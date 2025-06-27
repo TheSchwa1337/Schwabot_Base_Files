@@ -27,29 +27,35 @@ unicore = DualUnicoreHandler()
 # -*- coding: utf - 8 -*-\\n# Import safe print for Windows compatibility
 try:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+except Exception as e:
+    pass
+
+""""""
+""""""
     pass
 except ImportError:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     try:
+    except Exception as e:
+        pass
+
 # from core.utils.windows_cli_compatibility import safe_print, info, warn,
 # error, success, debug  # F811: duplicate import
     except ImportError:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 
 
@@ -57,12 +63,12 @@ def safe_print(message):
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     print(message)
 
@@ -71,12 +77,12 @@ def info(message):
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     print(f"[INFO] {message}")
 
@@ -85,12 +91,12 @@ def warn(message):
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     print(f"[WARN] {message}")
 
@@ -99,12 +105,12 @@ def error(message):
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     print(f"[ERROR] {message}")
 
@@ -113,12 +119,12 @@ def success(message):
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     print(f"[SUCCESS] {message}")
 
@@ -127,19 +133,19 @@ def debug(message):
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     print(f"[DEBUG] {message}")
 
 
 """"""
-"""
-"""
+""""""
+""""""
 Schwabot Demo Backtest Runner
 == == == == == == == == == == == == == ==
 
@@ -153,8 +159,8 @@ This system:
 - Generates comprehensive reports
 - Enables reinforcement learning from backtest results
 """"""
-"""
-"""
+""""""
+""""""
 
 # from core.unified_math_system import unified_math  # F811: duplicate import
 
@@ -165,12 +171,12 @@ class Placeholder:
     """[BRAIN] Placeholder class for recursive profit mapping"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """Configuration for backtest runs"""
-"""
-"""
+""""""
+""""""
 
 
 backtest_id: str
@@ -192,12 +198,12 @@ class Placeholder:
     """[BRAIN] Placeholder class for recursive profit mapping"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """Result of a backtest run"""
-"""
-"""
+""""""
+""""""
 
 
 backtest_id: str
@@ -221,24 +227,24 @@ class Placeholder:
     """[BRAIN] Placeholder class for recursive profit mapping"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """Comprehensive backtest runner for Schwabot demo system"""
-"""
-"""
+""""""
+""""""
 
 
 def __init__(self):
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         self.settings_controller = get_settings_controller()
         self.vector_validator = get_vector_validator()
@@ -271,16 +277,16 @@ def _initialize_backtest_directories(self):
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Initialize backtest - related directories"""
-"""
-"""
+""""""
+""""""
 
 
 backtest_dirs = []
@@ -292,8 +298,8 @@ backtest_dirs = []
 
         for dir_path in backtest_dirs:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 Path(dir_path).mkdir(parents = True, exist_ok = True)
 
@@ -301,17 +307,20 @@ Path(dir_path).mkdir(parents = True, exist_ok = True)
 def _load_backtest_data(self):
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Load existing backtest data from files"""
-"""
-"""
+""""""
+""""""
         try:
+
+        except Exception as e:
+            pass
 
 # Load backtest results
 results_file = Path("tests / demo_results / backtest_results.json")
@@ -330,20 +339,20 @@ safe_print(f"Warning: Could not load backtest data: {e}")
 def _update_performance_metrics(self):
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Update performance metrics from backtest results"""
-"""
-"""
+""""""
+""""""
         if not self.backtest_results:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 
 
@@ -362,8 +371,8 @@ self.performance_metrics["overall_profit"] = sum(r.total_profit for r in self.ba
 # Find best and worst backtests
         if self.backtest_results:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 best_backtest = unified_math.max(self.backtest_results, key = lambda x: x.success_rate)
             worst_backtest = unified_math.min(self.backtest_results, key = lambda x: x.success_rate)
@@ -372,35 +381,35 @@ self.performance_metrics["best_backtest"] = best_backtest.backtest_id
 self.performance_metrics["worst_backtest"] = worst_backtest.backtest_id
 
 
-def create_backtest_config(self, strategy_types: List[str = None,])
+def create_backtest_config(self, strategy_types: List[str = None,]):
 
                                 market_conditions: List[str] = None,
 
 
 num_trades_per_strategy: int = 100,
 base_price: float = 50000.0,
-price_volatility: float = 0.02,
+price_volatility: float = 0.2,
 volume_multiplier: float = 1.0,
 enable_reinforcement_learning: bool = True,
 enable_performance_tracking: bool = True,
 save_detailed_results: bool = True -> BacktestConfig:
 """Create a new backtest configuration"""
-"""
-"""
+""""""
+""""""
 
 # Default strategies if none provided
         if strategy_types is None:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 strategy_types = list(self.entry_simulator.entry_strategies.keys())
 
 # Default market conditions if none provided
         if market_conditions is None:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 market_conditions = list(self.entry_simulator.market_conditions.keys())
 
@@ -423,21 +432,21 @@ timestamp = datetime.now()
 
 self.backtest_configs.append(config)
 
-        return config
+#         return config
 
 def run_backtest(self, config: BacktestConfig) -> BacktestResult:
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Run a comprehensive backtest based on configuration"""
-"""
-"""
+""""""
+""""""
 safe_print(f"\\u1f680 Starting backtest: {config.backtest_id}")
         safe_print(f"Strategies: {config.strategy_types}")
         safe_print(f"Market Conditions: {config.market_conditions}")
@@ -462,15 +471,15 @@ reinforcement_updates = {}
 # Run backtests for each strategy and market condition combination
         for strategy_type in config.strategy_types:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 strategy_performance[strategy_type] = {}
 
             for market_condition in config.market_conditions:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 safe_print(f"Testing {strategy_type} in {market_condition} market...")
 
@@ -507,8 +516,8 @@ strategy_performance[strategy_type[market_condition]={]}
                 for matrix_id, perf in backtest_analysis["matrix_performance"].items():
                     if matrix_id not in matrix_performance:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 matrix_performance[matrix_id] = {"trades": 0, "successes": 0, "profit": 0.0}
 
@@ -519,8 +528,8 @@ matrix_performance[matrix_id]["profit"] += perf["profit"]
 # Update market condition performance
                 if market_condition not in market_condition_performance:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 market_condition_performance[market_condition] = {"trades": 0, "successes": 0, "profit": 0.0}
 
@@ -553,8 +562,8 @@ perf["average_profit"] = perf["profit"] / perf["trades"]
 # Get reinforcement learning updates
         if config.enable_reinforcement_learning:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 reinforcement_updates = {}
 "matrix_weights": self.settings_controller.matrix_path_weights,
@@ -589,8 +598,8 @@ self._update_performance_metrics()
 # Save results if requested
         if config.save_detailed_results:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 self._save_backtest_results()
 
@@ -599,74 +608,74 @@ safe_print("\\u2705 Backtest completed!")
         safe_print(f"Total Profit: {total_profit:.2f}")
         safe_print(f"Execution Time: {result.execution_time:.2f}s")
 
-        return result
+#         return result
 
 def _calculate_max_drawdown(self, profits: List[float]) -> float:
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Calculate maximum drawdown from profit series"""
-"""
-"""
+""""""
+""""""
         if not profits:
-            return 0.0
+#             return 0.0
 
 cumulative = np.cumsum(profits)
         running_max = np.maximum.accumulate(cumulative)
         drawdown = cumulative - running_max
 
-        return unified_math.abs(unified_math.min(drawdown)) if len(drawdown) > 0 else 0.0
+#         return unified_math.abs(unified_math.min(drawdown)) if len(drawdown) > 0 else 0.0
 
 def _calculate_sharpe_ratio(self, profits: List[float]) -> float:
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Calculate Sharpe ratio from profit series"""
-"""
-"""
+""""""
+""""""
         if not profits or len(profits) < 2:
-            return 0.0
+#             return 0.0
 
 returns = np.array(profits)
         mean_return = unified_math.unified_math.mean(returns)
         std_return = unified_math.unified_math.std(returns)
 
         if std_return == 0:
-            return 0.0
+#             return 0.0
 
 # Assuming risk - free rate of 0 for simplicity
 sharpe_ratio = mean_return / std_return
 
-        return sharpe_ratio
+#         return sharpe_ratio
 
 def run_comprehensive_backtest(self, num_trades_per_strategy: int = 50) -> Dict[str, Any]:
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Run comprehensive backtest across all strategies and market conditions"""
-"""
-"""
+""""""
+""""""
 safe_print("\\u1f680 Starting comprehensive backtest...")
 
 # Create comprehensive config
@@ -684,22 +693,22 @@ result = self.run_backtest(config)
 # Generate comprehensive analysis
 analysis = self._generate_comprehensive_analysis(result)
 
-        return analysis
+#         return analysis
 
 def _generate_comprehensive_analysis(self, result: BacktestResult) -> Dict[str, Any]:
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Generate comprehensive analysis of backtest results"""
-"""
-"""
+""""""
+""""""
 analysis={}
 "backtest_id": result.backtest_id,
 "summary": {}
@@ -740,8 +749,8 @@ analysis["market_condition_analysis"]=result.market_condition_performance
 # Reinforcement learning analysis
         if result.reinforcement_learning_updates:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 analysis["reinforcement_learning_analysis"={]}
 "matrix_weight_changes": result.reinforcement_learning_updates.get("matrix_weights", {}),
@@ -770,33 +779,33 @@ best_market = unified_math.max(result.market_condition_performance.items(), key 
 # Risk management recommendations
         if result.max_drawdown > 0.1:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 recommendations.append("High drawdown detected - consider implementing stricter risk management")
 
         if result.sharpe_ratio < 1.0:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 recommendations.append("Low Sharpe ratio - consider optimizing risk - adjusted returns")
 
 analysis["recommendations"] = recommendations
 
-        return analysis
+#         return analysis
 
-def generate_backtest_report(self, result: BacktestResult,)
+def generate_backtest_report(self, result: BacktestResult,):
 
 
                                 filepath: str = None -> str:
 """Generate a comprehensive backtest report"""
-"""
-"""
+""""""
+""""""
         if filepath is None:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 filepath = f"tests / demo_reports / backtest_report_{result.backtest_id}.md"
 
@@ -807,8 +816,8 @@ analysis = self._generate_comprehensive_analysis(result)
 
 # Create markdown report
 report = """  # Schwabot Backtest Report"""
-"""
-"""
+""""""
+""""""
 
 ## Backtest Summary
 - **Backtest ID**: {result.backtest_id}
@@ -824,8 +833,8 @@ report = """  # Schwabot Backtest Report"""
 ## Strategy Performance
 
 """"""
-"""
-"""
+""""""
+""""""
 
 # Add strategy performance
         for strategy_type, perf in analysis["strategy_analysis"].items():
@@ -853,16 +862,16 @@ report += f"- Total Profit: ${perf['profit']:.2f}\\n\n"
 report += "  ## Recommendations\\n\n"
         for recommendation in analysis["recommendations"]:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 report += f"- {recommendation}\n"
 
 # Add reinforcement learning analysis
         if result.reinforcement_learning_updates:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 report += "\\n  ## Reinforcement Learning Analysis\\n\n"
 report += f"- Known Bad Vectors: {result.reinforcement_learning_updates.get('known_bad_vectors', 0)}\n"
@@ -874,25 +883,28 @@ report += f"- Known Bad Vectors: {result.reinforcement_learning_updates.get('kno
 
 safe_print(f"\\u1f4ca Backtest report saved to {filepath}")
 
-        return filepath
+#         return filepath
 
 def _save_backtest_results(self):
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Save backtest results to file"""
-"""
-"""
+""""""
+""""""
         try:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+        except Exception as e:
+            pass
+
+""""""
+""""""
     pass
 results_file = Path("tests / demo_results / backtest_results.json")
 
@@ -913,17 +925,17 @@ safe_print(f"Error saving backtest results: {e}")
 def get_backtest_summary(self) -> Dict[str, Any]:
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Get comprehensive backtest summary"""
-"""
-"""
-        return {}
+""""""
+""""""
+#         return {}
 "performance_metrics": self.performance_metrics,
 "total_backtest_configs": len(self.backtest_configs),
             "total_backtest_results": len(self.backtest_results),
@@ -943,24 +955,24 @@ def get_backtest_summary(self) -> Dict[str, Any]:
 def _get_best_performing_strategies(self) -> Dict[str, float]:
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Get best performing strategies across all backtests"""
-"""
-"""
+""""""
+""""""
 strategy_performance = {}
 
         for result in self.backtest_results:
             for strategy_type, perf in result.strategy_performance.items():
                 if strategy_type not in strategy_performance:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 strategy_performance[strategy_type] = []
 
@@ -973,29 +985,29 @@ avg_performance = {}
 
 # Return top 3 strategies
 sorted_strategies = sorted(avg_performance.items(), key = lambda x: x[1], reverse = True)
-        return dict(sorted_strategies[:3])
+#         return dict(sorted_strategies[:3])
 
 def _get_best_performing_matrices(self) -> Dict[str, float]:
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Get best performing matrices across all backtests"""
-"""
-"""
+""""""
+""""""
 matrix_performance = {}
 
         for result in self.backtest_results:
             for matrix_id, perf in result.matrix_performance.items():
                 if matrix_id not in matrix_performance:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 matrix_performance[matrix_id] = []
 
@@ -1008,7 +1020,7 @@ avg_performance = {}
 
 # Return top 3 matrices
 sorted_matrices = sorted(avg_performance.items(), key = lambda x: x[1], reverse = True)
-        return dict(sorted_matrices[:3])
+#         return dict(sorted_matrices[:3])
 
 
 # Global demo backtest runner instance
@@ -1018,27 +1030,27 @@ demo_backtest_runner = DemoBacktestRunner()
 def get_demo_backtest_runner() -> DemoBacktestRunner:
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """Get the global demo backtest runner instance"""
-"""
-"""
-    return demo_backtest_runner
+""""""
+""""""
+#     return demo_backtest_runner
 
 
 if __name__ == "__main__":
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 # Test the demo backtest runner
 runner = DemoBacktestRunner()

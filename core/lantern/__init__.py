@@ -1,13 +1,13 @@
 # -*- coding: utf - 8 -*-\n"""Lantern trigger system for spike detection."""
-"""
-"""
-"""
-"""
+""""""
+""""""
+""""""
+""""""
 # -*- coding: utf - 8 -*-\n"""Lantern trigger system for spike detection."""
-"""
-"""
-"""
-"""
+""""""
+""""""
+""""""
+""""""
 # -*- coding: utf - 8 -*-\n"""Lantern trigger system for spike detection."""
 # -*- coding: utf - 8 -*-\n"""Lantern trigger system for spike detection."""
 from .trigger import lantern_trigger
@@ -19,6 +19,6 @@ __all__ = []
     "rolling_pca",
 
 
-"""
-"""
-"""
+""""""
+""""""
+""""""

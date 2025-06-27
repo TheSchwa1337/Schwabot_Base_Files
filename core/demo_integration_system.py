@@ -25,29 +25,35 @@ unicore = DualUnicoreHandler()
 # -*- coding: utf - 8 -*-\\n# Import safe print for Windows compatibility
 try:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+except Exception as e:
+    pass
+
+""""""
+""""""
     pass
 except ImportError:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     try:
+    except Exception as e:
+        pass
+
 # from core.utils.windows_cli_compatibility import safe_print, info, warn,
 # error, success, debug  # F811: duplicate import
     except ImportError:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 
 
@@ -55,12 +61,12 @@ def safe_print(message):
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     print(message)
 
@@ -69,12 +75,12 @@ def info(message):
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     print(f"[INFO] {message}")
 
@@ -83,12 +89,12 @@ def warn(message):
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     print(f"[WARN] {message}")
 
@@ -97,12 +103,12 @@ def error(message):
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     print(f"[ERROR] {message}")
 
@@ -111,12 +117,12 @@ def success(message):
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     print(f"[SUCCESS] {message}")
 
@@ -125,19 +131,19 @@ def debug(message):
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     print(f"[DEBUG] {message}")
 
 
 """"""
-"""
-"""
+""""""
+""""""
 Schwabot Demo Integration System
 == == == == == == == == == == == == == == == =
 
@@ -151,8 +157,8 @@ This system:
 - Hooks into settings controller for demo configuration
 - Manages demo data collection and analysis
 """"""
-"""
-"""
+""""""
+""""""
 
 # from core.unified_math_system import unified_math  # F811: duplicate import
 
@@ -163,12 +169,12 @@ class Placeholder:
     """[BRAIN] Placeholder class for recursive profit mapping"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """Represents a demo trade for backtesting"""
-"""
-"""
+""""""
+""""""
 
 
 trade_id: str
@@ -193,12 +199,12 @@ class Placeholder:
     """[BRAIN] Placeholder class for recursive profit mapping"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """Result of a demo trade execution"""
-"""
-"""
+""""""
+""""""
 
 
 trade_id: str
@@ -217,24 +223,24 @@ class Placeholder:
     """[BRAIN] Placeholder class for recursive profit mapping"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """Comprehensive demo integration system"""
-"""
-"""
+""""""
+""""""
 
 
 def __init__(self):
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         self.settings_controller = get_settings_controller()
         self.vector_validator = get_vector_validator()
@@ -276,38 +282,41 @@ def _load_demo_config(self) -> Dict[str, Any]:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Load demo configuration from settings"""
-"""
-"""
+""""""
+""""""
         try:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+        except Exception as e:
+            pass
+
+""""""
+""""""
     pass
 
 
 demo_config_path = Path("settings / demo_backtest_mode.yaml")
             if demo_config_path.exists():
                 with open(demo_config_path, 'r') as f:
-                    return yaml.safe_load(f)
+#                     return yaml.safe_load(f)
         except Exception as e:
 safe_print(f"Warning: Could not load demo config: {e}")
 
 # Default demo configuration
-        return {}
+#         return {}
 "mode": "demo",
 "backtest_path": "./tests / demo_backlog/",
 "reinforce_bad_vectors": True,
 "log_ghost_trades": True,
 "matrix_overlay": "full",
-"entropy_trigger_threshold": 0.02,
+"entropy_trigger_threshold": 0.2,
 "demo_trade_timeout": 300,  # 5 minutes
 "max_demo_trades": 1000,
 "enable_reinforcement_learning": True,
@@ -318,16 +327,16 @@ def _initialize_demo_directories(self):
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Initialize demo - related directories"""
-"""
-"""
+""""""
+""""""
 demo_dirs = []
 "tests / demo_backlog/",
 "tests / demo_results/",
@@ -338,8 +347,8 @@ demo_dirs = []
 
         for dir_path in demo_dirs:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 Path(dir_path).mkdir(parents = True, exist_ok = True)
 
@@ -347,17 +356,20 @@ def _load_demo_data(self):
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Load existing demo data from files"""
-"""
-"""
+""""""
+""""""
         try:
+        except Exception as e:
+            pass
+
 # Load demo trades
 trades_file = Path("tests / demo_data / demo_trades.json")
             if trades_file.exists():
@@ -382,20 +394,20 @@ def _update_demo_performance(self):
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Update demo performance metrics"""
-"""
-"""
+""""""
+""""""
         if not self.demo_trades:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 return
 
@@ -409,22 +421,22 @@ self.demo_performance["total_trades"] = len(self.demo_trades)
 matrix_perf = {}
         for trade in self.demo_trades:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 matrix_id = trade.matrix_id
             if matrix_id not in matrix_perf:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 matrix_perf[matrix_id] = {"trades": 0, "successes": 0, "profit": 0.0}
 
 matrix_perf[matrix_id]["trades"] += 1
             if trade.success:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 matrix_perf[matrix_id]["successes"] += 1
 matrix_perf[matrix_id]["profit"] += trade.profit_loss
@@ -435,22 +447,22 @@ def start_demo_mode(self, mode: str = "demo"):
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Start demo mode with specified configuration"""
-"""
-"""
+""""""
+""""""
 self.is_demo_mode = True
 
         if mode == "backtest":
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 self.is_backtest_mode = True
 safe_print("\\u1f504 Starting Demo Backtest Mode")
@@ -466,22 +478,22 @@ safe_print("\\u1f3af Starting Demo Mode")
 # Update settings controller for demo mode
 self.settings_controller.fault_settings.experimental_mode = True
 
-        return True
+#         return True
 
 def stop_demo_mode(self):
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Stop demo mode and save results"""
-"""
-"""
+""""""
+""""""
 self.is_demo_mode = False
 self.is_backtest_mode = False
 self.is_simulation_mode = False
@@ -495,22 +507,22 @@ self.settings_controller.fault_settings.experimental_mode = False
 
 safe_print("\\u2705 Demo mode stopped. Results saved.")
 
-        return True
+#         return True
 
 def execute_demo_trade(self, trade_data: Dict[str, Any]) -> DemoResult:
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Execute a demo trade with full integration"""
-"""
-"""
+""""""
+""""""
 start_time = time.time()
 
 # Create demo trade
@@ -554,22 +566,22 @@ self._update_demo_performance()
         if self.demo_config.get("enable_reinforcement_learning", True):
             self._apply_reinforcement_learning(demo_trade, demo_result)
 
-        return demo_result
+#         return demo_result
 
 def _create_demo_trade(self, trade_data: Dict[str, Any]) -> DemoTrade:
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Create a demo trade from input data"""
-"""
-"""
+""""""
+""""""
 trade_id = trade_data.get("trade_id", f"demo_{len(self.demo_trades) + 1}")
 
 # Generate vector hash
@@ -579,8 +591,8 @@ hash_input = f"{trade_data.get('matrix_id', '')}{trade_data.get('entry_price', 0
 # Determine demo mode
         if self.is_backtest_mode:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 demo_mode = "backtest"
         elif self.is_simulation_mode:
@@ -590,7 +602,7 @@ demo_mode = "reinforcement"
         else:
 demo_mode = "demo"
 
-        return DemoTrade()
+#         return DemoTrade()
             trade_id = trade_id,
 matrix_id = trade_data.get("matrix_id", "SFS8 - A5"),
             entry_price = trade_data.get("entry_price", 0.0),
@@ -606,13 +618,13 @@ strategy_type = trade_data.get("strategy_type", "default"),
             reinforcement_notes=[]
 
 
-def _simulate_trade_execution(self, demo_trade: DemoTrade,)
+def _simulate_trade_execution(self, demo_trade: DemoTrade,):
 
 
                                 vector_validation: Any, allocation: Any -> Dict[str, Any]:
 """Simulate trade execution based on validation and allocation"""
-"""
-"""
+""""""
+""""""
 # Determine success probability based on confidence and allocation
 success_prob = vector_validation.confidence_score * allocation.allocation_confidence
 
@@ -626,10 +638,10 @@ success = np.random.random() < success_prob
 # Calculate profit / loss
         if success:
 # Successful trade - positive profit
-profit_loss = np.random.uniform(0.001, 0.05) * demo_trade.entry_price
+profit_loss = np.random.uniform(0.1, 0.5) * demo_trade.entry_price
         else:
 # Failed trade - negative profit
-profit_loss = -np.random.uniform(0.001, 0.03) * demo_trade.entry_price
+profit_loss = -np.random.uniform(0.1, 0.3) * demo_trade.entry_price
 
 result = {}
 "success": success,
@@ -638,22 +650,22 @@ result = {}
 
         if not success:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 failure_reasons = ["early_exit", "false_positive", "market_reversal", "insufficient_volume"]
 result["failure_reason"] = np.random.choice(failure_reasons)
 
-        return result
+#         return result
 
-def _get_reinforcement_update(self, demo_trade: DemoTrade,)
+def _get_reinforcement_update(self, demo_trade: DemoTrade,):
 
 
                                 vector_validation: Any -> Dict[str, Any]:
 """Get reinforcement learning update data"""
-"""
-"""
-        return {}
+""""""
+""""""
+#         return {}
 "vector_hash": demo_trade.vector_hash,
 "matrix_id": demo_trade.matrix_id,
 "success": demo_trade.success,
@@ -666,16 +678,16 @@ def _apply_reinforcement_learning(self, demo_trade: DemoTrade, demo_result: Demo
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Apply reinforcement learning from demo trade"""
-"""
-"""
+""""""
+""""""
 # Update matrix weights
 self.settings_controller.update_matrix_weights()
             demo_trade.matrix_id, demo_trade.success
@@ -684,8 +696,8 @@ self.settings_controller.update_matrix_weights()
 # Add to bad vectors if failed
         if not demo_trade.success and demo_trade.failure_reason:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 self.settings_controller.add_bad_vector()
                 demo_trade.vector_hash,
@@ -708,13 +720,13 @@ vector_data = {}
 # This will update the learning data in vector validator
 self.vector_validator.validate_vector(vector_data)
 
-def run_backtest(self, strategy_config: Dict[str, Any,])
+def run_backtest(self, strategy_config: Dict[str, Any,]):
 
 
                     num_trades: int = 100 -> Dict[str, Any]:
 """Run a comprehensive backtest"""
-"""
-"""
+""""""
+""""""
 safe_print(f"\\u1f504 Starting backtest with {num_trades} trades...")
 
 # Start backtest mode
@@ -742,23 +754,23 @@ analysis = self._analyze_backtest_results(backtest_results)
 
 safe_print(f"\\u2705 Backtest completed. Success rate: {analysis['success_rate']:.2%}")
 
-        return analysis
+#         return analysis
 
-def _generate_backtest_trade(self, strategy_config: Dict[str, Any,])
+def _generate_backtest_trade(self, strategy_config: Dict[str, Any,]):
 
 
                                 trade_index: int -> Dict[str, Any]:
 """Generate trade data for backtesting"""
-"""
-"""
+""""""
+""""""
 # Base trade data
 base_price = strategy_config.get("base_price", 50000.0)
-        price_volatility = strategy_config.get("price_volatility", 0.02)
+        price_volatility = strategy_config.get("price_volatility", 0.2)
 
 # Generate price movement
 price_change = np.random.normal(0, price_volatility)
         entry_price = base_price * (1 + price_change)
-        exit_price = entry_price * (1 + np.random.normal(0, 0.01))
+        exit_price = entry_price * (1 + np.random.normal(0, 0.1))
 
 # Generate trade data
 trade_data = {}
@@ -779,24 +791,24 @@ trade_data = {}
             "tick_id": trade_index
 
 
-        return trade_data
+#         return trade_data
 
 def _analyze_backtest_results(self, results: List[DemoResult]) -> Dict[str, Any]:
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Analyze backtest results"""
-"""
-"""
+""""""
+""""""
         if not results:
-            return {"error": "No results to analyze"}
+#             return {"error": "No results to analyze"}
 
 total_trades = len(results)
         successful_trades = len([r for r in results if r.success])
@@ -810,22 +822,22 @@ avg_confidence = unified_math.mean([r.confidence_score for r in results])
 matrix_performance = {}
         for result in results:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 matrix_id = result.allocation_result["matrix_id"]
             if matrix_id not in matrix_performance:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 matrix_performance[matrix_id] = {"trades": 0, "successes": 0, "profit": 0.0}
 
 matrix_performance[matrix_id]["trades"] += 1
             if result.success:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 matrix_performance[matrix_id]["successes"] += 1
 matrix_performance[matrix_id]["profit"] += result.profit_loss
@@ -835,7 +847,7 @@ matrix_performance[matrix_id]["profit"] += result.profit_loss
             perf["success_rate"] = perf["successes"] / perf["trades"]
 perf["avg_profit"] = perf["profit"] / perf["trades"]
 
-        return {}
+#         return {}
 "total_trades": total_trades,
 "successful_trades": successful_trades,
 "success_rate": success_rate,
@@ -850,17 +862,17 @@ def get_demo_summary(self) -> Dict[str, Any]:
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Get comprehensive demo summary"""
-"""
-"""
-        return {}
+""""""
+""""""
+#         return {}
 "demo_config": self.demo_config,
 "demo_performance": self.demo_performance,
 "total_demo_trades": len(self.demo_trades),
@@ -882,17 +894,20 @@ def _save_demo_data(self):
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Save demo data to files"""
-"""
-"""
+""""""
+""""""
         try:
+        except Exception as e:
+            pass
+
 # Save demo trades
 trades_file = Path("tests / demo_data / demo_trades.json")
             with open(trades_file, 'w') as f:
@@ -922,27 +937,27 @@ def get_demo_integration_system() -> DemoIntegrationSystem:
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """Get the global demo integration system instance"""
-"""
-"""
-    return demo_integration_system
+""""""
+""""""
+#     return demo_integration_system
 
 
 if __name__ == "__main__":
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 # Test the demo integration system
 demo_system = DemoIntegrationSystem()
@@ -979,7 +994,7 @@ safe_print(f"Demo Trade ID: {result.trade_id}")
 # Test backtest
 strategy_config = {}
 "base_price": 50000.0,
-"price_volatility": 0.02,
+"price_volatility": 0.2,
 "matrix_id": "SFS8 - A5",
 "strategy_type": "test_backtest"
 

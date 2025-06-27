@@ -21,14 +21,14 @@ unicore = DualUnicoreHandler()
 
 # -*- coding: utf - 8 -*-
 # """Coinbase Pro / Advanced Trade API implementation."""
-"""
-"""
+""""""
+""""""
 
 This module provides Coinbase - specific API functionality with proper
 authentication and error handling.
 """"""
-"""
-"""
+""""""
+""""""
 
 
 class CoinbaseAPI(ExchangeAPI):
@@ -36,19 +36,19 @@ class CoinbaseAPI(ExchangeAPI):
     """Coinbase Pro / Advanced Trade API implementation."""
 
 
-"""
-"""
+""""""
+""""""
 
     def __init__(self, config: ExchangeConfig) -> None:
         """Initialize Coinbase API."""
-"""
-"""
+""""""
+""""""
 
         Args:
             config: Exchange configuration.
         """"""
-"""
-"""
+""""""
+""""""
 # Set Coinbase - specific defaults
         if not config.base_url:
             if config.sandbox:
@@ -61,7 +61,7 @@ class CoinbaseAPI(ExchangeAPI):
 # Initialize rate limiter
         self.rate_limiter = RateLimiter(config.rate_limit, 60.0)
 
-    def _sign_request()
+    def _sign_request():
 
         self,
         method: str,
@@ -70,8 +70,8 @@ class CoinbaseAPI(ExchangeAPI):
         data: Optional[Dict[str, Any]] = None,
         -> Dict[str, str]:
         """Sign request for Coinbase API."""
-"""
-"""
+""""""
+""""""
 
         Args:
             method: HTTP method.
@@ -82,10 +82,13 @@ class CoinbaseAPI(ExchangeAPI):
         Returns:
             Updated headers with Coinbase signature.
         """"""
-"""
-"""
+""""""
+""""""
         try:
             timestamp = str(int(time.time()))
+
+        except Exception as e:
+            pass
 
 # Create signature string
             signature_string = f"{timestamp}{method}{endpoint}"
@@ -110,7 +113,7 @@ class CoinbaseAPI(ExchangeAPI):
                 "Content - Type": "application / json",
 
 
-            return headers
+#             return headers
 
         except Exception as e:
             error_msg = f"Error signing Coinbase request: {e}"
@@ -120,56 +123,56 @@ class CoinbaseAPI(ExchangeAPI):
     def get_balance(self):
 
         """Get account balance."""
-"""
-"""
+""""""
+""""""
 # Implementation would go here
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 
 def get_market_data(self, symbol: str):
 
         """Get market data for symbol."""
-"""
-"""
+""""""
+""""""
 # Implementation would go here
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 
 def place_order(self, order):
 
         """Place order."""
-"""
-"""
+""""""
+""""""
 # Implementation would go here
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 
 def cancel_order(self, order_id: str) -> bool:
 
         """Cancel order."""
-"""
-"""
+""""""
+""""""
 # Implementation would go here
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 
 def get_order_status(self, order_id: str):
 
         """Get order status."""
-"""
-"""
+""""""
+""""""
 # Implementation would go here
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 
 

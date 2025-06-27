@@ -19,15 +19,15 @@ from core.unified_math_system import unified_math
 unicore = DualUnicoreHandler()
 
 # -*- coding: utf - 8 -*-\\n# """recursive_strategy_router - placeholder router stub."""
-"""
-"""
+""""""
+""""""
 
 Handles fallback / branch strategy routing for Ghost phase outputs.  Current
 implementation is a no - op that keeps the import graph intact while real
 logic is under construction.
 """"""
-"""
-"""
+""""""
+""""""
 
 
 __all__: list[str] = []
@@ -41,12 +41,12 @@ class Placeholder:
     """[BRAIN] Placeholder class for recursive profit mapping"""
 
 
-"""
-"""
-   pass
+""""""
+""""""
+pass
     """No - op recursive router stub."""
-"""
-"""
+""""""
+""""""
 
 
 max_depth: int = 1
@@ -56,32 +56,32 @@ def route(self, packet: Dict[str, Any], depth: int = 0) -> Dict[str, Any]:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
 
-"""
-"""
-   pass
+""""""
+""""""
+pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
-   pass
-       """Return packet unchanged, simulating routing recursion."""
-"""
-"""
+""""""
+""""""
+pass
+    """Return packet unchanged, simulating routing recursion."""
+""""""
+""""""
 
 
 Guards against exceeding * max_depth * to avoid runaway recursion.
 """"""
-"""
-"""
-   if depth >= self.max_depth:
-        return packet
+""""""
+""""""
+if depth >= self.max_depth:
+#         return packet
 # In future: inspect packet and re - route as needed.
-    return packet
+#     return packet
 
 
 def route_strategy(packet: Dict[str, Any]) -> Dict[str, Any]:  # noqa: D401
     """Stateless wrapper for :py:meth:`RecursiveStrategyRouter.route`."""
 
 
-"""
-"""
-   return RecursiveStrategyRouter().route(packet)
+""""""
+""""""
+# return RecursiveStrategyRouter().route(packet)

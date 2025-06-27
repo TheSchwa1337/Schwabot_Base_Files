@@ -1,17 +1,17 @@
 # -*- coding: utf - 8 -*-
-"""
-"""
-"""
-"""
-"""
-"""
+""""""
+""""""
+""""""
+""""""
+""""""
+""""""
 # -*- coding: utf - 8 -*-
-"""
-"""
-"""
-"""
-"""
-"""
+""""""
+""""""
+""""""
+""""""
+""""""
+""""""
 # -*- coding: utf - 8 -*-
 # -*- coding: utf - 8 -*-
 
@@ -27,15 +27,15 @@ Core Formula:
 P_seq = Σ(S_emoji_i * H_i * E_i * ΔT_i)
 
 Where:
-- S_emoji_i = symbol - derived flip bias(00 - 11 scale)
+- S_emoji_i = symbol - derived flip bias(0 - 11 scale)
 - H_i = SHA match confidence(0 - 1)
 - E_i = entropy vector of symbol / tier combo
 - ΔT_i = time delta since vault trigger
 
 Only when P_seq > θ_profit_threshold will flip be authorized recursively.
-"""
-"""
-"""
+""""""
+""""""
+""""""
 
 import math
 import time
@@ -52,8 +52,8 @@ logger = logging.getLogger(__name__)
 class ProfitTier(Enum):
 
     """Profit tier classification levels"""
-"""
-"""
+""""""
+""""""
     TIER_1 = 1  # Critical high - volume trades
     TIER_2 = 2  # High - priority medium volume
     TIER_3 = 3  # Normal priority trades
@@ -63,10 +63,10 @@ class ProfitTier(Enum):
 class FlipBias(Enum):
 
     """2 - bit flip states for symbolic encoding"""
-"""
-"""
-    ZERO_ZERO = 0  # 00 - Stable state
-    ZERO_ONE = 1  # 01 - Rising entropy
+""""""
+""""""
+    ZERO_ZERO = 0  # 0 - Stable state
+    ZERO_ONE = 1  # 1 - Rising entropy
     ONE_ZERO = 2  # 10 - Falling entropy
     ONE_ONE = 3  # 11 - Critical transition
 
@@ -75,8 +75,8 @@ class FlipBias(Enum):
 class SymbolicState:
 
     """Container for symbolic profit state"""
-"""
-"""
+""""""
+""""""
     symbol: str
     flip_bias: float  # 0.0 - 3.0 scale from FlipBias
     sha_confidence: float  # 0.0 - 1.0
@@ -91,8 +91,8 @@ class SymbolicState:
 class ProfitSequence:
 
     """Result of profit sequencer calculation"""
-"""
-"""
+""""""
+""""""
     sequence_value: float
     threshold_exceeded: bool
     tier_allocation: ProfitTier
@@ -104,14 +104,14 @@ class ProfitSequence:
 class SymbolicProfitRouter:
 
     """Main symbolic profit router and tier navigation system"""
-"""
-"""
+""""""
+""""""
 
     def __init__(self, profit_threshold: float = 2.5):
 
         """Initialize the symbolic profit router"""
-"""
-"""
+""""""
+""""""
         self.profit_threshold = profit_threshold
         self.active_symbols: Dict[str, SymbolicState] = {}
         self.vault_triggers: Dict[str, datetime] = {}
@@ -126,19 +126,19 @@ class SymbolicProfitRouter:
 
     def encode_symbol_bias(self, symbol: str) -> float:
 
-        """
-"""
-"""
+        """"""
+""""""
+""""""
         Encode symbol into flip bias value(0.0 - 3.0 scale)
 
         Converts Unicode symbols into 2 - bit flip states:
-        - 00 (0.0): Stable / neutral symbols
-        - 01 (1.0): Rising entropy symbols
+        - 0 (0.0): Stable / neutral symbols
+        - 1 (1.0): Rising entropy symbols
         - 10 (2.0): Falling entropy symbols
         - 11 (3.0): Critical transition symbols
-        """
-"""
-"""
+        """"""
+""""""
+""""""
 # Calculate hash - based bias
         symbol_hash = hashlib.sha256(symbol.encode('utf - 8')).hexdigest()
         hash_sum = sum(ord(c) for c in symbol_hash[:8])
@@ -157,22 +157,22 @@ class SymbolicProfitRouter:
             bias_state = 2.0  # Force falling entropy
 
         logger.debug(f"Symbol {symbol} encoded to bias: {bias_state}")
-        return float(bias_state)
+#         return float(bias_state)
 
     def calculate_sha_confidence(
 
             self,
             symbol: str,
             context: str = "") -> float:
-        """
-"""
-"""
+        """"""
+""""""
+""""""
         Calculate SHA match confidence for symbol
 
         Uses SHA - 256 hash similarity to determine confidence score
-        """
-"""
-"""
+        """"""
+""""""
+""""""
         combined_input = f"{symbol}{context}{time.time()}"
         sha_hash = hashlib.sha256(combined_input.encode('utf - 8')).hexdigest()
 
@@ -187,27 +187,27 @@ class SymbolicProfitRouter:
 # Check for ascending / descending sequences
         for i in range(len(sha_hash) - 2):
             if ord(sha_hash[i]) < ord(sha_hash[i + 1]) < ord(sha_hash[i + 2]):
-                pattern_score += 0.05
+                pattern_score += 0.5
             elif ord(sha_hash[i]) > ord(sha_hash[i + 1]) > ord(sha_hash[i + 2]):
-                pattern_score += 0.05
+                pattern_score += 0.5
 
 # Normalize to 0 - 1 range
         confidence = min(1.0, pattern_score)
 
         logger.debug(f"SHA confidence for {symbol}: {confidence}")
-        return confidence
+#         return confidence
 
     def calculate_entropy_vector(self, symbol: str, tier: ProfitTier) -> float:
 
-        """
-"""
-"""
+        """"""
+""""""
+""""""
         Calculate entropy vector for symbol / tier combination
 
         Uses mathematical entropy calculation combined with tier weighting
-        """
-"""
-"""
+        """"""
+""""""
+""""""
 # Base entropy from symbol Unicode value
         unicode_entropy = 0.0
         for char in symbol:
@@ -229,13 +229,13 @@ class SymbolicProfitRouter:
         logger.debug(
             f"Entropy vector for {symbol} (Tier {
                 tier.value}): {entropy_vector}")
-        return entropy_vector
+#         return entropy_vector
 
     def calculate_time_delta(self, vault_id: str) -> float:
 
         """Calculate time delta since vault trigger"""
-"""
-"""
+""""""
+""""""
         if vault_id in self.vault_triggers:
             delta = (
                 datetime.now() -
@@ -246,7 +246,7 @@ class SymbolicProfitRouter:
             delta = 0.0
 
         logger.debug(f"Time delta for vault {vault_id}: {delta}s")
-        return delta
+#         return delta
 
     def create_symbolic_state(
 
@@ -255,13 +255,13 @@ class SymbolicProfitRouter:
             tier: ProfitTier,
             vault_id: str,
             context: str = "") -> SymbolicState:
-        """
-"""
-"""
+        """"""
+""""""
+""""""
         Create a symbolic state for profit calculation
-        """
-"""
-"""
+        """"""
+""""""
+""""""
         flip_bias = self.encode_symbol_bias(symbol)
         sha_confidence = self.calculate_sha_confidence(symbol, context)
         entropy_vector = self.calculate_entropy_vector(symbol, tier)
@@ -284,19 +284,19 @@ class SymbolicProfitRouter:
 
         self.active_symbols[f"{symbol}_{vault_id}"] = state
         logger.info(f"Created symbolic state for {symbol} in vault {vault_id}")
-        return state
+#         return state
 
     def calculate_profit_sequence(
 
             self, states: List[SymbolicState]) -> ProfitSequence:
-        """
-"""
-"""
+        """"""
+""""""
+""""""
         Calculate profit sequence using the symbolic formula:
         P_seq = Σ(S_emoji_i * H_i * E_i * ΔT_i)
-        """
-"""
-"""
+        """"""
+""""""
+""""""
         sequence_value = 0.0
         vault_keys = []
 
@@ -306,7 +306,7 @@ class SymbolicProfitRouter:
                 state.flip_bias *
                 state.sha_confidence *
                 state.entropy_vector *
-                (1.0 + state.time_delta * 0.01)  # Time factor
+                (1.0 + state.time_delta * 0.1)  # Time factor
             )
 
             sequence_value += component_value
@@ -347,7 +347,7 @@ class SymbolicProfitRouter:
                 sequence_value:.4f} " f"(threshold: {
                 self.profit_threshold}, exceeded: {threshold_exceeded})")
 
-        return sequence
+#         return sequence
 
     def process_symbol_profit(
 
@@ -356,15 +356,15 @@ class SymbolicProfitRouter:
             tier: ProfitTier,
             vault_id: str,
             context: str = "") -> ProfitSequence:
-        """
-"""
-"""
+        """"""
+""""""
+""""""
         Process a single symbol for profit calculation
-        """
-"""
-"""
+        """"""
+""""""
+""""""
         state = self.create_symbolic_state(symbol, tier, vault_id, context)
-        return self.calculate_profit_sequence([state])
+#         return self.calculate_profit_sequence([state])
 
     def process_symbol_sequence(
 
@@ -373,25 +373,25 @@ class SymbolicProfitRouter:
             tiers: List[ProfitTier],
             vault_id: str,
             context: str = "") -> ProfitSequence:
-        """
-"""
-"""
+        """"""
+""""""
+""""""
         Process a sequence of symbols for combined profit calculation
-        """
-"""
-"""
+        """"""
+""""""
+""""""
         states = []
         for symbol, tier in zip(symbols, tiers):
             state = self.create_symbolic_state(symbol, tier, vault_id, context)
             states.append(state)
 
-        return self.calculate_profit_sequence(states)
+#         return self.calculate_profit_sequence(states)
 
     def get_tier_summary(self) -> Dict[ProfitTier, Dict[str, Any]]:
 
         """Get summary of profit tiers and their performance"""
-"""
-"""
+""""""
+""""""
         tier_summary = {}
 
         for tier in ProfitTier:
@@ -417,13 +417,13 @@ class SymbolicProfitRouter:
                 'weight': self.tier_weights[tier]
             }
 
-        return tier_summary
+#         return tier_summary
 
     def get_vault_status(self) -> Dict[str, Dict[str, Any]]:
 
         """Get status of all active vaults"""
-"""
-"""
+""""""
+""""""
         vault_status = {}
 
         for vault_id, trigger_time in self.vault_triggers.items():
@@ -440,19 +440,19 @@ class SymbolicProfitRouter:
                 'last_sequence': vault_sequences[-1].sequence_value if vault_sequences else 0.0
             }
 
-        return vault_status
+#         return vault_status
 
     def optimize_threshold(self, target_success_rate: float = 0.7) -> float:
 
-        """
-"""
-"""
+        """"""
+""""""
+""""""
         Optimize profit threshold based on historical performance
-        """
-"""
-"""
+        """"""
+""""""
+""""""
         if not self.sequence_history:
-            return self.profit_threshold
+#             return self.profit_threshold
 
 # Calculate success rates at different thresholds
         test_thresholds = [i * 0.1 for i in range(10, 50)]  # 1.0 to 5.0
@@ -478,14 +478,14 @@ class SymbolicProfitRouter:
             f"Optimized threshold from {old_threshold} to {best_threshold} " f"(score: {
                 best_score:.3f})")
 
-        return best_threshold
+#         return best_threshold
 
 
 def main():
 
     """Test the symbolic profit router"""
-"""
-"""
+""""""
+""""""
     router = SymbolicProfitRouter()
 
 # Test individual symbols

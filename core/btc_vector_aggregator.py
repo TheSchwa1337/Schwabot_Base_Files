@@ -1,14 +1,14 @@
 # -*- coding: utf - 8 -*-
-"""
-"""
-"""
-"""
+""""""
+""""""
+""""""
+""""""
 # -*- coding: utf - 8 -*-
 
-"""
-"""
-"""
-"""
+""""""
+""""""
+""""""
+""""""
 # -*- coding: utf - 8 -*-
 # -*- coding: utf - 8 -*-
 from __future__ import annotations
@@ -26,8 +26,8 @@ V_btc = \\u03a3_i^n [p_exit(i) - p_entry(i)].w_vol(i)
 This module aggregates BTC price movements with volume weighting and applies
 spectral filtering for enhanced signal quality.
 """"""
-"""
-"""
+""""""
+""""""
 
 
 from typing import Sequence
@@ -46,15 +46,15 @@ __all__: list[str] = []
 # ---------------------------------------------------------------------------
 
 
-def btc_vector()
+def btc_vector():
 
     exit_prices: Sequence[float],
     entry_prices: Sequence[float],
     volume_weights: Sequence[float],
     -> float:  # noqa: D401
     """Return V_btc = \\u03a3_i^n [p_exit(i) - p_entry(i)].w_vol(i)."""
-"""
-"""
+""""""
+""""""
 
     Parameters
     ----------
@@ -65,8 +65,8 @@ def btc_vector()
     volume_weights
         Volume weights w_vol(i) for each trade.
     """"""
-"""
-"""
+""""""
+""""""
     if not (len(exit_prices) == len(entry_prices) == len(volume_weights)):
         raise ValueError("all input sequences must have same length")
 
@@ -78,18 +78,18 @@ def btc_vector()
     price_diffs = exit_arr - entry_arr
     weighted_diffs = price_diffs * vol_arr
 
-    return float(np.sum(weighted_diffs))
+#     return float(np.sum(weighted_diffs))
 
 
-def btc_eta()
+def btc_eta():
 
     price_delta: float,
     time_delta: float,
     volumes: Sequence[float],
     -> float:  # noqa: D401
     """Return eta_btc = deltap / deltat . \\u03a3_j vol(j)."""
-"""
-"""
+""""""
+""""""
 
     Parameters
     ----------
@@ -100,22 +100,22 @@ def btc_eta()
     volumes
         Volume series vol(j) to sum.
     """"""
-"""
-"""
+""""""
+""""""
     if time_delta <= 0:
         raise ValueError("time_delta must be positive")
 
     vol_sum = float(np.sum(volumes))
     price_velocity = price_delta / time_delta
 
-    return price_velocity * vol_sum
+#     return price_velocity * vol_sum
 
 
 def btc_xi(v_btc: float, eta_btc: float) -> float:  # noqa: D401
 
     """Return \\u039e_btc(t) = tanh(V_btc . eta_btc)."""
-"""
-"""
+""""""
+""""""
 
     Parameters
     ----------
@@ -124,13 +124,13 @@ def btc_xi(v_btc: float, eta_btc: float) -> float:  # noqa: D401
     eta_btc
         Eta value from btc_eta().
     """"""
-"""
-"""
+""""""
+""""""
     product = v_btc * eta_btc
-    return float(np.tanh(product))
+#     return float(np.tanh(product))
 
 
-def btc_spectral_aggregate()
+def btc_spectral_aggregate():
 
     xi_series: Sequence[float],
     peak_frequency: float,
@@ -138,8 +138,8 @@ def btc_spectral_aggregate()
     filter_width: float = 1.0,
     -> np.ndarray:  # noqa: D401
     """Return A_btc = FFT(\\u039e_btc(t)) . filter(f_peak)."""
-"""
-"""
+""""""
+""""""
 
     Parameters
     ----------
@@ -150,12 +150,12 @@ def btc_spectral_aggregate()
     filter_width
         Width of the frequency filter around f_peak.
     """"""
-"""
-"""
+""""""
+""""""
     xi_arr = np.asarray(xi_series, dtype = float)
 
     if len(xi_arr) == 0:
-        return np.array([], dtype = complex)
+#         return np.array([], dtype = complex)
 
 # Compute FFT
     xi_fft = np.fft.fft(xi_arr)
@@ -171,6 +171,6 @@ def btc_spectral_aggregate()
 # Apply filter
     filtered_fft = xi_fft * filter_mask
 
-    return filtered_fft
+#     return filtered_fft
 
 

@@ -14,8 +14,8 @@ import numpy as np
 unicore = DualUnicoreHandler()
 
 # """Ghost Phase Integrator - trust - weighted phase correction logic."""
-"""
-"""
+""""""
+""""""
 
 Implements equations(1)...(9) from the design note, returning a
 class: `GhostPhasePacket` tuple(eq.\\u200610).
@@ -24,8 +24,8 @@ All computations are purely functional, fully typed and NumPy - backed while
 remaining free of heavy external dependencies.  The public helper
 func:`compute_ghost_phase_packet` is the single entry - point.
 """"""
-"""
-"""
+""""""
+""""""
 
 
 from dataclasses import dataclass
@@ -44,14 +44,14 @@ __all__: list[str] = ["GhostPhasePacket", "compute_ghost_phase_packet"]
 def _levenshtein(a: str, b: str) -> int:  # noqa: D401
 
     """Return Levenshtein edit distance (simple O(n**2) DP)."""
-"""
-"""
+""""""
+""""""
 
 The strings are expected to be hex - encoded hashes of identical length
 (64 chars for a 256 - bit digest).  A ValueError is raised if lengths differ.
     """"""
-"""
-"""
+""""""
+""""""
     if len(a) != len(b):
         raise ValueError("hash strings must have equal length")
 
@@ -65,25 +65,25 @@ del_ = curr_row[j - 1] + 1
 sub = prev_row[j - 1] + (ch_a != ch_b)
             curr_row.append(unified_math.min(ins, del_, sub))
         prev_row = curr_row
-    return prev_row[-1]
+#     return prev_row[-1]
 
 
 def _clip(x: float, lo: float, hi: float) -> float:  # noqa: D401
 
 
     """TODO: document _clip."""
-"""
-"""
-    return unified_math.max(lo, unified_math.min(hi, x))
+""""""
+""""""
+#     return unified_math.max(lo, unified_math.min(hi, x))
 
 
 def _hash_to_int(hex_digest: str) -> int:  # noqa: D401
 
 
     """TODO: document _hash_to_int."""
-"""
-"""
-    return int(hex_digest, 16)
+""""""
+""""""
+#     return int(hex_digest, 16)
 
 
 # ---------------------------------------------------------------------------
@@ -95,12 +95,12 @@ def _hash_to_int(hex_digest: str) -> int:  # noqa: D401
 class Placeholder:
 
     """[BRAIN] Placeholder class for recursive profit mapping"""
-"""
-"""
+""""""
+""""""
     pass
     """Output (C_t, zeta_final, H_echo, mu_echo, delta_corr)."""
-"""
-"""
+""""""
+""""""
 
 C_t: float
 zeta_final: float
@@ -114,7 +114,7 @@ delta_corr: float
 # ---------------------------------------------------------------------------
 
 
-def compute_ghost_phase_packet()
+def compute_ghost_phase_packet():
 
 
     *,
@@ -132,11 +132,11 @@ drift_t: float,
 q_exec_prev: float,
 q_exec_curr: float,
 delta_t: float,
-epsilon: float = 1e - 9,
+epsilon: float = 1e-9,
     -> GhostPhasePacket:  # noqa: D401
 """Return a :class:`GhostPhasePacket` computed from live signals."""
-"""
-"""
+""""""
+""""""
 
 Parameters
 ----------
@@ -155,8 +155,8 @@ Consecutive executable sizes and their time delta (sec).
     epsilon
 Small constant to stabilise log / denominator operations.
 """"""
-"""
-"""
+""""""
+""""""
 # --------------------------------------------------
 # (1) \\u0393_hash - similarity between current and echoed hash
 # --------------------------------------------------
@@ -208,8 +208,8 @@ int_series = np.fromiter((_hash_to_int(h) for h in H_echo), dtype = float)
 # --------------------------------------------------
     if delta_t <= 0:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 m_slope = 0.0
     else:
@@ -220,7 +220,7 @@ m_slope = (q_exec_curr - q_exec_prev) / delta_t
 # --------------------------------------------------
 zeta_final = _clip(mu_echo - theta_drift + m_slope, -1.0, 1.0)
 
-    return GhostPhasePacket()
+#     return GhostPhasePacket()
         C_t = C_t,
 zeta_final = zeta_final,
 H_echo = tuple(H_echo),  # immutable copy
@@ -230,7 +230,7 @@ delta_corr = delta_corr,
 
 
 
-"""
-"""
-"""
-"""
+""""""
+""""""
+""""""
+""""""

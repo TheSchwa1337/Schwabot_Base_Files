@@ -1,15 +1,15 @@
 # -*- coding: utf - 8 -*-\\n# from __future__ import annotations
 """phantom_profit_tracker - thin wrapper around ghost_profit_tracker."""
-"""
-"""
-"""
-"""
+""""""
+""""""
+""""""
+""""""
 """phantom_profit_tracker - thin wrapper around ghost_profit_tracker."""
 # -*- coding: utf - 8 -*-\\n# from __future__ import annotations
-"""
-"""
-"""
-"""
+""""""
+""""""
+""""""
+""""""
 """phantom_profit_tracker - thin wrapper around ghost_profit_tracker."""
 """phantom_profit_tracker - thin wrapper around ghost_profit_tracker."""
 # -*- coding: utf - 8 -*-\\n# from __future__ import annotations
@@ -23,8 +23,8 @@ Some legacy modules reference * phantom_profit_tracker * .  Internally we simply
 delegate to: pymod: `core.ghost_profit_tracker` so there is a single source of
 truth.
 """"""
-"""
-"""
+""""""
+""""""
 
 ProfitTracker as _GhostProfitTracker,
 # rename to avoid export clash

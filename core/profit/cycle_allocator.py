@@ -1,14 +1,14 @@
 # -*- coding: utf - 8 -*-\n"""Profit cycle allocator for basket distribution."""
-"""
-"""
-"""
-"""
+""""""
+""""""
+""""""
+""""""
 # -*- coding: utf - 8 -*-\n"""Profit cycle allocator for basket distribution."""
 
-"""
-"""
-"""
-"""
+""""""
+""""""
+""""""
+""""""
 # -*- coding: utf - 8 -*-\n"""Profit cycle allocator for basket distribution."""
 # -*- coding: utf - 8 -*-\n"""Profit cycle allocator for basket distribution."""
 from __future__ import annotations
@@ -25,16 +25,16 @@ def allocate(phi: float, alphas: list[float]) -> np.ndarray:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """Split entry weight across baskets proportionally."""
-"""
-"""
+""""""
+""""""
 
 
 Compute allocation: alloc_i = alpha_i.\\u03a6 / \\u03a3alpha
@@ -49,10 +49,10 @@ Per - basket allocation array that sums to |phi|
 Raises:
 ValueError: If alphas sum to zero
 """"""
-"""
-"""
+""""""
+""""""
     if not alphas:
-        return np.array([])
+#         return np.array([])
 
 
 a = np.array(alphas, dtype = float)
@@ -61,11 +61,11 @@ a = np.array(alphas, dtype = float)
     if alpha_sum == 0:
         raise ValueError("Alpha coefficients sum to zero")
 
-    return phi * (a / alpha_sum)
+#     return phi * (a / alpha_sum)
 
 
 
-"""
-"""
-"""
-"""
+""""""
+""""""
+""""""
+""""""

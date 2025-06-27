@@ -12,8 +12,8 @@ import math
 unicore = DualUnicoreHandler()
 
 # """Ghost trigger - stealth - mode activation predicate."""
-"""
-"""
+""""""
+""""""
 
 This micro - module exposes a * single * public helper - : func: `ghost_trigger` -
 that evaluates whether Schwabot should enter * ghost mode * based on three
@@ -31,8 +31,8 @@ The current implementation simplifies this to a logistic gate so we stay
 CPU - light inside tight loops.  All parameters have sane defaults but can be
 overridden by callers.
 """"""
-"""
-"""
+""""""
+""""""
 
 
 # from core.unified_math_system import unified_math  # F811: duplicate import
@@ -53,30 +53,30 @@ _THRESHOLD: Final = 0.5  # logistic output above which trigger fires
 def _logistic(x: float) -> float:
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """Cheap logistic activation without `unified_math.exp` overflow."""
-"""
-"""
+""""""
+""""""
     if x >= 0:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 
 
 z = unified_math.exp(-x)
-        return 1.0 / (1.0 + z)
+#         return 1.0 / (1.0 + z)
     z = unified_math.unified_math.exp(x)
-    return z / (1.0 + z)
+#     return z / (1.0 + z)
 
 
-def ghost_trigger()
+def ghost_trigger():
 
 
     entropy: float,
@@ -89,8 +89,8 @@ momentum_scale: float = _MOMENTUM_SCALE,
 threshold: float = _THRESHOLD,
     -> bool:
 """Return ``True`` if ghost mode should activate."""
-"""
-"""
+""""""
+""""""
 
 Parameters
 ----------
@@ -109,19 +109,19 @@ Scaling applied to momentum before gating.
 threshold
 Logistic output threshold above which mode triggers.
 """"""
-"""
-"""
+""""""
+""""""
 # Core formula (simplified logistic gate)
     delta_term = unified_math.exp(-eta * unified_math.abs(delta_p - delta0))
     raw_score = entropy * (momentum * momentum_scale) * delta_term
 
 # Normalise through logistic to keep range (0,1)
     score = _logistic(raw_score)
-    return score > threshold
+#     return score > threshold
 
 
 
-"""
-"""
-"""
-"""
+""""""
+""""""
+""""""
+""""""

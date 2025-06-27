@@ -21,8 +21,8 @@ unicore = DualUnicoreHandler()
 
 # -*- coding: utf - 8 -*-
 """core.phase.phase_transition_monitor"""
-"""
-"""
+""""""
+""""""
 Phase Transition Monitor
 == == == == == == == == == == == ==
 
@@ -39,8 +39,8 @@ Public API
 ~~~~~~~~~~
 PhaseTransitionMonitor.evaluate() -> PhaseEvaluationReport
 """"""
-"""
-"""
+""""""
+""""""
 
 
 __all__ = []
@@ -54,8 +54,8 @@ class PhaseState(Enum):
     """Discrete phase tiers for strategy selection."""
 
 
-"""
-"""
+""""""
+""""""
 
     LOW = auto()
     MEDIUM = auto()
@@ -68,8 +68,8 @@ class Placeholder:
     """[BRAIN] Placeholder class for recursive profit mapping"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     phase_state: PhaseState
     entropy_delta: float
@@ -92,20 +92,20 @@ class Placeholder:
     """[BRAIN] Placeholder class for recursive profit mapping"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """Assess phase state based on entropy + drift + consensus."""
-"""
-"""
+""""""
+""""""
 
-    def __init__()
+    def __init__():
 
         self,
         *,
         entropy_window: int = 20,
         epsilon: int = 3,
-        tau: float = 0.02,
+        tau: float = 0.2,
         low_thresh: float = 0.15,
         high_thresh: float = 0.4,
         -> None:
@@ -125,25 +125,25 @@ class Placeholder:
             prices[-(self.entropy_window * 2: -self.entropy_window])
         return abs(ent_now - ent_past) / self.entropy_window
 
-    def _phase_from_scores()
+    def _phase_from_scores():
 
             self,
             drift_weight: float,
             entropy_delta: float -> PhaseState:
         """Simple rule - set to map scores -> phase tiers."""
-"""
-"""
+""""""
+""""""
         composite = drift_weight + entropy_delta
         if composite >= self.high_thresh:
-            return PhaseState.HIGH
+#             return PhaseState.HIGH
         if composite >= self.low_thresh:
-            return PhaseState.MEDIUM
-        return PhaseState.LOW
+#             return PhaseState.MEDIUM
+#         return PhaseState.LOW
 
 # ------------------------------------------------------------------
 # public interface
 # ------------------------------------------------------------------
-    def evaluate()
+    def evaluate():
 
         self,
         prices: Sequence[float],
@@ -178,7 +178,7 @@ class Placeholder:
 
 
 
-"""
-"""
-"""
-"""
+""""""
+""""""
+""""""
+""""""

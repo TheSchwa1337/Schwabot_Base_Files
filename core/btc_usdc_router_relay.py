@@ -14,8 +14,8 @@ import numpy as np
 unicore = DualUnicoreHandler()
 
 # """btc_usdc_router_relay - BTC / USDC routing with ghost conditional triggers."""
-"""
-"""
+""""""
+""""""
 
 Implements the ghost conditional trigger logic:
 \\u0398\\u1d33(t) = \\u03a3 theta\\u2096 * zeta\\u2096(t) * delta(t - tau\\u2096)
@@ -23,8 +23,8 @@ Implements the ghost conditional trigger logic:
 This module handles routing between BTC and USDC flows with conditional
 trigger detection for the ghost protocol.
 """"""
-"""
-"""
+""""""
+""""""
 
 
 from dataclasses import dataclass
@@ -43,19 +43,19 @@ __all__: list[str] = []
 class Placeholder:
 
     """[BRAIN] Placeholder class for recursive profit mapping"""
-"""
-"""
+""""""
+""""""
     pass
     """BTC / USDC router with ghost conditional triggers."""
-"""
-"""
+""""""
+""""""
 
 
 trigger_threshold: float = 0.5
 delta_tolerance: float = 0.1
 
 
-def compute_theta_g()
+def compute_theta_g():
 
         self,
 theta_values: Sequence[float],
@@ -65,8 +65,8 @@ trigger_times: Sequence[float],
     -> float:
 
 """Compute \\u0398\\u1d33(t) = \\u03a3 theta\\u2096 * zeta\\u2096(t) * delta(t - tau\\u2096)."""
-"""
-"""
+""""""
+""""""
 
 Parameters
 ----------
@@ -79,8 +79,8 @@ Time points t.
 trigger_times
 Trigger times tau\\u2096.
 """"""
-"""
-"""
+""""""
+""""""
         if len(theta_values) != len(trigger_times):
             raise ValueError()
                 "theta_values and trigger_times must have same length"
@@ -109,10 +109,10 @@ Trigger times tau\\u2096.
                     delta_term = 1.0 / self.delta_tolerance  # normalized
                     theta_g_total += theta_k * zeta_k_t * delta_term
 
-        return theta_g_total
+#         return theta_g_total
 
 
-def route_flow_decision()
+def route_flow_decision():
 
 
         self,
@@ -122,8 +122,8 @@ ghost_trigger_strength: float,
     -> tuple[float, float]:
 
 """Route BTC / USDC flows based on ghost trigger strength."""
-"""
-"""
+""""""
+""""""
 
 Parameters
 ----------
@@ -139,8 +139,8 @@ Returns
 tuple[float, float]
 (routed_btc_flow, routed_usdc_flow)
         """"""
-"""
-"""
+""""""
+""""""
 # Apply routing based on trigger strength
         if ghost_trigger_strength > self.trigger_threshold:
 # Strong trigger: favor BTC
@@ -158,10 +158,10 @@ routed_usdc = usdc_flow * routing_factor
 routed_btc = btc_flow
 routed_usdc = usdc_flow
 
-        return routed_btc, routed_usdc
+#         return routed_btc, routed_usdc
 
 
-def process_relay_cycle()
+def process_relay_cycle():
 
 
         self,
@@ -174,8 +174,8 @@ trigger_times: Sequence[float],
     -> tuple[np.ndarray, np.ndarray]:
 
 """Process complete relay cycle with ghost triggers."""
-"""
-"""
+""""""
+""""""
 
 Parameters
 ----------
@@ -189,8 +189,8 @@ Returns
 tuple[np.ndarray, np.ndarray]
 (routed_btc_flows, routed_usdc_flows)
         """"""
-"""
-"""
+""""""
+""""""
         if len(btc_flows) != len(usdc_flows):
             raise ValueError("BTC and USDC flows must have same length")
 
@@ -211,13 +211,13 @@ ghost_strength = self.compute_theta_g()
                 btc_flow, usdc_flow, ghost_strength
 
 
-        return routed_btc, routed_usdc
+#         return routed_btc, routed_usdc
 
 
 # Functional helpers
 
 
-def compute_ghost_triggers()
+def compute_ghost_triggers():
 
 
     theta_values: Sequence[float],
@@ -227,15 +227,15 @@ trigger_times: Sequence[float],
 delta_tolerance: float = 0.1,
     -> float:  # noqa: D401
 """Compute ghost conditional triggers \\u0398\\u1d33(t)."""
-"""
-"""
+""""""
+""""""
     relay = BTCUSDCRouterRelay(delta_tolerance = delta_tolerance)
-    return relay.compute_theta_g()
+#     return relay.compute_theta_g()
         theta_values, zeta_series, timestamps, trigger_times
 
 
 
-def route_btc_usdc_flow()
+def route_btc_usdc_flow():
 
 
     btc_flow: float,
@@ -244,15 +244,15 @@ ghost_trigger_strength: float,
 threshold: float = 0.5,
     -> tuple[float, float]:  # noqa: D401
 """Route BTC / USDC flows using ghost trigger strength."""
-"""
-"""
+""""""
+""""""
 relay = BTCUSDCRouterRelay(trigger_threshold = threshold)
-    return relay.route_flow_decision()
+#     return relay.route_flow_decision()
         btc_flow, usdc_flow, ghost_trigger_strength
 
 
 
-"""
-"""
-"""
-"""
+""""""
+""""""
+""""""
+""""""

@@ -10,8 +10,8 @@ unicore = DualUnicoreHandler()
 
 # -*- coding: utf - 8 -*-
 """"""
-"""
-"""
+""""""
+""""""
 Rotation Heuristics Engine - Assists Ferris in phase - based decision rotation using normalized entropy.
 
 Mathematical Foundation:
@@ -22,8 +22,8 @@ Mathematical Foundation:
 
 Based on Schwabot's mathematical framework for rotation validation.'
 """"""
-"""
-"""
+""""""
+""""""
 
 
 # Import safe print for Windows compatibility
@@ -32,6 +32,9 @@ try:
         safe_print, info, warn, error, success, debug
 
     CLI_HANDLER_AVAILABLE = True
+except Exception as e:
+    pass
+
 except ImportError:
     CLI_HANDLER_AVAILABLE = False
 
@@ -64,6 +67,9 @@ try:
     from core.unified_math_system import unified_math
     from core.filters import RecursiveFractalFilter
     CORE_MODULES_AVAILABLE = True
+except Exception as e:
+    pass
+
 except ImportError:
     CORE_MODULES_AVAILABLE = False
 # Mock classes for testing
@@ -74,8 +80,8 @@ class Placeholder:
     """[BRAIN] Placeholder class for recursive profit mapping"""
 
 
-"""
-"""
+""""""
+""""""
     pass
         def __init__(self, depth=5):
 
@@ -96,8 +102,8 @@ class Placeholder:
     """[BRAIN] Placeholder class for recursive profit mapping"""
 
 
-"""
-"""
+""""""
+""""""
     pass
         @staticmethod
         def abs(x):
@@ -135,12 +141,12 @@ class Placeholder:
     """[BRAIN] Placeholder class for recursive profit mapping"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """Result of rotation heuristics analysis."""
-"""
-"""
+""""""
+""""""
     should_rotate: bool
     entropy: float
     threshold: float
@@ -154,12 +160,12 @@ class Placeholder:
     """[BRAIN] Placeholder class for recursive profit mapping"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """"""
-"""
-"""
+""""""
+""""""
     Assists Ferris in phase - based decision rotation using normalized entropy.
 
     Mathematical Foundation:
@@ -168,10 +174,10 @@ class Placeholder:
     - Rotation trigger: E >= theta where theta is entropy threshold
     - Adaptive threshold adjustment based on market conditions
     """"""
-"""
-"""
+""""""
+""""""
 
-    def __init__()
+    def __init__():
 
         self,
         depth: int = DEFAULT_DEPTH,
@@ -180,8 +186,8 @@ class Placeholder:
         adaptive_threshold: bool = True,
         -> None:
         """Initialize the rotation heuristics engine."""
-"""
-"""
+""""""
+""""""
         self.depth = depth
         self.entropy_threshold = entropy_threshold
         self.min_vector_length = min_vector_length
@@ -202,8 +208,8 @@ class Placeholder:
     def should_rotate(self, delta_vector: List[float]) -> bool:
 
         """"""
-"""
-"""
+""""""
+""""""
         Check if rotation should be triggered based on entropy analysis.
 
         Parameters:
@@ -216,22 +222,22 @@ class Placeholder:
         bool
             True if rotation should be triggered, False otherwise
         """"""
-"""
-"""
+""""""
+""""""
         try:
             result = self.calculate_rotation_result(delta_vector)
-            return result.should_rotate
+#             return result.should_rotate
 
         except Exception as e:
             logger.error(f"Error checking rotation: {e}")
-            return False
+#             return False
 
-    def calculate_rotation_result()
+    def calculate_rotation_result():
 
             self, delta_vector: List[float] -> RotationResult:
         """"""
-"""
-"""
+""""""
+""""""
         Calculate detailed rotation analysis result.
 
         Mathematical Process:
@@ -251,12 +257,15 @@ class Placeholder:
         RotationResult
             Detailed rotation analysis result
         """"""
-"""
-"""
+""""""
+""""""
         try:
+        except Exception as e:
+            pass
+
 # Validate input
             if not self._validate_input(delta_vector):
-                return RotationResult()
+#                 return RotationResult()
                     should_rotate = False,
                     entropy = 0.0,
                     threshold = self.entropy_threshold,
@@ -302,11 +311,11 @@ class Placeholder:
                 raw_value = current_value
 
 
-            return result
+#             return result
 
         except Exception as e:
             logger.error(f"Error calculating rotation result: {e}")
-            return RotationResult()
+#             return RotationResult()
                 should_rotate = False,
                 entropy = 0.0,
                 threshold = self.entropy_threshold,
@@ -317,22 +326,25 @@ class Placeholder:
     def _validate_input(self, delta_vector: List[float]) -> bool:
 
         """Validate input delta vector."""
-"""
-"""
+""""""
+""""""
         try:
+        except Exception as e:
+            pass
+
 # Check vector type and length
             if not isinstance(delta_vector, list):
                 logger.warning()
                     f"Invalid delta vector type: {"}
                         type(delta_vector")"
-                return False
+#                 return False
 
             if len(delta_vector) < self.min_vector_length:
                 logger.warning()
                     f"Delta vector too short: {"}
                         len(delta_vector)} < {
                         self.min_vector_length""
-                return False
+#                 return False
 
 # Check for valid numeric values
             for i, value in enumerate(delta_vector):
@@ -340,22 +352,22 @@ class Placeholder:
                     logger.warning()
                         f"Invalid value at index {i}: {"}
                             type(value")"
-                    return False
+#                     return False
 
-            return True
+#             return True
 
         except Exception as e:
             logger.error(f"Error validating input: {e}")
-            return False
+#             return False
 
-    def _calculate_entropy()
+    def _calculate_entropy():
 
             self,
             raw_value: float,
             smoothed_value: float -> float:
         """"""
-"""
-"""
+""""""
+""""""
         Calculate entropy as normalized deviation from smoothed signal.
 
         Mathematical Formula:
@@ -363,9 +375,12 @@ class Placeholder:
         - V(t) is the raw value at time t
         - S(t) is the smoothed value at time t
         """"""
-"""
-"""
+""""""
+""""""
         try:
+        except Exception as e:
+            pass
+
 # Calculate absolute difference
             abs_diff = unified_math.abs(raw_value - smoothed_value)
 
@@ -376,24 +391,27 @@ class Placeholder:
 
 # Avoid division by zero
             if max_abs == 0:
-                return 0.0
+#                 return 0.0
 
 # Calculate normalized entropy
             entropy = abs_diff / max_abs
-            return entropy
+#             return entropy
 
         except Exception as e:
             logger.error(f"Error calculating entropy: {e}")
-            return 0.0
+#             return 0.0
 
     def _update_adaptive_threshold(self) -> None:
 
         """Update threshold adaptively based on recent performance."""
-"""
-"""
+""""""
+""""""
         try:
             if len(self.entropy_history) < 10:
                 return
+
+        except Exception as e:
+            pass
 
 # Calculate performance - based adjustment
             recent_rotation_rate = sum(self.rotation_decisions[-10:]) / 10
@@ -402,15 +420,15 @@ class Placeholder:
 # Adjust threshold based on rotation rate and entropy
             if recent_rotation_rate < 0.1:  # Too restrictive
                 self.entropy_threshold = max()
-                    0.1, self.entropy_threshold - 0.02
+                    0.1, self.entropy_threshold - 0.2
             elif recent_rotation_rate > 0.7:  # Too permissive
                 self.entropy_threshold = min()
-                    0.8, self.entropy_threshold + 0.01
+                    0.8, self.entropy_threshold + 0.1
 
 # Adjust for average entropy
             if recent_avg_entropy > self.entropy_threshold * 1.5:
                 self.entropy_threshold = min()
-                    0.8, self.entropy_threshold + 0.015
+                    0.8, self.entropy_threshold + 0.15
 
             logger.debug()
                 f"Adaptive threshold updated to: {"}
@@ -422,13 +440,13 @@ class Placeholder:
     def get_performance_summary(self) -> dict:
 
         """Get performance summary of rotation engine."""
-"""
-"""
+""""""
+""""""
         try:
             if not self.entropy_history:
-                return {"error": "No entropy history available"}
+#                 return {"error": "No entropy history available"}
 
-            return {"total_checks": self.total_checks,}
+#             return {"total_checks": self.total_checks,}
                     "rotation_triggers": self.rotation_triggers,
                     "rotation_rate": self.rotation_triggers / max(1,)
                                                                     self.total_checks,
@@ -441,13 +459,13 @@ class Placeholder:
 
         except Exception as e:
             logger.error(f"Error getting performance summary: {e}")
-            return {"error": str(e)}
+#             return {"error": str(e)}
 
     def reset(self) -> None:
 
         """Reset the rotation engine state."""
-"""
-"""
+""""""
+""""""
         self.entropy_history.clear()
         self.rotation_decisions.clear()
         self.total_checks = 0
@@ -458,10 +476,10 @@ class Placeholder:
     def set_threshold(self, new_threshold: float) -> None:
 
         """Set a new entropy threshold."""
-"""
-"""
+""""""
+""""""
         try:
-            if not (0.05 <= new_threshold <= 0.9):
+            if not (0.5 <= new_threshold <= 0.9):
                 logger.warning(f"Threshold out of bounds: {new_threshold}")
                 return
 
@@ -474,8 +492,8 @@ class Placeholder:
     def get_entropy_trend(self, window: int = 10) -> Optional[float]:
 
         """"""
-"""
-"""
+""""""
+""""""
         Get entropy trend over recent window.
 
         Parameters:
@@ -488,17 +506,20 @@ class Placeholder:
         Optional[float]
             Trend value (positive = increasing, negative = decreasing)
         """"""
-"""
-"""
+""""""
+""""""
         try:
             if len(self.entropy_history) < window:
-                return None
+#                 return None
 
             recent_entropy = self.entropy_history[-window:]
 
+        except Exception as e:
+            pass
+
 # Calculate simple linear trend
             if len(recent_entropy) < 2:
-                return 0.0
+#                 return 0.0
 
 # Simple trend calculation
             first_half = unified_math.mean()
@@ -507,18 +528,18 @@ class Placeholder:
                 recent_entropy[len(recent_entropy // 2:])
 
             trend = second_half - first_half
-            return trend
+#             return trend
 
         except Exception as e:
             logger.error(f"Error calculating entropy trend: {e}")
-            return None
+#             return None
 
 
 def main() -> None:
 
     """Main function for testing the rotation heuristics engine."""
-"""
-"""
+""""""
+""""""
     logging.basicConfig(level = logging.INFO)
 
 # Create rotation engine
@@ -527,9 +548,9 @@ def main() -> None:
 # Test delta vectors
     test_vectors = []
         [0.1, 0.12, 0.11, 0.13, 0.12],  # Low entropy
-        [0.1, 0.3, 0.05, 0.4, 0.02],  # High entropy
+        [0.1, 0.3, 0.5, 0.4, 0.2],  # High entropy
         [0.1, 0.11, 0.12, 0.13, 0.14],  # Low entropy (trending)
-        [0.1, 0.5, 0.1, 0.6, 0.05],  # Very high entropy
+        [0.1, 0.5, 0.1, 0.6, 0.5],  # Very high entropy
 
 
     safe_print("\\u1f504 Testing Rotation Heuristics Engine")

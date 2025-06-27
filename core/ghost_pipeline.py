@@ -11,8 +11,8 @@ from dual_unicore_handler import DualUnicoreHandler
 unicore = DualUnicoreHandler()
 
 # -*- coding: utf - 8 -*-\\n# """Ghost pipeline - stealth - mode validator & orchestrator."""
-"""
-"""
+""""""
+""""""
 
 This module glues together the * stealth * helpers that were recently added to
 Schwabot's core:'
@@ -33,8 +33,8 @@ so that we avoid heavy computational cost inside tight trading loops.  The API
 surface is stable and future - proof: each component can be swapped for a more
 sophisticated version without changing the public signature.
 """"""
-"""
-"""
+""""""
+""""""
 
 
 from typing import Final, Tuple
@@ -57,12 +57,12 @@ _BASE_CYCLE: Final = 42  # phase_hash_gate default
 class Placeholder:
 
     """[BRAIN] Placeholder class for recursive profit mapping"""
-"""
-"""
+""""""
+""""""
     pass
     """Runtime container that evaluates ghost - mode pre - conditions."""
-"""
-"""
+""""""
+""""""
 
 
 entropy_threshold: float
@@ -70,7 +70,7 @@ temp_threshold: float
 base_cycle: int
 
 
-def __init__()
+def __init__():
 
 
         self,
@@ -82,8 +82,8 @@ base_cycle: int = _BASE_CYCLE,
 
 
 """TODO: document __init__."""
-"""
-"""
+""""""
+""""""
 self.entropy_threshold = entropy_threshold
 self.temp_threshold = temp_threshold
 self.base_cycle = base_cycle
@@ -93,7 +93,7 @@ self.base_cycle = base_cycle
 # ------------------------------------------------------------------
 
 
-def validate()
+def validate():
 
 
         self,
@@ -107,8 +107,8 @@ salt: str = "",
 
 
 """Return overall validity flag and individual component map."""
-"""
-"""
+""""""
+""""""
 entropy_ok = sync_flux_compensator(entropy, self.entropy_threshold)
         temp_ok = thermal_delta_switch()
             temp_current, temp_previous, threshold = self.temp_threshold
@@ -121,7 +121,7 @@ component_map={}
 "temp_ok": temp_ok,
 "phase_ok": phase_ok,
 
-        return all_ok, component_map
+#         return all_ok, component_map
 
 
 # -----------------------------------------------------------------------------
@@ -129,7 +129,7 @@ component_map={}
 # -----------------------------------------------------------------------------
 
 
-def ghost_validator_pipeline()
+def ghost_validator_pipeline():
 
 
     entropy: float,
@@ -143,13 +143,13 @@ base_cycle: int = _BASE_CYCLE,
 salt: str="",
     -> bool:
 """One - shot validation wrapper around :class:`GhostPipeline`."""
-"""
-"""
+""""""
+""""""
 
 Returns ``True`` only if *all* component validators pass.
 """"""
-"""
-"""
+""""""
+""""""
 pipeline = GhostPipeline()
         entropy_threshold = entropy_threshold,
 temp_threshold = temp_threshold,
@@ -158,11 +158,11 @@ base_cycle = base_cycle,
 result, _ = pipeline.validate()
         entropy, temp_current, temp_previous, tick, salt = salt
 
-    return result
+#     return result
 
 
 
-"""
-"""
-"""
-"""
+""""""
+""""""
+""""""
+""""""

@@ -18,8 +18,8 @@ from core.truth_lattice_math import is_consensus_reached
 unicore = DualUnicoreHandler()
 
 # -*- coding: utf - 8 -*-\n"""core.ghost_phase_strategy_loader"""
-"""
-"""
+""""""
+""""""
 Ghost - Phase Strategy Loader
 == == == == == == == == == == == == == =
 
@@ -33,8 +33,8 @@ The intent is to offer a * single * modern API(`decide`) so legacy modules(e.g.)
 `strategy_mapper` can replace their obsolete, error - prone stubs with a simple
 call.
 """"""
-"""
-"""
+""""""
+""""""
 
 
 __all__ = []
@@ -48,8 +48,8 @@ class Placeholder:
     """[BRAIN] Placeholder class for recursive profit mapping"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     phase_report: PhaseEvaluationReport
     overlay_match: OverlayMatch
@@ -72,14 +72,14 @@ class Placeholder:
     """[BRAIN] Placeholder class for recursive profit mapping"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """Evaluate signals and choose the appropriate strategy id."""
-"""
-"""
+""""""
+""""""
 
-    def __init__()
+    def __init__():
 
         self,
         overlay_json: str,
@@ -93,7 +93,7 @@ class Placeholder:
         self.omega = omega
 
 # ------------------------------------------------------------------
-    def decide()
+    def decide():
 
         self,
         prices: Sequence[float],
@@ -101,8 +101,8 @@ class Placeholder:
         raw_signals: Sequence[float],
         -> GhostPhaseDecision:
         """Return a decision object with strategy id and diagnostics."""
-"""
-"""
+""""""
+""""""
         drift_report = self.weighter.calculate_drift_weight(prices)
         overlay_match = self.overlay_mapper.map_overlay(live_vector)
         phase_report = self.monitor.evaluate()
@@ -116,7 +116,7 @@ class Placeholder:
         strategy_id = self._select_strategy()
     phase_report, overlay_match, consensus
 
-        return GhostPhaseDecision()
+#         return GhostPhaseDecision()
             phase_report,
             overlay_match,
             drift_report,
@@ -125,7 +125,7 @@ class Placeholder:
 
 
 # ------------------------------------------------------------------
-    def _select_strategy()
+    def _select_strategy():
 
         self,
         phase: PhaseEvaluationReport,
@@ -133,22 +133,22 @@ class Placeholder:
         consensus: bool,
         -> str:
         """Very simple rule - based strategy selector."""
-"""
-"""
+""""""
+""""""
 
         Replace this with your advanced logic / ML model.
         """"""
-"""
-"""
+""""""
+""""""
         base = overlay.overlay_id.split(":")[0] if ":" in overlay.overlay_id else overlay.overlay_id
         if not consensus:
-            return f"{base}_hold"
+#             return f"{base}_hold"
         match phase.phase_state:
             case PhaseEvaluationReport.phase_state.__class__.HIGH:
-                return f"{base}_high_risk"
+#                 return f"{base}_high_risk"
             case PhaseEvaluationReport.phase_state.__class__.MEDIUM:
-                return f"{base}_medium_risk"
+#                 return f"{base}_medium_risk"
             case _:
-                return f"{base}_low_risk"
+#                 return f"{base}_low_risk"
 
 

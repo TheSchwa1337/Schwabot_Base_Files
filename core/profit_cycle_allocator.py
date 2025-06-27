@@ -24,29 +24,35 @@ unicore = DualUnicoreHandler()
 # ASIC Symbol Mapping (Auto - generated):
 # 🟢 → 🟢
 # -*- coding: utf - 8 -*-
-"""
-"""
-"""
+""""""
+""""""
+""""""
 Enhanced Profit Cycle Allocator with Matrix Mapper Integration.
 
 Allocates trade volume or capital across strategy cycles with advanced tensor scoring,
 matrix basket integration, and bit resolution phase management. Integrates with quantum
 strategy system for optimal profit routing and portfolio rebalancing.
-"""
-"""
-"""
+""""""
+""""""
+""""""
 
 
 # Import safe print for Windows compatibility
 try:
     from core.utils.windows_cli_compatibility import safe_print, safe_format_error, log_safe, info, warn, error, success, debug
     CLI_HANDLER_AVAILABLE = True
+except Exception as e:
+    pass
+
 except ImportError:
     CLI_HANDLER_AVAILABLE = False
 
 # Import unified math system
 try:
     from core.unified_math_system import unified_math
+except Exception as e:
+    pass
+
 except ImportError:
 # Fallback math implementation
     class UnifiedMath:
@@ -72,6 +78,9 @@ except ImportError:
 try:
     from core.zpe_core import ZPECore
     ZPE_MODULES_AVAILABLE = True
+except Exception as e:
+    pass
+
 except ImportError as e:
     logging.warning(f"ZPE modules not available: {e}")
     ZPE_MODULES_AVAILABLE = False
@@ -81,6 +90,9 @@ except ImportError as e:
 try:
     from core.matrix_mapper import MatrixMapper, BitPhase, BasketType
     MATRIX_MAPPER_AVAILABLE = True
+except Exception as e:
+    pass
+
 except ImportError as e:
     logging.warning(f"Matrix mapper not available: {e}")
     MATRIX_MAPPER_AVAILABLE = False
@@ -92,6 +104,9 @@ except ImportError as e:
 try:
     from core.dlt_waveform_engine import DLTWaveformEngine, BitPhase as DLTBitPhase
     DLT_WAVEFORM_AVAILABLE = True
+except Exception as e:
+    pass
+
 except ImportError as e:
     logging.warning(f"DLT waveform engine not available: {e}")
     DLT_WAVEFORM_AVAILABLE = False
@@ -102,6 +117,9 @@ except ImportError as e:
 try:
     from lattice_glyph_profit_engine import LatticeGlyphProfitEngine
     LGPE_AVAILABLE = True
+except Exception as e:
+    pass
+
 except ImportError:
     LGPE_AVAILABLE = False
 
@@ -125,16 +143,16 @@ class AllocationResult:
 
 class ProfitCycleAllocator:
 
-    """
-"""
+    """"""
+""""""
 
 
-"""
+""""""
     Allocates profits across strategies / buckets using recursive, bit - aware, and symbol - driven logic.
     Handles 4 - bit, 8 - bit, N - bit strategies, and integrates with LGPE / emoji / ASIC triggers.
-    """
-"""
-"""
+    """"""
+""""""
+""""""
 
     def __init__(self, bit_modes: List[int] = [4, 8, 16]):
 
@@ -152,14 +170,14 @@ class ProfitCycleAllocator:
         recursion_depth: int = 0,
         max_recursion: int = 3
     ) -> AllocationResult:
-        """
-"""
-"""
+        """"""
+""""""
+""""""
         Allocate profits using weighted, bit - aware, and optionally symbol - driven logic.
         Recursively allocates overflow to higher bit modes.
-        """
-"""
-"""
+        """"""
+""""""
+""""""
         log = []
         profit_deltas = np.array(profit_deltas)
         weights = np.array(weights)
@@ -209,7 +227,7 @@ class ProfitCycleAllocator:
         )
         self.log_allocation(result)
         self.history.append(result)
-        return result
+#         return result
 
     def apply_bit_logic(
 
@@ -218,14 +236,14 @@ class ProfitCycleAllocator:
         bit_mode: int,
         log: List[str]
     ) -> Tuple[Dict[str, float], float]:
-        """
-"""
-"""
+        """"""
+""""""
+""""""
         Apply bit logic to allocate profits into buckets (4 / 8 / N - bit).
         Returns allocations and any overflow.
-        """
-"""
-"""
+        """"""
+""""""
+""""""
         n_buckets = bit_mode
         bucket_size = float(np.sum(weighted_profits)) / \
             n_buckets if n_buckets > 0 else 0.0
@@ -242,7 +260,7 @@ class ProfitCycleAllocator:
             overflow = total_alloc - total_profit
         log.append(f"Bit logic allocations ({bit_mode}-bit): {allocations}")
         log.append(f"Overflow after bit logic: {overflow}")
-        return allocations, overflow
+#         return allocations, overflow
 
     def map_symbol_to_logic(
 
@@ -250,18 +268,18 @@ class ProfitCycleAllocator:
             symbol: str,
             value: float,
             log: List[str]) -> Any:
-        """
-"""
-"""
+        """"""
+""""""
+""""""
         Map a symbol (emoji / ASIC) to a logic function using LGPE or fallback.
-        """
-"""
-"""
+        """"""
+""""""
+""""""
         if self.lgpe:
             context = {'magnitude': value}
             result = self.lgpe.execute_symbol(symbol, context)
             log.append(f"LGPE executed for symbol {symbol}: {result}")
-            return result
+#             return result
             else:
 # Fallback: hash the symbol and return a deterministic value
             hash_val = int(
@@ -269,37 +287,37 @@ class ProfitCycleAllocator:
                     symbol.encode('utf - 8')).hexdigest(), 16)
             mapped = (hash_val % 1000) / 1000.0 * value
             log.append(f"Fallback symbol logic for {symbol}: {mapped}")
-            return mapped
+#             return mapped
 
     def get_next_bit_mode(self, current: int) -> Optional[int]:
 
-        """
-"""
-"""
+        """"""
+""""""
+""""""
         Get the next higher bit mode for recursion.
-        """
-"""
-"""
+        """"""
+""""""
+""""""
         try:
             idx = self.bit_modes.index(current)
             if idx + 1 < len(self.bit_modes):
-                return self.bit_modes[idx + 1]
+#                 return self.bit_modes[idx + 1]
         except ValueError:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
-    return None
+#     return None
 
     def log_allocation(self, result: AllocationResult):
 
-        """
-"""
-"""
+        """"""
+""""""
+""""""
         Log the allocation result in detail.
-        """
-"""
-"""
+        """"""
+""""""
+""""""
         logger.info(
             f"Profit allocation (bit_mode={
                 result.bit_mode}, recursion={
@@ -317,7 +335,7 @@ class ProfitCycleAllocator:
 if __name__ == "__main__":
     allocator = ProfitCycleAllocator()
 # Example: 8 profit deltas, random weights, 8 - bit allocation, emoji trigger
-    profit_deltas = np.random.uniform(-0.05, 0.2, 8)
+    profit_deltas = np.random.uniform(-0.5, 0.2, 8)
     weights = np.random.uniform(0.5, 1.5, 8)
     symbol = "🟢"  # Profit trigger emoji
     result = allocator.allocate_profits(

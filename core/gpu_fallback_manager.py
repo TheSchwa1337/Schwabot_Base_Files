@@ -1,11 +1,11 @@
 # -*- coding: utf - 8 -*-
-"""
-"""
+""""""
+""""""
 # -*- coding: utf - 8 -*-
 from __future__ import annotations
 
-"""
-"""
+""""""
+""""""
 # -*- coding: utf - 8 -*-
 # -*- coding: utf - 8 -*-
 
@@ -14,7 +14,7 @@ GPU Fallback Manager - Hardware Failover System
 
 Handles GPU timeout detection, fallback routing to ASIC - compatible systems,
 and maintains trading continuity during hardware failures.
-"""
+""""""
 
 import time
 import psutil
@@ -141,6 +141,9 @@ class GPUFallbackManager:
         """Hardware monitoring loop."""
         while self.monitoring_active:
             try:
+            except Exception as e:
+                pass
+
 # Collect hardware metrics
                 self._collect_hardware_metrics()
 
@@ -161,6 +164,9 @@ class GPUFallbackManager:
     def _collect_hardware_metrics(self):
         """Collect current hardware performance metrics."""
         try:
+        except Exception as e:
+            pass
+
 # System metrics
             cpu_percent = psutil.cpu_percent(interval = 0.1)
             memory = psutil.virtual_memory()
@@ -325,6 +331,9 @@ class GPUFallbackManager:
                 self.completed_tasks[task.task_id] = result
                 processed_count += 1
 
+            except Exception as e:
+                pass
+
 # Execute callback if provided
                 if task.callback and result.success:
                     try:
@@ -482,7 +491,7 @@ class GPUFallbackManager:
 # Public API methods
 
     def submit_gpu_task(self, task: FallbackTask) -> bool:
-        """
+        """"""
         Submit task for GPU processing with fallback support.
 
         Args:
@@ -490,11 +499,14 @@ class GPUFallbackManager:
 
         Returns:
             True if task submitted successfully
-        """
+        """"""
         try:
             if self.hardware_state == HardwareState.ACTIVE:
                 self.gpu_task_queue.put(task)
             else:
+        except Exception as e:
+            pass
+
 # Route to fallback queue
                 self.fallback_task_queue.put(task)
             return True
@@ -502,7 +514,7 @@ class GPUFallbackManager:
             return False
 
     def get_task_result(self, task_id: str) -> Optional[FallbackResult]:
-        """
+        """"""
         Get result of completed task.
 
         Args:
@@ -510,16 +522,16 @@ class GPUFallbackManager:
 
         Returns:
             Task result or None if not found
-        """
+        """"""
         return self.completed_tasks.get(task_id)
 
     def get_hardware_status(self) -> Dict[str, Any]:
-        """
+        """"""
         Get current hardware status.
 
         Returns:
             Hardware status information
-        """
+        """"""
         return {
             'hardware_state': self.hardware_state.value,
             'fallback_mode': self.fallback_mode.value,
@@ -533,12 +545,12 @@ class GPUFallbackManager:
         }
 
     def force_fallback_mode(self, mode: FallbackMode):
-        """
+        """"""
         Force specific fallback mode.
 
         Args:
             mode: Fallback mode to activate
-        """
+        """"""
         self.fallback_mode = mode
         self.hardware_state = HardwareState.FALLBACK
         self._log_fallback_event(f"Forced fallback mode: {mode.value}")
@@ -559,7 +571,7 @@ def submit_gpu_task(task_id: str,
                     callback: Optional[Callable] = None,
                     priority: int = 1,
                     timeout: float = 30.0) -> bool:
-    """
+    """"""
     Global function for GPU task submission.
 
     Args:
@@ -572,7 +584,7 @@ def submit_gpu_task(task_id: str,
 
     Returns:
         True if task submitted successfully
-    """
+    """"""
     task = FallbackTask(
         task_id = task_id,
         task_type = task_type,
@@ -587,16 +599,16 @@ def submit_gpu_task(task_id: str,
 
 
 def get_gpu_hardware_status() -> Dict[str, Any]:
-    """
+    """"""
     Global function for hardware status retrieval.
 
     Returns:
         Current hardware status
-    """
+    """"""
     return gpu_fallback_manager.get_hardware_status()
 
 
-"""
+""""""
 GPU Fallback Manager Module
 
 This module implements hardware failover system for maintaining trading continuity
@@ -609,7 +621,7 @@ Key features:
 - Task queue management with priority
 - Hardware recovery detection
 - Memory - optimized processing options
-"""
+""""""
 
 
 

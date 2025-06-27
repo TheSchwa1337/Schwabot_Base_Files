@@ -30,12 +30,12 @@ unicore = DualUnicoreHandler()
 CLI_HANDLER_AVAILABLE = True
 except ImportError:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 CLI_HANDLER_AVAILABLE = False
 
@@ -44,40 +44,40 @@ def safe_print(message: str, use_emoji: bool = True) -> str:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
-        return message
+#         return message
 
 
 def safe_format_error(error: Exception, context: str = "") -> str:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
-        return f"Error: {str(error)} | Context: {context}"
+#         return f"Error: {str(error)} | Context: {context}"
 
 
 def log_safe(logger, level: str, message: str) -> None:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         getattr(logger, level.lower())(message)
 
@@ -90,8 +90,8 @@ class RiskLevel(Enum):
     """Risk levels for different market conditions."""
 
 
-"""
-"""
+""""""
+""""""
 
 
 LOW = "low"  # Normal market conditions
@@ -105,8 +105,8 @@ class CircuitBreakerState(Enum):
     """Circuit breaker states."""
 
 
-"""
-"""
+""""""
+""""""
 
 
 NORMAL = "normal"  # Normal operation
@@ -121,18 +121,18 @@ class Placeholder:
     """[BRAIN] Placeholder class for recursive profit mapping"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """Risk limits configuration."""
-"""
-"""
+""""""
+""""""
 
 
 daily_loss_limit: float = 1000.0  # Maximum daily loss in USD
 single_trade_limit: float = 100.0  # Maximum single trade size in USD
 exposure_limit: float = 5000.0  # Maximum total exposure in USD
-volatility_threshold: float = 0.05  # Volatility threshold for circuit breaker
+volatility_threshold: float = 0.5  # Volatility threshold for circuit breaker
 entropy_threshold: float = 0.8  # Entropy threshold for circuit breaker
 # Reconciliation interval in seconds
 position_reconciliation_interval: int = 300
@@ -144,12 +144,12 @@ class Placeholder:
     """[BRAIN] Placeholder class for recursive profit mapping"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """Position data for reconciliation."""
-"""
-"""
+""""""
+""""""
 
 
 asset: str
@@ -168,12 +168,12 @@ class Placeholder:
     """[BRAIN] Placeholder class for recursive profit mapping"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """Risk event data."""
-"""
-"""
+""""""
+""""""
 
 
 event_type: str
@@ -190,12 +190,12 @@ class Placeholder:
     """[BRAIN] Placeholder class for recursive profit mapping"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """"""
-"""
-"""
+""""""
+""""""
 
 
 Risk Guard - Safety and capital controls for Schwabot.
@@ -205,30 +205,36 @@ Provides comprehensive risk management including:
 # Import safe print for Windows compatibility
 try:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+except Exception as e:
+    pass
+
+""""""
+""""""
     pass
 except ImportError:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     try:
+    except Exception as e:
+        pass
+
 # from core.utils.windows_cli_compatibility import safe_print,
 # safe_format_error, info, warn, error, success, debug  # F811: duplicate
 # import
     except ImportError:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 
 
@@ -236,12 +242,12 @@ def safe_print(message):
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     print(message)
 
@@ -250,12 +256,12 @@ def info(message):
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     print(f"[INFO] {message}")
 
@@ -264,12 +270,12 @@ def warn(message):
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     print(f"[WARN] {message}")
 
@@ -278,12 +284,12 @@ def error(message):
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     print(f"[ERROR] {message}")
 
@@ -292,12 +298,12 @@ def success(message):
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     print(f"[SUCCESS] {message}")
 
@@ -306,19 +312,19 @@ def debug(message):
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     print(f"[DEBUG] {message}")
 
 
 # """Risk Guard - Safety and Capital Controls for Schwabot."""
-"""
-"""
+""""""
+""""""
 
 This module provides comprehensive risk management including:
 - Global daily - loss, single - trade, and exposure caps
@@ -327,77 +333,86 @@ This module provides comprehensive risk management including:
 - Manual panic button CLI
 - Integration with Fault Bus for automated safety
 """"""
-"""
-"""
+""""""
+""""""
 
 
 # Import unified mathematics
 try:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+except Exception as e:
+    pass
+
+""""""
+""""""
     pass
 unified_math = get_unified_math()
     UNIFIED_MATH_AVAILABLE = True
 except ImportError:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 UNIFIED_MATH_AVAILABLE = False
 
 # Import fault bus for integration
 try:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+except Exception as e:
+    pass
+
+""""""
+""""""
     pass
 fault_bus = get_fault_bus()
     FAULT_BUS_AVAILABLE = True
 except ImportError:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 FAULT_BUS_AVAILABLE = False
 
 # Import centralized CLI handler
 try:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+except Exception as e:
+    pass
+
+""""""
+""""""
     pass
 - Global daily - loss, single - trade, and exposure caps
 - Circuit - breaker tied to abnormal entropy / volatility spikes
 - Position reconciliation against exchange balances
 - Manual panic button CLI
 """"""
-"""
-"""
+""""""
+""""""
 
 
 def __init__(self, config: Optional[Dict[str, Any]] = None):
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Initialize risk guard."""
-"""
-"""
+""""""
+""""""
 
 
 self.config = config or {}
@@ -441,16 +456,16 @@ def set_risk_limits(self, limits: RiskLimits) -> None:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Set risk limits."""
-"""
-"""
+""""""
+""""""
 
 
 self.risk_limits = limits
@@ -462,17 +477,20 @@ def check_daily_loss_limit(self, trade_pnl: float) -> bool:
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Check if trade would exceed daily loss limit."""
-"""
-"""
+""""""
+""""""
         try:
+        except Exception as e:
+            pass
+
 # Check if we need to reset daily tracking
 now = datetime.now()
             if now.date() > self.daily_start_time.date():
@@ -484,8 +502,8 @@ new_daily_pnl = self.daily_pnl + trade_pnl
 # Check limit
             if new_daily_pnl < -self.risk_limits.daily_loss_limit:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 self._record_risk_event()
                     "daily_loss_limit",
@@ -493,36 +511,39 @@ RiskLevel.HIGH,
 f"Daily loss limit would be exceeded: ${new_daily_pnl:.2f}",
 "daily_loss_check"
 
-                return False
+#                 return False
 
-            return True
+#             return True
 
         except Exception as e:
 safe_safe_print()
     f"\\u274c Daily loss check failed: {"}
         safe_format_error()
             e, 'daily_loss_check'""
-            return False
+#             return False
 
 def check_single_trade_limit(self, trade_size: float) -> bool:
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Check if trade size exceeds single trade limit."""
-"""
-"""
+""""""
+""""""
         try:
             if trade_size > self.risk_limits.single_trade_limit:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+        except Exception as e:
+            pass
+
+""""""
+""""""
     pass
 self._record_risk_event()
                     "single_trade_limit",
@@ -530,42 +551,45 @@ RiskLevel.MEDIUM,
 f"Single trade limit exceeded: ${trade_size:.2f}",
 "single_trade_check"
 
-                return False
+#                 return False
 
-            return True
+#             return True
 
         except Exception as e:
 safe_safe_print()
     f"\\u274c Single trade check failed: {"}
         safe_format_error()
             e, 'single_trade_check'""
-            return False
+#             return False
 
 def check_exposure_limit(self, new_exposure: float) -> bool:
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Check if new exposure would exceed total exposure limit."""
-"""
-"""
+""""""
+""""""
         try:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+        except Exception as e:
+            pass
+
+""""""
+""""""
     pass
 total_exposure = self.total_exposure + new_exposure
 
             if total_exposure > self.risk_limits.exposure_limit:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 self._record_risk_event()
                     "exposure_limit",
@@ -573,18 +597,18 @@ RiskLevel.HIGH,
 f"Exposure limit would be exceeded: ${total_exposure:.2f}",
 "exposure_check"
 
-                return False
+#                 return False
 
-            return True
+#             return True
 
         except Exception as e:
 safe_safe_print()
     f"\\u274c Exposure check failed: {"}
         safe_format_error()
             e, 'exposure_check'""
-            return False
+#             return False
 
-def check_circuit_breaker()
+def check_circuit_breaker():
 
 
         self,
@@ -593,8 +617,8 @@ entropy: float,
 market_data: Optional[Dict[str, Any]]=None
     -> bool:
 """"""
-"""
-"""
+""""""
+""""""
 Check circuit breaker conditions.
 
 Circuit breaker is triggered by:
@@ -602,9 +626,12 @@ Circuit breaker is triggered by:
 - Abnormal entropy levels
 - Market anomalies
 """"""
-"""
-"""
+""""""
+""""""
         try:
+        except Exception as e:
+            pass
+
 # Update history
 self.volatility_history.append(volatility)
             self.entropy_history.append(entropy)
@@ -633,37 +660,37 @@ entropy_triggered = entropy > self.risk_limits.entropy_threshold
             if volatility_triggered or entropy_triggered or volatility_spike:
                 if self.circuit_breaker_state == CircuitBreakerState.NORMAL:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 self.circuit_breaker_state = CircuitBreakerState.WARNING
 self._record_circuit_breaker_event("warning", volatility, entropy)
 
                 if self.circuit_breaker_state == CircuitBreakerState.WARNING:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 self.circuit_breaker_state = CircuitBreakerState.TRIPPED
 self.circuit_breaker_trips += 1
 self._record_circuit_breaker_event("tripped", volatility, entropy)
-                    return False
+#                     return False
 
             elif self.circuit_breaker_state != CircuitBreakerState.NORMAL:
 # Reset circuit breaker if conditions normalize
 self.circuit_breaker_state = CircuitBreakerState.NORMAL
 self._record_circuit_breaker_event("reset", volatility, entropy)
 
-            return True
+#             return True
 
         except Exception as e:
 safe_safe_print()
     f"\\u274c Circuit breaker check failed: {"}
         safe_format_error()
             e, 'circuit_breaker'""
-            return False
+#             return False
 
-def update_position()
+def update_position():
 
 
         self,
@@ -673,12 +700,15 @@ entry_price: float,
 current_price: float
     -> None:
 """Update position data."""
-"""
-"""
+""""""
+""""""
         try:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+        except Exception as e:
+            pass
+
+""""""
+""""""
     pass
 unrealized_pnl=(current_price - entry_price) * quantity
 
@@ -710,19 +740,22 @@ safe_safe_print()
 async def reconcile_positions()
     self, exchange_balances: Dict[str, float] -> Dict[str, Any]:
         """"""
-"""
-"""
+""""""
+""""""
 Reconcile positions against exchange balances.
 
 This ensures our internal position tracking matches
 the actual exchange balances.
 """"""
-"""
-"""
+""""""
+""""""
         try:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+        except Exception as e:
+            pass
+
+""""""
+""""""
     pass
 reconciliation_results={}
 'reconciled': True,
@@ -736,7 +769,7 @@ reconciliation_results={}
 
 discrepancy = unified_math.abs(exchange_balance - internal_balance)
 
-                if discrepancy > 0.001:  # Allow for small rounding differences
+                if discrepancy > 0.1:  # Allow for small rounding differences
 reconciliation_results['discrepancies'.append({])}
                         'asset': asset,
 'internal': internal_balance,
@@ -763,8 +796,8 @@ self.last_reconciliation = datetime.now()
 
             if reconciliation_results['discrepancies']:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 reconciliation_results['reconciled']=False
 safe_safe_print()
@@ -774,40 +807,43 @@ safe_safe_print()
             else:
 safe_safe_print("\\u2705 Position reconciliation successful")
 
-            return reconciliation_results
+#             return reconciliation_results
 
         except Exception as e:
 safe_safe_print()
     f"\\u274c Position reconciliation failed: {"}
         safe_format_error()
             e, 'position_reconciliation'""
-            return {'reconciled': False, 'error': str(e)}
+#             return {'reconciled': False, 'error': str(e)}
 
 def trigger_panic_mode(self, reason: str="Manual trigger") -> None:
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """"""
-"""
-"""
+""""""
+""""""
 Trigger panic mode - emergency stop for all trading.
 
 This is the manual panic button that immediately stops
 all trading activity.
 """"""
-"""
-"""
+""""""
+""""""
         try:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+        except Exception as e:
+            pass
+
+""""""
+""""""
     pass
 self.panic_mode = True
 self.panic_triggered_at = datetime.now()
@@ -822,8 +858,8 @@ f"Panic mode triggered: {reason}",
 # Notify fault bus if available
             if FAULT_BUS_AVAILABLE:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 fault_bus.record_fault()
                     fault_type="risk_guard_panic",
@@ -845,20 +881,23 @@ def reset_panic_mode(self) -> None:
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Reset panic mode."""
-"""
-"""
+""""""
+""""""
         try:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+        except Exception as e:
+            pass
+
+""""""
+""""""
     pass
 self.panic_mode = False
 self.panic_triggered_at = None
@@ -882,17 +921,17 @@ def is_trading_allowed(self) -> bool:
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Check if trading is currently allowed."""
-"""
-"""
-        return ()
+""""""
+""""""
+#         return ()
             not self.panic_mode and
 self.circuit_breaker_state != CircuitBreakerState.TRIPPED and
 self.current_risk_level != RiskLevel.CRITICAL
@@ -902,17 +941,17 @@ def get_risk_status(self) -> Dict[str, Any]:
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Get current risk status."""
-"""
-"""
-        return {}
+""""""
+""""""
+#         return {}
 'panic_mode': self.panic_mode,
 'panic_triggered_at': self.panic_triggered_at.isoformat() if self.panic_triggered_at else None,
             'circuit_breaker_state': self.circuit_breaker_state.value,
@@ -931,16 +970,16 @@ def _reset_daily_tracking(self) -> None:
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Reset daily tracking counters."""
-"""
-"""
+""""""
+""""""
 self.daily_start_time = datetime.now().replace()
     hour = 0, minute = 0, second = 0, microsecond = 0
         self.daily_pnl = 0.0
@@ -948,7 +987,7 @@ self.daily_trades = 0
 self.daily_volume = 0.0
 safe_safe_print("\\u1f504 Daily tracking reset")
 
-def _record_risk_event()
+def _record_risk_event():
 
 
         self,
@@ -959,12 +998,15 @@ triggered_by: str,
 metadata: Optional[Dict[str, Any]]=None
     -> None:
 """Record a risk event."""
-"""
-"""
+""""""
+""""""
         try:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+        except Exception as e:
+            pass
+
+""""""
+""""""
     pass
 event = RiskEvent()
                 event_type = event_type,
@@ -991,7 +1033,7 @@ safe_safe_print()
         safe_format_error()
             e, 'record_risk_event'""
 
-def _record_circuit_breaker_event()
+def _record_circuit_breaker_event():
 
 
         self,
@@ -1000,12 +1042,15 @@ volatility: float,
 entropy: float
     -> None:
 """Record circuit breaker event."""
-"""
-"""
+""""""
+""""""
         try:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+        except Exception as e:
+            pass
+
+""""""
+""""""
     pass
 event = RiskEvent()
                 event_type = f"circuit_breaker_{event_type}",
@@ -1050,20 +1095,20 @@ def get_risk_guard() -> RiskGuard:
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """Get global risk guard instance."""
-"""
-"""
-    return risk_guard
+""""""
+""""""
+#     return risk_guard
 
 
-def check_risk_limits()
+def check_risk_limits():
 
     trade_pnl: float,
     trade_size: float,
@@ -1071,16 +1116,16 @@ def check_risk_limits()
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """Check all risk limits for a trade."""
-"""
-"""
+""""""
+""""""
 guard = get_risk_guard()
 
 # Update tracking
@@ -1091,41 +1136,41 @@ daily_ok = guard.check_daily_loss_limit(trade_pnl)
     trade_ok = guard.check_single_trade_limit(trade_size)
     exposure_ok = guard.check_exposure_limit(new_exposure)
 
-    return daily_ok and trade_ok and exposure_ok
+#     return daily_ok and trade_ok and exposure_ok
 
 
 def check_circuit_breaker(volatility: float, entropy: float) -> bool:
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """Check circuit breaker conditions."""
-"""
-"""
+""""""
+""""""
 guard = get_risk_guard()
-    return guard.check_circuit_breaker(volatility, entropy)
+#     return guard.check_circuit_breaker(volatility, entropy)
 
 
 def trigger_panic_mode(reason: str="Manual trigger") -> None:
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """Trigger panic mode."""
-"""
-"""
+""""""
+""""""
 guard = get_risk_guard()
     guard.trigger_panic_mode(reason)
 
@@ -1134,16 +1179,16 @@ def reset_panic_mode() -> None:
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """Reset panic mode."""
-"""
-"""
+""""""
+""""""
 guard = get_risk_guard()
     guard.reset_panic_mode()
 
@@ -1152,48 +1197,48 @@ def is_trading_allowed() -> bool:
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """Check if trading is currently allowed."""
-"""
-"""
+""""""
+""""""
 guard = get_risk_guard()
-    return guard.is_trading_allowed()
+#     return guard.is_trading_allowed()
 
 
 def get_risk_status() -> Dict[str, Any]:
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """Get current risk status."""
-"""
-"""
+""""""
+""""""
 guard = get_risk_guard()
-    return guard.get_risk_status()
+#     return guard.get_risk_status()
 
 
 # Example usage
 
 if __name__ == "__main__":
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 # Test risk guard
 safe_print("\\u1f9ea Testing Risk Guard...")
@@ -1208,7 +1253,7 @@ trade_ok = check_risk_limits()
     safe_print(f"\\u2705 Risk limit check: {trade_ok}")
 
 # Test circuit breaker
-circuit_ok = check_circuit_breaker(volatility = 0.03, entropy = 0.6)
+circuit_ok = check_circuit_breaker(volatility = 0.3, entropy = 0.6)
     safe_print(f"\\u2705 Circuit breaker check: {circuit_ok}")
 
 # Test panic mode

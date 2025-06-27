@@ -16,8 +16,8 @@ from core.unified_math_system import unified_math
 unicore = DualUnicoreHandler()
 
 # """Spectral lattice generator for quantised wave analysis."""
-"""
-"""
+""""""
+""""""
 
 The purpose of: func: `wave_lattice_generator` is to project an input signal
 onto an FFT basis, quantise the spectrum into a * lattice grid * and return
@@ -34,8 +34,8 @@ Current implementation
 This is intentionally lightweight.  Later extensions can add wavelet tiling or
 non - uniform lattices.
 """"""
-"""
-"""
+""""""
+""""""
 
 
 # from core.unified_math_system import unified_math  # F811: duplicate import
@@ -47,27 +47,27 @@ def _logspace_levels(magnitudes: np.ndarray, levels: int) -> np.ndarray:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """Compute logarithmic thresholds for *levels* bins."""
-"""
-"""
+""""""
+""""""
 
 
 mag_nonzero = magnitudes[magnitudes > 0]
     if mag_nonzero.size == 0:
-        return np.zeros(levels + 1)
+#         return np.zeros(levels + 1)
     mag_min = float(unified_math.unified_math.min(mag_nonzero))
     mag_max = float(unified_math.unified_math.max(magnitudes))
-    return np.logspace(np.log10(mag_min), np.log10(mag_max), num=levels + 1)
+#     return np.logspace(np.log10(mag_min), np.log10(mag_max), num=levels + 1)
 
 
-def wave_lattice_generator()
+def wave_lattice_generator():
 
     signal: np.ndarray,
 
@@ -78,8 +78,8 @@ levels: int = 3,
 
 
 """Project *signal* onto a logarithmic spectral lattice."""
-"""
-"""
+""""""
+""""""
 
 Parameters
 ----------
@@ -96,8 +96,8 @@ Tuple[np.ndarray, np.ndarray]
         and *freqs * is the 1 - D array of FFT frequency bins (Hz units with)
         normalised sampling of 1.0.
 """"""
-"""
-"""
+""""""
+""""""
     if signal.ndim != 1:
         raise ValueError("signal must be 1 - D")
     if levels < 1:
@@ -120,11 +120,11 @@ hi = thresholds[lvl + 1]
 mask = (magnitudes >= lo) & (magnitudes < hi)
         lattice[lvl, mask] = 1
 
-    return lattice, freqs
+#     return lattice, freqs
 
 
 
-"""
-"""
-"""
-"""
+""""""
+""""""
+""""""
+""""""

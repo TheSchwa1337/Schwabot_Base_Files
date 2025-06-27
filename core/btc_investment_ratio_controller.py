@@ -14,6 +14,7 @@ import time
 
 from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
 from core.unified_signal_metrics import ()
+xi_t = 0.0  # Default value for xi_t
 
 
 # Initialize Unicode handler
@@ -32,8 +33,8 @@ class InvestmentDecision(Enum):
     """Investment decision types."""
 
 
-"""
-"""
+""""""
+""""""
 
 
 STRONG_BUY = "strong_buy"
@@ -49,8 +50,8 @@ class RiskLevel(Enum):
     """Risk assessment levels."""
 
 
-"""
-"""
+""""""
+""""""
 
 
 VERY_LOW = "very_low"
@@ -66,12 +67,12 @@ class Placeholder:
     """[BRAIN] Placeholder class for recursive profit mapping"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """Result of investment ratio analysis."""
-"""
-"""
+""""""
+""""""
 
 
 decision: InvestmentDecision
@@ -91,12 +92,12 @@ class Placeholder:
     """[BRAIN] Placeholder class for recursive profit mapping"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """Main controller for BTC investment ratio decisions."""
-"""
-"""
+""""""
+""""""
 
 # Configuration parameters
 confidence_threshold_high: float = 1.15
@@ -114,7 +115,7 @@ decision_history: List[InvestmentRatioResult] = field(default_factory=list)
 cooldown_period: float = 60.0  # Minimum seconds between decisions
 
 
-def analyze_investment_ratio()
+def analyze_investment_ratio():
 
         self,
 
@@ -128,8 +129,8 @@ volume_data: Optional[Dict] = None,
 network_data: Optional[Dict] = None,
     -> InvestmentRatioResult:
 """Analyze BTC investment ratio based on all available signals."""
-"""
-"""
+""""""
+""""""
 
 Parameters
 ----------
@@ -149,29 +150,35 @@ logger = logging.getLogger(__name__)
 # Import safe print for Windows compatibility
 try:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+except Exception as e:
+    pass
+
+""""""
+""""""
     pass
 except ImportError:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     try:
+    except Exception as e:
+        pass
+
 # from core.utils.windows_cli_compatibility import safe_print, info, warn,
 # error, success, debug  # F811: duplicate import
     except ImportError:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 
 
@@ -179,12 +186,12 @@ def safe_print(message):
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     print(message)
 
@@ -193,12 +200,12 @@ def info(message):
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     print(f"[INFO] {message}")
 
@@ -207,12 +214,12 @@ def warn(message):
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     print(f"[WARN] {message}")
 
@@ -221,12 +228,12 @@ def error(message):
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     print(f"[ERROR] {message}")
 
@@ -235,12 +242,12 @@ def success(message):
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     print(f"[SUCCESS] {message}")
 
@@ -249,19 +256,19 @@ def debug(message):
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     print(f"[DEBUG] {message}")
 
 
 # """BTC Investment Ratio Controller - Logical Sequencing for BTC Trading."""
-"""
-"""
+""""""
+""""""
 
 This module implements the logical sequencing for BTC investment ratio decisions
 based on price analysis, hash correlation, network strength, and multi - bit
@@ -283,8 +290,8 @@ Logical Sequencing:
 
 Windows CLI compatible with comprehensive error handling.
 """"""
-"""
-"""
+""""""
+""""""
 
 
 
@@ -299,18 +306,21 @@ Returns
 InvestmentRatioResult
 Complete investment ratio analysis
 """"""
-"""
-"""
+""""""
+""""""
         try:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+        except Exception as e:
+            pass
+
+""""""
+""""""
     pass
 current_time = time.time()
 
 # Check cooldown period
             if current_time - self.last_decision_time < self.cooldown_period:
-                return self._create_no_action_result("Cooldown period active")
+#                 return self._create_no_action_result("Cooldown period active")
 
 # Step 1: Collect unified signals
 core_signals, btc_signals = collect_unified_signals()
@@ -386,36 +396,39 @@ f"BTC allocation: {btc_allocation:.2%}, "
 f"confidence: {execution_confidence:.3f}"
 
 
-            return result
+#             return result
 
         except Exception as e:
 logger.error(f"Error in investment ratio analysis: {e}")
-            return self._create_error_result(str(e))
+#             return self._create_error_result(str(e))
 
-def _calculate_execution_confidence()
+def _calculate_execution_confidence():
 
     self, signals: TradingSignalMetrics -> float:
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Calculate execution confidence scalar \\u039e."""
-"""
-"""
+""""""
+""""""
         try:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+        except Exception as e:
+            pass
+
+""""""
+""""""
     pass
 from core.entry_gate import execution_confidence
 
-            return execution_confidence()
+#             return execution_confidence()
                 signals.triplet_entropy,
 signals.theta_drift,
 signals.coherence,
@@ -425,7 +438,7 @@ signals.profit_decay,
         except Exception as e:
 logger.warning(f"Error calculating execution confidence: {e}")
 # Fallback calculation
-            return ()
+#             return ()
                 (signals.triplet_entropy * signals.theta_drift)
                 + (signals.coherence * signals.loop_volatility)
                 + signals.profit_decay
@@ -435,24 +448,27 @@ def _calculate_entry_score(self, signals: TradingSignalMetrics) -> float:
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Calculate entropy - weighted entry score \\u1d4d4\\u209b."""
-"""
-"""
+""""""
+""""""
         try:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+        except Exception as e:
+            pass
+
+""""""
+""""""
     pass
 from core.entry_gate import entry_score
 
-            return entry_score()
+#             return entry_score()
                 signals.harmony,
 signals.drift_penalty,
 signals.liquidity_score,
@@ -461,7 +477,7 @@ signals.projected_profit,
         except Exception as e:
 logger.warning(f"Error calculating entry score: {e}")
 # Fallback calculation
-            return ()
+#             return ()
                 signals.harmony
 * (1.0 - signals.drift_penalty)
                 * signals.liquidity_score
@@ -472,16 +488,16 @@ def _evaluate_btc_strength(self, btc_signals: BTCInvestmentSignals) -> float:
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Evaluate overall BTC strength from network and price metrics."""
-"""
-"""
+""""""
+""""""
 # Weighted combination of BTC - specific signals
 strength=()
             btc_signals.xi_btc * 0.30  # BTC confidence
@@ -491,9 +507,9 @@ strength=()
 + btc_signals.price_pressure * 0.10  # Price pressure
 
 
-        return unified_math.max(0.0, unified_math.min(1.0, strength))
+#         return unified_math.max(0.0, unified_math.min(1.0, strength))
 
-def _determine_investment_decision()
+def _determine_investment_decision():
 
 
         self,
@@ -503,8 +519,8 @@ btc_strength: float,
 btc_signals: BTCInvestmentSignals,
     -> Tuple[InvestmentDecision, str]:
 """Determine investment decision based on all factors."""
-"""
-"""
+""""""
+""""""
 
 # Primary gates
 high_confidence = execution_confidence > self.confidence_threshold_high
@@ -514,20 +530,20 @@ strong_network = btc_signals.network_strength > self.network_strength_threshold
 
 # Decision logic with reasoning
         if high_confidence and high_entry and strong_btc and strong_network:
-            return InvestmentDecision.STRONG_BUY, ()
+#             return InvestmentDecision.STRONG_BUY, ()
                 f"All signals positive: confidence={"}
     execution_confidence:.3f, ""
 f"entry={entry_score:.3f}, BTC strength={btc_strength:.3f}"
 
 
         elif high_confidence and high_entry and (strong_btc or strong_network):
-            return InvestmentDecision.BUY, ()
+#             return InvestmentDecision.BUY, ()
                 "Strong core signals with good BTC metrics: "
 f"confidence={execution_confidence:.3f}, entry={entry_score:.3f}"
 
 
         elif (high_confidence or high_entry) and btc_strength > 0.5:
-            return InvestmentDecision.HOLD, ()
+#             return InvestmentDecision.HOLD, ()
                 "Mixed signals suggest holding: "
 f"confidence={execution_confidence:.3f}, entry={entry_score:.3f}"
 
@@ -537,23 +553,23 @@ f"confidence={execution_confidence:.3f}, entry={entry_score:.3f}"
 or entry_score < self.entry_score_threshold_low
 :
             if btc_strength < 0.3:
-                return InvestmentDecision.STRONG_SELL, ()
+#                 return InvestmentDecision.STRONG_SELL, ()
                     "Weak signals across all metrics: "
 f"confidence={execution_confidence:.3f}, entry={entry_score:.3f}"
 
             else:
-                return InvestmentDecision.SELL, ()
+#                 return InvestmentDecision.SELL, ()
                     "Low confidence / entry but BTC showing some strength: "
 f"confidence={execution_confidence:.3f}, entry={entry_score:.3f}"
 
 
         else:
-            return InvestmentDecision.NO_ACTION, ()
+#             return InvestmentDecision.NO_ACTION, ()
                 "Insufficient signal strength for clear decision: "
 f"confidence={execution_confidence:.3f}, entry={entry_score:.3f}"
 
 
-def _calculate_btc_allocation_ratio()
+def _calculate_btc_allocation_ratio():
 
 
         self,
@@ -563,8 +579,8 @@ btc_strength: float,
 btc_signals: BTCInvestmentSignals,
     -> float:
 """Calculate recommended BTC allocation ratio."""
-"""
-"""
+""""""
+""""""
 
 # Base allocation from signal strength
 base_allocation=()
@@ -589,19 +605,19 @@ allocation *= 1.2
 # Network strength adjustment
         if btc_signals.network_strength < 0.4:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 allocation *= 0.7  # Reduce if network is weak
 
 # Final bounds check
-        return unified_math.max()
+#         return unified_math.max()
     self.min_btc_allocation,
     unified_math.min()
         self.max_btc_allocation,
             allocation
 
-def _calculate_position_multiplier()
+def _calculate_position_multiplier():
 
 
         self,
@@ -610,19 +626,22 @@ entry_score: float,
 btc_strength: float,
     -> float:
 """Calculate position size multiplier."""
-"""
-"""
+""""""
+""""""
         try:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+        except Exception as e:
+            pass
+
+""""""
+""""""
     pass
 from core.auto_scaler import scale_position
 
 # Use projected profit from entry score as proxy
-projected_profit = entry_score * 0.05  # Scale to reasonable profit range
+projected_profit = entry_score * 0.5  # Scale to reasonable profit range
 
-            return scale_position()
+#             return scale_position()
                 execution_confidence,
 projected_profit,
 base_scale = 1.0,
@@ -633,9 +652,9 @@ max_scale = 3.0,
 logger.warning(f"Error calculating position multiplier: {e}")
 # Fallback calculation
 multiplier = 1.0 + (execution_confidence - 1.0) * 0.5 + btc_strength * 0.3
-            return unified_math.max(0.1, unified_math.min(3.0, multiplier))
+#             return unified_math.max(0.1, unified_math.min(3.0, multiplier))
 
-def _assess_risk_level()
+def _assess_risk_level():
 
 
         self,
@@ -644,8 +663,8 @@ btc_signals: BTCInvestmentSignals,
 execution_confidence: float,
     -> RiskLevel:
 """Assess overall risk level."""
-"""
-"""
+""""""
+""""""
 
 # Risk factors
 volatility_risk = core_signals.loop_volatility
@@ -663,17 +682,17 @@ risk_score=()
 
 # Map to risk levels
         if risk_score < 0.2:
-            return RiskLevel.VERY_LOW
+#             return RiskLevel.VERY_LOW
         elif risk_score < 0.4:
-            return RiskLevel.LOW
+#             return RiskLevel.LOW
         elif risk_score < 0.6:
-            return RiskLevel.MODERATE
+#             return RiskLevel.MODERATE
         elif risk_score < 0.8:
-            return RiskLevel.HIGH
+#             return RiskLevel.HIGH
         else:
-            return RiskLevel.VERY_HIGH
+#             return RiskLevel.VERY_HIGH
 
-def _determine_execution_priority()
+def _determine_execution_priority():
 
 
         self,
@@ -682,25 +701,25 @@ execution_confidence: float,
 entry_score: float,
     -> int:
 """Determine execution priority (1 = highest, 5 = lowest)."""
-"""
-"""
+""""""
+""""""
 
         if decision == InvestmentDecision.STRONG_BUY:
-            return 1
+#             return 1
         elif decision == InvestmentDecision.BUY and execution_confidence > 1.3:
-            return 1
+#             return 1
         elif decision == InvestmentDecision.BUY:
-            return 2
+#             return 2
         elif decision == InvestmentDecision.STRONG_SELL:
-            return 2
+#             return 2
         elif decision == InvestmentDecision.SELL:
-            return 3
+#             return 3
         elif decision == InvestmentDecision.HOLD:
-            return 4
+#             return 4
         else:
-            return 5
+#             return 5
 
-def _create_signal_breakdown()
+def _create_signal_breakdown():
 
 
         self,
@@ -710,9 +729,9 @@ execution_confidence: float,
 entry_score: float,
     -> Dict[str, float]:
 """Create detailed signal breakdown for analysis."""
-"""
-"""
-        return {}
+""""""
+""""""
+#         return {}
 "execution_confidence": execution_confidence,
 "entry_score": entry_score,
 "triplet_entropy": core_signals.triplet_entropy,
@@ -736,17 +755,17 @@ def _create_no_action_result(self, reason: str) -> InvestmentRatioResult:
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Create a no - action result."""
-"""
-"""
-        return InvestmentRatioResult()
+""""""
+""""""
+#         return InvestmentRatioResult()
             decision = InvestmentDecision.NO_ACTION,
 confidence = 0.0,
 btc_allocation_ratio = 0.5,  # Neutral allocation
@@ -762,17 +781,17 @@ def _create_error_result(self, error_msg: str) -> InvestmentRatioResult:
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Create an error result."""
-"""
-"""
-        return InvestmentRatioResult()
+""""""
+""""""
+#         return InvestmentRatioResult()
             decision = InvestmentDecision.NO_ACTION,
 confidence = 0.0,
 btc_allocation_ratio = self.min_btc_allocation,
@@ -788,42 +807,42 @@ def get_decision_history(self, limit: int = 10) -> List[InvestmentRatioResult]:
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Get recent decision history."""
-"""
-"""
-        return self.decision_history[-limit:] if self.decision_history else []
+""""""
+""""""
+#         return self.decision_history[-limit:] if self.decision_history else []
 
 def get_performance_summary(self) -> Dict:
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Get performance summary of recent decisions."""
-"""
-"""
+""""""
+""""""
         if not self.decision_history:
-            return {"error": "No decision history available"}
+#             return {"error": "No decision history available"}
 
 recent_decisions = self.decision_history[-50:]  # Last 50 decisions
 
 decision_counts={}
         for result in recent_decisions:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 decision = result.decision.value
 decision_counts[decision]=decision_counts.get(decision, 0) + 1
@@ -832,7 +851,7 @@ avg_confidence = unified_math.mean([r.confidence for r in recent_decisions])
         avg_btc_allocation = unified_math.mean()
             [r.btc_allocation_ratio for r in recent_decisions]
 
-        return {}
+#         return {}
 "total_decisions": len(recent_decisions),
             "decision_distribution": decision_counts,
 "average_confidence": avg_confidence,
@@ -851,16 +870,16 @@ def main() -> None:
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """Demo function for testing BTC investment ratio controller."""
-"""
-"""
+""""""
+""""""
 safe_print("BTC Investment Ratio Controller Demo")
     safe_print("=" * 50)
 
@@ -878,7 +897,7 @@ mock_fractal_state={}
 
 mock_collapse_state={}
 "loop_sum_volatility": 0.12,
-"profit_time_decay": 0.04,
+"profit_time_decay": 0.4,
 
 
 mock_market_data={}
@@ -897,8 +916,8 @@ mock_btc_data={}
 "volume_weights": [1.2, 1.8, 1.0],
 "price_delta": 150.0,
 "time_delta": 60.0,
-"normalized_price_change": 0.003,
-"volatility_measure": 0.018,
+"normalized_price_change": 0.3,
+"volatility_measure": 0.18,
 
 
 mock_network_data={}
@@ -978,12 +997,12 @@ summary = controller.get_performance_summary()
 
 if __name__ == "__main__":
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 main()
 

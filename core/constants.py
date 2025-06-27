@@ -15,8 +15,8 @@ import re
 unicore = DualUnicoreHandler()
 
 # """Constants - Core System Constants and Configuration."""
-"""
-"""
+""""""
+""""""
 
 == == == == == == == == == == == == == == == == == == == == == == == == ==
 
@@ -28,8 +28,8 @@ used throughout the Schwabot trading system. Includes Windows CLI compatibility
 handlers for cross - platform operation.
 
 """"""
-"""
-"""
+""""""
+""""""
 
 
 # from core.unified_math_system import unified_math  # F811: duplicate import
@@ -48,7 +48,7 @@ LOG_DIR = Path(__file__).parent / "logs"
 KELLY_SAFETY_FACTOR = 0.25  # Kelly criterion safety factor
 SHARPE_TARGET = 2.0  # Target Sharpe ratio
 MAX_POSITION_SIZE = 0.1  # Maximum position size (10%)
-MIN_POSITION_SIZE = 0.001  # Minimum position size (0.1%)
+MIN_POSITION_SIZE = 0.1  # Minimum position size (0.1%)
 
 # Signal processing constants
 SAMPLE_RATE = 1000  # Hz - Signal sampling rate
@@ -75,16 +75,16 @@ FERRIS_HARMONIC_RATIOS = [1, 2, 4, 8, 16, 32]  # Harmonic subdivisions
 TEMPORAL_COMPRESSION_FACTOR = 0.8  # Time compression factor
 
 # Advanced mathematical constants
-SVD_TOLERANCE = 1e - 12  # Singular value decomposition tolerance
-EIGENVALUE_THRESHOLD = 1e - 10  # Eigenvalue significance threshold
+SVD_TOLERANCE = 1e-12  # Singular value decomposition tolerance
+EIGENVALUE_THRESHOLD = 1e-10  # Eigenvalue significance threshold
 
 # Additional constants from advanced_mathematical_core.py
-EPSILON_FLOAT64 = 1e - 8  # Floating point epsilon for numerical stability
+EPSILON_FLOAT64 = 1e-8  # Floating point epsilon for numerical stability
 MEMORY_CHUNK_SIZE = 128  # Memory chunk size for matrix operations
 MATRIX_CONDITION_LIMIT = 1e12  # Matrix conditioning limit
 THERMAL_CONDUCTIVITY_BTC = 0.85  # Thermal conductivity for BTC
-QUANTUM_ENTROPY_SCALE = 1.054571817e - 34  # Reduced Planck constant
-REDUCED_PLANCK = 1.054571817e - 34  # Reduced Planck constant
+QUANTUM_ENTROPY_SCALE = 1.054571817e-34  # Reduced Planck constant
+REDUCED_PLANCK = 1.054571817e-34  # Reduced Planck constant
 FERRIS_PRIMARY_CYCLE = 24  # Primary Ferris wheel cycle
 
 # Windows CLI compatibility handler
@@ -95,12 +95,12 @@ class Placeholder:
     """[BRAIN] Placeholder class for recursive profit mapping"""
 
 
-"""
-"""
-   pass
+""""""
+""""""
+pass
     """Handles Windows CLI compatibility for cross - platform operation."""
-"""
-"""
+""""""
+""""""
 
 
 @staticmethod
@@ -108,11 +108,11 @@ def is_windows_cli() -> bool:
     """Check if running in Windows CLI environment."""
 
 
-"""
-"""
-    return (platform.system() == "Windows" and )
+""""""
+""""""
+#     return (platform.system() == "Windows" and )
         ("cmd" in os.environ.get("COMSPEC", "").lower() or )
-           "powershell" in os.environ.get("PSModulePath", "".lower())
+        "powershell" in os.environ.get("PSModulePath", "".lower())
 
 
 @staticmethod
@@ -120,12 +120,12 @@ def safe_print(message: str, use_emoji: bool = True) -> str:
     """Safely print messages with optional emoji support."""
 
 
-"""
-"""
-   if WindowsCliCompatibilityHandler.is_windows_cli() and use_emoji:
+""""""
+""""""
+if WindowsCliCompatibilityHandler.is_windows_cli() and use_emoji:
     # Strip emojis for Windows CLI compatibility
         message = re.sub(r"[^\\w\\s\-_.,!?]", "", message)
-    return message
+#     return message
 
 
 @staticmethod
@@ -133,9 +133,9 @@ def log_safe(logger: Any, level: str, message: str) -> None:
     """Safely log messages with CLI compatibility."""
 
 
-"""
-"""
-   safe_message = WindowsCliCompatibilityHandler.safe_print(message)
+""""""
+""""""
+safe_message = WindowsCliCompatibilityHandler.safe_print(message)
     if hasattr(logger, level.lower()):
         getattr(logger, level.lower())(safe_message)
 
@@ -145,13 +145,13 @@ def safe_format_error(error: Exception, context: str = "") -> str:
     """Safely format error messages for CLI compatibility."""
 
 
-"""
-"""
-   error_msg = str(error)
+""""""
+""""""
+error_msg = str(error)
     if context:
         error_msg = f"{context}: {error_msg}"
-    return WindowsCliCompatibilityHandler.safe_print()
-       error_msg, use_emoji = False
+#     return WindowsCliCompatibilityHandler.safe_print()
+    error_msg, use_emoji = False
 
 
 # Shared constants across the Schwabot code - base
@@ -169,7 +169,7 @@ VECTORIZATION_THRESHOLD = 1000  # Use vectorized ops above this size
 PARALLEL_PROCESSING_THRESHOLD = 10000  # Use parallel processing above this
 
 
-"""
-"""
-"""
-"""
+""""""
+""""""
+""""""
+""""""

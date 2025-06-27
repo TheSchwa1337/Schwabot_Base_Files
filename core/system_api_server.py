@@ -20,8 +20,8 @@ from core.unified_math_system import unified_math
 unicore = DualUnicoreHandler()
 
 # -*- coding: utf - 8 -*-\\n# """"""
-"""
-"""
+""""""
+""""""
 System API Server for Schwabot
 == == == == == == == == == == == == == == ==
 
@@ -34,8 +34,8 @@ real - time view of the system's state (market data, proposals, etc.).'
 2.  `APIServer`: Runs a Flask server to expose this state via a REST API.
 It is stateless and queries the `SystemStateOracle` for data.
 """"""
-"""
-"""
+""""""
+""""""
 
 
 logger = logging.getLogger(__name__)
@@ -49,12 +49,12 @@ class Placeholder:
     """[BRAIN] Placeholder class for recursive profit mapping"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """A snapshot of the current state of the Schwabot system."""
-"""
-"""
+""""""
+""""""
 
 
 last_price_update: Dict[str, Any] = field(default_factory=dict)
@@ -69,31 +69,31 @@ class Placeholder:
     """[BRAIN] Placeholder class for recursive profit mapping"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """"""
-"""
-"""
+""""""
+""""""
 
 
 Maintains a real - time view of the system by listening to the FaultBus.
 This class is the single source of truth for the API server.
     """"""
-"""
-"""
+""""""
+""""""
 
 
 def __init__(self, fault_bus: FaultBus):
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         self.bus = fault_bus
 
@@ -107,16 +107,16 @@ def start_listening(self):
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Subscribes to all relevant topics on the FaultBus."""
-"""
-"""
+""""""
+""""""
 
 
 self.bus.subscribe("new_market_price", self.handle_price_update)
@@ -127,16 +127,16 @@ self.bus.subscribe("new_market_price", self.handle_price_update)
 
 async def handle_price_update(self, **kwargs):
         """Handles new price data from the bus."""
-"""
-"""
+""""""
+""""""
 self.state.last_price_update = kwargs
 self._update_timestamp()
 
 
 async def handle_dlt_confirmation(self, **kwargs):
         """Handles new DLT hash confirmations."""
-"""
-"""
+""""""
+""""""
 self.state.dlt_confirmations.insert(0, kwargs)
 # Keep only the last 50 confirmations
 self.state.dlt_confirmations = self.state.dlt_confirmations[:50]
@@ -145,8 +145,8 @@ self._update_timestamp()
 
 async def handle_trade_proposal(self, proposal: TradeProposal):
         """Handles new trade proposals."""
-"""
-"""
+""""""
+""""""
 self.state.trade_proposals.insert(0, proposal)
 # Keep only the last 50 proposals
 self.state.trade_proposals = self.state.trade_proposals[:50]
@@ -157,21 +157,21 @@ def get_current_state(self) -> Dict[str, Any]:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Returns the current system state as a serializable dictionary."""
-"""
-"""
+""""""
+""""""
 
 
 self.state.server_uptime_seconds = time.time() - self._start_time
 # Manually convert dataclass to dict for jsonify
-        return {}
+#         return {}
 "last_price_update": self.state.last_price_update,
 "dlt_confirmations": self.state.dlt_confirmations,
 "trade_proposals": [p.__dict__ for p in self.state.trade_proposals],
@@ -183,12 +183,12 @@ def _update_timestamp(self):
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         self.state.last_update_timestamp = time.time()
 
@@ -200,30 +200,30 @@ class Placeholder:
     """[BRAIN] Placeholder class for recursive profit mapping"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """"""
-"""
-"""
+""""""
+""""""
 
 
 A stateless Flask - based server that exposes system state.
 """"""
-"""
-"""
+""""""
+""""""
 
 
 def __init__(self, oracle: SystemStateOracle, host: str, port: int):
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         self.oracle = oracle
 
@@ -238,16 +238,16 @@ def _setup_routes(self):
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Configures the API endpoints."""
-"""
-"""
+""""""
+""""""
 
 
 @self.app.route("/api / status", methods=['GET'])
@@ -255,30 +255,30 @@ def placeholder(): pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
-            return jsonify(self.oracle.get_current_state())
+#             return jsonify(self.oracle.get_current_state())
 
 
 def run(self):
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Starts the Flask server."""
-"""
-"""
+""""""
+""""""
 
 
 logger.info(f"Starting Flask API server on http://{self.host}:{self.port}")
@@ -292,8 +292,8 @@ self.app.run(host=self.host, port=self.port, debug=False)
 # this would be managed by a main orchestrator script.
 async def main_async_part(bus: FaultBus):
     """Initializes and runs the async components of Schwabot."""
-"""
-"""
+""""""
+""""""
 logger.info("Async components starting. Publishing dummy data in 5s...")
     await asyncio.sleep(5)
 
@@ -310,16 +310,16 @@ def run_api_server_process(oracle: SystemStateOracle, host: str, port: int):
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """Function to run the Flask server, suitable for running in a process."""
-"""
-"""
+""""""
+""""""
 
 
 api_server = APIServer(oracle, host=host, port=port)
@@ -328,8 +328,8 @@ api_server = APIServer(oracle, host=host, port=port)
 
 if __name__ == '__main__':
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 
 logging.basicConfig(level=logging.INFO)
@@ -354,20 +354,23 @@ logger.info(f"API Server process started with PID: {api_process.pid}.")
 
     try:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+    except Exception as e:
+        pass
+
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 asyncio.run(main_async_part(bus))
         logger.info()
             "Main async tasks complete. Server will remain up. Press Ctrl + C to exit."
         while True:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 time.sleep(1)
     except KeyboardInterrupt:

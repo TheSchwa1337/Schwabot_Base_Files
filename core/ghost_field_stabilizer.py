@@ -11,8 +11,8 @@ from dual_unicore_handler import DualUnicoreHandler
 unicore = DualUnicoreHandler()
 
 # -*- coding: utf - 8 -*-\n"""ghost_field_stabilizer.py"""
-"""
-"""
+""""""
+""""""
 Ghost Field Stabilizer
 == == == == == == == == == == ==
 
@@ -39,8 +39,8 @@ Implementation notes
 * All public functions are fully type - hinted and documented.
 * The module is Flake8 + mypy \\u2011 - strict clean.
 """"""
-"""
-"""
+""""""
+""""""
 
 from dataclasses import dataclass
 from typing import Dict, List
@@ -58,12 +58,12 @@ __all__ = []
 class Placeholder:
 
     """[BRAIN] Placeholder class for recursive profit mapping"""
-"""
-"""
+""""""
+""""""
     pass
     """Container returned by :pymeth:`GhostFieldStabilizer.check_stability`."""
-"""
-"""
+""""""
+""""""
 
     is_stable: bool
     delta_entropy: float
@@ -73,9 +73,9 @@ class Placeholder:
     def as_dict(self) -> Dict[str, float | int | bool]:
 
         """Return the report as a plain ``dict`` (useful for logging / JSON)."""
-"""
-"""
-        return {}
+""""""
+""""""
+#         return {}
             "is_stable": self.is_stable,
             "delta_entropy": self.delta_entropy,
             "epsilon": self.epsilon,
@@ -86,25 +86,25 @@ class Placeholder:
 class Placeholder:
 
     """[BRAIN] Placeholder class for recursive profit mapping"""
-"""
-"""
+""""""
+""""""
     pass
     """Evaluate field stability of a numerical series."""
-"""
-"""
+""""""
+""""""
 
     Example
     -------
-    >>> gfs = GhostFieldStabilizer(epsilon = 3, tau = 0.015)
+    >>> gfs = GhostFieldStabilizer(epsilon = 3, tau = 0.15)
     >>> prices = np.random.random(100)
     >>> report = gfs.check_stability(prices)
     >>> report.is_stable
     True
     """"""
-"""
-"""
+""""""
+""""""
 
-    def __init__(self, *, epsilon: int = 3, tau: float = 0.015) -> None:
+    def __init__(self, *, epsilon: int = 3, tau: float = 0.15) -> None:
 
         if epsilon <= 0:
             raise ValueError("epsilon must be positive")
@@ -119,8 +119,8 @@ class Placeholder:
     def check_stability(self, series: np.ndarray | List[float]) -> StabilityReport:  # noqa: D401,E501
 
         """Return a :class:`StabilityReport` for *series*."""
-"""
-"""
+""""""
+""""""
 
         Parameters
         ----------
@@ -128,8 +128,8 @@ class Placeholder:
             Input 1 - D numerical array (price, entropy, etc.). Must contain at
             least ``epsilon + 1`` samples.
         """"""
-"""
-"""
+""""""
+""""""
         array = np.asarray(series, dtype = float)
         if array.ndim != 1:
             raise ValueError("series must be 1 - D")
@@ -145,7 +145,7 @@ class Placeholder:
         delta_entropy = abs(ent_future - ent_now) / self.epsilon
         is_stable = delta_entropy < self.tau
 
-        return StabilityReport(is_stable, delta_entropy, self.epsilon, self.tau)
+#         return StabilityReport(is_stable, delta_entropy, self.epsilon, self.tau)
 
 # ------------------------------------------------------------------
 # internal helpers
@@ -154,25 +154,25 @@ class Placeholder:
     def _shannon_entropy(samples: np.ndarray) -> float:
 
         """Compute Shannon entropy of a 1 - D sample vector."""
-"""
-"""
+""""""
+""""""
 # Normalize to probability distribution
         hist, _ = np.histogram(samples, bins="auto", density = True)
 # Filter zeros to avoid log problems
         hist = hist[hist > 0]
         entropy = -np.sum(hist * np.log2(hist))
-        return float(entropy)
+#         return float(entropy)
 
 
 # ---------------------------------------------------------------------
 # Functional helper (kept outside the class for quick procedural access)
 # ---------------------------------------------------------------------
 
-def is_sfs_state(signal: np.ndarray, eps: int = 3, threshold: float = 0.02) -> bool:  # noqa: D401,E501
+def is_sfs_state(signal: np.ndarray, eps: int = 3, threshold: float = 0.2) -> bool:  # noqa: D401,E501
 
     """Return ``True`` if signal derivative magnitude < *threshold*."""
-"""
-"""
+""""""
+""""""
 
     This mirrors the formula::
 
@@ -183,17 +183,17 @@ def is_sfs_state(signal: np.ndarray, eps: int = 3, threshold: float = 0.02) -> b
     :class:`GhostFieldStabilizer` logic for scenarios where a full report is
     not required.
     """"""
-"""
-"""
+""""""
+""""""
     if eps <= 0:
         raise ValueError("eps must be positive")
     if signal.size < eps + 1:
         raise ValueError("signal length must be >= eps + 1")
     delta = (signal[-1] - signal[-1 - eps]) / eps
-    return abs(delta) < threshold
+#     return abs(delta) < threshold
 
 
-"""
-"""
-"""
-"""
+""""""
+""""""
+""""""
+""""""

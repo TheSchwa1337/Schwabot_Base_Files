@@ -1,14 +1,14 @@
 # -*- coding: utf - 8 -*-\\nfrom core.unified_math_system import unified_math
-"""
-"""
-"""
-"""
+""""""
+""""""
+""""""
+""""""
 # -*- coding: utf - 8 -*-\\nfrom core.unified_math_system import unified_math
 
-"""
-"""
-"""
-"""
+""""""
+""""""
+""""""
+""""""
 # -*- coding: utf - 8 -*-\\nfrom core.unified_math_system import unified_math
 # -*- coding: utf - 8 -*-\\nfrom core.unified_math_system import unified_math
 
@@ -20,8 +20,8 @@ import numpy as np
 
 V_n = gradient.(\\u0398 . phi(news))
 """"""
-"""
-"""
+""""""
+""""""
 
 
 from typing import Sequence
@@ -31,7 +31,7 @@ from typing import Sequence
 __all__: list[str] = ["vectorize_news"]
 
 
-def vectorize_news()
+def vectorize_news():
 
 
     theta: np.ndarray, phi_news: Sequence[float]
@@ -39,16 +39,16 @@ def vectorize_news()
 
 
 """Return V_n vector = theta @ phi_news (gradient - like projection)."""
-"""
-"""
+""""""
+""""""
     phi = np.asarray(phi_news, dtype = float)
     if theta.shape[1] != phi.size:
         raise ValueError("theta column dim mismatch with phi_news length")
-    return theta @ phi
+#     return theta @ phi
 
 
 
-"""
-"""
-"""
-"""
+""""""
+""""""
+""""""
+""""""

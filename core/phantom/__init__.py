@@ -1,13 +1,13 @@
 # -*- coding: utf - 8 -*-\n"""Phantom entry / exit logic for Schwabot trading system."""
-"""
-"""
-"""
-"""
+""""""
+""""""
+""""""
+""""""
 # -*- coding: utf - 8 -*-\n"""Phantom entry / exit logic for Schwabot trading system."""
-"""
-"""
-"""
-"""
+""""""
+""""""
+""""""
+""""""
 # -*- coding: utf - 8 -*-\n"""Phantom entry / exit logic for Schwabot trading system."""
 # -*- coding: utf - 8 -*-\n"""Phantom entry / exit logic for Schwabot trading system."""
 from .price_vector_synchronizer import ema
@@ -21,6 +21,6 @@ __all__ = []
     "ema",
 
 
-"""
-"""
-"""
+""""""
+""""""
+""""""

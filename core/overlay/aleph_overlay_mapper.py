@@ -20,8 +20,8 @@ unicore = DualUnicoreHandler()
 
 # -*- coding: utf - 8 -*-
 """core.overlay.aleph_overlay_mapper"""
-"""
-"""
+""""""
+""""""
 Aleph Overlay Mapper
 == == == == == == == == == ==
 
@@ -29,8 +29,8 @@ Matches live price signature against a stored * Aleph * memory bank and returns
 the best overlay together with a confidence score derived from cosine
 similarity.
 """"""
-"""
-"""
+""""""
+""""""
 
 
 __all__ = []
@@ -45,8 +45,8 @@ class Placeholder:
     """[BRAIN] Placeholder class for recursive profit mapping"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     overlay_id: str
     similarity: float  # in [-1, 1]
@@ -64,12 +64,12 @@ class Placeholder:
     """[BRAIN] Placeholder class for recursive profit mapping"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """Load overlay memory and perform similarity search."""
-"""
-"""
+""""""
+""""""
 
     def __init__(self, memory_json: str | Path) -> None:
 
@@ -92,8 +92,8 @@ class Placeholder:
 # ------------------------------------------------------------------
     def map_overlay(self, live_vector: Sequence[float]) -> OverlayMatch:
         """Return best matching overlay for *live_vector*."""
-"""
-"""
+""""""
+""""""
         live = np.asarray(live_vector, dtype=float)
         best_id = None
         best_sim = -2.0  # less than minimum possible
@@ -111,42 +111,42 @@ class Placeholder:
                 best_vec = vec
         if best_id is None or best_vec is None:
             raise RuntimeError("no overlays found, memory may be empty")
-        return OverlayMatch(best_id, best_sim, best_vec)
+#         return OverlayMatch(best_id, best_sim, best_vec)
 
 # ------------------------------------------------------------------
     def overlay_confidence(self, sim: float) -> float:
 
         """Convert similarity to 0 - 1 confidence."""
-"""
-"""
-        return (sim + 1.0) / 2.0
+""""""
+""""""
+#         return (sim + 1.0) / 2.0
 
 
 # ---------------------------------------------------------------------------
 # Stand - alone functional API requested in integration docs
 # ---------------------------------------------------------------------------
 
-def map_aleph_overlay()
+def map_aleph_overlay():
 
     live_price: float,
     memory_prices: Sequence[float],
     omega: Sequence[float]
     -> float:
     """Return weighted sum of *omega* for memory prices close to *live_price*."""
-"""
-"""
+""""""
+""""""
 
     The helper mirrors the mathematical definition::
 
         Psi_ALEPH(t) = Sum [ A(t) * delta(P(t) - P_mem) * Omega(t) ]
 
     with a practical interpretation - if the price difference is below a very
-    small epsilon (1e - 4) we treat it as a *match* and accumulate the
+    small epsilon (1e-4) we treat it as a *match* and accumulate the
     associated *omega* weight. This is a lightweight convenience wrapper useful
     when the full :class:`AlephOverlayMapper` class overhead is not required.
     """"""
-"""
-"""
+""""""
+""""""
     if len(memory_prices) != len(omega):
         raise ValueError("memory_prices and omega must have equal length")
     import numpy as np
@@ -154,12 +154,12 @@ def map_aleph_overlay()
     mem_arr = np.asarray(memory_prices, dtype = float)
     omega_arr = np.asarray(omega, dtype = float)
 
-    diff = np.abs(mem_arr - live_price) < 1e - 4
-    return float(np.sum(omega_arr[diff]))
+    diff = np.abs(mem_arr - live_price) < 1e-4
+#     return float(np.sum(omega_arr[diff]))
 
 
 
-"""
-"""
-"""
-"""
+""""""
+""""""
+""""""
+""""""

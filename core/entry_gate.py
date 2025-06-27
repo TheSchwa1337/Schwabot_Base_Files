@@ -19,29 +19,35 @@ unicore = DualUnicoreHandler()
 # Import safe print for Windows compatibility
 try:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+except Exception as e:
+    pass
+
+""""""
+""""""
     pass
 except ImportError:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     try:
+    except Exception as e:
+        pass
+
 # from core.utils.windows_cli_compatibility import safe_print, info, warn,
 # error, success, debug  # F811: duplicate import
     except ImportError:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 
 
@@ -49,12 +55,12 @@ def safe_print(message):
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     print(message)
 
@@ -63,12 +69,12 @@ def info(message):
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     print(f"[INFO] {message}")
 
@@ -77,12 +83,12 @@ def warn(message):
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     print(f"[WARN] {message}")
 
@@ -91,12 +97,12 @@ def error(message):
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     print(f"[ERROR] {message}")
 
@@ -105,12 +111,12 @@ def success(message):
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     print(f"[SUCCESS] {message}")
 
@@ -119,19 +125,19 @@ def debug(message):
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     print(f"[DEBUG] {message}")
 
 
 # """Entry Gate - Mathematical Execution Confidence Evaluator."""
-"""
-"""
+""""""
+""""""
 
 This module provides the core mathematical gates that determine whether
 a trading opportunity should be executed, deferred, or rejected based on
@@ -148,8 +154,8 @@ Mathematical Foundation:
 
 Windows CLI compatible with flake8 compliance.
 """"""
-"""
-"""
+""""""
+""""""
 
 
 # from core.unified_math_system import unified_math  # F811: duplicate import
@@ -162,7 +168,7 @@ MIN_ENTRY_SCORE_THRESHOLD = 0.90
 DEFER_ENTRY_SCORE_THRESHOLD = 0.70
 
 
-def execution_confidence()
+def execution_confidence():
 
 
     triplet_entropy: float,
@@ -173,8 +179,8 @@ profit_decay: float,
     -> float:
 
 """Calculate execution confidence scalar \\u039e."""
-"""
-"""
+""""""
+""""""
 
 Parameters
 ----------
@@ -197,9 +203,12 @@ float
 0.85 - 1.15: Route to GAN filter
 <0.85: Defer / cooldown
 """"""
-"""
-"""
+""""""
+""""""
     try:
+    except Exception as e:
+        pass
+
 # \\u039e = (T . deltatheta) + (epsilon * sigma_f) + tau_p
         confidence = ()
             (triplet_entropy * theta_drift)
@@ -208,14 +217,14 @@ float
 
 
 # Ensure reasonable bounds
-        return unified_math.max(0.0, unified_math.min(3.0, confidence))
+#         return unified_math.max(0.0, unified_math.min(3.0, confidence))
 
     except (ValueError, TypeError) as e:
         logger.warning(f"Error computing execution confidence: {e}")
-        return 0.0
+#         return 0.0
 
 
-def entry_score()
+def entry_score():
 
 
     harmony: float,
@@ -224,8 +233,8 @@ liquidity_score: float,
 projected_profit: float,
     -> float:
 """Calculate entropy - weighted entry score \\u1d4d4\\u209b."""
-"""
-"""
+""""""
+""""""
 
 Parameters
 ----------
@@ -246,22 +255,25 @@ float
 0.70 - 0.90: Route to GAN review
 <0.70: Suppress / cooldown
 """"""
-"""
-"""
+""""""
+""""""
     try:
+    except Exception as e:
+        pass
+
 # \\u1d4d4\\u209b = \\u1d4d7 * (1 - \\u1d4d3\\u209a) * \\u1d4db * P\\u0302
         score = harmony * (1.0 - drift_penalty) *
                             liquidity_score * projected_profit
 
 # Ensure valid range
-        return unified_math.max(0.0, unified_math.min(1.0, score))
+#         return unified_math.max(0.0, unified_math.min(1.0, score))
 
     except (ValueError, TypeError) as e:
         logger.warning(f"Error computing entry score: {e}")
-        return 0.0
+#         return 0.0
 
 
-def evaluate()
+def evaluate():
 
 
     confidence: float,
@@ -269,8 +281,8 @@ entry_score_val: float,
 gan_filter_result: Optional[bool]=None,
     -> Dict[str, Any]:
 """Main entry gate evaluation logic."""
-"""
-"""
+""""""
+""""""
 
 Parameters
 ----------
@@ -290,9 +302,12 @@ Decision dictionary with:
 - entry_score: Entry score value
 - reason: Human - readable explanation
 """"""
-"""
-"""
+""""""
+""""""
     try:
+    except Exception as e:
+        pass
+
 # Primary gate: both confidence and entry score must pass
         if ()
             confidence > MIN_CONFIDENCE_THRESHOLD
@@ -301,14 +316,14 @@ and entry_score_val > MIN_ENTRY_SCORE_THRESHOLD
 
 # Check GAN filter if available
             if gan_filter_result is False:
-                return {}
+#                 return {}
 "action": "defer",
 "confidence": confidence,
 "entry_score": entry_score_val,
 "reason": "GAN anomaly filter rejection",
 
 
-            return {}
+#             return {}
 "action": "execute",
 "confidence": confidence,
 "entry_score": entry_score_val,
@@ -318,7 +333,7 @@ and entry_score_val > MIN_ENTRY_SCORE_THRESHOLD
 # Secondary gate: route to GAN review if entry score in middle band
         elif confidence > 0.85 and entry_score_val > DEFER_ENTRY_SCORE_THRESHOLD:
 
-            return {}
+#             return {}
 "action": "gan_review",
 "confidence": confidence,
 "entry_score": entry_score_val,
@@ -330,18 +345,18 @@ and entry_score_val > MIN_ENTRY_SCORE_THRESHOLD
 reason_parts=[]
             if confidence <= 0.85:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 reason_parts.append(f"low confidence ({confidence:.3f})")
             if entry_score_val <= DEFER_ENTRY_SCORE_THRESHOLD:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 reason_parts.append(f"low entry score ({entry_score_val:.3f})")
 
-            return {}
+#             return {}
 "action": "cooldown",
 "confidence": confidence,
 "entry_score": entry_score_val,
@@ -350,7 +365,7 @@ reason_parts.append(f"low entry score ({entry_score_val:.3f})")
 
     except Exception as e:
 logger.error(f"Error in entry gate evaluation: {e}")
-        return {}
+#         return {}
 "action": "cooldown",
 "confidence": 0.0,
 "entry_score": 0.0,
@@ -362,17 +377,17 @@ def get_thresholds() -> Dict[str, float]:
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """Get current threshold values for monitoring / tuning."""
-"""
-"""
-    return {}
+""""""
+""""""
+#     return {}
 "min_confidence": MIN_CONFIDENCE_THRESHOLD,
 "min_entry_score": MIN_ENTRY_SCORE_THRESHOLD,
 "defer_entry_score": DEFER_ENTRY_SCORE_THRESHOLD,
@@ -380,7 +395,7 @@ def get_thresholds() -> Dict[str, float]:
 
 
 # Quick validation function for testing
-def validate_inputs()
+def validate_inputs():
 
 
     triplet_entropy: float,
@@ -394,9 +409,12 @@ liquidity_score: float,
 projected_profit: float,
     -> bool:
 """Validate that all input values are in expected ranges."""
-"""
-"""
+""""""
+""""""
     try:
+    except Exception as e:
+        pass
+
 # Check ranges for all inputs
 checks=[]
 0.0 <= triplet_entropy <= 1.0,
@@ -410,29 +428,29 @@ checks=[]
 0.0 <= projected_profit <= 1.0,
 
 
-        return all(checks)
+#         return all(checks)
 
     except Exception:
-        return False
+#         return False
 
 
 def main() -> None:
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """Demo function for testing entry gate logic."""
-"""
-"""
+""""""
+""""""
 # Test case 1: High confidence scenario
-xi = execution_confidence(0.83, 0.12, 0.92, 0.18, 0.04)
-    es = entry_score(0.88, 0.12, 0.75, 0.03)
+xi = execution_confidence(0.83, 0.12, 0.92, 0.18, 0.4)
+    es = entry_score(0.88, 0.12, 0.75, 0.3)
     result = evaluate(xi, es)
 
 safe_print(f"Test 1 - \\u039e: {xi:.3f}, \\u1d4d4\\u209b: {es:.3f}")
@@ -440,8 +458,8 @@ safe_print(f"Test 1 - \\u039e: {xi:.3f}, \\u1d4d4\\u209b: {es:.3f}")
     print()
 
 # Test case 2: Moderate confidence scenario
-xi2 = execution_confidence(0.65, 0.08, 0.78, 0.15, 0.02)
-    es2 = entry_score(0.82, 0.08, 0.85, 0.025)
+xi2 = execution_confidence(0.65, 0.8, 0.78, 0.15, 0.2)
+    es2 = entry_score(0.82, 0.8, 0.85, 0.25)
     result2 = evaluate(xi2, es2)
 
 safe_print(f"Test 2 - \\u039e: {xi2:.3f}, \\u1d4d4\\u209b: {es2:.3f}")
@@ -450,18 +468,18 @@ safe_print(f"Test 2 - \\u039e: {xi2:.3f}, \\u1d4d4\\u209b: {es2:.3f}")
 
 if __name__ == "__main__":
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 main()
 
 
 
-"""
-"""
-"""
-"""
+""""""
+""""""
+""""""
+""""""

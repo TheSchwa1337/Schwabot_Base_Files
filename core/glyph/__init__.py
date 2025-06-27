@@ -1,13 +1,13 @@
 # -*- coding: utf - 8 -*-\n"""Glyph feedback and conditional processing."""
-"""
-"""
-"""
-"""
+""""""
+""""""
+""""""
+""""""
 # -*- coding: utf - 8 -*-\n"""Glyph feedback and conditional processing."""
-"""
-"""
-"""
-"""
+""""""
+""""""
+""""""
+""""""
 # -*- coding: utf - 8 -*-\n"""Glyph feedback and conditional processing."""
 # -*- coding: utf - 8 -*-\n"""Glyph feedback and conditional processing."""
 
@@ -17,6 +17,6 @@ __all__ = []
     "feedback",
 
 
-"""
-"""
-"""
+""""""
+""""""
+""""""

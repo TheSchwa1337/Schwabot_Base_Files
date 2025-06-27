@@ -1,14 +1,14 @@
 # -*- coding: utf - 8 -*-\\nfrom core.unified_math_system import unified_math
-"""
-"""
-"""
-"""
+""""""
+""""""
+""""""
+""""""
 # -*- coding: utf - 8 -*-\\nfrom core.unified_math_system import unified_math
 
-"""
-"""
-"""
-"""
+""""""
+""""""
+""""""
+""""""
 # -*- coding: utf - 8 -*-\\nfrom core.unified_math_system import unified_math
 # -*- coding: utf - 8 -*-\\nfrom core.unified_math_system import unified_math
 from __future__ import annotations
@@ -33,8 +33,8 @@ where 0 < gamma < infinity is the damping coefficient.
 The implementation is intentionally minimal - no dynamic state, no numerical
 integrator - just the closed - form expression that guarantees \\u2016x(t)\\u2016 <= A.
 """"""
-"""
-"""
+""""""
+""""""
 
 
 # from core.unified_math_system import unified_math  # F811: duplicate import
@@ -45,7 +45,7 @@ __all__ = ["fallback_oscillator"]
 _PI2: Final = 2.0 * math.pi
 
 
-def fallback_oscillator()
+def fallback_oscillator():
 
 
     t: float,
@@ -57,8 +57,8 @@ def fallback_oscillator()
     -> float:
 
 """Return damped cosine value x(t)."""
-"""
-"""
+""""""
+""""""
 
 Parameters
 ----------
@@ -78,12 +78,12 @@ Returns
 float
 Damped oscillator value at *t*.
 """"""
-"""
-"""
+""""""
+""""""
     if damping < 0:
         raise ValueError("damping must be non - negative")
     envelope = unified_math.exp(-damping * t)
     angle = _PI2 * frequency * t + phase
-    return amplitude * envelope * unified_math.unified_math.cos(angle)
+#     return amplitude * envelope * unified_math.unified_math.cos(angle)
 
 

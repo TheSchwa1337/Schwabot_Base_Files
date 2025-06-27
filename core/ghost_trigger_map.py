@@ -17,8 +17,8 @@ from utils.safe_print import safe_print
 unicore = DualUnicoreHandler()
 
 # -*- coding: utf - 8 -*-\n"""core.ghost_trigger_map"""
-"""
-"""
+""""""
+""""""
 Ghost Trigger Map
 == == == == == == == == =
 
@@ -26,8 +26,8 @@ Provides ghost - phase - aware trigger routing using the GhostPhaseStrategyLoade
 This module maps trigger signals to strategy logic while consuming
 GhostPhaseDecision objects for modern, unified decision - making.
 """"""
-"""
-"""
+""""""
+""""""
 
 
 logger = logging.getLogger(__name__)
@@ -44,12 +44,12 @@ class Placeholder:
     """[BRAIN] Placeholder class for recursive profit mapping"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """Result of trigger evaluation."""
-"""
-"""
+""""""
+""""""
     triggered: bool
     strategy_id: str
     confidence: float
@@ -62,14 +62,14 @@ class Placeholder:
     """[BRAIN] Placeholder class for recursive profit mapping"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """Maps trigger signals to strategy logic using ghost phase decisions."""
-"""
-"""
+""""""
+""""""
 
-    def __init__()
+    def __init__():
 
         self,
         overlay_json: str = "memory_stack / aleph_overlays.json",
@@ -77,22 +77,22 @@ class Placeholder:
         confidence_threshold: float = 0.5,
         -> None:
         """Initialize the ghost trigger mapper."""
-"""
-"""
+""""""
+""""""
 
         Args:
             overlay_json: Path to overlay configuration
             confidence_threshold: Minimum confidence to trigger
         """"""
-"""
-"""
+""""""
+""""""
         self.ghost_loader = GhostPhaseStrategyLoader(overlay_json)
         self.confidence_threshold = confidence_threshold
         self.trigger_history: List[TriggerResult] = []
 
         safe_print("\\u1f3af Ghost Trigger Mapper initialized")
 
-    def evaluate_trigger()
+    def evaluate_trigger():
 
         self,
         prices: Sequence[float],
@@ -103,8 +103,8 @@ class Placeholder:
         threshold: float = 0.3,
         -> TriggerResult:
         """Evaluate trigger conditions using ghost phase logic."""
-"""
-"""
+""""""
+""""""
 
         Args:
             prices: Historical price data
@@ -117,9 +117,12 @@ class Placeholder:
         Returns:
             TriggerResult with trigger decision and metadata
         """"""
-"""
-"""
+""""""
+""""""
         try:
+        except Exception as e:
+            pass
+
 # Get ghost phase decision
             ghost_decision = self.ghost_loader.decide()
                 prices, live_vector, raw_signals
@@ -162,13 +165,13 @@ class Placeholder:
         ghost_decision.strategy_id} (confidence: {)
             confidence:.3f""
 
-            return result
+#             return result
 
         except Exception as e:
             logger.error(f"Trigger evaluation failed: {e}")
 
 # Return safe fallback
-            return TriggerResult()
+#             return TriggerResult()
                 triggered = False,
                 strategy_id="fallback_hold",
                 confidence = 0.0,
@@ -176,7 +179,7 @@ class Placeholder:
                 trigger_metadata={"error": str(e)},
 
 
-    def _calculate_trigger_confidence()
+    def _calculate_trigger_confidence():
 
         self,
         decision: GhostPhaseDecision,
@@ -185,8 +188,8 @@ class Placeholder:
         threshold: float,
         -> float:
         """Calculate trigger confidence from ghost decision and parameters."""
-"""
-"""
+""""""
+""""""
 # Base confidence from overlay similarity
         base_confidence = (decision.overlay_match.similarity + \)
                             1.0 / 2.0  # Normalize to [0,1]
@@ -213,20 +216,20 @@ class Placeholder:
             * phase_multiplier * volatility_factor * resonance_factor * threshold_adjustment
 
 # Clamp to [0, 1]
-        return max(0.0, min(1.0, confidence))
+#         return max(0.0, min(1.0, confidence))
 
     def get_trigger_statistics(self) -> Dict[str, Any]:
 
         """Get trigger statistics from history."""
-"""
-"""
+""""""
+""""""
         if not self.trigger_history:
-            return {"total_triggers": 0, "fired_triggers": 0, "fire_rate": 0.0}
+#             return {"total_triggers": 0, "fired_triggers": 0, "fire_rate": 0.0}
 
         total = len(self.trigger_history)
         fired = sum(1 for t in self.trigger_history if t.triggered)
 
-        return {}
+#         return {}
             "total_triggers": total,
             "fired_triggers": fired,
             "fire_rate": fired / total if total > 0 else 0.0,
@@ -235,15 +238,15 @@ class Placeholder:
 
 
 
-def generate_ghost_trigger_map()
+def generate_ghost_trigger_map():
 
     volatility: float,
     resonance: float,
     threshold: float,
     -> Dict[str, Any]:
     """Generate a ghost trigger map with the given parameters."""
-"""
-"""
+""""""
+""""""
 
     This is a legacy compatibility function that creates a simple
     trigger configuration map for use with external systems.
@@ -256,9 +259,9 @@ def generate_ghost_trigger_map()
     Returns:
         Dictionary containing trigger map configuration
     """"""
-"""
-"""
-    return {}
+""""""
+""""""
+#     return {}
         "trigger_type": "ghost_phase",
         "parameters": {}
             "volatility": volatility,

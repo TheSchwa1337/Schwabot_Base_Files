@@ -11,8 +11,8 @@ from dual_unicore_handler import DualUnicoreHandler
 unicore = DualUnicoreHandler()
 
 # -*- coding: utf - 8 -*-\\n# """Glyph hysteresis field - prevent flip - flopping on glyph activation."""
-"""
-"""
+""""""
+""""""
 
 Implements a simple Schmitt - trigger style hysteresis on glyph * strength * :
 
@@ -21,8 +21,8 @@ inactive \\u21a6 activate threshold = activation_threshold
 
 with activation_threshold > decay_threshold.
 """"""
-"""
-"""
+""""""
+""""""
 
 
 from dataclasses import dataclass
@@ -41,12 +41,12 @@ __all__: list[str] = ["HysteresisField"]
 class Placeholder:
 
     """[BRAIN] Placeholder class for recursive profit mapping"""
-"""
-"""
+""""""
+""""""
     pass
     """TODO: document HysteresisField."""
-"""
-"""
+""""""
+""""""
 
 
 activation_threshold: float = 0.7
@@ -57,13 +57,13 @@ _active: bool = False
 def update(self, strength: float) -> bool:  # noqa: D401
 
     """Update with *strength* in [0,1] and return new active state."""
-"""
-"""
+""""""
+""""""
     if self._active:
         if strength < self.decay_threshold:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 
 
@@ -71,10 +71,10 @@ self._active = False
 else:
     if strength > self.activation_threshold:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 self._active = True
-return self._active
+# return self._active
 
 

@@ -11,8 +11,8 @@ from dual_unicore_handler import DualUnicoreHandler
 unicore = DualUnicoreHandler()
 
 # -*- coding: utf - 8 -*-\\n# """Dual - state tracker utility."""
-"""
-"""
+""""""
+""""""
 
 This module introduces a very lightweight dual - number structure that lets the
 Schwabot maths stack propagate first - order derivatives(dx) alongside scalar
@@ -36,8 +36,8 @@ division which are enough for most Schwabot analytic filters.
 This file is intentionally small so that it passes Flake8 and gives a clean
 API surface. Advanced Jacobian / nested - dual logic can be added later.
 """"""
-"""
-"""
+""""""
+""""""
 
 
 from dataclasses import dataclass
@@ -57,12 +57,12 @@ __all__ = ["DualNumber", "dual_state_tracker"]
 class Placeholder:
 
     """[BRAIN] Placeholder class for recursive profit mapping"""
-"""
-"""
+""""""
+""""""
     pass
     """A first - order dual number x + epsilon.dx."""
-"""
-"""
+""""""
+""""""
 
 
 x: float  # primal value
@@ -76,16 +76,16 @@ dx: float  # derivative w.r.t. some scalar variable
 def __add__(self, other: Union["DualNumber", float]) -> "DualNumber":
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Add another dual number or scalar to this dual number."""
-"""
-"""
+""""""
+""""""
 
 Parameters
 ----------
@@ -97,11 +97,11 @@ Returns
 DualNumber
 A new dual number representing the sum.
 """"""
-"""
-"""
+""""""
+""""""
         if isinstance(other, DualNumber):
-            return DualNumber(self.x + other.x, self.dx + other.dx)
-        return DualNumber(self.x + float(other), self.dx)
+#             return DualNumber(self.x + other.x, self.dx + other.dx)
+#         return DualNumber(self.x + float(other), self.dx)
 
 
 __radd__ = __add__
@@ -110,16 +110,16 @@ __radd__ = __add__
 def __sub__(self, other: Union["DualNumber", float]) -> "DualNumber":
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Subtract another dual number or scalar from this dual number."""
-"""
-"""
+""""""
+""""""
 
 Parameters
 ----------
@@ -131,26 +131,26 @@ Returns
 DualNumber
 A new dual number representing the difference.
 """"""
-"""
-"""
+""""""
+""""""
         if isinstance(other, DualNumber):
-            return DualNumber(self.x - other.x, self.dx - other.dx)
-        return DualNumber(self.x - float(other), self.dx)
+#             return DualNumber(self.x - other.x, self.dx - other.dx)
+#         return DualNumber(self.x - float(other), self.dx)
 
 
 def __rsub__(self, other: float) -> "DualNumber":
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Reverse subtraction: subtract this dual number from a scalar."""
-"""
-"""
+""""""
+""""""
 
 Parameters
 ----------
@@ -162,24 +162,24 @@ Returns
 DualNumber
 A new dual number representing the difference.
 """"""
-"""
-"""
-        return DualNumber(float(other) - self.x, -self.dx)
+""""""
+""""""
+#         return DualNumber(float(other) - self.x, -self.dx)
 
 
 def __mul__(self, other: Union["DualNumber", float]) -> "DualNumber":
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Multiply this dual number by another dual number or scalar."""
-"""
-"""
+""""""
+""""""
 
 Parameters
 ----------
@@ -191,14 +191,14 @@ Returns
 DualNumber
 A new dual number representing the product.
 """"""
-"""
-"""
+""""""
+""""""
         if isinstance(other, DualNumber):
-            return DualNumber()
+#             return DualNumber()
                 self.x * other.x, self.x * other.dx + self.dx * other.x
 
 other_f = float(other)
-        return DualNumber(self.x * other_f, self.dx * other_f)
+#         return DualNumber(self.x * other_f, self.dx * other_f)
 
 __rmul__ = __mul__
 
@@ -206,16 +206,16 @@ def __truediv__(self, other: Union["DualNumber", float]) -> "DualNumber":
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Divide this dual number by another dual number or scalar."""
-"""
-"""
+""""""
+""""""
 
 Parameters
 ----------
@@ -227,31 +227,31 @@ Returns
 DualNumber
 A new dual number representing the quotient.
 """"""
-"""
-"""
+""""""
+""""""
         if isinstance(other, DualNumber):
             denom = other.x**2
-            return DualNumber()
+#             return DualNumber()
                 self.x / other.x,
 (self.dx * other.x - self.x * other.dx) / denom,
 
 other_f = float(other)
-        return DualNumber(self.x / other_f, self.dx / other_f)
+#         return DualNumber(self.x / other_f, self.dx / other_f)
 
 def __rtruediv__(self, other: float) -> "DualNumber":
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Reverse division: divide a scalar by this dual number."""
-"""
-"""
+""""""
+""""""
 
 Parameters
 ----------
@@ -263,10 +263,10 @@ Returns
 DualNumber
 A new dual number representing the quotient.
 """"""
-"""
-"""
+""""""
+""""""
 denom = self.x**2
-        return DualNumber()
+#         return DualNumber()
             float(other) / self.x, (-float(other) * self.dx) / denom
 
 
@@ -277,50 +277,50 @@ def as_tuple(self) -> Tuple[float, float]:
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Return (x, dx) tuple for downstream consumers."""
-"""
-"""
+""""""
+""""""
 
 Returns
 -------
 Tuple[float, float]
 A tuple containing the primal value and derivative.
 """"""
-"""
-"""
-        return self.x, self.dx
+""""""
+""""""
+#         return self.x, self.dx
 
 # Human - friendly representation ------------------------------------------
 def __repr__(self) -> str:
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Return a string representation of the dual number."""
-"""
-"""
+""""""
+""""""
 
 Returns
 -------
 str
 A formatted string showing the dual number values.
 """"""
-"""
-"""
-        return f"DualNumber(x={self.x:.6g}, dx={self.dx:.6g})"
+""""""
+""""""
+#         return f"DualNumber(x={self.x:.6g}, dx={self.dx:.6g})"
 
 
 # -----------------------------------------------------------------------------
@@ -332,16 +332,16 @@ def dual_state_tracker(value: float, derivative: float) -> DualNumber:
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """Wrap value and derivative into a DualNumber instance."""
-"""
-"""
+""""""
+""""""
 
 Parameters
 ----------
@@ -355,13 +355,13 @@ Returns
 DualNumber
 x + epsilon.dx dual - number form.
 """"""
-"""
-"""
-    return DualNumber(x = float(value), dx = float(derivative))
+""""""
+""""""
+#     return DualNumber(x = float(value), dx = float(derivative))
 
 
 
-"""
-"""
-"""
-"""
+""""""
+""""""
+""""""
+""""""

@@ -19,8 +19,8 @@ unicore = DualUnicoreHandler()
 
 # -*- coding: utf - 8 -*-
 """"""
-"""
-"""
+""""""
+""""""
 ZPE Hybrid Mode Selector - Intelligent Trading Mode Selection
 == == == == == == == == == == == == == == == == == == == == == == == == == == == == == ==
 
@@ -41,8 +41,8 @@ Features:
 This module provides cross - platform compatible mode selection with intelligent
 math system switching based on thermal conditions and performance requirements.
 """"""
-"""
-"""
+""""""
+""""""
 
 
 # Import dual math systems for intelligent switching
@@ -53,6 +53,9 @@ try:
     from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
     DUAL_MATH_AVAILABLE = True
     ZPE_MODULES_AVAILABLE = True
+except Exception as e:
+    pass
+
 except ImportError:
 # Fallback to basic math operations
     DUAL_MATH_AVAILABLE = False
@@ -91,8 +94,8 @@ class TradingMode(Enum):
     """Available trading modes."""
 
 
-"""
-"""
+""""""
+""""""
     ZPE_RECURSIVE = "zpe_recursive"  # Rotational velocity for bull runs
     REACTIVE_TASKING = "reactive_tasking"  # Proven methods for instability
     HYBRID_BLEND = "hybrid_blend"  # Mixed approach for mixed conditions
@@ -104,8 +107,8 @@ class MarketCondition(Enum):
     """Market condition classifications."""
 
 
-"""
-"""
+""""""
+""""""
     BULL_RUN = "bull_run"  # Strong uptrend, use ZPE
     BEAR_MARKET = "bear_market"  # Downtrend, use reactive
     SIDEWAYS = "sideways"  # Range - bound, use hybrid
@@ -120,12 +123,12 @@ class Placeholder:
     """[BRAIN] Placeholder class for recursive profit mapping"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """Criteria for mode selection."""
-"""
-"""
+""""""
+""""""
     market_condition: MarketCondition
     volatility_score: float  # 0.0 to 1.0
     trend_strength: float  # -1.0 to 1.0
@@ -142,12 +145,12 @@ class Placeholder:
     """[BRAIN] Placeholder class for recursive profit mapping"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """Result of mode selection."""
-"""
-"""
+""""""
+""""""
     selected_mode: TradingMode
     confidence_score: float
     reasoning: List[str]
@@ -162,12 +165,12 @@ class Placeholder:
     """[BRAIN] Placeholder class for recursive profit mapping"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """Portfolio asset for retroactive tasking."""
-"""
-"""
+""""""
+""""""
     symbol: str
     current_value: float
     allocation_percentage: float
@@ -183,12 +186,12 @@ class Placeholder:
     """[BRAIN] Placeholder class for recursive profit mapping"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """Thermal performance metrics."""
-"""
-"""
+""""""
+""""""
     cpu_temp: float = 0.0
     gpu_temp: float = 0.0
     memory_usage: float = 0.0
@@ -201,12 +204,12 @@ class Placeholder:
     """[BRAIN] Placeholder class for recursive profit mapping"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """"""
-"""
-"""
+""""""
+""""""
     Hybrid Mode Selector for dynamic ZPE / Reactive mode selection.
 
     Implements intelligent mode selection based on:
@@ -218,13 +221,13 @@ class Placeholder:
     - 488 and 42 - bit phase logic
     - Thermal conditions and math system optimization
     """"""
-"""
-"""
+""""""
+""""""
 
     def __init__(self):
         """Initialize the hybrid mode selector."""
-"""
-"""
+""""""
+""""""
 # Initialize ZPE core if available
     self.zpe_core = ZPECore() if ZPE_MODULES_AVAILABLE else None
 
@@ -282,10 +285,13 @@ class Placeholder:
     def _get_current_thermal_metrics(self) -> ThermalMetrics:
 
         """Get current thermal metrics from system."""
-"""
-"""
+""""""
+""""""
         try:
             import psutil
+        except Exception as e:
+            pass
+
 # CPU temperature (simplified - in real implementation, use proper)
 # thermal monitoring
             cpu_temp = psutil.cpu_percent() * 0.8 + 30  # Simulated temperature
@@ -296,7 +302,7 @@ class Placeholder:
 # real implementation
             gpu_temp = cpu_temp + 10  # Simulated GPU temperature
 
-            return ThermalMetrics()
+#             return ThermalMetrics()
                 cpu_temp = cpu_temp,
                 gpu_temp = gpu_temp,
                 memory_usage = memory_usage,
@@ -305,15 +311,15 @@ class Placeholder:
 
         except Exception as e:
             logger.warning(f"Failed to get thermal metrics: {e}")
-            return ThermalMetrics()
+#             return ThermalMetrics()
 
     def _select_math_system(self, operation_name: str) -> str:
 
         """Select optimal math system based on thermal conditions."""
-"""
-"""
+""""""
+""""""
         if not DUAL_MATH_AVAILABLE:
-            return "basic"
+#             return "basic"
 
         thermal_metrics = self._get_current_thermal_metrics()
 
@@ -324,7 +330,7 @@ class Placeholder:
                     f"High thermal conditions ({")}
                         thermal_metrics.cpu_temp:.1f\\u00b0C - switching to legacy math""
                 self.active_math_system = "legacy"
-            return "legacy"
+#             return "legacy"
 
 # Use unified system for normal conditions
         if self.active_math_system != "unified":
@@ -332,9 +338,9 @@ class Placeholder:
                 f"Normal thermal conditions ({")}
                     thermal_metrics.cpu_temp:.1f\\u00b0C - using unified math""
             self.active_math_system = "unified"
-        return "unified"
+#         return "unified"
 
-    def _execute_with_math_system()
+    def _execute_with_math_system():
 
             self,
             operation_name: str,
@@ -342,23 +348,23 @@ class Placeholder:
             *args,
             **kwargs:
         """Execute operation with appropriate math system."""
-"""
-"""
+""""""
+""""""
         math_system = self._select_math_system(operation_name)
 
         try:
             if math_system == "unified" and self.unified_math:
-                return operation_func(self.unified_math, *args, **kwargs)
+#                 return operation_func(self.unified_math, *args, **kwargs)
             elif math_system == "legacy" and self.legacy_math:
-                return operation_func(self.legacy_math, *args, **kwargs)
+#                 return operation_func(self.legacy_math, *args, **kwargs)
             else:
-                return operation_func(None, *args, **kwargs)  # Basic math
+#                 return operation_func(None, *args, **kwargs)  # Basic math
         except Exception as e:
             logger.error(f"Math operation {operation_name} failed: {e}")
 # Fallback to basic math
-            return operation_func(None, *args, **kwargs)
+#             return operation_func(None, *args, **kwargs)
 
-    def select_mode(self,)
+    def select_mode(self,):
 
                     market_data: Dict[str,]
                                         Any,
@@ -366,8 +372,8 @@ class Placeholder:
                                                     Any = None,
                     timeframe: str = "daily" -> ModeSelectionResult:
         """"""
-"""
-"""
+""""""
+""""""
         Select the optimal trading mode based on current conditions.
 
         Args:
@@ -378,9 +384,12 @@ class Placeholder:
         Returns:
             ModeSelectionResult with selected mode and reasoning
         """"""
-"""
-"""
+""""""
+""""""
         try:
+        except Exception as e:
+            pass
+
 # Analyze market conditions
             market_condition = self._analyze_market_condition(market_data)
 
@@ -427,24 +436,24 @@ class Placeholder:
             safe_print(f"   Market Condition: {market_condition.value}")
             safe_print(f"   Reasoning: {', '.join(reasoning[:2])}")
 
-            return result
+#             return result
 
         except Exception as e:
             error(f"\\u274c Mode selection failed: {e}")
 # Emergency fallback
-            return ModeSelectionResult()
+#             return ModeSelectionResult()
                 selected_mode = TradingMode.EMERGENCY_FALLBACK,
                 confidence_score = 1.0,
                 reasoning=["Emergency fallback due to selection error"],
                 market_condition = MarketCondition.CRISIS
 
 
-    def _analyze_market_condition()
+    def _analyze_market_condition():
 
             self, market_data: Dict[str, Any] -> MarketCondition:
         """Analyze current market condition."""
-"""
-"""
+""""""
+""""""
         try:
             trend_strength = market_data.get('trend_strength', 0.0)
             volatility = market_data.get('volatility', 0.5)
@@ -457,47 +466,53 @@ class Placeholder:
                 else:
                     return abs(value)
 
+        except Exception as e:
+            pass
+
 # Check for crisis conditions
             if volatility > 0.9 or self._execute_with_math_system()
                     "abs", abs_operation, price_change > 0.2:
-                return MarketCondition.CRISIS
+#                 return MarketCondition.CRISIS
 
 # Check for bull run
-            if trend_strength > self.bull_run_threshold and price_change > 0.05:
-                return MarketCondition.BULL_RUN
+            if trend_strength > self.bull_run_threshold and price_change > 0.5:
+#                 return MarketCondition.BULL_RUN
 
 # Check for bear market
-            if trend_strength < self.bear_market_threshold and price_change < -0.05:
-                return MarketCondition.BEAR_MARKET
+            if trend_strength < self.bear_market_threshold and price_change < -0.5:
+#                 return MarketCondition.BEAR_MARKET
 
 # Check for high volatility
             if volatility > self.high_volatility_threshold:
-                return MarketCondition.HIGH_VOLATILITY
+#                 return MarketCondition.HIGH_VOLATILITY
 
 # Check for low volatility
             if volatility < self.low_volatility_threshold:
-                return MarketCondition.LOW_VOLATILITY
+#                 return MarketCondition.LOW_VOLATILITY
 
 # Default to sideways
-            return MarketCondition.SIDEWAYS
+#             return MarketCondition.SIDEWAYS
 
         except Exception as e:
             warn(f"\\u26a0\\ufe0f Market condition analysis failed: {e}")
-            return MarketCondition.SIDEWAYS
+#             return MarketCondition.SIDEWAYS
 
-    def _calculate_selection_criteria(self,)
+    def _calculate_selection_criteria(self,):
 
                                         market_data: Dict[str,]
                                                         Any,
                                         market_condition: MarketCondition,
                                         timeframe: str -> ModeSelectionCriteria:
         """Calculate mode selection criteria."""
-"""
-"""
+""""""
+""""""
         try:
             volatility_score = market_data.get('volatility', 0.5)
             trend_strength = market_data.get('trend_strength', 0.0)
             profit_performance = market_data.get('profit_performance', 0.0)
+
+        except Exception as e:
+            pass
 
 # Check ZPE availability
             zpe_available = ZPE_MODULES_AVAILABLE and self.zpe_core is not None
@@ -508,7 +523,7 @@ class Placeholder:
 # Check for emergency conditions
             emergency_triggered = market_condition == MarketCondition.CRISIS
 
-            return ModeSelectionCriteria()
+#             return ModeSelectionCriteria()
                 market_condition = market_condition,
                 volatility_score = volatility_score,
                 trend_strength = trend_strength,
@@ -521,7 +536,7 @@ class Placeholder:
 
         except Exception as e:
             warn(f"\\u26a0\\ufe0f Criteria calculation failed: {e}")
-            return ModeSelectionCriteria()
+#             return ModeSelectionCriteria()
                 market_condition = MarketCondition.SIDEWAYS,
                 volatility_score = 0.5,
                 trend_strength = 0.0,
@@ -532,9 +547,12 @@ class Placeholder:
     def _update_phase_logic(self, market_data: Dict[str, Any]) -> None:
 
         """Update 488 and 42 - bit phase logic."""
-"""
-"""
+""""""
+""""""
         try:
+        except Exception as e:
+            pass
+
 # Simple phase switching logic based on market conditions
             current_time = time.time()
 
@@ -558,20 +576,23 @@ class Placeholder:
         except Exception as e:
             warn(f"\\u26a0\\ufe0f Phase logic update failed: {e}")
 
-    def _select_mode_by_criteria()
+    def _select_mode_by_criteria():
 
             self, criteria: ModeSelectionCriteria -> Tuple[TradingMode, float, List[str]]:
         """Select mode based on criteria."""
-"""
-"""
+""""""
+""""""
         reasoning = []
         mode_scores = {}
 
         try:
+        except Exception as e:
+            pass
+
 # Emergency fallback check
             if criteria.emergency_triggered:
                 reasoning.append("Emergency conditions detected")
-                return TradingMode.EMERGENCY_FALLBACK, 1.0, reasoning
+#                 return TradingMode.EMERGENCY_FALLBACK, 1.0, reasoning
 
 # Calculate base scores for each mode
             mode_scores[TradingMode.ZPE_RECURSIVE] = self._calculate_zpe_score()
@@ -638,18 +659,18 @@ class Placeholder:
                     best_mode.value} with score {
                     best_score:.3f""
 
-            return best_mode, best_score, reasoning
+#             return best_mode, best_score, reasoning
 
         except Exception as e:
             warn(f"\\u26a0\\ufe0f Mode selection failed: {e}")
-            return TradingMode.EMERGENCY_FALLBACK, 1.0, []
+#             return TradingMode.EMERGENCY_FALLBACK, 1.0, []
                 "Emergency fallback due to selection error"
 
     def _calculate_zpe_score(self, criteria: ModeSelectionCriteria) -> float:
 
         """Calculate ZPE mode score."""
-"""
-"""
+""""""
+""""""
         score = 0.0
 
 # Market condition scoring
@@ -688,14 +709,14 @@ class Placeholder:
             else:
                 return min(value, max_val)
 
-        return self._execute_with_math_system("min", min_operation, score, 1.0)
+#         return self._execute_with_math_system("min", min_operation, score, 1.0)
 
-    def _calculate_reactive_score()
+    def _calculate_reactive_score():
 
             self, criteria: ModeSelectionCriteria -> float:
         """Calculate reactive mode score."""
-"""
-"""
+""""""
+""""""
         score = 0.0
 
 # Market condition scoring
@@ -743,14 +764,14 @@ class Placeholder:
             else:
                 return min(value, max_val)
 
-        return self._execute_with_math_system("min", min_operation, score, 1.0)
+#         return self._execute_with_math_system("min", min_operation, score, 1.0)
 
-    def _calculate_hybrid_score()
+    def _calculate_hybrid_score():
 
             self, criteria: ModeSelectionCriteria -> float:
         """Calculate hybrid mode score."""
-"""
-"""
+""""""
+""""""
 # Hybrid is good for mixed conditions
         score = 0.3  # Base score
 
@@ -777,16 +798,16 @@ class Placeholder:
             else:
                 return min(value, max_val)
 
-        return self._execute_with_math_system("min", min_operation, score, 1.0)
+#         return self._execute_with_math_system("min", min_operation, score, 1.0)
 
-    def _calculate_mode_weights(self,)
+    def _calculate_mode_weights(self,):
 
                                 criteria: ModeSelectionCriteria,
                                 selected_mode: TradingMode -> Dict[TradingMode,]
                                                                     float:
         """Calculate mode weights for hybrid scenarios."""
-"""
-"""
+""""""
+""""""
         weights = {}
             TradingMode.ZPE_RECURSIVE: 0.0,
             TradingMode.REACTIVE_TASKING: 0.0,
@@ -810,13 +831,13 @@ class Placeholder:
         else:
             weights[selected_mode] = 1.0
 
-        return weights
+#         return weights
 
     def _update_portfolio_assets(self, portfolio_data: Dict[str, Any]) -> None:
 
         """Update portfolio assets for retroactive tasking."""
-"""
-"""
+""""""
+""""""
         try:
             assets = portfolio_data.get('assets', {})
 
@@ -831,6 +852,9 @@ class Placeholder:
                     volatility = asset_data.get('volatility', 0.5)
 
                 else:
+        except Exception as e:
+            pass
+
 # Update existing asset
                     asset = self.portfolio_assets[symbol]
                     asset.current_value = asset_data.get()
@@ -848,36 +872,39 @@ class Placeholder:
     def get_retroactive_tasking_candidates(self) -> List[PortfolioAsset]:
 
         """Get portfolio assets that can be retroactively tasked."""
-"""
-"""
+""""""
+""""""
         candidates = []
 
         for asset in self.portfolio_assets.values():
             if asset.can_retroactive_task:
 # Check if asset meets retroactive tasking criteria
-                if (asset.profit_performance < -0.05 or  # Poor performance)
+                if (asset.profit_performance < -0.5 or  # Poor performance)
                     asset.volatility > 0.7 or  # High volatility
                         asset.allocation_percentage > 0.2:  # High allocation
                     candidates.append(asset)
 
 # Sort by priority (poor performance first)
         candidates.sort(key = lambda x: x.profit_performance)
-        return candidates
+#         return candidates
 
-    def record_mode_performance()
+    def record_mode_performance():
 
             self,
             mode: TradingMode,
             performance: float,
             market_condition: MarketCondition -> None:
         """Record performance for mode selection learning."""
-"""
-"""
+""""""
+""""""
         try:
             if mode not in self.mode_performance_history:
             self.mode_performance_history[mode] = []
 
             self.mode_performance_history[mode].append(performance)
+
+        except Exception as e:
+            pass
 
 # Keep only recent performance (last 100)
             if len(self.mode_performance_history[mode]) > 100:
@@ -889,8 +916,8 @@ class Placeholder:
     def get_mode_statistics(self) -> Dict[str, Any]:
 
         """Get mode selection statistics."""
-"""
-"""
+""""""
+""""""
         try:
             stats = {}
                 'total_selections': sum()
@@ -913,11 +940,11 @@ class Placeholder:
                         'recent': performance_list[-10:] if len(performance_list) >= 10 else performance_list
 
 
-            return stats
+#             return stats
 
         except Exception as e:
             warn(f"\\u26a0\\ufe0f Statistics calculation failed: {e}")
-            return {}
+#             return {}
 
 
 # Global mode selector instance
@@ -925,35 +952,35 @@ hybrid_mode_selector = ZPEHybridModeSelector()
 
 
 # Convenience functions for external access
-def select_trading_mode(market_data: Dict[str,])
+def select_trading_mode(market_data: Dict[str,]):
 
                                             Any,
                         portfolio_data: Optional[Dict[str,]]
                                                         Any = None,
                         timeframe: str = "daily" -> ModeSelectionResult:
     """Select trading mode using global selector."""
-"""
-"""
-    return hybrid_mode_selector.select_mode()
+""""""
+""""""
+#     return hybrid_mode_selector.select_mode()
         market_data, portfolio_data, timeframe
 
 
 def get_retroactive_candidates() -> List[PortfolioAsset]:
 
     """Get retroactive tasking candidates."""
-"""
-"""
-    return hybrid_mode_selector.get_retroactive_tasking_candidates()
+""""""
+""""""
+#     return hybrid_mode_selector.get_retroactive_tasking_candidates()
 
 
-def record_performance()
+def record_performance():
 
         mode: TradingMode,
         performance: float,
         market_condition: MarketCondition -> None:
     """Record mode performance."""
-"""
-"""
+""""""
+""""""
     hybrid_mode_selector.record_mode_performance()
         mode, performance, market_condition
 
@@ -961,9 +988,9 @@ def record_performance()
 def get_mode_stats() -> Dict[str, Any]:
 
     """Get mode selection statistics."""
-"""
-"""
-    return hybrid_mode_selector.get_mode_statistics()
+""""""
+""""""
+#     return hybrid_mode_selector.get_mode_statistics()
 
 
 # Module exports
@@ -983,8 +1010,8 @@ __all__ = []
 def placeholder(): pass
 
     """Test the ZPE Hybrid Mode Selector."""
-"""
-"""
+""""""
+""""""
     safe_print("\\u1f9e0 Testing ZPE Hybrid Mode Selector")
     safe_print("=" * 50)
 
@@ -992,7 +1019,7 @@ def placeholder(): pass
     test_market_data = {}
         'trend_strength': 0.8,
         'volatility': 0.3,
-        'price_change_24h': 0.08,
+        'price_change_24h': 0.8,
         'profit_performance': 0.15
 
 
@@ -1023,7 +1050,7 @@ if __name__ == "__main__":
 
 
 
-"""
-"""
-"""
-"""
+""""""
+""""""
+""""""
+""""""

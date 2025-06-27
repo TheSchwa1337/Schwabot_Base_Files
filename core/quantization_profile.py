@@ -12,8 +12,8 @@ unicore = DualUnicoreHandler()
 
 # -*- coding: utf - 8 -*-
 """quantization_profile.py"""
-"""
-"""
+""""""
+""""""
 
 
 def main() -> None:
@@ -21,8 +21,8 @@ def main() -> None:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
 
-"""
-"""
+""""""
+""""""
 pass
 
 

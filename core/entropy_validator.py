@@ -17,8 +17,8 @@ from core.unified_math_system import unified_math
 unicore = DualUnicoreHandler()
 
 # """Entropy - based signal validator."""
-"""
-"""
+""""""
+""""""
 
 This module exposes: func: `validate_entropy_envelope` - a helper that checks
 whether a signal(vector) lies inside an acceptable Shannon - or spectral - entropy
@@ -36,16 +36,19 @@ The implementation is intentionally lightweight to pass Flake8; deeper
 statistical tests(Jensen - Shannon divergence, permutation entropy) can be added
 later under the marked TODO sections.
 """"""
-"""
-"""
+""""""
+""""""
 
 
 # from core.unified_math_system import unified_math  # F811: duplicate import
 
 try:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+except Exception as e:
+    pass
+
+""""""
+""""""
     pass
 except ModuleNotFoundError:  # pragma: no cover - pure - NumPy fallback
 
@@ -54,12 +57,12 @@ def welch(x: np.ndarray, *, fs: float = 1.0, nperseg: int | None = None):  # typ
         """Rudimentary Welch PSD replacement (Hann + overlap = 0)."""
 
 
-"""
-"""
+""""""
+""""""
         if nperseg is None:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 
 
@@ -77,7 +80,7 @@ spec = np.fft.rfft(seg)
                         ** 2 / (np.sum(window**2) * fs)
         psd = psd_acc / num_segments
 freqs = np.fft.rfftfreq(nperseg, 1.0 / fs)
-        return freqs, psd
+#         return freqs, psd
 
 
 __all__ = ["validate_entropy_envelope"]
@@ -87,23 +90,23 @@ def _spectral_entropy(signal: np.ndarray, *, fs: float = 1.0) -> float:
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """Compute spectral entropy (base - 2) of a 1 - D real signal."""
-"""
-"""
+""""""
+""""""
     freqs, psd = welch(signal, fs = fs)
     psd_norm = psd / np.sum(psd)
     psd_norm = psd_norm[psd_norm > 0]  # avoid unified_math.log(0)
-    return float(-np.sum(psd_norm * np.log2(psd_norm)))
+#     return float(-np.sum(psd_norm * np.log2(psd_norm)))
 
 
-def validate_entropy_envelope()
+def validate_entropy_envelope():
 
 
     signal: np.ndarray,
@@ -113,8 +116,8 @@ min_entropy: float = 2.0,
 max_entropy: float = 8.0,
     -> Tuple[bool, float]:
 """Validate a waveform's entropy against an allowed envelope."""
-"""
-"""
+""""""
+""""""
 
 Parameters
 ----------
@@ -133,12 +136,12 @@ Tuple[bool, float]
 ``(is_valid, entropy)`` where *is_valid* is ``True`` if the spectral
         entropy lies inside the given envelope.
 """"""
-"""
-"""
+""""""
+""""""
     if signal.ndim != 1:
         raise ValueError("signal must be 1 - D")
     entropy = _spectral_entropy(signal, fs = fs)
-    return (min_entropy <= entropy <= max_entropy), entropy
+#     return (min_entropy <= entropy <= max_entropy), entropy
 
 
 # -----------------------------------------------------------------------------
@@ -152,16 +155,16 @@ def _permutation_entropy(signal: np.ndarray, order: int = 3) -> float:
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """Compute permutation entropy of a signal."""
-"""
-"""
+""""""
+""""""
 
 Parameters
 ----------
@@ -175,10 +178,10 @@ Returns
 float
 Permutation entropy value
 """"""
-"""
-"""
+""""""
+""""""
     if len(signal) < order + 1:
-        return 0.0
+#         return 0.0
 
 # Generate all possible permutations
 from itertools import permutations
@@ -193,43 +196,43 @@ sorted_indices = np.argsort(window)
         permutation = tuple(sorted_indices)
         if permutation in permutation_counts:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 permutation_counts[permutation] += 1
 
 # Calculate entropy
 total_windows = len(signal) - order
     if total_windows == 0:
-        return 0.0
+#         return 0.0
 
 entropy = 0.0
     for count in permutation_counts.values():
         if count > 0:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 p = count / total_windows
 entropy -= p * np.log2(p)
 
-    return float(entropy)
+#     return float(entropy)
 
 
 def _jensen_shannon_divergence(p: np.ndarray, q: np.ndarray) -> float:
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """Compute Jensen - Shannon divergence between two distributions."""
-"""
-"""
+""""""
+""""""
 
 Parameters
 ----------
@@ -241,8 +244,8 @@ Returns
 float
 Jensen - Shannon divergence value
 """"""
-"""
-"""
+""""""
+""""""
 # Ensure they are probability distributions
 p = p / np.sum(p)
     q = q / np.sum(q)
@@ -251,45 +254,45 @@ p = p / np.sum(p)
 m = 0.5 * (p + q)
 
 # Compute KL divergences
-kl_pm = np.sum(p * np.log2(p / m + 1e - 10))
-    kl_qm = np.sum(q * np.log2(q / m + 1e - 10))
+kl_pm = np.sum(p * np.log2(p / m + 1e-10))
+    kl_qm = np.sum(q * np.log2(q / m + 1e-10))
 
 # Jensen - Shannon divergence
-    return 0.5 * (kl_pm + kl_qm)
+#     return 0.5 * (kl_pm + kl_qm)
 
 
 class Placeholder:
 
     """[BRAIN] Placeholder class for recursive profit mapping"""
-"""
-"""
+""""""
+""""""
     pass
     """Entropy validator with dynamic threshold adaptation."""
-"""
-"""
+""""""
+""""""
 
 def __init__(self, window_size: int = 100):
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Initialize adaptive validator."""
-"""
-"""
+""""""
+""""""
 
 Parameters
 ----------
 window_size : int
 Size of rolling window for statistics
 """"""
-"""
-"""
+""""""
+""""""
 self.window_size = window_size
 self.entropy_history = []
 self.permutation_entropy_history = []
@@ -299,28 +302,28 @@ def update_reference_distribution(self, signal: np.ndarray) -> None:
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Update reference distribution for Jensen - Shannon divergence."""
-"""
-"""
+""""""
+""""""
 
 Parameters
 ----------
 signal : np.ndarray
 Signal to use as reference
 """"""
-"""
-"""
+""""""
+""""""
 freqs, psd = welch(signal, fs = 1.0)
         self.reference_distribution = psd / np.sum(psd)
 
-def validate_adaptive()
+def validate_adaptive():
 
 
         self,
@@ -334,8 +337,8 @@ use_js_divergence: bool = True,
 js_threshold: float = 0.5,
     -> Dict[str, Any]:
 """Validate signal with multiple entropy measures and adaptive thresholds."""
-"""
-"""
+""""""
+""""""
 
 Parameters
 ----------
@@ -357,8 +360,8 @@ Returns
 Dict[str, Any]
 Validation results with multiple measures
 """"""
-"""
-"""
+""""""
+""""""
         if signal.ndim != 1:
             raise ValueError("signal must be 1 - D")
 
@@ -371,15 +374,15 @@ permutation_entropy = 0.0
 permutation_valid = True
         if use_permutation:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 permutation_entropy = _permutation_entropy(signal)
 # Adaptive threshold for permutation entropy
             if self.permutation_entropy_history:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 mean_perm = unified_math.unified_math.mean(self.permutation_entropy_history)
                 std_perm = unified_math.unified_math.std(self.permutation_entropy_history)
@@ -394,8 +397,8 @@ js_divergence = 0.0
 js_valid = True
         if use_js_divergence and self.reference_distribution is not None:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 freqs, psd = welch(signal, fs = fs)
             current_distribution = psd / np.sum(psd)
@@ -415,7 +418,7 @@ self.entropy_history.append(spectral_entropy)
 # Overall validation
 overall_valid = spectral_valid and permutation_valid and js_valid
 
-        return {}
+#         return {}
 "is_valid": overall_valid,
 "spectral_entropy": spectral_entropy,
 "spectral_valid": spectral_valid,
@@ -433,7 +436,7 @@ overall_valid = spectral_valid and permutation_valid and js_valid
 
 
 
-"""
-"""
-"""
-"""
+""""""
+""""""
+""""""
+""""""

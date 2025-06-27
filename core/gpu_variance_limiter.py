@@ -6,8 +6,8 @@ unicore = DualUnicoreHandler()
 
 # -*- coding: utf - 8 -*-
 """"""
-"""
-"""
+""""""
+""""""
 GPU Variance Limiter - Blocks trade execution when CuPy - based variance spikes.
 
 Mathematical Foundation:
@@ -18,8 +18,8 @@ Mathematical Foundation:
 
 Based on Schwabot's mathematical framework for GPU - accelerated risk management.'
 """"""
-"""
-"""
+""""""
+""""""
 
 import logging
 from typing import List, Optional, Tuple, Union
@@ -32,6 +32,9 @@ try:
         safe_print, info, warn, error, success, debug
 
     CLI_HANDLER_AVAILABLE = True
+except Exception as e:
+    pass
+
 except ImportError:
     CLI_HANDLER_AVAILABLE = False
 
@@ -65,6 +68,9 @@ try:
     GPU_AVAILABLE = True
     logger = logging.getLogger(__name__)
     logger.info("CuPy GPU acceleration available")
+except Exception as e:
+    pass
+
 except ImportError:
     GPU_AVAILABLE = False
 # Mock CuPy for testing
@@ -72,8 +78,8 @@ except ImportError:
 class Placeholder:
 
     """[BRAIN] Placeholder class for recursive profit mapping"""
-"""
-"""
+""""""
+""""""
     pass
         @staticmethod
         def array(data, dtype = None):
@@ -110,6 +116,9 @@ class Placeholder:
 try:
     from core.unified_math_system import unified_math
     CORE_MODULES_AVAILABLE = True
+except Exception as e:
+    pass
+
 except ImportError:
     CORE_MODULES_AVAILABLE = False
 # Mock unified_math for testing
@@ -117,8 +126,8 @@ except ImportError:
 class Placeholder:
 
     """[BRAIN] Placeholder class for recursive profit mapping"""
-"""
-"""
+""""""
+""""""
     pass
         @staticmethod
         def max(a, b):
@@ -137,7 +146,7 @@ class Placeholder:
     unified_math = UnifiedMath()
 
 # Default parameters
-DEFAULT_VARIANCE_THRESHOLD = 0.05
+DEFAULT_VARIANCE_THRESHOLD = 0.5
 DEFAULT_NORM_THRESHOLD = 0.1
 DEFAULT_WINDOW_SIZE = 50
 DEFAULT_MIN_SAMPLES = 10
@@ -147,12 +156,12 @@ DEFAULT_MIN_SAMPLES = 10
 class Placeholder:
 
     """[BRAIN] Placeholder class for recursive profit mapping"""
-"""
-"""
+""""""
+""""""
     pass
     """Result of variance analysis."""
-"""
-"""
+""""""
+""""""
     is_limited: bool
     variance: float
     norm_value: float
@@ -165,12 +174,12 @@ class Placeholder:
 class Placeholder:
 
     """[BRAIN] Placeholder class for recursive profit mapping"""
-"""
-"""
+""""""
+""""""
     pass
     """"""
-"""
-"""
+""""""
+""""""
     Blocks trade execution when CuPy - based variance spikes.
 
     Mathematical Foundation:
@@ -179,10 +188,10 @@ class Placeholder:
     - Real - time variance thresholding with GPU acceleration
     - Adaptive threshold adjustment based on market conditions
     """"""
-"""
-"""
+""""""
+""""""
 
-    def __init__()
+    def __init__():
 
         self,
         variance_threshold: float = DEFAULT_VARIANCE_THRESHOLD,
@@ -192,8 +201,8 @@ class Placeholder:
         adaptive_threshold: bool = True,
         -> None:
         """Initialize the GPU variance limiter."""
-"""
-"""
+""""""
+""""""
         self.variance_threshold = variance_threshold
         self.norm_threshold = norm_threshold
         self.window_size = window_size
@@ -216,8 +225,8 @@ class Placeholder:
     def update_data(self, data_point: float) -> None:
 
         """"""
-"""
-"""
+""""""
+""""""
         Update the limiter with new data point.
 
         Parameters:
@@ -225,9 +234,12 @@ class Placeholder:
         data_point : float
             New data point to add to history
         """"""
-"""
-"""
+""""""
+""""""
         try:
+        except Exception as e:
+            pass
+
 # Validate input
             if not isinstance(data_point, (int, float)):
                 logger.warning(f"Invalid data point type: {type(data_point)}")
@@ -248,8 +260,8 @@ class Placeholder:
     def is_limited(self, data_vector: Optional[List[float]] = None) -> bool:
 
         """"""
-"""
-"""
+""""""
+""""""
         Check if trade execution should be limited based on variance analysis.
 
         Parameters:
@@ -262,22 +274,22 @@ class Placeholder:
         bool
             True if execution should be limited, False otherwise
         """"""
-"""
-"""
+""""""
+""""""
         try:
             result = self.calculate_variance_result(data_vector)
-            return result.is_limited
+#             return result.is_limited
 
         except Exception as e:
             logger.error(f"Error checking variance limit: {e}")
-            return True  # Default to limiting on error
+#             return True  # Default to limiting on error
 
-    def calculate_variance_result()
+    def calculate_variance_result():
 
             self, data_vector: Optional[List[float]] = None -> VarianceResult:
         """"""
-"""
-"""
+""""""
+""""""
         Calculate detailed variance analysis result.
 
         Mathematical Process:
@@ -297,16 +309,19 @@ class Placeholder:
         VarianceResult
             Detailed variance analysis result
         """"""
-"""
-"""
+""""""
+""""""
         try:
+        except Exception as e:
+            pass
+
 # Use provided vector or historical data
             if data_vector is None:
                 data_vector = self.data_history
 
 # Check minimum samples
             if len(data_vector) < self.min_samples:
-                return VarianceResult()
+#                 return VarianceResult()
                     is_limited = True,
                     variance = float('inf'),
                     norm_value = float('inf'),
@@ -357,11 +372,11 @@ class Placeholder:
                 gpu_available = self.gpu_available
 
 
-            return result
+#             return result
 
         except Exception as e:
             logger.error(f"Error calculating variance result: {e}")
-            return VarianceResult()
+#             return VarianceResult()
                 is_limited = True,
                 variance = float('inf'),
                 norm_value = float('inf'),
@@ -373,42 +388,45 @@ class Placeholder:
     def _calculate_variance_cpu(self, data_vector: List[float]) -> float:
 
         """Calculate variance using CPU fallback."""
-"""
-"""
+""""""
+""""""
         try:
             if len(data_vector) < 2:
-                return 0.0
+#                 return 0.0
 
             mean_val = sum(data_vector) / len(data_vector)
             variance = sum()
                 (x - mean_val ** 2 for x in data_vector) / len(data_vector)
-            return variance
+#             return variance
 
         except Exception as e:
             logger.error(f"Error calculating CPU variance: {e}")
-            return float('inf')
+#             return float('inf')
 
     def _calculate_norm_cpu(self, data_vector: List[float]) -> float:
 
         """Calculate matrix norm using CPU fallback."""
-"""
-"""
+""""""
+""""""
         try:
             norm = (sum(x * x for x in data_vector)) ** 0.5
-            return norm
+#             return norm
 
         except Exception as e:
             logger.error(f"Error calculating CPU norm: {e}")
-            return float('inf')
+#             return float('inf')
 
     def _update_adaptive_threshold(self) -> None:
 
         """Update threshold adaptively based on recent performance."""
-"""
-"""
+""""""
+""""""
         try:
             if len(self.variance_history) < 10:
                 return
+
+        except Exception as e:
+            pass
 
 # Calculate performance - based adjustment
             recent_limit_rate = self.limited_executions / \
@@ -418,15 +436,15 @@ class Placeholder:
 # Adjust variance threshold based on performance
             if recent_limit_rate < 0.1:  # Too restrictive
                 self.variance_threshold = min()
-                    0.2, self.variance_threshold + 0.01
+                    0.2, self.variance_threshold + 0.1
             elif recent_limit_rate > 0.8:  # Too permissive
                 self.variance_threshold = max()
-                    0.01, self.variance_threshold - 0.005
+                    0.1, self.variance_threshold - 0.5
 
 # Adjust for average variance
             if recent_avg_variance > self.variance_threshold * 1.5:
                 self.variance_threshold = min()
-                    0.2, self.variance_threshold + 0.008
+                    0.2, self.variance_threshold + 0.8
 
             logger.debug()
                 f"Adaptive variance threshold updated to: {"}
@@ -438,10 +456,10 @@ class Placeholder:
     def get_performance_summary(self) -> dict:
 
         """Get performance summary of variance limiter."""
-"""
-"""
+""""""
+""""""
         try:
-            return {}
+#             return {}
                 "total_checks": self.total_checks,
                 "limited_executions": self.limited_executions,
                 "limit_rate": self.limited_executions / max(1, self.total_checks),
@@ -456,13 +474,13 @@ class Placeholder:
 
         except Exception as e:
             logger.error(f"Error getting performance summary: {e}")
-            return {"error": str(e)}
+#             return {"error": str(e)}
 
     def reset(self) -> None:
 
         """Reset the variance limiter state."""
-"""
-"""
+""""""
+""""""
         self.data_history.clear()
         self.variance_history.clear()
         self.norm_history.clear()
@@ -470,19 +488,19 @@ class Placeholder:
         self.limited_executions = 0
         logger.info("GPU Variance Limiter reset")
 
-    def set_thresholds(self, variance_threshold: float,)
+    def set_thresholds(self, variance_threshold: float,):
 
                         norm_threshold: float -> None:
         """Set new variance and norm thresholds."""
-"""
-"""
+""""""
+""""""
         try:
-            if not (0.001 <= variance_threshold <= 0.5):
+            if not (0.1 <= variance_threshold <= 0.5):
                 logger.warning()
                     f"Variance threshold out of bounds: {variance_threshold}"
                 return
 
-            if not (0.001 <= norm_threshold <= 1.0):
+            if not (0.1 <= norm_threshold <= 1.0):
                 logger.warning()
                     f"Norm threshold out of bounds: {norm_threshold}"
                 return
@@ -498,9 +516,9 @@ class Placeholder:
     def get_gpu_status(self) -> dict:
 
         """Get GPU acceleration status."""
-"""
-"""
-        return {}
+""""""
+""""""
+#         return {}
             "gpu_available": self.gpu_available,
             "cupy_imported": GPU_AVAILABLE,
             "acceleration_type": "CuPy GPU" if self.gpu_available else "CPU Fallback"
@@ -509,19 +527,19 @@ class Placeholder:
 def main() -> None:
 
     """Main function for testing the GPU variance limiter."""
-"""
-"""
+""""""
+""""""
     logging.basicConfig(level = logging.INFO)
 
 # Create variance limiter
-    limiter = GPUVarianceLimiter(variance_threshold = 0.05, norm_threshold = 0.1)
+    limiter = GPUVarianceLimiter(variance_threshold = 0.5, norm_threshold = 0.1)
 
 # Test data
     test_data = []
         [1.0, 1.1, 1.2, 1.3, 1.4],  # Low variance
         [1.0, 2.0, 0.5, 3.0, 0.1],  # High variance
-        [1.0, 1.01, 1.02, 1.03, 1.04],  # Very low variance
-        [1.0, 5.0, 0.1, 10.0, 0.01],  # Extreme variance
+        [1.0, 1.1, 1.2, 1.3, 1.4],  # Very low variance
+        [1.0, 5.0, 0.1, 10.0, 0.1],  # Extreme variance
 
 
     safe_print("\\u1f680 Testing GPU Variance Limiter")

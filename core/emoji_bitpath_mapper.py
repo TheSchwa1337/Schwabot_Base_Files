@@ -1,11 +1,11 @@
 # -*- coding: utf - 8 -*-
-"""
-"""
+""""""
+""""""
 # -*- coding: utf - 8 -*-
 from __future__ import annotations
 
-"""
-"""
+""""""
+""""""
 # -*- coding: utf - 8 -*-
 # -*- coding: utf - 8 -*-
 
@@ -14,7 +14,7 @@ Emoji Bit - Path Mapper - Unicode Symbol Portal System
 
 Maps emoji / sigil portal paths to recursion - safe profit entry points with 2 - bit phase logic.
 Handles Unicode normalization and provides fallback validators for symbol collision prevention.
-"""
+""""""
 
 import os
 import unicodedata
@@ -42,8 +42,8 @@ class EmojiPortalType(Enum):
 
 class BitPathState(Enum):
     """2 - bit path states for emoji navigation."""
-    PATH_00 = "00"  # Safe entry
-    PATH_01 = "01"  # Risky entry
+    PATH_00 = "0"  # Safe entry
+    PATH_01 = "1"  # Risky entry
     PATH_10 = "10"  # Vault trigger
     PATH_11 = "11"  # Emergency fallback
 
@@ -255,7 +255,7 @@ class EmojiBitPathMapper:
             self.portal_registry[portal.emoji] = portal
 
     def normalize_unicode_symbol(self, symbol: str) -> str:
-        """
+        """"""
         Unicode normalization with OS - specific handling.
 
         Args:
@@ -263,8 +263,11 @@ class EmojiBitPathMapper:
 
         Returns:
             Normalized Unicode symbol
-        """
+        """"""
         try:
+        except Exception as e:
+            pass
+
 # Apply Unicode normalization
             normalized = unicodedata.normalize('NFC', symbol)
 
@@ -282,6 +285,9 @@ class EmojiBitPathMapper:
     def _patch_windows_unicode(self, symbol: str) -> str:
         """Windows - specific Unicode patching."""
         try:
+        except Exception as e:
+            pass
+
 # Encode to UTF - 8 and back to handle Windows encoding issues
             return symbol.encode('utf - 8').decode('utf - 8')
         except UnicodeError:
@@ -290,6 +296,9 @@ class EmojiBitPathMapper:
     def _patch_posix_unicode(self, symbol: str) -> str:
         """POSIX - specific Unicode patching."""
         try:
+        except Exception as e:
+            pass
+
 # POSIX systems generally handle Unicode better
             return symbol
         except Exception:
@@ -332,7 +341,7 @@ class EmojiBitPathMapper:
             return False
 
     def map_emoji_to_portal(self, emoji: str) -> Optional[EmojiPortal]:
-        """
+        """"""
         Map emoji to registered portal.
 
         Args:
@@ -340,7 +349,7 @@ class EmojiBitPathMapper:
 
         Returns:
             Matching portal or None
-        """
+        """"""
 # Try direct lookup first
         if emoji in self.portal_registry:
             return self.portal_registry[emoji]
@@ -356,7 +365,7 @@ class EmojiBitPathMapper:
                             source_emoji: str,
                             phase_state: PhaseState,
                             profit_tier: ProfitTier) -> Optional[PortalRoute]:
-        """
+        """"""
         Create portal route for profit navigation.
 
         Args:
@@ -366,7 +375,7 @@ class EmojiBitPathMapper:
 
         Returns:
             Portal route or None if invalid
-        """
+        """"""
         target_portal = self.map_emoji_to_portal(source_emoji)
         if not target_portal:
             return None
@@ -411,7 +420,7 @@ class EmojiBitPathMapper:
         return min(base_confidence, 1.0)
 
     def navigate_emoji_path(self, emoji_sequence: List[str]) -> Dict[str, Any]:
-        """
+        """"""
         Navigate through sequence of emoji portals.
 
         Args:
@@ -419,7 +428,7 @@ class EmojiBitPathMapper:
 
         Returns:
             Navigation result with path analysis
-        """
+        """"""
         navigation_result = {
             'status': 'success',
             'path_valid': True,
@@ -443,6 +452,9 @@ class EmojiBitPathMapper:
                         'tier_action': portal.tier_action.value,
                         'fallback_safe': portal.fallback_safe
                     })
+
+            except Exception as e:
+                pass
 
 # Calculate confidence contribution
                     confidence_weight = 1.0 / len(emoji_sequence)
@@ -489,6 +501,9 @@ class EmojiBitPathMapper:
 
         for emoji, portal in self.portal_registry.items():
             try:
+            except Exception as e:
+                pass
+
 # Check Unicode validity
                 normalized = self.normalize_unicode_symbol(emoji)
                 if normalized != portal.normalized_emoji:
@@ -517,7 +532,7 @@ emoji_bitpath_mapper = EmojiBitPathMapper()
 
 
 def map_emoji_to_profit_portal(emoji: str) -> Optional[EmojiPortal]:
-    """
+    """"""
     Global function for emoji to portal mapping.
 
     Args:
@@ -525,12 +540,12 @@ def map_emoji_to_profit_portal(emoji: str) -> Optional[EmojiPortal]:
 
     Returns:
         Matching portal or None
-    """
+    """"""
     return emoji_bitpath_mapper.map_emoji_to_portal(emoji)
 
 
 def navigate_emoji_profit_path(emoji_sequence: List[str]) -> Dict[str, Any]:
-    """
+    """"""
     Global function for emoji path navigation.
 
     Args:
@@ -538,11 +553,11 @@ def navigate_emoji_profit_path(emoji_sequence: List[str]) -> Dict[str, Any]:
 
     Returns:
         Navigation result
-    """
+    """"""
     return emoji_bitpath_mapper.navigate_emoji_path(emoji_sequence)
 
 
-"""
+""""""
 Emoji Bit - Path Mapper Module
 
 This module implements Unicode symbol portal system for 2 - bit phase logic navigation
@@ -555,7 +570,7 @@ Key features:
 - Fallback ASCII representation for invalid Unicode
 - Portal integrity validation
 - Navigation path confidence calculation
-"""
+""""""
 
 
 

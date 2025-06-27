@@ -1,14 +1,14 @@
 # -*- coding: utf - 8 -*-\\nfrom core.unified_math_system import unified_math
-"""
-"""
-"""
-"""
+""""""
+""""""
+""""""
+""""""
 # -*- coding: utf - 8 -*-\\nfrom core.unified_math_system import unified_math
 
-"""
-"""
-"""
-"""
+""""""
+""""""
+""""""
+""""""
 # -*- coding: utf - 8 -*-\\nfrom core.unified_math_system import unified_math
 # -*- coding: utf - 8 -*-\\nfrom core.unified_math_system import unified_math
 from __future__ import annotations
@@ -24,8 +24,8 @@ This module processes financial news streams and converts them into weighted
 sentiment signals that can influence ghost router decisions and strategy
 matrix updates.
 """"""
-"""
-"""
+""""""
+""""""
 
 
 from typing import Sequence
@@ -39,7 +39,7 @@ __all__: list[str] = ["interpret_news_sentiment", "weight_sentiment_events"]
 # ---------------------------------------------------------------------------
 
 
-def interpret_news_sentiment()
+def interpret_news_sentiment():
 
 
     sentiment_scores: Sequence[float],
@@ -49,8 +49,8 @@ event_sigmas: Sequence[float],
 
 
 """Return lambda_news weighted sentiment activation signal."""
-"""
-"""
+""""""
+""""""
 
 Parameters
 ----------
@@ -66,8 +66,8 @@ Returns
 float
 Combined sentiment signal lambda_news.
 """"""
-"""
-"""
+""""""
+""""""
 if not (len(sentiment_scores) == len(drift_biases) == len(event_sigmas)):
     raise ValueError("input sequences must share length")
 
@@ -76,10 +76,10 @@ biases = np.asarray(drift_biases, dtype = float)
 sigmas = np.asarray(event_sigmas, dtype = float)
 
 weighted_signals = scores * biases * sigmas
-return float(np.sum(weighted_signals))
+# return float(np.sum(weighted_signals))
 
 
-def weight_sentiment_events()
+def weight_sentiment_events():
 
 
     raw_sentiment: float,
@@ -91,16 +91,16 @@ base_weight: float = 1.0,
 
 
 """Apply time - decay and importance weighting to single sentiment."""
-"""
-"""
+""""""
+""""""
 
 Returns weighted sentiment suitable for inclusion in lambda_news calculation.
 """"""
-"""
-"""
+""""""
+""""""
 importance_weight = base_weight * event_importance
 decayed_sentiment = raw_sentiment * \
     (decay_factor ** unified_math.abs(raw_sentiment))
-return decayed_sentiment * importance_weight
+# return decayed_sentiment * importance_weight
 
 

@@ -21,29 +21,35 @@ unicore = DualUnicoreHandler()
 # -*- coding: utf - 8 -*-\\n# Import safe print for Windows compatibility
 try:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+except Exception as e:
+    pass
+
+""""""
+""""""
     pass
 except ImportError:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     try:
+    except Exception as e:
+        pass
+
 # from core.utils.windows_cli_compatibility import safe_print, info, warn,
 # error, success, debug  # F811: duplicate import
     except ImportError:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 
 
@@ -51,12 +57,12 @@ def safe_print(message):
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     print(message)
 
@@ -65,12 +71,12 @@ def info(message):
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     print(f"[INFO] {message}")
 
@@ -79,12 +85,12 @@ def warn(message):
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     print(f"[WARN] {message}")
 
@@ -93,12 +99,12 @@ def error(message):
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     print(f"[ERROR] {message}")
 
@@ -107,12 +113,12 @@ def success(message):
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     print(f"[SUCCESS] {message}")
 
@@ -121,19 +127,19 @@ def debug(message):
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     print(f"[DEBUG] {message}")
 
 
 # """"""
-"""
-"""
+""""""
+""""""
 Trade Simulation Engine - Schwabot UROS v1.0
 == == == == == == == == == == == == == == == == == == == == == =
 
@@ -147,8 +153,8 @@ Features:
 - Risk management simulation
 - Integration with tensor scoring and bit resolution
 """"""
-"""
-"""
+""""""
+""""""
 
 # from core.unified_math_system import unified_math  # F811: duplicate import
 
@@ -160,8 +166,8 @@ class TradeType(Enum):
     """Trade execution types."""
 
 
-"""
-"""
+""""""
+""""""
 
 
 BUY = "buy"
@@ -176,8 +182,8 @@ class TradeStatus(Enum):
     """Trade execution status."""
 
 
-"""
-"""
+""""""
+""""""
 
 
 PENDING = "pending"
@@ -192,12 +198,12 @@ class Placeholder:
     """[BRAIN] Placeholder class for recursive profit mapping"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """Trade execution result."""
-"""
-"""
+""""""
+""""""
 
 
 trade_id: str
@@ -221,12 +227,12 @@ class Placeholder:
     """[BRAIN] Placeholder class for recursive profit mapping"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """Portfolio state snapshot."""
-"""
-"""
+""""""
+""""""
 
 
 timestamp: datetime
@@ -244,12 +250,12 @@ class Placeholder:
     """[BRAIN] Placeholder class for recursive profit mapping"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """"""
-"""
-"""
+""""""
+""""""
 
 
 Trade simulation engine with real strategy logic integration.
@@ -260,19 +266,19 @@ Mathematical Foundation:
     - Risk Metrics: volatility = unified_math.std(returns), sharpe = unified_math.mean(returns) / unified_math.std(returns)
     - Strategy Scoring: score = tensor_score * bit_phase * market_conditions
 """"""
-"""
-"""
+""""""
+""""""
 
 
 def __init__(self, config_path: str = "./config / trade_simulator_config.json"):
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         self.config_path = config_path
 
@@ -284,32 +290,32 @@ self.performance_metrics: Dict[str, Any] = {}
 # Strategy configurations
 self.strategy_configs = {}
 "long_hold_btc": {}
-"entry_threshold": 0.02,
-"exit_threshold": -0.05,
+"entry_threshold": 0.2,
+"exit_threshold": -0.5,
 "position_size": 0.4,
 "bit_phase": 8
 ,
 "mid_swing_eth": {}
-"entry_threshold": 0.015,
-"exit_threshold": -0.03,
+"entry_threshold": 0.15,
+"exit_threshold": -0.3,
 "position_size": 0.25,
 "bit_phase": 42
 ,
 "safety_buffer": {}
-"entry_threshold": 0.01,
-"exit_threshold": -0.02,
+"entry_threshold": 0.1,
+"exit_threshold": -0.2,
 "position_size": 0.1,
 "bit_phase": 4
 ,
 "vol_spike_xrp": {}
-"entry_threshold": 0.025,
-"exit_threshold": -0.04,
+"entry_threshold": 0.25,
+"exit_threshold": -0.4,
 "position_size": 0.15,
 "bit_phase": 8
 ,
 "risk_reward_sol": {}
-"entry_threshold": 0.02,
-"exit_threshold": -0.035,
+"entry_threshold": 0.2,
+"exit_threshold": -0.35,
 "position_size": 0.1,
 "bit_phase": 16
 
@@ -330,18 +336,21 @@ self._load_configuration()
 def _load_configuration(self) -> None:
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Load trade simulator configuration."""
-"""
-"""
+""""""
+""""""
         try:
 
+
+        except Exception as e:
+            pass
 
 # Default configuration
 config = {}
@@ -353,14 +362,14 @@ config = {}
 ,
 "risk_management": {}
 "max_drawdown": 0.15,
-"stop_loss_pct": 0.05,
+"stop_loss_pct": 0.5,
 "take_profit_pct": 0.1,
 "max_correlation": 0.7
 ,
 "execution": {}
-"slippage": 0.001,
-"commission": 0.0025,
-"min_spread": 0.0005
+"slippage": 0.1,
+"commission": 0.25,
+"min_spread": 0.5
 
 
 
@@ -373,20 +382,23 @@ logger.error(f"Error loading configuration: {e}")
 def _initialize_portfolio(self) -> None:
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Initialize portfolio state."""
-"""
-"""
+""""""
+""""""
         try:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+        except Exception as e:
+            pass
+
+""""""
+""""""
     pass
 
 
@@ -410,7 +422,7 @@ logger.info("Portfolio state initialized")
         except Exception as e:
 logger.error(f"Error initializing portfolio: {e}")
 
-def simulate_trade(self,)
+def simulate_trade(self,):
 
     strategy_bucket: Dict[str,]
     Any,
@@ -418,16 +430,16 @@ def simulate_trade(self,)
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """"""
-"""
-"""
+""""""
+""""""
 Simulate trade execution with real strategy logic.
 
 Parameters:
@@ -442,9 +454,12 @@ Returns:
 TradeExecution
 Trade execution result
 """"""
-"""
-"""
+""""""
+""""""
         try:
+        except Exception as e:
+            pass
+
 # Extract strategy parameters
 asset = strategy_bucket.get('asset', 'BTC')
             strategy_id = strategy_bucket.get('strategy_id', 'long_hold_btc')
@@ -465,7 +480,7 @@ trade_type, quantity, price = self._determine_trade_parameters()
 
 # Validate trade
             if not self._validate_trade(asset, quantity, price, trade_type):
-                return self._create_failed_trade()
+#                 return self._create_failed_trade()
     strategy_bucket, "Trade validation failed"
 
 # Execute trade
@@ -486,29 +501,32 @@ logger.info()
             trade_type.value} {
                 quantity:.4f} @ {
                     price:.2f""
-            return trade_execution
+#             return trade_execution
 
         except Exception as e:
 logger.error(f"Error simulating trade: {e}")
-            return self._create_failed_trade(strategy_bucket, str(e))
+#             return self._create_failed_trade(strategy_bucket, str(e))
 
-def _determine_trade_parameters(self, strategy_bucket: Dict[str, Any,])
+def _determine_trade_parameters(self, strategy_bucket: Dict[str, Any,]):
 
 
                                     strategy_config: Dict[str, Any],
 tensor_score: float, bit_phase: int -> Tuple[TradeType, float, float]:
 """Determine trade type and parameters based on strategy."""
-"""
-"""
+""""""
+""""""
         try:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+        except Exception as e:
+            pass
+
+""""""
+""""""
     pass
 asset = strategy_bucket.get('asset', 'BTC')
             current_price = strategy_bucket.get('current_price', 50000.0)
-            entry_threshold = strategy_config.get('entry_threshold', 0.02)
-            exit_threshold = strategy_config.get('exit_threshold', -0.05)
+            entry_threshold = strategy_config.get('entry_threshold', 0.2)
+            exit_threshold = strategy_config.get('exit_threshold', -0.5)
             position_size = strategy_config.get('position_size', 0.4)
 
 # Calculate position value
@@ -518,8 +536,8 @@ quantity = available_capital / current_price
 # Determine trade type based on tensor score and thresholds
             if tensor_score > entry_threshold:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 trade_type = TradeType.BUY
             elif tensor_score < exit_threshold:
@@ -529,16 +547,16 @@ trade_type = TradeType.REBALANCE
 quantity *= 0.5  # Smaller rebalancing trade
 
 # Apply slippage and commission
-slippage = 0.001 if trade_type == TradeType.BUY else -0.001
+slippage = 0.1 if trade_type == TradeType.BUY else -0.1
 execution_price = current_price * (1 + slippage)
 
-            return trade_type, quantity, execution_price
+#             return trade_type, quantity, execution_price
 
         except Exception as e:
 logger.error(f"Error determining trade parameters: {e}")
-            return TradeType.REBALANCE, 0.0, current_price
+#             return TradeType.REBALANCE, 0.0, current_price
 
-def _validate_trade()
+def _validate_trade():
 
     self,
     asset: str,
@@ -548,39 +566,42 @@ def _validate_trade()
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Validate trade parameters."""
-"""
-"""
+""""""
+""""""
         try:
+        except Exception as e:
+            pass
+
 # Check minimum trade amount
 trade_value = quantity * price
             if trade_value < 100.0:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 logger.warning(f"Trade value {trade_value:.2f} below minimum")
-                return False
+#                 return False
 
 # Check available capital for buy trades
             if trade_type == TradeType.BUY:
                 if trade_value > self.portfolio_state.cash:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 logger.warning()
     f"Insufficient cash for trade: {"}
         trade_value:.2f} > {
             self.portfolio_state.cash:.2f""
-                    return False
+#                     return False
 
 # Check available position for sell trades
             elif trade_type == TradeType.SELL:
@@ -589,29 +610,32 @@ current_position = self.portfolio_state.positions.get()
         'quantity', 0.0
                 if quantity > current_position:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 logger.warning()
     f"Insufficient position for sell: {"}
         quantity:.4f} > {
             current_position:.4f""
-                    return False
+#                     return False
 
-            return True
+#             return True
 
         except Exception as e:
 logger.error(f"Error validating trade: {e}")
-            return False
+#             return False
 
-def _execute_trade(self, asset: str, trade_type: TradeType, quantity: float, price: float,)
+def _execute_trade(self, asset: str, trade_type: TradeType, quantity: float, price: float,):
 
 
                         strategy_id: str, tensor_score: float, bit_phase: int, basket_id: str, mode: str -> TradeExecution:
 """Execute trade and return execution result."""
-"""
-"""
+""""""
+""""""
         try:
+        except Exception as e:
+            pass
+
 # Generate trade ID
 trade_id = f"trade_{int(time.time())}_{asset}_{trade_type.value}"
 
@@ -643,11 +667,11 @@ metadata={}
 # Add to trade history
 self.trade_history.append(trade_execution)
 
-            return trade_execution
+#             return trade_execution
 
         except Exception as e:
 logger.error(f"Error executing trade: {e}")
-            return self._create_failed_trade({)}
+#             return self._create_failed_trade({)}
                 'asset': asset,
 'strategy_id': strategy_id,
 'tensor_score': tensor_score,
@@ -655,7 +679,7 @@ logger.error(f"Error executing trade: {e}")
 'basket_id': basket_id
 , str(e)
 
-def _calculate_portfolio_impact(self,)
+def _calculate_portfolio_impact(self,):
 
     asset: str,
     trade_type: TradeType,
@@ -665,28 +689,31 @@ def _calculate_portfolio_impact(self,)
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Calculate portfolio impact of trade."""
-"""
-"""
+""""""
+""""""
         try:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+        except Exception as e:
+            pass
+
+""""""
+""""""
     pass
 trade_value = quantity * price
-commission = trade_value * 0.0025  # 0.25% commission
+commission = trade_value * 0.25  # 0.25% commission
 
             if trade_type == TradeType.BUY:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 cash_impact=-(trade_value + commission)
                 position_impact = quantity
@@ -697,7 +724,7 @@ position_impact=-quantity
 cash_impact = 0.0
 position_impact = 0.0
 
-            return {}
+#             return {}
 'cash_impact': cash_impact,
 'position_impact': position_impact,
 'commission': commission,
@@ -706,7 +733,7 @@ position_impact = 0.0
 
         except Exception as e:
 logger.error(f"Error calculating portfolio impact: {e}")
-            return {}
+#             return {}
     'cash_impact': 0.0,
     'position_impact': 0.0,
     'commission': 0.0,
@@ -716,21 +743,24 @@ def _update_portfolio_state(self, trade_execution: TradeExecution) -> None:
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Update portfolio state after trade execution."""
-"""
-"""
+""""""
+""""""
         try:
             if trade_execution.status != TradeStatus.EXECUTED:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+        except Exception as e:
+            pass
+
+""""""
+""""""
     pass
 return
 
@@ -743,8 +773,8 @@ self.portfolio_state.cash += impact['cash_impact']
 # Update positions
             if asset not in self.portfolio_state.positions:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 self.portfolio_state.positions[asset={]}
 'quantity': 0.0,
@@ -759,8 +789,8 @@ position['quantity'] += impact['position_impact']
             if impact['position_impact'] > 0:
                 if position['entry_price'] == 0.0:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 position['entry_price']=trade_execution.price
                 else:
@@ -783,24 +813,27 @@ def _calculate_performance_metrics(self) -> None:
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Calculate portfolio performance metrics."""
-"""
-"""
+""""""
+""""""
         try:
+        except Exception as e:
+            pass
+
 # Calculate total portfolio value
 total_value = self.portfolio_state.cash
             for asset, position in self.portfolio_state.positions.items():
                 if position['quantity'] > 0:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 total_value += position['quantity'] * position['current_price']
 
@@ -811,8 +844,8 @@ unrealized_pnl = 0.0
             for asset, position in self.portfolio_state.positions.items():
                 if position['quantity'] > 0 and position['entry_price'] > 0:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 unrealized_pnl += position['quantity'] *
     (position['current_price'] - position['entry_price'])
@@ -827,21 +860,21 @@ self.portfolio_state.unrealized_pnl = unrealized_pnl
 curr_trade = self.trade_history[i]
                     if prev_trade.asset == curr_trade.asset:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 return_val=(curr_trade.price - prev_trade.price) / prev_trade.price
                         returns.append(return_val)
 
                 if returns:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 returns_array = np.array(returns)
                     volatility = unified_math.unified_math.std(returns_array)
                     sharpe_ratio = unified_math.unified_math.mean()
-                        returns_array / (volatility + 1e - 9)
+                        returns_array / (volatility + 1e-9)
 
 self.portfolio_state.risk_metrics.update({)}
                         'volatility': volatility,
@@ -851,23 +884,23 @@ self.portfolio_state.risk_metrics.update({)}
         except Exception as e:
 logger.error(f"Error calculating performance metrics: {e}")
 
-def _create_failed_trade()
+def _create_failed_trade():
 
     self, strategy_bucket: Dict[str, Any], error_message: str -> TradeExecution:
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Create a failed trade execution."""
-"""
-"""
-        return TradeExecution()
+""""""
+""""""
+#         return TradeExecution()
             trade_id = f"failed_{int(time.time())}",
             asset = strategy_bucket.get('asset', 'UNKNOWN'),
             trade_type = TradeType.REBALANCE,
@@ -887,16 +920,16 @@ def set_tensor_matcher(self, tensor_matcher) -> None:
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Set tensor matcher for integration."""
-"""
-"""
+""""""
+""""""
 self.tensor_matcher = tensor_matcher
 logger.info("Tensor matcher integrated with trade simulator")
 
@@ -904,16 +937,16 @@ def set_bit_phase_engine(self, bit_engine) -> None:
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Set bit phase engine for integration."""
-"""
-"""
+""""""
+""""""
 self.bit_phase_engine = bit_engine
 logger.info("Bit phase engine integrated with trade simulator")
 
@@ -921,16 +954,16 @@ def set_matrix_mapper(self, matrix_mapper) -> None:
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Set matrix mapper for integration."""
-"""
-"""
+""""""
+""""""
 self.matrix_mapper = matrix_mapper
 logger.info("Matrix mapper integrated with trade simulator")
 
@@ -938,16 +971,16 @@ def set_profit_allocator(self, profit_allocator) -> None:
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Set profit allocator for integration."""
-"""
-"""
+""""""
+""""""
 self.profit_allocator = profit_allocator
 logger.info("Profit allocator integrated with trade simulator")
 
@@ -955,55 +988,58 @@ def get_portfolio_state(self) -> PortfolioState:
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Get current portfolio state."""
-"""
-"""
-        return self.portfolio_state
+""""""
+""""""
+#         return self.portfolio_state
 
 def get_trade_history(self, limit: int = 100) -> List[TradeExecution]:
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Get recent trade history."""
-"""
-"""
-        return self.trade_history[-limit:] if self.trade_history else []
+""""""
+""""""
+#         return self.trade_history[-limit:] if self.trade_history else []
 
-def export_portfolio_snapshot()
+def export_portfolio_snapshot():
 
     self,
         output_path: str="portfolio_snapshot.json" -> None:
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Export portfolio snapshot to file."""
-"""
-"""
+""""""
+""""""
         try:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+        except Exception as e:
+            pass
+
+""""""
+""""""
     pass
 snapshot_data={}
 'timestamp': self.portfolio_state.timestamp.isoformat(),
@@ -1026,12 +1062,12 @@ logger.error(f"Error exporting portfolio snapshot: {e}")
 
 if __name__ == "__main__":
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 # Test trade simulator
 simulator = TradeSimulator()
@@ -1040,11 +1076,11 @@ simulator = TradeSimulator()
 strategy_bucket={}
 'asset': 'BTC',
 'strategy_id': 'long_hold_btc',
-'tensor_score': 0.03,
+'tensor_score': 0.3,
 'bit_phase': 8,
 'basket_id': 'basket_8bit_161',
 'current_price': 50000.0,
-'market_data': {'entropy_level': 4.5, 'volatility': 0.03}
+'market_data': {'entropy_level': 4.5, 'volatility': 0.3}
 
 
 trade_result = simulator.simulate_trade(strategy_bucket, "DEMO")

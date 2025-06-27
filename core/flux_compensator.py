@@ -17,8 +17,8 @@ from core.unified_math_system import unified_math
 unicore = DualUnicoreHandler()
 
 # """Flux compensator - entropy drift corrector."""
-"""
-"""
+""""""
+""""""
 
 A * flux compensator * is a lightweight corrective layer that smooths noisy
 entropy (or variance) readings and provides a boolean gate indicating whether
@@ -33,8 +33,8 @@ Implemented now
 
 Advanced Jacobian / KF tuning can be layered later.
 """"""
-"""
-"""
+""""""
+""""""
 
 
 # from core.unified_math_system import unified_math  # F811: duplicate import
@@ -48,12 +48,12 @@ class Placeholder:
     """[BRAIN] Placeholder class for recursive profit mapping"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """Exponential - smoothing entropy corrector."""
-"""
-"""
+""""""
+""""""
 
 
 Parameters
@@ -69,8 +69,8 @@ Optional fixed window for simple moving average(SMA) if you prefer
     multiplier
 Safety margin.  A value of 0.9 \\u21d2 allow 10 % slack under threshold.
 """"""
-"""
-"""
+""""""
+""""""
 
 
 threshold: float = 5.0
@@ -91,19 +91,19 @@ _sma_buf: Deque[float] = field()
 def update(self, entropy: float) -> Tuple[bool, float]:
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """Ingest a new entropy value and return (is_valid, smoothed_entropy)."""
-"""
-"""
+""""""
+""""""
         smoothed = self._smooth(entropy)
         is_valid = smoothed < self.threshold * self.multiplier
-        return is_valid, smoothed
+#         return is_valid, smoothed
 
 # ------------------------------------------------------------------
 # Internal helpers
@@ -113,36 +113,36 @@ def update(self, entropy: float) -> Tuple[bool, float]:
 def _smooth(self, value: float) -> float:
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
         """TODO: document _smooth."""
-"""
-"""
+""""""
+""""""
         if self.window is not None and self.window > 1:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 
 
 self._sma_buf.append(value)
             smoothed = float(unified_math.unified_math.mean(self._sma_buf))
-            return smoothed
+#             return smoothed
 # EMA path
         if self._ema is None:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 self._ema = value
         else:
 self._ema = self.alpha * value + (1.0 - self.alpha) * self._ema
-        return self._ema
+#         return self._ema
 
 
 # -----------------------------------------------------------------------------
@@ -154,22 +154,22 @@ def sync_flux_compensator(entropy: float, threshold: float) -> bool:
 
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """Single - shot flux compensation check."""
-"""
-"""
+""""""
+""""""
 
 Uses a fixed damping multiplier (0.9) and no state retention.  Suitable for
     quick gating where persistent history is not necessary.
 """"""
-"""
-"""
-    return entropy < threshold * 0.9
+""""""
+""""""
+#     return entropy < threshold * 0.9
 
 

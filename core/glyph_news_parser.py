@@ -8,50 +8,50 @@ unicore = DualUnicoreHandler()
 
 # -*- coding: utf - 8 -*-
 """"""
-"""
-"""
+""""""
+""""""
 Glyph News Parser Module
 
 This module provides glyph news parser functionality for the Schwabot system.
 """"""
-"""
-"""
+""""""
+""""""
 
 
 logger = logging.getLogger(__name__)
 
 
 def placeholder(): pass
-  """"""
+""""""
 
 
-"""
-"""
-  Initialize the glyph_news_parser module.
+""""""
+""""""
+Initialize the glyph_news_parser module.
 
-   Returns:
+Returns:
         bool: True if initialization successful
     """"""
-"""
-"""
-  logger.info(f"Initializing {module_name} module")
-   return True
+""""""
+""""""
+logger.info(f"Initializing {module_name} module")
+# return True
 
 
 def placeholder(): pass
-  """"""
+""""""
 
 
-"""
-"""
-  Placeholder function for glyph_news_parser module.
+""""""
+""""""
+Placeholder function for glyph_news_parser module.
 
-   This function is pending mathematical implementation.
+This function is pending mathematical implementation.
     """"""
-"""
-"""
-  raise NotImplementedError(
-       f"This module is pending mathematical implementation.")
+""""""
+""""""
+raise NotImplementedError(
+    f"This module is pending mathematical implementation.")
 
 
 # Module initialization

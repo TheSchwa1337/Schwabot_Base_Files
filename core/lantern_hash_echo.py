@@ -1,38 +1,30 @@
-# -*- coding: utf - 8 -*-
-"""
-"""
-"""
-"""
-# -*- coding: utf - 8 -*-
-# from __future__ import annotations  # FIXME: Unused import
+xi_t = 0.0  # Default value for xi_t
+# -*- coding: utf-8 -*-
+""""""
+Lantern hash echo - H_L = hash(Ξₜ) . e^-tau.
+""""""
 
-"""
-"""
-"""
-"""
-# -*- coding: utf - 8 -*-
-# -*- coding: utf - 8 -*-
+from __future__ import annotations
+
 import hashlib
-from core.unified_math_system import unified_math
 from typing import Final
-# import math  # FIXME: Unused import
 
+try:
+    from core.unified_math_system import unified_math
+except Exception as e:
+    pass
 
-# """Lantern hash echo - H_L = hash(\\u039e\\u209c) . e^-tau."""
-
-# from core.unified_math_system import unified_math  # F811: duplicate import
+except ImportError:
+    import math
+    unified_math = math
 
 __all__: list[str] = ["lantern_hash_echo"]
 
-_MOD: Final = 1 / (2**32 - 1)  # scale 32 - bit int to (0,1)
+_MOD: Final = 1 / (2**32 - 1)  # scale 32-bit int to (0,1)
 
 
-def lantern_hash_echo(xi_t: str, tau: float) -> float:  # noqa: D401
+def lantern_hash_echo(xi_t: str, tau: float) -> float:
     """Return decayed numeric echo of glyph hash."""
-
-
-"""
-"""
-digest = hashlib.sha256(xi_t.encode()).digest()[:4]
-val = int.from_bytes(digest, "big") * _MOD
-return val * unified_math.exp(-tau)
+    digest = hashlib.sha256(xi_t.encode()).digest()[:4]
+    val = int.from_bytes(digest, "big") * _MOD
+    return val * unified_math.exp(-tau)

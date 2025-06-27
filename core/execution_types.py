@@ -17,8 +17,8 @@ class Placeholder:
     """[BRAIN] Placeholder class for recursive profit mapping"""
 
 
-"""
-"""
+""""""
+""""""
 pass
 allow: bool
 strategy_id: str

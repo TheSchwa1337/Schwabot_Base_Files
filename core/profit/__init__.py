@@ -1,13 +1,13 @@
 # -*- coding: utf - 8 -*-\n"""Profit cycle allocation system."""
-"""
-"""
-"""
-"""
+""""""
+""""""
+""""""
+""""""
 # -*- coding: utf - 8 -*-\n"""Profit cycle allocation system."""
-"""
-"""
-"""
-"""
+""""""
+""""""
+""""""
+""""""
 # -*- coding: utf - 8 -*-\n"""Profit cycle allocation system."""
 # -*- coding: utf - 8 -*-\n"""Profit cycle allocation system."""
 
@@ -17,6 +17,6 @@ __all__ = []
     "allocate",
 
 
-"""
-"""
-"""
+""""""
+""""""
+""""""

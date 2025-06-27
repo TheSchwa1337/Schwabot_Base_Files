@@ -17,8 +17,8 @@ from core.unified_math_system import unified_math
 unicore = DualUnicoreHandler()
 
 # -*- coding: utf - 8 -*-\\n# """Phase - resonance gate logic."""
-"""
-"""
+""""""
+""""""
 
 This helper exposes a single function - : func: `phase_resonance_gate`.  It acts
 as a deterministic * tick filter * : only ticks that align with a given harmonic
@@ -38,8 +38,8 @@ the
 mask ``0x3ffffffffff`` (2 ^ 42 - 1) limits the counter and avoids Python int -> float
 precision loss when we later pass the phase index into NumPy code.
 """"""
-"""
-"""
+""""""
+""""""
 
 
 __all__ = ["phase_resonance_gate"]
@@ -48,9 +48,9 @@ __all__ = ["phase_resonance_gate"]
 _PHASE_MASK: int = 0x3FFFF_FFFFFF  # 42 bits set
 
 
-def phase_resonance_gate()
+def phase_resonance_gate():
 
-   tick: int,
+tick: int,
     *,
     base_cycle: int = 42,
     use_mask: bool = True,
@@ -58,14 +58,14 @@ def phase_resonance_gate()
 
 
 """Return ``True`` if *tick* aligns with the resonance gate."""
-"""
-"""
+""""""
+""""""
 
 Parameters
 ----------
 tick
 Monotonic tick counter(non - negative integer).
-   base_cycle
+base_cycle
 Fundamental cycle length ** C**.  Default ** 42 ** - Schwabot's universal'
 harmonic constant.
 use_mask
@@ -74,18 +74,18 @@ this mimics the ring
 counter used in the C + + / Rust back - ends and prevents 64 - bit overflow
 mismatch in long - running sessions.
 """"""
-"""
-"""
-   if tick < 0:
+""""""
+""""""
+if tick < 0:
         raise ValueError("tick must be non - negative")
     if base_cycle <= 0:
         raise ValueError("base_cycle must be positive")
 
     if use_mask:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
-   pass
+""""""
+""""""
+pass
 tick &= _PHASE_MASK
 
-   return tick % base_cycle == 0
+# return tick % base_cycle == 0

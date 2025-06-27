@@ -1,8 +1,8 @@
 # -*- coding: utf - 8 -*-\\n# """Trading enums for Schwabot BTC integration."""
-"""
-"""
-"""
-"""
+""""""
+""""""
+""""""
+""""""
 # -*- coding: utf - 8 -*-\\n# """Trading enums for Schwabot BTC integration."""
 
 
@@ -10,8 +10,8 @@ from enum import Enum
 This module contains all enumeration types used for trading operations,
 order management, and exchange communication.
 """"""
-"""
-"""
+""""""
+""""""
 
 
 class ExchangeType(Enum):
@@ -19,8 +19,8 @@ class ExchangeType(Enum):
     """Exchange type enumeration."""
 
 
-"""
-"""
+""""""
+""""""
 
     COINBASE = "coinbase"
     BINANCE = "binance"
@@ -35,8 +35,8 @@ class OrderType(Enum):
     """Order type enumeration."""
 
 
-"""
-"""
+""""""
+""""""
 
     MARKET = "market"
     LIMIT = "limit"
@@ -52,8 +52,8 @@ class OrderSide(Enum):
     """Order side enumeration."""
 
 
-"""
-"""
+""""""
+""""""
 
     BUY = "buy"
     SELL = "sell"
@@ -64,8 +64,8 @@ class OrderStatus(Enum):
     """Order status enumeration."""
 
 
-"""
-"""
+""""""
+""""""
 
     PENDING = "pending"
     OPEN = "open"
@@ -81,8 +81,8 @@ class DataType(Enum):
     """Data type enumeration."""
 
 
-"""
-"""
+""""""
+""""""
 
     TICKER = "ticker"
     ORDER_BOOK = "order_book"
@@ -93,6 +93,6 @@ class DataType(Enum):
     POSITIONS = "positions"
 
 
-"""
-"""
-"""
+""""""
+""""""
+""""""

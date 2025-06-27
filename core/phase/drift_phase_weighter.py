@@ -17,8 +17,8 @@ from utils.math_utils import calculate_entropy, moving_average
 unicore = DualUnicoreHandler()
 
 # -*- coding: utf - 8 -*-\n"""core.phase.drift_phase_weighter"""
-"""
-"""
+""""""
+""""""
 Drift - Phase Weighter
 == == == == == == == == == ==
 
@@ -26,8 +26,8 @@ Calculates a lambda - decay drift weight that quantifies the * tension * present
 latest price movement and provides an entropy - gradient helper used by other
 phase modules.
 """"""
-"""
-"""
+""""""
+""""""
 
 
 __all__ = []
@@ -41,8 +41,8 @@ class Placeholder:
     """[BRAIN] Placeholder class for recursive profit mapping"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     drift_weight: float
     smoothed_series: np.ndarray
@@ -60,12 +60,12 @@ class Placeholder:
     """[BRAIN] Placeholder class for recursive profit mapping"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """Compute lambda - decay drift weight from a price vector."""
-"""
-"""
+""""""
+""""""
 
     def __init__(self, *, lambda_: float = 0.3) -> None:
 
@@ -74,12 +74,12 @@ class Placeholder:
         self.lambda_ = lambda_
 
 # ------------------------------------------------------------------
-    def calculate_drift_weight()
+    def calculate_drift_weight():
 
     self, prices: Sequence[float] -> DriftWeightReport:
         """Return drift weight for `prices`."""
-"""
-"""
+""""""
+""""""
 
         Algorithm
         ~~~~~~~~~
@@ -87,8 +87,8 @@ class Placeholder:
         2. Apply exponential smoothing with factor lambda .
         3. Drift weight = mean of last 5 smoothed deltas.
         """"""
-"""
-"""
+""""""
+""""""
         prices_arr = np.asarray(prices, dtype=float)
         if prices_arr.size < 3:
             raise ValueError("need at least 3 price points")
@@ -105,31 +105,31 @@ class Placeholder:
         tail = smoothed[-5:]
         drift_weight = float(np.mean(tail))
 
-        return DriftWeightReport(drift_weight, smoothed, self.lambda_)
+#         return DriftWeightReport(drift_weight, smoothed, self.lambda_)
 
 # ------------------------------------------------------------------
     @ staticmethod
-    def gradient_entropy_score()
+    def gradient_entropy_score():
 
     prices: Sequence[float],
         window: int = 10 -> float:
         """Directional entropy gradient score for *prices * ."""
-"""
-"""
+""""""
+""""""
 
         A simple metric: difference between entropy of the most recent `window`
         samples and the preceding `window` samples.
         """"""
-"""
-"""
+""""""
+""""""
         arr = np.asarray(prices, dtype = float)
         if arr.size < window * 2:
             raise ValueError("price history too short for entropy gradient")
         ent_now = calculate_entropy(arr[-window:])
         ent_prev = calculate_entropy(arr[-(2 * window): -window])
-        return float(ent_now - ent_prev)
+#         return float(ent_now - ent_prev)
 
 
-"""
-"""
-"""
+""""""
+""""""
+""""""

@@ -11,8 +11,8 @@ from dual_unicore_handler import DualUnicoreHandler
 unicore = DualUnicoreHandler()
 
 # -*- coding: utf - 8 -*-\\n# """Phase - hash switch helper."""
-"""
-"""
+""""""
+""""""
 
 This stub offers a deterministic * hash - phase gate * so legacy modules can
 replace the placeholder previously located in the C + + back - end.  The idea is
@@ -25,8 +25,8 @@ Current implementation
 \\u2022 SHA - 256 hashing - cryptographically strong yet std - lib only.
 \\u2022 Fully typed, <= 79 - char lines, Flake8 - clean.
 """"""
-"""
-"""
+""""""
+""""""
 
 
 import hashlib
@@ -47,24 +47,24 @@ _BASE_CYCLE_FALLBACK: Final = 42  # Schwabot universal harmonic constant
 def _hash_int(value: int, salt: str = "") -> int:
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """Return 256 - bit hash of *value*||*salt* as an integer."""
-"""
-"""
+""""""
+""""""
 
 
 data = f"{value}{salt}".encode()
     digest = hashlib.sha256(data).digest()
-    return int.from_bytes(digest, byteorder="big", signed = False)
+#     return int.from_bytes(digest, byteorder="big", signed = False)
 
 
-def phase_hash_gate()
+def phase_hash_gate():
 
 
     tick: int,
@@ -75,8 +75,8 @@ def phase_hash_gate()
 
 
 """Return ``True`` if *tick* hashes into phase **0** of *base_cycle*."""
-"""
-"""
+""""""
+""""""
 
 Parameters
 ----------
@@ -94,8 +94,8 @@ Notes
 \\u2022 Uses SHA - 256; swapping to Blake2 or SHA - 3 later will not change the API.
 \\u2022 Gate condition is simply ``hash(tick) mod base_cycle == 0``.
     """"""
-"""
-"""
+""""""
+""""""
     if tick < 0:
         raise ValueError("tick must be non - negative")
     if base_cycle <= 0:
@@ -103,11 +103,11 @@ Notes
 
 hashed = _hash_int(tick, salt = salt)
     phase = hashed % base_cycle
-    return phase == 0
+#     return phase == 0
 
 
 
-"""
-"""
-"""
-"""
+""""""
+""""""
+""""""
+""""""

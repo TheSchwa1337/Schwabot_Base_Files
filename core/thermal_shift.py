@@ -16,8 +16,8 @@ from core.unified_math_system import unified_math
 unicore = DualUnicoreHandler()
 
 # """Thermal delta switch - minimal thermal drift detector."""
-"""
-"""
+""""""
+""""""
 
 This helper flags sudden temperature jumps (*thermal shifts *) above a preset
 threshold.  It is intentionally lightweight so it can execute inside tight
@@ -33,8 +33,8 @@ py: meth: `update` returning ``(is_stable, delta)``.
 
 Future versions may include adaptive hysteresis or GPU - calibrated drift maps.
 """"""
-"""
-"""
+""""""
+""""""
 
 
 __all__ = ["ThermalShift", "thermal_delta_switch"]
@@ -49,12 +49,12 @@ class Placeholder:
     """[BRAIN] Placeholder class for recursive profit mapping"""
 
 
-"""
-"""
+""""""
+""""""
     pass
     """EWMA - based thermal drift detector."""
-"""
-"""
+""""""
+""""""
 
 
 Parameters
@@ -64,8 +64,8 @@ Absolute temperature delta(\\u00b0C) that triggers an *unstable* flag.
     alpha
 EWMA smoothing factor between 0 and 1.  Higher = faster reaction.
 """"""
-"""
-"""
+""""""
+""""""
 
 
 threshold: float = _DEFAULT_THRESHOLD
@@ -81,16 +81,16 @@ _ema: float | None = field(default = None, init = False)
 def update(self, temp: float) -> Tuple[bool, float]:
 
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
     """Process a new temperature reading and return stability status."""
-"""
-"""
+""""""
+""""""
 
 Parameters
 ----------
@@ -103,8 +103,8 @@ Tuple[bool, float]
 ``(is_stable, delta)``, where *delta* is the absolute
             temperature change with respect to the EWMA baseline.
 """"""
-"""
-"""
+""""""
+""""""
     if self._ema is None:
         self._ema = temp
     else:
@@ -113,7 +113,7 @@ Tuple[bool, float]
 
 delta = unified_math.abs(temp - self._ema)
 is_stable = delta < self.threshold
-return is_stable, delta
+# return is_stable, delta
 
 
 # -----------------------------------------------------------------------------
@@ -121,7 +121,7 @@ return is_stable, delta
 # -----------------------------------------------------------------------------
 
 
-def thermal_delta_switch()
+def thermal_delta_switch():
 
 
     current: float,
@@ -132,8 +132,8 @@ def thermal_delta_switch()
 
 
 """Return ``True`` if the temperature delta is below *threshold*."""
-"""
-"""
+""""""
+""""""
 
 Parameters
 ----------
@@ -144,9 +144,9 @@ Previous or baseline temperature reading (\\u00b0C).
     threshold
 Allowed delta before declaring instability.  Defaults to 2.5 \\u00b0C.
 """"""
-"""
-"""
+""""""
+""""""
 delta = unified_math.abs(current - previous)
-return delta < threshold
+# return delta < threshold
 
 

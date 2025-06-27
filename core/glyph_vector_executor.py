@@ -14,8 +14,8 @@ import numpy as np
 unicore = DualUnicoreHandler()
 
 # """Glyph vector executor - executes strategic moves from glyph instructions."""
-"""
-"""
+""""""
+""""""
 
 Implements the formula:
 G_out = \\u03a3 omega_i . G_i_vector[t] . zeta_weighting[t]
@@ -23,8 +23,8 @@ G_out = \\u03a3 omega_i . G_i_vector[t] . zeta_weighting[t]
 This module takes weighted glyph vectors and converts them into executable
 trade instructions that can be consumed by the routing layer.
 """"""
-"""
-"""
+""""""
+""""""
 
 
 from dataclasses import dataclass
@@ -43,12 +43,12 @@ __all__: list[str] = ["GlyphInstruction", "execute_glyph_vectors"]
 class Placeholder:
 
     """[BRAIN] Placeholder class for recursive profit mapping"""
-"""
-"""
+""""""
+""""""
     pass
     """Executable instruction derived from glyph vector processing."""
-"""
-"""
+""""""
+""""""
 
 
 action: str  # "buy", "sell", "hold", "wait"
@@ -62,7 +62,7 @@ glyph_signature: str
 # ---------------------------------------------------------------------------
 
 
-def execute_glyph_vectors()
+def execute_glyph_vectors():
 
 
     omega_weights: Sequence[float],
@@ -74,8 +74,8 @@ volume_scale: float = 1.0,
     -> GlyphInstruction:  # noqa: D401
 
 """Return executable instruction from weighted glyph vectors."""
-"""
-"""
+""""""
+""""""
 
 Parameters
 ----------
@@ -95,13 +95,13 @@ Returns
 GlyphInstruction
 Executable instruction with action, volume, confidence.
 """"""
-"""
-"""
+""""""
+""""""
     if not (len(omega_weights) == len(glyph_vectors) == len(zeta_weightings)):
         raise ValueError("input sequences must share length")
 
     if not glyph_vectors:
-        return GlyphInstruction("hold", 0.0, 0.0, "empty")
+#         return GlyphInstruction("hold", 0.0, 0.0, "empty")
 
 # Convert inputs to arrays
 omega = np.asarray(omega_weights, dtype = float)
@@ -115,7 +115,7 @@ weighted_sum = np.zeros_like(glyph_vectors[0], dtype = float)
 
 # Extract action signals (assume first 4 components are [buy, sell, hold, wait])
     if len(weighted_sum) < 4:
-        return GlyphInstruction("hold", 0.0, 0.0, "insufficient_dims")
+#         return GlyphInstruction("hold", 0.0, 0.0, "insufficient_dims")
 
 buy_signal = weighted_sum[0]
 sell_signal = weighted_sum[1]
@@ -131,8 +131,8 @@ confidence = float(unified_math.unified_math.abs(max_signal))
 
     if confidence < action_threshold:
     """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
-"""
-"""
+""""""
+""""""
     pass
 action = "hold"
 volume = 0.0
@@ -144,11 +144,11 @@ volume = confidence * volume_scale
 vector_hash = hash(tuple(weighted_sum.round(6)))
     signature = f"glyph_{vector_hash & 0xFFFF:04x}"
 
-    return GlyphInstruction(action, volume, confidence, signature)
+#     return GlyphInstruction(action, volume, confidence, signature)
 
 
 
-"""
-"""
-"""
-"""
+""""""
+""""""
+""""""
+""""""

@@ -1,14 +1,14 @@
 # -*- coding: utf - 8 -*-\\nfrom core.unified_math_system import unified_math
-"""
-"""
-"""
-"""
+""""""
+""""""
+""""""
+""""""
 # -*- coding: utf - 8 -*-\\nfrom core.unified_math_system import unified_math
 
-"""
-"""
-"""
-"""
+""""""
+""""""
+""""""
+""""""
 # -*- coding: utf - 8 -*-\\nfrom core.unified_math_system import unified_math
 # -*- coding: utf - 8 -*-\\nfrom core.unified_math_system import unified_math
 from __future__ import annotations
@@ -31,8 +31,8 @@ The helper is intentionally simple - it does *no* learning, gradient updates
 or fancy broadcasting.  All arrays must have the same shape so we avoid silent
 numpy broadcasting errors.
 """"""
-"""
-"""
+""""""
+""""""
 
 
 from typing import Final
@@ -51,12 +51,12 @@ _SIGMOID_K: Final = 1.0  # logistic steepness
 def _sigmoid(x: np.ndarray, k: float = _SIGMOID_K) -> np.ndarray:  # noqa: D401
 
     """Vectorised logistic function 1 / (1 + exp(-k.x))."""
-"""
-"""
-    return 1.0 / (1.0 + unified_math.exp(-k * x))
+""""""
+""""""
+#     return 1.0 / (1.0 + unified_math.exp(-k * x))
 
 
-def ghost_swap_vector()
+def ghost_swap_vector():
 
 
     market_matrix: np.ndarray,
@@ -69,8 +69,8 @@ def ghost_swap_vector()
 
 
 """Return ghost trade simulation matrix \\u03a6_(ghost_)."""
-"""
-"""
+""""""
+""""""
 
 Parameters
 ----------
@@ -85,8 +85,8 @@ used.
 sigmoid_k
 Steepness parameter *k* of the logistic.  Higher \\u21d2 harder gate.
 """"""
-"""
-"""
+""""""
+""""""
     if not (market_matrix.shape == weights.shape == bias.shape):
         raise ValueError("market_matrix, weights and bias must share shape")
 
@@ -97,15 +97,15 @@ Steepness parameter *k* of the logistic.  Higher \\u21d2 harder gate.
 phi = market_matrix * activated
 
     if noise is None:
-        return phi
+#         return phi
 
     if noise.shape != phi.shape:
         raise ValueError("noise must match output shape")
-    return phi + noise
+#     return phi + noise
 
 
 
-"""
-"""
-"""
-"""
+""""""
+""""""
+""""""
+""""""
