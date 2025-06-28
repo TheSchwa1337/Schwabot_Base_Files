@@ -1,0 +1,231 @@
+{
+  "timestamp": "2025-06-27T19:30:16.867442",
+  "processed_files": 625,
+  "total_issues": 597,
+  "issues_by_type": {
+    "syntax_error": 596,
+    "mathematical_inconsistency": 1
+  },
+  "issues_by_severity": {
+    "low": 462,
+    "critical": 129,
+    "high": 6
+  },
+  "issues_by_core": {
+    "phase_engine": 322,
+    "recursive_engine": 82,
+    "matrix_core": 123,
+    "zpe_core": 21,
+    "lantern_core": 23,
+    "tensor_core": 90,
+    "ghost_core": 55,
+    "math_core": 13
+  },
+  "recommendations": [
+    "CRITICAL: Address mathematical syntax errors immediately",
+    "Fix 596 syntax errors to ensure code functionality",
+    "Review 1 mathematical inconsistencies"
+  ],
+  "integration_strategies": [
+    {
+      "core": "phase_engine",
+      "issue_count": 322,
+      "strategy": {
+        "strategy_type": "StrategyType.MATHEMATICAL_OPTIMIZATION",
+        "target_cores": [
+          "CoreType.PHASE_ENGINE"
+        ],
+        "approach": "Optimized error_recovery with mathematical validation",
+        "mathematical_requirements": {
+          "operation_type": "error_recovery",
+          "mathematical_consistency": "maintained",
+          "performance": "optimized"
+        },
+        "expected_outcome": "Successful error_recovery with mathematical integrity",
+        "risk_assessment": "Medium risk",
+        "implementation_steps": [
+          "1. Initialize error_recovery",
+          "2. Validate mathematical context",
+          "3. Execute operations",
+          "4. Verify results",
+          "5. Update state"
+        ]
+      }
+    },
+    {
+      "core": "recursive_engine",
+      "issue_count": 82,
+      "strategy": {
+        "strategy_type": "StrategyType.MATHEMATICAL_OPTIMIZATION",
+        "target_cores": [
+          "CoreType.RECURSIVE_ENGINE"
+        ],
+        "approach": "Optimized error_recovery with mathematical validation",
+        "mathematical_requirements": {
+          "operation_type": "error_recovery",
+          "mathematical_consistency": "maintained",
+          "performance": "optimized"
+        },
+        "expected_outcome": "Successful error_recovery with mathematical integrity",
+        "risk_assessment": "Medium risk",
+        "implementation_steps": [
+          "1. Initialize error_recovery",
+          "2. Validate mathematical context",
+          "3. Execute operations",
+          "4. Verify results",
+          "5. Update state"
+        ]
+      }
+    },
+    {
+      "core": "matrix_core",
+      "issue_count": 123,
+      "strategy": {
+        "strategy_type": "StrategyType.MATHEMATICAL_OPTIMIZATION",
+        "target_cores": [
+          "CoreType.MATRIX_CORE"
+        ],
+        "approach": "Optimized error_recovery with mathematical validation",
+        "mathematical_requirements": {
+          "operation_type": "error_recovery",
+          "mathematical_consistency": "maintained",
+          "performance": "optimized"
+        },
+        "expected_outcome": "Successful error_recovery with mathematical integrity",
+        "risk_assessment": "Medium risk",
+        "implementation_steps": [
+          "1. Initialize error_recovery",
+          "2. Validate mathematical context",
+          "3. Execute operations",
+          "4. Verify results",
+          "5. Update state"
+        ]
+      }
+    },
+    {
+      "core": "zpe_core",
+      "issue_count": 21,
+      "strategy": {
+        "strategy_type": "StrategyType.MATHEMATICAL_OPTIMIZATION",
+        "target_cores": [
+          "CoreType.ZPE_CORE"
+        ],
+        "approach": "Optimized error_recovery with mathematical validation",
+        "mathematical_requirements": {
+          "operation_type": "error_recovery",
+          "mathematical_consistency": "maintained",
+          "performance": "optimized"
+        },
+        "expected_outcome": "Successful error_recovery with mathematical integrity",
+        "risk_assessment": "Medium risk",
+        "implementation_steps": [
+          "1. Initialize error_recovery",
+          "2. Validate mathematical context",
+          "3. Execute operations",
+          "4. Verify results",
+          "5. Update state"
+        ]
+      }
+    },
+    {
+      "core": "lantern_core",
+      "issue_count": 23,
+      "strategy": {
+        "strategy_type": "StrategyType.MATHEMATICAL_OPTIMIZATION",
+        "target_cores": [
+          "CoreType.LANTERN_CORE"
+        ],
+        "approach": "Optimized error_recovery with mathematical validation",
+        "mathematical_requirements": {
+          "operation_type": "error_recovery",
+          "mathematical_consistency": "maintained",
+          "performance": "optimized"
+        },
+        "expected_outcome": "Successful error_recovery with mathematical integrity",
+        "risk_assessment": "Medium risk",
+        "implementation_steps": [
+          "1. Initialize error_recovery",
+          "2. Validate mathematical context",
+          "3. Execute operations",
+          "4. Verify results",
+          "5. Update state"
+        ]
+      }
+    },
+    {
+      "core": "tensor_core",
+      "issue_count": 90,
+      "strategy": {
+        "strategy_type": "StrategyType.MATHEMATICAL_OPTIMIZATION",
+        "target_cores": [
+          "CoreType.TENSOR_CORE"
+        ],
+        "approach": "Optimized error_recovery with mathematical validation",
+        "mathematical_requirements": {
+          "operation_type": "error_recovery",
+          "mathematical_consistency": "maintained",
+          "performance": "optimized"
+        },
+        "expected_outcome": "Successful error_recovery with mathematical integrity",
+        "risk_assessment": "Medium risk",
+        "implementation_steps": [
+          "1. Initialize error_recovery",
+          "2. Validate mathematical context",
+          "3. Execute operations",
+          "4. Verify results",
+          "5. Update state"
+        ]
+      }
+    },
+    {
+      "core": "ghost_core",
+      "issue_count": 55,
+      "strategy": {
+        "strategy_type": "StrategyType.MATHEMATICAL_OPTIMIZATION",
+        "target_cores": [
+          "CoreType.GHOST_CORE"
+        ],
+        "approach": "Optimized error_recovery with mathematical validation",
+        "mathematical_requirements": {
+          "operation_type": "error_recovery",
+          "mathematical_consistency": "maintained",
+          "performance": "optimized"
+        },
+        "expected_outcome": "Successful error_recovery with mathematical integrity",
+        "risk_assessment": "Medium risk",
+        "implementation_steps": [
+          "1. Initialize error_recovery",
+          "2. Validate mathematical context",
+          "3. Execute operations",
+          "4. Verify results",
+          "5. Update state"
+        ]
+      }
+    },
+    {
+      "core": "math_core",
+      "issue_count": 13,
+      "strategy": {
+        "strategy_type": "StrategyType.MATHEMATICAL_OPTIMIZATION",
+        "target_cores": [
+          "CoreType.MATH_CORE"
+        ],
+        "approach": "Optimized error_recovery with mathematical validation",
+        "mathematical_requirements": {
+          "operation_type": "error_recovery",
+          "mathematical_consistency": "maintained",
+          "performance": "optimized"
+        },
+        "expected_outcome": "Successful error_recovery with mathematical integrity",
+        "risk_assessment": "Medium risk",
+        "implementation_steps": [
+          "1. Initialize error_recovery",
+          "2. Validate mathematical context",
+          "3. Execute operations",
+          "4. Verify results",
+          "5. Update state"
+        ]
+      }
+    }
+  ]
+}

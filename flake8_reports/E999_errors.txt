@@ -1,0 +1,2456 @@
+FLAKE8 ERROR REPORT: E999
+==================================================
+Total occurrences: 613
+
+
+File: core/__init__.py
+------------------------------
+  Line 4, Col 56: SyntaxError: unterminated string literal (detected at line 4)
+
+File: core/advanced_drift_shell_integration.py
+------------------------------
+  Line 42, Col 33: SyntaxError: unterminated string literal (detected at line 42)
+
+File: core/advanced_mathematical_core.py
+------------------------------
+  Line 57, Col 49: SyntaxError: unterminated string literal (detected at line 57)
+
+File: core/advanced_test_harness.py
+------------------------------
+  Line 7, Col 25: SyntaxError: unterminated string literal (detected at line 7)
+
+File: core/ai_integration_bridge.py
+------------------------------
+  Line 4, Col 30: SyntaxError: unterminated string literal (detected at line 4)
+
+File: core/altitude_adjustment_math.py
+------------------------------
+  Line 43, Col 26: SyntaxError: unterminated string literal (detected at line 43)
+
+File: core/altitude_generator.py
+------------------------------
+  Line 7, Col 9: IndentationError: unexpected indent
+
+File: core/analysis_engine.py
+------------------------------
+  Line 5, Col 43: SyntaxError: unterminated string literal (detected at line 5)
+
+File: core/anomaly_filter_comprehensive.py
+------------------------------
+  Line 4, Col 26: SyntaxError: unterminated string literal (detected at line 4)
+
+File: core/antipole\__init__.py
+------------------------------
+  Line 22, Col 31: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/antipole\tesseract_bridge.py
+------------------------------
+  Line 23, Col 27: SyntaxError: unterminated string literal (detected at line 23)
+
+File: core/antipole\vector.py
+------------------------------
+  Line 23, Col 27: SyntaxError: unterminated string literal (detected at line 23)
+
+File: core/antipole\zbe_controller.py
+------------------------------
+  Line 21, Col 25: SyntaxError: unterminated string literal (detected at line 21)
+
+File: core/api_bridge_manager.py
+------------------------------
+  Line 34, Col 25: SyntaxError: unterminated string literal (detected at line 34)
+
+File: core/api_gateway.py
+------------------------------
+  Line 6, Col 77: SyntaxError: unterminated string literal (detected at line 6)
+
+File: core/asic_logic_gate_foundation.py
+------------------------------
+  Line 6, Col 13: SyntaxError: unterminated string literal (detected at line 6)
+
+File: core/asset_substitution_matrix.py
+------------------------------
+  Line 25, Col 30: SyntaxError: unterminated string literal (detected at line 25)
+
+File: core/auto_scaler.py
+------------------------------
+  Line 19, Col 25: SyntaxError: unterminated string literal (detected at line 19)
+
+File: core/automated_flake8_fix.py
+------------------------------
+  Line 3, Col 40: SyntaxError: unterminated string literal (detected at line 3)
+
+File: core/automated_system_fixes.py
+------------------------------
+  Line 9, Col 57: SyntaxError: unterminated string literal (detected at line 9)
+
+File: core/backchannel_memory_system.py
+------------------------------
+  Line 6, Col 27: SyntaxError: unterminated string literal (detected at line 6)
+
+File: core/backtest_injector.py
+------------------------------
+  Line 24, Col 5: IndentationError: unexpected indent
+
+File: core/bare_except_handling_fixes.py
+------------------------------
+  Line 22, Col 27: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/basket_entropy_allocator.py
+------------------------------
+  Line 3, Col 71: SyntaxError: unterminated string literal (detected at line 3)
+
+File: core/basket_log_controller.py
+------------------------------
+  Line 4, Col 71: SyntaxError: unterminated string literal (detected at line 4)
+
+File: core/basket_swap_logic.py
+------------------------------
+  Line 4, Col 71: SyntaxError: unterminated string literal (detected at line 4)
+
+File: core/basket_swap_overlay_router.py
+------------------------------
+  Line 3, Col 71: SyntaxError: unterminated string literal (detected at line 3)
+
+File: core/basket_swapper.py
+------------------------------
+  Line 22, Col 27: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/basket_tensor_feedback.py
+------------------------------
+  Line 22, Col 31: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/batch_critical_error_fix.py
+------------------------------
+  Line 4, Col 41: SyntaxError: unterminated string literal (detected at line 4)
+
+File: core/batch_syntax_fixer.py
+------------------------------
+  Line 3, Col 39: SyntaxError: unterminated string literal (detected at line 3)
+
+File: core/beat_strength_analyzer.py
+------------------------------
+  Line 15, Col 5: IndentationError: unexpected indent
+
+File: core/behavior_pattern_tracker.py
+------------------------------
+  Line 21, Col 31: SyntaxError: unterminated string literal (detected at line 21)
+
+File: core/best_practices_enforcer.py
+------------------------------
+  Line 35, Col 33: SyntaxError: unterminated string literal (detected at line 35)
+
+File: core/bit_operations.py
+------------------------------
+  Line 6, Col 23: SyntaxError: unterminated string literal (detected at line 6)
+
+File: core/bit_phase_engine.py
+------------------------------
+  Line 24, Col 5: IndentationError: unexpected indent
+
+File: core/bit_phase_sequencer.py
+------------------------------
+  Line 7, Col 31: SyntaxError: unterminated string literal (detected at line 7)
+
+File: core/bit_resolution_engine.py
+------------------------------
+  Line 26, Col 5: IndentationError: unexpected indent
+
+File: core/bit_sequencer.py
+------------------------------
+  Line 3, Col 5: IndentationError: unexpected indent
+
+File: core/bitcoin_mining_analyzer.py
+------------------------------
+  Line 23, Col 5: IndentationError: unexpected indent
+
+File: core/bitmap_engine.py
+------------------------------
+  Line 22, Col 5: IndentationError: unexpected indent
+
+File: core/block_wave_transform.py
+------------------------------
+  Line 23, Col 42: SyntaxError: unterminated string literal (detected at line 23)
+
+File: core/braid_fractal.py
+------------------------------
+  Line 22, Col 5: IndentationError: unexpected indent
+
+File: core/braid_pattern_engine.py
+------------------------------
+  Line 22, Col 5: IndentationError: unexpected indent
+
+File: core/btc_data_processor.py
+------------------------------
+  Line 11, Col 5: IndentationError: unexpected indent
+
+File: core/btc_investment_ratio_controller.py
+------------------------------
+  Line 47, Col 27: SyntaxError: unterminated string literal (detected at line 47)
+
+File: core/btc_processor_controller.py
+------------------------------
+  Line 16, Col 5: IndentationError: unexpected indent
+
+File: core/btc_processor_ui.py
+------------------------------
+  Line 21, Col 27: SyntaxError: unterminated string literal (detected at line 21)
+
+File: core/btc_tick_matrix_initializer.py
+------------------------------
+  Line 17, Col 49: SyntaxError: unterminated string literal (detected at line 17)
+
+File: core/btc_usdc_router_relay.py
+------------------------------
+  Line 23, Col 22: SyntaxError: unterminated string literal (detected at line 23)
+
+File: core/btc_vector_aggregator.py
+------------------------------
+  Line 8, Col 14: SyntaxError: unterminated string literal (detected at line 8)
+
+File: core/btc_vector_processor.py
+------------------------------
+  Line 34, Col 50: SyntaxError: unterminated string literal (detected at line 34)
+
+File: core/bus_core.py
+------------------------------
+  Line 5, Col 5: IndentationError: unexpected indent
+
+File: core/bus_events.py
+------------------------------
+  Line 26, Col 5: IndentationError: unexpected indent
+
+File: core/capital_controls.py
+------------------------------
+  Line 43, Col 5: IndentationError: unexpected indent
+
+File: core/ccxt_execution_manager.py
+------------------------------
+  Line 15, Col 5: IndentationError: unexpected indent
+
+File: core/ccxt_profit_vectorizer.py
+------------------------------
+  Line 14, Col 5: IndentationError: unexpected indent
+
+File: core/checksum_verifier.py
+------------------------------
+  Line 26, Col 5: IndentationError: unexpected indent
+
+File: core/cluster_mapper.py
+------------------------------
+  Line 29, Col 5: IndentationError: unexpected indent
+
+File: core/coldbase_bridge.py
+------------------------------
+  Line 40, Col 5: IndentationError: unexpected indent
+
+File: core/collapse_confidence.py
+------------------------------
+  Line 27, Col 5: IndentationError: unexpected indent
+
+File: core/collapse_engine.py
+------------------------------
+  Line 22, Col 5: IndentationError: unexpected indent
+
+File: core/component_registry.py
+------------------------------
+  Line 27, Col 31: SyntaxError: unterminated string literal (detected at line 27)
+
+File: core/comprehensive_code_fixer.py
+------------------------------
+  Line 4, Col 14: SyntaxError: unterminated string literal (detected at line 4)
+
+File: core/comprehensive_english_mathematical_bridge.py
+------------------------------
+  Line 7, Col 55: SyntaxError: unterminated string literal (detected at line 7)
+
+File: core/comprehensive_syntax_error_fixer.py
+------------------------------
+  Line 4, Col 5: IndentationError: unexpected indent
+
+File: core/comprehensive_system_integration_demo.py
+------------------------------
+  Line 5, Col 49: SyntaxError: unterminated string literal (detected at line 5)
+
+File: core/compute_ghost_route.py
+------------------------------
+  Line 21, Col 13: IndentationError: unexpected indent
+
+File: core/conditional_glyph_feedback_loop.py
+------------------------------
+  Line 25, Col 5: IndentationError: unexpected indent
+
+File: core/config.py
+------------------------------
+  Line 6, Col 29: SyntaxError: unterminated string literal (detected at line 6)
+
+File: core/config\__init__.py
+------------------------------
+  Line 22, Col 31: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/config\api_config.py
+------------------------------
+  Line 31, Col 34: SyntaxError: unterminated string literal (detected at line 31)
+
+File: core/config\defaults.py
+------------------------------
+  Line 22, Col 27: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/config\logging_config.py
+------------------------------
+  Line 22, Col 27: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/config\manager.py
+------------------------------
+  Line 22, Col 27: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/config\tesseract\config_loader.py
+------------------------------
+  Line 22, Col 27: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/config\unifier.py
+------------------------------
+  Line 22, Col 27: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/config\validator.py
+------------------------------
+  Line 22, Col 27: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/config_integration_system.py
+------------------------------
+  Line 7, Col 56: SyntaxError: unterminated string literal (detected at line 7)
+
+File: core/config_utils.py
+------------------------------
+  Line 21, Col 27: SyntaxError: unterminated string literal (detected at line 21)
+
+File: core/constants.py
+------------------------------
+  Line 18, Col 44: SyntaxError: unterminated string literal (detected at line 18)
+
+File: core/constraints.py
+------------------------------
+  Line 33, Col 26: SyntaxError: unterminated string literal (detected at line 33)
+
+File: core/cooldown_manager.py
+------------------------------
+  Line 21, Col 27: SyntaxError: unterminated string literal (detected at line 21)
+
+File: core/core_loop_manager.py
+------------------------------
+  Line 34, Col 5: IndentationError: unexpected indent
+
+File: core/create_anomaly_filter.py
+------------------------------
+  Line 29, Col 26: SyntaxError: unterminated string literal (detected at line 29)
+
+File: core/critical_error_handler.py
+------------------------------
+  Line 21, Col 31: SyntaxError: unterminated string literal (detected at line 21)
+
+File: core/critical_integration_fixes.py
+------------------------------
+  Line 7, Col 66: SyntaxError: unterminated string literal (detected at line 7)
+
+File: core/crypto_mathematical_integration_bridge.py
+------------------------------
+  Line 6, Col 31: SyntaxError: unterminated string literal (detected at line 6)
+
+File: core/cursor_engine.py
+------------------------------
+  Line 21, Col 27: SyntaxError: unterminated string literal (detected at line 21)
+
+File: core/cycle_hash_tracker.py
+------------------------------
+  Line 11, Col 30: SyntaxError: unterminated string literal (detected at line 11)
+
+File: core/cyclic_core.py
+------------------------------
+  Line 21, Col 27: SyntaxError: unterminated string literal (detected at line 21)
+
+File: core/dashboard_integration.py
+------------------------------
+  Line 5, Col 5: IndentationError: unexpected indent
+
+File: core/data\data_provider.py
+------------------------------
+  Line 22, Col 27: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/data\provider.py
+------------------------------
+  Line 22, Col 27: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/data_feed_manager.py
+------------------------------
+  Line 5, Col 5: IndentationError: unexpected indent
+
+File: core/data_integration_layer.py
+------------------------------
+  Line 5, Col 5: IndentationError: unexpected indent
+
+File: core/data_provider.py
+------------------------------
+  Line 27, Col 5: IndentationError: unexpected indent
+
+File: core/demo_backtest_runner.py
+------------------------------
+  Line 35, Col 5: IndentationError: unexpected indent
+
+File: core/demo_connectivity_audit.py
+------------------------------
+  Line 39, Col 26: SyntaxError: unterminated string literal (detected at line 39)
+
+File: core/demo_entry_simulator.py
+------------------------------
+  Line 30, Col 5: IndentationError: unexpected indent
+
+File: core/demo_integration_system.py
+------------------------------
+  Line 32, Col 5: IndentationError: unexpected indent
+
+File: core/demo_memory_core.py
+------------------------------
+  Line 39, Col 5: IndentationError: unexpected indent
+
+File: core/demo_runner.py
+------------------------------
+  Line 44, Col 5: IndentationError: unexpected indent
+
+File: core/demo_state_injector.py
+------------------------------
+  Line 45, Col 5: IndentationError: unexpected indent
+
+File: core/demo_trading_system.py
+------------------------------
+  Line 45, Col 5: IndentationError: unexpected indent
+
+File: core/demo_unified_system.py
+------------------------------
+  Line 8, Col 41: SyntaxError: unterminated string literal (detected at line 8)
+
+File: core/deterministic_value_engine.py
+------------------------------
+  Line 29, Col 5: IndentationError: unexpected indent
+
+File: core/dlt_waveform_engine.py
+------------------------------
+  Line 7, Col 15: SyntaxError: unterminated string literal (detected at line 7)
+
+File: core/dormant_engine.py
+------------------------------
+  Line 27, Col 5: IndentationError: unexpected indent
+
+File: core/drift_compensator.py
+------------------------------
+  Line 9, Col 46: SyntaxError: unterminated string literal (detected at line 9)
+
+File: core/drift_exit_detector.py
+------------------------------
+  Line 21, Col 27: SyntaxError: unterminated string literal (detected at line 21)
+
+File: core/drift_phase_monitor.py
+------------------------------
+  Line 33, Col 5: IndentationError: unexpected indent
+
+File: core/drift_shell_engine.py
+------------------------------
+  Line 22, Col 5: IndentationError: unexpected indent
+
+File: core/dual_error_handler.py
+------------------------------
+  Line 6, Col 64: SyntaxError: unterminated string literal (detected at line 6)
+
+File: core/dual_state_tracker.py
+------------------------------
+  Line 16, Col 47: SyntaxError: unterminated string literal (detected at line 16)
+
+File: core/echo_snapshot.py
+------------------------------
+  Line 24, Col 5: IndentationError: unexpected indent
+
+File: core/edge_vector_field.py
+------------------------------
+  Line 24, Col 5: IndentationError: unexpected indent
+
+File: core/emoji_bitpath_mapper.py
+------------------------------
+  Line 7, Col 31: SyntaxError: unterminated string literal (detected at line 7)
+
+File: core/emoji_symbolic_relay.py
+------------------------------
+  Line 8, Col 53: SyntaxError: unterminated string literal (detected at line 8)
+
+File: core/enhanced_backlog_integration_bridge.py
+------------------------------
+  Line 7, Col 52: SyntaxError: unterminated string literal (detected at line 7)
+
+File: core/enhanced_btc_integration_bridge.py
+------------------------------
+  Line 21, Col 31: SyntaxError: unterminated string literal (detected at line 21)
+
+File: core/enhanced_english_library_demo.py
+------------------------------
+  Line 7, Col 26: SyntaxError: unterminated string literal (detected at line 7)
+
+File: core/enhanced_fractal_core.py
+------------------------------
+  Line 33, Col 26: SyntaxError: unterminated string literal (detected at line 33)
+
+File: core/enhanced_gpu_hash_processor.py
+------------------------------
+  Line 21, Col 31: SyntaxError: unterminated string literal (detected at line 21)
+
+File: core/enhanced_hooks.py
+------------------------------
+  Line 21, Col 27: SyntaxError: unterminated string literal (detected at line 21)
+
+File: core/enhanced_risk_manager.py
+------------------------------
+  Line 30, Col 5: IndentationError: unexpected indent
+
+File: core/enhanced_tesseract_processor.py
+------------------------------
+  Line 21, Col 31: SyntaxError: unterminated string literal (detected at line 21)
+
+File: core/enhanced_thermal_aware_btc_processor.py
+------------------------------
+  Line 21, Col 31: SyntaxError: unterminated string literal (detected at line 21)
+
+File: core/enhanced_thermal_hash_processor.py
+------------------------------
+  Line 36, Col 26: SyntaxError: unterminated string literal (detected at line 36)
+
+File: core/enhanced_unified_mathematical_system.py
+------------------------------
+  Line 7, Col 25: SyntaxError: unmatched ']'
+
+File: core/enhanced_windows_cli_compatibility.py
+------------------------------
+  Line 7, Col 44: SyntaxError: unterminated string literal (detected at line 7)
+
+File: core/entropy_api_layer.py
+------------------------------
+  Line 24, Col 5: IndentationError: unexpected indent
+
+File: core/entropy_bridge.py
+------------------------------
+  Line 14, Col 5: IndentationError: unexpected indent
+
+File: core/entropy_engine.py
+------------------------------
+  Line 7, Col 43: SyntaxError: unterminated string literal (detected at line 7)
+
+File: core/entropy_flattener.py
+------------------------------
+  Line 5, Col 19: SyntaxError: unterminated string literal (detected at line 5)
+
+File: core/entropy_tracker.py
+------------------------------
+  Line 21, Col 27: SyntaxError: unterminated string literal (detected at line 21)
+
+File: core/entropy_validator.py
+------------------------------
+  Line 27, Col 9: IndentationError: unexpected indent
+
+File: core/entry_exit_vector.py
+------------------------------
+  Line 38, Col 43: SyntaxError: unterminated string literal (detected at line 38)
+
+File: core/entry_exit_vector_analyzer.py
+------------------------------
+  Line 26, Col 31: SyntaxError: unterminated string literal (detected at line 26)
+
+File: core/entry_gate.py
+------------------------------
+  Line 30, Col 5: IndentationError: unexpected indent
+
+File: core/environment_manager.py
+------------------------------
+  Line 66, Col 5: SyntaxError: unterminated string literal (detected at line 66)
+
+File: core/error_analysis_and_fix_strategy.py
+------------------------------
+  Line 7, Col 40: SyntaxError: unterminated string literal (detected at line 7)
+
+File: core/error_handler.py
+------------------------------
+  Line 29, Col 13: SyntaxError: unterminated string literal (detected at line 29)
+
+File: core/error_handling_pipeline.py
+------------------------------
+  Line 7, Col 10: SyntaxError: unmatched ')'
+
+File: core/error_mathematical_foundations.py
+------------------------------
+  Line 8, Col 66: SyntaxError: unterminated string literal (detected at line 8)
+
+File: core/error_sanitizer.py
+------------------------------
+  Line 34, Col 48: SyntaxError: unterminated string literal (detected at line 34)
+
+File: core/event_impact_mapper.py
+------------------------------
+  Line 34, Col 56: SyntaxError: unterminated string literal (detected at line 34)
+
+File: core/event_matrix_integration_bridge.py
+------------------------------
+  Line 34, Col 2: IndentationError: unexpected indent
+
+File: core/evolution_engine.py
+------------------------------
+  Line 29, Col 5: IndentationError: unexpected indent
+
+File: core/exchange_apis\__init__.py
+------------------------------
+  Line 8, Col 15: SyntaxError: unterminated string literal (detected at line 8)
+
+File: core/exchange_apis\base_api.py
+------------------------------
+  Line 38, Col 26: SyntaxError: unterminated string literal (detected at line 38)
+
+File: core/exchange_apis\coinbase_api.py
+------------------------------
+  Line 30, Col 9: IndentationError: unexpected indent
+
+File: core/exchange_plumbing.py
+------------------------------
+  Line 63, Col 5: IndentationError: unexpected indent
+
+File: core/exec_packet.py
+------------------------------
+  Line 29, Col 5: IndentationError: unexpected indent
+
+File: core/execution_types.py
+------------------------------
+  Line 17, Col 45: SyntaxError: unterminated string literal (detected at line 17)
+
+File: core/export_vector_snapshot.py
+------------------------------
+  Line 28, Col 5: IndentationError: unexpected indent
+
+File: core/fallback_logic_router.py
+------------------------------
+  Line 33, Col 32: SyntaxError: unterminated string literal (detected at line 33)
+
+File: core/fault_bus.py
+------------------------------
+  Line 6, Col 25: SyntaxError: unterminated string literal (detected at line 6)
+
+File: core/ferris_rde_core.py
+------------------------------
+  Line 26, Col 5: IndentationError: unexpected indent
+
+File: core/ferris_wheel_scheduler.py
+------------------------------
+  Line 26, Col 5: IndentationError: unexpected indent
+
+File: core/filtered_allocation_gate.py
+------------------------------
+  Line 15, Col 5: IndentationError: unexpected indent
+
+File: core/filters.py
+------------------------------
+  Line 30, Col 19: SyntaxError: unterminated string literal (detected at line 30)
+
+File: core/flake8_compliance_orchestrator.py
+------------------------------
+  Line 4, Col 23: SyntaxError: unterminated string literal (detected at line 4)
+
+File: core/flask_network_coordinator.py
+------------------------------
+  Line 31, Col 5: IndentationError: unexpected indent
+
+File: core/flux_compensator.py
+------------------------------
+  Line 23, Col 55: SyntaxError: unterminated string literal (detected at line 23)
+
+File: core/focused_critical_fix.py
+------------------------------
+  Line 10, Col 49: SyntaxError: unterminated string literal (detected at line 10)
+
+File: core/fractal_core.py
+------------------------------
+  Line 6, Col 21: SyntaxError: unterminated string literal (detected at line 6)
+
+File: core/function_patterns.py
+------------------------------
+  Line 10, Col 26: SyntaxError: unterminated string literal (detected at line 10)
+
+File: core/future_corridor_engine.py
+------------------------------
+  Line 33, Col 26: SyntaxError: unterminated string literal (detected at line 33)
+
+File: core/future_hooks.py
+------------------------------
+  Line 5, Col 5: IndentationError: unexpected indent
+
+File: core/gan_anomaly_filter.py
+------------------------------
+  Line 33, Col 5: IndentationError: unexpected indent
+
+File: core/gan_filter.py
+------------------------------
+  Line 33, Col 55: SyntaxError: unexpected character after line continuation character
+
+File: core/genesis_core.py
+------------------------------
+  Line 21, Col 27: SyntaxError: unterminated string literal (detected at line 21)
+
+File: core/ghost\__init__.py
+------------------------------
+  Line 5, Col 21: SyntaxError: unterminated string literal (detected at line 5)
+
+File: core/ghost\ghost_conditionals.py
+------------------------------
+  Line 10, Col 25: SyntaxError: unterminated triple-quoted string literal (detected at line 10)
+
+File: core/ghost\ghost_news_vectorizer.py
+------------------------------
+  Line 11, Col 63: SyntaxError: unterminated string literal (detected at line 11)
+
+File: core/ghost\ghost_phase_integrator.py
+------------------------------
+  Line 7, Col 56: SyntaxError: unterminated string literal (detected at line 7)
+
+File: core/ghost_architecture_btc_profit_handoff.py
+------------------------------
+  Line 34, Col 26: SyntaxError: unterminated string literal (detected at line 34)
+
+File: core/ghost_conditionals.py
+------------------------------
+  Line 19, Col 48: SyntaxError: unterminated string literal (detected at line 19)
+
+File: core/ghost_data_recovery.py
+------------------------------
+  Line 21, Col 27: SyntaxError: unterminated string literal (detected at line 21)
+
+File: core/ghost_decay.py
+------------------------------
+  Line 21, Col 27: SyntaxError: unterminated string literal (detected at line 21)
+
+File: core/ghost_field_stabilizer.py
+------------------------------
+  Line 16, Col 19: SyntaxError: unterminated string literal (detected at line 16)
+
+File: core/ghost_hash_decoder.py
+------------------------------
+  Line 21, Col 27: SyntaxError: unterminated string literal (detected at line 21)
+
+File: core/ghost_memory.py
+------------------------------
+  Line 21, Col 15: SyntaxError: unterminated string literal (detected at line 21)
+
+File: core/ghost_memory_router.py
+------------------------------
+  Line 18, Col 21: SyntaxError: unterminated string literal (detected at line 18)
+
+File: core/ghost_meta_layer_engine.py
+------------------------------
+  Line 21, Col 31: SyntaxError: unterminated string literal (detected at line 21)
+
+File: core/ghost_news_glyph_map.py
+------------------------------
+  Line 5, Col 46: SyntaxError: unterminated string literal (detected at line 5)
+
+File: core/ghost_news_vectorizer.py
+------------------------------
+  Line 9, Col 40: SyntaxError: unterminated string literal (detected at line 9)
+
+File: core/ghost_phase_integrator.py
+------------------------------
+  Line 23, Col 72: SyntaxError: unterminated string literal (detected at line 23)
+
+File: core/ghost_phase_strategy_loader.py
+------------------------------
+  Line 23, Col 22: SyntaxError: unterminated string literal (detected at line 23)
+
+File: core/ghost_pipeline.py
+------------------------------
+  Line 18, Col 71: SyntaxError: unterminated string literal (detected at line 18)
+
+File: core/ghost_profit_tracker.py
+------------------------------
+  Line 23, Col 5: IndentationError: unexpected indent
+
+File: core/ghost_router.py
+------------------------------
+  Line 24, Col 5: IndentationError: unexpected indent
+
+File: core/ghost_shadow_tracker.py
+------------------------------
+  Line 21, Col 31: SyntaxError: unterminated string literal (detected at line 21)
+
+File: core/ghost_signal.py
+------------------------------
+  Line 28, Col 26: SyntaxError: unterminated string literal (detected at line 28)
+
+File: core/ghost_signal_types.py
+------------------------------
+  Line 32, Col 62: SyntaxError: unterminated string literal (detected at line 32)
+
+File: core/ghost_strategy_handler.py
+------------------------------
+  Line 30, Col 21: SyntaxError: unterminated string literal (detected at line 30)
+
+File: core/ghost_strategy_integration.py
+------------------------------
+  Line 27, Col 26: SyntaxError: unterminated string literal (detected at line 27)
+
+File: core/ghost_strategy_integrator.py
+------------------------------
+  Line 71, Col 27: SyntaxError: unterminated string literal (detected at line 71)
+
+File: core/ghost_strategy_matrix.py
+------------------------------
+  Line 22, Col 25: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/ghost_swap_vector.py
+------------------------------
+  Line 9, Col 43: SyntaxError: unterminated string literal (detected at line 9)
+
+File: core/ghost_trigger.py
+------------------------------
+  Line 22, Col 39: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/ghost_trigger_map.py
+------------------------------
+  Line 25, Col 17: SyntaxError: unterminated string literal (detected at line 25)
+
+File: core/glyph\__init__.py
+------------------------------
+  Line 5, Col 20: SyntaxError: unterminated string literal (detected at line 5)
+
+File: core/glyph\conditional_feedback_loop.py
+------------------------------
+  Line 6, Col 34: SyntaxError: unterminated triple-quoted string literal (detected at line 6)
+
+File: core/glyph\recursive_glyph_mapper.py
+------------------------------
+  Line 24, Col 13: SyntaxError: unterminated string literal (detected at line 24)
+
+File: core/glyph_hysteresis.py
+------------------------------
+  Line 15, Col 45: SyntaxError: unterminated string literal (detected at line 15)
+
+File: core/glyph_math_core.py
+------------------------------
+  Line 9, Col 21: SyntaxError: unterminated string literal (detected at line 9)
+
+File: core/glyph_news_parser.py
+------------------------------
+  Line 15, Col 49: SyntaxError: unterminated string literal (detected at line 15)
+
+File: core/glyph_phase_anchor.py
+------------------------------
+  Line 6, Col 69: SyntaxError: unterminated string literal (detected at line 6)
+
+File: core/glyph_vector_executor.py
+------------------------------
+  Line 24, Col 67: SyntaxError: unterminated string literal (detected at line 24)
+
+File: core/gpt_command_layer.py
+------------------------------
+  Line 36, Col 5: IndentationError: unexpected indent
+
+File: core/gpt_command_layer_simple.py
+------------------------------
+  Line 13, Col 5: IndentationError: unexpected indent
+
+File: core/gpu_fallback_manager.py
+------------------------------
+  Line 4, Col 19: SyntaxError: unterminated string literal (detected at line 4)
+
+File: core/gpu_flash_engine.py
+------------------------------
+  Line 33, Col 26: SyntaxError: unterminated string literal (detected at line 33)
+
+File: core/gpu_metrics.py
+------------------------------
+  Line 21, Col 27: SyntaxError: unterminated string literal (detected at line 21)
+
+File: core/gpu_offload_manager.py
+------------------------------
+  Line 27, Col 5: IndentationError: unexpected indent
+
+File: core/gpu_variance_limiter.py
+------------------------------
+  Line 11, Col 5: IndentationError: unexpected indent
+
+File: core/hardware_self_identifier.py
+------------------------------
+  Line 30, Col 5: IndentationError: unexpected indent
+
+File: core/hash_affinity_vault.py
+------------------------------
+  Line 21, Col 27: SyntaxError: unterminated string literal (detected at line 21)
+
+File: core/hash_command_validator.py
+------------------------------
+  Line 20, Col 30: SyntaxError: unterminated string literal (detected at line 20)
+
+File: core/hash_confidence_evaluator.py
+------------------------------
+  Line 32, Col 13: SyntaxError: unterminated string literal (detected at line 32)
+
+File: core/hash_phase_switch.py
+------------------------------
+  Line 13, Col 41: SyntaxError: unterminated string literal (detected at line 13)
+
+File: core/hash_profit_matrix.py
+------------------------------
+  Line 21, Col 27: SyntaxError: unterminated string literal (detected at line 21)
+
+File: core/hash_recollection.py
+------------------------------
+  Line 35, Col 26: SyntaxError: unterminated string literal (detected at line 35)
+
+File: core/hash_registry.py
+------------------------------
+  Line 5, Col 5: IndentationError: unexpected indent
+
+File: core/hash_registry_core.py
+------------------------------
+  Line 30, Col 26: SyntaxError: unterminated string literal (detected at line 30)
+
+File: core/hash_registry_manager.py
+------------------------------
+  Line 5, Col 5: IndentationError: unexpected indent
+
+File: core/hash_registry_storage.py
+------------------------------
+  Line 24, Col 5: IndentationError: unexpected indent
+
+File: core/hash_repair_engine.py
+------------------------------
+  Line 32, Col 44: SyntaxError: unterminated string literal (detected at line 32)
+
+File: core/hash_tick_synchronizer.py
+------------------------------
+  Line 8, Col 21: SyntaxError: unterminated string literal (detected at line 8)
+
+File: core/hash_trigger_engine.py
+------------------------------
+  Line 34, Col 26: SyntaxError: unterminated string literal (detected at line 34)
+
+File: core/hash_trigger_mapper.py
+------------------------------
+  Line 29, Col 26: SyntaxError: unterminated string literal (detected at line 29)
+
+File: core/high_frequency_btc_trading_processor.py
+------------------------------
+  Line 21, Col 27: SyntaxError: unterminated string literal (detected at line 21)
+
+File: core/high_frequency_zero_hangup_engine.py
+------------------------------
+  Line 6, Col 21: SyntaxError: unterminated string literal (detected at line 6)
+
+File: core/historical_ledger_manager.py
+------------------------------
+  Line 21, Col 31: SyntaxError: unterminated string literal (detected at line 21)
+
+File: core/hooks.py
+------------------------------
+  Line 21, Col 27: SyntaxError: unterminated string literal (detected at line 21)
+
+File: core/hybrid_optimization_manager.py
+------------------------------
+  Line 21, Col 31: SyntaxError: unterminated string literal (detected at line 21)
+
+File: core/import_resolver.py
+------------------------------
+  Line 28, Col 29: SyntaxError: unterminated string literal (detected at line 28)
+
+File: core/inject_demo_ledger.py
+------------------------------
+  Line 29, Col 5: IndentationError: unexpected indent
+
+File: core/integrated_alif_aleph_system.py
+------------------------------
+  Line 5, Col 5: IndentationError: unexpected indent
+
+File: core/integrated_pathway_test_suite.py
+------------------------------
+  Line 21, Col 31: SyntaxError: unterminated string literal (detected at line 21)
+
+File: core/integrated_profit_correlation_system.py
+------------------------------
+  Line 21, Col 27: SyntaxError: unterminated string literal (detected at line 21)
+
+File: core/integration_orchestrator.py
+------------------------------
+  Line 22, Col 55: SyntaxError: unexpected character after line continuation character
+
+File: core/integration_test.py
+------------------------------
+  Line 43, Col 5: IndentationError: unexpected indent
+
+File: core/interlinked_mathematical_cores.py
+------------------------------
+  Line 6, Col 27: SyntaxError: unterminated string literal (detected at line 6)
+
+File: core/klein_bottle_integrator.py
+------------------------------
+  Line 21, Col 31: SyntaxError: unterminated string literal (detected at line 21)
+
+File: core/lantern\__init__.py
+------------------------------
+  Line 5, Col 27: SyntaxError: unterminated string literal (detected at line 5)
+
+File: core/lantern\lexicon_engine.py
+------------------------------
+  Line 21, Col 27: SyntaxError: unterminated string literal (detected at line 21)
+
+File: core/lantern\profit_story_engine.py
+------------------------------
+  Line 21, Col 27: SyntaxError: unterminated string literal (detected at line 21)
+
+File: core/lantern\story_parser.py
+------------------------------
+  Line 21, Col 27: SyntaxError: unterminated string literal (detected at line 21)
+
+File: core/lantern\trigger.py
+------------------------------
+  Line 10, Col 13: IndentationError: unexpected indent
+
+File: core/lantern\vector_memory.py
+------------------------------
+  Line 7, Col 14: SyntaxError: invalid syntax
+
+File: core/lantern\word_fitness_tracker.py
+------------------------------
+  Line 21, Col 31: SyntaxError: unterminated string literal (detected at line 21)
+
+File: core/lantern_core.py
+------------------------------
+  Line 7, Col 29: SyntaxError: unterminated string literal (detected at line 7)
+
+File: core/lantern_hash_echo.py
+------------------------------
+  Line 6, Col 47: SyntaxError: unterminated string literal (detected at line 6)
+
+File: core/lantern_news_intelligence_bridge.py
+------------------------------
+  Line 32, Col 5: IndentationError: unexpected indent
+
+File: core/lantern_trigger.py
+------------------------------
+  Line 5, Col 45: SyntaxError: unterminated string literal (detected at line 5)
+
+File: core/lantern_trigger_validator.py
+------------------------------
+  Line 35, Col 5: IndentationError: unexpected indent
+
+File: core/lantern_vector_memory.py
+------------------------------
+  Line 26, Col 5: IndentationError: unexpected indent
+
+File: core/lattice_wave_math.py
+------------------------------
+  Line 21, Col 37: SyntaxError: unterminated string literal (detected at line 21)
+
+File: core/line_render_engine.py
+------------------------------
+  Line 23, Col 5: IndentationError: unexpected indent
+
+File: core/lockout_matrix.py
+------------------------------
+  Line 22, Col 27: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/logic\swap_decision.py
+------------------------------
+  Line 21, Col 27: SyntaxError: unterminated string literal (detected at line 21)
+
+File: core/long_horizon_simulation.py
+------------------------------
+  Line 66, Col 5: IndentationError: unexpected indent
+
+File: core/magic_number_optimization_engine.py
+------------------------------
+  Line 22, Col 27: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/main.py
+------------------------------
+  Line 5, Col 5: IndentationError: unexpected indent
+
+File: core/main_orcestrator.py
+------------------------------
+  Line 10, Col 50: SyntaxError: unterminated string literal (detected at line 10)
+
+File: core/master_orchestrator.py
+------------------------------
+  Line 24, Col 22: SyntaxError: unterminated string literal (detected at line 24)
+
+File: core/math\complete_system_integration_validator.py
+------------------------------
+  Line 11, Col 10: SyntaxError: unmatched ')'
+
+File: core/math\integration_validator.py
+------------------------------
+  Line 27, Col 9: IndentationError: unexpected indent
+
+File: core/math\mathematical_relay_system.py
+------------------------------
+  Line 11, Col 66: SyntaxError: unterminated string literal (detected at line 11)
+
+File: core/math\tensor_algebra.py
+------------------------------
+  Line 11, Col 50: SyntaxError: unterminated string literal (detected at line 11)
+
+File: core/math\tensor_algebra\__init__.py
+------------------------------
+  Line 11, Col 85: SyntaxError: unterminated string literal (detected at line 11)
+
+File: core/math\tensor_algebra\entropy_engine.py
+------------------------------
+  Line 9, Col 42: SyntaxError: unterminated string literal (detected at line 9)
+
+File: core/math\tensor_algebra\profit_engine.py
+------------------------------
+  Line 11, Col 41: SyntaxError: unterminated string literal (detected at line 11)
+
+File: core/math\tensor_algebra\tensor_engine.py
+------------------------------
+  Line 11, Col 41: SyntaxError: unterminated string literal (detected at line 11)
+
+File: core/math\tensor_algebra\unified_tensor_algebra.py
+------------------------------
+  Line 11, Col 50: SyntaxError: unterminated string literal (detected at line 11)
+
+File: core/math\trading_tensor_ops.py
+------------------------------
+  Line 10, Col 43: SyntaxError: unterminated string literal (detected at line 10)
+
+File: core/math_core.py
+------------------------------
+  Line 7, Col 51: SyntaxError: unterminated string literal (detected at line 7)
+
+File: core/mathematical_character_converter.py
+------------------------------
+  Line 6, Col 17: IndentationError: unexpected indent
+
+File: core/mathematical_consciousness_bridge.py
+------------------------------
+  Line 8, Col 61: SyntaxError: unterminated triple-quoted string literal (detected at line 164)
+
+File: core/mathematical_context_finalizer.py
+------------------------------
+  Line 7, Col 84: SyntaxError: unterminated string literal (detected at line 7)
+
+File: core/mathematical_integration_mapping.py
+------------------------------
+  Line 7, Col 25: SyntaxError: unterminated string literal (detected at line 7)
+
+File: core/mathematical_integration_validator.py
+------------------------------
+  Line 33, Col 5: IndentationError: unexpected indent
+
+File: core/mathematical_intelligence_relay.py
+------------------------------
+  Line 5, Col 55: SyntaxError: unterminated string literal (detected at line 5)
+
+File: core/mathematical_optimization_bridge.py
+------------------------------
+  Line 53, Col 5: IndentationError: unexpected indent
+
+File: core/mathematical_pipeline_validator.py
+------------------------------
+  Line 63, Col 59: SyntaxError: unterminated string literal (detected at line 63)
+
+File: core/mathematical_pipeline_validator_simple.py
+------------------------------
+  Line 35, Col 5: IndentationError: unexpected indent
+
+File: core/mathematical_validation_suite.py
+------------------------------
+  Line 11, Col 5: IndentationError: unexpected indent
+
+File: core/mathlib.py
+------------------------------
+  Line 32, Col 24: SyntaxError: unterminated string literal (detected at line 32)
+
+File: core/mathlib_v2.py
+------------------------------
+  Line 36, Col 5: IndentationError: unexpected indent
+
+File: core/mathlib_v3.py
+------------------------------
+  Line 36, Col 5: IndentationError: unexpected indent
+
+File: core/mathlib_v4.py
+------------------------------
+  Line 6, Col 61: SyntaxError: unterminated string literal (detected at line 6)
+
+File: core/matrix\__init__.py
+------------------------------
+  Line 8, Col 19: SyntaxError: unterminated string literal (detected at line 8)
+
+File: core/matrix\fault_resolver.py
+------------------------------
+  Line 11, Col 64: SyntaxError: unterminated string literal (detected at line 11)
+
+File: core/matrix\strategy_matrix.py
+------------------------------
+  Line 11, Col 51: SyntaxError: unterminated string literal (detected at line 11)
+
+File: core/matrix_allocator.py
+------------------------------
+  Line 26, Col 5: IndentationError: unexpected indent
+
+File: core/matrix_basket_loader.py
+------------------------------
+  Line 5, Col 5: IndentationError: unexpected indent
+
+File: core/matrix_delta_reverser.py
+------------------------------
+  Line 9, Col 5: IndentationError: unexpected indent
+
+File: core/matrix_fault_resolver.py
+------------------------------
+  Line 24, Col 13: SyntaxError: unterminated string literal (detected at line 24)
+
+File: core/matrix_mapper.py
+------------------------------
+  Line 27, Col 5: IndentationError: unexpected indent
+
+File: core/matrix_overlay.py
+------------------------------
+  Line 22, Col 27: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/matrix_overlay_backup.py
+------------------------------
+  Line 22, Col 27: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/matrix_overlay_engine.py
+------------------------------
+  Line 22, Col 27: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/memory_agent.py
+------------------------------
+  Line 22, Col 27: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/memory_agent_ghost_meta_engine.py
+------------------------------
+  Line 41, Col 26: SyntaxError: unterminated string literal (detected at line 41)
+
+File: core/memory_allocation_manager.py
+------------------------------
+  Line 55, Col 71: SyntaxError: unterminated string literal (detected at line 55)
+
+File: core/memory_cache_bridge.py
+------------------------------
+  Line 6, Col 17: SyntaxError: unterminated string literal (detected at line 6)
+
+File: core/memory_drift_corrector.py
+------------------------------
+  Line 20, Col 56: SyntaxError: unterminated string literal (detected at line 20)
+
+File: core/memory_map.py
+------------------------------
+  Line 4, Col 60: SyntaxError: unterminated string literal (detected at line 4)
+
+File: core/memory_stack\ai_command_sequencer.py
+------------------------------
+  Line 36, Col 33: SyntaxError: unterminated string literal (detected at line 36)
+
+File: core/memory_stack\command_density_analyzer.py
+------------------------------
+  Line 54, Col 123: SyntaxError: unterminated string literal (detected at line 54)
+
+File: core/memory_stack\execution_validator.py
+------------------------------
+  Line 40, Col 43: SyntaxError: unterminated string literal (detected at line 40)
+
+File: core/memory_stack\memory_hash_rotator.py
+------------------------------
+  Line 26, Col 31: SyntaxError: unterminated string literal (detected at line 26)
+
+File: core/memory_stack\memory_key_allocator.py
+------------------------------
+  Line 43, Col 45: SyntaxError: unterminated string literal (detected at line 43)
+
+File: core/memory_stack\trust_feedback_updater.py
+------------------------------
+  Line 32, Col 31: SyntaxError: unterminated string literal (detected at line 32)
+
+File: core/memory_timing_orchestrator.py
+------------------------------
+  Line 22, Col 27: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/memory_vault.py
+------------------------------
+  Line 6, Col 17: SyntaxError: unterminated string literal (detected at line 6)
+
+File: core/meta_layer_ghost_bridge.py
+------------------------------
+  Line 27, Col 57: SyntaxError: unterminated string literal (detected at line 27)
+
+File: core/mode_manager.py
+------------------------------
+  Line 32, Col 26: SyntaxError: unterminated string literal (detected at line 32)
+
+File: core/model_predictor.py
+------------------------------
+  Line 22, Col 10: SyntaxError: invalid syntax
+
+File: core/multi_bit_btc_processor.py
+------------------------------
+  Line 9, Col 53: SyntaxError: unterminated string literal (detected at line 9)
+
+File: core/ncco_manager.py
+------------------------------
+  Line 33, Col 26: SyntaxError: unterminated string literal (detected at line 33)
+
+File: core/news_api_endpoints.py
+------------------------------
+  Line 22, Col 27: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/news_intelligence_engine.py
+------------------------------
+  Line 22, Col 27: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/news_lantern_integration_api.py
+------------------------------
+  Line 20, Col 2: SyntaxError: unterminated triple-quoted string literal (detected at line 21)
+
+File: core/news_lantern_mathematical_integration.py
+------------------------------
+  Line 22, Col 27: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/news_profit_api_endpoints.py
+------------------------------
+  Line 22, Col 27: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/news_profit_mathematical_bridge.py
+------------------------------
+  Line 22, Col 27: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/news_quant_field.py
+------------------------------
+  Line 8, Col 17: SyntaxError: unterminated string literal (detected at line 8)
+
+File: core/news_sentiment_interpreter.py
+------------------------------
+  Line 9, Col 77: SyntaxError: unterminated string literal (detected at line 9)
+
+File: core/observer_solution.py
+------------------------------
+  Line 26, Col 5: IndentationError: unexpected indent
+
+File: core/ops_observability.py
+------------------------------
+  Line 67, Col 71: SyntaxError: unterminated string literal (detected at line 67)
+
+File: core/optimization_engine.py
+------------------------------
+  Line 37, Col 12: SyntaxError: invalid syntax
+
+File: core/optimized_constants_wrapper.py
+------------------------------
+  Line 22, Col 27: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/orbital_profit_navigator.py
+------------------------------
+  Line 22, Col 27: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/oscillator_fallback.py
+------------------------------
+  Line 4, Col 34: SyntaxError: unterminated string literal (detected at line 4)
+
+File: core/overlay\aleph_overlay_mapper.py
+------------------------------
+  Line 26, Col 20: SyntaxError: unterminated string literal (detected at line 26)
+
+File: core/pattern_match_display.py
+------------------------------
+  Line 22, Col 27: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/pattern_utils.py
+------------------------------
+  Line 22, Col 27: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/performance_monitor.py
+------------------------------
+  Line 15, Col 49: SyntaxError: unterminated string literal (detected at line 15)
+
+File: core/persistent_state_manager.py
+------------------------------
+  Line 56, Col 5: IndentationError: unexpected indent
+
+File: core/phantom\__init__.py
+------------------------------
+  Line 9, Col 23: SyntaxError: unterminated string literal (detected at line 9)
+
+File: core/phantom\exit_logic.py
+------------------------------
+  Line 11, Col 27: SyntaxError: unterminated triple-quoted string literal (detected at line 11)
+
+File: core/phantom\price_vector_synchronizer.py
+------------------------------
+  Line 8, Col 37: SyntaxError: unterminated string literal (detected at line 8)
+
+File: core/phantom_entry_logic.py
+------------------------------
+  Line 8, Col 5: IndentationError: unexpected indent
+
+File: core/phantom_exit_logic.py
+------------------------------
+  Line 9, Col 44: SyntaxError: unterminated string literal (detected at line 9)
+
+File: core/phantom_lag_model.py
+------------------------------
+  Line 25, Col 58: SyntaxError: unterminated string literal (detected at line 25)
+
+File: core/phantom_memory.py
+------------------------------
+  Line 22, Col 78: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/phantom_price_vector_synchronizer.py
+------------------------------
+  Line 23, Col 28: SyntaxError: unterminated string literal (detected at line 23)
+
+File: core/phantom_profit_tracker.py
+------------------------------
+  Line 10, Col 17: SyntaxError: unterminated string literal (detected at line 10)
+
+File: core/phase\bit_wave_propagator.py
+------------------------------
+  Line 22, Col 19: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/phase\drift_phase_weighter.py
+------------------------------
+  Line 23, Col 21: SyntaxError: unterminated string literal (detected at line 23)
+
+File: core/phase\phase_transition_monitor.py
+------------------------------
+  Line 28, Col 18: SyntaxError: unterminated string literal (detected at line 28)
+
+File: core/phase_engine\__init__.py
+------------------------------
+  Line 31, Col 5: IndentationError: unexpected indent
+
+File: core/phase_engine\basket_phase_map.py
+------------------------------
+  Line 30, Col 5: IndentationError: unexpected indent
+
+File: core/phase_engine\phase_loader.py
+------------------------------
+  Line 29, Col 5: IndentationError: unexpected indent
+
+File: core/phase_engine\phase_logger.py
+------------------------------
+  Line 31, Col 5: IndentationError: unexpected indent
+
+File: core/phase_engine\phase_map.py
+------------------------------
+  Line 31, Col 5: IndentationError: unexpected indent
+
+File: core/phase_engine\phase_metrics_engine.py
+------------------------------
+  Line 31, Col 5: IndentationError: unexpected indent
+
+File: core/phase_engine\sha_mapper.py
+------------------------------
+  Line 32, Col 5: IndentationError: unexpected indent
+
+File: core/phase_engine\swap_controller.py
+------------------------------
+  Line 31, Col 5: IndentationError: unexpected indent
+
+File: core/phase_entropy_matcher.py
+------------------------------
+  Line 23, Col 5: IndentationError: unexpected indent
+
+File: core/phase_gate_controller.py
+------------------------------
+  Line 22, Col 31: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/phase_handler.py
+------------------------------
+  Line 22, Col 31: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/phase_inversion_mirror.py
+------------------------------
+  Line 22, Col 26: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/pipeline_management_system.py
+------------------------------
+  Line 25, Col 27: SyntaxError: unterminated string literal (detected at line 25)
+
+File: core/plot_sign_engine.py
+------------------------------
+  Line 25, Col 27: SyntaxError: unterminated string literal (detected at line 25)
+
+File: core/pod_management.py
+------------------------------
+  Line 25, Col 27: SyntaxError: unterminated string literal (detected at line 25)
+
+File: core/pool_volume_translator.py
+------------------------------
+  Line 24, Col 55: SyntaxError: unterminated string literal (detected at line 24)
+
+File: core/portfolio_router.py
+------------------------------
+  Line 39, Col 43: SyntaxError: unterminated string literal (detected at line 39)
+
+File: core/portfolio_substitution_matrix.py
+------------------------------
+  Line 29, Col 5: IndentationError: unexpected indent
+
+File: core/post_failure_recovery_intelligence_loop.py
+------------------------------
+  Line 21, Col 35: SyntaxError: unterminated string literal (detected at line 21)
+
+File: core/practical_visual_controller.py
+------------------------------
+  Line 25, Col 27: SyntaxError: unterminated string literal (detected at line 25)
+
+File: core/precision_performance.py
+------------------------------
+  Line 66, Col 5: IndentationError: unexpected indent
+
+File: core/profit\__init__.py
+------------------------------
+  Line 8, Col 20: SyntaxError: unterminated string literal (detected at line 8)
+
+File: core/profit\cycle_allocator.py
+------------------------------
+  Line 12, Col 59: SyntaxError: unterminated string literal (detected at line 12)
+
+File: core/profit_bridge_orchestrator.py
+------------------------------
+  Line 27, Col 31: SyntaxError: unterminated string literal (detected at line 27)
+
+File: core/profit_certainty_meter.py
+------------------------------
+  Line 17, Col 30: SyntaxError: unterminated string literal (detected at line 17)
+
+File: core/profit_cycle_allocator.py
+------------------------------
+  Line 36, Col 56: SyntaxError: unterminated string literal (detected at line 36)
+
+File: core/profit_echo_velocity_driver.py
+------------------------------
+  Line 25, Col 28: SyntaxError: unterminated string literal (detected at line 25)
+
+File: core/profit_feedback_loop.py
+------------------------------
+  Line 9, Col 47: SyntaxError: unterminated string literal (detected at line 9)
+
+File: core/profit_navigation_engine.py
+------------------------------
+  Line 32, Col 5: IndentationError: unexpected indent
+
+File: core/profit_navigator.py
+------------------------------
+  Line 25, Col 27: SyntaxError: unterminated string literal (detected at line 25)
+
+File: core/profit_projection.py
+------------------------------
+  Line 25, Col 27: SyntaxError: unterminated string literal (detected at line 25)
+
+File: core/profit_protection.py
+------------------------------
+  Line 25, Col 27: SyntaxError: unterminated string literal (detected at line 25)
+
+File: core/profit_router.py
+------------------------------
+  Line 34, Col 5: IndentationError: unexpected indent
+
+File: core/profit_routing_engine.py
+------------------------------
+  Line 6, Col 21: SyntaxError: unterminated string literal (detected at line 6)
+
+File: core/profit_sweep_allocator.py
+------------------------------
+  Line 25, Col 27: SyntaxError: unterminated string literal (detected at line 25)
+
+File: core/profit_tensor.py
+------------------------------
+  Line 25, Col 27: SyntaxError: unterminated string literal (detected at line 25)
+
+File: core/profit_tier_sequencer.py
+------------------------------
+  Line 8, Col 29: SyntaxError: unterminated string literal (detected at line 8)
+
+File: core/profit_trajectory_coprocessor.py
+------------------------------
+  Line 25, Col 27: SyntaxError: unterminated string literal (detected at line 25)
+
+File: core/profit_vector_reconciler.py
+------------------------------
+  Line 31, Col 27: SyntaxError: unterminated string literal (detected at line 31)
+
+File: core/prophet_connector.py
+------------------------------
+  Line 19, Col 5: SyntaxError: unterminated string literal (detected at line 19)
+
+File: core/psi_cache.py
+------------------------------
+  Line 25, Col 27: SyntaxError: unterminated string literal (detected at line 25)
+
+File: core/quantization_profile.py
+------------------------------
+  Line 25, Col 27: SyntaxError: unterminated string literal (detected at line 25)
+
+File: core/quantum_antipole_engine.py
+------------------------------
+  Line 25, Col 27: SyntaxError: unterminated string literal (detected at line 25)
+
+File: core/quantum_btc_intelligence_core.py
+------------------------------
+  Line 36, Col 5: IndentationError: unexpected indent
+
+File: core/quantum_cellular_risk_monitor.py
+------------------------------
+  Line 12, Col 19: SyntaxError: unterminated string literal (detected at line 12)
+
+File: core/quantum_drift_shell_engine.py
+------------------------------
+  Line 48, Col 5: IndentationError: unexpected indent
+
+File: core/quantum_mathematical_pathway_validator.py
+------------------------------
+  Line 11, Col 5: IndentationError: unexpected indent
+
+File: core/react_dashboard_integration.py
+------------------------------
+  Line 13, Col 19: SyntaxError: unterminated string literal (detected at line 13)
+
+File: core/real_trading_integration.py
+------------------------------
+  Line 34, Col 5: IndentationError: unexpected indent
+
+File: core/recursive_engine\__init__.py
+------------------------------
+  Line 27, Col 43: SyntaxError: unterminated string literal (detected at line 27)
+
+File: core/recursive_profit.py
+------------------------------
+  Line 11, Col 5: IndentationError: unexpected indent
+
+File: core/recursive_strategy_router.py
+------------------------------
+  Line 28, Col 27: SyntaxError: unterminated string literal (detected at line 28)
+
+File: core/recursive_trade_lock.py
+------------------------------
+  Line 16, Col 5: IndentationError: unexpected indent
+
+File: core/regulatory_compliance.py
+------------------------------
+  Line 51, Col 5: IndentationError: unexpected indent
+
+File: core/render_math_utils.py
+------------------------------
+  Line 25, Col 27: SyntaxError: unterminated string literal (detected at line 25)
+
+File: core/resonance_gate_logic.py
+------------------------------
+  Line 25, Col 35: SyntaxError: unterminated string literal (detected at line 25)
+
+File: core/resource_sequencer.py
+------------------------------
+  Line 11, Col 5: IndentationError: unexpected indent
+
+File: core/reverse_profit_calibrator.py
+------------------------------
+  Line 15, Col 5: IndentationError: unexpected indent
+
+File: core/riddle_gemm.py
+------------------------------
+  Line 23, Col 26: SyntaxError: unterminated string literal (detected at line 23)
+
+File: core/risk_engine.py
+------------------------------
+  Line 23, Col 23: SyntaxError: unterminated string literal (detected at line 23)
+
+File: core/risk_guard.py
+------------------------------
+  Line 42, Col 5: IndentationError: unexpected indent
+
+File: core/risk_indexer.py
+------------------------------
+  Line 22, Col 27: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/risk_manager.py
+------------------------------
+  Line 27, Col 5: IndentationError: unexpected indent
+
+File: core/risk_monitor.py
+------------------------------
+  Line 39, Col 5: IndentationError: unexpected indent
+
+File: core/rittle_gemm.py
+------------------------------
+  Line 67, Col 26: SyntaxError: unterminated string literal (detected at line 67)
+
+File: core/rotation_heuristics_engine.py
+------------------------------
+  Line 15, Col 5: IndentationError: unexpected indent
+
+File: core/route_verification_classifier.py
+------------------------------
+  Line 38, Col 5: IndentationError: unexpected indent
+
+File: core/schwabot_dashboard.py
+------------------------------
+  Line 22, Col 27: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/schwabot_integration_orchestrator.py
+------------------------------
+  Line 33, Col 33: SyntaxError: unterminated string literal (detected at line 33)
+
+File: core/schwabot_unified_interface_system.py
+------------------------------
+  Line 62, Col 26: SyntaxError: unterminated string literal (detected at line 62)
+
+File: core/schwafit_core.py
+------------------------------
+  Line 22, Col 14: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/secr\__init__.py
+------------------------------
+  Line 23, Col 31: SyntaxError: unterminated string literal (detected at line 23)
+
+File: core/secr\adaptive_icap.py
+------------------------------
+  Line 21, Col 27: SyntaxError: unterminated string literal (detected at line 21)
+
+File: core/secr\allocator.py
+------------------------------
+  Line 21, Col 27: SyntaxError: unterminated string literal (detected at line 21)
+
+File: core/secr\coordinator.py
+------------------------------
+  Line 21, Col 27: SyntaxError: unterminated string literal (detected at line 21)
+
+File: core/secr\failure_logger.py
+------------------------------
+  Line 30, Col 27: SyntaxError: unterminated string literal (detected at line 30)
+
+File: core/secr\injector.py
+------------------------------
+  Line 21, Col 27: SyntaxError: unterminated string literal (detected at line 21)
+
+File: core/secr\resolver_matrix.py
+------------------------------
+  Line 21, Col 27: SyntaxError: unterminated string literal (detected at line 21)
+
+File: core/secr\watchdog.py
+------------------------------
+  Line 21, Col 27: SyntaxError: unterminated string literal (detected at line 21)
+
+File: core/secure_api_manager.py
+------------------------------
+  Line 45, Col 5: IndentationError: unexpected indent
+
+File: core/sequencer_engine.py
+------------------------------
+  Line 21, Col 27: SyntaxError: unterminated string literal (detected at line 21)
+
+File: core/settings_controller.py
+------------------------------
+  Line 24, Col 5: IndentationError: unexpected indent
+
+File: core/settings_manager.py
+------------------------------
+  Line 34, Col 22: SyntaxError: unterminated string literal (detected at line 34)
+
+File: core/setup.py
+------------------------------
+  Line 8, Col 50: SyntaxError: unterminated string literal (detected at line 8)
+
+File: core/sfsss_router.py
+------------------------------
+  Line 21, Col 27: SyntaxError: unterminated string literal (detected at line 21)
+
+File: core/sfsss_strategy_bundler.py
+------------------------------
+  Line 22, Col 31: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/shell_memory_evolution_fixes.py
+------------------------------
+  Line 22, Col 31: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/shell_portal_mapper.py
+------------------------------
+  Line 22, Col 31: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/shift_profit_engine.py
+------------------------------
+  Line 22, Col 31: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/simple_import_test.py
+------------------------------
+  Line 6, Col 5: IndentationError: unexpected indent
+
+File: core/simple_math_test.py
+------------------------------
+  Line 8, Col 44: SyntaxError: unterminated string literal (detected at line 8)
+
+File: core/simplified_api.py
+------------------------------
+  Line 22, Col 31: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/simplified_btc_integration.py
+------------------------------
+  Line 7, Col 26: SyntaxError: unterminated string literal (detected at line 7)
+
+File: core/simulate_trade.py
+------------------------------
+  Line 35, Col 26: SyntaxError: unterminated string literal (detected at line 35)
+
+File: core/snapshot_logger.py
+------------------------------
+  Line 31, Col 31: SyntaxError: unterminated string literal (detected at line 31)
+
+File: core/spectral_state.py
+------------------------------
+  Line 22, Col 31: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/spectral_transform.py
+------------------------------
+  Line 50, Col 30: SyntaxError: unterminated string literal (detected at line 50)
+
+File: core/state_tracker.py
+------------------------------
+  Line 29, Col 40: SyntaxError: unterminated string literal (detected at line 29)
+
+File: core/state_validation_router.py
+------------------------------
+  Line 34, Col 49: SyntaxError: unterminated string literal (detected at line 34)
+
+File: core/strange_loop_detector.py
+------------------------------
+  Line 22, Col 31: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/strategic_dormancy.py
+------------------------------
+  Line 22, Col 31: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/strategy_config.py
+------------------------------
+  Line 22, Col 31: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/strategy_entropy_switcher.py
+------------------------------
+  Line 36, Col 5: IndentationError: unexpected indent
+
+File: core/strategy_execution_mapper.py
+------------------------------
+  Line 22, Col 31: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/strategy_loader.py
+------------------------------
+  Line 33, Col 55: SyntaxError: unexpected character after line continuation character
+
+File: core/strategy_logic.py
+------------------------------
+  Line 38, Col 5: IndentationError: unexpected indent
+
+File: core/strategy_loop_executor.py
+------------------------------
+  Line 22, Col 31: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/strategy_manager.py
+------------------------------
+  Line 25, Col 6: SyntaxError: invalid syntax
+
+File: core/strategy_mapper.py
+------------------------------
+  Line 29, Col 26: SyntaxError: unterminated string literal (detected at line 29)
+
+File: core/strategy_sustainment_validator.py
+------------------------------
+  Line 22, Col 31: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/sustainment_gan_integration_demo.py
+------------------------------
+  Line 22, Col 31: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/sustainment_integration_hooks.py
+------------------------------
+  Line 22, Col 31: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/sustainment_principles.py
+------------------------------
+  Line 22, Col 31: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/sustainment_underlay_controller.py
+------------------------------
+  Line 22, Col 31: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/symbolic_profit_router.py
+------------------------------
+  Line 6, Col 12: SyntaxError: unterminated string literal (detected at line 6)
+
+File: core/syntax_and_math_character_fix.py
+------------------------------
+  Line 8, Col 50: SyntaxError: unterminated string literal (detected at line 8)
+
+File: core/synthesis_api_integration.py
+------------------------------
+  Line 6, Col 66: SyntaxError: unterminated string literal (detected at line 6)
+
+File: core/synthesis_drift_integration.py
+------------------------------
+  Line 8, Col 56: SyntaxError: unterminated string literal (detected at line 8)
+
+File: core/synthesis_engine_system.py
+------------------------------
+  Line 6, Col 19: SyntaxError: unterminated string literal (detected at line 6)
+
+File: core/system_api_server.py
+------------------------------
+  Line 33, Col 9: IndentationError: unexpected indent
+
+File: core/system_clock_sequencer.py
+------------------------------
+  Line 22, Col 31: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/system_constants.py
+------------------------------
+  Line 22, Col 31: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/system_constants_example.py
+------------------------------
+  Line 22, Col 31: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/system_integration_orchestrator.py
+------------------------------
+  Line 36, Col 5: IndentationError: unexpected indent
+
+File: core/system_monitor.py
+------------------------------
+  Line 30, Col 5: IndentationError: unexpected indent
+
+File: core/system_orchestrator.py
+------------------------------
+  Line 22, Col 31: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/systematic_binding_fixer.py
+------------------------------
+  Line 32, Col 43: SyntaxError: unterminated string literal (detected at line 32)
+
+File: core/systematic_integration_strategy.py
+------------------------------
+  Line 7, Col 27: SyntaxError: unterminated string literal (detected at line 7)
+
+File: core/targeted_docstring_fix.py
+------------------------------
+  Line 8, Col 51: SyntaxError: unterminated string literal (detected at line 8)
+
+File: core/targeted_syntax_fixer.py
+------------------------------
+  Line 5, Col 7: SyntaxError: invalid syntax
+
+File: core/temporal_execution_correction_layer.py
+------------------------------
+  Line 9, Col 39: SyntaxError: unterminated string literal (detected at line 9)
+
+File: core/temporal_sync_tracker.py
+------------------------------
+  Line 11, Col 5: IndentationError: unexpected indent
+
+File: core/tensor_harness_matrix.py
+------------------------------
+  Line 29, Col 5: IndentationError: unexpected indent
+
+File: core/tensor_matcher.py
+------------------------------
+  Line 26, Col 5: IndentationError: unexpected indent
+
+File: core/tensor_path_router.py
+------------------------------
+  Line 29, Col 5: IndentationError: unexpected indent
+
+File: core/tensor_pool_registry.py
+------------------------------
+  Line 7, Col 60: SyntaxError: unterminated string literal (detected at line 7)
+
+File: core/tensor_router.py
+------------------------------
+  Line 23, Col 5: IndentationError: unexpected indent
+
+File: core/tensor_score_utils.py
+------------------------------
+  Line 27, Col 5: IndentationError: unexpected indent
+
+File: core/tensor_visualization_controller.py
+------------------------------
+  Line 22, Col 31: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/tesseract_processor.py
+------------------------------
+  Line 22, Col 31: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/tesseract_visualizer.py
+------------------------------
+  Line 22, Col 31: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/test_complete_system_functionality.py
+------------------------------
+  Line 22, Col 31: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/test_distributed_system.py
+------------------------------
+  Line 24, Col 18: SyntaxError: unterminated string literal (detected at line 24)
+
+File: core/test_enhanced_fractal_functionality.py
+------------------------------
+  Line 22, Col 31: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/test_enhanced_math_simple.py
+------------------------------
+  Line 5, Col 58: SyntaxError: unterminated string literal (detected at line 5)
+
+File: core/test_enhanced_systems_functionality.py
+------------------------------
+  Line 22, Col 31: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/test_integration.py
+------------------------------
+  Line 6, Col 5: IndentationError: unexpected indent
+
+File: core/test_mathematical_integration.py
+------------------------------
+  Line 9, Col 59: SyntaxError: unterminated string literal (detected at line 9)
+
+File: core/test_mathematical_integration_simple.py
+------------------------------
+  Line 9, Col 59: SyntaxError: unterminated string literal (detected at line 9)
+
+File: core/test_mathematical_preservation.py
+------------------------------
+  Line 7, Col 33: SyntaxError: unterminated string literal (detected at line 7)
+
+File: core/test_medium_risk_phase_ii.py
+------------------------------
+  Line 33, Col 26: SyntaxError: unterminated string literal (detected at line 33)
+
+File: core/test_recursive_profit_engine_functionality.py
+------------------------------
+  Line 22, Col 31: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/test_restored_components.py
+------------------------------
+  Line 8, Col 32: SyntaxError: unterminated string literal (detected at line 8)
+
+File: core/test_simple_enhanced_functionality.py
+------------------------------
+  Line 22, Col 31: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/tests\test_antipole_integration.py
+------------------------------
+  Line 22, Col 31: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/tests\test_apcf_functionality.py
+------------------------------
+  Line 22, Col 31: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/tests\test_config_functionality.py
+------------------------------
+  Line 22, Col 31: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/tests\test_config_loading_functionality.py
+------------------------------
+  Line 21, Col 31: SyntaxError: unterminated string literal (detected at line 21)
+
+File: core/tests\test_enhanced_mathematical_system.py
+------------------------------
+  Line 7, Col 57: SyntaxError: unterminated string literal (detected at line 7)
+
+File: core/tests\test_enhanced_tesseract_processor_functionality.py
+------------------------------
+  Line 21, Col 31: SyntaxError: unterminated string literal (detected at line 21)
+
+File: core/tests\test_gpu_offload_functionality.py
+------------------------------
+  Line 21, Col 31: SyntaxError: unterminated string literal (detected at line 21)
+
+File: core/tests\test_mathlib_functionality.py
+------------------------------
+  Line 21, Col 31: SyntaxError: unterminated string literal (detected at line 21)
+
+File: core/tests\test_schwafit_core_functionality.py
+------------------------------
+  Line 21, Col 31: SyntaxError: unterminated string literal (detected at line 21)
+
+File: core/tests\test_strategy_loader_functionality.py
+------------------------------
+  Line 21, Col 31: SyntaxError: unterminated string literal (detected at line 21)
+
+File: core/tests\test_zygot_shell_functionality.py
+------------------------------
+  Line 22, Col 31: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/tests\test_zygote_propagation_engine_functionality.py
+------------------------------
+  Line 21, Col 31: SyntaxError: unterminated string literal (detected at line 21)
+
+File: core/thermal_boundary_manager.py
+------------------------------
+  Line 7, Col 57: SyntaxError: unterminated string literal (detected at line 7)
+
+File: core/thermal_integration_demo.py
+------------------------------
+  Line 22, Col 31: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/thermal_map_allocator.py
+------------------------------
+  Line 6, Col 15: SyntaxError: unterminated string literal (detected at line 6)
+
+File: core/thermal_mathematical_integration.py
+------------------------------
+  Line 6, Col 19: SyntaxError: unterminated string literal (detected at line 6)
+
+File: core/thermal_performance_tracker.py
+------------------------------
+  Line 22, Col 31: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/thermal_shift.py
+------------------------------
+  Line 6, Col 51: SyntaxError: unterminated string literal (detected at line 6)
+
+File: core/thermal_system_integration.py
+------------------------------
+  Line 22, Col 31: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/thermal_visual_integration.py
+------------------------------
+  Line 22, Col 31: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/thermal_zone_manager.py
+------------------------------
+  Line 37, Col 5: IndentationError: unexpected indent
+
+File: core/thermal_zone_manager_mock.py
+------------------------------
+  Line 22, Col 31: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/tick_backlog_router.py
+------------------------------
+  Line 6, Col 19: SyntaxError: unterminated string literal (detected at line 6)
+
+File: core/tick_cycle_validator.py
+------------------------------
+  Line 29, Col 27: SyntaxError: unterminated string literal (detected at line 29)
+
+File: core/tick_feed_harness.py
+------------------------------
+  Line 27, Col 5: IndentationError: unexpected indent
+
+File: core/tick_hash_interpreter.py
+------------------------------
+  Line 39, Col 47: SyntaxError: unterminated string literal (detected at line 39)
+
+File: core/tick_hash_processor.py
+------------------------------
+  Line 13, Col 30: SyntaxError: unterminated string literal (detected at line 13)
+
+File: core/tick_logic_router.py
+------------------------------
+  Line 7, Col 43: SyntaxError: unterminated string literal (detected at line 7)
+
+File: core/tick_management_system.py
+------------------------------
+  Line 22, Col 31: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/tick_processor.py
+------------------------------
+  Line 27, Col 17: SyntaxError: unterminated string literal (detected at line 27)
+
+File: core/tick_resonance_engine.py
+------------------------------
+  Line 38, Col 2: SyntaxError: unmatched ')'
+
+File: core/tier_validation_matrix.py
+------------------------------
+  Line 6, Col 19: SyntaxError: unterminated string literal (detected at line 6)
+
+File: core/time_entropy_edge_case.py
+------------------------------
+  Line 22, Col 31: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/timing_manager.py
+------------------------------
+  Line 22, Col 31: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/todo_validation_fixes.py
+------------------------------
+  Line 7, Col 25: SyntaxError: unterminated string literal (detected at line 7)
+
+File: core/trade_executor.py
+------------------------------
+  Line 38, Col 26: SyntaxError: unterminated string literal (detected at line 38)
+
+File: core/trade_tensor_router.py
+------------------------------
+  Line 22, Col 31: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/trading_models\__init__.py
+------------------------------
+  Line 9, Col 16: SyntaxError: unterminated string literal (detected at line 9)
+
+File: core/trading_models\containers.py
+------------------------------
+  Line 23, Col 26: SyntaxError: unterminated triple-quoted string literal (detected at line 23)
+
+File: core/trading_models\enums.py
+------------------------------
+  Line 7, Col 25: SyntaxError: unterminated string literal (detected at line 7)
+
+File: core/trajectory_sphere.py
+------------------------------
+  Line 39, Col 5: IndentationError: unexpected indent
+
+File: core/triplet_matcher.py
+------------------------------
+  Line 47, Col 30: SyntaxError: unterminated string literal (detected at line 47)
+
+File: core/truth_lattice_math.py
+------------------------------
+  Line 17, Col 5: IndentationError: unexpected indent
+
+File: core/type_binding_system.py
+------------------------------
+  Line 7, Col 26: SyntaxError: unterminated string literal (detected at line 7)
+
+File: core/type_defs.py
+------------------------------
+  Line 6, Col 23: SyntaxError: unterminated string literal (detected at line 6)
+
+File: core/type_enforcer.py
+------------------------------
+  Line 23, Col 26: SyntaxError: unterminated triple-quoted string literal (detected at line 23)
+
+File: core/type_patterns.py
+------------------------------
+  Line 11, Col 22: SyntaxError: unterminated string literal (detected at line 11)
+
+File: core/typing_schemas.py
+------------------------------
+  Line 27, Col 41: SyntaxError: unterminated string literal (detected at line 27)
+
+File: core/ufs_echo_logger.py
+------------------------------
+  Line 31, Col 31: SyntaxError: unterminated string literal (detected at line 31)
+
+File: core/ufs_registry.py
+------------------------------
+  Line 22, Col 31: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/ui_bridge_integration_manager.py
+------------------------------
+  Line 5, Col 5: IndentationError: unexpected indent
+
+File: core/ui_integration_bridge.py
+------------------------------
+  Line 5, Col 5: IndentationError: unexpected indent
+
+File: core/ui_state_bridge.py
+------------------------------
+  Line 33, Col 5: IndentationError: unexpected indent
+
+File: core/ump_pipeline.py
+------------------------------
+  Line 22, Col 31: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/unified_api_coordinator.py
+------------------------------
+  Line 45, Col 5: IndentationError: unexpected indent
+
+File: core/unified_api_english_relay_system.py
+------------------------------
+  Line 7, Col 70: SyntaxError: unterminated string literal (detected at line 7)
+
+File: core/unified_btc_profit_scaffolding_engine.py
+------------------------------
+  Line 7, Col 72: SyntaxError: unterminated string literal (detected at line 7)
+
+File: core/unified_confidence_matrix.py
+------------------------------
+  Line 36, Col 29: SyntaxError: unterminated string literal (detected at line 36)
+
+File: core/unified_gap_logic_bridge.py
+------------------------------
+  Line 7, Col 24: SyntaxError: unterminated string literal (detected at line 7)
+
+File: core/unified_integration_layer.py
+------------------------------
+  Line 33, Col 34: SyntaxError: unterminated string literal (detected at line 33)
+
+File: core/unified_interlinking_system.py
+------------------------------
+  Line 7, Col 51: SyntaxError: unterminated string literal (detected at line 7)
+
+File: core/unified_logic\__init__.py
+------------------------------
+  Line 6, Col 11: SyntaxError: unterminated string literal (detected at line 6)
+
+File: core/unified_logic\entry_logic.py
+------------------------------
+  Line 7, Col 95: SyntaxError: unterminated string literal (detected at line 7)
+
+File: core/unified_logic\ghost_conditionals.py
+------------------------------
+  Line 7, Col 20: SyntaxError: unterminated string literal (detected at line 7)
+
+File: core/unified_logic\phase_math.py
+------------------------------
+  Line 4, Col 51: SyntaxError: unterminated string literal (detected at line 4)
+
+File: core/unified_logic\unicode_emoji_asic.py
+------------------------------
+  Line 3, Col 67: SyntaxError: unterminated string literal (detected at line 3)
+
+File: core/unified_math_system.py
+------------------------------
+  Line 7, Col 51: SyntaxError: unterminated string literal (detected at line 7)
+
+File: core/unified_mathematical_capitulation_engine.py
+------------------------------
+  Line 7, Col 28: SyntaxError: unterminated string literal (detected at line 7)
+
+File: core/unified_mathematical_trading_controller.py
+------------------------------
+  Line 36, Col 5: IndentationError: unexpected indent
+
+File: core/unified_mathematical_trading_integration_system.py
+------------------------------
+  Line 7, Col 17: SyntaxError: unterminated string literal (detected at line 7)
+
+File: core/unified_mathematics_config.py
+------------------------------
+  Line 6, Col 13: SyntaxError: unterminated string literal (detected at line 6)
+
+File: core/unified_observability_tensor.py
+------------------------------
+  Line 22, Col 31: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/unified_profit_vectorization_system.py
+------------------------------
+  Line 6, Col 31: SyntaxError: unterminated string literal (detected at line 6)
+
+File: core/unified_schwabot_integration.py
+------------------------------
+  Line 7, Col 56: SyntaxError: unterminated string literal (detected at line 7)
+
+File: core/unified_signal_metrics.py
+------------------------------
+  Line 24, Col 62: SyntaxError: unterminated string literal (detected at line 24)
+
+File: core/unified_visual_controller.py
+------------------------------
+  Line 22, Col 31: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/unified_visual_synthesis_controller.py
+------------------------------
+  Line 22, Col 31: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/universal_schwabot_client.py
+------------------------------
+  Line 36, Col 34: SyntaxError: unterminated string literal (detected at line 36)
+
+File: core/usdc_position_manager.py
+------------------------------
+  Line 18, Col 17: SyntaxError: unterminated string literal (detected at line 18)
+
+File: core/utils\__init__.py
+------------------------------
+  Line 6, Col 36: SyntaxError: unterminated string literal (detected at line 6)
+
+File: core/utils\cli_handler.py
+------------------------------
+  Line 24, Col 5: IndentationError: unexpected indent
+
+File: core/utils\math_utils.py
+------------------------------
+  Line 88, Col 53: SyntaxError: unterminated triple-quoted string literal (detected at line 127)
+
+File: core/utils\rate_limiter.py
+------------------------------
+  Line 23, Col 83: SyntaxError: invalid syntax
+
+File: core/utils\windows_cli_compatibility.py
+------------------------------
+  Line 3, Col 28: SyntaxError: unterminated string literal (detected at line 3)
+
+File: core/utils\yaml_config_loader.py
+------------------------------
+  Line 27, Col 5: IndentationError: unexpected indent
+
+File: core/validation_manager.py
+------------------------------
+  Line 22, Col 31: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/vault_balance_regulator.py
+------------------------------
+  Line 35, Col 5: IndentationError: unexpected indent
+
+File: core/vault_router.py
+------------------------------
+  Line 22, Col 31: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/vector_matcher.py
+------------------------------
+  Line 22, Col 31: SyntaxError: unterminated string literal (detected at line 22)
+
+File: core/vector_state_mapper.py
+------------------------------
+  Line 19, Col 44: SyntaxError: unterminated string literal (detected at line 19)
+
+File: core/vector_validator.py
+------------------------------
+  Line 24, Col 5: IndentationError: unexpected indent
+
+File: core/vecu_core.py
+------------------------------
+  Line 43, Col 71: SyntaxError: unterminated string literal (detected at line 43)
+
+File: core/visual_integration_bridge.py
+------------------------------
+  Line 27, Col 5: IndentationError: unexpected indent
+
+File: core/voltage_lane_mapper.py
+------------------------------
+  Line 29, Col 5: IndentationError: unexpected indent
+
+File: core/volume_tick_router.py
+------------------------------
+  Line 23, Col 15: SyntaxError: unterminated string literal (detected at line 23)
+
+File: core/wall_builder_anomaly_handler.py
+------------------------------
+  Line 34, Col 23: SyntaxError: unterminated string literal (detected at line 34)
+
+File: core/wallet_echo_monitor.py
+------------------------------
+  Line 34, Col 5: IndentationError: unexpected indent
+
+File: core/whitespace_cleanup.py
+------------------------------
+  Line 10, Col 14: SyntaxError: unterminated string literal (detected at line 10)
+
+File: core/zbe_position_tracker.py
+------------------------------
+  Line 23, Col 22: SyntaxError: unterminated string literal (detected at line 23)
+
+File: core/zpe_core.py
+------------------------------
+  Line 9, Col 5: IndentationError: unexpected indent
+
+File: core/zpe_core_matrix.py
+------------------------------
+  Line 22, Col 5: IndentationError: unexpected indent
+
+File: core/zpe_hybrid_mode_selector.py
+------------------------------
+  Line 27, Col 30: SyntaxError: unterminated string literal (detected at line 27)
+
+File: core/zpe_integration.py
+------------------------------
+  Line 5, Col 5: IndentationError: unexpected indent
+
+File: core/zpe_rotational_engine.py
+------------------------------
+  Line 16, Col 5: IndentationError: unexpected indent

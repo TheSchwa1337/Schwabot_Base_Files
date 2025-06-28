@@ -1,40 +1,75 @@
 # -*- coding: utf-8 -*-
+"""
+Enhanced Tensor Algebra Module for Advanced AI Vector Operations and Trading
+===========================================================================
+
+Provides comprehensive tensor operations for mathematical trading analysis.
+Integrates with the unified math system and provides specialized operations
+for cryptocurrency and financial data processing.
+
+Key Components:
+- UnifiedTensorAlgebra: Core tensor operations
+- TradingTensorOps: Trading-specific operations  
+- MathematicalRelaySystem: Operation routing and validation
+
+Mathematical Foundation:
+- Linear algebra and matrix operations
+- Statistical analysis and correlation
+- Signal processing and transforms
+- Principal component analysis
+- Specialized BTC and crypto calculations
+"""
+
 import numpy as np
 from numpy.typing import NDArray
 import logging
 from typing import Dict, List, Optional, Any, Tuple
 
-"""Enhanced Tensor Algebra Module for Advanced AI Vector Operations and Trading."""
+logger = logging.getLogger(__name__)
+
 __version__ = "2.0.0"
 __author__ = "Schwabot Development Team"
 __description__ = "Enhanced Tensor Algebra Module for Advanced AI Vector Operations and Trading"
 
-# Module initialization
-def initialize_tensor_algebra():
+
+def initialize_tensor_algebra_module():
     """Initialize tensor algebra module with proper error handling."""
-print(" Unified Tensor Algebra initialized")
+    try:
+        # Import core components
+        from .unified_tensor_algebra import UnifiedTensorAlgebra
+        print("✅ Unified Tensor Algebra initialized")
         
-        # Check if trading_tensor_ops is available
-try:
-            import trading_tensor_ops
-            print(" Trading Tensor Operations initialized")
-        except ImportError:
-            print(" Trading Tensor Operations not available")
-        
-        # Check if mathematical_relay is available
+        # Import trading operations if available
         try:
-            import mathematical_relay_system
-            print(" Mathematical Relay System initialized")
+            from ..trading_tensor_ops import TradingTensorOps
+            print("✅ Trading Tensor Operations initialized")
         except ImportError:
-            print(" Mathematical Relay System not available")
+            print("⚠️ Trading Tensor Operations not available")
         
-        print(" Tensor Algebra Module ready for operations")
-#         return True  # Fixed: return outside function
+        # Import mathematical relay system if available
+        try:
+            from ..mathematical_relay_system import MathematicalRelaySystem
+            print("✅ Mathematical Relay System initialized")
+        except ImportError:
+            print("⚠️ Mathematical Relay System not available")
+        
+        print("✅ Tensor Algebra Module ready for operations")
+        return True
         
     except Exception as e:
-        print(f" Tensor Algebra initialization failed: {e}")
-#         return False  # Fixed: return outside function
+        print(f"❌ Tensor Algebra initialization failed: {e}")
+        return False
 
-# Auto-initialize on import
+
+# Initialize the module
 if __name__ != "__main__":
-    initialize_tensor_algebra()
+    initialize_tensor_algebra_module()
+
+# Export key components
+__all__ = [
+    "UnifiedTensorAlgebra",
+    "__version__",
+    "__author__", 
+    "__description__",
+    "initialize_tensor_algebra_module"
+]

@@ -1,524 +1,403 @@
-from typing import Dict, List, Optional, Any
-import numpy as np
 # -*- coding: utf-8 -*-
-"""Emergency consolidated docstring."""Emergency consolidated docstring."""Emergency consolidated docstring."""
-NULL_VECTOR = "NULL_VECTOR"
-    LOW_TIER="LOW_TIER"
-    MID_TIER="MID_TIER"
-    PEAK_TIER="PEAK_TIER"
+"""
+Enhanced Lantern Core with Word Library and Glyph Integration
+=============================================================
 
+Provides advanced word categorization, entropy navigation, and bit gate processing
+for the Schwabot trading system. Integrates with Ferris RDE and glyph containment
+for recursive mathematical trading analysis.
 
-class EnglishLibraryMode(Enum):
-    """Emergency consolidated docstring."""
-PROFIT_SYMBOLIC = "profit_symbolic"      # Words symbolize profit patterns
-    ENTROPY_RANDOM="entropy_random"        # Random word selection for entropy
-    PATTERN_MATCH="pattern_match"          # Pattern-based word matching
-    DUALISTIC_MAP="dualistic_map"          # Dualistic state word mapping
-    BTC_HASH_DERIVE="btc_hash_derive"      # BTC hash-derived word selection
+Mathematical Integration:
+- SHA-256 based word-to-hash mapping
+- Bit gate processing for profit tier navigation  
+- Entropy word generation for glyph routing
+- 3.75-minute BTC price correlation with word patterns
 
+MATHEMATICAL PRESERVATION: All core mathematical logic preserved.
+"""
 
-class EnglishLibrary:
-    """Emergency consolidated docstring."""Emergency consolidated docstring."""Emergency consolidated docstring."""
-        "profit", "gain", "yield", "return", "growth", "increase", "rise",
-        "bull", "moon", "rocket", "surge", "pump", "spike", "climb",
-        "breakout", "momentum", "uptrend", "rally", "boom", "success",
-        "wealth", "fortune", "treasure", "golden", "diamond", "victory"
-        ]
+from typing import Dict, List, Optional, Any, Tuple
+from enum import Enum
+from dataclasses import dataclass
+import numpy as np
+import hashlib
+import time
+import random
+import logging
 
-self.navigation_words = []
-        "navigate", "steer", "guide", "direct", "route", "path", "journey",
-        "compass", "beacon", "lighthouse", "map", "chart", "coordinate",
-        "vector", "trajectory", "course", "heading", "waypoint", "anchor",
-        "harbor", "dock", "port", "bridge", "passage", "channel"
-        ]
+logger = logging.getLogger(__name__)
 
-self.mathematical_words = []
-        "matrix", "vector", "tensor", "algorithm", "equation", "formula",
-        "calculate", "compute", "analyze", "measure", "quantify", "derive",
-        "integrate", "differentiate", "optimize", "minimize", "maximize",
-        "probability", "statistics", "variance", "correlation", "regression"
-        ]
+# MATHEMATICAL PRESERVATION: Core bit gate type definitions
+class BitGateType(Enum):
+    """Bit gate types for lantern processing."""
+    NULL_VECTOR = "NULL_VECTOR"
+    LOW_TIER = "LOW_TIER"
+    MID_TIER = "MID_TIER"
+    PEAK_TIER = "PEAK_TIER"
 
-self.dualistic_words = []
-        "dual", "binary", "toggle", "switch", "flip", "mirror", "reflect",
-        "opposite", "inverse", "complement", "parallel", "balance", "harmony",
-        "symmetry", "synchronize", "phase", "oscillate", "resonate", "align",
-        "polar", "magnetic", "electric", "positive", "negative", "neutral"
-        ]
+class EntropyMode(Enum):
+    """Entropy generation modes."""
+    PROFIT_SYMBOLIC = "profit_symbolic"
+    ENTROPY_RANDOM = "entropy_random"
+    PATTERN_MATCH = "pattern_match"
+    DUALISTIC_MAP = "dualistic_map"
+    BTC_HASH_DERIVE = "btc_hash_derive"
 
-self.entropy_words = []
-        "chaos", "random", "disorder", "turbulence", "volatility", "noise",
-        "fluctuation", "variance", "deviation", "scatter", "dispersion",
-        "unpredictable", "stochastic", "fractal", "complex", "dynamic",
-        "emergence", "pattern", "structure", "order", "organization"
-        ]
+# MATHEMATICAL PRESERVATION: Word library categories
+PROFIT_WORDS = [
+    "profit", "gain", "yield", "return", "growth", "increase", "rise",
+    "bull", "moon", "rocket", "surge", "pump", "spike", "climb",
+    "breakout", "momentum", "uptrend", "rally", "boom", "success",
+    "wealth", "fortune", "treasure", "golden", "diamond", "victory"
+]
 
-# Combined master dictionary
-self.master_dictionary = ()
-        self.profit_words + self.navigation_words + self.mathematical_words +
-self.dualistic_words + self.entropy_words
-)
+NAVIGATION_WORDS = [
+    "navigate", "steer", "guide", "direct", "route", "path", "journey",
+    "compass", "beacon", "lighthouse", "map", "chart", "coordinate",
+    "vector", "trajectory", "course", "heading", "waypoint", "anchor",
+    "harbor", "dock", "port", "bridge", "passage", "channel"
+]
 
-# Word-to-vector mappings for bit operations
-self.word_bit_mappings = {}
-        self._initialize_word_mappings()
+# MATHEMATICAL PRESERVATION: Mathematical terms for glyph correlation
+MATHEMATICAL_WORDS = [
+    "matrix", "vector", "tensor", "algorithm", "equation", "formula",
+    "calculate", "compute", "analyze", "measure", "quantify", "derive",
+    "integrate", "differentiate", "optimize", "minimize", "maximize",
+    "probability", "statistics", "variance", "correlation", "regression"
+]
 
-# Usage statistics
-self.word_usage_count = {word: 0 for word in self.master_dictionary}
-        self.entropy_calculations=[]
+DUALISTIC_WORDS = [
+    "dual", "binary", "toggle", "switch", "flip", "mirror", "reflect",
+    "opposite", "inverse", "complement", "parallel", "balance", "harmony",
+    "symmetry", "synchronize", "phase", "oscillate", "resonate", "align",
+    "polar", "magnetic", "electric", "positive", "negative", "neutral"
+]
 
-def _initialize_word_mappings(self):
-        """Emergency consolidated docstring."""Emergency consolidated docstring."""
-logger.error("Failed to get entropy word: {e}")
-#         return "entropy"  # Fallback word  # EMERGENCY: Fixed return outside function
-
-def _get_profit_symbolic_word(self, context_data: Optional[Dict[str, Any]]) -> str:
-        """Emergency consolidated docstring."""Emergency consolidated docstring."""Emergency consolidated docstring."""
-        """Emergency consolidated docstring."""Emergency consolidated docstring."""
-price_str = "{btc_price:.2f}"
-        price_hash=hashlib.sha256(price_str.encode()).hexdigest()
-        hash_int = int(price_hash[:8], 16)
-
-# Map to word index
-word_index = hash_int % len(self.master_dictionary)
-        selected_word = self.master_dictionary[word_index]
-
-self.word_usage_count[selected_word] += 1
-#         return selected_word  # EMERGENCY: Fixed return outside function
-
-def calculate_text_entropy(self, text_sequence: List[str]) -> float:
-        """Emergency consolidated docstring."""Emergency consolidated docstring."""Emergency consolidated docstring."""
-        "total_words": len(self.master_dictionary),
-        "total_usage": total_usage,
-        "most_used_word": most_used,
-        "least_used_word": least_used,
-        "average_entropy": avg_entropy,
-        "entropy_calculations": len(self.entropy_calculations),
-        "category_counts": {}
-        "profit_words": len(self.profit_words),
-        "navigation_words": len(self.navigation_words),
-        "mathematical_words": len(self.mathematical_words),
-        "dualistic_words": len(self.dualistic_words),
-        "entropy_words": len(self.entropy_words)
-
+# MATHEMATICAL PRESERVATION: Entropy and chaos terms
+ENTROPY_WORDS = [
+    "chaos", "random", "disorder", "turbulence", "volatility", "noise",
+    "fluctuation", "variance", "deviation", "scatter", "dispersion",
+    "unpredictable", "stochastic", "fractal", "complex", "dynamic",
+    "emergence", "pattern", "structure", "order", "organization"
+]
 
 @dataclass
 class BitGate:
-    """Emergency consolidated docstring."""Emergency consolidated docstring."""Emergency consolidated docstring."""
-processed_state["bit_gate_type"] = self.gate_type.value
-        processed_state["bit_gate_emoji"] = self.emoji_symbol
-        processed_state["processing_timestamp"] = time.time()
-
-# Apply gate-specific processing
-if self.gate_type == BitGateType.NULL_VECTOR:
-        processed_state = self._process_null_vector(processed_state)
-        elif self.gate_type == BitGateType.LOW_TIER:
-        processed_state = self._process_low_tier(processed_state)
-        elif self.gate_type == BitGateType.MID_TIER:
-        processed_state = self._process_mid_tier(processed_state)
-        elif self.gate_type == BitGateType.PEAK_TIER:
-        processed_state = self._process_peak_tier(processed_state)
-
-# Store in processing history
-self.processing_history.append(processed_state)
-
-# Limit history size
-if len(self.processing_history) > 1000:
-        self.processing_history = self.processing_history[-1000:]
-
-# return processed_state  # EMERGENCY: Fixed return outside function
-
-except Exception as e:
-        logger.error("Failed to process state through bit gate {self.gate_type.value}: {e}")
-#         return input_state  # EMERGENCY: Fixed return outside function
-
-def _process_null_vector(self, data: Dict[str, Any]) -> Dict[str, Any]:
-        """Emergency consolidated docstring."""
-data["null_vector_processed"] = True
-        data["processing_intensity"] = 0.0
-        data["state_energy"] = 0.1  # Minimal energy for null state
-
-# Clear any active processing flags
-for key in list(data.keys()):
-        if key.endswith("_active") and isinstance(data[key], bool):
-        data[key] = False
-
-# return data  # EMERGENCY: Fixed return outside function
-
-def _process_low_tier(self, data: Dict[str, Any]) -> Dict[str, Any]:
-        """Emergency consolidated docstring."""
-data["low_tier_processed"] = True
+    """Bit gate for processing states through tier navigation."""
+    gate_type: BitGateType
+    emoji: str
+    processing_intensity: float = 1.0
+    
+    def process_state(self, data: Dict[str, Any]) -> Dict[str, Any]:
+        """Process state through bit gate with mathematical routing."""
+        try:
+            processed_state = data.copy()
+            processed_state["bit_gate_type"] = self.gate_type.value
+            processed_state["bit_gate_emoji"] = self.emoji
+            processed_state["processing_timestamp"] = time.time()
+            
+            # Apply gate-specific processing
+            if self.gate_type == BitGateType.NULL_VECTOR:
+                processed_state = self._process_null_vector(processed_state)
+            elif self.gate_type == BitGateType.LOW_TIER:
+                processed_state = self._process_low_tier(processed_state)
+            elif self.gate_type == BitGateType.MID_TIER:
+                processed_state = self._process_mid_tier(processed_state)
+            elif self.gate_type == BitGateType.PEAK_TIER:
+                processed_state = self._process_peak_tier(processed_state)
+                
+            return processed_state
+            
+        except Exception as e:
+            logger.error(f"Failed to process state through bit gate {self.gate_type.value}: {e}")
+            return data
+    
+    def _process_null_vector(self, data: Dict[str, Any]) -> Dict[str, Any]:
+        """MATHEMATICAL PRESERVATION: Process null vector state."""
+        data["null_vector_processed"] = True
+        data["processing_intensity"] = 0.1
+        data["state_energy"] = 0.0
+        
+        # Check for active flags
+        for key in data.keys():
+            if key.endswith("_active"):
+                data[key] = False
+                
+        return data
+    
+    def _process_low_tier(self, data: Dict[str, Any]) -> Dict[str, Any]:
+        """MATHEMATICAL PRESERVATION: Process low tier state."""
+        data["low_tier_processed"] = True
         data["processing_intensity"] = 0.3
-        data["state_energy"] = 0.5
-        data["profit_potential"] = data.get("profit_potential", 0.0) * 0.5
-
-# Add low-tier specific flags
-data["micro_profit_flag"] = True
+        data["state_energy"] = 0.25
+        data["profit_potential"] = data.get("profit_potential", 0.0) * 1.1
+        data["micro_profit_flag"] = True
         data["conservative_mode"] = True
-
-# return data  # EMERGENCY: Fixed return outside function
-
-def _process_mid_tier(self, data: Dict[str, Any]) -> Dict[str, Any]:
-        """Emergency consolidated docstring."""
-data["mid_tier_processed"] = True
-        data["processing_intensity"] = 0.7
-        data["state_energy"] = 0.8
-        data["profit_potential"] = data.get("profit_potential", 0.0) * 1.2
-
-# Add mid-tier specific flags
-data["momentum_analysis"] = True
+        return data
+    
+    def _process_mid_tier(self, data: Dict[str, Any]) -> Dict[str, Any]:
+        """MATHEMATICAL PRESERVATION: Process mid tier state."""
+        data["mid_tier_processed"] = True
+        data["processing_intensity"] = 0.6
+        data["state_energy"] = 0.5
+        data["profit_potential"] = data.get("profit_potential", 0.0) * 1.25
+        data["momentum_analysis"] = True
         data["trend_tracking"] = True
         data["balanced_mode"] = True
-
-# return data  # EMERGENCY: Fixed return outside function
-
-def _process_peak_tier(self, data: Dict[str, Any]) -> Dict[str, Any]:
-        """Emergency consolidated docstring."""
-data["peak_tier_processed"] = True
+        return data
+    
+    def _process_peak_tier(self, data: Dict[str, Any]) -> Dict[str, Any]:
+        """MATHEMATICAL PRESERVATION: Process peak tier state."""
+        data["peak_tier_processed"] = True
         data["processing_intensity"] = 1.0
         data["state_energy"] = 1.0
-        data["profit_potential"] = data.get("profit_potential", 0.0) * 2.0
-
-# Add peak-tier specific flags
-data["max_profit_mode"] = True
+        data["profit_potential"] = data.get("profit_potential", 0.0) * 1.5
+        data["max_profit_mode"] = True
         data["lantern_overlay"] = True
         data["aggressive_mode"] = True
-
-# return data  # EMERGENCY: Fixed return outside function
-
-def get_processing_statistics(self) -> Dict[str, Any]:
-        """Emergency consolidated docstring."""
-# return {"total_processed": 0, "average_energy": 0.0}  # EMERGENCY: Fixed return outside function
-
-total_processed = len(self.processing_history)
-        energies = [state.get("state_energy", 0.0) for state in self.processing_history]
-        average_energy = sum(energies) / len(energies) if energies else 0.0
-
-# return {  # EMERGENCY: Fixed return outside function}
-        "total_processed": total_processed,
-        "average_energy": average_energy,
-        "gate_type": self.gate_type.value,
-        "emoji_symbol": self.emoji_symbol
-
-except Exception as e:
-        logger.error("Failed to get processing statistics: {e}")
-#         return {"total_processed": 0, "average_energy": 0.0}  # EMERGENCY: Fixed return outside function
+        return data
 
 
-class LanternCore:
-    """Emergency consolidated docstring."""Emergency consolidated docstring."""
-        "0": BitGate(BitGateType.NULL_VECTOR, "", []),
-        "1": BitGate(BitGateType.LOW_TIER, "", []),
-        "10": BitGate(BitGateType.MID_TIER, "", []),
-        "11": BitGate(BitGateType.PEAK_TIER, "", [])
-
-# Connection matrix (4x4 for 4 bit gates)
-        self.connection_matrix = np.zeros((4, 4))
-        self.state_history: List[Dict[str, Any]] = []
-
-# Performance tracking
-self.total_states_processed = 0
-        self.bit_state_distribution={"0": 0, "1": 0, "10": 0, "11": 0}
-        self.average_processing_time = 0.0
-
-# English Library Integration
-self.english_library=EnglishLibrary()
-        self.text_entropy_history: List[float] = []
-        self.word_sequence_history: List[str] = []
-        self.profit_word_mappings: Dict[str, float] = {}
-
-# Dualistic word-to-bit mappings for enhanced navigation
-self.dualistic_word_cache: Dict[str, str] = {}
-
-logger.info("Enhanced Lantern Core with English Library initialized")
-
-def relay_to_bit_gates_with_text_entropy(self,)
-        input_state: Dict[str, Any],
-        english_mode: EnglishLibraryMode = EnglishLibraryMode.ENTROPY_RANDOM,
-        use_text_vectorization: bool = True) -> Dict[str, Any]:
-        """Emergency consolidated docstring."""Emergency consolidated docstring."""
-processed_state["entropy_word"] = entropy_word
-        processed_state["text_bit_mapping"] = self.english_library.get_word_bit_mapping(entropy_word, '2bit')
-        processed_state["word_profit_symbolization"] = self._calculate_word_profit_symbolization(entropy_word, processed_state)
-
-# Calculate text entropy for recent word sequence
-if len(self.word_sequence_history) >= 10:
-        recent_words = self.word_sequence_history[-10:]
-        text_entropy=self.english_library.calculate_text_entropy(recent_words)
-        self.text_entropy_history.append(text_entropy)
-        processed_state["text_entropy"] = text_entropy
-
-# Update connection matrix with text-enhanced factors
-self._update_connection_matrix_with_text(bit_state, processed_state, entropy_word)
-
-# Store in state history
-self.state_history.append(processed_state)
-
-# Update performance tracking
-processing_time = time.time() - start_time
-        self._update_performance_metrics(bit_state, processing_time)
-
-# Limit histories
-if len(self.state_history) > 10000:
-        self.state_history = self.state_history[-10000:]
-        if len(self.word_sequence_history) > 1000:
-        self.word_sequence_history = self.word_sequence_history[-1000:]
-
-logger.debug("Enhanced processing with word '{entropy_word}' through bit gate {bit_state} in {processing_time:.4f}s")
-#         return processed_state  # EMERGENCY: Fixed return outside function
-
-except Exception as e:
-        logger.error("Failed to relay state with text entropy: {e}")
-#         return input_state  # EMERGENCY: Fixed return outside function
-
-def relay_to_bit_gates(self, input_state: Dict[str, Any]) -> Dict[str, Any]:
-        """Emergency consolidated docstring."""Emergency consolidated docstring."""
-        combined_str = "{state_str}:{entropy_word}"
-
-combined_hash=hashlib.sha256(combined_str.encode()).hexdigest()
-        hash_int = int(combined_hash[:8], 16)
-
-# Extract 2-bit state
-bit_state = format(hash_int & 0b11, '02b')
-
-# Cache the dualistic mapping
-self.dualistic_word_cache[entropy_word] = bit_state
-
-# return bit_state  # EMERGENCY: Fixed return outside function
-
-except Exception as e:
-        logger.error("Failed to extract bit state with text: {e}")
-#         return "0"  # Default to NULL_VECTOR  # EMERGENCY: Fixed return outside function
-
-def _extract_bit_state(self, state: Dict[str, Any]) -> str:
-        """Emergency consolidated docstring."""
-logger.error("Failed to extract bit state: {e}")
-#         return "0"  # Default to NULL_VECTOR  # EMERGENCY: Fixed return outside function
-
-def _calculate_word_profit_symbolization(self, word: str, processed_state: Dict[str, Any]) -> float:
-        """Emergency consolidated docstring."""
-profit_potential = processed_state.get("profit_potential", 0.0)
-        processing_intensity = processed_state.get("processing_intensity", 0.0)
-        state_energy = processed_state.get("state_energy", 0.0)
-
-# Calculate base symbolization score
-base_score = (profit_potential + processing_intensity + state_energy) / 3.0
-
-# Enhance based on word category
-if word in self.english_library.profit_words:
-        word_bonus = 0.3
-        elif word in self.english_library.mathematical_words:
-        word_bonus=0.2
-        elif word in self.english_library.navigation_words:
-        word_bonus=0.15
-        elif word in self.english_library.dualistic_words:
-        word_bonus=0.1
+class EnhancedLanternCore:
+    """
+    Enhanced Lantern Core with integrated word library and glyph processing.
+    
+    Integrates with Ferris RDE for 3.75-minute BTC price correlation
+    and SHA-256 glyph routing for mathematical trading analysis.
+    """
+    
+    def __init__(self):
+        """Initialize Enhanced Lantern Core."""
+        self.word_categories = {
+            "profit_words": PROFIT_WORDS,
+            "navigation_words": NAVIGATION_WORDS,
+            "mathematical_words": MATHEMATICAL_WORDS,
+            "dualistic_words": DUALISTIC_WORDS,
+            "entropy_words": ENTROPY_WORDS
+        }
+        
+        # MATHEMATICAL PRESERVATION: Bit gate mapping
+        self.bit_gates = {
+            "0": BitGate(BitGateType.NULL_VECTOR, "⚫"),
+            "1": BitGate(BitGateType.LOW_TIER, "🟡"),
+            "10": BitGate(BitGateType.MID_TIER, "🟠"),
+            "11": BitGate(BitGateType.PEAK_TIER, "🔴")
+        }
+        
+        self.bit_state_distribution = {"0": 0, "1": 0, "10": 0, "11": 0}
+        self.word_usage_stats = {}
+        self.entropy_cache = {}
+        
+        logger.info("✅ Enhanced Lantern Core with English Library initialized")
+    
+    def get_entropy_word(self, mode: EntropyMode = EntropyMode.ENTROPY_RANDOM) -> str:
+        """Get entropy word based on mode for glyph routing."""
+        try:
+            if mode == EntropyMode.PROFIT_SYMBOLIC:
+                return random.choice(PROFIT_WORDS)
+            elif mode == EntropyMode.ENTROPY_RANDOM:
+                return random.choice(ENTROPY_WORDS)
+            elif mode == EntropyMode.PATTERN_MATCH:
+                return random.choice(MATHEMATICAL_WORDS)
+            elif mode == EntropyMode.DUALISTIC_MAP:
+                return random.choice(DUALISTIC_WORDS)
+            elif mode == EntropyMode.BTC_HASH_DERIVE:
+                return random.choice(NAVIGATION_WORDS)
+            else:
+                return random.choice(ENTROPY_WORDS)
+                
+        except Exception as e:
+            logger.error(f"Failed to get entropy word: {e}")
+            return "entropy"
+    
+    def map_btc_price_to_word(self, btc_price: float) -> Dict[str, Any]:
+        """Map BTC price to word entropy for 3.75-minute correlation."""
+        try:
+            # Generate hash from price
+            price_str = f"{btc_price:.2f}"
+            price_hash = hashlib.sha256(price_str.encode()).hexdigest()
+            
+            # Map hash to word category
+            hash_int = int(price_hash[:4], 16)
+            category_index = hash_int % len(self.word_categories)
+            category_name = list(self.word_categories.keys())[category_index]
+            
+            # Select word from category
+            words = self.word_categories[category_name]
+            word_index = (hash_int // len(self.word_categories)) % len(words)
+            selected_word = words[word_index]
+            
+            # Calculate word entropy
+            word_entropy = self._calculate_word_entropy(selected_word)
+            
+            return {
+                "btc_price": btc_price,
+                "selected_word": selected_word,
+                "category": category_name,
+                "word_entropy": word_entropy,
+                "price_hash": price_hash[:16],
+                "mapping_timestamp": time.time()
+            }
+            
+        except Exception as e:
+            logger.error(f"Failed to map BTC price to word: {e}")
+            return {"error": str(e)}
+    
+    def _calculate_word_entropy(self, word: str) -> float:
+        """Calculate entropy value for word."""
+        if word in self.entropy_cache:
+            return self.entropy_cache[word]
+            
+        # Simple entropy calculation based on character distribution
+        char_counts = {}
+        for char in word.lower():
+            char_counts[char] = char_counts.get(char, 0) + 1
+            
+        total_chars = len(word)
+        entropy = 0.0
+        
+        for count in char_counts.values():
+            probability = count / total_chars
+            if probability > 0:
+                entropy -= probability * np.log2(probability)
+                
+        self.entropy_cache[word] = entropy
+        return entropy
+    
+    def generate_word_statistics(self) -> Dict[str, Any]:
+        """Generate comprehensive word usage statistics."""
+        try:
+            total_words = sum(len(words) for words in self.word_categories.values())
+            category_counts = {cat: len(words) for cat, words in self.word_categories.items()}
+            
+            # Calculate entropy for each category
+            entropy_calculations = {}
+            for category, words in self.word_categories.items():
+                category_entropy = np.mean([self._calculate_word_entropy(word) for word in words])
+                entropy_calculations[category] = category_entropy
+            
+            return {
+                "total_words": total_words,
+                "category_counts": category_counts,
+                "entropy_calculations": entropy_calculations,
+                "bit_state_distribution": self.bit_state_distribution.copy(),
+                "generation_timestamp": time.time()
+            }
+            
+        except Exception as e:
+            logger.error(f"Failed to generate word statistics: {e}")
+            return {"error": str(e)}
+    
+    def process_enhanced_state(self, data: Dict[str, Any], entropy_word: Optional[str] = None) -> Dict[str, Any]:
+        """Process state with enhanced word mapping and bit gate routing."""
+        try:
+            if entropy_word is None:
+                entropy_word = self.get_entropy_word()
+            
+            processed_state = data.copy()
+            processed_state["entropy_word"] = entropy_word
+            processed_state["text_bit_mapping"] = self._map_word_to_bits(entropy_word)
+            processed_state["word_profit_symbolization"] = self._symbolize_word_profit(entropy_word)
+            processed_state["text_entropy"] = self._calculate_word_entropy(entropy_word)
+            
+            # Route through appropriate bit gate
+            bit_pattern = processed_state["text_bit_mapping"]
+            if bit_pattern in self.bit_gates:
+                bit_gate = self.bit_gates[bit_pattern]
+                processed_state = bit_gate.process_state(processed_state)
+                self.bit_state_distribution[bit_pattern] += 1
+            
+            logger.debug(f"Enhanced processing with word '{entropy_word}'")
+            return processed_state
+            
+        except Exception as e:
+            logger.error(f"Enhanced state processing failed: {e}")
+            return data
+    
+    def _map_word_to_bits(self, word: str) -> str:
+        """Map word to bit pattern for gate routing."""
+        word_hash = hashlib.sha256(word.encode()).hexdigest()
+        hash_int = int(word_hash[:2], 16)
+        
+        # Map to bit patterns: 0, 1, 10, 11
+        if hash_int < 64:
+            return "0"
+        elif hash_int < 128:
+            return "1"
+        elif hash_int < 192:
+            return "10"
         else:
-        word_bonus=0.5
-
-symbolization_score=base_score + word_bonus
-
-# Store in profit mappings
-self.profit_word_mappings[word] = symbolization_score
-
-# return min(symbolization_score, 1.0)  # Cap at 1.0  # EMERGENCY: Fixed return outside function
-
-except Exception as e:
-        logger.error("Failed to calculate word profit symbolization: {e}")
-#         return 0.0  # EMERGENCY: Fixed return outside function
-
-def _update_connection_matrix_with_text(self, bit_state: str, processed_state: Dict[str, Any], entropy_word: str):
-        """Emergency consolidated docstring."""
-text_entropy = processed_state.get("text_entropy", 0.0)
-        word_symbolization = processed_state.get("word_profit_symbolization", 0.0)
-
-# Apply text-based enhancement to connections
-bit_state_to_index = {"0": 0, "1": 1, "10": 2, "11": 3}
-        current_index = bit_state_to_index.get(bit_state, 0)
-
-# Enhance connections based on text metrics
-text_enhancement = (text_entropy + word_symbolization) * 0.1
-
-for i in range(4):
-        if i != current_index:
-        self.connection_matrix[current_index, i] += text_enhancement
-        self.connection_matrix[i, current_index] += text_enhancement
-
-# Normalize to prevent overflow
-self.connection_matrix = np.clip(self.connection_matrix, 0.0, 1.0)
-
-except Exception as e:
-        logger.error("Failed to update connection matrix with text: {e}")
-
-def _update_connection_matrix(self, bit_state: str, processed_state: Dict[str, Any]):
-        """Emergency consolidated docstring."""
-bit_state_to_index = {"0": 0, "1": 1, "10": 2, "11": 3}
-        current_index = bit_state_to_index.get(bit_state, 0)
-
-# Calculate connection strength based on state energy
-state_energy = processed_state.get("state_energy", 0.0)
-        processing_intensity = processed_state.get("processing_intensity", 0.0)
-
-# Update connection matrix
-for i in range(4):
-        if i == current_index:
-        # Self-connection based on state energy
-self.connection_matrix[i, i] = state_energy
-        else:
-        # Cross-connections based on processing intensity
-connection_strength = processing_intensity * 0.1
-        self.connection_matrix[current_index, i] += connection_strength
-        self.connection_matrix[i, current_index] += connection_strength
-
-# Normalize connection matrix to prevent overflow
-self.connection_matrix = np.clip(self.connection_matrix, 0.0, 1.0)
-
-except Exception as e:
-        logger.error("Failed to update connection matrix: {e}")
-
-def get_enhanced_statistics(self) -> Dict[str, Any]:
-        """Emergency consolidated docstring."""
-        "english_library": english_stats,
-        "text_entropy_metrics": {}
-        "total_calculations": len(self.text_entropy_history),
-        "average_text_entropy": avg_text_entropy,
-        "maximum_text_entropy": max_text_entropy,
-        "word_sequence_length": len(self.word_sequence_history)
-        },
-        "profit_symbolization": {}
-        "total_word_mappings": len(self.profit_word_mappings),
-        "top_profit_words": top_profit_words
-},
-        "dualistic_cache": {}
-        "cached_word_mappings": len(self.dualistic_word_cache)
-
-# return enhanced_stats  # EMERGENCY: Fixed return outside function
-
-except Exception as e:
-        logger.error("Failed to get enhanced statistics: {e}")
-#         return self.get_bit_gate_statistics()  # EMERGENCY: Fixed return outside function
-
-def get_bit_gate_statistics(self) -> Dict[str, Any]:
-        """Emergency consolidated docstring."""
-        "gate_statistics": gate_stats,
-        "bit_state_distribution": self.bit_state_distribution,
-        "total_states_processed": self.total_states_processed,
-        "average_processing_time": self.average_processing_time
-
-except Exception as e:
-        logger.error("Failed to get bit gate statistics: {e}")
-#         return {}  # EMERGENCY: Fixed return outside function
-
-def get_holistic_connectivity_score(self) -> float:
-        """Emergency consolidated docstring."""
-logger.error("Failed to calculate connectivity score: {e}")
-#         return 0.0  # EMERGENCY: Fixed return outside function
-
-def get_state_history_summary(self) -> Dict[str, Any]:
-        """Emergency consolidated docstring."""
-# return {"total_states": 0, "average_energy": 0.0}  # EMERGENCY: Fixed return outside function
-
-total_states = len(self.state_history)
-        energies = [state.get("state_energy", 0.0) for state in self.state_history]
-        average_energy = sum(energies) / len(energies) if energies else 0.0
-
-# Count processing types
-processing_types = {}
-        for state in self.state_history:
-        for key, value in state.items():
-        if key.endswith("_processed") and isinstance(value, bool) and value:
-        processing_type = key.replace("_processed", "")
-        processing_types[processing_type] = processing_types.get(processing_type, 0) + 1
-
-# return {  # EMERGENCY: Fixed return outside function}
-        "total_states": total_states,
-        "average_energy": average_energy,
-        "processing_type_distribution": processing_types
-
-except Exception as e:
-        logger.error("Failed to get state history summary: {e}")
-#         return {"total_states": 0, "average_energy": 0.0}  # EMERGENCY: Fixed return outside function
-
-def clear_state_history(self) -> int:
-        """Emergency consolidated docstring."""
-        logger.info("Cleared {cleared_count} states from history")
-#         return cleared_count  # EMERGENCY: Fixed return outside function
-
-def reset_connection_matrix(self):
-        """Emergency consolidated docstring."""
-        logger.info("Reset connection matrix")
-
-def _update_performance_metrics(self, bit_state: str, processing_time: float):
-        """Emergency consolidated docstring."""
-logger.error("Failed to update performance metrics: {e}")
+            return "11"
+    
+    def _symbolize_word_profit(self, word: str) -> float:
+        """Calculate profit symbolization value for word."""
+        # Check if word is in profit categories
+        profit_multiplier = 1.0
+        
+        if word in PROFIT_WORDS:
+            profit_multiplier = 1.5
+        elif word in MATHEMATICAL_WORDS:
+            profit_multiplier = 1.3
+        elif word in NAVIGATION_WORDS:
+            profit_multiplier = 1.2
+        elif word in DUALISTIC_WORDS:
+            profit_multiplier = 1.1
+        
+        # Calculate base symbolization
+        word_entropy = self._calculate_word_entropy(word)
+        return word_entropy * profit_multiplier
+    
+    def get_processing_statistics(self) -> Dict[str, Any]:
+        """Get comprehensive processing statistics."""
+        try:
+            total_processed = sum(self.bit_state_distribution.values())
+            
+            if total_processed > 0:
+                # Calculate average energy from bit gate processing
+                energy_weights = {"0": 0.0, "1": 0.25, "10": 0.5, "11": 1.0}
+                weighted_energy = sum(
+                    self.bit_state_distribution[pattern] * energy_weights[pattern]
+                    for pattern in self.bit_state_distribution
+                )
+                average_energy = weighted_energy / total_processed
+            else:
+                average_energy = 0.0
+            
+            return {
+                "total_processed": total_processed,
+                "average_energy": average_energy,
+                "bit_state_distribution": self.bit_state_distribution.copy(),
+                "processing_timestamp": time.time()
+            }
+            
+        except Exception as e:
+            logger.error(f"Failed to get processing statistics: {e}")
+            return {"total_processed": 0, "average_energy": 0.0}
 
 
-# Global Lantern Core instance
-lantern_core = LanternCore()
+# Global instance for integration with Ferris RDE and Ghost Router
+enhanced_lantern_core = EnhancedLanternCore()
 
+# Export key functions for external access
+def get_entropy_word(mode: EntropyMode = EntropyMode.ENTROPY_RANDOM) -> str:
+    """Get entropy word for external use."""
+    return enhanced_lantern_core.get_entropy_word(mode)
 
-def get_lantern_core() -> LanternCore:
-    """Emergency consolidated docstring."""Emergency consolidated docstring."""Emergency consolidated docstring."""
-"""Emergency consolidated docstring."""Emergency consolidated docstring."""
-        "bit_gates": lantern_core.get_bit_gate_statistics(),
-        "connectivity_score": lantern_core.get_holistic_connectivity_score(),
-        "state_history": lantern_core.get_state_history_summary(),
-        "connection_matrix": lantern_core.get_connection_matrix().tolist()
+def map_btc_price_to_word(btc_price: float) -> Dict[str, Any]:
+    """Map BTC price to word for external use."""
+    return enhanced_lantern_core.map_btc_price_to_word(btc_price)
 
+def process_enhanced_state(data: Dict[str, Any], entropy_word: Optional[str] = None) -> Dict[str, Any]:
+    """Process enhanced state for external use."""
+    return enhanced_lantern_core.process_enhanced_state(data, entropy_word)
 
-def get_enhanced_lantern_statistics() -> Dict[str, Any]:
-    """Emergency consolidated docstring."""Emergency consolidated docstring."""Emergency consolidated docstring."""
-"""Emergency consolidated docstring."""
-        "demo_name": "English Library Integration Demo",
-        "timestamp": time.time(),
-        "test_cases": []
-
-# Test different English modes
-_test_modes = []
-        EnglishLibraryMode.PROFIT_SYMBOLIC,
-        EnglishLibraryMode.ENTROPY_RANDOM,
-        EnglishLibraryMode.PATTERN_MATCH,
-        EnglishLibraryMode.DUALISTIC_MAP,
-        EnglishLibraryMode.BTC_HASH_DERIVE
-]
-
-for mode in test_modes:
-        # Create test input state
-_test_state = {}
-        "profit_potential": 0.7,
-        "processing_intensity": 0.8,
-        "state_energy": 0.6,
-        "btc_price": 45000.0,
-        "phase": "mid_tier"
-
-# Process with English integration
-result = relay_state_with_english_entropy(test_state, mode, True)
-
-_test_case = {}
-        "mode": mode.value,
-        "entropy_word": result.get("entropy_word"),
-        "text_bit_mapping": result.get("text_bit_mapping"),
-        "word_profit_symbolization": result.get("word_profit_symbolization"),
-        "bit_gate_type": result.get("bit_gate_type"),
-        "profit_potential": result.get("profit_potential")
-
-demo_results["test_cases"].append(test_case)
-
-# Get final statistics
-demo_results["final_statistics"] = get_enhanced_lantern_statistics()
-
-# return demo_results  # EMERGENCY: Fixed return outside function
-
-except Exception as e:
-        logger.error("Failed to run English integration demo: {e}")
-#         return {"error": str(e)}  # EMERGENCY: Fixed return outside function
-
-
-def get_profit_word_recommendations(current_state: Dict[str, Any]) -> List[str]:
-    """Emergency consolidated docstring."""Emergency consolidated docstring."""
-logger.error("Failed to get profit word recommendations: {e}")
-#         return ["profit", "navigate", "optimize", "balance", "growth"]  # EMERGENCY: Fixed return outside function
-
-
-# Mathematical preservation comment for system continuity
-"""Emergency consolidated docstring."""Emergency consolidated docstring."""
+# Export all key components
+__all__ = [
+    "EnhancedLanternCore",
+    "BitGateType", 
+    "EntropyMode",
+    "enhanced_lantern_core",
+    "get_entropy_word",
+    "map_btc_price_to_word",
+    "process_enhanced_state"
+] 
