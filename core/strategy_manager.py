@@ -3,8 +3,6 @@ from typing import Dict, List, Optional, Any
 # Import core mathematical modules
 from dual_unicore_handler import DualUnicoreHandler
 
-# from core.bit_phase_sequencer import BitPhase, BitSequence  # FIXME: Unused import
-# from core.dual_error_handler import PhaseState, SickType, SickState  # FIXME: Unused import
 # MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below
 # from core.symbolic_profit_router import ProfitTier, FlipBias, SymbolicState # FIXME: Unused
 # import
@@ -52,7 +50,7 @@ Emergency placeholder docstring.
 
 pass[BRAIN] Placeholder function - SHA - 256 ID=[autogen]
 def get_strategy_active_return(self): pass
-    pass  # TODO: Implement
+    pass  
 def get_strategy_active_alpha(self): pass
-    pass  # TODO: Implement
+    pass  
 def get_strategy_active_information_ratio(self): pass

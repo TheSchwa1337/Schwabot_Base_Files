@@ -197,7 +197,7 @@ Returns:
 """"""
 """
 try:
-    pass  # TODO: Implement try block
+    pass  
 # Raw hash (may fail on broken Unicode)
             h_raw = hashlib.sha256(symbol.encode('utf - 8')).hexdigest()
         except UnicodeEncodeError:

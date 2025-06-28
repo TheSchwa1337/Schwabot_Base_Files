@@ -28,7 +28,7 @@ except ImportError: pass
 # MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below
 [BRAIN] Placeholder class for recursive profit mapping
 : pass
-    pass  # TODO: Implement
+    pass  
 def __init__(self, core_dir: str = "core""""
 "import_fixes""""
 (r"from typing import ([^,]+)", r"from typing import \1, Union"""
@@ -44,7 +44,7 @@ def __init__(self, core_dir: str = "core""""
         (r"(\\w+): list", r"\1: List[Any]"""
 # MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
 "validation_patterns""""
-(r"  # TODO: document", r"# Properly documented""""
+(r"  
         (r"def __init__\(self\):", r"def __init__(self) -> None:""""
 "cli_compatibility""
 (r''

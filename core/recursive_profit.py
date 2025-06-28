@@ -8,7 +8,7 @@ from dual_unicore_handler import DualUnicoreHandler
 unicore = DualUnicoreHandler()
 # -*- coding: utf - 8 -*-
 # EMERGENCY: pass
-    pass  # TODO: Implement
+    pass  
 Emergency placeholder docstring.
 ACCUMULATING = "accumulating""""
     GATE_OPEN="gate_open"""

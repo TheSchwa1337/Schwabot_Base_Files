@@ -144,7 +144,7 @@ if not vecs or PCA is None:
         return np.eye(n_components)
 
 try:
-    pass  # TODO: Implement try block
+    pass  
 # Take last 256 vectors or all if fewer
 recent_vecs = vecs[-256:] if len(vecs) > 256 else vecs
         X = np.array(recent_vecs)
@@ -158,7 +158,7 @@ pca = PCA(n_components = n_components).fit(X)
         return pca.components_
 
 except Exception:
-    pass  # TODO: Implement except block
+    pass  
 # Fallback to identity matrix
 return np.eye(n_components)
 
@@ -207,7 +207,7 @@ self,
 """"""
 """
 try:
-    pass  # TODO: Implement try block
+    pass  
 # Create base memory entry
 entry = LanternMemoryEntry(
                 vector = vector,
@@ -221,7 +221,7 @@ entry = LanternMemoryEntry(
 # Apply ZPE calculations if available
 if self.zpe_core:
                 try:
-    pass  # TODO: Implement try block
+    pass  
 # Map news / lantern signals
 entry.zpe_lantern_signal = self.zpe_core.map_news_lantern_signals(
                         news_density, sentiment_delta

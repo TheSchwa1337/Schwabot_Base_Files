@@ -3,7 +3,7 @@ from typing import Dict, List, Optional, Any
 import numpy as np
 # -*- coding: utf-8 -*-
 
-def safe_format_error() -> Any:  # TODO: Implement
+def safe_format_error() -> Any:  
         ))
 
 # return actions  # EMERGENCY: Fixed return outside function

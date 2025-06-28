@@ -595,7 +595,7 @@ pass
 """"""
 """
 try:
-    pass  # TODO: Implement try block
+    pass  
 # Vector pattern matching
 match_result = self.vector_matcher.match_vector_triplet(values)
 

@@ -447,7 +447,7 @@ pass
 """"""
 """
 try:
-    pass  # TODO: Implement try block
+    pass  
 # If bit_depth not specified, determine from hash
             if bit_depth is None:
                 bit_depth = self._determine_bit_depth_from_hash(hash_value)
@@ -478,7 +478,7 @@ pass
 """"""
 """
 try:
-    pass  # TODO: Implement try block
+    pass  
 # Use first byte to determine bit depth
 first_byte = int(hash_value[0:2], 16)
 

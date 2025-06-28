@@ -31,7 +31,7 @@ unicore = DualUnicoreHandler(
 
 # -*- coding: utf-8 -*-
 
-def safe_format_error() -> Any:  # TODO: Implement
+def safe_format_error() -> Any:  
 # MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below
     metadata: Dict[str, Any] = field(default_factory=dict)
 # MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below

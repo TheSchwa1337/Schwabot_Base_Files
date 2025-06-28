@@ -6,7 +6,6 @@
 """"""
 """Conditional glyph feedback loop with exponential smoothing."""
 # -*- coding: utf - 8 -*-
-# from __future__ import annotations  # FIXME: Unused import
 """
 """"""
 """"""

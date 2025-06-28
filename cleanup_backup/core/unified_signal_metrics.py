@@ -124,7 +124,7 @@ Consolidated signal metrics"""
 """"""
 """
 try:
-    pass  # TODO: Implement try block
+    pass  
 # Extract cursor signals (T, \\u0394\\u03b8)
             if cursor_state:"""
 triplet_entropy = cursor_state.get("triplet_entropy", 0.0)
@@ -221,7 +221,7 @@ BTC investment ratio signals"""
 """"""
 """
 try:
-    pass  # TODO: Implement try block
+    pass  
 # Calculate BTC vector metrics
 if btc_data:
                 v_btc = self._calculate_btc_vector(btc_data)
@@ -354,7 +354,7 @@ pass
 """"""
 """
 try:
-    pass  # TODO: Implement try block
+    pass  
 # Simple projected profit based on spread and volatility"""
 order_book = market_data.get("order_book", {})
             if not order_book.get("bids") or not order_book.get("asks"):
@@ -446,7 +446,7 @@ pass
 """"""
 """
 try:
-    pass  # TODO: Implement try block
+    pass  
 # Use entry logic from phantom module
 from core.phantom.entry_logic import entry_score
 """

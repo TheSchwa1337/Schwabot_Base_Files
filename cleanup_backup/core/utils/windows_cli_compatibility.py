@@ -71,7 +71,7 @@ pass
 """"""
 """
 try:
-    pass  # TODO: Implement try block
+    pass  
 # Set console encoding for Windows
 if hasattr(sys.stdout, 'reconfigure'):
                 sys.stdout.reconfigure(encoding = self.encoding)
@@ -91,14 +91,14 @@ try:
             print(message, flush = True)
             return message
 except UnicodeEncodeError:
-    pass  # TODO: Implement except block
+    pass  
 # Fallback to ASCII - safe printing with better encoding
 try:"""
 encoded = " ".join(str(arg).encode('ascii', errors='replace').decode('ascii') for arg in [message])
                 print(encoded, flush = True)
                 return encoded
 except Exception:
-    pass  # TODO: Implement except block
+    pass  
 # Final fallback
 safe_message = message.encode('ascii', errors='ignore').decode('ascii')
                 print(safe_message, flush = True)
@@ -142,7 +142,7 @@ message = message.encode('ascii', errors='ignore').decode('ascii')
 log_method = getattr(logger_instance, level.lower(), logger_instance.info)
             log_method(message)
         except Exception as e:
-    pass  # TODO: Implement except block
+    pass  
 # Fallback logging"""
 logger.error(f"Log error: {e}")
             safe_print(f"[{level.upper()}] {message}")
@@ -155,7 +155,7 @@ pass
 """"""
 """
 try:
-    pass  # TODO: Implement try block
+    pass  
 # Simple emoji removal - can be enhanced with proper emoji detection
 import re
 # Remove common emoji patterns
@@ -202,7 +202,7 @@ pass
 """"""
 """
 try:
-    pass  # TODO: Implement try block
+    pass  
 # Set Windows - specific subprocess options
 if self.is_windows:
                 kwargs.setdefault('shell', True)

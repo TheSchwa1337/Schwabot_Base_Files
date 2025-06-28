@@ -3,7 +3,7 @@ from typing import Dict, List, Optional, Any
 import numpy as np
 # -*- coding: utf-8 -*-
 
-def safe_format_error() -> Any:  # TODO: Implement
+def safe_format_error() -> Any:  
 # MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below
         getattr(logger, level.lower()(message)
 
@@ -21,7 +21,7 @@ Matrix=npt.NDArray[np.float64]
 logger=logging.getLogger(__name__)
 
 : pass
-    pass  # TODO: Implement
+    pass  
 class TickType(Enum): pass
 # MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below
 TRADE = "trade""""

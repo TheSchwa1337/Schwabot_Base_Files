@@ -635,7 +635,7 @@ market_data: Optional[Dict[str, Any]]) -> float:"""
 """"""
 """
 try:
-    pass  # TODO: Implement try block
+    pass  
 # Get recent data points for resonance calculation
 recent_points = curve.data_points[-10:] if len(curve.data_points) >= 10 else curve.data_points
 

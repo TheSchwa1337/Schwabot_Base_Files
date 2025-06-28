@@ -1,0 +1,15 @@
+{
+  "glyph": "profit_signal",
+  "phase": 0.75,
+  "ncco": 0.6,
+  "entropy": 0.8,
+  "route": "cpu_2bit",
+  "result": 0.05,
+  "depth": 3,
+  "timestamp": 1751077911.0656288,
+  "hash_id": "b71ba887e5e1ab77",
+  "btc_price": 52000.0,
+  "volume": 1000.0,
+  "confidence": 0.85,
+  "market_conditions": {}
+}

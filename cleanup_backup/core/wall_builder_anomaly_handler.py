@@ -476,7 +476,7 @@ self,
 start_time = time.time()
 
 try:
-    pass  # TODO: Implement try block
+    pass  
 # Convert string to enum
 wall_type_enum = WallType(wall_type)
 

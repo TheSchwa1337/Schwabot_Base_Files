@@ -235,7 +235,7 @@ State change resistance [0, 1]"""
 """"""
 """
 try:
-    pass  # TODO: Implement try block
+    pass  
 # Tanh component for performance
 performance_component = np.tanh(performance_delta)
 
@@ -332,7 +332,7 @@ Strategy switch signal"""
 """"""
 """
 try:
-    pass  # TODO: Implement try block
+    pass  
 # Update entropy history
 self.entropy_history.append(current_entropy)
             if len(self.entropy_history) > self.max_history:

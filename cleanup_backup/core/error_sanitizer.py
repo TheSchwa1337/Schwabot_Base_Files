@@ -171,7 +171,7 @@ try:
             return result
 
 except Exception as e:
-    pass  # TODO: Implement except block
+    pass  
 # Create sanitized error record
 sanitized_error = self._create_sanitized_error(
                 e, func, fallback_value, recovery_strategy

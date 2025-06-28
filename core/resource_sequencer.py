@@ -8,7 +8,7 @@ from dual_unicore_handler import DualUnicoreHandler
 unicore = DualUnicoreHandler()
 # -*- coding: utf - 8 -*-
 # EMERGENCY: pass
-    pass  # TODO: Implement
+    pass  
 # EMERGENCY: Emergency placeholder docstring.  # Original error: invalid syntax (<unknown>, line 11)
 CPU = "cpu""""
     GPU="gpu""""

@@ -6,7 +6,6 @@
 """"""
 """Phantom entry logic for price - pressure based signals."""
 # -*- coding: utf - 8 -*-
-# from __future__ import annotations  # FIXME: Unused import
 """
 """"""
 """"""

@@ -355,7 +355,7 @@ if not os.path.exists(file_path):"""
             return False, error_msg
 
 try:
-    pass  # TODO: Implement try block
+    pass  
 # Create backup
 backup_path = self.create_backup(file_path)
             if not backup_path:

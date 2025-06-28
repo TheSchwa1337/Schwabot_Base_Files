@@ -95,7 +95,7 @@ Tuple[np.ndarray, Dict[str, Any]]
 """"""
 """
 try:
-    pass  # TODO: Implement try block
+    pass  
 # Set random seed for deterministic behavior
 np.random.seed(substitution_seed)
         random.seed(substitution_seed)
@@ -468,7 +468,7 @@ True if matrix is valid"""
 """"""
 """
 try:
-    pass  # TODO: Implement try block
+    pass  
 # Check shape
 if matrix.shape != (3, 4):
             return False

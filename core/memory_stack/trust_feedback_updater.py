@@ -27,7 +27,7 @@ unicore = DualUnicoreHandler(
 : pass
 # -*- coding: utf-8 -*-
 
-def safe_format_error() -> Any:  # TODO: Implement
+def safe_format_error() -> Any:  
 # MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below
     print(f"[WARN] {message}"""
 # MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""

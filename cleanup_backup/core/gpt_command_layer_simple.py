@@ -321,7 +321,7 @@ async def submit_command(
 """"""
 """
 try:
-    pass  # TODO: Implement try block
+    pass  
 # Create command
 command = AICommand("""
                 command_id="",
@@ -359,7 +359,7 @@ async def _validate_command(self, command: AICommand) -> bool:
 """"""
 """
 try:
-    pass  # TODO: Implement try block
+    pass  
 # Basic validation
 if not command.command_id:
                 return False

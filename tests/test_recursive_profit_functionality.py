@@ -15,7 +15,6 @@ from core.profit_optimizer import ProfitOptimizer
 from core.recursive_profit_engine import RecursiveProfitEngine
 from core.symbolic_profit_router import ProfitTier, FlipBias, SymbolicState, ProfitSequence
 
-# from __future__ import annotations  # FIXME: Unused import
 
 
 # Initialize Unicode handler
@@ -28,7 +27,6 @@ for short - term, mid - term, and long - term profit optimization."""
 """
 
 # import unittest  # FIXME: Unused import
-
 # Import core mathematical modules
 # from core.unified_math_system import unified_math  # FIXME: Unused import
 

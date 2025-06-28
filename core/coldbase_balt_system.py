@@ -491,6 +491,7 @@ if __name__ == "__main__":
         route="cpu_2bit",
         result=0.05,
         depth=3,
+        timestamp=time.time(),
         btc_price=52000.0,
         volume=1000.0,
         confidence=0.85

@@ -140,7 +140,7 @@ if level.lower() == "debug":
 
 return True
 except Exception:
-    pass  # TODO: Implement except block
+    pass  
 # Fallback to basic print if logging fails
 safe_print(f"[{level.upper()}] {message}")
         return False

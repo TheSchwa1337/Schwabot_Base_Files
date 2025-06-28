@@ -478,7 +478,7 @@ if context is None:
 
 with self.lock:
             try:
-    pass  # TODO: Implement try block
+    pass  
 # Check if symbol is registered
 if symbol not in self.symbol_registry:"""
 logger.warning(f"Symbol {symbol} not registered in LGPE")

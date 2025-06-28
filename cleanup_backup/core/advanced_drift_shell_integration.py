@@ -55,7 +55,7 @@ from core.quantum_drift_shell_engine import PhaseDriftHarmonizer
 from core.quantum_drift_shell_engine import QuantumDriftShellEngine
 from core.thermal_map_allocator import ThermalMapAllocator
 except ImportError:
-    pass  # TODO: Implement except block
+    pass  
 # Fallback for testing
 DriftShellEngine = None
     SubsurfaceGrayscaleMapper = None

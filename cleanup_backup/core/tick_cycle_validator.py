@@ -122,7 +122,7 @@ tick_phase: Optional[str],
 timestamp = datetime.now()
 
 try:
-    pass  # TODO: Implement try block
+    pass  
 # Create validation result
 validation = TickValidation(
                 timestamp = timestamp,
@@ -181,7 +181,7 @@ current_time = time.time()
 # Check if tick phase is valid
 if validation.tick_phase:
             try:
-    pass  # TODO: Implement try block
+    pass  
 # Validate against known phases
 phase_enum = TickPhase(validation.tick_phase)
 

@@ -285,7 +285,7 @@ description: str, category: str) -> str:
 """"""
 """
 try:
-    pass  # TODO: Implement try block
+    pass  
 # Create version hash
 value_str = str(value)"""
             hash_input = f"{name}:{value_str}:{description}:{category}:{datetime.now().isoformat()}"
@@ -813,7 +813,7 @@ pass
 """"""
 """
 try:
-    pass  # TODO: Implement try block
+    pass  
 # ZPE Core constants
 self.version_pinning.pin_math_constant("""
                 name="zpe_resonance_frequency",
@@ -939,7 +939,7 @@ pass
 """"""
 """
 try:
-    pass  # TODO: Implement try block
+    pass  
 # Get enabled testnets
 exchange_testnets = self.canary_manager.get_enabled_testnets()
 

@@ -6,7 +6,6 @@
 """"""
 """Matrix fault resolver for rank consistency checking."""
 # -*- coding: utf - 8 -*-
-# from __future__ import annotations  # FIXME: Unused import
 """
 """"""
 """"""

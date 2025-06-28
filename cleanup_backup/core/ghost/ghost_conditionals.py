@@ -6,7 +6,6 @@
 """"""
 """Ghost condition - gate for routing decisions."""
 # -*- coding: utf - 8 -*-
-# from __future__ import annotations  # FIXME: Unused import
 """
 """"""
 """"""

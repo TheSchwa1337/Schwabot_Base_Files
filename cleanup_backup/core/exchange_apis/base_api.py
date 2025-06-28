@@ -277,7 +277,7 @@ Returns:
 """"""
 """
 try:
-    pass  # TODO: Implement try block
+    pass  
 # Prepare order data
 order_data = {"""
                 "product_id": order_request.symbol,

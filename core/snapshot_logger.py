@@ -11,8 +11,6 @@ from dual_unicore_handler import DualUnicoreHandler
 # MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below
 import logging
 
-# from core.bit_phase_sequencer import BitPhase, BitSequence  # FIXME: Unused import
-# from core.dual_error_handler import PhaseState, SickType, SickState  # FIXME: Unused import
 # MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below
 # from core.symbolic_profit_router import ProfitTier, FlipBias, SymbolicState # FIXME: Unused
 # import

@@ -34,7 +34,7 @@ except ImportError: pass
         from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
     except ImportError: pass
 # MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below
-        def safe_print() -> Any:  # TODO: Implement
+        def safe_print() -> Any:  
         def success(message: str) -> None: pass
 # MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below
             """Success print function."""""

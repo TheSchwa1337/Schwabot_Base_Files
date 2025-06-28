@@ -9,8 +9,6 @@ from numpy.typing import NDArray
 import logging
 from typing import Dict, List, Optional, Any, Tuple
 
-# from core.bit_phase_sequencer import BitPhase, BitSequence  # FIXME: Unused import
-# from core.dual_error_handler import PhaseState, SickType, SickState  # FIXME: Unused import
 # MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below
 # from core.symbolic_profit_router import ProfitTier, FlipBias, SymbolicState # FIXME: Unused
 # import

@@ -373,7 +373,7 @@ entropy = -np.sum(eigenvalues * np.log2(eigenvalues + 1e - 10))
             max_entropy = math.log2(unified_math.min(dim_a, dim_b))
             return unified_math.min(1.0, entropy / max_entropy) if max_entropy > 0 else 0.0
         except Exception:
-    pass  # TODO: Implement except block
+    pass  
 # Fallback to simple measure
 return unified_math.unified_math.abs(np.vdot(state_a.state_vector, state_b.state_vector))
 

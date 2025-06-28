@@ -371,7 +371,7 @@ pass
 self.log("Setting up configuration...")
 
 try:
-    pass  # TODO: Implement try block
+    pass  
 # Create default configuration
 config = {
                 "system": {
@@ -606,7 +606,7 @@ pass
 self.log("Validating installation...")
 
 try:
-    pass  # TODO: Implement try block
+    pass  
 # Test import
 result = subprocess.run([
                 sys.executable, "-c", "import schwabot; print('Import OK')"
@@ -835,7 +835,7 @@ if args.install_dir:
         installer.data_dir = installer.install_dir / "data"
 
 try:
-    pass  # TODO: Implement try block
+    pass  
 # Check system requirements
 if not installer.check_system_requirements():
             safe_print("\\u274c System requirements not met. Installation aborted.")

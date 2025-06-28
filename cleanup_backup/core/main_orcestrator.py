@@ -371,7 +371,7 @@ for dep in component_info.dependencies:
                 return False
 
 try:
-    pass  # TODO: Implement try block
+    pass  
 # Store component instance
 self.component_instances[name] = component_instance
 
@@ -419,7 +419,7 @@ logger.error(f"Component {name} not found")
 component_info = self.components[name]
 
 try:
-    pass  # TODO: Implement try block
+    pass  
 # Update component status
 component_info.status = ComponentStatus.SHUTDOWN
             component_info.last_heartbeat = datetime.now()

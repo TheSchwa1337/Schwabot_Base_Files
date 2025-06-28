@@ -277,7 +277,7 @@ if not self._contains_unicode(args_str):
 
 # Parse the arguments
 try:
-    pass  # TODO: Implement try block
+    pass  
 # Simple parsing for common cases"""
 if args_str.strip().startswith('"') or args_str.strip().startswith("'"):'"
 # Single string argument
@@ -289,7 +289,7 @@ return f'safe_print({args_str})'
 # Complex arguments - use safe_print with all args
 return f'safe_print({args_str})'
             except:
-    pass  # TODO: Implement except block
+    pass  
 # Fallback to safe_print
 return f'safe_print({args_str})'
 

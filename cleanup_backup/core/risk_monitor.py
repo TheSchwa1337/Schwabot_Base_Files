@@ -338,7 +338,7 @@ pass
 """"""
 """
 try:
-    pass  # TODO: Implement try block
+    pass  
 # Extract portfolio metrics"""
 total_value = portfolio_data.get("total_value", 0.0)
             total_pnl = portfolio_data.get("total_pnl", 0.0)
@@ -371,7 +371,7 @@ self, total_value: float, total_pnl: float, positions: Dict[str, Any]
 """"""
 """
 try:
-    pass  # TODO: Implement try block
+    pass  
 # Calculate returns for VaR / CVaR
 if len(self.portfolio_history) > 1:
                 prev_value = self.portfolio_history[-1].total_value
@@ -673,7 +673,7 @@ self,
 """"""
 """
 try:
-    pass  # TODO: Implement try block
+    pass  
 # Normalize each risk component
 var_score = unified_math.min(var_95 / self.var_threshold, 1.0)
             cvar_score = unified_math.min(cvar_95 / self.cvar_threshold, 1.0)

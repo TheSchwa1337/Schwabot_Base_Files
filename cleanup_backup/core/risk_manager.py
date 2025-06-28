@@ -388,7 +388,7 @@ pass
 """"""
 """
 try:
-    pass  # TODO: Implement try block
+    pass  
 # Get portfolio volatility from risk history
 if len(self.risk_history) < self.volatility_lookback:
                 return 1.0

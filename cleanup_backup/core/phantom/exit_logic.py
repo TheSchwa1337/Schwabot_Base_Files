@@ -6,7 +6,6 @@
 """"""
 """Phantom exit logic for profit - target based signals."""
 # -*- coding: utf - 8 -*-
-# from __future__ import annotations  # FIXME: Unused import
 """
 """"""
 """"""

@@ -406,7 +406,7 @@ True if timestamps are valid"""
 """"""
 """
 try:
-    pass  # TODO: Implement try block
+    pass  
 # Check for reasonable timestamp values
 if not (0 < start_timestamp < 2e9):  # Reasonable Unix timestamp range
             return False

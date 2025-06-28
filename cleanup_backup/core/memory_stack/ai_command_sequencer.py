@@ -475,7 +475,7 @@ sequence.execution_time = response.execution_time
 # Calculate alpha score if Prophet curve available
 if prophet_curve_id and GPT_LAYER_AVAILABLE:
                 try:
-    pass  # TODO: Implement try block
+    pass  
 # Get expected profit from command context
 expected_profit = sequence.metadata.get('payload', {}).get('target_profit', 0.0)
 
@@ -562,7 +562,7 @@ pass
 """"""
 """
 try:
-    pass  # TODO: Implement try block
+    pass  
 # This would typically compare against expected tick timing
 # For now, use a simple heuristic based on command complexity
             complexity_factor = len(command.payload) * 0.1

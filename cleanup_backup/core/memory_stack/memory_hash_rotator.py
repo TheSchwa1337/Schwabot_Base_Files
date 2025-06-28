@@ -168,7 +168,7 @@ Returns:
 """"""
 """
 try:
-    pass  # TODO: Implement try block
+    pass  
 # Check if we need to rotate to a new epoch
 if self.current_epoch and tick > self.current_epoch.end_tick:
                 self._rotate_epoch(tick)
@@ -419,7 +419,7 @@ pass
 """"""
 """
 try:
-    pass  # TODO: Implement try block
+    pass  
 # Check if key is in registry
 if memory_key in self.memory_key_registry:
                 return True

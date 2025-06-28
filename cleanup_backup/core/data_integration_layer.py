@@ -217,7 +217,7 @@ async def _fetch_from_exchanges(self, symbol: str) -> Optional[CryptoDataPoint]:
 """
 for exchange_name, exchange in self.exchanges.items():
             try:
-    pass  # TODO: Implement try block
+    pass  
 # Fetch ticker data
 ticker = await asyncio.get_event_loop().run_in_executor(
                     None, exchange.fetch_ticker, symbol

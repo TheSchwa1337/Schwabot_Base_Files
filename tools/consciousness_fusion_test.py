@@ -86,7 +86,7 @@ if not self.gpt_layer:
             return False
 
 try:
-    pass  # TODO: Implement try block
+    pass  
 # Test GPT command
 gpt_command_id = await submit_gpt_command(
                 domain = CommandDomain.STRATEGY,
@@ -146,7 +146,7 @@ if not self.gpt_layer:
             return False
 
 try:
-    pass  # TODO: Implement try block
+    pass  
 # Submit parent command
 parent_command_id = await submit_gpt_command(
                 domain = CommandDomain.STRATEGY,
@@ -194,7 +194,7 @@ if not self.hash_registry:
             return False
 
 try:
-    pass  # TODO: Implement try block
+    pass  
 # Register test hashes
 hash_entries = []
 
@@ -250,7 +250,7 @@ if not self.gpt_layer:
             return False
 
 try:
-    pass  # TODO: Implement try block
+    pass  
 # Get consciousness profiles
 for agent_type in [AIAgentType.GPT, AIAgentType.CLAUDE, AIAgentType.R1]:
                 profile = await self.gpt_layer.get_consciousness_profile(agent_type)
@@ -282,7 +282,7 @@ if not self.api_gateway:
             return False
 
 try:
-    pass  # TODO: Implement try block
+    pass  
 # Get system status
 status = await self.api_gateway.get_system_status()
             safe_print(f"\\u1f4ca System Status: {status}")
@@ -319,7 +319,7 @@ if not self.hash_registry:
             return False
 
 try:
-    pass  # TODO: Implement try block
+    pass  
 # Create a repeating pattern
 pattern_commands = [
                 {"domain": "strategy", "payload": {"strategy_name": "pattern_test", "parameters": {"step": 1}}},
@@ -376,7 +376,7 @@ if not self.gpt_layer:
             return False
 
 try:
-    pass  # TODO: Implement try block
+    pass  
 # Submit invalid command (should be handled gracefully)
             try:
                 invalid_command_id = await submit_gpt_command(
@@ -421,7 +421,7 @@ if not self.gpt_layer:
             return False
 
 try:
-    pass  # TODO: Implement try block
+    pass  
 # Submit commands from different agents
 agents = [AIAgentType.GPT, AIAgentType.CLAUDE, AIAgentType.R1]
             commands = []

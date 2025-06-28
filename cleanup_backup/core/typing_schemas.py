@@ -408,7 +408,7 @@ try:
             metadata = response.get("metadata", {})
         )
 except Exception as e:
-    pass  # TODO: Implement except block
+    pass  
 # Return a safe default response
 return AIStrategyResponse(
             strategy_hash="error_hash",

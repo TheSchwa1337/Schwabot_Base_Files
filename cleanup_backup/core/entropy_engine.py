@@ -103,7 +103,7 @@ pass
 """"""
 """
 try:
-    pass  # TODO: Implement try block
+    pass  
 # Extract price data
 prices = market_data.get('prices', [])
             volumes = market_data.get('volumes', [])
@@ -348,7 +348,7 @@ pass
 """"""
 """
 try:
-    pass  # TODO: Implement try block
+    pass  
 # Data quality factors
 data_length_factor = unified_math.min(len(prices) / 100.0, 1.0)
             price_range_factor = min((unified_math.max(prices) - unified_math.min(prices)) / 1000.0, 1.0)

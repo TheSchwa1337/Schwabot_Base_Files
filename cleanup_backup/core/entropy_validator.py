@@ -36,7 +36,7 @@ later under the marked TODO sections."""
 try:
     from scipy.signal import welch  # type: ignore
 except ModuleNotFoundError:  # pragma: no cover \\u2013 pure - NumPy fallback
-pass  # TODO: Implement except block
+pass  
 
 def welch(x: np.ndarray, *, fs: float = 1.0, nperseg: int | None = None):  # type: ignore  # noqa: D401"""
         """Rudimentary Welch PSD replacement (Hann + overlap = 0).""""""

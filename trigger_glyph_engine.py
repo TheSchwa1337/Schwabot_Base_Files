@@ -247,7 +247,7 @@ Mathematical: E = Sigma(bit_entropy) / hash_complexity"""
 """"""
 """
 try:
-    pass  # TODO: Implement try block
+    pass  
 # Calculate entropy from SHA hash
 hash_bits = bin(int(sha_hash[:8], 16))[2:].zfill(32)
             bit_entropy = sum(1 for bit in hash_bits if bit == '1') / 32

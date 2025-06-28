@@ -103,7 +103,7 @@ Returns:
 """"""
 """
 try:
-    pass  # TODO: Implement try block
+    pass  
 # Apply window to reduce spectral leakage
 windowed_signal = time_series * np.hanning(len(time_series))
 
@@ -137,7 +137,7 @@ Returns:
 """"""
 """
 try:
-    pass  # TODO: Implement try block
+    pass  
 # Use Welch's method for robust PSD estimation
 freqs, psd = signal.welch(
                 time_series,
@@ -212,7 +212,7 @@ Returns:
 """"""
 """
 try:
-    pass  # TODO: Implement try block
+    pass  
 # Compute power spectrum
 fft_coeffs, _ = self.fft_transform(time_series)
             power_spectrum = unified_math.unified_math.abs(fft_coeffs) ** 2

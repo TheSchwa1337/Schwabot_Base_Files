@@ -168,7 +168,7 @@ def _load_settings(self) -> None:
 """"""
 """
 try:
-    pass  # TODO: Implement try block
+    pass  
 # Load main settings"""
 main_config = self.config_path / "main_settings.yaml"
             if main_config.exists():
@@ -535,7 +535,7 @@ pass
 """"""
 """
 try:
-    pass  # TODO: Implement try block
+    pass  
 # Save main settings
 main_settings = {"""
                 "mode": "production",

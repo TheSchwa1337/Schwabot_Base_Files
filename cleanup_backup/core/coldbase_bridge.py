@@ -265,7 +265,7 @@ pass
 """"""
 """
 try:
-    pass  # TODO: Implement try block
+    pass  
 # Generate key from password using PBKDF2
 salt = b'coldbase_salt_' + storage_type.value.encode()
             kdf = PBKDF2HMAC(
@@ -293,7 +293,7 @@ pass
 
 while True:
                 try:
-    pass  # TODO: Implement try block
+    pass  
 # Get next transfer job
 priority, job = self.transfer_queue.get(timeout = 1)
                     if job is None:  # Shutdown signal
@@ -494,7 +494,7 @@ data_category: DataCategory, filename: str,
 """"""
 """
 try:
-    pass  # TODO: Implement try block
+    pass  
 # Serialize data
 data_bytes = pickle.dumps(data)
 
@@ -557,7 +557,7 @@ pass
 """"""
 """
 try:
-    pass  # TODO: Implement try block
+    pass  
 # Load metadata
 metadata_path = os.path.join(
                 self.storage_configs[storage_type].base_path,"""

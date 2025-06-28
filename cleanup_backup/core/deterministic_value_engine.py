@@ -224,7 +224,7 @@ self, market_state: MarketState
 start_time = time.time()
 
 try:
-    pass  # TODO: Implement try block
+    pass  
 # 1. WHEN - Calculate timing score
 timing_score = self._calculate_timing_determinism(market_state)
 

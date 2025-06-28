@@ -40,7 +40,7 @@ def _dct_block(arr: np.ndarray) -> np.ndarray:  # noqa: D401"""
    return dct(arr, type=2, norm="ortho")
 
 except ModuleNotFoundError:  # pragma: no cover \\u2013 keep pure - NumPy fallback
-pass  # TODO: Implement except block
+pass  
 
 def _dct_block(arr: np.ndarray) -> np.ndarray:  # noqa: D401
         """Fallback: approximate DCT - II via real FFT symmetry trick.""""""

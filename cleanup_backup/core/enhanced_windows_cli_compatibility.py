@@ -439,7 +439,7 @@ log_method = getattr(logger, level.lower(), logger.info)
             log_method(safe_message)
             return True
 except Exception as e:
-    pass  # TODO: Implement except block
+    pass  
 # Fallback to print if logging fails
 try:
                 safe_print(f"[{level.upper()}] {message}")

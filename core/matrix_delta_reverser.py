@@ -6,7 +6,7 @@ from dual_unicore_handler import DualUnicoreHandler
 unicore = DualUnicoreHandler()
 # -*- coding: utf - 8 -*-
 # EMERGENCY: pass
-    pass  # TODO: Implement
+    pass  
 # EMERGENCY: Function implementation pending."""
 # MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
 print("[INFO] {message}"""

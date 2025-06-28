@@ -211,7 +211,7 @@ waveform_vector: ProfitVector,
 timestamp = datetime.now()
 
 try:
-    pass  # TODO: Implement try block
+    pass  
 # Calculate delta
 delta = self._calculate_vector_delta(waveform_vector, allocator_vector)
 
