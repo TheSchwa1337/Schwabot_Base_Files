@@ -35,7 +35,7 @@ logger = logging.getLogger(__name__)
 
 # Import tensor algebra with fallback
 try:
-    from .math.tensor_algebra.unified_tensor_algebra import UnifiedTensorAlgebra
+    from core.math.tensor_algebra.unified_tensor_algebra import UnifiedTensorAlgebra
 
     TENSOR_ALGEBRA_AVAILABLE = True
 except ImportError as e:
