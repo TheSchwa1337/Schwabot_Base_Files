@@ -10,7 +10,6 @@ import shutil
 from core.bit_phase_sequencer import BitPhase, BitSequence
 from core.dual_error_handler import PhaseState, SickType, SickState
 from core.symbolic_profit_router import ProfitTier, FlipBias, SymbolicState
-from core.unified_math_system import unified_math
 
 
 # Initialize Unicode handler

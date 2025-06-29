@@ -12,7 +12,6 @@ import sys
 import time
 import unittest
 
-from core.unified_math_system import unified_math
 
 
 # Initialize Unicode handler

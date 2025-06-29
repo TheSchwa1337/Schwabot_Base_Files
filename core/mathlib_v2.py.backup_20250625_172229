@@ -1,16 +1,4 @@
-# Import safe print for Windows compatibility
-try:
-    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
-except ImportError:
-    try:
-        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
-    except ImportError:
-        def safe_print(message): print(message)
-        def info(message): print(f"[INFO] {message}")
-        def warn(message): print(f"[WARN] {message}")
-        def error(message): print(f"[ERROR] {message}")
-        def success(message): print(f"[SUCCESS] {message}")
-        def debug(message): print(f"[DEBUG] {message}")
+from utils.safe_print import safe_print, info, warn, error, success, debug
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Mathematical Library V2 - Enhanced Mathematical Functions.
@@ -33,23 +21,10 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 import logging
-from typing import Any, Dict, TYPE_CHECKING, Union
+from typing import Any, Dict, TYPE_CHECKING
 
 from core.unified_math_system import unified_math
 import numpy.typing as npt
-
-# Import CLI handler for safe output
-try:
-    from core.type_binding_system import cli_handler
-    CLI_HANDLER_AVAILABLE = True
-except ImportError:
-    CLI_HANDLER_AVAILABLE = False
-    # Fallback for CLI safety
-    def safe_print(msg: str) -> None:
-        try:
-            print(msg)
-        except UnicodeEncodeError:
-            print(msg.encode('ascii', errors='replace').decode('ascii'))
 
 if TYPE_CHECKING:
     from typing_extensions import Self
@@ -77,10 +52,7 @@ class CoreMathLibV2:
         """Initialize the enhanced mathematical library."""
         self.version = "2.0.0"
         self.initialized = True
-        if CLI_HANDLER_AVAILABLE:
-            cli_handler.log_safe(logger, "info", f"CoreMathLibV2 v{self.version} initialized")
-        else:
-            logger.info(f"CoreMathLibV2 v{self.version} initialized")
+        logger.info(f"CoreMathLibV2 v{self.version} initialized")
 
     def calculate_vwap(self: Self, prices: Vector, volumes: Vector) -> Vector:
         """Calculate Volume Weighted Average Price."""

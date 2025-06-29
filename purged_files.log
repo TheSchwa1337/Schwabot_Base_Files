@@ -1,0 +1,89 @@
+--- Cleanup Log: 2025-06-28 19:16:06.092880 ---
+Backup directory: C:/Users/maxde/OneDrive/Documents\trash\20250628_191606
+
+Backed up and deleted: C:/Users/maxde/OneDrive/Documents\schwabot\core\api_documenter.py
+Backed up and deleted: C:/Users/maxde/OneDrive/Documents\schwabot\core\api_integrator.py
+Backed up and deleted: C:/Users/maxde/OneDrive/Documents\schwabot\core\archive_creator.py
+Backed up and deleted: C:/Users/maxde/OneDrive/Documents\schwabot\core\archive_manager.py
+Backed up and deleted: C:/Users/maxde/OneDrive/Documents\schwabot\core\audit_logger.py
+Backed up and deleted: C:/Users/maxde/OneDrive/Documents\schwabot\core\audit_manager.py
+Backed up and deleted: C:/Users/maxde/OneDrive/Documents\schwabot\core\audit_reporter.py
+Backed up and deleted: C:/Users/maxde/OneDrive/Documents\schwabot\core\audit_trail.py
+Backed up and deleted: C:/Users/maxde/OneDrive/Documents\schwabot\core\authorization_manager.py
+Backed up and deleted: C:/Users/maxde/OneDrive/Documents\schwabot\core\backup_creator.py
+Backed up and deleted: C:/Users/maxde/OneDrive/Documents\schwabot\core\backup_manager.py
+Backed up and deleted: C:/Users/maxde/OneDrive/Documents\schwabot\core\backup_restorer.py
+Backed up and deleted: C:/Users/maxde/OneDrive/Documents\schwabot\core\bootstrap.py
+Backed up and deleted: C:/Users/maxde/OneDrive/Documents\schwabot\core\btc_tick_matrix_initializer.py
+Backed up and deleted: C:/Users/maxde/OneDrive/Documents\schwabot\core\cache_invalidator.py
+Backed up and deleted: C:/Users/maxde/OneDrive/Documents\schwabot\core\cache_manager.py
+Backed up and deleted: C:/Users/maxde/OneDrive/Documents\schwabot\core\cache_optimizer.py
+Backed up and deleted: C:/Users/maxde/OneDrive/Documents\schwabot\core\cache_store.py
+Backed up and deleted: C:/Users/maxde/OneDrive/Documents\schwabot\core\choice_optimizer.py
+Backed up and deleted: C:/Users/maxde/OneDrive/Documents\schwabot\core\chunk_mapper.py
+Backed up and deleted: C:/Users/maxde/OneDrive/Documents\schwabot\core\chunk_router.py
+Backed up and deleted: C:/Users/maxde/OneDrive/Documents\schwabot\core\cleanup_handler.py
+Backed up and deleted: C:/Users/maxde/OneDrive/Documents\schwabot\core\communication_handler.py
+Backed up and deleted: C:/Users/maxde/OneDrive/Documents\schwabot\core\complex_number_handler.py
+Backed up and deleted: C:/Users/maxde/OneDrive/Documents\schwabot\core\complexity_analyzer.py
+Backed up and deleted: C:/Users/maxde/OneDrive/Documents\schwabot\core\component_connector.py
+Backed up and deleted: C:/Users/maxde/OneDrive/Documents\schwabot\core\compliance_monitor.py
+Backed up and deleted: C:/Users/maxde/OneDrive/Documents\schwabot\core\strategy_manager.py
+Backed up and deleted: C:/Users/maxde/OneDrive/Documents\schwabot\core\transaction_handler.py
+Backed up and deleted: C:/Users/maxde/OneDrive/Documents\schwabot\core\role_manager.py
+Backed up and deleted: C:/Users/maxde/OneDrive/Documents\schwabot\core\scalar_laws.py
+Backed up and deleted: C:/Users/maxde/OneDrive/Documents\schwabot\core\scheduler_manager.py
+Backed up and deleted: C:/Users/maxde/OneDrive/Documents\schwabot\core\schema_migrator.py
+Backed up and deleted: C:/Users/maxde/OneDrive/Documents\schwabot\core\security_manager.py
+
+--- Verification ---
+KEEP file found: C:/Users/maxde/OneDrive/Documents\core\unified_math_system.py
+KEEP file found: C:/Users/maxde/OneDrive/Documents\core\phase_bit_integration.py
+KEEP file found: C:/Users/maxde/OneDrive/Documents\core\schwafit_core.py
+KEEP file found: C:/Users/maxde/OneDrive/Documents\core\math\mathematical_relay_system.py
+KEEP file found: C:/Users/maxde/OneDrive/Documents\core\math\trading_tensor_ops.py
+KEEP file found: C:/Users/maxde/OneDrive/Documents\core\math\tensor_algebra.py
+KEEP file found: C:/Users/maxde/OneDrive/Documents\core\math\integration_validator.py
+WARNING: KEEP file missing: C:/Users/maxde/OneDrive/Documents\core\recursive_engine\fractal_core.py
+WARNING: KEEP file missing: C:/Users/maxde/OneDrive/Documents\core\dual_unicore_handler.py
+KEEP file found: C:/Users/maxde/OneDrive/Documents\core\integrated_correction_system.py
+KEEP file found: C:/Users/maxde/OneDrive/Documents\core\utc_2bit_wholesale_corrector.py
+KEEP file found: C:/Users/maxde/OneDrive/Documents\core\dualistic_thought_engines.py
+KEEP file found: C:/Users/maxde/OneDrive/Documents\core\phase_engine\phase_loader.py
+KEEP file found: C:/Users/maxde/OneDrive/Documents\core\tensor_pool_registry.py
+DELETE file successfully removed: C:/Users/maxde/OneDrive/Documents\schwabot\core\api_documenter.py
+DELETE file successfully removed: C:/Users/maxde/OneDrive/Documents\schwabot\core\api_integrator.py
+DELETE file successfully removed: C:/Users/maxde/OneDrive/Documents\schwabot\core\archive_creator.py
+DELETE file successfully removed: C:/Users/maxde/OneDrive/Documents\schwabot\core\archive_manager.py
+DELETE file successfully removed: C:/Users/maxde/OneDrive/Documents\schwabot\core\audit_logger.py
+DELETE file successfully removed: C:/Users/maxde/OneDrive/Documents\schwabot\core\audit_manager.py
+DELETE file successfully removed: C:/Users/maxde/OneDrive/Documents\schwabot\core\audit_reporter.py
+DELETE file successfully removed: C:/Users/maxde/OneDrive/Documents\schwabot\core\audit_trail.py
+DELETE file successfully removed: C:/Users/maxde/OneDrive/Documents\schwabot\core\authorization_manager.py
+DELETE file successfully removed: C:/Users/maxde/OneDrive/Documents\schwabot\core\backup_creator.py
+DELETE file successfully removed: C:/Users/maxde/OneDrive/Documents\schwabot\core\backup_manager.py
+DELETE file successfully removed: C:/Users/maxde/OneDrive/Documents\schwabot\core\backup_restorer.py
+DELETE file successfully removed: C:/Users/maxde/OneDrive/Documents\schwabot\core\bootstrap.py
+DELETE file successfully removed: C:/Users/maxde/OneDrive/Documents\schwabot\core\btc_tick_matrix_initializer.py
+DELETE file successfully removed: C:/Users/maxde/OneDrive/Documents\schwabot\core\cache_invalidator.py
+DELETE file successfully removed: C:/Users/maxde/OneDrive/Documents\schwabot\core\cache_manager.py
+DELETE file successfully removed: C:/Users/maxde/OneDrive/Documents\schwabot\core\cache_optimizer.py
+DELETE file successfully removed: C:/Users/maxde/OneDrive/Documents\schwabot\core\cache_store.py
+DELETE file successfully removed: C:/Users/maxde/OneDrive/Documents\schwabot\core\choice_optimizer.py
+DELETE file successfully removed: C:/Users/maxde/OneDrive/Documents\schwabot\core\chunk_mapper.py
+DELETE file successfully removed: C:/Users/maxde/OneDrive/Documents\schwabot\core\chunk_router.py
+DELETE file successfully removed: C:/Users/maxde/OneDrive/Documents\schwabot\core\cleanup_handler.py
+DELETE file successfully removed: C:/Users/maxde/OneDrive/Documents\schwabot\core\communication_handler.py
+DELETE file successfully removed: C:/Users/maxde/OneDrive/Documents\schwabot\core\complex_number_handler.py
+DELETE file successfully removed: C:/Users/maxde/OneDrive/Documents\schwabot\core\complexity_analyzer.py
+DELETE file successfully removed: C:/Users/maxde/OneDrive/Documents\schwabot\core\component_connector.py
+DELETE file successfully removed: C:/Users/maxde/OneDrive/Documents\schwabot\core\compliance_monitor.py
+DELETE file successfully removed: C:/Users/maxde/OneDrive/Documents\schwabot\core\strategy_manager.py
+DELETE file successfully removed: C:/Users/maxde/OneDrive/Documents\schwabot\core\transaction_handler.py
+DELETE file successfully removed: C:/Users/maxde/OneDrive/Documents\schwabot\core\role_manager.py
+DELETE file successfully removed: C:/Users/maxde/OneDrive/Documents\schwabot\core\scalar_laws.py
+DELETE file successfully removed: C:/Users/maxde/OneDrive/Documents\schwabot\core\scheduler_manager.py
+DELETE file successfully removed: C:/Users/maxde/OneDrive/Documents\schwabot\core\schema_migrator.py
+DELETE file successfully removed: C:/Users/maxde/OneDrive/Documents\schwabot\core\security_manager.py
+
+Cleanup process completed.

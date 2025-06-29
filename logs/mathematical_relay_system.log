@@ -1,0 +1,15 @@
+2025-06-29 08:48:47,534 - core.math.tensor_algebra.unified_tensor_algebra - INFO - Unified Tensor Algebra initialized with float64 precision
+2025-06-29 08:48:47,535 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 08:48:47,536 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 08:48:47,536 - core.unified_math_system - INFO - Unified Math System initialized with precision 64
+2025-06-29 08:48:50,416 - core - INFO - Core system initialized successfully with 5 modules
+2025-06-29 08:50:37,842 - core.math.tensor_algebra.unified_tensor_algebra - INFO - Unified Tensor Algebra initialized with float64 precision
+2025-06-29 08:50:37,843 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 08:50:37,843 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 08:50:37,843 - core.unified_math_system - INFO - Unified Math System initialized with precision 64
+2025-06-29 08:50:39,638 - core - INFO - Core system initialized successfully with 5 modules
+2025-06-29 08:50:51,236 - core.math.tensor_algebra.unified_tensor_algebra - INFO - Unified Tensor Algebra initialized with float64 precision
+2025-06-29 08:50:51,236 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 08:50:51,236 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 08:50:51,237 - core.unified_math_system - INFO - Unified Math System initialized with precision 64
+2025-06-29 08:50:53,108 - core - INFO - Core system initialized successfully with 5 modules

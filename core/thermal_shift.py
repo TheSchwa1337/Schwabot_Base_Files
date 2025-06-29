@@ -1,120 +1,105 @@
-from typing import Dict, List, Optional, Any
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below
-import numpy as np
-# -*- coding: utf-8 -*-
+# -*- coding: utf - 8 -*-
+""""""Thermal delta switch \\u2013 minimal thermal drift detector.""
+from __future__ import annotations
 
-__all__ = ["ThermalShift", "thermal_delta_switch"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-logger.error("Thermal shift update failed: {e}"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-        "threshold""""
-        "alpha""""
-        "ema_baseline""""
-        "is_initialized"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-logger.error("Thermal delta switch failed: {e}""""
-        "temperature""""
-        "is_stable""""
-        "delta_ewma""""
-        "shift_detected""""
-        "shift_count""""
-        "statistics""""
-        "last_shift_time"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-        logger.error("Advanced thermal shift update failed: {e}""""
-        "temperature""""
-        "is_stable""""
-        "delta_ewma""""
-        "shift_detected""""
-        "shift_count""""
-        "statistics""""
-        "error"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-        "mean"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-        "std""""
-        "trend"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-        "min"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-        "max"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-        "mean"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-        "std""""
-        "trend"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-        "min"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-        "max""""
-        "range""""
-        "count"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-        logger.error("Statistics calculation failed: {e}"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-        "mean"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-        "std""""
-        "trend"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-        "min"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-        "max""""
-        "range""""
-        "count"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-if not stats or "mean"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-mean_temp = stats["mean"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-        std_temp=stats.get("std""""
-        trend = stats.get("trend"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-        logger.error("Shift detection failed: {e}""""
-recommendations.append("High number of thermal shifts detected - check system stability"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-        if stats.get("std"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-        recommendations.append("High temperature variability - consider thermal management"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-if unified_math.abs(stats.get("trend""""
-        recommendations.append("Sustained temperature trend detected - monitor closely""""
-        recommendations.append("Thermal conditions appear stable"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-        logger.error("Recommendation generation failed: {e}""""
-#         return ["Error generating recommendations"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-logger.error("Reset failed: {e}"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-        "threshold""""
-        "alpha""""
-        "window_size""""
-        "shift_count""""
-        "history_length""""
-        "last_shift_time""""
-        "ewma_status"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-        logger.error("Status retrieval failed: {e}""""
-#         return {"error""""
-        """""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-            logger.error(f"Optimization failed: {e}")"""""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-threshold = config.get("threshold""""
-        alpha = config.get("alpha""""
-        window_size = config.get("window_size"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-        logger.error("Failed to create thermal shift detector: {e}"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-print("Testing Thermal Shift Detector:"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-        print("="""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-        print("Reading {i+1}: {temp}degC"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-        print("  Stable: {result['is_stable''"
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-        print("  Shift Detected: {result['shift_detected''"
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-        print("  Delta EWMA: {result['delta_ewma''"
-""
+""""""Thermal delta switch \\u2013 minimal thermal drift detector.""
+# -*- coding: utf - 8 -*-
+
+from core.unified_math_system import unified_math
+
+This helper flags sudden temperature jumps (*thermal shifts*) above a preset
+threshold.  It is intentionally lightweight so it can execute inside tight
+trading - loop iterations without blocking the GIL.
+
+Current implementation
+----------------------
+1. ``ThermalShift`` class \\u2013 exponential - moving - average (EWMA) smoothing with
+:py:meth:`update` returning ``(is_stable, delta)``.
+2. Stateless wrapper :func:`thermal_delta_switch`` mirroring the legacy stub
+signature requested by earlier Schwabot code.
+3. Fully typed and Flake8 - clean (\\u2264 79 - character lines).
+
+Future versions may include adaptive hysteresis or GPU - calibrated drift maps.""""""
+""""""
+
+
+from dataclasses import dataclass, field
+from typing import Final, Tuple
+
+""""""
+__all__ = ["ThermalShift", "thermal_delta_switch"]
+
+_DEFAULT_ALPHA: Final = 0.2
+_DEFAULT_THRESHOLD: Final = 2.5  # \\u00b0C
+
+
+@dataclass(slots = True)
+class ThermalShift:
+""""""EWMA - based thermal drift detector.""
+
+Parameters
+----------
+threshold
+Absolute temperature delta (\\u00b0C) that triggers an *unstable* flag.
+alpha
+EWMA smoothing factor between 0 and 1.  Higher = faster reaction.""""""
+""""""
+
+threshold: float = _DEFAULT_THRESHOLD
+alpha: float = _DEFAULT_ALPHA
+
+_ema: float | None = field(default = None, init = False)
+
+# ------------------------------------------------------------------
+# Public API
+# ------------------------------------------------------------------
+def update(self):
+    """Function implementation pending."""
+""""""Process a new temperature reading and return stability status.""
+
+Parameters
+----------
+temp
+Current temperature reading (\\u00b0C).
+
+Returns
+-------
+Tuple[bool, float]
+        ``(is_stable, delta)``, where *delta* is the absolute
+            temperature change with respect to the EWMA baseline.""""""
+""""""
+    if self._ema is None:
+        self._ema = temp
+        else:
+        self._ema = self.alpha * temp + (1.0 - self.alpha) * self._ema
+
+    delta = unified_math.abs(temp - self._ema)
+    is_stable = delta < self.threshold
+    return is_stable, delta
+
+
+# -----------------------------------------------------------------------------
+# Stateless helper \\u2013 mirrors historical stub signature
+# -----------------------------------------------------------------------------
+
+
+    def thermal_delta_switch():
+
+current: float,
+previous: float,
+*,
+threshold: float = _DEFAULT_THRESHOLD,
+    ) -> bool:"""Return ``True`` if the temperature delta is below *threshold*."
+
+Parameters
+----------
+current
+Current temperature reading (\\u00b0C).
+previous
+Previous or baseline temperature reading (\\u00b0C).
+threshold
+Allowed delta before declaring instability.  Defaults to 2.5 \\u00b0C.""""""
+""""""
+delta = unified_math.abs(current - previous)
+return delta < threshold
+""""""

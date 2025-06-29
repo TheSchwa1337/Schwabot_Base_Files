@@ -9,19 +9,18 @@ Provides intelligent memory key allocation for the Schwabot trading system.
 
 from __future__ import annotations
 
+import hashlib
 import logging
 import time
-import hashlib
-from typing import Dict, List, Any, Optional, Tuple, Union
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple, Union
+
 import numpy as np
 from numpy.typing import NDArray
 
-from core.utils.windows_cli_compatibility import (
-    safe_print, safe_format_error, log_safe, WindowsCliCompatibilityHandler
-)
+from core.utils.windows_cli_compatibility import WindowsCliCompatibilityHandler, log_safe, safe_format_error, safe_print
 
 logger = logging.getLogger(__name__)
 

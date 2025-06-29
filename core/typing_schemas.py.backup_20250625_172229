@@ -1,3 +1,4 @@
+from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """
 Schwabot Typing Schemas - Centralized Type Definitions
@@ -21,29 +22,16 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from typing import (
-    Any, Dict, List, Optional, Tuple, Union, Literal,
+    Any, Dict, List, Optional, Tuple, Union, Literal, 
     TypedDict, Protocol, TypeVar, Generic
 )
 import hashlib
-import numpy as np
+from core.unified_math_system import unified_math
 from numpy.typing import NDArray
-
-# Fallback math functions to avoid circular imports
-
-
-def _safe_math_max(a: float, b: float) -> float:
-    """Safe max function to avoid circular imports."""
-    return max(a, b)
-
-
-def _safe_math_min(a: float, b: float) -> float:
-    """Safe min function to avoid circular imports."""
-    return min(a, b)
 
 # =============================================================================
 # FAULT HANDLING SCHEMAS
 # =============================================================================
-
 
 class FaultLog(TypedDict):
     """Centralized fault log structure for AI triage logic."""
@@ -121,20 +109,16 @@ class AIStrategyResponse:
         """Validate and enhance the response."""
         if not self.strategy_hash:
             self.strategy_hash = self._generate_hash()
-
+        
         # Ensure confidence is bounded
-        self.confidence_score = _safe_math_max(
-            0.0, _safe_math_min(1.0, self.confidence_score))
-
+        self.confidence_score = unified_math.max(0.0, unified_math.min(1.0, self.confidence_score))
+        
         # Ensure layer depth is positive
-        self.layer_depth = _safe_math_max(1, self.layer_depth)
+        self.layer_depth = unified_math.max(1, self.layer_depth)
 
     def _generate_hash(self) -> str:
         """Generate hash signature for the strategy."""
-        content = f"{
-            self.ai_source}_{
-            self.recommended_action}_{
-            self.timestamp.isoformat()}"
+        content = f"{self.ai_source}_{self.recommended_action}_{self.timestamp.isoformat()}"
         return hashlib.sha256(content.encode()).hexdigest()[:16]
 
 
@@ -147,33 +131,31 @@ class MathematicalOperation:
     """Base mathematical operation with entry assumptions and output guarantees."""
     operation_id: str
     operation_type: str
-    # BTC vector state, XRP cycle delta, etc.
-    entry_assumptions: Dict[str, Any]
+    entry_assumptions: Dict[str, Any]  # BTC vector state, XRP cycle delta, etc.
     output_guarantees: Dict[str, Any]  # Expected USDC profit delta, etc.
     timestamp: datetime
     execution_time: float
     success: bool
     result: Optional[Any] = None
     error_message: Optional[str] = None
-    confidence_interval: Tuple[float, float] = field(
-        default_factory=lambda: (0.0, 1.0))
+    confidence_interval: Tuple[float, float] = field(default_factory=lambda: (0.0, 1.0))
     supporting_evidence: List[str] = field(default_factory=list)
 
 
 @dataclass
 class VectorOperation(MathematicalOperation):
     """Vector-specific mathematical operation."""
-    vector_dimensions: Tuple[int, ...] = field(default_factory=tuple)
-    input_vector: Optional[NDArray[np.float64]] = None
+    input_vector: NDArray[np.float64]
     output_vector: Optional[NDArray[np.float64]] = None
+    vector_dimensions: Tuple[int, ...] = field(default_factory=tuple)
 
 
 @dataclass
 class MatrixOperation(MathematicalOperation):
     """Matrix-specific mathematical operation."""
-    matrix_shape: Tuple[int, int] = field(default_factory=tuple)
-    input_matrix: Optional[NDArray[np.float64]] = None
+    input_matrix: NDArray[np.float64]
     output_matrix: Optional[NDArray[np.float64]] = None
+    matrix_shape: Tuple[int, int] = field(default_factory=tuple)
 
 
 # =============================================================================
@@ -241,13 +223,13 @@ class PerformanceMetrics:
     execution_time: float
     memory_usage: float
     cpu_usage: float
+    gpu_usage: Optional[float] = None
     throughput: float
     latency: float
     error_rate: float
     success_rate: float
     profit_per_tick: float
     risk_score: float
-    gpu_usage: Optional[float] = None
 
 
 # =============================================================================
@@ -256,7 +238,6 @@ class PerformanceMetrics:
 
 class FaultHandler(Protocol):
     """Protocol for fault handling components."""
-
     def handle_fault(self, fault_event: FaultEvent) -> bool:
         """Handle a fault event and return success status."""
         ...
@@ -268,7 +249,6 @@ class FaultHandler(Protocol):
 
 class AIStrategyParser(Protocol):
     """Protocol for AI strategy response parsing."""
-
     def parse_response(self, response: Dict[str, Any]) -> AIStrategyResponse:
         """Parse AI response into structured format."""
         ...
@@ -280,7 +260,6 @@ class AIStrategyParser(Protocol):
 
 class MathematicalValidator(Protocol):
     """Protocol for mathematical operation validation."""
-
     def validate_operation(self, operation: MathematicalOperation) -> bool:
         """Validate mathematical operation."""
         ...
@@ -340,7 +319,7 @@ def create_fault_log(
         error_code=error_code,
         module=module,
         recovery_suggestion=recovery_suggestion,
-        severity=_safe_math_max(0.0, _safe_math_min(1.0, severity)),
+        severity=unified_math.max(0.0, unified_math.min(1.0, severity)),
         context=context or {},
         ai_feedback=ai_feedback
     )
@@ -349,22 +328,22 @@ def create_fault_log(
 def validate_mathematical_operation(operation: MathematicalOperation) -> bool:
     """Validate mathematical operation structure."""
     required_fields = [
-        "operation_id", "operation_type", "entry_assumptions",
+        "operation_id", "operation_type", "entry_assumptions", 
         "output_guarantees", "timestamp", "execution_time", "success"
     ]
-
+    
     for field in required_fields:
         if not hasattr(operation, field):
             return False
-
+    
     # Validate confidence interval
     if operation.confidence_interval[0] < 0.0 or operation.confidence_interval[1] > 1.0:
         return False
-
+    
     # Validate execution time is positive
     if operation.execution_time < 0.0:
         return False
-
+    
     return True
 
 
@@ -407,25 +386,25 @@ PerformanceMetricsType = Union[PerformanceMetrics, Dict[str, Any]]
 __all__ = [
     # Fault handling
     "FaultLog", "FaultEvent", "RecoveryStrategy", "FaultHandler",
-
+    
     # AI strategy
     "StrategyHash", "AIStrategyResponse", "AIStrategyParser", "parse_ai_response",
-
+    
     # Mathematical operations
-    "MathematicalOperation", "VectorOperation", "MatrixOperation",
+    "MathematicalOperation", "VectorOperation", "MatrixOperation", 
     "MathematicalValidator", "validate_mathematical_operation",
-
+    
     # Trading
     "TradingDecision", "TradingSignal",
-
+    
     # System state
     "SystemState", "PerformanceMetrics",
-
+    
     # Utilities
     "create_fault_log",
-
+    
     # Type aliases
     "Vector", "Matrix", "Tensor", "FaultHandlerType", "RecoveryStrategyType",
     "AIResponseType", "StrategyHashType", "MathOpType", "TradingSignalType",
     "TradingDecisionType", "SystemStateType", "PerformanceMetricsType"
-]
+] 

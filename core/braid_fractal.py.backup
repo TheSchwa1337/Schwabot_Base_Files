@@ -1,0 +1,527 @@
+# -*- coding: utf-8 -*-
+"""
+Braid Fractal Engine
+====================
+
+Provides braid fractal generation and analysis with 32-bit phase integration
+for trading signal processing and mathematical operations.
+
+Mathematical Foundation:
+    - Braid group operations with phase-bit integration
+    - Fractal dimension calculations with thermal state management
+    - Pattern evolution with dualistic mode support
+    - Complexity analysis with 32-bit precision
+"""
+
+from __future__ import annotations
+from typing import Dict, List, Optional, Any, Tuple, Union
+from dual_unicore_handler import DualUnicoreHandler
+import numpy as np
+import logging
+
+# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below:
+from core.phase_bit_integration import BitPhase, StrategyType, PhaseBitIntegration
+# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below:
+from core.unified_profit_vectorization_system import UnifiedProfitVectorizationSystem
+# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below:
+from core.unified_math_system import unified_math
+
+# Initialize Unicode handler
+unicore = DualUnicoreHandler()
+
+# Configure logging
+logger = logging.getLogger(__name__)
+
+# Thermal state constants for braid fractal operations
+COOL = "cool"      # Low thermal state (4-bit operations)
+WARM = "warm"      # Mid thermal state (8-bit operations) 
+HOT = "hot"        # High thermal state (32-bit operations)
+CRITICAL = "critical"  # Extreme thermal state (42-bit operations)
+
+class BraidState:
+    """Represents a braid state with generators and properties."""
+    
+    def __init__(self, generators: List[int], complexity: float, entropy: float):
+        """Initialize braid state."""
+        self.generators = generators
+        self.complexity = complexity
+        self.entropy = entropy
+        self.length = len(generators)
+
+class FractalBraid:
+    """Represents a fractal braid with dimension and pattern analysis."""
+    
+    def __init__(self, dimension: float, pattern_score: float, states: List[BraidState]):
+        """Initialize fractal braid."""
+        self.dimension = dimension
+        self.pattern_score = pattern_score
+        self.states = states
+
+class BraidFractal:
+    """Braid fractal engine with 32-bit phase integration and thermal management."""
+    
+    def __init__(self):
+        """Initialize braid fractal engine with phase-bit integration."""
+        self.phase_bit_integration = PhaseBitIntegration()
+        self.profit_vectorization = UnifiedProfitVectorizationSystem()
+        self.thermal_state = WARM  # Default to warm state
+        self.dualistic_mode = False
+        self.current_bit_phase = BitPhase.EIGHT_BIT
+        self.braid_history: List[BraidState] = []
+        
+        logger.info("BraidFractal initialized with 32-bit phase integration")
+    
+    def generate_braid_state(self, hash_value: str, length: int = 100) -> Dict[str, Any]:
+        """Generate braid state with 32-bit phase consideration and thermal management."""
+        try:
+            # Determine thermal state based on hash complexity
+            thermal_state = self._determine_thermal_state(hash_value)
+            
+            # Get bit phase resolution for braid generation
+            bit_phase_result = self.phase_bit_integration.resolve_bit_phase(
+                hash_value, "auto"
+            )
+            
+            # Update current bit phase
+            self.current_bit_phase = bit_phase_result.bit_phase
+            
+            # Determine if dualistic mode is needed (32-bit operations)
+            dualistic_mode = bit_phase_result.bit_phase == BitPhase.THIRTY_TWO_BIT
+            
+            # Generate braid state based on bit phase
+            braid_state = self._generate_braid_by_phase(hash_value, length, bit_phase_result, thermal_state)
+            
+            # Store in history
+            self.braid_history.append(braid_state)
+            
+            logger.debug(f"Generated braid state with {len(braid_state.generators)} generators")
+            
+            return {
+                "braid_state": braid_state,
+                "thermal_state": thermal_state,
+                "bit_phase": bit_phase_result.bit_phase.value,
+                "dualistic_mode": dualistic_mode,
+                "confidence": bit_phase_result.confidence,
+                "strategy_type": bit_phase_result.strategy_type.value
+            }
+            
+        except Exception as e:
+            logger.error(f"Error generating braid state: {e}")
+            return {"error": str(e)}
+    
+    def calculate_braid_complexity(self, braid_state: BraidState, complexity_id: str) -> Dict[str, Any]:
+        """Calculate braid complexity with 32-bit phase integration."""
+        try:
+            thermal_state = self._determine_thermal_state(complexity_id)
+            bit_phase_result = self.phase_bit_integration.resolve_bit_phase(complexity_id, "auto")
+            
+            # Calculate complexity metrics
+            complexity_metrics = self._calculate_complexity_metrics(braid_state, bit_phase_result, thermal_state)
+            
+            return {
+                "complexity_metrics": complexity_metrics,
+                "thermal_state": thermal_state,
+                "bit_phase": bit_phase_result.bit_phase.value,
+                "dualistic_mode": bit_phase_result.bit_phase == BitPhase.THIRTY_TWO_BIT
+            }
+            
+        except Exception as e:
+            logger.error(f"Error calculating braid complexity: {e}")
+            return {"error": str(e)}
+    
+    def calculate_state_entropy(self, braid_state: BraidState, entropy_id: str) -> Dict[str, Any]:
+        """Calculate state entropy with 32-bit phase integration."""
+        try:
+            thermal_state = self._determine_thermal_state(entropy_id)
+            bit_phase_result = self.phase_bit_integration.resolve_bit_phase(entropy_id, "auto")
+            
+            # Calculate entropy metrics
+            entropy_metrics = self._calculate_entropy_metrics(braid_state, bit_phase_result, thermal_state)
+            
+            return {
+                "entropy_metrics": entropy_metrics,
+                "thermal_state": thermal_state,
+                "bit_phase": bit_phase_result.bit_phase.value,
+                "dualistic_mode": bit_phase_result.bit_phase == BitPhase.THIRTY_TWO_BIT
+            }
+            
+        except Exception as e:
+            logger.error(f"Error calculating state entropy: {e}")
+            return {"error": str(e)}
+    
+    def generate_fractal_braid(self, base_hash: str, iterations: int = 10) -> Dict[str, Any]:
+        """Generate fractal braid with 32-bit phase integration."""
+        try:
+            thermal_state = self._determine_thermal_state(base_hash)
+            bit_phase_result = self.phase_bit_integration.resolve_bit_phase(base_hash, "auto")
+            
+            # Generate fractal braid
+            fractal_braid = self._generate_fractal_by_phase(base_hash, iterations, bit_phase_result, thermal_state)
+            
+            return {
+                "fractal_braid": fractal_braid,
+                "thermal_state": thermal_state,
+                "bit_phase": bit_phase_result.bit_phase.value,
+                "dualistic_mode": bit_phase_result.bit_phase == BitPhase.THIRTY_TWO_BIT
+            }
+            
+        except Exception as e:
+            logger.error(f"Error generating fractal braid: {e}")
+            return {"error": str(e)}
+    
+    def calculate_fractal_dimension(self, fractal_braid: FractalBraid, dimension_id: str) -> Dict[str, Any]:
+        """Calculate fractal dimension with 32-bit phase integration."""
+        try:
+            thermal_state = self._determine_thermal_state(dimension_id)
+            bit_phase_result = self.phase_bit_integration.resolve_bit_phase(dimension_id, "auto")
+            
+            # Calculate dimension metrics
+            dimension_metrics = self._calculate_dimension_metrics(fractal_braid, bit_phase_result, thermal_state)
+            
+            return {
+                "dimension_metrics": dimension_metrics,
+                "thermal_state": thermal_state,
+                "bit_phase": bit_phase_result.bit_phase.value,
+                "dualistic_mode": bit_phase_result.bit_phase == BitPhase.THIRTY_TWO_BIT
+            }
+            
+        except Exception as e:
+            logger.error(f"Error calculating fractal dimension: {e}")
+            return {"error": str(e)}
+    
+    def analyze_patterns(self, pattern_id: str) -> Dict[str, Any]:
+        """Analyze braid patterns with 32-bit phase integration."""
+        try:
+            thermal_state = self._determine_thermal_state(pattern_id)
+            bit_phase_result = self.phase_bit_integration.resolve_bit_phase(pattern_id, "auto")
+            
+            # Analyze patterns
+            pattern_analysis = self._analyze_braid_patterns(bit_phase_result, thermal_state)
+            
+            return {
+                "pattern_analysis": pattern_analysis,
+                "thermal_state": thermal_state,
+                "bit_phase": bit_phase_result.bit_phase.value,
+                "dualistic_mode": bit_phase_result.bit_phase == BitPhase.THIRTY_TWO_BIT
+            }
+            
+        except Exception as e:
+            logger.error(f"Error analyzing braid patterns: {e}")
+            return {"error": str(e)}
+    
+    def get_braid_statistics(self, stats_id: str) -> Dict[str, Any]:
+        """Get braid statistics with 32-bit phase integration."""
+        try:
+            thermal_state = self._determine_thermal_state(stats_id)
+            bit_phase_result = self.phase_bit_integration.resolve_bit_phase(stats_id, "auto")
+            
+            # Calculate statistics
+            statistics = self._calculate_braid_statistics(bit_phase_result, thermal_state)
+            
+            return {
+                "statistics": statistics,
+                "thermal_state": thermal_state,
+                "bit_phase": bit_phase_result.bit_phase.value,
+                "dualistic_mode": bit_phase_result.bit_phase == BitPhase.THIRTY_TWO_BIT
+            }
+            
+        except Exception as e:
+            logger.error(f"Error getting braid statistics: {e}")
+            return {"error": str(e)}
+    
+    def _determine_thermal_state(self, hash_value: str) -> str:
+        """Determine thermal state based on hash complexity for braid operations."""
+        # Simple hash-based thermal state determination
+        hash_int = int(hash_value[:8], 16) if len(hash_value) >= 8 else hash(hash_value)
+        
+        if hash_int % 4 == 0:
+            return COOL      # 4-bit operations
+        elif hash_int % 4 == 1:
+            return WARM      # 8-bit operations  
+        elif hash_int % 4 == 2:
+            return HOT       # 32-bit operations
+        else:
+            return CRITICAL  # 42-bit operations
+    
+    def _generate_braid_by_phase(self, hash_value: str, length: int, bit_phase_result, thermal_state: str) -> BraidState:
+        """Generate braid based on bit phase and thermal state."""
+        # Create seed from hash and bit phase
+        seed = int(hash_value[:16], 16) + bit_phase_result.bit_phase.value
+        
+        # Adjust braid generation based on thermal state
+        thermal_multiplier = {
+            COOL: 0.8,      # Shorter braids for cool state
+            WARM: 1.0,      # Base length for warm state
+            HOT: 1.2,       # Longer braids for hot state (32-bit)
+            CRITICAL: 1.5   # Longest braids for critical state
+        }.get(thermal_state, 1.0)
+        
+        adjusted_length = int(length * thermal_multiplier)
+        
+        # Generate braid generators
+        generators = []
+        for i in range(adjusted_length):
+            # Generate braid generator using hash-based method
+            generator_hash = hash(f"{hash_value}_{i}_{seed}")
+            generator = (generator_hash % 3) - 1  # -1, 0, or 1
+            generators.append(generator)
+        
+        # Calculate complexity and entropy
+        complexity = self._calculate_complexity(generators)
+        entropy = self._calculate_entropy(generators)
+        
+        return BraidState(generators, complexity, entropy)
+    
+    def _calculate_complexity(self, generators: List[int]) -> float:
+        """Calculate complexity of braid generators."""
+        if not generators:
+            return 0.0
+        
+        # Count non-zero generators (actual braid operations)
+        non_zero_count = sum(1 for g in generators if g != 0)
+        
+        # Calculate complexity as ratio of non-zero operations
+        complexity = non_zero_count / len(generators)
+        
+        # Add pattern complexity
+        pattern_complexity = self._calculate_pattern_complexity(generators)
+        
+        return (complexity + pattern_complexity) / 2.0
+    
+    def _calculate_pattern_complexity(self, generators: List[int]) -> float:
+        """Calculate pattern complexity of generators."""
+        if len(generators) < 2:
+            return 0.0
+        
+        # Count alternations between positive and negative generators
+        alternations = 0
+        for i in range(1, len(generators)):
+            if (generators[i] > 0 and generators[i-1] < 0) or (generators[i] < 0 and generators[i-1] > 0):
+                alternations += 1
+        
+        return alternations / (len(generators) - 1)
+    
+    def _calculate_entropy(self, generators: List[int]) -> float:
+        """Calculate entropy of braid generators."""
+        if not generators:
+            return 0.0
+        
+        # Count occurrences of each generator type
+        counts = {}
+        for generator in generators:
+            counts[generator] = counts.get(generator, 0) + 1
+        
+        # Calculate Shannon entropy
+        total = len(generators)
+        entropy = 0.0
+        for count in counts.values():
+            p = count / total
+            if p > 0:
+                entropy -= p * np.log2(p)
+        
+        return entropy
+    
+    def _calculate_complexity_metrics(self, braid_state: BraidState, bit_phase_result, thermal_state: str) -> Dict[str, float]:
+        """Calculate complexity metrics based on bit phase and thermal state."""
+        # Adjust complexity based on thermal state
+        thermal_multiplier = {
+            COOL: 0.8, WARM: 1.0, HOT: 1.2, CRITICAL: 1.5
+        }.get(thermal_state, 1.0)
+        
+        return {
+            "complexity": braid_state.complexity * thermal_multiplier,
+            "length": braid_state.length * thermal_multiplier,
+            "pattern_complexity": self._calculate_pattern_complexity(braid_state.generators) * thermal_multiplier
+        }
+    
+    def _calculate_entropy_metrics(self, braid_state: BraidState, bit_phase_result, thermal_state: str) -> Dict[str, float]:
+        """Calculate entropy metrics based on bit phase and thermal state."""
+        # Adjust entropy based on thermal state
+        thermal_multiplier = {
+            COOL: 0.8, WARM: 1.0, HOT: 1.2, CRITICAL: 1.5
+        }.get(thermal_state, 1.0)
+        
+        return {
+            "entropy": braid_state.entropy * thermal_multiplier,
+            "max_entropy": np.log2(3) * thermal_multiplier,  # log2(3) for 3 generator types
+            "entropy_ratio": braid_state.entropy / np.log2(3)
+        }
+    
+    def _generate_fractal_by_phase(self, base_hash: str, iterations: int, bit_phase_result, thermal_state: str) -> FractalBraid:
+        """Generate fractal braid based on bit phase and thermal state."""
+        states = []
+        
+        for i in range(iterations):
+            # Generate braid state for each iteration
+            iteration_hash = f"{base_hash}_{i}"
+            braid_state = self._generate_braid_by_phase(iteration_hash, 50, bit_phase_result, thermal_state)
+            states.append(braid_state)
+        
+        # Calculate fractal dimension
+        dimension = self._calculate_fractal_dimension(states)
+        
+        # Calculate pattern score
+        pattern_score = self._calculate_pattern_score(states)
+        
+        return FractalBraid(dimension, pattern_score, states)
+    
+    def _calculate_fractal_dimension(self, states: List[BraidState]) -> float:
+        """Calculate fractal dimension from braid states."""
+        if len(states) < 2:
+            return 1.0
+        
+        # Calculate dimension using box-counting method approximation
+        complexities = [state.complexity for state in states]
+        entropies = [state.entropy for state in states]
+        
+        # Use complexity and entropy to estimate dimension
+        avg_complexity = np.mean(complexities)
+        avg_entropy = np.mean(entropies)
+        
+        # Dimension estimation (simplified)
+        dimension = 1.0 + avg_complexity * avg_entropy / np.log2(3)
+        return min(2.0, max(1.0, dimension))
+    
+    def _calculate_pattern_score(self, states: List[BraidState]) -> float:
+        """Calculate pattern score from braid states."""
+        if not states:
+            return 0.0
+        
+        # Calculate pattern stability
+        complexities = [state.complexity for state in states]
+        entropies = [state.entropy for state in states]
+        
+        # Pattern score based on stability and consistency
+        complexity_std = np.std(complexities)
+        entropy_std = np.std(entropies)
+        
+        # Lower std = higher pattern score
+        pattern_score = 1.0 / (1.0 + complexity_std + entropy_std)
+        return min(1.0, pattern_score)
+    
+    def _calculate_dimension_metrics(self, fractal_braid: FractalBraid, bit_phase_result, thermal_state: str) -> Dict[str, float]:
+        """Calculate dimension metrics based on bit phase and thermal state."""
+        # Adjust dimension metrics based on thermal state
+        thermal_multiplier = {
+            COOL: 0.8, WARM: 1.0, HOT: 1.2, CRITICAL: 1.5
+        }.get(thermal_state, 1.0)
+        
+        return {
+            "dimension": fractal_braid.dimension * thermal_multiplier,
+            "pattern_score": fractal_braid.pattern_score * thermal_multiplier,
+            "state_count": len(fractal_braid.states) * thermal_multiplier
+        }
+    
+    def _analyze_braid_patterns(self, bit_phase_result, thermal_state: str) -> Dict[str, Any]:
+        """Analyze braid patterns."""
+        if not self.braid_history:
+            return {"error": "No braid history available"}
+        
+        # Analyze complexity distribution
+        complexities = [state.complexity for state in self.braid_history]
+        entropies = [state.entropy for state in self.braid_history]
+        
+        # Calculate pattern evolution
+        pattern_evolution = self._analyze_pattern_evolution()
+        
+        # Detect trading patterns
+        trading_patterns = self._detect_trading_patterns()
+        
+        return {
+            "complexity_distribution": {
+                "mean": np.mean(complexities),
+                "std": np.std(complexities),
+                "min": np.min(complexities),
+                "max": np.max(complexities)
+            },
+            "entropy_distribution": {
+                "mean": np.mean(entropies),
+                "std": np.std(entropies),
+                "min": np.min(entropies),
+                "max": np.max(entropies)
+            },
+            "pattern_evolution": pattern_evolution,
+            "trading_patterns": trading_patterns
+        }
+    
+    def _analyze_pattern_evolution(self) -> Dict[str, float]:
+        """Analyze pattern evolution over time."""
+        if len(self.braid_history) < 2:
+            return {"stability": 0.0, "trend": 0.0}
+        
+        # Calculate stability and trend
+        complexities = [state.complexity for state in self.braid_history]
+        
+        # Stability (inverse of variance)
+        stability = 1.0 / (1.0 + np.var(complexities))
+        
+        # Trend (slope of complexity over time)
+        if len(complexities) > 1:
+            trend = np.polyfit(range(len(complexities)), complexities, 1)[0]
+        else:
+            trend = 0.0
+        
+        return {"stability": stability, "trend": trend}
+    
+    def _detect_trading_patterns(self) -> List[Dict[str, Any]]:
+        """Detect trading patterns in braid history."""
+        patterns = []
+        
+        if len(self.braid_history) >= 3:
+            # Detect increasing complexity pattern
+            complexities = [state.complexity for state in self.braid_history[-3:]]
+            if complexities[0] < complexities[1] < complexities[2]:
+                patterns.append({
+                    "type": "increasing_complexity",
+                    "description": "Braid complexity is increasing",
+                    "confidence": 0.8
+                })
+            
+            # Detect decreasing complexity pattern
+            if complexities[0] > complexities[1] > complexities[2]:
+                patterns.append({
+                    "type": "decreasing_complexity",
+                    "description": "Braid complexity is decreasing",
+                    "confidence": 0.8
+                })
+        
+        return patterns
+    
+    def _calculate_braid_statistics(self, bit_phase_result, thermal_state: str) -> Dict[str, Any]:
+        """Calculate braid statistics."""
+        if not self.braid_history:
+            return {"error": "No braid history available"}
+        
+        # Calculate basic statistics
+        total_states = len(self.braid_history)
+        avg_complexity = np.mean([state.complexity for state in self.braid_history])
+        avg_entropy = np.mean([state.entropy for state in self.braid_history])
+        
+        # Calculate standard deviations
+        complexity_std = np.std([state.complexity for state in self.braid_history])
+        entropy_std = np.std([state.entropy for state in self.braid_history])
+        
+        # Get latest state
+        latest_state = self.braid_history[-1] if self.braid_history else None
+        
+        # Adjust statistics based on thermal state
+        thermal_multiplier = {
+            COOL: 0.8, WARM: 1.0, HOT: 1.2, CRITICAL: 1.5
+        }.get(thermal_state, 1.0)
+        
+        return {
+            "total_states": total_states,
+            "avg_complexity": avg_complexity * thermal_multiplier,
+            "avg_entropy": avg_entropy * thermal_multiplier,
+            "complexity_std": complexity_std * thermal_multiplier,
+            "entropy_std": entropy_std * thermal_multiplier,
+            "latest_state": {
+                "complexity": latest_state.complexity * thermal_multiplier if latest_state else 0.0,
+                "entropy": latest_state.entropy * thermal_multiplier if latest_state else 0.0,
+                "length": latest_state.length if latest_state else 0
+            } if latest_state else None
+        }
+
+# Placeholder main function
+if __name__ == "__main__":
+    print("Braid Fractal - 32-bit Phase Integration & Thermal Management Ready") 

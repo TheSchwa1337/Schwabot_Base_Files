@@ -17,16 +17,17 @@ Core Functions:
 
 from __future__ import annotations
 
+import logging
+import warnings
+from typing import Any, Dict, List, Optional, Tuple, Union
+
 import numpy as np
 from numpy.typing import NDArray
-from typing import List, Tuple, Optional, Union, Dict, Any
-import logging
-from scipy.linalg import svd, eig
+from scipy.linalg import eig, svd
 from scipy.spatial.distance import cdist
-from sklearn.decomposition import PCA
 from sklearn.cluster import KMeans
+from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
-import warnings
 
 # Suppress warnings for cleaner output
 warnings.filterwarnings('ignore', category=RuntimeWarning)
@@ -191,7 +192,7 @@ class TensorEngine:
 
             # Calculate higher moments if possible
             if tensor.size > 2:
-                from scipy.stats import skew, kurtosis
+                from scipy.stats import kurtosis, skew
                 stats['skewness'] = float(skew(tensor.flatten()))
                 stats['kurtosis'] = float(kurtosis(tensor.flatten()))
 

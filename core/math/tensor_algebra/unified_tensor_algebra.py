@@ -1,192 +1,377 @@
+import scipy as sp
+
 # -*- coding: utf-8 -*-
 """
-Unified Tensor Algebra for Schwabot Trading
-==========================================
+Unified Tensor Algebra
+======================
 
-Provides comprehensive tensor operations for mathematical trading analysis.
-Includes basic tensor operations, advanced mathematical functions, and
-specialized operations for cryptocurrency and financial data processing.
+Advanced tensor algebra operations for mathematical trading calculations.
+Provides high-performance tensor operations, matrix manipulations, and
+mathematical foundations for the Schwabot trading system.
 
-Mathematical Operations:
-- Basic tensor arithmetic and linear algebra
-- Statistical and correlation functions
-- Signal processing and FFT operations
-- Matrix decomposition and analysis
-- PCA and dimensionality reduction
-
-Windows CLI compatible with comprehensive error handling.
+Mathematical Foundation:
+    - Tensor Operations: T(A,B) = A ⊗ B (tensor product)
+    - Matrix Decomposition: A = UsumVᵀ (SVD)
+    - Eigenvalue Analysis: Av = lambdav
+    - Tensor Contraction: C = sumᵢⱼ Aᵢⱼ Bᵢⱼ
 """
 
-import numpy as np
-from numpy.typing import NDArray
 import logging
-from typing import Dict, List, Optional, Any, Tuple, Union
-import warnings
+from typing import Any, Dict, List, Optional, Tuple, Union
+
+import numpy as np
 
 logger = logging.getLogger(__name__)
 
-# Suppress NumPy warnings for cleaner output
-warnings.filterwarnings('ignore', category=RuntimeWarning)
-
 
 class UnifiedTensorAlgebra:
-    """Unified tensor algebra operations for trading mathematics."""
-    
-    def __init__(self):
-        """Initialize the unified tensor algebra system."""
-        self.epsilon = 1e-10  # Small constant to prevent division by zero
-        logger.info("Unified Tensor Algebra initialized")
-    
-    def tensor_dot(self, tensor_a: NDArray, tensor_b: NDArray) -> float:
+    """
+    Unified tensor algebra system for advanced mathematical operations.
+
+    Provides comprehensive tensor operations, matrix algebra, and
+    mathematical utilities for trading system calculations.
+    """
+
+    def __init__(self, precision: str = "float64"):
+        """Initialize the tensor algebra system."""
+        self.precision = precision
+        self.default_dtype = getattr(np, precision)
+
+        # Performance metrics
+        self.operation_count = 0
+        self.total_computation_time = 0.0
+
+        logger.info(f"Unified Tensor Algebra initialized with {precision} precision")
+
+    def tensor_product(self, a: np.ndarray, b: np.ndarray) -> np.ndarray:
         """
-        Compute tensor dot product.
-        
-        Mathematical Formula: dot(A, B) = sum(A * B)
+        Compute tensor product of two tensors.
+
+        Args:
+            a: First tensor
+            b: Second tensor
+
+        Returns:
+            Tensor product result
         """
         try:
-            if tensor_a.shape != tensor_b.shape:
-                raise ValueError("Tensors must have the same shape for dot product")
-            return float(np.sum(tensor_a * tensor_b))
+            self.operation_count += 1
+            result = np.tensordot(a, b, axes=0)
+            return result.astype(self.default_dtype)
         except Exception as e:
-            logger.error(f"Tensor dot product failed: {e}")
-            return 0.0
-    
-    def tensor_normalize(self, tensor: NDArray, method: str = 'l2') -> NDArray:
+            logger.error(f"Tensor product failed: {e}")
+            raise
+
+    def matrix_decomposition(self, matrix: np.ndarray, method: str = "svd") -> Dict[str, np.ndarray]:
         """
-        Normalize tensor using specified method.
-        
-        Methods: 'l1', 'l2', 'max', 'minmax'
+        Perform matrix decomposition using specified method.
+
+        Args:
+            matrix: Input matrix
+            method: Decomposition method ("svd", "qr", "lu", "cholesky")
+
+        Returns:
+            Dictionary containing decomposition components
         """
         try:
-            if method == 'l1':
-                norm = np.sum(np.abs(tensor))
-                return tensor / (norm + self.epsilon)
-            elif method == 'l2':
-                norm = np.sqrt(np.sum(tensor ** 2))
-                return tensor / (norm + self.epsilon)
-            elif method == 'max':
-                max_val = np.max(np.abs(tensor))
-                return tensor / (max_val + self.epsilon)
-            elif method == 'minmax':
-                min_val, max_val = np.min(tensor), np.max(tensor)
-                if abs(max_val - min_val) < self.epsilon:
-                    return tensor
-                return (tensor - min_val) / (max_val - min_val)
+            self.operation_count += 1
+
+            if method == "svd":
+                U, s, Vt = np.linalg.svd(matrix)
+                return {"U": U, "s": s, "Vt": Vt}
+
+            elif method == "qr":
+                Q, R = np.linalg.qr(matrix)
+                return {"Q": Q, "R": R}
+
+            elif method == "lu":
+                # Simple LU decomposition using scipy if available
+                try:
+                    from scipy.linalg import lu
+
+                    P, L, U = lu(matrix)
+                    return {"P": P, "L": L, "U": U}
+                except ImportError:
+                    # Fallback to SVD
+                    logger.warning("SciPy not available, falling back to SVD")
+                    return self.matrix_decomposition(matrix, "svd")
+
+            elif method == "cholesky":
+                L = np.linalg.cholesky(matrix)
+                return {"L": L}
+
             else:
-                raise ValueError(f"Unknown normalization method: {method}")
+                raise ValueError(f"Unknown decomposition method: {method}")
+
         except Exception as e:
-            logger.error(f"Tensor normalization failed: {e}")
-            return tensor
-    
-    def tensor_correlation(self, tensor_a: NDArray, tensor_b: NDArray) -> float:
+            logger.error(f"Matrix decomposition failed: {e}")
+            raise
+
+    def eigenvalue_analysis(self, matrix: np.ndarray) -> Dict[str, np.ndarray]:
         """
-        Calculate Pearson correlation between tensors.
-        
-        Mathematical Formula: r = cov(A,B) / (std(A) * std(B))
+        Perform eigenvalue and eigenvector analysis.
+
+        Args:
+            matrix: Input square matrix
+
+        Returns:
+            Dictionary containing eigenvalues and eigenvectors
         """
         try:
-            flat_a = tensor_a.flatten()
-            flat_b = tensor_b.flatten()
-            
-            if len(flat_a) != len(flat_b):
-                return 0.0
-            
-            correlation_matrix = np.corrcoef(flat_a, flat_b)
-            return float(correlation_matrix[0, 1]) if not np.isnan(correlation_matrix[0, 1]) else 0.0
+            self.operation_count += 1
+            eigenvalues, eigenvectors = np.linalg.eig(matrix)
+
+            # Sort by eigenvalue magnitude (descending)
+            idx = np.argsort(np.abs(eigenvalues))[::-1]
+            eigenvalues = eigenvalues[idx]
+            eigenvectors = eigenvectors[:, idx]
+
+            return {
+                "eigenvalues": eigenvalues,
+                "eigenvectors": eigenvectors,
+                "condition_number": np.abs(eigenvalues[0] / eigenvalues[-1]) if len(eigenvalues) > 1 else 1.0,
+            }
+
         except Exception as e:
-            logger.error(f"Tensor correlation failed: {e}")
-            return 0.0
-    
-    def tensor_distance(self, tensor_a: NDArray, tensor_b: NDArray, metric: str = 'euclidean') -> float:
+            logger.error(f"Eigenvalue analysis failed: {e}")
+            raise
+
+    def tensor_contraction(
+        self, tensor_a: np.ndarray, tensor_b: np.ndarray, axes: Union[int, Tuple[int, int]]
+    ) -> np.ndarray:
         """
-        Calculate distance between tensors.
-        
-        Metrics: 'euclidean', 'manhattan', 'cosine'
+        Perform tensor contraction operation.
+
+        Args:
+            tensor_a: First tensor
+            tensor_b: Second tensor
+            axes: Axes to contract over
+
+        Returns:
+            Contracted tensor result
         """
         try:
-            flat_a = tensor_a.flatten()
-            flat_b = tensor_b.flatten()
-            
-            if metric == 'euclidean':
-                return float(np.linalg.norm(flat_a - flat_b))
-            elif metric == 'manhattan':
-                return float(np.sum(np.abs(flat_a - flat_b)))
-            elif metric == 'cosine':
-                dot_product = np.dot(flat_a, flat_b)
-                norm_a = np.linalg.norm(flat_a)
-                norm_b = np.linalg.norm(flat_b)
-                
-                if norm_a < self.epsilon or norm_b < self.epsilon:
-                    return 1.0
-                
-                cosine_similarity = dot_product / (norm_a * norm_b)
-                return 1.0 - cosine_similarity
+            self.operation_count += 1
+            result = np.tensordot(tensor_a, tensor_b, axes=axes)
+            return result.astype(self.default_dtype)
+        except Exception as e:
+            logger.error(f"Tensor contraction failed: {e}")
+            raise
+
+    def matrix_inverse(self, matrix: np.ndarray, method: str = "direct") -> np.ndarray:
+        """
+        Compute matrix inverse using specified method.
+
+        Args:
+            matrix: Input square matrix
+            method: Inversion method ("direct", "pseudo", "svd")
+
+        Returns:
+            Inverted matrix
+        """
+        try:
+            self.operation_count += 1
+
+            if method == "direct":
+                return np.linalg.inv(matrix)
+
+            elif method == "pseudo":
+                return np.linalg.pinv(matrix)
+
+            elif method == "svd":
+                # SVD-based pseudo-inverse for numerical stability
+                U, s, Vt = np.linalg.svd(matrix)
+                # Use tolerance for singular values
+                tolerance = np.finfo(s.dtype).eps * max(matrix.shape) * s[0]
+                s_inv = np.where(s > tolerance, 1.0 / s, 0.0)
+                return Vt.T @ np.diag(s_inv) @ U.T
+
             else:
-                raise ValueError(f"Unknown distance metric: {metric}")
+                raise ValueError(f"Unknown inversion method: {method}")
+
         except Exception as e:
-            logger.error(f"Tensor distance failed: {e}")
-            return float('inf')
-    
-    def tensor_similarity(self, tensor_a: NDArray, tensor_b: NDArray, method: str = 'cosine') -> float:
+            logger.error(f"Matrix inversion failed: {e}")
+            raise
+
+    def solve_linear_system(self, A: np.ndarray, b: np.ndarray) -> np.ndarray:
         """
-        Calculate similarity between tensors.
-        
-        Methods: 'cosine', 'dot', 'jaccard'
+        Solve linear system Ax = b.
+
+        Args:
+            A: Coefficient matrix
+            b: Right-hand side vector/matrix
+
+        Returns:
+            Solution vector/matrix
         """
         try:
-            flat_a = tensor_a.flatten()
-            flat_b = tensor_b.flatten()
-            
-            if method == 'cosine':
-                dot_product = np.dot(flat_a, flat_b)
-                norm_a = np.linalg.norm(flat_a)
-                norm_b = np.linalg.norm(flat_b)
-                
-                if norm_a < self.epsilon or norm_b < self.epsilon:
-                    return 0.0
-                
-                return float(dot_product / (norm_a * norm_b))
-            elif method == 'dot':
-                return float(np.dot(flat_a, flat_b))
-            elif method == 'jaccard':
-                intersection = np.sum(np.minimum(flat_a, flat_b))
-                union = np.sum(np.maximum(flat_a, flat_b))
-                return float(intersection / (union + self.epsilon))
-            else:
-                raise ValueError(f"Unknown similarity method: {method}")
+            self.operation_count += 1
+            return np.linalg.solve(A, b)
         except Exception as e:
-            logger.error(f"Tensor similarity failed: {e}")
-            return 0.0
+            logger.error(f"Linear system solve failed: {e}")
+            # Fallback to least squares
+            logger.warning("Falling back to least squares solution")
+            return np.linalg.lstsq(A, b, rcond=None)[0]
+
+    def compute_norm(self, tensor: np.ndarray, norm_type: Union[str, int, float] = "fro") -> float:
+        """
+        Compute various norms of a tensor.
+
+        Args:
+            tensor: Input tensor
+            norm_type: Type of norm ("fro", "nuc", 1, 2, -1, -2, np.inf, -np.inf)
+
+        Returns:
+            Norm value
+        """
+        try:
+            self.operation_count += 1
+            return float(np.linalg.norm(tensor, ord=norm_type))
+        except Exception as e:
+            logger.error(f"Norm computation failed: {e}")
+            raise
+
+    def tensor_reshape(self, tensor: np.ndarray, new_shape: Tuple[int, ...]) -> np.ndarray:
+        """
+        Reshape tensor to new dimensions.
+
+        Args:
+            tensor: Input tensor
+            new_shape: Target shape
+
+        Returns:
+            Reshaped tensor
+        """
+        try:
+            self.operation_count += 1
+            return tensor.reshape(new_shape)
+        except Exception as e:
+            logger.error(f"Tensor reshape failed: {e}")
+            raise
+
+    def kronecker_product(self, a: np.ndarray, b: np.ndarray) -> np.ndarray:
+        """
+        Compute Kronecker product of two matrices.
+
+        Args:
+            a: First matrix
+            b: Second matrix
+
+        Returns:
+            Kronecker product result
+        """
+        try:
+            self.operation_count += 1
+            return np.kron(a, b).astype(self.default_dtype)
+        except Exception as e:
+            logger.error(f"Kronecker product failed: {e}")
+            raise
+
+    def trace_operation(self, matrix: np.ndarray, offset: int = 0) -> float:
+        """
+        Compute trace of a matrix.
+
+        Args:
+            matrix: Input matrix
+            offset: Diagonal offset
+
+        Returns:
+            Trace value
+        """
+        try:
+            self.operation_count += 1
+            return float(np.trace(matrix, offset=offset))
+        except Exception as e:
+            logger.error(f"Trace operation failed: {e}")
+            raise
+
+    def determinant(self, matrix: np.ndarray) -> float:
+        """
+        Compute determinant of a square matrix.
+
+        Args:
+            matrix: Input square matrix
+
+        Returns:
+            Determinant value
+        """
+        try:
+            self.operation_count += 1
+            return float(np.linalg.det(matrix))
+        except Exception as e:
+            logger.error(f"Determinant computation failed: {e}")
+            raise
+
+    def matrix_rank(self, matrix: np.ndarray, tolerance: Optional[float] = None) -> int:
+        """
+        Compute rank of a matrix.
+
+        Args:
+            matrix: Input matrix
+            tolerance: Tolerance for rank computation
+
+        Returns:
+            Matrix rank
+        """
+        try:
+            self.operation_count += 1
+            return int(np.linalg.matrix_rank(matrix, tol=tolerance))
+        except Exception as e:
+            logger.error(f"Matrix rank computation failed: {e}")
+            raise
+
+    def get_performance_metrics(self) -> Dict[str, Any]:
+        """Get tensor algebra performance metrics."""
+        return {
+            "operation_count": self.operation_count,
+            "total_computation_time": self.total_computation_time,
+            "average_operation_time": (self.total_computation_time / max(self.operation_count, 1)),
+            "precision": self.precision,
+        }
+
+    def reset_metrics(self):
+        """Reset performance metrics."""
+        self.operation_count = 0
+        self.total_computation_time = 0.0
 
 
-def test_unified_tensor_algebra():
-    """Test the unified tensor algebra operations."""
-    try:
-        algebra = UnifiedTensorAlgebra()
-        logger.info("Testing Unified Tensor Algebra...")
-        
-        # Create test tensors
-        tensor_a = np.array([[1, 2], [3, 4]])
-        tensor_b = np.array([[2, 1], [1, 2]])
-        
-        # Test operations
-        dot_result = algebra.tensor_dot(tensor_a, tensor_b)
-        correlation = algebra.tensor_correlation(tensor_a, tensor_b)
-        distance = algebra.tensor_distance(tensor_a, tensor_b)
-        similarity = algebra.tensor_similarity(tensor_a, tensor_b)
-        
-        logger.info(f" Tensor dot product: {dot_result}")
-        logger.info(f" Tensor correlation: {correlation}")
-        logger.info(f" Tensor distance: {distance}")
-        logger.info(f" Tensor similarity: {similarity}")
-        
-        logger.info(" Unified Tensor Algebra test completed successfully")
-        return True
-        
-    except Exception as e:
-        logger.error(f" Tensor algebra test failed: {e}")
-        return False
-
-
+# Example usage
 if __name__ == "__main__":
-    test_unified_tensor_algebra() 
+    print("Unified Tensor Algebra Demonstration")
+    print("=" * 40)
+
+    # Initialize system
+    tensor_algebra = UnifiedTensorAlgebra()
+
+    # Test matrix operations
+    A = np.random.rand(4, 4).astype(np.float64)
+    B = np.random.rand(4, 4).astype(np.float64)
+
+    # Test decomposition
+    decomp = tensor_algebra.matrix_decomposition(A, "svd")
+    print(f"SVD decomposition shapes: U={decomp['U'].shape}, s={decomp['s'].shape}, Vt={decomp['Vt'].shape}")
+
+    # Test eigenvalue analysis
+    eigen_result = tensor_algebra.eigenvalue_analysis(A)
+    print(f"Eigenvalues: {eigen_result['eigenvalues'][:3]}")  # Show first 3
+    print(f"Condition number: {eigen_result['condition_number']:.2f}")
+
+    # Test tensor operations
+    tensor_prod = tensor_algebra.tensor_product(A, B)
+    print(f"Tensor product shape: {tensor_prod.shape}")
+
+    # Test matrix inverse
+    A_inv = tensor_algebra.matrix_inverse(A, "svd")
+    identity_check = A @ A_inv
+    identity_error = np.linalg.norm(identity_check - np.eye(4))
+    print(f"Inverse accuracy (should be ~0): {identity_error:.6f}")
+
+    # Test norms
+    frobenius_norm = tensor_algebra.compute_norm(A, "fro")
+    print(f"Frobenius norm: {frobenius_norm:.3f}")
+
+    # Show performance metrics
+    metrics = tensor_algebra.get_performance_metrics()
+    print(f"\nPerformance Metrics:")
+    print(f"  Operations performed: {metrics['operation_count']}")
+    print(f"  Precision: {metrics['precision']}")

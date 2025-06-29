@@ -1,16 +1,4 @@
-# Import safe print for Windows compatibility
-try:
-    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
-except ImportError:
-    try:
-        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
-    except ImportError:
-        def safe_print(message): print(message)
-        def info(message): print(f"[INFO] {message}")
-        def warn(message): print(f"[WARN] {message}")
-        def error(message): print(f"[ERROR] {message}")
-        def success(message): print(f"[SUCCESS] {message}")
-        def debug(message): print(f"[DEBUG] {message}")
+from utils.safe_print import safe_print, info, warn, error, success, debug
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Ferris RDE Core - Recursive Dynamic Engine for Schwabot.
@@ -250,10 +238,8 @@ class FerrisRDECore:
             
             # Map price to 16-bit integer based on mode
             if self.price_mapping_mode == PriceMappingMode.LINEAR:
-                mapped_price = int(
-                    ((clamped_price - self.btc_price_min) /
-                     (self.btc_price_max - self.btc_price_min)) * 65535
-                )
+                mapped_price = int(((clamped_price - self.btc_price_min) / 
+                                  (self.btc_price_max - self.btc_price_min)) * 65535)
             elif self.price_mapping_mode == PriceMappingMode.LOGARITHMIC:
                 log_price = unified_math.unified_math.log(clamped_price / self.btc_price_min)
                 log_max = unified_math.unified_math.log(self.btc_price_max / self.btc_price_min)
@@ -665,8 +651,7 @@ class FerrisRDECore:
                 # Sell wall: lower prices = better fill rate
                 price_advantage = (unified_math.max(price_levels) - btc_price) / btc_price
             
-            # Adjust fill rate based on volatility
-            fill_rate = unified_math.min(1.0, unified_math.max(0.0, price_advantage * 2.0 * (1.0 - volatility)))
+            fill_rate = unified_math.min(1.0, unified_math.max(0.0, price_advantage * 2.0))
             
             # Calculate expected profit
             total_volume = sum(volume_levels)

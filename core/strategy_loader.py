@@ -1,311 +1,109 @@
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below
-import numpy as np
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below
-# -*- coding: utf - 8 -*-\\nfrom .utils.windows_cli_compatibility import safe_print, info, warn,
-from __future__ import annotations
-# error, success, debug
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below
-# -*- coding: utf - 8 -*-\\nfrom .utils.windows_cli_compatibility import safe_print, info, warn,
-# error, success, debug
+#!/usr/bin/env python3
+"""
+Strategy Loader - Core component for loading and managing trading strategies.
+"""
 
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below
-# -*- coding: utf - 8 -*-\\nfrom .utils.windows_cli_compatibility import safe_print, info, warn,
-# error, success, debug
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below
-# -*- coding: utf - 8 -*-\\nfrom .utils.windows_cli_compatibility import safe_print, info, warn,
-# error, success, debug
-from collections import deque
-from dataclasses import dataclass
-from dataclasses import field
-from dual_unicore_handler import DualUnicoreHandler
-from enum import Enum
+import json
+import os
 from pathlib import Path
-from typing import Any, Dict, List, Optional, TYPE_CHECKING
-import inspect
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below
-import logging
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below
-import math
-import time
+from typing import Any, Dict, List, Optional
 
-import threading
-
-from core.enhanced_windows_cli_compatibility import \: pass
-    pass  
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below
-# EMERGENCY: from core.enhanced_windows_cli_compatibility import safe_log  # Original error: invalid syntax (<unknown>, line 27)
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below
-from core.unified_math_system import unified_math
+import numpy as np
+import pandas as pd
+import yaml
 
 
-# Initialize Unicode handler
-unicore = DualUnicoreHandler()
-EnhancedWindowsCliCompatibilityHandler as CLIHandler
+class StrategyLoader:
+    """Loads and manages trading strategies from various sources."""
 
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below
-# Import safe print for Windows compatibility: pass
-    pass  
-try: pass
-    Emergency placeholder docstring.
-Emergency placeholder docstring.Emergency placeholder docstring.
+    def __init__(self, strategy_dir: str = "strategies"):
+        """Initialize strategy loader.
 
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below
-print("[INFO] {message}"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-print("[WARN] {message}"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-print("[ERROR] {message}"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-print("[SUCCESS] {message}"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-print("[DEBUG] {message}""""
-emoji_mapping={}""""""
-"\\u2705": "[SUCCESS]",""""""
-"\\u274c": "[ERROR]""""
-"\\u26a0\\ufe0": "[WARNING]""""
-"\\u1f6a8": "[ALERT]""""
-"\\u1f389": "[COMPLETE]""""
-"\\u1f504": "[PROCESSING]""""
-"\\u23f3": "[WAITING]""""
-"\\u2b50": "[STAR]""""
-"\\u1f680": "[LAUNCH]""""
-"\\u1f527": "[TOOLS]""""
-"\\u1f6e0\\ufe0": "[REPAIR]""""
-"\\u26a1": "[FAST]""""
-"\\u1f50d": "[SEARCH]""""
-"\\u1f3a": "[TARGET]""""
-"\\u1f525": "[HOT]""""
-"\\u2744\\ufe0": "[COOL]""""
-"\\u1f4ca": "[DATA]"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-"\\u1f4c8": "[PROFIT]"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-"\\u1f4c9": "[LOSS]""""
-"\\u1f4b0": "[MONEY]""""
-"\\u1f9ea": "[TEST]""""
-"\\u2696\\ufe0": "[BALANCE]""""
-"\\ufe0": "[TEMP]""""
-"\\u1f52c": "[ANALYZE]""""
-"": "[SYSTEM]""""
-"\\ufe0": "[COMPUTER]""""
-"\\u1f4f1": "[MOBILE]""""
-"\\u1f310": "[NETWORK]""""
-"\\u1f512": "[SECURE]""""
-"\\u1f513": "[UNLOCK]""""
-"\\u1f511": "[KEY]""""
-"\\u1f6e1\\ufe0": "[SHIELD]""""
-"\\u1f9ee": "[CALC]"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-"\\u1f4d0": "[MATH]""""
-"\\u1f522": "[NUMBERS]""""
-"infinity": "[INFINITY]""""
-"phi": "[PHI]""""
-"pi": "[PI]"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-"sum": "[SUM]"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-"integral": "[INTEGRAL]""""
-Emergency placeholder docstring.""""""
-MOMENTUM = "momentum""""""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-MEAN_REVERSION="mean_reversion""""
-ARBITRAGE="arbitrage"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-STATISTICAL_ARBITRAGE="statistical_arbitrage""""
-MACHINE_LEARNING="machine_learning""""
-QUANTUM="quantum""""
-HYBRID="hybrid""""
-CUSTOM="custom""""
-LOADED = "loaded""""
-ACTIVE="active""""
-PAUSED="paused""""
-STOPPED="stopped""""
-ERROR="error""""
-VALIDATING="validating""""
-UPDATING="updating""""
-ROLLING_BACK="rolling_back""""
-FILE = "file""""
-DATABASE="database""""
-API="api""""
-PLUGIN="plugin""""
-DYNAMIC="dynamic""""
-""""""
-"enable_syntax_check": True,""""""
-"enable_dependency_check""""
-"enable_safety_check"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-"enable_performance_check"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-"max_strategy_size"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-"allowed_imports": ["numpy", "pandas", "scipy", "sklearn""""
-"forbidden_imports": ["os", "subprocess", "sys"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-"max_execution_time"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-"max_memory_usage""""
-"enable_cli_compatibility""""
-"syntax_valid""""
-"dependencies_valid""""
-"safety_valid"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-"performance_valid""""
-"overall_valid""""
-"warnings""""
-"errors""""
-if self.config["enable_syntax_check""""
-        results["syntax_valid"] = syntax_result["valid""""
-results["warnings"].extend(syntax_result["warnings""""
-        results["errors"].extend(syntax_result["errors""""
-if self.config["enable_dependency_check""""
-        results["dependencies_valid"] = dep_result["valid""""
-results["warnings"].extend(dep_result["warnings""""
-        results["errors"].extend(dep_result["errors""""
-if self.config["enable_safety_check""""
-        results["safety_valid"] = safety_result["valid""""
-results["warnings"].extend(safety_result["warnings""""
-        results["errors"].extend(safety_result["errors"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-if self.config["enable_performance_check"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-        results["performance_valid"] = perf_result["valid""""
-results["warnings"].extend(perf_result["warnings""""
-        results["errors"].extend(perf_result["errors""""
-results["overall_valid""""
-        results["syntax_valid""""
-and results["dependencies_valid""""
-and results["safety_valid"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-and results["performance_valid"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-error_msg = "Error in strategy validation: {e}"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-self.cli_handler.safe_safe_print("\\u274c {error_msg}""""
-"syntax_valid""""
-"dependencies_valid""""
-"safety_valid"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-"performance_valid""""
-"overall_valid""""
-"warnings""""
-"errors""""
-pass""""""
-compile(strategy_code, "<strategy>", "exec")""""""
-#             return {"valid": True, "warnings": [], "errors""""
-"valid""""
-"warnings""""
-"errors": ["Syntax error: {e}""""
-"valid""""
-"warnings""""
-"errors": ["Compilation error: {e}""""
-line.strip()""""""
-        for line in strategy_code.split("\n")""""""
-        if line.strip().startswith(("import ", "from """"
-for forbidden in self.config["forbidden_imports""""
-errors.append("Forbidden import: {import_line}""""
-        for allowed in self.config["allowed_imports""""
-warnings.append()""""""
-        "Potentially unsafe import: {import_line}"""""""
-"valid""""
-        "warnings""""
-"errors""""
-"valid""""
-"warnings"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-"errors": ["Dependency validation error: {e}""""
-dangerous_patterns=[]""""""
-"eval(",)""""""
-        "exec(""""
-        "open(""""
-        "file(""""
-        "__import__""""
-"subprocess""""
-"os.system""""
-"os.popen""""
-errors.append("Dangerous operation detected: {pattern}"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-if len(strategy_code) > self.config["max_strategy_size"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-        "Strategy size exceeds limit: {len(strategy_code)} bytes""""
-"valid""""
-        "warnings""""
-"errors""""
-"valid""""
-"warnings"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-"errors": ["Safety validation error: {e}"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-performance_patterns=[]""""""
-"while True:",""""""
-"for i in range(1000000):""""
-        "time.sleep(""""
-        "threading.sleep("""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-warnings.append("Potential performance issue: {pattern}""""
-#             return {"valid": True, "warnings": warnings, "errors""""
-"valid""""
-"warnings"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-"errors": ["Performance validation error: {e}""""
-Emergency placeholder docstring.""""""
-self.version="1.0_0""""""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-        maxlen = self.config.get("max_history_size"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-        self.config.get("validation_config""""
-self.monitoring_enabled = self.config.get("enable_monitoring""""
-init_message = "StrategyLoader v{self.version} initialized"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-safe_log(logger, "info""""
-#         return {}"""""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-"max_history_size": 1000,""""""
-"enable_monitoring""""
-"enable_caching""""
-"enable_hot_reload"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-"enable_validation"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-"enable_performance_tracking""""
-"cache_size"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-"max_concurrent_loads""""
-"load_timeout"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-"validation_config""""
-"strategy_paths": ["./strategies", "./config / strategies""""
-"backup_enabled""""
-"backup_path": "./backups / strategies""""
-"enable_cli_compatibility""""
-"force_ascii_output""""
-force_ascii=self.config.get("force_ascii_output"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-def safe_log(self, level: str, message: str, context: str = """"
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-self.safe_safe_print("\\u26a0\\ufe0f Strategy {strategy_path} already loaded""""
-warnings = ["Strategy already loaded""""
-error_message = "Unsupported loader type: {loader_type}"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-self.safe_log()""""""
-        "info", "Strategy {strategy_path} loaded successfully"""""""
-        "error"""""""
-"Failed to load strategy {strategy_path}: {result.error_message}""""
-error_msg = "Error loading strategy {strategy_path}: {e}"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-self.safe_log("error""""
-with open(file_path, "r", encoding = "utf - 8"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-if self.config.get("enable_validation"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-if not validation_results["overall_valid"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-error_message = "Strategy validation failed: {validation_results['errors''"
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-        loader.safe_safe_print("   Total loads: {summary['total_loads''"
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-        "   Success rate: {summary['success_rate''"
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-        "   Average load time: {summary['average_load_time''"
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-        "   Loaded strategies: {summary['loaded_strategies_count''"
-""
+        Args:
+            strategy_dir: Directory containing strategy files
+        """
+        self.strategy_dir = Path(strategy_dir)
+        self.strategies = {}
+        self.loaded_strategies = {}
+
+    def load_strategy(self, strategy_name: str) -> Dict[str, Any]:
+        """Load a specific strategy by name.
+
+        Args:
+            strategy_name: Name of the strategy to load
+
+        Returns:
+            Strategy configuration dictionary
+        """
+        try:
+            strategy_file = self.strategy_dir / f"{strategy_name}.json"
+            if strategy_file.exists():
+                with open(strategy_file, "r") as f:
+                    strategy = json.load(f)
+                self.loaded_strategies[strategy_name] = strategy
+                return strategy
+            else:
+                raise FileNotFoundError(f"Strategy file not found: {strategy_file}")
+        except Exception as e:
+            raise RuntimeError(f"Failed to load strategy {strategy_name}: {e}")
+
+    def load_all_strategies(self) -> Dict[str, Dict[str, Any]]:
+        """Load all available strategies.
+
+        Returns:
+            Dictionary of all loaded strategies
+        """
+        try:
+            for strategy_file in self.strategy_dir.glob("*.json"):
+                strategy_name = strategy_file.stem
+                self.load_strategy(strategy_name)
+            return self.loaded_strategies
+        except Exception as e:
+            raise RuntimeError(f"Failed to load all strategies: {e}")
+
+    def validate_strategy(self, strategy: Dict[str, Any]) -> bool:
+        """Validate strategy configuration.
+
+        Args:
+            strategy: Strategy configuration to validate
+
+        Returns:
+            True if valid, False otherwise
+        """
+        required_fields = ["name", "type", "parameters"]
+        return all(field in strategy for field in required_fields)
+
+    def get_strategy_parameters(self, strategy_name: str) -> Dict[str, Any]:
+        """Get parameters for a specific strategy.
+
+        Args:
+            strategy_name: Name of the strategy
+
+        Returns:
+            Strategy parameters dictionary
+        """
+        if strategy_name not in self.loaded_strategies:
+            self.load_strategy(strategy_name)
+        return self.loaded_strategies[strategy_name].get("parameters", {})
+
+    def list_available_strategies(self) -> List[str]:
+        """List all available strategy files.
+
+        Returns:
+            List of strategy names
+        """
+        return [f.stem for f in self.strategy_dir.glob("*.json")]
+
+
+def main():
+    """Main function for testing."""
+    loader = StrategyLoader()
+    print("Strategy Loader initialized successfully!")
+
+    # List available strategies
+    strategies = loader.list_available_strategies()
+    print(f"Available strategies: {strategies}")
+
+
+if __name__ == "__main__":
+    main()

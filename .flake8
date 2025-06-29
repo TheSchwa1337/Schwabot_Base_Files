@@ -1,75 +1,137 @@
 [flake8]
-# Flake8 configuration for Schwabot UROS v1.0
-# Version: 0.5.1
+# Flake8 Configuration for Advanced Trading System
+# ================================================
 
-# Line length and complexity settings
-max-line-length = 100
+# Maximum line length
+max-line-length = 120
+
+# Maximum complexity for functions
 max-complexity = 15
 
 # Ignore specific error codes
 ignore = 
-    E501
-    E402
-    F401
-    W503
-    W504
-    E731
-    E225
-    E226
-    E231
-    E241
-    E302
-    E301
-    E303
-    E722
+    # Line length issues (handled by black)
+    E203,  # whitespace before ':'
+    W503,  # line break before binary operator
+    W504,  # line break after binary operator
+    
+    # Import organization (handled by isort)
+    E402,  # module level import not at top of file
+    F401,  # imported but unused
+    
+    # Docstring issues (handled by pydocstyle)
+    D100,  # missing docstring in public module
+    D101,  # missing docstring in public class
+    D102,  # missing docstring in public method
+    D103,  # missing docstring in public function
+    D104,  # missing docstring in public package
+    D105,  # missing docstring in magic method
+    D106,  # missing docstring in public nested class
+    D107,  # missing docstring in __init__
+    D200,  # one-line docstring should fit on one line
+    D201,  # no blank lines allowed before function docstring
+    D202,  # no blank lines allowed after function docstring
+    D205,  # 1 blank line required between summary line and description
+    D206,  # 1 blank line required between section header and content
+    D207,  # docstring is under-indented
+    D208,  # docstring is over-indented
+    D209,  # multi-line docstring closing quotes should be on a separate line
+    D210,  # no whitespaces allowed surrounding docstring text
+    D211,  # no blank lines allowed before class docstring
+    D212,  # multi-line docstring summary should start at the first line
+    D213,  # multi-line docstring summary should start at the second line
+    D214,  # section is over-indented
+    D215,  # section underline is over-indented
+    D300,  # use """triple double quotes"""
+    D301,  # use r""" if any backslashes in a docstring
+    D400,  # first line should end with a period
+    D401,  # first line should be in imperative mood
+    D402,  # first line should not be the function's "signature"
+    D403,  # first word of the first line should be properly capitalized
+    D404,  # first word of the docstring should not be "This"
+    D405,  # section name should be properly capitalized
+    D406,  # section name should end with a newline
+    D407,  # missing argument descriptions in the docstring
+    D408,  # section underline should be in the line following the section's name
+    D409,  # section underline should match the length of its name
+    D410,  # missing blank line after section
+    D411,  # missing blank line before section
+    D412,  # no blank lines allowed between a section header and its content
+    D413,  # missing blank line after last section
+    D414,  # section has no content
+    D415,  # first line should end with a period, question mark, or exclamation point
+    D416,  # section name should end with a colon
+    D417,  # missing argument descriptions in the docstring
+    D418,  # missing docstring in public nested class
+    D419,  # prefer implicit docstring concatenation
+    
+    # Type annotation issues (handled by mypy)
+    ANN001,  # missing-type-self
+    ANN002,  # missing-type-cls
+    ANN003,  # missing-type-args
+    ANN004,  # missing-type-kwargs
+    ANN101,  # missing-type-self
+    ANN102,  # missing-type-cls
+    ANN201,  # missing-return-type-public-function
+    ANN202,  # missing-return-type-private-function
+    ANN204,  # missing-return-type-special-method
+    ANN205,  # missing-return-type-static-method
+    ANN206,  # missing-return-type-class-method
+    ANN401,  # dynamically-typed-expression
+    
+    # Variable naming issues (relaxed for mathematical variables)
+    E741,  # ambiguous variable name 'l'
+    E742,  # ambiguous class name 'l'
+    E743,  # ambiguous function name 'l'
+    
+    # Unused variables (allow for mathematical formulas)
+    F841,  # local variable is assigned to but never used
+    
+    # Import issues (relaxed for mathematical imports)
+    F403,  # 'from module import *' used; unable to detect undefined names
+    F405,  # name may be undefined, or defined from star imports: module
 
 # Exclude directories and files
 exclude = 
-    .git
-    __pycache__
-    .venv
-    venv
-    env
-    .env
-    .mypy_cache
-    .pytest_cache
-    build
-    dist
-    *.egg-info
-    .coverage
-    htmlcov
-    .tox
-    .eggs
-    .mypy_cache
-    .pytest_cache
-    .flake8_cache
+    .git,
+    __pycache__,
+    .venv,
+    venv,
+    env,
+    .env,
+    build,
+    dist,
+    *.egg-info,
+    .pytest_cache,
+    .coverage,
+    htmlcov,
+    .tox,
+    .mypy_cache,
+    .ruff_cache,
+    node_modules,
+    docs/_build,
+    tests/__pycache__,
+    core/__pycache__,
+    utils/__pycache__
 
 # Per-file-ignores
-# Ignore specific errors in specific files
 per-file-ignores = 
-    # Test files - relaxed standards
-    tests/*:E501,E302,E303
-    # Configuration files - relaxed standards  
-    *.ini:E501
-    *.cfg:E501
-    *.conf:E501
-    # Generated files
-    */__init__.py:F401
-    # Core mathematical modules - strict standards
-    core/bit_phase_engine.py:E501
-    core/tensor_router.py:E501
-    core/phase_entropy_matcher.py:E501
-    core/matrix_mapper.py:E501
-    core/profit_cycle_allocator.py:E501
-    core/gpu_offload_manager.py:E501
-    core/dlt_waveform_engine.py:E501
+    # Allow longer lines in test files
+    tests/*:E501
+    # Allow imports in __init__.py files
+    __init__.py:F401
+    # Allow star imports in mathematical modules
+    core/advanced_mathematical_core.py:F403,F405
+    core/unified_math_system.py:F403,F405
+    # Allow unused variables in mathematical formulas
+    core/*:F841
+    utils/*:F841
 
 # Statistics
 statistics = True
-count = True
 
-# Output format
-format = %(path)s:%(row)d:%(col)d: %(code)s %(text)s
+# Count errors
+count = True
 
 # Show source code
 show-source = True
@@ -78,27 +140,182 @@ show-source = True
 show-pep8 = False
 
 # Aggressive mode
-aggressive = False
+aggressive = 2
 
 # Builtins
 builtins = _
 
-# Docstring convention
-docstring-convention = google
+# Doctest
+doctests = False
 
-# Import order style
-# import-order-style = google
+# Format
+format = %(path)s:%(row)d:%(col)d: %(code)s %(text)s
 
-# Maximum doc length
-max-doc-length = 100
+# Hacker
+hacker = False
 
-# Select errors and warnings
+# Ignore select
+ignore-select = E9,W6
+
+# Jobs
+jobs = auto
+
+# Output file
+output-file = 
+
+# Quiet
+quiet = 0
+
+# Select
 select = E,W,F,C90
 
-# Extend ignore for mathematical code
+# Show statistics
+statistics = True
+
+# Verbose
+verbose = 0
+
+# Extend ignore
 extend-ignore = 
-    E203
-    E266
-    W291
-    W293
-    W391
+
+# Extend select
+extend-select = 
+
+# Filename
+filename = *.py
+
+# Exclude
+exclude = 
+    .git,
+    __pycache__,
+    .venv,
+    venv,
+    env,
+    .env,
+    build,
+    dist,
+    *.egg-info,
+    .pytest_cache,
+    .coverage,
+    htmlcov,
+    .tox,
+    .mypy_cache,
+    .ruff_cache,
+    node_modules,
+    docs/_build
+
+# Max doc length
+max-doc-length = None
+
+# Max line length
+max-line-length = 120
+
+# Max complexity
+max-complexity = 15
+
+# Min version
+min-version = 3.8
+
+# Output format
+output-format = 
+    %(path)s:%(row)d:%(col)d: %(code)s %(text)s
+
+# Parse error format
+parse-error-format = 
+    %(path)s:%(row)d:%(col)d: %(code)s %(text)s
+
+# Plugin prefix
+plugin-prefix = flake8
+
+# Plugins
+plugins = 
+
+# Require plugins
+require-plugins = 
+
+# Use pycodestyle
+use-pycodestyle = True
+
+# Use pyflakes
+use-pyflakes = True
+
+# Use mccabe
+use-mccabe = True
+
+# Use naming
+use-naming = True
+
+# Use docstring
+use-docstring = True
+
+# Use import order
+use-import-order = True
+
+# Use bandit
+use-bandit = False
+
+# Use black
+use-black = True
+
+# Use isort
+use-isort = True
+
+# Use mypy
+use-mypy = False
+
+# Use pydocstyle
+use-pydocstyle = False
+
+# Use pylint
+use-pylint = False
+
+# Use radon
+use-radon = False
+
+# Use safety
+use-safety = False
+
+# Use vulture
+use-vulture = False
+
+# Use xenon
+use-xenon = False
+
+# Use yapf
+use-yapf = False
+
+# Use autopep8
+use-autopep8 = False
+
+# Use yapf
+use-yapf = False
+
+# Use black
+use-black = True
+
+# Use isort
+use-isort = True
+
+# Use mypy
+use-mypy = False
+
+# Use pydocstyle
+use-pydocstyle = False
+
+# Use pylint
+use-pylint = False
+
+# Use radon
+use-radon = False
+
+# Use safety
+use-safety = False
+
+# Use vulture
+use-vulture = False
+
+# Use xenon
+use-xenon = False
+
+# Use autopep8
+use-autopep8 = False

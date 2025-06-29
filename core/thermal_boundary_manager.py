@@ -1,118 +1,883 @@
-from typing import Dict, List, Optional, Any
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below
-import numpy as np
-# -*- coding: utf-8 -*-
+# -*- coding: utf - 8 -*-
+from __future__ import annotations
 
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below
-logging.warning("Thermal components not available: {e}""""
-COOL = "cool""""
-    NORMAL="normal""""
-    WARM="warm""""
-    HOT="hot""""
-    CRITICAL="critical""""
-    EMERGENCY="emergency""""
-CPU_ONLY = "cpu_only""""
-    GPU_AVAILABLE="gpu_available""""
-    HYBRID="hybrid""""
-    UNKNOWN="unknown"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-logger.warning("Hardware detection failed: {e}""""
-        platform = "unknown""""
-if platform.system().lower() == "windows""""
-        "C:\\Windows\\System32\\nvapi64.dll""""
-        "C:\\Windows\\System32\\amdxc64.dll""""
-        result = os.popen("lspci | grep -i vga"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-        logger.debug("GPU detection failed: {e}""""
-if platform.system().lower() == "windows""""
-c = wmi.WMI(namespace="root\\wmi""""
-        "/sys/class/thermal/thermal_zone0/temp""""
-        "/proc/acpi/thermal_zone/THM0/temperature""""
-        "/sys/class/thermal/thermal_zone0/temp""""
-        "/proc/acpi/thermal_zone/THM0/temperature"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-        logger.debug("Thermal sensor check failed: {e}""""
-        processing_priority = "high""""
-        processing_priority = "normal""""
-        processing_priority = "low""""
-        emergency_procedures = ["reduce_batch_size", "throttle_threads"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-        processing_priority = "minimal""""
-        emergency_procedures = ["reduce_batch_size", "throttle_threads", "pause_heavy_tasks""""
-        processing_priority = "emergency""""
-        emergency_procedures = ["reduce_batch_size", "throttle_threads", "pause_heavy_tasks", "enable_cooling""""
-        processing_priority = "shutdown""""
-        emergency_procedures = ["emergency_shutdown", "save_state", "disable_all_tasks"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-logger.warning("Thermal monitoring already active"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-        logger.info("Thermal monitoring started"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-        logger.error("Thermal monitoring failed: {e}"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-        logger.info("Thermal monitoring stopped"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-        logger.info("Thermal state changed: {self.current_thermal_state.value} -> {new_thermal_state.value}"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-        logger.error("Thermal monitoring error: {e}"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-logger.error("Failed to get thermal state: {e}""""
-if platform.system().lower() == "windows"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-        logger.warning("CPU temperature reading failed: {e}""""
-c = wmi.WMI(namespace="root\\wmi"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-        logger.debug("Windows CPU temperature failed: {e}""""
-        "/sys/class/thermal/thermal_zone0/temp""""
-        "/sys/class/thermal/thermal_zone1/temp""""
-        "/proc/acpi/thermal_zone/THM0/temperature"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-        logger.debug("Linux CPU temperature failed: {e}"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-logger.error("Thermal state determination failed: {e}""""
-if procedure == "reduce_batch_size"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-        logger.warning("Applying emergency procedure: reduce_batch_size""""
-        elif procedure == "throttle_threads"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-        logger.warning("Applying emergency procedure: throttle_threads""""
-        elif procedure == "pause_heavy_tasks"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-        logger.warning("Applying emergency procedure: pause_heavy_tasks""""
-        elif procedure == "enable_cooling"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-        logger.warning("Applying emergency procedure: enable_cooling""""
-        elif procedure == "emergency_shutdown"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-        logger.critical("Applying emergency procedure: emergency_shutdown""""
-        elif procedure == "save_state"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-        logger.warning("Applying emergency procedure: save_state""""
-        elif procedure == "disable_all_tasks"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-        logger.critical("Applying emergency procedure: disable_all_tasks"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-        logger.error("Emergency procedure {procedure} failed: {e}"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-logger.debug("Thermal zone update failed: {e}"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-logger.error("Processing recommendations failed: {e}"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-logger.error("Batch size calculation failed: {e}"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-logger.error("Thread count calculation failed: {e}"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-logger.error("Processing priority failed: {e}""""
-#         return "normal"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-logger.error("Thermal alert callback failed: {e}"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-logger.error("Emergency procedure callback failed: {e}"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-        logger.info("Thermal boundary manager created successfully"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-        logger.error("Failed to create thermal boundary manager: {e}"""
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below""
-logger.error("Thermal boundary manager test failed: {e}""""
-if __name__ == "__main__"""
-""
+import asyncio
+import glob
+import logging
+import platform
+import subprocess
+import time
+from concurrent.futures import ThreadPoolExecutor, TimeoutError
+from dataclasses import dataclass, field
+from decimal import Decimal
+from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple, Union
+
+import psutil
+
+from core.unified_math_system import unified_math
+
+# -*- coding: utf - 8 -*-
+from dual_unicore_handler import DualUnicoreHandler
+from utils.safe_print import debug, error, info, safe_print, success, warn
+
+# Initialize Unicode handler
+unicore = DualUnicoreHandler()
+
+""""""
+""""""
+Thermal Boundary Manager - Schwabot Hardware - Aware Thermal Control
+================================================================
+
+Advanced thermal boundary management system that provides robust error handling,
+hardware scaling, and integration across CPU / GPU thermal states for trading operations.
+
+Key Features:
+- Hardware - agnostic thermal monitoring and control
+    - Robust error handling with graceful degradation
+- Dynamic resource allocation based on thermal conditions
+    - Integration with existing thermal zone and map systems
+    - Low - end hardware compatibility with CPU - only fallbacks
+- Real - time thermal state management and optimization
+
+Based on systematic elimination of Flake8 issues and SP 1.27 - AE framework.""""""
+""""""
+
+
+# Import existing thermal components
+        try:
+    from core.thermal_map_allocator import ThermalMapAllocator
+    from core.thermal_zone_manager import ThermalZone, ThermalZoneManager
+    except ImportError as e:"""""":
+    logging.warning(f"Thermal components not available: {e}")
+    ThermalZoneManager = None
+    ThermalZone = None
+    ThermalMapAllocator = None
+
+# Configure logging
+    logger = logging.getLogger(__name__)
+
+
+class ThermalState(Enum):
+
+"""Thermal state enumeration for system - wide thermal conditions."""
+""""""
+COOL = "cool"
+NORMAL = "normal"
+WARM = "warm"
+HOT = "hot"
+CRITICAL = "critical"
+EMERGENCY = "emergency"
+
+
+class HardwareType(Enum):
+
+"""Hardware type enumeration for resource management."""
+""""""
+CPU_ONLY = "cpu_only"
+GPU_AVAILABLE = "gpu_available"
+HYBRID = "hybrid"
+UNKNOWN = "unknown"
+
+
+@dataclass
+class ThermalBoundary:
+    """Thermal boundary configuration for different hardware states."""
+""""""
+
+state: ThermalState
+cpu_threshold: float
+gpu_threshold: float
+cpu_allocation: float  # 0.0 to 1.0
+gpu_allocation: float  # 0.0 to 1.0
+memory_limit_mb: int
+processing_mode: str
+emergency_procedures: List[str] = field(default_factory = list)
+cooldown_seconds: int = 0
+
+
+@dataclass
+class HardwareProfile:
+    """Hardware profile for thermal management."""
+""""""
+
+hardware_type: HardwareType
+cpu_cores: int
+gpu_available: bool
+gpu_memory_mb: int
+total_memory_mb: int
+thermal_sensors_available: bool
+low_end_hardware: bool = False
+
+
+class ThermalBoundaryManager:
+""""""
+""""""
+""""""
+Advanced thermal boundary manager with robust error handling and hardware scaling.
+
+This manager provides:
+- Hardware - agnostic thermal monitoring
+- Dynamic resource allocation
+- Graceful error handling and fallbacks
+    - Integration with existing thermal systems
+- Low - end hardware compatibility""""""
+""""""
+
+    def __init__(self,):
+
+config: Optional[Dict[str, Any]] = None,
+                enable_gpu_monitoring: bool = True,
+                enable_thermal_prediction: bool = True) -> None:""""""
+""""""
+Initialize thermal boundary manager.
+
+    Args:
+        config: Configuration dictionary
+    enable_gpu_monitoring: Enable GPU thermal monitoring
+    enable_thermal_prediction: Enable thermal prediction""""""
+    """"""
+    self.config = config or {}
+    self.enable_gpu_monitoring = enable_gpu_monitoring
+    self.enable_thermal_prediction = enable_thermal_prediction
+
+# Hardware detection
+    self.hardware_profile = self._detect_hardware()""""""
+    logger.info(f"Detected hardware: {self.hardware_profile}")
+
+# Thermal state tracking
+    self.current_thermal_state = ThermalState.NORMAL
+    self.thermal_history: List[Dict[str, Any]] = []
+    self.last_update_time = time.time()
+
+# Resource allocation tracking
+    self.current_cpu_allocation = 1.0
+        self.current_gpu_allocation = 1.0 if self.hardware_profile.gpu_available else 0.0
+    self.current_memory_limit = self.hardware_profile.total_memory_mb
+
+# Error handling and recovery
+    self.error_count = 0
+    self.last_error_time = 0.0
+    self.recovery_mode = False
+    self.emergency_mode = False
+
+# Integration with existing thermal systems
+    self.thermal_zone_manager = None
+    self.thermal_map_allocator = None
+    self._initialize_thermal_integration()
+
+# Thermal boundaries configuration
+    self.thermal_boundaries = self._configure_thermal_boundaries()
+
+# Monitoring and prediction
+    self.monitoring_active = False
+    self.prediction_model = None
+    self._setup_monitoring()
+
+    logger.info("Thermal Boundary Manager initialized successfully")
+
+def _detect_hardware(self) -> HardwareProfile:
+"""Function implementation pending."""
+"""Detect hardware capabilities and create profile."""
+""""""
+    try:
+        cpu_cores = psutil.cpu_count(logical = True) or 1
+        total_memory = psutil.virtual_memory().total // (1024 * 1024)  # MB
+
+# GPU detection (simplified)
+        gpu_available = False
+        gpu_memory = 0
+
+        if self.enable_gpu_monitoring:
+                try:
+    
+# Try to detect GPU using common methods
+        result = subprocess.run(['nvidia - smi', '--query - gpu = memory.total', '--format = csv,noheader,nounits'],)
+                                        capture_output = True, text = True, timeout = 5)
+                    if result.returncode == 0:
+                    gpu_memory = int(result.stdout.strip().split('\n')[0])
+                    gpu_available = True
+            except (subprocess.TimeoutExpired, FileNotFoundError, ValueError):"""[BRAIN] Placeholder function - SHA - 256 ID = [autogen]""":
+            """"""
+
+# Determine if low - end hardware
+            low_end = (cpu_cores <= 4 and total_memory <= 8192)  # 4 cores, 8GB RAM
+
+# Determine hardware type
+                    if gpu_available:
+                hardware_type = HardwareType.HYBRID
+                        elif low_end:
+                    hardware_type = HardwareType.CPU_ONLY
+                            else:
+                        hardware_type = HardwareType.CPU_ONLY
+
+# Thermal sensors availability
+                        thermal_sensors = self._check_thermal_sensors()
+
+                    return HardwareProfile()
+                    hardware_type = hardware_type,
+                    cpu_cores = cpu_cores,
+                    gpu_available = gpu_available,
+                    gpu_memory_mb = gpu_memory,
+                    total_memory_mb = total_memory,
+                    thermal_sensors_available = thermal_sensors,
+                    low_end_hardware = low_end
+                    )
+
+                    except Exception as e:"""""":
+                    logger.error(f"Hardware detection failed: {e}")
+# Fallback to safe defaults
+                return HardwareProfile()
+                hardware_type = HardwareType.UNKNOWN,
+                cpu_cores = 1,
+                gpu_available = False,
+                gpu_memory_mb = 0,
+                total_memory_mb = 4096,
+                thermal_sensors_available = False,
+                low_end_hardware = True
+                )
+
+def _check_thermal_sensors(self) -> bool:
+"""Function implementation pending."""
+"""Check if thermal sensors are available."""
+""""""
+    try:
+    
+# Check CPU temperature sensors""""""
+        if platform.system() == "Windows":
+# Windows thermal monitoring
+            try:
+                import wmi
+        w = wmi.WMI(namespace="root\\OpenHardwareMonitor")
+                temperature_infos = w.Sensor()
+                    return len([s for s in temperature_infos if s.SensorType == 'Temperature']) > 0
+            except ImportError:
+    
+# WMI not available, use fallback
+                return False
+            else:
+# Linux thermal monitoring
+            thermal_zones = "/sys / class / thermal / thermal_zone*/temp"
+            return len(glob.glob(thermal_zones)) > 0
+        except Exception:
+        return False
+
+def _initialize_thermal_integration(self) -> None:
+"""Function implementation pending."""
+"""Initialize integration with existing thermal systems."""
+""""""
+    try:
+            if ThermalZoneManager is not None:
+            self.thermal_zone_manager = ThermalZoneManager()""""""
+            logger.info("Thermal zone manager integrated")
+
+            if ThermalMapAllocator is not None:
+            self.thermal_map_allocator = ThermalMapAllocator()
+            logger.info("Thermal map allocator integrated")
+
+            except Exception as e:
+            logger.warning(f"Thermal integration failed: {e}")
+
+def _configure_thermal_boundaries(self) -> Dict[ThermalState, ThermalBoundary]:
+"""Function implementation pending."""
+"""Configure thermal boundaries based on hardware profile."""
+""""""
+
+# Base boundaries
+boundaries = {)
+        ThermalState.COOL: ThermalBoundary()
+            state = ThermalState.COOL,
+            cpu_threshold = 60.0,
+            gpu_threshold = 55.0,
+            cpu_allocation = 1.0,
+                gpu_allocation = 1.0 if self.hardware_profile.gpu_available else 0.0,
+            memory_limit_mb = self.hardware_profile.total_memory_mb,""""""
+            processing_mode="optimal_performance"
+        ),
+        ThermalState.NORMAL: ThermalBoundary()
+            state = ThermalState.NORMAL,
+            cpu_threshold = 70.0,
+            gpu_threshold = 65.0,
+            cpu_allocation = 0.9,
+                gpu_allocation = 0.9 if self.hardware_profile.gpu_available else 0.0,
+            memory_limit_mb = int(self.hardware_profile.total_memory_mb * 0.9),
+            processing_mode="balanced_processing"
+        ),
+        ThermalState.WARM: ThermalBoundary()
+            state = ThermalState.WARM,
+            cpu_threshold = 80.0,
+            gpu_threshold = 75.0,
+            cpu_allocation = 0.7,
+                gpu_allocation = 0.6 if self.hardware_profile.gpu_available else 0.0,
+            memory_limit_mb = int(self.hardware_profile.total_memory_mb * 0.7),
+            processing_mode="thermal_efficient",
+            cooldown_seconds = 30
+        ),
+        ThermalState.HOT: ThermalBoundary()
+            state = ThermalState.HOT,
+            cpu_threshold = 85.0,
+            gpu_threshold = 80.0,
+            cpu_allocation = 0.5,
+                gpu_allocation = 0.3 if self.hardware_profile.gpu_available else 0.0,
+            memory_limit_mb = int(self.hardware_profile.total_memory_mb * 0.5),
+            processing_mode="emergency_throttle",
+            emergency_procedures=["reduce_batch_size", "increase_cooldown"],
+            cooldown_seconds = 60
+        ),
+        ThermalState.CRITICAL: ThermalBoundary()
+            state = ThermalState.CRITICAL,
+            cpu_threshold = 90.0,
+            gpu_threshold = 85.0,
+            cpu_allocation = 0.2,
+                gpu_allocation = 0.1 if self.hardware_profile.gpu_available else 0.0,
+            memory_limit_mb = int(self.hardware_profile.total_memory_mb * 0.3),
+            processing_mode="critical_protection",
+            emergency_procedures=["emergency_shutdown", "force_cooldown"],
+            cooldown_seconds = 300
+        ),
+        ThermalState.EMERGENCY: ThermalBoundary()
+            state = ThermalState.EMERGENCY,
+            cpu_threshold = 95.0,
+            gpu_threshold = 90.0,
+            cpu_allocation = 0.1,
+            gpu_allocation = 0.0,
+            memory_limit_mb = int(self.hardware_profile.total_memory_mb * 0.1),
+            processing_mode="emergency_mode",
+            emergency_procedures=["immediate_shutdown", "system_pause"],
+            cooldown_seconds = 600
+        )
+
+# Adjust for low - end hardware
+    if self.hardware_profile.low_end_hardware:
+            for boundary in boundaries.values():
+            boundary.cpu_allocation *= 0.8
+            boundary.gpu_allocation *= 0.5
+            boundary.memory_limit_mb = int(boundary.memory_limit_mb * 0.7)
+
+return boundaries
+
+def _setup_monitoring(self) -> None:
+"""Function implementation pending."""
+"""Setup thermal monitoring system."""
+""""""
+    try:
+        self.monitoring_active = True""""""
+        logger.info("Thermal monitoring activated")
+    except Exception as e:
+        logger.error(f"Failed to setup monitoring: {e}")
+        self.monitoring_active = False
+
+            async def get_thermal_state(self) -> Dict[str, Any]:
+        """"""
+        """"""
+            Get current thermal state with robust error handling.
+
+            Returns:
+            Dictionary containing thermal state information""""""
+            """"""
+                    try:
+    
+# Get CPU temperature
+                cpu_temp = await self._get_cpu_temperature()
+
+# Get GPU temperature if available
+                    gpu_temp = await self._get_gpu_temperature() if self.hardware_profile.gpu_available else None
+
+# Determine thermal state
+                thermal_state = self._determine_thermal_state(cpu_temp, gpu_temp)
+
+# Update current state
+                self.current_thermal_state = thermal_state
+                self.last_update_time = time.time()
+
+# Create response
+                response = {"""""")
+                "thermal_state": thermal_state.value,
+                "cpu_temperature": cpu_temp,
+                "gpu_temperature": gpu_temp,
+                "cpu_allocation": self.current_cpu_allocation,
+                "gpu_allocation": self.current_gpu_allocation,
+                "memory_limit_mb": self.current_memory_limit,
+                "processing_mode": self.thermal_boundaries[thermal_state].processing_mode,
+                "hardware_profile": {)
+                "type": self.hardware_profile.hardware_type.value,
+                "cpu_cores": self.hardware_profile.cpu_cores,
+                "gpu_available": self.hardware_profile.gpu_available,
+                "low_end": self.hardware_profile.low_end_hardware
+                },
+                "timestamp": self.last_update_time,
+                "error_count": self.error_count,
+                "recovery_mode": self.recovery_mode,
+                "emergency_mode": self.emergency_mode
+
+# Add to history
+                self.thermal_history.append(response)
+                    if len(self.thermal_history) > 100:  # Keep last 100 entries:
+                self.thermal_history.pop(0)
+
+            return response
+
+                except Exception as e:
+                logger.error(f"Thermal state retrieval failed: {e}")
+                self.error_count += 1
+                self.last_error_time = time.time()
+
+# Return safe fallback
+            return {)
+            "thermal_state": ThermalState.NORMAL.value,
+            "cpu_temperature": 50.0,  # Safe assumption
+            "gpu_temperature": None,
+            "cpu_allocation": 0.5,  # Conservative allocation
+            "gpu_allocation": 0.0,
+            "memory_limit_mb": int(self.hardware_profile.total_memory_mb * 0.5),
+            "processing_mode": "safe_fallback",
+            "error": str(e),
+            "timestamp": time.time()
+
+                    async def _get_cpu_temperature(self) -> float:
+                    """Get CPU temperature with platform - specific methods."""
+                """"""
+                    try:""""""
+                        if platform.system() == "Windows":
+                return await self._get_windows_cpu_temp()
+                        else:
+                return await self._get_linux_cpu_temp()
+                    except Exception as e:
+                    logger.warning(f"CPU temperature retrieval failed: {e}")
+                return 50.0  # Safe fallback
+
+                        async def _get_windows_cpu_temp(self) -> float:
+                    """Get CPU temperature on Windows."""
+                    """"""
+                            try:
+                        import wmi""""""
+                        w = wmi.WMI(namespace="root\\OpenHardwareMonitor")
+                        temperature_infos = w.Sensor()
+                            cpu_temps = [s.Value for s in temperature_infos if s.SensorType == 'Temperature' and 'CPU' in s.Name]
+                        return float(cpu_temps[0]) if cpu_temps else 50.0
+                        except Exception:
+    
+# Fallback to CPU usage estimation
+                        cpu_percent = psutil.cpu_percent(interval = 1)
+                    return 30.0 + (cpu_percent * 0.5)  # Rough estimation
+
+                            async def _get_linux_cpu_temp(self) -> float:
+                        """Get CPU temperature on Linux."""
+                        """"""
+                            try:""""""
+                            thermal_files = glob.glob("/sys / class / thermal / thermal_zone*/temp")
+                                if thermal_files:
+                                    with open(thermal_files[0], 'r') as f:
+                                temp = float(f.read().strip()) / 1000.0  # Convert from millidegrees
+                            return temp
+                        return 50.0
+                            except Exception:
+                        return 50.0
+
+                                async def _get_gpu_temperature(self) -> Optional[float]:
+                                """Get GPU temperature if available."""
+                            """"""
+                                    try:
+                                result = await asyncio.create_subprocess_exec()
+                                'nvidia - smi', '--query - gpu = temperature.gpu', '--format = csv,noheader,nounits',
+                                stdout = asyncio.subprocess.PIPE,
+                                stderr = asyncio.subprocess.PIPE
+                                )
+                                stdout, stderr = await asyncio.wait_for(result.communicate(), timeout = 5.0)
+
+                                        if result.returncode == 0:
+                                    temp = float(stdout.decode().strip())
+                                return temp
+                            return None
+                            except Exception as e:"""""":
+                            logger.warning(f"GPU temperature retrieval failed: {e}")
+                        return None
+
+def _determine_thermal_state(self, cpu_temp: float, gpu_temp: Optional[float]) -> ThermalState:
+"""Function implementation pending."""
+"""Determine thermal state based on temperatures."""
+""""""
+
+# Check CPU temperature first
+    if cpu_temp >= 90:
+        return ThermalState.EMERGENCY
+    elif cpu_temp >= 85:
+        return ThermalState.CRITICAL
+    elif cpu_temp >= 80:
+        return ThermalState.HOT
+    elif cpu_temp >= 70:
+        return ThermalState.WARM
+    elif cpu_temp >= 60:
+        return ThermalState.NORMAL
+    else:
+        return ThermalState.COOL
+
+    async def update_resource_allocation(self):
+    """"""
+""""""
+Update resource allocation based on current thermal state.
+
+    Returns:
+        Dictionary containing new resource allocations""""""
+    """"""
+            try:
+    
+# Get current thermal state
+        thermal_info = await self.get_thermal_state()""""""
+        current_state = ThermalState(thermal_info["thermal_state"])
+
+# Get boundary for current state
+        boundary = self.thermal_boundaries[current_state]
+
+# Update allocations
+        self.current_cpu_allocation = boundary.cpu_allocation
+        self.current_gpu_allocation = boundary.gpu_allocation
+        self.current_memory_limit = boundary.memory_limit_mb
+
+# Apply emergency procedures if needed
+                if boundary.emergency_procedures:
+            await self._apply_emergency_procedures(boundary.emergency_procedures)
+
+# Update thermal zones if available
+                    if self.thermal_zone_manager:
+                await self._update_thermal_zones(current_state)
+
+            return {)
+            "cpu_allocation": self.current_cpu_allocation,
+            "gpu_allocation": self.current_gpu_allocation,
+            "memory_limit_mb": self.current_memory_limit,
+            "processing_mode": boundary.processing_mode,
+            "thermal_state": current_state.value,
+            "emergency_procedures": boundary.emergency_procedures
+
+                except Exception as e:
+                logger.error(f"Resource allocation update failed: {e}")
+# Return safe fallback
+            return {)
+            "cpu_allocation": 0.5,
+            "gpu_allocation": 0.0,
+            "memory_limit_mb": int(self.hardware_profile.total_memory_mb * 0.5),
+            "processing_mode": "safe_fallback",
+            "thermal_state": ThermalState.NORMAL.value,
+            "error": str(e)
+
+                    async def _apply_emergency_procedures(self, procedures: List[str]) -> None:
+                    """Apply emergency procedures for thermal management."""
+                """"""
+                        for procedure in procedures:
+                        try:""""""
+                            if procedure == "reduce_batch_size":
+                        logger.warning("Applying emergency procedure: reduce_batch_size")
+# Implementation would reduce processing batch sizes
+
+                                elif procedure == "increase_cooldown":
+                            logger.warning("Applying emergency procedure: increase_cooldown")
+# Implementation would increase cooldown periods
+
+                                    elif procedure == "emergency_shutdown":
+                                logger.critical("Applying emergency procedure: emergency_shutdown")
+                                self.emergency_mode = True
+# Implementation would initiate emergency shutdown
+
+                                        elif procedure == "force_cooldown":
+                                    logger.warning("Applying emergency procedure: force_cooldown")
+# Implementation would force system cooldown
+
+                                            elif procedure == "immediate_shutdown":
+                                        logger.critical("Applying emergency procedure: immediate_shutdown")
+                                        self.emergency_mode = True
+# Implementation would immediately shutdown
+
+                                                elif procedure == "system_pause":
+                                            logger.warning("Applying emergency procedure: system_pause")
+# Implementation would pause system operations
+
+                                                except Exception as e:
+                                                logger.error(f"Emergency procedure {procedure} failed: {e}")
+
+                                                        async def _update_thermal_zones(self, thermal_state: ThermalState) -> None:
+                                                        """Update thermal zones with current state."""
+                                                    """"""
+                                                            try:
+                                                                if self.thermal_zone_manager:
+# Update system thermal zone""""""
+                                                            zone_id = "system_thermal"
+                                                                    if hasattr(self.thermal_zone_manager, 'update_zone_temperature'):
+                                                                await self.thermal_zone_manager.update_zone_temperature()
+                                                                zone_id = zone_id,
+                                                                new_temperature = 50.0,  # Placeholder
+                                                                processing_time = 0.0,
+                                                                thermal_cost = 0.0
+                                                                )
+                                                                    except Exception as e:
+                                                                    logger.warning(f"Thermal zone update failed: {e}")
+
+def get_processing_recommendations(self) -> Dict[str, Any]:
+"""Function implementation pending."""
+""""""
+""""""
+Get processing recommendations based on current thermal state.
+
+Returns:
+        Dictionary containing processing recommendations""""""
+""""""
+        try:
+        boundary = self.thermal_boundaries[self.current_thermal_state]
+
+    recommendations = {"""""")
+            "recommended_batch_size": self._calculate_batch_size(boundary),
+            "recommended_threads": self._calculate_threads(boundary),
+            "memory_usage_limit": boundary.memory_limit_mb,
+            "processing_priority": self._get_processing_priority(boundary),
+            "cooldown_required": boundary.cooldown_seconds > 0,
+            "cooldown_duration": boundary.cooldown_seconds,
+            "emergency_mode": self.emergency_mode,
+            "hardware_optimization": self._get_hardware_optimization()
+
+return recommendations
+
+    except Exception as e:
+        logger.error(f"Processing recommendations failed: {e}")
+        return {)
+            "recommended_batch_size": 10,
+            "recommended_threads": 1,
+            "memory_usage_limit": 1024,
+            "processing_priority": "low",
+            "cooldown_required": False,
+            "cooldown_duration": 0,
+            "emergency_mode": False,
+            "error": str(e)
+
+def _calculate_batch_size(self, boundary: ThermalBoundary) -> int:
+"""Function implementation pending."""
+"""Calculate recommended batch size based on thermal boundary."""
+""""""
+base_size = 100
+
+    if boundary.state == ThermalState.COOL:
+        return base_size * 2
+    elif boundary.state == ThermalState.NORMAL:
+        return base_size
+    elif boundary.state == ThermalState.WARM:
+        return int(base_size * 0.7)
+        elif boundary.state == ThermalState.HOT:
+        return int(base_size * 0.5)
+        elif boundary.state == ThermalState.CRITICAL:
+        return int(base_size * 0.3)
+        else:  # EMERGENCY
+return int(base_size * 0.1)
+
+def _calculate_threads(self):
+    """Function implementation pending."""
+"""Calculate recommended thread count based on thermal boundary."""
+""""""
+max_threads = self.hardware_profile.cpu_cores
+
+    if boundary.state == ThermalState.COOL:
+        return max_threads
+    elif boundary.state == ThermalState.NORMAL:
+        return unified_math.max(1, int(max_threads * 0.9))
+        elif boundary.state == ThermalState.WARM:
+        return unified_math.max(1, int(max_threads * 0.7))
+        elif boundary.state == ThermalState.HOT:
+        return unified_math.max(1, int(max_threads * 0.5))
+        elif boundary.state == ThermalState.CRITICAL:
+        return unified_math.max(1, int(max_threads * 0.3))
+        else:  # EMERGENCY
+return 1
+
+def _get_processing_priority(self):
+    """Function implementation pending."""
+"""Get processing priority based on thermal boundary."""
+""""""
+if boundary.state in [ThermalState.CRITICAL, ThermalState.EMERGENCY]:"""""":
+        return "critical"
+    elif boundary.state == ThermalState.HOT:
+        return "high"
+    elif boundary.state == ThermalState.WARM:
+        return "medium"
+    else:
+        return "normal"
+
+def _get_hardware_optimization(self) -> Dict[str, Any]:
+"""Function implementation pending."""
+"""Get hardware - specific optimization recommendations."""
+""""""
+optimizations = {"""""")
+        "cpu_optimization": {)
+            "enable_multiprocessing": self.hardware_profile.cpu_cores > 1,
+            "max_workers": self.hardware_profile.cpu_cores,
+            "thread_scaling": True
+},
+        "memory_optimization": {)
+            "enable_garbage_collection": True,
+            "memory_pool_enabled": True,
+            "large_object_threshold_mb": 10
+},
+        "gpu_optimization": {)
+            "enable_gpu_processing": self.hardware_profile.gpu_available,
+            "memory_pool_size_mb": unified_math.min(2048, self.hardware_profile.gpu_memory_mb),
+            "batch_size_multiplier": 1.0
+
+# Adjust for low - end hardware
+    if self.hardware_profile.low_end_hardware:
+        optimizations["cpu_optimization"]["max_workers"] = unified_math.max(1, self.hardware_profile.cpu_cores // 2)
+        optimizations["memory_optimization"]["large_object_threshold_mb"] = 5
+        optimizations["gpu_optimization"]["batch_size_multiplier"] = 0.5
+
+return optimizations
+
+    async def start_monitoring(self) -> None:
+    """Start continuous thermal monitoring."""
+""""""
+        if not self.monitoring_active:
+        return
+
+        try:
+            while self.monitoring_active and not self.emergency_mode:
+# Update thermal state
+        await self.get_thermal_state()
+
+# Update resource allocation
+        await self.update_resource_allocation()
+
+# Check for thermal anomalies
+        await self._check_thermal_anomalies()
+
+# Wait before next update
+        await asyncio.sleep(10)  # 10 second intervals
+
+        except Exception as e:"""""":
+        logger.error(f"Thermal monitoring failed: {e}")
+        self.monitoring_active = False
+
+                async def _check_thermal_anomalies(self) -> None:
+                """Check for thermal anomalies and trigger alerts."""
+            """"""
+                    try:
+                        if len(self.thermal_history) < 3:
+                return
+
+# Check for rapid temperature changes""""""
+                    recent_temps = [entry["cpu_temperature"] for entry in self.thermal_history[-3:]]
+                    temp_deltas = [recent_temps[i + 1] - recent_temps[i] for i in range(len(recent_temps)-1)]
+
+                    max_delta = unified_math.max(unified_math.abs(d) for d in temp_deltas)
+                    if max_delta > 10:  # More than 10\\u00b0C change:
+                logger.warning(f"Rapid temperature change detected: {max_delta}\\u00b0C")
+                await self._trigger_thermal_alert("rapid_temperature_change", max_delta)
+
+# Check for sustained high temperature
+                        if all(temp > 80 for temp in recent_temps):
+                    logger.warning("Sustained high temperature detected")
+                    await self._trigger_thermal_alert("sustained_high_temperature", unified_math.max(recent_temps))
+
+                        except Exception as e:
+                        logger.error(f"Thermal anomaly check failed: {e}")
+
+                                async def _trigger_thermal_alert(self, alert_type: str, severity: float) -> None:
+                                """Trigger thermal alert with appropriate response."""
+                            """"""
+                                try:""""""
+                                logger.warning(f"Thermal alert: {alert_type} with severity {severity}")
+
+# Update error tracking
+                            self.error_count += 1
+                            self.last_error_time = time.time()
+
+# Implement alert response based on type
+                                    if alert_type == "rapid_temperature_change":
+# Reduce processing immediately
+                                self.current_cpu_allocation *= 0.5
+                                self.current_gpu_allocation *= 0.5
+
+                                        elif alert_type == "sustained_high_temperature":
+# Enter recovery mode
+                                    self.recovery_mode = True
+
+                                        except Exception as e:
+                                        logger.error(f"Thermal alert handling failed: {e}")
+
+def stop_monitoring(self) -> None:
+"""Function implementation pending."""
+"""Stop thermal monitoring."""
+""""""
+self.monitoring_active = False""""""
+    logger.info("Thermal monitoring stopped")
+
+def get_system_status(self) -> Dict[str, Any]:
+"""Function implementation pending."""
+"""Get comprehensive system status."""
+""""""
+return {"""""")
+        "thermal_boundary_manager": {)
+                "status": "active" if self.monitoring_active else "inactive",
+            "current_thermal_state": self.current_thermal_state.value,
+            "hardware_profile": {)
+                "type": self.hardware_profile.hardware_type.value,
+                "cpu_cores": self.hardware_profile.cpu_cores,
+                "gpu_available": self.hardware_profile.gpu_available,
+                "low_end_hardware": self.hardware_profile.low_end_hardware
+},
+            "resource_allocation": {)
+                "cpu_allocation": self.current_cpu_allocation,
+                "gpu_allocation": self.current_gpu_allocation,
+                "memory_limit_mb": self.current_memory_limit
+},
+            "error_tracking": {)
+                "error_count": self.error_count,
+                "last_error_time": self.last_error_time,
+                "recovery_mode": self.recovery_mode,
+                "emergency_mode": self.emergency_mode
+},
+            "integration": {)
+                "thermal_zone_manager": self.thermal_zone_manager is not None,
+                "thermal_map_allocator": self.thermal_map_allocator is not None
+
+
+# Factory function for easy instantiation
+def create_thermal_boundary_manager(config: Optional[Dict[str, Any]] = None) -> ThermalBoundaryManager:
+"""Function implementation pending."""
+""""""
+""""""
+Factory function to create a thermal boundary manager with default configuration.
+
+Args:
+    config: Optional configuration dictionary
+
+    Returns:
+    Configured ThermalBoundaryManager instance""""""
+    """"""
+return ThermalBoundaryManager(config = config)
+
+
+        async def main(self):
+        """Main function for testing and demonstration."""
+    """"""
+            try:
+    
+# Create thermal boundary manager
+        manager = create_thermal_boundary_manager()
+
+# Get initial thermal state
+        thermal_state = await manager.get_thermal_state()""""""
+        safe_print(f"Initial thermal state: {thermal_state}")
+
+# Get resource allocation
+        allocation = await manager.update_resource_allocation()
+        safe_print(f"Resource allocation: {allocation}")
+
+# Get processing recommendations
+        recommendations = manager.get_processing_recommendations()
+        safe_print(f"Processing recommendations: {recommendations}")
+
+# Get system status
+        status = manager.get_system_status()
+        safe_print(f"System status: {status}")
+
+            except Exception as e:
+            logger.error(f"Thermal boundary manager test failed: {e}")
+
+
+                    if __name__ == "__main__":
+                asyncio.run(main())

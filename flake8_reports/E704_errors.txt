@@ -1,8 +1,0 @@
-FLAKE8 ERROR REPORT: E704
-==================================================
-Total occurrences: 1
-
-
-File: core/phantom\entry_logic.py
-------------------------------
-  Line 5, Col 1: multiple statements on one line (def)

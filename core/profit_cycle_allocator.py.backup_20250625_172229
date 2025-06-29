@@ -1,16 +1,4 @@
-# Import safe print for Windows compatibility
-try:
-    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
-except ImportError:
-    try:
-        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
-    except ImportError:
-        def safe_print(message): print(message)
-        def info(message): print(f"[INFO] {message}")
-        def warn(message): print(f"[WARN] {message}")
-        def error(message): print(f"[ERROR] {message}")
-        def success(message): print(f"[SUCCESS] {message}")
-        def debug(message): print(f"[DEBUG] {message}")
+from utils.safe_print import safe_print, info, warn, error, success, debug
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Enhanced Profit Cycle Allocator with Matrix Mapper Integration.
@@ -22,7 +10,7 @@ strategy system for optimal profit routing and portfolio rebalancing.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Any, Dict, Sequence, Optional, List
 from datetime import datetime
 import logging
@@ -118,7 +106,7 @@ class TensorAllocation:
     timestamp: datetime
     metadata: Dict[str, Any] = field(default_factory=dict)
 
-@dataclass
+@dataclass(slots=True)
 class ProfitCycleAllocator:
     """Enhanced profit cycle allocator with matrix mapper and tensor scoring integration."""
 
@@ -126,10 +114,6 @@ class ProfitCycleAllocator:
     zpe_core: Optional[ZPECore] = None
     matrix_mapper: Optional[MatrixMapper] = None
     dlt_waveform_engine: Optional[DLTWaveformEngine] = None
-    bit_phases: Dict[int, BitResolutionPhase] = field(default_factory=dict)
-    allocation_history: List[Dict[str, Any]] = field(default_factory=list)
-    tensor_score_history: List[float] = field(default_factory=list)
-    hash_registry: Dict[str, Dict[str, Any]] = field(default_factory=dict)
     
     def __post_init__(self):
         """Initialize ZPE core and matrix mapper if available."""
@@ -153,6 +137,11 @@ class ProfitCycleAllocator:
         
         # Initialize bit resolution phases
         self.bit_phases = self._initialize_bit_phases()
+        
+        # Performance tracking
+        self.allocation_history: List[Dict[str, Any]] = []
+        self.tensor_score_history: List[float] = []
+        self.hash_registry: Dict[str, Dict[str, Any]] = {}
         
         # Integration setup
         self._setup_integrations()

@@ -1,0 +1,414 @@
+2025-06-29 07:56:27,552 - core.mathematical_relay_navigator - INFO - MathematicalRelayNavigator initialized in demo mode
+2025-06-29 07:56:27,553 - core.mathematical_relay_navigator - INFO - BTC state updated: price=50000.0, volume=1000.0, bit_depth=4, channel=primary
+2025-06-29 07:56:27,554 - core.mathematical_relay_navigator - INFO - Navigation executed: target=50100.0, result=True
+2025-06-29 07:56:27,555 - core.mathematical_relay_navigator - INFO - Bit depth switched: 32 -> 2
+2025-06-29 07:56:27,555 - core.mathematical_relay_navigator - INFO - Bit depth switched: 2 -> 4
+2025-06-29 07:56:27,556 - core.mathematical_relay_navigator - INFO - Bit depth switched: 4 -> 16
+2025-06-29 07:56:27,556 - core.mathematical_relay_navigator - INFO - Bit depth switched: 16 -> 32
+2025-06-29 07:56:27,557 - core.mathematical_relay_navigator - INFO - Bit depth switched: 32 -> 42
+2025-06-29 07:56:27,557 - core.mathematical_relay_navigator - INFO - Channel switched: primary -> primary
+2025-06-29 07:56:27,558 - core.mathematical_relay_navigator - INFO - Channel switched: primary -> secondary
+2025-06-29 07:56:27,559 - core.mathematical_relay_navigator - INFO - Channel switched: secondary -> fallback
+2025-06-29 07:56:27,562 - core.mathematical_relay_navigator - INFO - Navigation state exported to: mathematical_relay_navigation_demo_20250629_075627.json
+2025-06-29 07:56:27,565 - core.mathematical_relay_navigator - INFO - MathematicalRelayNavigator initialized in demo mode
+2025-06-29 07:56:27,565 - core.mathematical_relay_navigator - INFO - MathematicalRelayNavigator initialized in demo mode
+2025-06-29 07:56:27,566 - core.mathematical_relay_navigator - INFO - BTC state updated: price=45000.0, volume=800.0, bit_depth=4, channel=primary
+2025-06-29 07:56:27,566 - core.mathematical_relay_navigator - INFO - BTC state updated: price=45000.0, volume=800.0, bit_depth=4, channel=primary
+2025-06-29 07:56:27,567 - core.mathematical_relay_navigator - INFO - Bit depth switched: 32 -> 2
+2025-06-29 07:56:27,567 - core.mathematical_relay_navigator - INFO - Bit depth switched: 32 -> 2
+2025-06-29 07:56:27,568 - core.mathematical_relay_navigator - INFO - Bit depth switched: 2 -> 4
+2025-06-29 07:56:27,568 - core.mathematical_relay_navigator - INFO - Bit depth switched: 2 -> 4
+2025-06-29 07:56:27,569 - core.mathematical_relay_navigator - INFO - Bit depth switched: 4 -> 16
+2025-06-29 07:56:27,569 - core.mathematical_relay_navigator - INFO - Bit depth switched: 4 -> 16
+2025-06-29 07:56:27,569 - core.mathematical_relay_navigator - INFO - Bit depth switched: 16 -> 32
+2025-06-29 07:56:27,569 - core.mathematical_relay_navigator - INFO - Bit depth switched: 16 -> 32
+2025-06-29 07:56:27,570 - core.mathematical_relay_navigator - INFO - Bit depth switched: 32 -> 42
+2025-06-29 07:56:27,570 - core.mathematical_relay_navigator - INFO - Bit depth switched: 32 -> 42
+2025-06-29 07:56:27,571 - core.mathematical_relay_navigator - INFO - BTC state updated: price=50000.0, volume=1000.0, bit_depth=2, channel=primary
+2025-06-29 07:56:27,571 - core.mathematical_relay_navigator - INFO - BTC state updated: price=50000.0, volume=1000.0, bit_depth=2, channel=primary
+2025-06-29 07:56:27,572 - core.mathematical_relay_navigator - INFO - Bit depth switched: 42 -> 2
+2025-06-29 07:56:27,572 - core.mathematical_relay_navigator - INFO - Bit depth switched: 42 -> 2
+2025-06-29 07:56:27,573 - core.mathematical_relay_navigator - INFO - Bit depth switched: 2 -> 4
+2025-06-29 07:56:27,573 - core.mathematical_relay_navigator - INFO - Bit depth switched: 2 -> 4
+2025-06-29 07:56:27,574 - core.mathematical_relay_navigator - INFO - Bit depth switched: 4 -> 16
+2025-06-29 07:56:27,574 - core.mathematical_relay_navigator - INFO - Bit depth switched: 4 -> 16
+2025-06-29 07:56:27,575 - core.mathematical_relay_navigator - INFO - Bit depth switched: 16 -> 32
+2025-06-29 07:56:27,575 - core.mathematical_relay_navigator - INFO - Bit depth switched: 16 -> 32
+2025-06-29 07:56:27,576 - core.mathematical_relay_navigator - INFO - Bit depth switched: 32 -> 42
+2025-06-29 07:56:27,576 - core.mathematical_relay_navigator - INFO - Bit depth switched: 32 -> 42
+2025-06-29 07:56:27,577 - core.mathematical_relay_navigator - INFO - BTC state updated: price=55000.0, volume=1200.0, bit_depth=32, channel=primary
+2025-06-29 07:56:27,577 - core.mathematical_relay_navigator - INFO - BTC state updated: price=55000.0, volume=1200.0, bit_depth=32, channel=primary
+2025-06-29 07:56:27,578 - core.mathematical_relay_navigator - INFO - Bit depth switched: 42 -> 2
+2025-06-29 07:56:27,578 - core.mathematical_relay_navigator - INFO - Bit depth switched: 42 -> 2
+2025-06-29 07:56:27,579 - core.mathematical_relay_navigator - INFO - Bit depth switched: 2 -> 4
+2025-06-29 07:56:27,579 - core.mathematical_relay_navigator - INFO - Bit depth switched: 2 -> 4
+2025-06-29 07:56:27,579 - core.mathematical_relay_navigator - INFO - Bit depth switched: 4 -> 16
+2025-06-29 07:56:27,579 - core.mathematical_relay_navigator - INFO - Bit depth switched: 4 -> 16
+2025-06-29 07:56:27,580 - core.mathematical_relay_navigator - INFO - Bit depth switched: 16 -> 32
+2025-06-29 07:56:27,580 - core.mathematical_relay_navigator - INFO - Bit depth switched: 16 -> 32
+2025-06-29 07:56:27,581 - core.mathematical_relay_navigator - INFO - Bit depth switched: 32 -> 42
+2025-06-29 07:56:27,581 - core.mathematical_relay_navigator - INFO - Bit depth switched: 32 -> 42
+2025-06-29 07:56:27,582 - core.mathematical_relay_navigator - INFO - BTC state updated: price=60000.0, volume=1500.0, bit_depth=32, channel=primary
+2025-06-29 07:56:27,582 - core.mathematical_relay_navigator - INFO - BTC state updated: price=60000.0, volume=1500.0, bit_depth=32, channel=primary
+2025-06-29 07:56:27,583 - core.mathematical_relay_navigator - INFO - Bit depth switched: 42 -> 2
+2025-06-29 07:56:27,583 - core.mathematical_relay_navigator - INFO - Bit depth switched: 42 -> 2
+2025-06-29 07:56:27,584 - core.mathematical_relay_navigator - INFO - Bit depth switched: 2 -> 4
+2025-06-29 07:56:27,584 - core.mathematical_relay_navigator - INFO - Bit depth switched: 2 -> 4
+2025-06-29 07:56:27,585 - core.mathematical_relay_navigator - INFO - Bit depth switched: 4 -> 16
+2025-06-29 07:56:27,585 - core.mathematical_relay_navigator - INFO - Bit depth switched: 4 -> 16
+2025-06-29 07:56:27,586 - core.mathematical_relay_navigator - INFO - Bit depth switched: 16 -> 32
+2025-06-29 07:56:27,586 - core.mathematical_relay_navigator - INFO - Bit depth switched: 16 -> 32
+2025-06-29 07:56:27,587 - core.mathematical_relay_navigator - INFO - Bit depth switched: 32 -> 42
+2025-06-29 07:56:27,587 - core.mathematical_relay_navigator - INFO - Bit depth switched: 32 -> 42
+2025-06-29 07:56:27,590 - core.mathematical_relay_navigator - INFO - MathematicalRelayNavigator initialized in demo mode
+2025-06-29 07:56:27,590 - core.mathematical_relay_navigator - INFO - MathematicalRelayNavigator initialized in demo mode
+2025-06-29 07:56:27,590 - core.mathematical_relay_navigator - INFO - MathematicalRelayNavigator initialized in demo mode
+2025-06-29 07:56:27,592 - core.mathematical_relay_navigator - INFO - Channel switched: primary -> primary
+2025-06-29 07:56:27,592 - core.mathematical_relay_navigator - INFO - Channel switched: primary -> primary
+2025-06-29 07:56:27,592 - core.mathematical_relay_navigator - INFO - Channel switched: primary -> primary
+2025-06-29 07:56:27,593 - core.mathematical_relay_navigator - INFO - BTC state updated: price=50000.0, volume=1000.0, bit_depth=4, channel=primary
+2025-06-29 07:56:27,593 - core.mathematical_relay_navigator - INFO - BTC state updated: price=50000.0, volume=1000.0, bit_depth=4, channel=primary
+2025-06-29 07:56:27,593 - core.mathematical_relay_navigator - INFO - BTC state updated: price=50000.0, volume=1000.0, bit_depth=4, channel=primary
+2025-06-29 07:56:27,594 - core.mathematical_relay_navigator - INFO - Navigation executed: target=50100.0, result=True
+2025-06-29 07:56:27,594 - core.mathematical_relay_navigator - INFO - Navigation executed: target=50100.0, result=True
+2025-06-29 07:56:27,594 - core.mathematical_relay_navigator - INFO - Navigation executed: target=50100.0, result=True
+2025-06-29 07:56:27,596 - core.mathematical_relay_navigator - INFO - Channel switched: primary -> secondary
+2025-06-29 07:56:27,596 - core.mathematical_relay_navigator - INFO - Channel switched: primary -> secondary
+2025-06-29 07:56:27,596 - core.mathematical_relay_navigator - INFO - Channel switched: primary -> secondary
+2025-06-29 07:56:27,597 - core.mathematical_relay_navigator - INFO - BTC state updated: price=50000.0, volume=1000.0, bit_depth=2, channel=secondary
+2025-06-29 07:56:27,597 - core.mathematical_relay_navigator - INFO - BTC state updated: price=50000.0, volume=1000.0, bit_depth=2, channel=secondary
+2025-06-29 07:56:27,597 - core.mathematical_relay_navigator - INFO - BTC state updated: price=50000.0, volume=1000.0, bit_depth=2, channel=secondary
+2025-06-29 07:56:27,599 - core.mathematical_relay_navigator - INFO - Navigation executed: target=50100.0, result=True
+2025-06-29 07:56:27,599 - core.mathematical_relay_navigator - INFO - Navigation executed: target=50100.0, result=True
+2025-06-29 07:56:27,599 - core.mathematical_relay_navigator - INFO - Navigation executed: target=50100.0, result=True
+2025-06-29 07:56:27,601 - core.mathematical_relay_navigator - INFO - Channel switched: secondary -> fallback
+2025-06-29 07:56:27,601 - core.mathematical_relay_navigator - INFO - Channel switched: secondary -> fallback
+2025-06-29 07:56:27,601 - core.mathematical_relay_navigator - INFO - Channel switched: secondary -> fallback
+2025-06-29 07:56:27,602 - core.mathematical_relay_navigator - INFO - BTC state updated: price=50000.0, volume=1000.0, bit_depth=2, channel=fallback
+2025-06-29 07:56:27,602 - core.mathematical_relay_navigator - INFO - BTC state updated: price=50000.0, volume=1000.0, bit_depth=2, channel=fallback
+2025-06-29 07:56:27,602 - core.mathematical_relay_navigator - INFO - BTC state updated: price=50000.0, volume=1000.0, bit_depth=2, channel=fallback
+2025-06-29 07:56:27,604 - core.mathematical_relay_navigator - INFO - Navigation executed: target=50100.0, result=True
+2025-06-29 07:56:27,604 - core.mathematical_relay_navigator - INFO - Navigation executed: target=50100.0, result=True
+2025-06-29 07:56:27,604 - core.mathematical_relay_navigator - INFO - Navigation executed: target=50100.0, result=True
+2025-06-29 07:56:27,609 - core.mathematical_relay_navigator - INFO - MathematicalRelayNavigator initialized in demo mode
+2025-06-29 07:56:27,609 - core.mathematical_relay_navigator - INFO - MathematicalRelayNavigator initialized in demo mode
+2025-06-29 07:56:27,609 - core.mathematical_relay_navigator - INFO - MathematicalRelayNavigator initialized in demo mode
+2025-06-29 07:56:27,609 - core.mathematical_relay_navigator - INFO - MathematicalRelayNavigator initialized in demo mode
+2025-06-29 07:56:27,612 - core.mathematical_relay_navigator - INFO - BTC state updated: price=50000.0, volume=1000.0, bit_depth=4, channel=primary
+2025-06-29 07:56:27,612 - core.mathematical_relay_navigator - INFO - BTC state updated: price=50000.0, volume=1000.0, bit_depth=4, channel=primary
+2025-06-29 07:56:27,612 - core.mathematical_relay_navigator - INFO - BTC state updated: price=50000.0, volume=1000.0, bit_depth=4, channel=primary
+2025-06-29 07:56:27,612 - core.mathematical_relay_navigator - INFO - BTC state updated: price=50000.0, volume=1000.0, bit_depth=4, channel=primary
+2025-06-29 07:56:27,614 - core.mathematical_relay_navigator - INFO - Navigation executed: target=50100.0, result=False
+2025-06-29 07:56:27,614 - core.mathematical_relay_navigator - INFO - Navigation executed: target=50100.0, result=False
+2025-06-29 07:56:27,614 - core.mathematical_relay_navigator - INFO - Navigation executed: target=50100.0, result=False
+2025-06-29 07:56:27,614 - core.mathematical_relay_navigator - INFO - Navigation executed: target=50100.0, result=False
+2025-06-29 07:56:27,617 - core.mathematical_relay_navigator - INFO - BTC state updated: price=50000.0, volume=1000.0, bit_depth=2, channel=primary
+2025-06-29 07:56:27,617 - core.mathematical_relay_navigator - INFO - BTC state updated: price=50000.0, volume=1000.0, bit_depth=2, channel=primary
+2025-06-29 07:56:27,617 - core.mathematical_relay_navigator - INFO - BTC state updated: price=50000.0, volume=1000.0, bit_depth=2, channel=primary
+2025-06-29 07:56:27,617 - core.mathematical_relay_navigator - INFO - BTC state updated: price=50000.0, volume=1000.0, bit_depth=2, channel=primary
+2025-06-29 07:56:27,619 - core.mathematical_relay_navigator - INFO - Navigation executed: target=50500.0, result=True
+2025-06-29 07:56:27,619 - core.mathematical_relay_navigator - INFO - Navigation executed: target=50500.0, result=True
+2025-06-29 07:56:27,619 - core.mathematical_relay_navigator - INFO - Navigation executed: target=50500.0, result=True
+2025-06-29 07:56:27,619 - core.mathematical_relay_navigator - INFO - Navigation executed: target=50500.0, result=True
+2025-06-29 07:56:27,621 - core.mathematical_relay_navigator - INFO - BTC state updated: price=50000.0, volume=1000.0, bit_depth=2, channel=primary
+2025-06-29 07:56:27,621 - core.mathematical_relay_navigator - INFO - BTC state updated: price=50000.0, volume=1000.0, bit_depth=2, channel=primary
+2025-06-29 07:56:27,621 - core.mathematical_relay_navigator - INFO - BTC state updated: price=50000.0, volume=1000.0, bit_depth=2, channel=primary
+2025-06-29 07:56:27,621 - core.mathematical_relay_navigator - INFO - BTC state updated: price=50000.0, volume=1000.0, bit_depth=2, channel=primary
+2025-06-29 07:56:27,622 - core.mathematical_relay_navigator - INFO - Navigation executed: target=51000.0, result=True
+2025-06-29 07:56:27,622 - core.mathematical_relay_navigator - INFO - Navigation executed: target=51000.0, result=True
+2025-06-29 07:56:27,622 - core.mathematical_relay_navigator - INFO - Navigation executed: target=51000.0, result=True
+2025-06-29 07:56:27,622 - core.mathematical_relay_navigator - INFO - Navigation executed: target=51000.0, result=True
+2025-06-29 07:56:27,625 - core.mathematical_relay_navigator - INFO - BTC state updated: price=50000.0, volume=1000.0, bit_depth=2, channel=primary
+2025-06-29 07:56:27,625 - core.mathematical_relay_navigator - INFO - BTC state updated: price=50000.0, volume=1000.0, bit_depth=2, channel=primary
+2025-06-29 07:56:27,625 - core.mathematical_relay_navigator - INFO - BTC state updated: price=50000.0, volume=1000.0, bit_depth=2, channel=primary
+2025-06-29 07:56:27,625 - core.mathematical_relay_navigator - INFO - BTC state updated: price=50000.0, volume=1000.0, bit_depth=2, channel=primary
+2025-06-29 07:56:27,627 - core.mathematical_relay_navigator - INFO - Navigation executed: target=52000.0, result=True
+2025-06-29 07:56:27,627 - core.mathematical_relay_navigator - INFO - Navigation executed: target=52000.0, result=True
+2025-06-29 07:56:27,627 - core.mathematical_relay_navigator - INFO - Navigation executed: target=52000.0, result=True
+2025-06-29 07:56:27,627 - core.mathematical_relay_navigator - INFO - Navigation executed: target=52000.0, result=True
+2025-06-29 07:56:27,632 - core.mathematical_relay_navigator - INFO - MathematicalRelayNavigator initialized in demo mode
+2025-06-29 07:56:27,632 - core.mathematical_relay_navigator - INFO - MathematicalRelayNavigator initialized in demo mode
+2025-06-29 07:56:27,632 - core.mathematical_relay_navigator - INFO - MathematicalRelayNavigator initialized in demo mode
+2025-06-29 07:56:27,632 - core.mathematical_relay_navigator - INFO - MathematicalRelayNavigator initialized in demo mode
+2025-06-29 07:56:27,632 - core.mathematical_relay_navigator - INFO - MathematicalRelayNavigator initialized in demo mode
+2025-06-29 07:56:27,634 - core.mathematical_relay_navigator - INFO - BTC state updated: price=50000.0, volume=1000.0, bit_depth=4, channel=primary
+2025-06-29 07:56:27,634 - core.mathematical_relay_navigator - INFO - BTC state updated: price=50000.0, volume=1000.0, bit_depth=4, channel=primary
+2025-06-29 07:56:27,634 - core.mathematical_relay_navigator - INFO - BTC state updated: price=50000.0, volume=1000.0, bit_depth=4, channel=primary
+2025-06-29 07:56:27,634 - core.mathematical_relay_navigator - INFO - BTC state updated: price=50000.0, volume=1000.0, bit_depth=4, channel=primary
+2025-06-29 07:56:27,634 - core.mathematical_relay_navigator - INFO - BTC state updated: price=50000.0, volume=1000.0, bit_depth=4, channel=primary
+2025-06-29 07:56:28,551 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 32 -> 2
+2025-06-29 07:56:28,551 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 32 -> 2
+2025-06-29 07:56:28,551 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 32 -> 2
+2025-06-29 07:56:28,551 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 32 -> 2
+2025-06-29 07:56:28,551 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 32 -> 2
+2025-06-29 07:56:28,553 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 2 -> 4
+2025-06-29 07:56:28,553 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 2 -> 4
+2025-06-29 07:56:28,553 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 2 -> 4
+2025-06-29 07:56:28,553 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 2 -> 4
+2025-06-29 07:56:28,553 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 2 -> 4
+2025-06-29 07:56:28,555 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 4 -> 16
+2025-06-29 07:56:28,555 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 4 -> 16
+2025-06-29 07:56:28,555 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 4 -> 16
+2025-06-29 07:56:28,555 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 4 -> 16
+2025-06-29 07:56:28,555 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 4 -> 16
+2025-06-29 07:56:28,557 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 16 -> 32
+2025-06-29 07:56:28,557 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 16 -> 32
+2025-06-29 07:56:28,557 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 16 -> 32
+2025-06-29 07:56:28,557 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 16 -> 32
+2025-06-29 07:56:28,557 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 16 -> 32
+2025-06-29 07:56:28,559 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 32 -> 42
+2025-06-29 07:56:28,559 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 32 -> 42
+2025-06-29 07:56:28,559 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 32 -> 42
+2025-06-29 07:56:28,559 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 32 -> 42
+2025-06-29 07:56:28,559 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 32 -> 42
+2025-06-29 07:56:28,561 - core.mathematical_relay_navigator - INFO - Channel switch processed: primary -> primary
+2025-06-29 07:56:28,561 - core.mathematical_relay_navigator - INFO - Channel switch processed: primary -> primary
+2025-06-29 07:56:28,561 - core.mathematical_relay_navigator - INFO - Channel switch processed: primary -> primary
+2025-06-29 07:56:28,561 - core.mathematical_relay_navigator - INFO - Channel switch processed: primary -> primary
+2025-06-29 07:56:28,561 - core.mathematical_relay_navigator - INFO - Channel switch processed: primary -> primary
+2025-06-29 07:56:28,563 - core.mathematical_relay_navigator - INFO - Channel switch processed: primary -> secondary
+2025-06-29 07:56:28,563 - core.mathematical_relay_navigator - INFO - Channel switch processed: primary -> secondary
+2025-06-29 07:56:28,563 - core.mathematical_relay_navigator - INFO - Channel switch processed: primary -> secondary
+2025-06-29 07:56:28,563 - core.mathematical_relay_navigator - INFO - Channel switch processed: primary -> secondary
+2025-06-29 07:56:28,563 - core.mathematical_relay_navigator - INFO - Channel switch processed: primary -> secondary
+2025-06-29 07:56:28,565 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 32 -> 2
+2025-06-29 07:56:28,565 - core.mathematical_relay_navigator - INFO - Channel switch processed: secondary -> fallback
+2025-06-29 07:56:28,565 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 32 -> 2
+2025-06-29 07:56:28,565 - core.mathematical_relay_navigator - INFO - Channel switch processed: secondary -> fallback
+2025-06-29 07:56:28,565 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 32 -> 2
+2025-06-29 07:56:28,565 - core.mathematical_relay_navigator - INFO - Channel switch processed: secondary -> fallback
+2025-06-29 07:56:28,565 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 32 -> 2
+2025-06-29 07:56:28,565 - core.mathematical_relay_navigator - INFO - Channel switch processed: secondary -> fallback
+2025-06-29 07:56:28,565 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 32 -> 2
+2025-06-29 07:56:28,565 - core.mathematical_relay_navigator - INFO - Channel switch processed: secondary -> fallback
+2025-06-29 07:56:28,568 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 2 -> 4
+2025-06-29 07:56:28,569 - core.mathematical_relay_navigator - INFO - Profit navigation successful: target=50100.0, steps=1
+2025-06-29 07:56:28,568 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 2 -> 4
+2025-06-29 07:56:28,569 - core.mathematical_relay_navigator - INFO - Profit navigation successful: target=50100.0, steps=1
+2025-06-29 07:56:28,568 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 2 -> 4
+2025-06-29 07:56:28,568 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 2 -> 4
+2025-06-29 07:56:28,569 - core.mathematical_relay_navigator - INFO - Profit navigation successful: target=50100.0, steps=1
+2025-06-29 07:56:28,568 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 2 -> 4
+2025-06-29 07:56:28,572 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 4 -> 16
+2025-06-29 07:56:28,569 - core.mathematical_relay_navigator - INFO - Profit navigation successful: target=50100.0, steps=1
+2025-06-29 07:56:28,572 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 4 -> 16
+2025-06-29 07:56:28,569 - core.mathematical_relay_navigator - INFO - Profit navigation successful: target=50100.0, steps=1
+2025-06-29 07:56:28,572 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 4 -> 16
+2025-06-29 07:56:28,572 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 4 -> 16
+2025-06-29 07:56:28,572 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 4 -> 16
+2025-06-29 07:56:28,575 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 16 -> 32
+2025-06-29 07:56:28,575 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 16 -> 32
+2025-06-29 07:56:28,575 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 16 -> 32
+2025-06-29 07:56:28,575 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 16 -> 32
+2025-06-29 07:56:28,575 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 16 -> 32
+2025-06-29 07:56:28,577 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 32 -> 42
+2025-06-29 07:56:28,577 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 32 -> 42
+2025-06-29 07:56:28,577 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 32 -> 42
+2025-06-29 07:56:28,577 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 32 -> 42
+2025-06-29 07:56:28,577 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 32 -> 42
+2025-06-29 07:56:28,578 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 42 -> 2
+2025-06-29 07:56:28,578 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 42 -> 2
+2025-06-29 07:56:28,578 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 42 -> 2
+2025-06-29 07:56:28,578 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 42 -> 2
+2025-06-29 07:56:28,578 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 42 -> 2
+2025-06-29 07:56:28,580 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 2 -> 4
+2025-06-29 07:56:28,580 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 2 -> 4
+2025-06-29 07:56:28,580 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 2 -> 4
+2025-06-29 07:56:28,580 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 2 -> 4
+2025-06-29 07:56:28,580 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 2 -> 4
+2025-06-29 07:56:28,581 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 4 -> 16
+2025-06-29 07:56:28,581 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 4 -> 16
+2025-06-29 07:56:28,581 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 4 -> 16
+2025-06-29 07:56:28,581 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 4 -> 16
+2025-06-29 07:56:28,581 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 4 -> 16
+2025-06-29 07:56:28,583 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 16 -> 32
+2025-06-29 07:56:28,583 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 16 -> 32
+2025-06-29 07:56:28,583 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 16 -> 32
+2025-06-29 07:56:28,583 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 16 -> 32
+2025-06-29 07:56:28,583 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 16 -> 32
+2025-06-29 07:56:28,584 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 32 -> 42
+2025-06-29 07:56:28,584 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 32 -> 42
+2025-06-29 07:56:28,584 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 32 -> 42
+2025-06-29 07:56:28,584 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 32 -> 42
+2025-06-29 07:56:28,584 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 32 -> 42
+2025-06-29 07:56:28,586 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 42 -> 2
+2025-06-29 07:56:28,586 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 42 -> 2
+2025-06-29 07:56:28,586 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 42 -> 2
+2025-06-29 07:56:28,586 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 42 -> 2
+2025-06-29 07:56:28,586 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 42 -> 2
+2025-06-29 07:56:28,588 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 2 -> 4
+2025-06-29 07:56:28,588 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 2 -> 4
+2025-06-29 07:56:28,588 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 2 -> 4
+2025-06-29 07:56:28,588 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 2 -> 4
+2025-06-29 07:56:28,588 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 2 -> 4
+2025-06-29 07:56:28,590 - core.mathematical_relay_navigator - INFO - Channel switch processed: primary -> primary
+2025-06-29 07:56:28,590 - core.mathematical_relay_navigator - INFO - Channel switch processed: primary -> primary
+2025-06-29 07:56:28,590 - core.mathematical_relay_navigator - INFO - Channel switch processed: primary -> primary
+2025-06-29 07:56:28,591 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 4 -> 16
+2025-06-29 07:56:28,590 - core.mathematical_relay_navigator - INFO - Channel switch processed: primary -> primary
+2025-06-29 07:56:28,591 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 4 -> 16
+2025-06-29 07:56:28,590 - core.mathematical_relay_navigator - INFO - Channel switch processed: primary -> primary
+2025-06-29 07:56:28,591 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 4 -> 16
+2025-06-29 07:56:28,593 - core.mathematical_relay_navigator - INFO - Channel switch processed: primary -> secondary
+2025-06-29 07:56:28,591 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 4 -> 16
+2025-06-29 07:56:28,593 - core.mathematical_relay_navigator - INFO - Channel switch processed: primary -> secondary
+2025-06-29 07:56:28,591 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 4 -> 16
+2025-06-29 07:56:28,593 - core.mathematical_relay_navigator - INFO - Channel switch processed: primary -> secondary
+2025-06-29 07:56:28,593 - core.mathematical_relay_navigator - INFO - Channel switch processed: primary -> secondary
+2025-06-29 07:56:28,595 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 16 -> 32
+2025-06-29 07:56:28,593 - core.mathematical_relay_navigator - INFO - Channel switch processed: primary -> secondary
+2025-06-29 07:56:28,595 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 16 -> 32
+2025-06-29 07:56:28,597 - core.mathematical_relay_navigator - INFO - Channel switch processed: secondary -> fallback
+2025-06-29 07:56:28,595 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 16 -> 32
+2025-06-29 07:56:28,597 - core.mathematical_relay_navigator - INFO - Channel switch processed: secondary -> fallback
+2025-06-29 07:56:28,595 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 16 -> 32
+2025-06-29 07:56:28,597 - core.mathematical_relay_navigator - INFO - Channel switch processed: secondary -> fallback
+2025-06-29 07:56:28,595 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 16 -> 32
+2025-06-29 07:56:28,597 - core.mathematical_relay_navigator - INFO - Channel switch processed: secondary -> fallback
+2025-06-29 07:56:28,599 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 32 -> 42
+2025-06-29 07:56:28,597 - core.mathematical_relay_navigator - INFO - Channel switch processed: secondary -> fallback
+2025-06-29 07:56:28,599 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 32 -> 42
+2025-06-29 07:56:28,599 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 32 -> 42
+2025-06-29 07:56:28,600 - core.mathematical_relay_navigator - INFO - Profit navigation successful: target=50100.0, steps=1
+2025-06-29 07:56:28,599 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 32 -> 42
+2025-06-29 07:56:28,600 - core.mathematical_relay_navigator - INFO - Profit navigation successful: target=50100.0, steps=1
+2025-06-29 07:56:28,599 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 32 -> 42
+2025-06-29 07:56:28,600 - core.mathematical_relay_navigator - INFO - Profit navigation successful: target=50100.0, steps=1
+2025-06-29 07:56:28,602 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 42 -> 2
+2025-06-29 07:56:28,600 - core.mathematical_relay_navigator - INFO - Profit navigation successful: target=50100.0, steps=1
+2025-06-29 07:56:28,602 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 42 -> 2
+2025-06-29 07:56:28,600 - core.mathematical_relay_navigator - INFO - Profit navigation successful: target=50100.0, steps=1
+2025-06-29 07:56:28,602 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 42 -> 2
+2025-06-29 07:56:28,602 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 42 -> 2
+2025-06-29 07:56:28,605 - core.mathematical_relay_navigator - INFO - Profit navigation successful: target=50100.0, steps=1
+2025-06-29 07:56:28,602 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 42 -> 2
+2025-06-29 07:56:28,605 - core.mathematical_relay_navigator - INFO - Profit navigation successful: target=50100.0, steps=1
+2025-06-29 07:56:28,605 - core.mathematical_relay_navigator - INFO - Profit navigation successful: target=50100.0, steps=1
+2025-06-29 07:56:28,607 - core.mathematical_relay_navigator - WARNING - Profit navigation failed: target=50100.0
+2025-06-29 07:56:28,605 - core.mathematical_relay_navigator - INFO - Profit navigation successful: target=50100.0, steps=1
+2025-06-29 07:56:28,607 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 2 -> 4
+2025-06-29 07:56:28,607 - core.mathematical_relay_navigator - WARNING - Profit navigation failed: target=50100.0
+2025-06-29 07:56:28,605 - core.mathematical_relay_navigator - INFO - Profit navigation successful: target=50100.0, steps=1
+2025-06-29 07:56:28,607 - core.mathematical_relay_navigator - WARNING - Profit navigation failed: target=50100.0
+2025-06-29 07:56:28,607 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 2 -> 4
+2025-06-29 07:56:28,607 - core.mathematical_relay_navigator - WARNING - Profit navigation failed: target=50100.0
+2025-06-29 07:56:28,607 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 2 -> 4
+2025-06-29 07:56:28,610 - core.mathematical_relay_navigator - INFO - Profit navigation successful: target=50100.0, steps=1
+2025-06-29 07:56:28,607 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 2 -> 4
+2025-06-29 07:56:28,607 - core.mathematical_relay_navigator - WARNING - Profit navigation failed: target=50100.0
+2025-06-29 07:56:28,610 - core.mathematical_relay_navigator - INFO - Profit navigation successful: target=50100.0, steps=1
+2025-06-29 07:56:28,607 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 2 -> 4
+2025-06-29 07:56:28,610 - core.mathematical_relay_navigator - INFO - Profit navigation successful: target=50100.0, steps=1
+2025-06-29 07:56:28,611 - core.mathematical_relay_navigator - INFO - Profit navigation successful: target=50500.0, steps=1
+2025-06-29 07:56:28,610 - core.mathematical_relay_navigator - INFO - Profit navigation successful: target=50100.0, steps=1
+2025-06-29 07:56:28,611 - core.mathematical_relay_navigator - INFO - Profit navigation successful: target=50500.0, steps=1
+2025-06-29 07:56:28,613 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 4 -> 16
+2025-06-29 07:56:28,610 - core.mathematical_relay_navigator - INFO - Profit navigation successful: target=50100.0, steps=1
+2025-06-29 07:56:28,611 - core.mathematical_relay_navigator - INFO - Profit navigation successful: target=50500.0, steps=1
+2025-06-29 07:56:28,613 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 4 -> 16
+2025-06-29 07:56:28,611 - core.mathematical_relay_navigator - INFO - Profit navigation successful: target=50500.0, steps=1
+2025-06-29 07:56:28,613 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 4 -> 16
+2025-06-29 07:56:28,611 - core.mathematical_relay_navigator - INFO - Profit navigation successful: target=50500.0, steps=1
+2025-06-29 07:56:28,613 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 4 -> 16
+2025-06-29 07:56:28,617 - core.mathematical_relay_navigator - INFO - Profit navigation successful: target=51000.0, steps=1
+2025-06-29 07:56:28,613 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 4 -> 16
+2025-06-29 07:56:28,617 - core.mathematical_relay_navigator - INFO - Profit navigation successful: target=51000.0, steps=1
+2025-06-29 07:56:28,617 - core.mathematical_relay_navigator - INFO - Profit navigation successful: target=51000.0, steps=1
+2025-06-29 07:56:28,618 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 16 -> 32
+2025-06-29 07:56:28,617 - core.mathematical_relay_navigator - INFO - Profit navigation successful: target=51000.0, steps=1
+2025-06-29 07:56:28,618 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 16 -> 32
+2025-06-29 07:56:28,617 - core.mathematical_relay_navigator - INFO - Profit navigation successful: target=51000.0, steps=1
+2025-06-29 07:56:28,618 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 16 -> 32
+2025-06-29 07:56:28,620 - core.mathematical_relay_navigator - INFO - Profit navigation successful: target=52000.0, steps=1
+2025-06-29 07:56:28,620 - core.mathematical_relay_navigator - INFO - Profit navigation successful: target=52000.0, steps=1
+2025-06-29 07:56:28,618 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 16 -> 32
+2025-06-29 07:56:28,620 - core.mathematical_relay_navigator - INFO - Profit navigation successful: target=52000.0, steps=1
+2025-06-29 07:56:28,618 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 16 -> 32
+2025-06-29 07:56:28,620 - core.mathematical_relay_navigator - INFO - Profit navigation successful: target=52000.0, steps=1
+2025-06-29 07:56:28,620 - core.mathematical_relay_navigator - INFO - Profit navigation successful: target=52000.0, steps=1
+2025-06-29 07:56:28,623 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 32 -> 42
+2025-06-29 07:56:28,623 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 32 -> 42
+2025-06-29 07:56:28,623 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 32 -> 42
+2025-06-29 07:56:28,623 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 32 -> 42
+2025-06-29 07:56:28,623 - core.mathematical_relay_navigator - INFO - Bit depth switch processed: 32 -> 42
+2025-06-29 07:56:29,637 - core.mathematical_relay_navigator - INFO - BTC state updated: price=50000.0, volume=1000.0, bit_depth=2, channel=primary
+2025-06-29 07:56:29,637 - core.mathematical_relay_navigator - INFO - BTC state updated: price=50000.0, volume=1000.0, bit_depth=2, channel=primary
+2025-06-29 07:56:29,637 - core.mathematical_relay_navigator - INFO - BTC state updated: price=50000.0, volume=1000.0, bit_depth=2, channel=primary
+2025-06-29 07:56:29,637 - core.mathematical_relay_navigator - INFO - BTC state updated: price=50000.0, volume=1000.0, bit_depth=2, channel=primary
+2025-06-29 07:56:29,637 - core.mathematical_relay_navigator - INFO - BTC state updated: price=50000.0, volume=1000.0, bit_depth=2, channel=primary
+2025-06-29 07:56:29,639 - core.mathematical_relay_navigator - INFO - Navigation executed: target=50100.0, result=True
+2025-06-29 07:56:29,639 - core.mathematical_relay_navigator - INFO - Navigation executed: target=50100.0, result=True
+2025-06-29 07:56:29,639 - core.mathematical_relay_navigator - INFO - Navigation executed: target=50100.0, result=True
+2025-06-29 07:56:29,639 - core.mathematical_relay_navigator - INFO - Navigation executed: target=50100.0, result=True
+2025-06-29 07:56:29,639 - core.mathematical_relay_navigator - INFO - Navigation executed: target=50100.0, result=True
+2025-06-29 07:57:19,797 - core.mathematical_relay_navigator - INFO - MathematicalRelayNavigator initialized in demo mode
+2025-06-29 07:57:19,798 - core.mathematical_relay_navigator - INFO - BTC state updated: price=50000.0, volume=1000.0, bit_depth=4, channel=primary
+2025-06-29 07:57:19,799 - core.mathematical_relay_navigator - INFO - Navigation executed: target=50100.0, result=True
+2025-06-29 07:57:19,800 - core.mathematical_relay_navigator - INFO - Bit depth switched: 32 -> 2
+2025-06-29 07:57:19,801 - core.mathematical_relay_navigator - INFO - Bit depth switched: 2 -> 4
+2025-06-29 07:57:19,801 - core.mathematical_relay_navigator - INFO - Bit depth switched: 4 -> 16
+2025-06-29 07:57:19,802 - core.mathematical_relay_navigator - INFO - Bit depth switched: 16 -> 32
+2025-06-29 07:57:19,803 - core.mathematical_relay_navigator - INFO - Bit depth switched: 32 -> 42
+2025-06-29 07:57:19,803 - core.mathematical_relay_navigator - INFO - Channel switched: primary -> primary
+2025-06-29 07:57:19,804 - core.mathematical_relay_navigator - INFO - Channel switched: primary -> secondary
+2025-06-29 07:57:19,804 - core.mathematical_relay_navigator - INFO - Channel switched: secondary -> fallback
+2025-06-29 07:57:19,807 - core.mathematical_relay_navigator - INFO - Navigation state exported to: mathematical_relay_navigation_demo_20250629_075719.json
+2025-06-29 07:57:19,828 - core.mathematical_relay_navigator - INFO - MathematicalRelayNavigator initialized in demo mode
+2025-06-29 07:57:19,828 - core.mathematical_relay_navigator - INFO - MathematicalRelayNavigator initialized in demo mode
+2025-06-29 07:57:19,830 - core.mathematical_relay_navigator - INFO - BTC state updated: price=45000.0, volume=800.0, bit_depth=4, channel=primary
+2025-06-29 07:57:19,830 - core.mathematical_relay_navigator - INFO - BTC state updated: price=45000.0, volume=800.0, bit_depth=4, channel=primary
+2025-06-29 07:57:19,831 - core.mathematical_relay_navigator - INFO - Bit depth switched: 32 -> 2
+2025-06-29 07:57:19,831 - core.mathematical_relay_navigator - INFO - Bit depth switched: 32 -> 2
+2025-06-29 07:57:19,832 - core.mathematical_relay_navigator - INFO - Bit depth switched: 2 -> 4
+2025-06-29 07:57:19,832 - core.mathematical_relay_navigator - INFO - Bit depth switched: 2 -> 4
+2025-06-29 07:57:19,833 - core.mathematical_relay_navigator - INFO - Bit depth switched: 4 -> 16
+2025-06-29 07:57:19,833 - core.mathematical_relay_navigator - INFO - Bit depth switched: 4 -> 16
+2025-06-29 07:57:19,833 - core.mathematical_relay_navigator - INFO - Bit depth switched: 16 -> 32
+2025-06-29 07:57:19,833 - core.mathematical_relay_navigator - INFO - Bit depth switched: 16 -> 32
+2025-06-29 07:57:19,834 - core.mathematical_relay_navigator - INFO - Bit depth switched: 32 -> 42
+2025-06-29 07:57:19,834 - core.mathematical_relay_navigator - INFO - Bit depth switched: 32 -> 42
+2025-06-29 07:57:19,836 - core.mathematical_relay_navigator - INFO - BTC state updated: price=50000.0, volume=1000.0, bit_depth=2, channel=primary
+2025-06-29 07:57:19,836 - core.mathematical_relay_navigator - INFO - BTC state updated: price=50000.0, volume=1000.0, bit_depth=2, channel=primary
+2025-06-29 07:57:19,837 - core.mathematical_relay_navigator - INFO - Bit depth switched: 42 -> 2
+2025-06-29 07:57:19,837 - core.mathematical_relay_navigator - INFO - Bit depth switched: 42 -> 2
+2025-06-29 07:57:19,839 - core.mathematical_relay_navigator - INFO - Bit depth switched: 2 -> 4
+2025-06-29 07:57:19,839 - core.mathematical_relay_navigator - INFO - Bit depth switched: 2 -> 4
+2025-06-29 07:57:19,840 - core.mathematical_relay_navigator - INFO - Bit depth switched: 4 -> 16
+2025-06-29 07:57:19,840 - core.mathematical_relay_navigator - INFO - Bit depth switched: 4 -> 16
+2025-06-29 07:57:19,840 - core.mathematical_relay_navigator - INFO - Bit depth switched: 16 -> 32
+2025-06-29 07:57:19,840 - core.mathematical_relay_navigator - INFO - Bit depth switched: 16 -> 32
+2025-06-29 07:57:19,841 - core.mathematical_relay_navigator - INFO - Bit depth switched: 32 -> 42
+2025-06-29 07:57:19,841 - core.mathematical_relay_navigator - INFO - Bit depth switched: 32 -> 42
+2025-06-29 07:57:19,842 - core.mathematical_relay_navigator - INFO - BTC state updated: price=55000.0, volume=1200.0, bit_depth=32, channel=primary
+2025-06-29 07:57:19,842 - core.mathematical_relay_navigator - INFO - BTC state updated: price=55000.0, volume=1200.0, bit_depth=32, channel=primary
+2025-06-29 07:57:19,843 - core.mathematical_relay_navigator - INFO - Bit depth switched: 42 -> 2
+2025-06-29 07:57:19,843 - core.mathematical_relay_navigator - INFO - Bit depth switched: 42 -> 2
+2025-06-29 07:57:19,844 - core.mathematical_relay_navigator - INFO - Bit depth switched: 2 -> 4
+2025-06-29 07:57:19,844 - core.mathematical_relay_navigator - INFO - Bit depth switched: 2 -> 4
+2025-06-29 07:57:19,845 - core.mathematical_relay_navigator - INFO - Bit depth switched: 4 -> 16
+2025-06-29 07:57:19,845 - core.mathematical_relay_navigator - INFO - Bit depth switched: 4 -> 16
+2025-06-29 07:57:19,846 - core.mathematical_relay_navigator - INFO - Bit depth switched: 16 -> 32
+2025-06-29 07:57:19,846 - core.mathematical_relay_navigator - INFO - Bit depth switched: 16 -> 32
+2025-06-29 07:57:19,846 - core.mathematical_relay_navigator - INFO - Bit depth switched: 32 -> 42
+2025-06-29 07:57:19,846 - core.mathematical_relay_navigator - INFO - Bit depth switched: 32 -> 42
+2025-06-29 07:57:19,850 - core.mathematical_relay_navigator - INFO - MathematicalRelayNavigator initialized in demo mode
+2025-06-29 07:57:19,850 - core.mathematical_relay_navigator - INFO - MathematicalRelayNavigator initialized in demo mode
+2025-06-29 07:57:19,850 - core.mathematical_relay_navigator - INFO - MathematicalRelayNavigator initialized in demo mode
+2025-06-29 07:57:19,852 - core.mathematical_relay_navigator - INFO - BTC state updated: price=50000.0, volume=1000.0, bit_depth=4, channel=primary
+2025-06-29 07:57:19,852 - core.mathematical_relay_navigator - INFO - BTC state updated: price=50000.0, volume=1000.0, bit_depth=4, channel=primary
+2025-06-29 07:57:19,852 - core.mathematical_relay_navigator - INFO - BTC state updated: price=50000.0, volume=1000.0, bit_depth=4, channel=primary
+2025-06-29 07:57:19,854 - core.mathematical_relay_navigator - INFO - Navigation executed: target=50100.0, result=True
+2025-06-29 07:57:19,854 - core.mathematical_relay_navigator - INFO - Navigation executed: target=50100.0, result=True
+2025-06-29 07:57:19,854 - core.mathematical_relay_navigator - INFO - Navigation executed: target=50100.0, result=True
+2025-06-29 07:57:19,856 - core.mathematical_relay_navigator - INFO - BTC state updated: price=50000.0, volume=1000.0, bit_depth=2, channel=primary
+2025-06-29 07:57:19,856 - core.mathematical_relay_navigator - INFO - BTC state updated: price=50000.0, volume=1000.0, bit_depth=2, channel=primary
+2025-06-29 07:57:19,856 - core.mathematical_relay_navigator - INFO - BTC state updated: price=50000.0, volume=1000.0, bit_depth=2, channel=primary
+2025-06-29 07:57:19,857 - core.mathematical_relay_navigator - INFO - Navigation executed: target=50500.0, result=True
+2025-06-29 07:57:19,857 - core.mathematical_relay_navigator - INFO - Navigation executed: target=50500.0, result=True
+2025-06-29 07:57:19,857 - core.mathematical_relay_navigator - INFO - Navigation executed: target=50500.0, result=True
+2025-06-29 07:57:19,860 - core.mathematical_relay_navigator - INFO - BTC state updated: price=50000.0, volume=1000.0, bit_depth=2, channel=primary
+2025-06-29 07:57:19,860 - core.mathematical_relay_navigator - INFO - BTC state updated: price=50000.0, volume=1000.0, bit_depth=2, channel=primary
+2025-06-29 07:57:19,860 - core.mathematical_relay_navigator - INFO - BTC state updated: price=50000.0, volume=1000.0, bit_depth=2, channel=primary
+2025-06-29 07:57:19,862 - core.mathematical_relay_navigator - INFO - Navigation executed: target=51000.0, result=True
+2025-06-29 07:57:19,862 - core.mathematical_relay_navigator - INFO - Navigation executed: target=51000.0, result=True
+2025-06-29 07:57:19,862 - core.mathematical_relay_navigator - INFO - Navigation executed: target=51000.0, result=True

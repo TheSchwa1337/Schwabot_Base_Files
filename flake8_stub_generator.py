@@ -49,7 +49,6 @@ from typing import Dict, List, Set
 from dual_unicore_handler import DualUnicoreHandler
 
 # Import core mathematical modules
-from core.unified_math_system import unified_math
 from core.bit_phase_sequencer import BitPhase, BitSequence
 from core.symbolic_profit_router import ProfitTier, FlipBias, SymbolicState
 from core.dual_error_handler import PhaseState, SickType, SickState

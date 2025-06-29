@@ -1,0 +1,230 @@
+# -*- coding: utf-8 -*-
+"""
+Truth Lattice Math for Schwabot Trading
+======================================
+
+Provides truth lattice mathematics with 32-bit phase integration and ZPE/ZBE
+thermal control systems for enhanced mathematical precision in trading analysis.
+
+Mathematical Foundation:
+    - Truth lattice operations with thermal state management
+    - Consensus calculation with 32-bit phase integration
+    - Mathematical validation with dualistic mode support
+    - Legacy lattice mathematics preservation
+"""
+
+from __future__ import annotations
+from typing import Dict, Any, List, Optional
+from dual_unicore_handler import DualUnicoreHandler
+import numpy as np
+import logging
+
+# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below:
+from core.phase_bit_integration import BitPhase, StrategyType, PhaseBitIntegration
+# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below:
+from core.unified_profit_vectorization_system import UnifiedProfitVectorizationSystem
+# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below:
+from core.unified_math_system import unified_math
+
+# Initialize Unicode handler
+unicore = DualUnicoreHandler()
+
+# Configure logging
+logger = logging.getLogger(__name__)
+
+# Thermal state constants for truth lattice operations
+COOL = "cool"      # Low thermal state (4-bit operations)
+WARM = "warm"      # Mid thermal state (8-bit operations)
+HOT = "hot"        # High thermal state (32-bit operations)
+CRITICAL = "critical"  # Extreme thermal state (42-bit operations)
+
+
+class ConsensusResult:
+    """Consensus result container for truth lattice operations."""
+
+    def __init__(self, score: float, threshold: float, reached: bool):
+        """Initialize consensus result."""
+        self.score = score
+        self.threshold = threshold
+        self.reached = reached
+
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert to dictionary representation."""
+        return {
+            "score": self.score,
+            "threshold": self.threshold,
+            "reached": self.reached
+        }
+
+
+class TruthLatticeMath:
+    """Truth lattice mathematics with 32-bit phase integration and thermal management."""
+
+    def __init__(self):
+        """Initialize truth lattice math with phase-bit integration."""
+        self.phase_bit_integration = PhaseBitIntegration()
+        self.profit_vectorization = UnifiedProfitVectorizationSystem()
+        self.thermal_state = WARM  # Default to warm state
+        self.dualistic_mode = False
+        self.current_bit_phase = BitPhase.EIGHT_BIT
+
+        logger.info("TruthLatticeMath initialized with 32-bit phase integration")
+
+    def collapse_truth_lattice(self, signals: np.ndarray, weights: Optional[np.ndarray] = None) -> Dict[str, Any]:
+        """Collapse truth lattice with 32-bit phase consideration and thermal management."""
+        try:
+            # Validate inputs
+            if weights is not None and len(weights) != len(signals):
+                raise ValueError("weights must match signals length")
+
+            # Determine thermal state based on signal complexity
+            thermal_state = self._determine_thermal_state(signals)
+
+            # Get bit phase resolution for lattice collapse
+            bit_phase_result = self.phase_bit_integration.resolve_bit_phase(
+                str(hash(str(signals.tolist()))), "auto"
+            )
+
+            # Update current bit phase
+            self.current_bit_phase = bit_phase_result.bit_phase
+
+            # Determine if dualistic mode is needed (32-bit operations)
+            dualistic_mode = bit_phase_result.bit_phase == BitPhase.THIRTY_TWO_BIT
+
+            # Perform lattice collapse with thermal considerations
+            collapse_result = self._perform_lattice_collapse_by_thermal_state(signals, weights, thermal_state)
+
+            logger.debug(f"Truth lattice collapsed: score={collapse_result.get('score', 0):.4f} (thermal: {thermal_state})")
+
+            return {
+                **collapse_result,
+                "thermal_state": thermal_state,
+                "bit_phase": bit_phase_result.bit_phase.value,
+                "dualistic_mode": dualistic_mode,
+                "confidence": bit_phase_result.confidence,
+                "strategy_type": bit_phase_result.strategy_type.value,
+                "collapse_status": "completed"
+            }
+
+        except Exception as e:
+            logger.error(f"Truth lattice collapse failed: {e}")
+            return {"error": str(e)}
+
+    def calculate_consensus_score(self, signals: np.ndarray, threshold: float = 0.5) -> ConsensusResult:
+        """
+        Calculate consensus score with thermal state considerations.
+        
+        Mathematical Formula: consensus_score = weighted_mean(signals)
+        """
+        try:
+            # Determine thermal state based on signal properties
+            thermal_state = self._determine_thermal_state_from_signals(signals)
+
+            # Calculate base consensus score
+            base_score = float(unified_math.mean(signals))
+
+            # Apply thermal adjustment
+            thermal_multiplier = self._get_thermal_multiplier(thermal_state)
+            adjusted_score = base_score * thermal_multiplier
+
+            # Determine if consensus is reached
+            reached = adjusted_score >= threshold
+
+            return ConsensusResult(
+                score=adjusted_score,
+                threshold=threshold,
+                reached=reached
+            )
+
+        except Exception as e:
+            logger.error(f"Consensus score calculation failed: {e}")
+            return ConsensusResult(score=0.0, threshold=threshold, reached=False)
+
+    def _determine_thermal_state(self, signals: np.ndarray) -> str:
+        """Determine thermal state based on signal complexity."""
+        # Calculate signal complexity based on variance and size
+        signal_variance = float(unified_math.var(signals))
+        signal_size = signals.size
+        signal_complexity = signal_variance * np.log(signal_size + 1)
+        
+        complexity_hash = hash(str(signal_complexity))
+
+        if complexity_hash % 4 == 0:
+            return COOL      # 4-bit operations
+        elif complexity_hash % 4 == 1:
+            return WARM      # 8-bit operations
+        elif complexity_hash % 4 == 2:
+            return HOT       # 32-bit operations
+        else:
+            return CRITICAL  # 42-bit operations
+
+    def _determine_thermal_state_from_signals(self, signals: np.ndarray) -> str:
+        """Determine thermal state based on signal properties."""
+        signals_hash = hash(str(signals.flatten()[:100].tolist()))
+
+        if signals_hash % 4 == 0:
+            return COOL      # 4-bit operations
+        elif signals_hash % 4 == 1:
+            return WARM      # 8-bit operations
+        elif signals_hash % 4 == 2:
+            return HOT       # 32-bit operations
+        else:
+            return CRITICAL  # 42-bit operations
+
+    def _perform_lattice_collapse_by_thermal_state(self, signals: np.ndarray, 
+                                                 weights: Optional[np.ndarray], 
+                                                 thermal_state: str) -> Dict[str, Any]:
+        """Perform lattice collapse based on thermal state."""
+        try:
+            # Apply thermal processing adjustments
+            thermal_multiplier = self._get_thermal_multiplier(thermal_state)
+            
+            # Calculate weighted consensus if weights provided
+            if weights is not None:
+                weighted_signals = signals * weights
+                base_score = float(unified_math.sum(weighted_signals) / unified_math.sum(weights))
+            else:
+                base_score = float(unified_math.mean(signals))
+
+            # Apply thermal adjustment
+            adjusted_score = base_score * thermal_multiplier
+
+            # Determine consensus threshold
+            threshold = 0.5 * thermal_multiplier
+            consensus_reached = adjusted_score >= threshold
+
+            return {
+                "score": adjusted_score,
+                "threshold": threshold,
+                "reached": consensus_reached,
+                "base_score": base_score,
+                "thermal_multiplier": thermal_multiplier,
+                "signal_count": len(signals)
+            }
+
+        except Exception as e:
+            logger.error(f"Lattice collapse error: {e}")
+            return {"error": str(e), "score": 0.0, "reached": False}
+
+    def _get_thermal_multiplier(self, thermal_state: str) -> float:
+        """Get thermal state multiplier for truth lattice operations."""
+        thermal_multipliers = {
+            COOL: 0.9,      # Conservative collapse for cool state
+            WARM: 1.0,      # Standard collapse for warm state
+            HOT: 1.1,       # Enhanced collapse for hot state (32-bit)
+            CRITICAL: 1.2   # Maximum collapse for critical state
+        }
+        return thermal_multipliers.get(thermal_state, 1.0)
+
+
+# Global instance for backward compatibility
+truth_lattice_math = TruthLatticeMath()
+
+
+# Export alias
+collapse_truth_lattice = truth_lattice_math.collapse_truth_lattice
+
+
+# Placeholder main function
+if __name__ == "__main__":
+    print("Truth Lattice Math - 32-bit Phase Integration & Thermal Management Ready")

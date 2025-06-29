@@ -1,0 +1,97 @@
+#!/usr/bin/env python3
+"""
+Precision-service - exposes:
+
+• GET  /precision/stats     - live decimals, window-size, pnl proxy
+• POST /precision/override  - body {"decimals": <2-8>, "auto": true|false}
+
+Run with:  python -m core.precision_service
+"""
+from __future__ import annotations
+
+from statistics import mean
+from typing import Dict
+
+import uvicorn
+from fastapi import Body, FastAPI
+from pydantic import BaseModel, Field
+
+from core.price_event_registry import last
+from core.price_precision_utils import _set_runtime_decimals, get_active_decimals
+
+# ---------------------------------------------------------------------------
+# App + state
+# ---------------------------------------------------------------------------
+app = FastAPI(title="Precision Service")
+_AUTO_MODE = True
+
+
+# ---------------------------------------------------------------------------
+# API models
+# ---------------------------------------------------------------------------
+class PrecisionOverride(BaseModel):
+    auto: bool = Field(..., description="True to re-enable autotuner")
+    decimals: int | None = Field(None, ge=2, le=8, description="Manual decimal depth (2-8)")
+
+
+class PrecisionStats(BaseModel):
+    active_decimals: int
+    is_auto: bool
+    window_size: int
+    pnl_proxy: Dict[int, float] = Field(default_factory=dict)
+
+
+# ---------------------------------------------------------------------------
+# API implementation
+# ---------------------------------------------------------------------------
+def _calculate_pnl_proxy(window_size: int) -> Dict[int, float]:
+    """Crude PnL proxy: mean price change by decimal depth."""
+    events = last(window_size)
+    if len(events) < 100:
+        return {}
+
+    pnl = {}
+    for d in range(2, 9):
+        try:
+            changes = [
+                abs(float(events[i].formatted_price(d)) - float(events[i - 1].formatted_price(d)))
+                for i in range(1, len(events))
+            ]
+            pnl[d] = mean(changes) if changes else 0.0
+        except (ValueError, TypeError):
+            pnl[d] = 0.0
+    return pnl
+
+
+@app.get("/precision/stats", response_model=PrecisionStats)
+async def get_precision_stats(window: int = 2_000):
+    """Return current precision state and PnL-by-decimals proxy."""
+    return PrecisionStats(
+        active_decimals=get_active_decimals(),
+        is_auto=_AUTO_MODE,
+        window_size=len(last(window)),
+        pnl_proxy=_calculate_pnl_proxy(window),
+    )
+
+
+@app.post("/precision/override")
+async def set_precision_override(body: PrecisionOverride):
+    """Manually override decimal precision or re-enable autotuner."""
+    global _AUTO_MODE
+    _AUTO_MODE = body.auto
+
+    if body.auto:
+        _set_runtime_decimals(None)
+        return {"status": "autotuner enabled"}
+    else:
+        if body.decimals is None:
+            return {"status": "error", "message": "Manual mode needs 'decimals'"}
+        _set_runtime_decimals(body.decimals)
+        return {"status": f"manual override to {body.decimals} decimals"}
+
+
+# ---------------------------------------------------------------------------
+# Main entry
+# ---------------------------------------------------------------------------
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8008, log_level="info")

@@ -1,12 +1,40 @@
-from typing import Dict, List, Optional, Any
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below
-import numpy as np
-# -*- coding: utf - 8 -*-\n
+# -*- coding: utf - 8 -*-
+"""Matrix fault resolver for rank consistency checking."""
+""""""
+"""Matrix fault resolver for rank consistency checking."""
+# -*- coding: utf - 8 -*-
+""""""
+""""""
+"""Matrix fault resolver for rank consistency checking."""Matrix fault resolver for rank consistency checking.""""""
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
 
 
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below
-def check_rank(matrix: np.ndarray, eps: int = 0) -> None:Check matrix rank consistency and raise if drift exceeds threshold.
-: pass
-if drift > eps:""""""
-raise ValueError("Rank drift {r1}->{r2} = {drift} > {eps}")"""""
-""
+from core.unified_math_system import unified_math
+
+
+def check_rank(self):
+        """Check matrix rank consistency and raise if drift exceeds threshold."
+
+Verify rank stability: \\u03b4 = rank(A) \\u2013 rank(A\\u00b7A\\u1d40)
+    Raise ValueError if |\\u03b4| > eps
+
+Args:
+    matrix: Input matrix to check
+eps: Maximum allowed rank drift (default 0)
+
+    Raises:
+    ValueError: If rank drift exceeds threshold""""""
+
+    """"""
+    """"""
+    r1 = np.linalg.matrix_rank(matrix)
+    r2 = np.linalg.matrix_rank(matrix @ matrix.T)
+
+    drift = unified_math.abs(r1 - r2)
+        if drift > eps:"""""":
+    raise ValueError(f"Rank drift {r1}->{r2} = {drift} > {eps}")
+
+    """"""
+    """"""
+    """"""

@@ -1,0 +1,518 @@
+2025-06-28 19:46:56,663 - dual_unicore_handler - INFO - DualUnicoreHandler initialized for Windows with encoding cp1252
+2025-06-28 19:46:56,663 - dual_unicore_handler - INFO - DualUnicoreHandler module loaded successfully
+2025-06-28 19:46:56,664 - core - WARNING - Unified math system not available: cannot import name 'unified_math' from partially initialized module 'core.unified_math_system' (most likely due to a circular import) (C:\Users\maxde\OneDrive\Documents\core\unified_math_system.py)
+2025-06-28 19:46:56,674 - core - WARNING - Schwafit core not available: cannot import name 'unified_math' from partially initialized module 'core.unified_math_system' (most likely due to a circular import) (C:\Users\maxde\OneDrive\Documents\core\unified_math_system.py)
+2025-06-28 19:48:12,729 - core - WARNING - Unified math system not available: cannot import name 'DualUnicoreHandler' from 'dual_unicore_handler' (C:\Users\maxde\OneDrive\Documents\dual_unicore_handler.py)
+2025-06-28 19:48:12,732 - core - WARNING - Schwafit core not available: cannot import name 'DualUnicoreHandler' from 'dual_unicore_handler' (C:\Users\maxde\OneDrive\Documents\dual_unicore_handler.py)
+2025-06-28 19:52:17,162 - core.dual_unicore_handler - INFO - DualUnicoreHandler initialized with cross-platform compatibility
+2025-06-28 19:52:17,163 - core - WARNING - Unified math system not available: cannot import name 'unified_math' from partially initialized module 'core.unified_math_system' (most likely due to a circular import) (C:\Users\maxde\OneDrive\Documents\core\unified_math_system.py)
+2025-06-28 19:52:17,173 - core - WARNING - Schwafit core not available: cannot import name 'unified_math' from partially initialized module 'core.unified_math_system' (most likely due to a circular import) (C:\Users\maxde\OneDrive\Documents\core\unified_math_system.py)
+2025-06-28 19:53:00,987 - core.dual_unicore_handler - INFO - DualUnicoreHandler initialized with cross-platform compatibility
+2025-06-28 19:53:00,987 - core - WARNING - Unified math system not available: cannot import name 'unified_math' from partially initialized module 'core.unified_math_system' (most likely due to a circular import) (C:\Users\maxde\OneDrive\Documents\core\unified_math_system.py)
+2025-06-28 19:53:00,991 - core - WARNING - Schwafit core not available: cannot import name 'unified_math' from partially initialized module 'core.unified_math_system' (most likely due to a circular import) (C:\Users\maxde\OneDrive\Documents\core\unified_math_system.py)
+2025-06-28 19:53:01,009 - core - WARNING - Integrated correction system not available: No module named 'core.surgical_math_corrector'
+2025-06-28 21:29:57,947 - core.dual_unicore_handler - INFO - DualUnicoreHandler initialized with cross-platform compatibility
+2025-06-28 21:29:57,948 - core - WARNING - Unified math system not available: cannot import name 'unified_math' from partially initialized module 'core.unified_math_system' (most likely due to a circular import) (C:\Users\maxde\OneDrive\Documents\core\unified_math_system.py)
+2025-06-28 21:29:57,951 - core - WARNING - Schwafit core not available: cannot import name 'unified_math' from partially initialized module 'core.unified_math_system' (most likely due to a circular import) (C:\Users\maxde\OneDrive\Documents\core\unified_math_system.py)
+2025-06-28 21:29:57,961 - core - WARNING - Integrated correction system not available: No module named 'core.surgical_math_corrector'
+2025-06-28 21:29:57,973 - core - WARNING - Dualistic thought engines not available: cannot import name 'unified_math' from partially initialized module 'core.unified_math_system' (most likely due to a circular import) (C:\Users\maxde\OneDrive\Documents\core\unified_math_system.py)
+2025-06-28 21:29:58,049 - root - WARNING - Trading components not fully available: No module named 'core.integrated_ferris_glyph_controller'
+2025-06-28 21:32:15,881 - core.dual_unicore_handler - INFO - DualUnicoreHandler initialized with cross-platform compatibility
+2025-06-28 21:32:15,881 - core - WARNING - Unified math system not available: cannot import name 'unified_math' from partially initialized module 'core.unified_math_system' (most likely due to a circular import) (C:\Users\maxde\OneDrive\Documents\core\unified_math_system.py)
+2025-06-28 21:32:15,884 - core - WARNING - Schwafit core not available: cannot import name 'unified_math' from partially initialized module 'core.unified_math_system' (most likely due to a circular import) (C:\Users\maxde\OneDrive\Documents\core\unified_math_system.py)
+2025-06-28 21:32:15,895 - core - WARNING - Integrated correction system not available: No module named 'core.surgical_math_corrector'
+2025-06-28 21:32:15,906 - core - WARNING - Dualistic thought engines not available: cannot import name 'unified_math' from partially initialized module 'core.unified_math_system' (most likely due to a circular import) (C:\Users\maxde\OneDrive\Documents\core\unified_math_system.py)
+2025-06-28 21:32:15,972 - root - WARNING - Trading components not fully available: No module named 'core.integrated_ferris_glyph_controller'
+2025-06-28 21:32:19,848 - core.dual_unicore_handler - INFO - DualUnicoreHandler initialized with cross-platform compatibility
+2025-06-28 21:32:19,848 - core - WARNING - Unified math system not available: cannot import name 'unified_math' from partially initialized module 'core.unified_math_system' (most likely due to a circular import) (C:\Users\maxde\OneDrive\Documents\core\unified_math_system.py)
+2025-06-28 21:32:19,851 - core - WARNING - Schwafit core not available: cannot import name 'unified_math' from partially initialized module 'core.unified_math_system' (most likely due to a circular import) (C:\Users\maxde\OneDrive\Documents\core\unified_math_system.py)
+2025-06-28 21:32:19,860 - core - WARNING - Integrated correction system not available: No module named 'core.surgical_math_corrector'
+2025-06-28 21:32:19,863 - core - WARNING - Dualistic thought engines not available: cannot import name 'unified_math' from partially initialized module 'core.unified_math_system' (most likely due to a circular import) (C:\Users\maxde\OneDrive\Documents\core\unified_math_system.py)
+2025-06-28 21:32:19,930 - root - WARNING - Trading components not fully available: No module named 'core.integrated_ferris_glyph_controller'
+2025-06-28 21:33:23,450 - core.dual_unicore_handler - INFO - DualUnicoreHandler initialized with cross-platform compatibility
+2025-06-28 21:33:23,450 - core - WARNING - Unified math system not available: cannot import name 'unified_math' from partially initialized module 'core.unified_math_system' (most likely due to a circular import) (C:\Users\maxde\OneDrive\Documents\core\unified_math_system.py)
+2025-06-28 21:33:23,453 - core - WARNING - Schwafit core not available: cannot import name 'unified_math' from partially initialized module 'core.unified_math_system' (most likely due to a circular import) (C:\Users\maxde\OneDrive\Documents\core\unified_math_system.py)
+2025-06-28 21:33:23,467 - core - WARNING - Integrated correction system not available: No module named 'core.surgical_math_corrector'
+2025-06-28 21:33:23,487 - core - WARNING - Dualistic thought engines not available: cannot import name 'unified_math' from partially initialized module 'core.unified_math_system' (most likely due to a circular import) (C:\Users\maxde\OneDrive\Documents\core\unified_math_system.py)
+2025-06-28 21:33:23,560 - root - WARNING - Trading components not fully available: No module named 'core.integrated_ferris_glyph_controller'
+2025-06-28 21:33:53,289 - core.dual_unicore_handler - INFO - DualUnicoreHandler initialized with cross-platform compatibility
+2025-06-28 21:33:53,290 - core - WARNING - Unified math system not available: cannot import name 'unified_math' from partially initialized module 'core.unified_math_system' (most likely due to a circular import) (C:\Users\maxde\OneDrive\Documents\core\unified_math_system.py)
+2025-06-28 21:33:53,292 - core - WARNING - Schwafit core not available: cannot import name 'unified_math' from partially initialized module 'core.unified_math_system' (most likely due to a circular import) (C:\Users\maxde\OneDrive\Documents\core\unified_math_system.py)
+2025-06-28 21:34:45,382 - core.dual_unicore_handler - INFO - DualUnicoreHandler initialized with cross-platform compatibility
+2025-06-28 21:34:45,383 - core - WARNING - Unified math system not available: cannot import name 'unified_math' from partially initialized module 'core.unified_math_system' (most likely due to a circular import) (C:\Users\maxde\OneDrive\Documents\core\unified_math_system.py)
+2025-06-28 21:34:45,386 - core - WARNING - Schwafit core not available: cannot import name 'unified_math' from partially initialized module 'core.unified_math_system' (most likely due to a circular import) (C:\Users\maxde\OneDrive\Documents\core\unified_math_system.py)
+2025-06-28 21:35:06,948 - core.dual_unicore_handler - INFO - DualUnicoreHandler initialized with cross-platform compatibility
+2025-06-28 21:35:06,949 - core - WARNING - Unified math system not available: cannot import name 'unified_math' from partially initialized module 'core.unified_math_system' (most likely due to a circular import) (C:\Users\maxde\OneDrive\Documents\core\unified_math_system.py)
+2025-06-28 21:35:06,951 - core - WARNING - Schwafit core not available: cannot import name 'unified_math' from partially initialized module 'core.unified_math_system' (most likely due to a circular import) (C:\Users\maxde\OneDrive\Documents\core\unified_math_system.py)
+2025-06-28 21:44:55,497 - core.unified_math_system - WARNING - Tensor algebra not available: No module named 'core.math.tensor_algebra.unified_tensor_algebra'
+2025-06-28 21:44:55,498 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-28 21:44:55,498 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-28 21:44:55,499 - core.unified_math_system - INFO - Unified Math System initialized with precision 64
+2025-06-28 21:44:55,502 - core - WARNING - Schwafit core not available: cannot import name 'DualUnicoreHandler' from 'dual_unicore_handler' (C:\Users\maxde\OneDrive\Documents\dual_unicore_handler.py)
+2025-06-28 21:47:21,228 - core.math.tensor_algebra.unified_tensor_algebra - INFO - Unified Tensor Algebra initialized with float64 precision
+2025-06-28 21:47:21,228 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-28 21:47:21,229 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-28 21:47:21,230 - core.unified_math_system - INFO - Unified Math System initialized with precision 64
+2025-06-28 21:47:21,304 - core.dual_unicore_handler - INFO - Initialized 2 processing cores
+2025-06-28 21:47:21,305 - core.dual_unicore_handler - INFO - Dual Unicore Handler initialized with 2 cores
+2025-06-28 21:48:02,552 - core.math.tensor_algebra.unified_tensor_algebra - INFO - Unified Tensor Algebra initialized with float64 precision
+2025-06-28 21:48:02,552 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-28 21:48:02,552 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-28 21:48:02,552 - core.unified_math_system - INFO - Unified Math System initialized with precision 64
+2025-06-28 21:48:02,617 - core.dual_unicore_handler - INFO - Initialized 2 processing cores
+2025-06-28 21:48:02,617 - core.dual_unicore_handler - INFO - Dual Unicore Handler initialized with 2 cores
+2025-06-28 21:48:02,618 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-28 21:48:02,618 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-28 21:48:02,618 - core.schwafit_core - INFO - Schwabot Fitness Core initialized with thresholds: ALIF=0.75, MIR4X=0.8, PR1SMA=0.7, DELTA_MIRROR=0.65, Z_MATRIX=0.85
+2025-06-28 21:48:02,630 - core.math.tensor_algebra.unified_tensor_algebra - INFO - Unified Tensor Algebra initialized with float64 precision
+2025-06-28 21:48:02,631 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-28 21:48:02,632 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-28 21:48:02,632 - core.unified_math_system - INFO - Unified Math System initialized with precision 64
+2025-06-28 21:48:02,632 - core.dual_unicore_handler - INFO - Initialized 2 processing cores
+2025-06-28 21:48:02,633 - core.dual_unicore_handler - INFO - Dual Unicore Handler initialized with 2 cores
+2025-06-28 21:51:12,436 - core.math.tensor_algebra.unified_tensor_algebra - INFO - Unified Tensor Algebra initialized with float64 precision
+2025-06-28 21:51:12,437 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-28 21:51:12,438 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-28 21:51:12,439 - core.unified_math_system - INFO - Unified Math System initialized with precision 64
+2025-06-28 21:51:12,502 - core.dual_unicore_handler - INFO - Initialized 2 processing cores
+2025-06-28 21:51:12,503 - core.dual_unicore_handler - INFO - Dual Unicore Handler initialized with 2 cores
+2025-06-28 21:51:12,505 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-28 21:51:12,506 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-28 21:51:12,506 - core.schwafit_core - INFO - Schwabot Fitness Core initialized with thresholds: ALIF=0.75, MIR4X=0.8, PR1SMA=0.7, DELTA_MIRROR=0.65, Z_MATRIX=0.85
+2025-06-28 21:51:12,510 - core.math.tensor_algebra.unified_tensor_algebra - INFO - Unified Tensor Algebra initialized with float64 precision
+2025-06-28 21:51:12,510 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-28 21:51:12,511 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-28 21:51:12,512 - core.unified_math_system - INFO - Unified Math System initialized with precision 64
+2025-06-28 21:51:12,512 - core.dual_unicore_handler - INFO - Initialized 2 processing cores
+2025-06-28 21:51:12,513 - core.dual_unicore_handler - INFO - Dual Unicore Handler initialized with 2 cores
+2025-06-28 21:51:40,172 - core.math.tensor_algebra.unified_tensor_algebra - INFO - Unified Tensor Algebra initialized with float64 precision
+2025-06-28 21:51:40,173 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-28 21:51:40,173 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-28 21:51:40,173 - core.unified_math_system - INFO - Unified Math System initialized with precision 64
+2025-06-28 21:51:40,229 - core.dual_unicore_handler - INFO - Initialized 2 processing cores
+2025-06-28 21:51:40,230 - core.dual_unicore_handler - INFO - Dual Unicore Handler initialized with 2 cores
+2025-06-28 21:51:40,231 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-28 21:51:40,231 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-28 21:51:40,232 - core.schwafit_core - INFO - Schwabot Fitness Core initialized with thresholds: ALIF=0.75, MIR4X=0.8, PR1SMA=0.7, DELTA_MIRROR=0.65, Z_MATRIX=0.85
+2025-06-28 21:51:40,235 - core.math.tensor_algebra.unified_tensor_algebra - INFO - Unified Tensor Algebra initialized with float64 precision
+2025-06-28 21:51:40,235 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-28 21:51:40,236 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-28 21:51:40,236 - core.unified_math_system - INFO - Unified Math System initialized with precision 64
+2025-06-28 21:51:40,237 - core.dual_unicore_handler - INFO - Initialized 2 processing cores
+2025-06-28 21:51:40,239 - core.dual_unicore_handler - INFO - Dual Unicore Handler initialized with 2 cores
+2025-06-28 21:51:40,253 - core.math.tensor_algebra.unified_tensor_algebra - INFO - Unified Tensor Algebra initialized with float64 precision
+2025-06-28 21:51:40,254 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-28 21:51:40,255 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-28 21:51:40,255 - core.unified_math_system - INFO - Unified Math System initialized with precision 64
+2025-06-28 21:51:40,256 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-28 21:51:40,257 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-28 21:51:40,258 - core.schwafit_core - INFO - Schwabot Fitness Core initialized with thresholds: ALIF=0.75, MIR4X=0.8, PR1SMA=0.7, DELTA_MIRROR=0.65, Z_MATRIX=0.85
+2025-06-28 21:51:40,258 - core.dualistic_thought_engines - INFO - 🧠 Dualistic Thought Engines initialized.
+2025-06-28 21:51:40,263 - root - WARNING - Trading components not fully available: No module named 'core.exchange_plumbing'
+2025-06-28 21:55:23,592 - core.math.tensor_algebra.unified_tensor_algebra - INFO - Unified Tensor Algebra initialized with float64 precision
+2025-06-28 21:55:23,592 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-28 21:55:23,592 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-28 21:55:23,592 - core.unified_math_system - INFO - Unified Math System initialized with precision 64
+2025-06-28 21:55:23,645 - core.dual_unicore_handler - INFO - Initialized 2 processing cores
+2025-06-28 21:55:23,646 - core.dual_unicore_handler - INFO - Dual Unicore Handler initialized with 2 cores
+2025-06-28 21:55:23,648 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-28 21:55:23,649 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-28 21:55:23,649 - core.schwafit_core - INFO - Schwabot Fitness Core initialized with thresholds: ALIF=0.75, MIR4X=0.8, PR1SMA=0.7, DELTA_MIRROR=0.65, Z_MATRIX=0.85
+2025-06-28 21:55:23,653 - core.math.tensor_algebra.unified_tensor_algebra - INFO - Unified Tensor Algebra initialized with float64 precision
+2025-06-28 21:55:23,654 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-28 21:55:23,654 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-28 21:55:23,655 - core.unified_math_system - INFO - Unified Math System initialized with precision 64
+2025-06-28 21:55:23,655 - core.dual_unicore_handler - INFO - Initialized 2 processing cores
+2025-06-28 21:55:23,656 - core.dual_unicore_handler - INFO - Dual Unicore Handler initialized with 2 cores
+2025-06-28 21:55:23,666 - core.math.tensor_algebra.unified_tensor_algebra - INFO - Unified Tensor Algebra initialized with float64 precision
+2025-06-28 21:55:23,667 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-28 21:55:23,667 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-28 21:55:23,668 - core.unified_math_system - INFO - Unified Math System initialized with precision 64
+2025-06-28 21:55:23,668 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-28 21:55:23,668 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-28 21:55:23,669 - core.schwafit_core - INFO - Schwabot Fitness Core initialized with thresholds: ALIF=0.75, MIR4X=0.8, PR1SMA=0.7, DELTA_MIRROR=0.65, Z_MATRIX=0.85
+2025-06-28 21:55:23,669 - core.dualistic_thought_engines - INFO - 🧠 Dualistic Thought Engines initialized.
+2025-06-28 21:55:25,996 - core.unified_api_coordinator - INFO - Unified API Coordinator initialized
+2025-06-28 21:55:25,996 - core.exchange_plumbing - INFO - Exchange Plumbing System initialized
+2025-06-28 21:55:25,997 - root - WARNING - Trading components not fully available: No module named 'core.profit_routing_engine'
+2025-06-29 01:39:04,201 - core.math.tensor_algebra.unified_tensor_algebra - INFO - Unified Tensor Algebra initialized with float64 precision
+2025-06-29 01:39:04,201 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 01:39:04,201 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 01:39:04,202 - core.unified_math_system - INFO - Unified Math System initialized with precision 64
+2025-06-29 01:39:04,264 - core.dual_unicore_handler - INFO - Initialized 2 processing cores
+2025-06-29 01:39:04,265 - core.dual_unicore_handler - INFO - Dual Unicore Handler initialized with 2 cores
+2025-06-29 01:39:04,266 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 01:39:04,266 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 01:39:04,267 - core.schwafit_core - INFO - Schwabot Fitness Core initialized with thresholds: ALIF=0.75, MIR4X=0.8, PR1SMA=0.7, DELTA_MIRROR=0.65, Z_MATRIX=0.85
+2025-06-29 01:39:04,269 - core - WARNING - Schwafit trading integration not available: cannot import name 'SchwafitTradingIntegration' from 'core.schwafit_trading_integration' (C:\Users\maxde\OneDrive\Documents\core\schwafit_trading_integration.py)
+2025-06-29 01:39:04,273 - core.math.tensor_algebra.unified_tensor_algebra - INFO - Unified Tensor Algebra initialized with float64 precision
+2025-06-29 01:39:04,274 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 01:39:04,274 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 01:39:04,275 - core.unified_math_system - INFO - Unified Math System initialized with precision 64
+2025-06-29 01:39:04,275 - core.dual_unicore_handler - INFO - Initialized 2 processing cores
+2025-06-29 01:39:04,276 - core.dual_unicore_handler - INFO - Dual Unicore Handler initialized with 2 cores
+2025-06-29 01:39:04,294 - core.lantern_core - INFO - 🏮 Enhanced Lantern Core with Word Library initialized
+2025-06-29 01:39:04,296 - core.math.tensor_algebra.unified_tensor_algebra - INFO - Unified Tensor Algebra initialized with float64 precision
+2025-06-29 01:39:04,296 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 01:39:04,297 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 01:39:04,297 - core.unified_math_system - INFO - Unified Math System initialized with precision 64
+2025-06-29 01:39:04,298 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 01:39:04,298 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 01:39:04,298 - core.schwafit_core - INFO - Schwabot Fitness Core initialized with thresholds: ALIF=0.75, MIR4X=0.8, PR1SMA=0.7, DELTA_MIRROR=0.65, Z_MATRIX=0.85
+2025-06-29 01:39:04,299 - core.lantern_core - INFO - 🏮 Enhanced Lantern Core with Word Library initialized
+2025-06-29 01:39:04,299 - core.dualistic_thought_engines - INFO - 🧠 Dualistic Thought Engines initialized.
+2025-06-29 01:39:05,837 - core.unified_api_coordinator - INFO - Unified API Coordinator initialized
+2025-06-29 01:39:05,837 - core.exchange_plumbing - INFO - Exchange Plumbing System initialized
+2025-06-29 01:39:05,838 - root - WARNING - Trading components not fully available: No module named 'core.profit_routing_engine'
+2025-06-29 01:50:01,426 - core.math.tensor_algebra.unified_tensor_algebra - INFO - Unified Tensor Algebra initialized with float64 precision
+2025-06-29 01:50:01,426 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 01:50:01,427 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 01:50:01,427 - core.unified_math_system - INFO - Unified Math System initialized with precision 64
+2025-06-29 01:50:01,491 - core.dual_unicore_handler - INFO - Initialized 2 processing cores
+2025-06-29 01:50:01,492 - core.dual_unicore_handler - INFO - Dual Unicore Handler initialized with 2 cores
+2025-06-29 01:50:01,495 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 01:50:01,496 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 01:50:01,496 - core.schwafit_core - INFO - Schwabot Fitness Core initialized with thresholds: ALIF=0.75, MIR4X=0.8, PR1SMA=0.7, DELTA_MIRROR=0.65, Z_MATRIX=0.85
+2025-06-29 01:50:01,497 - core - WARNING - Schwafit trading integration not available: cannot import name 'SchwafitTradingIntegration' from 'core.schwafit_trading_integration' (C:\Users\maxde\OneDrive\Documents\core\schwafit_trading_integration.py)
+2025-06-29 01:50:01,501 - core.math.tensor_algebra.unified_tensor_algebra - INFO - Unified Tensor Algebra initialized with float64 precision
+2025-06-29 01:50:01,501 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 01:50:01,502 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 01:50:01,503 - core.unified_math_system - INFO - Unified Math System initialized with precision 64
+2025-06-29 01:50:01,503 - core.dual_unicore_handler - INFO - Initialized 2 processing cores
+2025-06-29 01:50:01,504 - core.dual_unicore_handler - INFO - Dual Unicore Handler initialized with 2 cores
+2025-06-29 01:50:01,514 - core.lantern_core - INFO - 🏮 Enhanced Lantern Core with Word Library initialized
+2025-06-29 01:50:01,516 - core.math.tensor_algebra.unified_tensor_algebra - INFO - Unified Tensor Algebra initialized with float64 precision
+2025-06-29 01:50:01,517 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 01:50:01,517 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 01:50:01,517 - core.unified_math_system - INFO - Unified Math System initialized with precision 64
+2025-06-29 01:50:01,518 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 01:50:01,519 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 01:50:01,519 - core.schwafit_core - INFO - Schwabot Fitness Core initialized with thresholds: ALIF=0.75, MIR4X=0.8, PR1SMA=0.7, DELTA_MIRROR=0.65, Z_MATRIX=0.85
+2025-06-29 01:50:01,519 - core.lantern_core - INFO - 🏮 Enhanced Lantern Core with Word Library initialized
+2025-06-29 01:50:01,520 - core.dualistic_thought_engines - INFO - 🧠 Dualistic Thought Engines initialized.
+2025-06-29 01:50:03,132 - core.unified_api_coordinator - INFO - Unified API Coordinator initialized
+2025-06-29 01:50:03,133 - core.exchange_plumbing - INFO - Exchange Plumbing System initialized
+2025-06-29 01:50:03,133 - root - WARNING - Trading components not fully available: No module named 'core.profit_routing_engine'
+2025-06-29 01:50:38,525 - core.math.tensor_algebra.unified_tensor_algebra - INFO - Unified Tensor Algebra initialized with float64 precision
+2025-06-29 01:50:38,525 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 01:50:38,525 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 01:50:38,526 - core.unified_math_system - INFO - Unified Math System initialized with precision 64
+2025-06-29 01:50:38,540 - core.dual_unicore_handler - INFO - Initialized 2 processing cores
+2025-06-29 01:50:38,541 - core.dual_unicore_handler - INFO - Dual Unicore Handler initialized with 2 cores
+2025-06-29 01:50:38,542 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 01:50:38,543 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 01:50:38,543 - core.schwafit_core - INFO - Schwabot Fitness Core initialized with thresholds: ALIF=0.75, MIR4X=0.8, PR1SMA=0.7, DELTA_MIRROR=0.65, Z_MATRIX=0.85
+2025-06-29 01:50:38,545 - core - WARNING - Schwafit trading integration not available: cannot import name 'SchwafitTradingIntegration' from 'core.schwafit_trading_integration' (C:\Users\maxde\OneDrive\Documents\core\schwafit_trading_integration.py)
+2025-06-29 01:50:38,548 - core.math.tensor_algebra.unified_tensor_algebra - INFO - Unified Tensor Algebra initialized with float64 precision
+2025-06-29 01:50:38,548 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 01:50:38,549 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 01:50:38,549 - core.unified_math_system - INFO - Unified Math System initialized with precision 64
+2025-06-29 01:50:38,550 - core.dual_unicore_handler - INFO - Initialized 2 processing cores
+2025-06-29 01:50:38,550 - core.dual_unicore_handler - INFO - Dual Unicore Handler initialized with 2 cores
+2025-06-29 01:50:38,555 - core.lantern_core - INFO - 🏮 Enhanced Lantern Core with Word Library initialized
+2025-06-29 01:50:38,558 - core.math.tensor_algebra.unified_tensor_algebra - INFO - Unified Tensor Algebra initialized with float64 precision
+2025-06-29 01:50:38,558 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 01:50:38,559 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 01:50:38,560 - core.unified_math_system - INFO - Unified Math System initialized with precision 64
+2025-06-29 01:50:38,560 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 01:50:38,561 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 01:50:38,561 - core.schwafit_core - INFO - Schwabot Fitness Core initialized with thresholds: ALIF=0.75, MIR4X=0.8, PR1SMA=0.7, DELTA_MIRROR=0.65, Z_MATRIX=0.85
+2025-06-29 01:50:38,561 - core.lantern_core - INFO - 🏮 Enhanced Lantern Core with Word Library initialized
+2025-06-29 01:50:38,561 - core.dualistic_thought_engines - INFO - 🧠 Dualistic Thought Engines initialized.
+2025-06-29 01:50:40,139 - core.unified_api_coordinator - INFO - Unified API Coordinator initialized
+2025-06-29 01:50:40,139 - core.exchange_plumbing - INFO - Exchange Plumbing System initialized
+2025-06-29 01:50:40,139 - root - WARNING - Trading components not fully available: No module named 'core.profit_routing_engine'
+2025-06-29 01:50:40,155 - core - WARNING - Schwafit trading integration not available: cannot import name 'SchwafitTradingIntegration' from 'core.schwafit_trading_integration' (C:\Users\maxde\OneDrive\Documents\core\schwafit_trading_integration.py)
+2025-06-29 01:50:40,157 - root - WARNING - Trading components not fully available: No module named 'core.profit_routing_engine'
+2025-06-29 01:50:40,169 - core - WARNING - Schwafit trading integration not available: cannot import name 'SchwafitTradingIntegration' from 'core.schwafit_trading_integration' (C:\Users\maxde\OneDrive\Documents\core\schwafit_trading_integration.py)
+2025-06-29 01:50:40,172 - root - WARNING - Trading components not fully available: No module named 'core.profit_routing_engine'
+2025-06-29 02:02:13,284 - core.math.tensor_algebra.unified_tensor_algebra - INFO - Unified Tensor Algebra initialized with float64 precision
+2025-06-29 02:02:13,284 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 02:02:13,284 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 02:02:13,284 - core.unified_math_system - INFO - Unified Math System initialized with precision 64
+2025-06-29 02:02:13,343 - core.dual_unicore_handler - INFO - Initialized 2 processing cores
+2025-06-29 02:02:13,346 - core.dual_unicore_handler - INFO - Dual Unicore Handler initialized with 2 cores
+2025-06-29 02:02:13,347 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 02:02:13,347 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 02:02:13,347 - core.schwafit_core - INFO - Schwabot Fitness Core initialized with thresholds: ALIF=0.75, MIR4X=0.8, PR1SMA=0.7, DELTA_MIRROR=0.65, Z_MATRIX=0.85
+2025-06-29 02:02:13,347 - core - WARNING - Schwafit trading integration not available: cannot import name 'SchwafitTradingIntegration' from 'core.schwafit_trading_integration' (C:\Users\maxde\OneDrive\Documents\core\schwafit_trading_integration.py)
+2025-06-29 02:02:13,353 - core.math.tensor_algebra.unified_tensor_algebra - INFO - Unified Tensor Algebra initialized with float64 precision
+2025-06-29 02:02:13,353 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 02:02:13,354 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 02:02:13,354 - core.unified_math_system - INFO - Unified Math System initialized with precision 64
+2025-06-29 02:02:13,354 - core.dual_unicore_handler - INFO - Initialized 2 processing cores
+2025-06-29 02:02:13,355 - core.dual_unicore_handler - INFO - Dual Unicore Handler initialized with 2 cores
+2025-06-29 02:02:13,361 - core.lantern_core - INFO - 🏮 Enhanced Lantern Core with Word Library initialized
+2025-06-29 02:02:13,364 - core.math.tensor_algebra.unified_tensor_algebra - INFO - Unified Tensor Algebra initialized with float64 precision
+2025-06-29 02:02:13,364 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 02:02:13,364 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 02:02:13,365 - core.unified_math_system - INFO - Unified Math System initialized with precision 64
+2025-06-29 02:02:13,365 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 02:02:13,366 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 02:02:13,366 - core.schwafit_core - INFO - Schwabot Fitness Core initialized with thresholds: ALIF=0.75, MIR4X=0.8, PR1SMA=0.7, DELTA_MIRROR=0.65, Z_MATRIX=0.85
+2025-06-29 02:02:13,366 - core.lantern_core - INFO - 🏮 Enhanced Lantern Core with Word Library initialized
+2025-06-29 02:02:13,367 - core.dualistic_thought_engines - INFO - 🧠 Dualistic Thought Engines initialized.
+2025-06-29 02:02:14,916 - core.unified_api_coordinator - INFO - Unified API Coordinator initialized
+2025-06-29 02:02:14,917 - core.exchange_plumbing - INFO - Exchange Plumbing System initialized
+2025-06-29 02:02:14,917 - root - WARNING - Trading components not fully available: No module named 'core.profit_routing_engine'
+2025-06-29 02:03:07,863 - core.math.tensor_algebra.unified_tensor_algebra - INFO - Unified Tensor Algebra initialized with float64 precision
+2025-06-29 02:03:07,863 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 02:03:07,863 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 02:03:07,864 - core.unified_math_system - INFO - Unified Math System initialized with precision 64
+2025-06-29 02:03:07,921 - core.dual_unicore_handler - INFO - Initialized 2 processing cores
+2025-06-29 02:03:07,921 - core.dual_unicore_handler - INFO - Dual Unicore Handler initialized with 2 cores
+2025-06-29 02:03:07,924 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 02:03:07,924 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 02:03:07,924 - core.schwafit_core - INFO - Schwabot Fitness Core initialized with thresholds: ALIF=0.75, MIR4X=0.8, PR1SMA=0.7, DELTA_MIRROR=0.65, Z_MATRIX=0.85
+2025-06-29 02:03:07,925 - core - WARNING - Schwafit trading integration not available: cannot import name 'SchwafitTradingIntegration' from 'core.schwafit_trading_integration' (C:\Users\maxde\OneDrive\Documents\core\schwafit_trading_integration.py)
+2025-06-29 02:03:07,927 - core.math.tensor_algebra.unified_tensor_algebra - INFO - Unified Tensor Algebra initialized with float64 precision
+2025-06-29 02:03:07,928 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 02:03:07,928 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 02:03:07,929 - core.unified_math_system - INFO - Unified Math System initialized with precision 64
+2025-06-29 02:03:07,929 - core.dual_unicore_handler - INFO - Initialized 2 processing cores
+2025-06-29 02:03:07,930 - core.dual_unicore_handler - INFO - Dual Unicore Handler initialized with 2 cores
+2025-06-29 02:03:07,937 - core.lantern_core - INFO - 🏮 Enhanced Lantern Core with Word Library initialized
+2025-06-29 02:03:07,939 - core.math.tensor_algebra.unified_tensor_algebra - INFO - Unified Tensor Algebra initialized with float64 precision
+2025-06-29 02:03:07,939 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 02:03:07,940 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 02:03:07,940 - core.unified_math_system - INFO - Unified Math System initialized with precision 64
+2025-06-29 02:03:07,941 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 02:03:07,941 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 02:03:07,941 - core.schwafit_core - INFO - Schwabot Fitness Core initialized with thresholds: ALIF=0.75, MIR4X=0.8, PR1SMA=0.7, DELTA_MIRROR=0.65, Z_MATRIX=0.85
+2025-06-29 02:03:07,942 - core.lantern_core - INFO - 🏮 Enhanced Lantern Core with Word Library initialized
+2025-06-29 02:03:07,942 - core.dualistic_thought_engines - INFO - 🧠 Dualistic Thought Engines initialized.
+2025-06-29 02:03:09,461 - core.unified_api_coordinator - INFO - Unified API Coordinator initialized
+2025-06-29 02:03:09,461 - core.exchange_plumbing - INFO - Exchange Plumbing System initialized
+2025-06-29 02:03:09,462 - root - WARNING - Trading components not fully available: No module named 'core.profit_routing_engine'
+2025-06-29 02:11:10,032 - core.math.tensor_algebra.unified_tensor_algebra - INFO - Unified Tensor Algebra initialized with float64 precision
+2025-06-29 02:11:10,033 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 02:11:10,034 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 02:11:10,034 - core.unified_math_system - INFO - Unified Math System initialized with precision 64
+2025-06-29 02:11:10,047 - core.dual_unicore_handler - INFO - Initialized 2 processing cores
+2025-06-29 02:11:10,048 - core.dual_unicore_handler - INFO - Dual Unicore Handler initialized with 2 cores
+2025-06-29 02:11:10,051 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 02:11:10,052 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 02:11:10,052 - core.schwafit_core - INFO - Schwabot Fitness Core initialized with thresholds: ALIF=0.75, MIR4X=0.8, PR1SMA=0.7, DELTA_MIRROR=0.65, Z_MATRIX=0.85
+2025-06-29 02:11:10,053 - core - WARNING - Schwafit trading integration not available: cannot import name 'SchwafitTradingIntegration' from 'core.schwafit_trading_integration' (C:\Users\maxde\OneDrive\Documents\core\schwafit_trading_integration.py)
+2025-06-29 02:11:10,055 - core.math.tensor_algebra.unified_tensor_algebra - INFO - Unified Tensor Algebra initialized with float64 precision
+2025-06-29 02:11:10,056 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 02:11:10,056 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 02:11:10,057 - core.unified_math_system - INFO - Unified Math System initialized with precision 64
+2025-06-29 02:11:10,058 - core.dual_unicore_handler - INFO - Initialized 2 processing cores
+2025-06-29 02:11:10,058 - core.dual_unicore_handler - INFO - Dual Unicore Handler initialized with 2 cores
+2025-06-29 02:11:10,064 - core.lantern_core - INFO - 🏮 Enhanced Lantern Core with Word Library initialized
+2025-06-29 02:11:10,066 - core.math.tensor_algebra.unified_tensor_algebra - INFO - Unified Tensor Algebra initialized with float64 precision
+2025-06-29 02:11:10,066 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 02:11:10,067 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 02:11:10,067 - core.unified_math_system - INFO - Unified Math System initialized with precision 64
+2025-06-29 02:11:10,067 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 02:11:10,068 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 02:11:10,068 - core.schwafit_core - INFO - Schwabot Fitness Core initialized with thresholds: ALIF=0.75, MIR4X=0.8, PR1SMA=0.7, DELTA_MIRROR=0.65, Z_MATRIX=0.85
+2025-06-29 02:11:10,069 - core.lantern_core - INFO - 🏮 Enhanced Lantern Core with Word Library initialized
+2025-06-29 02:11:10,070 - core.dualistic_thought_engines - INFO - 🧠 Dualistic Thought Engines initialized.
+2025-06-29 02:11:11,645 - core.unified_api_coordinator - INFO - Unified API Coordinator initialized
+2025-06-29 02:11:11,645 - core.exchange_plumbing - INFO - Exchange Plumbing System initialized
+2025-06-29 02:11:11,646 - root - WARNING - Trading components not fully available: No module named 'core.profit_routing_engine'
+2025-06-29 02:24:01,798 - core.math.tensor_algebra.unified_tensor_algebra - INFO - Unified Tensor Algebra initialized with float64 precision
+2025-06-29 02:24:01,799 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 02:24:01,799 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 02:24:01,800 - core.unified_math_system - INFO - Unified Math System initialized with precision 64
+2025-06-29 02:24:01,905 - core.dual_unicore_handler - INFO - Initialized 2 processing cores
+2025-06-29 02:24:01,906 - core.dual_unicore_handler - INFO - Dual Unicore Handler initialized with 2 cores
+2025-06-29 02:24:01,908 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 02:24:01,908 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 02:24:01,909 - core.schwafit_core - INFO - Schwabot Fitness Core initialized with thresholds: ALIF=0.75, MIR4X=0.8, PR1SMA=0.7, DELTA_MIRROR=0.65, Z_MATRIX=0.85
+2025-06-29 02:24:01,911 - core - WARNING - Schwafit trading integration not available: cannot import name 'SchwafitTradingIntegration' from 'core.schwafit_trading_integration' (C:\Users\maxde\OneDrive\Documents\core\schwafit_trading_integration.py)
+2025-06-29 02:24:01,914 - core.math.tensor_algebra.unified_tensor_algebra - INFO - Unified Tensor Algebra initialized with float64 precision
+2025-06-29 02:24:01,915 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 02:24:01,915 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 02:24:01,916 - core.unified_math_system - INFO - Unified Math System initialized with precision 64
+2025-06-29 02:24:01,916 - core.dual_unicore_handler - INFO - Initialized 2 processing cores
+2025-06-29 02:24:01,917 - core.dual_unicore_handler - INFO - Dual Unicore Handler initialized with 2 cores
+2025-06-29 02:24:01,925 - core.lantern_core - INFO - 🏮 Enhanced Lantern Core with Word Library initialized
+2025-06-29 02:24:01,927 - core.math.tensor_algebra.unified_tensor_algebra - INFO - Unified Tensor Algebra initialized with float64 precision
+2025-06-29 02:24:01,928 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 02:24:01,929 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 02:24:01,929 - core.unified_math_system - INFO - Unified Math System initialized with precision 64
+2025-06-29 02:24:01,930 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 02:24:01,930 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 02:24:01,931 - core.schwafit_core - INFO - Schwabot Fitness Core initialized with thresholds: ALIF=0.75, MIR4X=0.8, PR1SMA=0.7, DELTA_MIRROR=0.65, Z_MATRIX=0.85
+2025-06-29 02:24:01,931 - core.lantern_core - INFO - 🏮 Enhanced Lantern Core with Word Library initialized
+2025-06-29 02:24:01,932 - core.dualistic_thought_engines - INFO - 🧠 Dualistic Thought Engines initialized.
+2025-06-29 02:24:03,513 - core.unified_api_coordinator - INFO - Unified API Coordinator initialized
+2025-06-29 02:24:03,514 - core.exchange_plumbing - INFO - Exchange Plumbing System initialized
+2025-06-29 02:24:03,514 - root - WARNING - Trading components not fully available: No module named 'core.profit_routing_engine'
+2025-06-29 02:25:13,924 - core.math.tensor_algebra.unified_tensor_algebra - INFO - Unified Tensor Algebra initialized with float64 precision
+2025-06-29 02:25:13,925 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 02:25:13,925 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 02:25:13,925 - core.unified_math_system - INFO - Unified Math System initialized with precision 64
+2025-06-29 02:25:13,973 - core.dual_unicore_handler - INFO - Initialized 2 processing cores
+2025-06-29 02:25:13,974 - core.dual_unicore_handler - INFO - Dual Unicore Handler initialized with 2 cores
+2025-06-29 02:25:13,976 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 02:25:13,976 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 02:25:13,977 - core.schwafit_core - INFO - Schwabot Fitness Core initialized with thresholds: ALIF=0.75, MIR4X=0.8, PR1SMA=0.7, DELTA_MIRROR=0.65, Z_MATRIX=0.85
+2025-06-29 02:25:13,978 - core - WARNING - Schwafit trading integration not available: cannot import name 'SchwafitTradingIntegration' from 'core.schwafit_trading_integration' (C:\Users\maxde\OneDrive\Documents\core\schwafit_trading_integration.py)
+2025-06-29 02:25:13,980 - core.math.tensor_algebra.unified_tensor_algebra - INFO - Unified Tensor Algebra initialized with float64 precision
+2025-06-29 02:25:13,981 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 02:25:13,981 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 02:25:13,982 - core.unified_math_system - INFO - Unified Math System initialized with precision 64
+2025-06-29 02:25:13,982 - core.dual_unicore_handler - INFO - Initialized 2 processing cores
+2025-06-29 02:25:13,983 - core.dual_unicore_handler - INFO - Dual Unicore Handler initialized with 2 cores
+2025-06-29 02:25:13,990 - core.lantern_core - INFO - 🏮 Enhanced Lantern Core with Word Library initialized
+2025-06-29 02:25:13,993 - core.math.tensor_algebra.unified_tensor_algebra - INFO - Unified Tensor Algebra initialized with float64 precision
+2025-06-29 02:25:13,993 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 02:25:13,993 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 02:25:13,994 - core.unified_math_system - INFO - Unified Math System initialized with precision 64
+2025-06-29 02:25:13,994 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 02:25:13,995 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 02:25:13,995 - core.schwafit_core - INFO - Schwabot Fitness Core initialized with thresholds: ALIF=0.75, MIR4X=0.8, PR1SMA=0.7, DELTA_MIRROR=0.65, Z_MATRIX=0.85
+2025-06-29 02:25:13,996 - core.lantern_core - INFO - 🏮 Enhanced Lantern Core with Word Library initialized
+2025-06-29 02:25:13,996 - core.dualistic_thought_engines - INFO - 🧠 Dualistic Thought Engines initialized.
+2025-06-29 02:25:15,414 - core.unified_api_coordinator - INFO - Unified API Coordinator initialized
+2025-06-29 02:25:15,415 - core.exchange_plumbing - INFO - Exchange Plumbing System initialized
+2025-06-29 02:25:15,416 - root - WARNING - Trading components not fully available: No module named 'core.profit_routing_engine'
+2025-06-29 02:44:37,879 - core.math.tensor_algebra.unified_tensor_algebra - INFO - Unified Tensor Algebra initialized with float64 precision
+2025-06-29 02:44:37,880 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 02:44:37,881 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 02:44:37,881 - core.unified_math_system - INFO - Unified Math System initialized with precision 64
+2025-06-29 02:44:37,937 - core.dual_unicore_handler - INFO - Initialized 2 processing cores
+2025-06-29 02:44:37,938 - core.dual_unicore_handler - INFO - Dual Unicore Handler initialized with 2 cores
+2025-06-29 02:44:37,939 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 02:44:37,939 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 02:44:37,940 - core.schwafit_core - INFO - Schwabot Fitness Core initialized with thresholds: ALIF=0.75, MIR4X=0.8, PR1SMA=0.7, DELTA_MIRROR=0.65, Z_MATRIX=0.85
+2025-06-29 02:44:37,941 - core - WARNING - Schwafit trading integration not available: cannot import name 'SchwafitTradingIntegration' from 'core.schwafit_trading_integration' (C:\Users\maxde\OneDrive\Documents\core\schwafit_trading_integration.py)
+2025-06-29 02:44:37,945 - core.math.tensor_algebra.unified_tensor_algebra - INFO - Unified Tensor Algebra initialized with float64 precision
+2025-06-29 02:44:37,945 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 02:44:37,946 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 02:44:37,947 - core.unified_math_system - INFO - Unified Math System initialized with precision 64
+2025-06-29 02:44:37,947 - core.dual_unicore_handler - INFO - Initialized 2 processing cores
+2025-06-29 02:44:37,948 - core.dual_unicore_handler - INFO - Dual Unicore Handler initialized with 2 cores
+2025-06-29 02:44:37,956 - core.lantern_core - INFO - 🏮 Enhanced Lantern Core with Word Library initialized
+2025-06-29 02:44:37,958 - core.math.tensor_algebra.unified_tensor_algebra - INFO - Unified Tensor Algebra initialized with float64 precision
+2025-06-29 02:44:37,958 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 02:44:37,959 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 02:44:37,959 - core.unified_math_system - INFO - Unified Math System initialized with precision 64
+2025-06-29 02:44:37,960 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 02:44:37,960 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 02:44:37,961 - core.schwafit_core - INFO - Schwabot Fitness Core initialized with thresholds: ALIF=0.75, MIR4X=0.8, PR1SMA=0.7, DELTA_MIRROR=0.65, Z_MATRIX=0.85
+2025-06-29 02:44:37,961 - core.lantern_core - INFO - 🏮 Enhanced Lantern Core with Word Library initialized
+2025-06-29 02:44:37,961 - core.dualistic_thought_engines - INFO - 🧠 Dualistic Thought Engines initialized.
+2025-06-29 02:44:39,720 - core.unified_api_coordinator - INFO - Unified API Coordinator initialized
+2025-06-29 02:44:39,721 - core.exchange_plumbing - INFO - Exchange Plumbing System initialized
+2025-06-29 02:44:39,722 - root - WARNING - Trading components not fully available: No module named 'core.profit_routing_engine'
+2025-06-29 03:03:47,673 - core.math.tensor_algebra.unified_tensor_algebra - INFO - Unified Tensor Algebra initialized with float64 precision
+2025-06-29 03:03:47,673 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 03:03:47,674 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 03:03:47,675 - core.unified_math_system - INFO - Unified Math System initialized with precision 64
+2025-06-29 03:03:47,741 - core.dual_unicore_handler - INFO - Initialized 2 processing cores
+2025-06-29 03:03:47,742 - core.dual_unicore_handler - INFO - Dual Unicore Handler initialized with 2 cores
+2025-06-29 03:03:47,745 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 03:03:47,746 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 03:03:47,746 - core.schwafit_core - INFO - Schwabot Fitness Core initialized with thresholds: ALIF=0.75, MIR4X=0.8, PR1SMA=0.7, DELTA_MIRROR=0.65, Z_MATRIX=0.85
+2025-06-29 03:03:47,748 - core - WARNING - Schwafit trading integration not available: cannot import name 'SchwafitTradingIntegration' from 'core.schwafit_trading_integration' (C:\Users\maxde\OneDrive\Documents\core\schwafit_trading_integration.py)
+2025-06-29 03:03:47,750 - core.math.tensor_algebra.unified_tensor_algebra - INFO - Unified Tensor Algebra initialized with float64 precision
+2025-06-29 03:03:47,750 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 03:03:47,752 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 03:03:47,752 - core.unified_math_system - INFO - Unified Math System initialized with precision 64
+2025-06-29 03:03:47,753 - core.dual_unicore_handler - INFO - Initialized 2 processing cores
+2025-06-29 03:03:47,753 - core.dual_unicore_handler - INFO - Dual Unicore Handler initialized with 2 cores
+2025-06-29 03:03:47,761 - core.lantern_core - INFO - 🏮 Enhanced Lantern Core with Word Library initialized
+2025-06-29 03:03:47,763 - core.math.tensor_algebra.unified_tensor_algebra - INFO - Unified Tensor Algebra initialized with float64 precision
+2025-06-29 03:03:47,764 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 03:03:47,764 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 03:03:47,765 - core.unified_math_system - INFO - Unified Math System initialized with precision 64
+2025-06-29 03:03:47,765 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 03:03:47,766 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 03:03:47,766 - core.schwafit_core - INFO - Schwabot Fitness Core initialized with thresholds: ALIF=0.75, MIR4X=0.8, PR1SMA=0.7, DELTA_MIRROR=0.65, Z_MATRIX=0.85
+2025-06-29 03:03:47,766 - core.lantern_core - INFO - 🏮 Enhanced Lantern Core with Word Library initialized
+2025-06-29 03:03:47,767 - core.dualistic_thought_engines - INFO - 🧠 Dualistic Thought Engines initialized.
+2025-06-29 03:03:49,621 - core.unified_api_coordinator - INFO - Unified API Coordinator initialized
+2025-06-29 03:03:49,622 - core.exchange_plumbing - INFO - Exchange Plumbing System initialized
+2025-06-29 03:03:49,622 - root - WARNING - Trading components not fully available: No module named 'core.profit_routing_engine'
+2025-06-29 03:04:55,420 - core.math.tensor_algebra.unified_tensor_algebra - INFO - Unified Tensor Algebra initialized with float64 precision
+2025-06-29 03:04:55,421 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 03:04:55,421 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 03:04:55,421 - core.unified_math_system - INFO - Unified Math System initialized with precision 64
+2025-06-29 03:04:55,480 - core.dual_unicore_handler - INFO - Initialized 2 processing cores
+2025-06-29 03:04:55,481 - core.dual_unicore_handler - INFO - Dual Unicore Handler initialized with 2 cores
+2025-06-29 03:04:55,484 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 03:04:55,484 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 03:04:55,484 - core.schwafit_core - INFO - Schwabot Fitness Core initialized with thresholds: ALIF=0.75, MIR4X=0.8, PR1SMA=0.7, DELTA_MIRROR=0.65, Z_MATRIX=0.85
+2025-06-29 03:04:55,485 - core - WARNING - Schwafit trading integration not available: cannot import name 'SchwafitTradingIntegration' from 'core.schwafit_trading_integration' (C:\Users\maxde\OneDrive\Documents\core\schwafit_trading_integration.py)
+2025-06-29 03:04:55,488 - core.math.tensor_algebra.unified_tensor_algebra - INFO - Unified Tensor Algebra initialized with float64 precision
+2025-06-29 03:04:55,488 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 03:04:55,489 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 03:04:55,489 - core.unified_math_system - INFO - Unified Math System initialized with precision 64
+2025-06-29 03:04:55,490 - core.dual_unicore_handler - INFO - Initialized 2 processing cores
+2025-06-29 03:04:55,490 - core.dual_unicore_handler - INFO - Dual Unicore Handler initialized with 2 cores
+2025-06-29 03:04:55,496 - core.lantern_core - INFO - 🏮 Enhanced Lantern Core with Word Library initialized
+2025-06-29 03:04:55,498 - core.math.tensor_algebra.unified_tensor_algebra - INFO - Unified Tensor Algebra initialized with float64 precision
+2025-06-29 03:04:55,498 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 03:04:55,499 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 03:04:55,499 - core.unified_math_system - INFO - Unified Math System initialized with precision 64
+2025-06-29 03:04:55,500 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 03:04:55,500 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 03:04:55,501 - core.schwafit_core - INFO - Schwabot Fitness Core initialized with thresholds: ALIF=0.75, MIR4X=0.8, PR1SMA=0.7, DELTA_MIRROR=0.65, Z_MATRIX=0.85
+2025-06-29 03:04:55,501 - core.lantern_core - INFO - 🏮 Enhanced Lantern Core with Word Library initialized
+2025-06-29 03:04:55,501 - core.dualistic_thought_engines - INFO - 🧠 Dualistic Thought Engines initialized.
+2025-06-29 03:04:57,043 - core.unified_api_coordinator - INFO - Unified API Coordinator initialized
+2025-06-29 03:04:57,044 - core.exchange_plumbing - INFO - Exchange Plumbing System initialized
+2025-06-29 03:04:57,044 - root - WARNING - Trading components not fully available: No module named 'core.profit_routing_engine'
+2025-06-29 03:05:00,229 - core.math.tensor_algebra.unified_tensor_algebra - INFO - Unified Tensor Algebra initialized with float64 precision
+2025-06-29 03:05:00,229 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 03:05:00,230 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 03:05:00,230 - core.unified_math_system - INFO - Unified Math System initialized with precision 64
+2025-06-29 03:05:00,285 - core.dual_unicore_handler - INFO - Initialized 2 processing cores
+2025-06-29 03:05:00,286 - core.dual_unicore_handler - INFO - Dual Unicore Handler initialized with 2 cores
+2025-06-29 03:05:00,289 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 03:05:00,289 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 03:05:00,290 - core.schwafit_core - INFO - Schwabot Fitness Core initialized with thresholds: ALIF=0.75, MIR4X=0.8, PR1SMA=0.7, DELTA_MIRROR=0.65, Z_MATRIX=0.85
+2025-06-29 03:05:00,291 - core - WARNING - Schwafit trading integration not available: cannot import name 'SchwafitTradingIntegration' from 'core.schwafit_trading_integration' (C:\Users\maxde\OneDrive\Documents\core\schwafit_trading_integration.py)
+2025-06-29 03:05:00,294 - core.math.tensor_algebra.unified_tensor_algebra - INFO - Unified Tensor Algebra initialized with float64 precision
+2025-06-29 03:05:00,294 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 03:05:00,294 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 03:05:00,295 - core.unified_math_system - INFO - Unified Math System initialized with precision 64
+2025-06-29 03:05:00,295 - core.dual_unicore_handler - INFO - Initialized 2 processing cores
+2025-06-29 03:05:00,296 - core.dual_unicore_handler - INFO - Dual Unicore Handler initialized with 2 cores
+2025-06-29 03:05:00,303 - core.lantern_core - INFO - 🏮 Enhanced Lantern Core with Word Library initialized
+2025-06-29 03:05:00,304 - core.math.tensor_algebra.unified_tensor_algebra - INFO - Unified Tensor Algebra initialized with float64 precision
+2025-06-29 03:05:00,305 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 03:05:00,305 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 03:05:00,306 - core.unified_math_system - INFO - Unified Math System initialized with precision 64
+2025-06-29 03:05:00,307 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 03:05:00,307 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 03:05:00,308 - core.schwafit_core - INFO - Schwabot Fitness Core initialized with thresholds: ALIF=0.75, MIR4X=0.8, PR1SMA=0.7, DELTA_MIRROR=0.65, Z_MATRIX=0.85
+2025-06-29 03:05:00,308 - core.lantern_core - INFO - 🏮 Enhanced Lantern Core with Word Library initialized
+2025-06-29 03:05:00,308 - core.dualistic_thought_engines - INFO - 🧠 Dualistic Thought Engines initialized.
+2025-06-29 03:05:01,930 - core.unified_api_coordinator - INFO - Unified API Coordinator initialized
+2025-06-29 03:05:01,930 - core.exchange_plumbing - INFO - Exchange Plumbing System initialized
+2025-06-29 03:05:01,931 - root - WARNING - Trading components not fully available: No module named 'core.profit_routing_engine'
+2025-06-29 03:05:21,870 - core.math.tensor_algebra.unified_tensor_algebra - INFO - Unified Tensor Algebra initialized with float64 precision
+2025-06-29 03:05:21,870 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 03:05:21,870 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 03:05:21,870 - core.unified_math_system - INFO - Unified Math System initialized with precision 64
+2025-06-29 03:05:21,941 - core.dual_unicore_handler - INFO - Initialized 2 processing cores
+2025-06-29 03:05:21,942 - core.dual_unicore_handler - INFO - Dual Unicore Handler initialized with 2 cores
+2025-06-29 03:05:21,946 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 03:05:21,947 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 03:05:21,948 - core.schwafit_core - INFO - Schwabot Fitness Core initialized with thresholds: ALIF=0.75, MIR4X=0.8, PR1SMA=0.7, DELTA_MIRROR=0.65, Z_MATRIX=0.85
+2025-06-29 03:05:21,949 - core - WARNING - Schwafit trading integration not available: cannot import name 'SchwafitTradingIntegration' from 'core.schwafit_trading_integration' (C:\Users\maxde\OneDrive\Documents\core\schwafit_trading_integration.py)
+2025-06-29 03:05:21,954 - core.math.tensor_algebra.unified_tensor_algebra - INFO - Unified Tensor Algebra initialized with float64 precision
+2025-06-29 03:05:21,954 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 03:05:21,955 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 03:05:21,955 - core.unified_math_system - INFO - Unified Math System initialized with precision 64
+2025-06-29 03:05:21,956 - core.dual_unicore_handler - INFO - Initialized 2 processing cores
+2025-06-29 03:05:21,958 - core.dual_unicore_handler - INFO - Dual Unicore Handler initialized with 2 cores
+2025-06-29 03:05:21,967 - core.lantern_core - INFO - 🏮 Enhanced Lantern Core with Word Library initialized
+2025-06-29 03:05:21,970 - core.math.tensor_algebra.unified_tensor_algebra - INFO - Unified Tensor Algebra initialized with float64 precision
+2025-06-29 03:05:21,971 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 03:05:21,972 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 03:05:21,974 - core.unified_math_system - INFO - Unified Math System initialized with precision 64
+2025-06-29 03:05:21,976 - core.phase_bit_integration - INFO - Phase Bit Integration initialized with 8bit default resolution
+2025-06-29 03:05:21,977 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
+2025-06-29 03:05:21,978 - core.schwafit_core - INFO - Schwabot Fitness Core initialized with thresholds: ALIF=0.75, MIR4X=0.8, PR1SMA=0.7, DELTA_MIRROR=0.65, Z_MATRIX=0.85
+2025-06-29 03:05:21,979 - core.lantern_core - INFO - 🏮 Enhanced Lantern Core with Word Library initialized
+2025-06-29 03:05:21,980 - core.dualistic_thought_engines - INFO - 🧠 Dualistic Thought Engines initialized.
+2025-06-29 03:05:24,350 - core.unified_api_coordinator - INFO - Unified API Coordinator initialized
+2025-06-29 03:05:24,351 - core.exchange_plumbing - INFO - Exchange Plumbing System initialized
+2025-06-29 03:05:24,352 - root - WARNING - Trading components not fully available: No module named 'core.profit_routing_engine'

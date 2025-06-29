@@ -491,9 +491,9 @@ class SchwabotIntegrationOrchestrator:
                 return ThermalZoneManager()
 
             if component_name == "constraints":
-                from core.constraints import ConstraintValidator  # type: ignore
+                from core.constraints import Constraints  # type: ignore
 
-                return ConstraintValidator()
+                return Constraints()
 
             # Fallback: return None so orchestrator marks as ERROR
             return None

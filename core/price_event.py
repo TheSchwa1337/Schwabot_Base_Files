@@ -1,0 +1,45 @@
+"""core/price_event.py
+
+Typed representation of a single BTC/crypto price observation across Schwabot
+systems.  Every pull-live, back-test, or demo-should be wrapped in this event
+so all downstream logic can replay the exact same data.
+"""
+
+from __future__ import annotations
+
+from dataclasses import asdict, dataclass
+from datetime import datetime
+from enum import Enum, unique
+from typing import Any, Dict
+
+
+@unique
+class EventOrigin(str, Enum):
+    """Where a :class:`PriceEvent` came from."""
+
+    LIVE = "live"  # real-time API pull used for trading
+    DEMO = "demo"  # local mock / demo generator
+    BACKTEST = "backtest"  # historical replay/back-test runner
+
+
+@dataclass(slots=True)
+class PriceEvent:
+    """Immutable record of a price observation & its formatting/hash details."""
+
+    timestamp: datetime
+    origin: EventOrigin
+    source: str  # e.g. 'ccxt.binance', 'coinmarketcap', 'mock'
+    raw_price: float
+    decimals: int
+    price_str: str  # formatted by price_precision_utils.format_price
+    hash_bits: int
+    hash_slice: str  # truncated SHA-256 digest
+    meta: Dict[str, Any]
+
+    # ------------------------ convenience helpers -------------------------
+
+    def to_dict(self) -> Dict[str, Any]:
+        """Return JSON-serialisable dict (timestamps as ISO8601)."""
+        d = asdict(self)
+        d["timestamp"] = self.timestamp.isoformat()
+        return d

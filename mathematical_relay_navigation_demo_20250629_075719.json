@@ -1,0 +1,120 @@
+{
+  "mode": "demo",
+  "start_time": "2025-06-29T07:57:19.795765",
+  "current_state": {
+    "state_id": "math_state_9b6b8d1c29ba50e3_1751198239",
+    "bit_depth": "BitDepth.FOUR_BIT",
+    "channel": "ChannelType.PRIMARY",
+    "btc_price": 50000.0,
+    "btc_volume": 1000.0,
+    "btc_hash": "9b6b8d1c29ba50e3dc1249fc20c6e34ad8e861551a1fe89a8dc92080a323f040",
+    "profit_target": 6.25,
+    "navigation_vector": "[ 0.          0.          0.0952381  -0.12689183]",
+    "timestamp": "2025-06-29 07:57:19.798746",
+    "ttl": 225.0,
+    "relay_count": 1,
+    "last_optimization": "2025-06-29 07:57:19.799746"
+  },
+  "active_channel": "fallback",
+  "current_bit_depth": 42,
+  "channel_states": {
+    "primary": {
+      "status": "standby",
+      "last_update": "2025-06-29 07:57:19.803743"
+    },
+    "secondary": {
+      "status": "standby",
+      "last_update": "2025-06-29 07:57:19.804741"
+    },
+    "fallback": {
+      "status": "active",
+      "last_update": "2025-06-29 07:57:19.804741"
+    }
+  },
+  "state_history": [
+    {
+      "state_id": "math_state_9b6b8d1c29ba50e3_1751198239",
+      "bit_depth": "BitDepth.FOUR_BIT",
+      "channel": "ChannelType.PRIMARY",
+      "btc_price": 50000.0,
+      "btc_volume": 1000.0,
+      "btc_hash": "9b6b8d1c29ba50e3dc1249fc20c6e34ad8e861551a1fe89a8dc92080a323f040",
+      "profit_target": 6.25,
+      "navigation_vector": "[ 0.          0.          0.0952381  -0.12689183]",
+      "timestamp": "2025-06-29 07:57:19.798746",
+      "ttl": 225.0,
+      "relay_count": 1,
+      "last_optimization": "2025-06-29 07:57:19.799746"
+    }
+  ],
+  "navigation_vectors": [],
+  "bit_depth_history": [
+    [
+      4,
+      "2025-06-29T07:57:19.798746"
+    ],
+    [
+      2,
+      "2025-06-29T07:57:19.800745"
+    ],
+    [
+      4,
+      "2025-06-29T07:57:19.801746"
+    ],
+    [
+      16,
+      "2025-06-29T07:57:19.801746"
+    ],
+    [
+      32,
+      "2025-06-29T07:57:19.802745"
+    ],
+    [
+      42,
+      "2025-06-29T07:57:19.803743"
+    ]
+  ],
+  "navigation_status": {
+    "current_state": {
+      "state_id": "math_state_9b6b8d1c29ba50e3_1751198239",
+      "bit_depth": "BitDepth.FOUR_BIT",
+      "channel": "ChannelType.PRIMARY",
+      "btc_price": 50000.0,
+      "btc_volume": 1000.0,
+      "btc_hash": "9b6b8d1c29ba50e3dc1249fc20c6e34ad8e861551a1fe89a8dc92080a323f040",
+      "profit_target": 6.25,
+      "navigation_vector": "[ 0.          0.          0.0952381  -0.12689183]",
+      "timestamp": "2025-06-29 07:57:19.798746",
+      "ttl": 225.0,
+      "relay_count": 1,
+      "last_optimization": "2025-06-29 07:57:19.799746"
+    },
+    "active_channel": "fallback",
+    "current_bit_depth": 42,
+    "channel_states": {
+      "primary": {
+        "status": "standby",
+        "last_update": "2025-06-29 07:57:19.803743"
+      },
+      "secondary": {
+        "status": "standby",
+        "last_update": "2025-06-29 07:57:19.804741"
+      },
+      "fallback": {
+        "status": "active",
+        "last_update": "2025-06-29 07:57:19.804741"
+      }
+    },
+    "state_history_size": 1,
+    "navigation_vectors_size": 0,
+    "profit_targets_size": 0,
+    "sync_queue_sizes": {
+      "btc_sync": 1,
+      "state_sync": 8,
+      "profit_sync": 1
+    },
+    "uptime_seconds": 0.009977,
+    "timestamp": "2025-06-29T07:57:19.805742"
+  },
+  "export_timestamp": "2025-06-29T07:57:19.805742"
+}

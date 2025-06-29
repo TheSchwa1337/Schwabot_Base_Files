@@ -8,29 +8,41 @@ the trading system, including basic arithmetic, statistical functions,
 linear algebra, and specialized trading calculations.
 
 Mathematical Foundation:
-- Tensor operations for multi-dimensional analysis
-- Statistical computations for market analysis  
-- Linear algebra for portfolio optimization
-- Specialized BTC and crypto calculations
+    - Tensor operations for multi-dimensional analysis
+    - Statistical computations for market analysis
+    - Linear algebra for portfolio optimization
+    - Specialized BTC and crypto calculations
 
-Windows CLI compatible with comprehensive error handling.
+    Windows CLI compatible with comprehensive error handling.
 """
 
-from typing import Dict, List, Optional, Any, Union, Tuple
-from enum import Enum
-import numpy as np
+from __future__ import annotations
+
+import hashlib
 import logging
 import time
+from enum import Enum
+from typing import Any, Dict, Optional, Tuple, Union
+
+import numpy as np
+
+# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below:
+from core.phase_bit_integration import BitPhase, PhaseBitIntegration, StrategyType
+
+# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below:
+from core.unified_profit_vectorization_system import UnifiedProfitVectorizationSystem
 
 logger = logging.getLogger(__name__)
 
 # Import tensor algebra with fallback
 try:
     from .math.tensor_algebra.unified_tensor_algebra import UnifiedTensorAlgebra
+
     TENSOR_ALGEBRA_AVAILABLE = True
 except ImportError as e:
     logger.warning(f"Tensor algebra not available: {e}")
     TENSOR_ALGEBRA_AVAILABLE = False
+
 
 # Safe print functions for cross-platform compatibility
 def safe_print(message: str) -> None:
@@ -40,22 +52,32 @@ def safe_print(message: str) -> None:
     except Exception:
         pass
 
+
 def info(message: str) -> None:
     """Info level message."""
     print(f"[INFO] {message}")
 
+
 def warn(message: str) -> None:
     """Warning level message."""
     print(f"[WARN] {message}")
+
 
 def error(message: str) -> None:
     """Error level message."""
     print(f"[ERROR] {message}")
 
 
+# Thermal state constants for mathematical operations
+COOL = "cool"  # Low thermal state (4-bit operations)
+WARM_MATH = "warm"  # Mid thermal state (8-bit operations)
+HOT_MATH = "hot"  # High thermal state (32-bit operations)
+CRITICAL_MATH = "critical"  # Extreme thermal state (42-bit operations)
+
+
 class MathOperation(Enum):
     """Mathematical operation types."""
-    
+
     # Basic arithmetic
     ADD = "add"
     SUBTRACT = "subtract"
@@ -65,7 +87,7 @@ class MathOperation(Enum):
     SQRT = "sqrt"
     LOG = "log"
     EXP = "exp"
-    
+
     # Trigonometric
     SIN = "sin"
     COS = "cos"
@@ -73,7 +95,7 @@ class MathOperation(Enum):
     ASIN = "asin"
     ACOS = "acos"
     ATAN = "atan"
-    
+
     # Statistical
     ABS = "abs"
     MAX = "max"
@@ -86,7 +108,7 @@ class MathOperation(Enum):
     VAR = "var"
     CORRELATION = "correlation"
     COVARIANCE = "covariance"
-    
+
     # Linear algebra
     DOT_PRODUCT = "dot_product"
     CROSS_PRODUCT = "cross_product"
@@ -99,7 +121,7 @@ class MathOperation(Enum):
     QR = "qr"
     LU = "lu"
     CHOLESKY = "cholesky"
-    
+
     # Trading specific
     HASH_RATE = "hash_rate"
     DIFFICULTY_ADJUST = "difficulty_adjust"
@@ -113,27 +135,42 @@ class MathOperation(Enum):
 
 
 class UnifiedMathSystem:
-    """Unified mathematical system for trading operations."""
-    
+    """Unified mathematical system for trading operations with 32-bit phase integration."""
+
     def __init__(self, precision: int = 64):
-        """Initialize the unified math system."""
+        """Initialize the unified math system with phase-bit integration."""
         self.precision = precision
         self.tensor_algebra = UnifiedTensorAlgebra() if TENSOR_ALGEBRA_AVAILABLE else None
-        
+        self.phase_bit_integration = PhaseBitIntegration()
+        self.profit_vectorization = UnifiedProfitVectorizationSystem()
+        self.thermal_state = WARM_MATH  # Default to warm state
+        self.dualistic_mode = False
+        self.current_bit_phase = BitPhase.EIGHT_BIT
+
         # Integration metrics
         self.integration_metrics = {
             "dlt_analysis_calls": 0,
             "tensor_operation_calls": 0,
             "thermal_correction_calls": 0,
-            "integration_success_rate": 0.0
+            "integration_success_rate": 0.0,
         }
-        
+
         safe_print(f"Unified Math System initialized with precision {precision}")
         logger.info(f"Unified Math System initialized with precision {precision}")
-    
+
     def execute_operation(self, operation: MathOperation, *args, **kwargs) -> Any:
-        """Execute a mathematical operation."""
+        """Execute a mathematical operation with 32-bit phase consideration."""
         try:
+            # Determine thermal state based on operation complexity
+            operation_hash = hashlib.sha256(f"{operation.value}_{args}_{kwargs}".encode()).hexdigest()
+
+            # Get bit phase resolution for mathematical operations
+            bit_phase_result = self.phase_bit_integration.resolve_bit_phase(operation_hash, "auto")
+
+            # Update current bit phase
+            self.current_bit_phase = bit_phase_result.bit_phase
+
+            # Execute operation based on type
             if operation == MathOperation.ADD:
                 return self.add(*args)
             elif operation == MathOperation.SUBTRACT:
@@ -177,148 +214,140 @@ class UnifiedMathSystem:
             elif operation == MathOperation.SVD:
                 return self.svd(*args)
             else:
-                raise ValueError(f"Unknown operation: {operation}")
-                
+                raise ValueError(f"Unsupported operation: {operation}")
+
         except Exception as e:
-            error(f"Mathematical operation failed: {operation.value} - {e}")
-            logger.error(f"Mathematical operation failed: {operation.value} - {e}")
+            logger.error(f"Error executing operation {operation}: {e}")
             raise
-    
-    # Basic arithmetic operations
-    def add(self, a: Union[float, np.ndarray], b: Union[float, np.ndarray]) -> Union[float, np.ndarray]:
-        """Addition operation."""
-        return np.add(a, b)
-    
-    def subtract(self, a: Union[float, np.ndarray], b: Union[float, np.ndarray]) -> Union[float, np.ndarray]:
-        """Subtraction operation."""
-        return np.subtract(a, b)
-    
-    def multiply(self, a: Union[float, np.ndarray], b: Union[float, np.ndarray]) -> Union[float, np.ndarray]:
-        """Multiplication operation."""
-        return np.multiply(a, b)
-    
-    def divide(self, a: Union[float, np.ndarray], b: Union[float, np.ndarray]) -> Union[float, np.ndarray]:
-        """Division operation."""
-        return np.divide(a, b)
-    
-    def power(self, a: Union[float, np.ndarray], b: Union[float, np.ndarray]) -> Union[float, np.ndarray]:
-        """Power operation."""
-        return np.power(a, b)
-    
-    def sqrt(self, a: Union[float, np.ndarray]) -> Union[float, np.ndarray]:
-        """Square root operation."""
-        return np.sqrt(a)
-    
-    def log(self, a: Union[float, np.ndarray]) -> Union[float, np.ndarray]:
-        """Natural logarithm operation."""
-        return np.log(a)
-    
-    def exp(self, a: Union[float, np.ndarray]) -> Union[float, np.ndarray]:
-        """Exponential operation."""
-        return np.exp(a)
-    
-    # Trigonometric functions
-    def sin(self, a: Union[float, np.ndarray]) -> Union[float, np.ndarray]:
-        """Sine function."""
-        return np.sin(a)
-    
-    def cos(self, a: Union[float, np.ndarray]) -> Union[float, np.ndarray]:
-        """Cosine function."""
-        return np.cos(a)
-    
-    def tan(self, a: Union[float, np.ndarray]) -> Union[float, np.ndarray]:
-        """Tangent function."""
-        return np.tan(a)
-    
-    # Statistical functions
-    def abs(self, a: Union[float, np.ndarray]) -> Union[float, np.ndarray]:
-        """Absolute value."""
-        return np.abs(a)
-    
-    def max(self, a: Union[float, np.ndarray], axis: Optional[int] = None) -> Union[float, np.ndarray]:
-        """Maximum value."""
-        return np.max(a, axis=axis)
-    
-    def min(self, a: Union[float, np.ndarray], axis: Optional[int] = None) -> Union[float, np.ndarray]:
-        """Minimum value."""
-        return np.min(a, axis=axis)
-    
-    def mean(self, a: np.ndarray, axis: Optional[int] = None) -> Union[float, np.ndarray]:
-        """Mean value."""
-        return np.mean(a, axis=axis)
-    
+
+    def add(self, *args) -> Union[float, np.ndarray]:
+        """Add multiple values or arrays."""
+        if len(args) == 0:
+            return 0
+        return np.sum(args)
+
+    def subtract(self, a: float, b: float) -> float:
+        """Subtract b from a."""
+        return a - b
+
+    def multiply(self, *args) -> Union[float, np.ndarray]:
+        """Multiply multiple values or arrays."""
+        if len(args) == 0:
+            return 1
+        return np.prod(args)
+
+    def divide(self, a: float, b: float) -> float:
+        """Divide a by b."""
+        if b == 0:
+            raise ValueError("Division by zero")
+        return a / b
+
+    def power(self, base: float, exponent: float) -> float:
+        """Raise base to the power of exponent."""
+        return np.power(base, exponent)
+
+    def sqrt(self, value: float) -> float:
+        """Calculate square root."""
+        return np.sqrt(value)
+
+    def log(self, value: float, base: float = np.e) -> float:
+        """Calculate logarithm."""
+        return np.log(value) / np.log(base)
+
+    def exp(self, value: float) -> float:
+        """Calculate exponential."""
+        return np.exp(value)
+
+    def sin(self, value: float) -> float:
+        """Calculate sine."""
+        return np.sin(value)
+
+    def cos(self, value: float) -> float:
+        """Calculate cosine."""
+        return np.cos(value)
+
+    def tan(self, value: float) -> float:
+        """Calculate tangent."""
+        return np.tan(value)
+
+    def abs(self, value: Union[float, np.ndarray]) -> Union[float, np.ndarray]:
+        """Calculate absolute value."""
+        return np.abs(value)
+
+    def max(self, *args) -> Union[float, np.ndarray]:
+        """Find maximum value."""
+        return np.max(args)
+
+    def min(self, *args) -> Union[float, np.ndarray]:
+        """Find minimum value."""
+        return np.min(args)
+
+    def mean(self, *args) -> float:
+        """Calculate mean."""
+        return np.mean(args)
+
     def std(self, a: np.ndarray, axis: Optional[int] = None) -> Union[float, np.ndarray]:
         """Standard deviation."""
         return np.std(a, axis=axis)
-    
+
     def var(self, a: np.ndarray, axis: Optional[int] = None) -> Union[float, np.ndarray]:
         """Variance."""
         return np.var(a, axis=axis)
-    
-    # Linear algebra operations
+
     def dot_product(self, a: np.ndarray, b: np.ndarray) -> Union[float, np.ndarray]:
         """Dot product of two arrays."""
         return np.dot(a, b)
-    
+
     def matrix_multiply(self, a: np.ndarray, b: np.ndarray) -> np.ndarray:
         """Matrix multiplication."""
         return np.matmul(a, b)
-    
+
     def eigenvalues(self, a: np.ndarray) -> np.ndarray:
         """Compute eigenvalues of a matrix."""
         return np.linalg.eigvals(a)
-    
+
     def eigenvectors(self, a: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
         """Compute eigenvalues and eigenvectors of a matrix."""
         return np.linalg.eig(a)
-    
+
     def svd(self, a: np.ndarray, full_matrices: bool = True) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
         """Singular value decomposition."""
         return np.linalg.svd(a, full_matrices=full_matrices)
-    
-    # Integration functions
+
     def dlt_analysis(self, data: Dict[str, Any]) -> Dict[str, Any]:
         """Perform DLT (Distributed Ledger Technology) analysis."""
         try:
             self.integration_metrics["dlt_analysis_calls"] += 1
-            
+
             # Import MathLib V4 for DLT analysis
             try:
                 from .mathlib_v4 import MathLibV4
+
                 mathlib = MathLibV4()
                 mathlib_result = mathlib.calculate_dlt_metrics(data)
             except ImportError:
                 raise ValueError("MathLib V4 not available for DLT analysis")
-            
+
             if "error" in mathlib_result:
                 raise ValueError(f"MathLib V4 DLT analysis failed: {mathlib_result['error']}")
-            
-            return {
-                "status": "success",
-                "dlt_metrics": mathlib_result,
-                "timestamp": time.time()
-            }
-            
+
+            return {"status": "success", "dlt_metrics": mathlib_result, "timestamp": time.time()}
+
         except Exception as e:
             error(f"DLT analysis failed: {e}")
-            return {
-                "status": "error",
-                "error": str(e),
-                "timestamp": time.time()
-            }
-    
+            return {"status": "error", "error": str(e), "timestamp": time.time()}
+
     def get_integration_metrics(self) -> Dict[str, Any]:
         """Get integration metrics."""
         return self.integration_metrics.copy()
 
 
-# Global instance
+# Global instance for backward compatibility
 unified_math = UnifiedMathSystem()
 
+# Placeholder main function
+if __name__ == "__main__":
+    print("Unified Math System - 32-bit Phase Integration Ready")
+
 # Export key functions and classes
-__all__ = [
-    "UnifiedMathSystem",
-    "MathOperation", 
-    "unified_math",
-    "TENSOR_ALGEBRA_AVAILABLE"
-]
+__all__ = ["UnifiedMathSystem", "MathOperation", "unified_math", "TENSOR_ALGEBRA_AVAILABLE"]

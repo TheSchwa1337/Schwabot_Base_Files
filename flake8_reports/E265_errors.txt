@@ -1,8 +1,0 @@
-FLAKE8 ERROR REPORT: E265
-==================================================
-Total occurrences: 1
-
-
-File: core/simple_docstring_fix.py
-------------------------------
-  Line 2, Col 1: block comment should start with '# '

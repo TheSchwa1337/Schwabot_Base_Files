@@ -1,16 +1,4 @@
-# Import safe print for Windows compatibility
-try:
-    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
-except ImportError:
-    try:
-        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
-    except ImportError:
-        def safe_print(message): print(message)
-        def info(message): print(f"[INFO] {message}")
-        def warn(message): print(f"[WARN] {message}")
-        def error(message): print(f"[ERROR] {message}")
-        def success(message): print(f"[SUCCESS] {message}")
-        def debug(message): print(f"[DEBUG] {message}")
+from utils.safe_print import safe_print, info, warn, error, success, debug
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Unified Mathematical Trading Controller - Schwabot Framework.
@@ -72,23 +60,13 @@ from __future__ import annotations
 from decimal import Decimal
 from decimal import getcontext
 import logging
-from typing import Any, Dict, Optional, Union
+from typing import Any, Dict, Optional
 
 from core.unified_math_system import unified_math
 import numpy.typing as npt
 
-# Import CLI handler for safe output
-try:
-    from core.type_binding_system import cli_handler
-    CLI_HANDLER_AVAILABLE = True
-except ImportError:
-    CLI_HANDLER_AVAILABLE = False
-    # Fallback for CLI safety
-    def safe_print(msg: str) -> None:
-        try:
-            print(msg)
-        except UnicodeEncodeError:
-            print(msg.encode('ascii', errors='replace').decode('ascii'))
+from .ghost_profit_tracker import profit_summary
+from .ghost_profit_tracker import register_profit
 
 # Set high precision for financial calculations
 getcontext().prec = 18
@@ -119,10 +97,10 @@ class SafeDecimalHandler:
         return Decimal(str(x))
 
 
-class TradingMathematicalConstraints:
-    """Trading-specific mathematical bounds and validation constraints."""
+class MathematicalConstraints:
+    """Mathematical bounds and validation constraints."""
 
-    def __init__(self: TradingMathematicalConstraints) -> None:
+    def __init__(self: MathematicalConstraints) -> None:
         """Initialize constraints."""
         self.epsilon = Decimal("1e-12")
         self.max_position_size = Decimal("1.0")
@@ -131,7 +109,7 @@ class TradingMathematicalConstraints:
         self.max_thermal_bound = Decimal("0.10")
 
     def bounded_profit(
-        self: TradingMathematicalConstraints,
+        self: MathematicalConstraints,
         x: float | Decimal,
         min_val: Optional[float] = None,
         max_val: Optional[float] = None,
@@ -148,7 +126,7 @@ class TradingMathematicalConstraints:
 
         return unified_math.max(unified_math.min(value, max_bound), min_bound)
 
-    def safe_decimal(self: TradingMathematicalConstraints, x: float | str) -> Decimal:
+    def safe_decimal(self: MathematicalConstraints, x: float | str) -> Decimal:
         """Safely convert to Decimal."""
         return SafeDecimalHandler.safe_decimal(x)
 
@@ -282,7 +260,7 @@ class FerrisWheelCycleEngine:
         cycle["stabilizer_delta"] = stabilizer_strength * profit_variance
 
         # Apply bounded stabilization
-        constraints = TradingMathematicalConstraints()
+        constraints = MathematicalConstraints()
         cycle["stabilizer_delta"] = constraints.bounded_profit(
             cycle["stabilizer_delta"], -0.02, 0.02
         )
@@ -320,7 +298,7 @@ class UnifiedMathematicalTradingController:
     def __init__(self: UnifiedMathematicalTradingController) -> None:
         """Initialize unified trading controller."""
         self.version = "1.0.0"
-        self.constraints = TradingMathematicalConstraints()
+        self.constraints = MathematicalConstraints()
         self.safe_decimal = SafeDecimalHandler()
         self.ghost_detector = GhostSwapDetector()
         self.ferris_engine = FerrisWheelCycleEngine()

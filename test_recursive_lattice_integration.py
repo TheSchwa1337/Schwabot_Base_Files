@@ -49,8 +49,7 @@ try:
     from core.ccxt_trading_executor import ccxt_executor, execute_trading_signal
     from core.ferris_rde_core import ferris_rde_core
     from core.ghost_router import GhostRouter
-    from core.unified_math_system import unified_math
-    from core.math.trading_tensor_ops import trading_tensor_ops
+        from core.math.trading_tensor_ops import trading_tensor_ops
     SCHWABOT_CORE_AVAILABLE = True
 except ImportError as e:
     print(f"❌ Schwabot core components not available: {e}")

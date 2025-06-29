@@ -1,3 +1,0 @@
-matrix_response_paths:
-  data_directory: data
-  response_template: default_response.txt

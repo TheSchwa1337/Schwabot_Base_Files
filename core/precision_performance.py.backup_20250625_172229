@@ -1,16 +1,4 @@
-# Import safe print for Windows compatibility
-try:
-    from .utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
-except ImportError:
-    try:
-        from core.utils.windows_cli_compatibility import safe_print, info, warn, error, success, debug
-    except ImportError:
-        def safe_print(message): print(message)
-        def info(message): print(f"[INFO] {message}")
-        def warn(message): print(f"[WARN] {message}")
-        def error(message): print(f"[ERROR] {message}")
-        def success(message): print(f"[SUCCESS] {message}")
-        def debug(message): print(f"[DEBUG] {message}")
+from utils.safe_print import safe_print, info, warn, error, success, debug
 from core.unified_math_system import unified_math
 #!/usr/bin/env python3
 """Precision and Performance Optimization - High-Performance Math and Profiling.
@@ -171,18 +159,6 @@ class HeatMapData:
     timestamp: datetime = field(default_factory=datetime.now)
 
 
-# Add rounding mode mapping after the imports
-ROUNDING_MODES = {
-    "HALF_UP": ROUND_HALF_UP,
-    "HALF_DOWN": ROUND_DOWN,  # Using ROUND_DOWN as approximation
-    "HALF_EVEN": ROUND_HALF_UP,  # Using ROUND_HALF_UP as approximation
-    "UP": ROUND_UP,
-    "DOWN": ROUND_DOWN,
-    "FLOOR": ROUND_DOWN,  # Using ROUND_DOWN as approximation
-    "CEILING": ROUND_UP  # Using ROUND_UP as approximation
-}
-
-
 class PrecisionManager:
     """High-precision mathematical operations manager."""
     
@@ -196,7 +172,7 @@ class PrecisionManager:
         
         # Configure decimal context
         getcontext().prec = self.config.decimal_precision
-        getcontext().rounding = ROUNDING_MODES.get(self.config.rounding_mode.value, ROUND_HALF_UP)
+        getcontext().rounding = getattr(ROUND_HALF_UP, self.config.rounding_mode.value)
         
         # Performance tracking
         self.total_operations = 0
@@ -333,7 +309,7 @@ class PrecisionManager:
     def round_decimal(self, value: Decimal, places: int = 8) -> Decimal:
         """Round Decimal to specified places."""
         try:
-            rounding_mode = ROUNDING_MODES.get(self.config.rounding_mode.value, ROUND_HALF_UP)
+            rounding_mode = getattr(ROUND_HALF_UP, self.config.rounding_mode.value)
             return value.quantize(Decimal(f'0.{"0" * places}'), rounding=rounding_mode)
         except Exception as e:
             self.precision_errors += 1
