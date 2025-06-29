@@ -41,8 +41,7 @@ def simulate_market_conditions():
         'price_change_24h': random.uniform(-5.0, 7.0),
         'market_sentiment': random.choice(['bullish', 'bearish', 'neutral']),
         'timestamp': time.time()
-    }
-
+}
 async def linguistic_trading_demo_async(): # Changed to async function
     """Demonstrate the complete linguistic trading system."""
     print("🚀 SCHWABOT LINGUISTIC MATHEMATICAL TRADING DEMO")
@@ -117,7 +116,7 @@ async def linguistic_trading_demo_async(): # Changed to async function
                     "🚀 Execute aggressive BTC entry - capture momentum",
                     "💎 Diamond hands activated - hold position strong", 
                     "🧿 Memory lock profit vector - preserve gains"
-                ]
+]
             },
             {
                 'scenario': 'Market Correction Strategy',
@@ -125,7 +124,7 @@ async def linguistic_trading_demo_async(): # Changed to async function
                     "👻 Ghost entry on next dip - stealth accumulation",
                     "🔄 Schwa recursive state - wait for confirmation",
                     "📈 Profit vector engaged - upward extrapolation"
-                ]
+]
             },
             {
                 'scenario': 'Risk Management Protocol',
@@ -133,10 +132,9 @@ async def linguistic_trading_demo_async(): # Changed to async function
                     "🔒 Lock current vector - preserve capital",
                     "⚡ Quick exit strategy - capture remaining profit",
                     "🌊 Neutral recursive state - assess market flow"
-                ]
-            }
-        ]
-        
+]
+}
+]
         total_profit = 0.0
         scenario_results = []
         
@@ -235,7 +233,7 @@ async def linguistic_trading_demo_async(): # Changed to async function
             bit_meaning = {
                 0: "NULL_RECURSION", 1: "GHOST_ENTRY", 
                 2: "MEMORY_LOCK", 3: "PROFIT_VECTOR"
-            }
+}
             print(f"  {i}. {glyph} → {state:02b} ({bit_meaning.get(state, 'UNKNOWN')})")
         
         print()
@@ -252,9 +250,8 @@ async def linguistic_trading_demo_async(): # Changed to async function
                 'forever_energy': float(np.sum(np.abs(forever_data))),
                 'paradox_energy': float(np.sum(np.abs(paradox_data))),
                 'echo_energy': float(np.sum(np.abs(echo_data)))
-            }
-        }
-        
+}
+}
     except Exception as e:
         print(f"❌ Demo failed: {e}")
         import traceback

@@ -128,8 +128,7 @@ def remove_unused_imports(file_path):
             'from datetime import datetime',
             'from enum import Enum',
             'from typing import Dict, List, Any, Optional, Tuple, Union',
-        ]
-        
+]
         lines = content.split('\n')
         filtered_lines = []
         

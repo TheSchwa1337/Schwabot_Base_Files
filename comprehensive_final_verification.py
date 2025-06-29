@@ -47,8 +47,7 @@ class ComprehensiveFinalVerification:
             "weather_mapping": {},
             "portfolio_management": {},
             "platform_compatibility": {}
-        }
-    
+}
     def test_bit_logic_systems(self) -> Dict[str, Any]:
         """Test all bit-flip, bit-switch, and precision systems."""
         logger.info("🔢 Testing Bit Logic Systems...")
@@ -92,8 +91,7 @@ class ComprehensiveFinalVerification:
                     "base_4bit": base_strategy,
                     "expanded_8bit": expanded_8bit,
                     "expanded_16bit": expanded_16bit
-                }
-            
+}
             results["strategy_mapping"] = strategy_results
             results["strategy_mapper_initialized"] = True
             
@@ -119,8 +117,7 @@ class ComprehensiveFinalVerification:
                 {"type": "price_vector", "value": 62000.45, "timestamp": time.time()},
                 {"type": "strategy_vector", "confidence": 0.85, "decision": "BUY"},
                 {"type": "ferris_state", "phase": "PEAK", "rotation": 1.2}
-            ]
-            
+]
             relay_results = []
             for data in test_data:
                 hash_result = hash_relay_system.submit(data)
@@ -142,8 +139,7 @@ class ComprehensiveFinalVerification:
                 "volume": 1500.0,
                 "volatility": 0.025,
                 "timestamp": time.time()
-            }
-            
+}
             thought_vector = engines.process_decision(mock_market_data)
             results["thought_vector_generated"] = {
                 "state": thought_vector.state.value,
@@ -151,8 +147,7 @@ class ComprehensiveFinalVerification:
                 "decision": thought_vector.decision,
                 "thermal_state": thought_vector.thermal_state,
                 "tags_count": len(thought_vector.tags)
-            }
-            
+}
         except Exception as e:
             logger.error(f"Mathematical relay test failed: {e}")
             results["error"] = str(e)
@@ -189,7 +184,7 @@ class ComprehensiveFinalVerification:
                 results["dlt_waveform"] = {
                     "available": True,
                     "results": waveform_results
-                }
+}
                 dlt_available = True
                 
             except ImportError:
@@ -205,19 +200,17 @@ class ComprehensiveFinalVerification:
                         "intensity": 0.8 - (i * 0.1),
                         "color": [1.0, 0.5, 0.0, 1.0],
                         "size": 1.0 + (i * 0.2)
-                    }
+}
                     for i in range(5)
                 ],
                 "camera_position": [0.0, 0.0, 5.0, 0.0],
                 "profit_tier": "HIGH"
-            }
-            
+}
             results["tesseract_visualization"] = {
                 "frame_generated": True,
                 "glyph_count": len(tesseract_frame["glyphs"]),
                 "frame_id": tesseract_frame["frame_id"]
-            }
-            
+}
             # Test enhanced phase risk manager integration
             try:
                 from enhanced_phase_risk_manager import EnhancedPhaseRiskManager
@@ -229,8 +222,7 @@ class ComprehensiveFinalVerification:
                     "frequencies": [1.0, 2.0, 3.0, 4.0],
                     "magnitudes": [0.8, 0.6, 0.4, 0.2],
                     "phase_coherence": 0.75
-                }
-                
+}
                 dlt_result = risk_manager.integrate_dlt_waveform(waveform_data)
                 
                 # Test tesseract integration
@@ -239,8 +231,7 @@ class ComprehensiveFinalVerification:
                 results["phase_risk_integration"] = {
                     "dlt_integration": dlt_result.tensor_score,
                     "tesseract_integration": tesseract_result.profit_tier
-                }
-                
+}
             except ImportError:
                 results["phase_risk_integration"] = {"available": False}
             
@@ -271,16 +262,14 @@ class ComprehensiveFinalVerification:
                 "order_book": {
                     "bids": [[61950, 1.5], [61940, 2.0]],
                     "asks": [[62050, 1.2], [62060, 1.8]]
-                }
-            }
-            
+}
+}
             signal = entry_exit.generate_signal(mock_market_data)
             results["entry_exit_signal"] = {
                 "signal_generated": signal is not None,
                 "signal_type": signal.signal_type if signal else None,
                 "confidence": signal.confidence if signal else None
-            }
-            
+}
             # Test API bridge functionality
             from core.api_bridge import APIBridge
             api_bridge = APIBridge()
@@ -291,8 +280,7 @@ class ComprehensiveFinalVerification:
                 "price_data_fetched": price_data is not None,
                 "has_price": "price" in price_data,
                 "has_volume": "volume_24h" in price_data
-            }
-            
+}
             # Test order book fetching
             order_book = asyncio.run(api_bridge.fetch_order_book("BTC/USDC"))
             results["order_book"] = {
@@ -301,8 +289,7 @@ class ComprehensiveFinalVerification:
                 "has_asks": "asks" in order_book,
                 "bid_count": len(order_book.get("bids", [])),
                 "ask_count": len(order_book.get("asks", []))
-            }
-            
+}
         except Exception as e:
             logger.error(f"Trading logic test failed: {e}")
             results["error"] = str(e)
@@ -331,13 +318,11 @@ class ComprehensiveFinalVerification:
                     emoji_results[emoji] = {
                         "hash": hash_result,
                         "asic_code": dual_handler.emoji_asic_map.get(emoji, "UNKNOWN").value
-                    }
-                
+}
                 results["dual_unicore_handler"] = {
                     "available": True,
                     "emoji_mappings": emoji_results
-                }
-                
+}
             except ImportError:
                 results["dual_unicore_handler"] = {"available": False}
             
@@ -357,8 +342,7 @@ class ComprehensiveFinalVerification:
                 "01": "low_tier_entry",
                 "10": "mid_tier_sequence", 
                 "11": "peak_tier_trigger"
-            }
-            
+}
             results["asic_logic_mapping"] = asic_logic_map
             
         except Exception as e:
@@ -422,8 +406,7 @@ class ComprehensiveFinalVerification:
                 "BTC": Decimal("0.1"),
                 "ETH": Decimal("0.0"),
                 "XRP": Decimal("0.0")
-            }
-            
+}
             # Test randomization for portfolio balancing
             import random
             random.seed(42)  # For reproducible results
@@ -453,8 +436,7 @@ class ComprehensiveFinalVerification:
                 "ETH": 2500.0,
                 "XRP": 0.8,
                 "USDC": 1.0
-            }
-            
+}
             portfolio_value = float(
                 initial_portfolio["USDC"] * Decimal(str(mock_prices["USDC"])) +
                 initial_portfolio["BTC"] * Decimal(str(mock_prices["BTC"]))
@@ -464,8 +446,7 @@ class ComprehensiveFinalVerification:
                 "total_value_usd": portfolio_value,
                 "btc_value": float(initial_portfolio["BTC"] * Decimal(str(mock_prices["BTC"]))),
                 "usdc_value": float(initial_portfolio["USDC"])
-            }
-            
+}
         except Exception as e:
             logger.error(f"Portfolio management test failed: {e}")
             results["error"] = str(e)
@@ -490,22 +471,19 @@ class ComprehensiveFinalVerification:
                 "machine": platform.machine(),
                 "processor": platform.processor(),
                 "python_version": platform.python_version()
-            }
-            
+}
             # Path compatibility
             results["path_compatibility"] = {
                 "os_sep": os.sep,
                 "current_working_dir": str(Path.cwd()),
                 "home_dir": str(Path.home()),
                 "temp_dir_accessible": os.access(Path.home(), os.W_OK)
-            }
-            
+}
             # Module availability
             critical_modules = [
                 "numpy", "pandas", "asyncio", "hashlib", "json", 
                 "logging", "time", "decimal", "pathlib"
-            ]
-            
+]
             module_availability = {}
             for module in critical_modules:
                 try:
@@ -538,8 +516,7 @@ class ComprehensiveFinalVerification:
             ("Weather Mapping", self.test_chrono_weather_mapping),
             ("Portfolio Management", self.test_portfolio_management),
             ("Platform Compatibility", self.test_platform_compatibility)
-        ]
-        
+]
         for suite_name, test_func in test_suites:
             logger.info(f"\n🔍 Running {suite_name} Tests...")
             try:
@@ -560,8 +537,7 @@ class ComprehensiveFinalVerification:
             "test_results": self.test_results,
             "verification_summary": self.verification_summary,
             "overall_status": self._determine_overall_status()
-        }
-        
+}
         # Save results
         results_file = f"comprehensive_verification_results_{int(time.time())}.json"
         with open(results_file, 'w') as f:

@@ -62,8 +62,7 @@ def create_market_data(
         "price_history": [price * (1 + random.uniform(-0.05, 0.05)) for _ in range(20)],
         "volume_history": [volume * random.uniform(0.7, 1.3) for _ in range(20)],
         "phase_data": [random.uniform(0, 2*np.pi) for _ in range(4)]
-    }
-    
+}
     # Add AI feedback if requested
     if include_ai_feedback:
         market_data["ai_feedback"] = [
@@ -84,9 +83,8 @@ def create_market_data(
                 "confidence": random.uniform(0.7, 0.95),
                 "weight": 0.3,
                 "prediction": random.choice(["bullish", "bearish", "neutral"])
-            }
-        ]
-    
+}
+]
     # Add error logs if requested
     if include_errors:
         market_data["error_logs"] = [
@@ -99,9 +97,8 @@ def create_market_data(
                 "severity": random.uniform(0.2, 0.6),
                 "message": "Data inconsistency",
                 "timestamp": time.time() - random.uniform(0, 1800)
-            }
-        ]
-    
+}
+]
     return market_data
 
 def test_alif_basic_functionality():
@@ -171,8 +168,7 @@ def test_alif_state_activation():
             include_ai_feedback=True,
             include_errors=True
         ))
-    ]
-    
+]
     for scenario_name, market_data in scenarios:
         print(f"\nScenario: {scenario_name}")
         
@@ -249,7 +245,7 @@ def test_alif_configuration():
         "resonance": 0.2,
         "ai_feedback": 0.2,
         "error_correction": 0.1
-    }
+}
     print(f"Setting ALIF weights to {new_weights}...")
     engine.set_alif_weights(new_weights)
     
@@ -283,8 +279,7 @@ def test_alif_performance_metrics():
         ("Neutral", create_market_data(price=50000.0, rsi=50.0, momentum=0.0)),
         ("High Volatility", create_market_data(price=50000.0, volatility=0.8)),
         ("Low Volume", create_market_data(price=50000.0, volume=500000.0)),
-    ]
-    
+]
     for scenario_name, market_data in scenarios:
         thought_vector = engine.process_market_data(market_data)
         print(f"{scenario_name}: ALIF Score = {thought_vector.alif_score:.3f}, Decision = {thought_vector.decision}")

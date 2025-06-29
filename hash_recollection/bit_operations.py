@@ -117,8 +117,7 @@ class BitOperations:
             'pattern_confidence_threshold': 0.6,
             'sequence_length': 8,
             'pattern_detection_window': 32
-        }
-    
+}
     def analyze_bit_phase(self, value: float) -> BitPhase:
         """
         Analyze bit phase from a continuous value.
@@ -400,8 +399,7 @@ class BitOperations:
             "recent_transition_prob_avg": np.mean([p.transition_probability for p in recent_phases]),
             "history_size": len(self.bit_history),
             "pattern_history_size": len(self.pattern_history)
-        }
-    
+}
     def get_recent_patterns(self, count: int = 10) -> List[Dict[str, Any]]:
         """Get recent detected patterns."""
         recent_patterns = self.pattern_history[-count:]
@@ -413,11 +411,9 @@ class BitOperations:
                 "start_index": pattern.start_index,
                 "end_index": pattern.end_index,
                 "bit_sequence": pattern.bit_sequence
-            }
+}
             for pattern in recent_patterns
-        ]
-
-
+]
 # API Integration Functions
 def create_bit_operations_api_endpoints(app):
     """Create FastAPI endpoints for bit operations."""
@@ -436,7 +432,7 @@ def create_bit_operations_api_endpoints(app):
                 "confidence": bit_phase.confidence,
                 "transition_probability": bit_phase.transition_probability,
                 "timestamp": bit_phase.timestamp
-            }
+}
         except Exception as e:
             return {"success": False, "error": str(e)}
     
@@ -451,7 +447,7 @@ def create_bit_operations_api_endpoints(app):
                 "bits": sequence.bits,
                 "length": sequence.length,
                 "timestamp": sequence.timestamp
-            }
+}
         except Exception as e:
             return {"success": False, "error": str(e)}
     
@@ -470,10 +466,10 @@ def create_bit_operations_api_endpoints(app):
                         "start_index": p.start_index,
                         "end_index": p.end_index,
                         "bit_sequence": p.bit_sequence
-                    }
+}
                     for p in patterns
-                ]
-            }
+]
+}
         except Exception as e:
             return {"success": False, "error": str(e)}
     
@@ -484,7 +480,7 @@ def create_bit_operations_api_endpoints(app):
             return {
                 "success": True,
                 "summary": app.bit_operations.get_bit_summary()
-            }
+}
         except Exception as e:
             return {"success": False, "error": str(e)}
     
@@ -495,7 +491,7 @@ def create_bit_operations_api_endpoints(app):
             return {
                 "success": True,
                 "patterns": app.bit_operations.get_recent_patterns(count)
-            }
+}
         except Exception as e:
             return {"success": False, "error": str(e)}
     

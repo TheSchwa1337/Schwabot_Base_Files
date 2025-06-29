@@ -408,8 +408,7 @@ tests = [
         test_mathematical_integration,
         test_hybrid_strategy_mapper,
         test_legacy_compatibility_functions,
-    ]
-
+]
 passed = 0
     total = len(tests)
 

@@ -1,209 +1,236 @@
 # -*- coding: utf-8 -*-
-"""
-Trade Executor - Core trading execution logic for Schwabot
-=========================================================
+"""Trade Executor for Schwabot Trading System.
 
-Handles trade execution, position management, and portfolio updates
-with mathematical preservation and error handling.
+Handles the execution of trading orders, interacting with simulated or live exchange APIs.
+Provides functionalities for placing, canceling, and managing orders, and tracking trade statuses.
+
+Integrates with: [Other modules that generate trade signals or manage positions]
 """
 
-import asyncio
 import logging
 import time
+from datetime import datetime
+from typing import Any, Dict, List, Optional, Union
 from dataclasses import dataclass, field
-from decimal import Decimal
-from typing import Any, Dict, List, Optional
 
-from core.bit_phase_sequencer import BitPhase, BitSequence
-from core.dual_error_handler import PhaseState, SickState, SickType
-from core.symbolic_profit_router import FlipBias, ProfitTier, SymbolicState
-from dual_unicore_handler import DualUnicoreHandler
-
-# Initialize Unicode handler
-unicore = DualUnicoreHandler()
-
-# Configure logging
 logger = logging.getLogger(__name__)
 
 
 @dataclass
-class TradeProposal:
-    """Trade proposal with execution details."""
+class Order:
+    """Represents a trading order."""
 
-    symbol: str
-    direction: str  # "BUY" or "SELL"
-    entry_price: float
-    confidence: float
-    signal_id: str
+    order_id: str
+    asset: str
+    direction: str  # "buy" or "sell"
+    quantity: float
+    price: float
+    order_type: str = "market"
+    status: str = "pending"
     timestamp: float = field(default_factory=time.time)
-
-
-@dataclass
-class TradeExecution:
-    """Trade execution result."""
-
-    proposal: TradeProposal
-    execution_price: float
-    execution_timestamp: float
-    status: str = "SIMULATED_EXECUTION"
-    order_id: Optional[str] = None
-    error_message: Optional[str] = None
-
-
-class FaultBus:
-    """Simple event bus for trade events."""
-
-    def __init__(self):
-        self.subscribers = {}
-
-    def subscribe(self, event: str, callback):
-        """Subscribe to an event."""
-        if event not in self.subscribers:
-            self.subscribers[event] = []
-        self.subscribers[event].append(callback)
-
-    async def publish(self, event: str, data: Any = None):
-        """Publish an event."""
-        if event in self.subscribers:
-            for callback in self.subscribers[event]:
-                try:
-                    if asyncio.iscoroutinefunction(callback):
-                        await callback(data)
-                    else:
-                        callback(data)
-                except Exception as e:
-                    logger.error(f"Error in event callback: {e}")
+    executed_price: Optional[float] = None
+    executed_quantity: Optional[float] = None
+    fees: Optional[float] = None
+    metadata: Dict[str, Any] = field(default_factory=dict)
 
 
 class TradeExecutor:
-    """Main trade executor for Schwabot system."""
+    """Handles the execution of trading orders.
 
-    def __init__(self):
-        """Initialize trade executor."""
-        self.bus = FaultBus()
-        self.execution_history: List[TradeExecution] = []
-        self.active_positions: Dict[str, Dict[str, Any]] = {}
+    Interacts with simulated or live exchange APIs.
+    """
 
-        # Subscribe to trade events
-        self.bus.subscribe("trade_proposal_accepted", self._handle_trade_proposal)
-        self.bus.subscribe("trade_executed", self._handle_trade_execution)
+    def __init__(self, simulation_mode: bool = True):
+        """Initialize the trade executor.
 
-        logger.info("TradeExecutor initialized.")
-        logger.info("TradeExecutor is now listening for accepted proposals.")
+        Args:
+            simulation_mode: If True, operates in simulation mode; otherwise, connects to live exchange.
+        """
+        self.simulation_mode = simulation_mode
+        self.orders: Dict[str, Order] = {}
+        self.order_counter = 0  # Simple counter for unique order IDs
 
-    async def _handle_trade_proposal(self, proposal: TradeProposal):
-        """Handle accepted trade proposal."""
-        try:
-            logger.info(
-                f"EXECUTING TRADE for {proposal.symbol}: " f"{proposal.direction} @ ${proposal.entry_price:.2f}"
-            )
+        # Performance metrics
+        self.execution_stats = {
+            "total_orders": 0,
+            "executed_orders": 0,
+            "canceled_orders": 0,
+            "avg_execution_time": 0.0,
+            "simulation_trades": 0,
+            "live_trades": 0,
+        }
 
-            # Execute the trade
-            execution = await self._execute_trade(proposal)
+        logger.info(f"TradeExecutor initialized in {'simulation' if simulation_mode else 'live'} mode.")
 
-            # Publish execution result
-            await self.bus.publish("trade_executed", execution)
+    def place_order(
+        self,
+        asset: str,
+        direction: str,
+        quantity: float,
+        price: float,
+        order_type: str = "market",
+    ) -> Dict[str, Any]:
+        """Place a trading order.
 
-            logger.info(f"Trade for {proposal.symbol} executed. Publishing confirmation.")
+        Args:
+            asset: The trading asset (e.g., "BTC/USD").
+            direction: "buy" or "sell".
+            quantity: The quantity to trade.
+            price: The price at which to place the order.
+            order_type: "market" or "limit".
 
-        except Exception as e:
-            logger.error(f"Trade execution failed: {e}")
+        Returns:
+            A dictionary containing order details and status.
+        """
+        self.order_counter += 1
+        order_id = f"ORDER-{self.order_counter}-{int(time.time() * 1000)}"
 
-    async def _execute_trade(self, proposal: TradeProposal) -> TradeExecution:
-        """Execute a trade proposal."""
-        try:
-            # Simulate trade execution
-            execution_price = proposal.entry_price
-            execution_timestamp = time.time()
-
-            execution = TradeExecution(
-                proposal=proposal,
-                execution_price=execution_price,
-                execution_timestamp=execution_timestamp,
-                order_id=f"ORDER_{int(execution_timestamp)}",
-            )
-
-            # Update position tracking
-            self._update_position(execution)
-
-            # Log execution details
-            self._log_execution(execution)
-
-            return execution
-
-        except Exception as e:
-            logger.error(f"Trade execution failed: {e}")
-            return TradeExecution(
-                proposal=proposal,
-                execution_price=0.0,
-                execution_timestamp=time.time(),
-                status="FAILED",
-                error_message=str(e),
-            )
-
-    def _update_position(self, execution: TradeExecution):
-        """Update position tracking."""
-        symbol = execution.proposal.symbol
-        direction = execution.proposal.direction
-        amount = 0.1  # Default amount for simulation
-
-        if direction == "BUY":
-            if symbol not in self.active_positions:
-                self.active_positions[symbol] = {
-                    "side": "long",
-                    "amount": amount,
-                    "entry_price": execution.execution_price,
-                    "entry_time": execution.execution_timestamp,
-                }
-            else:
-                # Update existing position
-                pos = self.active_positions[symbol]
-                pos["amount"] += amount
-                pos["entry_price"] = (pos["entry_price"] + execution.execution_price) / 2
-
-        elif direction == "SELL":
-            if symbol in self.active_positions:
-                # Calculate P&L
-                pos = self.active_positions[symbol]
-                pnl = (execution.execution_price - pos["entry_price"]) * pos["amount"]
-                logger.info(f"Position closed for {symbol}, P&L: ${pnl:.2f}")
-                del self.active_positions[symbol]
-
-    def _log_execution(self, execution: TradeExecution):
-        """Log trade execution details."""
-        logger.info(
-            f"\n[AUDIT LOG] Confirmed trade execution:\n"
-            f"  -> Symbol: {execution.proposal.symbol}\n"
-            f"  -> Direction: {execution.proposal.direction}\n"
-            f"  -> Executed Price: ${execution.execution_price:.2f}"
+        new_order = Order(
+            order_id=order_id,
+            asset=asset,
+            direction=direction,
+            quantity=quantity,
+            price=price,
+            order_type=order_type,
+            status="pending",
         )
+        self.orders[order_id] = new_order
+        self.execution_stats["total_orders"] += 1
 
-        self.execution_history.append(execution)
+        start_time = time.time()
+        try:
+            if self.simulation_mode:
+                # Simulate order execution
+                executed_price = price * (1 + (random.random() - 0.5) * 0.001)  # Small price fluctuation
+                executed_quantity = quantity
+                fees = executed_quantity * executed_price * 0.00075  # Simulate 0.075% fee
+                new_order.status = "filled"
+                new_order.executed_price = executed_price
+                new_order.executed_quantity = executed_quantity
+                new_order.fees = fees
+                self.execution_stats["simulation_trades"] += 1
+                logger.info(f"Simulated order {order_id} filled: {direction} {executed_quantity:.4f} {asset} @ {executed_price:.2f}")
+            else:
+                # Placeholder for live exchange API call
+                logger.info(f"Placing live order: {direction} {quantity} {asset} @ {price}")
+                # In a real system, this would interact with an actual exchange API
+                # For now, simulate a successful live trade after a delay
+                time.sleep(0.05)  # Simulate network latency
+                new_order.status = "filled"
+                new_order.executed_price = price  # Assume filled at requested price
+                new_order.executed_quantity = quantity
+                new_order.fees = quantity * price * 0.0005  # Simulate 0.05% live fee
+                self.execution_stats["live_trades"] += 1
+                logger.info(f"Live order {order_id} filled: {direction} {quantity} {asset} @ {price}")
 
-    async def _handle_trade_execution(self, execution: TradeExecution):
-        """Handle trade execution event."""
-        logger.info(f"Trade execution confirmed: {execution.proposal.symbol}")
+            new_order.metadata["execution_time"] = time.time() - start_time
+            self.execution_stats["executed_orders"] += 1
+            self._update_avg_execution_time(new_order.metadata["execution_time"])
+            return self.get_order_status(order_id)
+
+        except Exception as e:
+            new_order.status = "failed"
+            logger.error(f"Order {order_id} failed: {e}")
+            return {"status": "failed", "order_id": order_id, "error": str(e)}
+
+    def cancel_order(self, order_id: str) -> Dict[str, Any]:
+        """Cancel an existing order.
+
+        Args:
+            order_id: The ID of the order to cancel.
+
+        Returns:
+            A dictionary with cancellation status.
+        """
+        order = self.orders.get(order_id)
+        if order and order.status == "pending":
+            order.status = "canceled"
+            self.execution_stats["canceled_orders"] += 1
+            logger.info(f"Order {order_id} canceled.")
+            return {"status": "canceled", "order_id": order_id}
+        elif order:
+            logger.warning(f"Cannot cancel order {order_id} (status: {order.status}).")
+            return {"status": "failed", "message": f"Cannot cancel order in {order.status} state"}
+        else:
+            logger.warning(f"Order {order_id} not found.")
+            return {"status": "failed", "message": "Order not found"}
+
+    def get_order_status(self, order_id: str) -> Dict[str, Any]:
+        """Retrieve the status of an order.
+
+        Args:
+            order_id: The ID of the order.
+
+        Returns:
+            A dictionary with order details.
+        """
+        order = self.orders.get(order_id)
+        if order:
+            return {**order.__dict__, "timestamp": order.timestamp}  # Convert dataclass to dict
+        else:
+            return {"status": "not_found", "order_id": order_id}
+
+    def get_all_orders(self) -> List[Dict[str, Any]]:
+        """Retrieve all orders managed by the executor."""
+        return [self.get_order_status(order_id) for order_id in self.orders]
+
+    def _update_avg_execution_time(self, new_execution_time: float) -> None:
+        """Update the average execution time metric."""
+        current_total = self.execution_stats["executed_orders"]
+        current_avg = self.execution_stats["avg_execution_time"]
+
+        if current_total == 1:
+            self.execution_stats["avg_execution_time"] = new_execution_time
+        elif current_total > 1:
+            self.execution_stats["avg_execution_time"] = (
+                (current_avg * (current_total - 1) + new_execution_time) / current_total
+            )
+
+    def get_performance_stats(self) -> Dict[str, Any]:
+        """Return the performance statistics of the trade executor."""
+        return self.execution_stats.copy()
 
 
-# Global instance
-trade_executor = TradeExecutor()
+def main():
+    """Demonstrate TradeExecutor functionality."""
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    executor = TradeExecutor(simulation_mode=True)
 
+    print("\n--- Trade Executor Demo (Simulation Mode) ---")
 
-async def main():
-    """Main function for testing."""
-    # Simulate a trade proposal
-    proposal = TradeProposal(
-        symbol="BTC/USDC", direction="BUY", entry_price=50000.0, confidence=0.93, signal_id="hash_final"
+    # Place a buy order
+    buy_order_result = executor.place_order("BTC/USD", "buy", 0.001, 50000.0)
+    print(f"Buy Order Result: {buy_order_result}")
+
+    # Place a sell order
+    sell_order_result = executor.place_order("ETH/USD", "sell", 0.01, 3000.0)
+    print(f"Sell Order Result: {sell_order_result}")
+
+    # Try to cancel a non-pending order (will fail)
+    cancel_failed_result = executor.cancel_order(buy_order_result["order_id"])
+    print(f"Cancel Failed Result: {cancel_failed_result}")
+
+    # Simulate a pending order and then cancel it
+    executor_for_cancel = TradeExecutor(simulation_mode=True)  # New executor to ensure pending order
+    pending_order_id = f"PENDING-{int(time.time() * 1000)}"
+    executor_for_cancel.orders[pending_order_id] = Order(
+        order_id=pending_order_id, asset="XRP/USD", direction="buy", quantity=100, price=0.5,
+        status="pending"
     )
+    print(f"\nCreated pending order: {executor_for_cancel.get_order_status(pending_order_id)}")
+    cancel_success_result = executor_for_cancel.cancel_order(pending_order_id)
+    print(f"Cancel Success Result: {cancel_success_result}")
+    print(f"Status after cancel: {executor_for_cancel.get_order_status(pending_order_id)}")
 
-    # Publish the proposal
-    await trade_executor.bus.publish("trade_proposal_accepted", proposal)
+    print("\n--- Performance Statistics ---")
+    stats = executor.get_performance_stats()
+    for key, value in stats.items():
+        print(f"  {key}: {value}")
 
-    # Wait for execution
-    await asyncio.sleep(1)
-
-    print("Trade execution test completed.")
+    print("\n--- All Orders ---")
+    for order in executor.get_all_orders():
+        print(f"  {order}")
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    main() 

@@ -45,12 +45,12 @@ class SimpleBacktester:
                     "enableRateLimit": True,
                     "options": {
                         "defaultType": "spot",
-                    }
-                }
+}
+}
             },
             "COINMARKETCAP_API_KEY": "mock_cmc_key", # Mock key
             # No actual API keys needed for backtesting if using simulated data
-        }
+}
         self.ccxt_executor = CCXTTradingExecutor(executor_config)
         self.ccxt_executor.portfolio_balance["USDC"] = initial_capital
 

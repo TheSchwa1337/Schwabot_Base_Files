@@ -65,7 +65,6 @@ UNICODE_REPLACEMENTS = {
     'ℝ': 'R',
     'ℂ': 'C'
 }
-
 def fix_unicode_in_file(file_path: Path) -> bool:
     """Fix Unicode characters in a single file."""
     try:

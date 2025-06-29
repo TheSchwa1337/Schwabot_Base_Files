@@ -139,7 +139,6 @@ self.test_cases = [
                 description="Multi - source arbitrage detection"
             )
 ]
-
 logger.info("\\u1f50c API Price Entry Feedback Test initialized")
 
 def test_ccxt_api_integration(self) -> Dict[str, Any]:
@@ -388,7 +387,6 @@ discrepancy_scenarios = [
                     'expected_detected': True,
                     'threshold': 0.01  # 1%
 ]
-
 for i, scenario in enumerate(discrepancy_scenarios):
 # Detect price discrepancy
 discrepancy_result = self._detect_price_discrepancy(
@@ -522,7 +520,6 @@ rate_limit_scenarios = [
                     'requests_per_minute': 1200,  # Exceeds limit
                     'expected_throttled': True
 ]
-
 for i, scenario in enumerate(rate_limit_scenarios):
 # Simulate rate limiting
 rate_limit_result = self._simulate_rate_limiting(scenario)

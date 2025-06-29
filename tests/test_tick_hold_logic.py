@@ -106,7 +106,6 @@ self.test_cases = [
                 description="Immediate exit with very low confidence"
             )
 ]
-
 logger.info("\\u23f1\\ufe0f Tick Hold Logic Test initialized")
 
 def test_long_hold_strategy_validation(self) -> Dict[str, Any]:
@@ -315,8 +314,7 @@ confidence_scenarios = [
                 {'initial_confidence': 0.9, 'hold_ticks': 5, 'expected_decay': 0.1},
                 {'initial_confidence': 0.7, 'hold_ticks': 8, 'expected_decay': 0.2},
                 {'initial_confidence': 0.5, 'hold_ticks': 12, 'expected_decay': 0.3}
-            ]
-
+]
 for i, scenario in enumerate(confidence_scenarios):
 # Calculate hold confidence
 hold_confidence = self._calculate_hold_confidence(

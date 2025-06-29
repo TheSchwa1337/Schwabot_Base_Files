@@ -68,8 +68,7 @@ class HistoricalDataManager:
                 "low": float(low_price),
                 "close": float(close_price),
                 "volume": volume
-            }
-
+}
             current_price = close_price # Next interval starts from this close price
             current_date += timedelta(minutes=self.interval_minutes) # Move to next interval
 

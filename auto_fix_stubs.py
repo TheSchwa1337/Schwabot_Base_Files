@@ -28,8 +28,7 @@ def fix_unicode_issues(content: str) -> str:
         '≥': '>=',
         '≠': '!=',
         '≈': '~='
-    }
-    
+}
     for old, new in replacements.items():
         content = content.replace(old, new)
     

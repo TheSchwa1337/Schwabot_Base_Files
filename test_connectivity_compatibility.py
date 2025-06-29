@@ -69,8 +69,7 @@ class ConnectivityCompatibilityTester:
             self.test_matrix_operations,
             self.test_wave_entropy,
             self.test_tensor_scores
-        ]
-        
+]
         results = {}
         for test_func in test_functions:
             try:
@@ -84,8 +83,7 @@ class ConnectivityCompatibilityTester:
                 results[test_name] = {
                     "success": result,
                     "execution_time_ms": execution_time
-                }
-                
+}
                 if result:
                     success(f"✅ {test_name} PASSED ({execution_time:.2f}ms)")
                 else:
@@ -97,8 +95,7 @@ class ConnectivityCompatibilityTester:
                     "success": False,
                     "execution_time_ms": 0,
                     "error": str(e)
-                }
-        
+}
         self._print_summary(results)
         return results
     

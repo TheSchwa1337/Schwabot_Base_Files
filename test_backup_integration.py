@@ -27,24 +27,23 @@ def create_test_flipmatrix() -> None:
             "bit_phases": {
                 "4": {"flip_pattern": "0101", "confidence": 0.8},
                 "8": {"flip_pattern": "10101010", "confidence": 0.9}
-            }
+}
         },
         "ETH→USDC": {
             "inverse": "USDC→ETH",
             "bit_phases": {
                 "4": {"flip_pattern": "1100", "confidence": 0.7},
                 "8": {"flip_pattern": "00110011", "confidence": 0.8}
-            }
+}
         },
         "BTC→USDC": {
             "inverse": "USDC→BTC",
             "bit_phases": {
                 "4": {"flip_pattern": "1010", "confidence": 0.9},
                 "8": {"flip_pattern": "11001100", "confidence": 0.95}
-            }
-        }
-    }
-    
+}
+}
+}
     flipmatrix_path = os.path.join(os.path.dirname(__file__), "flipmatrix.json")
     with open(flipmatrix_path, "w", encoding="utf-8") as f:
         json.dump(flipmatrix, f, indent=2)
@@ -58,8 +57,7 @@ def create_test_market_data() -> Dict[str, Any]:
         "BTC→USDC": {"price": 45000, "trend": "down", "volume": 2000},
         "USDC→BTC": {"price": 0.000022, "trend": "up", "volume": 1500},
         "ETH→BTC": {"price": 20, "trend": "neutral", "volume": 800}
-    }
-
+}
 def test_bit_flip_operations() -> None:
     """Test bit flip operations with backup tracking."""
     print("\n" + "="*60)
@@ -100,8 +98,7 @@ def test_pair_flip_operations() -> None:
         {"trigger": "price_spike", "outcome": "+0.05", "confidence": 0.8},
         {"trigger": "volume_surge", "outcome": "+0.02", "confidence": 0.7},
         {"trigger": "trend_reversal", "outcome": "-0.01", "confidence": 0.6}
-    ]
-    
+]
     for i, outcome in enumerate(test_outcomes):
         pair = test_pairs[i % len(test_pairs)]
         bit_phase = test_bit_phases[i % len(test_bit_phases)]
@@ -136,9 +133,8 @@ def test_ghost_trigger_events() -> None:
             "bit": "1010",
             "bit_phase": 8,
             "confidence": 0.9
-        }
-    ]
-    
+}
+]
     for event in test_events:
         print(f"\n[GHOST] Processing event: {event['event']} with trigger: {event['trigger']}")
         ghost_trigger(event)
@@ -160,8 +156,7 @@ def test_profit_orbit_cycles() -> None:
         [("BTC→ETH", 4), ("ETH→USDC", 4)],  # Layer 1: 4-bit pairs
         [("BTC→USDC", 8), ("USDC→BTC", 8)],  # Layer 2: 8-bit pairs
         [("ETH→BTC", 4), ("BTC→ETH", 8)]     # Layer 3: Mixed bit phases
-    ]
-    
+]
     # Get test market data
     market_data = create_test_market_data()
     
@@ -269,8 +264,7 @@ def _get_total_backup_size() -> str:
         backup_dirs = [
             os.path.join(os.path.dirname(__file__), "backup_memory_stack"),
             os.path.join(os.path.dirname(__file__), "hash_memory_bank")
-        ]
-        
+]
         total_size = 0
         for backup_dir in backup_dirs:
             if os.path.exists(backup_dir):

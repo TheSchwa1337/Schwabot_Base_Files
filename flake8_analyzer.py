@@ -74,7 +74,6 @@ MATH_PRESERVATION_KEYWORDS = {
     'sigmoid', 'activation', 'neural', 'feedback', 'harmonic', 'volatility',
     'liquidity', 'momentum', 'backprop', 'sha', 'RDE', 'RITL', 'RITTLE'
 }
-
 # Auto-fixable error codes
 AUTO_FIXABLE_CODES = {
     'E501', 'E302', 'E303', 'E305', 'E225', 'E226', 'E231', 'E241', 'E251',
@@ -83,7 +82,6 @@ AUTO_FIXABLE_CODES = {
     'E743', 'W291', 'W292', 'W293', 'W391', 'W503', 'W504', 'W505', 'W601',
     'W602', 'W603', 'W604', 'W605', 'W606'
 }
-
 # Critical error codes that must be fixed manually
 CRITICAL_CODES = {'E999', 'F821', 'F822', 'F823', 'F831', 'F841', 'F901'}
 
@@ -107,8 +105,7 @@ class Flake8Analyzer:
                 '--select=E,W,F',
                 '--format=%(path)s:%(row)d:%(col)d:%(code)s:%(text)s',
                 '--statistics'
-            ]
-            
+]
             # Add directories
             for directory in CODEBASE_DIRS:
                 if os.path.exists(directory):
@@ -167,8 +164,7 @@ class Flake8Analyzer:
                     'message': message,
                     'auto_fixable': code in AUTO_FIXABLE_CODES,
                     'critical': code in CRITICAL_CODES
-                }
-                
+}
                 self.errors[filepath].append(error_info)
                 self.total_count += 1
                 

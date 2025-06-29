@@ -36,8 +36,7 @@ def simple_test():
             PanelType.TRADING_STATE,
             PanelType.POOL_ANALYSIS,
             PanelType.PATTERN_RECOGNITION
-        ]
-        
+]
         for panel_type in test_panels:
             panel_system.switch_panel(panel_type)
             print(f"✅ Switched to: {panel_type.value}")
@@ -62,8 +61,7 @@ def simple_test():
             ('Total Panels', len(panel_system.panels)),
             ('API Connections', len(panel_system.api_connections)),
             ('Current Panel', panel_system.current_panel.value if panel_system.current_panel else None)
-        ]
-        
+]
         for item, value in status_items:
             print(f"✅ {item}: {value}")
         

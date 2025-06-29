@@ -185,8 +185,7 @@ required_fields = [
             "total_keys", "synchronized_keys", "pending_keys", "rotated_keys",
             "sync_rate", "total_operations", "successful_operations",
             "operation_success_rate", "collision_count"
-        ]
-
+]
 for field in required_fields:
             self.assertIn(field, stats)
 
@@ -216,8 +215,7 @@ compatible_pairs = [
             (BitLevel.FOUR_BIT, BitLevel.EIGHT_BIT),
             (BitLevel.EIGHT_BIT, BitLevel.SIXTEEN_BIT),
             (BitLevel.SIXTEEN_BIT, BitLevel.FORTY_TWO_BIT)
-        ]
-
+]
 for source_level, target_level in compatible_pairs:
             source_key = self.synchronizer.register_memory_key("""
                 f"compat_source_{source_level.value}", source_level, MatrixPhase.INITIALIZATION
@@ -236,8 +234,7 @@ self.assertTrue(result)
 incompatible_pairs = [
             (BitLevel.FOUR_BIT, BitLevel.FORTY_TWO_BIT),
             (BitLevel.EIGHT_BIT, BitLevel.FORTY_TWO_BIT)
-        ]
-
+]
 for source_level, target_level in incompatible_pairs:
             source_key = self.synchronizer.register_memory_key(
                 f"incompat_source_{source_level.value}", source_level, MatrixPhase.INITIALIZATION

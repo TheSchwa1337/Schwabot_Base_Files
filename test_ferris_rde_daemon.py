@@ -103,9 +103,8 @@ async def test_entry_exit_logic(daemon: FerrisRDEDaemon):
             "order_book": {
                 "bids": [[49999, 1.0], [49998, 2.0]],
                 "asks": [[50001, 1.0], [50002, 2.0]],
-            }
-        }
-        
+}
+}
         # Process through trading pipeline
         trading_signal = await daemon.trading_pipeline.process_market_data(
             market_data=test_market_data,
@@ -258,8 +257,7 @@ async def test_performance_metrics(daemon: FerrisRDEDaemon):
         required_metrics = [
             "uptime_seconds", "total_ticks_processed", "total_signals_generated",
             "total_trades_executed", "avg_tick_processing_time_ms"
-        ]
-        
+]
         for metric in required_metrics:
             assert metric in performance_summary
         
@@ -302,8 +300,7 @@ async def test_pipeline_integration(daemon: FerrisRDEDaemon):
             test_order_book = {
                 "bids": [[49999, 1.0], [49998, 2.0], [49997, 1.5]],
                 "asks": [[50001, 1.0], [50002, 2.0], [50003, 1.5]],
-            }
-            
+}
             # Process tick
             tick = pipeline.process_tick(
                 order_book=test_order_book,

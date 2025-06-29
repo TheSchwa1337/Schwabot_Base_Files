@@ -58,8 +58,7 @@ class ComprehensiveSyntaxFixer:
             "files_processed": self.files_processed,
             "errors_fixed": self.errors_fixed,
             "fixes_applied": self.fixes_applied[:20]  # Show first 20 fixes
-        }
-        
+}
         self._print_summary(results)
         return results
     
@@ -72,8 +71,7 @@ class ComprehensiveSyntaxFixer:
             "logs",
             "examples",
             "cleanup_stub_files"
-        ]
-        
+]
         file_str = str(file_path)
         return any(pattern in file_str for pattern in skip_patterns)
     
@@ -214,8 +212,7 @@ class ComprehensiveSyntaxFixer:
             (r'Emergency placeholder docstring\.\s*\^?', '"""Emergency placeholder docstring."""'),
             (r'# EMERGENCY: Emergency placeholder docstring\.', '"""Emergency placeholder docstring."""'),
             (r'EMERGENCY:\s*Emergency placeholder docstring\.', '"""Emergency placeholder docstring."""'),
-        ]
-        
+]
         for pattern, replacement in patterns:
             content = re.sub(pattern, replacement, content, flags=re.MULTILINE)
         

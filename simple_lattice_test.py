@@ -59,8 +59,7 @@ def test_direct_lattice():
             "ai_output": ["test signal", "mathematical validation"],
             "word": "profit",
             "btc_price": 52000.0
-        }
-        
+}
         result = process_recursive_cycle(input_data)
         print(f"   Final Action: {result.get('final_action', 'UNKNOWN')}")
         print(f"   Confidence: {result.get('overall_confidence', 0):.3f}")
@@ -192,8 +191,7 @@ def test_integration_flow():
         "routing": routing,
         "decision": decision,
         "confidence": confidence
-    }
-
+}
 def main():
     """Run the simplified lattice test."""
     print("🧠 SIMPLIFIED RECURSIVE LATTICE TEST")

@@ -147,7 +147,6 @@ self.test_cases = [
                 description="High frequency backlog with excellent performance"
             )
 ]
-
 # Initialize confidence matrix
 try:
             self.confidence_matrix = UnifiedConfidenceMatrix()

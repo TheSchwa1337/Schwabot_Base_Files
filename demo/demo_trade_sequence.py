@@ -195,7 +195,6 @@ trade_dirs = ["""
             "demo / trade_positions/",
             "demo / trade_reports/"
 ]
-
 for dir_path in trade_dirs:
             Path(dir_path).mkdir(parents = True, exist_ok = True)
 

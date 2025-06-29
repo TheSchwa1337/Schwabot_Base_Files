@@ -408,8 +408,7 @@ tests = [
         ("Module Integration", test_integration),
         ("BTC / DUS / DC Trading Logic", test_btc_dus_dc_trading_logic),
         ("System Robustness", test_system_robustness)
-    ]
-
+]
 results = {}
     for test_name, test_func in tests:
         try:

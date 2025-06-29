@@ -39,9 +39,8 @@ def check_shell_trade_signal(volume_signal: float, volatility_map: float, config
                 'alpha_c': 0.714,
                 'alpha_a': 23.2,
                 'alpha_p': 12.0
-            }
-        }
-
+}
+}
     # Pass the ZygotShell parameters from the config to compute_stability_index
     stability_index = compute_stability_index(volume_signal, volatility_map, config.get('params'))
 
@@ -79,7 +78,7 @@ if __name__ == "__main__":
         'stability_threshold_low': 6.1,
         'params': {
             'alpha_v': 16.0, 'alpha_s': 18.0, 'alpha_c': 0.7, 'alpha_a': 23.0, 'alpha_p': 12.5
-        }
-    }
+}
+}
     signal4 = check_shell_trade_signal(26.0, 30.0, custom_config)
     print(f"Signal for Fe-like state (custom config): {signal4}") 

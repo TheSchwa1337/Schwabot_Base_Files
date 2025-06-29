@@ -69,8 +69,7 @@ class MathematicalStubAnalyzer:
             'optimization': ['optimize', 'gradient', 'minimize', 'maximize'],
             'trading': ['trade', 'order', 'position', 'market', 'price'],
             'mathematical': ['calculate', 'compute', 'analyze', 'transform']
-        }
-        
+}
         # Important mathematical supporting patterns
         self.important_patterns = {
             'phase': ['phase', 'bit', 'sequence', 'transition'],
@@ -78,16 +77,14 @@ class MathematicalStubAnalyzer:
             'entropy': ['entropy', 'information', 'signal', 'noise'],
             'correlation': ['correlation', 'covariance', 'similarity'],
             'integration': ['integrate', 'sum', 'accumulate', 'aggregate']
-        }
-        
+}
         # Utility mathematical patterns
         self.utility_patterns = {
             'validation': ['validate', 'verify', 'check', 'test'],
             'conversion': ['convert', 'transform', 'map', 'encode'],
             'logging': ['log', 'debug', 'monitor', 'track'],
             'configuration': ['config', 'setting', 'parameter', 'option']
-        }
-        
+}
         # Mathematical implementations based on existing system
         self.mathematical_implementations = {
             'profit_calculation': self._generate_profit_calculation
@@ -98,8 +95,7 @@ class MathematicalStubAnalyzer:
             'phase_operation': self._generate_phase_operation
             'entropy_calculation': self._generate_entropy_calculation
             'validation_function': self._generate_validation_function
-        }
-        
+}
         self.analyzed_files: List[MathematicalStubAnalysis] = []
         self.implementation_stats = {
             'files_analyzed': 0
@@ -107,8 +103,7 @@ class MathematicalStubAnalyzer:
             'important_implementations': 0
             'utility_implementations': 0
             'cleanups_performed': 0
-        }
-    
+}
     def analyze_stub_file(self, filepath: str) -> MathematicalStubAnalysis:
         """Analyze a single stub file for mathematical relevance."""
         try:
@@ -745,8 +740,7 @@ except Exception as e:
                 '"""Function implementation pending."""'
                 'IndentationError: unexpected indent'
                 'SyntaxError: invalid syntax'
-            ]
-            
+]
             for indicator in stub_indicators:
                 if indicator in content:
                     return True

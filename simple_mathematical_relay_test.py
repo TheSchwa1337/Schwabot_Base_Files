@@ -152,8 +152,7 @@ def test_bit_depth_switching():
             {"price": 45000.0, "volume": 800.0, "description": "Low volatility, low volume"},
             {"price": 50000.0, "volume": 1000.0, "description": "Medium volatility, medium volume"},
             {"price": 55000.0, "volume": 1200.0, "description": "High volatility, high volume"}
-        ]
-        
+]
         for scenario in test_scenarios:
             print(f"\n--- {scenario['description']} ---")
             
@@ -208,8 +207,7 @@ def test_profit_navigation():
             {"current_price": 50000.0, "target_profit": 50100.0, "description": "Small profit target"},
             {"current_price": 50000.0, "target_profit": 50500.0, "description": "Medium profit target"},
             {"current_price": 50000.0, "target_profit": 51000.0, "description": "Large profit target"}
-        ]
-        
+]
         for target in test_targets:
             print(f"\n--- {target['description']} ---")
             
@@ -256,8 +254,7 @@ def main():
         ("MathematicalRelayIntegration", test_mathematical_relay_integration),
         ("Bit Depth Switching", test_bit_depth_switching),
         ("Profit Navigation", test_profit_navigation)
-    ]
-    
+]
     results = []
     for test_name, test_func in tests:
         try:

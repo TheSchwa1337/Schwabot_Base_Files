@@ -89,7 +89,6 @@ test_sequences = [
                     'time_delta': 1.0,
                     'description': 'Long - term XRP recursive profit'
 ]
-
 for i, seq_data in enumerate(test_sequences):
                 try:
                     # Create symbolic state
@@ -183,7 +182,6 @@ optimization_tests = [
                     'phase_state': PhaseState.BIT_256,
                     'description': 'High - frequency profit optimization'
 ]
-
 for i, opt_data in enumerate(optimization_tests):
                 try:
                     # Create optimization parameters

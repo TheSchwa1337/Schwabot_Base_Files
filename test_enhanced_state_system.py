@@ -233,8 +233,7 @@ def test_memory_and_backlog():
             {"id": "test1", "data": {"simple": "value"}, "ttl": 3600.0},
             {"id": "test2", "data": {"complex": {"nested": "data", "array": [1, 2, 3]}}, "ttl": 1800.0},
             {"id": "test3", "data": {"large": "x" * 1000}, "ttl": 900.0}
-        ]
-        
+]
         for test in memory_tests:
             manager.store_memory(test["id"], test["data"], test["ttl"])
             print(f"✅ Stored memory: {test['id']}")
@@ -250,8 +249,7 @@ def test_memory_and_backlog():
             {"priority": 1, "data": {"high": "priority"}, "source": "test", "target": "memory"},
             {"priority": 5, "data": {"medium": "priority"}, "source": "test", "target": "hash"},
             {"priority": 10, "data": {"low": "priority"}, "source": "demo", "target": "memory"}
-        ]
-        
+]
         for test in backlog_tests:
             entry_id = manager.add_backlog_entry(
                 test["priority"], test["data"], test["source"], test["target"]
@@ -350,8 +348,7 @@ def test_demo_state_generation():
             {"price": 45000.0, "volume": 800.0, "phase": 16, "description": "Low price scenario"},
             {"price": 50000.0, "volume": 1000.0, "phase": 32, "description": "Medium price scenario"},
             {"price": 55000.0, "volume": 1200.0, "phase": 42, "description": "High price scenario"}
-        ]
-        
+]
         generated_states = []
         
         for scenario in demo_scenarios:
@@ -469,8 +466,7 @@ def main():
         ("Logging and System States", test_logging_and_system_states),
         ("Demo State Generation", test_demo_state_generation),
         ("System Initialization", test_system_initialization)
-    ]
-    
+]
     results = []
     for test_name, test_func in tests:
         try:

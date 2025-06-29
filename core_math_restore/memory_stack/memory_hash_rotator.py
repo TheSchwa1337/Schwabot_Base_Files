@@ -182,8 +182,7 @@ base_components = [
                 curve_id,
                 str(tick),
                 str(tick // self.epoch_size)  # Epoch number
-            ]
-
+]
 if content_hash:
                 base_components.append(content_hash)
 
@@ -286,7 +285,7 @@ epochs_to_remove = len(sorted_epochs) - self.max_epochs
 keys_to_remove = [
                     key for key, data in self.memory_key_registry.items()"""
                     if data.get("epoch_id") == epoch_id
-                ]
+]
 for key in keys_to_remove:
                     del self.memory_key_registry[key]
 
@@ -357,8 +356,7 @@ epoch_stats = {}
                 epoch_keys = [
                     key for key, data in self.memory_key_registry.items()"""
                     if data.get("epoch_id") == epoch_id
-                ]
-
+]
 epoch_stats[epoch_id] = {
                     "start_tick": epoch.start_tick,
                     "end_tick": epoch.end_tick,

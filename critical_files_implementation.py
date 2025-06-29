@@ -352,9 +352,8 @@ class IntegrationOrchestrator:
                 "timeout": 30,
                 "retry_attempts": 3,
                 "log_level": "INFO"
-            }
-        }
-    
+}
+}
     async def start_integration(self, integration_name: str) -> bool:
         """Start a specific integration.
         
@@ -448,7 +447,7 @@ class IntegrationOrchestrator:
             "name": integration_name,
             "active": integration_name in self.active_integrations,
             "enabled": self.config["integrations"].get(integration_name, {}).get("enabled", False)
-        }
+}
         return status
 
 
@@ -488,8 +487,7 @@ def main():
         ("Strategy Loader", implement_strategy_loader),
         ("Matrix Mapper", implement_matrix_mapper),
         ("Integration Orchestrator", implement_integration_orchestrator)
-    ]
-    
+]
     success_count = 0
     for name, implementation_func in implementations:
         print(f"\n🔧 Implementing {name}...")

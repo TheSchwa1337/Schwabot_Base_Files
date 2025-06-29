@@ -168,8 +168,7 @@ class SchawbotAPIDemo:
                     'vector_size': len(vector),
                     'ferris_phase': ferris_phase,
                     'ghost_input': ghost_input
-                }
-
+}
                 logger.info(
                     f"🎯 {symbol}: Entry Signal = {entry_signal['should_enter']}, "
                     f"Strength = {entry_signal['signal_strength']:.4f}"

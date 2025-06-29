@@ -71,7 +71,7 @@ def test_drift_shells():
             "enable_fractal_lock": True,
             "shell_layers": 6,
             "delta_n_thresholds": {"lock": 0.001, "reset": 0.015}
-        }
+}
         ds = DriftShells(config)
         
         # Test with sample Q vector
@@ -97,8 +97,8 @@ def test_memory_backlog():
                 "short_term": 96,
                 "mid_term": 672,
                 "long_term": 8760
-            }
-        }
+}
+}
         mb = MemoryBacklog(config)
         
         # Test adding a profit vector
@@ -107,8 +107,7 @@ def test_memory_backlog():
             "risk": 0.5,
             "rho": 1.2,
             "timestamp": 1234567890.0
-        }
-        
+}
         mb.add_profit_vector(test_vector, "short_term")
         summary = mb.get_backlog_summary()
         
@@ -147,7 +146,7 @@ def test_asrl():
             "gamma": 0.3,
             "ur_threshold_mid": 0.3,
             "ur_threshold_high": 0.6
-        }
+}
         asrl = AutonomicStrategyReflexLayer(config)
         
         # Test unified reflex score calculation
@@ -215,8 +214,7 @@ async def main():
         ("ASRL", test_asrl),
         ("ChainWS", test_chain_ws),
         ("StratumSniffer", test_stratum_sniffer),
-    ]
-    
+]
     passed = 0
     total = len(tests)
     

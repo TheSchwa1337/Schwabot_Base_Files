@@ -611,8 +611,7 @@ pass
 strategy_commands = [
             cmd for cmd in self.command_history[-50:]
             if cmd.strategy_id == strategy_id
-        ]
-
+]
 trust_evolution = []
         for i, cmd in enumerate(strategy_commands):
 # Recalculate trust at each point
@@ -717,8 +716,7 @@ profile = self.strategy_profiles[strategy_id]
 recent_commands = [
             cmd for cmd in self.command_history[-20:]
             if cmd.strategy_id == strategy_id
-        ]
-
+]
 if len(recent_commands) < 5:
             return
 
@@ -800,7 +798,6 @@ default_strategies = ["""
         ("arbitrage_strategy", TrustLevel.HIGH_TRUST),
         ("scalping_strategy", TrustLevel.LOW_TRUST),
         ("swing_strategy", TrustLevel.MEDIUM_TRUST)
-    ]
-
+]
 for strategy_id, trust_level in default_strategies:
         dispatcher.register_strategy(strategy_id, trust_level)

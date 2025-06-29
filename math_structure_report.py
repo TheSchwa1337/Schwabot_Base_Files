@@ -16,12 +16,10 @@ MATH_KEYWORDS = [
     'sigmoid', 'activation', 'neural', 'feedback', 'harmonic', 'volatility',
     'liquidity', 'momentum', 'backprop', 'sha', 'ECC', 'NCCO', 'RDE', 'RITL', 'RITTLE'
 ]
-
 MATH_IMPORTS = [
     'import numpy', 'import scipy', 'import math', 'import mpmath', 'import sympy', 'import numba',
     'from numpy', 'from scipy', 'from math', 'from mpmath', 'from sympy', 'from numba'
 ]
-
 CODEBASE_DIRS = ['core', 'core/math', 'core/phase_engine', 'core/recursive_engine']
 
 REPORT_FILE = 'math_structure_report.md'

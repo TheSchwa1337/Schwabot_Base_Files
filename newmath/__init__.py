@@ -128,8 +128,7 @@ status = {"""
 modules = [
         "tensor_ops", "profit_math", "entropy_calc",
         "hash_vectors", "matrix_utils", "render_engine", "validation"
-    ]
-
+]
 for module in modules:
         try:
             __import__(f"newmath.{module}")

@@ -140,7 +140,6 @@ self.test_cases = [
                 description="Cascading failure with minimal functionality"
             )
 ]
-
 logger.info("\\u1f6e1\\ufe0f Fallback Trade Controller Test initialized")
 
 def test_fallback_system_initialization(self) -> Dict[str, Any]:
@@ -174,8 +173,7 @@ fallback_system = {
 required_fields = [
                 'active', 'current_mode', 'functionality_level', 'failed_components',
                 'recovery_attempts', 'last_recovery_time', 'emergency_stop_active'
-            ]
-
+]
 for field in required_fields:
                 if field not in fallback_system:
                     error_msg = f"Missing required field: {field}"
@@ -517,7 +515,6 @@ emergency_scenarios = [
                     'expected_response': 'immediate_stop',
                     'response_time_threshold': 0.5
 ]
-
 emergency_results = []
 
 for i, scenario in enumerate(emergency_scenarios):
@@ -772,8 +769,7 @@ def test_fallback_trade_controller() -> Dict[str, Any]:
                 'trend': 'bullish' if btc_price > 50000 else 'bearish',
                 'volatility': unified_math.calculate_volatility(btc_price),
                 'profit_potential': unified_math.calculate_profit_potential(btc_price)
-            }
-            
+}
             return analysis
             
         except Exception as e:

@@ -337,8 +337,7 @@ initial_count = len(self.history_stack)
             entry
 for entry in self.history_stack"""
 if (current_time - entry["timestamp"]).total_seconds() < max_age
-        ]
-
+]
 removed_count = initial_count - len(self.history_stack)
         return removed_count
 

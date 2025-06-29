@@ -22,8 +22,7 @@ def analyze_stub_patterns_in_file(file_path: Path) -> Dict[str, any]:
         'incomplete_functions': [],
         'todo_items': [],
         'fixme_items': []
-    }
-    
+}
     try:
         with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
             content = f.read()
@@ -108,8 +107,7 @@ def identify_common_stub_patterns() -> Dict[str, List[str]]:
         'incomplete_functions': [],
         'unicode_issues': [],
         'missing_imports': []
-    }
-    
+}
     for py_file in core_dir.rglob('*.py'):
         analysis = analyze_stub_patterns_in_file(py_file)
         
@@ -172,8 +170,7 @@ def function():
     except Exception as e:
         raise NotImplementedError(f"Function not yet implemented: {e}")
 """
-    }
-    
+}
     return strategies
 
 
@@ -319,8 +316,7 @@ def generate_fix_script() -> str:
         '',
         'if __name__ == "__main__":',
         '    main()',
-    ]
-    
+]
     return '\n'.join(script_lines)
 
 

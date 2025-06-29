@@ -78,8 +78,7 @@ def delete_non_essential_files():
         r"schwabot\core\test_suite.py",
         r"schwabot\core\test_utilities.py",
         r"schwabot\core\tests\test_schwafit_core_functionality.py",
-    ]
-
+]
     deleted_count = 0
     for file_path in files_to_delete:
         try:

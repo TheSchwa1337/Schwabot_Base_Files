@@ -153,8 +153,7 @@ def get_remaining_problematic_files() -> List[Path]:
         'volume_*.py',
         'wallet_*.py',
         'whale_*.py'
-    ]
-    
+]
     for pattern in math_patterns:
         problematic_files.extend(core_dir.glob(pattern))
     

@@ -108,8 +108,7 @@ def test_bit_depth_switching():
             {"price": 50000.0, "volume": 1000.0, "description": "Medium volatility, medium volume"},
             {"price": 55000.0, "volume": 1200.0, "description": "High volatility, high volume"},
             {"price": 60000.0, "volume": 1500.0, "description": "Very high volatility, very high volume"}
-        ]
-        
+]
         for scenario in test_scenarios:
             print(f"\n--- {scenario['description']} ---")
             
@@ -217,8 +216,7 @@ def test_profit_navigation():
             {"current_price": 50000.0, "target_profit": 50500.0, "description": "Medium profit target"},
             {"current_price": 50000.0, "target_profit": 51000.0, "description": "Large profit target"},
             {"current_price": 50000.0, "target_profit": 52000.0, "description": "Very large profit target"}
-        ]
-        
+]
         for target in test_targets:
             print(f"\n--- {target['description']} ---")
             
@@ -344,8 +342,7 @@ def test_mathematical_relay_integration():
             {"price": 45000.0, "volume": 800.0, "phase": 16, "description": "Low price scenario"},
             {"price": 50000.0, "volume": 1000.0, "phase": 32, "description": "Medium price scenario"},
             {"price": 55000.0, "volume": 1200.0, "phase": 42, "description": "High price scenario"}
-        ]
-        
+]
         for scenario in test_scenarios:
             print(f"\n--- {scenario['description']} ---")
             
@@ -499,7 +496,7 @@ def test_live_api_integration():
                     "source": "live_api",
                     "timestamp": datetime.now().isoformat(),
                     "sequence": i + 1
-                }
+}
             )
             
             if result.get("success", False):
@@ -549,8 +546,7 @@ def main():
         ("MathematicalRelayIntegration", test_mathematical_relay_integration),
         ("Information State Management", test_information_state_management),
         ("Live API Integration", test_live_api_integration)
-    ]
-    
+]
     results = []
     for test_name, test_func in tests:
         try:

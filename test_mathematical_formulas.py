@@ -395,7 +395,7 @@ def test_recursive_time_lock_synchronization():
         np.array([1, 2, 3, 4, 5]),  # Short scale
         np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]),  # Medium scale
         np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15])  # Long scale
-    ]
+]
     periods = [5, 10, 15]  # Corresponding periods
     sync_threshold = 0.7
     
@@ -462,7 +462,7 @@ def test_recursive_tensor_feedback():
     feedback_tensors = [
         np.array([[0.1, 0.2], [0.3, 0.4]]),
         np.array([[0.5, 0.6], [0.7, 0.8]])
-    ]
+]
     delta_entropies = [0.1, 0.2]
     lambda_values = [0.5, 1.0]
     

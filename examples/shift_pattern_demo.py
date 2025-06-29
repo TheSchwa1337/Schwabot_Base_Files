@@ -100,8 +100,7 @@ class ShiftPatternDemo:
             'descent_trough': 'orange', 
             'trough_ascent': 'blue',
             'initial': 'gray'
-        }
-        
+}
         for i, shift_type in enumerate(shift_types):
             if shift_type in colors:
                 ax2.scatter(i, 0, c=colors[shift_type], s=50, alpha=0.7)

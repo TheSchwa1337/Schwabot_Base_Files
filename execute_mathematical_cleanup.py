@@ -47,7 +47,7 @@ logging.basicConfig(
     handlers=[
         logging.FileHandler('mathematical_cleanup.log'),
         logging.StreamHandler()
-    ]
+]
 )
 logger = logging.getLogger(__name__)
 
@@ -92,7 +92,6 @@ self.critical_math_files = [
             "MATHEMATICAL_INTEGRATION_SUMMARY.md",
             "MATHEMATICAL_IMPLEMENTATION_CLEANUP_PLAN.md"
 ]
-
 # Test files to remove (safe to delete)
         self.test_files_to_remove = [
             "tests / test_ * _functionality.py",
@@ -103,7 +102,6 @@ self.critical_math_files = [
             "tests / hooks/",
             "schwabot / tests/"
 ]
-
 # Non - critical stub directories to remove
 self.non_critical_directories = [
             "schwabot / visual/",
@@ -116,7 +114,6 @@ self.non_critical_directories = [
             "schwabot / schwafit/",
             "components/"
 ]
-
 def create_backup(self):
         """Create backup of critical mathematical components.""""""
 """"""
@@ -325,7 +322,6 @@ report = {"""
                 "Run mathematical validation suite",
                 "Test core trading pipeline functionality"
 ]
-
 report_file = self.project_root / f"cleanup_report_{self.timestamp}.json"'''
         with open(report_file, 'w') as f:
             json.dump(report, f, indent = 2)

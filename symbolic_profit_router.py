@@ -685,8 +685,7 @@ test_scenarios = [
         ('📈', 0.08, 500.0, 'buy'),  # Medium profit
         ('⚠️', 0.02, 100.0, 'sell'),  # Low profit
         ('[BRAIN]', 0.20, 2000.0, 'buy'),  # Very high profit
-    ]
-
+]
 print("\n📝 Registering glyphs and storing profit sequences:")
     for emoji, profit, volume, side in test_scenarios:
 # Register glyph
@@ -712,8 +711,7 @@ print("\n🎯 Testing flip decisions:")
         ('💰', '📈', 0.15, 0.08),
         ('[BRAIN]', '⚠️', 0.20, 0.02),
         ('🔥', '🔄', 0.10, 0.06),
-    ]
-
+]
 for left, right, left_profit, right_profit in flip_tests:
         decision = router.get_flip_decision(left, right, left_profit, right_profit)
         print(f"  {left} vs {right}: Choose {decision}")

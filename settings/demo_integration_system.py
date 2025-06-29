@@ -545,8 +545,7 @@ components = [
             np.random.random(),  # Momentum
             np.random.random(),  # Volatility
             np.random.random()  # Market sentiment
-        ]
-
+]
 return {
             'price': current_price,
             'volume': np.random.uniform(0.5, 2.0),

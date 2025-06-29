@@ -526,7 +526,7 @@ recent_trades = trade_sequence[-max_sequence_length:]
 trade_ids = [
                 trade.get('trade_id', f'trade_{i}')
                 for i, trade in enumerate(recent_trades)
-            ]
+]
 risks = [trade.get('risk_score', 0.5) for trade in recent_trades]
             volumes = [trade.get('volume', 0.0) for trade in recent_trades]
             phases = [trade.get('bit_phase', 8) for trade in recent_trades]
@@ -1093,8 +1093,7 @@ try:
 phase_diffs = [
                 unified_math.abs(phases[i] - phases[i - 1])
                 for i in range(1, len(phases))
-            ]
-
+]
 # Calculate transition risk
 avg_transition = unified_math.unified_math.mean(phase_diffs)
             max_phase = unified_math.max(phases) if phases else 1
@@ -1202,8 +1201,7 @@ trade_history = [
         {'trade_id': 'trade_1', 'risk_score': 0.3, 'volume': 1000, 'bit_phase': 8},
         {'trade_id': 'trade_2', 'risk_score': 0.5, 'volume': 1200, 'bit_phase': 16},
         {'trade_id': 'trade_3', 'risk_score': 0.4, 'volume': 800, 'bit_phase': 8}
-    ]
-
+]
 # Get comprehensive risk assessment
 assessment = manager.get_comprehensive_risk_assessment(market_data, trade_history)
 

@@ -195,7 +195,6 @@ plan = {"""}
                 "Cross - platform clients available",
                 "External API integration complete"
 ]
-
    return plan
 
 
@@ -471,24 +470,24 @@ with open(file_path, 'r', encoding='utf - 8') as f:
 original_content = content
 
 # Common missing imports
-missing_imports = {}
-            'np': 'import numpy as np',
-            'pd': 'import pandas as pd',
-            'plt': 'import matplotlib.pyplot as plt',
-            'ccxt': 'import ccxt',
-            'flask': 'from flask import Flask',
-            'requests': 'import requests',
-            'json': 'import json',
-            'datetime': 'from datetime import datetime',
-            'time': 'import time',
-            'os': 'import os',
-            'sys': 'import sys',
-            'pathlib': 'from pathlib import Path',
-            'typing': 'from typing import Dict, List, Set, Tuple, Optional',
-            'logging': 'import logging',
-            'threading': 'import threading',
-            'asyncio': 'import asyncio'
-
+missing_imports = {
+    'np': 'import numpy as np',
+    'pd': 'import pandas as pd',
+    'plt': 'import matplotlib.pyplot as plt',
+    'ccxt': 'import ccxt',
+    'flask': 'from flask import Flask',
+    'requests': 'import requests',
+    'json': 'import json',
+    'datetime': 'from datetime import datetime',
+    'time': 'import time',
+    'os': 'import os',
+    'sys': 'import sys',
+    'pathlib': 'from pathlib import Path',
+    'typing': 'from typing import Dict, List, Set, Tuple, Optional',
+    'logging': 'import logging',
+    'threading': 'import threading',
+    'asyncio': 'import asyncio'
+}
 # Check for undefined names
 for name, import_stmt in missing_imports.items():
             if f'{name}.' in content or f' {name}(' in content:)

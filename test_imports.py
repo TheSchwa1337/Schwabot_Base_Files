@@ -120,8 +120,7 @@ def test_functionality():
             "performance_delta": 0.02,
             "actual_profit": 50.0,
             "consensus_signal": "hold"
-        }
-        
+}
         thought_result = engines.process_market_data(sample_market_data)
         print(f"✅ Dualistic engines: {thought_result.decision} (confidence: {thought_result.confidence:.3f})")
         

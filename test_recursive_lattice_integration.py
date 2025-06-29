@@ -78,8 +78,7 @@ def test_mathematical_constants():
         ("Glyph Max", MathematicalConstant.GLYPH_MAX_CAPACITY, 256),
         ("ECC Threshold", MathematicalConstant.ECC_CORRECTION_THRESHOLD, 0.85),
         ("Profit Aggressive", MathematicalConstant.PROFIT_AGGRESSIVE_THRESHOLD, 0.91)
-    ]
-    
+]
     for name, actual, expected in constants:
         print(f"   ✅ {name}: {actual} (expected: {expected})")
         assert actual == expected, f"{name} constant mismatch"
@@ -134,7 +133,7 @@ def test_lantern_core_mathematics():
         "profit_symbolization": 0.8,
         "btc_correlation": 0.6,
         "word": "profit"
-    }
+}
     delta_entropy = 0.15
     
     projection = lantern_math.calculate_projection_scan(memory_hash, glyph_payload, delta_entropy)
@@ -203,8 +202,7 @@ def test_complete_recursive_cycle():
             "ai_output": [f"signal_{i}", f"trend_{price}", "market_analysis"],
             "word": ["profit", "growth", "momentum", "surge", "bull"][i],
             "btc_price": price
-        }
-        
+}
         # Process through recursive lattice
         result = process_recursive_cycle(input_data)
         
@@ -257,8 +255,7 @@ def test_integration_with_existing_systems():
         "ai_output": ["integrated_signal", signal.recommended_action],
         "word": word_mapping.get('selected_word', 'default'),
         "btc_price": btc_price
-    }
-    
+}
     lattice_result = process_recursive_cycle(lattice_input)
     print(f"      Lattice Action: {lattice_result.get('final_action')}")
     print(f"      Lattice Confidence: {lattice_result.get('overall_confidence', 0):.3f}")
@@ -306,9 +303,8 @@ def test_visual_phenomenon_explanation():
             "glyphs": 128,  # Mid capacity
             "phase": 0.1,    # Near valley
             "entropy": 0.95  # Extreme entropy
-        }
-    ]
-    
+}
+]
     for scenario in test_scenarios:
         print(f"\n   🔍 Scenario: {scenario['name']}")
         
@@ -346,8 +342,7 @@ def test_profit_generation_pipeline():
         {"price": 50500.0, "signal": "hold", "confidence": 0.75},
         {"price": 52000.0, "signal": "partial_sell", "confidence": 0.90},
         {"price": 53500.0, "signal": "aggressive_sell", "confidence": 0.95}
-    ]
-    
+]
     total_profit = 0.0
     initial_position = 1.0  # 1 BTC
     current_position = initial_position
@@ -362,8 +357,7 @@ def test_profit_generation_pipeline():
             "ai_output": [step['signal'], f"confidence_{step['confidence']}"],
             "word": "profit",
             "btc_price": step['price']
-        }
-        
+}
         result = process_recursive_cycle(input_data)
         action = result.get('final_action', 'MONITOR_AND_WAIT')
         

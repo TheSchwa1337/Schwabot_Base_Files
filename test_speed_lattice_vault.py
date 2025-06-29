@@ -85,8 +85,7 @@ def test_surround_chronomancy(vault: SpeedLatticeVault):
         (0.05, "low_bias"),    # Should sustain recursion
         (0.15, "high_bias"),   # Should inject feedback layer
         (-0.1, "negative_bias") # Should activate fallback
-    ]
-    
+]
     results = []
     for bias_level, case_name in test_cases:
         # Create test drift matrix with specific bias
@@ -117,8 +116,7 @@ def test_containment_zones(vault: SpeedLatticeVault):
         ChronoBiasLevel.AEON_RIM,
         ChronoBiasLevel.VORTEX_MARGIN,
         ChronoBiasLevel.COLLAPSE_ARC
-    ]
-    
+]
     for bias, expected_zone in zip(test_biases, expected_zones):
         zone = vault.get_containment_zone(bias)
         assert zone == expected_zone, f"Expected {expected_zone} for bias {bias}, got {zone}"
@@ -141,8 +139,7 @@ def test_anchor_points(vault: SpeedLatticeVault):
         AnchorPhase.T2_MID_CYCLE,
         AnchorPhase.T3_PHASE_FLIP,
         AnchorPhase.T4_PROFIT_COLLAPSE
-    ]
-    
+]
     for phase in expected_phases:
         assert phase in anchor_points, f"Missing anchor phase {phase}"
         assert isinstance(anchor_points[phase], float), f"Expected float for {phase}, got {type(anchor_points[phase])}"
@@ -245,8 +242,7 @@ def test_system_status(vault: SpeedLatticeVault):
         "warp_speed", "cycles_completed", "chrono_bias", "stability_factor",
         "vault_sync", "echo_pulse_active", "fractal_feedback_loop", "phase_lock",
         "containment_zone", "resonance_history_size", "feedback_state_size", "delta_maps_count"
-    ]
-    
+]
     for field in required_fields:
         assert field in status, f"Missing field {field} in system status"
     
@@ -278,8 +274,7 @@ def test_lattice_vault_executor():
         "price_change": 0.02,
         "volume": 1000000,
         "volatility": 0.15
-    }
-    
+}
     result_with_market = executor.execute_strategy_cycle(market_data)
     assert result_with_market["market_data_integrated"] == True, "Market data should be integrated"
     
@@ -400,8 +395,7 @@ def run_comprehensive_test():
                 "report": report_file
             },
             "performance_results": test_results["performance"]
-        }
-        
+}
         # Save test summary
         summary_file = f"speed_lattice_vault_test_summary_{int(time.time())}.json"
         with open(summary_file, 'w') as f:

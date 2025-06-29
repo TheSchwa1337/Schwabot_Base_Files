@@ -211,7 +211,6 @@ components_config = [
                 'component_type': 'optimization',
                 'status': 'ACTIVE'
 ]
-
 for config in components_config:
             self.components[config['name']] = PipelineComponent(
                 name = config['name'],
@@ -528,7 +527,6 @@ return [
                     'timestamp': conf.timestamp.isoformat()
                 for conf in recent_confirmations
 ]
-
 except Exception as e:"""
 logger.error(f"Error getting visual confirmation: {e}")
             return []
@@ -686,7 +684,7 @@ logger.info("\\u1f527 Testing Comprehensive Risk Assessment...")
             'historical_volumes': [1000, 1100, 900, 1200, 1000, 1300]
         trade_history = [
             {'trade_id': 'test_1', 'risk_score': 0.3, 'volume': 1000, 'bit_phase': 8}
-        ]
+]
 risk_result = self.get_comprehensive_risk_assessment(market_data, trade_history)
         test_results.append({
             'test': 'Comprehensive Risk Assessment',

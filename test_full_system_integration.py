@@ -102,8 +102,7 @@ def test_dualistic_thought_engines():
             "sentiment_score": 0.9,
             "performance_delta": 0.05,
             "consensus_signal": "buy",
-        }
-        
+}
         # Process market data
         thought_vector = engines.process_market_data(market_data, thermal_state="hot")
         print(f"✓ Thought Vector generated:")
@@ -146,8 +145,7 @@ def test_hash_relay_system():
             "decision": "buy",
             "confidence": 0.85,
             "price": 62000.0
-        }
-        
+}
         hash_str = hash_relay_system.submit(test_data)
         print(f"✓ Data submitted and hashed: {hash_str[:8]}...")
         
@@ -202,8 +200,7 @@ def test_integrated_pipeline():
                 "phase_data": [0.5, 0.5, 0.5, 0.5],
                 "volatility": 0.5,
                 "consensus_signal": "neutral",
-            }
-            
+}
             # Step 3: Process through dualistic engines
             thought_vector = engines.process_market_data(market_data, thermal_state="warm")
             print(f"✓ Thought Vector processed: {thought_vector.decision} (confidence: {thought_vector.confidence:.2f})")
@@ -274,8 +271,7 @@ def test_trading_channel_simulation():
                     "phase_data": [0.5, 0.5, 0.5, 0.5],
                     "volatility": 0.5,
                     "consensus_signal": "neutral",
-                }
-                
+}
                 # Process through engines
                 thought_vector = engines.process_market_data(market_data, thermal_state="warm")
                 print(f"  Cycle {i+1}: {thought_vector.decision} (confidence: {thought_vector.confidence:.2f})")

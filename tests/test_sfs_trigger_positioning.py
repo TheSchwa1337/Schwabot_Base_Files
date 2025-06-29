@@ -171,7 +171,6 @@ self.test_cases = [
                 description="4 - bit no trigger with very stable conditions"
             )
 ]
-
 logger.info("\\u1f3af SFS Trigger Positioning Test initialized")
 
 def test_sfss_route_activators(self) -> Dict[str, Any]:

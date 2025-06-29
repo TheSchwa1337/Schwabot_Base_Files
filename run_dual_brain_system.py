@@ -37,7 +37,7 @@ logging.basicConfig(
     handlers=[
         logging.StreamHandler(sys.stdout),
         logging.FileHandler('dual_brain_system.log')
-    ]
+]
 )
 
 logger = logging.getLogger(__name__)
@@ -200,8 +200,7 @@ def check_dependencies():
     required_packages = [
         'numpy', 'asyncio', 'aiohttp', 'flask', 'flask-socketio', 
         'ccxt', 'requests', 'datetime', 'hashlib', 'logging'
-    ]
-    
+]
     missing_packages = []
     
     for package in required_packages:
@@ -248,8 +247,7 @@ def create_directory_structure():
         'server/templates',
         'server/static',
         'logs'
-    ]
-    
+]
     for directory in directories:
         os.makedirs(directory, exist_ok=True)
         logger.info(f"   ✅ {directory}/")

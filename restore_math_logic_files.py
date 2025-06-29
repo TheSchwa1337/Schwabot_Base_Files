@@ -41,7 +41,6 @@ FILES_TO_RESTORE = [
     'phantom/exit_logic.py',
     'phantom/price_vector_synchronizer.py',
 ]
-
 SRC_ROOT = Path('cleanup_backup/core')
 DST_ROOT = Path('core_math_restore')
 

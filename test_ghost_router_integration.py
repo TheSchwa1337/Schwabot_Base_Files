@@ -161,9 +161,8 @@ def test_coldbase_balt_system():
             "result": 0.03,
             "depth": 2,
             "btc_price": 51500.0
-        }
-    ]
-    
+}
+]
     stored_hashes = []
     for pattern in patterns:
         hash_id = store_balt_pattern(
@@ -187,8 +186,7 @@ def test_coldbase_balt_system():
         "phase": 0.78,
         "ncco": 0.62,
         "btc_price": 52800.0
-    }
-    
+}
     retrace_result = retest_balt_pattern(
         current_conditions["glyph"],
         current_conditions["phase"],
@@ -265,8 +263,7 @@ def test_dualistic_thought_engines():
         "eth_volume_prev": 480.0,
         "btc_price_change": 0.02,
         "eth_price_change": 0.01
-    }
-    
+}
     alif_output = alif_engine.process_feedback(test_state, market_data=test_market_data)
     print(f"   Decision: {alif_output.decision}")
     print(f"   Confidence: {alif_output.confidence:.3f}")
@@ -306,8 +303,7 @@ def test_integrated_thought_cycle():
         "Strong bullish momentum detected",
         "Volume increasing across all assets",
         "Technical indicators aligned"
-    ]
-    
+]
     market_data = {
         "btc_volatility": 0.25,
         "eth_volatility": 0.35,
@@ -318,8 +314,7 @@ def test_integrated_thought_cycle():
         "eth_volume_prev": 550.0,
         "btc_price_change": 0.03,
         "eth_price_change": 0.02
-    }
-    
+}
     thought_result = process_dualistic_thought(
         btc_price=52750.0,
         eth_price=3250.0,
@@ -372,8 +367,7 @@ def test_complete_trading_pipeline():
         "ai_output": ["bullish_signal", "volume_increase", "momentum_build"],
         "word": "profit",
         "btc_price": btc_price
-    }
-    
+}
     lattice_result = process_recursive_cycle(lattice_input)
     print(f"   Lattice Action: {lattice_result.get('final_action')}")
     print(f"   Lattice Confidence: {lattice_result.get('overall_confidence', 0):.3f}")
@@ -395,7 +389,7 @@ def test_complete_trading_pipeline():
             "btc_volume": 1200.0,
             "btc_volume_prev": 1100.0,
             "btc_price_change": 0.03
-        }
+}
     )
     
     print(f"   Thought Action: {thought_result['final_action']}")

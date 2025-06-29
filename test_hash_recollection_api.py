@@ -124,8 +124,7 @@ def test_signal_generation():
         ("uptrend", [100 + i * 0.5 for i in range(30)]),
         ("downtrend", [100 - i * 0.5 for i in range(30)]),
         ("sideways", [100 + np.random.normal(0, 2) for _ in range(30)])
-    ]
-    
+]
     for name, price_data in test_cases:
         print(f"  Testing {name}...")
         

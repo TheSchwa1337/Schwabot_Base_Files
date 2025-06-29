@@ -73,8 +73,7 @@ def test_dualistic_engines_basic():
             "phase_data": [0.5, 0.5, 0.5, 0.5],
             "volatility": 0.5,
             "consensus_signal": "neutral",
-        }
-        
+}
         thought_vector = engines.process_market_data(market_data, thermal_state="warm")
         print(f"✓ Thought Vector generated: {thought_vector.decision} (confidence: {thought_vector.confidence:.2f})")
         
@@ -109,8 +108,7 @@ def test_hash_relay_basic():
             "decision": "buy",
             "confidence": 0.85,
             "price": 62000.0
-        }
-        
+}
         hash_str = hash_relay_system.submit(test_data)
         print(f"✓ Data submitted and hashed: {hash_str[:8]}...")
         
@@ -155,8 +153,7 @@ def test_integration_basic():
             "phase_data": [0.6, 0.4, 0.8, 0.2],
             "volatility": 0.8,
             "consensus_signal": "buy",
-        }
-        
+}
         thought_vector = engines.process_market_data(market_data, thermal_state="hot")
         print(f"✓ Integration test: {thought_vector.decision} decision generated")
         
@@ -183,8 +180,7 @@ def main():
         ("Dualistic Engines Basic", test_dualistic_engines_basic),
         ("Hash Relay Basic", test_hash_relay_basic),
         ("Integration Basic", test_integration_basic),
-    ]
-    
+]
     results = {}
     for test_name, test_func in tests:
         print(f"\n{'='*20} {test_name} {'='*20}")

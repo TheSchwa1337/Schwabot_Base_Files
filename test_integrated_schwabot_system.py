@@ -88,7 +88,7 @@ def test_lantern_core_word_mapping():
                 "profit": profit_word,
                 "btc_hash": btc_word,
                 "pattern": pattern_word
-            }
+}
         })
     
     print(f"\n✅ Lantern Core word mapping test completed - {len(results)} prices processed")
@@ -198,8 +198,7 @@ def test_complete_recursive_flow():
     btc_prices = [
         49850.25, 50120.75, 49995.50, 50450.00, 50725.25,
         51000.00, 50875.75, 51200.50, 51525.25, 51750.00
-    ]
-    
+]
     print("🚀 Simulating 3.75-minute BTC price cycles...")
     print("   Each cycle: BTC Price → Word → Glyph → Ferris → Ghost → Trade\n")
     
@@ -242,8 +241,7 @@ def test_complete_recursive_flow():
         "successful_trades": successful_trades,
         "win_rate": win_rate,
         "total_profit": float(total_profit)
-    }
-
+}
 def test_system_status_reports():
     """Test system status reporting."""
     print_banner("SYSTEM STATUS REPORTS", "📋")
@@ -288,9 +286,10 @@ def main():
         print("="*80)
         
         word_results = test_lantern_core_word_mapping()
-        test_mathematical_unified_system()
-        signals = test_integrated_ferris_glyph_controller()
-        execution_results = test_ccxt_trading_executor(signals)
+        test_mathematical_unified_system(
+            signals = test_integrated_ferris_glyph_controller()
+            execution_results = test_ccxt_trading_executor(signals)
+        )
         
         # Test complete recursive flow
         print("\n" + "="*80)

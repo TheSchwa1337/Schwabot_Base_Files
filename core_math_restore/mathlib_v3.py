@@ -150,7 +150,7 @@ class MathLibV3:
                 "gradient_descent": self.gradient_descent_optimization,
                 "dual_gradient": self.compute_dual_gradient,
                 "jacobian": self.compute_jacobian,
-            }
+}
             if operation in ai_operations and args:
                 result = ai_operations[operation](*args, **kwargs)
                 return {
@@ -158,14 +158,14 @@ class MathLibV3:
                     "result": result,
                     "version": "v3",
                     "status": "success",
-                }
+}
             return {
                 "operation": operation,
                 "args": args,
                 "kwargs": kwargs,
                 "version": "v3",
                 "status": "processed",
-            }
+}
         except Exception as e:
             logger.error(f"Error in AI calculation {operation}: {e}")
             return {
@@ -173,8 +173,7 @@ class MathLibV3:
                 "error": str(e),
                 "version": "v3",
                 "status": "error",
-            }
-
+}
     def kelly_criterion_risk_adjusted(self,
                                       mu: float,
                                       sigma_squared: float,
@@ -187,7 +186,7 @@ class MathLibV3:
                     "kelly_fraction": 0.0,
                     "risk_adjusted_fraction": 0.0,
                     "error": "Invalid variance",
-                }
+}
             kelly_optimal = mu / sigma_squared
             kelly_adjusted = min(max(kelly_optimal * risk_tolerance, 0.0), 1.0)
             sharpe_ratio = mu / \
@@ -200,7 +199,7 @@ class MathLibV3:
                 "sharpe_ratio": sharpe_ratio,
                 "expected_utility": expected_utility,
                 "risk_tolerance": risk_tolerance,
-            }
+}
         except Exception as e:
             logger.error(f"Kelly criterion calculation failed: {e}")
             return {"error": str(e)}
@@ -250,7 +249,7 @@ class MathLibV3:
                 "max_drawdown": max_drawdown,
                 "cvar_95": cvar_95,
                 "risk_tolerance": risk_tolerance,
-            }
+}
         except Exception as e:
             logger.error(f"Profit lattice optimization failed: {e}")
             return {"error": str(e)}
@@ -275,7 +274,7 @@ class MathLibV3:
                 "portfolio_variance": portfolio_variance,
                 "concentration_index": concentration,
                 "diversification_ratio": diversification_ratio,
-            }
+}
         except Exception as e:
             logger.error(f"Risk assessment failed: {e}")
             return {"error": str(e)}
@@ -319,7 +318,7 @@ class MathLibV3:
                 "cycle_strength": cycle_strength,
                 "mean_reversion_coefficient": mean_reversion_coeff,
                 "pattern_complexity": pattern_complexity,
-            }
+}
         except Exception as e:
             logger.error(f"Pattern detection failed: {e}")
             return {"error": str(e)}
@@ -348,7 +347,7 @@ class MathLibV3:
                 "upper_95": (trend_forecast + 1.96 * volatility).tolist(),
                 "lower_68": (trend_forecast - volatility).tolist(),
                 "upper_68": (trend_forecast + volatility).tolist(),
-            }
+}
             return {
                 "forecast": trend_forecast.tolist(),
                 "confidence_intervals": confidence_intervals,
@@ -356,7 +355,7 @@ class MathLibV3:
                 "prediction_volatility": volatility,
                 "last_smoothed_value": float(smoothed[-1]),
                 "trend_slope": float(trend_coeffs[0]),
-            }
+}
         except Exception as e:
             logger.error(f"Market prediction failed: {e}")
             return {"error": str(e)}
@@ -426,7 +425,7 @@ class MathLibV3:
                 "iterations": iteration + 1,
                 "converged": iteration < max_iterations - 1,
                 "history": history[-10:] if len(history) > 10 else history,
-            }
+}
         except Exception as e:
             logger.error(f"Gradient descent optimization failed: {e}")
             return {"error": str(e)}
@@ -439,7 +438,7 @@ class MathLibV3:
         state = {
             "version": self.version,
             "ai_models_loaded": self.ai_models_loaded,
-        }
+}
         with open(filename, 'w') as f:
             json.dump(state, f, indent=2)
         logger.info(f"MathLibV3 state saved to {filename}")

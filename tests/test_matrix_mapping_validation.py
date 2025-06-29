@@ -161,7 +161,6 @@ self.test_scenarios = [
                 complexity_level=4
             )
 ]
-
 logger.info("\\u1f9ee Matrix Mapping Validation Test initialized")
 
 def test_matrix_controller_initialization(self) -> Dict[str, Any]:
@@ -530,7 +529,6 @@ trigger_scenarios = [
                     'trigger_condition': 'liquidity_flow',
                     'threshold': 0.8
 ]
-
 # Validate trigger properties
 for i, trigger in enumerate(trigger_scenarios):
                 required_fields = ['trigger_id', 'source_basket', 'target_basket', 'trigger_condition', 'threshold']
@@ -655,8 +653,7 @@ def test_matrix_mapping_validation() -> Dict[str, Any]:
                 'trend': 'bullish' if btc_price > 50000 else 'bearish',
                 'volatility': unified_math.calculate_volatility(btc_price),
                 'profit_potential': unified_math.calculate_profit_potential(btc_price)
-            }
-            
+}
             return analysis
             
         except Exception as e:

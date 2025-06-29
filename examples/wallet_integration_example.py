@@ -49,13 +49,12 @@ def setup_api_config():
                 'api_key': os.getenv('BINANCE_API_KEY', ''),
                 'secret': os.getenv('BINANCE_API_SECRET', ''),
                 'sandbox': True
-            }
+}
         },
         'strategy_integration_enabled': True,
         'sync_interval': 60,  # 1 minute
         'auto_snapshot_enabled': True
-    }
-    
+}
     return config
 
 
@@ -137,14 +136,12 @@ def demonstrate_strategy_integration(wallet):
         'volume': 1000000.0,
         'volatility': 0.02,
         'timestamp': time.time()
-    }
-    
+}
     portfolio_state = {
         'total_value': wallet.get_portfolio_summary()['total_value'],
         'cash_balance': wallet.get_portfolio_summary()['cash_balance'],
         'strategy_hash': wallet.generate_strategy_hash()
-    }
-    
+}
     selected_strategy = strategy_mapper.select_strategy(market_data, portfolio_state)
     if selected_strategy:
         print(f"   Selected Strategy: {selected_strategy.name}")
@@ -198,8 +195,7 @@ def demonstrate_ferris_integration(wallet):
         'volume': 1000000.0,
         'volatility': 0.02,
         'timestamp': time.time()
-    }
-    
+}
     ferris_signal = ferris.generate_signal(market_data)
     if ferris_signal:
         print(f"   Signal Type: {ferris_signal.signal_type}")

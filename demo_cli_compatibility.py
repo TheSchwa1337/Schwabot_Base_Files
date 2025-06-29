@@ -117,8 +117,7 @@ test_cases = [
         "\\u1f4b0 Profit optimization: \\u1f4c8 Returns maximized",
         "\\u26a0\\ufe0f Warning: \\u1f525 High volatility detected",
         "\\u1f389 System deployment COMPLETE!",
-    ]
-
+]
 for i, test_case in enumerate(test_cases, 1):
         safe_print_with_fallback(f"  {i}. {test_case}")
 

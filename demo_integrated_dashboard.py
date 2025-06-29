@@ -44,8 +44,7 @@ class DashboardDataProvider:
             "trigger_stats": {},
             "system_health": "healthy",
             "alif_aleph_status": "synchronized"
-        }
-        
+}
         logger.info("📊 Dashboard Data Provider initialized")
     
     async def register_client(self, websocket):
@@ -177,9 +176,8 @@ class DashboardDataProvider:
                 "aleph_score": self.current_stats["tick_stats"].get("aleph_score", 0),
                 "ghost_reservoir_size": self.current_stats["tick_stats"].get("ghost_reservoir_size", 0),
                 "float_decay": self.current_stats["balance_stats"].get("float_decay", 0)
-            }
-        }
-
+}
+}
 # Global data provider
 data_provider = DashboardDataProvider()
 

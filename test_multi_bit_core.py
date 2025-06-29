@@ -29,8 +29,7 @@ def test_mathematical_functions():
         "void_well": False,
         "profit_state": False,
         "kelly_metrics": False,
-    }
-    
+}
     try:
         # Test 1: Ferris Wheel State (simplified)
         print("  Testing Ferris wheel state calculation...")
@@ -138,8 +137,7 @@ def test_multi_bit_logic():
         "state_transitions": False,
         "memory_management": False,
         "performance_tracking": False,
-    }
-    
+}
     try:
         # Import the actual MultiBitStateManager
         from core.multi_bit_state_manager import MultiBitStateManager, ProcessingMode
@@ -155,8 +153,7 @@ def test_multi_bit_logic():
             (0.1, 0.05, 0.01),  # Low complexity
             (0.5, 0.2, 0.1),    # Medium complexity
             (0.9, 0.8, 0.5),    # High complexity
-        ]
-        
+]
         for volatility, volume_change, price_change in test_cases:
             complexity_score = volatility * 0.4 + abs(volume_change) * 0.3 + abs(price_change) * 0.3
             
@@ -195,8 +192,7 @@ def test_multi_bit_logic():
             ProcessingMode.GPU_16BIT,
             ProcessingMode.GPU_32BIT,
             ProcessingMode.GPU_42BIT,
-        ]
-        
+]
         for bit_depth, expected_mode in zip(bit_depths, expected_modes):
             determined_mode = manager._determine_processing_mode(bit_depth)
             assert determined_mode == expected_mode
@@ -256,8 +252,7 @@ def test_multi_bit_logic():
         required_metrics = [
             "total_transitions", "successful_transitions", "failed_transitions",
             "avg_transition_latency", "memory_efficiency", "cpu_utilization"
-        ]
-        
+]
         for metric in required_metrics:
             assert metric in performance
         
@@ -290,8 +285,7 @@ def test_trading_signal_generation():
         "risk_management": False,
         "position_sizing": False,
         "mathematical_integration": False,
-    }
-    
+}
     try:
         # Test 1: Signal Creation
         print("  Testing signal creation...")
@@ -437,8 +431,7 @@ def main():
         "mathematical_tests": math_results,
         "multi_bit_logic_tests": logic_results,
         "trading_signal_tests": signal_results,
-    }
-    
+}
     # Calculate success rates
     success_rates = {}
     for test_category, results in all_results.items():
@@ -450,8 +443,7 @@ def main():
                 "passed": passed,
                 "total": total,
                 "success_rate": success_rate,
-            }
-    
+}
     # Overall success rate
     total_passed = sum(sr["passed"] for sr in success_rates.values())
     total_tests = sum(sr["total"] for sr in success_rates.values())
@@ -482,8 +474,7 @@ def main():
         "overall_success_rate": overall_success_rate,
         "total_passed": total_passed,
         "total_tests": total_tests,
-    }
-    
+}
     with open("test_results_multi_bit_core.json", "w") as f:
         json.dump(results_summary, f, indent=2, default=str)
     

@@ -32,7 +32,7 @@ logging.basicConfig(
     handlers=[
         logging.FileHandler('logs/mathematical_relay_system.log'),
         logging.StreamHandler(sys.stdout)
-    ]
+]
 )
 
 logger = logging.getLogger(__name__)
@@ -67,8 +67,7 @@ async def run_backtest_demo():
             "enable_visualization": False,
             "enable_backtesting": True,
             "enable_live_trading": False
-        }
-        
+}
         manager = SystemIntegrationManager(config=config)
         await manager.initialize_system()
         
@@ -94,9 +93,8 @@ async def run_backtest_demo():
                 "start_date": datetime(2023, 1, 1),
                 "end_date": datetime(2023, 1, 31),
                 "trading_pair": TradingPair.XRP_USDC
-            }
-        ]
-        
+}
+]
         for scenario in backtest_scenarios:
             logger.info(f"Running backtest: {scenario['name']}")
             result = await manager.run_backtest(
@@ -139,8 +137,7 @@ async def run_visualization_demo():
             "enable_visualization": True,
             "enable_backtesting": False,
             "enable_live_trading": False
-        }
-        
+}
         manager = await initialize_and_start_system(config)
         
         logger.info("Visualization dashboard started at http://localhost:8000")
@@ -183,14 +180,13 @@ async def run_full_system_demo():
                     "ccxt_config": {
                         "timeout": 30000,
                         "enableRateLimit": True
-                    }
-                }
+}
+}
             },
             "enable_visualization": True,
             "enable_backtesting": True,
             "enable_live_trading": False
-        }
-        
+}
         # Initialize and start complete system
         manager = await initialize_and_start_system(config)
         

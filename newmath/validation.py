@@ -113,8 +113,7 @@ test_modules = [
         ("Hash Vectors", _test_hash_vectors),
         ("Matrix Utils", _test_matrix_utils),
         ("Render Engine", _test_render_engine)
-    ]
-
+]
 for module_name, test_func in test_modules:
         try:
             test_start = time.time()

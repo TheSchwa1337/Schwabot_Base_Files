@@ -50,8 +50,7 @@ class SchwabootDashboardEngine:
         self.ring_values = {
             "R1": 0.0, "R2": 0.0, "R3": 0.0, "R4": 0.0, "R5": 0.0,
             "R6": 0.0, "R7": 0.0, "R8": 0.0, "R9": 0.0, "R10": 0.0
-        }
-
+}
         # Stop Patterns
         self.stop_patterns = []
 
@@ -62,7 +61,7 @@ class SchwabootDashboardEngine:
             'total_return': 0.0,
             'sharpe_ratio': 0.0,
             'max_drawdown': 0.0
-        }
+}
         self.mock_detonation_active = False # Visual flag for detonation
 
     async def register_client(self, websocket, path):
@@ -109,8 +108,8 @@ class SchwabootDashboardEngine:
                 "stabilized": self.stabilized,
                 "phase": self.phase,
                 "performance_metrics": self.performance_metrics
-            }
-        }
+}
+}
         await websocket.send(json.dumps(initial_state_data))
 
     async def handle_client_message(self, websocket, message: str):
@@ -136,7 +135,7 @@ class SchwabootDashboardEngine:
                     "price": data.get("price", self.current_price),
                     "tpfState": self.tpf_state,
                     "hashTrigger": hashlib.sha256(str(time.time()).encode()).hexdigest()[:8]
-                }
+}
                 self.active_signals.append(glyph_signal)
                 await self.broadcast({"update_type": "glyph_signals", "data": glyph_signal})
 
@@ -226,7 +225,7 @@ class SchwabootDashboardEngine:
                 "vwap": vwap,
                 "atr": atr,
                 "kellyFraction": max(0, min(1, 0.25 + (random.random() - 0.5) * 0.1)) # Simulated kelly
-            }
+}
             await self.broadcast({"update_type": "market_data", "data": market_data_update})
 
             # Simulate Hash Stream
@@ -238,7 +237,7 @@ class SchwabootDashboardEngine:
                 "entropy": entropy_tag,
                 "confidence": random.random(),
                 "pattern": [random.randint(0, 15) for _ in range(8)]
-            }
+}
             self.hash_stream.append(hash_data)
             self.hash_stream = self.hash_stream[-50:] # Keep last 50
             await self.broadcast({"update_type": "hash_stream", "data": hash_data})
@@ -264,7 +263,7 @@ class SchwabootDashboardEngine:
                 "timestamp": time.time() * 1000,
                 "hash": hashlib.sha256(str(self.current_price).encode()).hexdigest(),
                 "state": self.tpf_state
-            }
+}
             self.timing_hashes.append(timing_hash_data)
             self.timing_hashes = self.timing_hashes[-20:] # Keep last 20
             await self.broadcast({"update_type": "timing_hashes", "data": timing_hash_data})

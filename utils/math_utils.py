@@ -18,8 +18,6 @@ __all__ = ["""
     "hash_distance",
     "cosine_similarity",
 ]
-
-
 def calculate_entropy(values: Sequence[float] | np.ndarray) -> float:
     """Return Shannon entropy of *values*."
 """

@@ -258,8 +258,7 @@ class VitruvianManager:
             "reason": reason,
             "confidence": min(confidence, 1.0),
             "timestamp": time.time()
-        }
-    
+}
     def register_state_callback(self, callback: Callable):
         """Register a callback for state updates."""
         self.state_callbacks.append(callback)
@@ -286,9 +285,8 @@ class VitruvianManager:
                 zone.value: count for zone, count in 
                 [(zone, sum(1 for trigger in self.trigger_history if trigger.zone == zone))
                  for zone in VitruvianZone]
-            }
-        }
-
+}
+}
 # Global VMM manager instance
 _vmm_manager: Optional[VitruvianManager] = None
 
@@ -405,8 +403,7 @@ def test_mathematical_integration():
             (103586.0, 50.0, "Balance - Heart Balance"),
             (103586.0, 70.0, "Overbought - Arms Exit"),
             (103586.0, 80.0, "Peak - Halo Peak"),
-        ]
-        
+]
         for price, rsi, description in scenarios:
             print(f"\n   Testing: {description}")
             
@@ -483,8 +480,7 @@ def main():
         ("VMM Basic Functionality", test_vmm_basic),
         ("Mathematical Integration", test_mathematical_integration),
         ("Vitruvian Calculations", test_vitruvian_calculations),
-    ]
-    
+]
     passed = 0
     total = len(tests)
     

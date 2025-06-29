@@ -108,8 +108,7 @@ class EntropyTracker:
             'signal_confidence_threshold': 0.7,
             'volatility_window': 20,
             'pattern_detection_window': 50
-        }
-    
+}
     def calculate_entropy(self, price_data: List[float]) -> EntropyMetrics:
         """
         Calculate entropy from price data.
@@ -322,8 +321,7 @@ class EntropyTracker:
             "recent_volatility_avg": np.mean([m.volatility_factor for m in recent_metrics]),
             "history_size": len(self.entropy_history),
             "signal_history_size": len(self.signal_history)
-        }
-    
+}
     def get_recent_signals(self, count: int = 10) -> List[Dict[str, Any]]:
         """Get recent trading signals."""
         recent_signals = self.signal_history[-count:]
@@ -336,11 +334,9 @@ class EntropyTracker:
                 "confidence": signal.confidence,
                 "entropy_value": signal.entropy_context.entropy_value,
                 "entropy_state": signal.entropy_context.state.value
-            }
+}
             for signal in recent_signals
-        ]
-
-
+]
 # API Integration Functions
 def create_entropy_api_endpoints(app):
     """Create FastAPI endpoints for entropy tracking."""
@@ -361,7 +357,7 @@ def create_entropy_api_endpoints(app):
                 "volatility_factor": metrics.volatility_factor,
                 "pattern_strength": metrics.pattern_strength,
                 "timestamp": metrics.timestamp
-            }
+}
         except Exception as e:
             return {"success": False, "error": str(e)}
     
@@ -380,8 +376,8 @@ def create_entropy_api_endpoints(app):
                     "entropy_context": {
                         "entropy_value": signal.entropy_context.entropy_value,
                         "state": signal.entropy_context.state.value
-                    }
-                }
+}
+}
             else:
                 return {"success": False, "message": "No signal generated"}
         except Exception as e:
@@ -394,7 +390,7 @@ def create_entropy_api_endpoints(app):
             return {
                 "success": True,
                 "summary": app.entropy_tracker.get_entropy_summary()
-            }
+}
         except Exception as e:
             return {"success": False, "error": str(e)}
     
@@ -405,7 +401,7 @@ def create_entropy_api_endpoints(app):
             return {
                 "success": True,
                 "signals": app.entropy_tracker.get_recent_signals(count)
-            }
+}
         except Exception as e:
             return {"success": False, "error": str(e)}
     

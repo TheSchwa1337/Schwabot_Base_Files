@@ -480,8 +480,6 @@ __all__ = [
     "__author__",
     "__description__",
 ]
-
-
 def main() -> None:
     """Function implementation pending."""
 pass

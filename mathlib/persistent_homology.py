@@ -188,8 +188,7 @@ edges = [
                             np.linalg.norm(points[j] - points[k]),
                             np.linalg.norm(points[j] - points[l]),
                             np.linalg.norm(points[k] - points[l])
-                        ]
-
+]
 if all(d <= max_distance for d in edges):
                             birth_time = unified_math.max(edges)
                             tetrahedra.append(Simplex(vertices=[i, j, k, l], dimension = 3, birth_time = birth_time))

@@ -478,8 +478,7 @@ print("\n💰 Simulating profit events...")
         ('🔥', 200.0, 220.0, 1.0, 0.8),  # Volatility high
         ('📈', 150.0, 165.0, 2.0, 0.85),  # Uptrend confirmed
         ('[BRAIN]', 300.0, 310.0, 0.2, 0.95),  # AI logic trigger
-    ]
-
+]
 for symbol, entry, exit, time_held, confidence in profit_events:
         event = router.trigger_profit_event(symbol, entry, exit, time_held, confidence)
         print(f"  {symbol}: DeltaP={event.delta_profit:.2f}, Vector={event.symbol_state.profit_vector:.3f}")

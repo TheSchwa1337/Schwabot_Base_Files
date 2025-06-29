@@ -113,8 +113,7 @@ async def run_mathematical_integration_demo():
             "moving_average": 60900.0,
             "current_glyphs": ["bullish_chart", "trophy"], # Sample glyphs (likely to trigger re-entry if profitable states are added)
         },
-    ]
-
+]
     for i, market_data in enumerate(simulated_market_data_points):
         logger.info(f"\n--- Processing Market Data Point {i+1} ---")
         logger.info(f"Current Price: {market_data["current_price"]}")

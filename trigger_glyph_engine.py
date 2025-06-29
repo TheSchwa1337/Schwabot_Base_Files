@@ -89,8 +89,7 @@ class TriggerGlyphEngine:
             'T2': 0.020,  # 2.0%
             'T3': 0.075,  # 7.5%
             'T4': 0.150  # 15%
-        }
-
+}
         # Symbolic trigger mapping
         self.symbolic_triggers = {
             'bullish_momentum': 'bullish_momentum',
@@ -101,8 +100,7 @@ class TriggerGlyphEngine:
             '[BRAIN]': 'ai_logic',
             'fast_execution': 'fast_execution',
             'target_hit': 'target_hit'
-        }
-
+}
     def extract_2bit_state(self, emoji: str) -> str:
         """
         Extract 2 - bit state from Unicode symbol
@@ -326,8 +324,7 @@ class TriggerGlyphEngine:
             "total_recursive_loops": len(self.recursive_loops),
             "cycle_counter": self.cycle_counter,
             "last_update": time.time()
-        }
-
+}
     def export_lantern_memory(self, filename: str = "lantern_memory_data.json"): 
         """Exports the current Lantern memory to a JSON file."""
         serializable_memory = {}
@@ -343,7 +340,7 @@ class TriggerGlyphEngine:
                 "entropy_score": entry.entropy_score,
                 "trust_level": entry.trust_level,
                 "recursive_count": entry.recursive_count
-            }
+}
         try:
             with open(filename, 'w', encoding='utf-8') as f:
                 json.dump(serializable_memory, f, indent=4)

@@ -164,8 +164,7 @@ def test_truth_lattice_math():
         ("Medium Agreement", [0.6, 0.7, 0.5, 0.8, 0.6]),
         ("Low Agreement", [0.2, 0.8, 0.1, 0.9, 0.3]),
         ("Random Signals", np.random.random(10).tolist())
-    ]
-    
+]
     for case_name, signals in test_cases:
         print(f"\nTesting {case_name}:")
         
@@ -258,8 +257,7 @@ def test_aleph_overlay_mapper():
         "XRP_0.5_2024_01_15",
         "SOL_100_2024_01_15",
         "USDC_1.0_2024_01_15"
-    ]
-    
+]
     for hash_signal in hash_signals:
         print(f"\nTesting hash signal: {hash_signal}")
         
@@ -397,9 +395,7 @@ def test_integration():
         'propagator': propagator,
         'mapper': mapper,
         'monitor': monitor
-    }
-
-
+}
 def export_test_results(components):
     """Export test results to JSON file."""
     print("\n" + "="*60)
@@ -409,8 +405,7 @@ def export_test_results(components):
     results = {
         "test_timestamp": time.time(),
         "components": {}
-    }
-    
+}
     # Export component summaries
     if 'weighter' in components:
         results["components"]["drift_phase_weighter"] = components['weighter'].get_drift_summary()

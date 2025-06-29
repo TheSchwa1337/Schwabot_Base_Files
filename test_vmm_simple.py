@@ -107,8 +107,7 @@ def test_mathematical_integration():
             (103586.0, 50.0, "Balance - Heart Balance"),
             (103586.0, 70.0, "Overbought - Arms Exit"),
             (103586.0, 80.0, "Peak - Halo Peak"),
-        ]
-        
+]
         for price, rsi, description in scenarios:
             print(f"\n   Testing: {description}")
             
@@ -188,8 +187,7 @@ def main():
         ("VMM Basic Functionality", test_vmm_basic),
         ("Mathematical Integration", test_mathematical_integration),
         ("Vitruvian Calculations", test_vitruvian_calculations),
-    ]
-    
+]
     passed = 0
     total = len(tests)
     

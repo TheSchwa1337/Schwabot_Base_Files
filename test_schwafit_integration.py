@@ -74,7 +74,7 @@ def test_schwafit_core():
             "prices": test_prices,
             "volumes": test_volumes,
             "phases": test_phases
-        }
+}
         comprehensive_results = schwafit_core.comprehensive_mirror_analysis(market_data)
         print(f"   Frameworks active: {len(comprehensive_results)}")
         
@@ -114,8 +114,7 @@ def test_schwafit_trading_integration():
             "prices": [50000, 50100, 49900, 50200, 50050],
             "volumes": [1500, 1800, 1200, 2100, 1600],
             "current_price": 50050
-        }
-        
+}
         # Process market data
         signal = asyncio.run(schwafit_integration.process_market_data(market_data))
         print(f"   Signal Type: {signal.signal_type.value}")
@@ -183,7 +182,7 @@ async def test_multiple_trading_cycles():
                     "prices": [50000, 50500, 51000, 51500, 52000],
                     "volumes": [1500, 1800, 2000, 2200, 2500],
                     "current_price": 52000
-                }
+}
             },
             {
                 "name": "Bearish Market",
@@ -192,7 +191,7 @@ async def test_multiple_trading_cycles():
                     "prices": [50000, 49500, 49000, 48500, 48000],
                     "volumes": [1500, 1800, 2000, 2200, 2500],
                     "current_price": 48000
-                }
+}
             },
             {
                 "name": "Sideways Market",
@@ -201,10 +200,9 @@ async def test_multiple_trading_cycles():
                     "prices": [50000, 50100, 49900, 50200, 50050],
                     "volumes": [1500, 1600, 1400, 1700, 1500],
                     "current_price": 50050
-                }
-            }
-        ]
-        
+}
+}
+]
         results = []
         
         for i, scenario in enumerate(scenarios, 1):
@@ -275,8 +273,7 @@ def test_core_system_integration():
                 "prices": [3000, 3010, 2990, 3020, 3005],
                 "volumes": [1000, 1200, 800, 1400, 1100],
                 "current_price": 3005
-            }
-            
+}
             signal = asyncio.run(schwafit_trading.process_market_data(market_data))
             print(f"   Signal generated: {signal.signal_type.value}")
             print(f"   Confidence: {signal.confidence:.3f}")

@@ -39,8 +39,7 @@ def test_panel_system():
         PanelType.TRADING_STATE,
         PanelType.POOL_ANALYSIS,
         PanelType.PATTERN_RECOGNITION
-    ]
-    
+]
     for panel_type in test_panels:
         panel_system.switch_panel(panel_type)
         print(f"   ✅ Switched to: {panel_type.value}")
@@ -81,8 +80,7 @@ def test_panel_system():
         ('Data Threads', len(panel_system.data_threads)),
         ('System Running', panel_system.is_running),
         ('Current Panel', panel_system.current_panel.value if panel_system.current_panel else None)
-    ]
-    
+]
     for item, value in status_items:
         print(f"   ✅ {item}: {value}")
     
@@ -131,8 +129,7 @@ def test_api_integration():
         PanelType.TRADING_STATE: "https://api.trading.com/v1/state",
         PanelType.POOL_ANALYSIS: "https://api.trading.com/v1/pools",
         PanelType.PATTERN_RECOGNITION: "https://api.trading.com/v1/patterns"
-    }
-    
+}
     for panel_type, endpoint in custom_endpoints.items():
         panel_system.connect_api(panel_type, endpoint, "test_api_key", update_interval=2.0)
         print(f"   ✅ Connected {panel_type.value} to {endpoint}")
@@ -160,8 +157,7 @@ def test_visualization_features():
         PanelType.TRADING_STATE: {"trading_state": "ACTIVE", "balances": {"usdc": 1000, "btc": 0.5, "total_profit": 100}},
         PanelType.POOL_ANALYSIS: {"pools": {"pool_1": {"is_active": True, "liquidity": 50000, "volume_24h": 10000, "fee_rate": 0.003}}},
         PanelType.PATTERN_RECOGNITION: {"patterns": {"active": True, "confidence": 0.85, "pattern_type": "BULL_FLAG", "strength": 0.9}}
-    }
-    
+}
     for panel_type, data in test_data.items():
         panel_system.switch_panel(panel_type)
         panel_system.panels[panel_type].update_data(data)

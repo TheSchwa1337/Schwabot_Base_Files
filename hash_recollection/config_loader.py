@@ -36,8 +36,7 @@ class ConfigLoader:
             "config/config.json",
             "config.json",
             "default.json"
-        ]
-
+]
         for path in possible_paths:
             if os.path.exists(path):
                 return path
@@ -94,10 +93,9 @@ class ConfigLoader:
                 "pattern_utils": {
                     "max_patterns": 500,
                     "trend_confidence_threshold": 0.6
-                }
-            }
-        }
-
+}
+}
+}
         # Ensure directory exists
         os.makedirs(os.path.dirname(self.config_path), exist_ok=True)
         
@@ -118,8 +116,7 @@ class ConfigLoader:
             "HASH_RECOLLECTION_FRONTEND_REFRESH_INTERVAL": ("frontend.refresh_interval", int),
             "HASH_RECOLLECTION_ENTROPY_MAX_HISTORY": ("backend.entropy.max_history_size", int),
             "HASH_RECOLLECTION_ENTROPY_CONFIDENCE_THRESHOLD": ("backend.entropy.signal_confidence_threshold", float),
-        }
-
+}
         for env_var, (config_path, value_type) in env_mappings.items():
             if env_var in os.environ:
                 try:

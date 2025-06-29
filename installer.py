@@ -165,7 +165,6 @@ try:
                 self.install_dir / "lib",
                 self.install_dir / "docs"
 ]
-
 for directory in directories:
                 directory.mkdir(parents = True, exist_ok = True)
                 self.unified_math.log(f"\\u2705 Created: {directory}")

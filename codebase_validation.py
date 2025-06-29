@@ -39,8 +39,7 @@ class CodebaseValidator:
             "missing_imports": 0,
             "gpu_cpu_issues": 0,
             "syntax_errors": 0
-        }
-        
+}
         # Patterns to identify stubs and incomplete code
         self.stub_patterns = [
             "pass",  # Empty implementations
@@ -52,8 +51,7 @@ class CodebaseValidator:
             "raise NotImplementedError",  # Explicit not implemented
             "Function implementation pending",  # Pending implementations
             "Emergency placeholder docstring",  # Emergency placeholders
-        ]
-        
+]
         # GPU/CPU related patterns
         self.gpu_cpu_patterns = [
             "GPU_AVAILABLE",
@@ -65,8 +63,7 @@ class CodebaseValidator:
             "gpu_available",
             "cpu_fallback",
             "hardware_optimization"
-        ]
-    
+]
     def scan_directory(self, directory: str = None) -> List[Path]:
         """Scan directory for Python files."""
         if directory is None:
@@ -321,8 +318,7 @@ class CodebaseValidator:
             },
             "detailed_issues": self.issues,
             "recommendations": self._generate_recommendations()
-        }
-        
+}
         return report
     
     def _generate_recommendations(self) -> List[str]:

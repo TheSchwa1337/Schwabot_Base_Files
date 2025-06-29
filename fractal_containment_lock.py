@@ -422,7 +422,6 @@ level_hierarchy = [
             ContainmentLevel.LOCKED,
             ContainmentLevel.VAULT
 ]
-
 current_index = level_hierarchy.index(current_level)
         new_index = level_hierarchy.index(new_level)
 
@@ -679,7 +678,6 @@ current_level = self.containment_locks[parent_bag_id]
             ContainmentLevel.LOCKED,
             ContainmentLevel.VAULT
 ]
-
 current_index = level_hierarchy.index(current_level)
         child_level = (
             level_hierarchy[unified_math.min(current_index + 1, len(level_hierarchy) - 1)]
@@ -794,8 +792,7 @@ initial_bags = ["""
         ("main_bag", (0.0, 0.0, 0.0), Decimal('1000.0')),
         ("secondary_bag", (2.0, 2.0, 2.0), Decimal('500.0')),
         ("tertiary_bag", (-1.0, -1.0, -1.0), Decimal('750.0'))
-    ]
-
+]
 for bag_id, position, initial_profit in initial_bags:
         system.create_profit_bag(bag_id, position, initial_profit)
 

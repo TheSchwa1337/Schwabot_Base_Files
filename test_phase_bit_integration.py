@@ -49,8 +49,7 @@ def test_phase_bit_integration():
         "volatility": 0.03,
         "entropy_level": 5.0,
         "btc_price": 52000.0
-    }
-    
+}
     for phase in [FerrisPhase.LOW, FerrisPhase.MID, FerrisPhase.HIGH]:
         strategy = get_phase_optimized_strategy(phase, market_data)
         print(f"  {phase.value.upper():4}: "
@@ -67,8 +66,7 @@ def test_phase_bit_integration():
         "tensor_score": 1.0,
         "hash_sensitivity": 0.6,
         "mathematical_factor": 1.0
-    }
-    
+}
     for phase in [FerrisPhase.LOW, FerrisPhase.MID, FerrisPhase.HIGH]:
         adjusted = integration.calculate_phase_adjusted_bit_operations(phase, base_operations)
         print(f"  {phase.value.upper():4}: "

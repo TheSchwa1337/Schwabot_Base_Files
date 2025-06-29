@@ -38,8 +38,7 @@ class ComprehensiveSchwabitCleanup:
             'core', 'schwabot', 'config', 'ai_oracles', 'mathlib', 
             'commands', 'state', 'init', 'tools', '.git', '.mypy_cache',
             'logs', 'frontend'
-        }
-        
+}
         # Essential files to absolutely keep
         self.essential_files = {
             # Core configuration (keep only the working ones)
@@ -61,8 +60,7 @@ class ComprehensiveSchwabitCleanup:
             
             # Cleanup and analysis scripts
             'comprehensive_schwabot_cleanup.py',
-        }
-        
+}
         # Files to definitely delete (the clutter you mentioned)
         self.files_to_delete = [
             # Multiple requirements variants (keep only requirements.txt)
@@ -112,8 +110,7 @@ class ComprehensiveSchwabitCleanup:
             
             # Hash and registry files
             'hash_registry.json',
-        ]
-        
+]
         # Pattern-based deletions for the scattered reports
         self.deletion_patterns = [
             # All the FINAL_*, COMPREHENSIVE_*, etc. reports (the main clutter)
@@ -208,8 +205,7 @@ class ComprehensiveSchwabitCleanup:
             r'test_.*\.py$',
             r'.*_demo\.py$',
             r'.*_stub.*\.py$',
-        ]
-    
+]
     def scan_directory(self):
         """Scan directory and categorize files."""
         print("🔍 Scanning directory for cleanup targets...")
@@ -277,8 +273,7 @@ class ComprehensiveSchwabitCleanup:
             'Temporary Python Scripts': [],
             'Backup Files': [],
             'Other Clutter': []
-        }
-        
+}
         for file_path in files_to_delete:
             filename = file_path.name
             
@@ -345,8 +340,7 @@ class ComprehensiveSchwabitCleanup:
             'IMPLEMENTATION_GUIDE.md', 
             'SYSTEM_ARCHITECTURE.md',
             'INSTALLATION_SOLUTION.md'
-        ]
-        
+]
         for doc_name in docs_to_copy:
             source_file = source_dir / doc_name
             dest_file = self.project_root / doc_name

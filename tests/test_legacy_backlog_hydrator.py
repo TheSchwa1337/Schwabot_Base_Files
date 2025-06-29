@@ -190,7 +190,6 @@ self.test_cases = [
                 description="Large trade history for comprehensive testing"
             )
 ]
-
 logger.info("\\u1f4da Legacy Backlog Hydrator Test initialized")
 
 def test_historical_trade_loading(self) -> Dict[str, Any]:

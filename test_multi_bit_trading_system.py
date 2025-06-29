@@ -52,8 +52,7 @@ class MultiBitTradingSystemTester:
             "mathematical_tests": {},
             "integration_tests": {},
             "performance_tests": {},
-        }
-        
+}
         logger.info("MultiBitTradingSystemTester initialized")
     
     def test_multi_bit_state_management(self) -> Dict[str, Any]:
@@ -66,8 +65,7 @@ class MultiBitTradingSystemTester:
             "mathematical_integration": False,
             "performance_metrics": False,
             "garbage_collection": False,
-        }
-        
+}
         try:
             # Test 1: State Creation
             info("  Testing state creation...")
@@ -122,8 +120,7 @@ class MultiBitTradingSystemTester:
                     "coupling_strength": 0.8,
                     "decoherence_rate": 0.001,
                 },
-            }
-            
+}
             math_state = self.multi_bit_manager.create_memory_state(
                 "test_math", 32, 1.0, mathematical_state
             )
@@ -176,8 +173,7 @@ class MultiBitTradingSystemTester:
             "void_well": False,
             "profit_state": False,
             "kelly_metrics": False,
-        }
-        
+}
         try:
             # Test 1: Ferris Wheel State
             info("  Testing Ferris wheel state calculation...")
@@ -275,8 +271,7 @@ class MultiBitTradingSystemTester:
             "signal_generation": False,
             "risk_management": False,
             "performance_tracking": False,
-        }
-        
+}
         try:
             # Test 1: Pipeline Initialization
             info("  Testing pipeline initialization...")
@@ -303,8 +298,7 @@ class MultiBitTradingSystemTester:
                 "rsi": 65.0,
                 "macd_signal": 0.01,
                 "moving_average": 61500.0,
-            }
-            
+}
             signal = await self.trading_pipeline.process_market_data(
                 sample_market_data, "BTC", "warm"
             )
@@ -370,8 +364,7 @@ class MultiBitTradingSystemTester:
             "alif_analysis": False,
             "historical_consultation": False,
             "bias_mitigation": False,
-        }
-        
+}
         try:
             # Test 1: Engine Initialization
             info("  Testing engine initialization...")
@@ -395,8 +388,7 @@ class MultiBitTradingSystemTester:
                 "moving_average": 61500.0,
                 "previous_close": 61800.0,
                 "volatility": 0.8,
-            }
-            
+}
             thought_vector = self.dualistic_engines.process_market_data(market_data, "warm")
             
             assert thought_vector is not None
@@ -461,8 +453,7 @@ class MultiBitTradingSystemTester:
             "latency_measurement": False,
             "throughput_measurement": False,
             "resource_utilization": False,
-        }
-        
+}
         try:
             # Test 1: Concurrent Processing
             info("  Testing concurrent processing...")
@@ -484,7 +475,7 @@ class MultiBitTradingSystemTester:
                     "rsi": 65.0 + i * 2,
                     "macd_signal": 0.01 + i * 0.001,
                     "moving_average": 61500.0 + i * 100,
-                }
+}
                 market_data_sets.append(market_data)
             
             # Process all concurrently
@@ -586,8 +577,7 @@ class MultiBitTradingSystemTester:
             "pipeline_tests": pipeline_results,
             "integration_tests": integration_results,
             "performance_tests": performance_results,
-        }
-        
+}
         # Calculate success rates
         success_rates = {}
         for test_category, results in all_results.items():
@@ -599,8 +589,7 @@ class MultiBitTradingSystemTester:
                     "passed": passed,
                     "total": total,
                     "success_rate": success_rate,
-                }
-        
+}
         # Overall success rate
         total_passed = sum(sr["passed"] for sr in success_rates.values())
         total_tests = sum(sr["total"] for sr in success_rates.values())
@@ -633,9 +622,7 @@ class MultiBitTradingSystemTester:
             "overall_success_rate": overall_success_rate,
             "total_passed": total_passed,
             "total_tests": total_tests,
-        }
-
-
+}
 def main():
     """Main test execution function."""
     info("Multi-Bit Trading System Comprehensive Test Suite")

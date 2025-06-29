@@ -77,9 +77,8 @@ class BackupIntegrationDemo:
                 "bit": "1010", 
                 "bit_phase": 8,
                 "confidence": 0.9
-            }
-        ]
-        
+}
+]
         for i, event in enumerate(test_events):
             # Create backup signature
             backup_signature = hashlib.sha256(
@@ -124,14 +123,12 @@ class BackupIntegrationDemo:
             [("BTC→ETH", 4), ("ETH→USDC", 4)],
             [("BTC→USDC", 8), ("USDC→BTC", 8)],
             [("ETH→BTC", 4), ("BTC→ETH", 8)]
-        ]
-        
+]
         market_data = {
             "BTC→ETH": {"price": 0.05, "trend": "up", "volume": 1000},
             "ETH→USDC": {"price": 2000, "trend": "up", "volume": 500},
             "BTC→USDC": {"price": 45000, "trend": "down", "volume": 2000}
-        }
-        
+}
         for i in range(3):
             # Create orbit backup signature
             orbit_pairs = [pair for layer in trade_layers for pair, _ in layer]
@@ -268,7 +265,7 @@ class BackupIntegrationDemo:
                 "patterns": backup_memory.patterns,
                 "performance_metrics": backup_memory.performance_metrics,
                 "timestamp": time.time()
-            }
+}
             with open(filepath, "w", encoding="utf-8") as f:
                 json.dump(data, f, indent=2)
         except Exception as e:
@@ -342,7 +339,7 @@ class BackupIntegrationDemo:
             "backup_memory_stack/ghost_backup_memory.json",
             "backup_memory_stack/orbit_backup_memory.json", 
             "backup_memory_stack/flip_backup_memory.json"
-        ]
+]
         for filepath in backup_files:
             if os.path.exists(filepath):
                 size = os.path.getsize(filepath)

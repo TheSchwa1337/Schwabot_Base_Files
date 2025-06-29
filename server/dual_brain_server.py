@@ -81,9 +81,8 @@ class DualBrainServer:
             "total_profit": 0.0,
             "thermal_state_distribution": {
                 COOL: 0, WARM: 0, HOT: 0, CRITICAL: 0
-            }
-        }
-        
+}
+}
         logger.info("🚀 Dual Brain Server initialized")
     
     async def start_dual_brain_monitoring(self):
@@ -139,8 +138,7 @@ class DualBrainServer:
                 "performance_metrics": decision.left_brain_state.performance_metrics,
                 "active_operations": decision.left_brain_state.active_operations,
                 "timestamp": decision.left_brain_state.timestamp.isoformat()
-            }
-            
+}
             # Right brain (trading) data
             right_brain_data = {
                 "thermal_state": decision.right_brain_state.thermal_state,
@@ -150,8 +148,7 @@ class DualBrainServer:
                 "performance_metrics": decision.right_brain_state.performance_metrics,
                 "active_operations": decision.right_brain_state.active_operations,
                 "timestamp": decision.right_brain_state.timestamp.isoformat()
-            }
-            
+}
             # Flip logic data
             flip_logic_data = {
                 "flip_signal": decision.flip_logic_result.flip_signal.value,
@@ -162,8 +159,7 @@ class DualBrainServer:
                 "reasoning": decision.flip_logic_result.reasoning,
                 "profit_potential": decision.flip_logic_result.profit_potential,
                 "risk_assessment": decision.flip_logic_result.risk_assessment
-            }
-            
+}
             # Unified decision data
             unified_decision_data = {
                 "synchronized_action": decision.synchronized_action,
@@ -171,8 +167,7 @@ class DualBrainServer:
                 "expected_profit": decision.expected_profit,
                 "thermal_enhancement": decision.thermal_enhancement,
                 "execution_priority": decision.execution_priority
-            }
-            
+}
             # Whale tracking data
             whale_data = {}
             if self.whale_tracker:
@@ -181,8 +176,7 @@ class DualBrainServer:
                     "statistics": whale_summary.get("statistics", {}),
                     "recent_alerts": whale_summary.get("recent_alerts", [])[:5],  # Last 5 alerts
                     "thermal_state": whale_summary.get("thermal_state", WARM)
-                }
-            
+}
             # Emit all updates
             socketio.emit('left_brain_update', left_brain_data)
             socketio.emit('right_brain_update', right_brain_data)
@@ -314,23 +308,20 @@ def create_templates():
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-        }
-        
+}
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #0c0c0c 0%, #1a1a1a 100%);
             color: #ffffff;
             height: 100vh;
             overflow-x: hidden;
-        }
-        
+}
         .header {
             background: linear-gradient(90deg, #2c3e50 0%, #34495e 100%);
             padding: 15px 30px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.3);
             position: relative;
-        }
-        
+}
         .header h1 {
             font-size: 2.2em;
             text-align: center;
@@ -338,8 +329,7 @@ def create_templates():
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-        }
-        
+}
         .status-bar {
             position: absolute;
             top: 20px;
@@ -347,34 +337,29 @@ def create_templates():
             display: flex;
             gap: 15px;
             align-items: center;
-        }
-        
+}
         .status-indicator {
             width: 12px;
             height: 12px;
             border-radius: 50%;
             background: #e74c3c;
             animation: pulse 2s infinite;
-        }
-        
+}
         .status-indicator.active {
             background: #27ae60;
-        }
-        
+}
         @keyframes pulse {
             0% { opacity: 1; }
             50% { opacity: 0.5; }
             100% { opacity: 1; }
-        }
-        
+}
         .control-panel {
             padding: 10px 30px;
             background: rgba(52, 73, 94, 0.3);
             display: flex;
             justify-content: center;
             gap: 20px;
-        }
-        
+}
         .btn {
             padding: 10px 20px;
             border: none;
@@ -382,58 +367,48 @@ def create_templates():
             cursor: pointer;
             font-size: 14px;
             transition: all 0.3s ease;
-        }
-        
+}
         .btn-start {
             background: linear-gradient(45deg, #27ae60, #2ecc71);
             color: white;
-        }
-        
+}
         .btn-stop {
             background: linear-gradient(45deg, #e74c3c, #c0392b);
             color: white;
-        }
-        
+}
         .btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-        }
-        
+}
         .main-container {
             display: flex;
             height: calc(100vh - 160px);
             gap: 2px;
-        }
-        
+}
         .brain-panel {
             flex: 1;
             padding: 20px;
             overflow-y: auto;
             position: relative;
-        }
-        
+}
         .left-brain {
             background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
             border-right: 2px solid #34495e;
-        }
-        
+}
         .right-brain {
             background: linear-gradient(135deg, #e74c3c 0%, #f39c12 100%);
-        }
-        
+}
         .brain-header {
             text-align: center;
             margin-bottom: 20px;
             padding: 15px;
             background: rgba(0,0,0,0.3);
             border-radius: 10px;
-        }
-        
+}
         .brain-header h2 {
             font-size: 1.8em;
             margin-bottom: 5px;
-        }
-        
+}
         .thermal-indicator {
             display: inline-block;
             padding: 5px 15px;
@@ -441,8 +416,7 @@ def create_templates():
             font-size: 12px;
             font-weight: bold;
             margin-top: 5px;
-        }
-        
+}
         .thermal-cool { background: #3498db; }
         .thermal-warm { background: #f39c12; }
         .thermal-hot { background: #e74c3c; animation: glow 1s infinite alternate; }
@@ -451,35 +425,30 @@ def create_templates():
         @keyframes glow {
             from { box-shadow: 0 0 5px rgba(255,255,255,0.5); }
             to { box-shadow: 0 0 20px rgba(255,255,255,0.8); }
-        }
-        
+}
         .metrics-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 15px;
             margin-bottom: 20px;
-        }
-        
+}
         .metric-card {
             background: rgba(0,0,0,0.4);
             padding: 15px;
             border-radius: 8px;
             border: 1px solid rgba(255,255,255,0.1);
-        }
-        
+}
         .metric-card h3 {
             color: #ecf0f1;
             margin-bottom: 10px;
             font-size: 14px;
             text-transform: uppercase;
-        }
-        
+}
         .metric-value {
             font-size: 1.5em;
             font-weight: bold;
             color: #3498db;
-        }
-        
+}
         .flip-logic-panel {
             position: fixed;
             bottom: 20px;
@@ -491,13 +460,11 @@ def create_templates():
             border-radius: 10px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.3);
             z-index: 1000;
-        }
-        
+}
         .flip-logic-header {
             text-align: center;
             margin-bottom: 10px;
-        }
-        
+}
         .flip-signal {
             text-align: center;
             font-size: 1.2em;
@@ -505,8 +472,7 @@ def create_templates():
             padding: 8px;
             border-radius: 5px;
             margin-bottom: 10px;
-        }
-        
+}
         .signal-strong-buy { background: #27ae60; }
         .signal-moderate-buy { background: #2ecc71; }
         .signal-hold { background: #f39c12; }
@@ -516,8 +482,7 @@ def create_templates():
         .operations-list {
             list-style: none;
             padding: 0;
-        }
-        
+}
         .operations-list li {
             background: rgba(0,0,0,0.3);
             margin: 5px 0;
@@ -525,22 +490,19 @@ def create_templates():
             border-radius: 5px;
             font-size: 12px;
             border-left: 3px solid #3498db;
-        }
-        
+}
         .whale-alerts {
             background: rgba(0,0,0,0.4);
             padding: 15px;
             border-radius: 8px;
             margin-top: 15px;
-        }
-        
+}
         .whale-alert {
             padding: 8px;
             margin: 5px 0;
             border-radius: 5px;
             font-size: 12px;
-        }
-        
+}
         .alert-high { background: #e74c3c; }
         .alert-medium { background: #f39c12; }
         .alert-low { background: #27ae60; }
@@ -551,13 +513,11 @@ def create_templates():
             border-radius: 8px;
             margin-top: 15px;
             height: 200px;
-        }
-        
+}
         @media (max-width: 768px) {
             .main-container {
                 flex-direction: column;
-            }
-            
+}
             .flip-logic-panel {
                 position: relative;
                 width: 90%;
@@ -565,8 +525,8 @@ def create_templates():
                 left: auto;
                 transform: none;
                 margin: 20px auto;
-            }
-        }
+}
+}
     </style>
 </head>
 <body>
@@ -731,8 +691,8 @@ def create_templates():
                     scales: {
                         x: { ticks: { color: '#ffffff' }, grid: { color: 'rgba(255,255,255,0.1)' } },
                         y: { ticks: { color: '#ffffff' }, grid: { color: 'rgba(255,255,255,0.1)' } }
-                    }
-                }
+}
+}
             });
             
             tradingChart = new Chart(tradingCtx, {
@@ -754,11 +714,10 @@ def create_templates():
                     scales: {
                         x: { ticks: { color: '#ffffff' }, grid: { color: 'rgba(255,255,255,0.1)' } },
                         y: { ticks: { color: '#ffffff' }, grid: { color: 'rgba(255,255,255,0.1)' } }
-                    }
-                }
+}
+}
             });
-        }
-        
+}
         // WebSocket event handlers
         socket.on('connect', function() {
             document.getElementById('status-indicator').classList.add('active');
@@ -815,8 +774,7 @@ def create_templates():
             
             // Update chart
             updateChart(miningChart, metrics.hash_rate_th_s || 0);
-        }
-        
+}
         function updateRightBrain(data) {
             // Update thermal indicator
             const thermalEl = document.getElementById('right-thermal');
@@ -846,8 +804,7 @@ def create_templates():
             
             // Update chart
             updateChart(tradingChart, metrics.profit_factor || 0);
-        }
-        
+}
         function updateFlipLogic(data) {
             const signalEl = document.getElementById('flip-signal');
             signalEl.textContent = data.flip_signal.replace(/_/g, ' ').toUpperCase();
@@ -857,8 +814,7 @@ def create_templates():
             document.getElementById('flip-confidence').textContent = `${((data.confidence || 0) * 100).toFixed(0)}%`;
             document.getElementById('flip-thermal').textContent = `${(data.thermal_multiplier || 1).toFixed(1)}x`;
             document.getElementById('flip-profit').textContent = `$${(data.profit_potential * 1000 || 0).toFixed(0)}`;
-        }
-        
+}
         function updateWhaleAlerts(data) {
             const alertsList = document.getElementById('whale-alerts-list');
             alertsList.innerHTML = '';
@@ -880,22 +836,19 @@ def create_templates():
                 div.className = 'whale-alert alert-low';
                 div.textContent = 'No recent whale activity';
                 alertsList.appendChild(div);
-            }
-        }
-        
+}
+}
         function updateChart(chart, value) {
             const now = new Date().toLocaleTimeString();
             
             if (chart.data.labels.length > 20) {
                 chart.data.labels.shift();
                 chart.data.datasets[0].data.shift();
-            }
-            
+}
             chart.data.labels.push(now);
             chart.data.datasets[0].data.push(value);
             chart.update('none');
-        }
-        
+}
         // Control functions
         function startMonitoring() {
             fetch('/api/start', { method: 'POST' })
@@ -903,16 +856,14 @@ def create_templates():
                 .then(data => {
                     console.log('Start response:', data);
                 });
-        }
-        
+}
         function stopMonitoring() {
             fetch('/api/stop', { method: 'POST' })
                 .then(response => response.json())
                 .then(data => {
                     console.log('Stop response:', data);
                 });
-        }
-        
+}
         // Initialize when page loads
         document.addEventListener('DOMContentLoaded', function() {
             initCharts();

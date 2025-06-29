@@ -101,8 +101,7 @@ TARGET_FILES = ["""
         "core / mathlib_v3.py",
         "core / master_orchestrator.py",
         "core / advanced_mathematical_core.py",
-    ]
-
+]
 # Import statement to add
 CLI_IMPORT_STATEMENT = """"""
 """"""
@@ -192,8 +191,7 @@ r'\\u1f9ec\\u269b\\ufe0f\\u1f52c\\u2697\\ufe0f\\u1f9ee\\u1f4d0\\u1f522\\u1f4bb\\
 r'[^"\']*)["\']',
             r'EnhancedWindowsCliCompatibilityHandler.safe_emoji_safe_print(f"\1")',
         ),
-    ]
-
+]
 def __init__(self):
     """Function implementation pending."""
 pass
@@ -295,8 +293,7 @@ main_function_patterns = ["""
             r"(def\\s + run_\\w+\\s*\([^)]*\)\\s*:)",
             r"(def\\s + validate_\\w+\\s*\([^)]*\)\\s*:)",
             r"(def\\s + demonstrate_\\w+\\s*\([^)]*\)\\s*:)",
-        ]
-
+]
 modified_content = content
 
 for pattern in main_function_patterns:

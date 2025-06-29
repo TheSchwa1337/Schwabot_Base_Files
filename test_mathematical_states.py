@@ -150,7 +150,7 @@ def test_recursive_time_lock_sync():
         np.array([1, 2, 3, 4, 5]),  # Short scale
         np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]),  # Medium scale
         np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15])  # Long scale
-    ]
+]
     periods = [5, 10, 15]  # Corresponding periods
     sync_threshold = 0.7
     

@@ -67,7 +67,7 @@ def setup_logging():
         handlers=[
             logging.FileHandler(logs_dir / 'schwabot.log'),
             logging.StreamHandler()
-        ]
+]
     )
 
     # Set specific log levels
@@ -142,8 +142,7 @@ def validate_environment():
         'COINBASE_API_SECRET',
         'KRAKEN_API_KEY',
         'KRAKEN_API_SECRET'
-    ]
-
+]
     missing_vars = []
     for var in required_vars:
         if not os.getenv(var):

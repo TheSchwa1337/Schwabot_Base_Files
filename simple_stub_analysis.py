@@ -46,8 +46,7 @@ def analyze_file_stubs(file_path: Path) -> Dict[str, any]:
         'has_math_logic': False,
         'total_errors': 0,
         'e999_errors': 0
-    }
-    
+}
     try:
         with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
             content = f.read()
@@ -93,8 +92,7 @@ def identify_important_files() -> List[str]:
         'main*.py',
         'core*.py',
         'integration*.py'
-    ]
-    
+]
     important_files = []
     core_dir = Path('core')
     

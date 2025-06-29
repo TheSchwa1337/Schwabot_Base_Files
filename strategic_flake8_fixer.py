@@ -191,7 +191,6 @@ FixPattern("""
                 validation_regex = r'^\\s * try:\\s*\\n\\s*[^e].*\\n\\s + except'
             )
 ]
-
 def is_mathematical_file(self, file_path: Path) -> bool:
     """Function implementation pending."""
 pass

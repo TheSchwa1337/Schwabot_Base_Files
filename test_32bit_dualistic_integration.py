@@ -56,8 +56,7 @@ def test_32bit_dualistic_integration():
         'entropy': 0.9,
         'trend_strength': 0.2,
         'complexity': 0.7
-    }
-    
+}
     dualistic_mapping = phase_integration.get_dualistic_mapping(market_conditions)
     print(f"  Bit Phase: {dualistic_mapping.bit_phase.value}")
     print(f"  Strategy Type: {dualistic_mapping.strategy_type.value}")
@@ -89,8 +88,7 @@ def test_32bit_dualistic_integration():
         'complexity': 0.8,
         'price_momentum': 0.4,
         'volume_profile': 0.6
-    }
-    
+}
     # Test standard market data
     standard_market_data = {
         'volatility': 0.3,
@@ -99,8 +97,7 @@ def test_32bit_dualistic_integration():
         'complexity': 0.3,
         'price_momentum': 0.8,
         'volume_profile': 0.5
-    }
-    
+}
     btc_price = 52000.0
     volume = 1.5
     
@@ -189,9 +186,8 @@ def test_profit_vectorization_pipeline():
                 'complexity': 0.6
             },
             'expected_dualistic': True
-        }
-    ]
-    
+}
+]
     btc_price = 52000.0
     volume = 1.0
     
@@ -239,9 +235,8 @@ def test_mathematical_portal_integration():
             'name': 'Tensor Processing Portal',
             'hash': 'c3d4e5f6789012345678901234567890abcdef1234567890abcdef1234567890ab',
             'market_conditions': {'volatility': 0.4, 'entropy': 0.5, 'trend_strength': 0.6}
-        }
-    ]
-    
+}
+]
     for test_case in test_cases:
         print(f"\n🔗 Portal: {test_case['name']}")
         

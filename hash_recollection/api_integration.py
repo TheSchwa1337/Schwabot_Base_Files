@@ -101,9 +101,8 @@ class HashRecollectionAPI:
                     "entropy_tracker": "active",
                     "bit_operations": "active",
                     "pattern_utils": "active"
-                }
-            }
-        
+}
+}
         # Comprehensive analysis endpoint
         @self.app.post("/analyze")
         async def comprehensive_analysis(request: AnalysisRequest):
@@ -114,8 +113,7 @@ class HashRecollectionAPI:
                     "timestamp": time.time(),
                     "symbol": request.symbol,
                     "data_points": len(request.price_data)
-                }
-                
+}
                 if request.include_entropy:
                     entropy_metrics = self.entropy_tracker.calculate_entropy(request.price_data)
                     result["entropy"] = {
@@ -125,8 +123,7 @@ class HashRecollectionAPI:
                         "trend_direction": entropy_metrics.trend_direction,
                         "volatility_factor": entropy_metrics.volatility_factor,
                         "pattern_strength": entropy_metrics.pattern_strength
-                    }
-                
+}
                 if request.include_bit_ops:
                     # Create bit sequence from price data
                     normalized_prices = [(p - min(request.price_data)) / (max(request.price_data) - min(request.price_data)) for p in request.price_data]
@@ -142,11 +139,10 @@ class HashRecollectionAPI:
                                 "pattern_id": p.pattern_id,
                                 "pattern_type": p.pattern_type,
                                 "confidence": p.confidence
-                            }
+}
                             for p in patterns
-                        ]
-                    }
-                
+]
+}
                 if request.include_patterns:
                     trend = self.pattern_utils.analyze_trend(request.price_data)
                     patterns = self.pattern_utils.detect_patterns(request.price_data)
@@ -164,11 +160,10 @@ class HashRecollectionAPI:
                                 "pattern_id": p.pattern_id,
                                 "pattern_type": p.pattern_type.value,
                                 "confidence": p.confidence
-                            }
+}
                             for p in patterns
-                        ]
-                    }
-                
+]
+}
                 return result
                 
             except Exception as e:
@@ -245,9 +240,8 @@ class HashRecollectionAPI:
                             "strength": trend.strength
                         },
                         "patterns_found": len(patterns) + len(bit_patterns)
-                    }
-                }
-                
+}
+}
             except Exception as e:
                 logger.error(f"Error generating signal: {e}")
                 raise HTTPException(status_code=500, detail=str(e))
@@ -268,8 +262,8 @@ class HashRecollectionAPI:
                         "entropy_tracker": self.entropy_tracker.get_entropy_summary(),
                         "bit_operations": self.bit_operations.get_bit_summary(),
                         "pattern_utils": self.pattern_utils.get_pattern_summary()
-                    }
-                }
+}
+}
             except Exception as e:
                 logger.error(f"Error getting system summary: {e}")
                 raise HTTPException(status_code=500, detail=str(e))
@@ -288,9 +282,8 @@ class HashRecollectionAPI:
                     "entropy_calculations": self.entropy_tracker.total_entropy_calculations,
                     "bit_operations": self.bit_operations.total_bit_operations,
                     "patterns_analyzed": self.pattern_utils.total_patterns_analyzed
-                }
-            }
-    
+}
+}
     def run(self, host: str = "0.0.0.0", port: int = 8000, debug: bool = False):
         """Run the API server."""
         logger.info(f"Starting Hash Recollection API on {host}:{port}")

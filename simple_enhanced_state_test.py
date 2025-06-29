@@ -171,8 +171,7 @@ def main():
         ("EnhancedStateManager", test_enhanced_state_manager),
         ("SystemIntegration", test_system_integration),
         ("BTC Price Hashing", test_btc_price_hashing)
-    ]
-    
+]
     results = []
     for test_name, test_func in tests:
         try:

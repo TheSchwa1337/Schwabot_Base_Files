@@ -85,7 +85,6 @@ test_states = [
                     'thermal_signature': 0.5,
                     'description': 'Long - term XRP quantum state'
 ]
-
 for i, state_data in enumerate(test_states):
                 try:
                     # Create symbolic state
@@ -155,8 +154,7 @@ transitions = [
                 (PhaseState.BIT_4, PhaseState.BIT_8),  # Mid to enhanced
                 (PhaseState.BIT_8, PhaseState.BIT_42),  # Enhanced to long
                 (PhaseState.BIT_42, PhaseState.BIT_256)  # Long to high - freq
-            ]
-
+]
 for i, (from_phase, to_phase) in enumerate(transitions):
                 try:
                     # Create transition visualization

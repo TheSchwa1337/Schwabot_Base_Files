@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""
+""""""
 Complete Schwabot System Demo
 ============================
 
@@ -12,7 +12,7 @@ Comprehensive demonstration of the complete Schwabot trading system including:
 - Real-time visualization capabilities
 
 This demo validates that all components work together correctly.
-"""
+""""""
 
 import asyncio
 import logging
@@ -21,9 +21,9 @@ from datetime import datetime
 from typing import Dict, Any
 
 # Set up logging
-logging.basicConfig(
+logging.basicConfig()
     level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
 
@@ -32,43 +32,43 @@ def test_core_imports():
     """Test that all core components can be imported."""
     print("🧪 Testing Core Imports")
     print("=" * 50)
-    
+
     try:
         from core.settings_manager import get_settings_manager
         print("✅ Settings Manager imported")
     except Exception as e:
         print(f"❌ Settings Manager failed: {e}")
-    
+
     try:
         from core.gpu_cpu_calculation_bridge import get_gpu_cpu_bridge
         print("✅ GPU/CPU Bridge imported")
     except Exception as e:
         print(f"❌ GPU/CPU Bridge failed: {e}")
-    
+
     try:
         from core.trading_pipeline_integration import TradingPipelineIntegration
         print("✅ Trading Pipeline imported")
     except Exception as e:
         print(f"❌ Trading Pipeline failed: {e}")
-    
+
     try:
         from core.ccxt_trading_executor import CCXTTradingExecutor
         print("✅ CCXT Trading Executor imported")
     except Exception as e:
         print(f"❌ CCXT Trading Executor failed: {e}")
-    
+
     try:
         from core.speed_lattice_visualizer import SpeedLatticeLivePanelSystem
         print("✅ Speed Lattice Visualizer imported")
     except Exception as e:
         print(f"❌ Speed Lattice Visualizer failed: {e}")
-    
+
     try:
         from core.unified_connectivity_manager import UnifiedConnectivityManager
         print("✅ Unified Connectivity Manager imported")
     except Exception as e:
         print(f"❌ Unified Connectivity Manager failed: {e}")
-    
+
     print()
 
 
@@ -76,43 +76,43 @@ def test_settings_system():
     """Test the settings management system."""
     print("🔧 Testing Settings System")
     print("=" * 50)
-    
+
     try:
         from core.settings_manager import get_settings_manager
-        
+
         # Get settings manager
         settings_manager = get_settings_manager()
         print("✅ Settings manager initialized")
-        
+
         # Test configuration updates
-        settings_manager.update_trading_settings(
+        settings_manager.update_trading_settings()
             trading_mode="demo",
-            max_concurrent_trades=5,
-            min_trade_amount=10.0
+                max_concurrent_trades=5,
+                    min_trade_amount=10.0
         )
         print("✅ Trading settings updated")
-        
-        settings_manager.update_performance_settings(
+
+        settings_manager.update_performance_settings()
             gpu_enabled=True,
-            cpu_threads=4,
-            memory_limit_mb=2048
+                cpu_threads=4,
+                    memory_limit_mb=2048
         )
         print("✅ Performance settings updated")
-        
+
         # Validate settings
         errors = settings_manager.validate_settings()
         if not any(errors.values()):
             print("✅ Settings validation passed")
         else:
             print(f"⚠️ Settings validation warnings: {errors}")
-        
+
         # Get config summary
         summary = settings_manager.get_config_summary()
         print(f"✅ Config summary generated: {len(summary)} sections")
-        
+
     except Exception as e:
         print(f"❌ Settings system test failed: {e}")
-    
+
     print()
 
 
@@ -120,38 +120,38 @@ def test_gpu_cpu_bridge():
     """Test the GPU/CPU calculation bridge."""
     print("🖥️ Testing GPU/CPU Bridge")
     print("=" * 50)
-    
+
     try:
         from core.gpu_cpu_calculation_bridge import get_gpu_cpu_bridge
         import numpy as np
-        
+
         # Get bridge
         bridge = get_gpu_cpu_bridge()
         print(f"✅ GPU/CPU bridge initialized - GPU Available: {bridge.gpu_available}")
-        
+
         # Test matrix multiplication
         a = np.random.random((100, 100))
         b = np.random.random((100, 100))
-        
+
         start_time = time.time()
         result = bridge.compute_sync("matrix_multiply", (a, b))
         execution_time = time.time() - start_time
-        
+
         print(f"✅ Matrix multiplication completed in {execution_time:.3f}s")
         print(f"✅ Result shape: {result.shape}")
-        
+
         # Test array operations
         data = np.random.random(10000)
         result_sum = bridge.compute_sync("array_sum", data)
         print(f"✅ Array sum computed: {result_sum:.3f}")
-        
+
         # Get performance stats
         stats = bridge.get_performance_stats()
         print(f"✅ Performance stats available: {len(stats['capabilities'])} metrics")
-        
+
     except Exception as e:
         print(f"❌ GPU/CPU bridge test failed: {e}")
-    
+
     print()
 
 
@@ -159,23 +159,23 @@ async def test_trading_pipeline():
     """Test the trading pipeline integration."""
     print("📈 Testing Trading Pipeline")
     print("=" * 50)
-    
+
     try:
         from core.trading_pipeline_integration import TradingPipelineIntegration
-        
+
         # Initialize pipeline
-        pipeline = TradingPipelineIntegration(
+        pipeline = TradingPipelineIntegration()
             enable_gpu=True,
-            enable_distributed=False,
-            max_concurrent_trades=5,
-            risk_management_enabled=True
+                enable_distributed=False,
+                    max_concurrent_trades=5,
+                    risk_management_enabled=True
         )
         print("✅ Trading pipeline initialized")
-        
+
         # Simulate market data
         market_data = {
             "current_price": 62000.0,
-            "price_change": 0.02,
+            "price_change": 0.2,
             "volume_change": 0.15,
             "volatility": 0.6,
             "temperature": 310.0,
@@ -183,25 +183,25 @@ async def test_trading_pipeline():
             "volume_data": [100.0, 120.0, 110.0, 90.0, 130.0],
             "price_data": [61000.0, 61500.0, 62000.0, 61800.0, 62200.0],
             "rsi": 65.0,
-            "macd_signal": 0.01,
+            "macd_signal": 0.1,
             "moving_average": 61500.0,
-        }
-        
+}
+}
         # Process market data
         signal = await pipeline.process_market_data(market_data, "BTC", "warm")
         print(f"✅ Generated trading signal: {signal.signal_type} (confidence: {signal.confidence:.3f})")
-        
+
         # Get performance metrics
         performance = pipeline.get_pipeline_performance()
         print(f"✅ Pipeline performance metrics available: {len(performance)} categories")
-        
+
         # Cleanup
         pipeline.cleanup()
         print("✅ Pipeline cleanup completed")
-        
+
     except Exception as e:
         print(f"❌ Trading pipeline test failed: {e}")
-    
+
     print()
 
 
@@ -209,53 +209,53 @@ def test_mathematical_systems():
     """Test mathematical system integrations."""
     print("🔬 Testing Mathematical Systems")
     print("=" * 50)
-    
+
     try:
         # Test mathematical states
         from core.glyph.glyph_entropy_system import GlyphEntropySystem
-        
+
         entropy_system = GlyphEntropySystem()
         test_glyphs = ["alpha", "beta", "gamma", "delta"]
         entropy_value = entropy_system.calculate_glyph_entropy(test_glyphs)
         print(f"✅ Glyph entropy calculated: {entropy_value:.3f}")
-        
+
     except Exception as e:
         print(f"⚠️ Glyph entropy system: {e}")
-    
+
     try:
         from core.strategy_vector_fidelity import StrategyVectorFidelitySystem
-        
+
         fidelity_system = StrategyVectorFidelitySystem()
         test_vector = [0.1, 0.2, 0.3, 0.4]
-        test_delta = [0.05, 0.15, 0.25, 0.35]
+        test_delta = [0.5, 0.15, 0.25, 0.35]
         fidelity = fidelity_system.calculate_vector_fidelity(test_vector, test_delta)
         print(f"✅ Strategy vector fidelity calculated: {fidelity:.3f}")
-        
+
     except Exception as e:
         print(f"⚠️ Strategy vector fidelity: {e}")
-    
+
     try:
         from core.symbolic_collapse import SymbolicCollapseSystem
-        
+
         collapse_system = SymbolicCollapseSystem()
         test_symbols = {"symbol_1": 0.8, "symbol_2": 0.6, "symbol_3": 0.4}
         collapse_state = collapse_system.calculate_symbolic_collapse(test_symbols, 0.7)
         print(f"✅ Symbolic collapse calculated: {collapse_state:.3f}")
-        
+
     except Exception as e:
         print(f"⚠️ Symbolic collapse system: {e}")
-    
+
     try:
         from core.zygote_reentry import ZygoteReentrySystem
-        
+
         zygote_system = ZygoteReentrySystem()
         test_states = [{"profit": 0.1, "time": 100}, {"profit": 0.2, "time": 200}]
         zygote_value = zygote_system.calculate_zygote_state(test_states, 300)
         print(f"✅ Zygote re-entry calculated: {zygote_value:.3f}")
-        
+
     except Exception as e:
         print(f"⚠️ Zygote re-entry system: {e}")
-    
+
     print()
 
 
@@ -263,30 +263,29 @@ def test_visualization_systems():
     """Test visualization systems."""
     print("📊 Testing Visualization Systems")
     print("=" * 50)
-    
+
     try:
         from core.speed_lattice_visualizer import SpeedLatticeLivePanelSystem, PanelType
-        
+
         # Initialize visualizer
         visualizer = SpeedLatticeLivePanelSystem()
         print("✅ Speed Lattice visualizer initialized")
-        
+
         # Test panel switching
-        test_panels = [
+        test_panels = []
             PanelType.DRIFT_MATRIX,
-            PanelType.TRADING_STATE,
-            PanelType.PATTERN_RECOGNITION
-        ]
-        
+                PanelType.TRADING_STATE,
+                    PanelType.PATTERN_RECOGNITION
+]
         for panel in test_panels:
             visualizer.switch_panel(panel)
             print(f"✅ Switched to panel: {panel.value}")
-        
+
         print(f"✅ Visualizer has {len(visualizer.panels)} panels available")
-        
+
     except Exception as e:
         print(f"❌ Visualization system test failed: {e}")
-    
+
     print()
 
 
@@ -294,17 +293,17 @@ def test_gui_availability():
     """Test GUI system availability."""
     print("🖼️ Testing GUI Availability")
     print("=" * 50)
-    
+
     try:
         import tkinter as tk
         from tkinter import ttk
         print("✅ Tkinter GUI available")
-        
+
         # Test basic GUI creation
         root = tk.Tk()
         root.title("Test Window")
         root.withdraw()  # Hide window
-        
+
         # Test matplotlib integration
         try:
             import matplotlib.pyplot as plt
@@ -312,13 +311,13 @@ def test_gui_availability():
             print("✅ Matplotlib GUI integration available")
         except ImportError:
             print("⚠️ Matplotlib GUI integration not available")
-        
+
         root.destroy()
         print("✅ GUI test window created and destroyed successfully")
-        
+
     except ImportError:
         print("❌ GUI system not available")
-    
+
     print()
 
 
@@ -326,29 +325,29 @@ def run_performance_benchmark():
     """Run a performance benchmark of the system."""
     print("⚡ Performance Benchmark")
     print("=" * 50)
-    
+
     try:
         import numpy as np
         from core.gpu_cpu_calculation_bridge import get_gpu_cpu_bridge
-        
+
         bridge = get_gpu_cpu_bridge()
-        
+
         # Benchmark different operation sizes
         sizes = [100, 500, 1000, 2000]
         results = {}
-        
+
         for size in sizes:
             print(f"🔄 Benchmarking {size}x{size} matrix operations...")
-            
+
             # Create test matrices
             a = np.random.random((size, size))
             b = np.random.random((size, size))
-            
+
             # CPU benchmark
             start_time = time.time()
             cpu_result = np.dot(a, b)
             cpu_time = time.time() - start_time
-            
+
             # GPU benchmark (if available)
             if bridge.gpu_available:
                 start_time = time.time()
@@ -358,26 +357,25 @@ def run_performance_benchmark():
             else:
                 gpu_time = cpu_time
                 speedup = 1.0
-            
-            results[size] = {
+
+            results[size] = {}
                 "cpu_time": cpu_time,
-                "gpu_time": gpu_time,
-                "speedup": speedup
-            }
-            
+                    "gpu_time": gpu_time,
+                        "speedup": speedup
+}
             print(f"  CPU: {cpu_time:.3f}s, GPU: {gpu_time:.3f}s, Speedup: {speedup:.2f}x")
-        
+
         # Summary
         print("\n📊 Benchmark Summary:")
         for size, result in results.items():
             print(f"  {size}x{size}: {result['speedup']:.2f}x speedup")
-        
+
         avg_speedup = np.mean([r['speedup'] for r in results.values()])
         print(f"  Average speedup: {avg_speedup:.2f}x")
-        
+
     except Exception as e:
         print(f"❌ Performance benchmark failed: {e}")
-    
+
     print()
 
 
@@ -387,7 +385,7 @@ async def main():
     print("=" * 60)
     print(f"Demo started at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print()
-    
+
     # Run all tests
     test_core_imports()
     test_settings_system()
@@ -397,7 +395,7 @@ async def main():
     test_visualization_systems()
     test_gui_availability()
     run_performance_benchmark()
-    
+
     print("🎉 Complete System Demo Finished")
     print("=" * 60)
     print(f"Demo completed at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
@@ -416,4 +414,4 @@ if __name__ == "__main__":
     except Exception as e:
         print(f"\n❌ Demo failed with error: {e}")
         import traceback
-        traceback.print_exc() 
+        traceback.print_exc()

@@ -59,8 +59,7 @@ test_cases = [
             ("111111", "Repeating pattern - should be cautious / defensive"),
             ("abcdef", "Sequential pattern - should be momentum / adaptive"),
             ("random1", "Random pattern - should be adaptive / monitor")
-        ]
-
+]
 for hash_trigger, description in test_cases:
             mapping = mapper.map_hash_trigger(hash_trigger)
             print(f"  {hash_trigger}: {mapping.strategy_pathway} ({mapping.pattern_type.value})")
@@ -114,8 +113,7 @@ scenarios = [
             {"name": "Low Risk Market", "entropy": 0.2, "volatility": 0.01, "momentum": 0.001},
             {"name": "Medium Risk Market", "entropy": 0.5, "volatility": 0.025, "momentum": 0.003},
             {"name": "High Risk Market", "entropy": 0.8, "volatility": 0.06, "momentum": 0.01}
-        ]
-
+]
 for scenario in scenarios:
             btc_vector = MockBTCVector(
                 volatility=scenario["volatility"],
@@ -182,8 +180,7 @@ scenarios = [
             {"name": "Conservative Trading", "entropy": 0.2, "volatility": 0.01, "momentum": 0.001},
             {"name": "Balanced Trading", "entropy": 0.5, "volatility": 0.025, "momentum": 0.003},
             {"name": "Aggressive Trading", "entropy": 0.8, "volatility": 0.06, "momentum": 0.01}
-        ]
-
+]
 for scenario in scenarios:
             btc_vector = MockBTCVector(
                 volatility=scenario["volatility"],
@@ -242,7 +239,6 @@ test_strings = [
             "\\u1f389 System Validation",
             "\\u1f527 Configuration Management"
 ]
-
 for test_string in test_strings:
             print(f"  \\u2713 {test_string}")
 
@@ -283,8 +279,7 @@ edge_cases = [
             ("Special characters", "!@  #$%^&*()"),
             ("Numbers only", "123456789"),
             ("Mixed case", "AbCdEfGhIj")
-        ]
-
+]
 for case_name, test_input in edge_cases:
             try:
                 mapping = mapper.map_hash_trigger(test_input)

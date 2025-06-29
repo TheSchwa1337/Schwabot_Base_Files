@@ -87,8 +87,7 @@ self.critical_files = ["""
             "core / gan_anomaly_filter.py",
             "core / btc_data_processor.py",
             "core / altitude_adjustment_math.py",
-        ]
-
+]
 # Mathematical function signatures that must exist
 self.required_math_functions = {
             "core / entry_gate.py": ["execution_confidence", "entry_score"],
@@ -216,8 +215,7 @@ cmd = ["""
                 "--max - line - length = 88",
                 "--select = E,W,F,C,B",
                 "--format=%(path)s:%(row)d:%(col)d: %(code)s %(text)s"
-            ]
-
+]
 process = subprocess.run(
                 cmd,
                 capture_output = True,

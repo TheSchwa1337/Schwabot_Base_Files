@@ -278,7 +278,6 @@ critical_modules = [
             'core.memory_stack.execution_validator',
             'core.memory_stack.memory_key_allocator'
 ]
-
 # Check if modules exist
 existing_modules = []
         for module in critical_modules:
@@ -296,7 +295,6 @@ python_files = [
             'core / math / tensor_algebra / tensor_engine.py',
             'core / config / api_config.py'
 ]
-
 valid_files = []
         for file_path in python_files:
             if os.path.exists(file_path):
@@ -387,8 +385,7 @@ tests = [
         ("Performance", test_performance),
         ("Code Quality", test_code_quality),
         ("Security", test_security)
-    ]
-
+]
 results = {}
     for test_name, test_func in tests:
         try:

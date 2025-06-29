@@ -505,7 +505,6 @@ known_configs = ["""
             "matrix_fault_resolver_config.yaml",
             "fractal_core_config.yaml"
 ]
-
 for config_name in known_configs:
             configs[config_name] = self.load_config(config_name)
 

@@ -78,8 +78,7 @@ self.skip_patterns = [
             r'utils / safe_print\.py',  # Skip our own utility
             r'refactor_cli_output\.py',  # Skip the complex version
             r'simple_cli_refactor\.py',  # Skip this script
-        ]
-
+]
 # Common Unicode patterns found in the codebase
 self.unicode_patterns = [
 # Emojis and symbols
@@ -103,8 +102,7 @@ r'[\\u2713\\u2717\\u26a0\\u2139]',
 
 # Common Unicode characters"""
 r'[\\u2013\\u2014""''\\u2026\\u2022\\u25e6\\u25aa\\u25ab\\u25ac\\u25ad\\u25ae\\u25af\\u25b0\\u25b1\\u25b2\\u25b3\\u25bc\\u25bd\\u25c0\\u25c1\\u25b6\\u25b7\\u25c6\\u25c7\\u25cf\\u25cb\\u25d0\\u25d1\\u25d2\\u25d3\\u25d4\\u25d5\\u25d6\\u25d7\\u25d8\\u25d9\\u25da\\u25db\\u25dc\\u25dd\\u25de\\u25df\\u25e0\\u25e1\\u25e2\\u25e3\\u25e4\\u25e5\\u25e6\\u25e7\\u25e8\\u25e9\\u25ea\\u25eb\\u25ec\\u25ed\\u25ee\\u25ef]',
-        ]
-
+]
 # Combined Unicode pattern
 self.unicode_regex = re.compile('|'.join(self.unicode_patterns))
 

@@ -96,8 +96,7 @@ class PatternUtils:
             'pattern_confidence_threshold': 0.5,
             'trend_window': 20,
             'breakout_threshold': 0.02
-        }
-    
+}
     def analyze_trend(self, price_data: List[float]) -> TrendAnalysis:
         """
         Analyze trend in price data.
@@ -348,8 +347,7 @@ class PatternUtils:
             "pattern_history_size": len(self.pattern_history),
             "pattern_type_counts": pattern_counts,
             "recent_patterns": len([p for p in self.pattern_history if time.time() - p.metadata.get('timestamp', 0) < 3600])
-        }
-    
+}
     def get_recent_patterns(self, count: int = 10) -> List[Dict[str, Any]]:
         """Get recent detected patterns."""
         recent_patterns = self.pattern_history[-count:]
@@ -361,11 +359,9 @@ class PatternUtils:
                 "start_index": pattern.start_index,
                 "end_index": pattern.end_index,
                 "price_range": len(pattern.price_data)
-            }
+}
             for pattern in recent_patterns
-        ]
-
-
+]
 # API Integration Functions
 def create_pattern_utils_api_endpoints(app):
     """Create FastAPI endpoints for pattern utilities."""
@@ -384,7 +380,7 @@ def create_pattern_utils_api_endpoints(app):
                 "duration": trend.duration,
                 "slope": trend.slope,
                 "r_squared": trend.r_squared
-            }
+}
         except Exception as e:
             return {"success": False, "error": str(e)}
     
@@ -403,10 +399,10 @@ def create_pattern_utils_api_endpoints(app):
                         "start_index": p.start_index,
                         "end_index": p.end_index,
                         "price_range": len(p.price_data)
-                    }
+}
                     for p in patterns
-                ]
-            }
+]
+}
         except Exception as e:
             return {"success": False, "error": str(e)}
     
@@ -417,7 +413,7 @@ def create_pattern_utils_api_endpoints(app):
             return {
                 "success": True,
                 "summary": app.pattern_utils.get_pattern_summary()
-            }
+}
         except Exception as e:
             return {"success": False, "error": str(e)}
     
@@ -428,7 +424,7 @@ def create_pattern_utils_api_endpoints(app):
             return {
                 "success": True,
                 "patterns": app.pattern_utils.get_recent_patterns(count)
-            }
+}
         except Exception as e:
             return {"success": False, "error": str(e)}
     

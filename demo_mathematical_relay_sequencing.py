@@ -72,8 +72,7 @@ class MathematicalRelaySequencingDemo:
                 ("Trend Manager", self.sequencer.trend_manager),
                 ("Basket Engine", self.sequencer.basket_engine),
                 ("QuickTime Manager", self.sequencer.quicktime_manager)
-            ]
-            
+]
             for name, integration in integrations:
                 status = "✅ Available" if integration else "⚠️ Not Available"
                 print(f"{status} {name}")
@@ -97,8 +96,7 @@ class MathematicalRelaySequencingDemo:
                 {"price": 52000.0, "volume": 2000.0, "phase": 8, "description": "Spike 8-bit"},
                 {"price": 53000.0, "volume": 2500.0, "phase": 4, "description": "Surge 4-bit"},
                 {"price": 54000.0, "volume": 3000.0, "phase": 2, "description": "Peak 2-bit"}
-            ]
-            
+]
             results = []
             
             for i, scenario in enumerate(btc_scenarios):
@@ -116,7 +114,7 @@ class MathematicalRelaySequencingDemo:
                         "scenario": i+1,
                         "description": scenario["description"],
                         "demo_type": "btc_price_hash"
-                    }
+}
                 )
                 
                 if result.get("success", False):
@@ -174,8 +172,7 @@ class MathematicalRelaySequencingDemo:
                 {"from": 8, "to": 4, "channel": "fallback", "description": "8→4 Fallback"},
                 {"from": 4, "to": 2, "channel": "primary", "description": "4→2 Primary"},
                 {"from": 2, "to": 32, "channel": "secondary", "description": "2→32 Secondary"}
-            ]
-            
+]
             results = []
             
             for i, scenario in enumerate(bit_depth_scenarios):
@@ -193,7 +190,7 @@ class MathematicalRelaySequencingDemo:
                         "scenario": i+1,
                         "description": scenario["description"],
                         "demo_type": "bit_depth_switch"
-                    }
+}
                 )
                 
                 if result.get("success", False):
@@ -248,8 +245,7 @@ class MathematicalRelaySequencingDemo:
                 {"target": 0.10, "tier": "high", "btc_price": 52000.0, "description": "High Risk 10%"},
                 {"target": 0.15, "tier": "aggressive", "btc_price": 53000.0, "description": "Aggressive 15%"},
                 {"target": 0.20, "tier": "extreme", "btc_price": 54000.0, "description": "Extreme 20%"}
-            ]
-            
+]
             results = []
             
             for i, scenario in enumerate(profit_scenarios):
@@ -267,7 +263,7 @@ class MathematicalRelaySequencingDemo:
                         "scenario": i+1,
                         "description": scenario["description"],
                         "demo_type": "profit_optimization"
-                    }
+}
                 )
                 
                 if result.get("success", False):
@@ -359,9 +355,8 @@ class MathematicalRelaySequencingDemo:
                         "sub_ring": 2
                     },
                     "description": "Market Crash Event"
-                }
-            ]
-            
+}
+]
             results = []
             
             for i, scenario in enumerate(quicktime_scenarios):
@@ -517,7 +512,7 @@ class MathematicalRelaySequencingDemo:
                     "filename": export_filename,
                     "file_size": os.path.getsize(export_filename) if os.path.exists(export_filename) else 0,
                     "success": True
-                }
+}
             else:
                 print(f"❌ Export file not created: {export_filename}")
                 return {"type": "data_export", "error": "Export file not created", "success": False}
@@ -546,8 +541,7 @@ class MathematicalRelaySequencingDemo:
             ("QuickTime Events", self.demo_quicktime_events),
             ("Time Log Analysis", self.demo_time_log_analysis),
             ("Data Export", self.demo_data_export)
-        ]
-        
+]
         for demo_name, demo_func in demos:
             print(f"\n{'='*60}")
             print(f"🎯 Running: {demo_name}")

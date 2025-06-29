@@ -48,8 +48,7 @@ def test_linguistic_glyph_engine():
             "Execute profit vector 🚀 upward extrapolation",
             "Schwa recursive state 🔄 neutral recursion",
             "Ghost entry activation 👻 containment protocol"
-        ]
-        
+]
         results = []
         for cmd in commands:
             result = process_linguistic_command(cmd)
@@ -104,9 +103,8 @@ def test_fractal_mathematical_functions():
                 'max': float(np.max(echo_data)),
                 'min': float(np.min(echo_data)),
                 'energy': float(np.sum(np.abs(echo_data)))
-            }
-        }
-        
+}
+}
         print("✅ Forever Fractal: Non-decaying memory vector (Golden ratio dynamics)")
         print(f"   Energy: {results['forever_fractal']['energy']:.2f}")
         
@@ -139,15 +137,13 @@ def test_dualistic_thought_integration():
             "👻 Ghost entry on next dip - capture containment",
             "🔄 Schwa recursive state - neutral hold position",
             "💎 Diamond hands - maintain current vector lock"
-        ]
-        
+]
         market_data = {
             'btc_price': 47500.0,
             'usdc_balance': 15000.0,
             'volume': 1250000,
             'price_change_24h': 2.3
-        }
-        
+}
         results = []
         for cmd in test_commands:
             result = thought_engines.process_linguistic_trading_command(cmd, market_data)
@@ -187,8 +183,7 @@ def test_asic_bit_logic_states():
             ("🚀", ASICBitState.PROFIT_VECTOR.value),
             ("👻", ASICBitState.GHOST_ENTRY.value),
             ("🔄", ASICBitState.NULL_RECURSION.value)
-        ]
-        
+]
         results = {}
         for input_term, expected_state in test_cases:
             ling_hash = linguistic_engine.text_to_glyph_hash(input_term)
@@ -201,8 +196,7 @@ def test_asic_bit_logic_states():
                 'success': success,
                 'sha_hash': ling_hash.sha_hash[:8],
                 'weight': ling_hash.weight
-            }
-            
+}
             status = "✅" if success else "❌"
             print(f"{status} {input_term} → {actual_state:02b} (expected {expected_state:02b})")
         
@@ -211,8 +205,7 @@ def test_asic_bit_logic_states():
             "capture 🧿 profit",  # Should prioritize glyph (MEMORY_LOCK)
             "👻 vectorize exit",   # Should prioritize glyph (GHOST_ENTRY)
             "schwa recursive 🚀",  # Should prioritize glyph (PROFIT_VECTOR)
-        ]
-        
+]
         print("\n🔀 Testing Combined State Logic:")
         for test_phrase in combined_tests:
             ling_hash = linguistic_engine.text_to_glyph_hash(test_phrase)
@@ -245,8 +238,7 @@ def test_profit_vectorization_synthesis():
             ("🧿 Memory lock current vector", 47150.0, 10000.0),
             ("📈 Profit vector - upward extrapolation", 47800.0, 10000.0),
             ("👻 Ghost exit - capture gains", 47650.0, 10000.0)
-        ]
-        
+]
         results = []
         total_profit = 0.0
         
@@ -266,8 +258,7 @@ def test_profit_vectorization_synthesis():
                 'fractal_energy': float(np.sum(np.abs(linguistic_engine.fractal_memory))),
                 'bit_sequence_length': len(trade_vector.bit_sequence),
                 'glyph_signature': trade_vector.glyph_signature
-            }
-            
+}
             results.append(result)
             
             print(f"✅ Step {i+1}: {command}")
@@ -287,8 +278,7 @@ def test_profit_vectorization_synthesis():
             'sequence_results': results,
             'total_profit': total_profit,
             'final_memory_state': final_memory
-        }
-        
+}
     except Exception as e:
         print(f"❌ Profit vectorization test failed: {e}")
         return False, str(e)
@@ -307,8 +297,7 @@ def test_zalgo_zygot_mathematical_processing():
             [3, 2, 1, 0, 3, 2, 1, 0],  # 2-bit sequence
             [1, 1, 1, 1, 0, 0, 0, 0],  # Block pattern
             [2, 3, 0, 1, 2, 3, 0, 1],  # Repeating 2-bit
-        ]
-        
+]
         zalgo_results = []
         zygot_results = []
         
@@ -341,16 +330,14 @@ def test_zalgo_zygot_mathematical_processing():
                 'zalgo_entropy': zalgo_entropy,
                 'zygot_length': len(zygot_expansion),
                 'zygot_energy': sum(abs(x) for x in zygot_expansion) if zygot_expansion else 0
-            }
-            
+}
             print(f"✅ {glyph}: Entropy={zalgo_entropy:.4f}, Zygot Energy={glyph_results[glyph]['zygot_energy']:.2f}")
         
         return True, {
             'zalgo_test_results': zalgo_results,
             'zygot_test_results': zygot_results,
             'glyph_processing': glyph_results
-        }
-        
+}
     except Exception as e:
         print(f"❌ Zalgo/Zygot processing test failed: {e}")
         return False, str(e)
@@ -372,8 +359,7 @@ def run_comprehensive_integration_test():
         ("ASIC Bit Logic States", test_asic_bit_logic_states),
         ("Profit Vectorization Synthesis", test_profit_vectorization_synthesis),
         ("Zalgo & Zygot Processing", test_zalgo_zygot_mathematical_processing)
-    ]
-    
+]
     passed_tests = 0
     total_tests = len(tests)
     
@@ -385,7 +371,7 @@ def run_comprehensive_integration_test():
                 'success': success,
                 'result': result,
                 'timestamp': time.time()
-            }
+}
             if success:
                 passed_tests += 1
                 print(f"✅ {test_name} PASSED")
@@ -396,7 +382,7 @@ def run_comprehensive_integration_test():
                 'success': False,
                 'result': str(e),
                 'timestamp': time.time()
-            }
+}
             print(f"❌ {test_name} ERROR: {e}")
     
     # Generate final report

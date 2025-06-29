@@ -26,8 +26,7 @@ def compute_stability_index(Z: float, N: float, params: Optional[Dict[str, float
             'alpha_c': 0.714,
             'alpha_a': 23.2,
             'alpha_p': 12.0
-        }
-
+}
     A = Z + N
     if A <= 0: # Avoid division by zero or negative mass
         logger.warning("Attempted to compute stability with A <= 0. Returning -np.inf.")
@@ -62,8 +61,7 @@ def check_shell_trade_signal(volume_signal: float, volatility_map: float, config
         config = {
             'stability_threshold_high': 7.5,
             'stability_threshold_low': 6.0
-        }
-
+}
     stability_index = compute_stability_index(volume_signal, volatility_map, config.get('params'))
 
     if stability_index > config['stability_threshold_high']:

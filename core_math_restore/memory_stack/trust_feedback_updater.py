@@ -239,8 +239,7 @@ try:
 agent_feedback = [
                 entry for entry in feedback_data"""
 if entry.get("agent_type") == agent_type.value
-            ]
-
+]
 # Get recent feedback (last N commands)
             recent_feedback = agent_feedback[-self.performance_window:]
 
@@ -255,14 +254,14 @@ total_commands = len(recent_feedback)
 alpha_scores = [
                 entry.get("alpha_score", 0.0) for entry in recent_feedback
                 if entry.get("alpha_score") is not None
-            ]
+]
 average_alpha = unified_math.unified_math.mean(alpha_scores) if alpha_scores else 0.0
 
 # Calculate average drift penalties
 drift_penalties = [
                 entry.get("drift_penalty", 0.0) for entry in recent_feedback
                 if entry.get("drift_penalty") is not None
-            ]
+]
 average_drift = unified_math.unified_math.mean(drift_penalties) if drift_penalties else 0.0
 
 # Update performance metrics

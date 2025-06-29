@@ -46,8 +46,7 @@ def analyze_file_content(file_path: Path) -> Dict[str, any]:
         'math_indicators': [],
         'e999_errors': 0,
         'total_errors': 0
-    }
-    
+}
     try:
         with open(file_path, 'r', encoding='utf-8') as f:
             content = f.read()
@@ -65,8 +64,7 @@ def analyze_file_content(file_path: Path) -> Dict[str, any]:
             r'# Stub',
             r'def \w+\([^)]*\):\s*\n\s*pass',
             r'class \w+:\s*\n\s*pass'
-        ]
-        
+]
         for pattern in stub_patterns:
             if re.search(pattern, content, re.MULTILINE):
                 analysis['has_stubs'] = True
@@ -87,8 +85,7 @@ def analyze_file_content(file_path: Path) -> Dict[str, any]:
             r'class.*Matrix',
             r'class.*Vector',
             r'class.*Tensor'
-        ]
-        
+]
         for pattern in math_patterns:
             if re.search(pattern, content, re.IGNORECASE):
                 analysis['has_math_logic'] = True
@@ -121,8 +118,7 @@ def identify_important_files() -> List[str]:
         'main*.py',
         'core*.py',
         'integration*.py'
-    ]
-    
+]
     important_files = []
     core_dir = Path('core')
     
@@ -143,8 +139,7 @@ def analyze_common_error_patterns(errors_by_file: Dict[str, List[str]]) -> Dict[
         'F821': 0,  # Undefined name
         'F541': 0,  # F-string is missing placeholders
         'W505': 0,  # Doc line too long
-    }
-    
+}
     for file_errors in errors_by_file.values():
         for error in file_errors:
             for pattern in error_patterns.keys():

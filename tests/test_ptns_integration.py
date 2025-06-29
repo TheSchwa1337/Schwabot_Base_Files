@@ -130,7 +130,6 @@ test_vectors = [
                     symbol_zone = SymbolZone.YELLOW_ZONE
                 )
 ]
-
 # Test profit sequence processing
 result = sequence_profit_tier(
                 btc_price = 45000.0,
@@ -270,7 +269,6 @@ profit_vectors = [
                     symbol_zone = SymbolZone.GREEN_ZONE
                 )
 ]
-
 profit_result = sequence_profit_tier(
                 btc_price = 47500.0,
                 vectors = profit_vectors,
@@ -343,7 +341,6 @@ test_symbols = [
                 "👻",  # Ghost
                 "🚪"  # Door
 ]
-
 successful_mappings = 0
             for symbol in test_symbols:
                 portal = map_emoji_to_profit_portal(symbol)

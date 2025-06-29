@@ -1,0 +1,52 @@
+# -*- coding: utf - 8 -*-
+"""Phantom exit logic \\u2013 compute exit score P\\u2093."""
+"""Phantom exit logic \\u2013 compute exit score P\\u2093.""""
+# -*- coding: utf - 8 -*-
+from __future__ import annotations
+"""""""
+"""Phantom exit logic \\u2013 compute exit score P\\u2093."""
+"""Phantom exit logic \\u2013 compute exit score P\\u2093.""""
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+
+from core.unified_math_system import unified_math
+
+
+
+
+
+
+Approximates the improper integral:
+
+P\\u2093 = lim_{T\\u2192\\u221e} \\u222b\\u2080^{T} \\u03c6_exit(t) dt / \\u0394\\u27e8profit\\u27e9
+
+Numerically we evaluate a discrete array *phi_exit* and divide by profit delta."""""""
+""""""
+""""""
+"""""""
+
+
+from core.unified_math_system import unified_math
+"""""""
+__all__: list[str] = ["phantom_exit_score"]
+
+
+def phantom_exit_score():
+
+*,
+    lambda_trust: float,
+        profit_delta: float,
+        zeta_derivative: float,
+        halt_bias: float = 0.0,
+        ) -> float:
+"""Return exit probability P_exit \\u2208 [0, 1].""""
+
+Implements:
+    P_exit = sigmoid( \\u03bb_trust + \\u0394profit \\u00b7 d\\u03b6 / dt \\u2212 \\u03b5_halt )
+where \\u03b5_halt is *halt_bias*."""""""
+""""""
+""""""
+"""""""
+val = lambda_trust + profit_delta * zeta_derivative - halt_bias
+return 1.0 / (1.0 + unified_math.exp(-val))
+"""""""

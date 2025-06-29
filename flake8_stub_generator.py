@@ -246,7 +246,6 @@ stub_indicators = [
             'FIXME:',
             'STUB:'
 ]
-
 content_lower = content.lower()
         return any(indicator in content_lower for indicator in stub_indicators)
 

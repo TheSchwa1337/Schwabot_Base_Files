@@ -186,7 +186,6 @@ self.test_cases = [
                 profit_tier = ProfitTier.TIER_1
             )
 ]
-
 logger.info("💰 Profit Vector Calibration Test initialized with 2 - bit phase logic")
 
 def test_profit_calculation_accuracy(self) -> Dict[str, Any]:
@@ -349,7 +348,6 @@ test_signals = [
                     "phase_state": PhaseState.BIT_8.value,
                     "profit_tier": ProfitTier.TIER_3.value
 ]
-
 expected_total_profit = 0.0
 
 for signal in test_signals:

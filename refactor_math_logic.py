@@ -74,8 +74,7 @@ self.skip_patterns = [
             r'simple_cli_refactor\.py',
             r'refactor_math_logic\.py',
             r'core / unified_math_system\.py',  # Skip our own unified system
-        ]
-
+]
 # Math library imports to replace
 self.math_imports = {
             'import numpy as np': 'from core.unified_math_system import unified_math',

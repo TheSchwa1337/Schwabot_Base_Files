@@ -275,8 +275,7 @@ def test_version_determination():
             ("mathlib_v3.py", MathLibVersion.V3),
             ("mathlib_v4.py", MathLibVersion.V4),
             ("unified_math_system.py", MathLibVersion.UNIFIED),
-        ]
-        
+]
         for filename, expected_version in test_cases:
             determined_version = flake8_corrector._determine_mathlib_version(filename, "")
             assert determined_version == expected_version, f"Expected {expected_version.value} for {filename}, got {determined_version.value if determined_version else 'None'}"
@@ -288,8 +287,7 @@ def test_version_determination():
             ('MathLibV3', MathLibVersion.V3),
             ('MathLibV4', MathLibVersion.V4),
             ('UnifiedMathSystem', MathLibVersion.UNIFIED),
-        ]
-        
+]
         for content, expected_version in content_tests:
             determined_version = flake8_corrector._determine_mathlib_version("test.py", content)
             assert determined_version == expected_version, f"Expected {expected_version.value} for content '{content}', got {determined_version.value if determined_version else 'None'}"
@@ -316,8 +314,7 @@ def run_all_tests():
         ("UTF-8 Compatibility", test_utf8_compatibility),
         ("Comprehensive Reporting", test_comprehensive_reporting),
         ("Version Determination", test_version_determination),
-    ]
-    
+]
     results = {}
     passed = 0
     total = len(tests)
@@ -356,8 +353,7 @@ def run_all_tests():
             "passed_tests": passed,
             "failed_tests": total - passed,
             "success_rate": (passed/total)*100
-        }
-        
+}
         # Save test report
         with open("mathlib_positional_system_test_report.json", "w", encoding="utf-8") as f:
             json.dump(report, f, indent=2, ensure_ascii=False)

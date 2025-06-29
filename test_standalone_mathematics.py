@@ -67,8 +67,7 @@ class StandaloneRBMMathematics:
             "active_patterns": [],
             "memory_bank": {},
             "entropy_pool": 0.0
-        }
-    
+}
     def bit_flip(self, value: int, bits: int = 4) -> int:
         if bits not in self.standard_bits:
             raise ValueError(f"Bits must be one of {self.standard_bits}")
@@ -207,8 +206,7 @@ class StandaloneRBMMathematics:
                 "inverse": self._find_inverse_pair(pair, pairs),
                 "confidence": 0.8,
                 "last_trigger": None
-            }
-        
+}
         return flip_matrix
     
     def _find_inverse_pair(self, pair: str, pairs: List[str]) -> Optional[str]:
@@ -249,8 +247,7 @@ class StandaloneRBMMathematics:
             [pairs[0], pairs[1]] if len(pairs) >= 2 else pairs,
             [pairs[2], pairs[3]] if len(pairs) >= 4 else pairs[2:],
             pairs[4:] if len(pairs) > 4 else []
-        ]
-        
+]
         return [layer for layer in layers if layer]
     
     def calculate_volume_weights(self, pairs: List[str], market_data: Dict[str, Dict[str, float]]) -> Dict[str, float]:
@@ -279,8 +276,7 @@ class StandaloneRBMMathematics:
             "entropy_pool": self.ferris_wheel_states["entropy_pool"],
             "active_patterns": len(self.ferris_wheel_states["active_patterns"]),
             "memory_bank_size": len(self.ferris_wheel_states["memory_bank"])
-        }
-
+}
 @dataclass
 class FerrisState:
     """Represents a Ferris Wheel state."""
@@ -387,7 +383,7 @@ class StandaloneFerrisWheelRDE:
                 "original_state": original,
                 "dual_state": dual,
                 "trading_action": trading_action
-            }
+}
         )
         self.states.append(rotation_state)
         
@@ -398,8 +394,7 @@ class StandaloneFerrisWheelRDE:
             "trading_action": trading_action,
             "phase": self.current_phase,
             "rotation_count": self.rotation_count
-        }
-    
+}
     def _determine_trading_action(self, original: int, dual: int, target_pairs: List[str]) -> Dict[str, Any]:
         action_type = "buy" if dual > original else "sell"
         
@@ -416,8 +411,7 @@ class StandaloneFerrisWheelRDE:
             "original_state": original,
             "dual_state": dual,
             "state_difference": state_diff
-        }
-    
+}
     def asic_character_duality(self, value: int) -> Dict[str, Any]:
         original, dual = self.dualistic_bit_operation(value, 2)
         
@@ -431,8 +425,7 @@ class StandaloneFerrisWheelRDE:
             "entropy_delta": entropy_delta,
             "duality_strength": abs(original - dual) / 3.0,
             "asic_compatible": True
-        }
-    
+}
     def create_trade_layers(self, pairs: List[str]) -> List[List[str]]:
         if len(pairs) < 3:
             return [pairs]
@@ -444,8 +437,7 @@ class StandaloneFerrisWheelRDE:
             pairs[3:5] if len(pairs) > 3 else [],
             pairs[5:8] if len(pairs) > 5 else [],
             pairs[8:] if len(pairs) > 8 else []
-        ]
-        
+]
         return [layer for layer in layers if layer]
     
     def get_rde_statistics(self) -> Dict[str, Any]:
@@ -456,8 +448,7 @@ class StandaloneFerrisWheelRDE:
             "total_states": len(self.states),
             "max_phases": self.max_phases,
             "asic_duality_active": self.bit_phase == 2
-        }
-
+}
 def test_rbm_mathematics():
     """Test RBM Mathematics system."""
     print("\n" + "="*60)
@@ -533,7 +524,7 @@ def test_rbm_mathematics():
         "BTC→ETH": {"price": 0.05, "volume": 1000},
         "ETH→USDC": {"price": 2000, "volume": 500},
         "BTC→USDC": {"price": 45000, "volume": 2000}
-    }
+}
     weights = rbm.calculate_volume_weights(pairs, market_data)
     for pair, weight in weights.items():
         print(f"  {pair}: {weight:.3f}")
@@ -608,8 +599,7 @@ def test_mathematical_integration():
         "ETH→USDC": {"price": 2000, "volume": 500, "trajectory": -0.01},
         "BTC→USDC": {"price": 45000, "volume": 2000, "trajectory": 0.03},
         "XRP→BTC": {"price": 0.000022, "volume": 1500, "trajectory": 0.01}
-    }
-    
+}
     print("Testing cross-system integration:")
     
     # Test RBM + Ferris integration
@@ -674,9 +664,8 @@ def save_test_results():
             "entropy_calculation": "Information theory implementation",
             "ferris_wheel_rde": "256 SHA creation cycle",
             "asic_duality": "2-bit connection functionality"
-        }
-    }
-    
+}
+}
     with open("standalone_test_results.json", "w", encoding="utf-8") as f:
         json.dump(test_results, f, indent=2)
     

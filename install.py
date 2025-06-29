@@ -127,8 +127,7 @@ class DependencyManager:
         required_packages = [
             "numpy", "pandas", "matplotlib", "scipy", "ccxt", 
             "aiohttp", "requests", "tkinter", "asyncio"
-        ]
-        
+]
         results = {}
         
         for package in required_packages:
@@ -257,15 +256,14 @@ ENABLE_BACKTESTING=true
                     },
                     "coingecko": {
                         "enabled": True
-                    }
+}
                 },
                 "trading": {
                     "enabled": False,
                     "pairs": ["BTC/USDC", "ETH/USDC", "XRP/USDC"],
                     "max_positions": 10
-                }
-            }
-            
+}
+}
             config_file = self.config_dir / "basic_config.json"
             config_file.write_text(json.dumps(basic_config, indent=2))
             logger.info("✅ Created basic configuration")
@@ -285,7 +283,7 @@ ENABLE_BACKTESTING=true
                 "formatters": {
                     "standard": {
                         "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-                    }
+}
                 },
                 "handlers": {
                     "file": {
@@ -298,14 +296,13 @@ ENABLE_BACKTESTING=true
                         "class": "logging.StreamHandler",
                         "formatter": "standard",
                         "level": "INFO"
-                    }
+}
                 },
                 "root": {
                     "handlers": ["file", "console"],
                     "level": "INFO"
-                }
-            }
-            
+}
+}
             log_config_file = self.config_dir / "logging_config.json"
             log_config_file.write_text(json.dumps(log_config, indent=2))
             logger.info("✅ Created logging configuration")
@@ -412,8 +409,7 @@ class InstallationManager:
             test_imports = [
                 "numpy", "pandas", "matplotlib", "scipy", 
                 "tkinter", "asyncio", "logging"
-            ]
-            
+]
             for module in test_imports:
                 __import__(module)
                 logger.info(f"✅ {module} import successful")

@@ -72,8 +72,7 @@ class SchwabotV05Tester:
             ("Fractal Core", self.test_fractal_core),
             ("Matrix Fault Resolver", self.test_fault_resolver),
             ("Integration Tests", self.test_integration)
-        ]
-        
+]
         for test_name, test_func in tests:
             try:
                 logger.info(f"Running {test_name} tests...")
@@ -86,8 +85,7 @@ class SchwabotV05Tester:
                     "status": "FAILED",
                     "error": str(e),
                     "details": {}
-                }
-        
+}
         # Generate summary
         total_tests = len(tests)
         passed_tests = sum(1 for result in self.test_results.values() 
@@ -100,8 +98,7 @@ class SchwabotV05Tester:
             "success_rate": passed_tests / total_tests if total_tests > 0 else 0.0,
             "test_results": self.test_results,
             "execution_time": time.time() - self.start_time
-        }
-        
+}
         logger.info(f"🎯 Test Summary: {passed_tests}/{total_tests} tests passed")
         return summary
     
@@ -133,9 +130,8 @@ class SchwabotV05Tester:
                     "strategies_activated": 1,
                     "strategies_selected": 1,
                     "routes_generated": 1
-                }
-            }
-            
+}
+}
         except Exception as e:
             return {"status": "FAILED", "error": str(e), "details": {}}
     
@@ -169,9 +165,8 @@ class SchwabotV05Tester:
                     "phases_updated": 1,
                     "signals_generated": 1 if signal else 0,
                     "cycles_completed": 1
-                }
-            }
-            
+}
+}
         except Exception as e:
             return {"status": "FAILED", "error": str(e), "details": {}}
     
@@ -199,9 +194,8 @@ class SchwabotV05Tester:
                     "allocations_made": len(allocations),
                     "total_profit_allocated": 1000.0,
                     "cycles_completed": 1
-                }
-            }
-            
+}
+}
         except Exception as e:
             return {"status": "FAILED", "error": str(e), "details": {}}
     
@@ -235,9 +229,8 @@ class SchwabotV05Tester:
                     "positions_updated": 1,
                     "transactions_created": 1,
                     "snapshots_created": 1
-                }
-            }
-            
+}
+}
         except Exception as e:
             return {"status": "FAILED", "error": str(e), "details": {}}
     
@@ -271,9 +264,8 @@ class SchwabotV05Tester:
                     "fallbacks_triggered": 1 if stall_detector else 0,
                     "failures_recorded": 1,
                     "successes_recorded": 1
-                }
-            }
-            
+}
+}
         except Exception as e:
             return {"status": "FAILED", "error": str(e), "details": {}}
     
@@ -303,9 +295,8 @@ class SchwabotV05Tester:
                     "glyphs_updated": 1,
                     "patterns_detected": len(patterns),
                     "display_rendered": 1
-                }
-            }
-            
+}
+}
         except Exception as e:
             return {"status": "FAILED", "error": str(e), "details": {}}
     
@@ -340,9 +331,8 @@ class SchwabotV05Tester:
                     "similarities_calculated": 1,
                     "hashes_created": 1,
                     "hashes_selected": 1 if selected_hash else 0
-                }
-            }
-            
+}
+}
         except Exception as e:
             return {"status": "FAILED", "error": str(e), "details": {}}
     
@@ -369,9 +359,8 @@ class SchwabotV05Tester:
                     "fractals_created": 1,
                     "fractals_updated": 1,
                     "patterns_detected": len(patterns)
-                }
-            }
-            
+}
+}
         except Exception as e:
             return {"status": "FAILED", "error": str(e), "details": {}}
     
@@ -401,9 +390,8 @@ class SchwabotV05Tester:
                     "health_analyses": 2,
                     "faults_detected": len(self.fault_resolver.faults),
                     "resolutions_attempted": 1 if len(self.fault_resolver.faults) > 0 else 0
-                }
-            }
-            
+}
+}
         except Exception as e:
             return {"status": "FAILED", "error": str(e), "details": {}}
     
@@ -416,8 +404,7 @@ class SchwabotV05Tester:
                 "volume": 1000000,
                 "volatility": 0.02,
                 "market_condition": "bullish"
-            }
-            
+}
             # 1. Strategy selection
             strategy_id = self.strategy_mapper.create_strategy("integration_strategy", StrategyType.HASH_BASED, {})
             self.strategy_mapper.activate_strategy(strategy_id)
@@ -468,9 +455,8 @@ class SchwabotV05Tester:
                     "matrix_integration": 1,
                     "fractal_integration": 1,
                     "fault_integration": 1
-                }
-            }
-            
+}
+}
         except Exception as e:
             return {"status": "FAILED", "error": str(e), "details": {}}
     

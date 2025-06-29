@@ -105,8 +105,7 @@ def generate_workflow_report() -> str:
         'auto_fix_log_*.md',
         'math_structure_report.md',
         'prune_candidates_report.md'
-    ]
-    
+]
     report.append("## 📊 Generated Reports")
     for pattern in analysis_files:
         if '*' in pattern:

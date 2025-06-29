@@ -172,8 +172,7 @@ except ImportError:
             self.root_dir / "cleanup_backup",
             self.root_dir / "backup_memory_stack",
             self.root_dir / "hash_memory_bank"
-        ]
-        
+]
         for trash_dir in trash_dirs:
             if trash_dir.exists():
                 try:

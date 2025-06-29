@@ -29,7 +29,7 @@ logging.basicConfig(
     handlers=[
         logging.FileHandler('flake8_elimination.log'),
         logging.StreamHandler()
-    ]
+]
 )
 logger = logging.getLogger(__name__)
 
@@ -45,8 +45,7 @@ class ComprehensiveFlake8Eliminator:
         self.target_dirs = [
             self.core_path,
             self.schwabot_path
-        ]
-        
+]
         # Statistics
         self.initial_errors = 0
         self.final_errors = 0
@@ -58,8 +57,7 @@ class ComprehensiveFlake8Eliminator:
             "max_line_length": 120,
             "ignore": "E203,W503,E501,F401,F841,W291,W293,E302,E303,E701,E702",
             "exclude": "__pycache__,*.pyc,.git,*.backup,temp,logs"
-        }
-        
+}
         logger.info(f"Initialized Comprehensive Flake8 Eliminator for {self.base_path}")
     
     def run_complete_elimination(self) -> Dict[str, Any]:
@@ -377,8 +375,7 @@ class ComprehensiveFlake8Eliminator:
                 f"--max-line-length={self.flake8_config['max_line_length']}",
                 f"--extend-ignore={self.flake8_config['ignore']}",
                 f"--exclude={self.flake8_config['exclude']}"
-            ]
-            
+]
             # Add target directories
             for target_dir in self.target_dirs:
                 if target_dir.exists():
@@ -429,8 +426,7 @@ class ComprehensiveFlake8Eliminator:
             "manual_fixes_needed": self.manual_fixes_needed,
             "target_directories": [str(d) for d in self.target_dirs],
             "flake8_config": self.flake8_config
-        }
-    
+}
     def _print_summary(self, results: Dict[str, Any]):
         """Print comprehensive summary."""
         print("\n" + "=" * 80)

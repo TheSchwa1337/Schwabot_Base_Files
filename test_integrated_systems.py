@@ -101,8 +101,7 @@ def test_balance_loader():
             (8.0, 12.0, 0.4, 0.6, 0.0),   # ALEPH heavy
             (12.0, 11.0, 0.5, 0.5, 0.0),  # Balanced
             (18.0, 16.0, 0.8, 0.2, 0.05), # High load with decay
-        ]
-        
+]
         for i, (alif_load, aleph_load, gpu_entropy, cpu_entropy, float_decay) in enumerate(scenarios):
             metrics = update_load_metrics(alif_load, aleph_load, gpu_entropy, cpu_entropy, float_decay)
             optimal_route = get_optimal_route(alif_load, aleph_load)
@@ -253,8 +252,7 @@ async def test_btc_processor_integration():
             (65200.0, 110.0),
             (65150.0, 105.0),
             (65300.0, 120.0)
-        ]
-        
+]
         for i, (price, volume) in enumerate(test_data):
             is_allowed, profit_vector = await processor.process_btc_data(price, volume)
             
@@ -355,8 +353,7 @@ async def main():
         ("Ghost Trigger Manager", test_ghost_trigger_manager),
         ("BTC Processor Integration", test_btc_processor_integration),
         ("Integrated Workflow", test_integrated_workflow),
-    ]
-    
+]
     passed = 0
     total = len(tests)
     

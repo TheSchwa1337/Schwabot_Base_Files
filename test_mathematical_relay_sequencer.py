@@ -179,8 +179,7 @@ def test_time_log_management(sequencer):
             "system_check_3",
             "synchronization_start",
             "synchronization_complete"
-        ]
-        
+]
         for i, operation in enumerate(operations):
             sequencer.log_sequence_operation(sequence_id, operation)
             time.sleep(0.001)  # 1ms delay between operations
@@ -327,7 +326,7 @@ def test_quicktime_event_handling(sequencer):
                         "bit_depth": 32,
                         "channel": "primary",
                         "sub_ring": 0
-                    }
+}
                 },
                 {
                     "event_type": "volume_surge",
@@ -339,10 +338,9 @@ def test_quicktime_event_handling(sequencer):
                         "bit_depth": 16,
                         "channel": "secondary",
                         "sub_ring": 1
-                    }
-                }
-            ]
-            
+}
+}
+]
             for i, event in enumerate(test_events):
                 print(f"\n🎯 Simulating QuickTime event {i+1}: {event['event_type']}")
                 sequencer.quicktime_manager.detect_and_log_event(
@@ -396,8 +394,7 @@ def test_data_export_and_persistence(sequencer):
             required_keys = [
                 "sequencer_info", "statistics", "active_sequences", 
                 "recent_completed_sequences", "recent_time_logs", "export_timestamp"
-            ]
-            
+]
             for key in required_keys:
                 if key in export_data:
                     print(f"✅ Export contains {key}")

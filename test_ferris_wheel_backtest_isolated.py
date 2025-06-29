@@ -72,14 +72,13 @@ class FerrisWheelRDE:
             4: ["hold"],
             8: ["stable_swap"],
             42: ["flip", "exit"]
-        }
+}
         self.phase_modifiers = {
             ("hold", "ascent"): 1.2,
             ("flip", "descent"): 1.3,
             ("exit", "peak"): 1.5,
             ("entry", "trough"): 1.4
-        }
-        
+}
         # Strategy performance tracking with history
         self.strategy_performance: Dict[str, float] = {s: 1.0 for s in ["hold", "stable_swap", "flip", "exit", "entry"]}
         self.strategy_weights: Dict[str, float] = {s: 1.0 for s in ["hold", "stable_swap", "flip", "exit", "entry"]}
@@ -287,7 +286,7 @@ class FerrisWheelRDE:
                 "weights": adjusted,
                 "hash_input": hash_input,
                 "entropy_hash": entropy_hash[:16]  # Store first 16 chars for debugging
-            }
+}
         )
         self.states.append(ferris_state)
         
@@ -300,8 +299,7 @@ class FerrisWheelRDE:
             "ferris_state": ferris_state,
             "ncco_history": self.ncco_history[-10:],  # last 10
             "rde_context": ferris_state
-        }
-
+}
 # --- Backtesting System ---
 
 @dataclass
@@ -442,7 +440,7 @@ class FerrisWheelBacktester:
             metadata={
                 "position_size": position_size,
                 "position_value": position_value
-            }
+}
         )
         
         self.trade_history.append(trade)
@@ -494,8 +492,7 @@ class FerrisWheelBacktester:
             "avg_trade_pnl": np.mean([t.pnl for t in self.trade_history]) if self.trade_history else 0.0,
             "total_trades": total_trades,
             "winning_trades": winning_trades
-        }
-
+}
     def validate_mathematics(self) -> Dict[str, bool]:
         """Validate mathematical components of the RDE system."""
         checks = {}
@@ -634,10 +631,9 @@ class FerrisWheelBacktester:
                 "pnl": trade.pnl,
                 "probability": trade.probability,
                 "entropy": trade.entropy
-            }
+}
             for trade in self.trade_history
-        ]
-        
+]
         result = BacktestResult(
             total_trades=risk_metrics.get("total_trades", 0),
             winning_trades=risk_metrics.get("winning_trades", 0),
@@ -678,8 +674,7 @@ class FerrisWheelBacktester:
             "timestamp": result.timestamp,
             "initial_balance": self.initial_balance,
             "final_balance": self.balance
-        }
-        
+}
         with open(filepath, 'w', encoding='utf-8') as f:
             json.dump(result_dict, f, indent=2)
         

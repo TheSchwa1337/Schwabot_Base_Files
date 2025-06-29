@@ -30,9 +30,8 @@ STRATEGIES = {
         "pattern_keywords": [], # Matches everything if no other strategy fits
         "action": "HOLD",
         "priority": 1
-    }
 }
-
+}
 def match_strategy(signal_hash_data: Dict[str, Any]) -> Dict[str, Any]:
     """
     Matches a given signal hash to a predefined trading strategy.
@@ -66,7 +65,7 @@ def match_strategy(signal_hash_data: Dict[str, Any]) -> Dict[str, Any]:
                         "name": strategy_name,
                         "action": strategy_props["action"],
                         "confidence": confidence * (strategy_props["priority"] / 100.0) # Scale confidence by strategy priority
-                    }
+}
                 break # Move to next strategy once a keyword is matched
 
     if strategy_match is None:
@@ -75,8 +74,7 @@ def match_strategy(signal_hash_data: Dict[str, Any]) -> Dict[str, Any]:
             "name": "default_hold",
             "action": "HOLD",
             "confidence": confidence * (STRATEGIES["default_hold"]["priority"] / 100.0)
-        }
-
+}
     print(f"[STRATEGY SWITCH] Matched {signal_hash_data['hash'][:6]}... to {strategy_match['name']} ({strategy_match['action']}) with confidence {strategy_match['confidence']:.2f}")
     return strategy_match
 
@@ -134,9 +132,8 @@ if __name__ == "__main__":
             "timestamp": "2024-04-10T10:02:00Z",
             "trigger": "price > 3450",
             "confidence": 0.7
-        }
-    ]
-
+}
+]
     selected_trade = select_best_trade_batch(mock_batch)
     if selected_trade:
         print(f"\n[MAIN] Selected trade: {selected_trade['asset']} - {selected_trade['recommended_strategy']['action']} ({selected_trade['recommended_strategy']['name']})")

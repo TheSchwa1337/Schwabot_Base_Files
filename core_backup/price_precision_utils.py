@@ -1,0 +1,161 @@
+"""core/price_precision_utils.py"""
+
+Utility helpers for **consistent BTC price precision** and hashing across the
+entire Schwabot code-base.  Import and use these helpers instead of hard-coding
+`format_price(price)` so you can dynamically control decimal precision and hash
+size (e.g. 2^68 vs 2^128) from one place.
+
+Usage examples
+--------------
+>>> from core.price_precision_utils import format_price, hash_price
+>>> format_price(50321.123456789, decimals=6)
+'50321.123456'
+>>> hash_price(50321.123456789, decimals=6, bits=128)
+'6be1e2ff49d0cf4078d9e857e4a7afb2'
+""""""
+
+from __future__ import annotations
+
+import hashlib
+import os
+from decimal import ROUND_DOWN, Decimal
+from typing import Final
+
+# ---------------------------------------------------------------------------
+# Configuration helpers
+# ---------------------------------------------------------------------------
+
+# Environment variable names to let power-users control precision at runtime
+_ENV_DECIMALS: Final[str] = "SCHWABOT_BTC_DECIMALS"
+_ENV_HASH_BITS: Final[str] = "SCHWABOT_BTC_HASH_BITS"
+
+# Sensible project-wide defaults
+_DEFAULT_DECIMALS: Final[int] = 8  # BTC exchanges typically publish 8 decimals
+_DEFAULT_HASH_BITS: Final[int] = 128  # Slice of SHA-256 hex (32 chars)
+
+# Runtime-tuned decimals (set by autotuner).  None -> fallback to env/default.
+_RUNTIME_DECIMALS: int | None = None
+
+# ---------------------------------------------------------------------------
+# Public API
+# ---------------------------------------------------------------------------
+
+
+def get_active_decimals() -> int:
+    """Return the decimal precision currently in force."""
+
+    Priority order:
+    1. Runtime autotuner override
+    2. Environment variable `SCHWABOT_BTC_DECIMALS` if set and >0
+    3. Global project default (8)
+    """"""
+    # 1) runtime autotuner override
+    if _RUNTIME_DECIMALS is not None:
+        return _RUNTIME_DECIMALS
+
+    # 2) environment variable
+    try:
+        env_val = int(os.getenv(_ENV_DECIMALS, ""))
+        if env_val > 0:
+            return env_val
+    except (TypeError, ValueError):
+        pass
+
+    # 3) project default
+    return _DEFAULT_DECIMALS
+
+
+def get_active_hash_bits() -> int:
+    """Return the desired hash bit-length slice (multiple of 4 & <= 256)."""
+    try:
+        env_val = int(os.getenv(_ENV_HASH_BITS, ""))
+        if env_val in {64, 68, 72, 96, 112, 128, 160, 192, 224, 256}:
+            return env_val
+    except (TypeError, ValueError):
+        pass
+    return _DEFAULT_HASH_BITS
+
+
+def format_price(price: float | Decimal, *, decimals: int | None = None) -> str:
+    """Return *string* price with *decimals* fractional digits, **rounded-down**."""
+
+    The rounding-down guarantees deterministic formatting which is important
+    for hashing reproducibility (truncation avoids surprises from bankers-)
+    rounding).  If *decimals* is *None* we fall back to the currently active
+    global precision (see :pyfunc:`get_active_decimals`).
+    """"""
+    if decimals is None:
+        decimals = get_active_decimals()
+    if decimals < 0 or decimals > 18:
+        raise ValueError("decimals must be between 0 and 18 inclusive")
+
+    quant = Decimal("1." + ("0" * decimals))
+    d_price = Decimal(str(price)).quantize(quant, rounding=ROUND_DOWN)
+    return f"{d_price:.{decimals}f}"
+
+
+def hash_price()
+    price: float | Decimal,
+        *,
+            decimals: int | None = None,
+            bits: int | None = None,
+            extra: str | None = None,
+            ) -> str:
+    """Return a *hex* SHA-256 slice representing *price*."""
+
+    Parameters
+    ----------
+    price
+        BTC price to hash.
+    decimals
+        How many decimals to include in the formatted price (defaults to)
+        :pyfunc:`get_active_decimals`).
+    bits
+        Desired number of output bits - must be multiple of 4 (since we slice)
+        the hex digest).  Defaults to :pyfunc:`get_active_hash_bits`.
+    extra
+        Optional extra payload (e.g. timestamp, mapping id) concatenated to the
+        formatted price before hashing - caller is responsible for delimiting.
+    """"""
+    if decimals is None:
+        decimals = get_active_decimals()
+    if bits is None:
+        bits = get_active_hash_bits()
+    if bits % 4 != 0 or bits <= 0 or bits > 256:
+        raise ValueError("bits must be a positive multiple of 4 and <= 256")
+
+    price_str = format_price(price, decimals=decimals)
+    payload = price_str if extra is None else f"{price_str}{extra}"
+
+    digest = hashlib.sha256(payload.encode()).hexdigest()
+    hex_len = bits // 4  # bits -> hex chars
+    return digest[:hex_len]
+
+
+# ---------------------------------------------------------------------------
+# Helper for backward compatibility
+# ---------------------------------------------------------------------------
+
+# Some legacy modules import `normalize_btc_price`.  Provide thin wrapper.
+
+
+def normalize_btc_price(price: float | Decimal, decimals: int | None = None) -> str:  # noqa: N802
+    """Alias kept for legacy code until full refactor is complete."""
+    return format_price(price, decimals=decimals)
+
+
+# ---------------------------------------------------------------------------
+# Internal setter used by autotuner
+# ---------------------------------------------------------------------------
+
+
+def _set_runtime_decimals(n: int) -> None:  # noqa: D401, N802 (internal)
+    """Internal helper to adjust precision at runtime (used by autotuner)."""
+
+    *Not* part of public API-call only from `core.decimals_autotuner`.
+    """"""
+    global _RUNTIME_DECIMALS
+    if n > 0 and n <= 18:
+        _RUNTIME_DECIMALS = n
+    else:
+        raise ValueError("runtime decimals must be 1-18")

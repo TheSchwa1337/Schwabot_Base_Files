@@ -126,9 +126,8 @@ class MathLibV3Visualizer:
                 "description": "API and CCXT connectivity",
                 "data": {},
                 "active": True
-            }
-        }
-
+}
+}
     def start_live_mode(self):
         """Start live visualization mode."""
         self.mode = "live"
@@ -227,8 +226,7 @@ class MathLibV3Visualizer:
             "volume": np.random.uniform(100, 1000),
             "returns": np.random.normal(0.001, 0.02),
             "source": "live_api"
-        }
-
+}
     def _generate_demo_data(self) -> Dict[str, Any]:
         """Generate simulated data for demo mode."""
         return {
@@ -237,8 +235,7 @@ class MathLibV3Visualizer:
             "volume": 500 + 200 * np.random.random(),
             "returns": np.random.normal(0.001, 0.015),
             "source": "demo_simulation"
-        }
-
+}
     def _process_backtest_data(self) -> Dict[str, Any]:
         """Process historical data for backtest mode."""
         if self.current_index < len(self.historical_data):
@@ -466,7 +463,7 @@ class MathLibV3Visualizer:
                 "function_value": val,
                 "derivative": grad_val,
                 "dual_number": f"{val:.4f} + {grad_val:.4f}ε"
-            }
+}
         except Exception as e:
             logger.error(f"Error computing dual operations: {e}")
             return {"error": str(e)}
@@ -495,7 +492,7 @@ class MathLibV3Visualizer:
                 "sharpe_ratio": sharpe_ratio,
                 "max_drawdown": np.min(returns_array),
                 "var_95": np.percentile(returns_array, 5)
-            }
+}
         except Exception as e:
             logger.error(f"Error computing risk assessment: {e}")
             return {"error": str(e)}
@@ -563,8 +560,7 @@ class MathLibV3Visualizer:
             "mode": self.state.mode,
             "last_update": datetime.now().isoformat(),
             "data_queue_size": self.data_queue.qsize()
-        }
-
+}
     def _update_dual_operations_panel(self):
         """Update dual operations panel."""
         ax = self.axes['dual_operations']
@@ -670,8 +666,7 @@ class MathLibV3Visualizer:
                 data.get('volatility', 0),
                 data.get('sharpe_ratio', 0),
                 abs(data.get('max_drawdown', 0))
-            ]
-
+]
             colors = ['red', 'orange', 'green', 'purple']
             bars = ax.bar(metrics, values, color=colors)
 
@@ -708,8 +703,7 @@ class MathLibV3Visualizer:
                 data.get('volatility_clustering', 0),
                 data.get('cycle_strength', 0),
                 abs(data.get('mean_reversion_coefficient', 0))
-            ]
-
+]
             colors = ['blue', 'orange', 'green', 'red']
             bars = ax.bar(patterns, values, color=colors)
 
@@ -824,8 +818,7 @@ class MathLibV3Visualizer:
                 data.get('avg_processing_time', 0) * 1000,
                 data.get('error_count', 0),
                 data.get('uptime', 0)
-            ]
-
+]
             colors = ['green', 'blue', 'red', 'orange']
             bars = ax.bar(metrics, values, color=colors)
 
@@ -867,8 +860,7 @@ class MathLibV3Visualizer:
                 '✓' if data.get('ccxt_connected', False) else '✗',
                 data.get('mode', 'unknown'),
                 data.get('data_queue_size', 0)
-            ]
-
+]
             colors = ['green' if v == '✓' else 'red' if v ==
                       '✗' else 'blue' for v in status_values]
 
@@ -915,8 +907,7 @@ class MathLibV3Visualizer:
             "panels": self.panels,
             "mode": self.mode,
             "timestamp": datetime.now().isoformat()
-        }
-
+}
         with open(filename, 'w') as f:
             json.dump(state_data, f, indent=2)
 
@@ -949,9 +940,7 @@ class MathLibV3Visualizer:
             "mode": self.mode,
             "data_queue": self.data_queue,
             "running": self.running
-        }
-
-
+}
 def main():
     """Main function for testing the MathLib V3 Visualizer."""
     print("MathLib V3 Visualizer Test")

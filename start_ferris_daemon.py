@@ -164,7 +164,7 @@ def setup_logging(config_dict: dict):
             handlers=[
                 logging.StreamHandler(sys.stdout),
                 logging.FileHandler(logging_config.get('log_file', 'logs/ferris_rde_daemon.log')),
-            ]
+]
         )
         
         # Configure specific loggers
@@ -172,8 +172,7 @@ def setup_logging(config_dict: dict):
             'core': logging.getLogger('core'),
             'schwabot': logging.getLogger('schwabot'),
             'utils': logging.getLogger('utils'),
-        }
-        
+}
         for logger_name, logger_instance in loggers.items():
             logger_instance.setLevel(log_level)
         

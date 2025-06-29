@@ -190,7 +190,6 @@ test_matrices = [
                 'correlation_factor': 0.3,
                 'performance_score': 0.6
 ]
-
 for matrix_data in test_matrices:
             self.matrix_allocator.add_matrix_to_basket(basket_id, matrix_data)
 

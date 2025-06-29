@@ -100,7 +100,7 @@ def test_rbm_mathematics():
         "BTC→ETH": {"price": 0.05, "volume": 1000},
         "ETH→USDC": {"price": 2000, "volume": 500},
         "BTC→USDC": {"price": 45000, "volume": 2000}
-    }
+}
     weights = rbm.calculate_volume_weights(pairs, market_data)
     for pair, weight in weights.items():
         print(f"  {pair}: {weight:.3f}")
@@ -190,8 +190,7 @@ def test_unified_mathematics():
         "ETH→USDC": {"price": 2000, "volume": 500, "trajectory": -0.01},
         "BTC→USDC": {"price": 45000, "volume": 2000, "trajectory": 0.03},
         "XRP→BTC": {"price": 0.000022, "volume": 1500, "trajectory": 0.01}
-    }
-    
+}
     # Test unified cycle execution
     print("Testing unified cycle execution:")
     result = unified.execute_unified_cycle(pairs, market_data, current_state=5)
@@ -228,7 +227,7 @@ def test_unified_mathematics():
         "pairs": pairs,
         "market_data": market_data,
         "current_state": 10
-    }
+}
     integrated_result = unified.integrate_systems(input_data)
     print(f"  Integration successful: {len(integrated_result['trading_signals'])} signals generated")
     
@@ -255,8 +254,7 @@ async def test_ccxt_integration():
         "BTC/USDC": {"price": 45000, "volume": 1000, "trajectory": 0.02},
         "ETH/USDC": {"price": 2000, "volume": 500, "trajectory": -0.01},
         "XRP/USDC": {"price": 0.5, "volume": 2000, "trajectory": 0.03}
-    }
-    
+}
     # Test unified cycle with CCXT-style data
     print("\nTesting unified cycle with CCXT-style data:")
     result = unified.execute_unified_cycle(pairs, market_data, current_state=15)
@@ -290,8 +288,7 @@ def test_mathematical_integration():
         "ETH→USDC": {"price": 2000, "volume": 500, "trajectory": -0.01},
         "BTC→USDC": {"price": 45000, "volume": 2000, "trajectory": 0.03},
         "XRP→BTC": {"price": 0.000022, "volume": 1500, "trajectory": 0.01}
-    }
-    
+}
     print("Testing cross-system integration:")
     
     # Test RBM + Ferris integration
@@ -369,9 +366,8 @@ def save_test_results():
             "entropy_calculation": "Information theory implementation",
             "ferris_wheel_rde": "256 SHA creation cycle",
             "asic_duality": "2-bit connection functionality"
-        }
-    }
-    
+}
+}
     # Save to file
     with open("test_results.json", "w", encoding="utf-8") as f:
         json.dump(test_results, f, indent=2)

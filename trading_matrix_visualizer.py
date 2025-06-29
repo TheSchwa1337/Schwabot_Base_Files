@@ -69,8 +69,7 @@ class HardwareOptimizer:
             "numba_available": self.numba_available,
             "optimization_mode": self.optimization_mode,
             "timestamp": datetime.now().isoformat()
-        }
-
+}
 # --- Trading Matrix Core ---
 class TradingMatrix:
     """High-speed trading matrix for prices, signals, and positions with GPU/CPU optimization."""
@@ -92,8 +91,7 @@ class TradingMatrix:
             "updates": 0,
             "total_time": 0.0,
             "avg_update_time": 0.0
-        }
-        
+}
         logger.info(f"TradingMatrix initialized: {n_assets} assets, {window} window, {self.optimizer.optimization_mode} mode")
 
     def update(self, prices: np.ndarray, signals: np.ndarray) -> None:
@@ -188,9 +186,7 @@ class TradingMatrix:
             "hardware_info": self.optimizer.get_optimization_info(),
             "matrix_size": f"{self.window}x{self.n_assets}",
             "current_bar": self.bar_index
-        }
-
-
+}
 # --- Glyph Visualizer ---
 GLYPHS = ['1', 'i', '·', ' ', '⊥']
 

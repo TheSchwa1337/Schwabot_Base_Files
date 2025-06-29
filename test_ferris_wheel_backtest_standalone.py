@@ -199,7 +199,7 @@ class FerrisWheelBacktester:
             metadata={
                 "position_size": position_size,
                 "position_value": position_value
-            }
+}
         )
         
         self.trade_history.append(trade)
@@ -251,8 +251,7 @@ class FerrisWheelBacktester:
             "avg_trade_pnl": np.mean([t.pnl for t in self.trade_history]) if self.trade_history else 0.0,
             "total_trades": total_trades,
             "winning_trades": winning_trades
-        }
-
+}
     def validate_mathematics(self) -> Dict[str, bool]:
         """Validate mathematical components of the RDE system."""
         checks = {}
@@ -400,10 +399,9 @@ class FerrisWheelBacktester:
                 "pnl": trade.pnl,
                 "probability": trade.probability,
                 "entropy": trade.entropy
-            }
+}
             for trade in self.trade_history
-        ]
-        
+]
         result = BacktestResult(
             total_trades=risk_metrics.get("total_trades", 0),
             winning_trades=risk_metrics.get("winning_trades", 0),
@@ -444,8 +442,7 @@ class FerrisWheelBacktester:
             "timestamp": result.timestamp,
             "initial_balance": self.initial_balance,
             "final_balance": self.balance
-        }
-        
+}
         with open(filepath, 'w', encoding='utf-8') as f:
             json.dump(result_dict, f, indent=2)
         

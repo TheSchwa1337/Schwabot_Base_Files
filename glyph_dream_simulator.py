@@ -29,8 +29,7 @@ def get_initial_glyph_matrix():
         ['i', ' ', '·', ' ', '·', ' ', '1', ' ', '·', ' ', 'i'],
         ['·', ' ', 'i', ' ', '·', ' ', '·', ' ', '1', ' ', '·'],
         ['·', ' ', '·', ' ', '·', ' ', 'i', ' ', '·', ' ', '1'],
-    ]
-
+]
 # --- Drift Vector Logging ---
 def log_drift_vectors(matrix: List[List[str]]):
     """Measure left/right offset per row for anchor glyphs."""

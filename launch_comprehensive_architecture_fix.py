@@ -99,8 +99,7 @@ required_files = ["""
         "windows_cli_compliant_architecture_fixer.py",
         "apply_comprehensive_architecture_integration.py",
         "WINDOWS_CLI_COMPATIBILITY.md",
-    ]
-
+]
 missing_files = []
     for file in required_files:
         if not os.path.exists(file):

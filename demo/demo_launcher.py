@@ -146,7 +146,6 @@ demo_dirs = ["""
             "demo / launcher_reports/",
             "demo / launcher_logs/"
 ]
-
 for dir_path in demo_dirs:
             Path(dir_path).mkdir(parents=True, exist_ok=True)
 
@@ -246,7 +245,6 @@ if components is None:
                 "btc_processor",
                 "temporal_layer"
 ]
-
 # Default strategies
 if strategies is None:
             strategies = ["conservative", "moderate", "aggressive"]

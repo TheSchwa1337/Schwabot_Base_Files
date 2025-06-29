@@ -121,7 +121,6 @@ self.test_cases = [
                 description="High frequency trading with noise"
             )
 ]
-
 logger.info("\\u1f504 Trade Chain Timeline Replay Test initialized")
 
 def test_timeline_reconstruction(self) -> Dict[str, Any]:
@@ -768,14 +767,12 @@ for anchor in anchors:
         context['recent_events'] = [
             anchor for anchor in anchors
 if anchor['timestamp'] >= recent_cutoff
-        ]
-
+]
 # Get high confidence events
 context['high_confidence_events'] = [
             anchor for anchor in anchors
 if anchor['confidence'] >= 0.8
-        ]
-
+]
 return context
 
 def _validate_ai_context(self, context: Dict[str, Any]) -> bool:"""
@@ -860,7 +857,7 @@ for event in events:
 ai_confidences = [
                     feedback['confidence']
                     for feedback in event.ai_feedback.values()
-                ]
+]
 avg_ai_confidence = unified_math.unified_math.mean(ai_confidences)
                 feedback_scores.append(avg_ai_confidence)
 
@@ -868,7 +865,7 @@ avg_ai_confidence = unified_math.unified_math.mean(ai_confidences)
 recommendations = [
                     feedback['recommendation']
                     for feedback in event.ai_feedback.values()
-                ]
+]
 if len(set(recommendations)) == 1:  # All AIs agree
                     consensus_count += 1
 

@@ -150,8 +150,7 @@ def main():
 tests = [
         test_hybrid_strategy_mapper_simple,
         test_legacy_compatibility,
-    ]
-
+]
 passed = 0
     total = len(tests)
 

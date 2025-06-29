@@ -36,7 +36,6 @@ MATH_PRESERVATION_KEYWORDS = {
     'sigmoid', 'activation', 'neural', 'feedback', 'harmonic', 'volatility',
     'liquidity', 'momentum', 'backprop', 'sha', 'RDE', 'RITL', 'RITTLE'
 }
-
 # Codebase directories
 CODEBASE_DIRS = ['core', 'core/math', 'core/phase_engine', 'core/recursive_engine']
 
@@ -48,7 +47,6 @@ AUTO_FIXABLE_CODES = {
     'E743', 'W291', 'W292', 'W293', 'W391', 'W503', 'W504', 'W505', 'W601',
     'W602', 'W603', 'W604', 'W605', 'W606'
 }
-
 class Flake8AutoFixer:
     def __init__(self):
         self.changes_log = []
@@ -88,8 +86,7 @@ class Flake8AutoFixer:
                 '--max-line-length=120',  # More lenient for mathematical expressions
                 '--ignore=E226,E302,E41',  # Ignore some aggressive fixes
                 filepath
-            ]
-            
+]
             result = subprocess.run(cmd, capture_output=True, text=True, timeout=60)
             
             if result.returncode == 0:

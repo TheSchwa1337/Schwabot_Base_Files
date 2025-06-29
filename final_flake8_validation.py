@@ -27,8 +27,7 @@ def run_flake8_validation():
         "max_line_length": 120,
         "ignore": "E203,W503,E501,F401,F841,W291,W293,E302,E303,E701,E702",
         "exclude": "__pycache__,*.pyc,.git,*.backup,temp,logs,examples,cleanup_stub_files"
-    }
-    
+}
     # Target directories
     target_dirs = ["core", "schwabot"]
     
@@ -95,8 +94,7 @@ def run_flake8_validation():
         "status": status,
         "results": results,
         "config": config
-    }
-    
+}
     with open("final_flake8_validation_report.json", "w") as f:
         json.dump(report, f, indent=2)
     

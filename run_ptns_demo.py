@@ -131,7 +131,6 @@ vectors = [
             symbol_zone = SymbolZone.YELLOW_ZONE
         )
 ]
-
 print(f"🪙 Processing BTC trade at $48,250")
     print(f"📈 Profit Vectors: {len(vectors)}")
 
@@ -230,7 +229,6 @@ print("3️⃣ Optimizing profit sequence...")
             symbol_zone = SymbolZone.PURPLE_ZONE
         )
 ]
-
 profit_result = sequence_profit_tier(
         btc_price = 49100.0,
         vectors = vectors,

@@ -47,7 +47,6 @@ test_inputs = [
         "momentum_shift::XRP::short::12hr",
         "symbolic_override::ADA::mid::36hr"
 ]
-    
 for input_str in test_inputs:
         # Generate hash
 hash_string = hashlib.sha256(input_str.encode('utf-8')).hexdigest()
@@ -78,7 +77,6 @@ test_strategies = [
         "emoji_hash_match::ETH::mid::24hr",
         "momentum_shift::XRP::short::12hr"
 ]
-    
 for strategy_input in test_strategies:
         strategy = hash_to_strategy(strategy_input)
         
@@ -122,7 +120,6 @@ scenarios = [
             "asset": "XRP",
             "expected_return": 0.08
 ]
-    
 for scenario in scenarios:
         print(f"Scenario: {scenario['name']}")
         
@@ -190,7 +187,6 @@ routing_scenarios = [
                 "expected_return": 0.08,
                 "hash_input": "momentum_shift::XRP::short::12hr"
 ]
-    
 for scenario in routing_scenarios:
         print(f"Scenario: {scenario['name']}")
         
@@ -231,7 +227,6 @@ vault_scenarios = [
             "asset": "XRP",
             "expected_return": 0.30
 ]
-    
 for scenario in vault_scenarios:
         print(f"Scenario: {scenario['name']}")
         
@@ -289,8 +284,7 @@ test_scenarios = [
         ("2-bit", "up", "11", "ETH", 0.25),
         ("2-bit", "down", "01", "XRP", 0.08),
         ("momentum", "up", "10", "ADA", 0.12)
-    ]
-    
+]
 print("Generating test data...")
     for phase, flip_bias, hash_bits, asset, expected_return in test_scenarios:
         router.route_profit_phase(phase, flip_bias, hash_bits, asset, expected_return)

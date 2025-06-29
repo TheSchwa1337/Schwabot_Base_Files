@@ -1,0 +1,134 @@
+# core/tick_rhythm_scanner.py
+
+import cmath
+import logging
+from collections import deque
+from typing import Any, Dict, List, Tuple
+
+import numpy as np
+
+from core.filters import RecursiveFractalFilter, TickNormalizer
+from core.phase_certainty_filter import PhaseCertaintyFilter
+
+logger = logging.getLogger(__name__)
+
+class TickRhythmScanner:
+""""""
+    Scans tick-level market data for rhythmic patterns and assesses their certainty
+using frequency analysis (e.g., conceptual Fourier Transform) and a phase certainty filter.
+""""""
+
+    def __init__(self, tick_history_size: int = 200, phase_filter_history: int = 50,):
+            phase_consistency_threshold: float = 0.8, min_rhythm_amplitude: float = 0.1):
+    self.tick_history = deque(maxlen = tick_history_size)
+    self.phase_certainty_filter = PhaseCertaintyFilter(history_size = phase_filter_history,)
+                                                    consistency_threshold = phase_consistency_threshold)
+    self.min_rhythm_amplitude = min_rhythm_amplitude
+    logger.info("TickRhythmScanner initialized.")
+
+    def add_tick_data(self, tick_price: float):
+    """"""
+    Adds a new tick price to the history.
+
+    Args:
+        tick_price (float): The price of the latest tick.
+    """"""
+    self.tick_history.append(tick_price)
+    logger.debug(f"Tick price added: {tick_price:.4f}. History size: {len(self.tick_history)}")
+
+    def _conceptual_dft(self, signal: List[float]) -> List[complex]:
+    """"""
+    Performs a conceptual Discrete Fourier Transform (DFT) on the signal.
+    Mathematical Logic: X_k = sum_{n=0}^{N-1} x_n * e^(-2pii * k * n / N)
+    """"""
+    N = len(signal)
+        if N == 0:
+        return []
+
+    dft_output = []
+        for k in range(N):  # For each frequency component:
+        sum_val = 0.0 + 0.0j
+            for n in range(N):  # Sum over each data point:
+            angle = -2 * cmath.pi * k * n / N
+            sum_val += signal[n] * cmath.exp(angle)
+        dft_output.append(sum_val)
+    return dft_output
+
+    def scan_rhythms(self) -> Dict[str, Any]:
+    """"""
+        Scans the historical tick data for rhythmic patterns using conceptual Fourier analysis
+    and assesses their certainty via the PhaseCertaintyFilter.
+
+    Returns:
+        Dict[str, Any]: A dictionary containing rhythm analysis results.
+    """"""
+        if len(self.tick_history) < self.phase_certainty_filter.phase_history.maxlen: # Need enough data for filter:
+        logger.warning("Not enough tick history to scan rhythms effectively.")
+        return {"status": "insufficient_data", "rhythm_detected": False, "phase_certainty": 0.0}
+
+    current_tick_data = list(self.tick_history)
+
+    # Perform conceptual DFT on the tick data to find dominant frequencies/rhythms
+    fourier_results = self._conceptual_dft(current_tick_data)
+
+    dominant_rhythm_frequency = 0.0
+    dominant_rhythm_amplitude = 0.0
+        if len(fourier_results) > 1: # Exclude DC component (k=0):
+            magnitudes = [abs(x) for x in fourier_results[1:]] # Magnitudes of complex numbers
+            if magnitudes:
+            max_magnitude_index = np.argmax(magnitudes)
+            # The actual frequency corresponding to this index (+1 because we skipped DC)
+            dominant_rhythm_frequency = (max_magnitude_index + 1) / len(current_tick_data)
+            dominant_rhythm_amplitude = magnitudes[max_magnitude_index]
+
+                # Use the phase of the dominant frequency component for certainty assessment
+            # Phase = atan2(imaginary_part, real_part)
+            dominant_phase = cmath.phase(fourier_results[max_magnitude_index + 1]) # +1 to get original k index
+            self.phase_certainty_filter.update_phase_history(dominant_phase)
+
+    # Assess phase certainty of the detected rhythm
+    phase_assessment = self.phase_certainty_filter.assess_phase_certainty()
+    rhythm_certainty = phase_assessment["certainty_score"]
+    is_rhythm_certain = phase_assessment["is_certain_enough"]
+
+    rhythm_detected = dominant_rhythm_amplitude >= self.min_rhythm_amplitude and is_rhythm_certain
+
+    logger.info(f"Rhythm Scan: Detected={rhythm_detected}, Freq={dominant_rhythm_frequency:.4f}, Ampl={dominant_rhythm_amplitude:.4f}, Phase Cert={rhythm_certainty:.4f}")
+
+    return {)}
+        "status": "success",
+            "rhythm_detected": rhythm_detected,
+                "dominant_rhythm_frequency": dominant_rhythm_frequency,
+                "dominant_rhythm_amplitude": dominant_rhythm_amplitude,
+                "rhythm_phase_certainty": rhythm_certainty,
+                "is_rhythm_certain": is_rhythm_certain,
+                "phase_assessment_details": phase_assessment
+}
+    def get_current_tick_history(self) -> List[float]:
+    """Returns the current tick price history."""
+    return list(self.tick_history)
+
+    if __name__ == "__main__":
+# Example Usage
+scanner = TickRhythmScanner(tick_history_size=100, phase_filter_history=30, min_rhythm_amplitude=0.2)
+
+    # Simulate tick data with a clear rhythm
+    print("\n--- Simulating Tick Data with Rhythm ---")
+t = np.linspace(0, 10 * np.pi, 100) # Simulating 100 ticks over 5 cycles
+rhythmic_prices = 100 + 5 * np.sin(t) + np.random.normal(0, 0.1, 100) # Sine wave + noise
+
+        for i, price in enumerate(rhythmic_prices):
+    scanner.add_tick_data(price)
+        if (i + 1) % 10 == 0: # Scan rhythms every 10 ticks:
+        results = scanner.scan_rhythms()
+        print(f"Tick {i+1}: {results['rhythm_detected']}, Freq: {results['dominant_rhythm_frequency']:.3f}, Ampl: {results['dominant_rhythm_amplitude']:.3f}, Certainty: {results['rhythm_phase_certainty']:.3f}")
+
+    print("\n--- Simulating Noisy/Less Rhythmic Data ---")
+    noisy_prices = 100 + np.random.normal(0, 1.0, 100) # Pure noise
+    noisy_scanner = TickRhythmScanner(tick_history_size=100, phase_filter_history=30, min_rhythm_amplitude=0.5) # Higher amplitude threshold
+
+            for i, price in enumerate(noisy_prices):
+        noisy_scanner.add_tick_data(price)
+                if (i + 1) % 10 == 0:
+            results = noisy_scanner.scan_rhythms()
+            print(f"Tick {i+1}: {results['rhythm_detected']}, Freq: {results['dominant_rhythm_frequency']:.3f}, Ampl: {results['dominant_rhythm_amplitude']:.3f}, Certainty: {results['rhythm_phase_certainty']:.3f}")

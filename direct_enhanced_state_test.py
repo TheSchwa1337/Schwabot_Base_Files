@@ -201,8 +201,7 @@ def test_demo_state_generation():
             {"price": 45000.0, "volume": 800.0, "phase": 16, "description": "Low price scenario"},
             {"price": 50000.0, "volume": 1000.0, "phase": 32, "description": "Medium price scenario"},
             {"price": 55000.0, "volume": 1200.0, "phase": 42, "description": "High price scenario"}
-        ]
-        
+]
         generated_states = []
         
         for scenario in demo_scenarios:
@@ -233,8 +232,7 @@ def test_demo_state_generation():
                 },
                 "additional_data": {"scenario": scenario["description"], "test_data": "demo_generation"},
                 "timestamp": datetime.now().isoformat()
-            }
-            
+}
             generated_states.append(demo_state)
             
             # Verify demo state structure
@@ -294,8 +292,7 @@ def test_system_initialization():
                 },
                 "additional_data": {"init_test": "data"},
                 "timestamp": datetime.now().isoformat()
-            }
-            
+}
             print(f"✅ Demo state created successfully in {mode.value} mode")
         
         return True
@@ -318,8 +315,7 @@ def main():
         ("SystemIntegration Import", test_system_integration_import),
         ("Demo State Generation", test_demo_state_generation),
         ("System Initialization", test_system_initialization)
-    ]
-    
+]
     results = []
     for test_name, test_func in tests:
         try:

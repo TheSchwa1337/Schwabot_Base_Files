@@ -195,8 +195,7 @@ class CoreMathLibV2:
             return {
                 "k_percent": np.zeros_like(high),
                 "d_percent": np.zeros_like(high),
-            }
-
+}
         k_percent = np.zeros_like(high)
 
         for i in range(k_period - 1, len(high)):
@@ -290,8 +289,7 @@ class CoreMathLibV2:
             "max": float(np.max(data)),
             "median": float(np.median(data)),
             "iqr": float(np.percentile(data, 75) - np.percentile(data, 25)),
-        }
-
+}
     def entropy_analysis(self, data: Vector,
                          bins: int = 10) -> Dict[str, float]:
         """Perform entropy analysis of data distribution."""
@@ -320,8 +318,7 @@ class CoreMathLibV2:
             "shannon_entropy": float(shannon_entropy),
             "normalized_entropy": float(normalized_entropy),
             "max_entropy": float(max_entropy),
-        }
-
+}
     def moving_average_variants(
             self, data: Vector, period: int = 20) -> Dict[str, float]:
         """Calculate various moving average types."""
@@ -362,8 +359,7 @@ class CoreMathLibV2:
             "ema": float(ema),
             "wma": float(wma),
             "hull_ma": float(hull_ma),
-        }
-
+}
     def generate_hash_signature(self, data: Vector, strategy_id: str) -> str:
         """Generate SHA-256 hash signature for data and strategy."""
         data_str = f"{strategy_id}_{np.array2string(data, precision=6)}"
@@ -450,11 +446,10 @@ class CoreMathLibV2:
                     "exit_vector": block.exit_vector,
                     "timestamp": block.timestamp,
                     "similarity_score": block.similarity_score
-                }
+}
                 for block in self.memory_blocks
-            ]
-        }
-
+]
+}
         with open(filename, 'w') as f:
             json.dump(export_data, f, indent=2)
 
@@ -486,8 +481,7 @@ def process_waveform(
             "status": "success",
             "signal_length": len(signal),
             "sample_rate": sample_rate,
-        }
-
+}
         if analysis_type == "basic":
             # Basic statistical analysis
             stats = mathlib.advanced_statistical_analysis(signal)
@@ -504,7 +498,7 @@ def process_waveform(
                     "statistics": stats,
                     "entropy": entropy,
                     "moving_averages": moving_avgs,
-                }
+}
             )
 
         elif analysis_type == "spectral":
@@ -524,7 +518,7 @@ def process_waveform(
                         np.sum(np.arange(len(power_spectrum)) * power_spectrum)
                         / np.sum(power_spectrum)
                     ),
-                }
+}
             )
 
         return result

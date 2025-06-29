@@ -45,8 +45,7 @@ def test_state_continuity_manager():
             "volume": 1000,
             "timestamp": time.time(),
             "indicators": {"rsi": 65.5, "macd": 0.02}
-        }
-        
+}
         state_key = manager.update_state(
             StateType.TRADING_STATE,
             test_data,
@@ -154,8 +153,7 @@ def test_visualizer_integration():
             "volume": 1000,
             "timestamp": time.time(),
             "indicators": {"rsi": 65.5, "macd": 0.02}
-        }
-        
+}
         state_key = integration.update_state(
             StateType.TRADING_STATE,
             test_data,
@@ -236,8 +234,7 @@ def test_json_hangup_prevention():
                 "level1": {"level2": {"level3": [i for i in range(1000)]}}
             },
             "timestamp": time.time()
-        }
-        
+}
         # This should not hang due to timeout protection
         start_time = time.time()
         state_key = manager.update_state(
@@ -280,8 +277,7 @@ def test_lint_compliance():
             "core/internal_state/visualizer_integration.py",
             "core/internal_state/__init__.py",
             "core/dynamic_handoff_orchestrator.py"
-        ]
-        
+]
         all_passed = True
         for module in modules:
             try:
@@ -325,8 +321,7 @@ def main():
         ("Orchestrator Integration", test_orchestrator_integration),
         ("JSON Hang-up Prevention", test_json_hangup_prevention),
         ("Lint Compliance", test_lint_compliance)
-    ]
-    
+]
     results = []
     for test_name, test_func in tests:
         try:

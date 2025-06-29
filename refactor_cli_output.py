@@ -147,16 +147,14 @@ self.skip_patterns = [
             r'\.idea',
             r'\.vscode',
             r'utils / safe_print\.py',  # Skip our own utility
-        ]
-
+]
 # Import patterns to add
 self.import_patterns = [
             'from utils.safe_print import safe_print, info, warn, error, success, debug',
             'from utils.safe_print import safe_log, safe_progress, safe_status',
             'from utils.safe_print import safe_phase, safe_math, safe_trade, safe_profit',
             'from utils.safe_print import safe_vector, safe_bitmap, safe_hash, safe_risk',
-        ]
-
+]
 def find_python_files(self) -> List[Path]:"""
     """Function implementation pending."""
 pass

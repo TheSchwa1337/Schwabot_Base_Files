@@ -174,8 +174,7 @@ cutoff_tick = current_tick - self.tick_window_size
         self.recent_commands = [
             cmd for cmd in self.recent_commands"""
 if cmd.get("tick", 0) >= cutoff_tick
-        ]
-
+]
 def _find_or_create_cluster()
 
 self,
@@ -476,8 +475,7 @@ try:
             old_clusters = [
                 cluster_id for cluster_id, cluster in self.command_clusters.items()
                 if cluster.tick_range[1] < cutoff_tick
-            ]
-
+]
 for cluster_id in old_clusters:
                 del self.command_clusters[cluster_id]
 
@@ -548,7 +546,6 @@ test_commands = [
                 "payload": {"strategy_name": "momentum", "direction": "long"},
                 "priority": "medium"
 ]
-
 # Analyze commands
 for i, cmd in enumerate(test_commands):
             warning = analyze_command_density(cmd, current_tick = 100 + i)

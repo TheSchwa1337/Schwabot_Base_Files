@@ -37,15 +37,13 @@ class MathLogicPreserver:
             r'class.*Tensor',
             r'class.*Calculator',
             r'class.*Solver'
-        ]
-        
+]
         self.critical_variables = [
             'gradient', 'derivative', 'integral', 'matrix', 'vector', 'tensor',
             'eigenvalue', 'eigenvector', 'determinant', 'inverse', 'transpose',
             'dot_product', 'cross_product', 'norm', 'magnitude', 'angle',
             'rotation', 'transformation', 'coordinate', 'axis', 'dimension'
-        ]
-    
+]
     def extract_math_logic(self, content: str) -> Dict[str, any]:
         """Extract critical mathematical logic from content."""
         math_logic = {
@@ -54,8 +52,7 @@ class MathLogicPreserver:
             'classes': [],
             'variables': [],
             'comments': []
-        }
-        
+}
         lines = content.split('\n')
         
         for i, line in enumerate(lines):
@@ -250,8 +247,7 @@ class StubImplementer:
         implementation = [
             f'    """{function_name} implementation."""',
             '    try:',
-        ]
-        
+]
         # Generate appropriate implementation based on function name
         if any(math_term in function_name.lower() for math_term in ['calculate', 'compute', 'solve']):
             implementation.extend([
@@ -411,8 +407,7 @@ class SystematicFixer:
             'integration_test.py',
             'integration_orchestrator.py',
             'mathlib_v3_visualizer.py'
-        ]
-        
+]
         core_dir = Path('core')
         for pattern in important_patterns:
             for file_path in core_dir.glob(f'*{pattern}*'):

@@ -207,7 +207,6 @@ default_components = [
                 "is_required": True,
                 "startup_timeout": 45
 ]
-
 for comp_config in default_components:
             component_id = comp_config["component_id"]
             self.component_configs[component_id] = ComponentConfig(
@@ -243,7 +242,7 @@ try:
                         "startup_timeout": comp.startup_timeout,
                         "metadata": comp.metadata
 for comp in self.component_configs.values()
-                ]
+]
 with open(self.config_path, 'w') as f:
                 json.dump(config, f, indent = 2)
         except Exception as e:
