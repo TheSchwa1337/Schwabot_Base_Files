@@ -1,0 +1,117 @@
+# Schwabot Unified Launcher Requirements
+# Core Dependencies for Visual Command Platform
+
+# GUI and Visualization
+tkinter>=8.6
+customtkinter>=5.2.0
+pillow>=10.0.0
+matplotlib>=3.7.0
+plotly>=5.15.0
+
+# Web Framework (Flask Server as "Device")
+flask>=2.3.0
+flask-cors>=4.0.0
+flask-socketio>=5.3.0
+gunicorn>=21.0.0
+
+# Data Processing (Historical CSV Integration)
+pandas>=2.0.0
+numpy>=1.24.0
+pyarrow>=12.0.0  # For parquet files
+
+# Technical Analysis (RSI, etc.)
+ta>=0.10.2
+ta-lib>=0.4.25
+
+# Cryptocurrency APIs
+ccxt>=4.0.0
+requests>=2.31.0
+websocket-client>=1.6.0
+
+# Hashing and Cryptography
+cryptography>=41.0.0
+hashlib2>=2.3.1
+
+# Mathematical Computing
+scipy>=1.11.0
+sympy>=1.12
+numba>=0.57.0
+
+# Async and Threading
+asyncio>=3.4.3
+aiohttp>=3.8.0
+threading2>=0.1.2
+
+# Configuration Management
+pyyaml>=6.0
+toml>=0.10.2
+configparser>=5.3.0
+
+# System Monitoring (Resource Manager)
+psutil>=5.9.0
+py-cpuinfo>=9.0.0
+gpustat>=1.1.1
+
+# Network and Tunneling (Ngrok Integration)
+pyngrok>=6.0.0
+netifaces>=0.11.0
+
+# Logging and Debug
+loguru>=0.7.0
+rich>=13.0.0
+colorlog>=6.7.0
+
+# Testing and Benchmarking
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+pytest-benchmark>=4.0.0
+memory-profiler>=0.61.0
+
+# Mathematical Framework Integration
+torch>=2.0.0  # For tensor operations
+tensorflow>=2.13.0  # Alternative tensor framework
+
+# Database (for tick/hash storage)
+sqlite3>=3.42.0
+sqlalchemy>=2.0.0
+
+# Performance Optimization
+cython>=3.0.0
+numexpr>=2.8.4
+
+# Schwabot Specific
+# These match your existing system
+dataclasses>=0.8
+typing-extensions>=4.7.0
+pathlib>=1.0.1
+
+# Development Tools
+mypy>=1.5.0
+flake8>=6.0.0
+black>=23.0.0
+isort>=5.12.0
+
+# Optional: GPU Computing (if available)
+# cupy>=12.0.0  # Uncomment if GPU support needed
+# pycuda>=2022.2.2  # Uncomment if CUDA support needed
+
+# Optional: Advanced Visualization
+# dash>=2.13.0  # Uncomment for web dashboards
+# streamlit>=1.25.0  # Uncomment for quick prototyping
+
+# System Integration
+schedule>=1.2.0
+python-crontab>=3.0.0
+
+# Security
+python-jose>=3.3.0
+passlib>=1.7.4
+
+# Export and Reporting
+openpyxl>=3.1.0
+jinja2>=3.1.0
+
+# Version Pinning for Stability
+setuptools>=68.0.0
+wheel>=0.41.0
+pip>=23.2.0 

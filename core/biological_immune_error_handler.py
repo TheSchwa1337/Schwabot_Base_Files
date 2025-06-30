@@ -1,15 +1,9 @@
 #!/usr/bin/env python3
-"""Biological Immune Error Handler.
+"""Biological Immune Error Handler with Enhanced T-Cell System.
 
-Implements advanced biological-inspired error handling following immune system patterns:
-- T-Cell signaling logic for multi-signal validation
-- Neural immune gateways with adaptive thresholds
-- Swarm vector matrix for distributed validation
-- Q-Immune zone response system
-- Auto-antibody logic for pattern rejection
-- Mitochondrial drift detection for system decay
-
-Acts as the immune system's error handling and recovery mechanism.
+A comprehensive error handling system inspired by biological immune responses,
+featuring T-cell validation, neural immune gateways, swarm vector matrices,
+Q-immune zones, auto-antibody logic, and mitochondrial drift detection.
 """
 
 from collections import deque, defaultdict
@@ -27,6 +21,13 @@ import numpy as np
 from dataclasses import dataclass, field
 from enum import Enum
 
+# Import enhanced T-Cell system
+from enhanced_tcell_system import (
+    EnhancedTCellValidator, 
+    EnhancedSignalGenerator, 
+    EnhancedTCellSignal,
+    EnhancedSignalType
+)
 
 logger = logging.getLogger(__name__)
 
@@ -468,7 +469,7 @@ class QImmuneZoneManager:
 
 
 class BiologicalImmuneErrorHandler:
-    """Main biological immune error handler."""
+    """Biological immune error handler with enhanced T-Cell system."""
 
     def __init__(self, config: Optional[Dict[str, Any]] = None):
         """Initialize biological immune error handler.
@@ -477,53 +478,52 @@ class BiologicalImmuneErrorHandler:
             config: Configuration dictionary
         """
         self.config = config or self._default_config()
-
-        # Initialize immune system components
-        self.tcell_validator = TCellValidator(
-            activation_threshold=self.config.get('tcell_threshold', 0.6)
+        
+        # Core immune system components
+        self.enhanced_tcell_validator = EnhancedTCellValidator(
+            activation_threshold=self.config.get("tcell_activation_threshold", 0.6)
         )
+        self.enhanced_signal_generator = EnhancedSignalGenerator(self)
+        
         self.neural_gateway = NeuralImmuneGateway(
-            baseline_threshold=self.config.get('neural_threshold', 0.7)
+            baseline_threshold=self.config.get("neural_baseline_threshold", 0.7)
         )
         self.swarm_matrix = SwarmVectorMatrix(
-            num_nodes=self.config.get('swarm_nodes', 64)
+            num_nodes=self.config.get("swarm_nodes", 64)
         )
-        self.zone_manager = QImmuneZoneManager()
-
-        # Error tracking and recovery
-        self.error_history: deque = deque(maxlen=1000)
-        self.antibody_patterns: Dict[str, Any] = {}
+        self.q_immune_zone_manager = QImmuneZoneManager()
+        
+        # System state tracking
         self.mitochondrial_health = 1.0
-        self.system_entropy = 0.0
+        self.system_entropy = 0.1
         self.current_error_rate = 0.0
-
-        # Performance metrics
         self.total_operations = 0
         self.successful_operations = 0
         self.blocked_operations = 0
-        self.recovered_operations = 0
-
-        # Background monitoring
+        
+        # Error tracking and patterns
+        self.error_history: deque = deque(maxlen=1000)
+        self.antibody_patterns: Dict[str, Dict[str, Any]] = {}
+        
+        # Monitoring state
         self.monitoring_active = False
-        self.monitoring_task = None
-
-        logger.info("🧬 Biological Immune Error Handler initialized")
+        self.monitoring_task: Optional[asyncio.Task] = None
+        
+        logger.info("🧬 Enhanced Biological Immune Error Handler initialized")
 
     def _default_config(self) -> Dict[str, Any]:
-        """Default configuration."""
+        """Get default configuration."""
         return {
-            'tcell_threshold': 0.6,
-            'neural_threshold': 0.7,
-            'swarm_nodes': 64,
-            'enable_auto_antibody': True,
-            'enable_mitochondrial_monitoring': True,
-            'monitoring_interval': 5.0,
-            'max_error_rate': 0.1,
-            'recovery_factor': 0.95
+            "tcell_activation_threshold": 0.6,
+            "neural_baseline_threshold": 0.7,
+            "swarm_nodes": 64,
+            "monitoring_interval": 5.0,
+            "mitochondrial_drift_threshold": 0.1,
+            "antibody_cleanup_interval": 3600.0
         }
 
     def immune_protected_operation(self, operation: Callable, *args, **kwargs) -> Any:
-        """Execute operation with full immune system protection.
+        """Execute operation with enhanced immune system protection.
 
         Args:
             operation: Function to execute with protection
@@ -535,20 +535,23 @@ class BiologicalImmuneErrorHandler:
         """
         self.total_operations += 1
         start_time = time.time()
+        operation_name = getattr(operation, '__name__', 'unknown')
 
         try:
-            # 1. Generate immune signals
-            signals = self._generate_immune_signals(operation, args, kwargs)
+            # 1. Generate enhanced immune signals
+            signals = self.enhanced_signal_generator.generate_comprehensive_signals(operation, args, kwargs)
 
-            # 2. T-Cell validation
-            tcell_activation, tcell_confidence, tcell_analysis = self.tcell_validator.validate_signals(signals)
+            # 2. Enhanced T-Cell validation
+            tcell_activation, tcell_confidence, tcell_analysis = self.enhanced_tcell_validator.validate_signals(signals)
 
             if not tcell_activation:
                 self.blocked_operations += 1
+                # Update signal generator with failure feedback
+                self.enhanced_signal_generator.update_operation_history(operation_name, False)
                 return self._create_immune_response(
                     ImmuneZone.TOXIC,
-                    "T-Cell validation failed",
-                    {"tcell_analysis": tcell_analysis}
+                    "Enhanced T-Cell validation failed",
+                    {"tcell_analysis": tcell_analysis, "signals": [s.signal_type.value for s in signals]}
                 )
 
             # 3. Neural gateway check
@@ -558,6 +561,7 @@ class BiologicalImmuneErrorHandler:
 
             if not neural_allowed:
                 self.blocked_operations += 1
+                self.enhanced_signal_generator.update_operation_history(operation_name, False)
                 return self._create_immune_response(
                     ImmuneZone.ALERT,
                     "Neural gateway blocked operation",
@@ -570,6 +574,7 @@ class BiologicalImmuneErrorHandler:
 
             if not swarm_result.get("convergence", False):
                 self.blocked_operations += 1
+                self.enhanced_signal_generator.update_operation_history(operation_name, False)
                 return self._create_immune_response(
                     ImmuneZone.TOXIC,
                     f"Swarm consensus failed: {swarm_result.get('recommendation', 'UNKNOWN')}",
@@ -579,18 +584,31 @@ class BiologicalImmuneErrorHandler:
             # 5. Execute operation with monitoring
             result = self._execute_with_monitoring(operation, args, kwargs)
 
-            # 6. Update success metrics
+            # 6. Update success metrics and feedback
             self.successful_operations += 1
             self._update_mitochondrial_health(True)
+            self.enhanced_signal_generator.update_operation_history(operation_name, True)
+            
+            # Update T-Cell performance feedback
+            pattern_hash = tcell_analysis.get("pattern_hash")
+            if pattern_hash:
+                self.enhanced_tcell_validator.update_performance_feedback(pattern_hash, True)
 
             return result
 
         except Exception as e:
             # Immune system error recovery
             self._handle_operation_error(e, operation, args, kwargs)
+            self.enhanced_signal_generator.update_operation_history(operation_name, False)
+            
+            # Update T-Cell performance feedback for failure
+            pattern_hash = tcell_analysis.get("pattern_hash") if 'tcell_analysis' in locals() else None
+            if pattern_hash:
+                self.enhanced_tcell_validator.update_performance_feedback(pattern_hash, False)
+                
             return self._create_immune_response(
                 ImmuneZone.QUARANTINE,
-                f"Operation failed with immune recovery: {str(e)}",
+                f"Operation failed with enhanced immune recovery: {str(e)}",
                 {"error_type": type(e).__name__, "traceback": traceback.format_exc()}
             )
 
@@ -598,58 +616,10 @@ class BiologicalImmuneErrorHandler:
             # Update system metrics
             operation_time = time.time() - start_time
             self._update_system_metrics(operation_time)
-
-    def _generate_immune_signals(self, operation: Callable, args: tuple, kwargs: dict) -> List[TCellSignal]:
-        """Generate immune signals for T-Cell validation."""
-        signals = []
-        current_time = time.time()
-
-        # Primary signal - operation characteristics
-        operation_name = getattr(operation, '__name__', 'unknown')
-        operation_complexity = len(args) + len(kwargs) + len(inspect.signature(operation).parameters)
-        primary_strength = min(1.0, operation_complexity / 10.0)
-
-        signals.append(TCellSignal(
-            signal_type=ImmuneSignalType.PRIMARY,
-            strength=primary_strength,
-            source=f"operation_{operation_name}",
-            timestamp=current_time,
-            metadata={"operation": operation_name, "complexity": operation_complexity}
-        ))
-
-        # Costimulatory signal - system health
-        system_health = self.mitochondrial_health * (1.0 - self.current_error_rate)
-        signals.append(TCellSignal(
-            signal_type=ImmuneSignalType.COSTIMULATORY,
-            strength=system_health,
-            source="system_health",
-            timestamp=current_time,
-            metadata={"mitochondrial_health": self.mitochondrial_health}
-        ))
-
-        # Inflammatory signal - system entropy
-        inflammatory_strength = self.system_entropy
-        signals.append(TCellSignal(
-            signal_type=ImmuneSignalType.INFLAMMATORY,
-            strength=inflammatory_strength,
-            source="entropy_monitor",
-            timestamp=current_time,
-            metadata={"entropy": self.system_entropy}
-        ))
-
-        # Memory signal - pattern recognition
-        operation_pattern = f"{operation_name}_{len(args)}_{len(kwargs)}"
-        if operation_pattern in self.antibody_patterns:
-            memory_strength = self.antibody_patterns[operation_pattern].get("rejection_strength", 0.0)
-            signals.append(TCellSignal(
-                signal_type=ImmuneSignalType.MEMORY,
-                strength=memory_strength,
-                source="antibody_memory",
-                timestamp=current_time,
-                metadata={"pattern": operation_pattern}
-            ))
-
-        return signals
+            
+            # Adjust T-Cell threshold based on recent performance
+            recent_success_rate = self.successful_operations / max(1, self.total_operations)
+            self.enhanced_tcell_validator.adjust_threshold(recent_success_rate)
 
     def _operation_to_vector(self, operation: Callable, args: tuple, kwargs: dict) -> np.ndarray:
         """Convert operation to vector for swarm analysis."""
@@ -694,7 +664,7 @@ class BiologicalImmuneErrorHandler:
         return ImmuneMonitoringContext(self)
 
     def _handle_operation_error(self, error: Exception, operation: Callable, args: tuple, kwargs: dict) -> None:
-        """Handle operation error with immune recovery."""
+        """Handle operation error with enhanced immune recovery."""
         current_time = time.time()
 
         # Record error in history
@@ -720,7 +690,7 @@ class BiologicalImmuneErrorHandler:
         # Create antibody pattern if recurring error
         self._create_antibody_pattern(error, operation, args, kwargs)
 
-        logger.warning(f"🚨 Immune system handled error: {type(error).__name__}: {str(error)}")
+        logger.warning(f"🚨 Enhanced immune system handled error: {type(error).__name__}: {str(error)}")
 
     def _update_antibody_patterns(self, exc_type: type, exc_val: Exception) -> None:
         """Update antibody patterns for auto-immunity."""
@@ -799,27 +769,56 @@ class BiologicalImmuneErrorHandler:
 
         # Update immune zone classification
         confidence = self.successful_operations / max(1, self.total_operations)
-        q_noise = self.system_entropy
-        current_zone = self.zone_manager.classify_zone(q_noise, confidence, self.current_error_rate)
-
-        logger.debug(f"🧬 System metrics updated - Zone: {current_zone.value}, "
-                    f"Entropy: {self.system_entropy:.3f}, Error Rate: {self.current_error_rate:.3f}")
 
     def _create_immune_response(self, zone: ImmuneZone, message: str, metadata: Dict[str, Any]) -> ImmuneResponse:
-        """Create immune response for blocked operations."""
-        zone_response = self.zone_manager.get_zone_response(zone)
-
+        """Create immune response with enhanced information."""
         return ImmuneResponse(
             zone=zone,
-            activation_level=1.0 - (self.successful_operations / max(1, self.total_operations)),
-            recommended_action=zone_response["action"],
-            recovery_strategy=zone_response.get("recovery_time", 60),
-            metadata={
-                "message": message,
-                "zone_response": zone_response,
-                **metadata
-            }
+            activation_level=1.0 if zone in [ImmuneZone.TOXIC, ImmuneZone.QUARANTINE] else 0.5,
+            recommended_action=f"Enhanced immune response: {message}",
+            recovery_strategy=self._get_recovery_strategy(zone),
+            metadata=metadata
         )
+
+    def _get_recovery_strategy(self, zone: ImmuneZone) -> str:
+        """Get recovery strategy for immune zone."""
+        strategies = {
+            ImmuneZone.SAFE: "Continue normal operation",
+            ImmuneZone.ALERT: "Increase monitoring and validation",
+            ImmuneZone.TOXIC: "Block operation and analyze patterns",
+            ImmuneZone.QUARANTINE: "Isolate and perform deep analysis",
+            ImmuneZone.RECOVERY: "Gradual restoration with enhanced validation"
+        }
+        return strategies.get(zone, "Unknown strategy")
+
+    def get_enhanced_immune_status(self) -> Dict[str, Any]:
+        """Get comprehensive immune system status with enhanced T-Cell information."""
+        base_status = self.get_immune_status()
+        
+        # Add enhanced T-Cell information
+        enhanced_status = {
+            **base_status,
+            "enhanced_tcell": {
+                "validator_stats": self.enhanced_tcell_validator.get_signal_statistics(),
+                "signal_generator": {
+                    "operation_history_size": len(self.enhanced_signal_generator.operation_history),
+                    "risk_patterns_size": len(self.enhanced_signal_generator.risk_patterns)
+                }
+            },
+            "signal_analysis": {
+                "total_signal_types": len(EnhancedSignalType),
+                "enhanced_features": [
+                    "INHIBITORY signal generation",
+                    "Contextual signal analysis", 
+                    "Risk assessment signals",
+                    "Pattern-based learning",
+                    "Adaptive threshold adjustment",
+                    "Performance feedback loops"
+                ]
+            }
+        }
+        
+        return enhanced_status
 
     def get_immune_status(self) -> Dict[str, Any]:
         """Get comprehensive immune system status."""
@@ -828,7 +827,7 @@ class BiologicalImmuneErrorHandler:
                 "mitochondrial_health": self.mitochondrial_health,
                 "system_entropy": self.system_entropy,
                 "current_error_rate": self.current_error_rate,
-                "current_zone": self.zone_manager.current_zone.value
+                "current_zone": self.q_immune_zone_manager.current_zone.value
             },
             "performance_metrics": {
                 "total_operations": self.total_operations,
@@ -837,7 +836,7 @@ class BiologicalImmuneErrorHandler:
                 "success_rate": self.successful_operations / max(1, self.total_operations)
             },
             "immune_components": {
-                "tcell_threshold": self.tcell_validator.activation_threshold,
+                "tcell_threshold": self.enhanced_tcell_validator.activation_threshold,
                 "neural_gateway_state": self.neural_gateway.current_state.value,
                 "swarm_health": sum(1 for node in self.swarm_matrix.nodes.values() if node.is_healthy()) / len(self.swarm_matrix.nodes)
             },
@@ -881,7 +880,7 @@ class BiologicalImmuneErrorHandler:
 
                 # Log status periodically
                 if self.total_operations % 100 == 0:
-                    status = self.get_immune_status()
+                    status = self.get_enhanced_immune_status()
                     logger.info(f"🧬 Immune status: Zone={status['system_health']['current_zone']}, "
                               f"Health={status['system_health']['mitochondrial_health']:.2f}")
 
@@ -953,7 +952,7 @@ def get_global_immune_handler() -> BiologicalImmuneErrorHandler:
 
 
 if __name__ == "__main__":
-    print("🧬 Biological Immune Error Handler Demo")
+    print("🧬 Enhanced Biological Immune Error Handler Demo")
 
     # Initialize immune system
     immune_handler = BiologicalImmuneErrorHandler()
@@ -984,7 +983,7 @@ if __name__ == "__main__":
 
     # Test immune status
     print("\n3. Immune system status:")
-    status = immune_handler.get_immune_status()
+    status = immune_handler.get_enhanced_immune_status()
     for category, metrics in status.items():
         print(f"   {category}:")
         if isinstance(metrics, dict):
@@ -993,4 +992,4 @@ if __name__ == "__main__":
         else:
             print(f"     {metrics}")
 
-    print("\n🧬 Biological Immune Error Handler Demo Complete")
+    print("\n🧬 Enhanced Biological Immune Error Handler Demo Complete")
