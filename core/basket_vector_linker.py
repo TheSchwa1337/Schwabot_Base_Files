@@ -8,8 +8,9 @@ to emit routing behavior based on observed tick states.
 
 import numpy as np
 from typing import Dict, Any, List, Tuple, Optional
-import hashlib # For hash pattern matching if needed
-from scipy.spatial.distance import cosine # For cosine similarity
+import hashlib  # For hash pattern matching if needed
+from scipy.spatial.distance import cosine  # For cosine similarity
+
 
 class BasketVectorLinker:
     """
@@ -35,15 +36,19 @@ class BasketVectorLinker:
             "last_resolution_time": None
         }
 
-    def register_strategy_vector(self, strategy_id: str, vector_signature: List[float]):
+    def register_strategy_vector(
+            self,
+            strategy_id: str,
+            vector_signature: List[float]):
         """
         Registers or updates a strategy's vector signature.
         """
         self.strategy_vectors[strategy_id] = np.array(vector_signature)
 
-    def resolve_strategy_basket(self, 
+    def resolve_strategy_basket(self,
                                 lattice_hash_vector: List[float],
-                                similarity_threshold: float = 0.8) -> Optional[Tuple[str, float]]:
+                                similarity_threshold: float = 0.8) -> Optional[Tuple[str,
+                                                                                     float]]:
         """
         Resolves the best-matching strategy basket for a given lattice hash vector.
 
@@ -64,20 +69,23 @@ class BasketVectorLinker:
 
         for strategy_id, strategy_vec in self.strategy_vectors.items():
             if len(input_vector) != len(strategy_vec):
-                print(f"Warning: Vector length mismatch for {strategy_id}. Skipping similarity check.")
+                print(
+                    f"Warning: Vector length mismatch for {strategy_id}. Skipping similarity check.")
                 continue
-            
+
             # Calculate cosine similarity
             # Ensure non-zero vectors to avoid NaN
-            if np.linalg.norm(input_vector) == 0 or np.linalg.norm(strategy_vec) == 0:
+            if np.linalg.norm(input_vector) == 0 or np.linalg.norm(
+                    strategy_vec) == 0:
                 similarity = 0.0
             else:
-                similarity = 1 - cosine(input_vector, strategy_vec) # cosine returns distance, 1-distance is similarity
-            
+                # cosine returns distance, 1-distance is similarity
+                similarity = 1 - cosine(input_vector, strategy_vec)
+
             if similarity > highest_similarity and similarity >= similarity_threshold:
                 highest_similarity = similarity
                 best_match_id = strategy_id
-        
+
         if best_match_id:
             self.metrics["successful_matches"] += 1
             return best_match_id, highest_similarity
@@ -102,6 +110,7 @@ class BasketVectorLinker:
             "no_match_found": 0,
             "last_resolution_time": None
         }
+
 
 if __name__ == "__main__":
     print("--- Basket Vector Linker Demo ---")
@@ -131,14 +140,17 @@ if __name__ == "__main__":
     print(f"  Best match: {match2}")
 
     # Test Case 3: Vector with no strong match (low similarity_threshold)
-    test_vector_3 = [0.9, 0.9, 0.9, 0.9, 0.9] # Very different
-    match3 = linker.resolve_strategy_basket(test_vector_3, similarity_threshold=0.9)
+    test_vector_3 = [0.9, 0.9, 0.9, 0.9, 0.9]  # Very different
+    match3 = linker.resolve_strategy_basket(
+        test_vector_3, similarity_threshold=0.9)
     print(f"Test Vector 3: {test_vector_3}")
     print(f"  Best match (threshold 0.9): {match3}")
 
     # Test Case 4: Register new strategy and test
     print("\n--- Registering New Strategy ---")
-    linker.register_strategy_vector("NewStrategy_Arbitrage", [0.95, 0.01, 0.02, 0.01, 0.01])
+    linker.register_strategy_vector(
+        "NewStrategy_Arbitrage", [
+            0.95, 0.01, 0.02, 0.01, 0.01])
     test_vector_4 = [0.9, 0.0, 0.0, 0.0, 0.0]
     match4 = linker.resolve_strategy_basket(test_vector_4)
     print(f"Test Vector 4: {test_vector_4}")
@@ -152,4 +164,4 @@ if __name__ == "__main__":
     print("\n--- Resetting the Linker ---")
     linker.reset()
     print(f"Metrics after reset: {linker.get_metrics()}")
-    print(f"Strategies after reset: {linker.strategy_vectors}") 
+    print(f"Strategies after reset: {linker.strategy_vectors}")

@@ -70,7 +70,8 @@ class PortfolioTracker:
         """Deposit cash into the portfolio."""
         amount_dec = Decimal(str(amount))
         if amount_dec <= 0:
-            logger.warning(f"Attempted to deposit non-positive amount: {amount_dec}")
+            logger.warning(
+                f"Attempted to deposit non-positive amount: {amount_dec}")
             return
         self.cash += amount_dec
         self.portfolio_stats["total_deposits"] += amount_dec
@@ -81,7 +82,9 @@ class PortfolioTracker:
         """Withdraw cash from the portfolio."""
         amount_dec = Decimal(str(amount))
         if amount_dec <= 0 or amount_dec > self.cash:
-            logger.warning(f"Attempted to withdraw invalid amount {amount_dec:.2f} or insufficient cash.")
+            logger.warning(
+                f"Attempted to withdraw invalid amount {
+                    amount_dec:.2f} or insufficient cash.")
             return
         self.cash -= amount_dec
         self.portfolio_stats["total_withdrawals"] += amount_dec
@@ -116,25 +119,40 @@ class PortfolioTracker:
 
         if direction == "buy":
             if self.cash < (trade_value + fees_dec):
-                logger.error(f"Insufficient cash to buy {qty_dec} of {asset}. Required: {trade_value + fees_dec:.2f}, Available: {self.cash:.2f}")
+                logger.error(
+                    f"Insufficient cash to buy {qty_dec} of {asset}. Required: {
+                        trade_value +
+                        fees_dec:.2f}, Available: {
+                        self.cash:.2f}")
                 return
             self.cash -= (trade_value + fees_dec)
 
             if asset in self.positions:
                 pos = self.positions[asset]
                 new_total_qty = pos.quantity + qty_dec
-                new_avg_price = ((pos.quantity * pos.avg_price) + trade_value) / new_total_qty
+                new_avg_price = (
+                    (pos.quantity * pos.avg_price) + trade_value) / new_total_qty
                 pos.quantity = new_total_qty
                 pos.avg_price = new_avg_price
                 pos.current_price = price_dec
                 pos.last_update = time.time()
             else:
-                self.positions[asset] = Position(asset, qty_dec, price_dec, price_dec)
-            logger.info(f"Bought {qty_dec:.4f} {asset} @ {price_dec:.2f}. New cash: {self.cash:.2f}")
+                self.positions[asset] = Position(
+                    asset, qty_dec, price_dec, price_dec)
+            logger.info(
+                f"Bought {qty_dec:.4f} {asset} @ {price_dec:.2f}. New cash: {self.cash:.2f}")
 
         elif direction == "sell":
             if asset not in self.positions or self.positions[asset].quantity < qty_dec:
-                logger.error(f"Insufficient {asset} to sell {qty_dec}. Available: {self.positions.get(asset, Position(asset, Decimal("0"), Decimal("0"), Decimal("0"))).quantity}")
+                logger.error(
+                    f"Insufficient {asset} to sell {qty_dec}. Available: {
+                        self.positions.get(
+                            asset,
+                            Position(
+                                asset,
+                                Decimal("0"),
+                                Decimal("0"),
+                                Decimal("0"))).quantity}")
                 return
             pos = self.positions[asset]
             pnl = (price_dec - pos.avg_price) * qty_dec
@@ -146,7 +164,12 @@ class PortfolioTracker:
 
             if pos.quantity == 0:
                 del self.positions[asset]
-            logger.info(f"Sold {qty_dec:.4f} {asset} @ {price_dec:.2f}. Realized PnL: {pnl:.2f}. New cash: {self.cash:.2f}")
+            logger.info(
+                f"Sold {
+                    qty_dec:.4f} {asset} @ {
+                    price_dec:.2f}. Realized PnL: {
+                    pnl:.2f}. New cash: {
+                    self.cash:.2f}")
 
         self.transaction_history.append({
             "timestamp": time.time(),
@@ -199,7 +222,8 @@ class PortfolioTracker:
             "last_update_time": time.time(),
         }
 
-    def get_transaction_history(self, limit: int = 100) -> List[Dict[str, Any]]:
+    def get_transaction_history(
+            self, limit: int = 100) -> List[Dict[str, Any]]:
         """Retrieve a portion of the transaction history."""
         return list(self.transaction_history)[-limit:]
 
@@ -213,7 +237,8 @@ class PortfolioTracker:
         stats["current_total_pnl"] = summary["total_pnl"]
         return stats
 
-    def reset_portfolio(self, initial_cash: Union[float, str, Decimal] = "100000.0") -> None:
+    def reset_portfolio(
+            self, initial_cash: Union[float, str, Decimal] = "100000.0") -> None:
         """Reset the portfolio to an initial state."""
         self.cash = Decimal(str(initial_cash))
         self.positions = {}
@@ -231,7 +256,9 @@ class PortfolioTracker:
 
 def main():
     """Demonstrate PortfolioTracker functionality."""
-    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     tracker = PortfolioTracker(initial_cash=10000.0)
 
     print("\n--- Portfolio Tracker Demo ---")
@@ -288,4 +315,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main() 
+    main()

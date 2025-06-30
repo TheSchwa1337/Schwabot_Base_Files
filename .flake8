@@ -1,6 +1,6 @@
 [flake8]
-# Flake8 Configuration for Advanced Trading System
-# ================================================
+# Flake8 Configuration for Schwabot Biological Immune System
+# ==========================================================
 
 # Maximum line length
 max-line-length = 120
@@ -15,7 +15,7 @@ ignore =
     W503,  # line break before binary operator
     W504,  # line break after binary operator
     
-    # Import organization (handled by isort)
+    # Import organization (handled by isort/flake8-import-order)
     E402,  # module level import not at top of file
     F401,  # imported but unused
     
@@ -90,6 +90,11 @@ ignore =
     # Import issues (relaxed for mathematical imports)
     F403,  # 'from module import *' used; unable to detect undefined names
     F405,  # name may be undefined, or defined from star imports: module
+    
+    # Import order issues (handled by flake8-import-order)
+    I100,  # Import statements are in the wrong order
+    I101,  # Imported names are in the wrong order
+    I201,  # Missing newline between import groups
 
 # Exclude directories and files
 exclude = 
@@ -112,7 +117,8 @@ exclude =
     docs/_build,
     tests/__pycache__,
     core/__pycache__,
-    utils/__pycache__
+    utils/__pycache__,
+    server/__pycache__
 
 # Per-file-ignores
 per-file-ignores = 

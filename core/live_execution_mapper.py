@@ -50,6 +50,7 @@ except ImportError as e:
 
 logger = logging.getLogger(__name__)
 
+
 @dataclass
 class ExecutionState:
     """Represents the current state of a trade execution request."""
@@ -57,7 +58,8 @@ class ExecutionState:
     glyph: str
     asset: str
     initial_signal: TradeSignal
-    status: str = "pending" # pending, signal_processed, risk_checked, sized, ordered, executed, failed, canceled
+    # pending, signal_processed, risk_checked, sized, ordered, executed, failed, canceled
+    status: str = "pending"
     timestamp: float = field(default_factory=time.time)
     risk_assessment: Optional[Dict[str, Any]] = None
     position_sizing_details: Optional[Dict[str, Any]] = None
@@ -65,6 +67,7 @@ class ExecutionState:
     execution_details: Optional[Dict[str, Any]] = None
     error_message: Optional[str] = None
     metadata: Dict[str, Any] = field(default_factory=dict)
+
 
 class LiveExecutionMapper:
     """
@@ -90,10 +93,17 @@ class LiveExecutionMapper:
         self.enable_portfolio_tracker = enable_portfolio_tracker
 
         # Initialize core components
-        if not all([GlyphStrategyCore, EntryExitPortal, TradeExecutor, RiskManager, PortfolioTracker]):
-            logger.critical("One or more core trading components failed to import. LiveExecutionMapper may not function correctly.")
-            # Depending on desired behavior, could raise an exception or run in a very limited mode
-            raise ImportError("Critical trading components are missing. Please check your core package imports.")
+        if not all([GlyphStrategyCore,
+                    EntryExitPortal,
+                    TradeExecutor,
+                    RiskManager,
+                    PortfolioTracker]):
+            logger.critical(
+                "One or more core trading components failed to import. LiveExecutionMapper may not function correctly.")
+            # Depending on desired behavior, could raise an exception or run in
+            # a very limited mode
+            raise ImportError(
+                "Critical trading components are missing. Please check your core package imports.")
 
         self.glyph_core = GlyphStrategyCore()
         self.portal = EntryExitPortal(
@@ -103,7 +113,8 @@ class LiveExecutionMapper:
         )
         self.trade_executor = TradeExecutor(simulation_mode=simulation_mode)
         self.risk_manager = RiskManager() if enable_risk_manager else None
-        self.portfolio_tracker = PortfolioTracker(initial_cash=initial_portfolio_cash) if enable_portfolio_tracker else None
+        self.portfolio_tracker = PortfolioTracker(
+            initial_cash=initial_portfolio_cash) if enable_portfolio_tracker else None
 
         # State management
         self.execution_states: Dict[str, ExecutionState] = {}
@@ -115,20 +126,27 @@ class LiveExecutionMapper:
             "successful_executions": 0,
             "failed_executions": 0,
             "risk_rejected_executions": 0,
-            "rejected_by_signal_threshold": 0, # Added for clarity
-            "rejected_by_sizing": 0, # Added for clarity
+            "rejected_by_signal_threshold": 0,  # Added for clarity
+            "rejected_by_sizing": 0,  # Added for clarity
             "avg_execution_flow_time": 0.0
         }
 
-        logger.info(f"LiveExecutionMapper initialized in {'simulation' if self.simulation_mode else 'live'} mode.")
+        logger.info(
+            f"LiveExecutionMapper initialized in {
+                'simulation' if self.simulation_mode else 'live'} mode.")
 
     def _generate_trade_id(self) -> str:
         """Generates a unique trade ID."""
         self.trade_id_counter += 1
         return f"TRADE-{self.trade_id_counter}-{int(time.time() * 1000)}"
 
-    def execute_glyph_trade(self, glyph: str, volume: float, asset: str, price: float,
-                            confidence_boost: float = 0.0) -> ExecutionState:
+    def execute_glyph_trade(
+            self,
+            glyph: str,
+            volume: float,
+            asset: str,
+            price: float,
+            confidence_boost: float = 0.0) -> ExecutionState:
         """
         Executes a trade based on a glyph signal through the full pipeline.
 
@@ -150,11 +168,12 @@ class LiveExecutionMapper:
             trade_id=trade_id,
             glyph=glyph,
             asset=asset,
-            initial_signal=None # Will be populated if signal is generated
+            initial_signal=None  # Will be populated if signal is generated
         )
         self.execution_states[trade_id] = execution_state
 
-        logger.info(f"[{trade_id}] Initiating glyph trade for {glyph} on {asset} @ {price} with volume {volume}")
+        logger.info(
+            f"[{trade_id}] Initiating glyph trade for {glyph} on {asset} @ {price} with volume {volume}")
 
         try:
             # Step 1: Process Glyph Signal via EntryExitPortal
@@ -167,12 +186,14 @@ class LiveExecutionMapper:
             if not trade_signal:
                 execution_state.status = "rejected_by_signal_threshold"
                 execution_state.error_message = "Signal confidence too low or no signal generated."
-                self.stats["rejected_by_signal_threshold"] += 1 # Updated stat
-                logger.warning(f"[{trade_id}] Signal rejected: {execution_state.error_message}")
+                self.stats["rejected_by_signal_threshold"] += 1  # Updated stat
+                logger.warning(
+                    f"[{trade_id}] Signal rejected: {execution_state.error_message}")
                 return execution_state
 
             # Step 2: Risk Assessment and Position Sizing
-            portfolio_value = self.portfolio_tracker.get_portfolio_summary()["total_value"] if self.portfolio_tracker else 0.0
+            portfolio_value = self.portfolio_tracker.get_portfolio_summary(
+            )["total_value"] if self.portfolio_tracker else 0.0
             if portfolio_value <= 0:
                 execution_state.status = "failed"
                 execution_state.error_message = "Portfolio value is zero or negative. Cannot execute trades."
@@ -180,16 +201,19 @@ class LiveExecutionMapper:
                 logger.error(f"[{trade_id}] {execution_state.error_message}")
                 return execution_state
 
-            position_sizing = self.portal.calculate_position_size(trade_signal, portfolio_value)
-            execution_state.position_sizing_details = position_sizing.__dict__ # Convert dataclass to dict
+            position_sizing = self.portal.calculate_position_size(
+                trade_signal, portfolio_value)
+            # Convert dataclass to dict
+            execution_state.position_sizing_details = position_sizing.__dict__
             execution_state.status = "position_sized"
 
             size_to_execute = position_sizing.risk_adjusted_size
 
             if size_to_execute <= 0:
                 execution_state.status = "rejected_by_sizing"
-                execution_state.error_message = f"Calculated position size is zero ({size_to_execute:.4f}). Trade not executed."
-                self.stats["rejected_by_sizing"] += 1 # Updated stat
+                execution_state.error_message = f"Calculated position size is zero ({
+                    size_to_execute:.4f}). Trade not executed."
+                self.stats["rejected_by_sizing"] += 1  # Updated stat
                 logger.warning(f"[{trade_id}] {execution_state.error_message}")
                 return execution_state
 
@@ -205,7 +229,9 @@ class LiveExecutionMapper:
 
             if order_result.get("status") not in ["filled", "dry_run_success"]:
                 execution_state.status = "failed"
-                execution_state.error_message = f"Order placement failed: {order_result.get('error', 'Unknown error')}"
+                execution_state.error_message = f"Order placement failed: {
+                    order_result.get(
+                        'error', 'Unknown error')}"
                 self.stats["failed_executions"] += 1
                 logger.error(f"[{trade_id}] {execution_state.error_message}")
                 return execution_state
@@ -215,34 +241,42 @@ class LiveExecutionMapper:
                 self.portfolio_tracker.update_position(
                     asset,
                     trade_signal.direction.value,
-                    order_result.get("executed_quantity", size_to_execute), # Use actual executed quantity if available
-                    order_result.get("executed_price", price), # Use actual executed price if available
+                    # Use actual executed quantity if available
+                    order_result.get("executed_quantity", size_to_execute),
+                    # Use actual executed price if available
+                    order_result.get("executed_price", price),
                     order_result.get("fees", 0.0)
                 )
                 execution_state.status = "portfolio_updated"
-                logger.info(f"[{trade_id}] Portfolio updated for {asset}. Current cash: {self.portfolio_tracker.cash:.2f}")
+                logger.info(
+                    f"[{trade_id}] Portfolio updated for {asset}. Current cash: {self.portfolio_tracker.cash:.2f}")
 
             execution_state.status = "executed_successfully"
             execution_state.execution_details = order_result
             self.stats["successful_executions"] += 1
-            logger.info(f"[{trade_id}] Trade executed successfully for {glyph} ({asset} {trade_signal.direction.value} {size_to_execute:.4f} @ {price})")
+            logger.info(
+                f"[{trade_id}] Trade executed successfully for {glyph} ({asset} {trade_signal.direction.value} {size_to_execute:.4f} @ {price})")
 
         except Exception as e:
             execution_state.status = "failed"
-            execution_state.error_message = f"An unexpected error occurred during trade execution: {str(e)}"
+            execution_state.error_message = f"An unexpected error occurred during trade execution: {
+                str(e)}"
             self.stats["failed_executions"] += 1
-            logger.critical(f"[{trade_id}] CRITICAL ERROR: {execution_state.error_message}", exc_info=True)
+            logger.critical(
+                f"[{trade_id}] CRITICAL ERROR: {execution_state.error_message}", exc_info=True)
 
         finally:
             # Update average execution flow time
             execution_flow_time = time.time() - current_time
-            total_completed = self.stats["successful_executions"] + self.stats["failed_executions"] + self.stats["rejected_by_signal_threshold"] + self.stats["rejected_by_sizing"] + self.stats["failed_executions"]
+            total_completed = self.stats["successful_executions"] + self.stats["failed_executions"] + \
+                self.stats["rejected_by_signal_threshold"] + self.stats["rejected_by_sizing"] + self.stats["failed_executions"]
             if total_completed > 0:
                 self.stats["avg_execution_flow_time"] = (
-                    (self.stats["avg_execution_flow_time"] * (total_completed - 1) + execution_flow_time) / total_completed
-                )
+                    (self.stats["avg_execution_flow_time"] * (
+                        total_completed - 1) + execution_flow_time) / total_completed)
             execution_state.metadata["total_flow_time"] = execution_flow_time
-            logger.debug(f"[{trade_id}] Execution flow completed in {execution_flow_time:.4f} seconds with status: {execution_state.status}")
+            logger.debug(
+                f"[{trade_id}] Execution flow completed in {execution_flow_time:.4f} seconds with status: {execution_state.status}")
 
         return execution_state
 
@@ -288,14 +322,19 @@ class LiveExecutionMapper:
         }
         logger.info("LiveExecutionMapper and integrated components reset.")
 
+
 def main():
     """Demonstrate LiveExecutionMapper functionality."""
-    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
     print("\n--- Live Execution Mapper Demo (Simulation Mode) ---")
 
     # Initialize mapper in simulation mode
-    mapper = LiveExecutionMapper(simulation_mode=True, initial_portfolio_cash=100000.0)
+    mapper = LiveExecutionMapper(
+        simulation_mode=True,
+        initial_portfolio_cash=100000.0)
 
     # Scenario 1: Successful trade
     print("\nScenario 1: Successful Trade (Glyph 'brain')")
@@ -308,27 +347,33 @@ def main():
     )
     print(f"Trade ID: {state1.trade_id}, Final Status: {state1.status}")
     if state1.execution_details:
-        print(f"  Executed Size: {state1.execution_details.get('executed_quantity'):.4f}, "
-              f"Price: {state1.execution_details.get('executed_price'):.2f}")
+        print(
+            f"  Executed Size: {
+                state1.execution_details.get('executed_quantity'):.4f}, " f"Price: {
+                state1.execution_details.get('executed_price'):.2f}")
     print(f"  Error: {state1.error_message}")
     print(f"  Portfolio Cash: {mapper.portfolio_tracker.cash:.2f}")
 
-    # Scenario 2: Signal rejected due to low confidence (simulate by setting very low confidence boost)
+    # Scenario 2: Signal rejected due to low confidence (simulate by setting
+    # very low confidence boost)
     print("\nScenario 2: Signal Rejected (Glyph 'skull', low confidence)")
     state2 = mapper.execute_glyph_trade(
         glyph='skull',
         volume=1.0e6,
         asset="ETH/USD",
         price=3000.0,
-        confidence_boost=-0.5 # Force low confidence
+        confidence_boost=-0.5  # Force low confidence
     )
     print(f"Trade ID: {state2.trade_id}, Final Status: {state2.status}")
     print(f"  Error: {state2.error_message}")
-    print(f"  Portfolio Cash: {mapper.portfolio_tracker.cash:.2f}") # Should be unchanged
+    # Should be unchanged
+    print(f"  Portfolio Cash: {mapper.portfolio_tracker.cash:.2f}")
 
-    # Scenario 3: Trade rejected by position sizing (simulate by having 0 portfolio value)
+    # Scenario 3: Trade rejected by position sizing (simulate by having 0
+    # portfolio value)
     print("\nScenario 3: Trade Rejected by Sizing (Glyph 'fire', no funds)")
-    mapper_no_funds = LiveExecutionMapper(simulation_mode=True, initial_portfolio_cash=0.0)
+    mapper_no_funds = LiveExecutionMapper(
+        simulation_mode=True, initial_portfolio_cash=0.0)
     state3 = mapper_no_funds.execute_glyph_trade(
         glyph='fire',
         volume=4.0e6,
@@ -337,14 +382,23 @@ def main():
     )
     print(f"Trade ID: {state3.trade_id}, Final Status: {state3.status}")
     print(f"  Error: {state3.error_message}")
-    print(f"  Portfolio Cash (no funds): {mapper_no_funds.portfolio_tracker.cash:.2f}")
+    print(
+        f"  Portfolio Cash (no funds): {
+            mapper_no_funds.portfolio_tracker.cash:.2f}")
 
     # Scenario 4: Multiple trades and check performance stats
     print("\nScenario 4: Multiple Trades and Performance Stats")
-    mapper_multi = LiveExecutionMapper(simulation_mode=True, initial_portfolio_cash=50000.0)
+    mapper_multi = LiveExecutionMapper(
+        simulation_mode=True,
+        initial_portfolio_cash=50000.0)
     mapper_multi.execute_glyph_trade('hourglass', 2.0e6, 'ADA/USD', 0.5)
     mapper_multi.execute_glyph_trade('tornado', 5.0e6, 'SOL/USD', 150.0)
-    mapper_multi.execute_glyph_trade('lightning', 0.5e6, 'XRP/USD', 0.6, confidence_boost=0.01) # Low volume, may reject
+    mapper_multi.execute_glyph_trade(
+        'lightning',
+        0.5e6,
+        'XRP/USD',
+        0.6,
+        confidence_boost=0.01)  # Low volume, may reject
 
     print("\n--- Overall Performance Statistics ---")
     stats = mapper_multi.get_performance_stats()
@@ -357,18 +411,28 @@ def main():
                 else:
                     print(f"    {sub_key}: {sub_value}")
         else:
-            print(f"  {key}: {value:.2f}" if isinstance(value, float) else f"  {key}: {value}")
+            print(f"  {key}: {value:.2f}" if isinstance(
+                value, float) else f"  {key}: {value}")
 
     print("\n--- All Execution States ---")
     for trade_id, state in mapper_multi.get_all_execution_states().items():
-        print(f"  [{trade_id}] Glyph: {state.glyph}, Asset: {state.asset}, Status: {state.status}, Error: {state.error_message}")
+        print(
+            f"  [{trade_id}] Glyph: {
+                state.glyph}, Asset: {
+                state.asset}, Status: {
+                state.status}, Error: {
+                    state.error_message}")
 
     # Reset system
     print("\n--- Resetting the system ---")
     mapper.reset_system()
-    print(f"Initial portfolio cash after reset: {mapper.portfolio_tracker.cash:.2f}")
-    print(f"Total execution requests after reset: {mapper.get_performance_stats()['total_execution_requests']}")
+    print(
+        f"Initial portfolio cash after reset: {
+            mapper.portfolio_tracker.cash:.2f}")
+    print(
+        f"Total execution requests after reset: {
+            mapper.get_performance_stats()['total_execution_requests']}")
 
 
 if __name__ == "__main__":
-    main() 
+    main()

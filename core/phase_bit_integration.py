@@ -9,6 +9,7 @@ This module is crucial for dynamic bitwise strategy adjustment.
 from enum import Enum
 from typing import Any, Dict, NamedTuple, Optional
 
+
 class BitPhase(Enum):
     """Defines different bit phases for operations."""
     FOUR_BIT = "4-bit"
@@ -16,7 +17,8 @@ class BitPhase(Enum):
     SIXTEEN_BIT = "16-bit"
     THIRTY_TWO_BIT = "32-bit"
     SIXTY_FOUR_BIT = "64-bit"
-    AUTO = "auto" # For automatic determination
+    AUTO = "auto"  # For automatic determination
+
 
 class StrategyType(Enum):
     """Defines different types of strategies."""
@@ -25,6 +27,7 @@ class StrategyType(Enum):
     LATTICE_STRATEGY = "lattice_strategy"
     DYNAMIC_STRATEGY = "dynamic_strategy"
 
+
 class PhaseBitResolution(NamedTuple):
     """Result of a bit phase resolution."""
     bit_phase: BitPhase
@@ -32,15 +35,17 @@ class PhaseBitResolution(NamedTuple):
     confidence: float
     reason: str = "Determined automatically"
 
+
 class PhaseBitIntegration:
     """
     Handles the dynamic resolution of bit phases and strategy types
     based on input context, ensuring optimal computational efficiency
     and strategic alignment.
     """
+
     def __init__(self):
         """Initialize PhaseBitIntegration."""
-        pass # Add more complex initialization if needed later
+        pass  # Add more complex initialization if needed later
 
     def resolve_bit_phase(self,
                           context_hash: str,
@@ -64,7 +69,7 @@ class PhaseBitIntegration:
 
         # For now, a simple heuristic based on hash length or predefined rules.
         if resolution_mode == "auto":
-            if len(context_hash) > 50: # Example heuristic
+            if len(context_hash) > 50:  # Example heuristic
                 bit_phase = BitPhase.SIXTY_FOUR_BIT
                 strategy_type = StrategyType.DYNAMIC_STRATEGY
                 confidence = 0.95
@@ -81,18 +86,19 @@ class PhaseBitIntegration:
                 bit_phase = BitPhase(resolution_mode)
                 # Default strategy type if mode is specified
                 strategy_type = StrategyType.GLYPH_STRATEGY
-                confidence = 1.0 # High confidence if explicitly set
+                confidence = 1.0  # High confidence if explicitly set
             except ValueError:
                 # Fallback if an invalid resolution_mode is provided
                 bit_phase = BitPhase.EIGHT_BIT
                 strategy_type = StrategyType.GLYPH_STRATEGY
                 confidence = 0.5
-                
+
         return PhaseBitResolution(
             bit_phase=bit_phase,
             strategy_type=strategy_type,
             confidence=confidence
         )
+
 
 if __name__ == "__main__":
     print("--- Phase Bit Integration Module Demo ---")
@@ -102,14 +108,32 @@ if __name__ == "__main__":
     # Example 1: Auto resolution with a long hash
     hash1 = "bbbf7a6412d6d3e8244ac1fda5e35a20037acee661288cb95b7b18cf469980aa"
     res1 = integrator.resolve_bit_phase(hash1, "auto")
-    print(f"Hash: {hash1[:10]}..., Resolution: {res1.bit_phase.value}, Strategy: {res1.strategy_type.value}, Confidence: {res1.confidence:.2f}")
+    print(
+        f"Hash: {
+            hash1[
+                :10]}..., Resolution: {
+            res1.bit_phase.value}, Strategy: {
+                    res1.strategy_type.value}, Confidence: {
+                        res1.confidence:.2f}")
 
     # Example 2: Auto resolution with a shorter hash
     hash2 = "44c8ae7917a19140"
     res2 = integrator.resolve_bit_phase(hash2, "auto")
-    print(f"Hash: {hash2[:10]}..., Resolution: {res2.bit_phase.value}, Strategy: {res2.strategy_type.value}, Confidence: {res2.confidence:.2f}")
+    print(
+        f"Hash: {
+            hash2[
+                :10]}..., Resolution: {
+            res2.bit_phase.value}, Strategy: {
+                    res2.strategy_type.value}, Confidence: {
+                        res2.confidence:.2f}")
 
     # Example 3: Explicit 16-bit resolution
     hash3 = "abcdef1234567890"
     res3 = integrator.resolve_bit_phase(hash3, "16-bit")
-    print(f"Hash: {hash3[:10]}..., Resolution: {res3.bit_phase.value}, Strategy: {res3.strategy_type.value}, Confidence: {res3.confidence:.2f}") 
+    print(
+        f"Hash: {
+            hash3[
+                :10]}..., Resolution: {
+            res3.bit_phase.value}, Strategy: {
+                    res3.strategy_type.value}, Confidence: {
+                        res3.confidence:.2f}")

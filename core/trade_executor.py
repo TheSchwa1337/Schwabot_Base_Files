@@ -60,7 +60,9 @@ class TradeExecutor:
             "live_trades": 0,
         }
 
-        logger.info(f"TradeExecutor initialized in {'simulation' if simulation_mode else 'live'} mode.")
+        logger.info(
+            f"TradeExecutor initialized in {
+                'simulation' if simulation_mode else 'live'} mode.")
 
     def place_order(
         self,
@@ -101,7 +103,8 @@ class TradeExecutor:
         try:
             if self.simulation_mode:
                 # Simulate order execution
-                executed_price = price * (1 + (random.random() - 0.5) * 0.001)  # Small price fluctuation
+                # Small price fluctuation
+                executed_price = price * (1 + (random.random() - 0.5) * 0.001)
                 executed_quantity = quantity
                 fees = executed_quantity * executed_price * 0.00075  # Simulate 0.075% fee
                 new_order.status = "filled"
@@ -109,10 +112,14 @@ class TradeExecutor:
                 new_order.executed_quantity = executed_quantity
                 new_order.fees = fees
                 self.execution_stats["simulation_trades"] += 1
-                logger.info(f"Simulated order {order_id} filled: {direction} {executed_quantity:.4f} {asset} @ {executed_price:.2f}")
+                logger.info(
+                    f"Simulated order {order_id} filled: {direction} {
+                        executed_quantity:.4f} {asset} @ {
+                        executed_price:.2f}")
             else:
                 # Placeholder for live exchange API call
-                logger.info(f"Placing live order: {direction} {quantity} {asset} @ {price}")
+                logger.info(
+                    f"Placing live order: {direction} {quantity} {asset} @ {price}")
                 # In a real system, this would interact with an actual exchange API
                 # For now, simulate a successful live trade after a delay
                 time.sleep(0.05)  # Simulate network latency
@@ -121,11 +128,13 @@ class TradeExecutor:
                 new_order.executed_quantity = quantity
                 new_order.fees = quantity * price * 0.0005  # Simulate 0.05% live fee
                 self.execution_stats["live_trades"] += 1
-                logger.info(f"Live order {order_id} filled: {direction} {quantity} {asset} @ {price}")
+                logger.info(
+                    f"Live order {order_id} filled: {direction} {quantity} {asset} @ {price}")
 
             new_order.metadata["execution_time"] = time.time() - start_time
             self.execution_stats["executed_orders"] += 1
-            self._update_avg_execution_time(new_order.metadata["execution_time"])
+            self._update_avg_execution_time(
+                new_order.metadata["execution_time"])
             return self.get_order_status(order_id)
 
         except Exception as e:
@@ -149,8 +158,13 @@ class TradeExecutor:
             logger.info(f"Order {order_id} canceled.")
             return {"status": "canceled", "order_id": order_id}
         elif order:
-            logger.warning(f"Cannot cancel order {order_id} (status: {order.status}).")
-            return {"status": "failed", "message": f"Cannot cancel order in {order.status} state"}
+            logger.warning(
+                f"Cannot cancel order {order_id} (status: {
+                    order.status}).")
+            return {
+                "status": "failed",
+                "message": f"Cannot cancel order in {
+                    order.status} state"}
         else:
             logger.warning(f"Order {order_id} not found.")
             return {"status": "failed", "message": "Order not found"}
@@ -166,7 +180,8 @@ class TradeExecutor:
         """
         order = self.orders.get(order_id)
         if order:
-            return {**order.__dict__, "timestamp": order.timestamp}  # Convert dataclass to dict
+            # Convert dataclass to dict
+            return {**order.__dict__, "timestamp": order.timestamp}
         else:
             return {"status": "not_found", "order_id": order_id}
 
@@ -193,7 +208,9 @@ class TradeExecutor:
 
 def main():
     """Demonstrate TradeExecutor functionality."""
-    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     executor = TradeExecutor(simulation_mode=True)
 
     print("\n--- Trade Executor Demo (Simulation Mode) ---")
@@ -211,16 +228,24 @@ def main():
     print(f"Cancel Failed Result: {cancel_failed_result}")
 
     # Simulate a pending order and then cancel it
-    executor_for_cancel = TradeExecutor(simulation_mode=True)  # New executor to ensure pending order
+    # New executor to ensure pending order
+    executor_for_cancel = TradeExecutor(simulation_mode=True)
     pending_order_id = f"PENDING-{int(time.time() * 1000)}"
     executor_for_cancel.orders[pending_order_id] = Order(
-        order_id=pending_order_id, asset="XRP/USD", direction="buy", quantity=100, price=0.5,
-        status="pending"
-    )
-    print(f"\nCreated pending order: {executor_for_cancel.get_order_status(pending_order_id)}")
+        order_id=pending_order_id,
+        asset="XRP/USD",
+        direction="buy",
+        quantity=100,
+        price=0.5,
+        status="pending")
+    print(
+        f"\nCreated pending order: {
+            executor_for_cancel.get_order_status(pending_order_id)}")
     cancel_success_result = executor_for_cancel.cancel_order(pending_order_id)
     print(f"Cancel Success Result: {cancel_success_result}")
-    print(f"Status after cancel: {executor_for_cancel.get_order_status(pending_order_id)}")
+    print(
+        f"Status after cancel: {
+            executor_for_cancel.get_order_status(pending_order_id)}")
 
     print("\n--- Performance Statistics ---")
     stats = executor.get_performance_stats()
@@ -233,4 +258,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main() 
+    main()

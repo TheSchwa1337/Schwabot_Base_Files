@@ -77,7 +77,8 @@ class StrategyBitMapper:
             "avg_processing_time": 0.0,
         }
         # Strategy history for self-similarity detection
-        self.strategy_history: deque[Dict[str, Union[int, float, str]]] = deque(maxlen=1000)
+        self.strategy_history: deque[Dict[str, Union[int, float, str]]] = deque(
+            maxlen=1000)
         self.max_history_size = 1000
 
         logger.info(
@@ -122,27 +123,34 @@ class StrategyBitMapper:
             if not (0 <= base_bits <= 15):
                 raise ValueError(f"base_bits must be 0-15, got {base_bits}")
             if target_depth not in [8, 16]:
-                raise ValueError(f"target_depth must be 8 or 16, got {target_depth}")
+                raise ValueError(
+                    f"target_depth must be 8 or 16, got {target_depth}")
 
             # Determine expansion mode
             if mode == "ferris" and ferris_phase is not None:
-                expanded_strategies = self._ferris_expansion(base_bits, target_depth, ferris_phase)
+                expanded_strategies = self._ferris_expansion(
+                    base_bits, target_depth, ferris_phase)
             elif mode == "flip":
-                expanded_strategies = self._flip_expansion(base_bits, target_depth)
+                expanded_strategies = self._flip_expansion(
+                    base_bits, target_depth)
             elif mode == "mirror":
-                expanded_strategies = self._mirror_expansion(base_bits, target_depth)
+                expanded_strategies = self._mirror_expansion(
+                    base_bits, target_depth)
             elif mode == "random":
-                expanded_strategies = self._random_expansion(base_bits, target_depth)
+                expanded_strategies = self._random_expansion(
+                    base_bits, target_depth)
             else:
                 # Default to flip mode
-                expanded_strategies = self._flip_expansion(base_bits, target_depth)
+                expanded_strategies = self._flip_expansion(
+                    base_bits, target_depth)
 
             # Update statistics
             processing_time = time.time() - start_time
             self._update_stats(mode, processing_time)
 
             # Store in history for self-similarity detection
-            self._store_strategy_history(base_bits, expanded_strategies, mode, ferris_phase)
+            self._store_strategy_history(
+                base_bits, expanded_strategies, mode, ferris_phase)
 
             logger.debug(
                 f"Strategy expanded: {base_bits} -> {len(expanded_strategies)} strategies "
@@ -180,7 +188,10 @@ class StrategyBitMapper:
         self.mapping_stats["flip_mappings"] += 1
         return strategies
 
-    def _mirror_expansion(self, base_bits: int, target_depth: int) -> List[int]:
+    def _mirror_expansion(
+            self,
+            base_bits: int,
+            target_depth: int) -> List[int]:
         """Mirror function expansion."""
         strategies = []
         num_strategies = target_depth // 4
@@ -197,7 +208,10 @@ class StrategyBitMapper:
         self.mapping_stats["mirror_mappings"] += 1
         return strategies
 
-    def _random_expansion(self, base_bits: int, target_depth: int) -> List[int]:
+    def _random_expansion(
+            self,
+            base_bits: int,
+            target_depth: int) -> List[int]:
         """Random expansion from strategy pool."""
         strategies = [base_bits]  # Always include base strategy
 
@@ -209,7 +223,11 @@ class StrategyBitMapper:
         self.mapping_stats["random_mappings"] += 1
         return strategies
 
-    def _ferris_expansion(self, base_bits: int, target_depth: int, ferris_phase: float) -> List[int]:
+    def _ferris_expansion(
+            self,
+            base_bits: int,
+            target_depth: int,
+            ferris_phase: float) -> List[int]:
         """Ferris wheel phase-dependent expansion."""
         strategies = []
         num_strategies = target_depth // 4
@@ -248,14 +266,18 @@ class StrategyBitMapper:
             Dictionary with similarity detection results
         """
         if not self.enable_self_similarity or not self.strategy_history:
-            return {"is_similar": False, "similarity_score": 0.0, "matching_patterns": []}
+            return {
+                "is_similar": False,
+                "similarity_score": 0.0,
+                "matching_patterns": []}
 
         max_similarity_score = 0.0
         matching_patterns = []
 
         for historical_record in self.strategy_history:
             historical_strategies = historical_record["expanded_strategies"]
-            similarity_score = self._calculate_pattern_similarity(current_strategies, historical_strategies)
+            similarity_score = self._calculate_pattern_similarity(
+                current_strategies, historical_strategies)
 
             if similarity_score > max_similarity_score:
                 max_similarity_score = similarity_score
@@ -266,7 +288,8 @@ class StrategyBitMapper:
 
         is_similar = max_similarity_score >= similarity_threshold
 
-        logger.debug(f"Self-similarity detection: {is_similar} (score: {max_similarity_score:.3f})")
+        logger.debug(
+            f"Self-similarity detection: {is_similar} (score: {max_similarity_score:.3f})")
 
         return {
             "is_similar": is_similar,
@@ -274,7 +297,10 @@ class StrategyBitMapper:
             "matching_patterns": matching_patterns,
         }
 
-    def _calculate_pattern_similarity(self, pattern1: List[int], pattern2: List[int]) -> float:
+    def _calculate_pattern_similarity(
+            self,
+            pattern1: List[int],
+            pattern2: List[int]) -> float:
         """Calculate similarity between two strategy patterns (simple intersection)."""
         set1 = set(pattern1)
         set2 = set(pattern2)
@@ -283,8 +309,11 @@ class StrategyBitMapper:
         return intersection / union if union > 0 else 0.0
 
     def _store_strategy_history(
-        self, base_bits: int, expanded_strategies: List[int], mode: str, ferris_phase: Optional[float]
-    ) -> None:
+            self,
+            base_bits: int,
+            expanded_strategies: List[int],
+            mode: str,
+            ferris_phase: Optional[float]) -> None:
         """Store the expanded strategy in history for self-similarity detection."""
         record = {
             "timestamp": time.time(),
@@ -304,13 +333,18 @@ class StrategyBitMapper:
                  processing_time) / self.mapping_stats["total_mappings"]
             )
 
-    def get_strategy_metrics(self, strategies: List[int]) -> Dict[str, Union[int, float]]:
+    def get_strategy_metrics(
+            self, strategies: List[int]) -> Dict[str, Union[int, float]]:
         """Analyze and return metrics for a given set of strategies."""
         num_strategies = len(strategies)
         unique_strategies = len(set(strategies))
-        entropy = -sum(p * math.log2(p) for p in [strategies.count(x) / num_strategies for x in set(strategies)])
+        entropy = -sum(p * math.log2(p)
+                       for p in [strategies.count(x) / num_strategies for x in set(strategies)])
 
-        return {"num_strategies": num_strategies, "unique_strategies": unique_strategies, "entropy": entropy}
+        return {
+            "num_strategies": num_strategies,
+            "unique_strategies": unique_strategies,
+            "entropy": entropy}
 
     def get_performance_stats(self) -> Dict[str, Any]:
         """Return the performance statistics."""
@@ -325,47 +359,58 @@ def expand_strategy_bits(
     This is a standalone function for external use, mirroring the internal logic.
     """
     mapper = StrategyBitMapper()
-    return mapper.expand_strategy_bits(base_bits, target_depth=8, mode=mode)  # Default to 8-bit
+    return mapper.expand_strategy_bits(
+        base_bits, target_depth=8, mode=mode)  # Default to 8-bit
 
 
 def main():
     """Demonstrate StrategyBitMapper functionality."""
-    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
-    mapper = StrategyBitMapper(enable_randomization=True, enable_mirror_functions=True)
+    mapper = StrategyBitMapper(
+        enable_randomization=True,
+        enable_mirror_functions=True)
     print("\n--- Strategy Bit Mapper Demo ---")
 
     test_base_bits = 0b1011  # Example 4-bit strategy (11 in decimal)
     print(f"Test Base 4-bit Strategy: {test_base_bits}")
 
     # Test flip expansion
-    flipped_8_bit = mapper.expand_strategy_bits(test_base_bits, target_depth=8, mode="flip")
+    flipped_8_bit = mapper.expand_strategy_bits(
+        test_base_bits, target_depth=8, mode="flip")
     print(f"\nFlipped 8-bit expansion: {flipped_8_bit}")
     print(f"  Metrics: {mapper.get_strategy_metrics(flipped_8_bit)}")
 
-    flipped_16_bit = mapper.expand_strategy_bits(test_base_bits, target_depth=16, mode="flip")
+    flipped_16_bit = mapper.expand_strategy_bits(
+        test_base_bits, target_depth=16, mode="flip")
     print(f"Flipped 16-bit expansion: {flipped_16_bit}")
     print(f"  Metrics: {mapper.get_strategy_metrics(flipped_16_bit)}")
 
     # Test mirror expansion
-    mirrored_8_bit = mapper.expand_strategy_bits(test_base_bits, target_depth=8, mode="mirror")
+    mirrored_8_bit = mapper.expand_strategy_bits(
+        test_base_bits, target_depth=8, mode="mirror")
     print(f"\nMirrored 8-bit expansion: {mirrored_8_bit}")
     print(f"  Metrics: {mapper.get_strategy_metrics(mirrored_8_bit)}")
 
     # Test random expansion
-    random_16_bit = mapper.expand_strategy_bits(test_base_bits, target_depth=16, mode="random")
+    random_16_bit = mapper.expand_strategy_bits(
+        test_base_bits, target_depth=16, mode="random")
     print(f"\nRandom 16-bit expansion: {random_16_bit}")
     print(f"  Metrics: {mapper.get_strategy_metrics(random_16_bit)}")
 
     # Test self-similarity detection
     print("\n--- Self-Similarity Detection ---")
-    similar_pattern = mapper.expand_strategy_bits(test_base_bits, target_depth=8, mode="flip")
+    similar_pattern = mapper.expand_strategy_bits(
+        test_base_bits, target_depth=8, mode="flip")
     detection_result = mapper.detect_self_similarity(similar_pattern)
     print(f"  Detection for similar pattern: {detection_result}")
 
     # Introduce a unique pattern to see no similarity
     unique_pattern = [random.randint(0, 15) for _ in range(8)]
-    detection_result_unique = mapper.detect_self_similarity(unique_pattern, similarity_threshold=0.99) # High threshold
+    detection_result_unique = mapper.detect_self_similarity(
+        unique_pattern, similarity_threshold=0.99)  # High threshold
     print(f"  Detection for unique pattern: {detection_result_unique}")
 
     print("\n--- Performance Statistics ---")
@@ -375,4 +420,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main() 
+    main()

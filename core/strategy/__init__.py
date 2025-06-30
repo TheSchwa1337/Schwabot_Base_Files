@@ -1,4 +1,4 @@
-# This is a package initializer file for the 'core/strategy' directory. 
+# This is a package initializer file for the 'core/strategy' directory.
 
 from .glyph_strategy_core import GlyphStrategyCore
 from .entry_exit_portal import EntryExitPortal
@@ -8,6 +8,7 @@ from .zygot_zalgo_entropy_dual_key_gate import ZygotZalgoEntropyDualKeyGate
 from .volume_weighted_hash_oscillator import VolumeWeightedHashOscillator
 from .multi_phase_strategy_weight_tensor import MultiPhaseStrategyWeightTensor, MarketPhase
 from .glyph_gate_engine import GlyphGateEngine
+
 
 def create_glyph_trading_system(
     simulation_mode: bool = True,
@@ -26,4 +27,4 @@ def create_glyph_trading_system(
         enable_risk_management=enable_risk_management,
         enable_portfolio_tracking=enable_portfolio_tracking
     )
-    return glyph_core, portal 
+    return glyph_core, portal

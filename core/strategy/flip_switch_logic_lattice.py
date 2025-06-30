@@ -10,6 +10,7 @@ import numpy as np
 import time
 from typing import Callable, Dict, Any, List, Optional
 
+
 class FlipSwitchLogicLattice:
     """
     A logic lattice that enables high-speed, condition-based switching
@@ -23,7 +24,8 @@ class FlipSwitchLogicLattice:
         Args:
             default_strategy_id: The ID of the strategy to use if no switch condition is met.
         """
-        self.strategies: Dict[str, Callable[[Dict[str, Any]], Dict[str, Any]]] = {}
+        self.strategies: Dict[str, Callable[[
+            Dict[str, Any]], Dict[str, Any]]] = {}
         self.switch_conditions: List[Dict[str, Any]] = []
         self.default_strategy_id = default_strategy_id
         self.active_strategy_id: str = default_strategy_id
@@ -35,15 +37,22 @@ class FlipSwitchLogicLattice:
         }
 
         # Register a simple pass-through default strategy
-        self.register_strategy(self.default_strategy_id, self._default_pass_through_strategy)
+        self.register_strategy(
+            self.default_strategy_id,
+            self._default_pass_through_strategy)
 
-    def _default_pass_through_strategy(self, data: Dict[str, Any]) -> Dict[str, Any]:
+    def _default_pass_through_strategy(
+            self, data: Dict[str, Any]) -> Dict[str, Any]:
         """
         A default strategy that simply returns the input data, effectively doing nothing.
         """
-        return {"status": "passed_through", "data": data, "timestamp": time.time()}
+        return {
+            "status": "passed_through",
+            "data": data,
+            "timestamp": time.time()}
 
-    def register_strategy(self, strategy_id: str, strategy_func: Callable[[Dict[str, Any]], Dict[str, Any]]):
+    def register_strategy(self, strategy_id: str, strategy_func: Callable[[
+                          Dict[str, Any]], Dict[str, Any]]):
         """
         Registers a new strategy with the lattice.
 
@@ -53,11 +62,12 @@ class FlipSwitchLogicLattice:
                            It should accept a dict (input data) and return a dict (result).
         """
         if not callable(strategy_func):
-            raise ValueError(f"Strategy function for '{strategy_id}' must be callable.")
+            raise ValueError(
+                f"Strategy function for '{strategy_id}' must be callable.")
         self.strategies[strategy_id] = strategy_func
         self.metrics["strategy_activations"][strategy_id] = 0
 
-    def add_switch_condition(self, 
+    def add_switch_condition(self,
                              condition_func: Callable[[Dict[str, Any]], bool],
                              target_strategy_id: str,
                              priority: int = 0,
@@ -72,7 +82,8 @@ class FlipSwitchLogicLattice:
             description: Optional description of the condition.
         """
         if target_strategy_id not in self.strategies:
-            raise ValueError(f"Target strategy ID '{target_strategy_id}' is not registered.")
+            raise ValueError(
+                f"Target strategy ID '{target_strategy_id}' is not registered.")
         if not callable(condition_func):
             raise ValueError("Condition function must be callable.")
 
@@ -104,14 +115,18 @@ class FlipSwitchLogicLattice:
             try:
                 if condition["condition_func"](data):
                     next_strategy_id = condition["target_strategy_id"]
-                    break # Found a matching condition, use this strategy
+                    break  # Found a matching condition, use this strategy
             except Exception as e:
-                print(f"Error evaluating condition '{condition["description"]}': {e}")
+                print(
+                    f"Error evaluating condition '{
+                        condition["description"]}': {e}")
                 # Continue to next condition or fallback
-        
+
         # Switch if necessary
         if next_strategy_id != self.active_strategy_id:
-            print(f"Switching from {self.active_strategy_id} to {next_strategy_id}")
+            print(
+                f"Switching from {
+                    self.active_strategy_id} to {next_strategy_id}")
             self.metrics["total_switches"] += 1
             self.metrics["last_switch_time"] = time.time()
             self.active_strategy_id = next_strategy_id
@@ -122,9 +137,11 @@ class FlipSwitchLogicLattice:
         # Execute the active strategy
         strategy_func = self.strategies.get(self.active_strategy_id)
         if strategy_func is None:
-            print(f"Error: Active strategy '{self.active_strategy_id}' not found. Falling back to default.")
+            print(
+                f"Error: Active strategy '{
+                    self.active_strategy_id}' not found. Falling back to default.")
             strategy_func = self.strategies[self.default_strategy_id]
-            self.active_strategy_id = self.default_strategy_id # Reset to default
+            self.active_strategy_id = self.default_strategy_id  # Reset to default
             self.metrics["strategy_activations"][self.active_strategy_id] = \
                 self.metrics["strategy_activations"].get(self.active_strategy_id, 0) + 1
 
@@ -134,7 +151,10 @@ class FlipSwitchLogicLattice:
             return result
         except Exception as e:
             print(f"Error executing strategy '{self.active_strategy_id}': {e}")
-            return {"status": "error", "message": str(e), "executed_strategy": self.active_strategy_id}
+            return {
+                "status": "error",
+                "message": str(e),
+                "executed_strategy": self.active_strategy_id}
 
     def get_metrics(self) -> Dict[str, Any]:
         """
@@ -173,9 +193,27 @@ if __name__ == "__main__":
     lattice.register_strategy("strat_C", strategy_c)
 
     # Add switch conditions
-    lattice.add_switch_condition(lambda d: d.get('value', 0) > 100, "strat_A", priority=10, description="Value > 100")
-    lattice.add_switch_condition(lambda d: 50 <= d.get('value', 0) <= 100, "strat_B", priority=5, description="Value between 50 and 100")
-    lattice.add_switch_condition(lambda d: d.get('value', 0) < 50, "strat_C", priority=0, description="Value < 50")
+    lattice.add_switch_condition(
+        lambda d: d.get(
+            'value',
+            0) > 100,
+        "strat_A",
+        priority=10,
+        description="Value > 100")
+    lattice.add_switch_condition(
+        lambda d: 50 <= d.get(
+            'value',
+            0) <= 100,
+        "strat_B",
+        priority=5,
+        description="Value between 50 and 100")
+    lattice.add_switch_condition(
+        lambda d: d.get(
+            'value',
+            0) < 50,
+        "strat_C",
+        priority=0,
+        description="Value < 50")
 
     # Test cases
     print("\n--- Test Case 1: Value = 120 (should trigger strat_A) ---")
@@ -199,15 +237,16 @@ if __name__ == "__main__":
     print(f"Active Strategy: {lattice.get_active_strategy_id()}")
 
     print("\n--- Test Case 5: No condition met (should use default) ---")
-    # Remove all conditions to simulate no match, or create a value that doesn't match
-    initial_conditions = lattice.switch_conditions # Save for restoration if needed
-    lattice.switch_conditions = [] # Temporarily clear conditions
+    # Remove all conditions to simulate no match, or create a value that
+    # doesn't match
+    initial_conditions = lattice.switch_conditions  # Save for restoration if needed
+    lattice.switch_conditions = []  # Temporarily clear conditions
     result5 = lattice.evaluate_and_execute({"value": -10})
     print(f"Result: {result5}")
     print(f"Active Strategy: {lattice.get_active_strategy_id()}")
-    lattice.switch_conditions = initial_conditions # Restore conditions
+    lattice.switch_conditions = initial_conditions  # Restore conditions
 
     print("\n--- Metrics ---")
     metrics = lattice.get_metrics()
     for k, v in metrics.items():
-        print(f"  {k}: {v}") 
+        print(f"  {k}: {v}")

@@ -302,7 +302,11 @@ def test_glyph_gate_engine():
 
     try:
         # Initialize individual components for the engine
-        glyph_core_test = GlyphStrategyCore()
+        from core.strategy import create_glyph_trading_system
+        glyph_core_test, _ = create_glyph_trading_system(
+            enable_fractal_memory=True,
+            enable_gear_shifting=True
+        )
         zygot_zalgo_gate_test = ZygotZalgoEntropyDualKeyGate()
         warp_sync_core_test = WarpSyncCore()
         quantum_trigger_test = QuantumSuperpositionalTrigger()

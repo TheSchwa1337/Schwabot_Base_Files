@@ -1,24 +1,45 @@
-"""
-Warp Sync Core Module
----------------------
+"""Warp Sync Core Module.
+
 Implements the Warp Gradient Drift Envelope and Warp Decay Function,
 essential for temporal acceleration and dynamic lattice management within Schwabot.
 This module helps throttle entry timing or delay trades until ideal vector return.
+
+Enhanced with SP (Stabilization Protocol) layer for quantum-phase-driven trade validation.
 """
 
-import numpy as np
 import time
-from typing import List, Dict, Any, Optional
+from typing import Any, Dict, List, Optional
+
+import numpy as np
+
 
 class WarpSyncCore:
-    """
-    Manages the warp momentum of the hash system and its decay, influencing
-    temporal acceleration and trade timing.
+    """Manages the warp momentum of the hash system and its decay.
+
+    Influences temporal acceleration and trade timing.
+    Enhanced with SP (Stabilization Protocol) mathematical framework.
     """
 
-    def __init__(self, initial_lambda: float = 0.05, initial_sigma_sq: float = 0.01):
-        """
-        Initializes the WarpSyncCore.
+    # SP Constants: Quantum Field Anchors
+    SP_CONSTANTS = {
+        'PSI_OMEGA_LAMBDA': 0.9997,      # ψ_Ω_λ - Universal field scaling
+        'EXP_LAMBDA_T': 0.9951,          # EXP_λt - Exponential time decay factor
+        'ENTROPY_SUM': 0.002,            # ∑ₑ - Global entropy summation
+        'TENSOR_CONVERGENCE': 0.998,     # T_CONVERGE - Tensor convergence factor
+        'CHRONOMANCY_LOCK': 1.000,       # Lock-in factor for quantum state alignment
+        'QSS_BASELINE': 0.42,            # Baseline energy harmonic
+        'ENTROPY_THRESHOLD': 0.87,       # Entropy control threshold
+        'COUPLING_COEFFICIENT': 0.7,     # Node-node coupling
+        'DECAY_RATE': 0.05,             # System decay rate
+        'SCALING_FACTOR': 1.1,          # Fractal scale
+        'TIME_RESOLUTION': 0.001,       # Temporal grain
+        'BETA': 0.02,                   # Entropic dampener
+        'QUANTUM_THRESHOLD': 0.91       # Quantum stability threshold
+    }
+
+    def __init__(self: "WarpSyncCore", initial_lambda: float = 0.05,
+                 initial_sigma_sq: float = 0.01) -> None:
+        """Initialize the WarpSyncCore.
 
         Args:
             initial_lambda: Initial decay rate (λ) for the warp decay function.
@@ -26,70 +47,237 @@ class WarpSyncCore:
         """
         self.lambda_decay = initial_lambda
         self.sigma_sq = initial_sigma_sq
-        self.lattice_history: List[Dict[str, Any]] = [] # Stores {t, L(t), Omega(t)}
+        # Stores {t, L(t), Omega(t)}
+        self.lattice_history: List[Dict[str, Any]] = []
         self.metrics: Dict[str, Any] = {
             "total_warp_calculations": 0,
             "last_warp_calculation_time": None,
-            "current_warp_momentum": 0.0
+            "current_warp_momentum": 0.0,
+            "sp_stability_tensor": 0.0,
+            "sp_density_field": 0.0,
+            "sp_quantum_phase": 0.0,
+            "sp_entropy_variation": 0.0
         }
 
-    def _calculate_omega(self, delta_psi: float, current_time: float = None) -> float:
-        """
-        Calculates the warp drift entropy function Ω(t).
+    def _calculate_omega(self: "WarpSyncCore", delta_psi: float,
+                         current_time: Optional[float] = None) -> float:
+        """Calculate the warp drift entropy function Ω(t).
 
         Ω(t) = e^(-λt) · (σ² / ΔΨ)
 
         Args:
             delta_psi: Phase delta between time-step strategies (ΔΨ).
-            current_time: The current time, used for the decay factor. If None, time.time() is used.
+            current_time: The current time, used for the decay factor. If None,
+                          time.time() is used.
 
         Returns:
             The calculated warp drift entropy (Ω(t)).
         """
         if delta_psi == 0:
             # Handle division by zero for ΔΨ, potentially indicating a stable phase
-            # We can return a default or very high value, or raise an error based on system needs.
-            # For now, let's return a very high value to signify extreme decay if ΔΨ is zero.
-            return np.inf 
+            # We can return a default or very high value, or raise an error
+            # based on system needs.
+            # For now, let's return a very high value to signify extreme decay
+            # if ΔΨ is zero.
+            return np.inf
 
         t = current_time if current_time is not None else time.time()
         decay_factor = np.exp(-self.lambda_decay * t)
-        
+
         # Ensure delta_psi is not too close to zero to prevent overflow
-        effective_delta_psi = max(delta_psi, 1e-9) 
-        
+        effective_delta_psi = max(delta_psi, 1e-9)
+
         return decay_factor * (self.sigma_sq / effective_delta_psi)
 
-    def calculate_warp_momentum(self, 
-                                lattice_points: List[Dict[str, Any]], 
-                                delta_psi_values: List[float], 
-                                span_tau: Optional[float] = None) -> float:
+    def calculate_sp_stability_tensor(self: "WarpSyncCore", 
+                                      ratio: float, 
+                                      time_step: float = None) -> float:
+        """Calculate SP Stability Tensor T_ij using QSS parameters.
+        
+        T_ij = QSS_BASELINE * exp(-DECAY_RATE * t) * COUPLING_COEFFICIENT^ratio
+        
+        Args:
+            ratio: Frequency ratio for tensor calculation
+            time_step: Time resolution for calculation
+            
+        Returns:
+            Calculated stability tensor value
         """
-        Calculates the total warp momentum W(τ) over a given time span τ.
+        t = time_step if time_step is not None else self.SP_CONSTANTS['TIME_RESOLUTION']
+        
+        # SP Stability Tensor Formula
+        quantum_phase = np.exp(-self.SP_CONSTANTS['DECAY_RATE'] * t)
+        coupling_factor = np.power(self.SP_CONSTANTS['COUPLING_COEFFICIENT'], ratio)
+        baseline_state = ratio * self.SP_CONSTANTS['QSS_BASELINE']
+        
+        tensor_value = baseline_state * coupling_factor * quantum_phase
+        self.metrics["sp_stability_tensor"] = tensor_value
+        
+        return tensor_value
+
+    def calculate_sp_density_field(self: "WarpSyncCore", tensor_value: float) -> float:
+        """Calculate SP Density Field Tolerance from stability tensor.
+        
+        DFT = tensor * exp(-BETA) * ENTROPY_THRESHOLD
+        
+        Args:
+            tensor_value: Input stability tensor value
+            
+        Returns:
+            Calculated density field tolerance
+        """
+        density_field = (tensor_value * 
+                        np.exp(-self.SP_CONSTANTS['BETA']) * 
+                        self.SP_CONSTANTS['ENTROPY_THRESHOLD'])
+        
+        self.metrics["sp_density_field"] = density_field
+        return density_field
+
+    def calculate_sp_entropy_variation(self: "WarpSyncCore", freq: float) -> float:
+        """Calculate SP Entropy Variation using QSS 2.0 formula.
+        
+        Entropy = 1 - (BETA * log(freq/base_freq) * ENTROPY_BASE)
+        
+        Args:
+            freq: Input frequency for entropy calculation
+            
+        Returns:
+            Calculated entropy variation
+        """
+        base_freq = 21237738.486323237  # QSS reference frequency
+        entropy_base = 0.65  # Base entropy threshold from QSS 2.0
+        
+        entropy_variation = 1 - (self.SP_CONSTANTS['BETA'] * 
+                                np.log(freq / base_freq) * entropy_base)
+        
+        self.metrics["sp_entropy_variation"] = entropy_variation
+        return entropy_variation
+
+    def calculate_sp_phase_alignment(self: "WarpSyncCore", freq: float) -> float:
+        """Calculate SP Phase Alignment using QSS parameters.
+        
+        Phase = sin(2π * freq * TIME_RESOLUTION) * QSS_BASELINE
+        
+        Args:
+            freq: Input frequency for phase calculation
+            
+        Returns:
+            Calculated phase alignment value
+        """
+        phase = np.sin(2 * np.pi * freq * self.SP_CONSTANTS['TIME_RESOLUTION'])
+        phase_alignment = phase * self.SP_CONSTANTS['QSS_BASELINE']
+        
+        self.metrics["sp_quantum_phase"] = phase_alignment
+        return phase_alignment
+
+    def calculate_gut_tensor_transform(self: "WarpSyncCore", 
+                                       base_freq: float, 
+                                       ratio: float) -> float:
+        """Calculate GUT (Grand Unified Theory) Tensor Transform.
+        
+        GUT = PSI_OMEGA_LAMBDA * EXP_LAMBDA_T * exp(-ENTROPY_SUM * ratio)
+        transformedFreq = baseFreq * ratio * GUT
+        
+        Args:
+            base_freq: Base frequency for transformation
+            ratio: Frequency ratio for scaling
+            
+        Returns:
+            GUT-transformed frequency
+        """
+        gut_tensor = (self.SP_CONSTANTS['PSI_OMEGA_LAMBDA'] * 
+                      self.SP_CONSTANTS['EXP_LAMBDA_T'] * 
+                      np.exp(-self.SP_CONSTANTS['ENTROPY_SUM'] * ratio))
+        
+        transformed_freq = base_freq * ratio * gut_tensor
+        return transformed_freq
+
+    def quantum_weighted_strategy_evaluation(self: "WarpSyncCore", 
+                                           ratio: float, 
+                                           freq: float, 
+                                           asset_pair: str = "BTC/USDC") -> Dict[str, Any]:
+        """Evaluate strategy using complete SP quantum framework.
+        
+        Integrates all SP mathematical components for trade validation.
+        
+        Args:
+            ratio: Strategy frequency ratio
+            freq: Strategy frequency
+            asset_pair: Trading pair identifier
+            
+        Returns:
+            Complete SP evaluation results
+        """
+        # Calculate all SP components
+        tensor = self.calculate_sp_stability_tensor(ratio)
+        density = self.calculate_sp_density_field(tensor)
+        entropy = self.calculate_sp_entropy_variation(freq)
+        phase = self.calculate_sp_phase_alignment(freq)
+        gut_freq = self.calculate_gut_tensor_transform(freq, ratio)
+        
+        # SP Quantum Score calculation
+        quantum_score = (tensor + entropy + phase - density) / 4
+        
+        # Stability check using quantum threshold
+        is_stable = (abs(phase) >= self.SP_CONSTANTS['QUANTUM_THRESHOLD'] and 
+                    entropy >= self.SP_CONSTANTS['ENTROPY_THRESHOLD'])
+        
+        # Phase bucket classification
+        phase_bucket = "unknown"
+        if phase > 0.9:
+            phase_bucket = "peak"
+        elif phase < -0.9:
+            phase_bucket = "trough"
+        elif 0.3 < phase <= 0.9:
+            phase_bucket = "ascent"
+        else:
+            phase_bucket = "descent"
+        
+        return {
+            "pair": asset_pair,
+            "quantum_score": quantum_score,
+            "entropy_variation": entropy,
+            "phase_alignment": phase,
+            "stability_tensor": tensor,
+            "density_field": density,
+            "gut_frequency": gut_freq,
+            "is_stable": is_stable,
+            "phase_bucket": phase_bucket,
+            "resonance_differential": abs(self.SP_CONSTANTS['QUANTUM_THRESHOLD'] - phase) * entropy
+        }
+
+    def calculate_warp_momentum(self: "WarpSyncCore",
+                                lattice_points: List[Dict[str, Any]],
+                                delta_psi_values: List[float],
+                                span_tau: Optional[float] = None) -> float:
+        """Calculate the total warp momentum W(τ) over a given time span τ.
 
         W(τ) = ∫₀^τ L(t)·Ω(t) dt
         Approximated as a sum for discrete time steps: Σ [L(t) * Ω(t) * Δt]
 
+        Enhanced with SP layer integration for quantum-phase validation.
+
         Args:
-            lattice_points: A list of dictionaries, each containing 'L(t)' (lattice position)
-                            and 't' (timestamp).
-            delta_psi_values: A list of ΔΨ values corresponding to each lattice point.
-            span_tau: The total time span over which to calculate the momentum. If None,
-                      it calculates over the provided lattice_points.
+            lattice_points: A list of dictionaries, each containing 'L(t)'
+                            (lattice position) and 't' (timestamp).
+            delta_psi_values: A list of ΔΨ values corresponding to each
+                              lattice point.
+            span_tau: The total time span over which to calculate the momentum.
+                      If None, it calculates over the provided lattice_points.
 
         Returns:
             The total warp momentum W(τ).
         """
-        start_time_calc = time.time()
         self.metrics["total_warp_calculations"] += 1
 
-        if not lattice_points or not delta_psi_values or len(lattice_points) != len(delta_psi_values):
+        if not lattice_points or not delta_psi_values or \
+           len(lattice_points) != len(delta_psi_values):
             # No data or mismatch in data lengths
             self.metrics["current_warp_momentum"] = 0.0
             return 0.0
 
         total_warp_momentum = 0.0
-        
+
         # Sort lattice points by time if not already sorted
         sorted_lattice_points = sorted(lattice_points, key=lambda x: x['t'])
 
@@ -97,87 +285,113 @@ class WarpSyncCore:
             current_l_t = sorted_lattice_points[i]['L(t)']
             current_t = sorted_lattice_points[i]['t']
             current_delta_psi = delta_psi_values[i]
-            
+
             omega_t = self._calculate_omega(current_delta_psi, current_t)
-            
-            # Approximate Δt. For the first point, use a small default or 
-            # assume it's the start of the interval. For subsequent points, 
+
+            # Approximate Δt. For the first point, use a small default or
+            # assume it's the start of the interval. For subsequent points,
             # use the difference from the previous tick.
-            dt = 0.0 # Default for the first point
+            dt = 0.0  # Default for the first point
             if i > 0:
-                prev_t = sorted_lattice_points[i-1]['t']
+                prev_t = sorted_lattice_points[i - 1]['t']
                 dt = current_t - prev_t
             elif len(sorted_lattice_points) == 1:
                 # If only one point, assume a unit time step or 0
-                dt = 1.0 # Or based on typical tick resolution
+                dt = 1.0  # Or based on typical tick resolution
 
             # W(τ) = Σ [L(t) * Ω(t) * Δt]
             total_warp_momentum += current_l_t * omega_t * dt
-        
+
         self.metrics["current_warp_momentum"] = total_warp_momentum
-        end_time_calc = time.time()
-        self.metrics["last_warp_calculation_time"] = end_time_calc
-        
+        self.metrics["last_warp_calculation_time"] = time.time()
+
         return total_warp_momentum
 
-    def get_metrics(self) -> Dict[str, Any]:
-        """
-        Returns the operational metrics of the Warp Sync Core.
-        """
+    def get_metrics(self: "WarpSyncCore") -> Dict[str, Any]:
+        """Return the operational metrics of the Warp Sync Core including SP values."""
         return self.metrics
 
-    def update_parameters(self, new_lambda: Optional[float] = None, new_sigma_sq: Optional[float] = None):
-        """
-        Updates the parameters of the warp decay function.
-        """
+    def update_parameters(
+            self: "WarpSyncCore",
+            new_lambda: Optional[float] = None,
+            new_sigma_sq: Optional[float] = None) -> None:
+        """Update the parameters of the warp decay function."""
         if new_lambda is not None:
             self.lambda_decay = new_lambda
         if new_sigma_sq is not None:
             self.sigma_sq = new_sigma_sq
         print("Warp Sync Core parameters updated.")
 
-    def reset(self):
-        """
-        Resets the core's history and metrics.
-        """
+    def reset(self: "WarpSyncCore") -> None:
+        """Reset the core's history and metrics."""
         self.lattice_history = []
         self.metrics = {
             "total_warp_calculations": 0,
             "last_warp_calculation_time": None,
-            "current_warp_momentum": 0.0
+            "current_warp_momentum": 0.0,
+            "sp_stability_tensor": 0.0,
+            "sp_density_field": 0.0,
+            "sp_quantum_phase": 0.0,
+            "sp_entropy_variation": 0.0
         }
 
-if __name__ == "__main__":
-    print("--- Warp Sync Core Demo ---")
 
-    # Initialize the WarpSyncCore
+if __name__ == "__main__":
+    print("--- Enhanced Warp Sync Core with SP Integration Demo ---")
+
+    # Initialize the WarpSyncCore with SP capabilities
     warp_core = WarpSyncCore(initial_lambda=0.01, initial_sigma_sq=0.005)
+
+    # Test SP mathematical framework
+    print("\n--- SP Mathematical Framework Testing ---")
+    
+    # QSS reference frequencies and ratios
+    test_frequencies = [
+        21237738.486323237,  # Unison
+        25485286.135841995,  # Minor Third
+        26547173.048222087,  # Major Third
+        31856607.610124096,  # Perfect Fifth
+        42475476.73393286    # Octave
+    ]
+    
+    test_ratios = [1.0, 1.2, 1.25, 1.5, 2.0]
+    
+    print("Frequency\t\tRatio\tQuantum Score\tPhase Bucket\tStable")
+    print("-" * 80)
+    
+    for freq, ratio in zip(test_frequencies, test_ratios):
+        evaluation = warp_core.quantum_weighted_strategy_evaluation(ratio, freq)
+        print(f"{freq:.3f}\t{ratio}\t{evaluation['quantum_score']:.4f}\t\t"
+              f"{evaluation['phase_bucket']}\t\t{evaluation['is_stable']}")
+    
+    print("\n--- SP Metrics Summary ---")
+    sp_metrics = warp_core.get_metrics()
+    for key, value in sp_metrics.items():
+        if key.startswith('sp_'):
+            print(f"  {key}: {value:.6f}")
 
     # Simulate lattice points and delta_psi values over time
     # L(t) = SHA256(P_t, V_t, Δt) - For simplicity, L(t) will be represented as a float
     # ΔΨ(t) = phase delta between time-step strategies - represented as a float
-    
+
     # Simulate a time series
-    start_sim_time = time.time()
-    
-    # Lattice data: L(t) and its corresponding time (t)
-    # delta_psi_values: ΔΨ(t)
     simulated_data = [
-        {"L(t)": 0.5, "t": start_sim_time + 1, "delta_psi": 0.01},
-        {"L(t)": 0.6, "t": start_sim_time + 2, "delta_psi": 0.02},
-        {"L(t)": 0.7, "t": start_sim_time + 3, "delta_psi": 0.015},
-        {"L(t)": 0.55, "t": start_sim_time + 4, "delta_psi": 0.03},
-        {"L(t)": 0.62, "t": start_sim_time + 5, "delta_psi": 0.01},
+        {"L(t)": 0.5, "t": time.time() + 1, "delta_psi": 0.01},
+        {"L(t)": 0.6, "t": time.time() + 2, "delta_psi": 0.02},
+        {"L(t)": 0.7, "t": time.time() + 3, "delta_psi": 0.015},
+        {"L(t)": 0.55, "t": time.time() + 4, "delta_psi": 0.03},
+        {"L(t)": 0.62, "t": time.time() + 5, "delta_psi": 0.01},
     ]
 
     lattice_points = [{"L(t)": d["L(t)"], "t": d["t"]} for d in simulated_data]
     delta_psi_values = [d["delta_psi"] for d in simulated_data]
 
-    print("\n--- Calculating Warp Momentum ---")
-    warp_momentum = warp_core.calculate_warp_momentum(lattice_points, delta_psi_values)
+    print("\n--- Calculating Warp Momentum with SP Enhancement ---")
+    warp_momentum = warp_core.calculate_warp_momentum(
+        lattice_points, delta_psi_values)
     print(f"Calculated Warp Momentum: {warp_momentum:.6f}")
 
-    print("\n--- Current Metrics ---")
+    print("\n--- Current Metrics with SP Integration ---")
     metrics = warp_core.get_metrics()
     for k, v in metrics.items():
         if isinstance(v, float):
@@ -188,22 +402,25 @@ if __name__ == "__main__":
     # Simulate another calculation with updated parameters
     print("\n--- Updating Parameters and Recalculating ---")
     warp_core.update_parameters(new_lambda=0.02, new_sigma_sq=0.008)
-    
+
     simulated_data_2 = [
-        {"L(t)": 0.58, "t": start_sim_time + 6, "delta_psi": 0.025},
-        {"L(t)": 0.65, "t": start_sim_time + 7, "delta_psi": 0.018},
+        {"L(t)": 0.58, "t": time.time() + 6, "delta_psi": 0.025},
+        {"L(t)": 0.65, "t": time.time() + 7, "delta_psi": 0.018},
     ]
-    lattice_points_2 = [{"L(t)": d["L(t)"], "t": d["t"]} for d in simulated_data_2]
+    lattice_points_2 = [{"L(t)": d["L(t)"], "t": d["t"]}
+                        for d in simulated_data_2]
     delta_psi_values_2 = [d["delta_psi"] for d in simulated_data_2]
-    
+
     # Combine old and new data for the new calculation
     combined_lattice_points = lattice_points + lattice_points_2
     combined_delta_psi_values = delta_psi_values + delta_psi_values_2
 
-    warp_momentum_2 = warp_core.calculate_warp_momentum(combined_lattice_points, combined_delta_psi_values)
-    print(f"Calculated Warp Momentum (with updated params): {warp_momentum_2:.6f}")
+    warp_momentum_2 = warp_core.calculate_warp_momentum(
+        combined_lattice_points, combined_delta_psi_values)
+    print(f"Calculated Warp Momentum (with updated params): "
+          f"{warp_momentum_2:.6f}")
 
-    print("\n--- Metrics After Update and Recalculation ---")
+    print("\n--- Final SP-Enhanced Metrics ---")
     metrics_2 = warp_core.get_metrics()
     for k, v in metrics_2.items():
         if isinstance(v, float):
@@ -213,5 +430,7 @@ if __name__ == "__main__":
 
     print("\n--- Resetting the Core ---")
     warp_core.reset()
-    print(f"Current Warp Momentum after reset: {warp_core.get_metrics()['current_warp_momentum']:.6f}")
-    print(f"Total calculations after reset: {warp_core.get_metrics()['total_warp_calculations']}") 
+    print(f"Current Warp Momentum after reset: "
+          f"{warp_core.get_metrics()['current_warp_momentum']:.6f}")
+    print(f"Total calculations after reset: "
+          f"{warp_core.get_metrics()['total_warp_calculations']}")

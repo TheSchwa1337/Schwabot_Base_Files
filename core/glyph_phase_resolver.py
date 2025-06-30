@@ -8,6 +8,7 @@ based on paradoxical phase shifts and entropy corridors.
 import numpy as np
 from typing import Dict, Any, List, Tuple, Optional
 
+
 class GlyphPhaseResolver:
     """
     Routes glyph logic based on observed phase shifts and entropy dynamics.
@@ -52,14 +53,16 @@ class GlyphPhaseResolver:
             self.metrics["phase_shift_alerts"] += 1
 
         # Integrate entropy corridor status
-        # Example: If entropy is high, might suggest a more conservative routing
+        # Example: If entropy is high, might suggest a more conservative
+        # routing
         if entropy_corridor_status.get("high_entropy_detected", False):
             if routing_behavior == "NORMAL_GLYPH_ROUTING":
                 routing_behavior = "CONSERVATIVE_GLYPH_ROUTING"
             else:
                 routing_behavior = "DIVERGENCE_AND_CONSERVATIVE_ROUTING"
-        
-        # More complex logic can be added here based on specific Zygot/Zalgo rules
+
+        # More complex logic can be added here based on specific Zygot/Zalgo
+        # rules
 
         return routing_behavior
 
@@ -74,7 +77,9 @@ class GlyphPhaseResolver:
         Updates the phase shift threshold.
         """
         self.phase_shift_threshold = new_threshold
-        print(f"Glyph Phase Resolver threshold updated to: {self.phase_shift_threshold}")
+        print(
+            f"Glyph Phase Resolver threshold updated to: {
+                self.phase_shift_threshold}")
 
     def reset(self):
         """
@@ -85,6 +90,7 @@ class GlyphPhaseResolver:
             "phase_shift_alerts": 0,
             "last_resolution_time": None
         }
+
 
 if __name__ == "__main__":
     import time
@@ -113,21 +119,23 @@ if __name__ == "__main__":
 
     print("\n--- Test Case 3: Normal phase shift, high entropy ---")
     phase_shift_3 = 0.02
-    routing_3 = resolver.resolve_glyph_phase(phase_shift_3, entropy_status_high)
+    routing_3 = resolver.resolve_glyph_phase(
+        phase_shift_3, entropy_status_high)
     print(f"Phase Shift: {phase_shift_3}, Entropy: {entropy_status_high}")
     print(f"  Routing Behavior: {routing_3}")
     print(f"  Metrics: {resolver.get_metrics()}")
 
     print("\n--- Test Case 4: High phase shift, high entropy ---")
     phase_shift_4 = 0.12
-    routing_4 = resolver.resolve_glyph_phase(phase_shift_4, entropy_status_high)
+    routing_4 = resolver.resolve_glyph_phase(
+        phase_shift_4, entropy_status_high)
     print(f"Phase Shift: {phase_shift_4}, Entropy: {entropy_status_high}")
     print(f"  Routing Behavior: {routing_4}")
     print(f"  Metrics: {resolver.get_metrics()}")
 
     print("\n--- Updating Threshold and Testing Again ---")
     resolver.update_threshold(0.1)
-    phase_shift_5 = 0.08 # Now below new threshold
+    phase_shift_5 = 0.08  # Now below new threshold
     routing_5 = resolver.resolve_glyph_phase(phase_shift_5, entropy_status_low)
     print(f"Phase Shift: {phase_shift_5}, Entropy: {entropy_status_low}")
     print(f"  Routing Behavior: {routing_5}")
@@ -135,4 +143,4 @@ if __name__ == "__main__":
 
     print("\n--- Resetting the Resolver ---")
     resolver.reset()
-    print(f"Metrics after reset: {resolver.get_metrics()}") 
+    print(f"Metrics after reset: {resolver.get_metrics()}")

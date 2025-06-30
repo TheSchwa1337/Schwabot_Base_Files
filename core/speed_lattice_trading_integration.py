@@ -10,6 +10,7 @@ import hashlib
 import time
 from typing import List, Dict, Optional, Callable
 
+
 class SpeedLatticeTradingIntegrator:
     def __init__(self, tick_resolution: float = 0.25):
         self.tick_resolution = tick_resolution  # e.g., 0.25s micro-cycle
@@ -23,7 +24,8 @@ class SpeedLatticeTradingIntegrator:
     def register_strategy(self, strategy_id: str, strategy_func: Callable):
         self.strategy_map[strategy_id] = strategy_func
 
-    def execute(self, price: float, volume: float, timestamp: Optional[float] = None):
+    def execute(self, price: float, volume: float,
+                timestamp: Optional[float] = None):
         timestamp = timestamp or time.time()
         tick_hash = self.hash_tick(price, volume, timestamp)
         self.tick_history.append(tick_hash)
@@ -32,4 +34,4 @@ class SpeedLatticeTradingIntegrator:
         for sid, strategy_func in self.strategy_map.items():
             results[sid] = strategy_func(price, volume, timestamp, tick_hash)
 
-        return results 
+        return results

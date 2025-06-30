@@ -29,7 +29,8 @@ import numpy as np
 from core.phase_bit_integration import BitPhase, PhaseBitIntegration, StrategyType
 
 # MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below:
-# from core.unified_profit_vectorization_system import UnifiedProfitVectorizationSystem # Removed to resolve circular import
+# from core.unified_profit_vectorization_system import
+# UnifiedProfitVectorizationSystem # Removed to resolve circular import
 
 logger = logging.getLogger(__name__)
 
@@ -138,7 +139,8 @@ class UnifiedMathSystem:
 
     def __init__(self, precision: int = 64):
         """Initialize the unified math system with phase-bit integration."""
-        # Lazy import UnifiedProfitVectorizationSystem to break circular dependency
+        # Lazy import UnifiedProfitVectorizationSystem to break circular
+        # dependency
         from core.unified_profit_vectorization_system import UnifiedProfitVectorizationSystem
 
         self.precision = precision
@@ -156,17 +158,25 @@ class UnifiedMathSystem:
             "thermal_correction_calls": 0,
             "integration_success_rate": 0.0,
         }
-        safe_print(f"Unified Math System initialized with precision {precision}")
-        logger.info(f"Unified Math System initialized with precision {precision}")
+        safe_print(
+            f"Unified Math System initialized with precision {precision}")
+        logger.info(
+            f"Unified Math System initialized with precision {precision}")
 
-    def execute_operation(self, operation: MathOperation, *args, **kwargs) -> Any:
+    def execute_operation(
+            self,
+            operation: MathOperation,
+            *args,
+            **kwargs) -> Any:
         """Execute a mathematical operation with 32-bit phase consideration."""
         try:
             # Determine thermal state based on operation complexity
-            operation_hash = hashlib.sha256(f"{operation.value}_{args}_{kwargs}".encode()).hexdigest()
+            operation_hash = hashlib.sha256(
+                f"{operation.value}_{args}_{kwargs}".encode()).hexdigest()
 
             # Get bit phase resolution for mathematical operations
-            bit_phase_result = self.phase_bit_integration.resolve_bit_phase(operation_hash, "auto")
+            bit_phase_result = self.phase_bit_integration.resolve_bit_phase(
+                operation_hash, "auto")
 
             # Update current bit phase
             self.current_bit_phase = bit_phase_result.bit_phase
@@ -287,15 +297,18 @@ class UnifiedMathSystem:
         """Calculate mean."""
         return np.mean(args)
 
-    def std(self, a: np.ndarray, axis: Optional[int] = None) -> Union[float, np.ndarray]:
+    def std(self, a: np.ndarray,
+            axis: Optional[int] = None) -> Union[float, np.ndarray]:
         """Standard deviation."""
         return np.std(a, axis=axis)
 
-    def var(self, a: np.ndarray, axis: Optional[int] = None) -> Union[float, np.ndarray]:
+    def var(self, a: np.ndarray,
+            axis: Optional[int] = None) -> Union[float, np.ndarray]:
         """Variance."""
         return np.var(a, axis=axis)
 
-    def dot_product(self, a: np.ndarray, b: np.ndarray) -> Union[float, np.ndarray]:
+    def dot_product(self, a: np.ndarray,
+                    b: np.ndarray) -> Union[float, np.ndarray]:
         """Dot product of two arrays."""
         return np.dot(a, b)
 
@@ -311,7 +324,11 @@ class UnifiedMathSystem:
         """Compute eigenvalues and eigenvectors of a matrix."""
         return np.linalg.eig(a)
 
-    def svd(self, a: np.ndarray, full_matrices: bool = True) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+    def svd(self,
+            a: np.ndarray,
+            full_matrices: bool = True) -> Tuple[np.ndarray,
+                                                 np.ndarray,
+                                                 np.ndarray]:
         """Singular value decomposition."""
         return np.linalg.svd(a, full_matrices=full_matrices)
 
@@ -330,13 +347,21 @@ class UnifiedMathSystem:
                 raise ValueError("MathLib V4 not available for DLT analysis")
 
             if "error" in mathlib_result:
-                raise ValueError(f"MathLib V4 DLT analysis failed: {mathlib_result['error']}")
+                raise ValueError(
+                    f"MathLib V4 DLT analysis failed: {
+                        mathlib_result['error']}")
 
-            return {"status": "success", "dlt_metrics": mathlib_result, "timestamp": time.time()}
+            return {
+                "status": "success",
+                "dlt_metrics": mathlib_result,
+                "timestamp": time.time()}
 
         except Exception as e:
             error(f"DLT analysis failed: {e}")
-            return {"status": "error", "error": str(e), "timestamp": time.time()}
+            return {
+                "status": "error",
+                "error": str(e),
+                "timestamp": time.time()}
 
     def get_integration_metrics(self) -> Dict[str, Any]:
         """Get integration metrics."""
@@ -351,4 +376,8 @@ if __name__ == "__main__":
     print("Unified Math System - 32-bit Phase Integration Ready")
 
 # Export key functions and classes
-__all__ = ["UnifiedMathSystem", "MathOperation", "unified_math", "TENSOR_ALGEBRA_AVAILABLE"] 
+__all__ = [
+    "UnifiedMathSystem",
+    "MathOperation",
+    "unified_math",
+    "TENSOR_ALGEBRA_AVAILABLE"]

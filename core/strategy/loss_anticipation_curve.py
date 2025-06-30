@@ -20,13 +20,14 @@ from typing import Dict, Any, List, Optional
 # from core.risk_manager import RiskMetric, RiskManagementSystem
 # from core.portfolio_tracker import PortfolioSnapshot
 
+
 class LossAnticipationCurve:
     """
     Calculates and manages a dynamic loss anticipation curve.
     """
 
-    def __init__(self, 
-                 prediction_horizon: int = 10, # e.g., next 10 periods
+    def __init__(self,
+                 prediction_horizon: int = 10,  # e.g., next 10 periods
                  risk_aversion_factor: float = 1.0):
         """
         Initializes the LossAnticipationCurve.
@@ -37,14 +38,17 @@ class LossAnticipationCurve:
         """
         self.prediction_horizon = prediction_horizon
         self.risk_aversion_factor = risk_aversion_factor
-        self.historical_losses: List[float] = [] # Stores actual historical losses for model tuning
-        self.anticipated_curve: List[float] = [] # The most recently calculated loss curve
+        # Stores actual historical losses for model tuning
+        self.historical_losses: List[float] = []
+        # The most recently calculated loss curve
+        self.anticipated_curve: List[float] = []
         self.metrics: Dict[str, Any] = {
             "last_prediction_time": None,
             "total_predictions": 0,
             "avg_prediction_time": 0.0
         }
-        self._model = None # Placeholder for a predictive model (e.g., statistical, ML)
+        # Placeholder for a predictive model (e.g., statistical, ML)
+        self._model = None
 
     def _train_model(self, historical_data: List[Dict[str, Any]]) -> None:
         """
@@ -71,7 +75,9 @@ class LossAnticipationCurve:
         if len(self.historical_losses) > 1000:
             self.historical_losses.pop(0)
 
-    def anticipate_losses(self, current_market_data: Dict[str, Any]) -> List[float]:
+    def anticipate_losses(self,
+                          current_market_data: Dict[str,
+                                                    Any]) -> List[float]:
         """
         Generates the loss anticipation curve based on current market data.
 
@@ -88,20 +94,24 @@ class LossAnticipationCurve:
 
         if not self._model and self.historical_losses:
             # Simple re-train if no model exists but we have history
-            self._train_model([{"loss_metric": l} for l in self.historical_losses])
+            self._train_model([{"loss_metric": l}
+                              for l in self.historical_losses])
 
         predicted_losses: List[float] = []
 
         if self._model and self._model.get("type") == "average":
             base_loss = self._model["value"]
         else:
-            base_loss = 0.001 # Default small anticipated loss if no model
+            base_loss = 0.001  # Default small anticipated loss if no model
 
-        # Simple linear increase for demonstration; real models would be more complex
+        # Simple linear increase for demonstration; real models would be more
+        # complex
         for i in range(self.prediction_horizon):
-            # Factor in market data (e.g., higher volatility -> higher anticipated loss)
+            # Factor in market data (e.g., higher volatility -> higher
+            # anticipated loss)
             volatility_impact = current_market_data.get("volatility", 1.0)
-            anticipated = base_loss * (1 + (i * 0.1 * volatility_impact * self.risk_aversion_factor))
+            anticipated = base_loss * \
+                (1 + (i * 0.1 * volatility_impact * self.risk_aversion_factor))
             predicted_losses.append(anticipated)
 
         self.anticipated_curve = predicted_losses
@@ -174,4 +184,4 @@ if __name__ == "__main__":
     print("\n--- Resetting the system ---")
     lac.reset()
     print(f"Historical Losses after reset: {lac.historical_losses}")
-    print(f"Metrics after reset: {lac.get_metrics()}") 
+    print(f"Metrics after reset: {lac.get_metrics()}")
