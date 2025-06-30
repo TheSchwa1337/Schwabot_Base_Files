@@ -1,12 +1,11 @@
-"""
-Glyph Phase Resolver Module
----------------------------
+"""Glyph Phase Resolver Module.
+
 Implements the Zygot/Zalgo phase router, dynamically routing glyph logic
 based on paradoxical phase shifts and entropy corridors.
 """
 
-import numpy as np
-from typing import Dict, Any, List, Tuple, Optional
+import time
+from typing import Any, Dict
 
 
 class GlyphPhaseResolver:
@@ -14,7 +13,7 @@ class GlyphPhaseResolver:
     Routes glyph logic based on observed phase shifts and entropy dynamics.
     """
 
-    def __init__(self, phase_shift_threshold: float = 0.1):
+    def __init__(self, phase_shift_threshold: float = 0.1) -> None:
         """
         Initializes the GlyphPhaseResolver.
 
@@ -72,7 +71,7 @@ class GlyphPhaseResolver:
         """
         return self.metrics
 
-    def update_threshold(self, new_threshold: float):
+    def update_threshold(self, new_threshold: float) -> None:
         """
         Updates the phase shift threshold.
         """
@@ -81,7 +80,7 @@ class GlyphPhaseResolver:
             f"Glyph Phase Resolver threshold updated to: {
                 self.phase_shift_threshold}")
 
-    def reset(self):
+    def reset(self) -> None:
         """
         Resets the resolver's metrics.
         """
@@ -93,8 +92,6 @@ class GlyphPhaseResolver:
 
 
 if __name__ == "__main__":
-    import time
-
     print("--- Glyph Phase Resolver Demo ---")
 
     resolver = GlyphPhaseResolver(phase_shift_threshold=0.05)
