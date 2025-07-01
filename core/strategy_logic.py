@@ -19,7 +19,7 @@ from __future__ import annotations
 import logging
 import time
 from dataclasses import dataclass, field
-from decimal import getcontext, Decimal
+from decimal import Decimal, getcontext
 from enum import Enum
 from typing import TYPE_CHECKING, Any, Dict, List, Optional, Union
 
@@ -131,6 +131,7 @@ class StrategyLogic:
         """Initialize strategy logic."""
         # Lazy import UnifiedMathSystem to avoid circular dependencies
         from core.unified_math_system import UnifiedMathSystem
+
         self.unified_math = UnifiedMathSystem()
 
         self.version = "1.0_0"
@@ -214,7 +215,8 @@ class StrategyLogic:
         for strategy in default_strategies:
             self.strategies[strategy.name] = strategy
             self.performance[strategy.name] = StrategyPerformance(
-                strategy_name=strategy.name)
+                strategy_name=strategy.name
+            )
 
     def process_data(self, data: Dict[str, Any]) -> List[TradingSignal]:
         """Process incoming market data and generate trading signals."""
@@ -240,7 +242,8 @@ class StrategyLogic:
                 logger.debug(
                     f"Generated {
                         signal.signal_type.value} signal for {
-                        signal.asset} from {strategy_name}")
+                        signal.asset} from {strategy_name}"
+                )
 
         return generated_signals
 
@@ -256,13 +259,16 @@ class StrategyLogic:
         # Dummy signal generation based on strategy type
         if config.strategy_type == StrategyType.MEAN_REVERSION:
             return self._generate_mean_reversion_signal(
-                config, asset, current_price, current_volume)
+                config, asset, current_price, current_volume
+            )
         elif config.strategy_type == StrategyType.MOMENTUM:
             return self._generate_momentum_signal(
-                config, asset, current_price, current_volume)
+                config, asset, current_price, current_volume
+            )
         elif config.strategy_type == StrategyType.ARBITRAGE:
             return self._generate_arbitrage_signal(
-                config, asset, current_price, current_volume)
+                config, asset, current_price, current_volume
+            )
         # Add other strategy types here
         return None
 
@@ -278,11 +284,14 @@ class StrategyLogic:
 
         # Example: if price is far from a simulated mean
         simulated_mean = 100.0
-        if price > simulated_mean * \
-                (1 + config.parameters.get("z_score_threshold", 2.0) * 0.01):
+        if price > simulated_mean * (
+            1 + config.parameters.get("z_score_threshold", 2.0) * 0.01
+        ):
             signal_type = SignalType.SELL
             strength = SignalStrength.STRONG
-        elif price < simulated_mean * (1 - config.parameters.get("z_score_threshold", 2.0) * 0.01):
+        elif price < simulated_mean * (
+            1 - config.parameters.get("z_score_threshold", 2.0) * 0.01
+        ):
             signal_type = SignalType.BUY
             strength = SignalStrength.STRONG
 
@@ -336,10 +345,10 @@ class StrategyLogic:
         exchange_a_price = price
         exchange_b_price = price * random.uniform(0.99, 1.01)
 
-        if abs(
-                exchange_a_price - exchange_b_price) > config.parameters.get(
-                "price_diff_threshold",
-                0.001) * price:
+        if (
+            abs(exchange_a_price - exchange_b_price)
+            > config.parameters.get("price_diff_threshold", 0.001) * price
+        ):
             if exchange_a_price < exchange_b_price:
                 signal_type = SignalType.BUY
                 strength = SignalStrength.STRONG
@@ -358,11 +367,13 @@ class StrategyLogic:
             strategy_name=config.name,
             metadata={
                 "exchange_a_price": exchange_a_price,
-                "exchange_b_price": exchange_b_price},
+                "exchange_b_price": exchange_b_price,
+            },
         )
 
-    def execute_signal(self, signal: TradingSignal,
-                       dry_run: bool = False) -> Dict[str, Any]:
+    def execute_signal(
+        self, signal: TradingSignal, dry_run: bool = False
+    ) -> Dict[str, Any]:
         """Execute a trading signal.
 
         Args:
@@ -373,9 +384,7 @@ class StrategyLogic:
             A dictionary with execution results.
         """
         self.total_signals_executed += 1
-        execution_result = {
-            "status": "failed",
-            "message": "Signal not executed"}
+        execution_result = {"status": "failed", "message": "Signal not executed"}
 
         if signal.signal_type == SignalType.BUY:
             if not dry_run:
@@ -383,14 +392,14 @@ class StrategyLogic:
                 logger.info(
                     f"Executing BUY order for {
                         signal.asset} at {
-                        signal.price}")
-                execution_result = {
-                    "status": "success",
-                    "message": "Buy order placed"}
+                        signal.price}"
+                )
+                execution_result = {"status": "success", "message": "Buy order placed"}
             else:
                 execution_result = {
                     "status": "dry_run_success",
-                    "message": "Simulated BUY order"}
+                    "message": "Simulated BUY order",
+                }
 
         elif signal.signal_type == SignalType.SELL:
             if not dry_run:
@@ -398,30 +407,30 @@ class StrategyLogic:
                 logger.info(
                     f"Executing SELL order for {
                         signal.asset} at {
-                        signal.price}")
-                execution_result = {
-                    "status": "success",
-                    "message": "Sell order placed"}
+                        signal.price}"
+                )
+                execution_result = {"status": "success", "message": "Sell order placed"}
             else:
                 execution_result = {
                     "status": "dry_run_success",
-                    "message": "Simulated SELL order"}
+                    "message": "Simulated SELL order",
+                }
 
         elif signal.signal_type == SignalType.CLOSE:
             if not dry_run:
                 logger.info(f"Executing CLOSE order for {signal.asset}")
-                execution_result = {
-                    "status": "success",
-                    "message": "Position closed"}
+                execution_result = {"status": "success", "message": "Position closed"}
             else:
                 execution_result = {
                     "status": "dry_run_success",
-                    "message": "Simulated CLOSE order"}
+                    "message": "Simulated CLOSE order",
+                }
 
         else:  # HOLD or HEDGE
             execution_result = {
                 "status": "no_action",
-                "message": "No trade action required"}
+                "message": "No trade action required",
+            }
 
         # Update performance metrics (simplified)
         self._update_performance_metrics(signal, execution_result)
@@ -429,11 +438,11 @@ class StrategyLogic:
         return execution_result
 
     def _update_performance_metrics(
-            self, signal: TradingSignal, result: Dict[str, Any]) -> None:
+        self, signal: TradingSignal, result: Dict[str, Any]
+    ) -> None:
         """Update strategy performance metrics based on trade execution (simplified)."""
         perf = self.performance.get(signal.strategy_name)
-        if not perf or not self.config.get(
-                "enable_performance_tracking", True):
+        if not perf or not self.config.get("enable_performance_tracking", True):
             return
 
         perf.total_trades += 1
@@ -441,10 +450,18 @@ class StrategyLogic:
             # Dummy PNL update based on simulated trade
             if signal.signal_type == SignalType.BUY:
                 pnl_change = Decimal(
-                    str(signal.volume * (signal.price * random.uniform(1.001, 1.005))))
+                    str(signal.volume * (signal.price * random.uniform(1.001, 1.005)))
+                )
             elif signal.signal_type == SignalType.SELL:
-                pnl_change = Decimal(
-                    str(signal.volume * (signal.price * random.uniform(0.995, 0.999)))) * -1
+                pnl_change = (
+                    Decimal(
+                        str(
+                            signal.volume
+                            * (signal.price * random.uniform(0.995, 0.999))
+                        )
+                    )
+                    * -1
+                )
             else:
                 pnl_change = Decimal("0.0")
 
@@ -455,8 +472,9 @@ class StrategyLogic:
                 perf.losing_trades += 1
 
         # Recalculate win rate and profit factor
-        perf.win_rate = perf.winning_trades / \
-            perf.total_trades if perf.total_trades > 0 else 0.0
+        perf.win_rate = (
+            perf.winning_trades / perf.total_trades if perf.total_trades > 0 else 0.0
+        )
         # Profit factor: (sum of winning trades PnL) / (sum of losing trades PnL magnitude)
         # This requires more detailed PnL tracking, using dummy for now
         perf.profit_factor = 1.5  # Dummy value
@@ -465,10 +483,12 @@ class StrategyLogic:
         logger.debug(
             f"Updated performance for {
                 signal.strategy_name}: PnL={
-                perf.total_pnl:.2f}")
+                perf.total_pnl:.2f}"
+        )
 
     def get_strategy_performance(
-            self, strategy_name: str) -> Optional[StrategyPerformance]:
+        self, strategy_name: str
+    ) -> Optional[StrategyPerformance]:
         """Retrieve performance metrics for a specific strategy."""
         return self.performance.get(strategy_name)
 
@@ -476,9 +496,7 @@ class StrategyLogic:
         """Retrieve performance metrics for all strategies."""
         return self.performance.copy()
 
-    def get_signal_history(
-            self,
-            num_signals: int = 100) -> List[TradingSignal]:
+    def get_signal_history(self, num_signals: int = 100) -> List[TradingSignal]:
         """Retrieve a portion of the signal history."""
         return list(self.signal_history)[-num_signals:]
 
@@ -487,32 +505,18 @@ def main():
     """Main function to demonstrate StrategyLogic functionality."""
     logging.basicConfig(
         level=logging.INFO,
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    )
     strategy_logic = StrategyLogic()
 
     print("\n--- Strategy Logic System Demo ---")
 
     # Simulate market data ticks
-    mock_market_data_1 = {
-        "asset": "BTC/USD",
-        "price": 45000.0,
-        "volume": 1000.0}
-    mock_market_data_2 = {
-        "asset": "BTC/USD",
-        "price": 45100.0,
-        "volume": 1200.0}
-    mock_market_data_3 = {
-        "asset": "BTC/USD",
-        "price": 44900.0,
-        "volume": 900.0}
-    mock_market_data_4 = {
-        "asset": "ETH/USD",
-        "price": 3000.0,
-        "volume": 5000.0}
-    mock_market_data_5 = {
-        "asset": "ETH/USD",
-        "price": 3050.0,
-        "volume": 5500.0}
+    mock_market_data_1 = {"asset": "BTC/USD", "price": 45000.0, "volume": 1000.0}
+    mock_market_data_2 = {"asset": "BTC/USD", "price": 45100.0, "volume": 1200.0}
+    mock_market_data_3 = {"asset": "BTC/USD", "price": 44900.0, "volume": 900.0}
+    mock_market_data_4 = {"asset": "ETH/USD", "price": 3000.0, "volume": 5000.0}
+    mock_market_data_5 = {"asset": "ETH/USD", "price": 3050.0, "volume": 5500.0}
 
     # Process data and generate signals
     print("\nProcessing market data...")
@@ -531,7 +535,8 @@ def main():
                 f"  Signal executed: {
                     signal.signal_type.value} for {
                     signal.asset} - Status: {
-                    result['status']}")
+                    result['status']}"
+            )
 
     print("\n--- Strategy Performance ---")
     all_performance = strategy_logic.get_all_strategy_performance()
@@ -553,7 +558,8 @@ def main():
                 signal.strategy_name}: {
                     signal.signal_type.value} {
                         signal.asset} @ {
-                            signal.price}")
+                            signal.price}"
+        )
 
 
 if __name__ == "__main__":

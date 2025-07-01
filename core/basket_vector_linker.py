@@ -6,9 +6,10 @@ through clustering or vector memory. This module enables Zalgo/Zygot glyph logic
 to emit routing behavior based on observed tick states.
 """
 
-import numpy as np
-from typing import Dict, Any, List, Tuple, Optional
 import hashlib  # For hash pattern matching if needed
+from typing import Any, Dict, List, Optional, Tuple
+
+import numpy as np
 from scipy.spatial.distance import cosine  # For cosine similarity
 
 
@@ -33,22 +34,18 @@ class BasketVectorLinker:
             "total_resolutions": 0,
             "successful_matches": 0,
             "no_match_found": 0,
-            "last_resolution_time": None
+            "last_resolution_time": None,
         }
 
-    def register_strategy_vector(
-            self,
-            strategy_id: str,
-            vector_signature: List[float]):
+    def register_strategy_vector(self, strategy_id: str, vector_signature: List[float]):
         """
         Registers or updates a strategy's vector signature.
         """
         self.strategy_vectors[strategy_id] = np.array(vector_signature)
 
-    def resolve_strategy_basket(self,
-                                lattice_hash_vector: List[float],
-                                similarity_threshold: float = 0.8) -> Optional[Tuple[str,
-                                                                                     float]]:
+    def resolve_strategy_basket(
+        self, lattice_hash_vector: List[float], similarity_threshold: float = 0.8
+    ) -> Optional[Tuple[str, float]]:
         """
         Resolves the best-matching strategy basket for a given lattice hash vector.
 
@@ -70,13 +67,13 @@ class BasketVectorLinker:
         for strategy_id, strategy_vec in self.strategy_vectors.items():
             if len(input_vector) != len(strategy_vec):
                 print(
-                    f"Warning: Vector length mismatch for {strategy_id}. Skipping similarity check.")
+                    f"Warning: Vector length mismatch for {strategy_id}. Skipping similarity check."
+                )
                 continue
 
             # Calculate cosine similarity
             # Ensure non-zero vectors to avoid NaN
-            if np.linalg.norm(input_vector) == 0 or np.linalg.norm(
-                    strategy_vec) == 0:
+            if np.linalg.norm(input_vector) == 0 or np.linalg.norm(strategy_vec) == 0:
                 similarity = 0.0
             else:
                 # cosine returns distance, 1-distance is similarity
@@ -108,7 +105,7 @@ class BasketVectorLinker:
             "total_resolutions": 0,
             "successful_matches": 0,
             "no_match_found": 0,
-            "last_resolution_time": None
+            "last_resolution_time": None,
         }
 
 
@@ -120,7 +117,7 @@ if __name__ == "__main__":
         "TrendFollowing_EMA": [0.1, 0.2, 0.7, 0.05, 0.3],
         "MeanReversion_RSI": [0.8, 0.1, 0.05, 0.6, 0.1],
         "VolatilityBreakout_BB": [0.2, 0.7, 0.1, 0.25, 0.8],
-        "Scalping_Volume": [0.05, 0.05, 0.05, 0.9, 0.95]
+        "Scalping_Volume": [0.05, 0.05, 0.05, 0.9, 0.95],
     }
 
     linker = BasketVectorLinker(initial_strategies)
@@ -141,16 +138,15 @@ if __name__ == "__main__":
 
     # Test Case 3: Vector with no strong match (low similarity_threshold)
     test_vector_3 = [0.9, 0.9, 0.9, 0.9, 0.9]  # Very different
-    match3 = linker.resolve_strategy_basket(
-        test_vector_3, similarity_threshold=0.9)
+    match3 = linker.resolve_strategy_basket(test_vector_3, similarity_threshold=0.9)
     print(f"Test Vector 3: {test_vector_3}")
     print(f"  Best match (threshold 0.9): {match3}")
 
     # Test Case 4: Register new strategy and test
     print("\n--- Registering New Strategy ---")
     linker.register_strategy_vector(
-        "NewStrategy_Arbitrage", [
-            0.95, 0.01, 0.02, 0.01, 0.01])
+        "NewStrategy_Arbitrage", [0.95, 0.01, 0.02, 0.01, 0.01]
+    )
     test_vector_4 = [0.9, 0.0, 0.0, 0.0, 0.0]
     match4 = linker.resolve_strategy_basket(test_vector_4)
     print(f"Test Vector 4: {test_vector_4}")

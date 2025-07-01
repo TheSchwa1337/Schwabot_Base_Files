@@ -10,9 +10,9 @@ for both live and simulated trading modes.
 
 import logging
 import time
-from typing import Dict, List, Optional, Tuple, Union
 from dataclasses import dataclass, field
 from enum import Enum
+from typing import Dict, List, Optional, Tuple, Union
 
 # Import glyph strategy core
 try:
@@ -23,10 +23,10 @@ except ImportError:
 
 # Import existing Schwabot components
 try:
-    from core.strategy_logic import StrategyLogic, SignalType, SignalStrength
-    from core.trade_executor import TradeExecutor
-    from core.risk_manager import RiskManager
     from core.portfolio_tracker import PortfolioTracker
+    from core.risk_manager import RiskManager
+    from core.strategy_logic import SignalStrength, SignalType, StrategyLogic
+    from core.trade_executor import TradeExecutor
 except ImportError:
     StrategyLogic = None
     SignalType = None
@@ -40,6 +40,7 @@ logger = logging.getLogger(__name__)
 
 class SignalDirection(Enum):
     """Signal direction enumeration."""
+
     BUY = "buy"
     SELL = "sell"
     HOLD = "hold"
@@ -49,6 +50,7 @@ class SignalDirection(Enum):
 @dataclass
 class TradeSignal:
     """Trade signal container."""
+
     glyph: str
     strategy_id: int
     direction: SignalDirection
@@ -64,6 +66,7 @@ class TradeSignal:
 @dataclass
 class PositionSizing:
     """Position sizing parameters."""
+
     base_size: float
     confidence_multiplier: float
     risk_adjusted_size: float
@@ -79,12 +82,14 @@ class EntryExitPortal:
     with risk management and portfolio tracking.
     """
 
-    def __init__(self,
-                 glyph_core: Optional[GlyphStrategyCore] = None,
-                 enable_risk_management: bool = True,
-                 enable_portfolio_tracking: bool = True,
-                 max_position_size: float = 0.1,
-                 min_confidence_threshold: float = 0.6):
+    def __init__(
+        self,
+        glyph_core: Optional[GlyphStrategyCore] = None,
+        enable_risk_management: bool = True,
+        enable_portfolio_tracking: bool = True,
+        max_position_size: float = 0.1,
+        min_confidence_threshold: float = 0.6,
+    ):
         """
         Initialize the entry/exit portal.
 
@@ -104,9 +109,14 @@ class EntryExitPortal:
         # Initialize components
         self.strategy_logic = StrategyLogic() if StrategyLogic else None
         self.trade_executor = TradeExecutor() if TradeExecutor else None
-        self.risk_manager = RiskManager() if RiskManager and enable_risk_management else None
-        self.portfolio_tracker = PortfolioTracker(
-        ) if PortfolioTracker and enable_portfolio_tracking else None
+        self.risk_manager = (
+            RiskManager() if RiskManager and enable_risk_management else None
+        )
+        self.portfolio_tracker = (
+            PortfolioTracker()
+            if PortfolioTracker and enable_portfolio_tracking
+            else None
+        )
 
         # Signal processing state
         self.active_signals: List[TradeSignal] = []
@@ -118,20 +128,23 @@ class EntryExitPortal:
             "total_signals": 0,
             "executed_trades": 0,
             "rejected_signals": 0,
-            "avg_processing_time": 0.0
+            "avg_processing_time": 0.0,
         }
 
-        logger.info(f"EntryExitPortal initialized: "
-                    f"risk_mgmt={enable_risk_management}, "
-                    f"portfolio_tracking={enable_portfolio_tracking}")
+        logger.info(
+            f"EntryExitPortal initialized: "
+            f"risk_mgmt={enable_risk_management}, "
+            f"portfolio_tracking={enable_portfolio_tracking}"
+        )
 
     def process_glyph_signal(
-            self,
-            glyph: str,
-            volume_signal: float,
-            asset: str = "BTC/USD",
-            current_price: float = 0.0,
-            confidence_boost: float = 0.0) -> Optional[TradeSignal]:
+        self,
+        glyph: str,
+        volume_signal: float,
+        asset: str = "BTC/USD",
+        current_price: float = 0.0,
+        confidence_boost: float = 0.0,
+    ) -> Optional[TradeSignal]:
         """
         Process glyph signal and generate trade signal.
 
@@ -157,8 +170,10 @@ class EntryExitPortal:
             if strategy_result.confidence < self.min_confidence_threshold:
                 logger.debug(
                     f"Signal rejected: confidence {
-                        strategy_result.confidence:.3f} " f"below threshold {
-                        self.min_confidence_threshold}")
+                        strategy_result.confidence:.3f} "
+                    f"below threshold {
+                        self.min_confidence_threshold}"
+                )
                 self.stats["rejected_signals"] += 1
                 return None
 
@@ -180,8 +195,8 @@ class EntryExitPortal:
                 fractal_hash=strategy_result.fractal_hash,
                 metadata={
                     "gear_state": strategy_result.gear_state,
-                    "processing_time": time.time() - start_time
-                }
+                    "processing_time": time.time() - start_time,
+                },
             )
 
             # Store signal
@@ -196,8 +211,10 @@ class EntryExitPortal:
 
             logger.info(
                 f"Trade signal generated: {glyph} -> {
-                    direction.value} " f"{asset} (confidence: {
-                    strategy_result.confidence:.3f})")
+                    direction.value} "
+                f"{asset} (confidence: {
+                    strategy_result.confidence:.3f})"
+            )
 
             return signal
 
@@ -206,10 +223,11 @@ class EntryExitPortal:
             return None
 
     def _determine_signal_direction(
-            self,
-            strategy_result: GlyphStrategyResult,
-            volume_signal: float,
-            current_price: float) -> SignalDirection:
+        self,
+        strategy_result: GlyphStrategyResult,
+        volume_signal: float,
+        current_price: float,
+    ) -> SignalDirection:
         """
         Determine signal direction based on strategy and market conditions.
 
@@ -243,9 +261,8 @@ class EntryExitPortal:
             return base_direction
 
     def calculate_position_size(
-            self,
-            signal: TradeSignal,
-            portfolio_value: float = 10000.0) -> PositionSizing:
+        self, signal: TradeSignal, portfolio_value: float = 10000.0
+    ) -> PositionSizing:
         """
         Calculate position size based on signal and risk parameters.
 
@@ -280,12 +297,15 @@ class EntryExitPortal:
             confidence_multiplier=confidence_multiplier,
             risk_adjusted_size=final_position_size,
             max_position_size=self.max_position_size,
-            min_position_size=0.0  # Assuming 0 as min for simplicity
+            min_position_size=0.0,  # Assuming 0 as min for simplicity
         )
 
-    def execute_signal(self, signal: TradeSignal,
-                       portfolio_value: float = 10000.0,
-                       dry_run: bool = True) -> Dict[str, any]:
+    def execute_signal(
+        self,
+        signal: TradeSignal,
+        portfolio_value: float = 10000.0,
+        dry_run: bool = True,
+    ) -> Dict[str, any]:
         """
         Execute a trading signal.
 
@@ -299,9 +319,7 @@ class EntryExitPortal:
         """
         self.stats["executed_trades"] += 1
 
-        execution_result = {
-            "status": "failed",
-            "message": "Execution prevented"}
+        execution_result = {"status": "failed", "message": "Execution prevented"}
 
         # Calculate position size
         position_sizing = self.calculate_position_size(signal, portfolio_value)
@@ -310,7 +328,8 @@ class EntryExitPortal:
         if size_to_execute <= 0:  # No position to take
             logger.info(
                 f"No position to execute for {
-                    signal.asset}. Size calculated as 0.")
+                    signal.asset}. Size calculated as 0."
+            )
             return {"status": "no_action", "message": "Position size is zero"}
 
         # Use TradeExecutor if available
@@ -319,30 +338,31 @@ class EntryExitPortal:
                 logger.info(
                     f"Simulating {
                         signal.direction.value} order for {
-                        signal.asset} " f"size {
+                        signal.asset} "
+                    f"size {
                         size_to_execute:.4f} at {
-                        signal.price}")
+                        signal.price}"
+                )
                 execution_result = {
                     "status": "dry_run_success",
                     "order_id": "simulated_" + str(int(time.time())),
                     "executed_size": size_to_execute,
                     "price": signal.price,
                     "fees": size_to_execute * 0.001,  # Simulate 0.1% fee
-                    "message": "Simulated trade execution"
+                    "message": "Simulated trade execution",
                 }
             else:
                 # In a real system, this would call actual exchange API
                 logger.info(
                     f"Placing {
                         signal.direction.value} order for {
-                        signal.asset} " f"size {
+                        signal.asset} "
+                    f"size {
                         size_to_execute:.4f} at {
-                        signal.price}")
+                        signal.price}"
+                )
                 order = self.trade_executor.place_order(
-                    signal.asset,
-                    signal.direction.value,
-                    size_to_execute,
-                    signal.price
+                    signal.asset, signal.direction.value, size_to_execute, signal.price
                 )
                 execution_result = {
                     "status": "live_executed",
@@ -350,27 +370,26 @@ class EntryExitPortal:
                     "executed_size": order.get("executed_size", 0.0),
                     "price": order.get("price", 0.0),
                     "fees": order.get("fees", 0.0),
-                    "message": "Live trade execution"
+                    "message": "Live trade execution",
                 }
         else:
-            logger.warning(
-                "TradeExecutor not available. Cannot execute trades.")
+            logger.warning("TradeExecutor not available. Cannot execute trades.")
             execution_result = {
                 "status": "failed",
-                "message": "TradeExecutor not available"}
+                "message": "TradeExecutor not available",
+            }
 
         # Update portfolio tracker if available
         if self.enable_portfolio_tracking and self.portfolio_tracker:
             self.portfolio_tracker.update_position(
-                signal.asset,
-                signal.direction.value,
-                size_to_execute,
-                signal.price
+                signal.asset, signal.direction.value, size_to_execute, signal.price
             )
             logger.debug(
                 f"Portfolio updated for {
-                    signal.asset}. Current holdings: " f"{
-                    self.portfolio_tracker.get_portfolio_summary()}")
+                    signal.asset}. Current holdings: "
+                f"{
+                    self.portfolio_tracker.get_portfolio_summary()}"
+            )
 
         return execution_result
 
@@ -397,30 +416,33 @@ class EntryExitPortal:
             "total_signals": 0,
             "executed_trades": 0,
             "rejected_signals": 0,
-            "avg_processing_time": 0.0
+            "avg_processing_time": 0.0,
         }
         logger.info("EntryExitPortal signals and stats cleared.")
+
 
 # Standalone utility function (for direct import if needed)
 
 
-def process_glyph_trade_signal(glyph: str,
-                               volume: float,
-                               asset: str = "BTC/USD",
-                               price: float = 50000.0,
-                               dry_run: bool = True) -> Dict[str,
-                                                             any]:
+def process_glyph_trade_signal(
+    glyph: str,
+    volume: float,
+    asset: str = "BTC/USD",
+    price: float = 50000.0,
+    dry_run: bool = True,
+) -> Dict[str, any]:
     """
     Process a glyph signal and execute a simulated trade using a temporary portal instance.
     Intended for quick, stateless trade simulations.
     """
     temp_portal = EntryExitPortal(
-        enable_risk_management=False,
-        enable_portfolio_tracking=False)
+        enable_risk_management=False, enable_portfolio_tracking=False
+    )
     signal = temp_portal.process_glyph_signal(glyph, volume, asset, price)
     if signal:
         return temp_portal.execute_signal(signal, dry_run=dry_run)
     else:
         return {
             "status": "rejected",
-            "message": "Signal did not meet confidence threshold."}
+            "message": "Signal did not meet confidence threshold.",
+        }

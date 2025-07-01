@@ -9,18 +9,18 @@ and live execution modes.
 """
 
 import hashlib
+import logging
 import random
 import time
-import logging
-from datetime import datetime
-from typing import List, Dict, Tuple, Optional, Union
 from dataclasses import dataclass, field
+from datetime import datetime
 from enum import Enum
+from typing import Dict, List, Optional, Tuple, Union
 
 # Import existing Schwabot components
 try:
     from ..strategy_bit_mapper import StrategyBitMapper
-    from ..strategy_logic import StrategyLogic, StrategyType, SignalType
+    from ..strategy_logic import SignalType, StrategyLogic, StrategyType
     from ..unified_math_system import UnifiedMathSystem
 except ImportError:
     # Fallback for standalone testing
@@ -35,14 +35,16 @@ logger = logging.getLogger(__name__)
 
 class GearState(Enum):
     """Gear state enumeration for strategy bit depth selection."""
-    LOW_VOLUME = 4    # 4-bit strategies for low volume
-    MED_VOLUME = 8    # 8-bit strategies for medium volume
+
+    LOW_VOLUME = 4  # 4-bit strategies for low volume
+    MED_VOLUME = 8  # 8-bit strategies for medium volume
     HIGH_VOLUME = 16  # 16-bit strategies for high volume
 
 
 @dataclass
 class GlyphStrategyResult:
     """Result container for glyph strategy selection."""
+
     glyph: str
     gear_state: int
     strategy_id: int
@@ -60,11 +62,13 @@ class GlyphStrategyCore:
     with support for gear-driven bit depth selection and fractal memory.
     """
 
-    def __init__(self,
-                 enable_fractal_memory: bool = True,
-                 enable_gear_shifting: bool = True,
-                 volume_thresholds: Tuple[float, float] = (1.5e6, 5e6),
-                 random_seed: Optional[int] = None):
+    def __init__(
+        self,
+        enable_fractal_memory: bool = True,
+        enable_gear_shifting: bool = True,
+        volume_thresholds: Tuple[float, float] = (1.5e6, 5e6),
+        random_seed: Optional[int] = None,
+    ):
         """
         Initialize the glyph strategy core.
 
@@ -90,7 +94,7 @@ class GlyphStrategyCore:
             "total_selections": 0,
             "gear_shifts": 0,
             "fractal_stores": 0,
-            "avg_processing_time": 0.0
+            "avg_processing_time": 0.0,
         }
 
         # Set random seed
@@ -113,7 +117,7 @@ class GlyphStrategyCore:
         Returns:
             SHA-256 hash string
         """
-        return hashlib.sha256(glyph.encode('utf-8')).hexdigest()
+        return hashlib.sha256(glyph.encode("utf-8")).hexdigest()
 
     def sha_to_strategy_bits(self, sha: str, bit_depth: int = 4) -> int:
         """
@@ -174,8 +178,9 @@ class GlyphStrategyCore:
         self.stats["gear_shifts"] += 1
         return gear_state
 
-    def store_fractal_hash(self, glyph: str, strategy_id: int,
-                           timestamp: Optional[str] = None) -> str:
+    def store_fractal_hash(
+        self, glyph: str, strategy_id: int, timestamp: Optional[str] = None
+    ) -> str:
         """
         Encode glyph + strategy into persistent fractal identity hash.
 
@@ -192,7 +197,7 @@ class GlyphStrategyCore:
 
         ts = timestamp or datetime.utcnow().isoformat()
         core_string = f"{glyph}-{strategy_id}-{ts}"
-        fractal_hash = hashlib.sha256(core_string.encode('utf-8')).hexdigest()
+        fractal_hash = hashlib.sha256(core_string.encode("utf-8")).hexdigest()
 
         # Store in fractal memory
         self.forever_fractal_hashes.append(fractal_hash)
@@ -204,8 +209,9 @@ class GlyphStrategyCore:
         self.stats["fractal_stores"] += 1
         return fractal_hash
 
-    def select_strategy(self, glyph: str, volume_signal: float = 0.0,
-                        confidence_boost: float = 0.0) -> GlyphStrategyResult:
+    def select_strategy(
+        self, glyph: str, volume_signal: float = 0.0, confidence_boost: float = 0.0
+    ) -> GlyphStrategyResult:
         """
         Combined strategy selection function for runtime use.
 
@@ -237,9 +243,9 @@ class GlyphStrategyCore:
             processing_time = time.time() - start_time
             self.stats["total_selections"] += 1
             self.stats["avg_processing_time"] = (
-                (self.stats["avg_processing_time"] * (self.stats["total_selections"] - 1) +
-                 processing_time) / self.stats["total_selections"]
-            )
+                self.stats["avg_processing_time"] * (self.stats["total_selections"] - 1)
+                + processing_time
+            ) / self.stats["total_selections"]
 
             result = GlyphStrategyResult(
                 glyph=glyph,
@@ -250,7 +256,7 @@ class GlyphStrategyCore:
                 metadata={
                     "processing_time": processing_time,
                     "volume_signal": volume_signal,
-                }
+                },
             )
 
             return result
@@ -262,11 +268,12 @@ class GlyphStrategyCore:
                 gear_state=4,
                 strategy_id=0,
                 fractal_hash="error",
-                confidence=0.0
+                confidence=0.0,
             )
 
-    def expand_strategy(self, base_strategy: int, target_depth: int = 8,
-                        mode: str = "flip") -> List[int]:
+    def expand_strategy(
+        self, base_strategy: int, target_depth: int = 8, mode: str = "flip"
+    ) -> List[int]:
         """
         Expand a base 4-bit strategy to a higher bit depth.
 
@@ -274,10 +281,10 @@ class GlyphStrategyCore:
         """
         if self.bit_mapper:
             return self.bit_mapper.expand_strategy_bits(
-                base_strategy, target_depth, mode)
+                base_strategy, target_depth, mode
+            )
         else:
-            logger.warning(
-                "StrategyBitMapper not available. Cannot expand strategy.")
+            logger.warning("StrategyBitMapper not available. Cannot expand strategy.")
             return [base_strategy] * (target_depth // 4)
 
     def get_fractal_memory_stats(self) -> Dict[str, any]:
@@ -300,9 +307,10 @@ class GlyphStrategyCore:
             "total_selections": 0,
             "gear_shifts": 0,
             "fractal_stores": 0,
-            "avg_processing_time": 0.0
+            "avg_processing_time": 0.0,
         }
         logger.info("GlyphStrategyCore memory and stats reset.")
+
 
 # Standalone utility function (for direct import if needed)
 
@@ -313,8 +321,8 @@ def glyph_to_strategy(glyph: str, volume: float = 0.0) -> Dict[str, any]:
     Intended for quick, stateless conversions.
     """
     temp_core = GlyphStrategyCore(
-        enable_fractal_memory=False,
-        enable_gear_shifting=True)
+        enable_fractal_memory=False, enable_gear_shifting=True
+    )
     result = temp_core.select_strategy(glyph, volume)
     return {
         "glyph": result.glyph,

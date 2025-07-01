@@ -14,14 +14,16 @@ Key functionalities include:
 - Integration with other strategy modules for dynamic control.
 """
 
-import numpy as np
 import time
-from typing import Dict, Any, List, Tuple, Optional, Union
 from enum import Enum  # Added missing import for Enum
+from typing import Any, Dict, List, Optional, Tuple, Union
+
+import numpy as np
 
 
 class MarketPhase(Enum):
     """Defines different market phases."""
+
     TREND = "trend"
     CONSOLIDATION = "consolidation"
     VOLATILITY = "volatility"
@@ -35,11 +37,13 @@ class MultiPhaseStrategyWeightTensor:
     based on identified market phases.
     """
 
-    def __init__(self,
-                 strategy_ids: List[str],
-                 initial_weights: Optional[Dict[str, float]] = None,
-                 phase_sensitivity: float = 0.1,
-                 decay_factor: float = 0.95):
+    def __init__(
+        self,
+        strategy_ids: List[str],
+        initial_weights: Optional[Dict[str, float]] = None,
+        phase_sensitivity: float = 0.1,
+        decay_factor: float = 0.95,
+    ):
         """
         Initializes the MultiPhaseStrategyWeightTensor.
 
@@ -56,23 +60,19 @@ class MultiPhaseStrategyWeightTensor:
         # Ensure unique and ordered
         self.strategy_ids = sorted(list(set(strategy_ids)))
         self.num_strategies = len(self.strategy_ids)
-        self.strategy_to_index = {
-            sid: i for i, sid in enumerate(
-                self.strategy_ids)}
+        self.strategy_to_index = {sid: i for i, sid in enumerate(self.strategy_ids)}
 
         # Initialize weights tensor (strategies x phases)
         # For simplicity, we'll start with 2D: strategy_id x phase
         # More complex could be strategy_id x phase x time_horizon, etc.
         self.phases = [phase.value for phase in MarketPhase]
         self.num_phases = len(self.phases)
-        self.phase_to_index = {
-            phase_val: i for i,
-            phase_val in enumerate(
-                self.phases)}
+        self.phase_to_index = {phase_val: i for i, phase_val in enumerate(self.phases)}
 
         # Initialize the weight tensor. Shape: (num_strategies, num_phases)
-        self.weight_tensor = np.ones(
-            (self.num_strategies, self.num_phases)) / self.num_strategies
+        self.weight_tensor = (
+            np.ones((self.num_strategies, self.num_phases)) / self.num_strategies
+        )
 
         if initial_weights:
             for strategy, weight in initial_weights.items():
@@ -92,7 +92,7 @@ class MultiPhaseStrategyWeightTensor:
             "last_update_time": None,
             "total_updates": 0,
             "phase_transitions": 0,
-            "active_phase": self.current_phase.value
+            "active_phase": self.current_phase.value,
         }
 
     def _normalize_weights(self):
@@ -105,8 +105,7 @@ class MultiPhaseStrategyWeightTensor:
         col_sums[col_sums == 0] = 1.0
         self.weight_tensor = self.weight_tensor / col_sums
 
-    def get_strategy_weights_for_phase(
-            self, phase: MarketPhase) -> Dict[str, float]:
+    def get_strategy_weights_for_phase(self, phase: MarketPhase) -> Dict[str, float]:
         """
         Retrieves the weights for all strategies given a specific market phase.
 
@@ -122,12 +121,13 @@ class MultiPhaseStrategyWeightTensor:
         phase_idx = self.phase_to_index[phase.value]
         weights = self.weight_tensor[:, phase_idx]
 
-        return {self.strategy_ids[i]: weights[i]
-                for i in range(self.num_strategies)}
+        return {self.strategy_ids[i]: weights[i] for i in range(self.num_strategies)}
 
-    def update_weights(self,
-                       identified_phase: MarketPhase,
-                       performance_feedback: Dict[str, Dict[str, float]]):
+    def update_weights(
+        self,
+        identified_phase: MarketPhase,
+        performance_feedback: Dict[str, Dict[str, float]],
+    ):
         """
         Adjusts strategy weights based on the identified market phase and
         performance feedback for each strategy.
@@ -179,15 +179,16 @@ class MultiPhaseStrategyWeightTensor:
             "strategy_ids": self.strategy_ids,
             "phases": self.phases,
             "current_phase": self.current_phase.value,
-            "metrics": self.metrics
+            "metrics": self.metrics,
         }
 
     def reset(self, initial_weights: Optional[Dict[str, float]] = None):
         """
         Resets the tensor to initial weights and clears metrics.
         """
-        self.weight_tensor = np.ones(
-            (self.num_strategies, self.num_phases)) / self.num_strategies
+        self.weight_tensor = (
+            np.ones((self.num_strategies, self.num_phases)) / self.num_strategies
+        )
         if initial_weights:
             for strategy, weight in initial_weights.items():
                 if strategy in self.strategy_to_index:
@@ -199,7 +200,7 @@ class MultiPhaseStrategyWeightTensor:
             "last_update_time": None,
             "total_updates": 0,
             "phase_transitions": 0,
-            "active_phase": self.current_phase.value
+            "active_phase": self.current_phase.value,
         }
 
     def get_active_phase(self) -> MarketPhase:
@@ -213,11 +214,7 @@ if __name__ == "__main__":
     print("--- Multi-Phase Strategy Weight Tensor Demo ---")
 
     # Define some dummy strategy IDs
-    strategies = [
-        "EMA_Cross",
-        "RSI_Divergence",
-        "Bollinger_Squeeze",
-        "Volume_Breakout"]
+    strategies = ["EMA_Cross", "RSI_Divergence", "Bollinger_Squeeze", "Volume_Breakout"]
     tensor_manager = MultiPhaseStrategyWeightTensor(strategy_ids=strategies)
 
     print("\nInitial Weights (across all phases):")
@@ -230,7 +227,7 @@ if __name__ == "__main__":
         "EMA_Cross": {"pnl": 0.02, "volatility": 0.005},
         "RSI_Divergence": {"pnl": -0.005, "volatility": 0.002},
         "Bollinger_Squeeze": {"pnl": 0.001, "volatility": 0.001},
-        "Volume_Breakout": {"pnl": 0.008, "volatility": 0.003}
+        "Volume_Breakout": {"pnl": 0.008, "volatility": 0.003},
     }
     tensor_manager.update_weights(MarketPhase.TREND, performance_trend)
     print("Weights for TREND phase after update:")
@@ -243,15 +240,11 @@ if __name__ == "__main__":
         "EMA_Cross": {"pnl": -0.01, "volatility": 0.003},
         "RSI_Divergence": {"pnl": 0.002, "volatility": 0.001},
         "Bollinger_Squeeze": {"pnl": 0.03, "volatility": 0.001},
-        "Volume_Breakout": {"pnl": -0.002, "volatility": 0.004}
+        "Volume_Breakout": {"pnl": -0.002, "volatility": 0.004},
     }
-    tensor_manager.update_weights(
-        MarketPhase.CONSOLIDATION,
-        performance_consolidation)
+    tensor_manager.update_weights(MarketPhase.CONSOLIDATION, performance_consolidation)
     print("Weights for CONSOLIDATION phase after update:")
-    print(
-        tensor_manager.get_strategy_weights_for_phase(
-            MarketPhase.CONSOLIDATION))
+    print(tensor_manager.get_strategy_weights_for_phase(MarketPhase.CONSOLIDATION))
     print(f"Current Active Phase: {tensor_manager.get_active_phase()}")
 
     # Scenario 3: Volatility phase, Volume_Breakout performs well
@@ -260,11 +253,9 @@ if __name__ == "__main__":
         "EMA_Cross": {"pnl": 0.00, "volatility": 0.005},
         "RSI_Divergence": {"pnl": 0.01, "volatility": 0.006},
         "Bollinger_Squeeze": {"pnl": -0.008, "volatility": 0.002},
-        "Volume_Breakout": {"pnl": 0.04, "volatility": 0.01}
+        "Volume_Breakout": {"pnl": 0.04, "volatility": 0.01},
     }
-    tensor_manager.update_weights(
-        MarketPhase.VOLATILITY,
-        performance_volatility)
+    tensor_manager.update_weights(MarketPhase.VOLATILITY, performance_volatility)
     print("Weights for VOLATILITY phase after update:")
     print(tensor_manager.get_strategy_weights_for_phase(MarketPhase.VOLATILITY))
     print(f"Current Active Phase: {tensor_manager.get_active_phase()}")
@@ -276,7 +267,7 @@ if __name__ == "__main__":
     print(f"Active Phase: {state['metrics']['active_phase']}")
     print("Full Weight Tensor:")
     for row in state["current_weight_tensor"]:
-        print([f'{x:.4f}' for x in row])
+        print([f"{x:.4f}" for x in row])
 
     print("\n--- Resetting the tensor ---")
     tensor_manager.reset()

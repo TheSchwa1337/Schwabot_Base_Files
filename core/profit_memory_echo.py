@@ -5,9 +5,10 @@ Implements the Recursive Memory Projection (Fₑ(t)), allowing Schwabot to "echo
 previous profitable logic by replaying or biasing decisions based on past successful lattice states.
 """
 
-import numpy as np
 import time
-from typing import Dict, Any, Optional
+from typing import Any, Dict, Optional
+
+import numpy as np
 
 
 class ProfitMemoryEcho:
@@ -15,8 +16,7 @@ class ProfitMemoryEcho:
     Manages the recursive memory projection to leverage past profitable lattice states.
     """
 
-    def __init__(self, memory_offset: int = 72,
-                 volatility_scalar: float = 1.0):
+    def __init__(self, memory_offset: int = 72, volatility_scalar: float = 1.0):
         """
         Initializes the ProfitMemoryEcho.
 
@@ -30,14 +30,12 @@ class ProfitMemoryEcho:
         self.metrics: Dict[str, Any] = {
             "total_projections": 0,
             "successful_echoes": 0,
-            "last_projection_time": None
+            "last_projection_time": None,
         }
 
     def store_lattice_state(
-            self,
-            tick_id: int,
-            lattice_state: float,
-            profit_vector: float):
+        self, tick_id: int, lattice_state: float, profit_vector: float
+    ):
         """
         Stores a lattice state and its associated profit vector.
 
@@ -49,11 +47,12 @@ class ProfitMemoryEcho:
         self.lattice_history[tick_id] = {
             "L(t)": lattice_state,
             "ΔL": profit_vector,
-            "timestamp": time.time()
+            "timestamp": time.time(),
         }
 
     def retrieve_memory_projection(
-            self, current_tick_id: int) -> Optional[Dict[str, Any]]:
+        self, current_tick_id: int
+    ) -> Optional[Dict[str, Any]]:
         """
         Retrieves the recursive memory projection (Fₑ(t)) based on the memory offset.
 
@@ -89,7 +88,7 @@ class ProfitMemoryEcho:
                 "L(t-τ)": l_t_minus_tau,
                 "ΔL": delta_l,
                 "σ_inv": 1 / effective_volatility_scalar,
-                "historical_tick_id": historical_tick_id
+                "historical_tick_id": historical_tick_id,
             }
         else:
             return None
@@ -100,8 +99,11 @@ class ProfitMemoryEcho:
         """
         return self.metrics
 
-    def update_parameters(self, new_memory_offset: Optional[int] = None,
-                          new_volatility_scalar: Optional[float] = None):
+    def update_parameters(
+        self,
+        new_memory_offset: Optional[int] = None,
+        new_volatility_scalar: Optional[float] = None,
+    ):
         """
         Updates the parameters for memory projection.
         """
@@ -119,7 +121,7 @@ class ProfitMemoryEcho:
         self.metrics = {
             "total_projections": 0,
             "successful_echoes": 0,
-            "last_projection_time": None
+            "last_projection_time": None,
         }
 
 
@@ -138,7 +140,8 @@ if __name__ == "__main__":
         print(
             f"Stored Tick {i}: L(t)={
                 lattice_val:.2f}, ΔL={
-                profit_change:.2f}")
+                profit_change:.2f}"
+        )
 
     print("\n--- Retrieving Memory Projections ---")
 
@@ -148,9 +151,9 @@ if __name__ == "__main__":
     if projection_1:
         print(
             f"Current Tick {current_tick_1}: Projected Memory: {
-                projection_1['projected_value']:.4f}")
-        print(
-            f"  L(t-τ): {projection_1['L(t-τ)']:.2f}, ΔL: {projection_1['ΔL']:.2f}")
+                projection_1['projected_value']:.4f}"
+        )
+        print(f"  L(t-τ): {projection_1['L(t-τ)']:.2f}, ΔL: {projection_1['ΔL']:.2f}")
     else:
         print(f"Current Tick {current_tick_1}: No memory projection found.")
     print(f"Metrics: {memory_echo.get_metrics()}")
@@ -162,26 +165,26 @@ if __name__ == "__main__":
     if projection_2:
         print(
             f"Current Tick {current_tick_2}: Projected Memory: {
-                projection_2['projected_value']:.4f}")
+                projection_2['projected_value']:.4f}"
+        )
     else:
-        print(
-            f"Current Tick {current_tick_2}: No memory projection found (expected).")
+        print(f"Current Tick {current_tick_2}: No memory projection found (expected).")
     print(f"Metrics: {memory_echo.get_metrics()}")
 
     # Test Case 3: Update parameters and test again
     print("\n--- Updating Parameters and Retesting ---")
-    memory_echo.update_parameters(
-        new_memory_offset=2,
-        new_volatility_scalar=0.1)
+    memory_echo.update_parameters(new_memory_offset=2, new_volatility_scalar=0.1)
     current_tick_3 = 10
     projection_3 = memory_echo.retrieve_memory_projection(current_tick_3)
     if projection_3:
         print(
             f"Current Tick {current_tick_3} (new offset): Projected Memory: {
-                projection_3['projected_value']:.4f}")
+                projection_3['projected_value']:.4f}"
+        )
     else:
         print(
-            f"Current Tick {current_tick_3} (new offset): No memory projection found.")
+            f"Current Tick {current_tick_3} (new offset): No memory projection found."
+        )
     print(f"Metrics: {memory_echo.get_metrics()}")
 
     print("\n--- Resetting the Memory Echo ---")

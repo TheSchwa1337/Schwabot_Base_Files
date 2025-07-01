@@ -12,6 +12,7 @@ from typing import Any, Dict, NamedTuple, Optional
 
 class BitPhase(Enum):
     """Defines different bit phases for operations."""
+
     FOUR_BIT = "4-bit"
     EIGHT_BIT = "8-bit"
     SIXTEEN_BIT = "16-bit"
@@ -22,6 +23,7 @@ class BitPhase(Enum):
 
 class StrategyType(Enum):
     """Defines different types of strategies."""
+
     GLYPH_STRATEGY = "glyph_strategy"
     MULTI_BIT_STRATEGY = "multi_bit_strategy"
     LATTICE_STRATEGY = "lattice_strategy"
@@ -30,6 +32,7 @@ class StrategyType(Enum):
 
 class PhaseBitResolution(NamedTuple):
     """Result of a bit phase resolution."""
+
     bit_phase: BitPhase
     strategy_type: StrategyType
     confidence: float
@@ -47,10 +50,9 @@ class PhaseBitIntegration:
         """Initialize PhaseBitIntegration."""
         pass  # Add more complex initialization if needed later
 
-    def resolve_bit_phase(self,
-                          context_hash: str,
-                          resolution_mode: str = "auto",
-                          **kwargs: Any) -> PhaseBitResolution:
+    def resolve_bit_phase(
+        self, context_hash: str, resolution_mode: str = "auto", **kwargs: Any
+    ) -> PhaseBitResolution:
         """
         Resolves the appropriate bit phase and strategy type based on a context hash.
 
@@ -94,9 +96,7 @@ class PhaseBitIntegration:
                 confidence = 0.5
 
         return PhaseBitResolution(
-            bit_phase=bit_phase,
-            strategy_type=strategy_type,
-            confidence=confidence
+            bit_phase=bit_phase, strategy_type=strategy_type, confidence=confidence
         )
 
 
@@ -114,7 +114,8 @@ if __name__ == "__main__":
                 :10]}..., Resolution: {
             res1.bit_phase.value}, Strategy: {
                     res1.strategy_type.value}, Confidence: {
-                        res1.confidence:.2f}")
+                        res1.confidence:.2f}"
+    )
 
     # Example 2: Auto resolution with a shorter hash
     hash2 = "44c8ae7917a19140"
@@ -125,7 +126,8 @@ if __name__ == "__main__":
                 :10]}..., Resolution: {
             res2.bit_phase.value}, Strategy: {
                     res2.strategy_type.value}, Confidence: {
-                        res2.confidence:.2f}")
+                        res2.confidence:.2f}"
+    )
 
     # Example 3: Explicit 16-bit resolution
     hash3 = "abcdef1234567890"
@@ -136,4 +138,5 @@ if __name__ == "__main__":
                 :10]}..., Resolution: {
             res3.bit_phase.value}, Strategy: {
                     res3.strategy_type.value}, Confidence: {
-                        res3.confidence:.2f}")
+                        res3.confidence:.2f}"
+    )

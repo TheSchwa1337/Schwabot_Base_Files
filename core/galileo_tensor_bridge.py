@@ -14,19 +14,20 @@ import math
 import sys
 import time
 from dataclasses import dataclass, field
+from decimal import getcontext
 from enum import Enum
 from pathlib import Path
 from typing import Any, Dict, List, Optional
-from decimal import getcontext
 
 import numpy as np
+
+from core.warp_sync_core import WarpSyncCore
 
 # Add project root to path for imports
 project_root = Path(__file__).parent.parent
 sys.path.append(str(project_root))
 
 # Import Schwabot core modules
-from core.warp_sync_core import WarpSyncCore
 
 # Set high precision for financial calculations
 getcontext().prec = 18
@@ -109,8 +110,8 @@ class GalileoTensorBridge:
 
         # Initialize core components
         self.warp_core = WarpSyncCore(
-            initial_lambda=self.config.get('warp_lambda', 0.01),
-            initial_sigma_sq=self.config.get('warp_sigma_sq', 0.005)
+            initial_lambda=self.config.get("warp_lambda", 0.01),
+            initial_sigma_sq=self.config.get("warp_sigma_sq", 0.005),
         )
 
         # Mathematical constants
@@ -120,7 +121,7 @@ class GalileoTensorBridge:
         # Analysis state
         self.current_analysis: Optional[TensorAnalysisResult] = None
         self.analysis_history: List[TensorAnalysisResult] = []
-        self.max_history_size = self.config.get('max_history_size', 1000)
+        self.max_history_size = self.config.get("max_history_size", 1000)
 
         # Performance tracking
         self.total_analyses = 0
@@ -136,15 +137,15 @@ class GalileoTensorBridge:
     def _default_config(self) -> Dict[str, Any]:
         """Return default configuration."""
         return {
-            'max_history_size': 1000,
-            'warp_lambda': 0.01,
-            'warp_sigma_sq': 0.005,
-            'enable_real_time_streaming': True,
-            'websocket_port': 8765,
-            'btc_hash_update_interval': 1.0,
-            'tensor_analysis_interval': 0.1,
-            'enable_gut_bridge': True,
-            'enable_sp_integration': True
+            "max_history_size": 1000,
+            "warp_lambda": 0.01,
+            "warp_sigma_sq": 0.005,
+            "enable_real_time_streaming": True,
+            "websocket_port": 8765,
+            "btc_hash_update_interval": 1.0,
+            "tensor_analysis_interval": 0.1,
+            "enable_gut_bridge": True,
+            "enable_sp_integration": True,
         }
 
     def calculate_quantum_ratio(self, interval: float) -> float:
@@ -167,10 +168,7 @@ class GalileoTensorBridge:
         tau = self.tensor_constants.TAU
         phi = self.tensor_constants.PHI
 
-        resonance_sum = sum(
-            math.pow(phi, -n) * psi * tau
-            for n in range(1, 11)
-        )
+        resonance_sum = sum(math.pow(phi, -n) * psi * tau for n in range(1, 11))
 
         return resonance_sum / 10
 
@@ -180,22 +178,20 @@ class GalileoTensorBridge:
         epsilon = self.tensor_constants.EPSILON
         tau = self.tensor_constants.TAU
 
-        tensor_field = np.array([
-            [psi, epsilon, 0, math.pi],
-            [epsilon, psi, tau, 0],
-            [0, tau, math.pi, epsilon],
-            [math.pi, 0, epsilon, psi]
-        ])
+        tensor_field = np.array(
+            [
+                [psi, epsilon, 0, math.pi],
+                [epsilon, psi, tau, 0],
+                [0, tau, math.pi, epsilon],
+                [math.pi, 0, epsilon, psi],
+            ]
+        )
 
         return tensor_field
 
     def calculate_stability_factors(self) -> Dict[str, float]:
         """Calculate harmonic stability factors."""
-        return {
-            "UNISON": 1.0000000,
-            "FIFTH": 0.9999206,
-            "OCTAVE": 0.9998413
-        }
+        return {"UNISON": 1.0000000, "FIFTH": 0.9999206, "OCTAVE": 0.9998413}
 
     def calculate_qss2_entropy_variation(self, freq: float) -> float:
         """Calculate QSS 2.0 entropy variation."""
@@ -223,7 +219,9 @@ class GalileoTensorBridge:
     def calculate_gut_metrics(self, btc_price: float) -> GUTMetrics:
         """Calculate GUT (Grand Unified Theory) metrics."""
         # Psi recursive calculation using complex analysis
-        psi_recursive_complex = complex(0.993, 0.002) * cmath.exp(complex(0, math.pi/4))
+        psi_recursive_complex = complex(0.993, 0.002) * cmath.exp(
+            complex(0, math.pi / 4)
+        )
         psi_recursive = abs(psi_recursive_complex)
 
         # H Phase coherence
@@ -240,7 +238,7 @@ class GalileoTensorBridge:
             stability_metric=stability_metric,
             temporal_lock=0.997,
             entropy_decay=0.002,
-            phase_variance=0.0015
+            phase_variance=0.0015,
         )
 
     def generate_btc_hash_frequency(self, btc_price: float) -> float:
@@ -254,7 +252,9 @@ class GalileoTensorBridge:
 
         return base_freq * frequency_multiplier
 
-    def perform_complete_analysis(self, btc_price: float, btc_hash: str = None) -> TensorAnalysisResult:
+    def perform_complete_analysis(
+        self, btc_price: float, btc_hash: str = None
+    ) -> TensorAnalysisResult:
         """Perform complete tensor analysis for current BTC state."""
         try:
             current_time = time.time()
@@ -267,7 +267,7 @@ class GalileoTensorBridge:
             quantum_ratios = {
                 "UNISON": self.calculate_quantum_ratio(self.tensor_constants.UNISON),
                 "FIFTH": self.calculate_quantum_ratio(self.tensor_constants.FIFTH),
-                "OCTAVE": self.calculate_quantum_ratio(self.tensor_constants.OCTAVE)
+                "OCTAVE": self.calculate_quantum_ratio(self.tensor_constants.OCTAVE),
             }
 
             # Calculate phi-resonance pattern
@@ -287,7 +287,7 @@ class GalileoTensorBridge:
             sp_evaluation = self.warp_core.quantum_weighted_strategy_evaluation(
                 ratio=btc_price / 50000.0,  # Normalize BTC price to ratio
                 freq=btc_freq,
-                asset_pair="BTC/USDC"
+                asset_pair="BTC/USDC",
             )
 
             # Create complete analysis result
@@ -305,8 +305,8 @@ class GalileoTensorBridge:
                 metadata={
                     "btc_frequency": btc_freq,
                     "analysis_duration": time.time() - current_time,
-                    "warp_metrics": self.warp_core.get_metrics()
-                }
+                    "warp_metrics": self.warp_core.get_metrics(),
+                },
             )
 
             # Update state
@@ -315,7 +315,7 @@ class GalileoTensorBridge:
 
             # Trim history if necessary
             if len(self.analysis_history) > self.max_history_size:
-                self.analysis_history = self.analysis_history[-self.max_history_size:]
+                self.analysis_history = self.analysis_history[-self.max_history_size :]
 
             # Update performance metrics
             self.total_analyses += 1
@@ -342,32 +342,36 @@ class GalileoTensorBridge:
             "timestamp": analysis.timestamp,
             "btc_price": analysis.btc_price,
             "btc_hash": analysis.btc_hash,
-
             # Galileo-Tensor data
             "quantumRatios": [
                 {
                     "interval": interval,
                     "perfectRatio": getattr(self.tensor_constants, interval),
                     "quantumRatio": ratio,
-                    "deviation": abs(getattr(self.tensor_constants, interval) - ratio)
+                    "deviation": abs(getattr(self.tensor_constants, interval) - ratio),
                 }
                 for interval, ratio in analysis.quantum_ratios.items()
             ],
-
             "phiResonance": analysis.phi_resonance,
             "stabilityFactors": analysis.stability_factors,
             "tensorFieldCoherence": analysis.tensor_field_coherence,
-
             # QSS2 validation data
             "qss2Validation": {
-                "entropyVariation": self.calculate_qss2_entropy_variation(analysis.metadata["btc_frequency"]),
-                "phaseAlignment": self.calculate_qss2_phase_alignment(analysis.metadata["btc_frequency"]),
+                "entropyVariation": self.calculate_qss2_entropy_variation(
+                    analysis.metadata["btc_frequency"]
+                ),
+                "phaseAlignment": self.calculate_qss2_phase_alignment(
+                    analysis.metadata["btc_frequency"]
+                ),
                 "isStable": self.check_qss2_stability(
-                    self.calculate_qss2_entropy_variation(analysis.metadata["btc_frequency"]),
-                    self.calculate_qss2_phase_alignment(analysis.metadata["btc_frequency"])
-                )
+                    self.calculate_qss2_entropy_variation(
+                        analysis.metadata["btc_frequency"]
+                    ),
+                    self.calculate_qss2_phase_alignment(
+                        analysis.metadata["btc_frequency"]
+                    ),
+                ),
             },
-
             # GUT metrics
             "gutMetrics": {
                 "psiRecursive": analysis.gut_metrics.psi_recursive,
@@ -375,18 +379,16 @@ class GalileoTensorBridge:
                 "stabilityMetric": analysis.gut_metrics.stability_metric,
                 "temporalLock": analysis.gut_metrics.temporal_lock,
                 "entropyDecay": analysis.gut_metrics.entropy_decay,
-                "phaseVariance": analysis.gut_metrics.phase_variance
+                "phaseVariance": analysis.gut_metrics.phase_variance,
             },
-
             # SP integration
             "spIntegration": analysis.sp_integration,
-
             # Performance metrics
             "performance": {
                 "totalAnalyses": self.total_analyses,
                 "successRate": self.successful_analyses / max(self.total_analyses, 1),
-                "lastAnalysisTime": self.last_analysis_time
-            }
+                "lastAnalysisTime": self.last_analysis_time,
+            },
         }
 
     def get_recent_history(self, count: int = 50) -> List[Dict[str, Any]]:
@@ -400,8 +402,10 @@ class GalileoTensorBridge:
                 "phi_resonance": analysis.phi_resonance,
                 "tensor_coherence": analysis.tensor_field_coherence,
                 "sp_quantum_score": analysis.sp_integration.get("quantum_score", 0),
-                "sp_phase_bucket": analysis.sp_integration.get("phase_bucket", "unknown"),
-                "gut_stability": analysis.gut_metrics.stability_metric
+                "sp_phase_bucket": analysis.sp_integration.get(
+                    "phase_bucket", "unknown"
+                ),
+                "gut_stability": analysis.gut_metrics.stability_metric,
             }
             for analysis in recent_analyses
         ]
@@ -409,13 +413,17 @@ class GalileoTensorBridge:
     async def add_websocket_client(self, websocket):
         """Add WebSocket client for real-time streaming."""
         self.websocket_clients.append(websocket)
-        logger.info(f"🔗 WebSocket client connected. Total clients: {len(self.websocket_clients)}")
+        logger.info(
+            f"🔗 WebSocket client connected. Total clients: {len(self.websocket_clients)}"
+        )
 
     async def remove_websocket_client(self, websocket):
         """Remove WebSocket client."""
         if websocket in self.websocket_clients:
             self.websocket_clients.remove(websocket)
-        logger.info(f"🔗 WebSocket client disconnected. Total clients: {len(self.websocket_clients)}")
+        logger.info(
+            f"🔗 WebSocket client disconnected. Total clients: {len(self.websocket_clients)}"
+        )
 
     async def broadcast_analysis(self, analysis_data: Dict[str, Any]):
         """Broadcast analysis data to all connected WebSocket clients."""
@@ -423,6 +431,7 @@ class GalileoTensorBridge:
             return
 
         import json
+
         message = json.dumps(analysis_data)
 
         # Send to all clients
@@ -447,7 +456,7 @@ class GalileoTensorBridge:
             "success_rate": self.successful_analyses / max(self.total_analyses, 1),
             "last_analysis_time": self.last_analysis_time,
             "history_size": len(self.analysis_history),
-            "connected_clients": len(self.websocket_clients)
+            "connected_clients": len(self.websocket_clients),
         }
 
 
@@ -463,4 +472,4 @@ if __name__ == "__main__":
     print(f"Phi Resonance: {result.phi_resonance:.3f}")
     print(f"Tensor Coherence: {result.tensor_field_coherence:.3f}")
     print(f"SP Quantum Score: {result.sp_integration['quantum_score']:.4f}")
-    print(f"GUT Stability: {result.gut_metrics.stability_metric:.4f}") 
+    print(f"GUT Stability: {result.gut_metrics.stability_metric:.4f}")

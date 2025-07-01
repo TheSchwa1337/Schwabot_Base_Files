@@ -3,7 +3,7 @@
 # ==========================================================
 
 # Maximum line length
-max-line-length = 120
+max-line-length = 88
 
 # Maximum complexity for functions
 max-complexity = 15
@@ -182,7 +182,7 @@ statistics = True
 verbose = 0
 
 # Extend ignore
-extend-ignore = 
+extend-ignore = D,ANN,B007,S311,E501
 
 # Extend select
 extend-select = 

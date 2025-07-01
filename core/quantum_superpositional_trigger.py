@@ -7,9 +7,10 @@ a closed loop of hash -> strategy -> execution -> memory -> hash.
 """
 
 import hashlib
-import numpy as np
 import time
-from typing import Dict, Any, Optional
+from typing import Any, Dict, Optional
+
+import numpy as np
 
 
 class QuantumSuperpositionalTrigger:
@@ -26,13 +27,15 @@ class QuantumSuperpositionalTrigger:
         self.metrics: Dict[str, Any] = {
             "total_collapses": 0,
             "last_collapse_time": None,
-            "avg_collapse_time": 0.0
+            "avg_collapse_time": 0.0,
         }
 
-    def collapse_superposition(self,
-                               recursive_hash_states: Dict[str, Any],
-                               conscious_processor_status: Dict[str, Any],
-                               purposeful_logic_collapse: bool) -> Dict[str, Any]:
+    def collapse_superposition(
+        self,
+        recursive_hash_states: Dict[str, Any],
+        conscious_processor_status: Dict[str, Any],
+        purposeful_logic_collapse: bool,
+    ) -> Dict[str, Any]:
         """
         Collapses superposed trade states into a definite trade decision.
 
@@ -54,8 +57,9 @@ class QuantumSuperpositionalTrigger:
         integrated_hash_str = ""
         for key, value in recursive_hash_states.items():
             integrated_hash_str += str(value)
-        integrated_hash_value = int(hashlib.sha256(
-            integrated_hash_str.encode()).hexdigest(), 16)
+        integrated_hash_value = int(
+            hashlib.sha256(integrated_hash_str.encode()).hexdigest(), 16
+        )
 
         # Process 'C': Evaluate conscious processor status
         cpu_align = conscious_processor_status.get("cpu_alignment", 0.0)
@@ -63,14 +67,20 @@ class QuantumSuperpositionalTrigger:
         processor_score = (cpu_align + gpu_align) / 2.0
 
         # Process 'P': Purposeful logic collapse
-        if purposeful_logic_collapse and processor_score > 0.7 and integrated_hash_value % 2 == 0:
+        if (
+            purposeful_logic_collapse
+            and processor_score > 0.7
+            and integrated_hash_value % 2 == 0
+        ):
             trade_decision = {
                 "status": "COLLAPSED_TO_TRADE",
-                "reason": "All conditions met"}
+                "reason": "All conditions met",
+            }
         else:
             trade_decision = {
                 "status": "HOLD_SUPERPOSITION",
-                "reason": "Conditions not met"}
+                "reason": "Conditions not met",
+            }
 
         # Store recursive hash states for future reference
         self.recursive_hash_states.update(recursive_hash_states)
@@ -79,9 +89,9 @@ class QuantumSuperpositionalTrigger:
         collapse_duration = end_time - start_time
         self.metrics["last_collapse_time"] = end_time
         self.metrics["avg_collapse_time"] = (
-            (self.metrics["avg_collapse_time"] * (self.metrics["total_collapses"] - 1) + collapse_duration) /
-            self.metrics["total_collapses"]
-        )
+            self.metrics["avg_collapse_time"] * (self.metrics["total_collapses"] - 1)
+            + collapse_duration
+        ) / self.metrics["total_collapses"]
 
         return {"trade_decision": trade_decision, "metrics": self.metrics}
 
@@ -105,7 +115,7 @@ class QuantumSuperpositionalTrigger:
         self.metrics = {
             "total_collapses": 0,
             "last_collapse_time": None,
-            "avg_collapse_time": 0.0
+            "avg_collapse_time": 0.0,
         }
 
 
@@ -118,12 +128,9 @@ if __name__ == "__main__":
     r_states_1 = {
         "hash_t1": "abcdef12345",
         "hash_t2": "fedcba54321",
-        "hash_t3": "123456789ab"
+        "hash_t3": "123456789ab",
     }
-    r_states_2 = {
-        "hash_t4": "bbbbbbbbbbb",
-        "hash_t5": "ccccccccccccc"
-    }
+    r_states_2 = {"hash_t4": "bbbbbbbbbbb", "hash_t5": "ccccccccccccc"}
 
     # Simulate conscious processor status (C)
     c_status_good = {"cpu_alignment": 0.9, "gpu_alignment": 0.85}
@@ -134,21 +141,24 @@ if __name__ == "__main__":
     p_collapse_false = False
 
     print("\n--- Test Case 1: All conditions good (expected COLLAPSED_TO_TRADE) ---")
-    result1 = trigger.collapse_superposition(
-        r_states_1, c_status_good, p_collapse_true)
+    result1 = trigger.collapse_superposition(r_states_1, c_status_good, p_collapse_true)
     print(f"Result: {result1["trade_decision"]}")
     print(f"Metrics: {result1["metrics"]}")
     print(f"Stored R states: {trigger.get_recursive_hash_states()}")
 
-    print("\n--- Test Case 2: Low processor alignment (expected HOLD_SUPERPOSITION) ---")
-    result2 = trigger.collapse_superposition(
-        r_states_1, c_status_bad, p_collapse_true)
+    print(
+        "\n--- Test Case 2: Low processor alignment (expected HOLD_SUPERPOSITION) ---"
+    )
+    result2 = trigger.collapse_superposition(r_states_1, c_status_bad, p_collapse_true)
     print(f"Result: {result2["trade_decision"]}")
     print(f"Metrics: {result2["metrics"]}")
 
-    print("\n--- Test Case 3: No purposeful logic collapse (expected HOLD_SUPERPOSITION) ---")
+    print(
+        "\n--- Test Case 3: No purposeful logic collapse (expected HOLD_SUPERPOSITION) ---"
+    )
     result3 = trigger.collapse_superposition(
-        r_states_2, c_status_good, p_collapse_false)
+        r_states_2, c_status_good, p_collapse_false
+    )
     print(f"Result: {result3["trade_decision"]}")
     print(f"Metrics: {result3["metrics"]}")
 
@@ -156,5 +166,6 @@ if __name__ == "__main__":
     trigger.reset()
     print(
         f"Stored R states after reset: {
-            trigger.get_recursive_hash_states()}")
+            trigger.get_recursive_hash_states()}"
+    )
     print(f"Metrics after reset: {trigger.get_metrics()}")

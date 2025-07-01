@@ -24,12 +24,12 @@ class GlyphPhaseResolver:
         self.metrics: Dict[str, Any] = {
             "total_resolutions": 0,
             "phase_shift_alerts": 0,
-            "last_resolution_time": None
+            "last_resolution_time": None,
         }
 
-    def resolve_glyph_phase(self,
-                            phase_shift_operator: float,
-                            entropy_corridor_status: Dict[str, Any]) -> str:
+    def resolve_glyph_phase(
+        self, phase_shift_operator: float, entropy_corridor_status: Dict[str, Any]
+    ) -> str:
         """
         Resolves the appropriate glyph phase based on the phase shift operator
         and entropy corridor status.
@@ -78,7 +78,8 @@ class GlyphPhaseResolver:
         self.phase_shift_threshold = new_threshold
         print(
             f"Glyph Phase Resolver threshold updated to: {
-                self.phase_shift_threshold}")
+                self.phase_shift_threshold}"
+        )
 
     def reset(self) -> None:
         """
@@ -87,7 +88,7 @@ class GlyphPhaseResolver:
         self.metrics = {
             "total_resolutions": 0,
             "phase_shift_alerts": 0,
-            "last_resolution_time": None
+            "last_resolution_time": None,
         }
 
 
@@ -116,16 +117,14 @@ if __name__ == "__main__":
 
     print("\n--- Test Case 3: Normal phase shift, high entropy ---")
     phase_shift_3 = 0.02
-    routing_3 = resolver.resolve_glyph_phase(
-        phase_shift_3, entropy_status_high)
+    routing_3 = resolver.resolve_glyph_phase(phase_shift_3, entropy_status_high)
     print(f"Phase Shift: {phase_shift_3}, Entropy: {entropy_status_high}")
     print(f"  Routing Behavior: {routing_3}")
     print(f"  Metrics: {resolver.get_metrics()}")
 
     print("\n--- Test Case 4: High phase shift, high entropy ---")
     phase_shift_4 = 0.12
-    routing_4 = resolver.resolve_glyph_phase(
-        phase_shift_4, entropy_status_high)
+    routing_4 = resolver.resolve_glyph_phase(phase_shift_4, entropy_status_high)
     print(f"Phase Shift: {phase_shift_4}, Entropy: {entropy_status_high}")
     print(f"  Routing Behavior: {routing_4}")
     print(f"  Metrics: {resolver.get_metrics()}")

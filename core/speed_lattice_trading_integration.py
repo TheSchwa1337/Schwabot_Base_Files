@@ -5,10 +5,11 @@ Implements recursive temporal hashing, lattice map overlays,
 and multi-strategy entry point logic for high-frequency tick resolution.
 """
 
-import numpy as np
 import hashlib
 import time
-from typing import List, Dict, Optional, Callable
+from typing import Callable, Dict, List, Optional
+
+import numpy as np
 
 
 class SpeedLatticeTradingIntegrator:
@@ -24,8 +25,7 @@ class SpeedLatticeTradingIntegrator:
     def register_strategy(self, strategy_id: str, strategy_func: Callable):
         self.strategy_map[strategy_id] = strategy_func
 
-    def execute(self, price: float, volume: float,
-                timestamp: Optional[float] = None):
+    def execute(self, price: float, volume: float, timestamp: Optional[float] = None):
         timestamp = timestamp or time.time()
         tick_hash = self.hash_tick(price, volume, timestamp)
         self.tick_history.append(tick_hash)

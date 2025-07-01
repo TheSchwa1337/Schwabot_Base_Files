@@ -1,8 +1,13 @@
 import logging
 import time
-from typing import Dict, Any, List, Tuple, Optional, Union
 from dataclasses import dataclass, field
 from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple, Union
+
+from core.basket_vector_linker import BasketVectorLinker
+from core.glyph_phase_resolver import GlyphPhaseResolver
+from core.profit_memory_echo import ProfitMemoryEcho
+from core.quantum_superpositional_trigger import QuantumSuperpositionalTrigger
 
 # Assuming these are in the core.strategy package and correctly
 # __init__.py initialized
@@ -11,10 +16,6 @@ from core.strategy.zygot_zalgo_entropy_dual_key_gate import ZygotZalgoEntropyDua
 
 # Import newly implemented modules
 from core.warp_sync_core import WarpSyncCore
-from core.quantum_superpositional_trigger import QuantumSuperpositionalTrigger
-from core.basket_vector_linker import BasketVectorLinker
-from core.glyph_phase_resolver import GlyphPhaseResolver
-from core.profit_memory_echo import ProfitMemoryEcho
 
 logger = logging.getLogger(__name__)
 
@@ -22,6 +23,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class GlyphGateDecision:
     """Decision from the Glyph Gate Engine."""
+
     signal_id: str
     gate_open: bool
     reason: str
@@ -38,15 +40,16 @@ class GlyphGateEngine:
     """
 
     def __init__(
-            self,
-            glyph_core: Optional[GlyphStrategyCore] = None,
-            zygot_zalgo_gate: Optional[ZygotZalgoEntropyDualKeyGate] = None,
-            warp_sync_core: Optional[WarpSyncCore] = None,
-            quantum_trigger: Optional[QuantumSuperpositionalTrigger] = None,
-            basket_linker: Optional[BasketVectorLinker] = None,
-            phase_resolver: Optional[GlyphPhaseResolver] = None,
-            profit_echo: Optional[ProfitMemoryEcho] = None,
-            confidence_threshold: float = 0.7):
+        self,
+        glyph_core: Optional[GlyphStrategyCore] = None,
+        zygot_zalgo_gate: Optional[ZygotZalgoEntropyDualKeyGate] = None,
+        warp_sync_core: Optional[WarpSyncCore] = None,
+        quantum_trigger: Optional[QuantumSuperpositionalTrigger] = None,
+        basket_linker: Optional[BasketVectorLinker] = None,
+        phase_resolver: Optional[GlyphPhaseResolver] = None,
+        profit_echo: Optional[ProfitMemoryEcho] = None,
+        confidence_threshold: float = 0.7,
+    ):
         """
         Initializes the Glyph Gate Engine with integrated components.
         """
@@ -55,27 +58,26 @@ class GlyphGateEngine:
         self.warp_sync_core = warp_sync_core or WarpSyncCore()
         self.quantum_trigger = quantum_trigger or QuantumSuperpositionalTrigger()
         self.basket_linker = basket_linker or BasketVectorLinker(
-            {})  # Initialize with empty strategies
+            {}
+        )  # Initialize with empty strategies
         self.phase_resolver = phase_resolver or GlyphPhaseResolver()
         self.profit_echo = profit_echo or ProfitMemoryEcho()
 
         self.confidence_threshold = confidence_threshold
         self.decision_history: List[GlyphGateDecision] = []
 
-        logger.info(
-            "GlyphGateEngine initialized with all core mathematical systems.")
+        logger.info("GlyphGateEngine initialized with all core mathematical systems.")
 
-    def evaluate_signal(self,
-                        glyph: str,
-                        volume_signal: float,
-                        current_price: float,
-                        tick_id: int,
-                        internal_system_data: Dict[str,
-                                                   Any],
-                        external_api_data: Dict[str,
-                                                Any],
-                        performance_feedback: Optional[Dict[str,
-                                                            Any]] = None) -> GlyphGateDecision:
+    def evaluate_signal(
+        self,
+        glyph: str,
+        volume_signal: float,
+        current_price: float,
+        tick_id: int,
+        internal_system_data: Dict[str, Any],
+        external_api_data: Dict[str, Any],
+        performance_feedback: Optional[Dict[str, Any]] = None,
+    ) -> GlyphGateDecision:
         """
         Evaluates a trading signal through the integrated mathematical systems.
 
@@ -99,31 +101,34 @@ class GlyphGateEngine:
 
         # Store fractal hash for memory echo
         self.profit_echo.store_lattice_state(
-            tick_id, strategy_result.strategy_id, initial_confidence)
+            tick_id, strategy_result.strategy_id, initial_confidence
+        )
 
         # Step 2: Warp Momentum Calculation
         # Assuming you have a way to get historical lattice points and delta_psi values
         # For this example, let's just pass some dummy data. In a real scenario, this
         # would come from actual historical L(t) and delta_psi values from your
         # system.
-        dummy_lattice_points = [
-            {"L(t)": strategy_result.strategy_id, "t": time.time()}]
+        dummy_lattice_points = [{"L(t)": strategy_result.strategy_id, "t": time.time()}]
         dummy_delta_psi_values = [0.01]  # Replace with actual delta_psi logic
         warp_momentum = self.warp_sync_core.calculate_warp_momentum(
-            dummy_lattice_points, dummy_delta_psi_values)
+            dummy_lattice_points, dummy_delta_psi_values
+        )
 
         # Step 3: Quantum-RS Integration
         # This will be based on recursive hash states, conscious processor, and
         # purposeful logic collapse
         quantum_decision = self.quantum_trigger.collapse_superposition(
-            recursive_hash_states={
-                "current_hash": strategy_result.fractal_hash},
+            recursive_hash_states={"current_hash": strategy_result.fractal_hash},
             # Use internal_system_data for 'C'
             conscious_processor_status=internal_system_data,
             purposeful_logic_collapse=(
-                strategy_result.confidence > self.confidence_threshold)  # 'P' based on confidence
+                strategy_result.confidence > self.confidence_threshold
+            ),  # 'P' based on confidence
         )
-        quantum_verified = quantum_decision["trade_decision"]["status"] == "COLLAPSED_TO_TRADE"
+        quantum_verified = (
+            quantum_decision["trade_decision"]["status"] == "COLLAPSED_TO_TRADE"
+        )
 
         # Step 4: Glyph Phase Resolution (Zygot/Zalgo Phase Router)
         # Assuming you can derive a phase_shift_operator from your system's state
@@ -131,19 +136,21 @@ class GlyphGateEngine:
         dummy_phase_shift_operator = 0.02  # Replace with actual phase shift logic
         glyph_phase_behavior = self.phase_resolver.resolve_glyph_phase(
             # external_api_data for entropy corridor
-            dummy_phase_shift_operator, external_api_data
+            dummy_phase_shift_operator,
+            external_api_data,
         )
 
         # Step 5: Strategy Memory Matching (Basket Resolver)
         # Assuming strategy_result.metadata can provide a vector or we convert
         # strategy_id
         dummy_lattice_hash_vector = [
-            float(
-                strategy_result.strategy_id),
+            float(strategy_result.strategy_id),
             initial_confidence,
-            volume_signal]
+            volume_signal,
+        ]
         basket_match = self.basket_linker.resolve_strategy_basket(
-            dummy_lattice_hash_vector)
+            dummy_lattice_hash_vector
+        )
         strategy_matched_in_basket = basket_match is not None
 
         # Step 6: Final Zygot-Zalgo Entropy Gate Evaluation
@@ -151,10 +158,12 @@ class GlyphGateEngine:
             trade_signal_data={
                 "glyph": glyph,
                 "volume": volume_signal,
-                "price": current_price},
+                "price": current_price,
+            },
             internal_system_data=internal_system_data,
             external_api_data=external_api_data,
-            performance_feedback=performance_feedback)
+            performance_feedback=performance_feedback,
+        )
 
         gate_open = gate_evaluation["gate_open"]
         gate_reason = gate_evaluation["reason"]
@@ -181,16 +190,17 @@ class GlyphGateEngine:
             decision_reason += " High warp turbulence and phase divergence."
 
         final_decision_status = gate_open and (
-            final_confidence >= self.confidence_threshold)
+            final_confidence >= self.confidence_threshold
+        )
 
         # Retrieve recursive memory projection for meta-analysis (not directly
         # gating for now)
-        memory_projection = self.profit_echo.retrieve_memory_projection(
-            tick_id)
+        memory_projection = self.profit_echo.retrieve_memory_projection(tick_id)
         if memory_projection:
             logger.info(
                 f"Memory echo retrieved: {
-                    memory_projection['projected_value']:.4f}")
+                    memory_projection['projected_value']:.4f}"
+            )
             # You might use this to adjust confidence, or prioritize certain
             # strategies
 
@@ -207,19 +217,18 @@ class GlyphGateEngine:
                 "glyph_phase_behavior": glyph_phase_behavior,
                 "strategy_matched_in_basket": strategy_matched_in_basket,
                 "gate_evaluation": gate_evaluation,
-                "processing_time_ms": (time.time() - start_time) * 1000
-            }
+                "processing_time_ms": (time.time() - start_time) * 1000,
+            },
         )
         self.decision_history.append(decision)
         logger.info(
             f"Glyph Gate Decision for {glyph}_{tick_id}: Open={
                 decision.gate_open}, Reason={
-                decision.reason}")
+                decision.reason}"
+        )
         return decision
 
-    def get_decision_history(
-            self,
-            limit: int = 100) -> List[GlyphGateDecision]:
+    def get_decision_history(self, limit: int = 100) -> List[GlyphGateDecision]:
         """Returns recent gate decisions."""
         return list(self.decision_history)[-limit:]
 
@@ -261,29 +270,43 @@ if __name__ == "__main__":
         basket_linker=basket_linker_demo,
         phase_resolver=phase_resolver_demo,
         profit_echo=profit_echo_demo,
-        confidence_threshold=0.6
+        confidence_threshold=0.6,
     )
 
     # Simulate a series of market ticks
     print("\n--- Simulating Signal Evaluations ---")
     market_ticks = [
-        {"glyph": "brain", "volume": 1.2e6, "price": 48000.0, "tick_id": 1,
-         "internal_data": {"cpu_alignment": 0.8, "mem_usage": 0.5},
-         "external_data": {"market_volatility": 0.6, "news_sentiment": 0.7}},
-
-        {"glyph": "skull", "volume": 3.5e6, "price": 50500.0, "tick_id": 2,
-         "internal_data": {"cpu_alignment": 0.9, "mem_usage": 0.4},
-         "external_data": {"market_volatility": 0.4, "news_sentiment": 0.8}},
-
-        {"glyph": "fire", "volume": 6.0e6, "price": 51000.0, "tick_id": 3,
-         "internal_data": {"cpu_alignment": 0.7, "mem_usage": 0.6},
-         # High volatility, low sentiment
-         "external_data": {"market_volatility": 0.8, "news_sentiment": 0.3}},
+        {
+            "glyph": "brain",
+            "volume": 1.2e6,
+            "price": 48000.0,
+            "tick_id": 1,
+            "internal_data": {"cpu_alignment": 0.8, "mem_usage": 0.5},
+            "external_data": {"market_volatility": 0.6, "news_sentiment": 0.7},
+        },
+        {
+            "glyph": "skull",
+            "volume": 3.5e6,
+            "price": 50500.0,
+            "tick_id": 2,
+            "internal_data": {"cpu_alignment": 0.9, "mem_usage": 0.4},
+            "external_data": {"market_volatility": 0.4, "news_sentiment": 0.8},
+        },
+        {
+            "glyph": "fire",
+            "volume": 6.0e6,
+            "price": 51000.0,
+            "tick_id": 3,
+            "internal_data": {"cpu_alignment": 0.7, "mem_usage": 0.6},
+            # High volatility, low sentiment
+            "external_data": {"market_volatility": 0.8, "news_sentiment": 0.3},
+        },
     ]
 
     for tick in market_ticks:
         print(
-            f"\n--- Evaluating Signal for Glyph: {tick['glyph']}, Tick: {tick['tick_id']} ---")
+            f"\n--- Evaluating Signal for Glyph: {tick['glyph']}, Tick: {tick['tick_id']} ---"
+        )
         decision = engine.evaluate_signal(
             glyph=tick["glyph"],
             volume_signal=tick["volume"],
@@ -293,13 +316,15 @@ if __name__ == "__main__":
             external_api_data=tick["external_data"],
             performance_feedback={
                 "recent_profit": 0.01,
-                "recent_loss": 0.005}  # Dummy feedback
+                "recent_loss": 0.005,
+            },  # Dummy feedback
         )
         print(
             f"Final Decision: Gate Open = {
                 decision.gate_open}, Reason = {
                 decision.reason}, Confidence = {
-                decision.confidence_score:.3f}")
+                decision.confidence_score:.3f}"
+        )
         print(f"Metadata: {decision.metadata}")
 
     print("\n--- Decision History ---")
@@ -310,7 +335,8 @@ if __name__ == "__main__":
                 dec.signal_id}, Open: {
                 dec.gate_open}, Conf: {
                 dec.confidence_score:.3f}, Reason: {
-                    dec.reason}")
+                    dec.reason}"
+        )
 
     print("\n--- Resetting Engine ---")
     engine.reset_engine()

@@ -15,9 +15,10 @@ Key functionalities include:
 
 import hashlib
 import time
-import numpy as np
 from collections import deque
-from typing import Dict, Any, List, Optional, Union, Tuple
+from typing import Any, Dict, List, Optional, Tuple, Union
+
+import numpy as np
 
 
 class VolumeWeightedHashOscillator:
@@ -25,12 +26,14 @@ class VolumeWeightedHashOscillator:
     Calculates a volume-weighted hash oscillator for market analysis.
     """
 
-    def __init__(self,
-                 period: int = 14,
-                 smoothing_period: int = 3,
-                 hash_strength: int = 16,  # Number of hex characters to use from hash for calculation
-                 normalize: bool = True,
-                 oscillator_range: Tuple[float, float] = (0.0, 100.0)):
+    def __init__(
+        self,
+        period: int = 14,
+        smoothing_period: int = 3,
+        hash_strength: int = 16,  # Number of hex characters to use from hash for calculation
+        normalize: bool = True,
+        oscillator_range: Tuple[float, float] = (0.0, 100.0),
+    ):
         """
         Initializes the VolumeWeightedHashOscillator.
 
@@ -54,19 +57,18 @@ class VolumeWeightedHashOscillator:
         self.price_history: deque[float] = deque(maxlen=period)
         self.volume_history: deque[float] = deque(maxlen=period)
         self.raw_oscillator_values: deque[float] = deque(
-            maxlen=period)  # Stores values before smoothing
-        self.smoothed_oscillator_values: deque[float] = deque(
-            maxlen=smoothing_period)
+            maxlen=period
+        )  # Stores values before smoothing
+        self.smoothed_oscillator_values: deque[float] = deque(maxlen=smoothing_period)
 
         self.metrics: Dict[str, Any] = {
             "last_calculation_time": None,
             "total_calculations": 0,
             "avg_calculation_time": 0.0,
-            "current_oscillator_value": None
+            "current_oscillator_value": None,
         }
 
-    def _generate_volume_weighted_hash(
-            self, price: float, volume: float) -> str:
+    def _generate_volume_weighted_hash(self, price: float, volume: float) -> str:
         """
         Generates a SHA256 hash weighted by volume.
         """
@@ -84,14 +86,11 @@ class VolumeWeightedHashOscillator:
             raise ValueError(
                 f"Hash string too short for specified hash_strength ({
                     len(hash_string)} < {
-                    self.hash_strength})")
-        return int(hash_string[:self.hash_strength], 16)
+                    self.hash_strength})"
+            )
+        return int(hash_string[: self.hash_strength], 16)
 
-    def _normalize_value(
-            self,
-            value: float,
-            min_val: float,
-            max_val: float) -> float:
+    def _normalize_value(self, value: float, min_val: float, max_val: float) -> float:
         """
         Normalizes a value to the specified oscillator range.
         """
@@ -100,13 +99,13 @@ class VolumeWeightedHashOscillator:
 
         # Scale to [0, 1] then to target range
         normalized_0_1 = (value - min_val) / (max_val - min_val)
-        return self.oscillator_range[0] + normalized_0_1 * \
-            (self.oscillator_range[1] - self.oscillator_range[0])
+        return self.oscillator_range[0] + normalized_0_1 * (
+            self.oscillator_range[1] - self.oscillator_range[0]
+        )
 
     def calculate_oscillator(
-            self,
-            current_price: float,
-            current_volume: float) -> Optional[float]:
+        self, current_price: float, current_volume: float
+    ) -> Optional[float]:
         """
         Calculates the current value of the Volume-Weighted Hash Oscillator.
 
@@ -124,9 +123,10 @@ class VolumeWeightedHashOscillator:
         self.price_history.append(current_price)
         self.volume_history.append(current_volume)
 
-        if len(
-                self.price_history) < self.period or len(
-                self.volume_history) < self.period:
+        if (
+            len(self.price_history) < self.period
+            or len(self.volume_history) < self.period
+        ):
             return None  # Not enough data to calculate
 
         # Step 1: Generate volume-weighted hashes for historical data
@@ -135,17 +135,17 @@ class VolumeWeightedHashOscillator:
             price_at_i = self.price_history[i]
             volume_at_i = self.volume_history[i]
             weighted_hash_str = self._generate_volume_weighted_hash(
-                price_at_i, volume_at_i)
-            volume_weighted_hashes.append(
-                self._hash_to_integer(weighted_hash_str))
+                price_at_i, volume_at_i
+            )
+            volume_weighted_hashes.append(self._hash_to_integer(weighted_hash_str))
 
         # Step 2: Calculate a raw oscillator value
         # A simple method: sum of hashes, or difference, or weighted average
         # For demonstration, let's use the current hash difference from an
         # average
         current_weighted_hash = self._hash_to_integer(
-            self._generate_volume_weighted_hash(
-                current_price, current_volume))
+            self._generate_volume_weighted_hash(current_price, current_volume)
+        )
         avg_historical_hash = np.mean(volume_weighted_hashes)
 
         raw_oscillator = current_weighted_hash - avg_historical_hash
@@ -156,7 +156,8 @@ class VolumeWeightedHashOscillator:
             smoothed_value = np.mean(list(self.raw_oscillator_values))
         else:
             smoothed_value = np.mean(
-                list(self.raw_oscillator_values)[-self.smoothing_period:])
+                list(self.raw_oscillator_values)[-self.smoothing_period :]
+            )
 
         self.smoothed_oscillator_values.append(smoothed_value)
 
@@ -168,19 +169,18 @@ class VolumeWeightedHashOscillator:
             max_val = max(self.smoothed_oscillator_values)
             if max_val > min_val:
                 final_oscillator_value = self._normalize_value(
-                    smoothed_value, min_val, max_val)
+                    smoothed_value, min_val, max_val
+                )
 
         self.metrics["current_oscillator_value"] = final_oscillator_value
         end_time = time.time()
         calculation_time = end_time - start_time
         self.metrics["last_calculation_time"] = end_time
         self.metrics["avg_calculation_time"] = (
-            (self.metrics["avg_calculation_time"] *
-             (
-                self.metrics["total_calculations"] -
-                1) +
-                calculation_time) /
-            self.metrics["total_calculations"])
+            self.metrics["avg_calculation_time"]
+            * (self.metrics["total_calculations"] - 1)
+            + calculation_time
+        ) / self.metrics["total_calculations"]
 
         return final_oscillator_value
 
@@ -208,7 +208,7 @@ class VolumeWeightedHashOscillator:
             "last_calculation_time": None,
             "total_calculations": 0,
             "avg_calculation_time": 0.0,
-            "current_oscillator_value": None
+            "current_oscillator_value": None,
         }
 
 
@@ -216,7 +216,8 @@ if __name__ == "__main__":
     print("--- Volume-Weighted Hash Oscillator Demo ---")
 
     oscillator = VolumeWeightedHashOscillator(
-        period=5, smoothing_period=3, hash_strength=8)
+        period=5, smoothing_period=3, hash_strength=8
+    )
 
     # Simulate market data points
     market_data = [
@@ -236,7 +237,8 @@ if __name__ == "__main__":
         f"Oscillator initialized with period={
             oscillator.period}, smoothing={
             oscillator.smoothing_period}, hash_strength={
-                oscillator.hash_strength}")
+                oscillator.hash_strength}"
+    )
     print("\nCalculating oscillator values:")
 
     for i, data_point in enumerate(market_data):
@@ -248,12 +250,14 @@ if __name__ == "__main__":
                 f"  Step {
                     i +
                     1}: Price={price}, Volume={volume}, Oscillator={
-                    osc_value:.4f}")
+                    osc_value:.4f}"
+            )
         else:
             print(
                 f"  Step {
                     i +
-                    1}: Price={price}, Volume={volume}, Oscillator=N/A (not enough data)")
+                    1}: Price={price}, Volume={volume}, Oscillator=N/A (not enough data)"
+            )
 
     print("\n--- Metrics ---")
     metrics = oscillator.get_metrics()
@@ -267,5 +271,6 @@ if __name__ == "__main__":
     oscillator.reset()
     print(
         f"Oscillator value after reset: {
-            oscillator.get_current_oscillator_value()}")
+            oscillator.get_current_oscillator_value()}"
+    )
     print(f"Metrics after reset: {oscillator.get_metrics()}")

@@ -1,4 +1,5 @@
 from pathlib import Path
+
 import pandas as pd
 
 HIST_DIR = Path("data/historical")
@@ -8,7 +9,11 @@ PREPROC_DIR = Path("data/preprocessed")
 def concat_csv_to_parquet(asset: str, quote: str = "usdc"):
     folder = HIST_DIR / f"{asset.lower()}_{quote.lower()}"
     if not folder.exists():
-        raise FileNotFoundError(f"No folder found for {asset.upper()}_{quote.upper()} history.")
+        raise FileNotFoundError(
+            f"No folder found for {
+                asset.upper()}_{
+                quote.upper()} history."
+        )
 
     all_csvs = sorted(folder.glob("*.csv"))
     if not all_csvs:
@@ -32,4 +37,4 @@ def load_historical_data(asset: str, quote: str = "usdc") -> pd.DataFrame:
     if not parquet_file.exists():
         print(f"[!] Parquet not found, creating for {asset.upper()}...")
         concat_csv_to_parquet(asset, quote)
-    return pd.read_parquet(parquet_file) 
+    return pd.read_parquet(parquet_file)

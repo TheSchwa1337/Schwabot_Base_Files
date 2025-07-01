@@ -7,8 +7,9 @@ mathematical analysis within the Schwabot trading framework.
 """
 
 import logging
+from typing import List, Optional, Tuple, Union
+
 import numpy as np
-from typing import Optional, Union, Tuple, List
 
 logger = logging.getLogger(__name__)
 
@@ -19,7 +20,8 @@ class UnifiedTensorAlgebra:
     def __init__(self, precision: int = 64):
         self.precision = precision
         logger.info(
-            f"Unified Tensor Algebra initialized with float{precision} precision")
+            f"Unified Tensor Algebra initialized with float{precision} precision"
+        )
 
     def create_tensor(self, data: list, dtype=np.float64) -> np.ndarray:
         """Creates a new tensor from input data.
@@ -33,10 +35,7 @@ class UnifiedTensorAlgebra:
         """
         return np.array(data, dtype=dtype)
 
-    def tensor_multiply(
-            self,
-            tensor1: np.ndarray,
-            tensor2: np.ndarray) -> np.ndarray:
+    def tensor_multiply(self, tensor1: np.ndarray, tensor2: np.ndarray) -> np.ndarray:
         """Performs element-wise multiplication of two tensors.
 
         Args:
@@ -48,13 +47,13 @@ class UnifiedTensorAlgebra:
         """
         if tensor1.shape != tensor2.shape:
             raise ValueError(
-                "Tensors must have the same shape for element-wise multiplication.")
+                "Tensors must have the same shape for element-wise multiplication."
+            )
         return tensor1 * tensor2
 
     def tensor_dot_product(
-            self,
-            tensor1: np.ndarray,
-            tensor2: np.ndarray) -> np.ndarray:
+        self, tensor1: np.ndarray, tensor2: np.ndarray
+    ) -> np.ndarray:
         """Computes the dot product of two tensors.
 
         Args:
@@ -75,9 +74,8 @@ class UnifiedTensorAlgebra:
         return tensor.ndim
 
     def apply_activation(
-            self,
-            tensor: np.ndarray,
-            activation_type: str = "relu") -> np.ndarray:
+        self, tensor: np.ndarray, activation_type: str = "relu"
+    ) -> np.ndarray:
         """Applies an activation function to the tensor.
 
         Args:
@@ -96,13 +94,12 @@ class UnifiedTensorAlgebra:
         else:
             raise ValueError(f"Unsupported activation type: {activation_type}")
 
-    def reduce_tensor(self,
-                      tensor: np.ndarray,
-                      axis: Optional[Union[int,
-                                           Tuple[int,
-                                                 ...]]] = None,
-                      operation: str = "sum") -> Union[np.ndarray,
-                                                       float]:
+    def reduce_tensor(
+        self,
+        tensor: np.ndarray,
+        axis: Optional[Union[int, Tuple[int, ...]]] = None,
+        operation: str = "sum",
+    ) -> Union[np.ndarray, float]:
         """Reduces the tensor along a specified axis.
 
         Args:
@@ -124,24 +121,26 @@ class UnifiedTensorAlgebra:
         else:
             raise ValueError(f"Unsupported reduction operation: {operation}")
 
-    def reshape_tensor(self, tensor: np.ndarray,
-                       new_shape: Tuple[int, ...]) -> np.ndarray:
+    def reshape_tensor(
+        self, tensor: np.ndarray, new_shape: Tuple[int, ...]
+    ) -> np.ndarray:
         """Reshapes the tensor to a new shape."""
         return tensor.reshape(new_shape)
 
-    def transpose_tensor(self, tensor: np.ndarray,
-                         axes: Optional[Tuple[int, ...]] = None) -> np.ndarray:
+    def transpose_tensor(
+        self, tensor: np.ndarray, axes: Optional[Tuple[int, ...]] = None
+    ) -> np.ndarray:
         """Transposes the tensor."""
         return np.transpose(tensor, axes=axes)
 
-    def concatenate_tensors(self,
-                            tensors: List[np.ndarray],
-                            axis: int = 0) -> np.ndarray:
+    def concatenate_tensors(
+        self, tensors: List[np.ndarray], axis: int = 0
+    ) -> np.ndarray:
         """Concatenates a list of tensors along a specified axis."""
         return np.concatenate(tensors, axis=axis)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Basic demonstration of UnifiedTensorAlgebra
     logging.basicConfig(level=logging.INFO)
     algebra = UnifiedTensorAlgebra()
@@ -179,6 +178,5 @@ if __name__ == '__main__':
 
     # Concatenate tensors
     tensor_c = algebra.create_tensor([[9, 10]])
-    concatenated_tensors = algebra.concatenate_tensors(
-        [tensor_a, tensor_c], axis=0)
+    concatenated_tensors = algebra.concatenate_tensors([tensor_a, tensor_c], axis=0)
     print("\nConcatenated Tensors:\n", concatenated_tensors)
