@@ -1,10 +1,66 @@
-numpy>=1.21.0
-asyncio
-pathlib
-dataclasses
-typing
-logging
-json
-hashlib
-time
-math
+# Schwabot Trading System Dependencies
+# ====================================
+
+# Core mathematical and scientific computing
+numpy>=1.21.0,<2.0.0
+scipy>=1.9.0,<2.0.0
+
+# HTTP client libraries for API handlers
+aiohttp>=3.8.0,<4.0.0
+requests>=2.28.0,<3.0.0
+
+# Data manipulation and analysis
+pandas>=1.5.0,<3.0.0
+
+# Visualization (for Ferris Wheel and plotting)
+matplotlib>=3.5.0,<4.0.0
+seaborn>=0.11.0,<1.0.0
+
+# Web framework for API server
+flask>=2.2.0,<3.0.0
+flask-cors>=3.0.0,<5.0.0
+
+# Cryptocurrency exchange APIs (optional)
+ccxt>=4.0.0,<5.0.0
+
+# Configuration and data formats
+pyyaml>=6.0,<7.0
+toml>=0.10.0,<1.0.0
+
+# Type checking and validation
+pydantic>=1.10.0,<3.0.0
+typing-extensions>=4.0.0
+
+# Testing dependencies (development)
+pytest>=7.0.0,<8.0.0
+pytest-asyncio>=0.21.0,<1.0.0
+pytest-cov>=4.0.0,<5.0.0
+
+# Code quality tools (development)
+black>=22.0.0,<24.0.0
+isort>=5.10.0,<6.0.0
+flake8>=5.0.0,<7.0.0
+mypy>=1.0.0,<2.0.0
+
+# Memory profiling and performance monitoring
+psutil>=5.9.0,<6.0.0
+
+# Cryptographic functions (for hash operations) - updated for compatibility
+cryptography>=37.0.0
+
+# Optional: Machine learning libraries (commented out by default)
+# scikit-learn>=1.1.0,<2.0.0
+# torch>=1.12.0,<3.0.0
+# tensorflow>=2.9.0,<3.0.0
+
+# Optional: Advanced plotting and visualization
+# plotly>=5.10.0,<6.0.0
+# bokeh>=2.4.0,<4.0.0
+
+# Optional: Database connectivity
+# sqlalchemy>=1.4.0,<3.0.0
+# redis>=4.3.0,<5.0.0
+
+# Optional: Message queuing
+# celery>=5.2.0,<6.0.0
+# redis>=4.3.0,<5.0.0

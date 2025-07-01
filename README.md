@@ -1,114 +1,251 @@
-# Schwabot Brain Trading System
+# Schwabot Trading System
 
-## Overview
+Advanced cryptocurrency trading bot with unified mathematics framework, AI-powered decision making, and comprehensive data integration.
 
-Schwabot is an advanced trading bot with brain-enhanced signal processing capabilities. 
-This package includes working implementations of:
+## 🚀 Quick Start
 
-- [BRAIN] Brain Trading Engine with mathematical optimization
-- [CHART] Real-time signal processing and analysis  
-- [MONEY] Profit optimization algorithms
-- [GRAPH] Backtesting simulation capabilities
-- [SEARCH] Code quality validation
-
-## Features
-
-### Brain Trading Engine
-- Advanced signal processing using brain algorithms
-- Mathematical profit optimization
-- Confidence-based decision making
-- Historical performance tracking
-
-### Mathematical Framework
-- Unified math system integration
-- Tensor-based calculations
-- Risk-adjusted return analysis
-- Portfolio optimization metrics
-
-### Trading Capabilities
-- Real-time market signal processing
-- Automated trading decisions
-- Position sizing based on confidence
-- Risk management protocols
-
-## Quick Start
-
-### Running the Executable
+### Automated Setup (Recommended)
 ```bash
-# Windows
-SchwabotBrainTrader.exe
-
-# Linux/Mac
-./SchwabotBrainTrader
+python setup_environment.py
 ```
 
-### Running from Source
+### Manual Setup
+
+1. **Check Python Version**
+   ```bash
+   python --version  # Requires Python 3.8+
+   ```
+
+2. **Install Dependencies**
+   ```bash
+   pip install --upgrade pip
+   pip install -r requirements.txt
+   ```
+
+3. **Install Development Dependencies (Optional)**
+   ```bash
+   pip install -r requirements-dev.txt
+   ```
+
+4. **Set up Pre-commit Hooks (Optional)**
+   ```bash
+   pre-commit install
+   ```
+
+5. **Test Installation**
+   ```bash
+   python test_schwabot_integration.py
+   ```
+
+6. **Run Schwabot**
+   ```bash
+   python schwabot_enhanced_launcher.py
+   ```
+
+## 📋 System Requirements
+
+- **Python**: 3.8 or higher
+- **Operating System**: Windows, macOS, Linux
+- **Memory**: 4GB RAM minimum, 8GB recommended
+- **Storage**: 1GB free space
+
+## 🏗️ Architecture
+
+### Core Components
+
+- **Unified Mathematics Framework**: Advanced mathematical operations and calculations
+- **Advanced Settings Engine**: Configurable bias coefficients and weighted confidence frameworks
+- **API Handlers**: Integration with multiple data sources (WhaleAlert, Glassnode, CoinGecko)
+- **Cache Sync Service**: Efficient data caching and synchronization
+- **Trading Engine**: Execution and risk management
+- **Signal Processing**: Echo-based recursive logic and spatial momentum calculations
+
+### Data Sources
+
+- **Fear & Greed Index**: Market sentiment analysis
+- **WhaleAlert**: Large transaction monitoring
+- **Glassnode**: On-chain metrics and analytics
+- **CoinGecko**: Market data and prices
+- **Custom APIs**: Extensible handler system
+
+## ⚙️ Configuration
+
+### Environment Setup
+
+1. Create required directories:
+   ```
+   flask/feeds/
+   flask/feeds/sentiment/
+   flask/feeds/whale_data/
+   flask/feeds/onchain_data/
+   flask/feeds/market_data/
+   settings/
+   logs/
+   ```
+
+2. Configure API keys (optional):
+   - WhaleAlert API key
+   - Glassnode API key
+   - Other custom API keys
+
+### Advanced Settings
+
+The system uses an advanced settings engine that controls behavior through bias coefficients rather than disabling core functionality:
+
+- **Echo Delay Sensitivity**: Controls lag window for signal detection
+- **AI Consensus Weight**: Weight given to AI decision making
+- **Buy/Sell Wall Aggression**: Trade execution intensity
+- **Strategy Memory Decay**: Rate of strategy adaptation
+
+## 🧪 Testing
+
+### Integration Tests
 ```bash
-python test_brain_integration.py
+python test_schwabot_integration.py
 ```
 
-## Configuration
+### Unit Tests
+```bash
+pytest tests/
+```
 
-The system can be configured by modifying the brain trading engine parameters:
+### Code Quality
+```bash
+# Format code
+black .
 
+# Check style
+flake8 .
+
+# Type checking
+mypy .
+
+# Run all pre-commit hooks
+pre-commit run --all-files
+```
+
+## 📊 Usage
+
+### Basic Trading
 ```python
-config = {
-    'base_profit_rate': 0.002,        # 0.2% base profit rate
-    'confidence_threshold': 0.7,       # 70% confidence threshold
-    'enhancement_range': (0.8, 1.8),   # Enhancement factor range
-    'max_history_size': 1000           # Maximum signal history
-}
+from schwabot_enhanced_launcher import SchawbotEnhancedLauncher
+
+launcher = SchawbotEnhancedLauncher()
+await launcher.start()
 ```
 
-## Test Results
+### Mathematical Operations
+```python
+from schwabot_unified_math import UnifiedMathematicsFramework
 
-The system includes comprehensive testing:
-- [PASS] Brain Trading Engine functionality
-- [PASS] Mathematical operations  
-- [PASS] Symbol processing
-- [PASS] Backtesting simulation
-- [PASS] Code quality validation
-
-## Output Files
-
-The system generates several output files:
-- `test_brain_signals.json` - Brain trading signals data
-- `test_results.json` - Comprehensive test results
-- `logs/` - System logs and debug information
-
-## API Integration
-
-To integrate your own API keys and trading endpoints:
-
-1. Modify the brain trading engine configuration
-2. Add your API credentials to the appropriate configuration files
-3. Update the market data sources as needed
-
-## Dependencies
-
-- Python 3.8+
-- NumPy for mathematical operations
-- AsyncIO for concurrent processing
-- Standard library modules
-
-## Building from Source
-
-To build your own executable:
-
-```bash
-# Install dependencies
-pip install -r requirements.txt
-pip install pyinstaller
-
-# Build executable
-pyinstaller schwabot.spec --clean --noconfirm
+framework = UnifiedMathematicsFramework()
+drift_field = framework.compute_unified_drift_field(1.0, 2.0, 0.5, 1.0)
 ```
 
-## Support
+### Settings Configuration
+```python
+from core.advanced_settings_engine import AdvancedSettingsEngine
 
-For issues and support, please review the test outputs and logs for diagnostic information.
+engine = AdvancedSettingsEngine()
+engine.set_setting_value("echo_delay_sensitivity", 1.2)
+```
+
+## 🔧 Development
+
+### Code Style
+- **Formatter**: Black (88 character line length)
+- **Import Sorting**: isort with black profile
+- **Linting**: flake8 with custom configuration
+- **Type Checking**: mypy with strict settings
+
+### Contributing
+1. Fork the repository
+2. Create a feature branch
+3. Make changes following code style guidelines
+4. Run tests and quality checks
+5. Submit a pull request
+
+### Project Structure
+```
+schwabot/
+├── core/                    # Core system components
+│   ├── api/                # API handlers and data integration
+│   ├── advanced_settings_engine.py
+│   └── type_defs.py
+├── utils/                  # Utility functions
+├── schwabot_unified_math.py # Mathematical framework
+├── schwabot_enhanced_launcher.py # Main launcher
+├── test_schwabot_integration.py # Integration tests
+├── requirements.txt        # Production dependencies
+├── requirements-dev.txt    # Development dependencies
+├── pyproject.toml         # Modern Python configuration
+├── mypy.ini              # Type checking configuration
+├── .flake8               # Linting configuration
+└── .pre-commit-config.yaml # Code quality automation
+```
+
+## 🚨 Troubleshooting
+
+### Common Issues
+
+1. **Import Errors**
+   ```bash
+   pip install --upgrade -r requirements.txt
+   ```
+
+2. **Version Conflicts**
+   ```bash
+   pip install --upgrade pip
+   pip install --force-reinstall -r requirements.txt
+   ```
+
+3. **Permission Issues**
+   ```bash
+   pip install --user -r requirements.txt
+   ```
+
+4. **API Rate Limits**
+   - Configure API keys for higher rate limits
+   - Use demo mode for testing
+
+### Performance Optimization
+
+- **Memory**: Monitor with `psutil` integration
+- **Caching**: Adjust cache refresh intervals
+- **Concurrency**: Configure async operations
+
+## 📈 Features
+
+### Advanced Mathematics
+- Unified drift field calculations
+- Entropy-stabilized feedback systems
+- Recursive identity functions
+- Quantum-enhanced processing
+- Spatial momentum calculations
+
+### Trading Intelligence
+- Multi-source signal integration
+- Echo-based decision making
+- Adaptive strategy learning
+- Risk-adjusted optimization
+- Real-time market analysis
+
+### System Monitoring
+- Performance metrics tracking
+- Resource usage monitoring
+- Error detection and handling
+- Automated quality checks
+
+## 📄 License
+
+MIT License - see LICENSE file for details.
+
+## 🤝 Support
+
+- **Issues**: GitHub Issues
+- **Documentation**: In-code documentation
+- **Community**: GitHub Discussions
 
 ---
 
-**Schwabot Brain Trading System v1.0**
-*Advanced Trading with Brain-Enhanced Signal Processing*
+**⚠️ Disclaimer**: This is experimental trading software. Use at your own risk. Past performance does not guarantee future results.
