@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """Strategy Logic - Core Trading Strategy Implementation.
 
@@ -17,6 +18,7 @@ Windows CLI compatible with flake8 compliance.
 from __future__ import annotations
 
 import logging
+import random
 import time
 from dataclasses import dataclass, field
 from decimal import Decimal, getcontext

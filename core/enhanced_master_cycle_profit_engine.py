@@ -219,14 +219,10 @@ class EnhancedMasterCycleProfitEngine:
 
         processing_time = time.time() - start_time
         logger.info(
-            f"💰🧬 Profit decision: {
-                profit_optimized_decision.biological_decision.decision.value} "
-            f"| Precision: {
-                profit_optimized_decision.selected_precision_level.value} "
-            f"| Expected profit: ${
-                profit_optimized_decision.expected_profit_usd:.2f} "
-            f"| Processing: {
-                    processing_time * 1000:.1f}ms"
+            f"💰�� Profit decision: {profit_optimized_decision.biological_decision.decision.value} "
+            f"| Precision: {profit_optimized_decision.selected_precision_level.value} "
+            f"| Expected profit: ${profit_optimized_decision.expected_profit_usd:.2f} "
+            f"| Processing: {processing_time * 1000:.1f}ms"
         )
 
         return profit_optimized_decision

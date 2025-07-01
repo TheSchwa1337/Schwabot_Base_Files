@@ -6,7 +6,7 @@ metrics across various trading strategies and timeframes.
 This system is crucial for performance evaluation and optimization.
 """
 
-from typing import Any, Dict, List, Union
+from typing import Any, Dict, List
 
 import numpy as np
 

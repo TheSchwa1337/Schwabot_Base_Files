@@ -233,8 +233,7 @@ class EnhancedLiveExecutionMapper:
         trade_id = f"enhanced_{int(time.time() * 1000)}"
 
         logger.info(
-            f"🎯 Starting optimized BTC trade execution: ${
-                btc_price:,.2f}"
+            f"🎯 Starting optimized BTC trade execution: ${btc_price:,.2f}"
         )
 
         try:
@@ -292,10 +291,8 @@ class EnhancedLiveExecutionMapper:
                 )
 
                 logger.info(
-                    f"💡 Optimization complete: confidence={
-                        optimization_result.confidence_level:.3f}, "
-                    f"should_trade={
-                        optimization_result.should_trade}"
+                    f"💡 Optimization complete: confidence={optimization_result.confidence_level:.3f}, "
+                    f"should_trade={optimization_result.should_trade}"
                 )
 
                 # Validate mathematical thresholds
@@ -332,8 +329,7 @@ class EnhancedLiveExecutionMapper:
 
             if position_size_btc < self.btc_usdc_config["min_trade_size_btc"]:
                 enhanced_state.status = "rejected_position_size"
-                enhanced_state.error_message = f"Position size too small: {
-                    position_size_btc:.6f} BTC"
+                enhanced_state.error_message = f"Position size too small: {position_size_btc:.6f} BTC"
                 return enhanced_state
 
             # Step 3: Risk Management Validation
@@ -381,10 +377,8 @@ class EnhancedLiveExecutionMapper:
             enhanced_state.metadata["execution_time_ms"] = execution_time_ms
 
             logger.info(
-                f"✅ Enhanced execution complete: {
-                    enhanced_state.status} "
-                f"(time: {
-                    execution_time_ms:.1f}ms)"
+                f"✅ Enhanced execution complete: {enhanced_state.status} "
+                f"(time: {execution_time_ms:.1f}ms)"
             )
 
             return enhanced_state
@@ -410,32 +404,28 @@ class EnhancedLiveExecutionMapper:
                 < thresholds["mathematical_confidence_min"]
             ):
                 logger.warning(
-                    f"Mathematical confidence too low: {
-                        state.mathematical_confidence:.3f}"
+                    f"Mathematical confidence too low: {state.mathematical_confidence:.3f}"
                 )
                 return False
 
             # Check profit potential
             if state.profit_potential < thresholds["profit_potential_min"]:
                 logger.warning(
-                    f"Profit potential too low: {
-                        state.profit_potential:.4f}"
+                    f"Profit potential too low: {state.profit_potential:.4f}"
                 )
                 return False
 
             # Check entropy score
             if state.entropy_score < thresholds["entropy_score_min"]:
                 logger.warning(
-                    f"Entropy score too low: {
-                        state.entropy_score:.3f}"
+                    f"Entropy score too low: {state.entropy_score:.3f}"
                 )
                 return False
 
             # Check phase alignment
             if state.phase_alignment < thresholds["phase_alignment_min"]:
                 logger.warning(
-                    f"Phase alignment too low: {
-                        state.phase_alignment:.3f}"
+                    f"Phase alignment too low: {state.phase_alignment:.3f}"
                 )
                 return False
 
@@ -445,8 +435,7 @@ class EnhancedLiveExecutionMapper:
                 and state.optimization_result.risk_score > thresholds["risk_score_max"]
             ):
                 logger.warning(
-                    f"Risk score too high: {
-                        state.optimization_result.risk_score:.3f}"
+                    f"Risk score too high: {state.optimization_result.risk_score:.3f}"
                 )
                 return False
 
@@ -651,8 +640,7 @@ class EnhancedLiveExecutionMapper:
                 self.enhanced_states = keep_states
 
                 logger.debug(
-                    f"Cleaned up state history, kept {
-                        len(keep_states)} states"
+                    f"Cleaned up state history, kept {len(keep_states)} states"
                 )
 
         except Exception as e:

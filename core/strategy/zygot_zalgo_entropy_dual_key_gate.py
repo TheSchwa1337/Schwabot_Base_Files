@@ -1,22 +1,16 @@
-"""
-Zygot-Zalgo Entropy Dual-Key Gate Module
----------------------------------------
-Implements a highly secure and adaptive gating mechanism for trade execution
-based on a dual-key entropy verification system. This module ensures that
-trade signals are only passed through when both internal (Zygot) and external
-(Zalgo) entropy conditions are met, preventing undesirable executions.
+#!/usr/bin/env python3
+"""Zygot-Zalgo Entropy Dual Key Gate - Advanced Entropic Gate System.
 
-Key functionalities include:
-- Real-time entropy generation and evaluation from diverse sources.
-- Dual-key (Zygot & Zalgo) cryptographic verification for trade signals.
-- Adaptive thresholding for entropy validation.
-- Integration with trade execution and risk management systems.
+Implements the dual-key entropy gate system that combines Zygot and Zalgo
+mathematical principles for enhanced trading signal validation.
 """
 
 import hashlib
 import secrets
 import time
 from typing import Any, Dict, Optional, Union
+
+import numpy as np
 
 
 class ZygotZalgoEntropyDualKeyGate:

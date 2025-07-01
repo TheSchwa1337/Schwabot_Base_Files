@@ -21,6 +21,7 @@ import asyncio
 import json
 import logging
 import math
+import os
 import time
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
@@ -31,6 +32,7 @@ from typing import Any, Dict, List, Optional, Tuple
 import numpy as np
 from scipy import signal
 from scipy.fft import fft, fftfreq
+import requests
 
 logger = logging.getLogger(__name__)
 

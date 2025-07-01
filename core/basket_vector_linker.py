@@ -6,7 +6,7 @@ through clustering or vector memory. This module enables Zalgo/Zygot glyph logic
 to emit routing behavior based on observed tick states.
 """
 
-import hashlib  # For hash pattern matching if needed
+import time
 from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np

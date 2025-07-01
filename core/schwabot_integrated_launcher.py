@@ -189,7 +189,7 @@ class SchwabotIntegratedLauncher:
         status_frame.pack(fill='x', padx=10, pady=5)
 
         self.system_status_text = tk.Text(
-    status_frame, height=10, bg='#2a2a2a', fg='#ffffff')
+            status_frame, height=10, bg='#2a2a2a', fg='#ffffff')
         self.system_status_text.pack(fill='both', expand=True, padx=5, pady=5)
 
         # Quick actions section
@@ -217,34 +217,34 @@ class SchwabotIntegratedLauncher:
         # Create API service entries
         self.api_entries = {}
         self._create_api_service_ui(
-    services_frame,
-    "CoinMarketCap",
-    "coinmarketcap",
-     SecurityLevel.LOW)
+            services_frame,
+            "CoinMarketCap",
+            "coinmarketcap",
+            SecurityLevel.LOW)
         self._create_api_service_ui(
-    services_frame,
-    "OpenWeather",
-    "openweather",
-     SecurityLevel.LOW)
+            services_frame,
+            "OpenWeather",
+            "openweather",
+            SecurityLevel.LOW)
         self._create_api_service_ui(
-    services_frame,
-    "NewsAPI",
-    "newsapi",
-     SecurityLevel.MEDIUM)
+            services_frame,
+            "NewsAPI",
+            "newsapi",
+            SecurityLevel.MEDIUM)
         self._create_api_service_ui(
-    services_frame,
-    "Twitter",
-    "twitter",
-     SecurityLevel.HIGH)
+            services_frame,
+            "Twitter",
+            "twitter",
+            SecurityLevel.HIGH)
         self._create_api_service_ui(
-    services_frame,
-    "Exchange APIs",
-    "exchange",
-     SecurityLevel.HIGH)
+            services_frame,
+            "Exchange APIs",
+            "exchange",
+            SecurityLevel.HIGH)
 
         # CRWM section
         crwm_frame = ttk.LabelFrame(
-    api_frame, text="ChronoResonance Weather Mapping (CRWM)")
+            api_frame, text="ChronoResonance Weather Mapping (CRWM)")
         crwm_frame.pack(fill='x', padx=10, pady=5)
 
         self.crwm_status_label = ttk.Label(crwm_frame, text="Status: Inactive")
@@ -256,23 +256,23 @@ class SchwabotIntegratedLauncher:
                   command=self._view_weather_data).pack(side='left', padx=5, pady=5)
 
     def _create_api_service_ui(
-    self,
-    parent,
-    name: str,
-    key: str,
-     security_level: SecurityLevel):
+        self,
+        parent,
+        name: str,
+        key: str,
+        security_level: SecurityLevel):
         """Create UI for an API service."""
         service_frame = ttk.Frame(parent)
         service_frame.pack(fill='x', padx=5, pady=2)
 
         # Service name and status
         ttk.Label(
-    service_frame,
-    text=f"{name}:").pack(
-        side='left',
-        padx=(
-            0,
-             10))
+            service_frame,
+            text=f"{name}:").pack(
+            side='left',
+            padx=(
+                0,
+                10))
 
         status_var = tk.StringVar(value="❌ Not Configured")
         status_label = ttk.Label(service_frame, textvariable=status_var)
@@ -281,16 +281,16 @@ class SchwabotIntegratedLauncher:
         # API key entry
         api_key_var = tk.StringVar()
         api_key_entry = ttk.Entry(
-    service_frame,
-    textvariable=api_key_var,
-    show="*",
-     width=30)
+            service_frame,
+            textvariable=api_key_var,
+            show="*",
+            width=30)
         api_key_entry.pack(side='left', padx=(0, 5))
 
         # Configure button
         ttk.Button(service_frame, text="Configure",
                   command=lambda: self._configure_api(
-    key, api_key_var.get(), security_level, status_var)
+                      key, api_key_var.get(), security_level, status_var)
                   ).pack(side='left', padx=5)
 
         # Test button
@@ -312,17 +312,17 @@ class SchwabotIntegratedLauncher:
 
         # Pipeline overview
         overview_frame = ttk.LabelFrame(
-    pipeline_frame, text="Pipeline Overview")
+            pipeline_frame, text="Pipeline Overview")
         overview_frame.pack(fill='x', padx=10, pady=5)
 
         # Memory usage visualization
         self.memory_canvas = tk.Canvas(
-    overview_frame, height=200, bg='#2a2a2a')
+            overview_frame, height=200, bg='#2a2a2a')
         self.memory_canvas.pack(fill='x', padx=5, pady=5)
 
         # Data flow controls
         controls_frame = ttk.LabelFrame(
-    pipeline_frame, text="Data Flow Controls")
+            pipeline_frame, text="Data Flow Controls")
         controls_frame.pack(fill='x', padx=10, pady=5)
 
         ttk.Button(controls_frame, text="📊 View Short-term Data",
@@ -336,11 +336,11 @@ class SchwabotIntegratedLauncher:
 
         # Data statistics
         stats_frame = ttk.LabelFrame(
-    pipeline_frame, text="Pipeline Statistics")
+            pipeline_frame, text="Pipeline Statistics")
         stats_frame.pack(fill='both', expand=True, padx=10, pady=5)
 
         self.pipeline_stats_text = tk.Text(
-    stats_frame, height=10, bg='#2a2a2a', fg='#ffffff')
+            stats_frame, height=10, bg='#2a2a2a', fg='#ffffff')
         self.pipeline_stats_text.pack(fill='both', expand=True, padx=5, pady=5)
 
     def _create_settings_tab(self):
@@ -350,59 +350,59 @@ class SchwabotIntegratedLauncher:
 
         # Installation path section
         path_frame = ttk.LabelFrame(
-    settings_frame, text="Installation & File Paths")
+            settings_frame, text="Installation & File Paths")
         path_frame.pack(fill='x', padx=10, pady=5)
 
         ttk.Label(
-    path_frame,
-    text="Installation Path:").pack(
-        anchor='w',
-        padx=5,
-         pady=2)
+            path_frame,
+            text="Installation Path:").pack(
+            anchor='w',
+            padx=5,
+            pady=2)
         self.install_path_var = tk.StringVar(value=str(self.installation_path))
         ttk.Entry(
-    path_frame,
-    textvariable=self.install_path_var,
-    width=60).pack(
-        fill='x',
-        padx=5,
-         pady=2)
+            path_frame,
+            textvariable=self.install_path_var,
+            width=60).pack(
+            fill='x',
+            padx=5,
+            pady=2)
 
         ttk.Button(path_frame, text="📁 Change Path",
                   command=self._change_install_path).pack(anchor='w', padx=5, pady=5)
 
         # Performance settings
         perf_frame = ttk.LabelFrame(
-    settings_frame, text="Performance Settings")
+            settings_frame, text="Performance Settings")
         perf_frame.pack(fill='x', padx=10, pady=5)
 
         # RAM usage setting
         ttk.Label(
-    perf_frame,
-    text="Max RAM Usage (MB):").pack(
-        anchor='w',
-        padx=5,
-         pady=2)
+            perf_frame,
+            text="Max RAM Usage (MB):").pack(
+            anchor='w',
+            padx=5,
+            pady=2)
         self.ram_usage_var = tk.IntVar(
-    value=self.config['data_pipeline']['max_ram_usage_mb'])
+            value=self.config['data_pipeline']['max_ram_usage_mb'])
         ttk.Scale(perf_frame, from_=100, to=2000, variable=self.ram_usage_var,
                  orient='horizontal').pack(fill='x', padx=5, pady=2)
 
         # Update interval setting
         ttk.Label(
-    perf_frame,
-    text="Update Interval (ms):").pack(
-        anchor='w',
-        padx=5,
-         pady=2)
+            perf_frame,
+            text="Update Interval (ms):").pack(
+            anchor='w',
+            padx=5,
+            pady=2)
         self.update_interval_var = tk.IntVar(
-    value=self.config['visualization']['update_interval_ms'])
+            value=self.config['visualization']['update_interval_ms'])
         ttk.Scale(perf_frame, from_=500, to=5000, variable=self.update_interval_var,
                  orient='horizontal').pack(fill='x', padx=5, pady=2)
 
         # Advanced features
         advanced_frame = ttk.LabelFrame(
-    settings_frame, text="Advanced Features")
+            settings_frame, text="Advanced Features")
         advanced_frame.pack(fill='x', padx=10, pady=5)
 
         self.cpu_channels_var = tk.BooleanVar()
@@ -435,14 +435,14 @@ class SchwabotIntegratedLauncher:
         metrics_text_frame.pack(fill='both', expand=True)
 
         self.metrics_text = tk.Text(
-    metrics_text_frame,
-    height=15,
-    bg='#2a2a2a',
-     fg='#00ff00')
+            metrics_text_frame,
+            height=15,
+            bg='#2a2a2a',
+            fg='#00ff00')
         scrollbar = ttk.Scrollbar(
-    metrics_text_frame,
-    orient='vertical',
-     command=self.metrics_text.yview)
+            metrics_text_frame,
+            orient='vertical',
+            command=self.metrics_text.yview)
         self.metrics_text.configure(yscrollcommand=scrollbar.set)
 
         self.metrics_text.pack(side='left', fill='both', expand=True)
@@ -450,13 +450,13 @@ class SchwabotIntegratedLauncher:
 
         # Recent actions
         actions_frame = ttk.LabelFrame(
-    monitor_frame, text="Recent Actions (Last 10)")
+            monitor_frame, text="Recent Actions (Last 10)")
         actions_frame.pack(fill='both', expand=True, padx=10, pady=5)
 
         self.recent_actions_listbox = tk.Listbox(
-    actions_frame, bg='#2a2a2a', fg='#ffffff')
+            actions_frame, bg='#2a2a2a', fg='#ffffff')
         self.recent_actions_listbox.pack(
-    fill='both', expand=True, padx=5, pady=5)
+            fill='both', expand=True, padx=5, pady=5)
 
     def _create_status_bar(self):
         """Create status bar at bottom."""
@@ -487,20 +487,20 @@ class SchwabotIntegratedLauncher:
         try:
             status_lines = []
             status_lines.append(
-    f"🚀 Schwabot Status: {
-        'Active' if self._is_system_active() else 'Inactive'}")
+                f"🚀 Schwabot Status: {
+                    'Active' if self._is_system_active() else 'Inactive'}")
             status_lines.append(
-    f"💰 Profit Engine: {
-        '✅' if PROFIT_COMPONENTS_AVAILABLE else '❌'}")
+                f"💰 Profit Engine: {
+                    '✅' if PROFIT_COMPONENTS_AVAILABLE else '❌'}")
             status_lines.append(
-    f"🔐 API Manager: {
-        '✅' if API_COMPONENTS_AVAILABLE else '❌'}")
+                f"🔐 API Manager: {
+                    '✅' if API_COMPONENTS_AVAILABLE else '❌'}")
             status_lines.append(
-    f"💾 Data Pipeline: {
-        '✅' if DATA_PIPELINE_AVAILABLE else '❌'}")
+                f"💾 Data Pipeline: {
+                    '✅' if DATA_PIPELINE_AVAILABLE else '❌'}")
             status_lines.append(
-    f"🌤️ CRWM: {
-        '✅' if self.chrono_mapper else '❌'}")
+                f"🌤️ CRWM: {
+                    '✅' if self.chrono_mapper else '❌'}")
             status_lines.append(f"📁 Install Path: {self.installation_path}")
             status_lines.append("")
 
@@ -508,15 +508,15 @@ class SchwabotIntegratedLauncher:
             if self.profit_engine:
                 perf = self.profit_engine.get_performance_summary()
                 status_lines.append(
-    f"Optimizations: {
-        perf.get(
-            'total_optimizations',
-             0)}")
+                    f"Optimizations: {
+                        perf.get(
+                            'total_optimizations',
+                            0)}")
                 status_lines.append(
-    f"Success Rate: {
-        perf.get(
-            'success_rate',
-             0):.1%}")
+                    f"Success Rate: {
+                        perf.get(
+                            'success_rate',
+                            0):.1%}")
 
             self.system_status_text.delete('1.0', tk.END)
             self.system_status_text.insert('1.0', '\n'.join(status_lines))
@@ -540,17 +540,17 @@ class SchwabotIntegratedLauncher:
 
             # Short-term bar
             short_width = (usage.short_term_usage / 100) * \
-                           (canvas_width / 3 - 20)
+                          (canvas_width / 3 - 20)
             self.memory_canvas.create_rectangle(10, 50, 10 + short_width, 80,
                                                fill='#ff6b6b', outline='#ffffff')
             self.memory_canvas.create_text(
-    canvas_width / 6, 35, text="Short-term", fill='#ffffff')
+                canvas_width / 6, 35, text="Short-term", fill='#ffffff')
             self.memory_canvas.create_text(
-    canvas_width / 6,
-    95,
-    text=f"{
-        usage.short_term_usage:.1f}%",
-         fill='#ffffff')
+                canvas_width / 6,
+                95,
+                text=f"{
+                    usage.short_term_usage:.1f}%",
+                fill='#ffffff')
 
             # Mid-term bar
             mid_x = canvas_width / 3 + 10
@@ -579,9 +579,9 @@ class SchwabotIntegratedLauncher:
                 f"Total Size: {usage.total_size_bytes / (1024 * 1024):.1f} MB",
                 f"Compression Savings: {usage.compression_savings:.1f}%",
                 f"Oldest Entry: {
-    usage.oldest_entry.strftime('%Y-%m-%d %H:%M:%S')}",
+                    usage.oldest_entry.strftime('%Y-%m-%d %H:%M:%S')}",
                 f"Newest Entry: {
-    usage.newest_entry.strftime('%Y-%m-%d %H:%M:%S')}"
+                    usage.newest_entry.strftime('%Y-%m-%d %H:%M:%S')}"
             ]
 
             self.pipeline_stats_text.delete('1.0', tk.END)
@@ -611,38 +611,38 @@ class SchwabotIntegratedLauncher:
             if self.profit_engine:
                 perf = self.profit_engine.get_performance_summary()
                 metrics_lines.append(
-    f"Profit Optimizations: {
-        perf.get(
-            'total_optimizations',
-             0)}")
+                    f"Profit Optimizations: {
+                        perf.get(
+                            'total_optimizations',
+                            0)}")
                 metrics_lines.append(
-    f"Average Confidence: {
-        perf.get(
-            'avg_confidence',
-             0):.3f}")
+                    f"Average Confidence: {
+                        perf.get(
+                            'avg_confidence',
+                            0):.3f}")
 
             # API status
             if self.secure_api_manager:
                 api_stats = self.secure_api_manager.get_api_statistics()
                 metrics_lines.append(
-    f"API Requests: {
-        api_stats.get(
-            'total_requests', 0)}")
+                    f"API Requests: {
+                        api_stats.get(
+                            'total_requests', 0)}")
                 metrics_lines.append(
-    f"API Success Rate: {
-        api_stats.get(
-            'success_rate',
-             0):.1%}")
+                    f"API Success Rate: {
+                        api_stats.get(
+                            'success_rate',
+                            0):.1%}")
 
             # CRWM status
             if self.chrono_mapper:
                 weather_data = self.chrono_mapper.get_weather_signature("1h")
                 if weather_data:
                     metrics_lines.append(
-    f"Weather Gradient: {
-        weather_data.get(
-            'price_gradient',
-             0):.4f}")
+                        f"Weather Gradient: {
+                            weather_data.get(
+                                'price_gradient',
+                                0):.4f}")
 
             metrics_lines.append("")
 
@@ -672,7 +672,7 @@ class SchwabotIntegratedLauncher:
             self._add_recent_action("🚀 Trading system started")
             self.status_label.configure(text="Trading Active")
             messagebox.showinfo("Trading Started",
-     "Schwabot trading system has been activated.")
+                "Schwabot trading system has been activated.")
 
         except Exception as e:
             logger.error(f"Error starting trading: {e}")
@@ -684,8 +684,8 @@ class SchwabotIntegratedLauncher:
             self._add_recent_action("⏸️ System paused")
             self.status_label.configure(text="System Paused")
             messagebox.showinfo(
-    "System Paused",
-     "Schwabot system has been paused.")
+                "System Paused",
+                "Schwabot system has been paused.")
 
         except Exception as e:
             logger.error(f"Error pausing system: {e}")
@@ -707,14 +707,14 @@ class SchwabotIntegratedLauncher:
             # System status
             report_lines.append("System Components:")
             report_lines.append(
-    f"  Profit Engine: {
-        'Available' if PROFIT_COMPONENTS_AVAILABLE else 'Not Available'}")
+                f"  Profit Engine: {
+                    'Available' if PROFIT_COMPONENTS_AVAILABLE else 'Not Available'}")
             report_lines.append(
-    f"  API Manager: {
-        'Available' if API_COMPONENTS_AVAILABLE else 'Not Available'}")
+                f"  API Manager: {
+                    'Available' if API_COMPONENTS_AVAILABLE else 'Not Available'}")
             report_lines.append(
-    f"  Data Pipeline: {
-        'Available' if DATA_PIPELINE_AVAILABLE else 'Not Available'}")
+                f"  Data Pipeline: {
+                    'Available' if DATA_PIPELINE_AVAILABLE else 'Not Available'}")
             report_lines.append("")
 
             # Performance data
@@ -733,8 +733,8 @@ class SchwabotIntegratedLauncher:
                 report_lines.append(
                     f"  Total Size: {usage.total_size_bytes / (1024 * 1024):.1f} MB")
                 report_lines.append(
-    f"  Compression Savings: {
-        usage.compression_savings:.1f}%")
+                    f"  Compression Savings: {
+                        usage.compression_savings:.1f}%")
                 report_lines.append("")
 
             # Write report
@@ -743,8 +743,8 @@ class SchwabotIntegratedLauncher:
 
             self._add_recent_action(f"📊 Report generated: {report_path.name}")
             messagebox.showinfo(
-    "Report Generated",
-     f"Report saved to:\n{report_path}")
+                "Report Generated",
+                f"Report saved to:\n{report_path}")
 
         except Exception as e:
             logger.error(f"Error generating report: {e}")
@@ -757,11 +757,11 @@ class SchwabotIntegratedLauncher:
         self._update_pipeline_visualization()
 
     def _configure_api(
-    self,
-    api_key: str,
-    api_secret: str,
-    security_level: SecurityLevel,
-     status_var: tk.StringVar):
+        self,
+        api_key: str,
+        api_secret: str,
+        security_level: SecurityLevel,
+        status_var: tk.StringVar):
         """Configure API credentials."""
         try:
             if not api_secret:
@@ -781,11 +781,11 @@ class SchwabotIntegratedLauncher:
                     status_var.set("✅ Configured")
                     self._add_recent_action(f"🔑 API configured: {api_key}")
                     messagebox.showinfo(
-    "Success", f"API credentials for {api_key} stored securely")
+                        "Success", f"API credentials for {api_key} stored securely")
                 else:
                     status_var.set("❌ Failed")
                     messagebox.showerror(
-    "Error", "Failed to store API credentials")
+                        "Error", "Failed to store API credentials")
             else:
                 messagebox.showerror("Error", "API Manager not available")
 
@@ -801,7 +801,7 @@ class SchwabotIntegratedLauncher:
             self._add_recent_action(f"🧪 API tested: {api_key}")
             status_var.set("✅ Test Passed")
             messagebox.showinfo("Test Success",
-     f"API {api_key} connection test passed")
+                f"API {api_key} connection test passed")
 
         except Exception as e:
             logger.error(f"Error testing API: {e}")
@@ -838,9 +838,9 @@ class SchwabotIntegratedLauncher:
                     weather_window.geometry("600x400")
 
                     weather_text = tk.Text(
-    weather_window, bg='#2a2a2a', fg='#ffffff')
+                        weather_window, bg='#2a2a2a', fg='#ffffff')
                     weather_text.pack(
-    fill='both', expand=True, padx=10, pady=10)
+                        fill='both', expand=True, padx=10, pady=10)
 
                     # Format weather data
                     weather_lines = []
@@ -888,7 +888,10 @@ class SchwabotIntegratedLauncher:
             data_lines = []
             data_lines.append(f"{data_type.title()} Data")
             data_lines.append("=" * 40)
-            data_lines.append(f"Retention Period: {self.config['data_pipeline'][f'{data_type.replace(\"-\", \"_\")}_retention_days']} days")
+            
+            data_type_key = data_type.replace("-", "_")
+            retention_days = self.config['data_pipeline'][f'{data_type_key}_retention_days']
+            data_lines.append(f"Retention Period: {retention_days} days")
             data_lines.append("Sample data entries would be displayed here...")
             
             data_text.insert('1.0', '\n'.join(data_lines))
