@@ -28,11 +28,11 @@ def read_requirements():
     return []
 
 setup(
-    name="hash-recollection",
+    name="schwabot",
     version="1.0.0",
     author="Schwabot Team",
     author_email="team@schwabot.com",
-    description="Advanced trading bot with entropy analysis and pattern recognition",
+    description="Schwabot – Universal cross-platform trading bot",
     long_description=read_readme(),
     long_description_content_type="text/markdown",
     url="https://github.com/schwabot/hash-recollection",
@@ -67,7 +67,10 @@ setup(
     },
     entry_points={
         "console_scripts": [
-            "hash-recollection=hash_recollection.api_integration:create_and_run_api",
+            "schwabot=schwabot.launch:run",
+            "schwabot-cli=schwabot.cli:main",
+            "schwabot-gui=schwabot.gui:launch",
+            "schwabot-tray=schwabot.tray:run_tray",
         ],
     },
     include_package_data=True,

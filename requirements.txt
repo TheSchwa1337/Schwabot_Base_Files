@@ -347,4 +347,11 @@ black>=22.0.0
 # alembic>=1.7.0
 
 # Optional: Monitoring and Metrics (uncomment if needed)
-# prometheus-client>=0.11.0 
+# prometheus-client>=0.11.0
+
+# --- Schwabot cross-platform launcher requirements ---
+pystray>=0.19.4
+Pillow>=9.0
+
+# --- Enhanced Vortex Math Security Protocol requirements ---
+numpy>=1.21.0  # For VMSP mathematical operations 
