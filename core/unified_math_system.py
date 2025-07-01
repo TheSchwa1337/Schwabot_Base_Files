@@ -7,6 +7,7 @@ Enhanced Nexus-Lantern trading intelligence system.
 
 import hashlib
 import logging
+import math
 import time
 from dataclasses import dataclass, field
 from enum import Enum
@@ -151,6 +152,15 @@ class MathOperation(Enum):
     THERMAL_CORRECTION = "thermal_correction"
 
 
+@dataclass
+class MathResult:
+    """Result container for mathematical operations."""
+    value: Any
+    operation: str
+    timestamp: float
+    metadata: Dict[str, Any]
+
+
 class UnifiedMathSystem:
     """Unified mathematical system for trading operations with 32-bit phase integration."""
 
@@ -171,6 +181,8 @@ class UnifiedMathSystem:
         self.thermal_state = WARM_MATH  # Default to warm state
         self.dualistic_mode = False
         self.current_bit_phase = BitPhase.EIGHT_BIT
+        self.operation_cache: Dict[str, Any] = {}
+        self.calculation_history: List[MathResult] = []
 
         # Integration metrics
         self.integration_metrics = {
@@ -381,6 +393,51 @@ class UnifiedMathSystem:
     def get_integration_metrics(self) -> Dict[str, Any]:
         """Get integration metrics."""
         return self.integration_metrics.copy()
+
+    def _log_calculation(self, operation: str, result: Any, metadata: Dict[str, Any]) -> None:
+        """Log calculation for history tracking."""
+        try:
+            calculation = MathResult(
+                value=result,
+                operation=operation,
+                timestamp=time.time(),
+                metadata=metadata
+            )
+            
+            self.calculation_history.append(calculation)
+            
+            # Limit history size
+            if len(self.calculation_history) > 1000:
+                self.calculation_history = self.calculation_history[-500:]
+                
+        except Exception as e:
+            logger.error(f"Calculation logging error: {e}")
+
+    def get_calculation_summary(self) -> Dict[str, Any]:
+        """Get summary of recent calculations."""
+        try:
+            if not self.calculation_history:
+                return {'total_calculations': 0}
+            
+            # Count operations
+            operation_counts = {}
+            for calc in self.calculation_history:
+                op = calc.operation
+                operation_counts[op] = operation_counts.get(op, 0) + 1
+            
+            # Get recent calculations
+            recent = self.calculation_history[-10:] if self.calculation_history else []
+            
+            return {
+                'total_calculations': len(self.calculation_history),
+                'operation_counts': operation_counts,
+                'recent_operations': [calc.operation for calc in recent],
+                'last_calculation_time': self.calculation_history[-1].timestamp if self.calculation_history else 0
+            }
+            
+        except Exception as e:
+            logger.error(f"Calculation summary error: {e}")
+            return {'error': str(e)}
 
 
 # Global instance for backward compatibility

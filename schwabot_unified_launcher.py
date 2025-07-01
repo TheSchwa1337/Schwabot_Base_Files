@@ -809,81 +809,66 @@ class SchwabotUnifiedLauncher:
             logger.error(f"Error running launcher: {e}")
             print(f"Error: {e}")
 
+    # Component operation methods
+    def _on_ferris_wheel_click(self, event):
+        """Handle Ferris wheel clicks."""
+        pass
 
-# Placeholder methods for component operations
-def _on_ferris_wheel_click(self, event):
-    """Handle Ferris wheel clicks."""
-    pass
+    def _toggle_component(self, component_type: str, enable: bool):
+        """Toggle component on/off."""
+        pass
 
+    def _configure_component(self, component_type: str):
+        """Configure component settings."""
+        pass
 
-def _toggle_component(self, component_type: str, enable: bool):
-    """Toggle component on/off."""
-    pass
+    def _run_benchmark(self):
+        """Run selected benchmark."""
+        pass
 
+    def _run_all_benchmarks(self):
+        """Run all benchmarks."""
+        pass
 
-def _configure_component(self, component_type: str):
-    """Configure component settings."""
-    pass
+    def _view_benchmark_results(self):
+        """View benchmark results."""
+        pass
 
+    def _start_flask_server(self):
+        """Start Flask server."""
+        pass
 
-def _run_benchmark(self):
-    """Run selected benchmark."""
-    pass
+    def _start_ngrok(self):
+        """Start Ngrok tunnel."""
+        pass
 
+    def _test_connections(self):
+        """Test device connections."""
+        pass
 
-def _run_all_benchmarks(self):
-    """Run all benchmarks."""
-    pass
+    def _start_btc_pool(self):
+        """Start BTC mining pool."""
+        pass
 
+    def _stop_btc_pool(self):
+        """Stop BTC mining pool."""
+        pass
 
-def _view_benchmark_results(self):
-    """View benchmark results."""
-    pass
+    def _show_pool_stats(self):
+        """Show pool statistics."""
+        pass
 
+    def _start_tick_manager(self):
+        """Start tick manager."""
+        pass
 
-def _start_flask_server(self):
-    """Start Flask server."""
-    pass
+    def _stop_tick_manager(self):
+        """Stop tick manager."""
+        pass
 
-
-def _start_ngrok(self):
-    """Start Ngrok tunnel."""
-    pass
-
-
-def _test_connections(self):
-    """Test device connections."""
-    pass
-
-
-def _start_btc_pool(self):
-    """Start BTC mining pool."""
-    pass
-
-
-def _stop_btc_pool(self):
-    """Stop BTC mining pool."""
-    pass
-
-
-def _show_pool_stats(self):
-    """Show pool statistics."""
-    pass
-
-
-def _start_tick_manager(self):
-    """Start tick manager."""
-    pass
-
-
-def _stop_tick_manager(self):
-    """Stop tick manager."""
-    pass
-
-
-def _show_tick_map(self):
-    """Show tick map."""
-    pass
+    def _show_tick_map(self):
+        """Show tick map."""
+        pass
 
 
 if __name__ == "__main__":

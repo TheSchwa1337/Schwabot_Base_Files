@@ -1,6 +1,14 @@
 #!/usr/bin/env python3
-""""""
-from typing import Dict, List, Optional
+# -*- coding: utf-8 -*-
+"""
+Schwabot Main Entry Point - Enhanced with Brain Trading
+======================================================
+
+Main launcher for Schwabot with integrated brain trading functionality.
+This replaces placeholder implementations with working brain algorithms.
+"""
+
+from typing import Dict, List, Optional, Any
 from pathlib import Path
 from datetime import datetime
 import time
@@ -11,6 +19,7 @@ import logging
 import json
 import asyncio
 import argparse
+
 Schwabot Advanced Trading System
 == == == == == == == == == == == == == == == =
 
@@ -56,11 +65,26 @@ logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler('schwabot.log'),
+        logging.FileHandler('logs/schwabot_main.log'),
         logging.StreamHandler(sys.stdout)
     ]
 )
 logger = logging.getLogger(__name__)
+
+# Import core components
+try:
+    from core.brain_trading_engine import BrainTradingEngine, BrainSignal
+    BRAIN_ENGINE_AVAILABLE = True
+except ImportError:
+    logger.error("Brain Trading Engine not available")
+    BRAIN_ENGINE_AVAILABLE = False
+
+try:
+    from symbolic_profit_router import SymbolicProfitRouter
+    SYMBOLIC_ROUTER_AVAILABLE = True
+except ImportError:
+    logger.error("Symbolic Profit Router not available")
+    SYMBOLIC_ROUTER_AVAILABLE = False
 
 
 class SchwabotGUI:

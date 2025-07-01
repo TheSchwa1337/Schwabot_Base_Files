@@ -40,6 +40,16 @@ try:
     from core.strategy_logic import StrategyLogic
     from core.risk_manager import RiskManager
     from core.portfolio_tracker import PortfolioTracker
+    
+    # Import the new modular API system
+    from core.api import (
+        ApiIntegrationManager,
+        OrderRequest,
+        MarketData,
+        OrderSide as APIOrderSide,
+        OrderType as APIOrderType,
+        ExchangeType
+    )
 except ImportError as e:
     logging.warning(f"Some Schwabot core modules unavailable: {e}")
 
@@ -162,7 +172,7 @@ class SchwabotTradingEngine:
     Advanced trading engine integrating with Schwabot's mathematical framework.
 
     Features:
-    - Live trading via CCXT/Coinbase
+    - Live trading via the modular API Integration Manager
     - Demo/simulation trading
     - Historical data integration
     - Advanced entry/exit logic
@@ -178,6 +188,11 @@ class SchwabotTradingEngine:
 
         # Initialize Schwabot core systems
         self._initialize_core_systems()
+        
+        # Initialize the API Integration Manager
+        self.api_manager: Optional[ApiIntegrationManager] = None
+        if self.mode == TradingMode.LIVE:
+            self.api_manager = ApiIntegrationManager()
 
         # Trading state
         self.active_orders: Dict[str, TradeExecution] = {}
@@ -185,9 +200,10 @@ class SchwabotTradingEngine:
         self.portfolio_value = 0.0
         self.available_balance = 0.0
 
-        # Exchange connections
-        self.exchanges: Dict[str, Any] = {}
-        self._initialize_exchanges()
+        # Exchange connections (for demo mode)
+        self.demo_exchanges: Dict[str, Any] = {}
+        if self.mode != TradingMode.LIVE:
+            self._initialize_demo_exchanges()
 
         # Historical data
         self.historical_data: Dict[str, pd.DataFrame] = {}
@@ -237,71 +253,9 @@ class SchwabotTradingEngine:
             self.risk_manager = None
             self.portfolio_tracker = None
 
-    def _initialize_exchanges(self):
-        """Initialize exchange connections."""
-        if self.mode == TradingMode.LIVE:
-            # Initialize live trading exchanges
-            self._setup_ccxt_exchange()
-            self._setup_coinbase_exchange()
-        else:
-            # Demo mode - use simulated exchanges
-            self._setup_demo_exchanges()
-
-    def _setup_ccxt_exchange(self):
-        """Setup CCXT exchange connection."""
-        try:
-            api_key = get_secure_api_key("CCXT_API")
-            if api_key:
-                # Parse API key (assuming format: exchange:key:secret)
-                parts = api_key.split(":")
-                if len(parts) >= 3:
-                    exchange_name = parts[0]
-                    key = parts[1]
-                    secret = parts[2]
-
-                    exchange_class = getattr(ccxt, exchange_name)
-                    self.exchanges["ccxt"] = exchange_class(
-                        {
-                            "apiKey": key,
-                            "secret": secret,
-                            "sandbox": False,
-                            "enableRateLimit": True,
-                        }
-                    )
-                    logger.info(f"✅ CCXT {exchange_name} exchange initialized")
-                else:
-                    logger.warning("⚠️  Invalid CCXT API key format")
-        except Exception as e:
-            logger.error(f"❌ Failed to setup CCXT exchange: {e}")
-
-    def _setup_coinbase_exchange(self):
-        """Setup Coinbase exchange connection."""
-        try:
-            api_key = get_secure_api_key("COINBASE_API")
-            if api_key:
-                # Parse Coinbase API key
-                parts = api_key.split(":")
-                if len(parts) >= 2:
-                    key = parts[0]
-                    secret = parts[1]
-
-                    self.exchanges["coinbase"] = ccxt.coinbase(
-                        {
-                            "apiKey": key,
-                            "secret": secret,
-                            "sandbox": False,
-                            "enableRateLimit": True,
-                        }
-                    )
-                    logger.info("✅ Coinbase exchange initialized")
-                else:
-                    logger.warning("⚠️  Invalid Coinbase API key format")
-        except Exception as e:
-            logger.error(f"❌ Failed to setup Coinbase exchange: {e}")
-
-    def _setup_demo_exchanges(self):
-        """Setup demo exchanges for simulation."""
-
+    def _initialize_demo_exchanges(self):
+        """Initialize demo exchange for simulation."""
+        # This method is now only for non-live modes
         class DemoExchange:
             def __init__(self, name):
                 self.name = name
@@ -310,7 +264,8 @@ class SchwabotTradingEngine:
 
             async def create_order(self, symbol, order_type, side, amount, price=None):
                 order_id = f"demo_{int(time.time())}"
-                executed_price = price or await self._get_current_price(symbol)
+                # In a real demo, we might want to get a live price feed here
+                executed_price = price or 50000.0 
 
                 # Update balance
                 if side == "buy":
@@ -319,13 +274,13 @@ class SchwabotTradingEngine:
                         self.balance["USDC"] -= cost
                         self.balance["BTC"] += amount
                     else:
-                        raise Exception("Insufficient USDC balance")
-                else:
+                        raise Exception("Insufficient USDC balance in demo exchange")
+                else: # sell
                     if self.balance["BTC"] >= amount:
                         self.balance["BTC"] -= amount
                         self.balance["USDC"] += amount * executed_price
                     else:
-                        raise Exception("Insufficient BTC balance")
+                        raise Exception("Insufficient BTC balance in demo exchange")
 
                 return {
                     "id": order_id,
@@ -335,15 +290,23 @@ class SchwabotTradingEngine:
                     "amount": amount,
                     "price": executed_price,
                     "status": "closed",
+                    "fee": {"cost": cost * 0.001, "currency": "USDC"}, # 0.1% fee
+                    "filled": amount,
+                    "remaining": 0,
+                    "cost": cost
                 }
 
-            async def _get_current_price(self, symbol):
-                # Get price from price bridge
-                price_data = await get_secure_price("BTC")
-                return price_data.price if price_data else 50000.0
-
-        self.exchanges["demo"] = DemoExchange("demo")
+        self.demo_exchanges["demo"] = DemoExchange("demo")
         logger.info("✅ Demo exchange initialized")
+        
+    async def _initialize_live_exchanges(self):
+        """Initializes and starts the live API manager."""
+        if self.api_manager:
+            logger.info("Starting API Integration Manager...")
+            await self.api_manager.start()
+            logger.info("✅ API Integration Manager started.")
+        else:
+            logger.error("❌ Trading mode is LIVE, but API Manager was not initialized.")
 
     def _load_historical_data(self):
         """Load historical data from CSV files."""
@@ -423,6 +386,13 @@ class SchwabotTradingEngine:
                 analysis["risk_assessment"] = await self._assess_risk(
                     price_data, historical_df
                 )
+
+            # Fetch live market data if in LIVE mode
+            if self.mode == TradingMode.LIVE and self.api_manager:
+                # Example: get data from a primary exchange like coinbase
+                live_data = await self.api_manager.get_market_data("coinbase", "BTC/USDT")
+                if live_data:
+                    analysis["live_market_data"] = live_data.__dict__
 
             return analysis
 
@@ -587,63 +557,75 @@ class SchwabotTradingEngine:
         return True  # Allow all trades if no risk manager
 
     async def _execute_live_trade(self, signal: TradeSignal) -> TradeExecution:
-        """Execute live trade via exchange."""
+        """Execute live trade via the API Integration Manager."""
         execution = TradeExecution(signal=signal)
 
-        try:
-            # Choose exchange (prioritize CCXT, fallback to Coinbase)
-            exchange = self.exchanges.get("ccxt") or self.exchanges.get("coinbase")
-            if not exchange:
-                raise Exception("No live exchange available")
+        if not self.api_manager:
+            execution.status = "failed"
+            execution.error_message = "API Integration Manager is not available."
+            logger.error(execution.error_message)
+            return execution
 
-            # Create order
+        try:
+            # We can add logic here to select the best exchange
+            # For now, let's assume a default like "coinbase"
+            target_exchange = "coinbase"
+            
+            # Convert our internal signal to a generic API OrderRequest
+            order_request = OrderRequest(
+                symbol=f"{signal.symbol}/USDC", # Assuming USDC pair
+                side=APIOrderSide(signal.side.value.lower()),
+                order_type=APIOrderType(signal.order_type.value.lower()),
+                amount=signal.quantity,
+                price=signal.price
+            )
+
+            # Place the order through the manager
+            order_response = await self.api_manager.place_order(target_exchange, order_request)
+
+            if order_response and order_response.success:
+                # Update execution from the successful response
+                execution.order_id = order_response.order_id
+                execution.executed_price = order_response.price
+                execution.executed_quantity = order_response.filled
+                execution.execution_time = int(order_response.timestamp)
+                execution.status = order_response.status
+                execution.fees = order_response.fee.get("cost") if order_response.fee else 0.0
+                logger.info(f"✅ Live trade executed successfully: {execution.order_id}")
+            else:
+                execution.status = "failed"
+                execution.error_message = order_response.error_message if order_response else "No response from API manager."
+                logger.error(f"❌ Live trade execution failed: {execution.error_message}")
+
+        except Exception as e:
+            execution.status = "failed"
+            execution.error_message = str(e)
+            logger.error(f"❌ Exception during live trade execution: {e}", exc_info=True)
+
+        return execution
+
+    async def _execute_demo_trade(self, signal: TradeSignal) -> TradeExecution:
+        """Execute demo trade via simulated exchange."""
+        execution = TradeExecution(signal=signal)
+        try:
+            exchange = self.demo_exchanges.get("demo")
+            if not exchange:
+                raise Exception("No demo exchange available")
+
             order = await exchange.create_order(
                 symbol=f"{signal.symbol}/USDC",
-                type=signal.order_type.value,
+                order_type=signal.order_type.value,
                 side=signal.side.value,
                 amount=signal.quantity,
                 price=signal.price,
             )
 
-            # Update execution
             execution.order_id = order["id"]
             execution.executed_price = order["price"]
             execution.executed_quantity = order["amount"]
             execution.execution_time = int(time.time())
             execution.status = order["status"]
             execution.fees = order.get("fee", {}).get("cost", 0.0)
-
-        except Exception as e:
-            execution.status = "failed"
-            execution.error_message = str(e)
-
-        return execution
-
-    async def _execute_demo_trade(self, signal: TradeSignal) -> TradeExecution:
-        """Execute demo trade."""
-        execution = TradeExecution(signal=signal)
-
-        try:
-            # Use demo exchange
-            exchange = self.exchanges.get("demo")
-            if not exchange:
-                raise Exception("Demo exchange not available")
-
-            # Create order
-            order = await exchange.create_order(
-                symbol=f"{signal.symbol}/USDC",
-                type=signal.order_type.value,
-                side=signal.side.value,
-                amount=signal.quantity,
-                price=signal.price,
-            )
-
-            # Update execution
-            execution.order_id = order["id"]
-            execution.executed_price = order["price"]
-            execution.executed_quantity = order["amount"]
-            execution.execution_time = int(time.time())
-            execution.status = order["status"]
 
         except Exception as e:
             execution.status = "failed"
@@ -671,27 +653,31 @@ class SchwabotTradingEngine:
                 pass
 
     async def get_portfolio_status(self) -> Dict[str, Any]:
-        """Get current portfolio status."""
-        try:
-            if self.portfolio_tracker:
-                return self.portfolio_tracker.get_portfolio_status()
-            else:
-                # Fallback portfolio status
-                return {
-                    "total_value": self.portfolio_value,
-                    "available_balance": self.available_balance,
-                    "positions": {},
-                    "performance": self.performance_metrics,
-                }
-        except Exception as e:
-            logger.error(f"❌ Portfolio status error: {e}")
-            return {"error": str(e)}
+        """Get portfolio status from the tracker or live from the API manager."""
+        if self.mode == TradingMode.LIVE and self.api_manager:
+            # We can enhance this to get a consolidated portfolio from the manager
+            # For now, we'll get the status of the connections
+            return self.api_manager.get_system_status()
+            
+        if self.portfolio_tracker:
+            return self.portfolio_tracker.get_status()
+        
+        return {"status": "Portfolio tracker not available"}
 
     async def start_trading(self):
-        """Start the trading engine."""
+        """Start the trading engine's main loop."""
+        if self.is_running:
+            logger.warning("Trading engine already running")
+            return
+            
+        logger.info("Starting trading engine...")
         self.is_running = True
-        logger.info(f"🚀 Trading engine started in {self.mode.value} mode")
+        
+        # Initialize live exchanges if in LIVE mode
+        if self.mode == TradingMode.LIVE:
+            await self._initialize_live_exchanges()
 
+        # Main loop
         while self.is_running:
             try:
                 # Analyze market
@@ -714,9 +700,12 @@ class SchwabotTradingEngine:
                 await asyncio.sleep(60)  # Wait longer on error
 
     async def stop_trading(self):
-        """Stop the trading engine."""
+        """Stop the trading engine's main loop."""
+        logger.info("Stopping trading engine...")
         self.is_running = False
-        logger.info("🛑 Trading engine stopped")
+        
+        if self.mode == TradingMode.LIVE and self.api_manager:
+            await self.api_manager.stop()
 
     async def _process_trading_signals(
         self, analysis: Dict[str, Any]
@@ -768,50 +757,88 @@ trading_engine = SchwabotTradingEngine()
 
 
 async def start_trading_engine(mode: TradingMode = TradingMode.DEMO):
-    """Start the trading engine."""
-    global trading_engine
-    trading_engine = SchwabotTradingEngine(mode)
-    await trading_engine.start_trading()
+    """Factory function to create and start a trading engine."""
+    global trading_engine_instance
+    if trading_engine_instance and trading_engine_instance.is_running:
+        logger.warning("Trading engine already running.")
+        return trading_engine_instance
+
+    trading_engine_instance = SchwabotTradingEngine(mode=mode)
+    asyncio.create_task(trading_engine_instance.start_trading())
+    logger.info(f"Trading engine started in {mode.value} mode.")
+    return trading_engine_instance
 
 
 async def stop_trading_engine():
-    """Stop the trading engine."""
-    global trading_engine
-    await trading_engine.stop_trading()
+    """Stops the global trading engine instance."""
+    global trading_engine_instance
+    if trading_engine_instance and trading_engine_instance.is_running:
+        await trading_engine_instance.stop_trading()
+        trading_engine_instance = None
+        logger.info("Trading engine stopped.")
+    else:
+        logger.warning("Trading engine not running or not found.")
 
 
-if __name__ == "__main__":
-    """Test the trading engine."""
+async def test_trading_engine():
+    """Function for testing the trading engine integration."""
+    logger.info("--- Starting Trading Engine Test ---")
 
-    async def test_trading_engine():
-        print("🚀 Testing Schwabot Trading Engine")
-        print("=" * 50)
+    # Start engine in DEMO mode
+    engine = await start_trading_engine(mode=TradingMode.DEMO)
 
-        # Initialize engine
-        engine = SchwabotTradingEngine(TradingMode.DEMO)
+    try:
+        # 1. Analyze market
+        logger.info("--- 1. Analyzing Market (Demo) ---")
+        analysis_result = await engine.analyze_market(symbol="BTC")
+        print("Analysis Result:", json.dumps(analysis_result, indent=2))
+        assert "error" not in analysis_result
 
-        # Test market analysis
-        print("\n📊 Testing market analysis:")
-        analysis = await engine.analyze_market("BTC")
-        print(f"Analysis result: {json.dumps(analysis, indent=2)}")
-
-        # Test portfolio status
-        print("\n💰 Testing portfolio status:")
-        portfolio = await engine.get_portfolio_status()
-        print(f"Portfolio: {json.dumps(portfolio, indent=2)}")
-
-        # Test trade execution
-        print("\n📈 Testing trade execution:")
-        signal = TradeSignal(
+        # 2. Generate and execute a signal
+        logger.info("--- 2. Executing Demo Trade ---")
+        demo_signal = TradeSignal(
             symbol="BTC",
             side=OrderSide.BUY,
             order_type=OrderType.MARKET,
-            quantity=0.001,
-            signal_strength=0.8,
-            confidence_level=0.7,
+            quantity=0.01,
+            signal_strength=0.85,
+            confidence_level=0.9
         )
-        execution = await engine.execute_trade(signal)
-        print(f"Trade execution: {execution.status}")
+        execution_result = await engine.execute_trade(demo_signal)
+        print("Execution Result:", execution_result)
+        assert execution_result.status == "closed"
+        
+        # 3. Get portfolio status
+        logger.info("--- 3. Getting Portfolio Status (Demo) ---")
+        portfolio_status = await engine.get_portfolio_status()
+        print("Portfolio Status:", json.dumps(portfolio_status, indent=2))
+        assert portfolio_status is not None
 
-    # Run the test
+    except Exception as e:
+        logger.error(f"❌ Test failed: {e}", exc_info=True)
+    finally:
+        await stop_trading_engine()
+
+    # --- Test LIVE mode (will use API keys if configured) ---
+    logger.info("--- Starting LIVE Mode Test (connects to exchanges) ---")
+    live_engine = await start_trading_engine(mode=TradingMode.LIVE)
+    
+    try:
+        # Allow time for connections
+        await asyncio.sleep(5)
+        
+        status = await live_engine.get_portfolio_status()
+        print("Live Engine Status:", json.dumps(status, indent=2, default=str))
+        assert status['running'] is True
+        
+    except Exception as e:
+        logger.error(f"❌ LIVE test failed: {e}", exc_info=True)
+    finally:
+        await stop_trading_engine()
+
+    logger.info("--- Trading Engine Test Finished ---")
+
+
+if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
     asyncio.run(test_trading_engine())
