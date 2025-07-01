@@ -1,36 +1,20 @@
-# -*- coding: utf-8 -*-
-"""Unified Math System for Schwabot Trading
-========================================
+#!/usr/bin/env python3
+"""Unified Math System - Core Mathematical Framework.
 
-Provides a unified interface for all mathematical operations used throughout
-the trading system, including basic arithmetic, statistical functions,
-    linear algebra, and specialized trading calculations.
-
-Mathematical Foundation:
-    - Tensor operations for multi-dimensional analysis
-    - Statistical computations for market analysis
-    - Linear algebra for portfolio optimization
-    - Specialized BTC and crypto calculations
-
-    Windows CLI compatible with comprehensive error handling.
+Provides comprehensive mathematical operations and validation for the SchwaBot
+Enhanced Nexus-Lantern trading intelligence system.
 """
-
-from __future__ import annotations
 
 import hashlib
 import logging
 import time
+from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
 
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below:
-from core.phase_bit_integration import BitPhase, PhaseBitIntegration, StrategyType
-
-# MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below:
-# from core.unified_profit_vectorization_system import
-# UnifiedProfitVectorizationSystem # Removed to resolve circular import
+# Import core mathematical components
 
 logger = logging.getLogger(__name__)
 
@@ -42,6 +26,39 @@ try:
 except ImportError as e:
     logger.warning(f"Tensor algebra not available: {e}")
     TENSOR_ALGEBRA_AVAILABLE = False
+
+# Import phase bit integration with fallback
+try:
+    from core.phase_bit_integration import PhaseBitIntegration, BitPhase
+    PHASE_BIT_INTEGRATION_AVAILABLE = True
+except ImportError as e:
+    logger.warning(f"Phase bit integration not available: {e}")
+    PHASE_BIT_INTEGRATION_AVAILABLE = False
+    
+    # Create fallback implementations
+    class BitPhase(Enum):
+        """Fallback BitPhase enum."""
+        FOUR_BIT = "4bit"
+        EIGHT_BIT = "8bit"
+        SIXTEEN_BIT = "16bit"
+        THIRTY_TWO_BIT = "32bit"
+        FORTY_TWO_BIT = "42bit"
+    
+    @dataclass
+    class PhaseBitResult:
+        """Fallback phase bit result."""
+        bit_phase: BitPhase
+        confidence: float = 0.8
+        
+    class PhaseBitIntegration:
+        """Fallback PhaseBitIntegration implementation."""
+        
+        def __init__(self):
+            self.current_phase = BitPhase.EIGHT_BIT
+        
+        def resolve_bit_phase(self, operation_hash: str, mode: str = "auto") -> PhaseBitResult:
+            """Fallback bit phase resolution."""
+            return PhaseBitResult(bit_phase=self.current_phase)
 
 
 # Safe print functions for cross-platform compatibility

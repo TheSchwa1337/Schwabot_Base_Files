@@ -30,6 +30,7 @@ from pathlib import Path
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
 class MathematicalPriority(Enum):
     """Priority levels for mathematical implementations."""
     CRITICAL = "critical"       # Core BTC-to-profit mathematical operations
@@ -37,12 +38,14 @@ class MathematicalPriority(Enum):
     UTILITY = "utility"         # Helper mathematical functions
     CLEANUP = "cleanup"         # Non-mathematical template artifacts
 
+
 class ImplementationStrategy(Enum):
     """Implementation strategies for different stub types."""
     FULL_IMPLEMENT = "full_implement"       # Complete mathematical implementation
     BASIC_IMPLEMENT = "basic_implement"     # Basic mathematical placeholder
     PRESERVE_STUB = "preserve_stub"         # Keep as improved stub
     REMOVE_CLEAN = "remove_clean"          # Clean removal
+
 
 @dataclass
 class MathematicalStubAnalysis:
@@ -57,9 +60,10 @@ class MathematicalStubAnalysis:
     suggested_implementation: str
     reasoning: str
 
+
 class MathematicalStubAnalyzer:
     """Analyzer for mathematical stub files and implementations."""
-    
+
     def __init__(self):
         # Critical mathematical patterns for BTC-to-profit system
         self.critical_patterns = {
@@ -104,35 +108,38 @@ class MathematicalStubAnalyzer:
             'utility_implementations': 0
             'cleanups_performed': 0
 }
+
     def analyze_stub_file(self, filepath: str) -> MathematicalStubAnalysis:
         """Analyze a single stub file for mathematical relevance."""
         try:
             with open(filepath, 'r', encoding='utf-8') as f:
                 content = f.read()
-            
+
             # Extract function and class information
             function_name, class_name = self._extract_function_info(content, filepath)
-            
+
             # Determine mathematical priority
-            priority = self._determine_mathematical_priority(content, filepath, function_name)
-            
+            priority = self._determine_mathematical_priority(
+                content, filepath, function_name)
+
             # Determine implementation strategy
             strategy = self._determine_implementation_strategy(priority, content)
-            
+
             # Extract mathematical context
             mathematical_context = self._extract_mathematical_context(content, filepath)
-            
+
             # Extract dependencies
             dependencies = self._extract_dependencies(content)
-            
+
             # Generate suggested implementation
             suggested_implementation = self._generate_suggested_implementation(
                 function_name, priority, mathematical_context
             )
-            
+
             # Generate reasoning
-            reasoning = self._generate_reasoning(priority, strategy, mathematical_context)
-            
+            reasoning = self._generate_reasoning(
+    priority, strategy, mathematical_context)
+
             analysis = MathematicalStubAnalysis(
                 filepath=filepath
                 function_name=function_name
@@ -144,24 +151,25 @@ class MathematicalStubAnalyzer:
                 suggested_implementation=suggested_implementation
                 reasoning=reasoning
             )
-            
+
             self.analyzed_files.append(analysis)
             return analysis
-            
+
         except Exception as e:
             logger.error(f"Error analyzing {filepath}: {e}")
             return None
-    
-    def _extract_function_info(self, content: str, filepath: str) -> Tuple[str, Optional[str]]:
+
+    def _extract_function_info(
+        self, content: str, filepath: str) -> Tuple[str, Optional[str]]:
         """Extract function and class names from content."""
         function_name = "unknown_function"
         class_name = None
-        
+
         # Extract from file path
         file_name = os.path.basename(filepath)
         if file_name.endswith('.py'):
             function_name = file_name[:-3]
-        
+
         # Try to parse AST for better extraction
         try:
             tree = ast.parse(content)
@@ -177,36 +185,40 @@ class MathematicalStubAnalyzer:
                             break
         except:
             pass
-        
+
         return function_name, class_name
-    
-    def _determine_mathematical_priority(self, content: str, filepath: str, function_name: str) -> MathematicalPriority:
+
+    def _determine_mathematical_priority(
+    self,
+    content: str,
+    filepath: str,
+     function_name: str) -> MathematicalPriority:
         """Determine mathematical priority based on content analysis."""
         content_lower = content.lower()
         filepath_lower = filepath.lower()
         function_lower = function_name.lower()
-        
+
         # Check for critical patterns
         critical_score = 0
         for category, patterns in self.critical_patterns.items():
             for pattern in patterns:
                 if pattern in content_lower or pattern in filepath_lower or pattern in function_lower:
                     critical_score += 2
-        
+
         # Check for important patterns
         important_score = 0
         for category, patterns in self.important_patterns.items():
             for pattern in patterns:
                 if pattern in content_lower or pattern in filepath_lower or pattern in function_lower:
                     important_score += 1
-        
+
         # Check for utility patterns
         utility_score = 0
         for category, patterns in self.utility_patterns.items():
             for pattern in patterns:
                 if pattern in content_lower or pattern in filepath_lower or pattern in function_lower:
                     utility_score += 1
-        
+
         # Determine priority based on scores
         if critical_score >= 3:
             return MathematicalPriority.CRITICAL
@@ -216,8 +228,11 @@ class MathematicalStubAnalyzer:
             return MathematicalPriority.UTILITY
         else:
             return MathematicalPriority.CLEANUP
-    
-    def _determine_implementation_strategy(self, priority: MathematicalPriority, content: str) -> ImplementationStrategy:
+
+    def _determine_implementation_strategy(
+    self,
+    priority: MathematicalPriority,
+     content: str) -> ImplementationStrategy:
         """Determine implementation strategy based on priority."""
         if priority == MathematicalPriority.CRITICAL:
             return ImplementationStrategy.FULL_IMPLEMENT
@@ -227,11 +242,11 @@ class MathematicalStubAnalyzer:
             return ImplementationStrategy.PRESERVE_STUB
         else:
             return ImplementationStrategy.REMOVE_CLEAN
-    
+
     def _extract_mathematical_context(self, content: str, filepath: str) -> List[str]:
         """Extract mathematical context from content."""
         context = []
-        
+
         # Check for mathematical imports
         if 'numpy' in content or 'np.' in content:
             context.append('numpy_operations')
@@ -243,7 +258,7 @@ class MathematicalStubAnalyzer:
             context.append('btc_analysis')
         if 'math' in content or 'mathematical' in content.lower():
             context.append('mathematical_operations')
-        
+
         # Check file location for context
         if 'core/math' in filepath:
             context.append('core_mathematics')
@@ -251,29 +266,33 @@ class MathematicalStubAnalyzer:
             context.append('tensor_algebra')
         if 'profit' in filepath:
             context.append('profit_optimization')
-        
+
         return list(set(context))
-    
+
     def _extract_dependencies(self, content: str) -> List[str]:
         """Extract dependencies from content."""
         dependencies = []
-        
+
         # Extract import statements
         import_pattern = r'from\s+([a-zA-Z_][a-zA-Z0-9_.]*)\s+import|import\s+([a-zA-Z_][a-zA-Z0-9_.]*)'
         matches = re.findall(import_pattern, content)
-        
+
         for match in matches:
             module = match[0] or match[1]
             if module and not module.startswith('__'):
                 dependencies.append(module)
-        
+
         return dependencies
-    
-    def _generate_suggested_implementation(self, function_name: str, priority: MathematicalPriority, context: List[str]) -> str:
+
+    def _generate_suggested_implementation(
+    self,
+    function_name: str,
+    priority: MathematicalPriority,
+     context: List[str]) -> str:
         """Generate suggested implementation based on analysis."""
         if priority == MathematicalPriority.CLEANUP:
             return "# Remove this file - no mathematical significance"
-        
+
         # Determine implementation type based on context
         if 'profit_calculations' in context:
             return self._generate_profit_calculation(function_name, context)
@@ -285,87 +304,90 @@ class MathematicalStubAnalyzer:
             return self._generate_optimization_function(function_name, context)
         else:
             return self._generate_validation_function(function_name, context)
-    
-    def _generate_profit_calculation(self, function_name: str, context: List[str]) -> str:
+
+    def _generate_profit_calculation(
+    self,
+    function_name: str,
+     context: List[str]) -> str:
         """Generate profit calculation implementation."""
         return f'''def {function_name}(price_data: float, volume_data: float, **kwargs) -> float:
     """
     Calculate profit optimization for BTC trading.
-    
+
     Args:
         price_data: Current BTC price
         volume_data: Trading volume
         **kwargs: Additional parameters
-    
+
     Returns:
         Calculated profit score
     """
     try:
         # Import unified math system
         from core.unified_math_system import unified_math
-        
+
         # Calculate profit using unified mathematical framework
         base_profit = price_data * volume_data * 0.001  # 0.1% base
-        
+
         # Apply mathematical optimization
         if hasattr(unified_math, 'optimize_profit'):
             optimized_profit = unified_math.optimize_profit(base_profit)
         else:
             optimized_profit = base_profit * 1.1  # 10% optimization factor
-        
+
         return float(optimized_profit)
-        
+
     except Exception as e:
         logger.error(f"Profit calculation failed: {{e}}")
         return 0.0'''
-    
+
     def _generate_tensor_operation(self, function_name: str, context: List[str]) -> str:
         """Generate tensor operation implementation."""
         return f'''def {function_name}(tensor_a: np.ndarray, tensor_b: np.ndarray = None, **kwargs) -> np.ndarray:
     """
     Perform tensor operation for mathematical trading analysis.
-    
+
     Args:
         tensor_a: Primary tensor input
         tensor_b: Secondary tensor input (optional)
         **kwargs: Additional parameters
-    
+
     Returns:
         Result tensor
     """
     try:
         import numpy as np
         from core.math.tensor_algebra import unified_tensor_algebra
-        
+
         # Perform tensor operation using unified algebra
         if tensor_b is not None:
             result = unified_tensor_algebra.tensor_dot(tensor_a, tensor_b)
         else:
             result = unified_tensor_algebra.tensor_normalize(tensor_a)
-        
+
         return result
-        
+
     except Exception as e:
         logger.error(f"Tensor operation failed: {{e}}")
         return np.zeros_like(tensor_a) if tensor_a is not None else np.array([])'''
-    
+
     def _generate_btc_analysis(self, function_name: str, context: List[str]) -> str:
         """Generate BTC analysis implementation."""
         return f'''def {function_name}(btc_price: float, market_data: dict = None, **kwargs) -> dict:
     """
     Analyze BTC market conditions for trading decisions.
-    
+
     Args:
         btc_price: Current BTC price
         market_data: Additional market data
         **kwargs: Additional parameters
-    
+
     Returns:
         Analysis results dictionary
     """
     try:
         from core.unified_math_system import unified_math
-        
+
         # Perform BTC analysis using unified mathematics
         analysis = {{
             'price': btc_price
@@ -373,94 +395,97 @@ class MathematicalStubAnalyzer:
             'volatility': unified_math.calculate_volatility(btc_price),
             'profit_potential': unified_math.calculate_profit_potential(btc_price)
         }}
-        
+
         return analysis
-        
+
     except Exception as e:
         logger.error(f"BTC analysis failed: {{e}}")
         return {{'price': btc_price, 'error': str(e)}}'''
-    
-    def _generate_optimization_function(self, function_name: str, context: List[str]) -> str:
+
+    def _generate_optimization_function(
+    self,
+    function_name: str,
+     context: List[str]) -> str:
         """Generate optimization function implementation."""
         return f'''def {function_name}(data: np.ndarray, target: float = None, **kwargs) -> np.ndarray:
     """
     Optimize mathematical function for trading performance.
-    
+
     Args:
         data: Input data array
         target: Target optimization value
         **kwargs: Additional parameters
-    
+
     Returns:
         Optimized result
     """
     try:
         import numpy as np
         from core.unified_math_system import unified_math
-        
+
         # Apply mathematical optimization
         if target is not None:
             result = unified_math.optimize_towards_target(data, target)
         else:
             result = unified_math.general_optimization(data)
-        
+
         return result
-        
+
     except Exception as e:
         logger.error(f"Optimization failed: {{e}}")
         return data'''
-    
+
     def _generate_trading_logic(self, function_name: str, context: List[str]) -> str:
         """Generate trading logic implementation."""
         return f'''def {function_name}(market_data: dict, **kwargs) -> str:
     """
     Implement trading logic based on mathematical analysis.
-    
+
     Args:
         market_data: Market data dictionary
         **kwargs: Additional parameters
-    
+
     Returns:
         Trading decision ('buy', 'sell', 'hold')
     """
     try:
         from core.unified_math_system import unified_math
-        
+
         # Extract key metrics
         price = market_data.get('price', 0)
         volume = market_data.get('volume', 0)
-        
+
         # Apply unified mathematical trading logic
         decision_score = unified_math.calculate_trading_score(price, volume)
-        
+
         if decision_score > 0.7:
             return 'buy'
         elif decision_score < 0.3:
             return 'sell'
         else:
             return 'hold'
-            
+
     except Exception as e:
         logger.error(f"Trading logic failed: {{e}}")
         return 'hold' '''
-    
+
     def _generate_phase_operation(self, function_name: str, context: List[str]) -> str:
         """Generate phase operation implementation."""
         return f'''def {function_name}(phase_data: int, bit_length: int = 8, **kwargs) -> int:
     """
     Perform bit phase operation for trading system.
-    
+
     Args:
         phase_data: Phase data input
         bit_length: Bit length (2, 4, 8, 42)
         **kwargs: Additional parameters
-    
+
     Returns:
         Processed phase result
     """
     try:
         from core.unified_math_system import unified_math
-        
+
         # Apply bit phase mathematics
         if bit_length == 2:
             result = phase_data & 0x3
@@ -472,23 +497,26 @@ class MathematicalStubAnalyzer:
             result = phase_data & 0x3FFFFFFFFFF
         else:
             result = phase_data
-        
+
         return result
-        
+
     except Exception as e:
         logger.error(f"Phase operation failed: {{e}}")
         return 0'''
-    
-    def _generate_entropy_calculation(self, function_name: str, context: List[str]) -> str:
+
+    def _generate_entropy_calculation(
+    self,
+    function_name: str,
+     context: List[str]) -> str:
         """Generate entropy calculation implementation."""
         return f'''def {function_name}(data: np.ndarray, **kwargs) -> float:
     """
     Calculate entropy for market signal analysis.
-    
+
     Args:
         data: Input data array
         **kwargs: Additional parameters
-    
+
     Returns:
         Calculated entropy value
     """
@@ -496,27 +524,30 @@ class MathematicalStubAnalyzer:
         import numpy as np
         from scipy.stats import entropy
         from core.unified_math_system import unified_math
-        
+
         # Calculate entropy using unified mathematics
         normalized_data = np.abs(data) + 1e-8
         entropy_value = entropy(normalized_data)
-        
+
         return float(entropy_value)
-        
+
     except Exception as e:
         logger.error(f"Entropy calculation failed: {{e}}")
         return 0.0'''
-    
-    def _generate_validation_function(self, function_name: str, context: List[str]) -> str:
+
+    def _generate_validation_function(
+    self,
+    function_name: str,
+     context: List[str]) -> str:
         """Generate validation function implementation."""
         return f'''def {function_name}(data: Any, **kwargs) -> bool:
     """
     Validate mathematical data for trading system.
-    
+
     Args:
         data: Data to validate
         **kwargs: Additional parameters
-    
+
     Returns:
         True if valid, False otherwise
     """
@@ -524,43 +555,50 @@ class MathematicalStubAnalyzer:
         # Perform basic validation
         if data is None:
             return False
-        
+
         # Numerical validation
         if isinstance(data, (int, float)):
             return not (np.isnan(data) or np.isinf(data))
-        
+
         # Array validation
         if isinstance(data, np.ndarray):
             return data.size > 0 and not np.any(np.isnan(data))
-        
+
         return True
-        
+
     except Exception as e:
         logger.error(f"Validation failed: {{e}}")
         return False'''
-    
-    def _generate_reasoning(self, priority: MathematicalPriority, strategy: ImplementationStrategy, context: List[str]) -> str:
+
+    def _generate_reasoning(
+    self,
+    priority: MathematicalPriority,
+    strategy: ImplementationStrategy,
+     context: List[str]) -> str:
         """Generate reasoning for analysis decisions."""
         reasoning_parts = []
-        
+
         reasoning_parts.append(f"Priority: {priority.value.upper()}")
         reasoning_parts.append(f"Strategy: {strategy.value}")
-        
+
         if context:
             reasoning_parts.append(f"Mathematical context: {', '.join(context)}")
-        
+
         if priority == MathematicalPriority.CRITICAL:
             reasoning_parts.append("Critical for BTC-to-profit mathematical operations")
         elif priority == MathematicalPriority.IMPORTANT:
             reasoning_parts.append("Important supporting mathematical component")
         elif priority == MathematicalPriority.UTILITY:
-            reasoning_parts.append("Utility function supporting mathematical operations")
+            reasoning_parts.append(
+                "Utility function supporting mathematical operations")
         else:
-            reasoning_parts.append("Template artifact with no mathematical significance")
-        
+            reasoning_parts.append(
+                "Template artifact with no mathematical significance")
+
         return " | ".join(reasoning_parts)
-    
-    def implement_mathematical_stubs(self, analysis_results: List[MathematicalStubAnalysis]) -> None:
+
+    def implement_mathematical_stubs(
+    self, analysis_results: List[MathematicalStubAnalysis]) -> None:
         """Implement mathematical stubs based on analysis."""
         for analysis in analysis_results:
             if analysis.strategy == ImplementationStrategy.FULL_IMPLEMENT:
@@ -575,21 +613,21 @@ class MathematicalStubAnalyzer:
             elif analysis.strategy == ImplementationStrategy.REMOVE_CLEAN:
                 self._clean_remove_file(analysis)
                 self.implementation_stats['cleanups_performed'] += 1
-    
+
     def _implement_full_function(self, analysis: MathematicalStubAnalysis) -> None:
         """Implement full mathematical function."""
         try:
             # Read current content
             with open(analysis.filepath, 'r', encoding='utf-8') as f:
                 content = f.read()
-            
+
             # Replace stub with full implementation
             # Keep imports and class structure, replace function body
             lines = content.split('\n')
             new_lines = []
             in_function = False
             function_indent = 0
-            
+
             for line in lines:
                 if ('def ' in line and analysis.function_name in line) or in_function:
                     if 'def ' in line and analysis.function_name in line:
@@ -601,7 +639,8 @@ class MathematicalStubAnalyzer:
                         # End of function (next function/class at same or higher level)
                         in_function = False
                         # Add the implementation before this line
-                        impl_lines = analysis.suggested_implementation.split('\n')[1:]  # Skip def line
+                        impl_lines = analysis.suggested_implementation.split('\n')[
+                                                                             1:]  # Skip def line
                         for impl_line in impl_lines:
                             new_lines.append(' ' * (function_indent + 4) + impl_line)
                         new_lines.append(line)
@@ -609,22 +648,23 @@ class MathematicalStubAnalyzer:
                         new_lines.append(line)
                 else:
                     new_lines.append(line)
-            
+
             # If we were still in function at end of file
             if in_function:
-                impl_lines = analysis.suggested_implementation.split('\n')[1:]  # Skip def line
+                impl_lines = analysis.suggested_implementation.split('\n')[
+                                                                     1:]  # Skip def line
                 for impl_line in impl_lines:
                     new_lines.append(' ' * (function_indent + 4) + impl_line)
-            
+
             # Write back
             with open(analysis.filepath, 'w', encoding='utf-8') as f:
                 f.write('\n'.join(new_lines))
-            
+
             logger.info(f"✅ Implemented full function: {analysis.filepath}")
-            
+
         except Exception as e:
             logger.error(f"❌ Failed to implement {analysis.filepath}: {e}")
-    
+
     def _implement_basic_function(self, analysis: MathematicalStubAnalysis) -> None:
         """Implement basic mathematical function."""
         try:
@@ -632,14 +672,16 @@ class MathematicalStubAnalyzer:
             self._implement_full_function(analysis)
             logger.info(f"✅ Implemented basic function: {analysis.filepath}")
         except Exception as e:
-            logger.error(f"❌ Failed to implement basic function {analysis.filepath}: {e}")
-    
+            logger.error(
+    f"❌ Failed to implement basic function {
+        analysis.filepath}: {e}")
+
     def _improve_stub(self, analysis: MathematicalStubAnalysis) -> None:
         """Improve existing stub with better documentation."""
         try:
             with open(analysis.filepath, 'r', encoding='utf-8') as f:
                 content = f.read()
-            
+
             # Add better docstring and TODO
             improved_content = content.replace(
                 '"""

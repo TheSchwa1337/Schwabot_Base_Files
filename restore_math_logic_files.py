@@ -44,6 +44,7 @@ FILES_TO_RESTORE = [
 SRC_ROOT = Path('cleanup_backup/core')
 DST_ROOT = Path('core_math_restore')
 
+
 def restore_files():
     for rel_path in FILES_TO_RESTORE:
         src = SRC_ROOT / rel_path
@@ -55,6 +56,7 @@ def restore_files():
         else:
             print(f"WARNING: {src} does not exist and was skipped.")
 
+
 if __name__ == "__main__":
     restore_files()
-    print("\nRestore complete. You can now autopep8, flake8, and mypy the core_math_restore directory.") 
+    print("\nRestore complete. You can now autopep8, flake8, and mypy the core_math_restore directory.")

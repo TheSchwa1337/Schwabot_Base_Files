@@ -63,8 +63,10 @@ class WindowsCliCompatibilityHandler:"""
 """
 
    @staticmethod
-def safe_print(message: str) -> str:"""
+def safe_print(message: str) -> str: """
         """Print message safely with Windows CLI compatibility.""""""
+
+
 """"""
 """"""
 """"""
@@ -137,7 +139,7 @@ cmd = [sys.executable, "windows_cli_compliant_architecture_fixer.py"]
 
 try:
         result = subprocess.run(
-            cmd, capture_output=True, text = True, timeout = 300
+            cmd, capture_output=True, text=True, timeout=300
         )
 if result.returncode == 0:
             safe_print(cli_handler.safe_print("\\u2705 Architecture fixer completed"))
@@ -148,9 +150,11 @@ if result.returncode == 0:
                 )
 )
 except subprocess.TimeoutExpired:
-        safe_print(cli_handler.safe_print("\\u26a0\\ufe0f Architecture fixer timed out"))
+        safe_print(cli_handler.safe_print(
+            "\\u26a0\\ufe0f Architecture fixer timed out"))
     except FileNotFoundError:
-        safe_print(cli_handler.safe_print("\\u274c Architecture fixer script not found"))
+        safe_print(cli_handler.safe_print(
+            "\\u274c Architecture fixer script not found"))
         return False
 except Exception as e:
         safe_print(
@@ -171,7 +175,7 @@ cmd = [sys.executable, "apply_comprehensive_architecture_integration.py"]
 
 try:
         result = subprocess.run(
-            cmd, capture_output=True, text = True, timeout = 600
+            cmd, capture_output=True, text=True, timeout=600
         )
 if result.returncode == 0:
             safe_print(
@@ -202,7 +206,7 @@ if os.path.exists("master_flake8_comprehensive_fixer.py"):
 
 try:
             result = subprocess.run(
-                cmd, capture_output=True, text = True, timeout = 600
+                cmd, capture_output=True, text=True, timeout=600
             )
 if result.returncode == 0:
                 safe_print(cli_handler.safe_print("\\u2705 Flake8 fixes completed"))

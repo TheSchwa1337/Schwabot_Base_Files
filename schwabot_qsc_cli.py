@@ -2,7 +2,7 @@
 """Schwabot QSC + GTS Immune System CLI.
 
 Enhanced command-line interface for launching and managing the complete
-Quantum Static Core (QSC) + Generalized Tensor Solutions (GTS) immune 
+Quantum Static Core (QSC) + Generalized Tensor Solutions (GTS) immune
 system integrated with Schwabot's trading infrastructure.
 
 Provides unified control over:
@@ -14,6 +14,12 @@ Provides unified control over:
 - Visual Diagnostics
 """
 
+from utils.logging_setup import setup_logging
+from server.tensor_websocket_server import TensorWebSocketServer
+from server.qsc_diagnostic_websocket import QSCDiagnosticServer
+from core.qsc_enhanced_profit_allocator import QSCEnhancedProfitAllocator
+from core.quantum_static_core import QuantumStaticCore, QSCMode, ResonanceLevel
+from core.master_cycle_engine import MasterCycleEngine, SystemMode, TradingDecision
 import os
 import sys
 import argparse
@@ -31,12 +37,6 @@ from dataclasses import dataclass, field
 project_root = Path(__file__).parent
 sys.path.append(str(project_root))
 
-from core.master_cycle_engine import MasterCycleEngine, SystemMode, TradingDecision
-from core.quantum_static_core import QuantumStaticCore, QSCMode, ResonanceLevel
-from core.qsc_enhanced_profit_allocator import QSCEnhancedProfitAllocator
-from server.qsc_diagnostic_websocket import QSCDiagnosticServer
-from server.tensor_websocket_server import TensorWebSocketServer
-from utils.logging_setup import setup_logging
 
 # Setup logging
 logger = setup_logging(__name__)
@@ -66,18 +66,18 @@ class SchwabotQSCCLI:
         """Initialize the QSC CLI."""
         self.config_file = project_root / "config" / "qsc_system_config.json"
         self.config = self._load_config()
-        
+
         # System components
         self.master_engine: Optional[MasterCycleEngine] = None
         self.diagnostic_server: Optional[QSCDiagnosticServer] = None
         self.tensor_server: Optional[TensorWebSocketServer] = None
         self.visualization_process: Optional[subprocess.Popen] = None
-        
+
         # Status tracking
         self.system_status = QSCSystemStatus()
         self.start_time = time.time()
         self.is_running = False
-        
+
         # Signal handling
         signal.signal(signal.SIGINT, self._signal_handler)
         signal.signal(signal.SIGTERM, self._signal_handler)
@@ -116,7 +116,7 @@ class SchwabotQSCCLI:
                 "alert_sound_enabled": True
             },
             "tensor_server": {
-                "host": "localhost", 
+                "host": "localhost",
                 "port": 8765,
                 "stream_interval": 1.0,
                 "btc_price_simulator": True
@@ -128,7 +128,7 @@ class SchwabotQSCCLI:
                 "diagnostic_panel_enabled": True
             }
         }
-        
+
         if self.config_file.exists():
             try:
                 with open(self.config_file, 'r') as f:
@@ -141,7 +141,7 @@ class SchwabotQSCCLI:
                             default_config[key] = value
             except Exception as e:
                 logger.warning(f"Failed to load QSC config: {e}. Using defaults.")
-        
+
         return default_config
 
     def _save_config(self):
@@ -164,7 +164,7 @@ class SchwabotQSCCLI:
         try:
             engine_config = self.config.get("master_engine", {})
             self.master_engine = MasterCycleEngine(engine_config)
-            
+
             # Test the engine with sample data
             test_data = {
                 "btc_price": 50000.0,
@@ -176,17 +176,19 @@ class SchwabotQSCCLI:
                     "asks": [[50010, 1.6], [50020, 2.1]]
                 }
             }
-            
+
             diagnostics = self.master_engine.process_market_tick(test_data)
-            logger.info(f"🎯 Master Cycle Engine started. Test decision: {diagnostics.trading_decision.value}")
-            
+            logger.info(
+                f"🎯 Master Cycle Engine started. Test decision: {
+                    diagnostics.trading_decision.value}")
+
             self.system_status.master_engine = True
             self.system_status.qsc_immune_system = True
             self.system_status.tensor_analysis = True
             self.system_status.profit_allocator = True
-            
+
             return True
-            
+
         except Exception as e:
             logger.error(f"Failed to start Master Cycle Engine: {e}")
             return False
@@ -197,11 +199,11 @@ class SchwabotQSCCLI:
             diagnostic_config = self.config.get("diagnostic_server", {})
             self.diagnostic_server = QSCDiagnosticServer(diagnostic_config)
             await self.diagnostic_server.start_server()
-            
+
             self.system_status.diagnostic_server = True
             logger.info("🧬📡 QSC Diagnostic server started successfully")
             return True
-            
+
         except Exception as e:
             logger.error(f"Failed to start QSC diagnostic server: {e}")
             return False
@@ -212,10 +214,10 @@ class SchwabotQSCCLI:
             tensor_config = self.config.get("tensor_server", {})
             self.tensor_server = TensorWebSocketServer(tensor_config)
             await self.tensor_server.start_server()
-            
+
             logger.info("🧠📡 Tensor WebSocket server started successfully")
             return True
-            
+
         except Exception as e:
             logger.error(f"Failed to start tensor server: {e}")
             return False
@@ -223,23 +225,25 @@ class SchwabotQSCCLI:
     async def start_visualization_server(self) -> bool:
         """Start the React visualization server with QSC diagnostic panel."""
         try:
-            if not self.config.get("visualization", {}).get("enable_react_server", True):
+            if not self.config.get(
+                    "visualization", {}).get(
+                    "enable_react_server", True):
                 return True
-            
+
             # Check if Node.js is available
             if not self._check_node_availability():
                 logger.warning("Node.js not available. Skipping React server.")
                 return False
-            
+
             # Create enhanced React app with QSC diagnostic panel
             self._setup_qsc_react_app()
-            
+
             # Start React server
             react_port = self.config.get("visualization", {}).get("react_port", 3000)
-            
+
             env = os.environ.copy()
             env["PORT"] = str(react_port)
-            
+
             self.visualization_process = subprocess.Popen(
                 ["npm", "start"],
                 cwd=project_root / "qsc_visualization",
@@ -248,22 +252,22 @@ class SchwabotQSCCLI:
                 stderr=subprocess.PIPE,
                 text=True
             )
-            
+
             # Give it time to start
             await asyncio.sleep(3)
-            
+
             if self.visualization_process.poll() is None:
                 self.system_status.visualization_server = True
                 logger.info(f"⚛️🧬 QSC React visualization started on port {react_port}")
-                
+
                 if self.config.get("visualization", {}).get("auto_open_browser", False):
                     self._open_browser(f"http://localhost:{react_port}")
-                
+
                 return True
             else:
                 logger.error("QSC React server failed to start")
                 return False
-                
+
         except Exception as e:
             logger.error(f"Failed to start QSC visualization server: {e}")
             return False
@@ -280,20 +284,29 @@ class SchwabotQSCCLI:
     def _setup_qsc_react_app(self):
         """Set up enhanced React app with QSC diagnostic components."""
         react_dir = project_root / "qsc_visualization"
-        
+
         if not react_dir.exists():
             logger.info("Setting up QSC React visualization app...")
-            
+
             # Create React app
-            subprocess.run([
-                "npx", "create-react-app", "qsc_visualization", "--template", "typescript"
-            ], cwd=project_root, check=True)
-            
+            subprocess.run(["npx",
+                            "create-react-app",
+                            "qsc_visualization",
+                            "--template",
+                            "typescript"],
+                           cwd=project_root,
+                           check=True)
+
             # Install additional dependencies
-            subprocess.run([
-                "npm", "install", "recharts", "mathjs", "react-router-dom", "@types/react-router-dom"
-            ], cwd=react_dir, check=True)
-            
+            subprocess.run(["npm",
+                            "install",
+                            "recharts",
+                            "mathjs",
+                            "react-router-dom",
+                            "@types/react-router-dom"],
+                           cwd=react_dir,
+                           check=True)
+
             # Create QSC diagnostic components
             self._create_qsc_components(react_dir)
 
@@ -302,7 +315,7 @@ class SchwabotQSCCLI:
         src_dir = react_dir / "src"
         components_dir = src_dir / "components"
         components_dir.mkdir(exist_ok=True)
-        
+
         # QSC Diagnostic Dashboard
         qsc_dashboard = '''
 import React, { useState, useEffect } from 'react';
@@ -326,22 +339,22 @@ const QSCDiagnosticDashboard = () => {
   useEffect(() => {
     // Connect to QSC diagnostic WebSocket
     const ws = new WebSocket('ws://localhost:8766');
-    
+
     ws.onopen = () => {
       setConnectionStatus('connected');
       console.log('Connected to QSC diagnostic server');
     };
-    
+
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data);
-      
+
       if (data.type === 'qsc_diagnostic_stream') {
         setQscData(data);
-        
+
         // Handle alerts
         if (data.alerts && data.alerts.length > 0) {
           setAlerts(prev => [...prev, ...data.alerts]);
-          
+
           // Auto-switch tab for critical alerts
           const criticalAlert = data.alerts.find(a => a.severity === 'critical');
           if (criticalAlert && criticalAlert.auto_switch_tab) {
@@ -350,11 +363,11 @@ const QSCDiagnosticDashboard = () => {
         }
       }
     };
-    
+
     ws.onclose = () => {
       setConnectionStatus('disconnected');
     };
-    
+
     return () => ws.close();
   }, []);
 
@@ -366,33 +379,33 @@ const QSCDiagnosticDashboard = () => {
           {qscData?.diagnostics.system_mode?.toUpperCase()}
         </p>
       </div>
-      
+
       <div className="metric-card">
         <h3>Trading Decision</h3>
         <p className={`decision ${qscData?.diagnostics.trading_decision}`}>
           {qscData?.diagnostics.trading_decision?.toUpperCase()}
         </p>
       </div>
-      
+
       <div className="metric-card">
         <h3>Confidence Score</h3>
         <p>{(qscData?.diagnostics.confidence_score * 100)?.toFixed(1)}%</p>
       </div>
-      
+
       <div className="metric-card">
         <h3>QSC Mode</h3>
         <p className={`qsc-mode ${qscData?.qsc_status.mode}`}>
           {qscData?.qsc_status.mode}
         </p>
       </div>
-      
+
       <div className="metric-card">
         <h3>Immune Status</h3>
         <p className={qscData?.diagnostics.immune_response_active ? 'active' : 'inactive'}>
           {qscData?.diagnostics.immune_response_active ? '🛡️ ACTIVE' : '✅ INACTIVE'}
         </p>
       </div>
-      
+
       <div className="metric-card">
         <h3>Risk Assessment</h3>
         <p className={`risk ${qscData?.diagnostics.risk_assessment?.toLowerCase()}`}>
@@ -415,7 +428,7 @@ const QSCDiagnosticDashboard = () => {
           <div>Entropy Flux: {qscData?.qsc_status.entropy_flux?.toFixed(4)}</div>
         </div>
       </div>
-      
+
       <div className="diagnostics-section">
         <h3>🧠 Tensor Analysis</h3>
         <div className="status-grid">
@@ -425,7 +438,7 @@ const QSCDiagnosticDashboard = () => {
           <div>Tensor Coherence: {qscData?.tensor_analysis.tensor_coherence?.toFixed(3)}</div>
         </div>
       </div>
-      
+
       <div className="diagnostics-section">
         <h3>📊 Market Conditions</h3>
         <div className="status-grid">
@@ -440,7 +453,7 @@ const QSCDiagnosticDashboard = () => {
 
   const renderFibonacciEcho = () => {
     if (!qscData?.fibonacci_echo?.timestamps) return <div>No echo data available</div>;
-    
+
     const chartData = qscData.fibonacci_echo.timestamps.map((timestamp, i) => ({
       time: new Date(timestamp * 1000).toLocaleTimeString(),
       divergence: qscData.fibonacci_echo.fibonacci_divergences[i],
@@ -493,34 +506,34 @@ const QSCDiagnosticDashboard = () => {
           Status: {connectionStatus}
         </div>
       </header>
-      
+
       <nav className="dashboard-nav">
-        <button 
-          className={activeTab === 'overview' ? 'active' : ''} 
+        <button
+          className={activeTab === 'overview' ? 'active' : ''}
           onClick={() => setActiveTab('overview')}
         >
           Overview
         </button>
-        <button 
-          className={activeTab === 'diagnostics' ? 'active' : ''} 
+        <button
+          className={activeTab === 'diagnostics' ? 'active' : ''}
           onClick={() => setActiveTab('diagnostics')}
         >
           Diagnostics
         </button>
-        <button 
-          className={activeTab === 'fibonacci' ? 'active' : ''} 
+        <button
+          className={activeTab === 'fibonacci' ? 'active' : ''}
           onClick={() => setActiveTab('fibonacci')}
         >
           Fibonacci Echo
         </button>
-        <button 
-          className={activeTab === 'alerts' ? 'active' : ''} 
+        <button
+          className={activeTab === 'alerts' ? 'active' : ''}
           onClick={() => setActiveTab('alerts')}
         >
           Alerts ({alerts.length})
         </button>
       </nav>
-      
+
       <main className="dashboard-content">
         {activeTab === 'overview' && renderOverview()}
         {activeTab === 'diagnostics' && renderDiagnostics()}
@@ -533,10 +546,10 @@ const QSCDiagnosticDashboard = () => {
 
 export default QSCDiagnosticDashboard;
 '''
-        
+
         with open(components_dir / "QSCDiagnosticDashboard.tsx", "w") as f:
             f.write(qsc_dashboard)
-        
+
         # Update App.tsx
         app_tsx = '''
 import React from 'react';
@@ -553,10 +566,10 @@ function App() {
 
 export default App;
 '''
-        
+
         with open(src_dir / "App.tsx", "w") as f:
             f.write(app_tsx)
-        
+
         # Add CSS styles
         app_css = '''
 .qsc-dashboard {
@@ -773,7 +786,7 @@ export default App;
   font-family: monospace;
 }
 '''
-        
+
         with open(src_dir / "App.css", "w") as f:
             f.write(app_css)
 
@@ -791,22 +804,27 @@ export default App;
             try:
                 # Update uptime
                 self.system_status.uptime = time.time() - self.start_time
-                
+
                 # Collect performance metrics from master engine
                 if self.master_engine:
                     engine_status = self.master_engine.get_system_status()
-                    self.system_status.immune_activations = engine_status.get("immune_activations", 0)
-                    self.system_status.ghost_floor_activations = engine_status.get("ghost_floor_activations", 0)
-                    self.system_status.emergency_shutdowns = engine_status.get("emergency_shutdowns", 0)
-                    self.system_status.total_decisions = engine_status.get("total_decisions", 0)
-                    self.system_status.success_rate = engine_status.get("success_rate", 0.0)
-                
+                    self.system_status.immune_activations = engine_status.get(
+                        "immune_activations", 0)
+                    self.system_status.ghost_floor_activations = engine_status.get(
+                        "ghost_floor_activations", 0)
+                    self.system_status.emergency_shutdowns = engine_status.get(
+                        "emergency_shutdowns", 0)
+                    self.system_status.total_decisions = engine_status.get(
+                        "total_decisions", 0)
+                    self.system_status.success_rate = engine_status.get(
+                        "success_rate", 0.0)
+
                 # Log status every 30 seconds
                 if int(self.system_status.uptime) % 30 == 0:
                     self._log_system_status()
-                
+
                 await asyncio.sleep(1)
-                
+
             except Exception as e:
                 logger.error(f"Error in QSC system monitoring: {e}")
                 await asyncio.sleep(5)
@@ -821,7 +839,7 @@ export default App;
   💰 Profit Allocator: {'✅' if self.system_status.profit_allocator else '❌'}
   📡 Diagnostic Server: {'✅' if self.system_status.diagnostic_server else '❌'}
   ⚛️ Visualization: {'✅' if self.system_status.visualization_server else '❌'}
-  
+
   📊 Performance:
     Total Decisions: {self.system_status.total_decisions}
     Success Rate: {self.system_status.success_rate:.2%}
@@ -829,61 +847,63 @@ export default App;
     Ghost Floor Activations: {self.system_status.ghost_floor_activations}
     Emergency Shutdowns: {self.system_status.emergency_shutdowns}
 """
-        
+
         logger.info(status_msg)
 
     async def start_all_systems(self) -> bool:
         """Start all QSC system components."""
         logger.info("🧬🚀 Starting Complete QSC + GTS Immune System...")
-        
+
         success_count = 0
         total_systems = 5
-        
+
         # Start master cycle engine
         if await self.start_master_engine():
             success_count += 1
-        
+
         # Start diagnostic server
         if await self.start_diagnostic_server():
             success_count += 1
-        
+
         # Start tensor server
         if await self.start_tensor_server():
             success_count += 1
-        
+
         # Start visualization
         if await self.start_visualization_server():
             success_count += 1
-        
+
         success_rate = success_count / total_systems
-        
+
         if success_rate >= 0.8:  # 80% success rate required
-            logger.info(f"✅ QSC System startup successful ({success_count}/{total_systems} components)")
+            logger.info(
+                f"✅ QSC System startup successful ({success_count}/{total_systems} components)")
             self.is_running = True
             return True
         else:
-            logger.error(f"❌ QSC System startup failed ({success_count}/{total_systems} components)")
+            logger.error(
+                f"❌ QSC System startup failed ({success_count}/{total_systems} components)")
             return False
 
     async def stop_all_systems(self):
         """Stop all QSC system components."""
         logger.info("🛑 Stopping QSC + GTS Immune System...")
-        
+
         self.is_running = False
-        
+
         # Stop diagnostic server
         if self.diagnostic_server:
             await self.diagnostic_server.stop_server()
-        
+
         # Stop tensor server
         if self.tensor_server:
             await self.tensor_server.stop_server()
-        
+
         # Stop visualization
         if self.visualization_process:
             self.visualization_process.terminate()
             self.visualization_process.wait()
-        
+
         logger.info("🛑 All QSC systems stopped")
 
     async def run(self):
@@ -891,7 +911,7 @@ export default App;
         if await self.start_all_systems():
             # Start monitoring
             monitor_task = asyncio.create_task(self.monitor_system())
-            
+
             try:
                 # Keep running until signal
                 while self.is_running:
@@ -913,32 +933,53 @@ def create_parser() -> argparse.ArgumentParser:
 Examples:
   %(prog)s start                    # Start complete QSC system
   %(prog)s start --no-viz          # Start without React visualization
-  %(prog)s status                  # Show system status  
+  %(prog)s status                  # Show system status
   %(prog)s demo                    # Run immune system demo
   %(prog)s config                  # Show configuration
         """
     )
-    
+
     subparsers = parser.add_subparsers(dest='command', help='Available commands')
-    
+
     # Start command
     start_parser = subparsers.add_parser('start', help='Start the QSC immune system')
-    start_parser.add_argument('--no-viz', action='store_true', help='Disable React visualization')
-    start_parser.add_argument('--diagnostic-port', type=int, default=8766, help='Diagnostic server port')
-    start_parser.add_argument('--tensor-port', type=int, default=8765, help='Tensor server port')
-    start_parser.add_argument('--react-port', type=int, default=3000, help='React server port')
-    
+    start_parser.add_argument(
+        '--no-viz',
+        action='store_true',
+        help='Disable React visualization')
+    start_parser.add_argument(
+        '--diagnostic-port',
+        type=int,
+        default=8766,
+        help='Diagnostic server port')
+    start_parser.add_argument(
+        '--tensor-port',
+        type=int,
+        default=8765,
+        help='Tensor server port')
+    start_parser.add_argument(
+        '--react-port',
+        type=int,
+        default=3000,
+        help='React server port')
+
     # Demo command
     subparsers.add_parser('demo', help='Run QSC immune system demo')
-    
+
     # Status command
     subparsers.add_parser('status', help='Show system status')
-    
+
     # Config command
     config_parser = subparsers.add_parser('config', help='Configuration management')
-    config_parser.add_argument('--show', action='store_true', help='Show current configuration')
-    config_parser.add_argument('--reset', action='store_true', help='Reset to default configuration')
-    
+    config_parser.add_argument(
+        '--show',
+        action='store_true',
+        help='Show current configuration')
+    config_parser.add_argument(
+        '--reset',
+        action='store_true',
+        help='Reset to default configuration')
+
     return parser
 
 
@@ -946,9 +987,9 @@ async def main():
     """Main function."""
     parser = create_parser()
     args = parser.parse_args()
-    
+
     cli = SchwabotQSCCLI()
-    
+
     if args.command == 'start':
         # Update config based on arguments
         if args.no_viz:
@@ -959,15 +1000,15 @@ async def main():
             cli.config["tensor_server"]["port"] = args.tensor_port
         if args.react_port != 3000:
             cli.config["visualization"]["react_port"] = args.react_port
-        
+
         await cli.run()
-        
+
     elif args.command == 'demo':
         # Run QSC immune system demo
         from examples.qsc_immune_system_demo import QSCImmuneSystemDemo
         demo = QSCImmuneSystemDemo()
         await demo.run_complete_demo()
-        
+
     elif args.command == 'status':
         # Show current system status
         print("🧬 Schwabot QSC + GTS Immune System Status:")
@@ -975,7 +1016,7 @@ async def main():
         print("  Configuration: Loaded")
         print("  Components: Available")
         print("  Integration: Complete")
-        
+
     elif args.command == 'config':
         if args.show:
             print("📋 QSC System Configuration:")
@@ -984,10 +1025,10 @@ async def main():
             cli.config = cli._load_config()
             cli._save_config()
             print("✅ QSC configuration reset to defaults")
-            
+
     else:
         parser.print_help()
 
 
 if __name__ == "__main__":
-    asyncio.run(main()) 
+    asyncio.run(main())

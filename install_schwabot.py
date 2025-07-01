@@ -1,34 +1,34 @@
 #!/usr/bin/env python3
 """"""
+import yaml
+import json
+from typing import List, Dict, Any, Optional
+from pathlib import Path
+import logging
+import platform
+import subprocess
+import sys
+import os
 Schwabot Complete System Installer
-==================================
+== == == == == == == == == == == == == == == == ==
 
 Comprehensive installer for the Schwabot Advanced Trading System:
 - Checks system requirements
 - Installs required dependencies
-- Configures cross-platform settings
+- Configures cross - platform settings
 - Sets up proper directory structure
 - Initializes configuration files
 - Verifies installation integrity
-- Creates desktop shortcuts (optional)
+- Creates desktop shortcuts(optional)
 
 Supports Windows, macOS, and Linux.
 """"""
 
-import os
-import sys
-import subprocess
-import platform
-import logging
-from pathlib import Path
-from typing import List, Dict, Any, Optional
-import json
-import yaml
 
 # Set up logging
 logging.basicConfig()
-    level=logging.INFO,
-        format='%(asctime)s - %(levelname)s - %(message)s'
+    level = logging.INFO,
+        format = '%(asctime)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
 
@@ -65,14 +65,27 @@ class SchwabotInstaller:
 
         # Check Python version
         if self.python_version < self.min_python_version:
-            print(f"❌ Python {self.min_python_version[0]}.{self.min_python_version[1]}+ required")
-            print(f"   Current version: {self.python_version[0]}.{self.python_version[1]}")
+            print(
+    f"❌ Python {
+        self.min_python_version[0]}.{
+            self.min_python_version[1]}+ required")
+            print(
+    f"   Current version: {
+        self.python_version[0]}.{
+            self.python_version[1]}")
             return False
 
-        print(f"✅ Python version: {self.python_version[0]}.{self.python_version[1]}.{self.python_version[2]}")
+        print(
+    f"✅ Python version: {
+        self.python_version[0]}.{
+            self.python_version[1]}.{
+                self.python_version[2]}")
 
         if self.python_version < self.recommended_python_version:
-            print(f"⚠️ Python {self.recommended_python_version[0]}.{self.recommended_python_version[1]}+ recommended for best performance")
+            print(
+    f"⚠️ Python {
+        self.recommended_python_version[0]}.{
+            self.recommended_python_version[1]}+ recommended for best performance")
 
         # Check pip
         try:
@@ -87,7 +100,9 @@ class SchwabotInstaller:
             import shutil
             free_space = shutil.disk_usage(self.install_dir).free / (1024**3)
             if free_space < 1.0:
-                print(f"❌ Insufficient disk space: {free_space:.1f}GB available, 1GB required")
+                print(
+    f"❌ Insufficient disk space: {
+        free_space:.1f}GB available, 1GB required")
                 return False
             print(f"✅ Disk space: {free_space:.1f}GB available")
         except Exception as e:

@@ -77,10 +77,10 @@ print("\n🔍 Tier Validation Demonstration")
 # Test tier transition validation
 print("🎯 Testing TIER_1 -> TIER_3 transition:")
     validation_result = validate_profit_tier_transition(
-        from_tier = ProfitTier.TIER_1,
-        to_tier = ProfitTier.TIER_3,
-        current_phase = PhaseState.BIT_8,
-        confidence_score = 0.85
+        from_tier=ProfitTier.TIER_1,
+        to_tier=ProfitTier.TIER_3,
+        current_phase=PhaseState.BIT_8,
+        confidence_score=0.85
     )
 
 print(f"✅ Valid: {validation_result.is_valid}")
@@ -154,6 +154,8 @@ return result
 
 def demonstrate_gpu_fallback():
     """Demonstrate GPU fallback system.""""""
+
+
 print("\n🖥️ GPU Fallback Demonstration")
     print("-" * 40)
 
@@ -164,7 +166,7 @@ gpu_fallback_manager.start_monitoring()
 print("📤 Submitting GPU tasks...")
     for i in range(3):
         task_success = submit_gpu_task(
-            task_id = f"demo_task_{i:03d}",
+            task_id=f"demo_task_{i:03d}",
             task_type="profit_optimization",
             data={
                 'profit_calculation': True,
@@ -275,7 +277,7 @@ print("🚀 Profit Tier Navigation System (PTNS) Demonstration")
 demo_start = time.time()
 
 try:
-    pass  
+    pass
 # Individual component demonstrations
 emoji_demo = demonstrate_emoji_navigation()
         tier_demo = demonstrate_tier_validation()
@@ -298,7 +300,9 @@ print("\n" + "=" * 60)
         print(f"🕒 Total Demo Time: {total_time:.2f} seconds")
         print(f"🧪 Integration Tests: {test_results['success_rate']:.1f}% success rate")
         print(f"📊 Components Tested: 4 core modules + integration")
-        print(f"🔧 System Status: {'🟢 Operational' if test_results['tests_failed'] == 0 else '🟡 Partial'}")
+        print(
+    f"🔧 System Status: {
+        '🟢 Operational' if test_results['tests_failed'] == 0 else '🟡 Partial'}")
 
 if test_results['tests_failed'] == 0:
             print("\n💎 The Profit Tier Navigation System is fully operational!")

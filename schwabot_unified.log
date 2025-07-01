@@ -1,0 +1,13 @@
+2025-07-01 12:05:58,645 - __main__ - ERROR - Unexpected error: 'SchwabotUnifiedLauncher' object has no attribute '_on_ferris_wheel_click'
+Traceback (most recent call last):
+  File "C:\Users\maxde\OneDrive\Documents\launch_schwabot_unified.py", line 152, in main
+    launcher = SchwabotUnifiedLauncher()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maxde\OneDrive\Documents\schwabot_unified_launcher.py", line 68, in __init__
+    self._setup_ui()
+  File "C:\Users\maxde\OneDrive\Documents\schwabot_unified_launcher.py", line 215, in _setup_ui
+    self._create_command_hub_tab()
+  File "C:\Users\maxde\OneDrive\Documents\schwabot_unified_launcher.py", line 258, in _create_command_hub_tab
+    self.ferris_wheel_canvas.bind("<Button-1>", self._on_ferris_wheel_click)
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'SchwabotUnifiedLauncher' object has no attribute '_on_ferris_wheel_click'

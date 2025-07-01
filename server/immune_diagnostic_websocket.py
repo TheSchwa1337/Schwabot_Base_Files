@@ -20,14 +20,21 @@ from dataclasses import dataclass, asdict
 from enum import Enum
 
 
-from core.enhanced_master_cycle_engine import EnhancedMasterCycleEngine, EnhancedSystemMode
-from core.biological_immune_error_handler import BiologicalImmuneErrorHandler, ImmuneZone
+from core.enhanced_master_cycle_engine import (
+    EnhancedMasterCycleEngine,
+    EnhancedSystemMode,
+)
+from core.biological_immune_error_handler import (
+    BiologicalImmuneErrorHandler,
+    ImmuneZone,
+)
 
 logger = logging.getLogger(__name__)
 
 
 class AlertLevel(Enum):
     """Alert severity levels."""
+
     INFO = "info"
     WARNING = "warning"
     CRITICAL = "critical"
@@ -37,6 +44,7 @@ class AlertLevel(Enum):
 @dataclass
 class ImmuneAlert:
     """Immune system alert."""
+
     timestamp: float
     level: AlertLevel
     zone: str
@@ -72,12 +80,12 @@ class ImmuneDiagnosticWebSocketServer:
         self.max_alerts = 1000
         self.last_zone = ImmuneZone.SAFE
         self.alert_thresholds = {
-            'mitochondrial_health_critical': 0.3,
-            'mitochondrial_health_warning': 0.5,
-            'system_entropy_critical': 0.8,
-            'system_entropy_warning': 0.6,
-            'error_rate_critical': 0.15,
-            'error_rate_warning': 0.05
+            "mitochondrial_health_critical": 0.3,
+            "mitochondrial_health_warning": 0.5,
+            "system_entropy_critical": 0.8,
+            "system_entropy_warning": 0.6,
+            "error_rate_critical": 0.15,
+            "error_rate_warning": 0.05,
         }
 
         # Real-time metrics
@@ -89,7 +97,9 @@ class ImmuneDiagnosticWebSocketServer:
         self.btc_price = 45000.0
         self.price_trend = 1.0
 
-        logger.info(f"🧬 Immune Diagnostic WebSocket Server initialized on {host}:{port}")
+        logger.info(
+            f"🧬 Immune Diagnostic WebSocket Server initialized on {host}:{port}"
+        )
 
     async def start_server(self) -> None:
         """Start the WebSocket server."""
@@ -103,11 +113,11 @@ class ImmuneDiagnosticWebSocketServer:
         await self.engine.start_enhanced_monitoring()
 
         # Start WebSocket server
-        server = await websockets.serve(
-            self.handle_client, self.host, self.port
-        )
+        server = await websockets.serve(self.handle_client, self.host, self.port)
 
-        logger.info(f"🧬 Immune Diagnostic WebSocket Server started on ws://{self.host}:{self.port}")
+        logger.info(
+            f"🧬 Immune Diagnostic WebSocket Server started on ws://{self.host}:{self.port}"
+        )
         return server
 
     async def stop_server(self) -> None:
@@ -140,11 +150,7 @@ class ImmuneDiagnosticWebSocketServer:
     async def send_initial_status(self, websocket) -> None:
         """Send initial system status to new client."""
         status = self.get_comprehensive_status()
-        message = {
-            "type": "initial_status",
-            "timestamp": time.time(),
-            "data": status
-        }
+        message = {"type": "initial_status", "timestamp": time.time(), "data": status}
         await websocket.send(json.dumps(message))
 
     async def handle_message(self, websocket, message: str) -> None:
@@ -155,37 +161,44 @@ class ImmuneDiagnosticWebSocketServer:
 
             if message_type == "start_simulation":
                 self.simulation_active = True
-                await self.broadcast_message({
-                    "type": "simulation_status",
-                    "active": True,
-                    "message": "Market simulation started"
-                })
+                await self.broadcast_message(
+                    {
+                        "type": "simulation_status",
+                        "active": True,
+                        "message": "Market simulation started",
+                    }
+                )
 
             elif message_type == "stop_simulation":
                 self.simulation_active = False
-                await self.broadcast_message({
-                    "type": "simulation_status",
-                    "active": False,
-                    "message": "Market simulation stopped"
-                })
+                await self.broadcast_message(
+                    {
+                        "type": "simulation_status",
+                        "active": False,
+                        "message": "Market simulation stopped",
+                    }
+                )
 
             elif message_type == "reset_immune_system":
                 await self.reset_immune_system()
-                await self.broadcast_message({
-                    "type": "system_reset",
-                    "message": "Immune system reset completed"
-                })
+                await self.broadcast_message(
+                    {"type": "system_reset", "message": "Immune system reset completed"}
+                )
 
             elif message_type == "trigger_emergency":
                 await self.trigger_emergency_scenario()
 
             elif message_type == "get_detailed_status":
                 detailed_status = self.get_comprehensive_status()
-                await websocket.send(json.dumps({
-                    "type": "detailed_status",
-                    "timestamp": time.time(),
-                    "data": detailed_status
-                }))
+                await websocket.send(
+                    json.dumps(
+                        {
+                            "type": "detailed_status",
+                            "timestamp": time.time(),
+                            "data": detailed_status,
+                        }
+                    )
+                )
 
         except json.JSONDecodeError:
             logger.error(f"🚨 Invalid JSON message: {message}")
@@ -223,28 +236,44 @@ class ImmuneDiagnosticWebSocketServer:
                 alerts = self.check_for_alerts(status)
 
                 # Store metrics history
-                self.metrics_history.append({
-                    "timestamp": time.time(),
-                    "mitochondrial_health": status["immune_status"]["system_health"]["mitochondrial_health"],
-                    "system_entropy": status["immune_status"]["system_health"]["system_entropy"],
-                    "error_rate": status["immune_status"]["system_health"]["current_error_rate"],
-                    "current_zone": status["immune_status"]["system_health"]["current_zone"],
-                    "success_rate": status["immune_status"]["performance_metrics"]["success_rate"]
-                })
+                self.metrics_history.append(
+                    {
+                        "timestamp": time.time(),
+                        "mitochondrial_health": status["immune_status"][
+                            "system_health"
+                        ]["mitochondrial_health"],
+                        "system_entropy": status["immune_status"]["system_health"][
+                            "system_entropy"
+                        ],
+                        "error_rate": status["immune_status"]["system_health"][
+                            "current_error_rate"
+                        ],
+                        "current_zone": status["immune_status"]["system_health"][
+                            "current_zone"
+                        ],
+                        "success_rate": status["immune_status"]["performance_metrics"][
+                            "success_rate"
+                        ],
+                    }
+                )
 
                 if len(self.metrics_history) > self.max_history:
                     self.metrics_history.pop(0)
 
                 # Broadcast real-time update
-                await self.broadcast_message({
-                    "type": "real_time_update",
-                    "timestamp": time.time(),
-                    "data": {
-                        "status": status,
-                        "alerts": [asdict(alert) for alert in alerts],
-                        "metrics_history": self.metrics_history[-50:]  # Last 50 points
+                await self.broadcast_message(
+                    {
+                        "type": "real_time_update",
+                        "timestamp": time.time(),
+                        "data": {
+                            "status": status,
+                            "alerts": [asdict(alert) for alert in alerts],
+                            "metrics_history": self.metrics_history[
+                                -50:
+                            ],  # Last 50 points
+                        },
                     }
-                })
+                )
 
                 # Process alerts
                 for alert in alerts:
@@ -271,17 +300,35 @@ class ImmuneDiagnosticWebSocketServer:
                 diagnostics = self.engine.process_market_tick_protected(market_data)
 
                 # Broadcast trading decision
-                await self.broadcast_message({
-                    "type": "trading_decision",
-                    "timestamp": time.time(),
-                    "data": {
-                        "btc_price": market_data["btc_price"],
-                        "decision": diagnostics.trading_decision if not isinstance(diagnostics, Exception) else "ERROR",
-                        "confidence": diagnostics.confidence_score if not isinstance(diagnostics, Exception) else 0.0,
-                        "zone": diagnostics.immune_zone if not isinstance(diagnostics, Exception) else "quarantine",
-                        "system_mode": diagnostics.system_mode.value if not isinstance(diagnostics, Exception) else "error"
+                await self.broadcast_message(
+                    {
+                        "type": "trading_decision",
+                        "timestamp": time.time(),
+                        "data": {
+                            "btc_price": market_data["btc_price"],
+                            "decision": (
+                                diagnostics.trading_decision
+                                if not isinstance(diagnostics, Exception)
+                                else "ERROR"
+                            ),
+                            "confidence": (
+                                diagnostics.confidence_score
+                                if not isinstance(diagnostics, Exception)
+                                else 0.0
+                            ),
+                            "zone": (
+                                diagnostics.immune_zone
+                                if not isinstance(diagnostics, Exception)
+                                else "quarantine"
+                            ),
+                            "system_mode": (
+                                diagnostics.system_mode.value
+                                if not isinstance(diagnostics, Exception)
+                                else "error"
+                            ),
+                        },
                     }
-                })
+                )
 
                 await asyncio.sleep(1.0)  # Simulate 1 tick per second
 
@@ -303,30 +350,32 @@ class ImmuneDiagnosticWebSocketServer:
             self.price_trend = np.random.uniform(-1, 1)
 
         # Generate price history
-        price_history = [
-            self.btc_price + np.random.uniform(-50, 50) for _ in range(5)
-        ]
+        price_history = [self.btc_price + np.random.uniform(-50, 50) for _ in range(5)]
 
         # Generate Fibonacci projection (sometimes divergent)
         fib_base = self.btc_price
         if np.random.random() < 0.2:  # 20% chance of divergence
             fib_base += np.random.uniform(-500, 500)  # Cause divergence
 
-        fibonacci_projection = [
-            fib_base + (i * 10) for i in range(5)
-        ]
+        fibonacci_projection = [fib_base + (i * 10) for i in range(5)]
 
         return {
             "btc_price": self.btc_price,
             "orderbook": {
-                "bids": [[self.btc_price - i, np.random.uniform(0.5, 2.0)] for i in range(1, 6)],
-                "asks": [[self.btc_price + i, np.random.uniform(0.5, 2.0)] for i in range(1, 6)]
+                "bids": [
+                    [self.btc_price - i, np.random.uniform(0.5, 2.0)]
+                    for i in range(1, 6)
+                ],
+                "asks": [
+                    [self.btc_price + i, np.random.uniform(0.5, 2.0)]
+                    for i in range(1, 6)
+                ],
             },
             "price_history": price_history,
             "volume_history": [np.random.uniform(50, 200) for _ in range(5)],
             "fibonacci_projection": fibonacci_projection,
             "volume": np.random.uniform(0.5, 3.0),
-            "trend": self.price_trend
+            "trend": self.price_trend,
         }
 
     def get_comprehensive_status(self) -> Dict[str, Any]:
@@ -334,7 +383,9 @@ class ImmuneDiagnosticWebSocketServer:
         engine_status = self.engine.get_enhanced_system_status()
 
         # Add additional metrics
-        recent_decisions = self.engine.decision_history[-10:] if self.engine.decision_history else []
+        recent_decisions = (
+            self.engine.decision_history[-10:] if self.engine.decision_history else []
+        )
 
         return {
             "engine_status": engine_status,
@@ -346,12 +397,13 @@ class ImmuneDiagnosticWebSocketServer:
                     "decision": d.trading_decision,
                     "confidence": d.confidence_score,
                     "zone": d.immune_zone,
-                    "risk": d.risk_assessment
-                } for d in recent_decisions
+                    "risk": d.risk_assessment,
+                }
+                for d in recent_decisions
             ],
             "alerts": [asdict(alert) for alert in self.alerts[-20:]],  # Last 20 alerts
             "simulation_active": self.simulation_active,
-            "current_btc_price": self.btc_price
+            "current_btc_price": self.btc_price,
         }
 
     def check_for_alerts(self, status: Dict[str, Any]) -> List[ImmuneAlert]:
@@ -363,62 +415,74 @@ class ImmuneDiagnosticWebSocketServer:
         # Check mitochondrial health
         mito_health = immune_status["system_health"]["mitochondrial_health"]
         if mito_health < self.alert_thresholds["mitochondrial_health_critical"]:
-            alerts.append(ImmuneAlert(
-                timestamp=current_time,
-                level=AlertLevel.CRITICAL,
-                zone=immune_status["system_health"]["current_zone"],
-                message=f"Critical mitochondrial health: {mito_health:.3f}",
-                component="mitochondrial_system",
-                mitochondrial_health=mito_health,
-                system_entropy=immune_status["system_health"]["system_entropy"],
-                recommended_action="immediate_recovery_protocol",
-                auto_switch_tab=True
-            ))
+            alerts.append(
+                ImmuneAlert(
+                    timestamp=current_time,
+                    level=AlertLevel.CRITICAL,
+                    zone=immune_status["system_health"]["current_zone"],
+                    message=f"Critical mitochondrial health: {mito_health:.3f}",
+                    component="mitochondrial_system",
+                    mitochondrial_health=mito_health,
+                    system_entropy=immune_status["system_health"]["system_entropy"],
+                    recommended_action="immediate_recovery_protocol",
+                    auto_switch_tab=True,
+                )
+            )
         elif mito_health < self.alert_thresholds["mitochondrial_health_warning"]:
-            alerts.append(ImmuneAlert(
-                timestamp=current_time,
-                level=AlertLevel.WARNING,
-                zone=immune_status["system_health"]["current_zone"],
-                message=f"Low mitochondrial health: {mito_health:.3f}",
-                component="mitochondrial_system",
-                mitochondrial_health=mito_health,
-                system_entropy=immune_status["system_health"]["system_entropy"],
-                recommended_action="monitor_and_prepare_recovery"
-            ))
+            alerts.append(
+                ImmuneAlert(
+                    timestamp=current_time,
+                    level=AlertLevel.WARNING,
+                    zone=immune_status["system_health"]["current_zone"],
+                    message=f"Low mitochondrial health: {mito_health:.3f}",
+                    component="mitochondrial_system",
+                    mitochondrial_health=mito_health,
+                    system_entropy=immune_status["system_health"]["system_entropy"],
+                    recommended_action="monitor_and_prepare_recovery",
+                )
+            )
 
         # Check system entropy
         entropy = immune_status["system_health"]["system_entropy"]
         if entropy > self.alert_thresholds["system_entropy_critical"]:
-            alerts.append(ImmuneAlert(
-                timestamp=current_time,
-                level=AlertLevel.CRITICAL,
-                zone=immune_status["system_health"]["current_zone"],
-                message=f"Critical system entropy: {entropy:.3f}",
-                component="entropy_monitor",
-                mitochondrial_health=mito_health,
-                system_entropy=entropy,
-                recommended_action="entropy_stabilization_protocol",
-                auto_switch_tab=True
-            ))
+            alerts.append(
+                ImmuneAlert(
+                    timestamp=current_time,
+                    level=AlertLevel.CRITICAL,
+                    zone=immune_status["system_health"]["current_zone"],
+                    message=f"Critical system entropy: {entropy:.3f}",
+                    component="entropy_monitor",
+                    mitochondrial_health=mito_health,
+                    system_entropy=entropy,
+                    recommended_action="entropy_stabilization_protocol",
+                    auto_switch_tab=True,
+                )
+            )
 
         # Check error rate
         error_rate = immune_status["system_health"]["current_error_rate"]
         if error_rate > self.alert_thresholds["error_rate_critical"]:
-            alerts.append(ImmuneAlert(
-                timestamp=current_time,
-                level=AlertLevel.CRITICAL,
-                zone=immune_status["system_health"]["current_zone"],
-                message=f"High error rate: {error_rate:.3f}",
-                component="error_tracking",
-                mitochondrial_health=mito_health,
-                system_entropy=entropy,
-                recommended_action="error_mitigation_protocol",
-                auto_switch_tab=True
-            ))
+            alerts.append(
+                ImmuneAlert(
+                    timestamp=current_time,
+                    level=AlertLevel.CRITICAL,
+                    zone=immune_status["system_health"]["current_zone"],
+                    message=f"High error rate: {error_rate:.3f}",
+                    component="error_tracking",
+                    mitochondrial_health=mito_health,
+                    system_entropy=entropy,
+                    recommended_action="error_mitigation_protocol",
+                    auto_switch_tab=True,
+                )
+            )
 
         # Check zone changes
         current_zone_name = immune_status["system_health"]["current_zone"]
-        current_zone = ImmuneZone(current_zone_name) if current_zone_name in [z.value for z in ImmuneZone] else ImmuneZone.SAFE
+        current_zone = (
+            ImmuneZone(current_zone_name)
+            if current_zone_name in [z.value for z in ImmuneZone]
+            else ImmuneZone.SAFE
+        )
 
         if current_zone != self.last_zone:
             level = AlertLevel.INFO
@@ -430,46 +494,48 @@ class ImmuneDiagnosticWebSocketServer:
             elif current_zone == ImmuneZone.ALERT:
                 level = AlertLevel.WARNING
 
-            alerts.append(ImmuneAlert(
-                timestamp=current_time,
-                level=level,
-                zone=current_zone.value,
-                message=f"Zone change: {self.last_zone.value} → {current_zone.value}",
-                component="zone_manager",
-                mitochondrial_health=mito_health,
-                system_entropy=entropy,
-                recommended_action=f"zone_{current_zone.value}_protocol",
-                auto_switch_tab=auto_switch
-            ))
+            alerts.append(
+                ImmuneAlert(
+                    timestamp=current_time,
+                    level=level,
+                    zone=current_zone.value,
+                    message=f"Zone change: {self.last_zone.value} → {current_zone.value}",
+                    component="zone_manager",
+                    mitochondrial_health=mito_health,
+                    system_entropy=entropy,
+                    recommended_action=f"zone_{current_zone.value}_protocol",
+                    auto_switch_tab=auto_switch,
+                )
+            )
 
             self.last_zone = current_zone
 
         # Store alerts
         self.alerts.extend(alerts)
         if len(self.alerts) > self.max_alerts:
-            self.alerts = self.alerts[-self.max_alerts:]
+            self.alerts = self.alerts[-self.max_alerts :]
 
         return alerts
 
     async def process_alert(self, alert: ImmuneAlert) -> None:
         """Process and broadcast alert."""
         # Broadcast alert
-        await self.broadcast_message({
-            "type": "alert",
-            "timestamp": time.time(),
-            "data": asdict(alert)
-        })
+        await self.broadcast_message(
+            {"type": "alert", "timestamp": time.time(), "data": asdict(alert)}
+        )
 
         # Log alert
         level_emoji = {
             AlertLevel.INFO: "ℹ️",
             AlertLevel.WARNING: "⚠️",
             AlertLevel.CRITICAL: "🚨",
-            AlertLevel.EMERGENCY: "🆘"
+            AlertLevel.EMERGENCY: "🆘",
         }
 
         emoji = level_emoji.get(alert.level, "❓")
-        logger.info(f"{emoji} {alert.level.value.upper()}: {alert.message} (Zone: {alert.zone})")
+        logger.info(
+            f"{emoji} {alert.level.value.upper()}: {alert.message} (Zone: {alert.zone})"
+        )
 
     async def reset_immune_system(self) -> None:
         """Reset the immune system to healthy state."""
@@ -498,20 +564,24 @@ class ImmuneDiagnosticWebSocketServer:
 
         # Add some error patterns
         for i in range(10):
-            self.immune_handler.error_history.append({
-                "timestamp": time.time(),
-                "error_type": f"TestError{i%3}",
-                "error_message": f"Simulated error {i}",
-                "operation": "test_operation",
-                "args_count": 2,
-                "kwargs_count": 1,
-                "traceback": "Simulated traceback"
-            })
+            self.immune_handler.error_history.append(
+                {
+                    "timestamp": time.time(),
+                    "error_type": f"TestError{i%3}",
+                    "error_message": f"Simulated error {i}",
+                    "operation": "test_operation",
+                    "args_count": 2,
+                    "kwargs_count": 1,
+                    "traceback": "Simulated traceback",
+                }
+            )
 
-        await self.broadcast_message({
-            "type": "emergency_triggered",
-            "message": "Emergency scenario activated for testing"
-        })
+        await self.broadcast_message(
+            {
+                "type": "emergency_triggered",
+                "message": "Emergency scenario activated for testing",
+            }
+        )
 
         logger.warning("🚨 Emergency scenario triggered")
 
@@ -944,7 +1014,9 @@ async def main():
     # Start the server
     websocket_server = await server.start_server()
 
-    print(f"🧬 Immune Diagnostic WebSocket Server running on ws://{server.host}:{server.port}")
+    print(
+        f"🧬 Immune Diagnostic WebSocket Server running on ws://{server.host}:{server.port}"
+    )
     print(f"📊 Dashboard available at: http://{server.host}:{server.port}/dashboard")
     print("Press Ctrl+C to stop the server")
 

@@ -1,23 +1,16 @@
 #!/usr/bin/env python3
-"""Enhanced T-Cell System for Biological Immune Error Handler.
+"""Enhanced T-Cell Trading System.
 
-Fixes critical issues with T-Cell signal generation, validation, and information handling:
-- Proper signal strength calculation based on operation risk
-- Complete signal type generation including INHIBITORY signals
-- Contextual signal generation based on operation history
-- Signal persistence and pattern analysis
-- Feedback loops for continuous improvement
-- Enhanced memory signal integration
+Implementation of biological immune system principles for trading decisions.
+Enhanced with mathematical precision and advanced security protocols.
 """
 
-import hashlib
-import inspect
 import logging
+import random
 import time
-from collections import defaultdict, deque
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Callable, Dict, List, Optional, Tuple
+from typing import Any, Dict, List
 
 import numpy as np
 
@@ -490,6 +483,10 @@ class EnhancedSignalGenerator:
 
         # Calculate inhibitory strength based on risk factors
         inhibitory_strength = 0.0
+
+        # Add risk factors contribution
+        for risk_type, risk_value in risk_factors.items():
+            inhibitory_strength += risk_value * 0.5  # Scale down risk contribution
 
         # High error rate in recent history
         if self.immune_handler.current_error_rate > 0.1:

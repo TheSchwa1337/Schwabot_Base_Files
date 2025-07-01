@@ -13,3 +13,9 @@
 2025-06-29 08:50:51,236 - core.unified_profit_vectorization_system - INFO - Unified Profit Vectorization System initialized with linear
 2025-06-29 08:50:51,237 - core.unified_math_system - INFO - Unified Math System initialized with precision 64
 2025-06-29 08:50:53,108 - core - INFO - Core system initialized successfully with 5 modules
+2025-07-01 12:06:18,774 - __main__ - ERROR - System components not available: No module named 'core.system_integration'
+2025-07-01 12:06:18,777 - __main__ - INFO - === Mathematical Relay Trading System ===
+2025-07-01 12:06:18,779 - __main__ - INFO - Mode: full
+2025-07-01 12:06:18,779 - __main__ - INFO - Log Level: INFO
+2025-07-01 12:06:18,779 - __main__ - INFO - Port: 8000
+2025-07-01 12:06:18,782 - __main__ - ERROR - System components not available

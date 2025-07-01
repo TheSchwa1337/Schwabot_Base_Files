@@ -17,12 +17,22 @@ MATH_KEYWORDS = [
     'liquidity', 'momentum', 'backprop', 'sha', 'ECC', 'NCCO', 'RDE', 'RITL', 'RITTLE'
 ]
 MATH_IMPORTS = [
-    'import numpy', 'import scipy', 'import math', 'import mpmath', 'import sympy', 'import numba',
-    'from numpy', 'from scipy', 'from math', 'from mpmath', 'from sympy', 'from numba'
-]
+    'import numpy',
+    'import scipy',
+    'import math',
+    'import mpmath',
+    'import sympy',
+    'import numba',
+    'from numpy',
+    'from scipy',
+    'from math',
+    'from mpmath',
+    'from sympy',
+    'from numba']
 CODEBASE_DIRS = ['core', 'core/math', 'core/phase_engine', 'core/recursive_engine']
 
 REPORT_FILE = 'math_structure_report.md'
+
 
 def scan_file(filepath):
     results = []
@@ -38,6 +48,7 @@ def scan_file(filepath):
             elif re.search(r'\b[A-Za-z]\s*\([^)]+\)\s*=\s*', line):
                 results.append((i, line.strip(), 'equation-like'))
     return results
+
 
 def main():
     report = defaultdict(list)
@@ -58,5 +69,6 @@ def main():
             out.write('\n')
     print(f'Report written to {REPORT_FILE}')
 
+
 if __name__ == '__main__':
-    main() 
+    main()

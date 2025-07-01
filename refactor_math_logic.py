@@ -42,7 +42,8 @@ class MathLogicRefactor:
 """"""
 """
 
-def __init__(self, root_dir: str = '.'):"""
+
+def __init__(self, root_dir: str = '.'): """
     """Function implementation pending."""
 pass
 
@@ -55,25 +56,25 @@ self.root_dir = Path(root_dir)
 # Files to skip
 self.skip_patterns = [
             r'__pycache__',
-            r'\.git',
-            r'\.mypy_cache',
-            r'\.venv',
+            r'\\.git',
+            r'\\.mypy_cache',
+            r'\\.venv',
             r'venv',
             r'env',
             r'node_modules',
-            r'\.pytest_cache',
-            r'\.coverage',
-            r'\.tox',
+            r'\\.pytest_cache',
+            r'\\.coverage',
+            r'\\.tox',
             r'build',
             r'dist',
-            r'\.eggs',
-            r'\.idea',
-            r'\.vscode',
-            r'utils / safe_print\.py',
-            r'refactor_cli_output\.py',
-            r'simple_cli_refactor\.py',
-            r'refactor_math_logic\.py',
-            r'core / unified_math_system\.py',  # Skip our own unified system
+            r'\\.eggs',
+            r'\\.idea',
+            r'\\.vscode',
+            r'utils / safe_print\\.py',
+            r'refactor_cli_output\\.py',
+            r'simple_cli_refactor\\.py',
+            r'refactor_math_logic\\.py',
+            r'core / unified_math_system\\.py',  # Skip our own unified system
 ]
 # Math library imports to replace
 self.math_imports = {
@@ -180,6 +181,8 @@ def scan_for_math_usage(self, file_path: Path) -> Dict[str, List[str]]:
     """Function implementation pending."""
 pass
 """
+
+
 """Scan a file for mathematical operations.""""""
 """"""
 """"""
@@ -199,7 +202,7 @@ lines = content.split('\n')
 for i, line in enumerate(lines, 1):
 # Check for math imports
 for import_pattern in self.math_imports.keys():
-                    if import_pattern in line:"""
+                    if import_pattern in line: """
 math_usage['imports'].append(f"Line {i}: {line.strip()}")
 
 # Check for math function usage
@@ -256,7 +259,7 @@ self.modified_files.append(str(file_path))
 
 return False
 
-except Exception as e:"""
+except Exception as e: """
 self.errors.append(f"Error refactoring {file_path}: {e}")
             return False
 
@@ -335,7 +338,7 @@ if self.refactor_file(file_path):
 """
 pass
 
-except Exception as e:"""
+except Exception as e: """
 error(f"Error processing {file_path}: {e}")
                 self.errors.append(str(e))
 

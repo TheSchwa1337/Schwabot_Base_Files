@@ -35,6 +35,7 @@ try:
     from core.dual_brain_architecture import DualBrainArchitecture, dual_brain
     from core.whale_tracker_integration import whale_tracker
     from core.unified_math_system import UnifiedMathSystem
+
     CORE_SYSTEMS_AVAILABLE = True
 except ImportError as e:
     logging.warning(f"Core systems not available: {e}")
@@ -46,8 +47,8 @@ logger = logging.getLogger(__name__)
 
 # Initialize Flask app
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'dual_brain_trading_system_2024'
-socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
+app.config["SECRET_KEY"] = "dual_brain_trading_system_2024"
+socketio = SocketIO(app, cors_allowed_origins="*", async_mode="threading")
 
 # Global state
 dual_brain_instance = None
@@ -57,20 +58,20 @@ update_thread = None
 
 # Thermal state constants
 COOL = "cool"
-WARM = "warm" 
+WARM = "warm"
 HOT = "hot"
 CRITICAL = "critical"
 
 
 class DualBrainServer:
     """Main server class managing dual brain operations and UI updates."""
-    
+
     def __init__(self):
         """Initialize the dual brain server."""
         self.dual_brain = DualBrainArchitecture() if CORE_SYSTEMS_AVAILABLE else None
         self.whale_tracker = whale_tracker if CORE_SYSTEMS_AVAILABLE else None
         self.math_system = UnifiedMathSystem() if CORE_SYSTEMS_AVAILABLE else None
-        
+
         # Server state
         self.running = False
         self.last_decision = None
@@ -79,53 +80,55 @@ class DualBrainServer:
             "total_decisions": 0,
             "successful_trades": 0,
             "total_profit": 0.0,
-            "thermal_state_distribution": {
-                COOL: 0, WARM: 0, HOT: 0, CRITICAL: 0
-}
-}
+            "thermal_state_distribution": {COOL: 0, WARM: 0, HOT: 0, CRITICAL: 0},
+        }
         logger.info("🚀 Dual Brain Server initialized")
-    
+
     async def start_dual_brain_monitoring(self):
         """Start continuous dual brain monitoring."""
         self.running = True
         start_time = time.time()
-        
+
         try:
             logger.info("🧠🧠 Starting dual brain monitoring...")
-            
+
             while self.running:
                 # Run dual brain cycle
                 if self.dual_brain:
                     decision = await self.dual_brain.run_dual_brain_cycle()
                     self.last_decision = decision
-                    
+
                     # Update metrics
                     self.system_metrics["total_decisions"] += 1
                     self.system_metrics["uptime"] = time.time() - start_time
-                    
+
                     # Track thermal states
                     left_thermal = decision.left_brain_state.thermal_state
                     right_thermal = decision.right_brain_state.thermal_state
-                    
+
                     self.system_metrics["thermal_state_distribution"][left_thermal] += 1
-                    self.system_metrics["thermal_state_distribution"][right_thermal] += 1
-                    
+                    self.system_metrics["thermal_state_distribution"][
+                        right_thermal
+                    ] += 1
+
                     # Simulate profit tracking
                     if decision.expected_profit > 0:
                         self.system_metrics["successful_trades"] += 1
-                        self.system_metrics["total_profit"] += decision.expected_profit * 0.1  # 10% realization
-                    
+                        self.system_metrics["total_profit"] += (
+                            decision.expected_profit * 0.1
+                        )  # 10% realization
+
                     # Emit updates to connected clients
                     await self._emit_updates(decision)
-                
+
                 # Wait before next cycle
                 await asyncio.sleep(5)  # 5-second cycles
-                
+
         except Exception as e:
             logger.error(f"Dual brain monitoring error: {e}")
         finally:
             self.running = False
-    
+
     async def _emit_updates(self, decision):
         """Emit real-time updates to connected WebSocket clients."""
         try:
@@ -137,8 +140,8 @@ class DualBrainServer:
                 "processing_load": decision.left_brain_state.processing_load,
                 "performance_metrics": decision.left_brain_state.performance_metrics,
                 "active_operations": decision.left_brain_state.active_operations,
-                "timestamp": decision.left_brain_state.timestamp.isoformat()
-}
+                "timestamp": decision.left_brain_state.timestamp.isoformat(),
+            }
             # Right brain (trading) data
             right_brain_data = {
                 "thermal_state": decision.right_brain_state.thermal_state,
@@ -147,8 +150,8 @@ class DualBrainServer:
                 "processing_load": decision.right_brain_state.processing_load,
                 "performance_metrics": decision.right_brain_state.performance_metrics,
                 "active_operations": decision.right_brain_state.active_operations,
-                "timestamp": decision.right_brain_state.timestamp.isoformat()
-}
+                "timestamp": decision.right_brain_state.timestamp.isoformat(),
+            }
             # Flip logic data
             flip_logic_data = {
                 "flip_signal": decision.flip_logic_result.flip_signal.value,
@@ -158,36 +161,38 @@ class DualBrainServer:
                 "thermal_multiplier": decision.flip_logic_result.thermal_multiplier,
                 "reasoning": decision.flip_logic_result.reasoning,
                 "profit_potential": decision.flip_logic_result.profit_potential,
-                "risk_assessment": decision.flip_logic_result.risk_assessment
-}
+                "risk_assessment": decision.flip_logic_result.risk_assessment,
+            }
             # Unified decision data
             unified_decision_data = {
                 "synchronized_action": decision.synchronized_action,
                 "overall_confidence": decision.overall_confidence,
                 "expected_profit": decision.expected_profit,
                 "thermal_enhancement": decision.thermal_enhancement,
-                "execution_priority": decision.execution_priority
-}
+                "execution_priority": decision.execution_priority,
+            }
             # Whale tracking data
             whale_data = {}
             if self.whale_tracker:
                 whale_summary = self.whale_tracker.get_whale_summary()
                 whale_data = {
                     "statistics": whale_summary.get("statistics", {}),
-                    "recent_alerts": whale_summary.get("recent_alerts", [])[:5],  # Last 5 alerts
-                    "thermal_state": whale_summary.get("thermal_state", WARM)
-}
+                    "recent_alerts": whale_summary.get("recent_alerts", [])[
+                        :5
+                    ],  # Last 5 alerts
+                    "thermal_state": whale_summary.get("thermal_state", WARM),
+                }
             # Emit all updates
-            socketio.emit('left_brain_update', left_brain_data)
-            socketio.emit('right_brain_update', right_brain_data)
-            socketio.emit('flip_logic_update', flip_logic_data)
-            socketio.emit('unified_decision_update', unified_decision_data)
-            socketio.emit('whale_update', whale_data)
-            socketio.emit('system_metrics_update', self.system_metrics)
-            
+            socketio.emit("left_brain_update", left_brain_data)
+            socketio.emit("right_brain_update", right_brain_data)
+            socketio.emit("flip_logic_update", flip_logic_data)
+            socketio.emit("unified_decision_update", unified_decision_data)
+            socketio.emit("whale_update", whale_data)
+            socketio.emit("system_metrics_update", self.system_metrics)
+
         except Exception as e:
             logger.error(f"WebSocket emit error: {e}")
-    
+
     def stop(self):
         """Stop the dual brain monitoring."""
         self.running = False
@@ -199,27 +204,45 @@ server_instance = DualBrainServer()
 
 
 # Flask Routes
-@app.route('/')
+@app.route("/")
 def dashboard():
     """Main dashboard with dual brain panels."""
-    return render_template('dual_brain_dashboard.html')
+    return render_template("dual_brain_dashboard.html")
 
 
-@app.route('/api/status')
+@app.route("/api/status")
 def get_status():
     """Get server status."""
-    return jsonify({
-        "status": "running" if server_instance.running else "stopped",
-        "system_metrics": server_instance.system_metrics,
-        "last_decision": {
-            "action": server_instance.last_decision.synchronized_action if server_instance.last_decision else None,
-            "confidence": server_instance.last_decision.overall_confidence if server_instance.last_decision else 0.0,
-            "timestamp": server_instance.last_decision.timestamp.isoformat() if server_instance.last_decision else None
-        } if server_instance.last_decision else None
-    })
+    return jsonify(
+        {
+            "status": "running" if server_instance.running else "stopped",
+            "system_metrics": server_instance.system_metrics,
+            "last_decision": (
+                {
+                    "action": (
+                        server_instance.last_decision.synchronized_action
+                        if server_instance.last_decision
+                        else None
+                    ),
+                    "confidence": (
+                        server_instance.last_decision.overall_confidence
+                        if server_instance.last_decision
+                        else 0.0
+                    ),
+                    "timestamp": (
+                        server_instance.last_decision.timestamp.isoformat()
+                        if server_instance.last_decision
+                        else None
+                    ),
+                }
+                if server_instance.last_decision
+                else None
+            ),
+        }
+    )
 
 
-@app.route('/api/architecture_summary')
+@app.route("/api/architecture_summary")
 def get_architecture_summary():
     """Get dual brain architecture summary."""
     if server_instance.dual_brain:
@@ -228,7 +251,7 @@ def get_architecture_summary():
         return jsonify({"error": "Dual brain not available"})
 
 
-@app.route('/api/whale_summary')
+@app.route("/api/whale_summary")
 def get_whale_summary():
     """Get whale tracking summary."""
     if server_instance.whale_tracker:
@@ -237,7 +260,7 @@ def get_whale_summary():
         return jsonify({"error": "Whale tracker not available"})
 
 
-@app.route('/api/start', methods=['POST'])
+@app.route("/api/start", methods=["POST"])
 def start_monitoring():
     """Start dual brain monitoring."""
     if not server_instance.running:
@@ -246,16 +269,16 @@ def start_monitoring():
             loop = asyncio.new_event_loop()
             asyncio.set_event_loop(loop)
             loop.run_until_complete(server_instance.start_dual_brain_monitoring())
-        
+
         monitoring_thread = threading.Thread(target=run_monitoring, daemon=True)
         monitoring_thread.start()
-        
+
         return jsonify({"status": "started"})
     else:
         return jsonify({"status": "already_running"})
 
 
-@app.route('/api/stop', methods=['POST'])
+@app.route("/api/stop", methods=["POST"])
 def stop_monitoring():
     """Stop dual brain monitoring."""
     server_instance.stop()
@@ -263,39 +286,41 @@ def stop_monitoring():
 
 
 # WebSocket Events
-@socketio.on('connect')
+@socketio.on("connect")
 def handle_connect():
     """Handle client connection."""
     logger.info("Client connected to WebSocket")
-    emit('connection_established', {'data': 'Connected to Dual Brain Server'})
+    emit("connection_established", {"data": "Connected to Dual Brain Server"})
 
 
-@socketio.on('disconnect')
+@socketio.on("disconnect")
 def handle_disconnect():
     """Handle client disconnection."""
     logger.info("Client disconnected from WebSocket")
 
 
-@socketio.on('request_update')
+@socketio.on("request_update")
 def handle_update_request():
     """Handle manual update request from client."""
     if server_instance.last_decision:
         # Send latest data
-        asyncio.create_task(server_instance._emit_updates(server_instance.last_decision))
+        asyncio.create_task(
+            server_instance._emit_updates(server_instance.last_decision)
+        )
 
 
 # Create templates directory if it doesn't exist
 def create_templates():
     """Create HTML templates for the dual brain interface."""
-    templates_dir = os.path.join(os.path.dirname(__file__), 'templates')
-    static_dir = os.path.join(os.path.dirname(__file__), 'static')
-    
+    templates_dir = os.path.join(os.path.dirname(__file__), "templates")
+    static_dir = os.path.join(os.path.dirname(__file__), "static")
+
     # Create directories
     os.makedirs(templates_dir, exist_ok=True)
     os.makedirs(static_dir, exist_ok=True)
-    
+
     # Create main dashboard template
-    dashboard_html = '''<!DOCTYPE html>
+    dashboard_html = """<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -870,29 +895,31 @@ def create_templates():
         });
     </script>
 </body>
-</html>'''
-    
+</html>"""
+
     # Write dashboard template
-    with open(os.path.join(templates_dir, 'dual_brain_dashboard.html'), 'w') as f:
+    with open(os.path.join(templates_dir, "dual_brain_dashboard.html"), "w") as f:
         f.write(dashboard_html)
-    
+
     logger.info("Templates created successfully")
 
 
 def run_server():
     """Run the Flask server."""
     global server_running, update_thread
-    
+
     # Create templates
     create_templates()
-    
+
     logger.info("🚀 Starting Dual Brain Server...")
     logger.info("📊 Dashboard available at: http://localhost:5000")
-    
+
     # Start server
     server_running = True
     try:
-        socketio.run(app, host='0.0.0.0', port=5000, debug=False, allow_unsafe_werkzeug=True)
+        socketio.run(
+            app, host="0.0.0.0", port=5000, debug=False, allow_unsafe_werkzeug=True
+        )
     except KeyboardInterrupt:
         logger.info("🛑 Server stopped by user")
     except Exception as e:
@@ -904,4 +931,4 @@ def run_server():
 
 
 if __name__ == "__main__":
-    run_server() 
+    run_server()

@@ -51,8 +51,11 @@ class SchwabotInstaller:
 """"""
 """
 
-def __init__(self):"""
+
+def __init__(self): """
         """Initialize the installer.""""""
+
+
 """"""
 """"""
 """"""
@@ -77,8 +80,11 @@ safe_print(f"\\u1f680 {self.project_name} v{self.version} Installer")
         safe_print(f"\\u1f4c1 Install directory: {self.install_dir}")
         safe_print("=" * 60)
 
+
 def unified_math.log(self, message: str, level: str = "INFO") -> None:
     """Function implementation pending."""
+
+
 pass
 """
 """Log installation messages.""""""
@@ -86,13 +92,16 @@ pass
 """"""
 """"""
 """"""
-timestamp = subprocess.run(["date"], capture_output = True, text = True).stdout.strip()
+timestamp = subprocess.run(["date"], capture_output=True, text=True).stdout.strip()
         log_entry = f"[{timestamp}] {level}: {message}"
         self.installation_log.append(log_entry)
         safe_print(f"  {message}")
 
+
 def check_system_requirements(self) -> bool:
     """Function implementation pending."""
+
+
 pass
 """
 """Check if system meets requirements.""""""
@@ -109,7 +118,11 @@ python_version = sys.version_info
                 f"\\u274c Python 3.8+ required, found {python_version.major}.{python_version.minor}", "ERROR")
             return False
 
-self.unified_math.log(f"\\u2705 Python {python_version.major}.{python_version.minor}.{python_version.micro}")
+self.unified_math.log(
+    f"\\u2705 Python {
+        python_version.major}.{
+            python_version.minor}.{
+                python_version.micro}")
 
 # Check available memory
 try:
@@ -117,7 +130,8 @@ try:
 memory = psutil.virtual_memory()
             memory_gb = memory.total / (1024**3)
             if memory_gb < 4:
-                self.unified_math.log(f"\\u26a0\\ufe0f  Recommended: 4GB+ RAM, found {memory_gb:.1f}GB", "WARNING")
+                self.unified_math.log(
+                    f"\\u26a0\\ufe0f  Recommended: 4GB+ RAM, found {memory_gb:.1f}GB", "WARNING")
             else:
                 self.unified_math.log(f"\\u2705 Memory: {memory_gb:.1f}GB")
         except ImportError:

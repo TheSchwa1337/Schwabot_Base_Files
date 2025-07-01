@@ -22,13 +22,16 @@ __all__ = [
     "set_level",
 ]
 
+
 def setup_logging(name: str = None) -> logging.Logger:
     """Simple setup function for backward compatibility."""
     return configure_logging(name)
 
+
 # ---------------------------------------------------------------------------
 # Core helpers
 # ---------------------------------------------------------------------------
+
 
 def configure_logging(
     name: str | None = None,

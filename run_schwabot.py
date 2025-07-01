@@ -67,7 +67,7 @@ def setup_logging():
         handlers=[
             logging.FileHandler(logs_dir / 'schwabot.log'),
             logging.StreamHandler()
-]
+        ]
     )
 
     # Set specific log levels
@@ -142,7 +142,7 @@ def validate_environment():
         'COINBASE_API_SECRET',
         'KRAKEN_API_KEY',
         'KRAKEN_API_SECRET'
-]
+    ]
     missing_vars = []
     for var in required_vars:
         if not os.getenv(var):
@@ -202,21 +202,33 @@ def print_system_info():
         safe_print("\n--- System Configuration ---")
         safe_print(f"   Environment: {config_summary.get('environment', 'unknown')}")
         safe_print(f"   Debug Mode: {config_summary.get('debug_mode', False)}")
-        safe_print(f"   API Server Port: {config_summary.get('api_server_port', 'N/A')}")
+        safe_print(
+            f"   API Server Port: {
+                config_summary.get(
+                    'api_server_port',
+                    'N/A')}")
         safe_print(f"   Dashboard Port: {config_summary.get('dashboard_port', 'N/A')}")
         safe_print(f"   Exchange Mode: {config_summary.get('exchange_mode', 'N/A')}")
         safe_print(f"   Trading Pairs: {config_summary.get('trading_pairs', 'N/A')}")
-        safe_print(f"   Risk Management: {config_summary.get('risk_management_enabled', False)}")
+        safe_print(
+            f"   Risk Management: {
+                config_summary.get(
+                    'risk_management_enabled',
+                    False)}")
     else:
-        safe_print("\n--- System Configuration: Not available (Settings Manager not initialized) ---")
+        safe_print(
+            "\n--- System Configuration: Not available (Settings Manager not initialized) ---")
 
     if 'orchestrator' in components:
         safe_print("\n--- System Health Metrics ---")
         # This will be updated to use chrono_causal_orchestrator's validation
         # For now, placeholder or existing SystemIntegrationOrchestrator health
-        health_metrics = components['orchestrator'].get_system_health() if hasattr(components['orchestrator'], 'get_system_health') else "N/A"
+        health_metrics = components['orchestrator'].get_system_health() if hasattr(
+            components['orchestrator'], 'get_system_health') else "N/A"
         safe_print(f"   Overall Health: {health_metrics}")
-        safe_print(f"   Chrono-Causal Orchestrator Status: {'Initialized' if 'chrono_orchestrator' in components else 'Not Initialized'}")
+        safe_print(
+            f"   Chrono-Causal Orchestrator Status: {
+                'Initialized' if 'chrono_orchestrator' in components else 'Not Initialized'}")
         if 'chrono_orchestrator' in components:
             # Example of how we might display initial orchestrator status or mock data
             safe_print("   CRWM Active: Yes")
@@ -283,4 +295,3 @@ def main():
 
 if __name__ == "__main__":
     sys.exit(main())
-    

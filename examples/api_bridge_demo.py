@@ -30,8 +30,7 @@ import numpy as np
 
 # Configure logging
 logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
 
@@ -52,16 +51,16 @@ class SchawbotAPIDemo:
         logger.info("🚀 Initializing Schwabot API Bridge Demo...")
 
         # Get API credentials from environment variables
-        coinmarketcap_api_key = os.getenv('COINMARKETCAP_API_KEY')
-        coinbase_api_key = os.getenv('COINBASE_API_KEY')
-        coinbase_api_secret = os.getenv('COINBASE_API_SECRET')
+        coinmarketcap_api_key = os.getenv("COINMARKETCAP_API_KEY")
+        coinbase_api_key = os.getenv("COINBASE_API_KEY")
+        coinbase_api_secret = os.getenv("COINBASE_API_SECRET")
 
         # Initialize API bridge
         self.api_bridge = await initialize_api_bridge(
             coinmarketcap_api_key=coinmarketcap_api_key,
             coinbase_api_key=coinbase_api_key,
             coinbase_api_secret=coinbase_api_secret,
-            sandbox=True  # Use sandbox for testing
+            sandbox=True,  # Use sandbox for testing
         )
 
         # Initialize entry/exit logic engine
@@ -70,7 +69,7 @@ class SchawbotAPIDemo:
             exit_threshold=-0.38,
             risk_management_enabled=True,
             enable_ghost_overlay=True,
-            enable_ferris_phase=True
+            enable_ferris_phase=True,
         )
 
         logger.info("✅ Initialization complete!")
@@ -105,15 +104,15 @@ class SchawbotAPIDemo:
 
         for symbol in self.trading_symbols:
             try:
-                order_book = await self.api_bridge.fetch_order_book(
-                    symbol, limit=10
-                )
+                order_book = await self.api_bridge.fetch_order_book(symbol, limit=10)
                 order_book_results[symbol] = order_book
 
-                if order_book and order_book.get('bids') and order_book.get('asks'):
-                    best_bid = order_book['bids'][0][0] if order_book['bids'] else 0
-                    best_ask = order_book['asks'][0][0] if order_book['asks'] else 0
-                    spread = ((best_ask - best_bid) / best_bid * 100) if best_bid > 0 else 0
+                if order_book and order_book.get("bids") and order_book.get("asks"):
+                    best_bid = order_book["bids"][0][0] if order_book["bids"] else 0
+                    best_ask = order_book["asks"][0][0] if order_book["asks"] else 0
+                    spread = (
+                        ((best_ask - best_bid) / best_bid * 100) if best_bid > 0 else 0
+                    )
 
                     logger.info(
                         f"📊 {symbol}: Bid ${best_bid:.2f}, Ask ${best_ask:.2f}, "
@@ -142,8 +141,8 @@ class SchawbotAPIDemo:
                     continue
 
                 # Create vectorized data from order book
-                bids = np.array([bid[0] for bid in order_book.get('bids', [])])
-                asks = np.array([ask[0] for ask in order_book.get('asks', [])])
+                bids = np.array([bid[0] for bid in order_book.get("bids", [])])
+                asks = np.array([ask[0] for ask in order_book.get("asks", [])])
 
                 if len(bids) == 0 or len(asks) == 0:
                     continue
@@ -160,15 +159,15 @@ class SchawbotAPIDemo:
                     vector=vector,
                     ferris_phase=ferris_phase,
                     ghost_input=ghost_input,
-                    metadata={'symbol': symbol, 'price': price_data['price']}
+                    metadata={"symbol": symbol, "price": price_data["price"]},
                 )
 
                 math_results[symbol] = {
-                    'entry_signal': entry_signal,
-                    'vector_size': len(vector),
-                    'ferris_phase': ferris_phase,
-                    'ghost_input': ghost_input
-}
+                    "entry_signal": entry_signal,
+                    "vector_size": len(vector),
+                    "ferris_phase": ferris_phase,
+                    "ghost_input": ghost_input,
+                }
                 logger.info(
                     f"🎯 {symbol}: Entry Signal = {entry_signal['should_enter']}, "
                     f"Strength = {entry_signal['signal_strength']:.4f}"
@@ -222,9 +221,15 @@ class SchawbotAPIDemo:
             # Summary
             logger.info("🎉 Demo completed successfully!")
             logger.info(f"📊 Tested {len(self.trading_symbols)} trading pairs")
-            logger.info(f"✅ Price data: {sum(1 for v in price_results.values() if v)}/{len(price_results)}")
-            logger.info(f"✅ Order books: {sum(1 for v in order_book_results.values() if v)}/{len(order_book_results)}")
-            logger.info(f"✅ Math integration: {sum(1 for v in math_results.values() if v)}/{len(math_results)}")
+            logger.info(
+                f"✅ Price data: {sum(1 for v in price_results.values() if v)}/{len(price_results)}"
+            )
+            logger.info(
+                f"✅ Order books: {sum(1 for v in order_book_results.values() if v)}/{len(order_book_results)}"
+            )
+            logger.info(
+                f"✅ Math integration: {sum(1 for v in math_results.values() if v)}/{len(math_results)}"
+            )
 
         except Exception as e:
             logger.error(f"❌ Demo failed: {e}")
@@ -249,4 +254,4 @@ if __name__ == "__main__":
     print("- COINBASE_API_SECRET (optional)")
     print()
 
-    asyncio.run(main()) 
+    asyncio.run(main())

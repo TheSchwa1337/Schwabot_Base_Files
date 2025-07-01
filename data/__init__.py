@@ -41,4 +41,4 @@ BTC_USDC_PRECISION_ANALYSIS = PREPROCESSED_DIR / "btc_usdc_precision_analysis.pa
 logger.info("📊 Schwabot Historical Data Pipeline initialized")
 logger.info(f"📁 Data root: {DATA_ROOT}")
 logger.info(f"📁 Historical data: {HISTORICAL_DIR}")
-logger.info(f"📁 Preprocessed data: {PREPROCESSED_DIR}") 
+logger.info(f"📁 Preprocessed data: {PREPROCESSED_DIR}")

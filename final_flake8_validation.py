@@ -21,26 +21,25 @@ def run_flake8_validation():
     print("=" * 80)
     print(f"Timestamp: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print()
-    
+
     # Configuration
     config = {
         "max_line_length": 120,
         "ignore": "E203,W503,E501,F401,F841,W291,W293,E302,E303,E701,E702",
-        "exclude": "__pycache__,*.pyc,.git,*.backup,temp,logs,examples,cleanup_stub_files"
-}
+        "exclude": "__pycache__,*.pyc,.git,*.backup,temp,logs,examples,cleanup_stub_files"}
     # Target directories
     target_dirs = ["core", "schwabot"]
-    
+
     total_errors = 0
     results = {}
-    
+
     for target_dir in target_dirs:
         if not Path(target_dir).exists():
             print(f"⚠️  Directory {target_dir} not found")
             continue
-            
+
         print(f"📁 Checking {target_dir}/...")
-        
+
         try:
             # Run flake8 on the directory
             result = subprocess.run([
@@ -51,33 +50,35 @@ def run_flake8_validation():
                 "--count",
                 target_dir
             ], capture_output=True, text=True)
-            
+
             if result.returncode == 0:
                 print(f"   ✅ CLEAN - No flake8 errors found")
                 results[target_dir] = {"errors": 0, "status": "clean"}
             else:
-                error_count = len([line for line in result.stdout.split('\n') if line.strip() and ':' in line])
+                error_count = len([line for line in result.stdout.split(
+                    '\n') if line.strip() and ':' in line])
                 print(f"   ❌ ERRORS - {error_count} flake8 errors found")
-                
+
                 # Show first few errors
-                errors = [line for line in result.stdout.split('\n') if line.strip() and ':' in line]
+                errors = [line for line in result.stdout.split(
+                    '\n') if line.strip() and ':' in line]
                 for error in errors[:5]:
                     print(f"      • {error}")
                 if len(errors) > 5:
                     print(f"      ... and {len(errors) - 5} more")
-                
+
                 results[target_dir] = {"errors": error_count, "status": "has_errors"}
                 total_errors += error_count
-                
+
         except Exception as e:
             print(f"   ❌ ERROR - Failed to check {target_dir}: {e}")
             results[target_dir] = {"errors": -1, "status": "check_failed"}
-    
+
     # Summary
     print("\n" + "=" * 40)
     print("VALIDATION SUMMARY")
     print("=" * 40)
-    
+
     if total_errors == 0:
         print("🎉 SUCCESS: Zero flake8 errors found!")
         print("✅ All directories are flake8 compliant")
@@ -86,7 +87,7 @@ def run_flake8_validation():
         print(f"⚠️  ISSUES: {total_errors} flake8 errors found")
         print("🔧 Additional fixes needed")
         status = "NEEDS_FIXES"
-    
+
     # Save results
     report = {
         "timestamp": datetime.now().isoformat(),
@@ -94,13 +95,13 @@ def run_flake8_validation():
         "status": status,
         "results": results,
         "config": config
-}
+    }
     with open("final_flake8_validation_report.json", "w") as f:
         json.dump(report, f, indent=2)
-    
+
     print(f"\n📊 Report saved to: final_flake8_validation_report.json")
     print("=" * 80)
-    
+
     return total_errors == 0
 
 
@@ -109,12 +110,12 @@ def print_comprehensive_solution_summary():
     print("\n" + "=" * 80)
     print("COMPREHENSIVE FLAKE8 ELIMINATION SOLUTION SUMMARY")
     print("=" * 80)
-    
+
     print("""
 🎯 SOLUTION STRATEGY:
 ====================
 
-Our comprehensive approach to eliminate ALL flake8 errors used a systematic 
+Our comprehensive approach to eliminate ALL flake8 errors used a systematic
 7-stage process:
 
 STAGE 1: Initial Assessment
@@ -124,7 +125,7 @@ STAGE 1: Initial Assessment
 
 STAGE 2: Tool Installation
 - Installed autopep8 for automatic PEP8 compliance
-- Installed Black for consistent code formatting  
+- Installed Black for consistent code formatting
 - Installed isort for import organization
 
 STAGE 3: AutoPEP8 Fixes
@@ -207,10 +208,10 @@ The system is ready for production deployment.
 if __name__ == "__main__":
     success = run_flake8_validation()
     print_comprehensive_solution_summary()
-    
+
     if success:
         print("🎉 MISSION ACCOMPLISHED: Complete flake8 compliance achieved!")
         sys.exit(0)
     else:
         print("⚠️  ADDITIONAL WORK NEEDED: Some errors remain to be fixed")
-        sys.exit(1) 
+        sys.exit(1)

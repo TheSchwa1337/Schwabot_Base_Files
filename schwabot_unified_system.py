@@ -40,14 +40,14 @@ from typing import Any, Dict, List, Optional
 from core.unified_math_system import unified_math
 
 try:
-    pass  
+    pass
 # Prefer the real package
 from enhanced_fitness_oracle import (
         EnhancedFitnessOracle,
         UnifiedFitnessScore,
     )
 except ImportError:  # pragma: no cover \\u2013 fallback stub for tests
-pass  
+pass
 # Fallback to a local config - stub version so the module still imports
 from config.enhanced_fitness_config import (  # type: ignore
         EnhancedFitnessOracle,
@@ -69,11 +69,14 @@ class WindowsCliCompatibilityHandler:
 """"""
 """
 
+
 @staticmethod
-def is_windows_cli() -> bool:"""
+def is_windows_cli() -> bool: """
     """Function implementation pending."""
 pass
 """
+
+
 """Detect if running in Windows CLI environment.""""""
 """"""
 """"""
@@ -151,9 +154,9 @@ action: str  # "BUY", "SELL", "HOLD", "STRONG_BUY", "STRONG_SELL"
 position_size: float
 confidence: float
 reasoning: str
-stop_loss: Optional[float] = None
-    take_profit: Optional[float] = None
-    max_hold_time: Optional[timedelta] = None
+stop_loss: Optional[float]=None
+    take_profit: Optional[float]=None
+    max_hold_time: Optional[timedelta]=None
 
 
 class SimplifiedFerrisWheelScheduler:
@@ -183,13 +186,13 @@ self: Any,
 """"""
 """"""
 """
-self.fitness_oracle = fitness_oracle
+self.fitness_oracle=fitness_oracle
 # Avoid mutable default argument \\u2013 initialise lazily"""
-self.symbols = symbols or ["BTC / USDT", "ETH / USDT"]
-        self.tick_count = 0
-        self.active_positions = {}
-        self.trade_history = []
-        self.performance_metrics = {
+self.symbols=symbols or ["BTC / USDT", "ETH / USDT"]
+        self.tick_count=0
+        self.active_positions={}
+        self.trade_history=[]
+        self.performance_metrics={
             "total_trades": 0,
             "winning_trades": 0,
             "total_profit": 0.0,
@@ -200,7 +203,7 @@ logger.info(
         )
 
 async def tick_loop(
-        self, market_data_provider, max_ticks: Optional[int] = None
+        self, market_data_provider, max_ticks: Optional[int]=None
     ):
         """"""
 """"""
@@ -221,7 +224,7 @@ logger.info("""
 
 while max_ticks is None or self.tick_count < max_ticks:
             try:
-    pass  
+    pass
 # === STEP 1: GET MARKET DATA ===
                 market_data = await self._get_market_data(market_data_provider)
 
@@ -302,7 +305,7 @@ return fitness_score
 def _make_trading_decision()
 
 self: Any, fitness_score: UnifiedFitnessScore
-    ) -> TradeDecision:"""
+    ) -> TradeDecision: """
 """"""
 """"""
 """"""
@@ -325,7 +328,7 @@ action = fitness_score.action
 reasoning_parts = []
         if fitness_score.dominant_factors:
             top_factor = max(
-                fitness_score.dominant_factors.items(), key = lambda x: unified_math.abs(x[1])
+                fitness_score.dominant_factors.items(), key=lambda x: unified_math.abs(x[1])
             )
 reasoning_parts.append("""
                 f"Dominant factor: {top_factor[0]} ({top_factor[1]:.3f})"
@@ -364,9 +367,9 @@ async def _execute_trade_decision(self, decision: TradeDecision):
 """
 if decision.action in ["BUY", "STRONG_BUY"]:
 # Enter or increase position
-current_position = self.active_positions.get(decision.symbol, 0.0)
-            new_position = current_position + decision.position_size
-            self.active_positions[decision.symbol] = new_position
+current_position=self.active_positions.get(decision.symbol, 0.0)
+            new_position=current_position + decision.position_size
+            self.active_positions[decision.symbol]=new_position
 
 logger.info(
                 f"\\u1f7e2 {decision.action}: {decision.symbol} | "
@@ -377,14 +380,14 @@ logger.info(
 
 elif decision.action in ["SELL", "STRONG_SELL"]:
 # Reduce or exit position
-current_position = self.active_positions.get(decision.symbol, 0.0)
-            reduction = unified_math.min(decision.position_size, current_position)
-            new_position = current_position - reduction
+current_position=self.active_positions.get(decision.symbol, 0.0)
+            reduction=unified_math.min(decision.position_size, current_position)
+            new_position=current_position - reduction
 
 if new_position <= 0:
                 self.active_positions.pop(decision.symbol, None)
             else:
-                self.active_positions[decision.symbol] = new_position
+                self.active_positions[decision.symbol]=new_position
 
 logger.info(
                 f"\\u1f534 {decision.action}: {decision.symbol} | "
@@ -451,11 +454,11 @@ if decision.action != "HOLD":
 
 # Calculate accuracy percentage
 if self.performance_metrics["total_trades"] > 0:
-            accuracy = (
+            accuracy=(
                 self.performance_metrics["fitness_accuracy"]
                 / self.performance_metrics["total_trades"]
             )
-self.performance_metrics["fitness_accuracy_pct"] = accuracy
+self.performance_metrics["fitness_accuracy_pct"]=accuracy
 
 def get_performance_summary(self: Any) -> Dict[str, Any]:
     """Function implementation pending."""
@@ -496,7 +499,7 @@ Complete unified system that combines:
 
 def __init__()
 """
-self, config_path: str = "config / enhanced_fitness_config.yaml"
+self, config_path: str="config / enhanced_fitness_config.yaml"
     ):
 # Initialize the Enhanced Fitness Oracle
 """TODO: document __init__.""""""
@@ -530,7 +533,7 @@ logger.info("""
         )
 
 start_time = datetime.now()
-        end_time = start_time + timedelta(minutes = duration_minutes)
+        end_time = start_time + timedelta(minutes=duration_minutes)
 
 # Mock market data provider
 async def market_data_provider() -> Any:
@@ -547,7 +550,7 @@ while datetime.now() < end_time:
                 await asyncio.sleep(1)
 
 try:
-    pass  
+    pass
 # Run the scheduler with time limit
 max_ticks = duration_minutes * 60  # 60 ticks per minute
             await self.scheduler.tick_loop(market_data_provider(), max_ticks)
@@ -583,7 +586,8 @@ logger.info("=" * 50)
         logger.info(f"System Uptime: {self.system_metrics['uptime']}")
         logger.info(f"Total Ticks: {scheduler_performance['tick_count']}")
         logger.info(
-            f"Total Trades: {scheduler_performance['performance_metrics']['total_trades']}"
+            f"Total Trades: {
+    scheduler_performance['performance_metrics']['total_trades']}"
         )
 logger.info(
             f"Active Positions: {scheduler_performance['active_positions']}"
@@ -640,7 +644,7 @@ report = {
 
 # Export to file
 with open(filename, "w") as f:
-            json.dump(report, f, indent = 2, default = str)
+            json.dump(report, f, indent=2, default=str)
 
 logger.info(f"Comprehensive report exported to {filename}")
         return report
@@ -656,7 +660,7 @@ async def demo_unified_system() -> Any:
 """"""
 """
 logging.basicConfig(
-        level = logging.INFO,"""
+        level=logging.INFO, """
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     )
 
@@ -664,7 +668,7 @@ logging.basicConfig(
 system = UnifiedSchwabotSystem()
 
 try:
-    pass  
+    pass
 # Run for 5 minutes as demo
 await system.run_system(duration_minutes = 5)
 
@@ -701,7 +705,7 @@ for decision making instead of complex internal logic"""
 """"""
 """
 
-def __init__(self: Any, *args, **kwargs) -> None:"""
+def __init__(self: Any, *args, **kwargs) -> None: """
     """Function implementation pending."""
 pass
 """
@@ -713,7 +717,7 @@ pass
 super().__init__(*args, **kwargs)
 
 # Add the Enhanced Fitness Oracle
-self.fitness_oracle = EnhancedFitnessOracle()
+self.fitness_oracle=EnhancedFitnessOracle()
 
 logger.info("""
             "Integrated Schwabot Orchestrator with Enhanced Fitness Oracle"
@@ -734,16 +738,16 @@ Override the original complex processing with Fitness Oracle"""
 """"""
 """
 # Use Fitness Oracle for all analysis
-market_snapshot = await self.fitness_oracle.capture_market_snapshot(
+market_snapshot=await self.fitness_oracle.capture_market_snapshot(
             market_data
 )
-fitness_score = self.fitness_oracle.calculate_unified_fitness(
+fitness_score=self.fitness_oracle.calculate_unified_fitness(
             market_snapshot
 )
 
 # Convert fitness score to trade signal format expected by parent class"""
 if fitness_score.action in ["BUY", "STRONG_BUY"]:
-            trade_signal = {
+            trade_signal={
                 "action": "ENTER",
                 "direction": "LONG",
                 "confidence": fitness_score.confidence,

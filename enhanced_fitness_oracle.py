@@ -96,6 +96,7 @@ stop_loss: Optional[float] = None
 
 class EnhancedFitnessOracle:  # pylint: disable = too - few - public - methods
 
+
 """Very thin placeholder for the full - fat oracle."
 
 The goal is *dependency satisfaction*, not production trading accuracy."""
@@ -116,7 +117,7 @@ def __init__(self, config_path: str | Path | None = None) -> None:  # noqa: D401
 self.config_path = Path(config_path) if config_path else None
         self.config: Dict[str, Any] = {}
         if self.config_path and self.config_path.exists():
-            try:"""
+            try: """
 if self.config_path.suffix.lower() in {".yml", ".yaml"}:
                     import yaml  # Lazy import to avoid hard dep
 
@@ -133,7 +134,9 @@ self.current_regime: str = "neutral"
 self.market_history: List[Dict[str, Any]] = []
         self.fitness_history: List[UnifiedFitnessScore] = []
 
-logger.info("EnhancedFitnessOracle initialised \\u2013 config entries: %s", len(self.config))
+logger.info(
+    "EnhancedFitnessOracle initialised \\u2013 config entries: %s", len(
+        self.config))
 
 # ------------------------------------------------------------------
 # Public async helpers expected by the scheduler

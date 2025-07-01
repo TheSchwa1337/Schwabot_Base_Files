@@ -3,6 +3,7 @@ import yaml
 from pathlib import Path
 from datetime import datetime, timedelta
 
+
 class BucketManager:
     def __init__(self, config_path='bucket_config.yaml'):
         self.config = yaml.safe_load(Path(config_path).read_text())["bucket_handling"]
@@ -12,8 +13,10 @@ class BucketManager:
         vol_cfg = self.config['volatility_thresholds']
         weights = vol_cfg['high_volatility'] if volatility >= 0.5 else vol_cfg['low_volatility']
 
-        entropy_factor = (1 - entropy_score) if self.config['entropy_weighting_enabled'] else 1
-        lock_amount = profit_value * self.config['incremental_locking_pct'] * entropy_factor
+        entropy_factor = (
+            1 - entropy_score) if self.config['entropy_weighting_enabled'] else 1
+        lock_amount = profit_value * \
+            self.config['incremental_locking_pct'] * entropy_factor
 
         btc_amount = lock_amount * weights['btc_weight']
         usdc_amount = lock_amount * weights['usdc_weight']
@@ -33,4 +36,4 @@ class BucketManager:
         excess_btc = self.buckets['BTC'] - target_btc
         self.buckets['BTC'] -= excess_btc
         self.buckets['USDC'] += excess_btc
-        return {"BTC_to_USDC": excess_btc} 
+        return {"BTC_to_USDC": excess_btc}

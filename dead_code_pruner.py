@@ -7,6 +7,8 @@ CODEBASE_DIRS = ['core', 'core/math', 'core/phase_engine', 'core/recursive_engin
 PRUNE_REPORT = 'prune_candidates_report.md'
 
 # Load math-relevant files/lines from the math report
+
+
 def load_math_relevant():
     math_relevant = set()
     if not os.path.exists(MATH_REPORT):
@@ -22,6 +24,7 @@ def load_math_relevant():
                     math_relevant.add((current_file, lineno))
     return math_relevant
 
+
 def find_unused_defs(filepath):
     with open(filepath, 'r', encoding='utf-8', errors='ignore') as f:
         tree = ast.parse(f.read(), filename=filepath)
@@ -34,6 +37,7 @@ def find_unused_defs(filepath):
             used.add(node.id)
     unused = defined - used
     return unused
+
 
 def main():
     math_relevant = load_math_relevant()
@@ -57,5 +61,6 @@ def main():
             out.write('\n')
     print(f'Prune report written to {PRUNE_REPORT}')
 
+
 if __name__ == '__main__':
-    main() 
+    main()

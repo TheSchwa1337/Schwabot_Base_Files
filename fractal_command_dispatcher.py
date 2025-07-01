@@ -65,6 +65,7 @@ UNTRUSTED = "UNTRUSTED"
 @dataclass
 class CommandRecord:
 
+
 """Record of a command execution.""""""
 """"""
 """"""
@@ -84,6 +85,8 @@ historical_matches: int = 0
 
 @dataclass
 class StrategyProfile:
+
+
 """
 """Profile of a trading strategy.""""""
 """"""
@@ -123,6 +126,8 @@ confidence_level: float
 
 
 class FractalCommandDispatcher:
+
+
 """
 """Core fractal command dispatcher with golden ratio weighting.""""""
 """"""
@@ -161,7 +166,7 @@ self,
 """"""
 """"""
 """
-if strategy_id in self.strategy_profiles:"""
+if strategy_id in self.strategy_profiles: """
 logger.warning(f"Strategy {strategy_id} already registered")
             return
 
@@ -224,15 +229,16 @@ execution_time = time.time() - start_time
 
 # Record command execution
 command_record = CommandRecord(
-            command_id = command_id,
-            strategy_id = selected_strategy,
-            fractal_weight = fractal_weight,
-            trust_score = trust_score,
-            execution_time = execution_time,
-            success = execution_result["success"],
-            profit_generated = execution_result.get("profit", Decimal('0.0')),
-            timestamp = time.time(),
-            historical_matches = self._count_historical_matches(command_id, selected_strategy)
+            command_id=command_id,
+            strategy_id=selected_strategy,
+            fractal_weight=fractal_weight,
+            trust_score=trust_score,
+            execution_time=execution_time,
+            success=execution_result["success"],
+            profit_generated=execution_result.get("profit", Decimal('0.0')),
+            timestamp=time.time(),
+            historical_matches=self._count_historical_matches(
+                command_id, selected_strategy)
         )
 
 self.command_history.append(command_record)
@@ -247,23 +253,26 @@ confidence_level = self._calculate_dispatch_confidence(
 
 # Create dispatch result
 dispatch_result = DispatchResult(
-            dispatch_id = f"dispatch_{len(self.dispatch_history)}_{int(time.time())}",
-            command_executed = command_id,
-            strategy_used = selected_strategy,
-            fractal_weight_applied = fractal_weight,
-            trust_score_final = trust_score,
-            execution_success = execution_result["success"],
-            profit_impact = execution_result.get("profit", Decimal('0.0')),
-            dispatch_time = execution_time,
-            confidence_level = confidence_level
+            dispatch_id=f"dispatch_{len(self.dispatch_history)}_{int(time.time())}",
+            command_executed=command_id,
+            strategy_used=selected_strategy,
+            fractal_weight_applied=fractal_weight,
+            trust_score_final=trust_score,
+            execution_success=execution_result["success"],
+            profit_impact=execution_result.get("profit", Decimal('0.0')),
+            dispatch_time=execution_time,
+            confidence_level=confidence_level
         )
 
 self.dispatch_history.append(dispatch_result)
 
 return dispatch_result
 
+
 def analyze_strategy_performance(self, strategy_id: str) -> Dict[str, Any]:
     """Function implementation pending."""
+
+
 pass
 """
 """Analyze performance of a specific strategy.""""""

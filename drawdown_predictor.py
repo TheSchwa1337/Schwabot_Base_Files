@@ -15,13 +15,14 @@ from collections import deque
 
 logger = logging.getLogger(__name__)
 
+
 class DrawdownPredictor:
     """
     Predicts potential future drawdowns based on historical performance data.
     """
 
-    def __init__(self, 
-                 lookback_period: int = 252, # e.g., number of trading days in a year
+    def __init__(self,
+                 lookback_period: int = 252,  # e.g., number of trading days in a year
                  confidence_level: float = 0.95,
                  use_adaptive_thresholds: bool = True):
         """
@@ -54,17 +55,19 @@ class DrawdownPredictor:
         """
         if not pnl_series:
             return []
-        
-        equity_curve = np.cumsum(pnl_series) # Assumes pnl_series are returns/changes
+
+        equity_curve = np.cumsum(pnl_series)  # Assumes pnl_series are returns/changes
         if not isinstance(equity_curve, np.ndarray):
             equity_curve = np.array(equity_curve)
 
         if len(equity_curve) == 0:
             return []
-        
+
         # Ensure equity_curve starts from a base of 100 or similar for percentage calculation
-        # If it's PnL, convert to cumulative returns / equity curve for meaningful drawdown
-        cumulative_returns = 100 * (1 + equity_curve / 100) if equity_curve.min() < 0 else 100 + equity_curve
+        # If it's PnL, convert to cumulative returns / equity curve for meaningful
+        # drawdown
+        cumulative_returns = 100 * \
+            (1 + equity_curve / 100) if equity_curve.min() < 0 else 100 + equity_curve
 
         peak_equity = np.maximum.accumulate(cumulative_returns)
         drawdowns = (peak_equity - cumulative_returns) / peak_equity
@@ -77,9 +80,10 @@ class DrawdownPredictor:
         self.historical_pnl.append(current_pnl)
         if len(self.historical_pnl) >= 2:
             # Recalculate historical drawdowns with new data
-            self.historical_drawdowns = deque(self._calculate_drawdown(list(self.historical_pnl)),
-                                              maxlen=self.lookback_period)
-        logger.debug(f"Historical PnL updated with {current_pnl}. History size: {len(self.historical_pnl)}")
+            self.historical_drawdowns = deque(self._calculate_drawdown(
+                list(self.historical_pnl)), maxlen=self.lookback_period)
+        logger.debug(
+            f"Historical PnL updated with {current_pnl}. History size: {len(self.historical_pnl)}")
 
     def predict_drawdown(self) -> Optional[Dict[str, Any]]:
         """
@@ -91,21 +95,22 @@ class DrawdownPredictor:
             or None if not enough data.
         """
         if len(self.historical_drawdowns) < self.lookback_period:
-            logger.warning("Not enough historical data to make a reliable drawdown prediction.")
+            logger.warning(
+                "Not enough historical data to make a reliable drawdown prediction.")
             return None
-        
+
         drawdown_data = np.array(self.historical_drawdowns)
-        
+
         # Basic statistical prediction: use historical max drawdown as a base
         # Or, could fit a distribution (e.g., GEV for extreme values) to drawdowns
-        predicted_drawdown = np.max(drawdown_data) # Simple: highest observed drawdown
-        
+        predicted_drawdown = np.max(drawdown_data)  # Simple: highest observed drawdown
+
         # Calculate prediction interval using bootstrapping or historical percentiles
         # For simplicity, let's use percentile method for confidence interval
         alpha = 1.0 - self.confidence_level
         lower_percentile = alpha / 2.0 * 100
         upper_percentile = (1.0 - alpha / 2.0) * 100
-        
+
         sorted_drawdowns = np.sort(drawdown_data)
         lower_bound = np.percentile(sorted_drawdowns, lower_percentile)
         upper_bound = np.percentile(sorted_drawdowns, upper_percentile)
@@ -113,9 +118,14 @@ class DrawdownPredictor:
         # Adaptive thresholding logic (placeholder for more complex adaptation)
         if self.use_adaptive_thresholds:
             # Example: if recent volatility is high, adjust bounds wider
-            recent_volatility = np.std(list(self.historical_pnl)[-self.lookback_period // 4:]) if len(self.historical_pnl) >= self.lookback_period // 4 else 0
-            if recent_volatility > np.std(np.array(self.historical_pnl)) and len(self.historical_pnl) >= self.lookback_period:
-                adjustment_factor = 1 + (recent_volatility / np.mean(drawdown_data)) * 0.1 # Example adjustment
+            recent_volatility = np.std(list(self.historical_pnl)[-self.lookback_period // 4:]) if len(
+                self.historical_pnl) >= self.lookback_period // 4 else 0
+            if recent_volatility > np.std(
+                    np.array(
+                        self.historical_pnl)) and len(
+                    self.historical_pnl) >= self.lookback_period:
+                adjustment_factor = 1 + \
+                    (recent_volatility / np.mean(drawdown_data)) * 0.1  # Example adjustment
                 upper_bound *= adjustment_factor
                 self.metrics["adaptive_threshold_adjustments"] += 1
 
@@ -124,8 +134,12 @@ class DrawdownPredictor:
         self.metrics["total_predictions"] += 1
         self.metrics["last_prediction_time"] = time.time()
 
-        logger.info(f"Drawdown predicted: {predicted_drawdown:.4f} (Interval: {lower_bound:.4f}-{upper_bound:.4f})")
-        
+        logger.info(
+            f"Drawdown predicted: {
+                predicted_drawdown:.4f} (Interval: {
+                lower_bound:.4f}-{
+                upper_bound:.4f})")
+
         return {
             "predicted_drawdown": predicted_drawdown,
             "lower_bound": lower_bound,
@@ -163,8 +177,9 @@ if __name__ == "__main__":
     # PnL data can be daily returns, or direct profit/loss figures
     # For this demo, we'll use simulated daily percentage returns
     simulated_pnl_data = [
-        0.01, 0.02, -0.005, 0.015, -0.01, 0.03, 0.005, -0.025, 0.01, 0.00, # Initial 10 for lookback
-        -0.03, 0.02, 0.01, -0.015, 0.005, -0.04, 0.02, -0.01, 0.015, 0.00 # Additional data
+        0.01, 0.02, -0.005, 0.015, -0.01, 0.03, 0.005, -
+        0.025, 0.01, 0.00,  # Initial 10 for lookback
+        -0.03, 0.02, 0.01, -0.015, 0.005, -0.04, 0.02, -0.01, 0.015, 0.00  # Additional data
     ]
 
     print(f"Predictor initialized with lookback_period={predictor.lookback_period}")
@@ -172,12 +187,15 @@ if __name__ == "__main__":
     print("\n--- Updating Historical Data and Predicting Drawdowns ---")
     for i, pnl in enumerate(simulated_pnl_data):
         predictor.update_historical_data(pnl)
-        print(f"Step {i+1}: Updated with PnL = {pnl:.3f}")
-        
+        print(f"Step {i + 1}: Updated with PnL = {pnl:.3f}")
+
         prediction = predictor.predict_drawdown()
         if prediction:
             print(f"  Predicted Drawdown: {prediction['predicted_drawdown']:.4f}")
-            print(f"  Prediction Interval: ({prediction['lower_bound']:.4f}, {prediction['upper_bound']:.4f})")
+            print(
+                f"  Prediction Interval: ({
+                    prediction['lower_bound']:.4f}, {
+                    prediction['upper_bound']:.4f})")
         else:
             print("  Prediction: Not enough data.")
 
@@ -191,4 +209,4 @@ if __name__ == "__main__":
 
     print("\n--- Resetting Predictor ---")
     predictor.reset()
-    print(f"Metrics after reset: {predictor.get_metrics()}") 
+    print(f"Metrics after reset: {predictor.get_metrics()}")

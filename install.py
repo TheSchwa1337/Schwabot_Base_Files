@@ -35,29 +35,32 @@ logger = logging.getLogger(__name__)
 
 class SystemInfo:
     """System information and compatibility checker."""
-    
+
     def __init__(self):
         self.platform = platform.system().lower()
         self.python_version = sys.version_info
         self.is_windows = self.platform == "windows"
         self.is_macos = self.platform == "darwin"
         self.is_linux = self.platform == "linux"
-        
+
     def get_python_version_str(self) -> str:
         """Get Python version as string."""
-        return f"{self.python_version.major}.{self.python_version.minor}.{self.python_version.micro}"
-    
+        return f"{
+            self.python_version.major}.{
+            self.python_version.minor}.{
+            self.python_version.micro}"
+
     def check_python_version(self) -> bool:
         """Check if Python version is compatible."""
         return self.python_version >= (3, 8)
-    
+
     def get_pip_command(self) -> str:
         """Get appropriate pip command for the system."""
         if self.is_windows:
             return "python -m pip"
         else:
             return "pip3"
-    
+
     def get_venv_command(self) -> str:
         """Get appropriate virtual environment command."""
         if self.is_windows:
@@ -68,12 +71,12 @@ class SystemInfo:
 
 class DependencyManager:
     """Manages dependency installation and verification."""
-    
+
     def __init__(self, system_info: SystemInfo):
         self.system_info = system_info
         self.requirements_file = "requirements.txt"
         self.installed_packages = {}
-        
+
     def check_pip_available(self) -> bool:
         """Check if pip is available."""
         try:
@@ -86,7 +89,7 @@ class DependencyManager:
         except (subprocess.CalledProcessError, FileNotFoundError):
             logger.error("Pip not available")
             return False
-    
+
     def upgrade_pip(self) -> bool:
         """Upgrade pip to latest version."""
         try:
@@ -99,37 +102,52 @@ class DependencyManager:
         except subprocess.CalledProcessError as e:
             logger.error(f"❌ Failed to upgrade pip: {e}")
             return False
-    
+
     def install_requirements(self, venv_path: Optional[str] = None) -> bool:
         """Install requirements from requirements.txt."""
         try:
             logger.info("Installing requirements...")
-            
-            pip_cmd = [self.system_info.get_pip_command(), "install", "-r", self.requirements_file]
-            
+
+            pip_cmd = [self.system_info.get_pip_command(), "install", "-r",
+                       self.requirements_file]
+
             if venv_path:
                 # Use virtual environment pip
                 if self.system_info.is_windows:
-                    pip_cmd = [os.path.join(venv_path, "Scripts", "pip"), "install", "-r", self.requirements_file]
+                    pip_cmd = [
+                        os.path.join(
+                            venv_path,
+                            "Scripts",
+                            "pip"),
+                        "install",
+                        "-r",
+                        self.requirements_file]
                 else:
-                    pip_cmd = [os.path.join(venv_path, "bin", "pip"), "install", "-r", self.requirements_file]
-            
+                    pip_cmd = [
+                        os.path.join(
+                            venv_path,
+                            "bin",
+                            "pip"),
+                        "install",
+                        "-r",
+                        self.requirements_file]
+
             subprocess.run(pip_cmd, check=True)
             logger.info("✅ Requirements installed successfully")
             return True
-            
+
         except subprocess.CalledProcessError as e:
             logger.error(f"❌ Failed to install requirements: {e}")
             return False
-    
+
     def verify_installation(self) -> Dict[str, bool]:
         """Verify that all required packages are installed."""
         required_packages = [
-            "numpy", "pandas", "matplotlib", "scipy", "ccxt", 
+            "numpy", "pandas", "matplotlib", "scipy", "ccxt",
             "aiohttp", "requests", "tkinter", "asyncio"
-]
+        ]
         results = {}
-        
+
         for package in required_packages:
             try:
                 __import__(package)
@@ -138,33 +156,33 @@ class DependencyManager:
             except ImportError:
                 results[package] = False
                 logger.error(f"❌ {package} - Not available")
-        
+
         return results
 
 
 class VirtualEnvironmentManager:
     """Manages virtual environment creation and activation."""
-    
+
     def __init__(self, system_info: SystemInfo):
         self.system_info = system_info
         self.venv_name = "schwabot_env"
-        
+
     def create_venv(self) -> Optional[str]:
         """Create virtual environment."""
         try:
             logger.info(f"Creating virtual environment: {self.venv_name}")
-            
+
             venv_cmd = [self.system_info.get_venv_command(), self.venv_name]
             subprocess.run(venv_cmd, check=True)
-            
+
             venv_path = os.path.abspath(self.venv_name)
             logger.info(f"✅ Virtual environment created: {venv_path}")
             return venv_path
-            
+
         except subprocess.CalledProcessError as e:
             logger.error(f"❌ Failed to create virtual environment: {e}")
             return None
-    
+
     def activate_venv(self, venv_path: str) -> bool:
         """Activate virtual environment."""
         try:
@@ -172,14 +190,14 @@ class VirtualEnvironmentManager:
                 activate_script = os.path.join(venv_path, "Scripts", "activate")
             else:
                 activate_script = os.path.join(venv_path, "bin", "activate")
-            
+
             if os.path.exists(activate_script):
                 logger.info(f"Virtual environment activated: {venv_path}")
                 return True
             else:
                 logger.error(f"Activation script not found: {activate_script}")
                 return False
-                
+
         except Exception as e:
             logger.error(f"Failed to activate virtual environment: {e}")
             return False
@@ -187,27 +205,27 @@ class VirtualEnvironmentManager:
 
 class ConfigurationManager:
     """Manages system configuration and setup."""
-    
+
     def __init__(self):
         self.config_dir = Path("config")
         self.logs_dir = Path("logs")
         self.data_dir = Path("data")
-        
+
     def create_directories(self) -> bool:
         """Create necessary directories."""
         try:
             directories = [self.config_dir, self.logs_dir, self.data_dir]
-            
+
             for directory in directories:
                 directory.mkdir(exist_ok=True)
                 logger.info(f"✅ Created directory: {directory}")
-            
+
             return True
-            
+
         except Exception as e:
             logger.error(f"❌ Failed to create directories: {e}")
             return False
-    
+
     def create_default_config(self) -> bool:
         """Create default configuration files."""
         try:
@@ -234,11 +252,11 @@ LOG_LEVEL=INFO
 ENABLE_VISUALIZATION=true
 ENABLE_BACKTESTING=true
 """
-            
+
             env_file = Path(".env.template")
             env_file.write_text(env_template)
             logger.info("✅ Created .env.template")
-            
+
             # Create basic config
             basic_config = {
                 "system": {
@@ -256,24 +274,24 @@ ENABLE_BACKTESTING=true
                     },
                     "coingecko": {
                         "enabled": True
-}
+                    }
                 },
                 "trading": {
                     "enabled": False,
                     "pairs": ["BTC/USDC", "ETH/USDC", "XRP/USDC"],
                     "max_positions": 10
-}
-}
+                }
+            }
             config_file = self.config_dir / "basic_config.json"
             config_file.write_text(json.dumps(basic_config, indent=2))
             logger.info("✅ Created basic configuration")
-            
+
             return True
-            
+
         except Exception as e:
             logger.error(f"❌ Failed to create configuration: {e}")
             return False
-    
+
     def setup_logging(self) -> bool:
         """Setup logging configuration."""
         try:
@@ -283,7 +301,7 @@ ENABLE_BACKTESTING=true
                 "formatters": {
                     "standard": {
                         "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-}
+                    }
                 },
                 "handlers": {
                     "file": {
@@ -296,19 +314,19 @@ ENABLE_BACKTESTING=true
                         "class": "logging.StreamHandler",
                         "formatter": "standard",
                         "level": "INFO"
-}
+                    }
                 },
                 "root": {
                     "handlers": ["file", "console"],
                     "level": "INFO"
-}
-}
+                }
+            }
             log_config_file = self.config_dir / "logging_config.json"
             log_config_file.write_text(json.dumps(log_config, indent=2))
             logger.info("✅ Created logging configuration")
-            
+
             return True
-            
+
         except Exception as e:
             logger.error(f"❌ Failed to setup logging: {e}")
             return False
@@ -316,123 +334,126 @@ ENABLE_BACKTESTING=true
 
 class InstallationManager:
     """Main installation manager."""
-    
+
     def __init__(self):
         self.system_info = SystemInfo()
         self.dependency_manager = DependencyManager(self.system_info)
         self.venv_manager = VirtualEnvironmentManager(self.system_info)
         self.config_manager = ConfigurationManager()
-        
+
     def check_system_requirements(self) -> bool:
         """Check if system meets requirements."""
         logger.info("🔍 Checking system requirements...")
-        
+
         # Check Python version
         if not self.system_info.check_python_version():
-            logger.error(f"❌ Python version {self.system_info.get_python_version_str()} is not supported. "
-                        f"Python 3.8+ is required.")
+            logger.error(
+                f"❌ Python version {
+                    self.system_info.get_python_version_str()} is not supported. " f"Python 3.8+ is required.")
             return False
-        
+
         logger.info(f"✅ Python version: {self.system_info.get_python_version_str()}")
-        
+
         # Check pip availability
         if not self.dependency_manager.check_pip_available():
             logger.error("❌ Pip is not available. Please install pip first.")
             return False
-        
+
         logger.info("✅ Pip is available")
-        
+
         # Check platform support
         logger.info(f"✅ Platform: {self.system_info.platform}")
-        
+
         return True
-    
+
     def install_dependencies(self, use_venv: bool = True) -> bool:
         """Install system dependencies."""
         logger.info("📦 Installing dependencies...")
-        
+
         venv_path = None
-        
+
         if use_venv:
             # Create virtual environment
             venv_path = self.venv_manager.create_venv()
             if not venv_path:
                 logger.error("❌ Failed to create virtual environment")
                 return False
-        
+
         # Upgrade pip
         if not self.dependency_manager.upgrade_pip():
             logger.warning("⚠️ Failed to upgrade pip, continuing...")
-        
+
         # Install requirements
         if not self.dependency_manager.install_requirements(venv_path):
             logger.error("❌ Failed to install requirements")
             return False
-        
+
         # Verify installation
         verification_results = self.dependency_manager.verify_installation()
         all_installed = all(verification_results.values())
-        
+
         if all_installed:
             logger.info("✅ All dependencies installed successfully")
         else:
-            failed_packages = [pkg for pkg, installed in verification_results.items() if not installed]
+            failed_packages = [
+                pkg for pkg,
+                installed in verification_results.items() if not installed]
             logger.error(f"❌ Failed to install packages: {failed_packages}")
-        
+
         return all_installed
-    
+
     def setup_configuration(self) -> bool:
         """Setup system configuration."""
         logger.info("⚙️ Setting up configuration...")
-        
+
         # Create directories
         if not self.config_manager.create_directories():
             return False
-        
+
         # Create default config
         if not self.config_manager.create_default_config():
             return False
-        
+
         # Setup logging
         if not self.config_manager.setup_logging():
             return False
-        
+
         logger.info("✅ Configuration setup completed")
         return True
-    
+
     def run_tests(self) -> bool:
         """Run basic system tests."""
         logger.info("🧪 Running system tests...")
-        
+
         try:
             # Test imports
             test_imports = [
-                "numpy", "pandas", "matplotlib", "scipy", 
+                "numpy", "pandas", "matplotlib", "scipy",
                 "tkinter", "asyncio", "logging"
-]
+            ]
             for module in test_imports:
                 __import__(module)
                 logger.info(f"✅ {module} import successful")
-            
+
             # Test CCXT if available
             try:
                 import ccxt
                 logger.info("✅ CCXT import successful")
             except ImportError:
                 logger.warning("⚠️ CCXT not available (optional)")
-            
+
             logger.info("✅ All tests passed")
             return True
-            
+
         except Exception as e:
             logger.error(f"❌ Test failed: {e}")
             return False
-    
+
     def create_launcher_scripts(self) -> bool:
         """Create launcher scripts for different platforms."""
         try:
             logger.info("🚀 Creating launcher scripts...")
-            
+
             if self.system_info.is_windows:
                 # Windows batch file
                 batch_content = """@echo off
@@ -449,7 +470,7 @@ pause
                 with open("start_schwabot.bat", "w") as f:
                     f.write(batch_content)
                 logger.info("✅ Created start_schwabot.bat")
-                
+
             else:
                 # Unix shell script
                 shell_content = """#!/bin/bash
@@ -462,41 +483,41 @@ python3 main.py
 """
                 with open("start_schwabot.sh", "w") as f:
                     f.write(shell_content)
-                
+
                 # Make executable
                 os.chmod("start_schwabot.sh", 0o755)
                 logger.info("✅ Created start_schwabot.sh")
-            
+
             return True
-            
+
         except Exception as e:
             logger.error(f"❌ Failed to create launcher scripts: {e}")
             return False
-    
+
     def install(self, auto_mode: bool = False) -> bool:
         """Run complete installation."""
         logger.info("🚀 Starting Schwabot installation...")
-        
+
         # Check system requirements
         if not self.check_system_requirements():
             return False
-        
+
         # Install dependencies
         if not self.install_dependencies(use_venv=True):
             return False
-        
+
         # Setup configuration
         if not self.setup_configuration():
             return False
-        
+
         # Run tests
         if not self.run_tests():
             return False
-        
+
         # Create launcher scripts
         if not self.create_launcher_scripts():
             return False
-        
+
         logger.info("🎉 Installation completed successfully!")
         logger.info("")
         logger.info("Next steps:")
@@ -509,7 +530,7 @@ python3 main.py
             logger.info("   - Run: ./start_schwabot.sh")
             logger.info("   - Or run: python3 main.py")
         logger.info("3. Open the GUI and configure your settings")
-        
+
         return True
 
 
@@ -517,23 +538,26 @@ def main():
     """Main installation function."""
     parser = argparse.ArgumentParser(description="Schwabot Installation Script")
     parser.add_argument("--auto", action="store_true", help="Automatic installation")
-    parser.add_argument("--check", action="store_true", help="Check system requirements only")
+    parser.add_argument(
+        "--check",
+        action="store_true",
+        help="Check system requirements only")
     parser.add_argument("--configure", action="store_true", help="Configure only")
-    
+
     args = parser.parse_args()
-    
+
     installer = InstallationManager()
-    
+
     if args.check:
         # Check requirements only
         success = installer.check_system_requirements()
         sys.exit(0 if success else 1)
-    
+
     elif args.configure:
         # Configure only
         success = installer.setup_configuration()
         sys.exit(0 if success else 1)
-    
+
     else:
         # Full installation
         success = installer.install(auto_mode=args.auto)
@@ -541,4 +565,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main() 
+    main()

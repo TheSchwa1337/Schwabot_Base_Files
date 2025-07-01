@@ -9,6 +9,7 @@ Integrates with: [Other modules that generate trade signals or manage positions]
 """
 
 import logging
+import random
 import time
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Union

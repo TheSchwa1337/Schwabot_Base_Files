@@ -1,29 +1,29 @@
 #!/usr/bin/env python3
 """"""
+from typing import Dict, Any
+from datetime import datetime
+import time
+import logging
+import asyncio
 Complete Schwabot System Demo
-============================
+== == == == == == == == == == == == == ==
 
 Comprehensive demonstration of the complete Schwabot trading system including:
 - Mathematical relay processing
-- GPU/CPU optimization
+- GPU / CPU optimization
 - Trading pipeline integration
 - Settings management
 - Performance monitoring
-- Real-time visualization capabilities
+- Real - time visualization capabilities
 
 This demo validates that all components work together correctly.
 """"""
 
-import asyncio
-import logging
-import time
-from datetime import datetime
-from typing import Dict, Any
 
 # Set up logging
 logging.basicConfig()
-    level=logging.INFO,
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    level = logging.INFO,
+        format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
 
@@ -86,16 +86,16 @@ def test_settings_system():
 
         # Test configuration updates
         settings_manager.update_trading_settings()
-            trading_mode="demo",
-                max_concurrent_trades=5,
-                    min_trade_amount=10.0
+            trading_mode = "demo",
+                max_concurrent_trades = 5,
+                    min_trade_amount = 10.0
         )
         print("✅ Trading settings updated")
 
         settings_manager.update_performance_settings()
-            gpu_enabled=True,
-                cpu_threads=4,
-                    memory_limit_mb=2048
+            gpu_enabled = True,
+                cpu_threads = 4,
+                    memory_limit_mb = 2048
         )
         print("✅ Performance settings updated")
 
@@ -165,10 +165,10 @@ async def test_trading_pipeline():
 
         # Initialize pipeline
         pipeline = TradingPipelineIntegration()
-            enable_gpu=True,
-                enable_distributed=False,
-                    max_concurrent_trades=5,
-                    risk_management_enabled=True
+            enable_gpu = True,
+                enable_distributed = False,
+                    max_concurrent_trades = 5,
+                    risk_management_enabled = True
         )
         print("✅ Trading pipeline initialized")
 
@@ -189,11 +189,16 @@ async def test_trading_pipeline():
 }
         # Process market data
         signal = await pipeline.process_market_data(market_data, "BTC", "warm")
-        print(f"✅ Generated trading signal: {signal.signal_type} (confidence: {signal.confidence:.3f})")
+        print(
+    f"✅ Generated trading signal: {
+        signal.signal_type} (confidence: {
+            signal.confidence:.3f})")
 
         # Get performance metrics
         performance = pipeline.get_pipeline_performance()
-        print(f"✅ Pipeline performance metrics available: {len(performance)} categories")
+        print(
+    f"✅ Pipeline performance metrics available: {
+        len(performance)} categories")
 
         # Cleanup
         pipeline.cleanup()

@@ -26,13 +26,13 @@ def analyze_stub_patterns_in_file(file_path: Path) -> Dict[str, any]:
     try:
         with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
             content = f.read()
-        
+
         lines = content.split('\n')
-        
+
         # Analyze each line for specific patterns
         for i, line in enumerate(lines, 1):
             line_num = i
-            
+
             # Unicode/encoding issues (the "uppity in the air commie things")
             if re.search(r'[^\x00-\x7F]', line):
                 analysis['unicode_issues'].append({
@@ -40,7 +40,7 @@ def analyze_stub_patterns_in_file(file_path: Path) -> Dict[str, any]:
                     'content': line[:100],
                     'issue': 'Non-ASCII characters detected'
                 })
-            
+
             # Stub patterns
             if re.match(r'^\s*pass\s*$', line):
                 analysis['stub_patterns'].append({
@@ -48,7 +48,7 @@ def analyze_stub_patterns_in_file(file_path: Path) -> Dict[str, any]:
                     'type': 'empty_pass',
                     'context': get_context(lines, i, 3)
                 })
-            
+
             # TODO items
             if 'TODO' in line.upper():
                 analysis['todo_items'].append({
@@ -56,7 +56,7 @@ def analyze_stub_patterns_in_file(file_path: Path) -> Dict[str, any]:
                     'content': line.strip(),
                     'priority': 'HIGH' if 'CRITICAL' in line.upper() else 'MEDIUM'
                 })
-            
+
             # FIXME items
             if 'FIXME' in line.upper():
                 analysis['fixme_items'].append({
@@ -64,29 +64,38 @@ def analyze_stub_patterns_in_file(file_path: Path) -> Dict[str, any]:
                     'content': line.strip(),
                     'priority': 'HIGH'
                 })
-            
+
             # Incomplete function definitions
             if re.match(r'^\s*def \w+\([^)]*\):\s*$', line):
                 # Check if next line is pass or empty
-                if i < len(lines) and (re.match(r'^\s*pass\s*$', lines[i]) or lines[i].strip() == ''):
+                if i < len(lines) and (
+    re.match(
+        r'^\s*pass\s*$',
+         lines[i]) or lines[i].strip() == ''):
                     analysis['incomplete_functions'].append({
                         'line': line_num,
                         'function_name': re.search(r'def (\w+)', line).group(1),
                         'context': get_context(lines, i, 5)
                     })
-            
+
             # Missing imports (undefined names)
-            if re.search(r'\b(?:numpy|scipy|pandas|matplotlib|tensorflow|torch)\b', line):
-                if not any(import_line in content for import_line in ['import numpy', 'import scipy', 'import pandas']):
+            if re.search(
+    r'\b(?:numpy|scipy|pandas|matplotlib|tensorflow|torch)\b',
+     line):
+                if not any(
+    import_line in content for import_line in [
+        'import numpy',
+        'import scipy',
+         'import pandas']):
                     analysis['missing_imports'].append({
                         'line': line_num,
                         'module': re.search(r'\b(?:numpy|scipy|pandas|matplotlib|tensorflow|torch)\b', line).group(0),
                         'context': line.strip()
                     })
-    
+
     except Exception as e:
         analysis['error'] = str(e)
-    
+
     return analysis
 
 
@@ -110,14 +119,14 @@ def identify_common_stub_patterns() -> Dict[str, List[str]]:
 }
     for py_file in core_dir.rglob('*.py'):
         analysis = analyze_stub_patterns_in_file(py_file)
-        
+
         for pattern_type in all_patterns.keys():
             if analysis.get(pattern_type):
                 all_patterns[pattern_type].append({
                     'file': str(py_file),
                     'items': analysis[pattern_type]
                 })
-    
+
     return all_patterns
 
 
@@ -133,14 +142,14 @@ def function_name():
     # TODO: Implement this function
     raise NotImplementedError("Function not yet implemented")
 """,
-        
+
         'todo_items': """
 # Strategy: Convert TODO items to proper docstrings or implementations
 # Pattern: # TODO: description
 # Fix: Convert to proper docstring or implement
 \"\"\"TODO: description\"\"\"
 """,
-        
+
         'unicode_issues': """
 # Strategy: Fix Unicode/encoding issues
 # Pattern: Non-ASCII characters in strings
@@ -148,7 +157,7 @@ def function_name():
 # Before: "some text with special chars"
 # After: r"some text with special chars" or "some text with special chars"
 """,
-        
+
         'missing_imports': """
 # Strategy: Add missing imports
 # Pattern: Using modules without importing them
@@ -157,7 +166,7 @@ import numpy as np
 import scipy as sp
 import pandas as pd
 """,
-        
+
         'incomplete_functions': """
 # Strategy: Complete function implementations
 # Pattern: def function(): pass

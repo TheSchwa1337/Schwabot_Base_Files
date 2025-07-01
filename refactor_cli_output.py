@@ -50,7 +50,8 @@ class PrintStatementFinder(ast.NodeVisitor):
 """"""
 """
 
-def __init__(self):"""
+
+def __init__(self): """
     """Function implementation pending."""
 pass
 
@@ -59,6 +60,8 @@ self.print_statements = []
 
 def visit_Call(self, node):"""
     """Function implementation pending."""
+
+
 pass
 
 if isinstance(node.func, ast.Name) and node.func.id == 'print':
@@ -85,8 +88,11 @@ for arg in args:
 
 self.generic_visit(node)
 
-def _extract_fstring_content(self, node):"""
+
+def _extract_fstring_content(self, node): """
         """Extract content from f - string nodes.""""""
+
+
 """"""
 """"""
 """"""
@@ -99,8 +105,11 @@ parts = []
 parts.append(f"{{{astunparse.unparse(part).strip()}}}")
         return ''.join(parts)
 
+
 def _contains_unicode(self, text: str) -> bool:
     """Function implementation pending."""
+
+
 pass
 """
 """Check if text contains Unicode characters.""""""
@@ -119,7 +128,8 @@ class CLIRefactor:
 """"""
 """
 
-def __init__(self, root_dir: str = '.'):"""
+
+def __init__(self, root_dir: str = '.'): """
     """Function implementation pending."""
 pass
 
@@ -132,21 +142,21 @@ self.root_dir = Path(root_dir)
 # Files to skip
 self.skip_patterns = [
             r'__pycache__',
-            r'\.git',
-            r'\.mypy_cache',
-            r'\.venv',
+            r'\\.git',
+            r'\\.mypy_cache',
+            r'\\.venv',
             r'venv',
             r'env',
             r'node_modules',
-            r'\.pytest_cache',
-            r'\.coverage',
-            r'\.tox',
+            r'\\.pytest_cache',
+            r'\\.coverage',
+            r'\\.tox',
             r'build',
             r'dist',
-            r'\.eggs',
-            r'\.idea',
-            r'\.vscode',
-            r'utils / safe_print\.py',  # Skip our own utility
+            r'\\.eggs',
+            r'\\.idea',
+            r'\\.vscode',
+            r'utils / safe_print\\.py',  # Skip our own utility
 ]
 # Import patterns to add
 self.import_patterns = [
@@ -157,6 +167,8 @@ self.import_patterns = [
 ]
 def find_python_files(self) -> List[Path]:"""
     """Function implementation pending."""
+
+
 pass
 """
 """Find all Python files in the codebase.""""""
@@ -186,8 +198,11 @@ self.python_files = filtered_files
         info(f"Found {len(self.python_files)} Python files to process")
         return filtered_files
 
+
 def analyze_file(self, file_path: Path) -> Tuple[List[dict], List[str]]:
     """Function implementation pending."""
+
+
 pass
 """
 """Analyze a single file for print statements and Unicode content.""""""
@@ -210,8 +225,11 @@ except Exception as e:"""
 self.errors.append(f"Error analyzing {file_path}: {e}")
             return [], []
 
+
 def refactor_file(self, file_path: Path) -> bool:
     """Function implementation pending."""
+
+
 pass
 """
 """Refactor a single file to use safe_print.""""""
@@ -249,8 +267,11 @@ except Exception as e:"""
 self.errors.append(f"Error refactoring {file_path}: {e}")
             return False
 
+
 def _replace_unicode_prints(self, content: str) -> str:
     """Function implementation pending."""
+
+
 pass
 """
 """Replace print statements containing Unicode with safe_print calls.""""""
@@ -260,7 +281,7 @@ pass
 """
 
 # Pattern to match print statements
-print_pattern = r'print\\s*\((.*?)\)'
+print_pattern = r'print\\s*\\((.*?)\\)'
 
 def replace_print(match):"""
     """Function implementation pending."""
@@ -274,9 +295,9 @@ if not self._contains_unicode(args_str):
 
 # Parse the arguments
 try:
-    pass  
+    pass
 # Simple parsing for common cases"""
-if args_str.strip().startswith('"') or args_str.strip().startswith("'"):'"
+if args_str.strip().startswith('"') or args_str.strip().startswith("'"): '"
 # Single string argument
 return f'safe_print({args_str})'
                 elif 'f"' in args_str or "f'" in args_str:'"

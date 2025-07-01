@@ -19,11 +19,7 @@ logger = logging.getLogger(__name__)
 
 # Import our enhanced compatibility handler
 try:
-    from core.enhanced_windows_cli_compatibility import (
-        get_safe_reporter,
-        safe_log,
-        safe_print,
-    )
+    from core.enhanced_windows_cli_compatibility import safe_print
 
     CLI_HANDLER_AVAILABLE = True
 except ImportError:
@@ -32,7 +28,7 @@ except ImportError:
 
 
 class CliCompatibilityApplicator:
-    """Applies enhanced CLI compatibility to mathematical validation systems"""
+    """Applies enhanced CLI compatibility to mathematical validation systems."""
 
     # Files that need CLI compatibility enhancement
     TARGET_FILES = [
@@ -46,7 +42,7 @@ class CliCompatibilityApplicator:
         "core/master_orchestrator.py",
         "core/advanced_mathematical_core.py",
     ]
-    
+
     # Import statement to add
     CLI_IMPORT_STATEMENT = """
 # Enhanced Windows CLI compatibility
@@ -83,20 +79,21 @@ except ImportError:
         def reporter(name, status, details="", metrics=None):
             status_text = "PASS" if status else "FAIL"
             return (
-                f"[{status_text}] {name}" +
-                (f": {details}" if details else "")
+                "[{}] {}".format(status_text, name) +
+                (": {}".format(details) if details else "")
             )
         return reporter
 
 """
 
     def __init__(self):
+        """Initialize the CLI compatibility applicator."""
         self.processed_files = []
         self.backup_files = []
         self.errors = []
 
     def create_backup(self, file_path: str) -> str:
-        """Create backup of file before modification"""
+        """Create backup of file before modification."""
         backup_path = f"{file_path}.cli_backup"
         try:
             shutil.copy2(file_path, backup_path)
@@ -109,7 +106,7 @@ except ImportError:
             return ""
 
     def add_cli_imports(self, content: str) -> str:
-        """Add CLI compatibility imports to file content"""
+        """Add CLI compatibility imports to file content."""
         # Check if imports already exist
         if "enhanced_windows_cli_compatibility" in content:
             return content
@@ -142,7 +139,7 @@ except ImportError:
         return modified_content
 
     def process_file(self, file_path: str) -> Tuple[bool, str]:
-        """Process a single file for CLI compatibility"""
+        """Process a single file for CLI compatibility."""
         if not os.path.exists(file_path):
             error_msg = f"File not found: {file_path}"
             self.errors.append(error_msg)
@@ -183,7 +180,7 @@ except ImportError:
             return False, error_msg
 
     def apply_to_all_targets(self) -> Dict[str, Any]:
-        """Apply CLI compatibility to all target files"""
+        """Apply CLI compatibility to all target files."""
         results = {
             "processed": [],
             "errors": [],
@@ -193,12 +190,14 @@ except ImportError:
         }
 
         logger.info(
-            f"Starting CLI compatibility enhancement for {len(self.TARGET_FILES)} files"
+            "Starting CLI compatibility enhancement for {} files".format(
+                len(self.TARGET_FILES)
+            )
         )
 
         for file_path in self.TARGET_FILES:
             success, message = self.process_file(file_path)
-            
+
             if success:
                 results["processed"].append({"file": file_path, "message": message})
                 results["success_count"] += 1
@@ -215,7 +214,7 @@ except ImportError:
 
 
 def main():
-    """Main CLI compatibility application function."""
+    """Run the CLI compatibility application."""
     if CLI_HANDLER_AVAILABLE:
         safe_print("🚀 Enhanced CLI Compatibility Application Starting...")
         safe_print(
@@ -240,15 +239,17 @@ def main():
     print("=" * 70)
 
     if CLI_HANDLER_AVAILABLE:
-        safe_print(f"📊 Processing Results:")
-        safe_print(f"   Files Processed: {results['success_count']}/{results['total_files']}")
-        safe_print(f"   Success Rate: {results['success_rate']:.1f}%")
-        safe_print(f"   Errors: {results['error_count']}")
+        safe_print("📊 Processing Results:")
+        safe_print("   Files Processed: {}/{}".format(
+            results['success_count'], results['total_files']
+        ))
+        safe_print("   Success Rate: {:.1f}%".format(results['success_rate']))
+        safe_print("   Errors: {}".format(results['error_count']))
 
         if results["errors"]:
             safe_print("\n❌ Errors encountered:")
             for error in results["errors"]:
-                safe_print(f"   {error['file']}: {error['error']}")
+                safe_print("   {}: {}".format(error['file'], error['error']))
 
         if results["success_rate"] >= 90:
             safe_print(
@@ -259,10 +260,12 @@ def main():
             safe_print("\n⚠️ PARTIAL SUCCESS: Some files may need manual review.")
             safe_print("   Check the error log for specific issues.")
     else:
-        print(f"[RESULTS] Files Processed: {results['success_count']}/{results['total_files']}")
-        print(f"[RESULTS] Success Rate: {results['success_rate']:.1f}%")
-        print(f"[RESULTS] Errors: {results['error_count']}")
+        print("Files Processed: {}/{}".format(
+            results['success_count'], results['total_files']
+        ))
+        print("Success Rate: {:.1f}%".format(results['success_rate']))
+        print("Errors: {}".format(results['error_count']))
 
 
 if __name__ == "__main__":
-    main() 
+    main()

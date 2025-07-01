@@ -1,30 +1,30 @@
 #!/usr/bin/env python3
 """"""
+from typing import Dict, List, Optional
+from pathlib import Path
+from datetime import datetime
+import time
+import threading
+import sys
+import signal
+import logging
+import json
+import asyncio
+import argparse
 Schwabot Advanced Trading System
-===============================
+== == == == == == == == == == == == == == == =
 
 Main application entry point with GUI and CLI interfaces.
 Supports demo, live, and backtest trading modes across multiple exchanges.
 
 Features:
-- Real-time trading interface
+- Real - time trading interface
 - Advanced mathematical processing with GPU acceleration
 - Risk management and portfolio tracking
-- Multi-exchange support via CCXT
+- Multi - exchange support via CCXT
 - Professional visualization system
 """"""
 
-import argparse
-import asyncio
-import json
-import logging
-import signal
-import sys
-import threading
-import time
-from datetime import datetime
-from pathlib import Path
-from typing import Dict, List, Optional
 
 # GUI imports with fallback
 GUI_AVAILABLE = True
@@ -58,7 +58,7 @@ logging.basicConfig(
     handlers=[
         logging.FileHandler('schwabot.log'),
         logging.StreamHandler(sys.stdout)
-]
+    ]
 )
 logger = logging.getLogger(__name__)
 
@@ -87,7 +87,7 @@ class SchwabotGUI:
             "gpu_status": tk.StringVar(value="Unknown"),
             "last_update": tk.StringVar(value="Never"),
             "total_profit": tk.StringVar(value="$0.00"),
-}
+        }
         self._setup_gui()
         self._initialize_systems()
 
@@ -122,13 +122,13 @@ class SchwabotGUI:
             ("GPU Status", self.status_vars["gpu_status"], "#00ffff"),
             ("Last Update", self.status_vars["last_update"], "#ffffff"),
             ("Total Profit", self.status_vars["total_profit"], "#00ff00"),
-]
+        ]
         for i, (label_text, var, color) in enumerate(status_items):
             row = i // 3
             col = i % 3
             frame = ttk.Frame(status_frame)
             frame.grid(row=row, column=col, sticky="ew", padx=10, pady=5)
-            
+
             ttk.Label(frame, text=f"{label_text}:").pack(side=tk.LEFT)
             ttk.Label(frame, textvariable=var, foreground=color).pack(side=tk.RIGHT)
 
@@ -174,21 +174,27 @@ class SchwabotGUI:
         self.mode_var = tk.StringVar(value="demo")
         modes = [("Demo", "demo"), ("Live", "live"), ("Backtest", "backtest")]
         for text, value in modes:
-            ttk.Radiobutton(mode_frame, text=text, variable=self.mode_var, 
-                          value=value, command=self._on_mode_change).pack(side=tk.LEFT, padx=10)
+            ttk.Radiobutton(
+                mode_frame,
+                text=text,
+                variable=self.mode_var,
+                value=value,
+                command=self._on_mode_change).pack(
+                side=tk.LEFT,
+                padx=10)
 
         # Action buttons
         button_frame = ttk.Frame(control_frame)
         button_frame.pack(fill=tk.X, pady=10)
 
-        ttk.Button(button_frame, text="Start Trading", 
-                  command=self._start_trading).pack(side=tk.LEFT, padx=5)
-        ttk.Button(button_frame, text="Stop Trading", 
-                  command=self._stop_trading).pack(side=tk.LEFT, padx=5)
-        ttk.Button(button_frame, text="Refresh Status", 
-                  command=self._refresh_status).pack(side=tk.LEFT, padx=5)
-        ttk.Button(button_frame, text="Emergency Stop", 
-                  command=self._emergency_stop).pack(side=tk.RIGHT, padx=5)
+        ttk.Button(button_frame, text="Start Trading",
+                   command=self._start_trading).pack(side=tk.LEFT, padx=5)
+        ttk.Button(button_frame, text="Stop Trading",
+                   command=self._stop_trading).pack(side=tk.LEFT, padx=5)
+        ttk.Button(button_frame, text="Refresh Status",
+                   command=self._refresh_status).pack(side=tk.LEFT, padx=5)
+        ttk.Button(button_frame, text="Emergency Stop",
+                   command=self._emergency_stop).pack(side=tk.RIGHT, padx=5)
 
         # Portfolio display
         portfolio_frame = ttk.LabelFrame(parent, text="Portfolio Summary", padding=10)
@@ -207,17 +213,17 @@ class SchwabotGUI:
 
         ttk.Label(viz_controls, text="Display Panel:").pack(side=tk.LEFT)
         self.panel_var = tk.StringVar(value="DRIFT_MATRIX")
-        panel_options = ["DRIFT_MATRIX", "PROFIT_RESONANCE", "SYSTEM_STATUS", 
-                        "TRADING_STATE", "PATTERN_RECOGNITION"]
-        
-        panel_combo = ttk.Combobox(viz_controls, textvariable=self.panel_var, 
-                                  values=panel_options, state="readonly")
+        panel_options = ["DRIFT_MATRIX", "PROFIT_RESONANCE", "SYSTEM_STATUS",
+                         "TRADING_STATE", "PATTERN_RECOGNITION"]
+
+        panel_combo = ttk.Combobox(viz_controls, textvariable=self.panel_var,
+                                   values=panel_options, state="readonly")
         panel_combo.pack(side=tk.LEFT, padx=10)
         panel_combo.bind("<<ComboboxSelected>>", self._on_panel_change)
 
         self.auto_refresh_var = tk.BooleanVar(value=True)
-        ttk.Checkbutton(viz_controls, text="Auto Refresh", 
-                       variable=self.auto_refresh_var).pack(side=tk.RIGHT)
+        ttk.Checkbutton(viz_controls, text="Auto Refresh",
+                        variable=self.auto_refresh_var).pack(side=tk.RIGHT)
 
         # Visualization area
         self.visualization_frame = ttk.Frame(parent)
@@ -230,8 +236,9 @@ class SchwabotGUI:
         scrollbar = ttk.Scrollbar(parent, orient="vertical", command=canvas.yview)
         scrollable_frame = ttk.Frame(canvas)
 
-        scrollable_frame.bind("<Configure>", 
-                            lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
+        scrollable_frame.bind(
+            "<Configure>", lambda e: canvas.configure(
+                scrollregion=canvas.bbox("all")))
         canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
         canvas.configure(yscrollcommand=scrollbar.set)
 
@@ -239,7 +246,10 @@ class SchwabotGUI:
         scrollbar.pack(side="right", fill="y")
 
         # API Settings
-        api_frame = ttk.LabelFrame(scrollable_frame, text="API Configuration", padding=10)
+        api_frame = ttk.LabelFrame(
+            scrollable_frame,
+            text="API Configuration",
+            padding=10)
         api_frame.pack(fill=tk.X, pady=5, padx=10)
 
         self.api_settings = {}
@@ -247,7 +257,7 @@ class SchwabotGUI:
             ("Coinbase API Key", "coinbase_api_key"),
             ("Coinbase Secret", "coinbase_secret"),
             ("Sandbox Mode", "sandbox_mode"),
-]
+        ]
         for label_text, var_name in api_fields:
             frame = ttk.Frame(api_frame)
             frame.pack(fill=tk.X, pady=2)
@@ -258,12 +268,16 @@ class SchwabotGUI:
                 ttk.Checkbutton(frame, variable=var).pack(side=tk.RIGHT)
             else:
                 var = tk.StringVar()
-                ttk.Entry(frame, textvariable=var, width=40, show="*").pack(side=tk.RIGHT)
+                ttk.Entry(frame, textvariable=var, width=40,
+                          show="*").pack(side=tk.RIGHT)
 
             self.api_settings[var_name] = var
 
         # Performance Settings
-        perf_frame = ttk.LabelFrame(scrollable_frame, text="Performance Settings", padding=10)
+        perf_frame = ttk.LabelFrame(
+            scrollable_frame,
+            text="Performance Settings",
+            padding=10)
         perf_frame.pack(fill=tk.X, pady=5, padx=10)
 
         self.perf_settings = {}
@@ -272,7 +286,7 @@ class SchwabotGUI:
             ("CPU Threads", "cpu_threads", "int"),
             ("Memory Limit (MB)", "memory_limit", "int"),
             ("Update Interval (s)", "update_interval", "float"),
-]
+        ]
         for label_text, var_name, var_type in perf_fields:
             frame = ttk.Frame(perf_frame)
             frame.pack(fill=tk.X, pady=2)
@@ -291,12 +305,12 @@ class SchwabotGUI:
         button_frame = ttk.Frame(scrollable_frame)
         button_frame.pack(fill=tk.X, pady=10, padx=10)
 
-        ttk.Button(button_frame, text="Save Settings", 
-                  command=self._save_settings).pack(side=tk.LEFT, padx=5)
-        ttk.Button(button_frame, text="Load Settings", 
-                  command=self._load_settings).pack(side=tk.LEFT, padx=5)
-        ttk.Button(button_frame, text="Reset to Defaults", 
-                  command=self._reset_settings).pack(side=tk.RIGHT, padx=5)
+        ttk.Button(button_frame, text="Save Settings",
+                   command=self._save_settings).pack(side=tk.LEFT, padx=5)
+        ttk.Button(button_frame, text="Load Settings",
+                   command=self._load_settings).pack(side=tk.LEFT, padx=5)
+        ttk.Button(button_frame, text="Reset to Defaults",
+                   command=self._reset_settings).pack(side=tk.RIGHT, padx=5)
 
     def _create_logs_tab(self, parent):
         """Create the system logs tab."""
@@ -304,10 +318,10 @@ class SchwabotGUI:
         log_frame.pack(fill=tk.BOTH, expand=True)
 
         # Log display
-        self.log_text = tk.Text(log_frame, bg="#0", fg="#0ff00", 
-                               font=("Consolas", 9), wrap=tk.WORD)
-        log_scrollbar = ttk.Scrollbar(log_frame, orient=tk.VERTICAL, 
-                                     command=self.log_text.yview)
+        self.log_text = tk.Text(log_frame, bg="#0", fg="#0ff00",
+                                font=("Consolas", 9), wrap=tk.WORD)
+        log_scrollbar = ttk.Scrollbar(log_frame, orient=tk.VERTICAL,
+                                      command=self.log_text.yview)
         self.log_text.configure(yscrollcommand=log_scrollbar.set)
 
         self.log_text.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
@@ -317,12 +331,12 @@ class SchwabotGUI:
         log_controls = ttk.Frame(parent)
         log_controls.pack(fill=tk.X, pady=5)
 
-        ttk.Button(log_controls, text="Clear Logs", 
-                  command=self._clear_logs).pack(side=tk.LEFT, padx=5)
-        ttk.Button(log_controls, text="Export Logs", 
-                  command=self._export_logs).pack(side=tk.LEFT, padx=5)
-        ttk.Button(log_controls, text="Refresh", 
-                  command=self._refresh_logs).pack(side=tk.LEFT, padx=5)
+        ttk.Button(log_controls, text="Clear Logs",
+                   command=self._clear_logs).pack(side=tk.LEFT, padx=5)
+        ttk.Button(log_controls, text="Export Logs",
+                   command=self._export_logs).pack(side=tk.LEFT, padx=5)
+        ttk.Button(log_controls, text="Refresh",
+                   command=self._refresh_logs).pack(side=tk.LEFT, padx=5)
 
     def _initialize_systems(self):
         """Initialize all system components."""
@@ -346,7 +360,8 @@ class SchwabotGUI:
                 self.visualizer = SpeedLatticeLivePanelSystem()
 
             self.status_vars["system_status"].set("Initialized")
-            self.status_vars["gpu_status"].set("Available" if self.gpu_cpu_bridge.gpu_available else "CPU Only")
+            self.status_vars["gpu_status"].set(
+                "Available" if self.gpu_cpu_bridge.gpu_available else "CPU Only")
 
             self._start_update_thread()
 
@@ -440,7 +455,9 @@ class SchwabotGUI:
                 self.trading_pipeline.emergency_stop()
                 self.status_vars["system_status"].set("Emergency Stop")
                 logger.warning("Emergency stop activated")
-                messagebox.showwarning("Emergency Stop", "All trading operations stopped immediately")
+                messagebox.showwarning(
+                    "Emergency Stop",
+                    "All trading operations stopped immediately")
         except Exception as e:
             logger.error(f"Emergency stop failed: {e}")
 
@@ -512,9 +529,8 @@ class SchwabotGUI:
         """Export logs to file."""
         try:
             filename = filedialog.asksaveasfilename(
-                defaultextension=".log",
-                filetypes=[("Log files", "*.log"), ("Text files", "*.txt"), ("All files", "*.*")]
-            )
+                defaultextension=".log", filetypes=[
+                    ("Log files", "*.log"), ("Text files", "*.txt"), ("All files", "*.*")])
             if filename:
                 with open(filename, 'w') as f:
                     f.write(self.log_text.get(1.0, tk.END))
@@ -610,7 +626,8 @@ class SchwabotCLI:
                 if gpu_cpu_bridge.gpu_available:
                     import numpy as np
                     test_data = np.random.random((1000, 1000))
-                    result = gpu_cpu_bridge.process_matrix_operation(test_data, "multiply", test_data)
+                    result = gpu_cpu_bridge.process_matrix_operation(
+                        test_data, "multiply", test_data)
                     logger.info(f"GPU processing completed: {result.shape}")
 
                 await asyncio.sleep(2)  # Wait 2 seconds between iterations
@@ -676,14 +693,14 @@ class SchwabotCLI:
 def main():
     """Main application entry point."""
     parser = argparse.ArgumentParser(description="Schwabot Advanced Trading System")
-    parser.add_argument("--mode", choices=["demo", "live", "backtest"], 
-                       default="demo", help="Trading mode")
-    parser.add_argument("--gui", action="store_true", 
-                       help="Start GUI interface")
-    parser.add_argument("--log-level", choices=["DEBUG", "INFO", "WARNING", "ERROR"], 
-                       default="INFO", help="Logging level")
-    parser.add_argument("--config", type=str, 
-                       help="Configuration file path")
+    parser.add_argument("--mode", choices=["demo", "live", "backtest"],
+                        default="demo", help="Trading mode")
+    parser.add_argument("--gui", action="store_true",
+                        help="Start GUI interface")
+    parser.add_argument("--log-level", choices=["DEBUG", "INFO", "WARNING", "ERROR"],
+                        default="INFO", help="Logging level")
+    parser.add_argument("--config", type=str,
+                        help="Configuration file path")
 
     args = parser.parse_args()
 

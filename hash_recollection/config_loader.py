@@ -35,8 +35,8 @@ class ConfigLoader:
             "config/default.json",
             "config/config.json",
             "config.json",
-            "default.json"
-]
+            "default.json",
+        ]
         for path in possible_paths:
             if os.path.exists(path):
                 return path
@@ -63,45 +63,41 @@ class ConfigLoader:
     def _load_from_file(self) -> None:
         """Load configuration from file."""
         file_path = Path(self.config_path)
-        
-        if file_path.suffix.lower() in ['.yaml', '.yml']:
-            with open(file_path, 'r', encoding='utf-8') as f:
+
+        if file_path.suffix.lower() in [".yaml", ".yml"]:
+            with open(file_path, "r", encoding="utf-8") as f:
                 self._config = yaml.safe_load(f) or {}
-        elif file_path.suffix.lower() == '.json':
-            with open(file_path, 'r', encoding='utf-8') as f:
+        elif file_path.suffix.lower() == ".json":
+            with open(file_path, "r", encoding="utf-8") as f:
                 self._config = json.load(f)
         else:
-            raise ConfigurationError(f"Unsupported config file format: {file_path.suffix}")
+            raise ConfigurationError(
+                f"Unsupported config file format: {file_path.suffix}"
+            )
 
     def _create_default_config(self) -> None:
         """Create default configuration."""
         default_config = {
             "api_url": "http://localhost:8000",
-            "frontend": {
-                "theme": "light",
-                "refresh_interval": 10
-            },
+            "frontend": {"theme": "light", "refresh_interval": 10},
             "backend": {
                 "entropy": {
                     "max_history_size": 1000,
-                    "signal_confidence_threshold": 0.7
+                    "signal_confidence_threshold": 0.7,
                 },
-                "bit_operations": {
-                    "max_history_size": 1000,
-                    "max_patterns": 500
-                },
+                "bit_operations": {"max_history_size": 1000, "max_patterns": 500},
                 "pattern_utils": {
                     "max_patterns": 500,
-                    "trend_confidence_threshold": 0.6
-}
-}
-}
+                    "trend_confidence_threshold": 0.6,
+                },
+            },
+        }
         # Ensure directory exists
         os.makedirs(os.path.dirname(self.config_path), exist_ok=True)
-        
+
         # Write default config
-        with open(self.config_path, 'w', encoding='utf-8') as f:
-            if self.config_path.endswith('.yaml'):
+        with open(self.config_path, "w", encoding="utf-8") as f:
+            if self.config_path.endswith(".yaml"):
                 yaml.dump(default_config, f, default_flow_style=False)
             else:
                 json.dump(default_config, f, indent=2)
@@ -113,41 +109,52 @@ class ConfigLoader:
         env_mappings = {
             "HASH_RECOLLECTION_API_URL": ("api_url", str),
             "HASH_RECOLLECTION_FRONTEND_THEME": ("frontend.theme", str),
-            "HASH_RECOLLECTION_FRONTEND_REFRESH_INTERVAL": ("frontend.refresh_interval", int),
-            "HASH_RECOLLECTION_ENTROPY_MAX_HISTORY": ("backend.entropy.max_history_size", int),
-            "HASH_RECOLLECTION_ENTROPY_CONFIDENCE_THRESHOLD": ("backend.entropy.signal_confidence_threshold", float),
-}
+            "HASH_RECOLLECTION_FRONTEND_REFRESH_INTERVAL": (
+                "frontend.refresh_interval",
+                int,
+            ),
+            "HASH_RECOLLECTION_ENTROPY_MAX_HISTORY": (
+                "backend.entropy.max_history_size",
+                int,
+            ),
+            "HASH_RECOLLECTION_ENTROPY_CONFIDENCE_THRESHOLD": (
+                "backend.entropy.signal_confidence_threshold",
+                float,
+            ),
+        }
         for env_var, (config_path, value_type) in env_mappings.items():
             if env_var in os.environ:
                 try:
                     value = value_type(os.environ[env_var])
                     self._set_nested_value(config_path, value)
                 except (ValueError, TypeError) as e:
-                    raise ConfigurationError(f"Invalid environment variable {env_var}: {e}")
+                    raise ConfigurationError(
+                        f"Invalid environment variable {env_var}: {e}"
+                    )
 
     def _set_nested_value(self, path: str, value: Any) -> None:
         """Set a nested configuration value."""
-        keys = path.split('.')
+        keys = path.split(".")
         current = self._config
-        
+
         for key in keys[:-1]:
             if key not in current:
                 current[key] = {}
             current = current[key]
-        
+
         current[keys[-1]] = value
 
     def get(self, key: str, default: Any = None) -> Any:
         """Get a configuration value."""
-        keys = key.split('.')
+        keys = key.split(".")
         current = self._config
-        
+
         for k in keys:
             if isinstance(current, dict) and k in current:
                 current = current[k]
             else:
                 return default
-        
+
         return current
 
     def get_api_url(self) -> str:
@@ -197,4 +204,4 @@ def get_config() -> ConfigLoader:
 
 def get_config_value(key: str, default: Any = None) -> Any:
     """Get a configuration value using the global loader."""
-    return get_config().get(key, default) 
+    return get_config().get(key, default)

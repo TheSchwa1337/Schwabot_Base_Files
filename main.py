@@ -32,7 +32,7 @@ logging.basicConfig(
     handlers=[
         logging.FileHandler('logs/mathematical_relay_system.log'),
         logging.StreamHandler(sys.stdout)
-]
+    ]
 )
 
 logger = logging.getLogger(__name__)
@@ -55,10 +55,10 @@ async def run_backtest_demo():
     if not SYSTEM_AVAILABLE:
         logger.error("System components not available")
         return
-    
+
     try:
         logger.info("=== Starting Backtest Demo ===")
-        
+
         # Initialize system with backtesting only
         config = {
             "sequencer_mode": "demo",
@@ -67,10 +67,10 @@ async def run_backtest_demo():
             "enable_visualization": False,
             "enable_backtesting": True,
             "enable_live_trading": False
-}
+        }
         manager = SystemIntegrationManager(config=config)
         await manager.initialize_system()
-        
+
         # Run multiple backtests with different parameters
         backtest_scenarios = [
             {
@@ -93,8 +93,8 @@ async def run_backtest_demo():
                 "start_date": datetime(2023, 1, 1),
                 "end_date": datetime(2023, 1, 31),
                 "trading_pair": TradingPair.XRP_USDC
-}
-]
+            }
+        ]
         for scenario in backtest_scenarios:
             logger.info(f"Running backtest: {scenario['name']}")
             result = await manager.run_backtest(
@@ -104,13 +104,13 @@ async def run_backtest_demo():
                 trading_pair=scenario['trading_pair']
             )
             logger.info(f"Backtest result: {result}")
-        
+
         # Export system data
         export_data = manager.export_system_data()
         logger.info("System data exported successfully")
-        
+
         logger.info("=== Backtest Demo Completed ===")
-        
+
     except Exception as e:
         logger.error(f"Backtest demo failed: {e}")
 
@@ -120,10 +120,10 @@ async def run_visualization_demo():
     if not SYSTEM_AVAILABLE:
         logger.error("System components not available")
         return
-    
+
     try:
         logger.info("=== Starting Visualization Demo ===")
-        
+
         # Initialize system with visualization only
         config = {
             "sequencer_mode": "demo",
@@ -137,16 +137,16 @@ async def run_visualization_demo():
             "enable_visualization": True,
             "enable_backtesting": False,
             "enable_live_trading": False
-}
+        }
         manager = await initialize_and_start_system(config)
-        
+
         logger.info("Visualization dashboard started at http://localhost:8000")
         logger.info("Press Ctrl+C to stop...")
-        
+
         # Keep running for visualization
         while True:
             await asyncio.sleep(60)
-            
+
     except KeyboardInterrupt:
         logger.info("Received shutdown signal...")
         if manager:
@@ -161,10 +161,10 @@ async def run_full_system_demo():
     if not SYSTEM_AVAILABLE:
         logger.error("System components not available")
         return
-    
+
     try:
         logger.info("=== Starting Full System Demo ===")
-        
+
         # Configuration for full system
         config = {
             "sequencer_mode": "demo",
@@ -180,16 +180,16 @@ async def run_full_system_demo():
                     "ccxt_config": {
                         "timeout": 30000,
                         "enableRateLimit": True
-}
-}
+                    }
+                }
             },
             "enable_visualization": True,
             "enable_backtesting": True,
             "enable_live_trading": False
-}
+        }
         # Initialize and start complete system
         manager = await initialize_and_start_system(config)
-        
+
         # Run a quick backtest to generate data
         logger.info("Running initial backtest to generate data...")
         backtest_result = await manager.run_backtest(
@@ -199,7 +199,7 @@ async def run_full_system_demo():
             trading_pair=TradingPair.BTC_USDC
         )
         logger.info(f"Initial backtest completed: {backtest_result}")
-        
+
         # Display system status
         status = manager.get_system_status()
         logger.info("=== System Status ===")
@@ -207,19 +207,21 @@ async def run_full_system_demo():
         logger.info(f"Running: {status['is_running']}")
         logger.info(f"Components: {status['components']}")
         logger.info(f"Performance: {status['performance_metrics']}")
-        
+
         logger.info("=== Full System Demo Running ===")
         logger.info("Access dashboard at http://localhost:8000")
         logger.info("Press Ctrl+C to stop...")
-        
+
         # Keep system running
         while True:
             await asyncio.sleep(60)
-            
+
             # Log periodic status
             current_status = manager.get_system_status()
-            logger.info(f"System uptime: {current_status['performance_metrics']['system_uptime']:.0f}s")
-            
+            logger.info(
+                f"System uptime: {
+                    current_status['performance_metrics']['system_uptime']:.0f}s")
+
     except KeyboardInterrupt:
         logger.info("Received shutdown signal...")
         if manager:
@@ -234,17 +236,19 @@ async def run_component_test():
     if not SYSTEM_AVAILABLE:
         logger.error("System components not available")
         return
-    
+
     try:
         logger.info("=== Testing Individual Components ===")
-        
+
         # Test MathematicalBacklogManager
         logger.info("Testing MathematicalBacklogManager...")
         backlog_manager = MathematicalBacklogManager()
-        backlog_manager.log_event("test_events", {"test": "backlog_manager", "timestamp": datetime.now().isoformat()})
+        backlog_manager.log_event(
+            "test_events", {
+                "test": "backlog_manager", "timestamp": datetime.now().isoformat()})
         events = backlog_manager.retrieve_events("test_events", limit=10)
         logger.info(f"Backlog manager test: {len(events)} events retrieved")
-        
+
         # Test MathematicalRelaySequencer
         logger.info("Testing MathematicalRelaySequencer...")
         sequencer = MathematicalRelaySequencer(mode="demo", log_level="INFO")
@@ -254,7 +258,7 @@ async def run_component_test():
             phase=32
         )
         logger.info(f"Sequencer test: {result.get('sequence_id')}")
-        
+
         # Test SimpleBacktester
         logger.info("Testing SimpleBacktester...")
         backtester = SimpleBacktester(
@@ -264,9 +268,9 @@ async def run_component_test():
             trading_pair=TradingPair.BTC_USDC
         )
         logger.info("Backtester initialized successfully")
-        
+
         logger.info("=== Component Tests Completed ===")
-        
+
     except Exception as e:
         logger.error(f"Component test failed: {e}")
 
@@ -274,22 +278,23 @@ async def run_component_test():
 def main():
     """Main entry point with command line argument parsing."""
     parser = argparse.ArgumentParser(description="Mathematical Relay Trading System")
-    parser.add_argument("--mode", choices=["backtest", "visualization", "full", "test"], 
-                       default="full", help="System mode to run")
-    parser.add_argument("--log-level", choices=["DEBUG", "INFO", "WARNING", "ERROR"], 
-                       default="INFO", help="Logging level")
-    parser.add_argument("--port", type=int, default=8000, help="Visualization server port")
-    
+    parser.add_argument("--mode", choices=["backtest", "visualization", "full", "test"],
+                        default="full", help="System mode to run")
+    parser.add_argument("--log-level", choices=["DEBUG", "INFO", "WARNING", "ERROR"],
+                        default="INFO", help="Logging level")
+    parser.add_argument("--port", type=int, default=8000,
+                        help="Visualization server port")
+
     args = parser.parse_args()
-    
+
     # Set log level
     logging.getLogger().setLevel(getattr(logging, args.log_level))
-    
+
     logger.info("=== Mathematical Relay Trading System ===")
     logger.info(f"Mode: {args.mode}")
     logger.info(f"Log Level: {args.log_level}")
     logger.info(f"Port: {args.port}")
-    
+
     try:
         if args.mode == "backtest":
             asyncio.run(run_backtest_demo())
@@ -302,7 +307,7 @@ def main():
         else:
             logger.error(f"Unknown mode: {args.mode}")
             sys.exit(1)
-            
+
     except KeyboardInterrupt:
         logger.info("System interrupted by user")
     except Exception as e:
@@ -311,4 +316,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main() 
+    main()

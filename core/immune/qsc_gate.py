@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""QSC Gate - Quantum Static Core Immune Signal Processing.
+"""QSC Gate (Quantum Static Core Gate) - Immune System Integration.
 
-Handles immune signal trigger responses and integrates with the enhanced T-Cell system.
-Maps biological immune responses to live orderbook volatility, signal collisions, and entropy bursts.
+Advanced gate system that integrates quantum static calculations with immune
+system protection for enhanced trading security and validation.
 """
 
 import logging
@@ -89,7 +89,8 @@ class QSCGate:
         logger.info("🧬 QSC Gate initialized with immune signal processing")
 
     def _default_config(self) -> Dict[str, Any]:
-        """Default configuration for QSC Gate."""
+        """Return default configuration for QSC Gate."""
+
         return {
             "w1_price_weight": 0.4,
             "w2_volume_weight": 0.3,
@@ -205,7 +206,8 @@ class QSCGate:
         self.adaptive_tau = np.clip(self.adaptive_tau + adjustment, 0.1, 0.9)
 
         logger.debug(
-            f"🧬 Adaptive tau updated: {self.adaptive_tau:.3f} (trigger rate: {trigger_rate:.3f})"
+            f"🧬 Adaptive tau updated: {self.adaptive_tau:.3f} "
+            f"(trigger rate: {trigger_rate:.3f})"
         )
 
     def process_immune_response(
@@ -376,7 +378,8 @@ class QSCGate:
             self.learning_rate = max(0.001, self.learning_rate * 0.9)
 
         logger.debug(
-            f"🧬 Performance feedback: success_rate={success_rate:.3f}, learning_rate={self.learning_rate:.4f}"
+            f"🧬 Performance feedback: success_rate={success_rate:.3f}, "
+            f"learning_rate={self.learning_rate:.4f}"
         )
 
 

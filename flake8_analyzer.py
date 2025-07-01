@@ -88,6 +88,7 @@ CRITICAL_CODES = {'E999', 'F821', 'F822', 'F823', 'F831', 'F841', 'F901'}
 # Codebase directories to scan
 CODEBASE_DIRS = ['core', 'core/math', 'core/phase_engine', 'core/recursive_engine']
 
+
 class Flake8Analyzer:
     def __init__(self):
         self.errors = defaultdict(list)
@@ -95,7 +96,7 @@ class Flake8Analyzer:
         self.auto_fixable_count = 0
         self.critical_count = 0
         self.total_count = 0
-        
+
     def run_flake8(self) -> List[str]:
         """Run Flake8 on the codebase and return error lines."""
         try:
@@ -105,28 +106,29 @@ class Flake8Analyzer:
                 '--select=E,W,F',
                 '--format=%(path)s:%(row)d:%(col)d:%(code)s:%(text)s',
                 '--statistics'
-]
+            ]
             # Add directories
             for directory in CODEBASE_DIRS:
                 if os.path.exists(directory):
                     cmd.append(directory)
-            
+
             result = subprocess.run(cmd, capture_output=True, text=True, timeout=300)
-            
+
             if result.returncode == 0:
                 return []
-            
+
             # Parse output
             lines = result.stdout.strip().split('\n')
-            return [line for line in lines if ':' in line and not line.startswith('---')]
-            
+            return [
+                line for line in lines if ':' in line and not line.startswith('---')]
+
         except subprocess.TimeoutExpired:
             print("Flake8 analysis timed out")
             return []
         except Exception as e:
             print(f"Error running Flake8: {e}")
             return []
-    
+
     def parse_error_line(self, line: str) -> Tuple[str, int, int, str, str]:
         """Parse a Flake8 error line."""
         try:
@@ -142,7 +144,7 @@ class Flake8Analyzer:
         except (ValueError, IndexError):
             pass
         return None, 0, 0, '', ''
-    
+
     def is_math_relevant_file(self, filepath: str) -> bool:
         """Check if a file contains mathematical content."""
         try:
@@ -151,7 +153,7 @@ class Flake8Analyzer:
                 return any(keyword in content for keyword in MATH_PRESERVATION_KEYWORDS)
         except Exception:
             return False
-    
+
     def categorize_errors(self, error_lines: List[str]):
         """Categorize errors by type and file."""
         for line in error_lines:
@@ -164,24 +166,24 @@ class Flake8Analyzer:
                     'message': message,
                     'auto_fixable': code in AUTO_FIXABLE_CODES,
                     'critical': code in CRITICAL_CODES
-}
+                }
                 self.errors[filepath].append(error_info)
                 self.total_count += 1
-                
+
                 if error_info['auto_fixable']:
                     self.auto_fixable_count += 1
                 if error_info['critical']:
                     self.critical_count += 1
-                
+
                 # Mark math-relevant files
                 if self.is_math_relevant_file(filepath):
                     self.math_relevant_files.add(filepath)
-    
+
     def generate_report(self) -> str:
         """Generate a comprehensive Flake8 error report."""
         report = []
         report.append("# Schwabot Flake8 Error Analysis Report\n")
-        
+
         # Summary
         report.append("## Summary")
         report.append(f"- Total Errors: {self.total_count}")
@@ -189,7 +191,7 @@ class Flake8Analyzer:
         report.append(f"- Critical: {self.critical_count}")
         report.append(f"- Math-relevant files: {len(self.math_relevant_files)}")
         report.append("")
-        
+
         # Critical errors first
         if self.critical_count > 0:
             report.append("## 🚨 Critical Errors (Must Fix)")
@@ -199,9 +201,10 @@ class Flake8Analyzer:
                     report.append(f"### {filepath}")
                     for error in critical_errors:
                         math_flag = "🔬" if filepath in self.math_relevant_files else ""
-                        report.append(f"- Line {error['line']}: {error['code']} - {error['message']} {math_flag}")
+                        report.append(
+                            f"- Line {error['line']}: {error['code']} - {error['message']} {math_flag}")
                     report.append("")
-        
+
         # Auto-fixable errors
         if self.auto_fixable_count > 0:
             report.append("## 🔧 Auto-fixable Errors")
@@ -211,66 +214,74 @@ class Flake8Analyzer:
                     report.append(f"### {filepath}")
                     for error in auto_errors:
                         math_flag = "🔬" if filepath in self.math_relevant_files else ""
-                        report.append(f"- Line {error['line']}: {error['code']} - {error['message']} {math_flag}")
+                        report.append(
+                            f"- Line {error['line']}: {error['code']} - {error['message']} {math_flag}")
                     report.append("")
-        
+
         # Other errors
         other_errors = []
         for filepath, errors in self.errors.items():
             other = [e for e in errors if not e['auto_fixable'] and not e['critical']]
             if other:
                 other_errors.append((filepath, other))
-        
+
         if other_errors:
             report.append("## ⚠️ Other Errors")
             for filepath, errors in other_errors:
                 report.append(f"### {filepath}")
                 for error in errors:
                     math_flag = "🔬" if filepath in self.math_relevant_files else ""
-                    report.append(f"- Line {error['line']}: {error['code']} - {error['message']} {math_flag}")
+                    report.append(
+                        f"- Line {error['line']}: {error['code']} - {error['message']} {math_flag}")
                 report.append("")
-        
+
         # Recommendations
         report.append("## 📋 Recommendations")
         if self.critical_count > 0:
-            report.append("1. **Fix critical errors first** - These prevent code from running")
+            report.append(
+                "1. **Fix critical errors first** - These prevent code from running")
         if self.auto_fixable_count > 0:
-            report.append("2. **Run auto-fix** - Use `python auto_fix_flake8.py` to fix formatting issues")
+            report.append(
+                "2. **Run auto-fix** - Use `python auto_fix_flake8.py` to fix formatting issues")
         if len(self.math_relevant_files) > 0:
-            report.append("3. **Preserve mathematical structures** - Files marked with 🔬 contain mathematical logic")
-        report.append("4. **Test after fixes** - Run your test suite after making changes")
-        
+            report.append(
+                "3. **Preserve mathematical structures** - Files marked with 🔬 contain mathematical logic")
+        report.append(
+            "4. **Test after fixes** - Run your test suite after making changes")
+
         return "\n".join(report)
-    
+
     def save_report(self, filename: str = "flake8_analysis_report.md"):
         """Save the analysis report to a file."""
         report = self.generate_report()
         with open(filename, 'w', encoding='utf-8') as f:
             f.write(report)
         print(f"Flake8 analysis report saved to {filename}")
-    
+
     def analyze(self):
         """Run the complete Flake8 analysis."""
         print("Running Flake8 analysis...")
         error_lines = self.run_flake8()
-        
+
         if not error_lines:
             print("[OK] No Flake8 errors found!")
             return
-        
+
         print(f"Found {len(error_lines)} error lines")
         self.categorize_errors(error_lines)
         self.save_report()
-        
+
         print(f"\nAnalysis complete:")
         print(f"- Total errors: {self.total_count}")
         print(f"- Auto-fixable: {self.auto_fixable_count}")
         print(f"- Critical: {self.critical_count}")
         print(f"- Math-relevant files: {len(self.math_relevant_files)}")
 
+
 def main():
     analyzer = Flake8Analyzer()
     analyzer.analyze()
 
+
 if __name__ == "__main__":
-    main() 
+    main()

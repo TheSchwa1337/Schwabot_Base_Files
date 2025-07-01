@@ -13,7 +13,7 @@ from .exceptions import (
     SignalGenerationError,
     MathSystemError,
     MemoryError,
-    IntegrationError
+    IntegrationError,
 )
 
 __version__ = "1.0.0"
@@ -37,5 +37,5 @@ __all__ = [
     "SignalGenerationError",
     "MathSystemError",
     "MemoryError",
-    "IntegrationError"
+    "IntegrationError",
 ]

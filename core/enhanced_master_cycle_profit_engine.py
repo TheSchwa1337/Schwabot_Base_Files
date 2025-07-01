@@ -731,10 +731,18 @@ if __name__ == "__main__":
     print("\n📊 Profit Engine Status:")
     status = engine.get_profit_engine_status()
 
-    print(f"  Total Decisions: {status['profit_engine_performance']['total_profit_decisions']}")
-    print(f"  Success Rate: {status['profit_engine_performance']['profit_success_rate']:.1%}")
-    print(f"  Avg Profit/Trade: ${status['profit_engine_performance']['avg_profit_per_trade']:.2f}")
-    print(f"  Current Focus: {status['profit_engine_performance']['current_profit_focus']}")
+    print(
+        f"  Total Decisions: {status['profit_engine_performance']['total_profit_decisions']}"
+    )
+    print(
+        f"  Success Rate: {status['profit_engine_performance']['profit_success_rate']:.1%}"
+    )
+    print(
+        f"  Avg Profit/Trade: ${status['profit_engine_performance']['avg_profit_per_trade']:.2f}"
+    )
+    print(
+        f"  Current Focus: {status['profit_engine_performance']['current_profit_focus']}"
+    )
     print(f"  Active Patterns: {status['active_profit_patterns']}")
 
     # Show current opportunities

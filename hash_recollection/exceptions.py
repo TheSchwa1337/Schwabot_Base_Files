@@ -50,12 +50,18 @@ class PatternDetectionError(HashRecollectionError):
 class APIError(HashRecollectionError):
     """Raised when API operations fail."""
 
-    def __init__(self, message: str, endpoint: Optional[str] = None, status_code: Optional[int] = None):
+    def __init__(
+        self,
+        message: str,
+        endpoint: Optional[str] = None,
+        status_code: Optional[int] = None,
+    ):
         """Initialize with error message, endpoint, and status code."""
-        details = {
-            "endpoint": endpoint,
-            "status_code": status_code
-        } if endpoint or status_code else {}
+        details = (
+            {"endpoint": endpoint, "status_code": status_code}
+            if endpoint or status_code
+            else {}
+        )
         super().__init__(f"API error: {message}", details)
 
 
@@ -71,24 +77,36 @@ class ConfigurationError(HashRecollectionError):
 class DataValidationError(HashRecollectionError):
     """Raised when data validation fails."""
 
-    def __init__(self, message: str, data_type: Optional[str] = None, data_length: Optional[int] = None):
+    def __init__(
+        self,
+        message: str,
+        data_type: Optional[str] = None,
+        data_length: Optional[int] = None,
+    ):
         """Initialize with error message, data type, and length."""
-        details = {
-            "data_type": data_type,
-            "data_length": data_length
-        } if data_type or data_length else {}
+        details = (
+            {"data_type": data_type, "data_length": data_length}
+            if data_type or data_length
+            else {}
+        )
         super().__init__(f"Data validation failed: {message}", details)
 
 
 class SignalGenerationError(HashRecollectionError):
     """Raised when signal generation fails."""
 
-    def __init__(self, message: str, signal_type: Optional[str] = None, confidence: Optional[float] = None):
+    def __init__(
+        self,
+        message: str,
+        signal_type: Optional[str] = None,
+        confidence: Optional[float] = None,
+    ):
         """Initialize with error message, signal type, and confidence."""
-        details = {
-            "signal_type": signal_type,
-            "confidence": confidence
-        } if signal_type or confidence else {}
+        details = (
+            {"signal_type": signal_type, "confidence": confidence}
+            if signal_type or confidence
+            else {}
+        )
         super().__init__(f"Signal generation failed: {message}", details)
 
 
@@ -122,39 +140,47 @@ class IntegrationError(HashRecollectionError):
 # Utility functions for exception handling
 def handle_entropy_error(func):
     """Decorator to handle entropy calculation errors."""
+
     def wrapper(*args, **kwargs):
         try:
             return func(*args, **kwargs)
         except Exception as e:
             raise EntropyCalculationError(str(e))
+
     return wrapper
 
 
 def handle_bit_operation_error(func):
     """Decorator to handle bit operation errors."""
+
     def wrapper(*args, **kwargs):
         try:
             return func(*args, **kwargs)
         except Exception as e:
             raise BitOperationError(str(e))
+
     return wrapper
 
 
 def handle_pattern_error(func):
     """Decorator to handle pattern detection errors."""
+
     def wrapper(*args, **kwargs):
         try:
             return func(*args, **kwargs)
         except Exception as e:
             raise PatternDetectionError(str(e))
+
     return wrapper
 
 
 def handle_api_error(func):
     """Decorator to handle API errors."""
+
     def wrapper(*args, **kwargs):
         try:
             return func(*args, **kwargs)
         except Exception as e:
             raise APIError(str(e))
-    return wrapper 
+
+    return wrapper

@@ -28,14 +28,15 @@ from core.ghost_trigger_manager import create_ghost_trigger, get_trigger_perform
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
 class DashboardDataProvider:
     """Provides real-time data for the React dashboard."""
-    
+
     def __init__(self):
         self.connected_clients = set()
         self.data_history = []
         self.max_history = 100
-        
+
         # Initialize system statistics
         self.current_stats = {
             "timestamp": time.time(),
@@ -44,36 +45,38 @@ class DashboardDataProvider:
             "trigger_stats": {},
             "system_health": "healthy",
             "alif_aleph_status": "synchronized"
-}
+        }
         logger.info("📊 Dashboard Data Provider initialized")
-    
+
     async def register_client(self, websocket):
         """Register a new dashboard client."""
         self.connected_clients.add(websocket)
-        logger.info(f"📱 Dashboard client connected. Total clients: {len(self.connected_clients)}")
-        
+        logger.info(
+            f"📱 Dashboard client connected. Total clients: {len(self.connected_clients)}")
+
         # Send initial data
         await websocket.send(json.dumps({
             "type": "initial_data",
             "data": self.current_stats
         }))
-    
+
     async def unregister_client(self, websocket):
         """Unregister a dashboard client."""
         self.connected_clients.discard(websocket)
-        logger.info(f"📱 Dashboard client disconnected. Total clients: {len(self.connected_clients)}")
-    
+        logger.info(
+            f"📱 Dashboard client disconnected. Total clients: {len(self.connected_clients)}")
+
     async def broadcast_data(self, data: Dict[str, Any]):
         """Broadcast data to all connected clients."""
         if not self.connected_clients:
             return
-        
+
         message = json.dumps({
             "type": "update",
             "data": data,
             "timestamp": time.time()
         })
-        
+
         # Send to all connected clients
         disconnected = set()
         for client in self.connected_clients:
@@ -84,23 +87,23 @@ class DashboardDataProvider:
             except Exception as e:
                 logger.error(f"Error sending to client: {e}")
                 disconnected.add(client)
-        
+
         # Remove disconnected clients
         for client in disconnected:
             await self.unregister_client(client)
-    
+
     def update_system_stats(self):
         """Update system statistics from all components."""
         try:
             # Get tick statistics
             tick_stats = get_tick_statistics()
-            
+
             # Get balance statistics
             balance_stats = get_balance_statistics()
-            
+
             # Get trigger statistics
             trigger_stats = get_trigger_performance()
-            
+
             # Update current stats
             self.current_stats.update({
                 "timestamp": time.time(),
@@ -110,15 +113,15 @@ class DashboardDataProvider:
                 "system_health": self._determine_system_health(tick_stats, balance_stats),
                 "alif_aleph_status": self._determine_alif_aleph_status(balance_stats)
             })
-            
+
             # Store in history
             self.data_history.append(self.current_stats.copy())
             if len(self.data_history) > self.max_history:
-                self.data_history = self.data_history[-self.max_history//2:]
-            
+                self.data_history = self.data_history[-self.max_history // 2:]
+
         except Exception as e:
             logger.error(f"Error updating system stats: {e}")
-    
+
     def _determine_system_health(self, tick_stats: Dict, balance_stats: Dict) -> str:
         """Determine overall system health."""
         if tick_stats.get('success_rate', 0) < 0.8:
@@ -127,7 +130,7 @@ class DashboardDataProvider:
             return "warning"
         else:
             return "healthy"
-    
+
     def _determine_alif_aleph_status(self, balance_stats: Dict) -> str:
         """Determine ALIF/ALEPH synchronization status."""
         mode = balance_stats.get('current_mode', 'balanced')
@@ -139,7 +142,7 @@ class DashboardDataProvider:
             return "overloaded"
         else:
             return "compressed"
-    
+
     def get_dashboard_data(self) -> Dict[str, Any]:
         """Get formatted data for dashboard display."""
         return {
@@ -176,35 +179,39 @@ class DashboardDataProvider:
                 "aleph_score": self.current_stats["tick_stats"].get("aleph_score", 0),
                 "ghost_reservoir_size": self.current_stats["tick_stats"].get("ghost_reservoir_size", 0),
                 "float_decay": self.current_stats["balance_stats"].get("float_decay", 0)
-}
-}
+            }
+        }
+
+
 # Global data provider
 data_provider = DashboardDataProvider()
+
 
 async def websocket_handler(websocket, path):
     """Handle WebSocket connections for dashboard clients."""
     await data_provider.register_client(websocket)
-    
+
     try:
         async for message in websocket:
             # Handle client messages if needed
             data = json.loads(message)
             logger.debug(f"Received message from client: {data}")
-            
+
     except websockets.exceptions.ConnectionClosed:
         pass
     finally:
         await data_provider.unregister_client(websocket)
 
+
 async def system_simulation():
     """Simulate system activity and update dashboard data."""
     logger.info("🔄 Starting system simulation...")
-    
+
     while True:
         try:
             # Run tick cycle
             tick_context = run_tick_cycle()
-            
+
             if tick_context:
                 # Update balance metrics
                 metrics = update_load_metrics(
@@ -214,7 +221,7 @@ async def system_simulation():
                     tick_context.entropy * 0.3,
                     tick_context.drift_score
                 )
-                
+
                 # Create ghost trigger if validated
                 if tick_context.validated:
                     trigger = create_ghost_trigger(
@@ -227,37 +234,45 @@ async def system_simulation():
                         echo_strength=tick_context.echo_strength,
                         drift_score=tick_context.drift_score
                     )
-                    
+
                     # Simulate profit if conditions are good
                     if tick_context.echo_strength > 0.6 and tick_context.entropy < 0.8:
                         entry_price = 65000.0 + (tick_context.tick_id * 10)
                         exit_price = entry_price + 150
                         from core.ghost_trigger_manager import add_profit_vector
-                        add_profit_vector(trigger.trigger_hash, entry_price, exit_price, 1.0, tick_context.echo_strength)
-            
+                        add_profit_vector(
+                            trigger.trigger_hash,
+                            entry_price,
+                            exit_price,
+                            1.0,
+                            tick_context.echo_strength)
+
             # Update dashboard data
             data_provider.update_system_stats()
-            
+
             # Broadcast to dashboard clients
             dashboard_data = data_provider.get_dashboard_data()
             await data_provider.broadcast_data(dashboard_data)
-            
+
             # Log progress
             if tick_context and tick_context.tick_id % 10 == 0:
-                logger.info(f"📊 Dashboard updated - Tick {tick_context.tick_id}, "
-                          f"Health: {dashboard_data['system_overview']['health']}, "
-                          f"Status: {dashboard_data['system_overview']['alif_aleph_status']}")
-            
+                logger.info(
+                    f"📊 Dashboard updated - Tick {
+                        tick_context.tick_id}, " f"Health: {
+                        dashboard_data['system_overview']['health']}, " f"Status: {
+                        dashboard_data['system_overview']['alif_aleph_status']}")
+
             await asyncio.sleep(1.0)  # Update every second
-            
+
         except Exception as e:
             logger.error(f"Error in system simulation: {e}")
             await asyncio.sleep(5.0)  # Wait before retrying
 
+
 async def main():
     """Main function to start the dashboard server."""
     logger.info("🚀 Starting Schwabot Altitude Dashboard Server")
-    
+
     # Start WebSocket server
     server = await websockets.serve(
         websocket_handler,
@@ -266,13 +281,13 @@ async def main():
         ping_interval=20,
         ping_timeout=10
     )
-    
+
     logger.info("🌐 WebSocket server started on ws://localhost:8765")
     logger.info("📱 Connect your React dashboard to ws://localhost:8765")
-    
+
     # Start system simulation in background
     simulation_task = asyncio.create_task(system_simulation())
-    
+
     try:
         # Keep server running
         await server.wait_closed()
@@ -286,4 +301,4 @@ if __name__ == "__main__":
     try:
         asyncio.run(main())
     except KeyboardInterrupt:
-        logger.info("👋 Dashboard server stopped") 
+        logger.info("👋 Dashboard server stopped")

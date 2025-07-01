@@ -23,14 +23,18 @@ from typing import List
 GLYPHS = ['1', 'i', '·', ' ', '⊥']
 
 # Example: a glyph matrix (2D list of str)
+
+
 def get_initial_glyph_matrix():
     return [
         ['1', ' ', '·', ' ', 'i', ' ', '·', ' ', '·', ' ', 'i'],
         ['i', ' ', '·', ' ', '·', ' ', '1', ' ', '·', ' ', 'i'],
         ['·', ' ', 'i', ' ', '·', ' ', '·', ' ', '1', ' ', '·'],
         ['·', ' ', '·', ' ', '·', ' ', 'i', ' ', '·', ' ', '1'],
-]
+    ]
 # --- Drift Vector Logging ---
+
+
 def log_drift_vectors(matrix: List[List[str]]):
     """Measure left/right offset per row for anchor glyphs."""
     drift_vectors = []
@@ -41,10 +45,12 @@ def log_drift_vectors(matrix: List[List[str]]):
             drift = [i - pivot for i, g in enumerate(row) if g in ('1', 'i', '·')]
             drift_vectors.append(drift)
         else:
-            drift_vectors.append([0]*len(row))
+            drift_vectors.append([0] * len(row))
     return drift_vectors
 
 # --- Phase Drift Engine (Animation Core) ---
+
+
 def drift_matrix(matrix: List[List[str]], t: int) -> List[List[str]]:
     """Apply a phase drift to the matrix."""
     drifted = []
@@ -59,6 +65,8 @@ def drift_matrix(matrix: List[List[str]], t: int) -> List[List[str]]:
     return drifted
 
 # --- Echo Correction (Anchor Normalization) ---
+
+
 def correct_glyph_row(glyph_row: List[str]) -> List[str]:
     """Aligns glyphs to the mean anchor position."""
     anchors = [i for i, g in enumerate(glyph_row) if g == '1']
@@ -72,10 +80,13 @@ def correct_glyph_row(glyph_row: List[str]) -> List[str]:
             corrected[new_pos] = g
     return corrected
 
+
 def correct_glyph_matrix(matrix: List[List[str]]) -> List[List[str]]:
     return [correct_glyph_row(row) for row in matrix]
 
 # --- Entropic Residue Function ---
+
+
 def entropic_residue(glyph_row: List[str]) -> float:
     """Measures instability (drift) in a glyph row."""
     values = [1 if g == '1' else 0 for g in glyph_row]
@@ -83,6 +94,8 @@ def entropic_residue(glyph_row: List[str]) -> float:
     return sum((v - mu) ** 2 for v in values)
 
 # --- Bitwise Drift Collapse Correction ---
+
+
 def bitwise_drift_collapse(matrix: List[List[str]]) -> List[List[str]]:
     """Collapse drift using XOR between consecutive rows."""
     collapsed = [matrix[0]]
@@ -97,6 +110,8 @@ def bitwise_drift_collapse(matrix: List[List[str]]) -> List[List[str]]:
     return collapsed
 
 # --- Lattice Collapse Function ---
+
+
 def lattice_collapse(matrix_list: List[List[List[str]]]) -> List[List[str]]:
     """Collapse a list of matrices into a final stabilized lattice."""
     arr = np.array(matrix_list)
@@ -110,7 +125,10 @@ def lattice_collapse(matrix_list: List[List[List[str]]]) -> List[List[str]]:
     return final
 
 # --- Animation and Main Loop ---
-def animate_glyph_matrix(matrix: List[List[str]], steps=40, delay=0.08, correct_every=8):
+
+
+def animate_glyph_matrix(matrix: List[List[str]],
+                         steps=40, delay=0.08, correct_every=8):
     """Animate glyphs like falling matrices, tracking stabilizing points."""
     history = []
     for t in range(steps):
@@ -127,6 +145,8 @@ def animate_glyph_matrix(matrix: List[List[str]], steps=40, delay=0.08, correct_
     return history
 
 # --- Main Entrypoint ---
+
+
 def main():
     print("Glyph Dream Simulator: Recursive Drift Visualizer\n")
     matrix = get_initial_glyph_matrix()
@@ -141,5 +161,6 @@ def main():
         print(''.join(row))
     print("\nSimulation complete. Ready for integration or export.")
 
+
 if __name__ == "__main__":
-    main() 
+    main()

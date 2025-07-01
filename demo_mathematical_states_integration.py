@@ -20,12 +20,16 @@ from typing import Dict, Any, List
 # Import core components
 from core.trading_pipeline_integration import TradingPipelineIntegration
 from core.linguistic_glyph_engine import LinguisticGlyphEngine
-from core.zygote_reentry import ZygoteReentrySystem # To directly interact for state history
+# To directly interact for state history
+from core.zygote_reentry import ZygoteReentrySystem
 from core.glyph.glyph_entropy_system import GlyphEntropySystem
 
 # Setup logging
-logging.basicConfig(level=logging.INFO, format='[%(asctime)s] - %(levelname)s - %(message)s')
+logging.basicConfig(
+    level=logging.INFO,
+    format='[%(asctime)s] - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
+
 
 async def run_mathematical_integration_demo():
     """
@@ -35,7 +39,7 @@ async def run_mathematical_integration_demo():
 
     # Initialize the trading pipeline (which internally initializes other systems)
     pipeline = TradingPipelineIntegration()
-    
+
     # Access underlying systems if needed for direct interaction or detailed logging
     zygote_system: ZygoteReentrySystem = pipeline.zygote_reentry_system
     glyph_entropy_system: GlyphEntropySystem = pipeline.glyph_entropy_system
@@ -54,7 +58,7 @@ async def run_mathematical_integration_demo():
             "rsi": 55.0,
             "macd_signal": 0.005,
             "moving_average": 59800.0,
-            "current_glyphs": ["bullish_chart", "bar_chart"], # Sample glyphs
+            "current_glyphs": ["bullish_chart", "bar_chart"],  # Sample glyphs
         },
         {
             "current_price": 60500.0,
@@ -68,7 +72,7 @@ async def run_mathematical_integration_demo():
             "rsi": 60.0,
             "macd_signal": 0.01,
             "moving_average": 60100.0,
-            "current_glyphs": ["rocket", "fire"], # Sample glyphs
+            "current_glyphs": ["rocket", "fire"],  # Sample glyphs
         },
         {
             "current_price": 60200.0,
@@ -82,7 +86,7 @@ async def run_mathematical_integration_demo():
             "rsi": 48.0,
             "macd_signal": -0.002,
             "moving_average": 60300.0,
-            "current_glyphs": ["bearish_chart", "wave"], # Sample glyphs
+            "current_glyphs": ["bearish_chart", "wave"],  # Sample glyphs
         },
         # Add more data points to simulate different scenarios for Zygote re-entry
         {
@@ -97,7 +101,7 @@ async def run_mathematical_integration_demo():
             "rsi": 68.0,
             "macd_signal": 0.008,
             "moving_average": 60400.0,
-            "current_glyphs": ["diamond", "sparkles"], # Sample glyphs
+            "current_glyphs": ["diamond", "sparkles"],  # Sample glyphs
         },
         {
             "current_price": 61000.0,
@@ -111,11 +115,12 @@ async def run_mathematical_integration_demo():
             "rsi": 70.0,
             "macd_signal": 0.012,
             "moving_average": 60900.0,
-            "current_glyphs": ["bullish_chart", "trophy"], # Sample glyphs (likely to trigger re-entry if profitable states are added)
+            # Sample glyphs (likely to trigger re-entry if profitable states are added)
+            "current_glyphs": ["bullish_chart", "trophy"],
         },
-]
+    ]
     for i, market_data in enumerate(simulated_market_data_points):
-        logger.info(f"\n--- Processing Market Data Point {i+1} ---")
+        logger.info(f"\n--- Processing Market Data Point {i + 1} ---")
         logger.info(f"Current Price: {market_data["current_price"]}")
         logger.info(f"Current Glyphs: {market_data["current_glyphs"]}")
 
@@ -128,18 +133,28 @@ async def run_mathematical_integration_demo():
 
         logger.info(f"Generated Trading Signal: {trading_signal.signal_type.upper()}")
         logger.info(f"Signal Confidence: {trading_signal.confidence:.4f}")
-        logger.info(f"Execution Certainty Signal (Xi(t)): {trading_signal.execution_certainty_signal:.4f}")
+        logger.info(
+            f"Execution Certainty Signal (Xi(t)): {
+                trading_signal.execution_certainty_signal:.4f}")
 
         # Retrieve and display individual mathematical states
         gamma_g = pipeline.glyph_entropy_system.calculate_glyph_entropy()
         lambda_t = pipeline.fractal_core.calculate_fractal_compression_state()
-        
-        # Prepare vectors for ASIC Fidelity and Symbolic Collapse (using simplified from demo context)
-        bit_vector_demo = [1.0] * (trading_signal.bit_depth // 4) if trading_signal.bit_depth else [1.0, 1.0]
-        profit_delta_demo = [market_data["current_price"] - market_data.get("previous_price", market_data["current_price"]) ]
-        
-        theta_b = pipeline.asic_fidelity_system.calculate_fidelity(bit_vector_demo, profit_delta_demo)
-        psi_c = pipeline.symbolic_collapse_system.calculate_symbolic_collapse(bit_vector_demo, profit_delta_demo, market_data.get("current_glyphs", []))
+
+        # Prepare vectors for ASIC Fidelity and Symbolic Collapse (using
+        # simplified from demo context)
+        bit_vector_demo = [1.0] * (trading_signal.bit_depth //
+                                   4) if trading_signal.bit_depth else [1.0, 1.0]
+        profit_delta_demo = [
+            market_data["current_price"] -
+            market_data.get(
+                "previous_price",
+                market_data["current_price"])]
+
+        theta_b = pipeline.asic_fidelity_system.calculate_fidelity(
+            bit_vector_demo, profit_delta_demo)
+        psi_c = pipeline.symbolic_collapse_system.calculate_symbolic_collapse(
+            bit_vector_demo, profit_delta_demo, market_data.get("current_glyphs", []))
         zygote_state = pipeline.zygote_reentry_system.calculate_zygote_state()
         trade_valuation_U = pipeline._calculate_trade_valuation_U(market_data)
 
@@ -161,4 +176,4 @@ async def run_mathematical_integration_demo():
     pipeline.cleanup()
 
 if __name__ == "__main__":
-    asyncio.run(run_mathematical_integration_demo()) 
+    asyncio.run(run_mathematical_integration_demo())

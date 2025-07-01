@@ -63,6 +63,7 @@ INSTANT = "INSTANT"  # < 1 minute
 @dataclass
 class ProfitPoint:
 
+
 """Individual profit point in 3D space.""""""
 """"""
 """"""
@@ -81,6 +82,8 @@ bag_id: str
 
 @dataclass
 class ProfitBag:
+
+
 """
 """Recursive profit bag for growth tracking.""""""
 """"""
@@ -120,6 +123,8 @@ time_band_distribution: Dict[TimeBand, Decimal]
 
 
 class FractalContainmentLock:
+
+
 """
 """Core multi - dimensional profit mapping and containment system.""""""
 """"""
@@ -167,7 +172,7 @@ self,
 """"""
 """"""
 """
-if bag_id in self.profit_bags:"""
+if bag_id in self.profit_bags: """
 raise ValueError(f"Profit bag {bag_id} already exists")
 
 # Calculate containment bounds based on level
@@ -234,17 +239,18 @@ profit_bag = self.profit_bags[bag_id]
 
 # Check containment bounds
 if not self._is_within_containment_bounds(position, profit_bag.containment_bounds):
-            logger.warning(f"Position {position} outside containment bounds for bag {bag_id}")
+            logger.warning(
+    f"Position {position} outside containment bounds for bag {bag_id}")
             return False
 
 # Create profit point
 profit_point = ProfitPoint(
-            x = position[0], y = position[1], z = position[2],
-            profit_value = profit_value,
-            timestamp = time.time(),
-            time_band = time_band,
-            containment_level = self.containment_locks[bag_id],
-            bag_id = bag_id
+            x=position[0], y=position[1], z=position[2],
+            profit_value=profit_value,
+            timestamp=time.time(),
+            time_band=time_band,
+            containment_level=self.containment_locks[bag_id],
+            bag_id=bag_id
         )
 
 # Update bag
@@ -269,10 +275,13 @@ if self._should_create_recursive_bag(profit_bag):
 
 return True
 
+
 def integrate_profit_volume()
 
+
 self,
-        integration_bounds: Optional[Tuple[Tuple[float, float], Tuple[float, float], Tuple[float, float]]] = None,
+        integration_bounds: Optional[Tuple[Tuple[float, float],
+            Tuple[float, float], Tuple[float, float]]] = None,
         time_filter: Optional[TimeBand] = None
     ) -> IntegrationResult:
         """Calculate M(x,y,z) = \\u222d P(t,x,y,z) dxdydz over specified bounds.""""""

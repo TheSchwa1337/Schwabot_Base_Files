@@ -10,9 +10,7 @@ def concat_csv_to_parquet(asset: str, quote: str = "usdc"):
     folder = HIST_DIR / f"{asset.lower()}_{quote.lower()}"
     if not folder.exists():
         raise FileNotFoundError(
-            f"No folder found for {
-                asset.upper()}_{
-                quote.upper()} history."
+            f"No folder found for {asset.upper()}_{quote.upper()} history."
         )
 
     all_csvs = sorted(folder.glob("*.csv"))

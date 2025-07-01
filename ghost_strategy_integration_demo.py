@@ -53,7 +53,7 @@ class GhostStrategyIntegrationDemo:
 """"""
 """
 
-def __init__(self):"""
+def __init__(self): """
     """Function implementation pending."""
 pass
 

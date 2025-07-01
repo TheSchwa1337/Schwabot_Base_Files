@@ -130,7 +130,13 @@ class EnhancedLiveExecutionMapper:
         simulation_mode: bool = True,
         initial_portfolio_usdc: float = 100000.0,
     ):
-        """Initialize the enhanced live execution mapper."""
+        """Initialize the enhanced live execution mapper.
+
+        Args:
+            config: Configuration parameters for enhanced execution
+            simulation_mode: Whether to run in simulation mode
+            initial_portfolio_usdc: Initial portfolio balance in USDC
+        """
 
         self.config = config or self._default_config()
         self.simulation_mode = simulation_mode
@@ -190,7 +196,8 @@ class EnhancedLiveExecutionMapper:
         )
 
     def _default_config(self) -> Dict[str, Any]:
-        """Default configuration for enhanced execution."""
+        """Return default configuration for enhanced execution."""
+
         return {
             "max_state_history": 1000,
             "math_confidence_min": 0.75,
@@ -232,9 +239,7 @@ class EnhancedLiveExecutionMapper:
         start_time = time.time()
         trade_id = f"enhanced_{int(time.time() * 1000)}"
 
-        logger.info(
-            f"🎯 Starting optimized BTC trade execution: ${btc_price:,.2f}"
-        )
+        logger.info(f"🎯 Starting optimized BTC trade execution: ${btc_price:,.2f}")
 
         try:
             # Create enhanced execution state
@@ -291,7 +296,8 @@ class EnhancedLiveExecutionMapper:
                 )
 
                 logger.info(
-                    f"💡 Optimization complete: confidence={optimization_result.confidence_level:.3f}, "
+                    f"💡 Optimization complete: "
+                    f"confidence={optimization_result.confidence_level:.3f}, "
                     f"should_trade={optimization_result.should_trade}"
                 )
 
@@ -329,7 +335,9 @@ class EnhancedLiveExecutionMapper:
 
             if position_size_btc < self.btc_usdc_config["min_trade_size_btc"]:
                 enhanced_state.status = "rejected_position_size"
-                enhanced_state.error_message = f"Position size too small: {position_size_btc:.6f} BTC"
+                enhanced_state.error_message = (
+                    f"Position size too small: {position_size_btc:.6f} BTC"
+                )
                 return enhanced_state
 
             # Step 3: Risk Management Validation
@@ -417,16 +425,12 @@ class EnhancedLiveExecutionMapper:
 
             # Check entropy score
             if state.entropy_score < thresholds["entropy_score_min"]:
-                logger.warning(
-                    f"Entropy score too low: {state.entropy_score:.3f}"
-                )
+                logger.warning(f"Entropy score too low: {state.entropy_score:.3f}")
                 return False
 
             # Check phase alignment
             if state.phase_alignment < thresholds["phase_alignment_min"]:
-                logger.warning(
-                    f"Phase alignment too low: {state.phase_alignment:.3f}"
-                )
+                logger.warning(f"Phase alignment too low: {state.phase_alignment:.3f}")
                 return False
 
             # Check risk score if available
@@ -544,7 +548,9 @@ class EnhancedLiveExecutionMapper:
         """Simulate enhanced execution when base system unavailable."""
         try:
             # Simulate successful execution
-            executed_price = state.btc_price * (1 + np.random.uniform(-0.001, 0.001))  # noqa: F841
+            executed_price = state.btc_price * (
+                1 + np.random.uniform(-0.001, 0.001)
+            )  # noqa: F841
             executed_quantity = state.risk_adjusted_size  # noqa: F841
             fees = executed_quantity * executed_price * 0.00075  # 0.075% fee
 
