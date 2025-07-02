@@ -24,7 +24,7 @@ import time
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Tuple, Union
+from typing import Any, Callable, Dict, List, Tuple, Union
 
 import numpy as np
 
@@ -38,18 +38,35 @@ try:
 except ImportError:
     UNIFIED_MATH_AND_SAFE_PRINT_AVAILABLE = False
     # Fallback for testing or environments where these modules are not present
-    class unified_math:
+    class UnifiedMath:
+        """Fallback class for unified_math."""
         @staticmethod
-        def abs(x): return abs(x)
+        def abs(x: float) -> float:
+            """Return the absolute value of x."""
+            return abs(x)
         @staticmethod
-        def log(x): return np.log(x)
+        def log(x: float) -> float:
+            """Return the natural logarithm of x."""
+            return np.log(x)
 
-    def safe_print(message): print(message)
-    def safe_info(message): print(f"[INFO] {message}")
-    def safe_error(message): print(f"[ERROR] {message}")
-    def safe_warning(message): print(f"[WARNING] {message}")
-    def safe_debug(message): print(f"[DEBUG] {message}")
-    def safe_success(message): print(f"[SUCCESS] {message}")
+    def safe_print(message: str):
+        """A safe print function."""
+        print(message)
+    def safe_info(message: str):
+        """A safe info logger."""
+        print(f"[INFO] {message}")
+    def safe_error(message: str):
+        """A safe error logger."""
+        print(f"[ERROR] {message}")
+    def safe_warning(message: str):
+        """A safe warning logger."""
+        print(f"[WARNING] {message}")
+    def safe_debug(message: str):
+        """A safe debug logger."""
+        print(f"[DEBUG] {message}")
+    def safe_success(message: str):
+        """A safe success logger."""
+        print(f"[SUCCESS] {message}")
 
 
 logger = logging.getLogger(__name__)
@@ -182,27 +199,18 @@ class UnifiedTensorAlgebra:
         self.hash_similarity_threshold = 0.7
         self.memory_activation_threshold = 0.6
 
-        # Bit-form flip matrix parameters
-        self.flip_matrix_count = 7  # Number of parallel flip matrices
-        self.consensus_threshold = 0.6  # Minimum consensus for execution
-        self.flip_decay_rate = 0.05  # Rate at which potential states decay
-        self.superposition_threshold = 0.3  # Threshold for superposition state
+        # Flip matrix parameters
+        self.superposition_threshold = 0.1
+        self.consensus_threshold = 0.5
 
-        # Performance tracking
-        self.operation_history: List[Dict[str, Any]] = []
-        self.bit_phase_results: List[BitPhaseResult] = []
-        self.tensor_results: List[TensorContractionResult] = []
-        self.profit_results: List[ProfitRoutingResult] = []
-        self.entropy_results: List[EntropyCompensationResult] = []
-        self.hash_results: List[HashMemoryResult] = []
-
-        # Bit-form flip matrix tracking
-        self.active_flip_matrices: List[BitFormFlipMatrix] = []
-        self.consensus_history: List[ProfitConsensusResult] = []
+        # Operation history for tracking
+        self.operation_history = []
 
         # Load configuration
         self._load_configuration()
-        logger.info("UnifiedTensorAlgebra initialized")
+
+        # Initialize mathematical containment for Ω(t,ξ)
+        self._initialize_time_phase_reinforcement()
 
     def _load_configuration(self) -> None:
         """Load tensor algebra configuration."""
@@ -226,10 +234,8 @@ class UnifiedTensorAlgebra:
 
             # Load bit-form flip matrix parameters if available
             if "flip_matrix_parameters" in config:
-                self.flip_matrix_count = config["flip_matrix_parameters"].get("matrix_count", 7)
-                self.consensus_threshold = config["flip_matrix_parameters"].get("consensus_threshold", 0.6)
-                self.flip_decay_rate = config["flip_matrix_parameters"].get("decay_rate", 0.05)
-                self.superposition_threshold = config["flip_matrix_parameters"].get("superposition_threshold", 0.3)
+                self.superposition_threshold = config["flip_matrix_parameters"].get("superposition_threshold", 0.1)
+                self.consensus_threshold = config["flip_matrix_parameters"].get("consensus_threshold", 0.5)
 
             logger.info(f"Tensor algebra configuration loaded from {self.config_path}")
 
@@ -257,10 +263,8 @@ class UnifiedTensorAlgebra:
                     "42bit": [8, 8, 8]
                 },
                 "flip_matrix_parameters": {
-                    "matrix_count": 7,
-                    "consensus_threshold": 0.6,
-                    "decay_rate": 0.05,
-                    "superposition_threshold": 0.3
+                    "superposition_threshold": 0.1,
+                    "consensus_threshold": 0.5
                 }
             }
             self.config = config
@@ -290,14 +294,90 @@ class UnifiedTensorAlgebra:
                     "42bit": [8, 8, 8]
                 },
                 "flip_matrix_parameters": {
-                    "matrix_count": 7,
-                    "consensus_threshold": 0.6,
-                    "decay_rate": 0.05,
-                    "superposition_threshold": 0.3
+                    "superposition_threshold": 0.1,
+                    "consensus_threshold": 0.5
                 }
             }
             self.config = config
             logger.info("Using default tensor algebra configuration due to error.")
+
+    def _initialize_time_phase_reinforcement(self) -> None:
+        """Initialize time-phase reinforcement parameters for Ω(t,ξ)."""
+        self.omega_time_scale = 1.0  # Time scaling factor
+        self.omega_phase_shift = 0.0  # Phase shift parameter
+        self.omega_protection_threshold = 0.3  # Protection activation threshold
+        self.omega_reinforcement_factor = 0.8  # Reinforcement strength
+
+    def compute_time_phase_reinforcement(self, t: float, xi: float) -> float:
+        """
+        Ω(t,ξ) - Time-phase reinforcement of protected logic vectors.
+        
+        This function implements the mathematical containment for time-phase
+        reinforcement as specified in the security core mathematica.
+        
+        Args:
+            t: Time parameter (current timestamp or cycle time)
+            xi: Phase parameter (market phase, sentiment phase, etc.)
+            
+        Returns:
+            float: Reinforced logic vector strength Ω(t,ξ)
+        """
+        try:
+            # Base time-phase component
+            time_component = np.sin(self.omega_time_scale * t + self.omega_phase_shift)
+            
+            # Phase modulation component
+            phase_component = np.cos(xi * np.pi)
+            
+            # Protection activation based on threshold
+            protection_factor = 1.0
+            if abs(time_component) > self.omega_protection_threshold:
+                protection_factor = self.omega_reinforcement_factor
+            
+            # Compute Ω(t,ξ) = time_component * phase_component * protection_factor
+            omega_result = time_component * phase_component * protection_factor
+            
+            # Log the mathematical computation
+            if UNIFIED_MATH_AND_SAFE_PRINT_AVAILABLE:
+                safe_debug(f"Ω(t={t:.3f}, ξ={xi:.3f}) = {omega_result:.6f}")
+            
+            return omega_result
+            
+        except Exception as e:
+            logger.error(f"Error computing time-phase reinforcement: {e}")
+            return 0.0
+
+    def apply_time_phase_reinforcement_to_tensor(
+        self, 
+        tensor: np.ndarray, 
+        t: float, 
+        xi: float
+    ) -> np.ndarray:
+        """
+        Apply time-phase reinforcement Ω(t,ξ) to a tensor.
+        
+        Args:
+            tensor: Input tensor to reinforce
+            t: Time parameter
+            xi: Phase parameter
+            
+        Returns:
+            np.ndarray: Reinforced tensor
+        """
+        try:
+            omega_value = self.compute_time_phase_reinforcement(t, xi)
+            
+            # Apply reinforcement as a scaling factor
+            reinforced_tensor = tensor * (1.0 + omega_value)
+            
+            # Ensure the tensor remains within reasonable bounds
+            reinforced_tensor = np.clip(reinforced_tensor, -10.0, 10.0)
+            
+            return reinforced_tensor
+            
+        except Exception as e:
+            logger.error(f"Error applying time-phase reinforcement: {e}")
+            return tensor  # Return original tensor on error
 
     def resolve_bit_phases(self, strategy_id: str) -> BitPhaseResult:
         """Resolve bit phases for strategy analysis."""
@@ -329,7 +409,6 @@ class UnifiedTensorAlgebra:
                 timestamp=datetime.now()
             )
 
-            self.bit_phase_results.append(result)
             self.operation_history.append({
                 "operation": "resolve_bit_phases",
                 "timestamp": datetime.now()
@@ -382,7 +461,6 @@ class UnifiedTensorAlgebra:
                 timestamp=datetime.now()
             )
 
-            self.tensor_results.append(result)
             self.operation_history.append({
                 "operation": "perform_tensor_contraction",
                 "timestamp": datetime.now()
@@ -426,7 +504,6 @@ class UnifiedTensorAlgebra:
                 timestamp=datetime.now()
             )
 
-            self.profit_results.append(result)
             self.operation_history.append({"operation": "calculate_profit_routing", "timestamp": datetime.now()})
             return result
 
@@ -469,7 +546,6 @@ class UnifiedTensorAlgebra:
                 timestamp=datetime.now()
             )
 
-            self.entropy_results.append(result)
             self.operation_history.append({"operation": "calculate_entropy_compensation", "timestamp": datetime.now()})
             return result
 
@@ -519,7 +595,6 @@ class UnifiedTensorAlgebra:
                 timestamp=datetime.now()
             )
 
-            self.hash_results.append(result)
             self.operation_history.append({"operation": "encode_hash_memory", "timestamp": datetime.now()})
             return result
 
@@ -1121,98 +1196,110 @@ class UnifiedTensorAlgebra:
             safe_error(f"Error in dualistic profit vectorization: {e}")
             return self._create_null_consensus()
 
+    def _resolve_superposition(
+        self, tensor: "Tensor", method: str = "max_likelihood"
+    ):
+        pass
+
+    def _get_active_learning_module(self):
+        pass
+
 
 def create_unified_tensor_algebra() -> UnifiedTensorAlgebra:
-    """Factory function to create a UnifiedTensorAlgebra instance."""
+    """Create a unified tensor algebra instance."""
     return UnifiedTensorAlgebra()
 
 
 def main():
-    """Test function for Unified Tensor Algebra."""
-    safe_info("🧮 Testing Unified Tensor Algebra...")
+    """Main function for demo purposes."""
+    safe_info("Initializing Advanced Tensor Algebra Demo")
+    tensor_algebra = create_unified_tensor_algebra()
 
-    # Initialize algebra
-    algebra = UnifiedTensorAlgebra()
+    # --- Demo Bit-Phase Resolution ---
+    safe_info("\n[1] --- Bit-Phase Resolution ---")
+    strategy_id = "test_strategy_001"
+    bit_phase_result = tensor_algebra.resolve_bit_phases(strategy_id)
+    safe_success(f"Bit-Phase Result for {strategy_id}:")
+    safe_print(f"  Cycle Score: {bit_phase_result.cycle_score:.4f}")
+    safe_print(f"  Phi_4: {bit_phase_result.phi_4}, Phi_8: {bit_phase_result.phi_8}, "
+               f"Phi_42: {bit_phase_result.phi_42}")
 
-    # Test bit phase resolution
-    safe_info("\n📊 Testing Bit Phase Resolution...")
-    strategy_id = "0x123456789abcde"
-    bit_result = algebra.resolve_bit_phases(strategy_id)
-    safe_info(f"  φ₄: {bit_result.phi_4}")
-    safe_info(f"  φ₈: {bit_result.phi_8}")
-    safe_info(f"  φ₄₂: {bit_result.phi_42}")
-    safe_info(f"  Cycle Score: {bit_result.cycle_score:.4f}")
-
-    # Test tensor contraction
-    safe_info("\n🔗 Testing Tensor Contraction...")
-    matrix_a = np.random.random((3, 3))
-    matrix_b = np.random.random((3, 3))
-    tensor_result = algebra.perform_tensor_contraction(matrix_a, matrix_b)
-    safe_info(f"  Tensor Score: {tensor_result.tensor_score:.4f}")
-    safe_info(f"  Operation Type: {tensor_result.operation_type.value}")
-
-    # Test profit routing
-    safe_info("\n💰 Testing Profit Routing...")
-    profit_result = algebra.calculate_profit_routing(1000.0, 950.0, 1.0)
-    safe_info(f"  Profit Rate: {profit_result.profit_rate:.6f}")
-    safe_info(f"  Execution Trigger: {profit_result.execution_trigger}")
-
-    # Test entropy compensation
-    safe_info("\n🌊 Testing Entropy Compensation...")
-    entropy_result = algebra.calculate_entropy_compensation(1000.0, 0.1)
-    safe_info(f"  Entropy Gate: {entropy_result.entropy_gate:.4f}")
-    safe_info(f"  Adaptive Trigger: {entropy_result.adaptive_trigger}")
-
-    # Test hash memory encoding
-    safe_info("\n🔐 Testing Hash Memory Encoding...")
-    current_data_hash = hashlib.sha256(b"some_current_data").hexdigest()
-    historical_data_hash = hashlib.sha256(b"some_historical_data").hexdigest()
-    hash_result = algebra.encode_hash_memory(
-        current_data_hash, historical_data_hash, bit_result
+    # --- Demo Tensor Contraction ---
+    safe_info("\n[2] --- Tensor Contraction ---")
+    matrix_a = np.random.rand(4, 4)
+    matrix_b = np.random.rand(4, 4)
+    contraction_result = tensor_algebra.perform_tensor_contraction(
+        matrix_a, matrix_b
     )
-    safe_info(f"  Hash Signature: {hash_result.hash_signature[:16]}...")
-    safe_info(f"  Similarity Score: {hash_result.similarity_score:.4f}")
-    safe_info(f"  Memory Activation: {hash_result.memory_activation}")
+    safe_success("Tensor Contraction Result:")
+    safe_print(f"  Tensor Score: {contraction_result.tensor_score:.4f}")
 
-    # Test unified operation (simplified example)
-    safe_info("\n🔄 Testing Unified Operation...")
-    market_data = {
-        "strategy_id": "unified_strategy_alpha",
-        "matrix_a": np.random.rand(3, 3),
-        "matrix_b": np.random.rand(3, 3),
-        "expected_profit": 1200.0,
-        "current_value": 1100.0,
-        "risk_factor": 0.3,
-        "market_volatility": 0.05,
-        "historical_drift": 0.01,
-        "current_data_hash": "mock_current_hash",
-        "historical_data_hash": "mock_historical_hash"
+    # --- Demo Profit Routing ---
+    safe_info("\n[3] --- Profit Routing Calculus ---")
+    profit_routing_result = tensor_algebra.calculate_profit_routing(
+        expected_profit=0.05, current_value=100, risk_factor=0.3
+    )
+    safe_success("Profit Routing Result:")
+    safe_print(f"  Profit Rate: {profit_routing_result.profit_rate:.4f}")
+    safe_print(f"  Execution Trigger: {profit_routing_result.execution_trigger}")
+
+    # --- Demo Hash Memory Encoding ---
+    safe_info("\n[4] --- Hash Memory Encoding ---")
+    current_hash = hashlib.sha256(b"market_data_now").hexdigest()
+    historical_hash = hashlib.sha256(b"market_data_past").hexdigest()
+    hash_result = tensor_algebra.encode_hash_memory(
+        current_hash, historical_hash, bit_phase_result
+    )
+    safe_success("Hash Memory Result:")
+    safe_print(f"  Similarity Score: {hash_result.similarity_score:.4f}")
+    safe_print(f"  Strategy Match: {hash_result.strategy_match}")
+
+    # --- Demo Dualistic Profit Vectorization ---
+    safe_info("\n[5] --- Dualistic Profit Vectorization ---")
+    market_data_demo = {
+        "price": 50000,
+        "volume": 1000,
+        "volatility": 0.02,
+        "liquidity_depth": 500,
+        "sentiment_score": 0.6,
+        "temporal_phase": 0.75,
     }
-
-    # Sequence of operations simulating a unified flow
-    algebra.resolve_bit_phases(market_data["strategy_id"])
-    algebra.perform_tensor_contraction(market_data["matrix_a"], market_data["matrix_b"])
-    algebra.calculate_profit_routing(
-        market_data["expected_profit"], market_data["current_value"], market_data["risk_factor"]
+    consensus_result = tensor_algebra.execute_dualistic_profit_vectorization(
+        market_data_demo
     )
-    algebra.calculate_entropy_compensation(
-        market_data["market_volatility"], market_data["historical_drift"]
+    safe_success("Profit Vectorization Consensus:")
+    safe_print(f"  Execution Signal: {consensus_result.execution_signal}")
+    safe_print(
+        f"  Final Profit Vector: {np.round(consensus_result.final_profit_vector, 4)}"
     )
-    algebra.encode_hash_memory(
-        market_data["current_data_hash"], market_data["historical_data_hash"], bit_result
+    safe_print(
+        f"  Consensus Confidence: {consensus_result.consensus_confidence:.4f}"
     )
 
-    safe_info("  Unified operations executed. Check logs for details.")
+    # --- Demo Time-Phase Reinforcement Ω(t,ξ) ---
+    safe_info("\n[6] --- Time-Phase Reinforcement Ω(t,ξ) ---")
+    t_values = [0.0, 1.0, 2.0, 3.0]
+    xi_values = [0.0, 0.25, 0.5, 0.75]
+    
+    safe_success("Time-Phase Reinforcement Results:")
+    for t in t_values:
+        for xi in xi_values:
+            omega_result = tensor_algebra.compute_time_phase_reinforcement(t, xi)
+            safe_print(f"  Ω(t={t}, ξ={xi}) = {omega_result:.6f}")
+    
+    # Demo tensor reinforcement
+    test_tensor = np.array([[1.0, 0.5], [0.5, 1.0]])
+    t_demo = 1.5
+    xi_demo = 0.3
+    reinforced_tensor = tensor_algebra.apply_time_phase_reinforcement_to_tensor(
+        test_tensor, t_demo, xi_demo
+    )
+    safe_success("Tensor Reinforcement Demo:")
+    safe_print(f"  Original Tensor:\n{test_tensor}")
+    safe_print(f"  Reinforced Tensor (t={t_demo}, ξ={xi_demo}):\n{reinforced_tensor}")
 
-    # Export data
-    try:
-        algebra.export_mathematical_data("exported_tensor_data.json")
-    except Exception as e:
-        safe_error(f"Failed to export data: {e}")
-
-    safe_success("\n✅ Unified Tensor Algebra demonstration complete!")
+    safe_info("\n--- Advanced Tensor Algebra Demo Complete ---")
 
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
     main() 

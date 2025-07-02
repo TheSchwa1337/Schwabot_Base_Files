@@ -1,3 +1,4 @@
+"""A service for synchronizing API data caches."""
 from __future__ import annotations
 
 import asyncio
@@ -6,24 +7,22 @@ import inspect
 import logging
 from pathlib import Path
 from types import ModuleType
-from typing import Dict, List, Type
+from typing import List
 
 from .handlers.base_handler import BaseAPIHandler
 
 
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Cache Sync Service
-==================
-
-Periodically refreshes all registered API handlers and stores their
-normalised JSON payloads into the local `flask/feeds/` cache hierarchy.
-
-This service is **independent** from the trading loop – it can be run as
-its own asyncio Task or integrated as a background task by the
-`ApiIntegrationManager`.
-"""
+#
+# Cache Sync Service
+# ==================
+#
+# Periodically refreshes all registered API handlers and stores their
+# normalised JSON payloads into the local `flask/feeds/` cache hierarchy.
+#
+# This service is **independent** from the trading loop – it can be run as
+# its own asyncio Task or integrated as a background task by the
+# `ApiIntegrationManager`.
+#
 
 logger = logging.getLogger(__name__)
 
@@ -34,21 +33,31 @@ DEFAULT_REFRESH: int = 300  # seconds
 class CacheSyncService:
     """Background service that refreshes all API handler caches."""
 
-    def __init__(self, refresh_interval: int = DEFAULT_REFRESH):
+    def __init__(self, refresh_interval: int = DEFAULT_REFRESH) -> None:
+        """
+        Initialize the CacheSyncService.
+
+        Args:
+            refresh_interval: The interval in seconds to refresh the cache.
+        """
         self.refresh_interval = refresh_interval
         self.handlers: List[BaseAPIHandler] = []
         self._task: asyncio.Task | None = None
 
     # ---------------------------------------------------------------------
-    async def start(self):
+    async def start(self) -> None:
+        """Start the cache sync service."""
         if self._task and not self._task.done():
             logger.warning("CacheSyncService already running")
             return
         await self._discover_handlers()
         self._task = asyncio.create_task(self._run_loop())
-        logger.info("🚀 CacheSyncService started with %d handlers", len(self.handlers))
+        logger.info(
+            "🚀 CacheSyncService started with %d handlers", len(self.handlers)
+        )
 
-    async def stop(self):
+    async def stop(self) -> None:
+        """Stop the cache sync service."""
         if self._task:
             self._task.cancel()
             try:
@@ -63,7 +72,8 @@ class CacheSyncService:
         logger.info("🛑 CacheSyncService stopped")
 
     # ------------------------------------------------------------------
-    async def _run_loop(self):
+    async def _run_loop(self) -> None:
+        """The main loop that periodically refreshes the cache."""
         while True:
             try:
                 await asyncio.gather(
@@ -76,7 +86,7 @@ class CacheSyncService:
             await asyncio.sleep(self.refresh_interval)
 
     # ------------------------------------------------------------------
-    async def _discover_handlers(self):
+    async def _discover_handlers(self) -> None:
         """Dynamically import every module in `core.api.handlers` and register subclasses."""
         pkg = importlib.import_module(HANDLER_PACKAGE)
         pkg_path = Path(pkg.__file__).parent  # type: ignore[arg-type]
@@ -96,4 +106,6 @@ class CacheSyncService:
                         self.handlers.append(handler)
                         logger.info("Registered handler: %s", handler.NAME)
                     except Exception as exc:  # noqa: BLE001
-                        logger.error("Failed to initialise handler %s: %s", obj, exc)
+                        logger.error(
+                            "Failed to initialise handler %s: %s", obj, exc
+                        ) 

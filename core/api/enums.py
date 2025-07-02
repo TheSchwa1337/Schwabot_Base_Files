@@ -1,3 +1,4 @@
+"""API enumeration types."""
 from enum import Enum
 
 
@@ -11,27 +12,40 @@ Contains all enumerations for the Schwabot live API integration system.
 """
 
 
-class ExchangeType(Enum):
-    """Supported exchange types."""
-    COINBASE = "coinbase"
+# =====================================================================
+#  API Enumerations
+# =====================================================================
+
+
+class ExchangeType(str, Enum):
+    """Supported exchanges."""
+
     BINANCE = "binance"
+    COINBASE = "coinbase"
     KRAKEN = "kraken"
-    KUCOIN = "kucoin"
-    OKX = "okx"
+    CUSTOM = "custom"
 
 
-class OrderType(Enum):
-    """Order types."""
-    MARKET = "market"
-    LIMIT = "limit"
-    STOP_LOSS = "stop_loss"
-    TAKE_PROFIT = "take_profit"
+class OrderSide(str, Enum):
+    """Order side."""
 
-
-class OrderSide(Enum):
-    """Order sides."""
     BUY = "buy"
     SELL = "sell"
+
+
+class OrderType(str, Enum):
+    """Order type."""
+
+    MARKET = "market"
+    LIMIT = "limit"
+
+
+class DataType(str, Enum):
+    """Data types for API payloads."""
+
+    TRADE = "trade"
+    ORDER_BOOK = "order_book"
+    NEWS = "news"
 
 
 class ConnectionStatus(Enum):
@@ -40,4 +54,4 @@ class ConnectionStatus(Enum):
     CONNECTING = "connecting"
     CONNECTED = "connected"
     ERROR = "error"
-    RECONNECTING = "reconnecting"
+    RECONNECTING = "reconnecting" 

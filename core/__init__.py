@@ -86,4 +86,4 @@ if ADVANCED_SYSTEM_AVAILABLE:
         'GhostTradeType',
         'TriggerComplexity',
         'advanced_trading_system'
-    ]) 
+    ])

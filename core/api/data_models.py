@@ -90,3 +90,73 @@ class PortfolioPosition:
     pnl_percentage: float
     timestamp: float
     metadata: Dict[str, Any] = field(default_factory=dict)
+
+
+"""Data models for API responses."""
+
+
+# =====================================================================
+#  Core Data Structures for API Payloads
+# =====================================================================
+
+
+@dataclass
+class APIPricePoint:
+    """Represents a single price point in a time series."""
+
+    timestamp: int
+    price: float
+    volume: Optional[float] = None
+
+
+@dataclass
+class APIMarketDepth:
+    """Represents the market depth for an asset."""
+
+    last_update_id: int
+    bids: list[tuple[float, float]]  # (price, quantity)
+    asks: list[tuple[float, float]]  # (price, quantity)
+
+
+@dataclass
+class APITrade:
+    """Represents a single executed trade."""
+
+    id: int
+    price: float
+    qty: float
+    quote_qty: float
+    timestamp: int
+    is_buyer_maker: bool
+
+
+@dataclass
+class APINewsArticle:
+    """Represents a single news article."""
+
+    id: str
+    source: str
+    headline: str
+    summary: str
+    url: str
+    timestamp: int
+    sentiment: Optional[float] = None  # e.g., -1.0 to 1.0
+
+
+@dataclass
+class APIFearAndGreedIndex:
+    """Represents a Fear and Greed Index value."""
+
+    value: int  # 0-100
+    value_classification: str  # e.g., "Extreme Fear"
+    timestamp: int
+
+
+@dataclass
+class APIGenericData:
+    """A generic container for other data types."""
+
+    source: str
+    data_type: str
+    content: Dict[str, Any] = field(default_factory=dict)
+    timestamp: int 

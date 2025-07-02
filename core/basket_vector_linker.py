@@ -1,6 +1,6 @@
 """
-Basket Vector Linker Module
----------------------------
+Basket Vector Linker Module.
+
 Implements the Strategy Basket Resolver, matching hash vectors to strategy classes
 through clustering or vector memory. This module enables Zalgo/Zygot glyph logic
 to emit routing behavior based on observed tick states.
@@ -20,9 +20,7 @@ class BasketVectorLinker:
     Uses similarity matching techniques.
     """
 
-    def __init__(
-        self: BasketVectorLinker, strategies_config: Dict[str, List[float]]
-    ) -> None:
+    def __init__(self, strategies_config: Dict[str, List[float]]) -> None:
         """
         Initialize the BasketVectorLinker.
 
@@ -40,14 +38,12 @@ class BasketVectorLinker:
             "last_resolution_time": None,
         }
 
-    def register_strategy_vector(
-        self: BasketVectorLinker, strategy_id: str, vector_signature: List[float]
-    ) -> None:
+    def register_strategy_vector(self, strategy_id: str, vector_signature: List[float]) -> None:
         """Register or update a strategy's vector signature."""
         self.strategy_vectors[strategy_id] = np.array(vector_signature)
 
     def resolve_strategy_basket(
-        self: BasketVectorLinker,
+        self,
         lattice_hash_vector: List[float],
         similarity_threshold: float = 0.8,
     ) -> Optional[Tuple[str, float]]:
@@ -72,8 +68,8 @@ class BasketVectorLinker:
         for strategy_id, strategy_vec in self.strategy_vectors.items():
             if len(input_vector) != len(strategy_vec):
                 print(
-                    "Warning: Vector length mismatch for"
-                    f" {strategy_id}. Skipping similarity check."
+                    f"Warning: Vector length mismatch for {strategy_id}. "
+                    "Skipping similarity check."
                 )
                 continue
 
@@ -99,11 +95,11 @@ class BasketVectorLinker:
         self.metrics["no_match_found"] += 1
         return None
 
-    def get_metrics(self: BasketVectorLinker) -> Dict[str, Any]:
+    def get_metrics(self) -> Dict[str, Any]:
         """Return the operational metrics of the Basket Vector Linker."""
         return self.metrics
 
-    def reset(self: BasketVectorLinker) -> None:
+    def reset(self) -> None:
         """Reset the linker's internal states and metrics."""
         self.strategy_vectors = {}
         self.metrics = {
