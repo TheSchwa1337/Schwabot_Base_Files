@@ -10,12 +10,7 @@ import numpy as np
 
 import ccxt
 import ccxt.async_support as ccxt_async
-from typing import Tuple
-
-
-
-"""CCXT Integration for Order Optimization
-=========================================
+from typing import TupleCCXT Integration for Order Optimization =========================================
 
 Provides CCXT-based exchange connectivity and order optimization for:
 - Multi-exchange arbitrage
@@ -25,15 +20,14 @@ Provides CCXT-based exchange connectivity and order optimization for:
 - Decimal precision handling (8, 6, 2)
 
 This module integrates with the Ghost Core system for strategy execution.
-"""
 
 # CCXT imports
 try:
     import ccxt
     import ccxt.async_support as ccxt_async
+
     CCXT_AVAILABLE = True
-except ImportError:
-    CCXT_AVAILABLE = False
+except ImportError: CCXT_AVAILABLE = False
 
 logger = logging.getLogger(__name__)
 
@@ -43,9 +37,7 @@ getcontext().prec = 28
 
 @dataclass
 class OrderBookSnapshot:
-    """Snapshot of order book data."""
-
-    timestamp: float
+    Snapshot of order book data.timestamp: float
     symbol: str
     bids: List[Tuple[float, float]]  # (price, volume)
     asks: List[Tuple[float, float]]  # (price, volume)
@@ -57,10 +49,7 @@ class OrderBookSnapshot:
 
 
 @dataclass
-class BuySellWall:
-    """Represents a buy or sell wall in the order book."""
-
-    side: str  # 'buy' or 'sell'
+class BuySellWall:Represents a buy or sell wall in the order book.side: str  # 'buy' or 'sell'
     price_level: float
     volume: float
     strength: float  # 0.0 to 1.0
@@ -69,10 +58,7 @@ class BuySellWall:
 
 
 @dataclass
-class ArbitrageOpportunity:
-    """Represents an arbitrage opportunity between exchanges."""
-
-    buy_exchange: str
+class ArbitrageOpportunity:Represents an arbitrage opportunity between exchanges.buy_exchange: str
     sell_exchange: str
     symbol: str
     buy_price: float
@@ -84,9 +70,7 @@ class ArbitrageOpportunity:
     timestamp: float
 
 
-class CCXTIntegration:
-    """
-    CCXT integration for exchange connectivity and order optimization.
+class CCXTIntegration:CCXT integration for exchange connectivity and order optimization.
 
     Features:
         - Multi-exchange support
@@ -94,13 +78,8 @@ class CCXTIntegration:
         - Buy/sell wall detection
         - Arbitrage opportunity detection
         - Decimal precision handling
-        - Profit vector optimization
-    """
-
-    def __init__(self, config: Optional[Dict[str, Any]] = None):
-        """Initialize CCXT integration."""
-        if not CCXT_AVAILABLE:
-            raise ImportError("CCXT library not available. Install with: pip install ccxt")
+        - Profit vector optimizationdef __init__():Initialize CCXT integration.if not CCXT_AVAILABLE:
+            raise ImportError(CCXT library not available. Install with: pip install ccxt)
 
         self.config = config or {}
         self.exchanges: Dict[str, Any] = {}
@@ -108,43 +87,36 @@ class CCXTIntegration:
         self.arbitrage_opportunities: List[ArbitrageOpportunity] = []
 
         # Configuration
-        self.supported_exchanges = self.config.get('exchanges', ['binance', 'coinbase', 'kraken'])
-        self.symbols = self.config.get('symbols', ['BTC/USDT', 'BTC/USD'])
-        self.granularities = self.config.get('granularities', [8, 6, 2])
-        self.min_spread = self.config.get('min_spread', 0.001)  # 0.1%
-        self.max_risk_score = self.config.get('max_risk_score', 0.3)
+        self.supported_exchanges = self.config.get(exchanges, [binance,coinbase,kraken])
+        self.symbols = self.config.get(symbols, [BTC/USDT,BTC/USD])
+        self.granularities = self.config.get(granularities, [8, 6, 2])
+        self.min_spread = self.config.get(min_spread, 0.001)  # 0.1%
+        self.max_risk_score = self.config.get(max_risk_score, 0.3)
 
         # Initialize exchanges
         self._initialize_exchanges()
 
-        logger.info("🔗 CCXT Integration initialized with %d exchanges", len(self.exchanges))
+        logger.info(🔗 CCXT Integration initialized with %d exchanges, len(self.exchanges))
 
-    def _initialize_exchanges(self) -> None:
-        """Initialize exchange connections."""
-        for exchange_id in self.supported_exchanges:
+    def _initialize_exchanges(self) -> None:Initialize exchange connections.for exchange_id in self.supported_exchanges:
             try:
                 # Initialize both sync and async versions
-                exchange = getattr(ccxt, exchange_id)({
-                    'enableRateLimit': True,
-                    'options': {'defaultType': 'spot'}
-                })
+                exchange = getattr(ccxt, exchange_id)(
+                    {enableRateLimit: True, options: {defaultType:spot}}
+                )
 
-                self.exchanges[exchange_id] = {
-                    'sync': exchange,
-                    'async': getattr(ccxt_async, exchange_id)({
-                        'enableRateLimit': True,
-                        'options': {'defaultType': 'spot'}
-                    }),
+                self.exchanges[exchange_id] = {sync: exchange,async: getattr(ccxt_async, exchange_id)(
+                        {enableRateLimit: True,options": {defaultType:spot}}
+                    ),
                 }
-                logger.info("✅ Initialized exchange: %s", exchange_id)
+                logger.info(✅ Initialized exchange: %s", exchange_id)
 
             except Exception as e:
-                logger.warning("❌ Failed to initialize exchange %s: %s", exchange_id, e)
+                logger.warning(❌ Failed to initialize exchange %s: %s", exchange_id, e)
 
     async def fetch_order_book(
         self, exchange_id: str, symbol: str, limit: int = 20
     ) -> Optional[OrderBookSnapshot]:
-        """
         Fetch order book from exchange.
 
         Args:
@@ -154,20 +126,18 @@ class CCXTIntegration:
 
         Returns:
             Order book snapshot or None if failed
-        """
-        try:
-            exchange = self.exchanges[exchange_id]['async']
+        try: exchange = self.exchanges[exchange_id][async]
 
             # Fetch order book
             order_book = await exchange.fetch_order_book(symbol, limit)
 
             # Extract data
-            bids = order_book['bids'][:limit]
-            asks = order_book['asks'][:limit]
+            bids = order_book[bids][:limit]
+            asks = order_book[asks][:limit]
 
             # Calculate metrics
             best_bid = bids[0][0] if bids else 0.0
-            best_ask = asks[0][0] if asks else float('inf')
+            best_ask = asks[0][0] if asks else float(inf)
             spread = best_ask - best_bid
             mid_price = (best_bid + best_ask) / 2
 
@@ -178,8 +148,8 @@ class CCXTIntegration:
             granularity = self._determine_granularity(mid_price)
 
             snapshot = OrderBookSnapshot(
-                timestamp=order_book['timestamp'] / 1000.0,
-                symbol=symbol,
+                timestamp=order_book[timestamp] / 1000.0,
+                symbol = symbol,
                 bids=bids,
                 asks=asks,
                 spread=spread,
@@ -190,18 +160,16 @@ class CCXTIntegration:
             )
 
             # Store in cache
-            cache_key = f"{exchange_id}:{symbol}"
+            cache_key = f{exchange_id}:{symbol}
             self.order_books[cache_key] = snapshot
 
             return snapshot
 
         except Exception as e:
-            logger.error("Failed to fetch order book for %s:%s: %s", exchange_id, symbol, e)
+            logger.error(Failed to fetch order book for %s:%s: %s, exchange_id, symbol, e)
             return None
 
-    def _determine_granularity(self, price: float) -> int:
-        """Determine appropriate decimal granularity based on price."""
-        if price >= 10000:  # High value assets like BTC
+    def _determine_granularity(self, price: float) -> int:Determine appropriate decimal granularity based on price.if price >= 10000:  # High value assets like BTC
             return 2
         elif price >= 100:  # Medium value assets
             return 6
@@ -211,7 +179,7 @@ class CCXTIntegration:
     def detect_buy_sell_walls(
         self, order_book: OrderBookSnapshot, min_wall_strength: float = 0.1
     ) -> List[BuySellWall]:
-        """
+        
         Detect buy and sell walls in order book.
 
         Args:
@@ -220,24 +188,21 @@ class CCXTIntegration:
 
         Returns:
             List of detected walls
-        """
         walls = []
 
         # Analyze bids (buy walls)
-        bid_walls = self._analyze_walls(order_book.bids, 'buy', order_book.mid_price)
+        bid_walls = self._analyze_walls(order_book.bids, buy, order_book.mid_price)
         walls.extend([wall for wall in bid_walls if wall.strength >= min_wall_strength])
 
         # Analyze asks (sell walls)
-        ask_walls = self._analyze_walls(order_book.asks, 'sell', order_book.mid_price)
+        ask_walls = self._analyze_walls(order_book.asks, sell, order_book.mid_price)
         walls.extend([wall for wall in ask_walls if wall.strength >= min_wall_strength])
 
         return walls
 
     def _analyze_walls(
         self, orders: List[Tuple[float, float]], side: str, mid_price: float
-    ) -> List[BuySellWall]:
-        """Analyze orders to detect walls."""
-        walls = []
+    ) -> List[BuySellWall]:Analyze orders to detect walls.walls = []
         if not orders:
             return walls
 
@@ -245,8 +210,7 @@ class CCXTIntegration:
         if total_volume == 0:
             return walls
 
-        for price, volume in orders:
-            strength = volume / total_volume
+        for price, volume in orders: strength = volume / total_volume
             distance = abs(price - mid_price) / mid_price
             granularity = self._determine_granularity(price)
 
@@ -265,7 +229,7 @@ class CCXTIntegration:
     async def detect_arbitrage_opportunities(
         self, symbol: str, min_spread: Optional[float] = None
     ) -> List[ArbitrageOpportunity]:
-        """
+        
         Detect arbitrage opportunities across exchanges.
 
         Args:
@@ -273,9 +237,7 @@ class CCXTIntegration:
             min_spread: Minimum spread threshold (overrides instance default)
 
         Returns:
-            List of detected arbitrage opportunities
-        """
-        min_spread = min_spread or self.min_spread
+            List of detected arbitrage opportunitiesmin_spread = min_spread or self.min_spread
         opportunities = []
         exchange_ids = list(self.exchanges.keys())
 
@@ -296,8 +258,7 @@ class CCXTIntegration:
                     continue
 
                 # Opportunity: buy on exchange 1, sell on exchange 2
-                if book1.bids and book2.asks:
-                    spread = book2.asks[0][0] - book1.bids[0][0]
+                if book1.bids and book2.asks: spread = book2.asks[0][0] - book1.bids[0][0]
                     if spread >= min_spread:
                         pass
                         # ... (add opportunity)
@@ -313,10 +274,9 @@ class CCXTIntegration:
     def _calculate_arbitrage_risk(
         self, buy_exchange: str, sell_exchange: str, spread: float, volume: float
     ) -> float:
-        """
+        
         Calculate risk score for an arbitrage opportunity.
         (Placeholder implementation)
-        """
         return 0.1
 
     def optimize_order_size(
@@ -326,42 +286,33 @@ class CCXTIntegration:
         side: str,
         max_slippage: float = 0.001,
     ) -> Dict[str, Any]:
-        """
-        Optimize order size to minimize slippage.
-        """
-        # ... (implementation)
+        
+        Optimize order size to minimize slippage.# ... (implementation)
         return {}
 
     def calculate_profit_vector(
         self, order_book: OrderBookSnapshot, walls: List[BuySellWall]
     ) -> Dict[str, Any]:
-        """
         Calculate profit vector based on order book and walls.
-        (Placeholder implementation)
-        """
-        return {}
+        (Placeholder implementation)return {}
 
     async def get_market_summary(self, symbol: str) -> Dict[str, Any]:
-        """
-        Get market summary for a symbol across all exchanges.
-        """
-        # ... (implementation)
+        Get market summary for a symbol across all exchanges.# ... (implementation)
         return {}
 
     async def close_connections(self) -> None:
-        """Close all exchange connections."""
-        for exchange_data in self.exchanges.values():
+        Close all exchange connections.for exchange_data in self.exchanges.values():
             try:
-                await exchange_data['async'].close()
+                await exchange_data[async].close()
             except Exception as e:
-                logger.warning(f"Error closing connection: {e}")
+                logger.warning(fError closing connection: {e})
 
-async def demo_ccxt_integration():
-    """Demonstrate CCXT integration features."""
-    logging.basicConfig(level=logging.INFO)
+
+async def demo_ccxt_integration():Demonstrate CCXT integration features.logging.basicConfig(level = logging.INFO)
     integration = CCXTIntegration()
 
     # ... (demo implementation)
 
-if __name__ == "__main__":
-    asyncio.run(demo_ccxt_integration()) 
+
+if __name__ == __main__:
+    asyncio.run(demo_ccxt_integration())

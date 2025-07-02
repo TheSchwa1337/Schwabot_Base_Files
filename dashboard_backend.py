@@ -49,19 +49,27 @@ class SchwabootDashboardEngine:
 
         # Ring values (RITTLE-GEMM)
         self.ring_values = {
-            "R1": 0.0, "R2": 0.0, "R3": 0.0, "R4": 0.0, "R5": 0.0,
-            "R6": 0.0, "R7": 0.0, "R8": 0.0, "R9": 0.0, "R10": 0.0
+            "R1": 0.0,
+            "R2": 0.0,
+            "R3": 0.0,
+            "R4": 0.0,
+            "R5": 0.0,
+            "R6": 0.0,
+            "R7": 0.0,
+            "R8": 0.0,
+            "R9": 0.0,
+            "R10": 0.0,
         }
         # Stop Patterns
         self.stop_patterns = []
 
         # Performance tracking
         self.performance_metrics = {
-            'total_signals': 0,
-            'successful_signals': 0,
-            'total_return': 0.0,
-            'sharpe_ratio': 0.0,
-            'max_drawdown': 0.0
+            "total_signals": 0,
+            "successful_signals": 0,
+            "total_return": 0.0,
+            "sharpe_ratio": 0.0,
+            "max_drawdown": 0.0,
         }
         self.mock_detonation_active = False  # Visual flag for detonation
 
@@ -91,26 +99,58 @@ class SchwabootDashboardEngine:
                 "market_data": {
                     "price": self.current_price,
                     "volume": self.volume_history[-1] if self.volume_history else 0,
-                    "rsi": self.math_lib.calculate_rsi(np.array(self.price_history)) if len(self.price_history) > self.math_lib.rsi_period else 50,
-                    "entropy": self.math_lib.calculate_entropy(np.array(self.price_history)) if self.price_history else 0.5,
+                    "rsi": self.math_lib.calculate_rsi(np.array(self.price_history))
+                    if len(self.price_history) > self.math_lib.rsi_period
+                    else 50,
+                    "entropy": self.math_lib.calculate_entropy(
+                        np.array(self.price_history)
+                    )
+                    if self.price_history
+                    else 0.5,
                     "drift": np.sin(self.phase * 0.1) * 2,  # Simulated drift
-                    "vwap": self.math_lib.calculate_vwap(np.array(self.price_history), np.array(self.volume_history)) if self.price_history and self.volume_history else self.current_price,
-                    "atr": self.math_lib.calculate_atr(np.array(self.high_history), np.array(self.low_history), np.array(self.price_history)) if len(self.price_history) > self.math_lib.atr_period else 0,
-                    "kellyFraction": 0.25  # Placeholder
+                    "vwap": self.math_lib.calculate_vwap(
+                        np.array(self.price_history), np.array(self.volume_history)
+                    )
+                    if self.price_history and self.volume_history
+                    else self.current_price,
+                    "atr": self.math_lib.calculate_atr(
+                        np.array(self.high_history),
+                        np.array(self.low_history),
+                        np.array(self.price_history),
+                    )
+                    if len(self.price_history) > self.math_lib.atr_period
+                    else 0,
+                    "kellyFraction": 0.25,  # Placeholder
                 },
                 "ring_values": self.ring_values,
                 "hash_stream": self.hash_stream,
                 "timing_hashes": self.timing_hashes,
                 "glyph_signals": self.active_signals,
                 # Convert dataclasses to dicts
-                "stop_patterns": [asdict(p) for p in self.stop_book.get_active_patterns()],
-                "price_history": [{"timestamp": i, "price": p, "vwap": vwap} for i, (p, vwap) in enumerate(zip(self.price_history, self.math_lib.calculate_vwap(np.array(self.price_history), np.array(self.volume_history), return_array=True).tolist()))] if self.price_history and self.volume_history else [],
+                "stop_patterns": [
+                    asdict(p) for p in self.stop_book.get_active_patterns()
+                ],
+                "price_history": [
+                    {"timestamp": i, "price": p, "vwap": vwap}
+                    for i, (p, vwap) in enumerate(
+                        zip(
+                            self.price_history,
+                            self.math_lib.calculate_vwap(
+                                np.array(self.price_history),
+                                np.array(self.volume_history),
+                                return_array=True,
+                            ).tolist(),
+                        )
+                    )
+                ]
+                if self.price_history and self.volume_history
+                else [],
                 "tpf_state": self.tpf_state,
                 "paradox_visible": self.paradox_visible,
                 "stabilized": self.stabilized,
                 "phase": self.phase,
-                "performance_metrics": self.performance_metrics
-            }
+                "performance_metrics": self.performance_metrics,
+            },
         }
         await websocket.send(json.dumps(initial_state_data))
 
@@ -126,9 +166,13 @@ class SchwabootDashboardEngine:
             if command_type == "generate_signal":
                 # Backend logic to generate a signal based on current market data
                 # For now, simulate a signal and send it back
-                signal_type = "BUY" if data.get(
-                    "rsi", 0) < 40 else "SELL" if data.get(
-                    "rsi", 0) > 60 else "HOLD"
+                signal_type = (
+                    "BUY"
+                    if data.get("rsi", 0) < 40
+                    else "SELL"
+                    if data.get("rsi", 0) > 60
+                    else "HOLD"
+                )
                 confidence = data.get("confidence", 0.7)  # Placeholder
 
                 # Simulate a glyph signal
@@ -138,19 +182,27 @@ class SchwabootDashboardEngine:
                     "confidence": confidence,
                     "price": data.get("price", self.current_price),
                     "tpfState": self.tpf_state,
-                    "hashTrigger": hashlib.sha256(str(time.time()).encode()).hexdigest()[:8]
+                    "hashTrigger": hashlib.sha256(
+                        str(time.time()).encode()
+                    ).hexdigest()[:8],
                 }
                 self.active_signals.append(glyph_signal)
-                await self.broadcast({"update_type": "glyph_signals", "data": glyph_signal})
+                await self.broadcast(
+                    {"update_type": "glyph_signals", "data": glyph_signal}
+                )
 
             elif command_type == "trigger_detonation":
                 print("1337 P4TT3RN D3T0N4T10N PR0T0C0L Triggered!")
                 self.mock_detonation_active = True  # Set flag for visual effect
                 # In a real scenario, this would kick off complex backend logic
-                await self.broadcast({"update_type": "detonation_status", "data": {"active": True}})
+                await self.broadcast(
+                    {"update_type": "detonation_status", "data": {"active": True}}
+                )
                 await asyncio.sleep(3)  # Simulate detonation process
                 self.mock_detonation_active = False
-                await self.broadcast({"update_type": "detonation_status", "data": {"active": False}})
+                await self.broadcast(
+                    {"update_type": "detonation_status", "data": {"active": False}}
+                )
 
             elif command_type == "clear_hash_stream":
                 self.hash_stream = []
@@ -194,7 +246,10 @@ class SchwabootDashboardEngine:
 
             volume_change = (random.random() - 0.5) * 50
             current_volume = max(
-                100, (self.volume_history[-1] if self.volume_history else 1000) + volume_change)
+                100,
+                (self.volume_history[-1] if self.volume_history else 1000)
+                + volume_change,
+            )
 
             self.price_history.append(self.current_price)
             self.volume_history.append(current_volume)
@@ -220,15 +275,14 @@ class SchwabootDashboardEngine:
                 entropy = self.math_lib.calculate_entropy(np.array(self.price_history))
             if len(self.price_history) > 0 and len(self.volume_history) > 0:
                 vwap = self.math_lib.calculate_vwap(
-                    np.array(
-                        self.price_history), np.array(
-                        self.volume_history))
+                    np.array(self.price_history), np.array(self.volume_history)
+                )
             if len(self.high_history) > self.math_lib.atr_period:
                 atr = self.math_lib.calculate_atr(
-                    np.array(
-                        self.high_history), np.array(
-                        self.low_history), np.array(
-                        self.price_history))
+                    np.array(self.high_history),
+                    np.array(self.low_history),
+                    np.array(self.price_history),
+                )
 
             market_data_update = {
                 "price": self.current_price,
@@ -239,9 +293,11 @@ class SchwabootDashboardEngine:
                 "vwap": vwap,
                 "atr": atr,
                 # Simulated kelly
-                "kellyFraction": max(0, min(1, 0.25 + (random.random() - 0.5) * 0.1))
+                "kellyFraction": max(0, min(1, 0.25 + (random.random() - 0.5) * 0.1)),
             }
-            await self.broadcast({"update_type": "market_data", "data": market_data_update})
+            await self.broadcast(
+                {"update_type": "market_data", "data": market_data_update}
+            )
 
             # Simulate Hash Stream
             hash_value = hashlib.sha256(str(time.time()).encode()).hexdigest()
@@ -251,7 +307,7 @@ class SchwabootDashboardEngine:
                 "hash": hash_value,
                 "entropy": entropy_tag,
                 "confidence": random.random(),
-                "pattern": [random.randint(0, 15) for _ in range(8)]
+                "pattern": [random.randint(0, 15) for _ in range(8)],
             }
             self.hash_stream.append(hash_data)
             self.hash_stream = self.hash_stream[-50:]  # Keep last 50
@@ -277,25 +333,39 @@ class SchwabootDashboardEngine:
             timing_hash_data = {
                 "timestamp": time.time() * 1000,
                 "hash": hashlib.sha256(str(self.current_price).encode()).hexdigest(),
-                "state": self.tpf_state
+                "state": self.tpf_state,
             }
             self.timing_hashes.append(timing_hash_data)
             self.timing_hashes = self.timing_hashes[-20:]  # Keep last 20
-            await self.broadcast({"update_type": "timing_hashes", "data": timing_hash_data})
+            await self.broadcast(
+                {"update_type": "timing_hashes", "data": timing_hash_data}
+            )
 
             # Broadcast TPF state update for the paradox visualizer
-            await self.broadcast({"update_type": "tpf_state_update", "data": {
-                "tpf_state": self.tpf_state,
-                "paradox_visible": self.paradox_visible,
-                "stabilized": self.stabilized,
-                "phase": self.phase
-            }})
+            await self.broadcast(
+                {
+                    "update_type": "tpf_state_update",
+                    "data": {
+                        "tpf_state": self.tpf_state,
+                        "paradox_visible": self.paradox_visible,
+                        "stabilized": self.stabilized,
+                        "phase": self.phase,
+                    },
+                }
+            )
 
             # Simulate RITTLE-GEMM Ring Values
             for ring in self.ring_values:
-                self.ring_values[ring] = max(-2.0, min(2.0, self.ring_values[ring]
-                                             * 0.9 + (random.random() - 0.5) * 0.2))
-            await self.broadcast({"update_type": "ring_values", "data": self.ring_values})
+                self.ring_values[ring] = max(
+                    -2.0,
+                    min(
+                        2.0,
+                        self.ring_values[ring] * 0.9 + (random.random() - 0.5) * 0.2,
+                    ),
+                )
+            await self.broadcast(
+                {"update_type": "ring_values", "data": self.ring_values}
+            )
 
             # Simulate Stop Patterns (simplified)
             if random.random() < 0.1:  # 10% chance to update stop patterns
@@ -304,10 +374,23 @@ class SchwabootDashboardEngine:
                 num_patterns = random.randint(0, 3)
                 for _ in range(num_patterns):
                     state = random.choice(
-                        [StopPatternState.ACTIVE, StopPatternState.TRIGGERED, StopPatternState.WARNING])
-                    self.stop_patterns.append({"id": hashlib.sha256(
-                        str(random.random()).encode()).hexdigest()[:6], "state": state.value})
-                await self.broadcast({"update_type": "stop_patterns", "data": self.stop_patterns})
+                        [
+                            StopPatternState.ACTIVE,
+                            StopPatternState.TRIGGERED,
+                            StopPatternState.WARNING,
+                        ]
+                    )
+                    self.stop_patterns.append(
+                        {
+                            "id": hashlib.sha256(
+                                str(random.random()).encode()
+                            ).hexdigest()[:6],
+                            "state": state.value,
+                        }
+                    )
+                await self.broadcast(
+                    {"update_type": "stop_patterns", "data": self.stop_patterns}
+                )
 
             await asyncio.sleep(0.2)  # Update every 200ms
 
@@ -326,7 +409,8 @@ class SchwabootDashboardEngine:
         try:
             # Start the WebSocket server
             start_server = websockets.serve(
-                self.register_client, "localhost", self.websocket_port)
+                self.register_client, "localhost", self.websocket_port
+            )
             self.loop.run_until_complete(start_server)
             print(f"WebSocket server started on ws://localhost:{self.websocket_port}")
 
@@ -345,7 +429,8 @@ class SchwabootDashboardEngine:
             print("Stopping Schwaboot Dashboard Engine...")
             # Use run_coroutine_threadsafe to stop the loop from another thread
             future = asyncio.run_coroutine_threadsafe(
-                self._shutdown_websocket_server(), self.loop)
+                self._shutdown_websocket_server(), self.loop
+            )
             future.result()  # Wait for shutdown to complete
             self.data_thread.join()
             print("Schwaboot Dashboard Engine stopped.")
@@ -373,8 +458,11 @@ if __name__ == "__main__":
         from aleph_unitizer_lib import AlephUnitizer, TesseractPortal
     except ImportError as e:
         print(
-            f"ERROR: Missing a required module. Please ensure all backend modules are in your Python path. {e}")
-        print("Expected modules: mathlib_v2.py, schwabot_stop.py, rittle_gemm.py, aleph_unitizer_lib.py")
+            f"ERROR: Missing a required module. Please ensure all backend modules are in your Python path. {e}"
+        )
+        print(
+            "Expected modules: mathlib_v2.py, schwabot_stop.py, rittle_gemm.py, aleph_unitizer_lib.py"
+        )
         exit(1)
 
     engine = SchwabootDashboardEngine()

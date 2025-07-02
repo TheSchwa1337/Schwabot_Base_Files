@@ -12,23 +12,16 @@ Key Features:
 - Real-time historical context for trading decisions
 """
 
-import os
-import time
 import logging
 import hashlib
 import pandas as pd
 import numpy as np
-from typing import Dict, List, Optional, Any, Tuple
-from pathlib import Path
+from typing import Dict, Optional, Any
 from datetime import datetime, timedelta
 from decimal import Decimal, ROUND_DOWN
 
 # Import Schwabot components
 from . import (
-    HISTORICAL_DIR,
-    LIVE_DIR,
-    PREPROCESSED_DIR,
-    CACHE_DIR,
     BTC_USDC_DIR,
     BTC_USDC_COMBINED,
     BTC_USDC_HASH_MEMORY,

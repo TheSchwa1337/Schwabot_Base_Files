@@ -10,8 +10,6 @@ This script ensures consistent, modern formatting while preserving mathematical 
 import os
 import sys
 import subprocess
-import glob
-from pathlib import Path
 
 
 def run_command(cmd, description):
@@ -19,11 +17,8 @@ def run_command(cmd, description):
     print(f"\n🔄 {description}...")
     try:
         result = subprocess.run(
-            cmd,
-            shell=True,
-            capture_output=True,
-            text=True,
-            check=True)
+            cmd, shell=True, capture_output=True, text=True, check=True
+        )
         print(f"✅ {description} completed successfully")
         if result.stdout:
             print(f"Output: {result.stdout[:200]}...")
@@ -40,19 +35,30 @@ def run_command(cmd, description):
 def find_python_files():
     """Find all Python files in the codebase, excluding certain directories."""
     exclude_dirs = {
-        '__pycache__', '.git', '.venv', 'venv', 'env',
-        'build', 'dist', '*.egg-info', '.pytest_cache',
-        'node_modules', 'docs/_build', '.mypy_cache',
-        '.ruff_cache', '.tox', 'htmlcov'
+        "__pycache__",
+        ".git",
+        ".venv",
+        "venv",
+        "env",
+        "build",
+        "dist",
+        "*.egg-info",
+        ".pytest_cache",
+        "node_modules",
+        "docs/_build",
+        ".mypy_cache",
+        ".ruff_cache",
+        ".tox",
+        "htmlcov",
     }
 
     python_files = []
-    for root, dirs, files in os.walk('.'):
+    for root, dirs, files in os.walk("."):
         # Remove excluded directories
         dirs[:] = [d for d in dirs if d not in exclude_dirs]
 
         for file in files:
-            if file.endswith('.py'):
+            if file.endswith(".py"):
                 file_path = os.path.join(root, file)
                 python_files.append(file_path)
 
@@ -88,7 +94,7 @@ def main():
     print("=" * 50)
 
     # Run Black on the entire codebase
-    black_cmd = 'black --line-length=88 --target-version=py38 .'
+    black_cmd = "black --line-length=88 --target-version=py38 ."
     black_success = run_command(black_cmd, "Black formatting")
 
     # Step 3: Final flake8 check
@@ -96,7 +102,7 @@ def main():
     print("STEP 3: Final flake8 check")
     print("=" * 50)
 
-    flake8_cmd = 'python -m flake8 --config=.flake8 --count --statistics .'
+    flake8_cmd = "python -m flake8 --config=.flake8 --count --statistics ."
     flake8_success = run_command(flake8_cmd, "flake8 linting check")
 
     # Summary
@@ -118,6 +124,6 @@ def main():
     return black_success and flake8_success
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     success = main()
     sys.exit(0 if success else 1)

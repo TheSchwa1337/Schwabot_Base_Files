@@ -9,11 +9,10 @@ on problematic imports.
 
 import sys
 import os
-import time
-import math
 
 # Add the current directory to the path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
 
 def test_vmm_basic():
     """Test basic VMM functionality without external dependencies."""
@@ -22,7 +21,7 @@ def test_vmm_basic():
 
     try:
         # Import VMM directly without other dependencies
-        sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'core'))
+        sys.path.insert(0, os.path.join(os.path.dirname(__file__), "core"))
 
         # Import the VMM module directly
         import VMM_Schwabot
@@ -35,12 +34,16 @@ def test_vmm_basic():
         print(f"✅ E: {VMM_Schwabot.E:.10f}")
 
         # Test enums
-        print(f"✅ Vitruvian Zones: {[zone.value for zone in VMM_Schwabot.VitruvianZone]}")
+        print(
+            f"✅ Vitruvian Zones: {[zone.value for zone in VMM_Schwabot.VitruvianZone]}"
+        )
         print(f"✅ Limb Vectors: {[limb.value for limb in VMM_Schwabot.LimbVector]}")
-        print(f"✅ Compression Modes: {[mode.value for mode in VMM_Schwabot.CompressionMode]}")
+        print(
+            f"✅ Compression Modes: {[mode.value for mode in VMM_Schwabot.CompressionMode]}"
+        )
 
         # Test manager creation
-        vmm = VMM_Schwabot.get_vitruvian_manager()
+        VMM_Schwabot.get_vitruvian_manager()
         print("✅ VMM manager created successfully")
 
         # Test basic state update
@@ -50,10 +53,10 @@ def test_vmm_basic():
             volume=1000000.0,
             entropy=0.6,
             echo_strength=0.7,
-            drift_score=0.02
+            drift_score=0.02,
         )
 
-        print(f"✅ State updated successfully")
+        print("✅ State updated successfully")
         print(f"   Phi center: {state.phi_center:.4f}")
         print(f"   Thermal state: {state.thermal_state}")
         print(f"   Bit phase: {state.bit_phase}")
@@ -65,19 +68,17 @@ def test_vmm_basic():
 
         # Test trading route
         route = VMM_Schwabot.get_optimal_trading_route(
-            price=103586.0,
-            rsi=45.0,
-            volume=1000000.0
+            price=103586.0, rsi=45.0, volume=1000000.0
         )
 
-        print(f"✅ Trading route generated")
+        print("✅ Trading route generated")
         print(f"   Action: {route['action']}")
         print(f"   Reason: {route['reason']}")
         print(f"   Confidence: {route['confidence']:.3f}")
 
         # Test statistics
         stats = VMM_Schwabot.get_vitruvian_statistics()
-        print(f"✅ Statistics generated")
+        print("✅ Statistics generated")
         print(f"   Total triggers: {stats['total_triggers']}")
         print(f"   Current thermal state: {stats['current_thermal_state']}")
         print(f"   Current bit phase: {stats['current_bit_phase']}")
@@ -87,8 +88,10 @@ def test_vmm_basic():
     except Exception as e:
         print(f"❌ VMM basic test failed: {e}")
         import traceback
+
         traceback.print_exc()
         return False
+
 
 def test_mathematical_integration():
     """Test mathematical integration without external dependencies."""
@@ -98,7 +101,7 @@ def test_mathematical_integration():
     try:
         import VMM_Schwabot
 
-        vmm = VMM_Schwabot.get_vitruvian_manager()
+        VMM_Schwabot.get_vitruvian_manager()
 
         # Test different market scenarios
         scenarios = [
@@ -107,7 +110,7 @@ def test_mathematical_integration():
             (103586.0, 50.0, "Balance - Heart Balance"),
             (103586.0, 70.0, "Overbought - Arms Exit"),
             (103586.0, 80.0, "Peak - Halo Peak"),
-]
+        ]
         for price, rsi, description in scenarios:
             print(f"\n   Testing: {description}")
 
@@ -117,10 +120,12 @@ def test_mathematical_integration():
                 volume=1000000.0,
                 entropy=0.5,
                 echo_strength=0.6,
-                drift_score=0.02
+                drift_score=0.02,
             )
 
-            active_zones = [zone.value for zone, active in state.zone_activations.items() if active]
+            active_zones = [
+                zone.value for zone, active in state.zone_activations.items() if active
+            ]
             print(f"      Active zones: {active_zones}")
             print(f"      Thermal state: {state.thermal_state}")
             print(f"      Bit phase: {state.bit_phase}")
@@ -135,8 +140,10 @@ def test_mathematical_integration():
     except Exception as e:
         print(f"❌ Mathematical integration test failed: {e}")
         import traceback
+
         traceback.print_exc()
         return False
+
 
 def test_vitruvian_calculations():
     """Test Vitruvian mathematical calculations."""
@@ -150,7 +157,7 @@ def test_vitruvian_calculations():
         phi = VMM_Schwabot.PHI
         print(f"✅ Golden Ratio (Φ): {phi:.10f}")
         print(f"✅ Φ²: {phi**2:.10f}")
-        print(f"✅ 1/Φ: {1/phi:.10f}")
+        print(f"✅ 1/Φ: {1 / phi:.10f}")
 
         # Test Fibonacci ratios
         fib_ratios = [0.618, 0.786, 1.000, 1.414, 1.618]
@@ -166,7 +173,7 @@ def test_vitruvian_calculations():
         # Test limb positions
         vmm._update_limb_positions(103586.0, 50.0, 1000000.0)
         limb_positions = vmm.current_state.limb_positions
-        print(f"✅ Limb Positions:")
+        print("✅ Limb Positions:")
         for limb, position in limb_positions.items():
             print(f"   {limb.value}: {position:.4f}")
 
@@ -175,8 +182,10 @@ def test_vitruvian_calculations():
     except Exception as e:
         print(f"❌ Vitruvian calculations test failed: {e}")
         import traceback
+
         traceback.print_exc()
         return False
+
 
 def main():
     """Run all VMM tests."""
@@ -187,12 +196,12 @@ def main():
         ("VMM Basic Functionality", test_vmm_basic),
         ("Mathematical Integration", test_mathematical_integration),
         ("Vitruvian Calculations", test_vitruvian_calculations),
-]
+    ]
     passed = 0
     total = len(tests)
 
     for name, test_func in tests:
-        print(f"\n{'='*20} {name} {'='*20}")
+        print(f"\n{'=' * 20} {name} {'=' * 20}")
         try:
             result = test_func()
 
@@ -213,13 +222,18 @@ def main():
         print("   - Core functionality: Working")
         print("   - Mathematical integration: NCCO, SFS, UFS, ZPLS, RBMS connected")
         print("   - Vitruvian calculations: Golden ratio and Fibonacci ratios")
-        print("   - Zone mapping: Feet→Entry, Pelvis→Hold, Heart→Balance, Arms→Exit, Halo→Peak")
+        print(
+            "   - Zone mapping: Feet→Entry, Pelvis→Hold, Heart→Balance, Arms→Exit, Halo→Peak"
+        )
         print("   - Thermal states: Cool→Hot with bit phase coordination")
-        print("   - Trading routes: Optimal route generation based on Vitruvian analysis")
+        print(
+            "   - Trading routes: Optimal route generation based on Vitruvian analysis"
+        )
     else:
         print("⚠️ Some tests failed. Check the errors above.")
 
     return passed == total
+
 
 if __name__ == "__main__":
     success = main()

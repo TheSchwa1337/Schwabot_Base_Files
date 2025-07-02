@@ -18,17 +18,15 @@ import os
 import sys
 import subprocess
 import platform
-import shutil
 import json
 import logging
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, Optional
 import argparse
 
 # Configure logging
 logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s'
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
 
@@ -45,10 +43,9 @@ class SystemInfo:
 
     def get_python_version_str(self) -> str:
         """Get Python version as string."""
-        return f"{
-            self.python_version.major}.{
-            self.python_version.minor}.{
-            self.python_version.micro}"
+        return f"{self.python_version.major}.{self.python_version.minor}.{
+            self.python_version.micro
+        }"
 
     def check_python_version(self) -> bool:
         """Check if Python version is compatible."""
@@ -82,7 +79,9 @@ class DependencyManager:
         try:
             result = subprocess.run(
                 [self.system_info.get_pip_command(), "--version"],
-                capture_output=True, text=True, check=True
+                capture_output=True,
+                text=True,
+                check=True,
             )
             logger.info(f"Pip version: {result.stdout.strip()}")
             return True
@@ -94,9 +93,10 @@ class DependencyManager:
         """Upgrade pip to latest version."""
         try:
             logger.info("Upgrading pip...")
-            subprocess.run([
-                self.system_info.get_pip_command(), "install", "--upgrade", "pip"
-            ], check=True)
+            subprocess.run(
+                [self.system_info.get_pip_command(), "install", "--upgrade", "pip"],
+                check=True,
+            )
             logger.info("✅ Pip upgraded successfully")
             return True
         except subprocess.CalledProcessError as e:
@@ -108,29 +108,29 @@ class DependencyManager:
         try:
             logger.info("Installing requirements...")
 
-            pip_cmd = [self.system_info.get_pip_command(), "install", "-r",
-                       self.requirements_file]
+            pip_cmd = [
+                self.system_info.get_pip_command(),
+                "install",
+                "-r",
+                self.requirements_file,
+            ]
 
             if venv_path:
                 # Use virtual environment pip
                 if self.system_info.is_windows:
                     pip_cmd = [
-                        os.path.join(
-                            venv_path,
-                            "Scripts",
-                            "pip"),
+                        os.path.join(venv_path, "Scripts", "pip"),
                         "install",
                         "-r",
-                        self.requirements_file]
+                        self.requirements_file,
+                    ]
                 else:
                     pip_cmd = [
-                        os.path.join(
-                            venv_path,
-                            "bin",
-                            "pip"),
+                        os.path.join(venv_path, "bin", "pip"),
                         "install",
                         "-r",
-                        self.requirements_file]
+                        self.requirements_file,
+                    ]
 
             subprocess.run(pip_cmd, check=True)
             logger.info("✅ Requirements installed successfully")
@@ -143,8 +143,15 @@ class DependencyManager:
     def verify_installation(self) -> Dict[str, bool]:
         """Verify that all required packages are installed."""
         required_packages = [
-            "numpy", "pandas", "matplotlib", "scipy", "ccxt",
-            "aiohttp", "requests", "tkinter", "asyncio"
+            "numpy",
+            "pandas",
+            "matplotlib",
+            "scipy",
+            "ccxt",
+            "aiohttp",
+            "requests",
+            "tkinter",
+            "asyncio",
         ]
         results = {}
 
@@ -262,25 +269,18 @@ ENABLE_BACKTESTING=true
                 "system": {
                     "name": "Schwabot Trading System",
                     "version": "1.0.0",
-                    "mode": "demo"
+                    "mode": "demo",
                 },
                 "api": {
-                    "coinbase": {
-                        "enabled": True,
-                        "sandbox": True
-                    },
-                    "coinmarketcap": {
-                        "enabled": True
-                    },
-                    "coingecko": {
-                        "enabled": True
-                    }
+                    "coinbase": {"enabled": True, "sandbox": True},
+                    "coinmarketcap": {"enabled": True},
+                    "coingecko": {"enabled": True},
                 },
                 "trading": {
                     "enabled": False,
                     "pairs": ["BTC/USDC", "ETH/USDC", "XRP/USDC"],
-                    "max_positions": 10
-                }
+                    "max_positions": 10,
+                },
             }
             config_file = self.config_dir / "basic_config.json"
             config_file.write_text(json.dumps(basic_config, indent=2))
@@ -308,18 +308,15 @@ ENABLE_BACKTESTING=true
                         "class": "logging.FileHandler",
                         "filename": "logs/schwabot.log",
                         "formatter": "standard",
-                        "level": "INFO"
+                        "level": "INFO",
                     },
                     "console": {
                         "class": "logging.StreamHandler",
                         "formatter": "standard",
-                        "level": "INFO"
-                    }
+                        "level": "INFO",
+                    },
                 },
-                "root": {
-                    "handlers": ["file", "console"],
-                    "level": "INFO"
-                }
+                "root": {"handlers": ["file", "console"], "level": "INFO"},
             }
             log_config_file = self.config_dir / "logging_config.json"
             log_config_file.write_text(json.dumps(log_config, indent=2))
@@ -349,7 +346,10 @@ class InstallationManager:
         if not self.system_info.check_python_version():
             logger.error(
                 f"❌ Python version {
-                    self.system_info.get_python_version_str()} is not supported. " f"Python 3.8+ is required.")
+                    self.system_info.get_python_version_str()
+                } is not supported. "
+                f"Python 3.8+ is required."
+            )
             return False
 
         logger.info(f"✅ Python version: {self.system_info.get_python_version_str()}")
@@ -396,8 +396,8 @@ class InstallationManager:
             logger.info("✅ All dependencies installed successfully")
         else:
             failed_packages = [
-                pkg for pkg,
-                installed in verification_results.items() if not installed]
+                pkg for pkg, installed in verification_results.items() if not installed
+            ]
             logger.error(f"❌ Failed to install packages: {failed_packages}")
 
         return all_installed
@@ -428,8 +428,13 @@ class InstallationManager:
         try:
             # Test imports
             test_imports = [
-                "numpy", "pandas", "matplotlib", "scipy",
-                "tkinter", "asyncio", "logging"
+                "numpy",
+                "pandas",
+                "matplotlib",
+                "scipy",
+                "tkinter",
+                "asyncio",
+                "logging",
             ]
             for module in test_imports:
                 __import__(module)
@@ -438,6 +443,7 @@ class InstallationManager:
             # Test CCXT if available
             try:
                 import ccxt
+
                 logger.info("✅ CCXT import successful")
             except ImportError:
                 logger.warning("⚠️ CCXT not available (optional)")
@@ -539,9 +545,8 @@ def main():
     parser = argparse.ArgumentParser(description="Schwabot Installation Script")
     parser.add_argument("--auto", action="store_true", help="Automatic installation")
     parser.add_argument(
-        "--check",
-        action="store_true",
-        help="Check system requirements only")
+        "--check", action="store_true", help="Check system requirements only"
+    )
     parser.add_argument("--configure", action="store_true", help="Configure only")
 
     args = parser.parse_args()

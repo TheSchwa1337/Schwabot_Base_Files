@@ -24,16 +24,15 @@ import subprocess
 import sys
 import time
 from pathlib import Path
-from typing import Any, Dict, List, Optional
 
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     handlers=[
         logging.StreamHandler(sys.stdout),
-        logging.FileHandler('schwabot.log', encoding='utf-8')
-    ]
+        logging.FileHandler("schwabot.log", encoding="utf-8"),
+    ],
 )
 logger = logging.getLogger(__name__)
 
@@ -60,7 +59,7 @@ class CrossPlatformLauncher:
             "project_root": str(self.project_root),
             "dependencies_installed": False,
             "system_validated": False,
-            "last_validation": None
+            "last_validation": None,
         }
 
         logger.info(f"🚀 Schwabot Launcher initialized on {self.platform}")
@@ -83,7 +82,7 @@ class CrossPlatformLauncher:
 ╚══════════════════════════════════════════════════════════════╝
         """.format(
             f"{self.platform.title()} {platform.release()}",
-            f"{self.python_version.major}.{self.python_version.minor}.{self.python_version.micro}"
+            f"{self.python_version.major}.{self.python_version.minor}.{self.python_version.micro}",
         )
         print(banner)
 
@@ -96,7 +95,7 @@ class CrossPlatformLauncher:
             "websockets",
             "requests",
             "pyyaml",
-            "psutil"
+            "psutil",
         ]
 
         missing_packages = []
@@ -125,17 +124,17 @@ class CrossPlatformLauncher:
             "requests>=2.25.0",
             "pyyaml>=5.4.0",
             "psutil>=5.8.0",
-            "aiofiles>=0.7.0"
+            "aiofiles>=0.7.0",
         ]
 
         try:
             for requirement in requirements:
                 logger.info(f"Installing {requirement}...")
-                result = subprocess.run(
+                subprocess.run(
                     [sys.executable, "-m", "pip", "install", requirement],
                     capture_output=True,
                     text=True,
-                    check=True
+                    check=True,
                 )
                 logger.info(f"✅ {requirement} installed successfully")
 
@@ -162,7 +161,7 @@ class CrossPlatformLauncher:
                 capture_output=True,
                 text=True,
                 cwd=self.project_root,
-                timeout=300  # 5 minutes timeout
+                timeout=300,  # 5 minutes timeout
             )
 
             if result.returncode == 0:
@@ -171,12 +170,16 @@ class CrossPlatformLauncher:
                 self.system_status["last_validation"] = time.time()
                 return True
             elif result.returncode == 1:
-                logger.warning("⚠️  System validation passed with warnings - MOSTLY OPERATIONAL")
+                logger.warning(
+                    "⚠️  System validation passed with warnings - MOSTLY OPERATIONAL"
+                )
                 self.system_status["system_validated"] = True
                 self.system_status["last_validation"] = time.time()
                 return True
             else:
-                logger.error(f"❌ System validation failed with exit code {result.returncode}")
+                logger.error(
+                    f"❌ System validation failed with exit code {result.returncode}"
+                )
                 logger.error(f"Validation output: {result.stdout}")
                 logger.error(f"Validation errors: {result.stderr}")
                 return False
@@ -211,10 +214,12 @@ class CrossPlatformLauncher:
         desktop = winshell.desktop()
         shortcut_path = os.path.join(desktop, "Schwabot Trading System.lnk")
 
-        shell = Dispatch('WScript.Shell')
+        shell = Dispatch("WScript.Shell")
         shortcut = shell.CreateShortCut(shortcut_path)
         shortcut.Targetpath = sys.executable
-        shortcut.Arguments = f'"{self.project_root / "schwabot_production_launcher.py"}" --mode demo'
+        shortcut.Arguments = (
+            f'"{self.project_root / "schwabot_production_launcher.py"}" --mode demo'
+        )
         shortcut.WorkingDirectory = str(self.project_root)
         shortcut.IconLocation = sys.executable
         shortcut.save()
@@ -229,7 +234,7 @@ class CrossPlatformLauncher:
         macos_dir.mkdir(parents=True, exist_ok=True)
 
         # Create Info.plist
-        info_plist = f"""<?xml version="1.0" encoding="UTF-8"?>
+        info_plist = """<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
@@ -270,7 +275,7 @@ Version=1.0
 Type=Application
 Name=Schwabot Trading System
 Comment=Advanced AI Trading Bot
-Exec="{sys.executable}" "{self.project_root / 'schwabot_production_launcher.py'}" --mode demo
+Exec="{sys.executable}" "{self.project_root / "schwabot_production_launcher.py"}" --mode demo
 Path={self.project_root}
 Icon=utilities-terminal
 Terminal=true
@@ -307,6 +312,7 @@ Categories=Office;Finance;
 
         try:
             from launcher import main as launcher_main
+
             await launcher_main(mode="simulation")
         except Exception as e:
             logger.error(f"❌ Error starting simulation mode: {e}")
@@ -323,6 +329,7 @@ Categories=Office;Finance;
 
         try:
             from launcher import main as launcher_main
+
             await launcher_main(mode="live")
         except Exception as e:
             logger.error(f"❌ Error starting live mode: {e}")
@@ -330,7 +337,9 @@ Categories=Office;Finance;
     def _confirm_live_trading(self) -> bool:
         """Confirm live trading with user."""
         try:
-            confirmation = input("⚠️  Are you sure you want to start LIVE TRADING? Type 'YES' to confirm: ")
+            confirmation = input(
+                "⚠️  Are you sure you want to start LIVE TRADING? Type 'YES' to confirm: "
+            )
             return confirmation.strip().upper() == "YES"
         except KeyboardInterrupt:
             return False
@@ -343,7 +352,7 @@ Categories=Office;Finance;
         demo_data = {
             "portfolio_value": 100000.0,
             "btc_price": 50000.0,
-            "current_position": 0.1
+            "current_position": 0.1,
         }
 
         for i in range(10):
@@ -353,10 +362,14 @@ Categories=Office;Finance;
 
             # Calculate portfolio value
             position_value = demo_data["current_position"] * demo_data["btc_price"]
-            cash_value = demo_data["portfolio_value"] - (demo_data["current_position"] * 50000)
+            cash_value = demo_data["portfolio_value"] - (
+                demo_data["current_position"] * 50000
+            )
             total_value = position_value + cash_value
 
-            logger.info(f"📊 Tick {i+1}: BTC ${demo_data['btc_price']:.2f} | Portfolio: ${total_value:.2f}")
+            logger.info(
+                f"📊 Tick {i + 1}: BTC ${demo_data['btc_price']:.2f} | Portfolio: ${total_value:.2f}"
+            )
 
             await asyncio.sleep(2)
 
@@ -369,6 +382,7 @@ Categories=Office;Finance;
         try:
             # Try to import and start the dashboard
             from dashboard_backend import run_dashboard
+
             await run_dashboard()
         except ImportError:
             logger.info("📡 Starting basic web server on port 8080...")
@@ -383,7 +397,9 @@ Categories=Office;Finance;
         import threading
 
         def serve():
-            with socketserver.TCPServer(("", 8080), http.server.SimpleHTTPRequestHandler) as httpd:
+            with socketserver.TCPServer(
+                ("", 8080), http.server.SimpleHTTPRequestHandler
+            ) as httpd:
                 logger.info("🌐 Server running at http://localhost:8080")
                 httpd.serve_forever()
 
@@ -433,45 +449,31 @@ Examples:
   python schwabot_production_launcher.py --install-deps
   python schwabot_production_launcher.py --validate-system
   python schwabot_production_launcher.py --dashboard
-        """
+        """,
     )
 
     parser.add_argument(
         "--mode",
         choices=["demo", "simulation", "live"],
         default="demo",
-        help="Operating mode (default: demo)"
+        help="Operating mode (default: demo)",
     )
 
     parser.add_argument(
-        "--install-deps",
-        action="store_true",
-        help="Install required dependencies"
+        "--install-deps", action="store_true", help="Install required dependencies"
     )
 
     parser.add_argument(
-        "--validate-system",
-        action="store_true",
-        help="Validate system functionality"
+        "--validate-system", action="store_true", help="Validate system functionality"
     )
 
-    parser.add_argument(
-        "--dashboard",
-        action="store_true",
-        help="Start web dashboard"
-    )
+    parser.add_argument("--dashboard", action="store_true", help="Start web dashboard")
 
     parser.add_argument(
-        "--create-shortcut",
-        action="store_true",
-        help="Create desktop shortcut"
+        "--create-shortcut", action="store_true", help="Create desktop shortcut"
     )
 
-    parser.add_argument(
-        "--verbose",
-        action="store_true",
-        help="Enable verbose logging"
-    )
+    parser.add_argument("--verbose", action="store_true", help="Enable verbose logging")
 
     args = parser.parse_args()
 
@@ -504,7 +506,9 @@ Examples:
 
         # Check dependencies if not installing them
         if not args.install_deps and not launcher.check_dependencies():
-            logger.error("❌ Dependencies not installed. Run with --install-deps first.")
+            logger.error(
+                "❌ Dependencies not installed. Run with --install-deps first."
+            )
             return 1
 
         # Start the requested mode

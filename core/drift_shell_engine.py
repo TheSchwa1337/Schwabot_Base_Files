@@ -19,9 +19,7 @@ from typing import Callable
 
 
 # -*- coding: utf-8 -*-
-"""Advanced Drift Shell Engine - Temporal Cohesion & Memory Validity System."
-
-Implements the complete mathematical framework for timing alignment between memory
+Advanced Drift Shell Engine - Temporal Cohesion & Memory Validity System.Implements the complete mathematical framework for timing alignment between memory
 recall and decision-action alignment. This engine ensures:
 
 1. Memory freshness validation through Temporal Drift Compensation Formula (TDCF)
@@ -31,14 +29,11 @@ recall and decision-action alignment. This engine ensures:
 5. Unified activation validator for entry/exit decisions
 
 Key Innovation: Not just fast response times, but VALID response timing that
-accounts for memory age, hash drift, execution windows, and correction overlays."
-"""
-
-# Import existing Schwabot systems
+accounts for memory age, hash drift, execution windows, and correction overlays.# Import existing Schwabot systems
 try:
         except ImportError as e:
-    # Graceful fallback for development environments"
-logging.warning(f"Some Schwabot modules not available: {e}")
+    # Graceful fallback for development environments
+logging.warning(fSome Schwabot modules not available: {e})
 QuantumDriftShellEngine = None
 TemporalIntelligenceIntegration = None
 EntropyTracker = None
@@ -49,10 +44,7 @@ logger = logging.getLogger(__name__)
 
 
 @dataclass
-class MemorySnapshot:"
-    """Represents a compressed memory snapshot for temporal validation."""
-
-tick_id: str
+class MemorySnapshot:Represents a compressed memory snapshot for temporal validation.tick_id: str
 timestamp: float
 price: float
 volume: float
@@ -65,10 +57,7 @@ momentum: Optional[float] = None
 
 
 @dataclass
-class TimingMetrics:"
-    """Timing validation metrics for drift analysis."""
-
-T_mem_read: float = 0.0  # Time to access buffered memory
+class TimingMetrics:Timing validation metrics for drift analysis.T_mem_read: float = 0.0  # Time to access buffered memory
     T_hash_eval: float = 0.0  # Time to re-calculate logic paths
     T_AI_response: float = 0.0  # Time for AI model confirmation
     T_execute: float = 0.0  # Time to execute trade
@@ -77,10 +66,8 @@ T_mem_read: float = 0.0  # Time to access buffered memory
 
 
 @dataclass
-class BitmapConfidence:"
-    """Confidence metrics for bitmap selection."""
-
-bitmap_16_confidence: float = 0.0  # Confidence in 16-bit map
+class BitmapConfidence:
+    Confidence metrics for bitmap selection.bitmap_16_confidence: float = 0.0  # Confidence in 16-bit map
     bitmap_10k_confidence: float = 0.0  # Confidence in 10k-bit map
     execution_window_scale: float = 1.0  # ζ: Execution window scale
     tensor_heat_signature: float = 0.0  # Θ: Tensor heat strength
@@ -88,45 +75,24 @@ bitmap_16_confidence: float = 0.0  # Confidence in 16-bit map
 
 
 @dataclass
-class ProfitVector:"
-    """3-dimensional profit vector for directional movement prediction."""
-
-x: float = 0.0  # Long/Short direction magnitude
+class ProfitVector:
+    3-dimensional profit vector for directional movement prediction.x: float = 0.0  # Long/Short direction magnitude
     y: float = 0.0  # Volatility/stability axis
     z: float = 0.0  # Time/momentum phase
-    magnitude: float = 0.0"
-    direction: str = "hold"  # "long", "short", "hold"
-
-
-@dataclass
-class CorrectionFactors:"
-    """Correction injection factors for anomaly mitigation."""
-
-quantum_correction: float = 0.0  # ε: Quantum Phase Correction
+    magnitude: float = 0.0
+    direction: str =  hold  # long,short,hold@dataclass
+class CorrectionFactors:Correction injection factors for anomaly mitigation.quantum_correction: float = 0.0  # ε: Quantum Phase Correction
     tensor_correction: float = 0.0  # β: Tensor Drift Compensation
     smart_money_correction: float = 0.0  # δ: Historical Ghost Re-alignment
 confidence_weights: Dict[str, float] = field(default_factory=dict)
 
 
-class DriftShellEngine:"
-    """Advanced Drift Shell Engine implementing temporal cohesion mathematics."""
-
-def __init__(
-self,:
-shell_radius: float = 144.44,
-memory_buffer_size: int = 1024,
-confidence_threshold: float = 0.7,
-        timing_threshold_ms: float = 300.0,
-):"
-        """Initialize the advanced drift shell engine."
-
-Args:
+class DriftShellEngine:
+    Advanced Drift Shell Engine implementing temporal cohesion mathematics.def __init__():Initialize the advanced drift shell engine.Args:
             shell_radius: Radius of the drift shell (Fibonacci-based)
 memory_buffer_size: Size of compressed memory buffer
 confidence_threshold: Minimum confidence for trade activation
-            timing_threshold_ms: Maximum acceptable timing drift in milliseconds"
-"""
-self.shell_radius = shell_radius
+            timing_threshold_ms: Maximum acceptable timing drift in millisecondsself.shell_radius = shell_radius
 self.memory_buffer_size = memory_buffer_size
 self.confidence_threshold = confidence_threshold
         self.timing_threshold_ms = timing_threshold_ms
@@ -150,18 +116,11 @@ self.pattern_utils = PatternUtils() if PatternUtils else None
 self.risk_manager = RiskManager() if RiskManager else None
 
 # Performance metrics
-self.stats = {"
-"total_evaluations": 0,"
-"valid_memory_recalls": 0,"
-"drift_rejections": 0,"
-"correction_injections": 0,"
-"avg_validation_time": 0.0,"
-"bitmap_16_selections": 0,"
-"bitmap_10k_selections": 0,
+self.stats = {
+total_evaluations: 0,valid_memory_recalls: 0,drift_rejections": 0,correction_injections": 0,avg_validation_time": 0.0,bitmap_16_selections": 0,bitmap_10k_selections": 0,
 }
 
-            logger.info("
-f"🕰️ Advanced Drift Shell Engine initialized with {memory_buffer_size} memory slots"
+            logger.info(f"🕰️ Advanced Drift Shell Engine initialized with {memory_buffer_size} memory slots
 )
 
 def record_memory(
@@ -172,10 +131,7 @@ volume: float,
 context_snapshot: Dict[str, Any],
 rsi: Optional[float] = None,
 momentum: Optional[float] = None,
-) -> str:"
-        """Record a new memory snapshot with tensor compression."
-
-Args:
+) -> str:"Record a new memory snapshot with tensor compression.Args:
             tick_id: Unique tick identifier
 price: Current price
 volume: Current volume
@@ -184,12 +140,10 @@ rsi: RSI indicator value
 momentum: Momentum indicator value
 
 Returns:
-            SHA256 hash of the memory snapshot"
-"""
-timestamp = time.time()
+            SHA256 hash of the memory snapshot"timestamp = time.time()
 
-# Generate hash for this memory snapshot"
-hash_data = f"{tick_id}_{price}_{volume}_{timestamp}_{rsi}_{momentum}"
+# Generate hash for this memory snapshot
+hash_data = f{tick_id}_{price}_{volume}_{timestamp}_{rsi}_{momentum}
         hash_val = hashlib.sha256(hash_data.encode()).hexdigest()
 
 # Compress context into tensor format (float16 for GPU efficiency)
@@ -220,10 +174,8 @@ current_price: float,
 current_volume: float,
 current_hash: str,
 timing_metrics: Optional[TimingMetrics] = None,
-) -> Dict[str, Any]:"
-        """Evaluate temporal drift and memory validity using TDCF."
-
-Implements: Validity(ΔT) = exp(−(σ_tick * ΔT + α_exec)) * ρ_hash
+) -> Dict[str, Any]:
+        Evaluate temporal drift and memory validity using TDCF.Implements: Validity(ΔT) = exp(−(σ_tick * ΔT + α_exec)) * ρ_hash
 
 Args:
             current_price: Current market price
@@ -232,24 +184,17 @@ current_hash: Current market state hash
 timing_metrics: Optional timing measurements
 
 Returns:
-            Dictionary containing drift analysis and valid memory recalls"
-"""
-start_time = time.time()"
-self.stats["total_evaluations"] += 1
+            Dictionary containing drift analysis and valid memory recallsstart_time = time.time()
+self.stats[total_evaluations] += 1
 
 now = time.time()
 valid_recalls = []
 drift_scores = []
 
-if not timing_metrics:
-            timing_metrics = TimingMetrics()
+if not timing_metrics: timing_metrics = TimingMetrics()
 
 # Calculate timing thresholds
-timing_windows = {"
-"immediate": 0.110,  # 0-110ms: Valid for immediate phase-match"
-            "confirmation": 0.180,  # 110-180ms: Valid for AI confirmation"
-            "drift_zone": 0.300,  # 180-300ms: Drift zone, needs revalidation"
-"macro_only": float("in"),  # 300ms+: Use only long-term logic
+timing_windows = {immediate: 0.110,  # 0-110ms: Valid for immediate phase-matchconfirmation: 0.180,  # 110-180ms: Valid for AI confirmationdrift_zone: 0.300,  # 180-300ms: Drift zone, needs revalidationmacro_only: float(in),  # 300ms+: Use only long-term logic
 }
 
 for memory in self.memory_log:
@@ -275,85 +220,57 @@ rho_hash = self._calculate_hash_similarity(current_hash, memory.hash_val)
 # Execution delay factor (α_exec)
             alpha_exec = timing_metrics.total_latency / 1000.0  # Convert ms to seconds
 
-# TDCF: Temporal Drift Compensation Formula
+# TDCF: Temporal Drif t Compensation Formula
 validity = math.exp(-(sigma_tick * delta_t + alpha_exec)) * rho_hash
 
 # Determine timing window
-delta_t_ms = delta_t * 1000"
-timing_window = "macro_only""
-if delta_t_ms <= timing_windows["immediate"]:"
-                timing_window = "immediate""
-elif delta_t_ms <= timing_windows["confirmation"]:"
-                timing_window = "confirmation""
-elif delta_t_ms <= timing_windows["drift_zone"]:"
-                timing_window = "drift_zone"
-
-# Enhanced validation with timing windows"
-if timing_window in ["immediate", "confirmation"]:
-                confidence_multiplier = 1.0"
-elif timing_window == "drift_zone":
+delta_t_ms = delta_t * 1000
+timing_window =  macro_only
+if delta_t_ms <= timing_windows[immediate]:
+                timing_window = immediateelif delta_t_ms <= timing_windows[confirmation]:
+                timing_window = confirmationelif delta_t_ms <= timing_windows[drift_zone]:
+                timing_window = drift_zone# Enhanced validation with timing windows
+if timing_window in [immediate,confirmation]:
+                confidence_multiplier = 1.0
+elif timing_window == drift_zone:
                 confidence_multiplier = 0.5  # Reduce confidence in drift zone
-else:
-                confidence_multiplier = 0.1  # Very low confidence for macro-only
+else: confidence_multiplier = 0.1  # Very low confidence for macro-only
 
 final_validity = validity * confidence_multiplier
 
 # Store drift score for analysis
 drift_scores.append(
-{"
-"memory_id": memory.tick_id,"
-"delta_t_ms": delta_t_ms,"
-"sigma_tick": sigma_tick,"
-"rho_hash": rho_hash,"
-"validity": validity,"
-"final_validity": final_validity,"
-"timing_window": timing_window,
+{memory_id: memory.tick_id,delta_t_ms: delta_t_ms,sigma_tick: sigma_tick,rho_hash: rho_hash,validity": validity,final_validity": final_validity,timing_window": timing_window,
 }
 )
 
 # Accept memory if validity exceeds threshold
             if final_validity >= self.confidence_threshold:
                 valid_recalls.append(
-{"
-"memory": memory,"
-"validity": final_validity,"
-"timing_window": timing_window,
+{memory: memory,validity": final_validity,timing_window": timing_window,
 }
-)"
-self.stats["valid_memory_recalls"] += 1
-else:"
-                self.stats["drift_rejections"] += 1
+)self.stats[valid_memory_recalls] += 1
+else :
+                self.stats[drift_rejections] += 1
 
 # Update performance metrics
 validation_time = time.time() - start_time
 self._update_avg_validation_time(validation_time)
 
-        return {"
-"valid_recalls": valid_recalls,"
-"drift_scores": drift_scores,"
-"total_memories": len(self.memory_log),"
-"validation_time": validation_time,"
-"timing_metrics": timing_metrics,
+        return {valid_recalls: valid_recalls,drift_scores: drift_scores,total_memories: len(self.memory_log),validation_time": validation_time,timing_metrics": timing_metrics,
 }
 
 def calculate_bitmap_confidence(:
 self, current_context: Dict[str, Any], profit_projection: float
-) -> BitmapConfidence:"
-        """Calculate confidence overlay for 16-bit vs 10k-bit bitmap selection using BCOE."
-
-Implements: B_total(t) = Softmax([B₁(t) * ζ, B₂(t) * Θ * Δ_profit])
+) -> BitmapConfidence:"Calculate confidence overlay for 16-bit vs 10k-bit bitmap selection using BCOE.Implements: B_total(t) = Softmax([B₁(t) * ζ, B₂(t) * Θ * Δ_profit])
 
 Args:
             current_context: Current market context
 profit_projection: Projected profit spread
 
 Returns:
-            BitmapConfidence object with selection weights"
-"""
-# Extract context features"
-volatility = current_context.get("volatility", 0.0)"
-        volume_spike = current_context.get("volume_spike", 0.0)"
-        trend_strength = current_context.get("trend_strength", 0.0)
+            BitmapConfidence object with selection weights"# Extract context features
+volatility = current_context.get(volatility, 0.0)volume_spike = current_context.get(volume_spike, 0.0)trend_strength = current_context.get(trend_strength, 0.0)
 
 # Calculate execution window scale (ζ)
 # Higher volatility = smaller window
@@ -381,13 +298,13 @@ bitmap_16_confidence = exp_x1 / softmax_sum
 bitmap_10k_confidence = exp_x2 / softmax_sum
 
 # Update selection statistics
-if bitmap_16_confidence > bitmap_10k_confidence:"
-            self.stats["bitmap_16_selections"] += 1
-else:"
-            self.stats["bitmap_10k_selections"] += 1
+if bitmap_16_confidence > bitmap_10k_confidence:
+            self.stats[bitmap_16_selections] += 1
+else :
+            self.stats[bitmap_10k_selections] += 1
 
         return BitmapConfidence(
-bitmap_16_confidence=bitmap_16_confidence,
+bitmap_16_confidence = bitmap_16_confidence,
 bitmap_10k_confidence=bitmap_10k_confidence,
 execution_window_scale=execution_window_scale,
 tensor_heat_signature=tensor_heat_signature,
@@ -402,10 +319,7 @@ rsi: float,
 volume: float,
 momentum: float,
 phase_vector: Tuple[float, float, float],
-    ) -> ProfitVector:"
-        """Calculate profit vector forecast using PVF for directional movement prediction."
-
-Implements: PV(t) = ∇(H ⊕ G) + tanh(m(t) * RSI(t)) + ψ(t)
+    ) -> ProfitVector:Calculate profit vector forecast using PVF for directional movement prediction.Implements: PV(t) = ∇(H ⊕ G) + tanh(m(t) * RSI(t)) + ψ(t)
 
 Args:
             historical_signals: List of historical signal hashes
@@ -416,15 +330,10 @@ momentum: Momentum delta
 phase_vector: Phase vector (peak, valley, wave-shift)
 
 Returns:
-            ProfitVector with 3D directional forecast"
-"""
-# Calculate historical signal hash gradient (∇(H ⊕ G))
-if historical_signals and len(historical_signals) >= 2:"
-            recent_hash = int(historical_signals[-1].get("hash", "0")[:8], 16) / (2**32)"
-prev_hash = int(historical_signals[-2].get("hash", "0")[:8], 16) / (2**32)
+            ProfitVector with 3D directional forecast# Calculate historical signal hash gradient (∇(H ⊕ G))
+if historical_signals and len(historical_signals) >= 2: recent_hash = int(historical_signals[-1].get(hash,0)[:8], 16) / (2**32)prev_hash = int(historical_signals[-2].get(hash,0)[:8], 16) / (2**32)
 hash_gradient = recent_hash - prev_hash
-else:
-            hash_gradient = 0.0
+else: hash_gradient = 0.0
 
 # Combine hash gradient with ghost alignment
 hash_ghost_component = hash_gradient + ghost_alignment
@@ -445,17 +354,13 @@ pv_z = phase_z  # Time/momentum phase
 magnitude = math.sqrt(pv_x**2 + pv_y**2 + pv_z**2)
 
 # Determine trading direction
-if magnitude < 0.1:"
-            direction = "hold"
-        elif pv_x > 0.2:"
-            direction = "long"
-elif pv_x < -0.2:"
-            direction = "short"
-else:"
-            direction = "hold"
-
-        return ProfitVector(
-x=pv_x, y=pv_y, z=pv_z, magnitude=magnitude, direction=direction
+if magnitude < 0.1:
+            direction = hold
+        elif pv_x > 0.2:
+            direction =  longelif pv_x < -0.2:
+            direction =  shortelse :
+            direction =  holdreturn ProfitVector(
+x = pv_x, y=pv_y, z=pv_z, magnitude=magnitude, direction=direction
 )
 
 def inject_correction(
@@ -463,10 +368,7 @@ self,:
 current_profit_vector: ProfitVector,
 deviation_magnitude: float,
 quantum_state: Optional[Dict[str, Any]] = None,
-) -> CorrectionFactors:"
-        """Apply correction injection for dynamic anomaly mitigation using CIF."
-
-Implements: C(t) = ε * Corr_Q(t) + β * Corr_G(t) + δ * Corr_SM(t)
+) -> CorrectionFactors:Apply correction injection for dynamic anomaly mitigation using CIF.Implements: C(t) = ε * Corr_Q(t) + β * Corr_G(t) + δ * Corr_SM(t)
 
 Args:
             current_profit_vector: Current PV calculation
@@ -474,22 +376,18 @@ deviation_magnitude: Magnitude of detected deviation
 quantum_state: Optional quantum correction state
 
 Returns:
-            CorrectionFactors for next tick adjustment"
-""""
-self.stats["correction_injections"] += 1
+            CorrectionFactors for next tick adjustmentself.stats[correction_injections] += 1
 
 # Quantum Phase Correction (Corr_Q) via QSC
 epsilon = 0.3  # Quantum correction weight
-if self.quantum_engine and quantum_state:
-            quantum_correction = (
+if self.quantum_engine and quantum_state: quantum_correction = (
 self.quantum_engine.calculate_phase_correction(
 deviation_magnitude, quantum_state
-)"
-if hasattr(self.quantum_engine, "calculate_phase_correction"):
+)
+if hasattr(self.quantum_engine, calculate_phase_correction):
 else deviation_magnitude * 0.1
 )
-else:
-            quantum_correction = deviation_magnitude * 0.1  # Fallback correction
+else: quantum_correction = deviation_magnitude * 0.1  # Fallback correction
 
 # Tensor Drift Compensation (Corr_G) via Galileo Tensor
         beta = 0.4  # Tensor correction weight
@@ -511,16 +409,14 @@ else:
 
 # Calculate confidence weights from entropy
         if self.entropy_tracker:
-            confidence_weights = {"
-"quantum": epsilon,"
-"tensor": beta,"
-"smart_money": delta,
+            confidence_weights = {quantum: epsilon,
+tensor: beta,smart_money: delta,
 }
-else:"
-            confidence_weights = {"quantum": 0.2, "tensor": 0.3, "smart_money": 0.2}
+else :
+            confidence_weights = {quantum: 0.2,tensor: 0.3,smart_money: 0.2}
 
         return CorrectionFactors(
-quantum_correction=quantum_correction,
+quantum_correction = quantum_correction,
 tensor_correction=tensor_correction,
 smart_money_correction=smart_money_correction,
 confidence_weights=confidence_weights,
@@ -532,10 +428,7 @@ drift_result: Dict[str, Any],
 bitmap_confidence: BitmapConfidence,
 profit_vector: ProfitVector,
 correction_factors: Optional[CorrectionFactors] = None,
-) -> Dict[str, Any]:"
-        """Unified activation validator implementing the complete confidence equation."
-
-Implements: Confidence(t) = Validity(ΔT) + B_total(t) + PV(t) + C(t) ≥ χ_activation
+) -> Dict[str, Any]:Unified activation validator implementing the complete confidence equation.Implements: Confidence(t) = Validity(ΔT) + B_total(t) + PV(t) + C(t) ≥ χ_activation
 
 Args:
             drift_result: Result from drift evaluation
@@ -544,14 +437,10 @@ profit_vector: Profit vector forecast
 correction_factors: Optional correction factors
 
 Returns:
-            Validation result with activation decision"
-"""
-# Extract validity score from drift analysis"
-valid_recalls = drift_result.get("valid_recalls", [])
-if valid_recalls:"
-            max_validity = max(recall["validity"] for recall in valid_recalls)
-else:
-            max_validity = 0.0
+            Validation result with activation decision# Extract validity score from drif t analysis
+valid_recalls = drift_result.get(valid_recalls, [])
+if valid_recalls: max_validity = max(recall[validity] for recall in valid_recalls)
+else: max_validity = 0.0
 
 # Bitmap confidence component
 bitmap_total = max(
@@ -565,15 +454,14 @@ bitmap_confidence.bitmap_10k_confidence,
 # Correction component
 if correction_factors:
             correction_component = (
-correction_factors.quantum_correction"
-* correction_factors.confidence_weights.get("quantum", 0.0)
-                + correction_factors.tensor_correction"
-                * correction_factors.confidence_weights.get("tensor", 0.0)
-+ correction_factors.smart_money_correction"
-* correction_factors.confidence_weights.get("smart_money", 0.0)
+correction_factors.quantum_correction
+* correction_factors.confidence_weights.get(quantum, 0.0)
+                + correction_factors.tensor_correction
+                * correction_factors.confidence_weights.get(tensor, 0.0)
++ correction_factors.smart_money_correction
+* correction_factors.confidence_weights.get(smart_money, 0.0)
 )
-else:
-            correction_component = 0.0
+else: correction_component = 0.0
 
 # Unified Confidence Equation
 total_confidence = (
@@ -589,54 +477,27 @@ risk_adjustment = 1.0
             # Apply risk-adjusted position sizing
 risk_metrics = self.risk_manager.assess_risk(
                 portfolio_value=100000,  # This should come from actual portfolio
-# This should come from actual positions"
-asset_exposures={"BTC/USD": 10000},
-)"
-if any(metric.status == "red" for metric in risk_metrics.values()):
+# This should come from actual positions
+asset_exposures={BTC/USD: 10000},
+)
+if any(metric.status == red for metric in risk_metrics.values()):
                 risk_adjustment = 0.5  # Reduce activation confidence in high risk
 
 final_confidence = total_confidence * risk_adjustment
         final_activation = final_confidence >= self.confidence_threshold
 
-        return {"
-"should_activate": final_activation,"
-"total_confidence": total_confidence,"
-"final_confidence": final_confidence,"
-"risk_adjustment": risk_adjustment,"
-"components": {"
-"validity": max_validity,"
-"bitmap": bitmap_total,"
-"profit_vector": pv_component,"
-"correction": correction_component,
-},"
-"selected_bitmap": ("
-"16-bit"
-if bitmap_confidence.bitmap_16_confidence:
-> bitmap_confidence.bitmap_10k_confidence"
-else "10k-bit"
-),"
-"trade_direction": profit_vector.direction,"
-"timing_window": ("
-valid_recalls[0]["timing_window"] if valid_recalls else "none"
-),
+        return {should_activate: final_activation,total_confidence: total_confidence,final_confidence: final_confidence,risk_adjustment: risk_adjustment,components": {validity: max_validity,bitmap: bitmap_total,profit_vector: pv_component,correction": correction_component,
+},selected_bitmap: (16-bitif bitmap_confidence.bitmap_16_confidence:
+> bitmap_confidence.bitmap_10k_confidence
+else10k-bit),trade_direction": profit_vector.direction,timing_window": (valid_recalls[0][timing_window] if valid_recalls elsenone),
 }
 
-def _compress_to_tensor(self, context_snapshot: Dict[str, Any]) -> np.ndarray:"
-        """Compress market context into tensor format for GPU processing."""
-        # Extract key features and convert to float16 tensor
-features = ["
-context_snapshot.get("price", 0.0),"
-            context_snapshot.get("volume", 0.0),"
-            context_snapshot.get("rsi", 50.0),"
-            context_snapshot.get("momentum", 0.0),"
-            context_snapshot.get("volatility", 0.0),"
-            context_snapshot.get("trend_strength", 0.0),
+def _compress_to_tensor(self, context_snapshot: Dict[str, Any]) -> np.ndarray:"Compress market context into tensor format for GPU processing.# Extract key features and convert to float16 tensor
+features = [context_snapshot.get(price, 0.0),context_snapshot.get(volume, 0.0),context_snapshot.get(rsi", 50.0),context_snapshot.get(momentum", 0.0),context_snapshot.get(volatility", 0.0),context_snapshot.get(trend_strength", 0.0),
 ]
-        return np.array(features, dtype=np.float16)
+        return np.array(features, dtype = np.float16)
 
-def _calculate_hash_similarity(self, hash1: str, hash2: str): -> float:"
-        """Calculate hash similarity using Hamming distance."""
-if len(hash1) != len(hash2):
+def _calculate_hash_similarity() -> float:Calculate hash similarity using Hamming distance.if len(hash1) != len(hash2):
             return 0.0
 
 # Calculate Hamming distance
@@ -644,43 +505,28 @@ differences = sum(c1 != c2 for c1, c2 in zip(hash1, hash2))
 similarity = 1.0 - (differences / len(hash1))
         return similarity
 
-def _update_avg_validation_time(self, new_time: float): -> None:"
-        """Update average validation time metric.""""
-total_evals = self.stats["total_evaluations"]"
-current_avg = self.stats["avg_validation_time"]
+def _update_avg_validation_time() -> None:
+        Update average validation time metric.total_evals = self.stats[total_evaluations]current_avg = self.stats[avg_validation_time]
 
-if total_evals == 1:"
-            self.stats["avg_validation_time"] = new_time
-else:"
-            self.stats["avg_validation_time"] = (
+if total_evals == 1:
+            self.stats[avg_validation_time] = new_time
+else :
+            self.stats[avg_validation_time] = (
 current_avg * (total_evals - 1) + new_time
 ) / total_evals
 
-def get_performance_stats(self) -> Dict[str, Any]:"
-        """Get comprehensive performance statistics."""
-stats = self.stats.copy()
+def get_performance_stats(self) -> Dict[str, Any]:Get comprehensive performance statistics.stats = self.stats.copy()
 stats.update(
-{"
-"memory_usage": len(self.memory_log),"
-"hash_memory_size": len(self.hash_memory),"
-                "tensor_cache_size": len(self.tensor_cache),"
-"memory_buffer_utilization": len(self.memory_log)
-/ self.memory_buffer_size,"
-"drift_rejection_rate": self.stats["drift_rejections"]"
-/ max(self.stats["total_evaluations"], 1),"
-"bitmap_16_preference": self.stats["bitmap_16_selections"]
-/ max("
-self.stats["bitmap_16_selections"]"
-+ self.stats["bitmap_10k_selections"],
+{memory_usage: len(self.memory_log),hash_memory_size": len(self.hash_memory),tensor_cache_size": len(self.tensor_cache),memory_buffer_utilization": len(self.memory_log)
+/ self.memory_buffer_size,drift_rejection_rate": self.stats[drift_rejections]/ max(self.stats[total_evaluations], 1),bitmap_16_preference": self.stats[bitmap_16_selections]
+/ max(self.stats[bitmap_16_selections]+ self.stats[bitmap_10k_selections],
 1,
 ),
 }
 )
         return stats
 
-def cleanup_expired_memory(self, max_age_seconds: float = 3600) -> int:"
-        """Clean up expired memory entries to maintain performance."""
-current_time = time.time()
+def cleanup_expired_memory(self, max_age_seconds: float = 3600) -> int:Clean up expired memory entries to maintain performance.current_time = time.time()
 initial_count = len(self.memory_log)
 
 # Filter out expired memories
@@ -706,12 +552,10 @@ removed_count = initial_count - len(self.memory_log)
         return removed_count
 
 
-def main():"
-    """Demonstrate the Advanced Drift Shell Engine functionality."""
-logging.basicConfig(level=logging.INFO)
-"
-print("🕰️ Advanced Drift Shell Engine Demo")"
-print("=" * 50)
+def main():
+    Demonstrate the Advanced Drift Shell Engine functionality.logging.basicConfig(level = logging.INFO)
+
+print(🕰️ Advanced Drift Shell Engine Demo)print(=* 50)
 
 # Initialize engine
 engine = DriftShellEngine(
@@ -721,116 +565,86 @@ confidence_threshold=0.7,
         timing_threshold_ms=300.0,
 )
 
-# Record some memory snapshots"
-print("\n📝 Recording memory snapshots...")
+# Record some memory snapshots
+print(\n📝 Recording memory snapshots...)
 for i in range(5):
-        hash_val = engine.record_memory("
-tick_id=f"tick_{i}",
-price=50000 + i * 100,
+        hash_val = engine.record_memory(
+tick_id = ftick_{i},
+price = 50000 + i * 100,
 volume=1000000 + i * 50000,
-context_snapshot={"
-"volatility": 0.02 + i * 0.005,"
-                "volume_spike": 0.1 + i * 0.02,"
-                "trend_strength": 0.6 + i * 0.05,
+context_snapshot={volatility: 0.02 + i * 0.005,volume_spike: 0.1 + i * 0.02,trend_strength": 0.6 + i * 0.05,
 },
-rsi=45 + i * 2,
+rsi = 45 + i * 2,
 momentum=0.1 + i * 0.02,
-)"
-print(f"  Memory {i}: {hash_val[:16]}...")
+)
+print(fMemory {i}: {hash_val[:16]}...)
 
-# Test drift evaluation"
-print("\n⏱️ Testing drift evaluation...")
+# Test drift evaluation
+print(\n⏱️ Testing drift evaluation...)
 drift_result = engine.evaluate_drift(
 current_price=50500,
-current_volume=1200000,"
-current_hash="test_hash_current",
-timing_metrics=TimingMetrics(
+current_volume=1200000,
+current_hash=test_hash_current",
+timing_metrics = TimingMetrics(
 T_mem_read=0.05,
             T_hash_eval=0.03,
             T_AI_response=0.12,
             T_execute=0.08,
             total_latency=0.28,
 ),
-)"
-print(f"  Valid recalls: {len(drift_result['valid_recalls'])}")'"
-print(f"  Validation time: {drift_result['validation_time']:.4f}s")
+)
+print(fValid recalls: {len(drift_result['valid_recalls'])})'print(fValidation time: {drift_result['validation_time']:.4f}s)
 
-# Test bitmap confidence"
-print("\n🎯 Testing bitmap confidence...")
+# Test bitmap confidence
+print(\n🎯 Testing bitmap confidence...)
 bitmap_conf = engine.calculate_bitmap_confidence(
-current_context={"
-"volatility": 0.035,"
-            "volume_spike": 0.15,"
-            "trend_strength": 0.72,
+current_context={volatility: 0.035,volume_spike": 0.15,trend_strength": 0.72,
 },
-profit_projection=0.025,
-)"
-print(f"  16-bit confidence: {bitmap_conf.bitmap_16_confidence:.3f}")"
-print(f"  10k-bit confidence: {bitmap_conf.bitmap_10k_confidence:.3f}")
+profit_projection = 0.025,
+)
+print(f16-bit confidence: {bitmap_conf.bitmap_16_confidence:.3f})print(f10k-bit confidence: {bitmap_conf.bitmap_10k_confidence:.3f})
 
-# Test profit vector forecast"
-    print("\n📈 Testing profit vector forecast...")
-    profit_vector = engine.forecast_profit_vector("
-historical_signals=[{"hash": "abc123def456"}, {"hash": "def456ghi789"}],
-ghost_alignment=0.15,
+# Test profit vector forecast
+    print(\n📈 Testing profit vector forecast...)
+    profit_vector = engine.forecast_profit_vector(
+historical_signals = [{hash:abc123def456}, {hash:def456ghi789}],
+ghost_alignment = 0.15,
 rsi=62,
 volume=1150000,
 momentum=0.08,
         phase_vector=(0.2, -0.1, 0.05),
-)"
-print(f"  Direction: {profit_vector.direction}")"
-    print(f"  Magnitude: {profit_vector.magnitude:.3f}")
-print("
-f"  Vector: ({
-            profit_vector.x:.3f}, {
-            profit_vector.y:.3f}, {"
-                profit_vector.z:.3f})""
 )
+print(fDirection: {profit_vector.direction})print(fMagnitude: {profit_vector.magnitude:.3f})
+print(fVector: ({profit_vector.x:.3f}, {
+            profit_vector.y:.3f}, {
+                profit_vector.z:.3f}))
 
-# Test correction injection"
-print("\n🔧 Testing correction injection...")
+# Test correction injection
+print(\n🔧 Testing correction injection...)
 correction = engine.inject_correction(
 current_profit_vector=profit_vector,
-        deviation_magnitude=0.12,"
-        quantum_state={"phase": 0.8, "coherence": 0.9},
-)"
-print(f"  Quantum correction: {correction.quantum_correction:.4f}")"
-print(f"  Tensor correction: {correction.tensor_correction:.4f}")"
-print(f"  Smart money correction: {correction.smart_money_correction:.4f}")
+        deviation_magnitude=0.12,
+        quantum_state = {phase: 0.8,coherence: 0.9},
+)print(fQuantum correction: {correction.quantum_correction:.4f})print(fTensor correction: {correction.tensor_correction:.4f})print(fSmart money correction: {correction.smart_money_correction:.4f})
 
-# Test unified confidence validator"
-print("\n✅ Testing unified confidence validator...")
+# Test unified confidence validator
+print(\n✅ Testing unified confidence validator...)
 validation_result = engine.unified_confidence_validator(
 drift_result=drift_result,
 bitmap_confidence=bitmap_conf,
 profit_vector=profit_vector,
 correction_factors=correction,
-)'"
-print(f"  Should activate: {validation_result['should_activate']}")'"
-print(f"  Total confidence: {validation_result['total_confidence']:.3f}")'"
-print(f"  Selected bitmap: {validation_result['selected_bitmap']}")'"
-print(f"  Trade direction: {validation_result['trade_direction']}")
+)'
+print(fShould activate: {validation_result['should_activate']})'print(fTotal confidence: {validation_result['total_confidence']:.3f})'print(fSelected bitmap: {validation_result['selected_bitmap']})'print(fTrade direction: {validation_result['trade_direction']})
 
-# Performance statistics"
-print("\n📊 Performance Statistics:")
+# Performance statistics
+print(\n📊 Performance Statistics:)
 stats = engine.get_performance_stats()
 for key, value in stats.items():
-        if isinstance(value, float):"
-            print(f"  {key}: {value:.4f}")
-else:"
-            print(f"  {key}: {value}")
-"
-print("\n🎯 Advanced Drift Shell Engine demo completed!")"
-print("The engine successfully implements all mathematical frameworks:")"
-print("  ✅ TDCF: Temporal Drift Compensation Formula")"
-print("  ✅ BCOE: Bitmap Confidence Overlay Equation")"
-print("  ✅ PVF: Profit Vectorization Forecast")"
-print("  ✅ CIF: Correction Injection Function")"
-print("  ✅ Unified Confidence Validator")
-
-"
-if __name__ == "__main__":
-    main()
-"
-""""
-"""'"
+        if isinstance(value, float):
+            print(f{key}: {value:.4f})
+else :
+            print(f{key}: {value})
+print(\n🎯 Advanced Drif t Shell Engine demo completed!)print(The engine successfully implements all mathematical frameworks:)print(✅ TDCF: Temporal Drift Compensation Formula)print(✅ BCOE: Bitmap Confidence Overlay Equation)print(✅ PVF: Profit Vectorization Forecast)print(✅ CIF: Correction Injection Function)print(✅ Unified Confidence Validator)
+if __name__ == __main__:
+    main()""'"

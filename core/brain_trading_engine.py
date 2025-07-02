@@ -15,17 +15,12 @@ from typing import Tuple
 
 
 # -*- coding: utf-8 -*-
-"""
-Brain Trading Engine - Core Implementation
-==========================================
+
+Brain Trading Engine - Core Implementation ==========================================
 
 Implements the brain glyph trading system with mathematical optimization.
-This replaces placeholder functions with working implementations."
-"""
-
-# Import core mathematical modules
-try:
-    UNIFIED_MATH_AVAILABLE = True
+This replaces placeholder functions with working implementations.# Import core mathematical modules
+try: UNIFIED_MATH_AVAILABLE = True
         except ImportError:
     UNIFIED_MATH_AVAILABLE = False
 # Create a simple fallback - unified_math is not used as a callable function
@@ -35,24 +30,18 @@ logger = logging.getLogger(__name__)
 
 
 @dataclass
-class BrainSignal:"
-    """Represents a brain glyph trading signal."""
-
-timestamp: float
+class BrainSignal:
+    Represents a brain glyph trading signal.timestamp: float
 price: float
 volume: float
 signal_strength: float
 enhancement_factor: float
 profit_score: float
-confidence: float"
-symbol: str = "BTC"
+confidence: floatsymbol: str = BTC
 
 
 @dataclass
-class TradingMetrics:"
-    """Trading performance metrics."""
-
-total_signals: int = 0
+class TradingMetrics:Trading performance metrics.total_signals: int = 0
 profitable_signals: int = 0
 total_profit: float = 0.0
 avg_profit_per_signal: float = 0.0
@@ -61,20 +50,14 @@ sharpe_ratio: float = 0.0
 max_drawdown: float = 0.0
 
 
-class BrainTradingEngine:"
-    """
+class BrainTradingEngine:
 Core brain trading engine that processes brain glyph signals.
 
 This implements the mathematical logic for:
     - Brain signal processing
 - Profit optimization
 - Risk management
-- Signal validation"
-"""
-
-def __init__(self, config: Optional[Dict[str, Any]] = None):"
-        """Initialize brain trading engine."""
-self.config = config or {}
+- Signal validationdef __init__():Initialize brain trading engine.self.config = config or {}
 self.signal_history: List[BrainSignal] = []
 self.metrics = TradingMetrics()
 
@@ -83,14 +66,12 @@ self.base_profit_rate = self.config.get('base_profit_rate', 0.001)  # 0.1%'
 self.enhancement_range = self.config.get('enhancement_range', (0.5, 2.0))'
 self.confidence_threshold = self.config.get('confidence_threshold', 0.6)'
 self.max_history_size = self.config.get('max_history_size', 1000)
-"
-            logger.info("🧠 Brain Trading Engine initialized")
 
-def process_brain_signal(":
-self, price: float, volume: float, symbol: str = "BTC", **kwargs
-) -> BrainSignal:"
-        """
-Process a brain glyph trading signal.
+            logger.info(🧠 Brain Trading Engine initialized)
+
+def process_brain_signal(:
+self, price: float, volume: float, symbol: str = BTC, **kwargs
+) -> BrainSignal:Process a brain glyph trading signal.
 
 Args:
             price: Current asset price
@@ -99,12 +80,10 @@ symbol: Asset symbol
 **kwargs: Additional parameters
 
 Returns:
-            Processed brain signal with optimization metrics"
-"""
-try:
+            Processed brain signal with optimization metrics"try:
             # Validate inputs
-if not self._validate_inputs(price, volume):"
-                raise ValueError("Invalid price or volume data")
+if not self._validate_inputs(price, volume):
+                raise ValueError(Invalid price or volume data)
 
 # Calculate signal strength based on market conditions
 signal_strength = self._calculate_signal_strength(price, volume)
@@ -137,15 +116,15 @@ self._store_signal(brain_signal)
 
 # Update metrics
 self._update_metrics(brain_signal)
-"
-            logger.debug(f"Brain signal processed: {symbol} profit={profit_score:.4f}")
+
+            logger.debug(fBrain signal processed: {symbol} profit = {profit_score:.4f})
         return brain_signal
 
-        except Exception as e:"
-            logger.error(f"Brain signal processing failed: {e}")
+        except Exception as e:
+            logger.error(fBrain signal processing failed: {e})
 # Return neutral signal
         return BrainSignal(
-timestamp=time.time(),
+timestamp = time.time(),
 price=price,
 volume=volume,
 signal_strength=0.0,
@@ -155,9 +134,8 @@ confidence=0.0,
 symbol=symbol,
 )
 
-def _validate_inputs(self, price: float, volume: float) -> bool:"
-        """Validate input parameters."""
-try:
+def _validate_inputs(self, price: float, volume: float) -> bool:
+        Validate input parameters.try:
             return (
 isinstance(price, (int, float))
 and price > 0
@@ -171,12 +149,9 @@ and not math.isinf(volume)
         except (TypeError, ValueError):
             return False
 
-def _calculate_signal_strength(self, price: float, volume: float) -> float:"
-        """Calculate signal strength based on market conditions."""
-try:
+def _calculate_signal_strength(self, price: float, volume: float) -> float:Calculate signal strength based on market conditions.try:
             # Volume-weighted price momentum
-if len(self.signal_history) >= 5:
-                recent_prices = [s.price for s in self.signal_history[-5:]]
+if len(self.signal_history) >= 5: recent_prices = [s.price for s in self.signal_history[-5:]]
 price_momentum = (price - recent_prices[0]) / max(
 recent_prices[0], 1e-10
 )
@@ -198,24 +173,20 @@ signal_strength = 0.6 * price_momentum + 0.4 * volume_momentum
 # Normalize to [-1, 1] range
         return max(-1.0, min(1.0, signal_strength))
 
-        except Exception as e:"
-            logger.error(f"Signal strength calculation failed: {e}")
+        except Exception as e:
+            logger.error(fSignal strength calculation failed: {e})
         return 0.0
 
-def _calculate_brain_enhancement(self, price: float, volume: float) -> float:"
-        """
+def _calculate_brain_enhancement(self, price: float, volume: float) -> float:
+        
 Calculate brain enhancement factor using advanced mathematical modeling.
-"
-This implements the core "brain" algorithm logic."
-"""
-try:
+This implements the corebrainalgorithm logic.try:
             # Base enhancement from price-volume relationship
 pv_ratio = price / max(volume, 1.0)
 base_enhancement = 1.0 + math.tanh(pv_ratio * 0.0001)
 
 # Historical momentum enhancement
-if len(self.signal_history) >= 10:
-                recent_signals = self.signal_history[-10:]
+if len(self.signal_history) >= 10: recent_signals = self.signal_history[-10:]
 profit_trend = sum(s.profit_score for s in recent_signals) / len(
 recent_signals
 )
@@ -238,8 +209,8 @@ enhancement = base_enhancement * momentum_enhancement * volatility_factor
 min_enhancement, max_enhancement = self.enhancement_range
         return max(min_enhancement, min(max_enhancement, enhancement))
 
-        except Exception as e:"
-            logger.error(f"Brain enhancement calculation failed: {e}")
+        except Exception as e:
+            logger.error(fBrain enhancement calculation failed: {e})
         return 1.0
 
 def _calculate_profit_score(
@@ -248,9 +219,8 @@ price: float,
 volume: float,
 signal_strength: float,
 enhancement_factor: float,
-) -> float:"
-        """Calculate optimized profit score."""
-try:
+) -> float:
+        Calculate optimized profit score.try:
             # Base profit calculation
 base_profit = price * volume * self.base_profit_rate
 
@@ -265,22 +235,19 @@ if UNIFIED_MATH_AVAILABLE:
                 try:'
                     # Use the unified math system's multiply method'
 optimized_profit = enhanced_profit * 1.1
-        except Exception:
-                    optimized_profit = enhanced_profit * 1.1
+        except Exception: optimized_profit = enhanced_profit * 1.1
 else:
                 optimized_profit = enhanced_profit * 1.1
 
         return float(optimized_profit)
 
-        except Exception as e:"
-            logger.error(f"Profit score calculation failed: {e}")
+        except Exception as e:
+            logger.error(fProfit score calculation failed: {e})
         return 0.0
 
 def _calculate_confidence(:
 self, signal_strength: float, enhancement_factor: float
-) -> float:"
-        """Calculate confidence level for the signal."""
-try:
+) -> float:Calculate confidence level for the signal.try:
             # Base confidence from signal strength
 strength_confidence = abs(signal_strength)
 
@@ -288,8 +255,7 @@ strength_confidence = abs(signal_strength)
 enhancement_confidence = 1.0 - abs(enhancement_factor - 1.0)
 
 # Historical accuracy factor
-if self.metrics.total_signals > 10:
-                accuracy_factor = self.metrics.win_rate
+if self.metrics.total_signals > 10: accuracy_factor = self.metrics.win_rate
 else:
                 accuracy_factor = 0.5  # Neutral when no history
 
@@ -302,22 +268,19 @@ confidence = (
 
         return max(0.0, min(1.0, confidence))
 
-        except Exception as e:"
-            logger.error(f"Confidence calculation failed: {e}")
+        except Exception as e:
+            logger.error(fConfidence calculation failed: {e})
         return 0.0
 
-def _store_signal(self, signal: BrainSignal) -> None:"
-        """Store signal in history with size management."""
-self.signal_history.append(signal)
+def _store_signal(self, signal: BrainSignal) -> None:
+        Store signal in history with size management.self.signal_history.append(signal)
 
 # Manage history size
 if len(self.signal_history) > self.max_history_size:
             # Keep most recent half
 self.signal_history = self.signal_history[-self.max_history_size // 2 :]
 
-def _update_metrics(self, signal: BrainSignal) -> None:"
-        """Update trading metrics."""
-try:
+def _update_metrics(self, signal: BrainSignal) -> None:Update trading metrics.try:
             self.metrics.total_signals += 1
 
 # Consider signal profitable if above threshold
@@ -341,117 +304,60 @@ self.metrics.total_profit / self.metrics.profitable_signals
 )
 
 # Calculate Sharpe ratio (simplified)
-if len(self.signal_history) >= 30:
-                recent_profits = [s.profit_score for s in self.signal_history[-30:]]
+if len(self.signal_history) >= 30: recent_profits = [s.profit_score for s in self.signal_history[-30:]]
 if np.std(recent_profits) > 0:
                     self.metrics.sharpe_ratio = np.mean(recent_profits) / np.std(
 recent_profits
 )
 
-        except Exception as e:"
-            logger.error(f"Metrics update failed: {e}")
+        except Exception as e:
+            logger.error(fMetrics update failed: {e})
 
-def get_trading_decision(self, signal: BrainSignal) -> Dict[str, Any]:"
-        """
-Generate trading decision from brain signal.
+def get_trading_decision(self, signal: BrainSignal) -> Dict[str, Any]:Generate trading decision from brain signal.
 
 Returns:
-            Dictionary with trading decision information"
-"""
-try:
+            Dictionary with trading decision informationtry:
             # Determine action based on signal
-if signal.confidence < self.confidence_threshold:"
-                action = "HOLD"
+if signal.confidence < self.confidence_threshold: action = HOLD
 position_size = 0.0
-elif signal.signal_strength > 0.3:"
-                action = "BUY"
-position_size = min(0.1, signal.confidence * 0.2)  # Max 10% position
-elif signal.signal_strength < -0.3:"
-                action = "SELL"
+elif signal.signal_strength > 0.3:
+                action =  BUYposition_size = min(0.1, signal.confidence * 0.2)  # Max 10% position
+elif signal.signal_strength < -0.3:
+                action =  SELL
 position_size = min(0.1, signal.confidence * 0.2)
-else:"
-                action = "HOLD"
-position_size = 0.0
+else:
+                action =  HOLDposition_size = 0.0
 
-        return {"
-"action": action,"
-"position_size": position_size,"
-"confidence": signal.confidence,"
-"expected_profit": signal.profit_score,"
-"signal_strength": signal.signal_strength,"
-"timestamp": signal.timestamp,"
-"symbol": signal.symbol,"
-"reasoning": f"Brain signal: {action} with {signal.confidence:.2f} confidence",
+        return {action: action,position_size: position_size,confidence: signal.confidence,expected_profit: signal.profit_score,signal_strength": signal.signal_strength,timestamp": signal.timestamp,symbol": signal.symbol,reasoning": f"Brain signal: {action} with {signal.confidence:.2f} confidence,
 }
 
-        except Exception as e:"
-            logger.error(f"Trading decision generation failed: {e}")
-        return {"
-"action": "HOLD","
-"position_size": 0.0,"
-"confidence": 0.0,"
-"expected_profit": 0.0,"
-"signal_strength": 0.0,"
-"timestamp": time.time(),"
-"symbol": "BTC","
-"reasoning": "Error in signal processing",
+        except Exception as e:logger.error(fTrading decision generation failed: {e})
+        return {action:HOLD,position_size": 0.0,confidence": 0.0,expected_profit": 0.0,signal_strength": 0.0,timestamp": time.time(),symbol":BTC",reasoning":Error in signal processing",
 }
 
-def get_metrics_summary(self) -> Dict[str, Any]:"
-        """Get trading metrics summary."""
-        return {"
-"total_signals": self.metrics.total_signals,"
-"profitable_signals": self.metrics.profitable_signals,"
-"win_rate": self.metrics.win_rate,"
-"total_profit": self.metrics.total_profit,"
-"avg_profit_per_signal": self.metrics.avg_profit_per_signal,"
-"sharpe_ratio": self.metrics.sharpe_ratio,"
-"max_drawdown": self.metrics.max_drawdown,"
-"signals_in_history": len(self.signal_history),
+def get_metrics_summary(self) -> Dict[str, Any]:"Get trading metrics summary.return {total_signals: self.metrics.total_signals,profitable_signals": self.metrics.profitable_signals,win_rate": self.metrics.win_rate,total_profit": self.metrics.total_profit,avg_profit_per_signal": self.metrics.avg_profit_per_signal,sharpe_ratio": self.metrics.sharpe_ratio,max_drawdown": self.metrics.max_drawdown,signals_in_history": len(self.signal_history),
 }
-"
-def export_signals(self, filepath: str = "brain_signals.json") -> bool:"
-        """Export signal history to JSON file."""
-try:
-            export_data = {"
-"metrics": self.get_metrics_summary(),"
-"signals": [
-{"
-"timestamp": s.timestamp,"
-"price": s.price,"
-"volume": s.volume,"
-"signal_strength": s.signal_strength,"
-"enhancement_factor": s.enhancement_factor,"
-"profit_score": s.profit_score,"
-"confidence": s.confidence,"
-"symbol": s.symbol,
+def export_signals(self, filepath: str = brain_signals.json) -> bool:Export signal history to JSON file.try: export_data = {metrics: self.get_metrics_summary(),signals: [{timestamp: s.timestamp,price": s.price,volume": s.volume,signal_strength": s.signal_strength,enhancement_factor: s.enhancement_factor,profit_score": s.profit_score,confidence": s.confidence,symbol": s.symbol,
 }
 for s in self.signal_history:
-],"
-"config": self.config,
+],config": self.config,
 }
 '
 with open(filepath, 'w') as f:
-                json.dump(export_data, f, indent=2)
-"
-            logger.info(f"Brain signals exported to {filepath}")
+                json.dump(export_data, f, indent = 2)
+
+            logger.info(fBrain signals exported to {filepath})
         return True
 
-        except Exception as e:"
-            logger.error(f"Signal export failed: {e}")
+        except Exception as e:
+            logger.error(fSignal export failed: {e})
         return False
 
 
-def demo_brain_trading_engine():"
-    """Demonstration of the brain trading engine.""""
-print("🧠 Brain Trading Engine Demo")"
-print("=" * 50)
+def demo_brain_trading_engine():Demonstration of the brain trading engine.print(🧠 Brain Trading Engine Demo)print(=* 50)
 
 # Initialize engine
-config = {'
-'base_profit_rate': 0.002,  # 0.2%'
-'confidence_threshold': 0.7,'
-'enhancement_range': (0.8, 1.5),
+config = {'base_profit_rate': 0.002,  # 0.2%'confidence_threshold': 0.7,'enhancement_range': (0.8, 1.5),
 }
 engine = BrainTradingEngine(config)
 
@@ -463,70 +369,49 @@ test_data = [
 (52000.0, 1500.0),  # Strong upward movement
 (51800.0, 1100.0),  # Slight decrease
 ]
-"
-print("\nProcessing brain signals:")
+
+print(\nProcessing brain signals:)
 decisions = []
 
 for i, (price, volume) in enumerate(test_data):
         signal = engine.process_brain_signal(price, volume)
 decision = engine.get_trading_decision(signal)
 decisions.append(decision)
-"
-print(f"Signal {i+1}: Price=${price:,.0f}, Volume={volume:,.0f}")
-print("
-f"  Action: {"'
-decision['action']}, Confidence: {'"
-decision['confidence']:.3f}""
-)
-print("
-f"  Profit Score: {"
-signal.profit_score:.4f}, Strength: {"
-signal.signal_strength:.3f}""
-)
+
+print(fSignal {i+1}: Price = ${price:,.0f}, Volume={volume:,.0f})
+print(
+fAction: {'
+decision['action']}, Confidence: {'
+decision['confidence']:.3f})
+print(fProfit Score: {
+signal.profit_score:.4f}, Strength: {
+signal.signal_strength:.3f})
 print()
 
 # Show summary
-metrics = engine.get_metrics_summary()"
-print("Final Metrics:")'"
-print(f"  Total Signals: {metrics['total_signals']}")'"
-print(f"  Win Rate: {metrics['win_rate']:.2%}")'"
-print(f"  Total Profit: {metrics['total_profit']:.4f}")'"
-print(f"  Avg Profit/Signal: {metrics['avg_profit_per_signal']:.4f}")
+metrics = engine.get_metrics_summary()
+print(Final Metrics:)'print(fTotal Signals: {metrics['total_signals']})'print(fWin Rate: {metrics['win_rate']:.2%})'print(fTotal Profit: {metrics['total_profit']:.4f})'print(fAvg Profit/Signal: {metrics['avg_profit_per_signal']:.4f})
 
-# Export data"
-engine.export_signals("demo_brain_signals.json")"
-print("\n✅ Demo completed. Data exported to demo_brain_signals.json")
-
-"
-if __name__ == "__main__":
+# Export data
+engine.export_signals(demo_brain_signals.json)print(\n✅ Demo completed. Data exported to demo_brain_signals.json)
+if __name__ == __main__:
     demo_brain_trading_engine()
 
 # ---------------------------------------------------------------------------
 # Module-level Risk-controller helpers (simple registry)
-# ---------------------------------------------------------------------------"
-_risk_manager_ref: Optional["RiskManager"] = None  # type: ignore
+# ---------------------------------------------------------------------------
+_risk_manager_ref: Optional[RiskManager] = None  # type: ignore
 
-"
-def register_risk_manager(risk_manager: "RiskManager") -> None:  # noqa: F821"
-"""Register the active RiskManager so other engines can tweak parameters."""
-global _risk_manager_ref
+
+def register_risk_manager(risk_manager:RiskManager) -> None:  # noqa: F821Register the active RiskManager so other engines can tweak parameters.global _risk_manager_ref
 _risk_manager_ref = risk_manager
 
 
-def update_risk_threshold(new_vol_threshold: float) -> bool:"
-    """Dynamically update the volatility threshold in the registered RiskManager."
-
-Returns ``True`` if the update succeeded, ``False`` otherwise."
-"""
-if _risk_manager_ref is None:"
-            logger.warning("No RiskManager registered – cannot update threshold")
+def update_risk_threshold(new_vol_threshold: float) -> bool:Dynamically update the volatility threshold in the registered RiskManager.Returns ``True`` if the update succeeded, ``False`` otherwise.if _risk_manager_ref is None:
+            logger.warning(No RiskManager registered – cannot update threshold)
         return False
-"
-_risk_manager_ref.config["volatility_threshold"] = float(new_vol_threshold)
-            logger.info("
-"🔧 Risk threshold updated: volatility_threshold=%.4", new_vol_threshold
+
+_risk_manager_ref.config[volatility_threshold] = float(new_vol_threshold)
+            logger.info(🔧 Risk threshold updated: volatility_threshold = %.4, new_vol_threshold
 )
-        return True
-"
-""""
-"""'"
+        return True'"

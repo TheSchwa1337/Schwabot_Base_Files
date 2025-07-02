@@ -10,7 +10,6 @@ Handles complex syntax errors including:
 - Import statement errors
 """
 
-import os
 import re
 import subprocess
 import sys
@@ -20,16 +19,14 @@ from pathlib import Path
 def fix_complex_syntax_errors(file_path: str) -> bool:
     """Fix complex syntax errors in a file."""
     try:
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, "r", encoding="utf-8") as f:
             content = f.read()
 
         original_content = content
-        lines = content.split('\n')
+        lines = content.split("\n")
         fixed_lines = []
 
         for i, line in enumerate(lines):
-            original_line = line
-
             # Fix 1: Handle unterminated strings with special characters
             # Look for lines that end with quotes but might be unterminated
             if line.strip().endswith('"') and line.count('"') % 2 == 1:
@@ -48,7 +45,7 @@ def fix_complex_syntax_errors(file_path: str) -> bool:
                         line += "'"
 
             # Fix 3: Handle f-strings with missing placeholders
-            if ('f"' in line or "f'" in line) and '{' not in line and '}' not in line:
+            if ('f"' in line or "f'" in line) and "{" not in line and "}" not in line:
                 # Convert f-string to regular string
                 line = line.replace('f"', '"').replace("f'", "'")
 
@@ -59,8 +56,8 @@ def fix_complex_syntax_errors(file_path: str) -> bool:
                 last_quote_pos = line.rfind('"')
                 if last_quote_pos > 0:
                     # Check if there's content after the last quote
-                    after_quote = line[last_quote_pos + 1:].strip()
-                    if after_quote and not after_quote.startswith((')', ',', ']', '}')):
+                    after_quote = line[last_quote_pos + 1 :].strip()
+                    if after_quote and not after_quote.startswith((")", ",", "]", "}")):
                         # Likely unterminated, add closing quote
                         line += '"'
 
@@ -68,13 +65,13 @@ def fix_complex_syntax_errors(file_path: str) -> bool:
             if "'" in line and line.count("'") % 2 == 1:
                 last_quote_pos = line.rfind("'")
                 if last_quote_pos > 0:
-                    after_quote = line[last_quote_pos + 1:].strip()
-                    if after_quote and not after_quote.startswith((')', ',', ']', '}')):
+                    after_quote = line[last_quote_pos + 1 :].strip()
+                    if after_quote and not after_quote.startswith((")", ",", "]", "}")):
                         line += "'"
 
             # Fix 6: Handle unterminated strings with escape sequences
             # Look for patterns like: "text with \n or \t without closing
-            if '\\' in line and ('"' in line or "'" in line):
+            if "\\" in line and ('"' in line or "'" in line):
                 # Count quotes, accounting for escaped quotes
                 double_quotes = len(re.findall(r'(?<!\\)"', line))
                 single_quotes = len(re.findall(r"(?<!\\)'", line))
@@ -86,11 +83,11 @@ def fix_complex_syntax_errors(file_path: str) -> bool:
 
             fixed_lines.append(line)
 
-        content = '\n'.join(fixed_lines)
+        content = "\n".join(fixed_lines)
 
         # Write back if changed
         if content != original_content:
-            with open(file_path, 'w', encoding='utf-8') as f:
+            with open(file_path, "w", encoding="utf-8") as f:
                 f.write(content)
             return True
 
@@ -106,15 +103,18 @@ def run_flake8_check(file_path: str) -> list:
     try:
         result = subprocess.run(
             [
-                sys.executable, "-m", "flake8", file_path,
+                sys.executable,
+                "-m",
+                "flake8",
+                file_path,
                 "--max-line-length=100",
-                "--select=E999"
+                "--select=E999",
             ],
             capture_output=True,
             text=True,
-            check=False
+            check=False,
         )
-        return result.stdout.strip().split('\n') if result.stdout.strip() else []
+        return result.stdout.strip().split("\n") if result.stdout.strip() else []
     except Exception as e:
         print(f"Error running flake8 on {file_path}: {e}")
         return []
@@ -124,12 +124,10 @@ def get_specific_error_info(file_path: str) -> list:
     """Get specific error information for a file."""
     try:
         result = subprocess.run(
-            [
-                sys.executable, "-m", "py_compile", file_path
-            ],
+            [sys.executable, "-m", "py_compile", file_path],
             capture_output=True,
             text=True,
-            check=False
+            check=False,
         )
 
         if result.returncode != 0:
@@ -155,7 +153,7 @@ def main():
         if file_path.is_file():
             # Check for syntax errors
             violations = run_flake8_check(str(file_path))
-            syntax_errors = [v for v in violations if 'E999' in v]
+            syntax_errors = [v for v in violations if "E999" in v]
 
             if syntax_errors:
                 print(f"\n📁 Processing: {file_path}")
@@ -171,16 +169,16 @@ def main():
                 # Try to fix
                 if fix_complex_syntax_errors(str(file_path)):
                     files_fixed += 1
-                    print(f"  ✅ Applied fixes")
+                    print("  ✅ Applied fixes")
 
                     # Check if fixed
                     violations_after = run_flake8_check(str(file_path))
-                    syntax_errors_after = [v for v in violations_after if 'E999' in v]
+                    syntax_errors_after = [v for v in violations_after if "E999" in v]
 
                     if syntax_errors_after:
                         print(f"  ⚠️  {len(syntax_errors_after)} syntax errors remain")
                     else:
-                        print(f"  ✅ All syntax errors fixed!")
+                        print("  ✅ All syntax errors fixed!")
 
     # Summary
     print("\n" + "=" * 60)

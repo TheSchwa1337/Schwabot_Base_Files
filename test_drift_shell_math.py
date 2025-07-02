@@ -21,12 +21,12 @@ This script demonstrates the core mathematical frameworks without external depen
 """
 
 import math
-import time
-import hashlib
-from typing import Dict, List, Tuple
+from typing import Tuple
 
 
-def calculate_tdcf(delta_t: float, sigma_tick: float, alpha_exec: float, rho_hash: float) -> float:
+def calculate_tdcf(
+    delta_t: float, sigma_tick: float, alpha_exec: float, rho_hash: float
+) -> float:
     """
     Calculate Temporal Drift Compensation Formula (TDCF).
 
@@ -45,7 +45,9 @@ def calculate_tdcf(delta_t: float, sigma_tick: float, alpha_exec: float, rho_has
     return max(0.0, min(1.0, validity))
 
 
-def calculate_bcoe(volatility: float, volume_spike: float, profit_projection: float) -> Tuple[float, float]:
+def calculate_bcoe(
+    volatility: float, volume_spike: float, profit_projection: float
+) -> Tuple[float, float]:
     """
     Calculate Bitmap Confidence Overlay Equation (BCOE).
 
@@ -84,8 +86,12 @@ def calculate_bcoe(volatility: float, volume_spike: float, profit_projection: fl
     return bitmap_16_confidence, bitmap_10k_confidence
 
 
-def calculate_pvf(hash_gradient: float, momentum: float, rsi: float,
-                  phase_vector: Tuple[float, float, float]) -> Tuple[float, float, float, float]:
+def calculate_pvf(
+    hash_gradient: float,
+    momentum: float,
+    rsi: float,
+    phase_vector: Tuple[float, float, float],
+) -> Tuple[float, float, float, float]:
     """
     Calculate Profit Vectorization Forecast (PVF).
 
@@ -120,8 +126,12 @@ def calculate_pvf(hash_gradient: float, momentum: float, rsi: float,
     return pv_x, pv_y, pv_z, magnitude
 
 
-def calculate_cif(deviation_magnitude: float, epsilon: float = 0.3,
-                  beta: float = 0.4, delta: float = 0.3) -> Tuple[float, float, float]:
+def calculate_cif(
+    deviation_magnitude: float,
+    epsilon: float = 0.3,
+    beta: float = 0.4,
+    delta: float = 0.3,
+) -> Tuple[float, float, float]:
     """
     Calculate Correction Injection Function (CIF).
 
@@ -144,9 +154,13 @@ def calculate_cif(deviation_magnitude: float, epsilon: float = 0.3,
     return quantum_correction, tensor_correction, smart_money_correction
 
 
-def calculate_unified_confidence(validity: float, bitmap_confidence: float,
-                                pv_magnitude: float, correction_total: float,
-                                activation_threshold: float = 0.7) -> Tuple[bool, float]:
+def calculate_unified_confidence(
+    validity: float,
+    bitmap_confidence: float,
+    pv_magnitude: float,
+    correction_total: float,
+    activation_threshold: float = 0.7,
+) -> Tuple[bool, float]:
     """
     Calculate Unified Confidence Validator.
 
@@ -163,7 +177,9 @@ def calculate_unified_confidence(validity: float, bitmap_confidence: float,
         Tuple of (should_activate, total_confidence)
     """
     # Unified confidence calculation
-    total_confidence = validity + bitmap_confidence + min(pv_magnitude, 1.0) + correction_total
+    total_confidence = (
+        validity + bitmap_confidence + min(pv_magnitude, 1.0) + correction_total
+    )
 
     # Activation decision
     should_activate = total_confidence >= activation_threshold
@@ -206,7 +222,7 @@ def demonstrate_drift_shell_mathematics():
 
     validity = calculate_tdcf(delta_t, sigma_tick, alpha_exec, rho_hash)
     print(f"  TDCF Validity: {validity:.3f}")
-    print(f"    Memory age: {delta_t*1000:.0f}ms")
+    print(f"    Memory age: {delta_t * 1000:.0f}ms")
     print(f"    Hash similarity: {rho_hash:.3f}")
 
     # BCOE - Stable market favors 16-bit bitmap
@@ -215,7 +231,7 @@ def demonstrate_drift_shell_mathematics():
     profit_projection = 0.15
 
     bitmap_16, bitmap_10k = calculate_bcoe(volatility, volume_spike, profit_projection)
-    print(f"  BCOE Bitmap Selection:")
+    print("  BCOE Bitmap Selection:")
     print(f"    16-bit confidence: {bitmap_16:.3f}")
     print(f"    10k-bit confidence: {bitmap_10k:.3f}")
     print(f"    Selected: {'16-bit' if bitmap_16 > bitmap_10k else '10k-bit'}")
@@ -226,9 +242,13 @@ def demonstrate_drift_shell_mathematics():
     rsi = 62
     phase_vector = (0.2, -0.1, 0.05)  # Slight bullish phase
 
-    pv_x, pv_y, pv_z, pv_magnitude = calculate_pvf(hash_gradient, momentum, rsi, phase_vector)
-    print(f"  PVF Profit Vector:")
-    print(f"    Direction: {'LONG' if pv_x > 0.1 else 'SHORT' if pv_x < -0.1 else 'HOLD'}")
+    pv_x, pv_y, pv_z, pv_magnitude = calculate_pvf(
+        hash_gradient, momentum, rsi, phase_vector
+    )
+    print("  PVF Profit Vector:")
+    print(
+        f"    Direction: {'LONG' if pv_x > 0.1 else 'SHORT' if pv_x < -0.1 else 'HOLD'}"
+    )
     print(f"    Magnitude: {pv_magnitude:.3f}")
     print(f"    Components: ({pv_x:.3f}, {pv_y:.3f}, {pv_z:.3f})")
 
@@ -236,7 +256,7 @@ def demonstrate_drift_shell_mathematics():
     deviation_magnitude = 0.05  # Small deviation
     q_corr, t_corr, sm_corr = calculate_cif(deviation_magnitude)
     correction_total = q_corr + t_corr + sm_corr
-    print(f"  CIF Corrections:")
+    print("  CIF Corrections:")
     print(f"    Quantum: {q_corr:.4f}")
     print(f"    Tensor: {t_corr:.4f}")
     print(f"    Smart Money: {sm_corr:.4f}")
@@ -246,7 +266,7 @@ def demonstrate_drift_shell_mathematics():
     should_activate, total_confidence = calculate_unified_confidence(
         validity, max(bitmap_16, bitmap_10k), pv_magnitude, correction_total
     )
-    print(f"  Unified Confidence:")
+    print("  Unified Confidence:")
     print(f"    Total confidence: {total_confidence:.3f}")
     print(f"    Should activate: {'✅ YES' if should_activate else '❌ NO'}")
     print()
@@ -265,7 +285,7 @@ def demonstrate_drift_shell_mathematics():
 
     validity = calculate_tdcf(delta_t, sigma_tick, alpha_exec, rho_hash)
     print(f"  TDCF Validity: {validity:.3f}")
-    print(f"    Memory age: {delta_t*1000:.0f}ms")
+    print(f"    Memory age: {delta_t * 1000:.0f}ms")
     print(f"    Hash similarity: {rho_hash:.3f}")
 
     # BCOE - Volatile market favors 10k-bit bitmap
@@ -274,7 +294,7 @@ def demonstrate_drift_shell_mathematics():
     profit_projection = 0.35
 
     bitmap_16, bitmap_10k = calculate_bcoe(volatility, volume_spike, profit_projection)
-    print(f"  BCOE Bitmap Selection:")
+    print("  BCOE Bitmap Selection:")
     print(f"    16-bit confidence: {bitmap_16:.3f}")
     print(f"    10k-bit confidence: {bitmap_10k:.3f}")
     print(f"    Selected: {'16-bit' if bitmap_16 > bitmap_10k else '10k-bit'}")
@@ -285,9 +305,13 @@ def demonstrate_drift_shell_mathematics():
     rsi = 25  # Oversold
     phase_vector = (-0.4, 0.2, 0.3)  # Bearish phase with high volatility
 
-    pv_x, pv_y, pv_z, pv_magnitude = calculate_pvf(hash_gradient, momentum, rsi, phase_vector)
-    print(f"  PVF Profit Vector:")
-    print(f"    Direction: {'LONG' if pv_x > 0.1 else 'SHORT' if pv_x < -0.1 else 'HOLD'}")
+    pv_x, pv_y, pv_z, pv_magnitude = calculate_pvf(
+        hash_gradient, momentum, rsi, phase_vector
+    )
+    print("  PVF Profit Vector:")
+    print(
+        f"    Direction: {'LONG' if pv_x > 0.1 else 'SHORT' if pv_x < -0.1 else 'HOLD'}"
+    )
     print(f"    Magnitude: {pv_magnitude:.3f}")
     print(f"    Components: ({pv_x:.3f}, {pv_y:.3f}, {pv_z:.3f})")
 
@@ -295,7 +319,7 @@ def demonstrate_drift_shell_mathematics():
     deviation_magnitude = 0.25  # Large deviation
     q_corr, t_corr, sm_corr = calculate_cif(deviation_magnitude)
     correction_total = q_corr + t_corr + sm_corr
-    print(f"  CIF Corrections:")
+    print("  CIF Corrections:")
     print(f"    Quantum: {q_corr:.4f}")
     print(f"    Tensor: {t_corr:.4f}")
     print(f"    Smart Money: {sm_corr:.4f}")
@@ -305,7 +329,7 @@ def demonstrate_drift_shell_mathematics():
     should_activate, total_confidence = calculate_unified_confidence(
         validity, max(bitmap_16, bitmap_10k), pv_magnitude, correction_total
     )
-    print(f"  Unified Confidence:")
+    print("  Unified Confidence:")
     print(f"    Total confidence: {total_confidence:.3f}")
     print(f"    Should activate: {'✅ YES' if should_activate else '❌ NO'}")
     print()
@@ -324,7 +348,7 @@ def demonstrate_drift_shell_mathematics():
 
     validity = calculate_tdcf(delta_t, sigma_tick, alpha_exec, rho_hash)
     print(f"  TDCF Validity: {validity:.3f}")
-    print(f"    Memory age: {delta_t*1000:.0f}ms")
+    print(f"    Memory age: {delta_t * 1000:.0f}ms")
     print(f"    Hash similarity: {rho_hash:.3f}")
 
     # BCOE - Extreme conditions
@@ -333,7 +357,7 @@ def demonstrate_drift_shell_mathematics():
     profit_projection = 0.8  # Massive profit opportunity
 
     bitmap_16, bitmap_10k = calculate_bcoe(volatility, volume_spike, profit_projection)
-    print(f"  BCOE Bitmap Selection:")
+    print("  BCOE Bitmap Selection:")
     print(f"    16-bit confidence: {bitmap_16:.3f}")
     print(f"    10k-bit confidence: {bitmap_10k:.3f}")
     print(f"    Selected: {'16-bit' if bitmap_16 > bitmap_10k else '10k-bit'}")
@@ -344,9 +368,13 @@ def demonstrate_drift_shell_mathematics():
     rsi = 85  # Overbought
     phase_vector = (0.6, -0.3, 0.8)  # Extreme bullish momentum
 
-    pv_x, pv_y, pv_z, pv_magnitude = calculate_pvf(hash_gradient, momentum, rsi, phase_vector)
-    print(f"  PVF Profit Vector:")
-    print(f"    Direction: {'LONG' if pv_x > 0.1 else 'SHORT' if pv_x < -0.1 else 'HOLD'}")
+    pv_x, pv_y, pv_z, pv_magnitude = calculate_pvf(
+        hash_gradient, momentum, rsi, phase_vector
+    )
+    print("  PVF Profit Vector:")
+    print(
+        f"    Direction: {'LONG' if pv_x > 0.1 else 'SHORT' if pv_x < -0.1 else 'HOLD'}"
+    )
     print(f"    Magnitude: {pv_magnitude:.3f}")
     print(f"    Components: ({pv_x:.3f}, {pv_y:.3f}, {pv_z:.3f})")
 
@@ -354,7 +382,7 @@ def demonstrate_drift_shell_mathematics():
     deviation_magnitude = 0.8  # Extreme deviation
     q_corr, t_corr, sm_corr = calculate_cif(deviation_magnitude)
     correction_total = q_corr + t_corr + sm_corr
-    print(f"  CIF Corrections:")
+    print("  CIF Corrections:")
     print(f"    Quantum: {q_corr:.4f}")
     print(f"    Tensor: {t_corr:.4f}")
     print(f"    Smart Money: {sm_corr:.4f}")
@@ -364,7 +392,7 @@ def demonstrate_drift_shell_mathematics():
     should_activate, total_confidence = calculate_unified_confidence(
         validity, max(bitmap_16, bitmap_10k), pv_magnitude, correction_total
     )
-    print(f"  Unified Confidence:")
+    print("  Unified Confidence:")
     print(f"    Total confidence: {total_confidence:.3f}")
     print(f"    Should activate: {'✅ YES' if should_activate else '❌ NO'}")
     print()

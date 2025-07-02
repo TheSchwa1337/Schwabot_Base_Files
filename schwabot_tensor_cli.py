@@ -13,11 +13,10 @@ import os
 import sys
 import argparse
 import asyncio
-import logging
 import time
 import signal
 import json
-from typing import Dict, List, Optional, Any
+from typing import Dict, Optional, Any
 from pathlib import Path
 import subprocess
 from dataclasses import dataclass, field
@@ -34,6 +33,7 @@ logger = setup_logging(__name__)
 @dataclass
 class SystemStatus:
     """System status container."""
+
     tensor_bridge: bool = False
     websocket_server: bool = False
     trading_integration: bool = False
@@ -71,35 +71,35 @@ class SchwabotTensorCLI:
             "tensor_bridge": {
                 "enable_real_time_streaming": True,
                 "tensor_analysis_interval": 0.1,
-                "max_history_size": 1000
+                "max_history_size": 1000,
             },
             "websocket_server": {
                 "host": "localhost",
                 "port": 8765,
                 "stream_interval": 1.0,
                 "btc_price_simulator": True,
-                "enable_cors": True
+                "enable_cors": True,
             },
             "trading_integration": {
                 "enable_strategy_integration": True,
                 "enable_profit_allocation": True,
-                "risk_management": True
+                "risk_management": True,
             },
             "visualization": {
                 "enable_react_server": True,
                 "react_port": 3000,
-                "auto_open_browser": False
+                "auto_open_browser": False,
             },
             "btc_feed": {
                 "enable_live_feed": False,
                 "exchange": "coinbase_pro",
-                "update_interval": 1.0
-            }
+                "update_interval": 1.0,
+            },
         }
 
         if self.config_file.exists():
             try:
-                with open(self.config_file, 'r') as f:
+                with open(self.config_file, "r") as f:
                     loaded_config = json.load(f)
                     # Merge with defaults
                     for key, value in loaded_config.items():
@@ -116,7 +116,7 @@ class SchwabotTensorCLI:
         """Save current configuration to file."""
         try:
             self.config_file.parent.mkdir(parents=True, exist_ok=True)
-            with open(self.config_file, 'w') as f:
+            with open(self.config_file, "w") as f:
                 json.dump(self.config, f, indent=2)
             logger.info(f"Configuration saved to {self.config_file}")
         except Exception as e:
@@ -137,7 +137,8 @@ class SchwabotTensorCLI:
             test_result = self.tensor_bridge.perform_complete_analysis(50000.0)
             logger.info(
                 f"🧠 Tensor Bridge started successfully. Test analysis: {
-                    test_result.phi_resonance:.3f}")
+                    test_result.phi_resonance:.3f}"
+            )
 
             self.system_status.tensor_bridge = True
             return True
@@ -166,9 +167,9 @@ class SchwabotTensorCLI:
     async def start_visualization_server(self) -> bool:
         """Start the React visualization server."""
         try:
-            if not self.config.get(
-                    "visualization", {}).get(
-                    "enable_react_server", True):
+            if not self.config.get("visualization", {}).get(
+                "enable_react_server", True
+            ):
                 return True
 
             # Check if Node.js and npm are available
@@ -191,7 +192,7 @@ class SchwabotTensorCLI:
                 env=env,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
-                text=True
+                text=True,
             )
 
             # Give it a moment to start
@@ -200,7 +201,8 @@ class SchwabotTensorCLI:
             if self.visualization_process.poll() is None:
                 self.system_status.visualization_server = True
                 logger.info(
-                    f"⚛️ React visualization server started on port {react_port}")
+                    f"⚛️ React visualization server started on port {react_port}"
+                )
 
                 if self.config.get("visualization", {}).get("auto_open_browser", False):
                     self._open_browser(f"http://localhost:{react_port}")
@@ -231,18 +233,24 @@ class SchwabotTensorCLI:
             logger.info("Setting up React visualization app...")
 
             # Create React app
-            subprocess.run(["npx",
-                            "create-react-app",
-                            "tensor_visualization",
-                            "--template",
-                            "typescript"],
-                           cwd=project_root,
-                           check=True)
+            subprocess.run(
+                [
+                    "npx",
+                    "create-react-app",
+                    "tensor_visualization",
+                    "--template",
+                    "typescript",
+                ],
+                cwd=project_root,
+                check=True,
+            )
 
             # Install additional dependencies
-            subprocess.run([
-                "npm", "install", "recharts", "mathjs", "websockets"
-            ], cwd=react_dir, check=True)
+            subprocess.run(
+                ["npm", "install", "recharts", "mathjs", "websockets"],
+                cwd=react_dir,
+                check=True,
+            )
 
             # Copy tensor visualization components
             self._create_tensor_components(react_dir)
@@ -254,7 +262,7 @@ class SchwabotTensorCLI:
         components_dir.mkdir(exist_ok=True)
 
         # Main tensor dashboard component
-        dashboard_component = '''
+        dashboard_component = """
 import React, { useState, useEffect } from 'react';
 import { create, all } from 'mathjs';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
@@ -348,13 +356,13 @@ const TensorDashboard = () => {
 };
 
 export default TensorDashboard;
-'''
+"""
 
         with open(components_dir / "TensorDashboard.tsx", "w") as f:
             f.write(dashboard_component)
 
         # Update App.tsx to use our dashboard
-        app_tsx = '''
+        app_tsx = """
 import React from 'react';
 import './App.css';
 import TensorDashboard from './components/TensorDashboard';
@@ -368,7 +376,7 @@ function App() {
 }
 
 export default App;
-'''
+"""
 
         with open(src_dir / "App.tsx", "w") as f:
             f.write(app_tsx)
@@ -376,6 +384,7 @@ export default App;
     def _open_browser(self, url: str):
         """Open browser to the given URL."""
         import webbrowser
+
         try:
             webbrowser.open(url)
         except Exception as e:
@@ -384,9 +393,9 @@ export default App;
     async def integrate_with_trading_system(self) -> bool:
         """Integrate tensor analysis with Schwabot's trading system."""
         try:
-            if not self.config.get(
-                    "trading_integration", {}).get(
-                    "enable_strategy_integration", True):
+            if not self.config.get("trading_integration", {}).get(
+                "enable_strategy_integration", True
+            ):
                 return True
 
             # Import and initialize trading system components
@@ -396,7 +405,7 @@ export default App;
 
                 # Create enhanced strategy logic with tensor integration
                 strategy_logic = StrategyLogic()
-                profit_allocator = ProfitCycleAllocator()
+                ProfitCycleAllocator()
 
                 # Add tensor-enhanced strategy
                 self._add_tensor_strategy(strategy_logic)
@@ -422,15 +431,15 @@ export default App;
             name="tensor_quantum_enhanced",
             enabled=True,
             max_position_size=0.05,  # Conservative position sizing
-            risk_tolerance=0.3,      # Lower risk for experimental strategy
+            risk_tolerance=0.3,  # Lower risk for experimental strategy
             lookback_period=50,
             min_signal_confidence=0.8,  # High confidence threshold
             parameters={
                 "tensor_bridge": self.tensor_bridge,
                 "quantum_threshold": 0.91,
                 "phi_resonance_threshold": 27.0,
-                "gut_stability_threshold": 0.995
-            }
+                "gut_stability_threshold": 0.995,
+            },
         )
 
         strategy_logic.strategies[tensor_strategy.name] = tensor_strategy
@@ -463,12 +472,14 @@ export default App;
 
                 # Collect performance metrics
                 if self.tensor_bridge:
-                    self.system_status.performance_metrics["tensor_bridge"] = \
+                    self.system_status.performance_metrics["tensor_bridge"] = (
                         self.tensor_bridge.get_performance_summary()
+                    )
 
                 if self.websocket_server:
-                    self.system_status.performance_metrics["websocket_server"] = \
+                    self.system_status.performance_metrics["websocket_server"] = (
                         self.websocket_server.get_server_stats()
+                    )
 
                 # Log status every 30 seconds
                 if int(self.system_status.uptime) % 30 == 0:
@@ -484,11 +495,11 @@ export default App;
         """Log current system status."""
         status_msg = f"""
 🚀 Schwabot Tensor System Status (Uptime: {self.system_status.uptime:.0f}s)
-  🧠 Tensor Bridge: {'✅' if self.system_status.tensor_bridge else '❌'}
-  🌐 WebSocket Server: {'✅' if self.system_status.websocket_server else '❌'}
-  🤖 Trading Integration: {'✅' if self.system_status.trading_integration else '❌'}
-  ⚛️ Visualization Server: {'✅' if self.system_status.visualization_server else '❌'}
-  ₿ BTC Price Feed: {'✅' if self.system_status.btc_price_feed else '❌'}
+  🧠 Tensor Bridge: {"✅" if self.system_status.tensor_bridge else "❌"}
+  🌐 WebSocket Server: {"✅" if self.system_status.websocket_server else "❌"}
+  🤖 Trading Integration: {"✅" if self.system_status.trading_integration else "❌"}
+  ⚛️ Visualization Server: {"✅" if self.system_status.visualization_server else "❌"}
+  ₿ BTC Price Feed: {"✅" if self.system_status.btc_price_feed else "❌"}
 """
 
         logger.info(status_msg)
@@ -524,12 +535,14 @@ export default App;
 
         if success_rate >= 0.8:  # 80% success rate required
             logger.info(
-                f"✅ System startup successful ({success_count}/{total_systems} components)")
+                f"✅ System startup successful ({success_count}/{total_systems} components)"
+            )
             self.is_running = True
             return True
         else:
             logger.error(
-                f"❌ System startup failed ({success_count}/{total_systems} components)")
+                f"❌ System startup failed ({success_count}/{total_systems} components)"
+            )
             return False
 
     async def stop_all_systems(self):
@@ -579,48 +592,40 @@ Examples:
   %(prog)s status                  # Show system status
   %(prog)s config                  # Show current configuration
   %(prog)s test                    # Run system tests
-        """
+        """,
     )
 
-    subparsers = parser.add_subparsers(dest='command', help='Available commands')
+    subparsers = parser.add_subparsers(dest="command", help="Available commands")
 
     # Start command
-    start_parser = subparsers.add_parser('start', help='Start the tensor system')
+    start_parser = subparsers.add_parser("start", help="Start the tensor system")
     start_parser.add_argument(
-        '--no-viz',
-        action='store_true',
-        help='Disable React visualization')
+        "--no-viz", action="store_true", help="Disable React visualization"
+    )
     start_parser.add_argument(
-        '--no-trading',
-        action='store_true',
-        help='Disable trading integration')
+        "--no-trading", action="store_true", help="Disable trading integration"
+    )
     start_parser.add_argument(
-        '--ws-port',
-        type=int,
-        default=8765,
-        help='WebSocket server port')
+        "--ws-port", type=int, default=8765, help="WebSocket server port"
+    )
     start_parser.add_argument(
-        '--react-port',
-        type=int,
-        default=3000,
-        help='React server port')
+        "--react-port", type=int, default=3000, help="React server port"
+    )
 
     # Status command
-    subparsers.add_parser('status', help='Show system status')
+    subparsers.add_parser("status", help="Show system status")
 
     # Config command
-    config_parser = subparsers.add_parser('config', help='Configuration management')
+    config_parser = subparsers.add_parser("config", help="Configuration management")
     config_parser.add_argument(
-        '--show',
-        action='store_true',
-        help='Show current configuration')
+        "--show", action="store_true", help="Show current configuration"
+    )
     config_parser.add_argument(
-        '--reset',
-        action='store_true',
-        help='Reset to default configuration')
+        "--reset", action="store_true", help="Reset to default configuration"
+    )
 
     # Test command
-    subparsers.add_parser('test', help='Run system tests')
+    subparsers.add_parser("test", help="Run system tests")
 
     return parser
 
@@ -632,7 +637,7 @@ async def main():
 
     cli = SchwabotTensorCLI()
 
-    if args.command == 'start':
+    if args.command == "start":
         # Update config based on arguments
         if args.no_viz:
             cli.config["visualization"]["enable_react_server"] = False
@@ -645,14 +650,14 @@ async def main():
 
         await cli.run()
 
-    elif args.command == 'status':
+    elif args.command == "status":
         # Show current system status
         print("🔍 Schwabot Tensor System Status:")
         print("  Implementation: Ready")
         print("  Configuration: Loaded")
         print("  Components: Available")
 
-    elif args.command == 'config':
+    elif args.command == "config":
         if args.show:
             print("📋 Current Configuration:")
             print(json.dumps(cli.config, indent=2))
@@ -661,7 +666,7 @@ async def main():
             cli._save_config()
             print("✅ Configuration reset to defaults")
 
-    elif args.command == 'test':
+    elif args.command == "test":
         # Run system tests
         print("🧪 Running system tests...")
 

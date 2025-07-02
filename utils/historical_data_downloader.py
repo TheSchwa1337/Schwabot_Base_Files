@@ -9,13 +9,11 @@ Saves data in the format expected by your trading system.
 
 import asyncio
 import logging
-import time
-from datetime import datetime, timedelta
+from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional, Any
+from typing import Dict, Optional, Any
 import pandas as pd
 import aiohttp
-import requests
 
 logger = logging.getLogger(__name__)
 
@@ -23,17 +21,11 @@ logger = logging.getLogger(__name__)
 BASE_URL = "https://api.coingecko.com/api/v3"
 
 # Coin IDs for CoinGecko API
-COIN_IDS = {
-    "BTC": "bitcoin",
-    "ETH": "ethereum",
-    "XRP": "ripple"
-}
+COIN_IDS = {"BTC": "bitcoin", "ETH": "ethereum", "XRP": "ripple"}
+
 
 async def download_historical_data(
-    coin_id: str,
-    vs_currency: str = "usd",
-    days: int = 365,
-    interval: str = "daily"
+    coin_id: str, vs_currency: str = "usd", days: int = 365, interval: str = "daily"
 ) -> Optional[pd.DataFrame]:
     """
     Download historical data from CoinGecko API.
@@ -49,11 +41,7 @@ async def download_historical_data(
     """
     try:
         url = f"{BASE_URL}/coins/{coin_id}/market_chart"
-        params = {
-            "vs_currency": vs_currency,
-            "days": days,
-            "interval": interval
-        }
+        params = {"vs_currency": vs_currency, "days": days, "interval": interval}
 
         async with aiohttp.ClientSession() as session:
             async with session.get(url, params=params) as resp:
@@ -68,10 +56,9 @@ async def download_historical_data(
         logger.error(f"Failed to download historical data for {coin_id}: {e}")
         return None
 
+
 def parse_historical_data(
-    data: Dict[str, Any],
-    coin_id: str,
-    vs_currency: str
+    data: Dict[str, Any], coin_id: str, vs_currency: str
 ) -> pd.DataFrame:
     """Parse CoinGecko historical data into DataFrame."""
 
@@ -88,7 +75,7 @@ def parse_historical_data(
             "datetime": datetime.fromtimestamp(timestamp / 1000),
             "price": price,
             "coin_id": coin_id,
-            "vs_currency": vs_currency
+            "vs_currency": vs_currency,
         }
 
         # Add market cap if available
@@ -105,10 +92,9 @@ def parse_historical_data(
     df.set_index("datetime", inplace=True)
     return df
 
+
 async def download_all_historical_data(
-    days: int = 365,
-    interval: str = "daily",
-    output_dir: str = "core/data/historical"
+    days: int = 365, interval: str = "daily", output_dir: str = "core/data/historical"
 ) -> None:
     """
     Download historical data for BTC, ETH, and XRP.
@@ -127,9 +113,7 @@ async def download_all_historical_data(
         logger.info(f"📥 Downloading {symbol} ({coin_id}) historical data...")
 
         df = await download_historical_data(
-            coin_id=coin_id,
-            days=days,
-            interval=interval
+            coin_id=coin_id, days=days, interval=interval
         )
 
         if df is not None:
@@ -151,6 +135,7 @@ async def download_all_historical_data(
 
     logger.info("✅ Historical data download complete!")
 
+
 if __name__ == "__main__":
     # Example usage
     logging.basicConfig(level=logging.INFO)
@@ -162,4 +147,4 @@ if __name__ == "__main__":
         # Download 30 days of hourly data (for more granular testing)
         # await download_all_historical_data(days=30, interval="hourly")
 
-    asyncio.run(main()) 
+    asyncio.run(main())

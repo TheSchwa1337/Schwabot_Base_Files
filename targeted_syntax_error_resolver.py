@@ -14,12 +14,11 @@ This resolver handles:
 - F-string syntax problems
 """
 
-import os
 import re
 import subprocess
 import sys
 from pathlib import Path
-from typing import List, Dict, Tuple, Optional
+from typing import Dict, Optional
 
 
 class TargetedSyntaxErrorResolver:
@@ -29,10 +28,10 @@ class TargetedSyntaxErrorResolver:
         """Initialize the resolver."""
         self.fixed_files = []
         self.error_patterns = {
-            'unterminated_string': r'SyntaxError: unterminated string literal',
-            'indentation_error': r'IndentationError: unexpected indent',
-            'invalid_syntax': r'SyntaxError: invalid syntax',
-            'unterminated_triple': r'SyntaxError: unterminated triple-quoted string',
+            "unterminated_string": r"SyntaxError: unterminated string literal",
+            "indentation_error": r"IndentationError: unexpected indent",
+            "invalid_syntax": r"SyntaxError: invalid syntax",
+            "unterminated_triple": r"SyntaxError: unterminated triple-quoted string",
         }
 
     def get_specific_error_info(self, file_path: str) -> Optional[Dict[str, str]]:
@@ -42,37 +41,37 @@ class TargetedSyntaxErrorResolver:
                 [sys.executable, "-m", "py_compile", file_path],
                 capture_output=True,
                 text=True,
-                check=False
+                check=False,
             )
 
             if result.returncode != 0:
                 error_text = result.stderr.strip()
 
                 # Parse line number and error type
-                line_match = re.search(r'line (\d+)', error_text)
+                line_match = re.search(r"line (\d+)", error_text)
                 line_num = int(line_match.group(1)) if line_match else None
 
                 # Determine error type
-                error_type = 'unknown'
+                error_type = "unknown"
                 for err_type, pattern in self.error_patterns.items():
                     if re.search(pattern, error_text):
                         error_type = err_type
                         break
 
                 return {
-                    'file': file_path,
-                    'line': line_num,
-                    'error_type': error_type,
-                    'full_error': error_text
+                    "file": file_path,
+                    "line": line_num,
+                    "error_type": error_type,
+                    "full_error": error_text,
                 }
 
             return None
         except Exception as e:
-            return {'file': file_path, 'error_type': 'exception', 'full_error': str(e)}
+            return {"file": file_path, "error_type": "exception", "full_error": str(e)}
 
     def fix_unterminated_string_advanced(self, content: str, line_num: int) -> str:
         """Advanced fix for unterminated string literals."""
-        lines = content.split('\n')
+        lines = content.split("\n")
         if line_num and line_num <= len(lines):
             target_line_idx = line_num - 1
             line = lines[target_line_idx]
@@ -94,7 +93,7 @@ class TargetedSyntaxErrorResolver:
                         # This should end a docstring
                         lines[target_line_idx] = line + '"""'
 
-            elif '"\'' in line or '\'"' in line:
+            elif "\"'" in line or "'\"" in line:
                 # Mixed quote issues
                 if line.count('"') % 2 == 1:
                     lines[target_line_idx] = line + '"'
@@ -113,7 +112,9 @@ class TargetedSyntaxErrorResolver:
             if re.search(r'"""[^"]*$', line):
                 # Docstring that doesn't close on same line
                 found_close = False
-                for i in range(target_line_idx + 1, min(len(lines), target_line_idx + 20)):
+                for i in range(
+                    target_line_idx + 1, min(len(lines), target_line_idx + 20)
+                ):
                     if '"""' in lines[i]:
                         found_close = True
                         break
@@ -122,26 +123,26 @@ class TargetedSyntaxErrorResolver:
                     # Add closing docstring
                     lines.insert(target_line_idx + 1, '    """')
 
-        return '\n'.join(lines)
+        return "\n".join(lines)
 
     def fix_indentation_advanced(self, content: str, line_num: int) -> str:
         """Advanced fix for indentation errors."""
-        lines = content.split('\n')
+        lines = content.split("\n")
         if line_num and line_num <= len(lines):
             target_line_idx = line_num - 1
 
             # Check if the line has unexpected indentation
             line = lines[target_line_idx]
-            if line.strip() and line.startswith('    '):
+            if line.strip() and line.startswith("    "):
                 # Check previous line
                 if target_line_idx > 0:
                     prev_line = lines[target_line_idx - 1].strip()
 
                     # If previous line doesn't warrant indentation, remove it
-                    if not prev_line.endswith(':') and not prev_line.endswith('\\'):
+                    if not prev_line.endswith(":") and not prev_line.endswith("\\"):
                         lines[target_line_idx] = line.lstrip()
 
-        return '\n'.join(lines)
+        return "\n".join(lines)
 
     def fix_complex_string_issues(self, content: str) -> str:
         """Fix complex string and quote issues."""
@@ -169,28 +170,32 @@ class TargetedSyntaxErrorResolver:
                 return False  # No errors to fix
 
             print(f"    Error type: {error_info['error_type']}")
-            if error_info.get('line'):
+            if error_info.get("line"):
                 print(f"    Line: {error_info['line']}")
 
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, "r", encoding="utf-8") as f:
                 content = f.read()
 
             original_content = content
 
             # Apply targeted fixes based on error type
-            if error_info['error_type'] == 'unterminated_string':
-                content = self.fix_unterminated_string_advanced(content, error_info.get('line'))
-            elif error_info['error_type'] == 'unterminated_triple':
-                content = self.fix_unterminated_string_advanced(content, error_info.get('line'))
-            elif error_info['error_type'] == 'indentation_error':
-                content = self.fix_indentation_advanced(content, error_info.get('line'))
+            if error_info["error_type"] == "unterminated_string":
+                content = self.fix_unterminated_string_advanced(
+                    content, error_info.get("line")
+                )
+            elif error_info["error_type"] == "unterminated_triple":
+                content = self.fix_unterminated_string_advanced(
+                    content, error_info.get("line")
+                )
+            elif error_info["error_type"] == "indentation_error":
+                content = self.fix_indentation_advanced(content, error_info.get("line"))
 
             # Apply general complex string fixes
             content = self.fix_complex_string_issues(content)
 
             # Write back if changed
             if content != original_content:
-                with open(file_path, 'w', encoding='utf-8') as f:
+                with open(file_path, "w", encoding="utf-8") as f:
                     f.write(content)
                 return True
 
@@ -206,11 +211,11 @@ class TargetedSyntaxErrorResolver:
         python_files = list(core_dir.rglob("*.py"))
 
         results = {
-            'total_files': len(python_files),
-            'files_with_errors': 0,
-            'files_fixed': 0,
-            'errors_resolved': 0,
-            'errors_remaining': 0,
+            "total_files": len(python_files),
+            "files_with_errors": 0,
+            "files_fixed": 0,
+            "errors_resolved": 0,
+            "errors_remaining": 0,
         }
 
         print("🎯 Targeted Syntax Error Resolver")
@@ -228,7 +233,7 @@ class TargetedSyntaxErrorResolver:
 
                     if error_info:
                         if iteration == 0:  # Count on first iteration
-                            results['files_with_errors'] += 1
+                            results["files_with_errors"] += 1
 
                         print(f"\n📁 Processing: {file_path}")
 
@@ -236,17 +241,21 @@ class TargetedSyntaxErrorResolver:
                             iteration_fixes += 1
                             if str(file_path) not in self.fixed_files:
                                 self.fixed_files.append(str(file_path))
-                                results['files_fixed'] += 1
+                                results["files_fixed"] += 1
 
                             # Check if error is resolved
-                            new_error_info = self.get_specific_error_info(str(file_path))
+                            new_error_info = self.get_specific_error_info(
+                                str(file_path)
+                            )
                             if not new_error_info:
-                                print(f"    ✅ Syntax error resolved!")
-                                results['errors_resolved'] += 1
+                                print("    ✅ Syntax error resolved!")
+                                results["errors_resolved"] += 1
                             else:
-                                print(f"    ⚠️  Error remains: {new_error_info['error_type']}")
+                                print(
+                                    f"    ⚠️  Error remains: {new_error_info['error_type']}"
+                                )
                                 if iteration == 2:  # Last iteration
-                                    results['errors_remaining'] += 1
+                                    results["errors_remaining"] += 1
 
             print(f"  Fixed {iteration_fixes} files in this iteration")
 
@@ -267,13 +276,15 @@ class TargetedSyntaxErrorResolver:
         print(f"✅ Errors Resolved: {results['errors_resolved']}")
         print(f"⚠️  Errors Remaining: {results['errors_remaining']}")
 
-        if results['files_with_errors'] > 0:
-            resolution_rate = (results['errors_resolved'] / results['files_with_errors']) * 100
+        if results["files_with_errors"] > 0:
+            resolution_rate = (
+                results["errors_resolved"] / results["files_with_errors"]
+            ) * 100
             print(f"📈 Resolution Rate: {resolution_rate:.1f}%")
 
-        if results['errors_remaining'] == 0:
+        if results["errors_remaining"] == 0:
             print("🎉 Perfect! All syntax errors resolved!")
-        elif results['errors_resolved'] > 0:
+        elif results["errors_resolved"] > 0:
             print("✅ Good progress! Mathematical integrity maintained.")
         else:
             print("⚠️  Complex errors remain. Manual review needed.")
@@ -289,7 +300,7 @@ def main():
     results = resolver.resolve_all_syntax_errors()
     resolver.generate_report(results)
 
-    return 0 if results['errors_remaining'] == 0 else 1
+    return 0 if results["errors_remaining"] == 0 else 1
 
 
 if __name__ == "__main__":

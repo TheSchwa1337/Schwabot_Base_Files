@@ -16,19 +16,20 @@ import time
 import logging
 import numpy as np
 import psutil
-from typing import Dict, List, Optional, Any, Tuple
+from typing import Dict, List, Any, Tuple
 from dataclasses import dataclass, field
-from enum import Enum
-import hashlib
 
 # Setup logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+)
 logger = logging.getLogger(__name__)
 
 
 @dataclass(frozen=True)
 class MarketData:
     """Immutable market data structure."""
+
     timestamp: float
     btc_price: float
     volatility: float
@@ -39,6 +40,7 @@ class MarketData:
 @dataclass(frozen=True)
 class StrategyParameters:
     """Immutable strategy parameters."""
+
     risk_tolerance: float = 0.02
     profit_target: float = 0.05
     position_size: float = 0.1
@@ -47,6 +49,7 @@ class StrategyParameters:
 @dataclass(frozen=True)
 class ProfitResult:
     """Pure profit calculation result."""
+
     timestamp: float
     base_profit: float
     risk_adjusted_profit: float
@@ -57,6 +60,7 @@ class ProfitResult:
 @dataclass(frozen=True)
 class AccelerationFactors:
     """Hardware acceleration factors."""
+
     α_zpe: float  # ZPE thermal acceleration
     α_zbe: float  # ZBE bit-level acceleration
     α_combined: float  # Combined acceleration
@@ -102,9 +106,9 @@ class PureProfitCalculator:
 
             # Mathematical combination using constants
             base_profit = (
-                momentum_component * np.sin(self.PI / 4) +
-                volatility_component * np.cos(self.PI / 6) +
-                volume_component * (1 / self.GOLDEN_RATIO)
+                momentum_component * np.sin(self.PI / 4)
+                + volatility_component * np.cos(self.PI / 6)
+                + volume_component * (1 / self.GOLDEN_RATIO)
             )
 
             # Apply position sizing
@@ -115,7 +119,9 @@ class PureProfitCalculator:
             momentum_risk = abs(market_data.momentum)
             combined_risk = (volatility_risk + momentum_risk) / 2.0
 
-            risk_adjustment = 1.0 - (combined_risk * (1.0 - self.strategy_params.risk_tolerance))
+            risk_adjustment = 1.0 - (
+                combined_risk * (1.0 - self.strategy_params.risk_tolerance)
+            )
             risk_adjustment = max(0.1, min(1.0, risk_adjustment))
 
             risk_adjusted_profit = base_profit * risk_adjustment
@@ -134,10 +140,10 @@ class PureProfitCalculator:
                 risk_adjusted_profit=risk_adjusted_profit,
                 total_profit_score=total_profit_score,
                 calculation_metadata={
-                    'calculation_time_ms': calculation_time * 1000,
-                    'btc_price': market_data.btc_price,
-                    'risk_adjustment': risk_adjustment
-                }
+                    "calculation_time_ms": calculation_time * 1000,
+                    "btc_price": market_data.btc_price,
+                    "risk_adjustment": risk_adjustment,
+                },
             )
 
         except Exception as e:
@@ -160,21 +166,23 @@ class PureProfitCalculator:
     def get_performance_metrics(self) -> Dict[str, Any]:
         """Get calculation performance metrics."""
         if self.calculation_count == 0:
-            return {'status': 'no_calculations'}
+            return {"status": "no_calculations"}
 
         avg_time = self.total_calculation_time / self.calculation_count
 
         return {
-            'total_calculations': self.calculation_count,
-            'average_time_ms': avg_time * 1000,
-            'calculations_per_second': 1.0 / avg_time if avg_time > 0 else 0
+            "total_calculations": self.calculation_count,
+            "average_time_ms": avg_time * 1000,
+            "calculations_per_second": 1.0 / avg_time if avg_time > 0 else 0,
         }
 
 
 class MockZPECore:
     """Mock ZPE core for thermal acceleration simulation."""
 
-    def calculate_thermal_efficiency(self, volatility: float, system_load: float) -> float:
+    def calculate_thermal_efficiency(
+        self, volatility: float, system_load: float
+    ) -> float:
         """Calculate thermal acceleration factor."""
         try:
             # Simulate thermal state calculation
@@ -194,7 +202,9 @@ class MockZPECore:
 class MockZBECore:
     """Mock ZBE core for bit-level acceleration simulation."""
 
-    def calculate_bit_efficiency(self, computational_load: float, memory_usage: float) -> float:
+    def calculate_bit_efficiency(
+        self, computational_load: float, memory_usage: float
+    ) -> float:
         """Calculate bit-level acceleration factor."""
         try:
             # Simulate memory efficiency calculation
@@ -240,7 +250,9 @@ class EnhancedAccelerationIntegration:
         self.EPSILON = 1e-10
         self.MAX_ACCELERATION = 5.0
 
-    def calculate_acceleration_factors(self, market_data: MarketData) -> AccelerationFactors:
+    def calculate_acceleration_factors(
+        self, market_data: MarketData
+    ) -> AccelerationFactors:
         """
         Calculate acceleration factors WITHOUT affecting profit.
 
@@ -254,14 +266,12 @@ class EnhancedAccelerationIntegration:
 
             # Get ZPE thermal acceleration
             α_zpe = self.zpe_core.calculate_thermal_efficiency(
-                volatility=market_data.volatility,
-                system_load=0.5
+                volatility=market_data.volatility, system_load=0.5
             )
 
             # Get ZBE bit-level acceleration
             α_zbe = self.zbe_core.calculate_bit_efficiency(
-                computational_load=0.6,
-                memory_usage=0.4
+                computational_load=0.6, memory_usage=0.4
             )
 
             # Calculate combined acceleration (geometric mean for stability)
@@ -278,7 +288,7 @@ class EnhancedAccelerationIntegration:
                 α_combined=α_combined,
                 T0_baseline=T0_baseline,
                 T_accelerated=T_accelerated,
-                speedup_ratio=speedup_ratio
+                speedup_ratio=speedup_ratio,
             )
 
             self.acceleration_history.append(acceleration_factors)
@@ -287,13 +297,16 @@ class EnhancedAccelerationIntegration:
         except Exception as e:
             logger.error(f"Acceleration calculation failed: {e}")
             return AccelerationFactors(
-                α_zpe=1.0, α_zbe=1.0, α_combined=1.0,
-                T0_baseline=0.001, T_accelerated=0.001, speedup_ratio=1.0
+                α_zpe=1.0,
+                α_zbe=1.0,
+                α_combined=1.0,
+                T0_baseline=0.001,
+                T_accelerated=0.001,
+                speedup_ratio=1.0,
             )
 
     def compute_profit_with_acceleration(
-        self,
-        market_data: MarketData
+        self, market_data: MarketData
     ) -> Tuple[ProfitResult, AccelerationFactors]:
         """
         Compute profit with acceleration - MATHEMATICAL PURITY GUARANTEED.
@@ -321,7 +334,7 @@ class EnhancedAccelerationIntegration:
                 self.total_time_saved += time_saved
 
                 logger.debug(
-                    f"⚡ Accelerated: {profit_time*1000:.3f}ms -> {accelerated_time*1000:.3f}ms "
+                    f"⚡ Accelerated: {profit_time * 1000:.3f}ms -> {accelerated_time * 1000:.3f}ms "
                     f"({acceleration_factors.speedup_ratio:.2f}x speedup)"
                 )
 
@@ -351,11 +364,13 @@ class EnhancedAccelerationIntegration:
                 btc_price=45000.0,
                 volatility=0.25,
                 momentum=0.15,
-                volume_profile=1.2
+                volume_profile=1.2,
             )
 
             # Test 1: Profit calculation purity
-            validation_results['profit_purity'] = self.profit_calculator.validate_purity(market_data)
+            validation_results["profit_purity"] = (
+                self.profit_calculator.validate_purity(market_data)
+            )
 
             # Test 2: Acceleration with different market conditions
             market_conditions = [
@@ -369,23 +384,24 @@ class EnhancedAccelerationIntegration:
                 profit_results.append(profit_result.total_profit_score)
 
             # Profits should only differ due to market conditions, not acceleration
-            validation_results['market_independence'] = True  # This is expected to differ
+            validation_results["market_independence"] = (
+                True  # This is expected to differ
+            )
 
             # Test 3: Acceleration factor bounds
             acceleration_factors = self.calculate_acceleration_factors(market_data)
-            validation_results['acceleration_bounds'] = (
+            validation_results["acceleration_bounds"] = (
                 0.1 <= acceleration_factors.α_combined <= self.MAX_ACCELERATION
             )
 
             # Test 4: Performance improvement
-            validation_results['performance_improvement'] = (
-                len(self.acceleration_history) > 0 and
-                any(af.speedup_ratio > 1.0 for af in self.acceleration_history)
-            )
+            validation_results["performance_improvement"] = len(
+                self.acceleration_history
+            ) > 0 and any(af.speedup_ratio > 1.0 for af in self.acceleration_history)
 
             # Overall validation
-            critical_tests = ['profit_purity', 'acceleration_bounds']
-            validation_results['overall_validation'] = all(
+            critical_tests = ["profit_purity", "acceleration_bounds"]
+            validation_results["overall_validation"] = all(
                 validation_results[test] for test in critical_tests
             )
 
@@ -393,13 +409,13 @@ class EnhancedAccelerationIntegration:
 
         except Exception as e:
             logger.error(f"Validation suite failed: {e}")
-            return {'overall_validation': False, 'error': str(e)}
+            return {"overall_validation": False, "error": str(e)}
 
     def get_performance_report(self) -> Dict[str, Any]:
         """Get comprehensive performance report."""
         try:
             if not self.acceleration_history:
-                return {'status': 'no_data'}
+                return {"status": "no_data"}
 
             # Calculate performance statistics
             speedups = [af.speedup_ratio for af in self.acceleration_history]
@@ -410,30 +426,34 @@ class EnhancedAccelerationIntegration:
             profit_metrics = self.profit_calculator.get_performance_metrics()
 
             return {
-                'status': 'active',
-                'acceleration_metrics': {
-                    'total_computations': self.total_computations,
-                    'average_speedup': avg_speedup,
-                    'max_speedup': max_speedup,
-                    'total_time_saved_ms': self.total_time_saved * 1000,
-                    'acceleration_events': len(self.acceleration_history)
+                "status": "active",
+                "acceleration_metrics": {
+                    "total_computations": self.total_computations,
+                    "average_speedup": avg_speedup,
+                    "max_speedup": max_speedup,
+                    "total_time_saved_ms": self.total_time_saved * 1000,
+                    "acceleration_events": len(self.acceleration_history),
                 },
-                'profit_metrics': profit_metrics,
-                'efficiency_improvement': {
-                    'computational_boost': (avg_speedup - 1.0) * 100,
-                    'time_savings_pct': (self.total_time_saved / max(profit_metrics.get('total_time', 0.001), 0.001)) * 100
-                }
+                "profit_metrics": profit_metrics,
+                "efficiency_improvement": {
+                    "computational_boost": (avg_speedup - 1.0) * 100,
+                    "time_savings_pct": (
+                        self.total_time_saved
+                        / max(profit_metrics.get("total_time", 0.001), 0.001)
+                    )
+                    * 100,
+                },
             }
 
         except Exception as e:
             logger.error(f"Performance report failed: {e}")
-            return {'status': 'error', 'message': str(e)}
+            return {"status": "error", "message": str(e)}
 
 
 def demonstrate_mathematical_framework():
     """Demonstrate the complete mathematical framework."""
     print("🚀 ENHANCED MATHEMATICAL FRAMEWORK DEMONSTRATION")
-    print("="*80)
+    print("=" * 80)
     print()
     print("📐 MATHEMATICAL FOUNDATION:")
     print("  • Pure Profit: 𝒫 = 𝐹(𝑀(𝑡), 𝐻(𝑡), Θ)")
@@ -444,9 +464,7 @@ def demonstrate_mathematical_framework():
     try:
         # Initialize system
         strategy_params = StrategyParameters(
-            risk_tolerance=0.02,
-            profit_target=0.05,
-            position_size=0.1
+            risk_tolerance=0.02, profit_target=0.05, position_size=0.1
         )
 
         integration = EnhancedAccelerationIntegration(strategy_params)
@@ -456,7 +474,13 @@ def demonstrate_mathematical_framework():
             {"name": "Bull Market", "btc": 48000, "vol": 0.15, "mom": 0.20, "vp": 1.3},
             {"name": "Bear Market", "btc": 42000, "vol": 0.35, "mom": -0.15, "vp": 0.8},
             {"name": "Sideways", "btc": 45000, "vol": 0.20, "mom": 0.02, "vp": 1.0},
-            {"name": "High Volatility", "btc": 46000, "vol": 0.45, "mom": 0.10, "vp": 1.1},
+            {
+                "name": "High Volatility",
+                "btc": 46000,
+                "vol": 0.45,
+                "mom": 0.10,
+                "vp": 1.1,
+            },
         ]
 
         print("🧪 Testing Market Scenarios:")
@@ -469,10 +493,12 @@ def demonstrate_mathematical_framework():
                 btc_price=scenario["btc"],
                 volatility=scenario["vol"],
                 momentum=scenario["mom"],
-                volume_profile=scenario["vp"]
+                volume_profile=scenario["vp"],
             )
 
-            profit_result, acceleration_factors = integration.compute_profit_with_acceleration(market_data)
+            profit_result, acceleration_factors = (
+                integration.compute_profit_with_acceleration(market_data)
+            )
 
             all_profits.append(profit_result.total_profit_score)
             all_speedups.append(acceleration_factors.speedup_ratio)
@@ -489,32 +515,36 @@ def demonstrate_mathematical_framework():
         validation_results = integration.run_validation_suite()
 
         for test_name, result in validation_results.items():
-            if test_name != 'overall_validation':
+            if test_name != "overall_validation":
                 status = "✅ PASSED" if result else "❌ FAILED"
                 print(f"  {test_name.replace('_', ' ').title()}: {status}")
 
-        overall_result = validation_results.get('overall_validation', False)
-        print(f"\n🎯 Overall Validation: {'✅ PASSED' if overall_result else '❌ FAILED'}")
+        overall_result = validation_results.get("overall_validation", False)
+        print(
+            f"\n🎯 Overall Validation: {'✅ PASSED' if overall_result else '❌ FAILED'}"
+        )
 
         # Performance summary
         print("\n📊 Performance Summary:")
         performance_report = integration.get_performance_report()
 
-        if performance_report['status'] == 'active':
-            accel_metrics = performance_report['acceleration_metrics']
-            profit_metrics = performance_report['profit_metrics']
-            efficiency = performance_report['efficiency_improvement']
+        if performance_report["status"] == "active":
+            accel_metrics = performance_report["acceleration_metrics"]
+            profit_metrics = performance_report["profit_metrics"]
+            efficiency = performance_report["efficiency_improvement"]
 
             print(f"  🧮 Total Computations: {accel_metrics['total_computations']}")
             print(f"  📈 Average Speedup: {accel_metrics['average_speedup']:.2f}x")
             print(f"  🚀 Max Speedup: {accel_metrics['max_speedup']:.2f}x")
             print(f"  💾 Time Saved: {accel_metrics['total_time_saved_ms']:.3f}ms")
             print(f"  📊 Efficiency Gain: {efficiency['computational_boost']:.1f}%")
-            print(f"  ⚡ Profit Calc Speed: {profit_metrics['calculations_per_second']:.0f}/sec")
+            print(
+                f"  ⚡ Profit Calc Speed: {profit_metrics['calculations_per_second']:.0f}/sec"
+            )
 
-        print("\n" + "="*80)
+        print("\n" + "=" * 80)
         print("✅ MATHEMATICAL FRAMEWORK DEMONSTRATION COMPLETED")
-        print("="*80)
+        print("=" * 80)
         print()
         print("🎯 KEY ACHIEVEMENTS:")
         print("  • ✅ Pure profit calculations (𝒫) remain mathematically untouched")

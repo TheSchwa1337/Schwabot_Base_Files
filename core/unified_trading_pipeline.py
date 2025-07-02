@@ -1,12 +1,8 @@
-#!/usr/bin/env python3
+# !/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
 Unified Trading Pipeline.
 
-Integrates all Schwabot components for comprehensive trading operations.
-"""
-
-import logging
+Integrates all Schwabot components for comprehensive trading operations.import logging
 import time
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
@@ -23,11 +19,12 @@ try:
     from core.unified_profit_vectorization_system import UnifiedProfitVectorizationSystem
     from core.strategy_logic import StrategyLogic, StrategyBranch, GhostState
     from core.profit_vector_forecast import ProfitVectorForecastEngine
+
     # This seems to be a custom math library, likely in the schwabot package
     # from schwabot_unified_math import UnifiedTradingMathematics
     ALL_COMPONENTS_AVAILABLE = True
 except ImportError as e:
-    logging.warning(f"Some components not available: {e}")
+    logging.warning(fSome components not available: {e})
     ALL_COMPONENTS_AVAILABLE = False
 
 
@@ -36,9 +33,7 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class TradingDecision:
-    """Represents a complete trading decision."""
-
-    timestamp: float
+    Represents a complete trading decision.timestamp: float
     symbol: str
     action: str  # 'BUY', 'SELL', 'HOLD'
     quantity: float
@@ -49,15 +44,13 @@ class TradingDecision:
     risk_score: float
     exchange: str
     granularity: int
-    mathematical_state: Dict[str, Any] = field(default_factory=dict)
+    mathematical_state: Dict[str, Any] = field(default_factory = dict)
     market_conditions: Dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
 class PipelineState:
-    """Current state of the unified trading pipeline."""
-
-    timestamp: float
+    Current state of the unified trading pipeline.timestamp: float
     active_strategy: StrategyBranch
     current_capital: float
     total_trades: int
@@ -69,9 +62,7 @@ class PipelineState:
     last_order_book: Optional[OrderBookSnapshot] = None
 
 
-class UnifiedTradingPipeline:
-    """
-    Unified trading pipeline integrating all Schwabot components.
+class UnifiedTradingPipeline:Unified trading pipeline integrating all Schwabot components.
 
     This pipeline provides:
     - Hash-based strategy switching via Ghost Core
@@ -79,16 +70,11 @@ class UnifiedTradingPipeline:
     - Mathematical optimization via Matrix Math
     - Risk management and position sizing
     - Profit vector optimization
-    - Real-time market analysis
-    """
-
-    def __init__(self, config: Optional[Dict[str, Any]] = None):
-        """Initialize unified trading pipeline."""
-        if not ALL_COMPONENTS_AVAILABLE:
-            raise ImportError("Not all required components are available")
+    - Real-time market analysisdef __init__():Initialize unified trading pipeline.if not ALL_COMPONENTS_AVAILABLE:
+            raise ImportError(Not all required components are available)
 
         self.config = config or {}
-        self.initial_capital = self.config.get('initial_capital', 100_000.0)
+        self.initial_capital = self.config.get(initial_capital, 100_000.0)
 
         # Initialize all components
         self._initialize_components()
@@ -110,44 +96,42 @@ class UnifiedTradingPipeline:
         self.market_data_history: List[Dict[str, Any]] = []
 
         logger.info(
-            "🚀 Unified Trading Pipeline initialized with capital: $%.2f",
+            🚀 Unified Trading Pipeline initialized with capital: $%.2f,
             self.initial_capital,
         )
 
-    def _initialize_components(self) -> None:
-        """Initialize all trading components."""
-        # Ghost Core for strategy switching
+    def _initialize_components(self) -> None:Initialize all trading components.# Ghost Core for strategy switching
         # from core.ghost_core import GhostCore
         # ghost_config = self.config.get('ghost_core', {})
         # self.ghost_core = GhostCore(memory_depth=ghost_config.get('memory_depth', 1000))
 
         # CCXT Integration for exchange connectivity
-        ccxt_config = self.config.get('ccxt_integration', {})
+        ccxt_config = self.config.get(ccxt_integration, {})
         self.ccxt_integration = CCXTIntegration(ccxt_config)
 
         # Brain Trading Engine for signal processing
-        brain_config = self.config.get('brain_trading_engine', {})
+        brain_config = self.config.get(brain_trading_engine, {})
         self.brain_engine = BrainTradingEngine(brain_config)
 
         # Risk Manager
-        risk_config = self.config.get('risk_manager', {})
+        risk_config = self.config.get(risk_manager, {})
         self.risk_manager = RiskManager(risk_config)
 
         # Profit Vector System
-        profit_config = self.config.get('profit_vectorization', {})
+        profit_config = self.config.get(profit_vectorization, {})
         self.profit_system = UnifiedProfitVectorizationSystem(profit_config)
 
         # Strategy Logic
-        strategy_config = self.config.get('strategy_logic', {})
+        strategy_config = self.config.get(strategy_logic, {})
         self.strategy_logic = StrategyLogic(strategy_config)
 
         # Profit Vector Forecast
-        forecast_config = self.config.get('profit_forecast', {})
+        forecast_config = self.config.get(profit_forecast, {})
         self.profit_forecast = ProfitVectorForecastEngine(forecast_config)
 
         # Unified Trading Mathematics
         # self.unified_math = UnifiedTradingMathematics()
-        logger.info("✅ All trading components initialized")
+        logger.info(✅ All trading components initialized)
 
     async def process_market_data(
         self,
@@ -157,7 +141,6 @@ class UnifiedTradingPipeline:
         granularity: int,
         tick_index: int,
     ) -> Optional[TradingDecision]:
-        """
         Process market data through the complete pipeline.
 
         Args:
@@ -168,17 +151,10 @@ class UnifiedTradingPipeline:
             tick_index: Current tick index
 
         Returns:
-            Trading decision or None if no action
-        """
-        try:
+            Trading decision or None if no actiontry:
             # 1. Update market data history
-            market_data = {
-                'symbol': symbol,
-                'price': price,
-                'volume': volume,
-                'timestamp': time.time(),
-                'granularity': granularity,
-                'tick_index': tick_index,
+            market_data = {symbol: symbol,
+                price: price,volume: volume,timestamp: time.time(),granularity: granularity,tick_index: tick_index,
             }
             self.market_data_history.append(market_data)
 
@@ -194,67 +170,47 @@ class UnifiedTradingPipeline:
             # 3. Fetch order book data
             order_book = await self._fetch_order_book_data(symbol)
             if not order_book:
-                logger.warning("No order book data available")
+                logger.warning(No order book data available)
                 return None
 
             # ... more processing ...
             return None
 
         except Exception as e:
-            logger.error(
-                "❌ Error in trading pipeline: %s", e, exc_info=True
-            )
+            logger.error(❌ Error in trading pipeline: %s, e, exc_info = True)
             return None
 
-    def _calculate_mathematical_state(
-        self, market_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
-        """
-        Calculate mathematical state using UnifiedTradingMathematics.
-        """
-        # Placeholder implementation
-        return {
-            'price': market_data['price'],
-            'volume': market_data['volume'],
-            'timestamp': market_data['timestamp'],
+    def _calculate_mathematical_state(self, market_data: Dict[str, Any]) -> Dict[str, Any]:
+        Calculate mathematical state using UnifiedTradingMathematics.# Placeholder implementation
+        return {price: market_data[price],volume: market_data[volume],timestamp: market_data[timestamp],
         }
 
-    async def _fetch_order_book_data(self, symbol: str) -> Optional[OrderBookSnapshot]:
-        """Fetch order book data for symbol."""
-        try:
+    async def _fetch_order_book_data(self, symbol: str) -> Optional[OrderBookSnapshot]:Fetch order book data for symbol.try:
             # Placeholder implementation
             return None
         except Exception as e:
-            logger.error(f"Error fetching order book: {e}")
+            logger.error(fError fetching order book: {e})
             return None
 
 
-async def run_trading_simulation(
-    config: Optional[Dict[str, Any]] = None,
-    simulation_ticks: int = 1000,
-):
-    """Run a trading simulation."""
-    pipeline = UnifiedTradingPipeline(config)
-    
+async def run_trading_simulation():Run a trading simulation.pipeline = UnifiedTradingPipeline(config)
+
     # Simulate market data
     for i in range(simulation_ticks):
         price = 50000 + random.uniform(-1000, 1000)
         volume = random.uniform(100, 1000)
-        
+
         decision = await pipeline.process_market_data(
-            symbol="BTC/USDC",
-            price=price,
-            volume=volume,
-            granularity=2,
-            tick_index=i
+            symbol=BTC/USDC, price = price, volume=volume, granularity=2, tick_index=i
         )
-        
+
         if decision:
-            print(f"Tick {i}: {decision.action} {decision.quantity} @ {decision.price}")
-        
+            print(fTick {i}: {decision.action} {decision.quantity} @ {decision.price})
+
         await asyncio.sleep(0.1)  # Simulate real-time
 
 
-if __name__ == "__main__":
+if __name__ == __main__:
     import asyncio
-    asyncio.run(run_trading_simulation()) 
+
+    asyncio.run(run_trading_simulation())

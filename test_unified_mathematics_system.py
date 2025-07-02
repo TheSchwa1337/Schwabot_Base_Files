@@ -16,20 +16,19 @@ This test shows the full mathematical foundation and trading system integration.
 import asyncio
 import json
 import time
-from typing import Dict, Any, List
 from datetime import datetime
 
 # Import the mathematical systems
 from core.math.rbm_mathematics import RBMMathematics
 from core.math.ferris_wheel_rde import FerrisWheelRDE
 from core.math.unified_mathematics import UnifiedMathematics
-from core.ccxt_integration import CCXTIntegration
+
 
 def test_rbm_mathematics():
     """Test RBM Mathematics system."""
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("TESTING RBM MATHEMATICS")
-    print("="*60)
+    print("=" * 60)
 
     rbm = RBMMathematics()
 
@@ -92,15 +91,15 @@ def test_rbm_mathematics():
     print("\nTesting trade layers:")
     layers = rbm.generate_trade_layers(pairs)
     for i, layer in enumerate(layers):
-        print(f"  Layer {i+1}: {layer}")
+        print(f"  Layer {i + 1}: {layer}")
 
     # Test volume weights
     print("\nTesting volume weights:")
     market_data = {
         "BTC→ETH": {"price": 0.05, "volume": 1000},
         "ETH→USDC": {"price": 2000, "volume": 500},
-        "BTC→USDC": {"price": 45000, "volume": 2000}
-}
+        "BTC→USDC": {"price": 45000, "volume": 2000},
+    }
     weights = rbm.calculate_volume_weights(pairs, market_data)
     for pair, weight in weights.items():
         print(f"  {pair}: {weight:.3f}")
@@ -108,11 +107,12 @@ def test_rbm_mathematics():
     # Print RBM statistics
     print(f"\nRBM Statistics: {rbm.get_rbm_statistics()}")
 
+
 def test_ferris_wheel_rde():
     """Test Ferris Wheel RDE system."""
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("TESTING FERRIS WHEEL RDE")
-    print("="*60)
+    print("=" * 60)
 
     ferris = FerrisWheelRDE()
 
@@ -146,8 +146,10 @@ def test_ferris_wheel_rde():
     print("\nTesting Ferris rotation:")
     for i in range(5):
         result = ferris.execute_ferris_rotation(i, pairs)
-        action = result['trading_action']
-        print(f"  Rotation {i}: {action['action']} {action['pair']} (confidence: {action['confidence']:.2f})")
+        action = result["trading_action"]
+        print(
+            f"  Rotation {i}: {action['action']} {action['pair']} (confidence: {action['confidence']:.2f})"
+        )
 
     # Test multi-bit state management
     print("\nTesting multi-bit state management:")
@@ -159,13 +161,15 @@ def test_ferris_wheel_rde():
     print("\nTesting ASIC duality:")
     for value in [0, 1, 2, 3]:
         duality = ferris.asic_character_duality(value)
-        print(f"  {value:02b}: ratio={duality['duality_ratio']:.2f}, strength={duality['duality_strength']:.2f}")
+        print(
+            f"  {value:02b}: ratio={duality['duality_ratio']:.2f}, strength={duality['duality_strength']:.2f}"
+        )
 
     # Test trade layers
     print("\nTesting trade layers:")
     layers = ferris.create_trade_layers(pairs)
     for i, layer in enumerate(layers):
-        print(f"  Layer {i+1}: {layer}")
+        print(f"  Layer {i + 1}: {layer}")
 
     # Test orbital efficiency
     print("\nTesting orbital efficiency:")
@@ -175,11 +179,12 @@ def test_ferris_wheel_rde():
     # Print RDE statistics
     print(f"\nRDE Statistics: {ferris.get_rde_statistics()}")
 
+
 def test_unified_mathematics():
     """Test Unified Mathematics system."""
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("TESTING UNIFIED MATHEMATICS")
-    print("="*60)
+    print("=" * 60)
 
     unified = UnifiedMathematics()
 
@@ -189,8 +194,8 @@ def test_unified_mathematics():
         "BTC→ETH": {"price": 0.05, "volume": 1000, "trajectory": 0.02},
         "ETH→USDC": {"price": 2000, "volume": 500, "trajectory": -0.01},
         "BTC→USDC": {"price": 45000, "volume": 2000, "trajectory": 0.03},
-        "XRP→BTC": {"price": 0.000022, "volume": 1500, "trajectory": 0.01}
-}
+        "XRP→BTC": {"price": 0.000022, "volume": 1500, "trajectory": 0.01},
+    }
     # Test unified cycle execution
     print("Testing unified cycle execution:")
     result = unified.execute_unified_cycle(pairs, market_data, current_state=5)
@@ -203,42 +208,43 @@ def test_unified_mathematics():
 
     # Show trading signals
     print("\nTrading signals:")
-    for signal in result['integrated_result']['trading_signals']:
-        print(f"  {signal['pair']}: {signal['action']} (confidence: {signal['confidence']:.2f})")
+    for signal in result["integrated_result"]["trading_signals"]:
+        print(
+            f"  {signal['pair']}: {signal['action']} (confidence: {signal['confidence']:.2f})"
+        )
 
     # Show trade layers
     print("\nTrade layers:")
-    for i, layer in enumerate(result['trade_layers']):
-        print(f"  Layer {i+1}: {layer}")
+    for i, layer in enumerate(result["trade_layers"]):
+        print(f"  Layer {i + 1}: {layer}")
 
     # Show volume weights
     print("\nVolume weights:")
-    for pair, weight in result['volume_weights'].items():
+    for pair, weight in result["volume_weights"].items():
         print(f"  {pair}: {weight:.3f}")
 
     # Show recommendations
     print("\nRecommendations:")
-    for rec in result['integrated_result']['recommendations']:
+    for rec in result["integrated_result"]["recommendations"]:
         print(f"  - {rec}")
 
     # Test system integration
     print("\nTesting system integration:")
-    input_data = {
-        "pairs": pairs,
-        "market_data": market_data,
-        "current_state": 10
-}
+    input_data = {"pairs": pairs, "market_data": market_data, "current_state": 10}
     integrated_result = unified.integrate_systems(input_data)
-    print(f"  Integration successful: {len(integrated_result['trading_signals'])} signals generated")
+    print(
+        f"  Integration successful: {len(integrated_result['trading_signals'])} signals generated"
+    )
 
     # Print unified statistics
     print(f"\nUnified Statistics: {unified.get_unified_statistics()}")
 
+
 async def test_ccxt_integration():
     """Test CCXT Integration (simulated)."""
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("TESTING CCXT INTEGRATION (SIMULATED)")
-    print("="*60)
+    print("=" * 60)
 
     # Note: This is a simulated test since we don't have real API keys
     print("CCXT Integration test (simulated mode)")
@@ -253,8 +259,8 @@ async def test_ccxt_integration():
     market_data = {
         "BTC/USDC": {"price": 45000, "volume": 1000, "trajectory": 0.02},
         "ETH/USDC": {"price": 2000, "volume": 500, "trajectory": -0.01},
-        "XRP/USDC": {"price": 0.5, "volume": 2000, "trajectory": 0.03}
-}
+        "XRP/USDC": {"price": 0.5, "volume": 2000, "trajectory": 0.03},
+    }
     # Test unified cycle with CCXT-style data
     print("\nTesting unified cycle with CCXT-style data:")
     result = unified.execute_unified_cycle(pairs, market_data, current_state=15)
@@ -265,16 +271,19 @@ async def test_ccxt_integration():
 
     # Show simulated trading signals
     print("\nSimulated trading signals:")
-    for signal in result['integrated_result']['trading_signals']:
-        print(f"  {signal['pair']}: {signal['action']} (confidence: {signal['confidence']:.2f})")
+    for signal in result["integrated_result"]["trading_signals"]:
+        print(
+            f"  {signal['pair']}: {signal['action']} (confidence: {signal['confidence']:.2f})"
+        )
 
     print("\nCCXT Integration test completed (simulated)")
 
+
 def test_mathematical_integration():
     """Test integration between all mathematical systems."""
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("TESTING MATHEMATICAL INTEGRATION")
-    print("="*60)
+    print("=" * 60)
 
     # Initialize all systems
     rbm = RBMMathematics()
@@ -287,8 +296,8 @@ def test_mathematical_integration():
         "BTC→ETH": {"price": 0.05, "volume": 1000, "trajectory": 0.02},
         "ETH→USDC": {"price": 2000, "volume": 500, "trajectory": -0.01},
         "BTC→USDC": {"price": 45000, "volume": 2000, "trajectory": 0.03},
-        "XRP→BTC": {"price": 0.000022, "volume": 1500, "trajectory": 0.01}
-}
+        "XRP→BTC": {"price": 0.000022, "volume": 1500, "trajectory": 0.01},
+    }
     print("Testing cross-system integration:")
 
     # Test RBM + Ferris integration
@@ -297,13 +306,17 @@ def test_mathematical_integration():
     ferris_rotation = ferris.execute_ferris_rotation(5, pairs)
 
     print(f"  RBM matrix pairs: {len(rbm_matrix)}")
-    print(f"  Ferris rotation: {ferris_rotation['trading_action']['action']} {ferris_rotation['trading_action']['pair']}")
+    print(
+        f"  Ferris rotation: {ferris_rotation['trading_action']['action']} {ferris_rotation['trading_action']['pair']}"
+    )
 
     # Test unified integration
     print("\n2. Unified Integration:")
     unified_result = unified.execute_unified_cycle(pairs, market_data, current_state=7)
 
-    print(f"  Unified signals: {len(unified_result['integrated_result']['trading_signals'])}")
+    print(
+        f"  Unified signals: {len(unified_result['integrated_result']['trading_signals'])}"
+    )
     print(f"  Unified layers: {len(unified_result['trade_layers'])}")
 
     # Test mathematical consistency
@@ -312,7 +325,7 @@ def test_mathematical_integration():
     # Check bit consistency
     rbm_bits = set()
     for pair_data in rbm_matrix.values():
-        rbm_bits.add(pair_data['bit'])
+        rbm_bits.add(pair_data["bit"])
 
     ferris_bits = set()
     for i in range(16):
@@ -328,7 +341,11 @@ def test_mathematical_integration():
     print("\n4. Entropy Consistency:")
     rbm_entropy = rbm.ferris_wheel_states["entropy_pool"]
     ferris_entropy = sum(state.entropy_level for state in ferris.states)
-    unified_entropy = unified.unified_states[-1].rbm_state.get("entropy_pool", 0) if unified.unified_states else 0
+    unified_entropy = (
+        unified.unified_states[-1].rbm_state.get("entropy_pool", 0)
+        if unified.unified_states
+        else 0
+    )
 
     print(f"  RBM entropy: {rbm_entropy:.3f}")
     print(f"  Ferris entropy: {ferris_entropy:.3f}")
@@ -336,11 +353,12 @@ def test_mathematical_integration():
 
     print("\nMathematical integration test completed")
 
+
 def save_test_results():
     """Save test results to file."""
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("SAVING TEST RESULTS")
-    print("="*60)
+    print("=" * 60)
 
     # Create test results
     test_results = {
@@ -350,13 +368,13 @@ def save_test_results():
             "ferris_tests": "Completed",
             "unified_tests": "Completed",
             "ccxt_tests": "Simulated",
-            "integration_tests": "Completed"
+            "integration_tests": "Completed",
         },
         "system_status": {
             "rbm_mathematics": "Operational",
             "ferris_wheel_rde": "Operational",
             "unified_mathematics": "Operational",
-            "ccxt_integration": "Ready for API keys"
+            "ccxt_integration": "Ready for API keys",
         },
         "mathematical_foundations": {
             "bit_operations": "2, 4, 8, 16, 32, 42, 64-bit support",
@@ -365,9 +383,9 @@ def save_test_results():
             "quantum_simulation": "Classical approximation of quantum behaviors",
             "entropy_calculation": "Information theory implementation",
             "ferris_wheel_rde": "256 SHA creation cycle",
-            "asic_duality": "2-bit connection functionality"
-}
-}
+            "asic_duality": "2-bit connection functionality",
+        },
+    }
     # Save to file
     with open("test_results.json", "w", encoding="utf-8") as f:
         json.dump(test_results, f, indent=2)
@@ -375,12 +393,13 @@ def save_test_results():
     print("Test results saved to test_results.json")
     print("Mathematical foundations successfully implemented and tested")
 
+
 async def main():
     """Main test function."""
     print("UNIFIED MATHEMATICS SYSTEM TEST")
-    print("="*60)
+    print("=" * 60)
     print("Testing the complete mathematical foundation for Schwabot trading system")
-    print("="*60)
+    print("=" * 60)
 
     start_time = time.time()
 
@@ -397,9 +416,9 @@ async def main():
 
         # Print summary
         elapsed_time = time.time() - start_time
-        print(f"\n" + "="*60)
+        print("\n" + "=" * 60)
         print("ALL TESTS COMPLETED SUCCESSFULLY!")
-        print("="*60)
+        print("=" * 60)
         print(f"Total test time: {elapsed_time:.2f} seconds")
         print("\nMathematical foundations implemented:")
         print("  ✓ RBM Mathematics (Recursive Bit Mapping)")
@@ -416,7 +435,9 @@ async def main():
     except Exception as e:
         print(f"\n[ERROR] Test failed: {e}")
         import traceback
+
         traceback.print_exc()
+
 
 if __name__ == "__main__":
     # Run the comprehensive test

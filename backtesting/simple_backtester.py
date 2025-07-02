@@ -10,13 +10,19 @@ import asyncio
 import logging
 import random
 import time
-from datetime import datetime, timedelta
+from datetime import datetime
 from decimal import Decimal
 from typing import Any, Dict, List, Optional
 
-from core.ccxt_trading_executor import CCXTTradingExecutor, TradingPair, IntegratedTradingSignal, ExecutionResult
-from core.unified_api_coordinator import ExchangeType, ExchangeConfig # Needed for configuring the executor correctly
-from backtesting.historical_data_manager import HistoricalDataManager # Import the new data manager
+from core.ccxt_trading_executor import (
+    CCXTTradingExecutor,
+    TradingPair,
+    IntegratedTradingSignal,
+    ExecutionResult,
+)
+from backtesting.historical_data_manager import (
+    HistoricalDataManager,
+)  # Import the new data manager
 
 logger = logging.getLogger(__name__)
 
@@ -24,12 +30,14 @@ logger = logging.getLogger(__name__)
 class SimpleBacktester:
     """A simple backtesting engine to simulate trading strategies."""
 
-    def __init__(self, initial_capital: Decimal = Decimal('10000'), 
-                 start_date: datetime = datetime(2023, 1, 1), 
-                 end_date: datetime = datetime(2023, 1, 31),
-                 trading_pair: TradingPair = TradingPair.BTC_USDC,
-                 config: Optional[Dict[str, Any]] = None):
-        
+    def __init__(
+        self,
+        initial_capital: Decimal = Decimal("10000"),
+        start_date: datetime = datetime(2023, 1, 1),
+        end_date: datetime = datetime(2023, 1, 31),
+        trading_pair: TradingPair = TradingPair.BTC_USDC,
+        config: Optional[Dict[str, Any]] = None,
+    ):
         self.initial_capital = initial_capital
         self.start_date = start_date
         self.end_date = end_date
@@ -45,12 +53,12 @@ class SimpleBacktester:
                     "enableRateLimit": True,
                     "options": {
                         "defaultType": "spot",
-}
-}
+                    },
+                }
             },
-            "COINMARKETCAP_API_KEY": "mock_cmc_key", # Mock key
+            "COINMARKETCAP_API_KEY": "mock_cmc_key",  # Mock key
             # No actual API keys needed for backtesting if using simulated data
-}
+        }
         self.ccxt_executor = CCXTTradingExecutor(executor_config)
         self.ccxt_executor.portfolio_balance["USDC"] = initial_capital
 
@@ -58,53 +66,73 @@ class SimpleBacktester:
         self.historical_data_manager = HistoricalDataManager(
             start_date=self.start_date,
             end_date=self.end_date,
-            interval_minutes=1440, # Daily data for backtesting, can be configured
-            initial_price=Decimal('40000.0') # Initial price for mock data generation
+            interval_minutes=1440,  # Daily data for backtesting, can be configured
+            initial_price=Decimal("40000.0"),  # Initial price for mock data generation
         )
 
         self.current_date = start_date
         self.trade_results: List[ExecutionResult] = []
         self.portfolio_value_history: List[Decimal] = [self.initial_capital]
 
-        logger.info(f"SimpleBacktester initialized for {trading_pair.value} from {start_date.date()} to {end_date.date()}")
+        logger.info(
+            f"SimpleBacktester initialized for {trading_pair.value} from {start_date.date()} to {end_date.date()}"
+        )
 
-    async def run_backtest(self, data_source: str = "mock", data_file_path: Optional[str] = None):
+    async def run_backtest(
+        self, data_source: str = "mock", data_file_path: Optional[str] = None
+    ):
         """Runs the backtest simulation."""
         logger.info("Starting backtest...")
-        
+
         # Start price monitoring in the executor (will use prices from backtest data)
-        self.ccxt_executor.start_price_monitoring() 
+        self.ccxt_executor.start_price_monitoring()
 
         try:
             # Use the HistoricalDataManager to get data
-            async for data_point in self.historical_data_manager.get_historical_data(source=data_source, file_path=data_file_path):
+            async for data_point in self.historical_data_manager.get_historical_data(
+                source=data_source, file_path=data_file_path
+            ):
                 self.current_date = datetime.fromisoformat(data_point["datetime"])
-                current_price = Decimal(str(data_point["close"])) # Use close price for current price
+                current_price = Decimal(
+                    str(data_point["close"])
+                )  # Use close price for current price
                 open_price = Decimal(str(data_point["open"]))
-                high_price = Decimal(str(data_point["high"]))
-                low_price = Decimal(str(data_point["low"]))
+                Decimal(str(data_point["high"]))
+                Decimal(str(data_point["low"]))
                 volume = Decimal(str(data_point["volume"]))
 
-                logger.info(f"Processing data for {self.current_date.date()}: Close Price={current_price:.2f}, Volume={volume:.2f}")
+                logger.info(
+                    f"Processing data for {self.current_date.date()}: Close Price={current_price:.2f}, Volume={volume:.2f}"
+                )
 
                 # Simulate updating the executor's price data for the trading pair
                 # This mimics the price monitoring loop feeding updated prices
                 self.ccxt_executor.price_data[self.trading_pair] = current_price
                 # Also update for stablecoin if relevant
-                if self.trading_pair in [TradingPair.BTC_USDC, TradingPair.ETH_USDC, TradingPair.XRP_USDC]:
-                     self.ccxt_executor.price_data[TradingPair.USDC_USD] = Decimal('1.0')
+                if self.trading_pair in [
+                    TradingPair.BTC_USDC,
+                    TradingPair.ETH_USDC,
+                    TradingPair.XRP_USDC,
+                ]:
+                    self.ccxt_executor.price_data[TradingPair.USDC_USD] = Decimal("1.0")
                 if self.trading_pair in [TradingPair.BTC_USDT, TradingPair.ETH_USDT]:
-                     self.ccxt_executor.price_data[TradingPair.USDT_USD] = Decimal('1.0')
+                    self.ccxt_executor.price_data[TradingPair.USDT_USD] = Decimal("1.0")
 
                 # Update portfolio history for drawdown calculation
                 # Assuming all non-USDC assets are converted to USDC value for total portfolio calculation
                 current_portfolio_value = self.ccxt_executor.portfolio_balance["USDC"]
                 if self.trading_pair == TradingPair.BTC_USDC:
-                    current_portfolio_value += self.ccxt_executor.portfolio_balance["BTC"] * current_price
+                    current_portfolio_value += (
+                        self.ccxt_executor.portfolio_balance["BTC"] * current_price
+                    )
                 elif self.trading_pair == TradingPair.ETH_USDC:
-                    current_portfolio_value += self.ccxt_executor.portfolio_balance["ETH"] * current_price
+                    current_portfolio_value += (
+                        self.ccxt_executor.portfolio_balance["ETH"] * current_price
+                    )
                 elif self.trading_pair == TradingPair.XRP_USDC:
-                    current_portfolio_value += self.ccxt_executor.portfolio_balance["XRP"] * current_price
+                    current_portfolio_value += (
+                        self.ccxt_executor.portfolio_balance["XRP"] * current_price
+                    )
                 # Add logic for other pairs if they hold non-USDC base assets
 
                 self.portfolio_value_history.append(current_portfolio_value)
@@ -113,7 +141,7 @@ class SimpleBacktester:
                 # This is a placeholder and would be replaced by a real trading strategy.
                 # For demonstration, let's use a simple moving average crossover or similar logic here
                 # For now, keep the random signal generation, but enhance its data usage
-                
+
                 # Simple price action strategy: if current price is significantly above/below open
                 signal_action = None
                 confidence = 0.0
@@ -122,12 +150,16 @@ class SimpleBacktester:
 
                 price_change_pct = (current_price - open_price) / open_price
 
-                if price_change_pct < Decimal('-0.0075'): # Price dropped by more than 0.75%
+                if price_change_pct < Decimal(
+                    "-0.0075"
+                ):  # Price dropped by more than 0.75%
                     signal_action = "buy"
                     confidence = Decimal(str(random.uniform(0.7, 0.95)))
                     profit_potential = Decimal(str(random.uniform(0.02, 0.08)))
                     risk = Decimal(str(random.uniform(0.05, 0.2)))
-                elif price_change_pct > Decimal('0.0075'): # Price increased by more than 0.75%
+                elif price_change_pct > Decimal(
+                    "0.0075"
+                ):  # Price increased by more than 0.75%
                     signal_action = "sell"
                     confidence = Decimal(str(random.uniform(0.6, 0.9)))
                     profit_potential = Decimal(str(random.uniform(0.01, 0.05)))
@@ -141,18 +173,24 @@ class SimpleBacktester:
                         confidence_score=confidence,
                         profit_potential=profit_potential,
                         risk_assessment={"overall_risk": risk},
-                        ghost_route="ghost_trade"
+                        ghost_route="ghost_trade",
                     )
-                    logger.debug(f"Generated mock signal: {signal.recommended_action} {signal.target_pair.value}")
+                    logger.debug(
+                        f"Generated mock signal: {signal.recommended_action} {signal.target_pair.value}"
+                    )
                     execution_result = await self.ccxt_executor.execute_signal(signal)
                     self.trade_results.append(execution_result)
                     if execution_result.executed:
-                        logger.info(f"Trade executed: {execution_result.strategy.value} {execution_result.fill_amount:.6f} {execution_result.pair.value} @ {execution_result.fill_price:.2f}")
+                        logger.info(
+                            f"Trade executed: {execution_result.strategy.value} {execution_result.fill_amount:.6f} {execution_result.pair.value} @ {execution_result.fill_price:.2f}"
+                        )
                     else:
-                        logger.warning(f"Trade not executed: {execution_result.error_message}")
+                        logger.warning(
+                            f"Trade not executed: {execution_result.error_message}"
+                        )
 
                 # Simulate a delay for realism in backtesting
-                await asyncio.sleep(0.001) # Very small sleep to allow async operations
+                await asyncio.sleep(0.001)  # Very small sleep to allow async operations
 
         finally:
             self.ccxt_executor.stop_price_monitoring()
@@ -162,52 +200,85 @@ class SimpleBacktester:
     def _report_results(self):
         """Reports the results of the backtest."""
         logger.info("\n--- Backtest Results ---")
-        
+
         # Calculate final portfolio value more accurately using actual holdings and current prices
-        final_portfolio_value = self.ccxt_executor.portfolio_balance["USDC"] 
+        final_portfolio_value = self.ccxt_executor.portfolio_balance["USDC"]
         if TradingPair.BTC_USDC in self.ccxt_executor.price_data:
-            final_portfolio_value += (self.ccxt_executor.portfolio_balance["BTC"] * self.ccxt_executor.price_data[TradingPair.BTC_USDC])
+            final_portfolio_value += (
+                self.ccxt_executor.portfolio_balance["BTC"]
+                * self.ccxt_executor.price_data[TradingPair.BTC_USDC]
+            )
         if TradingPair.ETH_USDC in self.ccxt_executor.price_data:
-            final_portfolio_value += (self.ccxt_executor.portfolio_balance["ETH"] * self.ccxt_executor.price_data[TradingPair.ETH_USDC])
+            final_portfolio_value += (
+                self.ccxt_executor.portfolio_balance["ETH"]
+                * self.ccxt_executor.price_data[TradingPair.ETH_USDC]
+            )
         if TradingPair.XRP_USDC in self.ccxt_executor.price_data:
-            final_portfolio_value += (self.ccxt_executor.portfolio_balance["XRP"] * self.ccxt_executor.price_data[TradingPair.XRP_USDC])
+            final_portfolio_value += (
+                self.ccxt_executor.portfolio_balance["XRP"]
+                * self.ccxt_executor.price_data[TradingPair.XRP_USDC]
+            )
         # Add other assets if necessary, using their current prices
 
         net_profit_loss = final_portfolio_value - self.initial_capital
-        
-        total_realized_profit = Decimal('0')
+
+        total_realized_profit = Decimal("0")
         for result in self.trade_results:
             if result.executed and result.profit_realized is not None:
                 total_realized_profit += result.profit_realized
 
-        total_return_pct = (net_profit_loss / self.initial_capital * Decimal('100')) if self.initial_capital else Decimal('0')
+        total_return_pct = (
+            (net_profit_loss / self.initial_capital * Decimal("100"))
+            if self.initial_capital
+            else Decimal("0")
+        )
 
         # Calculate Maximum Drawdown
         peak = self.initial_capital
-        max_drawdown = Decimal('0')
+        max_drawdown = Decimal("0")
         for value in self.portfolio_value_history:
             if value > peak:
                 peak = value
-            drawdown = (peak - value) / peak if peak else Decimal('0')
+            drawdown = (peak - value) / peak if peak else Decimal("0")
             if drawdown > max_drawdown:
                 max_drawdown = drawdown
 
-        max_drawdown_pct = max_drawdown * Decimal('100')
+        max_drawdown_pct = max_drawdown * Decimal("100")
 
         # Calculate winning and losing trades
-        winning_trades = [r.profit_realized for r in self.trade_results if r.executed and r.profit_realized is not None and r.profit_realized > 0]
-        losing_trades = [r.profit_realized for r in self.trade_results if r.executed and r.profit_realized is not None and r.profit_realized < 0]
+        winning_trades = [
+            r.profit_realized
+            for r in self.trade_results
+            if r.executed and r.profit_realized is not None and r.profit_realized > 0
+        ]
+        losing_trades = [
+            r.profit_realized
+            for r in self.trade_results
+            if r.executed and r.profit_realized is not None and r.profit_realized < 0
+        ]
 
         num_winning_trades = len(winning_trades)
         num_losing_trades = len(losing_trades)
 
-        avg_win = sum(winning_trades) / num_winning_trades if num_winning_trades > 0 else Decimal('0')
-        avg_loss = sum(losing_trades) / num_losing_trades if num_losing_trades > 0 else Decimal('0')
+        avg_win = (
+            sum(winning_trades) / num_winning_trades
+            if num_winning_trades > 0
+            else Decimal("0")
+        )
+        avg_loss = (
+            sum(losing_trades) / num_losing_trades
+            if num_losing_trades > 0
+            else Decimal("0")
+        )
 
-        total_wins = sum(winning_trades) if winning_trades else Decimal('0')
-        total_losses = sum(losing_trades) if losing_trades else Decimal('0')
+        total_wins = sum(winning_trades) if winning_trades else Decimal("0")
+        total_losses = sum(losing_trades) if losing_trades else Decimal("0")
 
-        profit_factor = total_wins / abs(total_losses) if total_losses != Decimal('0') else Decimal('Inf')
+        profit_factor = (
+            total_wins / abs(total_losses)
+            if total_losses != Decimal("0")
+            else Decimal("Inf")
+        )
 
         logger.info(f"Initial Capital: ${self.initial_capital:.2f}")
         logger.info(f"Final Portfolio Value: ${final_portfolio_value:.2f}")
@@ -227,15 +298,18 @@ class SimpleBacktester:
 
 
 async def main():
-    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+    logging.basicConfig(
+        level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+    )
     backtester = SimpleBacktester(
-        initial_capital=Decimal('10000'),
+        initial_capital=Decimal("10000"),
         start_date=datetime(2023, 1, 1),
         end_date=datetime(2023, 1, 31),
-        trading_pair=TradingPair.BTC_USDC
+        trading_pair=TradingPair.BTC_USDC,
     )
     # Run backtest using mock data from HistoricalDataManager
     await backtester.run_backtest(data_source="mock")
 
+
 if __name__ == "__main__":
-    asyncio.run(main()) 
+    asyncio.run(main())

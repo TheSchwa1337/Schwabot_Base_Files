@@ -28,22 +28,26 @@ from decimal import Decimal
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     handlers=[
-        logging.FileHandler('logs/mathematical_relay_system.log'),
-        logging.StreamHandler(sys.stdout)
-    ]
+        logging.FileHandler("logs/mathematical_relay_system.log"),
+        logging.StreamHandler(sys.stdout),
+    ],
 )
 
 logger = logging.getLogger(__name__)
 
 # Import system components
 try:
-    from core.system_integration import SystemIntegrationManager, initialize_and_start_system
+    from core.system_integration import (
+        SystemIntegrationManager,
+        initialize_and_start_system,
+    )
     from core.ccxt_trading_executor import TradingPair
     from core.mathematical_relay_sequencer import MathematicalRelaySequencer
     from core.mathematical_backlog_manager import MathematicalBacklogManager
     from backtesting.simple_backtester import SimpleBacktester
+
     SYSTEM_AVAILABLE = True
 except ImportError as e:
     logger.error(f"System components not available: {e}")
@@ -66,7 +70,7 @@ async def run_backtest_demo():
             "gpu_enabled": False,
             "enable_visualization": False,
             "enable_backtesting": True,
-            "enable_live_trading": False
+            "enable_live_trading": False,
         }
         manager = SystemIntegrationManager(config=config)
         await manager.initialize_system()
@@ -75,38 +79,38 @@ async def run_backtest_demo():
         backtest_scenarios = [
             {
                 "name": "BTC/USDC - 1 Week",
-                "initial_capital": Decimal('10000'),
+                "initial_capital": Decimal("10000"),
                 "start_date": datetime(2023, 1, 1),
                 "end_date": datetime(2023, 1, 7),
-                "trading_pair": TradingPair.BTC_USDC
+                "trading_pair": TradingPair.BTC_USDC,
             },
             {
                 "name": "ETH/USDC - 2 Weeks",
-                "initial_capital": Decimal('15000'),
+                "initial_capital": Decimal("15000"),
                 "start_date": datetime(2023, 1, 1),
                 "end_date": datetime(2023, 1, 14),
-                "trading_pair": TradingPair.ETH_USDC
+                "trading_pair": TradingPair.ETH_USDC,
             },
             {
                 "name": "XRP/USDC - 1 Month",
-                "initial_capital": Decimal('5000'),
+                "initial_capital": Decimal("5000"),
                 "start_date": datetime(2023, 1, 1),
                 "end_date": datetime(2023, 1, 31),
-                "trading_pair": TradingPair.XRP_USDC
-            }
+                "trading_pair": TradingPair.XRP_USDC,
+            },
         ]
         for scenario in backtest_scenarios:
             logger.info(f"Running backtest: {scenario['name']}")
             result = await manager.run_backtest(
-                initial_capital=scenario['initial_capital'],
-                start_date=scenario['start_date'],
-                end_date=scenario['end_date'],
-                trading_pair=scenario['trading_pair']
+                initial_capital=scenario["initial_capital"],
+                start_date=scenario["start_date"],
+                end_date=scenario["end_date"],
+                trading_pair=scenario["trading_pair"],
             )
             logger.info(f"Backtest result: {result}")
 
         # Export system data
-        export_data = manager.export_system_data()
+        manager.export_system_data()
         logger.info("System data exported successfully")
 
         logger.info("=== Backtest Demo Completed ===")
@@ -132,11 +136,11 @@ async def run_visualization_demo():
             "visualization_config": {
                 "host": "0.0.0.0",
                 "port": 8000,
-                "static_dir": "static"
+                "static_dir": "static",
             },
             "enable_visualization": True,
             "enable_backtesting": False,
-            "enable_live_trading": False
+            "enable_live_trading": False,
         }
         manager = await initialize_and_start_system(config)
 
@@ -173,19 +177,16 @@ async def run_full_system_demo():
             "visualization_config": {
                 "host": "0.0.0.0",
                 "port": 8000,
-                "static_dir": "static"
+                "static_dir": "static",
             },
             "trading_config": {
                 "unified_api_config": {
-                    "ccxt_config": {
-                        "timeout": 30000,
-                        "enableRateLimit": True
-                    }
+                    "ccxt_config": {"timeout": 30000, "enableRateLimit": True}
                 }
             },
             "enable_visualization": True,
             "enable_backtesting": True,
-            "enable_live_trading": False
+            "enable_live_trading": False,
         }
         # Initialize and start complete system
         manager = await initialize_and_start_system(config)
@@ -193,10 +194,10 @@ async def run_full_system_demo():
         # Run a quick backtest to generate data
         logger.info("Running initial backtest to generate data...")
         backtest_result = await manager.run_backtest(
-            initial_capital=Decimal('10000'),
+            initial_capital=Decimal("10000"),
             start_date=datetime(2023, 1, 1),
             end_date=datetime(2023, 1, 7),
-            trading_pair=TradingPair.BTC_USDC
+            trading_pair=TradingPair.BTC_USDC,
         )
         logger.info(f"Initial backtest completed: {backtest_result}")
 
@@ -220,7 +221,8 @@ async def run_full_system_demo():
             current_status = manager.get_system_status()
             logger.info(
                 f"System uptime: {
-                    current_status['performance_metrics']['system_uptime']:.0f}s")
+                    current_status['performance_metrics']['system_uptime']:.0f}s"
+            )
 
     except KeyboardInterrupt:
         logger.info("Received shutdown signal...")
@@ -244,8 +246,9 @@ async def run_component_test():
         logger.info("Testing MathematicalBacklogManager...")
         backlog_manager = MathematicalBacklogManager()
         backlog_manager.log_event(
-            "test_events", {
-                "test": "backlog_manager", "timestamp": datetime.now().isoformat()})
+            "test_events",
+            {"test": "backlog_manager", "timestamp": datetime.now().isoformat()},
+        )
         events = backlog_manager.retrieve_events("test_events", limit=10)
         logger.info(f"Backlog manager test: {len(events)} events retrieved")
 
@@ -253,19 +256,17 @@ async def run_component_test():
         logger.info("Testing MathematicalRelaySequencer...")
         sequencer = MathematicalRelaySequencer(mode="demo", log_level="INFO")
         result = sequencer.sequence_btc_price_hash(
-            btc_price=45000.0,
-            btc_volume=1000.0,
-            phase=32
+            btc_price=45000.0, btc_volume=1000.0, phase=32
         )
         logger.info(f"Sequencer test: {result.get('sequence_id')}")
 
         # Test SimpleBacktester
         logger.info("Testing SimpleBacktester...")
-        backtester = SimpleBacktester(
-            initial_capital=Decimal('1000'),
+        SimpleBacktester(
+            initial_capital=Decimal("1000"),
             start_date=datetime(2023, 1, 1),
             end_date=datetime(2023, 1, 3),
-            trading_pair=TradingPair.BTC_USDC
+            trading_pair=TradingPair.BTC_USDC,
         )
         logger.info("Backtester initialized successfully")
 
@@ -278,12 +279,21 @@ async def run_component_test():
 def main():
     """Main entry point with command line argument parsing."""
     parser = argparse.ArgumentParser(description="Mathematical Relay Trading System")
-    parser.add_argument("--mode", choices=["backtest", "visualization", "full", "test"],
-                        default="full", help="System mode to run")
-    parser.add_argument("--log-level", choices=["DEBUG", "INFO", "WARNING", "ERROR"],
-                        default="INFO", help="Logging level")
-    parser.add_argument("--port", type=int, default=8000,
-                        help="Visualization server port")
+    parser.add_argument(
+        "--mode",
+        choices=["backtest", "visualization", "full", "test"],
+        default="full",
+        help="System mode to run",
+    )
+    parser.add_argument(
+        "--log-level",
+        choices=["DEBUG", "INFO", "WARNING", "ERROR"],
+        default="INFO",
+        help="Logging level",
+    )
+    parser.add_argument(
+        "--port", type=int, default=8000, help="Visualization server port"
+    )
 
     args = parser.parse_args()
 

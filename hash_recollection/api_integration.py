@@ -9,7 +9,7 @@ modules and provides a unified FastAPI interface for trading bot operations.
 
 import logging
 from typing import Dict, List, Optional, Any
-from fastapi import FastAPI, HTTPException, Depends
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 import uvicorn

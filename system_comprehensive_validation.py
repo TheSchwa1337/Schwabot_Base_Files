@@ -26,14 +26,13 @@ import sys
 import time
 import traceback
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 import numpy as np
 
 # Configure logging
 logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
 
@@ -46,7 +45,7 @@ validation_results = {
     "overall_status": "unknown",
     "errors": [],
     "warnings": [],
-    "summary": {}
+    "summary": {},
 }
 
 
@@ -96,7 +95,7 @@ def test_core_mathematical_framework():
                 "abs_test": abs_result,
                 "sin_test": sin_result,
                 "cos_test": cos_result,
-                "operational": True
+                "operational": True,
             }
             print(f"   ✅ Unified Math System: abs({test_value}) = {abs_result}")
 
@@ -113,7 +112,7 @@ def test_core_mathematical_framework():
         test_results["details"]["drift_calculation"] = {
             "price_series": price_series,
             "drift_values": drift_values.tolist(),
-            "drift_magnitude": drift_magnitude
+            "drift_magnitude": drift_magnitude,
         }
         print(f"   ✅ Drift Calculation: magnitude = {drift_magnitude:.4f}")
 
@@ -145,17 +144,21 @@ def test_entry_exit_logic():
                 "price": 50000.0,
                 "volume": 1000.0,
                 "timestamp": time.time(),
-                "volatility": 0.02
+                "volatility": 0.02,
             }
 
             # Process entry signals
             signals = logic_engine.process_data(market_data)
             test_results["details"]["signals_generated"] = len(signals)
-            test_results["details"]["signal_types"] = [s.signal_type.value for s in signals]
+            test_results["details"]["signal_types"] = [
+                s.signal_type.value for s in signals
+            ]
 
             print(f"   ✅ Entry/Exit Logic: Generated {len(signals)} signals")
             for signal in signals[:3]:  # Show first 3 signals
-                print(f"      - {signal.signal_type.value}: {signal.asset} @ {signal.price:.2f} (confidence: {signal.confidence:.2f})")
+                print(
+                    f"      - {signal.signal_type.value}: {signal.asset} @ {signal.price:.2f} (confidence: {signal.confidence:.2f})"
+                )
 
         # Test harmonic matrix calculations
         # Simulate buy/sell wall analysis
@@ -169,10 +172,12 @@ def test_entry_exit_logic():
             "buy_wall_total": np.sum(buy_wall_depth),
             "sell_wall_total": np.sum(sell_wall_depth),
             "harmonic_ratio": harmonic_ratio,
-            "harmonic_balance": harmonic_balance
+            "harmonic_balance": harmonic_balance,
         }
 
-        print(f"   ✅ Harmonic Matrix: ratio = {harmonic_ratio:.4f}, balance = {harmonic_balance:.4f}")
+        print(
+            f"   ✅ Harmonic Matrix: ratio = {harmonic_ratio:.4f}, balance = {harmonic_balance:.4f}"
+        )
 
         test_results["status"] = "passed"
 
@@ -203,7 +208,9 @@ def test_profit_formalization():
             summary = tracker.get_portfolio_summary()
             test_results["details"]["portfolio_summary"] = summary
 
-            print(f"   ✅ Portfolio Tracking: Total value = ${summary['total_value']:.2f}")
+            print(
+                f"   ✅ Portfolio Tracking: Total value = ${summary['total_value']:.2f}"
+            )
             print(f"      - Realized PnL: ${summary['realized_pnl']:.2f}")
             print(f"      - Unrealized PnL: ${summary['unrealized_pnl']:.2f}")
 
@@ -221,7 +228,7 @@ def test_profit_formalization():
         test_results["details"]["tensor_calculations"] = {
             "price_tensor_shape": price_tensor.shape,
             "volume_tensor_shape": volume_tensor.shape,
-            "tensor_profit_score": tensor_profit_score
+            "tensor_profit_score": tensor_profit_score,
         }
 
         print(f"   ✅ Tensor Valuations: Profit score = {tensor_profit_score:.4f}")
@@ -258,7 +265,7 @@ def test_tick_mapping_automation():
                 "timestamp": time.time() + tick * 0.1,
                 "price": current_price,
                 "time_factor": time_factor,
-                "price_change": price_change
+                "price_change": price_change,
             }
             tick_sequence.append(tick_data)
 
@@ -274,7 +281,7 @@ def test_tick_mapping_automation():
                 trigger_map[f"trigger_{i}"] = {
                     "tick_id": tick["tick_id"],
                     "price": tick["price"],
-                    "intensity": abs(tick["price_change"]) / 10.0
+                    "intensity": abs(tick["price_change"]) / 10.0,
                 }
 
         test_results["details"]["tick_automation"] = {
@@ -282,13 +289,15 @@ def test_tick_mapping_automation():
             "price_volatility": price_volatility,
             "trend_direction": trend_direction,
             "triggers_generated": len(trigger_map),
-            "final_price": price_series[-1]
+            "final_price": price_series[-1],
         }
 
         print(f"   ✅ Tick Mapping: {len(tick_sequence)} ticks processed")
         print(f"      - Price volatility: {price_volatility:.2f}")
         print(f"      - Triggers generated: {len(trigger_map)}")
-        print(f"      - Trend direction: {'Bullish' if trend_direction > 0 else 'Bearish'}")
+        print(
+            f"      - Trend direction: {'Bullish' if trend_direction > 0 else 'Bearish'}"
+        )
 
         test_results["status"] = "passed"
 
@@ -319,7 +328,7 @@ def test_api_integration():
                     test_data = {
                         "price": 50000.0,
                         "volume": 1000.0,
-                        "timestamp": time.time()
+                        "timestamp": time.time(),
                     }
 
                     result = await core.process_data(test_data)
@@ -330,16 +339,16 @@ def test_api_integration():
                     loop = asyncio.get_event_loop()
                     if loop.is_running():
                         # If already in async context, just test the class exists
-                        core = lantern.LanternCore()
+                        lantern.LanternCore()
                         test_results["details"]["lantern_core"] = {"initialized": True}
                         print("   ✅ Lantern Core: Class initialized successfully")
                     else:
                         result = loop.run_until_complete(test_lantern_async())
                         test_results["details"]["lantern_core"] = result
-                        print(f"   ✅ Lantern Core: Processing completed")
+                        print("   ✅ Lantern Core: Processing completed")
                 except RuntimeError:
                     # Already in async context
-                    core = lantern.LanternCore()
+                    lantern.LanternCore()
                     test_results["details"]["lantern_core"] = {"initialized": True}
                     print("   ✅ Lantern Core: Class initialized successfully")
 
@@ -355,7 +364,7 @@ def test_api_integration():
                 "timestamp": time.time() + i,
                 "source": "market_data",
                 "confidence": np.random.uniform(0.5, 1.0),
-                "data": {"price": 50000 + np.random.normal(0, 100)}
+                "data": {"price": 50000 + np.random.normal(0, 100)},
             }
             api_triggers.append(trigger)
 
@@ -366,14 +375,18 @@ def test_api_integration():
                 "trigger_id": trigger["trigger_id"],
                 "processing_time": np.random.uniform(0.001, 0.01),
                 "status": "processed",
-                "result": "action_taken" if trigger["confidence"] > 0.7 else "no_action"
+                "result": "action_taken"
+                if trigger["confidence"] > 0.7
+                else "no_action",
             }
             backtrace_log.append(backtrace_entry)
 
         test_results["details"]["api_integration"] = {
             "triggers_generated": len(api_triggers),
             "backtrace_entries": len(backtrace_log),
-            "high_confidence_triggers": len([t for t in api_triggers if t["confidence"] > 0.7])
+            "high_confidence_triggers": len(
+                [t for t in api_triggers if t["confidence"] > 0.7]
+            ),
         }
 
         print(f"   ✅ API Triggers: {len(api_triggers)} generated")
@@ -428,15 +441,17 @@ def test_drift_detection():
         sequence_patterns = []
         window_size = 10
         for i in range(0, len(prices) - window_size, window_size):
-            window = prices[i:i + window_size]
+            window = prices[i : i + window_size]
             pattern_type = "bullish" if window[-1] > window[0] else "bearish"
             pattern_strength = abs(window[-1] - window[0]) / window[0]
 
-            sequence_patterns.append({
-                "start_index": i,
-                "pattern_type": pattern_type,
-                "strength": pattern_strength
-            })
+            sequence_patterns.append(
+                {
+                    "start_index": i,
+                    "pattern_type": pattern_type,
+                    "strength": pattern_strength,
+                }
+            )
 
         test_results["details"]["drift_analysis"] = {
             "total_price_points": len(prices),
@@ -444,7 +459,7 @@ def test_drift_detection():
             "drift_trend": drift_trend,
             "phantom_detections": len(phantom_detections),
             "sequence_patterns": len(sequence_patterns),
-            "final_price": prices[-1]
+            "final_price": prices[-1],
         }
 
         print(f"   ✅ Drift Detection: Magnitude = {drift_magnitude:.2f}")
@@ -478,7 +493,7 @@ def test_portfolio_rebalancing():
             asset_exposures = {
                 "BTC/USD": 30000.0,  # 30% BTC
                 "ETH/USD": 20000.0,  # 20% ETH
-                "USDC": 50000.0      # 50% Stable
+                "USDC": 50000.0,  # 50% Stable
             }
 
             # Assess current risk
@@ -489,7 +504,7 @@ def test_portfolio_rebalancing():
             current_allocation = {
                 "BTC": asset_exposures["BTC/USD"] / portfolio_value,
                 "ETH": asset_exposures["ETH/USD"] / portfolio_value,
-                "USDC": asset_exposures["USDC"] / portfolio_value
+                "USDC": asset_exposures["USDC"] / portfolio_value,
             }
 
             rebalance_actions = {}
@@ -505,7 +520,7 @@ def test_portfolio_rebalancing():
             profit_tiers = {
                 "conservative": {"target": 0.05, "risk": 0.1},
                 "moderate": {"target": 0.15, "risk": 0.2},
-                "aggressive": {"target": 0.30, "risk": 0.4}
+                "aggressive": {"target": 0.30, "risk": 0.4},
             }
 
             current_profit = 0.08  # 8% current profit
@@ -519,8 +534,8 @@ def test_portfolio_rebalancing():
                 "profit_navigation": {
                     "current_profit": current_profit,
                     "recommended_tier": recommended_tier,
-                    "tier_details": profit_tiers[recommended_tier]
-                }
+                    "tier_details": profit_tiers[recommended_tier],
+                },
             }
 
             print(f"   ✅ Risk Assessment: {len(risk_metrics)} metrics evaluated")
@@ -550,18 +565,11 @@ def test_cross_platform_compatibility():
             "python_version": sys.version_info,
             "executable": sys.executable,
             "path": os.environ.get("PATH", ""),
-            "pythonpath": os.environ.get("PYTHONPATH", "")
+            "pythonpath": os.environ.get("PYTHONPATH", ""),
         }
 
         # Test CLI module availability
-        cli_modules = [
-            "argparse",
-            "subprocess",
-            "pathlib",
-            "json",
-            "yaml",
-            "csv"
-        ]
+        cli_modules = ["argparse", "subprocess", "pathlib", "json", "yaml", "csv"]
 
         available_modules = {}
         for module in cli_modules:
@@ -597,8 +605,11 @@ def test_cross_platform_compatibility():
 
         # Test CLI argument parsing simulation
         import argparse
+
         parser = argparse.ArgumentParser(description="Schwabot CLI Test")
-        parser.add_argument("--mode", choices=["demo", "live", "simulation"], default="demo")
+        parser.add_argument(
+            "--mode", choices=["demo", "live", "simulation"], default="demo"
+        )
         parser.add_argument("--config", type=str, default="config/default.yaml")
         parser.add_argument("--verbose", action="store_true")
 
@@ -607,20 +618,24 @@ def test_cross_platform_compatibility():
         cli_parsing = {
             "mode": test_args.mode,
             "config": test_args.config,
-            "verbose": test_args.verbose
+            "verbose": test_args.verbose,
         }
 
         test_results["details"]["platform_compatibility"] = {
             "platform_info": platform_info,
             "available_modules": available_modules,
             "file_system": fs_operations,
-            "cli_parsing": cli_parsing
+            "cli_parsing": cli_parsing,
         }
 
         print(f"   ✅ Platform: {platform_info['platform']}")
         print(f"   ✅ Python: {platform_info['python_version']}")
-        print(f"   ✅ CLI Modules: {sum(available_modules.values())}/{len(available_modules)} available")
-        print(f"   ✅ File System: Operations {'successful' if fs_operations.get('cleanup', False) else 'limited'}")
+        print(
+            f"   ✅ CLI Modules: {sum(available_modules.values())}/{len(available_modules)} available"
+        )
+        print(
+            f"   ✅ File System: Operations {'successful' if fs_operations.get('cleanup', False) else 'limited'}"
+        )
 
         test_results["status"] = "passed"
 
@@ -644,10 +659,18 @@ def test_flake8_compliance():
         # Run flake8 check
         try:
             result = subprocess.run(
-                ["python", "-m", "flake8", "--config=.flake8", "--count", "--statistics", "."],
+                [
+                    "python",
+                    "-m",
+                    "flake8",
+                    "--config=.flake8",
+                    "--count",
+                    "--statistics",
+                    ".",
+                ],
                 capture_output=True,
                 text=True,
-                timeout=30
+                timeout=30,
             )
 
             flake8_output = result.stdout + result.stderr
@@ -656,7 +679,7 @@ def test_flake8_compliance():
             test_results["details"]["flake8"] = {
                 "exit_code": exit_code,
                 "output": flake8_output,
-                "compliant": exit_code == 0
+                "compliant": exit_code == 0,
             }
 
             if exit_code == 0:
@@ -664,7 +687,7 @@ def test_flake8_compliance():
             else:
                 print(f"   ⚠️  Flake8: {exit_code} issues found")
                 # Show first few lines of output
-                lines = flake8_output.split('\n')[:5]
+                lines = flake8_output.split("\n")[:5]
                 for line in lines:
                     if line.strip():
                         print(f"      {line}")
@@ -685,7 +708,7 @@ def test_flake8_compliance():
             "enum",
             "logging",
             "asyncio",
-            "json"
+            "json",
         ]
 
         for imp in critical_imports:
@@ -697,7 +720,9 @@ def test_flake8_compliance():
 
         test_results["details"]["imports"] = import_tests
         successful_imports = sum(import_tests.values())
-        print(f"   ✅ Imports: {successful_imports}/{len(critical_imports)} critical imports available")
+        print(
+            f"   ✅ Imports: {successful_imports}/{len(critical_imports)} critical imports available"
+        )
 
         test_results["status"] = "passed"
 
@@ -715,8 +740,12 @@ def generate_summary():
     print_banner("VALIDATION SUMMARY", "📊")
 
     total_tests = len(validation_results["tests"])
-    passed_tests = len([t for t in validation_results["tests"].values() if t["status"] == "passed"])
-    failed_tests = len([t for t in validation_results["tests"].values() if t["status"] == "failed"])
+    passed_tests = len(
+        [t for t in validation_results["tests"].values() if t["status"] == "passed"]
+    )
+    failed_tests = len(
+        [t for t in validation_results["tests"].values() if t["status"] == "failed"]
+    )
 
     validation_results["summary"] = {
         "total_tests": total_tests,
@@ -724,21 +753,18 @@ def generate_summary():
         "failed_tests": failed_tests,
         "success_rate": (passed_tests / total_tests) * 100 if total_tests > 0 else 0,
         "total_errors": len(validation_results["errors"]),
-        "total_warnings": len(validation_results["warnings"])
+        "total_warnings": len(validation_results["warnings"]),
     }
 
     if passed_tests == total_tests:
         validation_results["overall_status"] = "FULLY_OPERATIONAL"
         status_emoji = "🎉"
-        status_color = "GREEN"
     elif passed_tests > failed_tests:
         validation_results["overall_status"] = "MOSTLY_OPERATIONAL"
         status_emoji = "⚠️"
-        status_color = "YELLOW"
     else:
         validation_results["overall_status"] = "NEEDS_ATTENTION"
         status_emoji = "❌"
-        status_color = "RED"
 
     print(f"\n{status_emoji} OVERALL STATUS: {validation_results['overall_status']}")
     print(f"   📈 Success Rate: {validation_results['summary']['success_rate']:.1f}%")
@@ -747,17 +773,18 @@ def generate_summary():
     print(f"   ⚠️  Warnings: {validation_results['summary']['total_warnings']}")
     print(f"   🚨 Errors: {validation_results['summary']['total_errors']}")
 
-    print(f"\n📋 TEST RESULTS BREAKDOWN:")
+    print("\n📋 TEST RESULTS BREAKDOWN:")
     for test_name, result in validation_results["tests"].items():
         status_icon = "✅" if result["status"] == "passed" else "❌"
         print(f"   {status_icon} {test_name}: {result['status']}")
 
     # Save results to file
     import json
+
     with open("system_validation_results.json", "w", encoding="utf-8") as f:
         json.dump(validation_results, f, indent=2, default=str)
 
-    print(f"\n💾 Detailed results saved to: system_validation_results.json")
+    print("\n💾 Detailed results saved to: system_validation_results.json")
 
     return validation_results["overall_status"]
 
@@ -785,17 +812,19 @@ def main():
         overall_status = generate_summary()
 
         if overall_status == "FULLY_OPERATIONAL":
-            print(f"\n🎉 SUCCESS: Schwabot system is fully operational and ready for deployment!")
-            print(f"   • All mathematical frameworks are functional")
-            print(f"   • Entry/exit logic is working correctly")
-            print(f"   • Profit formalization is operational")
-            print(f"   • API integrations are stable")
-            print(f"   • Cross-platform compatibility confirmed")
+            print(
+                "\n🎉 SUCCESS: Schwabot system is fully operational and ready for deployment!"
+            )
+            print("   • All mathematical frameworks are functional")
+            print("   • Entry/exit logic is working correctly")
+            print("   • Profit formalization is operational")
+            print("   • API integrations are stable")
+            print("   • Cross-platform compatibility confirmed")
             return 0
         else:
             print(f"\n⚠️  REVIEW NEEDED: System has {overall_status.lower()} status")
-            print(f"   • Please review failed tests and warnings")
-            print(f"   • Check system_validation_results.json for details")
+            print("   • Please review failed tests and warnings")
+            print("   • Check system_validation_results.json for details")
             return 1
 
     except Exception as e:

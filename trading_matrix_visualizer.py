@@ -18,12 +18,12 @@ import os
 import csv
 import logging
 from typing import List, Tuple, Callable, Optional, Dict, Any
-from dataclasses import dataclass
 from datetime import datetime
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
 
 # GPU/CPU Detection and Optimization
 class HardwareOptimizer:
@@ -40,6 +40,7 @@ class HardwareOptimizer:
         """Detect available hardware for optimization."""
         try:
             import cupy as cp
+
             self.gpu_available = True
             self.cuda_available = True
             logger.info("CuPy GPU acceleration detected")
@@ -49,6 +50,7 @@ class HardwareOptimizer:
         try:
             import numba
             from numba import cuda
+
             self.numba_available = True
             logger.info("Numba CUDA acceleration detected")
         except ImportError:
@@ -68,13 +70,20 @@ class HardwareOptimizer:
             "cuda_available": self.cuda_available,
             "numba_available": self.numba_available,
             "optimization_mode": self.optimization_mode,
-            "timestamp": datetime.now().isoformat()
-}
+            "timestamp": datetime.now().isoformat(),
+        }
+
+
 # --- Trading Matrix Core ---
 class TradingMatrix:
     """High-speed trading matrix for prices, signals, and positions with GPU/CPU optimization."""
 
-    def __init__(self, n_assets: int, window: int = 32, optimizer: Optional[HardwareOptimizer] = None) -> None:
+    def __init__(
+        self,
+        n_assets: int,
+        window: int = 32,
+        optimizer: Optional[HardwareOptimizer] = None,
+    ) -> None:
         self.n_assets = n_assets
         self.window = window
         self.optimizer = optimizer or HardwareOptimizer()
@@ -90,9 +99,11 @@ class TradingMatrix:
         self.performance_metrics = {
             "updates": 0,
             "total_time": 0.0,
-            "avg_update_time": 0.0
-}
-        logger.info(f"TradingMatrix initialized: {n_assets} assets, {window} window, {self.optimizer.optimization_mode} mode")
+            "avg_update_time": 0.0,
+        }
+        logger.info(
+            f"TradingMatrix initialized: {n_assets} assets, {window} window, {self.optimizer.optimization_mode} mode"
+        )
 
     def update(self, prices: np.ndarray, signals: np.ndarray) -> None:
         """Update matrices with new prices and signals using optimized operations."""
@@ -134,8 +145,11 @@ class TradingMatrix:
         try:
             if self.optimizer.gpu_available:
                 import cupy as cp
+
                 signals_gpu = cp.array(signals)
-                positions_gpu = cp.where(signals_gpu > 0.5, 1, cp.where(signals_gpu < -0.5, -1, 0))
+                positions_gpu = cp.where(
+                    signals_gpu > 0.5, 1, cp.where(signals_gpu < -0.5, -1, 0)
+                )
                 return cp.asnumpy(positions_gpu)
             else:
                 return self._generate_positions_cpu(signals)
@@ -152,7 +166,11 @@ class TradingMatrix:
         end_idx = self.ptr
         indices = np.arange(start_idx, end_idx) % self.window
 
-        return self.price_matrix[indices], self.signal_matrix[indices], self.position_matrix[indices]
+        return (
+            self.price_matrix[indices],
+            self.signal_matrix[indices],
+            self.position_matrix[indices],
+        )
 
     def drift_vector(self) -> np.ndarray:
         """Calculate drift vector with optimization."""
@@ -185,10 +203,13 @@ class TradingMatrix:
             **self.performance_metrics,
             "hardware_info": self.optimizer.get_optimization_info(),
             "matrix_size": f"{self.window}x{self.n_assets}",
-            "current_bar": self.bar_index
-}
+            "current_bar": self.bar_index,
+        }
+
+
 # --- Glyph Visualizer ---
-GLYPHS = ['1', 'i', '·', ' ', '⊥']
+GLYPHS = ["1", "i", "·", " ", "⊥"]
+
 
 def trading_state_to_glyphs(
     drift: np.ndarray, entropy: np.ndarray, consensus: np.ndarray
@@ -201,20 +222,22 @@ def trading_state_to_glyphs(
         glyph_row: List[str] = []
         for col in range(n):
             if consensus[col] > 0:
-                glyph = '1' if abs(drift[col]) < 0.5 else 'i'
+                glyph = "1" if abs(drift[col]) < 0.5 else "i"
             elif consensus[col] < 0:
-                glyph = 'i' if abs(drift[col]) < 0.5 else '·'
+                glyph = "i" if abs(drift[col]) < 0.5 else "·"
             else:
-                glyph = ' ' if entropy[col] < 0.5 else '·'
+                glyph = " " if entropy[col] < 0.5 else "·"
             glyph_row.append(glyph)
         matrix.append(glyph_row)
 
     return matrix
 
+
 def print_glyph_matrix(matrix: List[List[str]]) -> None:
     """Print glyph matrix with proper formatting."""
     for row in matrix:
-        print(''.join(row))
+        print("".join(row))
+
 
 # --- Market Data Loader ---
 def load_market_data_csv(
@@ -226,7 +249,7 @@ def load_market_data_csv(
 
     data: List[List[float]] = []
     try:
-        with open(filename, 'r', newline='', encoding='utf-8') as csvfile:
+        with open(filename, "r", newline="", encoding="utf-8") as csvfile:
             reader = csv.reader(csvfile)
             next(reader)  # skip header
             for row_num, row in enumerate(reader, start=2):
@@ -246,6 +269,7 @@ def load_market_data_csv(
         logger.error(f"Error loading CSV data: {e}")
         raise
 
+
 # --- Strategy Function Example ---
 def example_strategy_fn(prices: np.ndarray, bar_index: int) -> np.ndarray:
     """Simple momentum strategy: signal = price change over last bar."""
@@ -258,12 +282,13 @@ def example_strategy_fn(prices: np.ndarray, bar_index: int) -> np.ndarray:
     else:
         return np.sign(prices - np.roll(prices, 1))
 
+
 # --- Backtesting Loop ---
 def run_backtest(
     price_data: np.ndarray,
     strategy_fn: Callable[[np.ndarray, int], np.ndarray],
     delay: float = 0.08,
-    optimizer: Optional[HardwareOptimizer] = None
+    optimizer: Optional[HardwareOptimizer] = None,
 ) -> None:
     """Run backtest with hardware optimization."""
     n_bars, n_assets = price_data.shape
@@ -286,12 +311,14 @@ def run_backtest(
             glyph_matrix = trading_state_to_glyphs(drift, entropy, consensus)
 
             # Clear screen
-            os.system('cls' if os.name == 'nt' else 'clear')
+            os.system("cls" if os.name == "nt" else "clear")
 
             # Display information
-            print(f"Trading Matrix Visualizer | Bar {t+1}/{n_bars}")
+            print(f"Trading Matrix Visualizer | Bar {t + 1}/{n_bars}")
             print(f"Hardware: {optimizer.optimization_mode.upper()}")
-            print(f"Performance: {tm.performance_metrics['avg_update_time']:.4f}s avg\n")
+            print(
+                f"Performance: {tm.performance_metrics['avg_update_time']:.4f}s avg\n"
+            )
 
             print_glyph_matrix(glyph_matrix)
             print(f"\nDrift:     {np.round(drift, 2)}")
@@ -310,6 +337,7 @@ def run_backtest(
         metrics = tm.get_performance_metrics()
         logger.info(f"Backtest completed. Performance: {metrics}")
 
+
 # --- Main Entrypoint ---
 def main() -> None:
     """Main entry point with comprehensive error handling."""
@@ -319,7 +347,7 @@ def main() -> None:
 
         # Configuration
         use_csv = False
-        csv_file = 'market_data.csv'  # Replace with your file
+        csv_file = "market_data.csv"  # Replace with your file
         n_assets = 12
         steps = 100
 
@@ -339,12 +367,15 @@ def main() -> None:
         if not use_csv:
             # Generate simulated data
             np.random.seed(42)  # For reproducible results
-            price_data = np.cumsum(np.random.normal(0, 1, (steps, n_assets)), axis=0) + 100
+            price_data = (
+                np.cumsum(np.random.normal(0, 1, (steps, n_assets)), axis=0) + 100
+            )
             run_backtest(price_data, example_strategy_fn, optimizer=optimizer)
 
     except Exception as e:
         logger.error(f"Application error: {e}")
         raise
+
 
 if __name__ == "__main__":
     main()

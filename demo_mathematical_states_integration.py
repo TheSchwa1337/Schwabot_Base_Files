@@ -13,21 +13,17 @@ to the overall trading decision-making process.
 
 import asyncio
 import logging
-import time
-import numpy as np
-from typing import Dict, Any, List
 
 # Import core components
 from core.trading_pipeline_integration import TradingPipelineIntegration
-from core.linguistic_glyph_engine import LinguisticGlyphEngine
+
 # To directly interact for state history
-from core.zygote_reentry import ZygoteReentrySystem
 from core.glyph.glyph_entropy_system import GlyphEntropySystem
 
 # Setup logging
 logging.basicConfig(
-    level=logging.INFO,
-    format='[%(asctime)s] - %(levelname)s - %(message)s')
+    level=logging.INFO, format="[%(asctime)s] - %(levelname)s - %(message)s"
+)
 logger = logging.getLogger(__name__)
 
 
@@ -41,7 +37,6 @@ async def run_mathematical_integration_demo():
     pipeline = TradingPipelineIntegration()
 
     # Access underlying systems if needed for direct interaction or detailed logging
-    zygote_system: ZygoteReentrySystem = pipeline.zygote_reentry_system
     glyph_entropy_system: GlyphEntropySystem = pipeline.glyph_entropy_system
 
     # Simulate a series of market data points over time
@@ -121,8 +116,8 @@ async def run_mathematical_integration_demo():
     ]
     for i, market_data in enumerate(simulated_market_data_points):
         logger.info(f"\n--- Processing Market Data Point {i + 1} ---")
-        logger.info(f"Current Price: {market_data["current_price"]}")
-        logger.info(f"Current Glyphs: {market_data["current_glyphs"]}")
+        logger.info(f"Current Price: {market_data['current_price']}")
+        logger.info(f"Current Glyphs: {market_data['current_glyphs']}")
 
         # Add current glyphs to the GlyphEntropySystem history for calculation
         for glyph in market_data.get("current_glyphs", []):
@@ -135,7 +130,8 @@ async def run_mathematical_integration_demo():
         logger.info(f"Signal Confidence: {trading_signal.confidence:.4f}")
         logger.info(
             f"Execution Certainty Signal (Xi(t)): {
-                trading_signal.execution_certainty_signal:.4f}")
+                trading_signal.execution_certainty_signal:.4f}"
+        )
 
         # Retrieve and display individual mathematical states
         gamma_g = pipeline.glyph_entropy_system.calculate_glyph_entropy()
@@ -143,18 +139,22 @@ async def run_mathematical_integration_demo():
 
         # Prepare vectors for ASIC Fidelity and Symbolic Collapse (using
         # simplified from demo context)
-        bit_vector_demo = [1.0] * (trading_signal.bit_depth //
-                                   4) if trading_signal.bit_depth else [1.0, 1.0]
+        bit_vector_demo = (
+            [1.0] * (trading_signal.bit_depth // 4)
+            if trading_signal.bit_depth
+            else [1.0, 1.0]
+        )
         profit_delta_demo = [
-            market_data["current_price"] -
-            market_data.get(
-                "previous_price",
-                market_data["current_price"])]
+            market_data["current_price"]
+            - market_data.get("previous_price", market_data["current_price"])
+        ]
 
         theta_b = pipeline.asic_fidelity_system.calculate_fidelity(
-            bit_vector_demo, profit_delta_demo)
+            bit_vector_demo, profit_delta_demo
+        )
         psi_c = pipeline.symbolic_collapse_system.calculate_symbolic_collapse(
-            bit_vector_demo, profit_delta_demo, market_data.get("current_glyphs", []))
+            bit_vector_demo, profit_delta_demo, market_data.get("current_glyphs", [])
+        )
         zygote_state = pipeline.zygote_reentry_system.calculate_zygote_state()
         trade_valuation_U = pipeline._calculate_trade_valuation_U(market_data)
 
@@ -174,6 +174,7 @@ async def run_mathematical_integration_demo():
         logger.info(f"  {key}: {value}")
 
     pipeline.cleanup()
+
 
 if __name__ == "__main__":
     asyncio.run(run_mathematical_integration_demo())

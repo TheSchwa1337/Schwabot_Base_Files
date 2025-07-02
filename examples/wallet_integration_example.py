@@ -10,18 +10,16 @@ and how it connects to the entire Schwabot strategy system.
 import os
 import sys
 import time
-import json
 import logging
 from pathlib import Path
 
 # Add schwabot to path
 sys.path.append(str(Path(__file__).parent.parent))
 
-from schwabot.core.wallet_tracker import WalletTracker, AssetType, PositionType
+from schwabot.core.wallet_tracker import WalletTracker, AssetType
 from schwabot.core.portfolio_integration import PortfolioIntegration
 from schwabot.core.strategy_mapper import StrategyMapper
 from schwabot.core.ferris_rde import FerrisRDE
-from schwabot.core.profit_cycle_allocator import ProfitCycleAllocator
 
 # Configure logging
 logging.basicConfig(
@@ -334,13 +332,13 @@ def main():
         wallet = demonstrate_wallet_tracker()
 
         # Strategy integration demonstration
-        strategy_mapper = demonstrate_strategy_integration(wallet)
+        demonstrate_strategy_integration(wallet)
 
         # Ferris RDE integration demonstration
-        ferris = demonstrate_ferris_integration(wallet)
+        demonstrate_ferris_integration(wallet)
 
         # Full portfolio integration demonstration
-        integration = demonstrate_portfolio_integration()
+        demonstrate_portfolio_integration()
 
         # API operations demonstration
         demonstrate_api_operations(wallet)

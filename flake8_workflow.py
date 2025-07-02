@@ -18,7 +18,7 @@ import os
 import subprocess
 import sys
 from datetime import datetime
-from typing import Dict, List
+from typing import List
 
 
 def run_command(cmd: List[str], description: str) -> bool:
@@ -52,13 +52,16 @@ def check_dependencies() -> bool:
     """Check if required dependencies are installed."""
     print("🔍 Checking dependencies...")
 
-    required_packages = ['flake8', 'autopep8']
+    required_packages = ["flake8", "autopep8"]
     missing_packages = []
 
     for package in required_packages:
         try:
-            subprocess.run([sys.executable, '-m', package, '--version'],
-                           capture_output=True, check=True)
+            subprocess.run(
+                [sys.executable, "-m", package, "--version"],
+                capture_output=True,
+                check=True,
+            )
             print(f"✅ {package} is available")
         except (subprocess.CalledProcessError, FileNotFoundError):
             print(f"❌ {package} is missing")
@@ -76,30 +79,27 @@ def check_dependencies() -> bool:
 def run_analysis() -> bool:
     """Run the Flake8 analysis."""
     return run_command(
-        [sys.executable, 'flake8_analyzer.py'],
-        "Running Flake8 analysis"
+        [sys.executable, "flake8_analyzer.py"], "Running Flake8 analysis"
     )
 
 
 def run_auto_fix() -> bool:
     """Run the auto-fix process."""
     return run_command(
-        [sys.executable, 'auto_fix_flake8.py'],
-        "Running auto-fix process"
+        [sys.executable, "auto_fix_flake8.py"], "Running auto-fix process"
     )
 
 
 def run_post_fix_analysis() -> bool:
     """Run Flake8 analysis after fixes to see improvement."""
     return run_command(
-        [sys.executable, 'flake8_analyzer.py'],
-        "Running post-fix Flake8 analysis"
+        [sys.executable, "flake8_analyzer.py"], "Running post-fix Flake8 analysis"
     )
 
 
 def generate_workflow_report() -> str:
     """Generate a comprehensive workflow report."""
-    timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     report = []
     report.append("# Schwabot Flake8 Error Reduction Workflow Report\n")
@@ -107,16 +107,17 @@ def generate_workflow_report() -> str:
 
     # Check for analysis reports
     analysis_files = [
-        'flake8_analysis_report.md',
-        'auto_fix_log_*.md',
-        'math_structure_report.md',
-        'prune_candidates_report.md'
+        "flake8_analysis_report.md",
+        "auto_fix_log_*.md",
+        "math_structure_report.md",
+        "prune_candidates_report.md",
     ]
     report.append("## 📊 Generated Reports")
     for pattern in analysis_files:
-        if '*' in pattern:
+        if "*" in pattern:
             # Handle wildcard patterns
             import glob
+
             files = glob.glob(pattern)
             for file in files:
                 if os.path.exists(file):
@@ -132,25 +133,32 @@ def generate_workflow_report() -> str:
     report.append("\n## 📋 Next Steps")
     report.append("1. **Review the analysis reports** - Understand what errors exist")
     report.append(
-        "2. **Check auto-fix results** - Verify mathematical structures were preserved")
+        "2. **Check auto-fix results** - Verify mathematical structures were preserved"
+    )
     report.append(
-        "3. **Address critical errors** - Fix syntax and import issues manually")
+        "3. **Address critical errors** - Fix syntax and import issues manually"
+    )
     report.append(
-        "4. **Test functionality** - Ensure the codebase still works correctly")
+        "4. **Test functionality** - Ensure the codebase still works correctly"
+    )
     report.append("5. **Iterate** - Run this workflow again if needed")
 
     report.append("\n## 🔧 Manual Fix Recommendations")
     report.append("- **E999 (Syntax errors)**: Fix syntax issues manually")
     report.append(
-        "- **F821 (Undefined names)**: Add missing imports or define variables")
+        "- **F821 (Undefined names)**: Add missing imports or define variables"
+    )
     report.append("- **F822 (Undefined names in __all__)**: Fix __all__ declarations")
     report.append(
-        "- **F823 (Local variable referenced before assignment)**: Fix variable scope")
+        "- **F823 (Local variable referenced before assignment)**: Fix variable scope"
+    )
     report.append("- **F831 (Duplicate argument name)**: Fix function signatures")
     report.append(
-        "- **F841 (Local variable assigned but never used)**: Remove unused variables")
+        "- **F841 (Local variable assigned but never used)**: Remove unused variables"
+    )
     report.append(
-        "- **F901 (Return statement with assignment)**: Refactor complex returns")
+        "- **F901 (Return statement with assignment)**: Refactor complex returns"
+    )
 
     report.append("\n## 🔬 Mathematical Structure Preservation")
     report.append("- Files marked with 🔬 contain mathematical logic")
@@ -163,10 +171,10 @@ def generate_workflow_report() -> str:
 
 def save_workflow_report(report: str):
     """Save the workflow report."""
-    timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     filename = f"flake8_workflow_report_{timestamp}.md"
 
-    with open(filename, 'w', encoding='utf-8') as f:
+    with open(filename, "w", encoding="utf-8") as f:
         f.write(report)
 
     print(f"📄 Workflow report saved to {filename}")

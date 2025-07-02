@@ -14,23 +14,17 @@ This demo shows:
 """
 
 import asyncio
-import time
-import logging
-from typing import Dict, List, Any
+from typing import Dict, Any
 import sys
-import os
 from pathlib import Path
 
 # Add project root to path
 project_root = Path(__file__).parent.parent
 sys.path.append(str(project_root))
 
-from core.master_cycle_engine import MasterCycleEngine, SystemMode, TradingDecision
-from core.quantum_static_core import QuantumStaticCore, QSCMode, ResonanceLevel
-from core.galileo_tensor_bridge import GalileoTensorBridge
+from core.master_cycle_engine import MasterCycleEngine
 from core.qsc_enhanced_profit_allocator import (
     QSCEnhancedProfitAllocator,
-    QSCAllocationMode,
 )
 from server.qsc_diagnostic_websocket import QSCDiagnosticServer
 from utils.logging_setup import setup_logging
@@ -182,7 +176,7 @@ class QSCImmuneSystemDemo:
         print(f"  🛡️ Immune Active: {diagnostics.immune_response_active}")
 
         if diagnostics.diagnostic_messages:
-            print(f"  📝 Messages:")
+            print("  📝 Messages:")
             for msg in diagnostics.diagnostic_messages:
                 print(f"    {msg}")
 
@@ -226,7 +220,9 @@ class QSCImmuneSystemDemo:
         print("=" * 70)
 
         for i, scenario in enumerate(self.demo_scenarios):
-            print(f"\n📋 Running Scenario {i+1}/{len(self.demo_scenarios)}: {scenario}")
+            print(
+                f"\n📋 Running Scenario {i + 1}/{len(self.demo_scenarios)}: {scenario}"
+            )
             print("-" * 50)
 
             # Generate scenario data
@@ -240,14 +236,14 @@ class QSCImmuneSystemDemo:
 
             # Show profit allocation impact
             if diagnostics.profit_allocation_status == "active":
-                print(f"  💰 Profit allocation: ACTIVE")
+                print("  💰 Profit allocation: ACTIVE")
             else:
-                print(f"  💰 Profit allocation: BLOCKED by immune system")
+                print("  💰 Profit allocation: BLOCKED by immune system")
 
             # Wait between scenarios
             await asyncio.sleep(2)
 
-        print(f"\n📊 Final System Status:")
+        print("\n📊 Final System Status:")
         final_status = self.master_engine.get_system_status()
         print(f"  Total Decisions: {final_status['total_decisions']}")
         print(f"  Success Rate: {final_status['success_rate']:.2%}")
@@ -257,7 +253,7 @@ class QSCImmuneSystemDemo:
 
     async def run_profit_allocation_demo(self) -> None:
         """Demonstrate QSC-enhanced profit allocation."""
-        print(f"\n💰 QSC-Enhanced Profit Allocation Demo")
+        print("\n💰 QSC-Enhanced Profit Allocation Demo")
         print("-" * 50)
 
         allocator = QSCEnhancedProfitAllocator()
@@ -289,23 +285,23 @@ class QSCImmuneSystemDemo:
 
     async def run_websocket_demo(self) -> None:
         """Demonstrate WebSocket diagnostic streaming."""
-        print(f"\n📡 WebSocket Diagnostic Streaming Demo")
+        print("\n📡 WebSocket Diagnostic Streaming Demo")
         print("-" * 50)
 
         # Start QSC diagnostic server
         self.qsc_server = QSCDiagnosticServer({"port": 8767, "stream_interval": 2.0})
         await self.qsc_server.start_server()
 
-        print(f"🚀 QSC Diagnostic server started on ws://localhost:8767")
-        print(f"🔗 Connect your React app to this endpoint for real-time diagnostics")
+        print("🚀 QSC Diagnostic server started on ws://localhost:8767")
+        print("🔗 Connect your React app to this endpoint for real-time diagnostics")
 
         # Let it run for a bit to show streaming
-        print(f"📡 Streaming diagnostic data for 10 seconds...")
+        print("📡 Streaming diagnostic data for 10 seconds...")
         await asyncio.sleep(10)
 
         # Show server stats
         stats = self.qsc_server.get_server_stats()
-        print(f"📊 Server Stats:")
+        print("📊 Server Stats:")
         print(f"  Active Connections: {stats['active_connections']}")
         print(f"  Messages Sent: {stats['total_messages_sent']}")
         print(f"  Active Alerts: {stats['active_alerts']}")
@@ -314,7 +310,7 @@ class QSCImmuneSystemDemo:
 
     async def run_fibonacci_echo_demo(self) -> None:
         """Demonstrate Fibonacci echo visualization data."""
-        print(f"\n📈 Fibonacci Echo Visualization Demo")
+        print("\n📈 Fibonacci Echo Visualization Demo")
         print("-" * 50)
 
         # Generate some history by processing multiple ticks
@@ -361,21 +357,21 @@ class QSCImmuneSystemDemo:
         # 4. WebSocket streaming demonstration
         await self.run_websocket_demo()
 
-        print(f"\n✅ Complete QSC + GTS Immune System Demo Finished!")
+        print("\n✅ Complete QSC + GTS Immune System Demo Finished!")
         print("=" * 80)
 
-        print(f"\n🚀 To integrate with your full Schwabot system:")
-        print(f"1. Import MasterCycleEngine into your main trading loop")
-        print(f"2. Use QSCEnhancedProfitAllocator instead of standard allocator")
-        print(f"3. Connect React visualization to QSC diagnostic WebSocket")
-        print(f"4. Monitor immune system alerts for manual intervention")
+        print("\n🚀 To integrate with your full Schwabot system:")
+        print("1. Import MasterCycleEngine into your main trading loop")
+        print("2. Use QSCEnhancedProfitAllocator instead of standard allocator")
+        print("3. Connect React visualization to QSC diagnostic WebSocket")
+        print("4. Monitor immune system alerts for manual intervention")
 
-        print(f"\n📋 Key Integration Points:")
-        print(f"  🧬 core.master_cycle_engine.MasterCycleEngine")
-        print(f"  💰 core.qsc_enhanced_profit_allocator.QSCEnhancedProfitAllocator")
-        print(f"  📡 server.qsc_diagnostic_websocket.QSCDiagnosticServer")
-        print(f"  🎯 React: ws://localhost:8766 for QSC diagnostics")
-        print(f"  🌐 React: ws://localhost:8765 for tensor analysis")
+        print("\n📋 Key Integration Points:")
+        print("  🧬 core.master_cycle_engine.MasterCycleEngine")
+        print("  💰 core.qsc_enhanced_profit_allocator.QSCEnhancedProfitAllocator")
+        print("  📡 server.qsc_diagnostic_websocket.QSCDiagnosticServer")
+        print("  🎯 React: ws://localhost:8766 for QSC diagnostics")
+        print("  🌐 React: ws://localhost:8765 for tensor analysis")
 
 
 async def main():

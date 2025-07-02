@@ -7,19 +7,16 @@ WebSocket streaming, and trading strategy integration.
 """
 
 import asyncio
-import logging
 import time
-import json
-from typing import Dict, Any
+from typing import Any
 import sys
-import os
 from pathlib import Path
 
 # Add project root to path
 project_root = Path(__file__).parent.parent
 sys.path.append(str(project_root))
 
-from core.galileo_tensor_bridge import GalileoTensorBridge, TensorAnalysisMode
+from core.galileo_tensor_bridge import GalileoTensorBridge
 from server.tensor_websocket_server import TensorWebSocketServer
 from utils.logging_setup import setup_logging
 
@@ -56,7 +53,7 @@ class TensorIntegrationDemo:
         logger.info("🧠 Running Basic Tensor Analysis Demo")
 
         for i, btc_price in enumerate(self.btc_prices):
-            logger.info(f"\n--- Analysis #{i+1}: BTC ${btc_price} ---")
+            logger.info(f"\n--- Analysis #{i + 1}: BTC ${btc_price} ---")
 
             # Perform complete tensor analysis
             result = self.tensor_bridge.perform_complete_analysis(btc_price)
@@ -117,7 +114,7 @@ class TensorIntegrationDemo:
 
         # Show server stats
         stats = self.websocket_server.get_server_stats()
-        print(f"\n📊 WebSocket Server Stats:")
+        print("\n📊 WebSocket Server Stats:")
         print(f"  Active Connections: {stats['active_connections']}")
         print(f"  Total Messages Sent: {stats['total_messages_sent']}")
         print(f"  Stream Interval: {stats['stream_interval']}s")
@@ -162,7 +159,7 @@ class TensorIntegrationDemo:
 
             # Process some sample market data
             for btc_price in self.btc_prices[:5]:
-                market_data = {
+                {
                     "BTC/USDC": {
                         "price": btc_price,
                         "volume": 1000.0,
@@ -254,7 +251,7 @@ class TensorIntegrationDemo:
         # Get performance summary
         performance = self.tensor_bridge.get_performance_summary()
 
-        print(f"\n📊 Performance Analysis Results:")
+        print("\n📊 Performance Analysis Results:")
         print(f"  Total Analyses: {performance['total_analyses']}")
         print(f"  Success Rate: {performance['success_rate']:.2%}")
         print(f"  Average Time per Analysis: {(end_time - start_time) / 20:.3f}s")
@@ -263,10 +260,10 @@ class TensorIntegrationDemo:
         # Show recent history trends
         history = self.tensor_bridge.get_recent_history(10)
 
-        print(f"\n📈 Recent Analysis Trends:")
+        print("\n📈 Recent Analysis Trends:")
         for i, entry in enumerate(history[-5:]):
             print(
-                f"  {i+1}. BTC ${entry['btc_price']:.0f} → "
+                f"  {i + 1}. BTC ${entry['btc_price']:.0f} → "
                 f"Quantum: {entry['sp_quantum_score']:.3f}, "
                 f"Phase: {entry['sp_phase_bucket']}"
             )
@@ -284,7 +281,7 @@ class TensorIntegrationDemo:
             42475476.73393286,
         ]
 
-        print(f"\n🔬 QSS2 Validation Results:")
+        print("\n🔬 QSS2 Validation Results:")
         print(f"{'Frequency':<15} {'Entropy':<12} {'Phase':<8} {'Stable'}")
         print("-" * 50)
 
@@ -296,7 +293,7 @@ class TensorIntegrationDemo:
 
             print(f"{freq:<15.0f} {entropy:<12.6f} {phase:<8.3f} {stable}")
 
-        print(f"\n✅ QSS2 validation matches your React reference data!")
+        print("\n✅ QSS2 validation matches your React reference data!")
 
     async def run_full_demo(self):
         """Run the complete demonstration."""

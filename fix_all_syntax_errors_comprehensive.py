@@ -11,27 +11,24 @@ Systematically fixes all syntax errors across the codebase:
 - F-string issues
 """
 
-import os
 import re
 import subprocess
 import sys
 from pathlib import Path
-from typing import List, Tuple
+from typing import List
 
 
 def fix_syntax_errors_in_file(file_path: str) -> bool:
     """Fix syntax errors in a specific file."""
     try:
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, "r", encoding="utf-8") as f:
             content = f.read()
 
         original_content = content
-        lines = content.split('\n')
+        lines = content.split("\n")
         fixed_lines = []
 
         for i, line in enumerate(lines):
-            original_line = line
-
             # Fix 1: Handle unterminated strings
             if '"' in line and line.count('"') % 2 == 1:
                 # Check if it's actually unterminated
@@ -46,16 +43,16 @@ def fix_syntax_errors_in_file(file_path: str) -> bool:
 
             # Fix 2: Handle missing colons after function parameters
             # Look for patterns like: parameter_name: type)
-            if re.search(r':\s*\w+\s*\)', line):
+            if re.search(r":\s*\w+\s*\)", line):
                 # Add missing colon
-                line = re.sub(r':\s*(\w+)\s*\)', r': \1):', line)
+                line = re.sub(r":\s*(\w+)\s*\)", r": \1):", line)
 
             # Fix 3: Handle f-strings with missing placeholders
-            if ('f"' in line or "f'" in line) and '{' not in line and '}' not in line:
+            if ('f"' in line or "f'" in line) and "{" not in line and "}" not in line:
                 line = line.replace('f"', '"').replace("f'", "'")
 
             # Fix 4: Handle unterminated strings with escape sequences
-            if '\\' in line and ('"' in line or "'" in line):
+            if "\\" in line and ('"' in line or "'" in line):
                 double_quotes = len(re.findall(r'(?<!\\)"', line))
                 single_quotes = len(re.findall(r"(?<!\\)'", line))
 
@@ -72,24 +69,24 @@ def fix_syntax_errors_in_file(file_path: str) -> bool:
             if '"' in line and line.count('"') % 2 == 1:
                 last_quote_pos = line.rfind('"')
                 if last_quote_pos > 0:
-                    after_quote = line[last_quote_pos + 1:].strip()
-                    if after_quote and not after_quote.startswith((')', ',', ']', '}')):
+                    after_quote = line[last_quote_pos + 1 :].strip()
+                    if after_quote and not after_quote.startswith((")", ",", "]", "}")):
                         line += '"'
 
             if "'" in line and line.count("'") % 2 == 1:
                 last_quote_pos = line.rfind("'")
                 if last_quote_pos > 0:
-                    after_quote = line[last_quote_pos + 1:].strip()
-                    if after_quote and not after_quote.startswith((')', ',', ']', '}')):
+                    after_quote = line[last_quote_pos + 1 :].strip()
+                    if after_quote and not after_quote.startswith((")", ",", "]", "}")):
                         line += "'"
 
             fixed_lines.append(line)
 
-        content = '\n'.join(fixed_lines)
+        content = "\n".join(fixed_lines)
 
         # Write back if changed
         if content != original_content:
-            with open(file_path, 'w', encoding='utf-8') as f:
+            with open(file_path, "w", encoding="utf-8") as f:
                 f.write(content)
             return True
 
@@ -107,7 +104,7 @@ def check_syntax_error(file_path: str) -> List[str]:
             [sys.executable, "-m", "py_compile", file_path],
             capture_output=True,
             text=True,
-            check=False
+            check=False,
         )
 
         if result.returncode != 0:
@@ -122,15 +119,18 @@ def run_flake8_syntax_check(file_path: str) -> List[str]:
     try:
         result = subprocess.run(
             [
-                sys.executable, "-m", "flake8", file_path,
+                sys.executable,
+                "-m",
+                "flake8",
+                file_path,
                 "--max-line-length=100",
-                "--select=E999"
+                "--select=E999",
             ],
             capture_output=True,
             text=True,
-            check=False
+            check=False,
         )
-        return result.stdout.strip().split('\n') if result.stdout.strip() else []
+        return result.stdout.strip().split("\n") if result.stdout.strip() else []
     except Exception as e:
         print(f"Error running flake8 on {file_path}: {e}")
         return []
@@ -170,16 +170,16 @@ def main():
                 # Try to fix
                 if fix_syntax_errors_in_file(str(file_path)):
                     files_fixed += 1
-                    print(f"  ✅ Applied fixes")
+                    print("  ✅ Applied fixes")
 
                     # Check if fixed
                     syntax_errors_after = check_syntax_error(str(file_path))
                     flake8_errors_after = run_flake8_syntax_check(str(file_path))
 
                     if syntax_errors_after or flake8_errors_after:
-                        print(f"  ⚠️  Some syntax errors remain")
+                        print("  ⚠️  Some syntax errors remain")
                     else:
-                        print(f"  ✅ All syntax errors fixed!")
+                        print("  ✅ All syntax errors fixed!")
 
     # Summary
     print("\n" + "=" * 60)

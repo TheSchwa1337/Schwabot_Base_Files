@@ -25,7 +25,7 @@ try:
     from schwabot_unified_math import (
         UnifiedMathematicsFramework,
         BTC256SHAPipeline,
-        unified_trading_math
+        unified_trading_math,
     )
     from core.advanced_settings_engine import AdvancedSettingsEngine
     from core.api.cache_sync import CacheSyncService
@@ -36,7 +36,11 @@ try:
 
     # Test if enhanced launcher is available
     try:
-        from schwabot_enhanced_launcher import EnhancedDataIntegrator, SchawbotEnhancedLauncher
+        from schwabot_enhanced_launcher import (
+            EnhancedDataIntegrator,
+            SchawbotEnhancedLauncher,
+        )
+
         LAUNCHER_AVAILABLE = True
     except ImportError:
         LAUNCHER_AVAILABLE = False
@@ -47,8 +51,7 @@ except ImportError as e:
 
 # Setup logging
 logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
 
@@ -109,20 +112,25 @@ class SchawbotIntegrationTester:
 
             # Test entropy calculation
             import numpy as np
+
             test_vector = np.array([0.5, 0.5, 0.0, 0.0])
             entropy = framework.compute_unified_entropy(test_vector)
-            assert hasattr(entropy, 'value') or isinstance(entropy, (int, float)), "Entropy should be numeric"
+            assert hasattr(entropy, "value") or isinstance(entropy, (int, float)), (
+                "Entropy should be numeric"
+            )
 
             # Test hash generation
             unified_hash = framework.generate_unified_hash(test_vector, time_slot=1.5)
-            assert isinstance(unified_hash, str) and len(unified_hash) == 64, "Hash should be 64-char string"
+            assert isinstance(unified_hash, str) and len(unified_hash) == 64, (
+                "Hash should be 64-char string"
+            )
 
             # Test system integration
             input_data = {
                 "tensor": np.random.rand(4, 4),
                 "hash_patterns": ["test_hash"],
                 "quantum_state": np.array([0.70710678, 0.70710678]),
-                "metadata": {"source": "test"}
+                "metadata": {"source": "test"},
             }
 
             result = framework.integrate_all_systems(input_data)
@@ -148,7 +156,7 @@ class SchawbotIntegrationTester:
 
             # Test setting values
             result = engine.set_setting_value("echo_delay_sensitivity", 1.2)
-            assert result == True, "Should be able to set valid setting"
+            assert result, "Should be able to set valid setting"
 
             value = engine.get_setting_value("echo_delay_sensitivity")
             assert value == 1.2, "Should retrieve correct setting value"
@@ -159,7 +167,9 @@ class SchawbotIntegrationTester:
 
             # Test confidence vector
             confidence = engine.get_confidence_vector("test")
-            assert hasattr(confidence, 'ai_consensus'), "Should have confidence attributes"
+            assert hasattr(confidence, "ai_consensus"), (
+                "Should have confidence attributes"
+            )
 
             # Test signal scoring
             test_signals = [0.5, -0.2, 0.8, 0.1]
@@ -171,6 +181,7 @@ class SchawbotIntegrationTester:
 
             # Clean up
             import shutil
+
             shutil.rmtree(settings_dir, ignore_errors=True)
 
             logger.info("  ✓ All advanced settings engine tests passed")
@@ -193,9 +204,13 @@ class SchawbotIntegrationTester:
 
             for name, handler_class in handlers:
                 handler = handler_class()
-                assert hasattr(handler, 'NAME'), f"{name} should have NAME attribute"
-                assert hasattr(handler, '_fetch_raw'), f"{name} should have _fetch_raw method"
-                assert hasattr(handler, '_parse_raw'), f"{name} should have _parse_raw method"
+                assert hasattr(handler, "NAME"), f"{name} should have NAME attribute"
+                assert hasattr(handler, "_fetch_raw"), (
+                    f"{name} should have _fetch_raw method"
+                )
+                assert hasattr(handler, "_parse_raw"), (
+                    f"{name} should have _parse_raw method"
+                )
 
             # Test a simple parse operation (without actual API call)
             fear_greed = FearGreedHandler()
@@ -222,7 +237,9 @@ class SchawbotIntegrationTester:
             assert len(service.handlers) == 1, "Should have one handler"
 
             # Test discovery (without starting full service)
-            assert hasattr(service, '_discover_handlers'), "Should have discovery method"
+            assert hasattr(service, "_discover_handlers"), (
+                "Should have discovery method"
+            )
 
             logger.info("  ✓ Cache sync service tests passed")
             return True
@@ -235,7 +252,9 @@ class SchawbotIntegrationTester:
         """Test data integration components."""
         try:
             if not LAUNCHER_AVAILABLE:
-                logger.info("  ⚠️  Enhanced launcher not available, skipping data integration test")
+                logger.info(
+                    "  ⚠️  Enhanced launcher not available, skipping data integration test"
+                )
                 return True
 
             # Create test components
@@ -246,12 +265,14 @@ class SchawbotIntegrationTester:
 
             # Test signal processing methods
             fear_greed_signal = integrator._process_fear_greed_signal({"value": 25})
-            assert isinstance(fear_greed_signal, float), "Fear/greed signal should be float"
+            assert isinstance(fear_greed_signal, float), (
+                "Fear/greed signal should be float"
+            )
             assert -1.0 <= fear_greed_signal <= 1.0, "Signal should be in valid range"
 
-            whale_signal = integrator._process_whale_signal({
-                "summary": {"whale_activity_score": 60, "total_volume_usd": 1000000}
-            })
+            whale_signal = integrator._process_whale_signal(
+                {"summary": {"whale_activity_score": 60, "total_volume_usd": 1000000}}
+            )
             assert isinstance(whale_signal, float), "Whale signal should be float"
 
             logger.info("  ✓ Data integration tests passed")
@@ -265,22 +286,33 @@ class SchawbotIntegrationTester:
         """Test trading mathematics components."""
         try:
             # Test profit optimization
-            profit_score = unified_trading_math.calculate_profit_optimization(50000.0, 1000.0, "BTC")
+            profit_score = unified_trading_math.calculate_profit_optimization(
+                50000.0, 1000.0, "BTC"
+            )
             assert isinstance(profit_score, float), "Profit score should be float"
             assert profit_score >= 0, "Profit score should be non-negative"
 
             # Test risk-adjusted return
             test_returns = [0.05, -0.02, 0.03, 0.01, -0.01]
-            sharpe_ratio = unified_trading_math.calculate_risk_adjusted_return(test_returns)
+            sharpe_ratio = unified_trading_math.calculate_risk_adjusted_return(
+                test_returns
+            )
             assert isinstance(sharpe_ratio, float), "Sharpe ratio should be float"
 
             # Test portfolio optimization
             import numpy as np
+
             weights = np.array([0.6, 0.4])
             returns = np.array([[0.05, 0.02], [-0.02, 0.03], [0.01, -0.01]])
-            portfolio_metrics = unified_trading_math.calculate_portfolio_optimization(weights, returns)
-            assert isinstance(portfolio_metrics, dict), "Portfolio metrics should be dict"
-            assert "portfolio_return" in portfolio_metrics, "Should have portfolio return"
+            portfolio_metrics = unified_trading_math.calculate_portfolio_optimization(
+                weights, returns
+            )
+            assert isinstance(portfolio_metrics, dict), (
+                "Portfolio metrics should be dict"
+            )
+            assert "portfolio_return" in portfolio_metrics, (
+                "Should have portfolio return"
+            )
 
             logger.info("  ✓ Trading mathematics tests passed")
             return True
@@ -324,12 +356,14 @@ class SchawbotIntegrationTester:
             # Test launcher initialization (without starting)
             launcher = SchawbotEnhancedLauncher()
 
-            assert hasattr(launcher, 'initialize'), "Should have initialize method"
-            assert hasattr(launcher, 'start'), "Should have start method"
-            assert hasattr(launcher, 'shutdown'), "Should have shutdown method"
+            assert hasattr(launcher, "initialize"), "Should have initialize method"
+            assert hasattr(launcher, "start"), "Should have start method"
+            assert hasattr(launcher, "shutdown"), "Should have shutdown method"
 
             # Test component initialization (without full startup)
-            assert launcher.performance_metrics is not None, "Should have performance metrics"
+            assert launcher.performance_metrics is not None, (
+                "Should have performance metrics"
+            )
             assert launcher.tasks is not None, "Should have tasks dict"
 
             logger.info("  ✓ Enhanced launcher tests passed")
@@ -343,9 +377,9 @@ class SchawbotIntegrationTester:
         """Print comprehensive test summary."""
         runtime = time.time() - self.start_time
 
-        print("\n" + "="*60)
+        print("\n" + "=" * 60)
         print("🧪 SCHWABOT INTEGRATION TEST SUMMARY")
-        print("="*60)
+        print("=" * 60)
 
         passed_count = sum(1 for result in self.test_results.values() if result)
         total_count = len(self.test_results)
@@ -368,7 +402,7 @@ class SchawbotIntegrationTester:
             print("⚠️  Some tests failed. Please review the errors above.")
             print("🔧 Fix the issues before running the full system.")
 
-        print("="*60)
+        print("=" * 60)
 
 
 async def main():

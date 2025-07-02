@@ -35,28 +35,29 @@ Matrix = np.ndarray
 @dataclass
 class Dual:
     """Dual number for automatic differentiation: a + b*ε where ε^2 = 0."""
+
     val: float  # Real part (function value)
     eps: float  # Dual part (derivative)
 
-    def __add__(self, other: Union['Dual', float]) -> 'Dual':
+    def __add__(self, other: Union["Dual", float]) -> "Dual":
         if isinstance(other, Dual):
             return Dual(self.val + other.val, self.eps + other.eps)
         else:
             return Dual(self.val + other, self.eps)
 
-    def __radd__(self, other: float) -> 'Dual':
+    def __radd__(self, other: float) -> "Dual":
         return self.__add__(other)
 
-    def __sub__(self, other: Union['Dual', float]) -> 'Dual':
+    def __sub__(self, other: Union["Dual", float]) -> "Dual":
         if isinstance(other, Dual):
             return Dual(self.val - other.val, self.eps - other.eps)
         else:
             return Dual(self.val - other, self.eps)
 
-    def __rsub__(self, other: float) -> 'Dual':
+    def __rsub__(self, other: float) -> "Dual":
         return Dual(other - self.val, -self.eps)
 
-    def __mul__(self, other: Union['Dual', float]) -> 'Dual':
+    def __mul__(self, other: Union["Dual", float]) -> "Dual":
         if isinstance(other, Dual):
             return Dual(
                 self.val * other.val,
@@ -65,64 +66,62 @@ class Dual:
         else:
             return Dual(self.val * other, self.eps * other)
 
-    def __rmul__(self, other: float) -> 'Dual':
+    def __rmul__(self, other: float) -> "Dual":
         return self.__mul__(other)
 
-    def __truediv__(self, other: Union['Dual', float]) -> 'Dual':
+    def __truediv__(self, other: Union["Dual", float]) -> "Dual":
         if isinstance(other, Dual):
             val = self.val / other.val
-            eps = (self.eps * other.val - self.val *
-                   other.eps) / (other.val ** 2)
+            eps = (self.eps * other.val - self.val * other.eps) / (other.val**2)
             return Dual(val, eps)
         else:
             return Dual(self.val / other, self.eps / other)
 
-    def __rtruediv__(self, other: float) -> 'Dual':
+    def __rtruediv__(self, other: float) -> "Dual":
         val = other / self.val
-        eps = -other * self.eps / (self.val ** 2)
+        eps = -other * self.eps / (self.val**2)
         return Dual(val, eps)
 
-    def __pow__(self, n: float) -> 'Dual':
+    def __pow__(self, n: float) -> "Dual":
         if self.val == 0 and n <= 0:
             raise ValueError("Cannot raise zero to non-positive power")
-        val = self.val ** n
+        val = self.val**n
         eps = n * (self.val ** (n - 1)) * self.eps
         return Dual(val, eps)
 
-    def __neg__(self) -> 'Dual':
+    def __neg__(self) -> "Dual":
         return Dual(-self.val, -self.eps)
 
-    def __abs__(self) -> 'Dual':
+    def __abs__(self) -> "Dual":
         if self.val >= 0:
             return Dual(self.val, self.eps)
         else:
             return Dual(-self.val, -self.eps)
 
-    def sin(self) -> 'Dual':
+    def sin(self) -> "Dual":
         return Dual(math.sin(self.val), math.cos(self.val) * self.eps)
 
-    def cos(self) -> 'Dual':
+    def cos(self) -> "Dual":
         return Dual(math.cos(self.val), -math.sin(self.val) * self.eps)
 
-    def exp(self) -> 'Dual':
+    def exp(self) -> "Dual":
         exp_val = math.exp(self.val)
         return Dual(exp_val, exp_val * self.eps)
 
-    def log(self) -> 'Dual':
+    def log(self) -> "Dual":
         if self.val <= 0:
             raise ValueError("Cannot take log of non-positive number")
         return Dual(math.log(self.val), self.eps / self.val)
 
-    def sqrt(self) -> 'Dual':
+    def sqrt(self) -> "Dual":
         if self.val < 0:
             raise ValueError("Cannot take sqrt of negative number")
         sqrt_val = math.sqrt(self.val)
-        return Dual(sqrt_val, self.eps / (2 * sqrt_val)
-                    if sqrt_val != 0 else 0)
+        return Dual(sqrt_val, self.eps / (2 * sqrt_val) if sqrt_val != 0 else 0)
 
-    def tanh(self) -> 'Dual':
+    def tanh(self) -> "Dual":
         tanh_val = math.tanh(self.val)
-        sech_squared = 1 - tanh_val ** 2
+        sech_squared = 1 - tanh_val**2
         return Dual(tanh_val, sech_squared * self.eps)
 
 
@@ -134,9 +133,7 @@ class MathLibV3:
         self.initialized = True
         self.ai_models_loaded = False
         self.state_file = "mathlib_v3_state.json"
-        logger.info(
-            f"MathLibV3 v{
-                self.version} initialized with auto-diff support")
+        logger.info(f"MathLibV3 v{self.version} initialized with auto-diff support")
 
     def ai_calculate(self, operation: str, *args, **kwargs) -> Any:
         """AI-enhanced calculation method with automatic differentiation support."""
@@ -150,7 +147,7 @@ class MathLibV3:
                 "gradient_descent": self.gradient_descent_optimization,
                 "dual_gradient": self.compute_dual_gradient,
                 "jacobian": self.compute_jacobian,
-}
+            }
             if operation in ai_operations and args:
                 result = ai_operations[operation](*args, **kwargs)
                 return {
@@ -158,14 +155,14 @@ class MathLibV3:
                     "result": result,
                     "version": "v3",
                     "status": "success",
-}
+                }
             return {
                 "operation": operation,
                 "args": args,
                 "kwargs": kwargs,
                 "version": "v3",
                 "status": "processed",
-}
+            }
         except Exception as e:
             logger.error(f"Error in AI calculation {operation}: {e}")
             return {
@@ -173,12 +170,11 @@ class MathLibV3:
                 "error": str(e),
                 "version": "v3",
                 "status": "error",
-}
-    def kelly_criterion_risk_adjusted(self,
-                                      mu: float,
-                                      sigma_squared: float,
-                                      risk_tolerance: float = 0.25) -> Dict[str,
-                                                                            float]:
+            }
+
+    def kelly_criterion_risk_adjusted(
+        self, mu: float, sigma_squared: float, risk_tolerance: float = 0.25
+    ) -> Dict[str, float]:
         """Kelly criterion with automatic risk adjustment."""
         try:
             if sigma_squared <= 0:
@@ -186,20 +182,20 @@ class MathLibV3:
                     "kelly_fraction": 0.0,
                     "risk_adjusted_fraction": 0.0,
                     "error": "Invalid variance",
-}
+                }
             kelly_optimal = mu / sigma_squared
             kelly_adjusted = min(max(kelly_optimal * risk_tolerance, 0.0), 1.0)
-            sharpe_ratio = mu / \
-                math.sqrt(sigma_squared) if sigma_squared > 0 else 0.0
-            expected_utility = mu * kelly_adjusted - \
-                0.5 * sigma_squared * (kelly_adjusted ** 2)
+            sharpe_ratio = mu / math.sqrt(sigma_squared) if sigma_squared > 0 else 0.0
+            expected_utility = mu * kelly_adjusted - 0.5 * sigma_squared * (
+                kelly_adjusted**2
+            )
             return {
                 "kelly_fraction": kelly_optimal,
                 "risk_adjusted_fraction": kelly_adjusted,
                 "sharpe_ratio": sharpe_ratio,
                 "expected_utility": expected_utility,
                 "risk_tolerance": risk_tolerance,
-}
+            }
         except Exception as e:
             logger.error(f"Kelly criterion calculation failed: {e}")
             return {"error": str(e)}
@@ -217,15 +213,15 @@ class MathLibV3:
                 else sorted_returns[-1]
             )
             tail_returns = sorted_returns[sorted_returns <= var_value]
-            cvar = np.mean(tail_returns) if len(
-                tail_returns) > 0 else var_value
+            cvar = np.mean(tail_returns) if len(tail_returns) > 0 else var_value
             return float(cvar)
         except Exception as e:
             logger.error(f"CVaR calculation failed: {e}")
             return 0.0
 
     def optimize_profit_lattice(
-            self, market_data: Vector, risk_tolerance: float = 0.1) -> Dict[str, Any]:
+        self, market_data: Vector, risk_tolerance: float = 0.1
+    ) -> Dict[str, Any]:
         """AI-enhanced multi-dimensional profit optimization using gradient descent approach."""
         try:
             if len(market_data) < 2:
@@ -234,7 +230,8 @@ class MathLibV3:
             mean_return = np.mean(returns)
             volatility = np.std(returns)
             optimal_allocation = min(
-                1.0, max(0.1, mean_return / (volatility + 1e-10) * (1 - risk_tolerance)))
+                1.0, max(0.1, mean_return / (volatility + 1e-10) * (1 - risk_tolerance))
+            )
             sharpe_ratio = mean_return / (volatility + 1e-10)
             cumulative = np.cumprod(1 + returns)
             running_max = np.maximum.accumulate(cumulative)
@@ -249,32 +246,35 @@ class MathLibV3:
                 "max_drawdown": max_drawdown,
                 "cvar_95": cvar_95,
                 "risk_tolerance": risk_tolerance,
-}
+            }
         except Exception as e:
             logger.error(f"Profit lattice optimization failed: {e}")
             return {"error": str(e)}
 
-    def ai_risk_assessment(self, portfolio_weights: Vector,
-                           covariance_matrix: Matrix) -> Dict[str, float]:
+    def ai_risk_assessment(
+        self, portfolio_weights: Vector, covariance_matrix: Matrix
+    ) -> Dict[str, float]:
         """AI-powered risk assessment with automatic differentiation."""
         try:
             portfolio_variance = float(
-                portfolio_weights.T @ covariance_matrix @ portfolio_weights)
+                portfolio_weights.T @ covariance_matrix @ portfolio_weights
+            )
             portfolio_volatility = math.sqrt(portfolio_variance)
-            concentration = float(np.sum(portfolio_weights ** 2))
+            concentration = float(np.sum(portfolio_weights**2))
             weighted_volatilities = float(
-                np.sum(
-                    portfolio_weights *
-                    np.sqrt(
-                        np.diag(covariance_matrix))))
-            diversification_ratio = weighted_volatilities / \
-                portfolio_volatility if portfolio_volatility > 0 else 0.0
+                np.sum(portfolio_weights * np.sqrt(np.diag(covariance_matrix)))
+            )
+            diversification_ratio = (
+                weighted_volatilities / portfolio_volatility
+                if portfolio_volatility > 0
+                else 0.0
+            )
             return {
                 "portfolio_volatility": portfolio_volatility,
                 "portfolio_variance": portfolio_variance,
                 "concentration_index": concentration,
                 "diversification_ratio": diversification_ratio,
-}
+            }
         except Exception as e:
             logger.error(f"Risk assessment failed: {e}")
             return {"error": str(e)}
@@ -286,19 +286,25 @@ class MathLibV3:
                 return {"error": "Insufficient data for pattern detection"}
             trends = np.diff(time_series)
             increasing_trend = float(np.sum(trends > 0) / len(trends))
-            squared_returns = trends ** 2
+            squared_returns = trends**2
             if len(squared_returns) > 1:
-                volatility_autocorr = float(np.corrcoef(
-                    squared_returns[:-1], squared_returns[1:])[0, 1])
+                volatility_autocorr = float(
+                    np.corrcoef(squared_returns[:-1], squared_returns[1:])[0, 1]
+                )
             else:
                 volatility_autocorr = 0.0
             if len(time_series) > 20:
                 autocorr = np.correlate(time_series, time_series, mode="full")
                 autocorr_max = np.max(autocorr)
-                autocorr_normalized = autocorr / autocorr_max if autocorr_max > 0 else autocorr
+                autocorr_normalized = (
+                    autocorr / autocorr_max if autocorr_max > 0 else autocorr
+                )
                 half_len = len(autocorr_normalized) // 2
-                cycle_strength = float(np.max(
-                    autocorr_normalized[half_len + 1:])) if half_len + 1 < len(autocorr_normalized) else 0.0
+                cycle_strength = (
+                    float(np.max(autocorr_normalized[half_len + 1 :]))
+                    if half_len + 1 < len(autocorr_normalized)
+                    else 0.0
+                )
             else:
                 cycle_strength = 0.0
             y_lag = time_series[:-1]
@@ -306,25 +312,26 @@ class MathLibV3:
             if len(y_lag) > 0 and np.var(y_lag) > 0:
                 X = np.column_stack([np.ones(len(y_lag)), y_lag])
                 coeffs = np.linalg.lstsq(X, y_diff, rcond=None)[0]
-                mean_reversion_coeff = float(
-                    coeffs[1]) if len(coeffs) > 1 else 0.0
+                mean_reversion_coeff = float(coeffs[1]) if len(coeffs) > 1 else 0.0
             else:
                 mean_reversion_coeff = 0.0
             pattern_complexity = float(
-                np.std(time_series) / (np.mean(np.abs(time_series)) + 1e-10))
+                np.std(time_series) / (np.mean(np.abs(time_series)) + 1e-10)
+            )
             return {
                 "increasing_trend_probability": increasing_trend,
                 "volatility_clustering": volatility_autocorr,
                 "cycle_strength": cycle_strength,
                 "mean_reversion_coefficient": mean_reversion_coeff,
                 "pattern_complexity": pattern_complexity,
-}
+            }
         except Exception as e:
             logger.error(f"Pattern detection failed: {e}")
             return {"error": str(e)}
 
     def predict_market_movement(
-            self, historical_data: Vector, forecast_horizon: int = 5) -> Dict[str, Any]:
+        self, historical_data: Vector, forecast_horizon: int = 5
+    ) -> Dict[str, Any]:
         """Simple market prediction using time series analysis."""
         try:
             if len(historical_data) < 10:
@@ -332,14 +339,12 @@ class MathLibV3:
             alpha = 0.3
             smoothed = [historical_data[0]]
             for i in range(1, len(historical_data)):
-                smoothed.append(
-                    alpha * historical_data[i] + (1 - alpha) * smoothed[-1])
+                smoothed.append(alpha * historical_data[i] + (1 - alpha) * smoothed[-1])
             x = np.arange(len(historical_data))
             trend_coeffs = np.polyfit(x, historical_data, 1)
             future_x = np.arange(
-                len(historical_data),
-                len(historical_data) +
-                forecast_horizon)
+                len(historical_data), len(historical_data) + forecast_horizon
+            )
             trend_forecast = np.polyval(trend_coeffs, future_x)
             volatility = float(np.std(np.diff(historical_data)))
             confidence_intervals = {
@@ -347,7 +352,7 @@ class MathLibV3:
                 "upper_95": (trend_forecast + 1.96 * volatility).tolist(),
                 "lower_68": (trend_forecast - volatility).tolist(),
                 "upper_68": (trend_forecast + volatility).tolist(),
-}
+            }
             return {
                 "forecast": trend_forecast.tolist(),
                 "confidence_intervals": confidence_intervals,
@@ -355,13 +360,14 @@ class MathLibV3:
                 "prediction_volatility": volatility,
                 "last_smoothed_value": float(smoothed[-1]),
                 "trend_slope": float(trend_coeffs[0]),
-}
+            }
         except Exception as e:
             logger.error(f"Market prediction failed: {e}")
             return {"error": str(e)}
 
     def compute_dual_gradient(
-            self, func: Callable[[Dual], Dual], x: float) -> Tuple[float, float]:
+        self, func: Callable[[Dual], Dual], x: float
+    ) -> Tuple[float, float]:
         """Compute gradient using dual numbers (forward-mode automatic differentiation)."""
         try:
             dual_x = Dual(x, 1.0)
@@ -371,10 +377,9 @@ class MathLibV3:
             logger.error(f"Dual gradient computation failed: {e}")
             return 0.0, 0.0
 
-    def compute_jacobian(self,
-                         func: Callable[[List[Dual]],
-                                        List[Dual]],
-                         x: Vector) -> Matrix:
+    def compute_jacobian(
+        self, func: Callable[[List[Dual]], List[Dual]], x: Vector
+    ) -> Matrix:
         """Compute Jacobian matrix using automatic differentiation."""
         try:
             n = len(x)
@@ -382,11 +387,10 @@ class MathLibV3:
             m = len(test_output)
             jacobian = np.zeros((m, n))
             for i in range(n):
-                dual_x = [Dual(xj, 1.0 if j == i else 0.0)
-                          for j, xj in enumerate(x)]
+                dual_x = [Dual(xj, 1.0 if j == i else 0.0) for j, xj in enumerate(x)]
                 dual_output = func(dual_x)
                 for j in range(m):
-                    jacobian[j, i] = getattr(dual_output[j], 'eps', 0.0)
+                    jacobian[j, i] = getattr(dual_output[j], "eps", 0.0)
             return jacobian
         except Exception as e:
             logger.error(f"Jacobian computation failed: {e}")
@@ -417,7 +421,8 @@ class MathLibV3:
                     break
                 x = x_new
                 history.append(
-                    {"iteration": iteration, "objective": f_x, "x": x.copy()})
+                    {"iteration": iteration, "objective": f_x, "x": x.copy()}
+                )
             final_objective = objective(x)
             return {
                 "optimal_x": x,
@@ -425,7 +430,7 @@ class MathLibV3:
                 "iterations": iteration + 1,
                 "converged": iteration < max_iterations - 1,
                 "history": history[-10:] if len(history) > 10 else history,
-}
+            }
         except Exception as e:
             logger.error(f"Gradient descent optimization failed: {e}")
             return {"error": str(e)}
@@ -438,8 +443,8 @@ class MathLibV3:
         state = {
             "version": self.version,
             "ai_models_loaded": self.ai_models_loaded,
-}
-        with open(filename, 'w') as f:
+        }
+        with open(filename, "w") as f:
             json.dump(state, f, indent=2)
         logger.info(f"MathLibV3 state saved to {filename}")
         return filename
@@ -451,12 +456,13 @@ class MathLibV3:
         if not os.path.exists(filename):
             logger.warning(f"State file {filename} does not exist.")
             return False
-        with open(filename, 'r') as f:
+        with open(filename, "r") as f:
             state = json.load(f)
         self.version = state.get("version", self.version)
         self.ai_models_loaded = state.get("ai_models_loaded", False)
         logger.info(f"MathLibV3 state loaded from {filename}")
         return True
+
 
 # Convenience functions for external API
 
@@ -493,6 +499,7 @@ def main() -> None:
 
     def test_function(x: Dual) -> Dual:
         return x * x + 2 * x + 1  # f(x) = x^2 + 2x + 1, f'(x) = 2x + 2
+
     val, grad_val = lib_v3.compute_dual_gradient(test_function, 3.0)
     print(f"f(3) = {val}, f'(3) = {grad_val} (expected: 16, 8)")
     print("\nTesting CVaR...")
@@ -513,8 +520,8 @@ def main() -> None:
 
     def quad_obj(x: Vector) -> float:
         return float(np.sum((x - 2) ** 2))
-    gd_result = lib_v3.gradient_descent_optimization(
-        quad_obj, np.array([10.0, -5.0]))
+
+    gd_result = lib_v3.gradient_descent_optimization(quad_obj, np.array([10.0, -5.0]))
     print(f"Gradient descent optimization: {gd_result}")
     print("\nTesting state save/load...")
     lib_v3.save_state()

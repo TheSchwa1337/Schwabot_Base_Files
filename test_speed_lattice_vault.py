@@ -8,12 +8,9 @@ import sys
 import os
 import time
 import json
-import numpy as np
-import pandas as pd
-from typing import Dict, List, Any
 
 # Add core directory to path
-sys.path.append(os.path.join(os.path.dirname(__file__), 'core'))
+sys.path.append(os.path.join(os.path.dirname(__file__), "core"))
 
 from speed_lattice_vault import (
     SpeedLatticeVault,
@@ -21,7 +18,7 @@ from speed_lattice_vault import (
     ChronoBiasLevel,
     AnchorPhase,
     DeltaMap,
-    ShiftPattern
+    ShiftPattern,
 )
 
 
@@ -32,10 +29,16 @@ def test_core_initialization():
     # Test basic initialization
     vault = SpeedLatticeVault(warp_speed=10000, cycles=64)
 
-    assert vault.warp_speed == 10000, f"Expected warp speed 10000, got {vault.warp_speed}"
+    assert vault.warp_speed == 10000, (
+        f"Expected warp speed 10000, got {vault.warp_speed}"
+    )
     assert vault.cycles == 64, f"Expected cycles 64, got {vault.cycles}"
-    assert vault.phase_lock == "Ω-Phase", f"Expected phase lock Ω-Phase, got {vault.phase_lock}"
-    assert vault.drift_matrix.shape == (64, 64), f"Expected drift matrix shape (64, 64), got {vault.drift_matrix.shape}"
+    assert vault.phase_lock == "Ω-Phase", (
+        f"Expected phase lock Ω-Phase, got {vault.phase_lock}"
+    )
+    assert vault.drift_matrix.shape == (64, 64), (
+        f"Expected drift matrix shape (64, 64), got {vault.drift_matrix.shape}"
+    )
 
     print("✅ Core initialization test passed")
     return vault
@@ -57,7 +60,9 @@ def test_chrono_bias_calculation(vault: SpeedLatticeVault):
         biases.append(bias)
         assert isinstance(bias, float), f"Expected float for t={t}, got {type(bias)}"
 
-    print(f"✅ Chrono bias calculation test passed - Bias range: {min(biases):.4f} to {max(biases):.4f}")
+    print(
+        f"✅ Chrono bias calculation test passed - Bias range: {min(biases):.4f} to {max(biases):.4f}"
+    )
     return biases
 
 
@@ -82,10 +87,10 @@ def test_surround_chronomancy(vault: SpeedLatticeVault):
 
     # Test with different bias levels
     test_cases = [
-        (0.05, "low_bias"),    # Should sustain recursion
-        (0.15, "high_bias"),   # Should inject feedback layer
-        (-0.1, "negative_bias") # Should activate fallback
-]
+        (0.05, "low_bias"),  # Should sustain recursion
+        (0.15, "high_bias"),  # Should inject feedback layer
+        (-0.1, "negative_bias"),  # Should activate fallback
+    ]
     results = []
     for bias_level, case_name in test_cases:
         # Create test drift matrix with specific bias
@@ -100,7 +105,9 @@ def test_surround_chronomancy(vault: SpeedLatticeVault):
         assert "stability_factor" in result, f"Missing stability_factor in {case_name}"
 
         results.append((case_name, result))
-        print(f"  {case_name}: Bias={result['chrono_bias']:.4f}, Action={result['action']}")
+        print(
+            f"  {case_name}: Bias={result['chrono_bias']:.4f}, Action={result['action']}"
+        )
 
     print("✅ Surround chronomancy test passed")
     return results
@@ -115,11 +122,13 @@ def test_containment_zones(vault: SpeedLatticeVault):
         ChronoBiasLevel.ECHO_CROWN,
         ChronoBiasLevel.AEON_RIM,
         ChronoBiasLevel.VORTEX_MARGIN,
-        ChronoBiasLevel.COLLAPSE_ARC
-]
+        ChronoBiasLevel.COLLAPSE_ARC,
+    ]
     for bias, expected_zone in zip(test_biases, expected_zones):
         zone = vault.get_containment_zone(bias)
-        assert zone == expected_zone, f"Expected {expected_zone} for bias {bias}, got {zone}"
+        assert zone == expected_zone, (
+            f"Expected {expected_zone} for bias {bias}, got {zone}"
+        )
         print(f"  Bias {bias:.2f} → Zone: {zone.name}")
 
     print("✅ Containment zones test passed")
@@ -138,11 +147,13 @@ def test_anchor_points(vault: SpeedLatticeVault):
         AnchorPhase.T1_ZERO_PHASE,
         AnchorPhase.T2_MID_CYCLE,
         AnchorPhase.T3_PHASE_FLIP,
-        AnchorPhase.T4_PROFIT_COLLAPSE
-]
+        AnchorPhase.T4_PROFIT_COLLAPSE,
+    ]
     for phase in expected_phases:
         assert phase in anchor_points, f"Missing anchor phase {phase}"
-        assert isinstance(anchor_points[phase], float), f"Expected float for {phase}, got {type(anchor_points[phase])}"
+        assert isinstance(anchor_points[phase], float), (
+            f"Expected float for {phase}, got {type(anchor_points[phase])}"
+        )
         print(f"  {phase.value}: {anchor_points[phase]:.4f}")
 
     print("✅ Anchor points test passed")
@@ -157,16 +168,30 @@ def test_shift_pattern_generation(vault: SpeedLatticeVault):
     for tick in range(10):
         pattern = vault.generate_shift_pattern(tick)
 
-        assert isinstance(pattern, ShiftPattern), f"Expected ShiftPattern, got {type(pattern)}"
+        assert isinstance(pattern, ShiftPattern), (
+            f"Expected ShiftPattern, got {type(pattern)}"
+        )
         assert pattern.tick == tick, f"Expected tick {tick}, got {pattern.tick}"
-        assert isinstance(pattern.delta_t, float), f"Expected float delta_t, got {type(pattern.delta_t)}"
-        assert isinstance(pattern.delta_psi, float), f"Expected float delta_psi, got {type(pattern.delta_psi)}"
-        assert isinstance(pattern.vault_sync, bool), f"Expected bool vault_sync, got {type(pattern.vault_sync)}"
-        assert isinstance(pattern.action_trigger, str), f"Expected str action_trigger, got {type(pattern.action_trigger)}"
-        assert isinstance(pattern.phase_lock, str), f"Expected str phase_lock, got {type(pattern.phase_lock)}"
+        assert isinstance(pattern.delta_t, float), (
+            f"Expected float delta_t, got {type(pattern.delta_t)}"
+        )
+        assert isinstance(pattern.delta_psi, float), (
+            f"Expected float delta_psi, got {type(pattern.delta_psi)}"
+        )
+        assert isinstance(pattern.vault_sync, bool), (
+            f"Expected bool vault_sync, got {type(pattern.vault_sync)}"
+        )
+        assert isinstance(pattern.action_trigger, str), (
+            f"Expected str action_trigger, got {type(pattern.action_trigger)}"
+        )
+        assert isinstance(pattern.phase_lock, str), (
+            f"Expected str phase_lock, got {type(pattern.phase_lock)}"
+        )
 
         patterns.append(pattern)
-        print(f"  Tick {tick}: ΔT={pattern.delta_t:.6f}, Δψ={pattern.delta_psi:.6f}, Action={pattern.action_trigger}")
+        print(
+            f"  Tick {tick}: ΔT={pattern.delta_t:.6f}, Δψ={pattern.delta_psi:.6f}, Action={pattern.action_trigger}"
+        )
 
     print("✅ Shift pattern generation test passed")
     return patterns
@@ -184,18 +209,36 @@ def test_delta_map_creation(vault: SpeedLatticeVault):
     delta_map = vault.create_full_delta_map()
 
     assert isinstance(delta_map, DeltaMap), f"Expected DeltaMap, got {type(delta_map)}"
-    assert isinstance(delta_map.delta_psi, list), f"Expected list delta_psi, got {type(delta_map.delta_psi)}"
-    assert isinstance(delta_map.delta_t, list), f"Expected list delta_t, got {type(delta_map.delta_t)}"
-    assert isinstance(delta_map.delta_xi, list), f"Expected list delta_xi, got {type(delta_map.delta_xi)}"
-    assert isinstance(delta_map.vault_sync, bool), f"Expected bool vault_sync, got {type(delta_map.vault_sync)}"
-    assert isinstance(delta_map.echo_map, str), f"Expected str echo_map, got {type(delta_map.echo_map)}"
-    assert isinstance(delta_map.timestamp, float), f"Expected float timestamp, got {type(delta_map.timestamp)}"
+    assert isinstance(delta_map.delta_psi, list), (
+        f"Expected list delta_psi, got {type(delta_map.delta_psi)}"
+    )
+    assert isinstance(delta_map.delta_t, list), (
+        f"Expected list delta_t, got {type(delta_map.delta_t)}"
+    )
+    assert isinstance(delta_map.delta_xi, list), (
+        f"Expected list delta_xi, got {type(delta_map.delta_xi)}"
+    )
+    assert isinstance(delta_map.vault_sync, bool), (
+        f"Expected bool vault_sync, got {type(delta_map.vault_sync)}"
+    )
+    assert isinstance(delta_map.echo_map, str), (
+        f"Expected str echo_map, got {type(delta_map.echo_map)}"
+    )
+    assert isinstance(delta_map.timestamp, float), (
+        f"Expected float timestamp, got {type(delta_map.timestamp)}"
+    )
 
     # Verify vector lengths
-    assert len(delta_map.delta_psi) == len(delta_map.delta_t), "Delta vectors should have same length"
-    assert len(delta_map.delta_t) == len(delta_map.delta_xi), "Delta vectors should have same length"
+    assert len(delta_map.delta_psi) == len(delta_map.delta_t), (
+        "Delta vectors should have same length"
+    )
+    assert len(delta_map.delta_t) == len(delta_map.delta_xi), (
+        "Delta vectors should have same length"
+    )
 
-    print(f"✅ Delta map creation test passed - Vector length: {len(delta_map.delta_psi)}")
+    print(
+        f"✅ Delta map creation test passed - Vector length: {len(delta_map.delta_psi)}"
+    )
     print(f"  Vault Sync: {delta_map.vault_sync}")
     print(f"  Echo Map: {delta_map.echo_map}")
     print(f"  Timestamp: {delta_map.timestamp}")
@@ -217,17 +260,27 @@ def test_warp_cycle_execution(vault: SpeedLatticeVault):
     assert "warp_speed" in result, "Missing warp_speed in warp result"
     assert "execution_time" in result, "Missing execution_time in warp result"
 
-    assert len(result["cycle_results"]) == 32, f"Expected 32 cycle results, got {len(result['cycle_results'])}"
-    assert result["total_cycles"] == 32, f"Expected 32 total cycles, got {result['total_cycles']}"
-    assert result["warp_speed"] == 10000, f"Expected warp speed 10000, got {result['warp_speed']}"
+    assert len(result["cycle_results"]) == 32, (
+        f"Expected 32 cycle results, got {len(result['cycle_results'])}"
+    )
+    assert result["total_cycles"] == 32, (
+        f"Expected 32 total cycles, got {result['total_cycles']}"
+    )
+    assert result["warp_speed"] == 10000, (
+        f"Expected warp speed 10000, got {result['warp_speed']}"
+    )
 
-    print(f"✅ Warp cycle execution test passed - {len(result['cycle_results'])} cycles completed")
+    print(
+        f"✅ Warp cycle execution test passed - {len(result['cycle_results'])} cycles completed"
+    )
 
     # Show sample cycle results
     for i in [0, 8, 16, 24, 31]:
         cycle = result["cycle_results"][i]
-        print(f"  Cycle {i}: Bias={cycle['chrono_result']['chrono_bias']:.4f}, "
-              f"Zone={cycle['containment_zone'].name}")
+        print(
+            f"  Cycle {i}: Bias={cycle['chrono_result']['chrono_bias']:.4f}, "
+            f"Zone={cycle['containment_zone'].name}"
+        )
 
     return result
 
@@ -239,10 +292,19 @@ def test_system_status(vault: SpeedLatticeVault):
     status = vault.get_system_status()
 
     required_fields = [
-        "warp_speed", "cycles_completed", "chrono_bias", "stability_factor",
-        "vault_sync", "echo_pulse_active", "fractal_feedback_loop", "phase_lock",
-        "containment_zone", "resonance_history_size", "feedback_state_size", "delta_maps_count"
-]
+        "warp_speed",
+        "cycles_completed",
+        "chrono_bias",
+        "stability_factor",
+        "vault_sync",
+        "echo_pulse_active",
+        "fractal_feedback_loop",
+        "phase_lock",
+        "containment_zone",
+        "resonance_history_size",
+        "feedback_state_size",
+        "delta_maps_count",
+    ]
     for field in required_fields:
         assert field in status, f"Missing field {field} in system status"
 
@@ -267,21 +329,23 @@ def test_lattice_vault_executor():
     assert "timestamp" in result, "Missing timestamp in execution result"
     assert "warp_result" in result, "Missing warp_result in execution result"
     assert "system_status" in result, "Missing system_status in execution result"
-    assert "market_data_integrated" in result, "Missing market_data_integrated in execution result"
+    assert "market_data_integrated" in result, (
+        "Missing market_data_integrated in execution result"
+    )
 
     # Test with market data
-    market_data = {
-        "price_change": 0.02,
-        "volume": 1000000,
-        "volatility": 0.15
-}
+    market_data = {"price_change": 0.02, "volume": 1000000, "volatility": 0.15}
     result_with_market = executor.execute_strategy_cycle(market_data)
-    assert result_with_market["market_data_integrated"] == True, "Market data should be integrated"
+    assert result_with_market["market_data_integrated"], (
+        "Market data should be integrated"
+    )
 
     # Test execution summary
     summary = executor.get_execution_summary()
     assert "total_executions" in summary, "Missing total_executions in summary"
-    assert summary["total_executions"] == 2, f"Expected 2 executions, got {summary['total_executions']}"
+    assert summary["total_executions"] == 2, (
+        f"Expected 2 executions, got {summary['total_executions']}"
+    )
 
     print("✅ LatticeVaultExecutor test passed")
     print(f"  Total Executions: {summary['total_executions']}")
@@ -296,10 +360,12 @@ def test_data_export(vault: SpeedLatticeVault, executor: LatticeVaultExecutor):
 
     # Test delta map export
     delta_map_file = vault.export_delta_map_data()
-    assert os.path.exists(delta_map_file), f"Delta map file not created: {delta_map_file}"
+    assert os.path.exists(delta_map_file), (
+        f"Delta map file not created: {delta_map_file}"
+    )
 
     # Verify JSON structure
-    with open(delta_map_file, 'r') as f:
+    with open(delta_map_file, "r") as f:
         delta_data = json.load(f)
 
     assert "system_status" in delta_data, "Missing system_status in exported data"
@@ -311,7 +377,7 @@ def test_data_export(vault: SpeedLatticeVault, executor: LatticeVaultExecutor):
     assert os.path.exists(report_file), f"Report file not created: {report_file}"
 
     # Verify JSON structure
-    with open(report_file, 'r') as f:
+    with open(report_file, "r") as f:
         report_data = json.load(f)
 
     assert "execution_summary" in report_data, "Missing execution_summary in report"
@@ -390,15 +456,12 @@ def run_comprehensive_test():
         summary = {
             "test_status": "ALL_PASSED",
             "timestamp": time.time(),
-            "export_files": {
-                "delta_map": delta_file,
-                "report": report_file
-            },
-            "performance_results": test_results["performance"]
-}
+            "export_files": {"delta_map": delta_file, "report": report_file},
+            "performance_results": test_results["performance"],
+        }
         # Save test summary
         summary_file = f"speed_lattice_vault_test_summary_{int(time.time())}.json"
-        with open(summary_file, 'w') as f:
+        with open(summary_file, "w") as f:
             json.dump(summary, f, indent=2, default=str)
 
         print(f"📁 Test summary saved to: {summary_file}")

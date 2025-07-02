@@ -20,28 +20,29 @@ import logging
 import math
 import random
 import time
-from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Tuple
 from dataclasses import dataclass, field
 
 import numpy as np
-import pandas as pd
 
 # Import Ferris Wheel RDE directly
 import sys
 import os
+
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 # Direct import to avoid core module issues
-from core.math.ferris_wheel_rde import FerrisWheelRDE, FerrisState, NCCO
+from core.math.ferris_wheel_rde import FerrisWheelRDE
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
 @dataclass
 class BacktestResult:
     """Results from a backtest run."""
+
     total_trades: int
     winning_trades: int
     losing_trades: int
@@ -56,9 +57,11 @@ class BacktestResult:
     live_ready_score: float
     timestamp: float = field(default_factory=time.time)
 
+
 @dataclass
 class TradeRecord:
     """Record of a single trade."""
+
     timestamp: float
     price: float
     strategy: str
@@ -70,6 +73,7 @@ class TradeRecord:
     pnl: float = 0.0
     cumulative_pnl: float = 0.0
     metadata: Dict[str, Any] = field(default_factory=dict)
+
 
 class FerrisWheelBacktester:
     """
@@ -90,9 +94,13 @@ class FerrisWheelBacktester:
         self.stop_loss = 0.05  # 5% stop loss
         self.take_profit = 0.15  # 15% take profit
 
-        logger.info(f"🎯 Ferris Wheel Backtester initialized with ${initial_balance:,.2f}")
+        logger.info(
+            f"🎯 Ferris Wheel Backtester initialized with ${initial_balance:,.2f}"
+        )
 
-    def generate_historical_data(self, days: int = 365, volatility: float = 0.02) -> List[Tuple[float, float]]:
+    def generate_historical_data(
+        self, days: int = 365, volatility: float = 0.02
+    ) -> List[Tuple[float, float]]:
         """
         Generate realistic historical price data for backtesting.
 
@@ -119,22 +127,33 @@ class FerrisWheelBacktester:
             # Add market cycles (trend + noise + volatility)
             trend = 0.0001 * math.sin(hour / (24 * 7))  # Weekly cycle
             noise = random.gauss(0, volatility / math.sqrt(24))  # Hourly noise
-            volatility_shock = random.gauss(0, volatility) * random.random()  # Occasional shocks
+            volatility_shock = (
+                random.gauss(0, volatility) * random.random()
+            )  # Occasional shocks
 
             # Price change
             change = trend + noise + volatility_shock
-            current_price *= (1 + change)
+            current_price *= 1 + change
 
             # Ensure price stays reasonable
             current_price = max(1000, min(100000, current_price))
 
             prices.append((timestamp, current_price))
 
-        logger.info(f"📈 Generated {len(prices)} price points, final price: ${current_price:,.2f}")
+        logger.info(
+            f"📈 Generated {len(prices)} price points, final price: ${current_price:,.2f}"
+        )
         return prices
 
-    def execute_trade(self, price: float, strategy: str, probability: float,
-                     bit_mode: int, phase: str, entropy: float) -> TradeRecord:
+    def execute_trade(
+        self,
+        price: float,
+        strategy: str,
+        probability: float,
+        bit_mode: int,
+        phase: str,
+        entropy: float,
+    ) -> TradeRecord:
         """
         Execute a trade based on RDE decision.
 
@@ -196,10 +215,7 @@ class FerrisWheelBacktester:
             action=action,
             pnl=pnl,
             cumulative_pnl=self.balance - self.initial_balance,
-            metadata={
-                "position_size": position_size,
-                "position_value": position_value
-}
+            metadata={"position_size": position_size, "position_value": position_value},
         )
 
         self.trade_history.append(trade)
@@ -238,8 +254,10 @@ class FerrisWheelBacktester:
 
         # Profit factor
         gross_profit = sum(trade.pnl for trade in self.trade_history if trade.pnl > 0)
-        gross_loss = abs(sum(trade.pnl for trade in self.trade_history if trade.pnl < 0))
-        profit_factor = gross_profit / gross_loss if gross_loss > 0 else float('inf')
+        gross_loss = abs(
+            sum(trade.pnl for trade in self.trade_history if trade.pnl < 0)
+        )
+        profit_factor = gross_profit / gross_loss if gross_loss > 0 else float("inf")
 
         return {
             "total_return": total_return,
@@ -248,10 +266,13 @@ class FerrisWheelBacktester:
             "volatility": volatility,
             "win_rate": win_rate,
             "profit_factor": profit_factor,
-            "avg_trade_pnl": np.mean([t.pnl for t in self.trade_history]) if self.trade_history else 0.0,
+            "avg_trade_pnl": np.mean([t.pnl for t in self.trade_history])
+            if self.trade_history
+            else 0.0,
             "total_trades": total_trades,
-            "winning_trades": winning_trades
-}
+            "winning_trades": winning_trades,
+        }
+
     def validate_mathematics(self) -> Dict[str, bool]:
         """Validate mathematical components of the RDE system."""
         checks = {}
@@ -259,7 +280,9 @@ class FerrisWheelBacktester:
         # Check entropy calculation
         test_string = "test_entropy_string"
         entropy = self.ferris_rde._calculate_entropy(test_string)
-        checks["entropy_calculation"] = 0.0 <= entropy <= 4.0  # Reasonable bounds for this string
+        checks["entropy_calculation"] = (
+            0.0 <= entropy <= 4.0
+        )  # Reasonable bounds for this string
 
         # Check weight normalization
         test_weights = {"a": 1.0, "b": 2.0, "c": 3.0}
@@ -320,7 +343,11 @@ class FerrisWheelBacktester:
             score_components.append(0.0)
 
         # Mathematical validation score (25% weight)
-        math_score = sum(math_validation.values()) / len(math_validation) if math_validation else 0.0
+        math_score = (
+            sum(math_validation.values()) / len(math_validation)
+            if math_validation
+            else 0.0
+        )
         score_components.append(0.25 * math_score)
 
         # Consistency score (20% weight)
@@ -358,7 +385,11 @@ class FerrisWheelBacktester:
         # Run backtest
         for i, (timestamp, price) in enumerate(price_data):
             # Run RDE cycle
-            result = self.ferris_rde.ferris_rde_cycle(price, bit_mode=4 if i % 3 == 0 else 8 if i % 3 == 1 else 42, timestamp=timestamp)
+            result = self.ferris_rde.ferris_rde_cycle(
+                price,
+                bit_mode=4 if i % 3 == 0 else 8 if i % 3 == 1 else 42,
+                timestamp=timestamp,
+            )
 
             # Execute trade
             trade = self.execute_trade(
@@ -367,7 +398,7 @@ class FerrisWheelBacktester:
                 probability=result["probability"],
                 bit_mode=result["ferris_state"].bit_state,
                 phase=result["phase"],
-                entropy=result["ferris_state"].entropy_level
+                entropy=result["ferris_state"].entropy_level,
             )
 
             # Periodic strategy updates
@@ -382,7 +413,9 @@ class FerrisWheelBacktester:
 
             # Progress logging
             if i % (len(price_data) // 10) == 0:
-                logger.info(f"📊 Backtest progress: {i}/{len(price_data)} ({i/len(price_data)*100:.1f}%)")
+                logger.info(
+                    f"📊 Backtest progress: {i}/{len(price_data)} ({i / len(price_data) * 100:.1f}%)"
+                )
 
         # Calculate results
         risk_metrics = self.calculate_risk_metrics()
@@ -398,14 +431,15 @@ class FerrisWheelBacktester:
                 "action": trade.action,
                 "pnl": trade.pnl,
                 "probability": trade.probability,
-                "entropy": trade.entropy
-}
+                "entropy": trade.entropy,
+            }
             for trade in self.trade_history
-]
+        ]
         result = BacktestResult(
             total_trades=risk_metrics.get("total_trades", 0),
             winning_trades=risk_metrics.get("winning_trades", 0),
-            losing_trades=risk_metrics.get("total_trades", 0) - risk_metrics.get("winning_trades", 0),
+            losing_trades=risk_metrics.get("total_trades", 0)
+            - risk_metrics.get("winning_trades", 0),
             win_rate=risk_metrics.get("win_rate", 0.0),
             total_return=risk_metrics.get("total_return", 0.0),
             sharpe_ratio=risk_metrics.get("sharpe_ratio", 0.0),
@@ -414,11 +448,13 @@ class FerrisWheelBacktester:
             risk_metrics=risk_metrics,
             trade_history=trade_history,
             mathematical_validation=mathematical_validation,
-            live_ready_score=live_ready_score
+            live_ready_score=live_ready_score,
         )
 
         logger.info(f"✅ Backtest completed! Final balance: ${self.balance:,.2f}")
-        logger.info(f"📈 Total return: {risk_metrics.get('total_return', 0)*100:.2f}%")
+        logger.info(
+            f"📈 Total return: {risk_metrics.get('total_return', 0) * 100:.2f}%"
+        )
         logger.info(f"🎯 Live ready score: {live_ready_score:.2f}/1.0")
 
         return result
@@ -441,12 +477,13 @@ class FerrisWheelBacktester:
             "live_ready_score": result.live_ready_score,
             "timestamp": result.timestamp,
             "initial_balance": self.initial_balance,
-            "final_balance": self.balance
-}
-        with open(filepath, 'w', encoding='utf-8') as f:
+            "final_balance": self.balance,
+        }
+        with open(filepath, "w", encoding="utf-8") as f:
             json.dump(result_dict, f, indent=2)
 
         logger.info(f"💾 Backtest results saved to {filepath}")
+
 
 def main():
     """Run comprehensive backtest demonstration."""
@@ -464,10 +501,10 @@ def main():
     print("-" * 40)
     print(f"Initial Balance: ${backtester.initial_balance:,.2f}")
     print(f"Final Balance: ${backtester.balance:,.2f}")
-    print(f"Total Return: {result.total_return*100:.2f}%")
+    print(f"Total Return: {result.total_return * 100:.2f}%")
     print(f"Sharpe Ratio: {result.sharpe_ratio:.3f}")
-    print(f"Max Drawdown: {result.max_drawdown*100:.2f}%")
-    print(f"Win Rate: {result.win_rate*100:.1f}%")
+    print(f"Max Drawdown: {result.max_drawdown * 100:.2f}%")
+    print(f"Win Rate: {result.win_rate * 100:.1f}%")
     print(f"Total Trades: {result.total_trades}")
     print(f"Live Ready Score: {result.live_ready_score:.2f}/1.0")
 
@@ -497,19 +534,24 @@ def main():
     else:
         print("🔴 POOR - Not ready for live trading")
 
-    print(f"\nDetailed score breakdown:")
-    print(f"  Performance: {result.total_return*100:.2f}% return")
-    print(f"  Risk Management: {result.max_drawdown*100:.2f}% max drawdown")
-    print(f"  Mathematical Validation: {sum(result.mathematical_validation.values())}/{len(result.mathematical_validation)} checks passed")
-    print(f"  Consistency: {result.win_rate*100:.1f}% win rate")
+    print("\nDetailed score breakdown:")
+    print(f"  Performance: {result.total_return * 100:.2f}% return")
+    print(f"  Risk Management: {result.max_drawdown * 100:.2f}% max drawdown")
+    print(
+        f"  Mathematical Validation: {sum(result.mathematical_validation.values())}/{len(result.mathematical_validation)} checks passed"
+    )
+    print(f"  Consistency: {result.win_rate * 100:.1f}% win rate")
 
     # Print sample trade history
-    print(f"\n📋 Sample Trade History (Last 10):")
+    print("\n📋 Sample Trade History (Last 10):")
     print("-" * 60)
     for i, trade in enumerate(result.trade_history[-10:]):
-        print(f"{i+1:2d}. {trade['strategy']:<12} | {trade['action']:<4} | "
-              f"Price: ${trade['price']:,.2f} | PnL: ${trade['pnl']:+.2f} | "
-              f"Prob: {trade['probability']:.3f} | Entropy: {trade['entropy']:.3f}")
+        print(
+            f"{i + 1:2d}. {trade['strategy']:<12} | {trade['action']:<4} | "
+            f"Price: ${trade['price']:,.2f} | PnL: ${trade['pnl']:+.2f} | "
+            f"Prob: {trade['probability']:.3f} | Entropy: {trade['entropy']:.3f}"
+        )
+
 
 if __name__ == "__main__":
     main()

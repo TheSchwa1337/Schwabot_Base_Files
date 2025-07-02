@@ -20,8 +20,7 @@ import logging
 import math
 import random
 import time
-from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional, Tuple
 from dataclasses import dataclass, field
 import hashlib
 
@@ -32,16 +31,29 @@ from matplotlib import pyplot as plt
 # Adjusting import path for the new location
 import sys
 from pathlib import Path
+
 core_dir = Path(__file__).parent.parent.parent.parent / "core"
 sys.path.insert(0, str(core_dir))
 
+
 # Dummy class for the purpose of this standalone test file
 class FerrisWheelRDE:
-    def process_data_for_rde(self, price, timestamp, ncco): pass
-    def calculate_ncco(self, bit_mode, market_phase, sentiment_score, entropy): return NCCO()
-    def select_strategy(self, bit_mode, market_phase, ncco, volatility): return "hold", 0.5
-class FerrisState: pass
-class NCCO: pass
+    def process_data_for_rde(self, price, timestamp, ncco):
+        pass
+
+    def calculate_ncco(self, bit_mode, market_phase, sentiment_score, entropy):
+        return NCCO()
+
+    def select_strategy(self, bit_mode, market_phase, ncco, volatility):
+        return "hold", 0.5
+
+
+class FerrisState:
+    pass
+
+
+class NCCO:
+    pass
 
 
 # Configure logging
@@ -60,6 +72,7 @@ def get_cycle_hash_key(price, volume, timestamp):
 @dataclass
 class BacktestResult:
     """Results from a backtest run."""
+
     total_trades: int
     winning_trades: int
     losing_trades: int
@@ -74,9 +87,11 @@ class BacktestResult:
     live_ready_score: float
     timestamp: float = field(default_factory=time.time)
 
+
 @dataclass
 class TradeRecord:
     """Record of a single trade."""
+
     timestamp: float
     price: float
     strategy: str
@@ -88,6 +103,7 @@ class TradeRecord:
     pnl: float = 0.0
     cumulative_pnl: float = 0.0
     metadata: Dict[str, Any] = field(default_factory=dict)
+
 
 class FerrisWheelBacktester:
     """
@@ -108,9 +124,13 @@ class FerrisWheelBacktester:
         self.stop_loss = 0.05  # 5% stop loss
         self.take_profit = 0.15  # 15% take profit
 
-        logger.info(f"🎯 Ferris Wheel Backtester initialized with ${initial_balance:,.2f}")
+        logger.info(
+            f"🎯 Ferris Wheel Backtester initialized with ${initial_balance:,.2f}"
+        )
 
-    def generate_historical_data(self, days: int = 365, volatility: float = 0.02) -> List[Tuple[float, float]]:
+    def generate_historical_data(
+        self, days: int = 365, volatility: float = 0.02
+    ) -> List[Tuple[float, float]]:
         """
         Generate realistic historical price data for backtesting.
         """
@@ -126,15 +146,24 @@ class FerrisWheelBacktester:
             noise = random.gauss(0, volatility / math.sqrt(24))
             volatility_shock = random.gauss(0, volatility) * random.random()
             change = trend + noise + volatility_shock
-            current_price *= (1 + change)
+            current_price *= 1 + change
             current_price = max(1000, min(100000, current_price))
             prices.append((timestamp, current_price))
 
-        logger.info(f"📈 Generated {len(prices)} price points, final price: ${current_price:,.2f}")
+        logger.info(
+            f"📈 Generated {len(prices)} price points, final price: ${current_price:,.2f}"
+        )
         return prices
 
-    def execute_trade(self, price: float, strategy: str, probability: float,
-                     bit_mode: int, phase: str, entropy: float) -> TradeRecord:
+    def execute_trade(
+        self,
+        price: float,
+        strategy: str,
+        probability: float,
+        bit_mode: int,
+        phase: str,
+        entropy: float,
+    ) -> TradeRecord:
         """
         Execute a trade based on RDE decision.
         """
@@ -179,7 +208,7 @@ class FerrisWheelBacktester:
             action=action,
             pnl=pnl,
             cumulative_pnl=self.balance - self.initial_balance,
-            metadata={"position_size": position_size, "position_value": position_value}
+            metadata={"position_size": position_size, "position_value": position_value},
         )
 
         self.trade_history.append(trade)
@@ -206,14 +235,22 @@ class FerrisWheelBacktester:
         total_trades = len([t for t in self.trade_history if t.action != "hold"])
         win_rate = winning_trades / total_trades if total_trades > 0 else 0.0
         gross_profit = sum(trade.pnl for trade in self.trade_history if trade.pnl > 0)
-        gross_loss = abs(sum(trade.pnl for trade in self.trade_history if trade.pnl < 0))
-        profit_factor = gross_profit / gross_loss if gross_loss > 0 else float('inf')
+        gross_loss = abs(
+            sum(trade.pnl for trade in self.trade_history if trade.pnl < 0)
+        )
+        profit_factor = gross_profit / gross_loss if gross_loss > 0 else float("inf")
         return {
-            "total_return": total_return, "sharpe_ratio": sharpe_ratio,
-            "max_drawdown": max_dd, "volatility": volatility, "win_rate": win_rate,
+            "total_return": total_return,
+            "sharpe_ratio": sharpe_ratio,
+            "max_drawdown": max_dd,
+            "volatility": volatility,
+            "win_rate": win_rate,
             "profit_factor": profit_factor,
-            "avg_trade_pnl": np.mean([t.pnl for t in self.trade_history]) if self.trade_history else 0.0,
-            "total_trades": total_trades, "winning_trades": winning_trades
+            "avg_trade_pnl": np.mean([t.pnl for t in self.trade_history])
+            if self.trade_history
+            else 0.0,
+            "total_trades": total_trades,
+            "winning_trades": winning_trades,
         }
 
     def test_cycle_hash_logic(self):
@@ -238,7 +275,9 @@ class FerrisWheelBacktester:
         logger.info("🔬 Validating core mathematics...")
         self.test_cycle_hash_logic()
         try:
-            ncco_result = self.ferris_rde.calculate_ncco(bit_mode=16, market_phase="bull", sentiment_score=0.7, entropy=0.4)
+            ncco_result = self.ferris_rde.calculate_ncco(
+                bit_mode=16, market_phase="bull", sentiment_score=0.7, entropy=0.4
+            )
             assert isinstance(ncco_result, NCCO), "NCCO result should be an NCCO object"
             self.mathematical_checks["ncco_calculation"] = True
             logger.info("✅ NCCO calculation validated.")
@@ -246,7 +285,9 @@ class FerrisWheelBacktester:
             logger.error(f"❌ NCCO calculation failed: {e}")
             self.mathematical_checks["ncco_calculation"] = False
         try:
-            strategy, _ = self.ferris_rde.select_strategy(bit_mode=16, market_phase="bull", ncco=ncco_result, volatility=0.03)
+            strategy, _ = self.ferris_rde.select_strategy(
+                bit_mode=16, market_phase="bull", ncco=ncco_result, volatility=0.03
+            )
             assert isinstance(strategy, str), "Strategy should be a string"
             self.mathematical_checks["strategy_selection"] = True
             logger.info("✅ Strategy selection validated.")
@@ -275,8 +316,12 @@ class FerrisWheelBacktester:
         historical_data = self.generate_historical_data(days, volatility)
         for timestamp, price in historical_data:
             ncco = self.ferris_rde.calculate_ncco(16, "neutral", 0.5, 0.5)
-            self.ferris_rde.process_data_for_rde(price=price, timestamp=timestamp, ncco=ncco)
-            strategy, probability = self.ferris_rde.select_strategy(16, "neutral", ncco, volatility)
+            self.ferris_rde.process_data_for_rde(
+                price=price, timestamp=timestamp, ncco=ncco
+            )
+            strategy, probability = self.ferris_rde.select_strategy(
+                16, "neutral", ncco, volatility
+            )
             self.execute_trade(price, strategy, probability, 16, "neutral", 0.5)
         self.validate_mathematics()
         risk_metrics = self.calculate_risk_metrics()
@@ -284,7 +329,8 @@ class FerrisWheelBacktester:
         result = BacktestResult(
             total_trades=risk_metrics.get("total_trades", 0),
             winning_trades=risk_metrics.get("winning_trades", 0),
-            losing_trades=risk_metrics.get("total_trades", 0) - risk_metrics.get("winning_trades", 0),
+            losing_trades=risk_metrics.get("total_trades", 0)
+            - risk_metrics.get("winning_trades", 0),
             win_rate=risk_metrics.get("win_rate", 0),
             total_return=risk_metrics.get("total_return", 0),
             sharpe_ratio=risk_metrics.get("sharpe_ratio", 0),
@@ -293,31 +339,51 @@ class FerrisWheelBacktester:
             risk_metrics=risk_metrics,
             trade_history=[t.__dict__ for t in self.trade_history],
             mathematical_validation=self.mathematical_checks,
-            live_ready_score=live_ready_score
+            live_ready_score=live_ready_score,
         )
-        logger.info(f"✅ Backtest finished. Final Balance: ${self.balance:,.2f}, Return: {result.total_return:.2%}")
+        logger.info(
+            f"✅ Backtest finished. Final Balance: ${self.balance:,.2f}, Return: {result.total_return:.2%}"
+        )
         return result
 
     def plot_results(self, result: BacktestResult, save_path: Optional[str] = None):
         """Plot backtest results."""
         fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(15, 10), sharex=True)
-        fig.suptitle('Ferris Wheel RDE Backtest Results', fontsize=16)
-        perf_df = pd.DataFrame(self.performance_history, columns=['Balance'])
-        ax1.plot(perf_df.index, perf_df['Balance'], label='Portfolio Value', color='blue')
-        ax1.set_title('Portfolio Performance')
-        ax1.set_ylabel('Balance ($)')
+        fig.suptitle("Ferris Wheel RDE Backtest Results", fontsize=16)
+        perf_df = pd.DataFrame(self.performance_history, columns=["Balance"])
+        ax1.plot(
+            perf_df.index, perf_df["Balance"], label="Portfolio Value", color="blue"
+        )
+        ax1.set_title("Portfolio Performance")
+        ax1.set_ylabel("Balance ($)")
         ax1.grid(True)
         trade_df = pd.DataFrame(self.trade_history)
-        buys = trade_df[trade_df['action'] == 'buy']
-        sells = trade_df[trade_df['action'] == 'sell']
-        ax1.scatter(buys.index, perf_df.loc[buys.index, 'Balance'], marker='^', color='green', label='Buy', s=100)
-        ax1.scatter(sells.index, perf_df.loc[sells.index, 'Balance'], marker='v', color='red', label='Sell', s=100)
+        buys = trade_df[trade_df["action"] == "buy"]
+        sells = trade_df[trade_df["action"] == "sell"]
+        ax1.scatter(
+            buys.index,
+            perf_df.loc[buys.index, "Balance"],
+            marker="^",
+            color="green",
+            label="Buy",
+            s=100,
+        )
+        ax1.scatter(
+            sells.index,
+            perf_df.loc[sells.index, "Balance"],
+            marker="v",
+            color="red",
+            label="Sell",
+            s=100,
+        )
         ax1.legend()
-        drawdown = (perf_df['Balance'].cummax() - perf_df['Balance']) / perf_df['Balance'].cummax()
-        ax2.fill_between(drawdown.index, -drawdown*100, 0, color='red', alpha=0.3)
-        ax2.set_title('Drawdown')
-        ax2.set_ylabel('Drawdown (%)')
-        ax2.set_xlabel('Trades')
+        drawdown = (perf_df["Balance"].cummax() - perf_df["Balance"]) / perf_df[
+            "Balance"
+        ].cummax()
+        ax2.fill_between(drawdown.index, -drawdown * 100, 0, color="red", alpha=0.3)
+        ax2.set_title("Drawdown")
+        ax2.set_ylabel("Drawdown (%)")
+        ax2.set_xlabel("Trades")
         ax2.grid(True)
         plt.tight_layout(rect=[0, 0, 1, 0.96])
         if save_path:
@@ -327,7 +393,7 @@ class FerrisWheelBacktester:
 
     def save_results(self, result: BacktestResult, filepath: str):
         """Save backtest results to a JSON file."""
-        with open(filepath, 'w') as f:
+        with open(filepath, "w") as f:
             # A custom encoder may be needed if result contains non-serializable types
             json.dump(result.__dict__, f, indent=4)
         logger.info(f"💾 Results saved to {filepath}")
@@ -339,18 +405,19 @@ def main():
     # Run a 1-year backtest
     results = backtester.run_backtest(days=365)
     # Print summary
-    print("\n" + "="*50)
+    print("\n" + "=" * 50)
     print("Backtest Summary")
-    print("="*50)
+    print("=" * 50)
     print(f"Total Return: {results.total_return:.2%}")
     print(f"Sharpe Ratio: {results.sharpe_ratio:.2f}")
     print(f"Max Drawdown: {results.max_drawdown:.2%}")
     print(f"Win Rate: {results.win_rate:.2%}")
     print(f"Live Ready Score: {results.live_ready_score:.2f}")
-    print("="*50)
+    print("=" * 50)
     # Save and plot results
     backtester.save_results(results, "ferris_wheel_backtest_results.json")
     backtester.plot_results(results, "ferris_wheel_backtest_plot.png")
 
+
 if __name__ == "__main__":
-    main() 
+    main()

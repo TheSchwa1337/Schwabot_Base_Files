@@ -1,14 +1,11 @@
 from dual_unicore_handler import DualUnicoreHandler
 from pathlib import Path
-from typing import List, Dict, Any, Optional
 import argparse
 import json
-import os
 import platform
 import shutil
 import subprocess
 import sys
-import yaml
 
 
 # Initialize Unicode handler
@@ -91,11 +88,19 @@ class PackageBuilder:
 
         try:
             # Build wheel and source distribution
-            subprocess.run([
-                sys.executable, "-m", "build",
-                "--wheel", "--sdist",
-                "--outdir", str(self.dist_dir)
-            ], check=True, cwd=self.project_root)
+            subprocess.run(
+                [
+                    sys.executable,
+                    "-m",
+                    "build",
+                    "--wheel",
+                    "--sdist",
+                    "--outdir",
+                    str(self.dist_dir),
+                ],
+                check=True,
+                cwd=self.project_root,
+            )
 
             print("✅ Python packages built successfully")
 
@@ -143,10 +148,15 @@ Schwabot is a comprehensive trading system with mathematical precision,
             control_file.write_text(control_content)
 
             # Build .deb package
-            subprocess.run([
-                "dpkg - deb", "--build", str(deb_dir),
-                str(self.dist_dir / f"{self.package_name}-{self.version}.deb")
-            ], check=True)
+            subprocess.run(
+                [
+                    "dpkg - deb",
+                    "--build",
+                    str(deb_dir),
+                    str(self.dist_dir / f"{self.package_name}-{self.version}.deb"),
+                ],
+                check=True,
+            )
 
             print("✅ .deb package built")
 
@@ -187,10 +197,16 @@ python3 -m pip uninstall -y {self.package_name}"""
             spec_file.write_text(spec_content)
 
             # Build RPM package
-            subprocess.run([
-                "rpmbuild", "-bb", "--define", f"_rpmdir {self.dist_dir}",
-                str(spec_file)
-            ], check=True)
+            subprocess.run(
+                [
+                    "rpmbuild",
+                    "-bb",
+                    "--define",
+                    f"_rpmdir {self.dist_dir}",
+                    str(spec_file),
+                ],
+                check=True,
+            )
 
             print("✅ .rpm package built")
 
@@ -216,7 +232,7 @@ exec python3 usr / bin / schwabot "$@"
             apprun_file.chmod(0o755)
 
             # Create .desktop file
-            desktop_content = f"""[Desktop Entry]
+            desktop_content = """[Desktop Entry]
 Name = Schwabot
 Comment = Hardware - scale - aware economic kernel for federated trading devices
 Exec = schwabot
@@ -229,10 +245,17 @@ Categories = Office;Finance;"""
             desktop_file.write_text(desktop_content)
 
             # Build AppImage
-            subprocess.run([
-                "appimagetool", str(appdir),
-                str(self.dist_dir / f"{self.package_name}-{self.version}-x86_64.AppImage")
-            ], check=True)
+            subprocess.run(
+                [
+                    "appimagetool",
+                    str(appdir),
+                    str(
+                        self.dist_dir
+                        / f"{self.package_name}-{self.version}-x86_64.AppImage"
+                    ),
+                ],
+                check=True,
+            )
 
             print("✅ AppImage built")
 
@@ -260,21 +283,30 @@ Categories = Office;Finance;"""
 
         try:
             # Install PyInstaller if not available
-            subprocess.run([
-                sys.executable, "-m", "pip", "install", "pyinstaller"
-            ], check=True)
+            subprocess.run(
+                [sys.executable, "-m", "pip", "install", "pyinstaller"], check=True
+            )
 
             # Build executable
-            subprocess.run([
-                sys.executable, "-m", "PyInstaller",
-                "--onefile",
-                "--windowed",
-                "--name", self.package_name,
-                "--distpath", str(self.dist_dir),
-                "--workpath", str(self.build_dir / "pyinstaller"),
-                "--specpath", str(self.build_dir / "pyinstaller"),
-                str(self.project_root / "run_schwabot.py")
-            ], check=True)
+            subprocess.run(
+                [
+                    sys.executable,
+                    "-m",
+                    "PyInstaller",
+                    "--onefile",
+                    "--windowed",
+                    "--name",
+                    self.package_name,
+                    "--distpath",
+                    str(self.dist_dir),
+                    "--workpath",
+                    str(self.build_dir / "pyinstaller"),
+                    "--specpath",
+                    str(self.build_dir / "pyinstaller"),
+                    str(self.project_root / "run_schwabot.py"),
+                ],
+                check=True,
+            )
 
             print("✅ .exe package built")
 
@@ -287,9 +319,9 @@ Categories = Office;Finance;"""
 
         try:
             # Install cx_Freeze if not available
-            subprocess.run([
-                sys.executable, "-m", "pip", "install", "cx_Freeze"
-            ], check=True)
+            subprocess.run(
+                [sys.executable, "-m", "pip", "install", "cx_Freeze"], check=True
+            )
 
             # Create setup script for cx_Freeze
             setup_cx_content = f"""from cx_Freeze import setup, Executable
@@ -318,9 +350,11 @@ setup(
             setup_cx_file.write_text(setup_cx_content)
 
             # Build MSI
-            subprocess.run([
-                sys.executable, str(setup_cx_file), "bdist_msi"
-            ], check=True, cwd=self.build_dir)
+            subprocess.run(
+                [sys.executable, str(setup_cx_file), "bdist_msi"],
+                check=True,
+                cwd=self.build_dir,
+            )
 
             # Move MSI to dist directory
             for msi_file in self.build_dir.rglob("*.msi"):
@@ -337,7 +371,9 @@ setup(
 
         try:
             # Create portable directory
-            portable_dir = self.dist_dir / f"{self.package_name}-{self.version}-portable"
+            portable_dir = (
+                self.dist_dir / f"{self.package_name}-{self.version}-portable"
+            )
             portable_dir.mkdir(exist_ok=True)
 
             # Copy Python files
@@ -350,7 +386,9 @@ setup(
             for dir_name in ["core", "ui", "config", "utils", "mathlib", "ncco_core"]:
                 src_dir = self.project_root / dir_name
                 if src_dir.exists():
-                    shutil.copytree(src_dir, portable_dir / dir_name, dirs_exist_ok=True)
+                    shutil.copytree(
+                        src_dir, portable_dir / dir_name, dirs_exist_ok=True
+                    )
 
             # Create batch file for Windows
             batch_content = """@echo off
@@ -363,10 +401,7 @@ pause"""
 
             # Create ZIP archive
             shutil.make_archive(
-                str(portable_dir),
-                'zip',
-                portable_dir.parent,
-                portable_dir.name
+                str(portable_dir), "zip", portable_dir.parent, portable_dir.name
             )
 
             # Clean up directory
@@ -398,9 +433,9 @@ pause"""
 
         try:
             # Install py2app if not available
-            subprocess.run([
-                sys.executable, "-m", "pip", "install", "py2app"
-            ], check=True)
+            subprocess.run(
+                [sys.executable, "-m", "pip", "install", "py2app"], check=True
+            )
 
             # Create setup script for py2app
             setup_py2app_content = f"""from setuptools import setup
@@ -438,9 +473,11 @@ setup(
             setup_py2app_file.write_text(setup_py2app_content)
 
             # Build App bundle
-            subprocess.run([
-                sys.executable, str(setup_py2app_file), "py2app"
-            ], check=True, cwd=self.build_dir)
+            subprocess.run(
+                [sys.executable, str(setup_py2app_file), "py2app"],
+                check=True,
+                cwd=self.build_dir,
+            )
 
             # Move App bundle to dist directory
             app_bundle = self.build_dir / "dist" / f"{self.package_name}.app"
@@ -462,12 +499,21 @@ setup(
             dmg_path = self.dist_dir / f"{self.package_name}-{self.version}.dmg"
 
             if app_path.exists():
-                subprocess.run([
-                    "hdiutil", "create", "-volname", self.package_name,
-                    "-srcfolder", str(app_path),
-                    "-ov", "-format", "UDZO",
-                    str(dmg_path)
-                ], check=True)
+                subprocess.run(
+                    [
+                        "hdiutil",
+                        "create",
+                        "-volname",
+                        self.package_name,
+                        "-srcfolder",
+                        str(app_path),
+                        "-ov",
+                        "-format",
+                        "UDZO",
+                        str(dmg_path),
+                    ],
+                    check=True,
+                )
 
                 print("✅ .dmg package built")
             else:
@@ -486,11 +532,17 @@ setup(
             pkg_path = self.dist_dir / f"{self.package_name}-{self.version}.pkg"
 
             if app_path.exists():
-                subprocess.run([
-                    "pkgbuild", "--component", str(app_path),
-                    "--install-location", "/Applications",
-                    str(pkg_path)
-                ], check=True)
+                subprocess.run(
+                    [
+                        "pkgbuild",
+                        "--component",
+                        str(app_path),
+                        "--install-location",
+                        "/Applications",
+                        str(pkg_path),
+                    ],
+                    check=True,
+                )
 
                 print("✅ .pkg package built")
             else:
@@ -505,7 +557,7 @@ setup(
 
         try:
             # Create Dockerfile
-            dockerfile_content = f"""FROM python:3.9 - slim
+            dockerfile_content = """FROM python:3.9 - slim
 
 # Set environment variables
 ENV PYTHONUNBUFFERED = 1
@@ -541,10 +593,19 @@ CMD ["python", "run_schwabot.py"]
             dockerfile_path.write_text(dockerfile_content)
 
             # Build Docker image
-            subprocess.run([
-                "docker", "build", "-t", f"{self.package_name}:{self.version}",
-                "-t", f"{self.package_name}:latest", "."
-            ], check=True, cwd=self.project_root)
+            subprocess.run(
+                [
+                    "docker",
+                    "build",
+                    "-t",
+                    f"{self.package_name}:{self.version}",
+                    "-t",
+                    f"{self.package_name}:latest",
+                    ".",
+                ],
+                check=True,
+                cwd=self.project_root,
+            )
 
             print("✅ Docker image built successfully")
 
@@ -639,12 +700,14 @@ echo "Run 'schwabot' to start the system"
         # List all files in dist directory
         for file_path in self.dist_dir.rglob("*"):
             if file_path.is_file():
-                packages.append({
-                    "name": file_path.name,
-                    "size": file_path.stat().st_size,
-                    "type": file_path.suffix,
-                    "path": str(file_path.relative_to(self.dist_dir))
-                })
+                packages.append(
+                    {
+                        "name": file_path.name,
+                        "size": file_path.stat().st_size,
+                        "type": file_path.suffix,
+                        "path": str(file_path.relative_to(self.dist_dir)),
+                    }
+                )
 
         # Create summary file
         summary = {
@@ -654,14 +717,14 @@ echo "Run 'schwabot' to start the system"
             "platform": self.current_platform,
             "architecture": self.current_arch,
             "packages": packages,
-            "total_packages": len(packages)
+            "total_packages": len(packages),
         }
 
         summary_file = self.dist_dir / "package_summary.json"
         summary_file.write_text(json.dumps(summary, indent=2))
 
         # Print summary
-        print(f"\n📦 Package Summary:")
+        print("\n📦 Package Summary:")
         print(f"   Project: {self.package_name} v{self.version}")
         print(f"   Total packages: {len(packages)}")
         print(f"   Build directory: {self.dist_dir}")
@@ -675,12 +738,24 @@ echo "Run 'schwabot' to start the system"
 
 def main():
     """Main entry point."""
-    parser = argparse.ArgumentParser(description="Build Schwabot packages for multiple platforms")
-    parser.add_argument("--platform", choices=["all", "linux", "windows", "macos", "python"],
-                        default="python", help="Target platform(s)")
-    parser.add_argument("--format", choices=["all", "deb", "rpm", "appimage", "exe", "msi", "dmg", "pkg"],
-                        default="all", help="Package format(s)")
-    parser.add_argument("--clean", action="store_true", help="Clean build directories before building")
+    parser = argparse.ArgumentParser(
+        description="Build Schwabot packages for multiple platforms"
+    )
+    parser.add_argument(
+        "--platform",
+        choices=["all", "linux", "windows", "macos", "python"],
+        default="python",
+        help="Target platform(s)",
+    )
+    parser.add_argument(
+        "--format",
+        choices=["all", "deb", "rpm", "appimage", "exe", "msi", "dmg", "pkg"],
+        default="all",
+        help="Package format(s)",
+    )
+    parser.add_argument(
+        "--clean", action="store_true", help="Clean build directories before building"
+    )
     parser.add_argument("--docker", action="store_true", help="Build Docker image")
 
     args = parser.parse_args()

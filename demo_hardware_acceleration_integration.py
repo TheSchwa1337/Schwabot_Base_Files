@@ -26,13 +26,12 @@ from core.zpe_core import ZPECore, ZPEMode
 from core.zbe_core import ZBECore, ZBEMode
 from core.hardware_acceleration_manager import (
     HardwareAccelerationManager,
-    AccelerationMode
+    AccelerationMode,
 )
 
 # Setup logging
 logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
 
@@ -40,30 +39,30 @@ logger = logging.getLogger(__name__)
 def simulate_market_conditions() -> Dict[str, Any]:
     """Simulate realistic market conditions for testing."""
     return {
-        'volatility': np.random.uniform(0.1, 0.3),
-        'system_load': np.random.uniform(0.3, 0.8),
-        'computational_load': np.random.uniform(0.4, 0.9),
-        'memory_usage': np.random.uniform(0.2, 0.7),
-        'volume_profile': np.random.uniform(0.8, 1.2),
-        'momentum': np.random.uniform(-0.5, 0.5)
+        "volatility": np.random.uniform(0.1, 0.3),
+        "system_load": np.random.uniform(0.3, 0.8),
+        "computational_load": np.random.uniform(0.4, 0.9),
+        "memory_usage": np.random.uniform(0.2, 0.7),
+        "volume_profile": np.random.uniform(0.8, 1.2),
+        "momentum": np.random.uniform(-0.5, 0.5),
     }
 
 
 def simulate_mathematical_state() -> Dict[str, Any]:
     """Simulate mathematical state for complexity estimation."""
     return {
-        'complexity': np.random.uniform(0.3, 0.8),
-        'stability': np.random.uniform(0.4, 0.9),
-        'tensor_rank': np.random.randint(2, 6),
-        'matrix_dimensions': np.random.randint(100, 1000)
+        "complexity": np.random.uniform(0.3, 0.8),
+        "stability": np.random.uniform(0.4, 0.9),
+        "tensor_rank": np.random.randint(2, 6),
+        "matrix_dimensions": np.random.randint(100, 1000),
     }
 
 
 def demonstrate_zpe_optimization():
     """Demonstrate ZPE thermal and computational optimization."""
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("🌌 ZPE (Zero Point Energy) Core Demonstration")
-    print("="*60)
+    print("=" * 60)
 
     # Initialize ZPE core
     zpe_core = ZPECore(precision=64)
@@ -80,9 +79,9 @@ def demonstrate_zpe_optimization():
 
         # Calculate thermal efficiency
         thermal_data = zpe_core.calculate_thermal_efficiency(
-            market_volatility=market_conditions['volatility'],
-            system_load=market_conditions['system_load'],
-            mathematical_state=mathematical_state
+            market_volatility=market_conditions["volatility"],
+            system_load=market_conditions["system_load"],
+            mathematical_state=mathematical_state,
         )
 
         # Get computational boost
@@ -92,8 +91,12 @@ def demonstrate_zpe_optimization():
         print(f"  📊 Market Volatility: {market_conditions['volatility']:.3f}")
         print(f"  🔥 Thermal State: {thermal_data.thermal_state:.3f}")
         print(f"  ⚡ Energy Efficiency: {thermal_data.energy_efficiency:.3f}")
-        print(f"  🚀 Computational Throughput: {thermal_data.computational_throughput:.3f}")
-        print(f"  📈 Tensor Calculation Multiplier: {boost_factors['tensor_calculation_multiplier']:.3f}")
+        print(
+            f"  🚀 Computational Throughput: {thermal_data.computational_throughput:.3f}"
+        )
+        print(
+            f"  📈 Tensor Calculation Multiplier: {boost_factors['tensor_calculation_multiplier']:.3f}"
+        )
         print(f"  🧠 CPU Utilization: {thermal_data.cpu_utilization:.3f}")
         print(f"  💾 Memory Utilization: {thermal_data.memory_utilization:.3f}")
         print()
@@ -103,9 +106,9 @@ def demonstrate_zpe_optimization():
 
 def demonstrate_zbe_optimization():
     """Demonstrate ZBE bit-level optimization."""
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("⚡ ZBE (Zero Bit Energy) Core Demonstration")
-    print("="*60)
+    print("=" * 60)
 
     # Initialize ZBE core
     zbe_core = ZBECore(precision=64)
@@ -122,15 +125,14 @@ def demonstrate_zbe_optimization():
 
         # Calculate bit efficiency
         bit_data = zbe_core.calculate_bit_efficiency(
-            computational_load=market_conditions['computational_load'],
-            memory_usage=market_conditions['memory_usage'],
-            mathematical_state=mathematical_state
+            computational_load=market_conditions["computational_load"],
+            memory_usage=market_conditions["memory_usage"],
+            mathematical_state=mathematical_state,
         )
 
         # Calculate memory efficiency
         memory_data = zbe_core.calculate_memory_efficiency(
-            bit_data=bit_data,
-            system_conditions=market_conditions
+            bit_data=bit_data, system_conditions=market_conditions
         )
 
         # Get computational optimization
@@ -146,7 +148,9 @@ def demonstrate_zbe_optimization():
         if memory_data:
             print(f"  🎯 Memory Efficiency: {memory_data.memory_efficiency:.3f}")
             print(f"  ⏱️  Memory Latency: {memory_data.memory_latency:.1f}ns")
-        print(f"  🚀 Optimization Factor: {optimization_factors['computational_optimization_factor']:.3f}")
+        print(
+            f"  🚀 Optimization Factor: {optimization_factors['computational_optimization_factor']:.3f}"
+        )
         print()
 
         time.sleep(0.5)
@@ -154,9 +158,9 @@ def demonstrate_zbe_optimization():
 
 def demonstrate_unified_acceleration():
     """Demonstrate unified hardware acceleration."""
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("🚀 Unified Hardware Acceleration Manager Demonstration")
-    print("="*60)
+    print("=" * 60)
 
     # Initialize hardware acceleration manager
     accel_manager = HardwareAccelerationManager(precision=64)
@@ -173,21 +177,28 @@ def demonstrate_unified_acceleration():
 
         # Calculate unified acceleration
         acceleration_metrics = accel_manager.calculate_unified_acceleration(
-            market_conditions=market_conditions,
-            mathematical_state=mathematical_state
+            market_conditions=market_conditions, mathematical_state=mathematical_state
         )
 
         # Get acceleration factors
-        acceleration_factors = accel_manager.get_acceleration_factors()
+        accel_manager.get_acceleration_factors()
 
         print(f"Cycle {cycle + 1}:")
         print(f"  🌌 ZPE Boost Factor: {acceleration_metrics.zpe_boost_factor:.3f}")
-        print(f"  ⚡ ZBE Optimization Factor: {acceleration_metrics.zbe_optimization_factor:.3f}")
-        print(f"  🚀 Combined Acceleration: {acceleration_metrics.combined_acceleration:.3f}")
+        print(
+            f"  ⚡ ZBE Optimization Factor: {acceleration_metrics.zbe_optimization_factor:.3f}"
+        )
+        print(
+            f"  🚀 Combined Acceleration: {acceleration_metrics.combined_acceleration:.3f}"
+        )
         print(f"  🔥 Thermal Efficiency: {acceleration_metrics.thermal_efficiency:.3f}")
-        print(f"  🧠 Computational Efficiency: {acceleration_metrics.computational_efficiency:.3f}")
+        print(
+            f"  🧠 Computational Efficiency: {acceleration_metrics.computational_efficiency:.3f}"
+        )
         print(f"  💾 Memory Efficiency: {acceleration_metrics.memory_efficiency:.3f}")
-        print(f"  📈 Overall Performance Boost: {acceleration_metrics.overall_performance_boost:.3f}")
+        print(
+            f"  📈 Overall Performance Boost: {acceleration_metrics.overall_performance_boost:.3f}"
+        )
         print()
 
         time.sleep(0.5)
@@ -195,9 +206,9 @@ def demonstrate_unified_acceleration():
 
 def demonstrate_tensor_optimization():
     """Demonstrate tensor calculation optimization."""
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("🧮 Tensor Calculation Optimization Demonstration")
-    print("="*60)
+    print("=" * 60)
 
     # Initialize hardware acceleration manager
     accel_manager = HardwareAccelerationManager(precision=64)
@@ -209,10 +220,30 @@ def demonstrate_tensor_optimization():
 
     # Simulate different tensor operations
     tensor_scenarios = [
-        {"complexity": 0.3, "size": 1000, "type": "element_wise", "name": "Element-wise Operations"},
-        {"complexity": 0.6, "size": 10000, "type": "matrix_multiply", "name": "Matrix Multiplication"},
-        {"complexity": 0.8, "size": 100000, "type": "convolution", "name": "Convolution Operations"},
-        {"complexity": 0.9, "size": 1000000, "type": "general", "name": "Large Tensor Operations"}
+        {
+            "complexity": 0.3,
+            "size": 1000,
+            "type": "element_wise",
+            "name": "Element-wise Operations",
+        },
+        {
+            "complexity": 0.6,
+            "size": 10000,
+            "type": "matrix_multiply",
+            "name": "Matrix Multiplication",
+        },
+        {
+            "complexity": 0.8,
+            "size": 100000,
+            "type": "convolution",
+            "name": "Convolution Operations",
+        },
+        {
+            "complexity": 0.9,
+            "size": 1000000,
+            "type": "general",
+            "name": "Large Tensor Operations",
+        },
     ]
 
     for i, scenario in enumerate(tensor_scenarios):
@@ -220,21 +251,31 @@ def demonstrate_tensor_optimization():
         optimization_factors = accel_manager.optimize_tensor_calculations(
             tensor_complexity=scenario["complexity"],
             tensor_size=scenario["size"],
-            operation_type=scenario["type"]
+            operation_type=scenario["type"],
         )
 
         print(f"Scenario {i + 1}: {scenario['name']}")
         print(f"  📊 Tensor Complexity: {scenario['complexity']:.3f}")
         print(f"  📏 Tensor Size: {scenario['size']:,}")
         print(f"  🔧 Operation Type: {scenario['type']}")
-        print(f"  🚀 Speedup Multiplier: {optimization_factors['speedup_multiplier']:.3f}")
+        print(
+            f"  🚀 Speedup Multiplier: {optimization_factors['speedup_multiplier']:.3f}"
+        )
         print(f"  🌌 ZPE Speedup: {optimization_factors['zpe_speedup']:.3f}")
         print(f"  ⚡ ZBE Speedup: {optimization_factors['zbe_speedup']:.3f}")
         print(f"  🔄 Unified Speedup: {optimization_factors['unified_speedup']:.3f}")
-        print(f"  📈 Operation Multiplier: {optimization_factors['operation_multiplier']:.3f}")
-        print(f"  🔥 Thermal Efficiency: {optimization_factors['thermal_efficiency']:.3f}")
-        print(f"  🧠 Computational Efficiency: {optimization_factors['computational_efficiency']:.3f}")
-        print(f"  💾 Memory Efficiency: {optimization_factors['memory_efficiency']:.3f}")
+        print(
+            f"  📈 Operation Multiplier: {optimization_factors['operation_multiplier']:.3f}"
+        )
+        print(
+            f"  🔥 Thermal Efficiency: {optimization_factors['thermal_efficiency']:.3f}"
+        )
+        print(
+            f"  🧠 Computational Efficiency: {optimization_factors['computational_efficiency']:.3f}"
+        )
+        print(
+            f"  💾 Memory Efficiency: {optimization_factors['memory_efficiency']:.3f}"
+        )
         print(f"  📊 Overall Boost: {optimization_factors['overall_boost']:.3f}")
         print()
 
@@ -243,9 +284,9 @@ def demonstrate_tensor_optimization():
 
 def demonstrate_performance_reporting():
     """Demonstrate performance reporting capabilities."""
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("📊 Performance Reporting Demonstration")
-    print("="*60)
+    print("=" * 60)
 
     # Initialize hardware acceleration manager
     accel_manager = HardwareAccelerationManager(precision=64)
@@ -259,8 +300,7 @@ def demonstrate_performance_reporting():
         mathematical_state = simulate_mathematical_state()
 
         accel_manager.calculate_unified_acceleration(
-            market_conditions=market_conditions,
-            mathematical_state=mathematical_state
+            market_conditions=market_conditions, mathematical_state=mathematical_state
         )
 
         time.sleep(0.1)
@@ -274,7 +314,9 @@ def demonstrate_performance_reporting():
     print(f"  🌌 ZPE Boost: {performance_report['zpe_boost']:.3f}")
     print(f"  ⚡ ZBE Optimization: {performance_report['zbe_optimization']:.3f}")
     print(f"  🔥 Thermal Efficiency: {performance_report['thermal_efficiency']:.3f}")
-    print(f"  🧠 Computational Efficiency: {performance_report['computational_efficiency']:.3f}")
+    print(
+        f"  🧠 Computational Efficiency: {performance_report['computational_efficiency']:.3f}"
+    )
     print(f"  💾 Memory Efficiency: {performance_report['memory_efficiency']:.3f}")
     print(f"  📈 Recent Average: {performance_report['recent_average']:.3f}")
     print(f"  📊 Trend: {performance_report['trend']}")
@@ -283,7 +325,7 @@ def demonstrate_performance_reporting():
     print()
 
     print("🖥️  Hardware Profile:")
-    hw_profile = performance_report['hardware_profile']
+    hw_profile = performance_report["hardware_profile"]
     print(f"  🧠 CPU Cores: {hw_profile['cpu_cores']}")
     print(f"  ⚡ CPU Frequency: {hw_profile['cpu_frequency']:.1f} GHz")
     print(f"  💾 Total Memory: {hw_profile['memory_total'] / (1024**3):.1f} GB")
@@ -294,11 +336,17 @@ def demonstrate_performance_reporting():
 def main():
     """Main demonstration function."""
     print("🚀 HARDWARE ACCELERATION INTEGRATION DEMONSTRATION")
-    print("="*80)
+    print("=" * 80)
     print()
-    print("🎯 PURPOSE: Demonstrate how ZPE and ZBE systems provide hardware acceleration")
-    print("⚠️  CRITICAL: These systems do NOT affect trading decisions or profit calculations")
-    print("🔧 FOCUS: Optimizing computational performance for faster tensor calculations")
+    print(
+        "🎯 PURPOSE: Demonstrate how ZPE and ZBE systems provide hardware acceleration"
+    )
+    print(
+        "⚠️  CRITICAL: These systems do NOT affect trading decisions or profit calculations"
+    )
+    print(
+        "🔧 FOCUS: Optimizing computational performance for faster tensor calculations"
+    )
     print()
 
     try:
@@ -309,9 +357,9 @@ def main():
         demonstrate_tensor_optimization()
         demonstrate_performance_reporting()
 
-        print("="*80)
+        print("=" * 80)
         print("✅ DEMONSTRATION COMPLETED SUCCESSFULLY")
-        print("="*80)
+        print("=" * 80)
         print()
         print("🎯 KEY TAKEAWAYS:")
         print("  • ZPE and ZBE systems work together for optimal hardware performance")

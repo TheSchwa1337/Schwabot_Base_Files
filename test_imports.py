@@ -6,6 +6,7 @@ Test script to verify all core module imports and basic functionality.
 import sys
 import traceback
 
+
 def test_imports():
     """Test all core module imports."""
 
@@ -14,9 +15,6 @@ def test_imports():
 
     # Test 1: Basic imports
     try:
-        from core.unified_math_system import UnifiedMathSystem
-        from core.price_precision_utils import format_price, get_active_decimals
-        from core.unified_api_coordinator import ExchangeType, UnifiedApiCoordinator
         print("✅ Basic core imports successful")
     except Exception as e:
         print(f"❌ Basic imports failed: {e}")
@@ -24,7 +22,6 @@ def test_imports():
 
     # Test 2: Phase bit integration
     try:
-        from core.phase_bit_integration import BitPhase, PhaseBitIntegration, StrategyType
         print("✅ Phase bit integration import successful")
     except Exception as e:
         print(f"❌ Phase bit integration import failed: {e}")
@@ -32,7 +29,6 @@ def test_imports():
 
     # Test 3: Profit vectorization
     try:
-        from core.unified_profit_vectorization_system import UnifiedProfitVectorizationSystem, VectorizationType
         print("✅ Profit vectorization import successful")
     except Exception as e:
         print(f"❌ Profit vectorization import failed: {e}")
@@ -40,7 +36,6 @@ def test_imports():
 
     # Test 4: Dual unicore handler
     try:
-        from core.dual_unicore_handler import DualUnicoreHandler, ProcessingMode
         print("✅ Dual unicore handler import successful")
     except Exception as e:
         print(f"❌ Dual unicore handler import failed: {e}")
@@ -48,7 +43,6 @@ def test_imports():
 
     # Test 5: Dualistic thought engines
     try:
-        from core.dualistic_thought_engines import DualisticThoughtEngines, dualistic_engines
         print("✅ Dualistic thought engines import successful")
     except Exception as e:
         print(f"❌ Dualistic thought engines import failed: {e}")
@@ -56,6 +50,7 @@ def test_imports():
         return False
 
     return True
+
 
 def test_functionality():
     """Test basic functionality of core modules."""
@@ -66,29 +61,36 @@ def test_functionality():
     try:
         # Test UnifiedMathSystem
         from core.unified_math_system import UnifiedMathSystem
+
         math_system = UnifiedMathSystem()
         result = math_system.add(10.5, 5.2)
         print(f"✅ Math system add: {result}")
 
         # Test price formatting
         from core.price_precision_utils import format_price
+
         formatted_price = format_price(50321.123456789, decimals=6)
         print(f"✅ Price formatting: {formatted_price}")
 
         # Test exchange types
         from core.unified_api_coordinator import ExchangeType, UnifiedApiCoordinator
+
         coordinator = UnifiedApiCoordinator()
         coordinator.add_exchange(ExchangeType.COINBASE, {"api_key": "test"})
         print(f"✅ API coordinator: {len(coordinator.exchanges)} exchanges")
 
         # Test phase bit integration
-        from core.phase_bit_integration import PhaseBitIntegration, BitPhase
+        from core.phase_bit_integration import PhaseBitIntegration
+
         phase_system = PhaseBitIntegration()
         result = phase_system.resolve_bit_phase("test_data", "auto")
         print(f"✅ Phase bit integration: {result.bit_phase.value}")
 
         # Test profit vectorization
-        from core.unified_profit_vectorization_system import UnifiedProfitVectorizationSystem
+        from core.unified_profit_vectorization_system import (
+            UnifiedProfitVectorizationSystem,
+        )
+
         profit_system = UnifiedProfitVectorizationSystem()
         sample_data = {"time_series": [100, 105, 98, 110], "total_profit": 110}
         result = profit_system.vectorize_profit_stream(sample_data)
@@ -96,13 +98,17 @@ def test_functionality():
 
         # Test dual core handler
         from core.dual_unicore_handler import DualUnicoreHandler
+
         handler = DualUnicoreHandler(max_workers=2)
-        math_result = handler.execute_mathematical_operation("mean", [1.0, 2.0, 3.0, 4.0])
+        math_result = handler.execute_mathematical_operation(
+            "mean", [1.0, 2.0, 3.0, 4.0]
+        )
         handler.shutdown()
         print(f"✅ Dual core handler: mean = {math_result['result']:.2f}")
 
         # Test dualistic thought engines
         from core.dualistic_thought_engines import DualisticThoughtEngines
+
         engines = DualisticThoughtEngines()
 
         sample_market_data = {
@@ -119,10 +125,12 @@ def test_functionality():
             "sentiment_score": 0.6,
             "performance_delta": 0.02,
             "actual_profit": 50.0,
-            "consensus_signal": "hold"
-}
+            "consensus_signal": "hold",
+        }
         thought_result = engines.process_market_data(sample_market_data)
-        print(f"✅ Dualistic engines: {thought_result.decision} (confidence: {thought_result.confidence:.3f})")
+        print(
+            f"✅ Dualistic engines: {thought_result.decision} (confidence: {thought_result.confidence:.3f})"
+        )
 
         performance = engines.get_engine_performance()
         print(f"✅ Engine performance: {performance['success_rate']:.2%} success rate")
@@ -133,6 +141,7 @@ def test_functionality():
         print(f"❌ Functionality test failed: {e}")
         traceback.print_exc()
         return False
+
 
 def main():
     """Main test function."""
@@ -160,6 +169,7 @@ def main():
     else:
         print("\n⚠️  Some tests failed. Check the error messages above.")
         return False
+
 
 if __name__ == "__main__":
     success = main()

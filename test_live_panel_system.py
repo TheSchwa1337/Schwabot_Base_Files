@@ -7,7 +7,6 @@ Tests the complete live panel system with API connectivity and dynamic switching
 import sys
 import time
 import json
-from datetime import datetime
 from core.speed_lattice_visualizer import SpeedLatticeLivePanelSystem, PanelType
 
 
@@ -38,8 +37,8 @@ def test_panel_system():
         PanelType.CHRONO_BIAS,
         PanelType.TRADING_STATE,
         PanelType.POOL_ANALYSIS,
-        PanelType.PATTERN_RECOGNITION
-]
+        PanelType.PATTERN_RECOGNITION,
+    ]
     for panel_type in test_panels:
         panel_system.switch_panel(panel_type)
         print(f"   ✅ Switched to: {panel_type.value}")
@@ -56,7 +55,9 @@ def test_panel_system():
     for panel_type in test_panels:
         panel_state = panel_system.panels[panel_type]
         panel_state.update_data({"test": "data", "timestamp": time.time()})
-        print(f"   ✅ Updated {panel_type.value}: {len(panel_state.history)} history entries")
+        print(
+            f"   ✅ Updated {panel_type.value}: {len(panel_state.history)} history entries"
+        )
 
     # Test 6: Save Panel State
     print("\n🧪 Test 6: Save Panel State")
@@ -65,7 +66,7 @@ def test_panel_system():
 
     # Test 7: Load and Verify State
     print("\n🧪 Test 7: Load and Verify State")
-    with open(filename, 'r') as f:
+    with open(filename, "r") as f:
         saved_state = json.load(f)
 
     print(f"   ✅ Loaded state with {len(saved_state['panel_states'])} panels")
@@ -75,12 +76,15 @@ def test_panel_system():
     # Test 8: System Status
     print("\n🧪 Test 8: System Status")
     status_items = [
-        ('Total Panels', len(panel_system.panels)),
-        ('API Connections', len(panel_system.api_connections)),
-        ('Data Threads', len(panel_system.data_threads)),
-        ('System Running', panel_system.is_running),
-        ('Current Panel', panel_system.current_panel.value if panel_system.current_panel else None)
-]
+        ("Total Panels", len(panel_system.panels)),
+        ("API Connections", len(panel_system.api_connections)),
+        ("Data Threads", len(panel_system.data_threads)),
+        ("System Running", panel_system.is_running),
+        (
+            "Current Panel",
+            panel_system.current_panel.value if panel_system.current_panel else None,
+        ),
+    ]
     for item, value in status_items:
         print(f"   ✅ {item}: {value}")
 
@@ -106,7 +110,7 @@ def test_panel_system():
     end_time = time.time()
     performance_time = end_time - start_time
     print(f"   ✅ Panel switching performance: {performance_time:.3f}s for 60 switches")
-    print(f"   ✅ Average switch time: {performance_time/60:.3f}s per switch")
+    print(f"   ✅ Average switch time: {performance_time / 60:.3f}s per switch")
 
     # Cleanup
     print("\n🧹 Cleanup")
@@ -128,15 +132,17 @@ def test_api_integration():
     custom_endpoints = {
         PanelType.TRADING_STATE: "https://api.trading.com/v1/state",
         PanelType.POOL_ANALYSIS: "https://api.trading.com/v1/pools",
-        PanelType.PATTERN_RECOGNITION: "https://api.trading.com/v1/patterns"
-}
+        PanelType.PATTERN_RECOGNITION: "https://api.trading.com/v1/patterns",
+    }
     for panel_type, endpoint in custom_endpoints.items():
-        panel_system.connect_api(panel_type, endpoint, "test_api_key", update_interval=2.0)
+        panel_system.connect_api(
+            panel_type, endpoint, "test_api_key", update_interval=2.0
+        )
         print(f"   ✅ Connected {panel_type.value} to {endpoint}")
 
     # Test data simulation
     for panel_type in custom_endpoints.keys():
-        simulated_data = panel_system._generate_simulation_data(custom_endpoints[panel_type])
+        panel_system._generate_simulation_data(custom_endpoints[panel_type])
         print(f"   ✅ Generated realistic data for {panel_type.value}")
 
     panel_system.close()
@@ -153,11 +159,34 @@ def test_visualization_features():
     # Test different data types
     test_data = {
         PanelType.DRIFT_MATRIX: {"drift_matrix": [[1, 2, 3], [4, 5, 6], [7, 8, 9]]},
-        PanelType.SHIFT_PATTERNS: {"shift_patterns": [{"delta_t": 0.1, "delta_psi": 0.2, "action_trigger": "Stable"}]},
-        PanelType.TRADING_STATE: {"trading_state": "ACTIVE", "balances": {"usdc": 1000, "btc": 0.5, "total_profit": 100}},
-        PanelType.POOL_ANALYSIS: {"pools": {"pool_1": {"is_active": True, "liquidity": 50000, "volume_24h": 10000, "fee_rate": 0.003}}},
-        PanelType.PATTERN_RECOGNITION: {"patterns": {"active": True, "confidence": 0.85, "pattern_type": "BULL_FLAG", "strength": 0.9}}
-}
+        PanelType.SHIFT_PATTERNS: {
+            "shift_patterns": [
+                {"delta_t": 0.1, "delta_psi": 0.2, "action_trigger": "Stable"}
+            ]
+        },
+        PanelType.TRADING_STATE: {
+            "trading_state": "ACTIVE",
+            "balances": {"usdc": 1000, "btc": 0.5, "total_profit": 100},
+        },
+        PanelType.POOL_ANALYSIS: {
+            "pools": {
+                "pool_1": {
+                    "is_active": True,
+                    "liquidity": 50000,
+                    "volume_24h": 10000,
+                    "fee_rate": 0.003,
+                }
+            }
+        },
+        PanelType.PATTERN_RECOGNITION: {
+            "patterns": {
+                "active": True,
+                "confidence": 0.85,
+                "pattern_type": "BULL_FLAG",
+                "strength": 0.9,
+            }
+        },
+    }
     for panel_type, data in test_data.items():
         panel_system.switch_panel(panel_type)
         panel_system.panels[panel_type].update_data(data)

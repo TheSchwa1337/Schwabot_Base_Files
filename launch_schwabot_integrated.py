@@ -13,20 +13,14 @@ Usage:
     python launch_schwabot_integrated.py
 """
 
-import os
 import sys
-import time
 import logging
-from pathlib import Path
 
 # Set up logging
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.StreamHandler(),
-        logging.FileHandler('schwabot_launcher.log')
-    ]
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    handlers=[logging.StreamHandler(), logging.FileHandler("schwabot_launcher.log")],
 )
 
 logger = logging.getLogger(__name__)
@@ -36,12 +30,12 @@ def check_dependencies():
     """Check if required dependencies are available."""
     required_modules = []
     optional_modules = [
-        ('numpy', 'NumPy for mathematical operations'),
-        ('scipy', 'SciPy for advanced mathematical functions'),
-        ('psutil', 'PSUtil for system monitoring'),
-        ('cryptography', 'Cryptography for secure API key storage'),
-        ('requests', 'Requests for API communication'),
-        ('aiohttp', 'AioHTTP for async API operations')
+        ("numpy", "NumPy for mathematical operations"),
+        ("scipy", "SciPy for advanced mathematical functions"),
+        ("psutil", "PSUtil for system monitoring"),
+        ("cryptography", "Cryptography for secure API key storage"),
+        ("requests", "Requests for API communication"),
+        ("aiohttp", "AioHTTP for async API operations"),
     ]
 
     missing_required = []
@@ -69,9 +63,11 @@ def check_dependencies():
 
     if missing_optional:
         logger.info(
-            "📝 Some optional features may not be available due to missing dependencies")
+            "📝 Some optional features may not be available due to missing dependencies"
+        )
         logger.info(
-            "To install all dependencies, run: pip install numpy scipy psutil cryptography requests aiohttp")
+            "To install all dependencies, run: pip install numpy scipy psutil cryptography requests aiohttp"
+        )
 
     return True
 
@@ -84,41 +80,53 @@ def create_demo_launcher():
 
     # Initialize demo components
     components = {
-        'api_coordinator': None,
-        'data_pipeline': None,
-        'crwm_mapper': None,
-        'profit_engine': None
+        "api_coordinator": None,
+        "data_pipeline": None,
+        "crwm_mapper": None,
+        "profit_engine": None,
     }
 
     try:
         # Try to import and initialize API coordinator
         try:
             from core.secure_api_coordinator import SecureAPICoordinator
-            components['api_coordinator'] = SecureAPICoordinator()
+
+            components["api_coordinator"] = SecureAPICoordinator()
             logger.info("✅ Secure API Coordinator initialized")
         except ImportError as e:
             logger.warning(f"⚠️ API Coordinator not available: {e}")
 
         # Try to import and initialize data pipeline visualizer
         try:
-            from core.data_pipeline_visualizer import DataPipelineVisualizer, DataCategory, DataTier
-            components['data_pipeline'] = DataPipelineVisualizer()
+            from core.data_pipeline_visualizer import (
+                DataPipelineVisualizer,
+                DataCategory,
+                DataTier,
+            )
+
+            components["data_pipeline"] = DataPipelineVisualizer()
             logger.info("✅ Data Pipeline Visualizer initialized")
         except ImportError as e:
             logger.warning(f"⚠️ Data Pipeline Visualizer not available: {e}")
 
         # Try to import and initialize CRWM
         try:
-            from core.chrono_resonance_weather_mapper import ChronoResonanceWeatherMapper
-            components['crwm_mapper'] = ChronoResonanceWeatherMapper()
+            from core.chrono_resonance_weather_mapper import (
+                ChronoResonanceWeatherMapper,
+            )
+
+            components["crwm_mapper"] = ChronoResonanceWeatherMapper()
             logger.info("✅ ChronoResonance Weather Mapper initialized")
         except ImportError as e:
             logger.warning(f"⚠️ CRWM not available: {e}")
 
         # Try to import profit optimization
         try:
-            from core.enhanced_profit_trading_strategy import EnhancedProfitTradingStrategy
-            components['profit_engine'] = EnhancedProfitTradingStrategy()
+            from core.enhanced_profit_trading_strategy import (
+                EnhancedProfitTradingStrategy,
+            )
+
+            components["profit_engine"] = EnhancedProfitTradingStrategy()
             logger.info("✅ Enhanced Profit Trading Strategy initialized")
         except ImportError as e:
             logger.warning(f"⚠️ Profit Engine not available: {e}")
@@ -136,20 +144,20 @@ def run_demo_without_ui(components):
     print("-" * 40)
 
     # Demo API Coordinator
-    if components['api_coordinator']:
+    if components["api_coordinator"]:
         print("\n🔐 API Coordinator Demo:")
-        api_coord = components['api_coordinator']
+        api_coord = components["api_coordinator"]
         status = api_coord.get_api_status()
         print(f"  Total providers configured: {status['total_providers']}")
         print(f"  Performance stats: {status['performance_stats']}")
 
     # Demo Data Pipeline
-    if components['data_pipeline']:
+    if components["data_pipeline"]:
         print("\n💾 Data Pipeline Demo:")
-        pipeline = components['data_pipeline']
+        pipeline = components["data_pipeline"]
 
         # Add some demo data
-        from core.data_pipeline_visualizer import DataCategory, DataTier
+        from core.data_pipeline_visualizer import DataCategory
         import random
 
         for i in range(10):
@@ -164,9 +172,9 @@ def run_demo_without_ui(components):
         print(f"  Total size: {status['total_size_bytes']} bytes")
 
     # Demo CRWM
-    if components['crwm_mapper']:
+    if components["crwm_mapper"]:
         print("\n🌤️ ChronoResonance Weather Mapping Demo:")
-        crwm = components['crwm_mapper']
+        crwm = components["crwm_mapper"]
 
         # Add demo weather data
         from core.chrono_resonance_weather_mapper import WeatherDataPoint
@@ -190,7 +198,7 @@ def run_demo_without_ui(components):
                 humidity=humidity,
                 wind_speed=wind_speed,
                 wind_direction=random.uniform(0, 360),
-                weather_type="partly_cloudy"
+                weather_type="partly_cloudy",
             )
 
             crwm.add_weather_data(weather_point)
@@ -208,23 +216,25 @@ def run_demo_without_ui(components):
         if signature:
             print(
                 f"  Current temperature: {
-                    signature['current_conditions']['temperature']:.1f}°C")
+                    signature['current_conditions']['temperature']:.1f}°C"
+            )
             print(f"  Trading signal: {signature['trading_signals']['direction']}")
 
     # Demo Profit Engine
-    if components['profit_engine']:
+    if components["profit_engine"]:
         print("\n💰 Profit Trading Strategy Demo:")
-        profit_engine = components['profit_engine']
+        profit_engine = components["profit_engine"]
 
         # Run demo analysis
         try:
             # Simulate market data
             import random
+
             demo_market_data = {
-                'btc_price': 45000 + random.uniform(-1000, 1000),
-                'volume_24h': 2500000000 + random.uniform(-500000000, 500000000),
-                'price_change_24h': random.uniform(-5, 5),
-                'volatility': random.uniform(0.02, 0.08)
+                "btc_price": 45000 + random.uniform(-1000, 1000),
+                "volume_24h": 2500000000 + random.uniform(-500000000, 500000000),
+                "price_change_24h": random.uniform(-5, 5),
+                "volatility": random.uniform(0.02, 0.08),
             }
 
             result = profit_engine.analyze_market_conditions(demo_market_data)
@@ -232,7 +242,7 @@ def run_demo_without_ui(components):
 
         except Exception as e:
             logger.warning(f"Profit engine demo error: {e}")
-            print(f"  Profit engine initialized (demo data simulation failed)")
+            print("  Profit engine initialized (demo data simulation failed)")
 
     print("\n✅ Demo completed successfully!")
 
@@ -282,7 +292,8 @@ def main():
     total_components = len(components)
 
     print(
-        f"\n📊 System Status: {available_components}/{total_components} components available")
+        f"\n📊 System Status: {available_components}/{total_components} components available"
+    )
 
     if available_components == 0:
         print("❌ No components available. Please check installation.")
@@ -321,7 +332,9 @@ def main():
         return 1
 
     print("\n🎉 Schwabot Integrated System Demo completed!")
-    print("📖 For more information, check the documentation files in the project directory.")
+    print(
+        "📖 For more information, check the documentation files in the project directory."
+    )
 
     return 0
 

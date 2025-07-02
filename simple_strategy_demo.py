@@ -15,7 +15,6 @@ in a self-contained, flake8-compliant script.
 """
 
 import random
-import time
 from collections import defaultdict, deque
 from typing import Dict, List, Any, Tuple
 
@@ -62,7 +61,7 @@ class PerformanceMetrics:
         downside_returns = excess_returns[excess_returns < 0]
 
         if len(downside_returns) == 0:
-            return float('inf') if np.mean(excess_returns) > 0 else 0.0
+            return float("inf") if np.mean(excess_returns) > 0 else 0.0
 
         downside_deviation = np.std(downside_returns, ddof=1)
         if downside_deviation == 0:
@@ -80,11 +79,9 @@ class KellyCriterion:
 
     def add_trade_result(self, profit: float, loss: float, won: bool):
         """Add trade result for Kelly calculation."""
-        self.trade_history.append({
-            'profit': profit if won else 0,
-            'loss': loss if not won else 0,
-            'won': won
-        })
+        self.trade_history.append(
+            {"profit": profit if won else 0, "loss": loss if not won else 0, "won": won}
+        )
 
         # Keep last 100 trades
         if len(self.trade_history) > 100:
@@ -95,15 +92,15 @@ class KellyCriterion:
         if len(self.trade_history) < 10:
             return 0.25  # Conservative default
 
-        wins = [t for t in self.trade_history if t['won']]
-        losses = [t for t in self.trade_history if not t['won']]
+        wins = [t for t in self.trade_history if t["won"]]
+        losses = [t for t in self.trade_history if not t["won"]]
 
         if len(wins) == 0 or len(losses) == 0:
             return 0.25
 
         win_rate = len(wins) / len(self.trade_history)
-        avg_win = np.mean([w['profit'] for w in wins])
-        avg_loss = np.mean([l['loss'] for l in losses])
+        avg_win = np.mean([w["profit"] for w in wins])
+        avg_loss = np.mean([l["loss"] for l in losses])
 
         if avg_loss == 0:
             return 0.25
@@ -185,7 +182,7 @@ class VolatilityCalculator:
         """Add price to history."""
         self.price_history.append(price)
         if len(self.price_history) > self.window * 2:
-            self.price_history = self.price_history[-self.window * 2:]
+            self.price_history = self.price_history[-self.window * 2 :]
 
     def calculate_volatility(self) -> float:
         """Calculate rolling volatility."""
@@ -195,15 +192,19 @@ class VolatilityCalculator:
         # Calculate returns
         returns = []
         for i in range(1, len(self.price_history)):
-            if self.price_history[i-1] != 0:
-                ret = (self.price_history[i] - self.price_history[i-1]) / self.price_history[i-1]
+            if self.price_history[i - 1] != 0:
+                ret = (
+                    self.price_history[i] - self.price_history[i - 1]
+                ) / self.price_history[i - 1]
                 returns.append(ret)
 
         if len(returns) < 2:
             return 0.02
 
         # Use recent window
-        recent_returns = returns[-self.window:] if len(returns) > self.window else returns
+        recent_returns = (
+            returns[-self.window :] if len(returns) > self.window else returns
+        )
         volatility = np.std(recent_returns, ddof=1)
 
         # Annualize (assuming daily data)
@@ -222,7 +223,7 @@ class FlipSwitchLogic:
         kelly_fraction: float,
         volatility: float,
         momentum: float,
-        forecast_confidence: float
+        forecast_confidence: float,
     ) -> Tuple[bool, float]:
         """
         Determine if strategy should flip to aggressive mode.
@@ -234,11 +235,12 @@ class FlipSwitchLogic:
 
         # More liberal conditions for demo purposes
         # High Kelly + reasonable volatility + any momentum = aggressive
-        if (kelly_fraction > 0.1 and
-            volatility < 0.8 and
-            abs(momentum) > 0.005 and
-            forecast_confidence > 0.2):
-
+        if (
+            kelly_fraction > 0.1
+            and volatility < 0.8
+            and abs(momentum) > 0.005
+            and forecast_confidence > 0.2
+        ):
             self.aggressive_mode = True
             confidence = min(0.8, kelly_fraction + forecast_confidence + 0.2)
 
@@ -324,7 +326,7 @@ class IntegratedStrategy:
                 won = False
 
             # Update capital
-            self.current_capital *= (1 + profit_pct)
+            self.current_capital *= 1 + profit_pct
             self.portfolio_history.append(self.current_capital)
 
             # Update systems with trade result
@@ -332,7 +334,7 @@ class IntegratedStrategy:
             self.kelly.add_trade_result(
                 profit=profit_pct if won else 0,
                 loss=abs(profit_pct) if not won else 0,
-                won=won
+                won=won,
             )
             self.markov.update_state(profit_pct)
             self.trades_executed += 1
@@ -340,27 +342,29 @@ class IntegratedStrategy:
         # 8. Calculate performance metrics
         sharpe = self.performance.calculate_sharpe_ratio()
         sortino = self.performance.calculate_sortino_ratio()
-        total_return = (self.current_capital - self.initial_capital) / self.initial_capital
+        total_return = (
+            self.current_capital - self.initial_capital
+        ) / self.initial_capital
         win_rate = self.winning_trades / max(1, self.trades_executed)
 
         return {
-            'price': current_price,
-            'portfolio_value': self.current_capital,
-            'total_return': total_return,
-            'sharpe_ratio': sharpe,
-            'sortino_ratio': sortino,
-            'kelly_fraction': kelly_fraction,
-            'volatility': current_volatility,
-            'momentum': momentum,
-            'forecast_state': forecast_state,
-            'forecast_confidence': forecast_confidence,
-            'aggressive_mode': aggressive_mode,
-            'strategy_confidence': strategy_confidence,
-            'position_size': position_size,
-            'trade_executed': trade_executed,
-            'profit_pct': profit_pct,
-            'trades_executed': self.trades_executed,
-            'win_rate': win_rate
+            "price": current_price,
+            "portfolio_value": self.current_capital,
+            "total_return": total_return,
+            "sharpe_ratio": sharpe,
+            "sortino_ratio": sortino,
+            "kelly_fraction": kelly_fraction,
+            "volatility": current_volatility,
+            "momentum": momentum,
+            "forecast_state": forecast_state,
+            "forecast_confidence": forecast_confidence,
+            "aggressive_mode": aggressive_mode,
+            "strategy_confidence": strategy_confidence,
+            "position_size": position_size,
+            "trade_executed": trade_executed,
+            "profit_pct": profit_pct,
+            "trades_executed": self.trades_executed,
+            "win_rate": win_rate,
         }
 
 
@@ -381,8 +385,10 @@ def main():
 
     # Run simulation
     print("\n🎯 Running 50 Trading Cycles...")
-    print(f"{'Cycle':<5} {'Price':<8} {'Portfolio':<12} {'Return':<8} {'Sharpe':<8} "
-          f"{'Kelly':<7} {'Mode':<6} {'Trades':<6}")
+    print(
+        f"{'Cycle':<5} {'Price':<8} {'Portfolio':<12} {'Return':<8} {'Sharpe':<8} "
+        f"{'Kelly':<7} {'Mode':<6} {'Trades':<6}"
+    )
     print("-" * 70)
 
     base_price = 50000.0
@@ -403,14 +409,16 @@ def main():
 
         # Print results every 10 cycles
         if cycle % 10 == 0:
-            mode_str = "AGG" if results['aggressive_mode'] else "CON"
-            print(f"{cycle:<5} {results['price']:<8.0f} "
-                  f"${results['portfolio_value']:<11,.0f} "
-                  f"{results['total_return']:<7.1%} "
-                  f"{results['sharpe_ratio']:<7.2f} "
-                  f"{results['kelly_fraction']:<6.2f} "
-                  f"{mode_str:<6} "
-                  f"{results['trades_executed']:<6}")
+            mode_str = "AGG" if results["aggressive_mode"] else "CON"
+            print(
+                f"{cycle:<5} {results['price']:<8.0f} "
+                f"${results['portfolio_value']:<11,.0f} "
+                f"{results['total_return']:<7.1%} "
+                f"{results['sharpe_ratio']:<7.2f} "
+                f"{results['kelly_fraction']:<6.2f} "
+                f"{mode_str:<6} "
+                f"{results['trades_executed']:<6}"
+            )
 
     # Final summary
     final_results = strategy.execute_trading_cycle(price)
@@ -427,8 +435,10 @@ def main():
     print(f"🏆 Win Rate:             {final_results['win_rate']:.1%}")
     print(f"🎲 Kelly Fraction:       {final_results['kelly_fraction']:.3f}")
     print(f"📊 Current Volatility:   {final_results['volatility']:.1%}")
-    print(f"🔄 Strategy Mode:        "
-          f"{'Aggressive' if final_results['aggressive_mode'] else 'Conservative'}")
+    print(
+        f"🔄 Strategy Mode:        "
+        f"{'Aggressive' if final_results['aggressive_mode'] else 'Conservative'}"
+    )
 
     print("\n🎉 Demo Complete!")
     print("This demonstrates the integration of advanced mathematical frameworks")

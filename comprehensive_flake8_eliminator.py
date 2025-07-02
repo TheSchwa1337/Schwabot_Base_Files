@@ -13,7 +13,6 @@ This script systematically eliminates ALL flake8 errors using a multi-stage appr
 GOAL: Zero flake8 errors across the entire codebase.
 """
 
-import os
 import sys
 import subprocess
 import logging
@@ -25,11 +24,8 @@ import json
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.FileHandler('flake8_elimination.log'),
-        logging.StreamHandler()
-    ]
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    handlers=[logging.FileHandler("flake8_elimination.log"), logging.StreamHandler()],
 )
 logger = logging.getLogger(__name__)
 
@@ -43,10 +39,7 @@ class ComprehensiveFlake8Eliminator:
         self.schwabot_path = self.base_path / "schwabot"
 
         # Target directories for cleanup
-        self.target_dirs = [
-            self.core_path,
-            self.schwabot_path
-        ]
+        self.target_dirs = [self.core_path, self.schwabot_path]
         # Statistics
         self.initial_errors = 0
         self.final_errors = 0
@@ -57,7 +50,7 @@ class ComprehensiveFlake8Eliminator:
         self.flake8_config = {
             "max_line_length": 120,
             "ignore": "E203,W503,E501,F401,F841,W291,W293,E302,E303,E701,E702",
-            "exclude": "__pycache__,*.pyc,.git,*.backup,temp,logs"
+            "exclude": "__pycache__,*.pyc,.git,*.backup,temp,logs",
         }
         logger.info(f"Initialized Comprehensive Flake8 Eliminator for {self.base_path}")
 
@@ -114,7 +107,9 @@ class ComprehensiveFlake8Eliminator:
         try:
             result = self._run_flake8_check()
             if result:
-                errors = result.stdout.strip().split('\n') if result.stdout.strip() else []
+                errors = (
+                    result.stdout.strip().split("\n") if result.stdout.strip() else []
+                )
                 self.initial_errors = len([e for e in errors if e.strip()])
 
                 print(f"   Initial flake8 errors found: {self.initial_errors}")
@@ -123,8 +118,8 @@ class ComprehensiveFlake8Eliminator:
                     # Categorize errors
                     error_types = {}
                     for error in errors[:20]:  # Sample first 20
-                        if ':' in error:
-                            error_code = error.split(':')[-1].strip().split()[0]
+                        if ":" in error:
+                            error_code = error.split(":")[-1].strip().split()[0]
                             error_types[error_code] = error_types.get(error_code, 0) + 1
 
                     print("   Error types found:")
@@ -144,15 +139,21 @@ class ComprehensiveFlake8Eliminator:
         for tool in tools:
             try:
                 # Check if tool is installed
-                result = subprocess.run([sys.executable, "-m", tool, "--version"],
-                                        capture_output=True, text=True)
+                result = subprocess.run(
+                    [sys.executable, "-m", tool, "--version"],
+                    capture_output=True,
+                    text=True,
+                )
                 if result.returncode == 0:
                     print(f"   {tool} already installed")
                 else:
                     # Install tool
                     print(f"   Installing {tool}...")
-                    install_result = subprocess.run([sys.executable, "-m", "pip", "install", tool],
-                                                    capture_output=True, text=True)
+                    install_result = subprocess.run(
+                        [sys.executable, "-m", "pip", "install", tool],
+                        capture_output=True,
+                        text=True,
+                    )
                     if install_result.returncode == 0:
                         print(f"   {tool} installed successfully")
                         self.fixes_applied.append(f"Installed {tool}")
@@ -172,15 +173,22 @@ class ComprehensiveFlake8Eliminator:
                 print(f"   Running autopep8 on {target_dir}...")
 
                 # Run autopep8 with aggressive fixes
-                result = subprocess.run([
-                    sys.executable, "-m", "autopep8",
-                    "--in-place",
-                    "--recursive",
-                    "--aggressive",
-                    "--aggressive",
-                    "--max-line-length=120",
-                    str(target_dir)
-                ], capture_output=True, text=True, cwd=self.base_path)
+                result = subprocess.run(
+                    [
+                        sys.executable,
+                        "-m",
+                        "autopep8",
+                        "--in-place",
+                        "--recursive",
+                        "--aggressive",
+                        "--aggressive",
+                        "--max-line-length=120",
+                        str(target_dir),
+                    ],
+                    capture_output=True,
+                    text=True,
+                    cwd=self.base_path,
+                )
 
                 if result.returncode == 0:
                     print(f"   autopep8 completed for {target_dir}")
@@ -201,17 +209,25 @@ class ComprehensiveFlake8Eliminator:
                 print(f"   Running Black on {target_dir}...")
 
                 # Run Black with line length 120
-                result = subprocess.run([
-                    sys.executable, "-m", "black",
-                    "--line-length=120",
-                    "--target-version=py38",
-                    str(target_dir)
-                ], capture_output=True, text=True, cwd=self.base_path)
+                result = subprocess.run(
+                    [
+                        sys.executable,
+                        "-m",
+                        "black",
+                        "--line-length=120",
+                        "--target-version=py38",
+                        str(target_dir),
+                    ],
+                    capture_output=True,
+                    text=True,
+                    cwd=self.base_path,
+                )
 
                 if result.returncode == 0:
                     print(f"   Black formatting completed for {target_dir}")
                     self.fixes_applied.append(
-                        f"Black formatting applied to {target_dir}")
+                        f"Black formatting applied to {target_dir}"
+                    )
                 else:
                     print(f"   Black issues in {target_dir}: {result.stderr}")
 
@@ -228,17 +244,24 @@ class ComprehensiveFlake8Eliminator:
                 print(f"   Running isort on {target_dir}...")
 
                 # Run isort with Black compatibility
-                result = subprocess.run([
-                    sys.executable, "-m", "isort",
-                    "--profile=black",
-                    "--line-length=120",
-                    "--multi-line=3",
-                    "--trailing-comma",
-                    "--force-grid-wrap=0",
-                    "--combine-as",
-                    "--use-parentheses",
-                    str(target_dir)
-                ], capture_output=True, text=True, cwd=self.base_path)
+                result = subprocess.run(
+                    [
+                        sys.executable,
+                        "-m",
+                        "isort",
+                        "--profile=black",
+                        "--line-length=120",
+                        "--multi-line=3",
+                        "--trailing-comma",
+                        "--force-grid-wrap=0",
+                        "--combine-as",
+                        "--use-parentheses",
+                        str(target_dir),
+                    ],
+                    capture_output=True,
+                    text=True,
+                    cwd=self.base_path,
+                )
 
                 if result.returncode == 0:
                     print(f"   isort completed for {target_dir}")
@@ -259,7 +282,7 @@ class ComprehensiveFlake8Eliminator:
             print("   No manual fixes needed!")
             return
 
-        errors = result.stdout.strip().split('\n')
+        errors = result.stdout.strip().split("\n")
         remaining_errors = [e for e in errors if e.strip()]
 
         if not remaining_errors:
@@ -271,8 +294,8 @@ class ComprehensiveFlake8Eliminator:
         # Group errors by file and type
         error_groups = {}
         for error in remaining_errors:
-            if ':' in error:
-                parts = error.split(':')
+            if ":" in error:
+                parts = error.split(":")
                 if len(parts) >= 4:
                     file_path = parts[0]
                     line_num = parts[1]
@@ -295,7 +318,7 @@ class ComprehensiveFlake8Eliminator:
 
             print(f"   Fixing {len(errors)} errors in {file_path}")
 
-            with open(file_path_obj, 'r', encoding='utf-8') as f:
+            with open(file_path_obj, "r", encoding="utf-8") as f:
                 lines = f.readlines()
 
             modified = False
@@ -317,13 +340,15 @@ class ComprehensiveFlake8Eliminator:
                             self.manual_fixes_needed.append(full_error)
                             print(
                                 f"      Manual fix needed for {error_code} on line {
-                                    line_num + 1}")
+                                    line_num + 1
+                                }"
+                            )
                 except (ValueError, IndexError) as e:
                     logger.error(f"Error fixing line {line_num_str}: {e}")
 
             # Write back if modified
             if modified:
-                with open(file_path_obj, 'w', encoding='utf-8') as f:
+                with open(file_path_obj, "w", encoding="utf-8") as f:
                     f.writelines(lines)
                 self.fixes_applied.append(f"Manual fixes applied to {file_path}")
 
@@ -332,40 +357,39 @@ class ComprehensiveFlake8Eliminator:
 
     def _fix_line_error(self, line: str, error_code: str) -> str:
         """Fix a specific error on a line."""
-        original_line = line
 
         # Remove trailing whitespace (W291, W293)
-        if error_code in ['W291', 'W293']:
-            line = line.rstrip() + '\n' if line.endswith('\n') else line.rstrip()
+        if error_code in ["W291", "W293"]:
+            line = line.rstrip() + "\n" if line.endswith("\n") else line.rstrip()
 
         # Fix missing blank lines (E302, E303)
-        elif error_code in ['E302', 'E303']:
+        elif error_code in ["E302", "E303"]:
             # These are usually handled by autopep8, but might need manual attention
             pass
 
         # Fix multiple statements on one line (E701, E702)
-        elif error_code in ['E701', 'E702']:
+        elif error_code in ["E701", "E702"]:
             # Split statements like "if x: return y" into multiple lines
-            if ':' in line and not line.strip().startswith('#'):
+            if ":" in line and not line.strip().startswith("#"):
                 # This is complex - mark for manual review
                 pass
 
         # Fix unused imports (F401)
-        elif error_code == 'F401':
+        elif error_code == "F401":
             # Mark unused imports for removal (conservative approach)
-            if 'import' in line and not line.strip().startswith('#'):
+            if "import" in line and not line.strip().startswith("#"):
                 # Only remove obviously unused imports
-                if any(unused in line for unused in ['# noqa', '# NOQA']):
+                if any(unused in line for unused in ["# noqa", "# NOQA"]):
                     pass  # Already marked to ignore
                 else:
                     # Add noqa comment as safe approach
-                    if line.endswith('\n'):
-                        line = line.rstrip() + '  # noqa: F401\n'
+                    if line.endswith("\n"):
+                        line = line.rstrip() + "  # noqa: F401\n"
                     else:
-                        line = line.rstrip() + '  # noqa: F401'
+                        line = line.rstrip() + "  # noqa: F401"
 
         # Fix undefined names (F821)
-        elif error_code == 'F821':
+        elif error_code == "F821":
             # These need manual review - don't auto-fix
             pass
 
@@ -375,10 +399,12 @@ class ComprehensiveFlake8Eliminator:
         """Run flake8 check and return results."""
         try:
             cmd = [
-                sys.executable, "-m", "flake8",
+                sys.executable,
+                "-m",
+                "flake8",
                 f"--max-line-length={self.flake8_config['max_line_length']}",
                 f"--extend-ignore={self.flake8_config['ignore']}",
-                f"--exclude={self.flake8_config['exclude']}"
+                f"--exclude={self.flake8_config['exclude']}",
             ]
             # Add target directories
             for target_dir in self.target_dirs:
@@ -386,10 +412,8 @@ class ComprehensiveFlake8Eliminator:
                     cmd.append(str(target_dir))
 
             result = subprocess.run(
-                cmd,
-                capture_output=True,
-                text=True,
-                cwd=self.base_path)
+                cmd, capture_output=True, text=True, cwd=self.base_path
+            )
             return result
 
         except Exception as e:
@@ -401,7 +425,9 @@ class ComprehensiveFlake8Eliminator:
         try:
             result = self._run_flake8_check()
             if result:
-                errors = result.stdout.strip().split('\n') if result.stdout.strip() else []
+                errors = (
+                    result.stdout.strip().split("\n") if result.stdout.strip() else []
+                )
                 self.final_errors = len([e for e in errors if e.strip()])
 
                 print(f"   Final flake8 errors: {self.final_errors}")
@@ -433,7 +459,7 @@ class ComprehensiveFlake8Eliminator:
             "fixes_applied": self.fixes_applied,
             "manual_fixes_needed": self.manual_fixes_needed,
             "target_directories": [str(d) for d in self.target_dirs],
-            "flake8_config": self.flake8_config
+            "flake8_config": self.flake8_config,
         }
 
     def _print_summary(self, results: Dict[str, Any]):
@@ -446,32 +472,33 @@ class ComprehensiveFlake8Eliminator:
         print(f"Base Path: {results['base_path']}")
         print(f"Target Directories: {len(results['target_directories'])}")
 
-        print(f"\nERROR ELIMINATION RESULTS:")
+        print("\nERROR ELIMINATION RESULTS:")
         print(f"   Initial Errors: {results['initial_errors']}")
         print(f"   Final Errors: {results['final_errors']}")
         print(f"   Errors Eliminated: {results['errors_eliminated']}")
-        success_rate = (results['errors_eliminated'] /
-                        max(1, results['initial_errors'])) * 100
+        success_rate = (
+            results["errors_eliminated"] / max(1, results["initial_errors"])
+        ) * 100
         print(f"   Success Rate: {success_rate:.1f}%")
 
-        status_text = "COMPLETE SUCCESS" if results['success'] else "PARTIAL SUCCESS"
+        status_text = "COMPLETE SUCCESS" if results["success"] else "PARTIAL SUCCESS"
         print(f"\nSTATUS: {status_text}")
 
-        if results['fixes_applied']:
+        if results["fixes_applied"]:
             print(f"\nFIXES APPLIED ({len(results['fixes_applied'])}):")
-            for fix in results['fixes_applied'][-10:]:  # Show last 10
+            for fix in results["fixes_applied"][-10:]:  # Show last 10
                 print(f"   {fix}")
 
-        if results['manual_fixes_needed']:
+        if results["manual_fixes_needed"]:
             print(f"\nMANUAL FIXES NEEDED ({len(results['manual_fixes_needed'])}):")
-            for fix in results['manual_fixes_needed'][:5]:  # Show first 5
+            for fix in results["manual_fixes_needed"][:5]:  # Show first 5
                 print(f"   {fix}")
 
         print("\n" + "=" * 80)
 
         # Save detailed report
         report_file = self.base_path / "flake8_elimination_report.json"
-        with open(report_file, 'w') as f:
+        with open(report_file, "w") as f:
             json.dump(results, f, indent=2)
         print(f"Detailed report saved to: {report_file}")
 
@@ -490,18 +517,15 @@ def main():
     results = eliminator.run_complete_elimination()
 
     # Exit with appropriate code
-    if results.get('success', False):
+    if results.get("success", False):
         print("\nMISSION ACCOMPLISHED: Zero flake8 errors achieved!")
         sys.exit(0)
-    elif results.get('final_errors', 0) < results.get('initial_errors', 0):
+    elif results.get("final_errors", 0) < results.get("initial_errors", 0):
         print(
             f"\nSIGNIFICANT PROGRESS: Reduced errors from {
-                results.get(
-                    'initial_errors',
-                    0)} to {
-                results.get(
-                    'final_errors',
-                    0)}")
+                results.get('initial_errors', 0)
+            } to {results.get('final_errors', 0)}"
+        )
         sys.exit(1)
     else:
         print("\nERROR ELIMINATION FAILED")

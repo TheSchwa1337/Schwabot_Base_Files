@@ -13,52 +13,36 @@ logger = logging.getLogger(__name__)
 
 
 class VECUMode(Enum):
-    """VECU operation modes."""
-    IDLE = "idle"
-    TIMING_SYNC = "timing_sync"
-    PWM_INJECTION = "pwm_injection"
-    FEEDBACK_CORRECTION = "feedback_correction"
-    PROFIT_BURST = "profit_burst"
-    THERMAL_MANAGEMENT = "thermal_management"
-
-
-@dataclass
-class VECUTimingData:
-    """VECU timing synchronization data."""
-    timestamp: float
+    VECU operation modes.IDLE =  idleTIMING_SYNC =  timing_syncPWM_INJECTION =  pwm_injectionFEEDBACK_CORRECTION =  feedback_correctionPROFIT_BURST =  profit_burstTHERMAL_MANAGEMENT =  thermal_management@dataclass
+class VECUTimingData:VECU timing synchronization data.timestamp: float
     profit_amplification: float
     timing_phase: float
     sync_confidence: float
     market_volatility: float
     volume_profile: float
     thermal_state: float
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    metadata: Dict[str, Any] = field(default_factory = dict)
 
 
 @dataclass
-class PWMInjectionData:
-    """VECU PWM profit injection data."""
-    timestamp: float
+class PWMInjectionData:VECU PWM profit injection data.timestamp: float
     injection_frequency: float
     injection_amplitude: float
     profit_target: float
     thermal_compensation: float
-    market_conditions: Dict[str, Any] = field(default_factory=dict)
+    market_conditions: Dict[str, Any] = field(default_factory = dict)
 
 
 @dataclass
-class VECUFeedbackData:
-    """VECU feedback correction data."""
-    timestamp: float
+class VECUFeedbackData:VECU feedback correction data.timestamp: float
     error_correction: float
     feedback_confidence: float
     correction_applied: bool
     thermal_adjustment: float
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    metadata: Dict[str, Any] = field(default_factory = dict)
 
 
 class VECUCore:
-    """
     VECU Core - Vectorized Electronic Control Unit for Schwabot.
 
     Provides:
@@ -66,12 +50,7 @@ class VECUCore:
         2. PWM profit injection for optimal execution
         3. Feedback correction for error management
         4. Thermal management integration
-        5. Market condition analysis
-    """
-
-    def __init__(self, precision: int = 64):
-        """Initialize VECU core."""
-        self.precision = precision
+        5. Market condition analysisdef __init__():Initialize VECU core.self.precision = precision
         self.mode = VECUMode.IDLE
         self.timing_history: List[VECUTimingData] = []
         self.feedback_history: List[VECUFeedbackData] = []
@@ -87,35 +66,26 @@ class VECUCore:
         self.total_cycles = 0
         self.successful_injections = 0
         self.thermal_events = 0
-        logger.info("⚡ VECU Core initialized with %d-bit precision", precision)
+        logger.info(⚡ VECU Core initialized with %d-bit precision, precision)
 
-    def set_mode(self, mode: VECUMode) -> None:
-        """Set VECU operation mode."""
-        self.mode = mode
-        logger.info("🔄 VECU mode set to: %s", mode.value)
+    def set_mode(self, mode: VECUMode) -> None:Set VECU operation mode.self.mode = mode
+        logger.info(🔄 VECU mode set to: %s, mode.value)
 
     def vecu_timing_sync(
-        self,
-        market_data: Dict[str, Any],
-        mathematical_state: Optional[Dict[str, Any]] = None
-    ) -> VECUTimingData:
-        """
-        VECU profit timing synchronization.
+        self, market_data: Dict[str, Any], mathematical_state: Optional[Dict[str, Any]] = None
+    ) -> VECUTimingData:VECU profit timing synchronization.
 
         Args:
             market_data: Current market data
             mathematical_state: Current mathematical state
 
         Returns:
-            VECU timing data
-        """
-        try:
-            timestamp = time.time()
+            VECU timing datatry: timestamp = time.time()
 
             # Extract market data
-            price = market_data.get('price', 50000.0)
-            volume = market_data.get('volume', 1000.0)
-            volatility = market_data.get('volatility', 0.02)
+            price = market_data.get(price, 50000.0)
+            volume = market_data.get(volume, 1000.0)
+            volatility = market_data.get(volatility, 0.02)
 
             # Calculate timing phase based on market conditions
             base_phase = (timestamp % 3600) / 3600.0  # Hourly cycle
@@ -130,16 +100,12 @@ class VECUCore:
             volatility_factor = 1.0 + (volatility * 10)  # Higher volatility = higher amplification
             mathematical_factor = 1.0
 
-            if mathematical_state:
-                complexity = mathematical_state.get('complexity', 0.5)
-                stability = mathematical_state.get('stability', 0.5)
+            if mathematical_state: complexity = mathematical_state.get(complexity, 0.5)
+                stability = mathematical_state.get(stability, 0.5)
                 mathematical_factor = 1.0 + (complexity * stability)
 
             profit_amplification = (
-                self.amplification_factor *
-                volume_factor *
-                volatility_factor *
-                mathematical_factor
+                self.amplification_factor * volume_factor * volatility_factor * mathematical_factor
             )
 
             # Calculate sync confidence
@@ -157,12 +123,9 @@ class VECUCore:
                 market_volatility=volatility,
                 volume_profile=volume_factor,
                 thermal_state=thermal_state,
-                metadata={
-                    'base_phase': base_phase,
-                    'volume_phase': volume_phase,
-                    'volatility_phase': volatility_phase,
-                    'mathematical_factor': mathematical_factor
-                }
+                metadata={base_phase: base_phase,
+                    volume_phase: volume_phase,volatility_phase: volatility_phase,mathematical_factor: mathematical_factor,
+                },
             )
 
             # Store in history
@@ -171,28 +134,26 @@ class VECUCore:
                 self.timing_history = self.timing_history[-500:]
 
             self.total_cycles += 1
-            logger.debug("✅ VECU timing sync: Amplification = %.6f", profit_amplification)
+            logger.debug(✅ VECU timing sync: Amplification = %.6f, profit_amplification)
 
             return timing_data
 
         except Exception as e:
-            logger.error("❌ VECU timing sync failed: %s", e)
+            logger.error(❌ VECU timing sync failed: %s, e)
             return VECUTimingData(
-                timestamp=time.time(),
+                timestamp = time.time(),
                 profit_amplification=1.0,
                 timing_phase=0.0,
                 sync_confidence=0.0,
                 market_volatility=0.02,
                 volume_profile=1.0,
-                thermal_state=0.0
+                thermal_state=0.0,
             )
 
     def pwm_profit_injection(
-        self,
-        timing_data: VECUTimingData,
-        market_conditions: Dict[str, Any]
+        self, timing_data: VECUTimingData, market_conditions: Dict[str, Any]
     ) -> PWMInjectionData:
-        """
+        
         VECU PWM profit injection.
 
         Args:
@@ -200,10 +161,7 @@ class VECUCore:
             market_conditions: Current market conditions
 
         Returns:
-            PWM injection data
-        """
-        try:
-            timestamp = time.time()
+            PWM injection datatry: timestamp = time.time()
 
             # Calculate injection frequency based on timing phase
             base_freq = self.base_frequency
@@ -212,7 +170,7 @@ class VECUCore:
 
             # Calculate injection amplitude
             base_amplitude = timing_data.profit_amplification
-            volume_modulation = market_conditions.get('volume_profile', 1.0)
+            volume_modulation = market_conditions.get(volume_profile, 1.0)
             volatility_modulation = 1.0 + (timing_data.market_volatility * 5.0)
 
             injection_amplitude = base_amplitude * volume_modulation * volatility_modulation
@@ -233,15 +191,14 @@ class VECUCore:
             )
             return injection_data
         except Exception as e:
-            logger.error(f"Error in pwm_profit_injection: {e}")
+            logger.error(fError in pwm_profit_injection: {e})
             return None
-
 
     def vecu_feedback_loop(
         self,
         timing_data: VECUTimingData,
         injection_data: PWMInjectionData,
-        actual_result: Dict[str, Any]
+        actual_result: Dict[str, Any],
     ) -> VECUFeedbackData:
         pass
 
@@ -260,12 +217,14 @@ class VECUCore:
     def clear_history(self) -> None:
         pass
 
+
 def get_vecu_core() -> VECUCore:
     pass
+
 
 def demo_vecu_core():
     pass
 
 
-if __name__ == "__main__":
-    demo_vecu_core() 
+if __name__ == __main__:
+    demo_vecu_core()

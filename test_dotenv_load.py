@@ -2,7 +2,7 @@ import os
 from dotenv import load_dotenv
 
 # Explicitly load the .env file from the current working directory
-load_dotenv(override=True) # override=True ensures it reloads even if already loaded
+load_dotenv(override=True)  # override=True ensures it reloads even if already loaded
 
 print(f"DEBUG: Current Working Directory: {os.getcwd()}")
 print(f"DEBUG: Value of NEWS_API_KEY: {os.getenv('NEWS_API_KEY')}")

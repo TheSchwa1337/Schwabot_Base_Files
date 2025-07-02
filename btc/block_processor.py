@@ -6,20 +6,23 @@ BTC Block Processor
 Handles BTC block processing and mining calculations.
 """
 
+
 class BTCBlockProcessor:
     """BTC block processing and mining interface."""
-    
+
     def __init__(self):
         self.current_difficulty = 0
         self.block_reward = 6.25
-        
+
     def calculate_hash_rate(self, gpu_count: int = 1) -> float:
         """Calculate expected hash rate for GPU mining."""
         # Placeholder implementation
         base_hash_rate = 50_000_000  # 50 MH/s per GPU
         return base_hash_rate * gpu_count
-    
-    def estimate_mining_profit(self, hash_rate: float, power_cost: float = 0.1) -> float:
+
+    def estimate_mining_profit(
+        self, hash_rate: float, power_cost: float = 0.1
+    ) -> float:
         """Estimate mining profitability."""
         # Simplified profitability calculation
         btc_price = 50000  # USD

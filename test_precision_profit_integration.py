@@ -14,28 +14,18 @@ import sys
 import time
 import logging
 import numpy as np
-from typing import Dict, Any, List
+from typing import Dict, Any
 
 # Add core directory to path
-sys.path.append('core')
+sys.path.append("core")
 
 # Import precision profit components
-from enhanced_master_cycle_profit_engine import (
-    EnhancedMasterCycleProfitEngine,
-    create_profit_optimized_engine,
-    ProfitFocusMode,
-    ProfitOptimizedDecision
-)
-from profit.precision_profit_engine import (
-    PrecisionProfitEngine,
-    PrecisionLevel,
-    ProfitOpportunity
-)
+from enhanced_master_cycle_profit_engine import create_profit_optimized_engine
+from profit.precision_profit_engine import PrecisionLevel
 
 # Configure logging
 logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
 
@@ -51,12 +41,12 @@ class AdvancedBTCMarketSimulator:
 
         # Market dynamics
         self.base_volatility = 0.008  # 0.8% base volatility
-        self.trend_momentum = 0.0     # Current trend momentum
-        self.cycle_position = 0.0     # Position in harmonic cycle
+        self.trend_momentum = 0.0  # Current trend momentum
+        self.cycle_position = 0.0  # Position in harmonic cycle
 
         # Pattern generation
-        self.pattern_strength = 0.5   # How strong patterns are
-        self.noise_level = 0.3        # Market noise level
+        self.pattern_strength = 0.5  # How strong patterns are
+        self.noise_level = 0.3  # Market noise level
 
         # Decimal precision analysis
         self.price_history_2_decimal = []
@@ -82,16 +72,18 @@ class AdvancedBTCMarketSimulator:
 
         # Combine components for price movement
         total_price_change = (
-            harmonic_component +      # Harmonic pattern
-            self.trend_momentum +     # Trend component
-            noise_component          # Random noise
+            harmonic_component  # Harmonic pattern
+            + self.trend_momentum  # Trend component
+            + noise_component  # Random noise
         )
 
         # Apply price movement
         new_price = self.current_price * (1 + total_price_change)
 
         # Generate volume with correlation to price movement
-        volume_multiplier = 1.0 + abs(total_price_change) * 10  # Higher vol with more movement
+        volume_multiplier = (
+            1.0 + abs(total_price_change) * 10
+        )  # Higher vol with more movement
         volume_noise = np.random.normal(1.0, 0.2)
         new_volume = self.current_volume * volume_multiplier * volume_noise
         new_volume = max(100, new_volume)
@@ -111,7 +103,7 @@ class AdvancedBTCMarketSimulator:
             "harmonic_position": self.cycle_position % (2 * np.pi),
             "volatility": abs(total_price_change),
             "decimal_analysis": decimal_analysis,
-            "tick_count": self.tick_count
+            "tick_count": self.tick_count,
         }
 
     def _analyze_multi_decimal_precision(self, price: float) -> Dict[str, Any]:
@@ -142,20 +134,28 @@ class AdvancedBTCMarketSimulator:
 
         # Generate hashes
         timestamp = time.time()
-        hash_2 = hashlib.sha256(f"macro_{price_2}_{timestamp:.3f}".encode()).hexdigest()[:16]
-        hash_6 = hashlib.sha256(f"standard_{price_6}_{timestamp:.3f}".encode()).hexdigest()[:16]
-        hash_8 = hashlib.sha256(f"micro_{price_8}_{timestamp:.3f}".encode()).hexdigest()[:16]
+        hash_2 = hashlib.sha256(
+            f"macro_{price_2}_{timestamp:.3f}".encode()
+        ).hexdigest()[:16]
+        hash_6 = hashlib.sha256(
+            f"standard_{price_6}_{timestamp:.3f}".encode()
+        ).hexdigest()[:16]
+        hash_8 = hashlib.sha256(
+            f"micro_{price_8}_{timestamp:.3f}".encode()
+        ).hexdigest()[:16]
 
         # Calculate hash entropy for profit scoring
         def calc_hash_entropy(hash_str: str) -> float:
             hash_bytes = bytes.fromhex(hash_str)
-            entropy = -sum((b/255.0) * np.log2((b/255.0) + 1e-8) for b in hash_bytes)
+            entropy = -sum(
+                (b / 255.0) * np.log2((b / 255.0) + 1e-8) for b in hash_bytes
+            )
             return min(1.0, entropy / 8.0)
 
         # Calculate profit potential scores
-        macro_profit_score = calc_hash_entropy(hash_2) * 0.8    # Conservative macro
+        macro_profit_score = calc_hash_entropy(hash_2) * 0.8  # Conservative macro
         standard_profit_score = calc_hash_entropy(hash_6) * 1.0  # Standard scoring
-        micro_profit_score = calc_hash_entropy(hash_8) * 1.2     # Boosted micro
+        micro_profit_score = calc_hash_entropy(hash_8) * 1.2  # Boosted micro
 
         # Calculate 16-bit tick mapping
         min_price, max_price = 10000.0, 100000.0
@@ -177,8 +177,8 @@ class AdvancedBTCMarketSimulator:
             "price_patterns": {
                 "macro_trend": self._detect_macro_pattern(),
                 "standard_oscillation": self._detect_standard_pattern(),
-                "micro_fluctuation": self._detect_micro_pattern()
-            }
+                "micro_fluctuation": self._detect_micro_pattern(),
+            },
         }
 
     def _detect_macro_pattern(self) -> Dict[str, Any]:
@@ -210,9 +210,15 @@ class AdvancedBTCMarketSimulator:
         recent_prices = [float(p) for p in self.price_history_6_decimal[-20:]]
 
         # Check for oscillation pattern
-        price_changes = [recent_prices[i] - recent_prices[i-1] for i in range(1, len(recent_prices))]
-        oscillation_score = sum(1 for i in range(1, len(price_changes))
-                              if price_changes[i] * price_changes[i-1] < 0) / len(price_changes)
+        price_changes = [
+            recent_prices[i] - recent_prices[i - 1]
+            for i in range(1, len(recent_prices))
+        ]
+        oscillation_score = sum(
+            1
+            for i in range(1, len(price_changes))
+            if price_changes[i] * price_changes[i - 1] < 0
+        ) / len(price_changes)
 
         if oscillation_score > 0.6:  # 60% oscillation
             pattern = "standard_oscillation"
@@ -221,7 +227,11 @@ class AdvancedBTCMarketSimulator:
             pattern = "standard_trend"
             strength = 0.5
 
-        return {"pattern": pattern, "strength": strength, "oscillation": oscillation_score}
+        return {
+            "pattern": pattern,
+            "strength": strength,
+            "oscillation": oscillation_score,
+        }
 
     def _detect_micro_pattern(self) -> Dict[str, Any]:
         """Detect micro-level patterns for $0.01-1 profit opportunities."""
@@ -231,8 +241,10 @@ class AdvancedBTCMarketSimulator:
         recent_prices = [float(p) for p in self.price_history_8_decimal[-30:]]
 
         # Check for micro-fluctuation patterns
-        micro_changes = [abs(recent_prices[i] - recent_prices[i-1])
-                        for i in range(1, len(recent_prices))]
+        micro_changes = [
+            abs(recent_prices[i] - recent_prices[i - 1])
+            for i in range(1, len(recent_prices))
+        ]
         avg_micro_change = np.mean(micro_changes)
         micro_volatility = np.std(micro_changes)
 
@@ -246,7 +258,11 @@ class AdvancedBTCMarketSimulator:
             pattern = "micro_stable"
             strength = 0.2
 
-        return {"pattern": pattern, "strength": strength, "avg_change": avg_micro_change}
+        return {
+            "pattern": pattern,
+            "strength": strength,
+            "avg_change": avg_micro_change,
+        }
 
 
 def test_precision_profit_integration():
@@ -259,9 +275,7 @@ def test_precision_profit_integration():
 
     # Create profit-optimized engine with all precision levels
     engine = create_profit_optimized_engine(
-        enable_micro=True,
-        enable_standard=True,
-        enable_macro=True
+        enable_micro=True, enable_standard=True, enable_macro=True
     )
 
     # Create advanced market simulator
@@ -280,10 +294,10 @@ def test_precision_profit_integration():
         "decision_breakdown": {},
         "precision_performance": {},
         "sync_scores": [],
-        "extraction_scores": []
+        "extraction_scores": [],
     }
 
-    print(f"\n🔬 Running precision profit extraction test (25 BTC ticks)...")
+    print("\n🔬 Running precision profit extraction test (25 BTC ticks)...")
 
     # Process market ticks with precision profit analysis
     for tick in range(25):
@@ -292,8 +306,7 @@ def test_precision_profit_integration():
 
         # Process with profit-optimized engine
         profit_decision = engine.process_profit_optimized_tick(
-            market_tick["price"],
-            market_tick["volume"]
+            market_tick["price"], market_tick["volume"]
         )
 
         # Record results
@@ -302,24 +315,36 @@ def test_precision_profit_integration():
         # Track profit opportunities by precision level
         precision = profit_decision.selected_precision_level.value
         test_results["profit_opportunities"][precision] += 1
-        test_results["expected_profits"][precision] += profit_decision.expected_profit_usd
+        test_results["expected_profits"][precision] += (
+            profit_decision.expected_profit_usd
+        )
 
         # Track hash patterns
         decimal_analysis = market_tick["decimal_analysis"]
-        test_results["hash_patterns"]["macro"].append(decimal_analysis["hash_2_decimal"])
-        test_results["hash_patterns"]["standard"].append(decimal_analysis["hash_6_decimal"])
-        test_results["hash_patterns"]["micro"].append(decimal_analysis["hash_8_decimal"])
+        test_results["hash_patterns"]["macro"].append(
+            decimal_analysis["hash_2_decimal"]
+        )
+        test_results["hash_patterns"]["standard"].append(
+            decimal_analysis["hash_6_decimal"]
+        )
+        test_results["hash_patterns"]["micro"].append(
+            decimal_analysis["hash_8_decimal"]
+        )
 
         # Track decision types
         decision_type = profit_decision.biological_decision.decision.value
-        test_results["decision_breakdown"][decision_type] = test_results["decision_breakdown"].get(decision_type, 0) + 1
+        test_results["decision_breakdown"][decision_type] = (
+            test_results["decision_breakdown"].get(decision_type, 0) + 1
+        )
 
         # Track performance metrics
         test_results["sync_scores"].append(profit_decision.profit_sync_harmony)
-        test_results["extraction_scores"].append(profit_decision.profit_extraction_score)
+        test_results["extraction_scores"].append(
+            profit_decision.profit_extraction_score
+        )
 
         # Display detailed tick results
-        print(f"\n📊 Tick {tick+1:2d}: BTC ${market_tick['price']:,.2f}")
+        print(f"\n📊 Tick {tick + 1:2d}: BTC ${market_tick['price']:,.2f}")
         print(f"   💰 Precision Focus: {precision.upper()}")
         print(f"   🎯 Opportunity: {profit_decision.profit_opportunity_type.value}")
         print(f"   💵 Expected Profit: ${profit_decision.expected_profit_usd:.2f}")
@@ -327,24 +352,36 @@ def test_precision_profit_integration():
         print(f"   🧬 Biological Decision: {decision_type}")
 
         # Show multi-decimal analysis
-        print(f"   📈 Multi-Decimal Analysis:")
-        print(f"     2-decimal: {decimal_analysis['price_2_decimal']} (hash: {decimal_analysis['hash_2_decimal'][:8]}...)")
-        print(f"     6-decimal: {decimal_analysis['price_6_decimal']} (hash: {decimal_analysis['hash_6_decimal'][:8]}...)")
-        print(f"     8-decimal: {decimal_analysis['price_8_decimal']} (hash: {decimal_analysis['hash_8_decimal'][:8]}...)")
+        print("   📈 Multi-Decimal Analysis:")
+        print(
+            f"     2-decimal: {decimal_analysis['price_2_decimal']} (hash: {decimal_analysis['hash_2_decimal'][:8]}...)"
+        )
+        print(
+            f"     6-decimal: {decimal_analysis['price_6_decimal']} (hash: {decimal_analysis['hash_6_decimal'][:8]}...)"
+        )
+        print(
+            f"     8-decimal: {decimal_analysis['price_8_decimal']} (hash: {decimal_analysis['hash_8_decimal'][:8]}...)"
+        )
         print(f"     16-bit tick: {decimal_analysis['tick_16bit']}")
 
         # Show profit scores by precision
-        print(f"   🎯 Profit Scores:")
+        print("   🎯 Profit Scores:")
         print(f"     Macro (2-dec): {decimal_analysis['macro_profit_score']:.3f}")
         print(f"     Standard (6-dec): {decimal_analysis['standard_profit_score']:.3f}")
         print(f"     Micro (8-dec): {decimal_analysis['micro_profit_score']:.3f}")
 
         # Show pattern detection
         patterns = decimal_analysis["price_patterns"]
-        print(f"   🔍 Pattern Detection:")
-        print(f"     Macro: {patterns['macro_trend']['pattern']} (strength: {patterns['macro_trend']['strength']:.3f})")
-        print(f"     Standard: {patterns['standard_oscillation']['pattern']} (strength: {patterns['standard_oscillation']['strength']:.3f})")
-        print(f"     Micro: {patterns['micro_fluctuation']['pattern']} (strength: {patterns['micro_fluctuation']['strength']:.3f})")
+        print("   🔍 Pattern Detection:")
+        print(
+            f"     Macro: {patterns['macro_trend']['pattern']} (strength: {patterns['macro_trend']['strength']:.3f})"
+        )
+        print(
+            f"     Standard: {patterns['standard_oscillation']['pattern']} (strength: {patterns['standard_oscillation']['strength']:.3f})"
+        )
+        print(
+            f"     Micro: {patterns['micro_fluctuation']['pattern']} (strength: {patterns['micro_fluctuation']['strength']:.3f})"
+        )
 
         # Brief pause for readability
         time.sleep(0.1)
@@ -352,46 +389,58 @@ def test_precision_profit_integration():
     return test_results, engine, simulator
 
 
-def analyze_precision_profit_results(results: Dict[str, Any], engine, simulator) -> None:
+def analyze_precision_profit_results(
+    results: Dict[str, Any], engine, simulator
+) -> None:
     """Analyze and display precision profit test results."""
     print("\n" + "=" * 80)
     print("📊 PRECISION PROFIT EXTRACTION ANALYSIS")
     print("=" * 80)
 
     # Profit opportunity breakdown
-    print(f"\n💰 Profit Opportunities by Precision Level:")
+    print("\n💰 Profit Opportunities by Precision Level:")
     total_opportunities = sum(results["profit_opportunities"].values())
     for level, count in results["profit_opportunities"].items():
-        percentage = (count / total_opportunities * 100) if total_opportunities > 0 else 0
+        percentage = (
+            (count / total_opportunities * 100) if total_opportunities > 0 else 0
+        )
         expected_profit = results["expected_profits"][level]
         avg_profit = expected_profit / max(1, count)
-        print(f"   {level.upper():8s}: {count:2d} opportunities ({percentage:4.1f}%) - "
-              f"Total: ${expected_profit:6.2f} - Avg: ${avg_profit:5.2f}")
+        print(
+            f"   {level.upper():8s}: {count:2d} opportunities ({percentage:4.1f}%) - "
+            f"Total: ${expected_profit:6.2f} - Avg: ${avg_profit:5.2f}"
+        )
 
     # Decision breakdown
-    print(f"\n🧬 Biological Decision Breakdown:")
+    print("\n🧬 Biological Decision Breakdown:")
     for decision, count in results["decision_breakdown"].items():
         percentage = (count / results["total_ticks"]) * 100
-        print(f"   {decision.replace('_', ' ').title():20s}: {count:2d} ({percentage:4.1f}%)")
+        print(
+            f"   {decision.replace('_', ' ').title():20s}: {count:2d} ({percentage:4.1f}%)"
+        )
 
     # Hash pattern analysis
-    print(f"\n📊 Hash Pattern Analysis:")
+    print("\n📊 Hash Pattern Analysis:")
     for precision, hashes in results["hash_patterns"].items():
         unique_patterns = len(set(hashes))
         pattern_diversity = unique_patterns / len(hashes) if hashes else 0
-        print(f"   {precision.upper():8s}: {len(hashes)} patterns, {unique_patterns} unique ({pattern_diversity:.1%} diversity)")
+        print(
+            f"   {precision.upper():8s}: {len(hashes)} patterns, {unique_patterns} unique ({pattern_diversity:.1%} diversity)"
+        )
 
     # Performance metrics
     avg_sync_score = np.mean(results["sync_scores"]) if results["sync_scores"] else 0
-    avg_extraction_score = np.mean(results["extraction_scores"]) if results["extraction_scores"] else 0
+    avg_extraction_score = (
+        np.mean(results["extraction_scores"]) if results["extraction_scores"] else 0
+    )
 
-    print(f"\n🎯 Performance Metrics:")
+    print("\n🎯 Performance Metrics:")
     print(f"   Average QSC-GTS Sync Score: {avg_sync_score:.3f}")
     print(f"   Average Profit Extraction Score: {avg_extraction_score:.3f}")
     print(f"   Total Expected Profit: ${sum(results['expected_profits'].values()):.2f}")
 
     # Engine status
-    print(f"\n🚀 Engine Status:")
+    print("\n🚀 Engine Status:")
     status = engine.get_profit_engine_status()
     engine_perf = status["profit_engine_performance"]
     print(f"   Total Profit Decisions: {engine_perf['total_profit_decisions']}")
@@ -405,22 +454,26 @@ def analyze_precision_profit_results(results: Dict[str, Any], engine, simulator)
     opportunities = engine.get_current_profit_opportunities(current_price)
 
     if opportunities:
-        print(f"\n🎯 Current Active Profit Opportunities:")
+        print("\n🎯 Current Active Profit Opportunities:")
         for opp in opportunities:
-            print(f"   {opp['precision_level'].upper()}: {opp['action']} - "
-                  f"Current P&L: ${opp['current_profit']:.2f} - "
-                  f"Priority: {opp['action_priority']} - "
-                  f"Bio Alignment: {opp['biological_alignment']}")
+            print(
+                f"   {opp['precision_level'].upper()}: {opp['action']} - "
+                f"Current P&L: ${opp['current_profit']:.2f} - "
+                f"Priority: {opp['action_priority']} - "
+                f"Bio Alignment: {opp['biological_alignment']}"
+            )
 
     # Decimal precision insights
-    print(f"\n📈 Multi-Decimal Precision Insights:")
+    print("\n📈 Multi-Decimal Precision Insights:")
     print(f"   2-Decimal (Macro): Best for ${10:.0f}-${50:.0f} profit targets")
     print(f"   6-Decimal (Standard): Best for ${1:.0f}-${10:.0f} profit targets")
     print(f"   8-Decimal (Micro): Best for ${0.01:.2f}-${1:.0f} profit targets")
-    print(f"   16-bit Tick Mapping: {results['total_ticks']} unique tick positions analyzed")
+    print(
+        f"   16-bit Tick Mapping: {results['total_ticks']} unique tick positions analyzed"
+    )
 
     # System readiness assessment
-    success_rate = engine_perf['profit_success_rate']
+    success_rate = engine_perf["profit_success_rate"]
     if success_rate > 0.7:
         readiness = "EXCELLENT"
     elif success_rate > 0.5:
@@ -431,9 +484,9 @@ def analyze_precision_profit_results(results: Dict[str, Any], engine, simulator)
         readiness = "NEEDS_IMPROVEMENT"
 
     print(f"\n✅ PRECISION PROFIT SYSTEM ASSESSMENT: {readiness}")
-    print(f"🧬 Biological immune protection: ACTIVE")
-    print(f"💰 Multi-precision profit extraction: OPERATIONAL")
-    print(f"📊 Hash pattern recognition: FUNCTIONAL")
+    print("🧬 Biological immune protection: ACTIVE")
+    print("💰 Multi-precision profit extraction: OPERATIONAL")
+    print("📊 Hash pattern recognition: FUNCTIONAL")
     print(f"🎯 QSC-GTS synchronization: {avg_sync_score:.1%} effectiveness")
 
 
@@ -446,11 +499,11 @@ def main():
         # Analyze results
         analyze_precision_profit_results(results, engine, simulator)
 
-        print(f"\n🎉 PRECISION PROFIT INTEGRATION TEST PASSED!")
-        print(f"💰 Multi-decimal BTC profit extraction system is operational")
-        print(f"🧬 QSC-GTS biological synchronization confirmed")
-        print(f"📊 Hash pattern-based profit targeting validated")
-        print(f"🚀 Ready for live BTC/USDC precision profit trading")
+        print("\n🎉 PRECISION PROFIT INTEGRATION TEST PASSED!")
+        print("💰 Multi-decimal BTC profit extraction system is operational")
+        print("🧬 QSC-GTS biological synchronization confirmed")
+        print("📊 Hash pattern-based profit targeting validated")
+        print("🚀 Ready for live BTC/USDC precision profit trading")
 
         return True
 

@@ -19,14 +19,13 @@ import logging
 import os
 import signal
 import sys
-import time
 from pathlib import Path
 from typing import Optional
 
 import yaml
 
 from core.ferris_rde_daemon import FerrisRDEDaemon, DaemonConfig, get_daemon_instance
-from utils.safe_print import info, success, warn, error, safe_print
+from utils.safe_print import info, success, error
 
 
 def load_config(config_path: str) -> Optional[dict]:
@@ -40,7 +39,7 @@ def load_config(config_path: str) -> Optional[dict]:
         Configuration dictionary or None if failed
     """
     try:
-        with open(config_path, 'r', encoding='utf-8') as f:
+        with open(config_path, "r", encoding="utf-8") as f:
             config = yaml.safe_load(f)
 
         info(f"✅ Configuration loaded from {config_path}")
@@ -69,66 +68,79 @@ def create_daemon_config(config_dict: dict) -> DaemonConfig:
     """
     try:
         # Extract configuration sections
-        daemon_config = config_dict.get('daemon', {})
-        trading_config = config_dict.get('trading', {})
-        processing_config = config_dict.get('processing', {})
-        timing_config = config_dict.get('timing', {})
-        assets_config = config_dict.get('assets', {})
-        ferris_config = config_dict.get('ferris_rde', {})
-        mathematical_config = config_dict.get('mathematical', {})
-        monitoring_config = config_dict.get('monitoring', {})
-        visualization_config = config_dict.get('visualization', {})
+        daemon_config = config_dict.get("daemon", {})
+        trading_config = config_dict.get("trading", {})
+        processing_config = config_dict.get("processing", {})
+        timing_config = config_dict.get("timing", {})
+        assets_config = config_dict.get("assets", {})
+        ferris_config = config_dict.get("ferris_rde", {})
+        mathematical_config = config_dict.get("mathematical", {})
+        monitoring_config = config_dict.get("monitoring", {})
+        visualization_config = config_dict.get("visualization", {})
 
         # Create DaemonConfig
         config = DaemonConfig(
-            daemon_name=daemon_config.get('name', 'FerrisRDE'),
-            log_level=daemon_config.get('log_level', 'INFO'),
-
+            daemon_name=daemon_config.get("name", "FerrisRDE"),
+            log_level=daemon_config.get("log_level", "INFO"),
             # Trading settings
-            trading_enabled=trading_config.get('enabled', True),
-            paper_trading=trading_config.get('paper_trading', True),
-            max_concurrent_trades=trading_config.get('max_concurrent_trades', 10),
-            risk_management_enabled=trading_config.get('risk_management_enabled', True),
-
+            trading_enabled=trading_config.get("enabled", True),
+            paper_trading=trading_config.get("paper_trading", True),
+            max_concurrent_trades=trading_config.get("max_concurrent_trades", 10),
+            risk_management_enabled=trading_config.get("risk_management_enabled", True),
             # Processing settings
-            enable_gpu=processing_config.get('enable_gpu', True),
-            enable_distributed=processing_config.get('enable_distributed', False),
-            bit_depth_range=tuple(processing_config.get('bit_depth_range', [2, 42])),
-
+            enable_gpu=processing_config.get("enable_gpu", True),
+            enable_distributed=processing_config.get("enable_distributed", False),
+            bit_depth_range=tuple(processing_config.get("bit_depth_range", [2, 42])),
             # Timing settings
-            tick_interval_seconds=timing_config.get('tick_interval_seconds', 1.0),
-            health_check_interval_seconds=timing_config.get('health_check_interval_seconds', 30.0),
-            performance_report_interval_seconds=timing_config.get('performance_report_interval_seconds', 300.0),
-            mathematical_update_interval_seconds=timing_config.get('mathematical_update_interval_seconds', 5.0),
-
+            tick_interval_seconds=timing_config.get("tick_interval_seconds", 1.0),
+            health_check_interval_seconds=timing_config.get(
+                "health_check_interval_seconds", 30.0
+            ),
+            performance_report_interval_seconds=timing_config.get(
+                "performance_report_interval_seconds", 300.0
+            ),
+            mathematical_update_interval_seconds=timing_config.get(
+                "mathematical_update_interval_seconds", 5.0
+            ),
             # Asset settings
-            primary_assets=assets_config.get('primary', ['BTC/USD', 'ETH/USD']),
-            secondary_assets=assets_config.get('secondary', ['XRP/USD', 'ADA/USD']),
-
+            primary_assets=assets_config.get("primary", ["BTC/USD", "ETH/USD"]),
+            secondary_assets=assets_config.get("secondary", ["XRP/USD", "ADA/USD"]),
             # Ferris RDE settings
-            ferris_cycle_duration_minutes=ferris_config.get('cycle_duration_minutes', 60),
-            ferris_phase_transitions=ferris_config.get('phase_transitions', {
-                "tick_to_pivot": 0.8,
-                "pivot_to_ascent": 0.7,
-                "ascent_to_descent": 0.6,
-                "descent_to_tick": 0.9
-            }),
-
+            ferris_cycle_duration_minutes=ferris_config.get(
+                "cycle_duration_minutes", 60
+            ),
+            ferris_phase_transitions=ferris_config.get(
+                "phase_transitions",
+                {
+                    "tick_to_pivot": 0.8,
+                    "pivot_to_ascent": 0.7,
+                    "ascent_to_descent": 0.6,
+                    "descent_to_tick": 0.9,
+                },
+            ),
             # Mathematical settings
-            enable_quantum_thermal=mathematical_config.get('enable_quantum_thermal', True),
-            enable_void_well_metrics=mathematical_config.get('enable_void_well_metrics', True),
-            enable_kelly_criterion=mathematical_config.get('enable_kelly_criterion', True),
-
+            enable_quantum_thermal=mathematical_config.get(
+                "enable_quantum_thermal", True
+            ),
+            enable_void_well_metrics=mathematical_config.get(
+                "enable_void_well_metrics", True
+            ),
+            enable_kelly_criterion=mathematical_config.get(
+                "enable_kelly_criterion", True
+            ),
             # Monitoring settings
-            enable_health_monitoring=monitoring_config.get('enable_health_monitoring', True),
-            enable_performance_tracking=monitoring_config.get('enable_performance_tracking', True),
-            enable_error_logging=monitoring_config.get('enable_error_logging', True),
-            max_error_count=monitoring_config.get('max_error_count', 1000),
-
+            enable_health_monitoring=monitoring_config.get(
+                "enable_health_monitoring", True
+            ),
+            enable_performance_tracking=monitoring_config.get(
+                "enable_performance_tracking", True
+            ),
+            enable_error_logging=monitoring_config.get("enable_error_logging", True),
+            max_error_count=monitoring_config.get("max_error_count", 1000),
             # Visualization settings
-            enable_visualization=visualization_config.get('enable_visualization', True),
-            dashboard_port=visualization_config.get('dashboard_port', 8080),
-            websocket_port=visualization_config.get('websocket_port', 8081),
+            enable_visualization=visualization_config.get("enable_visualization", True),
+            dashboard_port=visualization_config.get("dashboard_port", 8080),
+            websocket_port=visualization_config.get("websocket_port", 8081),
         )
 
         success("✅ Daemon configuration created successfully")
@@ -147,15 +159,17 @@ def setup_logging(config_dict: dict):
         config_dict: Configuration dictionary
     """
     try:
-        logging_config = config_dict.get('logging', {})
+        logging_config = config_dict.get("logging", {})
 
         # Create logs directory if it doesn't exist
         log_dir = Path("logs")
         log_dir.mkdir(exist_ok=True)
 
         # Configure logging
-        log_level = getattr(logging, logging_config.get('level', 'INFO').upper())
-        log_format = logging_config.get('format', '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        log_level = getattr(logging, logging_config.get("level", "INFO").upper())
+        log_format = logging_config.get(
+            "format", "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+        )
 
         # Configure root logger
         logging.basicConfig(
@@ -163,16 +177,18 @@ def setup_logging(config_dict: dict):
             format=log_format,
             handlers=[
                 logging.StreamHandler(sys.stdout),
-                logging.FileHandler(logging_config.get('log_file', 'logs/ferris_rde_daemon.log')),
-]
+                logging.FileHandler(
+                    logging_config.get("log_file", "logs/ferris_rde_daemon.log")
+                ),
+            ],
         )
 
         # Configure specific loggers
         loggers = {
-            'core': logging.getLogger('core'),
-            'schwabot': logging.getLogger('schwabot'),
-            'utils': logging.getLogger('utils'),
-}
+            "core": logging.getLogger("core"),
+            "schwabot": logging.getLogger("schwabot"),
+            "utils": logging.getLogger("utils"),
+        }
         for logger_name, logger_instance in loggers.items():
             logger_instance.setLevel(log_level)
 
@@ -195,7 +211,7 @@ def create_pid_file(pid_file: str):
         pid_dir = Path(pid_file).parent
         pid_dir.mkdir(exist_ok=True)
 
-        with open(pid_file, 'w') as f:
+        with open(pid_file, "w") as f:
             f.write(str(os.getpid()))
 
         info(f"✅ PID file created: {pid_file}")
@@ -284,31 +300,30 @@ def signal_handler(signum, frame):
 
 def main():
     """Main function."""
-    parser = argparse.ArgumentParser(description='Ferris RDE Daemon Startup Script')
+    parser = argparse.ArgumentParser(description="Ferris RDE Daemon Startup Script")
     parser.add_argument(
-        '--config', '-c',
-        default='config/ferris_rde_daemon_config.yaml',
-        help='Path to configuration file (default: config/ferris_rde_daemon_config.yaml)'
+        "--config",
+        "-c",
+        default="config/ferris_rde_daemon_config.yaml",
+        help="Path to configuration file (default: config/ferris_rde_daemon_config.yaml)",
     )
     parser.add_argument(
-        '--pid-file', '-p',
-        default='logs/ferris_rde_daemon.pid',
-        help='Path to PID file (default: logs/ferris_rde_daemon.pid)'
+        "--pid-file",
+        "-p",
+        default="logs/ferris_rde_daemon.pid",
+        help="Path to PID file (default: logs/ferris_rde_daemon.pid)",
     )
     parser.add_argument(
-        '--daemon', '-d',
-        action='store_true',
-        help='Run as daemon process'
+        "--daemon", "-d", action="store_true", help="Run as daemon process"
     )
     parser.add_argument(
-        '--test', '-t',
-        action='store_true',
-        help='Run in test mode with reduced intervals'
+        "--test",
+        "-t",
+        action="store_true",
+        help="Run in test mode with reduced intervals",
     )
     parser.add_argument(
-        '--verbose', '-v',
-        action='store_true',
-        help='Enable verbose logging'
+        "--verbose", "-v", action="store_true", help="Enable verbose logging"
     )
 
     args = parser.parse_args()
@@ -325,16 +340,16 @@ def main():
     # Modify configuration for test mode
     if args.test:
         info("🧪 Running in test mode")
-        config_dict['timing']['tick_interval_seconds'] = 2.0
-        config_dict['timing']['health_check_interval_seconds'] = 10.0
-        config_dict['timing']['performance_report_interval_seconds'] = 30.0
-        config_dict['trading']['paper_trading'] = True
-        config_dict['development']['test_mode'] = True
+        config_dict["timing"]["tick_interval_seconds"] = 2.0
+        config_dict["timing"]["health_check_interval_seconds"] = 10.0
+        config_dict["timing"]["performance_report_interval_seconds"] = 30.0
+        config_dict["trading"]["paper_trading"] = True
+        config_dict["development"]["test_mode"] = True
 
     # Set verbose logging
     if args.verbose:
-        config_dict['logging']['level'] = 'DEBUG'
-        config_dict['daemon']['log_level'] = 'DEBUG'
+        config_dict["logging"]["level"] = "DEBUG"
+        config_dict["daemon"]["log_level"] = "DEBUG"
 
     # Create daemon configuration
     config = create_daemon_config(config_dict)

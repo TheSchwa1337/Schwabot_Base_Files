@@ -15,7 +15,8 @@ import math
 import numpy as np
 
 # Add core to path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'core'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "core"))
+
 
 def test_direct_lattice():
     """Test the recursive lattice directly."""
@@ -24,21 +25,22 @@ def test_direct_lattice():
 
     try:
         from core.recursive_lattice_theorem import (
-            recursive_lattice, process_recursive_cycle,
-            MathematicalConstant, PhaseGrade
+            recursive_lattice,
+            process_recursive_cycle,
+            MathematicalConstant,
         )
 
         print("✅ Recursive Lattice Theorem imported successfully")
 
         # Test mathematical constants
-        print(f"📊 Mathematical Constants:")
+        print("📊 Mathematical Constants:")
         print(f"   Ferris Cycle: {MathematicalConstant.FERRIS_CYCLE_MINUTES} minutes")
         print(f"   Glyph Lambda: {MathematicalConstant.GLYPH_GROWTH_LAMBDA}")
         print(f"   Glyph Mu: {MathematicalConstant.GLYPH_DECAY_MU}")
         print(f"   Max Capacity: {MathematicalConstant.GLYPH_MAX_CAPACITY}")
 
         # Test Ferris RDE Mathematics
-        print(f"\n🎡 Ferris RDE Mathematics:")
+        print("\n🎡 Ferris RDE Mathematics:")
         ferris_math = recursive_lattice.ferris_math
         phase = ferris_math.calculate_ferris_phase()
         print(f"   Current Phase: {phase:.4f}")
@@ -53,13 +55,13 @@ def test_direct_lattice():
         print(f"   Router Target: {routing['router_target']}")
 
         # Test complete cycle
-        print(f"\n🔄 Complete Recursive Cycle:")
+        print("\n🔄 Complete Recursive Cycle:")
         input_data = {
             "current_glyphs": 100,
             "ai_output": ["test signal", "mathematical validation"],
             "word": "profit",
-            "btc_price": 52000.0
-}
+            "btc_price": 52000.0,
+        }
         result = process_recursive_cycle(input_data)
         print(f"   Final Action: {result.get('final_action', 'UNKNOWN')}")
         print(f"   Confidence: {result.get('overall_confidence', 0):.3f}")
@@ -69,14 +71,16 @@ def test_direct_lattice():
         phase_grade = ferris_math.calculate_phase_grade(1.5, 0.8)
         print(f"   Phase Grade: {phase_grade.value}")
 
-        print(f"\n✅ All core mathematical operations validated!")
+        print("\n✅ All core mathematical operations validated!")
         return True
 
     except Exception as e:
         print(f"❌ Error: {e}")
         import traceback
+
         traceback.print_exc()
         return False
+
 
 def test_mathematical_equations():
     """Test core mathematical equations directly."""
@@ -88,8 +92,8 @@ def test_mathematical_equations():
     time_val = 100.0
     phase_offset = 0.0
     phase = math.sin(2 * math.pi * frequency * time_val + phase_offset)
-    print(f"🎡 Ferris Phase Equation:")
-    print(f"   Φ(t) = sin(2πft + φ)")
+    print("🎡 Ferris Phase Equation:")
+    print("   Φ(t) = sin(2πft + φ)")
     print(f"   f = {frequency:.6f}, t = {time_val}, φ = {phase_offset}")
     print(f"   Φ(t) = {phase:.4f}")
 
@@ -99,15 +103,15 @@ def test_mathematical_equations():
     F_t = phase
     mu_val = 0.8
     G_t_plus_1 = G_t + lambda_val * F_t - mu_val
-    print(f"\n🧱 Glyph Recursion Equation:")
-    print(f"   G(t+1) = G(t) + λF(t) - μ")
+    print("\n🧱 Glyph Recursion Equation:")
+    print("   G(t+1) = G(t) + λF(t) - μ")
     print(f"   G(t) = {G_t}, λ = {lambda_val}, F(t) = {F_t:.4f}, μ = {mu_val}")
     print(f"   G(t+1) = {G_t_plus_1:.2f}")
 
     # Test phase grade routing: ρ(t) = (λ/μ) mod 8
     rho = (lambda_val / mu_val) % 8
-    print(f"\n🚪 Phase Grade Routing:")
-    print(f"   ρ(t) = (λ/μ) mod 8")
+    print("\n🚪 Phase Grade Routing:")
+    print("   ρ(t) = (λ/μ) mod 8")
     print(f"   ρ(t) = ({lambda_val}/{mu_val}) mod 8 = {rho:.2f}")
 
     if rho < 2:
@@ -119,7 +123,7 @@ def test_mathematical_equations():
     print(f"   Routing Destination: {routing}")
 
     # Test tensor operations
-    print(f"\n🧮 Tensor Operations:")
+    print("\n🧮 Tensor Operations:")
     test_vector = np.array([1.0, 2.0, 3.0, 4.0])
     test_delta = np.array([0.1, -0.2, 0.3, -0.1])
 
@@ -130,10 +134,13 @@ def test_mathematical_equations():
     print(f"   ||ΔT|| = {magnitude:.4f}")
 
     # Dot product for similarity
-    similarity = np.dot(test_vector, test_delta) / (np.linalg.norm(test_vector) * magnitude)
+    similarity = np.dot(test_vector, test_delta) / (
+        np.linalg.norm(test_vector) * magnitude
+    )
     print(f"   Cosine similarity = {similarity:.4f}")
 
-    print(f"\n✅ All mathematical equations validated!")
+    print("\n✅ All mathematical equations validated!")
+
 
 def test_integration_flow():
     """Test the complete integration flow."""
@@ -182,7 +189,7 @@ def test_integration_flow():
 
     print(f"   💰 Trade Decision: {decision} (confidence: {confidence:.2f})")
 
-    print(f"\n✅ Complete integration flow validated!")
+    print("\n✅ Complete integration flow validated!")
 
     return {
         "btc_price": btc_price,
@@ -190,8 +197,10 @@ def test_integration_flow():
         "glyph_count": new_glyphs,
         "routing": routing,
         "decision": decision,
-        "confidence": confidence
-}
+        "confidence": confidence,
+    }
+
+
 def main():
     """Run the simplified lattice test."""
     print("🧠 SIMPLIFIED RECURSIVE LATTICE TEST")
@@ -229,6 +238,7 @@ def main():
     print("   • Glyph overflow containment functional")
     print("   • Trading decision logic validated")
     print("   • System ready for live operations")
+
 
 if __name__ == "__main__":
     main()

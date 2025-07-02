@@ -9,10 +9,9 @@ Comprehensive test suite for all mathematical state structures in advanced_mathe
 import numpy as np
 import sys
 import os
-from typing import List
 
 # Add the core directory to the path
-sys.path.append(os.path.join(os.path.dirname(__file__), 'core'))
+sys.path.append(os.path.join(os.path.dirname(__file__), "core"))
 
 try:
     from advanced_mathematical_core import (
@@ -30,14 +29,16 @@ try:
         calculate_kelly_metrics,
         shannon_entropy_stable,
         safe_delta_calculation,
-        normalized_delta_tanh
+        normalized_delta_tanh,
     )
     from type_defs import QuantumState, Temperature
     from constants import EPSILON_FLOAT64, FERRIS_PRIMARY_CYCLE, KELLY_SAFETY_FACTOR
+
     print("✅ Successfully imported all mathematical state modules")
 except ImportError as e:
     print(f"❌ Import error: {e}")
     sys.exit(1)
+
 
 def test_ferris_wheel_state():
     """Test FerrisWheelState calculations."""
@@ -61,9 +62,12 @@ def test_ferris_wheel_state():
     assert 0 <= state.cycle_position <= 2 * np.pi, "Cycle position should be in [0, 2π]"
     assert state.angular_velocity > 0, "Angular velocity should be positive"
     assert 0 <= state.phase_coherence <= 1, "Phase coherence should be in [0, 1]"
-    assert state.synchronization_level >= 0, "Synchronization level should be non-negative"
+    assert state.synchronization_level >= 0, (
+        "Synchronization level should be non-negative"
+    )
 
     print("  ✅ FerrisWheelState tests passed")
+
 
 def test_quantum_thermal_state():
     """Test QuantumThermalState calculations."""
@@ -74,7 +78,9 @@ def test_quantum_thermal_state():
     temperature = Temperature(300.0)  # 300K
 
     # Calculate state
-    state = calculate_quantum_thermal_state(quantum_state, temperature, gamma_factor=1.0)
+    state = calculate_quantum_thermal_state(
+        quantum_state, temperature, gamma_factor=1.0
+    )
 
     print(f"  Temperature: {state.temperature:.2f}K")
     print(f"  Thermal Entropy: {state.thermal_entropy:.4f}")
@@ -88,6 +94,7 @@ def test_quantum_thermal_state():
     assert state.decoherence_rate >= 0, "Decoherence rate should be non-negative"
 
     print("  ✅ QuantumThermalState tests passed")
+
 
 def test_void_well_metrics():
     """Test VoidWellMetrics calculations."""
@@ -114,6 +121,7 @@ def test_void_well_metrics():
 
     print("  ✅ VoidWellMetrics tests passed")
 
+
 def test_profit_state():
     """Test ProfitState calculations."""
     print("\n🧮 Testing ProfitState...")
@@ -125,21 +133,32 @@ def test_profit_state():
     volatility = 0.02  # 2% volatility
 
     # Calculate profit state
-    state = calculate_profit_state(entry_price, exit_price, time_held_minutes, volatility)
+    state = calculate_profit_state(
+        entry_price, exit_price, time_held_minutes, volatility
+    )
 
-    print(f"  Raw Return: {state.raw_return:.4f} ({state.raw_return*100:.2f}%)")
-    print(f"  Annualized Return: {state.annualized_return:.4f} ({state.annualized_return*100:.2f}%)")
+    print(f"  Raw Return: {state.raw_return:.4f} ({state.raw_return * 100:.2f}%)")
+    print(
+        f"  Annualized Return: {state.annualized_return:.4f} ({state.annualized_return * 100:.2f}%)"
+    )
     print(f"  Sharpe Ratio: {state.sharpe_ratio:.4f}")
     print(f"  Risk-Adjusted Return: {state.risk_adjusted_return:.4f}")
     print(f"  Risk Penalty: {state.risk_penalty:.4f}")
 
     # Validate mathematical properties
     expected_raw_return = (exit_price - entry_price) / entry_price
-    assert abs(state.raw_return - expected_raw_return) < 1e-10, "Raw return calculation error"
-    assert state.risk_penalty > 0 and state.risk_penalty <= 1, "Risk penalty should be in (0, 1]"
-    assert state.risk_adjusted_return <= state.raw_return, "Risk-adjusted return should not exceed raw return"
+    assert abs(state.raw_return - expected_raw_return) < 1e-10, (
+        "Raw return calculation error"
+    )
+    assert state.risk_penalty > 0 and state.risk_penalty <= 1, (
+        "Risk penalty should be in (0, 1]"
+    )
+    assert state.risk_adjusted_return <= state.raw_return, (
+        "Risk-adjusted return should not exceed raw return"
+    )
 
     print("  ✅ ProfitState tests passed")
+
 
 def test_recursive_time_lock_sync():
     """Test RecursiveTimeLockSync calculations."""
@@ -149,13 +168,15 @@ def test_recursive_time_lock_sync():
     time_series = [
         np.array([1, 2, 3, 4, 5]),  # Short scale
         np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]),  # Medium scale
-        np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15])  # Long scale
-]
+        np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]),  # Long scale
+    ]
     periods = [5, 10, 15]  # Corresponding periods
     sync_threshold = 0.7
 
     # Calculate sync state
-    sync_state = calculate_recursive_time_lock_sync(time_series, periods, sync_threshold)
+    sync_state = calculate_recursive_time_lock_sync(
+        time_series, periods, sync_threshold
+    )
 
     print(f"  Coherence: {sync_state.coherence:.4f}")
     print(f"  Sync Triggered: {sync_state.sync_triggered}")
@@ -169,6 +190,7 @@ def test_recursive_time_lock_sync():
 
     print("  ✅ RecursiveTimeLockSync tests passed")
 
+
 def test_kelly_metrics():
     """Test KellyMetrics calculations."""
     print("\n📐 Testing KellyMetrics...")
@@ -181,21 +203,28 @@ def test_kelly_metrics():
     max_fraction = 0.25
 
     # Calculate Kelly metrics
-    metrics = calculate_kelly_metrics(win_probability, expected_return, volatility, safety_factor, max_fraction)
+    metrics = calculate_kelly_metrics(
+        win_probability, expected_return, volatility, safety_factor, max_fraction
+    )
 
-    print(f"  Kelly Fraction: {metrics.kelly_fraction:.4f} ({metrics.kelly_fraction*100:.2f}%)")
-    print(f"  Safe Kelly: {metrics.safe_kelly:.4f} ({metrics.safe_kelly*100:.2f}%)")
+    print(
+        f"  Kelly Fraction: {metrics.kelly_fraction:.4f} ({metrics.kelly_fraction * 100:.2f}%)"
+    )
+    print(f"  Safe Kelly: {metrics.safe_kelly:.4f} ({metrics.safe_kelly * 100:.2f}%)")
     print(f"  Odds: {metrics.odds:.4f}")
     print(f"  Growth Rate: {metrics.growth_rate:.6f}")
     print(f"  ROI Volatility: {metrics.roi_volatility:.4f}")
 
     # Validate mathematical properties
     assert metrics.odds > 0, "Odds should be positive"
-    assert metrics.safe_kelly <= max_fraction, "Safe Kelly should not exceed max fraction"
+    assert metrics.safe_kelly <= max_fraction, (
+        "Safe Kelly should not exceed max fraction"
+    )
     assert metrics.safe_kelly >= 0, "Safe Kelly should be non-negative"
     assert metrics.roi_volatility == volatility, "ROI volatility should match input"
 
     print("  ✅ KellyMetrics tests passed")
+
 
 def test_utility_functions():
     """Test utility mathematical functions."""
@@ -221,13 +250,16 @@ def test_utility_functions():
 
     print("  ✅ Utility function tests passed")
 
+
 def test_edge_cases():
     """Test edge cases and error handling."""
     print("\n⚠️ Testing Edge Cases...")
 
     # Test empty data
     empty_state = calculate_ferris_wheel_state(np.array([]), [], 0.0)
-    assert empty_state.cycle_position == 0.0, "Empty data should return zero cycle position"
+    assert empty_state.cycle_position == 0.0, (
+        "Empty data should return zero cycle position"
+    )
 
     # Test zero price
     zero_profit = calculate_profit_state(0.0, 100.0, 60.0, 0.1)
@@ -235,9 +267,12 @@ def test_edge_cases():
 
     # Test invalid Kelly parameters
     invalid_kelly = calculate_kelly_metrics(0.0, 0.1, 0.15)  # Zero win probability
-    assert invalid_kelly.kelly_fraction == 0.0, "Invalid Kelly should return zero fraction"
+    assert invalid_kelly.kelly_fraction == 0.0, (
+        "Invalid Kelly should return zero fraction"
+    )
 
     print("  ✅ Edge case tests passed")
+
 
 def main():
     """Run all mathematical state tests."""
@@ -261,10 +296,12 @@ def main():
     except Exception as e:
         print(f"\n❌ Test failed with error: {e}")
         import traceback
+
         traceback.print_exc()
         return 1
 
     return 0
+
 
 if __name__ == "__main__":
     exit(main())

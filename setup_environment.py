@@ -8,7 +8,6 @@ This script helps set up the Schwabot trading system environment
 with all required dependencies and configuration.
 """
 
-import os
 import subprocess
 import sys
 from pathlib import Path
@@ -44,7 +43,9 @@ def check_python_version():
         print("   ⚠️  Schwabot requires Python 3.8 or higher")
         return False
     else:
-        print(f"   ✅ Python {version.major}.{version.minor}.{version.micro} is compatible")
+        print(
+            f"   ✅ Python {version.major}.{version.minor}.{version.micro} is compatible"
+        )
         return True
 
 
@@ -53,11 +54,16 @@ def install_dependencies():
     print("\n📦 Installing Dependencies...")
 
     # Upgrade pip first
-    if not run_command(f"{sys.executable} -m pip install --upgrade pip", "Upgrading pip"):
+    if not run_command(
+        f"{sys.executable} -m pip install --upgrade pip", "Upgrading pip"
+    ):
         return False
 
     # Install core dependencies
-    if not run_command(f"{sys.executable} -m pip install -r requirements.txt", "Installing core dependencies"):
+    if not run_command(
+        f"{sys.executable} -m pip install -r requirements.txt",
+        "Installing core dependencies",
+    ):
         return False
 
     return True
@@ -69,7 +75,10 @@ def install_dev_dependencies():
 
     dev_req_file = Path("requirements-dev.txt")
     if dev_req_file.exists():
-        return run_command(f"{sys.executable} -m pip install -r requirements-dev.txt", "Installing dev dependencies")
+        return run_command(
+            f"{sys.executable} -m pip install -r requirements-dev.txt",
+            "Installing dev dependencies",
+        )
     else:
         print("   ⚠️  requirements-dev.txt not found, skipping dev dependencies")
         return True
@@ -81,7 +90,9 @@ def setup_pre_commit():
 
     if not run_command("pre-commit --version", "Checking pre-commit installation"):
         print("   Installing pre-commit...")
-        if not run_command(f"{sys.executable} -m pip install pre-commit", "Installing pre-commit"):
+        if not run_command(
+            f"{sys.executable} -m pip install pre-commit", "Installing pre-commit"
+        ):
             return False
 
     return run_command("pre-commit install", "Installing pre-commit hooks")
@@ -99,7 +110,7 @@ def create_directories():
         "flask/feeds/market_data",
         "settings",
         "logs",
-        ".mypy_cache"
+        ".mypy_cache",
     ]
 
     for directory in directories:
@@ -125,7 +136,7 @@ def test_imports():
         ("matplotlib", "Plotting library"),
         ("flask", "Web framework"),
         ("cryptography", "Cryptographic functions"),
-        ("psutil", "System monitoring")
+        ("psutil", "System monitoring"),
     ]
 
     all_good = True
@@ -147,7 +158,9 @@ def run_integration_test():
 
     test_file = Path("test_schwabot_integration.py")
     if test_file.exists():
-        return run_command(f"{sys.executable} test_schwabot_integration.py", "Running integration test")
+        return run_command(
+            f"{sys.executable} test_schwabot_integration.py", "Running integration test"
+        )
     else:
         print("   ⚠️  Integration test file not found, skipping")
         return True
@@ -173,13 +186,19 @@ def main():
         sys.exit(1)
 
     # Ask about dev dependencies
-    install_dev = input("\n🤔 Install development dependencies? (y/N): ").lower().startswith('y')
+    install_dev = (
+        input("\n🤔 Install development dependencies? (y/N): ").lower().startswith("y")
+    )
     if install_dev:
         if not install_dev_dependencies():
             print("⚠️  Failed to install dev dependencies (continuing anyway)")
 
     # Ask about pre-commit
-    setup_hooks = input("\n🤔 Set up pre-commit hooks for code quality? (y/N): ").lower().startswith('y')
+    setup_hooks = (
+        input("\n🤔 Set up pre-commit hooks for code quality? (y/N): ")
+        .lower()
+        .startswith("y")
+    )
     if setup_hooks:
         if not setup_pre_commit():
             print("⚠️  Failed to set up pre-commit hooks (continuing anyway)")
@@ -189,7 +208,7 @@ def main():
         print("⚠️  Some imports failed - there may be dependency issues")
 
     # Run integration test
-    run_test = input("\n🤔 Run integration test? (y/N): ").lower().startswith('y')
+    run_test = input("\n🤔 Run integration test? (y/N): ").lower().startswith("y")
     if run_test:
         if not run_integration_test():
             print("⚠️  Integration test failed - check the output above")

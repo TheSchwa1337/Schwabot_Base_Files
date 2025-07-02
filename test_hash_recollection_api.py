@@ -7,10 +7,9 @@ Test script to verify that the hash_recollection API integration
 works properly with all modules.
 """
 
-import asyncio
-import time
 import numpy as np
 from hash_recollection import HashRecollectionAPI
+
 
 def test_entropy_tracker():
     """Test entropy tracker functionality."""
@@ -38,6 +37,7 @@ def test_entropy_tracker():
 
     print("  ✓ Entropy Tracker test passed\n")
 
+
 def test_bit_operations():
     """Test bit operations functionality."""
     print("Testing Bit Operations...")
@@ -62,6 +62,7 @@ def test_bit_operations():
         print(f"    - {pattern.pattern_type}: {pattern.confidence:.4f}")
 
     print("  ✓ Bit Operations test passed\n")
+
 
 def test_pattern_utils():
     """Test pattern utilities functionality."""
@@ -89,6 +90,7 @@ def test_pattern_utils():
 
     print("  ✓ Pattern Utils test passed\n")
 
+
 def test_api_integration():
     """Test API integration."""
     print("Testing API Integration...")
@@ -107,11 +109,14 @@ def test_api_integration():
     trend = api.pattern_utils.analyze_trend(price_data)
     patterns = api.pattern_utils.detect_patterns(price_data)
 
-    print(f"    Entropy: {entropy_metrics.entropy_value:.4f} ({entropy_metrics.state.value})")
+    print(
+        f"    Entropy: {entropy_metrics.entropy_value:.4f} ({entropy_metrics.state.value})"
+    )
     print(f"    Trend: {trend.trend_direction} (strength: {trend.strength:.4f})")
     print(f"    Patterns: {len(patterns)} found")
 
     print("  ✓ API Integration test passed\n")
+
 
 def test_signal_generation():
     """Test signal generation."""
@@ -123,8 +128,8 @@ def test_signal_generation():
     test_cases = [
         ("uptrend", [100 + i * 0.5 for i in range(30)]),
         ("downtrend", [100 - i * 0.5 for i in range(30)]),
-        ("sideways", [100 + np.random.normal(0, 2) for _ in range(30)])
-]
+        ("sideways", [100 + np.random.normal(0, 2) for _ in range(30)]),
+    ]
     for name, price_data in test_cases:
         print(f"  Testing {name}...")
 
@@ -136,15 +141,21 @@ def test_signal_generation():
         patterns = api.pattern_utils.detect_patterns(price_data)
 
         # Create bit sequence
-        normalized_prices = [(p - min(price_data)) / (max(price_data) - min(price_data)) for p in price_data]
+        normalized_prices = [
+            (p - min(price_data)) / (max(price_data) - min(price_data))
+            for p in price_data
+        ]
         bit_sequence = api.bit_operations.create_bit_sequence(normalized_prices)
         bit_patterns = api.bit_operations.detect_patterns(bit_sequence.bits)
 
-        print(f"    Entropy signal: {entropy_signal.signal_type if entropy_signal else 'none'}")
+        print(
+            f"    Entropy signal: {entropy_signal.signal_type if entropy_signal else 'none'}"
+        )
         print(f"    Trend: {trend.trend_direction} ({trend.strength:.4f})")
         print(f"    Patterns: {len(patterns) + len(bit_patterns)} total")
 
     print("  ✓ Signal Generation test passed\n")
+
 
 def main():
     """Run all tests."""
@@ -168,7 +179,9 @@ def main():
     except Exception as e:
         print(f"❌ Test failed: {e}")
         import traceback
+
         traceback.print_exc()
+
 
 if __name__ == "__main__":
     main()

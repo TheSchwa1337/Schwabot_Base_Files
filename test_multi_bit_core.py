@@ -8,13 +8,11 @@ framework integration without complex dependencies.
 
 import logging
 import time
-from typing import Dict, Any
 import numpy as np
 
 # Configure logging
 logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
 
@@ -29,12 +27,12 @@ def test_mathematical_functions():
         "void_well": False,
         "profit_state": False,
         "kelly_metrics": False,
-}
+    }
     try:
         # Test 1: Ferris Wheel State (simplified)
         print("  Testing Ferris wheel state calculation...")
 
-        time_series = np.array([100.0, 101.0, 102.0, 101.5, 103.0])
+        np.array([100.0, 101.0, 102.0, 101.5, 103.0])
         periods = [24.0, 72.0, 168.0]
         current_time = time.time()
 
@@ -52,7 +50,7 @@ def test_mathematical_functions():
         # Test 2: Quantum Thermal State (simplified)
         print("  Testing quantum thermal state calculation...")
 
-        quantum_state = np.array([0.70710678, 0.70710678])  # |+⟩ state
+        np.array([0.70710678, 0.70710678])  # |+⟩ state
         temperature = 300.0
 
         # Simplified quantum thermal calculation
@@ -75,7 +73,9 @@ def test_mathematical_functions():
         volume_gradient = np.gradient(volume_data)
         price_gradient = np.gradient(price_data)
         curl_field = volume_gradient * price_gradient
-        fractal_index = np.sum(np.abs(curl_field)) / (np.linalg.norm(volume_data) + 1e-12)
+        fractal_index = np.sum(np.abs(curl_field)) / (
+            np.linalg.norm(volume_data) + 1e-12
+        )
 
         assert fractal_index >= 0
 
@@ -93,7 +93,7 @@ def test_mathematical_functions():
         # Simplified profit calculation
         raw_return = (exit_price - entry_price) / entry_price
         annualized_return = raw_return * (525600 / max(time_held, 1))
-        risk_adjusted_return = raw_return * np.exp(-volatility)
+        raw_return * np.exp(-volatility)
         sharpe_ratio = annualized_return / (volatility + 1e-12)
 
         assert raw_return == 0.05  # 5% return
@@ -113,7 +113,9 @@ def test_mathematical_functions():
         odds = expected_return / volatility
         lose_probability = 1 - win_probability
         kelly_fraction = (win_probability * odds - lose_probability) / odds
-        safe_kelly = min(max(kelly_fraction * 0.5, 0), 0.25)  # 50% safety factor, max 25%
+        safe_kelly = min(
+            max(kelly_fraction * 0.5, 0), 0.25
+        )  # 50% safety factor, max 25%
 
         assert 0 <= safe_kelly <= 0.25
 
@@ -137,7 +139,7 @@ def test_multi_bit_logic():
         "state_transitions": False,
         "memory_management": False,
         "performance_tracking": False,
-}
+    }
     try:
         # Import the actual MultiBitStateManager
         from core.multi_bit_state_manager import MultiBitStateManager, ProcessingMode
@@ -151,11 +153,13 @@ def test_multi_bit_logic():
         # Test different complexity scenarios
         test_cases = [
             (0.1, 0.05, 0.01),  # Low complexity
-            (0.5, 0.2, 0.1),    # Medium complexity
-            (0.9, 0.8, 0.5),    # High complexity
-]
+            (0.5, 0.2, 0.1),  # Medium complexity
+            (0.9, 0.8, 0.5),  # High complexity
+        ]
         for volatility, volume_change, price_change in test_cases:
-            complexity_score = volatility * 0.4 + abs(volume_change) * 0.3 + abs(price_change) * 0.3
+            complexity_score = (
+                volatility * 0.4 + abs(volume_change) * 0.3 + abs(price_change) * 0.3
+            )
 
             if complexity_score < 0.2:
                 expected_depth = 2
@@ -192,7 +196,7 @@ def test_multi_bit_logic():
             ProcessingMode.GPU_16BIT,
             ProcessingMode.GPU_32BIT,
             ProcessingMode.GPU_42BIT,
-]
+        ]
         for bit_depth, expected_mode in zip(bit_depths, expected_modes):
             determined_mode = manager._determine_processing_mode(bit_depth)
             assert determined_mode == expected_mode
@@ -206,7 +210,7 @@ def test_multi_bit_logic():
         # Create multiple states
         state_ids = ["state_2bit", "state_8bit", "state_32bit"]
         for state_id in state_ids:
-            bit_depth = int(state_id.split('_')[1].replace('bit', ''))
+            bit_depth = int(state_id.split("_")[1].replace("bit", ""))
             manager.create_memory_state(state_id, bit_depth, priority=0.8)
 
         # Test transitions between states
@@ -214,7 +218,9 @@ def test_multi_bit_logic():
         for i, from_state_id in enumerate(state_ids):
             for j, to_state_id in enumerate(state_ids):
                 if i != j:
-                    transition = manager.transition_state(from_state_id, to_state_id, trigger="test")
+                    transition = manager.transition_state(
+                        from_state_id, to_state_id, trigger="test"
+                    )
                     transitions.append(transition)
                     assert transition.success
 
@@ -250,9 +256,13 @@ def test_multi_bit_logic():
 
         # Verify performance metrics exist
         required_metrics = [
-            "total_transitions", "successful_transitions", "failed_transitions",
-            "avg_transition_latency", "memory_efficiency", "cpu_utilization"
-]
+            "total_transitions",
+            "successful_transitions",
+            "failed_transitions",
+            "avg_transition_latency",
+            "memory_efficiency",
+            "cpu_utilization",
+        ]
         for metric in required_metrics:
             assert metric in performance
 
@@ -285,7 +295,7 @@ def test_trading_signal_generation():
         "risk_management": False,
         "position_sizing": False,
         "mathematical_integration": False,
-}
+    }
     try:
         # Test 1: Signal Creation
         print("  Testing signal creation...")
@@ -308,7 +318,7 @@ def test_trading_signal_generation():
 
         signal = TradingSignal("test_001", "BTC", "buy", 0.75, 16)
 
-        assert signal.signal_type in ['buy', 'sell', 'hold']
+        assert signal.signal_type in ["buy", "sell", "hold"]
         assert 0 <= signal.confidence <= 1
         assert signal.bit_depth in [2, 4, 8, 16, 32, 42]
 
@@ -330,7 +340,9 @@ def test_trading_signal_generation():
         volume_factor = min(volume_change, 1.0)
         volatility_factor = 1.0 - volatility  # Lower volatility = higher confidence
 
-        calculated_confidence = (rsi_factor + macd_factor + volume_factor + volatility_factor) / 4
+        calculated_confidence = (
+            rsi_factor + macd_factor + volume_factor + volatility_factor
+        ) / 4
 
         assert 0 <= calculated_confidence <= 1
         signal.confidence = calculated_confidence
@@ -372,7 +384,9 @@ def test_trading_signal_generation():
         odds = expected_return / volatility
         lose_probability = 1 - win_probability
         kelly_fraction = (win_probability * odds - lose_probability) / odds
-        safe_kelly = min(max(kelly_fraction * 0.5, 0), 0.25)  # 50% safety factor, max 25%
+        safe_kelly = min(
+            max(kelly_fraction * 0.5, 0), 0.25
+        )  # 50% safety factor, max 25%
 
         signal.kelly_fraction = kelly_fraction
         signal.position_size = safe_kelly
@@ -395,7 +409,9 @@ def test_trading_signal_generation():
 
         # Adjust confidence based on mathematical states
         ferris_factor = np.cos(signal.ferris_wheel_phase)  # -1 to 1
-        quantum_factor = 1.0 - signal.quantum_entropy  # Lower entropy = higher confidence
+        quantum_factor = (
+            1.0 - signal.quantum_entropy
+        )  # Lower entropy = higher confidence
         void_factor = signal.void_well_index  # Higher index = higher confidence
 
         mathematical_adjustment = (ferris_factor + quantum_factor + void_factor) / 3
@@ -431,7 +447,7 @@ def main():
         "mathematical_tests": math_results,
         "multi_bit_logic_tests": logic_results,
         "trading_signal_tests": signal_results,
-}
+    }
     # Calculate success rates
     success_rates = {}
     for test_category, results in all_results.items():
@@ -443,7 +459,7 @@ def main():
                 "passed": passed,
                 "total": total,
                 "success_rate": success_rate,
-}
+            }
     # Overall success rate
     total_passed = sum(sr["passed"] for sr in success_rates.values())
     total_tests = sum(sr["total"] for sr in success_rates.values())
@@ -454,10 +470,20 @@ def main():
     print("=" * 30)
 
     for category, stats in success_rates.items():
-        status = "✓ PASS" if stats["success_rate"] == 100 else "⚠ PARTIAL" if stats["success_rate"] > 50 else "✗ FAIL"
-        print(f"{category}: {status} ({stats['passed']}/{stats['total']} - {stats['success_rate']:.1f}%)")
+        status = (
+            "✓ PASS"
+            if stats["success_rate"] == 100
+            else "⚠ PARTIAL"
+            if stats["success_rate"] > 50
+            else "✗ FAIL"
+        )
+        print(
+            f"{category}: {status} ({stats['passed']}/{stats['total']} - {stats['success_rate']:.1f}%)"
+        )
 
-    print(f"\nOverall Success Rate: {overall_success_rate:.1f}% ({total_passed}/{total_tests})")
+    print(
+        f"\nOverall Success Rate: {overall_success_rate:.1f}% ({total_passed}/{total_tests})"
+    )
 
     if overall_success_rate >= 90:
         print("🎉 All tests passed successfully!")
@@ -468,13 +494,14 @@ def main():
 
     # Save results
     import json
+
     results_summary = {
         "test_results": all_results,
         "success_rates": success_rates,
         "overall_success_rate": overall_success_rate,
         "total_passed": total_passed,
         "total_tests": total_tests,
-}
+    }
     with open("test_results_multi_bit_core.json", "w") as f:
         json.dump(results_summary, f, indent=2, default=str)
 

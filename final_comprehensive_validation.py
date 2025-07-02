@@ -10,7 +10,7 @@ with fully integrated requirements and mypy compliance.
 import logging
 import sys
 import time
-from typing import Any, Dict, List
+from typing import Any, Dict
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -22,7 +22,7 @@ def safe_print(message: str) -> None:
     try:
         print(message)
     except UnicodeEncodeError:
-        print(message.encode('ascii', 'replace').decode('ascii'))
+        print(message.encode("ascii", "replace").decode("ascii"))
 
 
 def validate_imports() -> Dict[str, Any]:
@@ -33,7 +33,6 @@ def validate_imports() -> Dict[str, Any]:
 
     # Test core mathematical components
     try:
-        from core.mathlib_v4 import MathLibV4
         import_results["MathLibV4"] = {"success": True, "error": None}
         safe_print("  ✅ MathLibV4 import successful")
     except Exception as e:
@@ -41,31 +40,42 @@ def validate_imports() -> Dict[str, Any]:
         safe_print(f"  ❌ MathLibV4 import failed: {e}")
 
     try:
-        from core.enhanced_strategy_framework import EnhancedStrategyFramework
         import_results["EnhancedStrategyFramework"] = {"success": True, "error": None}
         safe_print("  ✅ EnhancedStrategyFramework import successful")
     except Exception as e:
-        import_results["EnhancedStrategyFramework"] = {"success": False, "error": str(e)}
+        import_results["EnhancedStrategyFramework"] = {
+            "success": False,
+            "error": str(e),
+        }
         safe_print(f"  ❌ EnhancedStrategyFramework import failed: {e}")
 
     try:
-        from core.smart_money_integration import SmartMoneyIntegrationFramework
-        import_results["SmartMoneyIntegrationFramework"] = {"success": True, "error": None}
+        import_results["SmartMoneyIntegrationFramework"] = {
+            "success": True,
+            "error": None,
+        }
         safe_print("  ✅ SmartMoneyIntegrationFramework import successful")
     except Exception as e:
-        import_results["SmartMoneyIntegrationFramework"] = {"success": False, "error": str(e)}
+        import_results["SmartMoneyIntegrationFramework"] = {
+            "success": False,
+            "error": str(e),
+        }
         safe_print(f"  ❌ SmartMoneyIntegrationFramework import failed: {e}")
 
     try:
-        from core.mathematical_optimization_bridge import MathematicalOptimizationBridge
-        import_results["MathematicalOptimizationBridge"] = {"success": True, "error": None}
+        import_results["MathematicalOptimizationBridge"] = {
+            "success": True,
+            "error": None,
+        }
         safe_print("  ✅ MathematicalOptimizationBridge import successful")
     except Exception as e:
-        import_results["MathematicalOptimizationBridge"] = {"success": False, "error": str(e)}
+        import_results["MathematicalOptimizationBridge"] = {
+            "success": False,
+            "error": str(e),
+        }
         safe_print(f"  ❌ MathematicalOptimizationBridge import failed: {e}")
 
     try:
-        from core.advanced_tensor_algebra import UnifiedTensorAlgebra
         import_results["UnifiedTensorAlgebra"] = {"success": True, "error": None}
         safe_print("  ✅ UnifiedTensorAlgebra import successful")
     except Exception as e:
@@ -86,28 +96,41 @@ def validate_smart_money_integration() -> Dict[str, Any]:
         smart_money = SmartMoneyIntegrationFramework()
 
         # Test data
-        price_data = [50000, 50100, 50050, 50200, 50150, 50300, 50250, 50400, 50350, 50500]
+        price_data = [
+            50000,
+            50100,
+            50050,
+            50200,
+            50150,
+            50300,
+            50250,
+            50400,
+            50350,
+            50500,
+        ]
         volume_data = [1000, 1200, 800, 1500, 900, 1800, 1100, 2000, 1300, 2500]
 
         # Analyze smart money metrics
         signals = smart_money.analyze_smart_money_metrics(
-            asset="BTC/USDT",
-            price_data=price_data,
-            volume_data=volume_data
+            asset="BTC/USDT", price_data=price_data, volume_data=volume_data
         )
 
         success = len(signals) > 0
-        safe_print(f"  {'✅' if success else '❌'} Smart Money Analysis: {len(signals)} signals generated")
+        safe_print(
+            f"  {'✅' if success else '❌'} Smart Money Analysis: {len(signals)} signals generated"
+        )
 
         if success:
             # Show signal details
             for i, signal in enumerate(signals[:3]):  # Show first 3 signals
-                safe_print(f"    Signal {i+1}: {signal.metric.value} (strength: {signal.signal_strength:.2f})")
+                safe_print(
+                    f"    Signal {i + 1}: {signal.metric.value} (strength: {signal.signal_strength:.2f})"
+                )
 
         return {
             "success": success,
             "signals_generated": len(signals),
-            "signal_types": [s.metric.value for s in signals] if signals else []
+            "signal_types": [s.metric.value for s in signals] if signals else [],
         }
 
     except Exception as e:
@@ -134,7 +157,9 @@ def validate_mathematical_optimization() -> Dict[str, Any]:
         result = bridge.optimize_multi_vector_operation(vector, matrix)
 
         success = result.get("success", False)
-        safe_print(f"  {'✅' if success else '❌'} Mathematical Optimization: {'SUCCESS' if success else 'FAILED'}")
+        safe_print(
+            f"  {'✅' if success else '❌'} Mathematical Optimization: {'SUCCESS' if success else 'FAILED'}"
+        )
 
         if success:
             execution_time = result.get("execution_time", 0)
@@ -161,23 +186,25 @@ def validate_enhanced_strategy_framework() -> Dict[str, Any]:
 
         # Generate Wall Street signals
         signals = framework.generate_wall_street_signals(
-            asset="BTC/USDT",
-            price=50000.0,
-            volume=1000.0
+            asset="BTC/USDT", price=50000.0, volume=1000.0
         )
 
         success = len(signals) > 0
-        safe_print(f"  {'✅' if success else '❌'} Wall Street Signals: {len(signals)} signals generated")
+        safe_print(
+            f"  {'✅' if success else '❌'} Wall Street Signals: {len(signals)} signals generated"
+        )
 
         if success:
             # Show signal details
             for i, signal in enumerate(signals[:3]):  # Show first 3 signals
-                safe_print(f"    Signal {i+1}: {signal.action} (confidence: {signal.confidence:.2f})")
+                safe_print(
+                    f"    Signal {i + 1}: {signal.action} (confidence: {signal.confidence:.2f})"
+                )
 
         return {
             "success": success,
             "signals_generated": len(signals),
-            "signal_actions": [s.action for s in signals] if signals else []
+            "signal_actions": [s.action for s in signals] if signals else [],
         }
 
     except Exception as e:
@@ -194,36 +221,55 @@ def validate_code_quality() -> Dict[str, Any]:
 
         # Check flake8 compliance
         result = subprocess.run(
-            [sys.executable, "-m", "flake8", "core/smart_money_integration.py",
-             "core/enhanced_integration_validator.py", "core/mathematical_optimization_bridge.py",
-             "--max-line-length=120", "--count"],
+            [
+                sys.executable,
+                "-m",
+                "flake8",
+                "core/smart_money_integration.py",
+                "core/enhanced_integration_validator.py",
+                "core/mathematical_optimization_bridge.py",
+                "--max-line-length=120",
+                "--count",
+            ],
             capture_output=True,
             text=True,
-            check=False
+            check=False,
         )
 
         if result.returncode == 0:
             safe_print("  ✅ Flake8 Compliance: PASSED")
             flake8_violations = 0
         else:
-            flake8_violations = len(result.stdout.strip().split('\n')) if result.stdout.strip() else 0
+            flake8_violations = (
+                len(result.stdout.strip().split("\n")) if result.stdout.strip() else 0
+            )
             safe_print(f"  ⚠️  Flake8 Compliance: {flake8_violations} violations found")
 
         # Check mypy compliance (if available)
         try:
             mypy_result = subprocess.run(
-                [sys.executable, "-m", "mypy", "core/smart_money_integration.py",
-                 "--ignore-missing-imports", "--no-strict-optional"],
+                [
+                    sys.executable,
+                    "-m",
+                    "mypy",
+                    "core/smart_money_integration.py",
+                    "--ignore-missing-imports",
+                    "--no-strict-optional",
+                ],
                 capture_output=True,
                 text=True,
-                check=False
+                check=False,
             )
 
             if mypy_result.returncode == 0:
                 safe_print("  ✅ MyPy Type Checking: PASSED")
                 mypy_errors = 0
             else:
-                mypy_errors = len(mypy_result.stdout.strip().split('\n')) if mypy_result.stdout.strip() else 0
+                mypy_errors = (
+                    len(mypy_result.stdout.strip().split("\n"))
+                    if mypy_result.stdout.strip()
+                    else 0
+                )
                 safe_print(f"  ⚠️  MyPy Type Checking: {mypy_errors} errors found")
         except Exception:
             safe_print("  ⚠️  MyPy not available for type checking")
@@ -232,7 +278,7 @@ def validate_code_quality() -> Dict[str, Any]:
         return {
             "flake8_violations": flake8_violations,
             "mypy_errors": mypy_errors,
-            "overall_quality": flake8_violations == 0 and mypy_errors == 0
+            "overall_quality": flake8_violations == 0 and mypy_errors == 0,
         }
 
     except Exception as e:
@@ -260,7 +306,9 @@ def main() -> Dict[str, Any]:
     validation_results["smart_money"] = validate_smart_money_integration()
 
     # 3. Mathematical optimization
-    validation_results["mathematical_optimization"] = validate_mathematical_optimization()
+    validation_results["mathematical_optimization"] = (
+        validate_mathematical_optimization()
+    )
 
     # 4. Enhanced strategy framework
     validation_results["strategy_framework"] = validate_enhanced_strategy_framework()
@@ -277,11 +325,15 @@ def main() -> Dict[str, Any]:
     safe_print("=" * 60)
 
     # Import success rate
-    import_successes = sum(1 for result in validation_results["imports"].values() if result["success"])
+    import_successes = sum(
+        1 for result in validation_results["imports"].values() if result["success"]
+    )
     import_total = len(validation_results["imports"])
     import_rate = (import_successes / import_total) * 100 if import_total > 0 else 0.0
 
-    safe_print(f"🔗 Import Success Rate: {import_rate:.1f}% ({import_successes}/{import_total})")
+    safe_print(
+        f"🔗 Import Success Rate: {import_rate:.1f}% ({import_successes}/{import_total})"
+    )
 
     # Component success rates
     component_successes = 0
@@ -293,8 +345,12 @@ def main() -> Dict[str, Any]:
                 component_successes += 1
             component_total += 1
 
-    component_rate = (component_successes / component_total) * 100 if component_total > 0 else 0.0
-    safe_print(f"⚙️  Component Success Rate: {component_rate:.1f}% ({component_successes}/{component_total})")
+    component_rate = (
+        (component_successes / component_total) * 100 if component_total > 0 else 0.0
+    )
+    safe_print(
+        f"⚙️  Component Success Rate: {component_rate:.1f}% ({component_successes}/{component_total})"
+    )
 
     # Code quality
     code_quality = validation_results["code_quality"]
@@ -303,13 +359,15 @@ def main() -> Dict[str, Any]:
     else:
         flake8_violations = code_quality.get("flake8_violations", 0)
         mypy_errors = code_quality.get("mypy_errors", 0)
-        safe_print(f"🔧 Code Quality: ⚠️  {flake8_violations} flake8 violations, {mypy_errors} mypy errors")
+        safe_print(
+            f"🔧 Code Quality: ⚠️  {flake8_violations} flake8 violations, {mypy_errors} mypy errors"
+        )
 
     # Overall assessment
     overall_success = (
-        import_rate >= 80 and
-        component_rate >= 70 and
-        code_quality.get("overall_quality", False)
+        import_rate >= 80
+        and component_rate >= 70
+        and code_quality.get("overall_quality", False)
     )
 
     safe_print(f"\n⏱️  Total Execution Time: {execution_time:.2f} seconds")
@@ -330,7 +388,7 @@ def main() -> Dict[str, Any]:
         "component_success_rate": component_rate,
         "code_quality": code_quality,
         "execution_time": execution_time,
-        "detailed_results": validation_results
+        "detailed_results": validation_results,
     }
 
 

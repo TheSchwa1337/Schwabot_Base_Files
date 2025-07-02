@@ -8,49 +8,54 @@ that includes all necessary code without external dependencies.
 """
 
 import sys
-import os
 import time
-import math
 from enum import Enum
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Callable
-import json
 
 # Mathematical constants
 PHI = 1.618033988749895  # Golden ratio
 PI = 3.141592653589793
 E = 2.718281828459045
 
+
 class VitruvianZone(Enum):
     """Vitruvian body zones mapped to trading actions."""
-    FEET_ENTRY = "feet_entry"           # 0.618 - Buy signal
-    PELVIS_HOLD = "pelvis_hold"         # 0.786 - Hold signal
-    HEART_BALANCE = "heart_balance"     # 1.000 - Balance signal
-    ARMS_EXIT = "arms_exit"             # 1.414 - Sell signal
-    HALO_PEAK = "halo_peak"             # 1.618 - Exit signal
+
+    FEET_ENTRY = "feet_entry"  # 0.618 - Buy signal
+    PELVIS_HOLD = "pelvis_hold"  # 0.786 - Hold signal
+    HEART_BALANCE = "heart_balance"  # 1.000 - Balance signal
+    ARMS_EXIT = "arms_exit"  # 1.414 - Sell signal
+    HALO_PEAK = "halo_peak"  # 1.618 - Exit signal
+
 
 class LimbVector(Enum):
     """Limb vectors for RBMS integration."""
-    LEFT_ARM = "left_arm"               # [0,1] XOR-flip echo symmetry
-    RIGHT_ARM = "right_arm"             # [1,0] XOR-flip echo symmetry
-    LEFT_LEG = "left_leg"               # [1,1] Static-mirror vector
-    RIGHT_LEG = "right_leg"             # [0,0] Static-mirror vector
-    HEAD_VECTOR = "head_vector"         # [1,0,0] Inversion over vertical
-    SPINE_CORE = "spine_core"           # ZPLS core anchor
+
+    LEFT_ARM = "left_arm"  # [0,1] XOR-flip echo symmetry
+    RIGHT_ARM = "right_arm"  # [1,0] XOR-flip echo symmetry
+    LEFT_LEG = "left_leg"  # [1,1] Static-mirror vector
+    RIGHT_LEG = "right_leg"  # [0,0] Static-mirror vector
+    HEAD_VECTOR = "head_vector"  # [1,0,0] Inversion over vertical
+    SPINE_CORE = "spine_core"  # ZPLS core anchor
+
 
 class CompressionMode(Enum):
     """Compression modes for ALIF/ALEPH coordination."""
-    LO_SYNC = "LO_SYNC"                 # Normal operation
-    DELTA_DRIFT = "DELTA_DRIFT"         # ALIF fast, ALEPH lagging
-    ECHO_GLIDE = "ECHO_GLIDE"           # ALEPH holding, ALIF free
-    COMPRESS_HOLD = "COMPRESS_HOLD"     # Both systems restrict entropy
+
+    LO_SYNC = "LO_SYNC"  # Normal operation
+    DELTA_DRIFT = "DELTA_DRIFT"  # ALIF fast, ALEPH lagging
+    ECHO_GLIDE = "ECHO_GLIDE"  # ALEPH holding, ALIF free
+    COMPRESS_HOLD = "COMPRESS_HOLD"  # Both systems restrict entropy
     OVERLOAD_FALLBACK = "OVERLOAD_FALLBACK"  # ALIF stalls, ALEPH fallback
+
 
 @dataclass
 class VitruvianState:
     """Complete state of the Vitruvian system."""
+
     timestamp: float = field(default_factory=time.time)
-    phi_center: float = 0.0              # Navel center point (ZPLS)
+    phi_center: float = 0.0  # Navel center point (ZPLS)
     limb_positions: Dict[LimbVector, float] = field(default_factory=dict)
     zone_activations: Dict[VitruvianZone, bool] = field(default_factory=dict)
     compression_mode: CompressionMode = CompressionMode.LO_SYNC
@@ -65,14 +70,17 @@ class VitruvianState:
     thermal_state: str = "warm"
     bit_phase: int = 8
 
+
 @dataclass
 class VitruvianTrigger:
     """Trigger event from Vitruvian analysis."""
+
     zone: VitruvianZone
     confidence: float
     action: str
     reason: str
     timestamp: float = field(default_factory=time.time)
+
 
 class VitruvianManager:
     """Main Vitruvian Man Management system."""
@@ -110,9 +118,13 @@ class VitruvianManager:
         self.current_state.limb_positions[LimbVector.LEFT_ARM] = 0.618 * price_factor
         self.current_state.limb_positions[LimbVector.RIGHT_ARM] = 1.414 * rsi_factor
         self.current_state.limb_positions[LimbVector.LEFT_LEG] = 0.786 * volume_factor
-        self.current_state.limb_positions[LimbVector.RIGHT_LEG] = 1.618 * (price_factor + rsi_factor) / 2
+        self.current_state.limb_positions[LimbVector.RIGHT_LEG] = (
+            1.618 * (price_factor + rsi_factor) / 2
+        )
         self.current_state.limb_positions[LimbVector.HEAD_VECTOR] = PHI * volume_factor
-        self.current_state.limb_positions[LimbVector.SPINE_CORE] = self.current_state.phi_center
+        self.current_state.limb_positions[LimbVector.SPINE_CORE] = (
+            self.current_state.phi_center
+        )
 
     def _calculate_ncco_state(self, price: float, rsi: float, entropy: float) -> float:
         """Calculate NCCO state based on market data."""
@@ -121,7 +133,7 @@ class VitruvianManager:
         rsi_factor = rsi / 100.0
         entropy_factor = entropy
 
-        ncco_state = (price_factor * 0.4 + rsi_factor * 0.3 + entropy_factor * 0.3)
+        ncco_state = price_factor * 0.4 + rsi_factor * 0.3 + entropy_factor * 0.3
         return ncco_state
 
     def _calculate_sfs_state(self, entropy: float, echo_strength: float) -> float:
@@ -151,9 +163,11 @@ class VitruvianManager:
 
     def _update_thermal_state(self):
         """Update thermal state and bit phase based on system load."""
-        total_load = (self.current_state.entropy_score +
-                     self.current_state.echo_strength +
-                     self.current_state.drift_score) / 3.0
+        total_load = (
+            self.current_state.entropy_score
+            + self.current_state.echo_strength
+            + self.current_state.drift_score
+        ) / 3.0
 
         if total_load < 0.3:
             self.current_state.thermal_state = "cool"
@@ -186,8 +200,15 @@ class VitruvianManager:
         else:
             self.current_state.zone_activations[VitruvianZone.HALO_PEAK] = True
 
-    def update_state(self, price: float, rsi: float, volume: float,
-                    entropy: float, echo_strength: float, drift_score: float) -> VitruvianState:
+    def update_state(
+        self,
+        price: float,
+        rsi: float,
+        volume: float,
+        entropy: float,
+        echo_strength: float,
+        drift_score: float,
+    ) -> VitruvianState:
         """Update the complete Vitruvian state."""
         # Update timestamp
         self.current_state.timestamp = time.time()
@@ -207,7 +228,9 @@ class VitruvianManager:
         self.current_state.ncco_state = self._calculate_ncco_state(price, rsi, entropy)
         self.current_state.sfs_state = self._calculate_sfs_state(entropy, echo_strength)
         self.current_state.ufs_state = self._calculate_ufs_state(drift_score)
-        self.current_state.zpls_state = self._calculate_zpls_state(self.current_state.phi_center)
+        self.current_state.zpls_state = self._calculate_zpls_state(
+            self.current_state.phi_center
+        )
         self.current_state.rbms_state = self._calculate_rbms_state()
 
         # Update thermal state
@@ -225,7 +248,9 @@ class VitruvianManager:
 
         return self.current_state
 
-    def get_optimal_trading_route(self, price: float, rsi: float, volume: float) -> dict:
+    def get_optimal_trading_route(
+        self, price: float, rsi: float, volume: float
+    ) -> dict:
         """Get optimal trading route based on Vitruvian analysis."""
         # Determine action based on RSI and volume
         if rsi < 30 and volume > 500000:
@@ -251,14 +276,15 @@ class VitruvianManager:
 
         # Adjust confidence based on volume
         volume_factor = min(volume / 1000000.0, 1.0)
-        confidence *= (0.7 + 0.3 * volume_factor)
+        confidence *= 0.7 + 0.3 * volume_factor
 
         return {
             "action": action,
             "reason": reason,
             "confidence": min(confidence, 1.0),
-            "timestamp": time.time()
-}
+            "timestamp": time.time(),
+        }
+
     def register_state_callback(self, callback: Callable):
         """Register a callback for state updates."""
         self.state_callbacks.append(callback)
@@ -279,16 +305,28 @@ class VitruvianManager:
                 "sfs": self.current_state.sfs_state,
                 "ufs": self.current_state.ufs_state,
                 "zpls": self.current_state.zpls_state,
-                "rbms": self.current_state.rbms_state
+                "rbms": self.current_state.rbms_state,
             },
             "zone_activations": {
-                zone.value: count for zone, count in
-                [(zone, sum(1 for trigger in self.trigger_history if trigger.zone == zone))
-                 for zone in VitruvianZone]
-}
-}
+                zone.value: count
+                for zone, count in [
+                    (
+                        zone,
+                        sum(
+                            1
+                            for trigger in self.trigger_history
+                            if trigger.zone == zone
+                        ),
+                    )
+                    for zone in VitruvianZone
+                ]
+            },
+        }
+
+
 # Global VMM manager instance
 _vmm_manager: Optional[VitruvianManager] = None
+
 
 def get_vitruvian_manager() -> VitruvianManager:
     """Get the global VMM manager instance."""
@@ -297,31 +335,43 @@ def get_vitruvian_manager() -> VitruvianManager:
         _vmm_manager = VitruvianManager()
     return _vmm_manager
 
-def update_vitruvian_state(price: float, rsi: float, volume: float,
-                          entropy: float, echo_strength: float, drift_score: float) -> VitruvianState:
+
+def update_vitruvian_state(
+    price: float,
+    rsi: float,
+    volume: float,
+    entropy: float,
+    echo_strength: float,
+    drift_score: float,
+) -> VitruvianState:
     """Update the global VMM state."""
     vmm = get_vitruvian_manager()
     return vmm.update_state(price, rsi, volume, entropy, echo_strength, drift_score)
+
 
 def get_optimal_trading_route(price: float, rsi: float, volume: float) -> dict:
     """Get optimal trading route from global VMM manager."""
     vmm = get_vitruvian_manager()
     return vmm.get_optimal_trading_route(price, rsi, volume)
 
+
 def get_vitruvian_statistics() -> dict:
     """Get statistics from global VMM manager."""
     vmm = get_vitruvian_manager()
     return vmm.get_statistics()
+
 
 def register_vitruvian_state_callback(callback: Callable):
     """Register a state callback with the global VMM manager."""
     vmm = get_vitruvian_manager()
     vmm.register_state_callback(callback)
 
+
 def register_vitruvian_trigger_callback(callback: Callable):
     """Register a trigger callback with the global VMM manager."""
     vmm = get_vitruvian_manager()
     vmm.register_trigger_callback(callback)
+
 
 def test_vmm_basic():
     """Test basic VMM functionality."""
@@ -340,7 +390,7 @@ def test_vmm_basic():
         print(f"✅ Compression Modes: {[mode.value for mode in CompressionMode]}")
 
         # Test manager creation
-        vmm = get_vitruvian_manager()
+        get_vitruvian_manager()
         print("✅ VMM manager created successfully")
 
         # Test basic state update
@@ -350,10 +400,10 @@ def test_vmm_basic():
             volume=1000000.0,
             entropy=0.6,
             echo_strength=0.7,
-            drift_score=0.02
+            drift_score=0.02,
         )
 
-        print(f"✅ State updated successfully")
+        print("✅ State updated successfully")
         print(f"   Phi center: {state.phi_center:.4f}")
         print(f"   Thermal state: {state.thermal_state}")
         print(f"   Bit phase: {state.bit_phase}")
@@ -364,20 +414,16 @@ def test_vmm_basic():
         print(f"   RBMS state: {state.rbms_state:.4f}")
 
         # Test trading route
-        route = get_optimal_trading_route(
-            price=103586.0,
-            rsi=45.0,
-            volume=1000000.0
-        )
+        route = get_optimal_trading_route(price=103586.0, rsi=45.0, volume=1000000.0)
 
-        print(f"✅ Trading route generated")
+        print("✅ Trading route generated")
         print(f"   Action: {route['action']}")
         print(f"   Reason: {route['reason']}")
         print(f"   Confidence: {route['confidence']:.3f}")
 
         # Test statistics
         stats = get_vitruvian_statistics()
-        print(f"✅ Statistics generated")
+        print("✅ Statistics generated")
         print(f"   Total triggers: {stats['total_triggers']}")
         print(f"   Current thermal state: {stats['current_thermal_state']}")
         print(f"   Current bit phase: {stats['current_bit_phase']}")
@@ -387,8 +433,10 @@ def test_vmm_basic():
     except Exception as e:
         print(f"❌ VMM basic test failed: {e}")
         import traceback
+
         traceback.print_exc()
         return False
+
 
 def test_mathematical_integration():
     """Test mathematical integration."""
@@ -403,7 +451,7 @@ def test_mathematical_integration():
             (103586.0, 50.0, "Balance - Heart Balance"),
             (103586.0, 70.0, "Overbought - Arms Exit"),
             (103586.0, 80.0, "Peak - Halo Peak"),
-]
+        ]
         for price, rsi, description in scenarios:
             print(f"\n   Testing: {description}")
 
@@ -413,10 +461,12 @@ def test_mathematical_integration():
                 volume=1000000.0,
                 entropy=0.5,
                 echo_strength=0.6,
-                drift_score=0.02
+                drift_score=0.02,
             )
 
-            active_zones = [zone.value for zone, active in state.zone_activations.items() if active]
+            active_zones = [
+                zone.value for zone, active in state.zone_activations.items() if active
+            ]
             print(f"      Active zones: {active_zones}")
             print(f"      Thermal state: {state.thermal_state}")
             print(f"      Bit phase: {state.bit_phase}")
@@ -431,8 +481,10 @@ def test_mathematical_integration():
     except Exception as e:
         print(f"❌ Mathematical integration test failed: {e}")
         import traceback
+
         traceback.print_exc()
         return False
+
 
 def test_vitruvian_calculations():
     """Test Vitruvian mathematical calculations."""
@@ -443,7 +495,7 @@ def test_vitruvian_calculations():
         # Test golden ratio calculations
         print(f"✅ Golden Ratio (Φ): {PHI:.10f}")
         print(f"✅ Φ²: {PHI**2:.10f}")
-        print(f"✅ 1/Φ: {1/PHI:.10f}")
+        print(f"✅ 1/Φ: {1 / PHI:.10f}")
 
         # Test Fibonacci ratios
         fib_ratios = [0.618, 0.786, 1.000, 1.414, 1.618]
@@ -459,7 +511,7 @@ def test_vitruvian_calculations():
         # Test limb positions
         vmm._update_limb_positions(103586.0, 50.0, 1000000.0)
         limb_positions = vmm.current_state.limb_positions
-        print(f"✅ Limb Positions:")
+        print("✅ Limb Positions:")
         for limb, position in limb_positions.items():
             print(f"   {limb.value}: {position:.4f}")
 
@@ -468,8 +520,10 @@ def test_vitruvian_calculations():
     except Exception as e:
         print(f"❌ Vitruvian calculations test failed: {e}")
         import traceback
+
         traceback.print_exc()
         return False
+
 
 def main():
     """Run all VMM tests."""
@@ -480,12 +534,12 @@ def main():
         ("VMM Basic Functionality", test_vmm_basic),
         ("Mathematical Integration", test_mathematical_integration),
         ("Vitruvian Calculations", test_vitruvian_calculations),
-]
+    ]
     passed = 0
     total = len(tests)
 
     for name, test_func in tests:
-        print(f"\n{'='*20} {name} {'='*20}")
+        print(f"\n{'=' * 20} {name} {'=' * 20}")
         try:
             result = test_func()
 
@@ -506,13 +560,18 @@ def main():
         print("   - Core functionality: Working")
         print("   - Mathematical integration: NCCO, SFS, UFS, ZPLS, RBMS connected")
         print("   - Vitruvian calculations: Golden ratio and Fibonacci ratios")
-        print("   - Zone mapping: Feet→Entry, Pelvis→Hold, Heart→Balance, Arms→Exit, Halo→Peak")
+        print(
+            "   - Zone mapping: Feet→Entry, Pelvis→Hold, Heart→Balance, Arms→Exit, Halo→Peak"
+        )
         print("   - Thermal states: Cool→Hot with bit phase coordination")
-        print("   - Trading routes: Optimal route generation based on Vitruvian analysis")
+        print(
+            "   - Trading routes: Optimal route generation based on Vitruvian analysis"
+        )
     else:
         print("⚠️ Some tests failed. Check the errors above.")
 
     return passed == total
+
 
 if __name__ == "__main__":
     success = main()

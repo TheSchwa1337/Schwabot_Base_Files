@@ -17,21 +17,18 @@ Provides unified control over:
 from utils.logging_setup import setup_logging
 from server.tensor_websocket_server import TensorWebSocketServer
 from server.qsc_diagnostic_websocket import QSCDiagnosticServer
-from core.qsc_enhanced_profit_allocator import QSCEnhancedProfitAllocator
-from core.quantum_static_core import QuantumStaticCore, QSCMode, ResonanceLevel
-from core.master_cycle_engine import MasterCycleEngine, SystemMode, TradingDecision
+from core.master_cycle_engine import MasterCycleEngine
 import os
 import sys
 import argparse
 import asyncio
-import logging
 import time
 import signal
 import json
-from typing import Dict, List, Optional, Any
+from typing import Dict, Optional, Any
 from pathlib import Path
 import subprocess
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 # Add project root to path
 project_root = Path(__file__).parent
@@ -45,6 +42,7 @@ logger = setup_logging(__name__)
 @dataclass
 class QSCSystemStatus:
     """Complete QSC system status."""
+
     master_engine: bool = False
     qsc_immune_system: bool = False
     tensor_analysis: bool = False
@@ -92,46 +90,46 @@ class SchwabotQSCCLI:
                 "quantum_confidence_threshold": 0.8,
                 "enable_auto_immune_response": True,
                 "enable_ghost_floor_mode": True,
-                "enable_emergency_protocols": True
+                "enable_emergency_protocols": True,
             },
             "qsc_immune_system": {
                 "resonance_threshold": 0.618,
                 "immune_activation_threshold": 0.85,
                 "entropy_stability_range": [0.3, 0.7],
                 "timeband_lock_duration": 300,
-                "auto_optimization_enabled": True
+                "auto_optimization_enabled": True,
             },
             "profit_allocation": {
                 "qsc_validation_enabled": True,
                 "tensor_integration_enabled": True,
                 "min_resonance_threshold": 0.618,
                 "max_entropy_threshold": 0.7,
-                "emergency_stop_threshold": 0.2
+                "emergency_stop_threshold": 0.2,
             },
             "diagnostic_server": {
                 "host": "localhost",
                 "port": 8766,
                 "stream_interval": 1.0,
                 "auto_alert_enabled": True,
-                "alert_sound_enabled": True
+                "alert_sound_enabled": True,
             },
             "tensor_server": {
                 "host": "localhost",
                 "port": 8765,
                 "stream_interval": 1.0,
-                "btc_price_simulator": True
+                "btc_price_simulator": True,
             },
             "visualization": {
                 "enable_react_server": True,
                 "react_port": 3000,
                 "auto_open_browser": False,
-                "diagnostic_panel_enabled": True
-            }
+                "diagnostic_panel_enabled": True,
+            },
         }
 
         if self.config_file.exists():
             try:
-                with open(self.config_file, 'r') as f:
+                with open(self.config_file, "r") as f:
                     loaded_config = json.load(f)
                     # Merge with defaults
                     for key, value in loaded_config.items():
@@ -148,7 +146,7 @@ class SchwabotQSCCLI:
         """Save current configuration."""
         try:
             self.config_file.parent.mkdir(parents=True, exist_ok=True)
-            with open(self.config_file, 'w') as f:
+            with open(self.config_file, "w") as f:
                 json.dump(self.config, f, indent=2)
             logger.info(f"QSC configuration saved to {self.config_file}")
         except Exception as e:
@@ -173,14 +171,16 @@ class SchwabotQSCCLI:
                 "fibonacci_projection": [49850, 49950, 50050],
                 "orderbook": {
                     "bids": [[49990, 1.5], [49980, 2.0]],
-                    "asks": [[50010, 1.6], [50020, 2.1]]
-                }
+                    "asks": [[50010, 1.6], [50020, 2.1]],
+                },
             }
 
             diagnostics = self.master_engine.process_market_tick(test_data)
             logger.info(
                 f"🎯 Master Cycle Engine started. Test decision: {
-                    diagnostics.trading_decision.value}")
+                    diagnostics.trading_decision.value
+                }"
+            )
 
             self.system_status.master_engine = True
             self.system_status.qsc_immune_system = True
@@ -225,9 +225,9 @@ class SchwabotQSCCLI:
     async def start_visualization_server(self) -> bool:
         """Start the React visualization server with QSC diagnostic panel."""
         try:
-            if not self.config.get(
-                    "visualization", {}).get(
-                    "enable_react_server", True):
+            if not self.config.get("visualization", {}).get(
+                "enable_react_server", True
+            ):
                 return True
 
             # Check if Node.js is available
@@ -250,7 +250,7 @@ class SchwabotQSCCLI:
                 env=env,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
-                text=True
+                text=True,
             )
 
             # Give it time to start
@@ -289,23 +289,31 @@ class SchwabotQSCCLI:
             logger.info("Setting up QSC React visualization app...")
 
             # Create React app
-            subprocess.run(["npx",
-                            "create-react-app",
-                            "qsc_visualization",
-                            "--template",
-                            "typescript"],
-                           cwd=project_root,
-                           check=True)
+            subprocess.run(
+                [
+                    "npx",
+                    "create-react-app",
+                    "qsc_visualization",
+                    "--template",
+                    "typescript",
+                ],
+                cwd=project_root,
+                check=True,
+            )
 
             # Install additional dependencies
-            subprocess.run(["npm",
-                            "install",
-                            "recharts",
-                            "mathjs",
-                            "react-router-dom",
-                            "@types/react-router-dom"],
-                           cwd=react_dir,
-                           check=True)
+            subprocess.run(
+                [
+                    "npm",
+                    "install",
+                    "recharts",
+                    "mathjs",
+                    "react-router-dom",
+                    "@types/react-router-dom",
+                ],
+                cwd=react_dir,
+                check=True,
+            )
 
             # Create QSC diagnostic components
             self._create_qsc_components(react_dir)
@@ -317,7 +325,7 @@ class SchwabotQSCCLI:
         components_dir.mkdir(exist_ok=True)
 
         # QSC Diagnostic Dashboard
-        qsc_dashboard = '''
+        qsc_dashboard = """
 import React, { useState, useEffect } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
@@ -545,13 +553,13 @@ const QSCDiagnosticDashboard = () => {
 };
 
 export default QSCDiagnosticDashboard;
-'''
+"""
 
         with open(components_dir / "QSCDiagnosticDashboard.tsx", "w") as f:
             f.write(qsc_dashboard)
 
         # Update App.tsx
-        app_tsx = '''
+        app_tsx = """
 import React from 'react';
 import './App.css';
 import QSCDiagnosticDashboard from './components/QSCDiagnosticDashboard';
@@ -565,13 +573,13 @@ function App() {
 }
 
 export default App;
-'''
+"""
 
         with open(src_dir / "App.tsx", "w") as f:
             f.write(app_tsx)
 
         # Add CSS styles
-        app_css = '''
+        app_css = """
 .qsc-dashboard {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   background: #0a0a0a;
@@ -785,7 +793,7 @@ export default App;
   margin-top: 0.5rem;
   font-family: monospace;
 }
-'''
+"""
 
         with open(src_dir / "App.css", "w") as f:
             f.write(app_css)
@@ -793,6 +801,7 @@ export default App;
     def _open_browser(self, url: str):
         """Open browser to the given URL."""
         import webbrowser
+
         try:
             webbrowser.open(url)
         except Exception as e:
@@ -809,15 +818,20 @@ export default App;
                 if self.master_engine:
                     engine_status = self.master_engine.get_system_status()
                     self.system_status.immune_activations = engine_status.get(
-                        "immune_activations", 0)
+                        "immune_activations", 0
+                    )
                     self.system_status.ghost_floor_activations = engine_status.get(
-                        "ghost_floor_activations", 0)
+                        "ghost_floor_activations", 0
+                    )
                     self.system_status.emergency_shutdowns = engine_status.get(
-                        "emergency_shutdowns", 0)
+                        "emergency_shutdowns", 0
+                    )
                     self.system_status.total_decisions = engine_status.get(
-                        "total_decisions", 0)
+                        "total_decisions", 0
+                    )
                     self.system_status.success_rate = engine_status.get(
-                        "success_rate", 0.0)
+                        "success_rate", 0.0
+                    )
 
                 # Log status every 30 seconds
                 if int(self.system_status.uptime) % 30 == 0:
@@ -833,12 +847,12 @@ export default App;
         """Log current QSC system status."""
         status_msg = f"""
 🧬 Schwabot QSC + GTS System Status (Uptime: {self.system_status.uptime:.0f}s)
-  🎯 Master Engine: {'✅' if self.system_status.master_engine else '❌'}
-  🧬 QSC Immune System: {'✅' if self.system_status.qsc_immune_system else '❌'}
-  🧠 Tensor Analysis: {'✅' if self.system_status.tensor_analysis else '❌'}
-  💰 Profit Allocator: {'✅' if self.system_status.profit_allocator else '❌'}
-  📡 Diagnostic Server: {'✅' if self.system_status.diagnostic_server else '❌'}
-  ⚛️ Visualization: {'✅' if self.system_status.visualization_server else '❌'}
+  🎯 Master Engine: {"✅" if self.system_status.master_engine else "❌"}
+  🧬 QSC Immune System: {"✅" if self.system_status.qsc_immune_system else "❌"}
+  🧠 Tensor Analysis: {"✅" if self.system_status.tensor_analysis else "❌"}
+  💰 Profit Allocator: {"✅" if self.system_status.profit_allocator else "❌"}
+  📡 Diagnostic Server: {"✅" if self.system_status.diagnostic_server else "❌"}
+  ⚛️ Visualization: {"✅" if self.system_status.visualization_server else "❌"}
 
   📊 Performance:
     Total Decisions: {self.system_status.total_decisions}
@@ -877,12 +891,14 @@ export default App;
 
         if success_rate >= 0.8:  # 80% success rate required
             logger.info(
-                f"✅ QSC System startup successful ({success_count}/{total_systems} components)")
+                f"✅ QSC System startup successful ({success_count}/{total_systems} components)"
+            )
             self.is_running = True
             return True
         else:
             logger.error(
-                f"❌ QSC System startup failed ({success_count}/{total_systems} components)")
+                f"❌ QSC System startup failed ({success_count}/{total_systems} components)"
+            )
             return False
 
     async def stop_all_systems(self):
@@ -936,49 +952,40 @@ Examples:
   %(prog)s status                  # Show system status
   %(prog)s demo                    # Run immune system demo
   %(prog)s config                  # Show configuration
-        """
+        """,
     )
 
-    subparsers = parser.add_subparsers(dest='command', help='Available commands')
+    subparsers = parser.add_subparsers(dest="command", help="Available commands")
 
     # Start command
-    start_parser = subparsers.add_parser('start', help='Start the QSC immune system')
+    start_parser = subparsers.add_parser("start", help="Start the QSC immune system")
     start_parser.add_argument(
-        '--no-viz',
-        action='store_true',
-        help='Disable React visualization')
+        "--no-viz", action="store_true", help="Disable React visualization"
+    )
     start_parser.add_argument(
-        '--diagnostic-port',
-        type=int,
-        default=8766,
-        help='Diagnostic server port')
+        "--diagnostic-port", type=int, default=8766, help="Diagnostic server port"
+    )
     start_parser.add_argument(
-        '--tensor-port',
-        type=int,
-        default=8765,
-        help='Tensor server port')
+        "--tensor-port", type=int, default=8765, help="Tensor server port"
+    )
     start_parser.add_argument(
-        '--react-port',
-        type=int,
-        default=3000,
-        help='React server port')
+        "--react-port", type=int, default=3000, help="React server port"
+    )
 
     # Demo command
-    subparsers.add_parser('demo', help='Run QSC immune system demo')
+    subparsers.add_parser("demo", help="Run QSC immune system demo")
 
     # Status command
-    subparsers.add_parser('status', help='Show system status')
+    subparsers.add_parser("status", help="Show system status")
 
     # Config command
-    config_parser = subparsers.add_parser('config', help='Configuration management')
+    config_parser = subparsers.add_parser("config", help="Configuration management")
     config_parser.add_argument(
-        '--show',
-        action='store_true',
-        help='Show current configuration')
+        "--show", action="store_true", help="Show current configuration"
+    )
     config_parser.add_argument(
-        '--reset',
-        action='store_true',
-        help='Reset to default configuration')
+        "--reset", action="store_true", help="Reset to default configuration"
+    )
 
     return parser
 
@@ -990,7 +997,7 @@ async def main():
 
     cli = SchwabotQSCCLI()
 
-    if args.command == 'start':
+    if args.command == "start":
         # Update config based on arguments
         if args.no_viz:
             cli.config["visualization"]["enable_react_server"] = False
@@ -1003,13 +1010,14 @@ async def main():
 
         await cli.run()
 
-    elif args.command == 'demo':
+    elif args.command == "demo":
         # Run QSC immune system demo
         from examples.qsc_immune_system_demo import QSCImmuneSystemDemo
+
         demo = QSCImmuneSystemDemo()
         await demo.run_complete_demo()
 
-    elif args.command == 'status':
+    elif args.command == "status":
         # Show current system status
         print("🧬 Schwabot QSC + GTS Immune System Status:")
         print("  Implementation: Ready")
@@ -1017,7 +1025,7 @@ async def main():
         print("  Components: Available")
         print("  Integration: Complete")
 
-    elif args.command == 'config':
+    elif args.command == "config":
         if args.show:
             print("📋 QSC System Configuration:")
             print(json.dumps(cli.config, indent=2))

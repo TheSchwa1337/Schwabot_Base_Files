@@ -21,25 +21,29 @@ import hashlib
 import json
 import math
 import time
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional, Tuple
 from dataclasses import dataclass, field
 from datetime import datetime
 
 import numpy as np
 
+
 # Standalone mathematical implementations
 @dataclass
 class BitPattern:
     """Represents a bit pattern with metadata."""
+
     value: int
     bits: int
     pattern: str
     timestamp: float = field(default_factory=time.time)
     metadata: Dict[str, Any] = field(default_factory=dict)
 
+
 @dataclass
 class FlipEvent:
     """Represents a bit flip event with RBM metadata."""
+
     original: BitPattern
     flipped: BitPattern
     flip_type: str
@@ -47,6 +51,7 @@ class FlipEvent:
     entropy_delta: float
     timestamp: float = field(default_factory=time.time)
     metadata: Dict[str, Any] = field(default_factory=dict)
+
 
 class StandaloneRBMMathematics:
     """Standalone RBM Mathematics implementation."""
@@ -66,8 +71,9 @@ class StandaloneRBMMathematics:
             "bit_phase": 4,
             "active_patterns": [],
             "memory_bank": {},
-            "entropy_pool": 0.0
-}
+            "entropy_pool": 0.0,
+        }
+
     def bit_flip(self, value: int, bits: int = 4) -> int:
         if bits not in self.standard_bits:
             raise ValueError(f"Bits must be one of {self.standard_bits}")
@@ -79,14 +85,14 @@ class StandaloneRBMMathematics:
             value=value,
             bits=bits,
             pattern=f"{value:0{bits}b}",
-            metadata={"operation": "bit_flip_original"}
+            metadata={"operation": "bit_flip_original"},
         )
 
         flipped_pattern = BitPattern(
             value=flipped,
             bits=bits,
             pattern=f"{flipped:0{bits}b}",
-            metadata={"operation": "bit_flip_result"}
+            metadata={"operation": "bit_flip_result"},
         )
 
         self.bit_patterns[f"{value:0{bits}b}"] = original_pattern
@@ -97,7 +103,7 @@ class StandaloneRBMMathematics:
             flipped=flipped_pattern,
             flip_type="bitwise_not",
             confidence=1.0,
-            entropy_delta=self._calculate_entropy_delta(value, flipped, bits)
+            entropy_delta=self._calculate_entropy_delta(value, flipped, bits),
         )
 
         self.flip_history.append(flip_event)
@@ -107,17 +113,25 @@ class StandaloneRBMMathematics:
         original_bits = f"{original:0{bits}b}"
         flipped_bits = f"{flipped:0{bits}b}"
 
-        original_ones = original_bits.count('1')
-        flipped_ones = flipped_bits.count('1')
+        original_ones = original_bits.count("1")
+        flipped_ones = flipped_bits.count("1")
 
-        original_entropy = -((original_ones/bits) * math.log2(original_ones/bits + 1e-10) +
-                           ((bits-original_ones)/bits) * math.log2((bits-original_ones)/bits + 1e-10))
-        flipped_entropy = -((flipped_ones/bits) * math.log2(flipped_ones/bits + 1e-10) +
-                          ((bits-flipped_ones)/bits) * math.log2((bits-flipped_ones)/bits + 1e-10))
+        original_entropy = -(
+            (original_ones / bits) * math.log2(original_ones / bits + 1e-10)
+            + ((bits - original_ones) / bits)
+            * math.log2((bits - original_ones) / bits + 1e-10)
+        )
+        flipped_entropy = -(
+            (flipped_ones / bits) * math.log2(flipped_ones / bits + 1e-10)
+            + ((bits - flipped_ones) / bits)
+            * math.log2((bits - flipped_ones) / bits + 1e-10)
+        )
 
         return flipped_entropy - original_entropy
 
-    def recursive_bit_flip(self, seed: int, bits: int = 4, max_cycles: int = 10) -> List[int]:
+    def recursive_bit_flip(
+        self, seed: int, bits: int = 4, max_cycles: int = 10
+    ) -> List[int]:
         sequence = [seed]
         seen = {seed}
 
@@ -132,7 +146,9 @@ class StandaloneRBMMathematics:
 
         return sequence
 
-    def create_4d_array(self, dimensions: Tuple[int, int, int, int] = (4, 4, 4, 4)) -> np.ndarray:
+    def create_4d_array(
+        self, dimensions: Tuple[int, int, int, int] = (4, 4, 4, 4)
+    ) -> np.ndarray:
         if len(dimensions) != 4:
             raise ValueError("Dimensions must be 4-tuple")
 
@@ -147,7 +163,9 @@ class StandaloneRBMMathematics:
 
         return array_4d
 
-    def simulate_quantum_superposition(self, states: List[int], bits: int = 4) -> Dict[str, float]:
+    def simulate_quantum_superposition(
+        self, states: List[int], bits: int = 4
+    ) -> Dict[str, float]:
         if not states:
             return {}
 
@@ -160,7 +178,9 @@ class StandaloneRBMMathematics:
 
         return superposition
 
-    def simulate_entanglement(self, state_a: int, state_b: int, bits: int = 4) -> Dict[str, float]:
+    def simulate_entanglement(
+        self, state_a: int, state_b: int, bits: int = 4
+    ) -> Dict[str, float]:
         entangled_states = {}
 
         state_a_bits = f"{state_a:0{bits}b}"
@@ -205,8 +225,8 @@ class StandaloneRBMMathematics:
                 "avg_roi": 0.0,
                 "inverse": self._find_inverse_pair(pair, pairs),
                 "confidence": 0.8,
-                "last_trigger": None
-}
+                "last_trigger": None,
+            }
         return flip_matrix
 
     def _find_inverse_pair(self, pair: str, pairs: List[str]) -> Optional[str]:
@@ -217,12 +237,16 @@ class StandaloneRBMMathematics:
             return inverse
         return None
 
-    def calculate_profit_hash(self, pair: str, price: float, volume: float, timestamp: float) -> str:
+    def calculate_profit_hash(
+        self, pair: str, price: float, volume: float, timestamp: float
+    ) -> str:
         hash_input = f"{pair}_{price:.6f}_{volume:.2f}_{timestamp:.0f}"
         hash_value = hash(hash_input) % (2**32)
         return f"{hash_value:08x}"
 
-    def detect_profit_zone(self, hash_sig: str, current_price: float, price_trajectory: float) -> bool:
+    def detect_profit_zone(
+        self, hash_sig: str, current_price: float, price_trajectory: float
+    ) -> bool:
         try:
             hash_value = int(hash_sig[:8], 16)
         except ValueError:
@@ -246,11 +270,13 @@ class StandaloneRBMMathematics:
         layers = [
             [pairs[0], pairs[1]] if len(pairs) >= 2 else pairs,
             [pairs[2], pairs[3]] if len(pairs) >= 4 else pairs[2:],
-            pairs[4:] if len(pairs) > 4 else []
-]
+            pairs[4:] if len(pairs) > 4 else [],
+        ]
         return [layer for layer in layers if layer]
 
-    def calculate_volume_weights(self, pairs: List[str], market_data: Dict[str, Dict[str, float]]) -> Dict[str, float]:
+    def calculate_volume_weights(
+        self, pairs: List[str], market_data: Dict[str, Dict[str, float]]
+    ) -> Dict[str, float]:
         weights = {}
         total_volume = 0.0
 
@@ -275,17 +301,21 @@ class StandaloneRBMMathematics:
             "ferris_wheel_rotations": self.ferris_wheel_states["rotation_count"],
             "entropy_pool": self.ferris_wheel_states["entropy_pool"],
             "active_patterns": len(self.ferris_wheel_states["active_patterns"]),
-            "memory_bank_size": len(self.ferris_wheel_states["memory_bank"])
-}
+            "memory_bank_size": len(self.ferris_wheel_states["memory_bank"]),
+        }
+
+
 @dataclass
 class FerrisState:
     """Represents a Ferris Wheel state."""
+
     phase: int
     bit_state: int
     rotation_count: int
     entropy_level: float
     timestamp: float = field(default_factory=time.time)
     metadata: Dict[str, Any] = field(default_factory=dict)
+
 
 class StandaloneFerrisWheelRDE:
     """Standalone Ferris Wheel RDE implementation."""
@@ -311,7 +341,7 @@ class StandaloneFerrisWheelRDE:
                 bit_state=phase % 16,
                 rotation_count=self.rotation_count,
                 entropy_level=self._calculate_entropy(sha_hash),
-                metadata={"sha_hash": sha_hash, "input_data": input_data}
+                metadata={"sha_hash": sha_hash, "input_data": input_data},
             )
             self.states.append(state)
 
@@ -344,7 +374,9 @@ class StandaloneFerrisWheelRDE:
 
         return value, dual
 
-    def recursive_dualistic_cycle(self, seed: int, bits: int = 2, max_cycles: int = 10) -> List[Tuple[int, int]]:
+    def recursive_dualistic_cycle(
+        self, seed: int, bits: int = 2, max_cycles: int = 10
+    ) -> List[Tuple[int, int]]:
         cycle = []
         current = seed
         seen = set()
@@ -362,7 +394,9 @@ class StandaloneFerrisWheelRDE:
 
         return cycle
 
-    def execute_ferris_rotation(self, current_state: int, target_pairs: List[str]) -> Dict[str, Any]:
+    def execute_ferris_rotation(
+        self, current_state: int, target_pairs: List[str]
+    ) -> Dict[str, Any]:
         original, dual = self.dualistic_bit_operation(current_state, self.bit_phase)
 
         rotation_input = f"{original:04b}_{dual:04b}_{self.current_phase:03d}"
@@ -382,8 +416,8 @@ class StandaloneFerrisWheelRDE:
                 "rotation_hash": rotation_hash,
                 "original_state": original,
                 "dual_state": dual,
-                "trading_action": trading_action
-}
+                "trading_action": trading_action,
+            },
         )
         self.states.append(rotation_state)
 
@@ -393,9 +427,12 @@ class StandaloneFerrisWheelRDE:
             "dual_state": dual,
             "trading_action": trading_action,
             "phase": self.current_phase,
-            "rotation_count": self.rotation_count
-}
-    def _determine_trading_action(self, original: int, dual: int, target_pairs: List[str]) -> Dict[str, Any]:
+            "rotation_count": self.rotation_count,
+        }
+
+    def _determine_trading_action(
+        self, original: int, dual: int, target_pairs: List[str]
+    ) -> Dict[str, Any]:
         action_type = "buy" if dual > original else "sell"
 
         pair_index = (original + dual) % len(target_pairs)
@@ -410,13 +447,16 @@ class StandaloneFerrisWheelRDE:
             "confidence": confidence,
             "original_state": original,
             "dual_state": dual,
-            "state_difference": state_diff
-}
+            "state_difference": state_diff,
+        }
+
     def asic_character_duality(self, value: int) -> Dict[str, Any]:
         original, dual = self.dualistic_bit_operation(value, 2)
 
         duality_ratio = dual / (original + 1e-10)
-        entropy_delta = self._calculate_entropy(f"{original:02b}") - self._calculate_entropy(f"{dual:02b}")
+        entropy_delta = self._calculate_entropy(
+            f"{original:02b}"
+        ) - self._calculate_entropy(f"{dual:02b}")
 
         return {
             "original_2bit": original,
@@ -424,8 +464,9 @@ class StandaloneFerrisWheelRDE:
             "duality_ratio": duality_ratio,
             "entropy_delta": entropy_delta,
             "duality_strength": abs(original - dual) / 3.0,
-            "asic_compatible": True
-}
+            "asic_compatible": True,
+        }
+
     def create_trade_layers(self, pairs: List[str]) -> List[List[str]]:
         if len(pairs) < 3:
             return [pairs]
@@ -436,8 +477,8 @@ class StandaloneFerrisWheelRDE:
             [pairs[2]] if len(pairs) > 2 else [],
             pairs[3:5] if len(pairs) > 3 else [],
             pairs[5:8] if len(pairs) > 5 else [],
-            pairs[8:] if len(pairs) > 8 else []
-]
+            pairs[8:] if len(pairs) > 8 else [],
+        ]
         return [layer for layer in layers if layer]
 
     def get_rde_statistics(self) -> Dict[str, Any]:
@@ -447,13 +488,15 @@ class StandaloneFerrisWheelRDE:
             "bit_phase": self.bit_phase,
             "total_states": len(self.states),
             "max_phases": self.max_phases,
-            "asic_duality_active": self.bit_phase == 2
-}
+            "asic_duality_active": self.bit_phase == 2,
+        }
+
+
 def test_rbm_mathematics():
     """Test RBM Mathematics system."""
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("TESTING RBM MATHEMATICS")
-    print("="*60)
+    print("=" * 60)
 
     rbm = StandaloneRBMMathematics()
 
@@ -516,15 +559,15 @@ def test_rbm_mathematics():
     print("\nTesting trade layers:")
     layers = rbm.generate_trade_layers(pairs)
     for i, layer in enumerate(layers):
-        print(f"  Layer {i+1}: {layer}")
+        print(f"  Layer {i + 1}: {layer}")
 
     # Test volume weights
     print("\nTesting volume weights:")
     market_data = {
         "BTC→ETH": {"price": 0.05, "volume": 1000},
         "ETH→USDC": {"price": 2000, "volume": 500},
-        "BTC→USDC": {"price": 45000, "volume": 2000}
-}
+        "BTC→USDC": {"price": 45000, "volume": 2000},
+    }
     weights = rbm.calculate_volume_weights(pairs, market_data)
     for pair, weight in weights.items():
         print(f"  {pair}: {weight:.3f}")
@@ -532,11 +575,12 @@ def test_rbm_mathematics():
     # Print RBM statistics
     print(f"\nRBM Statistics: {rbm.get_rbm_statistics()}")
 
+
 def test_ferris_wheel_rde():
     """Test Ferris Wheel RDE system."""
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("TESTING FERRIS WHEEL RDE")
-    print("="*60)
+    print("=" * 60)
 
     ferris = StandaloneFerrisWheelRDE()
 
@@ -564,29 +608,34 @@ def test_ferris_wheel_rde():
     pairs = ["BTC→ETH", "ETH→USDC", "BTC→USDC"]
     for i in range(5):
         result = ferris.execute_ferris_rotation(i, pairs)
-        action = result['trading_action']
-        print(f"  Rotation {i}: {action['action']} {action['pair']} (confidence: {action['confidence']:.2f})")
+        action = result["trading_action"]
+        print(
+            f"  Rotation {i}: {action['action']} {action['pair']} (confidence: {action['confidence']:.2f})"
+        )
 
     # Test ASIC duality
     print("\nTesting ASIC duality:")
     for value in [0, 1, 2, 3]:
         duality = ferris.asic_character_duality(value)
-        print(f"  {value:02b}: ratio={duality['duality_ratio']:.2f}, strength={duality['duality_strength']:.2f}")
+        print(
+            f"  {value:02b}: ratio={duality['duality_ratio']:.2f}, strength={duality['duality_strength']:.2f}"
+        )
 
     # Test trade layers
     print("\nTesting trade layers:")
     layers = ferris.create_trade_layers(pairs)
     for i, layer in enumerate(layers):
-        print(f"  Layer {i+1}: {layer}")
+        print(f"  Layer {i + 1}: {layer}")
 
     # Print RDE statistics
     print(f"\nRDE Statistics: {ferris.get_rde_statistics()}")
 
+
 def test_mathematical_integration():
     """Test integration between mathematical systems."""
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("TESTING MATHEMATICAL INTEGRATION")
-    print("="*60)
+    print("=" * 60)
 
     # Initialize systems
     rbm = StandaloneRBMMathematics()
@@ -594,12 +643,6 @@ def test_mathematical_integration():
 
     # Test data
     pairs = ["BTC→ETH", "ETH→USDC", "BTC→USDC", "XRP→BTC"]
-    market_data = {
-        "BTC→ETH": {"price": 0.05, "volume": 1000, "trajectory": 0.02},
-        "ETH→USDC": {"price": 2000, "volume": 500, "trajectory": -0.01},
-        "BTC→USDC": {"price": 45000, "volume": 2000, "trajectory": 0.03},
-        "XRP→BTC": {"price": 0.000022, "volume": 1500, "trajectory": 0.01}
-}
     print("Testing cross-system integration:")
 
     # Test RBM + Ferris integration
@@ -608,7 +651,9 @@ def test_mathematical_integration():
     ferris_rotation = ferris.execute_ferris_rotation(5, pairs)
 
     print(f"  RBM matrix pairs: {len(rbm_matrix)}")
-    print(f"  Ferris rotation: {ferris_rotation['trading_action']['action']} {ferris_rotation['trading_action']['pair']}")
+    print(
+        f"  Ferris rotation: {ferris_rotation['trading_action']['action']} {ferris_rotation['trading_action']['pair']}"
+    )
 
     # Test mathematical consistency
     print("\n2. Mathematical Consistency:")
@@ -616,7 +661,7 @@ def test_mathematical_integration():
     # Check bit consistency
     rbm_bits = set()
     for pair_data in rbm_matrix.values():
-        rbm_bits.add(pair_data['bit'])
+        rbm_bits.add(pair_data["bit"])
 
     ferris_bits = set()
     for i in range(16):
@@ -638,23 +683,24 @@ def test_mathematical_integration():
 
     print("\nMathematical integration test completed")
 
+
 def save_test_results():
     """Save test results to file."""
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("SAVING TEST RESULTS")
-    print("="*60)
+    print("=" * 60)
 
     test_results = {
         "timestamp": datetime.now().isoformat(),
         "test_summary": {
             "rbm_tests": "Completed",
             "ferris_tests": "Completed",
-            "integration_tests": "Completed"
+            "integration_tests": "Completed",
         },
         "system_status": {
             "rbm_mathematics": "Operational",
             "ferris_wheel_rde": "Operational",
-            "mathematical_integration": "Operational"
+            "mathematical_integration": "Operational",
         },
         "mathematical_foundations": {
             "bit_operations": "2, 4, 8, 16, 32, 42, 64-bit support",
@@ -663,21 +709,22 @@ def save_test_results():
             "quantum_simulation": "Classical approximation of quantum behaviors",
             "entropy_calculation": "Information theory implementation",
             "ferris_wheel_rde": "256 SHA creation cycle",
-            "asic_duality": "2-bit connection functionality"
-}
-}
+            "asic_duality": "2-bit connection functionality",
+        },
+    }
     with open("standalone_test_results.json", "w", encoding="utf-8") as f:
         json.dump(test_results, f, indent=2)
 
     print("Test results saved to standalone_test_results.json")
     print("Mathematical foundations successfully implemented and tested")
 
+
 def main():
     """Main test function."""
     print("STANDALONE MATHEMATICS SYSTEM TEST")
-    print("="*60)
+    print("=" * 60)
     print("Testing the mathematical foundation for Schwabot trading system")
-    print("="*60)
+    print("=" * 60)
 
     start_time = time.time()
 
@@ -692,9 +739,9 @@ def main():
 
         # Print summary
         elapsed_time = time.time() - start_time
-        print(f"\n" + "="*60)
+        print("\n" + "=" * 60)
         print("ALL TESTS COMPLETED SUCCESSFULLY!")
-        print("="*60)
+        print("=" * 60)
         print(f"Total test time: {elapsed_time:.2f} seconds")
         print("\nMathematical foundations implemented:")
         print("  ✓ RBM Mathematics (Recursive Bit Mapping)")
@@ -709,7 +756,9 @@ def main():
     except Exception as e:
         print(f"\n[ERROR] Test failed: {e}")
         import traceback
+
         traceback.print_exc()
+
 
 if __name__ == "__main__":
     main()

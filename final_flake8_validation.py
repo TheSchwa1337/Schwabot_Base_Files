@@ -26,7 +26,8 @@ def run_flake8_validation():
     config = {
         "max_line_length": 120,
         "ignore": "E203,W503,E501,F401,F841,W291,W293,E302,E303,E701,E702",
-        "exclude": "__pycache__,*.pyc,.git,*.backup,temp,logs,examples,cleanup_stub_files"}
+        "exclude": "__pycache__,*.pyc,.git,*.backup,temp,logs,examples,cleanup_stub_files",
+    }
     # Target directories
     target_dirs = ["core", "schwabot"]
 
@@ -42,26 +43,40 @@ def run_flake8_validation():
 
         try:
             # Run flake8 on the directory
-            result = subprocess.run([
-                sys.executable, "-m", "flake8",
-                f"--max-line-length={config['max_line_length']}",
-                f"--extend-ignore={config['ignore']}",
-                f"--exclude={config['exclude']}",
-                "--count",
-                target_dir
-            ], capture_output=True, text=True)
+            result = subprocess.run(
+                [
+                    sys.executable,
+                    "-m",
+                    "flake8",
+                    f"--max-line-length={config['max_line_length']}",
+                    f"--extend-ignore={config['ignore']}",
+                    f"--exclude={config['exclude']}",
+                    "--count",
+                    target_dir,
+                ],
+                capture_output=True,
+                text=True,
+            )
 
             if result.returncode == 0:
-                print(f"   ✅ CLEAN - No flake8 errors found")
+                print("   ✅ CLEAN - No flake8 errors found")
                 results[target_dir] = {"errors": 0, "status": "clean"}
             else:
-                error_count = len([line for line in result.stdout.split(
-                    '\n') if line.strip() and ':' in line])
+                error_count = len(
+                    [
+                        line
+                        for line in result.stdout.split("\n")
+                        if line.strip() and ":" in line
+                    ]
+                )
                 print(f"   ❌ ERRORS - {error_count} flake8 errors found")
 
                 # Show first few errors
-                errors = [line for line in result.stdout.split(
-                    '\n') if line.strip() and ':' in line]
+                errors = [
+                    line
+                    for line in result.stdout.split("\n")
+                    if line.strip() and ":" in line
+                ]
                 for error in errors[:5]:
                     print(f"      • {error}")
                 if len(errors) > 5:
@@ -94,12 +109,12 @@ def run_flake8_validation():
         "total_errors": total_errors,
         "status": status,
         "results": results,
-        "config": config
+        "config": config,
     }
     with open("final_flake8_validation_report.json", "w") as f:
         json.dump(report, f, indent=2)
 
-    print(f"\n📊 Report saved to: final_flake8_validation_report.json")
+    print("\n📊 Report saved to: final_flake8_validation_report.json")
     print("=" * 80)
 
     return total_errors == 0

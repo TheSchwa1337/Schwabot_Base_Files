@@ -17,15 +17,13 @@ Comprehensive test of the mathematical relay sequencer system, including:
 import sys
 import time
 import logging
-import hashlib
 import json
 import os
 from datetime import datetime, timedelta
 
 # Configure logging
 logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
 
@@ -38,15 +36,12 @@ def test_sequencer_initialization():
     try:
         from core.mathematical_relay_sequencer import (
             MathematicalRelaySequencer,
-            SequenceType,
-            TimeLogLevel
+            TimeLogLevel,
         )
 
         # Test initialization with different time log levels
         sequencer = MathematicalRelaySequencer(
-            mode="demo",
-            log_level="INFO",
-            time_log_level=TimeLogLevel.MICROSECOND
+            mode="demo", log_level="INFO", time_log_level=TimeLogLevel.MICROSECOND
         )
 
         print("✅ MathematicalRelaySequencer initialized successfully")
@@ -59,10 +54,14 @@ def test_sequencer_initialization():
 
         # Test core system integrations
         print(f"✅ Relay navigator available: {sequencer.relay_navigator is not None}")
-        print(f"✅ Relay integration available: {sequencer.relay_integration is not None}")
+        print(
+            f"✅ Relay integration available: {sequencer.relay_integration is not None}"
+        )
         print(f"✅ Trend manager available: {sequencer.trend_manager is not None}")
         print(f"✅ Basket engine available: {sequencer.basket_engine is not None}")
-        print(f"✅ QuickTime manager available: {sequencer.quicktime_manager is not None}")
+        print(
+            f"✅ QuickTime manager available: {sequencer.quicktime_manager is not None}"
+        )
 
         return sequencer
 
@@ -83,15 +82,17 @@ def test_sequence_creation_and_management(sequencer):
             btc_price=50000.0,
             btc_volume=1000.0,
             phase=32,
-            additional_data={"test_type": "btc_price_hash"}
+            additional_data={"test_type": "btc_price_hash"},
         )
 
         if btc_result.get("success", False):
-            print(f"✅ BTC price hash sequence completed")
+            print("✅ BTC price hash sequence completed")
             print(f"✅ Duration: {btc_result.get('total_duration_seconds', 0):.6f}s")
             print(f"✅ BTC hash: {btc_result.get('btc_hash', '')[:16]}...")
         else:
-            print(f"❌ BTC price hash sequence failed: {btc_result.get('error', 'Unknown error')}")
+            print(
+                f"❌ BTC price hash sequence failed: {btc_result.get('error', 'Unknown error')}"
+            )
 
         # Test bit depth switch sequence
         print("\n🔄 Testing Bit Depth Switch Sequence")
@@ -99,14 +100,18 @@ def test_sequence_creation_and_management(sequencer):
             from_bit_depth=32,
             to_bit_depth=16,
             channel="primary",
-            metadata={"test_type": "bit_depth_switch"}
+            metadata={"test_type": "bit_depth_switch"},
         )
 
         if bit_depth_result.get("success", False):
-            print(f"✅ Bit depth switch sequence completed")
-            print(f"✅ Duration: {bit_depth_result.get('total_duration_seconds', 0):.6f}s")
+            print("✅ Bit depth switch sequence completed")
+            print(
+                f"✅ Duration: {bit_depth_result.get('total_duration_seconds', 0):.6f}s"
+            )
         else:
-            print(f"❌ Bit depth switch sequence failed: {bit_depth_result.get('error', 'Unknown error')}")
+            print(
+                f"❌ Bit depth switch sequence failed: {bit_depth_result.get('error', 'Unknown error')}"
+            )
 
         # Test profit optimization sequence
         print("\n💰 Testing Profit Optimization Sequence")
@@ -114,20 +119,22 @@ def test_sequence_creation_and_management(sequencer):
             profit_target=0.05,  # 5% profit target
             basket_tier="high",
             btc_price=50000.0,
-            metadata={"test_type": "profit_optimization"}
+            metadata={"test_type": "profit_optimization"},
         )
 
         if profit_result.get("success", False):
-            print(f"✅ Profit optimization sequence completed")
+            print("✅ Profit optimization sequence completed")
             print(f"✅ Duration: {profit_result.get('total_duration_seconds', 0):.6f}s")
         else:
-            print(f"❌ Profit optimization sequence failed: {profit_result.get('error', 'Unknown error')}")
+            print(
+                f"❌ Profit optimization sequence failed: {profit_result.get('error', 'Unknown error')}"
+            )
 
         # Test manual sequence creation
         print("\n🔧 Testing Manual Sequence Creation")
         sequence_id = sequencer.start_sequence(
             sequence_type=SequenceType.MATHEMATICAL_VALIDATION,
-            metadata={"test_type": "manual_sequence"}
+            metadata={"test_type": "manual_sequence"},
         )
 
         print(f"✅ Manual sequence started: {sequence_id}")
@@ -143,15 +150,15 @@ def test_sequence_creation_and_management(sequencer):
         manual_result = sequencer.complete_sequence(
             sequence_id=sequence_id,
             success=True,
-            final_metadata={"validation_passed": True}
+            final_metadata={"validation_passed": True},
         )
 
         if manual_result.get("success", False):
-            print(f"✅ Manual sequence completed")
+            print("✅ Manual sequence completed")
             print(f"✅ Duration: {manual_result.get('total_duration_seconds', 0):.6f}s")
             print(f"✅ Time logs: {manual_result.get('time_logs_count', 0)}")
         else:
-            print(f"❌ Manual sequence failed")
+            print("❌ Manual sequence failed")
 
         return True
 
@@ -169,7 +176,7 @@ def test_time_log_management(sequencer):
         # Create a test sequence for time log testing
         sequence_id = sequencer.start_sequence(
             sequence_type=SequenceType.SYSTEM_SYNCHRONIZATION,
-            metadata={"test_type": "time_log_management"}
+            metadata={"test_type": "time_log_management"},
         )
 
         # Log multiple operations with precise timing
@@ -178,8 +185,8 @@ def test_time_log_management(sequencer):
             "system_check_2",
             "system_check_3",
             "synchronization_start",
-            "synchronization_complete"
-]
+            "synchronization_complete",
+        ]
         for i, operation in enumerate(operations):
             sequencer.log_sequence_operation(sequence_id, operation)
             time.sleep(0.001)  # 1ms delay between operations
@@ -202,7 +209,7 @@ def test_time_log_management(sequencer):
                 timestamp = log.get("timestamp", "")
                 operation = log.get("operation", "")
                 duration = log.get("duration_microseconds", 0)
-                print(f"  {i+1}. {operation}: {duration}μs at {timestamp}")
+                print(f"  {i + 1}. {operation}: {duration}μs at {timestamp}")
 
             # Check microsecond precision
             first_log = time_logs[0]
@@ -220,9 +227,7 @@ def test_time_log_management(sequencer):
         now = datetime.now()
         one_minute_ago = now - timedelta(minutes=1)
         time_range_logs = sequencer.get_time_logs(
-            start_time=one_minute_ago,
-            end_time=now,
-            limit=50
+            start_time=one_minute_ago, end_time=now, limit=50
         )
         print(f"✅ Retrieved {len(time_range_logs)} time logs for last minute")
 
@@ -245,7 +250,7 @@ def test_sequence_status_and_statistics(sequencer):
         for i in range(5):
             sequence_id = sequencer.start_sequence(
                 sequence_type=SequenceType.STATE_CONTINUITY,
-                metadata={"test_type": "status_testing", "iteration": i}
+                metadata={"test_type": "status_testing", "iteration": i},
             )
             test_sequences.append(sequence_id)
 
@@ -265,12 +270,14 @@ def test_sequence_status_and_statistics(sequencer):
         for i, sequence_id in enumerate(test_sequences):
             status = sequencer.get_sequence_status(sequence_id)
             if status:
-                print(f"✅ Sequence {i+1}: {status.get('status', 'unknown')} - {status.get('type', 'unknown')}")
-                if status.get('end_time'):
-                    duration = status.get('total_duration_microseconds', 0) / 1_000_000
+                print(
+                    f"✅ Sequence {i + 1}: {status.get('status', 'unknown')} - {status.get('type', 'unknown')}"
+                )
+                if status.get("end_time"):
+                    duration = status.get("total_duration_microseconds", 0) / 1_000_000
                     print(f"   Duration: {duration:.6f}s")
             else:
-                print(f"❌ Sequence {i+1}: Status not found")
+                print(f"❌ Sequence {i + 1}: Status not found")
 
         # Test comprehensive statistics
         print("\n📈 Testing Comprehensive Statistics")
@@ -281,18 +288,20 @@ def test_sequence_status_and_statistics(sequencer):
             print(f"✅ Completed sequences: {statistics.get('completed_sequences', 0)}")
             print(f"✅ Total sequences: {statistics.get('total_sequences', 0)}")
             print(f"✅ Time logs count: {statistics.get('time_logs_count', 0)}")
-            print(f"✅ Average duration: {statistics.get('average_duration_seconds', 0):.6f}s")
+            print(
+                f"✅ Average duration: {statistics.get('average_duration_seconds', 0):.6f}s"
+            )
             print(f"✅ Uptime: {statistics.get('uptime_seconds', 0):.1f}s")
 
             # Show type distribution
-            type_dist = statistics.get('sequence_type_distribution', {})
+            type_dist = statistics.get("sequence_type_distribution", {})
             if type_dist:
                 print("\n📊 Sequence Type Distribution:")
                 for seq_type, count in type_dist.items():
                     print(f"  {seq_type}: {count}")
 
             # Show status distribution
-            status_dist = statistics.get('sequence_status_distribution', {})
+            status_dist = statistics.get("sequence_status_distribution", {})
             if status_dist:
                 print("\n📊 Sequence Status Distribution:")
                 for status, count in status_dist.items():
@@ -325,8 +334,8 @@ def test_quicktime_event_handling(sequencer):
                         "tier": "high",
                         "bit_depth": 32,
                         "channel": "primary",
-                        "sub_ring": 0
-}
+                        "sub_ring": 0,
+                    },
                 },
                 {
                     "event_type": "volume_surge",
@@ -337,15 +346,14 @@ def test_quicktime_event_handling(sequencer):
                         "tier": "medium",
                         "bit_depth": 16,
                         "channel": "secondary",
-                        "sub_ring": 1
-}
-}
-]
+                        "sub_ring": 1,
+                    },
+                },
+            ]
             for i, event in enumerate(test_events):
-                print(f"\n🎯 Simulating QuickTime event {i+1}: {event['event_type']}")
+                print(f"\n🎯 Simulating QuickTime event {i + 1}: {event['event_type']}")
                 sequencer.quicktime_manager.detect_and_log_event(
-                    event_type=event["event_type"],
-                    context=event["context"]
+                    event_type=event["event_type"], context=event["context"]
                 )
                 time.sleep(0.1)  # Small delay between events
 
@@ -354,7 +362,9 @@ def test_quicktime_event_handling(sequencer):
 
             # Check if sequences were created for QuickTime events
             statistics = sequencer.get_sequencing_statistics()
-            ghost_logic_count = statistics.get('sequence_type_distribution', {}).get('ghost_logic', 0)
+            ghost_logic_count = statistics.get("sequence_type_distribution", {}).get(
+                "ghost_logic", 0
+            )
 
             print(f"✅ QuickTime events processed: {len(test_events)}")
             print(f"✅ Ghost logic sequences created: {ghost_logic_count}")
@@ -387,14 +397,18 @@ def test_data_export_and_persistence(sequencer):
             print(f"✅ Data exported to: {export_filename}")
 
             # Read and validate exported data
-            with open(export_filename, 'r') as f:
+            with open(export_filename, "r") as f:
                 export_data = json.load(f)
 
             # Validate export structure
             required_keys = [
-                "sequencer_info", "statistics", "active_sequences",
-                "recent_completed_sequences", "recent_time_logs", "export_timestamp"
-]
+                "sequencer_info",
+                "statistics",
+                "active_sequences",
+                "recent_completed_sequences",
+                "recent_time_logs",
+                "export_timestamp",
+            ]
             for key in required_keys:
                 if key in export_data:
                     print(f"✅ Export contains {key}")
@@ -405,16 +419,18 @@ def test_data_export_and_persistence(sequencer):
             sequencer_info = export_data.get("sequencer_info", {})
             statistics = export_data.get("statistics", {})
 
-            print(f"\n📊 Export Summary:")
+            print("\n📊 Export Summary:")
             print(f"  Mode: {sequencer_info.get('mode', 'unknown')}")
-            print(f"  Time log level: {sequencer_info.get('time_log_level', 'unknown')}")
+            print(
+                f"  Time log level: {sequencer_info.get('time_log_level', 'unknown')}"
+            )
             print(f"  Uptime: {sequencer_info.get('uptime_seconds', 0):.1f}s")
             print(f"  Total sequences: {statistics.get('total_sequences', 0)}")
             print(f"  Time logs: {statistics.get('time_logs_count', 0)}")
 
             # Clean up export file
             os.remove(export_filename)
-            print(f"✅ Export file cleaned up")
+            print("✅ Export file cleaned up")
 
         else:
             print(f"❌ Export file not created: {export_filename}")
@@ -444,7 +460,7 @@ def test_error_handling_and_recovery(sequencer):
         print("\n⏰ Testing Sequence Timeout")
         timeout_sequence_id = sequencer.start_sequence(
             sequence_type=SequenceType.MATHEMATICAL_VALIDATION,
-            metadata={"test_type": "timeout_test"}
+            metadata={"test_type": "timeout_test"},
         )
 
         print(f"✅ Timeout test sequence started: {timeout_sequence_id}")
@@ -464,7 +480,9 @@ def test_error_handling_and_recovery(sequencer):
         try:
             # Test with invalid parameters
             invalid_logs = sequencer.get_time_logs(sequence_id="invalid_id")
-            print(f"✅ Invalid time log request handled: {len(invalid_logs)} logs returned")
+            print(
+                f"✅ Invalid time log request handled: {len(invalid_logs)} logs returned"
+            )
         except Exception as e:
             print(f"❌ Time log error handling failed: {e}")
 
@@ -489,7 +507,7 @@ def test_performance_and_scalability(sequencer):
         for i in range(10):
             sequence_id = sequencer.start_sequence(
                 sequence_type=SequenceType.SYSTEM_SYNCHRONIZATION,
-                metadata={"test_type": "performance_test", "iteration": i}
+                metadata={"test_type": "performance_test", "iteration": i},
             )
             rapid_sequences.append(sequence_id)
 
@@ -503,15 +521,17 @@ def test_performance_and_scalability(sequencer):
         end_time = time.time()
         total_time = end_time - start_time
 
-        print(f"✅ Created and completed {len(rapid_sequences)} sequences in {total_time:.3f}s")
-        print(f"✅ Average time per sequence: {total_time/len(rapid_sequences):.3f}s")
+        print(
+            f"✅ Created and completed {len(rapid_sequences)} sequences in {total_time:.3f}s"
+        )
+        print(f"✅ Average time per sequence: {total_time / len(rapid_sequences):.3f}s")
 
         # Test memory usage and cleanup
         print("\n🧹 Testing Memory Management")
 
         # Get statistics before cleanup
         stats_before = sequencer.get_sequencing_statistics()
-        time_logs_before = stats_before.get('time_logs_count', 0)
+        time_logs_before = stats_before.get("time_logs_count", 0)
 
         print(f"✅ Time logs before: {time_logs_before}")
 
@@ -520,7 +540,7 @@ def test_performance_and_scalability(sequencer):
 
         # Get statistics after cleanup
         stats_after = sequencer.get_sequencing_statistics()
-        time_logs_after = stats_after.get('time_logs_count', 0)
+        time_logs_after = stats_after.get("time_logs_count", 0)
 
         print(f"✅ Time logs after: {time_logs_after}")
         print(f"✅ Memory management working: {time_logs_after <= 10000}")
@@ -534,9 +554,11 @@ def test_performance_and_scalability(sequencer):
             for i in range(count):
                 sequence_id = sequencer.start_sequence(
                     sequence_type=SequenceType.STATE_CONTINUITY,
-                    metadata={"thread_id": thread_id, "iteration": i}
+                    metadata={"thread_id": thread_id, "iteration": i},
                 )
-                sequencer.log_sequence_operation(sequence_id, f"thread_{thread_id}_op_{i}")
+                sequencer.log_sequence_operation(
+                    sequence_id, f"thread_{thread_id}_op_{i}"
+                )
                 sequencer.complete_sequence(sequence_id, success=True)
 
         # Create multiple threads
@@ -576,26 +598,37 @@ def main():
     # Run all tests
     test_results = []
 
-    test_results.append(("Sequence Creation and Management",
-                        test_sequence_creation_and_management(sequencer)))
+    test_results.append(
+        (
+            "Sequence Creation and Management",
+            test_sequence_creation_and_management(sequencer),
+        )
+    )
 
-    test_results.append(("Time Log Management",
-                        test_time_log_management(sequencer)))
+    test_results.append(("Time Log Management", test_time_log_management(sequencer)))
 
-    test_results.append(("Sequence Status and Statistics",
-                        test_sequence_status_and_statistics(sequencer)))
+    test_results.append(
+        (
+            "Sequence Status and Statistics",
+            test_sequence_status_and_statistics(sequencer),
+        )
+    )
 
-    test_results.append(("QuickTime Event Handling",
-                        test_quicktime_event_handling(sequencer)))
+    test_results.append(
+        ("QuickTime Event Handling", test_quicktime_event_handling(sequencer))
+    )
 
-    test_results.append(("Data Export and Persistence",
-                        test_data_export_and_persistence(sequencer)))
+    test_results.append(
+        ("Data Export and Persistence", test_data_export_and_persistence(sequencer))
+    )
 
-    test_results.append(("Error Handling and Recovery",
-                        test_error_handling_and_recovery(sequencer)))
+    test_results.append(
+        ("Error Handling and Recovery", test_error_handling_and_recovery(sequencer))
+    )
 
-    test_results.append(("Performance and Scalability",
-                        test_performance_and_scalability(sequencer)))
+    test_results.append(
+        ("Performance and Scalability", test_performance_and_scalability(sequencer))
+    )
 
     # Print test summary
     print("\n" + "=" * 60)
@@ -619,12 +652,14 @@ def main():
         print("⚠️ Some tests failed. Please review the implementation.")
 
     # Final statistics
-    print(f"\n📈 Final Statistics:")
+    print("\n📈 Final Statistics:")
     final_stats = sequencer.get_sequencing_statistics()
     if "error" not in final_stats:
         print(f"  Total sequences: {final_stats.get('total_sequences', 0)}")
         print(f"  Time logs: {final_stats.get('time_logs_count', 0)}")
-        print(f"  Average duration: {final_stats.get('average_duration_seconds', 0):.6f}s")
+        print(
+            f"  Average duration: {final_stats.get('average_duration_seconds', 0):.6f}s"
+        )
         print(f"  Uptime: {final_stats.get('uptime_seconds', 0):.1f}s")
 
     return passed_tests == total_tests

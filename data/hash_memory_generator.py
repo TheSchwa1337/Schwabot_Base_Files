@@ -17,8 +17,7 @@ import logging
 import hashlib
 import pandas as pd
 import numpy as np
-from typing import Dict, List, Optional, Any, Tuple
-from pathlib import Path
+from typing import Dict, List, Optional, Any
 from decimal import Decimal, ROUND_DOWN
 
 from . import BTC_USDC_HASH_MEMORY, BTC_USDC_PRECISION_ANALYSIS
@@ -367,7 +366,7 @@ class HashMemoryGenerator:
 
         for pattern, count in pattern_counts.items():
             self.pattern_frequencies[pattern] = count
-            frequency = count / total_patterns
+            count / total_patterns
 
             # Initialize success rate if not exists
             if pattern not in self.pattern_success_rates:

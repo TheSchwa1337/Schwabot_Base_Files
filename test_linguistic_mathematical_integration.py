@@ -23,23 +23,17 @@ import os
 import time
 import json
 import numpy as np
-from typing import Dict, List, Any
 
 # Add core to path
-sys.path.append(os.path.join(os.path.dirname(__file__), 'core'))
+sys.path.append(os.path.join(os.path.dirname(__file__), "core"))
+
 
 def test_linguistic_glyph_engine():
     """Test core linguistic glyph engine functionality."""
     print("🧠 Testing Linguistic Glyph Engine...")
 
     try:
-        from core.linguistic_glyph_engine import (
-            linguistic_engine,
-            process_linguistic_command,
-            forever_fractal,
-            paradox_fractal,
-            echo_fractal
-        )
+        from core.linguistic_glyph_engine import process_linguistic_command
 
         # Test basic language processing
         commands = [
@@ -47,8 +41,8 @@ def test_linguistic_glyph_engine():
             "Hold current position 💎 maintain memory lock",
             "Execute profit vector 🚀 upward extrapolation",
             "Schwa recursive state 🔄 neutral recursion",
-            "Ghost entry activation 👻 containment protocol"
-]
+            "Ghost entry activation 👻 containment protocol",
+        ]
         results = []
         for cmd in commands:
             result = process_linguistic_command(cmd)
@@ -71,7 +65,11 @@ def test_fractal_mathematical_functions():
     print("\n🌀 Testing Fractal Mathematical Functions...")
 
     try:
-        from core.linguistic_glyph_engine import forever_fractal, paradox_fractal, echo_fractal
+        from core.linguistic_glyph_engine import (
+            forever_fractal,
+            paradox_fractal,
+            echo_fractal,
+        )
 
         # Generate test data
         x = np.linspace(0, 250, 256)
@@ -83,28 +81,28 @@ def test_fractal_mathematical_functions():
 
         # Verify fractal properties
         results = {
-            'forever_fractal': {
-                'mean': float(np.mean(forever_data)),
-                'std': float(np.std(forever_data)),
-                'max': float(np.max(forever_data)),
-                'min': float(np.min(forever_data)),
-                'energy': float(np.sum(np.abs(forever_data)))
+            "forever_fractal": {
+                "mean": float(np.mean(forever_data)),
+                "std": float(np.std(forever_data)),
+                "max": float(np.max(forever_data)),
+                "min": float(np.min(forever_data)),
+                "energy": float(np.sum(np.abs(forever_data))),
             },
-            'paradox_fractal': {
-                'mean': float(np.mean(paradox_data)),
-                'std': float(np.std(paradox_data)),
-                'max': float(np.max(paradox_data)),
-                'min': float(np.min(paradox_data)),
-                'energy': float(np.sum(np.abs(paradox_data)))
+            "paradox_fractal": {
+                "mean": float(np.mean(paradox_data)),
+                "std": float(np.std(paradox_data)),
+                "max": float(np.max(paradox_data)),
+                "min": float(np.min(paradox_data)),
+                "energy": float(np.sum(np.abs(paradox_data))),
             },
-            'echo_fractal': {
-                'mean': float(np.mean(echo_data)),
-                'std': float(np.std(echo_data)),
-                'max': float(np.max(echo_data)),
-                'min': float(np.min(echo_data)),
-                'energy': float(np.sum(np.abs(echo_data)))
-}
-}
+            "echo_fractal": {
+                "mean": float(np.mean(echo_data)),
+                "std": float(np.std(echo_data)),
+                "max": float(np.max(echo_data)),
+                "min": float(np.min(echo_data)),
+                "energy": float(np.sum(np.abs(echo_data))),
+            },
+        }
         print("✅ Forever Fractal: Non-decaying memory vector (Golden ratio dynamics)")
         print(f"   Energy: {results['forever_fractal']['energy']:.2f}")
 
@@ -136,20 +134,22 @@ def test_dualistic_thought_integration():
             "🚀 Execute BTC profit vector with memory lock 🧿",
             "👻 Ghost entry on next dip - capture containment",
             "🔄 Schwa recursive state - neutral hold position",
-            "💎 Diamond hands - maintain current vector lock"
-]
+            "💎 Diamond hands - maintain current vector lock",
+        ]
         market_data = {
-            'btc_price': 47500.0,
-            'usdc_balance': 15000.0,
-            'volume': 1250000,
-            'price_change_24h': 2.3
-}
+            "btc_price": 47500.0,
+            "usdc_balance": 15000.0,
+            "volume": 1250000,
+            "price_change_24h": 2.3,
+        }
         results = []
         for cmd in test_commands:
-            result = thought_engines.process_linguistic_trading_command(cmd, market_data)
+            result = thought_engines.process_linguistic_trading_command(
+                cmd, market_data
+            )
             results.append(result)
 
-            if result['success']:
+            if result["success"]:
                 print(f"✅ Command: {cmd}")
                 print(f"   Decision: {result['linguistic_analysis']['decision']}")
                 print(f"   Thought Hash: {result['thought_vector']['hash']}")
@@ -182,8 +182,8 @@ def test_asic_bit_logic_states():
             ("🧿", ASICBitState.MEMORY_LOCK.value),
             ("🚀", ASICBitState.PROFIT_VECTOR.value),
             ("👻", ASICBitState.GHOST_ENTRY.value),
-            ("🔄", ASICBitState.NULL_RECURSION.value)
-]
+            ("🔄", ASICBitState.NULL_RECURSION.value),
+        ]
         results = {}
         for input_term, expected_state in test_cases:
             ling_hash = linguistic_engine.text_to_glyph_hash(input_term)
@@ -191,25 +191,29 @@ def test_asic_bit_logic_states():
 
             success = actual_state == expected_state
             results[input_term] = {
-                'expected': expected_state,
-                'actual': actual_state,
-                'success': success,
-                'sha_hash': ling_hash.sha_hash[:8],
-                'weight': ling_hash.weight
-}
+                "expected": expected_state,
+                "actual": actual_state,
+                "success": success,
+                "sha_hash": ling_hash.sha_hash[:8],
+                "weight": ling_hash.weight,
+            }
             status = "✅" if success else "❌"
-            print(f"{status} {input_term} → {actual_state:02b} (expected {expected_state:02b})")
+            print(
+                f"{status} {input_term} → {actual_state:02b} (expected {expected_state:02b})"
+            )
 
         # Test state transitions and combinations
         combined_tests = [
             "capture 🧿 profit",  # Should prioritize glyph (MEMORY_LOCK)
-            "👻 vectorize exit",   # Should prioritize glyph (GHOST_ENTRY)
+            "👻 vectorize exit",  # Should prioritize glyph (GHOST_ENTRY)
             "schwa recursive 🚀",  # Should prioritize glyph (PROFIT_VECTOR)
-]
+        ]
         print("\n🔀 Testing Combined State Logic:")
         for test_phrase in combined_tests:
             ling_hash = linguistic_engine.text_to_glyph_hash(test_phrase)
-            print(f"✅ '{test_phrase}' → {ling_hash.bit_state:02b} (weight: {ling_hash.weight:.3f})")
+            print(
+                f"✅ '{test_phrase}' → {ling_hash.bit_state:02b} (weight: {ling_hash.weight:.3f})"
+            )
 
         return True, results
 
@@ -237,8 +241,8 @@ def test_profit_vectorization_synthesis():
             ("💎 Hold position - diamond hands", 47200.0, 10000.0),
             ("🧿 Memory lock current vector", 47150.0, 10000.0),
             ("📈 Profit vector - upward extrapolation", 47800.0, 10000.0),
-            ("👻 Ghost exit - capture gains", 47650.0, 10000.0)
-]
+            ("👻 Ghost exit - capture gains", 47650.0, 10000.0),
+        ]
         results = []
         total_profit = 0.0
 
@@ -250,21 +254,27 @@ def test_profit_vectorization_synthesis():
             total_profit += trade_vector.profit_delta
 
             result = {
-                'step': i + 1,
-                'command': command,
-                'btc_price': btc_price,
-                'profit_delta': trade_vector.profit_delta,
-                'containment_sum': float(np.sum(linguistic_engine.profit_containment)),
-                'fractal_energy': float(np.sum(np.abs(linguistic_engine.fractal_memory))),
-                'bit_sequence_length': len(trade_vector.bit_sequence),
-                'glyph_signature': trade_vector.glyph_signature
-}
+                "step": i + 1,
+                "command": command,
+                "btc_price": btc_price,
+                "profit_delta": trade_vector.profit_delta,
+                "containment_sum": float(np.sum(linguistic_engine.profit_containment)),
+                "fractal_energy": float(
+                    np.sum(np.abs(linguistic_engine.fractal_memory))
+                ),
+                "bit_sequence_length": len(trade_vector.bit_sequence),
+                "glyph_signature": trade_vector.glyph_signature,
+            }
             results.append(result)
 
-            print(f"✅ Step {i+1}: {command}")
-            print(f"   BTC: ${btc_price:,.0f} | Profit: ${trade_vector.profit_delta:.2f}")
+            print(f"✅ Step {i + 1}: {command}")
+            print(
+                f"   BTC: ${btc_price:,.0f} | Profit: ${trade_vector.profit_delta:.2f}"
+            )
             print(f"   Containment: {np.sum(linguistic_engine.profit_containment):.2f}")
-            print(f"   Fractal Energy: {np.sum(np.abs(linguistic_engine.fractal_memory)):.2f}")
+            print(
+                f"   Fractal Energy: {np.sum(np.abs(linguistic_engine.fractal_memory)):.2f}"
+            )
 
         print(f"\n💰 Total Profit Synthesized: ${total_profit:.2f}")
         print(f"🧠 Memory Vectors: {len(linguistic_engine.memory_stack)}")
@@ -275,10 +285,10 @@ def test_profit_vectorization_synthesis():
         print(f"🔮 Final Memory State: {final_memory}")
 
         return True, {
-            'sequence_results': results,
-            'total_profit': total_profit,
-            'final_memory_state': final_memory
-}
+            "sequence_results": results,
+            "total_profit": total_profit,
+            "final_memory_state": final_memory,
+        }
     except Exception as e:
         print(f"❌ Profit vectorization test failed: {e}")
         return False, str(e)
@@ -297,7 +307,7 @@ def test_zalgo_zygot_mathematical_processing():
             [3, 2, 1, 0, 3, 2, 1, 0],  # 2-bit sequence
             [1, 1, 1, 1, 0, 0, 0, 0],  # Block pattern
             [2, 3, 0, 1, 2, 3, 0, 1],  # Repeating 2-bit
-]
+        ]
         zalgo_results = []
         zygot_results = []
 
@@ -310,7 +320,7 @@ def test_zalgo_zygot_mathematical_processing():
             zygot_expansion = linguistic_engine.zygot_expand(pattern, depth=3)
             zygot_results.append(zygot_expansion)
 
-            print(f"✅ Pattern {i+1}: {pattern}")
+            print(f"✅ Pattern {i + 1}: {pattern}")
             print(f"   Zalgo Entropy: {zalgo_entropy:.4f}")
             print(f"   Zygot Expansion Length: {len(zygot_expansion)}")
             print(f"   Zygot Energy: {sum(abs(x) for x in zygot_expansion):.2f}")
@@ -323,21 +333,27 @@ def test_zalgo_zygot_mathematical_processing():
         for glyph in test_glyphs:
             bit_mask = linguistic_engine.emoji_to_bitmask(glyph)
             zalgo_entropy = linguistic_engine.zalgo_overlay(bit_mask)
-            zygot_expansion = linguistic_engine.zygot_expand(bit_mask[:8])  # Limit for processing
+            zygot_expansion = linguistic_engine.zygot_expand(
+                bit_mask[:8]
+            )  # Limit for processing
 
             glyph_results[glyph] = {
-                'bit_mask_length': len(bit_mask),
-                'zalgo_entropy': zalgo_entropy,
-                'zygot_length': len(zygot_expansion),
-                'zygot_energy': sum(abs(x) for x in zygot_expansion) if zygot_expansion else 0
-}
-            print(f"✅ {glyph}: Entropy={zalgo_entropy:.4f}, Zygot Energy={glyph_results[glyph]['zygot_energy']:.2f}")
+                "bit_mask_length": len(bit_mask),
+                "zalgo_entropy": zalgo_entropy,
+                "zygot_length": len(zygot_expansion),
+                "zygot_energy": sum(abs(x) for x in zygot_expansion)
+                if zygot_expansion
+                else 0,
+            }
+            print(
+                f"✅ {glyph}: Entropy={zalgo_entropy:.4f}, Zygot Energy={glyph_results[glyph]['zygot_energy']:.2f}"
+            )
 
         return True, {
-            'zalgo_test_results': zalgo_results,
-            'zygot_test_results': zygot_results,
-            'glyph_processing': glyph_results
-}
+            "zalgo_test_results": zalgo_results,
+            "zygot_test_results": zygot_results,
+            "glyph_processing": glyph_results,
+        }
     except Exception as e:
         print(f"❌ Zalgo/Zygot processing test failed: {e}")
         return False, str(e)
@@ -358,20 +374,20 @@ def run_comprehensive_integration_test():
         ("Dualistic Thought Integration", test_dualistic_thought_integration),
         ("ASIC Bit Logic States", test_asic_bit_logic_states),
         ("Profit Vectorization Synthesis", test_profit_vectorization_synthesis),
-        ("Zalgo & Zygot Processing", test_zalgo_zygot_mathematical_processing)
-]
+        ("Zalgo & Zygot Processing", test_zalgo_zygot_mathematical_processing),
+    ]
     passed_tests = 0
     total_tests = len(tests)
 
     for test_name, test_func in tests:
         try:
-            print(f"\n{'='*20} {test_name} {'='*20}")
+            print(f"\n{'=' * 20} {test_name} {'=' * 20}")
             success, result = test_func()
             test_results[test_name] = {
-                'success': success,
-                'result': result,
-                'timestamp': time.time()
-}
+                "success": success,
+                "result": result,
+                "timestamp": time.time(),
+            }
             if success:
                 passed_tests += 1
                 print(f"✅ {test_name} PASSED")
@@ -379,27 +395,31 @@ def run_comprehensive_integration_test():
                 print(f"❌ {test_name} FAILED: {result}")
         except Exception as e:
             test_results[test_name] = {
-                'success': False,
-                'result': str(e),
-                'timestamp': time.time()
-}
+                "success": False,
+                "result": str(e),
+                "timestamp": time.time(),
+            }
             print(f"❌ {test_name} ERROR: {e}")
 
     # Generate final report
     end_time = time.time()
     test_duration = end_time - start_time
 
-    print(f"\n{'='*80}")
+    print(f"\n{'=' * 80}")
     print("🎯 FINAL INTEGRATION TEST REPORT")
-    print(f"{'='*80}")
+    print(f"{'=' * 80}")
     print(f"✅ Tests Passed: {passed_tests}/{total_tests}")
     print(f"⏱️ Total Duration: {test_duration:.2f} seconds")
-    print(f"📊 Success Rate: {(passed_tests/total_tests)*100:.1f}%")
+    print(f"📊 Success Rate: {(passed_tests / total_tests) * 100:.1f}%")
 
     if passed_tests == total_tests:
         print("🎉 ALL TESTS PASSED - LINGUISTIC MATHEMATICAL INTEGRATION READY!")
-        print("🚀 Schwabot can now process English language → ASIC → Profit vectorization")
-        print("🧠 Memory states, fractal overlays, and Zalgo/Zygot processing functional")
+        print(
+            "🚀 Schwabot can now process English language → ASIC → Profit vectorization"
+        )
+        print(
+            "🧠 Memory states, fractal overlays, and Zalgo/Zygot processing functional"
+        )
         print("💰 BTC/USDC waveform analysis with hash valuations operational")
     else:
         print("⚠️ Some tests failed - review results for issues")
@@ -408,7 +428,7 @@ def run_comprehensive_integration_test():
     timestamp = int(time.time())
     results_file = f"linguistic_mathematical_integration_results_{timestamp}.json"
 
-    with open(results_file, 'w') as f:
+    with open(results_file, "w") as f:
         json.dump(test_results, f, indent=2, default=str)
 
     print(f"📄 Detailed results saved to: {results_file}")

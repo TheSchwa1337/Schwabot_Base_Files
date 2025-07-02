@@ -4,11 +4,7 @@ Critical files implementation - focuses on the most important files first.
 Implements proper functionality while preserving mathematical logic.
 """
 
-import os
-import re
-import shutil
 from pathlib import Path
-from typing import Dict, List
 
 
 def implement_strategy_loader():
@@ -123,8 +119,8 @@ if __name__ == "__main__":
     main()
 '''
 
-    file_path = Path('core/strategy_loader.py')
-    with open(file_path, 'w') as f:
+    file_path = Path("core/strategy_loader.py")
+    with open(file_path, "w") as f:
         f.write(content)
 
     return True
@@ -285,8 +281,8 @@ if __name__ == "__main__":
     main()
 '''
 
-    file_path = Path('core/matrix_mapper.py')
-    with open(file_path, 'w') as f:
+    file_path = Path("core/matrix_mapper.py")
+    with open(file_path, "w") as f:
         f.write(content)
 
     return True
@@ -471,8 +467,8 @@ if __name__ == "__main__":
     asyncio.run(main())
 '''
 
-    file_path = Path('core/integration_orchestrator.py')
-    with open(file_path, 'w') as f:
+    file_path = Path("core/integration_orchestrator.py")
+    with open(file_path, "w") as f:
         f.write(content)
 
     return True
@@ -486,7 +482,7 @@ def main():
     implementations = [
         ("Strategy Loader", implement_strategy_loader),
         ("Matrix Mapper", implement_matrix_mapper),
-        ("Integration Orchestrator", implement_integration_orchestrator)
+        ("Integration Orchestrator", implement_integration_orchestrator),
     ]
     success_count = 0
     for name, implementation_func in implementations:
@@ -502,7 +498,9 @@ def main():
 
     print(
         f"\n🎉 Implemented {success_count} out of {
-            len(implementations)} critical files!")
+            len(implementations)
+        } critical files!"
+    )
     print("\n📋 Next steps:")
     print("1. Test imports: python -c 'import core.strategy_loader'")
     print("2. Run: flake8 core/ to check for remaining errors")

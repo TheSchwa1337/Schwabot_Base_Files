@@ -12,7 +12,7 @@ import json
 import os
 import hashlib
 import time
-from typing import Dict, Any, List, Tuple
+from typing import Dict, Any
 from dataclasses import dataclass, field
 
 # Demo data structures to show the backup logic integration
@@ -21,6 +21,7 @@ from dataclasses import dataclass, field
 @dataclass
 class BackupEvent:
     """Backup event with metadata."""
+
     event_id: str
     event_type: str
     timestamp: float
@@ -32,6 +33,7 @@ class BackupEvent:
 @dataclass
 class BackupMemory:
     """Backup memory system."""
+
     entries: Dict[str, BackupEvent] = field(default_factory=dict)
     patterns: Dict[str, Any] = field(default_factory=dict)
     performance_metrics: Dict[str, float] = field(default_factory=dict)
@@ -51,7 +53,9 @@ class BackupIntegrationDemo:
         os.makedirs("hash_memory_bank", exist_ok=True)
 
         print("[DEMO] Backup Integration Demo initialized")
-        print("[DEMO] Created backup directories: backup_memory_stack, hash_memory_bank")
+        print(
+            "[DEMO] Created backup directories: backup_memory_stack, hash_memory_bank"
+        )
 
     def demonstrate_ghost_flip_executor_backup(self):
         """Demonstrate backup logic in Ghost Flip Executor."""
@@ -66,22 +70,22 @@ class BackupIntegrationDemo:
                 "trigger": "price_spike",
                 "bit": "0101",
                 "bit_phase": 4,
-                "confidence": 0.8
+                "confidence": 0.8,
             },
             {
                 "event": "ETH→USDC",
                 "trigger": "volume_surge",
                 "bit": "1100",
                 "bit_phase": 4,
-                "confidence": 0.7
+                "confidence": 0.7,
             },
             {
                 "event": "BTC→USDC",
                 "trigger": "trend_reversal",
                 "bit": "1010",
                 "bit_phase": 8,
-                "confidence": 0.9
-            }
+                "confidence": 0.9,
+            },
         ]
         for i, event in enumerate(test_events):
             # Create backup signature
@@ -96,7 +100,7 @@ class BackupIntegrationDemo:
                 timestamp=time.time(),
                 backup_hash=backup_signature,
                 data=event,
-                metadata={"source": "ghost_flip_executor"}
+                metadata={"source": "ghost_flip_executor"},
             )
 
             # Store in backup memory
@@ -104,15 +108,20 @@ class BackupIntegrationDemo:
 
             # Update performance metrics
             self.ghost_backup.performance_metrics["total_triggers"] = len(
-                self.ghost_backup.entries)
+                self.ghost_backup.entries
+            )
             self.ghost_backup.performance_metrics["successful_triggers"] = len(
-                self.ghost_backup.entries)
+                self.ghost_backup.entries
+            )
             self.ghost_backup.performance_metrics["average_confidence"] = sum(
                 e.data.get("confidence", 0) for e in self.ghost_backup.entries.values()
             ) / len(self.ghost_backup.entries)
 
-            print(f"[GHOST] Processed event {i +
-                                             1}: {event['event']} -> {event['trigger']}")
+            print(
+                f"[GHOST] Processed event {i + 1}: {event['event']} -> {
+                    event['trigger']
+                }"
+            )
             print(f"[GHOST] Backup signature: {backup_signature[:16]}...")
 
         # Save backup to file
@@ -129,12 +138,12 @@ class BackupIntegrationDemo:
         trade_layers = [
             [("BTC→ETH", 4), ("ETH→USDC", 4)],
             [("BTC→USDC", 8), ("USDC→BTC", 8)],
-            [("ETH→BTC", 4), ("BTC→ETH", 8)]
+            [("ETH→BTC", 4), ("BTC→ETH", 8)],
         ]
         market_data = {
             "BTC→ETH": {"price": 0.05, "trend": "up", "volume": 1000},
             "ETH→USDC": {"price": 2000, "trend": "up", "volume": 500},
-            "BTC→USDC": {"price": 45000, "trend": "down", "volume": 2000}
+            "BTC→USDC": {"price": 45000, "trend": "down", "volume": 2000},
         }
         for i in range(3):
             # Create orbit backup signature
@@ -155,12 +164,12 @@ class BackupIntegrationDemo:
                     "cycle_number": i + 1,
                     "executed_trades": [
                         {"pair": "BTC→ETH", "action": "buy", "price": 0.05},
-                        {"pair": "ETH→USDC", "action": "buy", "price": 2000}
+                        {"pair": "ETH→USDC", "action": "buy", "price": 2000},
                     ],
                     "total_profit": 0.15,
-                    "total_volume": 1500
+                    "total_volume": 1500,
                 },
-                metadata={"source": "profit_orbit_engine"}
+                metadata={"source": "profit_orbit_engine"},
             )
 
             # Store in backup memory
@@ -168,11 +177,14 @@ class BackupIntegrationDemo:
 
             # Update performance metrics
             self.orbit_backup.performance_metrics["total_orbits"] = len(
-                self.orbit_backup.entries)
+                self.orbit_backup.entries
+            )
             self.orbit_backup.performance_metrics["successful_orbits"] = len(
-                self.orbit_backup.entries)
+                self.orbit_backup.entries
+            )
             self.orbit_backup.performance_metrics["average_profit"] = sum(
-                e.data.get("total_profit", 0) for e in self.orbit_backup.entries.values()
+                e.data.get("total_profit", 0)
+                for e in self.orbit_backup.entries.values()
             ) / len(self.orbit_backup.entries)
 
             print(f"[ORBIT] Completed cycle {i + 1} with {len(orbit_pairs)} pairs")
@@ -212,16 +224,17 @@ class BackupIntegrationDemo:
                     "bits": bits,
                     "flipped_value": flip_result,
                     "binary_pattern": f"{value:0{bits}b}->{flip_result:0{bits}b}",
-                    "success": True
+                    "success": True,
                 },
-                metadata={"source": "pair_flip_orbit"}
+                metadata={"source": "pair_flip_orbit"},
             )
 
             # Store in backup memory
             self.flip_backup.entries[backup_event.event_id] = backup_event
 
             print(
-                f"[FLIP] {value} ({bits} bits) -> {flip_result} (binary: {flip_result:0{bits}b})")
+                f"[FLIP] {value} ({bits} bits) -> {flip_result} (binary: {flip_result:0{bits}b})"
+            )
             print(f"[FLIP] Backup signature: {backup_signature[:16]}...")
 
         # Simulate pair flip operations
@@ -246,9 +259,9 @@ class BackupIntegrationDemo:
                         "bit_phase": bit_phase,
                         "flip_pattern": f"pattern_{bit_phase}",
                         "confidence": 0.8,
-                        "inverse": f"inverse_{pair}"
+                        "inverse": f"inverse_{pair}",
                     },
-                    metadata={"source": "pair_flip_orbit"}
+                    metadata={"source": "pair_flip_orbit"},
                 )
 
                 # Store in backup memory
@@ -259,9 +272,11 @@ class BackupIntegrationDemo:
 
         # Update performance metrics
         self.flip_backup.performance_metrics["total_flips"] = len(
-            self.flip_backup.entries)
+            self.flip_backup.entries
+        )
         self.flip_backup.performance_metrics["successful_flips"] = len(
-            self.flip_backup.entries)
+            self.flip_backup.entries
+        )
         self.flip_backup.performance_metrics["average_confidence"] = 0.8
 
         # Save backup to file
@@ -276,7 +291,7 @@ class BackupIntegrationDemo:
                 "entries": {k: v.__dict__ for k, v in backup_memory.entries.items()},
                 "patterns": backup_memory.patterns,
                 "performance_metrics": backup_memory.performance_metrics,
-                "timestamp": time.time()
+                "timestamp": time.time(),
             }
             with open(filepath, "w", encoding="utf-8") as f:
                 json.dump(data, f, indent=2)
@@ -305,52 +320,52 @@ class BackupIntegrationDemo:
 
         # Ghost Flip Executor statistics
         ghost_stats = self.ghost_backup.performance_metrics
-        print(f"\n[GHOST FLIP EXECUTOR]")
+        print("\n[GHOST FLIP EXECUTOR]")
         print(f"  Backup memory entries: {len(self.ghost_backup.entries)}")
         print(f"  Total triggers: {ghost_stats.get('total_triggers', 0)}")
-        print(f"  Success rate: 100.0%")
+        print("  Success rate: 100.0%")
         print(f"  Average confidence: {ghost_stats.get('average_confidence', 0):.3f}")
 
         # Profit Orbit Engine statistics
         orbit_stats = self.orbit_backup.performance_metrics
-        print(f"\n[PROFIT ORBIT ENGINE]")
+        print("\n[PROFIT ORBIT ENGINE]")
         print(f"  Backup memory entries: {len(self.orbit_backup.entries)}")
         print(f"  Total orbits: {orbit_stats.get('total_orbits', 0)}")
-        print(f"  Success rate: 100.0%")
+        print("  Success rate: 100.0%")
         print(f"  Average profit: {orbit_stats.get('average_profit', 0):.4f}")
 
         # Pair Flip Orbit statistics
         flip_stats = self.flip_backup.performance_metrics
-        print(f"\n[PAIR FLIP ORBIT]")
+        print("\n[PAIR FLIP ORBIT]")
         print(f"  Backup memory entries: {len(self.flip_backup.entries)}")
         print(f"  Total flips: {flip_stats.get('total_flips', 0)}")
-        print(f"  Success rate: 100.0%")
+        print("  Success rate: 100.0%")
         print(f"  Average confidence: {flip_stats.get('average_confidence', 0):.3f}")
 
         # Overall system statistics
         total_backup_entries = (
-            len(self.ghost_backup.entries) +
-            len(self.orbit_backup.entries) +
-            len(self.flip_backup.entries)
+            len(self.ghost_backup.entries)
+            + len(self.orbit_backup.entries)
+            + len(self.flip_backup.entries)
         )
         total_operations = (
-            ghost_stats.get('total_triggers', 0) +
-            orbit_stats.get('total_orbits', 0) +
-            flip_stats.get('total_flips', 0)
+            ghost_stats.get("total_triggers", 0)
+            + orbit_stats.get("total_orbits", 0)
+            + flip_stats.get("total_flips", 0)
         )
 
-        print(f"\n[OVERALL SYSTEM]")
+        print("\n[OVERALL SYSTEM]")
         print(f"  Total backup entries: {total_backup_entries}")
         print(f"  Total operations: {total_operations}")
         print(f"  Backup memory stack size: {self._get_backup_directory_size()}")
-        print(f"  Integration status: SUCCESSFUL")
+        print("  Integration status: SUCCESSFUL")
 
         # Show backup file structure
-        print(f"\n[BACKUP FILES]")
+        print("\n[BACKUP FILES]")
         backup_files = [
             "backup_memory_stack/ghost_backup_memory.json",
             "backup_memory_stack/orbit_backup_memory.json",
-            "backup_memory_stack/flip_backup_memory.json"
+            "backup_memory_stack/flip_backup_memory.json",
         ]
         for filepath in backup_files:
             if os.path.exists(filepath):
@@ -381,7 +396,9 @@ def main():
     print("BACKUP INTEGRATION DEMO")
     print("=" * 60)
     print("Demonstrating the integration of backup logic from previous systems")
-    print("into the three core engines: Ghost Flip Executor, Profit Orbit Engine, and Pair Flip Orbit.")
+    print(
+        "into the three core engines: Ghost Flip Executor, Profit Orbit Engine, and Pair Flip Orbit."
+    )
     print("=" * 60)
 
     # Create and run demo
@@ -393,7 +410,9 @@ def main():
         print("\n" + "=" * 60)
         print("DEMO COMPLETED SUCCESSFULLY!")
         print("=" * 60)
-        print("\nThe backup logic from previous systems has been successfully integrated")
+        print(
+            "\nThe backup logic from previous systems has been successfully integrated"
+        )
         print("into all three engines, providing comprehensive memory management,")
         print("validation, and performance tracking capabilities.")
         print("\nKey features demonstrated:")
@@ -407,6 +426,7 @@ def main():
     except Exception as e:
         print(f"\n[ERROR] Demo failed: {e}")
         import traceback
+
         traceback.print_exc()
 
 

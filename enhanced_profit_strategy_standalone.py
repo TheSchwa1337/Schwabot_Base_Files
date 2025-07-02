@@ -30,6 +30,7 @@ logger = logging.getLogger(__name__)
 
 class TradeDirection(Enum):
     """Trade direction enum."""
+
     LONG = "long"
     SHORT = "short"
     HOLD = "hold"
@@ -37,6 +38,7 @@ class TradeDirection(Enum):
 
 class ProfitSignal(Enum):
     """Profit signal strength."""
+
     STRONG_BUY = "strong_buy"
     BUY = "buy"
     WEAK_BUY = "weak_buy"
@@ -48,6 +50,7 @@ class ProfitSignal(Enum):
 
 class StrategyState(Enum):
     """Trading strategy state."""
+
     INITIALIZING = "initializing"
     ANALYZING = "analyzing"
     OPTIMIZING = "optimizing"
@@ -59,27 +62,29 @@ class StrategyState(Enum):
 @dataclass
 class MarketVector:
     """Mathematical market analysis vector."""
+
     timestamp: float
     btc_price: float
     usdc_volume: float
 
     # Mathematical components (ALEPH, NCCO, Drift)
-    hash_similarity: float = 0.0      # ALEPH hash similarity mapping
-    phase_alignment: float = 0.0      # Phase transition alignment
-    entropy_score: float = 0.0        # NCCO entropy analysis
-    drift_weight: float = 0.0         # Drift compensation factor
-    pattern_confidence: float = 0.0   # Pattern recognition strength
+    hash_similarity: float = 0.0  # ALEPH hash similarity mapping
+    phase_alignment: float = 0.0  # Phase transition alignment
+    entropy_score: float = 0.0  # NCCO entropy analysis
+    drift_weight: float = 0.0  # Drift compensation factor
+    pattern_confidence: float = 0.0  # Pattern recognition strength
 
     # Derived metrics
-    confidence_score: float = 0.0     # Composite confidence
-    profit_potential: float = 0.0     # Expected profit percentage
-    risk_score: float = 0.0           # Risk assessment
-    volatility: float = 0.02          # Market volatility
+    confidence_score: float = 0.0  # Composite confidence
+    profit_potential: float = 0.0  # Expected profit percentage
+    risk_score: float = 0.0  # Risk assessment
+    volatility: float = 0.02  # Market volatility
 
 
 @dataclass
 class TradingSignal:
     """Comprehensive trading signal with profit optimization."""
+
     signal_id: str
     timestamp: float
     market_vector: MarketVector
@@ -106,6 +111,7 @@ class TradingSignal:
 @dataclass
 class ExecutionResult:
     """Trade execution result."""
+
     execution_id: str
     signal_id: str
     timestamp: float
@@ -131,6 +137,7 @@ class ExecutionResult:
 @dataclass
 class StrategyPerformance:
     """Comprehensive strategy performance tracking."""
+
     # Trade statistics
     total_signals: int = 0
     executed_trades: int = 0
@@ -159,9 +166,11 @@ class StrategyPerformance:
 class EnhancedProfitTradingStrategy:
     """Standalone enhanced profit-driven trading strategy."""
 
-    def __init__(self,
-                 initial_capital_usdc: float = 100000.0,
-                 config: Optional[Dict[str, Any]] = None):
+    def __init__(
+        self,
+        initial_capital_usdc: float = 100000.0,
+        config: Optional[Dict[str, Any]] = None,
+    ):
         """Initialize the profit trading strategy."""
 
         self.initial_capital_usdc = initial_capital_usdc
@@ -176,58 +185,58 @@ class EnhancedProfitTradingStrategy:
 
         # Mathematical weights for ALEPH, NCCO, Drift analysis
         self.math_weights = {
-            'hash_similarity': 0.25,    # ALEPH overlay mapping
-            'phase_alignment': 0.20,    # Phase transition monitoring
-            'entropy_score': 0.20,      # NCCO entropy tracking
-            'drift_weight': 0.20,       # Drift compensation
-            'pattern_confidence': 0.15   # Pattern recognition
+            "hash_similarity": 0.25,  # ALEPH overlay mapping
+            "phase_alignment": 0.20,  # Phase transition monitoring
+            "entropy_score": 0.20,  # NCCO entropy tracking
+            "drift_weight": 0.20,  # Drift compensation
+            "pattern_confidence": 0.15,  # Pattern recognition
         }
 
         # Risk management parameters
         self.risk_params = {
-            'max_daily_loss_pct': 0.02,        # 2% max daily loss
-            'max_position_size_pct': 0.10,     # 10% max position size
-            'min_confidence_threshold': 0.75,   # 75% min confidence
-            'min_profit_threshold': 0.005,     # 0.5% min profit
-            'max_risk_score': 0.30,            # 30% max risk score
-            'stop_loss_factor': 1.0,           # Stop loss multiplier
-            'take_profit_factor': 2.0          # Take profit multiplier
+            "max_daily_loss_pct": 0.02,  # 2% max daily loss
+            "max_position_size_pct": 0.10,  # 10% max position size
+            "min_confidence_threshold": 0.75,  # 75% min confidence
+            "min_profit_threshold": 0.005,  # 0.5% min profit
+            "max_risk_score": 0.30,  # 30% max risk score
+            "stop_loss_factor": 1.0,  # Stop loss multiplier
+            "take_profit_factor": 2.0,  # Take profit multiplier
         }
 
         # Kelly criterion parameters
         self.kelly_params = {
-            'max_kelly_fraction': 0.25,        # Max 25% Kelly
-            'conservative_factor': 0.5,        # 50% of Kelly for safety
-            'min_edge_required': 0.1           # 10% minimum edge
+            "max_kelly_fraction": 0.25,  # Max 25% Kelly
+            "conservative_factor": 0.5,  # 50% of Kelly for safety
+            "min_edge_required": 0.1,  # 10% minimum edge
         }
 
         logger.info(
-            f"💰 Enhanced Profit Strategy initialized with ${
-                initial_capital_usdc:,.2f}")
+            f"💰 Enhanced Profit Strategy initialized with ${initial_capital_usdc:,.2f}"
+        )
 
     def _default_config(self) -> Dict[str, Any]:
         """Default configuration."""
         return {
-            'simulation_mode': True,
-            'fee_rate': 0.00075,  # 0.075% trading fee
-            'slippage_factor': 0.001,  # 0.1% slippage
-            'max_signal_history': 1000,
-            'enable_kelly_sizing': True,
-            'enable_profit_taking': True,
-            'enable_stop_loss': True
+            "simulation_mode": True,
+            "fee_rate": 0.00075,  # 0.075% trading fee
+            "slippage_factor": 0.001,  # 0.1% slippage
+            "max_signal_history": 1000,
+            "enable_kelly_sizing": True,
+            "enable_profit_taking": True,
+            "enable_stop_loss": True,
         }
 
-    def analyze_market_vector(self,
-                              btc_price: float,
-                              usdc_volume: float,
-                              market_data: Dict[str, Any]) -> MarketVector:
+    def analyze_market_vector(
+        self, btc_price: float, usdc_volume: float, market_data: Dict[str, Any]
+    ) -> MarketVector:
         """Analyze market data and create mathematical vector."""
         try:
             self.current_state = StrategyState.ANALYZING
 
             # 1. ALEPH Hash Similarity Analysis
             hash_similarity = self._calculate_hash_similarity(
-                btc_price, usdc_volume, market_data)
+                btc_price, usdc_volume, market_data
+            )
 
             # 2. Phase Alignment Analysis
             phase_alignment = self._calculate_phase_alignment(market_data)
@@ -243,7 +252,12 @@ class EnhancedProfitTradingStrategy:
 
             # 6. Composite Confidence Score
             confidence_score = self._calculate_composite_confidence(
-                hash_similarity, phase_alignment, entropy_score, drift_weight, pattern_confidence)
+                hash_similarity,
+                phase_alignment,
+                entropy_score,
+                drift_weight,
+                pattern_confidence,
+            )
 
             # 7. Profit Potential Analysis
             profit_potential = self._calculate_profit_potential(
@@ -252,7 +266,8 @@ class EnhancedProfitTradingStrategy:
 
             # 8. Risk Assessment
             risk_score = self._calculate_risk_score(
-                confidence_score, profit_potential, market_data)
+                confidence_score, profit_potential, market_data
+            )
 
             # 9. Volatility Analysis
             volatility = self._calculate_volatility(market_data)
@@ -269,17 +284,16 @@ class EnhancedProfitTradingStrategy:
                 confidence_score=confidence_score,
                 profit_potential=profit_potential,
                 risk_score=risk_score,
-                volatility=volatility
+                volatility=volatility,
             )
 
         except Exception as e:
             logger.error(f"Error analyzing market vector: {e}")
             return self._create_default_market_vector(btc_price, usdc_volume)
 
-    def _calculate_hash_similarity(self,
-                                   btc_price: float,
-                                   usdc_volume: float,
-                                   market_data: Dict[str, Any]) -> float:
+    def _calculate_hash_similarity(
+        self, btc_price: float, usdc_volume: float, market_data: Dict[str, Any]
+    ) -> float:
         """Calculate ALEPH hash similarity for market state mapping."""
         try:
             # Create market state hash
@@ -287,10 +301,11 @@ class EnhancedProfitTradingStrategy:
             volume_str = f"{usdc_volume:.0f}"
 
             # Include historical context
-            price_history = market_data.get('price_history', [btc_price])
+            price_history = market_data.get("price_history", [btc_price])
             if len(price_history) > 1:
-                price_momentum = (price_history[-1] -
-                                  price_history[0]) / price_history[0]
+                price_momentum = (price_history[-1] - price_history[0]) / price_history[
+                    0
+                ]
                 momentum_str = f"{price_momentum:.6f}"
             else:
                 momentum_str = "0.000000"
@@ -315,14 +330,15 @@ class EnhancedProfitTradingStrategy:
     def _calculate_phase_alignment(self, market_data: Dict[str, Any]) -> float:
         """Calculate phase transition alignment score."""
         try:
-            price_history = market_data.get('price_history', [])
+            price_history = market_data.get("price_history", [])
             if len(price_history) < 4:
                 return 0.5
 
             # Calculate momentum phases
             short_momentum = (price_history[-1] - price_history[-2]) / price_history[-2]
-            medium_momentum = (price_history[-1] -
-                               price_history[-3]) / price_history[-3]
+            medium_momentum = (price_history[-1] - price_history[-3]) / price_history[
+                -3
+            ]
             long_momentum = (price_history[-1] - price_history[0]) / price_history[0]
 
             # Check phase alignment (all momentums in same direction)
@@ -351,8 +367,8 @@ class EnhancedProfitTradingStrategy:
     def _calculate_entropy_score(self, market_data: Dict[str, Any]) -> float:
         """Calculate NCCO entropy score for market predictability."""
         try:
-            price_history = market_data.get('price_history', [])
-            volume_history = market_data.get('volume_history', [])
+            price_history = market_data.get("price_history", [])
+            volume_history = market_data.get("volume_history", [])
 
             if len(price_history) < 5:
                 return 0.5
@@ -385,7 +401,7 @@ class EnhancedProfitTradingStrategy:
     def _calculate_drift_weight(self, market_data: Dict[str, Any]) -> float:
         """Calculate drift compensation weight."""
         try:
-            price_history = market_data.get('price_history', [])
+            price_history = market_data.get("price_history", [])
             if len(price_history) < 6:
                 return 0.5
 
@@ -417,8 +433,8 @@ class EnhancedProfitTradingStrategy:
     def _calculate_pattern_confidence(self, market_data: Dict[str, Any]) -> float:
         """Calculate pattern recognition confidence."""
         try:
-            price_history = market_data.get('price_history', [])
-            volume_history = market_data.get('volume_history', [])
+            price_history = market_data.get("price_history", [])
+            volume_history = market_data.get("volume_history", [])
 
             if len(price_history) < 4 or len(volume_history) < 4:
                 return 0.5
@@ -437,12 +453,12 @@ class EnhancedProfitTradingStrategy:
                 pattern_strength = abs(correlation)
 
                 # Calculate trend consistency
-                price_trend_consistent = all(
-                    p > 0 for p in price_changes) or all(
-                    p < 0 for p in price_changes)
-                volume_trend_consistent = all(
-                    v > 0 for v in volume_changes) or all(
-                    v < 0 for v in volume_changes)
+                price_trend_consistent = all(p > 0 for p in price_changes) or all(
+                    p < 0 for p in price_changes
+                )
+                volume_trend_consistent = all(v > 0 for v in volume_changes) or all(
+                    v < 0 for v in volume_changes
+                )
 
                 consistency_bonus = 0.0
                 if price_trend_consistent:
@@ -459,20 +475,22 @@ class EnhancedProfitTradingStrategy:
             logger.error(f"Error calculating pattern confidence: {e}")
             return 0.5
 
-    def _calculate_composite_confidence(self,
-                                        hash_similarity: float,
-                                        phase_alignment: float,
-                                        entropy_score: float,
-                                        drift_weight: float,
-                                        pattern_confidence: float) -> float:
+    def _calculate_composite_confidence(
+        self,
+        hash_similarity: float,
+        phase_alignment: float,
+        entropy_score: float,
+        drift_weight: float,
+        pattern_confidence: float,
+    ) -> float:
         """Calculate composite confidence using mathematical weights."""
         try:
             confidence = (
-                self.math_weights['hash_similarity'] * hash_similarity +
-                self.math_weights['phase_alignment'] * phase_alignment +
-                self.math_weights['entropy_score'] * entropy_score +
-                self.math_weights['drift_weight'] * drift_weight +
-                self.math_weights['pattern_confidence'] * pattern_confidence
+                self.math_weights["hash_similarity"] * hash_similarity
+                + self.math_weights["phase_alignment"] * phase_alignment
+                + self.math_weights["entropy_score"] * entropy_score
+                + self.math_weights["drift_weight"] * drift_weight
+                + self.math_weights["pattern_confidence"] * pattern_confidence
             )
 
             return max(0.0, min(1.0, confidence))
@@ -481,23 +499,25 @@ class EnhancedProfitTradingStrategy:
             logger.error(f"Error calculating composite confidence: {e}")
             return 0.5
 
-    def _calculate_profit_potential(self,
-                                    btc_price: float,
-                                    usdc_volume: float,
-                                    confidence_score: float,
-                                    market_data: Dict[str, Any]) -> float:
+    def _calculate_profit_potential(
+        self,
+        btc_price: float,
+        usdc_volume: float,
+        confidence_score: float,
+        market_data: Dict[str, Any],
+    ) -> float:
         """Calculate profit potential using mathematical model."""
         try:
             # Base profit from volatility
-            volatility = market_data.get('volatility', 0.02)
+            volatility = market_data.get("volatility", 0.02)
             volatility_profit = min(0.05, volatility * 2.0)  # Cap at 5%
 
             # Volume factor
-            avg_volume = market_data.get('avg_volume', usdc_volume)
+            avg_volume = market_data.get("avg_volume", usdc_volume)
             volume_factor = min(2.0, usdc_volume / max(avg_volume, 1.0))
 
             # Momentum factor
-            price_history = market_data.get('price_history', [btc_price])
+            price_history = market_data.get("price_history", [btc_price])
             if len(price_history) > 1:
                 momentum = abs(price_history[-1] - price_history[0]) / price_history[0]
                 momentum_factor = min(1.5, momentum * 50)
@@ -516,21 +536,23 @@ class EnhancedProfitTradingStrategy:
             logger.error(f"Error calculating profit potential: {e}")
             return 0.005  # 0.5% fallback
 
-    def _calculate_risk_score(self,
-                              confidence_score: float,
-                              profit_potential: float,
-                              market_data: Dict[str, Any]) -> float:
+    def _calculate_risk_score(
+        self,
+        confidence_score: float,
+        profit_potential: float,
+        market_data: Dict[str, Any],
+    ) -> float:
         """Calculate comprehensive risk score."""
         try:
             # Base risk from confidence (lower confidence = higher risk)
             confidence_risk = (1.0 - confidence_score) * 0.4
 
             # Volatility risk
-            volatility = market_data.get('volatility', 0.02)
+            volatility = market_data.get("volatility", 0.02)
             volatility_risk = min(0.4, volatility * 10)
 
             # Volume risk (lower volume = higher risk)
-            usdc_volume = market_data.get('usdc_volume', 1000000)
+            usdc_volume = market_data.get("usdc_volume", 1000000)
             volume_risk = max(0.0, (1000000 - usdc_volume) / 10000000) * 0.2
 
             # Profit-risk relationship (very high profit might indicate higher risk)
@@ -550,7 +572,7 @@ class EnhancedProfitTradingStrategy:
     def _calculate_volatility(self, market_data: Dict[str, Any]) -> float:
         """Calculate market volatility."""
         try:
-            price_history = market_data.get('price_history', [])
+            price_history = market_data.get("price_history", [])
             if len(price_history) < 3:
                 return 0.02  # Default 2%
 
@@ -577,19 +599,26 @@ class EnhancedProfitTradingStrategy:
 
             # 3. Calculate position size using Kelly criterion
             kelly_fraction, position_size_btc = self._calculate_kelly_position_size(
-                market_vector)
+                market_vector
+            )
 
             # 4. Calculate expected return
             expected_return = market_vector.profit_potential
 
             # 5. Calculate stop loss and take profit
             stop_loss, take_profit = self._calculate_exit_levels(
-                market_vector, direction)
+                market_vector, direction
+            )
 
             # 6. Check thresholds
-            confidence_met = market_vector.confidence_score >= self.risk_params[
-                'min_confidence_threshold']
-            profit_met = market_vector.profit_potential >= self.risk_params['min_profit_threshold']
+            confidence_met = (
+                market_vector.confidence_score
+                >= self.risk_params["min_confidence_threshold"]
+            )
+            profit_met = (
+                market_vector.profit_potential
+                >= self.risk_params["min_profit_threshold"]
+            )
 
             # 7. Create trading signal
             signal = TradingSignal(
@@ -605,12 +634,13 @@ class EnhancedProfitTradingStrategy:
                 kelly_fraction=kelly_fraction,
                 confidence_threshold_met=confidence_met,
                 profit_threshold_met=profit_met,
-                max_risk_usdc=self.current_capital_usdc *
-                self.risk_params['max_daily_loss_pct'])
+                max_risk_usdc=self.current_capital_usdc
+                * self.risk_params["max_daily_loss_pct"],
+            )
 
             # 8. Store signal
             self.signals.append(signal)
-            if len(self.signals) > self.config['max_signal_history']:
+            if len(self.signals) > self.config["max_signal_history"]:
                 self.signals.pop(0)
 
             return signal
@@ -624,9 +654,9 @@ class EnhancedProfitTradingStrategy:
         try:
             # Calculate composite signal score
             signal_score = (
-                market_vector.confidence_score * 0.4 +
-                market_vector.profit_potential * 10 * 0.4 +  # Scale up profit
-                (1 - market_vector.risk_score) * 0.2
+                market_vector.confidence_score * 0.4
+                + market_vector.profit_potential * 10 * 0.4  # Scale up profit
+                + (1 - market_vector.risk_score) * 0.2
             )
 
             # Determine signal strength
@@ -653,9 +683,13 @@ class EnhancedProfitTradingStrategy:
         """Determine optimal trade direction."""
         try:
             # Check if we should trade at all
-            if (market_vector.confidence_score < self.risk_params['min_confidence_threshold'] or
-                market_vector.profit_potential < self.risk_params['min_profit_threshold'] or
-                    market_vector.risk_score > self.risk_params['max_risk_score']):
+            if (
+                market_vector.confidence_score
+                < self.risk_params["min_confidence_threshold"]
+                or market_vector.profit_potential
+                < self.risk_params["min_profit_threshold"]
+                or market_vector.risk_score > self.risk_params["max_risk_score"]
+            ):
                 return TradeDirection.HOLD
 
             # Determine direction based on phase alignment and momentum
@@ -674,10 +708,11 @@ class EnhancedProfitTradingStrategy:
             return TradeDirection.HOLD
 
     def _calculate_kelly_position_size(
-            self, market_vector: MarketVector) -> Tuple[float, float]:
+        self, market_vector: MarketVector
+    ) -> Tuple[float, float]:
         """Calculate position size using Kelly criterion."""
         try:
-            if not self.config['enable_kelly_sizing']:
+            if not self.config["enable_kelly_sizing"]:
                 # Simple percentage sizing
                 base_fraction = min(0.05, market_vector.confidence_score * 0.1)
                 position_usdc = self.current_capital_usdc * base_fraction
@@ -700,20 +735,21 @@ class EnhancedProfitTradingStrategy:
             #       p = probability of winning
             #       q = probability of losing
             win_loss_ratio = expected_win / expected_loss
-            kelly_fraction = (win_probability * win_loss_ratio -
-                              loss_probability) / win_loss_ratio
+            kelly_fraction = (
+                win_probability * win_loss_ratio - loss_probability
+            ) / win_loss_ratio
 
             # Apply safety constraints
             kelly_fraction = max(0.0, kelly_fraction)  # No negative sizing
             kelly_fraction = min(
-                kelly_fraction,
-                self.kelly_params['max_kelly_fraction'])
+                kelly_fraction, self.kelly_params["max_kelly_fraction"]
+            )
             # Conservative adjustment
-            kelly_fraction *= self.kelly_params['conservative_factor']
+            kelly_fraction *= self.kelly_params["conservative_factor"]
 
             # Check minimum edge
             edge = win_probability * expected_win - loss_probability * expected_loss
-            if edge < self.kelly_params['min_edge_required']:
+            if edge < self.kelly_params["min_edge_required"]:
                 kelly_fraction = 0.0
 
             # Convert to BTC amount
@@ -721,8 +757,9 @@ class EnhancedProfitTradingStrategy:
             position_btc = position_usdc / market_vector.btc_price
 
             # Apply position limits
-            max_position_usdc = self.current_capital_usdc * \
-                self.risk_params['max_position_size_pct']
+            max_position_usdc = (
+                self.current_capital_usdc * self.risk_params["max_position_size_pct"]
+            )
             if position_usdc > max_position_usdc:
                 position_usdc = max_position_usdc
                 position_btc = position_usdc / market_vector.btc_price
@@ -734,20 +771,21 @@ class EnhancedProfitTradingStrategy:
             logger.error(f"Error calculating Kelly position size: {e}")
             return 0.0, 0.0
 
-    def _calculate_exit_levels(self,
-                               market_vector: MarketVector,
-                               direction: TradeDirection) -> Tuple[Optional[float],
-                                                                   Optional[float]]:
+    def _calculate_exit_levels(
+        self, market_vector: MarketVector, direction: TradeDirection
+    ) -> Tuple[Optional[float], Optional[float]]:
         """Calculate stop loss and take profit levels."""
         try:
             if direction == TradeDirection.HOLD:
                 return None, None
 
             current_price = market_vector.btc_price
-            profit_factor = self.risk_params['take_profit_factor'] * \
-                market_vector.profit_potential
-            loss_factor = self.risk_params['stop_loss_factor'] * \
-                market_vector.risk_score
+            profit_factor = (
+                self.risk_params["take_profit_factor"] * market_vector.profit_potential
+            )
+            loss_factor = (
+                self.risk_params["stop_loss_factor"] * market_vector.risk_score
+            )
 
             if direction == TradeDirection.LONG:
                 take_profit = current_price * (1 + profit_factor)
@@ -769,22 +807,23 @@ class EnhancedProfitTradingStrategy:
             execution_id = f"exec_{int(time.time() * 1000)}"
 
             # Validate signal
-            if (signal.recommended_direction == TradeDirection.HOLD or
-                not signal.confidence_threshold_met or
-                not signal.profit_threshold_met or
-                    signal.recommended_size_btc <= 0):
-
+            if (
+                signal.recommended_direction == TradeDirection.HOLD
+                or not signal.confidence_threshold_met
+                or not signal.profit_threshold_met
+                or signal.recommended_size_btc <= 0
+            ):
                 return ExecutionResult(
                     execution_id=execution_id,
                     signal_id=signal.signal_id,
                     timestamp=time.time(),
                     status="cancelled",
-                    error_message="Signal validation failed"
+                    error_message="Signal validation failed",
                 )
 
             # Simulate execution
             base_price = signal.market_vector.btc_price
-            slippage = self.config['slippage_factor']
+            slippage = self.config["slippage_factor"]
 
             if signal.recommended_direction == TradeDirection.LONG:
                 executed_price = base_price * (1 + slippage)
@@ -793,7 +832,7 @@ class EnhancedProfitTradingStrategy:
 
             executed_quantity = signal.recommended_size_btc
             gross_value = executed_quantity * executed_price
-            fees = gross_value * self.config['fee_rate']
+            fees = gross_value * self.config["fee_rate"]
 
             # Calculate expected profit
             expected_profit_pct = signal.expected_return
@@ -816,7 +855,7 @@ class EnhancedProfitTradingStrategy:
                 net_profit_usdc=net_profit,
                 profit_percentage=net_profit / gross_value if gross_value > 0 else 0.0,
                 confidence_accuracy=signal.market_vector.confidence_score,
-                profit_prediction_accuracy=1.0  # Simplified for demo
+                profit_prediction_accuracy=1.0,  # Simplified for demo
             )
 
             # Store execution
@@ -834,7 +873,7 @@ class EnhancedProfitTradingStrategy:
                 signal_id=signal.signal_id,
                 timestamp=time.time(),
                 status="failed",
-                error_message=str(e)
+                error_message=str(e),
             )
 
     def _update_performance(self, execution: ExecutionResult):
@@ -852,30 +891,34 @@ class EnhancedProfitTradingStrategy:
                 self.performance.total_return_usdc += execution.net_profit_usdc
                 self.performance.total_fees_usdc += execution.fees_usdc
                 self.performance.net_return_usdc = (
-                    self.performance.total_return_usdc -
-                    self.performance.total_fees_usdc)
+                    self.performance.total_return_usdc
+                    - self.performance.total_fees_usdc
+                )
 
                 # Update ratios
                 if self.performance.executed_trades > 0:
                     self.performance.win_rate = (
-                        self.performance.profitable_trades /
-                        self.performance.executed_trades)
+                        self.performance.profitable_trades
+                        / self.performance.executed_trades
+                    )
                     self.performance.avg_profit_per_trade = (
-                        self.performance.total_return_usdc / self.performance.executed_trades)
+                        self.performance.total_return_usdc
+                        / self.performance.executed_trades
+                    )
 
                 # Update mathematical accuracy
                 self.performance.avg_confidence = (
-                    (self.performance.avg_confidence * (self.performance.executed_trades - 1) +
-                     execution.confidence_accuracy) / self.performance.executed_trades
-                )
+                    self.performance.avg_confidence
+                    * (self.performance.executed_trades - 1)
+                    + execution.confidence_accuracy
+                ) / self.performance.executed_trades
 
         except Exception as e:
             logger.error(f"Error updating performance: {e}")
 
     def _create_default_market_vector(
-            self,
-            btc_price: float,
-            usdc_volume: float) -> MarketVector:
+        self, btc_price: float, usdc_volume: float
+    ) -> MarketVector:
         """Create default market vector for error cases."""
         return MarketVector(
             timestamp=time.time(),
@@ -883,7 +926,7 @@ class EnhancedProfitTradingStrategy:
             usdc_volume=usdc_volume,
             confidence_score=0.5,
             profit_potential=0.0,
-            risk_score=0.5
+            risk_score=0.5,
         )
 
     def _create_default_signal(self, market_vector: MarketVector) -> TradingSignal:
@@ -895,7 +938,7 @@ class EnhancedProfitTradingStrategy:
             profit_signal=ProfitSignal.HOLD,
             recommended_direction=TradeDirection.HOLD,
             recommended_size_btc=0.0,
-            expected_return=0.0
+            expected_return=0.0,
         )
 
     def get_performance_summary(self) -> Dict[str, Any]:
@@ -906,26 +949,30 @@ class EnhancedProfitTradingStrategy:
                 "current_usdc": self.current_capital_usdc,
                 "total_return_usdc": self.performance.total_return_usdc,
                 "return_percentage": (
-                    self.current_capital_usdc -
-                    self.initial_capital_usdc) /
-                self.initial_capital_usdc *
-                100},
+                    self.current_capital_usdc - self.initial_capital_usdc
+                )
+                / self.initial_capital_usdc
+                * 100,
+            },
             "trading": {
-                "total_signals": len(
-                    self.signals),
+                "total_signals": len(self.signals),
                 "executed_trades": self.performance.executed_trades,
                 "profitable_trades": self.performance.profitable_trades,
                 "losing_trades": self.performance.losing_trades,
                 "win_rate": self.performance.win_rate,
-                "avg_profit_per_trade": self.performance.avg_profit_per_trade},
+                "avg_profit_per_trade": self.performance.avg_profit_per_trade,
+            },
             "mathematical": {
                 "avg_confidence": self.performance.avg_confidence,
                 "avg_profit_potential": self.performance.avg_profit_potential,
-                "mathematical_precision": self.performance.mathematical_precision},
+                "mathematical_precision": self.performance.mathematical_precision,
+            },
             "risk": {
                 "total_fees_usdc": self.performance.total_fees_usdc,
                 "max_drawdown_usdc": self.performance.max_drawdown_usdc,
-                "current_state": self.current_state.value}}
+                "current_state": self.current_state.value,
+            },
+        }
 
 
 def demonstrate_profit_strategy():
@@ -943,34 +990,34 @@ def demonstrate_profit_strategy():
             "btc_price": 45000.0,
             "usdc_volume": 2500000.0,
             "market_data": {
-                'price_history': [44500, 44700, 44900, 45100, 45000],
-                'volume_history': [2000000, 2200000, 2400000, 2600000, 2500000],
-                'volatility': 0.015,
-                'avg_volume': 2000000.0
-            }
+                "price_history": [44500, 44700, 44900, 45100, 45000],
+                "volume_history": [2000000, 2200000, 2400000, 2600000, 2500000],
+                "volatility": 0.015,
+                "avg_volume": 2000000.0,
+            },
         },
         {
             "name": "Volatile Market - Medium Volume",
             "btc_price": 43200.0,
             "usdc_volume": 1800000.0,
             "market_data": {
-                'price_history': [44000, 43500, 44200, 42800, 43200],
-                'volume_history': [1500000, 1700000, 1600000, 1900000, 1800000],
-                'volatility': 0.035,
-                'avg_volume': 1600000.0
-            }
+                "price_history": [44000, 43500, 44200, 42800, 43200],
+                "volume_history": [1500000, 1700000, 1600000, 1900000, 1800000],
+                "volatility": 0.035,
+                "avg_volume": 1600000.0,
+            },
         },
         {
             "name": "Bear Market - Low Volume",
             "btc_price": 42000.0,
             "usdc_volume": 800000.0,
             "market_data": {
-                'price_history': [43000, 42800, 42500, 42200, 42000],
-                'volume_history': [1200000, 1000000, 900000, 850000, 800000],
-                'volatility': 0.025,
-                'avg_volume': 1000000.0
-            }
-        }
+                "price_history": [43000, 42800, 42500, 42200, 42000],
+                "volume_history": [1200000, 1000000, 900000, 850000, 800000],
+                "volatility": 0.025,
+                "avg_volume": 1000000.0,
+            },
+        },
     ]
 
     for i, scenario in enumerate(scenarios, 1):
@@ -979,12 +1026,10 @@ def demonstrate_profit_strategy():
 
         # Analyze market
         market_vector = strategy.analyze_market_vector(
-            scenario['btc_price'],
-            scenario['usdc_volume'],
-            scenario['market_data']
+            scenario["btc_price"], scenario["usdc_volume"], scenario["market_data"]
         )
 
-        print(f"Market Analysis:")
+        print("Market Analysis:")
         print(f"  BTC Price: ${market_vector.btc_price:,.2f}")
         print(f"  USDC Volume: ${market_vector.usdc_volume:,.0f}")
         print(f"  Hash Similarity (ALEPH): {market_vector.hash_similarity:.3f}")
@@ -994,25 +1039,23 @@ def demonstrate_profit_strategy():
         print(f"  Pattern Confidence: {market_vector.pattern_confidence:.3f}")
         print(f"  Composite Confidence: {market_vector.confidence_score:.3f}")
         print(
-            f"  Profit Potential: {
-                market_vector.profit_potential:.3f} ({
-                market_vector.profit_potential *
-                100:.1f}%)")
+            f"  Profit Potential: {market_vector.profit_potential:.3f} ({
+                market_vector.profit_potential * 100:.1f}%)"
+        )
         print(f"  Risk Score: {market_vector.risk_score:.3f}")
 
         # Generate signal
         signal = strategy.generate_trading_signal(market_vector)
 
-        print(f"\nTrading Signal:")
+        print("\nTrading Signal:")
         print(f"  Signal Strength: {signal.profit_signal.value}")
         print(f"  Direction: {signal.recommended_direction.value}")
         print(f"  Size: {signal.recommended_size_btc:.6f} BTC")
         print(f"  Kelly Fraction: {signal.kelly_fraction:.3f}")
         print(
-            f"  Expected Return: {
-                signal.expected_return:.3f} ({
-                signal.expected_return *
-                100:.1f}%)")
+            f"  Expected Return: {signal.expected_return:.3f} ({
+                signal.expected_return * 100:.1f}%)"
+        )
         print(f"  Confidence Met: {signal.confidence_threshold_met}")
         print(f"  Profit Met: {signal.profit_threshold_met}")
 
@@ -1024,7 +1067,7 @@ def demonstrate_profit_strategy():
         if signal.recommended_direction != TradeDirection.HOLD:
             execution = strategy.execute_trade(signal)
 
-            print(f"\nExecution Result:")
+            print("\nExecution Result:")
             print(f"  Status: {execution.status}")
             if execution.status == "filled":
                 print(f"  Executed Price: ${execution.executed_price:.2f}")
@@ -1036,12 +1079,12 @@ def demonstrate_profit_strategy():
             elif execution.error_message:
                 print(f"  Error: {execution.error_message}")
         else:
-            print(f"\n💤 HOLD - No trade executed (signal validation failed)")
+            print("\n💤 HOLD - No trade executed (signal validation failed)")
 
     # Show final performance
     performance = strategy.get_performance_summary()
 
-    print(f"\n📈 FINAL STRATEGY PERFORMANCE")
+    print("\n📈 FINAL STRATEGY PERFORMANCE")
     print("=" * 40)
     print(f"Initial Capital: ${performance['capital']['initial_usdc']:,.2f}")
     print(f"Current Capital: ${performance['capital']['current_usdc']:,.2f}")
@@ -1053,12 +1096,14 @@ def demonstrate_profit_strategy():
     print(f"Avg Profit/Trade: ${performance['trading']['avg_profit_per_trade']:,.2f}")
     print(f"Total Fees: ${performance['risk']['total_fees_usdc']:,.2f}")
     print(
-        f"Mathematical Precision: {
-            performance['mathematical']['avg_confidence']:.3f}")
+        f"Mathematical Precision: {performance['mathematical']['avg_confidence']:.3f}"
+    )
 
-    print(f"\n✅ PROFIT-DRIVEN STRATEGY DEMONSTRATION COMPLETE!")
-    print(f"🎯 System successfully integrates ALEPH, NCCO, and Drift analysis")
-    print(f"💰 All trading decisions are mathematically validated for profit optimization")
+    print("\n✅ PROFIT-DRIVEN STRATEGY DEMONSTRATION COMPLETE!")
+    print("🎯 System successfully integrates ALEPH, NCCO, and Drift analysis")
+    print(
+        "💰 All trading decisions are mathematically validated for profit optimization"
+    )
 
 
 if __name__ == "__main__":

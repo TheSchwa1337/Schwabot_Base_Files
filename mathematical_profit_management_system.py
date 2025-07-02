@@ -22,21 +22,22 @@ Business Logic:
 import time
 import logging
 import numpy as np
-import psutil
 from typing import Dict, List, Optional, Any, Tuple
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from enum import Enum
 import json
-from datetime import datetime, timedelta
 
 # Setup logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+)
 logger = logging.getLogger(__name__)
 
 
 @dataclass(frozen=True)
 class MarketTick:
     """Individual market tick data."""
+
     timestamp: float
     btc_price: float
     eth_price: float
@@ -49,6 +50,7 @@ class MarketTick:
 @dataclass
 class TradingSession:
     """Trading session performance tracking."""
+
     session_id: str
     start_time: float
     end_time: Optional[float] = None
@@ -66,6 +68,7 @@ class TradingSession:
 @dataclass
 class AccelerationImpact:
     """Impact of acceleration on trading performance."""
+
     baseline_opportunities: int
     accelerated_opportunities: int
     additional_trades_captured: int
@@ -76,10 +79,11 @@ class AccelerationImpact:
 
 class ProfitOptimizationMode(Enum):
     """Profit optimization strategies."""
+
     CONSERVATIVE = "conservative"  # Focus on accuracy and safety
-    BALANCED = "balanced"         # Balance speed and accuracy
-    AGGRESSIVE = "aggressive"     # Maximum speed for high-frequency
-    SCALPING = "scalping"        # Ultra-high frequency micro-profits
+    BALANCED = "balanced"  # Balance speed and accuracy
+    AGGRESSIVE = "aggressive"  # Maximum speed for high-frequency
+    SCALPING = "scalping"  # Ultra-high frequency micro-profits
 
 
 class MathematicalProfitManager:
@@ -109,15 +113,17 @@ class MathematicalProfitManager:
         # Trading parameters (optimized mathematically)
         self.base_position_size = 0.1  # 10% of capital per trade
         self.max_position_size = 0.25  # Maximum 25% per trade
-        self.profit_target = 0.02      # 2% profit target
-        self.stop_loss = 0.01          # 1% stop loss
-        self.fee_rate = 0.001          # 0.1% trading fee
+        self.profit_target = 0.02  # 2% profit target
+        self.stop_loss = 0.01  # 1% stop loss
+        self.fee_rate = 0.001  # 0.1% trading fee
 
         # Acceleration benefits
         self.response_time_advantage = 0.0  # Milliseconds saved per decision
-        self.frequency_multiplier = 1.0     # Trading frequency improvement
+        self.frequency_multiplier = 1.0  # Trading frequency improvement
 
-        logger.info("🧮 Mathematical Profit Manager initialized with $%.2f", initial_capital)
+        logger.info(
+            "🧮 Mathematical Profit Manager initialized with $%.2f", initial_capital
+        )
 
     def set_optimization_mode(self, mode: ProfitOptimizationMode) -> None:
         """Set profit optimization mode."""
@@ -127,15 +133,15 @@ class MathematicalProfitManager:
         # Adjust parameters based on mode
         if mode == ProfitOptimizationMode.CONSERVATIVE:
             self.base_position_size = 0.05  # 5% per trade
-            self.profit_target = 0.015      # 1.5% target
+            self.profit_target = 0.015  # 1.5% target
             self.frequency_multiplier = 0.8  # Slower, more careful
         elif mode == ProfitOptimizationMode.AGGRESSIVE:
             self.base_position_size = 0.15  # 15% per trade
-            self.profit_target = 0.025      # 2.5% target
+            self.profit_target = 0.025  # 2.5% target
             self.frequency_multiplier = 1.5  # 50% more frequent
         elif mode == ProfitOptimizationMode.SCALPING:
-            self.base_position_size = 0.2   # 20% per trade
-            self.profit_target = 0.005      # 0.5% micro-profits
+            self.base_position_size = 0.2  # 20% per trade
+            self.profit_target = 0.005  # 0.5% micro-profits
             self.frequency_multiplier = 3.0  # 3x frequency
         else:  # BALANCED
             self.base_position_size = 0.1
@@ -144,10 +150,15 @@ class MathematicalProfitManager:
 
         logger.info(
             "🔄 Optimization mode: %s -> %s (Freq: %.1fx, Target: %.2f%%)",
-            old_mode.value, mode.value, self.frequency_multiplier, self.profit_target * 100
+            old_mode.value,
+            mode.value,
+            self.frequency_multiplier,
+            self.profit_target * 100,
         )
 
-    def calculate_pure_profit_opportunity(self, market_tick: MarketTick) -> Dict[str, Any]:
+    def calculate_pure_profit_opportunity(
+        self, market_tick: MarketTick
+    ) -> Dict[str, Any]:
         """
         Calculate pure profit opportunity using mathematical framework.
 
@@ -164,14 +175,16 @@ class MathematicalProfitManager:
             volume_strength = self._calculate_volume_strength(market_tick)
 
             # Spread efficiency (lower spread = better opportunity)
-            spread_efficiency = max(0.1, 1.0 - (market_tick.spread / market_tick.btc_price))
+            spread_efficiency = max(
+                0.1, 1.0 - (market_tick.spread / market_tick.btc_price)
+            )
 
             # Mathematical combination using constants
             base_opportunity = (
-                momentum_score * np.sin(self.PI / 4) +
-                volatility_opportunity * np.cos(self.PI / 6) +
-                volume_strength * (1 / self.GOLDEN_RATIO) +
-                spread_efficiency * np.log(self.EULER)
+                momentum_score * np.sin(self.PI / 4)
+                + volatility_opportunity * np.cos(self.PI / 6)
+                + volume_strength * (1 / self.GOLDEN_RATIO)
+                + spread_efficiency * np.log(self.EULER)
             )
 
             # Risk-adjusted opportunity
@@ -190,30 +203,30 @@ class MathematicalProfitManager:
             expected_profit = profit_opportunity * position_size * self.current_capital
 
             return {
-                'opportunity_score': profit_opportunity,
-                'position_size': position_size,
-                'expected_profit': expected_profit,
-                'risk_adjustment': risk_adjustment,
-                'entry_price': market_tick.btc_price,
-                'target_price': market_tick.btc_price * (1 + self.profit_target),
-                'stop_price': market_tick.btc_price * (1 - self.stop_loss),
-                'metadata': {
-                    'momentum_score': momentum_score,
-                    'volatility_opportunity': volatility_opportunity,
-                    'volume_strength': volume_strength,
-                    'spread_efficiency': spread_efficiency
-                }
+                "opportunity_score": profit_opportunity,
+                "position_size": position_size,
+                "expected_profit": expected_profit,
+                "risk_adjustment": risk_adjustment,
+                "entry_price": market_tick.btc_price,
+                "target_price": market_tick.btc_price * (1 + self.profit_target),
+                "stop_price": market_tick.btc_price * (1 - self.stop_loss),
+                "metadata": {
+                    "momentum_score": momentum_score,
+                    "volatility_opportunity": volatility_opportunity,
+                    "volume_strength": volume_strength,
+                    "spread_efficiency": spread_efficiency,
+                },
             }
 
         except Exception as e:
             logger.error("❌ Profit opportunity calculation failed: %s", e)
-            return {'opportunity_score': 0.0, 'expected_profit': 0.0}
+            return {"opportunity_score": 0.0, "expected_profit": 0.0}
 
     def simulate_acceleration_impact(
         self,
         market_ticks: List[MarketTick],
         baseline_response_time_ms: float = 100.0,
-        accelerated_response_time_ms: float = 25.0
+        accelerated_response_time_ms: float = 25.0,
     ) -> AccelerationImpact:
         """
         Simulate the impact of computational acceleration on profit opportunities.
@@ -234,26 +247,34 @@ class MathematicalProfitManager:
             for i, tick in enumerate(market_ticks):
                 opportunity = self.calculate_pure_profit_opportunity(tick)
 
-                if opportunity['opportunity_score'] > 0.5:  # Threshold for trading
+                if opportunity["opportunity_score"] > 0.5:  # Threshold for trading
                     # Baseline scenario: slower response time
                     if i % 5 == 0:  # Can only act on every 5th opportunity
                         baseline_opportunities += 1
                         # Slippage due to slower response
                         slippage_factor = 0.95  # 5% slippage
-                        baseline_profit += opportunity['expected_profit'] * slippage_factor
+                        baseline_profit += (
+                            opportunity["expected_profit"] * slippage_factor
+                        )
 
                     # Accelerated scenario: faster response time
                     if i % 2 == 0:  # Can act on every 2nd opportunity
                         accelerated_opportunities += 1
                         # Minimal slippage due to faster response
                         slippage_factor = 0.99  # 1% slippage
-                        accelerated_profit += opportunity['expected_profit'] * slippage_factor
+                        accelerated_profit += (
+                            opportunity["expected_profit"] * slippage_factor
+                        )
 
             # Calculate impact metrics
             additional_trades = accelerated_opportunities - baseline_opportunities
             additional_profit = accelerated_profit - baseline_profit
-            competitive_advantage = baseline_response_time_ms - accelerated_response_time_ms
-            frequency_improvement = (accelerated_opportunities / max(baseline_opportunities, 1) - 1) * 100
+            competitive_advantage = (
+                baseline_response_time_ms - accelerated_response_time_ms
+            )
+            frequency_improvement = (
+                accelerated_opportunities / max(baseline_opportunities, 1) - 1
+            ) * 100
 
             impact = AccelerationImpact(
                 baseline_opportunities=baseline_opportunities,
@@ -261,7 +282,7 @@ class MathematicalProfitManager:
                 additional_trades_captured=additional_trades,
                 additional_profit=additional_profit,
                 competitive_advantage_ms=competitive_advantage,
-                frequency_improvement_pct=frequency_improvement
+                frequency_improvement_pct=frequency_improvement,
             )
 
             self.acceleration_impacts.append(impact)
@@ -275,7 +296,7 @@ class MathematicalProfitManager:
         self,
         market_ticks: List[MarketTick],
         session_duration_hours: float = 1.0,
-        acceleration_enabled: bool = True
+        acceleration_enabled: bool = True,
     ) -> TradingSession:
         """
         Run a complete trading session with mathematical profit optimization.
@@ -284,10 +305,7 @@ class MathematicalProfitManager:
             session_id = f"session_{int(time.time())}"
             start_time = time.time()
 
-            session = TradingSession(
-                session_id=session_id,
-                start_time=start_time
-            )
+            session = TradingSession(session_id=session_id, start_time=start_time)
 
             session_capital = self.current_capital
             trades_executed = []
@@ -295,7 +313,9 @@ class MathematicalProfitManager:
 
             # Apply acceleration benefits
             if acceleration_enabled:
-                effective_frequency = self.frequency_multiplier * 1.5  # 50% boost from acceleration
+                effective_frequency = (
+                    self.frequency_multiplier * 1.5
+                )  # 50% boost from acceleration
                 response_time_ms = 25.0  # Accelerated response time
             else:
                 effective_frequency = self.frequency_multiplier
@@ -314,44 +334,51 @@ class MathematicalProfitManager:
                 response_times.append(calc_time)
 
                 # Execute trade if opportunity is good
-                if opportunity['opportunity_score'] > 0.4:  # Trading threshold
+                if opportunity["opportunity_score"] > 0.4:  # Trading threshold
                     trade_result = self._execute_virtual_trade(
                         opportunity, tick, session_capital, response_time_ms
                     )
 
-                    if trade_result['executed']:
+                    if trade_result["executed"]:
                         trades_executed.append(trade_result)
                         session.total_trades += 1
 
-                        if trade_result['profit'] > 0:
+                        if trade_result["profit"] > 0:
                             session.successful_trades += 1
 
                         # Update capital
-                        net_trade_result = trade_result['profit'] - trade_result['fees']
+                        net_trade_result = trade_result["profit"] - trade_result["fees"]
                         session_capital += net_trade_result
-                        session.total_profit += trade_result['profit']
-                        session.total_fees += trade_result['fees']
+                        session.total_profit += trade_result["profit"]
+                        session.total_fees += trade_result["fees"]
 
             # Finalize session
             session.end_time = time.time()
             session.net_profit = session.total_profit - session.total_fees
-            session.average_response_time = np.mean(response_times) if response_times else 0.0
-            session.computation_time_saved = (100.0 - response_time_ms) * session.total_trades
+            session.average_response_time = (
+                np.mean(response_times) if response_times else 0.0
+            )
+            session.computation_time_saved = (
+                100.0 - response_time_ms
+            ) * session.total_trades
 
             # Calculate performance metrics
             if trades_executed:
-                profits = [t['profit'] for t in trades_executed]
+                profits = [t["profit"] for t in trades_executed]
                 session.max_drawdown = self._calculate_max_drawdown(profits)
                 session.sharpe_ratio = self._calculate_sharpe_ratio(profits)
 
             # Update manager state
             self.current_capital = session_capital
             self.trading_sessions.append(session)
-            self.profit_history.extend([t['profit'] for t in trades_executed])
+            self.profit_history.extend([t["profit"] for t in trades_executed])
 
             logger.info(
                 "📊 Session %s: %d trades, $%.2f profit, %.1fms avg response",
-                session_id, session.total_trades, session.net_profit, session.average_response_time
+                session_id,
+                session.total_trades,
+                session.net_profit,
+                session.average_response_time,
             )
 
             return session
@@ -377,9 +404,11 @@ class MathematicalProfitManager:
         """Calculate volume strength indicator."""
         # Normalize volume (assuming typical range)
         normalized_volume = min(1.0, tick.volume / 1000000.0)
-        return normalized_volume ** 0.5  # Square root for diminishing returns
+        return normalized_volume**0.5  # Square root for diminishing returns
 
-    def _calculate_optimal_position_size(self, opportunity: float, volatility: float) -> float:
+    def _calculate_optimal_position_size(
+        self, opportunity: float, volatility: float
+    ) -> float:
         """Calculate optimal position size using Kelly criterion and risk management."""
         # Base position size adjusted by opportunity and risk
         kelly_fraction = opportunity * 0.5  # Conservative Kelly
@@ -393,19 +422,21 @@ class MathematicalProfitManager:
         opportunity: Dict[str, Any],
         tick: MarketTick,
         available_capital: float,
-        response_time_ms: float
+        response_time_ms: float,
     ) -> Dict[str, Any]:
         """Execute a virtual trade with realistic slippage and fees."""
         try:
-            position_value = available_capital * opportunity['position_size']
+            position_value = available_capital * opportunity["position_size"]
 
             # Calculate slippage based on response time
-            slippage_factor = 1.0 - (response_time_ms / 10000.0)  # Faster = less slippage
+            slippage_factor = 1.0 - (
+                response_time_ms / 10000.0
+            )  # Faster = less slippage
             slippage_factor = max(0.95, slippage_factor)
 
             # Simulate trade execution
             entry_price = tick.btc_price
-            target_price = opportunity['target_price'] * slippage_factor
+            target_price = opportunity["target_price"] * slippage_factor
 
             # Simplified profit calculation (assuming target hit)
             profit_pct = (target_price - entry_price) / entry_price
@@ -416,20 +447,20 @@ class MathematicalProfitManager:
             net_profit = gross_profit - fees
 
             return {
-                'executed': True,
-                'entry_price': entry_price,
-                'target_price': target_price,
-                'position_value': position_value,
-                'profit': gross_profit,
-                'fees': fees,
-                'net_profit': net_profit,
-                'slippage_factor': slippage_factor,
-                'response_time_ms': response_time_ms
+                "executed": True,
+                "entry_price": entry_price,
+                "target_price": target_price,
+                "position_value": position_value,
+                "profit": gross_profit,
+                "fees": fees,
+                "net_profit": net_profit,
+                "slippage_factor": slippage_factor,
+                "response_time_ms": response_time_ms,
             }
 
         except Exception as e:
             logger.error("❌ Virtual trade execution failed: %s", e)
-            return {'executed': False}
+            return {"executed": False}
 
     def _calculate_max_drawdown(self, profits: List[float]) -> float:
         """Calculate maximum drawdown from profit series."""
@@ -441,7 +472,9 @@ class MathematicalProfitManager:
         drawdown = running_max - cumulative
         return float(np.max(drawdown))
 
-    def _calculate_sharpe_ratio(self, profits: List[float], risk_free_rate: float = 0.02) -> float:
+    def _calculate_sharpe_ratio(
+        self, profits: List[float], risk_free_rate: float = 0.02
+    ) -> float:
         """Calculate Sharpe ratio for profit series."""
         if len(profits) < 2:
             return 0.0
@@ -458,7 +491,7 @@ class MathematicalProfitManager:
         """Generate comprehensive profit management report."""
         try:
             if not self.trading_sessions:
-                return {'status': 'no_data', 'message': 'No trading sessions recorded'}
+                return {"status": "no_data", "message": "No trading sessions recorded"}
 
             # Aggregate session data
             total_trades = sum(s.total_trades for s in self.trading_sessions)
@@ -468,16 +501,25 @@ class MathematicalProfitManager:
 
             # Calculate performance metrics
             win_rate = (
-                sum(s.successful_trades for s in self.trading_sessions) / max(total_trades, 1)
+                sum(s.successful_trades for s in self.trading_sessions)
+                / max(total_trades, 1)
             ) * 100
 
-            roi = ((self.current_capital - self.initial_capital) / self.initial_capital) * 100
+            roi = (
+                (self.current_capital - self.initial_capital) / self.initial_capital
+            ) * 100
 
             # Acceleration impact summary
             if self.acceleration_impacts:
-                avg_additional_trades = np.mean([a.additional_trades_captured for a in self.acceleration_impacts])
-                avg_additional_profit = np.mean([a.additional_profit for a in self.acceleration_impacts])
-                avg_frequency_improvement = np.mean([a.frequency_improvement_pct for a in self.acceleration_impacts])
+                avg_additional_trades = np.mean(
+                    [a.additional_trades_captured for a in self.acceleration_impacts]
+                )
+                avg_additional_profit = np.mean(
+                    [a.additional_profit for a in self.acceleration_impacts]
+                )
+                avg_frequency_improvement = np.mean(
+                    [a.frequency_improvement_pct for a in self.acceleration_impacts]
+                )
             else:
                 avg_additional_trades = 0
                 avg_additional_profit = 0.0
@@ -485,73 +527,91 @@ class MathematicalProfitManager:
 
             # Time-based analysis
             if len(self.trading_sessions) > 1:
-                session_duration = self.trading_sessions[-1].end_time - self.trading_sessions[0].start_time
-                profit_per_hour = net_profit / (session_duration / 3600) if session_duration > 0 else 0
+                session_duration = (
+                    self.trading_sessions[-1].end_time
+                    - self.trading_sessions[0].start_time
+                )
+                profit_per_hour = (
+                    net_profit / (session_duration / 3600)
+                    if session_duration > 0
+                    else 0
+                )
             else:
                 profit_per_hour = 0.0
 
             return {
-                'status': 'active',
-                'capital_management': {
-                    'initial_capital': self.initial_capital,
-                    'current_capital': self.current_capital,
-                    'net_profit': net_profit,
-                    'roi_percent': roi,
-                    'profit_per_hour': profit_per_hour
+                "status": "active",
+                "capital_management": {
+                    "initial_capital": self.initial_capital,
+                    "current_capital": self.current_capital,
+                    "net_profit": net_profit,
+                    "roi_percent": roi,
+                    "profit_per_hour": profit_per_hour,
                 },
-                'trading_performance': {
-                    'total_sessions': len(self.trading_sessions),
-                    'total_trades': total_trades,
-                    'win_rate_percent': win_rate,
-                    'total_fees': total_fees,
-                    'fee_efficiency': (total_fees / max(total_profit, 0.01)) * 100
+                "trading_performance": {
+                    "total_sessions": len(self.trading_sessions),
+                    "total_trades": total_trades,
+                    "win_rate_percent": win_rate,
+                    "total_fees": total_fees,
+                    "fee_efficiency": (total_fees / max(total_profit, 0.01)) * 100,
                 },
-                'acceleration_benefits': {
-                    'additional_trades_per_session': avg_additional_trades,
-                    'additional_profit_per_session': avg_additional_profit,
-                    'frequency_improvement_percent': avg_frequency_improvement,
-                    'computational_advantage': True if avg_additional_profit > 0 else False
+                "acceleration_benefits": {
+                    "additional_trades_per_session": avg_additional_trades,
+                    "additional_profit_per_session": avg_additional_profit,
+                    "frequency_improvement_percent": avg_frequency_improvement,
+                    "computational_advantage": True
+                    if avg_additional_profit > 0
+                    else False,
                 },
-                'mathematical_integrity': {
-                    'profit_calculation_purity': True,  # Always maintained
-                    'acceleration_separation': True,   # Architecture guarantee
-                    'optimization_mode': self.optimization_mode.value,
-                    'frequency_multiplier': self.frequency_multiplier
+                "mathematical_integrity": {
+                    "profit_calculation_purity": True,  # Always maintained
+                    "acceleration_separation": True,  # Architecture guarantee
+                    "optimization_mode": self.optimization_mode.value,
+                    "frequency_multiplier": self.frequency_multiplier,
                 },
-                'risk_metrics': {
-                    'max_position_size': self.max_position_size * 100,
-                    'average_profit_target': self.profit_target * 100,
-                    'stop_loss_percent': self.stop_loss * 100,
-                    'sharpe_ratio': np.mean([s.sharpe_ratio for s in self.trading_sessions if s.sharpe_ratio > 0])
-                }
+                "risk_metrics": {
+                    "max_position_size": self.max_position_size * 100,
+                    "average_profit_target": self.profit_target * 100,
+                    "stop_loss_percent": self.stop_loss * 100,
+                    "sharpe_ratio": np.mean(
+                        [
+                            s.sharpe_ratio
+                            for s in self.trading_sessions
+                            if s.sharpe_ratio > 0
+                        ]
+                    ),
+                },
             }
 
         except Exception as e:
             logger.error("❌ Report generation failed: %s", e)
-            return {'status': 'error', 'message': str(e)}
+            return {"status": "error", "message": str(e)}
 
-    def save_session_data(self, filename: str = "profit_management_sessions.json") -> bool:
+    def save_session_data(
+        self, filename: str = "profit_management_sessions.json"
+    ) -> bool:
         """Save session data for analysis."""
         try:
             data = {
-                'initial_capital': self.initial_capital,
-                'current_capital': self.current_capital,
-                'optimization_mode': self.optimization_mode.value,
-                'sessions': [
+                "initial_capital": self.initial_capital,
+                "current_capital": self.current_capital,
+                "optimization_mode": self.optimization_mode.value,
+                "sessions": [
                     {
-                        'session_id': s.session_id,
-                        'start_time': s.start_time,
-                        'end_time': s.end_time,
-                        'total_trades': s.total_trades,
-                        'successful_trades': s.successful_trades,
-                        'net_profit': s.net_profit,
-                        'sharpe_ratio': s.sharpe_ratio,
-                        'average_response_time': s.average_response_time
-                    } for s in self.trading_sessions
-                ]
+                        "session_id": s.session_id,
+                        "start_time": s.start_time,
+                        "end_time": s.end_time,
+                        "total_trades": s.total_trades,
+                        "successful_trades": s.successful_trades,
+                        "net_profit": s.net_profit,
+                        "sharpe_ratio": s.sharpe_ratio,
+                        "average_response_time": s.average_response_time,
+                    }
+                    for s in self.trading_sessions
+                ],
             }
 
-            with open(filename, 'w') as f:
+            with open(filename, "w") as f:
                 json.dump(data, f, indent=2)
 
             logger.info("💾 Session data saved to %s", filename)
@@ -565,7 +625,7 @@ class MathematicalProfitManager:
 def generate_realistic_market_data(
     num_ticks: int = 1000,
     base_btc_price: float = 45000.0,
-    volatility_range: Tuple[float, float] = (0.1, 0.4)
+    volatility_range: Tuple[float, float] = (0.1, 0.4),
 ) -> List[MarketTick]:
     """Generate realistic market tick data for testing."""
     ticks = []
@@ -574,7 +634,7 @@ def generate_realistic_market_data(
     for i in range(num_ticks):
         # Random walk with drift
         drift = np.random.normal(0, 0.001)
-        current_price *= (1 + drift)
+        current_price *= 1 + drift
 
         # Market parameters
         volatility = np.random.uniform(*volatility_range)
@@ -589,7 +649,7 @@ def generate_realistic_market_data(
             volume=volume,
             volatility=volatility,
             momentum=momentum,
-            spread=spread
+            spread=spread,
         )
 
         ticks.append(tick)
@@ -600,7 +660,7 @@ def generate_realistic_market_data(
 def demonstrate_mathematical_profit_management():
     """Demonstrate the complete mathematical profit management system."""
     print("🧮 MATHEMATICAL PROFIT MANAGEMENT SYSTEM DEMONSTRATION")
-    print("="*80)
+    print("=" * 80)
     print()
     print("🎯 SYSTEM OBJECTIVES:")
     print("  • Maintain mathematical purity in profit calculations")
@@ -617,8 +677,12 @@ def demonstrate_mathematical_profit_management():
         print("📊 Generating realistic market conditions...")
         market_data = generate_realistic_market_data(num_ticks=500)
         print(f"  • Generated {len(market_data)} market ticks")
-        print(f"  • Price range: ${min(t.btc_price for t in market_data):,.0f} - ${max(t.btc_price for t in market_data):,.0f}")
-        print(f"  • Volatility range: {min(t.volatility for t in market_data):.3f} - {max(t.volatility for t in market_data):.3f}")
+        print(
+            f"  • Price range: ${min(t.btc_price for t in market_data):,.0f} - ${max(t.btc_price for t in market_data):,.0f}"
+        )
+        print(
+            f"  • Volatility range: {min(t.volatility for t in market_data):.3f} - {max(t.volatility for t in market_data):.3f}"
+        )
         print()
 
         # Test different optimization modes
@@ -626,7 +690,7 @@ def demonstrate_mathematical_profit_management():
             ProfitOptimizationMode.CONSERVATIVE,
             ProfitOptimizationMode.BALANCED,
             ProfitOptimizationMode.AGGRESSIVE,
-            ProfitOptimizationMode.SCALPING
+            ProfitOptimizationMode.SCALPING,
         ]
 
         print("🧪 Testing Optimization Modes:")
@@ -637,14 +701,16 @@ def demonstrate_mathematical_profit_management():
             session = manager.run_trading_session(
                 market_ticks=market_data[:200],  # Use subset for each mode
                 session_duration_hours=0.5,
-                acceleration_enabled=True
+                acceleration_enabled=True,
             )
 
             print(f"  {mode.value.upper()}:")
             print(f"    📊 Trades: {session.total_trades}")
             print(f"    💰 Net Profit: ${session.net_profit:.2f}")
             print(f"    ⚡ Avg Response: {session.average_response_time:.1f}ms")
-            print(f"    📈 Win Rate: {(session.successful_trades/max(session.total_trades,1)*100):.1f}%")
+            print(
+                f"    📈 Win Rate: {(session.successful_trades / max(session.total_trades, 1) * 100):.1f}%"
+            )
             print()
 
         # Demonstrate acceleration impact
@@ -652,7 +718,7 @@ def demonstrate_mathematical_profit_management():
         impact = manager.simulate_acceleration_impact(
             market_ticks=market_data,
             baseline_response_time_ms=100.0,
-            accelerated_response_time_ms=25.0
+            accelerated_response_time_ms=25.0,
         )
 
         print(f"  📊 Baseline Opportunities: {impact.baseline_opportunities}")
@@ -667,12 +733,12 @@ def demonstrate_mathematical_profit_management():
         print("📋 Comprehensive Performance Report:")
         report = manager.generate_comprehensive_report()
 
-        if report['status'] == 'active':
-            capital = report['capital_management']
-            trading = report['trading_performance']
-            acceleration = report['acceleration_benefits']
-            integrity = report['mathematical_integrity']
-            risk = report['risk_metrics']
+        if report["status"] == "active":
+            capital = report["capital_management"]
+            trading = report["trading_performance"]
+            acceleration = report["acceleration_benefits"]
+            integrity = report["mathematical_integrity"]
+            risk = report["risk_metrics"]
 
             print("  💰 CAPITAL MANAGEMENT:")
             print(f"    Initial Capital: ${capital['initial_capital']:,.2f}")
@@ -690,15 +756,27 @@ def demonstrate_mathematical_profit_management():
             print()
 
             print("  🚀 ACCELERATION BENEFITS:")
-            print(f"    Additional Trades/Session: +{acceleration['additional_trades_per_session']:.1f}")
-            print(f"    Additional Profit/Session: +${acceleration['additional_profit_per_session']:.2f}")
-            print(f"    Frequency Improvement: +{acceleration['frequency_improvement_percent']:.1f}%")
-            print(f"    Computational Advantage: {acceleration['computational_advantage']}")
+            print(
+                f"    Additional Trades/Session: +{acceleration['additional_trades_per_session']:.1f}"
+            )
+            print(
+                f"    Additional Profit/Session: +${acceleration['additional_profit_per_session']:.2f}"
+            )
+            print(
+                f"    Frequency Improvement: +{acceleration['frequency_improvement_percent']:.1f}%"
+            )
+            print(
+                f"    Computational Advantage: {acceleration['computational_advantage']}"
+            )
             print()
 
             print("  🔒 MATHEMATICAL INTEGRITY:")
-            print(f"    Profit Calculation Purity: {integrity['profit_calculation_purity']}")
-            print(f"    Acceleration Separation: {integrity['acceleration_separation']}")
+            print(
+                f"    Profit Calculation Purity: {integrity['profit_calculation_purity']}"
+            )
+            print(
+                f"    Acceleration Separation: {integrity['acceleration_separation']}"
+            )
             print(f"    Optimization Mode: {integrity['optimization_mode']}")
             print(f"    Frequency Multiplier: {integrity['frequency_multiplier']:.1f}x")
             print()
@@ -712,17 +790,27 @@ def demonstrate_mathematical_profit_management():
         # Save session data
         manager.save_session_data()
 
-        print("\n" + "="*80)
+        print("\n" + "=" * 80)
         print("✅ MATHEMATICAL PROFIT MANAGEMENT DEMONSTRATION COMPLETED")
-        print("="*80)
+        print("=" * 80)
         print()
         print("🎯 KEY BUSINESS RESULTS:")
-        print(f"  • ✅ Capital Growth: ${manager.initial_capital:,.0f} → ${manager.current_capital:,.2f}")
-        print(f"  • ✅ ROI Achievement: {((manager.current_capital/manager.initial_capital-1)*100):+.2f}%")
-        print(f"  • ✅ Mathematical Purity: Maintained throughout all calculations")
-        print(f"  • ✅ Acceleration Benefits: +{impact.frequency_improvement_pct:.1f}% trading frequency")
-        print(f"  • ✅ Competitive Advantage: {impact.competitive_advantage_ms:.0f}ms faster response")
-        print(f"  • ✅ System Optimization: Superior performance through mathematical rigor")
+        print(
+            f"  • ✅ Capital Growth: ${manager.initial_capital:,.0f} → ${manager.current_capital:,.2f}"
+        )
+        print(
+            f"  • ✅ ROI Achievement: {((manager.current_capital / manager.initial_capital - 1) * 100):+.2f}%"
+        )
+        print("  • ✅ Mathematical Purity: Maintained throughout all calculations")
+        print(
+            f"  • ✅ Acceleration Benefits: +{impact.frequency_improvement_pct:.1f}% trading frequency"
+        )
+        print(
+            f"  • ✅ Competitive Advantage: {impact.competitive_advantage_ms:.0f}ms faster response"
+        )
+        print(
+            "  • ✅ System Optimization: Superior performance through mathematical rigor"
+        )
         print()
         print("💡 BUSINESS INSIGHT:")
         print("   Better mathematical frameworks → Better system management →")

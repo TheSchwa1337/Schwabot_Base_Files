@@ -9,7 +9,6 @@ This script launches the complete unified Schwabot platform with:
 - Plugin/benchmark/device/processor/manager tabs
 """
 
-import os
 import sys
 import logging
 import argparse
@@ -23,19 +22,22 @@ def setup_logging(log_level: str = "INFO"):
     """Setup logging configuration."""
     logging.basicConfig(
         level=getattr(logging, log_level.upper()),
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-        handlers=[
-            logging.StreamHandler(),
-            logging.FileHandler('schwabot_unified.log')
-        ]
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+        handlers=[logging.StreamHandler(), logging.FileHandler("schwabot_unified.log")],
     )
 
 
 def check_requirements():
     """Check if all required packages are installed."""
     required_packages = [
-        'tkinter', 'pandas', 'numpy', 'yaml', 'flask',
-        'psutil', 'matplotlib', 'requests'
+        "tkinter",
+        "pandas",
+        "numpy",
+        "yaml",
+        "flask",
+        "psutil",
+        "matplotlib",
+        "requests",
     ]
 
     missing_packages = []
@@ -63,7 +65,7 @@ def initialize_data_directories():
         "data/live",
         "data/cache",
         "logs",
-        "config"
+        "config",
     ]
 
     for directory in directories:
@@ -80,7 +82,7 @@ def check_schwabot_components():
         "core/trade_executor.py",
         "core/speed_lattice_trading_integration.py",
         "hash_recollection/",
-        "schwabot/"
+        "schwabot/",
     ]
 
     missing_files = []
@@ -98,18 +100,32 @@ def check_schwabot_components():
 
 def main():
     """Main launcher function."""
-    parser = argparse.ArgumentParser(description='Schwabot Unified Launcher')
-    parser.add_argument('--log-level', default='INFO',
-                        choices=['DEBUG', 'INFO', 'WARNING', 'ERROR'],
-                        help='Set logging level')
-    parser.add_argument('--simulation-mode', action='store_true', default=True,
-                        help='Run in simulation mode (default)')
-    parser.add_argument('--live-mode', action='store_true',
-                        help='Run in live trading mode (requires API keys)')
-    parser.add_argument('--skip-checks', action='store_true',
-                        help='Skip requirement and component checks')
-    parser.add_argument('--debug-ui', action='store_true',
-                        help='Enable UI debugging features')
+    parser = argparse.ArgumentParser(description="Schwabot Unified Launcher")
+    parser.add_argument(
+        "--log-level",
+        default="INFO",
+        choices=["DEBUG", "INFO", "WARNING", "ERROR"],
+        help="Set logging level",
+    )
+    parser.add_argument(
+        "--simulation-mode",
+        action="store_true",
+        default=True,
+        help="Run in simulation mode (default)",
+    )
+    parser.add_argument(
+        "--live-mode",
+        action="store_true",
+        help="Run in live trading mode (requires API keys)",
+    )
+    parser.add_argument(
+        "--skip-checks",
+        action="store_true",
+        help="Skip requirement and component checks",
+    )
+    parser.add_argument(
+        "--debug-ui", action="store_true", help="Enable UI debugging features"
+    )
 
     args = parser.parse_args()
 
@@ -146,7 +162,8 @@ def main():
         # Initialize component bridge
         bridge = get_component_bridge()
         print(
-            f"🔗 Component bridge initialized with {len(bridge.components)} components")
+            f"🔗 Component bridge initialized with {len(bridge.components)} components"
+        )
 
         # Create and configure launcher
         launcher = SchwabotUnifiedLauncher()

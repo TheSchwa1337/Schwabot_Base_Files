@@ -12,13 +12,12 @@ import math
 import time
 import numpy as np
 
-from core.type_defs import AnalysisResult
 from core.type_defs import Entropy
 from core.type_defs import Matrix
 from core.type_defs import Tensor
 from core.type_defs import Vector
 from core.unified_math_system import unified_math
-from utils.safe_print import safe_print, info, warn, error, success, debug
+from utils.safe_print import safe_print
 
 # Initialize Unicode handler
 unicore = DualUnicoreHandler()
@@ -79,6 +78,7 @@ class RecursionGuard:
 
     def __call__(self, func: Callable) -> Callable:
         """Decorator to guard recursive functions."""
+
         @wraps(func)
         def wrapper(*args, **kwargs) -> Any:
             """Wrapper function that implements recursion guarding."""
@@ -89,9 +89,7 @@ class RecursionGuard:
                 logger.warning(
                     f"Max recursion depth {self.max_depth} exceeded for {func_name}"
                 )
-                raise RecursionError(
-                    f"Max recursion depth exceeded for {func_name}"
-                )
+                raise RecursionError(f"Max recursion depth exceeded for {func_name}")
 
             self._call_stack[func_name] = current_depth + 1
             try:
@@ -134,8 +132,10 @@ class MathematicalValidator:
         if isinstance(matrix, list):
             if not matrix:
                 return False
-            return all(isinstance(row, (list, tuple)) and
-                      len(row) == len(matrix[0]) for row in matrix)
+            return all(
+                isinstance(row, (list, tuple)) and len(row) == len(matrix[0])
+                for row in matrix
+            )
         return False
 
     @staticmethod
@@ -209,9 +209,7 @@ class RecursiveIdentityFunction:
         previous_state = self.compute_recursive_state(
             x, n - 1, delta_t, transform_input
         )
-        return self._recursive_transform(
-            previous_state, delta_t, transform_input
-        )
+        return self._recursive_transform(previous_state, delta_t, transform_input)
 
     def _base_transform(
         self, x: float, delta_t: float, transform_input: float
@@ -257,9 +255,7 @@ class EntropyStabilizedFeedback:
             return current_state
 
         # Compute derivatives
-        state_derivative = (
-            current_state - self.previous_states[-1]
-        ) / time_delta
+        state_derivative = (current_state - self.previous_states[-1]) / time_delta
         time_derivative = state_derivative * time_delta
 
         # Total change rate
@@ -288,9 +284,7 @@ class InformationDensityMap:
         self.dimensions = dimensions
         self.density_map = np.zeros(dimensions)
 
-    def update_density(
-        self, x: float, y: float, value: float, time: float
-    ) -> None:
+    def update_density(self, x: float, y: float, value: float, time: float) -> None:
         """Update information density at position.
 
         Args:
@@ -332,7 +326,7 @@ class InformationDensityMap:
         for i in range(self.dimensions[0]):
             for j in range(self.dimensions[1]):
                 x = i * dx
-                y = j * dy
+                j * dy
 
                 psi_value = recursive_state(x)
                 phi_value = context_potential(x, time)
@@ -368,9 +362,7 @@ class UnifiedMathematicsFramework:
 
         # Initialize core components
         self.drift_engine = (
-            DriftShellEngine(shell_radius=shell_radius)
-            if DriftShellEngine
-            else None
+            DriftShellEngine(shell_radius=shell_radius) if DriftShellEngine else None
         )
         self.quantum_engine = (
             QuantumDriftShellEngine(energy_scale=energy_scale)
@@ -438,9 +430,7 @@ class UnifiedMathematicsFramework:
             1 + layer_index * layer_index
         )
 
-    def compute_unified_entropy(
-        self, data: Union[Vector, Matrix, Tensor]
-    ) -> Entropy:
+    def compute_unified_entropy(self, data: Union[Vector, Matrix, Tensor]) -> Entropy:
         """Compute unified entropy across data types.
 
         Args:
@@ -473,7 +463,9 @@ class UnifiedMathematicsFramework:
                 eigenvalues = np.real(eigenvalues[eigenvalues > 1e-12])
                 if len(eigenvalues) > 0:
                     eigenvalues_norm = eigenvalues / np.sum(eigenvalues)
-                    entropy_value = -np.sum(eigenvalues_norm * np.log2(eigenvalues_norm))
+                    entropy_value = -np.sum(
+                        eigenvalues_norm * np.log2(eigenvalues_norm)
+                    )
                 else:
                     entropy_value = 0.0
 
@@ -488,15 +480,18 @@ class UnifiedMathematicsFramework:
             else:
                 raise ValueError(f"Invalid data dimensions: {data.ndim}")
 
-            return Entropy(entropy_value, {
-                'data_shape': data.shape,
-                'data_type': str(data.dtype),
-                'computation_time': time.time()
-            })
+            return Entropy(
+                entropy_value,
+                {
+                    "data_shape": data.shape,
+                    "data_type": str(data.dtype),
+                    "computation_time": time.time(),
+                },
+            )
 
         except Exception as e:
             logger.error(f"Error computing unified entropy: {e}")
-            return Entropy(0.0, {'error': str(e)})
+            return Entropy(0.0, {"error": str(e)})
 
     def generate_unified_hash(
         self,
@@ -517,7 +512,7 @@ class UnifiedMathematicsFramework:
 
             # Handle different data types
             if isinstance(data, str):
-                hasher.update(data.encode('utf-8'))
+                hasher.update(data.encode("utf-8"))
             elif isinstance(data, np.ndarray):
                 # Handle array data regardless of dimensions
                 hasher.update(data.tobytes())
@@ -527,18 +522,18 @@ class UnifiedMathematicsFramework:
                 hasher.update(array_data.tobytes())
             else:
                 # Convert to string as fallback
-                hasher.update(str(data).encode('utf-8'))
+                hasher.update(str(data).encode("utf-8"))
 
             # Add time component if provided
             if time_slot is not None:
-                hasher.update(str(time_slot).encode('utf-8'))
+                hasher.update(str(time_slot).encode("utf-8"))
 
             return hasher.hexdigest()
 
         except Exception as e:
             logger.error(f"Error generating unified hash: {e}")
             # Return a fallback hash
-            return hashlib.sha256(str(data).encode('utf-8')).hexdigest()
+            return hashlib.sha256(str(data).encode("utf-8")).hexdigest()
 
     def validate_mathematical_operation(
         self, operation: Callable, args: Tuple[Any, ...], expected_type: type
@@ -596,7 +591,9 @@ class UnifiedMathematicsFramework:
                     if min(data.shape) > 0:
                         cond_num = np.linalg.cond(data)
                         rank_ratio = np.linalg.matrix_rank(data) / min(data.shape)
-                        complexity_score = min(1.0, np.log10(cond_num) / 10.0) * rank_ratio
+                        complexity_score = (
+                            min(1.0, np.log10(cond_num) / 10.0) * rank_ratio
+                        )
                 except:
                     complexity_score = 0.5  # Default for singular matrices
 
@@ -604,7 +601,9 @@ class UnifiedMathematicsFramework:
                 # Use normalized variance across all dimensions
                 flat_data = data.flatten()
                 if len(flat_data) > 1:
-                    complexity_score = min(1.0, np.var(flat_data) / (np.mean(flat_data)**2 + 1e-12))
+                    complexity_score = min(
+                        1.0, np.var(flat_data) / (np.mean(flat_data) ** 2 + 1e-12)
+                    )
 
             return float(np.clip(complexity_score, 0.0, 1.0))
 
@@ -663,33 +662,25 @@ class UnifiedMathematicsFramework:
 
         # 5. Advanced integration (if available)
         if self.advanced_integration:
-            advanced_results = (
-                self.advanced_integration.integrate_all_components(
-                    current_tensor=tensor_data,
-                    hash_patterns=hash_patterns,
-                    quantum_state=quantum_state,
-                    metadata=metadata,
-                )
+            advanced_results = self.advanced_integration.integrate_all_components(
+                current_tensor=tensor_data,
+                hash_patterns=hash_patterns,
+                quantum_state=quantum_state,
+                metadata=metadata,
             )
             results["advanced_integration"] = advanced_results
 
         # 6. Quantum operations (if available and requested)
         if use_quantum and self.quantum_engine and quantum_state is not None:
-            quantum_energy = self.quantum_engine.compute_energy_level(
-                quantum_state
-            )
-            quantum_entropy = self.quantum_engine.compute_quantum_entropy(
-                quantum_state
-            )
+            quantum_energy = self.quantum_engine.compute_energy_level(quantum_state)
+            quantum_entropy = self.quantum_engine.compute_quantum_entropy(quantum_state)
             results["quantum_energy"] = quantum_energy
             results["quantum_entropy"] = quantum_entropy
 
         # 7. Thermal operations (if available and requested)
         if use_thermal and self.thermal_allocator:
-            thermal_pressure = (
-                self.thermal_allocator.calculate_thermal_pressure(
-                    temp=300.0, volume=1.0, particles=1000
-                )
+            thermal_pressure = self.thermal_allocator.calculate_thermal_pressure(
+                temp=300.0, volume=1.0, particles=1000
             )
             results["thermal_pressure"] = thermal_pressure
 
@@ -733,9 +724,7 @@ class BTC256SHAPipeline:
         self.price_history: List[float] = []
         self.hash_history: List[str] = []
 
-    def process_price_data(
-        self, price: float, timestamp: float
-    ) -> Dict[str, Any]:
+    def process_price_data(self, price: float, timestamp: float) -> Dict[str, Any]:
         """Process BTC price data through the mathematical framework.
 
         Args:
@@ -751,9 +740,7 @@ class BTC256SHAPipeline:
             self.price_history.pop(0)
 
         # Generate hash
-        price_hash = self.framework.generate_unified_hash(
-            str(price), timestamp
-        )
+        price_hash = self.framework.generate_unified_hash(str(price), timestamp)
         self.hash_history.append(price_hash)
 
         # Compute mathematical properties
@@ -787,12 +774,8 @@ class BTC256SHAPipeline:
         return {
             "price_history_length": len(self.price_history),
             "hash_history_length": len(self.hash_history),
-            "latest_price": (
-                self.price_history[-1] if self.price_history else None
-            ),
-            "latest_hash": (
-                self.hash_history[-1] if self.hash_history else None
-            ),
+            "latest_price": (self.price_history[-1] if self.price_history else None),
+            "latest_hash": (self.hash_history[-1] if self.hash_history else None),
             "framework_status": self.framework.get_system_status(),
         }
 
@@ -840,11 +823,9 @@ class FerrisWheelVisualizer:
         # Generate entropy stabilization
         stabilized_states = []
         for i, state in enumerate(recursive_states):
-            stabilized = (
-                self.framework.entropy_stabilizer.compute_stabilized_entropy(
-                    state,
-                    time_points[i] - (time_points[i - 1] if i > 0 else 0),
-                )
+            stabilized = self.framework.entropy_stabilizer.compute_stabilized_entropy(
+                state,
+                time_points[i] - (time_points[i - 1] if i > 0 else 0),
             )
             stabilized_states.append(stabilized)
 
@@ -893,7 +874,9 @@ class BrainGlyphProcessor:
         self.glyph_history: List[Dict[str, Any]] = []
         self.signal_cache: Dict[str, float] = {}
 
-    def process_brain_signal(self, price_data: float, volume_data: float, **kwargs) -> float:
+    def process_brain_signal(
+        self, price_data: float, volume_data: float, **kwargs
+    ) -> float:
         """
         Process brain glyph trading signal with mathematical optimization.
 
@@ -921,16 +904,18 @@ class BrainGlyphProcessor:
             brain_factor = self._calculate_brain_enhancement(price_data, volume_data)
 
             # Apply mathematical optimization using unified math
-            optimized_profit = unified_math('multiply', base_profit, brain_factor)
+            optimized_profit = unified_math("multiply", base_profit, brain_factor)
 
             # Store in glyph history
-            self.glyph_history.append({
-                'timestamp': time.time(),
-                'price': price_data,
-                'volume': volume_data,
-                'profit': optimized_profit,
-                'brain_factor': brain_factor
-            })
+            self.glyph_history.append(
+                {
+                    "timestamp": time.time(),
+                    "price": price_data,
+                    "volume": volume_data,
+                    "profit": optimized_profit,
+                    "brain_factor": brain_factor,
+                }
+            )
 
             # Limit history size
             if len(self.glyph_history) > 1000:
@@ -947,8 +932,10 @@ class BrainGlyphProcessor:
         try:
             # Use recent history for momentum calculation
             if len(self.glyph_history) >= 5:
-                recent_profits = [entry['profit'] for entry in self.glyph_history[-5:]]
-                momentum = (recent_profits[-1] - recent_profits[0]) / max(recent_profits[0], 1e-10)
+                recent_profits = [entry["profit"] for entry in self.glyph_history[-5:]]
+                momentum = (recent_profits[-1] - recent_profits[0]) / max(
+                    recent_profits[0], 1e-10
+                )
             else:
                 momentum = 0.0
 
@@ -979,9 +966,9 @@ class QuantumMathProcessor:
         """Calculate quantum-enhanced profit vector."""
         try:
             # Extract market parameters
-            price = market_data.get('price', 50000.0)
-            volume = market_data.get('volume', 1000.0)
-            volatility = market_data.get('volatility', 0.02)
+            price = market_data.get("price", 50000.0)
+            volume = market_data.get("volume", 1000.0)
+            volatility = market_data.get("volatility", 0.02)
 
             # Quantum state calculation
             phase = self.phase_state + volatility * 0.1
@@ -991,12 +978,14 @@ class QuantumMathProcessor:
             volume_component = volume * np.cos(phase) * 0.001
             volatility_component = volatility * np.sin(phase * 2) * 1000
 
-            profit_vector = np.array([
-                momentum_component,
-                volume_component,
-                volatility_component,
-                phase  # Phase information
-            ])
+            profit_vector = np.array(
+                [
+                    momentum_component,
+                    volume_component,
+                    volatility_component,
+                    phase,  # Phase information
+                ]
+            )
 
             # Update quantum state
             self.phase_state = (phase + 0.1) % (2 * np.pi)
@@ -1025,7 +1014,9 @@ class QuantumMathProcessor:
 
             # Ensure tensor has at least 3 dimensions
             if profit_tensor.ndim < 3:
-                logger.warning(f"Tensor has only {profit_tensor.ndim} dimensions, padding to 3D")
+                logger.warning(
+                    f"Tensor has only {profit_tensor.ndim} dimensions, padding to 3D"
+                )
                 profit_tensor = profit_tensor.reshape((*profit_tensor.shape, 1))
 
             # Calculate tensor decomposition
@@ -1057,7 +1048,9 @@ class UnifiedTradingMathematics:
         self.recursion_guard = RecursionGuard()
 
     @lru_cache(maxsize=128)
-    def calculate_profit_optimization(self, price: float, volume: float, symbol: str = 'BTC') -> float:
+    def calculate_profit_optimization(
+        self, price: float, volume: float, symbol: str = "BTC"
+    ) -> float:
         """Calculate profit optimization with caching."""
         cache_key = f"{symbol}_{price}_{volume}"
 
@@ -1079,7 +1072,9 @@ class UnifiedTradingMathematics:
 
         return result
 
-    def calculate_risk_adjusted_return(self, returns: List[float], risk_free_rate: float = 0.02) -> float:
+    def calculate_risk_adjusted_return(
+        self, returns: List[float], risk_free_rate: float = 0.02
+    ) -> float:
         """Calculate risk-adjusted return (Sharpe ratio)."""
         try:
             if not returns or len(returns) < 2:
@@ -1098,8 +1093,9 @@ class UnifiedTradingMathematics:
             logger.error(f"Risk-adjusted return calculation failed: {e}")
             return 0.0
 
-    def calculate_portfolio_optimization(self, weights: Vector, returns: Matrix,
-                                       risk_tolerance: float = 0.1) -> Dict[str, float]:
+    def calculate_portfolio_optimization(
+        self, weights: Vector, returns: Matrix, risk_tolerance: float = 0.1
+    ) -> Dict[str, float]:
         """Calculate portfolio optimization metrics."""
         try:
             if not self.validator.validate_vector(weights):
@@ -1116,29 +1112,33 @@ class UnifiedTradingMathematics:
 
             # Portfolio variance
             cov_matrix = np.cov(returns_array.T)
-            portfolio_variance = np.dot(weights_array.T, np.dot(cov_matrix, weights_array))
+            portfolio_variance = np.dot(
+                weights_array.T, np.dot(cov_matrix, weights_array)
+            )
             portfolio_volatility = np.sqrt(portfolio_variance)
 
             # Sharpe ratio
             sharpe_ratio = portfolio_return / max(portfolio_volatility, 1e-10)
 
             # Risk adjustment
-            risk_adjusted_return = portfolio_return - risk_tolerance * portfolio_variance
+            risk_adjusted_return = (
+                portfolio_return - risk_tolerance * portfolio_variance
+            )
 
             return {
-                'portfolio_return': float(portfolio_return),
-                'portfolio_volatility': float(portfolio_volatility),
-                'sharpe_ratio': float(sharpe_ratio),
-                'risk_adjusted_return': float(risk_adjusted_return)
+                "portfolio_return": float(portfolio_return),
+                "portfolio_volatility": float(portfolio_volatility),
+                "sharpe_ratio": float(sharpe_ratio),
+                "risk_adjusted_return": float(risk_adjusted_return),
             }
 
         except Exception as e:
             logger.error(f"Portfolio optimization calculation failed: {e}")
             return {
-                'portfolio_return': 0.0,
-                'portfolio_volatility': 0.0,
-                'sharpe_ratio': 0.0,
-                'risk_adjusted_return': 0.0
+                "portfolio_return": 0.0,
+                "portfolio_volatility": 0.0,
+                "sharpe_ratio": 0.0,
+                "risk_adjusted_return": 0.0,
             }
 
 
@@ -1153,9 +1153,7 @@ def main() -> None:
     validator = MathematicalValidator()
 
     # Test unified drift field
-    drift_field = framework.compute_unified_drift_field(
-        x=1.0, y=2.0, z=0.5, time=1.0
-    )
+    drift_field = framework.compute_unified_drift_field(x=1.0, y=2.0, z=0.5, time=1.0)
     safe_print(f"Unified drift field: {drift_field}")
 
     # Test unified ring drift

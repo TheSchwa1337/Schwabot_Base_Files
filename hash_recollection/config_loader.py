@@ -10,7 +10,7 @@ Supports YAML, JSON, and environment variables.
 import os
 import yaml
 import json
-from typing import Any, Dict, Optional, Union
+from typing import Any, Dict, Optional
 from pathlib import Path
 
 from .exceptions import ConfigurationError

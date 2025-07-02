@@ -7,12 +7,12 @@ import os
 import re
 import shutil
 from pathlib import Path
-from typing import List, Dict
+from typing import List
 
 
 def fix_unterminated_string_literals(content: str) -> str:
     """Fix unterminated string literals."""
-    lines = content.split('\n')
+    lines = content.split("\n")
     fixed_lines = []
 
     for line in lines:
@@ -26,123 +26,125 @@ def fix_unterminated_string_literals(content: str) -> str:
 
         fixed_lines.append(line)
 
-    return '\n'.join(fixed_lines)
+    return "\n".join(fixed_lines)
 
 
 def fix_unmatched_parentheses(content: str) -> str:
     """Fix unmatched parentheses."""
-    lines = content.split('\n')
+    lines = content.split("\n")
     fixed_lines = []
 
     for line in lines:
         # Count parentheses
-        open_parens = line.count('(') + line.count('[') + line.count('{')
-        close_parens = line.count(')') + line.count(']') + line.count('}')
+        open_parens = line.count("(") + line.count("[") + line.count("{")
+        close_parens = line.count(")") + line.count("]") + line.count("}")
 
         # If more opening than closing, add missing closing
         if open_parens > close_parens:
             missing = open_parens - close_parens
-            line = line + ')' * missing
+            line = line + ")" * missing
 
         fixed_lines.append(line)
 
-    return '\n'.join(fixed_lines)
+    return "\n".join(fixed_lines)
 
 
 def fix_indentation_errors(content: str) -> str:
     """Fix indentation errors."""
-    lines = content.split('\n')
+    lines = content.split("\n")
     fixed_lines = []
 
     for line in lines:
         # Fix mixed tabs and spaces
-        if '\t' in line and ' ' in line[:len(line) - len(line.lstrip())]:
+        if "\t" in line and " " in line[: len(line) - len(line.lstrip())]:
             # Convert tabs to spaces
             indent_level = len(line) - len(line.lstrip())
-            line = ' ' * indent_level + line.lstrip()
+            line = " " * indent_level + line.lstrip()
 
         # Fix unexpected indentation
         if line.strip() and not line.startswith(
-            ('def ',
-             'class ',
-             'if ',
-             'for ',
-             'while ',
-             'try:',
-             'except:',
-             'finally:',
-             'with ',
-             'elif ',
-             'else:')):
+            (
+                "def ",
+                "class ",
+                "if ",
+                "for ",
+                "while ",
+                "try:",
+                "except:",
+                "finally:",
+                "with ",
+                "elif ",
+                "else:",
+            )
+        ):
             # Check if line is over-indented
-            if line.startswith('    ') and not any(
-                keyword in line for keyword in [
-                    'def ',
-                    'class ',
-                    'if ',
-                    'for ',
-                    'while ',
-                    'try:',
-                    'except:',
-                    'finally:',
-                    'with ',
-                    'elif ',
-                    'else:']):
+            if line.startswith("    ") and not any(
+                keyword in line
+                for keyword in [
+                    "def ",
+                    "class ",
+                    "if ",
+                    "for ",
+                    "while ",
+                    "try:",
+                    "except:",
+                    "finally:",
+                    "with ",
+                    "elif ",
+                    "else:",
+                ]
+            ):
                 # Reduce indentation
                 line = line[4:]
 
         fixed_lines.append(line)
 
-    return '\n'.join(fixed_lines)
+    return "\n".join(fixed_lines)
 
 
 def fix_invalid_decimal_literals(content: str) -> str:
     """Fix invalid decimal literals."""
     # Fix patterns like 1.2.3 or 1..2
     content = re.sub(
-        r'(\d+)\.(\d+)\.(\d+)',
-        r'\1.\2_\3',
-        content)  # Replace with underscore
-    content = re.sub(r'(\d+)\.\.(\d+)', r'\1.\2', content)  # Remove double dots
+        r"(\d+)\.(\d+)\.(\d+)", r"\1.\2_\3", content
+    )  # Replace with underscore
+    content = re.sub(r"(\d+)\.\.(\d+)", r"\1.\2", content)  # Remove double dots
 
     return content
 
 
 def fix_invalid_syntax(content: str) -> str:
     """Fix various invalid syntax issues."""
-    lines = content.split('\n')
+    lines = content.split("\n")
     fixed_lines = []
 
     for line in lines:
         # Fix common syntax issues
         line = re.sub(
-            r'([a-zA-Z_]\w*)\s*=\s*=\s*([a-zA-Z_]\w*)',
-            r'\1 == \2',
-            line)  # Fix == spacing
+            r"([a-zA-Z_]\w*)\s*=\s*=\s*([a-zA-Z_]\w*)", r"\1 == \2", line
+        )  # Fix == spacing
         line = re.sub(
-            r'([a-zA-Z_]\w*)\s*!=\s*([a-zA-Z_]\w*)',
-            r'\1 != \2',
-            line)  # Fix != spacing
+            r"([a-zA-Z_]\w*)\s*!=\s*([a-zA-Z_]\w*)", r"\1 != \2", line
+        )  # Fix != spacing
         line = re.sub(
-            r'([a-zA-Z_]\w*)\s*=\s*([a-zA-Z_]\w*)',
-            r'\1 = \2',
-            line)  # Fix = spacing
+            r"([a-zA-Z_]\w*)\s*=\s*([a-zA-Z_]\w*)", r"\1 = \2", line
+        )  # Fix = spacing
 
         # Fix missing colons
         if re.match(
-            r'^\s*(if|for|while|def|class|try|except|finally|with|elif|else)\s+',
-                line) and not line.rstrip().endswith(':'):
-            line = line.rstrip() + ':'
+            r"^\s*(if|for|while|def|class|try|except|finally|with|elif|else)\s+", line
+        ) and not line.rstrip().endswith(":"):
+            line = line.rstrip() + ":"
 
         fixed_lines.append(line)
 
-    return '\n'.join(fixed_lines)
+    return "\n".join(fixed_lines)
 
 
 def fix_file(file_path: Path) -> bool:
     """Fix a single file."""
     try:
-        with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
+        with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
             content = f.read()
 
         original_content = content
@@ -157,11 +159,11 @@ def fix_file(file_path: Path) -> bool:
         # Only write if content changed
         if content != original_content:
             # Create backup
-            backup_path = file_path.with_suffix(file_path.suffix + '.backup')
+            backup_path = file_path.with_suffix(file_path.suffix + ".backup")
             shutil.copy2(file_path, backup_path)
 
             # Write fixed content
-            with open(file_path, 'w', encoding='utf-8') as f:
+            with open(file_path, "w", encoding="utf-8") as f:
                 f.write(content)
 
             return True
@@ -180,16 +182,17 @@ def get_files_with_e999_errors() -> List[Path]:
     files_with_errors = []
 
     try:
-        result = subprocess.run(['flake8',
-                                 'core/'],
-                                capture_output=True,
-                                text=True,
-                                encoding='utf-8',
-                                errors='ignore')
+        result = subprocess.run(
+            ["flake8", "core/"],
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="ignore",
+        )
         if result.stdout:
-            for line in result.stdout.strip().split('\n'):
-                if 'E999' in line and ':' in line:
-                    file_path = line.split(':')[0]
+            for line in result.stdout.strip().split("\n"):
+                if "E999" in line and ":" in line:
+                    file_path = line.split(":")[0]
                     if os.path.exists(file_path):
                         files_with_errors.append(Path(file_path))
     except Exception as e:

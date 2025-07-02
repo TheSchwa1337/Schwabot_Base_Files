@@ -1,4 +1,3 @@
-import os
 import requests
 import hashlib
 import asyncio
@@ -14,7 +13,7 @@ try:
 except ImportError:
     # Fallback for direct execution
     from secure_config_manager import get_secure_api_key
-    from price_bridge import get_secure_price, get_multiple_secure_prices, PriceData
+    from price_bridge import get_secure_price
 
 
 def pull_news_headlines(query: str = "bitcoin") -> List[str]:
@@ -143,7 +142,7 @@ def display_market_snapshot(snapshot: Dict[str, Any]):
 
     # Display price data
     price_data = snapshot["price_data"]
-    print(f"\n💰 Price Data:")
+    print("\n💰 Price Data:")
     print(f"  Symbol: {price_data['symbol']}")
     print(f"  Price: ${price_data['price']:,.2f} {price_data['currency']}")
     print(f"  Source: {price_data['source']}")
@@ -156,7 +155,7 @@ def display_market_snapshot(snapshot: Dict[str, Any]):
         print(f"  Market State Hash: {price_data['market_state_hash'][:16]}...")
 
     # Display market hash
-    print(f"\n🔐 Market State Hash:")
+    print("\n🔐 Market State Hash:")
     print(f"  {snapshot['market_hash']}")
 
     print("\n" + "=" * 60)

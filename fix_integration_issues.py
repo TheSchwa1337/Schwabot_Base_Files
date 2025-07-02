@@ -9,7 +9,6 @@ the system for executable build.
 """
 
 import os
-import shutil
 from pathlib import Path
 
 
@@ -19,25 +18,22 @@ def fix_unified_math_import():
     print("🔧 Fixing unified math integration...")
 
     # Files that might import the problematic schwabot_unified_math
-    files_to_fix = [
-        'core/schwabot_integration_pipeline.py',
-        'test_full_integration.py'
-    ]
+    files_to_fix = ["core/schwabot_integration_pipeline.py", "test_full_integration.py"]
 
     for file_path in files_to_fix:
         if os.path.exists(file_path):
             try:
-                with open(file_path, 'r', encoding='utf-8') as f:
+                with open(file_path, "r", encoding="utf-8") as f:
                     content = f.read()
 
                 # Replace problematic import with working one
-                if 'from schwabot_unified_math import' in content:
+                if "from schwabot_unified_math import" in content:
                     content = content.replace(
-                        'from schwabot_unified_math import UnifiedMathematicsFramework',
-                        'from core.clean_unified_math import CleanUnifiedMathSystem as UnifiedMathematicsFramework'
+                        "from schwabot_unified_math import UnifiedMathematicsFramework",
+                        "from core.clean_unified_math import CleanUnifiedMathSystem as UnifiedMathematicsFramework",
                     )
 
-                    with open(file_path, 'w', encoding='utf-8') as f:
+                    with open(file_path, "w", encoding="utf-8") as f:
                         f.write(content)
 
                     print(f"  ✅ Fixed imports in {file_path}")
@@ -61,18 +57,19 @@ def create_missing_config_files():
             "api_key": "YOUR_COINBASE_API_KEY",
             "secret": "YOUR_COINBASE_SECRET",
             "passphrase": "YOUR_COINBASE_PASSPHRASE",
-            "sandbox": True
+            "sandbox": True,
         },
         "binance": {
             "api_key": "YOUR_BINANCE_API_KEY",
             "secret": "YOUR_BINANCE_SECRET",
-            "testnet": True
-        }
+            "testnet": True,
+        },
     }
 
     if not os.path.exists("config/api_keys.json"):
         import json
-        with open("config/api_keys.json", 'w') as f:
+
+        with open("config/api_keys.json", "w") as f:
             json.dump(api_keys_content, f, indent=2)
         print("  ✅ Created config/api_keys.json")
 
@@ -81,12 +78,12 @@ def create_missing_config_files():
         "default_pairs": ["BTC/USD", "ETH/USD", "BTC/USDT"],
         "exchanges": {
             "coinbase": ["BTC-USD", "ETH-USD"],
-            "binance": ["BTCUSDT", "ETHUSDT"]
-        }
+            "binance": ["BTCUSDT", "ETHUSDT"],
+        },
     }
 
     if not os.path.exists("config/trading_pairs.json"):
-        with open("config/trading_pairs.json", 'w') as f:
+        with open("config/trading_pairs.json", "w") as f:
             json.dump(trading_pairs_content, f, indent=2)
         print("  ✅ Created config/trading_pairs.json")
 
@@ -391,7 +388,7 @@ if __name__ == "__main__":
 '''
 
     if not os.path.exists("visualization/schwabot_gui.py"):
-        with open("visualization/schwabot_gui.py", 'w', encoding='utf-8') as f:
+        with open("visualization/schwabot_gui.py", "w", encoding="utf-8") as f:
             f.write(gui_content)
         print("  ✅ Created visualization/schwabot_gui.py")
 
@@ -437,7 +434,7 @@ class BTCBlockProcessor:
 '''
 
     if not os.path.exists("btc/block_processor.py"):
-        with open("btc/block_processor.py", 'w') as f:
+        with open("btc/block_processor.py", "w") as f:
             f.write(block_processor_content)
         print("  ✅ Created btc/block_processor.py")
 

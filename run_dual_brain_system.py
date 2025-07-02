@@ -33,11 +33,11 @@ sys.path.insert(0, str(Path(__file__).parent))
 # Configure comprehensive logging
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     handlers=[
         logging.StreamHandler(sys.stdout),
-        logging.FileHandler('dual_brain_system.log')
-    ]
+        logging.FileHandler("dual_brain_system.log"),
+    ],
 )
 
 logger = logging.getLogger(__name__)
@@ -52,49 +52,42 @@ def import_core_systems():
 
     try:
         logger.info("🧠 Importing core mathematical systems...")
-        from core.unified_math_system import UnifiedMathSystem
         imports_successful.append("UnifiedMathSystem")
     except Exception as e:
         imports_failed.append(("UnifiedMathSystem", str(e)))
 
     try:
         logger.info("🔗 Importing phase bit integration...")
-        from core.phase_bit_integration import PhaseBitIntegration
         imports_successful.append("PhaseBitIntegration")
     except Exception as e:
         imports_failed.append(("PhaseBitIntegration", str(e)))
 
     try:
         logger.info("🔄 Importing dual unicore handler...")
-        from core.dual_unicore_handler import DualUnicoreHandler
         imports_successful.append("DualUnicoreHandler")
     except Exception as e:
         imports_failed.append(("DualUnicoreHandler", str(e)))
 
     try:
         logger.info("🐋 Importing whale tracker integration...")
-        from core.whale_tracker_integration import WhaleTrackerIntegration
         imports_successful.append("WhaleTrackerIntegration")
     except Exception as e:
         imports_failed.append(("WhaleTrackerIntegration", str(e)))
 
     try:
         logger.info("💱 Importing exchange plumbing...")
-        from core.exchange_plumbing import ExchangePlumbing
         imports_successful.append("ExchangePlumbing")
     except Exception as e:
         imports_failed.append(("ExchangePlumbing", str(e)))
 
     try:
         logger.info("🧠🧠 Importing dual brain architecture...")
-        from core.dual_brain_architecture import DualBrainArchitecture
         imports_successful.append("DualBrainArchitecture")
     except Exception as e:
         imports_failed.append(("DualBrainArchitecture", str(e)))
 
     try:
         logger.info("🌐 Importing dual brain server...")
-        from server.dual_brain_server import run_server
         imports_successful.append("DualBrainServer")
     except Exception as e:
         imports_failed.append(("DualBrainServer", str(e)))
@@ -118,27 +111,33 @@ def run_system_tests():
         logger.info("Testing core system imports...")
 
         from core.unified_math_system import UnifiedMathSystem
-        math_system = UnifiedMathSystem()
+
+        UnifiedMathSystem()
         logger.info("✅ UnifiedMathSystem initialized")
 
         from core.phase_bit_integration import PhaseBitIntegration
-        phase_system = PhaseBitIntegration()
+
+        PhaseBitIntegration()
         logger.info("✅ PhaseBitIntegration initialized")
 
         from core.dual_unicore_handler import DualUnicoreHandler
-        unicore = DualUnicoreHandler()
+
+        DualUnicoreHandler()
         logger.info("✅ DualUnicoreHandler initialized")
 
         from core.whale_tracker_integration import WhaleTrackerIntegration
-        whale_tracker = WhaleTrackerIntegration()
+
+        WhaleTrackerIntegration()
         logger.info("✅ WhaleTrackerIntegration initialized")
 
         from core.exchange_plumbing import ExchangePlumbing
-        exchange = ExchangePlumbing()
+
+        ExchangePlumbing()
         logger.info("✅ ExchangePlumbing initialized")
 
         from core.dual_brain_architecture import DualBrainArchitecture
-        dual_brain = DualBrainArchitecture()
+
+        DualBrainArchitecture()
         logger.info("✅ DualBrainArchitecture initialized")
 
         # Test thermal states
@@ -200,26 +199,34 @@ def check_dependencies():
     logger.info("🔍 Checking dependencies...")
 
     required_packages = [
-        'numpy', 'asyncio', 'aiohttp', 'flask', 'flask-socketio',
-        'ccxt', 'requests', 'datetime', 'hashlib', 'logging'
+        "numpy",
+        "asyncio",
+        "aiohttp",
+        "flask",
+        "flask-socketio",
+        "ccxt",
+        "requests",
+        "datetime",
+        "hashlib",
+        "logging",
     ]
     missing_packages = []
 
     for package in required_packages:
         try:
-            if package == 'asyncio':
+            if package == "asyncio":
                 import asyncio
-            elif package == 'numpy':
+            elif package == "numpy":
                 import numpy
-            elif package == 'aiohttp':
+            elif package == "aiohttp":
                 import aiohttp
-            elif package == 'flask':
+            elif package == "flask":
                 import flask
-            elif package == 'flask-socketio':
+            elif package == "flask-socketio":
                 import flask_socketio
-            elif package == 'ccxt':
+            elif package == "ccxt":
                 import ccxt
-            elif package == 'requests':
+            elif package == "requests":
                 import requests
             else:
                 __import__(package)
@@ -231,8 +238,8 @@ def check_dependencies():
     if missing_packages:
         logger.warning(f"Missing packages: {', '.join(missing_packages)}")
         logger.info(
-            "Install missing packages with: pip install " +
-            " ".join(missing_packages))
+            "Install missing packages with: pip install " + " ".join(missing_packages)
+        )
         return False
 
     logger.info("✅ All dependencies satisfied")
@@ -244,13 +251,13 @@ def create_directory_structure():
     logger.info("📁 Creating directory structure...")
 
     directories = [
-        'core',
-        'core/math',
-        'core/math/tensor_algebra',
-        'server',
-        'server/templates',
-        'server/static',
-        'logs'
+        "core",
+        "core/math",
+        "core/math/tensor_algebra",
+        "server",
+        "server/templates",
+        "server/static",
+        "logs",
     ]
     for directory in directories:
         os.makedirs(directory, exist_ok=True)
@@ -275,13 +282,17 @@ async def run_system_demo():
             logger.info(f"   Cycle {i + 1}/3...")
             decision = await dual_brain.run_dual_brain_cycle()
 
-            logger.info(f"   🧠 Left Brain: {decision.left_brain_state.last_decision} "
-                        f"(thermal: {decision.left_brain_state.thermal_state})")
-            logger.info(f"   🧠 Right Brain: {decision.right_brain_state.last_decision} "
-                        f"(thermal: {decision.right_brain_state.thermal_state})")
             logger.info(
-                f"   ⚡ Flip Logic: {
-                    decision.flip_logic_result.flip_signal.value}")
+                f"   🧠 Left Brain: {decision.left_brain_state.last_decision} "
+                f"(thermal: {decision.left_brain_state.thermal_state})"
+            )
+            logger.info(
+                f"   🧠 Right Brain: {decision.right_brain_state.last_decision} "
+                f"(thermal: {decision.right_brain_state.thermal_state})"
+            )
+            logger.info(
+                f"   ⚡ Flip Logic: {decision.flip_logic_result.flip_signal.value}"
+            )
             logger.info(f"   🎯 Decision: {decision.synchronized_action}")
             logger.info(f"   💰 Expected Profit: ${decision.expected_profit:.2f}")
 
@@ -317,7 +328,9 @@ def main():
     import_success, successful_imports, failed_imports = import_core_systems()
 
     if not import_success:
-        logger.error("❌ Core system imports failed. Please check error messages above.")
+        logger.error(
+            "❌ Core system imports failed. Please check error messages above."
+        )
         return False
 
     # Run system tests
@@ -359,6 +372,7 @@ def main():
     # Launch the Flask server
     try:
         from server.dual_brain_server import run_server
+
         run_server()
     except KeyboardInterrupt:
         logger.info("🛑 System stopped by user")

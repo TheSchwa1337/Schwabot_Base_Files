@@ -11,8 +11,11 @@ import logging
 import time
 
 # Configure logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+)
 logger = logging.getLogger(__name__)
+
 
 def test_mathlib_v4_standalone():
     """Test MathLibV4 standalone functionality."""
@@ -25,15 +28,15 @@ def test_mathlib_v4_standalone():
 
         # Test data
         test_data = {
-            'prices': [50000, 50001, 50002, 50001, 50003, 50005, 50004, 50006],
-            'volumes': [1000, 1200, 800, 1100, 900, 1300, 950, 1100],
-            'timestamps': [time.time() - i for i in range(8, 0, -1)]
+            "prices": [50000, 50001, 50002, 50001, 50003, 50005, 50004, 50006],
+            "volumes": [1000, 1200, 800, 1100, 900, 1300, 950, 1100],
+            "timestamps": [time.time() - i for i in range(8, 0, -1)],
         }
 
         result = ml4.calculate_dlt_metrics(test_data)
 
-        if 'error' not in result:
-            print(f"✅ MathLibV4 standalone test PASSED")
+        if "error" not in result:
+            print("✅ MathLibV4 standalone test PASSED")
             print(f"   Pattern Hash: {result['pattern_hash'][:10]}...")
             print(f"   Triplet Lock: {result['triplet_lock']}")
             print(f"   Confidence: {result['confidence']:.3f}")
@@ -47,6 +50,7 @@ def test_mathlib_v4_standalone():
         print(f"❌ MathLibV4 standalone test FAILED: {e}")
         return False
 
+
 def test_unified_math_integration():
     """Test MathLibV4 integration with UnifiedMathSystem."""
     print("\n🔗 Testing Unified Math System Integration...")
@@ -58,15 +62,15 @@ def test_unified_math_integration():
 
         # Test data
         test_data = {
-            'prices': [50000, 50001, 50002, 50001, 50003, 50005, 50004, 50006],
-            'volumes': [1000, 1200, 800, 1100, 900, 1300, 950, 1100]
+            "prices": [50000, 50001, 50002, 50001, 50003, 50005, 50004, 50006],
+            "volumes": [1000, 1200, 800, 1100, 900, 1300, 950, 1100],
         }
 
         result = ums.dlt_analysis(test_data)
 
-        if result['status'] == 'success':
-            print(f"✅ Unified Math System integration test PASSED")
-            dlt_metrics = result['dlt_metrics']
+        if result["status"] == "success":
+            print("✅ Unified Math System integration test PASSED")
+            dlt_metrics = result["dlt_metrics"]
             print(f"   Pattern Hash: {dlt_metrics['pattern_hash'][:10]}...")
             print(f"   Triplet Lock: {dlt_metrics['triplet_lock']}")
             print(f"   Confidence: {dlt_metrics['confidence']:.3f}")
@@ -80,21 +84,15 @@ def test_unified_math_integration():
         print(f"❌ Unified Math System integration test FAILED: {e}")
         return False
 
+
 def test_demo_integration():
     """Test that the demo can import all components without errors."""
     print("\n🎯 Testing Demo Integration...")
 
     try:
         # Test imports
-        from core.ghost_core import GhostCore
-        from core.brain_trading_engine import BrainTradingEngine
-        from core.risk_manager import RiskManager
-        from core.unified_profit_vectorization_system import UnifiedProfitVectorizationSystem
-        from core.strategy_logic import StrategyLogic
-        from core.profit_vector_forecast import ProfitVectorForecastEngine
         from core.matrix_math_utils import analyze_price_matrix
         from core.mathlib_v4 import MathLibV4
-        from schwabot_unified_math import UnifiedTradingMathematics
 
         print("✅ All core components imported successfully")
 
@@ -104,15 +102,19 @@ def test_demo_integration():
 
         # Test matrix math utils
         import numpy as np
+
         test_matrix = np.array([[1.0, 2.0], [3.0, 4.0], [5.0, 6.0]])
         matrix_result = analyze_price_matrix(test_matrix)
-        print(f"✅ Matrix math utils working: {matrix_result.get('stability_score', 'N/A'):.3f}")
+        print(
+            f"✅ Matrix math utils working: {matrix_result.get('stability_score', 'N/A'):.3f}"
+        )
 
         return True
 
     except Exception as e:
         print(f"❌ Demo integration test FAILED: {e}")
         return False
+
 
 def main():
     """Run all integration tests."""
@@ -122,7 +124,7 @@ def main():
     tests = [
         test_mathlib_v4_standalone,
         test_unified_math_integration,
-        test_demo_integration
+        test_demo_integration,
     ]
 
     passed = 0
@@ -140,6 +142,7 @@ def main():
     else:
         print("⚠️  Some tests FAILED. Check the integration.")
         return False
+
 
 if __name__ == "__main__":
     main()

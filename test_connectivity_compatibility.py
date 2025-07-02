@@ -12,25 +12,32 @@ import sys
 import time
 import logging
 import numpy as np
-from typing import Dict, List, Any, Tuple
+from typing import Dict, List, Any
 from dataclasses import dataclass
 
 # Add the project root to the path
-sys.path.insert(0, '.')
+sys.path.insert(0, ".")
 
-from core.gpu_cpu_calculation_bridge import get_gpu_cpu_bridge, ExecutionPath, ThermalState
+from core.gpu_cpu_calculation_bridge import (
+    get_gpu_cpu_bridge,
+    ExecutionPath,
+    ThermalState,
+)
 from core.gpu_offload_manager import GPUOffloadManager
 from core.unified_math_system import unified_math
-from utils.safe_print import safe_print, info, warn, error, success, debug
+from utils.safe_print import safe_print, warn, error, success
 
 # Configure logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+)
 logger = logging.getLogger(__name__)
 
 
 @dataclass
 class TestResult:
     """Test result data structure."""
+
     test_name: str
     success: bool
     execution_time_ms: float
@@ -68,8 +75,8 @@ class ConnectivityCompatibilityTester:
             self.test_gpu_cpu_fallback,
             self.test_matrix_operations,
             self.test_wave_entropy,
-            self.test_tensor_scores
-]
+            self.test_tensor_scores,
+        ]
         results = {}
         for test_func in test_functions:
             try:
@@ -82,8 +89,8 @@ class ConnectivityCompatibilityTester:
 
                 results[test_name] = {
                     "success": result,
-                    "execution_time_ms": execution_time
-}
+                    "execution_time_ms": execution_time,
+                }
                 if result:
                     success(f"✅ {test_name} PASSED ({execution_time:.2f}ms)")
                 else:
@@ -94,8 +101,8 @@ class ConnectivityCompatibilityTester:
                 results[test_func.__name__] = {
                     "success": False,
                     "execution_time_ms": 0,
-                    "error": str(e)
-}
+                    "error": str(e),
+                }
         self._print_summary(results)
         return results
 
@@ -106,8 +113,12 @@ class ConnectivityCompatibilityTester:
             test_matrix = np.random.rand(10, 10)
 
             # Execute on both GPU and CPU
-            gpu_result = self.bridge.execute_calculation("matrix_multiply", test_matrix, force_path=ExecutionPath.GPU_ONLY)
-            cpu_result = self.bridge.execute_calculation("matrix_multiply", test_matrix, force_path=ExecutionPath.CPU_ONLY)
+            gpu_result = self.bridge.execute_calculation(
+                "matrix_multiply", test_matrix, force_path=ExecutionPath.GPU_ONLY
+            )
+            cpu_result = self.bridge.execute_calculation(
+                "matrix_multiply", test_matrix, force_path=ExecutionPath.CPU_ONLY
+            )
 
             # Validate consistency
             if not gpu_result.success or not cpu_result.success:
@@ -118,15 +129,18 @@ class ConnectivityCompatibilityTester:
                 gpu_result.result, cpu_result.result, "matrix_multiply"
             )
 
-            self.test_results.append(TestResult(
-                test_name="calculation_consistency",
-                success=validation.is_consistent,
-                execution_time_ms=gpu_result.execution_time_ms + cpu_result.execution_time_ms,
-                gpu_result=gpu_result.result,
-                cpu_result=cpu_result.result,
-                consistency_score=validation.is_consistent,
-                metadata={"max_difference": validation.max_difference}
-            ))
+            self.test_results.append(
+                TestResult(
+                    test_name="calculation_consistency",
+                    success=validation.is_consistent,
+                    execution_time_ms=gpu_result.execution_time_ms
+                    + cpu_result.execution_time_ms,
+                    gpu_result=gpu_result.result,
+                    cpu_result=cpu_result.result,
+                    consistency_score=validation.is_consistent,
+                    metadata={"max_difference": validation.max_difference},
+                )
+            )
 
             return validation.is_consistent
 
@@ -142,36 +156,51 @@ class ConnectivityCompatibilityTester:
 
             # Simulate different temperatures
             test_temperatures = [45.0, 65.0, 75.0, 85.0]
-            expected_states = [ThermalState.COOL, ThermalState.WARM, ThermalState.HOT, ThermalState.CRITICAL]
+            expected_states = [
+                ThermalState.COOL,
+                ThermalState.WARM,
+                ThermalState.HOT,
+                ThermalState.CRITICAL,
+            ]
 
             for temp, expected_state in zip(test_temperatures, expected_states):
                 actual_state = thermal_manager.update_thermal_state(temp)
                 if actual_state != expected_state:
-                    logger.error(f"Thermal state mismatch: expected {expected_state}, got {actual_state}")
+                    logger.error(
+                        f"Thermal state mismatch: expected {expected_state}, got {actual_state}"
+                    )
                     return False
 
             # Test calculation strategy based on thermal state
-            test_data = np.random.rand(100, 100)
+            np.random.rand(100, 100)
 
             # Cool state should prefer GPU
             thermal_manager.update_thermal_state(45.0)
-            cool_strategy = thermal_manager.get_calculation_strategy("matrix_multiply", 10000)
+            cool_strategy = thermal_manager.get_calculation_strategy(
+                "matrix_multiply", 10000
+            )
 
             # Critical state should prefer CPU
             thermal_manager.update_thermal_state(85.0)
-            critical_strategy = thermal_manager.get_calculation_strategy("matrix_multiply", 10000)
+            critical_strategy = thermal_manager.get_calculation_strategy(
+                "matrix_multiply", 10000
+            )
 
-            success = (cool_strategy == ExecutionPath.GPU_ONLY and
-                      critical_strategy == ExecutionPath.CPU_ONLY)
+            success = (
+                cool_strategy == ExecutionPath.GPU_ONLY
+                and critical_strategy == ExecutionPath.CPU_ONLY
+            )
 
-            self.test_results.append(TestResult(
-                test_name="thermal_state_integration",
-                success=success,
-                execution_time_ms=0.0,
-                gpu_result=cool_strategy,
-                cpu_result=critical_strategy,
-                consistency_score=1.0 if success else 0.0
-            ))
+            self.test_results.append(
+                TestResult(
+                    test_name="thermal_state_integration",
+                    success=success,
+                    execution_time_ms=0.0,
+                    gpu_result=cool_strategy,
+                    cpu_result=critical_strategy,
+                    consistency_score=1.0 if success else 0.0,
+                )
+            )
 
             return success
 
@@ -186,23 +215,29 @@ class ConnectivityCompatibilityTester:
             test_data = np.random.rand(5, 5)
 
             # Force CPU fallback
-            result = self.bridge.execute_calculation("matrix_multiply", test_data, force_path=ExecutionPath.CPU_ONLY)
+            result = self.bridge.execute_calculation(
+                "matrix_multiply", test_data, force_path=ExecutionPath.CPU_ONLY
+            )
 
             # Test with invalid data
             invalid_data = None
-            error_result = self.bridge.execute_calculation("matrix_multiply", invalid_data, force_path=ExecutionPath.FALLBACK)
+            error_result = self.bridge.execute_calculation(
+                "matrix_multiply", invalid_data, force_path=ExecutionPath.FALLBACK
+            )
 
             # Both should handle errors gracefully
-            success = (result.success and not error_result.success)
+            success = result.success and not error_result.success
 
-            self.test_results.append(TestResult(
-                test_name="error_recovery",
-                success=success,
-                execution_time_ms=result.execution_time_ms,
-                gpu_result=result.success,
-                cpu_result=error_result.success,
-                consistency_score=1.0 if success else 0.0
-            ))
+            self.test_results.append(
+                TestResult(
+                    test_name="error_recovery",
+                    success=success,
+                    execution_time_ms=result.execution_time_ms,
+                    gpu_result=result.success,
+                    cpu_result=error_result.success,
+                    consistency_score=1.0 if success else 0.0,
+                )
+            )
 
             return success
 
@@ -226,14 +261,16 @@ class ConnectivityCompatibilityTester:
             # Memory should be tracked (even if not available)
             memory_tracked = gpu_memory_after >= gpu_memory_before
 
-            self.test_results.append(TestResult(
-                test_name="memory_management",
-                success=memory_tracked,
-                execution_time_ms=0.0,
-                gpu_result=gpu_memory_before,
-                cpu_result=gpu_memory_after,
-                consistency_score=1.0 if memory_tracked else 0.0
-            ))
+            self.test_results.append(
+                TestResult(
+                    test_name="memory_management",
+                    success=memory_tracked,
+                    execution_time_ms=0.0,
+                    gpu_result=gpu_memory_before,
+                    cpu_result=gpu_memory_after,
+                    consistency_score=1.0 if memory_tracked else 0.0,
+                )
+            )
 
             return memory_tracked
 
@@ -253,18 +290,22 @@ class ConnectivityCompatibilityTester:
             matrix_result = unified_math.matrix_multiply(test_data, test_data)
 
             # All should work as expected
-            success = (add_result == 3.0 and
-                      multiply_result == 12.0 and
-                      matrix_result is not None)
+            success = (
+                add_result == 3.0
+                and multiply_result == 12.0
+                and matrix_result is not None
+            )
 
-            self.test_results.append(TestResult(
-                test_name="legacy_compatibility",
-                success=success,
-                execution_time_ms=0.0,
-                gpu_result=add_result,
-                cpu_result=multiply_result,
-                consistency_score=1.0 if success else 0.0
-            ))
+            self.test_results.append(
+                TestResult(
+                    test_name="legacy_compatibility",
+                    success=success,
+                    execution_time_ms=0.0,
+                    gpu_result=add_result,
+                    cpu_result=multiply_result,
+                    consistency_score=1.0 if success else 0.0,
+                )
+            )
 
             return success
 
@@ -287,16 +328,21 @@ class ConnectivityCompatibilityTester:
             updated_stats = self.bridge.get_performance_stats()
 
             # Stats should be updated
-            stats_updated = (updated_stats["total_calculations"] > initial_stats["total_calculations"])
+            stats_updated = (
+                updated_stats["total_calculations"]
+                > initial_stats["total_calculations"]
+            )
 
-            self.test_results.append(TestResult(
-                test_name="performance_monitoring",
-                success=stats_updated,
-                execution_time_ms=0.0,
-                gpu_result=initial_stats["total_calculations"],
-                cpu_result=updated_stats["total_calculations"],
-                consistency_score=1.0 if stats_updated else 0.0
-            ))
+            self.test_results.append(
+                TestResult(
+                    test_name="performance_monitoring",
+                    success=stats_updated,
+                    execution_time_ms=0.0,
+                    gpu_result=initial_stats["total_calculations"],
+                    cpu_result=updated_stats["total_calculations"],
+                    consistency_score=1.0 if stats_updated else 0.0,
+                )
+            )
 
             return stats_updated
 
@@ -319,14 +365,16 @@ class ConnectivityCompatibilityTester:
             # Results should be consistent
             phases_consistent = gpu_phases == cpu_phases
 
-            self.test_results.append(TestResult(
-                test_name="gpu_cpu_fallback",
-                success=phases_consistent,
-                execution_time_ms=0.0,
-                gpu_result=gpu_phases,
-                cpu_result=cpu_phases,
-                consistency_score=1.0 if phases_consistent else 0.0
-            ))
+            self.test_results.append(
+                TestResult(
+                    test_name="gpu_cpu_fallback",
+                    success=phases_consistent,
+                    execution_time_ms=0.0,
+                    gpu_result=gpu_phases,
+                    cpu_result=cpu_phases,
+                    consistency_score=1.0 if phases_consistent else 0.0,
+                )
+            )
 
             return phases_consistent
 
@@ -344,10 +392,14 @@ class ConnectivityCompatibilityTester:
 
             for operation in operations:
                 # GPU result
-                gpu_result = self.gpu_manager.matrix_operation_gpu([test_matrix], operation)
+                gpu_result = self.gpu_manager.matrix_operation_gpu(
+                    [test_matrix], operation
+                )
 
                 # CPU result
-                cpu_result = self.gpu_manager._matrix_operation_cpu([test_matrix], operation)
+                cpu_result = self.gpu_manager._matrix_operation_cpu(
+                    [test_matrix], operation
+                )
 
                 # Validate consistency
                 if len(gpu_result) != len(cpu_result):
@@ -364,14 +416,16 @@ class ConnectivityCompatibilityTester:
                     if not np.allclose(gpu_res, cpu_res, rtol=1e-5, atol=1e-8):
                         return False
 
-            self.test_results.append(TestResult(
-                test_name="matrix_operations",
-                success=True,
-                execution_time_ms=0.0,
-                gpu_result="consistent",
-                cpu_result="consistent",
-                consistency_score=1.0
-            ))
+            self.test_results.append(
+                TestResult(
+                    test_name="matrix_operations",
+                    success=True,
+                    execution_time_ms=0.0,
+                    gpu_result="consistent",
+                    cpu_result="consistent",
+                    consistency_score=1.0,
+                )
+            )
 
             return True
 
@@ -399,14 +453,16 @@ class ConnectivityCompatibilityTester:
                         entropies_consistent = False
                         break
 
-            self.test_results.append(TestResult(
-                test_name="wave_entropy",
-                success=entropies_consistent,
-                execution_time_ms=0.0,
-                gpu_result=gpu_entropies,
-                cpu_result=cpu_entropies,
-                consistency_score=1.0 if entropies_consistent else 0.0
-            ))
+            self.test_results.append(
+                TestResult(
+                    test_name="wave_entropy",
+                    success=entropies_consistent,
+                    execution_time_ms=0.0,
+                    gpu_result=gpu_entropies,
+                    cpu_result=cpu_entropies,
+                    consistency_score=1.0 if entropies_consistent else 0.0,
+                )
+            )
 
             return entropies_consistent
 
@@ -422,10 +478,14 @@ class ConnectivityCompatibilityTester:
             phases = [1, 2, 3]
 
             # GPU calculation
-            gpu_scores = self.gpu_manager.tensor_score_gpu(entry_prices, current_prices, phases)
+            gpu_scores = self.gpu_manager.tensor_score_gpu(
+                entry_prices, current_prices, phases
+            )
 
             # CPU calculation
-            cpu_scores = self.gpu_manager._tensor_score_cpu(entry_prices, current_prices, phases)
+            cpu_scores = self.gpu_manager._tensor_score_cpu(
+                entry_prices, current_prices, phases
+            )
 
             # Results should be consistent
             scores_consistent = len(gpu_scores) == len(cpu_scores)
@@ -436,14 +496,16 @@ class ConnectivityCompatibilityTester:
                         scores_consistent = False
                         break
 
-            self.test_results.append(TestResult(
-                test_name="tensor_scores",
-                success=scores_consistent,
-                execution_time_ms=0.0,
-                gpu_result=gpu_scores,
-                cpu_result=cpu_scores,
-                consistency_score=1.0 if scores_consistent else 0.0
-            ))
+            self.test_results.append(
+                TestResult(
+                    test_name="tensor_scores",
+                    success=scores_consistent,
+                    execution_time_ms=0.0,
+                    gpu_result=gpu_scores,
+                    cpu_result=cpu_scores,
+                    consistency_score=1.0 if scores_consistent else 0.0,
+                )
+            )
 
             return scores_consistent
 
@@ -458,13 +520,15 @@ class ConnectivityCompatibilityTester:
         safe_print("=" * 60)
 
         total_tests = len(results)
-        passed_tests = sum(1 for result in results.values() if result.get("success", False))
+        passed_tests = sum(
+            1 for result in results.values() if result.get("success", False)
+        )
         failed_tests = total_tests - passed_tests
 
         safe_print(f"Total Tests: {total_tests}")
         safe_print(f"Passed: {passed_tests} ✅")
         safe_print(f"Failed: {failed_tests} ❌")
-        safe_print(f"Success Rate: {(passed_tests/total_tests)*100:.1f}%")
+        safe_print(f"Success Rate: {(passed_tests / total_tests) * 100:.1f}%")
 
         if failed_tests > 0:
             safe_print("\n❌ Failed Tests:")
@@ -484,11 +548,17 @@ class ConnectivityCompatibilityTester:
 
         # Overall assessment
         if passed_tests == total_tests:
-            success("\n🎉 ALL TESTS PASSED! System connectivity and compatibility verified.")
+            success(
+                "\n🎉 ALL TESTS PASSED! System connectivity and compatibility verified."
+            )
         elif passed_tests >= total_tests * 0.8:
-            warn(f"\n⚠️  MOST TESTS PASSED ({passed_tests}/{total_tests}). Minor issues detected.")
+            warn(
+                f"\n⚠️  MOST TESTS PASSED ({passed_tests}/{total_tests}). Minor issues detected."
+            )
         else:
-            error(f"\n🚨 MANY TESTS FAILED ({failed_tests}/{total_tests}). Critical issues detected.")
+            error(
+                f"\n🚨 MANY TESTS FAILED ({failed_tests}/{total_tests}). Critical issues detected."
+            )
 
 
 def main():
@@ -499,7 +569,9 @@ def main():
 
         # Return exit code based on results
         total_tests = len(results)
-        passed_tests = sum(1 for result in results.values() if result.get("success", False))
+        passed_tests = sum(
+            1 for result in results.values() if result.get("success", False)
+        )
 
         if passed_tests == total_tests:
             return 0  # All tests passed

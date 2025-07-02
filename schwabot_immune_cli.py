@@ -15,15 +15,13 @@ Features:
 
 import numpy as np
 from server.immune_diagnostic_websocket import ImmuneDiagnosticWebSocketServer
-from core.biological_immune_error_handler import BiologicalImmuneErrorHandler, ImmuneZone, immune_protected
-from core.enhanced_master_cycle_engine import EnhancedMasterCycleEngine, EnhancedSystemMode
+from core.biological_immune_error_handler import ImmuneZone, immune_protected
+from core.enhanced_master_cycle_engine import EnhancedMasterCycleEngine
 from pathlib import Path
-from typing import Dict, List, Optional, Any
+from typing import Dict, Any
 import argparse
 import asyncio
-import json
 import logging
-import os
 import signal
 import sys
 import time
@@ -50,7 +48,7 @@ class SchwabotImmuneCLI:
         # Setup logging
         logging.basicConfig(
             level=logging.INFO,
-            format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+            format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
         )
 
         print("🧬 Schwabot Biological Immune System CLI")
@@ -142,7 +140,7 @@ class SchwabotImmuneCLI:
                 raise ValueError("Test error")
 
             result = error_operation()
-            if hasattr(result, 'zone'):  # Should return ImmuneResponse
+            if hasattr(result, "zone"):  # Should return ImmuneResponse
                 results["passed"] += 1
                 results["details"].append("✅ Error handling successful")
             else:
@@ -160,49 +158,56 @@ class SchwabotImmuneCLI:
         results = {"passed": 0, "failed": 0, "details": []}
 
         try:
-            from core.biological_immune_error_handler import TCellSignal, ImmuneSignalType, TCellValidator
+            from core.biological_immune_error_handler import (
+                TCellSignal,
+                ImmuneSignalType,
+                TCellValidator,
+            )
 
             validator = TCellValidator()
 
             # Test strong positive signals
             strong_signals = [
+                TCellSignal(ImmuneSignalType.PRIMARY, 0.8, "test_primary", time.time()),
                 TCellSignal(
-                    ImmuneSignalType.PRIMARY, 0.8, "test_primary", time.time()), TCellSignal(
-                    ImmuneSignalType.COSTIMULATORY, 0.9, "test_costim", time.time()), TCellSignal(
-                    ImmuneSignalType.INFLAMMATORY, 0.3, "test_inflam", time.time())]
+                    ImmuneSignalType.COSTIMULATORY, 0.9, "test_costim", time.time()
+                ),
+                TCellSignal(
+                    ImmuneSignalType.INFLAMMATORY, 0.3, "test_inflam", time.time()
+                ),
+            ]
 
             activation, confidence, analysis = validator.validate_signals(
-                strong_signals)
+                strong_signals
+            )
             if activation and confidence > 0.6:
                 results["passed"] += 1
                 results["details"].append(
-                    f"✅ Strong signals activated T-cell (confidence: {confidence:.3f})")
+                    f"✅ Strong signals activated T-cell (confidence: {confidence:.3f})"
+                )
             else:
                 results["failed"] += 1
-                results["details"].append(f"❌ Strong signals failed to activate T-cell")
+                results["details"].append("❌ Strong signals failed to activate T-cell")
 
             # Test weak signals
             weak_signals = [
+                TCellSignal(ImmuneSignalType.PRIMARY, 0.2, "test_primary", time.time()),
                 TCellSignal(
-                    ImmuneSignalType.PRIMARY,
-                    0.2,
-                    "test_primary",
-                    time.time()),
-                TCellSignal(
-                    ImmuneSignalType.INHIBITORY,
-                    0.8,
-                    "test_inhibit",
-                    time.time())]
+                    ImmuneSignalType.INHIBITORY, 0.8, "test_inhibit", time.time()
+                ),
+            ]
 
             activation, confidence, analysis = validator.validate_signals(weak_signals)
             if not activation:
                 results["passed"] += 1
                 results["details"].append(
-                    f"✅ Weak signals correctly blocked T-cell activation")
+                    "✅ Weak signals correctly blocked T-cell activation"
+                )
             else:
                 results["failed"] += 1
                 results["details"].append(
-                    f"❌ Weak signals incorrectly activated T-cell")
+                    "❌ Weak signals incorrectly activated T-cell"
+                )
 
         except Exception as e:
             results["failed"] += 1
@@ -220,41 +225,47 @@ class SchwabotImmuneCLI:
             # Test permissive state
             gateway.current_state = gateway.current_state.PERMISSIVE
             allowed = gateway.should_allow_operation(
-                0.8, 0.1)  # High confidence, low entropy
+                0.8, 0.1
+            )  # High confidence, low entropy
             if allowed:
                 results["passed"] += 1
                 results["details"].append(
-                    "✅ Permissive state allows high-confidence operations")
+                    "✅ Permissive state allows high-confidence operations"
+                )
             else:
                 results["failed"] += 1
                 results["details"].append(
-                    "❌ Permissive state blocked high-confidence operation")
+                    "❌ Permissive state blocked high-confidence operation"
+                )
 
             # Test emergency state
             gateway.current_state = gateway.current_state.EMERGENCY
             allowed = gateway.should_allow_operation(
-                0.8, 0.9)  # High confidence, high entropy
+                0.8, 0.9
+            )  # High confidence, high entropy
             if not allowed:
                 results["passed"] += 1
                 results["details"].append(
-                    "✅ Emergency state correctly blocks operations")
+                    "✅ Emergency state correctly blocks operations"
+                )
             else:
                 results["failed"] += 1
                 results["details"].append(
-                    "❌ Emergency state incorrectly allowed operation")
+                    "❌ Emergency state incorrectly allowed operation"
+                )
 
             # Test adaptive threshold
             threshold = gateway.calculate_adaptive_threshold(0.5)
             if 0.7 < threshold < 0.8:  # Should be baseline + (0.15 * 0.5)
                 results["passed"] += 1
                 results["details"].append(
-                    f"✅ Adaptive threshold calculation correct: {
-                        threshold:.3f}")
+                    f"✅ Adaptive threshold calculation correct: {threshold:.3f}"
+                )
             else:
                 results["failed"] += 1
                 results["details"].append(
-                    f"❌ Adaptive threshold incorrect: {
-                        threshold:.3f}")
+                    f"❌ Adaptive threshold incorrect: {threshold:.3f}"
+                )
 
         except Exception as e:
             results["failed"] += 1
@@ -276,8 +287,8 @@ class SchwabotImmuneCLI:
             if "convergence" in consensus_result:
                 results["passed"] += 1
                 results["details"].append(
-                    f"✅ Swarm consensus computed: {
-                        consensus_result['recommendation']}")
+                    f"✅ Swarm consensus computed: {consensus_result['recommendation']}"
+                )
             else:
                 results["failed"] += 1
                 results["details"].append("❌ Swarm consensus failed to compute")
@@ -297,7 +308,8 @@ class SchwabotImmuneCLI:
             # Test node update
             test_node_id = list(swarm.nodes.keys())[0]
             success = swarm.update_node_vector(
-                test_node_id, np.array([1.0, 0.0, 0.0]), 0.9)
+                test_node_id, np.array([1.0, 0.0, 0.0]), 0.9
+            )
             if success:
                 results["passed"] += 1
                 results["details"].append("✅ Node update successful")
@@ -320,26 +332,31 @@ class SchwabotImmuneCLI:
 
             # Test safe zone
             safe_zone = zone_manager.classify_zone(
-                0.1, 0.9, 0.01)  # Low noise, high confidence, low error
+                0.1, 0.9, 0.01
+            )  # Low noise, high confidence, low error
             if safe_zone == ImmuneZone.SAFE:
                 results["passed"] += 1
                 results["details"].append("✅ Safe zone classification correct")
             else:
                 results["failed"] += 1
                 results["details"].append(
-                    f"❌ Safe zone classification incorrect: {safe_zone}")
+                    f"❌ Safe zone classification incorrect: {safe_zone}"
+                )
 
             # Test toxic zone
             toxic_zone = zone_manager.classify_zone(
-                0.8, 0.2, 0.2)  # High noise, low confidence, high error
+                0.8, 0.2, 0.2
+            )  # High noise, low confidence, high error
             if toxic_zone in [ImmuneZone.TOXIC, ImmuneZone.QUARANTINE]:
                 results["passed"] += 1
                 results["details"].append(
-                    f"✅ Toxic zone classification correct: {toxic_zone}")
+                    f"✅ Toxic zone classification correct: {toxic_zone}"
+                )
             else:
                 results["failed"] += 1
                 results["details"].append(
-                    f"❌ Toxic zone classification incorrect: {toxic_zone}")
+                    f"❌ Toxic zone classification incorrect: {toxic_zone}"
+                )
 
             # Test zone response
             response = zone_manager.get_zone_response(ImmuneZone.ALERT)
@@ -349,8 +366,8 @@ class SchwabotImmuneCLI:
             else:
                 results["failed"] += 1
                 results["details"].append(
-                    f"❌ Alert zone response incorrect: {
-                        response['action']}")
+                    f"❌ Alert zone response incorrect: {response['action']}"
+                )
 
         except Exception as e:
             results["failed"] += 1
@@ -373,7 +390,7 @@ class SchwabotImmuneCLI:
 
             # Call multiple times to create pattern
             for _ in range(3):
-                result = recurring_error_operation()
+                recurring_error_operation()
 
             # Check if antibody pattern was created
             final_patterns = len(self.immune_handler.antibody_patterns)
@@ -381,8 +398,9 @@ class SchwabotImmuneCLI:
                 results["passed"] += 1
                 results["details"].append(
                     f"✅ Antibody pattern created ({
-                        final_patterns -
-                        initial_patterns} new patterns)")
+                        final_patterns - initial_patterns
+                    } new patterns)"
+                )
             else:
                 results["failed"] += 1
                 results["details"].append("❌ No antibody pattern created")
@@ -403,12 +421,15 @@ class SchwabotImmuneCLI:
                 results["passed"] += 1
                 results["details"].append(
                     f"✅ Entropy monitoring works: {
-                        self.immune_handler.system_entropy:.3f}")
+                        self.immune_handler.system_entropy:.3f}"
+                )
             else:
                 results["failed"] += 1
                 results["details"].append(
                     f"❌ Entropy monitoring failed: {
-                        self.immune_handler.system_entropy}")
+                        self.immune_handler.system_entropy
+                    }"
+                )
 
         except Exception as e:
             results["failed"] += 1
@@ -429,16 +450,16 @@ class SchwabotImmuneCLI:
                 "volume_history": [100, 120, 110, 90, 105],
                 "fibonacci_projection": [44960, 44990, 45010, 45030, 45010],
                 "volume": 1.5,
-                "trend": 0.1
+                "trend": 0.1,
             }
 
             # Process normal market tick
             diagnostics = self.engine.process_market_tick_protected(market_data)
-            if hasattr(diagnostics, 'trading_decision'):
+            if hasattr(diagnostics, "trading_decision"):
                 results["passed"] += 1
                 results["details"].append(
-                    f"✅ Market tick processed: {
-                        diagnostics.trading_decision}")
+                    f"✅ Market tick processed: {diagnostics.trading_decision}"
+                )
             else:
                 results["failed"] += 1
                 results["details"].append("❌ Market tick processing failed")
@@ -446,19 +467,29 @@ class SchwabotImmuneCLI:
             # Test with divergent Fibonacci projection
             divergent_data = market_data.copy()
             divergent_data["fibonacci_projection"] = [
-                40000, 41000, 42000, 43000, 44000]  # Highly divergent
+                40000,
+                41000,
+                42000,
+                43000,
+                44000,
+            ]  # Highly divergent
 
             divergent_diagnostics = self.engine.process_market_tick_protected(
-                divergent_data)
-            if hasattr(
-                    divergent_diagnostics,
-                    'immune_response_active') and divergent_diagnostics.immune_response_active:
+                divergent_data
+            )
+            if (
+                hasattr(divergent_diagnostics, "immune_response_active")
+                and divergent_diagnostics.immune_response_active
+            ):
                 results["passed"] += 1
-                results["details"].append("✅ Fibonacci divergence detected and handled")
+                results["details"].append(
+                    "✅ Fibonacci divergence detected and handled"
+                )
             else:
                 results["passed"] += 1  # May not trigger immediately
                 results["details"].append(
-                    "✅ Divergent data processed (immune response may activate)")
+                    "✅ Divergent data processed (immune response may activate)"
+                )
 
             # Test system status
             status = self.engine.get_enhanced_system_status()
@@ -481,7 +512,8 @@ class SchwabotImmuneCLI:
         success_rate = (results["passed"] / total_tests * 100) if total_tests > 0 else 0
 
         print(
-            f"   {test_name}: {results['passed']}/{total_tests} passed ({success_rate:.1f}%)")
+            f"   {test_name}: {results['passed']}/{total_tests} passed ({success_rate:.1f}%)"
+        )
         for detail in results["details"]:
             print(f"     {detail}")
 
@@ -494,7 +526,8 @@ class SchwabotImmuneCLI:
 
         print(
             f"   Mitochondrial Health: {
-                status['system_health']['mitochondrial_health']:.3f}")
+                status['system_health']['mitochondrial_health']:.3f}"
+        )
         print(f"   System Entropy: {status['system_health']['system_entropy']:.3f}")
         print(f"   Error Rate: {status['system_health']['current_error_rate']:.3f}")
         print(f"   Current Zone: {status['system_health']['current_zone'].upper()}")
@@ -510,9 +543,9 @@ class SchwabotImmuneCLI:
             await self.websocket_server.start_server()
 
             # Open dashboard in browser
-            dashboard_url = f"http://{
-                self.websocket_server.host}:{
-                self.websocket_server.port}"
+            dashboard_url = (
+                f"http://{self.websocket_server.host}:{self.websocket_server.port}"
+            )
             print(f"📊 Dashboard URL: {dashboard_url}")
 
             # Try to open in default browser
@@ -520,29 +553,31 @@ class SchwabotImmuneCLI:
                 # Create a simple HTTP server for the dashboard
                 import http.server
                 import socketserver
-                from urllib.parse import urlparse
 
                 class DashboardHandler(http.server.SimpleHTTPRequestHandler):
                     def do_GET(self):
-                        if self.path == '/' or self.path == '/dashboard':
+                        if self.path == "/" or self.path == "/dashboard":
                             self.send_response(200)
-                            self.send_header('Content-type', 'text/html')
+                            self.send_header("Content-type", "text/html")
                             self.end_headers()
                             self.wfile.write(self.server.dashboard_html.encode())
                         else:
                             self.send_response(404)
                             self.end_headers()
 
-                with socketserver.TCPServer(("", self.websocket_server.port + 1), DashboardHandler) as httpd:
+                with socketserver.TCPServer(
+                    ("", self.websocket_server.port + 1), DashboardHandler
+                ) as httpd:
                     httpd.dashboard_html = self.websocket_server.get_dashboard_html()
 
-                    dashboard_http_url = f"http://{
-                        self.websocket_server.host}:{
-                        self.websocket_server.port + 1}/dashboard"
+                    dashboard_http_url = f"http://{self.websocket_server.host}:{
+                        self.websocket_server.port + 1
+                    }/dashboard"
                     print(f"📊 Opening dashboard at: {dashboard_http_url}")
 
                     # Start HTTP server in background
                     import threading
+
                     server_thread = threading.Thread(target=httpd.serve_forever)
                     server_thread.daemon = True
                     server_thread.start()
@@ -555,7 +590,9 @@ class SchwabotImmuneCLI:
                     print("   ⏹️ Stop Simulation - Stop market simulation")
                     print("   🔄 Reset System - Reset immune system to healthy state")
                     print("   🚨 Trigger Emergency - Test emergency response")
-                    print("   📱 Auto-Switch - Toggle automatic tab switching for alerts")
+                    print(
+                        "   📱 Auto-Switch - Toggle automatic tab switching for alerts"
+                    )
 
                     print("\n✅ Dashboard started successfully!")
                     print("   Press Ctrl+C to stop the server")
@@ -580,13 +617,15 @@ class SchwabotImmuneCLI:
             "operations": 0,
             "errors": 0,
             "immune_responses": 0,
-            "recoveries": 0}
+            "recoveries": 0,
+        }
 
         try:
             # Create various error scenarios
             @immune_protected(self.immune_handler)
             def random_operation(operation_type: str):
                 import random
+
                 if operation_type == "normal":
                     return random.uniform(0, 100)
                 elif operation_type == "error":
@@ -605,14 +644,15 @@ class SchwabotImmuneCLI:
             print("Running 100 random operations...")
             for i in range(100):
                 operation_type = np.random.choice(
-                    operation_types, p=[0.6, 0.2, 0.1, 0.1])
+                    operation_types, p=[0.6, 0.2, 0.1, 0.1]
+                )
 
                 result = random_operation(operation_type)
                 stress_results["operations"] += 1
 
-                if hasattr(result, 'zone'):  # ImmuneResponse
+                if hasattr(result, "zone"):  # ImmuneResponse
                     stress_results["immune_responses"] += 1
-                    if result.zone in ['recovery', 'safe']:
+                    if result.zone in ["recovery", "safe"]:
                         stress_results["recoveries"] += 1
                 elif operation_type == "error":
                     stress_results["errors"] += 1
@@ -633,8 +673,9 @@ class SchwabotImmuneCLI:
 
             # Calculate metrics
             error_rate = stress_results["errors"] / stress_results["operations"] * 100
-            immune_response_rate = stress_results["immune_responses"] / \
-                stress_results["operations"] * 100
+            immune_response_rate = (
+                stress_results["immune_responses"] / stress_results["operations"] * 100
+            )
 
             print(f"   Error Rate: {error_rate:.1f}%")
             print(f"   Immune Response Rate: {immune_response_rate:.1f}%")
@@ -660,7 +701,7 @@ class SchwabotImmuneCLI:
             ("🟡 Alert Condition", self._demo_alert_condition),
             ("🔴 Toxic Environment", self._demo_toxic_environment),
             ("🟣 Quarantine Mode", self._demo_quarantine_mode),
-            ("🔵 Recovery Phase", self._demo_recovery_phase)
+            ("🔵 Recovery Phase", self._demo_recovery_phase),
         ]
 
         for scenario_name, scenario_func in scenarios:
@@ -687,9 +728,9 @@ class SchwabotImmuneCLI:
             result = healthy_operation(i)
             print(
                 f"   Operation {i}: {
-                    '✅ Success' if not hasattr(
-                        result,
-                        'zone') else '🛡️ Protected'}")
+                    '✅ Success' if not hasattr(result, 'zone') else '🛡️ Protected'
+                }"
+            )
 
         status = self.immune_handler.get_immune_status()
         print(f"   Zone: {status['system_health']['current_zone']}")
@@ -714,15 +755,15 @@ class SchwabotImmuneCLI:
             result = alert_operation(i)
             print(
                 f"   Operation {i}: {
-                    '✅ Success' if not hasattr(
-                        result,
-                        'zone') else '🛡️ Blocked'}")
+                    '✅ Success' if not hasattr(result, 'zone') else '🛡️ Blocked'
+                }"
+            )
 
         status = self.immune_handler.get_immune_status()
         print(f"   Zone: {status['system_health']['current_zone']}")
         print(
-            f"   Gateway State: {
-                status['immune_components']['neural_gateway_state']}")
+            f"   Gateway State: {status['immune_components']['neural_gateway_state']}"
+        )
 
     async def _demo_toxic_environment(self) -> None:
         """Demonstrate toxic environment response."""
@@ -739,16 +780,18 @@ class SchwabotImmuneCLI:
             result = toxic_operation(i)
             print(
                 f"   Operation {i}: {
-                    '🚨 Error' if not hasattr(
-                        result,
-                        'zone') else f'🛡️ Immune Response ({
-                        result.zone.value})'}")
+                    '🚨 Error'
+                    if not hasattr(result, 'zone')
+                    else f'🛡️ Immune Response ({result.zone.value})'
+                }"
+            )
 
         status = self.immune_handler.get_immune_status()
         print(f"   Zone: {status['system_health']['current_zone']}")
         print(
             f"   Mitochondrial Health: {
-                status['system_health']['mitochondrial_health']:.3f}")
+                status['system_health']['mitochondrial_health']:.3f}"
+        )
 
     async def _demo_quarantine_mode(self) -> None:
         """Demonstrate quarantine mode."""
@@ -765,14 +808,15 @@ class SchwabotImmuneCLI:
             result = quarantine_operation(i)
             print(
                 f"   Operation {i}: {
-                    '🚨 Executed' if not hasattr(
-                        result,
-                        'zone') else f'🛡️ Quarantined ({
-                        result.zone.value})'}")
+                    '🚨 Executed'
+                    if not hasattr(result, 'zone')
+                    else f'🛡️ Quarantined ({result.zone.value})'
+                }"
+            )
 
         status = self.immune_handler.get_immune_status()
         print(f"   Zone: {status['system_health']['current_zone']}")
-        print(f"   All operations should be quarantined")
+        print("   All operations should be quarantined")
 
     async def _demo_recovery_phase(self) -> None:
         """Demonstrate recovery phase."""
@@ -791,10 +835,11 @@ class SchwabotImmuneCLI:
             result = recovery_operation(i)
             print(
                 f"   Operation {i}: {
-                    '✅ Recovery' if not hasattr(
-                        result,
-                        'zone') else f'🛡️ Protected ({
-                        result.zone.value})'}")
+                    '✅ Recovery'
+                    if not hasattr(result, 'zone')
+                    else f'🛡️ Protected ({result.zone.value})'
+                }"
+            )
 
             # Improve health slightly
             self.immune_handler._update_mitochondrial_health(True)
@@ -802,11 +847,12 @@ class SchwabotImmuneCLI:
         status = self.immune_handler.get_immune_status()
         print(f"   Zone: {status['system_health']['current_zone']}")
         print(
-            f"   Health Recovery: {
-                status['system_health']['mitochondrial_health']:.3f}")
+            f"   Health Recovery: {status['system_health']['mitochondrial_health']:.3f}"
+        )
 
     def setup_signal_handlers(self) -> None:
         """Setup signal handlers for graceful shutdown."""
+
         def signal_handler(signum, frame):
             print(f"\n🛑 Received signal {signum}, shutting down gracefully...")
             self.running = False
@@ -877,7 +923,9 @@ class SchwabotImmuneCLI:
         self.immune_handler.error_history.clear()
 
         # Reset neural gateway
-        self.immune_handler.neural_gateway.current_state = self.immune_handler.neural_gateway.current_state.PERMISSIVE
+        self.immune_handler.neural_gateway.current_state = (
+            self.immune_handler.neural_gateway.current_state.PERMISSIVE
+        )
 
         # Reset zone manager
         self.immune_handler.zone_manager.current_zone = ImmuneZone.SAFE
@@ -896,15 +944,17 @@ class SchwabotImmuneCLI:
 
         # Add multiple error patterns
         for i in range(15):
-            self.immune_handler.error_history.append({
-                "timestamp": time.time(),
-                "error_type": f"EmergencyError{i % 5}",
-                "error_message": f"Emergency test error {i}",
-                "operation": "emergency_test",
-                "args_count": 1,
-                "kwargs_count": 0,
-                "traceback": f"Emergency traceback {i}"
-            })
+            self.immune_handler.error_history.append(
+                {
+                    "timestamp": time.time(),
+                    "error_type": f"EmergencyError{i % 5}",
+                    "error_message": f"Emergency test error {i}",
+                    "operation": "emergency_test",
+                    "args_count": 1,
+                    "kwargs_count": 0,
+                    "traceback": f"Emergency traceback {i}",
+                }
+            )
 
         # Update antibody patterns
         for i in range(5):
@@ -913,7 +963,7 @@ class SchwabotImmuneCLI:
                 "pattern_type": "emergency_test",
                 "first_occurrence": time.time(),
                 "occurrence_count": 3,
-                "rejection_strength": 0.8
+                "rejection_strength": 0.8,
             }
 
         print("🚨 Emergency scenario activated")
@@ -927,15 +977,14 @@ class SchwabotImmuneCLI:
 async def main():
     """Main entry point."""
     parser = argparse.ArgumentParser(
-        description="Schwabot Biological Immune System CLI")
+        description="Schwabot Biological Immune System CLI"
+    )
     parser.add_argument(
-        "--test",
-        action="store_true",
-        help="Run comprehensive test suite and exit")
+        "--test", action="store_true", help="Run comprehensive test suite and exit"
+    )
     parser.add_argument(
-        "--dashboard",
-        action="store_true",
-        help="Start monitoring dashboard")
+        "--dashboard", action="store_true", help="Start monitoring dashboard"
+    )
     parser.add_argument("--stress", action="store_true", help="Run stress test")
     parser.add_argument("--demo", action="store_true", help="Run immune scenarios demo")
 

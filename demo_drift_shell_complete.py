@@ -26,13 +26,12 @@ import math
 import logging
 import sys
 from typing import Dict, List, Any
-from datetime import datetime
 
 # Configure logging for beautiful output
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s | %(levelname)s | %(message)s',
-    datefmt='%H:%M:%S'
+    format="%(asctime)s | %(levelname)s | %(message)s",
+    datefmt="%H:%M:%S",
 )
 logger = logging.getLogger(__name__)
 
@@ -59,19 +58,19 @@ class CompleteDriftShellDemo:
             shell_radius=144.44,
             memory_buffer_size=256,
             confidence_threshold=0.7,
-            timing_threshold_ms=300.0
+            timing_threshold_ms=300.0,
         )
 
         self.profit_forecast = ProfitVectorForecastEngine(
             lookback_periods=144,
             fibonacci_levels=[0.236, 0.382, 0.5, 0.618, 0.786],
-            volatility_window=50
+            volatility_window=50,
         )
 
         self.correction_matrix = CorrectionOverlayMatrix(
             anomaly_sensitivity=0.1,
             correction_weights={"quantum": 0.3, "tensor": 0.4, "smart_money": 0.3},
-            max_correction_magnitude=0.5
+            max_correction_magnitude=0.5,
         )
 
         # Market simulation data
@@ -87,22 +86,28 @@ class CompleteDriftShellDemo:
         self.current_tick += 1
 
         if scenario == "normal":
-            price = self.base_price + (self.current_tick * 25) + \
-                (math.sin(self.current_tick * 0.1) * 150)
+            price = (
+                self.base_price
+                + (self.current_tick * 25)
+                + (math.sin(self.current_tick * 0.1) * 150)
+            )
             volume = self.base_volume + (math.sin(self.current_tick * 0.05) * 200000)
             rsi = 50 + math.sin(self.current_tick * 0.08) * 20
             momentum = math.sin(self.current_tick * 0.12) * 0.08
             volatility = 0.02 + abs(math.sin(self.current_tick * 0.15)) * 0.01
 
         elif scenario == "volatility_spike":
-            price = self.base_price + \
-                (math.sin(self.current_tick * 0.3) * 800)  # Large price swings
-            volume = self.base_volume * \
-                (2.5 + abs(math.sin(self.current_tick * 0.2)))  # High volume
+            price = self.base_price + (
+                math.sin(self.current_tick * 0.3) * 800
+            )  # Large price swings
+            volume = self.base_volume * (
+                2.5 + abs(math.sin(self.current_tick * 0.2))
+            )  # High volume
             rsi = 30 + abs(math.sin(self.current_tick * 0.4)) * 40  # Extreme RSI
             momentum = math.sin(self.current_tick * 0.5) * 0.25  # High momentum
-            volatility = 0.08 + abs(math.sin(self.current_tick * 0.2)
-                                    ) * 0.04  # High volatility
+            volatility = (
+                0.08 + abs(math.sin(self.current_tick * 0.2)) * 0.04
+            )  # High volatility
 
         elif scenario == "black_swan":
             # Simulate black swan crash/pump
@@ -115,8 +120,9 @@ class CompleteDriftShellDemo:
 
         else:  # trending
             trend_factor = 1 + (self.current_tick * 0.01)
-            price = self.base_price * trend_factor + \
-                (math.sin(self.current_tick * 0.05) * 100)
+            price = self.base_price * trend_factor + (
+                math.sin(self.current_tick * 0.05) * 100
+            )
             volume = self.base_volume * (1 + math.sin(self.current_tick * 0.03) * 0.3)
             rsi = 55 + math.sin(self.current_tick * 0.06) * 15
             momentum = 0.05 + math.sin(self.current_tick * 0.04) * 0.03
@@ -135,11 +141,12 @@ class CompleteDriftShellDemo:
             "volatility": volatility,
             "hash": tick_hash,
             "timestamp": time.time(),
-            "scenario": scenario
+            "scenario": scenario,
         }
 
     def demonstrate_timing_validation(
-            self, market_data: Dict[str, Any]) -> Dict[str, Any]:
+        self, market_data: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Demonstrate temporal drift compensation and memory validation."""
         print(f"⏱️ TIMING VALIDATION - Tick {market_data['tick_id']}")
         print("-" * 50)
@@ -154,10 +161,10 @@ class CompleteDriftShellDemo:
                 "volume_spike": market_data["volume"] / self.base_volume,
                 "trend_strength": abs(market_data["momentum"]) * 10,
                 "rsi": market_data["rsi"],
-                "momentum": market_data["momentum"]
+                "momentum": market_data["momentum"],
             },
             rsi=market_data["rsi"],
-            momentum=market_data["momentum"]
+            momentum=market_data["momentum"],
         )
 
         # Simulate different timing scenarios
@@ -167,21 +174,24 @@ class CompleteDriftShellDemo:
                 T_hash_eval=0.01,
                 T_AI_response=0.08,
                 T_execute=0.04,
-                total_latency=0.15),
+                total_latency=0.15,
+            ),
             # Fast
             TimingMetrics(
                 T_mem_read=0.05,
                 T_hash_eval=0.03,
                 T_AI_response=0.12,
                 T_execute=0.08,
-                total_latency=0.28),
+                total_latency=0.28,
+            ),
             # Normal
             TimingMetrics(
                 T_mem_read=0.08,
                 T_hash_eval=0.05,
                 T_AI_response=0.25,
                 T_execute=0.15,
-                total_latency=0.53),
+                total_latency=0.53,
+            ),
             # Slow
         ]
 
@@ -194,36 +204,39 @@ class CompleteDriftShellDemo:
                 current_price=market_data["price"],
                 current_volume=market_data["volume"],
                 current_hash=market_data["hash"],
-                timing_metrics=timing
+                timing_metrics=timing,
             )
 
             print(f"  {scenario_name} Latency ({timing.total_latency * 1000:.0f}ms):")
             print(f"    Valid Recalls: {len(drift_result['valid_recalls'])}")
             print(
-                f"    Validation Time: {
-                    drift_result['validation_time'] *
-                    1000:.2f}ms")
+                f"    Validation Time: {drift_result['validation_time'] * 1000:.2f}ms"
+            )
 
-            if drift_result['valid_recalls']:
+            if drift_result["valid_recalls"]:
                 best_recall = max(
-                    drift_result['valid_recalls'],
-                    key=lambda x: x['validity'])
+                    drift_result["valid_recalls"], key=lambda x: x["validity"]
+                )
                 print(
-                    f"    Best Validity: {
-                        best_recall['validity']:.3f} ({
-                        best_recall['timing_window']})")
+                    f"    Best Validity: {best_recall['validity']:.3f} ({
+                        best_recall['timing_window']
+                    })"
+                )
 
-            results.append({
-                "scenario": scenario_name,
-                "timing": timing,
-                "drift_result": drift_result
-            })
+            results.append(
+                {
+                    "scenario": scenario_name,
+                    "timing": timing,
+                    "drift_result": drift_result,
+                }
+            )
 
         print()
         return {"memory_hash": memory_hash, "timing_results": results}
 
     def demonstrate_profit_forecasting(
-            self, market_data: Dict[str, Any]) -> Dict[str, Any]:
+        self, market_data: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Demonstrate 3D profit vector forecasting."""
         print(f"📈 PROFIT VECTOR FORECASTING - {market_data['scenario'].upper()}")
         print("-" * 50)
@@ -233,23 +246,23 @@ class CompleteDriftShellDemo:
             "1m": {
                 "rsi": market_data["rsi"] + 2,
                 "momentum": market_data["momentum"] * 1.1,
-                "volume": market_data["volume"] / self.base_volume
+                "volume": market_data["volume"] / self.base_volume,
             },
             "5m": {
                 "rsi": market_data["rsi"] - 1,
                 "momentum": market_data["momentum"] * 0.9,
-                "volume": (market_data["volume"] / self.base_volume) * 0.95
+                "volume": (market_data["volume"] / self.base_volume) * 0.95,
             },
             "15m": {
                 "rsi": market_data["rsi"] + 3,
                 "momentum": market_data["momentum"] * 1.2,
-                "volume": (market_data["volume"] / self.base_volume) * 1.05
+                "volume": (market_data["volume"] / self.base_volume) * 1.05,
             },
             "1h": {
                 "rsi": market_data["rsi"] - 2,
                 "momentum": market_data["momentum"] * 0.8,
-                "volume": (market_data["volume"] / self.base_volume) * 0.9
-            }
+                "volume": (market_data["volume"] / self.base_volume) * 0.9,
+            },
         }
 
         # Generate profit vector forecast
@@ -260,44 +273,42 @@ class CompleteDriftShellDemo:
             current_momentum=market_data["momentum"],
             current_hash=market_data["hash"],
             ghost_alignment=0.05 + math.sin(self.current_tick * 0.1) * 0.1,
-            timeframes=timeframes
+            timeframes=timeframes,
         )
 
-        print(f"  🎯 Profit Vector Analysis:")
+        print("  🎯 Profit Vector Analysis:")
         print(f"    Direction: {profit_vector.direction.upper()}")
         print(f"    Magnitude: {profit_vector.magnitude:.4f}")
         print(
-            f"    Components: X={
-                profit_vector.x:.3f}, Y={
-                profit_vector.y:.3f}, Z={
-                profit_vector.z:.3f}")
+            f"    Components: X={profit_vector.x:.3f}, Y={profit_vector.y:.3f}, Z={
+                profit_vector.z:.3f}"
+        )
 
         # Market phase analysis
         if self.profit_forecast.current_phase:
             phase = self.profit_forecast.current_phase
             print(
-                f"  🔄 Market Phase: {
-                    phase.phase_type} (strength={
-                    phase.strength:.3f}, confidence={
-                    phase.confidence:.3f})")
+                f"  🔄 Market Phase: {phase.phase_type} (strength={
+                    phase.strength:.3f}, confidence={phase.confidence:.3f})"
+            )
             if phase.fibonacci_level:
                 print(f"    📐 Fibonacci Level: {phase.fibonacci_level:.3f}")
 
         # Volatility profile
         vol_profile = self.profit_forecast.calculate_volatility_profile()
         print(
-            f"  📊 Volatility: {
-                vol_profile.volatility_regime} regime, scale factor={
-                vol_profile.profit_scale_factor:.3f}")
+            f"  📊 Volatility: {vol_profile.volatility_regime} regime, scale factor={
+                vol_profile.profit_scale_factor:.3f}"
+        )
 
         print()
         return {"profit_vector": profit_vector, "timeframes": timeframes}
 
-    def demonstrate_anomaly_correction(self,
-                                       market_data: Dict[str, Any],
-                                       profit_vector) -> Dict[str, Any]:
+    def demonstrate_anomaly_correction(
+        self, market_data: Dict[str, Any], profit_vector
+    ) -> Dict[str, Any]:
         """Demonstrate anomaly detection and correction injection."""
-        print(f"🔧 ANOMALY DETECTION & CORRECTION")
+        print("🔧 ANOMALY DETECTION & CORRECTION")
         print("-" * 50)
 
         # Prepare market context
@@ -305,7 +316,7 @@ class CompleteDriftShellDemo:
             "volatility": market_data["volatility"],
             "volume_spike": market_data["volume"] / self.base_volume,
             "trend_strength": abs(market_data["momentum"]) * 10,
-            "scenario": market_data["scenario"]
+            "scenario": market_data["scenario"],
         }
 
         # Detect anomalies
@@ -314,59 +325,55 @@ class CompleteDriftShellDemo:
             current_price=market_data["price"],
             current_volume=market_data["volume"],
             current_hash=market_data["hash"],
-            market_context=market_context
+            market_context=market_context,
         )
 
         print(f"  🚨 Anomalies Detected: {len(anomalies)}")
         for anomaly in anomalies:
             print(
-                f"    {
-                    anomaly.anomaly_type.value}: severity={
-                    anomaly.severity:.3f}, " f"confidence={
-                    anomaly.confidence:.3f}, priority={
-                    anomaly.correction_priority}")
+                f"    {anomaly.anomaly_type.value}: severity={anomaly.severity:.3f}, "
+                f"confidence={anomaly.confidence:.3f}, priority={
+                    anomaly.correction_priority
+                }"
+            )
 
         # Apply corrections if anomalies detected
         if anomalies:
             correction_factors = self.correction_matrix.apply_correction(
                 current_vector=profit_vector,
                 anomalies=anomalies,
-                market_context=market_context
+                market_context=market_context,
             )
 
-            print(f"  ⚡ Corrections Applied:")
+            print("  ⚡ Corrections Applied:")
             print(f"    Quantum (ε): {correction_factors.quantum_correction:.4f}")
             print(f"    Tensor (β): {correction_factors.tensor_correction:.4f}")
             print(
-                f"    Smart Money (δ): {
-                    correction_factors.smart_money_correction:.4f}")
+                f"    Smart Money (δ): {correction_factors.smart_money_correction:.4f}"
+            )
 
             # Show adjusted confidence weights
             weights = correction_factors.confidence_weights
             print(
-                f"    Weights: Q={
-                    weights.get(
-                        'quantum',
-                        0):.2f}, " f"T={
-                    weights.get(
-                        'tensor',
-                        0):.2f}, SM={
-                    weights.get(
-                        'smart_money',
-                        0):.2f}")
+                f"    Weights: Q={weights.get('quantum', 0):.2f}, "
+                f"T={weights.get('tensor', 0):.2f}, SM={
+                    weights.get('smart_money', 0):.2f}"
+            )
         else:
             correction_factors = None
-            print(f"  ✅ No corrections needed - market operating normally")
+            print("  ✅ No corrections needed - market operating normally")
 
         print()
         return {"anomalies": anomalies, "corrections": correction_factors}
 
-    def demonstrate_unified_confidence(self,
-                                       timing_results: List[Dict[str, Any]],
-                                       profit_vector,
-                                       correction_data: Dict[str, Any]) -> Dict[str, Any]:
+    def demonstrate_unified_confidence(
+        self,
+        timing_results: List[Dict[str, Any]],
+        profit_vector,
+        correction_data: Dict[str, Any],
+    ) -> Dict[str, Any]:
         """Demonstrate the unified confidence validator."""
-        print(f"✅ UNIFIED CONFIDENCE VALIDATION")
+        print("✅ UNIFIED CONFIDENCE VALIDATION")
         print("-" * 50)
 
         # Test confidence validation with different timing scenarios
@@ -381,9 +388,9 @@ class CompleteDriftShellDemo:
                 current_context={
                     "volatility": 0.03,
                     "volume_spike": 1.2,
-                    "trend_strength": 0.6
+                    "trend_strength": 0.6,
                 },
-                profit_projection=profit_vector.magnitude
+                profit_projection=profit_vector.magnitude,
             )
 
             # Run unified confidence validation
@@ -391,13 +398,15 @@ class CompleteDriftShellDemo:
                 drift_result=drift_result,
                 bitmap_confidence=bitmap_confidence,
                 profit_vector=profit_vector,
-                correction_factors=correction_data.get("corrections")
+                correction_factors=correction_data.get("corrections"),
             )
 
             print(f"  {scenario_name}:")
             print(
                 f"    Should Activate: {
-                    '✅ YES' if validation_result['should_activate'] else '❌ NO'}")
+                    '✅ YES' if validation_result['should_activate'] else '❌ NO'
+                }"
+            )
             print(f"    Total Confidence: {validation_result['total_confidence']:.3f}")
             print(f"    Final Confidence: {validation_result['final_confidence']:.3f}")
             print(f"    Selected Bitmap: {validation_result['selected_bitmap']}")
@@ -405,13 +414,13 @@ class CompleteDriftShellDemo:
             print(f"    Risk Adjustment: {validation_result['risk_adjustment']:.3f}")
 
             # Component breakdown
-            components = validation_result['components']
+            components = validation_result["components"]
             print(
-                f"    Components: Validity={
-                    components['validity']:.3f}, " f"Bitmap={
-                    components['bitmap']:.3f}, PV={
-                    components['profit_vector']:.3f}, " f"Correction={
-                    components['correction']:.3f}")
+                f"    Components: Validity={components['validity']:.3f}, "
+                f"Bitmap={components['bitmap']:.3f}, PV={
+                    components['profit_vector']:.3f}, "
+                f"Correction={components['correction']:.3f}"
+            )
 
             validation_results.append(validation_result)
             print()
@@ -440,9 +449,11 @@ class CompleteDriftShellDemo:
 
             # Generate market data for this scenario
             market_data = self.simulate_market_tick(scenario)
-            print(f"📊 Market Data: Price=${market_data['price']:.2f}, "
-                  f"Volume={market_data['volume']:,.0f}, RSI={market_data['rsi']:.1f}, "
-                  f"Volatility={market_data['volatility']:.3f}")
+            print(
+                f"📊 Market Data: Price=${market_data['price']:.2f}, "
+                f"Volume={market_data['volume']:,.0f}, RSI={market_data['rsi']:.1f}, "
+                f"Volatility={market_data['volatility']:.3f}"
+            )
             print()
 
             # Step 1: Timing validation
@@ -460,27 +471,36 @@ class CompleteDriftShellDemo:
             confidence_results = self.demonstrate_unified_confidence(
                 timing_data["timing_results"],
                 forecast_data["profit_vector"],
-                correction_data
+                correction_data,
             )
 
             # Summary for this scenario
-            print(f"📋 SCENARIO SUMMARY:")
+            print("📋 SCENARIO SUMMARY:")
             activated_scenarios = [
-                r for r in confidence_results if r['should_activate']]
+                r for r in confidence_results if r["should_activate"]
+            ]
             print(
-                f"  Activation Rate: {len(activated_scenarios)}/{len(confidence_results)} timing scenarios")
+                f"  Activation Rate: {len(activated_scenarios)}/{len(confidence_results)} timing scenarios"
+            )
 
             if activated_scenarios:
-                best_confidence = max(r['final_confidence']
-                                      for r in activated_scenarios)
+                best_confidence = max(
+                    r["final_confidence"] for r in activated_scenarios
+                )
                 print(f"  Best Confidence: {best_confidence:.3f}")
 
             if correction_data["anomalies"]:
                 total_corrections = len(correction_data["anomalies"])
                 high_priority = len(
-                    [a for a in correction_data["anomalies"] if a.correction_priority >= 4])
+                    [
+                        a
+                        for a in correction_data["anomalies"]
+                        if a.correction_priority >= 4
+                    ]
+                )
                 print(
-                    f"  Anomalies: {total_corrections} detected, {high_priority} high-priority")
+                    f"  Anomalies: {total_corrections} detected, {high_priority} high-priority"
+                )
 
             print()
             print("─" * 70)
@@ -492,36 +512,35 @@ class CompleteDriftShellDemo:
 
         # Drift engine stats
         drift_stats = self.drift_engine.get_performance_stats()
-        print(f"🕰️ Drift Shell Engine:")
+        print("🕰️ Drift Shell Engine:")
         print(f"  Total Evaluations: {drift_stats['total_evaluations']}")
         print(f"  Valid Memory Recalls: {drift_stats['valid_memory_recalls']}")
         print(f"  Drift Rejections: {drift_stats['drift_rejections']}")
         print(
-            f"  Avg Validation Time: {
-                drift_stats['avg_validation_time'] *
-                1000:.2f}ms")
+            f"  Avg Validation Time: {drift_stats['avg_validation_time'] * 1000:.2f}ms"
+        )
         print(f"  Memory Utilization: {drift_stats['memory_buffer_utilization']:.1%}")
 
         # Profit forecast stats
         forecast_stats = self.profit_forecast.get_performance_stats()
-        print(f"\n📈 Profit Vector Forecast:")
+        print("\n📈 Profit Vector Forecast:")
         print(f"  Total Forecasts: {forecast_stats['total_forecasts']}")
         print(
             f"  Avg Processing Time: {
-                forecast_stats['avg_processing_time'] *
-                1000:.2f}ms")
+                forecast_stats['avg_processing_time'] * 1000:.2f}ms"
+        )
         print(f"  Current Phase: {forecast_stats['current_phase']}")
         print(f"  Phase Confidence: {forecast_stats['phase_confidence']:.3f}")
 
         # Correction matrix stats
         correction_stats = self.correction_matrix.get_performance_stats()
-        print(f"\n🔧 Correction Overlay Matrix:")
+        print("\n🔧 Correction Overlay Matrix:")
         print(f"  Total Corrections: {correction_stats['total_corrections']}")
         print(f"  Anomalies Detected: {correction_stats['anomalies_detected']}")
         print(
             f"  Avg Correction Time: {
-                correction_stats['avg_correction_time'] *
-                1000:.2f}ms")
+                correction_stats['avg_correction_time'] * 1000:.2f}ms"
+        )
         print(f"  Detection Rate: {correction_stats['anomaly_detection_rate']:.2f}")
 
         print()
@@ -549,6 +568,7 @@ def main():
     except Exception as e:
         print(f"\n\n❌ Demo failed with error: {e}")
         import traceback
+
         traceback.print_exc()
 
 

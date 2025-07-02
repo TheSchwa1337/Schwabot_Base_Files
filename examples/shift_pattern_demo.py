@@ -8,7 +8,6 @@ in trading dynamics analysis.
 
 import numpy as np
 import matplotlib.pyplot as plt
-from datetime import datetime, timedelta
 import sys
 import os
 
@@ -17,9 +16,8 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from core.advanced_drift_shell_integration import (
     ShiftPatternEngine,
-    AdvancedDriftShellIntegration,
 )
-from utils.safe_print import safe_print, info, warn, error, success, debug
+from utils.safe_print import safe_print, info, error, success
 
 
 class ShiftPatternDemo:
@@ -122,7 +120,7 @@ class ShiftPatternDemo:
         for shift_type in shift_types:
             shift_counts[shift_type] = shift_counts.get(shift_type, 0) + 1
 
-        safe_print(f"Phase shift statistics:")
+        safe_print("Phase shift statistics:")
         for shift_type, count in shift_counts.items():
             safe_print(f"  {shift_type}: {count} occurrences")
 
@@ -167,7 +165,9 @@ class ShiftPatternDemo:
         safe_print(f"Decay rate (λ): {self.engine.decay_rate}")
         safe_print(f"Initial weight (w_0): {decay_weights[0]:.4f}")
         safe_print(f"Final weight (w_19): {decay_weights[-1]:.4f}")
-        safe_print(f"Weight ratio (w_19/w_0): {decay_weights[-1]/decay_weights[0]:.4f}")
+        safe_print(
+            f"Weight ratio (w_19/w_0): {decay_weights[-1] / decay_weights[0]:.4f}"
+        )
 
     def demo_thermal_shift_logic(self):
         """Demonstrate thermal shift logic."""
@@ -298,7 +298,7 @@ class ShiftPatternDemo:
         # Print statistics
         trigger_count = sum(shift_triggers)
         safe_print(f"Total shift triggers: {trigger_count}")
-        safe_print(f"Trigger rate: {trigger_count/len(shift_triggers)*100:.2f}%")
+        safe_print(f"Trigger rate: {trigger_count / len(shift_triggers) * 100:.2f}%")
         safe_print(f"Coherence threshold: {self.engine.coherence_threshold}")
 
     def demo_api_penalty_decay(self):
@@ -480,7 +480,9 @@ class ShiftPatternDemo:
         # Print statistics
         sync_count = sum(synchronization_triggers)
         safe_print(f"Total synchronization triggers: {sync_count}")
-        safe_print(f"Sync rate: {sync_count/len(synchronization_triggers)*100:.2f}%")
+        safe_print(
+            f"Sync rate: {sync_count / len(synchronization_triggers) * 100:.2f}%"
+        )
         safe_print(f"Average drift magnitude: {np.mean(drift_magnitudes):.4f}")
         safe_print(
             f"Drift direction distribution: {np.bincount(np.array(drift_directions) + 1)}"
@@ -510,7 +512,7 @@ class ShiftPatternDemo:
         # Add text annotations
         for i in range(len(assets)):
             for j in range(len(shift_types)):
-                text = ax.text(
+                ax.text(
                     j,
                     i,
                     duration_matrix[i][j],
@@ -534,7 +536,7 @@ class ShiftPatternDemo:
         plt.show()
 
         # Print detailed information
-        safe_print(f"Asset-specific shift durations:")
+        safe_print("Asset-specific shift durations:")
         for asset in assets:
             safe_print(f"  {asset}:")
             for shift_type in shift_types:

@@ -7,8 +7,6 @@ Targeted script to fix remaining syntax errors, particularly
 unterminated string literals (E999).
 """
 
-import os
-import re
 import subprocess
 import sys
 from pathlib import Path
@@ -17,11 +15,11 @@ from pathlib import Path
 def fix_unterminated_strings(file_path: str) -> bool:
     """Fix unterminated string literals."""
     try:
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, "r", encoding="utf-8") as f:
             content = f.read()
 
         original_content = content
-        lines = content.split('\n')
+        lines = content.split("\n")
         fixed_lines = []
 
         for i, line in enumerate(lines):
@@ -30,23 +28,23 @@ def fix_unterminated_strings(file_path: str) -> bool:
 
             if quote_count % 2 == 1:
                 # Odd number of quotes - likely unterminated
-                print(f"  Found unterminated string in line {i+1}: {line[:50]}...")
+                print(f"  Found unterminated string in line {i + 1}: {line[:50]}...")
 
                 # Try to fix by adding closing quote
                 if line.count('"') % 2 == 1:
                     line += '"'
-                    print(f"  Fixed: Added closing double quote")
+                    print("  Fixed: Added closing double quote")
                 if line.count("'") % 2 == 1:
                     line += "'"
-                    print(f"  Fixed: Added closing single quote")
+                    print("  Fixed: Added closing single quote")
 
             fixed_lines.append(line)
 
-        content = '\n'.join(fixed_lines)
+        content = "\n".join(fixed_lines)
 
         # Write back if changed
         if content != original_content:
-            with open(file_path, 'w', encoding='utf-8') as f:
+            with open(file_path, "w", encoding="utf-8") as f:
                 f.write(content)
             return True
 
@@ -62,15 +60,18 @@ def run_flake8_check(file_path: str) -> list:
     try:
         result = subprocess.run(
             [
-                sys.executable, "-m", "flake8", file_path,
+                sys.executable,
+                "-m",
+                "flake8",
+                file_path,
                 "--max-line-length=100",
-                "--select=E999"
+                "--select=E999",
             ],
             capture_output=True,
             text=True,
-            check=False
+            check=False,
         )
-        return result.stdout.strip().split('\n') if result.stdout.strip() else []
+        return result.stdout.strip().split("\n") if result.stdout.strip() else []
     except Exception as e:
         print(f"Error running flake8 on {file_path}: {e}")
         return []
@@ -92,7 +93,7 @@ def main():
         if file_path.is_file():
             # Check for syntax errors
             violations = run_flake8_check(str(file_path))
-            syntax_errors = [v for v in violations if 'E999' in v]
+            syntax_errors = [v for v in violations if "E999" in v]
 
             if syntax_errors:
                 print(f"\n📁 Processing: {file_path}")
@@ -103,16 +104,16 @@ def main():
                 # Try to fix
                 if fix_unterminated_strings(str(file_path)):
                     files_fixed += 1
-                    print(f"  ✅ Applied fixes")
+                    print("  ✅ Applied fixes")
 
                     # Check if fixed
                     violations_after = run_flake8_check(str(file_path))
-                    syntax_errors_after = [v for v in violations_after if 'E999' in v]
+                    syntax_errors_after = [v for v in violations_after if "E999" in v]
 
                     if syntax_errors_after:
                         print(f"  ⚠️  {len(syntax_errors_after)} syntax errors remain")
                     else:
-                        print(f"  ✅ All syntax errors fixed!")
+                        print("  ✅ All syntax errors fixed!")
 
     # Summary
     print("\n" + "=" * 60)

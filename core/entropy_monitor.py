@@ -1,10 +1,7 @@
-"""
-Entropy Monitor.
+""Entropy Monitor.
 
 Monitors and controls adversarial entropy flow Ψ_sec in Schwabot's defense system.
-Implements vector field analysis for entropy detection and response.
-"""
-from dataclasses import dataclass
+Implements vector field analysis for entropy detection and response.from dataclasses import dataclass
 from datetime import datetime
 from typing import Dict, List, Optional
 
@@ -12,52 +9,36 @@ import numpy as np
 
 
 @dataclass
-class EntropyField:
-    """Represents the Ψ_sec vector field for adversarial entropy control."""
-
-    field_strength: float
+class EntropyField:Represents the Ψ_sec vector field for adversarial entropy control.field_strength: float
     direction: np.ndarray
     volatility: float
     timestamp: datetime
     metadata: Dict[str, float] = None
 
 
-class EntropyMonitor:
-    """
-    Monitors and analyzes adversarial entropy flow Ψ_sec.
+class EntropyMonitor:Monitors and analyzes adversarial entropy flow Ψ_sec.
 
     This class implements the mathematical containment for Ψ_sec,
-    which represents the vector field of adversarial entropy control.
-    """
-
-    def __init__(self: 'EntropyMonitor', config: Optional[Dict] = None) -> None:
-        """
-        Initialize the entropy monitor.
+    which represents the vector field of adversarial entropy control.def __init__(self:EntropyMonitor, config: Optional[Dict] = None) -> None:Initialize the entropy monitor.
 
         Args:
-            config: Configuration dictionary for entropy monitoring
-        """
-        self.config = config or {}
-        self.entropy_threshold = self.config.get('entropy_threshold', 0.5)
+            config: Configuration dictionary for entropy monitoringself.config = config or {}
+        self.entropy_threshold = self.config.get(entropy_threshold, 0.5)
         self.field_history: List[EntropyField] = []
         self.alert_level = 0.0
 
-    def calculate_adversarial_entropy(self: 'EntropyMonitor', vector_field: np.ndarray) -> float:
-        """
-        Ψ_sec models adversarial entropy detection from vector field Ψ.
+    def calculate_adversarial_entropy(self: EntropyMonitor, vector_field: np.ndarray) -> float:Ψ_sec models adversarial entropy detection from vector field Ψ.
 
         Args:
             vector_field: Input vector field representing market entropy
         Returns:
             float: Adversarial entropy strength
-        """
         try:
             # Calculate the magnitude of the vector field
             field_magnitude = np.linalg.norm(vector_field)
 
             # Calculate field divergence (∇·Ψ)
-            if vector_field.ndim > 1:
-                divergence = np.sum(np.gradient(vector_field))
+            if vector_field.ndim > 1: divergence = np.sum(np.gradient(vector_field))
             else:
                 divergence = np.sum(np.diff(vector_field))
 
@@ -67,25 +48,22 @@ class EntropyMonitor:
             return float(adversarial_entropy)
 
         except Exception as e:
-            print(f"Error calculating adversarial entropy: {e}")
+            print(fError calculating adversarial entropy: {e})
             return 0.0
 
     def analyze_entropy_field(
-        self: 'EntropyMonitor', market_data: Dict[str, float]
+        self: EntropyMonitor, market_data: Dict[str, float]
     ) -> EntropyField:
-        """
         Analyze market data to extract entropy field characteristics.
 
         Args:
             market_data: Dictionary containing market metrics
         Returns:
-            EntropyField: Analyzed entropy field
-        """
-        try:
+            EntropyField: Analyzed entropy fieldtry:
             # Extract key metrics
-            volatility = market_data.get('volatility', 0.0)
-            volume = market_data.get('volume', 1.0)
-            price_change = market_data.get('price_change', 0.0)
+            volatility = market_data.get(volatility, 0.0)
+            volume = market_data.get(volume, 1.0)
+            price_change = market_data.get(price_change, 0.0)
 
             # Create vector field from market data
             vector_field = np.array([volatility, volume, price_change])
@@ -94,8 +72,7 @@ class EntropyMonitor:
             field_strength = self.calculate_adversarial_entropy(vector_field)
 
             # Determine field direction (normalized)
-            if np.linalg.norm(vector_field) > 0:
-                direction = vector_field / np.linalg.norm(vector_field)
+            if np.linalg.norm(vector_field) > 0: direction = vector_field / np.linalg.norm(vector_field)
             else:
                 direction = np.array([0.0, 0.0, 0.0])
 
@@ -105,11 +82,10 @@ class EntropyMonitor:
                 direction=direction,
                 volatility=volatility,
                 timestamp=datetime.now(),
-                metadata={
-                    'volume': volume,
-                    'price_change': price_change,
-                    'field_magnitude': float(np.linalg.norm(vector_field))
-                }
+                metadata={volume: volume,
+                    price_change: price_change,
+                    field_magnitude: float(np.linalg.norm(vector_field)),
+                },
             )
 
             # Store in history
@@ -122,26 +98,21 @@ class EntropyMonitor:
             return entropy_field
 
         except Exception as e:
-            print(f"Error analyzing entropy field: {e}")
+            print(fError analyzing entropy field: {e})
             return EntropyField(
-                field_strength=0.0,
+                field_strength = 0.0,
                 direction=np.array([0.0, 0.0, 0.0]),
                 volatility=0.0,
-                timestamp=datetime.now()
+                timestamp=datetime.now(),
             )
 
-    def detect_entropy_anomaly(
-        self: 'EntropyMonitor', current_field: EntropyField
-    ) -> bool:
-        """
+    def detect_entropy_anomaly(self: EntropyMonitor, current_field: EntropyField) -> bool:
         Detect anomalies in entropy field patterns.
 
         Args:
             current_field: Current entropy field to analyze
         Returns:
-            bool: True if anomaly detected
-        """
-        if len(self.field_history) < 5:
+            bool: True if anomaly detectedif len(self.field_history) < 5:
             return False
 
         # Calculate average field strength from recent history
@@ -154,53 +125,42 @@ class EntropyMonitor:
 
         return anomaly
 
-    def get_entropy_report(self: 'EntropyMonitor') -> Dict[str, float]:
-        """
+    def get_entropy_report(self: EntropyMonitor) -> Dict[str, float]:
+        
         Generate comprehensive entropy monitoring report.
 
         Returns:
-            Dict: Entropy monitoring statistics
-        """
-        if not self.field_history:
-            return {'status': 'no_data'}
+            Dict: Entropy monitoring statisticsif not self.field_history:
+            return {status:no_data}
 
         recent_fields = self.field_history[-10:]
 
         return {
-            'current_strength': recent_fields[-1].field_strength,
-            'average_strength': np.mean([f.field_strength for f in recent_fields]),
-            'max_strength': max([f.field_strength for f in recent_fields]),
-            'volatility_trend': np.mean([f.volatility for f in recent_fields]),
-            'field_count': len(self.field_history),
-            'alert_level': self.alert_level
+            current_strength: recent_fields[-1].field_strength,average_strength: np.mean([f.field_strength for f in recent_fields]),max_strength: max([f.field_strength for f in recent_fields]),volatility_trend: np.mean([f.volatility for f in recent_fields]),field_count": len(self.field_history),alert_level": self.alert_level,
         }
 
 
-if __name__ == "__main__":
+if __name__ == __main__:
     # Demo the entropy monitor
-    print("🧠 Entropy Monitor Demo")
-    print("=" * 40)
+    print(🧠 Entropy Monitor Demo)
+    print(=* 40)
 
     # Initialize monitor
     monitor = EntropyMonitor()
 
     # Test with sample market data
-    test_data = {
-        'volatility': 0.15,
-        'volume': 1000.0,
-        'price_change': 0.02
-    }
+    test_data = {volatility: 0.15, volume: 1000.0,price_change: 0.02}
 
     # Analyze entropy field
     entropy_field = monitor.analyze_entropy_field(test_data)
-    print(f"Field Strength: {entropy_field.field_strength:.6f}")
-    print(f"Direction: {entropy_field.direction}")
-    print(f"Volatility: {entropy_field.volatility:.4f}")
+    print(fField Strength: {entropy_field.field_strength:.6f})
+    print(fDirection: {entropy_field.direction})
+    print(fVolatility: {entropy_field.volatility:.4f})
 
     # Check for anomalies
     anomaly_detected = monitor.detect_entropy_anomaly(entropy_field)
-    print(f"Anomaly Detected: {anomaly_detected}")
+    print(fAnomaly Detected: {anomaly_detected})
 
     # Get report
     report = monitor.get_entropy_report()
-    print(f"Entropy Report: {report}")
+    print(fEntropy Report: {report})

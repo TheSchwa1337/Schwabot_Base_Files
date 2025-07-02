@@ -10,7 +10,6 @@ This script addresses the most critical issues found in the codebase validation:
 4. Fix syntax errors
 """
 
-import os
 import re
 import shutil
 from pathlib import Path
@@ -45,7 +44,7 @@ class CriticalFixer:
     def _fix_gpu_offload_manager(self, file_path: Path):
         """Fix the main GPU offload manager."""
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, "r", encoding="utf-8") as f:
                 content = f.read()
 
             # Fix malformed docstrings and syntax errors
@@ -53,7 +52,7 @@ class CriticalFixer:
             content = self._fix_syntax_errors(content)
             content = self._implement_stub_functions(content)
 
-            with open(file_path, 'w', encoding='utf-8') as f:
+            with open(file_path, "w", encoding="utf-8") as f:
                 f.write(content)
 
             logger.info(f"Fixed GPU offload manager: {file_path}")
@@ -65,14 +64,14 @@ class CriticalFixer:
     def _fix_gpu_file(self, file_path: Path):
         """Fix individual GPU-related files."""
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, "r", encoding="utf-8") as f:
                 content = f.read()
 
             # Fix common GPU/CPU issues
             content = self._fix_gpu_imports(content)
             content = self._fix_fallback_mechanisms(content)
 
-            with open(file_path, 'w', encoding='utf-8') as f:
+            with open(file_path, "w", encoding="utf-8") as f:
                 f.write(content)
 
             logger.info(f"Fixed GPU file: {file_path}")
@@ -91,7 +90,7 @@ class CriticalFixer:
         content = re.sub(
             r'""""""Emergency placeholder docstring\.""""""',
             '"""Placeholder implementation."""',
-            content
+            content,
         )
 
         return content
@@ -103,10 +102,10 @@ class CriticalFixer:
         content = re.sub(r'"""""""', '"""', content)
 
         # Fix malformed function definitions
-        content = re.sub(r'def \w+\([^)]*\):""""', 'def \\g<0>():', content)
+        content = re.sub(r'def \w+\([^)]*\):""""', "def \\g<0>():", content)
 
         # Fix malformed class definitions
-        content = re.sub(r'class \w+:""""', 'class \\g<0>:', content)
+        content = re.sub(r'class \w+:""""', "class \\g<0>:", content)
 
         return content
 
@@ -116,7 +115,7 @@ class CriticalFixer:
         content = re.sub(
             r'def (\w+)\([^)]*\):\s*"""Function implementation pending\."""\s*pass',
             r'def \1(self, *args, **kwargs):\n        """Implementation with fallback."""\n        try:\n            # Implementation here\n            return None\n        except Exception as e:\n            logger.warning(f"\\1 failed: {e}")\n            return None',
-            content
+            content,
         )
 
         return content
@@ -132,7 +131,7 @@ class CriticalFixer:
     GPU_AVAILABLE = True
 except ImportError:
     GPU_AVAILABLE = False
-    cp = None"""
+    cp = None""",
             )
 
         if "import numba" in content and "try:" not in content:
@@ -143,7 +142,7 @@ except ImportError:
     NUMBA_AVAILABLE = True
 except ImportError:
     NUMBA_AVAILABLE = False
-    numba = None"""
+    numba = None""",
             )
 
         return content
@@ -172,7 +171,7 @@ except ImportError:
             self.root_dir / "trash",
             self.root_dir / "cleanup_backup",
             self.root_dir / "backup_memory_stack",
-            self.root_dir / "hash_memory_bank"
+            self.root_dir / "hash_memory_bank",
         ]
         for trash_dir in trash_dirs:
             if trash_dir.exists():
@@ -198,7 +197,7 @@ except ImportError:
                 continue
 
             try:
-                with open(py_file, 'r', encoding='utf-8') as f:
+                with open(py_file, "r", encoding="utf-8") as f:
                     content = f.read()
 
                 # Fix unified_math imports
@@ -207,15 +206,13 @@ except ImportError:
                     if "unified_math." not in content:
                         # Remove unused import
                         content = content.replace(
-                            "from core.unified_math_system import unified_math\n",
-                            ""
+                            "from core.unified_math_system import unified_math\n", ""
                         )
                         content = content.replace(
-                            "from core.unified_math_system import unified_math",
-                            ""
+                            "from core.unified_math_system import unified_math", ""
                         )
 
-                        with open(py_file, 'w', encoding='utf-8') as f:
+                        with open(py_file, "w", encoding="utf-8") as f:
                             f.write(content)
 
                         logger.info(f"Fixed unused import in: {py_file}")
@@ -264,7 +261,7 @@ class UnifiedTensorAlgebra:
         return np.linalg.norm(tensor)
 '''
 
-            with open(tensor_algebra_file, 'w', encoding='utf-8') as f:
+            with open(tensor_algebra_file, "w", encoding="utf-8") as f:
                 f.write(tensor_algebra_content)
 
             logger.info(f"Created missing module: {tensor_algebra_file}")

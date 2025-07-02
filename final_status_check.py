@@ -17,13 +17,16 @@ def run_flake8_check(directory: str, max_length: int = 100) -> int:
     try:
         result = subprocess.run(
             [
-                sys.executable, "-m", "flake8", directory,
+                sys.executable,
+                "-m",
+                "flake8",
+                directory,
                 f"--max-line-length={max_length}",
-                "--count"
+                "--count",
             ],
             capture_output=True,
             text=True,
-            check=False
+            check=False,
         )
 
         if result.stdout.strip():
@@ -46,7 +49,7 @@ def check_syntax_errors(directory: str) -> int:
                     [sys.executable, "-m", "py_compile", str(file_path)],
                     capture_output=True,
                     text=True,
-                    check=False
+                    check=False,
                 )
 
                 if result.returncode != 0:

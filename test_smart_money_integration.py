@@ -1,9 +1,5 @@
 from core.enhanced_strategy_framework import EnhancedStrategyFramework
 from core.smart_money_integration import SmartMoneyIntegrationFramework
-from core.smart_money_integration import SmartMoneyIntegrationFramework
-from core.smart_money_integration import SmartMoneyIntegrationFramework
-from core.smart_money_integration import SmartMoneyIntegrationFramework
-from core.smart_money_integration import SmartMoneyIntegrationFramework
 from core.smart_money_integration import enhance_wall_street_with_smart_money
 from typing import Any, Dict
 import logging
@@ -33,7 +29,7 @@ def safe_print(message: str) -> None:
     try:
         print(message)
     except UnicodeEncodeError:
-        print(message.encode('ascii', 'replace').decode('ascii'))
+        print(message.encode("ascii", "replace").decode("ascii"))
 
 
 class SmartMoneyIntegrationTester:
@@ -54,14 +50,23 @@ class SmartMoneyIntegrationTester:
 
             # Test data
             asset = "BTC/USDT"
-            price_data = [50000, 50100, 50050, 50200, 50150, 50300, 50250, 50400, 50350, 50500]
+            price_data = [
+                50000,
+                50100,
+                50050,
+                50200,
+                50150,
+                50300,
+                50250,
+                50400,
+                50350,
+                50500,
+            ]
             volume_data = [1000, 1200, 800, 1500, 900, 1800, 1100, 2000, 1300, 2500]
 
             # Analyze smart money metrics
             sm_signals = smart_money.analyze_smart_money_metrics(
-                asset=asset,
-                price_data=price_data,
-                volume_data=volume_data
+                asset=asset, price_data=price_data, volume_data=volume_data
             )
 
             success = len(sm_signals) > 0
@@ -74,10 +79,13 @@ class SmartMoneyIntegrationTester:
                     "metrics_types": [signal.metric.value for signal in sm_signals],
                     "avg_institutional_confidence": (
                         np.mean([s.institutional_confidence for s in sm_signals])
-                        if sm_signals else 0.0
+                        if sm_signals
+                        else 0.0
                     ),
-                    "whale_activity_detected": any(s.whale_activity for s in sm_signals)
-                }
+                    "whale_activity_detected": any(
+                        s.whale_activity for s in sm_signals
+                    ),
+                },
             }
 
         except Exception as e:
@@ -85,7 +93,7 @@ class SmartMoneyIntegrationTester:
             return {
                 "component": "Smart Money Metrics Calculation",
                 "success": False,
-                "error": str(e)
+                "error": str(e),
             }
 
     def test_wall_street_smart_money_integration(self) -> Dict[str, Any]:
@@ -98,13 +106,24 @@ class SmartMoneyIntegrationTester:
 
             # Test data
             asset = "BTC/USDT"
-            price_data = [50000, 50100, 50050, 50200, 50150, 50300, 50250, 50400, 50350, 50500]
+            price_data = [
+                50000,
+                50100,
+                50050,
+                50200,
+                50150,
+                50300,
+                50250,
+                50400,
+                50350,
+                50500,
+            ]
             volume_data = [1000, 1200, 800, 1500, 900, 1800, 1100, 2000, 1300, 2500]
 
             # Order book simulation
             order_book_data = {
                 "bids": [[49950, 100], [49900, 200], [49850, 150]],
-                "asks": [[50050, 120], [50100, 180], [50150, 90]]
+                "asks": [[50050, 120], [50100, 180], [50150, 90]],
             }
 
             # Enhance with smart money
@@ -113,7 +132,7 @@ class SmartMoneyIntegrationTester:
                 asset=asset,
                 price_data=price_data,
                 volume_data=volume_data,
-                order_book_data=order_book_data
+                order_book_data=order_book_data,
             )
 
             success = integration_result.get("success", False)
@@ -123,9 +142,13 @@ class SmartMoneyIntegrationTester:
                 "success": success,
                 "details": {
                     "integration_result": integration_result,
-                    "integration_quality": integration_result.get("integration_quality", 0.0),
-                    "signals_correlated": integration_result.get("integrated_signals", 0)
-                }
+                    "integration_quality": integration_result.get(
+                        "integration_quality", 0.0
+                    ),
+                    "signals_correlated": integration_result.get(
+                        "integrated_signals", 0
+                    ),
+                },
             }
 
         except Exception as e:
@@ -133,7 +156,7 @@ class SmartMoneyIntegrationTester:
             return {
                 "component": "Wall Street-Smart Money Integration",
                 "success": False,
-                "error": str(e)
+                "error": str(e),
             }
 
     def test_order_flow_analysis(self) -> Dict[str, Any]:
@@ -147,11 +170,13 @@ class SmartMoneyIntegrationTester:
             # Simulate order book with imbalance
             order_book_data = {
                 "bids": [[49950, 500], [49900, 300], [49850, 200]],  # Strong bid side
-                "asks": [[50050, 100], [50100, 80], [50150, 60]]     # Weak ask side
+                "asks": [[50050, 100], [50100, 80], [50150, 60]],  # Weak ask side
             }
 
             # Calculate order flow imbalance
-            ofi_signal = smart_money._calculate_order_flow_imbalance("BTC/USDT", order_book_data)
+            ofi_signal = smart_money._calculate_order_flow_imbalance(
+                "BTC/USDT", order_book_data
+            )
 
             success = ofi_signal is not None and ofi_signal.order_flow_imbalance > 0
 
@@ -160,10 +185,18 @@ class SmartMoneyIntegrationTester:
                 "success": success,
                 "details": {
                     "signal_generated": ofi_signal is not None,
-                    "order_flow_imbalance": ofi_signal.order_flow_imbalance if ofi_signal else 0.0,
-                    "bid_pressure_detected": ofi_signal.volume_signature.get("bid_pressure", False) if ofi_signal else False,
-                    "execution_urgency": ofi_signal.execution_urgency if ofi_signal else "unknown"
-                }
+                    "order_flow_imbalance": ofi_signal.order_flow_imbalance
+                    if ofi_signal
+                    else 0.0,
+                    "bid_pressure_detected": ofi_signal.volume_signature.get(
+                        "bid_pressure", False
+                    )
+                    if ofi_signal
+                    else False,
+                    "execution_urgency": ofi_signal.execution_urgency
+                    if ofi_signal
+                    else "unknown",
+                },
             }
 
         except Exception as e:
@@ -171,7 +204,7 @@ class SmartMoneyIntegrationTester:
             return {
                 "component": "Order Flow Analysis",
                 "success": False,
-                "error": str(e)
+                "error": str(e),
             }
 
     def test_whale_detection(self) -> Dict[str, Any]:
@@ -189,7 +222,9 @@ class SmartMoneyIntegrationTester:
             price_data = [50000, 50100, 50050, 50200, 50150, 50500]  # Price impact
 
             # Detect whale activity
-            whale_signal = smart_money._detect_whale_activity("BTC/USDT", whale_volume, price_data)
+            whale_signal = smart_money._detect_whale_activity(
+                "BTC/USDT", whale_volume, price_data
+            )
 
             success = whale_signal is not None and whale_signal.whale_activity
 
@@ -197,11 +232,21 @@ class SmartMoneyIntegrationTester:
                 "component": "Whale Activity Detection",
                 "success": success,
                 "details": {
-                    "whale_detected": whale_signal.whale_activity if whale_signal else False,
-                    "volume_spike": whale_signal.volume_signature.get("volume_spike", 0.0) if whale_signal else 0.0,
-                    "volume_usd": whale_signal.volume_signature.get("volume_usd", 0.0) if whale_signal else 0.0,
-                    "execution_urgency": whale_signal.execution_urgency if whale_signal else "unknown"
-                }
+                    "whale_detected": whale_signal.whale_activity
+                    if whale_signal
+                    else False,
+                    "volume_spike": whale_signal.volume_signature.get(
+                        "volume_spike", 0.0
+                    )
+                    if whale_signal
+                    else 0.0,
+                    "volume_usd": whale_signal.volume_signature.get("volume_usd", 0.0)
+                    if whale_signal
+                    else 0.0,
+                    "execution_urgency": whale_signal.execution_urgency
+                    if whale_signal
+                    else "unknown",
+                },
             }
 
         except Exception as e:
@@ -209,7 +254,7 @@ class SmartMoneyIntegrationTester:
             return {
                 "component": "Whale Activity Detection",
                 "success": False,
-                "error": str(e)
+                "error": str(e),
             }
 
     def test_vwap_analysis(self) -> Dict[str, Any]:
@@ -222,10 +267,12 @@ class SmartMoneyIntegrationTester:
 
             # Test data with clear VWAP deviation
             price_data = [50000, 50100, 50200, 50300, 50400]  # Trending up
-            volume_data = [1000, 1200, 1500, 1800, 2000]     # Increasing volume
+            volume_data = [1000, 1200, 1500, 1800, 2000]  # Increasing volume
 
             # Calculate VWAP signal
-            vwap_signal = smart_money._calculate_vwap_signal("BTC/USDT", price_data, volume_data)
+            vwap_signal = smart_money._calculate_vwap_signal(
+                "BTC/USDT", price_data, volume_data
+            )
 
             success = vwap_signal is not None and vwap_signal.signal_strength > 0
 
@@ -234,19 +281,23 @@ class SmartMoneyIntegrationTester:
                 "success": success,
                 "details": {
                     "signal_generated": vwap_signal is not None,
-                    "vwap_value": vwap_signal.volume_signature.get("vwap", 0.0) if vwap_signal else 0.0,
-                    "price_deviation": vwap_signal.volume_signature.get("deviation", 0.0) if vwap_signal else 0.0,
-                    "institutional_confidence": vwap_signal.institutional_confidence if vwap_signal else 0.0
-                }
+                    "vwap_value": vwap_signal.volume_signature.get("vwap", 0.0)
+                    if vwap_signal
+                    else 0.0,
+                    "price_deviation": vwap_signal.volume_signature.get(
+                        "deviation", 0.0
+                    )
+                    if vwap_signal
+                    else 0.0,
+                    "institutional_confidence": vwap_signal.institutional_confidence
+                    if vwap_signal
+                    else 0.0,
+                },
             }
 
         except Exception as e:
             logger.error(f"VWAP analysis test failed: {e}")
-            return {
-                "component": "VWAP Analysis",
-                "success": False,
-                "error": str(e)
-            }
+            return {"component": "VWAP Analysis", "success": False, "error": str(e)}
 
     def test_dark_pool_detection(self) -> Dict[str, Any]:
         """Test dark pool activity detection."""
@@ -260,7 +311,9 @@ class SmartMoneyIntegrationTester:
             high_variance_volume = [1000, 500, 2000, 800, 1800, 600, 2200]
 
             # Calculate dark pool index
-            dpi_signal = smart_money._calculate_dark_pool_index("BTC/USDT", high_variance_volume)
+            dpi_signal = smart_money._calculate_dark_pool_index(
+                "BTC/USDT", high_variance_volume
+            )
 
             success = dpi_signal is not None and dpi_signal.dark_pool_activity > 0
 
@@ -269,10 +322,18 @@ class SmartMoneyIntegrationTester:
                 "success": success,
                 "details": {
                     "signal_generated": dpi_signal is not None,
-                    "dark_pool_estimate": dpi_signal.volume_signature.get("dark_pool_estimate", 0.0) if dpi_signal else 0.0,
-                    "dark_pool_activity": dpi_signal.dark_pool_activity if dpi_signal else 0.0,
-                    "institutional_confidence": dpi_signal.institutional_confidence if dpi_signal else 0.0
-                }
+                    "dark_pool_estimate": dpi_signal.volume_signature.get(
+                        "dark_pool_estimate", 0.0
+                    )
+                    if dpi_signal
+                    else 0.0,
+                    "dark_pool_activity": dpi_signal.dark_pool_activity
+                    if dpi_signal
+                    else 0.0,
+                    "institutional_confidence": dpi_signal.institutional_confidence
+                    if dpi_signal
+                    else 0.0,
+                },
             }
 
         except Exception as e:
@@ -280,7 +341,7 @@ class SmartMoneyIntegrationTester:
             return {
                 "component": "Dark Pool Detection",
                 "success": False,
-                "error": str(e)
+                "error": str(e),
             }
 
     def run_all_tests(self) -> Dict[str, Any]:
@@ -294,7 +355,7 @@ class SmartMoneyIntegrationTester:
             self.test_order_flow_analysis,
             self.test_whale_detection,
             self.test_vwap_analysis,
-            self.test_dark_pool_detection
+            self.test_dark_pool_detection,
         ]
 
         results = []
@@ -306,7 +367,9 @@ class SmartMoneyIntegrationTester:
 
                 status = "✅" if result["success"] else "❌"
                 component = result["component"]
-                safe_print(f"  {status} {component}: {'PASS' if result['success'] else 'FAIL'}")
+                safe_print(
+                    f"  {status} {component}: {'PASS' if result['success'] else 'FAIL'}"
+                )
 
                 if not result["success"] and "error" in result:
                     safe_print(f"    Error: {result['error']}")
@@ -314,25 +377,33 @@ class SmartMoneyIntegrationTester:
                     # Show key metrics for successful tests
                     details = result["details"]
                     if "signals_generated" in details:
-                        safe_print(f"    Signals Generated: {details['signals_generated']}")
+                        safe_print(
+                            f"    Signals Generated: {details['signals_generated']}"
+                        )
                     if "whale_detected" in details:
                         safe_print(f"    Whale Activity: {details['whale_detected']}")
                     if "integration_quality" in details:
-                        safe_print(f"    Integration Quality: {details['integration_quality']:.2f}")
+                        safe_print(
+                            f"    Integration Quality: {details['integration_quality']:.2f}"
+                        )
 
             except Exception as e:
                 safe_print(f"  ❌ {test_method.__name__}: CRITICAL FAILURE")
                 safe_print(f"    Error: {e}")
-                results.append({
-                    "component": test_method.__name__,
-                    "success": False,
-                    "error": str(e)
-                })
+                results.append(
+                    {
+                        "component": test_method.__name__,
+                        "success": False,
+                        "error": str(e),
+                    }
+                )
 
         # Calculate overall success rate
         successful_tests = sum(1 for r in results if r["success"])
         total_tests = len(results)
-        success_rate = (successful_tests / total_tests) * 100 if total_tests > 0 else 0.0
+        success_rate = (
+            (successful_tests / total_tests) * 100 if total_tests > 0 else 0.0
+        )
 
         safe_print("\n" + "=" * 60)
         safe_print("📊 SMART MONEY INTEGRATION TEST RESULTS")
@@ -345,7 +416,9 @@ class SmartMoneyIntegrationTester:
         elif success_rate >= 70:
             safe_print("✅ Good! Most smart money features are working correctly.")
         elif success_rate >= 50:
-            safe_print("⚠️  Partial success. Some smart money components need attention.")
+            safe_print(
+                "⚠️  Partial success. Some smart money components need attention."
+            )
         else:
             safe_print("❌ Multiple smart money components need debugging.")
 
@@ -353,7 +426,7 @@ class SmartMoneyIntegrationTester:
             "overall_success_rate": success_rate,
             "successful_tests": successful_tests,
             "total_tests": total_tests,
-            "detailed_results": results
+            "detailed_results": results,
         }
 
 
@@ -365,4 +438,6 @@ def main() -> Dict[str, Any]:
 
 if __name__ == "__main__":
     results = main()
-    safe_print(f"\nSmart Money Testing completed with {results['overall_success_rate']:.1f}% success rate")
+    safe_print(
+        f"\nSmart Money Testing completed with {results['overall_success_rate']:.1f}% success rate"
+    )

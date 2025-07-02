@@ -23,7 +23,7 @@ This script demonstrates the core mathematical frameworks without external depen
 import math
 import time
 import hashlib
-from typing import Dict, List, Tuple
+from typing import Tuple
 import numpy as np
 
 
@@ -36,7 +36,9 @@ def compute_drift_shell_velocity(prices: list[float]) -> float:
     return drift_velocity
 
 
-def calculate_tdcf(delta_t: float, sigma_tick: float, alpha_exec: float, rho_hash: float) -> float:
+def calculate_tdcf(
+    delta_t: float, sigma_tick: float, alpha_exec: float, rho_hash: float
+) -> float:
     """
     Calculate Temporal Drift Compensation Formula (TDCF).
 
@@ -55,7 +57,9 @@ def calculate_tdcf(delta_t: float, sigma_tick: float, alpha_exec: float, rho_has
     return max(0.0, min(1.0, validity))
 
 
-def calculate_bcoe(volatility: float, volume_spike: float, profit_projection: float) -> Tuple[float, float]:
+def calculate_bcoe(
+    volatility: float, volume_spike: float, profit_projection: float
+) -> Tuple[float, float]:
     """
     Calculate Bitmap Confidence Overlay Equation (BCOE).
 
@@ -94,8 +98,12 @@ def calculate_bcoe(volatility: float, volume_spike: float, profit_projection: fl
     return bitmap_16_confidence, bitmap_10k_confidence
 
 
-def calculate_pvf(hash_gradient: float, momentum: float, rsi: float,
-                  phase_vector: Tuple[float, float, float]) -> Tuple[float, float, float, float]:
+def calculate_pvf(
+    hash_gradient: float,
+    momentum: float,
+    rsi: float,
+    phase_vector: Tuple[float, float, float],
+) -> Tuple[float, float, float, float]:
     """
     Calculate Profit Vectorization Forecast (PVF).
 
@@ -130,8 +138,12 @@ def calculate_pvf(hash_gradient: float, momentum: float, rsi: float,
     return pv_x, pv_y, pv_z, magnitude
 
 
-def calculate_cif(deviation_magnitude: float, epsilon: float = 0.3,
-                  beta: float = 0.4, delta: float = 0.3) -> Tuple[float, float, float]:
+def calculate_cif(
+    deviation_magnitude: float,
+    epsilon: float = 0.3,
+    beta: float = 0.4,
+    delta: float = 0.3,
+) -> Tuple[float, float, float]:
     """
     Calculate Correction Injection Function (CIF).
 
@@ -154,9 +166,13 @@ def calculate_cif(deviation_magnitude: float, epsilon: float = 0.3,
     return quantum_correction, tensor_correction, smart_money_correction
 
 
-def calculate_unified_confidence(validity: float, bitmap_confidence: float,
-                                pv_magnitude: float, correction_total: float,
-                                activation_threshold: float = 0.7) -> Tuple[bool, float]:
+def calculate_unified_confidence(
+    validity: float,
+    bitmap_confidence: float,
+    pv_magnitude: float,
+    correction_total: float,
+    activation_threshold: float = 0.7,
+) -> Tuple[bool, float]:
     """
     Calculate Unified Confidence Validator.
 
@@ -173,7 +189,9 @@ def calculate_unified_confidence(validity: float, bitmap_confidence: float,
         Tuple of (should_activate, total_confidence)
     """
     # Unified confidence calculation
-    total_confidence = validity + bitmap_confidence + min(pv_magnitude, 1.0) + correction_total
+    total_confidence = (
+        validity + bitmap_confidence + min(pv_magnitude, 1.0) + correction_total
+    )
 
     # Activation decision
     should_activate = total_confidence >= activation_threshold
@@ -227,7 +245,9 @@ def demonstrate_drift_shell_mathematics():
     momentum = 0.4
     rsi = 60
     phase_vector = (0.1, 0.05, 0.02)
-    pv_x, pv_y, pv_z, pv_magnitude = calculate_pvf(hash_gradient, momentum, rsi, phase_vector)
+    pv_x, pv_y, pv_z, pv_magnitude = calculate_pvf(
+        hash_gradient, momentum, rsi, phase_vector
+    )
     print(f"  PVF Magnitude: {pv_magnitude:.3f}")
 
     # CIF - Low deviation
@@ -241,7 +261,9 @@ def demonstrate_drift_shell_mathematics():
         validity, b16, pv_magnitude, correction_total
     )
     print(f"  Total Confidence: {total_confidence:.3f}")
-    print(f"  Activation Decision: {'✅ ACTIVATE' if should_activate else '❌ DO NOT ACTIVATE'}")
+    print(
+        f"  Activation Decision: {'✅ ACTIVATE' if should_activate else '❌ DO NOT ACTIVATE'}"
+    )
     print()
 
     # Scenario 2: High volatility, stale memory
@@ -283,7 +305,9 @@ def demonstrate_drift_shell_mathematics():
         validity, b10k, pv_magnitude, correction_total, activation_threshold=0.8
     )
     print(f"  Total Confidence: {total_confidence:.3f}")
-    print(f"  Activation Decision: {'✅ ACTIVATE' if should_activate else '❌ DO NOT ACTIVATE'}")
+    print(
+        f"  Activation Decision: {'✅ ACTIVATE' if should_activate else '❌ DO NOT ACTIVATE'}"
+    )
     print()
 
     # Scenario 3: Drift Shell Velocity Test
@@ -306,4 +330,4 @@ def create_mock_hash() -> str:
 
 
 if __name__ == "__main__":
-    demonstrate_drift_shell_mathematics() 
+    demonstrate_drift_shell_mathematics()

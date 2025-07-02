@@ -5,12 +5,11 @@ Simple Live Panel System Test
 
 import sys
 import time
-import json
-from datetime import datetime
 
 # Import only the visualizer
 try:
     from core.speed_lattice_visualizer import SpeedLatticeLivePanelSystem, PanelType
+
     print("✅ Successfully imported SpeedLatticeLivePanelSystem")
 except ImportError as e:
     print(f"❌ Import error: {e}")
@@ -35,15 +34,15 @@ def simple_test():
             PanelType.DRIFT_MATRIX,
             PanelType.TRADING_STATE,
             PanelType.POOL_ANALYSIS,
-            PanelType.PATTERN_RECOGNITION
-]
+            PanelType.PATTERN_RECOGNITION,
+        ]
         for panel_type in test_panels:
             panel_system.switch_panel(panel_type)
             print(f"✅ Switched to: {panel_type.value}")
 
         # Test data generation
         for panel_type in test_panels:
-            data = panel_system._generate_simulation_data(f"api/test/{panel_type.value}")
+            panel_system._generate_simulation_data(f"api/test/{panel_type.value}")
             print(f"✅ Generated data for {panel_type.value}")
 
         # Test state management
@@ -58,10 +57,15 @@ def simple_test():
 
         # Test system status
         status_items = [
-            ('Total Panels', len(panel_system.panels)),
-            ('API Connections', len(panel_system.api_connections)),
-            ('Current Panel', panel_system.current_panel.value if panel_system.current_panel else None)
-]
+            ("Total Panels", len(panel_system.panels)),
+            ("API Connections", len(panel_system.api_connections)),
+            (
+                "Current Panel",
+                panel_system.current_panel.value
+                if panel_system.current_panel
+                else None,
+            ),
+        ]
         for item, value in status_items:
             print(f"✅ {item}: {value}")
 
@@ -74,6 +78,7 @@ def simple_test():
     except Exception as e:
         print(f"❌ Test failed: {e}")
         import traceback
+
         traceback.print_exc()
         return False
 

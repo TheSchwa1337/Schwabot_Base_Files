@@ -9,12 +9,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 from collections import deque
 from typing import Tuple
-from typing import Callable
-
-
-
-"""Ghost Core - Hash-Based Strategy Switching System"
-===================================================
+from typing import CallableGhost Core - Hash-Based Strategy Switching System ===================================================
 
 Implements the Ghost Core system for:
 - Hash-based strategy transitions
@@ -23,41 +18,22 @@ Implements the Ghost Core system for:
 - Profit vector optimization
 
 This system uses SHA256 hashing to trigger strategy switches based on
-market conditions and internal mathematical states."
-"""
-
-logger = logging.getLogger(__name__)
+market conditions and internal mathematical states.logger = logging.getLogger(__name__)
 
 
-class StrategyBranch(Enum):"
-    """Enumeration of available strategy branches.""""
-MEAN_REVERSION = "mean_reversion""
-MOMENTUM = "momentum""
-ARBITRAGE = "arbitrage""
-GHOST_ACCUMULATION = "ghost_accumulation""
-GHOST_DISTRIBUTION = "ghost_distribution""
-MATRIX_OPTIMIZED = "matrix_optimized""
-KELLY_ENHANCED = "kelly_enhanced""
-HOLOGRAPHIC_MEMORY = "holographic_memory"
-
-
-@dataclass
-class GhostState:"
-    """Represents the current Ghost Core state."""
-timestamp: float
+class StrategyBranch(Enum):Enumeration of available strategy branches."MEAN_REVERSION = mean_reversionMOMENTUM =  momentumARBITRAGE = arbitrageGHOST_ACCUMULATION =  ghost_accumulationGHOST_DISTRIBUTION = ghost_distributionMATRIX_OPTIMIZED =  matrix_optimizedKELLY_ENHANCED = kelly_enhancedHOLOGRAPHIC_MEMORY =  holographic_memory@dataclass
+class GhostState:Represents the current Ghost Core state.timestamp: float
 current_branch: StrategyBranch
 hash_signature: str
 confidence: float
 profit_potential: float
 memory_depth: int
 mathematical_complexity: float
-market_conditions: Dict[str, Any] = field(default_factory=dict)
+market_conditions: Dict[str, Any] = field(default_factory = dict)
 
 
 @dataclass
-class StrategyMemory:"
-    """Memory structure for strategy performance tracking."""
-branch: StrategyBranch
+class StrategyMemory:Memory structure for strategy performance tracking.branch: StrategyBranch
 total_trades: int = 0
 winning_trades: int = 0
 total_profit: float = 0.0
@@ -68,8 +44,7 @@ hash_triggers: List[str] = field(default_factory=list)
 mathematical_states: List[Dict[str, Any]] = field(default_factory=list)
 
 
-class GhostCore:"
-    """
+class GhostCore:
 Ghost Core system for hash-based strategy switching and internalized memory.
 
 This system implements:
@@ -77,12 +52,7 @@ This system implements:
 2. Multi-branch mathematical processing
 3. Internalized memory management
 4. Profit vector optimization
-5. Market condition analysis"
-"""
-
-def __init__(self, memory_depth: int = 1000):"
-        """Initialize Ghost Core system."""
-self.memory_depth = memory_depth
+5. Market condition analysisdef __init__():Initialize Ghost Core system.self.memory_depth = memory_depth
 self.current_state: Optional[GhostState] = None
 self.strategy_memories: Dict[StrategyBranch, StrategyMemory] = {}
 self.hash_history: deque = deque(maxlen=memory_depth)
@@ -93,15 +63,9 @@ for branch in StrategyBranch:
             self.strategy_memories[branch] = StrategyMemory(branch=branch)
 
 # Mathematical processing functions
-self.math_processors: Dict[str, Callable] = {"
-"kelly_optimization": self._kelly_optimization,"
-"matrix_analysis": self._matrix_analysis,"
-"holographic_memory": self._holographic_memory_analysis,"
-"profit_vector": self._profit_vector_analysis,"
-"volatility_analysis": self._volatility_analysis
+self.math_processors: Dict[str, Callable] = {kelly_optimization: self._kelly_optimization,matrix_analysis: self._matrix_analysis,holographic_memory: self._holographic_memory_analysis,profit_vector: self._profit_vector_analysis,volatility_analysis": self._volatility_analysis
 }
-"
-            logger.info("👻 Ghost Core initialized with memory depth %d", memory_depth)
+            logger.info(👻 Ghost Core initialized with memory depth %d", memory_depth)
 
 def generate_strategy_hash(
 self,:
@@ -110,9 +74,7 @@ volume: float,
 granularity: int,
 tick_index: int,
 mathematical_state: Optional[Dict[str, Any]] = None
-) -> str:"
-        """
-Generate strategy hash based on market conditions and mathematical state.
+) -> str:Generate strategy hash based on market conditions and mathematical state.
 
 Args:
             price: Current price
@@ -122,37 +84,29 @@ tick_index: Current tick index
 mathematical_state: Current mathematical state
 
 Returns:
-            SHA256 hash signature"
-"""
-# Create payload with all relevant information
-payload_parts = ["
-f"{price:.{granularity}f}","
-f"{volume:.2f}",
+            SHA256 hash signature"# Create payload with all relevant information
+payload_parts = [f{price:.{granularity}f},
+f{volume:.2f},
 str(granularity),
 str(tick_index),
 str(int(time.time())),
 ]
 
 # Add mathematical state if provided
-if mathematical_state:"
-            math_str = "|".join([f"{k}:{v}" for k, v in sorted(mathematical_state.items())])
+if mathematical_state: math_str = |.join([f{k}:{v} for k, v in sorted(mathematical_state.items())])
 payload_parts.append(math_str)
 
 # Add current Ghost state if available
 if self.current_state:
             payload_parts.append(self.current_state.hash_signature)
 
-# Combine and hash"
-payload = "_".join(payload_parts)
+# Combine and hash
+payload =  _.join(payload_parts)
 hash_signature = hashlib.sha256(payload.encode()).hexdigest()[:16]
 
 # Store in history
 self.hash_history.append({
-'timestamp': time.time(),'
-'hash': hash_signature,'
-'payload': payload,'
-'granularity': granularity,'
-'tick_index': tick_index
+'timestamp': time.time(),'hash': hash_signature,'payload': payload,'granularity': granularity,'tick_index': tick_index
 })
 
         return hash_signature
@@ -162,8 +116,8 @@ self,:
 hash_signature: str,
 market_conditions: Dict[str, Any],
 mathematical_state: Optional[Dict[str, Any]] = None
-) -> StrategyBranch:"
-        """
+) -> StrategyBranch:
+        
 Determine which strategy branch to activate based on hash and conditions.
 
 Args:
@@ -172,9 +126,7 @@ market_conditions: Current market conditions
 mathematical_state: Current mathematical state
 
 Returns:
-            Strategy branch to activate"
-"""
-# Use hash to determine branch (first 4 characters)
+            Strategy branch to activate# Use hash to determine branch (first 4 characters)
 hash_prefix = hash_signature[:4]
 hash_value = int(hash_prefix, 16)  # Convert to integer
 
@@ -193,8 +145,7 @@ branches = list(StrategyBranch)
 # Apply mathematical optimization to branch selection
 if math_complexity > 0.8:
             # High complexity: prefer advanced strategies
-if branch_index < 4:
-                branch_index = (branch_index + 4) % len(branches)
+if branch_index < 4: branch_index = (branch_index + 4) % len(branches)
 elif volatility > 0.05:
             # High volatility: prefer conservative strategies
 if branch_index >= 4:
@@ -219,8 +170,8 @@ self,:
 hash_signature: str,
 market_conditions: Dict[str, Any],
 mathematical_state: Optional[Dict[str, Any]] = None
-) -> GhostState:"
-        """
+) -> GhostState:
+        
 Switch to a new strategy based on hash and conditions.
 
 Args:
@@ -229,9 +180,7 @@ market_conditions: Current market conditions
 mathematical_state: Current mathematical state
 
 Returns:
-            New Ghost state"
-"""
-# Determine new strategy branch
+            New Ghost state# Determine new strategy branch
 new_branch = (
 self.determine_strategy_branch(hash_signature, market_conditions, mathematical_state))
 
@@ -259,8 +208,8 @@ market_conditions=market_conditions.copy()
 self.current_state = new_state
 
 # Log strategy switch
-            logger.info("
-"🔀 Ghost Core strategy switch: %s (hash=%s, confidence=%.3f, profit_potential=%.4f)",
+            logger.info(
+🔀 Ghost Core strategy switch: %s (hash = %s, confidence=%.3f, profit_potential=%.4f),
             new_branch.value, hash_signature, confidence, profit_potential
 )
 
@@ -270,15 +219,11 @@ def update_strategy_performance(
 self,:
 branch: StrategyBranch,
 trade_result: Dict[str, Any]
-) -> None:"
-        """
-Update strategy performance memory.
+) -> None:Update strategy performance memory.
 
 Args:
             branch: Strategy branch that was used
-trade_result: Result of the trade"
-"""
-memory = self.strategy_memories[branch]
+trade_result: Result of the tradememory = self.strategy_memories[branch]
 memory.total_trades += 1
 '
 profit = trade_result.get('profit', 0.0)
@@ -300,8 +245,7 @@ def get_optimal_strategy(
 self,:
 market_conditions: Dict[str, Any],
 mathematical_state: Optional[Dict[str, Any]] = None
-) -> StrategyBranch:"
-        """
+) -> StrategyBranch:
 Get the optimal strategy based on current conditions and historical performance.
 
 Args:
@@ -309,9 +253,7 @@ Args:
 mathematical_state: Current mathematical state
 
 Returns:
-            Optimal strategy branch"
-"""
-# Calculate performance scores for each branch
+            Optimal strategy branch# Calculate performance scores for each branch
 scores = {}
 for branch, memory in self.strategy_memories.items():
             if memory.total_trades == 0:
@@ -335,17 +277,15 @@ self,:
 branch: StrategyBranch,
 market_conditions: Dict[str, Any],
 mathematical_state: Optional[Dict[str, Any]] = None
-) -> float:"
-        """Calculate profit potential for a strategy branch."""
-        base_potential = 0.01  # 1% base potential
+) -> float:
+        Calculate profit potential for a strategy branch.base_potential = 0.01  # 1% base potential
 
 # Adjust based on market conditions'
 volatility = market_conditions.get('volatility', 0.02)'
         momentum = market_conditions.get('momentum', 0.0)
 
 # Branch-specific adjustments
-if branch == StrategyBranch.MOMENTUM:
-            potential = base_potential * (1.0 + abs(momentum) * 10)
+if branch == StrategyBranch.MOMENTUM: potential = base_potential * (1.0 + abs(momentum) * 10)
 elif branch == StrategyBranch.MEAN_REVERSION:
             potential = base_potential * (1.0 + volatility * 5)
 elif branch == StrategyBranch.ARBITRAGE:
@@ -362,25 +302,22 @@ if mathematical_state:'
 
         return min(0.1, max(0.001, potential))  # Clamp between 0.1% and 10%
 
-def _kelly_optimization(self, data: Dict[str, Any]) -> Dict[str, Any]:"
-        """Kelly criterion optimization."""'
+def _kelly_optimization(self, data: Dict[str, Any]) -> Dict[str, Any]:
+        Kelly criterion optimization.'
 win_rate = data.get('win_rate', 0.5)'
         avg_win = data.get('avg_win', 0.02)'
         avg_loss = data.get('avg_loss', 0.01)
 
-if avg_loss > 0:
-            kelly_fraction = (win_rate * avg_win - (1 - win_rate) * avg_loss) / avg_win
+if avg_loss > 0: kelly_fraction = (win_rate * avg_win - (1 - win_rate) * avg_loss) / avg_win
 kelly_fraction = max(0.0, min(0.25, kelly_fraction))  # Conservative cap
 else:
             kelly_fraction = 0.1
 
-        return {'
-'kelly_fraction': kelly_fraction,'
-'optimization_type': 'kelly_criterion'
+        return {'kelly_fraction': kelly_fraction,'optimization_type': 'kelly_criterion'
 }
 
-def _matrix_analysis(self, data: Dict[str, Any]) -> Dict[str, Any]:"
-        """Matrix analysis for strategy optimization."""'
+def _matrix_analysis(self, data: Dict[str, Any]) -> Dict[str, Any]:
+        Matrix analysis for strategy optimization.'
 prices = data.get('prices', [])
 if len(prices) < 10:'
             return {'complexity': 0.5, 'stability': 0.5}
@@ -390,28 +327,19 @@ returns = np.diff(np.log(prices))
         complexity = min(1.0, volatility * 100)
         stability = 1.0 / (1.0 + complexity)
 
-        return {'
-'complexity': complexity,'
-'stability': stability,'
-'volatility': volatility
+        return {'complexity': complexity,'stability': stability,'volatility': volatility
 }
 
-def _holographic_memory_analysis(self, data: Dict[str, Any]) -> Dict[str, Any]:"
-        """Holographic memory analysis."""
-memory_depth = len(self.hash_history)'
+def _holographic_memory_analysis(self, data: Dict[str, Any]) -> Dict[str, Any]:Holographic memory analysis.memory_depth = len(self.hash_history)'
         pattern_count = len(set([h['hash'] for h in self.hash_history]))
 
 memory_efficiency = pattern_count / max(memory_depth, 1)
 holographic_score = memory_efficiency * (1.0 - 1.0 / max(memory_depth, 1))
 
-        return {'
-'memory_efficiency': memory_efficiency,'
-'holographic_score': holographic_score,'
-'pattern_diversity': pattern_count
+        return {'memory_efficiency': memory_efficiency,'holographic_score': holographic_score,'pattern_diversity': pattern_count
 }
 
-def _profit_vector_analysis(self, data: Dict[str, Any]) -> Dict[str, Any]:"
-        """Profit vector analysis."""'
+def _profit_vector_analysis(self, data: Dict[str, Any]) -> Dict[str, Any]:Profit vector analysis.'
         profits = data.get('profits', [])
         if not profits:'
             return {'vector_magnitude': 0.0, 'direction': 'neutral'}
@@ -420,14 +348,10 @@ profit_array = np.array(profits)
         magnitude = np.linalg.norm(profit_array)'
         direction = 'positive' if np.mean(profit_array) > 0 else 'negative'
 
-        return {'
-'vector_magnitude': magnitude,'
-'direction': direction,'
-'profit_trend': np.mean(profit_array)
+        return {'vector_magnitude': magnitude,'direction': direction,'profit_trend': np.mean(profit_array)
 }
 
-def _volatility_analysis(self, data: Dict[str, Any]) -> Dict[str, Any]:"
-        """Volatility analysis."""'
+def _volatility_analysis(self, data: Dict[str, Any]) -> Dict[str, Any]:Volatility analysis.'
 prices = data.get('prices', [])
 if len(prices) < 5:'
             return {'volatility': 0.02, 'regime': 'normal'}
@@ -443,53 +367,31 @@ elif volatility < 0.3:'
 else:'
             regime = 'high'
 
-        return {'
-'volatility': volatility,'
-'regime': regime,'
-'annualized': volatility
+        return {'volatility': volatility,'regime': regime,'annualized': volatility
 }
 
-def get_system_status(self) -> Dict[str, Any]:"
-        """Get comprehensive system status."""
-        return {'
-'current_branch': self.current_state.current_branch.value if self.current_state else
-None,'
-'memory_depth': len(self.hash_history),'
-            'strategy_performance': {
-branch.value: {'
-'total_trades': memory.total_trades,'
-'success_rate': memory.success_rate,'
-'avg_profit': memory.avg_profit
+def get_system_status(self) -> Dict[str, Any]:Get comprehensive system status.return {'current_branch': self.current_state.current_branch.value if self.current_state else
+None,'memory_depth': len(self.hash_history),'strategy_performance': {
+branch.value: {'total_trades': memory.total_trades,'success_rate': memory.success_rate,'avg_profit': memory.avg_profit
 }
 for branch, memory in self.strategy_memories.items():
-},'
-'mathematical_processors': list(self.math_processors.keys()),'
-'hash_history_size': len(self.hash_history)
+},'mathematical_processors': list(self.math_processors.keys()),'hash_history_size': len(self.hash_history)
 }
 
 
-def demo_ghost_core():"
-    """Demonstrate Ghost Core functionality.""""
-print("👻 Ghost Core Demo")"
-print("=" * 50)
+def demo_ghost_core():Demonstrate Ghost Core functionality.print(👻 Ghost Core Demo)print(=* 50)
 
 # Initialize Ghost Core
 ghost = GhostCore(memory_depth=100)
 
 # Simulate market conditions
-market_conditions = {'
-'volatility': 0.025,'
-        'momentum': 0.01,'
-        'volume_profile': 1.2
+market_conditions = {'volatility': 0.025,'momentum': 0.01,'volume_profile': 1.2
 }
 
-mathematical_state = {'
-'complexity': 0.7,'
-        'stability': 0.8,'
-        'kelly_fraction': 0.15
+mathematical_state = {'complexity': 0.7,'stability': 0.8,'kelly_fraction': 0.15
 }
-"
-print("\nGenerating strategy hashes and switching:")
+
+print(\nGenerating strategy hashes and switching:)
 
 for i in range(10):
         # Generate hash
@@ -503,23 +405,11 @@ mathematical_state=mathematical_state
 
 # Switch strategy
 state = ghost.switch_strategy(hash_sig, market_conditions, mathematical_state)
-"
-print(f"Tick {i}: Hash={hash_sig[:8]}... → {state.current_branch.value}")"
-        print(f"  Confidence: {state.confidence:.3f}, Profit Potential:""
-{state.profit_potential:.4f}")"
 
-# Show system status
-status = ghost.get_system_status()"
-print("\nSystem Status:")'"
-print(f"  Current Branch: {status['current_branch']}")'"
-print(f"  Memory Depth: {status['memory_depth']}")'"
-print(f"  Hash History Size: {status['hash_history_size']}")
-"
-print("\n✅ Ghost Core demo completed!")
-
-"
-if __name__ == "__main__":
-    demo_ghost_core()
-"
-""""
-"""'"
+print(fTick {i}: Hash = {hash_sig[:8]}... → {state.current_branch.value})
+        print(fConfidence: {state.confidence:.3f}, Profit Potential:{state.profit_potential:.4f})# Show system status
+status = ghost.get_system_status()
+print(\nSystem Status:)'print(fCurrent Branch: {status['current_branch']})'print(fMemory Depth: {status['memory_depth']})'print(fHash History Size: {status['hash_history_size']})
+print(\n✅ Ghost Core demo completed!)
+if __name__ == __main__:
+    demo_ghost_core()""'"

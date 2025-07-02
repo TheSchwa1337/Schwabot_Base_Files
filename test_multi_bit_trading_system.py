@@ -26,12 +26,11 @@ from core.advanced_mathematical_core import (
     calculate_profit_state,
     calculate_kelly_metrics,
 )
-from utils.safe_print import debug, error, info, safe_print, success, warn
+from utils.safe_print import error, info, success, warn
 
 # Configure logging
 logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
 
@@ -52,7 +51,7 @@ class MultiBitTradingSystemTester:
             "mathematical_tests": {},
             "integration_tests": {},
             "performance_tests": {},
-}
+        }
         logger.info("MultiBitTradingSystemTester initialized")
 
     def test_multi_bit_state_management(self) -> Dict[str, Any]:
@@ -65,7 +64,7 @@ class MultiBitTradingSystemTester:
             "mathematical_integration": False,
             "performance_metrics": False,
             "garbage_collection": False,
-}
+        }
         try:
             # Test 1: State Creation
             info("  Testing state creation...")
@@ -74,8 +73,12 @@ class MultiBitTradingSystemTester:
             state_2bit = self.multi_bit_manager.create_memory_state("test_2bit", 2, 0.5)
             state_4bit = self.multi_bit_manager.create_memory_state("test_4bit", 4, 0.7)
             state_8bit = self.multi_bit_manager.create_memory_state("test_8bit", 8, 0.8)
-            state_16bit = self.multi_bit_manager.create_memory_state("test_16bit", 16, 0.9)
-            state_32bit = self.multi_bit_manager.create_memory_state("test_32bit", 32, 1.0)
+            state_16bit = self.multi_bit_manager.create_memory_state(
+                "test_16bit", 16, 0.9
+            )
+            state_32bit = self.multi_bit_manager.create_memory_state(
+                "test_32bit", 32, 1.0
+            )
 
             assert state_2bit.bit_depth == 2
             assert state_4bit.bit_depth == 4
@@ -89,10 +92,18 @@ class MultiBitTradingSystemTester:
             # Test 2: State Transitions
             info("  Testing state transitions...")
 
-            transition1 = self.multi_bit_manager.transition_state("test_2bit", "test_4bit", "upgrade")
-            transition2 = self.multi_bit_manager.transition_state("test_4bit", "test_8bit", "processing")
-            transition3 = self.multi_bit_manager.transition_state("test_8bit", "test_16bit", "gpu_required")
-            transition4 = self.multi_bit_manager.transition_state("test_16bit", "test_32bit", "high_precision")
+            transition1 = self.multi_bit_manager.transition_state(
+                "test_2bit", "test_4bit", "upgrade"
+            )
+            transition2 = self.multi_bit_manager.transition_state(
+                "test_4bit", "test_8bit", "processing"
+            )
+            transition3 = self.multi_bit_manager.transition_state(
+                "test_8bit", "test_16bit", "gpu_required"
+            )
+            transition4 = self.multi_bit_manager.transition_state(
+                "test_16bit", "test_32bit", "high_precision"
+            )
 
             assert transition1.success
             assert transition2.success
@@ -120,7 +131,7 @@ class MultiBitTradingSystemTester:
                     "coupling_strength": 0.8,
                     "decoherence_rate": 0.001,
                 },
-}
+            }
             math_state = self.multi_bit_manager.create_memory_state(
                 "test_math", 32, 1.0, mathematical_state
             )
@@ -173,7 +184,7 @@ class MultiBitTradingSystemTester:
             "void_well": False,
             "profit_state": False,
             "kelly_metrics": False,
-}
+        }
         try:
             # Test 1: Ferris Wheel State
             info("  Testing Ferris wheel state calculation...")
@@ -182,10 +193,12 @@ class MultiBitTradingSystemTester:
             periods = [24.0, 72.0, 168.0]
             current_time = time.time()
 
-            ferris_wheel = calculate_ferris_wheel_state(time_series, periods, current_time)
+            ferris_wheel = calculate_ferris_wheel_state(
+                time_series, periods, current_time
+            )
 
-            assert hasattr(ferris_wheel, 'cycle_position')
-            assert hasattr(ferris_wheel, 'phase_coherence')
+            assert hasattr(ferris_wheel, "cycle_position")
+            assert hasattr(ferris_wheel, "phase_coherence")
             assert 0 <= ferris_wheel.phase_coherence <= 1
 
             results["ferris_wheel"] = True
@@ -197,10 +210,12 @@ class MultiBitTradingSystemTester:
             quantum_state = np.array([0.70710678, 0.70710678])  # |+⟩ state
             temperature = 300.0
 
-            quantum_thermal = calculate_quantum_thermal_state(quantum_state, temperature)
+            quantum_thermal = calculate_quantum_thermal_state(
+                quantum_state, temperature
+            )
 
-            assert hasattr(quantum_thermal, 'temperature')
-            assert hasattr(quantum_thermal, 'thermal_entropy')
+            assert hasattr(quantum_thermal, "temperature")
+            assert hasattr(quantum_thermal, "thermal_entropy")
             assert quantum_thermal.temperature == temperature
 
             results["quantum_thermal"] = True
@@ -214,8 +229,8 @@ class MultiBitTradingSystemTester:
 
             void_well = calculate_void_well_metrics(volume_data, price_data)
 
-            assert hasattr(void_well, 'fractal_index')
-            assert hasattr(void_well, 'volume_divergence')
+            assert hasattr(void_well, "fractal_index")
+            assert hasattr(void_well, "volume_divergence")
             assert void_well.fractal_index >= 0
 
             results["void_well"] = True
@@ -229,10 +244,12 @@ class MultiBitTradingSystemTester:
             time_held = 60.0
             volatility = 0.5
 
-            profit_state = calculate_profit_state(entry_price, exit_price, time_held, volatility)
+            profit_state = calculate_profit_state(
+                entry_price, exit_price, time_held, volatility
+            )
 
-            assert hasattr(profit_state, 'raw_return')
-            assert hasattr(profit_state, 'sharpe_ratio')
+            assert hasattr(profit_state, "raw_return")
+            assert hasattr(profit_state, "sharpe_ratio")
             assert profit_state.raw_return == 0.05  # 5% return
 
             results["profit_state"] = True
@@ -245,10 +262,12 @@ class MultiBitTradingSystemTester:
             expected_return = 0.02
             volatility = 0.5
 
-            kelly_metrics = calculate_kelly_metrics(win_probability, expected_return, volatility)
+            kelly_metrics = calculate_kelly_metrics(
+                win_probability, expected_return, volatility
+            )
 
-            assert hasattr(kelly_metrics, 'kelly_fraction')
-            assert hasattr(kelly_metrics, 'safe_kelly')
+            assert hasattr(kelly_metrics, "kelly_fraction")
+            assert hasattr(kelly_metrics, "safe_kelly")
             assert 0 <= kelly_metrics.safe_kelly <= 0.25  # Max 25%
 
             results["kelly_metrics"] = True
@@ -271,7 +290,7 @@ class MultiBitTradingSystemTester:
             "signal_generation": False,
             "risk_management": False,
             "performance_tracking": False,
-}
+        }
         try:
             # Test 1: Pipeline Initialization
             info("  Testing pipeline initialization...")
@@ -298,15 +317,15 @@ class MultiBitTradingSystemTester:
                 "rsi": 65.0,
                 "macd_signal": 0.01,
                 "moving_average": 61500.0,
-}
+            }
             signal = await self.trading_pipeline.process_market_data(
                 sample_market_data, "BTC", "warm"
             )
 
             assert signal is not None
-            assert hasattr(signal, 'signal_type')
-            assert hasattr(signal, 'confidence')
-            assert hasattr(signal, 'bit_depth')
+            assert hasattr(signal, "signal_type")
+            assert hasattr(signal, "confidence")
+            assert hasattr(signal, "bit_depth")
 
             results["market_data_processing"] = True
             success("    ✓ Market data processing successful")
@@ -314,7 +333,7 @@ class MultiBitTradingSystemTester:
             # Test 3: Signal Generation
             info("  Testing signal generation...")
 
-            assert signal.signal_type in ['buy', 'sell', 'hold']
+            assert signal.signal_type in ["buy", "sell", "hold"]
             assert 0 <= signal.confidence <= 1
             assert signal.bit_depth in [2, 4, 8, 16, 32, 42]
             assert signal.processing_mode in ProcessingMode
@@ -325,7 +344,7 @@ class MultiBitTradingSystemTester:
             # Test 4: Risk Management
             info("  Testing risk management...")
 
-            if signal.signal_type in ['buy', 'sell']:
+            if signal.signal_type in ["buy", "sell"]:
                 assert signal.stop_loss > 0
                 assert signal.take_profit > 0
                 assert signal.position_size >= 0
@@ -364,7 +383,7 @@ class MultiBitTradingSystemTester:
             "alif_analysis": False,
             "historical_consultation": False,
             "bias_mitigation": False,
-}
+        }
         try:
             # Test 1: Engine Initialization
             info("  Testing engine initialization...")
@@ -388,14 +407,16 @@ class MultiBitTradingSystemTester:
                 "moving_average": 61500.0,
                 "previous_close": 61800.0,
                 "volatility": 0.8,
-}
-            thought_vector = self.dualistic_engines.process_market_data(market_data, "warm")
+            }
+            thought_vector = self.dualistic_engines.process_market_data(
+                market_data, "warm"
+            )
 
             assert thought_vector is not None
-            assert hasattr(thought_vector, 'logical_score')
-            assert hasattr(thought_vector, 'intuitive_score')
-            assert hasattr(thought_vector, 'combined_score')
-            assert hasattr(thought_vector, 'decision')
+            assert hasattr(thought_vector, "logical_score")
+            assert hasattr(thought_vector, "intuitive_score")
+            assert hasattr(thought_vector, "combined_score")
+            assert hasattr(thought_vector, "decision")
 
             results["logical_analysis"] = True
             success("    ✓ Logical analysis successful")
@@ -404,7 +425,7 @@ class MultiBitTradingSystemTester:
             info("  Testing intuitive analysis...")
 
             assert 0 <= thought_vector.intuitive_score <= 1
-            assert thought_vector.decision in ['buy', 'sell', 'hold']
+            assert thought_vector.decision in ["buy", "sell", "hold"]
 
             results["intuitive_analysis"] = True
             success("    ✓ Intuitive analysis successful")
@@ -412,9 +433,9 @@ class MultiBitTradingSystemTester:
             # Test 4: ALIF Analysis
             info("  Testing ALIF analysis...")
 
-            assert hasattr(thought_vector, 'alif_score')
-            assert hasattr(thought_vector, 'alif_decision')
-            assert hasattr(thought_vector, 'alif_feedback')
+            assert hasattr(thought_vector, "alif_score")
+            assert hasattr(thought_vector, "alif_decision")
+            assert hasattr(thought_vector, "alif_feedback")
 
             results["alif_analysis"] = True
             success("    ✓ ALIF analysis successful")
@@ -422,8 +443,8 @@ class MultiBitTradingSystemTester:
             # Test 5: Historical Consultation
             info("  Testing historical consultation...")
 
-            assert hasattr(thought_vector, 'historical_adjustment')
-            assert hasattr(thought_vector, 'historical_consultation')
+            assert hasattr(thought_vector, "historical_adjustment")
+            assert hasattr(thought_vector, "historical_consultation")
 
             results["historical_consultation"] = True
             success("    ✓ Historical consultation successful")
@@ -431,7 +452,7 @@ class MultiBitTradingSystemTester:
             # Test 6: Bias Mitigation
             info("  Testing bias mitigation...")
 
-            assert hasattr(thought_vector, 'bias_mitigated')
+            assert hasattr(thought_vector, "bias_mitigated")
 
             results["bias_mitigation"] = True
             success("    ✓ Bias mitigation successful")
@@ -453,7 +474,7 @@ class MultiBitTradingSystemTester:
             "latency_measurement": False,
             "throughput_measurement": False,
             "resource_utilization": False,
-}
+        }
         try:
             # Test 1: Concurrent Processing
             info("  Testing concurrent processing...")
@@ -469,13 +490,21 @@ class MultiBitTradingSystemTester:
                     "volume_change": 0.15 + i * 0.05,
                     "volatility": 0.6 + i * 0.02,
                     "temperature": 310.0 + i * 5,
-                    "price_history": [61000.0 + i * 100, 61500.0 + i * 100, 62000.0 + i * 100],
+                    "price_history": [
+                        61000.0 + i * 100,
+                        61500.0 + i * 100,
+                        62000.0 + i * 100,
+                    ],
                     "volume_data": [100.0 + i * 10, 120.0 + i * 10, 110.0 + i * 10],
-                    "price_data": [61000.0 + i * 100, 61500.0 + i * 100, 62000.0 + i * 100],
+                    "price_data": [
+                        61000.0 + i * 100,
+                        61500.0 + i * 100,
+                        62000.0 + i * 100,
+                    ],
                     "rsi": 65.0 + i * 2,
                     "macd_signal": 0.01 + i * 0.001,
                     "moving_average": 61500.0 + i * 100,
-}
+                }
                 market_data_sets.append(market_data)
 
             # Process all concurrently
@@ -504,6 +533,7 @@ class MultiBitTradingSystemTester:
             info("  Testing memory efficiency...")
 
             import psutil
+
             process = psutil.Process()
             memory_usage = process.memory_info().rss / 1024 / 1024  # MB
 
@@ -518,9 +548,11 @@ class MultiBitTradingSystemTester:
             latency_times = []
             for i in range(5):
                 start = time.time()
-                asyncio.run(self.trading_pipeline.process_market_data(
-                    market_data_sets[i], f"BTC_latency_{i}", "warm"
-                ))
+                asyncio.run(
+                    self.trading_pipeline.process_market_data(
+                        market_data_sets[i], f"BTC_latency_{i}", "warm"
+                    )
+                )
                 latency = time.time() - start
                 latency_times.append(latency)
 
@@ -537,7 +569,9 @@ class MultiBitTradingSystemTester:
             assert throughput > 1.0  # Should process at least 1 signal per second
 
             results["throughput_measurement"] = True
-            success(f"    ✓ Throughput measurement successful ({throughput:.1f} signals/s)")
+            success(
+                f"    ✓ Throughput measurement successful ({throughput:.1f} signals/s)"
+            )
 
             # Test 5: Resource Utilization
             info("  Testing resource utilization...")
@@ -549,7 +583,9 @@ class MultiBitTradingSystemTester:
             assert memory_usage < 80  # Memory usage should be reasonable
 
             results["resource_utilization"] = True
-            success(f"    ✓ Resource utilization successful (CPU: {cpu_usage:.1f}%, Memory: {memory_usage:.1f}%)")
+            success(
+                f"    ✓ Resource utilization successful (CPU: {cpu_usage:.1f}%, Memory: {memory_usage:.1f}%)"
+            )
 
         except Exception as e:
             error(f"Performance and scalability test failed: {e}")
@@ -577,7 +613,7 @@ class MultiBitTradingSystemTester:
             "pipeline_tests": pipeline_results,
             "integration_tests": integration_results,
             "performance_tests": performance_results,
-}
+        }
         # Calculate success rates
         success_rates = {}
         for test_category, results in all_results.items():
@@ -589,21 +625,33 @@ class MultiBitTradingSystemTester:
                     "passed": passed,
                     "total": total,
                     "success_rate": success_rate,
-}
+                }
         # Overall success rate
         total_passed = sum(sr["passed"] for sr in success_rates.values())
         total_tests = sum(sr["total"] for sr in success_rates.values())
-        overall_success_rate = total_passed / total_tests * 100 if total_tests > 0 else 0
+        overall_success_rate = (
+            total_passed / total_tests * 100 if total_tests > 0 else 0
+        )
 
         # Print results
         info("\nTest Results Summary:")
         info("=" * 40)
 
         for category, stats in success_rates.items():
-            status = "✓ PASS" if stats["success_rate"] == 100 else "⚠ PARTIAL" if stats["success_rate"] > 50 else "✗ FAIL"
-            info(f"{category}: {status} ({stats['passed']}/{stats['total']} - {stats['success_rate']:.1f}%)")
+            status = (
+                "✓ PASS"
+                if stats["success_rate"] == 100
+                else "⚠ PARTIAL"
+                if stats["success_rate"] > 50
+                else "✗ FAIL"
+            )
+            info(
+                f"{category}: {status} ({stats['passed']}/{stats['total']} - {stats['success_rate']:.1f}%)"
+            )
 
-        info(f"\nOverall Success Rate: {overall_success_rate:.1f}% ({total_passed}/{total_tests})")
+        info(
+            f"\nOverall Success Rate: {overall_success_rate:.1f}% ({total_passed}/{total_tests})"
+        )
 
         if overall_success_rate >= 90:
             success("🎉 All tests passed successfully!")
@@ -622,7 +670,9 @@ class MultiBitTradingSystemTester:
             "overall_success_rate": overall_success_rate,
             "total_passed": total_passed,
             "total_tests": total_tests,
-}
+        }
+
+
 def main():
     """Main test execution function."""
     info("Multi-Bit Trading System Comprehensive Test Suite")
@@ -633,6 +683,7 @@ def main():
 
     # Save results to file
     import json
+
     with open("test_results_multi_bit_system.json", "w") as f:
         json.dump(results, f, indent=2, default=str)
 

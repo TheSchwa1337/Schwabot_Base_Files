@@ -7,7 +7,6 @@ Tests all differential states and their mathematical implementations.
 import pytest
 import numpy as np
 from datetime import datetime
-from typing import Dict, List
 
 from core.advanced_drift_shell_integration import (
     ShiftPatternEngine,
@@ -15,7 +14,7 @@ from core.advanced_drift_shell_integration import (
     GrayscaleDriftTensorCore,
     AdvancedTensorMemoryFeedback,
 )
-from core.type_defs import Tensor, Entropy, RecursionDepth
+from core.type_defs import Tensor, Entropy
 
 
 class TestShiftPatternEngine:

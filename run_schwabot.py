@@ -3,13 +3,12 @@ from core.dual_unicore_handler import DualUnicoreHandler
 from pathlib import Path
 import logging
 import os
-import signal
 import sys
 import time
 
 import threading
 
-from utils.safe_print import safe_print, info, warn, error, success, debug
+from utils.safe_print import safe_print
 
 
 # Initialize Unicode handler
@@ -35,7 +34,7 @@ and the API server on http://localhost:8081
 
 
 # Add core to path
-sys.path.append(str(Path(__file__).parent / 'core'))
+sys.path.append(str(Path(__file__).parent / "core"))
 
 # Import Schwabot components
 try:
@@ -43,10 +42,13 @@ try:
     from core.system_integration_orchestrator import SystemIntegrationOrchestrator
     from ui.schwabot_dashboard import app, socketio
     from core.chrono_causal_orchestrator import ChronoCausalOrchestrator
+
     IMPORTS_SUCCESSFUL = True
 except ImportError as e:
     safe_print(f"Error importing Schwabot components: {e}")
-    safe_print("Please ensure all dependencies are installed: pip install -r requirements.txt")
+    safe_print(
+        "Please ensure all dependencies are installed: pip install -r requirements.txt"
+    )
     IMPORTS_SUCCESSFUL = False
 
 # Global variables for graceful shutdown
@@ -57,22 +59,22 @@ components = {}
 def setup_logging():
     """Setup comprehensive logging configuration."""
     # Create logs directory
-    logs_dir = Path('logs')
+    logs_dir = Path("logs")
     logs_dir.mkdir(exist_ok=True)
 
     # Configure logging
     logging.basicConfig(
         level=logging.INFO,
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
         handlers=[
-            logging.FileHandler(logs_dir / 'schwabot.log'),
-            logging.StreamHandler()
-        ]
+            logging.FileHandler(logs_dir / "schwabot.log"),
+            logging.StreamHandler(),
+        ],
     )
 
     # Set specific log levels
-    logging.getLogger('werkzeug').setLevel(logging.WARNING)
-    logging.getLogger('socketio').setLevel(logging.WARNING)
+    logging.getLogger("werkzeug").setLevel(logging.WARNING)
+    logging.getLogger("socketio").setLevel(logging.WARNING)
 
     return logging.getLogger(__name__)
 
@@ -93,13 +95,13 @@ def initialize_components():
         # Initialize settings manager
         logger.info("Loading settings manager...")
         settings_manager = get_settings_manager()
-        components['settings_manager'] = settings_manager
+        components["settings_manager"] = settings_manager
         logger.info("Settings manager initialized successfully")
 
         # Initialize system orchestrator
         logger.info("Initializing system integration orchestrator...")
         orchestrator = SystemIntegrationOrchestrator()
-        components['orchestrator'] = orchestrator
+        components["orchestrator"] = orchestrator
         logger.info("System orchestrator initialized successfully")
 
         # Initialize mathematical components
@@ -115,12 +117,12 @@ def initialize_components():
         # Initialize Chrono-Causal Orchestrator
         logger.info("Initializing Chrono-Causal Orchestrator...")
         chrono_orchestrator = ChronoCausalOrchestrator()
-        components['chrono_orchestrator'] = chrono_orchestrator
+        components["chrono_orchestrator"] = chrono_orchestrator
         logger.info("Chrono-Causal Orchestrator initialized successfully")
 
-        components['phantom_model'] = phantom_model
-        components['meta_bridge'] = meta_bridge
-        components['fallback_router'] = fallback_router
+        components["phantom_model"] = phantom_model
+        components["meta_bridge"] = meta_bridge
+        components["fallback_router"] = fallback_router
 
         logger.info("Mathematical components initialized successfully")
 
@@ -136,12 +138,12 @@ def validate_environment():
     logger.info("Validating environment configuration...")
 
     required_vars = [
-        'BINANCE_API_KEY',
-        'BINANCE_API_SECRET',
-        'COINBASE_API_KEY',
-        'COINBASE_API_SECRET',
-        'KRAKEN_API_KEY',
-        'KRAKEN_API_SECRET'
+        "BINANCE_API_KEY",
+        "BINANCE_API_SECRET",
+        "COINBASE_API_KEY",
+        "COINBASE_API_SECRET",
+        "KRAKEN_API_KEY",
+        "KRAKEN_API_SECRET",
     ]
     missing_vars = []
     for var in required_vars:
@@ -159,13 +161,14 @@ def validate_environment():
 
 def start_background_tasks():
     """Start background monitoring and maintenance tasks."""
+
     def background_monitor():
         """Background monitoring task."""
         while not shutdown_event.is_set():
             try:
                 pass  # Update system health
-                if 'orchestrator' in components:
-                    health = components['orchestrator'].get_system_health()
+                if "orchestrator" in components:
+                    health = components["orchestrator"].get_system_health()
                     logger.debug(f"System health: {health}")
 
                 # Sleep for monitoring interval
@@ -195,41 +198,47 @@ def print_startup_banner():
 
 def print_system_info():
     """Print system information and status."""
-    if 'settings_manager' in components:
-        settings = components['settings_manager']
+    if "settings_manager" in components:
+        settings = components["settings_manager"]
         config_summary = settings.get_configuration_summary()
 
         safe_print("\n--- System Configuration ---")
         safe_print(f"   Environment: {config_summary.get('environment', 'unknown')}")
         safe_print(f"   Debug Mode: {config_summary.get('debug_mode', False)}")
         safe_print(
-            f"   API Server Port: {
-                config_summary.get(
-                    'api_server_port',
-                    'N/A')}")
+            f"   API Server Port: {config_summary.get('api_server_port', 'N/A')}"
+        )
         safe_print(f"   Dashboard Port: {config_summary.get('dashboard_port', 'N/A')}")
         safe_print(f"   Exchange Mode: {config_summary.get('exchange_mode', 'N/A')}")
         safe_print(f"   Trading Pairs: {config_summary.get('trading_pairs', 'N/A')}")
         safe_print(
             f"   Risk Management: {
-                config_summary.get(
-                    'risk_management_enabled',
-                    False)}")
+                config_summary.get('risk_management_enabled', False)
+            }"
+        )
     else:
         safe_print(
-            "\n--- System Configuration: Not available (Settings Manager not initialized) ---")
+            "\n--- System Configuration: Not available (Settings Manager not initialized) ---"
+        )
 
-    if 'orchestrator' in components:
+    if "orchestrator" in components:
         safe_print("\n--- System Health Metrics ---")
         # This will be updated to use chrono_causal_orchestrator's validation
         # For now, placeholder or existing SystemIntegrationOrchestrator health
-        health_metrics = components['orchestrator'].get_system_health() if hasattr(
-            components['orchestrator'], 'get_system_health') else "N/A"
+        health_metrics = (
+            components["orchestrator"].get_system_health()
+            if hasattr(components["orchestrator"], "get_system_health")
+            else "N/A"
+        )
         safe_print(f"   Overall Health: {health_metrics}")
         safe_print(
             f"   Chrono-Causal Orchestrator Status: {
-                'Initialized' if 'chrono_orchestrator' in components else 'Not Initialized'}")
-        if 'chrono_orchestrator' in components:
+                'Initialized'
+                if 'chrono_orchestrator' in components
+                else 'Not Initialized'
+            }"
+        )
+        if "chrono_orchestrator" in components:
             # Example of how we might display initial orchestrator status or mock data
             safe_print("   CRWM Active: Yes")
             safe_print("   CRTPM Active: Yes")
@@ -263,9 +272,9 @@ def main():
         print_system_info()
 
         # Flask app settings
-        settings_manager = components['settings_manager']
-        host = settings_manager.get_setting('api_server_host', '0.0.0.0')
-        port = settings_manager.get_setting('dashboard_port', 8080)
+        settings_manager = components["settings_manager"]
+        host = settings_manager.get_setting("api_server_host", "0.0.0.0")
+        port = settings_manager.get_setting("dashboard_port", 8080)
 
         safe_print(f"\n>>> Schwabot starting on http://{host}:{port}")
         safe_print(">>> Access the dashboard in your web browser")
@@ -278,7 +287,7 @@ def main():
             host=host,
             port=port,
             debug=False,
-            use_reloader=False  # Disable reloader to avoid duplicate processes
+            use_reloader=False,  # Disable reloader to avoid duplicate processes
         )
 
     except KeyboardInterrupt:

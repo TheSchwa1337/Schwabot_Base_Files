@@ -15,12 +15,10 @@ import sys
 import time
 import logging
 import numpy as np
-from datetime import datetime
 
 # Configure logging
 logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
 
@@ -32,7 +30,8 @@ def test_state_continuity_manager():
 
     try:
         from core.internal_state.state_continuity_manager import (
-            StateContinuityManager, StateType, StateSnapshot
+            StateContinuityManager,
+            StateType,
         )
 
         # Create manager
@@ -44,14 +43,14 @@ def test_state_continuity_manager():
             "price": 50000,
             "volume": 1000,
             "timestamp": time.time(),
-            "indicators": {"rsi": 65.5, "macd": 0.02}
-}
+            "indicators": {"rsi": 65.5, "macd": 0.02},
+        }
         state_key = manager.update_state(
             StateType.TRADING_STATE,
             test_data,
             agent="BTC",
             phase=32,
-            metadata={"source": "test"}
+            metadata={"source": "test"},
         )
         print(f"✅ Created state: {state_key}")
 
@@ -105,7 +104,9 @@ def test_fileization_manager():
             print("❌ Failed to load array")
 
         # Test validation
-        valid = manager.validate_state(loaded_array, expected_shape=(10, 10), expected_type=np.ndarray)
+        valid = manager.validate_state(
+            loaded_array, expected_shape=(10, 10), expected_type=np.ndarray
+        )
         print(f"✅ Validation result: {valid}")
 
         # Test dict save/load
@@ -152,14 +153,14 @@ def test_visualizer_integration():
             "price": 50000,
             "volume": 1000,
             "timestamp": time.time(),
-            "indicators": {"rsi": 65.5, "macd": 0.02}
-}
+            "indicators": {"rsi": 65.5, "macd": 0.02},
+        }
         state_key = integration.update_state(
             StateType.TRADING_STATE,
             test_data,
             agent="BTC",
             phase=32,
-            metadata={"source": "test"}
+            metadata={"source": "test"},
         )
         print(f"✅ Created state: {state_key}")
 
@@ -206,7 +207,9 @@ def test_orchestrator_integration():
 
         # Test visualization data
         viz_data = orchestrator.get_visualization_data("handoff")
-        print(f"✅ Handoff visualization data: {len(viz_data.get('states', []))} states")
+        print(
+            f"✅ Handoff visualization data: {len(viz_data.get('states', []))} states"
+        )
 
         return True
 
@@ -221,7 +224,10 @@ def test_json_hangup_prevention():
     print("=" * 50)
 
     try:
-        from core.internal_state.state_continuity_manager import StateContinuityManager, StateType
+        from core.internal_state.state_continuity_manager import (
+            StateContinuityManager,
+            StateType,
+        )
 
         # Create manager with short timeout
         manager = StateContinuityManager(max_json_timeout=1.0)
@@ -230,18 +236,13 @@ def test_json_hangup_prevention():
         # Test large data handling
         large_data = {
             "large_array": np.random.rand(1000, 1000).tolist(),
-            "nested_data": {
-                "level1": {"level2": {"level3": [i for i in range(1000)]}}
-            },
-            "timestamp": time.time()
-}
+            "nested_data": {"level1": {"level2": {"level3": [i for i in range(1000)]}}},
+            "timestamp": time.time(),
+        }
         # This should not hang due to timeout protection
         start_time = time.time()
         state_key = manager.update_state(
-            StateType.MATHEMATICAL_STATE,
-            large_data,
-            agent="BTC",
-            phase=32
+            StateType.MATHEMATICAL_STATE, large_data, agent="BTC", phase=32
         )
         elapsed = time.time() - start_time
 
@@ -276,8 +277,8 @@ def test_lint_compliance():
             "core/internal_state/fileization_manager.py",
             "core/internal_state/visualizer_integration.py",
             "core/internal_state/__init__.py",
-            "core/dynamic_handoff_orchestrator.py"
-]
+            "core/dynamic_handoff_orchestrator.py",
+        ]
         all_passed = True
         for module in modules:
             try:
@@ -285,7 +286,7 @@ def test_lint_compliance():
                     ["flake8", module, "--max-line-length=120"],
                     capture_output=True,
                     text=True,
-                    timeout=30
+                    timeout=30,
                 )
 
                 if result.returncode == 0:
@@ -320,8 +321,8 @@ def main():
         ("VisualizerIntegration", test_visualizer_integration),
         ("Orchestrator Integration", test_orchestrator_integration),
         ("JSON Hang-up Prevention", test_json_hangup_prevention),
-        ("Lint Compliance", test_lint_compliance)
-]
+        ("Lint Compliance", test_lint_compliance),
+    ]
     results = []
     for test_name, test_func in tests:
         try:

@@ -13,23 +13,21 @@ import sys
 import time
 import logging
 import asyncio
-from typing import Dict, Any
 
 # Add core directory to path
-sys.path.append('core')
+sys.path.append("core")
 
 from enhanced_tcell_system import (
     EnhancedTCellValidator,
     EnhancedSignalGenerator,
     EnhancedTCellSignal,
-    EnhancedSignalType
+    EnhancedSignalType,
 )
 from biological_immune_error_handler import BiologicalImmuneErrorHandler
 
 # Configure logging
 logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
 
@@ -61,19 +59,21 @@ def test_enhanced_tcell_validator():
             strength=0.7,
             source="test_operation",
             timestamp=time.time(),
-            confidence=0.8
+            confidence=0.8,
         ),
         EnhancedTCellSignal(
             signal_type=EnhancedSignalType.COSTIMULATORY,
             strength=0.6,
             source="system_health",
             timestamp=time.time(),
-            confidence=0.9
-        )
+            confidence=0.9,
+        ),
     ]
 
     activation, confidence, analysis = validator.validate_signals(signals)
-    print(f"   ✅ Basic validation: activation={activation}, confidence={confidence:.3f}")
+    print(
+        f"   ✅ Basic validation: activation={activation}, confidence={confidence:.3f}"
+    )
 
     # Test 2: INHIBITORY signal handling (CRITICAL FIX)
     signals_with_inhibitory = signals + [
@@ -82,13 +82,19 @@ def test_enhanced_tcell_validator():
             strength=0.5,
             source="risk_assessment",
             timestamp=time.time(),
-            confidence=0.8
+            confidence=0.8,
         )
     ]
 
-    activation2, confidence2, analysis2 = validator.validate_signals(signals_with_inhibitory)
-    print(f"   ✅ INHIBITORY signal test: activation={activation2}, confidence={confidence2:.3f}")
-    print(f"   📊 Signal analysis: {len(analysis2['signal_analysis'])} signals analyzed")
+    activation2, confidence2, analysis2 = validator.validate_signals(
+        signals_with_inhibitory
+    )
+    print(
+        f"   ✅ INHIBITORY signal test: activation={activation2}, confidence={confidence2:.3f}"
+    )
+    print(
+        f"   📊 Signal analysis: {len(analysis2['signal_analysis'])} signals analyzed"
+    )
 
     # Test 3: Performance feedback
     pattern_hash = analysis2.get("pattern_hash")
@@ -103,7 +109,9 @@ def test_enhanced_tcell_validator():
 
     # Test 5: Statistics
     stats = validator.get_signal_statistics()
-    print(f"   ✅ Statistics: {stats['total_validations']} validations, {stats['pattern_count']} patterns")
+    print(
+        f"   ✅ Statistics: {stats['total_validations']} validations, {stats['pattern_count']} patterns"
+    )
 
     return True
 
@@ -132,7 +140,7 @@ def test_enhanced_signal_generator():
         EnhancedSignalType.COSTIMULATORY,
         EnhancedSignalType.INFLAMMATORY,
         EnhancedSignalType.CONTEXTUAL,
-        EnhancedSignalType.RISK_ASSESSMENT
+        EnhancedSignalType.RISK_ASSESSMENT,
     ]
 
     for expected_type in expected_types:
@@ -146,11 +154,19 @@ def test_enhanced_signal_generator():
     mock_handler.current_error_rate = 0.15  # High error rate
     mock_handler.system_entropy = 0.8  # High entropy
 
-    signals_with_inhibitory = generator.generate_comprehensive_signals(test_operation, (5.0,), {})
-    inhibitory_signals = [s for s in signals_with_inhibitory if s.signal_type == EnhancedSignalType.INHIBITORY]
+    signals_with_inhibitory = generator.generate_comprehensive_signals(
+        test_operation, (5.0,), {}
+    )
+    inhibitory_signals = [
+        s
+        for s in signals_with_inhibitory
+        if s.signal_type == EnhancedSignalType.INHIBITORY
+    ]
 
     if inhibitory_signals:
-        print(f"   ✅ INHIBITORY signal generated with strength: {inhibitory_signals[0].strength:.3f}")
+        print(
+            f"   ✅ INHIBITORY signal generated with strength: {inhibitory_signals[0].strength:.3f}"
+        )
     else:
         print("   ❌ INHIBITORY signal not generated")
 
@@ -158,19 +174,29 @@ def test_enhanced_signal_generator():
     # Add antibody pattern
     mock_handler.antibody_patterns["test_operation_1_0"] = {
         "rejection_strength": 0.3,
-        "occurrence_count": 2
+        "occurrence_count": 2,
     }
 
-    signals_with_memory = generator.generate_comprehensive_signals(test_operation, (5.0,), {})
-    memory_signals = [s for s in signals_with_memory if s.signal_type == EnhancedSignalType.MEMORY]
+    signals_with_memory = generator.generate_comprehensive_signals(
+        test_operation, (5.0,), {}
+    )
+    memory_signals = [
+        s for s in signals_with_memory if s.signal_type == EnhancedSignalType.MEMORY
+    ]
 
     if memory_signals:
-        print(f"   ✅ MEMORY signal generated with strength: {memory_signals[0].strength:.3f}")
+        print(
+            f"   ✅ MEMORY signal generated with strength: {memory_signals[0].strength:.3f}"
+        )
     else:
         print("   ❌ MEMORY signal not generated")
 
     # Test 4: Risk assessment
-    risk_signals = [s for s in signals_with_memory if s.signal_type == EnhancedSignalType.RISK_ASSESSMENT]
+    risk_signals = [
+        s
+        for s in signals_with_memory
+        if s.signal_type == EnhancedSignalType.RISK_ASSESSMENT
+    ]
     if risk_signals:
         risk_strength = risk_signals[0].strength
         print(f"   ✅ Risk assessment signal: {risk_strength:.3f}")
@@ -216,7 +242,9 @@ def test_integrated_immune_system():
 
     # Test 3: Failing operation
     try:
-        result3 = immune_handler.immune_protected_operation(risky_operation, [1, 2, 3], {"should_fail": True})
+        result3 = immune_handler.immune_protected_operation(
+            risky_operation, [1, 2, 3], {"should_fail": True}
+        )
         print(f"   ✅ Failing operation handled: {type(result3).__name__}")
     except Exception as e:
         print(f"   ❌ Failing operation not handled: {e}")
@@ -228,14 +256,20 @@ def test_integrated_immune_system():
     # Check for enhanced T-Cell information
     if "enhanced_tcell" in enhanced_status:
         tcell_info = enhanced_status["enhanced_tcell"]
-        print(f"   📊 T-Cell validator stats: {tcell_info['validator_stats']['total_validations']} validations")
-        print(f"   📊 Signal generator: {tcell_info['signal_generator']['operation_history_size']} operations tracked")
+        print(
+            f"   📊 T-Cell validator stats: {tcell_info['validator_stats']['total_validations']} validations"
+        )
+        print(
+            f"   📊 Signal generator: {tcell_info['signal_generator']['operation_history_size']} operations tracked"
+        )
 
     # Check for signal analysis
     if "signal_analysis" in enhanced_status:
         signal_info = enhanced_status["signal_analysis"]
         print(f"   📊 Signal types: {signal_info['total_signal_types']}")
-        print(f"   📊 Enhanced features: {len(signal_info['enhanced_features'])} features")
+        print(
+            f"   📊 Enhanced features: {len(signal_info['enhanced_features'])} features"
+        )
 
     return True
 
@@ -248,7 +282,9 @@ def test_signal_validation_edge_cases():
 
     # Test 1: Empty signals
     activation, confidence, analysis = validator.validate_signals([])
-    print(f"   ✅ Empty signals handled: activation={activation}, confidence={confidence}")
+    print(
+        f"   ✅ Empty signals handled: activation={activation}, confidence={confidence}"
+    )
 
     # Test 2: Invalid signals
     invalid_signals = [
@@ -257,12 +293,14 @@ def test_signal_validation_edge_cases():
             strength=1.5,  # Invalid strength > 1.0
             source="invalid",
             timestamp=time.time(),
-            confidence=0.8
+            confidence=0.8,
         )
     ]
 
     activation2, confidence2, analysis2 = validator.validate_signals(invalid_signals)
-    print(f"   ✅ Invalid signals filtered: activation={activation2}, confidence={confidence2}")
+    print(
+        f"   ✅ Invalid signals filtered: activation={activation2}, confidence={confidence2}"
+    )
 
     # Test 3: Mixed valid/invalid signals
     mixed_signals = [
@@ -271,19 +309,21 @@ def test_signal_validation_edge_cases():
             strength=0.7,
             source="valid",
             timestamp=time.time(),
-            confidence=0.8
+            confidence=0.8,
         ),
         EnhancedTCellSignal(
             signal_type=EnhancedSignalType.INHIBITORY,
             strength=-0.1,  # Invalid negative strength
             source="invalid",
             timestamp=time.time(),
-            confidence=0.8
-        )
+            confidence=0.8,
+        ),
     ]
 
     activation3, confidence3, analysis3 = validator.validate_signals(mixed_signals)
-    print(f"   ✅ Mixed signals handled: activation={activation3}, confidence={confidence3:.3f}")
+    print(
+        f"   ✅ Mixed signals handled: activation={activation3}, confidence={confidence3:.3f}"
+    )
     print(f"   📊 Valid signals processed: {analysis3['signal_count']}")
 
     return True
@@ -302,15 +342,15 @@ def test_adaptive_learning():
             strength=0.6,
             source="test",
             timestamp=time.time(),
-            confidence=0.8
+            confidence=0.8,
         ),
         EnhancedTCellSignal(
             signal_type=EnhancedSignalType.COSTIMULATORY,
             strength=0.5,
             source="test",
             timestamp=time.time(),
-            confidence=0.8
-        )
+            confidence=0.8,
+        ),
     ]
 
     # Test pattern learning
@@ -322,7 +362,9 @@ def test_adaptive_learning():
         was_successful = i % 2 == 0  # Alternating success/failure
         validator.update_performance_feedback(pattern_hash, was_successful)
 
-        print(f"   📊 Iteration {i+1}: activation={activation}, success={was_successful}")
+        print(
+            f"   📊 Iteration {i + 1}: activation={activation}, success={was_successful}"
+        )
 
     # Check pattern statistics
     stats = validator.get_signal_statistics()
@@ -333,7 +375,9 @@ def test_adaptive_learning():
     validator.adjust_threshold(0.3)  # Low success rate
     validator.adjust_threshold(0.9)  # High success rate
 
-    print(f"   ✅ Threshold adaptation: {initial_threshold:.3f} -> {validator.adaptive_threshold:.3f}")
+    print(
+        f"   ✅ Threshold adaptation: {initial_threshold:.3f} -> {validator.adaptive_threshold:.3f}"
+    )
 
     return True
 
@@ -350,11 +394,12 @@ async def test_async_monitoring():
 
     # Run some operations
     for i in range(3):
+
         def test_op(x: float) -> float:
             return x * 2
 
         result = immune_handler.immune_protected_operation(test_op, float(i))
-        print(f"   📊 Operation {i+1}: {result}")
+        print(f"   📊 Operation {i + 1}: {result}")
         await asyncio.sleep(1)
 
     # Stop monitoring
@@ -393,7 +438,7 @@ def main():
             logger.exception(f"Test {test_name} failed")
 
     # Run async test
-    print(f"\n🔬 Running: Async Monitoring")
+    print("\n🔬 Running: Async Monitoring")
     try:
         asyncio.run(test_async_monitoring())
         print("   ✅ Async Monitoring PASSED")

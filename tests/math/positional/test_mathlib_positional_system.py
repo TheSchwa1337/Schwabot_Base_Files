@@ -22,8 +22,6 @@ import os
 import time
 import json
 from pathlib import Path
-import numpy as np
-import hashlib
 
 # Add core directory to path
 # This path is relative to the new location in tests/math/positional/
@@ -51,45 +49,84 @@ try:
 
     class MathLibPositionalStateSystem:
         def __init__(self):
-            self.states = {v: DummyState(v) for v in MathLibVersion.__dict__ if not v.startswith('_')}
+            self.states = {
+                v: DummyState(v)
+                for v in MathLibVersion.__dict__
+                if not v.startswith("_")
+            }
             self.dependency_graph = {
                 MathLibVersion.V1: [],
                 MathLibVersion.V2: [MathLibVersion.V1],
                 MathLibVersion.V3: [MathLibVersion.V1, MathLibVersion.V2],
                 MathLibVersion.V4: [MathLibVersion.V2, MathLibVersion.V3],
-                MathLibVersion.UNIFIED: [MathLibVersion.V1, MathLibVersion.V2, MathLibVersion.V3, MathLibVersion.V4],
+                MathLibVersion.UNIFIED: [
+                    MathLibVersion.V1,
+                    MathLibVersion.V2,
+                    MathLibVersion.V3,
+                    MathLibVersion.V4,
+                ],
             }
+
         def get_positional_state(self, version):
             return self.states.get(version)
+
         def apply_32bit_phase_orientation(self, version):
             state = self.get_positional_state(version)
             if state:
                 state.bit_phase = BitPhase.THIRTY_TWO_BIT
                 return {"status": "success", "bit_phase": 32}
             return {"status": "error"}
+
         def get_comprehensive_report(self):
             return {
                 "timestamp": time.time(),
                 "total_versions": 5,
-                "versions": {v.value: {"bit_phase": 32, "dependencies": [], "mathematical_formulas_count": 0, "flake8_errors_count": 0, "compliance_score": 1.0, "last_updated": time.time(), "is_active": True} for v in MathLibVersion if isinstance(v, MathLibVersion)},
-                "dependency_graph": {k.value: [d.value for d in v] for k,v in self.dependency_graph.items()},
+                "versions": {
+                    v.value: {
+                        "bit_phase": 32,
+                        "dependencies": [],
+                        "mathematical_formulas_count": 0,
+                        "flake8_errors_count": 0,
+                        "compliance_score": 1.0,
+                        "last_updated": time.time(),
+                        "is_active": True,
+                    }
+                    for v in MathLibVersion
+                    if isinstance(v, MathLibVersion)
+                },
+                "dependency_graph": {
+                    k.value: [d.value for d in v]
+                    for k, v in self.dependency_graph.items()
+                },
                 "overall_compliance": 1.0,
             }
+
         def save_state_report(self, path):
-            with open(path, 'w') as f:
+            with open(path, "w") as f:
                 json.dump(self.get_comprehensive_report(), f)
 
     class Flake8PositionalCorrector:
         def _extract_mathematical_formulas(self, content):
-            return [line for line in content.split('\n') if "# MATHEMATICAL PRESERVATION:" in line]
+            return [
+                line
+                for line in content.split("\n")
+                if "# MATHEMATICAL PRESERVATION:" in line
+            ]
+
         def _correct_content(self, content, version):
             # Dummy correction
-            corrected = content.replace('(x,y)', '(x, y)').replace('result=x+y', 'result = x + y')
+            corrected = content.replace("(x,y)", "(x, y)").replace(
+                "result=x+y", "result = x + y"
+            )
             return corrected, [("E231", 2), ("E225", 3)]
+
         def _determine_mathlib_version(self, content):
-            if "v3" in content: return MathLibVersion.V3
-            if "v4" in content: return MathLibVersion.V4
-            if "Unified" in content: return MathLibVersion.UNIFIED
+            if "v3" in content:
+                return MathLibVersion.V3
+            if "v4" in content:
+                return MathLibVersion.V4
+            if "Unified" in content:
+                return MathLibVersion.UNIFIED
             return None
 
     positional_state_system = MathLibPositionalStateSystem()
@@ -114,13 +151,23 @@ def test_positional_state_initialization():
 
     try:
         # Test state initialization
-        assert len(positional_state_system.states) == 5, f"Expected 5 states, got {len(positional_state_system.states)}"
+        assert len(positional_state_system.states) == 5, (
+            f"Expected 5 states, got {len(positional_state_system.states)}"
+        )
 
         # Test each MathLib version
-        for version in [v for v in dir(MathLibVersion) if not v.startswith('_') and v != 'name' and v != 'value']:
-            state = positional_state_system.get_positional_state(getattr(MathLibVersion, version))
+        for version in [
+            v
+            for v in dir(MathLibVersion)
+            if not v.startswith("_") and v != "name" and v != "value"
+        ]:
+            state = positional_state_system.get_positional_state(
+                getattr(MathLibVersion, version)
+            )
             assert state is not None, f"State not found for {version}"
-            assert state.version == getattr(MathLibVersion, version), f"Version mismatch for {version}"
+            assert state.version == getattr(MathLibVersion, version), (
+                f"Version mismatch for {version}"
+            )
             assert state.is_active, f"State not active for {version}"
 
         print("✅ Positional state initialization test passed")
@@ -137,16 +184,26 @@ def test_32bit_phase_orientation():
 
     try:
         # Test 32-bit phase orientation for each version
-        for version in [v for v in dir(MathLibVersion) if not v.startswith('_') and v != 'name' and v != 'value']:
+        for version in [
+            v
+            for v in dir(MathLibVersion)
+            if not v.startswith("_") and v != "name" and v != "value"
+        ]:
             v_enum = getattr(MathLibVersion, version)
             result = positional_state_system.apply_32bit_phase_orientation(v_enum)
 
-            assert "error" not in result, f"Error applying 32-bit phase to {v_enum.value}"
-            assert result["bit_phase"] == 32, f"Expected 32-bit phase, got {result['bit_phase']} for {v_enum.value}"
+            assert "error" not in result, (
+                f"Error applying 32-bit phase to {v_enum.value}"
+            )
+            assert result["bit_phase"] == 32, (
+                f"Expected 32-bit phase, got {result['bit_phase']} for {v_enum.value}"
+            )
 
             # Verify state was updated
             state = positional_state_system.get_positional_state(v_enum)
-            assert state.bit_phase == BitPhase.THIRTY_TWO_BIT, f"State not updated for {v_enum.value}"
+            assert state.bit_phase == BitPhase.THIRTY_TWO_BIT, (
+                f"State not updated for {v_enum.value}"
+            )
 
         print("✅ 32-bit phase orientation test passed")
         return True
@@ -165,10 +222,14 @@ def test_dependency_relationships():
         dependency_graph = positional_state_system.dependency_graph
 
         # V1 should have no dependencies
-        assert len(dependency_graph[MathLibVersion.V1]) == 0, "V1 should have no dependencies"
+        assert len(dependency_graph[MathLibVersion.V1]) == 0, (
+            "V1 should have no dependencies"
+        )
 
         # V2 should depend on V1
-        assert MathLibVersion.V1 in dependency_graph[MathLibVersion.V2], "V2 should depend on V1"
+        assert MathLibVersion.V1 in dependency_graph[MathLibVersion.V2], (
+            "V2 should depend on V1"
+        )
 
         # V3 should depend on V1 and V2
         v3_deps = dependency_graph[MathLibVersion.V3]
@@ -198,7 +259,7 @@ def test_mathematical_formula_preservation():
 
     try:
         # Test formula extraction
-        test_content = '''
+        test_content = """
 # MATHEMATICAL PRESERVATION: Mathematical logic or formula preserved below
 def calculate_btc_price_hash(price_data):
     # BTC price hashing algorithm
@@ -208,13 +269,17 @@ def calculate_btc_price_hash(price_data):
 def tensor_contraction(a, b):
     # Tensor contraction formula
     return np.tensordot(a, b, axes=1)
-'''
+"""
 
         formulas = flake8_corrector._extract_mathematical_formulas(test_content)
 
         assert len(formulas) >= 2, f"Expected at least 2 formulas, got {len(formulas)}"
-        assert any("BTC price hashing" in formula for formula in formulas), "BTC price hashing formula not found"
-        assert any("tensor" in formula.lower() for formula in formulas), "Tensor operation formula not found"
+        assert any("BTC price hashing" in formula for formula in formulas), (
+            "BTC price hashing formula not found"
+        )
+        assert any("tensor" in formula.lower() for formula in formulas), (
+            "Tensor operation formula not found"
+        )
 
         print("✅ Mathematical formula preservation test passed")
         return True
@@ -230,7 +295,7 @@ def test_flake8_error_correction():
 
     try:
         # Test content with Flake8 errors
-        test_content = '''
+        test_content = """
 # MATHEMATICAL PRESERVATION: Mathematical logic preserved below
 def test_function(x,y):  # Missing spaces around comma
     result=x+y  # Missing spaces around operators
@@ -239,16 +304,20 @@ def test_function(x,y):  # Missing spaces around comma
 def another_function():
     text="Unmatched quote  # Unmatched quote
     return text
-'''
+"""
 
         # Test correction
-        corrected_content, corrections = flake8_corrector._correct_content(test_content, MathLibVersion.V3)
+        corrected_content, corrections = flake8_corrector._correct_content(
+            test_content, MathLibVersion.V3
+        )
 
         # Verify corrections were made
         assert len(corrections) > 0, "No corrections were made"
 
         # Verify mathematical preservation was maintained
-        assert "# MATHEMATICAL PRESERVATION:" in corrected_content, "Mathematical preservation lost"
+        assert "# MATHEMATICAL PRESERVATION:" in corrected_content, (
+            "Mathematical preservation lost"
+        )
 
         # Verify syntax was corrected
         assert "x, y" in corrected_content, "Comma spacing not corrected"
@@ -313,17 +382,32 @@ def test_comprehensive_reporting():
         report = positional_state_system.get_comprehensive_report()
 
         # Verify report structure
-        assert report["total_versions"] == 5, f"Expected 5 versions, got {report['total_versions']}"
-        assert len(report["versions"]) == 5, f"Expected 5 version entries, got {len(report['versions'])}"
-        assert len(report["dependency_graph"]) == 5, f"Expected 5 dependency entries, got {len(report['dependency_graph'])}"
+        assert report["total_versions"] == 5, (
+            f"Expected 5 versions, got {report['total_versions']}"
+        )
+        assert len(report["versions"]) == 5, (
+            f"Expected 5 version entries, got {len(report['versions'])}"
+        )
+        assert len(report["dependency_graph"]) == 5, (
+            f"Expected 5 dependency entries, got {len(report['dependency_graph'])}"
+        )
 
         # Verify each version has required fields
         for version_name, version_data in report["versions"].items():
-            required_fields = ["bit_phase", "dependencies", "mathematical_formulas_count",
-                             "flake8_errors_count", "compliance_score", "last_updated", "is_active"]
+            required_fields = [
+                "bit_phase",
+                "dependencies",
+                "mathematical_formulas_count",
+                "flake8_errors_count",
+                "compliance_score",
+                "last_updated",
+                "is_active",
+            ]
 
             for field in required_fields:
-                assert field in version_data, f"Missing field '{field}' in version {version_name}"
+                assert field in version_data, (
+                    f"Missing field '{field}' in version {version_name}"
+                )
 
         # Test report saving
         test_report_path = "test_positional_state_report.json"
@@ -355,8 +439,12 @@ def test_version_determination():
         assert version_v4 == MathLibVersion.V4, f"Expected V4, got {version_v4}"
 
         test_content_unified = "# Unified Mathematics Framework"
-        version_unified = flake8_corrector._determine_mathlib_version(test_content_unified)
-        assert version_unified == MathLibVersion.UNIFIED, f"Expected UNIFIED, got {version_unified}"
+        version_unified = flake8_corrector._determine_mathlib_version(
+            test_content_unified
+        )
+        assert version_unified == MathLibVersion.UNIFIED, (
+            f"Expected UNIFIED, got {version_unified}"
+        )
 
         test_content_none = "# Some other comment"
         version_none = flake8_corrector._determine_mathlib_version(test_content_none)
@@ -385,7 +473,7 @@ def run_all_tests():
         test_positional_score_logic,
         test_utf8_compatibility,
         test_comprehensive_reporting,
-        test_version_determination
+        test_version_determination,
     ]
 
     passed_count = 0
@@ -414,4 +502,4 @@ def run_all_tests():
 
 
 if __name__ == "__main__":
-    run_all_tests() 
+    run_all_tests()

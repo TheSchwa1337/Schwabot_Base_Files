@@ -15,23 +15,22 @@ import numpy as np
 from typing import Dict, Any
 
 # Add schwabot to path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'schwabot'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "schwabot"))
 
 # Import all Schwabot modules
-from core.strategy_mapper import StrategyMapper, StrategyType, StrategyState
-from core.ferris_rde import FerrisRDE, FerrisPhase, FerrisState
-from core.profit_cycle_allocator import ProfitCycleAllocator, AllocationStage, AllocationType
+from core.strategy_mapper import StrategyMapper, StrategyType
+from core.ferris_rde import FerrisRDE, FerrisPhase
+from core.profit_cycle_allocator import ProfitCycleAllocator
 from core.wallet_tracker import WalletTracker, AssetType, PositionType
-from core.fallback_logic import FallbackLogic, FallbackState, FallbackType
+from core.fallback_logic import FallbackLogic, FallbackType
 from core.glyph_vm import GlyphVM, GlyphType, GlyphState
 from core.matrix_map_logic import MatrixMapLogic, MatrixType, LogicHashType
 from core.fractal_core import FractalCore, FractalType, FractalState
-from core.matrix_fault_resolver import MatrixFaultResolver, FaultType, ResolutionMethod
+from core.matrix_fault_resolver import MatrixFaultResolver
 
 # Configure logging
 logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
 
@@ -71,8 +70,8 @@ class SchwabotV05Tester:
             ("Matrix Map Logic", self.test_matrix_logic),
             ("Fractal Core", self.test_fractal_core),
             ("Matrix Fault Resolver", self.test_fault_resolver),
-            ("Integration Tests", self.test_integration)
-]
+            ("Integration Tests", self.test_integration),
+        ]
         for test_name, test_func in tests:
             try:
                 logger.info(f"Running {test_name} tests...")
@@ -84,12 +83,15 @@ class SchwabotV05Tester:
                 self.test_results[test_name] = {
                     "status": "FAILED",
                     "error": str(e),
-                    "details": {}
-}
+                    "details": {},
+                }
         # Generate summary
         total_tests = len(tests)
-        passed_tests = sum(1 for result in self.test_results.values()
-                          if result.get('status') == 'PASSED')
+        passed_tests = sum(
+            1
+            for result in self.test_results.values()
+            if result.get("status") == "PASSED"
+        )
 
         summary = {
             "total_tests": total_tests,
@@ -97,8 +99,8 @@ class SchwabotV05Tester:
             "failed_tests": total_tests - passed_tests,
             "success_rate": passed_tests / total_tests if total_tests > 0 else 0.0,
             "test_results": self.test_results,
-            "execution_time": time.time() - self.start_time
-}
+            "execution_time": time.time() - self.start_time,
+        }
         logger.info(f"🎯 Test Summary: {passed_tests}/{total_tests} tests passed")
         return summary
 
@@ -116,7 +118,9 @@ class SchwabotV05Tester:
             assert success
 
             # Test strategy selection
-            selected = self.strategy_mapper.select_strategy({"market_condition": "bullish"})
+            selected = self.strategy_mapper.select_strategy(
+                {"market_condition": "bullish"}
+            )
             assert selected is not None
 
             # Test strategy routing
@@ -129,9 +133,9 @@ class SchwabotV05Tester:
                     "strategies_created": 1,
                     "strategies_activated": 1,
                     "strategies_selected": 1,
-                    "routes_generated": 1
-}
-}
+                    "routes_generated": 1,
+                },
+            }
         except Exception as e:
             return {"status": "FAILED", "error": str(e), "details": {}}
 
@@ -146,13 +150,24 @@ class SchwabotV05Tester:
             # Test phase updates
             market_data = {"price": 50000, "volume": 1000000, "volatility": 0.02}
             phase = self.ferris_rde.update_phase(market_data)
-            assert phase in [FerrisPhase.TICK, FerrisPhase.PIVOT, FerrisPhase.ASCENT, FerrisPhase.DESCENT]
+            assert phase in [
+                FerrisPhase.TICK,
+                FerrisPhase.PIVOT,
+                FerrisPhase.ASCENT,
+                FerrisPhase.DESCENT,
+            ]
 
             # Test signal generation
             signal = self.ferris_rde.generate_signal(market_data)
             # Signal might be None if conditions aren't met
             if signal:
-                assert signal.signal_type in ["buy", "sell", "hold", "scale_in", "scale_out"]
+                assert signal.signal_type in [
+                    "buy",
+                    "sell",
+                    "hold",
+                    "scale_in",
+                    "scale_out",
+                ]
 
             # Test cycle completion
             completed_cycle = self.ferris_rde.end_cycle()
@@ -164,9 +179,9 @@ class SchwabotV05Tester:
                     "cycles_created": 1,
                     "phases_updated": 1,
                     "signals_generated": 1 if signal else 0,
-                    "cycles_completed": 1
-}
-}
+                    "cycles_completed": 1,
+                },
+            }
         except Exception as e:
             return {"status": "FAILED", "error": str(e), "details": {}}
 
@@ -193,9 +208,9 @@ class SchwabotV05Tester:
                     "cycles_created": 1,
                     "allocations_made": len(allocations),
                     "total_profit_allocated": 1000.0,
-                    "cycles_completed": 1
-}
-}
+                    "cycles_completed": 1,
+                },
+            }
         except Exception as e:
             return {"status": "FAILED", "error": str(e), "details": {}}
 
@@ -209,7 +224,9 @@ class SchwabotV05Tester:
             assert position is not None
 
             # Test position update
-            success = self.wallet_tracker.update_position_price(position.position_id, 51000.0)
+            success = self.wallet_tracker.update_position_price(
+                position.position_id, 51000.0
+            )
             assert success
 
             # Test transaction creation
@@ -228,9 +245,9 @@ class SchwabotV05Tester:
                     "positions_created": 1,
                     "positions_updated": 1,
                     "transactions_created": 1,
-                    "snapshots_created": 1
-}
-}
+                    "snapshots_created": 1,
+                },
+            }
         except Exception as e:
             return {"status": "FAILED", "error": str(e), "details": {}}
 
@@ -263,9 +280,9 @@ class SchwabotV05Tester:
                     "stall_detections": 1 if stall_detector else 0,
                     "fallbacks_triggered": 1 if stall_detector else 0,
                     "failures_recorded": 1,
-                    "successes_recorded": 1
-}
-}
+                    "successes_recorded": 1,
+                },
+            }
         except Exception as e:
             return {"status": "FAILED", "error": str(e), "details": {}}
 
@@ -273,7 +290,9 @@ class SchwabotV05Tester:
         """Test glyph VM functionality."""
         try:
             # Test glyph creation
-            glyph = self.glyph_vm.add_glyph("test_glyph", GlyphType.SYSTEM, GlyphState.ACTIVE, 0.8)
+            glyph = self.glyph_vm.add_glyph(
+                "test_glyph", GlyphType.SYSTEM, GlyphState.ACTIVE, 0.8
+            )
             assert glyph is not None
 
             # Test glyph update
@@ -294,9 +313,9 @@ class SchwabotV05Tester:
                     "glyphs_created": 1,
                     "glyphs_updated": 1,
                     "patterns_detected": len(patterns),
-                    "display_rendered": 1
-}
-}
+                    "display_rendered": 1,
+                },
+            }
         except Exception as e:
             return {"status": "FAILED", "error": str(e), "details": {}}
 
@@ -305,13 +324,19 @@ class SchwabotV05Tester:
         try:
             # Test matrix creation
             matrix_data = np.random.rand(5, 5)
-            matrix = self.matrix_logic.add_matrix("test_matrix", MatrixType.FEATURE, matrix_data)
+            matrix = self.matrix_logic.add_matrix(
+                "test_matrix", MatrixType.FEATURE, matrix_data
+            )
             assert matrix is not None
 
             # Test similarity calculation
             matrix2_data = np.random.rand(5, 5)
-            self.matrix_logic.add_matrix("test_matrix2", MatrixType.FEATURE, matrix2_data)
-            similarity = self.matrix_logic.calculate_similarity("test_matrix", "test_matrix2")
+            self.matrix_logic.add_matrix(
+                "test_matrix2", MatrixType.FEATURE, matrix2_data
+            )
+            similarity = self.matrix_logic.calculate_similarity(
+                "test_matrix", "test_matrix2"
+            )
             assert 0.0 <= similarity <= 1.0
 
             # Test logic hash creation
@@ -330,9 +355,9 @@ class SchwabotV05Tester:
                     "matrices_created": 2,
                     "similarities_calculated": 1,
                     "hashes_created": 1,
-                    "hashes_selected": 1 if selected_hash else 0
-}
-}
+                    "hashes_selected": 1 if selected_hash else 0,
+                },
+            }
         except Exception as e:
             return {"status": "FAILED", "error": str(e), "details": {}}
 
@@ -341,7 +366,9 @@ class SchwabotV05Tester:
         try:
             # Test fractal creation
             fractal_data = np.random.rand(100)
-            fractal = self.fractal_core.add_fractal("test_fractal", FractalType.PRICE, FractalState.ACTIVE, fractal_data)
+            fractal = self.fractal_core.add_fractal(
+                "test_fractal", FractalType.PRICE, FractalState.ACTIVE, fractal_data
+            )
             assert fractal is not None
 
             # Test fractal update
@@ -358,9 +385,9 @@ class SchwabotV05Tester:
                 "details": {
                     "fractals_created": 1,
                     "fractals_updated": 1,
-                    "patterns_detected": len(patterns)
-}
-}
+                    "patterns_detected": len(patterns),
+                },
+            }
         except Exception as e:
             return {"status": "FAILED", "error": str(e), "details": {}}
 
@@ -375,13 +402,15 @@ class SchwabotV05Tester:
 
             # Test fault detection (create a problematic matrix)
             bad_matrix = np.array([[1, 1], [1, 1.0000001]])  # Nearly singular
-            health_bad = self.fault_resolver.analyze_matrix_health("bad_matrix", bad_matrix)
+            health_bad = self.fault_resolver.analyze_matrix_health(
+                "bad_matrix", bad_matrix
+            )
             assert health_bad is not None
 
             # Test fault resolution
             if len(self.fault_resolver.faults) > 0:
                 fault_id = list(self.fault_resolver.faults.keys())[0]
-                resolution = self.fault_resolver.resolve_fault(fault_id, bad_matrix)
+                self.fault_resolver.resolve_fault(fault_id, bad_matrix)
                 # Resolution might be None if no improvement
 
             return {
@@ -389,9 +418,11 @@ class SchwabotV05Tester:
                 "details": {
                     "health_analyses": 2,
                     "faults_detected": len(self.fault_resolver.faults),
-                    "resolutions_attempted": 1 if len(self.fault_resolver.faults) > 0 else 0
-}
-}
+                    "resolutions_attempted": 1
+                    if len(self.fault_resolver.faults) > 0
+                    else 0,
+                },
+            }
         except Exception as e:
             return {"status": "FAILED", "error": str(e), "details": {}}
 
@@ -403,21 +434,23 @@ class SchwabotV05Tester:
                 "price": 50000,
                 "volume": 1000000,
                 "volatility": 0.02,
-                "market_condition": "bullish"
-}
+                "market_condition": "bullish",
+            }
             # 1. Strategy selection
-            strategy_id = self.strategy_mapper.create_strategy("integration_strategy", StrategyType.HASH_BASED, {})
+            strategy_id = self.strategy_mapper.create_strategy(
+                "integration_strategy", StrategyType.HASH_BASED, {}
+            )
             self.strategy_mapper.activate_strategy(strategy_id)
-            selected_strategy = self.strategy_mapper.select_strategy(market_data)
+            self.strategy_mapper.select_strategy(market_data)
 
             # 2. Ferris cycle
-            cycle = self.ferris_rde.start_cycle("integration_cycle")
+            self.ferris_rde.start_cycle("integration_cycle")
             self.ferris_rde.update_phase(market_data)
             signal = self.ferris_rde.generate_signal(market_data)
 
             # 3. Wallet tracking
             if signal and signal.signal_type == "buy":
-                position = self.wallet_tracker.add_position(
+                self.wallet_tracker.add_position(
                     AssetType.BTC, PositionType.LONG, 0.1, market_data["price"]
                 )
                 self.wallet_tracker.add_transaction(
@@ -425,9 +458,9 @@ class SchwabotV05Tester:
                 )
 
             # 4. Profit allocation
-            profit_cycle = self.profit_allocator.start_profit_cycle("integration_profit")
+            self.profit_allocator.start_profit_cycle("integration_profit")
             portfolio_state = {"total_value": 10000, "volatility": 0.1}
-            allocations = self.profit_allocator.allocate_profit(500.0, portfolio_state)
+            self.profit_allocator.allocate_profit(500.0, portfolio_state)
 
             # 5. Glyph updates
             self.glyph_vm.update_glyph("trading_performance", 0.7)
@@ -454,36 +487,36 @@ class SchwabotV05Tester:
                     "glyph_integration": 1,
                     "matrix_integration": 1,
                     "fractal_integration": 1,
-                    "fault_integration": 1
-}
-}
+                    "fault_integration": 1,
+                },
+            }
         except Exception as e:
             return {"status": "FAILED", "error": str(e), "details": {}}
 
     def print_summary(self, summary: Dict[str, Any]):
         """Print test summary."""
-        print("\n" + "="*60)
+        print("\n" + "=" * 60)
         print("🎯 SCHWABOT v0.05 TEST SUMMARY")
-        print("="*60)
+        print("=" * 60)
         print(f"Total Tests: {summary['total_tests']}")
         print(f"Passed: {summary['passed_tests']}")
         print(f"Failed: {summary['failed_tests']}")
         print(f"Success Rate: {summary['success_rate']:.1%}")
         print(f"Execution Time: {summary['execution_time']:.2f}s")
         print("\nDetailed Results:")
-        print("-"*40)
+        print("-" * 40)
 
-        for test_name, result in summary['test_results'].items():
-            status = result.get('status', 'UNKNOWN')
+        for test_name, result in summary["test_results"].items():
+            status = result.get("status", "UNKNOWN")
             status_icon = "✅" if status == "PASSED" else "❌"
             print(f"{status_icon} {test_name}: {status}")
 
             if status == "FAILED" and "error" in result:
                 print(f"   Error: {result['error']}")
 
-        print("\n" + "="*60)
+        print("\n" + "=" * 60)
 
-        if summary['success_rate'] >= 0.8:
+        if summary["success_rate"] >= 0.8:
             print("🎉 Schwabot v0.05 is ready for deployment!")
         else:
             print("⚠️  Some tests failed. Please review and fix issues.")
@@ -498,7 +531,7 @@ def main():
     tester.print_summary(summary)
 
     # Exit with appropriate code
-    if summary['success_rate'] >= 0.8:
+    if summary["success_rate"] >= 0.8:
         sys.exit(0)
     else:
         sys.exit(1)

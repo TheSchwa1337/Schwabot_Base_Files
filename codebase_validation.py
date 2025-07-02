@@ -16,15 +16,15 @@ import sys
 import ast
 import importlib
 import logging
-from typing import List, Dict, Set, Tuple, Any
+from typing import List, Dict, Any
 from pathlib import Path
 import subprocess
 import json
 
 # Configure logging
 logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s')
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+)
 logger = logging.getLogger(__name__)
 
 
@@ -41,7 +41,7 @@ class CodebaseValidator:
             "stubs_found": 0,
             "missing_imports": 0,
             "gpu_cpu_issues": 0,
-            "syntax_errors": 0
+            "syntax_errors": 0,
         }
         # Patterns to identify stubs and incomplete code
         self.stub_patterns = [
@@ -65,7 +65,7 @@ class CodebaseValidator:
             "cuda",
             "gpu_available",
             "cpu_fallback",
-            "hardware_optimization"
+            "hardware_optimization",
         ]
 
     def scan_directory(self, directory: str = None) -> List[Path]:
@@ -76,13 +76,25 @@ class CodebaseValidator:
         python_files = []
         for root, dirs, files in os.walk(directory):
             # Skip common directories that shouldn't contain source code
-            dirs[:] = [d for d in dirs if d not in {
-                '__pycache__', '.git', '.vscode', 'node_modules',
-                'venv', 'env', '.pytest_cache', 'build', 'dist'
-            }]
+            dirs[:] = [
+                d
+                for d in dirs
+                if d
+                not in {
+                    "__pycache__",
+                    ".git",
+                    ".vscode",
+                    "node_modules",
+                    "venv",
+                    "env",
+                    ".pytest_cache",
+                    "build",
+                    "dist",
+                }
+            ]
 
             for file in files:
-                if file.endswith('.py'):
+                if file.endswith(".py"):
                     python_files.append(Path(root) / file)
 
         return python_files
@@ -92,9 +104,9 @@ class CodebaseValidator:
         issues = []
 
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, "r", encoding="utf-8") as f:
                 content = f.read()
-                lines = content.split('\n')
+                lines = content.split("\n")
 
             # Check for stub patterns
             for line_num, line in enumerate(lines, 1):
@@ -102,13 +114,15 @@ class CodebaseValidator:
 
                 for pattern in self.stub_patterns:
                     if pattern.lower() in line_lower:
-                        issues.append({
-                            "type": "stub_pattern",
-                            "line": line_num,
-                            "pattern": pattern,
-                            "content": line.strip(),
-                            "severity": "warning"
-                        })
+                        issues.append(
+                            {
+                                "type": "stub_pattern",
+                                "line": line_num,
+                                "pattern": pattern,
+                                "content": line.strip(),
+                                "severity": "warning",
+                            }
+                        )
 
             # Check for GPU/CPU related issues
             gpu_cpu_issues = self._check_gpu_cpu_implementation(content, lines)
@@ -118,34 +132,40 @@ class CodebaseValidator:
             try:
                 ast.parse(content)
             except SyntaxError as e:
-                issues.append({
-                    "type": "syntax_error",
-                    "line": e.lineno,
-                    "message": str(e),
-                    "severity": "error"
-                })
+                issues.append(
+                    {
+                        "type": "syntax_error",
+                        "line": e.lineno,
+                        "message": str(e),
+                        "severity": "error",
+                    }
+                )
 
             # Check for import issues
             import_issues = self._check_imports(content, lines, file_path)
             issues.extend(import_issues)
 
         except Exception as e:
-            issues.append({
-                "type": "file_error",
-                "message": f"Error reading file: {e}",
-                "severity": "error"
-            })
+            issues.append(
+                {
+                    "type": "file_error",
+                    "message": f"Error reading file: {e}",
+                    "severity": "error",
+                }
+            )
 
         return issues
 
     def _check_gpu_cpu_implementation(
-            self, content: str, lines: List[str]) -> List[Dict[str, Any]]:
+        self, content: str, lines: List[str]
+    ) -> List[Dict[str, Any]]:
         """Check for proper GPU/CPU implementation patterns."""
         issues = []
 
         # Check for GPU/CPU detection patterns
-        gpu_cpu_detected = any(pattern.lower() in content.lower()
-                               for pattern in self.gpu_cpu_patterns)
+        gpu_cpu_detected = any(
+            pattern.lower() in content.lower() for pattern in self.gpu_cpu_patterns
+        )
 
         if gpu_cpu_detected:
             # Check for proper fallback mechanisms
@@ -158,21 +178,26 @@ class CodebaseValidator:
             else:
                 # Potential issue - GPU/CPU code without proper fallbacks
                 for line_num, line in enumerate(lines, 1):
-                    if any(pattern.lower() in line.lower()
-                           for pattern in ["cupy", "numba", "cuda"]):
+                    if any(
+                        pattern.lower() in line.lower()
+                        for pattern in ["cupy", "numba", "cuda"]
+                    ):
                         if "import" in line and "try:" not in content:
-                            issues.append({
-                                "type": "gpu_cpu_issue",
-                                "line": line_num,
-                                "message": "GPU import without proper fallback mechanism",
-                                "content": line.strip(),
-                                "severity": "warning"
-                            })
+                            issues.append(
+                                {
+                                    "type": "gpu_cpu_issue",
+                                    "line": line_num,
+                                    "message": "GPU import without proper fallback mechanism",
+                                    "content": line.strip(),
+                                    "severity": "warning",
+                                }
+                            )
 
         return issues
 
-    def _check_imports(self, content: str,
-                       lines: List[str], file_path: Path) -> List[Dict[str, Any]]:
+    def _check_imports(
+        self, content: str, lines: List[str], file_path: Path
+    ) -> List[Dict[str, Any]]:
         """Check for import issues."""
         issues = []
 
@@ -195,20 +220,25 @@ class CodebaseValidator:
                 if "unified_math" in import_name:
                     # Check if unified_math_system exists
                     if not self._check_module_exists("core.unified_math_system"):
-                        issues.append({
-                            "type": "missing_import",
-                            "message": f"Missing module: {import_name}",
-                            "severity": "error"
-                        })
+                        issues.append(
+                            {
+                                "type": "missing_import",
+                                "message": f"Missing module: {import_name}",
+                                "severity": "error",
+                            }
+                        )
 
                 # Check for other core dependencies
-                if import_name.startswith(
-                        "core.") and not self._check_module_exists(import_name):
-                    issues.append({
-                        "type": "missing_import",
-                        "message": f"Missing core module: {import_name}",
-                        "severity": "error"
-                    })
+                if import_name.startswith("core.") and not self._check_module_exists(
+                    import_name
+                ):
+                    issues.append(
+                        {
+                            "type": "missing_import",
+                            "message": f"Missing core module: {import_name}",
+                            "severity": "error",
+                        }
+                    )
 
         except SyntaxError:
             # Syntax errors are handled separately
@@ -238,10 +268,7 @@ class CodebaseValidator:
             issues = self.check_file_for_stubs(file_path)
 
             if issues:
-                self.issues.append({
-                    "file": str(file_path),
-                    "issues": issues
-                })
+                self.issues.append({"file": str(file_path), "issues": issues})
                 self.stats["files_with_issues"] += 1
                 self.stats["total_issues"] += len(issues)
 
@@ -271,7 +298,7 @@ class CodebaseValidator:
                 ["flake8", "--count", "--select=E,W,F", "--max-line-length=120"],
                 capture_output=True,
                 text=True,
-                cwd=self.root_dir
+                cwd=self.root_dir,
             )
 
             if result.stdout:
@@ -293,12 +320,12 @@ class CodebaseValidator:
                 ["mypy", "--ignore-missing-imports", "--no-strict-optional"],
                 capture_output=True,
                 text=True,
-                cwd=self.root_dir
+                cwd=self.root_dir,
             )
 
             if result.returncode != 0:
                 logger.warning("Mypy found type issues")
-                self.stats["mypy_issues"] = len(result.stdout.split('\n')) - 1
+                self.stats["mypy_issues"] = len(result.stdout.split("\n")) - 1
             else:
                 logger.info("Mypy check passed")
                 self.stats["mypy_issues"] = 0
@@ -315,20 +342,21 @@ class CodebaseValidator:
                 "total_files": self.stats["files_checked"],
                 "files_with_issues": self.stats["files_with_issues"],
                 "total_issues": self.stats["total_issues"],
-                "validation_status": "PASS" if self.stats["total_issues"] == 0 else "FAIL"},
+                "validation_status": "PASS"
+                if self.stats["total_issues"] == 0
+                else "FAIL",
+            },
             "issue_breakdown": {
                 "stubs_found": self.stats["stubs_found"],
                 "missing_imports": self.stats["missing_imports"],
                 "gpu_cpu_issues": self.stats["gpu_cpu_issues"],
                 "syntax_errors": self.stats["syntax_errors"],
-                "flake8_issues": self.stats.get(
-                    "flake8_issues",
-                    0),
-                "mypy_issues": self.stats.get(
-                    "mypy_issues",
-                    0)},
+                "flake8_issues": self.stats.get("flake8_issues", 0),
+                "mypy_issues": self.stats.get("mypy_issues", 0),
+            },
             "detailed_issues": self.issues,
-            "recommendations": self._generate_recommendations()}
+            "recommendations": self._generate_recommendations(),
+        }
         return report
 
     def _generate_recommendations(self) -> List[str]:
@@ -373,7 +401,8 @@ class CodebaseValidator:
 
         if not recommendations:
             recommendations.append(
-                "Codebase validation passed! All checks completed successfully.")
+                "Codebase validation passed! All checks completed successfully."
+            )
 
         return recommendations
 
@@ -385,7 +414,7 @@ class CodebaseValidator:
 
         # Summary
         summary = report["summary"]
-        print(f"\nSUMMARY:")
+        print("\nSUMMARY:")
         print(f"  Total files checked: {summary['total_files']}")
         print(f"  Files with issues: {summary['files_with_issues']}")
         print(f"  Total issues found: {summary['total_issues']}")
@@ -393,7 +422,7 @@ class CodebaseValidator:
 
         # Issue breakdown
         breakdown = report["issue_breakdown"]
-        print(f"\nISSUE BREAKDOWN:")
+        print("\nISSUE BREAKDOWN:")
         print(f"  Stubs found: {breakdown['stubs_found']}")
         print(f"  Missing imports: {breakdown['missing_imports']}")
         print(f"  GPU/CPU issues: {breakdown['gpu_cpu_issues']}")
@@ -403,27 +432,29 @@ class CodebaseValidator:
 
         # Detailed issues
         if report["detailed_issues"]:
-            print(f"\nDETAILED ISSUES:")
+            print("\nDETAILED ISSUES:")
             for file_issue in report["detailed_issues"]:
                 print(f"\n  File: {file_issue['file']}")
                 for issue in file_issue["issues"]:
                     print(
-                        f"    [{issue['severity'].upper()}] Line {issue.get('line', 'N/A')}: {issue['message']}")
-                    if 'content' in issue:
+                        f"    [{issue['severity'].upper()}] Line {issue.get('line', 'N/A')}: {issue['message']}"
+                    )
+                    if "content" in issue:
                         print(f"      Content: {issue['content']}")
 
         # Recommendations
-        print(f"\nRECOMMENDATIONS:")
+        print("\nRECOMMENDATIONS:")
         for rec in report["recommendations"]:
             print(f"  • {rec}")
 
         print("\n" + "=" * 80)
 
-    def save_report(self, report: Dict[str, Any],
-                    filename: str = "codebase_validation_report.json"):
+    def save_report(
+        self, report: Dict[str, Any], filename: str = "codebase_validation_report.json"
+    ):
         """Save validation report to JSON file."""
         try:
-            with open(filename, 'w') as f:
+            with open(filename, "w") as f:
                 json.dump(report, f, indent=2)
             logger.info(f"Validation report saved to {filename}")
         except Exception as e:

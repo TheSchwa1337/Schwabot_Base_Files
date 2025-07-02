@@ -6,8 +6,7 @@ Provides comprehensive diagnostics, alerts, and auto-tab switching for critical 
 Streams immune system metrics, zone changes, and recovery operations.
 """
 
-from datetime import datetime
-from typing import Dict, List, Optional, Any, Set
+from typing import Dict, List, Any, Set
 import asyncio
 import json
 import logging
@@ -25,7 +24,6 @@ from core.enhanced_master_cycle_engine import (
     EnhancedSystemMode,
 )
 from core.biological_immune_error_handler import (
-    BiologicalImmuneErrorHandler,
     ImmuneZone,
 )
 
@@ -567,7 +565,7 @@ class ImmuneDiagnosticWebSocketServer:
             self.immune_handler.error_history.append(
                 {
                     "timestamp": time.time(),
-                    "error_type": f"TestError{i%3}",
+                    "error_type": f"TestError{i % 3}",
                     "error_message": f"Simulated error {i}",
                     "operation": "test_operation",
                     "args_count": 2,

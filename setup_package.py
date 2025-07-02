@@ -10,8 +10,8 @@ This creates a self-contained .exe that includes all working components.
 
 import os
 import sys
-import subprocess
 from pathlib import Path
+
 
 def create_requirements_txt():
     """Create requirements.txt with minimal dependencies."""
@@ -25,7 +25,7 @@ def create_requirements_txt():
         "json",
         "hashlib",
         "time",
-        "math"
+        "math",
     ]
 
     with open("requirements.txt", "w") as f:
@@ -34,9 +34,10 @@ def create_requirements_txt():
 
     print("Created requirements.txt")
 
+
 def create_pyinstaller_spec():
     """Create PyInstaller spec file for executable creation."""
-    spec_content = '''# -*- mode: python ; coding: utf-8 -*-
+    spec_content = """# -*- mode: python ; coding: utf-8 -*-
 
 block_cipher = None
 
@@ -96,17 +97,18 @@ exe = EXE(
     entitlements_file=None,
     icon=None,
 )
-'''
+"""
 
     with open("schwabot.spec", "w") as f:
         f.write(spec_content)
 
     print("Created PyInstaller spec file")
 
+
 def create_build_script():
     """Create build script for easy executable creation."""
-    if sys.platform.startswith('win'):
-        script_content = '''@echo off
+    if sys.platform.startswith("win"):
+        script_content = """@echo off
 echo Building Schwabot Brain Trading Executable...
 echo.
 
@@ -130,14 +132,14 @@ if exist "dist\\SchwabotBrainTrader.exe" (
 )
 
 pause
-'''
+"""
         script_name = "build.bat"
 
         # Write with UTF-8 encoding for Windows
-        with open(script_name, "w", encoding='utf-8') as f:
+        with open(script_name, "w", encoding="utf-8") as f:
             f.write(script_content)
     else:
-        script_content = '''#!/bin/bash
+        script_content = """#!/bin/bash
 echo "Building Schwabot Brain Trading Executable..."
 echo
 
@@ -159,20 +161,21 @@ if [ -f "dist/SchwabotBrainTrader" ]; then
 else
     echo "[ERROR] Build failed!"
 fi
-'''
+"""
         script_name = "build.sh"
 
         with open(script_name, "w") as f:
             f.write(script_content)
 
-        if not sys.platform.startswith('win'):
+        if not sys.platform.startswith("win"):
             os.chmod(script_name, 0o755)
 
     print(f"Created build script: {script_name}")
 
+
 def create_readme():
     """Create README for the packaged application."""
-    readme_content = '''# Schwabot Brain Trading System
+    readme_content = """# Schwabot Brain Trading System
 
 ## Overview
 
@@ -286,19 +289,17 @@ For issues and support, please review the test outputs and logs for diagnostic i
 
 **Schwabot Brain Trading System v1.0**
 *Advanced Trading with Brain-Enhanced Signal Processing*
-'''
+"""
 
-    with open("README.md", "w", encoding='utf-8') as f:
+    with open("README.md", "w", encoding="utf-8") as f:
         f.write(readme_content)
 
     print("Created README.md")
 
+
 def verify_core_files():
     """Verify that all core files exist."""
-    required_files = [
-        "core/brain_trading_engine.py",
-        "test_brain_integration.py"
-    ]
+    required_files = ["core/brain_trading_engine.py", "test_brain_integration.py"]
 
     missing_files = []
     for file in required_files:
@@ -311,6 +312,7 @@ def verify_core_files():
     else:
         print("All required files present")
         return True
+
 
 def main():
     """Main setup execution."""
@@ -333,7 +335,7 @@ def main():
     print("Next steps:")
     print("1. Run the build script to create executable:")
 
-    if sys.platform.startswith('win'):
+    if sys.platform.startswith("win"):
         print("   build.bat")
     else:
         print("   ./build.sh")
@@ -343,6 +345,7 @@ def main():
     print("3. The executable will be in the 'dist/' directory")
 
     print("\n[SUCCESS] Ready for packaging!")
+
 
 if __name__ == "__main__":
     main()

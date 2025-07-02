@@ -11,7 +11,8 @@ import sys
 import os
 
 # Add the core directory to the path
-sys.path.append(os.path.join(os.path.dirname(__file__), 'core'))
+sys.path.append(os.path.join(os.path.dirname(__file__), "core"))
+
 
 def test_mathematical_structures():
     """Test the mathematical state structures directly."""
@@ -54,7 +55,9 @@ def test_mathematical_structures():
         assert 0 <= cycle_position <= 2 * np.pi, "Cycle position should be in [0, 2π]"
         assert angular_velocity > 0, "Angular velocity should be positive"
         assert 0 <= phase_coherence <= 1, "Phase coherence should be in [0, 1]"
-        assert synchronization_level >= 0, "Synchronization level should be non-negative"
+        assert synchronization_level >= 0, (
+            "Synchronization level should be non-negative"
+        )
 
         print("  ✅ FerrisWheelState calculations passed")
 
@@ -88,9 +91,13 @@ def test_mathematical_structures():
         # Calculate entropy gradient: ∇S = Shannon(C⃗)
         if len(curl_field) > 1:
             # Normalize curl field for entropy calculation
-            curl_normalized = np.abs(curl_field) / (np.sum(np.abs(curl_field)) + epsilon)
+            curl_normalized = np.abs(curl_field) / (
+                np.sum(np.abs(curl_field)) + epsilon
+            )
             # Simple entropy calculation
-            entropy_gradient = -np.sum(curl_normalized * np.log2(curl_normalized + epsilon))
+            entropy_gradient = -np.sum(
+                curl_normalized * np.log2(curl_normalized + epsilon)
+            )
         else:
             entropy_gradient = 0.0
 
@@ -133,17 +140,25 @@ def test_mathematical_structures():
         # Calculate Sharpe ratio: Sharpe = R_annualized/(σ + ε)
         sharpe_ratio = annualized_return / (volatility + epsilon)
 
-        print(f"  Raw Return: {raw_return:.4f} ({raw_return*100:.2f}%)")
-        print(f"  Annualized Return: {annualized_return:.4f} ({annualized_return*100:.2f}%)")
+        print(f"  Raw Return: {raw_return:.4f} ({raw_return * 100:.2f}%)")
+        print(
+            f"  Annualized Return: {annualized_return:.4f} ({annualized_return * 100:.2f}%)"
+        )
         print(f"  Sharpe Ratio: {sharpe_ratio:.4f}")
         print(f"  Risk-Adjusted Return: {risk_adjusted_return:.4f}")
         print(f"  Risk Penalty: {risk_penalty:.4f}")
 
         # Validate mathematical properties
         expected_raw_return = (exit_price - entry_price) / entry_price
-        assert abs(raw_return - expected_raw_return) < 1e-10, "Raw return calculation error"
-        assert risk_penalty > 0 and risk_penalty <= 1, "Risk penalty should be in (0, 1]"
-        assert risk_adjusted_return <= raw_return, "Risk-adjusted return should not exceed raw return"
+        assert abs(raw_return - expected_raw_return) < 1e-10, (
+            "Raw return calculation error"
+        )
+        assert risk_penalty > 0 and risk_penalty <= 1, (
+            "Risk penalty should be in (0, 1]"
+        )
+        assert risk_adjusted_return <= raw_return, (
+            "Risk-adjusted return should not exceed raw return"
+        )
 
         print("  ✅ ProfitState calculations passed")
 
@@ -170,13 +185,14 @@ def test_mathematical_structures():
 
         # Calculate growth rate: G = p·log(1 + bf*) + q·log(1 - f*)
         if kelly_fraction > 0 and kelly_fraction < 1:
-            growth_rate = (win_probability * np.log(1 + odds * kelly_fraction) +
-                          lose_probability * np.log(1 - kelly_fraction))
+            growth_rate = win_probability * np.log(
+                1 + odds * kelly_fraction
+            ) + lose_probability * np.log(1 - kelly_fraction)
         else:
             growth_rate = 0.0
 
-        print(f"  Kelly Fraction: {kelly_fraction:.4f} ({kelly_fraction*100:.2f}%)")
-        print(f"  Safe Kelly: {safe_kelly:.4f} ({safe_kelly*100:.2f}%)")
+        print(f"  Kelly Fraction: {kelly_fraction:.4f} ({kelly_fraction * 100:.2f}%)")
+        print(f"  Safe Kelly: {safe_kelly:.4f} ({safe_kelly * 100:.2f}%)")
         print(f"  Odds: {odds:.4f}")
         print(f"  Growth Rate: {growth_rate:.6f}")
         print(f"  ROI Volatility: {volatility:.4f}")
@@ -196,8 +212,8 @@ def test_mathematical_structures():
         time_series = [
             np.array([1, 2, 3, 4, 5]),  # Short scale
             np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]),  # Medium scale
-            np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15])  # Long scale
-]
+            np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]),  # Long scale
+        ]
         periods = [5, 10, 15]  # Corresponding periods
         sync_threshold = 0.7
 
@@ -224,8 +240,10 @@ def test_mathematical_structures():
 
         # Calculate ratios: (C₁/C₂, C₂/C₃)
         if len(phases) >= 3:
-            ratios = (phases[0] / (phases[1] + epsilon),
-                     phases[1] / (phases[2] + epsilon))
+            ratios = (
+                phases[0] / (phases[1] + epsilon),
+                phases[1] / (phases[2] + epsilon),
+            )
         else:
             ratios = (1.0, 1.0)
 
@@ -250,8 +268,10 @@ def test_mathematical_structures():
     except Exception as e:
         print(f"\n❌ Test failed with error: {e}")
         import traceback
+
         traceback.print_exc()
         return False
+
 
 if __name__ == "__main__":
     success = test_mathematical_structures()

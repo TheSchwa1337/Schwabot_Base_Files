@@ -12,7 +12,7 @@ from __future__ import annotations
 
 import logging
 import unicodedata
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict
 
 logger = logging.getLogger(__name__)
 
@@ -23,31 +23,54 @@ class DualUnicoreHandler:
     def __init__(self):
         """Initialize dual unicode handler."""
         self.mathematical_symbols = {
-            'psi': 'Ψ',
-            'phi': 'Φ',
-            'delta': 'Δ',
-            'epsilon': 'ε',
-            'lambda': 'λ',
-            'omega': 'ω',
-            'sigma': 'σ',
-            'tau': 'τ',
-            'pi': 'π',
-            'theta': 'θ',
-            'alpha': 'α',
-            'beta': 'β',
-            'gamma': 'γ',
+            "psi": "Ψ",
+            "phi": "Φ",
+            "delta": "Δ",
+            "epsilon": "ε",
+            "lambda": "λ",
+            "omega": "ω",
+            "sigma": "σ",
+            "tau": "τ",
+            "pi": "π",
+            "theta": "θ",
+            "alpha": "α",
+            "beta": "β",
+            "gamma": "γ",
         }
 
         self.subscripts = {
-            '0': '₀', '1': '₁', '2': '₂', '3': '₃', '4': '₄',
-            '5': '₅', '6': '₆', '7': '₇', '8': '₈', '9': '₉',
-            'n': 'ₙ', 'i': 'ᵢ', 'j': 'ⱼ', 'x': 'ₓ', 'y': 'ᵧ'
+            "0": "₀",
+            "1": "₁",
+            "2": "₂",
+            "3": "₃",
+            "4": "₄",
+            "5": "₅",
+            "6": "₆",
+            "7": "₇",
+            "8": "₈",
+            "9": "₉",
+            "n": "ₙ",
+            "i": "ᵢ",
+            "j": "ⱼ",
+            "x": "ₓ",
+            "y": "ᵧ",
         }
 
         self.superscripts = {
-            '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴',
-            '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹',
-            'n': 'ⁿ', 'i': 'ⁱ', '+': '⁺', '-': '⁻'
+            "0": "⁰",
+            "1": "¹",
+            "2": "²",
+            "3": "³",
+            "4": "⁴",
+            "5": "⁵",
+            "6": "⁶",
+            "7": "⁷",
+            "8": "⁸",
+            "9": "⁹",
+            "n": "ⁿ",
+            "i": "ⁱ",
+            "+": "⁺",
+            "-": "⁻",
         }
 
         logger.info("DualUnicoreHandler initialized")
@@ -56,7 +79,7 @@ class DualUnicoreHandler:
         """Normalize unicode text for mathematical processing."""
         try:
             # Normalize to NFC form
-            normalized = unicodedata.normalize('NFC', text)
+            normalized = unicodedata.normalize("NFC", text)
             return normalized
         except Exception as e:
             logger.error(f"Failed to normalize text: {e}")
@@ -69,7 +92,9 @@ class DualUnicoreHandler:
     def add_subscript(self, text: str, subscript: str) -> str:
         """Add subscript to text."""
         try:
-            subscript_chars = ''.join(self.subscripts.get(char, char) for char in str(subscript))
+            subscript_chars = "".join(
+                self.subscripts.get(char, char) for char in str(subscript)
+            )
             return f"{text}{subscript_chars}"
         except Exception as e:
             logger.error(f"Failed to add subscript: {e}")
@@ -78,7 +103,9 @@ class DualUnicoreHandler:
     def add_superscript(self, text: str, superscript: str) -> str:
         """Add superscript to text."""
         try:
-            superscript_chars = ''.join(self.superscripts.get(char, char) for char in str(superscript))
+            superscript_chars = "".join(
+                self.superscripts.get(char, char) for char in str(superscript)
+            )
             return f"{text}{superscript_chars}"
         except Exception as e:
             logger.error(f"Failed to add superscript: {e}")
@@ -111,11 +138,11 @@ class DualUnicoreHandler:
     def decode_dual_unicode(self, encoded: str) -> tuple[str, str]:
         """Decode dual unicode representation."""
         try:
-            if '⊕' in encoded:
-                parts = encoded.split('⊕', 1)
+            if "⊕" in encoded:
+                parts = encoded.split("⊕", 1)
                 return parts[0], parts[1] if len(parts) > 1 else ""
-            elif '+' in encoded:
-                parts = encoded.split('+', 1)
+            elif "+" in encoded:
+                parts = encoded.split("+", 1)
                 return parts[0], parts[1] if len(parts) > 1 else ""
             else:
                 return encoded, ""
@@ -141,8 +168,8 @@ class DualUnicoreHandler:
         """Validate unicode text integrity."""
         try:
             # Check if text can be encoded/decoded properly
-            encoded = text.encode('utf-8')
-            decoded = encoded.decode('utf-8')
+            encoded = text.encode("utf-8")
+            decoded = encoded.decode("utf-8")
             return decoded == text
         except Exception as e:
             logger.error(f"Unicode integrity validation failed: {e}")

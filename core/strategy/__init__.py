@@ -13,15 +13,7 @@ from .zygot_zalgo_entropy_dual_key_gate import ZygotZalgoEntropyDualKeyGate
 MarketPhase,
 MultiPhaseStrategyWeightTensor,
 )
-def create_glyph_trading_system(:
-simulation_mode: bool = True,
-enable_fractal_memory: bool = True,
-enable_gear_shifting: bool = True,
-enable_risk_management: bool = True,
-    enable_portfolio_tracking: bool = True,
-):
-    """Factory function to create an integrated glyph trading system."""
-glyph_core = GlyphStrategyCore(
+def create_glyph_trading_system():Factory function to create an integrated glyph trading system.glyph_core = GlyphStrategyCore(
 enable_fractal_memory=enable_fractal_memory,
 enable_gear_shifting=enable_gear_shifting,
 )
@@ -31,4 +23,4 @@ enable_risk_management=enable_risk_management,
         enable_portfolio_tracking=enable_portfolio_tracking,
 )
         return glyph_core, portal
-'"
+'

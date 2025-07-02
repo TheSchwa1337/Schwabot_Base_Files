@@ -12,19 +12,16 @@ from core.lantern_core_integration import (
     start_lantern_core,
     stop_lantern_core,
     get_lantern_core_status,
-    LanternCoreIntegration,
 )
-from utils.price_bridge import get_secure_price, get_multiple_secure_prices
-from utils.market_data_utils import create_market_snapshot, display_market_snapshot
+from utils.price_bridge import get_secure_price
+from utils.market_data_utils import create_market_snapshot
 from utils.secure_config_manager import SecureConfigManager, get_secure_api_key
 import os
 import sys
-import time
 import threading
 import asyncio
-from typing import Dict, Any, Optional
-from flask import Flask, render_template, request, jsonify, redirect, url_for, flash
-from werkzeug.security import generate_password_hash, check_password_hash
+from typing import Dict, Any
+from flask import Flask, render_template, request, jsonify
 
 # Add project root to path for imports
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -201,9 +198,7 @@ def test_connection(service):
                     "success": success,
                     "data": price_data.to_dict() if success else {},
                     "message": (
-                        f"Price: ${
-                        price_data.price:,.2f} ({
-                        price_data.source})"
+                        f"Price: ${price_data.price:,.2f} ({price_data.source})"
                         if success
                         else "Price data unavailable"
                     ),

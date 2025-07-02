@@ -9,10 +9,12 @@ Basic test of the enhanced state system functionality.
 import sys
 import time
 import logging
-from datetime import datetime
 
 # Configure logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+)
+
 
 def test_enhanced_state_manager():
     """Test EnhancedStateManager basic functionality."""
@@ -21,7 +23,9 @@ def test_enhanced_state_manager():
 
     try:
         from core.internal_state.enhanced_state_manager import (
-            EnhancedStateManager, SystemMode, LogLevel, BTCPriceHash
+            EnhancedStateManager,
+            SystemMode,
+            LogLevel,
         )
 
         # Create manager in demo mode
@@ -51,7 +55,9 @@ def test_enhanced_state_manager():
 
         # Test system status
         status = manager.get_system_status()
-        print(f"✅ System status: {status['mode']} mode, {status['memory']['active_memories']} memories")
+        print(
+            f"✅ System status: {status['mode']} mode, {status['memory']['active_memories']} memories"
+        )
 
         # Test BTC price history
         history = manager.get_btc_price_history(limit=10)
@@ -66,8 +72,10 @@ def test_enhanced_state_manager():
     except Exception as e:
         print(f"❌ EnhancedStateManager test failed: {e}")
         import traceback
+
         traceback.print_exc()
         return False
+
 
 def test_system_integration():
     """Test SystemIntegration basic functionality."""
@@ -88,14 +96,20 @@ def test_system_integration():
         )
 
         if "error" not in demo_state:
-            print(f"✅ Demo state created with BTC hash: {demo_state['btc_price_hash']['hash'][:16]}...")
-            print(f"✅ System integration data: {len(demo_state['system_integration']['connected_systems'])} systems")
+            print(
+                f"✅ Demo state created with BTC hash: {demo_state['btc_price_hash']['hash'][:16]}..."
+            )
+            print(
+                f"✅ System integration data: {len(demo_state['system_integration']['connected_systems'])} systems"
+            )
         else:
             print(f"❌ Demo state creation failed: {demo_state['error']}")
 
         # Test comprehensive system status
         status = integration.get_comprehensive_system_status()
-        print(f"✅ Comprehensive status: {status['system_health_summary']['total_systems']} systems connected")
+        print(
+            f"✅ Comprehensive status: {status['system_health_summary']['total_systems']} systems connected"
+        )
 
         # Test export
         export_file = integration.export_integrated_system_state()
@@ -106,8 +120,10 @@ def test_system_integration():
     except Exception as e:
         print(f"❌ SystemIntegration test failed: {e}")
         import traceback
+
         traceback.print_exc()
         return False
+
 
 def test_btc_price_hashing():
     """Test BTC price hashing functionality."""
@@ -115,7 +131,11 @@ def test_btc_price_hashing():
     print("=" * 50)
 
     try:
-        from core.internal_state.enhanced_state_manager import BTCPriceHash, EnhancedStateManager, SystemMode, LogLevel
+        from core.internal_state.enhanced_state_manager import (
+            EnhancedStateManager,
+            SystemMode,
+            LogLevel,
+        )
 
         # Create manager
         manager = EnhancedStateManager(mode=SystemMode.DEMO, log_level=LogLevel.INFO)
@@ -134,7 +154,9 @@ def test_btc_price_hashing():
                     btc_hash = manager.generate_btc_price_hash(price, volume, phase)
                     generated_hashes.append(btc_hash)
 
-                    print(f"✅ Generated hash for price={price}, volume={volume}, phase={phase}: {btc_hash.hash_value[:16]}...")
+                    print(
+                        f"✅ Generated hash for price={price}, volume={volume}, phase={phase}: {btc_hash.hash_value[:16]}..."
+                    )
 
                     # Verify hash properties
                     assert btc_hash.price == price
@@ -148,7 +170,9 @@ def test_btc_price_hashing():
         # Test hash uniqueness
         hash_values = [h.hash_value for h in generated_hashes]
         unique_hashes = set(hash_values)
-        print(f"✅ Hash uniqueness: {len(unique_hashes)} unique hashes out of {len(hash_values)} total")
+        print(
+            f"✅ Hash uniqueness: {len(unique_hashes)} unique hashes out of {len(hash_values)} total"
+        )
 
         # Test BTC price history
         history = manager.get_btc_price_history(limit=50)
@@ -159,8 +183,10 @@ def test_btc_price_hashing():
     except Exception as e:
         print(f"❌ BTC price hashing test failed: {e}")
         import traceback
+
         traceback.print_exc()
         return False
+
 
 def main():
     """Run basic enhanced state system tests."""
@@ -170,12 +196,12 @@ def main():
     tests = [
         ("EnhancedStateManager", test_enhanced_state_manager),
         ("SystemIntegration", test_system_integration),
-        ("BTC Price Hashing", test_btc_price_hashing)
-]
+        ("BTC Price Hashing", test_btc_price_hashing),
+    ]
     results = []
     for test_name, test_func in tests:
         try:
-            print(f"\n{'='*60}")
+            print(f"\n{'=' * 60}")
             result = test_func()
             results.append((test_name, result))
         except Exception as e:
@@ -199,13 +225,16 @@ def main():
 
     if passed == total:
         print("🎉 All enhanced state system tests passed!")
-        print("✅ System properly initializes, organizes, and connects to internal systems")
+        print(
+            "✅ System properly initializes, organizes, and connects to internal systems"
+        )
         print("✅ BTC price hashing works correctly for demo states")
         print("✅ Memory and backlog management is functional")
         return 0
     else:
         print("⚠️ Some tests failed. Please check the implementation.")
         return 1
+
 
 if __name__ == "__main__":
     sys.exit(main())

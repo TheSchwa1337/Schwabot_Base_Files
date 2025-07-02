@@ -1,5 +1,6 @@
 import numpy as np
 
+
 class FractalBase:
     def __init__(self):
         self.memory_shell = 1.0
@@ -21,4 +22,4 @@ class FractalBase:
         # For now, it could be inverse of variance or a measure of stability.
         if len(data) < 2:
             return 1.0
-        return 1.0 - np.std(data) / (np.mean(data) + 1e-9) if np.mean(data) > 0 else 0.0 
+        return 1.0 - np.std(data) / (np.mean(data) + 1e-9) if np.mean(data) > 0 else 0.0

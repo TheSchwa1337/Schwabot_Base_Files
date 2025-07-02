@@ -24,14 +24,13 @@ import sys
 import time
 from pathlib import Path
 from typing import Dict, Any, Optional
-import threading
 
 # Core Schwabot imports
 from schwabot_unified_math import (
     UnifiedMathematicsFramework,
     BTC256SHAPipeline,
     FerrisWheelVisualizer,
-    unified_trading_math
+    unified_trading_math,
 )
 from core.advanced_settings_engine import AdvancedSettingsEngine
 from symbolic_profit_router import SymbolicProfitRouter
@@ -60,9 +59,11 @@ logger = logging.getLogger(__name__)
 class EnhancedDataIntegrator:
     """Integrates cached API data into trading signals and strategy logic."""
 
-    def __init__(self,
-                 settings_engine: AdvancedSettingsEngine,
-                 math_framework: UnifiedMathematicsFramework):
+    def __init__(
+        self,
+        settings_engine: AdvancedSettingsEngine,
+        math_framework: UnifiedMathematicsFramework,
+    ):
         self.settings_engine = settings_engine
         self.math_framework = math_framework
         self.data_cache: Dict[str, Any] = {}
@@ -122,7 +123,8 @@ class EnhancedDataIntegrator:
             cache_file = Path("flask/feeds") / cache_path
             if cache_file.exists():
                 import json
-                with open(cache_file, 'r') as f:
+
+                with open(cache_file, "r") as f:
                     return json.load(f)
         except Exception as e:
             logger.error(f"Failed to load cached data from {cache_path}: {e}")
@@ -154,7 +156,7 @@ class EnhancedDataIntegrator:
         try:
             summary = data.get("summary", {})
             whale_score = summary.get("whale_activity_score", 0)
-            total_volume = summary.get("total_volume_usd", 0)
+            summary.get("total_volume_usd", 0)
 
             # High whale activity suggests institutional movement
             if whale_score > 70:
@@ -177,11 +179,7 @@ class EnhancedDataIntegrator:
             momentum = scores.get("momentum", 50)
 
             # Weighted combination of scores
-            combined_score = (
-                network_health * 0.3 +
-                valuation * 0.4 +
-                momentum * 0.3
-            )
+            combined_score = network_health * 0.3 + valuation * 0.4 + momentum * 0.3
 
             # Convert to signal (-1 to 1)
             normalized_signal = (combined_score - 50) / 50
@@ -204,7 +202,7 @@ class EnhancedDataIntegrator:
                 "bearish": -0.5,
                 "neutral": 0.0,
                 "bullish": 0.5,
-                "very_bullish": 1.0
+                "very_bullish": 1.0,
             }
 
             trend_signal = trend_values.get(market_trend, 0.0)
@@ -260,14 +258,14 @@ class SchawbotEnhancedLauncher:
                 shell_radius=144.44,
                 thermal_conductivity=0.024,
                 energy_scale=1.0,
-                psi_infinity=1.618033988749
+                psi_infinity=1.618033988749,
             )
             logger.info("✓ Unified Mathematics Framework initialized")
 
             # 2. Initialize advanced settings engine
             self.settings_engine = AdvancedSettingsEngine(
                 config_path=Path("settings/advanced_config.json"),
-                math_framework=self.math_framework
+                math_framework=self.math_framework,
             )
             logger.info("✓ Advanced Settings Engine initialized")
 
@@ -344,6 +342,7 @@ class SchawbotEnhancedLauncher:
 
     def _setup_signal_handlers(self) -> None:
         """Setup signal handlers for graceful shutdown."""
+
         def signal_handler(signum, frame):
             logger.info(f"Received signal {signum}, initiating shutdown...")
             asyncio.create_task(self.shutdown())
@@ -365,9 +364,7 @@ class SchawbotEnhancedLauncher:
 
             # Start cache sync service
             await self.cache_sync_service.start()
-            self.tasks["cache_sync"] = asyncio.create_task(
-                self._monitor_cache_sync()
-            )
+            self.tasks["cache_sync"] = asyncio.create_task(self._monitor_cache_sync())
 
             # Start settings monitoring
             self.tasks["settings_monitor"] = asyncio.create_task(
@@ -390,7 +387,9 @@ class SchawbotEnhancedLauncher:
             )
 
             logger.info("🚀 All Schwabot services started successfully!")
-            logger.info("📊 Entering enhanced trading mode with spatial momentum system...")
+            logger.info(
+                "📊 Entering enhanced trading mode with spatial momentum system..."
+            )
 
             # Wait for tasks to complete (they run indefinitely)
             await asyncio.gather(*self.tasks.values(), return_exceptions=True)
@@ -405,7 +404,10 @@ class SchawbotEnhancedLauncher:
         while self.running:
             try:
                 # Check if cache sync is running
-                if self.cache_sync_service._task and self.cache_sync_service._task.done():
+                if (
+                    self.cache_sync_service._task
+                    and self.cache_sync_service._task.done()
+                ):
                     logger.warning("Cache sync service stopped, restarting...")
                     await self.cache_sync_service.start()
 
@@ -423,15 +425,21 @@ class SchawbotEnhancedLauncher:
                 recommendations = self.settings_engine.get_adaptive_recommendations()
 
                 if recommendations:
-                    logger.info(f"📈 Adaptive recommendations available: {len(recommendations)}")
+                    logger.info(
+                        f"📈 Adaptive recommendations available: {len(recommendations)}"
+                    )
 
                     # Auto-apply low-risk recommendations
                     for setting_name, rec in recommendations.items():
-                        if abs(rec["suggested"] - rec["current"]) < 0.1:  # Small changes only
+                        if (
+                            abs(rec["suggested"] - rec["current"]) < 0.1
+                        ):  # Small changes only
                             self.settings_engine.set_setting_value(
                                 setting_name, rec["suggested"]
                             )
-                            logger.info(f"🔧 Auto-applied setting: {setting_name} = {rec['suggested']}")
+                            logger.info(
+                                f"🔧 Auto-applied setting: {setting_name} = {rec['suggested']}"
+                            )
 
                 await asyncio.sleep(300)  # Check every 5 minutes
 
@@ -477,7 +485,9 @@ class SchawbotEnhancedLauncher:
                 await self._process_market_tick()
 
                 # Get unified signals
-                unified_signal = self.performance_metrics.get("last_unified_signal", 0.0)
+                unified_signal = self.performance_metrics.get(
+                    "last_unified_signal", 0.0
+                )
                 signal_breakdown = self.performance_metrics.get("signal_breakdown", {})
 
                 # Apply spatial momentum calculations
@@ -517,13 +527,18 @@ class SchawbotEnhancedLauncher:
         except Exception as e:
             logger.error(f"Error processing market tick: {e}")
 
-    async def _apply_spatial_momentum(self, unified_signal: float, breakdown: Dict[str, float]) -> None:
+    async def _apply_spatial_momentum(
+        self, unified_signal: float, breakdown: Dict[str, float]
+    ) -> None:
         """Apply spatial momentum calculations to trading decisions."""
         try:
             # Calculate momentum vector using unified math framework
             if self.math_framework:
                 drift_field = self.math_framework.compute_unified_drift_field(
-                    x=unified_signal, y=time.time() / 1000, z=0.5, time=time.time() / 86400
+                    x=unified_signal,
+                    y=time.time() / 1000,
+                    z=0.5,
+                    time=time.time() / 86400,
                 )
 
                 # Store momentum calculations
@@ -532,7 +547,7 @@ class SchawbotEnhancedLauncher:
                     "unified_signal": unified_signal,
                     "signal_breakdown": breakdown,
                     "drift_field": drift_field,
-                    "timestamp": time.time()
+                    "timestamp": time.time(),
                 }
 
         except Exception as e:
@@ -542,19 +557,27 @@ class SchawbotEnhancedLauncher:
         """Execute trading decisions based on unified signal."""
         try:
             # Apply signal threshold from settings
-            threshold = self.settings_engine.get_setting_value("ghost_relay_threshold") or 0.9
+            threshold = (
+                self.settings_engine.get_setting_value("ghost_relay_threshold") or 0.9
+            )
 
             if abs(unified_signal) >= threshold:
                 # Strong signal - consider trading
                 if self.profit_router:
                     # Route through symbolic profit router
-                    profit_signal = await self._calculate_profit_optimization(unified_signal)
+                    profit_signal = await self._calculate_profit_optimization(
+                        unified_signal
+                    )
 
                     if profit_signal > 0.1:  # Minimum profit threshold
-                        logger.info(f"💰 Profit opportunity detected: {profit_signal:.3f}")
+                        logger.info(
+                            f"💰 Profit opportunity detected: {profit_signal:.3f}"
+                        )
 
                         # Update settings feedback
-                        self.settings_engine.update_profit_feedback("unified_trading", profit_signal)
+                        self.settings_engine.update_profit_feedback(
+                            "unified_trading", profit_signal
+                        )
 
         except Exception as e:
             logger.error(f"Error in trading execution: {e}")
@@ -586,13 +609,15 @@ class SchawbotEnhancedLauncher:
             current_time = time.time()
             runtime = current_time - self.start_time
 
-            self.performance_metrics.update({
-                "runtime_seconds": runtime,
-                "runtime_hours": runtime / 3600,
-                "system_status": self.settings_engine.get_system_status(),
-                "math_framework_status": self.math_framework.get_system_status(),
-                "last_update": current_time
-            })
+            self.performance_metrics.update(
+                {
+                    "runtime_seconds": runtime,
+                    "runtime_hours": runtime / 3600,
+                    "system_status": self.settings_engine.get_system_status(),
+                    "math_framework_status": self.math_framework.get_system_status(),
+                    "last_update": current_time,
+                }
+            )
 
         except Exception as e:
             logger.error(f"Error updating performance: {e}")
@@ -605,10 +630,18 @@ class SchawbotEnhancedLauncher:
 
                 # Log performance every 15 minutes
                 if runtime % 900 < 30:  # Within 30 seconds of 15-minute mark
-                    logger.info(f"📊 Performance Report (Runtime: {runtime/3600:.1f}h)")
-                    logger.info(f"   Unified Signal: {self.performance_metrics.get('last_unified_signal', 0):.3f}")
-                    logger.info(f"   Drift Field: {self.performance_metrics.get('drift_field', 0):.3f}")
-                    logger.info(f"   Active Settings: {len(self.settings_engine.settings_state)}")
+                    logger.info(
+                        f"📊 Performance Report (Runtime: {runtime / 3600:.1f}h)"
+                    )
+                    logger.info(
+                        f"   Unified Signal: {self.performance_metrics.get('last_unified_signal', 0):.3f}"
+                    )
+                    logger.info(
+                        f"   Drift Field: {self.performance_metrics.get('drift_field', 0):.3f}"
+                    )
+                    logger.info(
+                        f"   Active Settings: {len(self.settings_engine.settings_state)}"
+                    )
 
                     # Save configuration periodically
                     self.settings_engine.save_configuration()
@@ -646,10 +679,12 @@ class SchawbotEnhancedLauncher:
         # Export final visualization data
         if self.ferris_visualizer:
             try:
-                viz_data = self.ferris_visualizer.create_visualization_data(
+                self.ferris_visualizer.create_visualization_data(
                     {"performance": self.performance_metrics}
                 )
-                self.ferris_visualizer.export_visualization_data("final_session_data.json")
+                self.ferris_visualizer.export_visualization_data(
+                    "final_session_data.json"
+                )
             except Exception as e:
                 logger.error(f"Failed to export visualization data: {e}")
 
@@ -661,11 +696,11 @@ async def main():
     # Setup logging
     logging.basicConfig(
         level=logging.INFO,
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
         handlers=[
-            logging.FileHandler('schwabot_enhanced.log'),
-            logging.StreamHandler(sys.stdout)
-        ]
+            logging.FileHandler("schwabot_enhanced.log"),
+            logging.StreamHandler(sys.stdout),
+        ],
     )
 
     logger.info("🌟 Starting Schwabot Enhanced System...")

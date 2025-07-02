@@ -9,10 +9,9 @@ Tests all mathematical formulas from the MATHEMATICAL_FORMULAS_REFERENCE.md
 import numpy as np
 import sys
 import os
-from typing import List, Dict, Any, Tuple
 
 # Add the core directory to the path
-sys.path.append(os.path.join(os.path.dirname(__file__), 'core'))
+sys.path.append(os.path.join(os.path.dirname(__file__), "core"))
 
 try:
     from advanced_mathematical_core import (
@@ -22,14 +21,21 @@ try:
         kl_divergence_stable,
         entropy_gradient_field,
         stable_activation_matrix,
-        robust_matrix_inverse
+        robust_matrix_inverse,
     )
     from type_defs import QuantumState, Temperature, Vector, Matrix, Tensor
-    from constants import EPSILON_FLOAT64, THERMAL_CONDUCTIVITY_BTC, REDUCED_PLANCK, KELLY_SAFETY_FACTOR
+    from constants import (
+        EPSILON_FLOAT64,
+        THERMAL_CONDUCTIVITY_BTC,
+        REDUCED_PLANCK,
+        KELLY_SAFETY_FACTOR,
+    )
+
     print("✅ Successfully imported mathematical core modules")
 except ImportError as e:
     print(f"❌ Import error: {e}")
     sys.exit(1)
+
 
 def test_delta_calculations():
     """Test delta calculation formulas."""
@@ -54,6 +60,7 @@ def test_delta_calculations():
     print(f"  Zero Price Delta: {delta_zero:.4f}")
 
     print("  ✅ Delta calculations passed")
+
 
 def test_entropy_and_information_theory():
     """Test entropy and information theory formulas."""
@@ -81,6 +88,7 @@ def test_entropy_and_information_theory():
 
     print("  ✅ Entropy and information theory passed")
 
+
 def test_matrix_activation():
     """Test matrix activation formulas."""
     print("\n🔁 Testing Matrix Activation...")
@@ -91,7 +99,9 @@ def test_matrix_activation():
 
     activation = stable_activation_matrix(input_array, weight_matrix, lambda_reg=0.01)
     assert activation.shape == (3,), "Activation shape error"
-    assert np.all(activation >= -1) and np.all(activation <= 1), "Activation should be in [-1, 1]"
+    assert np.all(activation >= -1) and np.all(activation <= 1), (
+        "Activation should be in [-1, 1]"
+    )
     print(f"  Activation Result: {activation}")
 
     # Test robust matrix inversion
@@ -102,6 +112,7 @@ def test_matrix_activation():
     print(f"  Matrix Inversion Check: {np.allclose(identity_check, np.eye(2))}")
 
     print("  ✅ Matrix activation passed")
+
 
 def test_thermal_dynamics():
     """Test thermal dynamics formulas."""
@@ -117,7 +128,9 @@ def test_thermal_dynamics():
     print(f"  EMA Volume: {ema_volume:.2f}")
 
     # Volatility-scaled pressure
-    pressure = np.tanh(volume_data[-1] / (ema_volume + EPSILON_FLOAT64)) * (1 + np.log(1 + volatility))
+    pressure = np.tanh(volume_data[-1] / (ema_volume + EPSILON_FLOAT64)) * (
+        1 + np.log(1 + volatility)
+    )
     assert -1 <= pressure <= 1, "Pressure should be in [-1, 1]"
     print(f"  Volatility-Scaled Pressure: {pressure:.4f}")
 
@@ -133,6 +146,7 @@ def test_thermal_dynamics():
 
     print("  ✅ Thermal dynamics passed")
 
+
 def test_risk_adjusted_profit_rate():
     """Test risk-adjusted profit rate formulas."""
     print("\n📈 Testing Risk-Adjusted Profit Rate...")
@@ -146,12 +160,16 @@ def test_risk_adjusted_profit_rate():
     raw_return = (exit_price - entry_price) / entry_price
     expected_return = 0.05
     assert abs(raw_return - expected_return) < 1e-10, "Raw return calculation error"
-    print(f"  Raw Return: {raw_return:.4f} ({raw_return*100:.2f}%)")
+    print(f"  Raw Return: {raw_return:.4f} ({raw_return * 100:.2f}%)")
 
     # Annualized return
     annualized_return = raw_return * (525600 / max(time_held_minutes, 1))
-    assert annualized_return > raw_return, "Annualized return should be larger than raw return"
-    print(f"  Annualized Return: {annualized_return:.4f} ({annualized_return*100:.2f}%)")
+    assert annualized_return > raw_return, (
+        "Annualized return should be larger than raw return"
+    )
+    print(
+        f"  Annualized Return: {annualized_return:.4f} ({annualized_return * 100:.2f}%)"
+    )
 
     # Sharpe ratio
     sharpe_ratio = annualized_return / (volatility + EPSILON_FLOAT64)
@@ -160,10 +178,13 @@ def test_risk_adjusted_profit_rate():
 
     # Risk-adjusted return
     risk_adjusted_return = raw_return * np.exp(-volatility)
-    assert risk_adjusted_return <= raw_return, "Risk-adjusted return should not exceed raw return"
+    assert risk_adjusted_return <= raw_return, (
+        "Risk-adjusted return should not exceed raw return"
+    )
     print(f"  Risk-Adjusted Return: {risk_adjusted_return:.4f}")
 
     print("  ✅ Risk-adjusted profit rate passed")
+
 
 def test_kelly_criterion():
     """Test Kelly criterion formulas."""
@@ -183,23 +204,25 @@ def test_kelly_criterion():
     # Calculate Kelly fraction
     lose_probability = 1 - win_probability
     kelly_fraction = (win_probability * odds - lose_probability) / odds
-    print(f"  Kelly Fraction: {kelly_fraction:.4f} ({kelly_fraction*100:.2f}%)")
+    print(f"  Kelly Fraction: {kelly_fraction:.4f} ({kelly_fraction * 100:.2f}%)")
 
     # Apply safety factor and limits
     safe_kelly = np.clip(kelly_fraction, 0, max_fraction) * safety_factor
     assert safe_kelly <= max_fraction, "Safe Kelly should not exceed max fraction"
     assert safe_kelly >= 0, "Safe Kelly should be non-negative"
-    print(f"  Safe Kelly: {safe_kelly:.4f} ({safe_kelly*100:.2f}%)")
+    print(f"  Safe Kelly: {safe_kelly:.4f} ({safe_kelly * 100:.2f}%)")
 
     # Calculate growth rate
     if kelly_fraction > 0 and kelly_fraction < 1:
-        growth_rate = (win_probability * np.log(1 + odds * kelly_fraction) +
-                      lose_probability * np.log(1 - kelly_fraction))
+        growth_rate = win_probability * np.log(
+            1 + odds * kelly_fraction
+        ) + lose_probability * np.log(1 - kelly_fraction)
     else:
         growth_rate = 0.0
     print(f"  Growth Rate: {growth_rate:.6f}")
 
     print("  ✅ Kelly criterion passed")
+
 
 def test_quantum_signal_normalization():
     """Test quantum signal normalization formulas."""
@@ -212,12 +235,16 @@ def test_quantum_signal_normalization():
     # Normalize state
     state_magnitude = np.linalg.norm(quantum_state.amplitude)
     normalized_state = quantum_state.amplitude / (state_magnitude + EPSILON_FLOAT64)
-    assert np.allclose(np.linalg.norm(normalized_state), 1.0, atol=1e-10), "State normalization error"
+    assert np.allclose(np.linalg.norm(normalized_state), 1.0, atol=1e-10), (
+        "State normalization error"
+    )
     print(f"  Normalized State Magnitude: {np.linalg.norm(normalized_state):.6f}")
 
     # Probability vector
     probability_vector = np.abs(normalized_state) ** 2
-    assert np.allclose(np.sum(probability_vector), 1.0, atol=1e-10), "Probability vector should sum to 1"
+    assert np.allclose(np.sum(probability_vector), 1.0, atol=1e-10), (
+        "Probability vector should sum to 1"
+    )
     print(f"  Probability Vector Sum: {np.sum(probability_vector):.6f}")
 
     # Von Neumann entropy
@@ -226,18 +253,19 @@ def test_quantum_signal_normalization():
     print(f"  Von Neumann Entropy: {von_neumann_entropy:.4f}")
 
     # Purity
-    purity = np.sum(probability_vector ** 2)
+    purity = np.sum(probability_vector**2)
     assert 0 < purity <= 1, "Purity should be in (0, 1]"
     print(f"  Purity: {purity:.4f}")
 
     print("  ✅ Quantum signal normalization passed")
+
 
 def test_quantum_thermal_coupling():
     """Test quantum-thermal coupling formulas."""
     print("\n🧊 Testing Quantum-Thermal Coupling...")
 
     # Create mock quantum state and temperature
-    quantum_state = QuantumState(amplitude=np.array([1.0, 0.0]), phase=0.0)
+    QuantumState(amplitude=np.array([1.0, 0.0]), phase=0.0)
     temperature = Temperature(300.0)  # 300K
     gamma_factor = 1.0
 
@@ -263,6 +291,7 @@ def test_quantum_thermal_coupling():
 
     print("  ✅ Quantum-thermal coupling passed")
 
+
 def test_fractal_dimensions():
     """Test fractal dimensions (Higuchi method)."""
     print("\n🌌 Testing Fractal Dimensions (Higuchi)...")
@@ -282,7 +311,7 @@ def test_fractal_dimensions():
             l_m_k = 0
             for i in range(1, int((n - m) / k)):
                 l_m_k += abs(time_series[m + i * k] - time_series[m + (i - 1) * k])
-            l_m_k = l_m_k * (n - 1) / (k ** 2)
+            l_m_k = l_m_k * (n - 1) / (k**2)
             l_k += l_m_k
         l_k = l_k / k
         l_values.append(l_k)
@@ -300,17 +329,20 @@ def test_fractal_dimensions():
 
     print("  ✅ Fractal dimensions passed")
 
+
 def test_ferris_wheel_harmonic_analysis():
     """Test Ferris wheel harmonic analysis."""
     print("\n🎡 Testing Ferris Wheel Harmonic Analysis...")
 
-    time_series = np.array([100, 101, 102, 103, 104, 105])
+    np.array([100, 101, 102, 103, 104, 105])
     periods = [60, 120, 240]  # 1h, 2h, 4h periods
     current_time = 100.0
 
     # Calculate harmonic phases
     harmonic_phases = [2 * np.pi * current_time / P for P in periods]
-    assert len(harmonic_phases) == len(periods), "Number of phases should match number of periods"
+    assert len(harmonic_phases) == len(periods), (
+        "Number of phases should match number of periods"
+    )
     print(f"  Harmonic Phases: {[f'{p:.4f}' for p in harmonic_phases]}")
 
     # Calculate angular velocity
@@ -331,6 +363,7 @@ def test_ferris_wheel_harmonic_analysis():
     print(f"  Sync Level: {sync_level:.4f}")
 
     print("  ✅ Ferris wheel harmonic analysis passed")
+
 
 def test_void_well_fractal_index():
     """Test Void-Well fractal index."""
@@ -365,6 +398,7 @@ def test_void_well_fractal_index():
 
     print("  ✅ Void-Well fractal index passed")
 
+
 def test_api_entropy_reflection_penalty():
     """Test API entropy reflection penalty."""
     print("\n🧩 Testing API Entropy Reflection Penalty...")
@@ -381,10 +415,13 @@ def test_api_entropy_reflection_penalty():
 
     # Calculate reflected confidence
     reflected_confidence = confidence * penalty * (1 - entropy / np.log2(2))
-    assert reflected_confidence <= confidence, "Reflected confidence should not exceed original"
+    assert reflected_confidence <= confidence, (
+        "Reflected confidence should not exceed original"
+    )
     print(f"  Reflected Confidence: {reflected_confidence:.4f}")
 
     print("  ✅ API entropy reflection penalty passed")
+
 
 def test_recursive_time_lock_synchronization():
     """Test recursive time lock synchronization."""
@@ -394,8 +431,8 @@ def test_recursive_time_lock_synchronization():
     time_series = [
         np.array([1, 2, 3, 4, 5]),  # Short scale
         np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]),  # Medium scale
-        np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15])  # Long scale
-]
+        np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]),  # Long scale
+    ]
     periods = [5, 10, 15]  # Corresponding periods
     sync_threshold = 0.7
 
@@ -409,7 +446,9 @@ def test_recursive_time_lock_synchronization():
         else:
             phases.append(0.0)
 
-    assert len(phases) == len(periods), "Number of phases should match number of periods"
+    assert len(phases) == len(periods), (
+        "Number of phases should match number of periods"
+    )
     print(f"  Phases: {[f'{p:.4f}' for p in phases]}")
 
     # Calculate coherence
@@ -429,6 +468,7 @@ def test_recursive_time_lock_synchronization():
 
     print("  ✅ Recursive time lock synchronization passed")
 
+
 def test_grayscale_drift_tensor_core():
     """Test grayscale drift tensor core."""
     print("\n🌗 Testing Grayscale Drift Tensor Core...")
@@ -438,12 +478,13 @@ def test_grayscale_drift_tensor_core():
     psi_infinity = 1.0
 
     # Drift field
-    drift_field = (np.exp(-t) * np.sin(x * y) * np.cos(z) *
-                   (1 + abs(x)) / (1 + 0.1 * abs(y)))
+    drift_field = (
+        np.exp(-t) * np.sin(x * y) * np.cos(z) * (1 + abs(x)) / (1 + 0.1 * abs(y))
+    )
     print(f"  Drift Field: {drift_field:.6f}")
 
     # Ring drift allocation
-    ring_drift = psi_infinity * np.sin(l * delta) / (1 + l ** 2)
+    ring_drift = psi_infinity * np.sin(l * delta) / (1 + l**2)
     print(f"  Ring Drift: {ring_drift:.6f}")
 
     # Gamma coupling
@@ -453,6 +494,7 @@ def test_grayscale_drift_tensor_core():
 
     print("  ✅ Grayscale drift tensor core passed")
 
+
 def test_recursive_tensor_feedback():
     """Test recursive tensor feedback."""
     print("\n🧠 Testing Recursive Tensor Feedback...")
@@ -461,8 +503,8 @@ def test_recursive_tensor_feedback():
     base_tensor = np.array([[1.0, 2.0], [3.0, 4.0]])
     feedback_tensors = [
         np.array([[0.1, 0.2], [0.3, 0.4]]),
-        np.array([[0.5, 0.6], [0.7, 0.8]])
-]
+        np.array([[0.5, 0.6], [0.7, 0.8]]),
+    ]
     delta_entropies = [0.1, 0.2]
     lambda_values = [0.5, 1.0]
 
@@ -473,17 +515,22 @@ def test_recursive_tensor_feedback():
 
     # Calculate weighted sum
     weighted_sum = base_tensor.copy()
-    for i, (tensor, delta_entropy, weight) in enumerate(zip(feedback_tensors, delta_entropies, weights)):
+    for i, (tensor, delta_entropy, weight) in enumerate(
+        zip(feedback_tensors, delta_entropies, weights)
+    ):
         weighted_sum += weight * tensor * delta_entropy
 
     # Normalize by total weight
     total_weight = 1 + sum(weights)
     feedback_tensor = weighted_sum / total_weight
 
-    assert feedback_tensor.shape == base_tensor.shape, "Feedback tensor shape should match base tensor"
+    assert feedback_tensor.shape == base_tensor.shape, (
+        "Feedback tensor shape should match base tensor"
+    )
     print(f"  Feedback Tensor:\n{feedback_tensor}")
 
     print("  ✅ Recursive tensor feedback passed")
+
 
 def main():
     """Run all mathematical formula tests."""
@@ -514,10 +561,12 @@ def main():
     except Exception as e:
         print(f"\n❌ Test failed with error: {e}")
         import traceback
+
         traceback.print_exc()
         return 1
 
     return 0
+
 
 if __name__ == "__main__":
     exit(main())

@@ -54,39 +54,135 @@ Error Categories:
 
 import os
 import subprocess
-import re
-import json
 from collections import defaultdict
-from typing import Dict, List, Tuple, Set
-import ast
+from typing import List, Tuple
 
 # Mathematical keywords that should be preserved during fixes
 MATH_PRESERVATION_KEYWORDS = {
-    'numpy', 'scipy', 'math', 'mpmath', 'sympy', 'numba',
-    'tensor', 'lattice', 'phase', 'profit', 'entropy', 'glyph', 'hash',
-    'volume', 'trade', 'signal', 'router', 'engine', 'recursive', 'vector',
-    'matrix', 'sha256', 'ECC', 'NCCO', 'fractal', 'cycle', 'oscillator',
-    'backtrace', 'resonance', 'projection', 'delta', 'lambda', 'mu', 'sigma',
-    'alpha', 'beta', 'gamma', 'zeta', 'theta', 'pi', 'phi', 'psi', 'rho',
-    'Fourier', 'Kalman', 'Markov', 'stochastic', 'deterministic', 'statistic',
-    'probability', 'distribution', 'mean', 'variance', 'covariance', 'correlation',
-    'regression', 'gradient', 'derivative', 'integral', 'logistic', 'exponential',
-    'sigmoid', 'activation', 'neural', 'feedback', 'harmonic', 'volatility',
-    'liquidity', 'momentum', 'backprop', 'sha', 'RDE', 'RITL', 'RITTLE'
+    "numpy",
+    "scipy",
+    "math",
+    "mpmath",
+    "sympy",
+    "numba",
+    "tensor",
+    "lattice",
+    "phase",
+    "profit",
+    "entropy",
+    "glyph",
+    "hash",
+    "volume",
+    "trade",
+    "signal",
+    "router",
+    "engine",
+    "recursive",
+    "vector",
+    "matrix",
+    "sha256",
+    "ECC",
+    "NCCO",
+    "fractal",
+    "cycle",
+    "oscillator",
+    "backtrace",
+    "resonance",
+    "projection",
+    "delta",
+    "lambda",
+    "mu",
+    "sigma",
+    "alpha",
+    "beta",
+    "gamma",
+    "zeta",
+    "theta",
+    "pi",
+    "phi",
+    "psi",
+    "rho",
+    "Fourier",
+    "Kalman",
+    "Markov",
+    "stochastic",
+    "deterministic",
+    "statistic",
+    "probability",
+    "distribution",
+    "mean",
+    "variance",
+    "covariance",
+    "correlation",
+    "regression",
+    "gradient",
+    "derivative",
+    "integral",
+    "logistic",
+    "exponential",
+    "sigmoid",
+    "activation",
+    "neural",
+    "feedback",
+    "harmonic",
+    "volatility",
+    "liquidity",
+    "momentum",
+    "backprop",
+    "sha",
+    "RDE",
+    "RITL",
+    "RITTLE",
 }
 # Auto-fixable error codes
 AUTO_FIXABLE_CODES = {
-    'E501', 'E302', 'E303', 'E305', 'E225', 'E226', 'E231', 'E241', 'E251',
-    'E261', 'E262', 'E265', 'E266', 'E401', 'E402', 'E701', 'E702', 'E703',
-    'E711', 'E712', 'E713', 'E714', 'E721', 'E722', 'E731', 'E741', 'E742',
-    'E743', 'W291', 'W292', 'W293', 'W391', 'W503', 'W504', 'W505', 'W601',
-    'W602', 'W603', 'W604', 'W605', 'W606'
+    "E501",
+    "E302",
+    "E303",
+    "E305",
+    "E225",
+    "E226",
+    "E231",
+    "E241",
+    "E251",
+    "E261",
+    "E262",
+    "E265",
+    "E266",
+    "E401",
+    "E402",
+    "E701",
+    "E702",
+    "E703",
+    "E711",
+    "E712",
+    "E713",
+    "E714",
+    "E721",
+    "E722",
+    "E731",
+    "E741",
+    "E742",
+    "E743",
+    "W291",
+    "W292",
+    "W293",
+    "W391",
+    "W503",
+    "W504",
+    "W505",
+    "W601",
+    "W602",
+    "W603",
+    "W604",
+    "W605",
+    "W606",
 }
 # Critical error codes that must be fixed manually
-CRITICAL_CODES = {'E999', 'F821', 'F822', 'F823', 'F831', 'F841', 'F901'}
+CRITICAL_CODES = {"E999", "F821", "F822", "F823", "F831", "F841", "F901"}
 
 # Codebase directories to scan
-CODEBASE_DIRS = ['core', 'core/math', 'core/phase_engine', 'core/recursive_engine']
+CODEBASE_DIRS = ["core", "core/math", "core/phase_engine", "core/recursive_engine"]
 
 
 class Flake8Analyzer:
@@ -102,10 +198,12 @@ class Flake8Analyzer:
         try:
             # Run flake8 with specific error codes
             cmd = [
-                'python', '-m', 'flake8',
-                '--select=E,W,F',
-                '--format=%(path)s:%(row)d:%(col)d:%(code)s:%(text)s',
-                '--statistics'
+                "python",
+                "-m",
+                "flake8",
+                "--select=E,W,F",
+                "--format=%(path)s:%(row)d:%(col)d:%(code)s:%(text)s",
+                "--statistics",
             ]
             # Add directories
             for directory in CODEBASE_DIRS:
@@ -118,9 +216,10 @@ class Flake8Analyzer:
                 return []
 
             # Parse output
-            lines = result.stdout.strip().split('\n')
+            lines = result.stdout.strip().split("\n")
             return [
-                line for line in lines if ':' in line and not line.startswith('---')]
+                line for line in lines if ":" in line and not line.startswith("---")
+            ]
 
         except subprocess.TimeoutExpired:
             print("Flake8 analysis timed out")
@@ -133,7 +232,7 @@ class Flake8Analyzer:
         """Parse a Flake8 error line."""
         try:
             # Format: path:line:column:code:message
-            parts = line.split(':', 4)
+            parts = line.split(":", 4)
             if len(parts) >= 5:
                 filepath = parts[0]
                 line_num = int(parts[1])
@@ -143,12 +242,12 @@ class Flake8Analyzer:
                 return filepath, line_num, column, code, message
         except (ValueError, IndexError):
             pass
-        return None, 0, 0, '', ''
+        return None, 0, 0, "", ""
 
     def is_math_relevant_file(self, filepath: str) -> bool:
         """Check if a file contains mathematical content."""
         try:
-            with open(filepath, 'r', encoding='utf-8', errors='ignore') as f:
+            with open(filepath, "r", encoding="utf-8", errors="ignore") as f:
                 content = f.read()
                 return any(keyword in content for keyword in MATH_PRESERVATION_KEYWORDS)
         except Exception:
@@ -160,19 +259,19 @@ class Flake8Analyzer:
             filepath, line_num, column, code, message = self.parse_error_line(line)
             if filepath:
                 error_info = {
-                    'line': line_num,
-                    'column': column,
-                    'code': code,
-                    'message': message,
-                    'auto_fixable': code in AUTO_FIXABLE_CODES,
-                    'critical': code in CRITICAL_CODES
+                    "line": line_num,
+                    "column": column,
+                    "code": code,
+                    "message": message,
+                    "auto_fixable": code in AUTO_FIXABLE_CODES,
+                    "critical": code in CRITICAL_CODES,
                 }
                 self.errors[filepath].append(error_info)
                 self.total_count += 1
 
-                if error_info['auto_fixable']:
+                if error_info["auto_fixable"]:
                     self.auto_fixable_count += 1
-                if error_info['critical']:
+                if error_info["critical"]:
                     self.critical_count += 1
 
                 # Mark math-relevant files
@@ -196,32 +295,34 @@ class Flake8Analyzer:
         if self.critical_count > 0:
             report.append("## 🚨 Critical Errors (Must Fix)")
             for filepath, errors in self.errors.items():
-                critical_errors = [e for e in errors if e['critical']]
+                critical_errors = [e for e in errors if e["critical"]]
                 if critical_errors:
                     report.append(f"### {filepath}")
                     for error in critical_errors:
                         math_flag = "🔬" if filepath in self.math_relevant_files else ""
                         report.append(
-                            f"- Line {error['line']}: {error['code']} - {error['message']} {math_flag}")
+                            f"- Line {error['line']}: {error['code']} - {error['message']} {math_flag}"
+                        )
                     report.append("")
 
         # Auto-fixable errors
         if self.auto_fixable_count > 0:
             report.append("## 🔧 Auto-fixable Errors")
             for filepath, errors in self.errors.items():
-                auto_errors = [e for e in errors if e['auto_fixable']]
+                auto_errors = [e for e in errors if e["auto_fixable"]]
                 if auto_errors:
                     report.append(f"### {filepath}")
                     for error in auto_errors:
                         math_flag = "🔬" if filepath in self.math_relevant_files else ""
                         report.append(
-                            f"- Line {error['line']}: {error['code']} - {error['message']} {math_flag}")
+                            f"- Line {error['line']}: {error['code']} - {error['message']} {math_flag}"
+                        )
                     report.append("")
 
         # Other errors
         other_errors = []
         for filepath, errors in self.errors.items():
-            other = [e for e in errors if not e['auto_fixable'] and not e['critical']]
+            other = [e for e in errors if not e["auto_fixable"] and not e["critical"]]
             if other:
                 other_errors.append((filepath, other))
 
@@ -232,29 +333,34 @@ class Flake8Analyzer:
                 for error in errors:
                     math_flag = "🔬" if filepath in self.math_relevant_files else ""
                     report.append(
-                        f"- Line {error['line']}: {error['code']} - {error['message']} {math_flag}")
+                        f"- Line {error['line']}: {error['code']} - {error['message']} {math_flag}"
+                    )
                 report.append("")
 
         # Recommendations
         report.append("## 📋 Recommendations")
         if self.critical_count > 0:
             report.append(
-                "1. **Fix critical errors first** - These prevent code from running")
+                "1. **Fix critical errors first** - These prevent code from running"
+            )
         if self.auto_fixable_count > 0:
             report.append(
-                "2. **Run auto-fix** - Use `python auto_fix_flake8.py` to fix formatting issues")
+                "2. **Run auto-fix** - Use `python auto_fix_flake8.py` to fix formatting issues"
+            )
         if len(self.math_relevant_files) > 0:
             report.append(
-                "3. **Preserve mathematical structures** - Files marked with 🔬 contain mathematical logic")
+                "3. **Preserve mathematical structures** - Files marked with 🔬 contain mathematical logic"
+            )
         report.append(
-            "4. **Test after fixes** - Run your test suite after making changes")
+            "4. **Test after fixes** - Run your test suite after making changes"
+        )
 
         return "\n".join(report)
 
     def save_report(self, filename: str = "flake8_analysis_report.md"):
         """Save the analysis report to a file."""
         report = self.generate_report()
-        with open(filename, 'w', encoding='utf-8') as f:
+        with open(filename, "w", encoding="utf-8") as f:
             f.write(report)
         print(f"Flake8 analysis report saved to {filename}")
 
@@ -271,7 +377,7 @@ class Flake8Analyzer:
         self.categorize_errors(error_lines)
         self.save_report()
 
-        print(f"\nAnalysis complete:")
+        print("\nAnalysis complete:")
         print(f"- Total errors: {self.total_count}")
         print(f"- Auto-fixable: {self.auto_fixable_count}")
         print(f"- Critical: {self.critical_count}")

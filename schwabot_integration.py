@@ -1,5 +1,6 @@
 # -*- coding: utf - 8 -*-
 """Public Schwabot integration facade."""
+
 """Public Schwabot integration facade."
 # -*- coding: utf - 8 -*-
 from __future__ import annotations

@@ -113,9 +113,7 @@ except ImportError:
 
         # Find appropriate insertion point
         import_pattern = r"^(import\s+\w+|from\s+\w+\s+import\s+.*?)$"
-        import_matches = list(
-            re.finditer(import_pattern, content, re.MULTILINE)
-        )
+        import_matches = list(re.finditer(import_pattern, content, re.MULTILINE))
 
         if import_matches:
             # Insert after last import
@@ -131,9 +129,7 @@ except ImportError:
 
         # Insert the CLI imports
         modified_content = (
-            content[:insert_pos]
-            + self.CLI_IMPORT_STATEMENT
-            + content[insert_pos:]
+            content[:insert_pos] + self.CLI_IMPORT_STATEMENT + content[insert_pos:]
         )
 
         return modified_content
@@ -152,7 +148,7 @@ except ImportError:
                 return False, "Backup creation failed"
 
             # Read file content
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, "r", encoding="utf-8") as f:
                 content = f.read()
 
             # Apply CLI compatibility
@@ -161,11 +157,13 @@ except ImportError:
             # Check if modifications were made
             if modified_content != content:
                 # Write modified content
-                with open(file_path, 'w', encoding='utf-8') as f:
+                with open(file_path, "w", encoding="utf-8") as f:
                     f.write(modified_content)
 
                 self.processed_files.append(file_path)
-                success_msg = f"Successfully enhanced {file_path} with CLI compatibility"
+                success_msg = (
+                    f"Successfully enhanced {file_path} with CLI compatibility"
+                )
                 logger.info(success_msg)
                 return True, success_msg
             else:
@@ -207,7 +205,8 @@ except ImportError:
 
         results["success_rate"] = (
             results["success_count"] / results["total_files"] * 100
-            if results["total_files"] > 0 else 0
+            if results["total_files"] > 0
+            else 0
         )
 
         return results
@@ -240,16 +239,18 @@ def main():
 
     if CLI_HANDLER_AVAILABLE:
         safe_print("📊 Processing Results:")
-        safe_print("   Files Processed: {}/{}".format(
-            results['success_count'], results['total_files']
-        ))
-        safe_print("   Success Rate: {:.1f}%".format(results['success_rate']))
-        safe_print("   Errors: {}".format(results['error_count']))
+        safe_print(
+            "   Files Processed: {}/{}".format(
+                results["success_count"], results["total_files"]
+            )
+        )
+        safe_print("   Success Rate: {:.1f}%".format(results["success_rate"]))
+        safe_print("   Errors: {}".format(results["error_count"]))
 
         if results["errors"]:
             safe_print("\n❌ Errors encountered:")
             for error in results["errors"]:
-                safe_print("   {}: {}".format(error['file'], error['error']))
+                safe_print("   {}: {}".format(error["file"], error["error"]))
 
         if results["success_rate"] >= 90:
             safe_print(
@@ -260,11 +261,13 @@ def main():
             safe_print("\n⚠️ PARTIAL SUCCESS: Some files may need manual review.")
             safe_print("   Check the error log for specific issues.")
     else:
-        print("Files Processed: {}/{}".format(
-            results['success_count'], results['total_files']
-        ))
-        print("Success Rate: {:.1f}%".format(results['success_rate']))
-        print("Errors: {}".format(results['error_count']))
+        print(
+            "Files Processed: {}/{}".format(
+                results["success_count"], results["total_files"]
+            )
+        )
+        print("Success Rate: {:.1f}%".format(results["success_rate"]))
+        print("Errors: {}".format(results["error_count"]))
 
 
 if __name__ == "__main__":

@@ -13,14 +13,14 @@ from __future__ import annotations
 
 import numpy as np
 import logging
-from typing import Any, Dict, List, Optional, TYPE_CHECKING
+from typing import Any, Dict, List, TYPE_CHECKING
 from dataclasses import dataclass
 import hashlib
 import json
 from datetime import datetime
 
 if TYPE_CHECKING:
-    from typing_extensions import Self
+    pass
 
 logger = logging.getLogger(__name__)
 
@@ -32,6 +32,7 @@ Matrix = np.ndarray
 @dataclass
 class AdvancedIndicators:
     """Container for advanced trading indicators."""
+
     atr: float
     williams_r: float
     stochastic_k: float
@@ -42,6 +43,7 @@ class AdvancedIndicators:
 @dataclass
 class HashMemoryBlock:
     """Memory block for hash-based fractal pattern storage."""
+
     hash_signature: str
     profit: float
     strategy_id: str
@@ -81,11 +83,7 @@ class CoreMathLibV2:
         )
         return vwap
 
-    def calculate_true_range(
-            self,
-            high: Vector,
-            low: Vector,
-            close: Vector) -> Vector:
+    def calculate_true_range(self, high: Vector, low: Vector, close: Vector) -> Vector:
         """Calculate True Range for ATR."""
         if len(high) != len(low) or len(low) != len(close) or len(high) < 2:
             return np.zeros_like(high)
@@ -104,11 +102,8 @@ class CoreMathLibV2:
         return true_range
 
     def calculate_atr(
-            self,
-            high: Vector,
-            low: Vector,
-            close: Vector,
-            period: int = 14) -> Vector:
+        self, high: Vector, low: Vector, close: Vector, period: int = 14
+    ) -> Vector:
         """Calculate Average True Range."""
         true_range = self.calculate_true_range(high, low, close)
 
@@ -159,11 +154,8 @@ class CoreMathLibV2:
         return np.clip(rsi, 0, 100)
 
     def calculate_williams_r(
-            self,
-            high: Vector,
-            low: Vector,
-            close: Vector,
-            period: int = 14) -> Vector:
+        self, high: Vector, low: Vector, close: Vector, period: int = 14
+    ) -> Vector:
         """Calculate Williams % R."""
         if len(high) < period:
             return np.zeros_like(high)
@@ -171,14 +163,15 @@ class CoreMathLibV2:
         williams_r = np.zeros_like(high)
 
         for i in range(period - 1, len(high)):
-            highest_high = np.max(high[i - period + 1:i + 1])
-            lowest_low = np.min(low[i - period + 1:i + 1])
+            highest_high = np.max(high[i - period + 1 : i + 1])
+            lowest_low = np.min(low[i - period + 1 : i + 1])
 
             if highest_high - lowest_low == 0:
                 williams_r[i] = -50.0
             else:
-                williams_r[i] = (-100 * (highest_high - close[i]
-                                         ) / (highest_high - lowest_low))
+                williams_r[i] = (
+                    -100 * (highest_high - close[i]) / (highest_high - lowest_low)
+                )
 
         return williams_r
 
@@ -195,12 +188,12 @@ class CoreMathLibV2:
             return {
                 "k_percent": np.zeros_like(high),
                 "d_percent": np.zeros_like(high),
-}
+            }
         k_percent = np.zeros_like(high)
 
         for i in range(k_period - 1, len(high)):
-            highest_high = np.max(high[i - k_period + 1:i + 1])
-            lowest_low = np.min(low[i - k_period + 1:i + 1])
+            highest_high = np.max(high[i - k_period + 1 : i + 1])
+            lowest_low = np.min(low[i - k_period + 1 : i + 1])
 
             if highest_high - lowest_low == 0:
                 k_percent[i] = 50.0
@@ -212,16 +205,13 @@ class CoreMathLibV2:
         # Calculate %D as moving average of %K
         d_percent = np.zeros_like(k_percent)
         for i in range(d_period - 1, len(k_percent)):
-            d_percent[i] = np.mean(k_percent[i - d_period + 1:i + 1])
+            d_percent[i] = np.mean(k_percent[i - d_period + 1 : i + 1])
 
         return {"k_percent": k_percent, "d_percent": d_percent}
 
     def calculate_cci(
-            self,
-            high: Vector,
-            low: Vector,
-            close: Vector,
-            period: int = 20) -> Vector:
+        self, high: Vector, low: Vector, close: Vector, period: int = 20
+    ) -> Vector:
         """Calculate Commodity Channel Index."""
         if len(high) < period:
             return np.zeros_like(high)
@@ -232,7 +222,7 @@ class CoreMathLibV2:
         cci = np.zeros_like(typical_price)
 
         for i in range(period - 1, len(typical_price)):
-            tp_period = typical_price[i - period + 1:i + 1]
+            tp_period = typical_price[i - period + 1 : i + 1]
             sma_tp = np.mean(tp_period)
             mean_deviation = np.mean(np.abs(tp_period - sma_tp))
 
@@ -267,16 +257,12 @@ class CoreMathLibV2:
             if n < 4:
                 kurtosis = 0.0
             else:
-                kurtosis = (
-                    n * (n + 1) / ((n - 1) * (n - 2) * (n - 3))
-                ) * np.sum(((data - mean_val) / std_val) ** 4) - (
-                    3 * (n - 1) ** 2 / ((n - 2) * (n - 3))
-                )
+                kurtosis = (n * (n + 1) / ((n - 1) * (n - 2) * (n - 3))) * np.sum(
+                    ((data - mean_val) / std_val) ** 4
+                ) - (3 * (n - 1) ** 2 / ((n - 2) * (n - 3)))
 
         # Jarque-Bera test statistic for normality
-        jb_statistic = (
-            (n / 6) * (skewness**2 + (kurtosis**2) / 4) if n > 6 else 0.0
-        )
+        jb_statistic = (n / 6) * (skewness**2 + (kurtosis**2) / 4) if n > 6 else 0.0
 
         return {
             "mean": float(mean_val),
@@ -289,9 +275,9 @@ class CoreMathLibV2:
             "max": float(np.max(data)),
             "median": float(np.median(data)),
             "iqr": float(np.percentile(data, 75) - np.percentile(data, 25)),
-}
-    def entropy_analysis(self, data: Vector,
-                         bins: int = 10) -> Dict[str, float]:
+        }
+
+    def entropy_analysis(self, data: Vector, bins: int = 10) -> Dict[str, float]:
         """Perform entropy analysis of data distribution."""
         if len(data) == 0:
             return {"shannon_entropy": 0.0, "normalized_entropy": 0.0}
@@ -310,17 +296,17 @@ class CoreMathLibV2:
 
         # Normalized entropy (0 to 1)
         max_entropy = np.log2(len(hist)) if len(hist) > 1 else 1.0
-        normalized_entropy = (
-            shannon_entropy / max_entropy if max_entropy > 0 else 0.0
-        )
+        normalized_entropy = shannon_entropy / max_entropy if max_entropy > 0 else 0.0
 
         return {
             "shannon_entropy": float(shannon_entropy),
             "normalized_entropy": float(normalized_entropy),
             "max_entropy": float(max_entropy),
-}
+        }
+
     def moving_average_variants(
-            self, data: Vector, period: int = 20) -> Dict[str, float]:
+        self, data: Vector, period: int = 20
+    ) -> Dict[str, float]:
         """Calculate various moving average types."""
         if len(data) < period:
             period = len(data)
@@ -359,16 +345,14 @@ class CoreMathLibV2:
             "ema": float(ema),
             "wma": float(wma),
             "hull_ma": float(hull_ma),
-}
+        }
+
     def generate_hash_signature(self, data: Vector, strategy_id: str) -> str:
         """Generate SHA-256 hash signature for data and strategy."""
         data_str = f"{strategy_id}_{np.array2string(data, precision=6)}"
         return hashlib.sha256(data_str.encode()).hexdigest()
 
-    def hash_similarity_score(
-            self,
-            new_hash: str,
-            memory_hashes: List[str]) -> float:
+    def hash_similarity_score(self, new_hash: str, memory_hashes: List[str]) -> float:
         """Calculate hash similarity score using Hamming distance."""
         if not memory_hashes:
             return 0.0
@@ -381,9 +365,7 @@ class CoreMathLibV2:
             old_binary = bin(int(old_hash, 16))[2:].zfill(256)
 
             # Calculate Hamming distance
-            hamming_dist = sum(
-                c1 != c2 for c1, c2 in zip(
-                    new_binary, old_binary))
+            hamming_dist = sum(c1 != c2 for c1, c2 in zip(new_binary, old_binary))
 
             # Convert to similarity score (0-1)
             similarity = 1.0 - (hamming_dist / 256)
@@ -398,7 +380,7 @@ class CoreMathLibV2:
 
         # Keep only max_memory_blocks
         if len(self.memory_blocks) > self.max_memory_blocks:
-            self.memory_blocks = self.memory_blocks[-self.max_memory_blocks:]
+            self.memory_blocks = self.memory_blocks[-self.max_memory_blocks :]
 
         # Store in hash memory dictionary
         self.hash_memory[hash_block.hash_signature] = hash_block
@@ -406,25 +388,23 @@ class CoreMathLibV2:
         logger.info(f"Stored hash memory: {hash_block.hash_signature[:16]}...")
 
     def recall_profitable_patterns(
-            self,
-            current_hash: str,
-            threshold: float = 0.8) -> List[HashMemoryBlock]:
+        self, current_hash: str, threshold: float = 0.8
+    ) -> List[HashMemoryBlock]:
         """Recall profitable patterns based on hash similarity."""
         profitable_patterns = []
 
         for block in self.memory_blocks:
             similarity = self.hash_similarity_score(
-                current_hash, [block.hash_signature])
+                current_hash, [block.hash_signature]
+            )
             if similarity > threshold and block.profit > 0:
                 block.similarity_score = similarity
                 profitable_patterns.append(block)
 
         # Sort by profit and similarity
         profitable_patterns.sort(
-            key=lambda x: (
-                x.profit,
-                x.similarity_score),
-            reverse=True)
+            key=lambda x: (x.profit, x.similarity_score), reverse=True
+        )
 
         return profitable_patterns
 
@@ -445,12 +425,12 @@ class CoreMathLibV2:
                     "entry_vector": block.entry_vector,
                     "exit_vector": block.exit_vector,
                     "timestamp": block.timestamp,
-                    "similarity_score": block.similarity_score
-}
+                    "similarity_score": block.similarity_score,
+                }
                 for block in self.memory_blocks
-]
-}
-        with open(filename, 'w') as f:
+            ],
+        }
+        with open(filename, "w") as f:
             json.dump(export_data, f, indent=2)
 
         logger.info(f"Hash memory exported to: {filename}")
@@ -481,7 +461,7 @@ def process_waveform(
             "status": "success",
             "signal_length": len(signal),
             "sample_rate": sample_rate,
-}
+        }
         if analysis_type == "basic":
             # Basic statistical analysis
             stats = mathlib.advanced_statistical_analysis(signal)
@@ -498,16 +478,14 @@ def process_waveform(
                     "statistics": stats,
                     "entropy": entropy,
                     "moving_averages": moving_avgs,
-}
+                }
             )
 
         elif analysis_type == "spectral":
             # Basic spectral analysis (simplified)
             fft_result = np.fft.fft(signal)
             power_spectrum = np.abs(fft_result) ** 2
-            dominant_freq_idx = np.argmax(
-                power_spectrum[: len(power_spectrum) // 2]
-            )
+            dominant_freq_idx = np.argmax(power_spectrum[: len(power_spectrum) // 2])
             dominant_frequency = dominant_freq_idx * sample_rate / len(signal)
 
             result.update(
@@ -518,7 +496,7 @@ def process_waveform(
                         np.sum(np.arange(len(power_spectrum)) * power_spectrum)
                         / np.sum(power_spectrum)
                     ),
-}
+                }
             )
 
         return result
@@ -535,9 +513,7 @@ def main() -> None:
 
         # Demo data
         prices = np.array([100, 102, 98, 105, 103, 107, 104, 108, 106, 110])
-        volumes = np.array(
-            [1000, 1200, 800, 1500, 1100, 1300, 900, 1400, 1000, 1600]
-        )
+        volumes = np.array([1000, 1200, 800, 1500, 1100, 1300, 900, 1400, 1000, 1600])
 
         # Test VWAP
         vwap = mathlib.calculate_vwap(prices, volumes)
@@ -562,7 +538,7 @@ def main() -> None:
             strategy_id="RSI_ECHO_T5",
             entry_vector=prices.tolist(),
             exit_vector=prices.tolist(),
-            timestamp=datetime.now().timestamp()
+            timestamp=datetime.now().timestamp(),
         )
         mathlib.store_hash_memory(hash_block)
 

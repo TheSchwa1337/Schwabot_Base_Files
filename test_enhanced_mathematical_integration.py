@@ -18,7 +18,7 @@ Tests:
 
 import logging
 import time
-from typing import Dict, Any, List
+from typing import Dict, Any
 
 import numpy as np
 
@@ -38,7 +38,7 @@ class EnhancedMathematicalIntegrationTester:
         print("🔢 Testing Advanced Tensor Algebra...")
 
         try:
-            from core.advanced_tensor_algebra import UnifiedTensorAlgebra, BitPhaseResult
+            from core.advanced_tensor_algebra import UnifiedTensorAlgebra
 
             # Initialize tensor algebra
             tensor_algebra = UnifiedTensorAlgebra()
@@ -48,10 +48,10 @@ class EnhancedMathematicalIntegrationTester:
             bit_result = tensor_algebra.resolve_bit_phases(strategy_id)
 
             success = (
-                bit_result is not None and
-                hasattr(bit_result, 'phi_4') and
-                hasattr(bit_result, 'phi_8') and
-                hasattr(bit_result, 'cycle_score')
+                bit_result is not None
+                and hasattr(bit_result, "phi_4")
+                and hasattr(bit_result, "phi_8")
+                and hasattr(bit_result, "cycle_score")
             )
 
             return {
@@ -59,8 +59,10 @@ class EnhancedMathematicalIntegrationTester:
                 "success": success,
                 "details": {
                     "bit_phases_resolved": success,
-                    "cycle_score": getattr(bit_result, 'cycle_score', 0.0) if bit_result else 0.0
-                }
+                    "cycle_score": getattr(bit_result, "cycle_score", 0.0)
+                    if bit_result
+                    else 0.0,
+                },
             }
 
         except Exception as e:
@@ -68,7 +70,7 @@ class EnhancedMathematicalIntegrationTester:
             return {
                 "component": "Advanced Tensor Algebra",
                 "success": False,
-                "error": str(e)
+                "error": str(e),
             }
 
     def test_mathematical_optimization_bridge(self) -> Dict[str, Any]:
@@ -76,7 +78,9 @@ class EnhancedMathematicalIntegrationTester:
         print("⚡ Testing Mathematical Optimization Bridge...")
 
         try:
-            from core.mathematical_optimization_bridge import MathematicalOptimizationBridge
+            from core.mathematical_optimization_bridge import (
+                MathematicalOptimizationBridge,
+            )
 
             # Initialize optimization bridge
             opt_bridge = MathematicalOptimizationBridge()
@@ -87,13 +91,11 @@ class EnhancedMathematicalIntegrationTester:
 
             # Test optimization
             optimization_result = opt_bridge.optimize_multi_vector_operation(
-                primary_vector=test_vector,
-                operation_matrix=test_matrix
+                primary_vector=test_vector, operation_matrix=test_matrix
             )
 
-            success = (
-                optimization_result is not None and
-                optimization_result.get("success", False)
+            success = optimization_result is not None and optimization_result.get(
+                "success", False
             )
 
             return {
@@ -101,8 +103,10 @@ class EnhancedMathematicalIntegrationTester:
                 "success": success,
                 "details": {
                     "optimization_completed": success,
-                    "execution_time": optimization_result.get("execution_time", 0.0) if optimization_result else 0.0
-                }
+                    "execution_time": optimization_result.get("execution_time", 0.0)
+                    if optimization_result
+                    else 0.0,
+                },
             }
 
         except Exception as e:
@@ -110,7 +114,7 @@ class EnhancedMathematicalIntegrationTester:
             return {
                 "component": "Mathematical Optimization Bridge",
                 "success": False,
-                "error": str(e)
+                "error": str(e),
             }
 
     def test_dual_number_autodiff(self) -> Dict[str, Any]:
@@ -124,16 +128,18 @@ class EnhancedMathematicalIntegrationTester:
             mathlib = MathLibV4()
 
             # Test if dual number functionality is available
-            has_dual_support = hasattr(mathlib, 'compute_dual_gradient') or hasattr(mathlib, 'Dual')
+            has_dual_support = hasattr(mathlib, "compute_dual_gradient") or hasattr(
+                mathlib, "Dual"
+            )
 
             if has_dual_support:
                 # Test gradient computation
                 def test_function(x):
-                    return x**2 + 2*x + 1
+                    return x**2 + 2 * x + 1
 
                 # Test derivative computation
                 result = mathlib.compute_gradient_at_point(test_function, 3.0)
-                expected = 2*3 + 2  # derivative of x^2 + 2x + 1 at x=3
+                expected = 2 * 3 + 2  # derivative of x^2 + 2x + 1 at x=3
 
                 gradient_correct = abs(result - expected) < 0.001 if result else False
             else:
@@ -144,8 +150,8 @@ class EnhancedMathematicalIntegrationTester:
                 "success": has_dual_support and gradient_correct,
                 "details": {
                     "dual_support_available": has_dual_support,
-                    "gradient_computation_correct": gradient_correct
-                }
+                    "gradient_computation_correct": gradient_correct,
+                },
             }
 
         except Exception as e:
@@ -153,7 +159,7 @@ class EnhancedMathematicalIntegrationTester:
             return {
                 "component": "Dual-Number Automatic Differentiation",
                 "success": False,
-                "error": str(e)
+                "error": str(e),
             }
 
     def test_enhanced_validation_framework(self) -> Dict[str, Any]:
@@ -161,7 +167,9 @@ class EnhancedMathematicalIntegrationTester:
         print("✅ Testing Enhanced Validation Framework...")
 
         try:
-            from core.enhanced_integration_validator import CompleteSystemIntegrationValidator
+            from core.enhanced_integration_validator import (
+                CompleteSystemIntegrationValidator,
+            )
 
             # Initialize validator
             validator = CompleteSystemIntegrationValidator()
@@ -169,9 +177,8 @@ class EnhancedMathematicalIntegrationTester:
             # Test validation capabilities
             validation_result = validator.validate_core_mathematical_foundations()
 
-            success = (
-                validation_result is not None and
-                hasattr(validation_result, 'all_tests_passed')
+            success = validation_result is not None and hasattr(
+                validation_result, "all_tests_passed"
             )
 
             return {
@@ -179,8 +186,8 @@ class EnhancedMathematicalIntegrationTester:
                 "success": success,
                 "details": {
                     "validator_initialized": True,
-                    "validation_callable": success
-                }
+                    "validation_callable": success,
+                },
             }
 
         except Exception as e:
@@ -188,7 +195,7 @@ class EnhancedMathematicalIntegrationTester:
             return {
                 "component": "Enhanced Validation Framework",
                 "success": False,
-                "error": str(e)
+                "error": str(e),
             }
 
     def test_wall_street_integration(self) -> Dict[str, Any]:
@@ -202,14 +209,12 @@ class EnhancedMathematicalIntegrationTester:
 
             # Initialize components
             strategy_framework = EnhancedStrategyFramework()
-            integration_bridge = StrategyIntegrationBridge()
+            StrategyIntegrationBridge()
             tensor_algebra = UnifiedTensorAlgebra()
 
             # Test mathematical enhancement of trading signals
             test_signals = strategy_framework.generate_wall_street_signals(
-                asset="BTC/USDT",
-                price=50000.0,
-                volume=1000.0
+                asset="BTC/USDT", price=50000.0, volume=1000.0
             )
 
             # Test tensor-enhanced signal processing
@@ -217,16 +222,13 @@ class EnhancedMathematicalIntegrationTester:
             for signal in test_signals:
                 # Apply tensor enhancement
                 tensor_result = tensor_algebra.calculate_profit_routing(
-                    signal.entry_price,
-                    signal.take_profit,
-                    1.0
+                    signal.entry_price, signal.take_profit, 1.0
                 )
 
                 if tensor_result:
-                    enhanced_signals.append({
-                        "original_signal": signal,
-                        "tensor_enhancement": tensor_result
-                    })
+                    enhanced_signals.append(
+                        {"original_signal": signal, "tensor_enhancement": tensor_result}
+                    )
 
             success = len(enhanced_signals) > 0
 
@@ -236,8 +238,9 @@ class EnhancedMathematicalIntegrationTester:
                 "details": {
                     "signals_generated": len(test_signals),
                     "enhanced_signals": len(enhanced_signals),
-                    "enhancement_rate": len(enhanced_signals) / max(1, len(test_signals))
-                }
+                    "enhancement_rate": len(enhanced_signals)
+                    / max(1, len(test_signals)),
+                },
             }
 
         except Exception as e:
@@ -245,7 +248,7 @@ class EnhancedMathematicalIntegrationTester:
             return {
                 "component": "Wall Street Integration",
                 "success": False,
-                "error": str(e)
+                "error": str(e),
             }
 
     def test_comprehensive_performance(self) -> Dict[str, Any]:
@@ -257,7 +260,9 @@ class EnhancedMathematicalIntegrationTester:
             from core.enhanced_strategy_framework import EnhancedStrategyFramework
             from core.strategy_integration_bridge import StrategyIntegrationBridge
             from core.advanced_tensor_algebra import UnifiedTensorAlgebra
-            from core.mathematical_optimization_bridge import MathematicalOptimizationBridge
+            from core.mathematical_optimization_bridge import (
+                MathematicalOptimizationBridge,
+            )
             from core.mathlib_v4 import MathLibV4
 
             start_time = time.time()
@@ -268,7 +273,7 @@ class EnhancedMathematicalIntegrationTester:
                 "integration_bridge": StrategyIntegrationBridge(),
                 "tensor_algebra": UnifiedTensorAlgebra(),
                 "optimization_bridge": MathematicalOptimizationBridge(),
-                "mathlib_v4": MathLibV4()
+                "mathlib_v4": MathLibV4(),
             }
 
             initialization_time = time.time() - start_time
@@ -284,20 +289,20 @@ class EnhancedMathematicalIntegrationTester:
             # Process through integration bridge
             integrated_signals = []
             for signal in signals[:3]:  # Test first 3 signals
-                integrated_signal = components["integration_bridge"].process_integrated_trading_signal(
-                    asset=signal.asset,
-                    price=signal.price,
-                    volume=signal.volume
+                integrated_signal = components[
+                    "integration_bridge"
+                ].process_integrated_trading_signal(
+                    asset=signal.asset, price=signal.price, volume=signal.volume
                 )
                 integrated_signals.extend(integrated_signal)
 
             processing_time = time.time() - start_time
 
             success = (
-                len(components) == 5 and
-                all(comp is not None for comp in components.values()) and
-                len(signals) > 0 and
-                len(integrated_signals) > 0
+                len(components) == 5
+                and all(comp is not None for comp in components.values())
+                and len(signals) > 0
+                and len(integrated_signals) > 0
             )
 
             return {
@@ -309,8 +314,8 @@ class EnhancedMathematicalIntegrationTester:
                     "processing_time": processing_time,
                     "signals_generated": len(signals),
                     "integrated_signals": len(integrated_signals),
-                    "performance_score": 1.0 / max(0.001, processing_time)
-                }
+                    "performance_score": 1.0 / max(0.001, processing_time),
+                },
             }
 
         except Exception as e:
@@ -318,7 +323,7 @@ class EnhancedMathematicalIntegrationTester:
             return {
                 "component": "Comprehensive Performance",
                 "success": False,
-                "error": str(e)
+                "error": str(e),
             }
 
     def run_all_tests(self) -> Dict[str, Any]:
@@ -332,7 +337,7 @@ class EnhancedMathematicalIntegrationTester:
             self.test_dual_number_autodiff,
             self.test_enhanced_validation_framework,
             self.test_wall_street_integration,
-            self.test_comprehensive_performance
+            self.test_comprehensive_performance,
         ]
 
         results = []
@@ -344,7 +349,9 @@ class EnhancedMathematicalIntegrationTester:
 
                 status = "✅" if result["success"] else "❌"
                 component = result["component"]
-                print(f"  {status} {component}: {'PASS' if result['success'] else 'FAIL'}")
+                print(
+                    f"  {status} {component}: {'PASS' if result['success'] else 'FAIL'}"
+                )
 
                 if not result["success"] and "error" in result:
                     print(f"    Error: {result['error']}")
@@ -352,16 +359,20 @@ class EnhancedMathematicalIntegrationTester:
             except Exception as e:
                 print(f"  ❌ {test_method.__name__}: CRITICAL FAILURE")
                 print(f"    Error: {e}")
-                results.append({
-                    "component": test_method.__name__,
-                    "success": False,
-                    "error": str(e)
-                })
+                results.append(
+                    {
+                        "component": test_method.__name__,
+                        "success": False,
+                        "error": str(e),
+                    }
+                )
 
         # Calculate overall success rate
         successful_tests = sum(1 for r in results if r["success"])
         total_tests = len(results)
-        success_rate = (successful_tests / total_tests) * 100 if total_tests > 0 else 0.0
+        success_rate = (
+            (successful_tests / total_tests) * 100 if total_tests > 0 else 0.0
+        )
 
         print("\n" + "=" * 60)
         print("📊 ENHANCED INTEGRATION TEST RESULTS")
@@ -370,7 +381,9 @@ class EnhancedMathematicalIntegrationTester:
         print(f"✅ Tests Passed: {successful_tests}/{total_tests}")
 
         if success_rate >= 90:
-            print("🎉 Excellent! Enhanced mathematical integration is working perfectly!")
+            print(
+                "🎉 Excellent! Enhanced mathematical integration is working perfectly!"
+            )
         elif success_rate >= 70:
             print("✅ Good! Most enhanced features are working correctly.")
         elif success_rate >= 50:
@@ -382,7 +395,7 @@ class EnhancedMathematicalIntegrationTester:
             "overall_success_rate": success_rate,
             "successful_tests": successful_tests,
             "total_tests": total_tests,
-            "detailed_results": results
+            "detailed_results": results,
         }
 
 
@@ -394,4 +407,6 @@ def main():
 
 if __name__ == "__main__":
     results = main()
-    print(f"\nTesting completed with {results['overall_success_rate']:.1f}% success rate")
+    print(
+        f"\nTesting completed with {results['overall_success_rate']:.1f}% success rate"
+    )

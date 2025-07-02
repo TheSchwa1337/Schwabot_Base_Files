@@ -9,7 +9,7 @@ keep external dependencies to a minimum while staying Flake8/mypy compliant.
 from __future__ import annotations
 
 from hashlib import blake2b
-from typing import Iterable, Sequence
+from typing import Sequence
 import numpy as np
 
 __all__ = [

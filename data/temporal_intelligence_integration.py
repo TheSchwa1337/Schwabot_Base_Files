@@ -20,22 +20,14 @@ from dataclasses import dataclass, field
 
 # Import Schwabot components
 from .historical_data_manager import (
-    HistoricalDataManager,
     create_historical_data_manager,
 )
-from .hash_memory_generator import HashMemoryGenerator, create_hash_memory_generator
+from .hash_memory_generator import create_hash_memory_generator
 
 # Import precision profit components
 from core.enhanced_master_cycle_profit_engine import (
     EnhancedMasterCycleProfitEngine,
     ProfitOptimizedDecision,
-    ProfitFocusMode,
-)
-from core.profit.precision_profit_engine import (
-    PrecisionProfitEngine,
-    PrecisionLevel,
-    ProfitOpportunity,
-    ProfitPattern,
 )
 
 logger = logging.getLogger(__name__)
@@ -204,7 +196,7 @@ class TemporalIntelligenceIntegration:
         logger.info(
             f"🧠 Temporal decision: {enhanced_decision.biological_decision.decision.value} "
             f"| Temporal improvement: {enhanced_decision.metadata.get('temporal_improvement', 0):.3f} "
-            f"| Processing: {processing_time*1000:.1f}ms"
+            f"| Processing: {processing_time * 1000:.1f}ms"
         )
 
         return enhanced_decision

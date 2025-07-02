@@ -9,11 +9,8 @@ Schwabot's trading system.
 import asyncio
 import websockets
 import json
-import logging
 import time
-from typing import Dict, List, Optional, Any, Set
-from dataclasses import asdict
-import threading
+from typing import Dict, Optional, Any, Set
 from concurrent.futures import ThreadPoolExecutor
 
 # Import our core modules
@@ -192,7 +189,7 @@ class TensorWebSocketServer:
     async def run_analysis(self, btc_price: float) -> Dict[str, Any]:
         """Run tensor analysis in executor to avoid blocking."""
         loop = asyncio.get_event_loop()
-        result = await loop.run_in_executor(
+        await loop.run_in_executor(
             self.executor, self.tensor_bridge.perform_complete_analysis, btc_price
         )
         return self.tensor_bridge.get_analysis_for_react()
@@ -319,7 +316,6 @@ class TensorWebSocketServer:
 async def main():
     """Main function for running the server."""
     import argparse
-    import math
 
     parser = argparse.ArgumentParser(description="Tensor WebSocket Server")
     parser.add_argument("--host", default="localhost", help="Server host")

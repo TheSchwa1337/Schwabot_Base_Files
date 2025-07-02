@@ -20,19 +20,16 @@ import logging
 import json
 import time
 import threading
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List
 from dataclasses import dataclass, asdict
-from datetime import datetime, timedelta
+from datetime import datetime
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
-import matplotlib.patches as patches
-from matplotlib.widgets import Button, Slider, TextBox
 import tkinter as tk
-from tkinter import ttk, messagebox
 import queue
 
-from core.mathlib_v3 import MathLibV3, Dual, grad, jacobian, kelly_fraction, cvar
+from core.mathlib_v3 import MathLibV3, Dual
 
 logger = logging.getLogger(__name__)
 
@@ -40,6 +37,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class MathLibState:
     """Internal state management for MathLib V3 operations."""
+
     current_operation: str = "idle"
     last_calculation: Dict[str, Any] = None
     calculation_history: List[Dict[str, Any]] = None
@@ -83,51 +81,52 @@ class MathLibV3Visualizer:
                 "title": "Dual Number Operations",
                 "description": "Real-time automatic differentiation",
                 "data": {},
-                "active": True
+                "active": True,
             },
             "kelly_criterion": {
                 "title": "Kelly Criterion Analysis",
                 "description": "Risk-adjusted portfolio optimization",
                 "data": {},
-                "active": True
+                "active": True,
             },
             "risk_assessment": {
                 "title": "Risk Assessment",
                 "description": "Portfolio risk metrics and CVaR",
                 "data": {},
-                "active": True
+                "active": True,
             },
             "pattern_detection": {
                 "title": "Pattern Detection",
                 "description": "AI-enhanced pattern recognition",
                 "data": {},
-                "active": True
+                "active": True,
             },
             "market_prediction": {
                 "title": "Market Prediction",
                 "description": "Time series forecasting",
                 "data": {},
-                "active": True
+                "active": True,
             },
             "optimization": {
                 "title": "Gradient Descent Optimization",
                 "description": "Real-time optimization progress",
                 "data": {},
-                "active": True
+                "active": True,
             },
             "performance": {
                 "title": "Performance Metrics",
                 "description": "System performance and timing",
                 "data": {},
-                "active": True
+                "active": True,
             },
             "integration": {
                 "title": "Integration Status",
                 "description": "API and CCXT connectivity",
                 "data": {},
-                "active": True
-}
-}
+                "active": True,
+            },
+        }
+
     def start_live_mode(self):
         """Start live visualization mode."""
         self.mode = "live"
@@ -225,8 +224,9 @@ class MathLibV3Visualizer:
             "price": np.random.normal(50000, 1000),
             "volume": np.random.uniform(100, 1000),
             "returns": np.random.normal(0.001, 0.02),
-            "source": "live_api"
-}
+            "source": "live_api",
+        }
+
     def _generate_demo_data(self) -> Dict[str, Any]:
         """Generate simulated data for demo mode."""
         return {
@@ -234,19 +234,26 @@ class MathLibV3Visualizer:
             "price": 50000 + 1000 * np.sin(time.time() / 10),
             "volume": 500 + 200 * np.random.random(),
             "returns": np.random.normal(0.001, 0.015),
-            "source": "demo_simulation"
-}
+            "source": "demo_simulation",
+        }
+
     def _process_backtest_data(self) -> Dict[str, Any]:
         """Process historical data for backtest mode."""
         if self.current_index < len(self.historical_data):
             data_point = self.historical_data[self.current_index]
-            return {"timestamp": f"backtest_{self.current_index}",
-                    "price": data_point,
-                    "volume": np.random.uniform(100,
-                                                1000),
-                    "returns": np.diff(self.historical_data[max(0,
-                                                                self.current_index - 1):self.current_index + 1])[0] if self.current_index > 0 else 0,
-                    "source": "backtest_data"}
+            return {
+                "timestamp": f"backtest_{self.current_index}",
+                "price": data_point,
+                "volume": np.random.uniform(100, 1000),
+                "returns": np.diff(
+                    self.historical_data[
+                        max(0, self.current_index - 1) : self.current_index + 1
+                    ]
+                )[0]
+                if self.current_index > 0
+                else 0,
+                "source": "backtest_data",
+            }
         return None
 
     def _create_visualization(self):
@@ -254,7 +261,8 @@ class MathLibV3Visualizer:
         plt.ion()  # Interactive mode
         self.fig = plt.figure(figsize=(16, 12))
         self.fig.suptitle(
-            f"MathLib V3 Visualizer - {self.mode.upper()} Mode", fontsize=16)
+            f"MathLib V3 Visualizer - {self.mode.upper()} Mode", fontsize=16
+        )
 
         # Create subplots for each panel
         self._create_panel_layout()
@@ -264,8 +272,7 @@ class MathLibV3Visualizer:
 
         # Start animation
         self.animation = FuncAnimation(
-            self.fig, self._update_visualization,
-            interval=1000, blit=False
+            self.fig, self._update_visualization, interval=1000, blit=False
         )
 
         plt.show()
@@ -276,41 +283,41 @@ class MathLibV3Visualizer:
         self.axes = {}
 
         # Dual Operations Panel
-        self.axes['dual_operations'] = plt.subplot(3, 3, 1)
-        self.axes['dual_operations'].set_title("Dual Number Operations")
+        self.axes["dual_operations"] = plt.subplot(3, 3, 1)
+        self.axes["dual_operations"].set_title("Dual Number Operations")
 
         # Kelly Criterion Panel
-        self.axes['kelly_criterion'] = plt.subplot(3, 3, 2)
-        self.axes['kelly_criterion'].set_title("Kelly Criterion")
+        self.axes["kelly_criterion"] = plt.subplot(3, 3, 2)
+        self.axes["kelly_criterion"].set_title("Kelly Criterion")
 
         # Risk Assessment Panel
-        self.axes['risk_assessment'] = plt.subplot(3, 3, 3)
-        self.axes['risk_assessment'].set_title("Risk Assessment")
+        self.axes["risk_assessment"] = plt.subplot(3, 3, 3)
+        self.axes["risk_assessment"].set_title("Risk Assessment")
 
         # Pattern Detection Panel
-        self.axes['pattern_detection'] = plt.subplot(3, 3, 4)
-        self.axes['pattern_detection'].set_title("Pattern Detection")
+        self.axes["pattern_detection"] = plt.subplot(3, 3, 4)
+        self.axes["pattern_detection"].set_title("Pattern Detection")
 
         # Market Prediction Panel
-        self.axes['market_prediction'] = plt.subplot(3, 3, 5)
-        self.axes['market_prediction'].set_title("Market Prediction")
+        self.axes["market_prediction"] = plt.subplot(3, 3, 5)
+        self.axes["market_prediction"].set_title("Market Prediction")
 
         # Optimization Panel
-        self.axes['optimization'] = plt.subplot(3, 3, 6)
-        self.axes['optimization'].set_title("Optimization")
+        self.axes["optimization"] = plt.subplot(3, 3, 6)
+        self.axes["optimization"].set_title("Optimization")
 
         # Performance Panel
-        self.axes['performance'] = plt.subplot(3, 3, 7)
-        self.axes['performance'].set_title("Performance")
+        self.axes["performance"] = plt.subplot(3, 3, 7)
+        self.axes["performance"].set_title("Performance")
 
         # Integration Panel
-        self.axes['integration'] = plt.subplot(3, 3, 8)
-        self.axes['integration'].set_title("Integration Status")
+        self.axes["integration"] = plt.subplot(3, 3, 8)
+        self.axes["integration"].set_title("Integration Status")
 
         # Control Panel
-        self.axes['control'] = plt.subplot(3, 3, 9)
-        self.axes['control'].set_title("Controls")
-        self.axes['control'].axis('off')
+        self.axes["control"] = plt.subplot(3, 3, 9)
+        self.axes["control"].set_title("Controls")
+        self.axes["control"].axis("off")
 
     def _add_control_buttons(self):
         """Add control buttons to the visualization."""
@@ -325,22 +332,22 @@ class MathLibV3Visualizer:
             text="Live",
             variable=self.mode_var,
             value="live",
-            command=self._change_mode).pack(
-            side=tk.LEFT)
+            command=self._change_mode,
+        ).pack(side=tk.LEFT)
         tk.Radiobutton(
             mode_frame,
             text="Demo",
             variable=self.mode_var,
             value="demo",
-            command=self._change_mode).pack(
-            side=tk.LEFT)
+            command=self._change_mode,
+        ).pack(side=tk.LEFT)
         tk.Radiobutton(
             mode_frame,
             text="Backtest",
             variable=self.mode_var,
             value="backtest",
-            command=self._change_mode).pack(
-            side=tk.LEFT)
+            command=self._change_mode,
+        ).pack(side=tk.LEFT)
 
     def _change_mode(self):
         """Change visualization mode."""
@@ -399,50 +406,54 @@ class MathLibV3Visualizer:
     def _perform_math_operations(self, data: Dict[str, Any]):
         """Perform mathematical operations on the data."""
         try:
-            price = data.get('price', 50000)
-            returns = data.get('returns', 0.001)
+            price = data.get("price", 50000)
+            returns = data.get("returns", 0.001)
 
             # Dual number operations
             dual_result = self._compute_dual_operations(price)
-            self.panels['dual_operations']['data'] = dual_result
+            self.panels["dual_operations"]["data"] = dual_result
 
             # Kelly criterion
             kelly_result = self.mathlib.kelly_criterion_risk_adjusted(
                 returns, returns**2, 0.25
             )
-            self.panels['kelly_criterion']['data'] = kelly_result
+            self.panels["kelly_criterion"]["data"] = kelly_result
 
             # Risk assessment
             risk_result = self._compute_risk_assessment(data)
-            self.panels['risk_assessment']['data'] = risk_result
+            self.panels["risk_assessment"]["data"] = risk_result
 
             # Pattern detection
             if len(self.state.calculation_history) > 10:
-                prices = [calc.get('price', 50000)
-                          for calc in self.state.calculation_history[-20:]]
-                pattern_result = self.mathlib.detect_patterns_enhanced(
-                    np.array(prices))
-                self.panels['pattern_detection']['data'] = pattern_result
+                prices = [
+                    calc.get("price", 50000)
+                    for calc in self.state.calculation_history[-20:]
+                ]
+                pattern_result = self.mathlib.detect_patterns_enhanced(np.array(prices))
+                self.panels["pattern_detection"]["data"] = pattern_result
 
             # Market prediction
             if len(self.state.calculation_history) > 20:
-                prices = [calc.get('price', 50000)
-                          for calc in self.state.calculation_history[-30:]]
+                prices = [
+                    calc.get("price", 50000)
+                    for calc in self.state.calculation_history[-30:]
+                ]
                 prediction_result = self.mathlib.predict_market_movement(
-                    np.array(prices))
-                self.panels['market_prediction']['data'] = prediction_result
+                    np.array(prices)
+                )
+                self.panels["market_prediction"]["data"] = prediction_result
 
             # Optimization
             opt_result = self._compute_optimization(data)
-            self.panels['optimization']['data'] = opt_result
+            self.panels["optimization"]["data"] = opt_result
 
             # Performance metrics
             perf_result = self._compute_performance_metrics()
-            self.panels['performance']['data'] = perf_result
+            self.panels["performance"]["data"] = perf_result
 
             # Integration status
             integration_result = self._get_integration_status()
-            self.panels['integration']['data'] = integration_result
+            self.panels["integration"]["data"] = integration_result
 
         except Exception as e:
             logger.error(f"Error performing math operations: {e}")
@@ -455,15 +466,14 @@ class MathLibV3Visualizer:
             def test_function(dual_x: Dual) -> Dual:
                 return dual_x * dual_x + 2 * dual_x + 1
 
-            val, grad_val = self.mathlib.compute_dual_gradient(
-                test_function, x)
+            val, grad_val = self.mathlib.compute_dual_gradient(test_function, x)
 
             return {
                 "input": x,
                 "function_value": val,
                 "derivative": grad_val,
-                "dual_number": f"{val:.4f} + {grad_val:.4f}ε"
-}
+                "dual_number": f"{val:.4f} + {grad_val:.4f}ε",
+            }
         except Exception as e:
             logger.error(f"Error computing dual operations: {e}")
             return {"error": str(e)}
@@ -474,8 +484,9 @@ class MathLibV3Visualizer:
             if len(self.state.calculation_history) < 5:
                 return {"error": "Insufficient data"}
 
-            returns = [calc.get('returns', 0)
-                       for calc in self.state.calculation_history[-20:]]
+            returns = [
+                calc.get("returns", 0) for calc in self.state.calculation_history[-20:]
+            ]
             returns_array = np.array(returns)
 
             # CVaR calculation
@@ -483,16 +494,15 @@ class MathLibV3Visualizer:
 
             # Basic risk metrics
             volatility = np.std(returns_array)
-            sharpe_ratio = np.mean(returns_array) / \
-                volatility if volatility > 0 else 0
+            sharpe_ratio = np.mean(returns_array) / volatility if volatility > 0 else 0
 
             return {
                 "cvar_95": cvar_95,
                 "volatility": volatility,
                 "sharpe_ratio": sharpe_ratio,
                 "max_drawdown": np.min(returns_array),
-                "var_95": np.percentile(returns_array, 5)
-}
+                "var_95": np.percentile(returns_array, 5),
+            }
         except Exception as e:
             logger.error(f"Error computing risk assessment: {e}")
             return {"error": str(e)}
@@ -503,7 +513,8 @@ class MathLibV3Visualizer:
             # Simple quadratic optimization
             def objective(x: np.ndarray) -> float:
                 return float(
-                    np.sum((x - np.array([data.get('price', 50000), 0.1])) ** 2))
+                    np.sum((x - np.array([data.get("price", 50000), 0.1])) ** 2)
+                )
 
             initial_x = np.array([0.0, 0.0])
             opt_result = self.mathlib.gradient_descent_optimization(
@@ -522,8 +533,9 @@ class MathLibV3Visualizer:
                 return {"error": "No data available"}
 
             # Timing metrics
-            timestamps = [calc.get('timestamp', '')
-                          for calc in self.state.calculation_history]
+            timestamps = [
+                calc.get("timestamp", "") for calc in self.state.calculation_history
+            ]
             processing_times = []
 
             for i in range(1, len(timestamps)):
@@ -534,20 +546,14 @@ class MathLibV3Visualizer:
                 except BaseException:
                     pass
 
-            avg_processing_time = np.mean(
-                processing_times) if processing_times else 0
+            avg_processing_time = np.mean(processing_times) if processing_times else 0
 
             return {
-                "total_calculations": len(
-                    self.state.calculation_history),
+                "total_calculations": len(self.state.calculation_history),
                 "avg_processing_time": avg_processing_time,
-                "error_count": len(
-                    self.state.error_log),
-                "uptime": time.time() -
-                getattr(
-                    self,
-                    '_start_time',
-                    time.time())}
+                "error_count": len(self.state.error_log),
+                "uptime": time.time() - getattr(self, "_start_time", time.time()),
+            }
         except Exception as e:
             logger.error(f"Error computing performance metrics: {e}")
             return {"error": str(e)}
@@ -559,34 +565,35 @@ class MathLibV3Visualizer:
             "ccxt_connected": self.state.ccxt_connected,
             "mode": self.state.mode,
             "last_update": datetime.now().isoformat(),
-            "data_queue_size": self.data_queue.qsize()
-}
+            "data_queue_size": self.data_queue.qsize(),
+        }
+
     def _update_dual_operations_panel(self):
         """Update dual operations panel."""
-        ax = self.axes['dual_operations']
+        ax = self.axes["dual_operations"]
         ax.clear()
 
-        data = self.panels['dual_operations']['data']
-        if data and 'error' not in data:
+        data = self.panels["dual_operations"]["data"]
+        if data and "error" not in data:
             # Create dual number visualization
-            x = np.linspace(data['input'] - 10, data['input'] + 10, 100)
+            x = np.linspace(data["input"] - 10, data["input"] + 10, 100)
             y = x**2 + 2 * x + 1
             dy = 2 * x + 2
 
-            ax.plot(x, y, 'b-', label='f(x) = x² + 2x + 1')
-            ax.plot(x, dy, 'r--', label='f\'(x) = 2x + 2')
+            ax.plot(x, y, "b-", label="f(x) = x² + 2x + 1")
+            ax.plot(x, dy, "r--", label="f'(x) = 2x + 2")
             ax.axvline(
-                data['input'],
-                color='g',
-                linestyle=':',
-                label=f'x = {
-                    data["input"]:.2f}')
+                data["input"],
+                color="g",
+                linestyle=":",
+                label=f"x = {data['input']:.2f}",
+            )
             ax.axhline(
-                data['function_value'],
-                color='g',
-                linestyle=':',
-                label=f'f(x) = {
-                    data["function_value"]:.2f}')
+                data["function_value"],
+                color="g",
+                linestyle=":",
+                label=f"f(x) = {data['function_value']:.2f}",
+            )
 
             ax.set_title("Dual Number Operations")
             ax.legend()
@@ -596,43 +603,42 @@ class MathLibV3Visualizer:
                 0.5,
                 0.5,
                 "No data available",
-                ha='center',
-                va='center',
-                transform=ax.transAxes)
+                ha="center",
+                va="center",
+                transform=ax.transAxes,
+            )
 
     def _update_kelly_criterion_panel(self):
         """Update Kelly criterion panel."""
-        ax = self.axes['kelly_criterion']
+        ax = self.axes["kelly_criterion"]
         ax.clear()
 
-        data = self.panels['kelly_criterion']['data']
-        if data and 'error' not in data:
+        data = self.panels["kelly_criterion"]["data"]
+        if data and "error" not in data:
             # Create Kelly criterion visualization
             fractions = np.linspace(0, 1, 100)
             expected_returns = []
 
             for f in fractions:
-                er = data.get('expected_utility', 0) * f - 0.5 * \
-                    data.get('risk_tolerance', 0.25) * f**2
+                er = (
+                    data.get("expected_utility", 0) * f
+                    - 0.5 * data.get("risk_tolerance", 0.25) * f**2
+                )
                 expected_returns.append(er)
 
-            ax.plot(
-                fractions,
-                expected_returns,
-                'b-',
-                label='Expected Utility')
+            ax.plot(fractions, expected_returns, "b-", label="Expected Utility")
             ax.axvline(
-                data.get(
-                    'kelly_fraction',
-                    0),
-                color='r',
-                linestyle='--',
-                label=f'Kelly: {
-                    data.get(
-                        "kelly_fraction",
-                        0):.3f}')
-            ax.axvline(data.get('risk_adjusted_fraction', 0), color='g', linestyle='--',
-                       label=f'Risk-Adjusted: {data.get("risk_adjusted_fraction", 0):.3f}')
+                data.get("kelly_fraction", 0),
+                color="r",
+                linestyle="--",
+                label=f"Kelly: {data.get('kelly_fraction', 0):.3f}",
+            )
+            ax.axvline(
+                data.get("risk_adjusted_fraction", 0),
+                color="g",
+                linestyle="--",
+                label=f"Risk-Adjusted: {data.get('risk_adjusted_fraction', 0):.3f}",
+            )
 
             ax.set_title("Kelly Criterion Analysis")
             ax.set_xlabel("Allocation Fraction")
@@ -644,107 +650,118 @@ class MathLibV3Visualizer:
                 0.5,
                 0.5,
                 "No data available",
-                ha='center',
-                va='center',
-                transform=ax.transAxes)
+                ha="center",
+                va="center",
+                transform=ax.transAxes,
+            )
 
     def _update_risk_assessment_panel(self):
         """Update risk assessment panel."""
-        ax = self.axes['risk_assessment']
+        ax = self.axes["risk_assessment"]
         ax.clear()
 
-        data = self.panels['risk_assessment']['data']
-        if data and 'error' not in data:
+        data = self.panels["risk_assessment"]["data"]
+        if data and "error" not in data:
             # Create risk metrics visualization
-            metrics = [
-                'CVaR 95%',
-                'Volatility',
-                'Sharpe Ratio',
-                'Max Drawdown']
+            metrics = ["CVaR 95%", "Volatility", "Sharpe Ratio", "Max Drawdown"]
             values = [
-                abs(data.get('cvar_95', 0)),
-                data.get('volatility', 0),
-                data.get('sharpe_ratio', 0),
-                abs(data.get('max_drawdown', 0))
-]
-            colors = ['red', 'orange', 'green', 'purple']
+                abs(data.get("cvar_95", 0)),
+                data.get("volatility", 0),
+                data.get("sharpe_ratio", 0),
+                abs(data.get("max_drawdown", 0)),
+            ]
+            colors = ["red", "orange", "green", "purple"]
             bars = ax.bar(metrics, values, color=colors)
 
             # Add value labels
             for bar, value in zip(bars, values):
-                ax.text(bar.get_x() +
-                        bar.get_width() /
-                        2, bar.get_height() +
-                        0.001, f'{value:.4f}', ha='center', va='bottom')
+                ax.text(
+                    bar.get_x() + bar.get_width() / 2,
+                    bar.get_height() + 0.001,
+                    f"{value:.4f}",
+                    ha="center",
+                    va="bottom",
+                )
 
             ax.set_title("Risk Assessment Metrics")
             ax.set_ylabel("Value")
-            ax.tick_params(axis='x', rotation=45)
+            ax.tick_params(axis="x", rotation=45)
         else:
             ax.text(
                 0.5,
                 0.5,
                 "No data available",
-                ha='center',
-                va='center',
-                transform=ax.transAxes)
+                ha="center",
+                va="center",
+                transform=ax.transAxes,
+            )
 
     def _update_pattern_detection_panel(self):
         """Update pattern detection panel."""
-        ax = self.axes['pattern_detection']
+        ax = self.axes["pattern_detection"]
         ax.clear()
 
-        data = self.panels['pattern_detection']['data']
-        if data and 'error' not in data:
+        data = self.panels["pattern_detection"]["data"]
+        if data and "error" not in data:
             # Create pattern detection visualization
-            patterns = ['Trend', 'Volatility', 'Cycles', 'Mean Reversion']
+            patterns = ["Trend", "Volatility", "Cycles", "Mean Reversion"]
             values = [
-                data.get('increasing_trend_probability', 0),
-                data.get('volatility_clustering', 0),
-                data.get('cycle_strength', 0),
-                abs(data.get('mean_reversion_coefficient', 0))
-]
-            colors = ['blue', 'orange', 'green', 'red']
+                data.get("increasing_trend_probability", 0),
+                data.get("volatility_clustering", 0),
+                data.get("cycle_strength", 0),
+                abs(data.get("mean_reversion_coefficient", 0)),
+            ]
+            colors = ["blue", "orange", "green", "red"]
             bars = ax.bar(patterns, values, color=colors)
 
             # Add value labels
             for bar, value in zip(bars, values):
-                ax.text(bar.get_x() +
-                        bar.get_width() /
-                        2, bar.get_height() +
-                        0.01, f'{value:.3f}', ha='center', va='bottom')
+                ax.text(
+                    bar.get_x() + bar.get_width() / 2,
+                    bar.get_height() + 0.01,
+                    f"{value:.3f}",
+                    ha="center",
+                    va="bottom",
+                )
 
             ax.set_title("Pattern Detection")
             ax.set_ylabel("Strength")
-            ax.tick_params(axis='x', rotation=45)
+            ax.tick_params(axis="x", rotation=45)
             ax.set_ylim(0, 1)
         else:
             ax.text(
                 0.5,
                 0.5,
                 "No data available",
-                ha='center',
-                va='center',
-                transform=ax.transAxes)
+                ha="center",
+                va="center",
+                transform=ax.transAxes,
+            )
 
     def _update_market_prediction_panel(self):
         """Update market prediction panel."""
-        ax = self.axes['market_prediction']
+        ax = self.axes["market_prediction"]
         ax.clear()
 
-        data = self.panels['market_prediction']['data']
-        if data and 'error' not in data:
+        data = self.panels["market_prediction"]["data"]
+        if data and "error" not in data:
             # Create market prediction visualization
-            forecast = data.get('forecast', [])
+            forecast = data.get("forecast", [])
             if forecast:
                 x = range(len(forecast))
-                ax.plot(x, forecast, 'b-', label='Forecast', linewidth=2)
+                ax.plot(x, forecast, "b-", label="Forecast", linewidth=2)
 
                 # Add confidence intervals
-                ci = data.get('confidence_intervals', {})
-                if 'lower_95' in ci and 'upper_95' in ci:
-                    ax.fill_between(x, ci['lower_95'], ci['upper_95'],
-                                    alpha=0.3, color='blue', label='95% CI')
+                ci = data.get("confidence_intervals", {})
+                if "lower_95" in ci and "upper_95" in ci:
+                    ax.fill_between(
+                        x,
+                        ci["lower_95"],
+                        ci["upper_95"],
+                        alpha=0.3,
+                        color="blue",
+                        label="95% CI",
+                    )
 
                 ax.set_title("Market Prediction")
                 ax.set_xlabel("Time Steps")
@@ -756,32 +773,34 @@ class MathLibV3Visualizer:
                     0.5,
                     0.5,
                     "No forecast data",
-                    ha='center',
-                    va='center',
-                    transform=ax.transAxes)
+                    ha="center",
+                    va="center",
+                    transform=ax.transAxes,
+                )
         else:
             ax.text(
                 0.5,
                 0.5,
                 "No data available",
-                ha='center',
-                va='center',
-                transform=ax.transAxes)
+                ha="center",
+                va="center",
+                transform=ax.transAxes,
+            )
 
     def _update_optimization_panel(self):
         """Update optimization panel."""
-        ax = self.axes['optimization']
+        ax = self.axes["optimization"]
         ax.clear()
 
-        data = self.panels['optimization']['data']
-        if data and 'error' not in data:
+        data = self.panels["optimization"]["data"]
+        if data and "error" not in data:
             # Create optimization visualization
-            history = data.get('history', [])
+            history = data.get("history", [])
             if history:
-                iterations = [h.get('iteration', 0) for h in history]
-                objectives = [h.get('objective', 0) for h in history]
+                iterations = [h.get("iteration", 0) for h in history]
+                objectives = [h.get("objective", 0) for h in history]
 
-                ax.plot(iterations, objectives, 'b-', label='Objective Value')
+                ax.plot(iterations, objectives, "b-", label="Objective Value")
                 ax.set_title("Gradient Descent Optimization")
                 ax.set_xlabel("Iteration")
                 ax.set_ylabel("Objective Value")
@@ -792,88 +811,95 @@ class MathLibV3Visualizer:
                     0.5,
                     0.5,
                     "No optimization history",
-                    ha='center',
-                    va='center',
-                    transform=ax.transAxes)
+                    ha="center",
+                    va="center",
+                    transform=ax.transAxes,
+                )
         else:
             ax.text(
                 0.5,
                 0.5,
                 "No data available",
-                ha='center',
-                va='center',
-                transform=ax.transAxes)
+                ha="center",
+                va="center",
+                transform=ax.transAxes,
+            )
 
     def _update_performance_panel(self):
         """Update performance panel."""
-        ax = self.axes['performance']
+        ax = self.axes["performance"]
         ax.clear()
 
-        data = self.panels['performance']['data']
-        if data and 'error' not in data:
+        data = self.panels["performance"]["data"]
+        if data and "error" not in data:
             # Create performance visualization
-            metrics = ['Calculations', 'Avg Time (ms)', 'Errors', 'Uptime (s)']
+            metrics = ["Calculations", "Avg Time (ms)", "Errors", "Uptime (s)"]
             values = [
-                data.get('total_calculations', 0),
-                data.get('avg_processing_time', 0) * 1000,
-                data.get('error_count', 0),
-                data.get('uptime', 0)
-]
-            colors = ['green', 'blue', 'red', 'orange']
+                data.get("total_calculations", 0),
+                data.get("avg_processing_time", 0) * 1000,
+                data.get("error_count", 0),
+                data.get("uptime", 0),
+            ]
+            colors = ["green", "blue", "red", "orange"]
             bars = ax.bar(metrics, values, color=colors)
 
             # Add value labels
             for bar, value in zip(bars, values):
-                ax.text(bar.get_x() +
-                        bar.get_width() /
-                        2, bar.get_height() +
-                        max(values) *
-                        0.01, f'{value:.1f}', ha='center', va='bottom')
+                ax.text(
+                    bar.get_x() + bar.get_width() / 2,
+                    bar.get_height() + max(values) * 0.01,
+                    f"{value:.1f}",
+                    ha="center",
+                    va="bottom",
+                )
 
             ax.set_title("Performance Metrics")
             ax.set_ylabel("Value")
-            ax.tick_params(axis='x', rotation=45)
+            ax.tick_params(axis="x", rotation=45)
         else:
             ax.text(
                 0.5,
                 0.5,
                 "No data available",
-                ha='center',
-                va='center',
-                transform=ax.transAxes)
+                ha="center",
+                va="center",
+                transform=ax.transAxes,
+            )
 
     def _update_integration_panel(self):
         """Update integration panel."""
-        ax = self.axes['integration']
+        ax = self.axes["integration"]
         ax.clear()
 
-        data = self.panels['integration']['data']
+        data = self.panels["integration"]["data"]
         if data:
             # Create integration status visualization
-            status_items = [
-                'API Connected',
-                'CCXT Connected',
-                'Mode',
-                'Queue Size']
+            status_items = ["API Connected", "CCXT Connected", "Mode", "Queue Size"]
             status_values = [
-                '✓' if data.get('api_connected', False) else '✗',
-                '✓' if data.get('ccxt_connected', False) else '✗',
-                data.get('mode', 'unknown'),
-                data.get('data_queue_size', 0)
-]
-            colors = ['green' if v == '✓' else 'red' if v ==
-                      '✗' else 'blue' for v in status_values]
+                "✓" if data.get("api_connected", False) else "✗",
+                "✓" if data.get("ccxt_connected", False) else "✗",
+                data.get("mode", "unknown"),
+                data.get("data_queue_size", 0),
+            ]
+            colors = [
+                "green" if v == "✓" else "red" if v == "✗" else "blue"
+                for v in status_values
+            ]
 
             y_pos = np.arange(len(status_items))
-            bars = ax.barh(y_pos,
-                           [1 if v != '✗' else 0 for v in status_values],
-                           color=colors)
+            ax.barh(y_pos, [1 if v != "✗" else 0 for v in status_values], color=colors)
 
             # Add labels
-            for i, (item, value) in enumerate(
-                    zip(status_items, status_values)):
-                ax.text(0.5, i, f'{item}: {value}', ha='center', va='center',
-                        transform=ax.transAxes, fontweight='bold')
+            for i, (item, value) in enumerate(zip(status_items, status_values)):
+                ax.text(
+                    0.5,
+                    i,
+                    f"{item}: {value}",
+                    ha="center",
+                    va="center",
+                    transform=ax.transAxes,
+                    fontweight="bold",
+                )
 
             ax.set_title("Integration Status")
             ax.set_xlim(0, 1)
@@ -884,31 +910,33 @@ class MathLibV3Visualizer:
                 0.5,
                 0.5,
                 "No data available",
-                ha='center',
-                va='center',
-                transform=ax.transAxes)
+                ha="center",
+                va="center",
+                transform=ax.transAxes,
+            )
 
     def stop(self):
         """Stop the visualizer."""
         self.running = False
         if self.animation:
             self.animation.event_source.stop()
-        plt.close('all')
+        plt.close("all")
         logger.info("MathLib V3 Visualizer stopped")
 
     def save_state(self, filename: str = None) -> str:
         """Save visualizer state to file."""
         if filename is None:
             filename = f"mathlib_v3_visualizer_state_{
-                datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+                datetime.now().strftime('%Y%m%d_%H%M%S')
+            }.json"
 
         state_data = {
             "visualizer_state": asdict(self.state),
             "panels": self.panels,
             "mode": self.mode,
-            "timestamp": datetime.now().isoformat()
-}
-        with open(filename, 'w') as f:
+            "timestamp": datetime.now().isoformat(),
+        }
+        with open(filename, "w") as f:
             json.dump(state_data, f, indent=2)
 
         logger.info(f"Visualizer state saved to {filename}")
@@ -917,7 +945,7 @@ class MathLibV3Visualizer:
     def load_state(self, filename: str) -> bool:
         """Load visualizer state from file."""
         try:
-            with open(filename, 'r') as f:
+            with open(filename, "r") as f:
                 state_data = json.load(f)
 
             # Restore state
@@ -939,8 +967,10 @@ class MathLibV3Visualizer:
             "panels": self.panels,
             "mode": self.mode,
             "data_queue": self.data_queue,
-            "running": self.running
-}
+            "running": self.running,
+        }
+
+
 def main():
     """Main function for testing the MathLib V3 Visualizer."""
     print("MathLib V3 Visualizer Test")

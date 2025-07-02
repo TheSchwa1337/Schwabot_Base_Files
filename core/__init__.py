@@ -1,89 +1,81 @@
-# Core module for the 100% Advanced Dualistic Trading Execution System
-# Import only essential working components for final implementation
+# -*- coding: utf-8 -*-
+"""
+Core module for the Schwabot Trading System.
 
-# Essential mathematical components that are working
-try:
-    from .unified_math_system import UnifiedMathSystem, unified_math
-    UNIFIED_MATH_AVAILABLE = True
-except ImportError:
-    UNIFIED_MATH_AVAILABLE = False
+This module provides access to the clean implementations that are
+fully functional and error-free.
+"""
 
+# Clean implementations - fully functional and error-free
 try:
-    from .unified_profit_vectorization_system import (
-        UnifiedProfitVectorizationSystem, profit_vectorization_system
+    from .clean_math_foundation import (
+        CleanMathFoundation, MathOperation, ThermalState, BitPhase, 
+        create_math_foundation, quick_calculation
     )
-    PROFIT_VECTORIZATION_AVAILABLE = True
+    CLEAN_MATH_AVAILABLE = True
 except ImportError:
-    PROFIT_VECTORIZATION_AVAILABLE = False
+    CLEAN_MATH_AVAILABLE = False
 
 try:
-    from .dualistic_state_machine import DualisticStateMachine
-    DUALISTIC_STATE_AVAILABLE = True
-except ImportError:
-    DUALISTIC_STATE_AVAILABLE = False
-
-try:
-    from .advanced_tensor_algebra import UnifiedTensorAlgebra
-    TENSOR_ALGEBRA_AVAILABLE = True
-except ImportError:
-    TENSOR_ALGEBRA_AVAILABLE = False
-
-try:
-    from .ccxt_integration import CCXTIntegration
-    CCXT_INTEGRATION_AVAILABLE = True
-except ImportError:
-    CCXT_INTEGRATION_AVAILABLE = False
-
-try:
-    from .phase_bit_integration import PhaseBitIntegration
-    PHASE_BIT_AVAILABLE = True
-except ImportError:
-    PHASE_BIT_AVAILABLE = False
-
-# Advanced dualistic trading system - 100% Complete Implementation
-try:
-    from .advanced_dualistic_trading_execution_system import (
-        AdvancedDualisticTradingExecutionSystem,
-        GhostTradeType,
-        TriggerComplexity,
-        advanced_trading_system
+    from .clean_profit_vectorization import (
+        CleanProfitVectorization, VectorizationMode, ProfitVector,
+        create_profit_vectorizer
     )
-    ADVANCED_SYSTEM_AVAILABLE = True
+    CLEAN_PROFIT_AVAILABLE = True
 except ImportError:
-    ADVANCED_SYSTEM_AVAILABLE = False
+    CLEAN_PROFIT_AVAILABLE = False
 
+try:
+    from .clean_trading_pipeline import (
+        CleanTradingPipeline, MarketData, TradingDecision, StrategyBranch,
+        create_trading_pipeline, run_trading_simulation
+    )
+    CLEAN_PIPELINE_AVAILABLE = True
+except ImportError:
+    CLEAN_PIPELINE_AVAILABLE = False
+
+# Core exports - only clean implementations
 __all__ = [
-    'UNIFIED_MATH_AVAILABLE',
-    'PROFIT_VECTORIZATION_AVAILABLE',
-    'DUALISTIC_STATE_AVAILABLE',
-    'TENSOR_ALGEBRA_AVAILABLE',
-    'CCXT_INTEGRATION_AVAILABLE',
-    'PHASE_BIT_AVAILABLE',
-    'ADVANCED_SYSTEM_AVAILABLE'
+    # Clean implementations (recommended)
+    'CleanMathFoundation', 'MathOperation', 'ThermalState', 'BitPhase',
+    'create_math_foundation', 'quick_calculation',
+    'CleanProfitVectorization', 'VectorizationMode', 'ProfitVector',
+    'create_profit_vectorizer',
+    'CleanTradingPipeline', 'MarketData', 'TradingDecision', 'StrategyBranch',
+    'create_trading_pipeline', 'run_trading_simulation',
+    
+    # Availability flags
+    'CLEAN_MATH_AVAILABLE', 'CLEAN_PROFIT_AVAILABLE', 'CLEAN_PIPELINE_AVAILABLE',
+    
+    # Utility functions
+    'get_system_status', 'create_clean_trading_system'
 ]
 
-if UNIFIED_MATH_AVAILABLE:
-    __all__.extend(['UnifiedMathSystem', 'unified_math'])
 
-if PROFIT_VECTORIZATION_AVAILABLE:
-    __all__.extend(['UnifiedProfitVectorizationSystem', 'profit_vectorization_system'])
+def get_system_status():
+    """Get the status of all system components."""
+    return {
+        'clean_implementations': {
+            'math_foundation': CLEAN_MATH_AVAILABLE,
+            'profit_vectorization': CLEAN_PROFIT_AVAILABLE,
+            'trading_pipeline': CLEAN_PIPELINE_AVAILABLE
+        },
+        'system_operational': CLEAN_MATH_AVAILABLE and CLEAN_PROFIT_AVAILABLE and CLEAN_PIPELINE_AVAILABLE
+    }
 
-if DUALISTIC_STATE_AVAILABLE:
-    __all__.extend(['DualisticStateMachine'])
 
-if TENSOR_ALGEBRA_AVAILABLE:
-    __all__.extend(['UnifiedTensorAlgebra'])
-
-if CCXT_INTEGRATION_AVAILABLE:
-    __all__.extend(['CCXTIntegration'])
-
-if PHASE_BIT_AVAILABLE:
-    __all__.extend(['PhaseBitIntegration'])
-
-if ADVANCED_SYSTEM_AVAILABLE:
-    __all__.extend([
-        'AdvancedDualisticTradingExecutionSystem',
-        'GhostTradeType',
-        'TriggerComplexity',
-        'advanced_trading_system'
-    ])
+def create_clean_trading_system(initial_capital=100000.0):
+    """
+    Create a complete clean trading system with all components.
+    
+    Returns:
+        Dictionary with all initialized components
+    """
+    if not (CLEAN_MATH_AVAILABLE and CLEAN_PROFIT_AVAILABLE and CLEAN_PIPELINE_AVAILABLE):
+        raise ImportError("Clean implementations not available")
+    
+    return {
+        'math_foundation': create_math_foundation(),
+        'profit_vectorizer': create_profit_vectorizer(),
+        'trading_pipeline': create_trading_pipeline(initial_capital=initial_capital)
+    }
