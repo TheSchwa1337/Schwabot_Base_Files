@@ -1,6 +1,12 @@
 from __future__ import annotations
 
-"""Matrix Math Utilities for Schwabot
+from typing import Dict, Any
+
+import numpy as np
+
+
+
+"""Matrix Math Utilities for Schwabot"
 ====================================
 
 Provides advanced matrix and linear-algebra functions used by
@@ -17,15 +23,11 @@ All public helpers are **pure functions** and NumPy-based so they can be
 unit-tested in isolation.
 """
 
-from typing import Dict, Any
-
-import numpy as np
-
 __all__ = ["analyze_price_matrix", "risk_parity_weights"]
 
 
 def analyze_price_matrix(price_matrix: np.ndarray) -> Dict[str, Any]:
-    """Analyse a 2-D matrix of *prices* or *returns*.
+    """Analyse a 2-D matrix of *prices* or *returns*."
 
     The input shape is (N, M) where **N** is the number of samples/
     timesteps and **M** is the number of assets.
@@ -71,7 +73,7 @@ def analyze_price_matrix(price_matrix: np.ndarray) -> Dict[str, Any]:
     log_prices = np.log(price_matrix)
     returns = np.diff(log_prices, axis=0)  # returns will have num_samples-1 rows
 
-    # If after diff, we still don't have enough samples for cov (i.e., returns.shape[0] < 2)
+    # If after diff, we still don't have enough samples for cov (i.e., returns.shape[0] < 2)'
     # This also covers the case where price_matrix had only 2 rows, resulting
     # in 1 return.
     if returns.shape[0] < 2:
@@ -132,7 +134,7 @@ def analyze_price_matrix(price_matrix: np.ndarray) -> Dict[str, Any]:
     try:
         condition_number = float(np.linalg.cond(cov_matrix))
     except np.linalg.LinAlgError:
-        condition_number = float('inf')  # Assign infinity for singular matrices
+        condition_number = float('in')  # Assign infinity for singular matrices
 
     # Stability metric: lower condition number + small max eigenvalue =>
     # more stable system (0-1 scaling for convenience)
@@ -155,7 +157,7 @@ def analyze_price_matrix(price_matrix: np.ndarray) -> Dict[str, Any]:
 
 
 def risk_parity_weights(cov_matrix: np.ndarray) -> np.ndarray:
-    """Return naive risk-parity weights from a covariance matrix.
+    """Return naive risk-parity weights from a covariance matrix."
 
     Uses inverse volatility as a quick approximation (no optimisation).
     """

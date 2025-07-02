@@ -1,3 +1,17 @@
+from __future__ import annotations
+
+import asyncio
+import importlib
+import inspect
+import logging
+from pathlib import Path
+from types import ModuleType
+from typing import Dict, List, Type
+
+from .handlers.base_handler import BaseAPIHandler
+
+
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -11,18 +25,6 @@ This service is **independent** from the trading loop – it can be run as
 its own asyncio Task or integrated as a background task by the
 `ApiIntegrationManager`.
 """
-
-from __future__ import annotations
-
-import asyncio
-import importlib
-import inspect
-import logging
-from pathlib import Path
-from types import ModuleType
-from typing import Dict, List, Type
-
-from .handlers.base_handler import BaseAPIHandler
 
 logger = logging.getLogger(__name__)
 

@@ -1,3 +1,8 @@
+from enum import Enum
+
+
+
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -6,9 +11,6 @@ API System Enums
 
 Contains all enumerations for the Schwabot live API integration system.
 """
-
-from enum import Enum
-
 
 class ExchangeType(Enum):
     """Supported exchange types."""
@@ -39,4 +41,4 @@ class ConnectionStatus(Enum):
     CONNECTING = "connecting"
     CONNECTED = "connected"
     ERROR = "error"
-    RECONNECTING = "reconnecting" 
+    RECONNECTING = "reconnecting"

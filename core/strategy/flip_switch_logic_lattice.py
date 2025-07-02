@@ -1,3 +1,12 @@
+import time
+from typing import Any, Callable, Dict, List, Optional
+
+import numpy as np
+from typing import Callable
+
+
+
+
 """
 Flip-Switch Logic Lattice Module
 --------------------------------
@@ -6,253 +15,250 @@ based on predefined conditions and adaptive thresholds. This module
 facilitates rapid, deterministic switching between trading strategies.
 """
 
-import time
-from typing import Any, Callable, Dict, List, Optional
-
-import numpy as np
-
-
 class FlipSwitchLogicLattice:
     """
-    A logic lattice that enables high-speed, condition-based switching
-    between different trading strategies or operational modes.
-    """
+A logic lattice that enables high-speed, condition-based switching
+between different trading strategies or operational modes.
+"""
 
-    def __init__(self, default_strategy_id: str = "default_pass_through"):
+def __init__(self, default_strategy_id: str = "default_pass_through"):
         """
-        Initializes the Flip-Switch Logic Lattice.
+Initializes the Flip-Switch Logic Lattice.
 
-        Args:
+Args:
             default_strategy_id: The ID of the strategy to use if no switch condition is met.
-        """
-        self.strategies: Dict[str, Callable[[Dict[str, Any]], Dict[str, Any]]] = {}
-        self.switch_conditions: List[Dict[str, Any]] = []
-        self.default_strategy_id = default_strategy_id
-        self.active_strategy_id: str = default_strategy_id
-        self.metrics: Dict[str, Any] = {
-            "total_evaluations": 0,
-            "total_switches": 0,
-            "last_switch_time": None,
-            "strategy_activations": {self.default_strategy_id: 0},
-        }
+"""
+self.strategies: Dict[str, Callable[[Dict[str, Any]], Dict[str, Any]]] = {}
+self.switch_conditions: List[Dict[str, Any]] = []
+self.default_strategy_id = default_strategy_id
+self.active_strategy_id: str = default_strategy_id
+self.metrics: Dict[str, Any] = {
+"total_evaluations": 0,
+"total_switches": 0,
+"last_switch_time": None,
+"strategy_activations": {self.default_strategy_id: 0},
+}
 
-        # Register a simple pass-through default strategy
-        self.register_strategy(
-            self.default_strategy_id, self._default_pass_through_strategy
-        )
+# Register a simple pass-through default strategy
+self.register_strategy(
+self.default_strategy_id, self._default_pass_through_strategy
+)
 
-    def _default_pass_through_strategy(self, data: Dict[str, Any]) -> Dict[str, Any]:
+def _default_pass_through_strategy(self, data: Dict[str, Any]) -> Dict[str, Any]:
         """
-        A default strategy that simply returns the input data, effectively doing nothing.
-        """
-        return {"status": "passed_through", "data": data, "timestamp": time.time()}
+A default strategy that simply returns the input data, effectively doing nothing.
+"""
+return {"status": "passed_through", "data": data, "timestamp": time.time()}
 
-    def register_strategy(
-        self,
-        strategy_id: str,
+def register_strategy(
+self,
+strategy_id: str,
         strategy_func: Callable[[Dict[str, Any]], Dict[str, Any]],
-    ):
+):
         """
-        Registers a new strategy with the lattice.
+Registers a new strategy with the lattice.
 
-        Args:
+Args:
             strategy_id: A unique identifier for the strategy.
             strategy_func: The callable function representing the strategy logic.
-                           It should accept a dict (input data) and return a dict (result).
-        """
-        if not callable(strategy_func):
+It should accept a dict (input data) and return a dict (result).
+"""
+if not callable(strategy_func):
             raise ValueError(f"Strategy function for '{strategy_id}' must be callable.")
         self.strategies[strategy_id] = strategy_func
         self.metrics["strategy_activations"][strategy_id] = 0
 
-    def add_switch_condition(
-        self,
-        condition_func: Callable[[Dict[str, Any]], bool],
-        target_strategy_id: str,
-        priority: int = 0,
-        description: Optional[str] = None,
-    ):
+def add_switch_condition(
+self,
+condition_func: Callable[[Dict[str, Any]], bool],
+target_strategy_id: str,
+priority: int = 0,
+description: Optional[str] = None,
+):
         """
-        Adds a condition for switching to a target strategy.
+Adds a condition for switching to a target strategy.
 
-        Args:
+Args:
             condition_func: A callable that takes input data (dict) and returns a boolean.
-            target_strategy_id: The ID of the strategy to switch to if the condition is met.
-            priority: Higher priority conditions are evaluated first (default 0).
-            description: Optional description of the condition.
-        """
-        if target_strategy_id not in self.strategies:
+target_strategy_id: The ID of the strategy to switch to if the condition is met.
+priority: Higher priority conditions are evaluated first (default 0).
+description: Optional description of the condition.
+"""
+if target_strategy_id not in self.strategies:
             raise ValueError(
-                f"Target strategy ID '{target_strategy_id}' is not registered."
-            )
-        if not callable(condition_func):
+f"Target strategy ID '{target_strategy_id}' is not registered."
+)
+if not callable(condition_func):
             raise ValueError("Condition function must be callable.")
 
-        self.switch_conditions.append(
-            {
-                "condition_func": condition_func,
-                "target_strategy_id": target_strategy_id,
-                "priority": priority,
-                "description": description or f"Switch to {target_strategy_id}",
-            }
-        )
-        # Sort conditions by priority (descending)
-        self.switch_conditions.sort(key=lambda x: x["priority"], reverse=True)
+self.switch_conditions.append(
+{
+"condition_func": condition_func,
+"target_strategy_id": target_strategy_id,
+"priority": priority,
+"description": description or f"Switch to {target_strategy_id}",
+}
+)
+# Sort conditions by priority (descending)
+self.switch_conditions.sort(key=lambda x: x["priority"], reverse=True)
 
-    def evaluate_and_execute(self, data: Dict[str, Any]) -> Dict[str, Any]:
+def evaluate_and_execute(self, data: Dict[str, Any]) -> Dict[str, Any]:
         """
-        Evaluates switch conditions and executes the appropriate strategy.
+Evaluates switch conditions and executes the appropriate strategy.
 
-        Args:
+Args:
             data: The input data for strategy evaluation and execution.
 
-        Returns:
+Returns:
             The result of the executed strategy.
-        """
-        self.metrics["total_evaluations"] += 1
-        current_active_strategy_before_eval = self.active_strategy_id
+"""
+self.metrics["total_evaluations"] += 1
+current_active_strategy_before_eval = self.active_strategy_id
 
-        # Evaluate conditions
-        next_strategy_id = self.default_strategy_id
-        for condition in self.switch_conditions:
+# Evaluate conditions
+next_strategy_id = self.default_strategy_id
+for condition in self.switch_conditions:
             try:
                 if condition["condition_func"](data):
                     next_strategy_id = condition["target_strategy_id"]
-                    break  # Found a matching condition, use this strategy
-            except Exception as e:
+break  # Found a matching condition, use this strategy
+except Exception as e:
                 print(
-                    f"Error evaluating condition '{
-                        condition["description"]}': {e}"
-                )
-                # Continue to next condition or fallback
+f"Error evaluating condition '{'"
+condition["description"]}': {e}""'
+)
+# Continue to next condition or fallback
 
-        # Switch if necessary
-        if next_strategy_id != self.active_strategy_id:
+# Switch if necessary
+if next_strategy_id != self.active_strategy_id:
             print(
-                f"Switching from {
-                    self.active_strategy_id} to {next_strategy_id}"
-            )
-            self.metrics["total_switches"] += 1
-            self.metrics["last_switch_time"] = time.time()
-            self.active_strategy_id = next_strategy_id
+f"Switching from {
+self.active_strategy_id} to {next_strategy_id}""
+)
+self.metrics["total_switches"] += 1
+self.metrics["last_switch_time"] = time.time()
+self.active_strategy_id = next_strategy_id
 
-        self.metrics["strategy_activations"][self.active_strategy_id] = (
+self.metrics["strategy_activations"][self.active_strategy_id] = (
             self.metrics["strategy_activations"].get(self.active_strategy_id, 0) + 1
-        )
+)
 
-        # Execute the active strategy
+# Execute the active strategy
         strategy_func = self.strategies.get(self.active_strategy_id)
         if strategy_func is None:
             print(
-                f"Error: Active strategy '{
-                    self.active_strategy_id}' not found. Falling back to default."
-            )
-            strategy_func = self.strategies[self.default_strategy_id]
+f"Error: Active strategy '{'"
+self.active_strategy_id}' not found. Falling back to default.""'
+)
+strategy_func = self.strategies[self.default_strategy_id]
             self.active_strategy_id = self.default_strategy_id  # Reset to default
             self.metrics["strategy_activations"][self.active_strategy_id] = (
                 self.metrics["strategy_activations"].get(self.active_strategy_id, 0) + 1
-            )
+)
 
-        try:
+try:
             result = strategy_func(data)
             result["active_strategy_after_eval"] = self.active_strategy_id
-            return result
-        except Exception as e:
+return result
+except Exception as e:
             print(f"Error executing strategy '{self.active_strategy_id}': {e}")
-            return {
-                "status": "error",
-                "message": str(e),
-                "executed_strategy": self.active_strategy_id,
-            }
+return {
+"status": "error",
+"message": str(e),
+"executed_strategy": self.active_strategy_id,
+}
 
-    def get_metrics(self) -> Dict[str, Any]:
+def get_metrics(self) -> Dict[str, Any]:
         """
-        Returns the performance metrics of the logic lattice.
-        """
-        return self.metrics
+Returns the performance metrics of the logic lattice.
+"""
+return self.metrics
 
-    def get_active_strategy_id(self) -> str:
+def get_active_strategy_id(self) -> str:
         """
-        Returns the currently active strategy ID.
-        """
-        return self.active_strategy_id
+Returns the currently active strategy ID.
+"""
+return self.active_strategy_id
 
 
 if __name__ == "__main__":
     print("--- Flip-Switch Logic Lattice Demo ---")
 
-    lattice = FlipSwitchLogicLattice()
+lattice = FlipSwitchLogicLattice()
 
-    # Define some dummy strategies
-    def strategy_a(data: Dict[str, Any]) -> Dict[str, Any]:
+# Define some dummy strategies
+def strategy_a(data: Dict[str, Any]) -> Dict[str, Any]:
         print(f"Executing Strategy A with data: {data.get('value')}")
-        return {"strategy": "A", "processed_value": data.get("value", 0) * 2}
+return {"strategy": "A", "processed_value": data.get("value", 0) * 2}
 
-    def strategy_b(data: Dict[str, Any]) -> Dict[str, Any]:
+def strategy_b(data: Dict[str, Any]) -> Dict[str, Any]:
         print(f"Executing Strategy B with data: {data.get('value')}")
-        return {"strategy": "B", "processed_value": data.get("value", 0) / 2}
+return {"strategy": "B", "processed_value": data.get("value", 0) / 2}
 
-    def strategy_c(data: Dict[str, Any]) -> Dict[str, Any]:
+def strategy_c(data: Dict[str, Any]) -> Dict[str, Any]:
         print(f"Executing Strategy C with data: {data.get('value')}")
-        return {"strategy": "C", "processed_value": data.get("value", 0) + 10}
+return {"strategy": "C", "processed_value": data.get("value", 0) + 10}
 
-    # Register strategies
-    lattice.register_strategy("strat_A", strategy_a)
+# Register strategies
+lattice.register_strategy("strat_A", strategy_a)
     lattice.register_strategy("strat_B", strategy_b)
     lattice.register_strategy("strat_C", strategy_c)
 
-    # Add switch conditions
-    lattice.add_switch_condition(
-        lambda d: d.get("value", 0) > 100,
-        "strat_A",
-        priority=10,
-        description="Value > 100",
-    )
-    lattice.add_switch_condition(
-        lambda d: 50 <= d.get("value", 0) <= 100,
-        "strat_B",
-        priority=5,
-        description="Value between 50 and 100",
-    )
-    lattice.add_switch_condition(
-        lambda d: d.get("value", 0) < 50,
-        "strat_C",
-        priority=0,
-        description="Value < 50",
-    )
+# Add switch conditions
+lattice.add_switch_condition(
+lambda d: d.get("value", 0) > 100,
+"strat_A",
+priority=10,
+description="Value > 100",
+)
+lattice.add_switch_condition(
+lambda d: 50 <= d.get("value", 0) <= 100,
+"strat_B",
+priority=5,
+description="Value between 50 and 100",
+)
+lattice.add_switch_condition(
+lambda d: d.get("value", 0) < 50,
+"strat_C",
+priority=0,
+description="Value < 50",
+)
 
-    # Test cases
-    print("\n--- Test Case 1: Value = 120 (should trigger strat_A) ---")
-    result1 = lattice.evaluate_and_execute({"value": 120})
-    print(f"Result: {result1}")
-    print(f"Active Strategy: {lattice.get_active_strategy_id()}")
+# Test cases
+print("\n--- Test Case 1: Value = 120 (should trigger strat_A) ---")
+result1 = lattice.evaluate_and_execute({"value": 120})
+print(f"Result: {result1}")
+print(f"Active Strategy: {lattice.get_active_strategy_id()}")
 
-    print("\n--- Test Case 2: Value = 75 (should trigger strat_B) ---")
-    result2 = lattice.evaluate_and_execute({"value": 75})
-    print(f"Result: {result2}")
-    print(f"Active Strategy: {lattice.get_active_strategy_id()}")
+print("\n--- Test Case 2: Value = 75 (should trigger strat_B) ---")
+result2 = lattice.evaluate_and_execute({"value": 75})
+print(f"Result: {result2}")
+print(f"Active Strategy: {lattice.get_active_strategy_id()}")
 
-    print("\n--- Test Case 3: Value = 20 (should trigger strat_C) ---")
-    result3 = lattice.evaluate_and_execute({"value": 20})
-    print(f"Result: {result3}")
-    print(f"Active Strategy: {lattice.get_active_strategy_id()}")
+print("\n--- Test Case 3: Value = 20 (should trigger strat_C) ---")
+result3 = lattice.evaluate_and_execute({"value": 20})
+print(f"Result: {result3}")
+print(f"Active Strategy: {lattice.get_active_strategy_id()}")
 
-    print("\n--- Test Case 4: Value = 150 (should trigger strat_A again) ---")
-    result4 = lattice.evaluate_and_execute({"value": 150})
-    print(f"Result: {result4}")
-    print(f"Active Strategy: {lattice.get_active_strategy_id()}")
+print("\n--- Test Case 4: Value = 150 (should trigger strat_A again) ---")
+result4 = lattice.evaluate_and_execute({"value": 150})
+print(f"Result: {result4}")
+print(f"Active Strategy: {lattice.get_active_strategy_id()}")
 
-    print("\n--- Test Case 5: No condition met (should use default) ---")
-    # Remove all conditions to simulate no match, or create a value that
-    # doesn't match
-    initial_conditions = lattice.switch_conditions  # Save for restoration if needed
-    lattice.switch_conditions = []  # Temporarily clear conditions
-    result5 = lattice.evaluate_and_execute({"value": -10})
-    print(f"Result: {result5}")
-    print(f"Active Strategy: {lattice.get_active_strategy_id()}")
-    lattice.switch_conditions = initial_conditions  # Restore conditions
+print("\n--- Test Case 5: No condition met (should use default) ---")
+# Remove all conditions to simulate no match, or create a value that
+# doesn't match'
+initial_conditions = lattice.switch_conditions  # Save for restoration if needed
+lattice.switch_conditions = []  # Temporarily clear conditions
+result5 = lattice.evaluate_and_execute({"value": -10})
+print(f"Result: {result5}")
+print(f"Active Strategy: {lattice.get_active_strategy_id()}")
+lattice.switch_conditions = initial_conditions  # Restore conditions
 
-    print("\n--- Metrics ---")
-    metrics = lattice.get_metrics()
-    for k, v in metrics.items():
+print("\n--- Metrics ---")
+metrics = lattice.get_metrics()
+for k, v in metrics.items():
         print(f"  {k}: {v}")
+
+"""
+"""

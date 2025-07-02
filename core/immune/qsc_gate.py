@@ -1,10 +1,3 @@
-#!/usr/bin/env python3
-"""QSC Gate (Quantum Static Core Gate) - Immune System Integration.
-
-Advanced gate system that integrates quantum static calculations with immune
-system protection for enhanced trading security and validation.
-"""
-
 import logging
 import time
 from dataclasses import dataclass
@@ -12,6 +5,16 @@ from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
+from typing import Tuple
+
+
+
+#!/usr/bin/env python3
+"""QSC Gate (Quantum Static Core Gate) - Immune System Integration."
+
+Advanced gate system that integrates quantum static calculations with immune
+system protection for enhanced trading security and validation.
+"""
 
 logger = logging.getLogger(__name__)
 
@@ -54,7 +57,7 @@ class QSCGate:
     """Quantum Static Core Gate for immune signal processing."""
 
     def __init__(self, config: Optional[Dict[str, Any]] = None):
-        """Initialize QSC Gate.
+        """Initialize QSC Gate."
 
         Args:
             config: Configuration parameters
@@ -105,7 +108,7 @@ class QSCGate:
     def immune_trigger(
         self, signal_data: ImmuneSignalData
     ) -> Tuple[bool, float, Dict[str, Any]]:
-        """Process immune trigger using biological T-cell activation math.
+        """Process immune trigger using biological T-cell activation math."
 
         Mathematical Model:
         I_act = σ(w1*S1 + w2*S2 + w3*S3 - τ)
@@ -216,7 +219,7 @@ class QSCGate:
         swarm_vector: Optional[np.ndarray] = None,
         gts_sync_score: Optional[float] = None,
     ) -> QSCImmuneResponse:
-        """Process complete immune response with swarm and GTS integration.
+        """Process complete immune response with swarm and GTS integration."
 
         Args:
             signal_data: Immune signal data
@@ -358,7 +361,7 @@ class QSCGate:
     def update_performance_feedback(
         self, response_id: str, was_successful: bool
     ) -> None:
-        """Update performance feedback for learning.
+        """Update performance feedback for learning."
 
         Args:
             response_id: ID of the response to update
@@ -389,7 +392,7 @@ def create_signal_from_market_data(
     entropy_level: float,
     source: str = "market_data",
 ) -> ImmuneSignalData:
-    """Create immune signal data from market data.
+    """Create immune signal data from market data."
 
     Args:
         price_delta: Normalized price change (-1 to 1)

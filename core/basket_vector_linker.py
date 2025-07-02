@@ -1,3 +1,12 @@
+import time
+from typing import Any, Dict, List, Optional, Tuple
+
+import numpy as np
+from typing import Tuple
+
+
+
+
 """
 Basket Vector Linker Module
 ---------------------------
@@ -5,13 +14,6 @@ Implements the Strategy Basket Resolver, matching hash vectors to strategy class
 through clustering or vector memory. This module enables Zalgo/Zygot glyph logic
 to emit routing behavior based on observed tick states.
 """
-
-import time
-from typing import Any, Dict, List, Optional, Tuple
-
-import numpy as np
-from scipy.spatial.distance import cosine  # For cosine similarity
-
 
 class BasketVectorLinker:
     """
@@ -39,7 +41,7 @@ class BasketVectorLinker:
 
     def register_strategy_vector(self, strategy_id: str, vector_signature: List[float]):
         """
-        Registers or updates a strategy's vector signature.
+        Registers or updates a strategy's vector signature.'
         """
         self.strategy_vectors[strategy_id] = np.array(vector_signature)
 
@@ -98,7 +100,7 @@ class BasketVectorLinker:
 
     def reset(self):
         """
-        Resets the linker's internal states and metrics.
+        Resets the linker's internal states and metrics.'
         """
         self.strategy_vectors = {}
         self.metrics = {

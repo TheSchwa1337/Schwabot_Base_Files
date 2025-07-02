@@ -1,15 +1,18 @@
+import logging
+from typing import List, Optional, Tuple, Union
+
+import numpy as np
+from typing import Tuple
+
+
+
 # -*- coding: utf-8 -*-
-"""Unified Tensor Algebra for Schwabot Trading
+"""Unified Tensor Algebra for Schwabot Trading"
 ===========================================
 
 Provides core tensor operations and abstractions for multi-dimensional
 mathematical analysis within the Schwabot trading framework.
 """
-
-import logging
-from typing import List, Optional, Tuple, Union
-
-import numpy as np
 
 logger = logging.getLogger(__name__)
 
@@ -24,7 +27,7 @@ class UnifiedTensorAlgebra:
         )
 
     def create_tensor(self, data: list, dtype=np.float64) -> np.ndarray:
-        """Creates a new tensor from input data.
+        """Creates a new tensor from input data."
 
         Args:
             data (list): List of lists representing tensor data.
@@ -36,7 +39,7 @@ class UnifiedTensorAlgebra:
         return np.array(data, dtype=dtype)
 
     def tensor_multiply(self, tensor1: np.ndarray, tensor2: np.ndarray) -> np.ndarray:
-        """Performs element-wise multiplication of two tensors.
+        """Performs element-wise multiplication of two tensors."
 
         Args:
             tensor1 (np.ndarray): First tensor.
@@ -54,7 +57,7 @@ class UnifiedTensorAlgebra:
     def tensor_dot_product(
         self, tensor1: np.ndarray, tensor2: np.ndarray
     ) -> np.ndarray:
-        """Computes the dot product of two tensors.
+        """Computes the dot product of two tensors."
 
         Args:
             tensor1 (np.ndarray): First tensor.
@@ -76,7 +79,7 @@ class UnifiedTensorAlgebra:
     def apply_activation(
         self, tensor: np.ndarray, activation_type: str = "relu"
     ) -> np.ndarray:
-        """Applies an activation function to the tensor.
+        """Applies an activation function to the tensor."
 
         Args:
             tensor (np.ndarray): Input tensor.
@@ -100,7 +103,7 @@ class UnifiedTensorAlgebra:
         axis: Optional[Union[int, Tuple[int, ...]]] = None,
         operation: str = "sum",
     ) -> Union[np.ndarray, float]:
-        """Reduces the tensor along a specified axis.
+        """Reduces the tensor along a specified axis."
 
         Args:
             tensor (np.ndarray): Input tensor.

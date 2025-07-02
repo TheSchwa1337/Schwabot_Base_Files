@@ -2,6 +2,8 @@ from pathlib import Path
 
 import pandas as pd
 
+
+
 HIST_DIR = Path("data/historical")
 PREPROC_DIR = Path("data/preprocessed")
 

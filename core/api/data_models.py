@@ -1,3 +1,12 @@
+import time
+from dataclasses import dataclass, field
+from typing import Dict, List, Optional, Any
+
+from .enums import ExchangeType, OrderSide, OrderType
+
+
+
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -7,13 +16,6 @@ API System Data Models
 Contains all data models (dataclasses) for the Schwabot live API
 integration system.
 """
-
-import time
-from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Any
-
-from .enums import ExchangeType, OrderSide, OrderType
-
 
 @dataclass
 class APICredentials:
@@ -88,4 +90,4 @@ class PortfolioPosition:
     pnl: float
     pnl_percentage: float
     timestamp: float
-    metadata: Dict[str, Any] = field(default_factory=dict) 
+    metadata: Dict[str, Any] = field(default_factory=dict)

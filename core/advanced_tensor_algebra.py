@@ -9,7 +9,7 @@ the comprehensive Schwabot trading system.
 
 Features:
 - Bit-phase resolution algebra
-- Matrix basket tensor operations  
+- Matrix basket tensor operations
 - Profit routing differential calculus
 - Entropy compensation dynamics
 - Hash memory vector encoding
@@ -21,6 +21,7 @@ import hashlib
 import json
 import logging
 import time
+import random
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
@@ -30,13 +31,14 @@ import numpy as np
 
 try:
     from core.unified_math_system import unified_math
+    from utils.safe_print import safe_print
 except ImportError:
     # Fallback for testing
     class unified_math:
         @staticmethod
         def abs(x):
             return abs(x)
-        
+
         @staticmethod
         def log(x):
             return np.log(x)
@@ -191,19 +193,19 @@ class UnifiedTensorAlgebra:
         try:
             # Convert strategy_id to hash for consistent bit operations
             hash_val = int(hashlib.md5(strategy_id.encode()).hexdigest()[:8], 16)
-            
+
             # Calculate bit phases
             phi_4 = hash_val & 0b1111
             phi_8 = (hash_val >> 4) & 0b11111111
             phi_42 = (hash_val >> 12) & 0x3FFFFFFFFFF
-            
+
             # Calculate cycle score
             cycle_score = (
                 self.alpha_weight * phi_4 +
                 self.beta_weight * phi_8 +
                 self.gamma_weight * (phi_42 % 1000)  # Normalize phi_42
             )
-            
+
             result = BitPhaseResult(
                 phi_4=phi_4,
                 phi_8=phi_8,
@@ -212,10 +214,10 @@ class UnifiedTensorAlgebra:
                 strategy_id=strategy_id,
                 timestamp=datetime.now()
             )
-            
+
             self.bit_phase_results.append(result)
             return result
-            
+
         except Exception as e:
             logger.error(f"Bit phase resolution failed: {e}")
             return BitPhaseResult(
@@ -223,22 +225,28 @@ class UnifiedTensorAlgebra:
                 strategy_id=strategy_id, timestamp=datetime.now()
             )
 
-    def perform_tensor_contraction(self, matrix_a: np.ndarray, matrix_b: np.ndarray) -> TensorContractionResult:
+    def perform_tensor_contraction(
+        self,
+        matrix_a: np.ndarray,
+        matrix_b: np.ndarray
+    ) -> TensorContractionResult:
         """Perform tensor contraction operation."""
         try:
             # Ensure matrices are compatible
             if matrix_a.shape[1] != matrix_b.shape[0]:
                 raise ValueError("Matrix dimensions incompatible for contraction")
-            
+
             # Perform contraction
             contraction_matrix = np.dot(matrix_a, matrix_b)
-            
+
             # Calculate tensor score
             tensor_score = np.trace(contraction_matrix) / max(1, np.linalg.norm(contraction_matrix))
-            
+
             # Calculate basket weights
-            basket_weights = np.diagonal(contraction_matrix) / np.sum(np.diagonal(contraction_matrix))
-            
+            basket_weights = (
+                np.diagonal(contraction_matrix) / np.sum(np.diagonal(contraction_matrix))
+            )
+
             result = TensorContractionResult(
                 tensor_score=tensor_score,
                 basket_weights=basket_weights,
@@ -246,10 +254,10 @@ class UnifiedTensorAlgebra:
                 operation_type=TensorOperation.CONTRACTION,
                 timestamp=datetime.now()
             )
-            
+
             self.tensor_results.append(result)
             return result
-            
+
         except Exception as e:
             logger.error(f"Tensor contraction failed: {e}")
             return TensorContractionResult(
@@ -260,18 +268,23 @@ class UnifiedTensorAlgebra:
                 timestamp=datetime.now()
             )
 
-    def calculate_profit_routing(self, price_current: float, price_target: float, time_delta: float) -> ProfitRoutingResult:
+    def calculate_profit_routing(
+        self,
+        price_current: float,
+        price_target: float,
+        time_delta: float
+    ) -> ProfitRoutingResult:
         """Calculate profit routing using differential calculus."""
         try:
             # Calculate profit rate: dP/dt = (P_t - P_t-1) / Δt
             profit_rate = (price_target - price_current) / max(0.001, time_delta)
-            
+
             # Calculate routing score based on profit potential
             routing_score = unified_math.abs(profit_rate) / (1 + unified_math.abs(profit_rate))
-            
+
             # Determine execution trigger
             execution_trigger = routing_score > self.drift_threshold
-            
+
             result = ProfitRoutingResult(
                 profit_rate=profit_rate,
                 routing_score=routing_score,
@@ -279,10 +292,10 @@ class UnifiedTensorAlgebra:
                 threshold_value=self.drift_threshold,
                 timestamp=datetime.now()
             )
-            
+
             self.profit_results.append(result)
             return result
-            
+
         except Exception as e:
             logger.error(f"Profit routing calculation failed: {e}")
             return ProfitRoutingResult(
@@ -290,7 +303,11 @@ class UnifiedTensorAlgebra:
                 threshold_value=self.drift_threshold, timestamp=datetime.now()
             )
 
-    def calculate_entropy_compensation(self, volume: float, drift_magnitude: float) -> EntropyCompensationResult:
+    def calculate_entropy_compensation(
+        self,
+        volume: float,
+        drift_magnitude: float
+    ) -> EntropyCompensationResult:
         """Calculate entropy compensation and drift dynamics."""
         try:
             # Calculate entropy gate: E(t) = log(V + 1) / (1 + β)
@@ -309,10 +326,10 @@ class UnifiedTensorAlgebra:
                 adaptive_trigger=adaptive_trigger,
                 timestamp=datetime.now()
             )
-            
+
             self.entropy_results.append(result)
             return result
-            
+
         except Exception as e:
             logger.error(f"Error calculating entropy compensation: {e}")
             return EntropyCompensationResult(
@@ -323,11 +340,18 @@ class UnifiedTensorAlgebra:
                 timestamp=datetime.now()
             )
 
-    def encode_hash_memory(self, profit_current: float, profit_delta: float, bit_phase_result: BitPhaseResult) -> HashMemoryResult:
+    def encode_hash_memory(
+        self,
+        profit_current: float,
+        profit_delta: float,
+        bit_phase_result: BitPhaseResult
+    ) -> HashMemoryResult:
         """Encode hash memory vector."""
         try:
             # Create hash input: H(t) = SHA256(P_t || ΔP || φ_t)
-            hash_input = f"{profit_current:.8f}||{profit_delta:.8f}||{bit_phase_result.cycle_score:.8f}"
+            hash_input = (
+                f"{profit_current:.8f}||{profit_delta:.8f}||{bit_phase_result.cycle_score:.8f}"
+            )
             hash_signature = hashlib.sha256(hash_input.encode()).hexdigest()
 
             # Calculate similarity with known hashes (simplified)
@@ -346,10 +370,10 @@ class UnifiedTensorAlgebra:
                 strategy_match=strategy_match,
                 timestamp=datetime.now()
             )
-            
+
             self.hash_results.append(result)
             return result
-            
+
         except Exception as e:
             logger.error(f"Error encoding hash memory: {e}")
             return HashMemoryResult(
@@ -377,13 +401,17 @@ class UnifiedTensorAlgebra:
                     similarity = 1.0 - (hamming_distance / len(hash_signature))
                     similarities.append(similarity)
 
-            return unified_math.mean(similarities) if similarities else 0.5
-            
+            return np.mean(similarities) if similarities else 0.5
+
         except Exception as e:
             logger.error(f"Error calculating hash similarity: {e}")
             return 0.5
 
-    def _determine_strategy_match(self, hash_signature: str, bit_phase_result: BitPhaseResult) -> str:
+    def _determine_strategy_match(
+        self,
+        hash_signature: str,
+        bit_phase_result: BitPhaseResult
+    ) -> str:
         """Determine strategy match based on hash and bit phases."""
         try:
             # Simple strategy determination based on bit phases
@@ -391,16 +419,20 @@ class UnifiedTensorAlgebra:
                 return "conservative"
             elif bit_phase_result.phi_8 < 128:
                 return "balanced"
-            elif bit_phase_result.phi_42 < 2199023255552:  # 2^41:
+            elif bit_phase_result.phi_42 < 2199023255552:  # 2^41
                 return "aggressive"
             else:
                 return "quantum"
-            
+
         except Exception as e:
             logger.error(f"Error determining strategy match: {e}")
             return "fallback"
 
-    def perform_unified_operation(self, strategy_id: str, market_data: Dict[str, Any]) -> Dict[str, Any]:
+    def perform_unified_operation(
+        self,
+        strategy_id: str,
+        market_data: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Perform unified mathematical operation combining all components."""
         try:
             # 1. Resolve bit phases
@@ -459,7 +491,7 @@ class UnifiedTensorAlgebra:
 
             logger.info(f"Unified operation completed for strategy {strategy_id}")
             return unified_result
-            
+
         except Exception as e:
             logger.error(f"Error performing unified operation: {e}")
             return {
@@ -476,11 +508,16 @@ class UnifiedTensorAlgebra:
             "profit_routing_operations": len(self.profit_results),
             "entropy_operations": len(self.entropy_results),
             "hash_operations": len(self.hash_results),
-            "average_cycle_score": np.mean([r.cycle_score for r in self.bit_phase_results]) if self.bit_phase_results else 0.0,
-            "average_tensor_score": np.mean([r.tensor_score for r in self.tensor_results]) if self.tensor_results else 0.0,
-            "average_profit_rate": np.mean([r.profit_rate for r in self.profit_results]) if self.profit_results else 0.0,
-            "average_entropy_gate": np.mean([r.entropy_gate for r in self.entropy_results]) if self.entropy_results else 0.0,
-            "average_hash_similarity": np.mean([r.similarity_score for r in self.hash_results]) if self.hash_results else 0.0,
+            "average_cycle_score": np.mean([r.cycle_score for r in self.bit_phase_results]) if
+self.bit_phase_results else 0.0,
+            "average_tensor_score": np.mean([r.tensor_score for r in self.tensor_results]) if
+self.tensor_results else 0.0,
+            "average_profit_rate": np.mean([r.profit_rate for r in self.profit_results]) if
+self.profit_results else 0.0,
+            "average_entropy_gate": np.mean([r.entropy_gate for r in self.entropy_results]) if
+self.entropy_results else 0.0,
+            "average_hash_similarity": np.mean([r.similarity_score for r in self.hash_results]) if
+self.hash_results else 0.0,
             "mathematical_weights": {
                 "alpha": self.alpha_weight,
                 "beta": self.beta_weight,
@@ -502,7 +539,7 @@ class UnifiedTensorAlgebra:
                 json.dump(data, f, indent=2)
 
             logger.info(f"Mathematical data exported to {output_path}")
-            
+
         except Exception as e:
             logger.error(f"Error exporting mathematical data: {e}")
 
@@ -521,7 +558,7 @@ def main():
 
     # Test bit phase resolution
     safe_print("\n\u1f4ca Testing Bit Phase Resolution...")
-    strategy_id = "0x123456789abcdef"
+    strategy_id = "0x123456789abcde"
     bit_result = algebra.resolve_bit_phases(strategy_id)
     safe_print(f"  φ₄: {bit_result.phi_4}")
     safe_print(f"  φ₈: {bit_result.phi_8}")
@@ -570,7 +607,7 @@ def main():
 
     # Get statistics
     stats = algebra.get_mathematical_statistics()
-    safe_print(f"\n\u1f4c8 Mathematical Statistics:")
+    safe_print("\n\u1f4c8 Mathematical Statistics:")
     safe_print(f"  Total Operations: {stats['total_operations']}")
     safe_print(f"  Average Cycle Score: {stats['average_cycle_score']:.4f}")
     safe_print(f"  Average Tensor Score: {stats['average_tensor_score']:.4f}")
