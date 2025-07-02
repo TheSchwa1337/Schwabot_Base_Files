@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 class ProfitTier(Enum):
     """Profit tier classification for symbols."""
     TIER_1 = "tier_1"  # 0-5% profit
-    TIER_2 = "tier_2"  # 5-15% profit  
+    TIER_2 = "tier_2"  # 5-15% profit
     TIER_3 = "tier_3"  # 15-50% profit
     TIER_4 = "tier_4"  # 50%+ profit
 
@@ -54,14 +54,14 @@ class ProfitSequence:
 
 class SymbolicProfitRouter:
     """Advanced symbolic profit router for Unicode/Emoji trading signals."""
-    
+
     def __init__(self, profit_threshold: float = 0.01):
         """Initialize the symbolic profit router."""
         self.profit_threshold = profit_threshold
         self.glyph_registry: Dict[str, GlyphTier] = {}
         self.profit_vault: Dict[str, ProfitSequence] = {}
         self.cycle_index = 0
-        
+
         # Unicode tier mapping for common trading symbols
         self.unicode_tier_map = {
             '💰': ProfitTier.TIER_4,
@@ -75,9 +75,9 @@ class SymbolicProfitRouter:
             '💡': ProfitTier.TIER_1,
             '⭐': ProfitTier.TIER_1
         }
-        
+
         logger.info("Symbolic Profit Router initialized")
-    
+
     def extract_2bit_from_unicode(self, emoji: str) -> str:
         """Extract 2-bit state from Unicode codepoint."""
         try:
@@ -91,24 +91,24 @@ class SymbolicProfitRouter:
         except Exception as e:
             logger.error(f"Unicode extraction error: {e}")
             return "00"
-    
+
     def calculate_entropy_vector(self, emoji: str, sha_hash: str) -> float:
         """Calculate entropy vector from symbol and hash."""
         try:
             # Calculate entropy from symbol
             symbol_entropy = len(set(emoji.encode('utf-8'))) / max(len(emoji.encode('utf-8')), 1)
-            
+
             # Calculate hash entropy
             hash_entropy = len(set(sha_hash[:16])) / 16
-            
+
             # Combine entropies
             combined_entropy = (symbol_entropy + hash_entropy) / 2
             return min(combined_entropy, 1.0)
-            
+
         except Exception as e:
             logger.error(f"Entropy calculation error: {e}")
             return 0.5
-    
+
     def calculate_trust_score(self, emoji: str, historical_profits: List[float]) -> float:
         """Calculate trust score based on historical performance."""
         try:
@@ -122,19 +122,19 @@ class SymbolicProfitRouter:
                     ProfitTier.TIER_4: 0.9
                 }
                 return trust_scores.get(tier, 0.5)
-            
+
             # Calculate from historical data
             avg_profit = sum(historical_profits) / len(historical_profits)
             profit_variance = sum((p - avg_profit) ** 2 for p in historical_profits) / len(historical_profits)
-            
+
             # Trust score based on performance and consistency
             trust = min(avg_profit * 2, 1.0) * (1 - min(profit_variance, 0.5))
             return max(trust, 0.1)
-            
+
         except Exception as e:
             logger.error(f"Trust score calculation error: {e}")
             return 0.5
-    
+
     def calculate_profit_bias(self, emoji: str, sha_hash: str) -> float:
         """Calculate profit bias from symbol characteristics."""
         try:
@@ -147,45 +147,45 @@ class SymbolicProfitRouter:
                 ProfitTier.TIER_4: 3.0
             }
             tier_multiplier = tier_multipliers.get(tier, 1.0)
-            
+
             # Calculate hash-based bias
             hash_int = int(sha_hash[:8], 16)
             hash_bias = (hash_int % 1000) / 1000  # Normalize to 0-1
-            
+
             # Symbol weight based on emoji complexity
             symbol_weight = min(len(emoji.encode('utf-8')) / 4, 1.0)
-            
+
             # Combine factors
             profit_bias = hash_bias * tier_multiplier * symbol_weight
             return profit_bias * 20  # Scale to percentage
-            
+
         except Exception as e:
             logger.error(f"Profit bias calculation error: {e}")
             return 1.0
-    
+
     def register_glyph(self, emoji: str, historical_profits: List[float] = None) -> GlyphTier:
         """Register a Unicode symbol as a glyph tier with full profit mapping."""
         try:
             if historical_profits is None:
                 historical_profits = []
-            
+
             # Generate SHA hash
             sha_hash = hashlib.sha256(emoji.encode('utf-8')).hexdigest()
-            
+
             # Extract 2-bit state
             state_bits = self.extract_2bit_from_unicode(emoji)
-            
+
             # Calculate components
             entropy_vector = self.calculate_entropy_vector(emoji, sha_hash)
             trust_score = self.calculate_trust_score(emoji, historical_profits)
             profit_bias = self.calculate_profit_bias(emoji, sha_hash)
-            
+
             # Determine tier classification
             tier_classification = self.unicode_tier_map.get(emoji, ProfitTier.TIER_1)
-            
+
             # Generate vault key
             vault_key = sha_hash[:16]
-            
+
             # Create glyph tier
             glyph_tier = GlyphTier(
                 symbol=emoji,
@@ -197,13 +197,13 @@ class SymbolicProfitRouter:
                 tier_classification=tier_classification,
                 vault_key=vault_key
             )
-            
+
             # Register in system
             self.glyph_registry[emoji] = glyph_tier
-            
+
             logger.info(f"Registered glyph: {emoji} -> {state_bits} -> {tier_classification.value}")
             return glyph_tier
-            
+
         except Exception as e:
             logger.error(f"Glyph registration error: {e}")
             # Return default glyph
@@ -217,7 +217,7 @@ class SymbolicProfitRouter:
                 tier_classification=ProfitTier.TIER_1,
                 vault_key="default"
             )
-    
+
     def calculate_profit_sequence(self, emoji: str, current_profit: float,
                                  volume_burst: float, execution_side: str) -> float:
         """Calculate profit sequence score for recursive triggering."""
@@ -225,40 +225,40 @@ class SymbolicProfitRouter:
             # Get or register glyph
             if emoji not in self.glyph_registry:
                 self.register_glyph(emoji)
-            
+
             glyph = self.glyph_registry[emoji]
-            
+
             # Calculate components
             S_emoji = int(glyph.state_bits, 2) / 3.0  # Normalize 00-11 to 0-1
             H_i = glyph.trust_score
             E_i = glyph.entropy_vector
             DeltaT_i = 1.0  # Current time delta (can be enhanced with actual timing)
-            
+
             # Calculate profit sequence score
             P_seq = S_emoji * H_i * E_i * DeltaT_i
-            
+
             # Add profit bias
             P_seq += glyph.profit_bias / 100
-            
+
             return P_seq
-            
+
         except Exception as e:
             logger.error(f"Profit sequence calculation error: {e}")
             return 0.0
-    
+
     def store_profit_sequence(self, emoji: str, profit: float, volume_burst: float,
                              execution_side: str) -> Optional[str]:
         """Store profit sequence in vault for recursive triggering."""
         try:
             if profit < self.profit_threshold:
                 return None
-            
+
             # Get glyph
             if emoji not in self.glyph_registry:
                 self.register_glyph(emoji)
-            
+
             glyph = self.glyph_registry[emoji]
-            
+
             # Create profit sequence
             self.cycle_index += 1
             profit_sequence = ProfitSequence(
@@ -271,42 +271,42 @@ class SymbolicProfitRouter:
                 volume_burst=volume_burst,
                 execution_side=execution_side
             )
-            
+
             # Store in vault
             self.profit_vault[glyph.vault_key] = profit_sequence
-            
+
             logger.info(f"Stored profit sequence: {emoji} -> {profit:.4f} -> {glyph.vault_key}")
             return glyph.vault_key
-            
+
         except Exception as e:
             logger.error(f"Profit sequence storage error: {e}")
             return None
-    
+
     def check_recursive_trigger(self, emoji: str, current_sha: str) -> bool:
         """Check if current symbol/SHA combination triggers recursive profit pattern."""
         try:
             if emoji not in self.glyph_registry:
                 return False
-            
+
             glyph = self.glyph_registry[emoji]
-            
+
             # Check if vault key matches current SHA pattern
             if glyph.vault_key in self.profit_vault:
                 stored_sequence = self.profit_vault[glyph.vault_key]
-                
+
                 # Check SHA similarity (first 8 characters)
                 sha_similarity = current_sha[:8] == glyph.sha_hash[:8]
-                
+
                 if sha_similarity:
                     logger.info(f"Recursive trigger detected: {emoji} -> {stored_sequence.profit:.4f}")
                     return True
-            
+
             return False
-            
+
         except Exception as e:
             logger.error(f"Recursive trigger check error: {e}")
             return False
-    
+
     def get_flip_decision(self, left_emoji: str, right_emoji: str,
                          left_profit: float, right_profit: float) -> str:
         """Get flip decision between two symbols."""
@@ -316,31 +316,31 @@ class SymbolicProfitRouter:
                 self.register_glyph(left_emoji)
             if right_emoji not in self.glyph_registry:
                 self.register_glyph(right_emoji)
-            
+
             left_glyph = self.glyph_registry[left_emoji]
             right_glyph = self.glyph_registry[right_emoji]
-            
+
             # Calculate weighted scores
             left_score = left_profit * left_glyph.trust_score * left_glyph.entropy_vector
             right_score = right_profit * right_glyph.trust_score * right_glyph.entropy_vector
-            
+
             if left_score > right_score:
                 return f"flip_to_{left_emoji}"
             else:
                 return f"flip_to_{right_emoji}"
-                
+
         except Exception as e:
             logger.error(f"Flip decision error: {e}")
             return "hold"
-    
+
     def get_profit_tier_visualization(self, emoji: str) -> Dict[str, Any]:
         """Get profit tier visualization for a symbol."""
         try:
             if emoji not in self.glyph_registry:
                 self.register_glyph(emoji)
-            
+
             glyph = self.glyph_registry[emoji]
-            
+
             return {
                 'symbol': emoji,
                 'tier': glyph.tier_classification.value,
@@ -350,7 +350,7 @@ class SymbolicProfitRouter:
                 'bit_state': glyph.state_bits,
                 'vault_key': glyph.vault_key[:8]
             }
-            
+
         except Exception as e:
             logger.error(f"Visualization error: {e}")
             return {
@@ -362,7 +362,7 @@ class SymbolicProfitRouter:
                 'bit_state': '00',
                 'vault_key': 'default'
             }
-    
+
     def export_vault_state(self, filename: str = "profit_vault_state.json") -> bool:
         """Export current vault state to JSON file."""
         try:
@@ -372,7 +372,7 @@ class SymbolicProfitRouter:
                 'cycle_index': self.cycle_index,
                 'export_timestamp': time.time()
             }
-            
+
             # Convert glyph registry
             for symbol, glyph in self.glyph_registry.items():
                 vault_data['glyph_registry'][symbol] = {
@@ -385,7 +385,7 @@ class SymbolicProfitRouter:
                     'tier_classification': glyph.tier_classification.value,
                     'vault_key': glyph.vault_key
                 }
-            
+
             # Convert profit vault
             for key, sequence in self.profit_vault.items():
                 vault_data['profit_vault'][key] = {
@@ -398,13 +398,13 @@ class SymbolicProfitRouter:
                     'volume_burst': sequence.volume_burst,
                     'execution_side': sequence.execution_side
                 }
-            
+
             with open(filename, 'w', encoding='utf-8') as f:
                 json.dump(vault_data, f, indent=2, ensure_ascii=False)
-            
+
             logger.info(f"Vault state exported to {filename}")
             return True
-            
+
         except Exception as e:
             logger.error(f"Vault export error: {e}")
             return False
@@ -414,31 +414,31 @@ def test_symbolic_profit_router():
     """Test the symbolic profit router functionality."""
     print("🔣 Testing Symbolic Profit Router")
     print("=" * 40)
-    
+
     router = SymbolicProfitRouter()
-    
+
     # Test symbols
     test_symbols = ['💰', '📈', '🧠', '[BRAIN]', '⚡']
-    
+
     print("Testing symbol registration:")
     for symbol in test_symbols:
         glyph = router.register_glyph(symbol)
         viz = router.get_profit_tier_visualization(symbol)
         print(f"  {symbol}: {viz['tier']} (trust: {viz['trust_score']}, bits: {viz['bit_state']})")
-    
+
     print("\nTesting profit sequence storage:")
     for i, symbol in enumerate(test_symbols):
         profit = 0.05 + (i * 0.02)  # 5%, 7%, 9%, etc.
         vault_key = router.store_profit_sequence(symbol, profit, 1000, "buy")
         print(f"  {symbol}: {profit:.1%} profit -> {'stored' if vault_key else 'below threshold'}")
-    
+
     print("\nTesting flip decisions:")
     for i in range(len(test_symbols) - 1):
         left = test_symbols[i]
         right = test_symbols[i + 1]
         decision = router.get_flip_decision(left, right, 0.05, 0.03)
         print(f"  {left} vs {right}: {decision}")
-    
+
     # Export state
     router.export_vault_state("test_vault_state.json")
     print("\n✅ Symbolic Profit Router test completed")

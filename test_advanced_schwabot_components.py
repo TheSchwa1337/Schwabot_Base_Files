@@ -61,23 +61,23 @@ def test_drift_phase_weighter():
     print("\n" + "="*60)
     print("TESTING DRIFT-PHASE WEIGHTER")
     print("="*60)
-    
+
     # Initialize component
     weighter = DriftPhaseWeighter()
-    
+
     # Test different signal types
     signal_types = ["random", "trending", "oscillatory", "chaotic"]
-    
+
     for signal_type in signal_types:
         print(f"\nTesting {signal_type} signal:")
-        
+
         # Generate test signal
         signal = generate_test_signal(100, signal_type)
-        
+
         # Calculate drift weight
         drift_weight = weighter.calculate_phase_drift_weight(signal)
         print(f"  Drift Weight: {drift_weight:.4f}")
-        
+
         # Analyze drift pattern
         metrics = weighter.analyze_drift_pattern(signal)
         print(f"  Drift Type: {metrics.drift_type.value}")
@@ -85,7 +85,7 @@ def test_drift_phase_weighter():
         print(f"  Transition Tension: {metrics.transition_tension:.4f}")
         print(f"  Phase Stability: {metrics.phase_stability:.4f}")
         print(f"  Entropy Score: {metrics.entropy_score:.4f}")
-        
+
         # Test phase transition detection
         transition = weighter.detect_phase_transition(signal, "consolidation")
         if transition:
@@ -94,7 +94,7 @@ def test_drift_phase_weighter():
             print(f"  Confidence: {transition.confidence:.3f}")
         else:
             print("  No phase transition detected")
-    
+
     # Get summary
     summary = weighter.get_drift_summary()
     print(f"\nDrift Summary:")
@@ -102,7 +102,7 @@ def test_drift_phase_weighter():
     print(f"  Total Transitions: {summary['total_transitions']}")
     print(f"  Average Drift Weight: {summary['average_drift_weight']:.4f}")
     print(f"  Most Common Type: {summary['most_common_drift_type']}")
-    
+
     return weighter
 
 
@@ -111,19 +111,19 @@ def test_ghost_field_stabilizer():
     print("\n" + "="*60)
     print("TESTING GHOST FIELD STABILIZER")
     print("="*60)
-    
+
     # Initialize component
     stabilizer = GhostFieldStabilizer()
-    
+
     # Test different signal types
     signal_types = ["random", "trending", "oscillatory", "chaotic"]
-    
+
     for signal_type in signal_types:
         print(f"\nTesting {signal_type} signal:")
-        
+
         # Generate test signal
         signal = generate_test_signal(100, signal_type)
-        
+
         # Evaluate stability
         report = stabilizer.evaluate_stability(signal)
         print(f"  Stability Level: {report.stability_level.value}")
@@ -132,11 +132,11 @@ def test_ghost_field_stabilizer():
         print(f"  Slope Estimate: {report.slope_estimate:.4f}")
         print(f"  Field Integrity: {report.field_integrity:.4f}")
         print(f"  Confidence: {report.confidence:.4f}")
-        
+
         # Test entropy bounds computation
         bounds = stabilizer.compute_entropy_bounds(signal)
         print(f"  Computed Bounds: ({bounds[0]:.4f}, {bounds[1]:.4f})")
-    
+
     # Get summary
     summary = stabilizer.get_stability_summary()
     print(f"\nStability Summary:")
@@ -145,7 +145,7 @@ def test_ghost_field_stabilizer():
     print(f"  Average Entropy Score: {summary['average_entropy_score']:.4f}")
     print(f"  Average Field Integrity: {summary['average_field_integrity']:.4f}")
     print(f"  Most Common Level: {summary['most_common_stability_level']}")
-    
+
     return stabilizer
 
 
@@ -154,10 +154,10 @@ def test_truth_lattice_math():
     print("\n" + "="*60)
     print("TESTING TRUTH LATTICE MATH (CONSENSUS ENGINE)")
     print("="*60)
-    
+
     # Initialize component
     consensus = TruthLatticeMath()
-    
+
     # Test different signal combinations
     test_cases = [
         ("High Agreement", [0.8, 0.82, 0.79, 0.81, 0.83]),
@@ -167,15 +167,15 @@ def test_truth_lattice_math():
 ]
     for case_name, signals in test_cases:
         print(f"\nTesting {case_name}:")
-        
+
         # Calculate collapse score
         collapse_score = consensus.collapse_score(signals)
         print(f"  Collapse Score: {collapse_score:.4f}")
-        
+
         # Check consensus
         consensus_reached = consensus.is_consensus_reached(collapse_score)
         print(f"  Consensus Reached: {consensus_reached}")
-        
+
         # Evaluate consensus
         result = consensus.evaluate_consensus(signals)
         print(f"  Consensus State: {result.consensus_state.value}")
@@ -183,7 +183,7 @@ def test_truth_lattice_math():
         print(f"  Agreement Ratio: {result.agreement_ratio:.4f}")
         print(f"  Volatility Tolerance: {result.volatility_tolerance:.4f}")
         print(f"  Confidence: {result.confidence:.4f}")
-    
+
     # Get summary
     summary = consensus.get_consensus_summary()
     print(f"\nConsensus Summary:")
@@ -191,7 +191,7 @@ def test_truth_lattice_math():
     print(f"  Successful Consensus: {summary['successful_consensus']}")
     print(f"  Consensus Rate: {summary['consensus_rate']:.2%}")
     print(f"  Average Collapse Score: {summary['average_collapse_score']:.4f}")
-    
+
     return consensus
 
 
@@ -200,35 +200,35 @@ def test_bit_wave_propagator():
     print("\n" + "="*60)
     print("TESTING BIT-WAVE PROPAGATOR")
     print("="*60)
-    
+
     # Initialize component
     propagator = BitWavePropagator()
-    
+
     # Test different bit depths
     bit_depths = [4, 8, 16]
     signal_types = ["random", "trending", "oscillatory"]
-    
+
     for bit_depth in bit_depths:
         print(f"\nTesting {bit_depth}-bit depth:")
-        
+
         for signal_type in signal_types:
             print(f"  {signal_type} signal:")
-            
+
             # Generate test signal
             signal = generate_test_signal(100, signal_type)
-            
+
             # Allocate phase vector
             vector = propagator.allocate_phase_vector(bit_depth, signal)
             print(f"    Vector ID: {vector.vector_id}")
             print(f"    Bit Depth: {vector.bit_depth.value}")
             print(f"    Strategy Slots: {vector.strategy_slots}")
             print(f"    Phase Energy: {np.sum(vector.phase_values**2):.4f}")
-        
+
         # Generate transition matrix
         transition_matrix = propagator.generate_transition_matrix(bit_depth)
         print(f"  Transition Matrix Size: {transition_matrix.shape}")
         print(f"  Matrix Energy: {np.sum(transition_matrix**2):.4f}")
-    
+
     # Get summary
     summary = propagator.get_propagation_summary()
     print(f"\nPropagation Summary:")
@@ -237,7 +237,7 @@ def test_bit_wave_propagator():
     print(f"  Average Bit Depth: {summary['average_bit_depth']:.1f}")
     print(f"  Most Common Strategy: {summary['most_common_strategy']}")
     print(f"  Average Phase Energy: {summary['average_phase_energy']:.4f}")
-    
+
     return propagator
 
 
@@ -246,10 +246,10 @@ def test_aleph_overlay_mapper():
     print("\n" + "="*60)
     print("TESTING ALEPH OVERLAY MAPPER")
     print("="*60)
-    
+
     # Initialize component
     mapper = AlephOverlayMapper()
-    
+
     # Test different hash signals
     hash_signals = [
         "BTC_45000_2024_01_15",
@@ -260,18 +260,18 @@ def test_aleph_overlay_mapper():
 ]
     for hash_signal in hash_signals:
         print(f"\nTesting hash signal: {hash_signal}")
-        
+
         # Map hash to overlay
         overlay = mapper.map_hash_to_overlay(hash_signal)
         print(f"  Overlay Type: {overlay.overlay_type.value}")
         print(f"  Confidence Score: {overlay.confidence_score:.4f}")
         print(f"  Similarity Matrix Size: {overlay.similarity_matrix.shape}")
         print(f"  Phase Alignment Size: {overlay.phase_alignment.shape}")
-        
+
         # Calculate overlay confidence
         confidence = mapper.calculate_overlay_confidence(overlay.similarity_matrix)
         print(f"  Calculated Confidence: {confidence:.4f}")
-    
+
     # Get summary
     summary = mapper.get_overlay_summary()
     print(f"\nOverlay Summary:")
@@ -281,7 +281,7 @@ def test_aleph_overlay_mapper():
     print(f"  Most Common Type: {summary['most_common_type']}")
     print(f"  Average Similarity: {summary['average_similarity']:.4f}")
     print(f"  Projection Rate: {summary['projection_rate']:.2%}")
-    
+
     return mapper
 
 
@@ -290,30 +290,30 @@ def test_phase_transition_monitor():
     print("\n" + "="*60)
     print("TESTING PHASE TRANSITION MONITOR")
     print("="*60)
-    
+
     # Initialize component
     monitor = PhaseTransitionMonitor()
-    
+
     # Test different signal types
     signal_types = ["random", "trending", "oscillatory", "chaotic"]
-    
+
     for signal_type in signal_types:
         print(f"\nTesting {signal_type} signal:")
-        
+
         # Generate test signal
         signal = generate_test_signal(100, signal_type)
-        
+
         # Calculate drift weight (simulated)
         drift_weight = np.random.random()
-        
+
         # Evaluate phase state
         phase_state = monitor.evaluate_phase_state(signal, drift_weight)
         print(f"  Phase State: {phase_state.value}")
-        
+
         # Check transition likelihood
         transition_likely = monitor.is_phase_transition_likely(phase_state, drift_weight)
         print(f"  Transition Likely: {transition_likely}")
-    
+
     # Get summary
     summary = monitor.get_phase_summary()
     print(f"\nPhase Summary:")
@@ -324,7 +324,7 @@ def test_phase_transition_monitor():
     print(f"  Average Stability: {summary['average_stability']:.4f}")
     print(f"  Most Common Phase: {summary['most_common_phase']}")
     print(f"  Transition Rate: {summary['transition_rate']:.2%}")
-    
+
     return monitor
 
 
@@ -333,7 +333,7 @@ def test_integration():
     print("\n" + "="*60)
     print("TESTING ADVANCED COMPONENTS INTEGRATION")
     print("="*60)
-    
+
     # Initialize all components
     weighter = DriftPhaseWeighter()
     stabilizer = GhostFieldStabilizer()
@@ -341,53 +341,53 @@ def test_integration():
     propagator = BitWavePropagator()
     mapper = AlephOverlayMapper()
     monitor = PhaseTransitionMonitor()
-    
+
     # Generate test signal
     signal = generate_test_signal(100, "trending")
     print(f"Generated test signal: {len(signal)} points")
-    
+
     # Integration workflow
     print("\nIntegration Workflow:")
-    
+
     # 1. Drift analysis
     print("1. Drift Analysis:")
     drift_weight = weighter.calculate_phase_drift_weight(signal)
     drift_metrics = weighter.analyze_drift_pattern(signal)
     print(f"   Drift Weight: {drift_weight:.4f}")
     print(f"   Drift Type: {drift_metrics.drift_type.value}")
-    
+
     # 2. Field stability
     print("2. Field Stability:")
     stability_report = stabilizer.evaluate_stability(signal)
     print(f"   Stability Level: {stability_report.stability_level.value}")
     print(f"   Field Integrity: {stability_report.field_integrity:.4f}")
-    
+
     # 3. Phase transition monitoring
     print("3. Phase Transition Monitoring:")
     phase_state = monitor.evaluate_phase_state(signal, drift_weight)
     print(f"   Phase State: {phase_state.value}")
-    
+
     # 4. Bit wave propagation
     print("4. Bit Wave Propagation:")
     phase_vector = propagator.allocate_phase_vector(8, signal)
     print(f"   Strategy Slots: {phase_vector.strategy_slots}")
-    
+
     # 5. Hash overlay mapping
     print("5. Hash Overlay Mapping:")
     hash_signal = f"BTC_{int(time.time())}"
     overlay = mapper.map_hash_to_overlay(hash_signal)
     print(f"   Overlay Type: {overlay.overlay_type.value}")
     print(f"   Confidence: {overlay.confidence_score:.4f}")
-    
+
     # 6. Consensus evaluation
     print("6. Consensus Evaluation:")
     signals = [drift_weight, stability_report.field_integrity, overlay.confidence_score]
     consensus_result = consensus.evaluate_consensus(signals)
     print(f"   Consensus State: {consensus_result.consensus_state.value}")
     print(f"   Confidence: {consensus_result.confidence:.4f}")
-    
+
     print("\nIntegration test completed successfully!")
-    
+
     return {
         'weighter': weighter,
         'stabilizer': stabilizer,
@@ -401,7 +401,7 @@ def export_test_results(components):
     print("\n" + "="*60)
     print("EXPORTING TEST RESULTS")
     print("="*60)
-    
+
     results = {
         "test_timestamp": time.time(),
         "components": {}
@@ -409,29 +409,29 @@ def export_test_results(components):
     # Export component summaries
     if 'weighter' in components:
         results["components"]["drift_phase_weighter"] = components['weighter'].get_drift_summary()
-    
+
     if 'stabilizer' in components:
         results["components"]["ghost_field_stabilizer"] = components['stabilizer'].get_stability_summary()
-    
+
     if 'consensus' in components:
         results["components"]["truth_lattice_math"] = components['consensus'].get_consensus_summary()
-    
+
     if 'propagator' in components:
         results["components"]["bit_wave_propagator"] = components['propagator'].get_propagation_summary()
-    
+
     if 'mapper' in components:
         results["components"]["aleph_overlay_mapper"] = components['mapper'].get_overlay_summary()
-    
+
     if 'monitor' in components:
         results["components"]["phase_transition_monitor"] = components['monitor'].get_phase_summary()
-    
+
     # Save to file
     output_file = "advanced_schwabot_test_results.json"
     with open(output_file, 'w') as f:
         json.dump(results, f, indent=2)
-    
+
     print(f"Test results exported to: {output_file}")
-    
+
     return output_file
 
 
@@ -447,7 +447,7 @@ def main():
     print("- Aleph Overlay Mapper")
     print("- Phase Transition Monitor")
     print("="*60)
-    
+
     try:
         # Test individual components
         weighter = test_drift_phase_weighter()
@@ -456,19 +456,19 @@ def main():
         propagator = test_bit_wave_propagator()
         mapper = test_aleph_overlay_mapper()
         monitor = test_phase_transition_monitor()
-        
+
         # Test integration
         components = test_integration()
-        
+
         # Export results
         export_test_results(components)
-        
+
         print("\n" + "="*60)
         print("ALL TESTS COMPLETED SUCCESSFULLY!")
         print("="*60)
         print("Advanced Schwabot components are working correctly.")
         print("The system is ready for advanced trading operations.")
-        
+
     except Exception as e:
         logger.error(f"Error in advanced component testing: {e}")
         print(f"\nError: {e}")
@@ -476,4 +476,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main() 
+    main()

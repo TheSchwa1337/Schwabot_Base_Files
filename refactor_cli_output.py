@@ -307,7 +307,7 @@ return f'safe_print({args_str})'
 # Complex arguments - use safe_print with all args
 return f'safe_print({args_str})'
             except:
-    pass  
+    pass
 # Fallback to safe_print
 return f'safe_print({args_str})'
 

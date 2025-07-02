@@ -78,4 +78,4 @@ def main():
             inject_stubs(mod, funcs)
 
 if __name__ == '__main__':
-    main() 
+    main()

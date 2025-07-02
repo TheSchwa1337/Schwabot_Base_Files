@@ -36,31 +36,31 @@ def test_tick_management_system():
     """Test the tick management system."""
     print("\n🧠 Testing Tick Management System")
     print("=" * 50)
-    
+
     try:
         from core.tick_management_system import (
             get_tick_manager, run_tick_cycle, get_tick_statistics,
             register_tick_callback, TickContext, CompressionMode
         )
-        
+
         # Get the tick manager
         tick_manager = get_tick_manager()
         print(f"✅ Tick manager initialized: {tick_manager.tick_count} ticks")
-        
+
         # Register a callback to log tick events
         def tick_callback(tick_context: TickContext):
             print(f"   Tick {tick_context.tick_id}: {tick_context.compression_mode.value} "
                   f"(entropy: {tick_context.entropy:.3f}, echo: {tick_context.echo_strength:.3f})")
-        
+
         register_tick_callback(tick_callback)
-        
+
         # Run several tick cycles
         print("\n🔄 Running tick cycles...")
         for i in range(5):
             tick_context = run_tick_cycle()
             if tick_context:
                 time.sleep(0.1)  # Small delay between ticks
-        
+
         # Get statistics
         stats = get_tick_statistics()
         print(f"\n📊 Tick Statistics:")
@@ -70,9 +70,9 @@ def test_tick_management_system():
         print(f"   Compressed ticks: {stats['compressed_ticks']}")
         print(f"   Success rate: {stats['success_rate']:.2%}")
         print(f"   Current mode: {stats['current_compression_mode']}")
-        
+
         return True
-        
+
     except Exception as e:
         print(f"❌ Tick management test failed: {e}")
         return False
@@ -81,20 +81,20 @@ def test_balance_loader():
     """Test the balance loader system."""
     print("\n⚖️ Testing Balance Loader System")
     print("=" * 50)
-    
+
     try:
         from core.balance_loader import (
             get_balance_loader, update_load_metrics, get_balance_statistics,
             get_optimal_route, monitor_float_decay, LoadMode
         )
-        
+
         # Get the balance loader
         balance_loader = get_balance_loader()
         print(f"✅ Balance loader initialized")
-        
+
         # Test load metric updates
         print("\n🔄 Testing load metric updates...")
-        
+
         # Simulate different load scenarios
         scenarios = [
             (15.0, 10.0, 0.7, 0.3, 0.0),  # ALIF heavy
@@ -105,16 +105,16 @@ def test_balance_loader():
         for i, (alif_load, aleph_load, gpu_entropy, cpu_entropy, float_decay) in enumerate(scenarios):
             metrics = update_load_metrics(alif_load, aleph_load, gpu_entropy, cpu_entropy, float_decay)
             optimal_route = get_optimal_route(alif_load, aleph_load)
-            
+
             print(f"   Scenario {i+1}: ALIF={alif_load:.1f}, ALEPH={aleph_load:.1f} → {optimal_route}")
             print(f"      Balance needed: {metrics.balance_needed}")
             print(f"      Compression ratio: {metrics.compression_ratio:.3f}")
-        
+
         # Test float decay monitoring
         print("\n⏱️ Testing float decay monitoring...")
         decay_detected = monitor_float_decay(1.0, 1.05)  # 50ms decay
         print(f"   Float decay detected: {decay_detected}")
-        
+
         # Get statistics
         stats = get_balance_statistics()
         print(f"\n📊 Balance Statistics:")
@@ -123,9 +123,9 @@ def test_balance_loader():
         print(f"   Success rate: {stats['success_rate']:.2%}")
         print(f"   Balance needed: {stats['balance_needed']}")
         print(f"   Compression ratio: {stats['compression_ratio']:.3f}")
-        
+
         return True
-        
+
     except Exception as e:
         print(f"❌ Balance loader test failed: {e}")
         return False
@@ -134,21 +134,21 @@ def test_ghost_trigger_manager():
     """Test the ghost trigger manager."""
     print("\n👻 Testing Ghost Trigger Manager")
     print("=" * 50)
-    
+
     try:
         from core.ghost_trigger_manager import (
             get_ghost_trigger_manager, create_ghost_trigger, create_fallback_trigger,
             add_profit_vector, get_trigger_performance, get_profit_mapping_suggestions,
             TriggerType, AnchorStatus
         )
-        
+
         # Get the ghost trigger manager
         gtm = get_ghost_trigger_manager()
         print(f"✅ Ghost trigger manager initialized")
-        
+
         # Create different types of triggers
         print("\n🔄 Creating ghost triggers...")
-        
+
         # Anchored trigger (real block)
         anchored_trigger = create_ghost_trigger(
             trigger_hash="anchored_1234567890abcdef",
@@ -161,7 +161,7 @@ def test_ghost_trigger_manager():
             drift_score=0.002
         )
         print(f"   Created anchored trigger: {anchored_trigger.trigger_hash[:16]}...")
-        
+
         # Unanchored trigger (simulated)
         unanchored_trigger = create_ghost_trigger(
             trigger_hash="unanchored_abcdef1234567890",
@@ -174,11 +174,11 @@ def test_ghost_trigger_manager():
             drift_score=0.015
         )
         print(f"   Created unanchored trigger: {unanchored_trigger.trigger_hash[:16]}...")
-        
+
         # Create a fallback trigger
         fallback_trigger = create_fallback_trigger(unanchored_trigger, "4bit")
         print(f"   Created fallback trigger: {fallback_trigger.trigger_hash[:16]}...")
-        
+
         # Add profit vectors
         print("\n💰 Adding profit vectors...")
         add_profit_vector(
@@ -188,7 +188,7 @@ def test_ghost_trigger_manager():
             volume=1.0,
             confidence=0.85
         )
-        
+
         add_profit_vector(
             trigger_hash=unanchored_trigger.trigger_hash,
             entry_price=65000.0,
@@ -196,7 +196,7 @@ def test_ghost_trigger_manager():
             volume=0.5,
             confidence=0.65
         )
-        
+
         add_profit_vector(
             trigger_hash=fallback_trigger.trigger_hash,
             entry_price=65000.0,
@@ -204,7 +204,7 @@ def test_ghost_trigger_manager():
             volume=0.3,
             confidence=0.5
         )
-        
+
         # Get performance statistics
         performance = get_trigger_performance()
         print(f"\n📊 Trigger Performance:")
@@ -216,7 +216,7 @@ def test_ghost_trigger_manager():
         print(f"   Anchored profit: {performance['anchored_profit']:.4f}")
         print(f"   Unanchored profit: {performance['unanchored_profit']:.4f}")
         print(f"   Fallback profit: {performance['fallback_profit']:.4f}")
-        
+
         # Get profit mapping suggestions
         suggestions = get_profit_mapping_suggestions()
         print(f"\n💡 Profit Mapping Suggestions:")
@@ -224,9 +224,9 @@ def test_ghost_trigger_manager():
         print(f"   Prefer fallback: {suggestions['prefer_fallback']}")
         print(f"   Compression needed: {suggestions['compression_needed']}")
         print(f"   Recommended actions: {suggestions['recommended_actions']}")
-        
+
         return True
-        
+
     except Exception as e:
         print(f"❌ Ghost trigger manager test failed: {e}")
         return False
@@ -235,17 +235,17 @@ async def test_btc_processor_integration():
     """Test BTC processor integration."""
     print("\n₿ Testing BTC Processor Integration")
     print("=" * 50)
-    
+
     try:
         from core.multi_bit_btc_processor import MultiBitBTCProcessor
-        
+
         # Initialize BTC processor
         processor = MultiBitBTCProcessor()
         print(f"✅ BTC processor initialized")
-        
+
         # Test with simulated data
         print("\n🔄 Testing BTC data processing...")
-        
+
         test_data = [
             (65000.0, 100.0),
             (65100.0, 95.0),
@@ -255,7 +255,7 @@ async def test_btc_processor_integration():
 ]
         for i, (price, volume) in enumerate(test_data):
             is_allowed, profit_vector = await processor.process_btc_data(price, volume)
-            
+
             if is_allowed and profit_vector:
                 print(f"   Tick {i+1}: Price=${price:.0f}, Volume={volume:.0f}")
                 print(f"      Class: {profit_vector['class']}")
@@ -264,11 +264,11 @@ async def test_btc_processor_integration():
                 print(f"      U_r Score: {profit_vector['asrl_unified_reflex_score']:.3f}")
             else:
                 print(f"   Tick {i+1}: Processing failed or not allowed")
-            
+
             await asyncio.sleep(0.1)
-        
+
         return True
-        
+
     except Exception as e:
         print(f"❌ BTC processor integration test failed: {e}")
         return False
@@ -277,23 +277,23 @@ def test_integrated_workflow():
     """Test the complete integrated workflow."""
     print("\n🔄 Testing Integrated Workflow")
     print("=" * 50)
-    
+
     try:
         from core.tick_management_system import run_tick_cycle, get_tick_statistics
         from core.balance_loader import update_load_metrics, get_balance_statistics
         from core.ghost_trigger_manager import create_ghost_trigger, add_profit_vector, AnchorStatus, TriggerType
-        
+
         print("🔄 Running integrated workflow simulation...")
-        
+
         # Simulate a complete trading cycle
         for cycle in range(3):
             print(f"\n   Cycle {cycle + 1}:")
-            
+
             # 1. Run tick cycle
             tick_context = run_tick_cycle()
             if tick_context:
                 print(f"      Tick {tick_context.tick_id}: {tick_context.compression_mode.value}")
-                
+
                 # 2. Update balance metrics
                 metrics = update_load_metrics(
                     tick_context.alif_score,
@@ -303,7 +303,7 @@ def test_integrated_workflow():
                     tick_context.drift_score
                 )
                 print(f"      Balance needed: {metrics.balance_needed}")
-                
+
                 # 3. Create ghost trigger based on tick
                 if tick_context.validated:
                     trigger = create_ghost_trigger(
@@ -317,27 +317,27 @@ def test_integrated_workflow():
                         drift_score=tick_context.drift_score
                     )
                     print(f"      Created trigger: {trigger.trigger_hash[:16]}... ({trigger.anchor_status.value})")
-                    
+
                     # 4. Simulate profit (if conditions are good)
                     if tick_context.echo_strength > 0.6 and tick_context.entropy < 0.8:
                         entry_price = 65000.0 + (cycle * 100)
                         exit_price = entry_price + 200  # Simulate profit
                         add_profit_vector(trigger.trigger_hash, entry_price, exit_price, 1.0, tick_context.echo_strength)
                         print(f"      Added profit vector: +{((exit_price - entry_price) / entry_price):.2%}")
-            
+
             time.sleep(0.2)  # Simulate processing time
-        
+
         # Get final statistics
         print(f"\n📊 Final Statistics:")
-        
+
         tick_stats = get_tick_statistics()
         print(f"   Tick success rate: {tick_stats['success_rate']:.2%}")
-        
+
         balance_stats = get_balance_statistics()
         print(f"   Balance mode: {balance_stats['current_mode']}")
-        
+
         return True
-        
+
     except Exception as e:
         print(f"❌ Integrated workflow test failed: {e}")
         return False
@@ -346,7 +346,7 @@ async def main():
     """Run all integrated system tests."""
     print("🚀 Starting Integrated Systems Test Suite")
     print("=" * 60)
-    
+
     tests = [
         ("Tick Management System", test_tick_management_system),
         ("Balance Loader", test_balance_loader),
@@ -356,7 +356,7 @@ async def main():
 ]
     passed = 0
     total = len(tests)
-    
+
     for name, test_func in tests:
         print(f"\n{'='*20} {name} {'='*20}")
         try:
@@ -364,7 +364,7 @@ async def main():
                 result = await test_func()
             else:
                 result = test_func()
-            
+
             if result:
                 passed += 1
                 print(f"✅ {name} test passed")
@@ -372,10 +372,10 @@ async def main():
                 print(f"❌ {name} test failed")
         except Exception as e:
             print(f"❌ {name} test failed with exception: {e}")
-    
+
     print("\n" + "=" * 60)
     print(f"📊 Test Results: {passed}/{total} tests passed")
-    
+
     if passed == total:
         print("🎉 All integrated systems tests passed!")
         print("\n✅ Integration Summary:")
@@ -386,9 +386,9 @@ async def main():
         print("   - Integrated Workflow: All systems working together seamlessly")
     else:
         print("⚠️ Some tests failed. Check the errors above.")
-    
+
     return passed == total
 
 if __name__ == "__main__":
     success = asyncio.run(main())
-    sys.exit(0 if success else 1) 
+    sys.exit(0 if success else 1)

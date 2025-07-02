@@ -48,7 +48,7 @@ def test_glyph_strategy_core():
     print("=" * 60)
     print("GLYPH STRATEGY CORE TEST")
     print("=" * 60)
-    
+
     try:
         # Initialize core
         core = GlyphStrategyCore(
@@ -56,24 +56,24 @@ def test_glyph_strategy_core():
             enable_gear_shifting=True,
             volume_thresholds=(1.5e6, 5e6)
         )
-        
+
         # Test glyphs
         test_glyphs = ['brain', 'skull', 'fire', 'hourglass', 'tornado', 'lightning', 'shield', 'target', 'crystal', 'scales']
         test_volumes = [1e6, 3e6, 6e6]  # Low, medium, high volume
-        
+
         print(f"Testing {len(test_glyphs)} glyphs across {len(test_volumes)} volume levels")
         print()
-        
+
         results = []
-        
+
         for glyph in test_glyphs:
             print(f"Glyph: {glyph}")
             glyph_results = []
-            
+
             for volume in test_volumes:
                 # Get strategy selection
                 result = core.select_strategy(glyph, volume)
-                
+
                 glyph_results.append({
                     'volume': volume,
                     'gear_state': result.gear_state,
@@ -81,16 +81,16 @@ def test_glyph_strategy_core():
                     'confidence': result.confidence,
                     'fractal_hash': result.fractal_hash[:8] + "..."
                 })
-                
+
                 print(f"  Volume: {volume:.1e} -> Gear: {result.gear_state}-bit, "
                       f"Strategy: {result.strategy_id}, Confidence: {result.confidence:.3f}")
-            
+
             results.append({
                 'glyph': glyph,
                 'results': glyph_results
             })
             print()
-        
+
         # Show performance stats
         print("PERFORMANCE STATISTICS")
         print("-" * 40)
@@ -102,9 +102,9 @@ def test_glyph_strategy_core():
                     print(f"  {mem_key}: {mem_value}")
             else:
                 print(f"{key}: {value}")
-        
+
         return core, results
-        
+
     except ImportError as e:
         print(f"❌ Import error: {e}")
         return None, []
@@ -118,7 +118,7 @@ def test_entry_exit_portal():
     print("\n" + "=" * 60)
     print("ENTRY/EXIT PORTAL TEST")
     print("=" * 60)
-    
+
     try:
         # Initialize portal
         portal = EntryExitPortal(
@@ -127,39 +127,39 @@ def test_entry_exit_portal():
             max_position_size=0.1,
             min_confidence_threshold=0.5
         )
-        
+
         # Test parameters
         test_glyphs = ['brain', 'skull', 'fire', 'hourglass', 'tornado']
         test_volume = 3.2e6
         test_price = 50000.0
         test_asset = "BTC/USD"
-        
+
         print(f"Testing trade signal processing with:")
         print(f"  Volume: {test_volume:.1e}")
         print(f"  Price: ${test_price:,.2f}")
         print(f"  Asset: {test_asset}")
         print()
-        
+
         executed_trades = []
-        
+
         for glyph in test_glyphs:
             print(f"Processing glyph: {glyph}")
-            
+
             # Process signal
             signal = portal.process_glyph_signal(
                 glyph, test_volume, test_asset, test_price
             )
-            
+
             if signal:
                 print(f"  Signal generated:")
                 print(f"    Strategy ID: {signal.strategy_id}")
                 print(f"    Direction: {signal.direction.value}")
                 print(f"    Confidence: {signal.confidence:.3f}")
                 print(f"    Gear State: {signal.metadata.get('gear_state', 'N/A')}")
-                
+
                 # Execute signal (simulated)
                 result = portal.execute_signal(signal, dry_run=True)
-                
+
                 if "execution_result" in result:
                     exec_result = result["execution_result"]
                     print(f"  Execution result:")
@@ -167,7 +167,7 @@ def test_entry_exit_portal():
                     print(f"    Order ID: {exec_result['order_id']}")
                     print(f"    Size: ${exec_result['executed_size']:,.2f}")
                     print(f"    Fees: ${exec_result['fees']:,.2f}")
-                    
+
                     executed_trades.append({
                         'glyph': glyph,
                         'signal': signal,
@@ -177,18 +177,18 @@ def test_entry_exit_portal():
                     print(f"  X Execution failed: {result.get('error', 'Unknown error')}")
             else:
                 print(f"  X Signal rejected (confidence too low)")
-            
+
             print()
-        
+
         # Show portal stats
         print("PORTAL STATISTICS")
         print("-" * 40)
         stats = portal.get_performance_stats()
         for key, value in stats.items():
             print(f"{key}: {value}")
-        
+
         return portal, executed_trades
-        
+
     except ImportError as e:
         print(f"❌ Import error: {e}")
         return None, []
@@ -202,10 +202,10 @@ def test_integrated_workflow():
     print("\n" + "=" * 60)
     print("INTEGRATED WORKFLOW TEST")
     print("=" * 60)
-    
+
     try:
         from core.strategy import create_glyph_trading_system
-        
+
         # Create complete system
         glyph_core, portal = create_glyph_trading_system(
             enable_fractal_memory=True,
@@ -213,45 +213,45 @@ def test_integrated_workflow():
             enable_risk_management=True,
             enable_portfolio_tracking=True
         )
-        
+
         print("Complete glyph trading system created")
         print()
-        
+
         # Simulate market conditions
         market_scenarios = [
             {'volume': 1e6, 'price': 45000, 'description': 'Low volume, bearish'},
             {'volume': 3e6, 'price': 50000, 'description': 'Medium volume, neutral'},
             {'volume': 7e6, 'price': 55000, 'description': 'High volume, bullish'}
         ]
-        
+
         test_glyphs = ['brain', 'skull', 'fire']
-        
+
         for scenario in market_scenarios:
             print(f"Market Scenario: {scenario['description']}")
             print(f"   Volume: {scenario['volume']:.1e}, Price: ${scenario['price']:,.2f}")
             print()
-            
+
             for glyph in test_glyphs:
                 # Process signal
                 signal = portal.process_glyph_signal(
                     glyph, scenario['volume'], "BTC/USD", scenario['price']
                 )
-                
+
                 if signal:
                     # Execute signal
                     result = portal.execute_signal(signal, dry_run=True)
-                    
+
                     print(f"  {glyph} -> {signal.direction.value} "
                           f"(Strategy: {signal.strategy_id}, "
                           f"Confidence: {signal.confidence:.3f})")
-                    
+
                     if "execution_result" in result:
                         exec_result = result["execution_result"]
                         print(f"    Status: {exec_result['status']}")
                         print(f"    Order ID: {exec_result['order_id']}")
                         print(f"    Size: ${exec_result['executed_size']:,.2f}")
                         print(f"    Fees: ${exec_result['fees']:,.2f}")
-                        
+
                         # Update portfolio (simplified)
                         if exec_result['status'] == 'filled':
                             print(f"      Trade executed successfully for {glyph}.")
@@ -332,10 +332,10 @@ def test_glyph_gate_engine():
 
         # Simulate a series of market ticks
         market_ticks = [
-            {"glyph": "brain", "volume": 1.2e6, "price": 48000.0, "tick_id": 1, 
+            {"glyph": "brain", "volume": 1.2e6, "price": 48000.0, "tick_id": 1,
              "internal_data": {"cpu_alignment": 0.8, "mem_usage": 0.5},
              "external_data": {"market_volatility": 0.6, "news_sentiment": 0.7}},
-            
+
             {"glyph": "skull", "volume": 3.5e6, "price": 50500.0, "tick_id": 2,
              "internal_data": {"cpu_alignment": 0.9, "mem_usage": 0.4},
              "external_data": {"market_volatility": 0.4, "news_sentiment": 0.8}},
@@ -398,7 +398,7 @@ def test_drawdown_predictor():
         for i, pnl in enumerate(simulated_pnl_data):
             predictor.update_historical_data(pnl)
             print(f"Step {i+1}: Updated with PnL = {pnl:.3f}")
-            
+
             prediction = predictor.predict_drawdown()
             if prediction:
                 print(f"  Predicted Drawdown: {prediction['predicted_drawdown']:.4f}")
@@ -416,7 +416,7 @@ def test_drawdown_predictor():
                 print(f"  {k}: ({v[0]:.4f}, {v[1]:.4f})")
             else:
                 print(f"  {k}: {v}")
-        
+
         if metrics["total_predictions"] < len(simulated_pnl_data) - predictor.lookback_period + 1:
             success = False
             print("❌ Not all expected predictions were made.")
@@ -440,11 +440,11 @@ def demonstrate_mathematical_framework():
     print("\n" + "=" * 60)
     print("MATHEMATICAL FRAMEWORK DEMONSTRATION")
     print("=" * 60)
-    
+
     try:
         # GlyphStrategyCore is imported at the top-level
         core = GlyphStrategyCore()
-        
+
         # Demonstrate SHA256 transformation
         print("SHA-256 Transformation Process:")
         test_glyph = "brain"
@@ -452,7 +452,7 @@ def demonstrate_mathematical_framework():
         print(f"  Glyph: {test_glyph}")
         print(f"  SHA-256: {sha_hash}")
         print()
-        
+
         # Demonstrate bit extraction
         print("Bit Extraction Process:")
         for bit_depth in [4, 8, 16]:
@@ -460,7 +460,7 @@ def demonstrate_mathematical_framework():
             binary = bin(strategy_bits)[2:].zfill(bit_depth)
             print(f"  {bit_depth}-bit: {strategy_bits} (binary: {binary})")
         print()
-        
+
         # Demonstrate gear shifting
         print("Gear Shifting Logic:")
         volumes = [1e6, 2e6, 4e6, 6e6]
@@ -468,19 +468,19 @@ def demonstrate_mathematical_framework():
             gear = core.gear_shift(volume)
             print(f"  Volume: {volume:.1e} -> Gear: {gear}-bit")
         print()
-        
+
         # Demonstrate fractal memory
         print("Fractal Memory Encoding:")
         for i, glyph in enumerate(['brain', 'skull', 'fire']):
             result = core.select_strategy(glyph, 3e6)
             print(f"  {glyph} -> Hash: {result.fractal_hash[:16]}...")
-        
+
         fractal_stats = core.get_fractal_memory_stats()
         print(f"\n  Total hashes stored: {fractal_stats['total_hashes']}")
         print(f"  Memory size limit: {fractal_stats['memory_size']}")
-        
+
         return True
-        
+
     except ImportError as e:
         print(f"❌ Demonstration failed: {e}")
         return False
@@ -534,4 +534,4 @@ if __name__ == "__main__":
     if main():
         sys.exit(0)
     else:
-        sys.exit(1) 
+        sys.exit(1)

@@ -206,7 +206,7 @@ class PureProfitCalculator:
             self.calculation_count += 1
             self.total_calculation_time += calculation_time
             
-            logger.debug(
+            logger.info(
                 "🧮 Profit calculated: Base=%.4f, Adjusted=%.4f, Total=%.4f (%.3fms)",
                 base_profit, risk_adjusted_profit, total_profit_score,
                 calculation_time * 1000
@@ -457,11 +457,11 @@ def create_sample_market_data() -> MarketData:
     """Create sample market data for testing."""
     return MarketData(
         timestamp=time.time(),
-        btc_price=45000.0,
-        eth_price=3200.0,
+        btc_price=50000.0,
+        eth_price=3000.0,
         usdc_volume=1000000.0,
-        volatility=0.25,
-        momentum=0.15,
+        volatility=0.02,
+        momentum=0.01,
         volume_profile=1.2,
         on_chain_signals={'whale_activity': 0.3, 'miner_activity': 0.7}
     )

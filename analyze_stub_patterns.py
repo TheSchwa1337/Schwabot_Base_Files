@@ -333,35 +333,35 @@ def main():
     """Main analysis function."""
     print("🔍 Analyzing stub patterns and creating automated fixes...")
     print("=" * 80)
-    
+
     # Analyze patterns
     print("\n1. Analyzing stub patterns across codebase...")
     patterns = identify_common_stub_patterns()
-    
+
     print("\n📊 Stub Pattern Analysis:")
     for pattern_type, files in patterns.items():
         if files:
             print(f"\n  {pattern_type.upper()}:")
             for file_info in files[:5]:  # Show top 5
                 print(f"    - {file_info['file']}: {len(file_info['items'])} items")
-    
+
     # Create strategies
     print("\n2. Creating automated fix strategies...")
     strategies = create_automated_fix_strategy()
-    
+
     print("\n💡 Automated Fix Strategies:")
     for pattern_type, strategy in strategies.items():
         if patterns.get(pattern_type):
             print(f"\n  {pattern_type.upper()}:")
             print(f"    {strategy.strip()}")
-    
+
     # Generate fix script
     print("\n3. Generating automated fix script...")
     fix_script = generate_fix_script()
-    
+
     with open('auto_fix_stubs.py', 'w') as f:
         f.write(fix_script)
-    
+
     print("\n✅ Generated auto_fix_stubs.py")
     print("\n🚀 Next Steps:")
     print("1. Review the analysis above")
@@ -371,4 +371,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main() 
+    main()

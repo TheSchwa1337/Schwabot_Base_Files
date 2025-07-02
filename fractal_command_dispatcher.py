@@ -495,7 +495,7 @@ self,
 """"""
 """
 try:
-    pass  
+    pass
 # Apply fractal weighting to execution parameters
 weighted_kwargs = command_kwargs.copy()
 

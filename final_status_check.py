@@ -25,7 +25,7 @@ def run_flake8_check(directory: str, max_length: int = 100) -> int:
             text=True,
             check=False
         )
-        
+
         if result.stdout.strip():
             return int(result.stdout.strip())
         return 0
@@ -39,7 +39,7 @@ def check_syntax_errors(directory: str) -> int:
     try:
         python_files = list(Path(directory).rglob("*.py"))
         syntax_errors = 0
-        
+
         for file_path in python_files:
             if file_path.is_file():
                 result = subprocess.run(
@@ -48,10 +48,10 @@ def check_syntax_errors(directory: str) -> int:
                     text=True,
                     check=False
                 )
-                
+
                 if result.returncode != 0:
                     syntax_errors += 1
-        
+
         return syntax_errors
     except Exception as e:
         print(f"Error checking syntax: {e}")
@@ -62,27 +62,27 @@ def main():
     """Main function to check final status."""
     print("🔍 FINAL STATUS CHECK")
     print("=" * 60)
-    
+
     # Check core directory
     print("\n📁 Checking core/ directory...")
     core_violations = run_flake8_check("core", 100)
     core_syntax_errors = check_syntax_errors("core")
-    
+
     print(f"  Flake8 violations: {core_violations}")
     print(f"  Syntax errors: {core_syntax_errors}")
-    
+
     # Check schwabot directory if it exists
     if Path("schwabot").exists():
         print("\n📁 Checking schwabot/ directory...")
         schwabot_violations = run_flake8_check("schwabot", 100)
         schwabot_syntax_errors = check_syntax_errors("schwabot")
-        
+
         print(f"  Flake8 violations: {schwabot_violations}")
         print(f"  Syntax errors: {schwabot_syntax_errors}")
     else:
         schwabot_violations = 0
         schwabot_syntax_errors = 0
-    
+
     # Check apply_enhanced_cli_compatibility.py if it exists
     if Path("apply_enhanced_cli_compatibility.py").exists():
         print("\n📁 Checking apply_enhanced_cli_compatibility.py...")
@@ -90,18 +90,18 @@ def main():
         print(f"  Flake8 violations: {cli_violations}")
     else:
         cli_violations = 0
-    
+
     # Calculate totals
     total_violations = core_violations + schwabot_violations + cli_violations
     total_syntax_errors = core_syntax_errors + schwabot_syntax_errors
-    
+
     # Summary
     print("\n" + "=" * 60)
     print("📊 FINAL STATUS SUMMARY")
     print("=" * 60)
     print(f"🎯 Total Flake8 Violations: {total_violations}")
     print(f"🎯 Total Syntax Errors: {total_syntax_errors}")
-    
+
     if total_violations == 0 and total_syntax_errors == 0:
         print("🎉 PERFECT! 100% flake8 compliance achieved!")
         print("✅ All syntax errors resolved!")
@@ -124,4 +124,4 @@ def main():
 
 if __name__ == "__main__":
     exit_code = main()
-    sys.exit(exit_code) 
+    sys.exit(exit_code)

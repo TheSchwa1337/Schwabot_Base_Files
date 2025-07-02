@@ -8,4 +8,4 @@ print(f"DEBUG: Current Working Directory: {os.getcwd()}")
 print(f"DEBUG: Value of NEWS_API_KEY: {os.getenv('NEWS_API_KEY')}")
 
 # Optional: List files in CWD to confirm .env presence
-# print(f"DEBUG: Files in CWD: {os.listdir()}") 
+# print(f"DEBUG: Files in CWD: {os.listdir()}")

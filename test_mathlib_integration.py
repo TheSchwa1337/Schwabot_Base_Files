@@ -17,21 +17,21 @@ logger = logging.getLogger(__name__)
 def test_mathlib_v4_standalone():
     """Test MathLibV4 standalone functionality."""
     print("🧮 Testing MathLibV4 Standalone...")
-    
+
     try:
         from core.mathlib_v4 import MathLibV4
-        
+
         ml4 = MathLibV4(precision=64)
-        
+
         # Test data
         test_data = {
             'prices': [50000, 50001, 50002, 50001, 50003, 50005, 50004, 50006],
             'volumes': [1000, 1200, 800, 1100, 900, 1300, 950, 1100],
             'timestamps': [time.time() - i for i in range(8, 0, -1)]
         }
-        
+
         result = ml4.calculate_dlt_metrics(test_data)
-        
+
         if 'error' not in result:
             print(f"✅ MathLibV4 standalone test PASSED")
             print(f"   Pattern Hash: {result['pattern_hash'][:10]}...")
@@ -42,7 +42,7 @@ def test_mathlib_v4_standalone():
         else:
             print(f"❌ MathLibV4 standalone test FAILED: {result['error']}")
             return False
-            
+
     except Exception as e:
         print(f"❌ MathLibV4 standalone test FAILED: {e}")
         return False
@@ -50,20 +50,20 @@ def test_mathlib_v4_standalone():
 def test_unified_math_integration():
     """Test MathLibV4 integration with UnifiedMathSystem."""
     print("\n🔗 Testing Unified Math System Integration...")
-    
+
     try:
         from core.unified_math_system import UnifiedMathSystem
-        
+
         ums = UnifiedMathSystem()
-        
+
         # Test data
         test_data = {
             'prices': [50000, 50001, 50002, 50001, 50003, 50005, 50004, 50006],
             'volumes': [1000, 1200, 800, 1100, 900, 1300, 950, 1100]
         }
-        
+
         result = ums.dlt_analysis(test_data)
-        
+
         if result['status'] == 'success':
             print(f"✅ Unified Math System integration test PASSED")
             dlt_metrics = result['dlt_metrics']
@@ -75,7 +75,7 @@ def test_unified_math_integration():
         else:
             print(f"❌ Unified Math System integration test FAILED: {result}")
             return False
-            
+
     except Exception as e:
         print(f"❌ Unified Math System integration test FAILED: {e}")
         return False
@@ -83,7 +83,7 @@ def test_unified_math_integration():
 def test_demo_integration():
     """Test that the demo can import all components without errors."""
     print("\n🎯 Testing Demo Integration...")
-    
+
     try:
         # Test imports
         from core.ghost_core import GhostCore
@@ -95,21 +95,21 @@ def test_demo_integration():
         from core.matrix_math_utils import analyze_price_matrix
         from core.mathlib_v4 import MathLibV4
         from schwabot_unified_math import UnifiedTradingMathematics
-        
+
         print("✅ All core components imported successfully")
-        
+
         # Test MathLibV4 initialization
         ml4 = MathLibV4()
         print(f"✅ MathLibV4 initialized: v{ml4.version.value}")
-        
+
         # Test matrix math utils
         import numpy as np
         test_matrix = np.array([[1.0, 2.0], [3.0, 4.0], [5.0, 6.0]])
         matrix_result = analyze_price_matrix(test_matrix)
         print(f"✅ Matrix math utils working: {matrix_result.get('stability_score', 'N/A'):.3f}")
-        
+
         return True
-        
+
     except Exception as e:
         print(f"❌ Demo integration test FAILED: {e}")
         return False
@@ -118,22 +118,22 @@ def main():
     """Run all integration tests."""
     print("🧠 MathLibV4 Integration Test Suite")
     print("=" * 50)
-    
+
     tests = [
         test_mathlib_v4_standalone,
         test_unified_math_integration,
         test_demo_integration
     ]
-    
+
     passed = 0
     total = len(tests)
-    
+
     for test in tests:
         if test():
             passed += 1
-    
+
     print(f"\n📊 Test Results: {passed}/{total} tests passed")
-    
+
     if passed == total:
         print("🎉 All tests PASSED! MathLibV4 is properly integrated.")
         return True
@@ -142,4 +142,4 @@ def main():
         return False
 
 if __name__ == "__main__":
-    main() 
+    main()

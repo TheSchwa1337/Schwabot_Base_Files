@@ -27,32 +27,32 @@ def fix_trailing_whitespace(file_path: str) -> bool:
     try:
         with open(file_path, 'r', encoding='utf-8') as f:
             content = f.read()
-        
+
         original_content = content
-        
+
         # Fix trailing whitespace
         lines = content.split('\n')
         fixed_lines = []
-        
+
         for line in lines:
             # Remove trailing whitespace
             line = line.rstrip()
             fixed_lines.append(line)
-        
+
         # Ensure file ends with newline
         if fixed_lines and fixed_lines[-1] != '':
             fixed_lines.append('')
-        
+
         content = '\n'.join(fixed_lines)
-        
+
         # Write back if changed
         if content != original_content:
             with open(file_path, 'w', encoding='utf-8') as f:
                 f.write(content)
             return True
-        
+
         return False
-        
+
     except Exception as e:
         print(f"Error fixing trailing whitespace in {file_path}: {e}")
         return False
@@ -63,11 +63,11 @@ def fix_line_length(file_path: str, max_length: int = 100) -> bool:
     try:
         with open(file_path, 'r', encoding='utf-8') as f:
             content = f.read()
-        
+
         original_content = content
         lines = content.split('\n')
         fixed_lines = []
-        
+
         for line in lines:
             if len(line) > max_length:
                 # Try to break at logical points
@@ -152,17 +152,17 @@ def fix_line_length(file_path: str, max_length: int = 100) -> bool:
                         fixed_lines.append(line)
             else:
                 fixed_lines.append(line)
-        
+
         content = '\n'.join(fixed_lines)
-        
+
         # Write back if changed
         if content != original_content:
             with open(file_path, 'w', encoding='utf-8') as f:
                 f.write(content)
             return True
-        
+
         return False
-        
+
     except Exception as e:
         print(f"Error fixing line length in {file_path}: {e}")
         return False
@@ -173,11 +173,11 @@ def fix_unused_imports(file_path: str) -> bool:
     try:
         with open(file_path, 'r', encoding='utf-8') as f:
             content = f.read()
-        
+
         original_content = content
         lines = content.split('\n')
         fixed_lines = []
-        
+
         # Common unused imports to remove
         unused_imports = [
             'typing.Optional', 'typing.Tuple', 'typing.List', 'typing.Dict',
@@ -185,11 +185,11 @@ def fix_unused_imports(file_path: str) -> bool:
             'collections.deque', 'random', 'time', 'os', 'pathlib.Path',
             'datetime.datetime', 'datetime.timedelta', 'asyncio', 'inspect'
         ]
-        
+
         in_import_section = False
         import_lines = []
         other_lines = []
-        
+
         for line in lines:
             if line.strip().startswith(('import ', 'from ')):
                 in_import_section = True
@@ -202,7 +202,7 @@ def fix_unused_imports(file_path: str) -> bool:
                         if not re.search(rf'\b{unused.split(".")[-1]}\b', content):
                             is_unused = True
                             break
-                
+
                 if not is_unused:
                     import_lines.append(line)
             elif in_import_section and line.strip() == '':
@@ -212,19 +212,19 @@ def fix_unused_imports(file_path: str) -> bool:
                 other_lines.append(line)
             else:
                 other_lines.append(line)
-        
+
         # Reconstruct content
         if import_lines:
             content = '\n'.join(import_lines + [''] + other_lines)
-        
+
         # Write back if changed
         if content != original_content:
             with open(file_path, 'w', encoding='utf-8') as f:
                 f.write(content)
             return True
-        
+
         return False
-        
+
     except Exception as e:
         print(f"Error fixing unused imports in {file_path}: {e}")
         return False
@@ -235,14 +235,14 @@ def fix_syntax_errors(file_path: str) -> bool:
     try:
         with open(file_path, 'r', encoding='utf-8') as f:
             content = f.read()
-        
+
         original_content = content
-        
+
         # Fix unterminated string literals
         # Look for lines ending with quotes that might be unterminated
         lines = content.split('\n')
         fixed_lines = []
-        
+
         for i, line in enumerate(lines):
             # Check for unterminated strings
             if line.count('"') % 2 == 1 or line.count("'") % 2 == 1:
@@ -251,19 +251,19 @@ def fix_syntax_errors(file_path: str) -> bool:
                     line += '"'
                 if line.count("'") % 2 == 1:
                     line += "'"
-            
+
             fixed_lines.append(line)
-        
+
         content = '\n'.join(fixed_lines)
-        
+
         # Write back if changed
         if content != original_content:
             with open(file_path, 'w', encoding='utf-8') as f:
                 f.write(content)
             return True
-        
+
         return False
-        
+
     except Exception as e:
         print(f"Error fixing syntax errors in {file_path}: {e}")
         return False
@@ -274,9 +274,9 @@ def fix_undefined_names(file_path: str) -> bool:
     try:
         with open(file_path, 'r', encoding='utf-8') as f:
             content = f.read()
-        
+
         original_content = content
-        
+
         # Common undefined names and their imports
         undefined_fixes = {
             'safe_print': 'from utils.safe_print import safe_print',
@@ -288,36 +288,36 @@ def fix_undefined_names(file_path: str) -> bool:
             'random': 'import random',
             'inspect': 'import inspect'
         }
-        
+
         # Check for undefined names
         missing_imports = []
         for name, import_line in undefined_fixes.items():
             if re.search(rf'\b{name}\b', content) and import_line not in content:
                 missing_imports.append(import_line)
-        
+
         if missing_imports:
             # Add missing imports
             lines = content.split('\n')
             import_section_end = 0
-            
+
             for i, line in enumerate(lines):
                 if line.strip().startswith(('import ', 'from ')):
                     import_section_end = i + 1
                 elif line.strip() == '' and import_section_end == i:
                     import_section_end = i
-            
+
             # Insert missing imports
             lines.insert(import_section_end, '\n'.join(missing_imports))
             content = '\n'.join(lines)
-        
+
         # Write back if changed
         if content != original_content:
             with open(file_path, 'w', encoding='utf-8') as f:
                 f.write(content)
             return True
-        
+
         return False
-        
+
     except Exception as e:
         print(f"Error fixing undefined names in {file_path}: {e}")
         return False
@@ -328,11 +328,11 @@ def fix_f_string_issues(file_path: str) -> bool:
     try:
         with open(file_path, 'r', encoding='utf-8') as f:
             content = f.read()
-        
+
         original_content = content
         lines = content.split('\n')
         fixed_lines = []
-        
+
         for line in lines:
             # Fix f-strings with missing placeholders
             if 'f"' in line or "f'" in line:
@@ -340,19 +340,19 @@ def fix_f_string_issues(file_path: str) -> bool:
                 if '{' not in line and '}' not in line:
                     # Convert to regular string
                     line = line.replace('f"', '"').replace("f'", "'")
-            
+
             fixed_lines.append(line)
-        
+
         content = '\n'.join(fixed_lines)
-        
+
         # Write back if changed
         if content != original_content:
             with open(file_path, 'w', encoding='utf-8') as f:
                 f.write(content)
             return True
-        
+
         return False
-        
+
     except Exception as e:
         print(f"Error fixing f-string issues in {file_path}: {e}")
         return False
@@ -380,30 +380,30 @@ def run_flake8_check(file_path: str, max_length: int = 100) -> List[str]:
 def fix_file(file_path: str, max_length: int = 100) -> Tuple[int, int]:
     """Fix all flake8 violations in a file."""
     violations_before = len(run_flake8_check(file_path, max_length))
-    
+
     # Apply fixes
     fixes_applied = 0
-    
+
     if fix_trailing_whitespace(file_path):
         fixes_applied += 1
-    
+
     if fix_line_length(file_path, max_length):
         fixes_applied += 1
-    
+
     if fix_unused_imports(file_path):
         fixes_applied += 1
-    
+
     if fix_syntax_errors(file_path):
         fixes_applied += 1
-    
+
     if fix_undefined_names(file_path):
         fixes_applied += 1
-    
+
     if fix_f_string_issues(file_path):
         fixes_applied += 1
-    
+
     violations_after = len(run_flake8_check(file_path, max_length))
-    
+
     return violations_before, violations_after
 
 
@@ -411,24 +411,24 @@ def main():
     """Main function to fix all flake8 violations."""
     print("🔧 Fixing All Flake8 Violations")
     print("=" * 60)
-    
+
     # Get all Python files in core directory
     core_dir = Path("core")
     python_files = list(core_dir.rglob("*.py"))
-    
+
     total_violations_before = 0
     total_violations_after = 0
     files_fixed = 0
-    
+
     for file_path in python_files:
         if file_path.is_file():
             print(f"\n📁 Processing: {file_path}")
-            
+
             violations_before, violations_after = fix_file(str(file_path), 100)
-            
+
             total_violations_before += violations_before
             total_violations_after += violations_after
-            
+
             if violations_before > violations_after:
                 files_fixed += 1
                 improvement = violations_before - violations_after
@@ -437,7 +437,7 @@ def main():
                 print(f"  ⚠️  {violations_before} violations remain")
             else:
                 print(f"  ✅ No violations found")
-    
+
     # Summary
     print("\n" + "=" * 60)
     print("📊 FLAKE8 FIXING SUMMARY")
@@ -446,11 +446,11 @@ def main():
     print(f"🔧 Files Fixed: {files_fixed}")
     print(f"📉 Violations Before: {total_violations_before}")
     print(f"📉 Violations After: {total_violations_after}")
-    
+
     if total_violations_before > 0:
         improvement = ((total_violations_before - total_violations_after) / total_violations_before) * 100
         print(f"📈 Improvement: {improvement:.1f}%")
-    
+
     if total_violations_after == 0:
         print("🎉 Perfect! All flake8 violations have been resolved!")
         return 0
@@ -464,4 +464,4 @@ def main():
 
 if __name__ == "__main__":
     exit_code = main()
-    sys.exit(exit_code) 
+    sys.exit(exit_code)

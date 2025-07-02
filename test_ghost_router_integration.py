@@ -51,7 +51,7 @@ try:
     from core.ghost_router import GhostRouter, RouterInput
     from core.coldbase_balt_system import coldbase_balt, store_balt_pattern, retest_balt_pattern
     from core.dualistic_thought_engines import (
-        dualistic_thought_core, process_dualistic_thought, 
+        dualistic_thought_core, process_dualistic_thought,
         ALEPHEngine, ALIFEngine, RITLEngine, RITTLEEngine
     )
     from core.recursive_lattice_theorem import recursive_lattice, process_recursive_cycle
@@ -65,18 +65,18 @@ except ImportError as e:
 def test_ghost_router_btc_usdc_flow():
     """Test Ghost Router BTC/USDC flow mathematics."""
     print_banner("TESTING GHOST ROUTER BTC/USDC FLOW MATHEMATICS", "👻")
-    
+
     if not INTEGRATION_AVAILABLE:
         print("⚠️  Skipping Ghost Router tests - components not available")
         return
-    
+
     # Test Ghost Router with BTC/USDC flow
     btc_price = 52750.0
     usdc_balance = 10000.0
-    
+
     print(f"💰 Testing BTC Price: ${btc_price:,.2f}")
     print(f"💵 USDC Balance: ${usdc_balance:,.2f}")
-    
+
     # Create router input
     router_input = RouterInput(
         tick_hash="a1b2c3d4e5f6",
@@ -93,13 +93,13 @@ def test_ghost_router_btc_usdc_flow():
         projected_exit=0.08,
         news_score=0.3
     )
-    
+
     # Test Ghost Router
     ghost_router = GhostRouter()
     routing_decision = ghost_router.route(router_input)
-    
+
     print(f"👻 Ghost Router Decision: {routing_decision}")
-    
+
     # Test compute_ghost_route function
     exec_packet = ghost_router.compute_ghost_route(
         H_t=1000,
@@ -111,25 +111,25 @@ def test_ghost_router_btc_usdc_flow():
         S_t=0.2,
         base_vol=1000.0
     )
-    
+
     print(f"📦 Exec Packet:")
     print(f"   Volume: {exec_packet.volume:.2f}")
     print(f"   Route: {exec_packet.route}")
     print(f"   Hash Tag: {exec_packet.hash_tag[:16]}...")
-    
+
     print("✅ Ghost Router BTC/USDC flow mathematics validated")
 
 def test_coldbase_balt_system():
     """Test ColdBase BALT memory-retaining truth engine."""
     print_banner("TESTING COLDBASE BALT SYSTEM", "❄️")
-    
+
     if not INTEGRATION_AVAILABLE:
         print("⚠️  Skipping ColdBase tests - components not available")
         return
-    
+
     # Test BALT pattern storage
     print("📁 Testing BALT Pattern Storage:")
-    
+
     # Store multiple BALT patterns
     patterns = [
         {
@@ -143,7 +143,7 @@ def test_coldbase_balt_system():
             "btc_price": 52000.0
         },
         {
-            "glyph": "profit_signal_2", 
+            "glyph": "profit_signal_2",
             "phase": 0.85,
             "ncco": 0.7,
             "entropy": 0.9,
@@ -177,10 +177,10 @@ def test_coldbase_balt_system():
         )
         stored_hashes.append(hash_id)
         print(f"   Stored: {pattern['glyph']} → {hash_id}")
-    
+
     # Test BALT pattern retrace
     print("\n🔄 Testing BALT Pattern Retrace:")
-    
+
     current_conditions = {
         "glyph": "profit_signal_1",
         "phase": 0.78,
@@ -193,24 +193,24 @@ def test_coldbase_balt_system():
         current_conditions["ncco"],
         current_conditions["btc_price"]
     )
-    
+
     print(f"   Current Glyph: {current_conditions['glyph']}")
     print(f"   Retrace Status: {retrace_result['status']}")
     print(f"   Similarity: {retrace_result['similarity']:.3f}")
     print(f"   Profit Viability: {retrace_result['profit_viability']:.3f}")
     print(f"   Retrace Confidence: {retrace_result['retrace_confidence']:.3f}")
-    
+
     # Test bit phase routing
     print("\n🚪 Testing Bit Phase Routing:")
-    
+
     lambda_val = 1.2
     mu_val = 0.8
     bit_phase = coldbase_balt.calculate_bit_phase_routing(lambda_val, mu_val)
-    
+
     print(f"   λ = {lambda_val}, μ = {mu_val}")
     print(f"   ρ_bit_phase = (λ/μ) mod 8 = {int((lambda_val/mu_val) % 8)}")
     print(f"   Routing Destination: {bit_phase.value}")
-    
+
     # Get ColdBase statistics
     stats = coldbase_balt.get_system_statistics()
     print(f"\n📊 ColdBase Statistics:")
@@ -219,21 +219,21 @@ def test_coldbase_balt_system():
             print(f"   {key}: {value:.3f}")
         else:
             print(f"   {key}: {value}")
-    
+
     print("✅ ColdBase BALT system validated")
 
 def test_dualistic_thought_engines():
     """Test dualistic thought engines (ALEPH, ALIF, RITL, RITTLE)."""
     print_banner("TESTING DUALISTIC THOUGHT ENGINES", "🧠")
-    
+
     if not INTEGRATION_AVAILABLE:
         print("⚠️  Skipping dualistic engine tests - components not available")
         return
-    
+
     # Test individual engines
     print("✴️ Testing ALEPH Engine:")
     aleph_engine = ALEPHEngine()
-    
+
     from core.dualistic_thought_engines import ThoughtState
     test_state = ThoughtState(
         glyph="profit_signal",
@@ -245,15 +245,15 @@ def test_dualistic_thought_engines():
         xrp_price=0.55,
         usdc_balance=10000.0
     )
-    
+
     aleph_output = aleph_engine.evaluate_trust(test_state)
     print(f"   Decision: {aleph_output.decision}")
     print(f"   Confidence: {aleph_output.confidence:.3f}")
     print(f"   Routing: {aleph_output.routing_target}")
-    
+
     print("\n✴️ Testing ALIF Engine:")
     alif_engine = ALIFEngine()
-    
+
     test_market_data = {
         "btc_volatility": 0.3,
         "eth_volatility": 0.4,
@@ -268,37 +268,37 @@ def test_dualistic_thought_engines():
     print(f"   Decision: {alif_output.decision}")
     print(f"   Confidence: {alif_output.confidence:.3f}")
     print(f"   Routing: {alif_output.routing_target}")
-    
+
     print("\n🧮 Testing RITL Engine:")
     ritl_engine = RITLEngine()
-    
+
     ritl_output = ritl_engine.validate_truth_lattice(test_state)
     print(f"   Decision: {ritl_output.decision}")
     print(f"   Confidence: {ritl_output.confidence:.3f}")
     print(f"   Routing: {ritl_output.routing_target}")
-    
+
     print("\n🧮 Testing RITTLE Engine:")
     rittle_engine = RITTLEEngine()
-    
+
     rittle_output = rittle_engine.evaluate_trust_transfer(test_state, test_market_data)
     print(f"   Decision: {ritlle_output.decision}")
     print(f"   Confidence: {ritlle_output.confidence:.3f}")
     print(f"   Routing: {ritlle_output.routing_target}")
     print(f"   Trust Transfer: {ritlle_output.trust_transfer}")
-    
+
     print("✅ Dualistic thought engines validated")
 
 def test_integrated_thought_cycle():
     """Test complete integrated thought cycle."""
     print_banner("TESTING INTEGRATED THOUGHT CYCLE", "🔄")
-    
+
     if not INTEGRATION_AVAILABLE:
         print("⚠️  Skipping integrated thought cycle tests - components not available")
         return
-    
+
     # Test complete dualistic thought cycle
     print("🧠 Testing Complete Dualistic Thought Cycle:")
-    
+
     ai_feedback = [
         "Strong bullish momentum detected",
         "Volume increasing across all assets",
@@ -327,39 +327,39 @@ def test_integrated_thought_cycle():
         ai_feedback=ai_feedback,
         market_data=market_data
     )
-    
+
     print(f"   Final Action: {thought_result['final_action']}")
     print(f"   Overall Confidence: {thought_result['integrated_decision']['confidence']:.3f}")
     print(f"   Overall Decision: {thought_result['integrated_decision']['decision']}")
-    
+
     print("\n   Engine Outputs:")
     for engine, output in thought_result['engine_outputs'].items():
         print(f"     {engine.upper()}: {output.decision} (confidence: {output.confidence:.3f})")
-    
+
     # Get dualistic statistics
     stats = dualistic_thought_core.get_system_statistics()
     print(f"\n📊 Dualistic Thought Statistics:")
     print(f"   Total Cycles: {stats['total_cycles']}")
     print(f"   Success Rate: {stats['success_rate']:.3f}")
     print(f"   Asset Trust Levels: {stats['ritlle_stats']['asset_trust_levels']}")
-    
+
     print("✅ Integrated thought cycle validated")
 
 def test_complete_trading_pipeline():
     """Test complete trading pipeline from BTC price to execution."""
     print_banner("TESTING COMPLETE TRADING PIPELINE", "🚀")
-    
+
     if not INTEGRATION_AVAILABLE:
         print("⚠️  Skipping complete pipeline tests - components not available")
         return
-    
+
     # Simulate complete trading pipeline
     print("🚀 Complete Trading Pipeline Simulation:")
-    
+
     # Step 1: BTC Price Input
     btc_price = 52750.0
     print(f"\n1️⃣  BTC Price Input: ${btc_price:,.2f}")
-    
+
     # Step 2: Recursive Lattice Processing
     print("\n2️⃣  Recursive Lattice Processing:")
     lattice_input = {
@@ -372,7 +372,7 @@ def test_complete_trading_pipeline():
     print(f"   Lattice Action: {lattice_result.get('final_action')}")
     print(f"   Lattice Confidence: {lattice_result.get('overall_confidence', 0):.3f}")
     print(f"   Routing: {lattice_result.get('routing_destination')}")
-    
+
     # Step 3: Dualistic Thought Processing
     print("\n3️⃣  Dualistic Thought Processing:")
     thought_result = process_dualistic_thought(
@@ -391,13 +391,13 @@ def test_complete_trading_pipeline():
             "btc_price_change": 0.03
 }
     )
-    
+
     print(f"   Thought Action: {thought_result['final_action']}")
     print(f"   Thought Confidence: {thought_result['integrated_decision']['confidence']:.3f}")
-    
+
     # Step 4: ColdBase BALT Integration
     print("\n4️⃣  ColdBase BALT Integration:")
-    
+
     # Store current pattern in BALT
     balt_hash = store_balt_pattern(
         glyph=thought_result['thought_state'].glyph,
@@ -410,7 +410,7 @@ def test_complete_trading_pipeline():
         btc_price=btc_price
     )
     print(f"   Stored Pattern: {balt_hash}")
-    
+
     # Retest pattern
     retrace_result = retest_balt_pattern(
         thought_result['thought_state'].glyph,
@@ -420,17 +420,17 @@ def test_complete_trading_pipeline():
     )
     print(f"   Retrace Status: {retrace_result['status']}")
     print(f"   Retrace Confidence: {retrace_result['retrace_confidence']:.3f}")
-    
+
     # Step 5: Final Trading Decision
     print("\n5️⃣  Final Trading Decision:")
-    
+
     # Combine all signals
     lattice_confidence = lattice_result.get('overall_confidence', 0)
     thought_confidence = thought_result['integrated_decision']['confidence']
     balt_confidence = retrace_result['retrace_confidence']
-    
+
     overall_confidence = (lattice_confidence + thought_confidence + balt_confidence) / 3
-    
+
     if overall_confidence > 0.8:
         final_decision = "EXECUTE_AGGRESSIVE_TRADE"
     elif overall_confidence > 0.6:
@@ -439,50 +439,50 @@ def test_complete_trading_pipeline():
         final_decision = "PREPARE_ENTRY"
     else:
         final_decision = "HOLD_POSITION"
-    
+
     print(f"   Lattice Confidence: {lattice_confidence:.3f}")
     print(f"   Thought Confidence: {thought_confidence:.3f}")
     print(f"   BALT Confidence: {balt_confidence:.3f}")
     print(f"   Overall Confidence: {overall_confidence:.3f}")
     print(f"   Final Decision: {final_decision}")
-    
+
     # Step 6: Cross-Asset Analysis
     print("\n6️⃣  Cross-Asset Analysis:")
-    
+
     asset_trust = dualistic_thought_core.ritlle_engine.asset_trust_levels
     print(f"   Asset Trust Levels:")
     for asset, trust in asset_trust.items():
         print(f"     {asset}: {trust:.3f}")
-    
+
     highest_asset = max(asset_trust.items(), key=lambda x: x[1])[0]
     print(f"   Highest Trust Asset: {highest_asset}")
-    
+
     if final_decision.startswith("EXECUTE") and highest_asset != "USDC":
         trade_action = f"BUY_{highest_asset}_WITH_USDC"
         print(f"   Trade Action: {trade_action}")
     else:
         print(f"   Trade Action: HOLD_POSITION")
-    
+
     print("✅ Complete trading pipeline validated")
 
 def test_mathematical_relationships():
     """Test mathematical relationships between all systems."""
     print_banner("TESTING MATHEMATICAL RELATIONSHIPS", "📐")
-    
+
     print("📐 Mathematical Framework Validation:")
-    
+
     # Test Ghost Router mathematics
     print("\n👻 Ghost Router Mathematics:")
     print("   Θᴳ(t) = Σ θₖ * ζₖ(t) * δ(t − τₖ)")
     print("   ✓ Conditional trigger logic implemented")
-    
+
     # Test BALT mathematics
     print("\n❄️ ColdBase BALT Mathematics:")
     print("   sim(G_t, G_τ) + sim(Φ_t, Φ_τ) + sim(Ψ_t, Ψ_τ) > ε_threshold")
     print("   P_live = project_profit(G_t) - P_τ")
     print("   ρ_bit_phase = (λ / μ) mod 8")
     print("   ✓ Pattern retrace logic implemented")
-    
+
     # Test Dualistic Engine mathematics
     print("\n🧠 Dualistic Engine Mathematics:")
     print("   ALEPH: A_Trust(t) = sim(G_t, G_{t-n}) + NCCO_stability - Phase_dissonance")
@@ -490,49 +490,49 @@ def test_mathematical_relationships():
     print("   RITL: RITL(G,Ξ,Φ) = 1 if ECC.valid and Ξ_stable and Glyph_has_backtrace")
     print("   RITTLE: RITTLE(Ξ₁,Ξ₂) = if Ξ₁ > Ξ₂ → transfer_trust_to_Ξ₂_asset")
     print("   ✓ All dualistic engine mathematics implemented")
-    
+
     # Test integration mathematics
     print("\n🔗 Integration Mathematics:")
     print("   BTC Price → Ferris RDE → Lantern Core → Ghost Router → Dualistic Engines → ColdBase")
     print("   Cross-asset trust transfer: BTC ⇄ ETH ⇄ XRP ⇄ USDC")
     print("   ✓ Complete mathematical integration validated")
-    
+
     print("✅ All mathematical relationships validated")
 
 def main():
     """Run complete Ghost Router integration test suite."""
     print_banner("👻 GHOST ROUTER INTEGRATION TEST SUITE", "🚀")
     print("Testing complete integration of Ghost Router system with BTC/USDC flow mathematics")
-    
+
     if not INTEGRATION_AVAILABLE:
         print("❌ Integration components not available - cannot run tests")
         return
-    
+
     try:
         # Core system tests
         print("\n" + "="*80)
         print(" PHASE 1: CORE SYSTEM TESTS")
         print("="*80)
-        
+
         test_ghost_router_btc_usdc_flow()
         test_coldbase_balt_system()
         test_dualistic_thought_engines()
-        
+
         # Integration tests
         print("\n" + "="*80)
         print(" PHASE 2: INTEGRATION TESTS")
         print("="*80)
-        
+
         test_integrated_thought_cycle()
         test_complete_trading_pipeline()
-        
+
         # Mathematical validation
         print("\n" + "="*80)
         print(" PHASE 3: MATHEMATICAL VALIDATION")
         print("="*80)
-        
+
         test_mathematical_relationships()
-        
+
         # Final summary
         print_banner("🎉 GHOST ROUTER INTEGRATION TEST COMPLETE!", "🎉")
         print("✅ Ghost Router BTC/USDC flow mathematics operational")
@@ -541,7 +541,7 @@ def main():
         print("✅ Complete trading pipeline from BTC price to execution tested")
         print("✅ Cross-asset trust transfer (BTC ⇄ ETH ⇄ XRP ⇄ USDC) operational")
         print("✅ All mathematical relationships and integrations confirmed")
-        
+
         print("\n👻 Ghost Router System Summary:")
         print("   • BTC ⟷ USDC flow mathematics: OPERATIONAL")
         print("   • Conditional trigger logic: Θᴳ(t) = Σ θₖ * ζₖ(t) * δ(t − τₖ) ✓")
@@ -550,13 +550,13 @@ def main():
         print("   • ALIF feedback processing: F(t) = Σ w_i · ΔV_i + w_j · ΔΨ_j ✓")
         print("   • RITL truth validation: RITL(G,Ξ,Φ) = 1 if ECC.valid and Ξ_stable and Glyph_has_backtrace ✓")
         print("   • RITTLE trust transfer: RITTLE(Ξ₁,Ξ₂) = if Ξ₁ > Ξ₂ → transfer_trust_to_Ξ₂_asset ✓")
-        
+
         print("\n🚀 System ready for live cross-asset trading operations!")
-        
+
     except Exception as e:
         print(f"\n❌ Test suite failed: {e}")
         import traceback
         traceback.print_exc()
 
 if __name__ == "__main__":
-    main() 
+    main()

@@ -36,17 +36,17 @@ async def test_full_integration_pipeline():
     """Test the complete integration pipeline."""
     print("🚀 SCHWABOT FULL INTEGRATION TEST")
     print("=" * 60)
-    
+
     results = {}
-    
+
     # Test 1: Configuration Loading
     print("\n📋 TESTING CONFIGURATION SYSTEM")
     print("-" * 40)
-    
+
     try:
         import yaml
         config_path = Path("config/master_integration.yaml")
-        
+
         if config_path.exists():
             with open(config_path, 'r', encoding='utf-8') as f:
                 config = yaml.safe_load(f)
@@ -57,27 +57,27 @@ async def test_full_integration_pipeline():
         else:
             print("⚠️ Master configuration not found, using defaults")
             results['config_loading'] = False
-            
+
     except Exception as e:
         print(f"❌ Configuration loading failed: {e}")
         results['config_loading'] = False
-    
+
     # Test 2: Brain Trading Engine
     print("\n🧠 TESTING BRAIN TRADING ENGINE")
     print("-" * 40)
-    
+
     try:
         from core.brain_trading_engine import BrainTradingEngine, BrainSignal
-        
+
         brain_config = {
             'base_profit_rate': 0.002,
             'confidence_threshold': 0.6,
             'enhancement_range': (0.8, 2.0),
             'max_history_size': 100
         }
-        
+
         brain_engine = BrainTradingEngine(brain_config)
-        
+
         # Test multiple market scenarios
         test_scenarios = [
             {"name": "Strong Bull", "price": 55000, "volume": 2000},
@@ -85,7 +85,7 @@ async def test_full_integration_pipeline():
             {"name": "Sideways", "price": 50000, "volume": 1000},
             {"name": "Volatile", "price": 52000, "volume": 1800},
         ]
-        
+
         brain_results = []
         for scenario in test_scenarios:
             signal = brain_engine.process_brain_signal(
@@ -99,36 +99,36 @@ async def test_full_integration_pipeline():
                 'action': decision['action'],
                 'position_size': decision['position_size']
             })
-        
+
         print("✅ Brain Trading Engine operational")
         print(f"   Processed {len(brain_results)} scenarios")
-        
+
         # Show results
         for result in brain_results:
             print(f"   {result['scenario']}: {result['action']} "
                   f"(conf: {result['confidence']:.3f}, "
                   f"profit: {result['profit_score']:.2f})")
-        
+
         results['brain_engine'] = True
         results['brain_results'] = brain_results
-        
+
     except Exception as e:
         print(f"❌ Brain Trading Engine test failed: {e}")
         results['brain_engine'] = False
-    
+
     # Test 3: Symbolic Profit Router
     print("\n🔣 TESTING SYMBOLIC PROFIT ROUTER")
     print("-" * 40)
-    
+
     try:
         from symbolic_profit_router import SymbolicProfitRouter
-        
+
         router = SymbolicProfitRouter()
-        
+
         # Test with brain symbols and results
         brain_symbols = ['[BRAIN]', '🧠', '💰', '📈', '⚡']
         router_results = []
-        
+
         for i, symbol in enumerate(brain_symbols):
             # Use brain results if available
             if 'brain_results' in results and i < len(results['brain_results']):
@@ -138,14 +138,14 @@ async def test_full_integration_pipeline():
             else:
                 profit = 0.05 + (i * 0.02)  # 5%, 7%, 9%, etc.
                 volume = 1000 + (i * 200)
-            
+
             # Register and process
             glyph = router.register_glyph(symbol)
             vault_key = router.store_profit_sequence(symbol, profit, volume, "buy")
-            
+
             # Get visualization
             viz = router.get_profit_tier_visualization(symbol)
-            
+
             router_results.append({
                 'symbol': symbol,
                 'profit': profit,
@@ -153,53 +153,53 @@ async def test_full_integration_pipeline():
                 'vault_stored': vault_key is not None,
                 'bit_state': viz['bit_state']
             })
-        
+
         print("✅ Symbolic Profit Router operational")
         print(f"   Processed {len(router_results)} symbols")
-        
+
         for result in router_results:
             print(f"   {result['symbol']}: {result['tier']} "
                   f"(profit: {result['profit']:.3f}, "
                   f"vault: {result['vault_stored']})")
-        
+
         results['symbolic_router'] = True
         results['router_results'] = router_results
-        
+
     except Exception as e:
         print(f"❌ Symbolic Profit Router test failed: {e}")
         results['symbolic_router'] = False
-    
+
     # Test 4: Clean Unified Math System
     print("\n🧮 TESTING CLEAN UNIFIED MATH SYSTEM")
     print("-" * 40)
-    
+
     try:
         from core.clean_unified_math import CleanUnifiedMathSystem, optimize_brain_profit
-        
+
         math_system = CleanUnifiedMathSystem()
         math_results = []
-        
+
         # Test with brain trading data
         if 'brain_results' in results:
             for brain_result in results['brain_results'][:3]:  # Test first 3
                 # Simulate market data based on brain results
                 price = 50000 + (brain_result['confidence'] - 0.5) * 10000
                 volume = 1000 + brain_result['confidence'] * 1000
-                
+
                 # Test mathematical optimization
                 optimized_profit = optimize_brain_profit(
                     price, volume, brain_result['confidence'], 1.2
                 )
-                
+
                 # Test risk calculations
                 returns = [0.05, 0.02, -0.01, 0.03, 0.01]
                 sharpe = math_system.calculate_sharpe_ratio(returns)
-                
+
                 # Test portfolio calculations
                 position_size = math_system.calculate_portfolio_weight(
                     brain_result['confidence'], 0.1
                 ) * 100000  # $100k portfolio
-                
+
                 math_results.append({
                     'scenario': brain_result['scenario'],
                     'optimized_profit': optimized_profit,
@@ -213,27 +213,27 @@ async def test_full_integration_pipeline():
                 {'price': 51000, 'volume': 1200, 'confidence': 0.8},
                 {'price': 49000, 'volume': 800, 'confidence': 0.6}
             ]
-            
+
             for i, data in enumerate(test_data):
                 optimized_profit = optimize_brain_profit(
                     data['price'], data['volume'], data['confidence'], 1.1
                 )
-                
+
                 math_results.append({
                     'scenario': f'Test {i+1}',
                     'optimized_profit': optimized_profit,
                     'sharpe_ratio': 0.8,  # Mock value
                     'position_size': data['confidence'] * 10000
                 })
-        
+
         print("✅ Clean Unified Math System operational")
         print(f"   Processed {len(math_results)} calculations")
-        
+
         for result in math_results:
             print(f"   {result['scenario']}: "
                   f"profit={result['optimized_profit']:.2f}, "
                   f"position=${result['position_size']:.0f}")
-        
+
         # Test integration function
         input_data = {
             'tensor': [[50000, 1200], [51000, 1100]],
@@ -241,74 +241,74 @@ async def test_full_integration_pipeline():
         }
         integration_result = math_system.integrate_all_systems(input_data)
         print(f"   Integration test: combined_score={integration_result.get('combined_score', 0):.2f}")
-        
+
         results['math_system'] = True
         results['math_results'] = math_results
-        
+
     except Exception as e:
         print(f"❌ Clean Unified Math System test failed: {e}")
         results['math_system'] = False
-    
+
     # Test 5: Integration Pipeline Orchestrator
     print("\n🔄 TESTING INTEGRATION ORCHESTRATOR")
     print("-" * 40)
-    
+
     try:
         from core.schwabot_integration_pipeline import IntegrationOrchestrator
-        
+
         # Initialize orchestrator
         orchestrator = IntegrationOrchestrator()
-        
+
         # Test system status
         system_status = orchestrator.get_system_status()
-        
+
         print("✅ Integration Orchestrator operational")
         print(f"   Available components:")
         components = system_status.get('available_components', {})
         for comp, available in components.items():
             status = "✅" if available else "❌"
             print(f"     {status} {comp}")
-        
+
         print(f"   Configured layers: {len(system_status.get('layers', {}))}")
-        
+
         # Test brief pipeline run (5 seconds)
         print("   Running brief integration test...")
-        
+
         # Start a short integration run
         integration_task = asyncio.create_task(
             orchestrator.start_integration_pipeline()
         )
-        
+
         # Let it run for 5 seconds
         await asyncio.sleep(5)
-        
+
         # Stop the pipeline
         await orchestrator.emergency_shutdown()
-        
+
         # Cancel the task
         integration_task.cancel()
         try:
             await integration_task
         except asyncio.CancelledError:
             pass
-        
+
         # Export final state
         orchestrator.export_system_state("integration_test_state.json")
-        
+
         print("   ✅ Brief integration run completed")
         results['integration_orchestrator'] = True
-        
+
     except Exception as e:
         print(f"❌ Integration Orchestrator test failed: {e}")
         results['integration_orchestrator'] = False
-    
+
     # Test 6: API Security Layer
     print("\n🔐 TESTING API SECURITY LAYER")
     print("-" * 40)
-    
+
     try:
         from core.schwabot_integration_pipeline import SecureAPIManager
-        
+
         # Test API manager
         config = {
             'api_security_layer': {
@@ -318,36 +318,36 @@ async def test_full_integration_pipeline():
                 }
             }
         }
-        
+
         api_manager = SecureAPIManager(config)
-        
+
         # Test key encryption
         test_key = "test_api_key_123"
         encrypted = api_manager.encrypt_api_key(test_key, "test_api")
-        
+
         # Test validation
         is_valid = api_manager.validate_api_access("test_api")
-        
+
         print("✅ API Security Layer operational")
         print(f"   Key encryption: {'✅' if encrypted else '❌'}")
         print(f"   Access validation: {'✅' if is_valid else '❌'}")
-        
+
         results['api_security'] = True
-        
+
     except Exception as e:
         print(f"❌ API Security Layer test failed: {e}")
         results['api_security'] = False
-    
+
     # Test 7: Cross-Layer Communication
     print("\n📡 TESTING CROSS-LAYER COMMUNICATION")
     print("-" * 40)
-    
+
     try:
         # Test message creation and processing
         from core.schwabot_integration_pipeline import IntegrationMessage
-        
+
         test_messages = []
-        
+
         # Create test messages
         if 'brain_results' in results and 'router_results' in results:
             # Brain to Symbolic message
@@ -363,7 +363,7 @@ async def test_full_integration_pipeline():
                 }
             )
             test_messages.append(message1)
-            
+
             # Symbolic to Math message
             router_data = results['router_results'][0]
             message2 = IntegrationMessage(
@@ -377,29 +377,29 @@ async def test_full_integration_pipeline():
                 }
             )
             test_messages.append(message2)
-        
+
         print("✅ Cross-Layer Communication operational")
         print(f"   Created {len(test_messages)} test messages")
-        
+
         for i, msg in enumerate(test_messages):
             print(f"   Message {i+1}: {msg.source_layer} → {msg.target_layer}")
-        
+
         results['cross_layer_comm'] = True
-        
+
     except Exception as e:
         print(f"❌ Cross-Layer Communication test failed: {e}")
         results['cross_layer_comm'] = False
-    
+
     # Test Summary
     print("\n📊 INTEGRATION TEST SUMMARY")
     print("=" * 60)
-    
+
     passed_tests = sum(1 for v in results.values() if isinstance(v, bool) and v)
     total_tests = sum(1 for v in results.values() if isinstance(v, bool))
-    
+
     print(f"Tests Passed: {passed_tests}/{total_tests}")
     print(f"Success Rate: {(passed_tests/total_tests)*100:.1f}%")
-    
+
     print("\nDetailed Results:")
     test_names = {
         'config_loading': 'Configuration Loading',
@@ -410,26 +410,26 @@ async def test_full_integration_pipeline():
         'api_security': 'API Security Layer',
         'cross_layer_comm': 'Cross-Layer Communication'
     }
-    
+
     for key, passed in results.items():
         if isinstance(passed, bool):
             status = "✅ PASS" if passed else "❌ FAIL"
             name = test_names.get(key, key)
             print(f"  {name}: {status}")
-    
+
     # Data Flow Validation
     if all(results.get(key, False) for key in ['brain_engine', 'symbolic_router', 'math_system']):
         print("\n🔄 DATA FLOW VALIDATION")
         print("-" * 40)
         print("✅ Complete data flow verified:")
         print("   Market Data → Brain Engine → Symbolic Router → Math System")
-        
+
         if 'brain_results' in results and 'router_results' in results:
             print(f"   Processed {len(results['brain_results'])} brain signals")
             print(f"   Generated {len(results['router_results'])} symbolic mappings")
             if 'math_results' in results:
                 print(f"   Calculated {len(results['math_results'])} mathematical optimizations")
-    
+
     # Export comprehensive test results
     test_report = {
         'timestamp': time.time(),
@@ -442,13 +442,13 @@ async def test_full_integration_pipeline():
         'data_flow_validated': all(results.get(key, False) for key in ['brain_engine', 'symbolic_router', 'math_system']),
         'ready_for_production': passed_tests >= 5  # At least 5 core tests must pass
     }
-    
+
     # Save detailed results
     with open('full_integration_test_results.json', 'w') as f:
         json.dump(test_report, f, indent=2, default=str)
-    
+
     print(f"\n📄 Test report saved to full_integration_test_results.json")
-    
+
     # Final Status
     if test_report['ready_for_production']:
         print("\n🎯 INTEGRATION STATUS: READY FOR PRODUCTION")
@@ -459,27 +459,27 @@ async def test_full_integration_pipeline():
     else:
         print("\n⚠️ INTEGRATION STATUS: NEEDS ATTENTION")
         print("Some critical systems need fixing before production")
-    
+
     return test_report
 
 
 async def main():
     """Main test execution."""
     print("Starting Schwabot Full Integration Test...")
-    
+
     # Ensure log directory exists
     Path("logs").mkdir(exist_ok=True)
-    
+
     try:
         test_report = await test_full_integration_pipeline()
-        
+
         if test_report['ready_for_production']:
             print("\n🎉 ALL SYSTEMS GO! Schwabot is ready for deployment!")
             return 0
         else:
             print("\n⚠️ Some systems need attention before deployment")
             return 1
-            
+
     except Exception as e:
         print(f"\n❌ Critical test failure: {e}")
         logger.exception("Full integration test failed")
@@ -488,7 +488,7 @@ async def main():
 
 if __name__ == "__main__":
     import sys
-    
+
     # Run the test
     exit_code = asyncio.run(main())
-    sys.exit(exit_code) 
+    sys.exit(exit_code)

@@ -134,7 +134,7 @@ class MathematicalValidator:
         if isinstance(matrix, list):
             if not matrix:
                 return False
-            return all(isinstance(row, (list, tuple)) and 
+            return all(isinstance(row, (list, tuple)) and
                       len(row) == len(matrix[0]) for row in matrix)
         return False
 
@@ -876,7 +876,7 @@ class FerrisWheelVisualizer:
             filename: Output filename
         """
         import json
-        
+
         with open(filename, "w") as f:
             json.dump(self.visualization_data, f, indent=2, default=str)
 
@@ -885,23 +885,23 @@ class FerrisWheelVisualizer:
 
 class BrainGlyphProcessor:
     """Processes brain glyph trading signals with mathematical integration."""
-    
+
     def __init__(self):
         """Initialize brain glyph processor."""
         self.validator = MathematicalValidator()
         self.recursion_guard = RecursionGuard()
         self.glyph_history: List[Dict[str, Any]] = []
         self.signal_cache: Dict[str, float] = {}
-        
+
     def process_brain_signal(self, price_data: float, volume_data: float, **kwargs) -> float:
         """
         Process brain glyph trading signal with mathematical optimization.
-        
+
         Args:
             price_data: Current price data
             volume_data: Trading volume data
             **kwargs: Additional parameters
-        
+
         Returns:
             Calculated profit optimization score
         """
@@ -909,20 +909,20 @@ class BrainGlyphProcessor:
             if not self.validator.validate_positive(price_data):
                 logger.error("Invalid price data")
                 return 0.0
-                
+
             if not self.validator.validate_positive(volume_data):
                 logger.error("Invalid volume data")
                 return 0.0
-            
+
             # Calculate base profit potential
             base_profit = price_data * volume_data * 0.001  # 0.1% base
-            
+
             # Apply brain glyph enhancement
             brain_factor = self._calculate_brain_enhancement(price_data, volume_data)
-            
+
             # Apply mathematical optimization using unified math
             optimized_profit = unified_math('multiply', base_profit, brain_factor)
-            
+
             # Store in glyph history
             self.glyph_history.append({
                 'timestamp': time.time(),
@@ -931,17 +931,17 @@ class BrainGlyphProcessor:
                 'profit': optimized_profit,
                 'brain_factor': brain_factor
             })
-            
+
             # Limit history size
             if len(self.glyph_history) > 1000:
                 self.glyph_history = self.glyph_history[-500:]
-            
+
             return float(optimized_profit)
-            
+
         except Exception as e:
             logger.error(f"Brain signal processing failed: {e}")
             return 0.0
-    
+
     def _calculate_brain_enhancement(self, price: float, volume: float) -> float:
         """Calculate brain glyph enhancement factor."""
         try:
@@ -951,16 +951,16 @@ class BrainGlyphProcessor:
                 momentum = (recent_profits[-1] - recent_profits[0]) / max(recent_profits[0], 1e-10)
             else:
                 momentum = 0.0
-            
+
             # Volume-price correlation factor
             volatility = math.sqrt(abs(momentum)) if momentum != 0 else 0.1
-            
+
             # Brain enhancement calculation
             enhancement = 1.0 + (momentum * 0.2) + (volatility * 0.1)
-            
+
             # Clamp to reasonable bounds
             return max(0.5, min(2.0, enhancement))
-            
+
         except Exception as e:
             logger.error(f"Brain enhancement calculation failed: {e}")
             return 1.0
@@ -968,13 +968,13 @@ class BrainGlyphProcessor:
 
 class QuantumMathProcessor:
     """Quantum-enhanced mathematical processor for advanced trading calculations."""
-    
+
     def __init__(self):
         """Initialize quantum math processor."""
         self.validator = MathematicalValidator()
         self.phase_state = 0.0
         self.quantum_cache: Dict[str, Any] = {}
-        
+
     def calculate_quantum_profit_vector(self, market_data: Dict[str, float]) -> Vector:
         """Calculate quantum-enhanced profit vector."""
         try:
@@ -982,38 +982,38 @@ class QuantumMathProcessor:
             price = market_data.get('price', 50000.0)
             volume = market_data.get('volume', 1000.0)
             volatility = market_data.get('volatility', 0.02)
-            
+
             # Quantum state calculation
             phase = self.phase_state + volatility * 0.1
-            
+
             # Profit vector components
             momentum_component = price * np.sin(phase)
             volume_component = volume * np.cos(phase) * 0.001
             volatility_component = volatility * np.sin(phase * 2) * 1000
-            
+
             profit_vector = np.array([
                 momentum_component,
                 volume_component,
                 volatility_component,
                 phase  # Phase information
             ])
-            
+
             # Update quantum state
             self.phase_state = (phase + 0.1) % (2 * np.pi)
-            
+
             return profit_vector
-            
+
         except Exception as e:
             logger.error(f"Quantum profit vector calculation failed: {e}")
             return np.array([0.0, 0.0, 0.0, 0.0])
-    
+
     def calculate_tensor_optimization(self, profit_tensor: Tensor) -> float:
         """
         Calculate tensor optimization for profit maximization.
-        
+
         Args:
             profit_tensor: Tensor containing profit vectors
-            
+
         Returns:
             Optimized profit value
         """
@@ -1022,25 +1022,25 @@ class QuantumMathProcessor:
             if not isinstance(profit_tensor, np.ndarray):
                 logger.error(f"Invalid tensor type: {type(profit_tensor)}")
                 return 0.0
-            
+
             # Ensure tensor has at least 3 dimensions
             if profit_tensor.ndim < 3:
                 logger.warning(f"Tensor has only {profit_tensor.ndim} dimensions, padding to 3D")
                 profit_tensor = profit_tensor.reshape((*profit_tensor.shape, 1))
-            
+
             # Calculate tensor decomposition
             tensor_shape = profit_tensor.shape
             flattened = profit_tensor.reshape(tensor_shape[0], -1)
-            
+
             # Perform SVD for optimization
             U, s, Vt = np.linalg.svd(flattened, full_matrices=False)
-            
+
             # Calculate optimization score using singular values
             optimization_score = np.sum(s * np.log(1 + s))
-            
+
             logger.info(f"Tensor optimization completed: {optimization_score:.4f}")
             return float(optimization_score)
-            
+
         except Exception as e:
             logger.error(f"Error in tensor optimization: {e}")
             return 0.0
@@ -1048,90 +1048,90 @@ class QuantumMathProcessor:
 
 class UnifiedTradingMathematics:
     """Unified mathematical framework for trading operations."""
-    
+
     def __init__(self):
         """Initialize unified trading mathematics."""
         self.brain_processor = BrainGlyphProcessor()
         self.quantum_processor = QuantumMathProcessor()
         self.validator = MathematicalValidator()
         self.recursion_guard = RecursionGuard()
-        
+
     @lru_cache(maxsize=128)
     def calculate_profit_optimization(self, price: float, volume: float, symbol: str = 'BTC') -> float:
         """Calculate profit optimization with caching."""
         cache_key = f"{symbol}_{price}_{volume}"
-        
+
         if cache_key in self.brain_processor.signal_cache:
             return self.brain_processor.signal_cache[cache_key]
-        
+
         # Calculate using brain processor
         result = self.brain_processor.process_brain_signal(price, volume)
-        
+
         # Cache result
         self.brain_processor.signal_cache[cache_key] = result
-        
+
         # Limit cache size
         if len(self.brain_processor.signal_cache) > 1000:
             # Remove oldest entries
             old_keys = list(self.brain_processor.signal_cache.keys())[:500]
             for key in old_keys:
                 del self.brain_processor.signal_cache[key]
-        
+
         return result
-    
+
     def calculate_risk_adjusted_return(self, returns: List[float], risk_free_rate: float = 0.02) -> float:
         """Calculate risk-adjusted return (Sharpe ratio)."""
         try:
             if not returns or len(returns) < 2:
                 return 0.0
-            
+
             returns_array = np.array(returns)
             excess_returns = returns_array - risk_free_rate
-            
+
             if np.std(excess_returns) == 0:
                 return 0.0
-            
+
             sharpe_ratio = np.mean(excess_returns) / np.std(excess_returns)
             return float(sharpe_ratio)
-            
+
         except Exception as e:
             logger.error(f"Risk-adjusted return calculation failed: {e}")
             return 0.0
-    
-    def calculate_portfolio_optimization(self, weights: Vector, returns: Matrix, 
+
+    def calculate_portfolio_optimization(self, weights: Vector, returns: Matrix,
                                        risk_tolerance: float = 0.1) -> Dict[str, float]:
         """Calculate portfolio optimization metrics."""
         try:
             if not self.validator.validate_vector(weights):
                 raise ValueError("Invalid weights vector")
-            
+
             if not self.validator.validate_matrix(returns):
                 raise ValueError("Invalid returns matrix")
-            
+
             weights_array = np.array(weights)
             returns_array = np.array(returns)
-            
+
             # Portfolio return
             portfolio_return = np.mean(np.dot(returns_array, weights_array))
-            
+
             # Portfolio variance
             cov_matrix = np.cov(returns_array.T)
             portfolio_variance = np.dot(weights_array.T, np.dot(cov_matrix, weights_array))
             portfolio_volatility = np.sqrt(portfolio_variance)
-            
+
             # Sharpe ratio
             sharpe_ratio = portfolio_return / max(portfolio_volatility, 1e-10)
-            
+
             # Risk adjustment
             risk_adjusted_return = portfolio_return - risk_tolerance * portfolio_variance
-            
+
             return {
                 'portfolio_return': float(portfolio_return),
                 'portfolio_volatility': float(portfolio_volatility),
                 'sharpe_ratio': float(sharpe_ratio),
                 'risk_adjusted_return': float(risk_adjusted_return)
             }
-            
+
         except Exception as e:
             logger.error(f"Portfolio optimization calculation failed: {e}")
             return {

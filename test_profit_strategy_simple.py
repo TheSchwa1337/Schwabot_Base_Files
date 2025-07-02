@@ -18,19 +18,19 @@ class ProfitAnalysis:
     """Profit analysis results."""
     btc_price: float
     usdc_volume: float
-    
+
     # Mathematical components
     hash_similarity: float = 0.0
     phase_alignment: float = 0.0
     entropy_score: float = 0.0
     drift_weight: float = 0.0
     pattern_confidence: float = 0.0
-    
+
     # Derived metrics
     confidence_score: float = 0.0
     profit_potential: float = 0.0
     risk_score: float = 0.0
-    
+
     # Trading decision
     should_trade: bool = False
     position_size_btc: float = 0.0
@@ -39,11 +39,11 @@ class ProfitAnalysis:
 
 class ProfitTradingStrategy:
     """Simple profit-driven trading strategy."""
-    
+
     def __init__(self, initial_capital: float = 100000.0):
         self.initial_capital = initial_capital
         self.current_capital = initial_capital
-        
+
         # Mathematical weights
         self.weights = {
             'hash_similarity': 0.25,
@@ -52,33 +52,33 @@ class ProfitTradingStrategy:
             'drift_weight': 0.20,
             'pattern_confidence': 0.15
         }
-        
+
         # Risk thresholds
         self.min_confidence = 0.75
         self.min_profit = 0.005  # 0.5%
         self.max_risk = 0.30
-        
+
         print("Enhanced Profit Trading Strategy initialized")
         print(f"Initial Capital: ${self.initial_capital:,.2f}")
-    
+
     def analyze_market(self, btc_price: float, usdc_volume: float, market_data: Dict[str, Any]) -> ProfitAnalysis:
         """Analyze market using mathematical components."""
-        
+
         # 1. ALEPH Hash Similarity
         hash_similarity = self._calculate_hash_similarity(btc_price, usdc_volume, market_data)
-        
+
         # 2. Phase Alignment
         phase_alignment = self._calculate_phase_alignment(market_data)
-        
+
         # 3. NCCO Entropy Score
         entropy_score = self._calculate_entropy_score(market_data)
-        
+
         # 4. Drift Weight
         drift_weight = self._calculate_drift_weight(market_data)
-        
+
         # 5. Pattern Confidence
         pattern_confidence = self._calculate_pattern_confidence(market_data)
-        
+
         # 6. Composite Confidence
         confidence_score = (
             self.weights['hash_similarity'] * hash_similarity +
@@ -87,25 +87,25 @@ class ProfitTradingStrategy:
             self.weights['drift_weight'] * drift_weight +
             self.weights['pattern_confidence'] * pattern_confidence
         )
-        
+
         # 7. Profit Potential
         profit_potential = self._calculate_profit_potential(btc_price, usdc_volume, confidence_score, market_data)
-        
+
         # 8. Risk Score
         risk_score = self._calculate_risk_score(confidence_score, profit_potential, market_data)
-        
+
         # 9. Trading Decision
-        should_trade = (confidence_score >= self.min_confidence and 
-                       profit_potential >= self.min_profit and 
+        should_trade = (confidence_score >= self.min_confidence and
+                       profit_potential >= self.min_profit and
                        risk_score <= self.max_risk)
-        
+
         # 10. Position Sizing (Kelly Criterion)
         position_size_btc = 0.0
         if should_trade:
             kelly_fraction = self._calculate_kelly_fraction(confidence_score, profit_potential, risk_score)
             position_usdc = self.current_capital * kelly_fraction
             position_size_btc = position_usdc / btc_price
-        
+
         return ProfitAnalysis(
             btc_price=btc_price,
             usdc_volume=usdc_volume,
@@ -121,7 +121,7 @@ class ProfitTradingStrategy:
             position_size_btc=position_size_btc,
             expected_return_pct=profit_potential
         )
-    
+
     def _calculate_hash_similarity(self, btc_price: float, usdc_volume: float, market_data: Dict[str, Any]) -> float:
         """ALEPH hash similarity calculation."""
         try:
@@ -133,107 +133,107 @@ class ProfitTradingStrategy:
             return max(0.1, min(0.9, similarity))
         except Exception:
             return 0.5
-    
+
     def _calculate_phase_alignment(self, market_data: Dict[str, Any]) -> float:
         """Phase transition alignment calculation."""
         try:
             price_history = market_data.get('price_history', [])
             if len(price_history) < 3:
                 return 0.5
-            
+
             # Calculate momentum alignment
             recent_momentum = (price_history[-1] - price_history[-2]) / price_history[-2]
             trend_momentum = (price_history[-1] - price_history[0]) / price_history[0]
-            
+
             # Check alignment
             if recent_momentum * trend_momentum > 0:  # Same direction
                 alignment = 0.8 + abs(recent_momentum) * 10
             else:
                 alignment = 0.3 + abs(recent_momentum) * 5
-            
+
             return max(0.1, min(0.9, alignment))
         except Exception:
             return 0.5
-    
+
     def _calculate_entropy_score(self, market_data: Dict[str, Any]) -> float:
         """NCCO entropy score calculation."""
         try:
             price_history = market_data.get('price_history', [])
             if len(price_history) < 4:
                 return 0.5
-            
+
             # Calculate volatility as entropy proxy
             returns = np.diff(price_history) / price_history[:-1]
             volatility = np.std(returns)
-            
+
             # Lower volatility = higher entropy score (more predictable)
             entropy_score = 1.0 / (1.0 + volatility * 100)
             return max(0.1, min(0.9, entropy_score))
         except Exception:
             return 0.5
-    
+
     def _calculate_drift_weight(self, market_data: Dict[str, Any]) -> float:
         """Drift weight calculation."""
         try:
             price_history = market_data.get('price_history', [])
             if len(price_history) < 4:
                 return 0.5
-            
+
             # Calculate exponentially weighted average
             weights = np.exp(np.linspace(-1, 0, len(price_history)))
             weighted_avg = np.average(price_history, weights=weights)
             current_price = price_history[-1]
-            
+
             # Calculate drift deviation
             drift = abs(current_price - weighted_avg) / current_price
             drift_weight = 1.0 / (1.0 + drift * 10)
-            
+
             return max(0.1, min(0.9, drift_weight))
         except Exception:
             return 0.5
-    
+
     def _calculate_pattern_confidence(self, market_data: Dict[str, Any]) -> float:
         """Pattern confidence calculation."""
         try:
             price_history = market_data.get('price_history', [])
             volume_history = market_data.get('volume_history', [])
-            
+
             if len(price_history) < 3 or len(volume_history) < 3:
                 return 0.5
-            
+
             # Price-volume correlation
             price_changes = np.diff(price_history[-3:])
             volume_changes = np.diff(volume_history[-3:])
-            
+
             if len(price_changes) == len(volume_changes) and len(price_changes) > 1:
                 correlation = np.corrcoef(price_changes, volume_changes)[0, 1]
                 if np.isnan(correlation):
                     return 0.5
                 return abs(correlation)
-            
+
             return 0.5
         except Exception:
             return 0.5
-    
+
     def _calculate_profit_potential(self, btc_price: float, usdc_volume: float, confidence: float, market_data: Dict[str, Any]) -> float:
         """Calculate profit potential."""
         try:
             # Base profit from volatility
             volatility = market_data.get('volatility', 0.02)
             volatility_profit = min(0.05, volatility * 2.0)
-            
+
             # Volume factor
             avg_volume = market_data.get('avg_volume', usdc_volume)
             volume_factor = min(2.0, usdc_volume / max(avg_volume, 1.0))
-            
+
             # Base profit calculation
             base_profit = volatility_profit * volume_factor * 0.01
             confidence_adjusted = base_profit * confidence
-            
+
             return max(0.0, min(0.05, confidence_adjusted))
         except Exception:
             return 0.005
-    
+
     def _calculate_risk_score(self, confidence: float, profit_potential: float, market_data: Dict[str, Any]) -> float:
         """Calculate risk score."""
         try:
@@ -241,36 +241,36 @@ class ProfitTradingStrategy:
             confidence_risk = (1.0 - confidence) * 0.4
             volatility = market_data.get('volatility', 0.02)
             volatility_risk = min(0.4, volatility * 10)
-            
+
             # Combine risks
             total_risk = confidence_risk + volatility_risk
             return max(0.1, min(0.9, total_risk))
         except Exception:
             return 0.5
-    
+
     def _calculate_kelly_fraction(self, confidence: float, profit_potential: float, risk_score: float) -> float:
         """Calculate Kelly criterion position size."""
         try:
             win_probability = confidence
             expected_win = profit_potential
             expected_loss = risk_score * 0.05  # 5% max loss
-            
+
             if expected_loss <= 0:
                 expected_loss = 0.01
-            
+
             # Kelly formula
             win_loss_ratio = expected_win / expected_loss
             kelly_fraction = (win_probability * win_loss_ratio - (1 - win_probability)) / win_loss_ratio
-            
+
             # Apply limits
             kelly_fraction = max(0.0, kelly_fraction)
             kelly_fraction = min(kelly_fraction, 0.1)  # Max 10%
             kelly_fraction *= 0.5  # Conservative factor
-            
+
             return kelly_fraction
         except Exception:
             return 0.0
-    
+
     def execute_trade(self, analysis: ProfitAnalysis) -> Dict[str, Any]:
         """Execute trade based on analysis."""
         if not analysis.should_trade:
@@ -279,16 +279,16 @@ class ProfitTradingStrategy:
                 'reason': 'Thresholds not met',
                 'profit': 0.0
             }
-        
+
         # Simulate execution
         position_value = analysis.position_size_btc * analysis.btc_price
         fees = position_value * 0.00075  # 0.075% fee
         expected_profit = position_value * analysis.expected_return_pct
         net_profit = expected_profit - fees
-        
+
         # Update capital
         self.current_capital += net_profit
-        
+
         return {
             'status': 'EXECUTED',
             'position_btc': analysis.position_size_btc,
@@ -305,9 +305,9 @@ def test_profit_strategy():
     print("="*60)
     print("ENHANCED PROFIT-DRIVEN BTC/USDC TRADING STRATEGY TEST")
     print("="*60)
-    
+
     strategy = ProfitTradingStrategy(initial_capital=100000.0)
-    
+
     # Test scenarios
     scenarios = [
         {
@@ -344,18 +344,18 @@ def test_profit_strategy():
             }
         }
     ]
-    
+
     for i, scenario in enumerate(scenarios, 1):
         print(f"\nScenario {i}: {scenario['name']}")
         print("-"*40)
-        
+
         # Analyze market
         analysis = strategy.analyze_market(
             scenario['btc_price'],
             scenario['usdc_volume'],
             scenario['market_data']
         )
-        
+
         print(f"Market Analysis:")
         print(f"  BTC Price: ${analysis.btc_price:,.2f}")
         print(f"  USDC Volume: ${analysis.usdc_volume:,.0f}")
@@ -368,17 +368,17 @@ def test_profit_strategy():
         print(f"  Profit Potential: {analysis.profit_potential:.3f} ({analysis.profit_potential*100:.1f}%)")
         print(f"  Risk Score: {analysis.risk_score:.3f}")
         print(f"  Should Trade: {analysis.should_trade}")
-        
+
         if analysis.should_trade:
             print(f"  Position Size: {analysis.position_size_btc:.6f} BTC")
             print(f"  Expected Return: {analysis.expected_return_pct:.3f} ({analysis.expected_return_pct*100:.1f}%)")
-        
+
         # Execute trade
         execution = strategy.execute_trade(analysis)
-        
+
         print(f"\nExecution Result:")
         print(f"  Status: {execution['status']}")
-        
+
         if execution['status'] == 'EXECUTED':
             print(f"  Position Value: ${execution['position_value']:,.2f}")
             print(f"  Expected Profit: ${execution['expected_profit']:,.2f}")
@@ -387,11 +387,11 @@ def test_profit_strategy():
             print(f"  New Capital: ${execution['new_capital']:,.2f}")
         else:
             print(f"  Reason: {execution['reason']}")
-    
+
     # Final performance
     total_return = strategy.current_capital - strategy.initial_capital
     return_pct = (total_return / strategy.initial_capital) * 100
-    
+
     print(f"\n" + "="*40)
     print("FINAL PERFORMANCE SUMMARY")
     print("="*40)
@@ -399,7 +399,7 @@ def test_profit_strategy():
     print(f"Final Capital: ${strategy.current_capital:,.2f}")
     print(f"Total Return: ${total_return:,.2f}")
     print(f"Return Percentage: {return_pct:.2f}%")
-    
+
     print(f"\nKEY FEATURES DEMONSTRATED:")
     print("- ALEPH hash similarity mapping for market state analysis")
     print("- Phase alignment for momentum detection")
@@ -409,9 +409,9 @@ def test_profit_strategy():
     print("- Kelly criterion for position sizing")
     print("- Comprehensive risk management")
     print("- Profit-driven decision making")
-    
+
     print(f"\nAll trading decisions are mathematically validated for profit optimization!")
 
 
 if __name__ == "__main__":
-    test_profit_strategy() 
+    test_profit_strategy()

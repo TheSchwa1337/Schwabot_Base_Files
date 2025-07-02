@@ -13,47 +13,47 @@ from pathlib import Path
 def fix_settings_manager():
     """Fix the settings_manager.py file."""
     filepath = "core/settings_manager.py"
-    
+
     with open(filepath, 'r', encoding='utf-8') as f:
         content = f.read()
-    
+
     # Fix 1: Remove extra closing braces
     content = re.sub(r'}\s*}\s*$', '}', content, flags=re.MULTILINE)
-    
+
     # Fix 2: Fix broken dictionary definitions
     content = re.sub(
         r'(\w+)\s*=\s*\{\s*}\s*\n\s*([^}]*)\s*}\s*}',
         r'\1 = {\n\2\n}',
         content
     )
-    
+
     # Fix 3: Fix broken function calls
     content = re.sub(
         r'(\w+)\(\s*\)\s*\n\s*([^)]*)\s*\)',
         r'\1(\n\2\n)',
         content
     )
-    
+
     # Fix 4: Fix specific broken patterns
     patterns_to_fix = [
         # Fix config_data = {} followed by indented items
         (r'config_data = \{\s*}\s*\n\s*"performance":', 'config_data = {\n                "performance":'),
         (r'config_data = \{\s*}\s*\n\s*"api":', 'config_data = {\n                "api":'),
-        
-        # Fix errors = {} followed by indented items  
+
+        # Fix errors = {} followed by indented items
         (r'errors: Dict\[str, List\[str\]\] = \{\s*}\s*\n\s*"api":', 'errors: Dict[str, List[str]] = {\n                "api":'),
-        
+
         # Fix return {} followed by indented items
         (r'return \{\s*}\s*\n\s*"api":', 'return {\n                "api":'),
-        
+
         # Fix function calls
         (r'manager\.update_api_settings\(\s*\)\s*\n\s*coinbase_api_key=', 'manager.update_api_settings(\n        coinbase_api_key='),
         (r'manager\.update_trading_settings\(\s*\)\s*\n\s*trading_mode=', 'manager.update_trading_settings(\n        trading_mode='),
     ]
-    
+
     for pattern, replacement in patterns_to_fix:
         content = re.sub(pattern, replacement, content)
-    
+
     # Fix 5: Fix specific broken dictionary structures
     content = content.replace(
         '''        return {}
@@ -77,7 +77,7 @@ def fix_settings_manager():
             "trading": asdict(self.settings.trading)
         }'''
     )
-    
+
     content = content.replace(
         '''        errors: Dict[str, List[str]] = {}
             "api": [],
@@ -92,7 +92,7 @@ def fix_settings_manager():
             "trading": []
         }'''
     )
-    
+
     content = content.replace(
         '''    manager.update_api_settings()
         coinbase_api_key="test_key",
@@ -103,7 +103,7 @@ def fix_settings_manager():
         sandbox_mode=True
     )'''
     )
-    
+
     content = content.replace(
         '''    manager.update_trading_settings()
         trading_mode="demo",
@@ -114,20 +114,20 @@ def fix_settings_manager():
         max_concurrent_trades=3
     )'''
     )
-    
+
     with open(filepath, 'w', encoding='utf-8') as f:
         f.write(content)
-    
+
     print(f"✅ Fixed {filepath}")
 
 
 def fix_core_init():
     """Fix the core/__init__.py file."""
     filepath = "core/__init__.py"
-    
+
     with open(filepath, 'r', encoding='utf-8') as f:
         content = f.read()
-    
+
     # Fix broken list definitions
     content = content.replace(
         '''__all__ = []
@@ -179,7 +179,7 @@ def fix_core_init():
     "__description__",
 ]'''
     )
-    
+
     # Fix broken dictionary definitions
     content = content.replace(
         '''        initialization_status = {}
@@ -199,7 +199,7 @@ def fix_core_init():
             "errors": [],
         }'''
     )
-    
+
     content = content.replace(
         '''        core_modules = []
             ("speed_lattice_vault", "Speed Lattice Vault"),
@@ -216,7 +216,7 @@ def fix_core_init():
             ("mathlib_v2", "Mathematical Library V2"),
         ]'''
     )
-    
+
     content = content.replace(
         '''                module_result = {}
                     "name": module_name,
@@ -231,7 +231,7 @@ def fix_core_init():
                     "timestamp": datetime.now().isoformat(),
                 }'''
     )
-    
+
     content = content.replace(
         '''                module_result = {}
                     "name": module_name,
@@ -248,7 +248,7 @@ def fix_core_init():
                     "timestamp": datetime.now().isoformat(),
                 }'''
     )
-    
+
     content = content.replace(
         '''        return {}
             "status": "error",
@@ -269,7 +269,7 @@ def fix_core_init():
             "errors": [str(e)],
         }'''
     )
-    
+
     content = content.replace(
         '''        status = {}
             "timestamp": datetime.now().isoformat(),
@@ -286,7 +286,7 @@ def fix_core_init():
             "performance": {"memory_usage": "normal", "cpu_usage": "normal", "disk_usage": "normal"},
         }'''
     )
-    
+
     content = content.replace(
         '''        core_components = []
             "SpeedLatticeVault",
@@ -303,7 +303,7 @@ def fix_core_init():
             "CoreMathLibV2",
         ]'''
     )
-    
+
     content = content.replace(
         '''                status["components"][component] = {}
                     "status": "error",
@@ -316,20 +316,20 @@ def fix_core_init():
                     "timestamp": datetime.now().isoformat(),
                 }'''
     )
-    
+
     with open(filepath, 'w', encoding='utf-8') as f:
         f.write(content)
-    
+
     print(f"✅ Fixed {filepath}")
 
 
 def fix_schwabot_main():
     """Fix the schwabot_main.py file."""
     filepath = "schwabot_main.py"
-    
+
     with open(filepath, 'r', encoding='utf-8') as f:
         content = f.read()
-    
+
     # Fix broken function calls
     content = content.replace(
         '''            self.trading_pipeline = TradingPipelineIntegration()
@@ -345,7 +345,7 @@ def fix_schwabot_main():
                 risk_management_enabled=True
             )'''
     )
-    
+
     content = content.replace(
         '''            self.trading_pipeline = TradingPipelineIntegration()
                 enable_gpu=True,
@@ -360,7 +360,7 @@ def fix_schwabot_main():
                 risk_management_enabled=True
             )'''
     )
-    
+
     content = content.replace(
         '''            self.trading_pipeline = TradingPipelineIntegration()
                 enable_gpu=True,
@@ -375,10 +375,10 @@ def fix_schwabot_main():
                 risk_management_enabled=True
             )'''
     )
-    
+
     with open(filepath, 'w', encoding='utf-8') as f:
         f.write(content)
-    
+
     print(f"✅ Fixed {filepath}")
 
 
@@ -386,14 +386,14 @@ def main():
     """Main execution function."""
     print("🔧 Targeted Syntax Fix")
     print("=" * 30)
-    
+
     # Fix core files
     fix_settings_manager()
     fix_core_init()
     fix_schwabot_main()
-    
+
     print("\n✅ All targeted fixes completed!")
 
 
 if __name__ == "__main__":
-    main() 
+    main()

@@ -27,11 +27,11 @@ def create_requirements_txt():
         "time",
         "math"
     ]
-    
+
     with open("requirements.txt", "w") as f:
         for req in requirements:
             f.write(f"{req}\n")
-    
+
     print("Created requirements.txt")
 
 def create_pyinstaller_spec():
@@ -97,10 +97,10 @@ exe = EXE(
     icon=None,
 )
 '''
-    
+
     with open("schwabot.spec", "w") as f:
         f.write(spec_content)
-    
+
     print("Created PyInstaller spec file")
 
 def create_build_script():
@@ -132,7 +132,7 @@ if exist "dist\\SchwabotBrainTrader.exe" (
 pause
 '''
         script_name = "build.bat"
-        
+
         # Write with UTF-8 encoding for Windows
         with open(script_name, "w", encoding='utf-8') as f:
             f.write(script_content)
@@ -161,13 +161,13 @@ else
 fi
 '''
         script_name = "build.sh"
-        
+
         with open(script_name, "w") as f:
             f.write(script_content)
-        
+
         if not sys.platform.startswith('win'):
             os.chmod(script_name, 0o755)
-    
+
     print(f"Created build script: {script_name}")
 
 def create_readme():
@@ -176,11 +176,11 @@ def create_readme():
 
 ## Overview
 
-Schwabot is an advanced trading bot with brain-enhanced signal processing capabilities. 
+Schwabot is an advanced trading bot with brain-enhanced signal processing capabilities.
 This package includes working implementations of:
 
 - [BRAIN] Brain Trading Engine with mathematical optimization
-- [CHART] Real-time signal processing and analysis  
+- [CHART] Real-time signal processing and analysis
 - [MONEY] Profit optimization algorithms
 - [GRAPH] Backtesting simulation capabilities
 - [SEARCH] Code quality validation
@@ -238,7 +238,7 @@ config = {
 
 The system includes comprehensive testing:
 - [PASS] Brain Trading Engine functionality
-- [PASS] Mathematical operations  
+- [PASS] Mathematical operations
 - [PASS] Symbol processing
 - [PASS] Backtesting simulation
 - [PASS] Code quality validation
@@ -287,10 +287,10 @@ For issues and support, please review the test outputs and logs for diagnostic i
 **Schwabot Brain Trading System v1.0**
 *Advanced Trading with Brain-Enhanced Signal Processing*
 '''
-    
+
     with open("README.md", "w", encoding='utf-8') as f:
         f.write(readme_content)
-    
+
     print("Created README.md")
 
 def verify_core_files():
@@ -299,12 +299,12 @@ def verify_core_files():
         "core/brain_trading_engine.py",
         "test_brain_integration.py"
     ]
-    
+
     missing_files = []
     for file in required_files:
         if not Path(file).exists():
             missing_files.append(file)
-    
+
     if missing_files:
         print(f"[ERROR] Missing required files: {missing_files}")
         return False
@@ -316,33 +316,33 @@ def main():
     """Main setup execution."""
     print("SCHWABOT PACKAGE SETUP")
     print("=" * 50)
-    
+
     # Verify core files
     if not verify_core_files():
         print("[ERROR] Setup failed - missing core files")
         return
-    
+
     # Create package files
     create_requirements_txt()
     create_pyinstaller_spec()
     create_build_script()
     create_readme()
-    
+
     print("\nPACKAGE SETUP COMPLETE")
     print("=" * 50)
     print("Next steps:")
     print("1. Run the build script to create executable:")
-    
+
     if sys.platform.startswith('win'):
         print("   build.bat")
     else:
         print("   ./build.sh")
-    
+
     print("2. Test the system:")
     print("   python test_brain_integration.py")
     print("3. The executable will be in the 'dist/' directory")
-    
+
     print("\n[SUCCESS] Ready for packaging!")
 
 if __name__ == "__main__":
-    main() 
+    main()

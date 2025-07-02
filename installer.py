@@ -384,7 +384,7 @@ pass
 self.log("Setting up configuration...")
 
 try:
-    pass  
+    pass
 # Create default configuration
 config = {
                 "system": {
@@ -619,7 +619,7 @@ pass
 self.log("Validating installation...")
 
 try:
-    pass  
+    pass
 # Test import
 result = subprocess.run([
                 sys.executable, "-c", "import schwabot; print('Import OK')"
@@ -667,27 +667,27 @@ except Exception as e:
 def create_uninstaller(self) -> bool:
         """
         Optimize mathematical function for trading performance.
-        
+
         Args:
             data: Input data array
             target: Target optimization value
             **kwargs: Additional parameters
-        
+
         Returns:
             Optimized result
         """
         try:
             import numpy as np
             from core.unified_math_system import unified_math
-            
+
             # Apply mathematical optimization
             if target is not None:
                 result = unified_math.optimize_towards_target(data, target)
             else:
                 result = unified_math.general_optimization(data)
-            
+
             return result
-            
+
         except Exception as e:
             logger.error(f"Optimization failed: {e}")
             return data
@@ -848,7 +848,7 @@ if args.install_dir:
         installer.data_dir = installer.install_dir / "data"
 
 try:
-    pass  
+    pass
 # Check system requirements
 if not installer.check_system_requirements():
             safe_print("\\u274c System requirements not met. Installation aborted.")

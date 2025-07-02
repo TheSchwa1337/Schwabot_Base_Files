@@ -172,7 +172,7 @@ class TriggerGlyphEngine:
         max_profit_expected = self.tier_thresholds['T4'] * 2 # A heuristic max profit
         if max_profit_expected == 0:
             return 0.0
-        
+
         profit_ratio = profit_value / max_profit_expected
         trust_score = profit_ratio * (1 - entropy_score)
         return max(0.0, min(1.0, trust_score)) # Clamp between 0 and 1
@@ -263,11 +263,11 @@ class TriggerGlyphEngine:
         """
         # Retrieve historical profit values associated with the symbol
         relevant_entries = [entry for entry in self.lantern_memory.values() if entry.symbol == symbol and entry.memory_type == LanternMemoryType.PROFIT_SEQUENCE]
-        
+
         if not relevant_entries:
             logger.debug(f"No historical profit entries for {symbol}. Returning 0.0 flip score.")
             return 0.0
-        
+
         # Use the most recent entry for historical profit comparison
         latest_entry = max(relevant_entries, key=lambda x: x.time_stamp)
         historical_profit = latest_entry.profit_value # This is a tier string, need to convert
@@ -277,7 +277,7 @@ class TriggerGlyphEngine:
 
         # Calculate profit difference
         profit_difference = profit_context - historical_profit_float
-        
+
         # Use the trust level of the latest entry as trigger confidence
         trigger_confidence = latest_entry.trust_level
 
@@ -305,7 +305,7 @@ class TriggerGlyphEngine:
             # For simplicity, using a dummy profit context. In reality, this would come from live data.
             dummy_profit_context = random.uniform(0.001, 0.05) # Simulate some profit
             total_flip_score += self.get_profit_flip_score(symbol, dummy_profit_context)
-        
+
         # Apply a sigmoid function to normalize the score between 0 and 1
         trigger_probability = 1 / (1 + math.exp(-total_flip_score))
 
@@ -325,7 +325,7 @@ class TriggerGlyphEngine:
             "cycle_counter": self.cycle_counter,
             "last_update": time.time()
 }
-    def export_lantern_memory(self, filename: str = "lantern_memory_data.json"): 
+    def export_lantern_memory(self, filename: str = "lantern_memory_data.json"):
         """Exports the current Lantern memory to a JSON file."""
         serializable_memory = {}
         for key, entry in self.lantern_memory.items():

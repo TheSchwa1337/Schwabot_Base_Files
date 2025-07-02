@@ -73,7 +73,7 @@ class SmartMoneyIntegrationTester:
                     "signals_generated": len(sm_signals),
                     "metrics_types": [signal.metric.value for signal in sm_signals],
                     "avg_institutional_confidence": (
-                        np.mean([s.institutional_confidence for s in sm_signals]) 
+                        np.mean([s.institutional_confidence for s in sm_signals])
                         if sm_signals else 0.0
                     ),
                     "whale_activity_detected": any(s.whale_activity for s in sm_signals)
@@ -365,4 +365,4 @@ def main() -> Dict[str, Any]:
 
 if __name__ == "__main__":
     results = main()
-    safe_print(f"\nSmart Money Testing completed with {results['overall_success_rate']:.1f}% success rate") 
+    safe_print(f"\nSmart Money Testing completed with {results['overall_success_rate']:.1f}% success rate")

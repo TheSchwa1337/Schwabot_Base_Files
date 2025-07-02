@@ -336,7 +336,7 @@ Equation: {safe_equation}
 """"""
 """
 try:
-    pass  
+    pass
 # ASIC - safe hash verification
 sha_hash = unicore.dual_unicore_handler(hash_block)
 

@@ -656,7 +656,7 @@ def create_templates():
             e.preventDefault();
             const formData = new FormData(e.target);
             const data = Object.fromEntries(formData);
-            
+
             fetch('/api/setup', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -678,13 +678,13 @@ def create_templates():
 
     # Write templates with UTF-8 encoding
     os.makedirs("templates", exist_ok=True)
-    
+
     with open("templates/dashboard.html", "w", encoding="utf-8") as f:
         f.write(dashboard_html)
-    
+
     with open("templates/setup.html", "w", encoding="utf-8") as f:
         f.write(setup_html)
-    
+
     print("✅ HTML templates created successfully with UTF-8 encoding")
 
 
