@@ -1,10 +1,3 @@
-import time
-from typing import Any, Dict, List, Optional, Tuple
-
-import numpy as np
-from scipy.spatial.distance import cosine
-
-
 """
 Basket Vector Linker Module
 ---------------------------
@@ -13,15 +6,25 @@ through clustering or vector memory. This module enables Zalgo/Zygot glyph logic
 to emit routing behavior based on observed tick states.
 """
 
+import time
+from typing import Any, Dict, List, Optional, Tuple
+
+import numpy as np
+from scipy.spatial.distance import cosine
+
+
 class BasketVectorLinker:
     """
-    Resolves the appropriate strategy basket based on a given hash vector
-    using similarity matching techniques.
+    Resolves the appropriate strategy basket based on a given hash vector.
+
+    Uses similarity matching techniques.
     """
 
-    def __init__(self, strategies_config: Dict[str, List[float]]):
+    def __init__(
+        self: BasketVectorLinker, strategies_config: Dict[str, List[float]]
+    ) -> None:
         """
-        Initializes the BasketVectorLinker.
+        Initialize the BasketVectorLinker.
 
         Args:
             strategies_config: A dictionary where keys are strategy IDs and values
@@ -37,17 +40,19 @@ class BasketVectorLinker:
             "last_resolution_time": None,
         }
 
-    def register_strategy_vector(self, strategy_id: str, vector_signature: List[float]):
-        """
-        Registers or updates a strategy's vector signature.
-        """
+    def register_strategy_vector(
+        self: BasketVectorLinker, strategy_id: str, vector_signature: List[float]
+    ) -> None:
+        """Register or update a strategy's vector signature."""
         self.strategy_vectors[strategy_id] = np.array(vector_signature)
 
     def resolve_strategy_basket(
-        self, lattice_hash_vector: List[float], similarity_threshold: float = 0.8
+        self: BasketVectorLinker,
+        lattice_hash_vector: List[float],
+        similarity_threshold: float = 0.8,
     ) -> Optional[Tuple[str, float]]:
         """
-        Resolves the best-matching strategy basket for a given lattice hash vector.
+        Resolve the best-matching strategy basket for a given lattice hash vector.
 
         Args:
             lattice_hash_vector: The vector signature derived from the lattice hash L(t).
@@ -67,19 +72,20 @@ class BasketVectorLinker:
         for strategy_id, strategy_vec in self.strategy_vectors.items():
             if len(input_vector) != len(strategy_vec):
                 print(
-                    f"Warning: Vector length mismatch for {strategy_id}. Skipping similarity check."
+                    "Warning: Vector length mismatch for"
+                    f" {strategy_id}. Skipping similarity check."
                 )
                 continue
 
             # Calculate cosine similarity
             # Ensure non-zero vectors to avoid NaN
-            if np.linalg.norm(input_vector) == 0 or np.linalg.norm(strategy_vec) == 0:
+            if not np.any(input_vector) or not np.any(strategy_vec):
                 similarity = 0.0
             else:
                 try:
                     # cosine returns distance, 1-distance is similarity
                     similarity = 1 - cosine(input_vector, strategy_vec)
-                except:
+                except ValueError:
                     similarity = 0.0
 
             if similarity > highest_similarity and similarity >= similarity_threshold:
@@ -89,20 +95,16 @@ class BasketVectorLinker:
         if best_match_id:
             self.metrics["successful_matches"] += 1
             return best_match_id, highest_similarity
-        else:
-            self.metrics["no_match_found"] += 1
-            return None
 
-    def get_metrics(self) -> Dict[str, Any]:
-        """
-        Returns the operational metrics of the Basket Vector Linker.
-        """
+        self.metrics["no_match_found"] += 1
+        return None
+
+    def get_metrics(self: BasketVectorLinker) -> Dict[str, Any]:
+        """Return the operational metrics of the Basket Vector Linker."""
         return self.metrics
 
-    def reset(self):
-        """
-        Resets the linker's internal states and metrics.
-        """
+    def reset(self: BasketVectorLinker) -> None:
+        """Reset the linker's internal states and metrics."""
         self.strategy_vectors = {}
         self.metrics = {
             "total_resolutions": 0,
@@ -148,7 +150,9 @@ if __name__ == "__main__":
 
     # Test Case 4: Register new strategy and test
     print("\n--- Registering New Strategy ---")
-    linker.register_strategy_vector("NewStrategy_Arbitrage", [0.95, 0.01, 0.02, 0.01, 0.01])
+    linker.register_strategy_vector(
+        "NewStrategy_Arbitrage", [0.95, 0.01, 0.02, 0.01, 0.01]
+    )
     test_vector_4 = [0.9, 0.0, 0.0, 0.0, 0.0]
     match4 = linker.resolve_strategy_basket(test_vector_4)
     print(f"Test Vector 4: {test_vector_4}")
