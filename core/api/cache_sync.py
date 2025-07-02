@@ -11,7 +11,6 @@ from typing import Dict, List, Type
 from .handlers.base_handler import BaseAPIHandler
 
 
-
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -23,16 +22,16 @@ normalised JSON payloads into the local `flask/feeds/` cache hierarchy.
 
 This service is **independent** from the trading loop – it can be run as
 its own asyncio Task or integrated as a background task by the
-`ApiIntegrationManager`."
+`ApiIntegrationManager`.
 """
 
 logger = logging.getLogger(__name__)
-"
+
 HANDLER_PACKAGE = "core.api.handlers"
 DEFAULT_REFRESH: int = 300  # seconds
 
 
-class CacheSyncService:"
+class CacheSyncService:
     """Background service that refreshes all API handler caches."""
 
     def __init__(self, refresh_interval: int = DEFAULT_REFRESH):
@@ -42,12 +41,12 @@ class CacheSyncService:"
 
     # ---------------------------------------------------------------------
     async def start(self):
-        if self._task and not self._task.done():"
+        if self._task and not self._task.done():
             logger.warning("CacheSyncService already running")
             return
         await self._discover_handlers()
-        self._task = asyncio.create_task(self._run_loop())"
-            logger.info("🚀 CacheSyncService started with %d handlers", len(self.handlers))
+        self._task = asyncio.create_task(self._run_loop())
+        logger.info("🚀 CacheSyncService started with %d handlers", len(self.handlers))
 
     async def stop(self):
         if self._task:
@@ -60,8 +59,8 @@ class CacheSyncService:"
         # Close handler sessions
         await asyncio.gather(
             *(h.close() for h in self.handlers), return_exceptions=True
-        )"
-            logger.info("🛑 CacheSyncService stopped")
+        )
+        logger.info("🛑 CacheSyncService stopped")
 
     # ------------------------------------------------------------------
     async def _run_loop(self):
@@ -71,31 +70,30 @@ class CacheSyncService:"
                     *(h.get_data(force_refresh=True) for h in self.handlers)
                 )
             except Exception as exc:  # noqa: BLE001
-                logger.error("
+                logger.error(
                     "CacheSyncService iteration failed: %s", exc, exc_info=True
                 )
             await asyncio.sleep(self.refresh_interval)
 
     # ------------------------------------------------------------------
-    async def _discover_handlers(self):"
+    async def _discover_handlers(self):
         """Dynamically import every module in `core.api.handlers` and register subclasses."""
         pkg = importlib.import_module(HANDLER_PACKAGE)
-        pkg_path = Path(pkg.__file__).parent  # type: ignore[arg-type]"
-        for py_file in pkg_path.rglob("*.py"):"
+        pkg_path = Path(pkg.__file__).parent  # type: ignore[arg-type]
+        for py_file in pkg_path.rglob("*.py"):
             if py_file.name == "__init__.py" or py_file.name.startswith("_"):
-                continue"
+                continue
             rel_mod = f"{HANDLER_PACKAGE}.{py_file.stem}"
             try:
                 mod: ModuleType = importlib.import_module(rel_mod)  # noqa: PERF401
-            except Exception as exc:  # noqa: BLE001"
+            except Exception as exc:  # noqa: BLE001
                 logger.error("Failed to import handler module %s: %s", rel_mod, exc)
                 continue
             for _, obj in inspect.getmembers(mod, inspect.isclass):
                 if issubclass(obj, BaseAPIHandler) and obj is not BaseAPIHandler:
                     try:
                         handler: BaseAPIHandler = obj()  # type: ignore[call-arg]
-                        self.handlers.append(handler)"
+                        self.handlers.append(handler)
                         logger.info("Registered handler: %s", handler.NAME)
-                    except Exception as exc:  # noqa: BLE001"
+                    except Exception as exc:  # noqa: BLE001
                         logger.error("Failed to initialise handler %s: %s", obj, exc)
-"
