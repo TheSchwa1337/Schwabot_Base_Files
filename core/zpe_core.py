@@ -1,477 +1,270 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-ZPE Core - Zero Point Energy Core for Schwabot.
-
-Hardware acceleration and computational optimization system that provides
-thermal management, resonance calculations, and quantum state analysis
-without interfering with profit calculations or trading decisions.
-"""
-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
 import logging
-import time
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Any, Dict, List, Optional
-
+import math
 import numpy as np
-import psutil
+from datetime import datetime
+from typing import Dict, List, Tuple, Optional
+
+# Fix import paths
+try:
+    from .unified_math_system import unified_math
+except ImportError:
+    try:
+        from unified_math_system import unified_math
+    except ImportError:
+        # Fallback for testing
+        class unified_math:
+            @staticmethod
+            def sin(x): return np.sin(x)
+            @staticmethod
+            def max(x, y): return max(x, y)
+            @staticmethod
+            def min(x, y): return min(x, y)
+            @staticmethod
+            def abs(x): return abs(x)
+
+try:
+    from utils.safe_print import safe_print, info, warn, error, success, debug
+except ImportError:
+    # Fallback for testing
+    def safe_print(message): print(message)
+    def info(message): print(f"[INFO] {message}")
+    def error(message): print(f"[ERROR] {message}")
+    def warn(message): print(f"[WARN] {message}")
+    def debug(message): print(f"[DEBUG] {message}")
+    def success(message): print(f"[SUCCESS] {message}")
 
 
 logger = logging.getLogger(__name__)
 
 
-class ZPEMode(Enum):
-    """ZPE operation modes - focused on computational acceleration."""
-
-    IDLE = "idle"
-    THERMAL_MANAGEMENT = "thermal_management"
-    RESONANCE_CALCULATION = "resonance_calculation"
-    QUANTUM_ANALYSIS = "quantum_analysis"
-    THERMAL_COMPENSATION = "thermal_compensation"
-    ENERGY_OPTIMIZATION = "energy_optimization"
-    COMPUTATIONAL_ACCELERATION = "computational_acceleration"
-    HARDWARE_OPTIMIZATION = "hardware_optimization"
-
-
-@dataclass
-class ZPEThermalData:
-    """ZPE thermal management data - hardware-focused."""
-
-    timestamp: float
-    thermal_state: float
-    resonance_frequency: float
-    energy_efficiency: float
-    thermal_drift: float
-    compensation_factor: float
-    cpu_utilization: float
-    memory_utilization: float
-    gpu_utilization: Optional[float]
-    computational_throughput: float
-    metadata: Dict[str, Any] = field(default_factory=dict)
-
-
-@dataclass
-class ZPEResonanceData:
-    """ZPE resonance calculation data - computational resonance."""
-
-    timestamp: float
-    resonance_frequency: float
-    resonance_amplitude: float
-    phase_coherence: float
-    quantum_state: float
-    energy_level: float
-    calculation_speed_multiplier: float
-    tensor_processing_efficiency: float
-    metadata: Dict[str, Any] = field(default_factory=dict)
-
-
-@dataclass
-class ZPEQuantumData:
-    """ZPE quantum state analysis data - computational quantum states."""
-
-    timestamp: float
-    quantum_state: float
-    superposition_factor: float
-    entanglement_measure: float
-    coherence_time: float
-    decoherence_rate: float
-    parallel_processing_capacity: float
-    computational_entanglement: float
-    metadata: Dict[str, Any] = field(default_factory=dict)
-
-
-@dataclass
-class ZPEHardwareMetrics:
-    """Hardware performance metrics for ZPE optimization."""
-
-    cpu_cores: int
-    cpu_frequency: float
-    memory_total: int
-    memory_available: int
-    gpu_available: bool
-    gpu_memory: Optional[int]
-    network_latency: float
-    disk_io_speed: float
-    computational_bottleneck: str
-
-
 class ZPECore:
     """
-    ZPE Core - Zero Point Energy Core for Schwabot.
-
-    ENHANCED PURPOSE: Hardware acceleration and computational optimization
-    WITHOUT interfering with profit calculations or trading decisions.
-
-    Provides:
-        1. Thermal management and monitoring (hardware-focused)
-        2. Resonance frequency calculations (computational resonance)
-        3. Quantum state analysis (parallel processing optimization)
-        4. Energy efficiency optimization (hardware efficiency)
-        5. Thermal compensation algorithms (performance preservation)
-        6. Computational acceleration (tensor calculation speedup)
-        7. Hardware optimization (resource allocation)
+    Core ZPE mathematical functions for Schwabot's rotational profit engine.
+    
+    Schwabot ZPE Core - The Saw Blade of Profit
+    ==========================================
+    
+    Implements the core mathematical framework for Schwabot as a Zero-Point Energy
+    profit engine that spins with the economy's vectorized chart.
+    
+    Key Mathematical Functions:
+    1. ZPE Work Core (W = F · d = ΔP)
+    2. Rotational Vectorization (τ = I · α)
+    3. Thermal Integrity Differential (η = W_out / Q_in)
+    4. Elastic Resonance Profit Function
+    5. Multi-Vector Trade Alignment
+    6. Recursive Cycle Depth
+    7. Agent Consensus Feedback
+    8. Temporal Fault-Bus Correction
+    9. News/Lantern Signal Mapping
+    10. Profit Loop Reinjection
     """
 
-    def __init__(self, precision: int = 64) -> None:
-        """Initialize ZPE core with hardware acceleration focus."""
-        self.precision = precision
-        self.mode = ZPEMode.IDLE
-        self.thermal_history: List[ZPEThermalData] = []
-        self.resonance_history: List[ZPEResonanceData] = []
-        self.quantum_history: List[ZPEQuantumData] = []
+    def __init__(self):
+        """Initialize ZPE Core."""
+        self.recursion_depth = 0
+        self.max_recursion_depth = 16  # 16 BTC bitmap depth
+        self.thermal_history = []
+        self.agent_consensus = {'R1': 0.0, 'GPT4o': 0.0, 'Claude': 0.0, 'Schwafit': 0.0}
 
-        # ZPE parameters - optimized for computational performance
-        self.base_resonance_frequency = 1.0  # Hz
-        self.thermal_threshold = 0.8
-        self.energy_efficiency_target = 0.9
-        self.quantum_coherence_time = 1.0  # seconds
-
-        # Hardware acceleration parameters
-        self.computational_boost_factor = 1.0
-        self.tensor_calculation_multiplier = 1.0
-        self.parallel_processing_optimization = 1.0
-
-        # Performance tracking
-        self.total_cycles = 0
-        self.thermal_events = 0
-        self.resonance_events = 0
-        self.quantum_events = 0
-        self.acceleration_events = 0
-
-        # Hardware monitoring
-        self.hardware_metrics = self._initialize_hardware_metrics()
-
-        logger.info("🌌 ZPE Core initialized with %d-bit precision - HARDWARE ACCELERATION MODE", precision)
-
-    def _initialize_hardware_metrics(self) -> ZPEHardwareMetrics:
-        """Initialize hardware metrics for optimization."""
-        try:
-            cpu_info = psutil.cpu_freq()
-            memory_info = psutil.virtual_memory()
-
-            return ZPEHardwareMetrics(
-                cpu_cores=psutil.cpu_count(),
-                cpu_frequency=cpu_info.current if cpu_info else 0.0,
-                memory_total=memory_info.total,
-                memory_available=memory_info.available,
-                gpu_available=False,  # Will be detected if available
-                gpu_memory=None,
-                network_latency=0.0,
-                disk_io_speed=0.0,
-                computational_bottleneck="cpu"
-            )
-        except Exception as e:
-            logger.warning("⚠️ Hardware metrics initialization failed: %s", e)
-            return ZPEHardwareMetrics(
-                cpu_cores=4,
-                cpu_frequency=2.0,
-                memory_total=8192,
-                memory_available=4096,
-                gpu_available=False,
-                gpu_memory=None,
-                network_latency=0.0,
-                disk_io_speed=0.0,
-                computational_bottleneck="cpu"
-            )
-
-    def set_mode(self, mode: ZPEMode) -> None:
-        """Set ZPE operation mode."""
-        self.mode = mode
-        logger.info("🔄 ZPE mode set to: %s", mode.value)
-
-    def calculate_thermal_efficiency(
-        self,
-        market_volatility: float,
-        system_load: float,
-        mathematical_state: Optional[Dict[str, Any]] = None
-    ) -> ZPEThermalData:
+    def calculate_zpe_work(self, trend_strength: float, entry_exit_range: float) -> float:
         """
-        Calculate ZPE thermal efficiency - HARDWARE FOCUSED.
-
-        This function optimizes computational performance WITHOUT affecting trading decisions.
-        It only provides hardware acceleration and thermal management.
-
-        Args:
-            market_volatility: Current market volatility (for computational load estimation)
-            system_load: Current system load
-            mathematical_state: Current mathematical state (for complexity estimation)
-
-        Returns:
-            ZPE thermal data with hardware optimization metrics
+        ZPE Work Core: W = F · d = ΔP
+        
+        Where:
+            - W: Work Schwabot performs (profit vector potential)
+            - F: Force of trend momentum (ΔPrice / ΔTime)
+            - d: Displacement in trade phase space (entry - exit delta)
+            - ΔP: Profit differential between vector anchor states
         """
-        try:
-            timestamp = time.time()
+        market_force = math.tanh(trend_strength)  # Bounded between -1 and 1
+        work = market_force * entry_exit_range
+        logger.debug(f"ZPE Work: {work:.6f}")
+        return work
 
-            # Get current hardware metrics
-            cpu_percent = psutil.cpu_percent(interval=0.1)
-            memory_percent = psutil.virtual_memory().percent
-
-            # Calculate thermal state based on hardware load (NOT trading decisions)
-            hardware_thermal = min(1.0, (cpu_percent + memory_percent) / 200.0)
-            load_thermal = min(1.0, system_load)
-
-            # Mathematical complexity factor (for computational optimization only)
-            complexity_factor = 1.0
-            if mathematical_state:
-                complexity = mathematical_state.get('complexity', 0.5)
-                # Higher complexity = more computational resources needed
-                complexity_factor = 1.0 + (complexity * 0.5)
-
-            # Calculate thermal state (hardware-focused)
-            thermal_state = (
-                (hardware_thermal + load_thermal) / 2.0 * complexity_factor
-            )
-            thermal_state = min(1.0, thermal_state)  # Cap at 1.0
-
-            # Calculate resonance frequency (computational resonance)
-            base_freq = self.base_resonance_frequency
-            thermal_modulation = 1.0 + (thermal_state * 0.3)  # Reduced impact
-            resonance_frequency = base_freq * thermal_modulation
-
-            # Calculate energy efficiency (hardware efficiency)
-            thermal_efficiency = max(0.1, 1.0 - thermal_state)
-            load_efficiency = max(0.1, 1.0 - system_load)
-            energy_efficiency = (thermal_efficiency + load_efficiency) / 2.0
-
-            # Calculate computational throughput boost
-            computational_throughput = max(0.5, 1.0 - thermal_state)
-
-            # Calculate thermal drift
-            if self.thermal_history:
-                last_thermal = self.thermal_history[-1].thermal_state
-                thermal_drift = thermal_state - last_thermal
-            else:
-                thermal_drift = 0.0
-
-            # Calculate compensation factor (performance preservation)
-            compensation_factor = max(0.0, 1.0 - thermal_state)
-
-            # Create thermal data with hardware metrics
-            thermal_data = ZPEThermalData(
-                timestamp=timestamp,
-                thermal_state=thermal_state,
-                resonance_frequency=resonance_frequency,
-                energy_efficiency=energy_efficiency,
-                thermal_drift=thermal_drift,
-                compensation_factor=compensation_factor,
-                cpu_utilization=cpu_percent / 100.0,
-                memory_utilization=memory_percent / 100.0,
-                gpu_utilization=None,  # Will be implemented if GPU available
-                computational_throughput=computational_throughput,
-                metadata={
-                    'hardware_thermal': hardware_thermal,
-                    'load_thermal': load_thermal,
-                    'complexity_factor': complexity_factor,
-                    'thermal_modulation': thermal_modulation,
-                    'performance_boost': computational_throughput
-                }
-            )
-
-            # Store in history
-            self.thermal_history.append(thermal_data)
-            if len(self.thermal_history) > 1000:
-                self.thermal_history = self.thermal_history[-500:]
-
-            self.total_cycles += 1
-            self.thermal_events += 1
-
-            # Update computational boost factors
-            self.computational_boost_factor = computational_throughput
-            self.tensor_calculation_multiplier = 1.0 + (computational_throughput * 0.5)
-
-            logger.debug(
-                "🌡️ ZPE thermal: State = %.3f, Efficiency = %.3f, Boost = %.3f",
-                thermal_state, energy_efficiency, computational_throughput
-            )
-
-            return thermal_data
-
-        except Exception as e:
-            logger.error("❌ ZPE thermal calculation failed: %s", e)
-            return ZPEThermalData(
-                timestamp=time.time(),
-                thermal_state=0.5,
-                resonance_frequency=self.base_resonance_frequency,
-                energy_efficiency=0.5,
-                thermal_drift=0.0,
-                compensation_factor=0.5,
-                cpu_utilization=0.5,
-                memory_utilization=0.5,
-                gpu_utilization=None,
-                computational_throughput=0.5
-            )
-
-    def calculate_resonance(
-        self,
-        thermal_data: ZPEThermalData,
-        market_conditions: Dict[str, Any]
-    ) -> Optional[ZPEResonanceData]:
+    def calculate_rotational_torque(self, liquidity_depth: float, trend_change_rate: float) -> float:
         """
-        Calculate ZPE resonance - COMPUTATIONAL RESONANCE.
-
-        This optimizes calculation speed and tensor processing efficiency
-        WITHOUT affecting trading decisions.
-
-        Args:
-            thermal_data: Current thermal data
-            market_conditions: Current market conditions (for load estimation)
-
-        Returns:
-            ZPE resonance data with computational optimization metrics
+        Rotational Vectorization: τ = I · α
+        
+        Where:
+            - τ: Torque applied to profit wheel (rotational force)
+            - I: Market inertia (resistance from liquidity walls, spread delay)
+            - α: Angular acceleration (rate of directional bias change)
         """
-        try:
-            timestamp = time.time()
+        inertia = 1.0 / (1.0 + liquidity_depth)  # Higher liquidity = lower inertia
+        angular_acceleration = math.atan(trend_change_rate)  # Bounded acceleration
+        torque = inertia * angular_acceleration
+        logger.debug(f"Rotational Torque: {torque:.6f}")
+        return torque
 
-            # Base resonance frequency
-            base_freq = thermal_data.resonance_frequency
-
-            # Market condition modulation (for computational load estimation only)
-            volume_profile = market_conditions.get('volume_profile', 1.0)
-            momentum = market_conditions.get('momentum', 0.0)
-
-            # Calculate resonance amplitude (computational resonance)
-            volume_modulation = 1.0 + (volume_profile - 1.0) * 0.2  # Reduced impact
-            momentum_modulation = 1.0 + abs(momentum) * 0.5  # Reduced impact
-            thermal_modulation = 1.0 + thermal_data.thermal_state * 0.2  # Reduced impact
-
-            resonance_amplitude = (
-                volume_modulation *
-                momentum_modulation *
-                thermal_modulation
-            )
-
-            # Calculate phase coherence (computational coherence)
-            thermal_coherence = 1.0 - thermal_data.thermal_state
-            volume_coherence = min(1.0, volume_profile)
-            phase_coherence = (thermal_coherence + volume_coherence) / 2.0
-
-            # Calculate computational speed multiplier
-            calculation_speed_multiplier = 1.0 + (phase_coherence * 0.5)
-
-            # Calculate tensor processing efficiency
-            tensor_processing_efficiency = max(0.5, 1.0 - thermal_data.thermal_state)
-
-            # Placeholder calculations for quantum state and energy level
-            quantum_state = 0.0  # placeholder
-            energy_level = 0.0  # placeholder
-
-            resonance_data = ZPEResonanceData(
-                timestamp=timestamp,
-                resonance_frequency=base_freq,
-                resonance_amplitude=resonance_amplitude,
-                phase_coherence=phase_coherence,
-                quantum_state=quantum_state,
-                energy_level=energy_level,
-                calculation_speed_multiplier=calculation_speed_multiplier,
-                tensor_processing_efficiency=tensor_processing_efficiency,
-            )
-
-            # Update computational multipliers
-            self.tensor_calculation_multiplier = calculation_speed_multiplier
-            self.parallel_processing_optimization = tensor_processing_efficiency
-
-            return resonance_data
-        except Exception as e:
-            logger.error(f"Error in calculate_resonance: {e}")
-            return None
-
-    def get_computational_boost(self) -> Dict[str, float]:
+    def calculate_thermal_efficiency(self, profit_generated: float, capital_exposure: float) -> float:
         """
-        Get current computational boost factors.
-
-        These factors can be used by tensor calculations to optimize performance
-        WITHOUT affecting trading decisions.
+        Thermal Integrity Differential: η = W_out / Q_in
+        
+        Where:
+            - η: Efficiency of Schwabot's thermal core
+            - W_out: Profit generated
+            - Q_in: Capital allocated + trade gas/fee loss
         """
-        return {
-            'computational_boost_factor': self.computational_boost_factor,
-            'tensor_calculation_multiplier': self.tensor_calculation_multiplier,
-            'parallel_processing_optimization': self.parallel_processing_optimization,
-            'thermal_efficiency': getattr(self.thermal_history[-1], 'energy_efficiency', 0.5) if self.thermal_history else 0.5
+        if capital_exposure <= 0:
+            return 0.0
+        efficiency = profit_generated / capital_exposure
+        self.thermal_history.append({'timestamp': datetime.now(), 'efficiency': efficiency})
+        logger.debug(f"Thermal Efficiency: {efficiency:.6f}")
+        return efficiency
+
+    def calculate_elastic_resonance(self, price_derivative: float, frequency: float, phase_offset: float, time_window: float) -> float:
+        """
+        Elastic Resonance Profit Function: 𝛿(t) = ∫₀ᵗ P'(t) · unified_math.sin(ωt + φ) dt
+        """
+        dt = 0.001
+        t_values = np.arange(0, time_window, dt)
+        integral_sum = sum(price_derivative * unified_math.sin(frequency * t + phase_offset) * dt for t in t_values)
+        logger.debug(f"Elastic Resonance: {integral_sum:.6f}")
+        return integral_sum
+
+    def calculate_multi_vector_alignment(self, strategy_vectors: Dict[str, Dict], weights: Dict[str, float]) -> Dict:
+        """
+        Multi-Vector Trade Alignment: V⃗_total = Σᵢ wᵢ · V⃗ᵢ
+        """
+        total_magnitude = sum(weights.get(asset, 0.0) * vector.get('magnitude', 0.0)
+                            for asset, vector in strategy_vectors.items())
+        total_resonance = sum(weights.get(asset, 0.0) * vector.get('resonance', 0.0)
+                            for asset, vector in strategy_vectors.items())
+        
+        result = {
+            'magnitude': total_magnitude,
+            'resonance': total_resonance,
+            'timestamp': datetime.now()
+        }
+        logger.debug(f"Multi-Vector Alignment: magnitude={total_magnitude:.6f}, resonance={total_resonance:.6f}")
+        return result
+
+    def update_recursive_cycle_depth(self, tick_interval: float, price_trigger: float) -> int:
+        """
+        Recursive Cycle Depth: Rₙ = f(Rₙ₋₁, Δt, Pₙ)
+        """
+        # Simple complexity calculation based on price trigger variance
+        complexity = unified_math.min(16.0, 1.0 + unified_math.abs(price_trigger) * 10.0)
+        self.recursion_depth = int(complexity)
+        logger.debug(f"Recursive Cycle Depth: {self.recursion_depth}")
+        return self.recursion_depth
+
+    def update_agent_consensus(self, agent_name: str, confidence: float) -> float:
+        """
+        Agent Consensus Feedback Function: C(t) = (R1 + GPT4o + Claude + Schwafit) / 4
+        """
+        if agent_name in self.agent_consensus:
+            self.agent_consensus[agent_name] = confidence
+            average_consensus = sum(self.agent_consensus.values()) / len(self.agent_consensus)
+            logger.debug(f"Agent Consensus: {average_consensus:.6f}")
+            return average_consensus
+        return 0.0
+
+    def calculate_temporal_fault_correction(self, expected_phase: float, actual_phase: float) -> float:
+        """
+        Temporal Fault-Bus Diff Correction: Δφ_fault = φ_actual - φ_expected
+        """
+        phase_difference = actual_phase - expected_phase
+        # Normalize to [-π, π]
+        while phase_difference > math.pi:
+            phase_difference -= 2 * math.pi
+        while phase_difference < -math.pi:
+            phase_difference += 2 * math.pi
+        logger.debug(f"Temporal Fault Correction: {phase_difference:.6f}")
+        return phase_difference
+
+    def map_news_lantern_signals(self, news_density: float, sentiment_delta: float) -> float:
+        """
+        News/Lantern API Signal Mapping: Lₙ = g(nₙ, ΔSₙ)
+        """
+        normalized_density = unified_math.max(0.0, unified_math.min(1.0, news_density))
+        normalized_sentiment = max(-1.0, unified_math.min(1.0, sentiment_delta))
+        lantern_signal = normalized_density * (1.0 + normalized_sentiment)
+        logger.debug(f"Lantern Signal: {lantern_signal:.6f}")
+        return lantern_signal
+
+    def calculate_profit_reinjection(self, profit_delta: float, market_heat: float) -> float:
+        """
+        Profit Loop Reinjection: Π(t) = Π₀ + Σ(ΔΠᵢ · αᵢ)
+        """
+        reinjection_coefficient = unified_math.min(1.0, unified_math.max(0.0, market_heat))
+        reinjected_profit = profit_delta * reinjection_coefficient
+        logger.debug(f"Profit Reinjection: {reinjected_profit:.6f}")
+        return reinjected_profit
+
+    def spin_profit_wheel(self, market_data: Dict) -> Dict:
+        """
+        Main ZPE Profit Wheel function - where Schwabot becomes the wheel.
+        """
+        logger.info("🔄 Spinning ZPE Profit Wheel...")
+
+        # Extract market data
+        trend_strength = market_data.get('trend_strength', 0.0)
+        entry_exit_range = market_data.get('entry_exit_range', 0.0)
+        liquidity_depth = market_data.get('liquidity_depth', 1.0)
+        trend_change_rate = market_data.get('trend_change_rate', 0.0)
+        price_derivative = market_data.get('price_derivative', 0.0)
+        news_density = market_data.get('news_density', 0.0)
+        sentiment_delta = market_data.get('sentiment_delta', 0.0)
+
+        # Execute ZPE mathematical framework
+        zpe_work = self.calculate_zpe_work(trend_strength, entry_exit_range)
+        rotational_torque = self.calculate_rotational_torque(liquidity_depth, trend_change_rate)
+        elastic_resonance = self.calculate_elastic_resonance(price_derivative, 1.0, 0.0, 1.0)
+        lantern_signal = self.map_news_lantern_signals(news_density, sentiment_delta)
+
+        # Calculate spin decision
+        spin_threshold = 0.5
+        spin_score = (zpe_work + elastic_resonance + lantern_signal) / 3.0
+        should_spin = spin_score > spin_threshold
+
+        result = {
+            'zpe_work': zpe_work,
+            'rotational_torque': rotational_torque,
+            'elastic_resonance': elastic_resonance,
+            'lantern_signal': lantern_signal,
+            'spin_score': spin_score,
+            'should_spin': should_spin,
+            'recursion_depth': self.recursion_depth,
+            'agent_consensus': self.agent_consensus.copy()
         }
 
-    def optimize_tensor_calculation(self, tensor_complexity: float) -> float:
-        """
-        Optimize tensor calculation speed based on current ZPE state.
-
-        This function provides speedup factors for tensor calculations
-        WITHOUT affecting the mathematical results or trading decisions.
-
-        Args:
-            tensor_complexity: Complexity of the tensor calculation
-
-        Returns:
-            Speedup multiplier for the calculation
-        """
-        try:
-            # Get current boost factors
-            boost_factors = self.get_computational_boost()
-
-            # Calculate optimal speedup based on complexity and current state
-            base_speedup = boost_factors['tensor_calculation_multiplier']
-            complexity_factor = min(2.0, 1.0 + (tensor_complexity * 0.5))
-            thermal_factor = boost_factors['thermal_efficiency']
-
-            # Final speedup multiplier (capped to prevent instability)
-            speedup_multiplier = min(3.0, base_speedup * complexity_factor * thermal_factor)
-
-            logger.debug(
-                "🚀 ZPE tensor optimization: Complexity=%.3f, Speedup=%.3f",
-                tensor_complexity, speedup_multiplier
-            )
-
-            return speedup_multiplier
-
-        except Exception as e:
-            logger.error("❌ ZPE tensor optimization failed: %s", e)
-            return 1.0  # No speedup on error
-
-    def analyze_quantum_state(
-        self,
-        resonance_data: ZPEResonanceData,
-        mathematical_state: Optional[Dict[str, Any]] = None
-    ) -> ZPEQuantumData:
-        """Analyze quantum state based on resonance data - COMPUTATIONAL QUANTUM STATES."""
-        # ⚠️ PHANTOM_MATH: Implementation placeholder for parallel processing optimization
-        pass
-
-    def get_performance_stats(self) -> Dict[str, Any]:
-        """Get performance statistics - HARDWARE FOCUSED."""
-        # ⚠️ PHANTOM_MATH: Implementation placeholder
-        pass
-
-    def get_thermal_history(self) -> List[ZPEThermalData]:
-        """Get thermal history data."""
-        # ⚠️ PHANTOM_MATH: Implementation placeholder
-        pass
-
-    def get_resonance_history(self) -> List[ZPEResonanceData]:
-        """Get resonance history data."""
-        # ⚠️ PHANTOM_MATH: Implementation placeholder
-        pass
-
-    def get_quantum_history(self) -> List[ZPEQuantumData]:
-        """Get quantum history data."""
-        # ⚠️ PHANTOM_MATH: Implementation placeholder
-        pass
-
-    def clear_history(self) -> None:
-        """Clear all history data."""
-        # ⚠️ PHANTOM_MATH: Implementation placeholder
-        pass
+        logger.info(f"🎯 ZPE Wheel Decision: {'SPIN' if should_spin else 'HOLD'} (score: {spin_score:.6f})")
+        return result
 
 
-def get_zpe_core() -> ZPECore:
-    """Get ZPE core instance."""
-    # ⚠️ PHANTOM_MATH: Implementation placeholder
-    pass
+def main():
+    """Test the ZPE Core."""
+    safe_print("🧠 Testing Schwabot ZPE Core")
+    safe_print("=" * 40)
 
+    engine = ZPECore()
 
-def demo_zpe_core() -> None:
-    """Demonstrate ZPE core functionality - HARDWARE ACCELERATION FOCUS."""
-    # ⚠️ PHANTOM_MATH: Implementation placeholder
-    pass
+    market_data = {
+        'trend_strength': 0.8,
+        'entry_exit_range': 0.05,
+        'liquidity_depth': 0.7,
+        'trend_change_rate': 0.3,
+        'price_derivative': 0.02,
+        'news_density': 0.6,
+        'sentiment_delta': 0.2
+    }
+
+    result = engine.spin_profit_wheel(market_data)
+
+    safe_print(f"ZPE Work: {result['zpe_work']:.6f}")
+    safe_print(f"Rotational Torque: {result['rotational_torque']:.6f}")
+    safe_print(f"Elastic Resonance: {result['elastic_resonance']:.6f}")
+    safe_print(f"Lantern Signal: {result['lantern_signal']:.6f}")
+    safe_print(f"Spin Score: {result['spin_score']:.6f}")
+    safe_print(f"Should Spin: {result['should_spin']}")
+    safe_print(f"Recursion Depth: {result['recursion_depth']}")
+
+    safe_print("\n🎉 ZPE Core test complete!")
 
 
 if __name__ == "__main__":
-    demo_zpe_core() 
+    main() 
