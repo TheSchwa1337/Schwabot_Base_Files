@@ -32,7 +32,7 @@ This module implements a comprehensive profit optimization framework that integr
 Mathematical Foundation:
 - Profit Vector: P(t) = ∑ᵢ wᵢ · Aᵢ(t) · exp(iφᵢ(t)) · Eᵢ(t)
 - Confidence Score: C(t) = α·H_sim + β·φ_align + γ·E_ent + δ·D_drift
-- Trade Decision: T(t) = 1 if C(t) > θ_threshold ∧ P(t) > P_min
+- Trade Decision: T(t) = 1 if C(t) > θ_threshold ∧ P(t) > P_min"
 """
 
 # Import Schwabot components
@@ -45,33 +45,33 @@ PhaseTransitionMonitor,
 )
 
 COMPONENTS_AVAILABLE = True
-except ImportError as e:
+        except ImportError as e:"
     logging.warning(f"Some Schwabot components not available: {e}")
 COMPONENTS_AVAILABLE = False
 
 logger = logging.getLogger(__name__)
 
 
-class ProfitState(Enum):
+class ProfitState(Enum):"
     """Profit optimization state."""
-
-ACCUMULATING = "accumulating"
-ANALYZING = "analyzing"
-OPTIMIZING = "optimizing"
-EXECUTING = "executing"
+"
+ACCUMULATING = "accumulating""
+ANALYZING = "analyzing""
+OPTIMIZING = "optimizing""
+EXECUTING = "executing""
 VALIDATING = "validating"
 
 
-class TradeDirection(Enum):
+class TradeDirection(Enum):"
     """Trade direction enum."""
-
-LONG = "long"
-SHORT = "short"
+"
+LONG = "long""
+SHORT = "short""
 HOLD = "hold"
 
 
 @dataclass
-class ProfitVector:
+class ProfitVector:"
     """Comprehensive profit vector with mathematical components."""
 
 timestamp: float
@@ -99,7 +99,7 @@ metadata: Dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
-class OptimizationResult:
+class OptimizationResult:"
     """Profit optimization result."""
 
 optimization_id: str
@@ -113,19 +113,19 @@ optimization_time_ms: float
 metadata: Dict[str, Any] = field(default_factory=dict)
 
 
-class ProfitOptimizationEngine:
+class ProfitOptimizationEngine:"
     """Advanced profit optimization engine for BTC/USDC trading."""
 
-def __init__(self, config: Optional[Dict[str, Any]] = None):
+def __init__(self, config: Optional[Dict[str, Any]] = None):"
         """Initialize the profit optimization engine."""
 self.config = config or self._default_config()
 
 # Initialize mathematical components
-if COMPONENTS_AVAILABLE:
-            self.phase_monitor = PhaseTransitionMonitor(self.config.get("phase_config"))
-self.drift_weighter = DriftPhaseWeighter(self.config.get("drift_config"))
-self.overlay_mapper = AlephOverlayMapper(self.config.get("overlay_config"))
-self.entropy_tracker = EntropyTracker(self.config.get("entropy_config"))
+if COMPONENTS_AVAILABLE:"
+            self.phase_monitor = PhaseTransitionMonitor(self.config.get("phase_config"))"
+self.drift_weighter = DriftPhaseWeighter(self.config.get("drift_config"))"
+self.overlay_mapper = AlephOverlayMapper(self.config.get("overlay_config"))"
+self.entropy_tracker = EntropyTracker(self.config.get("entropy_config"))"
 self.pattern_utils = PatternUtils(self.config.get("pattern_config"))
 else:
             self.phase_monitor = None
@@ -134,65 +134,65 @@ self.overlay_mapper = None
 self.entropy_tracker = None
 self.pattern_utils = None
 
-# Profit optimization parameters
+# Profit optimization parameters"
         self.confidence_threshold = self.config.get("confidence_threshold", 0.75)
-        self.profit_threshold = self.config.get(
+        self.profit_threshold = self.config.get("
             "profit_threshold", 0.005
-        )  # 0.5% minimum
+        )  # 0.5% minimum"
         self.risk_tolerance = self.config.get("risk_tolerance", 0.02)  # 2% max risk
 
 # Mathematical weights for profit calculation
-self.weights = {
-"hash_similarity": self.config.get("hash_weight", 0.25),
-            "phase_alignment": self.config.get("phase_weight", 0.20),
-            "entropy_score": self.config.get("entropy_weight", 0.20),
-            "drift_weight": self.config.get("drift_weight", 0.20),
+self.weights = {"
+"hash_similarity": self.config.get("hash_weight", 0.25),"
+            "phase_alignment": self.config.get("phase_weight", 0.20),"
+            "entropy_score": self.config.get("entropy_weight", 0.20),"
+            "drift_weight": self.config.get("drift_weight", 0.20),"
             "pattern_confidence": self.config.get("pattern_weight", 0.15),
 }
 
 # State management
 self.current_state = ProfitState.ACCUMULATING
-self.optimization_history: List[OptimizationResult] = []
+self.optimization_history: List[OptimizationResult] = []"
 self.max_history_size = self.config.get("max_history_size", 1000)
 
 # Performance tracking
-self.stats = {
-"total_optimizations": 0,
-"profitable_decisions": 0,
-            "avg_confidence": 0.0,
-            "avg_profit_potential": 0.0,
+self.stats = {"
+"total_optimizations": 0,"
+"profitable_decisions": 0,"
+            "avg_confidence": 0.0,"
+            "avg_profit_potential": 0.0,"
             "optimization_time_ms": 0.0,
 }
 
-logger.info(
+            logger.info("
 f"💰 Profit Optimization Engine initialized with {
-len(
+len("
 self.weights)} mathematical components""
 )
 
-def _default_config(self) -> Dict[str, Any]:
+def _default_config(self) -> Dict[str, Any]:"
         """Default configuration for profit optimization."""
-return {
-"confidence_threshold": 0.75,
-            "profit_threshold": 0.005,
-            "risk_tolerance": 0.02,
-            "hash_weight": 0.25,
-            "phase_weight": 0.20,
-            "entropy_weight": 0.20,
-            "drift_weight": 0.20,
-            "pattern_weight": 0.15,
-"max_history_size": 1000,
-"btc_usdc_pair": True,
-"precision": 8,  # BTC precision
-"min_volume_threshold": 1000.0,
-            "max_position_size": 0.1,  # 10% of portfolio
-            "stop_loss_factor": 0.02,  # 2% stop loss
+        return {"
+"confidence_threshold": 0.75,"
+            "profit_threshold": 0.005,"
+            "risk_tolerance": 0.02,"
+            "hash_weight": 0.25,"
+            "phase_weight": 0.20,"
+            "entropy_weight": 0.20,"
+            "drift_weight": 0.20,"
+            "pattern_weight": 0.15,"
+"max_history_size": 1000,"
+"btc_usdc_pair": True,"
+"precision": 8,  # BTC precision"
+"min_volume_threshold": 1000.0,"
+            "max_position_size": 0.1,  # 10% of portfolio"
+            "stop_loss_factor": 0.02,  # 2% stop loss"
             "take_profit_factor": 0.05,  # 5% take profit
 }
 
-def optimize_profit(
+def optimize_profit(:
 self, btc_price: float, usdc_volume: float, market_data: Dict[str, Any]
-) -> OptimizationResult:
+) -> OptimizationResult:"
         """Main profit optimization function."
 
 Mathematical Formula:
@@ -205,16 +205,16 @@ usdc_volume: Trading volume in USDC
 market_data: Additional market context
 
 Returns:
-            OptimizationResult with trade recommendation
+            OptimizationResult with trade recommendation"
 """
-start_time = time.time()
+start_time = time.time()"
 optimization_id = f"opt_{int(time.time() * 1000)}"
 
 try:
             self.current_state = ProfitState.ANALYZING
 
-# Extract time series data for analysis
-price_history = market_data.get("price_history", [btc_price])
+# Extract time series data for analysis"
+price_history = market_data.get("price_history", [btc_price])"
             volume_history = market_data.get("volume_history", [usdc_volume])
 
 # 1. Hash Similarity Analysis via ALEPH Overlay
@@ -301,10 +301,10 @@ confidence_level=confidence_score,
 expected_return=expected_profit,
                 risk_score=risk_score,
 optimization_time_ms=optimization_time_ms,
-metadata={
-"btc_price": btc_price,
-"usdc_volume": usdc_volume,
-"market_phase": market_data.get("phase", "unknown"),
+metadata={"
+"btc_price": btc_price,"
+"usdc_volume": usdc_volume,"
+"market_phase": market_data.get("phase", "unknown"),"
 "volatility": market_data.get("volatility", 0.0),
 },
 )
@@ -321,43 +321,43 @@ if len(self.optimization_history) > self.max_history_size:
 
 self.current_state = ProfitState.ACCUMULATING
 
-logger.info(
-f"💰 Optimization complete: {trade_direction.value} "
-f"(confidence: {confidence_score:.3f}, "
+            logger.info("
+f"💰 Optimization complete: {trade_direction.value} ""
+f"(confidence: {confidence_score:.3f}, ""
 f"expected: {expected_profit:.4f})"
 )
 
-return result
+        return result
 
-except Exception as e:
+        except Exception as e:"
             logger.error(f"Error in profit optimization: {e}")
             self.current_state = ProfitState.ACCUMULATING
 
 # Return safe default result
-return self._create_default_result(optimization_id, btc_price, usdc_volume)
+        return self._create_default_result(optimization_id, btc_price, usdc_volume)
 
-def _calculate_hash_similarity(
+def _calculate_hash_similarity(:
 self, btc_price: float, usdc_volume: float, market_data: Dict[str, Any]
-) -> float:
+) -> float:"
         """Calculate hash similarity using ALEPH overlay mapping."""
 try:
             if not self.overlay_mapper:
                 return 0.5  # Neutral default
 
 # Create hash from current market state
-market_hash = hashlib.sha256(
+market_hash = hashlib.sha256("
 f"{btc_price}_{usdc_volume}_{time.time()}".encode()
 ).hexdigest()
 
 # Map to overlay and extract similarity
 overlay_map = self.overlay_mapper.map_hash_to_overlay(market_hash)
-return overlay_map.confidence_score
+        return overlay_map.confidence_score
 
-except Exception as e:
+        except Exception as e:"
             logger.error(f"Error calculating hash similarity: {e}")
-return 0.5
+        return 0.5
 
-def _calculate_phase_alignment(self, price_history: List[float]) -> float:
+def _calculate_phase_alignment(self, price_history: List[float]) -> float:"
         """Calculate phase alignment using phase transition monitoring."""
 try:
             if not self.phase_monitor or len(price_history) < 10:
@@ -385,13 +385,13 @@ PhaseState.ACCUMULATION: 0.8,
                 PhaseState.TRANSITION: 0.4,
 }
 
-return phase_scores.get(phase_state, 0.5)
+        return phase_scores.get(phase_state, 0.5)
 
-except Exception as e:
+        except Exception as e:"
             logger.error(f"Error calculating phase alignment: {e}")
-return 0.5
+        return 0.5
 
-def _calculate_entropy_score(self, price_history: List[float]) -> float:
+def _calculate_entropy_score(self, price_history: List[float]) -> float:"
         """Calculate entropy score using entropy tracker."""
 try:
             if not self.entropy_tracker or len(price_history) < 5:
@@ -412,13 +412,13 @@ entropy_scores = {
 base_score = entropy_scores.get(entropy_metrics.state, 0.5)
 
 # Adjust by confidence
-return base_score * entropy_metrics.confidence
+        return base_score * entropy_metrics.confidence
 
-except Exception as e:
+        except Exception as e:"
             logger.error(f"Error calculating entropy score: {e}")
             return 0.5
 
-def _calculate_drift_weight(self, price_history: List[float]) -> float:
+def _calculate_drift_weight(self, price_history: List[float]) -> float:"
         """Calculate drift weight using drift phase weighter."""
 try:
             if not self.drift_weighter or len(price_history) < 10:
@@ -430,13 +430,13 @@ trace = np.array(price_history)
 # Calculate drift weight
 drift_weight = self.drift_weighter.calculate_phase_drift_weight(trace)
 
-return max(0.0, min(1.0, drift_weight))
+        return max(0.0, min(1.0, drift_weight))
 
-except Exception as e:
+        except Exception as e:"
             logger.error(f"Error calculating drift weight: {e}")
-return 0.5
+        return 0.5
 
-def _calculate_pattern_confidence(self, price_history: List[float]) -> float:
+def _calculate_pattern_confidence(self, price_history: List[float]) -> float:"
         """Calculate pattern recognition confidence."""
 try:
             if not self.pattern_utils or len(price_history) < 5:
@@ -470,47 +470,47 @@ pattern_scores.get(max_pattern.pattern_type, 0.5)
 )
 
 # Combine trend and pattern confidence
-return trend_confidence * 0.6 + pattern_confidence * 0.4
+        return trend_confidence * 0.6 + pattern_confidence * 0.4
 
-except Exception as e:
+        except Exception as e:"
             logger.error(f"Error calculating pattern confidence: {e}")
-return 0.5
+        return 0.5
 
 def _calculate_confidence_score(
-self,
+self,:
 hash_similarity: float,
 phase_alignment: float,
 entropy_score: float,
 drift_weight: float,
 pattern_confidence: float,
-) -> float:
+) -> float:"
         """Calculate composite confidence score using mathematical weights."""
 try:
             # Weighted sum of all components
-confidence = (
-self.weights["hash_similarity"] * hash_similarity
-+ self.weights["phase_alignment"] * phase_alignment
-+ self.weights["entropy_score"] * entropy_score
-+ self.weights["drift_weight"] * drift_weight
+confidence = ("
+self.weights["hash_similarity"] * hash_similarity"
++ self.weights["phase_alignment"] * phase_alignment"
++ self.weights["entropy_score"] * entropy_score"
++ self.weights["drift_weight"] * drift_weight"
 + self.weights["pattern_confidence"] * pattern_confidence
 )
 
-return max(0.0, min(1.0, confidence))
+        return max(0.0, min(1.0, confidence))
 
-except Exception as e:
+        except Exception as e:"
             logger.error(f"Error calculating confidence score: {e}")
-return 0.5
+        return 0.5
 
 def _calculate_profit_potential(
-self,
+self,:
 btc_price: float,
 usdc_volume: float,
 confidence_score: float,
 market_data: Dict[str, Any],
-) -> float:
+) -> float:"
         """Calculate profit potential using mathematical model."""
 try:
-            # Base profit potential from price momentum
+            # Base profit potential from price momentum"
             price_history = market_data.get("price_history", [btc_price])
             if len(price_history) > 1:
                 price_momentum = (price_history[-1] - price_history[0]) / price_history[
@@ -519,11 +519,11 @@ try:
 else:
                 price_momentum = 0.0
 
-# Volume factor
+# Volume factor"
 avg_volume = market_data.get("avg_volume", usdc_volume)
 volume_factor = min(2.0, usdc_volume / max(avg_volume, 1.0))
 
-# Volatility factor
+# Volatility factor"
 volatility = market_data.get("volatility", 0.02)
             volatility_factor = min(1.5, volatility * 10)
 
@@ -533,21 +533,21 @@ volatility = market_data.get("volatility", 0.02)
 # Adjust by confidence score
 profit_potential = base_profit * confidence_score
 
-return max(0.0, min(0.1, profit_potential))  # Cap at 10%
+        return max(0.0, min(0.1, profit_potential))  # Cap at 10%
 
-except Exception as e:
+        except Exception as e:"
             logger.error(f"Error calculating profit potential: {e}")
             return 0.0
 
 def _determine_trade_parameters(
-self,
+self,:
 profit_potential: float,
 confidence_score: float,
 market_data: Dict[str, Any],
-) -> Tuple[TradeDirection, float]:
+) -> Tuple[TradeDirection, float]:"
         """Determine optimal trade direction and position size."""
 try:
-            # Determine direction from price momentum
+            # Determine direction from price momentum"
 price_history = market_data.get("price_history", [])
             if len(price_history) > 1:
                 momentum = price_history[-1] - price_history[0]
@@ -564,39 +564,39 @@ else:
             if direction == TradeDirection.HOLD:
                 position_size = 0.0
 else:
-                # Base position size on confidence and profit potential
+                # Base position size on confidence and profit potential"
 base_size = self.config["max_position_size"]
 size_factor = confidence_score * profit_potential * 10  # Scale up
 position_size = min(base_size, base_size * size_factor)
 
-return direction, position_size
+        return direction, position_size
 
-except Exception as e:
+        except Exception as e:"
             logger.error(f"Error determining trade parameters: {e}")
-return TradeDirection.HOLD, 0.0
+        return TradeDirection.HOLD, 0.0
 
-def _calculate_risk_adjustment(
+def _calculate_risk_adjustment(:
 self, btc_price: float, usdc_volume: float, confidence_score: float
-) -> float:
+) -> float:"
         """Calculate risk adjustment factor."""
 try:
             # Base risk adjustment on confidence
 base_adjustment = confidence_score
 
-# Adjust for volume (higher volume = lower risk)
+# Adjust for volume (higher volume = lower risk)"
 volume_threshold = self.config["min_volume_threshold"]
             volume_adjustment = min(1.0, usdc_volume / volume_threshold)
 
 # Combine adjustments
 risk_adjustment = base_adjustment * volume_adjustment
 
-return max(0.1, min(1.0, risk_adjustment))
+        return max(0.1, min(1.0, risk_adjustment))
 
-except Exception as e:
+        except Exception as e:"
             logger.error(f"Error calculating risk adjustment: {e}")
-return 0.5
+        return 0.5
 
-def _validate_trade_decision(self, profit_vector: ProfitVector)::: -> bool:
+def _validate_trade_decision(self, profit_vector: ProfitVector): -> bool:"
         """Validate if trade should be executed based on thresholds."""
 try:
             # Check confidence threshold
@@ -615,23 +615,23 @@ if profit_vector.position_size <= 0:
 if profit_vector.trade_direction == TradeDirection.HOLD:
                 return False
 
-return True
+        return True
 
-except Exception as e:
+        except Exception as e:"
             logger.error(f"Error validating trade decision: {e}")
-return False
+        return False
 
-def _calculate_risk_score(
+def _calculate_risk_score(:
         self, profit_vector: ProfitVector, market_data: Dict[str, Any]
-) -> float:
+) -> float:"
         """Calculate overall risk score for the trade."""
 try:
-            # Base risk from volatility
+            # Base risk from volatility"
 volatility = market_data.get("volatility", 0.02)
             volatility_risk = min(1.0, volatility / self.risk_tolerance)
 
 # Risk from position size
-position_risk = (
+position_risk = ("
 profit_vector.position_size / self.config["max_position_size"]
 )
 
@@ -643,43 +643,43 @@ total_risk = (
 volatility_risk * 0.4 + position_risk * 0.3 + confidence_risk * 0.3
 )
 
-return max(0.0, min(1.0, total_risk))
+        return max(0.0, min(1.0, total_risk))
 
-except Exception as e:
+        except Exception as e:"
             logger.error(f"Error calculating risk score: {e}")
-return 0.5
+        return 0.5
 
-def _update_performance_stats(self, result: OptimizationResult)::: -> None:
+def _update_performance_stats(self, result: OptimizationResult): -> None:"
         """Update performance statistics."""
-try:
+try:"
             self.stats["total_optimizations"] += 1
 
-if result.should_trade and result.expected_return > 0:
+if result.should_trade and result.expected_return > 0:"
                 self.stats["profitable_decisions"] += 1
 
-# Update averages
+# Update averages"
 total = self.stats["total_optimizations"]
-
-self.stats["avg_confidence"] = (
+"
+self.stats["avg_confidence"] = ("
 self.stats["avg_confidence"] * (total - 1) + result.confidence_level
 ) / total
-
-self.stats["avg_profit_potential"] = (
+"
+self.stats["avg_profit_potential"] = ("
                 self.stats["avg_profit_potential"] * (total - 1)
                 + result.profit_vector.profit_potential
 ) / total
-
-self.stats["optimization_time_ms"] = (
+"
+self.stats["optimization_time_ms"] = ("
 self.stats["optimization_time_ms"] * (total - 1)
 + result.optimization_time_ms
 ) / total
 
-except Exception as e:
+        except Exception as e:"
             logger.error(f"Error updating performance stats: {e}")
 
-def _create_default_result(
+def _create_default_result(:
 self, optimization_id: str, btc_price: float, usdc_volume: float
-) -> OptimizationResult:
+) -> OptimizationResult:"
         """Create safe default optimization result."""
 profit_vector = ProfitVector(
 timestamp=time.time(),
@@ -690,7 +690,7 @@ trade_direction=TradeDirection.HOLD,
             expected_profit=0.0,
 )
 
-return OptimizationResult(
+        return OptimizationResult(
 optimization_id=optimization_id,
 timestamp=time.time(),
 profit_vector=profit_vector,
@@ -701,67 +701,67 @@ confidence_level=0.0,
             optimization_time_ms=0.0,
 )
 
-def get_performance_summary(self) -> Dict[str, Any]:
+def get_performance_summary(self) -> Dict[str, Any]:"
         """Get comprehensive performance summary."""
 try:
-            success_rate = 0.0
+            success_rate = 0.0"
 if self.stats["total_optimizations"] > 0:
-                success_rate = (
-self.stats["profitable_decisions"]
+                success_rate = ("
+self.stats["profitable_decisions"]"
 / self.stats["total_optimizations"]
 )
 
-return {
-"total_optimizations": self.stats["total_optimizations"],
-"profitable_decisions": self.stats["profitable_decisions"],
-"success_rate": success_rate,
-"avg_confidence": self.stats["avg_confidence"],
-"avg_profit_potential": self.stats["avg_profit_potential"],
-"avg_optimization_time_ms": self.stats["optimization_time_ms"],
-"current_state": self.current_state.value,
-"history_size": len(self.optimization_history),
-"mathematical_weights": self.weights,
-"thresholds": {
-                    "confidence": self.confidence_threshold,
-                    "profit": self.profit_threshold,
+        return {"
+"total_optimizations": self.stats["total_optimizations"],"
+"profitable_decisions": self.stats["profitable_decisions"],"
+"success_rate": success_rate,"
+"avg_confidence": self.stats["avg_confidence"],"
+"avg_profit_potential": self.stats["avg_profit_potential"],"
+"avg_optimization_time_ms": self.stats["optimization_time_ms"],"
+"current_state": self.current_state.value,"
+"history_size": len(self.optimization_history),"
+"mathematical_weights": self.weights,"
+"thresholds": {"
+                    "confidence": self.confidence_threshold,"
+                    "profit": self.profit_threshold,"
                     "risk_tolerance": self.risk_tolerance,
 },
 }
 
-except Exception as e:
+        except Exception as e:"
             logger.error(f"Error getting performance summary: {e}")
-return {}
+        return {}
 
-def get_recent_optimizations(self, count: int = 10) -> List[Dict[str, Any]]:
+def get_recent_optimizations(self, count: int = 10) -> List[Dict[str, Any]]:"
         """Get recent optimization results."""
 try:
             recent = self.optimization_history[-count:]
 
-return [
-{
-"optimization_id": result.optimization_id,
-"timestamp": result.timestamp,
-"should_trade": result.should_trade,
-"trade_direction": result.profit_vector.trade_direction.value,
-"confidence_level": result.confidence_level,
-"expected_return": result.expected_return,
-"risk_score": result.risk_score,
-                    "btc_price": result.profit_vector.price,
+        return [
+{"
+"optimization_id": result.optimization_id,"
+"timestamp": result.timestamp,"
+"should_trade": result.should_trade,"
+"trade_direction": result.profit_vector.trade_direction.value,"
+"confidence_level": result.confidence_level,"
+"expected_return": result.expected_return,"
+"risk_score": result.risk_score,"
+                    "btc_price": result.profit_vector.price,"
                     "position_size": result.profit_vector.position_size,
 }
 for result in recent:
 ]
 
-except Exception as e:
+        except Exception as e:"
             logger.error(f"Error getting recent optimizations: {e}")
-return []
+        return []
 
 
-def main():
+def main():"
     """Demonstrate profit optimization engine functionality."""
 logging.basicConfig(level=logging.INFO)
-
-print("💰 Profit Optimization Engine Demo")
+"
+print("💰 Profit Optimization Engine Demo")"
 print("=" * 50)
 
 # Initialize engine
@@ -771,45 +771,45 @@ engine = ProfitOptimizationEngine()
 btc_prices = [45000, 45100, 45050, 45200, 45150, 45300, 45250]
 usdc_volume = 1500000.0
 
-market_data = {
-"price_history": btc_prices,
-        "volume_history": [usdc_volume] * len(btc_prices),
-"avg_volume": usdc_volume,
-"volatility": 0.025,
+market_data = {"
+"price_history": btc_prices,"
+        "volume_history": [usdc_volume] * len(btc_prices),"
+"avg_volume": usdc_volume,"
+"volatility": 0.025,"
 "phase": "expansion",
 }
 
-# Run optimization
+# Run optimization"
 print(f"\n📊 Optimizing for BTC price: ${btc_prices[-1]:,.2f}")
 result = engine.optimize_profit(btc_prices[-1], usdc_volume, market_data)
-
-print("🎯 Optimization Result:")
-print(f"  Should Trade: {result.should_trade}")
-print(f"  Direction: {result.profit_vector.trade_direction.value}")
-print(f"  Confidence: {result.confidence_level:.3f}")
-print(f"  Expected Return: {result.expected_return:.4f}")
-print(f"  Risk Score: {result.risk_score:.3f}")
-    print(f"  Position Size: {result.profit_vector.position_size:.3f}")
+"
+print("🎯 Optimization Result:")"
+print(f"  Should Trade: {result.should_trade}")"
+print(f"  Direction: {result.profit_vector.trade_direction.value}")"
+print(f"  Confidence: {result.confidence_level:.3f}")"
+print(f"  Expected Return: {result.expected_return:.4f}")"
+print(f"  Risk Score: {result.risk_score:.3f}")"
+    print(f"  Position Size: {result.profit_vector.position_size:.3f}")"
 print(f"  Processing Time: {result.optimization_time_ms:.1f}ms")
 
-# Show performance summary
+# Show performance summary"
 print("\n📈 Performance Summary:")
 summary = engine.get_performance_summary()
 for key, value in summary.items():
-        if isinstance(value, dict):
+        if isinstance(value, dict):"
             print(f"  {key}:")
-for sub_key, sub_value in value.items():
+for sub_key, sub_value in value.items():"
                 print(f"    {sub_key}: {sub_value}")
-elif isinstance(value, float):
+elif isinstance(value, float):"
             print(f"  {key}: {value:.4f}")
-else:
+else:"
             print(f"  {key}: {value}")
-
+"
 print("\n✅ Profit optimization demo completed!")
 
-
+"
 if __name__ == "__main__":
     main()
-
-"""
-"""
+"
+""""
+""""

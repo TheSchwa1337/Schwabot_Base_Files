@@ -14,22 +14,22 @@ API System Data Models
 ======================
 
 Contains all data models (dataclasses) for the Schwabot live API
-integration system.
+integration system."
 """
 
 @dataclass
-class APICredentials:
+class APICredentials:"
     """API credentials for exchanges."""
     exchange: ExchangeType
     api_key: str
-    secret: str
+    secret: str"
     passphrase: str = ""
     sandbox: bool = True
     testnet: bool = True
 
 
 @dataclass
-class MarketData:
+class MarketData:"
     """Real-time market data."""
     symbol: str
     price: float
@@ -45,7 +45,7 @@ class MarketData:
 
 
 @dataclass
-class OrderRequest:
+class OrderRequest:"
     """Order request structure."""
     symbol: str
     side: OrderSide
@@ -59,7 +59,7 @@ class OrderRequest:
 
 
 @dataclass
-class OrderResponse:
+class OrderResponse:"
     """Order response structure."""
     order_id: str
     client_order_id: Optional[str]
@@ -80,7 +80,7 @@ class OrderResponse:
 
 
 @dataclass
-class PortfolioPosition:
+class PortfolioPosition:"
     """Portfolio position."""
     symbol: str
     amount: float
@@ -91,3 +91,4 @@ class PortfolioPosition:
     pnl_percentage: float
     timestamp: float
     metadata: Dict[str, Any] = field(default_factory=dict)
+"

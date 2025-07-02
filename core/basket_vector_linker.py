@@ -2,9 +2,7 @@ import time
 from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
-from typing import Tuple
-
-
+from scipy.spatial.distance import cosine
 
 
 """
@@ -41,7 +39,7 @@ class BasketVectorLinker:
 
     def register_strategy_vector(self, strategy_id: str, vector_signature: List[float]):
         """
-        Registers or updates a strategy's vector signature.'
+        Registers or updates a strategy's vector signature.
         """
         self.strategy_vectors[strategy_id] = np.array(vector_signature)
 
@@ -78,8 +76,11 @@ class BasketVectorLinker:
             if np.linalg.norm(input_vector) == 0 or np.linalg.norm(strategy_vec) == 0:
                 similarity = 0.0
             else:
-                # cosine returns distance, 1-distance is similarity
-                similarity = 1 - cosine(input_vector, strategy_vec)
+                try:
+                    # cosine returns distance, 1-distance is similarity
+                    similarity = 1 - cosine(input_vector, strategy_vec)
+                except:
+                    similarity = 0.0
 
             if similarity > highest_similarity and similarity >= similarity_threshold:
                 highest_similarity = similarity
@@ -100,7 +101,7 @@ class BasketVectorLinker:
 
     def reset(self):
         """
-        Resets the linker's internal states and metrics.'
+        Resets the linker's internal states and metrics.
         """
         self.strategy_vectors = {}
         self.metrics = {
@@ -123,6 +124,7 @@ if __name__ == "__main__":
     }
 
     linker = BasketVectorLinker(initial_strategies)
+    print("✅ Basket Vector Linker initialized successfully!")
 
     print("\n--- Resolving Strategy Baskets ---")
 
@@ -146,9 +148,7 @@ if __name__ == "__main__":
 
     # Test Case 4: Register new strategy and test
     print("\n--- Registering New Strategy ---")
-    linker.register_strategy_vector(
-        "NewStrategy_Arbitrage", [0.95, 0.01, 0.02, 0.01, 0.01]
-    )
+    linker.register_strategy_vector("NewStrategy_Arbitrage", [0.95, 0.01, 0.02, 0.01, 0.01])
     test_vector_4 = [0.9, 0.0, 0.0, 0.0, 0.0]
     match4 = linker.resolve_strategy_basket(test_vector_4)
     print(f"Test Vector 4: {test_vector_4}")

@@ -19,18 +19,18 @@ Handles trade entry/exit signals from glyph strategy core and integrates
 with Schwabot's trading execution system.'
 
 Provides signal processing, position sizing, and execution coordination
-for both live and simulated trading modes.:
+for both live and simulated trading modes.:"
 """
 
 # Import glyph strategy core
 try:
-except ImportError:
+        except ImportError:
     GlyphStrategyCore = None
 GlyphStrategyResult = None
 
 # Import existing Schwabot components
 try:
-except ImportError:
+        except ImportError:
     StrategyLogic = None
 SignalType = None
 SignalStrength = None
@@ -41,17 +41,17 @@ PortfolioTracker = None
 logger = logging.getLogger(__name__)
 
 
-class SignalDirection(Enum):
+class SignalDirection(Enum):"
     """Signal direction enumeration."""
-
-BUY = "buy"
-    SELL = "sell"
-    HOLD = "hold"
+"
+BUY = "buy""
+    SELL = "sell""
+    HOLD = "hold""
 CLOSE = "close"
 
 
 @dataclass
-class TradeSignal:
+class TradeSignal:"
     """Trade signal container."""
 
 glyph: str
@@ -67,7 +67,7 @@ metadata: Dict[str, any] = field(default_factory=dict)
 
 
 @dataclass
-class PositionSizing:
+class PositionSizing:"
     """Position sizing parameters."""
 
 base_size: float
@@ -77,22 +77,22 @@ max_position_size: float
 min_position_size: float
 
 
-class EntryExitPortal:
+class EntryExitPortal:"
     """
 Entry/Exit Portal for glyph strategy integration.
 
 Processes glyph strategy signals and coordinates trade execution
-with risk management and portfolio tracking.
+with risk management and portfolio tracking."
 """
 
 def __init__(
-self,
+self,:
 glyph_core: Optional[GlyphStrategyCore] = None,
 enable_risk_management: bool = True,
         enable_portfolio_tracking: bool = True,
         max_position_size: float = 0.1,
         min_confidence_threshold: float = 0.6,
-):
+):"
         """
 Initialize the entry/exit portal.
 
@@ -101,7 +101,7 @@ Args:
 enable_risk_management: Enable risk management integration
             enable_portfolio_tracking: Enable portfolio tracking
 max_position_size: Maximum position size as fraction of portfolio
-min_confidence_threshold: Minimum confidence for trade execution
+min_confidence_threshold: Minimum confidence for trade execution"
 """
 self.glyph_core = glyph_core or GlyphStrategyCore()
 self.enable_risk_management = enable_risk_management
@@ -127,27 +127,27 @@ self.signal_history: List[TradeSignal] = []
         self.max_signal_history = 1000
 
 # Performance tracking
-self.stats = {
-"total_signals": 0,
-"executed_trades": 0,
-"rejected_signals": 0,
+self.stats = {"
+"total_signals": 0,"
+"executed_trades": 0,"
+"rejected_signals": 0,"
 "avg_processing_time": 0.0,
 }
 
-logger.info(
-"EntryExitPortal initialized: "
-f"risk_mgmt={enable_risk_management}, "
+            logger.info("
+"EntryExitPortal initialized: ""
+f"risk_mgmt={enable_risk_management}, ""
             f"portfolio_tracking={enable_portfolio_tracking}"
 )
 
 def process_glyph_signal(
-self,
+self,:
 glyph: str,
-volume_signal: float,
+volume_signal: float,"
 asset: str = "BTC/USD",
 current_price: float = 0.0,
         confidence_boost: float = 0.0,
-) -> Optional[TradeSignal]:
+) -> Optional[TradeSignal]:"
         """
 Process glyph signal and generate trade signal.
 
@@ -159,7 +159,7 @@ current_price: Current asset price
 confidence_boost: Additional confidence boost
 
 Returns:
-            TradeSignal if valid, None otherwise
+            TradeSignal if valid, None otherwise"
 """
 start_time = time.time()
 
@@ -171,14 +171,14 @@ strategy_result = self.glyph_core.select_strategy(
 
 # Check confidence threshold
             if strategy_result.confidence < self.min_confidence_threshold:
-                logger.debug(
-f"Signal rejected: confidence {
-strategy_result.confidence:.3f} ""
-                    f"below threshold {
+                logger.debug("
+f"Signal rejected: confidence {"
+strategy_result.confidence:.3f} """
+                    f"below threshold {"
                         self.min_confidence_threshold}""
-)
+)"
 self.stats["rejected_signals"] += 1
-return None
+        return None
 
 # Determine signal direction based on strategy and market
 # conditions
@@ -196,8 +196,8 @@ price=current_price,
 volume=volume_signal,
                 confidence=strategy_result.confidence,
                 fractal_hash=strategy_result.fractal_hash,
-metadata={
-"gear_state": strategy_result.gear_state,
+metadata={"
+"gear_state": strategy_result.gear_state,"
 "processing_time": time.time() - start_time,
 },
 )
@@ -209,28 +209,28 @@ self.signal_history.append(signal)
 # Maintain history size
 if len(self.signal_history) > self.max_signal_history:
                 self.signal_history.pop(0)
-
+"
 self.stats["total_signals"] += 1
 
-logger.info(
-f"Trade signal generated: {glyph} -> {
-direction.value} ""
-f"{asset} (confidence: {
+            logger.info("
+f"Trade signal generated: {glyph} -> {"
+direction.value} """
+f"{asset} (confidence: {"
 strategy_result.confidence:.3f})""
 )
 
-return signal
+        return signal
 
-except Exception as e:
+        except Exception as e:"
             logger.error(f"Signal processing failed: {e}")
-return None
+        return None
 
 def _determine_signal_direction(
-self,
+self,:
 strategy_result: GlyphStrategyResult,
         volume_signal: float,
 current_price: float,
-) -> SignalDirection:
+) -> SignalDirection:"
         """
 Determine signal direction based on strategy and market conditions.
 
@@ -240,7 +240,7 @@ Args:
 current_price: Current asset price
 
 Returns:
-            Signal direction
+            Signal direction"
 """
 # Simple heuristic based on strategy ID and volume
 strategy_id = strategy_result.strategy_id
@@ -261,11 +261,11 @@ else:
         elif volume_signal < 1e6:  # Low volume
             return SignalDirection.HOLD
 else:  # Medium volume
-return base_direction
+        return base_direction
 
-def calculate_position_size(
+def calculate_position_size(:
 self, signal: TradeSignal, portfolio_value: float = 10000.0
-) -> PositionSizing:
+) -> PositionSizing:"
         """
 Calculate position size based on signal and risk parameters.
 
@@ -274,7 +274,7 @@ Args:
 portfolio_value: Current portfolio value
 
 Returns:
-            Position sizing parameters
+            Position sizing parameters"
 """
 # Base position size
 base_size = portfolio_value * self.max_position_size
@@ -295,7 +295,7 @@ risk_adjusted_size = self.risk_manager.adjust_position_size(
 # Ensure within bounds
 final_position_size = max(0.0, min(risk_adjusted_size, base_size))
 
-return PositionSizing(
+        return PositionSizing(
 base_size=base_size,
 confidence_multiplier=confidence_multiplier,
 risk_adjusted_size=final_position_size,
@@ -304,11 +304,11 @@ min_position_size=0.0,  # Assuming 0 as min for simplicity
 )
 
 def execute_signal(
-self,
+self,:
 signal: TradeSignal,
 portfolio_value: float = 10000.0,
 dry_run: bool = True,
-) -> Dict[str, any]:
+) -> Dict[str, any]:"
         """
 Execute a trading signal.
 
@@ -318,10 +318,10 @@ Args:
 dry_run: If True, simulate execution without actual trades.
 
 Returns:
-            A dictionary with execution results.
-"""
+            A dictionary with execution results."
+""""
 self.stats["executed_trades"] += 1
-
+"
 execution_result = {"status": "failed", "message": "Execution prevented"}
 
 # Calculate position size
@@ -329,56 +329,56 @@ position_sizing = self.calculate_position_size(signal, portfolio_value)
         size_to_execute = position_sizing.risk_adjusted_size
 
 if size_to_execute <= 0:  # No position to take
-logger.info(
-f"No position to execute for {
+            logger.info("
+f"No position to execute for {"
 signal.asset}. Size calculated as 0.""
-)
-return {"status": "no_action", "message": "Position size is zero"}
+)"
+        return {"status": "no_action", "message": "Position size is zero"}
 
 # Use TradeExecutor if available
 if self.trade_executor:
             if dry_run:
-                logger.info(
+                logger.info("
 f"Simulating {
-signal.direction.value} order for {
-signal.asset} ""
+signal.direction.value} order for {"
+signal.asset} """
 f"size {
-size_to_execute:.4f} at {
+size_to_execute:.4f} at {"
 signal.price}""
 )
-execution_result = {
-"status": "dry_run_success",
-"order_id": "simulated_" + str(int(time.time())),
-"executed_size": size_to_execute,
-"price": signal.price,
-"fees": size_to_execute * 0.001,  # Simulate 0.1% fee
+execution_result = {"
+"status": "dry_run_success","
+"order_id": "simulated_" + str(int(time.time())),"
+"executed_size": size_to_execute,"
+"price": signal.price,"
+"fees": size_to_execute * 0.001,  # Simulate 0.1% fee"
 "message": "Simulated trade execution",
 }
 else:
                 # In a real system, this would call actual exchange API
-logger.info(
+            logger.info("
 f"Placing {
-signal.direction.value} order for {
-signal.asset} ""
+signal.direction.value} order for {"
+signal.asset} """
 f"size {
-size_to_execute:.4f} at {
+size_to_execute:.4f} at {"
 signal.price}""
 )
 order = self.trade_executor.place_order(
 signal.asset, signal.direction.value, size_to_execute, signal.price
 )
-execution_result = {
-"status": "live_executed",
-"order_id": order.get("order_id", "N/A"),
-"executed_size": order.get("executed_size", 0.0),
-                    "price": order.get("price", 0.0),
-                    "fees": order.get("fees", 0.0),
+execution_result = {"
+"status": "live_executed","
+"order_id": order.get("order_id", "N/A"),"
+"executed_size": order.get("executed_size", 0.0),"
+                    "price": order.get("price", 0.0),"
+                    "fees": order.get("fees", 0.0),"
 "message": "Live trade execution",
 }
-else:
+else:"
             logger.warning("TradeExecutor not available. Cannot execute trades.")
-execution_result = {
-"status": "failed",
+execution_result = {"
+"status": "failed","
 "message": "TradeExecutor not available",
 }
 
@@ -387,56 +387,56 @@ if self.enable_portfolio_tracking and self.portfolio_tracker:
             self.portfolio_tracker.update_position(
                 signal.asset, signal.direction.value, size_to_execute, signal.price
 )
-logger.debug(
-f"Portfolio updated for {
-signal.asset}. Current holdings: ""
-f"{
+            logger.debug("
+f"Portfolio updated for {"
+signal.asset}. Current holdings: """
+f"{"
 self.portfolio_tracker.get_portfolio_summary()}""
 )
 
-return execution_result
+        return execution_result
 
-def get_active_signals(self) -> List[TradeSignal]:
+def get_active_signals(self) -> List[TradeSignal]:"
         """Return list of currently active signals."""
-return self.active_signals.copy()
+        return self.active_signals.copy()
 
-def get_signal_history(self, limit: int = 100) -> List[TradeSignal]:
+def get_signal_history(self, limit: int = 100) -> List[TradeSignal]:"
         """Return a portion of the signal history."""
-return list(self.signal_history)[-limit:]
+        return list(self.signal_history)[-limit:]
 
-def get_performance_stats(self) -> Dict[str, any]:
+def get_performance_stats(self) -> Dict[str, any]:"
         """Return performance statistics."""
 stats = self.stats.copy()
-if self.portfolio_tracker:
+if self.portfolio_tracker:"
             stats["portfolio_summary"] = self.portfolio_tracker.get_portfolio_summary()
-return stats
+        return stats
 
-def clear_signals(self):
+def clear_signals(self):"
         """Clear all active signals and history."""
 self.active_signals = []
 self.signal_history = []
-self.stats = {
-"total_signals": 0,
-"executed_trades": 0,
-"rejected_signals": 0,
+self.stats = {"
+"total_signals": 0,"
+"executed_trades": 0,"
+"rejected_signals": 0,"
 "avg_processing_time": 0.0,
-}
-logger.info("EntryExitPortal signals and stats cleared.")
+}"
+            logger.info("EntryExitPortal signals and stats cleared.")
 
 
 # Standalone utility function (for direct import if needed)
 
 
-def process_glyph_trade_signal(
+def process_glyph_trade_signal(:
 glyph: str,
-volume: float,
+volume: float,"
 asset: str = "BTC/USD",
 price: float = 50000.0,
 dry_run: bool = True,
-) -> Dict[str, any]:
+) -> Dict[str, any]:"
     """
 Process a glyph signal and execute a simulated trade using a temporary portal instance.
-Intended for quick, stateless trade simulations.
+Intended for quick, stateless trade simulations."
 """
 temp_portal = EntryExitPortal(
 enable_risk_management=False, enable_portfolio_tracking=False
@@ -445,10 +445,10 @@ signal = temp_portal.process_glyph_signal(glyph, volume, asset, price)
 if signal:
         return temp_portal.execute_signal(signal, dry_run=dry_run)
 else:
-        return {
-"status": "rejected",
+        return {"
+"status": "rejected","
 "message": "Signal did not meet confidence threshold.",
 }
-
-"""
-"""
+"
+""""
+"""'"

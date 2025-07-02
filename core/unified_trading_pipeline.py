@@ -33,7 +33,7 @@ Integrates all Schwabot components into a comprehensive trading pipeline:
 5. Risk Management - Position and risk control
 6. Profit Vector System - Profit optimization
 
-This creates a complete internalized pipeline for profitable trading.
+This creates a complete internalized pipeline for profitable trading."
 """
 
 # Import all core components
@@ -41,7 +41,7 @@ try:
         UnifiedProfitVectorizationSystem,
 )
 ALL_COMPONENTS_AVAILABLE = True
-except ImportError as e:
+        except ImportError as e:"
     logging.warning(f"Some components not available: {e}")
 ALL_COMPONENTS_AVAILABLE = False
 
@@ -49,7 +49,7 @@ logger = logging.getLogger(__name__)
 
 
 @dataclass
-class TradingDecision:
+class TradingDecision:"
     """Represents a complete trading decision."""
 
 timestamp: float
@@ -68,7 +68,7 @@ market_conditions: Dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
-class PipelineState:
+class PipelineState:"
     """Current state of the unified trading pipeline."""
 
 timestamp: float
@@ -83,7 +83,7 @@ ghost_state: Optional[GhostState] = None
 last_order_book: Optional[OrderBookSnapshot] = None
 
 
-class UnifiedTradingPipeline:
+class UnifiedTradingPipeline:"
     """
 Unified trading pipeline integrating all Schwabot components.
 
@@ -93,15 +93,15 @@ This pipeline provides:
 - Mathematical optimization via Matrix Math
 - Risk management and position sizing
 - Profit vector optimization
-- Real-time market analysis
+- Real-time market analysis"
 """
 
-def __init__(self, config: Optional[Dict[str, Any]] = None):
+def __init__(self, config: Optional[Dict[str, Any]] = None):"
         """Initialize unified trading pipeline."""
-if not ALL_COMPONENTS_AVAILABLE:
+if not ALL_COMPONENTS_AVAILABLE:"
             raise ImportError("Not all required components are available")
 
-self.config = config or {}
+self.config = config or {}'
 self.initial_capital = self.config.get('initial_capital', 100_000.0)
 
 # Initialize all components
@@ -123,54 +123,54 @@ total_profit=0.0,
 self.trading_history: List[TradingDecision] = []
 self.market_data_history: List[Dict[str, Any]] = []
 
-logger.info(
+            logger.info("
 "🚀 Unified Trading Pipeline initialized with capital: $%.2",
 self.initial_capital,
 )
 
-def _initialize_components(self) -> None:
+def _initialize_components(self) -> None:"
         """Initialize all trading components."""
-# Ghost Core for strategy switching
-ghost_config = self.config.get('ghost_core', {})
+# Ghost Core for strategy switching'
+ghost_config = self.config.get('ghost_core', {})'
 self.ghost_core = GhostCore(memory_depth=ghost_config.get('memory_depth', 1000))
 
-# CCXT Integration for exchange connectivity
+# CCXT Integration for exchange connectivity'
 ccxt_config = self.config.get('ccxt_integration', {})
 self.ccxt_integration = CCXTIntegration(ccxt_config)
 
-# Brain Trading Engine for signal processing
+# Brain Trading Engine for signal processing'
 brain_config = self.config.get('brain_trading_engine', {})
 self.brain_engine = BrainTradingEngine(brain_config)
 
-# Risk Manager
+# Risk Manager'
 risk_config = self.config.get('risk_manager', {})
         self.risk_manager = RiskManager(risk_config)
 
-# Profit Vector System
+# Profit Vector System'
         profit_config = self.config.get('profit_vectorization', {})
         self.profit_system = UnifiedProfitVectorizationSystem(profit_config)
 
-# Strategy Logic
+# Strategy Logic'
 strategy_config = self.config.get('strategy_logic', {})
         self.strategy_logic = StrategyLogic(strategy_config)
 
-# Profit Vector Forecast
+# Profit Vector Forecast'
         forecast_config = self.config.get('profit_forecast', {})
         self.profit_forecast = ProfitVectorForecastEngine(forecast_config)
 
 # Unified Trading Mathematics
 self.unified_math = UnifiedTradingMathematics()
-
-logger.info("✅ All trading components initialized")
+"
+            logger.info("✅ All trading components initialized")
 
 async def process_market_data(
-self,
+self,:
 symbol: str,
 price: float,
 volume: float,
 granularity: int,
 tick_index: int,
-) -> Optional[TradingDecision]:
+) -> Optional[TradingDecision]:"
         """
 Process market data through the complete pipeline.
 
@@ -182,16 +182,16 @@ granularity: Decimal precision
 tick_index: Current tick index
 
 Returns:
-            Trading decision or None if no action
+            Trading decision or None if no action"
 """
 try:
             # 1. Update market data history
-market_data = {
-'symbol': symbol,
-'price': price,
-'volume': volume,
-'timestamp': time.time(),
-'granularity': granularity,
+market_data = {'
+'symbol': symbol,'
+'price': price,'
+'volume': volume,'
+'timestamp': time.time(),'
+'granularity': granularity,'
 'tick_index': tick_index,
 }
 self.market_data_history.append(market_data)
@@ -222,9 +222,9 @@ mathematical_state=mathematical_state,
 
 # 3. Fetch order book data
 order_book = await self._fetch_order_book_data(symbol)
-if not order_book:
+if not order_book:"
                 logger.warning("No order book data available")
-return None
+        return None
 
 # 4. Detect buy/sell walls
             walls = self.ccxt_integration.detect_buy_sell_walls(order_book)
@@ -256,21 +256,21 @@ market_conditions=market_conditions,
 # 8. Update pipeline state
 self._update_pipeline_state(decision, ghost_state, market_conditions)
 
-return decision
+        return decision
 
-except Exception as e:
+        except Exception as e:"
             logger.error("Error processing market data: %s", e)
-return None
+        return None
 
-def _calculate_mathematical_state(
+def _calculate_mathematical_state(:
 self, market_data: Dict[str, Any]
-) -> Dict[str, Any]:
+) -> Dict[str, Any]:"
         """Calculate mathematical state from market data."""
 try:
-            # Get price history
+            # Get price history'
 prices = [data['price'] for data in self.market_data_history[-50:]]
 
-if len(prices) < 10:
+if len(prices) < 10:'
                 return {'complexity': 0.5, 'stability': 0.5}
 
 # Calculate matrix analysis
@@ -281,30 +281,30 @@ if len(prices) < 10:
 returns = np.diff(np.log(prices))
             volatility = np.std(returns) * np.sqrt(252) if len(returns) > 0 else 0.02
 
-# Calculate complexity
-complexity = matrix_analysis.get('complexity', 0.5)
+# Calculate complexity'
+complexity = matrix_analysis.get('complexity', 0.5)'
             stability = matrix_analysis.get('stability', 0.5)
 
-return {
-'complexity': complexity,
-'stability': stability,
-'volatility': volatility,
-'price_trend': np.mean(np.diff(prices)) if len(prices) > 1 else 0.0,
-                'volume_profile': market_data.get('volume', 0.0) / 1000.0,  # Normalized
+        return {'
+'complexity': complexity,'
+'stability': stability,'
+'volatility': volatility,'
+'price_trend': np.mean(np.diff(prices)) if len(prices) > 1 else 0.0,'
+                'volume_profile': market_data.get('volume', 0.0) / 1000.0,  # Normalized'
                 'matrix_condition': matrix_analysis.get('condition_number', 1.0),
 }
 
-except Exception as e:
-            logger.error("Error calculating mathematical state: %s", e)
-return {'complexity': 0.5, 'stability': 0.5, 'volatility': 0.02}
+        except Exception as e:"
+            logger.error("Error calculating mathematical state: %s", e)'
+        return {'complexity': 0.5, 'stability': 0.5, 'volatility': 0.02}
 
-def _analyze_market_conditions(self, market_data: Dict[str, Any]) -> Dict[str, Any]:
+def _analyze_market_conditions(self, market_data: Dict[str, Any]) -> Dict[str, Any]:"
         """Analyze current market conditions."""
-try:
-            prices = [data['price'] for data in self.market_data_history[-20:]]
+try:'
+            prices = [data['price'] for data in self.market_data_history[-20:]]'
 volumes = [data['volume'] for data in self.market_data_history[-20:]]
 
-if len(prices) < 5:
+if len(prices) < 5:'
                 return {'volatility': 0.02, 'momentum': 0.0, 'volume_profile': 1.0}
 
 # Calculate volatility
@@ -315,23 +315,23 @@ returns = np.diff(np.log(prices))
 momentum = (prices[-1] - prices[0]) / prices[0] if prices[0] > 0 else 0.0
 
 # Calculate volume profile
-avg_volume = np.mean(volumes) if volumes else 1000.0
+avg_volume = np.mean(volumes) if volumes else 1000.0'
             current_volume = market_data.get('volume', 1000.0)
             volume_profile = current_volume / avg_volume if avg_volume > 0 else 1.0
 
-return {
-'volatility': volatility,
-'momentum': momentum,
-'volume_profile': volume_profile,
-                'price_range': (np.min(prices), np.max(prices)),
+        return {'
+'volatility': volatility,'
+'momentum': momentum,'
+'volume_profile': volume_profile,'
+                'price_range': (np.min(prices), np.max(prices)),'
                 'volume_trend': np.mean(np.diff(volumes)) if len(volumes) > 1 else 0.0,
 }
 
-except Exception as e:
-            logger.error("Error analyzing market conditions: %s", e)
-return {'volatility': 0.02, 'momentum': 0.0, 'volume_profile': 1.0}
+        except Exception as e:"
+            logger.error("Error analyzing market conditions: %s", e)'
+        return {'volatility': 0.02, 'momentum': 0.0, 'volume_profile': 1.0}
 
-async def _fetch_order_book_data(self, symbol: str)::: -> Optional[OrderBookSnapshot]:
+async def _fetch_order_book_data(self, symbol: str): -> Optional[OrderBookSnapshot]:"
         """Fetch order book data from exchanges."""
 try:
             # Try to fetch from the first available exchange
@@ -342,14 +342,14 @@ exchange_id, symbol
 if order_book:
                     return order_book
 
-return None
+        return None
 
-except Exception as e:
+        except Exception as e:"
             logger.error("Error fetching order book data: %s", e)
-return None
+        return None
 
 async def _generate_trading_decision(
-self,
+self,:
 symbol: str,
 price: float,
 volume: float,
@@ -360,7 +360,7 @@ walls: List[BuySellWall],
 brain_signal: Any,
 mathematical_state: Dict[str, Any],
 market_conditions: Dict[str, Any],
-) -> Optional[TradingDecision]:
+) -> Optional[TradingDecision]:"
         """Generate trading decision based on all available data."""
 try:
             # Get brain trading decision
@@ -369,8 +369,8 @@ brain_decision = self.brain_engine.get_trading_decision(brain_signal)
 # Calculate risk-adjusted position size
 risk_metrics = self.risk_manager.calculate_position_size(
 capital=self.state.current_capital,
-price=price,
-volatility=market_conditions.get('volatility', 0.02),
+price=price,'
+volatility=market_conditions.get('volatility', 0.02),'
                 confidence=brain_decision.get('confidence', 0.5),
 )
 
@@ -382,7 +382,7 @@ profit_vector=profit_vector,
 walls=walls,
 market_conditions=market_conditions,
 )
-
+'
 if action == 'HOLD':
                 return None
 
@@ -426,7 +426,7 @@ action=action,
 quantity=quantity,
 price=execution_price,
 confidence=confidence,
-strategy_branch=ghost_state.current_branch.value,
+strategy_branch=ghost_state.current_branch.value,'
                 profit_potential=profit_vector.get('wall_enhanced_profit', 0.0),
                 risk_score=risk_score,
 exchange=list(self.ccxt_integration.exchanges.keys())[
@@ -437,75 +437,75 @@ mathematical_state=mathematical_state,
 market_conditions=market_conditions,
 )
 
-return decision
+        return decision
 
-except Exception as e:
+        except Exception as e:"
             logger.error("Error generating trading decision: %s", e)
-return None
+        return None
 
 def _determine_action(
-self,
+self,:
 brain_decision: Dict[str, Any],
 ghost_state: GhostState,
 profit_vector: Dict[str, Any],
         walls: List[BuySellWall],
 market_conditions: Dict[str, Any],
-) -> str:
-        """Determine trading action based on multiple factors."""
-brain_action = brain_decision.get('action', 'HOLD')
+) -> str:"
+        """Determine trading action based on multiple factors."""'
+brain_action = brain_decision.get('action', 'HOLD')'
         brain_confidence = brain_decision.get('confidence', 0.0)
 
 # Ghost state influence
 ghost_confidence = ghost_state.confidence
 ghost_profit_potential = ghost_state.profit_potential
 
-# Profit vector influence
-        profit_potential = profit_vector.get('wall_enhanced_profit', 0.0)
+# Profit vector influence'
+        profit_potential = profit_vector.get('wall_enhanced_profit', 0.0)'
         pressure_ratio = profit_vector.get('pressure_ratio', 1.0)
 
-# Market conditions influence
-volatility = market_conditions.get('volatility', 0.02)
+# Market conditions influence'
+volatility = market_conditions.get('volatility', 0.02)'
         momentum = market_conditions.get('momentum', 0.0)
 
-# Combined decision logic
-if brain_action == 'HOLD' or brain_confidence < 0.3:
+# Combined decision logic'
+if brain_action == 'HOLD' or brain_confidence < 0.3:'
             return 'HOLD'
 
 # High confidence scenarios
 if brain_confidence > 0.7 and ghost_confidence > 0.6:
             if profit_potential > 0.001:  # 0.1% profit potential
-return brain_action
+        return brain_action
 
 # Moderate confidence with strong profit potential
         if brain_confidence > 0.5 and profit_potential > 0.002:  # 0.2% profit potential
-return brain_action
+        return brain_action
 
-# Wall pressure influence
-if pressure_ratio > 1.5 and brain_action == 'BUY':
-            return 'BUY'
-        elif pressure_ratio < 0.7 and brain_action == 'SELL':
+# Wall pressure influence'
+if pressure_ratio > 1.5 and brain_action == 'BUY':'
+            return 'BUY''
+        elif pressure_ratio < 0.7 and brain_action == 'SELL':'
             return 'SELL'
-
-return 'HOLD'
+'
+        return 'HOLD'
 
 def _calculate_optimal_quantity(
-self,
+self,:
 action: str,
 risk_metrics: Dict[str, Any],
 brain_decision: Dict[str, Any],
 profit_vector: Dict[str, Any],
 order_book: OrderBookSnapshot,
-) -> float:
+) -> float:"
         """Calculate optimal trading quantity."""
 try:
-            # Base quantity from risk metrics
+            # Base quantity from risk metrics'
 base_quantity = risk_metrics.get('position_size', 0.0)
 
-# Adjust based on brain decision
-brain_position_size = brain_decision.get('position_size', 0.0)
+# Adjust based on brain decision'
+brain_position_size = brain_decision.get('position_size', 0.0)'
             brain_confidence = brain_decision.get('confidence', 0.5)
 
-# Adjust based on profit potential
+# Adjust based on profit potential'
             profit_potential = profit_vector.get('wall_enhanced_profit', 0.0)
             profit_multiplier = 1.0 + (profit_potential * 100)  # Scale profit potential
 
@@ -528,17 +528,17 @@ min_quantity = 0.001  # Minimum BTC quantity
 if quantity < min_quantity:
                 return 0.0
 
-return quantity
+        return quantity
 
-except Exception as e:
+        except Exception as e:"
             logger.error("Error calculating optimal quantity: %s", e)
-return 0.0
+        return 0.0
 
-def _calculate_execution_price(
+def _calculate_execution_price(:
 self, action: str, order_book: OrderBookSnapshot, quantity: float
-) -> float:
+) -> float:"
         """Calculate execution price based on order book."""
-try:
+try:'
             if action == 'BUY':
                 # Use ask prices
 orders = order_book.asks
@@ -566,30 +566,30 @@ if total_volume > 0:
 else:
                 return order_book.mid_price
 
-except Exception as e:
+        except Exception as e:"
             logger.error("Error calculating execution price: %s", e)
-return order_book.mid_price
+        return order_book.mid_price
 
 def _calculate_decision_confidence(
-self,
+self,:
 brain_decision: Dict[str, Any],
 ghost_state: GhostState,
 profit_vector: Dict[str, Any],
 mathematical_state: Dict[str, Any],
-) -> float:
+) -> float:"
         """Calculate overall decision confidence."""
 try:
-            # Brain confidence
+            # Brain confidence'
 brain_confidence = brain_decision.get('confidence', 0.5)
 
 # Ghost state confidence
 ghost_confidence = ghost_state.confidence
 
-# Mathematical state confidence
+# Mathematical state confidence'
 math_stability = mathematical_state.get('stability', 0.5)
 
 # Profit vector confidence
-            profit_confidence = min(
+            profit_confidence = min('
                 1.0, profit_vector.get('wall_enhanced_profit', 0.0) * 1000
 )
 
@@ -601,24 +601,24 @@ brain_confidence * 0.4
                 + profit_confidence * 0.1
 )
 
-return max(0.0, min(1.0, confidence))
+        return max(0.0, min(1.0, confidence))
 
-except Exception as e:
+        except Exception as e:"
             logger.error("Error calculating decision confidence: %s", e)
-return 0.5
+        return 0.5
 
 def _calculate_risk_score(
-self,
+self,:
 action: str,
 quantity: float,
 market_conditions: Dict[str, Any],
 mathematical_state: Dict[str, Any],
-) -> float:
+) -> float:"
         """Calculate risk score for the trading decision."""
 try:
             risk_score = 0.0
 
-# Volatility risk
+# Volatility risk'
 volatility = market_conditions.get('volatility', 0.02)
             if volatility > 0.05:  # High volatility
                 risk_score += 0.3
@@ -627,7 +627,7 @@ volatility = market_conditions.get('volatility', 0.02)
 else:  # Low volatility
 risk_score += 0.1
 
-# Position size risk
+# Position size risk'
 position_value = quantity * market_conditions.get('price', 50000)
 capital_ratio = position_value / self.state.current_capital
 if capital_ratio > 0.1:  # More than 10% of capital
@@ -637,7 +637,7 @@ if capital_ratio > 0.1:  # More than 10% of capital
 else:
                 risk_score += 0.1
 
-# Mathematical complexity risk
+# Mathematical complexity risk'
 complexity = mathematical_state.get('complexity', 0.5)
             if complexity > 0.8:  # High complexity
                 risk_score += 0.2
@@ -646,22 +646,22 @@ complexity = mathematical_state.get('complexity', 0.5)
 else:
                 risk_score += 0.05
 
-return min(1.0, risk_score)
+        return min(1.0, risk_score)
 
-except Exception as e:
+        except Exception as e:"
             logger.error("Error calculating risk score: %s", e)
-return 0.5
+        return 0.5
 
 def _update_pipeline_state(
-self,
+self,:
 decision: Optional[TradingDecision],
 ghost_state: GhostState,
 market_conditions: Dict[str, Any],
-) -> None:
+) -> None:"
         """Update pipeline state."""
 self.state.timestamp = time.time()
 self.state.active_strategy = ghost_state.current_branch
-self.state.ghost_state = ghost_state
+self.state.ghost_state = ghost_state'
 self.state.market_volatility = market_conditions.get('volatility', 0.02)
 
 if decision:
@@ -671,7 +671,7 @@ if decision:
 if len(self.trading_history) > 1000:
                 self.trading_history = self.trading_history[-500:]
 
-async def execute_trade(self, decision: TradingDecision)::: -> Dict[str, Any]:
+async def execute_trade(self, decision: TradingDecision): -> Dict[str, Any]:"
         """Execute a trading decision."""
 try:
             # Simulate trade execution (replace with actual exchange API calls)
@@ -681,7 +681,7 @@ execution_time = time.time()
 trade_value = decision.quantity * decision.price
 commission = trade_value * 0.001  # 0.1% commission
 
-# Update capital
+# Update capital'
 if decision.action == 'BUY':
                 self.state.current_capital -= trade_value + commission
 else:  # SELL
@@ -691,7 +691,7 @@ self.state.current_capital += trade_value - commission
 self.state.total_trades += 1
 
 # Calculate profit (simplified)
-            profit = 0.0
+            profit = 0.0'
             if decision.action == 'SELL':
                 # Assume we bought at a lower price
 profit = trade_value * 0.01  # 1% profit assumption
@@ -702,11 +702,11 @@ if profit > 0:
 self.state.total_profit += profit
 
 # Update Ghost Core performance
-trade_result = {
-'profit': profit,
-'action': decision.action,
-'quantity': decision.quantity,
-'price': decision.price,
+trade_result = {'
+'profit': profit,'
+'action': decision.action,'
+'quantity': decision.quantity,'
+'price': decision.price,'
 'mathematical_state': decision.mathematical_state,
 }
 
@@ -714,17 +714,17 @@ self.ghost_core.update_strategy_performance(
                 decision.strategy_branch, trade_result
 )
 
-result = {
-'success': True,
-'execution_time': execution_time,
-'trade_value': trade_value,
-'commission': commission,
-'profit': profit,
-'new_capital': self.state.current_capital,
+result = {'
+'success': True,'
+'execution_time': execution_time,'
+'trade_value': trade_value,'
+'commission': commission,'
+'profit': profit,'
+'new_capital': self.state.current_capital,'
 'decision': decision,
 }
 
-logger.info(
+            logger.info("
 "✅ Trade executed: %s %.4f %s @ $%.2f (profit: $%.2f)",
 decision.action,
 decision.quantity,
@@ -733,41 +733,41 @@ decision.price,
 profit,
 )
 
-return result
+        return result
 
-except Exception as e:
-            logger.error("Error executing trade: %s", e)
-return {'success': False, 'error': str(e), 'decision': decision}
+        except Exception as e:"
+            logger.error("Error executing trade: %s", e)'
+        return {'success': False, 'error': str(e), 'decision': decision}
 
-def get_pipeline_status(self) -> Dict[str, Any]:
+def get_pipeline_status(self) -> Dict[str, Any]:"
         """Get comprehensive pipeline status."""
-return {
-'state': {
-'current_capital': self.state.current_capital,
-'total_trades': self.state.total_trades,
-'winning_trades': self.state.winning_trades,
-'total_profit': self.state.total_profit,
-'win_rate': self.state.winning_trades / max(self.state.total_trades, 1),
-'active_strategy': self.state.active_strategy.value,
+        return {'
+'state': {'
+'current_capital': self.state.current_capital,'
+'total_trades': self.state.total_trades,'
+'winning_trades': self.state.winning_trades,'
+'total_profit': self.state.total_profit,'
+'win_rate': self.state.winning_trades / max(self.state.total_trades, 1),'
+'active_strategy': self.state.active_strategy.value,'
 'market_volatility': self.state.market_volatility,
-},
-'ghost_core_status': self.ghost_core.get_system_status(),
-'brain_engine_metrics': self.brain_engine.get_metrics_summary(),
-'risk_manager_status': {
-                'current_risk_level': self.state.current_risk_level,
+},'
+'ghost_core_status': self.ghost_core.get_system_status(),'
+'brain_engine_metrics': self.brain_engine.get_metrics_summary(),'
+'risk_manager_status': {'
+                'current_risk_level': self.state.current_risk_level,'
                 'risk_metrics': self.risk_manager.get_risk_metrics({}),
-},
-'trading_history_size': len(self.trading_history),
+},'
+'trading_history_size': len(self.trading_history),'
 'market_data_history_size': len(self.market_data_history),
 }
 
 async def run_backtest(
-self,
-price_series: List[Tuple[float, float]],  # (timestamp, price)
+self,:
+price_series: List[Tuple[float, float]],  # (timestamp, price)"
 symbol: str = "BTC/USDT",
-) -> Dict[str, Any]:
-        """Run backtest on historical price data."""
-logger.info("Starting backtest with %d price points", len(price_series))
+) -> Dict[str, Any]:"
+        """Run backtest on historical price data.""""
+            logger.info("Starting backtest with %d price points", len(price_series))
 
 initial_capital = self.state.current_capital
 trades_executed = []
@@ -795,7 +795,7 @@ if decision:
 
 # Log progress
 if i % 100 == 0:
-                logger.info(
+                logger.info("
 "Backtest progress: %d/%d (%.1f%%)",
 i,
 len(price_series),
@@ -806,52 +806,52 @@ len(price_series),
 final_capital = self.state.current_capital
 total_return = (final_capital - initial_capital) / initial_capital
 
-results = {
-'initial_capital': initial_capital,
-'final_capital': final_capital,
-'total_return': total_return,
-'total_trades': len(trades_executed),
-'winning_trades': sum(
+results = {'
+'initial_capital': initial_capital,'
+'final_capital': final_capital,'
+'total_return': total_return,'
+'total_trades': len(trades_executed),'
+'winning_trades': sum('
 1 for trade in trades_executed if trade.get('profit', 0) > 0
-),
-'total_profit': sum(trade.get('profit', 0) for trade in trades_executed),
+),'
+'total_profit': sum(trade.get('profit', 0) for trade in trades_executed),'
 'pipeline_status': self.get_pipeline_status(),
 }
 
-logger.info(
+            logger.info("
 "Backtest completed: %.2f%% return, %d trades",
 total_return * 100,
 len(trades_executed),
 )
-return results
+        return results
 
-async def close(self) -> None:
+async def close(self) -> None:"
         """Close all connections and cleanup."""
 try:
-            await self.ccxt_integration.close_connections()
-logger.info("Pipeline connections closed")
-except Exception as e:
+            await self.ccxt_integration.close_connections()"
+            logger.info("Pipeline connections closed")
+        except Exception as e:"
             logger.error("Error closing pipeline: %s", e)
 
 
-async def demo_unified_pipeline():
-    """Demonstrate unified trading pipeline."""
-print("🚀 Unified Trading Pipeline Demo")
+async def demo_unified_pipeline():"
+    """Demonstrate unified trading pipeline.""""
+print("🚀 Unified Trading Pipeline Demo")"
 print("=" * 50)
 
 # Initialize pipeline
-config = {
-'initial_capital': 100_000.0,
-'ghost_core': {'memory_depth': 100},
-'ccxt_integration': {'exchanges': ['binance']},
-'brain_trading_engine': {'confidence_threshold': 0.6},
+config = {'
+'initial_capital': 100_000.0,'
+'ghost_core': {'memory_depth': 100},'
+'ccxt_integration': {'exchanges': ['binance']},'
+'brain_trading_engine': {'confidence_threshold': 0.6},'
         'risk_manager': {'max_position_size': 0.1},
 }
 
 pipeline = UnifiedTradingPipeline(config)
 
 try:
-        # Generate test price series
+        # Generate test price series"
 print("\nGenerating test price series...")
 base_price = 50000.0
         price_series = []
@@ -862,41 +862,41 @@ price_change = np.random.normal(0, 0.01)  # 1% volatility
             base_price *= 1 + price_change
             price_series.append((time.time() + i, base_price))
 
-# Run backtest
-print("Running backtest...")
+# Run backtest"
+print("Running backtest...")"
 results = await pipeline.run_backtest(price_series, "BTC/USDT")
 
-# Show results
-print("\nBacktest Results:")
-print(f"  Initial Capital: ${results['initial_capital']:,.2f}")
-print(f"  Final Capital: ${results['final_capital']:,.2f}")
-print(f"  Total Return: {results['total_return']:.2%}")
-print(f"  Total Trades: {results['total_trades']}")
+# Show results"
+print("\nBacktest Results:")'"
+print(f"  Initial Capital: ${results['initial_capital']:,.2f}")'"
+print(f"  Final Capital: ${results['final_capital']:,.2f}")'"
+print(f"  Total Return: {results['total_return']:.2%}")'"
+print(f"  Total Trades: {results['total_trades']}")'"
 print(f"  Winning Trades: {results['winning_trades']}")
-print(
-f"  Win Rate: {results['winning_trades']/"
+print('"
+f"  Win Rate: {results['winning_trades']/"'"
 max(results['total_trades'], 1):.1%}""
-)
+)'"
 print(f"  Total Profit: ${results['total_profit']:,.2f}")
 
-# Show pipeline status
-status = results['pipeline_status']
-print("\nPipeline Status:")
-print(f"  Active Strategy: {status['state']['active_strategy']}")
-print(f"  Market Volatility: {status['state']['market_volatility']:.4f}")
+# Show pipeline status'
+status = results['pipeline_status']"
+print("\nPipeline Status:")'"
+print(f"  Active Strategy: {status['state']['active_strategy']}")'"
+print(f"  Market Volatility: {status['state']['market_volatility']:.4f}")'"
 print(f"  Ghost Core Memory: {status['ghost_core_status']['memory_depth']}")
 
-except Exception as e:
+        except Exception as e:"
         print(f"Demo failed: {e}")
 
 finally:
         await pipeline.close()
-
+"
 print("\n✅ Unified Trading Pipeline demo completed!")
 
-
+"
 if __name__ == "__main__":
     asyncio.run(demo_unified_pipeline())
-
-"""
-"""
+"
+""""
+"""'"

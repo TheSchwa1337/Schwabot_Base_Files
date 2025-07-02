@@ -9,36 +9,37 @@ from enum import Enum
 API System Enums
 ================
 
-Contains all enumerations for the Schwabot live API integration system.
+Contains all enumerations for the Schwabot live API integration system."
 """
 
-class ExchangeType(Enum):
-    """Supported exchange types."""
-    COINBASE = "coinbase"
-    BINANCE = "binance"
-    KRAKEN = "kraken"
-    KUCOIN = "kucoin"
+class ExchangeType(Enum):"
+    """Supported exchange types.""""
+    COINBASE = "coinbase""
+    BINANCE = "binance""
+    KRAKEN = "kraken""
+    KUCOIN = "kucoin""
     OKX = "okx"
 
 
-class OrderType(Enum):
-    """Order types."""
-    MARKET = "market"
-    LIMIT = "limit"
-    STOP_LOSS = "stop_loss"
+class OrderType(Enum):"
+    """Order types.""""
+    MARKET = "market""
+    LIMIT = "limit""
+    STOP_LOSS = "stop_loss""
     TAKE_PROFIT = "take_profit"
 
 
-class OrderSide(Enum):
-    """Order sides."""
-    BUY = "buy"
+class OrderSide(Enum):"
+    """Order sides.""""
+    BUY = "buy""
     SELL = "sell"
 
 
-class ConnectionStatus(Enum):
-    """Connection status."""
-    DISCONNECTED = "disconnected"
-    CONNECTING = "connecting"
-    CONNECTED = "connected"
-    ERROR = "error"
+class ConnectionStatus(Enum):"
+    """Connection status.""""
+    DISCONNECTED = "disconnected""
+    CONNECTING = "connecting""
+    CONNECTED = "connected""
+    ERROR = "error""
     RECONNECTING = "reconnecting"
+"

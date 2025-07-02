@@ -12,7 +12,7 @@ This system enables:
 - AI confidence bias adjustment
 - Recursive memory tuning
 - Strategy vector weighting
-- Temporal filtering controls
+- Temporal filtering controls"
 """
 
 from __future__ import annotations
@@ -33,7 +33,7 @@ try:
         RecursionGuard,
         UnifiedMathematicsFramework,
     )
-except ImportError:
+        except ImportError:
     # Fallback implementations for testing
     class MathematicalValidator:
         def validate(self, *args, **kwargs):
@@ -54,25 +54,25 @@ logger = logging.getLogger(__name__)
 
 
 @dataclass
-class SettingDefinition:
+class SettingDefinition:"
     """Definition of an advanced setting parameter."""
 
     name: str
     display_name: str
-    description: str
+    description: str'
     setting_type: str  # 'slider', 'toggle', 'select', 'numeric'
     default_value: Union[float, bool, str, int]
     min_value: Optional[float] = None
     max_value: Optional[float] = None
     step: Optional[float] = None
-    options: Optional[List[str]] = None
+    options: Optional[List[str]] = None"
     category: str = "general"
     affects_modules: List[str] = field(default_factory=list)
     validation_func: Optional[Callable] = None
 
 
 @dataclass
-class ConfidenceVector:
+class ConfidenceVector:"
     """Multi-dimensional confidence vector for decision weighting."""
 
     ai_consensus: float = 0.6
@@ -82,7 +82,7 @@ class ConfidenceVector:
     echo_resonance: float = 0.0
     temporal_decay: float = 0.9
 
-    def normalize(self) -> None:
+    def normalize(self) -> None:"
         """Normalize confidence vector to unit magnitude."""
         total = sum([
             self.ai_consensus,
@@ -99,7 +99,7 @@ class ConfidenceVector:
 
 
 @dataclass
-class EchoState:
+class EchoState:"
     """Echo signal state for recursive feedback."""
 
     amplitude: float = 1.0
@@ -110,17 +110,17 @@ class EchoState:
     last_update: float = field(default_factory=time.time)
 
 
-class AdvancedSettingsEngine:
-    """
+class AdvancedSettingsEngine:"
+    """'
     Advanced settings engine that implements Schwabot's spatial momentum system
-    with weighted confidence frameworks and echo-based signal modulation.
+    with weighted confidence frameworks and echo-based signal modulation."
     """
 
     def __init__(
-        self,
+        self,":
         config_path: Path = Path("settings/advanced_config.json"),
         math_framework: Optional[UnifiedMathematicsFramework] = None,
-    ) -> None:
+    ) -> None:"
         """Initialize the advanced settings engine."""
         self.config_path = Path(config_path)
         self.math_framework = math_framework or UnifiedMathematicsFramework()
@@ -148,174 +148,174 @@ class AdvancedSettingsEngine:
 
         # Load configuration
         self._load_configuration()
+"
+            logger.info("Advanced Settings Engine initialized")
 
-        logger.info("Advanced Settings Engine initialized")
-
-    def _initialize_setting_definitions(self) -> Dict[str, SettingDefinition]:
+    def _initialize_setting_definitions(self) -> Dict[str, SettingDefinition]:"
         """Initialize all advanced setting definitions."""
         definitions = {}
 
-        # Echo Control Settings
-        definitions["echo_delay_sensitivity"] = SettingDefinition(
-            name="echo_delay_sensitivity",
-            display_name="Echo Delay Sensitivity",
-            description="Controls lag window for ghost signal detection",
+        # Echo Control Settings"
+        definitions["echo_delay_sensitivity"] = SettingDefinition("
+            name="echo_delay_sensitivity","
+            display_name="Echo Delay Sensitivity","
+            description="Controls lag window for ghost signal detection","
             setting_type="slider",
             default_value=0.8,
             min_value=0.1,
             max_value=2.0,
-            step=0.1,
-            category="echo_control",
+            step=0.1,"
+            category="echo_control","
             affects_modules=["echo_modulator", "drift_engine", "signal_processing"],
         )
-
-        definitions["ghost_relay_threshold"] = SettingDefinition(
-            name="ghost_relay_threshold",
-            display_name="Ghost Relay Threshold",
-            description="Minimum entropy for ghost trade activation",
+"
+        definitions["ghost_relay_threshold"] = SettingDefinition("
+            name="ghost_relay_threshold","
+            display_name="Ghost Relay Threshold","
+            description="Minimum entropy for ghost trade activation","
             setting_type="slider",
             default_value=0.9,
             min_value=0.5,
             max_value=1.5,
-            step=0.05,
-            category="echo_control",
+            step=0.05,"
+            category="echo_control","
             affects_modules=["ghost_detector", "execution_engine"],
         )
 
-        # AI Bias Settings
-        definitions["ai_consensus_weight"] = SettingDefinition(
-            name="ai_consensus_weight",
-            display_name="AI Consensus Weight",
-            description="Weight given to AI consensus in decision making",
+        # AI Bias Settings"
+        definitions["ai_consensus_weight"] = SettingDefinition("
+            name="ai_consensus_weight","
+            display_name="AI Consensus Weight","
+            description="Weight given to AI consensus in decision making","
             setting_type="slider",
             default_value=0.6,
             min_value=0.0,
             max_value=1.0,
-            step=0.05,
-            category="ai_control",
+            step=0.05,"
+            category="ai_control","
             affects_modules=["ai_coordinator", "decision_engine"],
         )
-
-        definitions["r1_preference"] = SettingDefinition(
-            name="r1_preference",
-            display_name="R1 Model Preference",
-            description="Preference weight for R1 model outputs",
+"
+        definitions["r1_preference"] = SettingDefinition("
+            name="r1_preference","
+            display_name="R1 Model Preference","
+            description="Preference weight for R1 model outputs","
             setting_type="slider",
             default_value=0.5,
             min_value=0.0,
             max_value=1.0,
-            step=0.1,
-            category="ai_control",
+            step=0.1,"
+            category="ai_control","
             affects_modules=["ai_coordinator"],
         )
-
-        definitions["claude_preference"] = SettingDefinition(
-            name="claude_preference",
-            display_name="Claude Model Preference",
-            description="Preference weight for Claude model outputs",
+"
+        definitions["claude_preference"] = SettingDefinition("
+            name="claude_preference","
+            display_name="Claude Model Preference","
+            description="Preference weight for Claude model outputs","
             setting_type="slider",
             default_value=0.3,
             min_value=0.0,
             max_value=1.0,
-            step=0.1,
-            category="ai_control",
+            step=0.1,"
+            category="ai_control","
             affects_modules=["ai_coordinator"],
         )
-
-        definitions["gpt4_preference"] = SettingDefinition(
-            name="gpt4_preference",
-            display_name="GPT-4 Model Preference",
-            description="Preference weight for GPT-4 model outputs",
+"
+        definitions["gpt4_preference"] = SettingDefinition("
+            name="gpt4_preference","
+            display_name="GPT-4 Model Preference","
+            description="Preference weight for GPT-4 model outputs","
             setting_type="slider",
             default_value=0.2,
             min_value=0.0,
             max_value=1.0,
-            step=0.1,
-            category="ai_control",
+            step=0.1,"
+            category="ai_control","
             affects_modules=["ai_coordinator"],
         )
 
-        # Trading Control Settings
-        definitions["buy_wall_aggression"] = SettingDefinition(
-            name="buy_wall_aggression",
-            display_name="Buy Wall Aggression",
-            description="Scale factor for buy wall construction during predictable pumps",
+        # Trading Control Settings"
+        definitions["buy_wall_aggression"] = SettingDefinition("
+            name="buy_wall_aggression","
+            display_name="Buy Wall Aggression","
+            description="Scale factor for buy wall construction during predictable pumps","
             setting_type="slider",
             default_value=1.0,
             min_value=0.5,
             max_value=3.0,
-            step=0.1,
-            category="trading_control",
+            step=0.1,"
+            category="trading_control","
             affects_modules=["execution_engine", "volume_optimizer"],
         )
-
-        definitions["sell_wall_aggression"] = SettingDefinition(
-            name="sell_wall_aggression",
-            display_name="Sell Wall Aggression",
-            description="Scale factor for sell wall construction during predictable dumps",
+"
+        definitions["sell_wall_aggression"] = SettingDefinition("
+            name="sell_wall_aggression","
+            display_name="Sell Wall Aggression","
+            description="Scale factor for sell wall construction during predictable dumps","
             setting_type="slider",
             default_value=1.0,
             min_value=0.5,
             max_value=3.0,
-            step=0.1,
-            category="trading_control",
+            step=0.1,"
+            category="trading_control","
             affects_modules=["execution_engine", "volume_optimizer"],
         )
 
-        # Memory and Learning Settings
-        definitions["strategy_decay_rate"] = SettingDefinition(
-            name="strategy_decay_rate",
-            display_name="Strategy Memory Decay",
-            description="Rate at which old strategies decay from memory",
+        # Memory and Learning Settings"
+        definitions["strategy_decay_rate"] = SettingDefinition("
+            name="strategy_decay_rate","
+            display_name="Strategy Memory Decay","
+            description="Rate at which old strategies decay from memory","
             setting_type="slider",
             default_value=0.1,
             min_value=0.01,
             max_value=0.5,
-            step=0.01,
-            category="memory_control",
+            step=0.01,"
+            category="memory_control","
             affects_modules=["memory_stack", "strategy_mapper"],
         )
-
-        definitions["profit_memory_window"] = SettingDefinition(
-            name="profit_memory_window",
-            display_name="Profit Memory Window",
-            description="Time window for retaining profitable strategy hashes",
+"
+        definitions["profit_memory_window"] = SettingDefinition("
+            name="profit_memory_window","
+            display_name="Profit Memory Window","
+            description="Time window for retaining profitable strategy hashes","
             setting_type="numeric",
             default_value=24,
             min_value=1,
             max_value=168,
-            step=1,
-            category="memory_control",
+            step=1,"
+            category="memory_control","
             affects_modules=["profit_memory", "ferris_wheel"],
         )
 
-        # Advanced Mathematical Controls
-        definitions["fractal_noise_tolerance"] = SettingDefinition(
-            name="fractal_noise_tolerance",
-            display_name="Fractal Noise Tolerance",
-            description="Tolerance for fractal deviation in signal processing",
+        # Advanced Mathematical Controls"
+        definitions["fractal_noise_tolerance"] = SettingDefinition("
+            name="fractal_noise_tolerance","
+            display_name="Fractal Noise Tolerance","
+            description="Tolerance for fractal deviation in signal processing","
             setting_type="slider",
             default_value=0.05,
             min_value=0.01,
             max_value=0.2,
-            step=0.01,
-            category="mathematical_control",
+            step=0.01,"
+            category="mathematical_control","
             affects_modules=["fractal_processor", "signal_filter"],
         )
-
-        definitions["entropy_stabilization"] = SettingDefinition(
-            name="entropy_stabilization",
-            display_name="Entropy Stabilization",
-            description="Enable entropy-based signal stabilization",
+"
+        definitions["entropy_stabilization"] = SettingDefinition("
+            name="entropy_stabilization","
+            display_name="Entropy Stabilization","
+            description="Enable entropy-based signal stabilization","
             setting_type="toggle",
-            default_value=True,
-            category="mathematical_control",
+            default_value=True,"
+            category="mathematical_control","
             affects_modules=["entropy_stabilizer", "recursive_processor"],
         )
 
         return definitions
 
-    def get_setting_value(self, setting_name: str) -> Any:
+    def get_setting_value(self, setting_name: str) -> Any:"
         """Get current value of a setting."""
         if setting_name in self.settings_state:
             return self.settings_state[setting_name]
@@ -323,20 +323,20 @@ class AdvancedSettingsEngine:
         # Return default if not set
         if setting_name in self.setting_definitions:
             return self.setting_definitions[setting_name].default_value
-
-        logger.warning(f"Unknown setting requested: {setting_name}")
+"
+            logger.warning(f"Unknown setting requested: {setting_name}")
         return None
 
-    def set_setting_value(self, setting_name: str, value: Any) -> bool:
+    def set_setting_value(self, setting_name: str, value: Any) -> bool:"
         """Set value of a setting with validation."""
-        if setting_name not in self.setting_definitions:
+        if setting_name not in self.setting_definitions:"
             logger.error(f"Unknown setting: {setting_name}")
             return False
 
         definition = self.setting_definitions[setting_name]
 
         # Validate value
-        if not self._validate_setting_value(definition, value):
+        if not self._validate_setting_value(definition, value):"
             logger.error(f"Invalid value for setting {setting_name}: {value}")
             return False
 
@@ -352,11 +352,11 @@ class AdvancedSettingsEngine:
 
             # Log setting change for performance tracking
             self._log_setting_change(setting_name, old_value, value)
-
-        logger.info(f"Setting {setting_name} updated: {old_value} -> {value}")
+"
+            logger.info(f"Setting {setting_name} updated: {old_value} -> {value}")
         return True
 
-    def apply_bias_to_module(self, module_name: str, base_value: float) -> float:
+    def apply_bias_to_module(self, module_name: str, base_value: float) -> float:'"
         """Apply settings bias to a module's base value."""
         total_bias = 1.0
 
@@ -365,21 +365,21 @@ class AdvancedSettingsEngine:
             if module_name in definition.affects_modules:
                 setting_value = self.get_setting_value(setting_name)
                 if setting_value is not None:
-                    # Apply bias based on setting type
+                    # Apply bias based on setting type"
                     if definition.setting_type == "slider":
                         # Normalize setting value to bias coefficient
                         if definition.default_value != 0:
                             bias = setting_value / definition.default_value
                         else:
                             bias = setting_value
-                        total_bias *= bias
+                        total_bias *= bias"
                     elif definition.setting_type == "toggle":
                         if not setting_value:
                             total_bias *= 0.5  # Reduce effect if disabled
 
         return base_value * total_bias
-
-    def get_confidence_vector(self, context: str = "default") -> ConfidenceVector:
+"
+    def get_confidence_vector(self, context: str = "default") -> ConfidenceVector:"
         """Get confidence vector for a specific context."""
         if context not in self.confidence_vectors:
             self.confidence_vectors[context] = ConfidenceVector()
@@ -387,7 +387,7 @@ class AdvancedSettingsEngine:
         # Apply current settings to confidence vector
         cv = self.confidence_vectors[context]
 
-        # Update AI consensus based on preferences
+        # Update AI consensus based on preferences"
         ai_weight = self.get_setting_value("ai_consensus_weight")
         if ai_weight is not None:
             cv.ai_consensus = ai_weight
@@ -404,13 +404,13 @@ class AdvancedSettingsEngine:
         cv.normalize()
         return cv
 
-    def calculate_unified_signal_score(
+    def calculate_unified_signal_score(":
         self, echo_signals: List[float], confidence_context: str = "default"
-    ) -> float:
+    ) -> float:"
         """
         Calculate unified signal activation score based on spatial momentum system.
 
-        Implements: S(t) = Σᵢ εᵢ(t)·Cᵢ(t)·ωᵢ(t) / (λ(t) + ΔE(t))
+        Implements: S(t) = Σᵢ εᵢ(t)·Cᵢ(t)·ωᵢ(t) / (λ(t) + ΔE(t))"
         """
         if not echo_signals:
             return 0.0
@@ -448,7 +448,7 @@ class AdvancedSettingsEngine:
 
         return float(signal_score)
 
-    def update_profit_feedback(self, setting_name: str, profit_delta: float) -> None:
+    def update_profit_feedback(self, setting_name: str, profit_delta: float) -> None:"
         """Update profit feedback for a specific setting."""
         if setting_name not in self.profit_feedback:
             self.profit_feedback[setting_name] = []
@@ -467,7 +467,7 @@ class AdvancedSettingsEngine:
             avg_profit = sum(recent_profits) / len(recent_profits)
             self.setting_effectiveness[setting_name] = avg_profit
 
-    def get_adaptive_recommendations(self) -> Dict[str, Any]:
+    def get_adaptive_recommendations(self) -> Dict[str, Any]:"
         """Get adaptive setting recommendations based on performance."""
         recommendations = {}
 
@@ -476,24 +476,24 @@ class AdvancedSettingsEngine:
                 definition = self.setting_definitions[setting_name]
                 current_value = self.get_setting_value(setting_name)
 
-                if effectiveness > 0.1:  # Good performance
+                if effectiveness > 0.1:  # Good performance"
                     if definition.setting_type == "slider":
                         # Suggest slight increase
                         new_value = min(definition.max_value, current_value * 1.1)
-                        recommendations[setting_name] = {
-                            "action": "increase",
-                            "current": current_value,
-                            "suggested": new_value,
+                        recommendations[setting_name] = {"
+                            "action": "increase","
+                            "current": current_value,"
+                            "suggested": new_value,"
                             "reason": f"High effectiveness: {effectiveness:.3f}",
                         }
-                elif effectiveness < -0.1:  # Poor performance
+                elif effectiveness < -0.1:  # Poor performance"
                     if definition.setting_type == "slider":
                         # Suggest slight decrease
                         new_value = max(definition.min_value, current_value * 0.9)
-                        recommendations[setting_name] = {
-                            "action": "decrease",
-                            "current": current_value,
-                            "suggested": new_value,
+                        recommendations[setting_name] = {"
+                            "action": "decrease","
+                            "current": current_value,"
+                            "suggested": new_value,"
                             "reason": f"Low effectiveness: {effectiveness:.3f}",
                         }
 
@@ -501,20 +501,20 @@ class AdvancedSettingsEngine:
 
     # Private Methods
 
-    def _validate_setting_value(
+    def _validate_setting_value(:
         self, definition: SettingDefinition, value: Any
-    ) -> bool:
-        """Validate a setting value against its definition."""
+    ) -> bool:"
+        """Validate a setting value against its definition.""""
         if definition.setting_type == "slider" or definition.setting_type == "numeric":
             if not isinstance(value, (int, float)):
                 return False
             if definition.min_value is not None and value < definition.min_value:
                 return False
             if definition.max_value is not None and value > definition.max_value:
-                return False
+                return False"
         elif definition.setting_type == "toggle":
             if not isinstance(value, bool):
-                return False
+                return False"
         elif definition.setting_type == "select":
             if definition.options and value not in definition.options:
                 return False
@@ -523,60 +523,60 @@ class AdvancedSettingsEngine:
         if definition.validation_func:
             try:
                 return definition.validation_func(value)
-            except Exception as e:
+            except Exception as e:"
                 logger.error(f"Validation function failed for {definition.name}: {e}")
                 return False
 
         return True
 
-    def _update_bias_coefficients(
+    def _update_bias_coefficients(:
         self, setting_name: str, new_value: Any, old_value: Any
-    ) -> None:
+    ) -> None:"
         """Update bias coefficients based on setting changes."""
         definition = self.setting_definitions[setting_name]
-
+"
         if definition.setting_type == "slider":
             # Calculate bias coefficient
             if definition.default_value != 0:
                 bias = new_value / definition.default_value
             else:
                 bias = new_value
-            self.bias_coefficients[setting_name] = bias
+            self.bias_coefficients[setting_name] = bias"
         elif definition.setting_type == "toggle":
             self.bias_coefficients[setting_name] = 1.0 if new_value else 0.5
 
-    def _update_confidence_vectors(self, setting_name: str, value: Any) -> None:
+    def _update_confidence_vectors(self, setting_name: str, value: Any) -> None:"
         """Update confidence vectors based on setting changes."""
         # Update confidence vectors for all contexts
-        for context, cv in self.confidence_vectors.items():
+        for context, cv in self.confidence_vectors.items():"
             if setting_name == "ai_consensus_weight":
                 cv.ai_consensus = value
             cv.normalize()
 
-    def _log_setting_change(
+    def _log_setting_change(:
         self, setting_name: str, old_value: Any, new_value: Any
-    ) -> None:
+    ) -> None:"
         """Log setting change for performance tracking."""
         timestamp = time.time()
-        change_log = {
-            "timestamp": timestamp,
-            "setting": setting_name,
-            "old_value": old_value,
+        change_log = {"
+            "timestamp": timestamp,"
+            "setting": setting_name,"
+            "old_value": old_value,"
             "new_value": new_value,
         }
 
-        if setting_name not in self.adaptive_memory:
+        if setting_name not in self.adaptive_memory:"
             self.adaptive_memory[setting_name] = {"changes": []}
-
+"
         self.adaptive_memory[setting_name]["changes"].append(change_log)
 
-        # Keep only recent changes
-        if len(self.adaptive_memory[setting_name]["changes"]) > 50:
+        # Keep only recent changes"
+        if len(self.adaptive_memory[setting_name]["changes"]) > 50:"
             self.adaptive_memory[setting_name]["changes"] = self.adaptive_memory[
-                setting_name
+                setting_name"
             ]["changes"][-50:]
 
-    def _get_echo_state(self, context: str) -> EchoState:
+    def _get_echo_state(self, context: str) -> EchoState:"
         """Get or create echo state for context."""
         if context not in self.echo_states:
             self.echo_states[context] = EchoState()
@@ -584,19 +584,19 @@ class AdvancedSettingsEngine:
         # Apply settings to echo state
         echo_state = self.echo_states[context]
 
-        # Update amplitude based on echo delay sensitivity
+        # Update amplitude based on echo delay sensitivity"
         sensitivity = self.get_setting_value("echo_delay_sensitivity")
         if sensitivity is not None:
             echo_state.amplitude = sensitivity
 
         return echo_state
 
-    def _get_strategy_weight(self, index: int) -> float:
+    def _get_strategy_weight(self, index: int) -> float:"
         """Get strategy weight for signal index."""
         # Simple strategy weighting - can be enhanced
         base_weight = 1.0
 
-        # Apply strategy decay if relevant
+        # Apply strategy decay if relevant"
         decay_rate = self.get_setting_value("strategy_decay_rate")
         if decay_rate is not None:
             time_factor = np.exp(-decay_rate * index)
@@ -604,7 +604,7 @@ class AdvancedSettingsEngine:
 
         return base_weight
 
-    def _calculate_entropy_cost(self, signals: List[float]) -> float:
+    def _calculate_entropy_cost(self, signals: List[float]) -> float:"
         """Calculate entropy suppression cost."""
         if not signals:
             return 1.0
@@ -620,13 +620,13 @@ class AdvancedSettingsEngine:
 
         entropy = -np.sum(probabilities * np.log2(probabilities + 1e-10))
 
-        # Apply entropy stabilization setting
+        # Apply entropy stabilization setting"
         if self.get_setting_value("entropy_stabilization"):
             entropy *= 0.8  # Reduce cost when stabilization is enabled
 
         return max(0.1, entropy)
 
-    def _calculate_expected_deviation(self, signals: List[float]) -> float:
+    def _calculate_expected_deviation(self, signals: List[float]) -> float:"
         """Calculate expected deviation in signal behavior."""
         if len(signals) < 2:
             return 0.1
@@ -634,68 +634,69 @@ class AdvancedSettingsEngine:
         signal_array = np.array(signals)
         deviation = np.std(signal_array)
 
-        # Apply fractal noise tolerance
+        # Apply fractal noise tolerance"
         tolerance = self.get_setting_value("fractal_noise_tolerance")
         if tolerance is not None:
             deviation = max(tolerance, deviation)
 
         return deviation
 
-    def _load_configuration(self) -> None:
+    def _load_configuration(self) -> None:"
         """Load configuration from file."""
         try:
-            if self.config_path.exists():
+            if self.config_path.exists():'
                 with open(self.config_path, 'r') as f:
                     config = json.load(f)
-
+"
                 for setting_name, value in config.get("settings", {}).items():
                     if setting_name in self.setting_definitions:
                         self.set_setting_value(setting_name, value)
-
+"
                 logger.info(f"Loaded configuration from {self.config_path}")
             else:
                 # Initialize with defaults
                 for setting_name, definition in self.setting_definitions.items():
-                    self.settings_state[setting_name] = definition.default_value
+                    self.settings_state[setting_name] = definition.default_value"
                 logger.info("Initialized with default settings")
-        except Exception as e:
+        except Exception as e:"
             logger.error(f"Failed to load configuration: {e}")
             # Fall back to defaults
             for setting_name, definition in self.setting_definitions.items():
                 self.settings_state[setting_name] = definition.default_value
 
-    def save_configuration(self) -> bool:
+    def save_configuration(self) -> bool:"
         """Save current configuration to file."""
         try:
             self.config_path.parent.mkdir(parents=True, exist_ok=True)
 
-            config = {
-                "settings": self.settings_state,
-                "timestamp": time.time(),
+            config = {"
+                "settings": self.settings_state,"
+                "timestamp": time.time(),"
                 "effectiveness_scores": self.setting_effectiveness,
             }
-
+'
             with open(self.config_path, 'w') as f:
                 json.dump(config, f, indent=2)
-
+"
             logger.info(f"Configuration saved to {self.config_path}")
             return True
-        except Exception as e:
+        except Exception as e:"
             logger.error(f"Failed to save configuration: {e}")
             return False
 
-    def get_system_status(self) -> Dict[str, Any]:
+    def get_system_status(self) -> Dict[str, Any]:"
         """Get comprehensive system status."""
-        return {
-            "settings_loaded": len(self.settings_state),
-            "confidence_vectors": len(self.confidence_vectors),
-            "echo_states": len(self.echo_states),
-            "bias_coefficients": len(self.bias_coefficients),
-            "memory_weights": len(self.memory_weights),
+        return {"
+            "settings_loaded": len(self.settings_state),"
+            "confidence_vectors": len(self.confidence_vectors),"
+            "echo_states": len(self.echo_states),"
+            "bias_coefficients": len(self.bias_coefficients),"
+            "memory_weights": len(self.memory_weights),"
             "profit_feedback_entries": sum(
                 len(feedback) for feedback in self.profit_feedback.values()
-            ),
-            "setting_effectiveness": len(self.setting_effectiveness),
-            "adaptive_memory_entries": len(self.adaptive_memory),
+            ),"
+            "setting_effectiveness": len(self.setting_effectiveness),"
+            "adaptive_memory_entries": len(self.adaptive_memory),"
             "running": self._running,
         }
+'"

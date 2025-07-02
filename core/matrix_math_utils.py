@@ -20,24 +20,24 @@ Key Features
 4. Matrix stability scoring for dynamic risk controls
 
 All public helpers are **pure functions** and NumPy-based so they can be
-unit-tested in isolation.
+unit-tested in isolation."
 """
-
+"
 __all__ = ["analyze_price_matrix", "risk_parity_weights"]
 
 
-def analyze_price_matrix(price_matrix: np.ndarray) -> Dict[str, Any]:
+def analyze_price_matrix(price_matrix: np.ndarray) -> Dict[str, Any]:"
     """Analyse a 2-D matrix of *prices* or *returns*."
 
     The input shape is (N, M) where **N** is the number of samples/
     timesteps and **M** is the number of assets.
     Returns a dictionary of diagnostics suitable for adaptive
-    parameter tuning.
+    parameter tuning."
     """
-    if not isinstance(price_matrix, np.ndarray):
+    if not isinstance(price_matrix, np.ndarray):"
         raise TypeError("price_matrix must be a NumPy array")
 
-    if price_matrix.ndim != 2:
+    if price_matrix.ndim != 2:"
         raise ValueError("price_matrix must be 2-D (samples × assets)")
 
     num_samples = price_matrix.shape[0]
@@ -59,13 +59,13 @@ def analyze_price_matrix(price_matrix: np.ndarray) -> Dict[str, Any]:
             else np.array([1.0])
         )
 
-        return {
-            "cov_matrix": default_cov,
-            "corr_matrix": default_corr,
-            "eigenvalues": default_eig,
-            "condition_number": 0.0,  # Represents no sensitivity or perfectly stable if no data
-            "stability_score": 0.0,  # Represents no stability if no data
-            "risk_parity_weights": default_weights,
+        return {"
+            "cov_matrix": default_cov,"
+            "corr_matrix": default_corr,"
+            "eigenvalues": default_eig,"
+            "condition_number": 0.0,  # Represents no sensitivity or perfectly stable if no data"
+            "stability_score": 0.0,  # Represents no stability if no data"
+            "risk_parity_weights": default_weights,"
             "volatility": 0.0,
         }
 
@@ -85,13 +85,13 @@ def analyze_price_matrix(price_matrix: np.ndarray) -> Dict[str, Any]:
         default_eig = np.full(num_assets, default_val)
         default_weights = np.full(num_assets, 1.0 / num_assets)
 
-        return {
-            "cov_matrix": default_cov,
-            "corr_matrix": default_corr,
-            "eigenvalues": default_eig,
-            "condition_number": 0.0,
-            "stability_score": 0.0,
-            "risk_parity_weights": default_weights,
+        return {"
+            "cov_matrix": default_cov,"
+            "corr_matrix": default_corr,"
+            "eigenvalues": default_eig,"
+            "condition_number": 0.0,"
+            "stability_score": 0.0,"
+            "risk_parity_weights": default_weights,"
             "volatility": 0.0,
         }
 
@@ -126,14 +126,14 @@ def analyze_price_matrix(price_matrix: np.ndarray) -> Dict[str, Any]:
     # Eigenvalues might fail if cov_matrix is singular/empty, add a try-except
     try:
         eigenvalues = np.linalg.eigvals(cov_matrix)
-    except np.linalg.LinAlgError:
+        except np.linalg.LinAlgError:
         # Fallback to zero eigenvalues if calculation fails
         eigenvalues = np.zeros(num_assets)
 
     # Condition number might fail if cov_matrix is singular/empty, add a try-except
     try:
         condition_number = float(np.linalg.cond(cov_matrix))
-    except np.linalg.LinAlgError:
+        except np.linalg.LinAlgError:'
         condition_number = float('in')  # Assign infinity for singular matrices
 
     # Stability metric: lower condition number + small max eigenvalue =>
@@ -145,26 +145,27 @@ def analyze_price_matrix(price_matrix: np.ndarray) -> Dict[str, Any]:
     # Simple risk-parity weight suggestion
     parity_weights = risk_parity_weights(cov_matrix)
 
-    return {
-        "cov_matrix": cov_matrix,
-        "corr_matrix": corr_matrix,
-        "eigenvalues": eigenvalues,
-        "condition_number": condition_number,
-        "stability_score": stability_score,
-        "risk_parity_weights": parity_weights,
+        return {"
+        "cov_matrix": cov_matrix,"
+        "corr_matrix": corr_matrix,"
+        "eigenvalues": eigenvalues,"
+        "condition_number": condition_number,"
+        "stability_score": stability_score,"
+        "risk_parity_weights": parity_weights,"
         "volatility": volatility,
     }
 
 
-def risk_parity_weights(cov_matrix: np.ndarray) -> np.ndarray:
+def risk_parity_weights(cov_matrix: np.ndarray) -> np.ndarray:"
     """Return naive risk-parity weights from a covariance matrix."
 
-    Uses inverse volatility as a quick approximation (no optimisation).
+    Uses inverse volatility as a quick approximation (no optimisation)."
     """
-    if cov_matrix.ndim != 2 or cov_matrix.shape[0] != cov_matrix.shape[1]:
+    if cov_matrix.ndim != 2 or cov_matrix.shape[0] != cov_matrix.shape[1]:"
         raise ValueError("cov_matrix must be square")
 
     vol = np.sqrt(np.diag(cov_matrix))
     inv_vol = 1.0 / np.where(vol == 0, 1e-8, vol)
     weights = inv_vol / np.sum(inv_vol)
-    return weights
+        return weights
+'"

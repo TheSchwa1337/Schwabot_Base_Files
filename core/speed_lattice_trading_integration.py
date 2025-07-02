@@ -11,7 +11,7 @@ import numpy as np
 Speed-Lattice Trading Integration Engine
 ----------------------------------------
 Implements recursive temporal hashing, lattice map overlays,
-and multi-strategy entry point logic for high-frequency tick resolution.
+and multi-strategy entry point logic for high-frequency tick resolution."
 """
 
 class SpeedLatticeTradingIntegrator:
@@ -20,11 +20,11 @@ class SpeedLatticeTradingIntegrator:
 self.tick_history = []
 self.strategy_map = {}
 
-def hash_tick(self, price: float, volume: float, timestamp: float)::: -> str:
+def hash_tick(self, price: float, volume: float, timestamp: float): -> str:"
         payload = f"{price}-{volume}-{timestamp}".encode()
-return hashlib.sha256(payload).hexdigest()
+        return hashlib.sha256(payload).hexdigest()
 
-def register_strategy(self, strategy_id: str, strategy_func: Callable)::::
+def register_strategy(self, strategy_id: str, strategy_func: Callable)::
         self.strategy_map[strategy_id] = strategy_func
 
 def execute(self, price: float, volume: float, timestamp: Optional[float] = None):
@@ -36,9 +36,9 @@ results = {}
 for sid, strategy_func in self.strategy_map.items():
             results[sid] = strategy_func(price, volume, timestamp, tick_hash)
 
-return results
-
-"""
-"""
-"""
-"""
+        return results
+"
+""""
+""""
+""""
+""""
