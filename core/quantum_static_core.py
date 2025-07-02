@@ -1,30 +1,26 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Quantum Static Core (QSC) - Trading Immune System.
+Quantum Static Core (QSC) - Fibonacci Divergence Detection & Immune Response System
 
-The QSC acts as an intelligent immune system for the trading bot, providing:
-1. Real-time Fibonacci resonance analysis
-2. Quantum state validation
-3. Entropy flux monitoring  
-4. Automatic override for anomalous market conditions
-5. Timeband locking mechanism for stability
+Mathematical Foundation:
+- Fibonacci Resonance: F(n) = φⁿ/√5 - ψⁿ/√5, where φ = (1+√5)/2, ψ = (1-√5)/2
+- Entropy Flux: H(X) = -Σ p(x) log₂ p(x)
+- Vector Divergence: D(v₁,v₂) = ||v₁ - v₂||₂ / max(||v₁||₂, ||v₂||₂)
+
+This module provides quantum-enhanced static analysis for trading decisions.
 """
 
 import logging
-import math
 import time
-from dataclasses import dataclass, field
-from decimal import Decimal, getcontext
+from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Dict, Any, Optional
 
 import numpy as np
-from typing import Tuple
 
-# Set high precision for financial calculations
-getcontext().prec = 18
-
+# Configure logging
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
@@ -78,184 +74,215 @@ class QSCResult:
 
 
 class QuantumProbe:
-    """Quantum probe for auto-detection of market anomalies."""
+    """Quantum-enhanced divergence detection probe."""
 
     def __init__(self, threshold: float = 0.007):
-        """Initialize quantum probe.
-
+        """
+        Initialize quantum probe.
+        
         Args:
-            threshold: Quantum Static baseline resonance error threshold
+            threshold: Divergence threshold for triggering immune response
         """
         self.threshold = threshold
-        self.last_check_time = 0.0
-        self.check_interval = 5.0  # Check every 5 ticks
-        self.divergence_history: List[float] = []
-        self.max_history = 100
+        self.divergence_history = []
+        self.last_divergence = 0.0
 
     def check_vector_divergence(
         self, fib_projection: np.ndarray, price_series: np.ndarray
     ) -> bool:
-        """Check for vector divergence from Fibonacci pathing.
-
-        Args:
-            fib_projection: Fibonacci projection array
-            price_series: Live price series array
-
-        Returns:
-            True if divergence detected, triggers QSC immune system
         """
-        current_time = time.time()
+        Check for vector divergence between Fibonacci projection and actual prices.
+        
+        Mathematical Formula:
+        D(v₁,v₂) = ||v₁ - v₂||₂ / max(||v₁||₂, ||v₂||₂)
+        
+        Where:
+        - v₁ = Fibonacci projection vector
+        - v₂ = Actual price series vector
+        - ||·||₂ = L2 norm (Euclidean distance)
+        
+        Args:
+            fib_projection: Expected Fibonacci-based price projection
+            price_series: Actual price series data
+            
+        Returns:
+            bool: True if divergence exceeds threshold
+        """
+        try:
+            if len(fib_projection) != len(price_series):
+                min_len = min(len(fib_projection), len(price_series))
+                fib_projection = fib_projection[:min_len]
+                price_series = price_series[:min_len]
 
-        # Check if it's time for probe
-        if current_time - self.last_check_time < self.check_interval:
+            # Calculate L2 norm divergence
+            diff_vector = fib_projection - price_series
+            l2_norm_diff = np.linalg.norm(diff_vector)
+            max_norm = max(np.linalg.norm(fib_projection), np.linalg.norm(price_series))
+
+            if max_norm == 0:
+                divergence = 0.0
+            else:
+                divergence = l2_norm_diff / max_norm
+
+            # Store divergence in history
+            self.divergence_history.append(divergence)
+            if len(self.divergence_history) > 100:  # Keep last 100 measurements
+                self.divergence_history.pop(0)
+
+            self.last_divergence = divergence
+
+            logger.debug(f"🔬 Vector divergence: {divergence:.6f} (threshold: {self.threshold})")
+
+            return divergence > self.threshold
+
+        except Exception as e:
+            logger.error(f"Error calculating vector divergence: {e}")
             return False
 
-        self.last_check_time = current_time
-
-        # Calculate error margin
-        if len(fib_projection) != len(price_series):
-            logger.warning("Fibonacci projection and price series length mismatch")
-            return True  # Trigger on data inconsistency
-
-        error_margin = np.abs(fib_projection - price_series).mean()
-
-        # Store in history
-        self.divergence_history.append(error_margin)
-        if len(self.divergence_history) > self.max_history:
-            self.divergence_history.pop(0)
-
-        # Trigger QSC if error exceeds threshold
-        divergence_detected = error_margin > self.threshold
-
-        if divergence_detected:
-            logger.warning(
-                f"🚨 Quantum divergence detected: {error_margin:.6f} > "
-                f"{self.threshold}"
-            )
-
-        return divergence_detected
-
     def get_divergence_trend(self) -> float:
-        """Get the trend of divergence over recent history."""
-        if len(self.divergence_history) < 2:
+        """
+        Calculate trend in divergence over recent history.
+        
+        Returns:
+            float: Trend coefficient (-1 to 1, where 1 = increasing divergence)
+        """
+        if len(self.divergence_history) < 3:
             return 0.0
 
-        recent = self.divergence_history[-10:]  # Last 10 readings
-        if len(recent) < 2:
-            return 0.0
+        # Simple linear regression slope
+        x = np.arange(len(self.divergence_history))
+        y = np.array(self.divergence_history)
+        slope = np.corrcoef(x, y)[0, 1] if len(x) > 1 else 0.0
 
-        # Simple linear trend
-        x = np.arange(len(recent))
-        trend = np.polyfit(x, recent, 1)[0]  # Slope
-        return float(trend)
+        return np.clip(slope, -1.0, 1.0)
 
 
 class QuantumStaticCore:
-    """Quantum Static Core - Trading immune system."""
+    """Main QSC system for trading decision analysis."""
+
+    # Class constants
+    RESONANCE_THRESHOLD = 0.618  # Golden ratio threshold
+    TIMEBAND_LOCK_DURATION = 300  # 5 minutes
 
     def __init__(self, timeband: Optional[str] = None):
-        """Initialize QSC.
-
-        Args:
-            timeband: Current timeband for locking mechanism
         """
-        self.timeband = timeband
+        Initialize Quantum Static Core.
+        
+        Args:
+            timeband: Trading timeband identifier (e.g., "M5", "H1", "D1")
+        """
+        self.timeband = timeband or "H1"
         self.state = QSCState()
         self.quantum_probe = QuantumProbe()
 
-        # QSC Constants
-        self.RESONANCE_THRESHOLD = 0.618  # Golden ratio threshold
-        self.IMMUNE_ACTIVATION_THRESHOLD = 0.85
-        self.ENTROPY_STABILITY_RANGE = (0.3, 0.7)
-        self.TIMEBAND_LOCK_DURATION = 300  # 5 minutes
-
-        # Fibonacci constants for resonance calculation
-        self.FIB_RATIOS = [0.236, 0.382, 0.618, 0.786, 1.0, 1.618, 2.618]
-
-        # Profit cycle templates
-        self.PROFIT_CYCLES = {
-            "conservative": {"risk": 0.2, "allocation": 0.1, "resonance_req": 0.7},
-            "moderate": {"risk": 0.4, "allocation": 0.25, "resonance_req": 0.6},
-            "aggressive": {"risk": 0.6, "allocation": 0.4, "resonance_req": 0.5},
-            "quantum_enhanced": {"risk": 0.3, "allocation": 0.15, "resonance_req": 0.8},
-        }
-
-        logger.info(f"🧬 QSC initialized with timeband: {timeband}")
+        logger.info(f"🧬 QSC initialized for timeband: {self.timeband}")
 
     def calculate_fibonacci_resonance(self, price_data: np.ndarray) -> float:
-        """Calculate Fibonacci resonance level."""
-        if len(price_data) < 3:
-            return 0.5  # Neutral resonance
+        """
+        Calculate Fibonacci resonance score.
+        
+        Mathematical Foundation:
+        F(n) = φⁿ/√5 - ψⁿ/√5
+        Where φ = (1+√5)/2 ≈ 1.618 (golden ratio)
+        And ψ = (1-√5)/2 ≈ -0.618
+        
+        Args:
+            price_data: Array of price values
+            
+        Returns:
+            float: Resonance score (0.0 to 1.0)
+        """
+        try:
+            if len(price_data) < 2:
+                return 0.5
 
-        # Calculate price movements
-        price_changes = np.diff(price_data)
-        price_ranges = np.abs(price_changes)
+            # Calculate price ratios
+            price_ratios = price_data[1:] / price_data[:-1]
 
-        # Find Fibonacci alignments
-        resonance_scores = []
+            # Golden ratio (φ)
+            phi = (1 + np.sqrt(5)) / 2
 
-        for i in range(1, len(price_ranges)):
-            if price_ranges[i - 1] != 0:  # Avoid division by zero
-                ratio = price_ranges[i] / price_ranges[i - 1]
+            # Calculate deviation from golden ratio patterns
+            phi_deviations = np.abs(price_ratios - phi)
+            inverse_phi_deviations = np.abs(price_ratios - (1/phi))
 
-                # Check alignment with Fibonacci ratios
-                min_distance = min(
-                    abs(ratio - fib_ratio) for fib_ratio in self.FIB_RATIOS
-                )
-                resonance_score = 1.0 - min(min_distance, 1.0)
-                resonance_scores.append(resonance_score)
+            # Find minimum deviations (closest to Fibonacci ratios)
+            min_deviations = np.minimum(phi_deviations, inverse_phi_deviations)
 
-        if not resonance_scores:
+            # Calculate resonance score (lower deviation = higher resonance)
+            resonance_score = 1.0 - np.mean(min_deviations)
+
+            return np.clip(resonance_score, 0.0, 1.0)
+
+        except Exception as e:
+            logger.error(f"Error calculating Fibonacci resonance: {e}")
             return 0.5
-
-        return np.mean(resonance_scores)
 
     def calculate_entropy_flux(
         self, price_data: np.ndarray, volume_data: np.ndarray = None
     ) -> float:
-        """Calculate entropy flux in the market."""
-        if len(price_data) < 2:
+        """
+        Calculate entropy flux in price/volume data.
+        
+        Mathematical Foundation:
+        H(X) = -Σ p(x) log₂ p(x)
+        
+        Args:
+            price_data: Price series data
+            volume_data: Optional volume series data
+            
+        Returns:
+            float: Entropy flux (0.0 to 1.0)
+        """
+        try:
+            # Calculate price change distribution
+            price_changes = np.diff(price_data)
+            price_change_abs = np.abs(price_changes)
+
+            if np.sum(price_change_abs) == 0:
+                return 0.0
+
+            # Normalize to probability distribution
+            price_probs = price_change_abs / np.sum(price_change_abs)
+
+            # Calculate Shannon entropy
+            entropy = -np.sum(price_probs * np.log2(price_probs + 1e-10))
+
+            # Normalize entropy to [0, 1] range
+            max_entropy = np.log2(len(price_probs))
+            normalized_entropy = entropy / max_entropy if max_entropy > 0 else 0
+
+            return np.clip(normalized_entropy, 0.0, 1.0)
+
+        except Exception as e:
+            logger.error(f"Error calculating entropy flux: {e}")
             return 0.5
 
-        # Price entropy
-        price_returns = np.diff(np.log(price_data))
-        price_entropy = -np.sum(price_returns * np.log(np.abs(price_returns) + 1e-10))
-
-        # Volume entropy (if available)
-        if volume_data is not None and len(volume_data) > 1:
-            volume_changes = np.diff(volume_data)
-            volume_entropy = -np.sum(
-                volume_changes * np.log(np.abs(volume_changes) + 1e-10)
-            )
-            combined_entropy = (price_entropy + volume_entropy) / 2
-        else:
-            combined_entropy = price_entropy
-
-        # Normalize to 0-1 range
-        normalized_entropy = 1.0 / (1.0 + np.exp(-combined_entropy))
-
-        return float(normalized_entropy)
-
     def assess_orderbook_stability(self, orderbook_data: Dict[str, Any]) -> float:
-        """Assess order book stability and calculate imbalance ratio."""
+        """
+        Assess orderbook stability for QSC analysis.
+        
+        Args:
+            orderbook_data: Orderbook bid/ask data
+            
+        Returns:
+            float: Stability score (0.0 = unstable, 1.0 = stable)
+        """
         try:
-            bids = orderbook_data.get("bids", [])
-            asks = orderbook_data.get("asks", [])
+            bids = np.array(orderbook_data.get("bids", []))
+            asks = np.array(orderbook_data.get("asks", []))
 
-            if not bids or not asks:
-                return 1.0  # Maximum instability
+            if len(bids) == 0 or len(asks) == 0:
+                return 0.5
 
-            # Calculate depth for top 5 levels
-            bid_depth = sum(bid[1] for bid in bids[:5])
-            ask_depth = sum(ask[1] for ask in asks[:5])
+            # Calculate bid-ask spread stability
+            bid_prices = bids[:, 0] if bids.ndim > 1 else bids
+            ask_prices = asks[:, 0] if asks.ndim > 1 else asks
 
-            if max(bid_depth, ask_depth) == 0:
-                return 1.0
+            spread = np.mean(ask_prices[:5]) - np.mean(bid_prices[:5])
+            spread_stability = 1.0 / (1.0 + spread * 100)  # Lower spread = higher stability
 
-            # Calculate imbalance ratio
-            imbalance = abs(bid_depth - ask_depth) / max(bid_depth, ask_depth)
-
-            return float(imbalance)
+            return np.clip(spread_stability, 0.0, 1.0)
 
         except Exception as e:
             logger.error(f"Error assessing orderbook stability: {e}")
@@ -378,7 +405,8 @@ class QuantumStaticCore:
             diagnostic_data=diagnostic_data,
         )
 
-        logger.info(f"🧬 QSC Cycle Analysis: {recommended_cycle} (confidence: {overall_resonance:.3f})")
+        logger.info(f"🧬 QSC Cycle Analysis: {recommended_cycle} "
+                   f"(confidence: {overall_resonance:.3f})")
 
         return result
 

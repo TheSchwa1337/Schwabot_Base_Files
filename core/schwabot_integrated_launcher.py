@@ -226,8 +226,7 @@ class SchwabotIntegratedLauncher:
         self._create_api_service_ui(services_frame, "Exchange APIs", "exchange", SecurityLevel.HIGH)
 
         # CRWM section
-        crwm_frame = ttk.LabelFrame("api_frame, text="ChronoResonance Weather Mapping (CRWM)"
-        )
+        crwm_frame = ttk.LabelFrame(api_frame, text="ChronoResonance Weather Mapping (CRWM)")
         crwm_frame.pack(fill="x", padx=10, pady=5)
         self.crwm_status_label = ttk.Label(crwm_frame, text="Status: Inactive")
         self.crwm_status_label.pack(anchor="w", padx=5, pady=2)
@@ -499,8 +498,8 @@ class SchwabotIntegratedLauncher:
                 f"Total Entries: {usage.total_entries:,}",
                 f"Total Size: {usage.total_size_bytes / (1024 * 1024):.1f} MB",
                 f"Compression Savings: {usage.compression_savings:.1f}%",
-                f"Oldest Entry: '{usage.oldest_entry.strftime('%Y-%m-%d %H:%M:%S')}",
-                f"Newest Entry: '{usage.newest_entry.strftime('%Y-%m-%d %H:%M:%S')}","
+                f"Oldest Entry: '{usage.oldest_entry.strftime('%Y-%m-%d %H:%M:%S')}'",
+                f"Newest Entry: '{usage.newest_entry.strftime('%Y-%m-%d %H:%M:%S')}'",
             ]
             self.pipeline_stats_text.delete("1.0", tk.END)
             self.pipeline_stats_text.insert("1.0", "\n".join(stats_lines))

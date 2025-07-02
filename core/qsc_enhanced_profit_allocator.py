@@ -1,20 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-QSC Enhanced Profit Allocator - Zero-point energy enhancement for intelligent
-profit cycle recommendations with Quantum Static Core validation.
+QSC Enhanced Profit Allocator
 
-This module provides intelligent profit cycle allocation based on QSC immune
-system validation, Fibonacci resonance analysis, and quantum tensor alignment.
-Powered by:
-- Quantum Static Core (QSC) for immune system validation and
-intelligent profit cycle recommendation based on resonance analysis.
+This module provides quantum-static-core enhanced profit allocation with
+dynamic risk assessment and Fibonacci-based position sizing.
 """
 
 import logging
 import math
 import time
 from dataclasses import dataclass, field
+from decimal import Decimal, getcontext
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
 

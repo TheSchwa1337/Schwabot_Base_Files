@@ -1,839 +1,608 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Enhanced Schwabot Unified Integration System - Complete Implementation
+Schwabot Unified Integration System
 
-Final integration system that connects all enhanced mathematical components for
-rapid Bitcoin to USD and back trading using proprietary drift, phase, and bit-level logic.
+This module provides comprehensive integration of all Schwabot components including:
+- Advanced Dualistic Trading Execution System
+- Unified Profit Vectorization System  
+- Quantum Static Core (QSC) Integration
+- Mathematical Pipeline Validation
+- Cross-dynamical state management
 
-Enhanced with backup logic integration:
-- Entropy-weighted vectors and consensus voting
-- Bit-phase triggers (4, 8, 16, 32, 42-bit)
-- Multi-phase DLT waveform processing
-- Dynamic allocation sliders and percentage methods
-- Bit-flip operations and enhanced entry/exit logic
-
-Mathematical Foundation:
-- Unified Profit Vectorization: V = Σ(wᵢ × methodᵢ) for profit calculation
-- Enhanced Entry/Exit Logic: E = f(bit_flip, consensus, entropy, dlt_waveform)
-- Cross-Sectional Tensors: T(t+1) = Σ(φ₄ × φ₈ × φ₄₂) over dualistic manifolds
-- Ghost Trade Triggers: G = f(ALEPH_state, ALIF_state, entropy_compensation)
-- Bit-Flip Operations: B = f(bit_pattern, consensus_weight, market_entropy)
-- Consensus Voting: C = Σ(wᵢ × voteᵢ) / Σ(wᵢ) for entry/exit decisions
+The system ensures complete mathematical coherence and quantum-enhanced trading capabilities.
 """
 
-import asyncio
-import hashlib
 import logging
 import time
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from typing import Dict, Any, List, Optional
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+import hashlib
 
 import numpy as np
 
-# Import all enhanced mathematical pipeline components
 try:
-    from core.unified_profit_vectorization_system import (
-        EnhancedUnifiedProfitVectorizationSystem, 
-        VectorizationMode, 
-        AllocationMethod,
-        profit_vectorization_system
+    from .unified_profit_vectorization_system import (
+        EnhancedUnifiedProfitVectorizationSystem
     )
-    from core.advanced_dualistic_trading_execution_system import (
-        EnhancedAdvancedDualisticTradingExecutionSystem,
-        ExecutionMode,
-        GhostTradeType,
-        TriggerComplexity,
-        advanced_trading_system
+    from .advanced_dualistic_trading_execution_system import (
+        EnhancedAdvancedDualisticTradingExecutionSystem
     )
-    from core.dualistic_state_machine import DualisticStateMachine
-    from core.advanced_tensor_algebra import UnifiedTensorAlgebra
-    from core.phase_bit_integration import PhaseBitIntegration
-    from core.ccxt_integration import CCXTIntegration, OrderBookSnapshot
-    from core.zpe_core import ZPECore
-    from core.unified_math_system import unified_math
-    MATHEMATICAL_PIPELINE_AVAILABLE = True
+    from .quantum_static_core import QuantumStaticCore, QSCResult
+    from .mathematical_pipeline_validator import MathematicalPipelineValidator
+    from .unified_math_system import unified_math
+    from .ccxt_integration import CCXTIntegration
+    COMPONENTS_AVAILABLE = True
 except ImportError as e:
-    logger = logging.getLogger(__name__)
-    logger.warning(f"Enhanced mathematical pipeline components not fully available: {e}")
-    MATHEMATICAL_PIPELINE_AVAILABLE = False
+    logging.warning(f"Some components unavailable: {e}")
+    COMPONENTS_AVAILABLE = False
 
 logger = logging.getLogger(__name__)
 
 
 class IntegrationMode(Enum):
-    """Different integration modes for the unified system."""
-    STANDARD = "standard"                    # Original unified system
-    ENHANCED_BACKUP = "enhanced_backup"      # Enhanced with backup logic
-    HYBRID_BLEND = "hybrid_blend"           # Blended approach
-    ADAPTIVE_MODE = "adaptive_mode"         # Adaptive mode selection
-    CONSENSUS_DRIVEN = "consensus_driven"   # Consensus-driven integration
-    ENTROPY_OPTIMIZED = "entropy_optimized" # Entropy-optimized integration
+    """Integration operational modes."""
+    CONSERVATIVE = "conservative"
+    BALANCED = "balanced"
+    AGGRESSIVE = "aggressive"
+    QUANTUM_ENHANCED = "quantum_enhanced"
 
 
-class TradingPhase(Enum):
-    """Different phases of the trading cycle."""
-    ANALYSIS = "analysis"           # Market analysis phase
-    VECTORIZATION = "vectorization" # Profit vectorization phase
-    ENTRY_LOGIC = "entry_logic"     # Entry logic phase
-    EXECUTION = "execution"         # Trade execution phase
-    EXIT_LOGIC = "exit_logic"       # Exit logic phase
-    OPTIMIZATION = "optimization"   # Optimization phase
+class SystemHealth(Enum):
+    """System health status levels."""
+    CRITICAL = "critical"
+    WARNING = "warning"
+    HEALTHY = "healthy"
+    OPTIMAL = "optimal"
 
 
 @dataclass
-class MarketAnalysisResult:
-    """Result of market analysis phase."""
-    analysis_id: str
-    btc_price: float
-    volume: float
-    volatility: float
-    entropy_level: float
-    complexity: float
-    market_data: Dict[str, Any]
-    timestamp: float
-    metadata: Dict[str, Any] = None
+class IntegrationMetrics:
+    """Integration system metrics."""
+    total_integrations: int = 0
+    successful_integrations: int = 0
+    failed_integrations: int = 0
+    average_integration_time: float = 0.0
+    quantum_coherence_score: float = 0.0
+    mathematical_precision: float = 0.0
+    system_health: SystemHealth = SystemHealth.HEALTHY
+    last_integration_timestamp: float = 0.0
+
 
 @dataclass
-class ProfitVectorizationResult:
-    """Result of profit vectorization phase."""
-    vectorization_id: str
-    profit_score: float
-    confidence_score: float
-    vectorization_mode: VectorizationMode
-    allocation_method: AllocationMethod
-    market_data: Dict[str, Any]
+class IntegrationResult:
+    """Result of unified integration process."""
+    integration_id: str
     timestamp: float
-    metadata: Dict[str, Any] = None
-
-@dataclass
-class EntryLogicResult:
-    """Result of entry logic phase."""
-    entry_id: str
-    entry_price: float
-    entry_quantity: float
-    execution_mode: ExecutionMode
-    ghost_type: GhostTradeType
-    trigger_complexity: TriggerComplexity
-    confidence: float
-    timestamp: float
-    metadata: Dict[str, Any] = None
-
-@dataclass
-class ExecutionResult:
-    """Result of trade execution phase."""
-    execution_id: str
-    trade_id: str
-    entry_price: float
-    exit_price: float
-    quantity: float
-    profit_realized: float
-    execution_confidence: float
-    timestamp: float
-    metadata: Dict[str, Any] = None
-
-@dataclass
-class OptimizationResult:
-    """Result of optimization phase."""
-    optimization_id: str
-    optimization_type: str
-    improvement_score: float
-    parameters_adjusted: Dict[str, Any]
-    timestamp: float
-    metadata: Dict[str, Any] = None
+    mode: IntegrationMode
+    success: bool
+    profit_vectorization_result: Dict[str, Any]
+    trading_execution_result: Dict[str, Any]
+    qsc_validation_result: Dict[str, Any]
+    mathematical_coherence_score: float
+    quantum_enhancement_factor: float
+    system_health: SystemHealth
+    performance_metrics: Dict[str, Any]
+    error_details: Optional[str] = None
 
 
-class EnhancedSchwabotUnifiedIntegration:
+class SchwabotUnifiedIntegration:
     """
-    Enhanced unified integration system for rapid Bitcoin to USD trading.
+    Unified integration system for all Schwabot components.
     
-    Integrates all enhanced mathematical components with backup logic:
-    - Enhanced profit vectorization with multiple modes
-    - Enhanced entry/exit logic with backup methods
-    - Bit-flip operations and bit-phase triggers
-    - Consensus voting systems
-    - Entropy-weighted calculations
-    - Multi-phase DLT waveform processing
-    - Dynamic allocation sliders and percentage methods
+    Provides comprehensive orchestration of:
+    - Profit vectorization and optimization
+    - Trading execution with dualistic enhancement
+    - Quantum static core validation
+    - Mathematical pipeline coherence
     """
 
-    def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
-        """Initialize the enhanced unified integration system."""
+    def __init__(self, config: Optional[Dict[str, Any]] = None):
+        """Initialize unified integration system."""
         self.config = config or self._default_config()
-
-        # Initialize all enhanced mathematical pipeline components
-        if MATHEMATICAL_PIPELINE_AVAILABLE:
-            self.profit_vectorization = profit_vectorization_system
-            self.trading_execution = advanced_trading_system
-            self.dualistic_state_machine = DualisticStateMachine(
-                entropy_threshold=self.config.get('entropy_threshold', 0.6),
-                quantum_phase_sensitivity=self.config.get('quantum_phase_sensitivity', 0.3)
-            )
-            self.tensor_algebra = UnifiedTensorAlgebra()
-            self.phase_bit_integration = PhaseBitIntegration()
-            self.ccxt_integration = CCXTIntegration(self.config.get('ccxt_config', {}))
-            self.zpe_core = ZPECore()
+        self.integration_metrics = IntegrationMetrics()
+        self.active_integrations: Dict[str, IntegrationResult] = {}
+        
+        # Component initialization
+        self.profit_vectorization = None
+        self.trading_execution = None
+        self.qsc_core = None
+        self.math_validator = None
+        
+        if COMPONENTS_AVAILABLE:
+            self._initialize_components()
         else:
-            raise ImportError("Enhanced mathematical pipeline components required for 100% implementation")
-
-        # Integration state
-        self.integration_mode = IntegrationMode(self.config.get('integration_mode', 'hybrid_blend'))
-        self.current_phase = TradingPhase.ANALYSIS
+            logger.warning("⚠️ Running in fallback mode - some features disabled")
         
-        # Performance tracking
-        self.total_trades = 0
-        self.total_profit = 0.0
-        self.success_rate = 0.0
-        self.avg_execution_time = 0.0
-        
-        # Phase-specific tracking
-        self.analysis_results: List[MarketAnalysisResult] = []
-        self.vectorization_results: List[ProfitVectorizationResult] = []
-        self.entry_results: List[EntryLogicResult] = []
-        self.execution_results: List[ExecutionResult] = []
-        self.optimization_results: List[OptimizationResult] = []
-        
-        # Mode-specific performance tracking
-        self.mode_performance: Dict[str, Dict[str, float]] = {
-            mode.value: {"total_trades": 0, "success_rate": 0.0, "avg_profit": 0.0}
-            for mode in IntegrationMode
-        }
-        
-        # Mathematical constants from backup systems
-        self.entropy_decay_rate = 0.1
-        self.consensus_threshold = 0.6
-        self.bit_phase_weights = {4: 0.2, 8: 0.3, 16: 0.2, 32: 0.2, 42: 0.1}
-        self.dlt_modulation_factor = 0.5
-        
-        logger.info(f"🚀 Enhanced Schwabot Unified Integration System initialized with {self.integration_mode.value} mode")
+        logger.info("🚀 Schwabot Unified Integration System initialized")
 
     def _default_config(self) -> Dict[str, Any]:
-        """Return default configuration for enhanced unified system."""
+        """Default configuration for unified integration."""
         return {
-            'integration_mode': 'hybrid_blend',
-            'entropy_threshold': 0.6,
-            'quantum_phase_sensitivity': 0.3,
-            'btc_usdc_symbol': 'BTC/USDC',
-            'min_trade_amount': 0.001,
-            'max_trade_amount': 1.0,
-            'profit_threshold': 0.005,  # 0.5% minimum profit
-            'execution_timeout': 30.0,  # seconds
-            'optimization_interval': 100,  # trades
-            'ccxt_config': {
-                'exchanges': ['binance', 'coinbase'],
-                'symbols': ['BTC/USDC'],
-                'granularities': [8, 6, 2]
+            "integration_mode": IntegrationMode.BALANCED.value,
+            "quantum_enhancement": True,
+            "mathematical_precision": 1e-12,
+            "max_concurrent_integrations": 5,
+            "health_check_interval": 60,
+            "profit_vectorization": {
+                "vector_dimensions": 16,
+                "optimization_cycles": 10,
+                "precision_threshold": 1e-10
+            },
+            "trading_execution": {
+                "dualistic_mode": True,
+                "quantum_validation": True,
+                "risk_assessment": True
+            },
+            "qsc_integration": {
+                "immune_system": True,
+                "resonance_threshold": 0.618,
+                "fibonacci_validation": True
             }
         }
 
-    async def execute_enhanced_trading_cycle(
+    def _initialize_components(self):
+        """Initialize all integration components."""
+        try:
+            # Initialize profit vectorization system
+            profit_config = self.config.get("profit_vectorization", {})
+            self.profit_vectorization = EnhancedUnifiedProfitVectorizationSystem(
+                config=profit_config
+            )
+            
+            # Initialize trading execution system
+            trading_config = self.config.get("trading_execution", {})
+            self.trading_execution = EnhancedAdvancedDualisticTradingExecutionSystem(
+                config=trading_config
+            )
+            
+            # Initialize quantum static core
+            qsc_config = self.config.get("qsc_integration", {})
+            self.qsc_core = QuantumStaticCore(timeband="H1")
+            
+            # Initialize mathematical validator
+            self.math_validator = MathematicalPipelineValidator()
+            
+            logger.info("✅ All integration components initialized successfully")
+            
+        except Exception as e:
+            logger.error(f"❌ Component initialization failed: {e}")
+            raise
+
+    def execute_unified_integration(
         self,
-        target_quantity: float,
-        integration_mode: Optional[IntegrationMode] = None
-    ) -> Dict[str, Any]:
+        market_data: Dict[str, Any],
+        portfolio_data: Dict[str, Any],
+        mode: Optional[IntegrationMode] = None
+    ) -> IntegrationResult:
         """
-        Execute complete enhanced trading cycle with all phases.
+        Execute unified integration across all Schwabot systems.
         
         Args:
-            target_quantity: BTC quantity to trade
-            integration_mode: Integration mode to use (defaults to current mode)
+            market_data: Real-time market data and indicators
+            portfolio_data: Current portfolio state and positions
+            mode: Integration mode override
             
         Returns:
-            Complete trading cycle result with all phase data
+            IntegrationResult: Comprehensive integration result
         """
-        integration_mode = integration_mode or self.integration_mode
-        cycle_id = hashlib.sha256(f"{time.time()}_{target_quantity}_{integration_mode.value}".encode()).hexdigest()[:16]
+        integration_start = time.time()
+        integration_id = hashlib.md5(
+            f"{integration_start}_{len(self.active_integrations)}".encode()
+        ).hexdigest()[:12]
         
-        logger.info(f"🔄 Executing Enhanced Trading Cycle {cycle_id} with {integration_mode.value} mode")
+        mode = mode or IntegrationMode(self.config["integration_mode"])
         
-        start_time = time.time()
+        logger.info(f"🔄 Starting unified integration {integration_id} "
+                   f"in {mode.value} mode")
         
         try:
-            # Phase 1: Market Analysis
-            self.current_phase = TradingPhase.ANALYSIS
-            analysis_result = await self._execute_market_analysis_phase(target_quantity, integration_mode)
+            # Phase 1: Quantum Static Core validation
+            qsc_result = self._execute_qsc_validation(market_data, integration_id)
             
-            if not analysis_result.get('success', False):
-                return self._create_failed_cycle_result(cycle_id, "Market analysis failed", start_time)
-            
-            # Phase 2: Profit Vectorization
-            self.current_phase = TradingPhase.VECTORIZATION
-            vectorization_result = await self._execute_profit_vectorization_phase(
-                analysis_result['analysis'], integration_mode
+            # Phase 2: Profit vectorization optimization
+            profit_result = self._execute_profit_vectorization(
+                market_data, portfolio_data, qsc_result, integration_id
             )
             
-            if not vectorization_result.get('success', False):
-                return self._create_failed_cycle_result(cycle_id, "Profit vectorization failed", start_time)
-            
-            # Phase 3: Entry Logic
-            self.current_phase = TradingPhase.ENTRY_LOGIC
-            entry_result = await self._execute_entry_logic_phase(
-                target_quantity, vectorization_result['vectorization'], integration_mode
+            # Phase 3: Trading execution with dualistic enhancement
+            trading_result = self._execute_trading_execution(
+                market_data, portfolio_data, profit_result, integration_id
             )
             
-            if not entry_result.get('success', False):
-                return self._create_failed_cycle_result(cycle_id, "Entry logic failed", start_time)
-            
-            # Phase 4: Trade Execution
-            self.current_phase = TradingPhase.EXECUTION
-            execution_result = await self._execute_trade_execution_phase(
-                entry_result['entry'], integration_mode
+            # Phase 4: Mathematical coherence validation
+            coherence_score = self._validate_mathematical_coherence(
+                profit_result, trading_result, integration_id
             )
             
-            if not execution_result.get('success', False):
-                return self._create_failed_cycle_result(cycle_id, "Trade execution failed", start_time)
-            
-            # Phase 5: Exit Logic
-            self.current_phase = TradingPhase.EXIT_LOGIC
-            exit_result = await self._execute_exit_logic_phase(
-                execution_result['execution'], integration_mode
+            # Phase 5: System health assessment
+            system_health = self._assess_system_health(
+                qsc_result, profit_result, trading_result, integration_id
             )
             
-            if not exit_result.get('success', False):
-                return self._create_failed_cycle_result(cycle_id, "Exit logic failed", start_time)
-            
-            # Phase 6: Optimization
-            self.current_phase = TradingPhase.OPTIMIZATION
-            optimization_result = await self._execute_optimization_phase(
-                analysis_result['analysis'],
-                vectorization_result['vectorization'],
-                entry_result['entry'],
-                execution_result['execution'],
-                exit_result['exit'],
-                integration_mode
-            )
-            
-            # Calculate cycle performance
-            execution_time = time.time() - start_time
-            profit_realized = exit_result['exit'].profit_realized
-            success = profit_realized > 0
-            
-            # Update performance metrics
-            self._update_cycle_performance_metrics(cycle_id, success, profit_realized, execution_time, integration_mode)
-            
-            # Create complete cycle result
-            cycle_result = {
-                "cycle_id": cycle_id,
-                "success": True,
-                "integration_mode": integration_mode.value,
-                "execution_time": execution_time,
-                "profit_realized": profit_realized,
-                "success": success,
-                "phases": {
-                    "analysis": analysis_result['analysis'],
-                    "vectorization": vectorization_result['vectorization'],
-                    "entry": entry_result['entry'],
-                    "execution": execution_result['execution'],
-                    "exit": exit_result['exit'],
-                    "optimization": optimization_result.get('optimization')
-                },
-                "performance": {
-                    "total_trades": self.total_trades,
-                    "total_profit": self.total_profit,
-                    "success_rate": self.success_rate,
-                    "avg_execution_time": self.avg_execution_time
-                }
+            # Calculate performance metrics
+            integration_time = time.time() - integration_start
+            performance_metrics = {
+                "integration_time": integration_time,
+                "qsc_confidence": qsc_result.get("confidence", 0.0),
+                "profit_optimization_score": profit_result.get("optimization_score", 0.0),
+                "trading_execution_success": trading_result.get("success", False),
+                "mathematical_coherence": coherence_score,
+                "quantum_enhancement_factor": self._calculate_quantum_enhancement(
+                    qsc_result, profit_result, trading_result
+                )
             }
             
-            logger.info(f"✅ Enhanced Trading Cycle {cycle_id} completed successfully")
-            return cycle_result
-            
-        except Exception as e:
-            logger.error(f"❌ Enhanced Trading Cycle {cycle_id} failed: {e}")
-            return self._create_failed_cycle_result(cycle_id, str(e), start_time)
-
-    async def _execute_market_analysis_phase(
-        self, 
-        target_quantity: float, 
-        integration_mode: IntegrationMode
-    ) -> Dict[str, Any]:
-        """Execute market analysis phase."""
-        try:
-            analysis_id = f"analysis_{int(time.time() * 1000)}"
-            
-            # Get market data from CCXT
-            market_data = await self._get_market_data()
-            
-            # Calculate market metrics
-            btc_price = market_data.get('btc_price', 50000.0)
-            volume = market_data.get('volume', target_quantity)
-            volatility = market_data.get('volatility', 0.5)
-            entropy_level = market_data.get('entropy_level', 4.0)
-            complexity = market_data.get('complexity', 0.5)
-            
-            # Create analysis result
-            analysis_result = MarketAnalysisResult(
-                analysis_id=analysis_id,
-                btc_price=btc_price,
-                volume=volume,
-                volatility=volatility,
-                entropy_level=entropy_level,
-                complexity=complexity,
-                market_data=market_data,
-                timestamp=time.time()
+            # Create integration result
+            result = IntegrationResult(
+                integration_id=integration_id,
+                timestamp=integration_start,
+                mode=mode,
+                success=True,
+                profit_vectorization_result=profit_result,
+                trading_execution_result=trading_result,
+                qsc_validation_result=qsc_result,
+                mathematical_coherence_score=coherence_score,
+                quantum_enhancement_factor=performance_metrics["quantum_enhancement_factor"],
+                system_health=system_health,
+                performance_metrics=performance_metrics
             )
             
-            self.analysis_results.append(analysis_result)
+            # Update metrics
+            self._update_integration_metrics(result)
+            
+            # Store active integration
+            self.active_integrations[integration_id] = result
+            
+            logger.info(f"✅ Unified integration {integration_id} completed successfully "
+                       f"in {integration_time:.3f}s")
+            
+            return result
+            
+        except Exception as e:
+            logger.error(f"❌ Unified integration {integration_id} failed: {e}")
+            
+            # Create failed result
+            result = IntegrationResult(
+                integration_id=integration_id,
+                timestamp=integration_start,
+                mode=mode,
+                success=False,
+                profit_vectorization_result={},
+                trading_execution_result={},
+                qsc_validation_result={},
+                mathematical_coherence_score=0.0,
+                quantum_enhancement_factor=0.0,
+                system_health=SystemHealth.CRITICAL,
+                performance_metrics={},
+                error_details=str(e)
+            )
+            
+            self._update_integration_metrics(result)
+            return result
+
+    def _execute_qsc_validation(self, market_data: Dict[str, Any], 
+                               integration_id: str) -> Dict[str, Any]:
+        """Execute Quantum Static Core validation."""
+        try:
+            if not self.qsc_core:
+                return {"status": "qsc_unavailable", "confidence": 0.5}
+            
+            # Extract price and volume data for QSC analysis
+            price_data = np.array(market_data.get("price_history", []))
+            volume_data = np.array(market_data.get("volume_history", []))
+            
+            # Fibonacci projection for divergence detection
+            fib_tracking = market_data.get("fibonacci_tracking", {})
+            
+            tick_data = {
+                "prices": price_data,
+                "volumes": volume_data
+            }
+            
+            # Check for QSC override conditions
+            should_override = self.qsc_core.should_override(tick_data, fib_tracking)
+            
+            # Stabilize profit cycle
+            qsc_result = self.qsc_core.stabilize_cycle()
             
             return {
-                "success": True,
-                "analysis": analysis_result
+                "qsc_override": should_override,
+                "resonant": qsc_result.resonant,
+                "recommended_cycle": qsc_result.recommended_cycle,
+                "confidence": qsc_result.confidence,
+                "immune_response": qsc_result.immune_response,
+                "stability_metrics": qsc_result.stability_metrics,
+                "diagnostic_data": qsc_result.diagnostic_data,
+                "integration_id": integration_id
             }
+            
         except Exception as e:
-            logger.error(f"Error in market analysis phase: {e}")
-            return {"success": False, "error": str(e)}
+            logger.error(f"QSC validation failed for {integration_id}: {e}")
+            return {"status": "qsc_error", "error": str(e), "confidence": 0.0}
 
-    async def _execute_profit_vectorization_phase(
-        self, 
-        analysis_result: MarketAnalysisResult, 
-        integration_mode: IntegrationMode
-    ) -> Dict[str, Any]:
-        """Execute profit vectorization phase."""
-        try:
-            vectorization_id = f"vectorization_{int(time.time() * 1000)}"
-            
-            # Determine vectorization mode based on integration mode
-            vectorization_mode = self._determine_vectorization_mode(integration_mode, analysis_result)
-            
-            # Calculate profit vectorization
-            vectorization_result = self.profit_vectorization.calculate_profit_vectorization(
-                analysis_result.btc_price,
-                analysis_result.volume,
-                analysis_result.market_data,
-                vectorization_mode
-            )
-            
-            # Create vectorization result
-            profit_vectorization_result = ProfitVectorizationResult(
-                vectorization_id=vectorization_id,
-                profit_score=vectorization_result['profit_score'],
-                confidence_score=vectorization_result['confidence_score'],
-                vectorization_mode=vectorization_mode,
-                allocation_method=AllocationMethod.KELLY_CRITERION,  # Default
-                market_data=analysis_result.market_data,
-                timestamp=time.time()
-            )
-            
-            self.vectorization_results.append(profit_vectorization_result)
-            
-            return {
-                "success": True,
-                "vectorization": profit_vectorization_result
-            }
-        except Exception as e:
-            logger.error(f"Error in profit vectorization phase: {e}")
-            return {"success": False, "error": str(e)}
-
-    async def _execute_entry_logic_phase(
-        self, 
-        target_quantity: float, 
-        vectorization_result: ProfitVectorizationResult, 
-        integration_mode: IntegrationMode
-    ) -> Dict[str, Any]:
-        """Execute entry logic phase."""
-        try:
-            entry_id = f"entry_{int(time.time() * 1000)}"
-            
-            # Determine execution mode based on integration mode
-            execution_mode = self._determine_execution_mode(integration_mode, vectorization_result)
-            
-            # Execute enhanced entry logic
-            entry_result = await self.trading_execution._execute_enhanced_entry_logic(
-                target_quantity,
-                execution_mode,
-                self._create_dummy_cross_tensor(),  # Simplified for now
-                self._create_dummy_wavepath_link(),
-                self._create_dummy_backlog_transition()
-            )
-            
-            if not entry_result.get('success', False):
-                return {"success": False, "error": entry_result.get('error', 'Entry logic failed')}
-            
-            # Create entry result
-            entry_logic_result = EntryLogicResult(
-                entry_id=entry_id,
-                entry_price=entry_result['entry_price'],
-                entry_quantity=entry_result['entry_quantity'],
-                execution_mode=execution_mode,
-                ghost_type=GhostTradeType.DUALISTIC_HYBRID,  # Default
-                trigger_complexity=TriggerComplexity.CROSS_SECTIONAL_TENSOR,  # Default
-                confidence=entry_result['confidence'],
-                timestamp=time.time()
-            )
-            
-            self.entry_results.append(entry_logic_result)
-            
-            return {
-                "success": True,
-                "entry": entry_logic_result
-            }
-        except Exception as e:
-            logger.error(f"Error in entry logic phase: {e}")
-            return {"success": False, "error": str(e)}
-
-    async def _execute_trade_execution_phase(
-        self, 
-        entry_result: EntryLogicResult, 
-        integration_mode: IntegrationMode
-    ) -> Dict[str, Any]:
-        """Execute trade execution phase."""
-        try:
-            execution_id = f"execution_{int(time.time() * 1000)}"
-            trade_id = f"trade_{int(time.time() * 1000)}"
-            
-            # Simulate trade execution (in real implementation, this would execute actual trades)
-            exit_price = entry_result.entry_price * 1.01  # 1% profit
-            profit_realized = (exit_price - entry_result.entry_price) * entry_result.entry_quantity
-            
-            # Create execution result
-            execution_result = ExecutionResult(
-                execution_id=execution_id,
-                trade_id=trade_id,
-                entry_price=entry_result.entry_price,
-                exit_price=exit_price,
-                quantity=entry_result.entry_quantity,
-                profit_realized=profit_realized,
-                execution_confidence=entry_result.confidence,
-                timestamp=time.time()
-            )
-            
-            self.execution_results.append(execution_result)
-            
-            return {
-                "success": True,
-                "execution": execution_result
-            }
-        except Exception as e:
-            logger.error(f"Error in trade execution phase: {e}")
-            return {"success": False, "error": str(e)}
-
-    async def _execute_exit_logic_phase(
-        self, 
-        execution_result: ExecutionResult, 
-        integration_mode: IntegrationMode
-    ) -> Dict[str, Any]:
-        """Execute exit logic phase."""
-        try:
-            # For now, return the execution result as the exit result
-            # In a real implementation, this would monitor exit conditions
-            return {
-                "success": True,
-                "exit": execution_result
-            }
-        except Exception as e:
-            logger.error(f"Error in exit logic phase: {e}")
-            return {"success": False, "error": str(e)}
-
-    async def _execute_optimization_phase(
+    def _execute_profit_vectorization(
         self,
-        analysis_result: MarketAnalysisResult,
-        vectorization_result: ProfitVectorizationResult,
-        entry_result: EntryLogicResult,
-        execution_result: ExecutionResult,
-        exit_result: ExecutionResult,
-        integration_mode: IntegrationMode
+        market_data: Dict[str, Any],
+        portfolio_data: Dict[str, Any],
+        qsc_result: Dict[str, Any],
+        integration_id: str
     ) -> Dict[str, Any]:
-        """Execute optimization phase."""
+        """Execute profit vectorization optimization."""
         try:
-            optimization_id = f"optimization_{int(time.time() * 1000)}"
+            if not self.profit_vectorization:
+                return {"status": "profit_vectorization_unavailable"}
             
-            # Simple optimization based on performance
-            improvement_score = exit_result.profit_realized / max(1, analysis_result.btc_price * analysis_result.volume)
+            # Configure vectorization based on QSC result
+            vectorization_mode = qsc_result.get("recommended_cycle", "balanced")
             
-            # Create optimization result
-            optimization_result = OptimizationResult(
-                optimization_id=optimization_id,
-                optimization_type="performance_optimization",
-                improvement_score=improvement_score,
-                parameters_adjusted={},
-                timestamp=time.time()
+            # Execute profit vectorization
+            vector_result = self.profit_vectorization.optimize_profit_vectors(
+                market_data=market_data,
+                portfolio_data=portfolio_data,
+                optimization_mode=vectorization_mode,
+                qsc_validation=qsc_result
             )
-            
-            self.optimization_results.append(optimization_result)
             
             return {
-                "success": True,
-                "optimization": optimization_result
+                "vectorization_mode": vectorization_mode,
+                "optimization_score": vector_result.get("optimization_score", 0.0),
+                "profit_vectors": vector_result.get("profit_vectors", {}),
+                "mathematical_precision": vector_result.get("precision", 0.0),
+                "qsc_enhanced": qsc_result.get("resonant", False),
+                "integration_id": integration_id
             }
+            
         except Exception as e:
-            logger.error(f"Error in optimization phase: {e}")
-            return {"success": False, "error": str(e)}
+            logger.error(f"Profit vectorization failed for {integration_id}: {e}")
+            return {"status": "profit_vectorization_error", "error": str(e)}
 
-    def _determine_vectorization_mode(self, integration_mode: IntegrationMode, analysis_result: MarketAnalysisResult) -> VectorizationMode:
-        """Determine vectorization mode based on integration mode and analysis."""
+    def _execute_trading_execution(
+        self,
+        market_data: Dict[str, Any],
+        portfolio_data: Dict[str, Any],
+        profit_result: Dict[str, Any],
+        integration_id: str
+    ) -> Dict[str, Any]:
+        """Execute trading execution with dualistic enhancement."""
         try:
-            if integration_mode == IntegrationMode.STANDARD:
-                return VectorizationMode.STANDARD
-            elif integration_mode == IntegrationMode.ENHANCED_BACKUP:
-                # Choose based on market conditions
-                if analysis_result.entropy_level > 6.0:
-                    return VectorizationMode.ENTROPY_WEIGHTED
-                elif analysis_result.complexity > 0.7:
-                    return VectorizationMode.CONSENSUS_VOTING
-                else:
-                    return VectorizationMode.BIT_PHASE_TRIGGER
-            elif integration_mode == IntegrationMode.HYBRID_BLEND:
-                return VectorizationMode.HYBRID_BLEND
-            elif integration_mode == IntegrationMode.ADAPTIVE_MODE:
-                # Adaptive selection based on performance
-                return self._select_adaptive_vectorization_mode(analysis_result)
-            elif integration_mode == IntegrationMode.CONSENSUS_DRIVEN:
-                return VectorizationMode.CONSENSUS_VOTING
-            elif integration_mode == IntegrationMode.ENTROPY_OPTIMIZED:
-                return VectorizationMode.ENTROPY_WEIGHTED
-            else:
-                return VectorizationMode.HYBRID_BLEND
-        except Exception as e:
-            logger.error(f"Error determining vectorization mode: {e}")
-            return VectorizationMode.STANDARD
-
-    def _determine_execution_mode(self, integration_mode: IntegrationMode, vectorization_result: ProfitVectorizationResult) -> ExecutionMode:
-        """Determine execution mode based on integration mode and vectorization."""
-        try:
-            if integration_mode == IntegrationMode.STANDARD:
-                return ExecutionMode.STANDARD
-            elif integration_mode == IntegrationMode.ENHANCED_BACKUP:
-                # Choose based on vectorization mode
-                if vectorization_result.vectorization_mode == VectorizationMode.ENTROPY_WEIGHTED:
-                    return ExecutionMode.ENTROPY_WEIGHTED
-                elif vectorization_result.vectorization_mode == VectorizationMode.CONSENSUS_VOTING:
-                    return ExecutionMode.CONSENSUS_VOTED
-                elif vectorization_result.vectorization_mode == VectorizationMode.BIT_PHASE_TRIGGER:
-                    return ExecutionMode.BIT_FLIP_ENHANCED
-                else:
-                    return ExecutionMode.HYBRID_BLEND
-            elif integration_mode == IntegrationMode.HYBRID_BLEND:
-                return ExecutionMode.HYBRID_BLEND
-            elif integration_mode == IntegrationMode.ADAPTIVE_MODE:
-                return self._select_adaptive_execution_mode(vectorization_result)
-            elif integration_mode == IntegrationMode.CONSENSUS_DRIVEN:
-                return ExecutionMode.CONSENSUS_VOTED
-            elif integration_mode == IntegrationMode.ENTROPY_OPTIMIZED:
-                return ExecutionMode.ENTROPY_WEIGHTED
-            else:
-                return ExecutionMode.HYBRID_BLEND
-        except Exception as e:
-            logger.error(f"Error determining execution mode: {e}")
-            return ExecutionMode.STANDARD
-
-    def _select_adaptive_vectorization_mode(self, analysis_result: MarketAnalysisResult) -> VectorizationMode:
-        """Select adaptive vectorization mode based on performance history."""
-        try:
-            # Simple adaptive selection - in real implementation, this would use performance history
-            if analysis_result.entropy_level > 5.0:
-                return VectorizationMode.ENTROPY_WEIGHTED
-            elif analysis_result.volatility > 0.6:
-                return VectorizationMode.CONSENSUS_VOTING
-            else:
-                return VectorizationMode.HYBRID_BLEND
-        except Exception as e:
-            logger.error(f"Error selecting adaptive vectorization mode: {e}")
-            return VectorizationMode.STANDARD
-
-    def _select_adaptive_execution_mode(self, vectorization_result: ProfitVectorizationResult) -> ExecutionMode:
-        """Select adaptive execution mode based on vectorization result."""
-        try:
-            # Simple adaptive selection based on confidence
-            if vectorization_result.confidence_score > 0.8:
-                return ExecutionMode.BIT_FLIP_ENHANCED
-            elif vectorization_result.confidence_score > 0.6:
-                return ExecutionMode.CONSENSUS_VOTED
-            else:
-                return ExecutionMode.HYBRID_BLEND
-        except Exception as e:
-            logger.error(f"Error selecting adaptive execution mode: {e}")
-            return ExecutionMode.STANDARD
-
-    async def _get_market_data(self) -> Dict[str, Any]:
-        """Get market data from CCXT integration."""
-        try:
-            # Simplified market data - in real implementation, this would fetch from CCXT
+            if not self.trading_execution:
+                return {"status": "trading_execution_unavailable"}
+            
+            # Configure execution based on profit vectorization result
+            execution_config = {
+                "profit_vectors": profit_result.get("profit_vectors", {}),
+                "optimization_score": profit_result.get("optimization_score", 0.0),
+                "dualistic_mode": True,
+                "quantum_enhancement": True
+            }
+            
+            # Execute trading operations
+            execution_result = self.trading_execution.execute_dualistic_trading(
+                market_data=market_data,
+                portfolio_data=portfolio_data,
+                execution_config=execution_config
+            )
+            
             return {
-                'btc_price': 50000.0 + np.random.normal(0, 100),  # Simulated price
-                'volume': 1000.0,
-                'volatility': np.random.uniform(0.1, 0.9),
-                'entropy_level': np.random.uniform(2.0, 8.0),
-                'complexity': np.random.uniform(0.2, 0.8),
-                'liquidity_depth': 10000.0
+                "execution_success": execution_result.get("success", False),
+                "trades_executed": execution_result.get("trades_executed", []),
+                "dualistic_coherence": execution_result.get("dualistic_coherence", 0.0),
+                "quantum_enhancement": execution_result.get("quantum_enhancement", 0.0),
+                "risk_assessment": execution_result.get("risk_assessment", {}),
+                "integration_id": integration_id
             }
+            
         except Exception as e:
-            logger.error(f"Error getting market data: {e}")
-            return {
-                'btc_price': 50000.0,
-                'volume': 1000.0,
-                'volatility': 0.5,
-                'entropy_level': 4.0,
-                'complexity': 0.5,
-                'liquidity_depth': 10000.0
-            }
+            logger.error(f"Trading execution failed for {integration_id}: {e}")
+            return {"status": "trading_execution_error", "error": str(e)}
 
-    def _create_dummy_cross_tensor(self):
-        """Create dummy cross-sectional tensor for testing."""
-        return type('DummyCrossTensor', (), {
-            'tensor_coherence': 0.8,
-            'aleph_tensor_state': np.array([1, 2, 3]),
-            'alif_tensor_state': np.array([4, 5, 6]),
-            'cross_section_matrix': np.array([[1, 2], [3, 4]]),
-            'dualistic_eigenvalues': np.array([1, 2]),
-            'transition_coefficients': np.array([0.5, 0.5]),
-            'timestamp': time.time()
-        })()
-
-    def _create_dummy_wavepath_link(self):
-        """Create dummy wavepath visual link for testing."""
-        return type('DummyWavepathLink', (), {
-            'wave_frequency': 1.0,
-            'visual_amplitude': 0.8,
-            'link_strength': 0.7,
-            'conformity_score': 0.6,
-            'path_optimization': {'optimization_score': 0.5},
-            'timestamp': time.time()
-        })()
-
-    def _create_dummy_backlog_transition(self):
-        """Create dummy backlog state transition for testing."""
-        return type('DummyBacklogTransition', (), {
-            'tick_drift_magnitude': 0.3,
-            'state_buffer_depth': 10,
-            'transitional_velocity': 0.5,
-            'backlog_pressure': 0.4,
-            'drift_compensation': 0.2,
-            'timestamp': time.time()
-        })()
-
-    def _update_cycle_performance_metrics(
-        self, 
-        cycle_id: str, 
-        success: bool, 
-        profit_realized: float, 
-        execution_time: float, 
-        integration_mode: IntegrationMode
-    ) -> None:
-        """Update cycle performance metrics."""
+    def _validate_mathematical_coherence(
+        self,
+        profit_result: Dict[str, Any],
+        trading_result: Dict[str, Any],
+        integration_id: str
+    ) -> float:
+        """Validate mathematical coherence across all systems."""
         try:
-            self.total_trades += 1
-            self.total_profit += profit_realized
+            if not self.math_validator:
+                return 0.5  # Default coherence score
             
-            # Update success rate
-            current_success_rate = self.success_rate
-            self.success_rate = (
-                (current_success_rate * (self.total_trades - 1) + (1 if success else 0)) / self.total_trades
+            # Validate mathematical consistency
+            coherence_result = self.math_validator.validate_system_coherence(
+                profit_vectors=profit_result.get("profit_vectors", {}),
+                trading_execution=trading_result.get("trades_executed", []),
+                precision_threshold=self.config.get("mathematical_precision", 1e-12)
             )
             
-            # Update average execution time
-            current_avg_time = self.avg_execution_time
-            self.avg_execution_time = (
-                (current_avg_time * (self.total_trades - 1) + execution_time) / self.total_trades
-            )
-            
-            # Update mode-specific performance
-            mode = integration_mode.value
-            if mode not in self.mode_performance:
-                self.mode_performance[mode] = {"total_trades": 0, "success_rate": 0.0, "avg_profit": 0.0}
-            
-            self.mode_performance[mode]["total_trades"] += 1
-            
-            # Update mode success rate
-            current_mode_success_rate = self.mode_performance[mode]["success_rate"]
-            total_mode_trades = self.mode_performance[mode]["total_trades"]
-            self.mode_performance[mode]["success_rate"] = (
-                (current_mode_success_rate * (total_mode_trades - 1) + (1 if success else 0)) / total_mode_trades
-            )
-            
-            # Update mode average profit
-            current_mode_avg_profit = self.mode_performance[mode]["avg_profit"]
-            self.mode_performance[mode]["avg_profit"] = (
-                (current_mode_avg_profit * (total_mode_trades - 1) + profit_realized) / total_mode_trades
-            )
+            return coherence_result.get("coherence_score", 0.5)
             
         except Exception as e:
-            logger.error(f"Error updating cycle performance metrics: {e}")
+            logger.error(f"Mathematical coherence validation failed for "
+                        f"{integration_id}: {e}")
+            return 0.0
 
-    def _create_failed_cycle_result(self, cycle_id: str, reason: str, start_time: float) -> Dict[str, Any]:
-        """Create a failed cycle result."""
-        execution_time = time.time() - start_time
+    def _assess_system_health(
+        self,
+        qsc_result: Dict[str, Any],
+        profit_result: Dict[str, Any],
+        trading_result: Dict[str, Any],
+        integration_id: str
+    ) -> SystemHealth:
+        """Assess overall system health."""
+        try:
+            health_factors = []
+            
+            # QSC health factor
+            qsc_confidence = qsc_result.get("confidence", 0.0)
+            health_factors.append(qsc_confidence)
+            
+            # Profit vectorization health factor
+            profit_score = profit_result.get("optimization_score", 0.0)
+            health_factors.append(profit_score)
+            
+            # Trading execution health factor
+            execution_success = 1.0 if trading_result.get("execution_success", False) else 0.0
+            health_factors.append(execution_success)
+            
+            # Calculate overall health score
+            avg_health = np.mean(health_factors) if health_factors else 0.0
+            
+            # Determine health status
+            if avg_health >= 0.9:
+                return SystemHealth.OPTIMAL
+            elif avg_health >= 0.7:
+                return SystemHealth.HEALTHY
+            elif avg_health >= 0.5:
+                return SystemHealth.WARNING
+            else:
+                return SystemHealth.CRITICAL
+                
+        except Exception as e:
+            logger.error(f"System health assessment failed for {integration_id}: {e}")
+            return SystemHealth.CRITICAL
+
+    def _calculate_quantum_enhancement(
+        self,
+        qsc_result: Dict[str, Any],
+        profit_result: Dict[str, Any],
+        trading_result: Dict[str, Any]
+    ) -> float:
+        """Calculate quantum enhancement factor."""
+        try:
+            enhancement_factors = []
+            
+            # QSC quantum enhancement
+            if qsc_result.get("resonant", False):
+                enhancement_factors.append(qsc_result.get("confidence", 0.0))
+            
+            # Profit vectorization quantum enhancement
+            if profit_result.get("qsc_enhanced", False):
+                enhancement_factors.append(profit_result.get("optimization_score", 0.0))
+            
+            # Trading execution quantum enhancement
+            quantum_trading = trading_result.get("quantum_enhancement", 0.0)
+            enhancement_factors.append(quantum_trading)
+            
+            return np.mean(enhancement_factors) if enhancement_factors else 0.0
+            
+        except Exception as e:
+            logger.error(f"Quantum enhancement calculation failed: {e}")
+            return 0.0
+
+    def _update_integration_metrics(self, result: IntegrationResult):
+        """Update integration metrics."""
+        self.integration_metrics.total_integrations += 1
+        
+        if result.success:
+            self.integration_metrics.successful_integrations += 1
+        else:
+            self.integration_metrics.failed_integrations += 1
+        
+        # Update average integration time
+        integration_time = result.performance_metrics.get("integration_time", 0.0)
+        total_time = (self.integration_metrics.average_integration_time * 
+                     (self.integration_metrics.total_integrations - 1))
+        self.integration_metrics.average_integration_time = ((total_time + integration_time) / 
+                                                           self.integration_metrics.total_integrations)
+        
+        # Update other metrics
+        self.integration_metrics.quantum_coherence_score = result.quantum_enhancement_factor
+        self.integration_metrics.mathematical_precision = result.mathematical_coherence_score
+        self.integration_metrics.system_health = result.system_health
+        self.integration_metrics.last_integration_timestamp = result.timestamp
+
+    def get_integration_status(self) -> Dict[str, Any]:
+        """Get current integration system status."""
         return {
-            "cycle_id": cycle_id,
-            "success": False,
-            "error": reason,
-            "execution_time": execution_time,
-            "profit_realized": 0.0,
-            "phases": {},
-            "performance": {
-                "total_trades": self.total_trades,
-                "total_profit": self.total_profit,
-                "success_rate": self.success_rate,
-                "avg_execution_time": self.avg_execution_time
+            "system_status": "active" if COMPONENTS_AVAILABLE else "fallback_mode",
+            "components_available": COMPONENTS_AVAILABLE,
+            "active_integrations": len(self.active_integrations),
+            "metrics": {
+                "total_integrations": self.integration_metrics.total_integrations,
+                "success_rate": (self.integration_metrics.successful_integrations / 
+                               max(self.integration_metrics.total_integrations, 1)),
+                "average_integration_time": self.integration_metrics.average_integration_time,
+                "quantum_coherence_score": self.integration_metrics.quantum_coherence_score,
+                "mathematical_precision": self.integration_metrics.mathematical_precision,
+                "system_health": self.integration_metrics.system_health.value
+            },
+            "component_status": {
+                "profit_vectorization": self.profit_vectorization is not None,
+                "trading_execution": self.trading_execution is not None,
+                "qsc_core": self.qsc_core is not None,
+                "math_validator": self.math_validator is not None
             }
         }
 
-    def get_enhanced_performance_summary(self) -> Dict[str, Any]:
-        """Get enhanced performance summary with all phase and mode statistics."""
-        try:
-            return {
-                "total_trades": self.total_trades,
-                "total_profit": self.total_profit,
-                "success_rate": self.success_rate,
-                "avg_execution_time": self.avg_execution_time,
-                "current_integration_mode": self.integration_mode.value,
-                "current_phase": self.current_phase.value,
-                "integration_modes": self.mode_performance,
-                "phase_statistics": {
-                    "analysis_results": len(self.analysis_results),
-                    "vectorization_results": len(self.vectorization_results),
-                    "entry_results": len(self.entry_results),
-                    "execution_results": len(self.execution_results),
-                    "optimization_results": len(self.optimization_results)
-                },
-                "available_integration_modes": [mode.value for mode in IntegrationMode],
-                "available_trading_phases": [phase.value for phase in TradingPhase]
-            }
-        except Exception as e:
-            logger.error(f"Error getting enhanced performance summary: {e}")
-            return {"error": str(e)}
-
-    def set_integration_mode(self, mode: IntegrationMode) -> None:
-        """Set the integration mode."""
-        self.integration_mode = mode
-        logger.info(f"Integration mode changed to: {mode.value}")
-
-    def get_available_integration_modes(self) -> List[str]:
-        """Get list of available integration modes."""
-        return [mode.value for mode in IntegrationMode]
-
-    def get_mode_description(self, mode: IntegrationMode) -> str:
-        """Get description of an integration mode."""
-        descriptions = {
-            IntegrationMode.STANDARD: "Original unified system approach",
-            IntegrationMode.ENHANCED_BACKUP: "Enhanced with backup logic integration",
-            IntegrationMode.HYBRID_BLEND: "Blended approach using all methods",
-            IntegrationMode.ADAPTIVE_MODE: "Adaptive mode selection based on performance",
-            IntegrationMode.CONSENSUS_DRIVEN: "Consensus-driven integration",
-            IntegrationMode.ENTROPY_OPTIMIZED: "Entropy-optimized integration"
-        }
-        return descriptions.get(mode, "Unknown mode")
+    def cleanup_completed_integrations(self, max_age_hours: float = 24):
+        """Clean up completed integrations older than specified age."""
+        current_time = time.time()
+        cutoff_time = current_time - (max_age_hours * 3600)
+        
+        completed_integrations = [
+            integration_id for integration_id, result in self.active_integrations.items()
+            if result.timestamp < cutoff_time
+        ]
+        
+        for integration_id in completed_integrations:
+            del self.active_integrations[integration_id]
+        
+        logger.info(f"🧹 Cleaned up {len(completed_integrations)} completed integrations")
 
 
-# Global instance for the enhanced unified integration system
-enhanced_unified_integration = EnhancedSchwabotUnifiedIntegration()
+def create_unified_integration_system(config: Optional[Dict[str, Any]] = None):
+    """Create unified integration system instance."""
+    return SchwabotUnifiedIntegration(config)
 
-__all__ = [
-    "EnhancedSchwabotUnifiedIntegration",
-    "IntegrationMode",
-    "TradingPhase",
-    "enhanced_unified_integration"
-]
 
 if __name__ == "__main__":
-    print("🚀 Enhanced Schwabot Unified Integration System - Complete Implementation")
-    print("✅ Enhanced Profit Vectorization: ACTIVE")
-    print("✅ Enhanced Entry/Exit Logic: ACTIVE")
-    print("✅ Bit-Flip Operations: ACTIVE")
-    print("✅ Consensus Voting Systems: ACTIVE")
-    print("✅ Entropy-Weighted Calculations: ACTIVE")
-    print("✅ Multi-Phase DLT Waveform Processing: ACTIVE")
-    print("✅ Dynamic Allocation Sliders: ACTIVE")
-    print("✅ Percentage-Based Methods: ACTIVE")
-    print("✅ Rapid Bitcoin to USD Trading: READY")
-    print("✅ 100% Implementation Status: ACHIEVED")
+    # Test unified integration system
+    print("🚀 Testing Schwabot Unified Integration System")
+    
+    integration_system = create_unified_integration_system()
+    
+    # Sample market data
+    market_data = {
+        "price_history": [50000, 50500, 51000, 50800, 51200],
+        "volume_history": [100, 120, 90, 110, 130],
+        "fibonacci_tracking": {
+            "projection": [50000, 50600, 51100, 50900, 51300]
+        },
+        "indicators": {
+            "rsi": 65,
+            "macd": 0.02,
+            "bollinger_bands": {"upper": 52000, "lower": 49000}
+        }
+    }
+    
+    # Sample portfolio data
+    portfolio_data = {
+        "positions": {
+            "BTC": {"quantity": 0.5, "entry_price": 50000, "current_value": 25600}
+        },
+        "cash_balance": 10000,
+        "total_value": 35600
+    }
+    
+    # Execute unified integration
+    result = integration_system.execute_unified_integration(
+        market_data=market_data,
+        portfolio_data=portfolio_data,
+        mode=IntegrationMode.QUANTUM_ENHANCED
+    )
+    
+    print(f"Integration Result: {result.success}")
+    print(f"Integration ID: {result.integration_id}")
+    print(f"System Health: {result.system_health.value}")
+    print(f"Quantum Enhancement: {result.quantum_enhancement_factor:.3f}")
+    print(f"Mathematical Coherence: {result.mathematical_coherence_score:.3f}")
+    
+    # Show system status
+    status = integration_system.get_integration_status()
+    print(f"\nSystem Status: {status['system_status']}")
+    print(f"Success Rate: {status['metrics']['success_rate']:.1%}")
+    print(f"Components Available: {status['components_available']}")
+    
+    print("✅ Unified integration test completed")

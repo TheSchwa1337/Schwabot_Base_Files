@@ -16,3 +16,8 @@ class PhaseDriftHarmonizer:
 
     def harmonize_phase(self, phase_data):
         return {"harmonized": True, "phase_shift": 0.0}
+
+
+def create_quantum_drift_shell(config=None):
+    """Create quantum drift shell instance."""
+    return QuantumDriftShellEngine(config)

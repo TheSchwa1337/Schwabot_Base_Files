@@ -321,26 +321,29 @@ class PureProfitCalculator:
         try:
             if not history_state.profit_memory:
                 return 0.0
-            
+
             # Recent profit memory analysis
-            recent_profits = history_state.profit_memory[-10:] if len(history_state.profit_memory) > 10 else history_state.profit_memory
-            
+            recent_profits = (history_state.profit_memory[-10:] 
+                            if len(history_state.profit_memory) > 10 
+                            else history_state.profit_memory)
+
             if not recent_profits:
                 return 0.0
-            
+
             # Calculate profit trend
             profit_trend = np.mean(recent_profits)
             profit_stability = 1.0 - np.std(recent_profits)
-            
+
             # Hash-based pattern recognition
             market_hash = hash(f"{market_data.btc_price:.0f}_{market_data.volatility:.3f}")
             hash_factor = (market_hash % 1000) / 1000.0
-            
+
             # Combine factors
-            hash_contribution = (profit_trend * 0.6 + profit_stability * 0.4) * hash_factor
-            
+            hash_contribution = ((profit_trend * 0.6 + profit_stability * 0.4) * 
+                               hash_factor)
+
             return np.clip(hash_contribution, -0.3, 0.3)
-            
+
         except Exception as e:
             logger.error("❌ Hash contribution calculation failed: %s", e)
             return 0.0
@@ -353,7 +356,7 @@ class PureProfitCalculator:
         """Calculate confidence score based on signal alignment."""
         try:
             confidence_factors = []
-            
+
             # Price-volume alignment
             if market_data.volume_profile > 1.0 and market_data.momentum > 0:
                 confidence_factors.append(0.8)
@@ -361,21 +364,22 @@ class PureProfitCalculator:
                 confidence_factors.append(0.6)
             else:
                 confidence_factors.append(0.4)
-            
+
             # Volatility-momentum alignment
             if abs(market_data.momentum) > market_data.volatility:
                 confidence_factors.append(0.7)
             else:
                 confidence_factors.append(0.5)
-            
+
             # Historical signal consistency
             if history_state.signal_history:
                 recent_signals = history_state.signal_history[-5:]
-                signal_consistency = 1.0 - np.std(recent_signals) if len(recent_signals) > 1 else 0.5
+                signal_consistency = (1.0 - np.std(recent_signals) 
+                                    if len(recent_signals) > 1 else 0.5)
                 confidence_factors.append(signal_consistency)
-            
+
             return np.mean(confidence_factors) if confidence_factors else 0.5
-            
+
         except Exception as e:
             logger.error("❌ Confidence score calculation failed: %s", e)
             return 0.5
@@ -394,14 +398,15 @@ class PureProfitCalculator:
         """Get pure calculation metrics."""
         if self.calculation_count == 0:
             return {'status': 'no_calculations'}
-        
+
         avg_calculation_time = self.total_calculation_time / self.calculation_count
-        
+
         return {
             'total_calculations': self.calculation_count,
             'total_time': self.total_calculation_time,
             'average_time_ms': avg_calculation_time * 1000,
-            'calculations_per_second': 1.0 / avg_calculation_time if avg_calculation_time > 0 else 0,
+            'calculations_per_second': (1.0 / avg_calculation_time 
+                                      if avg_calculation_time > 0 else 0),
             'strategy_params': {
                 'risk_tolerance': self.strategy_params.risk_tolerance,
                 'profit_target': self.strategy_params.profit_target,
@@ -409,10 +414,11 @@ class PureProfitCalculator:
             }
         }
 
-    def validate_profit_purity(self, market_data: MarketData, history_state: HistoryState) -> bool:
+    def validate_profit_purity(self, market_data: MarketData, 
+                             history_state: HistoryState) -> bool:
         """
         Validate that profit calculation is mathematically pure.
-        
+
         This test ensures that the same inputs always produce the same outputs,
         regardless of external factors like ZPE/ZBE acceleration.
         """
@@ -420,15 +426,15 @@ class PureProfitCalculator:
             # Calculate profit twice with identical inputs
             result1 = self.calculate_profit(market_data, history_state)
             result2 = self.calculate_profit(market_data, history_state)
-            
+
             # Results should be identical (within floating point precision)
             is_pure = abs(result1.total_profit_score - result2.total_profit_score) < 1e-10
-            
+
             if not is_pure:
                 logger.error("❌ Profit calculation purity violation detected!")
-                
+
             return is_pure
-            
+
         except Exception as e:
             logger.error("❌ Profit purity validation failed: %s", e)
             return False
@@ -437,19 +443,20 @@ class PureProfitCalculator:
 def assert_zpe_isolation() -> None:
     """
     Assert that ZPE/ZBE systems are completely isolated from profit calculation.
-    
+
     This function ensures that no ZPE/ZBE imports or references exist in
     the profit calculation pipeline.
     """
     import sys
-    
+
     # Check that ZPE/ZBE modules are not imported
-    zpe_modules = [name for name in sys.modules.keys() if 'zpe' in name.lower() or 'zbe' in name.lower()]
-    
+    zpe_modules = [name for name in sys.modules.keys() 
+                  if 'zpe' in name.lower() or 'zbe' in name.lower()]
+
     if zpe_modules:
         logger.warning("⚠️ ZPE/ZBE modules detected in system: %s", zpe_modules)
         logger.warning("⚠️ Ensure they do not influence profit calculations")
-    
+
     logger.info("✅ ZPE isolation check completed")
 
 
@@ -482,10 +489,10 @@ def demo_pure_profit_calculation():
     """Demonstrate pure profit calculation."""
     print("🧮 PURE PROFIT CALCULATION DEMONSTRATION")
     print("="*60)
-    
+
     # Assert ZPE isolation
     assert_zpe_isolation()
-    
+
     # Create calculator
     strategy_params = StrategyParameters(
         risk_tolerance=0.02,
@@ -493,15 +500,16 @@ def demo_pure_profit_calculation():
         position_size=0.1
     )
     calculator = PureProfitCalculator(strategy_params)
-    
+
     # Create sample data
     market_data = create_sample_market_data()
     history_state = create_sample_history_state()
-    
-    print(f"📊 Market Data: BTC=${market_data.btc_price:,.0f}, Vol={market_data.volatility:.3f}")
+
+    print(f"📊 Market Data: BTC=${market_data.btc_price:,.0f}, "
+          f"Vol={market_data.volatility:.3f}")
     print(f"🧠 History State: {len(history_state.profit_memory)} profit memories")
     print()
-    
+
     # Test different calculation modes
     modes = [
         ProfitCalculationMode.CONSERVATIVE,
@@ -509,7 +517,7 @@ def demo_pure_profit_calculation():
         ProfitCalculationMode.AGGRESSIVE,
         ProfitCalculationMode.TENSOR_OPTIMIZED
     ]
-    
+
     for mode in modes:
         result = calculator.calculate_profit(market_data, history_state, mode)
         print(f"Mode: {mode.value.upper()}")
@@ -518,16 +526,15 @@ def demo_pure_profit_calculation():
         print(f"  🎯 Total Score: {result.total_profit_score:.4f}")
         print(f"  📊 Confidence: {result.confidence_score:.4f}")
         print()
-    
-    # Validate purity
+
+    # Test purity
     is_pure = calculator.validate_profit_purity(market_data, history_state)
-    print(f"✅ Profit Calculation Purity: {'PASSED' if is_pure else 'FAILED'}")
-    
-    # Get metrics
+    print(f"🔬 Calculation Purity: {'✅ PURE' if is_pure else '❌ IMPURE'}")
+
+    # Show metrics
     metrics = calculator.get_calculation_metrics()
-    print(f"📊 Calculations: {metrics['total_calculations']}")
-    print(f"⏱️  Average Time: {metrics['average_time_ms']:.3f}ms")
-    print(f"🚀 Calculations/sec: {metrics['calculations_per_second']:.1f}")
+    print(f"📈 Calculations: {metrics['total_calculations']}")
+    print(f"⏱️  Avg Time: {metrics['average_time_ms']:.2f}ms")
 
 
 if __name__ == "__main__":

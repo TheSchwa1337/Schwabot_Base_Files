@@ -1,17 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Quantum Superpositional Trigger Module
---------------------------------------
-Implements the Recursive Superposition Collapser (U(t)), which introduces
-superposed trade-state memory to modify lattice projection. This module ensures
-a closed loop of hash -> strategy -> execution -> memory -> hash.
+Quantum Superpositional Trigger - Advanced quantum market state detection
 """
 
-import hashlib
+import logging
 import time
-from typing import Any, Dict, Optional
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Dict, Any, List
 
+import hashlib
 import numpy as np
 
 
@@ -124,52 +123,6 @@ class QuantumSuperpositionalTrigger:
 
 
 if __name__ == "__main__":
-    print("--- Quantum Superpositional Trigger Demo ---")
-
     trigger = QuantumSuperpositionalTrigger()
-
-    # Simulate recursive hash states (R)
-    r_states_1 = {
-        "hash_t1": "abcdef12345",
-        "hash_t2": "fedcba54321",
-        "hash_t3": "123456789ab",
-    }
-    r_states_2 = {"hash_t4": "bbbbbbbbbbb", "hash_t5": "ccccccccccccc"}
-
-    # Simulate conscious processor status (C)
-    c_status_good = {"cpu_alignment": 0.9, "gpu_alignment": 0.85}
-    c_status_bad = {"cpu_alignment": 0.4, "gpu_alignment": 0.3}
-
-    # Simulate purposeful logic collapse (P)
-    p_collapse_true = True
-    p_collapse_false = False
-
-    print("\n--- Test Case 1: All conditions good (expected COLLAPSED_TO_TRADE) ---")
-    result1 = trigger.collapse_superposition(r_states_1, c_status_good, p_collapse_true)
-    print(f"Result: {result1['trade_decision']}")
-    print(f"Metrics: {result1['metrics']}")
-    print(f"Stored R states: {trigger.get_recursive_hash_states()}")
-
-    print(
-        "\n--- Test Case 2: Low processor alignment (expected HOLD_SUPERPOSITION) ---"
-    )
-    result2 = trigger.collapse_superposition(r_states_1, c_status_bad, p_collapse_true)
-    print(f"Result: {result2['trade_decision']}")
-    print(f"Metrics: {result2['metrics']}")
-
-    print(
-        "\n--- Test Case 3: No purposeful logic collapse (expected HOLD_SUPERPOSITION) ---"
-    )
-    result3 = trigger.collapse_superposition(
-        r_states_2, c_status_good, p_collapse_false
-    )
-    print(f"Result: {result3['trade_decision']}")
-    print(f"Metrics: {result3['metrics']}")
-
-    print("\n--- Resetting the Trigger ---")
-    trigger.reset()
-    print(
-        f"Stored R states after reset: "
-        f"{trigger.get_recursive_hash_states()}"
-    )
-    print(f"Metrics after reset: {trigger.get_metrics()}")
+    print("Testing Quantum Superpositional Trigger...")
+    trigger.test_quantum_detection()
