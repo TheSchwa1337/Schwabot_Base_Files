@@ -1,14 +1,21 @@
-import hashlib
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+ZPE Core - Zero Point Energy Core for Schwabot.
+
+Hardware acceleration and computational optimization system that provides
+thermal management, resonance calculations, and quantum state analysis
+without interfering with profit calculations or trading decisions.
+"""
+
 import logging
 import time
-import numpy as np
-import psutil
-import threading
-from typing import Dict, List, Optional, Any, Tuple
 from dataclasses import dataclass, field
 from enum import Enum
-from collections import deque
-from typing import Tuple
+from typing import Any, Dict, List, Optional
+
+import numpy as np
+import psutil
 
 
 logger = logging.getLogger(__name__)
@@ -16,6 +23,7 @@ logger = logging.getLogger(__name__)
 
 class ZPEMode(Enum):
     """ZPE operation modes - focused on computational acceleration."""
+
     IDLE = "idle"
     THERMAL_MANAGEMENT = "thermal_management"
     RESONANCE_CALCULATION = "resonance_calculation"
@@ -29,6 +37,7 @@ class ZPEMode(Enum):
 @dataclass
 class ZPEThermalData:
     """ZPE thermal management data - hardware-focused."""
+
     timestamp: float
     thermal_state: float
     resonance_frequency: float
@@ -45,6 +54,7 @@ class ZPEThermalData:
 @dataclass
 class ZPEResonanceData:
     """ZPE resonance calculation data - computational resonance."""
+
     timestamp: float
     resonance_frequency: float
     resonance_amplitude: float
@@ -59,6 +69,7 @@ class ZPEResonanceData:
 @dataclass
 class ZPEQuantumData:
     """ZPE quantum state analysis data - computational quantum states."""
+
     timestamp: float
     quantum_state: float
     superposition_factor: float
@@ -73,6 +84,7 @@ class ZPEQuantumData:
 @dataclass
 class ZPEHardwareMetrics:
     """Hardware performance metrics for ZPE optimization."""
+
     cpu_cores: int
     cpu_frequency: float
     memory_total: int
@@ -87,10 +99,10 @@ class ZPEHardwareMetrics:
 class ZPECore:
     """
     ZPE Core - Zero Point Energy Core for Schwabot.
-    
+
     ENHANCED PURPOSE: Hardware acceleration and computational optimization
     WITHOUT interfering with profit calculations or trading decisions.
-    
+
     Provides:
         1. Thermal management and monitoring (hardware-focused)
         2. Resonance frequency calculations (computational resonance)
@@ -101,7 +113,7 @@ class ZPECore:
         7. Hardware optimization (resource allocation)
     """
 
-    def __init__(self: 'ZPECore', precision: int = 64) -> None:
+    def __init__(self, precision: int = 64) -> None:
         """Initialize ZPE core with hardware acceleration focus."""
         self.precision = precision
         self.mode = ZPEMode.IDLE
@@ -114,22 +126,22 @@ class ZPECore:
         self.thermal_threshold = 0.8
         self.energy_efficiency_target = 0.9
         self.quantum_coherence_time = 1.0  # seconds
-        
+
         # Hardware acceleration parameters
         self.computational_boost_factor = 1.0
         self.tensor_calculation_multiplier = 1.0
         self.parallel_processing_optimization = 1.0
-        
+
         # Performance tracking
         self.total_cycles = 0
         self.thermal_events = 0
         self.resonance_events = 0
         self.quantum_events = 0
         self.acceleration_events = 0
-        
+
         # Hardware monitoring
         self.hardware_metrics = self._initialize_hardware_metrics()
-        
+
         logger.info("🌌 ZPE Core initialized with %d-bit precision - HARDWARE ACCELERATION MODE", precision)
 
     def _initialize_hardware_metrics(self) -> ZPEHardwareMetrics:
@@ -137,7 +149,7 @@ class ZPECore:
         try:
             cpu_info = psutil.cpu_freq()
             memory_info = psutil.virtual_memory()
-            
+
             return ZPEHardwareMetrics(
                 cpu_cores=psutil.cpu_count(),
                 cpu_frequency=cpu_info.current if cpu_info else 0.0,
@@ -163,20 +175,20 @@ class ZPECore:
                 computational_bottleneck="cpu"
             )
 
-    def set_mode(self: 'ZPECore', mode: ZPEMode) -> None:
+    def set_mode(self, mode: ZPEMode) -> None:
         """Set ZPE operation mode."""
         self.mode = mode
         logger.info("🔄 ZPE mode set to: %s", mode.value)
 
     def calculate_thermal_efficiency(
-        self: 'ZPECore',
+        self,
         market_volatility: float,
         system_load: float,
         mathematical_state: Optional[Dict[str, Any]] = None
     ) -> ZPEThermalData:
         """
         Calculate ZPE thermal efficiency - HARDWARE FOCUSED.
-        
+
         This function optimizes computational performance WITHOUT affecting trading decisions.
         It only provides hardware acceleration and thermal management.
 
@@ -194,7 +206,7 @@ class ZPECore:
             # Get current hardware metrics
             cpu_percent = psutil.cpu_percent(interval=0.1)
             memory_percent = psutil.virtual_memory().percent
-            
+
             # Calculate thermal state based on hardware load (NOT trading decisions)
             hardware_thermal = min(1.0, (cpu_percent + memory_percent) / 200.0)
             load_thermal = min(1.0, system_load)
@@ -203,7 +215,6 @@ class ZPECore:
             complexity_factor = 1.0
             if mathematical_state:
                 complexity = mathematical_state.get('complexity', 0.5)
-                stability = mathematical_state.get('stability', 0.5)
                 # Higher complexity = more computational resources needed
                 complexity_factor = 1.0 + (complexity * 0.5)
 
@@ -225,7 +236,7 @@ class ZPECore:
 
             # Calculate computational throughput boost
             computational_throughput = max(0.5, 1.0 - thermal_state)
-            
+
             # Calculate thermal drift
             if self.thermal_history:
                 last_thermal = self.thermal_history[-1].thermal_state
@@ -264,11 +275,11 @@ class ZPECore:
 
             self.total_cycles += 1
             self.thermal_events += 1
-            
+
             # Update computational boost factors
             self.computational_boost_factor = computational_throughput
             self.tensor_calculation_multiplier = 1.0 + (computational_throughput * 0.5)
-            
+
             logger.debug(
                 "🌡️ ZPE thermal: State = %.3f, Efficiency = %.3f, Boost = %.3f",
                 thermal_state, energy_efficiency, computational_throughput
@@ -292,13 +303,13 @@ class ZPECore:
             )
 
     def calculate_resonance(
-        self: 'ZPECore',
+        self,
         thermal_data: ZPEThermalData,
         market_conditions: Dict[str, Any]
     ) -> Optional[ZPEResonanceData]:
         """
         Calculate ZPE resonance - COMPUTATIONAL RESONANCE.
-        
+
         This optimizes calculation speed and tensor processing efficiency
         WITHOUT affecting trading decisions.
 
@@ -337,7 +348,7 @@ class ZPECore:
 
             # Calculate computational speed multiplier
             calculation_speed_multiplier = 1.0 + (phase_coherence * 0.5)
-            
+
             # Calculate tensor processing efficiency
             tensor_processing_efficiency = max(0.5, 1.0 - thermal_data.thermal_state)
 
@@ -355,11 +366,11 @@ class ZPECore:
                 calculation_speed_multiplier=calculation_speed_multiplier,
                 tensor_processing_efficiency=tensor_processing_efficiency,
             )
-            
+
             # Update computational multipliers
             self.tensor_calculation_multiplier = calculation_speed_multiplier
             self.parallel_processing_optimization = tensor_processing_efficiency
-            
+
             return resonance_data
         except Exception as e:
             logger.error(f"Error in calculate_resonance: {e}")
@@ -368,7 +379,7 @@ class ZPECore:
     def get_computational_boost(self) -> Dict[str, float]:
         """
         Get current computational boost factors.
-        
+
         These factors can be used by tensor calculations to optimize performance
         WITHOUT affecting trading decisions.
         """
@@ -382,41 +393,41 @@ class ZPECore:
     def optimize_tensor_calculation(self, tensor_complexity: float) -> float:
         """
         Optimize tensor calculation speed based on current ZPE state.
-        
+
         This function provides speedup factors for tensor calculations
         WITHOUT affecting the mathematical results or trading decisions.
-        
+
         Args:
             tensor_complexity: Complexity of the tensor calculation
-            
+
         Returns:
             Speedup multiplier for the calculation
         """
         try:
             # Get current boost factors
             boost_factors = self.get_computational_boost()
-            
+
             # Calculate optimal speedup based on complexity and current state
             base_speedup = boost_factors['tensor_calculation_multiplier']
             complexity_factor = min(2.0, 1.0 + (tensor_complexity * 0.5))
             thermal_factor = boost_factors['thermal_efficiency']
-            
+
             # Final speedup multiplier (capped to prevent instability)
             speedup_multiplier = min(3.0, base_speedup * complexity_factor * thermal_factor)
-            
+
             logger.debug(
                 "🚀 ZPE tensor optimization: Complexity=%.3f, Speedup=%.3f",
                 tensor_complexity, speedup_multiplier
             )
-            
+
             return speedup_multiplier
-            
+
         except Exception as e:
             logger.error("❌ ZPE tensor optimization failed: %s", e)
             return 1.0  # No speedup on error
 
     def analyze_quantum_state(
-        self: 'ZPECore',
+        self,
         resonance_data: ZPEResonanceData,
         mathematical_state: Optional[Dict[str, Any]] = None
     ) -> ZPEQuantumData:
@@ -424,27 +435,27 @@ class ZPECore:
         # ⚠️ PHANTOM_MATH: Implementation placeholder for parallel processing optimization
         pass
 
-    def get_performance_stats(self: 'ZPECore') -> Dict[str, Any]:
+    def get_performance_stats(self) -> Dict[str, Any]:
         """Get performance statistics - HARDWARE FOCUSED."""
         # ⚠️ PHANTOM_MATH: Implementation placeholder
         pass
 
-    def get_thermal_history(self: 'ZPECore') -> List[ZPEThermalData]:
+    def get_thermal_history(self) -> List[ZPEThermalData]:
         """Get thermal history data."""
         # ⚠️ PHANTOM_MATH: Implementation placeholder
         pass
 
-    def get_resonance_history(self: 'ZPECore') -> List[ZPEResonanceData]:
+    def get_resonance_history(self) -> List[ZPEResonanceData]:
         """Get resonance history data."""
         # ⚠️ PHANTOM_MATH: Implementation placeholder
         pass
 
-    def get_quantum_history(self: 'ZPECore') -> List[ZPEQuantumData]:
+    def get_quantum_history(self) -> List[ZPEQuantumData]:
         """Get quantum history data."""
         # ⚠️ PHANTOM_MATH: Implementation placeholder
         pass
 
-    def clear_history(self: 'ZPECore') -> None:
+    def clear_history(self) -> None:
         """Clear all history data."""
         # ⚠️ PHANTOM_MATH: Implementation placeholder
         pass

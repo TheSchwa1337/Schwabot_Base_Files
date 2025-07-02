@@ -1,15 +1,3 @@
-from __future__ import annotations
-
-import logging
-from typing import Any, Dict, List
-import asyncio
-import time
-
-import aiohttp
-import requests
-from .base_handler import BaseAPIHandler
-
-
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -19,6 +7,17 @@ CoinGecko API Handler
 Fetches comprehensive cryptocurrency market data from CoinGecko API.
 Provides price data, market metrics, trending coins, and market dominance data.
 """
+
+import asyncio
+import logging
+import time
+from typing import Any, Dict
+
+import aiohttp
+import requests
+
+from .base_handler import BaseAPIHandler
+
 
 try:
     import aiohttp
@@ -37,11 +36,14 @@ BASE_URL = "https://api.coingecko.com/api/v3"
 
 
 class CoinGeckoHandler(BaseAPIHandler):
+    """CoinGecko API handler for comprehensive cryptocurrency market data."""
+
     NAME = "coingecko"
     CACHE_SUBDIR = "market_data"
     REFRESH_INTERVAL = 300  # 5-minute updates for market data
 
-    def __init__(self, api_key: str = None, cache_root: str = "flask/feeds"):
+    def __init__(self, api_key: str = None, cache_root: str = "flask/feeds") -> None:
+        """Initialize CoinGecko handler with API key and cache configuration."""
         super().__init__(cache_root)
         self.api_key = api_key  # CoinGecko has free tier without API key
 

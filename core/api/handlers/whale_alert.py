@@ -1,14 +1,3 @@
-from __future__ import annotations
-
-import logging
-from typing import Any, Dict, List
-import asyncio
-
-import aiohttp
-import requests
-from .base_handler import BaseAPIHandler
-
-
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -18,6 +7,16 @@ WhaleAlert API Handler
 Fetches whale transaction data from WhaleAlert API.
 Tracks large crypto transactions and provides insights into whale movements.
 """
+
+import asyncio
+import logging
+from typing import Any, Dict, List
+
+import aiohttp
+import requests
+
+from .base_handler import BaseAPIHandler
+
 
 try:
     import aiohttp
@@ -36,11 +35,14 @@ BASE_URL = "https://api.whale-alert.io/v1"
 
 
 class WhaleAlertHandler(BaseAPIHandler):
+    """WhaleAlert API handler for tracking large cryptocurrency transactions."""
+
     NAME = "whale_alert"
     CACHE_SUBDIR = "whale_data"
     REFRESH_INTERVAL = 180  # 3-minute updates for whale tracking
 
-    def __init__(self, api_key: str = None, cache_root: str = "flask/feeds"):
+    def __init__(self, api_key: str = None, cache_root: str = "flask/feeds") -> None:
+        """Initialize WhaleAlert handler with API key and cache configuration."""
         super().__init__(cache_root)
         self.api_key = api_key or "demo-key"  # Use demo key if none provided
         self.min_value = 500000  # Minimum transaction value USD

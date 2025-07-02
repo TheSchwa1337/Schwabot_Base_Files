@@ -45,8 +45,8 @@ class ApiIntegrationManager:
         self.load_configuration()
         logger.info("🚀 Live API Integration Manager initialized")
 
-    def load_configuration(self):
-        """Loads API configurations from the specified JSON file."""
+    def load_configuration(self) -> None:
+        """Load API configurations from the specified JSON file."""
         logger.info(f"Loading API configuration from {self.config_path}...")
         try:
             if not self.config_path.exists():
@@ -79,8 +79,8 @@ class ApiIntegrationManager:
         except Exception as e:
             logger.error(f"❌ Error loading API configuration: {e}", exc_info=True)
 
-    async def start(self):
-        """Starts the API integration system and all connections."""
+    async def start(self) -> None:
+        """Start the API integration system and all connections."""
         if self.running:
             logger.warning("API integration manager is already running.")
             return
@@ -95,8 +95,8 @@ class ApiIntegrationManager:
 
         logger.info("✅ Live API Integration Manager started successfully.")
 
-    async def stop(self):
-        """Stops the API integration system gracefully."""
+    async def stop(self) -> None:
+        """Stop the API integration system gracefully."""
         if not self.running:
             return
 
@@ -116,13 +116,13 @@ class ApiIntegrationManager:
         await asyncio.gather(*(conn.disconnect() for conn in self.connections.values()))
         logger.info("✅ Live API Integration Manager stopped.")
 
-    async def _connect_all_exchanges(self):
-        """Attempts to connect to all loaded exchange configurations."""
+    async def _connect_all_exchanges(self) -> None:
+        """Attempt to connect to all loaded exchange configurations."""
         connection_tasks = [conn.connect() for conn in self.connections.values()]
         await asyncio.gather(*connection_tasks)
 
-    async def _main_loop(self):
-        """The main operational loop for health checks and portfolio updates."""
+    async def _main_loop(self) -> None:
+        """Run the main operational loop for health checks and portfolio updates."""
         while self.running:
             try:
                 await self._heartbeat_check()
@@ -134,8 +134,8 @@ class ApiIntegrationManager:
                 logger.error(f"Error in main loop: {e}", exc_info=True)
                 await asyncio.sleep(self.reconnect_interval)
 
-    async def _heartbeat_check(self):
-        """Periodically checks connection health and reconnects if necessary."""
+    async def _heartbeat_check(self) -> None:
+        """Periodically check connection health and reconnect if necessary."""
         for name, conn in self.connections.items():
             if conn.status == ConnectionStatus.ERROR or (
                 conn.status == ConnectionStatus.CONNECTED and 
@@ -151,8 +151,8 @@ class ApiIntegrationManager:
                         logger.error(f"Max reconnect attempts reached for {name}. Disabling.")
                         conn.status = ConnectionStatus.ERROR
 
-    async def _update_all_portfolios(self):
-        """Triggers portfolio updates for all connected exchanges."""
+    async def _update_all_portfolios(self) -> None:
+        """Trigger portfolio updates for all connected exchanges."""
         # This can be expanded to fetch all balances and update a central portfolio model.
         # For now, it's a placeholder for periodic background tasks.
         pass
@@ -162,7 +162,7 @@ class ApiIntegrationManager:
         exchange_name: str,
         order_request: OrderRequest
     ) -> Optional[OrderResponse]:
-        """Places an order on a specific exchange."""
+        """Place an order on a specific exchange."""
         connection = self.connections.get(exchange_name)
         if connection and connection.status == ConnectionStatus.CONNECTED:
             return await connection.place_order(order_request)
@@ -170,7 +170,7 @@ class ApiIntegrationManager:
         return None
 
     async def get_market_data(self, exchange_name: str, symbol: str) -> Optional[MarketData]:
-        """Gets market data from a specific exchange."""
+        """Get market data from a specific exchange."""
         connection = self.connections.get(exchange_name)
         if connection and connection.status == ConnectionStatus.CONNECTED:
             return await connection.get_market_data(symbol)
@@ -178,7 +178,7 @@ class ApiIntegrationManager:
         return None
 
     def get_system_status(self) -> Dict[str, Any]:
-        """Provides a status overview of the entire API integration system."""
+        """Provide a status overview of the entire API integration system."""
         uptime = time.time() - self.start_time if self.running else 0
 
         return {
