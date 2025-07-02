@@ -33,63 +33,63 @@ class UnifiedProfitVectorizationSystem:
 }
 
     def calculate_sharpe_ratio(
-self, returns: List[float], risk_free_rate: Optional[float] = None
+        self, returns: List[float], risk_free_rate: Optional[float] = None
     ) -> float:
         """
-        Calculate Sharpe ratio for risk-adjusted returns in mathematical pipeline.
+        Calculate Sharpe ratio for risk-adjusted returns in tick analysis.
 
-Args:
+        Args:
             returns: List of return values
-risk_free_rate: Risk-free rate (defaults to instance rate)
+            risk_free_rate: Risk-free rate (defaults to instance rate)
 
-Returns:
-            Sharpe ratio value for tensor bucket optimization
-"""
-if not returns or len(returns) < 2:
+        Returns:
+            Sharpe ratio value for probabilistic drive systems
+        """
+        if not returns or len(returns) < 2:
             return 0.0
 
-risk_rate = risk_free_rate if risk_free_rate is not None else self.risk_free_rate
-returns_array = np.array(returns)
-excess_returns = returns_array - risk_rate
+        risk_rate = risk_free_rate if risk_free_rate is not None else self.risk_free_rate
+        returns_array = np.array(returns)
+        excess_returns = returns_array - risk_rate
 
-std_dev = np.std(excess_returns, ddof=1)
-if std_dev == 0 or np.isnan(std_dev):
+        std_dev = np.std(excess_returns, ddof=1)
+        if std_dev == 0 or np.isnan(std_dev):
             return 0.0
 
-sharpe = np.mean(excess_returns) / std_dev
+        sharpe = np.mean(excess_returns) / std_dev
         return float(sharpe)
 
     def calculate_sortino_ratio(
-self, returns: List[float], risk_free_rate: Optional[float] = None
+        self, returns: List[float], risk_free_rate: Optional[float] = None
     ) -> float:
         """
         Calculate Sortino ratio focusing on downside deviation for jerf pattern analysis.
 
-Args:
+        Args:
             returns: List of return values
-risk_free_rate: Risk-free rate (defaults to instance rate)
+            risk_free_rate: Risk-free rate (defaults to instance rate)
 
-Returns:
+        Returns:
             Sortino ratio value for probabilistic drive systems
-"""
-if not returns or len(returns) < 2:
+        """
+        if not returns or len(returns) < 2:
             return 0.0
 
-risk_rate = risk_free_rate if risk_free_rate is not None else self.risk_free_rate
-returns_array = np.array(returns)
-excess_returns = returns_array - risk_rate
+        risk_rate = risk_free_rate if risk_free_rate is not None else self.risk_free_rate
+        returns_array = np.array(returns)
+        excess_returns = returns_array - risk_rate
 
-# Calculate downside deviation (only negative returns)
-downside_returns = excess_returns[excess_returns < 0]
+        # Calculate downside deviation (only negative returns)
+        downside_returns = excess_returns[excess_returns < 0]
 
-if len(downside_returns) == 0:
+        if len(downside_returns) == 0:
             return float('inf') if np.mean(excess_returns) > 0 else 0.0
 
-downside_deviation = np.std(downside_returns, ddof=1)
-if downside_deviation == 0 or np.isnan(downside_deviation):
+        downside_deviation = np.std(downside_returns, ddof=1)
+        if downside_deviation == 0 or np.isnan(downside_deviation):
             return 0.0
 
-sortino = np.mean(excess_returns) / downside_deviation
+        sortino = np.mean(excess_returns) / downside_deviation
         return float(sortino)
 
     def calculate_kelly_criterion(
