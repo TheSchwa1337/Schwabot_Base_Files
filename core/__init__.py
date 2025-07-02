@@ -9,7 +9,9 @@ except ImportError:
     UNIFIED_MATH_AVAILABLE = False
 
 try:
-    from .unified_profit_vectorization_system import UnifiedProfitVectorizationSystem, profit_vectorization_system
+    from .unified_profit_vectorization_system import (
+        UnifiedProfitVectorizationSystem, profit_vectorization_system
+    )
     PROFIT_VECTORIZATION_AVAILABLE = True
 except ImportError:
     PROFIT_VECTORIZATION_AVAILABLE = False
@@ -52,7 +54,7 @@ except ImportError:
 
 __all__ = [
     'UNIFIED_MATH_AVAILABLE',
-    'PROFIT_VECTORIZATION_AVAILABLE', 
+    'PROFIT_VECTORIZATION_AVAILABLE',
     'DUALISTIC_STATE_AVAILABLE',
     'TENSOR_ALGEBRA_AVAILABLE',
     'CCXT_INTEGRATION_AVAILABLE',
@@ -81,7 +83,7 @@ if PHASE_BIT_AVAILABLE:
 if ADVANCED_SYSTEM_AVAILABLE:
     __all__.extend([
         'AdvancedDualisticTradingExecutionSystem',
-        'GhostTradeType', 
+        'GhostTradeType',
         'TriggerComplexity',
         'advanced_trading_system'
     ]) 

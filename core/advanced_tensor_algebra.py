@@ -20,18 +20,20 @@ from __future__ import annotations
 import hashlib
 import json
 import logging
-import random
 import time
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Tuple, Union
 
 import numpy as np
 
 try:
     from core.unified_math_system import unified_math
-    from utils.safe_print import safe_print, info as safe_info, error as safe_error, warning as safe_warning, debug as safe_debug, success as safe_success
+    from utils.safe_print import (
+        safe_print, info as safe_info, error as safe_error,
+        warning as safe_warning, debug as safe_debug, success as safe_success
+    )
     UNIFIED_MATH_AND_SAFE_PRINT_AVAILABLE = True
 except ImportError:
     UNIFIED_MATH_AND_SAFE_PRINT_AVAILABLE = False
@@ -193,7 +195,7 @@ class UnifiedTensorAlgebra:
         self.profit_results: List[ProfitRoutingResult] = []
         self.entropy_results: List[EntropyCompensationResult] = []
         self.hash_results: List[HashMemoryResult] = []
-        
+
         # Bit-form flip matrix tracking
         self.active_flip_matrices: List[BitFormFlipMatrix] = []
         self.consensus_history: List[ProfitConsensusResult] = []
@@ -307,14 +309,15 @@ class UnifiedTensorAlgebra:
             # Calculate bit phases (example logic)
             phi_4 = hash_val & 0b1111  # Last 4 bits
             phi_8 = (hash_val >> 4) & 0b11111111  # Next 8 bits
-            phi_42 = (hash_val >> 12) & 0x3FFFFFFFFFF  # Next 42 bits (example, max 16 bits in 8 hex chars)
+            # Next 42 bits (example, max 16 bits in 8 hex chars)
+            phi_42 = (hash_val >> 12) & 0x3FFFFFFFFFF
             # For a true 42-bit, you'd need a larger hash or more complex mapping.
 
             # Calculate cycle score based on weights
             cycle_score = (
                 self.alpha_weight * phi_4 +
                 self.beta_weight * phi_8 +
-                self.gamma_weight * (phi_42 % 1000)  # Normalize for scoring if phi_42 is large
+                self.gamma_weight * (phi_42 % 1000)  # Normalize for scoring
             )
 
             result = BitPhaseResult(
@@ -327,7 +330,10 @@ class UnifiedTensorAlgebra:
             )
 
             self.bit_phase_results.append(result)
-            self.operation_history.append({"operation": "resolve_bit_phases", "timestamp": datetime.now()})
+            self.operation_history.append({
+                "operation": "resolve_bit_phases",
+                "timestamp": datetime.now()
+            })
             return result
 
         except Exception as e:
@@ -351,13 +357,13 @@ class UnifiedTensorAlgebra:
             contraction_matrix = np.dot(matrix_a, matrix_b)
 
             # Calculate tensor score (e.g., Frobenius norm or trace)
-            tensor_score = np.trace(contraction_matrix) # Example: sum of diagonal elements
+            tensor_score = np.trace(contraction_matrix)  # Example: sum of diagonal
             if np.linalg.norm(contraction_matrix) != 0:
                 tensor_score = np.trace(contraction_matrix) / np.linalg.norm(contraction_matrix)
-            
+
             # Calculate basket weights (example: normalized diagonal)
             basket_weights = np.array([])
-            if contraction_matrix.shape[0] == contraction_matrix.shape[1]: # Square matrix
+            if contraction_matrix.shape[0] == contraction_matrix.shape[1]:  # Square matrix
                 diag_sum = np.sum(np.diagonal(contraction_matrix))
                 if diag_sum != 0:
                     basket_weights = np.diagonal(contraction_matrix) / diag_sum
@@ -365,7 +371,7 @@ class UnifiedTensorAlgebra:
                     basket_weights = np.zeros_like(np.diagonal(contraction_matrix))
             else:
                 # For non-square matrices, a more complex weighting would be needed
-                basket_weights = np.random.rand(contraction_matrix.shape[1]) # Example random weights
+                basket_weights = np.random.rand(contraction_matrix.shape[1])  # Random weights
                 basket_weights = basket_weights / np.sum(basket_weights)
 
             result = TensorContractionResult(
@@ -377,7 +383,10 @@ class UnifiedTensorAlgebra:
             )
 
             self.tensor_results.append(result)
-            self.operation_history.append({"operation": "perform_tensor_contraction", "timestamp": datetime.now()})
+            self.operation_history.append({
+                "operation": "perform_tensor_contraction",
+                "timestamp": datetime.now()
+            })
             return result
 
         except Exception as e:
@@ -552,10 +561,15 @@ class UnifiedTensorAlgebra:
             }
             # Convert numpy arrays and datetime objects to serializable format
             def convert_to_serializable(obj):
-                if isinstance(obj, np.ndarray): return obj.tolist()
-                if isinstance(obj, datetime): return obj.isoformat()
-                if isinstance(obj, Enum): return obj.value
-                raise TypeError(f"Object of type {obj.__class__.__name__} is not JSON serializable")
+                if isinstance(obj, np.ndarray):
+                    return obj.tolist()
+                if isinstance(obj, datetime):
+                    return obj.isoformat()
+                if isinstance(obj, Enum):
+                    return obj.value
+                raise TypeError(
+                    f"Object of type {obj.__class__.__name__} is not JSON serializable"
+                )
 
             with open(output_path, 'w') as f:
                 json.dump(export_data, f, indent=4, default=convert_to_serializable)
@@ -578,24 +592,27 @@ class UnifiedTensorAlgebra:
                 raise ValueError("Heatmap must be a 2D numpy array.")
 
             # Example: Simple directional slope based on diff and normalization
-            directional_slope = np.diff(heatmap, axis=1) # Difference across columns
+            directional_slope = np.diff(heatmap, axis=1)  # Difference across columns
             # If heatmap represents bid/ask, this could be (bid - ask) or similar.
             # For now, a simple differential to represent "directionality"
 
             # Normalize to generate a 2D tensor field
-            norm_factor = np.max(np.abs(directional_slope)) # Max absolute value for normalization
+            norm_factor = np.max(np.abs(directional_slope))  # Max absolute value
             if norm_factor == 0:
                 trade_tensor = np.zeros_like(directional_slope)
             else:
                 trade_tensor = directional_slope / norm_factor
 
             safe_info(f"Generated trade tensor with shape: {trade_tensor.shape}")
-            self.operation_history.append({"operation": "generate_tensor_from_liquidity", "timestamp": datetime.now()})
+            self.operation_history.append({
+                "operation": "generate_tensor_from_liquidity",
+                "timestamp": datetime.now()
+            })
             return trade_tensor
         except Exception as e:
             logger.error(f"Error generating tensor from liquidity: {e}")
             safe_error(f"Error generating tensor from liquidity: {e}")
-            return np.array([]) # Return empty array on error
+            return np.array([])  # Return empty array on error
 
     def contract_strategy_tensor(self, T: np.ndarray) -> np.ndarray:
         """Reduces strategy tensor into 1D actionable trade vector.
@@ -609,14 +626,14 @@ class UnifiedTensorAlgebra:
             # Echo-weighting and decay mechanics would involve historical data / memory context
 
             # Example: Flatten and then apply a simple reduction (mean)
-            if T.size == 0: # Handle empty tensor
+            if T.size == 0:  # Handle empty tensor
                 return np.array([])
 
             flat_tensor = T.flatten()
 
             # Simulate echo-weighting and decay: perhaps apply a decaying average
             # For simplicity, we'll just take a weighted sum or mean
-            weights = np.linspace(1.0, 0.1, len(flat_tensor)) # Example linear decay weights
+            weights = np.linspace(1.0, 0.1, len(flat_tensor))  # Linear decay weights
             weighted_sum = np.dot(flat_tensor, weights)
 
             # Simple reduction to a 1D vector (e.g., a single value or small array)
@@ -624,7 +641,10 @@ class UnifiedTensorAlgebra:
             actionable_vector = np.array([weighted_sum / np.sum(weights)])
 
             safe_info(f"Contracted strategy tensor to 1D vector: {actionable_vector}")
-            self.operation_history.append({"operation": "contract_strategy_tensor", "timestamp": datetime.now()})
+            self.operation_history.append({
+                "operation": "contract_strategy_tensor",
+                "timestamp": datetime.now()
+            })
             return actionable_vector
         except Exception as e:
             logger.error(f"Error contracting strategy tensor: {e}")
@@ -649,10 +669,13 @@ class UnifiedTensorAlgebra:
             warp_distance = np.linalg.norm(T1 - T2)
 
             # Reentry signal based on warp distance and warp_band (threshold)
-            reentry_signal = warp_distance < warp_band # Lower distance = higher similarity
+            reentry_signal = warp_distance < warp_band  # Lower distance = higher similarity
 
             safe_info(f"Warp tensor flux: Distance {warp_distance:.4f}, Reentry Signal: {reentry_signal}")
-            self.operation_history.append({"operation": "warp_tensor_flux", "timestamp": datetime.now()})
+            self.operation_history.append({
+                "operation": "warp_tensor_flux",
+                "timestamp": datetime.now()
+            })
             return float(warp_distance), reentry_signal
         except Exception as e:
             logger.error(f"Error calculating warp tensor flux: {e}")
@@ -670,10 +693,11 @@ class UnifiedTensorAlgebra:
             # "Memory-aware" implies historical hash lookups via hash_registry.json
 
             # 1. Perform dot product
-            if A.ndim > 2 or B.ndim > 2 or A.shape[1] != B.shape[0]: # Basic compatibility check for dot
-                 raise ValueError("Matrices A and B not compatible for dot product or too high dimension.")
+            if A.ndim > 2 or B.ndim > 2 or A.shape[1] != B.shape[0]:
+                # Basic compatibility check for dot
+                raise ValueError("Matrices A and B not compatible for dot product or too high dimension.")
             dot_product_result = np.dot(A, B)
-            scalar_dot_product = float(np.sum(dot_product_result)) # Convert to scalar for comparison
+            scalar_dot_product = float(np.sum(dot_product_result))  # Convert to scalar
 
             # 2. Generate hashes (using a simple hash of the array content)
             hash_A = hashlib.sha256(A.tobytes()).hexdigest()
@@ -682,12 +706,16 @@ class UnifiedTensorAlgebra:
             # 3. Check for hash similarity and dot product threshold
             hash_match = (hash_A == hash_B)
             # This threshold would ideally come from config or dynamic calculation
-            dot_product_threshold = 0.5 # Example threshold
+            dot_product_threshold = 0.5  # Example threshold
 
             rebind_phantom_logic = (scalar_dot_product > dot_product_threshold and hash_match)
 
-            safe_info(f"Echo tensor dot: Scalar Dot Product: {scalar_dot_product:.4f}, Hash Match: {hash_match}, Rebind Phantom: {rebind_phantom_logic}")
-            self.operation_history.append({"operation": "echo_tensor_dot", "timestamp": datetime.now()})
+            safe_info(f"Echo tensor dot: Scalar Dot Product: {scalar_dot_product:.4f}, "
+                     f"Hash Match: {hash_match}, Rebind Phantom: {rebind_phantom_logic}")
+            self.operation_history.append({
+                "operation": "echo_tensor_dot",
+                "timestamp": datetime.now()
+            })
             return scalar_dot_product, rebind_phantom_logic
         except Exception as e:
             logger.error(f"Error in echo tensor dot: {e}")
@@ -707,13 +735,16 @@ class UnifiedTensorAlgebra:
 
             # Simulate finding a match in a "hash slope" database
             # In a real scenario, this would be a complex lookup and comparison
-            is_match_found = (orphaned_strategy_hash == "known_orphaned_pattern_abc") # Dummy check
+            is_match_found = (orphaned_strategy_hash == "known_orphaned_pattern_abc")  # Dummy check
 
             if is_match_found:
                 safe_info(f"Corrected orphaned strategy: {orphaned_strategy_hash}. Logic recovered.")
                 # Simulate pushing to phantom_math_core (not directly implementable here without that module)
                 # phantom_math_core.inject_recursive_loop(recovered_logic)
-                self.operation_history.append({"operation": "tensor_backtrace_correction", "timestamp": datetime.now()})
+                self.operation_history.append({
+                    "operation": "tensor_backtrace_correction",
+                    "timestamp": datetime.now()
+                })
                 return True
             else:
                 safe_warning(f"No match found for orphaned strategy: {orphaned_strategy_hash}. Cannot correct.")
@@ -1098,13 +1129,13 @@ def create_unified_tensor_algebra() -> UnifiedTensorAlgebra:
 
 def main():
     """Test function for Unified Tensor Algebra."""
-    safe_info("\u1f9ee Testing Unified Tensor Algebra...")
+    safe_info("🧮 Testing Unified Tensor Algebra...")
 
     # Initialize algebra
     algebra = UnifiedTensorAlgebra()
 
     # Test bit phase resolution
-    safe_info("\n\u1f4ca Testing Bit Phase Resolution...")
+    safe_info("\n📊 Testing Bit Phase Resolution...")
     strategy_id = "0x123456789abcde"
     bit_result = algebra.resolve_bit_phases(strategy_id)
     safe_info(f"  φ₄: {bit_result.phi_4}")
@@ -1113,7 +1144,7 @@ def main():
     safe_info(f"  Cycle Score: {bit_result.cycle_score:.4f}")
 
     # Test tensor contraction
-    safe_info("\n\u1f517 Testing Tensor Contraction...")
+    safe_info("\n🔗 Testing Tensor Contraction...")
     matrix_a = np.random.random((3, 3))
     matrix_b = np.random.random((3, 3))
     tensor_result = algebra.perform_tensor_contraction(matrix_a, matrix_b)
@@ -1121,32 +1152,34 @@ def main():
     safe_info(f"  Operation Type: {tensor_result.operation_type.value}")
 
     # Test profit routing
-    safe_info("\n\u1f4b0 Testing Profit Routing...")
+    safe_info("\n💰 Testing Profit Routing...")
     profit_result = algebra.calculate_profit_routing(1000.0, 950.0, 1.0)
     safe_info(f"  Profit Rate: {profit_result.profit_rate:.6f}")
     safe_info(f"  Execution Trigger: {profit_result.execution_trigger}")
 
     # Test entropy compensation
-    safe_info("\n\u1f30a Testing Entropy Compensation...")
+    safe_info("\n🌊 Testing Entropy Compensation...")
     entropy_result = algebra.calculate_entropy_compensation(1000.0, 0.1)
     safe_info(f"  Entropy Gate: {entropy_result.entropy_gate:.4f}")
     safe_info(f"  Adaptive Trigger: {entropy_result.adaptive_trigger}")
 
     # Test hash memory encoding
-    safe_info("\n\u1f510 Testing Hash Memory Encoding...")
+    safe_info("\n🔐 Testing Hash Memory Encoding...")
     current_data_hash = hashlib.sha256(b"some_current_data").hexdigest()
     historical_data_hash = hashlib.sha256(b"some_historical_data").hexdigest()
-    hash_result = algebra.encode_hash_memory(current_data_hash, historical_data_hash, bit_result)
+    hash_result = algebra.encode_hash_memory(
+        current_data_hash, historical_data_hash, bit_result
+    )
     safe_info(f"  Hash Signature: {hash_result.hash_signature[:16]}...")
     safe_info(f"  Similarity Score: {hash_result.similarity_score:.4f}")
     safe_info(f"  Memory Activation: {hash_result.memory_activation}")
 
     # Test unified operation (simplified example)
-    safe_info("\n\u1f504 Testing Unified Operation...")
+    safe_info("\n🔄 Testing Unified Operation...")
     market_data = {
         "strategy_id": "unified_strategy_alpha",
-        "matrix_a": np.random.rand(3,3),
-        "matrix_b": np.random.rand(3,3),
+        "matrix_a": np.random.rand(3, 3),
+        "matrix_b": np.random.rand(3, 3),
         "expected_profit": 1200.0,
         "current_value": 1100.0,
         "risk_factor": 0.3,
@@ -1157,11 +1190,17 @@ def main():
     }
 
     # Sequence of operations simulating a unified flow
-    bit_phase_res = algebra.resolve_bit_phases(market_data["strategy_id"])
-    tensor_contr_res = algebra.perform_tensor_contraction(market_data["matrix_a"], market_data["matrix_b"])
-    profit_rout_res = algebra.calculate_profit_routing(market_data["expected_profit"], market_data["current_value"], market_data["risk_factor"])
-    entropy_comp_res = algebra.calculate_entropy_compensation(market_data["market_volatility"], market_data["historical_drift"])
-    hash_mem_res = algebra.encode_hash_memory(market_data["current_data_hash"], market_data["historical_data_hash"], bit_phase_res)
+    algebra.resolve_bit_phases(market_data["strategy_id"])
+    algebra.perform_tensor_contraction(market_data["matrix_a"], market_data["matrix_b"])
+    algebra.calculate_profit_routing(
+        market_data["expected_profit"], market_data["current_value"], market_data["risk_factor"]
+    )
+    algebra.calculate_entropy_compensation(
+        market_data["market_volatility"], market_data["historical_drift"]
+    )
+    algebra.encode_hash_memory(
+        market_data["current_data_hash"], market_data["historical_data_hash"], bit_result
+    )
 
     safe_info("  Unified operations executed. Check logs for details.")
 

@@ -14,7 +14,7 @@ try:
     TENSOR_ALGEBRA_AVAILABLE = True
 except ImportError as e:
     logger = logging.getLogger(__name__)
-    logger.warning(f"Tensor algebra not available: {e}")
+            logger.warning(f"Tensor algebra not available: {e}")
     TENSOR_ALGEBRA_AVAILABLE = False
 
 try:
@@ -22,8 +22,8 @@ try:
     PHASE_BIT_INTEGRATION_AVAILABLE = True
 except ImportError as e:
     logger = logging.getLogger(__name__)
-    logger.warning(f"Phase bit integration not available: {e}")
-    PHASE_BIT_INTEGRATION_AVAILABLE = False
+            logger.warning(f"Phase bit integration not available: {e}")
+PHASE_BIT_INTEGRATION_AVAILABLE = False
 
 # Import profit vectorization with lazy loading to prevent circular imports
 try:
@@ -68,19 +68,19 @@ class BitPhase(Enum):
     EIGHT_BIT = "8bit"
     SIXTEEN_BIT = "16bit"
     THIRTY_TWO_BIT = "32bit"
-    FORTY_TWO_BIT = "42bit"
+FORTY_TWO_BIT = "42bit"
 
 @dataclass
 class PhaseBitResult:
     """Fallback phase bit result for tensor bucket operations."""
-    bit_phase: BitPhase
-    confidence: float = 0.8
+bit_phase: BitPhase
+        confidence: float = 0.8
 
 class PhaseBitIntegration:
     """Fallback PhaseBitIntegration implementation for mathematical pipeline."""
 
-    def __init__(self):
-        self.current_phase = BitPhase.EIGHT_BIT
+def __init__(self):
+            self.current_phase = BitPhase.EIGHT_BIT
 
     def resolve_bit_phase(self, operation_hash: str, mode: str = "auto") -> PhaseBitResult:
         """Fallback bit phase resolution for jerf pattern waveform systems."""
@@ -89,15 +89,15 @@ class PhaseBitIntegration:
 # Safe print functions for cross-platform compatibility
 def info(message: str) -> None:
     """Info level message for mathematical pipeline logging."""
-    print(f"[INFO] {message}")
+print(f"[INFO] {message}")
 
 def warn(message: str) -> None:
     """Warning level message for mathematical pipeline logging."""
-    print(f"[WARN] {message}")
+print(f"[WARN] {message}")
 
 def error(message: str) -> None:
     """Error level message for mathematical pipeline logging."""
-    print(f"[ERROR] {message}")
+print(f"[ERROR] {message}")
 
 # Thermal state constants for mathematical operations - critical for tensor bucket states
 COOL = "cool"  # Low thermal state (4-bit operations)
@@ -115,7 +115,7 @@ class MathOperation(Enum):
     POWER = "power"
     SQRT = "sqrt"
     LOG = "log"
-    EXP = "exp"
+EXP = "exp"
 
     # Trigonometric
     SIN = "sin"
@@ -123,7 +123,7 @@ class MathOperation(Enum):
     TAN = "tan"
     ASIN = "asin"
     ACOS = "acos"
-    ATAN = "atan"
+ATAN = "atan"
 
     # Statistical
     ABS = "abs"
@@ -136,7 +136,7 @@ class MathOperation(Enum):
     STD = "std"
     VAR = "var"
     CORRELATION = "correlation"
-    COVARIANCE = "covariance"
+COVARIANCE = "covariance"
 
     # Linear algebra for tensor operations
     DOT_PRODUCT = "dot_product"
@@ -149,7 +149,7 @@ class MathOperation(Enum):
     SVD = "svd"
     QR = "qr"
     LU = "lu"
-    CHOLESKY = "cholesky"
+CHOLESKY = "cholesky"
 
     # Trading specific operations for tick analysis
     HASH_RATE = "hash_rate"
@@ -160,43 +160,43 @@ class MathOperation(Enum):
     ENTRY_EXIT_OPTIMIZATION = "entry_exit_optimization"
     DLT_ANALYSIS = "dlt_analysis"
     TENSOR_CONTRACTION = "tensor_contraction"
-    THERMAL_CORRECTION = "thermal_correction"
+THERMAL_CORRECTION = "thermal_correction"
 
 @dataclass
 class MathResult:
     """Result container for mathematical operations in the pipeline."""
-    value: Any
-    operation: str
-    timestamp: float
-    metadata: Dict[str, Any]
+value: Any
+operation: str
+timestamp: float
+metadata: Dict[str, Any]
 
 class UnifiedMathSystem:
     """Unified mathematical system for trading operations with 32-bit phase integration."""
 
     def __init__(self, precision: int = 64):
         """Initialize the unified math system with phase-bit integration for tensor buckets."""
-        self.precision = precision
+self.precision = precision
         
         # Initialize tensor algebra system for jerf pattern waveforms
-        self.tensor_algebra = (
+self.tensor_algebra = (
             UnifiedTensorAlgebra() if TENSOR_ALGEBRA_AVAILABLE else None
-        )
+)
         
         # Initialize phase bit integration for probabilistic drive systems
-        self.phase_bit_integration = PhaseBitIntegration()
+self.phase_bit_integration = PhaseBitIntegration()
         
         # Initialize profit vectorization for tick analysis
         if PROFIT_VECTORIZATION_AVAILABLE:
-            self.profit_vectorization = UnifiedProfitVectorizationSystem()
+self.profit_vectorization = UnifiedProfitVectorizationSystem()
         else:
             self.profit_vectorization = None
             
         # Mathematical pipeline state management
-        self.thermal_state = WARM_MATH  # Default to warm state
-        self.dualistic_mode = False
-        self.current_bit_phase = BitPhase.EIGHT_BIT
-        self.operation_cache: Dict[str, Any] = {}
-        self.calculation_history: List[MathResult] = []
+self.thermal_state = WARM_MATH  # Default to warm state
+self.dualistic_mode = False
+self.current_bit_phase = BitPhase.EIGHT_BIT
+self.operation_cache: Dict[str, Any] = {}
+self.calculation_history: List[MathResult] = []
 
         # Integration metrics for mathematical confirmations
         self.integration_metrics = {
@@ -208,73 +208,73 @@ class UnifiedMathSystem:
         }
 
         safe_print(f"Unified Math System initialized with precision {precision}")
-        logger.info(f"Unified Math System initialized with precision {precision}")
+            logger.info(f"Unified Math System initialized with precision {precision}")
 
     def execute_operation(self, operation: MathOperation, *args, **kwargs) -> Any:
         """Execute a mathematical operation with 32-bit phase consideration."""
-        try:
+try:
             # Determine thermal state based on operation complexity
             operation_hash = hashlib.sha256(f"{operation.value}_{args}_{kwargs}".encode()).hexdigest()
 
-            # Get bit phase resolution for mathematical operations
+# Get bit phase resolution for mathematical operations
             bit_phase_result = self.phase_bit_integration.resolve_bit_phase(operation_hash, "auto")
 
-            # Update current bit phase
-            self.current_bit_phase = bit_phase_result.bit_phase
+# Update current bit phase
+self.current_bit_phase = bit_phase_result.bit_phase
 
-            # Execute operation based on type
-            if operation == MathOperation.ADD:
+# Execute operation based on type
+if operation == MathOperation.ADD:
                 return self.add(*args)
-            elif operation == MathOperation.SUBTRACT:
+elif operation == MathOperation.SUBTRACT:
                 return self.subtract(*args)
-            elif operation == MathOperation.MULTIPLY:
+elif operation == MathOperation.MULTIPLY:
                 return self.multiply(*args)
-            elif operation == MathOperation.DIVIDE:
+elif operation == MathOperation.DIVIDE:
                 return self.divide(*args)
-            elif operation == MathOperation.POWER:
+elif operation == MathOperation.POWER:
                 return self.power(*args)
-            elif operation == MathOperation.SQRT:
+elif operation == MathOperation.SQRT:
                 return self.sqrt(*args)
-            elif operation == MathOperation.LOG:
+elif operation == MathOperation.LOG:
                 return self.log(*args)
-            elif operation == MathOperation.EXP:
+elif operation == MathOperation.EXP:
                 return self.exp(*args)
-            elif operation == MathOperation.SIN:
+elif operation == MathOperation.SIN:
                 return self.sin(*args)
-            elif operation == MathOperation.COS:
+elif operation == MathOperation.COS:
                 return self.cos(*args)
-            elif operation == MathOperation.TAN:
+elif operation == MathOperation.TAN:
                 return self.tan(*args)
-            elif operation == MathOperation.ABS:
+elif operation == MathOperation.ABS:
                 return self.abs(*args)
-            elif operation == MathOperation.MAX:
+elif operation == MathOperation.MAX:
                 return self.max(*args)
-            elif operation == MathOperation.MIN:
+elif operation == MathOperation.MIN:
                 return self.min(*args)
-            elif operation == MathOperation.MEAN:
+elif operation == MathOperation.MEAN:
                 return self.mean(*args)
-            elif operation == MathOperation.STD:
+elif operation == MathOperation.STD:
                 return self.std(*args)
-            elif operation == MathOperation.VAR:
+elif operation == MathOperation.VAR:
                 return self.var(*args)
-            elif operation == MathOperation.DOT_PRODUCT:
+elif operation == MathOperation.DOT_PRODUCT:
                 return self.dot_product(*args)
-            elif operation == MathOperation.MATRIX_MULTIPLY:
+elif operation == MathOperation.MATRIX_MULTIPLY:
                 return self.matrix_multiply(*args)
-            elif operation == MathOperation.EIGENVALUES:
+elif operation == MathOperation.EIGENVALUES:
                 return self.eigenvalues(*args)
-            elif operation == MathOperation.SVD:
+elif operation == MathOperation.SVD:
                 return self.svd(*args)
             else:
                 raise ValueError(f"Unsupported operation: {operation}")
 
         except Exception as e:
             logger.error(f"Error executing operation {operation}: {e}")
-            raise
+raise
 
     def add(self, *args) -> Union[float, np.ndarray]:
         """Add multiple values or arrays."""
-        if len(args) == 0:
+if len(args) == 0:
             return 0
         return np.sum(args)
 
@@ -284,7 +284,7 @@ class UnifiedMathSystem:
 
     def multiply(self, *args) -> Union[float, np.ndarray]:
         """Multiply multiple values or arrays."""
-        if len(args) == 0:
+if len(args) == 0:
             return 1
         return np.prod(args)
 
@@ -371,21 +371,21 @@ class UnifiedMathSystem:
         try:
             self.integration_metrics["total_operations"] += 1
 
-            # Import MathLib V4 for DLT analysis
+# Import MathLib V4 for DLT analysis
             if MATHLIB_V4_AVAILABLE:
                 mathlib = MathLibV4()
-                mathlib_result = mathlib.calculate_dlt_metrics(data)
+mathlib_result = mathlib.calculate_dlt_metrics(data)
             else:
                 raise ValueError("MathLib V4 not available for DLT analysis")
 
-            if "error" in mathlib_result:
+if "error" in mathlib_result:
                 raise ValueError(f"MathLib V4 DLT analysis failed: {mathlib_result['error']}")
 
             return {"status": "success", "dlt_metrics": mathlib_result, "timestamp": time.time()}
 
         except Exception as e:
             error(f"DLT analysis failed: {e}")
-            return {"status": "error", "error": str(e), "timestamp": time.time()}
+        return {"status": "error", "error": str(e), "timestamp": time.time()}
 
     def get_integration_metrics(self) -> Dict[str, Any]:
         """Get integration metrics."""
@@ -393,18 +393,18 @@ class UnifiedMathSystem:
 
     def _log_calculation(self, operation: str, result: Any, metadata: Dict[str, Any]) -> None:
         """Log calculation for history tracking."""
-        try:
+try:
             calculation = MathResult(
-                value=result,
-                operation=operation,
-                timestamp=time.time(),
-                metadata=metadata,
-            )
+value=result,
+operation=operation,
+timestamp=time.time(),
+metadata=metadata,
+)
 
-            self.calculation_history.append(calculation)
+self.calculation_history.append(calculation)
 
-            # Limit history size
-            if len(self.calculation_history) > 1000:
+# Limit history size
+if len(self.calculation_history) > 1000:
                 self.calculation_history = self.calculation_history[-500:]
 
         except Exception as e:
@@ -412,33 +412,33 @@ class UnifiedMathSystem:
 
     def get_calculation_summary(self) -> Dict[str, Any]:
         """Get summary of recent calculations."""
-        try:
+try:
             if not self.calculation_history:
                 return {'total_calculations': 0}
 
-            # Count operations
-            operation_counts = {}
-            for calc in self.calculation_history:
+# Count operations
+operation_counts = {}
+for calc in self.calculation_history:
                 op = calc.operation
-                operation_counts[op] = operation_counts.get(op, 0) + 1
+operation_counts[op] = operation_counts.get(op, 0) + 1
 
-            # Get recent calculations
-            recent = self.calculation_history[-10:] if self.calculation_history else []
+# Get recent calculations
+recent = self.calculation_history[-10:] if self.calculation_history else []
 
             return {
                 'total_calculations': len(self.calculation_history),
                 'operation_counts': operation_counts,
                 'recent_operations': [calc.operation for calc in recent],
-                'last_calculation_time': (
-                    self.calculation_history[-1].timestamp
+'last_calculation_time': (
+self.calculation_history[-1].timestamp
                     if self.calculation_history
-                    else 0
-                ),
-            }
+else 0
+),
+}
 
         except Exception as e:
             logger.error(f"Calculation summary error: {e}")
-            return {'error': str(e)}
+        return {'error': str(e)}
 
 # Global instance for backward compatibility
 unified_math = UnifiedMathSystem()
