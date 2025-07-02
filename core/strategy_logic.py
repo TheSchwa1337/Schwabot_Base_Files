@@ -207,10 +207,7 @@ class StrategyLogic:
                 max_position_size=0.05,
                 risk_tolerance=0.8,
                 min_signal_confidence=0.85,
-                parameters={
-                    "price_diff_threshold": 0.001,
-                    "volume_threshold": 100,
-                },
+                parameters={"price_diff_threshold": 0.001, "volume_threshold": 100},
             ),
         ]
 
@@ -257,19 +254,31 @@ class StrategyLogic:
         current_price = data.get("price", 0.0)
         current_volume = data.get("volume", 0.0)
         price_history = data.get("price_history", [current_price])
-        
+
         # Get strategy performance for Kelly calculation
         strategy_perf = self.performance.get(strategy_name)
-        kelly_multiplier = self._calculate_kelly_multiplier(strategy_perf) if strategy_perf else 0.5
+        kelly_multiplier = (
+            self._calculate_kelly_multiplier(strategy_perf) if strategy_perf else 0.5
+        )
 
         # Generate signal based on strategy type with real logic
         if config.strategy_type == StrategyType.MEAN_REVERSION:
             return self._generate_mean_reversion_signal(
-                config, asset, current_price, current_volume, price_history, kelly_multiplier
+                config,
+                asset,
+                current_price,
+                current_volume,
+                price_history,
+                kelly_multiplier,
             )
         elif config.strategy_type == StrategyType.MOMENTUM:
             return self._generate_momentum_signal(
-                config, asset, current_price, current_volume, price_history, kelly_multiplier
+                config,
+                asset,
+                current_price,
+                current_volume,
+                price_history,
+                kelly_multiplier,
             )
         elif config.strategy_type == StrategyType.ARBITRAGE:
             return self._generate_arbitrage_signal(
@@ -282,40 +291,50 @@ class StrategyLogic:
         """Calculate Kelly criterion multiplier for position sizing."""
         if strategy_perf.total_trades < 10:
             return 0.3  # Conservative for new strategies
-            
+
         win_rate = strategy_perf.win_rate
         if win_rate <= 0 or win_rate >= 1:
             return 0.3
-            
+
         # Calculate average win/loss from total PnL and trade counts
         if strategy_perf.winning_trades > 0 and strategy_perf.losing_trades > 0:
-            avg_win = float(strategy_perf.total_pnl) / strategy_perf.winning_trades if strategy_perf.winning_trades > 0 else 0
-            avg_loss = abs(float(strategy_perf.total_pnl)) / strategy_perf.losing_trades if strategy_perf.losing_trades > 0 else 1
-            
+            avg_win = (
+                float(strategy_perf.total_pnl) / strategy_perf.winning_trades
+                if strategy_perf.winning_trades > 0
+                else 0
+            )
+            avg_loss = (
+                abs(float(strategy_perf.total_pnl)) / strategy_perf.losing_trades
+                if strategy_perf.losing_trades > 0
+                else 1
+            )
+
             if avg_loss > 0:
                 reward_risk_ratio = avg_win / avg_loss
-                kelly_fraction = (reward_risk_ratio * win_rate - (1 - win_rate)) / reward_risk_ratio
-                
+                kelly_fraction = (
+                    reward_risk_ratio * win_rate - (1 - win_rate)
+                ) / reward_risk_ratio
+
                 # Conservative scaling (max 25% of capital)
                 return max(0.1, min(0.25, kelly_fraction))
-        
+
         return 0.3
 
     def _calculate_rsi(self, prices: List[float], period: int = 14) -> float:
         """Calculate Relative Strength Index."""
         if len(prices) < period + 1:
             return 50.0  # Neutral RSI
-            
+
         deltas = np.diff(prices)
         gains = np.where(deltas > 0, deltas, 0)
         losses = np.where(deltas < 0, -deltas, 0)
-        
+
         avg_gain = np.mean(gains[-period:])
         avg_loss = np.mean(losses[-period:])
-        
+
         if avg_loss == 0:
             return 100.0
-            
+
         rs = avg_gain / avg_loss
         rsi = 100 - (100 / (1 + rs))
         return float(rsi)
@@ -326,30 +345,34 @@ class StrategyLogic:
             return prices[-1] if prices else 0.0
         return float(np.mean(prices[-period:]))
 
-    def _calculate_bollinger_bands(self, prices: List[float], period: int = 20, std_dev: float = 2.0) -> Dict[str, float]:
+    def _calculate_bollinger_bands(
+        self, prices: List[float], period: int = 20, std_dev: float = 2.0
+    ) -> Dict[str, float]:
         """Calculate Bollinger Bands."""
         if len(prices) < period:
             current_price = prices[-1] if prices else 0.0
             return {
                 "upper": current_price * 1.02,
                 "middle": current_price,
-                "lower": current_price * 0.98
+                "lower": current_price * 0.98,
             }
-            
+
         recent_prices = prices[-period:]
         middle = np.mean(recent_prices)
         std = np.std(recent_prices)
-        
+
         return {
             "upper": float(middle + (std_dev * std)),
             "middle": float(middle),
-            "lower": float(middle - (std_dev * std))
+            "lower": float(middle - (std_dev * std)),
         }
 
-    def _flipswitch_trigger(self, market_data: Dict[str, Any], strategy_stats: Dict[str, float]) -> Tuple[bool, float]:
+    def _flipswitch_trigger(
+        self, market_data: Dict[str, Any], strategy_stats: Dict[str, float]
+    ) -> Tuple[bool, float]:
         """
         Dynamic FlipSwitch logic based on market conditions and Kelly criterion.
-        
+
         Returns:
             Tuple of (flip_state, confidence)
         """
@@ -357,20 +380,20 @@ class StrategyLogic:
         momentum = market_data.get('momentum', 0.0)
         volatility = market_data.get('volatility', 0.02)
         rsi = market_data.get('rsi', 50.0)
-        
+
         flip_state = False
         confidence = 0.5
-        
+
         # High Kelly weight + positive momentum = flip to aggressive
         if kelly_weight > 0.6 and momentum > 0.02:
             flip_state = True
             confidence = min(0.9, kelly_weight + 0.1)
-            
+
         # Low Kelly weight + high volatility = flip to conservative
         elif kelly_weight < 0.3 and volatility > 0.03:
             flip_state = False
             confidence = 0.7
-            
+
         # RSI extremes with good Kelly = contrarian flip
         elif kelly_weight > 0.4:
             if rsi > 80:  # Overbought
@@ -379,64 +402,68 @@ class StrategyLogic:
             elif rsi < 20:  # Oversold
                 flip_state = True
                 confidence = 0.8
-        
+
         return flip_state, confidence
 
     def _generate_mean_reversion_signal(
-        self, 
-        config: StrategyConfig, 
-        asset: str, 
-        price: float, 
+        self,
+        config: StrategyConfig,
+        asset: str,
+        price: float,
         volume: float,
         price_history: List[float],
-        kelly_multiplier: float
+        kelly_multiplier: float,
     ) -> TradingSignal:
         """Generate a mean reversion signal with real statistical analysis."""
-        
+
         # Calculate technical indicators
         bollinger = self._calculate_bollinger_bands(price_history)
         rsi = self._calculate_rsi(price_history)
         sma_20 = self._calculate_moving_average(price_history, 20)
-        
+
         # Calculate momentum and volatility
         if len(price_history) >= 2:
             momentum = (price - price_history[-2]) / price_history[-2]
-            volatility = np.std(price_history[-10:]) / np.mean(price_history[-10:]) if len(price_history) >= 10 else 0.02
+            volatility = (
+                np.std(price_history[-10:]) / np.mean(price_history[-10:])
+                if len(price_history) >= 10
+                else 0.02
+            )
         else:
             momentum = 0.0
             volatility = 0.02
-        
+
         # Market data for FlipSwitch
-        market_data = {
-            'momentum': momentum,
-            'volatility': volatility,
-            'rsi': rsi
-        }
-        
-        strategy_stats = {
-            'kelly_multiplier': kelly_multiplier
-        }
-        
+        market_data = {'momentum': momentum, 'volatility': volatility, 'rsi': rsi}
+
+        strategy_stats = {'kelly_multiplier': kelly_multiplier}
+
         # Get FlipSwitch decision
-        flip_aggressive, base_confidence = self._flipswitch_trigger(market_data, strategy_stats)
-        
+        flip_aggressive, base_confidence = self._flipswitch_trigger(
+            market_data, strategy_stats
+        )
+
         signal_type = SignalType.HOLD
         strength = SignalStrength.MODERATE
         confidence = base_confidence
-        
+
         # Mean reversion logic with Bollinger Bands and RSI
         if price < bollinger['lower'] and rsi < 30:
             # Oversold condition
             signal_type = SignalType.BUY
-            strength = SignalStrength.STRONG if flip_aggressive else SignalStrength.MODERATE
+            strength = (
+                SignalStrength.STRONG if flip_aggressive else SignalStrength.MODERATE
+            )
             confidence = min(0.95, base_confidence + 0.1)
-            
+
         elif price > bollinger['upper'] and rsi > 70:
             # Overbought condition
             signal_type = SignalType.SELL
-            strength = SignalStrength.STRONG if flip_aggressive else SignalStrength.MODERATE
+            strength = (
+                SignalStrength.STRONG if flip_aggressive else SignalStrength.MODERATE
+            )
             confidence = min(0.95, base_confidence + 0.1)
-            
+
         elif abs(price - sma_20) / sma_20 > 0.05:
             # Significant deviation from mean
             if price < sma_20:
@@ -461,73 +488,85 @@ class StrategyLogic:
                 "bollinger_lower": bollinger['lower'],
                 "sma_20": sma_20,
                 "kelly_multiplier": kelly_multiplier,
-                "flip_aggressive": flip_aggressive
-            }
+                "flip_aggressive": flip_aggressive,
+            },
         )
 
     def _generate_momentum_signal(
-        self, 
-        config: StrategyConfig, 
-        asset: str, 
-        price: float, 
+        self,
+        config: StrategyConfig,
+        asset: str,
+        price: float,
         volume: float,
         price_history: List[float],
-        kelly_multiplier: float
+        kelly_multiplier: float,
     ) -> TradingSignal:
         """Generate a momentum signal with real technical analysis."""
-        
+
         # Calculate technical indicators
         rsi = self._calculate_rsi(price_history)
         sma_10 = self._calculate_moving_average(price_history, 10)
         sma_20 = self._calculate_moving_average(price_history, 20)
-        
+
         # Calculate price momentum
         if len(price_history) >= 5:
             momentum_5 = (price - price_history[-5]) / price_history[-5]
-            momentum_1 = (price - price_history[-1]) / price_history[-1] if len(price_history) > 1 else 0
+            momentum_1 = (
+                (price - price_history[-1]) / price_history[-1]
+                if len(price_history) > 1
+                else 0
+            )
         else:
             momentum_5 = 0.0
             momentum_1 = 0.0
-        
+
         # Volume momentum
-        volume_avg = np.mean([data.get('volume', volume) for data in [{"volume": volume}] * 10])
+        volume_avg = np.mean(
+            [data.get('volume', volume) for data in [{"volume": volume}] * 10]
+        )
         volume_momentum = (volume - volume_avg) / volume_avg if volume_avg > 0 else 0
-        
+
         market_data = {
             'momentum': momentum_1,
             'volatility': abs(momentum_5),
-            'rsi': rsi
+            'rsi': rsi,
         }
-        
-        strategy_stats = {
-            'kelly_multiplier': kelly_multiplier
-        }
-        
-        flip_aggressive, base_confidence = self._flipswitch_trigger(market_data, strategy_stats)
-        
+
+        strategy_stats = {'kelly_multiplier': kelly_multiplier}
+
+        flip_aggressive, base_confidence = self._flipswitch_trigger(
+            market_data, strategy_stats
+        )
+
         signal_type = SignalType.HOLD
         strength = SignalStrength.WEAK
         confidence = base_confidence
-        
+
         # Momentum logic with moving average crossover and RSI confirmation
         ma_trend = sma_10 - sma_20
-        
+
         if momentum_5 > 0.02 and ma_trend > 0 and rsi < 80 and volume_momentum > 0.1:
             # Strong upward momentum
             signal_type = SignalType.BUY
-            strength = SignalStrength.STRONG if flip_aggressive else SignalStrength.MODERATE
+            strength = (
+                SignalStrength.STRONG if flip_aggressive else SignalStrength.MODERATE
+            )
             confidence = min(0.9, base_confidence + 0.15)
-            
+
         elif momentum_5 < -0.02 and ma_trend < 0 and rsi > 20 and volume_momentum > 0.1:
             # Strong downward momentum
             signal_type = SignalType.SELL
-            strength = SignalStrength.STRONG if flip_aggressive else SignalStrength.MODERATE
+            strength = (
+                SignalStrength.STRONG if flip_aggressive else SignalStrength.MODERATE
+            )
             confidence = min(0.9, base_confidence + 0.15)
-            
+
         elif abs(momentum_5) > 0.01 and abs(ma_trend) > 0.5:
             # Moderate momentum
             signal_type = SignalType.BUY if momentum_5 > 0 else SignalType.SELL
-            strength = SignalStrength.MODERATE if flip_aggressive else SignalStrength.WEAK
+            strength = (
+                SignalStrength.MODERATE if flip_aggressive else SignalStrength.WEAK
+            )
 
         return TradingSignal(
             signal_type=signal_type,
@@ -546,45 +585,49 @@ class StrategyLogic:
                 "sma_20": sma_20,
                 "volume_momentum": volume_momentum,
                 "kelly_multiplier": kelly_multiplier,
-                "flip_aggressive": flip_aggressive
-            }
+                "flip_aggressive": flip_aggressive,
+            },
         )
 
     def _generate_arbitrage_signal(
-        self, 
-        config: StrategyConfig, 
-        asset: str, 
-        price: float, 
+        self,
+        config: StrategyConfig,
+        asset: str,
+        price: float,
         volume: float,
-        kelly_multiplier: float
+        kelly_multiplier: float,
     ) -> TradingSignal:
         """Generate an arbitrage signal with realistic price difference detection."""
-        
+
         # Simulate multi-exchange price checking
         exchange_a_price = price
         price_variance = config.parameters.get("price_variance", 0.002)
-        exchange_b_price = price * (1 + np.random.uniform(-price_variance, price_variance))
-        
+        exchange_b_price = price * (
+            1 + np.random.uniform(-price_variance, price_variance)
+        )
+
         # Calculate spread
         spread = abs(exchange_a_price - exchange_b_price)
         spread_threshold = config.parameters.get("price_diff_threshold", 0.001) * price
-        
+
         # Arbitrage opportunity assessment
         confidence = kelly_multiplier  # Use Kelly as base confidence
         signal_type = SignalType.HOLD
         strength = SignalStrength.MODERATE
-        
+
         if spread > spread_threshold:
             # Profitable arbitrage opportunity
             if exchange_a_price < exchange_b_price:
                 signal_type = SignalType.BUY  # Buy on A, sell on B
             else:
                 signal_type = SignalType.SELL  # Sell on A, buy on B
-            
+
             # Higher spread = higher confidence
             spread_ratio = spread / spread_threshold
             confidence = min(0.95, kelly_multiplier + (spread_ratio * 0.1))
-            strength = SignalStrength.STRONG if spread_ratio > 2 else SignalStrength.MODERATE
+            strength = (
+                SignalStrength.STRONG if spread_ratio > 2 else SignalStrength.MODERATE
+            )
 
         return TradingSignal(
             signal_type=signal_type,
@@ -601,7 +644,9 @@ class StrategyLogic:
                 "spread": spread,
                 "spread_threshold": spread_threshold,
                 "kelly_multiplier": kelly_multiplier,
-                "arbitrage_ratio": spread / spread_threshold if spread_threshold > 0 else 0
+                "arbitrage_ratio": (
+                    spread / spread_threshold if spread_threshold > 0 else 0
+                ),
             },
         )
 

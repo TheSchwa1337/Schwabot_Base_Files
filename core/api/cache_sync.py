@@ -56,16 +56,22 @@ class CacheSyncService:
                 pass
             self._task = None
         # Close handler sessions
-        await asyncio.gather(*(h.close() for h in self.handlers), return_exceptions=True)
+        await asyncio.gather(
+            *(h.close() for h in self.handlers), return_exceptions=True
+        )
         logger.info("🛑 CacheSyncService stopped")
 
     # ------------------------------------------------------------------
     async def _run_loop(self):
         while True:
             try:
-                await asyncio.gather(*(h.get_data(force_refresh=True) for h in self.handlers))
+                await asyncio.gather(
+                    *(h.get_data(force_refresh=True) for h in self.handlers)
+                )
             except Exception as exc:  # noqa: BLE001
-                logger.error("CacheSyncService iteration failed: %s", exc, exc_info=True)
+                logger.error(
+                    "CacheSyncService iteration failed: %s", exc, exc_info=True
+                )
             await asyncio.sleep(self.refresh_interval)
 
     # ------------------------------------------------------------------
@@ -89,4 +95,4 @@ class CacheSyncService:
                         self.handlers.append(handler)
                         logger.info("Registered handler: %s", handler.NAME)
                     except Exception as exc:  # noqa: BLE001
-                        logger.error("Failed to initialise handler %s: %s", obj, exc) 
+                        logger.error("Failed to initialise handler %s: %s", obj, exc)

@@ -31,33 +31,38 @@ except ImportError as e:
 # Import phase bit integration with fallback
 try:
     from core.phase_bit_integration import PhaseBitIntegration, BitPhase
+
     PHASE_BIT_INTEGRATION_AVAILABLE = True
 except ImportError as e:
     logger.warning(f"Phase bit integration not available: {e}")
     PHASE_BIT_INTEGRATION_AVAILABLE = False
-    
+
     # Create fallback implementations
     class BitPhase(Enum):
         """Fallback BitPhase enum."""
+
         FOUR_BIT = "4bit"
         EIGHT_BIT = "8bit"
         SIXTEEN_BIT = "16bit"
         THIRTY_TWO_BIT = "32bit"
         FORTY_TWO_BIT = "42bit"
-    
+
     @dataclass
     class PhaseBitResult:
         """Fallback phase bit result."""
+
         bit_phase: BitPhase
         confidence: float = 0.8
-        
+
     class PhaseBitIntegration:
         """Fallback PhaseBitIntegration implementation."""
-        
+
         def __init__(self):
             self.current_phase = BitPhase.EIGHT_BIT
-        
-        def resolve_bit_phase(self, operation_hash: str, mode: str = "auto") -> PhaseBitResult:
+
+        def resolve_bit_phase(
+            self, operation_hash: str, mode: str = "auto"
+        ) -> PhaseBitResult:
             """Fallback bit phase resolution."""
             return PhaseBitResult(bit_phase=self.current_phase)
 
@@ -155,6 +160,7 @@ class MathOperation(Enum):
 @dataclass
 class MathResult:
     """Result container for mathematical operations."""
+
     value: Any
     operation: str
     timestamp: float
@@ -394,22 +400,24 @@ class UnifiedMathSystem:
         """Get integration metrics."""
         return self.integration_metrics.copy()
 
-    def _log_calculation(self, operation: str, result: Any, metadata: Dict[str, Any]) -> None:
+    def _log_calculation(
+        self, operation: str, result: Any, metadata: Dict[str, Any]
+    ) -> None:
         """Log calculation for history tracking."""
         try:
             calculation = MathResult(
                 value=result,
                 operation=operation,
                 timestamp=time.time(),
-                metadata=metadata
+                metadata=metadata,
             )
-            
+
             self.calculation_history.append(calculation)
-            
+
             # Limit history size
             if len(self.calculation_history) > 1000:
                 self.calculation_history = self.calculation_history[-500:]
-                
+
         except Exception as e:
             logger.error(f"Calculation logging error: {e}")
 
@@ -418,23 +426,27 @@ class UnifiedMathSystem:
         try:
             if not self.calculation_history:
                 return {'total_calculations': 0}
-            
+
             # Count operations
             operation_counts = {}
             for calc in self.calculation_history:
                 op = calc.operation
                 operation_counts[op] = operation_counts.get(op, 0) + 1
-            
+
             # Get recent calculations
             recent = self.calculation_history[-10:] if self.calculation_history else []
-            
+
             return {
                 'total_calculations': len(self.calculation_history),
                 'operation_counts': operation_counts,
                 'recent_operations': [calc.operation for calc in recent],
-                'last_calculation_time': self.calculation_history[-1].timestamp if self.calculation_history else 0
+                'last_calculation_time': (
+                    self.calculation_history[-1].timestamp
+                    if self.calculation_history
+                    else 0
+                ),
             }
-            
+
         except Exception as e:
             logger.error(f"Calculation summary error: {e}")
             return {'error': str(e)}

@@ -223,155 +223,162 @@ class RiskManager:
                 current_avg * (current_total - 1) + new_assessment_time
             ) / current_total
 
-    def calculate_current_volatility(self, price_data: List[float], window: int = 20) -> float:
+    def calculate_current_volatility(
+        self, price_data: List[float], window: int = 20
+    ) -> float:
         """
         Calculate current price volatility using historical price data.
-        
+
         Args:
             price_data: List of historical prices
             window: Rolling window for volatility calculation
-            
+
         Returns:
             Volatility as standard deviation of returns
         """
         if len(price_data) < 2:
             return self.config["volatility_threshold"]  # Default volatility
-        
+
         # Calculate returns
         returns = []
         for i in range(1, len(price_data)):
-            if price_data[i-1] != 0:
-                return_pct = (price_data[i] - price_data[i-1]) / price_data[i-1]
+            if price_data[i - 1] != 0:
+                return_pct = (price_data[i] - price_data[i - 1]) / price_data[i - 1]
                 returns.append(return_pct)
-        
+
         if len(returns) < 2:
             return self.config["volatility_threshold"]
-        
+
         # Use only recent data if we have more than window size
         recent_returns = returns[-window:] if len(returns) > window else returns
-        
+
         # Calculate standard deviation (volatility)
         volatility = float(np.std(recent_returns, ddof=1))
-        
+
         # Annualize if needed (assuming daily data)
         annualized_volatility = volatility * np.sqrt(252)
-        
-        return min(annualized_volatility, self.config["volatility_threshold"])  # Cap at 200% volatility
+
+        # Cap at 200% volatility
+        return min(annualized_volatility, self.config["volatility_threshold"])
 
     def calculate_current_drawdown(self, portfolio_values: List[float]) -> float:
         """
         Calculate current drawdown from portfolio value history.
-        
+
         Args:
             portfolio_values: List of historical portfolio values
-            
+
         Returns:
             Current drawdown as percentage
         """
         if len(portfolio_values) < 2:
             return 0.0
-        
+
         # Find the running maximum (peak)
         running_max = portfolio_values[0]
         max_drawdown = 0.0
         current_drawdown = 0.0
-        
+
         for value in portfolio_values:
             # Update running maximum
             if value > running_max:
                 running_max = value
-            
+
             # Calculate drawdown from peak
             drawdown = (running_max - value) / running_max if running_max > 0 else 0.0
-            
+
             # Update maximum drawdown seen
             max_drawdown = max(max_drawdown, drawdown)
-            
+
             # Current drawdown is from the most recent peak
             current_drawdown = drawdown
-        
+
         return min(current_drawdown, 1.0)  # Cap at 100%
 
     def calculate_var(self, returns: List[float], confidence: float = 0.05) -> float:
         """
         Calculate Value at Risk (VaR) at given confidence level.
-        
+
         Args:
             returns: List of historical returns
             confidence: Confidence level (e.g., 0.05 for 95% VaR)
-            
+
         Returns:
             VaR value
         """
         if len(returns) < 10:
             return self.config["volatility_threshold"]  # Default 5% VaR
-        
+
         returns_array = np.array(returns)
         var_value = float(np.percentile(returns_array, confidence * 100))
-        
+
         return abs(var_value)  # Return positive value
 
-    def calculate_sharpe_ratio(self, returns: List[float], risk_free_rate: float = 0.02) -> float:
+    def calculate_sharpe_ratio(
+        self, returns: List[float], risk_free_rate: float = 0.02
+    ) -> float:
         """
         Calculate Sharpe ratio for risk-adjusted returns.
-        
+
         Args:
             returns: List of portfolio returns
             risk_free_rate: Risk-free rate (default 2%)
-            
+
         Returns:
             Sharpe ratio
         """
         if len(returns) < 2:
             return 0.0
-        
+
         returns_array = np.array(returns)
         excess_returns = returns_array - risk_free_rate / 252  # Daily risk-free rate
-        
+
         if np.std(excess_returns) == 0:
             return 0.0
-        
+
         sharpe = float(np.mean(excess_returns) / np.std(excess_returns) * np.sqrt(252))
         return sharpe
 
     def calculate_position_size(
-        self, 
-        entry_price: float, 
-        stop_loss_price: float, 
+        self,
+        entry_price: float,
+        stop_loss_price: float,
         portfolio_value: float,
         volatility: Optional[float] = None,
-        kelly_fraction: Optional[float] = None
+        kelly_fraction: Optional[float] = None,
     ) -> float:
         """
         Calculate optimal position size using multiple risk management techniques.
-        
+
         Args:
             entry_price: Entry price for the position
             stop_loss_price: Stop loss price
             portfolio_value: Current portfolio value
             volatility: Current market volatility (optional)
             kelly_fraction: Kelly criterion fraction (optional)
-            
+
         Returns:
             Position size in base currency
         """
         if entry_price <= 0 or stop_loss_price <= 0 or portfolio_value <= 0:
             return 0.0
-        
+
         # Calculate risk per share
         risk_per_share = abs(entry_price - stop_loss_price)
-        
+
         # Method 1: Fixed percentage risk
         fixed_risk_amount = portfolio_value * self.config["max_exposure_per_asset"]
         fixed_position_size = fixed_risk_amount / risk_per_share
-        
+
         # Method 2: Volatility-adjusted position sizing
         if volatility is not None:
-            vol_adjustment = min(1.0, self.config["volatility_threshold"] / max(volatility, 0.01))
+            vol_adjustment = min(
+                1.0, self.config["volatility_threshold"] / max(volatility, 0.01)
+            )
             vol_adjusted_size = fixed_position_size * vol_adjustment
         else:
             vol_adjusted_size = fixed_position_size
-        
+
         # Method 3: Kelly criterion (if provided)
         if kelly_fraction is not None:
             kelly_position_size = portfolio_value * kelly_fraction / entry_price
@@ -379,34 +386,34 @@ class RiskManager:
             final_position_size = min(vol_adjusted_size, kelly_position_size)
         else:
             final_position_size = vol_adjusted_size
-        
+
         # Apply maximum position limit
         max_position_value = portfolio_value * self.config["max_exposure_per_asset"]
         max_shares = max_position_value / entry_price
-        
+
         return min(final_position_size, max_shares)
 
     def update_risk_metrics(self, portfolio_data: Dict[str, Any]) -> Dict[str, float]:
         """
         Update comprehensive risk metrics with portfolio data.
-        
+
         Args:
             portfolio_data: Dictionary containing portfolio information
-            
+
         Returns:
             Dictionary of updated risk metric values
         """
         start_time = time.time()  # Track assessment time
-        
+
         # Extract portfolio data with defaults
         portfolio_values = portfolio_data.get('portfolio_history', [100000])
         price_history = portfolio_data.get('price_history', [50000])
         returns_history = portfolio_data.get('returns_history', [])
-        
+
         # Calculate real metrics
         current_volatility = self.calculate_current_volatility(price_history)
         current_drawdown = self.calculate_current_drawdown(portfolio_values)
-        
+
         # Calculate additional metrics if we have returns data
         if returns_history:
             var_95 = self.calculate_var(returns_history, 0.05)
@@ -414,7 +421,7 @@ class RiskManager:
         else:
             var_95 = self.config["volatility_threshold"]
             sharpe_ratio = 0.0
-        
+
         # Update internal metrics
         self.risk_metrics["volatility"].value = current_volatility
         self.risk_metrics["volatility"].status = self._get_status(
@@ -425,12 +432,14 @@ class RiskManager:
             current_drawdown, self.config["max_drawdown_percent"]
         )
         self.risk_metrics["exposure_btc"].value = (
-            portfolio_data.get("BTC/USD", 0.0) / portfolio_data.get("portfolio_value", 100000)
+            portfolio_data.get("BTC/USD", 0.0)
+            / portfolio_data.get("portfolio_value", 100000)
             if portfolio_data.get("portfolio_value", 100000) > 0
             else 0.0
         )
         self.risk_metrics["exposure_btc"].status = self._get_status(
-            self.risk_metrics["exposure_btc"].value, self.config["max_exposure_per_asset"]
+            self.risk_metrics["exposure_btc"].value,
+            self.config["max_exposure_per_asset"],
         )
         self.last_assessment_time = time.time()
         self._update_avg_assessment_time(time.time() - start_time)
@@ -438,144 +447,172 @@ class RiskManager:
         return {
             'portfolio_volatility': current_volatility,
             'current_drawdown': current_drawdown,
-            'max_drawdown': max(self.risk_metrics["drawdown"].value, self.config["max_drawdown_percent"]),
+            'max_drawdown': max(
+                self.risk_metrics["drawdown"].value, self.config["max_drawdown_percent"]
+            ),
             'var_95': var_95,
             'sharpe_ratio': sharpe_ratio,
-            'last_updated': time.time()
+            'last_updated': time.time(),
         }
 
     def check_risk_limits(self, position_data: Dict[str, Any]) -> Dict[str, Any]:
         """
         Check if current or proposed position violates risk limits.
-        
+
         Args:
             position_data: Dictionary containing position information
-            
+
         Returns:
             Risk check results with violations and recommendations
         """
         violations = []
         warnings = []
         recommendations = []
-        
+
         # Extract position data
         position_size = position_data.get('position_size', 0)
         entry_price = position_data.get('entry_price', 0)
         portfolio_value = position_data.get('portfolio_value', 100000)
         current_volatility = position_data.get('volatility', 0.02)
         current_drawdown = position_data.get('drawdown', 0.0)
-        
+
         # Check position size limits
         position_value = position_size * entry_price
-        position_percentage = position_value / portfolio_value if portfolio_value > 0 else 0
-        
+        position_percentage = (
+            position_value / portfolio_value if portfolio_value > 0 else 0
+        )
+
         if position_percentage > self.config["max_exposure_per_asset"]:
-            violations.append(f"Position size {position_percentage:.1%} exceeds maximum {self.config['max_exposure_per_asset']:.1%}")
-            recommended_size = (portfolio_value * self.config["max_exposure_per_asset"]) / entry_price
+            violations.append(
+                f"Position size {
+        position_percentage:.1%} exceeds maximum {
+            self.config['max_exposure_per_asset']:.1%}"
+            )
+            recommended_size = (
+                portfolio_value * self.config["max_exposure_per_asset"]
+            ) / entry_price
             recommendations.append(f"Reduce position size to {recommended_size:.2f}")
-        
+
         # Check volatility limits
         if current_volatility > self.config["volatility_threshold"]:
-            warnings.append(f"Market volatility {current_volatility:.1%} exceeds comfort level {self.config['volatility_threshold']:.1%}")
-            recommendations.append("Consider reducing position size due to high volatility")
-        
+            warnings.append(
+                f"Market volatility {
+        current_volatility:.1%} exceeds comfort level {
+            self.config['volatility_threshold']:.1%}"
+            )
+            recommendations.append(
+                "Consider reducing position size due to high volatility"
+            )
+
         # Check drawdown limits
         if current_drawdown > self.config["max_drawdown_percent"]:
-            violations.append(f"Current drawdown {current_drawdown:.1%} exceeds maximum {self.config['max_drawdown_percent']:.1%}")
+            violations.append(
+                f"Current drawdown {
+        current_drawdown:.1%} exceeds maximum {
+            self.config['max_drawdown_percent']:.1%}"
+            )
             recommendations.append("Consider reducing exposure or stopping trading")
-        
+
         # Check correlation limits (simplified)
         if position_percentage > 0.1 and current_volatility > 0.05:
             warnings.append("High concentration in volatile asset")
             recommendations.append("Consider diversification")
-        
+
         return {
             'violations': violations,
             'warnings': warnings,
             'recommendations': recommendations,
             'risk_score': self._calculate_risk_score(position_data),
             'can_trade': len(violations) == 0,
-            'timestamp': time.time()
+            'timestamp': time.time(),
         }
 
     def _calculate_risk_score(self, position_data: Dict[str, Any]) -> float:
         """
         Calculate overall risk score (0-100, higher = riskier).
-        
+
         Args:
             position_data: Position data dictionary
-            
+
         Returns:
             Risk score between 0 and 100
         """
         score = 0.0
-        
+
         # Position size component (0-30 points)
         position_size = position_data.get('position_size', 0)
         entry_price = position_data.get('entry_price', 1)
         portfolio_value = position_data.get('portfolio_value', 100000)
-        
-        position_pct = (position_size * entry_price) / portfolio_value if portfolio_value > 0 else 0
-        size_score = min(30, (position_pct / self.config["max_exposure_per_asset"]) * 30)
+
+        position_pct = (
+            (position_size * entry_price) / portfolio_value
+            if portfolio_value > 0
+            else 0
+        )
+        size_score = min(
+            30, (position_pct / self.config["max_exposure_per_asset"]) * 30
+        )
         score += size_score
-        
+
         # Volatility component (0-25 points)
         volatility = position_data.get('volatility', 0.02)
         vol_score = min(25, (volatility / self.config["volatility_threshold"]) * 25)
         score += vol_score
-        
+
         # Drawdown component (0-25 points)
         drawdown = position_data.get('drawdown', 0.0)
         dd_score = min(25, (drawdown / self.config["max_drawdown_percent"]) * 25)
         score += dd_score
-        
+
         # Correlation/concentration component (0-20 points)
         # Simplified: penalize high concentration in single asset
         if position_pct > 0.2:
             score += 20
         elif position_pct > 0.1:
             score += 10
-        
+
         return min(100.0, score)
 
     def get_risk_adjusted_signal_strength(
-        self, 
-        original_strength: float, 
-        market_conditions: Dict[str, Any]
+        self, original_strength: float, market_conditions: Dict[str, Any]
     ) -> float:
         """
         Adjust signal strength based on current risk conditions.
-        
+
         Args:
             original_strength: Original signal strength (0-1)
             market_conditions: Current market conditions
-            
+
         Returns:
             Risk-adjusted signal strength
         """
         if original_strength <= 0:
             return 0.0
-        
+
         adjustment_factor = 1.0
-        
+
         # Reduce strength during high volatility
         volatility = market_conditions.get('volatility', 0.02)
         if volatility > self.config["volatility_threshold"]:
             vol_adjustment = self.config["volatility_threshold"] / volatility
             adjustment_factor *= vol_adjustment
-        
+
         # Reduce strength during high drawdown
         drawdown = market_conditions.get('drawdown', 0.0)
-        if drawdown > self.config["max_drawdown_percent"] * 0.5:  # Start reducing at 50% of max drawdown
+        if (
+            drawdown > self.config["max_drawdown_percent"] * 0.5
+        ):  # Start reducing at 50% of max drawdown
             dd_adjustment = 1 - (drawdown / self.config["max_drawdown_percent"])
             adjustment_factor *= max(0.1, dd_adjustment)
-        
+
         # Reduce strength for large positions
         position_exposure = market_conditions.get('position_exposure', 0.0)
         if position_exposure > self.config["max_exposure_per_asset"] * 0.7:
-            exposure_adjustment = 1 - (position_exposure / self.config["max_exposure_per_asset"])
+            exposure_adjustment = 1 - (
+                position_exposure / self.config["max_exposure_per_asset"]
+            )
             adjustment_factor *= max(0.2, exposure_adjustment)
-        
+
         adjusted_strength = original_strength * adjustment_factor
         return max(0.0, min(1.0, adjusted_strength))
 
