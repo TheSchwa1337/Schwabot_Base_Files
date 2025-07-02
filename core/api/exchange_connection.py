@@ -31,7 +31,7 @@ class ExchangeConnection:
     """
     Manages the connection and communication with a single crypto exchange.
     """
-    
+
     def __init__(self, credentials: APICredentials, config: Dict[str, any]):
         self.credentials = credentials
         self.config = config
@@ -41,17 +41,17 @@ class ExchangeConnection:
         self.last_heartbeat = 0.0
         self.reconnect_attempts = 0
         self.max_reconnect_attempts = config.get('max_reconnect_attempts', 5)
-        
+
         # Performance tracking
         self.total_requests = 0
         self.successful_requests = 0
         self.failed_requests = 0
         self.last_error: Optional[str] = None
-        
+
         # Market data cache
         self.market_data_cache: Dict[str, MarketData] = {}
         self.cache_expiry = config.get('market_data_cache_expiry', 30)
-        
+
         logger.info(f"Exchange connection initialized for {credentials.exchange.value}")
 
     async def connect(self) -> bool:
@@ -61,15 +61,15 @@ class ExchangeConnection:
             self.status = ConnectionStatus.ERROR
             self.last_error = "CCXT library not installed."
             return False
-            
+
         self.status = ConnectionStatus.CONNECTING
         logger.info(f"Connecting to {self.credentials.exchange.value}...")
-        
+
         try:
             exchange_name = self.credentials.exchange.value
             exchange_class = getattr(ccxt, exchange_name)
             async_exchange_class = getattr(ccxt_async, exchange_name)
-            
+
             config = {
                 'apiKey': self.credentials.api_key,
                 'secret': self.credentials.secret,
@@ -79,34 +79,37 @@ class ExchangeConnection:
             }
             if self.credentials.passphrase:
                 config['password'] = self.credentials.passphrase
-            
+
             # CCXT handles sandbox/testnet via a method on the instance
             self.exchange = exchange_class(config)
             self.async_exchange = async_exchange_class(config)
-            
+
             if self.credentials.sandbox or self.credentials.testnet:
                 self.exchange.set_sandbox_mode(True)
                 self.async_exchange.set_sandbox_mode(True)
 
             await self.async_exchange.load_markets()
-            
+
             self.status = ConnectionStatus.CONNECTED
             self.last_heartbeat = time.time()
             self.reconnect_attempts = 0
             logger.info(f"✅ Successfully connected to {exchange_name}")
             return True
-            
+
         except Exception as e:
             self.status = ConnectionStatus.ERROR
             self.last_error = str(e)
-            logger.error(f"❌ Failed to connect to {self.credentials.exchange.value}: {e}", exc_info=True)
+            logger.error(
+                f"❌ Failed to connect to {
+                    self.credentials.exchange.value}: {e}",
+                exc_info=True)
             return False
 
     async def disconnect(self):
         """Closes the connection to the exchange."""
         if self.status == ConnectionStatus.DISCONNECTED:
             return
-        
+
         logger.info(f"Disconnecting from {self.credentials.exchange.value}...")
         try:
             if self.async_exchange:
@@ -129,7 +132,7 @@ class ExchangeConnection:
         try:
             # CCXT fetch_ticker is already rate-limited by the library
             ticker = await self.async_exchange.fetch_ticker(symbol)
-            
+
             market_data = MarketData(
                 symbol=symbol,
                 price=float(ticker['last']),
@@ -143,16 +146,18 @@ class ExchangeConnection:
                 exchange=self.credentials.exchange.value,
                 metadata=ticker
             )
-            
+
             self.market_data_cache[symbol] = market_data
             self.successful_requests += 1
             self.last_heartbeat = time.time()
             return market_data
-            
+
         except Exception as e:
             self.failed_requests += 1
             self.last_error = str(e)
-            logger.error(f"Error fetching market data for {symbol} on {self.credentials.exchange.value}: {e}")
+            logger.error(
+                f"Error fetching market data for {symbol} on {
+                    self.credentials.exchange.value}: {e}")
             return None
 
     async def place_order(self, order_request: OrderRequest) -> OrderResponse:
@@ -166,7 +171,7 @@ class ExchangeConnection:
                 params['stopLossPrice'] = order_request.stop_loss
             if order_request.take_profit:
                 params['takeProfitPrice'] = order_request.take_profit
-            
+
             order = await self.async_exchange.create_order(
                 symbol=order_request.symbol,
                 type=order_request.order_type.value,
@@ -175,17 +180,20 @@ class ExchangeConnection:
                 price=order_request.price,
                 params=params
             )
-            
+
             response = self._create_success_response(order)
             self.successful_requests += 1
             self.last_heartbeat = time.time()
             logger.info(f"✅ Order placed on {self.credentials.exchange.value}: {response.order_id}")
             return response
-            
+
         except Exception as e:
             self.failed_requests += 1
             self.last_error = str(e)
-            logger.error(f"❌ Error placing order on {self.credentials.exchange.value}: {e}", exc_info=True)
+            logger.error(
+                f"❌ Error placing order on {
+                    self.credentials.exchange.value}: {e}",
+                exc_info=True)
             return self._create_error_response(order_request, str(e))
 
     async def get_balance(self) -> Dict[str, float]:
@@ -245,4 +253,4 @@ class ExchangeConnection:
             timestamp=time.time(),
             success=False,
             error_message=error_msg
-        ) 
+        )

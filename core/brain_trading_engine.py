@@ -463,4 +463,31 @@ def demo_brain_trading_engine():
 
 
 if __name__ == "__main__":
-    demo_brain_trading_engine() 
+    demo_brain_trading_engine()
+
+# ---------------------------------------------------------------------------
+# Module-level Risk-controller helpers (simple registry)
+# ---------------------------------------------------------------------------
+_risk_manager_ref: Optional["RiskManager"] = None  # type: ignore
+
+
+def register_risk_manager(risk_manager: "RiskManager") -> None:  # noqa: F821
+    """Register the active RiskManager so other engines can tweak parameters."""
+    global _risk_manager_ref
+    _risk_manager_ref = risk_manager
+
+
+def update_risk_threshold(new_vol_threshold: float) -> bool:
+    """Dynamically update the volatility threshold in the registered RiskManager.
+
+    Returns ``True`` if the update succeeded, ``False`` otherwise.
+    """
+    if _risk_manager_ref is None:
+        logger.warning("No RiskManager registered – cannot update threshold")
+        return False
+
+    _risk_manager_ref.config["volatility_threshold"] = float(new_vol_threshold)
+    logger.info(
+        "🔧 Risk threshold updated: volatility_threshold=%.4f", new_vol_threshold
+    )
+    return True

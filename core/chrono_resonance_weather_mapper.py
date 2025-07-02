@@ -188,7 +188,7 @@ class ChronoResonanceWeatherMapper:
             # Maintain history limit
             if len(self.weather_history) > self.config["max_weather_history"]:
                 self.weather_history = self.weather_history[
-                    -self.config["max_weather_history"] :
+                    -self.config["max_weather_history"]:
                 ]
 
             # Trigger analysis if enough data
@@ -208,7 +208,7 @@ class ChronoResonanceWeatherMapper:
             # Maintain history limit
             if len(self.price_history) > self.config["max_price_history"]:
                 self.price_history = self.price_history[
-                    -self.config["max_price_history"] :
+                    -self.config["max_price_history"]:
                 ]
 
             # Trigger correlation analysis
@@ -294,7 +294,7 @@ class ChronoResonanceWeatherMapper:
 
             # Find dominant frequency
             # Skip DC component
-            max_idx = np.argmax(magnitude[1 : len(magnitude) // 2]) + 1
+            max_idx = np.argmax(magnitude[1: len(magnitude) // 2]) + 1
             dominant_freq = abs(frequencies[max_idx])
             dominant_amplitude = magnitude[max_idx]
             dominant_phase = np.angle(fft_data[max_idx])

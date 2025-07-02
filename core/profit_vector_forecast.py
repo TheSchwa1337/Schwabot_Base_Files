@@ -21,13 +21,13 @@ import logging
 import math
 import time
 from collections import deque
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 
 try:
-    from core.drift_shell_engine import MemorySnapshot, ProfitVector
+    from core.drift_shell_engine import ProfitVector
     from data.temporal_intelligence_integration import TemporalIntelligenceIntegration
     from hash_recollection.pattern_utils import PatternUtils
 except ImportError as e:
@@ -78,6 +78,240 @@ class VolatilityProfile:
     volatility_regime: str  # "low", "normal", "high", "extreme"
     volatility_trend: str  # "increasing", "decreasing", "stable"
     profit_scale_factor: float
+
+
+@dataclass
+class ProfitState:
+    """Represents a profit state for Markov chain analysis."""
+    profit_range: str  # e.g., "high_profit", "loss_zone", "neutral"
+    value: float
+    timestamp: float
+    volume: float = 0.0
+    volatility: float = 0.0
+
+
+@dataclass
+class MCMCTransition:
+    """Markov chain transition record."""
+    from_state: str
+    to_state: str
+    probability: float
+    count: int
+    last_updated: float
+
+
+class MarkovProfitModel:
+    """Markov Chain Monte Carlo model for profit state prediction."""
+    
+    def __init__(self, memory_size: int = 1000):
+        self.transition_matrix = defaultdict(lambda: defaultdict(float))
+        self.state_counts = defaultdict(int)
+        self.state_history = deque(maxlen=memory_size)
+        self.profit_thresholds = {
+            "high_profit": 0.02,    # >2% profit
+            "low_profit": 0.005,    # 0.5-2% profit
+            "neutral": -0.005,      # -0.5% to 0.5%
+            "loss_zone": -0.02,     # -2% to -0.5%
+            "high_loss": float('-inf')  # <-2%
+        }
+        
+    def classify_profit_state(self, profit_pct: float) -> str:
+        """Classify profit percentage into discrete states."""
+        if profit_pct >= self.profit_thresholds["high_profit"]:
+            return "high_profit"
+        elif profit_pct >= self.profit_thresholds["low_profit"]:
+            return "low_profit"
+        elif profit_pct >= self.profit_thresholds["neutral"]:
+            return "neutral"
+        elif profit_pct >= self.profit_thresholds["loss_zone"]:
+            return "loss_zone"
+        else:
+            return "high_loss"
+    
+    def update_transition(self, current_state: str, next_state: str):
+        """Update transition matrix with new state transition."""
+        self.transition_matrix[current_state][next_state] += 1
+        self.state_counts[current_state] += 1
+        
+        # Add to history
+        self.state_history.append({
+            'state': next_state,
+            'timestamp': time.time(),
+            'transition_from': current_state
+        })
+    
+    def predict_next_state(self, current_state: str, method: str = "probabilistic") -> Optional[str]:
+        """Predict next state using different methods."""
+        if current_state not in self.transition_matrix:
+            return None
+            
+        transitions = self.transition_matrix[current_state]
+        total = self.state_counts[current_state]
+        
+        if total == 0:
+            return None
+        
+        if method == "probabilistic":
+            # Weighted random selection
+            rand_val = random.random()
+            cumulative = 0.0
+            for state, count in transitions.items():
+                prob = count / total
+                cumulative += prob
+                if rand_val <= cumulative:
+                    return state
+                    
+        elif method == "most_likely":
+            # Return most probable next state
+            return max(transitions.items(), key=lambda x: x[1])[0]
+        
+        return None
+    
+    def get_state_probabilities(self, state: str) -> Dict[str, float]:
+        """Get all transition probabilities from a given state."""
+        total = self.state_counts[state]
+        if total == 0:
+            return {}
+        return {s: count / total for s, count in self.transition_matrix[state].items()}
+    
+    def get_steady_state_probabilities(self) -> Dict[str, float]:
+        """Calculate long-term steady state probabilities."""
+        all_states = set()
+        for from_state in self.transition_matrix:
+            all_states.add(from_state)
+            for to_state in self.transition_matrix[from_state]:
+                all_states.add(to_state)
+        
+        if not all_states:
+            return {}
+        
+        # Simple steady state approximation
+        state_frequencies = defaultdict(int)
+        for history_item in self.state_history:
+            state_frequencies[history_item['state']] += 1
+        
+        total_observations = sum(state_frequencies.values())
+        if total_observations == 0:
+            return {}
+        
+        return {state: count / total_observations for state, count in state_frequencies.items()}
+    
+    def simulate_future_path(self, current_state: str, steps: int = 10) -> List[str]:
+        """Simulate future profit states using Monte Carlo."""
+        path = [current_state]
+        state = current_state
+        
+        for _ in range(steps):
+            next_state = self.predict_next_state(state)
+            if next_state is None:
+                break
+            path.append(next_state)
+            state = next_state
+        
+        return path
+
+
+class ProfitAccuracyValidator:
+    """Validates forecasting accuracy and model performance."""
+    
+    def __init__(self, validation_window: int = 100):
+        self.validation_window = validation_window
+        self.predictions = deque(maxlen=validation_window)
+        self.actual_outcomes = deque(maxlen=validation_window)
+        self.accuracy_history = deque(maxlen=validation_window)
+        
+    def add_prediction(self, prediction: str, confidence: float):
+        """Add a new prediction to track."""
+        self.predictions.append({
+            'prediction': prediction,
+            'confidence': confidence,
+            'timestamp': time.time()
+        })
+    
+    def add_actual_outcome(self, actual_state: str):
+        """Add actual outcome for validation."""
+        self.actual_outcomes.append({
+            'actual': actual_state,
+            'timestamp': time.time()
+        })
+        
+        # Calculate accuracy if we have matching prediction
+        if len(self.predictions) > 0 and len(self.actual_outcomes) > 0:
+            self._update_accuracy()
+    
+    def _update_accuracy(self):
+        """Update accuracy metrics."""
+        if len(self.predictions) != len(self.actual_outcomes):
+            return
+        
+        correct_predictions = 0
+        total_predictions = min(len(self.predictions), len(self.actual_outcomes))
+        
+        for i in range(total_predictions):
+            if self.predictions[i]['prediction'] == self.actual_outcomes[i]['actual']:
+                correct_predictions += 1
+        
+        accuracy = correct_predictions / total_predictions if total_predictions > 0 else 0.0
+        self.accuracy_history.append({
+            'accuracy': accuracy,
+            'timestamp': time.time(),
+            'sample_size': total_predictions
+        })
+    
+    def get_accuracy_metrics(self) -> Dict[str, float]:
+        """Get comprehensive accuracy metrics."""
+        if not self.accuracy_history:
+            return {
+                'current_accuracy': 0.0,
+                'average_accuracy': 0.0,
+                'accuracy_trend': 0.0,
+                'confidence_correlation': 0.0
+            }
+        
+        accuracies = [item['accuracy'] for item in self.accuracy_history]
+        
+        current_accuracy = accuracies[-1] if accuracies else 0.0
+        average_accuracy = np.mean(accuracies) if accuracies else 0.0
+        
+        # Calculate trend (slope of recent accuracy)
+        if len(accuracies) >= 2:
+            x = np.arange(len(accuracies))
+            accuracy_trend = np.polyfit(x, accuracies, 1)[0]  # Slope
+        else:
+            accuracy_trend = 0.0
+        
+        # Confidence correlation (how well confidence predicts accuracy)
+        confidence_correlation = self._calculate_confidence_correlation()
+        
+        return {
+            'current_accuracy': float(current_accuracy),
+            'average_accuracy': float(average_accuracy),
+            'accuracy_trend': float(accuracy_trend),
+            'confidence_correlation': float(confidence_correlation),
+            'total_predictions': len(self.predictions)
+        }
+    
+    def _calculate_confidence_correlation(self) -> float:
+        """Calculate correlation between prediction confidence and accuracy."""
+        if len(self.predictions) < 5:
+            return 0.0
+        
+        try:
+            confidences = [p['confidence'] for p in self.predictions[-20:]]  # Recent 20
+            correct = []
+            
+            for i, pred in enumerate(self.predictions[-20:]):
+                if i < len(self.actual_outcomes):
+                    is_correct = pred['prediction'] == self.actual_outcomes[i]['actual']
+                    correct.append(1.0 if is_correct else 0.0)
+            
+            if len(confidences) == len(correct) and len(correct) > 1:
+                correlation = np.corrcoef(confidences, correct)[0, 1]
+                return correlation if not np.isnan(correlation) else 0.0
+        except Exception:
+            pass
+        
+        return 0.0
 
 
 class ProfitVectorForecastEngine:
@@ -719,10 +953,7 @@ def main():
         print(f"  Confidence: {engine.current_phase.confidence:.3f}")
         print(f"  Duration: {engine.current_phase.duration:.1f}s")
         if engine.current_phase.fibonacci_level:
-            print(
-                f"  Fibonacci Level: {
-                    engine.current_phase.fibonacci_level:.3f}"
-            )
+            print(f"  Fibonacci Level: {engine.current_phase.fibonacci_level:.3f}")
 
     # Display volatility profile
     volatility_profile = engine.calculate_volatility_profile()
@@ -739,11 +970,10 @@ def main():
         if isinstance(value, dict):
             print(f"  {key}:")
             for sub_key, sub_value in value.items():
-                print(
-                    f"    {sub_key}: {sub_value:.3f}"
-                    if isinstance(sub_value, float)
-                    else f"    {sub_key}: {sub_value}"
-                )
+                if isinstance(sub_value, float):
+                    print(f"    {sub_key}: {sub_value:.3f}")
+                else:
+                    print(f"    {sub_key}: {sub_value}")
         elif isinstance(value, float):
             print(f"  {key}: {value:.4f}")
         else:

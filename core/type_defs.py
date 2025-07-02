@@ -25,17 +25,17 @@ Scalar = Union[int, float, np.number]
 # Entropy and information types
 class Entropy:
     """Entropy value with metadata."""
-    
+
     def __init__(self, value: float, metadata: Optional[Dict[str, Any]] = None):
         self.value = float(value)
         self.metadata = metadata or {}
-    
+
     def __float__(self) -> float:
         return self.value
-    
+
     def __str__(self) -> str:
         return f"Entropy({self.value:.6f})"
-    
+
     def __repr__(self) -> str:
         return f"Entropy({self.value}, metadata={self.metadata})"
 
@@ -43,31 +43,31 @@ class Entropy:
 # Analysis result types
 class AnalysisResult:
     """Container for analysis results."""
-    
+
     def __init__(self, data: Dict[str, Any]):
         self._data = data
-    
+
     def __getitem__(self, key: str) -> Any:
         return self._data[key]
-    
+
     def __setitem__(self, key: str, value: Any) -> None:
         self._data[key] = value
-    
+
     def __contains__(self, key: str) -> bool:
         return key in self._data
-    
+
     def get(self, key: str, default: Any = None) -> Any:
         return self._data.get(key, default)
-    
+
     def keys(self):
         return self._data.keys()
-    
+
     def values(self):
         return self._data.values()
-    
+
     def items(self):
         return self._data.items()
-    
+
     def to_dict(self) -> Dict[str, Any]:
         return self._data.copy()
 
@@ -301,22 +301,28 @@ E = 2.718281828459045
 SQRT_2 = 1.4142135623730951
 
 # Common error types
+
+
 class SchawbotError(Exception):
     """Base exception for Schwabot system."""
     pass
+
 
 class MathematicalError(SchawbotError):
     """Mathematical computation error."""
     pass
 
+
 class TradingError(SchawbotError):
     """Trading operation error."""
     pass
+
 
 class DataError(SchawbotError):
     """Data processing error."""
     pass
 
+
 class ConfigurationError(SchawbotError):
     """Configuration error."""
-    pass 
+    pass

@@ -71,4 +71,4 @@ class FearGreedHandler(BaseAPIHandler):
                 "timestamp": int(time.time()),
                 "time_until_update": 0,
                 "error": str(exc)
-            } 
+            }

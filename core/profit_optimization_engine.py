@@ -313,7 +313,7 @@ class ProfitOptimizationEngine:
             # Trim history if needed
             if len(self.optimization_history) > self.max_history_size:
                 self.optimization_history = self.optimization_history[
-                    -self.max_history_size :
+                    -self.max_history_size:
                 ]
 
             self.current_state = ProfitState.ACCUMULATING

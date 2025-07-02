@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Advanced Settings Engine
-========================
+Advanced Settings Engine.
 
 Implements Schwabot's advanced settings framework that controls pipeline logic
 through bias coefficients and weighted confidence frameworks without disabling
@@ -10,7 +9,7 @@ core mathematical operations.
 
 This system enables:
 - Echo weight modulation
-- AI confidence bias adjustment  
+- AI confidence bias adjustment
 - Recursive memory tuning
 - Strategy vector weighting
 - Temporal filtering controls
@@ -18,22 +17,20 @@ This system enables:
 
 from __future__ import annotations
 
-import asyncio
 import json
 import logging
-import time
 import threading
+import time
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Callable, Union
-from functools import lru_cache
+from typing import Any, Callable, Dict, List, Optional, Union
+
 import numpy as np
 
 from schwabot_unified_math import (
-    UnifiedMathematicsFramework,
     MathematicalValidator,
     RecursionGuard,
-    unified_trading_math
+    UnifiedMathematicsFramework,
 )
 
 logger = logging.getLogger(__name__)
@@ -42,6 +39,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class SettingDefinition:
     """Definition of an advanced setting parameter."""
+
     name: str
     display_name: str
     description: str
@@ -59,16 +57,20 @@ class SettingDefinition:
 @dataclass
 class ConfidenceVector:
     """Multi-dimensional confidence vector for decision weighting."""
+
     ai_consensus: float = 0.6
     profit_memory: float = 0.3
     strategy_alignment: float = 0.2
     user_bias: float = 0.1
     echo_resonance: float = 0.0
     temporal_decay: float = 0.9
-    
+
     def normalize(self) -> None:
         """Normalize confidence vector to unit magnitude."""
-        total = sum([self.ai_consensus, self.profit_memory, self.strategy_alignment, self.user_bias])
+        total = sum([
+            self.ai_consensus, self.profit_memory, self.strategy_alignment,
+            self.user_bias
+        ])
         if total > 0:
             factor = 1.0 / total
             self.ai_consensus *= factor
@@ -80,6 +82,7 @@ class ConfidenceVector:
 @dataclass
 class EchoState:
     """Echo signal state for recursive feedback."""
+
     amplitude: float = 1.0
     frequency: float = 1.0
     phase: float = 0.0
@@ -97,41 +100,42 @@ class AdvancedSettingsEngine:
     def __init__(
         self,
         config_path: Path = Path("settings/advanced_config.json"),
-        math_framework: Optional[UnifiedMathematicsFramework] = None
-    ):
+        math_framework: Optional[UnifiedMathematicsFramework] = None,
+    ) -> None:
+        """Initialize the advanced settings engine."""
         self.config_path = Path(config_path)
         self.math_framework = math_framework or UnifiedMathematicsFramework()
         self.validator = MathematicalValidator()
         self.recursion_guard = RecursionGuard()
-        
+
         # Core state management
         self.settings_state: Dict[str, Any] = {}
         self.confidence_vectors: Dict[str, ConfidenceVector] = {}
         self.echo_states: Dict[str, EchoState] = {}
         self.bias_coefficients: Dict[str, float] = {}
         self.memory_weights: Dict[str, float] = {}
-        
+
         # Performance tracking
         self.profit_feedback: Dict[str, List[float]] = {}
         self.setting_effectiveness: Dict[str, float] = {}
         self.adaptive_memory: Dict[str, Dict] = {}
-        
+
         # Threading for async updates
         self._update_lock = threading.RLock()
         self._running = False
-        
+
         # Initialize settings definitions
         self.setting_definitions = self._initialize_setting_definitions()
-        
+
         # Load configuration
         self._load_configuration()
-        
+
         logger.info("Advanced Settings Engine initialized")
 
     def _initialize_setting_definitions(self) -> Dict[str, SettingDefinition]:
         """Initialize all advanced setting definitions."""
         definitions = {}
-        
+
         # Echo Control Settings
         definitions["echo_delay_sensitivity"] = SettingDefinition(
             name="echo_delay_sensitivity",
@@ -145,10 +149,10 @@ class AdvancedSettingsEngine:
             category="echo_control",
             affects_modules=["echo_modulator", "drift_engine", "signal_processing"]
         )
-        
+
         definitions["ghost_relay_threshold"] = SettingDefinition(
             name="ghost_relay_threshold",
-            display_name="Ghost Relay Threshold", 
+            display_name="Ghost Relay Threshold",
             description="Minimum entropy for ghost trade activation",
             setting_type="slider",
             default_value=0.9,
@@ -158,7 +162,7 @@ class AdvancedSettingsEngine:
             category="echo_control",
             affects_modules=["ghost_detector", "execution_engine"]
         )
-        
+
         # AI Bias Settings
         definitions["ai_consensus_weight"] = SettingDefinition(
             name="ai_consensus_weight",
@@ -172,7 +176,7 @@ class AdvancedSettingsEngine:
             category="ai_control",
             affects_modules=["ai_coordinator", "decision_engine"]
         )
-        
+
         definitions["r1_preference"] = SettingDefinition(
             name="r1_preference",
             display_name="R1 Model Preference",
@@ -185,10 +189,10 @@ class AdvancedSettingsEngine:
             category="ai_control",
             affects_modules=["ai_coordinator"]
         )
-        
+
         definitions["claude_preference"] = SettingDefinition(
             name="claude_preference",
-            display_name="Claude Model Preference", 
+            display_name="Claude Model Preference",
             description="Preference weight for Claude model outputs",
             setting_type="slider",
             default_value=0.3,
@@ -198,11 +202,11 @@ class AdvancedSettingsEngine:
             category="ai_control",
             affects_modules=["ai_coordinator"]
         )
-        
+
         definitions["gpt4_preference"] = SettingDefinition(
             name="gpt4_preference",
             display_name="GPT-4 Model Preference",
-            description="Preference weight for GPT-4 model outputs", 
+            description="Preference weight for GPT-4 model outputs",
             setting_type="slider",
             default_value=0.2,
             min_value=0.0,
@@ -211,7 +215,7 @@ class AdvancedSettingsEngine:
             category="ai_control",
             affects_modules=["ai_coordinator"]
         )
-        
+
         # Trading Control Settings
         definitions["buy_wall_aggression"] = SettingDefinition(
             name="buy_wall_aggression",
@@ -225,12 +229,12 @@ class AdvancedSettingsEngine:
             category="trading_control",
             affects_modules=["execution_engine", "volume_optimizer"]
         )
-        
+
         definitions["sell_wall_aggression"] = SettingDefinition(
             name="sell_wall_aggression",
             display_name="Sell Wall Aggression",
             description="Scale factor for sell wall construction during predictable dumps",
-            setting_type="slider", 
+            setting_type="slider",
             default_value=1.0,
             min_value=0.5,
             max_value=3.0,
@@ -238,7 +242,7 @@ class AdvancedSettingsEngine:
             category="trading_control",
             affects_modules=["execution_engine", "volume_optimizer"]
         )
-        
+
         # Memory and Learning Settings
         definitions["strategy_decay_rate"] = SettingDefinition(
             name="strategy_decay_rate",
@@ -252,7 +256,7 @@ class AdvancedSettingsEngine:
             category="memory_control",
             affects_modules=["memory_stack", "strategy_mapper"]
         )
-        
+
         definitions["profit_memory_window"] = SettingDefinition(
             name="profit_memory_window",
             display_name="Profit Memory Window",
@@ -265,7 +269,7 @@ class AdvancedSettingsEngine:
             category="memory_control",
             affects_modules=["profit_memory", "ferris_wheel"]
         )
-        
+
         # Advanced Mathematical Controls
         definitions["fractal_noise_tolerance"] = SettingDefinition(
             name="fractal_noise_tolerance",
@@ -279,7 +283,7 @@ class AdvancedSettingsEngine:
             category="mathematical_control",
             affects_modules=["fractal_processor", "signal_filter"]
         )
-        
+
         definitions["entropy_stabilization"] = SettingDefinition(
             name="entropy_stabilization",
             display_name="Entropy Stabilization",
@@ -289,7 +293,7 @@ class AdvancedSettingsEngine:
             category="mathematical_control",
             affects_modules=["entropy_stabilizer", "recursive_processor"]
         )
-        
+
         return definitions
 
     def get_setting_value(self, setting_name: str) -> Any:
@@ -645,10 +649,14 @@ class AdvancedSettingsEngine:
         """Get comprehensive system status."""
         return {
             "settings_loaded": len(self.settings_state),
-            "active_biases": len([b for b in self.bias_coefficients.values() if b != 1.0]),
-            "confidence_contexts": len(self.confidence_vectors),
+            "confidence_vectors": len(self.confidence_vectors),
             "echo_states": len(self.echo_states),
-            "effectiveness_tracked": len(self.setting_effectiveness),
-            "adaptive_memory_size": sum(len(m.get("changes", [])) for m in self.adaptive_memory.values()),
-            "math_framework_active": self.math_framework is not None,
-        } 
+            "bias_coefficients": len(self.bias_coefficients),
+            "memory_weights": len(self.memory_weights),
+            "profit_feedback_entries": sum(
+                len(feedback) for feedback in self.profit_feedback.values()
+            ),
+            "setting_effectiveness": len(self.setting_effectiveness),
+            "adaptive_memory_entries": len(self.adaptive_memory),
+            "running": self._running,
+        }

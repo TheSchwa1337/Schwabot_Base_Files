@@ -49,7 +49,7 @@ class WhaleAlertHandler(BaseAPIHandler):
             "min_value": self.min_value,
             "limit": 100,
         }
-        
+
         if aiohttp:
             session = await self._get_session()
             async with session.get(f"{BASE_URL}/transactions", params=params) as resp:
@@ -61,7 +61,7 @@ class WhaleAlertHandler(BaseAPIHandler):
         elif requests:
             loop = asyncio.get_running_loop()
             response = await loop.run_in_executor(
-                None, 
+                None,
                 lambda: requests.get(f"{BASE_URL}/transactions", params=params, timeout=15)
             )
             if response.status_code == 401:
@@ -78,15 +78,15 @@ class WhaleAlertHandler(BaseAPIHandler):
             if raw.get("result") != "success":
                 logger.warning("WhaleAlert API returned non-success result")
                 return {"transactions": [], "summary": {}}
-            
+
             transactions = raw.get("transactions", [])
-            
+
             # Process transactions
             processed_transactions = []
             btc_volume = 0.0
             eth_volume = 0.0
             total_volume_usd = 0.0
-            
+
             for tx in transactions:
                 processed_tx = {
                     "id": tx.get("id"),
@@ -103,12 +103,12 @@ class WhaleAlertHandler(BaseAPIHandler):
                     "hash": tx.get("hash", ""),
                 }
                 processed_transactions.append(processed_tx)
-                
+
                 # Accumulate volumes
                 symbol = tx.get("symbol", "").upper()
                 amount_usd = float(tx.get("amount_usd", 0))
                 total_volume_usd += amount_usd
-                
+
                 if symbol == "BTC":
                     btc_volume += amount_usd
                 elif symbol == "ETH":
@@ -121,16 +121,17 @@ class WhaleAlertHandler(BaseAPIHandler):
                 "btc_volume_usd": btc_volume,
                 "eth_volume_usd": eth_volume,
                 "average_transaction_size": total_volume_usd / max(len(processed_transactions), 1),
-                "whale_activity_score": min(100, (total_volume_usd / 1000000) * 10),  # Scale to 0-100
+                # Scale to 0-100
+                "whale_activity_score": min(100, (total_volume_usd / 1000000) * 10),
                 "dominant_blockchain": self._get_dominant_blockchain(processed_transactions),
             }
-            
+
             return {
                 "transactions": processed_transactions,
                 "summary": summary,
                 "last_updated": raw.get("cursor", {}).get("last", 0),
             }
-            
+
         except Exception as exc:
             logger.error("%s: failed to parse whale data – %s", self.NAME, exc)
             return {"transactions": [], "summary": {}}
@@ -141,8 +142,8 @@ class WhaleAlertHandler(BaseAPIHandler):
         for tx in transactions:
             blockchain = tx.get("blockchain", "unknown")
             blockchain_counts[blockchain] = blockchain_counts.get(blockchain, 0) + 1
-        
+
         if not blockchain_counts:
             return "unknown"
-        
-        return max(blockchain_counts, key=blockchain_counts.get) 
+
+        return max(blockchain_counts, key=blockchain_counts.get)
