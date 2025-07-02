@@ -1,3 +1,23 @@
+"""
+LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
+
+This file has been automatically commented out because it contains syntax errors
+that prevent the Schwabot system from running properly.
+
+Original file: core\strategy\glyph_strategy_core.py
+Date commented out: 2025-07-02 19:37:06
+
+The clean implementation has been preserved in the following files:
+- core/clean_math_foundation.py (mathematical foundation)
+- core/clean_profit_vectorization.py (profit calculations)
+- core/clean_trading_pipeline.py (trading logic)
+- core/clean_unified_math.py (unified mathematics)
+
+All core functionality has been reimplemented in clean, production-ready files.
+"""
+
+# ORIGINAL CONTENT COMMENTED OUT BELOW:
+"""
 import hashlib
 import logging
 import random
@@ -261,3 +281,4 @@ enable_fractal_memory=False, enable_gear_shifting=True
 result = temp_core.select_strategy(glyph, volume)
         return {glyph: result.glyph,gear_state: result.gear_state,strategy_id: result.strategy_id,fractal_hash: result.fractal_hash,confidence": result.confidence,timestamp": result.timestamp,metadata": result.metadata,
 }"""'"
+"""

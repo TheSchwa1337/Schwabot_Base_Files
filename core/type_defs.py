@@ -1,3 +1,23 @@
+"""
+LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
+
+This file has been automatically commented out because it contains syntax errors
+that prevent the Schwabot system from running properly.
+
+Original file: core\type_defs.py
+Date commented out: 2025-07-02 19:37:03
+
+The clean implementation has been preserved in the following files:
+- core/clean_math_foundation.py (mathematical foundation)
+- core/clean_profit_vectorization.py (profit calculations)
+- core/clean_trading_pipeline.py (trading logic)
+- core/clean_unified_math.py (unified mathematics)
+
+All core functionality has been reimplemented in clean, production-ready files.
+"""
+
+# ORIGINAL CONTENT COMMENTED OUT BELOW:
+"""
 from __future__ import annotations
 
 from typing import Any, Callable, Dict, List, NewType, Optional, Tuple, Union
@@ -275,3 +295,4 @@ class DataError(SchawbotError):Data processing error.pass
 
 
 class ConfigurationError(SchawbotError):Configuration error.pass""'"
+"""

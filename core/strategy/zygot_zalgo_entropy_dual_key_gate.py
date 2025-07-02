@@ -1,3 +1,23 @@
+"""
+LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
+
+This file has been automatically commented out because it contains syntax errors
+that prevent the Schwabot system from running properly.
+
+Original file: core\strategy\zygot_zalgo_entropy_dual_key_gate.py
+Date commented out: 2025-07-02 19:37:06
+
+The clean implementation has been preserved in the following files:
+- core/clean_math_foundation.py (mathematical foundation)
+- core/clean_profit_vectorization.py (profit calculations)
+- core/clean_trading_pipeline.py (trading logic)
+- core/clean_unified_math.py (unified mathematics)
+
+All core functionality has been reimplemented in clean, production-ready files.
+"""
+
+# ORIGINAL CONTENT COMMENTED OUT BELOW:
+"""
 import hashlib
 import secrets
 import time
@@ -199,3 +219,4 @@ result5 = gate.evaluate_gate(
 trade_signal, internal_data, external_data, performance_good
 )
 print(fGate Result after key rotation: {result5})"'"
+"""

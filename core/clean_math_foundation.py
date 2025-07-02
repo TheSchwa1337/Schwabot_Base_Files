@@ -12,7 +12,7 @@ import math
 import time
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Tuple, Union
 
 import numpy as np
 
@@ -414,9 +414,12 @@ class CleanMathFoundation:
     
     def get_metrics(self) -> Dict[str, Any]:
         """Get performance metrics."""
+        cache_total = self.metrics["cache_hits"] + self.metrics["cache_misses"]
+        cache_efficiency = self.metrics["cache_hits"] / max(1, cache_total)
+
         return {
             **self.metrics,
-            "cache_efficiency": self.metrics["cache_hits"] / max(1, self.metrics["cache_hits"] + self.metrics["cache_misses"]),
+            "cache_efficiency": cache_efficiency,
             "total_calculations": len(self.calculation_history),
             "current_thermal_state": self.thermal_state.value,
             "current_bit_phase": self.bit_phase.value

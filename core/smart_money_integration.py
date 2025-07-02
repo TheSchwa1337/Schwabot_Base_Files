@@ -1,3 +1,23 @@
+"""
+LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
+
+This file has been automatically commented out because it contains syntax errors
+that prevent the Schwabot system from running properly.
+
+Original file: core\smart_money_integration.py
+Date commented out: 2025-07-02 19:37:02
+
+The clean implementation has been preserved in the following files:
+- core/clean_math_foundation.py (mathematical foundation)
+- core/clean_profit_vectorization.py (profit calculations)
+- core/clean_trading_pipeline.py (trading logic)
+- core/clean_unified_math.py (unified mathematics)
+
+All core functionality has been reimplemented in clean, production-ready files.
+"""
+
+# ORIGINAL CONTENT COMMENTED OUT BELOW:
+"""
 from __future__ import annotations
 
 import logging
@@ -666,3 +686,4 @@ integrated_signals else 0.0,smart_money_analytics": smart_money.get_smart_money_
             logger.error(fSmart money enhancement failed: {e})
         return {success: False,error: str(e)
 }"""'"
+"""

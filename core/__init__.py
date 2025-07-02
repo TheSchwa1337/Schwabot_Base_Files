@@ -9,7 +9,7 @@ fully functional and error-free.
 # Clean implementations - fully functional and error-free
 try:
     from .clean_math_foundation import (
-        CleanMathFoundation, MathOperation, ThermalState, BitPhase, 
+        CleanMathFoundation, MathOperation, ThermalState, BitPhase,
         create_math_foundation, quick_calculation
     )
     CLEAN_MATH_AVAILABLE = True
@@ -43,10 +43,10 @@ __all__ = [
     'create_profit_vectorizer',
     'CleanTradingPipeline', 'MarketData', 'TradingDecision', 'StrategyBranch',
     'create_trading_pipeline', 'run_trading_simulation',
-    
+
     # Availability flags
     'CLEAN_MATH_AVAILABLE', 'CLEAN_PROFIT_AVAILABLE', 'CLEAN_PIPELINE_AVAILABLE',
-    
+
     # Utility functions
     'get_system_status', 'create_clean_trading_system'
 ]
@@ -60,20 +60,22 @@ def get_system_status():
             'profit_vectorization': CLEAN_PROFIT_AVAILABLE,
             'trading_pipeline': CLEAN_PIPELINE_AVAILABLE
         },
-        'system_operational': CLEAN_MATH_AVAILABLE and CLEAN_PROFIT_AVAILABLE and CLEAN_PIPELINE_AVAILABLE
+        'system_operational': (CLEAN_MATH_AVAILABLE and CLEAN_PROFIT_AVAILABLE and
+                               CLEAN_PIPELINE_AVAILABLE)
     }
 
 
 def create_clean_trading_system(initial_capital=100000.0):
     """
     Create a complete clean trading system with all components.
-    
+
     Returns:
         Dictionary with all initialized components
     """
-    if not (CLEAN_MATH_AVAILABLE and CLEAN_PROFIT_AVAILABLE and CLEAN_PIPELINE_AVAILABLE):
+    if not (CLEAN_MATH_AVAILABLE and CLEAN_PROFIT_AVAILABLE and
+            CLEAN_PIPELINE_AVAILABLE):
         raise ImportError("Clean implementations not available")
-    
+
     return {
         'math_foundation': create_math_foundation(),
         'profit_vectorizer': create_profit_vectorizer(),

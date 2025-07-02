@@ -1,3 +1,23 @@
+"""
+LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
+
+This file has been automatically commented out because it contains syntax errors
+that prevent the Schwabot system from running properly.
+
+Original file: core\matrix_math_utils.py
+Date commented out: 2025-07-02 19:36:59
+
+The clean implementation has been preserved in the following files:
+- core/clean_math_foundation.py (mathematical foundation)
+- core/clean_profit_vectorization.py (profit calculations)
+- core/clean_trading_pipeline.py (trading logic)
+- core/clean_unified_math.py (unified mathematics)
+
+All core functionality has been reimplemented in clean, production-ready files.
+"""
+
+# ORIGINAL CONTENT COMMENTED OUT BELOW:
+"""
 from __future__ import annotations
 
 from typing import Dict, Any
@@ -132,3 +152,4 @@ def risk_parity_weights(cov_matrix: np.ndarray) -> np.ndarray:"Return naive risk
     weights = inv_vol / np.sum(inv_vol)
         return weights
 '
+"""

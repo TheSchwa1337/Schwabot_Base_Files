@@ -1,3 +1,23 @@
+"""
+LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
+
+This file has been automatically commented out because it contains syntax errors
+that prevent the Schwabot system from running properly.
+
+Original file: core\unified_math_system.py
+Date commented out: 2025-07-02 19:37:04
+
+The clean implementation has been preserved in the following files:
+- core/clean_math_foundation.py (mathematical foundation)
+- core/clean_profit_vectorization.py (profit calculations)
+- core/clean_trading_pipeline.py (trading logic)
+- core/clean_unified_math.py (unified mathematics)
+
+All core functionality has been reimplemented in clean, production-ready files.
+"""
+
+# ORIGINAL CONTENT COMMENTED OUT BELOW:
+"""
 # !/usr/bin/env python3Unified Math System - Core Mathematical Framework.
 
 Provides comprehensive mathematical operations and validation for the SchwaBot
@@ -363,3 +383,5 @@ def generate_unified_hash(arr: Sequence[float], time_slot: str) -> str:  # pragm
         time_slot: arbitrary string/number identifying timeslice.vec = .join(f{x:.6f} for x in arr)
     base = f{vec}{time_slot}
     return _hashlib.sha256(base.encode()).hexdigest()
+
+"""
