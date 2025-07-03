@@ -438,63 +438,72 @@ phi = math.atan2(momentum * 0.8, price_direction * 1.2)
         return theta, phi
 
 
-if __name__ == __main__:
-    print(🔭 Galileo Tensor Field Demo)
+if __name__ == "__main__":
+    print("Galileo Tensor Field Demo")
 
-# Initialize tensor field
+    # Initialize tensor field
     tensor_field = GalileoTensorField()
 
-# Test tensor synchronization
-test_cases = [(0.1, 0.12, High sync),  # Very close angles
-        (0.5, 0.7,Medium sync),  # Moderate dif ference
-        (1.0, -0.8,Low sync),  # Large difference
-        (math.pi / 4, math.pi / 4 + 0.02,Near perfect),  # Near perfect match
-]
+    # Test tensor synchronization
+    test_cases = [
+        (0.1, 0.12, "High sync"),  # Very close angles
+        (0.5, 0.7, "Medium sync"),  # Moderate difference
+        (1.0, -0.8, "Low sync"),  # Large difference
+        (math.pi / 4, math.pi / 4 + 0.02, "Near perfect"),  # Near perfect match
+    ]
 
-print(\n🔬 Testing tensor synchronization:)
-for theta, phi, description in test_cases:
+    print("\nTesting tensor synchronization:")
+    for theta, phi, description in test_cases:
         sync_score, result = tensor_field.galileo_tensor_sync(theta, phi, 0.9, 0.8)
-        print(f{description}: θ = {theta:.3f}, φ={phi:.3f})
-print(fSync score: {sync_score:.3f})print(fAlignment: {result.alignment.value})print(fAngular diff: {result.angular_difference:.3f})
+        print(f"{description}: θ = {theta:.3f}, φ={phi:.3f}")
+        print(f"Sync score: {sync_score:.3f}")
+        print(f"Alignment: {result.alignment.value}")
+        print(f"Angular diff: {result.angular_difference:.3f}")
 
-# Test immune trust
-trust, reasoning = tensor_field.validate_trajectory_immune_trust(theta, phi)
-print(f  Immune trust: {trust} - {reasoning})
-print()
+        # Test immune trust
+        trust, reasoning = tensor_field.validate_trajectory_immune_trust(theta, phi)
+        print(f"  Immune trust: {trust} - {reasoning}")
+        print()
 
-# Test with market data solutions
-print(🔬 Testing market solutions:)
-market_data = [(0.6, 0.4, Bullish momentum),(-0.3, 0.7,Bearish with high volatility),(0.1, 0.2,Sideways low activity),
-]
+    # Test with market data solutions
+    print("Testing market solutions:")
+    market_data = [
+        (0.6, 0.4, "Bullish momentum"),
+        (-0.3, 0.7, "Bearish with high volatility"),
+        (0.1, 0.2, "Sideways low activity"),
+    ]
 
-for price_dir, momentum, description in market_data:
+    for price_dir, momentum, description in market_data:
         theta, phi = create_market_solution(price_dir, momentum)
 
-# Add solutions to field
-qsc_id = tensor_field.add_qsc_solution(theta, 0.8)
+        # Add solutions to field
+        qsc_id = tensor_field.add_qsc_solution(theta, 0.8)
         gts_id = tensor_field.add_gts_solution(phi, 0.9)
 
-print(f{description}: QSC = {theta:.3f}, GTS={phi:.3f})
+        print(f"{description}: QSC = {theta:.3f}, GTS={phi:.3f}")
 
-# Test sync
-sync_score, result = tensor_field.galileo_tensor_sync(theta, phi)
-print(f  Sync: {sync_score:.3f}, Alignment: {result.alignment.value})
+        # Test sync
+        sync_score, result = tensor_field.galileo_tensor_sync(theta, phi)
+        print(f"  Sync: {sync_score:.3f}, Alignment: {result.alignment.value}")
 
-# Show harmonic pairs
-harmonic_pairs = tensor_field.find_harmonic_solutions()
-print(f\n📊 Found {len(harmonic_pairs)} harmonic pairs)
+    # Show harmonic pairs
+    harmonic_pairs = tensor_field.find_harmonic_solutions()
+    print(f"\nFound {len(harmonic_pairs)} harmonic pairs")
 
-# Get consensus
-consensus_angle, consensus_confidence = tensor_field.get_consensus_direction()
-if consensus_angle is not None:
+    # Get consensus
+    consensus_angle, consensus_confidence = tensor_field.get_consensus_direction()
+    if consensus_angle is not None:
         print(
-f📊 Consensus: angle = {consensus_angle:.3f}, confidence={
-consensus_confidence:.3f}
-)
+            f"Consensus: angle = {consensus_angle:.3f}, confidence={consensus_confidence:.3f}"
+        )
 
-# Show status
-print(\n📊 Tensor Field Status:)
+    # Show status
+    print("\nTensor Field Status:")
     status = tensor_field.get_tensor_field_status()
-print(fTotal syncs: {status['field_status']['total_syncs']})'print(f"Harmony rate: {status['field_status']['harmony_rate']:.3f})'print(f"QSC solutions: {status['solution_inventory']['qsc_solutions']})'print(f"GTS solutions: {status['solution_inventory']['gts_solutions']})
-print(🔭 Galileo Tensor Field Demo Complete)"""'"
+    print(f"Total syncs: {status['field_status']['total_syncs']}")
+    print(f"Harmony rate: {status['field_status']['harmony_rate']:.3f}")
+    print(f"QSC solutions: {status['solution_inventory']['qsc_solutions']}")
+    print(f"GTS solutions: {status['solution_inventory']['gts_solutions']}")
+
+    print("Galileo Tensor Field Demo Complete")
 """

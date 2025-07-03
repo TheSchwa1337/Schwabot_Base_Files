@@ -393,190 +393,262 @@ if pattern is None:
 if pattern.pattern_frequency > 0.3:  # Frequent pattern
             profit_sync_harmony += 0.1
 
-        return {qsc_alignment: min(1.0, enhanced_qsc),gts_confirmation: min(1.0, enhanced_gts),sync_harmony: min(1.0, profit_sync_harmony),
-}
+        return {
+            "qsc_alignment": min(1.0, enhanced_qsc),
+            "gts_confirmation": min(1.0, enhanced_gts),
+            "sync_harmony": min(1.0, profit_sync_harmony),
+        }
 
-def _update_profit_performance() -> None:Update profit performance tracking.# Track precision level usage
-precision_perf = self.precision_performance[decision.selected_precision_level]
-precision_perf[trades] += 1
+def _update_profit_performance(self) -> None:
+        """Update profit performance tracking."""
+        # Track precision level usage
+        precision_perf = self.precision_performance[self.decision.selected_precision_level]
+        precision_perf["trades"] += 1
 
-# Update extraction score tracking
-if decision.profit_extraction_score > 0.7:
+        # Update extraction score tracking
+        if self.decision.profit_extraction_score > 0.7:
             self.successful_profit_extractions += 1
 
-# Update average profit estimation
-        self.total_profit_realized += decision.expected_profit_usd
+        # Update average profit estimation
+        self.total_profit_realized += self.decision.expected_profit_usd
         self.avg_profit_per_trade = self.total_profit_realized / max(
             1, self.total_profit_decisions
-)
+        )
 
-def _adjust_profit_focus() -> None:
-        Adaptively adjust profit focus based on performance.# Get recent performance
-# Last 20 decisions
-recent_decisions = self.profit_decision_history[-20:]
+    def _adjust_profit_focus(self) -> None:
+        """Adaptively adjust profit focus based on performance."""
+        # Get recent performance
+        # Last 20 decisions
+        recent_decisions = self.profit_decision_history[-20:]
 
-if len(recent_decisions) < 10:
-            return # Calculate performance by precision level
-precision_performance = {}
-for level in PrecisionLevel: level_decisions = [
-d for d in recent_decisions if d.selected_precision_level == level
-]
-if level_decisions:
+        if len(recent_decisions) < 10:
+            return
+
+        # Calculate performance by precision level
+        precision_performance = {}
+        for level in self.PrecisionLevel:
+            level_decisions = [
+                d for d in recent_decisions if d.selected_precision_level == level
+            ]
+            if level_decisions:
                 avg_extraction_score = np.mean(
                     [d.profit_extraction_score for d in level_decisions]
-)
-precision_performance[level] = avg_extraction_score
+                )
+                precision_performance[level] = avg_extraction_score
 
-# Find best performing precision level
-if precision_performance:
+        # Find best performing precision level
+        if precision_performance:
             best_precision = max(precision_performance.items(), key=lambda x: x[1])[0]
 
-# Update current focus if significantly better
-if (:
-best_precision != self.current_profit_focus
-and precision_performance[best_precision]
-> precision_performance.get(self.current_profit_focus, 0.0) + 0.1
-):
+            # Update current focus if significantly better
+            if (
+                best_precision != self.current_profit_focus
+                and precision_performance[best_precision]
+                > precision_performance.get(self.current_profit_focus, 0.0) + 0.1
+            ):
+                self.current_profit_focus = best_precision
+                logger.info(
+                    f"Adjusted profit focus to {best_precision.value} "
+                    f"(performance: {precision_performance[best_precision]:.3f})"
+                )
 
-self.current_profit_focus = best_precision
-            logger.info(
-f💰 Adjusted profit focus to {best_precision.value}
-f(performance: {
-precision_performance[best_precision]:.3f}))
+    def get_profit_engine_status(self) -> Dict[str, Any]:
+        """Get comprehensive profit engine status."""
+        # Get biological engine status
+        biological_status = self.biological_engine.get_system_status()
 
-def get_profit_engine_status(self) -> Dict[str, Any]:Get comprehensive profit engine status.# Get biological engine status
-biological_status = self.biological_engine.get_system_status()
-
-# Get precision profit engine status
+        # Get precision profit engine status
         profit_status = self.precision_profit_engine.get_profit_status()
 
-# Calculate success rates
-profit_success_rate = self.successful_profit_extractions / max(
+        # Calculate success rates
+        profit_success_rate = self.successful_profit_extractions / max(
             1, self.total_profit_decisions
-)
+        )
 
-        return {profit_engine_performance: {
-                total_profit_decisions: self.total_profit_decisions,successful_extractions: self.successful_profit_extractions,profit_success_rate": profit_success_rate,total_profit_realized": self.total_profit_realized,avg_profit_per_trade": self.avg_profit_per_trade,current_profit_focus": self.current_profit_focus.value,
-},precision_performance": {level.value: {trades: perf[trades],total_profit": perf[profit],success_rate": perf[success_rate],
-}
-for level, perf in self.precision_performance.items():
-},biological_engine": biological_status,precision_profit_engine": profit_status,active_profit_patterns": len(self.precision_profit_engine.active_patterns),profit_focus_mode": self.profit_focus_mode.value,configuration": self.config,
-}
+        return {
+            "profit_engine_performance": {
+                "total_profit_decisions": self.total_profit_decisions,
+                "successful_extractions": self.successful_profit_extractions,
+                "profit_success_rate": profit_success_rate,
+                "total_profit_realized": self.total_profit_realized,
+                "avg_profit_per_trade": self.avg_profit_per_trade,
+                "current_profit_focus": self.current_profit_focus.value,
+            },
+            "precision_performance": {
+                level.value: {
+                    "trades": perf["trades"],
+                    "total_profit": perf["profit"],
+                    "success_rate": perf["success_rate"],
+                }
+                for level, perf in self.precision_performance.items()
+            },
+            "biological_engine": biological_status,
+            "precision_profit_engine": profit_status,
+            "active_profit_patterns": len(self.precision_profit_engine.active_patterns),
+            "profit_focus_mode": self.profit_focus_mode.value,
+            "configuration": self.config,
+        }
 
-def get_current_profit_opportunities(:
-self, current_price: float
-) -> List[Dict[str, Any]]:"Get current profit opportunities with recommendations.# Get precision profit recommendations
+    def get_current_profit_opportunities(
+        self, current_price: float
+    ) -> List[Dict[str, Any]]:
+        """Get current profit opportunities with recommendations."""
+        # Get precision profit recommendations
         profit_recommendations = (
             self.precision_profit_engine.get_trading_recommendations(current_price)
-)
+        )
 
-# Enhance with biological decision context
-enhanced_opportunities = []
+        # Enhance with biological decision context
+        enhanced_opportunities = []
 
-for rec in profit_recommendations:
+        for rec in profit_recommendations:
             # Calculate profit potential
             profit_potential = (
-                rec[current_profit] / rec[entry_price]if rec[entry_price] > 0:
-else 0.0
-)
+                rec["current_profit"] / rec["entry_price"]
+                if rec["entry_price"] > 0
+                else 0.0
+            )
 
-# Determine action priority
-action_priority = (
-HIGHif rec[confidence] > 0.8:
-                elseMEDIUMif rec[confidence] > 0.6 elseLOW)
+            # Determine action priority
+            action_priority = (
+                "HIGH"
+                if rec["confidence"] > 0.8
+                else "MEDIUM"
+                if rec["confidence"] > 0.6
+                else "LOW"
+            )
 
-enhanced_opportunities.append(
-{**rec,profit_potential: profit_potential,action_priority": action_priority,biological_alignment": self._assess_biological_alignment(rec),hash_pattern_strength": self._assess_hash_pattern_strength(rec),recommended_position_size": self._calculate_recommended_position_size(
-rec
-),
-}
-)
+            enhanced_opportunities.append(
+                {
+                    **rec,
+                    "profit_potential": profit_potential,
+                    "action_priority": action_priority,
+                    "biological_alignment": self._assess_biological_alignment(rec),
+                    "hash_pattern_strength": self._assess_hash_pattern_strength(rec),
+                    "recommended_position_size": self._calculate_recommended_position_size(
+                        rec
+                    ),
+                }
+            )
 
         return enhanced_opportunities
 
-def _assess_biological_alignment(self, recommendation: Dict[str, Any]) -> str:Assess how well the profit opportunity aligns with biological system.sync_harmony = recommendation.get(sync_harmony, 0.5)
+    def _assess_biological_alignment(self, recommendation: Dict[str, Any]) -> str:
+        """Assess how well the profit opportunity aligns with biological system."""
+        sync_harmony = recommendation.get("sync_harmony", 0.5)
 
-if sync_harmony > 0.8:
-            returnEXCELLENTelif sync_harmony > 0.6:
-            returnGOODelif sync_harmony > 0.4:
-            returnFAIRelse :
-            returnPOORdef _assess_hash_pattern_strength(self, recommendation: Dict[str, Any]) -> str:"Assess the strength of the hash pattern for this opportunity.confidence = recommendation.get(confidence, 0.5)
+        if sync_harmony > 0.8:
+            return "EXCELLENT"
+        elif sync_harmony > 0.6:
+            return "GOOD"
+        elif sync_harmony > 0.4:
+            return "FAIR"
+        else:
+            return "POOR"
 
-if confidence > 0.8:
-            returnSTRONGelif confidence > 0.6:
-            returnMODERATEelse :
-            returnWEAKdef _calculate_recommended_position_size(:
-self, recommendation: Dict[str, Any]
-) -> float:"Calculate recommended position size based on confidence and risk.base_size = 0.1  # 10% base position
-        confidence = recommendation.get(confidence, 0.5)sync_harmony = recommendation.get(sync_harmony, 0.5)
+    def _assess_hash_pattern_strength(self, recommendation: Dict[str, Any]) -> str:
+        """Assess the strength of the hash pattern for this opportunity."""
+        confidence = recommendation.get("confidence", 0.5)
 
-# Adjust based on confidence and synchronization
-size_multiplier = (confidence + sync_harmony) / 2.0
-recommended_size = base_size * size_multiplier
+        if confidence > 0.8:
+            return "STRONG"
+        elif confidence > 0.6:
+            return "MODERATE"
+        else:
+            return "WEAK"
+
+    def _calculate_recommended_position_size(
+        self, recommendation: Dict[str, Any]
+    ) -> float:
+        """Calculate recommended position size based on confidence and risk."""
+        base_size = 0.1  # 10% base position
+        confidence = recommendation.get("confidence", 0.5)
+        sync_harmony = recommendation.get("sync_harmony", 0.5)
+
+        # Adjust based on confidence and synchronization
+        size_multiplier = (confidence + sync_harmony) / 2.0
+        recommended_size = base_size * size_multiplier
 
         return min(0.25, max(0.01, recommended_size))  # Between 1% and 25%
 
 
 # Helper function for easy integration
 def create_profit_optimized_engine(
-enable_micro=True, enable_standard=True, enable_macro=True:
-) -> EnhancedMasterCycleProfitEngine:
-    Create a profit-optimized engine with specified precision levels.Args:
+    enable_micro=True, enable_standard=True, enable_macro=True
+) -> "EnhancedMasterCycleProfitEngine":
+    """Create a profit-optimized engine with specified precision levels.
+
+    Args:
         enable_micro: Enable micro-precision trading (cent-level profits)
         enable_standard: Enable standard-precision trading (dollar-level profits)
         enable_macro: Enable macro-precision trading (tens of dollars profits)
 
-Returns:
-        Configured profit engineconfig = {profit_focus_mode:adaptive_auto,profit_config": {enable_micro_trading: enable_micro,enable_standard_trading": enable_standard,enable_macro_trading": enable_macro,
-},
-}
+    Returns:
+        Configured profit engine
+    """
+    config = {
+        "profit_focus_mode": "adaptive_auto",
+        "profit_config": {
+            "enable_micro_trading": enable_micro,
+            "enable_standard_trading": enable_standard,
+            "enable_macro_trading": enable_macro,
+        },
+    }
 
-        return EnhancedMasterCycleProfitEngine(config)
+    return EnhancedMasterCycleProfitEngine(config)
 
 
-if __name__ == __main__:
-    print(💰🧬 Enhanced Master Cycle Profit Engine Demo)
+if __name__ == "__main__":
+    print("Enhanced Master Cycle Profit Engine Demo")
 
-# Initialize profit-optimized engine
+    # Initialize profit-optimized engine
     engine = create_profit_optimized_engine(
-enable_micro=True, enable_standard=True, enable_macro=True
-)
+        enable_micro=True, enable_standard=True, enable_macro=True
+    )
 
-# Simulate BTC trading with profit optimization
+    # Simulate BTC trading with profit optimization
     base_price = 50000.0
 
-print(\n🔬 Testing profit-optimized trading decisions:)
+    print("\nTesting profit-optimized trading decisions:")
 
-for i in range(10):
+    for i in range(10):
         # Simulate realistic price movement
-price_change = np.random.normal(0, 0.008)  # 0.8% volatility
+        price_change = np.random.normal(0, 0.008)  # 0.8% volatility
         price = base_price * (1 + price_change)
         volume = np.random.uniform(800, 1500)
 
-# Process with profit optimization
+        # Process with profit optimization
         decision = engine.process_profit_optimized_tick(price, volume)
 
-print(f\nTick {i + 1}: BTC ${price:,.2f})print(f🧬 Biological: {decision.biological_decision.decision.value})print(f💰 Precision: {decision.selected_precision_level.value.upper()})
-print(f🎯 Opportunity: {decision.profit_opportunity_type.value})print(f💵 Expected Profit: ${decision.expected_profit_usd:.2f})print(f🔥 Extraction Score: {decision.profit_extraction_score:.3f})print(f📊 Hash Pattern: {decision.price_hash_8_decimal[:8]}...)print(f🎪 16-bit Tick: {decision.tick_16bit_mapping})
+        print(f"\nTick {i + 1}: BTC ${price:,.2f}")
+        print(f"Biological: {decision.biological_decision.decision.value}")
+        print(f"Precision: {decision.selected_precision_level.value.upper()}")
+        print(f"Opportunity: {decision.profit_opportunity_type.value}")
+        print(f"Expected Profit: ${decision.expected_profit_usd:.2f}")
+        print(f"Extraction Score: {decision.profit_extraction_score:.3f}")
+        print(f"Hash Pattern: {decision.price_hash_8_decimal[:8]}...")
+        print(f"16-bit Tick: {decision.tick_16bit_mapping}")
 
-base_price = price
-time.sleep(0.1)
+        base_price = price
+        time.sleep(0.1)
 
-# Show comprehensive status
-print(\n📊 Profit Engine Status:)
+    # Show comprehensive status
+    print("\nProfit Engine Status:")
     status = engine.get_profit_engine_status()
 
-print(
-fTotal Decisions: {status['profit_engine_performance']['total_profit_decisions']})
-print('fSuccess Rate: {status['profit_engine_performance']['profit_success_rate']:.1%})
-print('fAvg Profit/Trade: ${status['profit_engine_performance']['avg_profit_per_trade']:.2f})
-print('fCurrent Focus: {status['profit_engine_performance']['current_profit_focus']})'print(fActive Patterns: {status['active_profit_patterns']})
+    print(f"Total Decisions: {status['profit_engine_performance']['total_profit_decisions']}")
+    print(f"Success Rate: {status['profit_engine_performance']['profit_success_rate']:.1%}")
+    print(f"Avg Profit/Trade: ${status['profit_engine_performance']['avg_profit_per_trade']:.2f}")
+    print(f"Current Focus: {status['profit_engine_performance']['current_profit_focus']}")
+    print(f"Active Patterns: {status['active_profit_patterns']}")
 
-# Show current opportunities
-opportunities = engine.get_current_profit_opportunities(base_price)
-if opportunities:
-        print(\n🎯 Current Profit Opportunities:)
-for opp in opportunities:
-            print('f{opp['precision_level'].upper()}: {opp['action']} -'f${opp['current_profit']:.2f} ({opp['action_priority']} priority))
-print(💰🧬 Enhanced Master Cycle Profit Engine Demo Complete)"""'"
+    # Show current opportunities
+    opportunities = engine.get_current_profit_opportunities(base_price)
+    if opportunities:
+        print("\nCurrent Profit Opportunities:")
+        for opp in opportunities:
+            print(f"{opp['precision_level'].upper()}: {opp['action']} - "
+                  f"${opp['current_profit']:.2f} ({opp['action_priority']} priority)")
+
+    print("Enhanced Master Cycle Profit Engine Demo Complete")
 """

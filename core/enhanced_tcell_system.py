@@ -562,13 +562,15 @@ self, operation: Callable, args: tuple, kwargs: dict
 ) -> float:Assess overall operation risk.risk_factors = self._assess_risk_factors(operation, args, kwargs)
         return sum(risk_factors.values()) / len(risk_factors)
 
-def update_operation_history(:
-self, operation_name: str, was_successful: bool
-) -> None:Update operation history.if operation_name not in self.operation_history:
-            self.operation_history[operation_name] = {total: 0,successful": 0}
+def update_operation_history(
+    self, operation_name: str, was_successful: bool
+) -> None:
+    """Update operation history."""
+    if operation_name not in self.operation_history:
+        self.operation_history[operation_name] = {"total": 0, "successful": 0}
 
-history = self.operation_history[operation_name]
-history[total] += 1
-if was_successful:
-            history[successful] += 1"""
+    history = self.operation_history[operation_name]
+    history["total"] += 1
+    if was_successful:
+        history["successful"] += 1"""
 """

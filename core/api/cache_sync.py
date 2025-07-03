@@ -83,11 +83,7 @@ class CacheSyncService:
             try:
                 mod: ModuleType = importlib.import_module(rel_mod)  # noqa: PERF401
             except Exception as exc:  # noqa: BLE001
-
-
-logger.error("Failed to import handler module %s: %s"
-logger.error("Failed to import rel_mod
-logger.error("Failed to import exc)
+                logger.error("Failed to import handler module %s: %s", rel_mod, exc)
                 continue
             for _, obj in inspect.getmembers(mod, inspect.isclass):
                 if issubclass(obj, BaseAPIHandler) and obj is not BaseAPIHandler:
