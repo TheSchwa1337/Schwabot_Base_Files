@@ -38,7 +38,9 @@ try:
     from core.profit_vector_forecast import ProfitVectorForecastEngine
     from core.risk_manager import RiskManager
     from core.strategy_logic import GhostState, StrategyBranch, StrategyLogic
-    from core.unified_profit_vectorization_system import UnifiedProfitVectorizationSystem
+    from core.unified_profit_vectorization_system import (
+        UnifiedProfitVectorizationSystem,
+    )
 
     # This seems to be a custom math library, likely in the schwabot package
     # from schwabot_unified_math import UnifiedTradingMathematics

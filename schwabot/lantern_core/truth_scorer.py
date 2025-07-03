@@ -65,9 +65,7 @@ class TruthScorer:
         self.correlation_threshold = 0.6  # Minimum correlation for validation
         self.confidence_decay = 0.95  # Confidence decay factor over time
 
-    def add_price_data(
-        self, price: float, volume: float = None, timestamp: float = None
-    ) -> None:
+    def add_price_data(self, price: float, volume: float = None, timestamp: float = None) -> None:
         """Add new price data for validation."""
         if timestamp is None:
             timestamp = time.time()
@@ -98,12 +96,8 @@ class TruthScorer:
         confidence_score = interpretation.get("confidence_score", 0.5)
 
         # Perform validation
-        historical_accuracy = self._calculate_historical_accuracy(
-            category, primary_meaning
-        )
-        market_correlation = self._calculate_market_correlation(
-            interpretation, current_price
-        )
+        historical_accuracy = self._calculate_historical_accuracy(category, primary_meaning)
+        market_correlation = self._calculate_market_correlation(interpretation, current_price)
         temporal_stability = self._calculate_temporal_stability(interpretation)
 
         # Calculate overall truth score
@@ -138,18 +132,14 @@ class TruthScorer:
 
         return truth_score_obj
 
-    def _calculate_historical_accuracy(
-        self, category: str, primary_meaning: str
-    ) -> float:
+    def _calculate_historical_accuracy(self, category: str, primary_meaning: str) -> float:
         """Calculate accuracy based on historical similar interpretations."""
         if not self.interpretation_history:
             return 0.5  # Neutral score for no history
 
         # Find similar interpretations in history
         similar_interpretations = [
-            interp
-            for interp in self.interpretation_history
-            if interp.get("category") == category
+            interp for interp in self.interpretation_history if interp.get("category") == category
         ]
 
         if not similar_interpretations:
@@ -163,9 +153,7 @@ class TruthScorer:
             if self._was_prediction_correct(interp):
                 correct_predictions += 1
 
-        accuracy = (
-            correct_predictions / total_predictions if total_predictions > 0 else 0.5
-        )
+        accuracy = correct_predictions / total_predictions if total_predictions > 0 else 0.5
         return max(0.0, min(1.0, accuracy))
 
     def _was_prediction_correct(self, interpretation: Dict[str, Any]) -> bool:
@@ -240,9 +228,7 @@ class TruthScorer:
 
         # Use price after reasonable delay (e.g., 1 hour later in simulation)
         target_time = timestamp + 3600  # 1 hour
-        relevant_after_prices = [
-            p for p in after_prices if p["timestamp"] <= target_time
-        ]
+        relevant_after_prices = [p for p in after_prices if p["timestamp"] <= target_time]
 
         if not relevant_after_prices:
             return 0.0
@@ -265,9 +251,7 @@ class TruthScorer:
 
         # Get recent price trend
         recent_prices = (
-            self.price_history[-10:]
-            if len(self.price_history) >= 10
-            else self.price_history
+            self.price_history[-10:] if len(self.price_history) >= 10 else self.price_history
         )
 
         if len(recent_prices) < 2:
@@ -399,8 +383,7 @@ class TruthScorer:
 
         # Update average accuracy
         self.average_accuracy = (
-            self.average_accuracy * (self.total_validations - 1)
-            + truth_score.truth_score
+            self.average_accuracy * (self.total_validations - 1) + truth_score.truth_score
         ) / self.total_validations
 
     def get_validation_statistics(self) -> Dict[str, Any]:
@@ -443,9 +426,7 @@ class TruthScorer:
 
         # Clear old cache entries
         old_keys = [
-            key
-            for key, score in self.validation_cache.items()
-            if score.created_at < cutoff_time
+            key for key, score in self.validation_cache.items() if score.created_at < cutoff_time
         ]
 
         for key in old_keys:
@@ -473,9 +454,7 @@ def demo_truth_scorer() -> Dict[str, Any]:
     base_price = 100.0
     for i in range(20):
         price = base_price + (i * 0.5) + np.random.normal(0, 0.2)
-        scorer.add_price_data(
-            price, timestamp=time.time() - (20 - i) * 300
-        )  # 5-minute intervals
+        scorer.add_price_data(price, timestamp=time.time() - (20 - i) * 300)  # 5-minute intervals
 
     # Create mock interpretation
     mock_interpretation = {

@@ -7,12 +7,13 @@ Core fractal injection system for Schwabot trading bot.
 Provides fractal pattern injection, synchronization, and decision-making capabilities.
 """
 
-import time
 import logging
-import numpy as np
-from datetime import datetime
-from typing import Dict, List, Optional, Any
+import time
 from dataclasses import dataclass
+from datetime import datetime
+from typing import Any, Dict, List, Optional
+
+import numpy as np
 
 # Import unified math system
 try:
@@ -58,9 +59,7 @@ class FractalInjector:
             fractal_id = f"fractal_{self.injection_count}_{int(time.time())}"
 
             # Process fractal pattern
-            processed_pattern = self._process_fractal_pattern(
-                pattern_data, fractal_type
-            )
+            processed_pattern = self._process_fractal_pattern(pattern_data, fractal_type)
 
             # Create fractal state
             fractal_state = {
@@ -101,9 +100,7 @@ class FractalInjector:
                 error_message=str(e),
             )
 
-    def _process_fractal_pattern(
-        self, pattern_data: np.ndarray, fractal_type: str
-    ) -> np.ndarray:
+    def _process_fractal_pattern(self, pattern_data: np.ndarray, fractal_type: str) -> np.ndarray:
         """Process fractal pattern based on type."""
         if fractal_type == "mandelbrot":
             return self._process_mandelbrot_pattern(pattern_data)
@@ -135,9 +132,7 @@ class FractalInjector:
         # Apply Sierpinski-specific processing
         return pattern_data.astype(bool).astype(float)
 
-    def synchronize_fractal_state(
-        self, fractal_id: str, new_state: Dict[str, Any]
-    ) -> bool:
+    def synchronize_fractal_state(self, fractal_id: str, new_state: Dict[str, Any]) -> bool:
         """Synchronize fractal state."""
         try:
             if fractal_id in self.active_fractals:
@@ -189,9 +184,7 @@ class FractalInjector:
             logger.error(f"Fractal cycle detection error: {e}")
             return []
 
-    def get_fractal_decision(
-        self, fractal_id: str, input_data: np.ndarray
-    ) -> Dict[str, Any]:
+    def get_fractal_decision(self, fractal_id: str, input_data: np.ndarray) -> Dict[str, Any]:
         """Get decision based on fractal analysis."""
         try:
             if fractal_id not in self.active_fractals:
@@ -237,12 +230,8 @@ class FractalInjector:
     def get_injection_statistics(self) -> Dict[str, Any]:
         """Get injection statistics."""
         total_injections = len(self.injection_history)
-        successful_injections = sum(
-            1 for result in self.injection_history if result.success
-        )
-        success_rate = (
-            successful_injections / total_injections if total_injections > 0 else 0.0
-        )
+        successful_injections = sum(1 for result in self.injection_history if result.success)
+        success_rate = successful_injections / total_injections if total_injections > 0 else 0.0
 
         return {
             "total_injections": total_injections,

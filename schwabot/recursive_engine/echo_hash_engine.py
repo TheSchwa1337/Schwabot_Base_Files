@@ -1,6 +1,7 @@
-import numpy as np
 import hashlib
-from typing import List, Dict, Any
+from typing import Any, Dict, List
+
+import numpy as np
 
 
 # Placeholder for a PatternMatcher or similar utility for composite_similarity
@@ -63,14 +64,10 @@ class SHAGravitationField:
     """
 
     def __init__(self) -> None:
-        self.attractors: Dict[
-            str, Dict[str, Any]
-        ] = {}  # SHA key -> attractor properties
+        self.attractors: Dict[str, Dict[str, Any]] = {}  # SHA key -> attractor properties
         self.G: float = 0.1  # Gravitational constant
 
-    def add_attractor(
-        self, sha_key: str, profit: float, entropy: float, coherence: float
-    ) -> None:
+    def add_attractor(self, sha_key: str, profit: float, entropy: float, coherence: float) -> None:
         """Adds or updates SHA attractor based on profit, entropy, and coherence."""
         if sha_key not in self.attractors:
             self.attractors[sha_key] = {
@@ -124,9 +121,7 @@ class EchoHashEngine:
     ) -> None:
         self.recursive_registry = recursive_registry
         self.sha_gravitation_field = SHAGravitationField()
-        self.sha_gravitation_field.G = (
-            gravitational_constant  # Set gravitational constant
-        )
+        self.sha_gravitation_field.G = gravitational_constant  # Set gravitational constant
 
     def generate_sha_fingerprint(self, data: bytes) -> Dict[str, Any]:
         """
@@ -176,9 +171,7 @@ class EchoHashEngine:
 
         # Compute gravitational field strength at current pattern's position
         current_pos = np.array([current_entropy, current_coherence])
-        gravitational_force = self.sha_gravitation_field.compute_field_strength(
-            current_pos
-        )
+        gravitational_force = self.sha_gravitation_field.compute_field_strength(current_pos)
 
         # Get weighted memory from registry for this SHA key
         sha_memory = self.recursive_registry.get_sha_memory(idx42, idx81)
@@ -197,8 +190,7 @@ class EchoHashEngine:
             )  # More occurrences -> higher confidence
             echo_match_confidence = max(
                 echo_match_confidence,
-                sha_memory["total_weight"]
-                / self.recursive_registry.loop_memory_ring.size,
+                sha_memory["total_weight"] / self.recursive_registry.loop_memory_ring.size,
             )
 
             # Recall bias could be based on historical profit or entropy profile of the echo

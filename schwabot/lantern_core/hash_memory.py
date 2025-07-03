@@ -10,17 +10,19 @@ Memory → Pattern Recognition → Profitable Predictions.
 """
 
 from __future__ import annotations
+
+import hashlib
 import json
 import time
-import hashlib
-from typing import Dict, List, Any, Optional, TYPE_CHECKING
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import TYPE_CHECKING, Any, Dict, List, Optional
 
 import numpy as np
 
 if TYPE_CHECKING:
     from .lantern_eye import HashBlock
+
 from .semantic_interpreter import LanguagePattern, SemanticCategory
 
 
@@ -102,9 +104,7 @@ class HashMemoryDatabase:
         self.correlations: Dict[str, SemanticCorrelation] = {}
         # Hash prefix -> correlation IDs
         self.hash_index: Dict[str, List[str]] = {}
-        self.category_index: Dict[
-            SemanticCategory, List[str]
-        ] = {}  # Category -> correlation IDs
+        self.category_index: Dict[SemanticCategory, List[str]] = {}  # Category -> correlation IDs
         # Profit range -> correlation IDs
         self.profit_index: Dict[str, List[str]] = {}
 
@@ -123,9 +123,7 @@ class HashMemoryDatabase:
             if category not in self.category_index:
                 self.category_index[category] = []
 
-    def _generate_hash_signature(
-        self: "HashMemoryDatabase", hash_block: HashBlock
-    ) -> str:
+    def _generate_hash_signature(self: "HashMemoryDatabase", hash_block: HashBlock) -> str:
         """Generate a signature for hash pattern matching."""
         # Create signature from key hash characteristics
         signature_components = [
@@ -140,11 +138,7 @@ class HashMemoryDatabase:
                 if hash_block.entropy_block
                 else "S0.000"
             ),
-            (
-                f"D{hash_block.entropy_block.recursion_depth}"
-                if hash_block.entropy_block
-                else "D0"
-            ),
+            (f"D{hash_block.entropy_block.recursion_depth}" if hash_block.entropy_block else "D0"),
         ]
 
         signature = "_".join(signature_components)
@@ -169,9 +163,7 @@ class HashMemoryDatabase:
         self.category_index[category].append(correlation_id)
 
         # Profit index
-        profit_range = self._get_profit_range(
-            correlation.semantic_pattern.profit_potential
-        )
+        profit_range = self._get_profit_range(correlation.semantic_pattern.profit_potential)
         if profit_range not in self.profit_index:
             self.profit_index[profit_range] = []
         self.profit_index[profit_range].append(correlation_id)
@@ -307,8 +299,7 @@ class HashMemoryDatabase:
 
                     # Check semantic similarity
                     if (
-                        correlation.semantic_pattern.category
-                        == semantic_pattern.category
+                        correlation.semantic_pattern.category == semantic_pattern.category
                         and abs(
                             correlation.semantic_pattern.confidence_score
                             - semantic_pattern.confidence_score
@@ -338,9 +329,7 @@ class HashMemoryDatabase:
 
         # Sort by correlation strength and usage
         similar_patterns.sort(
-            key=lambda x: (
-                x.correlation_coefficient * 0.7 + (x.usage_count / 100.0) * 0.3
-            ),
+            key=lambda x: (x.correlation_coefficient * 0.7 + (x.usage_count / 100.0) * 0.3),
             reverse=True,
         )
 
@@ -374,16 +363,13 @@ class HashMemoryDatabase:
 
         for correlation in self.correlations.values():
             if correlation.semantic_pattern.profit_potential >= min_profit_potential:
-                if (
-                    correlation.correlation_coefficient > 0.6
-                ):  # Must have good correlation
+                if correlation.correlation_coefficient > 0.6:  # Must have good correlation
                     high_profit_patterns.append(correlation)
 
         # Sort by profit potential and correlation
         high_profit_patterns.sort(
             key=lambda x: (
-                x.semantic_pattern.profit_potential * 0.6
-                + x.correlation_coefficient * 0.4
+                x.semantic_pattern.profit_potential * 0.6 + x.correlation_coefficient * 0.4
             ),
             reverse=True,
         )
@@ -473,9 +459,7 @@ class HashMemoryDatabase:
                     data = json.load(f)
 
                 # Load correlations
-                for correlation_id, correlation_data in data.get(
-                    "correlations", {}
-                ).items():
+                for correlation_id, correlation_data in data.get("correlations", {}).items():
                     correlation = SemanticCorrelation.from_dict(correlation_data)
                     self.correlations[correlation_id] = correlation
                     self._index_correlation(correlation_id, correlation)
@@ -485,14 +469,10 @@ class HashMemoryDatabase:
                 self.total_stored = metadata.get("total_stored", 0)
                 self.total_retrieved = metadata.get("total_retrieved", 0)
                 self.cache_hits = metadata.get("cache_hits", 0)
-                self.correlation_strength_sum = metadata.get(
-                    "correlation_strength_sum", 0.0
-                )
+                self.correlation_strength_sum = metadata.get("correlation_strength_sum", 0.0)
                 self.created_at = metadata.get("created_at", time.time())
 
-                print(
-                    f"Loaded {len(self.correlations)} correlations from memory database"
-                )
+                print(f"Loaded {len(self.correlations)} correlations from memory database")
 
         except Exception as e:
             print(f"Error loading hash memory database: {e}")
@@ -512,9 +492,7 @@ class HashMemoryDatabase:
                     [p for p in patterns if p.correlation_coefficient > 0.7]
                 ),
                 "average_correlation": (
-                    np.mean([p.correlation_coefficient for p in patterns])
-                    if patterns
-                    else 0.0
+                    np.mean([p.correlation_coefficient for p in patterns]) if patterns else 0.0
                 ),
             }
 
@@ -530,9 +508,7 @@ class HashMemoryDatabase:
             "total_stored_lifetime": self.total_stored,
             "total_retrieved_lifetime": self.total_retrieved,
             "cache_hit_rate": (
-                self.cache_hits / self.total_retrieved
-                if self.total_retrieved > 0
-                else 0.0
+                self.cache_hits / self.total_retrieved if self.total_retrieved > 0 else 0.0
             ),
             "average_correlation_strength": (
                 self.correlation_strength_sum / len(self.correlations)

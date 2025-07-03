@@ -6,19 +6,6 @@ as meaningful language patterns, creating a recursive profit oracle through entr
 fractal analysis.
 """
 
-# Import base components first
-from .entropy_generator import EntropyGenerator, FractalBlock
-from .semantic_interpreter import LanguagePattern, SemanticInterpreter
-from .truth_scorer import TruthScore, TruthScorer
-from .nexus_thought_core import NexusThoughtCore, ZalgoLockState
-
-# Import memory components
-from .hash_memory import HashMemoryDatabase, SemanticCorrelation
-
-# Import higher-level components that depend on others
-from .lantern_eye import HashBlock, LanternEye, SemanticInterpretation
-from .main_loop import LanternMainLoop, LanternProcessingResult
-
 # Import enhanced components
 from .channel_relay_navigator import (
     BitDepth,
@@ -28,12 +15,25 @@ from .channel_relay_navigator import (
     NavigationVector,
     RelayState,
 )
+from .enhanced_main_loop import EnhancedLanternMainLoop
+
+# Import base components first
+from .entropy_generator import EntropyGenerator, FractalBlock
+
+# Import memory components
+from .hash_memory import HashMemoryDatabase, SemanticCorrelation
+
+# Import higher-level components that depend on others
+from .lantern_eye import HashBlock, LanternEye, SemanticInterpretation
 from .legacy_math_connectivity import (
     ConnectivityMatrix,
     LegacyMathematicalConnectivity,
     LegacyMathVector,
 )
-from .enhanced_main_loop import EnhancedLanternMainLoop
+from .main_loop import LanternMainLoop, LanternProcessingResult
+from .nexus_thought_core import NexusThoughtCore, ZalgoLockState
+from .semantic_interpreter import LanguagePattern, SemanticInterpreter
+from .truth_scorer import TruthScore, TruthScorer
 
 __all__ = [
     # Core Components

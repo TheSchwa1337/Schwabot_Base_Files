@@ -11,12 +11,14 @@ Hash → Entropy Block → Semantic Meaning
 """
 
 from __future__ import annotations
-import hashlib
-import numpy as np
-import time
-from typing import Dict, List, Any, Optional
-from dataclasses import dataclass, field
+
 import cmath
+import hashlib
+import time
+from dataclasses import dataclass, field
+from typing import Any, Dict, List, Optional
+
+import numpy as np
 
 
 @dataclass
@@ -116,9 +118,7 @@ class EntropyGenerator:
 
         return sequence
 
-    def _create_entropy_layers(
-        self, fractal_sequence: List[complex]
-    ) -> List[List[float]]:
+    def _create_entropy_layers(self, fractal_sequence: List[complex]) -> List[List[float]]:
         """Create multiple entropy layers from fractal sequence"""
         layers = []
 
@@ -151,9 +151,7 @@ class EntropyGenerator:
 
         return layers
 
-    def _calculate_harmonic_frequencies(
-        self, entropy_layers: List[List[float]]
-    ) -> List[float]:
+    def _calculate_harmonic_frequencies(self, entropy_layers: List[List[float]]) -> List[float]:
         """Extract harmonic frequencies from entropy patterns"""
         frequencies = []
 
@@ -170,9 +168,7 @@ class EntropyGenerator:
                 if len(sign_changes) > 0:
                     # Estimate frequency from zero crossings
                     avg_period = (
-                        len(layer) / len(sign_changes)
-                        if len(sign_changes) > 0
-                        else len(layer)
+                        len(layer) / len(sign_changes) if len(sign_changes) > 0 else len(layer)
                     )
                     frequency = 1.0 / avg_period if avg_period > 0 else 0.0
                 else:
@@ -184,9 +180,7 @@ class EntropyGenerator:
 
         return frequencies
 
-    def _calculate_phase_relationships(
-        self, entropy_layers: List[List[float]]
-    ) -> List[float]:
+    def _calculate_phase_relationships(self, entropy_layers: List[List[float]]) -> List[float]:
         """Calculate phase relationships between entropy layers"""
         phases = []
 
@@ -240,9 +234,7 @@ class EntropyGenerator:
         final_convergence = convergence_patterns[-1] if convergence_patterns else 1.0
 
         # Calculate stability as inverse of variance with convergence weighting
-        stability = (
-            1.0 / (1.0 + convergence_variance) * (1.0 / (1.0 + final_convergence))
-        )
+        stability = 1.0 / (1.0 + convergence_variance) * (1.0 / (1.0 + final_convergence))
 
         return min(stability, 1.0)  # Cap at 1.0
 
@@ -311,9 +303,7 @@ class EntropyGenerator:
 
         # Calculate metrics
         entropy_score = self._calculate_entropy_score(entropy_layers)
-        stability_index = self._calculate_stability_index(
-            fractal_sequence, convergence_patterns
-        )
+        stability_index = self._calculate_stability_index(fractal_sequence, convergence_patterns)
         temporal_signature = self._generate_temporal_signature(fractal_sequence)
 
         # Create fractal block
@@ -362,9 +352,7 @@ class EntropyGenerator:
             "stability_variance": np.var(stability_indices),
             "average_recursion_depth": np.mean(recursion_depths),
             "harmonic_frequency_range": (
-                [min(all_frequencies), max(all_frequencies)]
-                if all_frequencies
-                else [0, 0]
+                [min(all_frequencies), max(all_frequencies)] if all_frequencies else [0, 0]
             ),
             # Sample of signatures
             "temporal_signatures": [block.temporal_signature for block in blocks[:10]],

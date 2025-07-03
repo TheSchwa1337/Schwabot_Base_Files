@@ -16,14 +16,15 @@ Mathematical Foundation:
 - Multi-Dimensional Recursive Collapse: MDRC(x,y,z,t)
 """
 
-from contextvars import ContextVar
 import hashlib
-import time
 import math
-import numpy as np
-from typing import List, Dict, Optional, Callable, Any, Set
+import time
+from contextvars import ContextVar
 from dataclasses import dataclass
 from enum import Enum
+from typing import Any, Callable, Dict, List, Optional, Set
+
+import numpy as np
 
 
 class LogicFramework(Enum):
@@ -135,9 +136,7 @@ class VariableLogicGate:
     """
 
     @staticmethod
-    def membership_function(
-        x: float, threshold: float = 0.5, steepness: float = 2.0
-    ) -> float:
+    def membership_function(x: float, threshold: float = 0.5, steepness: float = 2.0) -> float:
         """
         Fuzzy membership function: μ_A(x): X → [0,1]
         """
@@ -190,10 +189,7 @@ class RecursiveQuantumFolder:
             return value
 
         # Quantum folding transformation
-        folded = (
-            math.sin(value * math.pi) * self.beta
-            + math.cos(value * math.e) * self.gamma
-        )
+        folded = math.sin(value * math.pi) * self.beta + math.cos(value * math.e) * self.gamma
 
         self.fold_history.append(folded)
 
@@ -210,12 +206,8 @@ class RecursiveQuantumFolder:
 
         for _ in range(iterations):
             # Apply collapse transformation across all dimensions
-            new_x = (
-                math.sin(states["x"]) * self.beta + math.cos(states["t"]) * self.gamma
-            )
-            new_y = (
-                math.cos(states["y"]) * self.beta + math.sin(states["z"]) * self.gamma
-            )
+            new_x = math.sin(states["x"]) * self.beta + math.cos(states["t"]) * self.gamma
+            new_y = math.cos(states["y"]) * self.beta + math.sin(states["z"]) * self.gamma
             new_z = math.tan(states["z"] * 0.1) * self.beta + states["x"] * self.gamma
             new_t = (states["t"] + states["x"] * states["y"]) * 0.5
 
@@ -398,9 +390,7 @@ class EnhancedVortexSecurity:
         modulated_strength = self._adaptive_entropy_modulation(folded_strength, entropy)
 
         # Select logic framework
-        framework = self.swap_logic.select_framework(
-            entropy, modulated_strength, self.GAMMA
-        )
+        framework = self.swap_logic.select_framework(entropy, modulated_strength, self.GAMMA)
 
         # Execute logic with selected framework
         threat_probability = self.swap_logic.execute_logic(threat_inputs, framework)
@@ -409,9 +399,7 @@ class EnhancedVortexSecurity:
         quantum_coherence = abs(math.sin(modulated_strength * math.pi))
 
         # Calculate pattern fitness
-        pattern_fitness = self._pattern_fitness(
-            len(self.security_chain), modulated_strength
-        )
+        pattern_fitness = self._pattern_fitness(len(self.security_chain), modulated_strength)
 
         # Generate session hash
         session_hash = self._vortex_hash(
@@ -506,9 +494,7 @@ class EnhancedVortexSecurity:
         folded_strength = self.quantum_folder.quantum_fold(decision_strength, depth=3)
 
         # Apply entropy modulation
-        modulated_strength = self._adaptive_entropy_modulation(
-            folded_strength, state.entropy_level
-        )
+        modulated_strength = self._adaptive_entropy_modulation(folded_strength, state.entropy_level)
 
         # Check pattern fitness
         fitness = self._pattern_fitness(index, modulated_strength)

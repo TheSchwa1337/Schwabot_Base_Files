@@ -10,11 +10,13 @@ Entropy Block → Semantic Patterns → Market Language
 """
 
 from __future__ import annotations
-import numpy as np
+
 import time
-from typing import Dict, List, Any
 from dataclasses import dataclass, field
 from enum import Enum
+from typing import Any, Dict, List
+
+import numpy as np
 
 from .entropy_generator import FractalBlock
 
@@ -249,9 +251,7 @@ class SemanticInterpreter:
             ],
         }
 
-    def _analyze_entropy_characteristics(
-        self, fractal_block: FractalBlock
-    ) -> Dict[str, float]:
+    def _analyze_entropy_characteristics(self, fractal_block: FractalBlock) -> Dict[str, float]:
         """Analyze key characteristics of the entropy block"""
         characteristics = {}
 
@@ -265,21 +265,15 @@ class SemanticInterpreter:
         if fractal_block.convergence_patterns:
             convergence_trend = np.mean(np.diff(fractal_block.convergence_patterns))
             characteristics["convergence_trend"] = convergence_trend
-            characteristics["convergence_volatility"] = np.std(
-                fractal_block.convergence_patterns
-            )
+            characteristics["convergence_volatility"] = np.std(fractal_block.convergence_patterns)
         else:
             characteristics["convergence_trend"] = 0.0
             characteristics["convergence_volatility"] = 0.0
 
         # Harmonic analysis
         if fractal_block.harmonic_frequencies:
-            characteristics["harmonic_strength"] = np.mean(
-                fractal_block.harmonic_frequencies
-            )
-            characteristics["harmonic_variance"] = np.var(
-                fractal_block.harmonic_frequencies
-            )
+            characteristics["harmonic_strength"] = np.mean(fractal_block.harmonic_frequencies)
+            characteristics["harmonic_variance"] = np.var(fractal_block.harmonic_frequencies)
         else:
             characteristics["harmonic_strength"] = 0.0
             characteristics["harmonic_variance"] = 0.0
@@ -289,9 +283,7 @@ class SemanticInterpreter:
             characteristics["phase_coherence"] = 1.0 / (
                 1.0 + np.std(fractal_block.phase_relationships)
             )
-            characteristics["phase_alignment"] = np.mean(
-                np.cos(fractal_block.phase_relationships)
-            )
+            characteristics["phase_alignment"] = np.mean(np.cos(fractal_block.phase_relationships))
         else:
             characteristics["phase_coherence"] = 0.5
             characteristics["phase_alignment"] = 0.0
@@ -363,8 +355,7 @@ class SemanticInterpreter:
         else:
             # Default scoring
             score = (
-                characteristics["entropy_level"] * 0.5
-                + characteristics["entropy_variance"] * 0.5
+                characteristics["entropy_level"] * 0.5 + characteristics["entropy_variance"] * 0.5
             )
 
         return max(0.0, min(1.0, score))
@@ -405,9 +396,7 @@ class SemanticInterpreter:
 
         # Select vocabulary word
         vocab_words = self.meaning_vocabulary[vocab_category]
-        word_index = int(characteristics["harmonic_strength"] * len(vocab_words)) % len(
-            vocab_words
-        )
+        word_index = int(characteristics["harmonic_strength"] * len(vocab_words)) % len(vocab_words)
         vocab_word = vocab_words[word_index]
 
         # Construct enhanced meaning
@@ -435,9 +424,7 @@ class SemanticInterpreter:
                 "High entropy suggests significant market uncertainty and potential for large moves"
             )
         elif characteristics["entropy_level"] < 0.2:
-            insights.append(
-                "Low entropy indicates market stability and predictable price action"
-            )
+            insights.append("Low entropy indicates market stability and predictable price action")
 
         # Stability-based insights
         if characteristics["stability_level"] > 0.8:
@@ -540,9 +527,7 @@ class SemanticInterpreter:
         # Lower entropy = longer relevance
         entropy_factor = 1.0 - characteristics["entropy_level"]
 
-        temporal_relevance = (
-            depth_factor * 0.4 + stability_factor * 0.3 + entropy_factor * 0.3
-        )
+        temporal_relevance = depth_factor * 0.4 + stability_factor * 0.3 + entropy_factor * 0.3
 
         return min(temporal_relevance, 1.0)
 
@@ -572,14 +557,10 @@ class SemanticInterpreter:
         )
 
         # Generate contextual insights
-        contextual_insights = self._generate_contextual_insights(
-            characteristics, pattern_name
-        )
+        contextual_insights = self._generate_contextual_insights(characteristics, pattern_name)
 
         # Calculate metrics
-        confidence_score = template["confidence_base"] * characteristics.get(
-            "phase_coherence", 0.5
-        )
+        confidence_score = template["confidence_base"] * characteristics.get("phase_coherence", 0.5)
         profit_potential = self._calculate_profit_potential(characteristics, template)
         risk_assessment = self._assess_risk_level(characteristics, template)
         temporal_relevance = self._calculate_temporal_relevance(characteristics)
@@ -611,8 +592,7 @@ class SemanticInterpreter:
         # Update performance metrics
         self.interpretations_performed += 1
         self.average_confidence = (
-            self.average_confidence * (self.interpretations_performed - 1)
-            + confidence_score
+            self.average_confidence * (self.interpretations_performed - 1) + confidence_score
         ) / self.interpretations_performed
 
         return language_pattern
@@ -623,8 +603,6 @@ class SemanticInterpreter:
             "total_interpretations": self.interpretations_performed,
             "average_confidence_score": self.average_confidence,
             "pattern_template_count": len(self.pattern_templates),
-            "vocabulary_size": sum(
-                len(words) for words in self.meaning_vocabulary.values()
-            ),
+            "vocabulary_size": sum(len(words) for words in self.meaning_vocabulary.values()),
             "semantic_categories": [cat.value for cat in SemanticCategory],
         }

@@ -19,13 +19,14 @@ Integration with SchwaBot Vortex Math Security Protocol (VMSP) provides enhanced
 protection through pattern-based authentication and recursive mathematical legitimacy.
 """
 
-import numpy as np
+import cmath
 import hashlib
 import time
-import cmath
-from typing import List, Dict, Any, Tuple, Optional
 from dataclasses import dataclass
 from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple
+
+import numpy as np
 
 from .vortex_security import get_vortex_security
 
@@ -108,9 +109,7 @@ class OmegaLayer:
 
         return complex(real_part / 255.0, imag_part / 127.0)
 
-    def _calculate_convergence_metric(
-        self, z_current: complex, z_previous: complex
-    ) -> float:
+    def _calculate_convergence_metric(self, z_current: complex, z_previous: complex) -> float:
         """Calculate convergence metric for fractal stability analysis"""
         return abs(z_current - z_previous)
 
@@ -310,9 +309,7 @@ class GammaLayer:
         """
         # Normalize wave to probability-like distribution
         wave_abs = np.abs(wave)
-        wave_normalized = (
-            wave_abs / np.sum(wave_abs) if np.sum(wave_abs) > 0 else wave_abs
-        )
+        wave_normalized = wave_abs / np.sum(wave_abs) if np.sum(wave_abs) > 0 else wave_abs
 
         # Calculate entropy
         entropy = 0.0
@@ -386,13 +383,13 @@ class AlphaEncryption:
 
         # Calculate total entropy
         total_entropy = (
-            omega_state.convergence_metric
-            + beta_state.bayesian_entropy
-            + gamma_state.wave_entropy
+            omega_state.convergence_metric + beta_state.bayesian_entropy + gamma_state.wave_entropy
         ) / 3.0
 
         # Generate encryption hash
-        encryption_data = f"{omega_state.complex_state}_{beta_state.gate_state}_{len(gamma_state.harmonic_wave)}"
+        encryption_data = (
+            f"{omega_state.complex_state}_{beta_state.gate_state}_{len(gamma_state.harmonic_wave)}"
+        )
         encryption_hash = hashlib.sha256(encryption_data.encode()).hexdigest()
 
         processing_time = time.time() - start_time
@@ -453,9 +450,7 @@ class AlphaEncryption:
                 print(
                     f"⚠️  VMSP Security Warning: Pattern fitness validation failed for {alpha_result.encryption_hash[:16]}..."
                 )
-                print(
-                    "   This would normally trigger security lockdown in production mode."
-                )
+                print("   This would normally trigger security lockdown in production mode.")
             else:
                 self.vortex_security.enforce_security_lockdown(
                     f"Alpha Encryption security validation failed: {alpha_result.encryption_hash}",
@@ -489,9 +484,7 @@ class AlphaEncryption:
         else:
             return decryption_hint
 
-    def get_security_analysis(
-        self, alpha_result: AlphaEncryptionResult
-    ) -> Dict[str, Any]:
+    def get_security_analysis(self, alpha_result: AlphaEncryptionResult) -> Dict[str, Any]:
         """Analyze Alpha Encryption security metrics"""
         return {
             "encryption_hash": alpha_result.encryption_hash,
@@ -510,9 +503,7 @@ class AlphaEncryption:
             },
             "gamma_analysis": {
                 "wave_entropy": alpha_result.gamma_state.wave_entropy,
-                "harmonic_components": len(
-                    alpha_result.gamma_state.frequency_components
-                ),
+                "harmonic_components": len(alpha_result.gamma_state.frequency_components),
                 "frequency_range": [
                     min(alpha_result.gamma_state.frequency_components),
                     max(alpha_result.gamma_state.frequency_components),
@@ -522,17 +513,13 @@ class AlphaEncryption:
             "security_score": self._calculate_alpha_security_score(alpha_result),
         }
 
-    def _calculate_alpha_security_score(
-        self, alpha_result: AlphaEncryptionResult
-    ) -> float:
+    def _calculate_alpha_security_score(self, alpha_result: AlphaEncryptionResult) -> float:
         """Calculate Alpha Encryption security score (0-100)"""
         # Component scores
         entropy_score = min(100, alpha_result.total_entropy * 20)
         depth_score = min(100, alpha_result.omega_state.recursion_depth)
         coherence_score = alpha_result.beta_state.quantum_coherence * 100
-        complexity_score = min(
-            100, len(alpha_result.gamma_state.frequency_components) * 10
-        )
+        complexity_score = min(100, len(alpha_result.gamma_state.frequency_components) * 10)
 
         # Weighted security score
         security_score = (

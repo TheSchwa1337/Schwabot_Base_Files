@@ -6,6 +6,7 @@ import numpy as np
 from utils.safe_print import safe_print
 
 from core.unified_math_system import unified_math
+
 # from dual_unicore_handler import DualUnicoreHandler
 
 # Initialize Unicode handler
@@ -79,9 +80,7 @@ class MatrixFaultResolver:
                 else np.zeros_like(matrix)
             )
 
-    def resolve_nan_values(
-        self, matrix: np.ndarray, method: str = "zero"
-    ) -> np.ndarray:
+    def resolve_nan_values(self, matrix: np.ndarray, method: str = "zero") -> np.ndarray:
         """Resolves NaN values in a matrix."""
         try:
             if method == "zero":
@@ -133,9 +132,7 @@ class MatrixFaultResolver:
         except Exception as e:
             logger.error(f"Matrix multiplication fault resolution failed: {e}")
             # Return fallback result
-            fallback_shape = (
-                (A.shape[0], B.shape[1]) if A.ndim == 2 and B.ndim == 2 else (1, 1)
-            )
+            fallback_shape = (A.shape[0], B.shape[1]) if A.ndim == 2 and B.ndim == 2 else (1, 1)
             fallback_result = np.zeros(fallback_shape)
             resolution_info = {"method": "fallback", "success": False, "error": str(e)}
             return fallback_result, resolution_info
@@ -178,9 +175,7 @@ class MatrixFaultResolver:
             resolution_info = {"method": "fallback", "success": False, "error": str(e)}
             return fallback_vals, fallback_vecs, resolution_info
 
-    def resolve_inversion_fault(
-        self, matrix: np.ndarray
-    ) -> Tuple[np.ndarray, Dict[str, Any]]:
+    def resolve_inversion_fault(self, matrix: np.ndarray) -> Tuple[np.ndarray, Dict[str, Any]]:
         """Resolves faults in matrix inversion."""
         resolution_info = {}
         try:
@@ -232,9 +227,7 @@ def check_matrix_validity(matrix: np.ndarray) -> Dict[str, Any]:
     return matrix_resolver.check_matrix_validity(matrix)
 
 
-def resolve_singular_matrix(
-    matrix: np.ndarray, regularization: float = 1e-6
-) -> np.ndarray:
+def resolve_singular_matrix(matrix: np.ndarray, regularization: float = 1e-6) -> np.ndarray:
     """Convenience function to resolve a singular matrix."""
     return matrix_resolver.resolve_singular_matrix(matrix, regularization)
 

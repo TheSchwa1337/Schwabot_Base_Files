@@ -125,9 +125,7 @@ def test_enhanced_main_loop() -> bool:
         print("   ✅ Enhanced Main Loop: WORKING")
         print(f"   💰 Price: ${market_data['price']:.2f}")
         print(f"   🎯 Confidence: {result.confidence_score:.3f}")
-        print(
-            f"   🚪 Gate Validation: {'PASS' if result.gate_validation_result else 'FAIL'}"
-        )
+        print(f"   🚪 Gate Validation: {'PASS' if result.gate_validation_result else 'FAIL'}")
         print(f"   ⏱️  Processing Time: {result.processing_time:.4f}s")
 
         # Test analytics

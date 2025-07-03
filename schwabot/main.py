@@ -25,11 +25,10 @@ import numpy as np
 
 # Import core mathematical systems
 try:
-    from core.unified_math_system import UnifiedMathSystem
     from core.schwafit_trading_integration import (
         SchwafitTradingIntegration,
-        schwafit_trading_integration,
     )
+    from core.unified_math_system import UnifiedMathSystem
     from dual_unicore_handler import DualUnicoreHandler
     from schwabot import get_info, initialize, shutdown
 
@@ -90,9 +89,7 @@ def parse_arguments() -> argparse.Namespace:
         default=["BTC/USDT", "ETH/USDT"],
         help="Trading symbols to monitor",
     )
-    parser.add_argument(
-        "--cycles", type=int, default=100, help="Number of trading cycles to run"
-    )
+    parser.add_argument("--cycles", type=int, default=100, help="Number of trading cycles to run")
     return parser.parse_args()
 
 
@@ -124,9 +121,7 @@ async def run_schwafit_trading_cycle(
                 result = await schwafit_integration.run_trading_cycle(market_data)
 
                 if "error" in result:
-                    logger.error(
-                        f"Error in trading cycle for {symbol}: {result['error']}"
-                    )
+                    logger.error(f"Error in trading cycle for {symbol}: {result['error']}")
                     continue
 
                 # Log results
@@ -222,9 +217,7 @@ async def run_demo_mode(symbols: List[str], cycles: int) -> None:
         return
 
     # Initialize Schwafit trading integration
-    schwafit_integration = SchwafitTradingIntegration(
-        {"demo_mode": True, "simulate_trading": True}
-    )
+    schwafit_integration = SchwafitTradingIntegration({"demo_mode": True, "simulate_trading": True})
 
     # Run trading cycles
     await run_schwafit_trading_cycle(schwafit_integration, symbols, cycles)

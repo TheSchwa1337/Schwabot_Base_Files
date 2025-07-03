@@ -7,13 +7,14 @@ Multi-stage, recursive profit allocation for Schwabot v0.5.
 Provides intelligent profit distribution and reinvestment strategies.
 """"""
 
-import time
-import math
 import logging
-from typing import Dict, List, Optional, Any, Tuple
+import math
+import time
 from dataclasses import dataclass, field
-from enum import Enum
 from datetime import datetime
+from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple
+
 import numpy as np
 
 logger = logging.getLogger(__name__)

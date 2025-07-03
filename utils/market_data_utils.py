@@ -1,19 +1,18 @@
-import requests
-import hashlib
 import asyncio
-from typing import List, Optional, Dict, Any
+import hashlib
+from typing import Any, Dict, List, Optional
+
+import requests
 
 try:
-    from utils.secure_config_manager import get_secure_api_key
     from utils.price_bridge import (
         get_secure_price,
-        get_multiple_secure_prices,
-        PriceData,
     )
+    from utils.secure_config_manager import get_secure_api_key
 except ImportError:
     # Fallback for direct execution
-    from secure_config_manager import get_secure_api_key
     from price_bridge import get_secure_price
+    from secure_config_manager import get_secure_api_key
 
 
 def pull_news_headlines(query: str = "bitcoin") -> List[str]:
@@ -60,9 +59,7 @@ def get_btc_price() -> float:
         return 0.0
 
 
-def get_secure_price_data(
-    symbol: str = "BTC", currency: str = "USD"
-) -> Optional[Dict[str, Any]]:
+def get_secure_price_data(symbol: str = "BTC", currency: str = "USD") -> Optional[Dict[str, Any]]:
     """
     Get price data using the secure price bridge with Schwabot's mathematical framework.
     """

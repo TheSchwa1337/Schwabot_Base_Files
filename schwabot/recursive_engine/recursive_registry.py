@@ -1,6 +1,7 @@
-import numpy as np
 from datetime import datetime
-from typing import Dict, List, Optional, Any
+from typing import Any, Dict, List, Optional
+
+import numpy as np
 
 
 class LoopMemoryRing:
@@ -27,9 +28,7 @@ class LoopMemoryRing:
 
     def get_weighted_memory(self, idx42: int, idx81: int) -> Optional[Dict[str, Any]]:
         """Get exponentially weighted memory for SHA pair."""
-        matches = self.buffer[
-            (self.buffer[:, 1] == idx42) & (self.buffer[:, 2] == idx81)
-        ]
+        matches = self.buffer[(self.buffer[:, 1] == idx42) & (self.buffer[:, 2] == idx81)]
         if matches.shape[0] == 0:
             return None
 
@@ -122,17 +121,13 @@ class RecursiveRegistry:
     Acts as a memory-bound state machine for retrigger threshold calibration.
     """
 
-    def __init__(
-        self, memory_ring_size: int = 1000, memory_decay_rate: float = 0.01
-    ) -> None:
-        self.loop_memory_ring = LoopMemoryRing(
-            size=memory_ring_size, decay_rate=memory_decay_rate
-        )
+    def __init__(self, memory_ring_size: int = 1000, memory_decay_rate: float = 0.01) -> None:
+        self.loop_memory_ring = LoopMemoryRing(size=memory_ring_size, decay_rate=memory_decay_rate)
         self.orbit_rings: Dict[str, OrbitRing] = {}  # ring_id -> OrbitRing instance
         self.sha_to_ring_map: Dict[str, str] = {}  # sha_key -> ring_id
-        self.historical_profit_events: Dict[
-            str, List[Dict[str, Any]]
-        ] = {}  # sha_key -> list of profit events
+        self.historical_profit_events: Dict[str, List[Dict[str, Any]]] = (
+            {}
+        )  # sha_key -> list of profit events
 
     def register_sha_event(
         self, idx42: int, idx81: int, profit: float, entropy: float, phase: float
@@ -151,9 +146,7 @@ class RecursiveRegistry:
         """Retrieves weighted memory for a given SHA pair."""
         return self.loop_memory_ring.get_weighted_memory(idx42, idx81)
 
-    def create_or_update_orbit_ring(
-        self, ring_id: str, sha_family: List[str]
-    ) -> OrbitRing:
+    def create_or_update_orbit_ring(self, ring_id: str, sha_family: List[str]) -> OrbitRing:
         """Creates or updates an OrbitRing for a family of SHA keys."""
         if ring_id not in self.orbit_rings:
             self.orbit_rings[ring_id] = OrbitRing(ring_id, sha_family)

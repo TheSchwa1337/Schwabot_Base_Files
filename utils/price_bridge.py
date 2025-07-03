@@ -16,15 +16,15 @@ import hashlib
 import json
 import logging
 import time
-from typing import Dict, List, Optional, Any
 from dataclasses import dataclass
+from typing import Any, Dict, List, Optional
 
 import aiohttp
 
 # Import Schwabot's secure systems
 try:
+    from core.secure_api_coordinator import APIProvider, SecureAPICoordinator
     from utils.secure_config_manager import get_secure_api_key
-    from core.secure_api_coordinator import SecureAPICoordinator, APIProvider
 except ImportError:
     # Fallback for direct execution
     from secure_config_manager import get_secure_api_key
@@ -228,13 +228,9 @@ class SchwabotPriceBridge:
                 params = {"symbol": symbol, "convert": "USD"}
 
                 async with aiohttp.ClientSession() as session:
-                    async with session.get(
-                        url, headers=headers, params=params
-                    ) as response:
+                    async with session.get(url, headers=headers, params=params) as response:
                         if response.status != 200:
-                            logger.error(
-                                f"❌ CoinMarketCap API error: {response.status}"
-                            )
+                            logger.error(f"❌ CoinMarketCap API error: {response.status}")
                             return None
                         response = await response.json()
 
@@ -262,9 +258,7 @@ class SchwabotPriceBridge:
                 max_supply=float(data.get("max_supply", 0)),
             )
 
-            logger.info(
-                f"✅ CoinMarketCap price for {symbol}: ${price_data.price:,.2f}"
-            )
+            logger.info(f"✅ CoinMarketCap price for {symbol}: ${price_data.price:,.2f}")
             return price_data
 
         except Exception as e:
@@ -312,9 +306,7 @@ class SchwabotPriceBridge:
             logger.error(f"❌ CoinGecko API error: {e}")
             return None
 
-    async def get_price(
-        self, symbol: str = "BTC", use_cache: bool = True
-    ) -> Optional[PriceData]:
+    async def get_price(self, symbol: str = "BTC", use_cache: bool = True) -> Optional[PriceData]:
         """
         Get price data with fallback mechanism.
 

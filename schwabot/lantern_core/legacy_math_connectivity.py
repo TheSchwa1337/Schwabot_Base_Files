@@ -193,9 +193,7 @@ class LegacyMathematicalConnectivity:
         context_factor = 1.0 + (context_enhancement / (1.0 + context_enhancement))
 
         # Apply legacy connectivity transformation
-        connectivity_index = (
-            base_connectivity * context_factor * self.phi_golden
-        ) % 1.0
+        connectivity_index = (base_connectivity * context_factor * self.phi_golden) % 1.0
 
         return connectivity_index
 
@@ -227,9 +225,7 @@ class LegacyMathematicalConnectivity:
         """Generate connectivity matrix from recent legacy vectors."""
         if recent_vectors is None:
             recent_vectors = (
-                self.legacy_vectors[-4:]
-                if len(self.legacy_vectors) >= 4
-                else self.legacy_vectors
+                self.legacy_vectors[-4:] if len(self.legacy_vectors) >= 4 else self.legacy_vectors
             )
 
         if not recent_vectors:
@@ -358,8 +354,7 @@ class LegacyMathematicalConnectivity:
         max_iterations = 100
 
         while (
-            abs(current_connectivity - target_connectivity) > 0.01
-            and iterations < max_iterations
+            abs(current_connectivity - target_connectivity) > 0.01 and iterations < max_iterations
         ):
             # Simple gradient descent-like adjustment
             error = target_connectivity - current_connectivity
@@ -388,9 +383,7 @@ class LegacyMathematicalConnectivity:
         total_matrices = len(self.connectivity_matrices)
 
         avg_magnitude = (
-            np.mean([v.magnitude for v in self.legacy_vectors])
-            if total_vectors > 0
-            else 0.0
+            np.mean([v.magnitude for v in self.legacy_vectors]) if total_vectors > 0 else 0.0
         )
         avg_connectivity = (
             np.mean([v.connectivity_index for v in self.legacy_vectors])

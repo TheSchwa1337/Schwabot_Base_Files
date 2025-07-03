@@ -1,6 +1,5 @@
 import logging
 
-
 # from dual_unicore_handler import DualUnicoreHandler
 
 # Import core mathematical modules

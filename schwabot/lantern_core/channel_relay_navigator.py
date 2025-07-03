@@ -238,9 +238,7 @@ class ChannelRelayNavigator:
             logger.error(f"Navigation error: {e}")
             return {"success": False, "error": str(e)}
 
-    async def _calculate_navigation_path(
-        self, target_profit: float
-    ) -> List[Dict[str, Any]]:
+    async def _calculate_navigation_path(self, target_profit: float) -> List[Dict[str, Any]]:
         """Calculate optimal navigation path with bit-depth optimization."""
         if not self.current_state:
             return []
@@ -321,9 +319,7 @@ class ChannelRelayNavigator:
 
         return max(0.1, base_confidence * magnitude_factor * channel_factor)
 
-    async def _execute_navigation_path(
-        self, path: List[Dict[str, Any]]
-    ) -> Dict[str, Any]:
+    async def _execute_navigation_path(self, path: List[Dict[str, Any]]) -> Dict[str, Any]:
         """Execute navigation path asynchronously."""
         results = []
         successful_steps = 0
@@ -360,9 +356,7 @@ class ChannelRelayNavigator:
             "execution_time": sum(r.get("execution_time", 0) for r in results),
         }
 
-    async def _execute_navigation_step(
-        self, step_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _execute_navigation_step(self, step_data: Dict[str, Any]) -> Dict[str, Any]:
         """Execute single navigation step with simulated execution."""
         try:
             # Simulate execution time based on bit depth
@@ -451,9 +445,7 @@ class ChannelRelayNavigator:
 
             self.relay_state = RelayState.IDLE
 
-            logger.info(
-                f"Bit depth switched: {old_bit_depth.value} -> {new_bit_depth.value}"
-            )
+            logger.info(f"Bit depth switched: {old_bit_depth.value} -> {new_bit_depth.value}")
             return True
 
         except Exception as e:
@@ -534,9 +526,7 @@ class ChannelRelayNavigator:
             },
         }
 
-    async def optimize_configuration(
-        self, market_volatility: float = 0.05
-    ) -> Dict[str, Any]:
+    async def optimize_configuration(self, market_volatility: float = 0.05) -> Dict[str, Any]:
         """Optimize bit depth and channel configuration based on conditions."""
         optimization_result = {"changes": [], "performance_improvement": 0.0}
 
@@ -560,9 +550,7 @@ class ChannelRelayNavigator:
                     )
 
             # Optimize channel based on performance
-            best_channel = max(
-                self.channel_states.items(), key=lambda x: x[1]["success_rate"]
-            )[0]
+            best_channel = max(self.channel_states.items(), key=lambda x: x[1]["success_rate"])[0]
 
             if best_channel != self.active_channel:
                 success = await self.switch_channel(best_channel)
@@ -634,10 +622,7 @@ async def demo_channel_relay_navigator() -> Dict[str, Any]:
     print("\n📈 Navigation Status:")
     print(f"   Success Rate: {status['performance']['success_rate']:.2%}")
     print(f"   Total Switches: {status['performance']['total_channel_switches']}")
-    print(
-        f"   Current Config: {status['current_bit_depth']}-bit, "
-        f"{status['active_channel']}"
-    )
+    print(f"   Current Config: {status['current_bit_depth']}-bit, " f"{status['active_channel']}")
 
     return status
 

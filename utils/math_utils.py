@@ -10,6 +10,7 @@ from __future__ import annotations
 
 from hashlib import blake2b
 from typing import Sequence
+
 import numpy as np
 
 __all__ = [
@@ -56,9 +57,7 @@ def hash_distance(a: str, b: str, *, digest_bits: int = 64) -> int:
     return xor_bytes.bit_count()
 
 
-def cosine_similarity(
-    a: Sequence[float] | np.ndarray, b: Sequence[float] | np.ndarray
-) -> float:
+def cosine_similarity(a: Sequence[float] | np.ndarray, b: Sequence[float] | np.ndarray) -> float:
     """Return cosine similarity between two equal-length vectors.
 
     The value is in the range ``[-1, 1]`` where ``1`` means identical direction.

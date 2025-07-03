@@ -9,7 +9,6 @@ not crash.
 
 import subprocess
 import sys
-import threading
 import tkinter as tk
 from tkinter import messagebox
 
@@ -22,22 +21,22 @@ class SchwabotGUI(tk.Tk):
         self.resizable(False, False)
 
         tk.Label(self, text="Schwabot", font=("Segoe UI", 24, "bold")).pack(pady=10)
-        tk.Label(
-            self, text="Choose a subsystem to launch:", font=("Segoe UI", 10)
-        ).pack(pady=(0, 15))
+        tk.Label(self, text="Choose a subsystem to launch:", font=("Segoe UI", 10)).pack(
+            pady=(0, 15)
+        )
 
         btn_frame = tk.Frame(self)
         btn_frame.pack()
 
-        tk.Button(
-            btn_frame, text="QSC Engine", width=15, command=self._launch_qsc
-        ).grid(row=0, column=0, padx=5, pady=5)
-        tk.Button(
-            btn_frame, text="Immune Engine", width=15, command=self._launch_immune
-        ).grid(row=0, column=1, padx=5, pady=5)
-        tk.Button(
-            btn_frame, text="Tensor Engine", width=15, command=self._launch_tensor
-        ).grid(row=1, column=0, padx=5, pady=5)
+        tk.Button(btn_frame, text="QSC Engine", width=15, command=self._launch_qsc).grid(
+            row=0, column=0, padx=5, pady=5
+        )
+        tk.Button(btn_frame, text="Immune Engine", width=15, command=self._launch_immune).grid(
+            row=0, column=1, padx=5, pady=5
+        )
+        tk.Button(btn_frame, text="Tensor Engine", width=15, command=self._launch_tensor).grid(
+            row=1, column=0, padx=5, pady=5
+        )
         tk.Button(btn_frame, text="Update", width=15, command=self._update).grid(
             row=1, column=1, padx=5, pady=5
         )

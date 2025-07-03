@@ -16,7 +16,11 @@ from typing import Any, Dict, List, Optional
 import numpy as np
 
 from .clean_math_foundation import BitPhase, CleanMathFoundation, ThermalState
-from .clean_profit_vectorization import CleanProfitVectorization, ProfitVector, VectorizationMode
+from .clean_profit_vectorization import (
+    CleanProfitVectorization,
+    ProfitVector,
+    VectorizationMode,
+)
 
 logger = logging.getLogger(__name__)
 

@@ -16,10 +16,10 @@ The tray icon can be launched with::
     python -m schwabot.launch tray
 """
 
-from pathlib import Path
 import subprocess
 import sys
 import threading
+from pathlib import Path
 
 try:
     import pystray  # type: ignore

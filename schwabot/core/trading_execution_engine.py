@@ -5,16 +5,17 @@ This module implements the trading execution engine that handles order execution
     position management, risk control, and trade lifecycle management for Schwabot.
 """"""
 
+import json
+import logging
+import uuid
+import warnings
+from dataclasses import dataclass
+from datetime import datetime, timedelta
+from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple, Union
+
 import numpy as np
 import pandas as pd
-from typing import Dict, List, Tuple, Optional, Union, Any
-from dataclasses import dataclass
-from enum import Enum
-import logging
-from datetime import datetime, timedelta
-import warnings
-import uuid
-import json
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)

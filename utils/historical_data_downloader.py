@@ -11,9 +11,10 @@ import asyncio
 import logging
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, Optional, Any
-import pandas as pd
+from typing import Any, Dict, Optional
+
 import aiohttp
+import pandas as pd
 
 logger = logging.getLogger(__name__)
 
@@ -57,9 +58,7 @@ async def download_historical_data(
         return None
 
 
-def parse_historical_data(
-    data: Dict[str, Any], coin_id: str, vs_currency: str
-) -> pd.DataFrame:
+def parse_historical_data(data: Dict[str, Any], coin_id: str, vs_currency: str) -> pd.DataFrame:
     """Parse CoinGecko historical data into DataFrame."""
 
     # Extract price data
@@ -112,9 +111,7 @@ async def download_all_historical_data(
     for symbol, coin_id in COIN_IDS.items():
         logger.info(f"📥 Downloading {symbol} ({coin_id}) historical data...")
 
-        df = await download_historical_data(
-            coin_id=coin_id, days=days, interval=interval
-        )
+        df = await download_historical_data(coin_id=coin_id, days=days, interval=interval)
 
         if df is not None:
             # Create coin-specific directory

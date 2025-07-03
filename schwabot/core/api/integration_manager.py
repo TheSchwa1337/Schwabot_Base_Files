@@ -6,7 +6,13 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any, Dict, Optional
 
-from .data_models import APICredentials, MarketData, OrderRequest, OrderResponse, PortfolioPosition
+from .data_models import (
+    APICredentials,
+    MarketData,
+    OrderRequest,
+    OrderResponse,
+    PortfolioPosition,
+)
 from .enums import ConnectionStatus, ExchangeType
 from .exchange_connection import ExchangeConnection
 

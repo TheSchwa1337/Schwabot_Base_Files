@@ -1,5 +1,5 @@
-from .profit_vector import profit_percentage
 from .hash_memory import is_hash_profitable
+from .profit_vector import profit_percentage
 from .tick_cycle import is_exit_tick
 
 

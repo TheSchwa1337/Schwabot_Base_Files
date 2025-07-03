@@ -19,12 +19,9 @@ Temporary stub implementation for quantization management.
 class QuantizationSchema:
     """Quantization schema class."""
 
-    pass
-
 
 def main() -> None:
     """Stub main function."""
-    pass
 
 
 if __name__ == "__main__":

@@ -12,7 +12,6 @@ from typing import Any
 
 def main() -> None:
     """Stub main function."""
-    pass
 
 
 class WindowsCliCompatibilityHandler:
@@ -49,9 +48,7 @@ class WindowsCliCompatibilityHandler:
         try:
             getattr(logger, level.lower())(safe_message)
         except UnicodeEncodeError:
-            ascii_message = safe_message.encode("ascii", errors="replace").decode(
-                "ascii"
-            )
+            ascii_message = safe_message.encode("ascii", errors="replace").decode("ascii")
             getattr(logger, level.lower())(ascii_message)
 
 

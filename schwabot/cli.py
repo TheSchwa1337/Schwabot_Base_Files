@@ -1,10 +1,11 @@
-import asyncio
 import argparse
+import asyncio
 import json
 import logging
-from typing import Dict, Any
+from typing import Any, Dict
 
-from .integration_hub import create_schwabot_hub, SchwabotIntegrationHub
+from .integration_hub import SchwabotIntegrationHub, create_schwabot_hub
+
 
 class SchwabotCLI:
     """

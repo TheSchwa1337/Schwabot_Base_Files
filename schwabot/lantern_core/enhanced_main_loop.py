@@ -42,9 +42,7 @@ class EnhancedLanternMainLoop(LanternMainLoop):
     ) -> None:
         """Initialize Enhanced Lantern Main Loop."""
         # Initialize base main loop
-        super().__init__(
-            processing_interval, memory_save_interval, max_processing_history
-        )
+        super().__init__(processing_interval, memory_save_interval, max_processing_history)
 
         # Enhanced navigation components
         self.enable_channel_relay = enable_channel_relay
@@ -100,9 +98,7 @@ class EnhancedLanternMainLoop(LanternMainLoop):
 
         # Enhanced processing with legacy mathematical connectivity
         if self.enable_legacy_math and self.legacy_math:
-            await self._process_legacy_mathematical_enhancement(
-                market_data, base_result
-            )
+            await self._process_legacy_mathematical_enhancement(market_data, base_result)
 
         # Configuration optimization
         if optimize_configuration:
@@ -146,9 +142,7 @@ class EnhancedLanternMainLoop(LanternMainLoop):
                     1.0 + result.confidence_score * 0.02
                 )  # Dynamic target
 
-                navigation_result = await self.channel_navigator.navigate_to_profit(
-                    profit_target
-                )
+                navigation_result = await self.channel_navigator.navigate_to_profit(profit_target)
 
                 if navigation_result.get("success", False):
                     self.navigation_successes += 1
@@ -202,9 +196,7 @@ class EnhancedLanternMainLoop(LanternMainLoop):
 
             # Keep stability history manageable
             if len(self.mathematical_stability_history) > 100:
-                self.mathematical_stability_history = (
-                    self.mathematical_stability_history[-50:]
-                )
+                self.mathematical_stability_history = self.mathematical_stability_history[-50:]
 
             # Add stability-based insights
             if stability_index > 0.8:
@@ -212,9 +204,7 @@ class EnhancedLanternMainLoop(LanternMainLoop):
                     f"📊 High mathematical stability: {stability_index:.3f}"
                 )
             elif stability_index < 0.3:
-                result.risk_warnings.append(
-                    f"⚠️ Mathematical instability: {stability_index:.3f}"
-                )
+                result.risk_warnings.append(f"⚠️ Mathematical instability: {stability_index:.3f}")
 
             # Calculate mathematical resonance with previous vectors
             if len(self.legacy_math.legacy_vectors) >= 2:
@@ -231,17 +221,15 @@ class EnhancedLanternMainLoop(LanternMainLoop):
         except Exception as e:
             print(f"Legacy mathematical enhancement error: {e}")
 
-    async def _optimize_system_configuration(
-        self, market_data: Dict[str, float]
-    ) -> None:
+    async def _optimize_system_configuration(self, market_data: Dict[str, float]) -> None:
         """Optimize system configuration based on market conditions."""
         try:
             market_volatility = market_data.get("volatility", 0.05)
 
             # Optimize channel relay configuration
             if self.channel_navigator:
-                optimization_result = await (
-                    self.channel_navigator.optimize_configuration(market_volatility)
+                optimization_result = await self.channel_navigator.optimize_configuration(
+                    market_volatility
                 )
 
                 if optimization_result.get("changes"):
@@ -272,18 +260,14 @@ class EnhancedLanternMainLoop(LanternMainLoop):
         except Exception as e:
             print(f"System configuration optimization error: {e}")
 
-    def _update_enhanced_performance_metrics(
-        self, result: LanternProcessingResult
-    ) -> None:
+    def _update_enhanced_performance_metrics(self, result: LanternProcessingResult) -> None:
         """Update enhanced performance metrics."""
         # Update base metrics manually
         self.processing_history.append(result)
 
         # Keep processing history manageable
         if len(self.processing_history) > self.max_processing_history:
-            self.processing_history = self.processing_history[
-                -self.max_processing_history // 2 :
-            ]
+            self.processing_history = self.processing_history[-self.max_processing_history // 2 :]
 
         # Enhanced metrics tracking
         if hasattr(result, "navigation_result"):
@@ -342,8 +326,7 @@ class EnhancedLanternMainLoop(LanternMainLoop):
                 "bid": base_data["price"] * 0.999,
                 "ask": base_data["price"] * 1.001,
                 "spread": base_data["price"] * 0.002,
-                "volume_weighted_price": base_data["price"]
-                * (1.0 + random.uniform(-0.001, 0.001)),
+                "volume_weighted_price": base_data["price"] * (1.0 + random.uniform(-0.001, 0.001)),
                 "order_book_depth": random.uniform(0.5, 2.0),
                 "market_momentum": random.uniform(-1.0, 1.0),
             }
@@ -367,9 +350,7 @@ class EnhancedLanternMainLoop(LanternMainLoop):
             nav_result = result.navigation_result
             print(f"   🚀 Navigation: {'✅' if nav_result.get('success') else '❌'}")
             if nav_result.get("success"):
-                print(
-                    f"   💰 Navigation Profit: ${nav_result.get('final_profit', 0):.2f}"
-                )
+                print(f"   💰 Navigation Profit: ${nav_result.get('final_profit', 0):.2f}")
 
         if hasattr(result, "legacy_vector"):
             legacy_vector = result.legacy_vector
@@ -477,9 +458,9 @@ class EnhancedLanternMainLoop(LanternMainLoop):
                     "status": "healthy" if stability_index > 0.6 else "degraded",
                     "stability_index": stability_index,
                     "vector_count": len(self.legacy_math.legacy_vectors),
-                    "connectivity_average": legacy_analytics.get(
-                        "vector_analytics", {}
-                    ).get("average_connectivity", 0.0),
+                    "connectivity_average": legacy_analytics.get("vector_analytics", {}).get(
+                        "average_connectivity", 0.0
+                    ),
                 }
 
                 if stability_index < 0.3:
@@ -560,10 +541,7 @@ async def demo_enhanced_lantern_main_loop() -> Dict[str, Any]:
         f"   Navigation Successes: "
         f"{analytics['navigation_performance']['navigation_successes']}"
     )
-    print(
-        f"   Channel Switches: "
-        f"{analytics['navigation_performance']['channel_switches']}"
-    )
+    print(f"   Channel Switches: " f"{analytics['navigation_performance']['channel_switches']}")
     print(
         f"   Mathematical Stability: "
         f"{analytics['mathematical_stability']['current_stability']:.4f}"

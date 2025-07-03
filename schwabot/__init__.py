@@ -13,16 +13,16 @@ A sophisticated trading system that combines mathematical modeling with AI-drive
 
 from . import core
 from .core import (
-    trading_engine_integration,
-    pure_profit_calculator,
-    clean_unified_math,
-    clean_trading_pipeline,
+    advanced_settings_engine,
     advanced_tensor_algebra,
-    clean_profit_vectorization,
     clean_math_foundation,
+    clean_profit_vectorization,
+    clean_trading_pipeline,
+    clean_unified_math,
+    pure_profit_calculator,
     speed_lattice_trading_integration,
+    trading_engine_integration,
     unified_api_coordinator,
-    advanced_settings_engine
 )
 
 # Version information
@@ -222,9 +222,7 @@ class SchwabotPackage:
                 initialization_result["components"].append(component_result)
 
                 if component_result["status"] == "success":
-                    self.loaded_components[component_name] = component_result[
-                        "component"
-                    ]
+                    self.loaded_components[component_name] = component_result["component"]
                 else:
                     logging.warning(
                         f"Component {component_name} loading failed: {component_result['error']}"
@@ -234,11 +232,7 @@ class SchwabotPackage:
             successful_modules = sum(
                 1 for m in initialization_result["modules"] if m["status"] == "success"
             )
-            sum(
-                1
-                for c in initialization_result["components"]
-                if c["status"] == "success"
-            )
+            sum(1 for c in initialization_result["components"] if c["status"] == "success")
 
             if (
                 successful_modules >= len(self.package_config["core_modules"]) * 0.8
@@ -247,9 +241,7 @@ class SchwabotPackage:
                 logging.info("Schwabot package initialized successfully")
             else:
                 initialization_result["status"] = "degraded"
-                logging.warning(
-                    "Schwabot package initialized with degraded functionality"
-                )
+                logging.warning("Schwabot package initialized with degraded functionality")
 
             return initialization_result
 
@@ -362,9 +354,7 @@ class SchwabotPackage:
             "config": self.package_config,
             "initialized_modules": self.initialized_modules,
             "loaded_components": list(self.loaded_components.keys()),
-            "startup_time": (
-                self.startup_time.isoformat() if self.startup_time else None
-            ),
+            "startup_time": (self.startup_time.isoformat() if self.startup_time else None),
         }
 
     def shutdown_package(self) -> Dict[str, Any]:
@@ -443,15 +433,15 @@ __all__ = [
     "__author__",
     "__description__",
     "__license__",
-    'core',
-    'trading_engine_integration',
-    'pure_profit_calculator',
-    'clean_unified_math',
-    'clean_trading_pipeline', 
-    'advanced_tensor_algebra',
-    'clean_profit_vectorization',
-    'clean_math_foundation',
-    'speed_lattice_trading_integration',
-    'unified_api_coordinator',
-    'advanced_settings_engine'
+    "core",
+    "trading_engine_integration",
+    "pure_profit_calculator",
+    "clean_unified_math",
+    "clean_trading_pipeline",
+    "advanced_tensor_algebra",
+    "clean_profit_vectorization",
+    "clean_math_foundation",
+    "speed_lattice_trading_integration",
+    "unified_api_coordinator",
+    "advanced_settings_engine",
 ]

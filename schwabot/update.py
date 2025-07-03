@@ -12,7 +12,6 @@ import pathlib
 import subprocess
 import sys
 
-
 PROJECT_ROOT = pathlib.Path(__file__).resolve().parents[1]
 REQ_FILE = PROJECT_ROOT / "requirements.txt"
 
@@ -24,9 +23,7 @@ def _file_hash(path: pathlib.Path) -> str:
 
 
 def _pip_install(requirements: pathlib.Path) -> None:
-    subprocess.check_call(
-        [sys.executable, "-m", "pip", "install", "-r", str(requirements)]
-    )
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", str(requirements)])
 
 
 def do_update() -> None:

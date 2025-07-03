@@ -1,13 +1,14 @@
 import unittest
+
 import numpy as np
 
+from schwabot.recursive_engine.echo_hash_engine import (
+    EchoHashEngine,
+)
 from schwabot.recursive_engine.recursive_registry import (
     LoopMemoryRing,
     OrbitRing,
     RecursiveRegistry,
-)
-from schwabot.recursive_engine.echo_hash_engine import (
-    EchoHashEngine,
 )
 from schwabot.recursive_engine.recursive_strategy_handler import (
     RecursiveStrategyHandler,
@@ -18,9 +19,7 @@ class TestRecursiveEngineIntegration(unittest.TestCase):
     def setUp(self) -> None:
         self.mock_registry = RecursiveRegistry()
         self.echo_engine = EchoHashEngine(self.mock_registry)
-        self.strategy_handler = RecursiveStrategyHandler(
-            self.mock_registry, self.echo_engine
-        )
+        self.strategy_handler = RecursiveStrategyHandler(self.mock_registry, self.echo_engine)
 
     def test_loop_memory_ring_add_and_retrieve(self) -> None:
         ring = LoopMemoryRing(size=10)
@@ -154,9 +153,7 @@ class TestRecursiveEngineIntegration(unittest.TestCase):
 
         # A simpler way to test this without deep mocking for now:
         # Just assert on the properties we expect to be influenced by gravitational field
-        self.assertIn(
-            strategy["strategy_signal"], ["GRAVITATIONAL_DIVE", "CONSISTENCY_CHECK"]
-        )
+        self.assertIn(strategy["strategy_signal"], ["GRAVITATIONAL_DIVE", "CONSISTENCY_CHECK"])
         self.assertIn(strategy["recommended_action"], ["ADJUST_POSITION", "HOLD"])
         self.assertGreaterEqual(strategy["activation_score"], 0)
 

@@ -14,6 +14,7 @@ This is not prediction - this is reading the hidden language of markets.
 """
 
 from __future__ import annotations
+
 import hashlib
 import time
 from dataclasses import dataclass, field
@@ -44,13 +45,9 @@ class HashBlock:
             "hash_value": self.hash_value,
             "price_context": self.price_context,
             "timestamp": self.timestamp,
-            "entropy_block": (
-                self.entropy_block.to_dict() if self.entropy_block else None
-            ),
+            "entropy_block": (self.entropy_block.to_dict() if self.entropy_block else None),
             "semantic_interpretation": (
-                self.semantic_interpretation.to_dict()
-                if self.semantic_interpretation
-                else None
+                self.semantic_interpretation.to_dict() if self.semantic_interpretation else None
             ),
             "truth_score": self.truth_score.to_dict() if self.truth_score else None,
             "created_at": self.created_at,
@@ -202,15 +199,11 @@ class LanternEye:
 
             # Update performance metrics
             processing_time = time.time() - start_time
-            self.interpretation_speed = (self.interpretation_speed * 0.9) + (
-                processing_time * 0.1
-            )
+            self.interpretation_speed = (self.interpretation_speed * 0.9) + (processing_time * 0.1)
 
             if hash_block.semantic_interpretation:
                 confidence = hash_block.semantic_interpretation.confidence_score
-                self.average_confidence = (self.average_confidence * 0.9) + (
-                    confidence * 0.1
-                )
+                self.average_confidence = (self.average_confidence * 0.9) + (confidence * 0.1)
 
         except Exception as e:
             print(f"LanternEye processing error: {e}")
@@ -264,9 +257,7 @@ class LanternEye:
 
         # Filter data for the relevant date range
         cutoff_timestamp = time.time() - (date_range_days * 86400)
-        relevant_prices = [
-            p for p in historical_prices if p.get("timestamp", 0) > cutoff_timestamp
-        ]
+        relevant_prices = [p for p in historical_prices if p.get("timestamp", 0) > cutoff_timestamp]
 
         for price_data in relevant_prices:
             self.process_price_tick(price_data)

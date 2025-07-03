@@ -1,10 +1,11 @@
-import os
-import hashlib
 import base64
-import json
 import getpass
+import hashlib
+import json
+import os
 from pathlib import Path
-from typing import Dict, Optional, Any
+from typing import Any, Dict, Optional
+
 from cryptography.fernet import Fernet
 
 
@@ -51,15 +52,11 @@ class SecureConfigManager:
 
     def _encrypt_data(self, data: str) -> str:
         """Encrypt sensitive data."""
-        return base64.b64encode(self.cipher.encrypt(data.encode("utf-8"))).decode(
-            "utf-8"
-        )
+        return base64.b64encode(self.cipher.encrypt(data.encode("utf-8"))).decode("utf-8")
 
     def _decrypt_data(self, encrypted_data: str) -> str:
         """Decrypt sensitive data."""
-        return self.cipher.decrypt(
-            base64.b64decode(encrypted_data.encode("utf-8"))
-        ).decode("utf-8")
+        return self.cipher.decrypt(base64.b64decode(encrypted_data.encode("utf-8"))).decode("utf-8")
 
     def secure_input(self, prompt: str, service_name: str) -> Dict[str, str]:
         """

@@ -1,10 +1,11 @@
-import numpy as np
-from typing import Dict, Any, List
+from typing import Any, Dict, List
 
-from schwabot.recursive_engine.recursive_registry import RecursiveRegistry
+import numpy as np
+
 from schwabot.recursive_engine.echo_hash_engine import (
     EchoHashEngine,
 )
+from schwabot.recursive_engine.recursive_registry import RecursiveRegistry
 
 
 class RecursiveStrategyHandler:
@@ -83,9 +84,7 @@ class RecursiveStrategyHandler:
         soft_loop_break_signal = False
 
         # Evaluate Ghost Shell Resonance (hypothetical, needs concrete definition)
-        ghost_resonance = self._evaluate_ghost_shell_resonance(
-            sha_key, gravitational_force
-        )
+        ghost_resonance = self._evaluate_ghost_shell_resonance(sha_key, gravitational_force)
         activation_score += ghost_resonance * 0.4
 
         # --- Core Recursive Logic & Strategy Selection ---
@@ -93,9 +92,7 @@ class RecursiveStrategyHandler:
         # 1. High Confidence Echo Reentry
         if reentry_signal and echo_match_confidence >= self.confidence_threshold:
             strategy_signal = "REENTRY_PROFIT_LOOP"
-            activation_score += (
-                echo_match_confidence * self.reentry_profit_multiplier * 0.3
-            )
+            activation_score += echo_match_confidence * self.reentry_profit_multiplier * 0.3
             recommended_action = "BUY_OR_SELL"
             # Predict profit based on orbital mechanics if available
             orbit_ring = self.recursive_registry.get_ring_for_sha(sha_key)
@@ -110,8 +107,7 @@ class RecursiveStrategyHandler:
 
         # 2. Gravitational Pull towards high-profit attractors
         elif (
-            np.linalg.norm(gravitational_force)
-            >= self.gravitational_influence_threshold
+            np.linalg.norm(gravitational_force) >= self.gravitational_influence_threshold
             and recall_bias > self.recall_bias_threshold
         ):
             strategy_signal = "GRAVITATIONAL_DIVE"
@@ -129,9 +125,7 @@ class RecursiveStrategyHandler:
             and recall_bias < self.recall_bias_threshold
         ):
             strategy_signal = "EXPLORE_NEW_PATTERN"
-            activation_score += (
-                1.0 - echo_match_confidence
-            ) * 0.1  # Encourage exploration
+            activation_score += (1.0 - echo_match_confidence) * 0.1  # Encourage exploration
             recommended_action = "OBSERVE"
             predicted_profit_potential = 0.0  # Unknown profit potential
 

@@ -11,8 +11,8 @@ import logging
 import random
 import time
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional
 from enum import Enum
+from typing import Any, Dict, List, Optional
 
 from .entropy_generator import FractalEntropyGenerator
 from .hash_memory import HashMemoryDB
@@ -187,9 +187,7 @@ class EnhancedLanternCore:
     Provides recursive consciousness-driven semantic market interpretation.
     """
 
-    def __init__(
-        self: "EnhancedLanternCore", config_path: Optional[str] = None
-    ) -> None:
+    def __init__(self: "EnhancedLanternCore", config_path: Optional[str] = None) -> None:
         """Initialize the Enhanced Lantern Core."""
         # Initialize Lantern Eye components
         self.entropy_gen = FractalEntropyGenerator()
@@ -275,20 +273,14 @@ class EnhancedLanternCore:
         # Step 2: Nexus Thought Core processing
         # Convert price to normalized input for thought matrix
         price_normalized = (price % 1000) / 1000.0  # Normalize to 0-1 range
-        nexus_result = self.nexus_core.nexus_omega_exec(
-            price_normalized, tick_hash[:16]
-        )
+        nexus_result = self.nexus_core.nexus_omega_exec(price_normalized, tick_hash[:16])
 
         # Step 3: Truth scoring with Nexus awareness
-        base_truth_score = self.truth_scorer.score_interpretation(
-            semantic_glyphs, price
-        )
+        base_truth_score = self.truth_scorer.score_interpretation(semantic_glyphs, price)
 
         # Enhance truth score with ZALGO lock state
         zalgo_locked = nexus_result["zalgo_lock"]["locked"]
-        nexus_confidence = (
-            1.0 if zalgo_locked else nexus_result["zalgo_lock"]["sigmoid_collapse"]
-        )
+        nexus_confidence = 1.0 if zalgo_locked else nexus_result["zalgo_lock"]["sigmoid_collapse"]
         enhanced_truth_score = base_truth_score * (0.5 + 0.5 * nexus_confidence)
 
         # Create enhanced tick data
@@ -315,18 +307,14 @@ class EnhancedLanternCore:
                 "nexus_entropy": nexus_result["entropy"],
                 "zalgo_locked": zalgo_locked,
                 "qutrit_state": nexus_result["zalgo_lock"]["qutrit_state"],
-                "fractal_containment": nexus_result["zalgo_lock"][
-                    "fractal_containment"
-                ],
+                "fractal_containment": nexus_result["zalgo_lock"]["fractal_containment"],
             },
         )
 
         self.processed_ticks.append(tick_data)
         return tick_data
 
-    def _update_recursive_memory(
-        self: "EnhancedLanternCore", tick_data: LanternTickData
-    ) -> None:
+    def _update_recursive_memory(self: "EnhancedLanternCore", tick_data: LanternTickData) -> None:
         """Update recursive memory with Nexus-enhanced patterns."""
         # Store ZALGO state history
         self.zalgo_history.append(
@@ -343,9 +331,7 @@ class EnhancedLanternCore:
             self.zalgo_history = self.zalgo_history[-1000:]
 
         # Update recursive memory patterns
-        semantic_key = "_".join(
-            tick_data.semantic_glyphs[:3]
-        )  # Use first 3 glyphs as key
+        semantic_key = "_".join(tick_data.semantic_glyphs[:3])  # Use first 3 glyphs as key
         if semantic_key not in self.recursive_memory:
             self.recursive_memory[semantic_key] = []
 
@@ -360,9 +346,7 @@ class EnhancedLanternCore:
 
         # Maintain memory size
         if len(self.recursive_memory[semantic_key]) > 100:
-            self.recursive_memory[semantic_key] = self.recursive_memory[semantic_key][
-                -100:
-            ]
+            self.recursive_memory[semantic_key] = self.recursive_memory[semantic_key][-100:]
 
     def get_nexus_zalgo_commits(self: "EnhancedLanternCore") -> List[str]:
         """Get current ZALGO commit array from Nexus Core."""
@@ -395,9 +379,7 @@ class EnhancedLanternCore:
 
         return patterns
 
-    def _calculate_volatility(
-        self: "EnhancedLanternCore", prices: List[float]
-    ) -> float:
+    def _calculate_volatility(self: "EnhancedLanternCore", prices: List[float]) -> float:
         """Calculate simple price volatility."""
         if len(prices) < 2:
             return 0.0
@@ -409,9 +391,7 @@ class EnhancedLanternCore:
     def predict_price_movement(self: "EnhancedLanternCore", current_hash: str) -> Dict:
         """Enhanced price prediction using Nexus-Lantern integration."""
         # Get semantic interpretation
-        semantic_glyphs = self.semantic_interpreter.interpret_hash_semantics(
-            current_hash
-        )
+        semantic_glyphs = self.semantic_interpreter.interpret_hash_semantics(current_hash)
         semantic_key = "_".join(semantic_glyphs[:3])
 
         # Check recursive memory
@@ -419,9 +399,7 @@ class EnhancedLanternCore:
 
         # Get Nexus prediction
         price_normalized = (len(current_hash) % 1000) / 1000.0
-        nexus_result = self.nexus_core.nexus_omega_exec(
-            price_normalized, current_hash[:16]
-        )
+        nexus_result = self.nexus_core.nexus_omega_exec(price_normalized, current_hash[:16])
 
         if not historical_data:
             return {
@@ -445,15 +423,9 @@ class EnhancedLanternCore:
         combined_confidence = (avg_truth_score + nexus_confidence + zalgo_lock_rate) / 3
 
         # Determine prediction
-        if (
-            nexus_result["zalgo_lock"]["qutrit_state"] == 1
-            and combined_confidence > 0.6
-        ):
+        if nexus_result["zalgo_lock"]["qutrit_state"] == 1 and combined_confidence > 0.6:
             prediction = "UP"
-        elif (
-            nexus_result["zalgo_lock"]["qutrit_state"] == -1
-            and combined_confidence > 0.6
-        ):
+        elif nexus_result["zalgo_lock"]["qutrit_state"] == -1 and combined_confidence > 0.6:
             prediction = "DOWN"
         else:
             prediction = "NEUTRAL"

@@ -13,14 +13,14 @@ Real-time visualization system for Schwabot operations including:
 
 from .core_visualizer import SchwabotVisualizer
 from .data_aggregator import DataAggregator
+from .math_visualizer import MathVisualizer
 from .performance_monitor import PerformanceMonitor
 from .trading_visualizer import TradingVisualizer
-from .math_visualizer import MathVisualizer
 
 __all__ = [
-    'SchwabotVisualizer',
-    'DataAggregator', 
-    'PerformanceMonitor',
-    'TradingVisualizer',
-    'MathVisualizer'
-] 
+    "SchwabotVisualizer",
+    "DataAggregator",
+    "PerformanceMonitor",
+    "TradingVisualizer",
+    "MathVisualizer",
+]

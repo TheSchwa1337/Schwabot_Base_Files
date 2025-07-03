@@ -15,7 +15,6 @@ import sys
 import traceback
 from typing import Optional
 
-
 # Get logger for this module
 logger = logging.getLogger(__name__)
 
@@ -112,9 +111,7 @@ def print_exception(exc: Exception, context: Optional[str] = None) -> None:
     """Safely print exception with traceback."""
     try:
         context_str = f" in {context}" if context else ""
-        safe_print(
-            f"[EXCEPTION{context_str}] {type(exc).__name__}: {exc}", file=sys.stderr
-        )
+        safe_print(f"[EXCEPTION{context_str}] {type(exc).__name__}: {exc}", file=sys.stderr)
 
         # Print traceback safely
         try:
@@ -128,9 +125,7 @@ def print_exception(exc: Exception, context: Optional[str] = None) -> None:
 
     except Exception as print_exc:
         # Ultimate fallback
-        sys.stderr.write(
-            f"[CRITICAL: Cannot print exception {exc} due to {print_exc}]\n"
-        )
+        sys.stderr.write(f"[CRITICAL: Cannot print exception {exc} due to {print_exc}]\n")
 
 
 def print_separator(char: str = "=", length: int = 60) -> None:
@@ -156,9 +151,7 @@ def print_header(title: str, char: str = "=", length: int = 60) -> None:
         safe_print(f"[HEADER ERROR: {e}] {title}")
 
 
-def print_dict(
-    data: dict, indent: int = 2, max_depth: int = 3, current_depth: int = 0
-) -> None:
+def print_dict(data: dict, indent: int = 2, max_depth: int = 3, current_depth: int = 0) -> None:
     """Safely print dictionary with indentation."""
     if current_depth >= max_depth:
         safe_print("  " * indent + "...")
@@ -199,9 +192,7 @@ def print_list(data: list, indent: int = 2, max_items: int = 10) -> None:
             safe_print("  " * (indent + 1) + f"[{i}]: {item_str}")
 
         if total_items > max_items:
-            safe_print(
-                "  " * (indent + 1) + f"... and {total_items - max_items} more items"
-            )
+            safe_print("  " * (indent + 1) + f"... and {total_items - max_items} more items")
 
     except Exception as e:
         safe_print(f"[LIST PRINT ERROR: {e}] {repr(data)}")
@@ -220,14 +211,10 @@ def print_status(component: str, status: bool, details: Optional[str] = None) ->
         safe_print(message)
 
     except Exception as e:
-        safe_print(
-            f"[STATUS PRINT ERROR: {e}] {component}: {'OK' if status else 'FAIL'}"
-        )
+        safe_print(f"[STATUS PRINT ERROR: {e}] {component}: {'OK' if status else 'FAIL'}")
 
 
-def print_progress(
-    current: int, total: int, description: str = "", bar_length: int = 40
-) -> None:
+def print_progress(current: int, total: int, description: str = "", bar_length: int = 40) -> None:
     """Print a progress bar."""
     try:
         if total <= 0:

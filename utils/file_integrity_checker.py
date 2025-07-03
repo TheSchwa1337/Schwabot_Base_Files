@@ -7,13 +7,13 @@ Core file integrity checking system for Schwabot trading bot.
 Provides checksum validation, corruption detection, and repair capabilities.
 """
 
-import os
 import hashlib
 import logging
+import os
+from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional, Any
-from dataclasses import dataclass
+from typing import Any, Dict, List, Optional
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -189,18 +189,14 @@ class FileIntegrityChecker:
                 if not result.is_valid:
                     corrupted.append(result.file_path)
 
-            logger.info(
-                f"Detected {len(corrupted)} corrupted files in {directory_path}"
-            )
+            logger.info(f"Detected {len(corrupted)} corrupted files in {directory_path}")
             return corrupted
 
         except Exception as e:
             logger.error(f"Corrupted file detection error: {e}")
             return corrupted
 
-    def repair_corrupted_file(
-        self, file_path: str, backup_path: Optional[str] = None
-    ) -> bool:
+    def repair_corrupted_file(self, file_path: str, backup_path: Optional[str] = None) -> bool:
         """Attempt to repair a corrupted file."""
         try:
             if file_path not in self.corrupted_files:
@@ -220,9 +216,7 @@ class FileIntegrityChecker:
                     self.corrupted_files.remove(file_path)
                     return True
                 else:
-                    logger.error(
-                        f"File still corrupted after backup restoration: {file_path}"
-                    )
+                    logger.error(f"File still corrupted after backup restoration: {file_path}")
                     return False
             else:
                 logger.error(f"No backup available for corrupted file: {file_path}")
@@ -253,9 +247,7 @@ class FileIntegrityChecker:
                 for file_path, checksum in self.file_checksums.items():
                     f.write(f"{file_path}:{checksum}\n")
 
-            logger.info(
-                f"Exported {len(self.file_checksums)} checksums to {output_file}"
-            )
+            logger.info(f"Exported {len(self.file_checksums)} checksums to {output_file}")
             return True
 
         except Exception as e:
@@ -272,9 +264,7 @@ class FileIntegrityChecker:
                         file_path, checksum = line.split(":", 1)
                         self.file_checksums[file_path] = checksum
 
-            logger.info(
-                f"Imported {len(self.file_checksums)} checksums from {input_file}"
-            )
+            logger.info(f"Imported {len(self.file_checksums)} checksums from {input_file}")
             return True
 
         except Exception as e:

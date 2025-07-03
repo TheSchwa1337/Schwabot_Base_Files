@@ -14,13 +14,13 @@ This module enables:
 - Integration with trading strategy memory
 """
 
-from contextvars import ContextVar, copy_context
 import asyncio
 import time
 import uuid
-from typing import Dict, Any, Optional, List, Callable
+from contextvars import ContextVar, copy_context
 from dataclasses import dataclass, field
 from enum import Enum
+from typing import Any, Callable, Dict, List, Optional
 
 from .vortex_security import SecurityState, get_vortex_security
 
@@ -222,9 +222,7 @@ class SecureSessionManager:
         if len(self.activity_log) > 1000:
             self.activity_log = self.activity_log[-800:]  # Keep last 800 entries
 
-    def close_session(
-        self, session_id: str, exit_price: Optional[float] = None
-    ) -> None:
+    def close_session(self, session_id: str, exit_price: Optional[float] = None) -> None:
         """Close trading session and calculate results"""
         if session_id not in self.active_sessions:
             return
@@ -260,9 +258,7 @@ class SecureSessionManager:
         if current and current.session_id == session_id:
             self._context.set(None)
 
-    async def run_with_context(
-        self, context: TradeContext, coro: Callable[[], Any]
-    ) -> Any:
+    async def run_with_context(self, context: TradeContext, coro: Callable[[], Any]) -> Any:
         """
         Run coroutine with specific context (like AsyncLocalStorage.run)
         """
@@ -294,9 +290,7 @@ class SecureSessionManager:
             strategy_counts[session.strategy_hash] = (
                 strategy_counts.get(session.strategy_hash, 0) + 1
             )
-            pair_counts[session.market_pair] = (
-                pair_counts.get(session.market_pair, 0) + 1
-            )
+            pair_counts[session.market_pair] = pair_counts.get(session.market_pair, 0) + 1
 
             # Calculate profits
             profit = session.metadata.get("profit_percentage")
@@ -326,9 +320,7 @@ class SecureSessionManager:
                 "total_profit": total_profit,
                 "profitable_sessions": profitable_sessions,
                 "success_rate": (
-                    profitable_sessions / len(self.session_history)
-                    if self.session_history
-                    else 0
+                    profitable_sessions / len(self.session_history) if self.session_history else 0
                 ),
             },
             "recent_activity": activity_counts,

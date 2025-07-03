@@ -72,9 +72,7 @@ class NexusThoughtCore:
 
         print(f"🧠 Nexus Core v4.03-OMEGA initialized with seed={self.seed}")
 
-    def nexus_thought_matrix_omega(
-        self: NexusThoughtCore, input_value: float
-    ) -> np.ndarray:
+    def nexus_thought_matrix_omega(self: NexusThoughtCore, input_value: float) -> np.ndarray:
         """
         Create exponential recursive state matrix.
 
@@ -112,15 +110,12 @@ class NexusThoughtCore:
         """Calculate all ZALGO lock equations for recursive stability."""
         # 1. Fractal Containment Lock: L(x) = (∂Φ/∂t) * Σ(Ω * R(n))
         phi_derivative = entropy_current * time_delta
-        omega_sum = sum(
-            self.omega_coefficient * (n + 1) for n in range(self.matrix_size)
-        )
+        omega_sum = sum(self.omega_coefficient * (n + 1) for n in range(self.matrix_size))
         fractal_containment = phi_derivative * omega_sum
 
         # 2. Drift Suppression: D(x) = e^(-λt) * sin(Ψt) + κ
         drift_suppression = (
-            math.exp(-self.lambda_decay * time_delta)
-            * math.sin(self.psi_frequency * time_delta)
+            math.exp(-self.lambda_decay * time_delta) * math.sin(self.psi_frequency * time_delta)
             + self.kappa_offset
         )
 
@@ -129,14 +124,10 @@ class NexusThoughtCore:
         collapse_stability = abs(entropy_derivative * time_delta)
 
         # 4. Recursive Bound: D_cap = D_max * (1 - E_current/E_critical)
-        recursive_bound = self.max_depth * (
-            1 - min(entropy_current / self.critical_entropy, 1.0)
-        )
+        recursive_bound = self.max_depth * (1 - min(entropy_current / self.critical_entropy, 1.0))
 
         # 5. Sigmoid Collapse: C_grey(t) = ΣC(t)/(1+e^(-Ωt))
-        sigmoid_collapse = entropy_current / (
-            1 + math.exp(-self.omega_coefficient * time_delta)
-        )
+        sigmoid_collapse = entropy_current / (1 + math.exp(-self.omega_coefficient * time_delta))
 
         # 6. Qutrit Logic: Q(t) ∈ {-1, 0, +1}
         if sigmoid_collapse < 0.33:
@@ -231,9 +222,7 @@ class NexusThoughtCore:
         print(f"   Hash: {result['semantic_hash']}")
         print(f"   ZALGO Locked: {result['zalgo_lock']['locked']}")
         print(f"   Qutrit State: {result['zalgo_lock']['qutrit_state']}")
-        print(
-            f"   Collapse Stability: {result['zalgo_lock']['collapse_stability']:.6f}"
-        )
+        print(f"   Collapse Stability: {result['zalgo_lock']['collapse_stability']:.6f}")
 
         return result
 
@@ -263,9 +252,7 @@ class NexusThoughtCore:
 
         return result
 
-    def _handle_recursive_spillover(
-        self: NexusThoughtCore, entropy_level: float
-    ) -> None:
+    def _handle_recursive_spillover(self: NexusThoughtCore, entropy_level: float) -> None:
         """Handle recursive spillover when entropy exceeds critical threshold."""
         print(f"⚠️ RECURSIVE SPILLOVER DETECTED! Entropy: {entropy_level:.4f}")
         self.current_depth += 1

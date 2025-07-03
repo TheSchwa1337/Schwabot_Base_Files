@@ -12,15 +12,17 @@ TODO: Implement mathematical configuration package and integration with unified_
 # [BRAIN] End of stub. Replace with full implementation as needed.
 
 import logging
-from typing import Dict, List, Optional, Any, Tuple
+from typing import Any, Dict, List, Optional, Tuple
+
 import numpy as np
 from numpy.typing import NDArray
 
+from core.bit_phase_sequencer import BitPhase, BitSequence
+from core.dual_error_handler import PhaseState, SickState, SickType
+from core.symbolic_profit_router import FlipBias, ProfitTier, SymbolicState
+
 # Import core mathematical modules
 from dual_unicore_handler import DualUnicoreHandler
-from core.bit_phase_sequencer import BitPhase, BitSequence
-from core.dual_error_handler import PhaseState, SickType, SickState
-from core.symbolic_profit_router import ProfitTier, FlipBias, SymbolicState
 
 # Initialize Unicode handler
 unicore = DualUnicoreHandler()

@@ -148,9 +148,7 @@ class MathematicalFrameworkConfig:
     drift_shell: DriftShellConfig = field(default_factory=DriftShellConfig)
     quantum: QuantumConfig = field(default_factory=QuantumConfig)
     thermal: ThermalConfig = field(default_factory=ThermalConfig)
-    btc_pipeline: BTC256SHAPipelineConfig = field(
-        default_factory=BTC256SHAPipelineConfig
-    )
+    btc_pipeline: BTC256SHAPipelineConfig = field(default_factory=BTC256SHAPipelineConfig)
     ferris_wheel: FerrisWheelConfig = field(default_factory=FerrisWheelConfig)
     validation: ValidationConfig = field(default_factory=ValidationConfig)
     error_handling: ErrorHandlingConfig = field(default_factory=ErrorHandlingConfig)

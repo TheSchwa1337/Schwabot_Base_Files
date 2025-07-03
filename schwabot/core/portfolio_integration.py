@@ -8,23 +8,25 @@ Provides integration between CCXT/Coinbase API, strategy mapper,
     Ferris RDE, profit allocator, and other core modules.
 """"""
 
-import time
+import hashlib
 import json
 import logging
-import hashlib
-from typing import Dict, List, Optional, Any, Tuple
+import time
 from dataclasses import dataclass, field
 from datetime import datetime
+from typing import Any, Dict, List, Optional, Tuple
+
 import numpy as np
 
-# Import Schwabot core modules
-from .wallet_tracker import WalletTracker, AssetType, PositionType
-from .strategy_mapper import StrategyMapper, StrategyConfig
-from .ferris_rde import FerrisRDE, FerrisPhase
-from .profit_cycle_allocator import ProfitCycleAllocator, AllocationStage
 from .fallback_logic import FallbackLogic, FallbackType
+from .ferris_rde import FerrisPhase, FerrisRDE
+from .glyph_vm import GlyphType, GlyphVM
 from .matrix_map_logic import MatrixMapLogic, MatrixType
-from .glyph_vm import GlyphVM, GlyphType
+from .profit_cycle_allocator import AllocationStage, ProfitCycleAllocator
+from .strategy_mapper import StrategyConfig, StrategyMapper
+
+# Import Schwabot core modules
+from .wallet_tracker import AssetType, PositionType, WalletTracker
 
 logger = logging.getLogger(__name__)
 

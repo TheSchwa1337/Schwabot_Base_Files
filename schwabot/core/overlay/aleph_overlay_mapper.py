@@ -7,14 +7,15 @@ Implements NDArray hash similarity projection using cosine similarity
 and phase alignment for Schwabot v0.5.
 """"""
 
-import numpy as np
+import hashlib
 import logging
-from typing import List, Optional, Dict, Any, Tuple
-from numpy.typing import NDArray
+import time
 from dataclasses import dataclass, field
 from enum import Enum
-import time
-import hashlib
+from typing import Any, Dict, List, Optional, Tuple
+
+import numpy as np
+from numpy.typing import NDArray
 from scipy.spatial.distance import cosine
 
 logger = logging.getLogger(__name__)

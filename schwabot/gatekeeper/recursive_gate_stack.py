@@ -5,10 +5,10 @@ Implements mathematical lock equations and validation chains.
 """
 
 import math
-import yaml
 from pathlib import Path
-from typing import Dict, Any
+from typing import Any, Dict
 
+import yaml
 
 # Use absolute import to fix the import issue
 try:
@@ -178,18 +178,13 @@ class RecursiveGateStack:
 
         return (
             self.zalgo_core.locked
-            and self.zalgo_core.collapse_stability
-            <= self.thresholds["entropy_collapse"]
-            and abs(self.zalgo_core.drift_suppression)
-            < self.thresholds["kappa_offset"] * 2
-            and self.zalgo_core.sigmoid_collapse
-            < self.thresholds["sigmoid_collapse_trigger"]
+            and self.zalgo_core.collapse_stability <= self.thresholds["entropy_collapse"]
+            and abs(self.zalgo_core.drift_suppression) < self.thresholds["kappa_offset"] * 2
+            and self.zalgo_core.sigmoid_collapse < self.thresholds["sigmoid_collapse_trigger"]
             and self.zalgo_core.qutrit_state == 0
         )
 
-    def temporal_hash_drift_gate(
-        self, current_hash: str, previous_hash: str = None
-    ) -> bool:
+    def temporal_hash_drift_gate(self, current_hash: str, previous_hash: str = None) -> bool:
         """Implement Equation 5A: Temporal Hash Drift Compensation.
 
         D_hash(t) = e^(-λt) * sin(Ψt) + κ
@@ -305,14 +300,11 @@ class RecursiveGateStack:
         gate_success_rates = {}
 
         for gate_name in self.validation_history[0].keys():
-            successes = sum(
-                1 for result in self.validation_history if result[gate_name]
-            )
+            successes = sum(1 for result in self.validation_history if result[gate_name])
             gate_success_rates[gate_name] = successes / total_validations
 
         overall_success_rate = (
-            sum(1 for result in self.validation_history if all(result.values()))
-            / total_validations
+            sum(1 for result in self.validation_history if all(result.values())) / total_validations
         )
 
         return {

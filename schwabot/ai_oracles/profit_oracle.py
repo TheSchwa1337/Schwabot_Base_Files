@@ -20,7 +20,6 @@ from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional
 
-
 # Import core mathematical systems
 try:
     from core.unified_math_system import UnifiedMathSystem
@@ -62,17 +61,13 @@ class ProfitOracle:
         Initializes the ProfitOracle.
         """
         if not CORE_MATH_SYSTEMS_AVAILABLE:
-            logger.error(
-                "ProfitOracle cannot function without core mathematical systems."
-            )
+            logger.error("ProfitOracle cannot function without core mathematical systems.")
             raise RuntimeError("Core mathematical systems not available.")
 
         self.unified_math = unified_math
         self.unicore = unicore
         self.historical_data_window = timedelta(hours=24)  # Look back 24 hours
-        self.forecast_history: deque[ProfitForecast] = deque(
-            maxlen=100
-        )  # Keep last 100 forecasts
+        self.forecast_history: deque[ProfitForecast] = deque(maxlen=100)  # Keep last 100 forecasts
 
         logger.info("🔮 Profit Oracle initialized.")
 
@@ -87,9 +82,7 @@ class ProfitOracle:
             A ProfitForecast object or None if forecasting fails.
         """
         if not self.unified_math or not self.unicore:
-            logger.error(
-                "Cannot forecast profit: Core mathematical systems are not initialized."
-            )
+            logger.error("Cannot forecast profit: Core mathematical systems are not initialized.")
             return None
 
         try:
@@ -102,9 +95,7 @@ class ProfitOracle:
             # This would be much more sophisticated in a real system.
             predicted_profit = self.unified_math.multiply(
                 current_price,
-                self.unified_math.add(
-                    0.01, self.unified_math.power(indicator_score, 2)
-                ),
+                self.unified_math.add(0.01, self.unified_math.power(indicator_score, 2)),
             )
             predicted_profit = self.unified_math.subtract(
                 predicted_profit, self.unified_math.multiply(volume, 0.000001)
@@ -115,9 +106,7 @@ class ProfitOracle:
                 1.0,
                 self.unified_math.max(
                     0.0,
-                    self.unified_math.add(
-                        0.5, self.unified_math.multiply(indicator_score, 0.4)
-                    ),
+                    self.unified_math.add(0.5, self.unified_math.multiply(indicator_score, 0.4)),
                 ),
             )
 

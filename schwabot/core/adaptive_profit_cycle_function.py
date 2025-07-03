@@ -6,17 +6,18 @@ trading strategies and profit targets based on market conditions, performance
 metrics, and risk management parameters.
 """"""
 
+import logging
+import math
+import warnings
+from dataclasses import dataclass
+from datetime import datetime, timedelta
+from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple, Union
+
 import numpy as np
 import pandas as pd
-from typing import Dict, List, Tuple, Optional, Union, Any
-from dataclasses import dataclass
-from enum import Enum
-import logging
-from datetime import datetime, timedelta
-import warnings
-from scipy.optimize import minimize
 from scipy import stats
-import math
+from scipy.optimize import minimize
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)

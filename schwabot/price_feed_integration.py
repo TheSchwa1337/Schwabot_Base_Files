@@ -21,19 +21,20 @@ import asyncio
 import logging
 import os
 import time
-from datetime import datetime
-from typing import Dict, List, Optional, Any, Tuple
 from dataclasses import dataclass, field
+from datetime import datetime
 from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple
+
+from core.decimals_autotuner import autotune_loop
+from core.price_event import EventOrigin, PriceEvent
+from core.price_event_registry import record as record_price_event
 from core.price_precision_utils import (
     format_price,
-    hash_price,
     get_active_decimals,
     get_active_hash_bits,
+    hash_price,
 )
-from core.price_event import PriceEvent, EventOrigin
-from core.price_event_registry import record as record_price_event
-from core.decimals_autotuner import autotune_loop
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -108,9 +109,7 @@ class RateLimiter:
         now = time.time()
         # Remove old requests
         self.requests = [
-            req_time
-            for req_time in self.requests
-            if now - req_time < self.window_seconds
+            req_time for req_time in self.requests if now - req_time < self.window_seconds
         ]
 
         return len(self.requests) < self.max_requests
@@ -291,9 +290,7 @@ class CoinMarketCapPriceFeed:
                                 source=PriceSource.COINMARKETCAP,
                                 metadata={
                                     "market_cap": quote.get("market_cap"),
-                                    "percent_change_24h": quote.get(
-                                        "percent_change_24h"
-                                    ),
+                                    "percent_change_24h": quote.get("percent_change_24h"),
                                     "cmc_rank": quote_data.get("cmc_rank"),
                                 },
                             )
@@ -519,17 +516,11 @@ class UnifiedPriceFeed:
 
         # Keep only recent history
         if len(self.price_history[symbol]) > self.max_history_size:
-            self.price_history[symbol] = self.price_history[symbol][
-                -self.max_history_size :
-            ]
+            self.price_history[symbol] = self.price_history[symbol][-self.max_history_size :]
 
         # -------------------- NEW: record PriceEvent --------------------
         try:
-            origin = (
-                EventOrigin.DEMO
-                if price_data.source == PriceSource.MOCK
-                else EventOrigin.LIVE
-            )
+            origin = EventOrigin.DEMO if price_data.source == PriceSource.MOCK else EventOrigin.LIVE
             if price_data.metadata.get("backtest_id"):
                 origin = EventOrigin.BACKTEST
 
@@ -574,9 +565,7 @@ class UnifiedPriceFeed:
         """Get price history for a symbol."""
         return self.price_history.get(symbol, [])[-limit:]
 
-    def get_portfolio_fallback_prices(
-        self, portfolio_symbols: List[str]
-    ) -> Dict[str, float]:
+    def get_portfolio_fallback_prices(self, portfolio_symbols: List[str]) -> Dict[str, float]:
         """Get fallback prices for portfolio calculation."""
         fallback_prices = {}
 
@@ -629,9 +618,7 @@ async def test_price_feed():
         print(f"\n🔄 Testing unified feed for {symbol}:")
         price_data = await price_feed.get_price(symbol)
         if price_data:
-            print(
-                f"  ✅ Unified: ${price_data.price:.2f} from {price_data.source.value}"
-            )
+            print(f"  ✅ Unified: ${price_data.price:.2f} from {price_data.source.value}")
         else:
             print("  ❌ Unified: Failed")
 

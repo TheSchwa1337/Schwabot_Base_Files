@@ -18,7 +18,6 @@ Temporary stub implementation for matrix response management.
 
 def main() -> None:
     """Stub main function."""
-    pass
 
 
 if __name__ == "__main__":

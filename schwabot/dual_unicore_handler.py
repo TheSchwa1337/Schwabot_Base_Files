@@ -140,9 +140,7 @@ class DualUnicoreHandler:
             self.unicode_cache[symbol] = mapping
             self.sha_to_symbol[sha_hash] = symbol
 
-            logger.info(
-                f"Unicode mapping: {symbol} -> {sha_hash[:8]} -> {asic_code.value}"
-            )
+            logger.info(f"Unicode mapping: {symbol} -> {sha_hash[:8]} -> {asic_code.value}")
             return sha_hash
 
         except Exception as e:

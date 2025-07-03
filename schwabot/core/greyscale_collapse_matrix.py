@@ -17,13 +17,14 @@ Mathematical Core:
     - Gradient-based collapse validation
 """"""
 
-import numpy as np
 import hashlib
 import logging
-from typing import Dict, List, Optional, Any
 from dataclasses import dataclass, field
-from enum import Enum
 from datetime import datetime
+from enum import Enum
+from typing import Any, Dict, List, Optional
+
+import numpy as np
 
 logger = logging.getLogger(__name__)
 

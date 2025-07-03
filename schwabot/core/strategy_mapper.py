@@ -9,28 +9,26 @@ Provides strategy selection, routing, and execution coordination.
 
 import hashlib
 import json
-import time
 import logging
-from typing import Dict, List, Optional, Any, Tuple
-from dataclasses import dataclass, field
-from enum import Enum
-
-import numpy as np
+import os
 
 # Updated import path to work from project root
 import sys
-import os
+import time
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple
+
+import numpy as np
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", ".."))
 from core.advanced_tensor_algebra import UnifiedTensorAlgebra
 
 # Import safe_print functions
 try:
-    from utils.safe_print import (
-        info as safe_info,
-        error as safe_error,
-        warning as safe_warning,
-    )
+    from utils.safe_print import error as safe_error
+    from utils.safe_print import info as safe_info
+    from utils.safe_print import warning as safe_warning
 except ImportError:
 
     def safe_info(message):
@@ -352,10 +350,7 @@ class StrategyMapper:
 
             # Fallback to hybrid strategy
             for strategy_id, strategy_config in self.strategies.items():
-                if (
-                    strategy_config.strategy_type == StrategyType.HYBRID
-                    and strategy_config.enabled
-                ):
+                if strategy_config.strategy_type == StrategyType.HYBRID and strategy_config.enabled:
                     return strategy_config
 
             return None
@@ -414,9 +409,7 @@ class StrategyMapper:
                 return False
 
             # Check for exact match or significant similarity
-            similarity = sum(
-                1 for i in range(pattern_length) if market_hash[i] == pattern[i]
-            )
+            similarity = sum(1 for i in range(pattern_length) if market_hash[i] == pattern[i])
             similarity_ratio = similarity / pattern_length
 
             return similarity_ratio > 0.8  # 80% similarity threshold
@@ -432,9 +425,7 @@ class StrategyMapper:
                 return False
 
             # Check for exact match or significant similarity
-            similarity = sum(
-                1 for i in range(len(pattern)) if bit_sequence[i] == pattern[i]
-            )
+            similarity = sum(1 for i in range(len(pattern)) if bit_sequence[i] == pattern[i])
             similarity_ratio = similarity / len(pattern)
 
             return similarity_ratio > 0.7  # 70% similarity threshold
@@ -517,14 +508,12 @@ class StrategyMapper:
         """Calculate trading signal based on strategy."""
         try:
             # NEW: Execute dualistic profit vectorization for pure mathematical decision-making
-            consensus_result = (
-                self.tensor_algebra.execute_dualistic_profit_vectorization(market_data)
+            consensus_result = self.tensor_algebra.execute_dualistic_profit_vectorization(
+                market_data
             )
 
             # If mathematical consensus produces a strong signal, use it directly
-            if (
-                consensus_result.consensus_confidence >= 0.7
-            ):  # High confidence threshold
+            if consensus_result.consensus_confidence >= 0.7:  # High confidence threshold
                 # Use pure mathematical decision
                 signal_type = consensus_result.execution_signal
                 if signal_type == "long":
@@ -559,14 +548,10 @@ class StrategyMapper:
                 )
 
             # Generate trade tensor from liquidity
-            trade_tensor = self.tensor_algebra.generate_tensor_from_liquidity(
-                liquidity_heatmap
-            )
+            trade_tensor = self.tensor_algebra.generate_tensor_from_liquidity(liquidity_heatmap)
 
             # Contract strategy tensor to 1D actionable trade vector
-            actionable_vector = self.tensor_algebra.contract_strategy_tensor(
-                trade_tensor
-            )
+            actionable_vector = self.tensor_algebra.contract_strategy_tensor(trade_tensor)
 
             # Base confidence calculation
             base_confidence = 0.5
@@ -591,18 +576,10 @@ class StrategyMapper:
 
             # Combine with mathematical consensus as influence factor
             if consensus_result.consensus_confidence > 0.3:  # Medium confidence
-                consensus_influence = (
-                    consensus_result.consensus_confidence * 0.2
-                )  # 20% influence
-                if (
-                    consensus_result.execution_signal == "long"
-                    and signal_type != "sell"
-                ):
+                consensus_influence = consensus_result.consensus_confidence * 0.2  # 20% influence
+                if consensus_result.execution_signal == "long" and signal_type != "sell":
                     base_confidence += consensus_influence
-                elif (
-                    consensus_result.execution_signal == "short"
-                    and signal_type != "buy"
-                ):
+                elif consensus_result.execution_signal == "short" and signal_type != "buy":
                     base_confidence += consensus_influence
 
             # Adjust based on strategy type (original logic combined with tensor output)
@@ -636,8 +613,7 @@ class StrategyMapper:
         try:
             # Base position size from strategy
             base_size = (
-                portfolio_state.get("available_funds", 0)
-                * strategy_config.max_position_size
+                portfolio_state.get("available_funds", 0) * strategy_config.max_position_size
             )
 
             # Adjust based on confidence
@@ -692,9 +668,11 @@ class StrategyMapper:
             "successful_executions": self.successful_executions,
             "failed_executions": self.failed_executions,
             "success_rate": success_rate,
-            "avg_confidence": np.mean([r.confidence for r in self.execution_history])
-            if self.execution_history
-            else 0.0,
+            "avg_confidence": (
+                np.mean([r.confidence for r in self.execution_history])
+                if self.execution_history
+                else 0.0
+            ),
         }
 
     def get_strategy_details(self, strategy_id: str) -> Optional[StrategyConfig]:
@@ -720,9 +698,7 @@ class StrategyMapper:
             medium_confidence_decisions = [
                 r for r in recent_consensus if 0.3 <= r.consensus_confidence < 0.7
             ]
-            low_confidence_decisions = [
-                r for r in recent_consensus if r.consensus_confidence < 0.3
-            ]
+            low_confidence_decisions = [r for r in recent_consensus if r.consensus_confidence < 0.3]
 
             signal_distribution = {}
             for result in recent_consensus:
@@ -731,8 +707,7 @@ class StrategyMapper:
 
             # Calculate mathematical certainty trends
             certainties = [
-                r.mathematical_proof.get("mathematical_certainty", 0)
-                for r in recent_consensus
+                r.mathematical_proof.get("mathematical_certainty", 0) for r in recent_consensus
             ]
             avg_certainty = np.mean(certainties) if certainties else 0
 
@@ -744,20 +719,23 @@ class StrategyMapper:
                 "low_confidence_decisions": len(low_confidence_decisions),
                 "signal_distribution": signal_distribution,
                 "average_mathematical_certainty": avg_certainty,
-                "pure_math_decision_rate": len(high_confidence_decisions)
-                / len(recent_consensus)
-                if recent_consensus
-                else 0,
-                "last_consensus": {
-                    "signal": recent_consensus[-1].execution_signal,
-                    "confidence": recent_consensus[-1].consensus_confidence,
-                    "mathematical_certainty": recent_consensus[
-                        -1
-                    ].mathematical_proof.get("mathematical_certainty", 0),
-                    "flip_transitions": len(recent_consensus[-1].flip_transitions),
-                }
-                if recent_consensus
-                else None,
+                "pure_math_decision_rate": (
+                    len(high_confidence_decisions) / len(recent_consensus)
+                    if recent_consensus
+                    else 0
+                ),
+                "last_consensus": (
+                    {
+                        "signal": recent_consensus[-1].execution_signal,
+                        "confidence": recent_consensus[-1].consensus_confidence,
+                        "mathematical_certainty": recent_consensus[-1].mathematical_proof.get(
+                            "mathematical_certainty", 0
+                        ),
+                        "flip_transitions": len(recent_consensus[-1].flip_transitions),
+                    }
+                    if recent_consensus
+                    else None
+                ),
             }
 
         except Exception as e:
@@ -848,9 +826,7 @@ def demo_strategy_mapper():
 
     # Test pure mathematical decision-making
     print("\n🧮 Testing Pure Mathematical Decision-Making...")
-    consensus_result = mapper.tensor_algebra.execute_dualistic_profit_vectorization(
-        market_data
-    )
+    consensus_result = mapper.tensor_algebra.execute_dualistic_profit_vectorization(market_data)
     print(f"  Mathematical Signal: {consensus_result.execution_signal}")
     print(f"  Consensus Confidence: {consensus_result.consensus_confidence:.3f}")
     print(
@@ -865,12 +841,8 @@ def demo_strategy_mapper():
     dualistic_summary = mapper.get_dualistic_state_summary()
     if "error" not in dualistic_summary:
         print(f"  Active Matrices: {dualistic_summary['active_matrices_count']}")
-        print(
-            f"  Flip State Distribution: {dualistic_summary['flip_state_distribution']}"
-        )
-        print(
-            f"  Mathematical Coherence: {dualistic_summary['mathematical_coherence']:.3f}"
-        )
+        print(f"  Flip State Distribution: {dualistic_summary['flip_state_distribution']}")
+        print(f"  Mathematical Coherence: {dualistic_summary['mathematical_coherence']:.3f}")
         print("  Average Profit Vector:")
         avg_vector = dualistic_summary["average_profit_vector"]
         print(f"    Price Direction: {avg_vector['price_direction']:.3f}")
@@ -885,9 +857,7 @@ def demo_strategy_mapper():
         print(
             f"  Selected Strategy: {selected_strategy.name} ({selected_strategy.strategy_type.value})"
         )
-        result = mapper.execute_strategy(
-            selected_strategy, market_data, portfolio_state
-        )
+        result = mapper.execute_strategy(selected_strategy, market_data, portfolio_state)
 
         if result:
             print(f"  Final Signal: {result.signal_type}")
@@ -904,20 +874,14 @@ def demo_strategy_mapper():
     print("\n📈 Mathematical Decision Analysis...")
     math_analysis = mapper.get_mathematical_decision_analysis()
     if "error" not in math_analysis and "analysis" not in math_analysis:
-        print(
-            f"  Total Consensus Decisions: {math_analysis['total_consensus_decisions']}"
-        )
-        print(
-            f"  Pure Math Decision Rate: {math_analysis['pure_math_decision_rate']:.1%}"
-        )
+        print(f"  Total Consensus Decisions: {math_analysis['total_consensus_decisions']}")
+        print(f"  Pure Math Decision Rate: {math_analysis['pure_math_decision_rate']:.1%}")
         print(
             f"  Average Mathematical Certainty: {math_analysis['average_mathematical_certainty']:.3f}"
         )
         if math_analysis["last_consensus"]:
             last = math_analysis["last_consensus"]
-            print(
-                f"  Last Decision: {last['signal']} (confidence: {last['confidence']:.3f})"
-            )
+            print(f"  Last Decision: {last['signal']} (confidence: {last['confidence']:.3f})")
 
     # Get comprehensive summary
     print("\n📋 Strategy Summary:")
@@ -939,9 +903,7 @@ def demo_strategy_mapper():
     print("\n" + "=" * 80)
     print("🎉 Demo Complete! Schwabot's mathematical intelligence is operational.")
     print("💡 Key Innovation: Bit-form tensor flip matrices enable pure mathematical")
-    print(
-        "   decision-making through dualistic state resolution, replacing traditional"
-    )
+    print("   decision-making through dualistic state resolution, replacing traditional")
     print("   AI heuristics with mathematical consensus mechanisms.")
 
 

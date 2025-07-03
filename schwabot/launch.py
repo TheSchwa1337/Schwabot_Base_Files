@@ -15,8 +15,8 @@ $ schwabot cli             # command-line interface
 $ schwabot tray            # background tray icon
 """
 
-from importlib import import_module
 import sys
+from importlib import import_module
 from types import ModuleType
 from typing import Callable
 
@@ -25,9 +25,7 @@ from typing import Callable
 # ---------------------------------------------------------------------------
 
 
-def _import_optional(
-    module_path: str, default: Callable[[], None]
-) -> Callable[[], None]:
+def _import_optional(module_path: str, default: Callable[[], None]) -> Callable[[], None]:
     """Try to import *module_path* and return its callable.  If that fails, return
     *default* so that the program still runs gracefully on systems that do not
     ship every optional dependency yet (e.g. GUI requirements on headless

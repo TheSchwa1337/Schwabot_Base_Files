@@ -9,9 +9,9 @@ Provides hash signature validation, data integrity verification, and collision d
 
 import hashlib
 import logging
-from typing import Dict, Any, Optional, List
 from dataclasses import dataclass
 from datetime import datetime
+from typing import Any, Dict, List, Optional
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -41,9 +41,7 @@ class HashValidator:
 
         logger.info("Hash Validator initialized")
 
-    def validate_hash_signature(
-        self, data: str, expected_hash: str
-    ) -> HashValidationResult:
+    def validate_hash_signature(self, data: str, expected_hash: str) -> HashValidationResult:
         """Validate a hash signature against provided data."""
         try:
             # Generate hash from data
@@ -85,9 +83,7 @@ class HashValidator:
                 error_message=str(e),
             )
 
-    def validate_data_integrity(
-        self, data: bytes, hash_signature: str
-    ) -> HashValidationResult:
+    def validate_data_integrity(self, data: bytes, hash_signature: str) -> HashValidationResult:
         """Validate data integrity using hash signature."""
         try:
             # Generate hash from binary data

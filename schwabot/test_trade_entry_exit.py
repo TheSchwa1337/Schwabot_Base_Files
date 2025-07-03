@@ -22,7 +22,7 @@ import sys
 import time
 import unittest
 from decimal import Decimal
-from typing import Dict, Optional, Any
+from typing import Any, Dict, Optional
 
 # Add the project root to the path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -48,9 +48,7 @@ MOCK_PORTFOLIO_STATE = {
 class MockIntegratedTradingSignal:
     """Mock trading signal for testing."""
 
-    def __init__(
-        self, signal_id: str, recommended_action: str, btc_price: float = 50000.0
-    ):
+    def __init__(self, signal_id: str, recommended_action: str, btc_price: float = 50000.0):
         self.signal_id = signal_id
         self.recommended_action = recommended_action
         self.btc_price = btc_price
@@ -251,9 +249,7 @@ class MockTradeExecutor:
                 "trade_id": f"ERROR_{int(time.time())}",
             }
 
-    def _validate_trade(
-        self, symbol: str, side: str, amount: float, price: float
-    ) -> bool:
+    def _validate_trade(self, symbol: str, side: str, amount: float, price: float) -> bool:
         """Validate trade parameters."""
         if amount <= 0 or price <= 0:
             return False
@@ -292,9 +288,7 @@ class TestTradeEntryExit(unittest.TestCase):
 
         async def run_test():
             # Test entry
-            entry_result = await self.trade_executor.execute_entry(
-                "BTC/USDC", "BUY", 0.1, 50000.0
-            )
+            entry_result = await self.trade_executor.execute_entry("BTC/USDC", "BUY", 0.1, 50000.0)
 
             self.assertTrue(entry_result["success"])
             self.assertEqual(entry_result["symbol"], "BTC/USDC")
@@ -303,9 +297,7 @@ class TestTradeEntryExit(unittest.TestCase):
             self.assertEqual(entry_result["price"], 50000.0)
 
             # Verify portfolio state after entry
-            self.assertEqual(
-                float(self.trade_executor.portfolio["BTC"]), 0.2
-            )  # 0.1 + 0.1
+            self.assertEqual(float(self.trade_executor.portfolio["BTC"]), 0.2)  # 0.1 + 0.1
             self.assertLess(
                 float(self.trade_executor.portfolio["USDC"]), 10000.0
             )  # Reduced by trade
@@ -324,9 +316,7 @@ class TestTradeEntryExit(unittest.TestCase):
             self.assertEqual(exit_result["pnl"], 100.0)  # (51000 - 50000) * 0.1
 
             # Verify portfolio state after exit
-            self.assertEqual(
-                float(self.trade_executor.portfolio["BTC"]), 0.1
-            )  # Back to original
+            self.assertEqual(float(self.trade_executor.portfolio["BTC"]), 0.1)  # Back to original
             self.assertGreater(
                 float(self.trade_executor.portfolio["USDC"]), 10000.0
             )  # Increased by profit
@@ -338,9 +328,7 @@ class TestTradeEntryExit(unittest.TestCase):
 
         async def run_test():
             # Test entry
-            entry_result = await self.trade_executor.execute_entry(
-                "ETH/USDC", "BUY", 1.0, 3000.0
-            )
+            entry_result = await self.trade_executor.execute_entry("ETH/USDC", "BUY", 1.0, 3000.0)
 
             self.assertTrue(entry_result["success"])
             self.assertEqual(entry_result["symbol"], "ETH/USDC")
@@ -400,15 +388,11 @@ class TestTradeEntryExit(unittest.TestCase):
 
         async def run_test():
             # Test negative amount
-            result = await self.trade_executor.execute_entry(
-                "BTC/USDC", "BUY", -0.1, 50000.0
-            )
+            result = await self.trade_executor.execute_entry("BTC/USDC", "BUY", -0.1, 50000.0)
             self.assertFalse(result["success"])
 
             # Test zero price
-            result = await self.trade_executor.execute_entry(
-                "BTC/USDC", "BUY", 0.1, 0.0
-            )
+            result = await self.trade_executor.execute_entry("BTC/USDC", "BUY", 0.1, 0.0)
             self.assertFalse(result["success"])
 
         asyncio.run(run_test())
