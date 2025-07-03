@@ -34,69 +34,69 @@ logger = logging.getLogger(__name__)
 
 def tensor_contraction(A: np.ndarray, B: np.ndarray, axes: Union[int, List[int]] = 1) -> np.ndarray:
     """Perform tensor contraction."""
-    try:
+try:
         return np.tensordot(A, B, axes=axes)
     except Exception as e:
-        logger.error(f"Tensor contraction failed: {e}")
+logger.error(f"Tensor contraction failed: {e}")
         return np.zeros((A.shape[0], B.shape[-1]), dtype=np.float64)
 
 
 def bit_phase_operations(strategy_id: int) -> Tuple[int, int, int]:
     """Advanced bit phase tensor operations for strategy routing."""
-    try:
+try:
         phi_4 = strategy_id & 0b1111
         phi_8 = (strategy_id >> 4) & 0xFF
         phi_42 = (strategy_id >> 12) & 0x3FFFFFFFFFF
         return (phi_4, phi_8, phi_42)
     except Exception as e:
-        logger.error(f"Bit phase operations failed: {e}")
+logger.error(f"Bit phase operations failed: {e}")
         return (0, 0, 0)
 
 
 def matrix_basket_calc(prices: np.ndarray, weights: np.ndarray) -> np.ndarray:
     """Calculate matrix basket operations for asset allocation."""
-    try:
+try:
         if prices.ndim == 1:
             prices = prices.reshape(-1, 1)
         return unified_math.dot_product(weights, prices.T)
     except Exception as e:
-        logger.error(f"Matrix basket calculation failed: {e}")
+logger.error(f"Matrix basket calculation failed: {e}")
         return np.zeros_like(weights)
 
 
 def tensor_similarity(tensor_a: np.ndarray, tensor_b: np.ndarray) -> float:
     """Calculate cosine similarity between tensors."""
-    try:
+try:
         flat_a = tensor_a.flatten()
         flat_b = tensor_b.flatten()
-        
+
         dot_product = unified_math.dot_product(flat_a, flat_b)
         norm_a = np.linalg.norm(flat_a)
         norm_b = np.linalg.norm(flat_b)
-        
+
         if norm_a < 1e-12 or norm_b < 1e-12:
             return 0.0
-            
-        similarity = dot_product / (norm_a * norm_b)
+
+similarity = dot_product / (norm_a * norm_b)
         return max(0.0, min(1.0, similarity))
     except Exception as e:
-        logger.error(f"Tensor similarity calculation failed: {e}")
+logger.error(f"Tensor similarity calculation failed: {e}")
         return 0.0
 
 
 def tensor_decomposition(tensor: np.ndarray) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
-    """
-    Perform SVD decomposition of tensor.
+"""
+Perform SVD decomposition of tensor.
 
-    Args:
+Args:
         tensor: Input tensor
 
-    Returns:
+Returns:
         Tuple of (U, S, V) decomposition matrices
-    """
-    try:
-        # Ensure 2D for SVD
-        if tensor.ndim > 2:
+"""
+try:
+# Ensure 2D for SVD
+if tensor.ndim > 2:
             tensor_2d = tensor.reshape(tensor.shape[0], -1)
         else:
             tensor_2d = tensor
@@ -104,41 +104,41 @@ def tensor_decomposition(tensor: np.ndarray) -> Tuple[np.ndarray, np.ndarray, np
         U, S, Vt = np.linalg.svd(tensor_2d, full_matrices=False)
         return U, S, Vt
     except Exception as e:
-        logger.error(f"Tensor decomposition failed: {e}")
+logger.error(f"Tensor decomposition failed: {e}")
         n, m = tensor.shape[0], tensor.shape[1] if tensor.ndim > 1 else 1
         return np.eye(n), np.ones(unified_math.min(n, m)), np.eye(m)
 
 
 def tensor_normalize(tensor: np.ndarray, method: str = 'l2') -> np.ndarray:
-    """
-    Normalize tensor using specified method.
+"""
+Normalize tensor using specified method.
 
-    Args:
+Args:
         tensor: Input tensor
-        method: Normalization method ('l2', 'l1', 'max', 'minmax')
+method: Normalization method ('l2', 'l1', 'max', 'minmax')
 
-    Returns:
+Returns:
         Normalized tensor
-    """
-    try:
+"""
+try:
         if method == 'l2':
             norm = np.linalg.norm(tensor)
             return tensor / norm if norm > 1e-12 else tensor
-        elif method == 'l1':
+elif method == 'l1':
             norm = np.sum(unified_math.abs(tensor))
             return tensor / norm if norm > 1e-12 else tensor
-        elif method == 'max':
+elif method == 'max':
             max_val = unified_math.max(unified_math.abs(tensor))
             return tensor / max_val if max_val > 1e-12 else tensor
-        elif method == 'minmax':
+elif method == 'minmax':
             min_val, max_val = unified_math.min(tensor), unified_math.max(tensor)
             if max_val - min_val > 1e-12:
                 return (tensor - min_val) / (max_val - min_val)
             return tensor
-        else:
+else:
             return tensor
     except Exception as e:
-        logger.error(f"Tensor normalization failed: {e}")
+logger.error(f"Tensor normalization failed: {e}")
         return tensor
 
 

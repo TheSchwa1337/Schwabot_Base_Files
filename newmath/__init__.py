@@ -99,11 +99,11 @@ from .render_engine import (
 
 def quick_test() -> bool:
     """Quick validation test for the new math library."""
-    try:
+try:
         from .validation import run_basic_tests
-        return run_basic_tests()
+return run_basic_tests()
     except Exception as e:
-        safe_print(f"Quick test failed: {e}")
+safe_print(f"Quick test failed: {e}")
         return False
 
 
@@ -116,12 +116,12 @@ def library_status() -> dict:
         "all_operational": True
     }
 
-    modules = [
+modules = [
         "tensor_ops", "profit_math", "entropy_calc",
         "hash_vectors", "matrix_utils", "render_engine", "validation"
-    ]
+]
     
-    for module in modules:
+for module in modules:
         try:
             __import__(f"newmath.{module}")
             status["modules_loaded"].append(module)
@@ -129,7 +129,7 @@ def library_status() -> dict:
             status["all_operational"] = False
             status[f"{module}_error"] = str(e)
 
-    return status
+return status
 
 
 # Export main components
