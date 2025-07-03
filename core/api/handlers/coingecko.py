@@ -1,5 +1,14 @@
 """CoinGecko API Handler
 
+Handles data fetching and processing from CoinGecko API endpoints
+for cryptocurrency market data, price feeds, and market analytics.
+
+This module provides both sync and async interfaces for:
+- Price data fetching
+- Market cap information  
+- Historical data retrieval
+- Volume and trading metrics
+
 
 
 
@@ -17,6 +26,7 @@ Provides price data, market metrics, trending coins, and market dominance data.
 """
 
 import asyncio
+import json
 import logging
 import time
 from typing import Any, Dict

@@ -1,1184 +1,362 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Schwabot Type Definitions
+
+Type definitions for the Schwabot unified mathematics and trading system.
+Provides consistent type annotations across all modules.
+"""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Any, Callable, Dict, List, NewType, Optional, Tuple, Union
-
+from enum import Enum
 import numpy as np
 
-""""
 
-
-
-LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
-
-
-
-
-
-
-
-This file has been automatically commented out because it contains syntax errors
-
-
-
-that prevent the Schwabot system from running properly.
-
-
-
-
-
-
-
-Original file: core\type_defs.py
-
-
-
-Date commented out: 2025-7-2 19:37:3
-
-
-
-
-
-
-
-The clean implementation has been preserved in the following files:
-
-
-
-- core/clean_math_foundation.py (mathematical foundation)
-
-
-
-- core/clean_profit_vectorization.py (profit calculations)
-
-
-
-- core/clean_trading_pipeline.py (trading logic)
-
-
-
-- core/clean_unified_math.py (unified mathematics)
-
-
-
-
-
-
-
-All core functionality has been reimplemented in clean, production-ready files.
-
-
-""""
-""""
-
-# ORIGINAL CONTENT COMMENTED OUT BELOW:
-
-""""
-""""
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# !/usr/bin/env python3
-
-
-
-# -*- coding: utf-8 -*-
-
-
-
-
-
-
-
-Schwabot Type Definitions =========================
-
-
-
-
-
-
-
-Type definitions for the Schwabot unified mathematics and trading system.
-
-
-
-Provides consistent type annotations across all modules.# Basic mathematical types
-
-
-
-Vector = NewType('Vector', np.ndarray)''
-
-
-
-Matrix = NewType('Matrix', np.ndarray)''
-
-
-
+# Basic mathematical types
+Vector = NewType('Vector', np.ndarray)
+Matrix = NewType('Matrix', np.ndarray)
 Tensor = NewType('Tensor', np.ndarray)
-
-
-
 Scalar = Union[int, float, np.number]
 
 
+# Trading types
+class TradingAction(Enum):
+    """Trading action types."""
+    BUY = "BUY"
+    SELL = "SELL"
+    HOLD = "HOLD"
 
 
-
-
-
-
-
+class OrderType(Enum):
+    """Order types for trading."""
+    MARKET = "market"
+    LIMIT = "limit"
+    STOP = "stop"
+    STOP_LIMIT = "stop_limit"
 
 
 # Entropy and information types
-
-
-
-class Entropy:Entropy value with metadata.def __init__(self, value: float, metadata: Optional[Dict[str, Any]] = None):
-
-
-
-        self.value = float(value)
-
-
-
-self.metadata = metadata or {}
-
-
-
-
-
-
-
-def __float__() -> float:
-
-
-
+@dataclass
+class Entropy:
+    """Entropy value with metadata."""
+    value: float
+    metadata: Dict[str, Any] = None
+    
+    def __post_init__(self):
+        if self.metadata is None:
+            self.metadata = {}
+    
+    def __float__(self) -> float:
         return self.value
 
 
-
-
-
-
-
-def __str__() -> str:
-
-
-
-        return fEntropy({self.value:.6f})
-
-
-
-
-
-
-
-def __repr__() -> str:return fEntropy({self.value}, metadata = {self.metadata})
-
-
-
-
-
-
-
-
-
-
-
-# Analysis result types
-
-
-
-class AnalysisResult:
-
-
-
-    Container for analysis results.def __init__(self, data: Dict[str, Any]):
-
-
-
-        self._data = data
-
-
-
-
-
-
-
-def __getitem__() -> Any:
-
-
-
-        return self._data[key]
-
-
-
-
-
-
-
-def __setitem__() -> None:
-
-
-
-        self._data[key] = value
-
-
-
-
-
-
-
-def __contains__() -> bool:
-
-
-
-        return key in self._data
-
-
-
-
-
-
-
-def get() -> Any:
-
-
-
-        return self._data.get(key, default)
-
-
-
-
-
-
-
-def keys(self):
-
-
-
-        return self._data.keys()
-
-
-
-
-
-
-
-def values(self):
-
-
-
-        return self._data.values()
-
-
-
-
-
-
-
-def items(self):
-
-
-
-        return self._data.items()
-
-
-
-
-
-
-
-def to_dict() -> Dict[str, Any]:
-
-
-
-        return self._data.copy()
-
-
-
-
-
-
-
-
-
-
-
-# Trading and strategy types
-
+@dataclass
+class PricePoint:
+    """Price point with timestamp."""
+    price: float
+    timestamp: float
+    volume: Optional[float] = None
+    
+    
+@dataclass
+class MarketData:
+    """Market data container."""
+    symbol: str
+    price: float
+    bid: Optional[float] = None
+    ask: Optional[float] = None
+    volume: Optional[float] = None
+    timestamp: Optional[float] = None
 
 
 @dataclass
-
-
-
-class TradingSignal:
-
-
-
-    Trading signal with confidence and metadata.symbol: str''
-
-
-
-signal_type: str  # 'buy', 'sell', 'hold'
-
-
-
-    strength: float  # -1.0 to 1.0
-
-
-
-    confidence: float  # 0.0 to 1.0
-
-
-
-timestamp: float
-
-
-
-metadata: Dict[str, Any]
-
-
-
-
-
-
-
-
-
+class TradeSignal:
+    """Trading signal container."""
+    action: TradingAction
+    confidence: float
+    price: Optional[float] = None
+    quantity: Optional[float] = None
+    reason: Optional[str] = None
+    timestamp: Optional[float] = None
 
 
 @dataclass
-
-
-
-class StrategyResult:Result from strategy execution.strategy_id: str
-
-
-
-    profit_score: float
-
-
-
-    risk_score: float
-
-
-
-execution_time: float
-
-
-
-signals: List[TradingSignal]
-
-
-
-metadata: Dict[str, Any]
-
-
-
-
-
-
-
-
-
+class Position:
+    """Trading position."""
+    symbol: str
+    side: str  # 'long' or 'short'
+    size: float
+    entry_price: float
+    current_price: Optional[float] = None
+    unrealized_pnl: Optional[float] = None
+    timestamp: Optional[float] = None
 
 
 @dataclass
+class RiskMetrics:
+    """Risk assessment metrics."""
+    var_95: float  # Value at Risk at 95% confidence
+    max_drawdown: float
+    sharpe_ratio: float
+    volatility: float
+    beta: Optional[float] = None
 
 
-
-class MarketData:Market data structure.symbol: str
-
-
-
-price: float
+# Strategy types
+StrategyFunction = Callable[[MarketData], TradeSignal]
+RiskFunction = Callable[[Position], RiskMetrics]
+SignalProcessor = Callable[[List[TradeSignal]], TradeSignal]
 
 
-
-volume: float
-
-
-
-timestamp: float
-
-
-
-bid: Optional[float] = None
-
-
-
-ask: Optional[float] = None
-
-
-
-high_24h: Optional[float] = None
-
-
-
-low_24h: Optional[float] = None
-
-
-
-change_24h: Optional[float] = None
-
-
-
-
-
-
-
-
-
-
-
-# Quantum and mathematical state types
-
+# Mathematical operation types
+class MathOperation(Enum):
+    """Mathematical operation types."""
+    ADD = "add"
+    SUBTRACT = "subtract"
+    MULTIPLY = "multiply"
+    DIVIDE = "divide"
+    POWER = "power"
+    LOG = "log"
+    EXP = "exp"
+    SIN = "sin"
+    COS = "cos"
+    TAN = "tan"
 
 
 @dataclass
+class CalculationResult:
+    """Result of a mathematical calculation."""
+    value: Union[Scalar, Vector, Matrix, Tensor]
+    operation: MathOperation
+    inputs: List[Any]
+    metadata: Dict[str, Any] = None
+    
+    def __post_init__(self):
+        if self.metadata is None:
+            self.metadata = {}
 
 
-
-class QuantumState:Quantum state representation.amplitudes: Vector
-
-
-
-    phases: Vector
-
-
-
-    entanglement: Optional[Matrix] = None
-
-
-
-    coherence: float = 1.0
-
-
-
-    timestamp: float = 0.0
-
-
-
-
-
-
-
-
-
+# Quantum and advanced types
+@dataclass
+class QuantumState:
+    """Quantum state representation."""
+    amplitude: complex
+    phase: float
+    coherence: float
+    entanglement: Optional[float] = None
 
 
 @dataclass
+class WaveFunction:
+    """Wave function representation."""
+    states: List[QuantumState]
+    normalization: float = 1.0
+    
+    def collapse(self) -> QuantumState:
+        """Collapse wave function to single state."""
+        if not self.states:
+            return QuantumState(amplitude=0+0j, phase=0.0, coherence=0.0)
+        return self.states[0]
 
 
-
-class DriftState:Drift field state.field_values: Matrix
-
-
-
-    gradient: Vector
-
-
-
-divergence: float
-
-
-
-curl: Vector
-
-
-
-timestamp: float
-
-
-
-
-
-
-
-
-
-
-
-# Echo and signal processing types
-
+# Error and status types
+class ComponentStatus(Enum):
+    """Component status types."""
+    OPERATIONAL = "OPERATIONAL"
+    WARNING = "WARNING"
+    ERROR = "ERROR"
+    OFFLINE = "OFFLINE"
+    INITIALIZING = "INITIALIZING"
 
 
 @dataclass
-
-
-
-class EchoSignal:Echo signal data structure.amplitude: float
-
-
-
-frequency: float
-
-
-
-phase: float
-
-
-
-decay_rate: float
-
-
-
-timestamp: float
-
-
-
-source: str
-
-
-
-
-
-
-
-
-
-
-
-@dataclass
-
-
-
-class SignalProcessingResult:Result from signal processing.filtered_signal: Vector
-
-
-
-noise_level: float
-
-
-
-signal_to_noise_ratio: float
-
-
-
-frequency_spectrum: Dict[float, float]
-
-
-
-confidence: float
-
-
-
-
-
-
-
-
-
-
-
-# Memory and learning types
-
-
-
-@dataclass
-
-
-
-class MemoryState:Memory state for adaptive learning.short_term: Dict[str, Any]
-
-
-
-long_term: Dict[str, Any]
-
-
-
-decay_factors: Dict[str, float]
-
-
-
-last_update: float
-
-
-
-
-
-
-
-
-
-
-
-@dataclass
-
-
-
-class LearningMetrics:Metrics for adaptive learning.accuracy: float
-
-
-
-precision: float
-
-
-
-recall: float
-
-
-
-f1_score: float
-
-
-
-learning_rate: float
-
-
-
-convergence: float
-
-
-
-
-
-
-
-
-
-
-
-# Profit and optimization types
-
-
-
-@dataclass
-
-
-
-class ProfitMetrics:Profit calculation metrics.gross_profit: float
-
-
-
-    net_profit: float
-
-
-
-roi: float
-
-
-
-sharpe_ratio: float
-
-
-
-max_drawdown: float
-
-
-
-win_rate: float
-
-
-
-profit_factor: float
-
-
-
-
-
-
-
-
-
-
-
-@dataclass
-
-
-
-class OptimizationResult:Result from optimization process.optimal_parameters: Dict[str, float]
-
-
-
-objective_value: float
-
-
-
-iterations: int
-
-
-
-convergence_time: float
-
-
-
-confidence: float
-
-
-
-
-
-
-
-
-
-
-
-# Risk management types
-
-
-
-@dataclass
-
-
-
-class RiskMetrics:Risk assessment metrics.var_95: float  # Value at Risk 95%
-
-
-
-expected_shortfall: float
-
-
-
-beta: float
-
-
-
-alpha: float
-
-
-
-tracking_error: float
-
-
-
-information_ratio: float
-
-
-
-
-
-
-
-
-
-
-
-@dataclass
-
-
-
-class RiskLimits:Risk management limits.max_position_size: float
-
-
-
-max_daily_loss: float
-
-
-
-max_drawdown: float
-
-
-
-concentration_limit: float
-
-
-
-leverage_limit: float
-
-
-
-
-
-
-
-
-
-
-
-# API and data feed types
-
-
-
-@dataclass
-
-
-
-class APIResponse:Standardized API response.success: bool
-
-
-
-data: Any
-
-
-
-timestamp: float
-
-
-
-source: str
-
-
-
-error_message: Optional[str] = None
-
-
-
-rate_limit_remaining: Optional[int] = None
-
-
-
-
-
-
-
-
-
-
-
-@dataclass
-
-
-
-class CacheEntry:Cache entry structure.key: str
-
-
-
-value: Any
-
-
-
-timestamp: float
-
-
-
-expiry: Optional[float] = None
-
-
-
-hit_count: int = 0
-
-
-
-
-
-
-
-
-
-
-
-# Performance and monitoring types
-
-
-
-@dataclass
-
-
-
-class PerformanceMetrics:
-
-
-
-    System performance metrics.cpu_usage: float
-
-
-
-memory_usage: float
-
-
-
-latency_ms: float
-
-
-
-throughput: float
-
-
-
-error_rate: float
-
-
-
-uptime: float
-
-
-
-
-
-
-
-
-
-
-
-@dataclass
-
-
-
-class SystemStatus:Overall system status.components: Dict[str, bool]
-
-
-
-performance: PerformanceMetrics
-
-
-
-last_update: float
-
-
-
-alerts: List[str]
-
-
-
-
-
-
-
-
-
+class SystemStatus:
+    """System status container."""
+    component_name: str
+    status: ComponentStatus
+    message: Optional[str] = None
+    timestamp: Optional[float] = None
+    metrics: Dict[str, Any] = None
+    
+    def __post_init__(self):
+        if self.metrics is None:
+            self.metrics = {}
 
 
 # Configuration types
+@dataclass
+class TradingConfig:
+    """Trading configuration."""
+    symbol: str
+    max_position_size: float
+    stop_loss_pct: float
+    take_profit_pct: float
+    risk_per_trade: float = 0.02
+    
+    
+@dataclass
+class MathConfig:
+    """Mathematical configuration."""
+    precision: int = 8
+    use_numpy: bool = True
+    enable_caching: bool = True
+    cache_size: int = 1000
 
+
+# Unified types for backward compatibility
+TradingData = Union[MarketData, TradeSignal, Position]
+MathData = Union[Vector, Matrix, Tensor, Scalar]
+StatusData = Union[SystemStatus, ComponentStatus]
+ConfigData = Union[TradingConfig, MathConfig]
+
+
+# Type aliases for complex structures
+TensorOperation = Callable[[Tensor, Tensor], Tensor]
+StrategyPipeline = List[StrategyFunction]
+RiskPipeline = List[RiskFunction]
+ValidationFunction = Callable[[Any], bool]
+
+
+# Advanced mathematical structures
+@dataclass
+class ComplexMatrix:
+    """Complex-valued matrix."""
+    real_part: Matrix
+    imaginary_part: Matrix
+    
+    def to_complex(self) -> np.ndarray:
+        """Convert to complex numpy array."""
+        return self.real_part + 1j * self.imaginary_part
 
 
 @dataclass
-
-
-
-class ConfigParameter:Configuration parameter definition.name: str
-
-
-
-value: Any
-
-
-
-parameter_type: str
-
-
-
-description: str
-
-
-
-constraints: Optional[Dict[str, Any]] = Nonecategory: str = general
-
-
-
-
-
-
-
-
-
-
-
-# Utility types''
-
-
-
-Timestamp = NewType('Timestamp', float)''
-
-
-
-Hash = NewType('Hash', str)''
-
-
-
-Symbol = NewType('Symbol', str)''
-
-
-
-Price = NewType('Price', float)''
-
-
-
-Volume = NewType('Volume', float)''
-
-
-
-Percentage = NewType('Percentage', float)
-
-
-
-
-
-
-
-# Complex composite types
-
-
-
-TensorField = Dict[str, Tensor]
-
-
-
-MatrixStack = List[Matrix]
-
-
-
-VectorSequence = List[Vector]
-
-
-
-SignalHistory = List[EchoSignal]
-
-
-
-StrategyPortfolio = Dict[str, StrategyResult]
-
-
-
-
-
-
-
-# Function signature types (compatible with older Python versions)
-
-
-
-MathFunction = Callable[[Vector], Scalar]
-
-
-
-OptimizationFunction = Callable[[Dict[str, float]], float]
-
-
-
-SignalProcessor = Callable[[Vector], Vector]
-
-
-
-RiskCalculator = Callable[[MarketData], RiskMetrics]
-
-
-
-
-
-
-
-# Special mathematical constants
-
-
-
-GOLDEN_RATIO = 1.618033988749
-
-
-
-PI = 3.141592653589793
-
-
-
-E = 2.718281828459045
-
-
-
-SQRT_2 = 1.4142135623730951
-
-
-
-
-
-
-
-# Common error types
-
-
-
-
-
-
-
-
-
-
-
-class SchawbotError(Exception):Base exception for Schwabot system.pass
-
-
-
-
-
-
-
-
-
-
-
-class MathematicalError(SchawbotError):Mathematical computation error.pass
-
-
-
-
-
-
-
-
-
-
-
-class TradingError(SchawbotError):Trading operation error.pass
-
-
-
-
-
-
-
-
-
-
-
-class DataError(SchawbotError):Data processing error.pass
-
-
-
-
-
-
-
-
-
-
-""""
-class ConfigurationError(SchawbotError):Configuration error.pass""'""'
-
-
-
-""""
-""""
+class SparseTensor:
+    """Sparse tensor representation."""
+    indices: List[Tuple[int, ...]]
+    values: List[Scalar]
+    shape: Tuple[int, ...]
+    
+    def to_dense(self) -> Tensor:
+        """Convert to dense tensor."""
+        dense = np.zeros(self.shape)
+        for idx, val in zip(self.indices, self.values):
+            dense[idx] = val
+        return Tensor(dense)
+
+
+# Profit and performance types
+@dataclass
+class ProfitMetrics:
+    """Profit and performance metrics."""
+    total_return: float
+    annual_return: float
+    max_drawdown: float
+    win_rate: float
+    profit_factor: float
+    sharpe_ratio: float
+    calmar_ratio: Optional[float] = None
+
+
+@dataclass
+class TradeRecord:
+    """Individual trade record."""
+    symbol: str
+    action: TradingAction
+    quantity: float
+    price: float
+    timestamp: float
+    commission: float = 0.0
+    slippage: float = 0.0
+    
+    
+# Integration and pipeline types
+IntegrationResult = Dict[str, Any]
+PipelineStage = Callable[[Any], Any]
+ValidationResult = Tuple[bool, str]
+ProcessingPipeline = List[PipelineStage]
+
+
+# Export list for easy imports
+__all__ = [
+    # Basic types
+    'Vector', 'Matrix', 'Tensor', 'Scalar',
+    
+    # Enums
+    'TradingAction', 'OrderType', 'MathOperation', 'ComponentStatus',
+    
+    # Dataclasses
+    'Entropy', 'PricePoint', 'MarketData', 'TradeSignal', 'Position',
+    'RiskMetrics', 'CalculationResult', 'QuantumState', 'WaveFunction',
+    'SystemStatus', 'TradingConfig', 'MathConfig', 'ComplexMatrix',
+    'SparseTensor', 'ProfitMetrics', 'TradeRecord',
+    
+    # Type aliases
+    'TradingData', 'MathData', 'StatusData', 'ConfigData',
+    'TensorOperation', 'StrategyPipeline', 'RiskPipeline',
+    'ValidationFunction', 'IntegrationResult', 'PipelineStage',
+    'ValidationResult', 'ProcessingPipeline',
+    
+    # Function types
+    'StrategyFunction', 'RiskFunction', 'SignalProcessor',
+]
+
+
+def create_default_market_data(symbol: str = "BTC/USDC") -> MarketData:
+    """Create default market data for testing."""
+    return MarketData(
+        symbol=symbol,
+        price=50000.0,
+        bid=49999.0,
+        ask=50001.0,
+        volume=1000.0,
+        timestamp=None
+    )
+
+
+def create_default_trade_signal() -> TradeSignal:
+    """Create default trade signal for testing."""
+    return TradeSignal(
+        action=TradingAction.HOLD,
+        confidence=0.5,
+        reason="Default signal"
+    )
+
+
+def validate_trading_data(data: TradingData) -> ValidationResult:
+    """Validate trading data structure."""
+    try:
+        if isinstance(data, MarketData):
+            if data.price <= 0:
+                return False, "Invalid price"
+        elif isinstance(data, TradeSignal):
+            if not 0 <= data.confidence <= 1:
+                return False, "Invalid confidence range"
+        elif isinstance(data, Position):
+            if data.size <= 0:
+                return False, "Invalid position size"
+        
+        return True, "Valid"
+    except Exception as e:
+        return False, f"Validation error: {e}"
+
+
+if __name__ == "__main__":
+    # Test the type definitions
+    print("Testing Schwabot Type Definitions...")
+    
+    # Test market data
+    market_data = create_default_market_data()
+    print(f"Market data: {market_data}")
+    
+    # Test trade signal
+    signal = create_default_trade_signal()
+    print(f"Trade signal: {signal}")
+    
+    # Test validation
+    valid, msg = validate_trading_data(market_data)
+    print(f"Market data validation: {valid} - {msg}")
+    
+    print("Type definitions test completed!")

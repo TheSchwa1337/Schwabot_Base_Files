@@ -25,6 +25,16 @@ except ImportError:
     CLI_HANDLER_AVAILABLE = False
     print("Warning: Enhanced CLI compatibility handler not available")
 
+# Enhanced Windows CLI Compatibility Integration
+try:
+    from utils.safe_print import safe_print
+    CLI_HANDLER_AVAILABLE = True
+except ImportError:
+    CLI_HANDLER_AVAILABLE = False
+    def safe_print(message):
+        """Fallback safe print function"""
+        print(message)
+
 
 class CliCompatibilityApplicator:
     """Applies enhanced CLI compatibility to mathematical validation systems."""

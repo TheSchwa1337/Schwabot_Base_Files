@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import json
 import logging
 import time
 from typing import Any, Dict
@@ -12,19 +13,10 @@ from .base_handler import BaseAPIHandler
 
 """Glassnode API Handler
 
-
-
-
-
-
-
-Fetches on-chain cryptocurrency metrics from Glassnode API.
-
-
+Professional-grade Glassnode API integration for on-chain analytics
+and advanced cryptocurrency market intelligence.
 
 Provides network health, market valuation, and activity metrics.
-
-
 
 """
 

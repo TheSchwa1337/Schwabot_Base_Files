@@ -1,390 +1,307 @@
+#!/usr/bin/env python3
+"""
+Glyph Phase Resolver
+
+Routes glyph logic based on observed phase shifts and entropy dynamics.
+This module provides intelligent glyph routing for the Schwabot trading system.
+"""
+
 import time
-from typing import (
-    Any,
-    DictGlyph,
-    Module.Implements,
-    Phase,
-    Resolver,
-    Zygot/Zalgo,
-    dynamically,
-    glyph,
-    logic,
-    phase,
-    router,
-    routing,
-    the,
-)
-
-""""
-
-
-
-LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
-
-
-
-
-
-
-
-This file has been automatically commented out because it contains syntax errors
-
-
-
-that prevent the Schwabot system from running properly.
-
-
-
-
-
-
-
-Original file: core\\glyph_phase_resolver.py
-
-
-
-Date commented out: 2025-7-2 19:36:58
-
-
-
-
-
-
-
-The clean implementation has been preserved in the following files:
-
-
-
-- core/clean_math_foundation.py (mathematical foundation)
-
-
-
-- core/clean_profit_vectorization.py (profit calculations)
-
-
-
-- core/clean_trading_pipeline.py (trading logic)
-
-
-
-- core/clean_unified_math.py (unified mathematics)
-
-
-
-
-
-
-
-All core functionality has been reimplemented in clean, production-ready files.
-
-
-""""
-""""
-
-# ORIGINAL CONTENT COMMENTED OUT BELOW:
-
-""""
-""""
-
-
-
-
-
-
-
-
-
-based on paradoxical phase shifts and entropy corridors.class GlyphPhaseResolver:Routes glyph logic based on observed phase shifts and entropy dynamics.def __init__() -> None:
-
-
-
-Initializes the GlyphPhaseResolver.
-
-
-
-
-
-
-
-Args:
-
-
-
-            phase_shift_threshold: The threshold for significant phase shifts.self.phase_shift_threshold = phase_shift_threshold
-
-
-""""
-self.metrics: Dict[str, Any] = {total_resolutions: 0,phase_shift_alerts": 0,last_resolution_time": None,
-
-
-
-}
-
-
-
-
-
-
-
-def resolve_glyph_phase() -> str:Resolves the appropriate glyph phase based on the phase shift operator
-
-
-
-and entropy corridor status.
-
-
-
-
-
-
-
-Args:
-
-
-
+from typing import Any, Dict, Optional, Union
+from enum import Enum
+import logging
+
+
+logger = logging.getLogger(__name__)
+
+
+class GlyphPhase(Enum):
+    """Glyph phase states."""
+    NORMAL = "normal"
+    ALERT = "alert"
+    DIVERGENCE = "divergence"
+    CONVERGENCE = "convergence"
+    CRITICAL = "critical"
+
+
+class RoutingBehavior(Enum):
+    """Routing behavior types."""
+    NORMAL_GLYPH_ROUTING = "normal_glyph_routing"
+    DIVERGENCE_ALERT_ROUTING = "divergence_alert_routing"
+    HIGH_ENTROPY_ROUTING = "high_entropy_routing"
+    CONSERVATIVE_ROUTING = "conservative_routing"
+    AGGRESSIVE_ROUTING = "aggressive_routing"
+
+
+class GlyphPhaseResolver:
+    """
+    Routes glyph logic based on observed phase shifts and entropy dynamics.
+    
+    This class analyzes phase shifts and entropy corridors to determine
+    the appropriate glyph routing behavior for trading decisions.
+    """
+    
+    def __init__(self, phase_shift_threshold: float = 0.1):
+        """
+        Initialize the GlyphPhaseResolver.
+        
+        Args:
+            phase_shift_threshold: The threshold for significant phase shifts.
+        """
+        self.phase_shift_threshold = phase_shift_threshold
+        self.metrics: Dict[str, Any] = {
+            "total_resolutions": 0,
+            "phase_shift_alerts": 0,
+            "last_resolution_time": None,
+            "entropy_adjustments": 0,
+            "routing_history": []
+        }
+        
+    def resolve_glyph_phase(self, 
+                           phase_shift_operator: float = 0.0,
+                           entropy_corridor_status: Optional[Dict[str, Any]] = None) -> str:
+        """
+        Resolve the appropriate glyph phase based on phase shift and entropy.
+        
+        Args:
             phase_shift_operator: The (t) value indicating phase divergence.
-
-
-
-entropy_corridor_status: Dictionary with entropy-related metrics.
-
-
-
-
-
-
-
-Returns:
-
-
-
-            A string indicating the resolved glyph routing behavior."self.metrics[total_resolutions] += 1self.metrics[last_resolution_time] = time.time()"
-
-
-
-routing_behavior = NORMAL_GLYPH_ROUTING# Check for signif icant phase divergence
-
-
-
-if abs(phase_shift_operator) > self.phase_shift_threshold: routing_behavior = DIVERGENCE_ALERT_ROUTING
-
-
-
-self.metrics[phase_shift_alerts] += 1
-
-
-
-
-
-
-
-# Integrate entropy corridor status
-
-
-
-        # Example: If entropy is high, might suggest a more conservative
-
-
-
-# routing
-
-
-
-if entropy_corridor_status.get(high_entropy_detected, False):
-
-
-
-            if routing_behavior == NORMAL_GLYPH_ROUTING:
-
-
-
-                routing_behavior = CONSERVATIVE_GLYPH_ROUTINGelse :
-
-
-
-                routing_behavior =  DIVERGENCE_AND_CONSERVATIVE_ROUTING# More complex logic can be added here based on specific Zygot/Zalgo
-
-
-
-# rules
-
-
-
-
-
-
-
-        return routing_behavior
-
-
-
-
-
-
-
-def get_metrics() -> Dict[str, Any]:
-
-
-
-Returns the operational metrics of the Glyph Phase Resolver.return self.metrics
-
-
-
-
-
-
-
-def update_threshold() -> None:
-
-
-
-Updates the phase shift threshold.self.phase_shift_threshold = new_threshold
-
-
-
-print(
-
-
-
-fGlyph Phase Resolver threshold updated to: {self.phase_shif t_threshold})
-
-
-
-
-
-
-
-def reset() -> None:Resets the resolver's metrics.'self.metrics = {total_resolutions: 0,phase_shift_alerts: 0,last_resolution_time": None,"
-
-
-
-}
-
-
-
-if __name__ == __main__:
-
-
-
-    print(--- Glyph Phase Resolver Demo ---)
-
-
-
-
-
-
-
-resolver = GlyphPhaseResolver(phase_shift_threshold=0.5)
-
-
-
-
-
-
-
-# Simulate phase shift operator ((t)) and entropy status
-
-
-
-    entropy_status_low = {high_entropy_detected: False, entropy_value: 0.1}entropy_status_high = {high_entropy_detected: True,entropy_value: 0.9}
-
-
-
-print(\n--- Test Case 1: Normal phase shift, low entropy ---)
-
-
-
-    phase_shift_1 = 0.3
-
-
-
-    routing_1 = resolver.resolve_glyph_phase(phase_shift_1, entropy_status_low)
-
-
-
-    print(fPhase Shift: {phase_shift_1}, Entropy: {entropy_status_low})print(fRouting Behavior: {routing_1})print(fMetrics: {resolver.get_metrics()})
-
-
-
-print(\n--- Test Case 2: High phase shift, low entropy ---)
-
-
-
-    phase_shift_2 = 0.8
-
-
-
-    routing_2 = resolver.resolve_glyph_phase(phase_shift_2, entropy_status_low)
-
-
-
-    print(fPhase Shift: {phase_shift_2}, Entropy: {entropy_status_low})print(fRouting Behavior: {routing_2})print(fMetrics: {resolver.get_metrics()})
-
-
-
-print(\n--- Test Case 3: Normal phase shift, high entropy ---)
-
-
-
-    phase_shift_3 = 0.2
-
-
-
-    routing_3 = resolver.resolve_glyph_phase(phase_shift_3, entropy_status_high)
-
-
-
-    print(fPhase Shift: {phase_shift_3}, Entropy: {entropy_status_high})print(fRouting Behavior: {routing_3})print(fMetrics: {resolver.get_metrics()})
-
-
-
-print(\n--- Test Case 4: High phase shift, high entropy ---)
-
-
-
-    phase_shift_4 = 0.12
-
-
-
-    routing_4 = resolver.resolve_glyph_phase(phase_shift_4, entropy_status_high)
-
-
-
-    print(fPhase Shift: {phase_shift_4}, Entropy: {entropy_status_high})print(fRouting Behavior: {routing_4})print(fMetrics: {resolver.get_metrics()})
-
-
-
-print(\n--- Updating Threshold and Testing Again ---)
-
-
-
-    resolver.update_threshold(0.1)
-
-
-
-    phase_shift_5 = 0.8  # Now below new threshold
-
-
-
-    routing_5 = resolver.resolve_glyph_phase(phase_shift_5, entropy_status_low)
-
-
-
-    print(fPhase Shift: {phase_shift_5}, Entropy: {entropy_status_low})print(fRouting Behavior: {routing_5})print(fMetrics: {resolver.get_metrics()})
-
-
-
-print(\n--- Resetting the Resolver ---)
-
-
-
-resolver.reset()
-
-
-
-print(fMetrics after reset: {resolver.get_metrics()})"'"'
-
-
-
-""""
-""""
+            entropy_corridor_status: Dictionary with entropy-related metrics.
+            
+        Returns:
+            A string indicating the resolved glyph routing behavior.
+        """
+        try:
+            # Update metrics
+            self.metrics["total_resolutions"] += 1
+            self.metrics["last_resolution_time"] = time.time()
+            
+            # Default routing behavior
+            routing_behavior = RoutingBehavior.NORMAL_GLYPH_ROUTING.value
+            
+            # Check for significant phase divergence
+            if abs(phase_shift_operator) > self.phase_shift_threshold:
+                routing_behavior = RoutingBehavior.DIVERGENCE_ALERT_ROUTING.value
+                self.metrics["phase_shift_alerts"] += 1
+                
+            # Integrate entropy corridor status
+            if entropy_corridor_status:
+                routing_behavior = self._apply_entropy_adjustments(
+                    routing_behavior, entropy_corridor_status
+                )
+                
+            # Store routing decision in history
+            self.metrics["routing_history"].append({
+                "timestamp": time.time(),
+                "phase_shift": phase_shift_operator,
+                "routing": routing_behavior,
+                "entropy_status": entropy_corridor_status
+            })
+            
+            # Keep only last 100 routing decisions
+            if len(self.metrics["routing_history"]) > 100:
+                self.metrics["routing_history"] = self.metrics["routing_history"][-100:]
+                
+            return routing_behavior
+            
+        except Exception as e:
+            logger.error(f"Error in glyph phase resolution: {e}")
+            return RoutingBehavior.CONSERVATIVE_ROUTING.value
+            
+    def _apply_entropy_adjustments(self, 
+                                 current_routing: str,
+                                 entropy_status: Dict[str, Any]) -> str:
+        """
+        Apply entropy-based adjustments to routing behavior.
+        
+        Args:
+            current_routing: Current routing behavior
+            entropy_status: Entropy corridor status information
+            
+        Returns:
+            Adjusted routing behavior
+        """
+        try:
+            self.metrics["entropy_adjustments"] += 1
+            
+            # Check for high entropy detection
+            if entropy_status.get("high_entropy_detected", False):
+                if current_routing == RoutingBehavior.NORMAL_GLYPH_ROUTING.value:
+                    return RoutingBehavior.HIGH_ENTROPY_ROUTING.value
+                elif current_routing == RoutingBehavior.DIVERGENCE_ALERT_ROUTING.value:
+                    return RoutingBehavior.CONSERVATIVE_ROUTING.value
+                    
+            # Check entropy level
+            entropy_level = entropy_status.get("entropy_level", 0.5)
+            
+            if entropy_level > 0.8:  # Very high entropy
+                return RoutingBehavior.CONSERVATIVE_ROUTING.value
+            elif entropy_level < 0.2:  # Very low entropy
+                return RoutingBehavior.AGGRESSIVE_ROUTING.value
+                
+            # Check entropy trend
+            entropy_trend = entropy_status.get("entropy_trend", "stable")
+            
+            if entropy_trend == "increasing" and current_routing == RoutingBehavior.NORMAL_GLYPH_ROUTING.value:
+                return RoutingBehavior.HIGH_ENTROPY_ROUTING.value
+            elif entropy_trend == "decreasing" and current_routing == RoutingBehavior.CONSERVATIVE_ROUTING.value:
+                return RoutingBehavior.NORMAL_GLYPH_ROUTING.value
+                
+            return current_routing
+            
+        except Exception as e:
+            logger.error(f"Error applying entropy adjustments: {e}")
+            return current_routing
+            
+    def get_glyph_phase_state(self, 
+                             phase_shift_operator: float,
+                             entropy_corridor_status: Optional[Dict[str, Any]] = None) -> GlyphPhase:
+        """
+        Get the current glyph phase state based on conditions.
+        
+        Args:
+            phase_shift_operator: Phase shift value
+            entropy_corridor_status: Entropy status information
+            
+        Returns:
+            Current glyph phase state
+        """
+        try:
+            # Determine phase based on shift magnitude
+            if abs(phase_shift_operator) > self.phase_shift_threshold * 2:
+                phase = GlyphPhase.CRITICAL
+            elif abs(phase_shift_operator) > self.phase_shift_threshold:
+                if phase_shift_operator > 0:
+                    phase = GlyphPhase.DIVERGENCE
+                else:
+                    phase = GlyphPhase.CONVERGENCE
+            else:
+                phase = GlyphPhase.NORMAL
+                
+            # Adjust based on entropy if available
+            if entropy_corridor_status:
+                entropy_level = entropy_corridor_status.get("entropy_level", 0.5)
+                if entropy_level > 0.9 and phase != GlyphPhase.CRITICAL:
+                    phase = GlyphPhase.ALERT
+                    
+            return phase
+            
+        except Exception as e:
+            logger.error(f"Error determining glyph phase state: {e}")
+            return GlyphPhase.NORMAL
+            
+    def calculate_phase_confidence(self, 
+                                 phase_shift_operator: float,
+                                 entropy_corridor_status: Optional[Dict[str, Any]] = None) -> float:
+        """
+        Calculate confidence in the current phase resolution.
+        
+        Args:
+            phase_shift_operator: Phase shift value
+            entropy_corridor_status: Entropy status information
+            
+        Returns:
+            Confidence score between 0.0 and 1.0
+        """
+        try:
+            # Base confidence from phase shift stability
+            phase_stability = 1.0 - min(abs(phase_shift_operator), 1.0)
+            confidence = phase_stability * 0.6  # 60% weight for phase stability
+            
+            # Add entropy-based confidence
+            if entropy_corridor_status:
+                entropy_level = entropy_corridor_status.get("entropy_level", 0.5)
+                entropy_confidence = 1.0 - abs(entropy_level - 0.5) * 2  # Peak confidence at 0.5 entropy
+                confidence += entropy_confidence * 0.3  # 30% weight for entropy
+                
+                # Add trend confidence
+                entropy_trend = entropy_corridor_status.get("entropy_trend", "stable")
+                if entropy_trend == "stable":
+                    confidence += 0.1  # 10% bonus for stable trend
+                    
+            return max(0.0, min(1.0, confidence))
+            
+        except Exception as e:
+            logger.error(f"Error calculating phase confidence: {e}")
+            return 0.5  # Default moderate confidence
+            
+    def get_routing_statistics(self) -> Dict[str, Any]:
+        """
+        Get statistics about routing behavior.
+        
+        Returns:
+            Dictionary with routing statistics
+        """
+        try:
+            stats = self.metrics.copy()
+            
+            # Calculate additional statistics
+            if self.metrics["routing_history"]:
+                recent_routings = [entry["routing"] for entry in self.metrics["routing_history"][-10:]]
+                stats["most_common_recent_routing"] = max(set(recent_routings), key=recent_routings.count)
+                
+                phase_shifts = [entry["phase_shift"] for entry in self.metrics["routing_history"]]
+                stats["average_phase_shift"] = sum(phase_shifts) / len(phase_shifts)
+                stats["max_phase_shift"] = max(phase_shifts)
+                stats["min_phase_shift"] = min(phase_shifts)
+                
+            return stats
+            
+        except Exception as e:
+            logger.error(f"Error getting routing statistics: {e}")
+            return self.metrics.copy()
+            
+    def reset_metrics(self) -> None:
+        """Reset all tracking metrics."""
+        self.metrics = {
+            "total_resolutions": 0,
+            "phase_shift_alerts": 0,
+            "last_resolution_time": None,
+            "entropy_adjustments": 0,
+            "routing_history": []
+        }
+
+
+# Global instance for easy access
+glyph_phase_resolver = GlyphPhaseResolver()
+
+
+def test_glyph_phase_resolver():
+    """Test function for GlyphPhaseResolver."""
+    print("Testing Glyph Phase Resolver...")
+    
+    resolver = GlyphPhaseResolver()
+    
+    # Test normal resolution
+    result1 = resolver.resolve_glyph_phase(0.05)
+    print(f"Normal phase resolution: {result1}")
+    
+    # Test divergence resolution
+    result2 = resolver.resolve_glyph_phase(0.15)
+    print(f"Divergence phase resolution: {result2}")
+    
+    # Test with entropy status
+    entropy_status = {
+        "high_entropy_detected": True,
+        "entropy_level": 0.8,
+        "entropy_trend": "increasing"
+    }
+    result3 = resolver.resolve_glyph_phase(0.05, entropy_status)
+    print(f"High entropy resolution: {result3}")
+    
+    # Test phase state
+    phase_state = resolver.get_glyph_phase_state(0.12, entropy_status)
+    print(f"Phase state: {phase_state}")
+    
+    # Test confidence calculation
+    confidence = resolver.calculate_phase_confidence(0.08, entropy_status)
+    print(f"Phase confidence: {confidence:.3f}")
+    
+    # Test statistics
+    stats = resolver.get_routing_statistics()
+    print(f"Routing statistics: {stats}")
+    
+    print("Glyph Phase Resolver test completed!")
+
+
+if __name__ == "__main__":
+    test_glyph_phase_resolver() 
