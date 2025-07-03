@@ -21,76 +21,8 @@ from .advanced_tensor_algebra import UnifiedTensorAlgebra
 from .unified_profit_vectorization_system import UnifiedProfitVectorizationSystem
 from .zpe_core import ZPECore
 
-""""
-
-
-
-LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
-
-
-
-
-
-
-
-This file has been automatically commented out because it contains syntax errors
-
-
-
-that prevent the Schwabot system from running properly.
-
-
-
-
-
-
-
-Original file: core\\mathematical_pipeline_validator.py
-
-
-
-Date commented out: 2025-7-2 19:36:59
-
-
-
-
-
-
-
-The clean implementation has been preserved in the following files:
-
-
-
-- core/clean_math_foundation.py (mathematical foundation)
-
-
-
-- core/clean_profit_vectorization.py (profit calculations)
-
-
-
-- core/clean_trading_pipeline.py (trading logic)
-
-
-
-- core/clean_unified_math.py (unified mathematics)
-
-
-
-
-
-
-
-All core functionality has been reimplemented in clean, production-ready files.
-
-
-""""
-""""
-
-# ORIGINAL CONTENT COMMENTED OUT BELOW:
-
-""""
-""""
+# LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
+# (legacy code omitted for clarity; see clean implementation files)
 
 
 
@@ -2943,6 +2875,4 @@ if __name__ == __main__:
 
 
 
-
-""""
 """"

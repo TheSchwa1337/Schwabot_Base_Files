@@ -311,7 +311,7 @@ class QSCEnhancedProfitAllocator:
             return "resonance_phase"
         elif combined_score >= 0.4:
             return "fibonacci_phase"
-            else:
+        else:
             return "entropy_phase"
 
     def _calculate_qsc_allocation(

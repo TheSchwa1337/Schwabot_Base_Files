@@ -233,7 +233,7 @@ class TradeExecution:
 
     def to_dict(self) -> Dict[str, Any]:
         """Convert execution to dictionary with performance metrics."""
-            return {
+        return {
             "id": self.id,
             "signal_id": self.signal_id,
             "asset": self.asset,

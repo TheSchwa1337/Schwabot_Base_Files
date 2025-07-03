@@ -63,10 +63,10 @@ class StrategyType(Enum):
 class MarketSignal:
     """Market signal data."""
     signal_type: SignalType
-strength: SignalStrength
+    strength: SignalStrength
     confidence: float
-price: float
-timestamp: float
+    price: float
+    timestamp: float
     volume: Optional[float] = None
     metadata: Dict[str, Any] = field(default_factory=dict)
 
@@ -86,13 +86,13 @@ class StrategyDecision:
 @dataclass
 class StrategyPerformance:
     """Strategy performance metrics."""
-total_trades: int = 0
-winning_trades: int = 0
-losing_trades: int = 0
+    total_trades: int = 0
+    winning_trades: int = 0
+    losing_trades: int = 0
     total_pnl: float = 0.0
-max_drawdown: float = 0.0
+    max_drawdown: float = 0.0
     sharpe_ratio: float = 0.0
-win_rate: float = 0.0
+    win_rate: float = 0.0
     avg_trade_pnl: float = 0.0
     metadata: Dict[str, Any] = field(default_factory=dict)
 
@@ -132,7 +132,7 @@ class StrategyLogic:
             signal = self._generate_signal(indicators, market_data)
             
             # Store signal
-self.signal_history.append(signal)
+            self.signal_history.append(signal)
 
             return signal
             
@@ -222,18 +222,18 @@ self.signal_history.append(signal)
         if len(prices) < period + 1:
             return 50.0
 
-deltas = np.diff(prices)
+        deltas = np.diff(prices)
         gains = np.where(deltas > 0, deltas, 0)
         losses = np.where(deltas < 0, -deltas, 0)
 
-avg_gain = np.mean(gains[-period:])
+        avg_gain = np.mean(gains[-period:])
         avg_loss = np.mean(losses[-period:])
 
-if avg_loss == 0:
+        if avg_loss == 0:
             return 100.0
 
-rs = avg_gain / avg_loss
-rsi = 100 - (100 / (1 + rs))
+        rs = avg_gain / avg_loss
+        rsi = 100 - (100 / (1 + rs))
 
         return float(rsi)
 
@@ -317,9 +317,9 @@ rsi = 100 - (100 / (1 + rs))
         strength = self._determine_strength(confidence)
         
         return MarketSignal(
-signal_type=signal_type,
-strength=strength,
-confidence=confidence,
+            signal_type=signal_type,
+            strength=strength,
+            confidence=confidence,
             price=market_data.get("price", 0.0),
             timestamp=market_data.get("timestamp", time.time()),
             volume=market_data.get("volume", 0.0),
@@ -405,7 +405,7 @@ confidence=confidence,
             return SignalType.BUY, min(0.5 + buy_score * 0.1, 1.0)
         elif sell_score > buy_score and sell_score >= 2:
             return SignalType.SELL, min(0.5 + sell_score * 0.1, 1.0)
-else:
+        else:
             return SignalType.HOLD, 0.5
 
     def _determine_strength(self, confidence: float) -> SignalStrength:
@@ -416,15 +416,21 @@ else:
             return SignalStrength.STRONG
         elif confidence >= 0.4:
             return SignalStrength.MODERATE
-else:
+        else:
             return SignalStrength.WEAK
 
     def _calculate_position_size(self, signal: MarketSignal, portfolio_data: Dict[str, Any]) -> float:
         """Calculate position size based on signal and portfolio."""
-        available_capital = portfolio_data.get("available_capital", 10000.0)
+        # Extract available capital from portfolio data with proper fallback logic
+        available_capital = self._extract_available_capital(portfolio_data)
         current_price = signal.price
         
         if current_price <= 0:
+            logger.warning("Invalid price for position size calculation")
+            return 0.0
+        
+        if available_capital <= 0:
+            logger.warning("No available capital for position size calculation")
             return 0.0
         
         # Base position size from risk management
@@ -449,18 +455,86 @@ else:
         max_size = available_capital * self.max_position_size / current_price
         position_size = min(position_size, max_size)
         
+        logger.debug(f"Position size calculation: capital={available_capital:.2f}, "
+                    f"price={current_price:.2f}, size={position_size:.4f}")
+        
         return max(0.0, position_size)
+
+    def _extract_available_capital(self, portfolio_data: Dict[str, Any]) -> float:
+        """Extract available capital from portfolio data with proper fallback logic."""
+        if not portfolio_data:
+            logger.warning("No portfolio data provided, using fallback capital")
+            return 10000.0  # Fallback for testing/development
+        
+        # Try multiple possible keys for available capital
+        available_capital = None
+        
+        # Direct available_capital key
+        if "available_capital" in portfolio_data:
+            available_capital = portfolio_data["available_capital"]
+        
+        # Balance structure from exchange API
+        elif "balance" in portfolio_data:
+            balance = portfolio_data["balance"]
+            if isinstance(balance, dict):
+                # Look for USD, USDT, or other stablecoin balances
+                for currency in ["USD", "USDT", "USDC", "BUSD"]:
+                    if currency in balance:
+                        available_capital = balance[currency]
+                        break
+                # If no stablecoin found, sum all positive balances
+                if available_capital is None:
+                    available_capital = sum(float(amount) for amount in balance.values() 
+                                          if float(amount) > 0)
+        
+        # Free balances structure (from CCXT get_balance())
+        elif "free" in portfolio_data:
+            free_balances = portfolio_data["free"]
+            if isinstance(free_balances, dict):
+                # Look for stablecoin first
+                for currency in ["USD", "USDT", "USDC", "BUSD"]:
+                    if currency in free_balances:
+                        available_capital = free_balances[currency]
+                        break
+                # If no stablecoin found, sum all positive balances
+                if available_capital is None:
+                    available_capital = sum(float(amount) for amount in free_balances.values() 
+                                          if float(amount) > 0)
+        
+        # Total portfolio value
+        elif "total_value" in portfolio_data:
+            available_capital = portfolio_data["total_value"]
+        
+        # Cash or liquid balance
+        elif "cash" in portfolio_data:
+            available_capital = portfolio_data["cash"]
+        elif "liquid_balance" in portfolio_data:
+            available_capital = portfolio_data["liquid_balance"]
+        
+        # Validate the extracted value
+        if available_capital is not None:
+            try:
+                available_capital = float(available_capital)
+                if available_capital > 0:
+                    logger.info(f"Using available capital: {available_capital:.2f}")
+                    return available_capital
+            except (ValueError, TypeError):
+                logger.warning(f"Invalid available capital value: {available_capital}")
+        
+        # Fallback to default value
+        logger.warning("Could not extract available capital from portfolio data, using fallback")
+        return 10000.0  # Fallback for testing/development
 
     def _determine_action(self, signal: MarketSignal, portfolio_data: Dict[str, Any]) -> SignalType:
         """Determine trading action based on signal and portfolio."""
         current_position = portfolio_data.get("current_position", None)
 
-if signal.signal_type == SignalType.BUY:
+        if signal.signal_type == SignalType.BUY:
             if current_position and current_position.get("side") == "long":
                 return SignalType.HOLD  # Already long
             else:
                 return SignalType.BUY
-elif signal.signal_type == SignalType.SELL:
+        elif signal.signal_type == SignalType.SELL:
             if current_position and current_position.get("side") == "short":
                 return SignalType.HOLD  # Already short
             else:
@@ -506,7 +580,7 @@ elif signal.signal_type == SignalType.SELL:
             confidence=0.0,
             price=0.0,
             timestamp=time.time(),
-            reasoning="Default signal due to processing error"
+            metadata={"reasoning": "Default signal due to processing error"}
         )
 
     def update_performance(self, trade_result: Dict[str, Any]) -> None:
@@ -518,7 +592,7 @@ elif signal.signal_type == SignalType.SELL:
         
         if pnl > 0:
             self.performance.winning_trades += 1
-else:
+        else:
             self.performance.losing_trades += 1
         
         # Update derived metrics
@@ -554,4 +628,22 @@ else:
 # Factory function
 def create_strategy_logic(strategy_type: StrategyType = StrategyType.HYBRID) -> StrategyLogic:
     """Create a new strategy logic instance."""
-    return StrategyLogic(strategy_type) 
+    return StrategyLogic(strategy_type)
+
+# Temporary strategy tags mapped to known hashes
+STRATEGY_DB = {
+    "8f51c6a0f9eee0e4b8f866ce7041ffa2145af1cff9b07f5577147aa629089c7f": {
+        "name": "Long Momentum",
+        "risk": "Low",
+        "action": "Buy & Hold"
+    }
+}
+
+def activate_strategy_for_hash(soulprint_hash, asset):
+    if soulprint_hash in STRATEGY_DB:
+        return STRATEGY_DB[soulprint_hash]
+    return {
+        "name": "Unrecognized Pattern",
+        "risk": "Unknown",
+        "action": "Observe"
+    } 

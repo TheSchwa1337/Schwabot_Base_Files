@@ -4,6 +4,21 @@ from dataclasses import dataclass, field
 from decimal import Decimal, getcontext
 from typing import Any, Dict, List, Optional, Union
 
+# Add stub class to fix import errors
+class PortfolioTracker:
+    """Stub PortfolioTracker class to fix import errors."""
+    def __init__(self):
+        self.positions = {}
+        self.total_value = 0.0
+        self.total_pnl = 0.0
+    
+    def get_portfolio_summary(self):
+        return {
+            "total_value": self.total_value,
+            "total_pnl": self.total_pnl,
+            "positions": self.positions
+        }
+
 """
 
 

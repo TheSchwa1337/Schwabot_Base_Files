@@ -57,7 +57,7 @@ class PricePoint:
     """Price point with timestamp."""
 
     price: float
-    timestamp: float
+timestamp: float
     volume: Optional[float] = None
 
 
@@ -66,9 +66,9 @@ class MarketData:
     """Market data container."""
 
     symbol: str
-    price: float
-    bid: Optional[float] = None
-    ask: Optional[float] = None
+price: float
+bid: Optional[float] = None
+ask: Optional[float] = None
     volume: Optional[float] = None
     timestamp: Optional[float] = None
 

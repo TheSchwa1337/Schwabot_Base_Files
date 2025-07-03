@@ -66,8 +66,8 @@ class ApiIntegrationManager:
         try:
             if not self.config_path.exists():
                 logger.warning(
-                    f"Configuration file not found: {
-                        self.config_path}. No exchanges will be loaded."
+                    f"Configuration file not found: {self.config_path}. "
+                    "No exchanges will be loaded."
                 )
                 return
 

@@ -86,7 +86,7 @@ Returns:
                 routing_behavior = RoutingBehavior.DIVERGENCE_ALERT_ROUTING.value
                 self.metrics["phase_shift_alerts"] += 1
 
-# Integrate entropy corridor status
+            # Integrate entropy corridor status
             if entropy_corridor_status:
                 routing_behavior = self._apply_entropy_adjustments(
                     routing_behavior, entropy_corridor_status
@@ -106,7 +106,7 @@ Returns:
             if len(self.metrics["routing_history"]) > 100:
                 self.metrics["routing_history"] = self.metrics["routing_history"][-100:]
 
-        return routing_behavior
+            return routing_behavior
 
         except Exception as e:
             logger.error(f"Error in glyph phase resolution: {e}")

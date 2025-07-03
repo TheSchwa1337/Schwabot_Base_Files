@@ -34,6 +34,7 @@ class IntegratedTradingSignal:
     signal_id: str
     recommended_action: str  # 'buy', 'sell', 'hold'
     target_pair: TradingPair
+    quantity: Decimal # Added quantity field
     confidence_score: Decimal
     profit_potential: Decimal
     risk_assessment: Dict[str, Any]
