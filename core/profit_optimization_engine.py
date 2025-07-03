@@ -1,15 +1,15 @@
-"""
+""""
 Profit Optimization Engine for Schwabot Trading System.
 
 This module implements a comprehensive profit optimization framework that integrates:
-1. Mathematical optimization algorithms
+    1. Mathematical optimization algorithms
 2. Risk management and portfolio optimization
 3. Performance analysis and backtesting
 4. Dynamic parameter adjustment
 5. Multi-objective optimization
 
 All functions are pure and can be unit-tested in isolation.
-"""
+""""
 
 import math
 from dataclasses import dataclass, field
@@ -60,14 +60,14 @@ class PortfolioWeights:
 
 
 class ProfitOptimizationEngine:
-    """
+    """"
     Main profit optimization engine.
 
     Provides methods for optimizing trading strategies, portfolio allocation,
     and risk management parameters.
-    """
+    """"
 
-    def __init__(self, risk_free_rate: float = 0.02):
+    def __init__(self, risk_free_rate: float = 0.2):
         """Initialize the optimization engine."""
         self.risk_free_rate = risk_free_rate
 self.optimization_history: List[OptimizationResult] = []
@@ -81,7 +81,7 @@ self.optimization_history: List[OptimizationResult] = []
         max_iterations: int = 1000,
         tolerance: float = 1e-6
     ) -> OptimizationResult:
-        """
+        """"
         Optimize portfolio weights for maximum risk-adjusted returns.
 
 Args:
@@ -94,7 +94,7 @@ Args:
 
 Returns:
             Optimization result with optimal weights
-        """
+        """"
         if method == OptimizationMethod.GRADIENT_DESCENT:
             return self._gradient_descent_optimization(
                 returns, risk_metric, constraints, max_iterations, tolerance
@@ -131,7 +131,7 @@ Returns:
                 objective, gradient = self._generic_risk_gradient(weights, returns, cov_matrix, risk_metric)
 
             # Update weights
-            learning_rate = 0.01
+            learning_rate = 0.1
             weights_new = weights + learning_rate * gradient
 
             # Apply constraints
@@ -329,7 +329,7 @@ else:
         strategy_params: Dict[str, Any],
         optimization_target: str = "sharpe_ratio"
     ) -> OptimizationResult:
-        """
+        """"
         Optimize trading strategy parameters.
 
         Args:
@@ -339,7 +339,7 @@ else:
 
         Returns:
             Optimization result with optimal parameters
-        """
+        """"
         # This would implement strategy-specific optimization
         # For now, return a placeholder result
         return OptimizationResult(
@@ -353,7 +353,7 @@ else:
 
 
 # Convenience functions
-def create_optimization_engine(risk_free_rate: float = 0.02) -> ProfitOptimizationEngine:
+def create_optimization_engine(risk_free_rate: float = 0.2) -> ProfitOptimizationEngine:
     """Create a new optimization engine instance."""
     return ProfitOptimizationEngine(risk_free_rate=risk_free_rate)
 

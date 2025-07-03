@@ -25,8 +25,8 @@ from .pure_profit_calculator import (
     ZBECore,
     ZPECore,
     19:36:56,
-    2025-07-02,
-    """,
+    2025-7-2,
+    ""","
     -,
     .zbe_core,
     .zpe_core,
@@ -94,13 +94,13 @@ from .pure_profit_calculator import (
 All core functionality has been reimplemented in clean, production-ready files.
 
 
-"""
-"""
+""""
+""""
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
 
-"""
-"""
+""""
+""""
 
 
 
@@ -959,11 +959,11 @@ class EnhancedAccelerationIntegration:
 
 
 
-                T0_baseline=0.001,
+                T0_baseline=0.1,
 
 
 
-                T_accelerated=0.001,
+                T_accelerated=0.1,
 
 
 
@@ -1347,7 +1347,7 @@ class EnhancedAccelerationIntegration:
 
 
 
-            return tensor_operation(), 0.001
+            return tensor_operation(), 0.1
 
 
 
@@ -1558,8 +1558,8 @@ class EnhancedAccelerationIntegration:
 
 
 
-"""
-            return {status:active,mode: self.acceleration_mode.value,acceleration_enabled: self.acceleration_enabled,performance_metrics": {total_computations: metrics.total_computations,average_speedup": metrics.average_speedup,max_speedup": metrics.max_speedup,min_speedup": metrics.min_speedup,efficiency_improvement_pct": efficiency_improvement,total_time_saved_ms": total_time_saved * 1000,error_count": metrics.error_count,
+""""
+            return {status:active,mode: self.acceleration_mode.value,acceleration_enabled: self.acceleration_enabled,performance_metrics": {total_computations: metrics.total_computations,average_speedup": metrics.average_speedup,max_speedup": metrics.max_speedup,min_speedup": metrics.min_speedup,efficiency_improvement_pct": efficiency_improvement,total_time_saved_ms": total_time_saved * 1000,error_count": metrics.error_count,"
 
 
 
@@ -1567,7 +1567,7 @@ class EnhancedAccelerationIntegration:
 
 
 
-                },profit_calculator_metrics": self.profit_calculator.get_calculation_metrics(),
+                },profit_calculator_metrics": self.profit_calculator.get_calculation_metrics(),"
 
 
 
@@ -1583,11 +1583,11 @@ class EnhancedAccelerationIntegration:
 
 
 
-            logger.error( Performance report generation failed: %s", e)
+            logger.error( Performance report generation failed: %s", e)"
 
 
 
-            return {status:error,message: f"Report generation failed: {e}}
+            return {status:error,message: f"Report generation failed: {e}}"
 
 
 
@@ -1659,7 +1659,7 @@ class EnhancedAccelerationIntegration:
 
 
 
-                profit_memory=[0.02, 0.015, 0.03],
+                profit_memory=[0.2, 0.15, 0.3],
 
 
 
@@ -1983,7 +1983,7 @@ def demo_enhanced_acceleration_integration():Demonstrate enhanced acceleration i
 
 
 
-            risk_tolerance=0.02, profit_target=0.05, position_size=0.1
+            risk_tolerance=0.2, profit_target=0.5, position_size=0.1
 
 
 
@@ -2071,7 +2071,7 @@ def demo_enhanced_acceleration_integration():Demonstrate enhanced acceleration i
 
 
 
-            profit_memory = [0.025, 0.018, 0.032, 0.015, 0.028],
+            profit_memory = [0.25, 0.18, 0.32, 0.15, 0.28],
 
 
 
@@ -2287,7 +2287,7 @@ def demo_enhanced_acceleration_integration():Demonstrate enhanced acceleration i
 
 
 
-                status =  PASSEDif result else FAILEDprint(f{test_name.replace('_', ').title()}: {status})
+                status =  PASSEDif result else FAILEDprint(f{test_name.replace('_', ').title()}: {status})'
 
 
 
@@ -2407,7 +2407,7 @@ def demo_enhanced_acceleration_integration():Demonstrate enhanced acceleration i
 
 
 
-        logger.error(f" Demonstration failed: {e})
+        logger.error(f" Demonstration failed: {e})"
 
 
 
@@ -2436,4 +2436,4 @@ if __name__ == __main__:
 
 
 """"
-"""
+""""

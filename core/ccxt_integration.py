@@ -49,7 +49,7 @@ class CCXTIntegration:
                 logger.info(f"Initialized exchange: {exchange_id} (stub)")
             
             self.initialized = True
-            except Exception as e:
+        except Exception as e:
             logger.error(f"Failed to initialize exchanges: {e}")
 
     async def fetch_order_book(

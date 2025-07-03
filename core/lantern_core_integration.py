@@ -29,8 +29,8 @@ from core.trading_engine_integration import (
     This,
     Union,
     19:36:58,
-    2025-07-02,
-    """,
+    2025-7-2,
+    ""","
     -,
     asyncio,
     automatically,
@@ -105,13 +105,13 @@ from core.unified_math_system import UnifiedMathSystem
 All core functionality has been reimplemented in clean, production-ready files.
 
 
-"""
-"""
+""""
+""""
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
 
-"""
-"""
+""""
+""""
 
 
 
@@ -430,8 +430,8 @@ last_market_snapshot: Optional[Dict[str, Any]] = None
 
 
 
-"""
-def to_dict() -> Dict[str, Any]:Convert to dictionary.return {is_initialized: self.is_initialized,is_running: self.is_running,last_sync_time": self.last_sync_time,secure_config_ready": self.secure_config_ready,price_bridge_ready": self.price_bridge_ready,trading_engine_ready": self.trading_engine_ready,math_framework_ready": self.math_framework_ready,immune_system_ready": self.immune_system_ready,total_operations": self.total_operations,successful_operations": self.successful_operations,failed_operations": self.failed_operations,avg_response_time": self.avg_response_time,current_drift_field": self.current_drift_field,current_entropy_level": self.current_entropy_level,current_quantum_state": self.current_quantum_state,current_market_hash: self.current_market_hash,
+""""
+def to_dict() -> Dict[str, Any]:Convert to dictionary.return {is_initialized: self.is_initialized,is_running: self.is_running,last_sync_time": self.last_sync_time,secure_config_ready": self.secure_config_ready,price_bridge_ready": self.price_bridge_ready,trading_engine_ready": self.trading_engine_ready,math_framework_ready": self.math_framework_ready,immune_system_ready": self.immune_system_ready,total_operations": self.total_operations,successful_operations": self.successful_operations,failed_operations": self.failed_operations,avg_response_time": self.avg_response_time,current_drift_field": self.current_drift_field,current_entropy_level": self.current_entropy_level,current_quantum_state": self.current_quantum_state,current_market_hash: self.current_market_hash,"
 
 
 
@@ -483,7 +483,7 @@ Features:
 
 
 
-- Error handling and recovery"def __init__():Initialize Lantern Core integration.self.config = config or self._default_config()
+- Error handling and recovery"def __init__():Initialize Lantern Core integration.self.config = config or self._default_config()"
 
 
 
@@ -775,7 +775,7 @@ self.state.is_initialized = True
 
 
 
-            logger.error(f" Failed to initialize core systems: {e})
+            logger.error(f" Failed to initialize core systems: {e})"
 
 
 
@@ -1295,7 +1295,7 @@ price_data.price
 
 
 
-),mathematical_hash: hashlib.sha256(f"{drift_field}:{entropy}:{quantum_state}.encode()
+),mathematical_hash: hashlib.sha256(f"{drift_field}:{entropy}:{quantum_state}.encode()"
 
 
 
@@ -1355,7 +1355,7 @@ price_data.price
 
 
 
-),immune_response": self.tcell_system.generate_response(
+),immune_response": self.tcell_system.generate_response("
 
 
 
@@ -1363,7 +1363,7 @@ price_data.price
 
 
 
-),risk_level": self.tcell_system.calculate_risk_level(price_data.price),
+),risk_level": self.tcell_system.calculate_risk_level(price_data.price),"
 
 
 
@@ -1371,7 +1371,7 @@ price_data.price
 
 
 
-        except Exception as e:logger.error(f" Immune system data error: {e})
+        except Exception as e:logger.error(f" Immune system data error: {e})"
 
 
 
@@ -1395,7 +1395,7 @@ async def _get_weather_mapping_data() -> Dict[str, Any]:Get weather mapping data
 
 
 
-        except Exception as e:logger.error(f" Weather mapping data error: {e})
+        except Exception as e:logger.error(f" Weather mapping data error: {e})"
 
 
 
@@ -1419,7 +1419,7 @@ async def _get_profit_engine_data() -> Dict[str, Any]:Get profit engine data.try
 
 
 
-        except Exception as e:logger.error(f" Profit engine data error: {e})
+        except Exception as e:logger.error(f" Profit engine data error: {e})"
 
 
 
@@ -1487,7 +1487,7 @@ self.math_system.calculate_quantum_state(price_data.price)
 
 
 
-async def _generate_trading_signals() -> List[TradeSignal]:"Generate trading signals using all systems.signals = []
+async def _generate_trading_signals() -> List[TradeSignal]:"Generate trading signals using all systems.signals = []"
 
 
 
@@ -1571,7 +1571,7 @@ order_type = OrderType.MARKET,
 
 
 
-quantity = signal_data.get(quantity, 0.001),signal_strength = signal_data.get(strength, 0.0),confidence_level = signal_data.get(confidence, 0.0),
+quantity = signal_data.get(quantity, 0.1),signal_strength = signal_data.get(strength, 0.0),confidence_level = signal_data.get(confidence, 0.0),
 
 
 
@@ -1691,7 +1691,7 @@ order_type=OrderType.MARKET,
 
 
 
-quantity=0.001,
+quantity=0.1,
 
 
 
@@ -1735,7 +1735,7 @@ order_type=OrderType.MARKET,
 
 
 
-quantity=0.001,
+quantity=0.1,
 
 
 
@@ -1835,7 +1835,7 @@ order_type=OrderType.MARKET,
 
 
 
-quantity=0.001,
+quantity=0.1,
 
 
 
@@ -1871,7 +1871,7 @@ order_type=OrderType.MARKET,
 
 
 
-quantity=0.001,
+quantity=0.1,
 
 
 
@@ -2143,11 +2143,11 @@ async def get_system_status() -> Dict[str, Any]:Get comprehensive system status.
 
 
 
-},market_data": self.state.last_market_snapshot,performance": {total_operations: self.state.total_operations,success_rate": self.state.successful_operations
+},market_data": self.state.last_market_snapshot,performance": {total_operations: self.state.total_operations,success_rate": self.state.successful_operations"
 
 
 
-/ max(self.state.total_operations, 1),avg_response_time": self.state.avg_response_time,
+/ max(self.state.total_operations, 1),avg_response_time": self.state.avg_response_time,"
 
 
 
@@ -2187,7 +2187,7 @@ async def load_historical_data() -> bool:Load historical data from CSV file.try:
 
 
 
-            # This would integrate with your existing historical data manager'
+            # This would integrate with your existing historical data manager''
 
 
 
@@ -2351,7 +2351,7 @@ if snapshot:
 
 
 
-            print(Snapshot created successfully)'print(fMarket hash: {snapshot.get('market_hash', 'N/A')})
+            print(Snapshot created successfully)'print(fMarket hash: {snapshot.get('market_hash', 'N/A')})'
 
 
 
@@ -2403,9 +2403,9 @@ for signal in signals:
 
 
 
-asyncio.run(test_lantern_core())'"
+asyncio.run(test_lantern_core())'""'
 
 
 
 """"
-"""
+""""

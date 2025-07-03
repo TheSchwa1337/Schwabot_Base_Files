@@ -74,7 +74,7 @@ class AdvancedDualisticTradingExecutionSystem:
         self.consensus_votes: List[ConsensusVote] = []
         self.execution_history: List[TradingExecution] = []
         self.initialized = False
-        
+
         logger.info("Advanced Dualistic Trading Execution System initialized (stub mode)")
 
     def _default_config(self) -> Dict[str, Any]:
@@ -91,18 +91,18 @@ class AdvancedDualisticTradingExecutionSystem:
         }
 
     async def execute_bit_flip_entry(
-        self, 
-        target_quantity: float, 
+        self,
+        target_quantity: float,
         market_data: Dict[str, Any]
     ) -> Dict[str, Any]:
         """Execute bit-flip entry logic."""
         try:
             operation_id = f"bitflip_{int(time.time() * 1000)}"
-            
+
             # Mock bit flip operation
             original_value = hash(str(target_quantity)) % 256
             flipped_value = original_value ^ 1  # Simple flip
-            
+
             bit_depth = self.config["bit_depth"]
             flip_strength = 0.8
             confidence = 0.7
@@ -132,20 +132,20 @@ class AdvancedDualisticTradingExecutionSystem:
                 "bit_flip_operation": bit_flip_op,
                 "confidence": confidence
             }
-            
+
         except Exception as e:
             logger.error(f"Error in bit-flip entry logic: {e}")
             return {"success": False, "error": str(e)}
 
     async def execute_consensus_voting_entry(
-        self, 
-        target_quantity: float, 
+        self,
+        target_quantity: float,
         market_data: Dict[str, Any]
     ) -> Dict[str, Any]:
         """Execute consensus voting entry logic."""
         try:
             vote_id = f"consensus_{int(time.time() * 1000)}"
-            
+
             # Mock consensus voting
             bit_pattern = np.random.randint(0, 2, 8)
             consensus_weight = np.mean(bit_pattern) * 0.8
@@ -158,9 +158,9 @@ class AdvancedDualisticTradingExecutionSystem:
                 confidence=confidence,
                 timestamp=time.time()
             )
-            
+
             self.consensus_votes.append(vote)
-            
+
             # Mock price calculation
             base_price = market_data.get("price", 50000.0)
             entry_price = base_price * (1 + consensus_weight * 0.005)
@@ -173,14 +173,14 @@ class AdvancedDualisticTradingExecutionSystem:
                 "consensus_vote": vote,
                 "confidence": confidence
             }
-            
+
         except Exception as e:
             logger.error(f"Error in consensus voting logic: {e}")
             return {"success": False, "error": str(e)}
 
     async def execute_entropy_weighted_entry(
-        self, 
-        target_quantity: float, 
+        self,
+        target_quantity: float,
         market_data: Dict[str, Any]
     ) -> Dict[str, Any]:
         """Execute entropy-weighted entry logic."""
@@ -188,7 +188,7 @@ class AdvancedDualisticTradingExecutionSystem:
             # Mock entropy calculation
             entropy_level = market_data.get("entropy", 0.5)
             weight_factor = min(1.0, entropy_level / self.config["entropy_threshold"])
-            
+
             base_price = market_data.get("price", 50000.0)
             entry_price = base_price * (1 + weight_factor * 0.003)
             entry_quantity = target_quantity * weight_factor
@@ -200,21 +200,21 @@ class AdvancedDualisticTradingExecutionSystem:
                 "entropy_weight": weight_factor,
                 "confidence": weight_factor * 0.9
             }
-            
+
         except Exception as e:
             logger.error(f"Error in entropy weighted logic: {e}")
             return {"success": False, "error": str(e)}
 
     async def execute_trade(
-        self, 
-        mode: ExecutionMode, 
-        target_quantity: float, 
+        self,
+        mode: ExecutionMode,
+        target_quantity: float,
         market_data: Dict[str, Any]
     ) -> TradingExecution:
         """Execute trade using specified mode."""
         try:
             execution_id = f"exec_{mode.value}_{int(time.time() * 1000)}"
-            
+
             # Route to appropriate execution method
             if mode == ExecutionMode.BIT_FLIP:
                 result = await self.execute_bit_flip_entry(target_quantity, market_data)
@@ -230,7 +230,7 @@ class AdvancedDualisticTradingExecutionSystem:
                     "entry_quantity": target_quantity,
                     "confidence": 0.5
                 }
-            
+
             execution = TradingExecution(
                 execution_id=execution_id,
                 mode=mode,
@@ -241,7 +241,7 @@ class AdvancedDualisticTradingExecutionSystem:
                 timestamp=time.time(),
                 metadata=result
             )
-            
+
             self.execution_history.append(execution)
             return execution
 
@@ -288,15 +288,15 @@ def create_trading_execution_system(config: Optional[Dict[str, Any]] = None) -> 
 def demo_trading_execution():
     """Demonstrate trading execution functionality."""
     print("=== Advanced Dualistic Trading Execution System Demo (Stub Mode) ===")
-    
+
     system = create_trading_execution_system()
-    
+
     market_data = {
         "price": 50000.0,
         "volume": 1000.0,
         "entropy": 0.7
     }
-    
+
     print(f"System Status: {system.get_system_status()}")
     print("Trading execution system ready (stub mode)")
 

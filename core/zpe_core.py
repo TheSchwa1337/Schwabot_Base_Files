@@ -1,1075 +1,364 @@
-        from unified_math_system import unified_math
-    from .unified_math_system import unified_math
+"""
+ZPE (Zero Point Energy) Core Module
+Advanced quantum energy field calculations for trading optimization
+
+Implements Zero Point Energy mathematical models for market prediction
+and quantum field fluctuation analysis in trading systems.
+"""
 
 import logging
 import math
+import time
 from datetime import datetime
 from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 
-from utils.safe_print import debug, error, info, safe_print, success, warn
-
-"""
-
-
-
-LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
-
-
-
-
-
-
-
-This file has been automatically commented out because it contains syntax errors
-
-
-
-that prevent the Schwabot system from running properly.
-
-
-
-
-
-
-
-Original file: core\\zpe_core.py
-
-
-
-Date commented out: 2025-07-02 19:37:04
-
-
-
-
-
-
-
-The clean implementation has been preserved in the following files:
-
-
-
-- core/clean_math_foundation.py (mathematical foundation)
-
-
-
-- core/clean_profit_vectorization.py (profit calculations)
-
-
-
-- core/clean_trading_pipeline.py (trading logic)
-
-
-
-- core/clean_unified_math.py (unified mathematics)
-
-
-
-
-
-
-
-All core functionality has been reimplemented in clean, production-ready files.
-
-
-"""
-"""
-
-# ORIGINAL CONTENT COMMENTED OUT BELOW:
-
-"""
-"""
-
-
-
-# -*- coding: utf - 8 -*-
-
-
-
-# -*- coding: utf - 8 -*-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Fix import paths
-
-
-
+# Import clean math system
 try:
-
-
-
-
-
-
+    from core.clean_unified_math import clean_unified_math as unified_math
 except ImportError:
-
-
-
-    try:
-
-
-
-
-
-
-    except ImportError:
-
-
-
-        # Fallback for testing
-
-
-
-        class unified_math:
-
-
-
-            @staticmethod
-
-
-
-            def sin(x):
-
-
-
-                return np.sin(x)
-
-
-
-
-
-
-
-            @staticmethod
-
-
-
-            def max(x, y):
-
-
-
-                return max(x, y)
-
-
-
-
-
-
-
-            @staticmethod
-
-
-
-            def min(x, y):
-
-
-
-                return min(x, y)
-
-
-
-
-
-
-
-            @staticmethod
-
-
-
-            def abs(x):
-
-
-
-                return abs(x)
-
-
-
-
-
-
-
-
-
-
-
-try:
-
-
-
-
-
-
-except ImportError:
-
-
-
     # Fallback for testing
-
-
-
-    def safe_print(message):
-
-
-
-        print(message)
-
-
-
-
-
-
-
-    def info(message):
-
-
-
-        print(f[INFO] {message})
-
-
-
-
-
-
-
-    def error(message):
-
-
-
-        print(f[ERROR] {message})
-
-
-
-
-
-
-
-    def warn(message):
-
-
-
-        print(f[WARN] {message})
-
-
-
-
-
-
-
-    def debug(message):
-
-
-
-        print(f[DEBUG] {message})
-
-
-
-
-
-
-
-    def success(message):
-
-
-
-        print(f[SUCCESS] {message})
-
-
-
-
-
-
-
-
-
-
-
-logger = logging.getLogger(__name__)
-
-
-
-
-
-
-
-
-
+    class unified_math:
+        @staticmethod
+        def sin(x):
+            return np.sin(x)
+        
+        @staticmethod
+        def max(x, y):
+            return max(x, y)
+        
+        @staticmethod
+        def min(x, y):
+            return min(x, y)
+        
+        @staticmethod
+        def abs(x):
+            return abs(x)
+        
+        @staticmethod
+        def multiply(x, y):
+            return x * y
 
 
 class ZPECore:
-
-
-
-    Core ZPE mathematical functions for Schwabot's rotational profit engine.
-
-
-
-
-
-
-
-    Schwabot ZPE Core - The Saw Blade of Profit ==========================================
-
-
-
-
-
-
-
-    Implements the core mathematical framework for Schwabot as a Zero-Point Energy
-
-
-
-    profit engine that spins with the economy's vectorized chart.
-
-
-
-
-
-
-
-    Key Mathematical Functions:
-
-
-
-    1. ZPE Work Core (W = F  d = P)
-
-
-
-    2. Rotational Vectorization ( = I  )
-
-
-
-    3. Thermal Integrity Dif ferential ( = W_out / Q_in)
-
-
-
-    4. Elastic Resonance Profit Function
-
-
-
-    5. Multi-Vector Trade Alignment
-
-
-
-    6. Recursive Cycle Depth
-
-
-
-    7. Agent Consensus Feedback
-
-
-
-    8. Temporal Fault-Bus Correction
-
-
-
-    9. News/Lantern Signal Mapping
-
-
-
-    10. Profit Loop Reinjectiondef __init__():Initialize ZPE Core.self.recursion_depth = 0
-
-
-
-        self.max_recursion_depth = 16  # 16 BTC bitmap depth
-
-
-
-        self.thermal_history = []
-
-
-
-        self.agent_consensus = {R1: 0.0, GPT4o: 0.0,Claude: 0.0,Schwafit: 0.0}
-
-
-
-
-
-
-
-    def calculate_zpe_work() -> float:ZPE Work Core: W = F  d = P
-
-
-
-
-
-
-
-        Where:
-
-
-
-            - W: Work Schwabot performs (profit vector potential)
-
-
-
-            - F: Force of trend momentum (Price / Time)
-
-
-
-            - d: Displacement in trade phase space (entry - exit delta)
-
-
-
-            - P: Profit differential between vector anchor states
-
-
-
-        market_force = math.tanh(trend_strength)  # Bounded between -1 and 1
-
-
-
-        work = market_force * entry_exit_range
-
-
-
-        logger.debug(fZPE Work: {work:.6f})
-
-
-
-        return work
-
-
-
-
-
-
-
-    def calculate_rotational_torque() -> float:
-
-
-
-
-
-
-
-        Rotational Vectorization:  = I  
-
-
-
-
-
-
-
-        Where:
-
-
-
-            - : Torque applied to profit wheel (rotational force)
-
-
-
-            - I: Market inertia (resistance from liquidity walls, spread delay)
-
-
-
-            - : Angular acceleration (rate of directional bias change)
-
-
-
-
-
-
-
-        inertia = 1.0 / (1.0 + liquidity_depth)  # Higher liquidity = lower inertia
-
-
-
-        angular_acceleration = math.atan(trend_change_rate)  # Bounded acceleration
-
-
-
-        torque = inertia * angular_acceleration
-
-
-
-        logger.debug(fRotational Torque: {torque:.6f})
-
-
-
-        return torque
-
-
-
-
-
-
-
-    def calculate_thermal_efficiency() -> float:
-
-
-
-        Thermal Integrity Differential:  = W_out / Q_in
-
-
-
-
-
-
-
-        Where:
-
-
-
-            - : Efficiency of Schwabot's thermal core
-
-
-
-            - W_out: Profit generated
-
-
-
-            - Q_in: Capital allocated + trade gas/fee loss
-
-
-
-        if capital_exposure <= 0:
-
-
-
+    """
+    Zero Point Energy Core System
+    
+    Implements advanced quantum energy field calculations for trading optimization.
+    Uses ZPE principles to predict market fluctuations and optimize entry/exit points.
+    """
+    
+    def __init__(self):
+        self.logger = logging.getLogger(__name__)
+        
+        # ZPE Constants
+        self.ZPE_CONSTANTS = {
+            "PLANCK_CONSTANT": 6.62607015e-34,
+            "FREQUENCY_BASE": 21237738.486323237,  # Base trading frequency
+            "ENERGY_THRESHOLD": 0.85,
+            "QUANTUM_FLUCTUATION": 0.15,
+            "FIELD_COUPLING": 0.7,
+            "DAMPING_FACTOR": 0.95,
+            "RESONANCE_MULTIPLIER": 1.618,  # Golden ratio
+            "ZERO_POINT_BASELINE": 0.5
+        }
+        
+        # ZPE state tracking
+        self.energy_fields = {
+            "primary_field": 0.0,
+            "secondary_field": 0.0,
+            "quantum_vacuum": 0.0,
+            "field_coherence": 0.0
+        }
+        
+        self.calculation_history = []
+        self.last_calculation_time = None
+        
+    def calculate_zero_point_energy(self, frequency: float, amplitude: float = 1.0) -> float:
+        """
+        Calculate Zero Point Energy for given frequency.
+        
+        ZPE = (1/2) * ℏ * ω * amplitude
+        Where ℏ is reduced Planck constant, ω is angular frequency
+        
+        Args:
+            frequency: Market frequency
+            amplitude: Signal amplitude
+            
+        Returns:
+            Calculated zero point energy
+        """
+        try:
+            # Convert to angular frequency
+            angular_freq = 2 * np.pi * frequency
+            
+            # Reduced Planck constant
+            h_bar = self.ZPE_CONSTANTS["PLANCK_CONSTANT"] / (2 * np.pi)
+            
+            # Zero Point Energy calculation
+            zpe = 0.5 * h_bar * angular_freq * amplitude
+            
+            # Normalize for trading context
+            normalized_zpe = zpe / self.ZPE_CONSTANTS["FREQUENCY_BASE"]
+            
+            return normalized_zpe
+            
+        except Exception as e:
+            self.logger.error(f"ZPE calculation error: {e}")
+            return self.ZPE_CONSTANTS["ZERO_POINT_BASELINE"]
+    
+    def calculate_quantum_field_fluctuation(self, price_data: List[float]) -> float:
+        """
+        Calculate quantum field fluctuations based on price data.
+        
+        Args:
+            price_data: List of price values
+            
+        Returns:
+            Quantum field fluctuation value
+        """
+        try:
+            if len(price_data) < 2:
+                return 0.0
+                
+            # Calculate price variations
+            price_diff = np.diff(price_data)
+            variance = np.var(price_diff)
+            
+            # Quantum fluctuation model
+            fluctuation = np.sqrt(variance) * self.ZPE_CONSTANTS["QUANTUM_FLUCTUATION"]
+            
+            # Apply field coupling
+            coupled_fluctuation = fluctuation * self.ZPE_CONSTANTS["FIELD_COUPLING"]
+            
+            return coupled_fluctuation
+            
+        except Exception as e:
+            self.logger.error(f"Quantum fluctuation calculation error: {e}")
             return 0.0
-
-
-
-        efficiency = profit_generated / capital_exposure
-
-
-
-        self.thermal_history.append({timestamp: datetime.now(), efficiency: efficiency})
-
-
-
-        logger.debug(fThermal Efficiency: {efficiency:.6f})
-
-
-
-        return efficiency
-
-
-
-
-
-
-
-    def calculate_elastic_resonance() -> float:
-
-
-
-        Elastic Resonance Profit Function: (t) =  P'(t)  unified_math.sin(t + ) dtdt = 0.001
-
-
-
-        t_values = np.arange(0, time_window, dt)
-
-
-
-        integral_sum = sum(
-
-
-
-            price_derivative * unified_math.sin(frequency * t + phase_offset) * dt for t in t_values
-
-
-
-        )
-
-
-
-        logger.debug(fElastic Resonance: {integral_sum:.6f})
-
-
-
-        return integral_sum
-
-
-
-
-
-
-
-    def calculate_multi_vector_alignment() -> Dict:Multi-Vector Trade Alignment: V_total =  w  V
-
-
-
-        total_magnitude = sum(
-
-
-
-            weights.get(asset, 0.0) * vector.get(magnitude, 0.0)
-
-
-
-            for asset, vector in strategy_vectors.items()
-
-
-
-        )
-
-
-
-        total_resonance = sum(
-
-
-
-            weights.get(asset, 0.0) * vector.get(resonance, 0.0)
-
-
-
-            for asset, vector in strategy_vectors.items()
-
-
-
-        )
-
-
-
-
-
-
-
-        result = {magnitude: total_magnitude,resonance: total_resonance,timestamp: datetime.now(),
-
-
-
+    
+    def calculate_energy_field_coherence(self, signal_strength: float, 
+                                       market_volatility: float) -> float:
+        """
+        Calculate energy field coherence based on signal and volatility.
+        
+        Args:
+            signal_strength: Trading signal strength
+            market_volatility: Market volatility measure
+            
+        Returns:
+            Energy field coherence value
+        """
+        try:
+            # Coherence calculation with damping
+            base_coherence = signal_strength / (1 + market_volatility)
+            
+            # Apply damping factor
+            damped_coherence = base_coherence * self.ZPE_CONSTANTS["DAMPING_FACTOR"]
+            
+            # Resonance enhancement
+            if damped_coherence > self.ZPE_CONSTANTS["ENERGY_THRESHOLD"]:
+                damped_coherence *= self.ZPE_CONSTANTS["RESONANCE_MULTIPLIER"]
+            
+            # Normalize to [0, 1]
+            coherence = min(damped_coherence, 1.0)
+            
+            return coherence
+            
+        except Exception as e:
+            self.logger.error(f"Coherence calculation error: {e}")
+            return 0.5
+    
+    def update_energy_fields(self, frequency: float, amplitude: float, 
+                           price_data: List[float], signal_strength: float,
+                           market_volatility: float) -> Dict[str, float]:
+        """
+        Update all energy fields with new data.
+        
+        Args:
+            frequency: Market frequency
+            amplitude: Signal amplitude
+            price_data: Price data list
+            signal_strength: Trading signal strength
+            market_volatility: Market volatility
+            
+        Returns:
+            Updated energy field values
+        """
+        try:
+            # Calculate primary energy field
+            self.energy_fields["primary_field"] = self.calculate_zero_point_energy(
+                frequency, amplitude
+            )
+            
+            # Calculate quantum vacuum fluctuations
+            self.energy_fields["quantum_vacuum"] = self.calculate_quantum_field_fluctuation(
+                price_data
+            )
+            
+            # Calculate field coherence
+            self.energy_fields["field_coherence"] = self.calculate_energy_field_coherence(
+                signal_strength, market_volatility
+            )
+            
+            # Calculate secondary field as combination
+            self.energy_fields["secondary_field"] = (
+                self.energy_fields["primary_field"] * 
+                self.energy_fields["field_coherence"] - 
+                self.energy_fields["quantum_vacuum"]
+            )
+            
+            # Store calculation in history
+            self.calculation_history.append({
+                "timestamp": datetime.now(),
+                "energy_fields": self.energy_fields.copy(),
+                "input_params": {
+                    "frequency": frequency,
+                    "amplitude": amplitude,
+                    "signal_strength": signal_strength,
+                    "market_volatility": market_volatility
+                }
+            })
+            
+            # Keep only last 100 calculations
+            if len(self.calculation_history) > 100:
+                self.calculation_history = self.calculation_history[-100:]
+            
+            self.last_calculation_time = time.time()
+            
+            return self.energy_fields.copy()
+            
+        except Exception as e:
+            self.logger.error(f"Energy field update error: {e}")
+            return self.energy_fields.copy()
+    
+    def get_zpe_trading_signal(self, current_price: float, 
+                              historical_prices: List[float]) -> Dict[str, any]:
+        """
+        Generate ZPE-based trading signal.
+        
+        Args:
+            current_price: Current market price
+            historical_prices: Historical price data
+            
+        Returns:
+            ZPE trading signal analysis
+        """
+        try:
+            if len(historical_prices) < 10:
+                return {"signal": "HOLD", "confidence": 0.0, "reason": "Insufficient data"}
+            
+            # Calculate market metrics
+            price_changes = np.diff(historical_prices)
+            volatility = np.std(price_changes) / np.mean(historical_prices)
+            momentum = (current_price - historical_prices[-10]) / historical_prices[-10]
+            
+            # Calculate frequency from price oscillations
+            frequency = abs(np.fft.fftfreq(len(price_changes))[1]) * self.ZPE_CONSTANTS["FREQUENCY_BASE"]
+            
+            # Update energy fields
+            energy_fields = self.update_energy_fields(
+                frequency=frequency,
+                amplitude=abs(momentum),
+                price_data=historical_prices,
+                signal_strength=abs(momentum),
+                market_volatility=volatility
+            )
+            
+            # Generate signal based on energy field analysis
+            primary_field = energy_fields["primary_field"]
+            field_coherence = energy_fields["field_coherence"]
+            quantum_vacuum = energy_fields["quantum_vacuum"]
+            
+            # Signal logic
+            signal_strength = (primary_field + field_coherence - quantum_vacuum) / 2
+            
+            if signal_strength > 0.7:
+                signal = "BUY"
+                confidence = min(signal_strength, 1.0)
+            elif signal_strength < -0.3:
+                signal = "SELL"
+                confidence = min(abs(signal_strength), 1.0)
+            else:
+                signal = "HOLD"
+                confidence = 0.5
+            
+            return {
+                "signal": signal,
+                "confidence": confidence,
+                "signal_strength": signal_strength,
+                "energy_fields": energy_fields,
+                "market_metrics": {
+                    "volatility": volatility,
+                    "momentum": momentum,
+                    "frequency": frequency
+                },
+                "timestamp": datetime.now()
+            }
+            
+        except Exception as e:
+            self.logger.error(f"ZPE trading signal error: {e}")
+            return {
+                "signal": "HOLD",
+                "confidence": 0.0,
+                "error": str(e),
+                "timestamp": datetime.now()
+            }
+    
+    def get_current_energy_state(self) -> Dict[str, any]:
+        """
+        Get current ZPE system state.
+        
+        Returns:
+            Current energy field state and metrics
+        """
+        return {
+            "energy_fields": self.energy_fields.copy(),
+            "last_calculation_time": self.last_calculation_time,
+            "calculation_count": len(self.calculation_history),
+            "system_status": "OPERATIONAL" if self.last_calculation_time else "IDLE"
         }
-
-
-
-            logger.debug(
-
-
-
-            fMulti-Vector Alignment: magnitude = {total_magnitude:.6f}, resonance={total_resonance:.6f}
-
-
-
-        )
-
-
-
-        return result
-
-
-
-
-
-
-
-    def update_recursive_cycle_depth() -> int:
-
-
-
-
-
-
-
-        Recursive Cycle Depth: R = f(R, t, P)
-
-
-
-        # Simple complexity calculation based on price trigger variance
-
-
-
-        complexity = unified_math.min(16.0, 1.0 + unified_math.abs(price_trigger) * 10.0)
-
-
-
-        self.recursion_depth = int(complexity)
-
-
-
-        logger.debug(fRecursive Cycle Depth: {self.recursion_depth})
-
-
-
-        return self.recursion_depth
-
-
-
-
-
-
-
-    def update_agent_consensus() -> float:
-
-
-
-
-
-
-
-        Agent Consensus Feedback Function: C(t) = (R1 + GPT4o + Claude + Schwafit) / 4if agent_name in self.agent_consensus:
-
-
-
-            self.agent_consensus[agent_name] = confidence
-
-
-
-            average_consensus = sum(self.agent_consensus.values()) / len(self.agent_consensus)
-
-
-
-            logger.debug(fAgent Consensus: {average_consensus:.6f})
-
-
-
-            return average_consensus
-
-
-
-        return 0.0
-
-
-
-
-
-
-
-    def calculate_temporal_fault_correction() -> float:Temporal Fault-Bus Diff Correction: _fault = _actual - _expected
-
-
-
-        phase_difference = actual_phase - expected_phase
-
-
-
-        # Normalize to [-, ]
-
-
-
-        while phase_difference > math.pi:
-
-
-
-            phase_difference -= 2 * math.pi
-
-
-
-        while phase_difference < -math.pi:
-
-
-
-            phase_difference += 2 * math.pi
-
-
-
-        logger.debug(fTemporal Fault Correction: {phase_difference:.6f})
-
-
-
-        return phase_difference
-
-
-
-
-
-
-
-    def map_news_lantern_signals() -> float:
-
-
-
-
-
-
-
-        News/Lantern API Signal Mapping: L = g(n, S)
-
-
-
-        normalized_density = unified_math.max(0.0, unified_math.min(1.0, news_density))
-
-
-
-        normalized_sentiment = max(-1.0, unified_math.min(1.0, sentiment_delta))
-
-
-
-        lantern_signal = normalized_density * (1.0 + normalized_sentiment)
-
-
-
-        logger.debug(fLantern Signal: {lantern_signal:.6f})
-
-
-
-        return lantern_signal
-
-
-
-
-
-
-
-    def calculate_profit_reinjection() -> float:
-
-
-
-        Profit Loop Reinjection: (t) =  + (  )reinjection_coefficient = unified_math.min(1.0, unified_math.max(0.0, market_heat))
-
-
-
-        reinjected_profit = profit_delta * reinjection_coefficient
-
-
-
-        logger.debug(fProfit Reinjection: {reinjected_profit:.6f})
-
-
-
-        return reinjected_profit
-
-
-
-
-
-
-
-    def spin_profit_wheel() -> Dict:Main ZPE Profit Wheel function - where Schwabot becomes the wheel.logger.info( Spinning ZPE Profit Wheel...)
-
-
-
-
-
-
-
-        # Extract market data
-
-
-
-        trend_strength = market_data.get(trend_strength, 0.0)
-
-
-
-        entry_exit_range = market_data.get(entry_exit_range, 0.0)
-
-
-
-        liquidity_depth = market_data.get(liquidity_depth, 1.0)
-
-
-
-        trend_change_rate = market_data.get(trend_change_rate, 0.0)
-
-
-
-        price_derivative = market_data.get(price_derivative, 0.0)
-
-
-
-        news_density = market_data.get(news_density, 0.0)
-
-
-
-        sentiment_delta = market_data.get(sentiment_delta, 0.0)
-
-
-
-
-
-
-
-        # Execute ZPE mathematical framework
-
-
-
-        zpe_work = self.calculate_zpe_work(trend_strength, entry_exit_range)
-
-
-
-        rotational_torque = self.calculate_rotational_torque(liquidity_depth, trend_change_rate)
-
-
-
-        elastic_resonance = self.calculate_elastic_resonance(price_derivative, 1.0, 0.0, 1.0)
-
-
-
-        lantern_signal = self.map_news_lantern_signals(news_density, sentiment_delta)
-
-
-
-
-
-
-
-        # Calculate spin decision
-
-
-
-        spin_threshold = 0.5
-
-
-
-        spin_score = (zpe_work + elastic_resonance + lantern_signal) / 3.0
-
-
-
-        should_spin = spin_score > spin_threshold
-
-
-
-
-
-
-
-        result = {zpe_work: zpe_work,
-
-
-"""
-            rotational_torque: rotational_torque,elastic_resonance: elastic_resonance,lantern_signal: lantern_signal,spin_score: spin_score,should_spin": should_spin,recursion_depth": self.recursion_depth,agent_consensus": self.agent_consensus.copy(),
-
-
-
+    
+    def reset_energy_fields(self) -> None:
+        """Reset all energy fields to initial state."""
+        self.energy_fields = {
+            "primary_field": 0.0,
+            "secondary_field": 0.0,
+            "quantum_vacuum": 0.0,
+            "field_coherence": 0.0
         }
-
-
-
-
-
-
-
-        logger.info(
-
-
-
-            f" ZPE Wheel Decision: {'SPIN' if should_spin else 'HOLD'} (score: {spin_score:.6f})
-
-
-
-        )
-
-
-
-        return result
-
-
-
-
-
-
-
-
-
-
-
-def main():Test the ZPE Core.safe_print( Testing Schwabot ZPE Core)
-
-
-
-    safe_print(=* 40)
-
-
-
-
-
-
-
-    engine = ZPECore()
-
-
-
-
-
-
-
-    market_data = {trend_strength: 0.8,entry_exit_range: 0.05,liquidity_depth: 0.7,trend_change_rate": 0.3,price_derivative": 0.02,news_density": 0.6,sentiment_delta": 0.2,
-
-
-
-    }
-
-
-
-
-
-
-
-    result = engine.spin_profit_wheel(market_data)
-
-
-
-
-
-
-
-    safe_print(fZPE Work: {result['zpe_work']:.6f})
-
-
-
-    safe_print(f"Rotational Torque: {result['rotational_torque']:.6f})
-
-
-
-    safe_print(f"Elastic Resonance: {result['elastic_resonance']:.6f})
-
-
-
-    safe_print(f"Lantern Signal: {result['lantern_signal']:.6f})
-
-
-
-    safe_print(f"Spin Score: {result['spin_score']:.6f})
-
-
-
-    safe_print(f"Should Spin: {result['should_spin']})
-
-
-
-    safe_print(f"Recursion Depth: {result['recursion_depth']})
-
-
-
-
-
-
-
-    safe_print(\n ZPE Core test complete!)
-
-
-
-
-
-
-
-
-
-
-
-if __name__ == __main__:
-
-
-
-    main()
-
-
-
-
-
-
-
-"""
-"""
+        self.calculation_history = []
+        self.last_calculation_time = None
+
+
+# Global ZPE instance
+zpe_core = ZPECore()
+
+
+def test_zpe_core():
+    """Test function for ZPE Core"""
+    print("Testing ZPE Core...")
+    
+    core = ZPECore()
+    
+    # Test ZPE calculation
+    zpe = core.calculate_zero_point_energy(100.0, 1.5)
+    print(f"Zero Point Energy: {zpe}")
+    
+    # Test with sample price data
+    sample_prices = [100, 101, 99, 102, 98, 103, 97, 104, 96, 105]
+    
+    # Test trading signal
+    signal = core.get_zpe_trading_signal(105, sample_prices)
+    print(f"ZPE Trading Signal: {signal}")
+    
+    # Test energy state
+    state = core.get_current_energy_state()
+    print(f"Energy State: {state}")
+    
+    print("ZPE Core test completed!")
+
+
+if __name__ == "__main__":
+    test_zpe_core() 

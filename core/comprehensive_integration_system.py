@@ -32,8 +32,8 @@ from core.advanced_dualistic_trading_execution_system import (
     Union,
     ZPECore,
     19:36:56,
-    2025-07-02,
-    """,
+    2025-7-2,
+    ""","
     -,
     asyncio,
     automatically,
@@ -107,13 +107,13 @@ from core.advanced_dualistic_trading_execution_system import (
 All core functionality has been reimplemented in clean, production-ready files.
 
 
-"""
-"""
+""""
+""""
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
 
-"""
-"""
+""""
+""""
 
 
 
@@ -1023,8 +1023,8 @@ class ComprehensiveIntegrationSystem:
 
 
 
-"""
-    def _default_config() -> Dict[str, Any]:Return default configuration for comprehensive system.return {integration_mode:comprehensive,bit_levels: [4, 8, 16, 32, 42],logic_gates: [and,or,xor,nand,nor,xnor,not],entropy_threshold": 0.6,quantum_phase_sensitivity": 0.3,btc_usdc_symbol":BTC/USDC",min_trade_amount": 0.001,max_trade_amount": 1.0,profit_threshold": 0.005,execution_timeout": 30.0,optimization_interval": 100,error_handling": {max_retries: 3,retry_delay": 1.0,fallback_enabled": True},ccxt_config": {exchanges: [binance,coinbase],symbols": [BTC/USDC],granularities": [8, 6, 2],
+""""
+    def _default_config() -> Dict[str, Any]:Return default configuration for comprehensive system.return {integration_mode:comprehensive,bit_levels: [4, 8, 16, 32, 42],logic_gates: [and,or,xor,nand,nor,xnor,not],entropy_threshold": 0.6,quantum_phase_sensitivity": 0.3,btc_usdc_symbol":BTC/USDC",min_trade_amount": 0.1,max_trade_amount": 1.0,profit_threshold": 0.5,execution_timeout": 30.0,optimization_interval": 100,error_handling": {max_retries: 3,retry_delay": 1.0,fallback_enabled": True},ccxt_config": {exchanges: [binance,coinbase],symbols": [BTC/USDC],granularities": [8, 6, 2],"
 
 
 
@@ -1248,7 +1248,7 @@ class ComprehensiveIntegrationSystem:
 
 
 
-            logger.error(f" Mathematical pipeline initialization failed: {e})
+            logger.error(f" Mathematical pipeline initialization failed: {e})"
 
 
 
@@ -1600,7 +1600,7 @@ class ComprehensiveIntegrationSystem:
 
 
 
-                    bit_levels_used: bit_levels or self.config.get(bit_levels),logic_gates_used": logic_gates or self.config.get(logic_gates),
+                    bit_levels_used: bit_levels or self.config.get(bit_levels),logic_gates_used": logic_gates or self.config.get(logic_gates),"
 
 
 
@@ -2300,7 +2300,7 @@ class ComprehensiveIntegrationSystem:
 
 
 
-                volume: target_quantity,volatility: 0.5,entropy_level: cross_dynamical_state.dualistic_coherence * 8.0,complexity: cross_dynamical_state.dualistic_coherence,cross_dynamical_state": cross_dynamical_state,
+                volume: target_quantity,volatility: 0.5,entropy_level: cross_dynamical_state.dualistic_coherence * 8.0,complexity: cross_dynamical_state.dualistic_coherence,cross_dynamical_state": cross_dynamical_state,"
 
 
 
@@ -2340,7 +2340,7 @@ class ComprehensiveIntegrationSystem:
 
 
 
-                result = {profit_score: target_quantity * 0.001,
+                result = {profit_score: target_quantity * 0.1,
 
 
 
@@ -2672,7 +2672,7 @@ class ComprehensiveIntegrationSystem:
 
 
 
-            logger.error(f" Failed to track error: {e})
+            logger.error(f" Failed to track error: {e})"
 
 
 
@@ -2692,7 +2692,7 @@ class ComprehensiveIntegrationSystem:
 
 
 
-                successful_integrations: self.successful_integrations,failed_integrations: self.failed_integrations,success_rate: success_rate,avg_execution_time: self.avg_execution_time,import_status: self.import_status,available_modules": list(self.available_modules),bit_logic_operations_count": len(self.bit_logic_operations),cross_dynamical_states_count": len(self.cross_dynamical_states),error_history_count": len(self.error_history),mathematical_pipeline_available": MATHEMATICAL_PIPELINE_AVAILABLE,bit_level_systems": list(self.bit_level_systems.keys()),configuration": self.config,
+                successful_integrations: self.successful_integrations,failed_integrations: self.failed_integrations,success_rate: success_rate,avg_execution_time: self.avg_execution_time,import_status: self.import_status,available_modules": list(self.available_modules),bit_logic_operations_count": len(self.bit_logic_operations),cross_dynamical_states_count": len(self.cross_dynamical_states),error_history_count": len(self.error_history),mathematical_pipeline_available": MATHEMATICAL_PIPELINE_AVAILABLE,bit_level_systems": list(self.bit_level_systems.keys()),configuration": self.config,"
 
 
 
@@ -2708,7 +2708,7 @@ class ComprehensiveIntegrationSystem:
 
 
 
-            logger.error(f" Failed to get performance summary: {e})
+            logger.error(f" Failed to get performance summary: {e})"
 
 
 
@@ -2816,7 +2816,7 @@ class ComprehensiveIntegrationSystem:
 
 
 
-                import_status: self.import_status,bit_level_systems: len(self.bit_level_systems),configuration_valid: True,issues": [],
+                import_status: self.import_status,bit_level_systems: len(self.bit_level_systems),configuration_valid: True,issues": [],"
 
 
 
@@ -3064,5 +3064,5 @@ if __name__ == __main__:
 
 
 
-"""
-"""
+""""
+""""

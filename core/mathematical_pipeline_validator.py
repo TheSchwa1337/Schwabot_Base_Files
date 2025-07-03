@@ -21,7 +21,7 @@ from .advanced_tensor_algebra import UnifiedTensorAlgebra
 from .unified_profit_vectorization_system import UnifiedProfitVectorizationSystem
 from .zpe_core import ZPECore
 
-"""
+""""
 
 
 
@@ -49,7 +49,7 @@ Original file: core\\mathematical_pipeline_validator.py
 
 
 
-Date commented out: 2025-07-02 19:36:59
+Date commented out: 2025-7-2 19:36:59
 
 
 
@@ -84,13 +84,13 @@ The clean implementation has been preserved in the following files:
 All core functionality has been reimplemented in clean, production-ready files.
 
 
-"""
-"""
+""""
+""""
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
 
-"""
-"""
+""""
+""""
 
 
 
@@ -110,7 +110,7 @@ Mathematical Pipeline Validator - Schwabot UROS v1.0 ===========================
 
 
 
-Comprehensive validation framework for Schwabot's mathematical trading pipeline.
+Comprehensive validation framework for Schwabot's mathematical trading pipeline.'
 
 
 
@@ -162,7 +162,7 @@ Validates:
 
 
 
-This is the final validation step before going live with Schwabot UROS v1.0.import asyncio
+This is the final validation step before going live with Schwabot UROS v1.0.mport asyncio
 
 
 
@@ -471,7 +471,7 @@ class ComprehensiveValidationReport:Comprehensive validation report for the enti
 
 
 
-class MathematicalPipelineValidator:Comprehensive validator for Schwabot's mathematical trading pipeline.
+class MathematicalPipelineValidator:Comprehensive validator for Schwabot's mathematical trading pipeline.'
 
 
 
@@ -1224,8 +1224,8 @@ class MathematicalPipelineValidator:Comprehensive validator for Schwabot's mathe
                     error_count += 1
 
 
-"""
-                    recommendations.append(f"Bit phase resolution error: {e})
+""""
+                    recommendations.append(f"Bit phase resolution error: {e})"
 
 
 
@@ -1433,7 +1433,7 @@ class MathematicalPipelineValidator:Comprehensive validator for Schwabot's mathe
 
 
 
-                    zpe_work = self.zpe_core.calculate_zpe_work(0.8, 0.05)
+                    zpe_work = self.zpe_core.calculate_zpe_work(0.8, 0.5)
 
 
 
@@ -1509,7 +1509,7 @@ class MathematicalPipelineValidator:Comprehensive validator for Schwabot's mathe
 
 
 
-                        entry_exit_range: 0.05,liquidity_depth: 0.7,trend_change_rate: 0.3,price_derivative: 0.02,news_density: 0.6,sentiment_delta: 0.2,
+                        entry_exit_range: 0.5,liquidity_depth: 0.7,trend_change_rate: 0.3,price_derivative: 0.2,news_density: 0.6,sentiment_delta: 0.2,
 
 
 
@@ -1541,7 +1541,7 @@ class MathematicalPipelineValidator:Comprehensive validator for Schwabot's mathe
 
 
 
-                    recommendations.append(f"Profit wheel spinning error: {e})
+                    recommendations.append(f"Profit wheel spinning error: {e})"
 
 
 
@@ -2237,7 +2237,7 @@ class MathematicalPipelineValidator:Comprehensive validator for Schwabot's mathe
 
 
 
-                tensor_algebra,zpe_core,profit_vectorization,mathematical_coherence",
+                tensor_algebra,zpe_core,profit_vectorization,mathematical_coherence","
 
 
 
@@ -2945,4 +2945,4 @@ if __name__ == __main__:
 
 
 """"
-"""
+""""

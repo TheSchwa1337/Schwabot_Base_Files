@@ -10,7 +10,7 @@ from typing import Any, Dict, List, Optional, Tuple
 import numpy as np
 import numpy.typing as npt
 
-"""
+""""
 
 
 
@@ -38,7 +38,7 @@ Original file: core\\enhanced_strategy_framework.py
 
 
 
-Date commented out: 2025-07-02 19:36:57
+Date commented out: 2025-7-2 19:36:57
 
 
 
@@ -73,13 +73,13 @@ The clean implementation has been preserved in the following files:
 All core functionality has been reimplemented in clean, production-ready files.
 
 
-"""
-"""
+""""
+""""
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
 
-"""
-"""
+""""
+""""
 
 
 
@@ -261,7 +261,7 @@ TURTLE_TRADING =  turtle_tradingSUPERTREND =  supertrendPARABOLIC_SAR = paraboli
 
 
 
-class MarketCondition:Market condition analysis result.'
+class MarketCondition:Market condition analysis result.''
 
 
 
@@ -269,7 +269,7 @@ trend: str  # 'bullish', 'bearish', 'sideways'
 
 
 
-volatility: float  # 0.0 to 1.0'
+volatility: float  # 0.0 to 1.0''
 
 
 
@@ -309,7 +309,7 @@ class StrategySignal:
 
 
 
-    Enhanced trading signal with Wall Street strategy integration.strategy: WallStreetStrategy'
+    Enhanced trading signal with Wall Street strategy integration.strategy: WallStreetStrategy''
 
 
 
@@ -592,8 +592,8 @@ self._initialize_wall_street_strategies()
 
 
 
-"""
-def _default_config() -> Dict[str, Any]:Default configuration for enhanced framework.return {max_signal_history: 10000,max_price_history": 1000,strategy_optimization_interval": 3600,  # 1 hourmin_signal_confidence: 0.7,max_position_size": 0.1,default_risk_reward_ratio": 2.0,enable_multi_timeframe": True,enable_dynamic_weights": True,performance_tracking_enabled": True,
+""""
+def _default_config() -> Dict[str, Any]:Default configuration for enhanced framework.return {max_signal_history: 10000,max_price_history": 1000,strategy_optimization_interval": 3600,  # 1 hourmin_signal_confidence: 0.7,max_position_size": 0.1,default_risk_reward_ratio": 2.0,enable_multi_timeframe": True,enable_dynamic_weights": True,performance_tracking_enabled": True,"
 
 
 
@@ -605,7 +605,7 @@ def _default_config() -> Dict[str, Any]:Default configuration for enhanced frame
 
 
 
-def _initialize_wall_street_strategies() -> None:"Initialize Wall Street trading strategies.strategies = [
+def _initialize_wall_street_strategies() -> None:"Initialize Wall Street trading strategies.strategies = ["
 
 
 
@@ -689,7 +689,7 @@ def analyze_market_conditions() -> MarketCondition:Analyze current market condit
 
 
 
-trend=unknown",
+trend=unknown","
 
 
 
@@ -697,7 +697,7 @@ volatility = 0.0,
 
 
 
-                volume_profile=unknown",
+                volume_profile=unknown","
 
 
 
@@ -1297,7 +1297,7 @@ entry_price=price,
 
 
 
-stop_loss = price * (0.98 if action == BUY else 1.02),take_profit = price * (1.04 if action == BUYelse 0.96),
+stop_loss = price * (0.98 if action == BUY else 1.2),take_profit = price * (1.4 if action == BUYelse 0.96),
 
 
 
@@ -1497,7 +1497,7 @@ entry_price=price,
 
 
 
-stop_loss = price * (0.975 if action == BUY else 1.025),take_profit = price * (1.05 if action == BUYelse 0.95),
+stop_loss = price * (0.975 if action == BUY else 1.25),take_profit = price * (1.5 if action == BUYelse 0.95),
 
 
 
@@ -1509,7 +1509,7 @@ market_condition=market_condition,
 
 
 
-mathematical_state={macd_line: macd_line,signal_line: signal_line,histogram": histogram,
+mathematical_state={macd_line: macd_line,signal_line: signal_line,histogram": histogram,"
 
 
 
@@ -1525,7 +1525,7 @@ mathematical_state={macd_line: macd_line,signal_line: signal_line,histogram": hi
 
 
 
-def _bollinger_bands_signal() -> Optional[StrategySignal]:"Generate Bollinger Bands signal.price_history = self.price_history.get(asset, [])
+def _bollinger_bands_signal() -> Optional[StrategySignal]:"Generate Bollinger Bands signal.price_history = self.price_history.get(asset, [])"
 
 
 
@@ -1697,7 +1697,7 @@ mathematical_state={bb_upper: bb_upper,bb_middle: bb_middle,bb_lower": bb_lower,
 
 
 
-},metadata = {indicator:Bollinger Bands,period: 20,std_dev": 2.0},
+},metadata = {indicator:Bollinger Bands,period: 20,std_dev": 2.0},"
 
 
 
@@ -1709,7 +1709,7 @@ mathematical_state={bb_upper: bb_upper,bb_middle: bb_middle,bb_lower": bb_lower,
 
 
 
-def _golden_cross_signal() -> Optional[StrategySignal]:"Generate Golden Cross signal.price_history = self.price_history.get(asset, [])
+def _golden_cross_signal() -> Optional[StrategySignal]:"Generate Golden Cross signal.price_history = self.price_history.get(asset, [])"
 
 
 
@@ -1973,7 +1973,7 @@ action =  HOLD
 
 
 
-if price > vwap * 1.005 and market_condition.volume_profile == high: action = BUYconfidence = 0.75
+if price > vwap * 1.5 and market_condition.volume_profile == high: action = BUYconfidence = 0.75
 
 
 
@@ -2057,7 +2057,7 @@ stop_loss=vwap,
 
 
 
-take_profit = price * (1.03 if action == BUY else 0.97),
+take_profit = price * (1.3 if action == BUY else 0.97),
 
 
 
@@ -2097,7 +2097,7 @@ def _momentum_breakout_signal() -> Optional[StrategySignal]:Generate momentum br
 
 
 
-if market_condition.momentum > 0.3 and market_condition.volatility > 0.02:
+if market_condition.momentum > 0.3 and market_condition.volatility > 0.2:
 
 
 
@@ -2153,7 +2153,7 @@ stop_loss=price * 0.97,
 
 
 
-                take_profit=price * 1.06,
+                take_profit=price * 1.6,
 
 
 
@@ -2181,7 +2181,7 @@ def _volatility_breakout_signal() -> Optional[StrategySignal]:Generate volatilit
 
 
 
-if market_condition.volatility > 0.05: action = BUY if market_condition.momentum > 0 elseSELLreturn StrategySignal(
+if market_condition.volatility > 0.5: action = BUY if market_condition.momentum > 0 elseSELLreturn StrategySignal(
 
 
 
@@ -2229,7 +2229,7 @@ entry_price=price,
 
 
 
-stop_loss = price * (0.96 if action == BUY else 1.04),take_profit = price * (1.08 if action == BUYelse 0.92),
+stop_loss = price * (0.96 if action == BUY else 1.4),take_profit = price * (1.8 if action == BUYelse 0.92),
 
 
 
@@ -2573,11 +2573,11 @@ def _calculate_trend() -> str:Calculate trend direction.if len(price_data) < 10:
 
 
 
-        if recent_slope > price_data[-1] * 0.001:
+        if recent_slope > price_data[-1] * 0.1:
 
 
 
-            returnbullishelif recent_slope < -price_data[-1] * 0.001:
+            returnbullishelif recent_slope < -price_data[-1] * 0.1:
 
 
 
@@ -3389,7 +3389,7 @@ for name, metrics in self.strategy_metrics.items():
 
 
 
-},market_conditions": {asset: {trend: condition.trend,volatility": condition.volatility,momentum": condition.momentum,
+},market_conditions": {asset: {trend: condition.trend,volatility": condition.volatility,momentum": condition.momentum,"
 
 
 
@@ -3417,7 +3417,7 @@ for asset, condition in self.market_conditions.items():
 
 
 
-def create_enhanced_strategy_framework() -> EnhancedStrategyFramework:"Factory function to create enhanced strategy framework.return EnhancedStrategyFramework(config)
+def create_enhanced_strategy_framework() -> EnhancedStrategyFramework:"Factory function to create enhanced strategy framework.return EnhancedStrategyFramework(config)"
 
 
 
@@ -3505,9 +3505,9 @@ f{signal.confidence:.2f} confidence
 
 
 
-)'"
+)'""'
 
 
 
 """"
-"""
+""""

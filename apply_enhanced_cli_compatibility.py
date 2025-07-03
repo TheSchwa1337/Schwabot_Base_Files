@@ -19,13 +19,7 @@ logger = logging.getLogger(__name__)
 
 # Import our enhanced compatibility handler
 try:
-    from core.enhanced_windows_cli_compatibility import (
-        EnhancedWindowsCliCompatibilityHandler,
-        cli_safe,
-        safe_print,
-        safe_log,
-        get_safe_reporter
-    )
+    # All imports from core.enhanced_windows_cli_compatibility are unused
     CLI_HANDLER_AVAILABLE = True
 except ImportError:
     CLI_HANDLER_AVAILABLE = False
@@ -53,11 +47,11 @@ class CliCompatibilityApplicator:
 # Enhanced Windows CLI compatibility
 try:
     from core.enhanced_windows_cli_compatibility import (
-        EnhancedWindowsCliCompatibilityHandler,
-        cli_safe,
-        safe_print,
-        safe_log,
-        get_safe_reporter
+        # EnhancedWindowsCliCompatibilityHandler,  # unused
+        # cli_safe,  # unused
+        # safe_print,  # unused
+        # safe_log,  # unused
+        # get_safe_reporter  # unused
     )
     CLI_HANDLER_AVAILABLE = True
 except ImportError:

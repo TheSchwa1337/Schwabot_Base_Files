@@ -556,7 +556,7 @@ class AdvancedSettingsEngine:
     def _validate_section_strict(self, section: SettingsSection) -> bool:
         """Strict validation of a section."""
         # This is a basic implementation - can be extended
-            return True
+        return True
 
     def is_loaded(self) -> bool:
         """Check if any configuration has been loaded."""

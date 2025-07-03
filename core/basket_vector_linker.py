@@ -1,7 +1,6 @@
-from typing import Any, Dict, List, Optional, Tuple
-
-import numpy as np
-from scipy.spatial.distance import cosine
+# from typing import Any, Dict, List, Optional, Tuple  # unused
+# import numpy as np  # unused
+# from scipy.spatial.distance import cosine  # unused
 
 """
 

@@ -227,7 +227,9 @@ class PureProfitCalculator:
     def _calculate_risk_adjustment(self, market_data: MarketData, history_state: HistoryState) -> float:
         """Calculate risk adjustment factor using YOUR risk mathematics."""
         # YOUR risk tolerance calculation
-        risk_factor = 1.0 - (market_data.volatility * self.strategy_params.risk_tolerance)
+        risk_factor = 1.0 - (
+            market_data.volatility * self.strategy_params.risk_tolerance
+        )
 
         # YOUR historical risk calculation
         if history_state.profit_memory:
@@ -246,7 +248,8 @@ class PureProfitCalculator:
 
         # YOUR historical confidence calculation
         if history_state.signal_history:
-            signal_consistency = 1.0 - np.std(history_state.signal_history[-10:])
+            recent_history = history_state.signal_history[-10:]
+            signal_consistency = 1.0 - np.std(recent_history)
             signal_strength *= signal_consistency
 
         # YOUR Pi constant integration for confidence
@@ -257,12 +260,12 @@ class PureProfitCalculator:
 
     def _calculate_tensor_contribution(self, history_state: HistoryState) -> float:
         """Calculate tensor contribution using YOUR tensor mathematics."""
-            if not history_state.tensor_buckets:
+        if not history_state.tensor_buckets:
             return 0.0
 
         # YOUR tensor bucket analysis
         total_contribution = 0.0
-        for bucket_name, bucket_data in history_state.tensor_buckets.items():
+        for _bucket_name, bucket_data in history_state.tensor_buckets.items():
             if len(bucket_data) > 0:
                 # YOUR tensor mathematics
                 bucket_norm = np.linalg.norm(bucket_data)
@@ -280,7 +283,7 @@ class PureProfitCalculator:
 
         # YOUR hash matrix analysis
         total_hash_strength = 0.0
-        for matrix_name, matrix_data in history_state.hash_matrices.items():
+        for _matrix_name, matrix_data in history_state.hash_matrices.items():
             if matrix_data.size > 0:
                 # YOUR hash strength calculation
                 matrix_hash = hashlib.sha256(matrix_data.tobytes()).hexdigest()

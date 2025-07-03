@@ -10,7 +10,7 @@ import numpy as np
 from .galileo_tensor_bridge import GalileoTensorBridge
 from .quantum_static_core import QSCResult, QuantumStaticCore, ResonanceLevel
 
-"""
+""""
 
 
 
@@ -38,7 +38,7 @@ Original file: core\\qsc_enhanced_profit_allocator.py
 
 
 
-Date commented out: 2025-07-02 19:37:00
+Date commented out: 2025-7-2 19:37:0
 
 
 
@@ -74,12 +74,12 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 
 
-"""
+""""
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
 
 
-"""
+""""
 
 
 
@@ -270,7 +270,7 @@ class QSCEnhancedProfitAllocator:QSC-Enhanced Profit Cycle Allocator.def __init_
 
 
 
-        self.qsc_profit_cycles = {conservative: {max_allocation: 0.3,min_resonance: 0.7,risk_factor: 0.2,entropy_tolerance: 0.4,fibonacci_requirement": 0.6,
+        self.qsc_profit_cycles = {conservative: {max_allocation: 0.3,min_resonance: 0.7,risk_factor: 0.2,entropy_tolerance: 0.4,fibonacci_requirement": 0.6,"
 
 
 
@@ -370,7 +370,7 @@ class QSCEnhancedProfitAllocator:QSC-Enhanced Profit Cycle Allocator.def __init_
 
 
 
-        tick_data = {prices: market_data.get(price_history, []),volumes: market_data.get(volume_history", []),
+        tick_data = {prices: market_data.get(price_history, []),volumes: market_data.get(volume_history", []),"
 
 
 
@@ -678,7 +678,7 @@ class QSCEnhancedProfitAllocator:QSC-Enhanced Profit Cycle Allocator.def __init_
 
 
 
-                minimal_trading: profit_amount * 0.15,system_reserve: profit_amount * 0.05,
+                minimal_trading: profit_amount * 0.15,system_reserve: profit_amount * 0.5,
 
 
 
@@ -930,11 +930,11 @@ class QSCEnhancedProfitAllocator:QSC-Enhanced Profit Cycle Allocator.def __init_
 
 
 
-                amount: amount,timestamp: time.time(),success: success,qsc_validation": {resonance_score: qsc_result.confidence,immune_approved": not qsc_result.immune_response,recommended_cycle": qsc_result.recommended_cycle,
+                amount: amount,timestamp: time.time(),success: success,qsc_validation": {resonance_score: qsc_result.confidence,immune_approved": not qsc_result.immune_response,recommended_cycle": qsc_result.recommended_cycle,"
 
 
 
-                },tensor_validation": {phi_resonance: tensor_result.phi_resonance,quantum_score": tensor_result.sp_integration[quantum_score],tensor_coherence": tensor_result.tensor_field_coherence,
+                },tensor_validation": {phi_resonance: tensor_result.phi_resonance,quantum_score": tensor_result.sp_integration[quantum_score],tensor_coherence": tensor_result.tensor_field_coherence,"
 
 
 
@@ -954,7 +954,7 @@ class QSCEnhancedProfitAllocator:QSC-Enhanced Profit Cycle Allocator.def __init_
 
 
 
-                logger.info(f" Allocation executed: {allocation_type} ${amount:.2f})
+                logger.info(f" Allocation executed: {allocation_type} ${amount:.2f})"
 
 
 
@@ -986,7 +986,7 @@ class QSCEnhancedProfitAllocator:QSC-Enhanced Profit Cycle Allocator.def __init_
 
 
 
-            return {allocation_type: allocation_type,amount: amount,timestamp: time.time(),success": False,error: str(e),
+            return {allocation_type: allocation_type,amount: amount,timestamp: time.time(),success": False,error: str(e),"
 
 
 
@@ -1150,7 +1150,7 @@ class QSCEnhancedProfitAllocator:QSC-Enhanced Profit Cycle Allocator.def __init_
 
 
 
-            immune_blocks: self.immune_blocks,immune_success_rate: immune_success_rate,resonance_optimizations: self.resonance_optimizations,total_qsc_allocated: self.total_qsc_allocated,current_qsc_mode": (self.current_cycle.qsc_mode.value if self.current_cycle else None),qsc_state": self.qsc.get_immune_status(),average_resonance": (
+            immune_blocks: self.immune_blocks,immune_success_rate: immune_success_rate,resonance_optimizations: self.resonance_optimizations,total_qsc_allocated: self.total_qsc_allocated,current_qsc_mode": (self.current_cycle.qsc_mode.value if self.current_cycle else None),qsc_state": self.qsc.get_immune_status(),average_resonance": ("
 
 
 
@@ -1274,7 +1274,7 @@ class QSCEnhancedProfitAllocator:QSC-Enhanced Profit Cycle Allocator.def __init_
 
 
 
-                config[max_allocation] = min(config[max_allocation] + 0.05, 0.8)
+                config[max_allocation] = min(config[max_allocation] + 0.5, 0.8)
 
 
 
@@ -1450,4 +1450,4 @@ if __name__ == __main__:
 
 
 
-"""
+""""

@@ -14,7 +14,7 @@ import numpy as np
 
 from core.warp_sync_core import WarpSyncCore
 
-"""
+""""
 
 
 
@@ -42,7 +42,7 @@ Original file: core\\galileo_tensor_bridge.py
 
 
 
-Date commented out: 2025-07-02 19:36:58
+Date commented out: 2025-7-2 19:36:58
 
 
 
@@ -78,12 +78,12 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 
 
-"""
+""""
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
 
 
-"""
+""""
 
 
 
@@ -250,7 +250,7 @@ PHI: float = (1 + math.sqrt(5)) / 2
 
 
 
-UNISON: float = 1.0000
+UNISON: float = 1.0
 
 
 
@@ -294,11 +294,11 @@ ENTROPY_BASE: float = 0.65
 
 
 
-    TIME_RESOLUTION: float = 0.001
+    TIME_RESOLUTION: float = 0.1
 
 
 
-    BETA: float = 0.02
+    BETA: float = 0.2
 
 
 
@@ -418,7 +418,7 @@ self.warp_core = WarpSyncCore(
 
 
 
-initial_lambda = self.config.get(warp_lambda, 0.01),initial_sigma_sq = self.config.get(warp_sigma_sq, 0.005),
+initial_lambda = self.config.get(warp_lambda, 0.1),initial_sigma_sq = self.config.get(warp_sigma_sq, 0.5),
 
 
 
@@ -510,7 +510,7 @@ self.websocket_clients: List[Any] = []
 
 
 
-def _default_config():-> Dict[str, Any]:Return default configuration.return {max_history_size: 1000,warp_lambda: 0.01,warp_sigma_sq": 0.005,enable_real_time_streaming": True,websocket_port": 8765,btc_hash_update_interval": 1.0,tensor_analysis_interval": 0.1,enable_gut_bridge": True,enable_sp_integration": True,
+def _default_config():-> Dict[str, Any]:Return default configuration.return {max_history_size: 1000,warp_lambda: 0.1,warp_sigma_sq": 0.5,enable_real_time_streaming": True,websocket_port": 8765,btc_hash_update_interval": 1.0,tensor_analysis_interval": 0.1,enable_gut_bridge": True,enable_sp_integration": True,"
 
 
 
@@ -638,7 +638,7 @@ tensor_field = np.array(
 
 
 
-def calculate_stability_factors():-> Dict[str, float]:Calculate harmonic stability factors.return {UNISON: 1.0000000,FIFTH: 0.9999206,OCTAVE: 0.9998413}
+def calculate_stability_factors():-> Dict[str, float]:Calculate harmonic stability factors.return {UNISON: 1.0,FIFTH: 0.9999206,OCTAVE: 0.9998413}
 
 
 
@@ -722,7 +722,7 @@ def calculate_gut_metrics():-> GUTMetrics:Calculate GUT (Grand Unified Theory) m
 
 
 
-psi_recursive_complex = complex(0.993, 0.002) * cmath.exp(
+psi_recursive_complex = complex(0.993, 0.2) * cmath.exp(
 
 
 
@@ -746,7 +746,7 @@ psi_recursive = abs(psi_recursive_complex)
 
 
 
-h_phase_complex = cmath.exp(complex(-0.001, 0)) * complex(0.998, 0.001)
+h_phase_complex = cmath.exp(complex(-0.1, 0)) * complex(0.998, 0.1)
 
 
 
@@ -794,11 +794,11 @@ temporal_lock=0.997,
 
 
 
-            entropy_decay=0.002,
+            entropy_decay=0.2,
 
 
 
-            phase_variance=0.0015,
+            phase_variance=0.15,
 
 
 
@@ -1022,7 +1022,7 @@ sp_integration=sp_evaluation,
 
 
 
-metadata={btc_frequency: btc_freq,analysis_duration: time.time() - current_time,warp_metrics": self.warp_core.get_metrics(),
+metadata={btc_frequency: btc_freq,analysis_duration: time.time() - current_time,warp_metrics": self.warp_core.get_metrics(),"
 
 
 
@@ -1150,7 +1150,7 @@ analysis = self.current_analysis
 
 
 
-# Galileo-Tensor dataquantumRatios: [{interval: interval,perfectRatio": getattr(self.tensor_constants, interval),quantumRatio": ratio,deviation": abs(getattr(self.tensor_constants, interval) - ratio),
+# Galileo-Tensor dataquantumRatios: [{interval: interval,perfectRatio": getattr(self.tensor_constants, interval),quantumRatio": ratio,deviation": abs(getattr(self.tensor_constants, interval) - ratio),"
 
 
 
@@ -1162,7 +1162,7 @@ for interval, ratio in analysis.quantum_ratios.items():
 
 
 
-],phiResonance": analysis.phi_resonance,stabilityFactors": analysis.stability_factors,tensorFieldCoherence": analysis.tensor_field_coherence,
+],phiResonance": analysis.phi_resonance,stabilityFactors": analysis.stability_factors,tensorFieldCoherence": analysis.tensor_field_coherence,"
 
 
 
@@ -1170,11 +1170,11 @@ for interval, ratio in analysis.quantum_ratios.items():
 
 
 
-),phaseAlignment": self.calculate_qss2_phase_alignment(analysis.metadata[btc_frequency]
+),phaseAlignment": self.calculate_qss2_phase_alignment(analysis.metadata[btc_frequency]"
 
 
 
-),isStable": self.check_qss2_stability(
+),isStable": self.check_qss2_stability("
 
 
 
@@ -1202,7 +1202,7 @@ self.calculate_qss2_phase_alignment(analysis.metadata[btc_frequency]
 
 
 
-# GUT metricsgutMetrics: {psiRecursive: analysis.gut_metrics.psi_recursive,hPhase": analysis.gut_metrics.h_phase,stabilityMetric": analysis.gut_metrics.stability_metric,temporalLock": analysis.gut_metrics.temporal_lock,entropyDecay": analysis.gut_metrics.entropy_decay,phaseVariance": analysis.gut_metrics.phase_variance,
+# GUT metricsgutMetrics: {psiRecursive: analysis.gut_metrics.psi_recursive,hPhase": analysis.gut_metrics.h_phase,stabilityMetric": analysis.gut_metrics.stability_metric,temporalLock": analysis.gut_metrics.temporal_lock,entropyDecay": analysis.gut_metrics.entropy_decay,phaseVariance": analysis.gut_metrics.phase_variance,"
 
 
 
@@ -1242,7 +1242,7 @@ def get_recent_history():-> List[Dict[str, Any]]:Get recent analysis history for
 
 
 
-timestamp: analysis.timestamp,btc_price: analysis.btc_price,phi_resonance": analysis.phi_resonance,tensor_coherence": analysis.tensor_field_coherence,sp_quantum_score": analysis.sp_integration.get(quantum_score", 0),sp_phase_bucket": analysis.sp_integration.get(phase_bucket",unknown),gut_stability": analysis.gut_metrics.stability_metric,
+timestamp: analysis.timestamp,btc_price: analysis.btc_price,phi_resonance": analysis.phi_resonance,tensor_coherence": analysis.tensor_field_coherence,sp_quantum_score": analysis.sp_integration.get(quantum_score", 0),sp_phase_bucket": analysis.sp_integration.get(phase_bucket",unknown),gut_stability": analysis.gut_metrics.stability_metric,"
 
 
 
@@ -1266,7 +1266,7 @@ async def add_websocket_client():Add WebSocket client for real-time streaming.se
 
 
 
-            logger.info(f" WebSocket client connected. Total clients: {len(self.websocket_clients)}
+            logger.info(f" WebSocket client connected. Total clients: {len(self.websocket_clients)}"
 
 
 
@@ -1286,7 +1286,7 @@ async def remove_websocket_client():Remove WebSocket client.if websocket in self
 
 
 
-            logger.info(f" WebSocket client disconnected. Total clients: {len(self.websocket_clients)}
+            logger.info(f" WebSocket client disconnected. Total clients: {len(self.websocket_clients)}"
 
 
 
@@ -1406,4 +1406,4 @@ print(f Tensor Analysis Complete for BTC ${test_btc_price})print(fPhi Resonance:
 
 
 
-"""
+""""

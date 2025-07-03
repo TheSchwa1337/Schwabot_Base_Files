@@ -23,8 +23,8 @@ from core.enhanced_live_execution_mapper import (
     This,
     Tuple,
     19:36:57,
-    2025-07-02,
-    """,
+    2025-7-2,
+    ""","
     -,
     automatically,
     because,
@@ -91,13 +91,13 @@ from core.enhanced_live_execution_mapper import (
 All core functionality has been reimplemented in clean, production-ready files.
 
 
-"""
-"""
+""""
+""""
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
 
-"""
-"""
+""""
+""""
 
 
 
@@ -628,15 +628,15 @@ self.performance = StrategyPerformance()
 
 
 
-self.risk_limits = {max_daily_loss: self.config.get(max_daily_loss, 0.02),  # 2%
+self.risk_limits = {max_daily_loss: self.config.get(max_daily_loss, 0.2),  # 2%
 
 
-"""
-# 10%max_position_size: self.config.get(max_position_size", 0.1),min_confidence_threshold": self.config.get(min_confidence", 0.75),
+""""
+# 10%max_position_size: self.config.get(max_position_size", 0.1),min_confidence_threshold": self.config.get(min_confidence", 0.75),"
 
 
 
-            # 0.5%min_profit_threshold: self.config.get(min_profit", 0.005),max_risk_score": self.config.get(max_risk_score", 0.3),
+            # 0.5%min_profit_threshold: self.config.get(min_profit", 0.5),max_risk_score": self.config.get(max_risk_score", 0.3),"
 
 
 
@@ -664,7 +664,7 @@ self.risk_limits = {max_daily_loss: self.config.get(max_daily_loss, 0.02),  # 2%
 
 
 
-            logger.info( Enhanced Profit Trading Strategy initializedf"(capital: ${initial_capital_usdc:,.2f},
+            logger.info( Enhanced Profit Trading Strategy initializedf"(capital: ${initial_capital_usdc:,.2f},"
 
 
 
@@ -680,7 +680,7 @@ fsimulation: {simulation_mode})
 
 
 
-def _default_config() -> Dict[str, Any]:"Default configuration for profit trading strategy.return {max_signal_history: 1000,max_daily_loss": 0.02,max_position_size": 0.1,min_confidence": 0.75,min_profit": 0.005,max_risk_score": 0.3,kelly_fraction": 0.25,profit_multiplier": 1.5,risk_multiplier": 0.8,confidence_weight": 0.7,signal_generation_interval": 60,  # secondsenable_dynamic_sizing: True,enable_profit_taking": True,enable_stop_loss": True,profit_target_multiplier": 2.0,stop_loss_multiplier": 1.0,
+def _default_config() -> Dict[str, Any]:"Default configuration for profit trading strategy.return {max_signal_history: 1000,max_daily_loss": 0.2,max_position_size": 0.1,min_confidence": 0.75,min_profit": 0.5,max_risk_score": 0.3,kelly_fraction": 0.25,profit_multiplier": 1.5,risk_multiplier": 0.8,confidence_weight": 0.7,signal_generation_interval": 60,  # secondsenable_dynamic_sizing: True,enable_profit_taking": True,enable_stop_loss": True,profit_target_multiplier": 2.0,stop_loss_multiplier": 1.0,"
 
 
 
@@ -692,7 +692,7 @@ def _default_config() -> Dict[str, Any]:"Default configuration for profit tradin
 
 
 
-def generate_profit_signal() -> TradingSignal:"Generate profit-optimized trading signal.try:
+def generate_profit_signal() -> TradingSignal:"Generate profit-optimized trading signal.try:"
 
 
 
@@ -1324,7 +1324,7 @@ profit_score = (
 
 
 
-                if profit_potential > 0.01:  # > 1% profit potential
+                if profit_potential > 0.1:  # > 1% profit potential
 
 
 
@@ -1360,7 +1360,7 @@ else:
 
 
 
-                if profit_potential < -0.005:  # Negative profit (short opportunity)
+                if profit_potential < -0.5:  # Negative profit (short opportunity)
 
 
 
@@ -1924,7 +1924,7 @@ def _calculate_fallback_profit_potential() -> float:
 
 
 
-            volatility = market_data.get(volatility, 0.02)avg_volume = market_data.get(avg_volume, usdc_volume)
+            volatility = market_data.get(volatility, 0.2)avg_volume = market_data.get(avg_volume, usdc_volume)
 
 
 
@@ -1944,7 +1944,7 @@ volume_factor = min(2.0, usdc_volume / max(avg_volume, 1.0))
 
 
 
-base_profit = volatility_factor * volume_factor * 0.01  # 1% base
+base_profit = volatility_factor * volume_factor * 0.1  # 1% base
 
 
 
@@ -1956,7 +1956,7 @@ base_profit = volatility_factor * volume_factor * 0.01  # 1% base
 
 
 
-        return max(0.0, min(0.05, confidence_adjusted))  # Cap at 5%
+        return max(0.0, min(0.5, confidence_adjusted))  # Cap at 5%
 
 
 
@@ -1964,7 +1964,7 @@ base_profit = volatility_factor * volume_factor * 0.01  # 1% base
 
 
 
-            return 0.005  # 0.5% fallback
+            return 0.5  # 0.5% fallback
 
 
 
@@ -1992,7 +1992,7 @@ def _calculate_fallback_risk_score() -> float:
 
 
 
-            profit_adjustment = max(0, (0.01 - profit_potential) * 10) * 0.2
+            profit_adjustment = max(0, (0.1 - profit_potential) * 10) * 0.2
 
 
 
@@ -2036,7 +2036,7 @@ price_history = market_data.get(price_history, [])
 
 
 
-                if momentum > 0 and profit_potential > 0.005:
+                if momentum > 0 and profit_potential > 0.5:
 
 
 
@@ -2044,7 +2044,7 @@ price_history = market_data.get(price_history, [])
 
 
 
-elif momentum < 0 and profit_potential > 0.005:
+elif momentum < 0 and profit_potential > 0.5:
 
 
 
@@ -2084,7 +2084,7 @@ if direction != TradeDirection.HOLD:
 
 
 
-win_loss_ratio = profit_potential / 0.01  # Assume 1% loss
+win_loss_ratio = profit_potential / 0.1  # Assume 1% loss
 
 
 
@@ -2124,7 +2124,7 @@ position_size = portfolio_btc * kelly_fraction
 
 
 
-                position_size = max(0.001, min(1.0, position_size))  # BTC limits
+                position_size = max(0.1, min(1.0, position_size))  # BTC limits
 
 
 
@@ -2388,7 +2388,7 @@ state.profit_potential = signal.profit_potential
 
 
 
-state.execution_details = {status:filled,executed_price: signal.btc_price,executed_quantity": signal.recommended_size_btc,fees": signal.recommended_size_btc * signal.btc_price * 0.00075,simulation": True,
+state.execution_details = {status:filled,executed_price: signal.btc_price,executed_quantity": signal.recommended_size_btc,fees": signal.recommended_size_btc * signal.btc_price * 0.75,simulation": True,"
 
 
 
@@ -2692,7 +2692,7 @@ def get_strategy_performance() -> Dict[str, Any]:Get comprehensive strategy perf
 
 
 
-        except Exception as e:logger.error(f"Error getting strategy performance: {e})return {error: str(e)}
+        except Exception as e:logger.error(f"Error getting strategy performance: {e})return {error: str(e)}"
 
 
 
@@ -2708,7 +2708,7 @@ def get_recent_signals() -> List[Dict[str, Any]]:Get recent trading signals.try:
 
 
 
-signal_id: signal.signal_id,timestamp: signal.timestamp,profit_signal: signal.profit_signal.value,confidence_score": signal.confidence_score,profit_potential": signal.profit_potential,risk_score": signal.risk_score,recommended_direction": signal.recommended_direction.value,recommended_size_btc": signal.recommended_size_btc,expected_return: signal.expected_return,
+signal_id: signal.signal_id,timestamp: signal.timestamp,profit_signal: signal.profit_signal.value,confidence_score": signal.confidence_score,profit_potential": signal.profit_potential,risk_score": signal.risk_score,recommended_direction": signal.recommended_direction.value,recommended_size_btc": signal.recommended_size_btc,expected_return: signal.expected_return,"
 
 
 
@@ -2724,7 +2724,7 @@ for signal in recent_signals:
 
 
 
-        except Exception as e:logger.error(f"Error getting recent signals: {e})
+        except Exception as e:logger.error(f"Error getting recent signals: {e})"
 
 
 
@@ -2776,7 +2776,7 @@ strategy = EnhancedProfitTradingStrategy(
 
 
 
-demo_market_data = {price_history: [45000, 45100, 45200, 45150, 45300],volume_history: [1000000, 1100000, 950000, 1200000, 1150000],volatility": 0.02,avg_volume": 1100000.0,
+demo_market_data = {price_history: [45000, 45100, 45200, 45150, 45300],volume_history: [1000000, 1100000, 950000, 1200000, 1150000],volatility": 0.2,avg_volume": 1100000.0,
 
 
 
@@ -2868,7 +2868,7 @@ print(fExecuted Quantity: {details.get('executed_quantity',
 
 
 
-0):.6f} BTC)'print(fFees: ${details.get('fees', 0):.2f})
+0):.6f} BTC)'print(fFees: ${details.get('fees', 0):.2f})'
 
 
 
@@ -2888,7 +2888,7 @@ print(\n Strategy Performance:)
 
 
 
-print(fTotal Signals: {'
+print(fTotal Signals: {''
 
 
 
@@ -2896,7 +2896,7 @@ performance['strategy_performance']['total_signals']})
 
 
 
-print(fWin Rate: {'
+print(fWin Rate: {''
 
 
 
@@ -2904,7 +2904,7 @@ performance['strategy_performance']['win_rate']:.3f})
 
 
 
-print(fAvg Confidence: {'
+print(fAvg Confidence: {''
 
 
 
@@ -2920,7 +2920,7 @@ print(\n Enhanced Profit Trading Strategy Demo Complete!)
 
 
 
-        except Exception as e:print(f"\n Demo error: {e})
+        except Exception as e:print(f"\n Demo error: {e})"
 
 
 
@@ -2932,9 +2932,9 @@ if __name__ == __main__:
 
 
 
-    main()"'"
+    main()"'"'
 
 
 
-"""
-"""
+""""
+""""

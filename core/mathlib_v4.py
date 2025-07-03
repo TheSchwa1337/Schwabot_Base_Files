@@ -100,7 +100,7 @@ class Dual:
         if isinstance(other, Dual):
             return Dual(other.val - self.val, other.eps - self.eps)
         else:
-        return Dual(other - self.val, -self.eps)
+            return Dual(other - self.val, -self.eps)
 
     def __mul__(self, other) -> Dual:
         if isinstance(other, Dual):

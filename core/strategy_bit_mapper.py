@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 import math  # Added for entropy calculation
-import random
+    import random
 import time
 from collections import deque
 from enum import Enum
@@ -10,7 +10,7 @@ from typing import Any, Dict, List, Optional, Union
 
 import numpy as np
 
-"""
+""""
 
 
 
@@ -38,7 +38,7 @@ Original file: core\\strategy_bit_mapper.py
 
 
 
-Date commented out: 2025-07-02 19:37:03
+Date commented out: 2025-7-2 19:37:3
 
 
 
@@ -73,13 +73,13 @@ The clean implementation has been preserved in the following files:
 All core functionality has been reimplemented in clean, production-ready files.
 
 
-"""
-"""
+""""
+""""
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
 
-"""
-"""
+""""
+""""
 
 
 
@@ -289,7 +289,7 @@ self.strategy_pool = self._generate_strategy_pool()
 # Performance tracking
 
 
-"""
+""""
 self.mapping_stats = {total_mappings: 0,flip_mappings: 0,mirror_mappings": 0,random_mappings": 0,self_similarity_detections": 0,avg_processing_time": 0.0,
 
 
@@ -890,7 +890,7 @@ Returns:
 
 
 
-            return {is_similar: False,similarity_score: 0.0,matching_patterns": [],
+            return {is_similar: False,similarity_score: 0.0,matching_patterns": [],"
 
 
 
@@ -982,7 +982,7 @@ fSelf-similarity detection: {is_similar} (score: {max_similarity_score:.3f})
 
 
 
-        return {is_similar: is_similar,similarity_score: max_similarity_score,matching_patterns": matching_patterns,
+        return {is_similar: is_similar,similarity_score: max_similarity_score,matching_patterns": matching_patterns,"
 
 
 
@@ -994,7 +994,7 @@ fSelf-similarity detection: {is_similar} (score: {max_similarity_score:.3f})
 
 
 
-def _calculate_pattern_similarity() -> float:"Calculate similarity between two strategy patterns (simple intersection).set1 = set(pattern1)
+def _calculate_pattern_similarity() -> float:"Calculate similarity between two strategy patterns (simple intersection).set1 = set(pattern1)"
 
 
 
@@ -1002,11 +1002,11 @@ set2 = set(pattern2)
 
 
 
-intersection = len(set1.intersection(set2))
+intersection = len(set1.ntersection(set2))
 
 
 
-union = len(set1.union(set2))
+union = len(set1.nion(set2))
 
 
 
@@ -1050,7 +1050,7 @@ def _update_stats() -> None:Update internal statistics.self.mapping_stats[total_
 
 
 
-def get_strategy_metrics() -> Dict[str, Union[int, float]]:"Analyze and return metrics for a given set of strategies.num_strategies = len(strategies)
+def get_strategy_metrics() -> Dict[str, Union[int, float]]:"Analyze and return metrics for a given set of strategies.num_strategies = len(strategies)"
 
 
 
@@ -1078,7 +1078,7 @@ for p in [strategies.count(x) / num_strategies for x in set(strategies)]:
 
 
 
-        return {num_strategies: num_strategies,unique_strategies: unique_strategies,entropy": entropy,
+        return {num_strategies: num_strategies,unique_strategies: unique_strategies,entropy": entropy,"
 
 
 
@@ -1090,7 +1090,7 @@ for p in [strategies.count(x) / num_strategies for x in set(strategies)]:
 
 
 
-def get_performance_stats() -> Dict[str, Any]:"Return the performance statistics.return self.mapping_stats.copy()
+def get_performance_stats() -> Dict[str, Any]:"Return the performance statistics.return self.mapping_stats.copy()"
 
 
 
@@ -1318,9 +1318,9 @@ if __name__ == __main__:
 
 
 
-    main()'"
+    main()'""'
 
 
 
 """"
-"""
+""""

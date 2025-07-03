@@ -15,7 +15,7 @@ from typing import Any, Dict, List, Optional, Set, Tuple, Union
 import _error=None
 import numpy as np
 
-"""
+""""
 
 
 
@@ -43,7 +43,7 @@ Original file: core\\error_handling_and_flake_gate_prevention.py
 
 
 
-Date commented out: 2025-07-02 19:36:58
+Date commented out: 2025-7-2 19:36:58
 
 
 
@@ -78,13 +78,13 @@ The clean implementation has been preserved in the following files:
 All core functionality has been reimplemented in clean, production-ready files.
 
 
-"""
-"""
+""""
+""""
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
 
-"""
-"""
+""""
+""""
 
 
 
@@ -665,12 +665,12 @@ class ComprehensiveErrorHandler:
 
 
 
-"""
+""""
     def _default_config() -> Dict[str, Any]:Return default configuration for error handling.return {max_retries: 3,retry_delay: 1.0,health_check_interval: 60.0,error_threshold: 10,recovery_timeout": 30.0,fallback_enabled": True,auto_recovery": True,critical_modules": [numpy,core.unified_profit_vectorization_system,core.advanced_dualistic_trading_execution_system,core.schwabot_unified_integration,
 
 
 
-            ],optional_modules": [core.dualistic_state_machine,core.advanced_tensor_algebra,core.phase_bit_integration,core.ccxt_integration,core.zpe_core,
+            ],optional_modules": [core.dualistic_state_machine,core.advanced_tensor_algebra,core.phase_bit_integration,core.ccxt_integration,core.zpe_core,"
 
 
 
@@ -690,7 +690,7 @@ class ComprehensiveErrorHandler:
 
 
 
-    def _initialize_module_tracking() -> None:Initialize module tracking for all known modules.all_modules = self.config.get(critical_modules, []) + self.config.get(optional_modules", []
+    def _initialize_module_tracking() -> None:Initialize module tracking for all known modules.all_modules = self.config.get(critical_modules, []) + self.config.get(optional_modules", []"
 
 
 
@@ -817,7 +817,7 @@ class ComprehensiveErrorHandler:
 
 
 
-                return {profit_score: btc_price * volume * 0.001,confidence_score: 0.5,mode:fallback,method":fallback_vectorization",
+                return {profit_score: btc_price * volume * 0.1,confidence_score: 0.5,mode:fallback,method":fallback_vectorization",
 
 
 
@@ -869,7 +869,7 @@ class ComprehensiveErrorHandler:
 
 
 
-                return {success: True,profit_realized: target_quantity * 0.001,execution_confidence: 0.5,mode:fallback",
+                return {success: True,profit_realized: target_quantity * 0.1,execution_confidence: 0.5,mode:fallback","
 
 
 
@@ -921,7 +921,7 @@ class ComprehensiveErrorHandler:
 
 
 
-                return {success: True,profit_realized: target_quantity * 0.001,execution_time: 0.1,mode:fallback",
+                return {success: True,profit_realized: target_quantity * 0.1,execution_time: 0.1,mode:fallback","
 
 
 
@@ -1657,7 +1657,7 @@ Determine error severity based on module import []):
 
 
 
-        if module_name in self.config.get(critical_modules", []):
+        if module_name in self.config.get(critical_modules", []):"
 
 
 
@@ -2089,7 +2089,7 @@ Determine error severity based on module import []):
 
 
 
-                critical_errors * 0.5 + high_errors * 0.3 + medium_errors * 0.15 + low_errors * 0.05
+                critical_errors * 0.5 + high_errors * 0.3 + medium_errors * 0.15 + low_errors * 0.5
 
 
 
@@ -2381,7 +2381,7 @@ Determine error severity based on module import []):
 
 
 
-                recovery_statistics: {total_errors: total_errors,successful_recoveries: successful_recoveries,recovery_success_rate": successful_recoveries / max(1, total_errors),fallback_usage": fallback_usage,fallback_usage_rate": fallback_usage / max(1, total_errors),
+                recovery_statistics: {total_errors: total_errors,successful_recoveries: successful_recoveries,recovery_success_rate": successful_recoveries / max(1, total_errors),fallback_usage": fallback_usage,fallback_usage_rate": fallback_usage / max(1, total_errors),"
 
 
 
@@ -2409,7 +2409,7 @@ Determine error severity based on module import []):
 
 
 
-            logger.error(f" Failed to get error analysis: {e})
+            logger.error(f" Failed to get error analysis: {e})"
 
 
 
@@ -2429,11 +2429,11 @@ is_available: False,dependencies: [], import _chain: []
 
 
 
-is_available: False,dependencies: [], import issues": []
+is_available: False,dependencies: [], import issues": []"
 
 
 
-is_available: False,dependencies: [], import recommendations": []
+is_available: False,dependencies: [], import recommendations": []"
 
 
 
@@ -2497,7 +2497,7 @@ is_available: False,dependencies: [], import
 
 
 
-                        validation_result[recommendations].append(f"Install or fix {module_name})
+                        validation_result[recommendations].append(f"Install or fix {module_name})"
 
 
 
@@ -2573,7 +2573,7 @@ is_available: False,dependencies: [], import
 
 
 
-                        available: status.is_available,health_score": status.health_score,fallback_available": status.fallback_available,last_check": status.last_check,
+                        available: status.is_available,health_score": status.health_score,fallback_available": status.fallback_available,last_check": status.last_check,"
 
 
 
@@ -2585,7 +2585,7 @@ is_available: False,dependencies: [], import
 
 
 
-                },recommendations": health.recommendations,
+                },recommendations": health.recommendations,"
 
 
 
@@ -2601,7 +2601,7 @@ is_available: False,dependencies: [], import
 
 
 
-            logger.error(f" Failed to get performance summary: {e})
+            logger.error(f" Failed to get performance summary: {e})"
 
 
 
@@ -2633,7 +2633,7 @@ __all__ = [ComprehensiveErrorHandler,
 
 
 
-    ErrorSeverity,ErrorType,RecoveryStrategy,ErrorRecord,ModuleStatus",SystemHealth",comprehensive_error_handler",
+    ErrorSeverity,ErrorType,RecoveryStrategy,ErrorRecord,ModuleStatus",SystemHealth",comprehensive_error_handler","
 
 
 
@@ -2781,5 +2781,5 @@ if __name__ == __main__:
 
 
 
-"""
-))"""
+""""
+))""""

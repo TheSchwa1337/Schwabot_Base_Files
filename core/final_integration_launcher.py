@@ -30,8 +30,8 @@ from core.advanced_dualistic_trading_execution_system import (
     Tuple,
     Union,
     19:36:58,
-    2025-07-02,
-    """,
+    2025-7-2,
+    ""","
     -,
     asyncio,
     automatically,
@@ -102,13 +102,13 @@ from core.advanced_dualistic_trading_execution_system import (
 All core functionality has been reimplemented in clean, production-ready files.
 
 
-"""
-"""
+""""
+""""
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
 
-"""
-"""
+""""
+""""
 
 
 
@@ -779,8 +779,8 @@ class FinalIntegrationLauncher:
 
 
 
-"""
-    def _default_config() -> Dict[str, Any]:Return default configuration for the launcher.return {trading_mode: TradingMode.DEMO,bit_levels: [4, 8, 16, 32, 42],logic_gates": [and,or,xor,nand,nor,xnor,not],integration_mode":comprehensive",error_handling_enabled": True,flake_gate_prevention_enabled": True,auto_recovery_enabled": True,health_monitoring_enabled": True,health_check_interval": 60.0,max_concurrent_trades": 5,default_trade_quantity": 0.001,profit_threshold": 0.005,risk_management": {max_drawdown: 0.1,position_size_limit": 0.1,daily_loss_limit": 0.05,
+""""
+    def _default_config() -> Dict[str, Any]:Return default configuration for the launcher.return {trading_mode: TradingMode.DEMO,bit_levels: [4, 8, 16, 32, 42],logic_gates": [and,or,xor,nand,nor,xnor,not],integration_mode":comprehensive",error_handling_enabled": True,flake_gate_prevention_enabled": True,auto_recovery_enabled": True,health_monitoring_enabled": True,health_check_interval": 60.0,max_concurrent_trades": 5,default_trade_quantity": 0.1,profit_threshold": 0.5,risk_management": {max_drawdown: 0.1,position_size_limit": 0.1,daily_loss_limit": 0.5,
 
 
 
@@ -1191,7 +1191,7 @@ class FinalIntegrationLauncher:
 
 
 
-                    profit_score: target_quantity * 0.001,
+                    profit_score: target_quantity * 0.1,
 
 
 
@@ -1207,7 +1207,7 @@ class FinalIntegrationLauncher:
 
 
 
-                trading_result = {success: True,profit_realized: target_quantity * 0.001,execution_confidence: 0.5,mode:fallback",
+                trading_result = {success: True,profit_realized: target_quantity * 0.1,execution_confidence: 0.5,mode:fallback","
 
 
 
@@ -1465,7 +1465,7 @@ class FinalIntegrationLauncher:
 
 
 
-            error_context = {module_name: final_integration_launcher,function_name:_initialize_systems,line_number": None,
+            error_context = {module_name: final_integration_launcher,function_name:_initialize_systems,line_number": None,"
 
 
 
@@ -1585,7 +1585,7 @@ class FinalIntegrationLauncher:
 
 
 
-        target_quantity = target_quantity or self.config.get(default_trade_quantity, 0.001)
+        target_quantity = target_quantity or self.config.get(default_trade_quantity, 0.1)
 
 
 
@@ -1601,7 +1601,7 @@ class FinalIntegrationLauncher:
 
 
 
-        logger.info(f" Executing Complete Trading Cycle {trade_id})
+        logger.info(f" Executing Complete Trading Cycle {trade_id})"
 
 
 
@@ -2221,7 +2221,7 @@ class FinalIntegrationLauncher:
 
 
 
-                trades_executed: trades_executed,successful_trades: self.system_state.successful_trades,failed_trades: self.system_state.failed_trades,success_rate: success_rate,total_profit": self.system_state.total_profit,avg_profit_per_trade": self.system_state.total_profit / max(1, trades_executed),system_health_final": self.system_state.system_health,error_count": self.system_state.error_count,recovery_count": self.system_state.recovery_count,
+                trades_executed: trades_executed,successful_trades: self.system_state.successful_trades,failed_trades: self.system_state.failed_trades,success_rate: success_rate,total_profit": self.system_state.total_profit,avg_profit_per_trade": self.system_state.total_profit / max(1, trades_executed),system_health_final": self.system_state.system_health,error_count": self.system_state.error_count,recovery_count": self.system_state.recovery_count,"
 
 
 
@@ -2233,7 +2233,7 @@ class FinalIntegrationLauncher:
 
 
 
-            logger.info(f" Continuous Trading Session completed)
+            logger.info(f" Continuous Trading Session completed)"
 
 
 
@@ -2301,7 +2301,7 @@ class FinalIntegrationLauncher:
 
 
 
-                },system_health": {current_health: self.system_state.system_health,error_count": self.system_state.error_count,recovery_count": self.system_state.recovery_count,
+                },system_health": {current_health: self.system_state.system_health,error_count": self.system_state.error_count,recovery_count": self.system_state.recovery_count,"
 
 
 
@@ -2309,7 +2309,7 @@ class FinalIntegrationLauncher:
 
 
 
-                },recent_trades": [{
+                },recent_trades": [{"
 
 
 
@@ -2481,7 +2481,7 @@ __all__ = [FinalIntegrationLauncher,
 
 
 
-    SystemStatus,TradingMode,SystemConfiguration,SystemState",TradingResult",final_integration_launcher",
+    SystemStatus,TradingMode,SystemConfiguration,SystemState",TradingResult",final_integration_launcher","
 
 
 
@@ -2809,27 +2809,27 @@ async def main():Main function for running the complete Schwabot trading system.
 
 
 
-        print(f" Error handling and recovery working)
+        print(f" Error handling and recovery working)"
 
 
 
-        print(f" Flake gate prevention active)
+        print(f" Flake gate prevention active)"
 
 
 
-        print(f" Mathematical pipeline fully functional)
+        print(f" Mathematical pipeline fully functional)"
 
 
 
-        print(f" Bit-level logic gates operational)
+        print(f" Bit-level logic gates operational)"
 
 
 
-        print(f" Cross-dynamical integration complete)
+        print(f" Cross-dynamical integration complete)"
 
 
 
-        print(f" 100% Implementation Status: ACHIEVED)
+        print(f" 100% Implementation Status: ACHIEVED)"
 
 
 
@@ -2841,7 +2841,7 @@ async def main():Main function for running the complete Schwabot trading system.
 
 
 
-        print(f" Main execution failed: {e})
+        print(f" Main execution failed: {e})"
 
 
 
@@ -2874,4 +2874,4 @@ if __name__ == __main__:
 
 
 """"
-))"""
+))""""

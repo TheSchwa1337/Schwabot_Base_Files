@@ -15,7 +15,7 @@ from typing import (
     the,
 )
 
-"""
+""""
 
 
 
@@ -43,7 +43,7 @@ Original file: core\\glyph_phase_resolver.py
 
 
 
-Date commented out: 2025-07-02 19:36:58
+Date commented out: 2025-7-2 19:36:58
 
 
 
@@ -78,13 +78,13 @@ The clean implementation has been preserved in the following files:
 All core functionality has been reimplemented in clean, production-ready files.
 
 
-"""
-"""
+""""
+""""
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
 
-"""
-"""
+""""
+""""
 
 
 
@@ -113,7 +113,7 @@ Args:
             phase_shift_threshold: The threshold for significant phase shifts.self.phase_shift_threshold = phase_shift_threshold
 
 
-"""
+""""
 self.metrics: Dict[str, Any] = {total_resolutions: 0,phase_shift_alerts": 0,last_resolution_time": None,
 
 
@@ -158,7 +158,7 @@ Returns:
 
 
 
-            A string indicating the resolved glyph routing behavior."self.metrics[total_resolutions] += 1self.metrics[last_resolution_time] = time.time()
+            A string indicating the resolved glyph routing behavior."self.metrics[total_resolutions] += 1self.metrics[last_resolution_time] = time.time()"
 
 
 
@@ -254,7 +254,7 @@ fGlyph Phase Resolver threshold updated to: {self.phase_shif t_threshold})
 
 
 
-def reset() -> None:Resets the resolver's metrics.'self.metrics = {total_resolutions: 0,phase_shift_alerts: 0,last_resolution_time": None,
+def reset() -> None:Resets the resolver's metrics.'self.metrics = {total_resolutions: 0,phase_shift_alerts: 0,last_resolution_time": None,"
 
 
 
@@ -274,7 +274,7 @@ if __name__ == __main__:
 
 
 
-resolver = GlyphPhaseResolver(phase_shift_threshold=0.05)
+resolver = GlyphPhaseResolver(phase_shift_threshold=0.5)
 
 
 
@@ -294,7 +294,7 @@ print(\n--- Test Case 1: Normal phase shift, low entropy ---)
 
 
 
-    phase_shift_1 = 0.03
+    phase_shift_1 = 0.3
 
 
 
@@ -310,7 +310,7 @@ print(\n--- Test Case 2: High phase shift, low entropy ---)
 
 
 
-    phase_shift_2 = 0.08
+    phase_shift_2 = 0.8
 
 
 
@@ -326,7 +326,7 @@ print(\n--- Test Case 3: Normal phase shift, high entropy ---)
 
 
 
-    phase_shift_3 = 0.02
+    phase_shift_3 = 0.2
 
 
 
@@ -362,7 +362,7 @@ print(\n--- Updating Threshold and Testing Again ---)
 
 
 
-    phase_shift_5 = 0.08  # Now below new threshold
+    phase_shift_5 = 0.8  # Now below new threshold
 
 
 
@@ -382,9 +382,9 @@ resolver.reset()
 
 
 
-print(fMetrics after reset: {resolver.get_metrics()})"'"
+print(fMetrics after reset: {resolver.get_metrics()})"'"'
 
 
 
-"""
-"""
+""""
+""""

@@ -14,7 +14,7 @@ import numpy.typing as npt
 from core.unified_math_system import UnifiedMathSystem
 from utils.safe_print import safe_print
 
-"""
+""""
 
 
 
@@ -42,7 +42,7 @@ Original file: core\\strategy_logic.py
 
 
 
-Date commented out: 2025-07-02 19:37:03
+Date commented out: 2025-7-2 19:37:3
 
 
 
@@ -77,13 +77,13 @@ The clean implementation has been preserved in the following files:
 All core functionality has been reimplemented in clean, production-ready files.
 
 
-"""
-"""
+""""
+""""
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
 
-"""
-"""
+""""
+""""
 
 
 
@@ -533,7 +533,7 @@ self._initialize_default_strategies()
 
 
 
-"""
+""""
 def _default_config() -> Dict[str, Any]:Default configuration.return {max_signals_history: 1000,default_risk_tolerance": 0.5,default_max_position_size": 0.1,min_signal_confidence": 0.6,enable_performance_tracking": True,enable_signal_filtering": True,signal_cooldown_period": 1.0,  # seconds
 
 
@@ -598,7 +598,7 @@ strategy_type = StrategyType.MOMENTUM,
 
 
 
-name=momentum_v1",
+name=momentum_v1","
 
 
 
@@ -606,7 +606,7 @@ enabled = True,
 
 
 
-max_position_size=0.08,
+max_position_size=0.8,
 
 
 
@@ -642,7 +642,7 @@ strategy_type = StrategyType.ARBITRAGE,
 
 
 
-name=arbitrage_v1",
+name=arbitrage_v1","
 
 
 
@@ -650,7 +650,7 @@ enabled = False,
 
 
 
-max_position_size=0.05,
+max_position_size=0.5,
 
 
 
@@ -662,7 +662,7 @@ max_position_size=0.05,
 
 
 
-                parameters = {price_diff_threshold: 0.001,volume_threshold: 100},
+                parameters = {price_diff_threshold: 0.1,volume_threshold: 100},
 
 
 
@@ -1162,7 +1162,7 @@ def _calculate_bollinger_bands() -> Dict[str, float]:Calculate Bollinger Bands.i
 
 
 
-        return {upper: current_price * 1.02,middle: current_price,lower: current_price * 0.98,
+        return {upper: current_price * 1.2,middle: current_price,lower: current_price * 0.98,
 
 
 
@@ -1214,15 +1214,15 @@ Returns:
 
 
 
-            Tuple of(flip_state, confidence)kelly_weight = strategy_stats.get('kelly_multiplier', 0.3)'
+            Tuple of(flip_state, confidence)kelly_weight = strategy_stats.get('kelly_multiplier', 0.3)''
 
 
 
-        momentum = market_data.get('momentum', 0.0)'
+        momentum = market_data.get('momentum', 0.0)''
 
 
 
-        volatility = market_data.get('volatility', 0.02)'
+        volatility = market_data.get('volatility', 0.2)''
 
 
 
@@ -1250,7 +1250,7 @@ confidence = 0.5
 
 
 
-if kelly_weight > 0.6 and momentum > 0.02: flip_state = True
+if kelly_weight > 0.6 and momentum > 0.2: flip_state = True
 
 
 
@@ -1266,7 +1266,7 @@ confidence = min(0.9, kelly_weight + 0.1)
 
 
 
-elif kelly_weight < 0.3 and volatility > 0.03:
+elif kelly_weight < 0.3 and volatility > 0.3:
 
 
 
@@ -1370,7 +1370,7 @@ np.std(price_history[-10:]) / np.mean(price_history[-10:])
 
 
 
-                else 0.02
+                else 0.2
 
 
 
@@ -1386,7 +1386,7 @@ else:
 
 
 
-            volatility = 0.02
+            volatility = 0.2
 
 
 
@@ -1394,7 +1394,7 @@ else:
 
 
 
-# Market data for FlipSwitch'
+# Market data for FlipSwitch''
 
 
 
@@ -1402,7 +1402,7 @@ market_data = {'momentum': momentum, 'volatility': volatility, 'rsi': rsi}
 
 
 
-'
+''
 
 
 
@@ -1450,7 +1450,7 @@ confidence = base_confidence
 
 
 
-# Mean reversion logic with Bollinger Bands and RSI'
+# Mean reversion logic with Bollinger Bands and RSI''
 
 
 
@@ -1482,7 +1482,7 @@ confidence = min(0.95, base_confidence + 0.1)
 
 
 
-'
+''
 
 
 
@@ -1518,7 +1518,7 @@ confidence = min(0.95, base_confidence + 0.1)
 
 
 
-elif abs(price - sma_20) / sma_20 > 0.05:
+elif abs(price - sma_20) / sma_20 > 0.5:
 
 
 
@@ -1590,11 +1590,11 @@ strategy_name=config.name,
 
 
 
-metadata={rsi: rsi,'
+metadata={rsi: rsi,''
 
 
 
-bollinger_upper: bollinger['upper'],'bollinger_lower: bollinger['lower'],sma_20: sma_20,kelly_multiplier": kelly_multiplier,flip_aggressive": flip_aggressive,
+bollinger_upper: bollinger['upper'],'bollinger_lower: bollinger['lower'],sma_20: sma_20,kelly_multiplier": kelly_multiplier,flip_aggressive": flip_aggressive,'
 
 
 
@@ -1610,7 +1610,7 @@ bollinger_upper: bollinger['upper'],'bollinger_lower: bollinger['lower'],sma_20:
 
 
 
-def _generate_momentum_signal() -> TradingSignal:"Generate a momentum signal with real technical analysis.# Calculate technical indicators
+def _generate_momentum_signal() -> TradingSignal:"Generate a momentum signal with real technical analysis.# Calculate technical indicators"
 
 
 
@@ -1678,7 +1678,7 @@ else:
 
 
 
-volume_avg = np.mean('
+volume_avg = np.mean(''
 
 
 
@@ -1706,7 +1706,7 @@ market_data = {'momentum': momentum_1,'volatility': abs(momentum_5),'rsi': rsi,
 
 
 
-'
+''
 
 
 
@@ -1762,7 +1762,7 @@ ma_trend = sma_10 - sma_20
 
 
 
-if momentum_5 > 0.02 and ma_trend > 0 and rsi < 80 and volume_momentum > 0.1:
+if momentum_5 > 0.2 and ma_trend > 0 and rsi < 80 and volume_momentum > 0.1:
 
 
 
@@ -1794,7 +1794,7 @@ confidence = min(0.9, base_confidence + 0.15)
 
 
 
-elif momentum_5 < -0.02 and ma_trend < 0 and rsi > 20 and volume_momentum > 0.1:
+elif momentum_5 < -0.2 and ma_trend < 0 and rsi > 20 and volume_momentum > 0.1:
 
 
 
@@ -1826,7 +1826,7 @@ confidence = min(0.9, base_confidence + 0.15)
 
 
 
-elif abs(momentum_5) > 0.01 and abs(ma_trend) > 0.5:
+elif abs(momentum_5) > 0.1 and abs(ma_trend) > 0.5:
 
 
 
@@ -1910,7 +1910,7 @@ momentum_5: momentum_5,momentum_1: momentum_1,rsi: rsi,sma_10: sma_10,sma_20": s
 
 
 
-def _generate_arbitrage_signal() -> TradingSignal:"Generate an arbitrage signal with realistic price difference detection.# Simulate multi-exchange price checking
+def _generate_arbitrage_signal() -> TradingSignal:"Generate an arbitrage signal with realistic price difference detection.# Simulate multi-exchange price checking"
 
 
 
@@ -1918,7 +1918,7 @@ exchange_a_price = price
 
 
 
-price_variance = config.parameters.get(price_variance, 0.002)
+price_variance = config.parameters.get(price_variance, 0.2)
 
 
 
@@ -1946,7 +1946,7 @@ spread = abs(exchange_a_price - exchange_b_price)
 
 
 
-spread_threshold = config.parameters.get(price_diff_threshold, 0.001) * price
+spread_threshold = config.parameters.get(price_diff_threshold, 0.1) * price
 
 
 
@@ -2142,7 +2142,7 @@ signal.price})execution_result = {status:success,message:Buy order placed}
 
 
 
-else: execution_result = {status:dry_run_success,message:Simulated BUY order",
+else: execution_result = {status:dry_run_success,message:Simulated BUY order","
 
 
 
@@ -2178,7 +2178,7 @@ signal.price})execution_result = {status:success,message:Sell order placed}
 
 
 
-else: execution_result = {status:dry_run_success,message:Simulated SELL order",
+else: execution_result = {status:dry_run_success,message:Simulated SELL order","
 
 
 
@@ -2202,7 +2202,7 @@ elif signal.signal_type == SignalType.CLOSE:
 
 
 
-else: execution_result = {status:dry_run_success,message:Simulated CLOSE order",
+else: execution_result = {status:dry_run_success,message:Simulated CLOSE order","
 
 
 
@@ -2218,7 +2218,7 @@ else:  # HOLD or HEDGE
 
 
 
-execution_result = {status:no_action,message:No trade action required",
+execution_result = {status:no_action,message:No trade action required","
 
 
 
@@ -2262,7 +2262,7 @@ if not perf or not self.config.get(enable_performance_tracking, True):
 
 
 
-if result[status] ==success":
+if result[status] ==success":"
 
 
 
@@ -2274,7 +2274,7 @@ if signal.signal_type == SignalType.BUY: pnl_change = Decimal(
 
 
 
-str(signal.volume * (signal.price * random.uniform(1.001, 1.005)))
+str(signal.volume * (signal.price * random.uniform(1.1, 1.5)))
 
 
 
@@ -2538,7 +2538,7 @@ f  Signal executed: {signal.signal_type.value} for {
 
 
 
-signal.asset} - Status: {'
+signal.asset} - Status: {''
 
 
 
@@ -2598,9 +2598,9 @@ if __name__ == __main__:
 
 
 
-    main()'"
+    main()'""'
 
 
 
-"""
-"""
+""""
+""""

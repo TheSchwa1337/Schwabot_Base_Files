@@ -9,7 +9,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 
-from core.unified_math_system import unified_math
+from core.clean_unified_math import clean_unified_math as unified_math
 
 """
 

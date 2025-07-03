@@ -26,8 +26,8 @@ from core.strategy.entry_exit_portal import (
     TradeExecutor,
     Union,
     19:36:58,
-    2025-07-02,
-    """,
+    2025-7-2,
+    ""","
     -,
     automatically,
     because,
@@ -94,13 +94,13 @@ from core.strategy.entry_exit_portal import (
 All core functionality has been reimplemented in clean, production-ready files.
 
 
-"""
-"""
+""""
+""""
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
 
-"""
-"""
+""""
+""""
 
 
 
@@ -163,7 +163,7 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 
 
-Live Execution Mapper for Schwabot's Glyph-Driven Trading System.Orchestrates the end-to-end process of translating glyph strategy outputs
+Live Execution Mapper for Schwabot's Glyph-Driven Trading System.Orchestrates the end-to-end process of translating glyph strategy outputs'
 
 
 
@@ -207,7 +207,7 @@ Key Responsibilities:
 
 
 
-- Maintain a clear state of the execution pipeline for debugging and monitoring.'
+- Maintain a clear state of the execution pipeline for debugging and monitoring.''
 
 
 
@@ -574,8 +574,8 @@ self.trade_id_counter = 0
 self.stats = {
 
 
-"""
-total_execution_requests: 0,successful_executions: 0,failed_executions": 0,risk_rejected_executions": 0,rejected_by_signal_threshold": 0,  # Added for clarityrejected_by_sizing: 0,  # Added for clarityavg_execution_flow_time: 0.0,
+""""
+total_execution_requests: 0,successful_executions: 0,failed_executions": 0,risk_rejected_executions": 0,rejected_by_signal_threshold": 0,  # Added for clarityrejected_by_sizing: 0,  # Added for clarityavg_execution_flow_time: 0.0,"
 
 
 
@@ -587,7 +587,7 @@ total_execution_requests: 0,successful_executions: 0,failed_executions": 0,risk_
 
 
 
-            logger.info(f"LiveExecutionMapper initialized in {'simulation' if self.simulation_mode else 'live'} mode.)
+            logger.info(f"LiveExecutionMapper initialized in {'simulation' if self.simulation_mode else 'live'} mode.)"
 
 
 
@@ -903,7 +903,7 @@ if order_result.get(status) not in [filled,dry_run_success]:
 
 
 
-                execution_state.status = failedexecution_state.error_message = fOrder placement failed: {order_result.get('error', 'Unknown error')}self.stats[failed_executions] += 1logger.error(f"[{trade_id}] {execution_state.error_message})
+                execution_state.status = failedexecution_state.error_message = fOrder placement failed: {order_result.get('error', 'Unknown error')}self.stats[failed_executions] += 1logger.error(f"[{trade_id}] {execution_state.error_message})"
 
 
 
@@ -947,7 +947,7 @@ trade_signal.direction.value,
 
 
 
-                    order_result.get(executed_price, price),order_result.get(fees", 0.0),
+                    order_result.get(executed_price, price),order_result.get(fees", 0.0),"
 
 
 
@@ -967,7 +967,7 @@ self.stats[successful_executions] += 1
 
 
 
-            logger.info(f"[{trade_id}] Trade executed successfully for {glyph} ({asset}{trade_signal.direction.value} {size_to_execute:.4f} @ {price}))
+            logger.info(f"[{trade_id}] Trade executed successfully for {glyph} ({asset}{trade_signal.direction.value} {size_to_execute:.4f} @ {price}))"
 
 
 
@@ -983,7 +983,7 @@ fAn unexpected error occurred during trade execution: {)str(e)}self.stats[failed
 
 
 
-            logger.critical(f"[{trade_id}] CRITICAL ERROR: {execution_state.error_message},
+            logger.critical(f"[{trade_id}] CRITICAL ERROR: {execution_state.error_message},"
 
 
 
@@ -1119,7 +1119,7 @@ if self.portfolio_tracker:
 
 
 
-            self.portfolio_tracker.reset_portfolio()'
+            self.portfolio_tracker.reset_portfolio()''
 
 
 
@@ -1151,7 +1151,7 @@ self.stats = {
 
 
 
-total_execution_requests: 0,successful_executions: 0,failed_executions": 0,risk_rejected_executions": 0,rejected_by_signal_threshold": 0,rejected_by_sizing": 0,avg_execution_flow_time": 0.0,
+total_execution_requests: 0,successful_executions: 0,failed_executions": 0,risk_rejected_executions": 0,rejected_by_signal_threshold": 0,rejected_by_sizing": 0,avg_execution_flow_time": 0.0,"
 
 
 
@@ -1175,7 +1175,7 @@ level = logging.INFO,
 
 
 
-format=%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+format=%(asctime)s - %(name)s - %(levelname)s - %(message)s","
 
 
 
@@ -1203,7 +1203,7 @@ mapper = LiveExecutionMapper(simulation_mode=True, initial_portfolio_cash=100000
 
 
 
-# Scenario 1: Successful trade'
+# Scenario 1: Successful trade''
 
 
 
@@ -1219,11 +1219,11 @@ glyph=brain,
 
 
 
-volume = 3.5e6,
+volume = 3.56,
 
 
 
-asset=BTC/USD",
+asset=BTC/USD","
 
 
 
@@ -1239,23 +1239,23 @@ price = 50000.0,
 
 
 
-print(fTrade ID: {state1.trade_id}, Final Status: {state1.status})
+print(fTrade ID: {state1.rade_id}, Final Status: {state1.tatus})
 
 
 
-if state1.execution_details:
+if state1.xecution_details:
 
 
 
-        print(fExecuted Size: {'
+        print(fExecuted Size: {''
 
 
 
-                state1.execution_details.get('executed_quantity'):.4f},fPrice: {'
+                state1.xecution_details.get('executed_quantity'):.4f},fPrice: {''
 
 
 
-state1.execution_details.get('executed_price'):.2f})print(fError: {state1.error_message})print(fPortfolio Cash: {mapper.portfolio_tracker.cash:.2f})
+state1.xecution_details.get('executed_price'):.2f})print(fError: {state1.rror_message})print(fPortfolio Cash: {mapper.portfolio_tracker.cash:.2f})
 
 
 
@@ -1267,7 +1267,7 @@ state1.execution_details.get('executed_price'):.2f})print(fError: {state1.error_
 
 
 
-# very low confidence boost)'
+# very low confidence boost)''
 
 
 
@@ -1283,11 +1283,11 @@ glyph=skull,
 
 
 
-volume = 1.0e6,
+volume = 1.06,
 
 
 
-asset=ETH/USD",
+asset=ETH/USD","
 
 
 
@@ -1303,7 +1303,7 @@ price = 3000.0,
 
 
 
-print(fTrade ID: {state2.trade_id}, Final Status: {state2.status})print(fError: {state2.error_message})
+print(fTrade ID: {state2.rade_id}, Final Status: {state2.tatus})print(fError: {state2.rror_message})
 
 
 
@@ -1323,7 +1323,7 @@ print(fPortfolio Cash: {mapper.portfolio_tracker.cash:.2f})
 
 
 
-# portfolio value)'
+# portfolio value)''
 
 
 
@@ -1347,7 +1347,7 @@ state3 = mapper_no_funds.execute_glyph_trade(
 
 
 
-        glyph=fire, volume = 4.0e6, asset=LTC/USD, price = 200.0
+        glyph=fire, volume = 4.06, asset=LTC/USD, price = 200.0
 
 
 
@@ -1355,7 +1355,7 @@ state3 = mapper_no_funds.execute_glyph_trade(
 
 
 
-print(fTrade ID: {state3.trade_id}, Final Status: {state3.status})print(fError: {state3.error_message})
+print(fTrade ID: {state3.rade_id}, Final Status: {state3.tatus})print(fError: {state3.rror_message})
 
 
 
@@ -1391,11 +1391,11 @@ simulation_mode=True, initial_portfolio_cash=50000.0
 
 
 
-mapper_multi.execute_glyph_trade(hourglass", 2.0e6,ADA/USD", 0.5)mapper_multi.execute_glyph_trade(tornado", 5.0e6,SOL/USD", 150.0)
+mapper_multi.execute_glyph_trade(hourglass", 2.06,ADA/USD", 0.5)mapper_multi.execute_glyph_trade(tornado", 5.06,SOL/USD", 150.0)
 
 
 
-    mapper_multi.execute_glyph_trade(lightning", 0.5e6,XRP/USD", 0.6, confidence_boost = 0.01
+    mapper_multi.execute_glyph_trade(lightning", 0.56,XRP/USD", 0.6, confidence_boost = 0.1
 
 
 
@@ -1507,11 +1507,11 @@ mapper.reset_system()
 
 
 
-print(f"Initial portfolio cash after reset: {mapper.portfolio_tracker.cash:.2f})
+print(f"Initial portfolio cash after reset: {mapper.portfolio_tracker.cash:.2f})"
 
 
 
-print(fTotal execution requests after reset: {'
+print(fTotal execution requests after reset: {''
 
 
 
@@ -1523,9 +1523,9 @@ if __name__ == __main__:
 
 
 
-    main()""'"
+    main()""'""'
 
 
 
-"""
-"""
+""""
+""""

@@ -21,8 +21,8 @@ from core.profit_optimization_engine import (
     This,
     Tuple,
     19:36:57,
-    2025-07-02,
-    """,
+    2025-7-2,
+    ""","
     -,
     automatically,
     because,
@@ -83,13 +83,13 @@ from core.profit_optimization_engine import (
 All core functionality has been reimplemented in clean, production-ready files.
 
 
-"""
-"""
+""""
+""""
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
 
-"""
-"""
+""""
+""""
 
 
 
@@ -700,7 +700,7 @@ self.performance_metrics = TradingPerformanceMetrics()
 
 
 
-self.btc_usdc_config = {precision: 8,  # BTC precisionmin_trade_size_btc: 0.001,  # Minimum 0.001 BTCmax_trade_size_btc: 1.0,  # Maximum 1.0 BTCprice_decimals: 2,  # USDC price decimalsvolume_threshold: 1000.0,  # Minimum USDC volumeslippage_tolerance: 0.001,  # 0.1% slippage tolerance
+self.btc_usdc_config = {precision: 8,  # BTC precisionmin_trade_size_btc: 0.1,  # Minimum 0.1 BTCmax_trade_size_btc: 1.0,  # Maximum 1.0 BTCprice_decimals: 2,  # USDC price decimalsvolume_threshold: 1000.0,  # Minimum USDC volumeslippage_tolerance: 0.1,  # 0.1% slippage tolerance
 
 
 
@@ -716,7 +716,7 @@ self.btc_usdc_config = {precision: 8,  # BTC precisionmin_trade_size_btc: 0.001,
 
 
 
-        self.enhanced_thresholds = {mathematical_confidence_min: self.config.get(math_confidence_min, 0.75),profit_potential_min: self.config.get(profit_potential_min, 0.005),risk_score_max: self.config.get(risk_score_max, 0.3),entropy_score_min: self.config.get(entropy_score_min, 0.6),phase_alignment_min: self.config.get(phase_alignment_min, 0.7),
+        self.enhanced_thresholds = {mathematical_confidence_min: self.config.get(math_confidence_min, 0.75),profit_potential_min: self.config.get(profit_potential_min, 0.5),risk_score_max: self.config.get(risk_score_max, 0.3),entropy_score_min: self.config.get(entropy_score_min, 0.6),phase_alignment_min: self.config.get(phase_alignment_min, 0.7),
 
 
 
@@ -727,8 +727,8 @@ self.btc_usdc_config = {precision: 8,  # BTC precisionmin_trade_size_btc: 0.001,
 
 
 
-"""
-            logger.info( Enhanced Live Execution Mapper initializedf"(simulation: {simulation_mode},
+""""
+            logger.info( Enhanced Live Execution Mapper initializedf"(simulation: {simulation_mode},"
 
 
 
@@ -744,7 +744,7 @@ finitial_usdc: ${initial_portfolio_usdc:,.2f})
 
 
 
-def _default_config() -> Dict[str, Any]:"Return default configuration for enhanced execution.return {max_state_history: 1000,math_confidence_min: 0.75,profit_potential_min: 0.005,  # 0.5%risk_score_max: 0.3,  # 30%entropy_score_min: 0.6,  # 60%phase_alignment_min: 0.7,  # 70%optimization_timeout_ms: 5000,enable_mathematical_validation": True,enable_profit_optimization": True,btc_usdc_pair_only": True,stop_loss_enabled": True,take_profit_enabled": True,dynamic_position_sizing": True,
+def _default_config() -> Dict[str, Any]:"Return default configuration for enhanced execution.return {max_state_history: 1000,math_confidence_min: 0.75,profit_potential_min: 0.5,  # 0.5%risk_score_max: 0.3,  # 30%entropy_score_min: 0.6,  # 60%phase_alignment_min: 0.7,  # 70%optimization_timeout_ms: 5000,enable_mathematical_validation": True,enable_profit_optimization": True,btc_usdc_pair_only": True,stop_loss_enabled": True,take_profit_enabled": True,dynamic_position_sizing": True,"
 
 
 
@@ -756,7 +756,7 @@ def _default_config() -> Dict[str, Any]:"Return default configuration for enhanc
 
 
 
-def execute_optimized_btc_trade() -> EnhancedExecutionState:"Execute a mathematically optimized BTC/USDC trade.This is the main entry point for enhanced trading that integrates
+def execute_optimized_btc_trade() -> EnhancedExecutionState:"Execute a mathematically optimized BTC/USDC trade.This is the main entry point for enhanced trading that integrates"
 
 
 
@@ -796,7 +796,7 @@ Returns:
 
 
 
-            EnhancedExecutionState with detailed execution results"start_time = time.time()
+            EnhancedExecutionState with detailed execution results"start_time = time.time()"
 
 
 
@@ -1100,7 +1100,7 @@ enhanced_state.mathematical_confidence = 0.5
 
 
 
-                enhanced_state.profit_potential = 0.01  # 1% fallback
+                enhanced_state.profit_potential = 0.1  # 1% fallback
 
 
 
@@ -1588,7 +1588,7 @@ else:
 
 
 
-                base_size = 0.01  # 1% fallback
+                base_size = 0.1  # 1% fallback
 
 
 
@@ -1740,11 +1740,11 @@ def _validate_enhanced_risk() -> Tuple[bool, str]:Validate enhanced risk managem
 
 
 
-volatility = market_data.get(volatility, 0.02)
+volatility = market_data.get(volatility, 0.2)
 
 
 
-            if volatility > 0.05:  # 5% volatility threshold
+            if volatility > 0.5:  # 5% volatility threshold
 
 
 
@@ -1844,7 +1844,7 @@ fDrift weight too high: {state.drift_weight:.3f},
 
 
 
-def _prepare_base_market_data() -> Dict[str, Any]:Prepare market data for base execution system.return {price_history: market_data.get(price_history", [state.btc_price]),volume_history": market_data.get(volume_history", [state.usdc_volume]),volatility": market_data.get(volatility", 0.02),confidence_override": state.mathematical_confidence,position_size_override": state.risk_adjusted_size,
+def _prepare_base_market_data() -> Dict[str, Any]:Prepare market data for base execution system.return {price_history: market_data.get(price_history", [state.btc_price]),volume_history": market_data.get(volume_history", [state.usdc_volume]),volatility": market_data.get(volatility", 0.2),confidence_override": state.mathematical_confidence,position_size_override": state.risk_adjusted_size,"
 
 
 
@@ -1856,7 +1856,7 @@ def _prepare_base_market_data() -> Dict[str, Any]:Prepare market data for base e
 
 
 
-def _simulate_enhanced_execution() -> EnhancedExecutionState:"Simulate enhanced execution when base system unavailable.try:
+def _simulate_enhanced_execution() -> EnhancedExecutionState:"Simulate enhanced execution when base system unavailable.try:"
 
 
 
@@ -1868,7 +1868,7 @@ executed_price = state.btc_price * (
 
 
 
-                1 + np.random.uniform(-0.001, 0.001)
+                1 + np.random.uniform(-0.1, 0.1)
 
 
 
@@ -1880,7 +1880,7 @@ executed_quantity = state.risk_adjusted_size  # noqa: F841
 
 
 
-            fees = executed_quantity * executed_price * 0.00075  # 0.075% fee
+            fees = executed_quantity * executed_price * 0.75  # 0.75% fee
 
 
 
@@ -1888,7 +1888,7 @@ executed_quantity = state.risk_adjusted_size  # noqa: F841
 
 
 
-state.execution_details = {status:filled,executed_price: executed_price,executed_quantity": executed_quantity,fees": fees,simulation": True,
+state.execution_details = {status:filled,executed_price: executed_price,executed_quantity": executed_quantity,fees": fees,simulation": True,"
 
 
 
@@ -2340,7 +2340,7 @@ for state in recent_states:
 
 
 
-        except Exception as e:logger.error(f"Error getting recent enhanced executions: {e})
+        except Exception as e:logger.error(f"Error getting recent enhanced executions: {e})"
 
 
 
@@ -2404,7 +2404,7 @@ current_btc_price = btc_prices[-1]
 
 
 
-usdc_volume = 2500000.0  # 2.5M USDC volume
+usdc_volume = 2500000.0  # 2.5 USDC volume
 
 
 
@@ -2412,7 +2412,7 @@ usdc_volume = 2500000.0  # 2.5M USDC volume
 
 
 
-market_data = {price_history: btc_prices,volume_history: [usdc_volume * 0.8, usdc_volume, usdc_volume * 1.2],avg_volume": usdc_volume,volatility": 0.025,phase":expansion",trend":upward",
+market_data = {price_history: btc_prices,volume_history: [usdc_volume * 0.8, usdc_volume, usdc_volume * 1.2],avg_volume": usdc_volume,volatility": 0.25,phase":expansion",trend":upward",
 
 
 
@@ -2420,7 +2420,7 @@ market_data = {price_history: btc_prices,volume_history: [usdc_volume * 0.8, usd
 
 
 
-print(\n Market Data:)print(fBTC Price: ${current_btc_price:,.2f})print(fUSDC Volume: ${usdc_volume:,.0f})print(fVolatility: {market_data['volatility']:.1%})'print(fPhase: {market_data['phase']})
+print(\n Market Data:)print(fBTC Price: ${current_btc_price:,.2f})print(fUSDC Volume: ${usdc_volume:,.0f})print(fVolatility: {market_data['volatility']:.1%})'print(fPhase: {market_data['phase']})'
 
 
 
@@ -2516,9 +2516,9 @@ if __name__ == __main__:
 
 
 
-    main()""'"
+    main()""'""'
 
 
 
 """"
-"""
+""""

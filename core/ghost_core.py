@@ -25,7 +25,7 @@ from typing import (
 
 import numpy as np
 
-"""
+""""
 
 
 
@@ -53,7 +53,7 @@ Original file: core\\ghost_core.py
 
 
 
-Date commented out: 2025-07-02 19:36:58
+Date commented out: 2025-7-2 19:36:58
 
 
 
@@ -88,13 +88,13 @@ The clean implementation has been preserved in the following files:
 All core functionality has been reimplemented in clean, production-ready files.
 
 
-"""
-"""
+""""
+""""
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
 
-"""
-"""
+""""
+""""
 
 
 
@@ -178,8 +178,8 @@ market conditions and internal mathematical states.logger = logging.getLogger(__
 
 
 
-"""
-class StrategyBranch(Enum):Enumeration of available strategy branches."MEAN_REVERSION = mean_reversionMOMENTUM =  momentumARBITRAGE = arbitrageGHOST_ACCUMULATION =  ghost_accumulationGHOST_DISTRIBUTION = ghost_distributionMATRIX_OPTIMIZED =  matrix_optimizedKELLY_ENHANCED = kelly_enhancedHOLOGRAPHIC_MEMORY =  holographic_memory@dataclass
+""""
+class StrategyBranch(Enum):Enumeration of available strategy branches."MEAN_REVERSION = mean_reversionMOMENTUM =  momentumARBITRAGE = arbitrageGHOST_ACCUMULATION =  ghost_accumulationGHOST_DISTRIBUTION = ghost_distributionMATRIX_OPTIMIZED =  matrix_optimizedKELLY_ENHANCED = kelly_enhancedHOLOGRAPHIC_MEMORY =  holographic_memory@dataclass"
 
 
 
@@ -347,7 +347,7 @@ for branch in StrategyBranch:
 
 
 
-self.math_processors: Dict[str, Callable] = {kelly_optimization: self._kelly_optimization,matrix_analysis: self._matrix_analysis,holographic_memory: self._holographic_memory_analysis,profit_vector: self._profit_vector_analysis,volatility_analysis": self._volatility_analysis
+self.math_processors: Dict[str, Callable] = {kelly_optimization: self._kelly_optimization,matrix_analysis: self._matrix_analysis,holographic_memory: self._holographic_memory_analysis,profit_vector: self._profit_vector_analysis,volatility_analysis": self._volatility_analysis"
 
 
 
@@ -355,7 +355,7 @@ self.math_processors: Dict[str, Callable] = {kelly_optimization: self._kelly_opt
 
 
 
-            logger.info( Ghost Core initialized with memory depth %d", memory_depth)
+            logger.info( Ghost Core initialized with memory depth %d", memory_depth)"
 
 
 
@@ -403,7 +403,7 @@ Returns:
 
 
 
-            SHA256 hash signature"# Create payload with all relevant information
+            SHA256 hash signature"# Create payload with all relevant information"
 
 
 
@@ -567,15 +567,15 @@ hash_value = int(hash_prefix, 16)  # Convert to integer
 
 
 
-# Get market volatility'
+# Get market volatility''
 
 
 
-volatility = market_conditions.get('volatility', 0.02)'
+volatility = market_conditions.get('volatility', 0.2)''
 
 
 
-        price_momentum = market_conditions.get('momentum', 0.0)'
+        price_momentum = market_conditions.get('momentum', 0.0)''
 
 
 
@@ -587,7 +587,7 @@ volatility = market_conditions.get('volatility', 0.02)'
 
 
 
-# Mathematical complexity from state'
+# Mathematical complexity from state''
 
 
 
@@ -631,7 +631,7 @@ if branch_index < 4: branch_index = (branch_index + 4) % len(branches)
 
 
 
-elif volatility > 0.05:
+elif volatility > 0.5:
 
 
 
@@ -823,7 +823,7 @@ profit_potential=profit_potential,
 
 
 
-            memory_depth=len(self.hash_history),'
+            memory_depth=len(self.hash_history),''
 
 
 
@@ -911,7 +911,7 @@ memory.total_trades += 1
 
 
 
-'
+''
 
 
 
@@ -947,11 +947,11 @@ memory.success_rate = memory.winning_trades / memory.total_trades
 
 
 
-# Store mathematical state'
+# Store mathematical state''
 
 
 
-if 'mathematical_state' in trade_result:'
+if 'mathematical_state' in trade_result:''
 
 
 
@@ -1087,7 +1087,7 @@ def _calculate_profit_potential() -> float:
 
 
 
-        Calculate profit potential for a strategy branch.base_potential = 0.01  # 1% base potential
+        Calculate profit potential for a strategy branch.base_potential = 0.1  # 1% base potential
 
 
 
@@ -1095,11 +1095,11 @@ def _calculate_profit_potential() -> float:
 
 
 
-# Adjust based on market conditions'
+# Adjust based on market conditions''
 
 
 
-volatility = market_conditions.get('volatility', 0.02)'
+volatility = market_conditions.get('volatility', 0.2)''
 
 
 
@@ -1159,7 +1159,7 @@ else:
 
 
 
-if mathematical_state:'
+if mathematical_state:''
 
 
 
@@ -1175,7 +1175,7 @@ if mathematical_state:'
 
 
 
-        return min(0.1, max(0.001, potential))  # Clamp between 0.1% and 10%
+        return min(0.1, max(0.1, potential))  # Clamp between 0.1% and 10%
 
 
 
@@ -1187,19 +1187,19 @@ def _kelly_optimization() -> Dict[str, Any]:
 
 
 
-        Kelly criterion optimization.'
+        Kelly criterion optimization.''
 
 
 
-win_rate = data.get('win_rate', 0.5)'
+win_rate = data.get('win_rate', 0.5)''
 
 
 
-        avg_win = data.get('avg_win', 0.02)'
+        avg_win = data.get('avg_win', 0.2)''
 
 
 
-        avg_loss = data.get('avg_loss', 0.01)
+        avg_loss = data.get('avg_loss', 0.1)
 
 
 
@@ -1243,7 +1243,7 @@ def _matrix_analysis() -> Dict[str, Any]:
 
 
 
-        Matrix analysis for strategy optimization.'
+        Matrix analysis for strategy optimization.''
 
 
 
@@ -1251,7 +1251,7 @@ prices = data.get('prices', [])
 
 
 
-if len(prices) < 10:'
+if len(prices) < 10:''
 
 
 
@@ -1295,7 +1295,7 @@ returns = np.diff(np.log(prices))
 
 
 
-def _holographic_memory_analysis() -> Dict[str, Any]:Holographic memory analysis.memory_depth = len(self.hash_history)'
+def _holographic_memory_analysis() -> Dict[str, Any]:Holographic memory analysis.memory_depth = len(self.hash_history)''
 
 
 
@@ -1331,7 +1331,7 @@ holographic_score = memory_efficiency * (1.0 - 1.0 / max(memory_depth, 1))
 
 
 
-def _profit_vector_analysis() -> Dict[str, Any]:Profit vector analysis.'
+def _profit_vector_analysis() -> Dict[str, Any]:Profit vector analysis.''
 
 
 
@@ -1339,7 +1339,7 @@ def _profit_vector_analysis() -> Dict[str, Any]:Profit vector analysis.'
 
 
 
-        if not profits:'
+        if not profits:''
 
 
 
@@ -1355,7 +1355,7 @@ profit_array = np.array(profits)
 
 
 
-        magnitude = np.linalg.norm(profit_array)'
+        magnitude = np.linalg.norm(profit_array)''
 
 
 
@@ -1379,7 +1379,7 @@ profit_array = np.array(profits)
 
 
 
-def _volatility_analysis() -> Dict[str, Any]:Volatility analysis.'
+def _volatility_analysis() -> Dict[str, Any]:Volatility analysis.''
 
 
 
@@ -1387,11 +1387,11 @@ prices = data.get('prices', [])
 
 
 
-if len(prices) < 5:'
+if len(prices) < 5:''
 
 
 
-            return {'volatility': 0.02, 'regime': 'normal'}
+            return {'volatility': 0.2, 'regime': 'normal'}
 
 
 
@@ -1415,7 +1415,7 @@ returns = np.diff(np.log(prices))
 
 
 
-if volatility < 0.1:'
+if volatility < 0.1:''
 
 
 
@@ -1423,7 +1423,7 @@ if volatility < 0.1:'
 
 
 
-elif volatility < 0.3:'
+elif volatility < 0.3:''
 
 
 
@@ -1431,7 +1431,7 @@ elif volatility < 0.3:'
 
 
 
-else:'
+else:''
 
 
 
@@ -1515,7 +1515,7 @@ ghost = GhostCore(memory_depth=100)
 
 
 
-market_conditions = {'volatility': 0.025,'momentum': 0.01,'volume_profile': 1.2
+market_conditions = {'volatility': 0.25,'momentum': 0.1,'volume_profile': 1.2
 
 
 
@@ -1611,7 +1611,7 @@ status = ghost.get_system_status()
 
 
 
-print(\nSystem Status:)'print(fCurrent Branch: {status['current_branch']})'print(fMemory Depth: {status['memory_depth']})'print(fHash History Size: {status['hash_history_size']})
+print(\nSystem Status:)'print(fCurrent Branch: {status['current_branch']})'print(fMemory Depth: {status['memory_depth']})'print(fHash History Size: {status['hash_history_size']})'
 
 
 
@@ -1623,9 +1623,9 @@ if __name__ == __main__:
 
 
 
-    demo_ghost_core()""'"
+    demo_ghost_core()""'""'
 
 
 
 """"
-"""
+""""

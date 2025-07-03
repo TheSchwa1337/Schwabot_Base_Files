@@ -1,14 +1,789 @@
 {
-  "timestamp": 1751396437.2577195,
+  "timestamp": "2025-07-03T10:57:58.310472",
+  "test_suite_version": "1.0.0",
   "results": {
-    "brain_engine": true,
-    "mathematical_functions": true,
-    "symbol_processing": true,
-    "backtest_simulation": true,
-    "code_quality": false
+    "mathematical_integration": {
+      "test_name": "mathematical_integration",
+      "passed": 2,
+      "failed": 1,
+      "details": [
+        {
+          "case": 1,
+          "status": "PASS",
+          "mathematical_score": 12.5,
+          "risk_score": -9.375
+        },
+        {
+          "case": 2,
+          "status": "FAIL",
+          "expected": false,
+          "actual": 5.34375
+        },
+        {
+          "case": 3,
+          "status": "PASS",
+          "mathematical_score": 27.0,
+          "risk_score": -27.0
+        }
+      ]
+    },
+    "signal_generation": {
+      "test_name": "signal_generation",
+      "passed": 4,
+      "failed": 0,
+      "signals": [
+        {
+          "scenario": "bullish",
+          "signal_id": "6591ea41-e235-47a7-af7f-9f94cefdbaa3",
+          "mathematical_score": 19.59375,
+          "confidence": 0.5,
+          "order_side": "buy"
+        },
+        {
+          "scenario": "bearish",
+          "signal_id": "18c037fe-0425-4666-82f3-02d31ca8c9a3",
+          "mathematical_score": 8.549999999999999,
+          "confidence": 0.5,
+          "order_side": "buy"
+        },
+        {
+          "scenario": "sideways",
+          "signal_id": "31ce09f6-00ca-4e5c-8763-b45bcb9bf48e",
+          "mathematical_score": 12.5,
+          "confidence": 0.5,
+          "order_side": "buy"
+        },
+        {
+          "scenario": "high_volatility",
+          "signal_id": "b6396f81-e136-4fcc-a1a1-96c133373598",
+          "mathematical_score": 31.849999999999998,
+          "confidence": 0.5,
+          "order_side": "buy"
+        }
+      ]
+    },
+    "execution_pipeline": {
+      "test_name": "execution_pipeline",
+      "passed": 5,
+      "failed": 0,
+      "executions": [
+        {
+          "signal_id": "4b9de1da-e324-44ee-89b1-0bfb90b3f431",
+          "execution_id": "9550850b-ad89-4185-81c1-7f205d019d70",
+          "realized_profit": 50.0,
+          "performance_score": 35.0
+        },
+        {
+          "signal_id": "f4dc94aa-61dd-46e4-b6aa-df66968935e2",
+          "execution_id": "28650848-3577-4094-b5df-d04f24aff26b",
+          "realized_profit": 50.0,
+          "performance_score": 38.5
+        },
+        {
+          "signal_id": "122a45d8-f1b6-4acb-8cfa-3916910413fd",
+          "execution_id": "94d539e1-e516-4d6a-8a7a-4dad2be78e70",
+          "realized_profit": 50.0,
+          "performance_score": 42.0
+        },
+        {
+          "signal_id": "9badb415-6793-4a1f-9138-badf8e95d8a9",
+          "execution_id": "c99ed38a-8df3-43f5-9dbb-68041f82dff4",
+          "realized_profit": 50.0,
+          "performance_score": 45.5
+        },
+        {
+          "signal_id": "b4dfa508-75c9-4fe6-8226-48b95a9d7d84",
+          "execution_id": "b0320efc-26eb-4a84-94b8-bef6c87dc5db",
+          "realized_profit": 50.0,
+          "performance_score": 49.0
+        }
+      ]
+    },
+    "error_handling": {
+      "test_name": "error_handling",
+      "passed": 0,
+      "failed": 4,
+      "errors": [
+        {
+          "case": "Negative price",
+          "status": "FAIL",
+          "message": "Unexpected error: NameError"
+        },
+        {
+          "case": "Zero volume",
+          "status": "FAIL",
+          "message": "Unexpected error: NameError"
+        },
+        {
+          "case": "Infinite price",
+          "status": "FAIL",
+          "message": "Unexpected error: NameError"
+        },
+        {
+          "case": "NaN price",
+          "status": "FAIL",
+          "message": "Unexpected error: NameError"
+        }
+      ]
+    },
+    "performance_metrics": {
+      "test_name": "performance_metrics",
+      "metrics": {
+        "total_signals": 19,
+        "total_executions": 15,
+        "success_count": 34,
+        "error_count": 4,
+        "success_rate_percent": 89.47,
+        "average_signal_strength": 6.3473,
+        "average_mathematical_score": 17.6083,
+        "average_performance_score": 14.0,
+        "last_signal_time": "2025-07-03T10:57:58.401430",
+        "last_execution_time": "2025-07-03T10:57:58.402430"
+      },
+      "validation": {
+        "total_signals": "PASS",
+        "total_executions": "PASS",
+        "success_count": "PASS",
+        "error_count": "PASS",
+        "success_rate_percent": "PASS"
+      }
+    },
+    "live_simulation": {
+      "test_name": "live_simulation",
+      "duration_seconds": 10,
+      "signals_generated": 89,
+      "executions_completed": 89,
+      "errors": 0,
+      "performance_data": [
+        {
+          "timestamp": 1751540278.4716022,
+          "price": 50000.0,
+          "signal_strength": 6.0,
+          "mathematical_score": 12.5,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540278.575298,
+          "price": 50001.03699684143,
+          "signal_strength": 6.0006220637542045,
+          "mathematical_score": 12.513092216852176,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540278.685594,
+          "price": 50002.139859199524,
+          "signal_strength": 6.001283343756623,
+          "mathematical_score": 12.527016283296673,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540278.7960417,
+          "price": 50003.244535923004,
+          "signal_strength": 6.0019454078075185,
+          "mathematical_score": 12.540963555501675,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540278.9066675,
+          "price": 50004.34060096741,
+          "signal_strength": 6.002602010575805,
+          "mathematical_score": 12.554802395009117,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540279.0144532,
+          "price": 50005.42860031128,
+          "signal_strength": 6.003253486439006,
+          "mathematical_score": 12.568539688568368,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540279.125248,
+          "price": 50006.53648138046,
+          "signal_strength": 6.003916565513379,
+          "mathematical_score": 12.582528310614787,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540279.2366366,
+          "price": 50007.65027761459,
+          "signal_strength": 6.0045828785763335,
+          "mathematical_score": 12.596591923291458,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540279.347289,
+          "price": 50008.75680208206,
+          "signal_strength": 6.005244537790949,
+          "mathematical_score": 12.610564018101199,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540279.4577541,
+          "price": 50009.86199140549,
+          "signal_strength": 6.005905097064897,
+          "mathematical_score": 12.624519553308483,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540279.5729237,
+          "price": 50011.00317955017,
+          "signal_strength": 6.006586856676531,
+          "mathematical_score": 12.638929969560646,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540279.6807556,
+          "price": 50012.08105802536,
+          "signal_strength": 6.007230500198089,
+          "mathematical_score": 12.652541232277505,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540279.7874928,
+          "price": 50013.15962076187,
+          "signal_strength": 6.00787426677685,
+          "mathematical_score": 12.66616142043459,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540279.8984761,
+          "price": 50014.268662929535,
+          "signal_strength": 6.0085359283758715,
+          "mathematical_score": 12.680166802578688,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540280.0133567,
+          "price": 50015.407507419586,
+          "signal_strength": 6.009215056963759,
+          "mathematical_score": 12.694548852460652,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540280.1193066,
+          "price": 50016.476979255676,
+          "signal_strength": 6.009852527935659,
+          "mathematical_score": 12.708055109548102,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540280.2304983,
+          "price": 50017.58904695511,
+          "signal_strength": 6.01051509275837,
+          "mathematical_score": 12.7220996025894,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540280.368649,
+          "price": 50018.860454559326,
+          "signal_strength": 6.01127222257514,
+          "mathematical_score": 12.738156797340453,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540280.4843779,
+          "price": 50020.12770175934,
+          "signal_strength": 6.01202648382508,
+          "mathematical_score": 12.754161842062409,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540280.5987084,
+          "price": 50021.270990371704,
+          "signal_strength": 6.012706630975011,
+          "mathematical_score": 12.768601655123694,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540280.7065365,
+          "price": 50022.34978199005,
+          "signal_strength": 6.0133481182530995,
+          "mathematical_score": 12.782227160026883,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540280.8157353,
+          "price": 50023.44183206558,
+          "signal_strength": 6.0139972028064514,
+          "mathematical_score": 12.796020413761214,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540280.9257178,
+          "price": 50024.541091918945,
+          "signal_strength": 6.014650281837763,
+          "mathematical_score": 12.80990502601216,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540281.0372682,
+          "price": 50025.65697431564,
+          "signal_strength": 6.015312938511808,
+          "mathematical_score": 12.823999897851845,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540281.1485357,
+          "price": 50026.76926612854,
+          "signal_strength": 6.015973164703444,
+          "mathematical_score": 12.838049719633219,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540281.2574172,
+          "price": 50027.86215543747,
+          "signal_strength": 6.016621584544784,
+          "mathematical_score": 12.851854755038532,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540281.3714943,
+          "price": 50028.9889216423,
+          "signal_strength": 6.017289803816293,
+          "mathematical_score": 12.866088018634734,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540281.4774985,
+          "price": 50030.05892753601,
+          "signal_strength": 6.0179240803608645,
+          "mathematical_score": 12.87960457578636,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540281.5889342,
+          "price": 50031.1732673645,
+          "signal_strength": 6.018584346075091,
+          "mathematical_score": 12.893681466886797,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540281.6984842,
+          "price": 50032.26876497269,
+          "signal_strength": 6.019233158452596,
+          "mathematical_score": 12.907520629744795,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540281.8127654,
+          "price": 50033.40162038803,
+          "signal_strength": 6.019903795260074,
+          "mathematical_score": 12.921832033596031,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540281.9213808,
+          "price": 50034.497599601746,
+          "signal_strength": 6.020552311132742,
+          "mathematical_score": 12.93567787767074,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540282.0295715,
+          "price": 50035.57962656021,
+          "signal_strength": 6.021192291165143,
+          "mathematical_score": 12.949347746674874,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540282.136498,
+          "price": 50036.64889574051,
+          "signal_strength": 6.021824452580022,
+          "mathematical_score": 12.962856720503266,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540282.2459536,
+          "price": 50037.74344444275,
+          "signal_strength": 6.022471278985039,
+          "mathematical_score": 12.976685361200293,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540282.3654947,
+          "price": 50038.92887830734,
+          "signal_strength": 6.023171494644075,
+          "mathematical_score": 12.991662584694408,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540282.481505,
+          "price": 50040.10049819946,
+          "signal_strength": 6.023863224644373,
+          "mathematical_score": 13.006465614678799,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540282.592512,
+          "price": 50041.20920419693,
+          "signal_strength": 6.024517512043229,
+          "mathematical_score": 13.020474057350258,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540282.7054446,
+          "price": 50042.328374385834,
+          "signal_strength": 6.025177681387478,
+          "mathematical_score": 13.034615019204278,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540282.812061,
+          "price": 50043.4047460556,
+          "signal_strength": 6.025812327402104,
+          "mathematical_score": 13.048215501086245,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540282.9213855,
+          "price": 50044.49919939041,
+          "signal_strength": 6.026457356012973,
+          "mathematical_score": 13.062044743909455,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540283.0290284,
+          "price": 50045.57437181473,
+          "signal_strength": 6.02709074803972,
+          "mathematical_score": 13.075630642875721,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540283.1386995,
+          "price": 50046.67086362839,
+          "signal_strength": 6.0277364210750015,
+          "mathematical_score": 13.08948622493096,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540283.2495093,
+          "price": 50047.7690410614,
+          "signal_strength": 6.0283828053500725,
+          "mathematical_score": 13.103363401349272,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540283.360171,
+          "price": 50048.875584602356,
+          "signal_strength": 6.029033829557463,
+          "mathematical_score": 13.117346594506323,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540283.4683628,
+          "price": 50049.96730566025,
+          "signal_strength": 6.029675853833522,
+          "mathematical_score": 13.13114277169853,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540283.5789056,
+          "price": 50051.07278108597,
+          "signal_strength": 6.030325684637649,
+          "mathematical_score": 13.145113060709603,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540283.6916716,
+          "price": 50052.19069957733,
+          "signal_strength": 6.030982541513107,
+          "mathematical_score": 13.159240900729714,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540283.799738,
+          "price": 50053.28129053116,
+          "signal_strength": 6.031623062554767,
+          "mathematical_score": 13.17302367955606,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540283.9101043,
+          "price": 50054.38505649567,
+          "signal_strength": 6.032271041409739,
+          "mathematical_score": 13.186973258576742,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540284.0397878,
+          "price": 50055.482466220856,
+          "signal_strength": 6.032915009867255,
+          "mathematical_score": 13.20084280130565,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540284.146786,
+          "price": 50056.751935482025,
+          "signal_strength": 6.03365959784723,
+          "mathematical_score": 13.216887274313677,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540284.2561963,
+          "price": 50057.846059799194,
+          "signal_strength": 6.03430104230906,
+          "mathematical_score": 13.230715926471142,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540284.3685153,
+          "price": 50058.959045410156,
+          "signal_strength": 6.034953262228213,
+          "mathematical_score": 13.244783266631073,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540284.4781985,
+          "price": 50060.05593061447,
+          "signal_strength": 6.035595769109408,
+          "mathematical_score": 13.25864740505941,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540284.586643,
+          "price": 50061.15035057068,
+          "signal_strength": 6.036236557291546,
+          "mathematical_score": 13.272480676554487,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540284.696176,
+          "price": 50062.24623680115,
+          "signal_strength": 6.03687792950179,
+          "mathematical_score": 13.286332774431745,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540284.8115616,
+          "price": 50063.34970474243,
+          "signal_strength": 6.037523461848362,
+          "mathematical_score": 13.300281001961615,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540284.917619,
+          "price": 50064.46026086807,
+          "signal_strength": 6.038172860509598,
+          "mathematical_score": 13.314319126699095,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540285.0355546,
+          "price": 50065.57948112488,
+          "signal_strength": 6.038827041481498,
+          "mathematical_score": 13.328467075984802,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540285.163479,
+          "price": 50066.788778305054,
+          "signal_strength": 6.039533552170054,
+          "mathematical_score": 13.343754022043884,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540285.284411,
+          "price": 50068.098068237305,
+          "signal_strength": 6.0402981077915285,
+          "mathematical_score": 13.36030539700502,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540285.3893516,
+          "price": 50069.16760444641,
+          "signal_strength": 6.040922371863849,
+          "mathematical_score": 13.3738262381585,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540285.4993832,
+          "price": 50070.267758369446,
+          "signal_strength": 6.0415642369128815,
+          "mathematical_score": 13.387734432875062,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540285.6416237,
+          "price": 50071.47024393082,
+          "signal_strength": 6.042265492941883,
+          "mathematical_score": 13.402936646433822,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540285.7513418,
+          "price": 50072.76735305786,
+          "signal_strength": 6.043021565395641,
+          "mathematical_score": 13.41933551732142,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540285.8857782,
+          "price": 50073.97179365158,
+          "signal_strength": 6.043723283278198,
+          "mathematical_score": 13.434563181665565,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540286.0436895,
+          "price": 50075.44096469879,
+          "signal_strength": 6.044578794394106,
+          "mathematical_score": 13.453138294968403,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540286.1866164,
+          "price": 50077.110562324524,
+          "signal_strength": 6.045550428353459,
+          "mathematical_score": 13.474248092846818,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540286.3033178,
+          "price": 50078.28711271286,
+          "signal_strength": 6.046234755510659,
+          "mathematical_score": 13.489124385292696,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540286.4150012,
+          "price": 50079.42397117615,
+          "signal_strength": 6.046895702697874,
+          "mathematical_score": 13.503499134031319,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540286.522422,
+          "price": 50080.50899028778,
+          "signal_strength": 6.047526242790131,
+          "mathematical_score": 13.517218705741778,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540286.6356323,
+          "price": 50081.62022829056,
+          "signal_strength": 6.048171747923278,
+          "mathematical_score": 13.53127010086573,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540286.7447176,
+          "price": 50082.72110939026,
+          "signal_strength": 6.048810966239614,
+          "mathematical_score": 13.545190831733233,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540286.8535273,
+          "price": 50083.819200992584,
+          "signal_strength": 6.049448296942054,
+          "mathematical_score": 13.559076583479422,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540286.9686978,
+          "price": 50084.940927028656,
+          "signal_strength": 6.0500990691832275,
+          "mathematical_score": 13.573261504355926,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540287.0810368,
+          "price": 50086.08751296997,
+          "signal_strength": 6.050763976285085,
+          "mathematical_score": 13.587761111083042,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540287.185492,
+          "price": 50087.13883638382,
+          "signal_strength": 6.051373385289722,
+          "mathematical_score": 13.60105631935302,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540287.296522,
+          "price": 50088.24913263321,
+          "signal_strength": 6.052016713764653,
+          "mathematical_score": 13.615097600206429,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540287.4117513,
+          "price": 50089.3914270401,
+          "signal_strength": 6.052678299313601,
+          "mathematical_score": 13.629543856938104,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540287.5168362,
+          "price": 50090.45228481293,
+          "signal_strength": 6.053292462048578,
+          "mathematical_score": 13.642960493587509,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540287.628069,
+          "price": 50091.56461715698,
+          "signal_strength": 6.053936159621904,
+          "mathematical_score": 13.657028422086018,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540287.7436037,
+          "price": 50092.679958343506,
+          "signal_strength": 6.054581326058119,
+          "mathematical_score": 13.671134706781325,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540287.850129,
+          "price": 50093.78524065018,
+          "signal_strength": 6.055220405350223,
+          "mathematical_score": 13.685114070690162,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540287.9587817,
+          "price": 50094.87226963043,
+          "signal_strength": 6.0558486700745675,
+          "mathematical_score": 13.698862860855076,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540288.069682,
+          "price": 50095.980739593506,
+          "signal_strength": 6.056489061404322,
+          "mathematical_score": 13.712883133899709,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540288.1811643,
+          "price": 50097.08570241928,
+          "signal_strength": 6.057127160118622,
+          "mathematical_score": 13.726859345425519,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540288.2941663,
+          "price": 50098.17561626434,
+          "signal_strength": 6.057756308054079,
+          "mathematical_score": 13.74064550000955,
+          "performance_score": 0.0
+        },
+        {
+          "timestamp": 1751540288.3987844,
+          "price": 50099.27195072174,
+          "signal_strength": 6.058388901917847,
+          "mathematical_score": 13.754513159793609,
+          "performance_score": 0.0
+        }
+      ]
+    }
   },
-  "passed": 4,
-  "total": 5,
-  "success_rate": 0.8,
-  "backtest_data": null
+  "summary": {
+    "total_tests": 6,
+    "passed_tests": 2,
+    "success_rate": 33.33333333333333
+  }
 }

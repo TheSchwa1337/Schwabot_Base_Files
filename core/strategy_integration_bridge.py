@@ -23,9 +23,9 @@ from core.enhanced_strategy_framework import (
     This,
     TradingDecision,
     UnifiedTradingPipeline,
-    19:37:03,
-    2025-07-02,
-    """,
+    19:37:3,
+    2025-7-2,
+    ""","
     -,
     asyncio,
     automatically,
@@ -92,13 +92,13 @@ from core.unified_math_system import UnifiedMathSystem
 All core functionality has been reimplemented in clean, production-ready files.
 
 
-"""
-"""
+""""
+""""
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
 
-"""
-"""
+""""
+""""
 
 
 
@@ -407,7 +407,7 @@ execution_priority: int = 0
 
 
 
-estimated_slippage: float = 0.001
+estimated_slippage: float = 0.1
 
 
 
@@ -614,7 +614,7 @@ self.signal_correlation_cache: Dict[str, float] = {}
 self.integration_metrics = {
 
 
-"""
+""""
 correlation_scores: [],execution_success_rate: 0.0,composite_confidence_avg": 0.0,strategy_agreement_rate": 0.0,
 
 
@@ -631,7 +631,7 @@ correlation_scores: [],execution_success_rate: 0.0,composite_confidence_avg": 0.
 
 
 
-self.api_endpoints = {/api/strategies/status: self._api_strategy_status,/api/signals/current: self._api_current_signals,/api/performance/metrics": self._api_performance_metrics,/api/integration/health": self._api_integration_health,/api/orchestration/state": self._api_orchestration_state,
+self.api_endpoints = {/api/strategies/status: self._api_strategy_status,/api/signals/current: self._api_current_signals,/api/performance/metrics": self._api_performance_metrics,/api/integration/health": self._api_integration_health,/api/orchestration/state": self._api_orchestration_state,"
 
 
 
@@ -639,7 +639,7 @@ self.api_endpoints = {/api/strategies/status: self._api_strategy_status,/api/sig
 
 
 
-            logger.info(f"Strategy Integration Bridge v{self.version} initialized)
+            logger.info(f"Strategy Integration Bridge v{self.version} initialized)"
 
 
 
@@ -647,7 +647,7 @@ self.api_endpoints = {/api/strategies/status: self._api_strategy_status,/api/sig
 
 
 
-def _default_config() -> Dict[str, Any]:"Default configuration for integration bridge.return {correlation_threshold: 0.6,max_integrated_signals": 1000,optimization_interval": 3600,  # 1 hourapi_update_interval: 5,  # 5 secondsenable_real_time_optimization: True,enable_api_endpoints": True,visualization_update_interval": 1,  # 1 secondrisk_correlation_weight: 0.3,mathematical_confidence_weight": 0.4,wall_street_confidence_weight": 0.3,
+def _default_config() -> Dict[str, Any]:"Default configuration for integration bridge.return {correlation_threshold: 0.6,max_integrated_signals": 1000,optimization_interval": 3600,  # 1 hourapi_update_interval: 5,  # 5 secondsenable_real_time_optimization: True,enable_api_endpoints": True,visualization_update_interval": 1,  # 1 secondrisk_correlation_weight: 0.3,mathematical_confidence_weight": 0.4,wall_street_confidence_weight": 0.3,"
 
 
 
@@ -659,7 +659,7 @@ def _default_config() -> Dict[str, Any]:"Default configuration for integration b
 
 
 
-def _initialize_components() -> None:"Initialize all integration components.try:
+def _initialize_components() -> None:"Initialize all integration components.try:"
 
 
 
@@ -1039,7 +1039,7 @@ fGenerated {len(filtered_signals)} integrated signals for {asset}
 
 
 
-async def _perform_mathematical_analysis() -> Dict[str, Any]:Perform comprehensive Schwabot mathematical analysis.analysis = {dlt_metrics: {},unified_math_state: {},mathematical_confidence: 0.5,risk_assessment": {},
+async def _perform_mathematical_analysis() -> Dict[str, Any]:Perform comprehensive Schwabot mathematical analysis.analysis = {dlt_metrics: {},unified_math_state: {},mathematical_confidence: 0.5,risk_assessment": {},"
 
 
 
@@ -1115,7 +1115,7 @@ time.time() - i for i in range(len(price_history[-50:]))
 
 
 
-dlt_result = self.mathlib_v4.calculate_dlt_metrics(dlt_data)
+dlt_result = self.mathlib_v4.alculate_dlt_metrics(dlt_data)
 
 
 
@@ -1123,7 +1123,7 @@ iferrornot in dlt_result:
 
 
 
-                        analysis[dlt_metrics] = dlt_resultanalysis[mathematical_confidence] = dlt_result.get(confidence", 0.5
+                        analysis[dlt_metrics] = dlt_resultanalysis[mathematical_confidence] = dlt_result.get(confidence", 0.5"
 
 
 
@@ -1167,7 +1167,7 @@ if hasattr(self,risk_manager):
 
 
 
-{asset: asset,price": price,volume": volume,position_size": 0.1,  # Default position size for risk calculation
+{asset: asset,price": price,volume": volume,position_size": 0.1,  # Default position size for risk calculation"
 
 
 
@@ -1715,7 +1715,7 @@ max_position = self.config.get(max_position_size, 0.1)
 
 
 
-        final_size = max(0.001, min(max_position, adjusted_size))
+        final_size = max(0.1, min(max_position, adjusted_size))
 
 
 
@@ -1723,7 +1723,7 @@ max_position = self.config.get(max_position_size, 0.1)
 
 
 
-        return {base_size: base_position_size,adjusted_size: adjusted_size,final_size: final_size,math_adjustment": math_adjustment,risk_adjustment": risk_adjustment,dlt_adjustment": dlt_adjustment,confidence_factor: composite_confidence,
+        return {base_size: base_position_size,adjusted_size: adjusted_size,final_size: final_size,math_adjustment": math_adjustment,risk_adjustment": risk_adjustment,dlt_adjustment": dlt_adjustment,confidence_factor: composite_confidence,"
 
 
 
@@ -1735,7 +1735,7 @@ max_position = self.config.get(max_position_size, 0.1)
 
 
 
-def _calculate_execution_priority() -> int:"Calculate execution priority (1 = highest, 10=lowest).# Base priority on signal quality
+def _calculate_execution_priority() -> int:"Calculate execution priority (1 = highest, 10=lowest).# Base priority on signal quality"
 
 
 
@@ -2051,7 +2051,7 @@ execution_result = {executed: True,message:Executed via fallback method,signal_i
 
 
 
-if execution_result.get(executed", False):
+if execution_result.get(executed", False):"
 
 
 
@@ -2171,7 +2171,7 @@ mathematical_state=integrated_signal.unified_math_state,
 
 
 
-market_conditions={trend: ws_signal.market_condition.trend,volatility: ws_signal.market_condition.volatility,volume_profile": ws_signal.market_condition.volume_profile,
+market_conditions={trend: ws_signal.market_condition.trend,volatility: ws_signal.market_condition.volatility,volume_profile": ws_signal.market_condition.volume_profile,"
 
 
 
@@ -2191,7 +2191,7 @@ else:
 
 
 
-        return {timestamp: time.time(),symbol: ws_signal.asset,action": ws_signal.action,quantity": integrated_signal.position_sizing[final_size],price": ws_signal.price,confidence": integrated_signal.composite_confidence,strategy": ws_signal.strategy.value,
+        return {timestamp: time.time(),symbol: ws_signal.asset,action": ws_signal.action,quantity": integrated_signal.position_sizing[final_size],price": ws_signal.price,confidence": integrated_signal.composite_confidence,strategy": ws_signal.strategy.value,"
 
 
 
@@ -2215,7 +2215,7 @@ strategy, False
 
 
 
-),weight": self.enhanced_framework.strategy_weights.get(
+),weight": self.enhanced_framework.strategy_weights.get("
 
 
 
@@ -2223,7 +2223,7 @@ strategy, False
 
 
 
-),performance": self.enhanced_framework.get_strategy_performance(
+),performance": self.enhanced_framework.get_strategy_performance("
 
 
 
@@ -2243,7 +2243,7 @@ for strategy in WallStreetStrategy:
 
 
 
-},orchestration_state": {total_active: self.orchestration_state.total_strategies_active,wall_street_active": self.orchestration_state.wall_street_strategies_active,schwabot_active": self.orchestration_state.schwabot_strategies_active,
+},orchestration_state": {total_active: self.orchestration_state.total_strategies_active,wall_street_active": self.orchestration_state.wall_street_strategies_active,schwabot_active": self.orchestration_state.schwabot_strategies_active,"
 
 
 
@@ -2259,7 +2259,7 @@ for strategy in WallStreetStrategy:
 
 
 
-async def _api_current_signals() -> Dict[str, Any]:"API endpoint for current trading signals.recent_signals = (
+async def _api_current_signals() -> Dict[str, Any]:"API endpoint for current trading signals.recent_signals = ("
 
 
 
@@ -2299,7 +2299,7 @@ for signal in recent_signals:
 
 
 
-async def _api_performance_metrics() -> Dict[str, Any]:"API endpoint for performance metrics.return {integration_metrics: self.integration_metrics,strategy_performance": self.enhanced_framework.get_all_performance_metrics(),orchestration_stats": {signals_generated_today: self.orchestration_state.signals_generated_today,signals_executed_today": self.orchestration_state.signals_executed_today,execution_rate": (
+async def _api_performance_metrics() -> Dict[str, Any]:"API endpoint for performance metrics.return {integration_metrics: self.integration_metrics,strategy_performance": self.enhanced_framework.get_all_performance_metrics(),orchestration_stats": {signals_generated_today: self.orchestration_state.signals_generated_today,signals_executed_today": self.orchestration_state.signals_executed_today,execution_rate": ("
 
 
 
@@ -2347,7 +2347,7 @@ async def _api_orchestration_state() -> Dict[str, Any]:"API endpoint for orchest
 
 
 
-self.orchestration_state.wall_street_strategies_active,schwabot_strategies_active": self.orchestration_state.schwabot_strategies_active,signals_generated_today": self.orchestration_state.signals_generated_today,signals_executed_today": self.orchestration_state.signals_executed_today,current_market_regime": self.orchestration_state.current_market_regime,strategy_performance_score": self.orchestration_state.strategy_performance_score,api_endpoints_active": self.orchestration_state.api_endpoints_active,visualization_connected": self.orchestration_state.visualization_connected,
+self.orchestration_state.wall_street_strategies_active,schwabot_strategies_active": self.orchestration_state.schwabot_strategies_active,signals_generated_today": self.orchestration_state.signals_generated_today,signals_executed_today": self.orchestration_state.signals_executed_today,current_market_regime": self.orchestration_state.current_market_regime,strategy_performance_score": self.orchestration_state.strategy_performance_score,api_endpoints_active": self.orchestration_state.api_endpoints_active,visualization_connected": self.orchestration_state.visualization_connected,"
 
 
 
@@ -2363,7 +2363,7 @@ self.orchestration_state.wall_street_strategies_active,schwabot_strategies_activ
 
 
 
-def get_api_endpoints() -> Dict[str, Any]:"Get available API endpoints for integration.return self.api_endpoints
+def get_api_endpoints() -> Dict[str, Any]:"Get available API endpoints for integration.return self.api_endpoints"
 
 
 
@@ -2443,7 +2443,7 @@ self.orchestration_state.strategy_performance_score = avg_correlation
 
 
 
-        except Exception as e:logger.error(f"Integration optimization failed: {e})
+        except Exception as e:logger.error(f"Integration optimization failed: {e})"
 
 
 
@@ -2455,7 +2455,7 @@ def get_integration_status() -> Dict[str, Any]:"Get comprehensive integration st
 
 
 
-},orchestration_state": self.orchestration_state,integration_metrics": self.integration_metrics,api_endpoints": list(self.api_endpoints.keys()),signal_history_size": len(self.integrated_signals),last_signal_time": (
+},orchestration_state": self.orchestration_state,integration_metrics": self.integration_metrics,api_endpoints": list(self.api_endpoints.keys()),signal_history_size": len(self.integrated_signals),last_signal_time": ("
 
 
 
@@ -2487,7 +2487,7 @@ else 0
 
 
 
-def create_strategy_integration_bridge() -> StrategyIntegrationBridge:"Factory function to create strategy integration bridge.return StrategyIntegrationBridge(config)
+def create_strategy_integration_bridge() -> StrategyIntegrationBridge:"Factory function to create strategy integration bridge.return StrategyIntegrationBridge(config)"
 
 
 
@@ -2571,15 +2571,15 @@ print(\n Integration Status:)
 
 
 
-status = bridge.get_integration_status()'
+status = bridge.get_integration_status()''
 
 
 
-print(fBridge Version: {status['bridge_version']})'print(fComponents Available: {status['component_status']})
+print(fBridge Version: {status['bridge_version']})'print(fComponents Available: {status['component_status']})'
 
 
 
-print(Active Strategies:'f"{status['orchestration_state'].total_strategies_active})'print(fAPI Endpoints: {len(status['api_endpoints'])})
+print(Active Strategies:'f"{status['orchestration_state'].total_strategies_active})'print(fAPI Endpoints: {len(status['api_endpoints'])})"
 
 
 
@@ -2587,9 +2587,9 @@ if __name__ == __main__:
 
 
 
-    asyncio.run(run_integration_demo())""'"
+    asyncio.run(run_integration_demo())""'""'
 
 
 
-"""
-"""
+""""
+""""

@@ -9,7 +9,7 @@ from typing import Any, Dict, List, Optional
 from .zbe_core import ZBECore
 from .zpe_core import ZPECore
 
-"""
+""""
 
 
 
@@ -37,7 +37,7 @@ Original file: core\\hardware_acceleration_manager.py
 
 
 
-Date commented out: 2025-07-02 19:36:58
+Date commented out: 2025-7-2 19:36:58
 
 
 
@@ -72,13 +72,13 @@ The clean implementation has been preserved in the following files:
 All core functionality has been reimplemented in clean, production-ready files.
 
 
-"""
-"""
+""""
+""""
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
 
-"""
-"""
+""""
+""""
 
 
 
@@ -1193,8 +1193,8 @@ class HardwareAccelerationManager:Hardware Acceleration Manager - Coordinates ZP
             return {speedup_multiplier: speedup_multiplier,
 
 
-"""
-                memory_optimization: memory_optimization,thermal_optimization: thermal_optimization,optimal_batch_size: optimal_batch_size,parallelization_factor: parallelization_factor,operation_type: operation_type,tensor_complexity: tensor_complexity,tensor_size": tensor_size,
+""""
+                memory_optimization: memory_optimization,thermal_optimization: thermal_optimization,optimal_batch_size: optimal_batch_size,parallelization_factor: parallelization_factor,operation_type: operation_type,tensor_complexity: tensor_complexity,tensor_size": tensor_size,"
 
 
 
@@ -1210,11 +1210,11 @@ class HardwareAccelerationManager:Hardware Acceleration Manager - Coordinates ZP
 
 
 
-            logger.error( Tensor optimization failed: %s", e)
+            logger.error( Tensor optimization failed: %s", e)"
 
 
 
-            return {speedup_multiplier: 1.0,memory_optimization: 0.5,thermal_optimization: 0.5,optimal_batch_size": 1,parallelization_factor: 1,operation_type: operation_type,tensor_complexity": tensor_complexity,tensor_size": tensor_size,
+            return {speedup_multiplier: 1.0,memory_optimization: 0.5,thermal_optimization: 0.5,optimal_batch_size": 1,parallelization_factor: 1,operation_type: operation_type,tensor_complexity": tensor_complexity,tensor_size": tensor_size,"
 
 
 
@@ -1306,7 +1306,7 @@ class HardwareAccelerationManager:Hardware Acceleration Manager - Coordinates ZP
 
 
 
-            return {acceleration_mode: self.mode.value,total_cycles: self.total_cycles,acceleration_events: self.acceleration_events,optimization_events": self.optimization_events,current_boost_factor: acceleration_factors[unified_boost_factor],average_boost": avg_boost,maximum_boost": max_boost,thermal_efficiency": acceleration_factors[thermal_optimization_factor],computational_efficiency": acceleration_factors[computational_optimization_factor],memory_efficiency": acceleration_factors[memory_optimization_factor],hardware_profile": hardware_utilization,is_optimizing": self.is_optimizing,history_size": len(self.acceleration_history),
+            return {acceleration_mode: self.mode.value,total_cycles: self.total_cycles,acceleration_events: self.acceleration_events,optimization_events": self.optimization_events,current_boost_factor: acceleration_factors[unified_boost_factor],average_boost": avg_boost,maximum_boost": max_boost,thermal_efficiency": acceleration_factors[thermal_optimization_factor],computational_efficiency": acceleration_factors[computational_optimization_factor],memory_efficiency": acceleration_factors[memory_optimization_factor],hardware_profile": hardware_utilization,is_optimizing": self.is_optimizing,history_size": len(self.acceleration_history),"
 
 
 
@@ -1322,15 +1322,15 @@ class HardwareAccelerationManager:Hardware Acceleration Manager - Coordinates ZP
 
 
 
-            logger.error( Performance report generation failed: %s", e)
+            logger.error( Performance report generation failed: %s", e)"
 
 
 
-            return {acceleration_mode: self.mode.value,total_cycles: self.total_cycles,acceleration_events: self.acceleration_events,optimization_events": self.optimization_events,current_boost_factor: 1.0,average_boost": 1.0,maximum_boost": 1.0,thermal_efficiency": 0.5,computational_efficiency": 0.5,memory_efficiency": 0.5,hardware_profile": {},
+            return {acceleration_mode: self.mode.value,total_cycles: self.total_cycles,acceleration_events: self.acceleration_events,optimization_events": self.optimization_events,current_boost_factor: 1.0,average_boost": 1.0,maximum_boost": 1.0,thermal_efficiency": 0.5,computational_efficiency": 0.5,memory_efficiency": 0.5,hardware_profile": {},"
 
 
 
-                is_optimizing: False,history_size": 0,
+                is_optimizing: False,history_size": 0,"
 
 
 
@@ -1467,4 +1467,4 @@ if __name__ == __main__:
 
 
 """"
-"""
+""""
