@@ -9,7 +9,7 @@ from typing import Any, Dict, List, Optional
 from .zbe_core import ZBECore
 from .zpe_core import ZPECore
 
-""""
+"""
 
 
 
@@ -72,13 +72,13 @@ The clean implementation has been preserved in the following files:
 All core functionality has been reimplemented in clean, production-ready files.
 
 
-""""
-""""
+"""
+"""
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
 
-""""
-""""
+"""
+"""
 
 
 
@@ -1193,7 +1193,7 @@ class HardwareAccelerationManager:Hardware Acceleration Manager - Coordinates ZP
             return {speedup_multiplier: speedup_multiplier,
 
 
-""""
+"""
                 memory_optimization: memory_optimization,thermal_optimization: thermal_optimization,optimal_batch_size: optimal_batch_size,parallelization_factor: parallelization_factor,operation_type: operation_type,tensor_complexity: tensor_complexity,tensor_size": tensor_size,"
 
 
@@ -1466,5 +1466,5 @@ if __name__ == __main__:
 
 
 
-""""
-""""
+"""
+"""

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Risk Manager - Comprehensive risk assessment and management for Schwabot trading system.
+Clean Risk Manager - Risk assessment and management for Schwabot trading system.
 
 Provides real-time risk assessment, position sizing, and risk management
 for the Schwabot trading system.
@@ -355,4 +355,4 @@ class RiskManager:
 
 
 # Export main classes
-__all__ = ["RiskManager", "RiskMetric", "RiskAssessment", "RiskLevel"]
+__all__ = ["RiskManager", "RiskMetric", "RiskAssessment", "RiskLevel"] 

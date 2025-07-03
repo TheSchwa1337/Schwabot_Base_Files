@@ -22,6 +22,17 @@ def load_matrix_vectors(matrix_dir: str) -> Dict[str, Any]:
                 matrices[fname] = json.load(f)
     return matrices
 
+def load_matrix_from_file(matrix_file) -> np.ndarray:
+    """Load a matrix from a file (supports .npy and .json formats)."""
+    if str(matrix_file).endswith('.npy'):
+        return np.load(matrix_file)
+    elif str(matrix_file).endswith('.json'):
+        with open(matrix_file, 'r') as f:
+            data = json.load(f)
+            return np.array(data)
+    else:
+        raise ValueError(f"Unsupported file format: {matrix_file}")
+
 def match_hash_to_matrix(hash_vec, matrix_dir, threshold=0.8) -> Optional[str]:
     """Match a hash vector to the closest matrix file above threshold."""
     matrices = load_matrix_vectors(matrix_dir)
@@ -34,4 +45,4 @@ def match_hash_to_matrix(hash_vec, matrix_dir, threshold=0.8) -> Optional[str]:
             best_file = fname
     return best_file
 
-__all__ = ["match_hash_to_matrix", "cosine_similarity"] 
+__all__ = ["match_hash_to_matrix", "cosine_similarity", "load_matrix_from_file", "load_matrix_vectors"] 

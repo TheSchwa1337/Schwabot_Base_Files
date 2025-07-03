@@ -91,13 +91,13 @@ from core.enhanced_live_execution_mapper import (
 All core functionality has been reimplemented in clean, production-ready files.
 
 
-""""
-""""
+"""
+"""
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
 
-""""
-""""
+"""
+"""
 
 
 
@@ -631,7 +631,7 @@ self.performance = StrategyPerformance()
 self.risk_limits = {max_daily_loss: self.config.get(max_daily_loss, 0.2),  # 2%
 
 
-""""
+"""
 # 10%max_position_size: self.config.get(max_position_size", 0.1),min_confidence_threshold": self.config.get(min_confidence", 0.75),"
 
 
@@ -2936,5 +2936,5 @@ if __name__ == __main__:
 
 
 
-""""
-""""
+"""
+"""

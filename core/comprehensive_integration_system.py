@@ -50,7 +50,7 @@ class ComprehensiveIntegrationSystem:
     Provides unified access to all trading components with graceful fallbacks.
     """
 
-        def __init__(self):
+    def __init__(self):
         """Initialize the comprehensive integration system."""
         self.logger = logging.getLogger(__name__)
         self.initialization_time = time.time()
@@ -74,7 +74,7 @@ class ComprehensiveIntegrationSystem:
         # Trading components
         if TRADING_AVAILABLE:
             self.component_status["trading_engine"] = "OPERATIONAL"
-            else:
+        else:
             self.component_status["trading_engine"] = "UNAVAILABLE"
 
         self.logger.info("Component initialization complete")

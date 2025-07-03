@@ -94,13 +94,13 @@ from core.strategy.entry_exit_portal import (
 All core functionality has been reimplemented in clean, production-ready files.
 
 
-""""
-""""
+"""
+"""
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
 
-""""
-""""
+"""
+"""
 
 
 
@@ -574,7 +574,7 @@ self.trade_id_counter = 0
 self.stats = {
 
 
-""""
+"""
 total_execution_requests: 0,successful_executions: 0,failed_executions": 0,risk_rejected_executions": 0,rejected_by_signal_threshold": 0,  # Added for clarityrejected_by_sizing: 0,  # Added for clarityavg_execution_flow_time: 0.0,"
 
 
@@ -1527,5 +1527,5 @@ if __name__ == __main__:
 
 
 
-""""
-""""
+"""
+"""
