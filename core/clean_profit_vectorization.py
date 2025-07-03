@@ -108,328 +108,336 @@ class DynamicAllocationSlider:
     metadata: Dict[str, Any] = field(default_factory=dict)
 
 
+class ProfitVectorCache:
+    """Cache for profit vector calculations to improve performance."""
+
+    def __init__(self, max_size: int = 1000):
+        """Initialize cache with maximum size."""
+        self.cache = {}
+        self.max_size = max_size
+        self.access_count = {}
+
+    def get(self, key: str) -> Optional[ProfitVector]:
+        """Get cached profit vector."""
+        if key in self.cache:
+            self.access_count[key] = self.access_count.get(key, 0) + 1
+            return self.cache[key]
+        return None
+
+    def set(self, key: str, vector: ProfitVector) -> None:
+        """Set cached profit vector."""
+        if len(self.cache) >= self.max_size:
+            # Remove least recently used item
+            lru_key = min(self.access_count.keys(), key=lambda k: self.access_count[k])
+            del self.cache[lru_key]
+            del self.access_count[lru_key]
+
+        self.cache[key] = vector
+        self.access_count[key] = 1
+
+    def clear(self) -> None:
+        """Clear the cache."""
+        self.cache.clear()
+        self.access_count.clear()
+
+    def get_cache_info(self) -> Dict[str, Any]:
+        """Get cache statistics."""
+        return {
+            "size": len(self.cache),
+            "max_size": self.max_size,
+            "hit_rate": self._calculate_hit_rate(),
+            "total_accesses": sum(self.access_count.values())
+        }
+
+    def _calculate_hit_rate(self) -> float:
+        """Calculate cache hit rate."""
+        total_accesses = sum(self.access_count.values())
+        if total_accesses == 0:
+            return 0.0
+        return len(self.cache) / total_accesses
+
+
 class CleanProfitVectorization:
     """
-    Clean profit vectorization system with multiple calculation modes.
-    
-    This system provides advanced profit calculation and allocation methods
-    while maintaining clean, error-free code structure.
+    Clean implementation of profit vectorization system.
+
+    This system calculates profit vectors using mathematical models that integrate:
+    - Market data analysis
+    - Risk-adjusted returns
+    - Thermal state considerations
+    - Bit phase precision
+    - Multiple vectorization modes
     """
-    
-    def __init__(
-        self,
-        risk_free_rate: float = 0.02,
-        default_mode: VectorizationMode = VectorizationMode.STANDARD,
-    ):
-        """Initialize the profit vectorization system."""
-        self.risk_free_rate = risk_free_rate
-        self.default_mode = default_mode
-        
-        # Initialize math foundation
+
+    def __init__(self, cache_size: int = 1000):
+        """Initialize profit vectorization system."""
         self.math_foundation = CleanMathFoundation()
-        
-        # Profit tracking
-        self.profit_history: List[ProfitVector] = []
-        
-        # Performance metrics
-        self.performance_metrics = {
-            "total_profit": 0.0,
-            "average_profit_per_trade": 0.0,
-            "win_rate": 0.0,
-            "loss_rate": 0.0,
-            "max_drawdown": 0.0,
-            "sharpe_ratio": 0.0,
-            "sortino_ratio": 0.0,
-        }
-        
-        # Enhanced tracking for different modes
-        self.bit_phase_triggers: List[BitPhaseTrigger] = []
-        self.consensus_votes: List[ConsensusVote] = []
-        self.dlt_waveforms: List[DLTWaveformData] = []
-        self.allocation_sliders: List[DynamicAllocationSlider] = []
-        
-        logger.info(f"CleanProfitVectorization initialized with mode {default_mode}")
+        self.cache = ProfitVectorCache(cache_size)
+        self.calculation_count = 0
+        self.total_calculation_time = 0.0
+
+        logger.info("Clean Profit Vectorization system initialized")
 
     def calculate_profit_vector(
         self,
-        btc_price: float,
-        volume: float,
-        mode: Optional[VectorizationMode] = None,
-        method: Optional[AllocationMethod] = None,
+        vector_input: Dict[str, Any],
+        mode: VectorizationMode = VectorizationMode.ADAPTIVE
     ) -> ProfitVector:
         """
-        Calculate profit vector using specified mode and method.
-        
+        Calculate profit vector using specified mode.
+
         Args:
-            btc_price: Current BTC price
-            volume: Trading volume
+            vector_input: Input data for vectorization
             mode: Vectorization mode to use
-            method: Allocation method to use
-            
+
         Returns:
-            ProfitVector: Calculated profit vector
+            Calculated profit vector
         """
-        mode = mode or self.default_mode
-        method = method or AllocationMethod.EQUAL_WEIGHT
-        
-        vector_id = self._generate_vector_id()
-        timestamp = time.time()
-        
-        # Calculate profit score based on mode
-        if mode == VectorizationMode.STANDARD:
-            profit_score = self._calculate_standard_profit(btc_price, volume)
-        elif mode == VectorizationMode.ENTROPY_WEIGHTED:
-            profit_score = self._calculate_entropy_weighted_profit(btc_price, volume)
-        elif mode == VectorizationMode.CONSENSUS_VOTING:
-            profit_score = self._calculate_consensus_profit(btc_price, volume)
-        elif mode == VectorizationMode.BIT_PHASE_TRIGGER:
-            profit_score = self._calculate_bit_phase_profit(btc_price, volume)
-        elif mode == VectorizationMode.DLT_WAVEFORM:
-            profit_score = self._calculate_dlt_waveform_profit(btc_price, volume)
-        elif mode == VectorizationMode.DYNAMIC_SLIDER:
-            profit_score = self._calculate_dynamic_slider_profit(btc_price, volume)
-        elif mode == VectorizationMode.PERCENTAGE_BASED:
-            profit_score = self._calculate_percentage_profit(btc_price, volume)
-        elif mode == VectorizationMode.HYBRID_BLEND:
-            profit_score = self._calculate_hybrid_profit(btc_price, volume)
-        else:
-            profit_score = self._calculate_standard_profit(btc_price, volume)
-        
-        # Calculate confidence score
-        confidence_score = self._calculate_confidence_score(profit_score, mode)
-        
-        # Create profit vector
-        profit_vector = ProfitVector(
-            vector_id=vector_id,
-            btc_price=btc_price,
-            volume=volume,
-            profit_score=profit_score,
-            confidence_score=confidence_score,
-            mode=mode.value,
-            method=method.value,
-            timestamp=timestamp,
-            metadata={
-                'risk_free_rate': self.risk_free_rate,
-                'calculation_mode': mode.value,
-                'allocation_method': method.value,
-            }
-        )
-        
-        # Store in history
-        self.profit_history.append(profit_vector)
-        
-        # Update performance metrics
-        self._update_performance_metrics(profit_vector)
-        
-        logger.debug(f"Calculated profit vector {vector_id} with score {profit_score:.6f}")
-        return profit_vector
+        start_time = time.time()
+        self.calculation_count += 1
 
-    def _generate_vector_id(self) -> str:
-        """Generate unique vector ID."""
-        timestamp = str(int(time.time() * 1000000))
-        random_component = hashlib.md5(timestamp.encode()).hexdigest()[:8]
-        return f"pv_{timestamp}_{random_component}"
+        try:
+            # Generate cache key
+            cache_key = self._generate_cache_key(vector_input, mode)
 
-    def _calculate_standard_profit(self, btc_price: float, volume: float) -> float:
-        """Calculate standard profit score."""
-        # Simple profit calculation: price * volume * risk adjustment
-        base_profit = btc_price * volume
-        risk_adjustment = 1.0 - self.risk_free_rate
-        return base_profit * risk_adjustment
+            # Check cache first
+            cached_vector = self.cache.get(cache_key)
+            if cached_vector is not None:
+                logger.debug(f"Using cached profit vector for key: {cache_key[:16]}...")
+                return cached_vector
 
-    def _calculate_entropy_weighted_profit(self, btc_price: float, volume: float) -> float:
-        """Calculate entropy-weighted profit score."""
-        # Use entropy to weight the profit calculation
-        entropy = self._calculate_entropy(btc_price, volume)
-        base_profit = self._calculate_standard_profit(btc_price, volume)
-        return base_profit * (1.0 + entropy)
+            # Calculate base profit using math foundation
+            base_profit = self._calculate_base_profit(vector_input)
 
-    def _calculate_consensus_profit(self, btc_price: float, volume: float) -> float:
-        """Calculate consensus-based profit score."""
-        # Simulate consensus voting
-        votes = self._generate_consensus_votes(btc_price, volume)
-        consensus_score = np.mean([vote.confidence for vote in votes])
-        base_profit = self._calculate_standard_profit(btc_price, volume)
-        return base_profit * consensus_score
+            # Apply mode-specific calculations
+            mode_multiplier = self._get_mode_multiplier(mode, vector_input)
 
-    def _calculate_bit_phase_profit(self, btc_price: float, volume: float) -> float:
-        """Calculate bit-phase triggered profit score."""
-        # Use bit-phase triggers for profit calculation
-        trigger = self._generate_bit_phase_trigger(btc_price, volume)
-        base_profit = self._calculate_standard_profit(btc_price, volume)
-        return base_profit * trigger.trigger_strength
+            # Calculate risk adjustment
+            risk_factor = self._calculate_risk_factor(vector_input)
 
-    def _calculate_dlt_waveform_profit(self, btc_price: float, volume: float) -> float:
-        """Calculate DLT waveform-based profit score."""
-        # Use DLT waveform analysis
-        waveform = self._generate_dlt_waveform(btc_price, volume)
-        probability_score = np.mean(waveform.probability_density)
-        base_profit = self._calculate_standard_profit(btc_price, volume)
-        return base_profit * probability_score
+            # Calculate thermal adjustment
+            thermal_factor = self._calculate_thermal_factor(vector_input)
 
-    def _calculate_dynamic_slider_profit(self, btc_price: float, volume: float) -> float:
-        """Calculate dynamic slider-based profit score."""
-        # Use dynamic allocation slider
-        slider = self._generate_allocation_slider(btc_price, volume)
-        base_profit = self._calculate_standard_profit(btc_price, volume)
-        return base_profit * slider.allocation_percentage
+            # Calculate bit phase precision
+            precision_factor = self._calculate_precision_factor(vector_input)
 
-    def _calculate_percentage_profit(self, btc_price: float, volume: float) -> float:
-        """Calculate percentage-based profit score."""
-        # Use percentage-based calculation
-        percentage = self._calculate_profit_percentage(btc_price, volume)
-        base_profit = self._calculate_standard_profit(btc_price, volume)
-        return base_profit * percentage
+            # Combine all factors
+            total_profit = base_profit * mode_multiplier * risk_factor * thermal_factor * precision_factor
 
-    def _calculate_hybrid_profit(self, btc_price: float, volume: float) -> float:
-        """Calculate hybrid profit score combining multiple methods."""
-        # Combine multiple calculation methods
-        standard = self._calculate_standard_profit(btc_price, volume)
-        entropy = self._calculate_entropy_weighted_profit(btc_price, volume)
-        consensus = self._calculate_consensus_profit(btc_price, volume)
-        
-        # Weighted average
-        weights = [0.4, 0.3, 0.3]
-        return standard * weights[0] + entropy * weights[1] + consensus * weights[2]
+            # Ensure bounded result
+            total_profit = max(-1.0, min(1.0, total_profit))
 
-    def _calculate_entropy(self, btc_price: float, volume: float) -> float:
-        """Calculate entropy for the given price and volume."""
-        # Simplified entropy calculation
-        price_entropy = -btc_price * math.log(btc_price + 1e-10)
-        volume_entropy = -volume * math.log(volume + 1e-10)
-        return (price_entropy + volume_entropy) / 2.0
-
-    def _generate_consensus_votes(self, btc_price: float, volume: float) -> List[ConsensusVote]:
-        """Generate consensus votes for the given parameters."""
-        votes = []
-        for i in range(5):  # Generate 5 consensus votes
-            vote = ConsensusVote(
-                vote_id=f"vote_{i}_{int(time.time())}",
-                profit_vector=np.array([btc_price, volume]),
-                confidence=np.random.uniform(0.5, 1.0),
-                bit_pattern=np.random.randint(0, 2, 8),
-                market_data={'price': btc_price, 'volume': volume},
-                timestamp=time.time()
-            )
-            votes.append(vote)
-            self.consensus_votes.append(vote)
-        return votes
-
-    def _generate_bit_phase_trigger(self, btc_price: float, volume: float) -> BitPhaseTrigger:
-        """Generate bit-phase trigger for the given parameters."""
-        trigger = BitPhaseTrigger(
-            bit_phase=np.random.randint(4, 43),
-            phase_value=np.random.randint(0, 256),
-            trigger_strength=np.random.uniform(0.5, 1.5),
-            confidence=np.random.uniform(0.6, 1.0),
-            timestamp=time.time()
-        )
-        self.bit_phase_triggers.append(trigger)
-        return trigger
-
-    def _generate_dlt_waveform(self, btc_price: float, volume: float) -> DLTWaveformData:
-        """Generate DLT waveform data for the given parameters."""
-        waveform = DLTWaveformData(
-            waveform_id=f"waveform_{int(time.time())}",
-            bit_phase=np.random.randint(4, 43),
-            phase_values=np.random.uniform(0, 1, 10),
-            probability_density=np.random.uniform(0, 1, 10),
-            strategy_slots=['strategy_1', 'strategy_2', 'strategy_3'],
-            timestamp=time.time()
-        )
-        self.dlt_waveforms.append(waveform)
-        return waveform
-
-    def _generate_allocation_slider(self, btc_price: float, volume: float) -> DynamicAllocationSlider:
-        """Generate allocation slider for the given parameters."""
-        slider = DynamicAllocationSlider(
-            slider_id=f"slider_{int(time.time())}",
-            allocation_percentage=np.random.uniform(0.1, 0.9),
-            min_allocation=0.1,
-            max_allocation=0.9,
-            current_position=np.random.uniform(0.1, 0.9),
-            adjustment_factor=np.random.uniform(0.8, 1.2),
-            timestamp=time.time()
-        )
-        self.allocation_sliders.append(slider)
-        return slider
-
-    def _calculate_profit_percentage(self, btc_price: float, volume: float) -> float:
-        """Calculate profit percentage for the given parameters."""
-        # Simplified percentage calculation
-        base_value = btc_price * volume
-        return min(1.0, max(0.0, (base_value - 1000) / 10000))
-
-    def _calculate_confidence_score(self, profit_score: float, mode: VectorizationMode) -> float:
-        """Calculate confidence score for the profit calculation."""
-        # Base confidence on profit score and mode
-        base_confidence = min(1.0, max(0.0, profit_score / 10000))
-        
-        # Mode-specific adjustments
-        mode_adjustments = {
-            VectorizationMode.STANDARD: 1.0,
-            VectorizationMode.ENTROPY_WEIGHTED: 0.9,
-            VectorizationMode.CONSENSUS_VOTING: 0.95,
-            VectorizationMode.BIT_PHASE_TRIGGER: 0.85,
-            VectorizationMode.DLT_WAVEFORM: 0.8,
-            VectorizationMode.DYNAMIC_SLIDER: 0.9,
-            VectorizationMode.PERCENTAGE_BASED: 0.95,
-            VectorizationMode.HYBRID_BLEND: 0.92,
-        }
-        
-        adjustment = mode_adjustments.get(mode, 1.0)
-        return base_confidence * adjustment
-
-    def _update_performance_metrics(self, profit_vector: ProfitVector) -> None:
-        """Update performance metrics with new profit vector."""
-        # Update total profit
-        self.performance_metrics["total_profit"] += profit_vector.profit_score
-        
-        # Update average profit per trade
-        total_trades = len(self.profit_history)
-        self.performance_metrics["average_profit_per_trade"] = (
-            self.performance_metrics["total_profit"] / total_trades
-        )
-        
-        # Update win/loss rates
-        profitable_trades = sum(1 for pv in self.profit_history if pv.profit_score > 0)
-        self.performance_metrics["win_rate"] = profitable_trades / total_trades
-        self.performance_metrics["loss_rate"] = 1.0 - self.performance_metrics["win_rate"]
-        
-        # Calculate Sharpe ratio (simplified)
-        if total_trades > 1:
-            returns = [pv.profit_score for pv in self.profit_history]
-            mean_return = np.mean(returns)
-            std_return = np.std(returns)
-            if std_return > 0:
-                self.performance_metrics["sharpe_ratio"] = (
-                    (mean_return - self.risk_free_rate) / std_return
-                )
-
-    def get_performance_summary(self) -> Dict[str, Any]:
-        """Get performance summary."""
-        return {
-            "total_vectors": len(self.profit_history),
-            "performance_metrics": self.performance_metrics.copy(),
-            "recent_vectors": [
-                {
-                    "vector_id": pv.vector_id,
-                    "profit_score": pv.profit_score,
-                    "confidence_score": pv.confidence_score,
-                    "mode": pv.mode,
+            # Create profit vector
+            profit_vector = ProfitVector(
+                vector_id=self._generate_vector_id(),
+                btc_price=vector_input.get('price', 0.0),
+                volume=vector_input.get('volume', 0.0),
+                profit_score=total_profit,
+                confidence_score=self._calculate_confidence(vector_input, total_profit),
+                mode=mode.value,
+                method=AllocationMethod.EQUAL_WEIGHT.value,
+                timestamp=time.time(),
+                metadata={
+                    'mode_multiplier': mode_multiplier,
+                    'risk_factor': risk_factor,
+                    'thermal_factor': thermal_factor,
+                    'precision_factor': precision_factor,
+                    'calculation_id': self.calculation_count
                 }
-                for pv in self.profit_history[-10:]  # Last 10 vectors
-            ],
+            )
+
+            # Cache the result
+            self.cache.set(cache_key, profit_vector)
+
+            # Update timing
+            calculation_time = time.time() - start_time
+            self.total_calculation_time += calculation_time
+
+            logger.debug(f"Calculated profit vector: {total_profit:.6f} in {calculation_time:.4f}s")
+
+            return profit_vector
+
+        except Exception as e:
+            logger.error(f"Error calculating profit vector: {e}")
+            # Return safe default vector
+            return ProfitVector(
+                vector_id="error_vector",
+                btc_price=0.0,
+                volume=0.0,
+                profit_score=0.0,
+                confidence_score=0.0,
+                mode=VectorizationMode.STANDARD.value,
+                method=AllocationMethod.EQUAL_WEIGHT.value,
+                timestamp=time.time(),
+                metadata={'error': str(e)}
+            )
+
+    def _calculate_base_profit(self, vector_input: Dict[str, Any]) -> float:
+        """Calculate base profit from input data."""
+        price = vector_input.get('price', 0.0)
+        volume = vector_input.get('volume', 0.0)
+        volatility = vector_input.get('volatility', 0.5)
+
+        # Normalize inputs
+        price_factor = min(1.0, price / 100000.0) if price > 0 else 0.0
+        volume_factor = min(1.0, volume / 1000000.0) if volume > 0 else 0.0
+        volatility_factor = 1.0 - min(1.0, volatility)
+
+        # Calculate base profit using weighted combination
+        base_profit = (price_factor * 0.3 + volume_factor * 0.4 + volatility_factor * 0.3)
+
+        return base_profit
+
+    def _get_mode_multiplier(self, mode: VectorizationMode, vector_input: Dict[str, Any]) -> float:
+        """Get multiplier based on vectorization mode."""
+        multipliers = {
+            VectorizationMode.CONSERVATIVE: 0.8,
+            VectorizationMode.BALANCED: 1.0,
+            VectorizationMode.AGGRESSIVE: 1.3,
+            VectorizationMode.HIGH_FREQUENCY: 1.1,
+            VectorizationMode.MOMENTUM_BASED: 1.2,
+            VectorizationMode.MEAN_REVERSION: 0.9,
+            VectorizationMode.ADAPTIVE: 1.0
         }
 
+        base_multiplier = multipliers.get(mode, 1.0)
 
-# Convenience functions
-def create_profit_vectorizer(
-    risk_free_rate: float = 0.02,
-    default_mode: VectorizationMode = VectorizationMode.STANDARD,
-) -> CleanProfitVectorization:
-    """Create a new profit vectorizer instance."""
-    return CleanProfitVectorization(
-        risk_free_rate=risk_free_rate,
-        default_mode=default_mode,
-    ) 
+        # Adaptive mode adjusts based on input
+        if mode == VectorizationMode.ADAPTIVE:
+            signal_strength = vector_input.get('signal_strength', 0.5)
+            base_multiplier = 0.8 + (signal_strength * 0.6)
+
+        return base_multiplier
+
+    def _calculate_risk_factor(self, vector_input: Dict[str, Any]) -> float:
+        """Calculate risk adjustment factor."""
+        volatility = vector_input.get('volatility', 0.5)
+        quantity = vector_input.get('quantity', 0.0)
+
+        # Risk increases with volatility and large positions
+        volatility_risk = volatility * 0.5
+        position_risk = min(0.3, quantity * 0.1) if quantity > 0 else 0.0
+
+        total_risk = volatility_risk + position_risk
+        risk_factor = max(0.1, 1.0 - total_risk)
+
+        return risk_factor
+
+    def _calculate_thermal_factor(self, vector_input: Dict[str, Any]) -> float:
+        """Calculate thermal state adjustment factor."""
+        thermal_state = vector_input.get('thermal_state', ThermalState.WARM)
+
+        thermal_multipliers = {
+            ThermalState.COOL: 0.9,
+            ThermalState.WARM: 1.0,
+            ThermalState.HOT: 1.1
+        }
+
+        return thermal_multipliers.get(thermal_state, 1.0)
+
+    def _calculate_precision_factor(self, vector_input: Dict[str, Any]) -> float:
+        """Calculate bit phase precision factor."""
+        bit_phase = vector_input.get('bit_phase', BitPhase.SIXTEEN_BIT)
+
+        precision_multipliers = {
+            BitPhase.FOUR_BIT: 0.95,
+            BitPhase.EIGHT_BIT: 0.98,
+            BitPhase.SIXTEEN_BIT: 1.0,
+            BitPhase.THIRTY_TWO_BIT: 1.02,
+            BitPhase.FORTY_TWO_BIT: 1.05
+        }
+
+        return precision_multipliers.get(bit_phase, 1.0)
+
+    def _calculate_confidence(self, vector_input: Dict[str, Any], profit_value: float) -> float:
+        """Calculate confidence score for the profit vector."""
+        signal_strength = vector_input.get('signal_strength', 0.5)
+        data_quality = 1.0 - abs(profit_value)  # Higher confidence for moderate profits
+
+        confidence = (signal_strength + data_quality) / 2.0
+        return max(0.0, min(1.0, confidence))
+
+    def _generate_cache_key(self, vector_input: Dict[str, Any], mode: VectorizationMode) -> str:
+        """Generate cache key for input and mode."""
+        key_data = {
+            'price': vector_input.get('price', 0.0),
+            'volume': vector_input.get('volume', 0.0),
+            'volatility': vector_input.get('volatility', 0.5),
+            'mode': mode.value,
+            'thermal_state': vector_input.get('thermal_state', ThermalState.WARM).value,
+            'bit_phase': vector_input.get('bit_phase', BitPhase.SIXTEEN_BIT).value
+        }
+
+        key_str = str(sorted(key_data.items()))
+        return hashlib.md5(key_str.encode()).hexdigest()
+
+    def get_performance_metrics(self) -> Dict[str, Any]:
+        """Get performance metrics for the vectorization system."""
+        avg_time = self.total_calculation_time / max(1, self.calculation_count)
+
+        return {
+            'total_calculations': self.calculation_count,
+            'total_calculation_time': self.total_calculation_time,
+            'average_calculation_time': avg_time,
+            'cache_info': self.cache.get_cache_info(),
+            'math_foundation_version': self.math_foundation.get_version_info()
+        }
+
+    def clear_cache(self) -> None:
+        """Clear the profit vector cache."""
+        self.cache.clear()
+        logger.info("Profit vector cache cleared")
+
+
+# Factory functions for easy instantiation
+def create_profit_vectorization(cache_size: int = 1000) -> CleanProfitVectorization:
+    """Create profit vectorization system."""
+    return CleanProfitVectorization(cache_size)
+
+
+def calculate_quick_profit_vector(
+    price: float,
+    volume: float,
+    volatility: float = 0.5,
+    mode: VectorizationMode = VectorizationMode.BALANCED
+) -> ProfitVector:
+    """Quick profit vector calculation for simple use cases."""
+    vectorizer = create_profit_vectorization()
+    vector_input = {
+        'price': price,
+        'volume': volume,
+        'volatility': volatility,
+        'signal_strength': 0.7
+    }
+    return vectorizer.calculate_profit_vector(vector_input, mode)
+
+
+# Demo function
+def demo_profit_vectorization():
+    """Demonstrate profit vectorization capabilities."""
+    print("=== Clean Profit Vectorization Demo ===")
+
+    vectorizer = create_profit_vectorization()
+
+    # Test different modes
+    test_input = {
+        'price': 50000.0,
+        'volume': 1000.0,
+        'volatility': 0.3,
+        'signal_strength': 0.8,
+        'thermal_state': ThermalState.WARM,
+        'bit_phase': BitPhase.THIRTY_TWO_BIT
+    }
+
+    for mode in VectorizationMode:
+        vector = vectorizer.calculate_profit_vector(test_input, mode)
+        print(f"{mode.value}: {vector.profit_score:.6f} (confidence: {vector.confidence_score:.3f})")
+
+    # Show performance metrics
+    metrics = vectorizer.get_performance_metrics()
+    print(f"\nCalculations: {metrics['total_calculations']}")
+    print(f"Avg time: {metrics['average_calculation_time']:.6f}s")
+
+
+if __name__ == "__main__":
+    demo_profit_vectorization() 

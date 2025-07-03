@@ -90,10 +90,10 @@ def get_system_status():
 def create_clean_trading_system(initial_capital=100000.0):
     """
     Create a complete clean trading system with all components.
-    
+
     Args:
         initial_capital: Initial capital for the trading system
-        
+
     Returns:
         Dictionary with all initialized components
     """

@@ -16,10 +16,28 @@ Key Features:
 from __future__ import annotations
 
 import math
+from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
 from numpy.typing import NDArray
+
+
+class ThermalState(Enum):
+    """Thermal state enumeration for trading system."""
+    COOL = "cool"
+    WARM = "warm"
+    HOT = "hot"
+
+
+class BitPhase(Enum):
+    """Bit phase enumeration for precision control."""
+    FOUR_BIT = "4bit"
+    EIGHT_BIT = "8bit"
+    SIXTEEN_BIT = "16bit"
+    THIRTY_TWO_BIT = "32bit"
+    FORTY_TWO_BIT = "42bit"
+
 
 # Mathematical constants
 PI = math.pi
@@ -27,6 +45,29 @@ E = math.e
 GOLDEN_RATIO = (1 + math.sqrt(5)) / 2
 SQRT_2 = math.sqrt(2)
 LN_2 = math.log(2)
+
+
+class CleanMathFoundation:
+    """
+    Clean mathematical foundation providing core mathematical operations.
+    
+    This class serves as the foundation for all mathematical computations
+    in the Schwabot trading system.
+    """
+    
+    def __init__(self):
+        """Initialize the mathematical foundation."""
+        self.version = "1.0.0"
+        self.precision = 64
+        
+    def get_version_info(self) -> Dict[str, Any]:
+        """Get version information."""
+        return {
+            "version": self.version,
+            "precision": self.precision,
+            "thermal_states": [state.value for state in ThermalState],
+            "bit_phases": [phase.value for phase in BitPhase]
+        }
 
 
 def calculate_vector_norm(vector: np.ndarray, p: float = 2.0) -> float:
