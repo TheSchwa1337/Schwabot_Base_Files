@@ -1,0 +1,49 @@
+# Gate Profiles Configuration for SchwaBot Enhanced Nexus-Lantern System
+# Threshold values for recursive trading intelligence
+
+# Entropy and Collapse Thresholds
+entropy_collapse: 0.001
+entropy_critical: 1.0
+greyscale_threshold: 0.001
+
+# Fuzzy Logic Triggers
+fuzzy_trigger: 0.65
+profit_zone_min: 0.4
+profit_zone_max: 0.6
+
+# Bayesian Confidence Thresholds
+bayes_trigger: 0.72
+confidence_min: 0.6
+confidence_critical: 0.8
+
+# ZALGO Lock Parameters
+fractal_containment_max: 10.0
+drift_suppression_threshold: 0.002
+collapse_stability_limit: 0.001
+sigmoid_collapse_trigger: 0.1
+
+# Qutrit Logic States
+qutrit_negative: -1
+qutrit_neutral: 0
+qutrit_positive: 1
+
+# Recursive Depth Limits
+max_recursive_depth: 9
+spillover_channels: 3
+depth_safety_factor: 0.8
+
+# Mathematical Constants
+omega_coefficient: 0.1
+lambda_decay: 0.05
+psi_frequency: 2.0
+kappa_offset: 0.001
+
+# Trading Signal Thresholds
+signal_strength_min: 0.7
+volatility_threshold: 0.05
+hash_drift_max: 0.2
+
+# Adaptive Learning Parameters
+learning_rate: 0.1
+adaptation_window: 100
+memory_decay: 0.95 
