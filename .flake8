@@ -2,8 +2,8 @@
 # Flake8 Configuration for Schwabot Biological Immune System
 # ==========================================================
 
-# Maximum line length
-max-line-length = 160
+# Maximum line length - increased for mathematical formulas
+max-line-length = 120
 
 # Maximum complexity for functions
 max-complexity = 15
@@ -99,6 +99,7 @@ per-file-ignores =
     core/quantum_static_core.py:E501
     core/quantum_superpositional_trigger.py:E501
     core/quantum_drift_shell_engine.py:E501
+    core/pure_profit_calculator.py:E501
     core/advanced_settings_engine.py:F401
     core/api/data_models.py:F401
     core/api/exchange_connection.py:F401
