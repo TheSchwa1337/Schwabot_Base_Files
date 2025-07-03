@@ -219,7 +219,7 @@ def calculate_sharpe_ratio(
     returns_clean = returns[~np.isnan(returns)]
 
     if len(returns_clean) == 0:
-        return 0.0
+            return 0.0
 
     # Calculate excess returns
     excess_returns = returns_clean - risk_free_rate / periods_per_year

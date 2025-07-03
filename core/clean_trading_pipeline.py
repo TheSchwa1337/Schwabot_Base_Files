@@ -177,7 +177,7 @@ class CleanTradingPipeline:
 
         Returns:
             Trading decision or None if no action recommended
-        """
+"""
         try:
             start_time = time.time()
 
@@ -221,25 +221,25 @@ class CleanTradingPipeline:
             profit_vector = self._create_profit_vector(risk_adjusted_signal, market_data)
 
             # 8. Make final trading decision
-            decision = TradingDecision(
+                decision = TradingDecision(
                 timestamp=market_data.timestamp,
-                symbol=market_data.symbol,
+                    symbol=market_data.symbol,
                 action=TradingAction(risk_adjusted_signal["action"]),
-                quantity=risk_adjusted_signal["quantity"],
-                price=market_data.price,
-                confidence=risk_adjusted_signal["confidence"],
+                    quantity=risk_adjusted_signal["quantity"],
+                    price=market_data.price,
+                    confidence=risk_adjusted_signal["confidence"],
                 strategy_branch=optimal_strategy,
                 profit_potential=risk_adjusted_signal["profit_potential"],
                 risk_score=risk_adjusted_signal["risk_score"],
-                thermal_state=self.state.thermal_state,
-                bit_phase=self.state.bit_phase,
-                profit_vector=profit_vector,
-                metadata={
-                    "processing_time": time.time() - start_time,
-                    "market_regime": market_regime.value,
+                    thermal_state=self.state.thermal_state,
+                    bit_phase=self.state.bit_phase,
+                    profit_vector=profit_vector,
+                    metadata={
+                        "processing_time": time.time() - start_time,
+                        "market_regime": market_regime.value,
                     "signal_metadata": risk_adjusted_signal.get("metadata", {}),
-                },
-            )
+                    },
+                )
 
             # 9. Update pipeline state
             self._update_pipeline_state(decision)
@@ -251,7 +251,7 @@ class CleanTradingPipeline:
 
             logger.info(f"Trading decision: {decision.action.value} {decision.quantity:.4f} @ {decision.price:.2f}")
 
-            return decision
+                return decision
 
         except Exception as e:
             logger.error(f"Error processing market data: {e}")
@@ -260,13 +260,13 @@ class CleanTradingPipeline:
     def _analyze_market_regime(self, market_data: MarketData) -> MarketRegime:
         """Analyze current market regime using mathematical indicators."""
         if len(self.market_data_history) < 20:
-            return MarketRegime.SIDEWAYS
+                return MarketRegime.SIDEWAYS
 
         # Get recent price data
-        recent_prices = [md.price for md in self.market_data_history[-20:]]
+            recent_prices = [md.price for md in self.market_data_history[-20:]]
         recent_volumes = [md.volume for md in self.market_data_history[-20:]]
 
-        # Calculate trend strength
+            # Calculate trend strength
         trend_slope = np.polyfit(range(len(recent_prices)), recent_prices, 1)[0]
         price_std = np.std(recent_prices)
         volume_avg = np.mean(recent_volumes)
@@ -277,14 +277,14 @@ class CleanTradingPipeline:
 
         # Regime classification logic
         if volatility > high_vol_threshold:
-            return MarketRegime.VOLATILE
+                return MarketRegime.VOLATILE
         elif abs(trend_slope) < price_std * 0.1:
             return MarketRegime.SIDEWAYS
         elif trend_slope > 0:
-            return MarketRegime.TRENDING_UP
+                return MarketRegime.TRENDING_UP
         elif trend_slope < 0:
-            return MarketRegime.TRENDING_DOWN
-        else:
+                return MarketRegime.TRENDING_DOWN
+            else:
             return MarketRegime.CALM
 
     def _determine_optimal_strategy(self, regime: MarketRegime, market_data: MarketData) -> StrategyBranch:
@@ -304,7 +304,7 @@ class CleanTradingPipeline:
             # High volume - prefer momentum or arbitrage
             if regime in [MarketRegime.TRENDING_UP, MarketRegime.TRENDING_DOWN]:
                 return StrategyBranch.MOMENTUM
-            else:
+        else:
                 return StrategyBranch.ARBITRAGE
 
         return base_strategy
@@ -348,11 +348,11 @@ class CleanTradingPipeline:
         """Select appropriate vectorization mode."""
         if strategy in [StrategyBranch.SCALPING, StrategyBranch.ARBITRAGE]:
             return VectorizationMode.HIGH_FREQUENCY
-        elif strategy == StrategyBranch.MOMENTUM:
+            elif strategy == StrategyBranch.MOMENTUM:
             return VectorizationMode.MOMENTUM_BASED
         elif strategy == StrategyBranch.MEAN_REVERSION:
             return VectorizationMode.MEAN_REVERSION
-        else:
+            else:
             return VectorizationMode.ADAPTIVE
 
     def _create_profit_vector(self, signal: Dict[str, Any], market_data: MarketData) -> ProfitVector:
@@ -386,7 +386,7 @@ class CleanTradingPipeline:
 
         # Mean reversion logic
         if z_score > 2.0:  # Price too high
-            return {
+        return {
                 "action": "SELL",
                 "quantity": self._calculate_position_size(market_data, "SELL"),
                 "confidence": min(abs(z_score) / 3.0, 1.0),
@@ -401,8 +401,8 @@ class CleanTradingPipeline:
                 "confidence": min(abs(z_score) / 3.0, 1.0),
                 "profit_potential": abs(z_score) * 0.01,
                 "risk_score": 0.3,
-                "metadata": {"z_score": z_score, "mean_price": mean_price},
-            }
+            "metadata": {"z_score": z_score, "mean_price": mean_price},
+        }
 
         return None
 
@@ -420,7 +420,7 @@ class CleanTradingPipeline:
 
         # Momentum logic
         if momentum > 0.01 and volume_surge > 1.2:  # Strong upward momentum
-            return {
+        return {
                 "action": "BUY",
                 "quantity": self._calculate_position_size(market_data, "BUY"),
                 "confidence": min(momentum * 10, 1.0),
@@ -471,8 +471,8 @@ class CleanTradingPipeline:
         # Scalping logic - capitalize on small movements
         if abs(price_change) > 0.002 and volatility > 0.3:
             action = "BUY" if price_change > 0 else "SELL"
-            return {
-                "action": action,
+        return {
+            "action": action,
                 "quantity": self._calculate_position_size(market_data, action) * 2,  # Higher frequency
                 "confidence": min(abs(price_change) * 100, 1.0),
                 "profit_potential": abs(price_change) * 0.5,
@@ -501,7 +501,7 @@ class CleanTradingPipeline:
 
         # Swing logic
         if current_price <= support * 1.02 and trend > 0:  # Near support with uptrend
-            return {
+        return {
                 "action": "BUY",
                 "quantity": self._calculate_position_size(market_data, "BUY"),
                 "confidence": 0.7,
@@ -571,7 +571,7 @@ class CleanTradingPipeline:
             return None
 
         # Check volatility threshold
-        if market_data.volatility > self.risk_params.volatility_threshold:
+            if market_data.volatility > self.risk_params.volatility_threshold:
             signal["quantity"] *= 0.5  # Reduce position size
             signal["risk_score"] *= 1.5
 
@@ -595,7 +595,7 @@ class CleanTradingPipeline:
         portfolio_risk = self._calculate_portfolio_risk()
         signal["risk_score"] = min(signal["risk_score"] + portfolio_risk, 1.0)
 
-        return signal
+            return signal
 
     def _calculate_position_size(self, market_data: MarketData, action: str) -> float:
         """Calculate appropriate position size."""
@@ -703,10 +703,10 @@ async def run_trading_simulation(
     decisions = []
     
     for market_data in market_data_stream:
-        decision = await pipeline.process_market_data(market_data)
-        if decision:
+            decision = await pipeline.process_market_data(market_data)
+            if decision:
             decisions.append(decision)
-    
+
     return {
         "total_decisions": len(decisions),
         "pipeline_summary": pipeline.get_pipeline_summary(),

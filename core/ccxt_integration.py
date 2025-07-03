@@ -49,7 +49,7 @@ class CCXTIntegration:
                 logger.info(f"Initialized exchange: {exchange_id} (stub)")
             
             self.initialized = True
-        except Exception as e:
+            except Exception as e:
             logger.error(f"Failed to initialize exchanges: {e}")
 
     async def fetch_order_book(
@@ -67,15 +67,15 @@ class CCXTIntegration:
             timestamp = 1640000000.0
             bids = [[50000.0, 1.0], [49999.0, 2.0]]
             asks = [[50001.0, 1.5], [50002.0, 2.5]]
-            
+
             best_bid = bids[0][0] if bids else 0.0
             best_ask = asks[0][0] if asks else float('inf')
             spread = best_ask - best_bid
             mid_price = (best_bid + best_ask) / 2
-            
+
             total_bid_volume = sum(bid[1] for bid in bids)
             total_ask_volume = sum(ask[1] for ask in asks)
-            
+
             return OrderBookSnapshot(
                 timestamp=timestamp,
                 symbol=symbol,

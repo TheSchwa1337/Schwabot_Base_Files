@@ -152,7 +152,7 @@ class Dual:
 class MathLibV4:
     """
     Advanced mathematical library for trading system analysis.
-    
+
     Provides comprehensive mathematical operations including:
     - Pattern recognition and hashing
     - DLT metrics calculation
@@ -166,46 +166,46 @@ class MathLibV4:
         self.precision = precision
         self.pattern_cache: Dict[str, DLTMetrics] = {}
         self.analysis_history: List[Dict[str, Any]] = []
-        
+
         logger.info(f"MathLibV4 initialized with precision {precision}")
 
     def calculate_dlt_metrics(self, data: Dict[str, Any]) -> DLTMetrics:
         """
         Calculate DLT (Distributed Ledger Technology) metrics for market data.
-        
+
         This is YOUR mathematical algorithm for pattern analysis.
         """
         try:
             prices = data.get('prices', [])
             volumes = data.get('volumes', [])
             timestamps = data.get('timestamps', [])
-            
+
             if len(prices) < 3:
                 raise ValueError("Need at least 3 data points for DLT analysis")
-            
+
             # Calculate deltas using YOUR mathematical approach
             deltas = [prices[i] - prices[i-1] for i in range(1, len(prices))]
-            
+
             # YOUR pattern hash algorithm
             pattern_data = ''.join([f"{d:.6f}" for d in deltas])
             pattern_hash = hashlib.sha256(pattern_data.encode()).hexdigest()
-            
+
             # YOUR triplet lock mechanism
             triplet_lock = self._calculate_triplet_lock(deltas)
-            
+
             # YOUR statistical calculations
             mean_delta = np.mean(deltas)
             std_dev = np.std(deltas, ddof=1)
-            
+
             # YOUR confidence scoring algorithm
             confidence = self._calculate_confidence(deltas, mean_delta, std_dev)
-            
+
             # YOUR warp factor calculation
             warp_factor = self._calculate_warp_factor(deltas, volumes)
-            
+
             # YOUR greyscale score
             greyscale_score = self._calculate_greyscale_score(deltas)
-            
+
             metrics = DLTMetrics(
                 pattern_hash=pattern_hash,
                 triplet_lock=triplet_lock,
@@ -217,10 +217,10 @@ class MathLibV4:
                 warp_factor=warp_factor,
                 greyscale_score=greyscale_score
             )
-            
+
             # Cache the result
             self.pattern_cache[pattern_hash] = metrics
-            
+
             # Add to history
             self.analysis_history.append({
                 'timestamp': time.time(),
@@ -228,9 +228,9 @@ class MathLibV4:
                 'confidence': confidence,
                 'operation': 'dlt_metrics'
             })
-            
+
             return metrics
-            
+
         except Exception as e:
             logger.error(f"DLT metrics calculation failed: {e}")
             raise
@@ -239,7 +239,7 @@ class MathLibV4:
         """YOUR triplet lock validation algorithm."""
         if len(deltas) < 3:
             return False
-        
+
         # YOUR specific triplet lock logic
         for i in range(len(deltas) - 2):
             triplet = deltas[i:i+3]
@@ -251,15 +251,15 @@ class MathLibV4:
         """YOUR confidence calculation algorithm."""
         if std_dev == 0:
             return 1.0
-        
+
         # YOUR confidence scoring formula
         cv = abs(std_dev / mean_delta) if mean_delta != 0 else float('inf')
         confidence = 1.0 / (1.0 + cv)
-        
+
         # YOUR additional confidence factors
         trend_consistency = self._calculate_trend_consistency(deltas)
         momentum_factor = self._calculate_momentum_factor(deltas)
-        
+
         # YOUR final confidence formula
         final_confidence = confidence * trend_consistency * momentum_factor
         return max(0.0, min(1.0, final_confidence))
@@ -268,28 +268,28 @@ class MathLibV4:
         """YOUR warp factor calculation for market dynamics."""
         if not volumes or len(volumes) != len(deltas) + 1:
             return 1.0
-        
+
         # YOUR warp factor algorithm
         volume_deltas = [volumes[i] - volumes[i-1] for i in range(1, len(volumes))]
-        
+
         # YOUR correlation calculation
         if len(deltas) != len(volume_deltas):
             return 1.0
-        
+
         correlation = np.corrcoef(deltas, volume_deltas)[0, 1] if len(deltas) > 1 else 0.0
         warp_factor = 1.0 + abs(correlation) * 0.5  # YOUR formula
-        
+
         return warp_factor
 
     def _calculate_greyscale_score(self, deltas: List[float]) -> float:
         """YOUR greyscale scoring algorithm."""
         if not deltas:
             return 0.0
-        
+
         # YOUR greyscale calculation
-        normalized_deltas = [(d - min(deltas)) / (max(deltas) - min(deltas)) 
+        normalized_deltas = [(d - min(deltas)) / (max(deltas) - min(deltas))
                            for d in deltas] if max(deltas) != min(deltas) else [0.5] * len(deltas)
-        
+
         # YOUR greyscale scoring formula
         greyscale_score = sum(normalized_deltas) / len(normalized_deltas)
         return greyscale_score
@@ -298,25 +298,25 @@ class MathLibV4:
         """YOUR trend consistency calculation."""
         if len(deltas) < 2:
             return 1.0
-        
+
         # YOUR trend consistency algorithm
         positive_count = sum(1 for d in deltas if d > 0)
         negative_count = sum(1 for d in deltas if d < 0)
-        
+
         total_count = len(deltas)
         consistency = max(positive_count, negative_count) / total_count
-        
+
         return consistency
 
     def _calculate_momentum_factor(self, deltas: List[float]) -> float:
         """YOUR momentum factor calculation."""
         if len(deltas) < 2:
             return 1.0
-        
+
         # YOUR momentum calculation
         recent_deltas = deltas[-3:] if len(deltas) >= 3 else deltas
         momentum = sum(recent_deltas) / len(recent_deltas)
-        
+
         # Normalize momentum factor
         momentum_factor = 1.0 / (1.0 + abs(momentum))
         return momentum_factor
@@ -355,31 +355,31 @@ class MathLibV4:
 def demo_mathlib_v4():
     """Demonstration of MathLibV4 capabilities."""
     print("=== MathLibV4 Demo ===")
-    
+
     # Initialize the library
     mathlib = MathLibV4(precision=64)
-    
+
     # Sample price data
     sample_data = {
         "prices": [100.0, 105.2, 103.8, 107.1, 109.3, 108.5, 111.2],
         "volumes": [1000, 1200, 800, 1500, 900, 1100, 1300],
         "timestamps": [1640000000 + i * 3600 for i in range(7)],
     }
-    
+
     # Calculate DLT metrics
     metrics = mathlib.calculate_dlt_metrics(sample_data)
     print(f"Pattern Hash: {metrics.pattern_hash[:16]}...")
     print(f"Triplet Lock: {metrics.triplet_lock}")
     print(f"Confidence: {metrics.confidence:.4f}")
     print(f"Warp Factor: {metrics.warp_factor:.4f}")
-    
+
     # Demonstrate dual number automatic differentiation
     def f(x_dual: Dual) -> Dual:
         return x_dual * x_dual + x_dual.sin()
-    
+
     gradient = mathlib.compute_dual_gradient(f, 2.0)
     print(f"Gradient at x = 2.0: {gradient:.4f}")
-    
+
     # Show version info
     version_info = mathlib.get_version_info()
     print(f"Version: {version_info['version']}")

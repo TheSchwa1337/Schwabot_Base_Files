@@ -60,19 +60,19 @@ def get_system_status():
 # Main system class for compatibility
 class SchwabotSystem:
     """Main Schwabot system interface."""
-    
+
     def __init__(self):
         """Initialize the Schwabot system."""
         self.version = __version__
         self.status = get_system_status()
-        
+
         if not self.status['ready']:
             raise RuntimeError("Schwabot system is not ready - missing dependencies")
-    
+
     def get_version(self):
         """Get the system version."""
         return self.version
-    
+
     def get_status(self):
         """Get the system status."""
         return self.status
@@ -90,7 +90,7 @@ __all__ = [
 if CORE_AVAILABLE:
     __all__.extend([
         'MathLibV4',
-        'PureProfitCalculator', 
+        'PureProfitCalculator',
         'ProfitOptimizationEngine',
         'analyze_price_matrix',
         'risk_parity_weights'
@@ -100,4 +100,4 @@ if CONFIG_AVAILABLE:
     __all__.append('SchwabotConfig')
 
 if UTILS_AVAILABLE:
-    __all__.extend(['setup_logging', 'safe_print']) 
+    __all__.extend(['setup_logging', 'safe_print'])

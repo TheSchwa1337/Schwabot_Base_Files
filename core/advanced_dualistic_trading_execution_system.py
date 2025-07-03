@@ -106,7 +106,7 @@ class AdvancedDualisticTradingExecutionSystem:
             bit_depth = self.config["bit_depth"]
             flip_strength = 0.8
             confidence = 0.7
-            
+
             bit_flip_op = BitFlipOperation(
                 operation_id=operation_id,
                 original_value=original_value,
@@ -116,15 +116,15 @@ class AdvancedDualisticTradingExecutionSystem:
                 confidence=confidence,
                 timestamp=time.time()
             )
-            
+
             self.bit_flip_operations.append(bit_flip_op)
-            
+
             # Mock price calculation
             base_price = market_data.get("price", 50000.0)
             price_adjustment = (flipped_value - original_value) / 256 * 0.01
             entry_price = base_price * (1 + price_adjustment)
             entry_quantity = target_quantity * flip_strength
-            
+
             return {
                 "success": True,
                 "entry_price": entry_price,
@@ -150,7 +150,7 @@ class AdvancedDualisticTradingExecutionSystem:
             bit_pattern = np.random.randint(0, 2, 8)
             consensus_weight = np.mean(bit_pattern) * 0.8
             confidence = consensus_weight
-            
+
             vote = ConsensusVote(
                 vote_id=vote_id,
                 bit_pattern=bit_pattern,
@@ -165,7 +165,7 @@ class AdvancedDualisticTradingExecutionSystem:
             base_price = market_data.get("price", 50000.0)
             entry_price = base_price * (1 + consensus_weight * 0.005)
             entry_quantity = target_quantity * consensus_weight
-            
+
             return {
                 "success": True,
                 "entry_price": entry_price,
@@ -192,7 +192,7 @@ class AdvancedDualisticTradingExecutionSystem:
             base_price = market_data.get("price", 50000.0)
             entry_price = base_price * (1 + weight_factor * 0.003)
             entry_quantity = target_quantity * weight_factor
-            
+
             return {
                 "success": True,
                 "entry_price": entry_price,
@@ -244,7 +244,7 @@ class AdvancedDualisticTradingExecutionSystem:
             
             self.execution_history.append(execution)
             return execution
-            
+
         except Exception as e:
             logger.error(f"Error executing trade: {e}")
             return TradingExecution(
@@ -273,7 +273,7 @@ class AdvancedDualisticTradingExecutionSystem:
         """Calculate execution success rate."""
         if not self.execution_history:
             return 0.0
-        
+
         successful = sum(1 for exec in self.execution_history if exec.success)
         return successful / len(self.execution_history)
 

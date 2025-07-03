@@ -1,3 +1,12 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Clean Profit Vectorization System
+
+This module provides profit vectorization capabilities with various modes
+and allocation methods for the Schwabot trading system.
+"""
+
 import hashlib
 import logging
 import math
@@ -8,7 +17,11 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
 
-from .clean_math_foundation import CleanMathFoundation
+from core.clean_math_foundation import (
+    BitPhase, 
+    ThermalState, 
+    CleanMathFoundation
+)
 
 # -*- coding: utf-8 -*-
 
@@ -32,6 +45,13 @@ class VectorizationMode(Enum):
     DYNAMIC_SLIDER = "dynamic_slider"
     PERCENTAGE_BASED = "percentage_based"
     HYBRID_BLEND = "hybrid_blend"
+    CONSERVATIVE = "conservative"
+    BALANCED = "balanced"
+    AGGRESSIVE = "aggressive"
+    HIGH_FREQUENCY = "high_frequency"
+    MOMENTUM_BASED = "momentum_based"
+    MEAN_REVERSION = "mean_reversion"
+    ADAPTIVE = "adaptive"
 
 
 class AllocationMethod(Enum):
