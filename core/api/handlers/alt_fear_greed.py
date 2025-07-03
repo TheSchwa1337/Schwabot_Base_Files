@@ -1,12 +1,8 @@
 from __future__ import annotations
 
 import asyncio
-import logging
-import time
 from typing import Any, Dict
 
-import aiohttp  # type: ignore
-import requests  # type: ignore
 
 from .base_handler import BaseAPIHandler
 
@@ -35,7 +31,6 @@ it under `flask/feeds/sentiment/fear_greed.json`.
 
 try:
 
-    import aiohttp  # type: ignore
 
 
 except ImportError:  # pragma: no cover
@@ -45,7 +40,6 @@ except ImportError:  # pragma: no cover
 
 try:
 
-    import requests  # type: ignore
 
 
 except ImportError:  # pragma: no cover

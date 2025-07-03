@@ -5,16 +5,15 @@ Integrates advanced mathematical modeling for trade decision making.
 Provides robust error handling and validation mechanisms.
 """
 
-import datetime
-import hashlib
-import logging
-import math
+import traceback
 import uuid
-from dataclasses import dataclass, field
-from enum import Enum, auto
 from typing import Any, Dict, List, Optional, Union
 
-from core.clean_unified_math import clean_unified_math, calculate_position_size, optimize_brain_profit
+from core.clean_unified_math import (
+    clean_unified_math, 
+    calculate_position_size,
+    optimize_brain_profit
+)
 
 # Configure logging
 logger = logging.getLogger(__name__)

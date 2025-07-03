@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+# !/usr/bin/env python3
 
 
 """Master Cycle Engine  compatibility stub (legacy implementation removed)."""

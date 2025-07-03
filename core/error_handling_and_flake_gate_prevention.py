@@ -22,20 +22,12 @@ Mathematical Foundation:
 """
 
 import asyncio
-import hashlib
 import importlib
-import logging
-import os
 import sys
-import time
 import traceback
 from collections import defaultdict
-from dataclasses import dataclass, field
-from enum import Enum
-from pathlib import Path
 from typing import Any, Dict, List, Optional, Set, Tuple, Union
 
-import numpy as np
 
 # Configure logging
 logging.basicConfig(
@@ -132,7 +124,7 @@ class SystemHealth:
 class ComprehensiveErrorHandler:
     """
     Comprehensive error handling and flake gate prevention system.
-    
+
     Features:
     - Comprehensive import error handling and fallback mechanisms
     - Flake gate prevention with proper module management
@@ -212,7 +204,8 @@ class ComprehensiveErrorHandler:
 
     def _initialize_module_tracking(self) -> None:
         """Initialize module tracking for all known modules."""
-        all_modules = self.config.get('critical_modules', []) + self.config.get('optional_modules', [])
+        all_modules = self.config.get('critical_modules', [])
+    + self.config.get('optional_modules', [])
 
         for module_name in all_modules:
             self.module_status[module_name] = ModuleStatus(
@@ -232,8 +225,8 @@ class ComprehensiveErrorHandler:
         """Initialize fallback systems for critical modules."""
         # Create fallback modules for critical functionality
         self.fallback_modules = {
-            'core.unified_profit_vectorization_system': self._create_fallback_vectorization_system(),
-            'core.advanced_dualistic_trading_execution_system': self._create_fallback_trading_system(),
+'core.unified_profit_vectorization_system': self._create_fallback_vectorization_system(),
+'core.advanced_dualistic_trading_execution_system': self._create_fallback_trading_system(),
             'core.schwabot_unified_integration': self._create_fallback_integration_system(),
             'core.dualistic_state_machine': self._create_fallback_state_machine(),
             'core.advanced_tensor_algebra': self._create_fallback_tensor_algebra(),
@@ -261,7 +254,8 @@ class ComprehensiveErrorHandler:
                 self.mode = 'fallback'
                 self.available_modes = ['fallback']
 
-            def calculate_profit_vectorization(self, btc_price: float = 50000.0, volume: float = 1000.0) -> Dict[str, Any]:
+            def calculate_profit_vectorization(self, btc_price: float = 50000.0, volume: float
+    = 1000.0) -> Dict[str, Any]:
                 return {
                     'profit_score': btc_price * volume * 0.1,
                     'confidence_score': 0.5,
@@ -281,7 +275,8 @@ class ComprehensiveErrorHandler:
                 self.mode = 'fallback'
                 self.available_modes = ['fallback']
 
-            async def execute_enhanced_ghost_btc_usdc_trade(self, target_quantity: float = 0.1) -> Dict[str, Any]:
+            async def execute_enhanced_ghost_btc_usdc_trade(self, target_quantity: float = 0.1)
+    -> Dict[str, Any]:
                 return {
                     'success': True,
                     'profit_realized': target_quantity * 0.1,
@@ -301,7 +296,8 @@ class ComprehensiveErrorHandler:
                 self.mode = 'fallback'
                 self.available_modes = ['fallback']
 
-            async def execute_enhanced_trading_cycle(self, target_quantity: float = 0.1) -> Dict[str, Any]:
+            async def execute_enhanced_trading_cycle(self, target_quantity: float = 0.1)
+    -> Dict[str, Any]:
                 return {
                     'success': True,
                     'profit_realized': target_quantity * 0.1,
@@ -379,11 +375,11 @@ class ComprehensiveErrorHandler:
     def safe_import(self, module_name: str, fallback_enabled: bool = True) -> Tuple[Any, bool]:
         """
         Safely import a module with error handling and fallback.
-        
+
         Args:
             module_name: Name of the module to import
             fallback_enabled: Whether to use fallback if import fails
-        
+
         Returns:
             Tuple of (module_object, success_flag)
         """
@@ -443,7 +439,8 @@ class ComprehensiveErrorHandler:
         else:
             return ErrorSeverity.LOW
 
-    def _update_module_status(self, module_name: str, is_available: bool, error_message: Optional[str]) -> None:
+def _update_module_status(self, module_name: str, is_available: bool, error_message: Optional[str])
+-> None:
         """Update module status tracking."""
         if module_name in self.module_status:
             status = self.module_status[module_name]
@@ -459,11 +456,11 @@ class ComprehensiveErrorHandler:
     def handle_runtime_error(self, error: Exception, context: Dict[str, Any]) -> Dict[str, Any]:
         """
         Handle runtime errors with appropriate recovery strategies.
-        
+
         Args:
             error: The exception that occurred
             context: Context information about the error
-        
+
         Returns:
             Recovery result dictionary
         """
@@ -515,7 +512,8 @@ class ComprehensiveErrorHandler:
         else:
             return ErrorType.RUNTIME_ERROR
 
-    def _determine_runtime_error_severity(self, error: Exception, context: Dict[str, Any]) -> ErrorSeverity:
+def _determine_runtime_error_severity(self, error: Exception, context: Dict[str, Any]) ->
+ErrorSeverity:
         """Determine severity of runtime error."""
         module_name = context.get('module_name')
 
@@ -526,7 +524,7 @@ class ComprehensiveErrorHandler:
         else:
             return ErrorSeverity.MEDIUM
 
-    def _attempt_recovery(self, error_record: ErrorRecord, context: Dict[str, Any]) -> Dict[str, Any]:
+def _attempt_recovery(self, error_record: ErrorRecord, context: Dict[str, Any]) -> Dict[str, Any]:
         """Attempt to recover from an error."""
         try:
             if error_record.error_type == ErrorType.IMPORT_ERROR:
@@ -546,7 +544,8 @@ class ComprehensiveErrorHandler:
                 'error': str(recovery_error),
             }
 
-    def _recover_from_import_error(self, error_record: ErrorRecord, context: Dict[str, Any]) -> Dict[str, Any]:
+def _recover_from_import_error(self, error_record: ErrorRecord, context: Dict[str, Any]) ->
+Dict[str, Any]:
         """Recover from import error."""
         module_name = error_record.module_name
 
@@ -566,7 +565,8 @@ class ComprehensiveErrorHandler:
             'fallback_used': False,
         }
 
-    def _recover_from_attribute_error(self, error_record: ErrorRecord, context: Dict[str, Any]) -> Dict[str, Any]:
+def _recover_from_attribute_error(self, error_record: ErrorRecord, context: Dict[str, Any]) ->
+Dict[str, Any]:
         """Recover from attribute error."""
         return {
             'success': True,
@@ -574,7 +574,8 @@ class ComprehensiveErrorHandler:
             'fallback_used': False
         }
 
-    def _recover_from_runtime_error(self, error_record: ErrorRecord, context: Dict[str, Any]) -> Dict[str, Any]:
+def _recover_from_runtime_error(self, error_record: ErrorRecord, context: Dict[str, Any]) ->
+Dict[str, Any]:
         """Recover from runtime error."""
         return {
             'success': True,
@@ -582,7 +583,8 @@ class ComprehensiveErrorHandler:
             'fallback_used': False,
         }
 
-    def _recover_from_generic_error(self, error_record: ErrorRecord, context: Dict[str, Any]) -> Dict[str, Any]:
+def _recover_from_generic_error(self, error_record: ErrorRecord, context: Dict[str, Any]) ->
+Dict[str, Any]:
         """Recover from generic error."""
         return {
             'success': False,
@@ -653,7 +655,7 @@ class ComprehensiveErrorHandler:
             return self.system_health
 
     def _calculate_health_score(self, modules_available: int, modules_total: int,
-                               critical_errors: int, high_errors: int, medium_errors: int, low_errors: int,
+critical_errors: int, high_errors: int, medium_errors: int, low_errors: int,
                                recovery_success_rate: float) -> float:
         """Calculate overall health score."""
         try:
@@ -689,7 +691,7 @@ class ComprehensiveErrorHandler:
         return len(flake_gate_errors)
 
     def _generate_health_recommendations(self, critical_errors: int, high_errors: int,
-                                       modules_available: int, recovery_success_rate: float) -> List[str]:
+modules_available: int, recovery_success_rate: float) -> List[str]:
         """Generate health recommendations."""
         recommendations = []
 
@@ -778,14 +780,14 @@ class ComprehensiveErrorHandler:
                 validation_result['is_available'] = status.is_available
 
                 if not status.is_available:
-                    validation_result['import_issues'].append(f"Module {module_name} is not available")
+validation_result['import_issues'].append(f"Module {module_name} is not available")
 
                     if status.fallback_available:
                         validation_result['import_recommendations'].append(
                             f"Use fallback for {module_name}"
                         )
                     else:
-                        validation_result['import_recommendations'].append(f"Install or fix {module_name}")
+validation_result['import_recommendations'].append(f"Install or fix {module_name}")
 
             # Check dependencies
             if module_name in self.fallback_chains:
@@ -808,7 +810,8 @@ class ComprehensiveErrorHandler:
                     'overall_health': health.overall_health,
                     'modules_available': health.modules_available,
                     'modules_total': health.modules_total,
-                    'module_availability_rate': health.modules_available / max(1, health.modules_total),
+                    'module_availability_rate': health.modules_available
+    / max(1, health.modules_total),
                     'flake_gate_issues': health.flake_gate_issues,
                     'last_health_check': health.last_health_check,
                 },
@@ -876,6 +879,7 @@ if __name__ == "__main__":
         f"Overall Health: {performance.get('system_health', {}).get('overall_health', 0.0):.2%}"
     )
     print(
-        f"Module Availability: {performance.get('system_health', {}).get('module_availability_rate', 0.0):.2%}"
+f"Module Availability: {performance.get('system_health', {}).get('module_availability_rate',
+0.0):.2%}"
     )
     print(f"Total Errors: {performance.get('error_statistics', {}).get('error_count', 0)}")

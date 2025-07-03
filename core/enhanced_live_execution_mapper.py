@@ -1,4 +1,3 @@
-import numpy as np
 
 from core.live_execution_mapper import ExecutionState, LiveExecutionMapper
 from core.profit_optimization_engine import (
@@ -148,7 +147,8 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 
 
-Enhanced Live Execution Mapper with Profit Optimization Integration.This module enhances the live execution system by integrating:
+Enhanced Live Execution Mapper with Profit Optimization Integration.This module enhances the live
+execution system by integrating:
 
 
 
@@ -556,7 +556,8 @@ class EnhancedLiveExecutionMapper:
 
 
 
-    Enhanced live execution mapper with integrated profit optimization.def __init__():Initialize the enhanced live execution mapper.Args:
+Enhanced live execution mapper with integrated profit optimization.def __init__():Initialize the
+enhanced live execution mapper.Args:
 
 
 
@@ -568,7 +569,8 @@ simulation_mode: Whether to run in simulation mode
 
 
 
-initial_portfolio_usdc: Initial portfolio balance in USDCself.config = config or self._default_config()
+initial_portfolio_usdc: Initial portfolio balance in USDCself.config
+    = config or self._default_config()
 
 
 
@@ -700,7 +702,9 @@ self.performance_metrics = TradingPerformanceMetrics()
 
 
 
-self.btc_usdc_config = {precision: 8,  # BTC precisionmin_trade_size_btc: 0.1,  # Minimum 0.1 BTCmax_trade_size_btc: 1.0,  # Maximum 1.0 BTCprice_decimals: 2,  # USDC price decimalsvolume_threshold: 1000.0,  # Minimum USDC volumeslippage_tolerance: 0.1,  # 0.1% slippage tolerance
+self.btc_usdc_config
+    
+    = {precision: 8,  # BTC precisionmin_trade_size_btc: 0.1,  # Minimum 0.1 BTCmax_trade_size_btc: 1.0,  # Maximum 1.0 BTCprice_decimals: 2,  # USDC price decimalsvolume_threshold: 1000.0,  # Minimum USDC volumeslippage_tolerance: 0.1,  # 0.1% slippage tolerance
 
 
 
@@ -716,7 +720,9 @@ self.btc_usdc_config = {precision: 8,  # BTC precisionmin_trade_size_btc: 0.1,  
 
 
 
-        self.enhanced_thresholds = {mathematical_confidence_min: self.config.get(math_confidence_min, 0.75),profit_potential_min: self.config.get(profit_potential_min, 0.5),risk_score_max: self.config.get(risk_score_max, 0.3),entropy_score_min: self.config.get(entropy_score_min, 0.6),phase_alignment_min: self.config.get(phase_alignment_min, 0.7),
+        self.enhanced_thresholds
+    
+    = {mathematical_confidence_min: self.config.get(math_confidence_min, 0.75),profit_potential_min: self.config.get(profit_potential_min, 0.5),risk_score_max: self.config.get(risk_score_max, 0.3),entropy_score_min: self.config.get(entropy_score_min, 0.6),phase_alignment_min: self.config.get(phase_alignment_min, 0.7),
 
 
 
@@ -728,7 +734,7 @@ self.btc_usdc_config = {precision: 8,  # BTC precisionmin_trade_size_btc: 0.1,  
 
 
 """
-            logger.info( Enhanced Live Execution Mapper initializedf"(simulation: {simulation_mode},"
+logger.info( Enhanced Live Execution Mapper initializedf"(simulation: {simulation_mode},"
 
 
 
@@ -744,7 +750,11 @@ finitial_usdc: ${initial_portfolio_usdc:,.2f})
 
 
 
-def _default_config() -> Dict[str, Any]:"Return default configuration for enhanced execution.return {max_state_history: 1000,math_confidence_min: 0.75,profit_potential_min: 0.5,  # 0.5%risk_score_max: 0.3,  # 30%entropy_score_min: 0.6,  # 60%phase_alignment_min: 0.7,  # 70%optimization_timeout_ms: 5000,enable_mathematical_validation": True,enable_profit_optimization": True,btc_usdc_pair_only": True,stop_loss_enabled": True,take_profit_enabled": True,dynamic_position_sizing": True,"
+def _default_config() -> Dict[str, Any]:"Return default configuration for enhanced execution.return
+{max_state_history: 1000,math_confidence_min: 0.75,profit_potential_min: 0.5,  # 0.5%risk_score_max:
+0.3,  # 30%entropy_score_min: 0.6,  # 60%phase_alignment_min: 0.7,  # 70%optimization_timeout_ms:
+5000,enable_mathematical_validation": True,enable_profit_optimization": True,btc_usdc_pair_only":
+True,stop_loss_enabled": True,take_profit_enabled": True,dynamic_position_sizing": True,"
 
 
 
@@ -756,7 +766,8 @@ def _default_config() -> Dict[str, Any]:"Return default configuration for enhanc
 
 
 
-def execute_optimized_btc_trade() -> EnhancedExecutionState:"Execute a mathematically optimized BTC/USDC trade.This is the main entry point for enhanced trading that integrates"
+def execute_optimized_btc_trade() -> EnhancedExecutionState:"Execute a mathematically optimized
+BTC/USDC trade.This is the main entry point for enhanced trading that integrates"
 
 
 
@@ -1200,7 +1211,8 @@ if not risk_validated:
 
 
 
-                enhanced_state.status =  rejected_riskenhanced_state.error_message = fRisk validation failed: {risk_message}
+                enhanced_state.status =  rejected_riskenhanced_state.error_message
+    = fRisk validation failed: {risk_message}
 
 
 
@@ -1400,7 +1412,9 @@ self._cleanup_state_history()
 
 
 
-def _validate_mathematical_thresholds() -> bool:Validate mathematical thresholds for trade execution.try: thresholds = self.enhanced_thresholds
+def _validate_mathematical_thresholds()
+    -> bool:Validate mathematical thresholds for trade execution.try: thresholds 
+    = self.enhanced_thresholds
 
 
 
@@ -1572,7 +1586,8 @@ and state.optimization_result.risk_score > thresholds[risk_score_max]
 
 
 
-def _calculate_enhanced_position_size() -> float:Calculate enhanced position size using mathematical optimization.try:
+def _calculate_enhanced_position_size() -> float:Calculate enhanced position size using mathematical
+optimization.try:
 
 
 
@@ -1836,7 +1851,8 @@ fDrift weight too high: {state.drift_weight:.3f},
 
 
 
-        return True, Risk validation passedexcept Exception as e:logger.error(fError in risk validation: {e})return False, fRisk validation error: {str(e)}
+return True, Risk validation passedexcept Exception as e:logger.error(fError in risk validation:
+{e})return False, fRisk validation error: {str(e)}
 
 
 
@@ -1844,7 +1860,11 @@ fDrift weight too high: {state.drift_weight:.3f},
 
 
 
-def _prepare_base_market_data() -> Dict[str, Any]:Prepare market data for base execution system.return {price_history: market_data.get(price_history", [state.btc_price]),volume_history": market_data.get(volume_history", [state.usdc_volume]),volatility": market_data.get(volatility", 0.2),confidence_override": state.mathematical_confidence,position_size_override": state.risk_adjusted_size,"
+def _prepare_base_market_data() -> Dict[str, Any]:Prepare market data for base execution
+system.return {price_history: market_data.get(price_history", [state.btc_price]),volume_history":
+market_data.get(volume_history", [state.usdc_volume]),volatility": market_data.get(volatility",
+0.2),confidence_override": state.mathematical_confidence,position_size_override":
+state.risk_adjusted_size,"
 
 
 
@@ -1856,7 +1876,8 @@ def _prepare_base_market_data() -> Dict[str, Any]:Prepare market data for base e
 
 
 
-def _simulate_enhanced_execution() -> EnhancedExecutionState:"Simulate enhanced execution when base system unavailable.try:"
+def _simulate_enhanced_execution() -> EnhancedExecutionState:"Simulate enhanced execution when base
+system unavailable.try:"
 
 
 
@@ -1888,7 +1909,9 @@ executed_quantity = state.risk_adjusted_size  # noqa: F841
 
 
 
-state.execution_details = {status:filled,executed_price: executed_price,executed_quantity": executed_quantity,fees": fees,simulation": True,"
+state.execution_details
+    
+    = {status:filled,executed_price: executed_price,executed_quantity": executed_quantity,fees": fees,simulation": True,"
 
 
 
@@ -1896,7 +1919,9 @@ state.execution_details = {status:filled,executed_price: executed_price,executed
 
 
 
-state.status = executed_successfullylogger.info(fSimulated execution: {executed_quantity:.6f} BTC @ ${executed_price:.2f}
+state.status
+    
+    = executed_successfullylogger.info(fSimulated execution: {executed_quantity:.6f} BTC @ ${executed_price:.2f}
 
 
 
@@ -1920,7 +1945,8 @@ state.status = executed_successfullylogger.info(fSimulated execution: {executed_
 
 
 
-            logger.error(fError in simulated execution: {e})state.status = failedstate.error_message = fSimulation error: {str(e)}
+            logger.error(fError in simulated execution: {e})state.status
+    = failedstate.error_message = fSimulation error: {str(e)}
 
 
 
@@ -2200,7 +2226,8 @@ fCleaned up state history, kept {len(keep_states)} states
 
 
 
-def get_enhanced_performance_summary() -> Dict[str, Any]:Get comprehensive enhanced performance summary.try: base_summary = {}
+def get_enhanced_performance_summary()
+    -> Dict[str, Any]:Get comprehensive enhanced performance summary.try: base_summary = {}
 
 
 
@@ -2220,11 +2247,22 @@ enhanced_summary = {
 
 
 
-enhanced_metrics: {total_trades: self.performance_metrics.total_trades,successful_trades: self.performance_metrics.successful_trades,failed_trades": self.performance_metrics.failed_trades,win_rate": self.performance_metrics.win_rate,total_profit_usdc": self.performance_metrics.total_profit_usdc,total_fees_usdc": self.performance_metrics.total_fees_usdc,net_profit_usdc": self.performance_metrics.net_profit_usdc,profit_per_trade": self.performance_metrics.profit_per_trade,avg_confidence": self.performance_metrics.avg_confidence,avg_profit_potential": self.performance_metrics.avg_profit_potential,
+enhanced_metrics: {total_trades: self.performance_metrics.total_trades,successful_trades:
+self.performance_metrics.successful_trades,failed_trades":
+self.performance_metrics.failed_trades,win_rate":
+self.performance_metrics.win_rate,total_profit_usdc":
+self.performance_metrics.total_profit_usdc,total_fees_usdc":
+self.performance_metrics.total_fees_usdc,net_profit_usdc":
+self.performance_metrics.net_profit_usdc,profit_per_trade":
+self.performance_metrics.profit_per_trade,avg_confidence":
+self.performance_metrics.avg_confidence,avg_profit_potential":
+self.performance_metrics.avg_profit_potential,
 
 
 
-},mathematical_validation": {optimization_available: OPTIMIZATION_AVAILABLE,math_components_available": MATH_COMPONENTS_AVAILABLE,thresholds": self.enhanced_thresholds,btc_usdc_config": self.btc_usdc_config,
+},mathematical_validation": {optimization_available:
+OPTIMIZATION_AVAILABLE,math_components_available": MATH_COMPONENTS_AVAILABLE,thresholds":
+self.enhanced_thresholds,btc_usdc_config": self.btc_usdc_config,
 
 
 
@@ -2284,7 +2322,8 @@ if base_summary:
 
 
 
-def get_recent_enhanced_executions() -> List[Dict[str, Any]]:Get recent enhanced execution results.try:
+def get_recent_enhanced_executions() -> List[Dict[str, Any]]:Get recent enhanced execution
+results.try:
 
 
 
@@ -2320,7 +2359,13 @@ recent_states = sorted_states[:count]
 
 
 
-trade_id: state.trade_id,timestamp: state.timestamp,status: state.status,btc_price": state.btc_price,usdc_volume": state.usdc_volume,mathematical_confidence": state.mathematical_confidence,profit_potential": state.profit_potential,risk_adjusted_size": state.risk_adjusted_size,expected_profit_usdc": state.expected_profit_usdc,hash_similarity": state.hash_similarity,phase_alignment": state.phase_alignment,entropy_score": state.entropy_score,drift_weight": state.drift_weight,pattern_confidence": state.pattern_confidence,error_message": state.error_message,
+trade_id: state.trade_id,timestamp: state.timestamp,status: state.status,btc_price":
+state.btc_price,usdc_volume": state.usdc_volume,mathematical_confidence":
+state.mathematical_confidence,profit_potential": state.profit_potential,risk_adjusted_size":
+state.risk_adjusted_size,expected_profit_usdc": state.expected_profit_usdc,hash_similarity":
+state.hash_similarity,phase_alignment": state.phase_alignment,entropy_score":
+state.entropy_score,drift_weight": state.drift_weight,pattern_confidence":
+state.pattern_confidence,error_message": state.error_message,
 
 
 
@@ -2356,7 +2401,8 @@ for state in recent_states:
 
 
 
-def main():Demonstrate enhanced live execution mapper functionality.logging.basicConfig(level = logging.INFO)
+def main():Demonstrate enhanced live execution mapper functionality.logging.basicConfig(level
+    = logging.INFO)
 
 
 
@@ -2412,7 +2458,9 @@ usdc_volume = 2500000.0  # 2.5 USDC volume
 
 
 
-market_data = {price_history: btc_prices,volume_history: [usdc_volume * 0.8, usdc_volume, usdc_volume * 1.2],avg_volume": usdc_volume,volatility": 0.25,phase":expansion",trend":upward",
+market_data = {price_history: btc_prices,volume_history: [usdc_volume
+    * 0.8, usdc_volume, usdc_volume 
+    * 1.2],avg_volume": usdc_volume,volatility": 0.25,phase":expansion",trend":upward",
 
 
 
@@ -2420,7 +2468,9 @@ market_data = {price_history: btc_prices,volume_history: [usdc_volume * 0.8, usd
 
 
 
-print(\n Market Data:)print(fBTC Price: ${current_btc_price:,.2f})print(fUSDC Volume: ${usdc_volume:,.0f})print(fVolatility: {market_data['volatility']:.1%})'print(fPhase: {market_data['phase']})'
+print(\n Market Data:)print(fBTC Price: ${current_btc_price:,.2f})print(fUSDC Volume:
+${usdc_volume:,.0f})print(fVolatility: {market_data['volatility']:.1%})'print(fPhase:
+{market_data['phase']})'
 
 
 
@@ -2452,7 +2502,13 @@ btc_price=current_btc_price, usdc_volume=usdc_volume, market_data=market_data
 
 
 
-print(\n Execution Result:)print(fTrade ID: {result.trade_id})print(fStatus: {result.status})print(fMathematical Confidence: {result.mathematical_confidence:.3f})print(fProfit Potential: {result.profit_potential:.4f})print(fRisk Adjusted Size: {result.risk_adjusted_size:.6f} BTC)print(fExpected Profit: ${result.expected_profit_usdc:.2f})print(fHash Similarity: {result.hash_similarity:.3f})print(fPhase Alignment: {result.phase_alignment:.3f})print(fEntropy Score: {result.entropy_score:.3f})print(fDrift Weight: {result.drift_weight:.3f})print(fPattern Confidence: {result.pattern_confidence:.3f})
+print(\n Execution Result:)print(fTrade ID: {result.trade_id})print(fStatus:
+{result.status})print(fMathematical Confidence: {result.mathematical_confidence:.3f})print(fProfit
+Potential: {result.profit_potential:.4f})print(fRisk Adjusted Size: {result.risk_adjusted_size:.6f}
+BTC)print(fExpected Profit: ${result.expected_profit_usdc:.2f})print(fHash Similarity:
+{result.hash_similarity:.3f})print(fPhase Alignment: {result.phase_alignment:.3f})print(fEntropy
+Score: {result.entropy_score:.3f})print(fDrift Weight: {result.drift_weight:.3f})print(fPattern
+Confidence: {result.pattern_confidence:.3f})
 
 
 
@@ -2476,7 +2532,9 @@ if result.execution_details: details = result.execution_details
 
 
 
-print(\n Execution Details:)'print(fExecuted Price: ${details.get('executed_price', 0):.2f})'print(fExecuted Quantity: {details.get('executed_quantity', 0):.6f} BTC)'print(fFees: ${details.get('fees', 0):.2f})'print(fSimulation: {details.get('simulation', False)})
+print(\n Execution Details:)'print(fExecuted Price: ${details.get('executed_price',
+0):.2f})'print(fExecuted Quantity: {details.get('executed_quantity', 0):.6f} BTC)'print(fFees:
+${details.get('fees', 0):.2f})'print(fSimulation: {details.get('simulation', False)})
 
 
 
@@ -2500,11 +2558,15 @@ summary = mapper.get_enhanced_performance_summary()
 
 
 
-ifenhanced_metricsin summary: metrics = summary[enhanced_metrics]'print(fTotal Trades: {metrics['total_trades']})'print(fSuccessful Trades: {metrics['successful_trades']})'print(fWin Rate: {metrics['win_rate']:.1%})'print(fNet Profit: ${metrics['net_profit_usdc']:.2f})'print(fAvg Confidence: {metrics['avg_confidence']:.3f})'print(fAvg Profit Potential: {metrics['avg_profit_potential']:.4f})
+ifenhanced_metricsin summary: metrics
+    
+    = summary[enhanced_metrics]'print(fTotal Trades: {metrics['total_trades']})'print(fSuccessful Trades: {metrics['successful_trades']})'print(fWin Rate: {metrics['win_rate']:.1%})'print(fNet Profit: ${metrics['net_profit_usdc']:.2f})'print(fAvg Confidence: {metrics['avg_confidence']:.3f})'print(fAvg Profit Potential: {metrics['avg_profit_potential']:.4f})
 
 
 
-print(\n System Status:)print(fOptimization Available: {OPTIMIZATION_AVAILABLE})print(fMath Components Available: {MATH_COMPONENTS_AVAILABLE})print(fBase Execution Available: {BASE_EXECUTION_AVAILABLE})
+print(\n System Status:)print(fOptimization Available: {OPTIMIZATION_AVAILABLE})print(fMath
+Components Available: {MATH_COMPONENTS_AVAILABLE})print(fBase Execution Available:
+{BASE_EXECUTION_AVAILABLE})
 
 
 

@@ -1,4 +1,3 @@
-import numpy as np
 from adaptive_immunity_vector import AdaptiveImmunityVector
 from entropy_monitor import EntropyMonitor
 from security_vector_allocator import SecurityVectorAllocator
@@ -236,7 +235,7 @@ class StrategicImmunityStack:
 
 
 
-    def process_strategy_vector():-> np.ndarray:Process strategy vector through complete immunity stack.
+def process_strategy_vector():-> np.ndarray:Process strategy vector through complete immunity stack.
 
 
 
@@ -492,7 +491,8 @@ class StrategicImmunityStack:
 
 
 
-            if entropy_field.field_strength > 0.5: secure_theta = np.pi / 4  # High entropy = more rotation
+            if entropy_field.field_strength > 0.5: secure_theta = np.pi / 4  # High entropy
+    = more rotation
 
 
 
@@ -548,7 +548,9 @@ class StrategicImmunityStack:
 
 
 
-                    original_vector: strategy_vector.copy(),secured_vector: final_secured_vector.copy(),psi_sec: psi_sec,chi: chi,resistance": resistance_profile.resistance_value,fortification_strength": self.fortification_matrix.get_fortification_report().get(current_strength", 0
+original_vector: strategy_vector.copy(),secured_vector: final_secured_vector.copy(),psi_sec:
+psi_sec,chi: chi,resistance": resistance_profile.resistance_value,fortification_strength":
+self.fortification_matrix.get_fortification_report().get(current_strength", 0
 
 
 
@@ -628,7 +630,9 @@ class StrategicImmunityStack:
 
 
 
-            average_psi_sec: np.mean([i[psi_sec] for i in recent_integrations]),average_chi": np.mean([i[chi] for i in recent_integrations]),average_resistance": np.mean([i[resistance] for i in recent_integrations]),average_fortification": np.mean(
+average_psi_sec: np.mean([i[psi_sec] for i in recent_integrations]),average_chi": np.mean([i[chi]
+for i in recent_integrations]),average_resistance": np.mean([i[resistance] for i in
+recent_integrations]),average_fortification": np.mean(
 
 
 
@@ -636,7 +640,9 @@ class StrategicImmunityStack:
 
 
 
-            ),entropy_report": self.entropy_monitor.get_entropy_report(),immunity_report": self.immunity_vector.get_immunity_report(),fortification_report": self.fortification_matrix.get_fortification_report(),
+),entropy_report": self.entropy_monitor.get_entropy_report(),immunity_report":
+self.immunity_vector.get_immunity_report(),fortification_report":
+self.fortification_matrix.get_fortification_report(),
 
 
 
@@ -676,7 +682,8 @@ class StrategicImmunityStack:
 
 
 
-def demo_strategic_immunity_stack():Demonstrate the complete Strategic Recursive Vector Immunity Stack.print( Strategic Recursive Vector Immunity Stack Demo)
+def demo_strategic_immunity_stack():Demonstrate the complete Strategic Recursive Vector Immunity
+Stack.print( Strategic Recursive Vector Immunity Stack Demo)
 
 
 
@@ -700,7 +707,9 @@ def demo_strategic_immunity_stack():Demonstrate the complete Strategic Recursive
 
 
 
-    config = {entropy: {entropy_threshold: 0.3},immunity: {shock_threshold: 0.7},fortification: {adaptive_scaling: True},
+    config
+    
+    = {entropy: {entropy_threshold: 0.3},immunity: {shock_threshold: 0.7},fortification: {adaptive_scaling: True},
 
 
 
@@ -728,7 +737,8 @@ def demo_strategic_immunity_stack():Demonstrate the complete Strategic Recursive
 
 
 
-            name: Low Volatility Market,market_data: {volatility: 0.05,volume: 500,price_change": 0.01},strategy_vector: np.array([0.8, 0.6, 0.4]),
+name: Low Volatility Market,market_data: {volatility: 0.05,volume: 500,price_change":
+0.01},strategy_vector: np.array([0.8, 0.6, 0.4]),
 
 
 
@@ -736,7 +746,8 @@ def demo_strategic_immunity_stack():Demonstrate the complete Strategic Recursive
 
 
 
-        {name:High Volatility Market",market_data": {volatility: 0.25,volume": 2000,price_change": -0.05},strategy_vector: np.array([0.9, 0.3, 0.7]),
+{name:High Volatility Market",market_data": {volatility: 0.25,volume": 2000,price_change":
+-0.05},strategy_vector: np.array([0.9, 0.3, 0.7]),
 
 
 
@@ -744,7 +755,8 @@ def demo_strategic_immunity_stack():Demonstrate the complete Strategic Recursive
 
 
 
-        {name:Anomaly Detection",market_data": {volatility: 0.8,volume": 5000,price_change": 0.15},strategy_vector: np.array([0.5, 0.8, 0.2]),
+{name:Anomaly Detection",market_data": {volatility: 0.8,volume": 5000,price_change":
+0.15},strategy_vector: np.array([0.5, 0.8, 0.2]),
 
 
 

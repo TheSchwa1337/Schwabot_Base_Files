@@ -1,12 +1,6 @@
-import logging
-import math
-import random
-import time
 from collections import defaultdict, deque
-from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Tuple
 
-import numpy as np
 
 from core.drift_shell_engine import ProfitVector
 from data.temporal_intelligence_integration import TemporalIntelligenceIntegration
@@ -144,7 +138,9 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 
 
-Profit Vector Forecast Engine - Advanced Directional Movement Prediction.Implements sophisticated profit vectorization mathematics for 3-dimensional market
+Profit Vector Forecast Engine
+    
+    - Advanced Directional Movement Prediction.Implements sophisticated profit vectorization mathematics for 3-dimensional market
 
 
 
@@ -268,7 +264,8 @@ class MarketPhase:
 
 
 
-    Represents a market phase for cycle analysis.phase_type: str  # peak,valley,wave_up,wave_down",consolidationstrength: float  # 0.0 to 1.0
+Represents a market phase for cycle analysis.phase_type: str  #
+peak,valley,wave_up,wave_down",consolidationstrength: float  # 0.0 to 1.0
 
 
 
@@ -296,7 +293,9 @@ fibonacci_level: Optional[float] = None  # Associated Fibonacci level
 
 
 
-class TimeframeConfluence:Multi-timeframe confluence analysis.timeframe: str  # 1m,5m",15m",1h",4h",1ddirection: str  # bullish,bearish",neutralstrength: float  # Signal strength 0.0 to 1.0
+class TimeframeConfluence:Multi-timeframe confluence analysis.timeframe: str  #
+1m,5m",15m",1h",4h",1ddirection: str  # bullish,bearish",neutralstrength: float  # Signal strength
+0.0 to 1.0
 
 
 
@@ -328,7 +327,8 @@ class VolatilityProfile:Volatility analysis for profit scaling.current_volatilit
 
 
 
-avg_volatility: floatvolatility_regime: str  # low,normal",high",extremevolatility_trend: str  # increasing,decreasing",stableprofit_scale_factor: float
+avg_volatility: floatvolatility_regime: str  # low,normal",high",extremevolatility_trend: str  #
+increasing,decreasing",stableprofit_scale_factor: float
 
 
 
@@ -344,7 +344,8 @@ avg_volatility: floatvolatility_regime: str  # low,normal",high",extremevolatili
 
 
 
-class ProfitState:Represents a profit state for Markov chain analysis.profit_range: str  # e.g., high_profit,loss_zone",neutralvalue: float
+class ProfitState:Represents a profit state for Markov chain analysis.profit_range: str  # e.g.,
+high_profit,loss_zone",neutralvalue: float
 
 
 
@@ -400,7 +401,8 @@ last_updated: float
 
 
 
-class MarkovProfitModel:Markov Chain Monte Carlo model for profit state prediction.def __init__(self, memory_size: int = 1000):
+class MarkovProfitModel:Markov Chain Monte Carlo model for profit state prediction.def
+__init__(self, memory_size: int = 1000):
 
 
 
@@ -416,7 +418,9 @@ self.state_history = deque(maxlen=memory_size)
 
 
 
-self.profit_thresholds = {high_profit: 0.02,    # >2% profitlow_profit: 0.005,    # 0.5-2% profitneutral: -0.005,      # -0.5% to 0.5%loss_zone: -0.02,     # -2% to -0.5%high_loss: float('-in')  # <-2%
+self.profit_thresholds
+    = {high_profit: 0.02,    # >2% profitlow_profit: 0.005,    # 0.5-2% profitneutral: 
+    -0.005,      # -0.5% to 0.5%loss_zone: -0.02,     # -2% to -0.5%high_loss: float('-in')  # <-2%
 
 
 
@@ -428,7 +432,8 @@ self.profit_thresholds = {high_profit: 0.02,    # >2% profitlow_profit: 0.005,  
 
 
 
-def classify_profit_state():-> str:Classif y profit percentage into discrete states.if profit_pct >= self.profit_thresholds[high_profit]:
+def classify_profit_state():-> str:Classif y profit percentage into discrete states.if profit_pct >=
+self.profit_thresholds[high_profit]:
 
 
 
@@ -448,7 +453,8 @@ def classify_profit_state():-> str:Classif y profit percentage into discrete sta
 
 
 
-            returnhigh_lossdef update_transition(self, current_state: str, next_state: str)::"Update transition matrix with new state transition.self.transition_matrix[current_state][next_state] += 1
+returnhigh_lossdef update_transition(self, current_state: str, next_state: str)::"Update transition
+matrix with new state transition.self.transition_matrix[current_state][next_state] += 1
 
 
 
@@ -464,7 +470,8 @@ self.state_counts[current_state] += 1
 
 
 
-self.state_history.append({'state': next_state,'timestamp': time.time(),'transition_from': current_state
+self.state_history.append({'state': next_state,'timestamp': time.time(),'transition_from':
+current_state
 
 
 
@@ -476,7 +483,8 @@ self.state_history.append({'state': next_state,'timestamp': time.time(),'transit
 
 
 
-def predict_next_state():Predict next state using different methods.if current_state not in self.transition_matrix:
+def predict_next_state():Predict next state using different methods.if current_state not in
+self.transition_matrix:
 
 
 
@@ -600,7 +608,8 @@ if total == 0:
 
 
 
-def get_steady_state_probabilities():-> Dict[str, float]:Calculate long-term steady state probabilities.all_states = set()
+def get_steady_state_probabilities():-> Dict[str, float]:Calculate long-term steady state
+probabilities.all_states = set()
 
 
 
@@ -736,7 +745,8 @@ state = next_state
 
 
 
-class ProfitAccuracyValidator:Validates forecasting accuracy and model performance.def __init__(self, validation_window: int = 100):
+class ProfitAccuracyValidator:Validates forecasting accuracy and model performance.def
+__init__(self, validation_window: int = 100):
 
 
 
@@ -760,7 +770,9 @@ self.accuracy_history = deque(maxlen=validation_window)
 
 
 
-def add_prediction(self, prediction: str, confidence: float)::Add a new prediction to track.self.predictions.append({'prediction': prediction,'confidence': confidence,'timestamp': time.time()
+def add_prediction(self, prediction: str, confidence: float)::Add a new prediction to
+track.self.predictions.append({'prediction': prediction,'confidence': confidence,'timestamp':
+time.time()
 
 
 
@@ -772,7 +784,8 @@ def add_prediction(self, prediction: str, confidence: float)::Add a new predicti
 
 
 
-def add_actual_outcome(self, actual_state: str)::Add actual outcome for validation.self.actual_outcomes.append({'actual': actual_state,'timestamp': time.time()
+def add_actual_outcome(self, actual_state: str)::Add actual outcome for
+validation.self.actual_outcomes.append({'actual': actual_state,'timestamp': time.time()
 
 
 
@@ -840,7 +853,8 @@ accuracy = correct_predictions / total_predictions if total_predictions > 0 else
 
 
 
-self.accuracy_history.append({'accuracy': accuracy,'timestamp': time.time(),'sample_size': total_predictions
+self.accuracy_history.append({'accuracy': accuracy,'timestamp': time.time(),'sample_size':
+total_predictions
 
 
 
@@ -852,11 +866,13 @@ self.accuracy_history.append({'accuracy': accuracy,'timestamp': time.time(),'sam
 
 
 
-def get_accuracy_metrics():-> Dict[str, float]:Get comprehensive accuracy metrics.if not self.accuracy_history:
+def get_accuracy_metrics():-> Dict[str, float]:Get comprehensive accuracy metrics.if not
+self.accuracy_history:
 
 
 
-            return {'current_accuracy': 0.0,'average_accuracy': 0.0,'accuracy_trend': 0.0,'confidence_correlation': 0.0
+return {'current_accuracy': 0.0,'average_accuracy': 0.0,'accuracy_trend':
+0.0,'confidence_correlation': 0.0
 
 
 
@@ -924,7 +940,9 @@ confidence_correlation = self._calculate_confidence_correlation()
 
 
 
-        return {'current_accuracy': float(current_accuracy),'average_accuracy': float(average_accuracy),'accuracy_trend': float(accuracy_trend),'confidence_correlation': float(confidence_correlation),'total_predictions': len(self.predictions)
+return {'current_accuracy': float(current_accuracy),'average_accuracy':
+float(average_accuracy),'accuracy_trend': float(accuracy_trend),'confidence_correlation':
+float(confidence_correlation),'total_predictions': len(self.predictions)
 
 
 
@@ -940,7 +958,7 @@ def _calculate_confidence_correlation():-> float:
 
 
 
-        Calculate correlation between prediction confidence and accuracy.if len(self.predictions) < 5:
+Calculate correlation between prediction confidence and accuracy.if len(self.predictions) < 5:
 
 
 
@@ -988,7 +1006,8 @@ correct.append(1.0 if is_correct else 0.0)
 
 
 
-if len(confidences) == len(correct) and len(correct) > 1: correlation = np.corrcoef(confidences, correct)[0, 1]
+if len(confidences) == len(correct) and len(correct) > 1: correlation
+    = np.corrcoef(confidences, correct)[0, 1]
 
 
 
@@ -1024,7 +1043,8 @@ class ProfitVectorForecastEngine:
 
 
 
-    Advanced engine for 3D profit vector prediction and directional analysis.def __init__():Initialize the profit vector forecast engine.Args:
+Advanced engine for 3D profit vector prediction and directional analysis.def __init__():Initialize
+the profit vector forecast engine.Args:
 
 
 
@@ -1096,7 +1116,9 @@ self.phase_history = deque(maxlen=20)
 
 
 
-self.stats = {total_forecasts: 0,correct_directions: 0,avg_magnitude_accuracy: 0.0,phase_detection_accuracy": 0.0,confluence_signals": 0,avg_processing_time": 0.0,
+self.stats
+    
+    = {total_forecasts: 0,correct_directions: 0,avg_magnitude_accuracy: 0.0,phase_detection_accuracy": 0.0,confluence_signals": 0,avg_processing_time": 0.0,
 
 
 
@@ -1140,7 +1162,7 @@ else None
 
 
 
-            logger.info(f Profit Vector Forecast Engine initialized with {lookback_periods} period lookback
+logger.info(f Profit Vector Forecast Engine initialized with {lookback_periods} period lookback
 
 
 
@@ -1176,7 +1198,8 @@ timestamp: Optional timestamp (defaults to current time)
 
 
 
-signal_hash: Optional signal hash for gradient analysis"if timestamp is None: timestamp = time.time()
+signal_hash: Optional signal hash for gradient analysis"if timestamp is None: timestamp
+    = time.time()
 
 
 
@@ -1624,7 +1647,8 @@ duration = 0.0
 
 
 
-if self.current_phase and self.current_phase.phase_type == phase_type: duration = time.time() - recent_timestamps[0]
+if self.current_phase and self.current_phase.phase_type == phase_type: duration = time.time()
+    - recent_timestamps[0]
 
 
 
@@ -1752,7 +1776,7 @@ def calculate_timeframe_confluence():-> List[TimeframeConfluence]:
 
 
 
-            timeframes: Dictionary of timeframe data{timeframe: {rsi: value,momentum: value,volume: value}}
+timeframes: Dictionary of timeframe data{timeframe: {rsi: value,momentum: value,volume: value}}
 
 
 
@@ -1868,11 +1892,13 @@ confluence_analysis.append(confluence)
 
 
 
-def calculate_volatility_profile():-> VolatilityProfile:Calculate volatility profile for profit scaling.Returns:
+def calculate_volatility_profile():-> VolatilityProfile:Calculate volatility profile for profit
+scaling.Returns:
 
 
 
-            VolatilityProfile with current volatility analysisif len(self.price_history) < self.volatility_window:
+VolatilityProfile with current volatility analysisif len(self.price_history) <
+self.volatility_window:
 
 
 
@@ -2076,7 +2102,8 @@ profit_scale_factor=scale_factor,
 
 
 
-def generate_profit_vector():-> ProfitVector:Generate complete 3D profit vector forecast.Implements: PV(t) = (H  G) + tanh(m(t) * RSI(t)) + (t) + _confluence + _scale
+def generate_profit_vector():-> ProfitVector:Generate complete 3D profit vector forecast.Implements:
+PV(t) = (H  G) + tanh(m(t) * RSI(t)) + (t) + _confluence + _scale
 
 
 
@@ -2416,7 +2443,8 @@ def _phase_to_vector(self, phase: MarketPhase): -> Tuple[float, float, float]:
 
 
 
-        Convert market phase to vector components.phase_mappings = {# Slight bullish, stable, high time component
+        Convert market phase to vector components.phase_mappings
+    = {# Slight bullish, stable, high time component
 
 
 
@@ -2592,7 +2620,8 @@ def _store_forecast_for_validation():-> None:
 
 
 
-        Store forecast for future accuracy validation.# This would store forecasts for later validation against actual outcomes
+Store forecast for future accuracy validation.# This would store forecasts for later validation
+against actual outcomes
 
 
 
@@ -2608,7 +2637,8 @@ pass
 
 
 
-def _update_avg_processing_time():-> None:Update average processing time metric.total_forecasts = self.stats[total_forecasts]current_avg = self.stats[avg_processing_time]
+def _update_avg_processing_time():-> None:Update average processing time metric.total_forecasts
+    = self.stats[total_forecasts]current_avg = self.stats[avg_processing_time]
 
 
 
@@ -2644,7 +2674,8 @@ current_avg * (total_forecasts - 1) + new_time
 
 
 
-def validate_forecast_accuracy():-> Dict[str, float]:Validate forecast accuracy against actual outcomes.Args:actual_direction: Actual market direction (long",short",hold)
+def validate_forecast_accuracy():-> Dict[str, float]:Validate forecast accuracy against actual
+outcomes.Args:actual_direction: Actual market direction (long",short",hold)
 
 
 
@@ -2680,7 +2711,8 @@ Returns:
 
 
 
-def get_performance_stats():-> Dict[str, Any]:"Get comprehensive performance statistics.stats = self.stats.copy()
+def get_performance_stats():-> Dict[str, Any]:"Get comprehensive performance statistics.stats
+    = self.stats.copy()
 
 
 
@@ -2688,7 +2720,9 @@ stats.update(
 
 
 
-{historical_signals: len(self.historical_signals),price_history_length": len(self.price_history),current_phase": (self.current_phase.phase_type if self.current_phase elseunknown),phase_confidence": (
+{historical_signals: len(self.historical_signals),price_history_length":
+len(self.price_history),current_phase": (self.current_phase.phase_type if self.current_phase
+elseunknown),phase_confidence": (
 
 
 
@@ -2696,7 +2730,9 @@ self.current_phase.confidence if self.current_phase else 0.0
 
 
 
-),memory_utilization": {signals: len(self.historical_signals) / self.lookback_periods,prices": len(self.price_history) / (self.lookback_periods * 2),volumes": len(self.volume_history) / self.lookback_periods,
+),memory_utilization": {signals: len(self.historical_signals)
+    / self.lookback_periods,prices": len(self.price_history) / (self.lookback_periods 
+    * 2),volumes": len(self.volume_history) / self.lookback_periods,
 
 
 
@@ -2724,7 +2760,8 @@ self.current_phase.confidence if self.current_phase else 0.0
 
 
 
-def main():Demonstrate Profit Vector Forecast Engine functionality.logging.basicConfig(level = logging.INFO)
+def main():Demonstrate Profit Vector Forecast Engine functionality.logging.basicConfig(level
+    = logging.INFO)
 
 
 
@@ -2832,7 +2869,9 @@ engine.add_market_data(price, volume, rsi, momentum, signal_hash = hash_val)
 
 
 
-timeframes = {1m: {rsi: 58,momentum: 0.08,volume: 1.2},5m": {rsi: 62,momentum": 0.12,volume": 1.1},15m": {rsi: 65,momentum": 0.15,volume": 1.0},1h": {rsi: 59,momentum": 0.06,volume": 0.9},
+timeframes
+    
+    = {1m: {rsi: 58,momentum: 0.08,volume: 1.2},5m": {rsi: 62,momentum": 0.12,volume": 1.1},15m": {rsi: 65,momentum": 0.15,volume": 1.0},1h": {rsi: 59,momentum": 0.06,volume": 0.9},
 
 
 
@@ -2884,7 +2923,8 @@ timeframes=timeframes,
 
 
 
-print(fDirection: {profit_vector.direction})print(fMagnitude: {profit_vector.magnitude:.4f})print(Vector Components:)print(fX(Long/Short): {profit_vector.x:.4f})
+print(fDirection: {profit_vector.direction})print(fMagnitude:
+{profit_vector.magnitude:.4f})print(Vector Components:)print(fX(Long/Short): {profit_vector.x:.4f})
 
 
 
@@ -2908,7 +2948,10 @@ if engine.current_phase:
 
 
 
-        print(\n Market Phase Analysis:)print(fPhase Type: {engine.current_phase.phase_type})print(fStrength: {engine.current_phase.strength:.3f})print(fConfidence: {engine.current_phase.confidence:.3f})print(fDuration: {engine.current_phase.duration:.1f}s)
+print(\n Market Phase Analysis:)print(fPhase Type:
+{engine.current_phase.phase_type})print(fStrength:
+{engine.current_phase.strength:.3f})print(fConfidence:
+{engine.current_phase.confidence:.3f})print(fDuration: {engine.current_phase.duration:.1f}s)
 
 
 
@@ -2932,7 +2975,11 @@ volatility_profile = engine.calculate_volatility_profile()
 
 
 
-print(\n Volatility Profile:)print(fCurrent Volatility: {volatility_profile.current_volatility:.4f})print(fRegime: {volatility_profile.volatility_regime})print(fTrend: {volatility_profile.volatility_trend})print(fScale Factor: {volatility_profile.profit_scale_factor:.3f})
+print(\n Volatility Profile:)print(fCurrent Volatility:
+{volatility_profile.current_volatility:.4f})print(fRegime:
+{volatility_profile.volatility_regime})print(fTrend:
+{volatility_profile.volatility_trend})print(fScale Factor:
+{volatility_profile.profit_scale_factor:.3f})
 
 
 
@@ -3000,7 +3047,10 @@ else :
 
 
 
-print(\n Profit Vector Forecast Engine demo completed!)print(The engine successfully implements:)print( Hash gradient analysis (H  G))print( Momentum-RSI tensor product tanh(m(t) * RSI(t)))print( Market phase detection (t))print( Multi-timeframe confluence _confluence)print( Volatility-adjusted scaling _scale)print( 3D profit vector generation PV(t))
+print(\n Profit Vector Forecast Engine demo completed!)print(The engine successfully
+implements:)print( Hash gradient analysis (H  G))print( Momentum-RSI tensor product tanh(m(t) *
+RSI(t)))print( Market phase detection (t))print( Multi-timeframe confluence _confluence)print(
+Volatility-adjusted scaling _scale)print( 3D profit vector generation PV(t))
 
 
 

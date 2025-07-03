@@ -1,12 +1,5 @@
-import logging
-import random
-import time
-from dataclasses import dataclass, field
-from datetime import datetime
-from enum import Enum
 from typing import Any, Dict, List, Optional, Union
 
-import numpy as np
 
 """
 
@@ -125,7 +118,9 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 
 
-Trade Executor - Real-time Trade Execution Engine.Handles the actual execution of trades with advanced order management,
+Trade Executor
+    
+    - Real-time Trade Execution Engine.Handles the actual execution of trades with advanced order management,
 
 
 
@@ -185,7 +180,8 @@ metadata: Dict[str, Any] = field(default_factory=dict)
 
 
 
-class TradeExecutor:Handles the execution of trading orders.Interacts with simulated or live exchange APIs.def __init__():Initialize the trade executor.Args:
+class TradeExecutor:Handles the execution of trading orders.Interacts with simulated or live
+exchange APIs.def __init__():Initialize the trade executor.Args:
 
 
 
@@ -217,7 +213,8 @@ self.execution_stats = {
 
 
 
-total_orders: 0,executed_orders: 0,canceled_orders": 0,avg_execution_time": 0.0,simulation_trades": 0,live_trades": 0,
+total_orders: 0,executed_orders: 0,canceled_orders": 0,avg_execution_time": 0.0,simulation_trades":
+0,live_trades": 0,
 
 
 
@@ -241,7 +238,8 @@ total_orders: 0,executed_orders: 0,canceled_orders": 0,avg_execution_time": 0.0,
 
 
 
-def place_order():-> Dict[str, Any]:Place a trading order.Args:asset: The trading asset (e.g.,BTC/USD).direction:buyorsell".
+def place_order():-> Dict[str, Any]:Place a trading order.Args:asset: The trading asset
+(e.g.,BTC/USD).direction:buyorsell".
 
 
 
@@ -261,7 +259,8 @@ Returns:
 
 
 
-            A dictionary containing order details and status.self.order_counter += 1order_id = fORDER-{self.order_counter}-{int(time.time() * 1000)}
+            A dictionary containing order details and status.self.order_counter += 1order_id
+    = fORDER-{self.order_counter}-{int(time.time() * 1000)}
 
 
 
@@ -441,7 +440,8 @@ self.execution_stats[live_trades] += 1
 
 
 
-new_order.metadata[execution_time] = time.time() - start_timeself.execution_stats[executed_orders] += 1self._update_avg_execution_time(new_order.metadata[execution_time])
+new_order.metadata[execution_time] = time.time() - start_timeself.execution_stats[executed_orders]
+    += 1self._update_avg_execution_time(new_order.metadata[execution_time])
 
 
 
@@ -457,7 +457,9 @@ new_order.metadata[execution_time] = time.time() - start_timeself.execution_stat
 
 
 
-            new_order.status = failedlogger.error(fOrder {order_id} failed: {e})return {status:failed,order_id: order_id,error: str(e)}
+            new_order.status
+    
+    = failedlogger.error(fOrder {order_id} failed: {e})return {status:failed,order_id: order_id,error: str(e)}
 
 
 
@@ -489,7 +491,8 @@ if order and order.status == pending:
 
 
 
-            order.status = canceledself.execution_stats[canceled_orders] += 1logger.info(f"Order {order_id} canceled.)return {status:canceled,order_id: order_id}
+            order.status = canceledself.execution_stats[canceled_orders]
+    += 1logger.info(f"Order {order_id} canceled.)return {status:canceled,order_id: order_id}
 
 
 
@@ -513,7 +516,7 @@ else :
 
 
 
-            logger.warning(f"Order {order_id} not found.)return {status:failed,message:Order not found}
+logger.warning(f"Order {order_id} not found.)return {status:failed,message:Order not found}
 
 
 
@@ -565,7 +568,8 @@ else :
 
 
 
-def get_all_orders():-> List[Dict[str, Any]]:Retrieve all orders managed by the executor.return [self.get_order_status(order_id) for order_id in self.orders]
+def get_all_orders():-> List[Dict[str, Any]]:Retrieve all orders managed by the executor.return
+[self.get_order_status(order_id) for order_id in self.orders]
 
 
 
@@ -573,7 +577,8 @@ def get_all_orders():-> List[Dict[str, Any]]:Retrieve all orders managed by the 
 
 
 
-def _update_avg_execution_time():-> None:Update the average execution time metric.current_total = self.execution_stats[executed_orders]current_avg = self.execution_stats[avg_execution_time]
+def _update_avg_execution_time():-> None:Update the average execution time metric.current_total
+    = self.execution_stats[executed_orders]current_avg = self.execution_stats[avg_execution_time]
 
 
 
@@ -609,7 +614,8 @@ current_avg * (current_total - 1) + new_execution_time
 
 
 
-def get_performance_stats():-> Dict[str, Any]:"Return the performance statistics of the trade executor.return self.execution_stats.copy()
+def get_performance_stats():-> Dict[str, Any]:"Return the performance statistics of the trade
+executor.return self.execution_stats.copy()
 
 
 
@@ -657,7 +663,8 @@ print(\n--- Trade Executor Demo (Simulation Mode) ---)
 
 
 
-    buy_order_result = executor.place_order(BTC/USD,buy, 0.001, 50000.0)print(f"Buy Order Result: {buy_order_result})
+    buy_order_result
+    = executor.place_order(BTC/USD,buy, 0.001, 50000.0)print(f"Buy Order Result: {buy_order_result})
 
 
 
@@ -669,7 +676,8 @@ print(\n--- Trade Executor Demo (Simulation Mode) ---)
 
 
 
-    sell_order_result = executor.place_order(ETH/USD,sell, 0.01, 3000.0)print(fSell Order Result: {sell_order_result})
+    sell_order_result
+    = executor.place_order(ETH/USD,sell, 0.01, 3000.0)print(fSell Order Result: {sell_order_result})
 
 
 

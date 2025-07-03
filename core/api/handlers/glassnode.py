@@ -1,13 +1,8 @@
 from __future__ import annotations
 
 import asyncio
-import json
-import logging
-import time
 from typing import Any, Dict
 
-import aiohttp
-import requests
 
 from .base_handler import BaseAPIHandler
 
@@ -23,7 +18,6 @@ Provides network health, market valuation, and activity metrics.
 
 try:
 
-    import aiohttp
 
 
 except ImportError:
@@ -33,7 +27,6 @@ except ImportError:
 
 try:
 
-    import requests
 
 
 except ImportError:

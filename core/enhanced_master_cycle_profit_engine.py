@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+# !/usr/bin/env python3
 
 
 """Enhanced Master Cycle Profit Engine  compatibility stub.

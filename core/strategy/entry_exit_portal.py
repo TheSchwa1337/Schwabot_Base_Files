@@ -1,7 +1,3 @@
-import logging
-import time
-from dataclasses import dataclass, field
-from enum import Enum
 from typing import Dict, List, Optional, Tuple, Union
 
 from core.portfolio_tracker import PortfolioTracker
@@ -352,7 +348,8 @@ max_position_size: Maximum position size as fraction of portfolio
 
 
 
-min_confidence_threshold: Minimum confidence for trade executionself.glyph_core = glyph_core or GlyphStrategyCore()
+min_confidence_threshold: Minimum confidence for trade executionself.glyph_core
+    = glyph_core or GlyphStrategyCore()
 
 
 
@@ -748,7 +745,8 @@ strategy_result.confidence:.3f}))
 
 
 
-def _determine_signal_direction():-> SignalDirection:Determine signal direction based on strategy and market conditions.
+def _determine_signal_direction():-> SignalDirection:Determine signal direction based on strategy
+and market conditions.
 
 
 
@@ -1084,7 +1082,8 @@ if size_to_execute <= 0:  # No position to take
 
 
 
-fNo position to execute for {signal.asset}. Size calculated as 0.)return {status:no_action,message:Position size is zero}
+fNo position to execute for {signal.asset}. Size calculated as 0.)return
+{status:no_action,message:Position size is zero}
 
 
 
@@ -1120,7 +1119,9 @@ signal.price})
 
 
 
-execution_result = {status:dry_run_success,order_id:simulated_+ str(int(time.time())),executed_size": size_to_execute,price": signal.price,fees": size_to_execute * 0.001,  # Simulate 0.1% feemessage:Simulated trade execution",
+execution_result
+    
+    = {status:dry_run_success,order_id:simulated_+ str(int(time.time())),executed_size": size_to_execute,price": signal.price,fees": size_to_execute * 0.001,  # Simulate 0.1% feemessage:Simulated trade execution",
 
 
 
@@ -1164,7 +1165,9 @@ signal.asset, signal.direction.value, size_to_execute, signal.price
 
 
 
-execution_result = {status:live_executed,order_id: order.get(order_id,N/A),executed_size": order.get(executed_size", 0.0),price": order.get(price", 0.0),fees": order.get(fees", 0.0),message":Live trade execution",
+execution_result
+    
+    = {status:live_executed,order_id: order.get(order_id,N/A),executed_size": order.get(executed_size", 0.0),price": order.get(price", 0.0),fees": order.get(fees", 0.0),message":Live trade execution",
 
 
 
@@ -1236,7 +1239,8 @@ self.portfolio_tracker.get_portfolio_summary()})
 
 
 
-def get_active_signals():-> List[TradeSignal]:Return list of currently active signals.return self.active_signals.copy()
+def get_active_signals():-> List[TradeSignal]:Return list of currently active signals.return
+self.active_signals.copy()
 
 
 
@@ -1244,7 +1248,8 @@ def get_active_signals():-> List[TradeSignal]:Return list of currently active si
 
 
 
-def get_signal_history():-> List[TradeSignal]:Return a portion of the signal history.return list(self.signal_history)[-limit:]
+def get_signal_history():-> List[TradeSignal]:Return a portion of the signal history.return
+list(self.signal_history)[-limit:]
 
 
 
@@ -1252,7 +1257,8 @@ def get_signal_history():-> List[TradeSignal]:Return a portion of the signal his
 
 
 
-def get_performance_stats():-> Dict[str, any]:Return performance statistics.stats = self.stats.copy()
+def get_performance_stats():-> Dict[str, any]:Return performance statistics.stats
+    = self.stats.copy()
 
 
 

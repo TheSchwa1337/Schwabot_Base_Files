@@ -1,10 +1,5 @@
-import numpy as np
-import hashlib
-import time
-from dataclasses import dataclass
 from typing import Any, Dict, List, Optional
 
-import numpy as np
 
 from core.advanced_dualistic_trading_execution_system import (
     COMMENTED,
@@ -110,8 +105,6 @@ Mathematical Foundation:
 - Error Recovery: R = f(error_type, severity, fallback_available)
 """
 
-import logging
-from pathlib import Path
 import sys
 
 # Configure logging
@@ -127,19 +120,21 @@ sys.path.insert(0, str(core_dir))
 
 # Import all comprehensive systems with error handling
 try:
-    # from core.comprehensive_integration_system import ComprehensiveIntegrationSystem, BitLevel, LogicGateType
-    # from core.error_handling_and_flake_gate_prevention import ComprehensiveErrorHandler, ErrorSeverity, ErrorType
-    # from core.unified_profit_vectorization_system import EnhancedUnifiedProfitVectorizationSystem, VectorizationMode
-    # from core.advanced_dualistic_trading_execution_system import EnhancedAdvancedDualisticTradingExecutionSystem, ExecutionMode
-    # from core.schwabot_unified_integration import EnhancedSchwabotUnifiedIntegration, IntegrationMode
+# from core.comprehensive_integration_system import ComprehensiveIntegrationSystem, BitLevel,
+LogicGateType
+# from core.error_handling_and_flake_gate_prevention import ComprehensiveErrorHandler,
+ErrorSeverity, ErrorType
+# from core.unified_profit_vectorization_system import EnhancedUnifiedProfitVectorizationSystem,
+VectorizationMode
+# from core.advanced_dualistic_trading_execution_system import
+EnhancedAdvancedDualisticTradingExecutionSystem, ExecutionMode
+# from core.schwabot_unified_integration import EnhancedSchwabotUnifiedIntegration, IntegrationMode
     ALL_SYSTEMS_AVAILABLE = True
     logger.info("All comprehensive systems imported successfully")
 except ImportError as e:
     logger.warning(f"Some comprehensive systems not available: {e}")
     ALL_SYSTEMS_AVAILABLE = False
 
-from enum import Enum
-from dataclasses import dataclass
 
 class SystemStatus(Enum):
     """System status enumeration."""
@@ -410,7 +405,7 @@ class FinalIntegrationLauncher:
                     recommendations=['Using fallback mode'],
                 )
 
-            def handle_runtime_error(self, error: Exception, error_context: Dict[str, Any]) -> Dict[str, Any]:
+def handle_runtime_error(self, error: Exception, error_context: Dict[str, Any]) -> Dict[str, Any]:
                 return {
                     'success': True,
                     'strategy': 'fallback',
@@ -451,9 +446,12 @@ class FinalIntegrationLauncher:
 
     async def execute_complete_trading_cycle(self, target_quantity: Optional[float] = None,
                                             bit_levels: Optional[List[int]] = None,
-                                            logic_gates: Optional[List[str]] = None) -> TradingResult:
+                                            logic_gates: Optional[List[str]] = None)
+    -> TradingResult:
         """Execute complete trading cycle with all systems."""
-        trade_id = hashlib.sha256(f"{time.time()}_{target_quantity or self.config.get('default_trade_quantity', 0.1)}".encode()).hexdigest()[:16]
+        trade_id
+    
+    = hashlib.sha256(f"{time.time()}_{target_quantity or self.config.get('default_trade_quantity', 0.1)}".encode()).hexdigest()[:16]
 
         start_time = time.time()
 
@@ -584,7 +582,8 @@ class FinalIntegrationLauncher:
         except Exception as e:
             logger.error(f"Failed to update system state: {e}")
 
-    async def run_continuous_trading(self, duration_minutes: int, trade_interval_seconds: float, max_trades: Optional[int] = None) -> Dict[str, Any]:
+async def run_continuous_trading(self, duration_minutes: int, trade_interval_seconds: float,
+max_trades: Optional[int] = None) -> Dict[str, Any]:
         """Run continuous trading for a specified duration."""
         logger.info(f"Starting Continuous Trading Session")
         logger.info(f"Duration: {duration_minutes} minutes")
@@ -662,9 +661,11 @@ class FinalIntegrationLauncher:
                     'total_trades': self.system_state.total_trades,
                     'successful_trades': self.system_state.successful_trades,
                     'failed_trades': self.system_state.failed_trades,
-                    'success_rate': self.system_state.successful_trades / max(1, self.system_state.total_trades),
+                    'success_rate': self.system_state.successful_trades
+    / max(1, self.system_state.total_trades),
                     'total_profit': self.system_state.total_profit,
-                    'avg_profit_per_trade': self.system_state.total_profit / max(1, self.system_state.total_trades),
+                    'avg_profit_per_trade': self.system_state.total_profit
+    / max(1, self.system_state.total_trades),
                 },
                 'system_health': {
                     'current_health': self.system_state.system_health,
@@ -707,13 +708,13 @@ class FinalIntegrationLauncher:
                 f"Total Trades: {final_stats.get('trading_statistics', {}).get('total_trades', 0)}"
             )
             logger.info(
-                f"Success Rate: {final_stats.get('trading_statistics', {}).get('success_rate', 0.0):.2%}"
+f"Success Rate: {final_stats.get('trading_statistics', {}).get('success_rate', 0.0):.2%}"
             )
             logger.info(
-                f"Total Profit: {final_stats.get('trading_statistics', {}).get('total_profit', 0.0):.6f}"
+f"Total Profit: {final_stats.get('trading_statistics', {}).get('total_profit', 0.0):.6f}"
             )
             logger.info(
-                f"System Health: {final_stats.get('system_health', {}).get('current_health', 0.0):.2%}"
+f"System Health: {final_stats.get('system_health', {}).get('current_health', 0.0):.2%}"
             )
 
             logger.info("Final Integration Launcher shutdown complete")
@@ -755,15 +756,15 @@ async def main():
         # Get initial system status
         initial_status = final_integration_launcher.get_system_status()
         print(
-            f"\nInitial System Status: {initial_status.get('system_state', {}).get('status', 'unknown')}"
+f"\nInitial System Status: {initial_status.get('system_state', {}).get('status', 'unknown')}"
         )
         print(
-            f"Trading Mode: {initial_status.get('configuration', {}).get('trading_mode', 'unknown')}"
+f"Trading Mode: {initial_status.get('configuration', {}).get('trading_mode', 'unknown')}"
         )
         print(f"Bit Levels: {initial_status.get('configuration', {}).get('bit_levels', [])}")
         print(f"Logic Gates: {initial_status.get('configuration', {}).get('logic_gates', [])}")
         print(
-            f"System Health: {initial_status.get('system_health', {}).get('current_health', 0.0):.2%}"
+f"System Health: {initial_status.get('system_health', {}).get('current_health', 0.0):.2%}"
         )
 
         # Execute a single trading cycle
@@ -801,10 +802,10 @@ async def main():
             f"Total Trades: {final_status.get('trading_statistics', {}).get('total_trades', 0)}"
         )
         print(
-            f"Success Rate: {final_status.get('trading_statistics', {}).get('success_rate', 0.0):.2%}"
+f"Success Rate: {final_status.get('trading_statistics', {}).get('success_rate', 0.0):.2%}"
         )
         print(
-            f"Total Profit: {final_status.get('trading_statistics', {}).get('total_profit', 0.0):.6f}"
+f"Total Profit: {final_status.get('trading_statistics', {}).get('total_profit', 0.0):.6f}"
         )
         print(
             f"System Health: {final_status.get('system_health', {}).get('current_health', 0.0):.2%}"

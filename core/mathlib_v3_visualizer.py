@@ -1,8 +1,7 @@
-#!/usr/bin/env python3
+# !/usr/bin/env python3
 """
 Mathlib v3 Visualizer - Minimal stub for import and placeholder plot
 """
-import numpy as np
 import matplotlib.pyplot as plt
 from io import BytesIO
 
@@ -19,4 +18,4 @@ def get_placeholder_plot() -> bytes:
     buf.seek(0)
     return buf.read()
 
-__all__ = ["get_placeholder_plot"] 
+__all__ = ["get_placeholder_plot"]

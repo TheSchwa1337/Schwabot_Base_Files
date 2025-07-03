@@ -1,10 +1,6 @@
-import hashlib
-import random
 import secrets
-import time
 from typing import Any, Dict, Optional, Union
 
-import numpy as np
 
 """
 
@@ -121,11 +117,15 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 
 
-Zygot-Zalgo Entropy Dual Key Gate - Advanced Entropic Gate System.Implements the dual-key entropy gate system that combines Zygot and Zalgo
+Zygot-Zalgo Entropy Dual Key Gate
+    
+    - Advanced Entropic Gate System.Implements the dual-key entropy gate system that combines Zygot and Zalgo
 
 
 
-mathematical principles for enhanced trading signal validation.class ZygotZalgoEntropyDualKeyGate:A dual-key entropy gate for secure and adaptive trade signal validation.def __init__():Initializes the Zygot-Zalgo Entropy Dual-Key Gate.
+mathematical principles for enhanced trading signal validation.class ZygotZalgoEntropyDualKeyGate:A
+dual-key entropy gate for secure and adaptive trade signal validation.def __init__():Initializes the
+Zygot-Zalgo Entropy Dual-Key Gate.
 
 
 
@@ -153,7 +153,8 @@ initial_zygot_key: Optional initial Zygot key. If None, a random one is generate
 
 
 
-initial_zalgo_key: Optional initial Zalgo key. If None, a random one is generated.self.zygot_entropy_threshold = zygot_entropy_threshold
+initial_zalgo_key: Optional initial Zalgo key. If None, a random one is
+generated.self.zygot_entropy_threshold = zygot_entropy_threshold
 
 
 
@@ -197,7 +198,9 @@ initial_zalgo_key if initial_zalgo_key else self._generate_key()
 
 
 
-self.metrics: Dict[str, Any] = {total_evaluations: 0,gates_opened": 0,gates_closed": 0,last_evaluation_time": None,current_zygot_entropy": 0.0,current_zalgo_entropy": 0.0,current_zygot_key_hash: hashlib.sha256(
+self.metrics: Dict[str, Any]
+    
+    = {total_evaluations: 0,gates_opened": 0,gates_closed": 0,last_evaluation_time": None,current_zygot_entropy": 0.0,current_zalgo_entropy": 0.0,current_zygot_key_hash: hashlib.sha256(
 
 
 
@@ -229,7 +232,8 @@ def _generate_key():-> str:
 
 
 
-Generates a random cryptographic key.return secrets.token_hex(length // 2)  # Each byte is 2 hex chars
+Generates a random cryptographic key.return secrets.token_hex(length // 2)  # Each byte is 2 hex
+chars
 
 
 
@@ -245,7 +249,8 @@ Generates internal (Zygot) entropy based on system-internal data.
 
 
 
-        This is a placeholder. Real implementation would involve complex metrics.# Example: based on system uptime, CPU load, memory usage, internal
+This is a placeholder. Real implementation would involve complex metrics.# Example: based on system
+uptime, CPU load, memory usage, internal
 
 
 
@@ -297,7 +302,8 @@ Generates external (Zalgo) entropy based on external market data or APIs.
 
 
 
-        This is a placeholder. Real implementation would involve external API calls.# Example: based on market volatility, news sentiment, external API
+This is a placeholder. Real implementation would involve external API calls.# Example: based on
+market volatility, news sentiment, external API
 
 
 
@@ -313,7 +319,8 @@ external_data.get('news_sentiment', 0.5)}-{
 
 
 
-external_data.get('api_latency', 0.1)}hashed_entropy = hashlib.sha256(entropy_source.encode()).hexdigest()
+external_data.get('api_latency', 0.1)}hashed_entropy
+    = hashlib.sha256(entropy_source.encode()).hexdigest()
 
 
 
@@ -337,7 +344,8 @@ Performs cryptographic verification using both Zygot and Zalgo keys.
 
 
 
-This is a simplified verification. Real system would use proper HMAC/signatures.combined_hash = hashlib.sha256(
+This is a simplified verification. Real system would use proper HMAC/signatures.combined_hash
+    = hashlib.sha256(
 
 
 
@@ -377,7 +385,7 @@ Adapts the entropy thresholds based on system performance feedback.
 
 
 
-        This is a placeholder. Real adaptive logic would be more complex.if not self.adaptive_thresholding:
+This is a placeholder. Real adaptive logic would be more complex.if not self.adaptive_thresholding:
 
 
 
@@ -481,7 +489,8 @@ Returns:
 
 
 
-            A dictionary indicating whether the gate is open and the reason.self.metrics[total_evaluations] += 1self.metrics[last_evaluation_time] = time.time()
+A dictionary indicating whether the gate is open and the reason.self.metrics[total_evaluations] +=
+1self.metrics[last_evaluation_time] = time.time()
 
 
 
@@ -501,7 +510,8 @@ zygot_entropy = self._generate_zygot_entropy(internal_system_data)
 
 
 
-        self.metrics[current_zygot_entropy] = zygot_entropyself.metrics[current_zalgo_entropy] = zalgo_entropy
+        self.metrics[current_zygot_entropy] = zygot_entropyself.metrics[current_zalgo_entropy]
+    = zalgo_entropy
 
 
 
@@ -629,7 +639,7 @@ if not is_verified:
 
 
 
-            self.metrics[gates_closed] += 1return {gate_open: False,reason:Dual-key verification failed.}
+self.metrics[gates_closed] += 1return {gate_open: False,reason:Dual-key verification failed.}
 
 
 
@@ -641,7 +651,8 @@ self.metrics[gates_opened] += 1return {gate_open: True,reason:All entropy and ke
 
 
 
-def get_metrics():-> Dict[str, Any]:Returns the operational metrics of the dual-key gate.return self.metrics
+def get_metrics():-> Dict[str, Any]:Returns the operational metrics of the dual-key gate.return
+self.metrics
 
 
 
@@ -741,7 +752,8 @@ external_data = {market_volatility: 0.7,news_sentiment": 0.9,api_latency": 0.05,
 
 
 
-}performance_good = {recent_profit: 0.08,recent_loss: 0.00}performance_bad = {recent_profit: 0.01,recent_loss: 0.05}
+}performance_good = {recent_profit: 0.08,recent_loss: 0.00}performance_bad
+    = {recent_profit: 0.01,recent_loss: 0.05}
 
 
 
@@ -765,7 +777,8 @@ print(fGate Result: {result1})print(fMetrics: {gate.get_metrics()})
 
 
 
-print(\n--- Test Case 2: Low Zygot Entropy (expected to fail) ---)low_zygot_data = {cpu_load: 0.9,mem_usage: 0.9,data_checksum:error}
+print(\n--- Test Case 2: Low Zygot Entropy (expected to fail) ---)low_zygot_data
+    = {cpu_load: 0.9,mem_usage: 0.9,data_checksum:error}
 
 
 
@@ -797,7 +810,9 @@ print(fGate Result: {result3})print(fMetrics: {gate.get_metrics()})
 
 
 
-print(\n--- Test Case 4: Adaptive Thresholding (with bad performance) ---)print(f"Initial Zygot Threshold: {gate.zygot_entropy_threshold:.3f})print(fInitial Zalgo Threshold: {gate.zalgo_entropy_threshold:.3f})
+print(\n--- Test Case 4: Adaptive Thresholding (with bad performance) ---)print(f"Initial Zygot
+Threshold: {gate.zygot_entropy_threshold:.3f})print(fInitial Zalgo Threshold:
+{gate.zalgo_entropy_threshold:.3f})
 
 
 
@@ -813,11 +828,15 @@ trade_signal, internal_data, external_data, performance_bad
 
 
 
-print(fGate Result: {result4})print(fNew Zygot Threshold: {gate.zygot_entropy_threshold:.3f})print(fNew Zalgo Threshold: {gate.zalgo_entropy_threshold:.3f})print(fMetrics: {gate.get_metrics()})
+print(fGate Result: {result4})print(fNew Zygot Threshold:
+{gate.zygot_entropy_threshold:.3f})print(fNew Zalgo Threshold:
+{gate.zalgo_entropy_threshold:.3f})print(fMetrics: {gate.get_metrics()})
 
 
 
-print(\n--- Test Case 5: Key Rotation ---)initial_zygot_hash = gate.get_metrics()[current_zygot_key_hash]initial_zalgo_hash = gate.get_metrics()[current_zalgo_key_hash]
+print(\n--- Test Case 5: Key Rotation ---)initial_zygot_hash
+    = gate.get_metrics()[current_zygot_key_hash]initial_zalgo_hash 
+    = gate.get_metrics()[current_zalgo_key_hash]
 
 
 
@@ -825,7 +844,10 @@ gate.rotate_keys()
 
 
 
-print(fOld Zygot Key Hash: {initial_zygot_hash[:8]}...)print(f"New Zygot Key Hash: {gate.get_metrics()[current_zygot_key_hash][:8]}...)print(f"Old Zalgo Key Hash: {initial_zalgo_hash[:8]}...)print(f"New Zalgo Key Hash: {gate.get_metrics()[current_zalgo_key_hash][:8]}...)
+print(fOld Zygot Key Hash: {initial_zygot_hash[:8]}...)print(f"New Zygot Key Hash:
+{gate.get_metrics()[current_zygot_key_hash][:8]}...)print(f"Old Zalgo Key Hash:
+{initial_zalgo_hash[:8]}...)print(f"New Zalgo Key Hash:
+{gate.get_metrics()[current_zalgo_key_hash][:8]}...)
 
 
 

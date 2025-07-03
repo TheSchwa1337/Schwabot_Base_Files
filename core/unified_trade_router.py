@@ -1,13 +1,10 @@
-#!/usr/bin/env python3
+# !/usr/bin/env python3
 """
 Unified Trade Router
 Handles all routing between raw market data → signal construction → execution logic.
 Enhanced to work with the improved trading engine integration.
 """
 
-import logging
-import time
-from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
@@ -328,11 +325,11 @@ class UnifiedTradeRouter:
                 "average_mathematical_score": round(avg_math_score, 4),
                 "average_performance_score": round(avg_performance, 4),
                 "last_signal_time": (
-                    time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(self.signal_history[-1].timestamp)) 
+time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(self.signal_history[-1].timestamp))
                     if self.signal_history else None
                 ),
                 "last_execution_time": (
-                    time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(self.execution_log[-1].timestamp)) 
+time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(self.execution_log[-1].timestamp))
                     if self.execution_log else None
                 ),
             }

@@ -1,10 +1,5 @@
 import cmath
-import logging
-import math
-import time
-from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Union
-import numpy as np
 
 # Optional: Import dashboard event emitter if available
 try:
@@ -104,7 +99,7 @@ class GalileoTensorBridge:
         quantum_threshold = self.qss2_constants.QUANTUM_THRESHOLD
         resonance_threshold = self.qss2_constants.RESONANCE_THRESHOLD
         stable = (abs(phase) >= quantum_threshold) and (entropy >= resonance_threshold)
-        emit_dashboard_event("qss2_stability", {"phase": phase, "entropy": entropy, "stable": stable})
+emit_dashboard_event("qss2_stability", {"phase": phase, "entropy": entropy, "stable": stable})
         return stable
 
     def calculate_gut_metrics(self, btc_price: float = 50000.0) -> GUTMetrics:
@@ -140,4 +135,4 @@ def test_galileo_tensor_bridge():
     print("GalileoTensorBridge test passed")
 
 if __name__ == "__main__":
-    test_galileo_tensor_bridge() 
+    test_galileo_tensor_bridge()

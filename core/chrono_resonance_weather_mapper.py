@@ -1,18 +1,6 @@
 import asyncio
-import json
-import logging
-import math
-import os
-import random
-import time
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
-from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
-import numpy as np
-import requests
 from scipy import signal
 from scipy.fft import fft, fftfreq
 
@@ -168,7 +156,9 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 
 
-ChronoResonance Weather Mapping (CRWM) - Weather-Price Correlation Analysis.This module implements the ChronoResonance Weather Mapping system for Schwabot:
+ChronoResonance Weather Mapping (CRWM)
+    
+    - Weather-Price Correlation Analysis.This module implements the ChronoResonance Weather Mapping system for Schwabot:
 
 
 
@@ -236,7 +226,9 @@ logger = logging.getLogger(__name__)
 
 
 
-class WeatherPattern(Enum):Weather pattern types.HIGH_PRESSURE =  high_pressureLOW_PRESSURE =  low_pressureTEMPERATURE_RISE = temperature_riseTEMPERATURE_DROP =  temperature_dropHUMIDITY_INCREASE = humidity_increaseWIND_ACCELERATION =  wind_accelerationATMOSPHERIC_STABILITY = atmospheric_stabilityWEATHER_TRANSITION =  weather_transitionclass ResonanceMode(Enum):Chrono-resonance analysis modes.HARMONIC = harmonicSUBHARMONIC =  subharmonicOVERTONE = overtoneFUNDAMENTAL =  fundamentalCHAOS = chaos@dataclass
+class WeatherPattern(Enum):Weather pattern types.HIGH_PRESSURE =  high_pressureLOW_PRESSURE
+    =  low_pressureTEMPERATURE_RISE = temperature_riseTEMPERATURE_DROP 
+    =  temperature_dropHUMIDITY_INCREASE = humidity_increaseWIND_ACCELERATION =  wind_accelerationATMOSPHERIC_STABILITY = atmospheric_stabilityWEATHER_TRANSITION =  weather_transitionclass ResonanceMode(Enum):Chrono-resonance analysis modes.HARMONIC = harmonicSUBHARMONIC =  subharmonicOVERTONE = overtoneFUNDAMENTAL =  fundamentalCHAOS = chaos@dataclass
 
 
 
@@ -416,7 +408,8 @@ prediction_accuracy: float
 
 
 
-class ChronoResonanceWeatherMapper:ChronoResonance Weather Mapping system.def __init__():Initialize the CRWM system.self.config = config or self._default_config()
+class ChronoResonanceWeatherMapper:ChronoResonance Weather Mapping system.def __init__():Initialize
+the CRWM system.self.config = config or self._default_config()
 
 
 
@@ -500,7 +493,10 @@ self.storage_path = self._get_storage_path()
 
 
 
-def _default_config():-> Dict[str, Any]:Default configuration.return {max_weather_history: 10000,max_price_history": 10000,correlation_window_hours": 168,  # 1 weekresonance_analysis_enabled: True,gradient_smoothing": True,atmospheric_modeling": True,prediction_horizon_hours": 24,confidence_threshold": 0.7,auto_calibration": True,data_retention_days": 30,
+def _default_config():-> Dict[str, Any]:Default configuration.return {max_weather_history:
+10000,max_price_history": 10000,correlation_window_hours": 168,  # 1 weekresonance_analysis_enabled:
+True,gradient_smoothing": True,atmospheric_modeling": True,prediction_horizon_hours":
+24,confidence_threshold": 0.7,auto_calibration": True,data_retention_days": 30,
 
 
 
@@ -532,7 +528,11 @@ storage_path = Path.home() / .schwabot/crwmstorage_path.mkdir(parents = True, ex
 
 
 
-def _initialize_resonance_frequencies():-> Dict[str, float]:Initialize resonance frequency analysis parameters.return {atmospheric_base: 11.78,  # Earth's Schumann resonance (Hz)'diurnal_cycle: 1 / (24 * 3600),  # Daily cyclepressure_wave: 0.5,  # Pressure wave frequencytemperature_oscillation: 2.0,  # Temperature oscillationhumidity_cycle: 0.25,  # Humidity cyclewind_pattern: 1.5,  # Wind pattern frequencymarket_sentiment: 3.14159,  # Market resonance( Hz)
+def _initialize_resonance_frequencies():-> Dict[str, float]:Initialize resonance frequency analysis
+parameters.return {atmospheric_base: 11.78,  # Earth's Schumann resonance (Hz)'diurnal_cycle: 1 /
+(24 * 3600),  # Daily cyclepressure_wave: 0.5,  # Pressure wave frequencytemperature_oscillation:
+2.0,  # Temperature oscillationhumidity_cycle: 0.25,  # Humidity cyclewind_pattern: 1.5,  # Wind
+pattern frequencymarket_sentiment: 3.14159,  # Market resonance( Hz)
 
 
 
@@ -912,7 +912,8 @@ len(signatures)} new signatures)
 
 
 
-def _analyze_frequency_domain():-> Optional[ResonanceSignature]:Analyze frequency domain data for resonance signatures.try:
+def _analyze_frequency_domain():-> Optional[ResonanceSignature]:Analyze frequency domain data for
+resonance signatures.try:
 
 
 
@@ -1068,7 +1069,8 @@ harmonic_order=self._calculate_harmonic_order(dominant_freq),
 
 
 
-def _calculate_resonance_correlation():-> float:Calculate correlation with known resonance frequencies.try: max_correlation = 0.0
+def _calculate_resonance_correlation():-> float:Calculate correlation with known resonance
+frequencies.try: max_correlation = 0.0
 
 
 
@@ -1208,7 +1210,8 @@ else:
 
 
 
-def _calculate_harmonic_order():-> int:Calculate the harmonic order.try: fundamental = self.resonance_frequencies[atmospheric_base]
+def _calculate_harmonic_order():-> int:Calculate the harmonic order.try: fundamental
+    = self.resonance_frequencies[atmospheric_base]
 
 
 
@@ -1428,7 +1431,8 @@ f Updated correlation analysis: {len(correlations)} correlations)
 
 
 
-def _calculate_weather_price_correlation():-> Optional[WeatherPriceCorrelation]:Calculate correlation between weather parameter and price.try:
+def _calculate_weather_price_correlation():-> Optional[WeatherPriceCorrelation]:Calculate
+correlation between weather parameter and price.try:
 
 
 
@@ -1692,7 +1696,8 @@ prediction_accuracy=prediction_accuracy,
 
 
 
-def _align_time_series():-> Tuple[List[float], List[float]]:Align weather and price time series data.try: aligned_weather = []
+def _align_time_series():-> Tuple[List[float], List[float]]:Align weather and price time series
+data.try: aligned_weather = []
 
 
 
@@ -2280,7 +2285,8 @@ temp_stability + pressure_stability + wind_stability
 
 
 
-def get_weather_signature():-> Optional[Dict[str, Any]]:Get current weather signature for trading decisions.try:
+def get_weather_signature():-> Optional[Dict[str, Any]]:Get current weather signature for trading
+decisions.try:
 
 
 
@@ -2424,11 +2430,15 @@ signature = {timestamp: datetime.now().isoformat(),
 
 
 
-time_window: time_window,current_conditions: {temperature: latest_weather.temperature,pressure": latest_weather.pressure,humidity": latest_weather.humidity,wind_speed": latest_weather.wind_speed,weather_type: latest_weather.weather_type,
+time_window: time_window,current_conditions: {temperature: latest_weather.temperature,pressure":
+latest_weather.pressure,humidity": latest_weather.humidity,wind_speed":
+latest_weather.wind_speed,weather_type: latest_weather.weather_type,
 
 
 
-},atmospheric_gradient": gradient.__dict__ if gradient else None,weather_momentum": weather_momentum,resonance_analysis": {active_signatures: len(recent_signatures),dominant_frequency": (
+},atmospheric_gradient": gradient.__dict__ if gradient else None,weather_momentum":
+weather_momentum,resonance_analysis": {active_signatures:
+len(recent_signatures),dominant_frequency": (
 
 
 
@@ -2596,7 +2606,8 @@ overall_momentum = math.sqrt(temp_momentum**2 + pressure_momentum**2)
 
 
 
-        return {momentum: overall_momentum,acceleration: wind_acceleration,pressure_momentum: pressure_momentum,temperature_velocity": temp_velocity,pressure_velocity": pressure_velocity,
+return {momentum: overall_momentum,acceleration: wind_acceleration,pressure_momentum:
+pressure_momentum,temperature_velocity": temp_velocity,pressure_velocity": pressure_velocity,
 
 
 
@@ -2608,7 +2619,8 @@ overall_momentum = math.sqrt(temp_momentum**2 + pressure_momentum**2)
 
 
 
-        except Exception as e:logger.error(f"Error calculating weather momentum: {e})return {momentum: 0.0,acceleration: 0.0,pressure_momentum: 0.0}
+except Exception as e:logger.error(f"Error calculating weather momentum: {e})return {momentum:
+0.0,acceleration: 0.0,pressure_momentum: 0.0}
 
 
 
@@ -2616,7 +2628,8 @@ overall_momentum = math.sqrt(temp_momentum**2 + pressure_momentum**2)
 
 
 
-def _generate_trading_signals():-> Dict[str, Any]:"Generate trading signals based on weather analysis.try: signals = {signal_strength: 0.0,direction:neutral,confidence": 0.0,components": {},
+def _generate_trading_signals():-> Dict[str, Any]:"Generate trading signals based on weather
+analysis.try: signals = {signal_strength: 0.0,direction:neutral,confidence": 0.0,components": {},
 
 
 
@@ -2656,7 +2669,8 @@ gradient.composite_gradient * gradient.stability_index
 
 
 
-signal_components.append((gradient, gradient_signal, 0.3))signals[components][gradient] = gradient_signal
+signal_components.append((gradient, gradient_signal, 0.3))signals[components][gradient]
+    = gradient_signal
 
 
 
@@ -2672,7 +2686,8 @@ for param, corr in correlations.items():
 
 
 
-                if abs(corr.correlation_coefficient) > 0.3 and corr.p_value < 0.05: corr_signal = corr.correlation_coefficient * corr.pattern_strength
+                if abs(corr.correlation_coefficient) > 0.3 and corr.p_value < 0.05: corr_signal
+    = corr.correlation_coefficient * corr.pattern_strength
 
 
 
@@ -2704,7 +2719,8 @@ if momentum[acceleration] > 0:
 
 
 
-signal_components.append((momentum, momentum_signal, 0.3))signals[components][momentum] = momentum_signal
+signal_components.append((momentum, momentum_signal, 0.3))signals[components][momentum]
+    = momentum_signal
 
 
 
@@ -2752,7 +2768,8 @@ signals[direction] = (bullishif signals[signal_strength] > 0.1:
 
 
 
-                    elsebearishif signals[signal_strength] < -0.1 elseneutral)signals[confidence] = min(1.0, abs(signals[signal_strength]))
+                    elsebearishif signals[signal_strength] < -0.1 elseneutral)signals[confidence]
+    = min(1.0, abs(signals[signal_strength]))
 
 
 
@@ -2788,7 +2805,8 @@ signals[direction] = (bullishif signals[signal_strength] > 0.1:
 
 
 
-def predict_weather_price_movement():-> Optional[Dict[str, Any]]:Predict price movement based on weather patterns.try:
+def predict_weather_price_movement():-> Optional[Dict[str, Any]]:Predict price movement based on
+weather patterns.try:
 
 
 
@@ -2916,7 +2934,9 @@ corr.correlation_coefficient
 
 
 
-prediction = {parameter: param,correlation: corr.correlation_coefficient,predicted_change_percent: predicted_price_change,confidence": corr.prediction_accuracy,lag_hours": corr.lag_hours,
+prediction
+    
+    = {parameter: param,correlation: corr.correlation_coefficient,predicted_change_percent: predicted_price_change,confidence": corr.prediction_accuracy,lag_hours": corr.lag_hours,
 
 
 
@@ -2976,7 +2996,8 @@ final_confidence = total_confidence / len(predictions)
 
 
 
-        return {horizon_hours: horizon_hours,predicted_change_percent: final_prediction,confidence: final_confidence,predictions: predictions,timestamp": datetime.now().isoformat(),
+return {horizon_hours: horizon_hours,predicted_change_percent: final_prediction,confidence:
+final_confidence,predictions: predictions,timestamp": datetime.now().isoformat(),
 
 
 
@@ -3016,7 +3037,9 @@ def get_crwm_status():-> Dict[str, Any]:Get comprehensive CRWM system status.try
 
 
 
-            return {system_status:activeif self.weather_history elseinactive,data_points": {weather_history: len(self.weather_history),price_history": len(self.price_history),resonance_signatures": len(self.resonance_signatures),
+return {system_status:activeif self.weather_history elseinactive,data_points": {weather_history:
+len(self.weather_history),price_history": len(self.price_history),resonance_signatures":
+len(self.resonance_signatures),
 
 
 
@@ -3092,7 +3115,8 @@ else None
 
 
 
-        except Exception as e:logger.error(f"Error getting CRWM status: {e})return {system_status:error,error: str(e)}
+except Exception as e:logger.error(f"Error getting CRWM status: {e})return
+{system_status:error,error: str(e)}
 
 
 
@@ -3100,7 +3124,9 @@ else None
 
 
 
-def export_crwm_data():-> bool:"Export CRWM data and analysis results.try: export_data = {export_timestamp: datetime.now().isoformat(),system_status: self.get_crwm_status(),recent_weather_data": [{timestamp: w.timestamp.isoformat(),location": w.location,temperature": w.temperature,pressure": w.pressure,humidity": w.humidity,wind_speed": w.wind_speed,weather_type: w.weather_type,
+def export_crwm_data():-> bool:"Export CRWM data and analysis results.try: export_data
+    
+    = {export_timestamp: datetime.now().isoformat(),system_status: self.get_crwm_status(),recent_weather_data": [{timestamp: w.timestamp.isoformat(),location": w.location,temperature": w.temperature,pressure": w.pressure,humidity": w.humidity,wind_speed": w.wind_speed,weather_type: w.weather_type,
 
 
 
@@ -3112,7 +3138,9 @@ for w in self.weather_history[-100:]  # Last 100 points
 
 
 
-],resonance_signatures: [{frequency: s.frequency,amplitude": s.amplitude,correlation": s.correlation,confidence": s.confidence,pattern_type: s.pattern_type.value,resonance_mode": s.resonance_mode.value,
+],resonance_signatures: [{frequency: s.frequency,amplitude": s.amplitude,correlation":
+s.correlation,confidence": s.confidence,pattern_type: s.pattern_type.value,resonance_mode":
+s.resonance_mode.value,
 
 
 
@@ -3128,7 +3156,9 @@ for s in self.resonance_signatures[-50:]
 
 
 
-],correlations: {param: {correlation_coefficient: corr.correlation_coefficient,p_value": corr.p_value,lag_hours": corr.lag_hours,pattern_strength": corr.pattern_strength,prediction_accuracy": corr.prediction_accuracy,
+],correlations: {param: {correlation_coefficient: corr.correlation_coefficient,p_value":
+corr.p_value,lag_hours": corr.lag_hours,pattern_strength":
+corr.pattern_strength,prediction_accuracy": corr.prediction_accuracy,
 
 
 
@@ -3408,7 +3438,8 @@ print(\n Analyzing weather signature...)signature = crwm.get_weather_signature(4
 
 
 
-if signature:'print(fCurrent conditions: {signature['current_conditions']})'print(f"Trading signals: {signature['trading_signals']})
+if signature:'print(fCurrent conditions: {signature['current_conditions']})'print(f"Trading signals:
+{signature['trading_signals']})
 
 
 
@@ -3456,7 +3487,8 @@ if prediction:
 
 
 
-f6-hour prediction: {prediction['predicted_change_percent']:.2f}% change)'print(f"Confidence: {prediction['confidence']:.2f})
+f6-hour prediction: {prediction['predicted_change_percent']:.2f}% change)'print(f"Confidence:
+{prediction['confidence']:.2f})
 
 
 
@@ -3480,7 +3512,9 @@ print(
 
 
 
-fData points - Weather: {'status['data_points']['weather_history']},f"Price: {'status['data_points']['price_history']})
+fData points
+    
+    - Weather: {'status['data_points']['weather_history']},f"Price: {'status['data_points']['price_history']})
 
 
 

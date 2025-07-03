@@ -1,9 +1,5 @@
             import psutil
 
-import threading
-import time
-from dataclasses import dataclass, field
-from enum import Enum
 from typing import Any, Dict, List, Optional
 
 from .zbe_core import ZBECore
@@ -147,7 +143,9 @@ class AccelerationMode(Enum):
 
 
 
-    Hardware acceleration modes.IDLE =  idleTHERMAL_OPTIMIZATION =  thermal_optimizationBIT_LEVEL_OPTIMIZATION =  bit_level_optimizationUNIFIED_ACCELERATION =  unified_accelerationPERFORMANCE_MODE =  performance_modeEFFICIENCY_MODE =  efficiency_mode@dataclass
+    Hardware acceleration modes.IDLE =  idleTHERMAL_OPTIMIZATION
+    =  thermal_optimizationBIT_LEVEL_OPTIMIZATION =  bit_level_optimizationUNIFIED_ACCELERATION 
+    =  unified_accelerationPERFORMANCE_MODE =  performance_modeEFFICIENCY_MODE =  efficiency_mode@dataclass
 
 
 
@@ -287,7 +285,8 @@ class HardwareAccelerationManager:Hardware Acceleration Manager - Coordinates ZP
 
 
 
-        5. Thermal management prevents performance degradationdef __init__() -> None:Initialize hardware acceleration manager.self.precision = precision
+        5. Thermal management prevents performance degradationdef __init__()
+    -> None:Initialize hardware acceleration manager.self.precision = precision
 
 
 
@@ -550,7 +549,7 @@ class HardwareAccelerationManager:Hardware Acceleration Manager - Coordinates ZP
 
 
 
-    def calculate_unified_acceleration() -> AccelerationMetrics:Calculate unified acceleration metrics.
+def calculate_unified_acceleration() -> AccelerationMetrics:Calculate unified acceleration metrics.
 
 
 
@@ -810,7 +809,8 @@ class HardwareAccelerationManager:Hardware Acceleration Manager - Coordinates ZP
 
 
 
-                        bit_density: bit_data.bit_density,memory_usage: memory_data.memory_usage if memory_data else 0.0,optimization_mode: self.mode.value,
+bit_density: bit_data.bit_density,memory_usage: memory_data.memory_usage if memory_data else
+0.0,optimization_mode: self.mode.value,
 
 
 
@@ -982,7 +982,11 @@ class HardwareAccelerationManager:Hardware Acceleration Manager - Coordinates ZP
 
 
 
-    def get_acceleration_factors() -> Dict[str, float]:Get current acceleration factors.return {unified_boost_factor: self.unified_boost_factor,thermal_optimization_factor: self.thermal_optimization_factor,computational_optimization_factor: self.computational_optimization_factor,memory_optimization_factor: self.memory_optimization_factor,overall_performance_boost: (
+def get_acceleration_factors() -> Dict[str, float]:Get current acceleration factors.return
+{unified_boost_factor: self.unified_boost_factor,thermal_optimization_factor:
+self.thermal_optimization_factor,computational_optimization_factor:
+self.computational_optimization_factor,memory_optimization_factor:
+self.memory_optimization_factor,overall_performance_boost: (
 
 
 
@@ -1018,7 +1022,8 @@ class HardwareAccelerationManager:Hardware Acceleration Manager - Coordinates ZP
 
 
 
-    def optimize_tensor_calculations() -> Dict[str, float]:Optimize tensor calculations using unified acceleration.
+def optimize_tensor_calculations() -> Dict[str, float]:Optimize tensor calculations using unified
+acceleration.
 
 
 
@@ -1106,7 +1111,7 @@ class HardwareAccelerationManager:Hardware Acceleration Manager - Coordinates ZP
 
 
 
-                matrix_multiply: 1.2,tensor_contraction: 1.1,eigenvalue_decomposition: 0.9,svd_decomposition: 0.8,
+matrix_multiply: 1.2,tensor_contraction: 1.1,eigenvalue_decomposition: 0.9,svd_decomposition: 0.8,
 
 
 
@@ -1194,7 +1199,10 @@ class HardwareAccelerationManager:Hardware Acceleration Manager - Coordinates ZP
 
 
 """
-                memory_optimization: memory_optimization,thermal_optimization: thermal_optimization,optimal_batch_size: optimal_batch_size,parallelization_factor: parallelization_factor,operation_type: operation_type,tensor_complexity: tensor_complexity,tensor_size": tensor_size,"
+memory_optimization: memory_optimization,thermal_optimization:
+thermal_optimization,optimal_batch_size: optimal_batch_size,parallelization_factor:
+parallelization_factor,operation_type: operation_type,tensor_complexity:
+tensor_complexity,tensor_size": tensor_size,"
 
 
 
@@ -1214,7 +1222,9 @@ class HardwareAccelerationManager:Hardware Acceleration Manager - Coordinates ZP
 
 
 
-            return {speedup_multiplier: 1.0,memory_optimization: 0.5,thermal_optimization: 0.5,optimal_batch_size": 1,parallelization_factor: 1,operation_type: operation_type,tensor_complexity": tensor_complexity,tensor_size": tensor_size,"
+return {speedup_multiplier: 1.0,memory_optimization: 0.5,thermal_optimization:
+0.5,optimal_batch_size": 1,parallelization_factor: 1,operation_type:
+operation_type,tensor_complexity": tensor_complexity,tensor_size": tensor_size,"
 
 
 
@@ -1294,7 +1304,11 @@ class HardwareAccelerationManager:Hardware Acceleration Manager - Coordinates ZP
 
 
 
-                cpu_frequency: self.hardware_profile.cpu_frequency,memory_total: self.hardware_profile.memory_total,memory_available: self.hardware_profile.memory_available,gpu_available": self.hardware_profile.gpu_available,vectorization_support": self.hardware_profile.vectorization_support,
+cpu_frequency: self.hardware_profile.cpu_frequency,memory_total:
+self.hardware_profile.memory_total,memory_available:
+self.hardware_profile.memory_available,gpu_available":
+self.hardware_profile.gpu_available,vectorization_support":
+self.hardware_profile.vectorization_support,
 
 
 
@@ -1306,7 +1320,15 @@ class HardwareAccelerationManager:Hardware Acceleration Manager - Coordinates ZP
 
 
 
-            return {acceleration_mode: self.mode.value,total_cycles: self.total_cycles,acceleration_events: self.acceleration_events,optimization_events": self.optimization_events,current_boost_factor: acceleration_factors[unified_boost_factor],average_boost": avg_boost,maximum_boost": max_boost,thermal_efficiency": acceleration_factors[thermal_optimization_factor],computational_efficiency": acceleration_factors[computational_optimization_factor],memory_efficiency": acceleration_factors[memory_optimization_factor],hardware_profile": hardware_utilization,is_optimizing": self.is_optimizing,history_size": len(self.acceleration_history),"
+return {acceleration_mode: self.mode.value,total_cycles: self.total_cycles,acceleration_events:
+self.acceleration_events,optimization_events": self.optimization_events,current_boost_factor:
+acceleration_factors[unified_boost_factor],average_boost": avg_boost,maximum_boost":
+max_boost,thermal_efficiency":
+acceleration_factors[thermal_optimization_factor],computational_efficiency":
+acceleration_factors[computational_optimization_factor],memory_efficiency":
+acceleration_factors[memory_optimization_factor],hardware_profile":
+hardware_utilization,is_optimizing": self.is_optimizing,history_size":
+len(self.acceleration_history),"
 
 
 
@@ -1326,7 +1348,10 @@ class HardwareAccelerationManager:Hardware Acceleration Manager - Coordinates ZP
 
 
 
-            return {acceleration_mode: self.mode.value,total_cycles: self.total_cycles,acceleration_events: self.acceleration_events,optimization_events": self.optimization_events,current_boost_factor: 1.0,average_boost": 1.0,maximum_boost": 1.0,thermal_efficiency": 0.5,computational_efficiency": 0.5,memory_efficiency": 0.5,hardware_profile": {},"
+return {acceleration_mode: self.mode.value,total_cycles: self.total_cycles,acceleration_events:
+self.acceleration_events,optimization_events": self.optimization_events,current_boost_factor:
+1.0,average_boost": 1.0,maximum_boost": 1.0,thermal_efficiency": 0.5,computational_efficiency":
+0.5,memory_efficiency": 0.5,hardware_profile": {},"
 
 
 
@@ -1342,7 +1367,8 @@ class HardwareAccelerationManager:Hardware Acceleration Manager - Coordinates ZP
 
 
 
-    def reset_acceleration() -> None:Reset acceleration to default state.self.unified_boost_factor = 1.0
+    def reset_acceleration() -> None:Reset acceleration to default state.self.unified_boost_factor
+    = 1.0
 
 
 
@@ -1366,7 +1392,8 @@ class HardwareAccelerationManager:Hardware Acceleration Manager - Coordinates ZP
 
 
 
-    def get_acceleration_history() -> List[AccelerationMetrics]:Get acceleration history.return self.acceleration_history.copy()
+def get_acceleration_history() -> List[AccelerationMetrics]:Get acceleration history.return
+self.acceleration_history.copy()
 
 
 
@@ -1390,7 +1417,8 @@ class HardwareAccelerationManager:Hardware Acceleration Manager - Coordinates ZP
 
 
 
-def get_hardware_acceleration_manager() -> HardwareAccelerationManager:Return hardware acceleration manager instance.#  PHANTOM_MATH: Implementation placeholder
+def get_hardware_acceleration_manager() -> HardwareAccelerationManager:Return hardware acceleration
+manager instance.#  PHANTOM_MATH: Implementation placeholder
 
 
 
@@ -1406,7 +1434,8 @@ def get_hardware_acceleration_manager() -> HardwareAccelerationManager:Return ha
 
 
 
-def demo_hardware_acceleration() -> None:Demonstrate hardware acceleration functionality.#  PHANTOM_MATH: Implementation placeholder
+def demo_hardware_acceleration() -> None:Demonstrate hardware acceleration functionality.# 
+PHANTOM_MATH: Implementation placeholder
 
 
 
@@ -1438,7 +1467,8 @@ def get_gpu_energy_ratio() -> float:  # pragma: no cover
 
 
 
-    Return placeholder GPU energy ratio until full implementation.logger.warning( HARDWARE STUB: Returning default GPU energy ratio = 1.0)
+Return placeholder GPU energy ratio until full implementation.logger.warning( HARDWARE STUB:
+Returning default GPU energy ratio = 1.0)
 
 
 

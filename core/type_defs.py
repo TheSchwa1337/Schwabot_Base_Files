@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+# !/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Schwabot Type Definitions
@@ -9,11 +9,8 @@ Provides consistent type annotations across all modules.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from enum import Enum
 from typing import Any, Callable, Dict, List, NewType, Optional, Tuple, Union
 
-import numpy as np
 
 # Basic mathematical types
 Vector = NewType("Vector", np.ndarray)

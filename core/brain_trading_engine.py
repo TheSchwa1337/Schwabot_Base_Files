@@ -1,13 +1,5 @@
-import hashlib
-import json
-import logging
-import math
-import time
-from dataclasses import dataclass, field
-from datetime import datetime
 from typing import Any, Dict, List, Optional, Tuple
 
-import numpy as np
 
 from core.clean_unified_math import clean_unified_math as unified_math
 
@@ -1257,7 +1249,8 @@ self.metrics.total_profit / self.metrics.profitable_signals
 
 
 
-if len(self.signal_history) >= 30: recent_profits = [s.profit_score for s in self.signal_history[-30:]]
+if len(self.signal_history) >= 30: recent_profits
+    = [s.profit_score for s in self.signal_history[-30:]]
 
 
 
@@ -1353,7 +1346,9 @@ else:
 
 
 
-        return {action: action,position_size: position_size,confidence: signal.confidence,expected_profit: signal.profit_score,signal_strength": signal.signal_strength,timestamp": signal.timestamp,symbol": signal.symbol,reasoning": f"Brain signal: {action} with {signal.confidence:.2f} confidence,
+return {action: action,position_size: position_size,confidence: signal.confidence,expected_profit:
+signal.profit_score,signal_strength": signal.signal_strength,timestamp": signal.timestamp,symbol":
+signal.symbol,reasoning": f"Brain signal: {action} with {signal.confidence:.2f} confidence,
 
 
 
@@ -1369,7 +1364,8 @@ else:
 
 
 
-        return {action:HOLD,position_size": 0.0,confidence": 0.0,expected_profit": 0.0,signal_strength": 0.0,timestamp": time.time(),symbol":BTC",reasoning":Error in signal processing",
+return {action:HOLD,position_size": 0.0,confidence": 0.0,expected_profit": 0.0,signal_strength":
+0.0,timestamp": time.time(),symbol":BTC",reasoning":Error in signal processing",
 
 
 
@@ -1381,7 +1377,11 @@ else:
 
 
 
-def get_metrics_summary():-> Dict[str, Any]:"Get trading metrics summary.return {total_signals: self.metrics.total_signals,profitable_signals": self.metrics.profitable_signals,win_rate": self.metrics.win_rate,total_profit": self.metrics.total_profit,avg_profit_per_signal": self.metrics.avg_profit_per_signal,sharpe_ratio": self.metrics.sharpe_ratio,max_drawdown": self.metrics.max_drawdown,signals_in_history": len(self.signal_history),
+def get_metrics_summary():-> Dict[str, Any]:"Get trading metrics summary.return {total_signals:
+self.metrics.total_signals,profitable_signals": self.metrics.profitable_signals,win_rate":
+self.metrics.win_rate,total_profit": self.metrics.total_profit,avg_profit_per_signal":
+self.metrics.avg_profit_per_signal,sharpe_ratio": self.metrics.sharpe_ratio,max_drawdown":
+self.metrics.max_drawdown,signals_in_history": len(self.signal_history),
 
 
 
@@ -1389,7 +1389,9 @@ def get_metrics_summary():-> Dict[str, Any]:"Get trading metrics summary.return 
 
 
 
-def export_signals():-> bool:Export signal history to JSON file.try: export_data = {metrics: self.get_metrics_summary(),signals: [{timestamp: s.timestamp,price": s.price,volume": s.volume,signal_strength": s.signal_strength,enhancement_factor: s.enhancement_factor,profit_score": s.profit_score,confidence": s.confidence,symbol": s.symbol,
+def export_signals():-> bool:Export signal history to JSON file.try: export_data
+    
+    = {metrics: self.get_metrics_summary(),signals: [{timestamp: s.timestamp,price": s.price,volume": s.volume,signal_strength": s.signal_strength,enhancement_factor: s.enhancement_factor,profit_score": s.profit_score,confidence": s.confidence,symbol": s.symbol,
 
 
 
@@ -1457,7 +1459,8 @@ with open(filepath, 'w') as f:
 
 
 
-def demo_brain_trading_engine():Demonstration of the brain trading engine.print( Brain Trading Engine Demo)print(=* 50)
+def demo_brain_trading_engine():Demonstration of the brain trading engine.print( Brain Trading
+Engine Demo)print(=* 50)
 
 
 
@@ -1469,7 +1472,9 @@ def demo_brain_trading_engine():Demonstration of the brain trading engine.print(
 
 
 
-config = {'base_profit_rate': 0.002,  # 0.2%'confidence_threshold': 0.7,'enhancement_range': (0.8, 1.5),
+config
+    
+    = {'base_profit_rate': 0.002,  # 0.2%'confidence_threshold': 0.7,'enhancement_range': (0.8, 1.5),
 
 
 
@@ -1601,7 +1606,9 @@ metrics = engine.get_metrics_summary()
 
 
 
-print(Final Metrics:)'print(fTotal Signals: {metrics['total_signals']})'print(fWin Rate: {metrics['win_rate']:.2%})'print(fTotal Profit: {metrics['total_profit']:.4f})'print(fAvg Profit/Signal: {metrics['avg_profit_per_signal']:.4f})
+print(Final Metrics:)'print(fTotal Signals: {metrics['total_signals']})'print(fWin Rate:
+{metrics['win_rate']:.2%})'print(fTotal Profit: {metrics['total_profit']:.4f})'print(fAvg
+Profit/Signal: {metrics['avg_profit_per_signal']:.4f})
 
 
 
@@ -1613,7 +1620,8 @@ print(Final Metrics:)'print(fTotal Signals: {metrics['total_signals']})'print(fW
 
 
 
-engine.export_signals(demo_brain_signals.json)print(\n Demo completed. Data exported to demo_brain_signals.json)
+engine.export_signals(demo_brain_signals.json)print(\n Demo completed. Data exported to
+demo_brain_signals.json)
 
 
 
@@ -1653,7 +1661,8 @@ _risk_manager_ref: Optional[RiskManager] = None  # type: ignore
 
 
 
-def register_risk_manager():-> None:  # noqa: F821Register the active RiskManager so other engines can tweak parameters.global _risk_manager_ref
+def register_risk_manager():-> None:  # noqa: F821Register the active RiskManager so other engines
+can tweak parameters.global _risk_manager_ref
 
 
 
@@ -1669,7 +1678,9 @@ _risk_manager_ref = risk_manager
 
 
 
-def update_risk_threshold():-> bool:Dynamically update the volatility threshold in the registered RiskManager.Returns ``True`` if the update succeeded, ``False`` otherwise.if _risk_manager_ref is None:
+def update_risk_threshold():-> bool:Dynamically update the volatility threshold in the registered
+RiskManager.Returns ``True`` if the update succeeded, ``False`` otherwise.if _risk_manager_ref is
+None:
 
 
 

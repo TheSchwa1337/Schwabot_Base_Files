@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+# !/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Unified Profit Vectorization System
@@ -16,13 +16,8 @@ This system integrates:
 
 from __future__ import annotations
 
-import logging
-import time
-from dataclasses import dataclass, field
-from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
 
-import numpy as np
 
 from .clean_math_foundation import BitPhase, CleanMathFoundation, ThermalState
 from .clean_profit_vectorization import CleanProfitVectorization, ProfitVector, VectorizationMode
@@ -100,8 +95,7 @@ class UnifiedProfitVectorizationSystem:
         self.performance_tracking = True
 
         logger.info(
-            f"UnifiedProfitVectorizationSystem initialized with mode: {
-                integration_mode.value}"
+            f"UnifiedProfitVectorizationSystem initialized with mode: {integration_mode.value}"
         )
 
     def calculate_unified_profit(

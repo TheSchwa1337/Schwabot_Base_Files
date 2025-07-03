@@ -1,12 +1,5 @@
-import logging
-import math
-import time
-from collections import deque
-from dataclasses import dataclass, field
-from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
 
-import numpy as np
 
 from core.drift_shell_engine import CorrectionFactors, ProfitVector
 from data.temporal_intelligence_integration import TemporalIntelligenceIntegration
@@ -155,7 +148,9 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 
 
-Correction Overlay Matrix - Dynamic Anomaly Detection & Multi-Model Correction.Implements the Correction Injection Function (CIF) for dynamic anomaly mitigation:
+Correction Overlay Matrix
+    
+    - Dynamic Anomaly Detection & Multi-Model Correction.Implements the Correction Injection Function (CIF) for dynamic anomaly mitigation:
 
 
 
@@ -291,7 +286,9 @@ logger = logging.getLogger(__name__)
 
 
 
-class AnomalyType(Enum):Types of market anomalies that can be detected.PRICE_SPIKE =  price_spikeVOLUME_SURGE =  volume_surgeHASH_DIVERGENCE =  hash_divergenceMOMENTUM_REVERSAL =  momentum_reversalVOLATILITY_SHOCK = volatility_shockBLACK_SWAN =  black_swanTECHNICAL_BREAKDOWN = technical_breakdownCORRELATION_BREAKDOWN =  correlation_breakdownclass CorrectionModel(Enum):Available correction models.QUANTUM_STATIC_CORE = qscGALILEO_TENSOR =  tensorSMART_MONEY_REPLAY = smart_moneyFIBONACCI_REVERSION =  fibonacciSTATISTICAL_REVERSION = statisticalENSEMBLE_HYBRID =  ensemble@dataclass
+class AnomalyType(Enum):Types of market anomalies that can be detected.PRICE_SPIKE
+    =  price_spikeVOLUME_SURGE =  volume_surgeHASH_DIVERGENCE =  hash_divergenceMOMENTUM_REVERSAL 
+    =  momentum_reversalVOLATILITY_SHOCK = volatility_shockBLACK_SWAN =  black_swanTECHNICAL_BREAKDOWN = technical_breakdownCORRELATION_BREAKDOWN =  correlation_breakdownclass CorrectionModel(Enum):Available correction models.QUANTUM_STATIC_CORE = qscGALILEO_TENSOR =  tensorSMART_MONEY_REPLAY = smart_moneyFIBONACCI_REVERSION =  fibonacciSTATISTICAL_REVERSION = statisticalENSEMBLE_HYBRID =  ensemble@dataclass
 
 
 
@@ -379,7 +376,8 @@ metadata: Dict[str, Any] = field(default_factory = dict)
 
 
 
-class CorrectionOverlayMatrix:Advanced correction matrix for dynamic anomaly detection and mitigation.def __init__():Initialize the correction overlay matrix.Args:
+class CorrectionOverlayMatrix:Advanced correction matrix for dynamic anomaly detection and
+mitigation.def __init__():Initialize the correction overlay matrix.Args:
 
 
 
@@ -391,7 +389,8 @@ correction_weights: Weights for different correction models
 
 
 
-max_correction_magnitude: Maximum allowed correction magnitudeself.anomaly_sensitivity = anomaly_sensitivity
+max_correction_magnitude: Maximum allowed correction magnitudeself.anomaly_sensitivity
+    = anomaly_sensitivity
 
 
 
@@ -407,7 +406,9 @@ self.max_correction_magnitude = max_correction_magnitude
 
 
 
-self.correction_weights = correction_weights or {quantum: 0.3,  # : Quantum correction weighttensor: 0.4,  # : Tensor correction weightsmart_money: 0.3,  # : Smart money correction weight
+self.correction_weights
+    
+    = correction_weights or {quantum: 0.3,  # : Quantum correction weighttensor: 0.4,  # : Tensor correction weightsmart_money: 0.3,  # : Smart money correction weight
 
 
 
@@ -443,7 +444,9 @@ self.correction_history = deque(maxlen=100)
 
 
 
-self.baselines = {price_volatility: 0.02,volume_ratio: 1.0,hash_similarity": 0.8,momentum_change": 0.1,vector_magnitude": 0.3,
+self.baselines
+    
+    = {price_volatility: 0.02,volume_ratio: 1.0,hash_similarity": 0.8,momentum_change": 0.1,vector_magnitude": 0.3,
 
 
 
@@ -523,7 +526,9 @@ self.pattern_utils = PatternUtils() if PatternUtilsin globals() else None
 
 
 
-self.stats = {total_corrections: 0,anomalies_detected: 0,successful_corrections": 0,avg_correction_time": 0.0,correction_accuracy": 0.0,model_usage": {model.value: 0 for model in CorrectionModel},
+self.stats
+    
+    = {total_corrections: 0,anomalies_detected: 0,successful_corrections": 0,avg_correction_time": 0.0,correction_accuracy": 0.0,model_usage": {model.value: 0 for model in CorrectionModel},
 
 
 
@@ -551,7 +556,8 @@ f Correction Overlay Matrix initialized with {anomaly_sensitivity} sensitivity
 
 
 
-def detect_anomalies():-> List[AnomalyDetection]:"Detect market anomalies by comparing current state to historical patterns.Args:
+def detect_anomalies():-> List[AnomalyDetection]:"Detect market anomalies by comparing current state
+to historical patterns.Args:
 
 
 
@@ -603,7 +609,8 @@ current_time = time.time()
 
 
 
-{vector: current_vector,price: current_price,volume": current_volume,hash: current_hash,timestamp": current_time,context": market_context,
+{vector: current_vector,price: current_price,volume": current_volume,hash: current_hash,timestamp":
+current_time,context": market_context,
 
 
 
@@ -779,7 +786,8 @@ self.stats[anomalies_detected] += 1
 
 
 
-def _detect_price_spike(self, current_price: float): -> Optional[AnomalyDetection]:Detect abnormal price spikes.if len(self.profit_vector_history) < 5:
+def _detect_price_spike(self, current_price: float): -> Optional[AnomalyDetection]:Detect abnormal
+price spikes.if len(self.profit_vector_history) < 5:
 
 
 
@@ -903,7 +911,8 @@ current_price: current_price,
 
 
 
-def _detect_volume_surge(self, current_volume: float): -> Optional[AnomalyDetection]:Detect abnormal volume surges.if len(self.profit_vector_history) < 10:
+def _detect_volume_surge(self, current_volume: float): -> Optional[AnomalyDetection]:Detect abnormal
+volume surges.if len(self.profit_vector_history) < 10:
 
 
 
@@ -955,7 +964,8 @@ volume_ratio = current_volume / avg_volume
 
 
 
-if volume_ratio > surge_threshold: severity = min(1.0, (volume_ratio - surge_threshold) / surge_threshold)
+if volume_ratio > surge_threshold: severity = min(1.0, (volume_ratio - surge_threshold)
+    / surge_threshold)
 
 
 
@@ -1031,7 +1041,8 @@ deviation_magnitude = volume_ratio - 1.0,
 
 
 
-def _detect_hash_divergence(self, current_hash: str): -> Optional[AnomalyDetection]:Detect hash pattern divergences.if len(self.profit_vector_history) < 5:
+def _detect_hash_divergence(self, current_hash: str): -> Optional[AnomalyDetection]:Detect hash
+pattern divergences.if len(self.profit_vector_history) < 5:
 
 
 
@@ -1167,7 +1178,8 @@ correction_priority = 2,
 
 
 
-def _detect_momentum_reversal():-> Optional[AnomalyDetection]:Detect sudden momentum reversals.if len(self.profit_vector_history) < 3:
+def _detect_momentum_reversal():-> Optional[AnomalyDetection]:Detect sudden momentum reversals.if
+len(self.profit_vector_history) < 3:
 
 
 
@@ -1311,7 +1323,8 @@ correction_priority=3,
 
 
 
-def _detect_volatility_shock():-> Optional[AnomalyDetection]:Detect volatility shocks.current_volatility = market_context.get(volatility, 0.02)
+def _detect_volatility_shock():-> Optional[AnomalyDetection]:Detect volatility
+shocks.current_volatility = market_context.get(volatility, 0.02)
 
 
 
@@ -1411,7 +1424,8 @@ correction_priority=4,
 
 
 
-def _detect_black_swan_event():-> Optional[AnomalyDetection]:Detect potential black swan events (multiple simultaneous anomalies).# Black swan = multiple extreme conditions
+def _detect_black_swan_event():-> Optional[AnomalyDetection]:Detect potential black swan events
+(multiple simultaneous anomalies).# Black swan = multiple extreme conditions
 
 
 
@@ -1451,7 +1465,8 @@ total_severity += 0.3
 
 
 
-volatility = market_context.get(volatility, 0.02)if volatility > self.baselines[price_volatility] * 5:
+volatility = market_context.get(volatility, 0.02)if volatility > self.baselines[price_volatility]
+    * 5:
 
 
 
@@ -1571,7 +1586,8 @@ def apply_correction():-> CorrectionFactors:
 
 
 
-        Apply multi-model correction based on detected anomalies.Implements: C(t) =  * Corr_Q(t) +  * Corr_G(t) +  * Corr_SM(t)
+        Apply multi-model correction based on detected anomalies.Implements: C(t) =  * Corr_Q(t)
+    +  * Corr_G(t) +  * Corr_SM(t)
 
 
 
@@ -1851,7 +1867,8 @@ def _calculate_individual_corrections():-> Dict[str, float]:
 
 
 
-        Calculate individual model corrections.corrections = {quantum: 0.0,tensor: 0.0,smart_money: 0.0}
+        Calculate individual model corrections.corrections
+    = {quantum: 0.0,tensor: 0.0,smart_money: 0.0}
 
 
 
@@ -2003,7 +2020,8 @@ corrections[quantum] += base_correction * 0.3
 
 
 
-def _adjust_confidence_weights():-> Dict[str, float]:Adjust confidence weights based on anomaly characteristics.base_weights = self.correction_weights.copy()
+def _adjust_confidence_weights():-> Dict[str, float]:Adjust confidence weights based on anomaly
+characteristics.base_weights = self.correction_weights.copy()
 
 
 
@@ -2143,7 +2161,8 @@ min(self.max_correction_magnitude, correction),
 
 
 
-def _calculate_hash_similarity():-> float:Calculate hash similarity using Hamming distance.if len(hash1) != len(hash2):
+def _calculate_hash_similarity():-> float:Calculate hash similarity using Hamming distance.if
+len(hash1) != len(hash2):
 
 
 
@@ -2171,7 +2190,9 @@ similarity = 1.0 - (differences / len(hash1))
 
 
 
-def _store_correction_result():-> None:Store correction result for analysis.correction_record = {timestamp: time.time(),original_vector: original_vector,correction_factors": correction_factors,anomalies": anomalies,processing_time": processing_time,
+def _store_correction_result():-> None:Store correction result for analysis.correction_record
+    
+    = {timestamp: time.time(),original_vector: original_vector,correction_factors": correction_factors,anomalies": anomalies,processing_time": processing_time,
 
 
 
@@ -2191,7 +2212,8 @@ self.correction_history.append(correction_record)
 
 
 
-def _update_avg_correction_time():-> None:Update average correction time metric.total_corrections = self.stats[total_corrections]current_avg = self.stats[avg_correction_time]
+def _update_avg_correction_time():-> None:Update average correction time metric.total_corrections
+    = self.stats[total_corrections]current_avg = self.stats[avg_correction_time]
 
 
 
@@ -2227,7 +2249,8 @@ current_avg * (total_corrections - 1) + new_time
 
 
 
-def update_baselines():-> None:"Update statistical baselines based on recent market behavior.# This would implement adaptive baseline updates
+def update_baselines():-> None:"Update statistical baselines based on recent market behavior.# This
+would implement adaptive baseline updates
 
 
 
@@ -2247,7 +2270,8 @@ if volatilityin market_data:
 
 
 
-            self.baselines[price_volatility] = (1 - alpha) * self.baselines[price_volatility] + alpha * market_data[volatility]
+            self.baselines[price_volatility] = (1 - alpha) * self.baselines[price_volatility]
+    + alpha * market_data[volatility]
 
 
 
@@ -2255,7 +2279,8 @@ ifvolume_ratioin market_data:
 
 
 
-            self.baselines[volume_ratio] = (1 - alpha) * self.baselines[volume_ratio] + alpha * market_data[volume_ratio]
+            self.baselines[volume_ratio] = (1 - alpha) * self.baselines[volume_ratio] + alpha
+    * market_data[volume_ratio]
 
 
 
@@ -2263,7 +2288,8 @@ ifvolume_ratioin market_data:
 
 
 
-def get_performance_stats():-> Dict[str, Any]:Get comprehensive performance statistics.stats = self.stats.copy()
+def get_performance_stats():-> Dict[str, Any]:Get comprehensive performance statistics.stats
+    = self.stats.copy()
 
 
 
@@ -2279,7 +2305,8 @@ if self.stats[total_corrections] > 0:
 
 
 
-            stats[anomaly_detection_rate] = (self.stats[anomalies_detected] / self.stats[total_corrections]
+            stats[anomaly_detection_rate] = (self.stats[anomalies_detected]
+    / self.stats[total_corrections]
 
 
 
@@ -2307,7 +2334,8 @@ stats.update(
 
 
 
-{memory_usage: {profit_vectors: len(self.profit_vector_history),anomaly_history": len(self.anomaly_history),correction_history": len(self.correction_history),
+{memory_usage: {profit_vectors: len(self.profit_vector_history),anomaly_history":
+len(self.anomaly_history),correction_history": len(self.correction_history),
 
 
 
@@ -2339,7 +2367,8 @@ stats.update(
 
 
 
-def main():Demonstrate Correction Overlay Matrix functionality.logging.basicConfig(level = logging.INFO)
+def main():Demonstrate Correction Overlay Matrix functionality.logging.basicConfig(level
+    = logging.INFO)
 
 
 
@@ -2543,7 +2572,8 @@ correction_factors = matrix.apply_correction(spike_vector, anomalies, spike_cont
 
 
 
-print(fQuantum correction: {correction_factors.quantum_correction:.4f})print(fTensor correction: {correction_factors.tensor_correction:.4f})
+print(fQuantum correction: {correction_factors.quantum_correction:.4f})print(fTensor correction:
+{correction_factors.tensor_correction:.4f})
 
 
 
@@ -2563,7 +2593,8 @@ correction_factors.smart_money_correction:.4f})
 
 
 
-print(\n Black Swan Event Simulation:)swan_vector = ProfitVector(x=-0.9, y=0.8, z=-0.5, magnitude=1.3, direction=short)
+print(\n Black Swan Event Simulation:)swan_vector
+    = ProfitVector(x=-0.9, y=0.8, z=-0.5, magnitude=1.3, direction=short)
 
 
 
@@ -2635,7 +2666,10 @@ swan_corrections = matrix.apply_correction(
 
 
 
-print(Black swan corrections applied:)print(fQuantum: {swan_corrections.quantum_correction:.4f})print(fTensor: {swan_corrections.tensor_correction:.4f})print(fSmart money: {swan_corrections.smart_money_correction:.4f})
+print(Black swan corrections applied:)print(fQuantum:
+{swan_corrections.quantum_correction:.4f})print(fTensor:
+{swan_corrections.tensor_correction:.4f})print(fSmart money:
+{swan_corrections.smart_money_correction:.4f})
 
 
 
@@ -2703,7 +2737,10 @@ else :
 
 
 
-print(\n Correction Overlay Matrix demo completed!)print(The matrix successfully implements:)print( Multi-type anomaly detection)print( Quantum phase correction(QSC))print( Tensor drift compensation(Galileo))print( Smart money re-alignment)print( Dynamic correction weighting)print( Black swan event handling)
+print(\n Correction Overlay Matrix demo completed!)print(The matrix successfully implements:)print(
+Multi-type anomaly detection)print( Quantum phase correction(QSC))print( Tensor drift
+compensation(Galileo))print( Smart money re-alignment)print( Dynamic correction weighting)print(
+Black swan event handling)
 
 
 

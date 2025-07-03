@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+# !/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Clean Profit Vectorization System
@@ -9,7 +9,6 @@ and allocation methods for the Schwabot trading system.
 
 import hashlib
 import logging
-import math
 import time
 from dataclasses import dataclass, field
 from enum import Enum

@@ -1,12 +1,10 @@
-#!/usr/bin/env python3
+# !/usr/bin/env python3
 """
 Warp Sync Core Stub Implementation
 
 Minimal stub for WarpSyncCore to satisfy module imports and basic instantiation.
 """
 
-import time
-import math
 from typing import Any, Dict, Optional
 from core.clean_unified_math import clean_unified_math
 
@@ -16,7 +14,7 @@ class WarpSyncCore:
     def __init__(self, initial_lambda: float = 0.5, initial_sigma_sq: float = 1.0) -> None:
         """Initialize the WarpSyncCore stub."""
         self.lambda_decay = initial_lambda
-self.sigma_sq = initial_sigma_sq
+        self.sigma_sq = initial_sigma_sq
         self.metrics: Dict[str, Any] = {}
 
     def calculate_omega(self, delta_psi: float, current_time: Optional[float] = None) -> float:

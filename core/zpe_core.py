@@ -6,39 +6,92 @@ Implements Zero Point Energy mathematical models for market prediction
 and quantum field fluctuation analysis in trading systems.
 """
 
+import datetime
 import logging
 import math
 import time
-from datetime import datetime
-from typing import Dict, List, Optional, Tuple
-
 import numpy as np
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Dict, List, Optional, Tuple, Any
 
 # Import clean math system
 try:
     from core.clean_unified_math import clean_unified_math as unified_math
 except ImportError:
-        # Fallback for testing
-        class unified_math:
-            @staticmethod
-            def sin(x):
-                return np.sin(x)
+    # Fallback for testing
+    class unified_math:
+        @staticmethod
+        def sin(x):
+            return np.sin(x)
 
-            @staticmethod
-            def max(x, y):
-                return max(x, y)
+        @staticmethod
+        def max(x, y):
+            return max(x, y)
 
-            @staticmethod
-            def min(x, y):
-                return min(x, y)
+        @staticmethod
+        def min(x, y):
+            return min(x, y)
 
-            @staticmethod
-            def abs(x):
-                return abs(x)
+        @staticmethod
+        def abs(x):
+            return abs(x)
 
         @staticmethod
         def multiply(x, y):
             return x * y
+
+        @staticmethod
+        def tanh(x):
+            return np.tanh(x)
+
+        @staticmethod
+        def atan(x):
+            return np.arctan(x)
+
+
+class ZPEMode(Enum):
+    """ZPE operation modes."""
+    IDLE = "idle"
+    THERMAL_MANAGEMENT = "thermal_management"
+    QUANTUM_OPTIMIZATION = "quantum_optimization"
+    PROFIT_WHEEL = "profit_wheel"
+    DUALISTIC_STATE = "dualistic_state"
+    ENTANGLED_PROFIT = "entangled_profit"
+
+
+@dataclass
+class ThermalData:
+    """Thermal efficiency data."""
+    timestamp: float
+    thermal_efficiency: float
+    thermal_integrity: float
+    thermal_state: str
+    energy_consumption: float
+    heat_dissipation: float
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass
+class ZPEWorkData:
+    """ZPE work calculation data."""
+    timestamp: float
+    work_value: float
+    force_magnitude: float
+    displacement: float
+    profit_potential: float
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass
+class RotationalTorqueData:
+    """Rotational torque calculation data."""
+    timestamp: float
+    torque_value: float
+    inertia: float
+    angular_acceleration: float
+    rotational_energy: float
+    metadata: Dict[str, Any] = field(default_factory=dict)
 
 
 class ZPECore:
@@ -49,8 +102,10 @@ class ZPECore:
     Uses ZPE principles to predict market fluctuations and optimize entry/exit points.
     """
 
-    def __init__(self):
+    def __init__(self, precision: int = 64):
         self.logger = logging.getLogger(__name__)
+        self.precision = precision
+        self.mode = ZPEMode.IDLE
 
         # ZPE Constants
         self.ZPE_CONSTANTS = {
@@ -62,6 +117,9 @@ class ZPECore:
             "DAMPING_FACTOR": 0.95,
             "RESONANCE_MULTIPLIER": 1.618,  # Golden ratio
             "ZERO_POINT_BASELINE": 0.5,
+            "THERMAL_CONSTANT": 0.023,  # Thermal efficiency constant
+            "WORK_CONSTANT": 1.602e-19,  # Work calculation constant
+            "TORQUE_CONSTANT": 0.001,  # Torque calculation constant
         }
 
         # ZPE state tracking
@@ -72,8 +130,34 @@ class ZPECore:
             "field_coherence": 0.0,
         }
 
+        # Thermal management
+        self.thermal_history: List[ThermalData] = []
+        self.thermal_state = "COOL"
+        self.thermal_integrity = 1.0
+
+        # Work tracking
+        self.work_history: List[ZPEWorkData] = []
+        self.total_work_performed = 0.0
+
+        # Rotational tracking
+        self.torque_history: List[RotationalTorqueData] = []
+        self.rotational_momentum = 0.0
+
+        # Profit wheel state
+        self.profit_wheel_state = {
+            "is_spinning": False,
+            "spin_frequency": 0.0,
+            "profit_momentum": 0.0,
+            "thermal_balance": 1.0,
+        }
+
         self.calculation_history = []
         self.last_calculation_time = None
+
+    def set_mode(self, mode: ZPEMode) -> None:
+        """Set ZPE operation mode."""
+        self.mode = mode
+        self.logger.info(f"ZPE mode set to: {mode.value}")
 
     def calculate_zero_point_energy(self, frequency: float, amplitude: float = 1.0) -> float:
         """
@@ -107,6 +191,357 @@ class ZPECore:
         except Exception as e:
             self.logger.error(f"ZPE calculation error: {e}")
             return self.ZPE_CONSTANTS["ZERO_POINT_BASELINE"]
+
+    def calculate_thermal_efficiency(
+        self, 
+        energy_input: float, 
+        energy_output: float, 
+        thermal_state: Optional[str] = None
+    ) -> ThermalData:
+        """
+        Calculate thermal efficiency: η = W_out / Q_in
+
+        Where:
+        - η: Efficiency of Schwabot's thermal core
+        - W_out: Profit generated (energy output)
+        - Q_in: Capital allocated + trade gas/fee loss (energy input)
+
+        Args:
+            energy_input: Input energy (capital + fees)
+            energy_output: Output energy (profit generated)
+            thermal_state: Current thermal state
+
+        Returns:
+            ThermalData with efficiency calculations
+        """
+        try:
+            if energy_input <= 0:
+                efficiency = 0.0
+            else:
+                efficiency = energy_output / energy_input
+
+            # Calculate thermal integrity based on efficiency
+            thermal_integrity = min(1.0, efficiency * self.ZPE_CONSTANTS["THERMAL_CONSTANT"])
+
+            # Determine thermal state
+            if thermal_state is None:
+                if efficiency > 0.8:
+                    thermal_state = "HOT"
+                elif efficiency > 0.5:
+                    thermal_state = "WARM"
+                else:
+                    thermal_state = "COOL"
+
+            # Calculate energy consumption and heat dissipation
+            energy_consumption = energy_input * (1 - efficiency)
+            heat_dissipation = energy_consumption * 0.7  # 70% heat loss
+
+            thermal_data = ThermalData(
+                timestamp=time.time(),
+                thermal_efficiency=efficiency,
+                thermal_integrity=thermal_integrity,
+                thermal_state=thermal_state,
+                energy_consumption=energy_consumption,
+                heat_dissipation=heat_dissipation,
+                metadata={
+                    "mode": self.mode.value,
+                    "precision": self.precision,
+                    "zpe_constants": self.ZPE_CONSTANTS,
+                }
+            )
+
+            # Store in history
+            self.thermal_history.append(thermal_data)
+            self.thermal_state = thermal_state
+            self.thermal_integrity = thermal_integrity
+
+            # Keep history manageable
+            if len(self.thermal_history) > 1000:
+                self.thermal_history = self.thermal_history[-1000:]
+
+            self.logger.debug(f"Thermal efficiency: {efficiency:.6f}")
+            return thermal_data
+
+        except Exception as e:
+            self.logger.error(f"Thermal efficiency calculation error: {e}")
+            return ThermalData(
+                timestamp=time.time(),
+                thermal_efficiency=0.0,
+                thermal_integrity=0.0,
+                thermal_state="ERROR",
+                energy_consumption=0.0,
+                heat_dissipation=0.0,
+                metadata={"error": str(e)}
+            )
+
+    def calculate_zpe_work(self, trend_strength: float, entry_exit_range: float) -> ZPEWorkData:
+        """
+        Calculate ZPE Work: W = F · d = ΔP
+
+        Where:
+        - W: Work Schwabot performs (profit vector potential)
+        - F: Force of trend momentum (Price / Time)
+        - d: Displacement in trade phase space (entry - exit delta)
+        - ΔP: Profit differential between vector anchor states
+
+        Args:
+            trend_strength: Strength of market trend
+            entry_exit_range: Range between entry and exit points
+
+        Returns:
+            ZPEWorkData with work calculations
+        """
+        try:
+            # Calculate market force using hyperbolic tangent for bounded output
+            market_force = unified_math.tanh(trend_strength)  # Bounded between -1 and 1
+
+            # Calculate work performed
+            work = market_force * entry_exit_range * self.ZPE_CONSTANTS["WORK_CONSTANT"]
+
+            # Calculate profit potential
+            profit_potential = abs(work) * self.ZPE_CONSTANTS["RESONANCE_MULTIPLIER"]
+
+            work_data = ZPEWorkData(
+                timestamp=time.time(),
+                work_value=work,
+                force_magnitude=abs(market_force),
+                displacement=entry_exit_range,
+                profit_potential=profit_potential,
+                metadata={
+                    "trend_strength": trend_strength,
+                    "market_force": market_force,
+                    "work_constant": self.ZPE_CONSTANTS["WORK_CONSTANT"],
+                }
+            )
+
+            # Store in history
+            self.work_history.append(work_data)
+            self.total_work_performed += abs(work)
+
+            # Keep history manageable
+            if len(self.work_history) > 1000:
+                self.work_history = self.work_history[-1000:]
+
+            self.logger.debug(f"ZPE Work: {work:.6f}")
+            return work_data
+
+        except Exception as e:
+            self.logger.error(f"ZPE work calculation error: {e}")
+            return ZPEWorkData(
+                timestamp=time.time(),
+                work_value=0.0,
+                force_magnitude=0.0,
+                displacement=0.0,
+                profit_potential=0.0,
+                metadata={"error": str(e)}
+            )
+
+    def calculate_rotational_torque(
+        self, 
+        liquidity_depth: float, 
+        trend_change_rate: float
+    ) -> RotationalTorqueData:
+        """
+        Calculate Rotational Torque: τ = I · α
+
+        Where:
+        - τ: Torque applied to profit wheel (rotational force)
+        - I: Market inertia (resistance from liquidity walls, spread delay)
+        - α: Angular acceleration (rate of directional bias change)
+
+        Args:
+            liquidity_depth: Depth of market liquidity
+            trend_change_rate: Rate of trend change
+
+        Returns:
+            RotationalTorqueData with torque calculations
+        """
+        try:
+            # Calculate market inertia (higher liquidity = lower inertia)
+            inertia = 1.0 / (1.0 + liquidity_depth)
+
+            # Calculate angular acceleration (bounded acceleration)
+            angular_acceleration = unified_math.atan(trend_change_rate)
+
+            # Calculate torque
+            torque = inertia * angular_acceleration * self.ZPE_CONSTANTS["TORQUE_CONSTANT"]
+
+            # Calculate rotational energy
+            rotational_energy = 0.5 * inertia * (angular_acceleration ** 2)
+
+            torque_data = RotationalTorqueData(
+                timestamp=time.time(),
+                torque_value=torque,
+                inertia=inertia,
+                angular_acceleration=angular_acceleration,
+                rotational_energy=rotational_energy,
+                metadata={
+                    "liquidity_depth": liquidity_depth,
+                    "trend_change_rate": trend_change_rate,
+                    "torque_constant": self.ZPE_CONSTANTS["TORQUE_CONSTANT"],
+                }
+            )
+
+            # Store in history
+            self.torque_history.append(torque_data)
+            self.rotational_momentum += torque
+
+            # Keep history manageable
+            if len(self.torque_history) > 1000:
+                self.torque_history = self.torque_history[-1000:]
+
+            self.logger.debug(f"Rotational Torque: {torque:.6f}")
+            return torque_data
+
+        except Exception as e:
+            self.logger.error(f"Rotational torque calculation error: {e}")
+            return RotationalTorqueData(
+                timestamp=time.time(),
+                torque_value=0.0,
+                inertia=0.0,
+                angular_acceleration=0.0,
+                rotational_energy=0.0,
+                metadata={"error": str(e)}
+            )
+
+    def spin_profit_wheel(self, market_data: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Main ZPE Profit Wheel function - where Schwabot becomes the wheel.
+
+        This function integrates all ZPE calculations to create a comprehensive
+        profit wheel that spins based on market conditions and thermal balance.
+
+        Args:
+            market_data: Market data dictionary
+
+        Returns:
+            Profit wheel analysis results
+        """
+        try:
+            self.logger.info("🔄 Spinning ZPE Profit Wheel...")
+
+            # Extract market parameters
+            trend_strength = market_data.get("trend_strength", 0.0)
+            entry_exit_range = market_data.get("entry_exit_range", 1.0)
+            liquidity_depth = market_data.get("liquidity_depth", 1.0)
+            trend_change_rate = market_data.get("trend_change_rate", 0.0)
+            energy_input = market_data.get("energy_input", 1000.0)
+            energy_output = market_data.get("energy_output", 1100.0)
+
+            # Calculate ZPE components
+            zpe_work = self.calculate_zpe_work(trend_strength, entry_exit_range)
+            rotational_torque = self.calculate_rotational_torque(liquidity_depth, trend_change_rate)
+            thermal_data = self.calculate_thermal_efficiency(energy_input, energy_output)
+
+            # Calculate profit wheel metrics
+            spin_frequency = abs(rotational_torque.torque_value) * 1000  # Hz
+            profit_momentum = zpe_work.profit_potential * thermal_data.thermal_efficiency
+            thermal_balance = thermal_data.thermal_integrity
+
+            # Update profit wheel state
+            self.profit_wheel_state.update({
+                "is_spinning": spin_frequency > 0.1,
+                "spin_frequency": spin_frequency,
+                "profit_momentum": profit_momentum,
+                "thermal_balance": thermal_balance,
+            })
+
+            # Calculate overall profit score
+            profit_score = (
+                zpe_work.profit_potential * 0.4 +
+                rotational_torque.rotational_energy * 0.3 +
+                thermal_data.thermal_efficiency * 0.3
+            )
+
+            # Determine trading signal
+            if profit_score > 0.7:
+                signal = "BUY"
+                confidence = min(profit_score, 1.0)
+            elif profit_score < 0.3:
+                signal = "SELL"
+                confidence = min(1.0 - profit_score, 1.0)
+            else:
+                signal = "HOLD"
+                confidence = 0.5
+
+            result = {
+                "timestamp": time.time(),
+                "signal": signal,
+                "confidence": confidence,
+                "profit_score": profit_score,
+                "profit_wheel_state": self.profit_wheel_state.copy(),
+                "zpe_work": {
+                    "work_value": zpe_work.work_value,
+                    "profit_potential": zpe_work.profit_potential,
+                },
+                "rotational_torque": {
+                    "torque_value": rotational_torque.torque_value,
+                    "rotational_energy": rotational_torque.rotational_energy,
+                },
+                "thermal_data": {
+                    "efficiency": thermal_data.thermal_efficiency,
+                    "integrity": thermal_data.thermal_integrity,
+                    "state": thermal_data.thermal_state,
+                },
+                "metadata": {
+                    "mode": self.mode.value,
+                    "precision": self.precision,
+                    "total_work_performed": self.total_work_performed,
+                    "rotational_momentum": self.rotational_momentum,
+                }
+            }
+
+            self.logger.info(f"Profit wheel result: {signal} (confidence: {confidence:.3f})")
+            return result
+
+        except Exception as e:
+            self.logger.error(f"Profit wheel error: {e}")
+            return {
+                "timestamp": time.time(),
+                "signal": "HOLD",
+                "confidence": 0.0,
+                "profit_score": 0.0,
+                "error": str(e),
+                "metadata": {"mode": self.mode.value}
+            }
+
+    def get_computational_boost(self) -> Dict[str, float]:
+        """
+        Get computational boost factors from ZPE system.
+
+        Returns:
+            Dictionary of boost factors
+        """
+        try:
+            # Calculate boost factors based on current state
+            thermal_boost = self.thermal_integrity * 1.5
+            work_boost = min(self.total_work_performed / 1000, 2.0)
+            momentum_boost = min(abs(self.rotational_momentum) / 100, 1.5)
+
+            # Calculate overall boost
+            overall_boost = (thermal_boost + work_boost + momentum_boost) / 3.0
+
+            boost_factors = {
+                "thermal_boost": thermal_boost,
+                "work_boost": work_boost,
+                "momentum_boost": momentum_boost,
+                "overall_boost": overall_boost,
+                "precision_factor": self.precision / 32.0,  # Normalize precision
+            }
+
+            self.logger.debug(f"Computational boost: {overall_boost:.3f}")
+            return boost_factors
+
+        except Exception as e:
+            self.logger.error(f"Computational boost calculation error: {e}")
+            return {
+                "thermal_boost": 1.0,
+                "work_boost": 1.0,
+                "momentum_boost": 1.0,
+                "overall_boost": 1.0,
+                "precision_factor": 1.0,
+                "error": str(e)
+            }
 
     def calculate_quantum_field_fluctuation(self, price_data: List[float]) -> float:
         """
@@ -217,7 +652,7 @@ class ZPECore:
             # Store calculation in history
             self.calculation_history.append(
                 {
-                    "timestamp": datetime.now(),
+                    "timestamp": datetime.datetime.now(),
                     "energy_fields": self.energy_fields.copy(),
                     "input_params": {
                         "frequency": frequency,
@@ -304,7 +739,7 @@ class ZPECore:
                     "momentum": momentum,
                     "frequency": frequency,
                 },
-                "timestamp": datetime.now(),
+                "timestamp": datetime.datetime.now(),
             }
 
         except Exception as e:
@@ -313,7 +748,7 @@ class ZPECore:
                 "signal": "HOLD",
                 "confidence": 0.0,
                 "error": str(e),
-                "timestamp": datetime.now(),
+                "timestamp": datetime.datetime.now(),
             }
 
     def get_current_energy_state(self) -> Dict[str, any]:
@@ -325,9 +760,16 @@ class ZPECore:
         """
         return {
             "energy_fields": self.energy_fields.copy(),
+            "thermal_state": self.thermal_state,
+            "thermal_integrity": self.thermal_integrity,
+            "profit_wheel_state": self.profit_wheel_state.copy(),
+            "total_work_performed": self.total_work_performed,
+            "rotational_momentum": self.rotational_momentum,
             "last_calculation_time": self.last_calculation_time,
             "calculation_count": len(self.calculation_history),
             "system_status": "OPERATIONAL" if self.last_calculation_time else "IDLE",
+            "mode": self.mode.value,
+            "precision": self.precision,
         }
 
     def reset_energy_fields(self) -> None:
@@ -338,7 +780,18 @@ class ZPECore:
             "quantum_vacuum": 0.0,
             "field_coherence": 0.0,
         }
-        self.calculation_history = []
+        self.thermal_history.clear()
+        self.work_history.clear()
+        self.torque_history.clear()
+        self.calculation_history.clear()
+        self.total_work_performed = 0.0
+        self.rotational_momentum = 0.0
+        self.profit_wheel_state = {
+            "is_spinning": False,
+            "spin_frequency": 0.0,
+            "profit_momentum": 0.0,
+            "thermal_balance": 1.0,
+        }
         self.last_calculation_time = None
 
 
@@ -355,6 +808,34 @@ def test_zpe_core():
     # Test ZPE calculation
     zpe = core.calculate_zero_point_energy(100.0, 1.5)
     print(f"Zero Point Energy: {zpe}")
+
+    # Test thermal efficiency
+    thermal_data = core.calculate_thermal_efficiency(1000.0, 1100.0)
+    print(f"Thermal Efficiency: {thermal_data.thermal_efficiency:.6f}")
+
+    # Test ZPE work
+    work_data = core.calculate_zpe_work(0.8, 0.5)
+    print(f"ZPE Work: {work_data.work_value:.6f}")
+
+    # Test rotational torque
+    torque_data = core.calculate_rotational_torque(0.7, 0.3)
+    print(f"Rotational Torque: {torque_data.torque_value:.6f}")
+
+    # Test profit wheel
+    market_data = {
+        "trend_strength": 0.8,
+        "entry_exit_range": 0.5,
+        "liquidity_depth": 0.7,
+        "trend_change_rate": 0.3,
+        "energy_input": 1000.0,
+        "energy_output": 1100.0,
+    }
+    wheel_result = core.spin_profit_wheel(market_data)
+    print(f"Profit Wheel Signal: {wheel_result['signal']}")
+
+    # Test computational boost
+    boost_factors = core.get_computational_boost()
+    print(f"Computational Boost: {boost_factors['overall_boost']:.3f}")
 
     # Test with sample price data
     sample_prices = [100, 101, 99, 102, 98, 103, 97, 104, 96, 105]

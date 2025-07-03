@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+# !/usr/bin/env python3
 """
 Integration Test - High-level strategy integration unit tests
 """
@@ -23,4 +23,4 @@ def test_signal_to_trade_loop():
     for i in range(3):
         result = pipeline.process_market_data("ETHUSD", 2000 + i * 10, 2.0, 60, i)
         assert result["action"] == "buy"
-        assert result["confidence"] > 0.5 
+        assert result["confidence"] > 0.5

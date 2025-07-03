@@ -1,6 +1,3 @@
-import logging
-import time
-from dataclasses import dataclass, field
 from decimal import Decimal, getcontext
 from typing import Any, Dict, List, Optional, Union
 
@@ -11,7 +8,7 @@ class PortfolioTracker:
         self.positions = {}
         self.total_value = 0.0
         self.total_pnl = 0.0
-    
+
     def get_portfolio_summary(self):
         return {
             "total_value": self.total_value,
@@ -123,7 +120,8 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 
 
-Portfolio Tracker for Schwabot Trading System.Monitors and tracks the state of the trading portfolio, including current holdings,
+Portfolio Tracker for Schwabot Trading System.Monitors and tracks the state of the trading
+portfolio, including current holdings,
 
 
 
@@ -135,7 +133,8 @@ realized and unrealized PnL, and various portfolio-level metrics.
 
 
 
-Integrates with: [Other modules that execute trades or manage risk]# Set high precision for financial calculations
+Integrates with: [Other modules that execute trades or manage risk]# Set high precision for
+financial calculations
 
 
 
@@ -195,7 +194,8 @@ last_update: float = field(default_factory=time.time)
 
 
 
-def value():-> Decimal:Current market value of the position.return self.quantity * self.current_price
+def value():-> Decimal:Current market value of the position.return self.quantity
+    * self.current_price
 
 
 
@@ -207,7 +207,8 @@ def value():-> Decimal:Current market value of the position.return self.quantity
 
 
 
-def unrealized_pnl():-> Decimal:Unrealized Profit and Loss.return (self.current_price - self.avg_price) * self.quantity
+def unrealized_pnl():-> Decimal:Unrealized Profit and Loss.return (self.current_price
+    - self.avg_price) * self.quantity
 
 
 
@@ -219,7 +220,8 @@ def unrealized_pnl():-> Decimal:Unrealized Profit and Loss.return (self.current_
 
 
 
-class PortfolioTracker:Tracks and manages the trading portfolio.def __init__():Initialize the portfolio tracker.Args:
+class PortfolioTracker:Tracks and manages the trading portfolio.def __init__():Initialize the
+portfolio tracker.Args:
 
 
 
@@ -247,7 +249,9 @@ self.transaction_history: List[Dict[str, Any]] = []
 
 
 
-self.portfolio_stats = {total_deposits: Decimal(0.0),total_withdrawals: Decimal(0.0),trade_count": 0,total_fees": Decimal(0.0),last_update_time": time.time(),
+self.portfolio_stats
+    
+    = {total_deposits: Decimal(0.0),total_withdrawals: Decimal(0.0),trade_count": 0,total_fees": Decimal(0.0),last_update_time": time.time(),
 
 
 
@@ -279,7 +283,8 @@ return self.cash += amount_dec
 
 
 
-self.portfolio_stats[total_deposits] += amount_decself.portfolio_stats[last_update_time] = time.time()
+self.portfolio_stats[total_deposits] += amount_decself.portfolio_stats[last_update_time]
+    = time.time()
 
 
 
@@ -315,7 +320,8 @@ return self.cash -= amount_dec
 
 
 
-self.portfolio_stats[total_withdrawals] += amount_decself.portfolio_stats[last_update_time] = time.time()
+self.portfolio_stats[total_withdrawals] += amount_decself.portfolio_stats[last_update_time]
+    = time.time()
 
 
 
@@ -327,7 +333,8 @@ self.portfolio_stats[total_withdrawals] += amount_decself.portfolio_stats[last_u
 
 
 
-def update_position():-> None:Update an asset position based on a trade execution.Args:asset: The asset traded (e.g.,BTC/USD).direction:buyorsell.
+def update_position():-> None:Update an asset position based on a trade execution.Args:asset: The
+asset traded (e.g.,BTC/USD).direction:buyorsell.
 
 
 
@@ -359,7 +366,8 @@ trade_value = qty_dec * price_dec
 
 
 
-self.portfolio_stats[trade_count] += 1self.portfolio_stats[total_fees] += fees_decself.portfolio_stats[last_update_time] = time.time()
+self.portfolio_stats[trade_count] += 1self.portfolio_stats[total_fees]
+    += fees_decself.portfolio_stats[last_update_time] = time.time()
 
 
 
@@ -555,7 +563,9 @@ self.transaction_history.append(
 
 
 
-{timestamp: time.time(),asset: asset,direction": direction,quantity": quantity,price": price,fees": fees,trade_value": float(trade_value),realized_pnl": float(self.realized_pnl),cash_after_trade": float(self.cash),
+{timestamp: time.time(),asset: asset,direction": direction,quantity": quantity,price": price,fees":
+fees,trade_value": float(trade_value),realized_pnl": float(self.realized_pnl),cash_after_trade":
+float(self.cash),
 
 
 
@@ -571,7 +581,8 @@ self.transaction_history.append(
 
 
 
-def update_market_prices():-> None:"Update current market prices for all held positions.for asset, price in current_prices.items():
+def update_market_prices():-> None:"Update current market prices for all held positions.for asset,
+price in current_prices.items():
 
 
 
@@ -595,7 +606,8 @@ self.portfolio_stats[last_update_time] = time.time()
 
 
 
-def get_portfolio_summary():-> Dict[str, Any]:"Get a summary of the current portfolio state.total_assets_value = Decimal(0.0)unrealized_pnl = Decimal(0.0)
+def get_portfolio_summary():-> Dict[str, Any]:"Get a summary of the current portfolio
+state.total_assets_value = Decimal(0.0)unrealized_pnl = Decimal(0.0)
 
 
 
@@ -619,7 +631,9 @@ unrealized_pnl += pos.unrealized_pnl
 
 
 
-positions_summary[asset] = {quantity: float(pos.quantity),avg_price": float(pos.avg_price),current_price": float(pos.current_price),value": float(pos.value),unrealized_pnl": float(pos.unrealized_pnl),
+positions_summary[asset]
+    
+    = {quantity: float(pos.quantity),avg_price": float(pos.avg_price),current_price": float(pos.current_price),value": float(pos.value),unrealized_pnl": float(pos.unrealized_pnl),
 
 
 
@@ -643,7 +657,10 @@ total_pnl = self.realized_pnl + unrealized_pnl
 
 
 
-        return {cash: float(self.cash),total_assets_value: float(total_assets_value),total_value": float(total_value),realized_pnl": float(self.realized_pnl),unrealized_pnl": float(unrealized_pnl),total_pnl": float(total_pnl),positions": positions_summary,last_update_time": time.time(),
+return {cash: float(self.cash),total_assets_value: float(total_assets_value),total_value":
+float(total_value),realized_pnl": float(self.realized_pnl),unrealized_pnl":
+float(unrealized_pnl),total_pnl": float(total_pnl),positions": positions_summary,last_update_time":
+time.time(),
 
 
 
@@ -655,7 +672,8 @@ total_pnl = self.realized_pnl + unrealized_pnl
 
 
 
-def get_transaction_history():-> List[Dict[str, Any]]:Retrieve a portion of the transaction history.return list(self.transaction_history)[-limit:]
+def get_transaction_history():-> List[Dict[str, Any]]:Retrieve a portion of the transaction
+history.return list(self.transaction_history)[-limit:]
 
 
 
@@ -663,7 +681,8 @@ def get_transaction_history():-> List[Dict[str, Any]]:Retrieve a portion of the 
 
 
 
-def get_performance_stats():-> Dict[str, Any]:Return the performance statistics of the portfolio tracker.stats = self.portfolio_stats.copy()
+def get_performance_stats():-> Dict[str, Any]:Return the performance statistics of the portfolio
+tracker.stats = self.portfolio_stats.copy()
 
 
 
@@ -671,7 +690,9 @@ def get_performance_stats():-> Dict[str, Any]:Return the performance statistics 
 
 
 
-stats[current_total_value] = summary[total_value]stats[current_realized_pnl] = summary[realized_pnl]stats[current_unrealized_pnl] = summary[unrealized_pnl]stats[current_total_pnl] = summary[total_pnl]
+stats[current_total_value] = summary[total_value]stats[current_realized_pnl]
+    = summary[realized_pnl]stats[current_unrealized_pnl] 
+    = summary[unrealized_pnl]stats[current_total_pnl] = summary[total_pnl]
 
 
 
@@ -683,7 +704,8 @@ stats[current_total_value] = summary[total_value]stats[current_realized_pnl] = s
 
 
 
-def reset_portfolio():-> None:Reset the portfolio to an initial state.self.cash = Decimal(str(initial_cash))
+def reset_portfolio():-> None:Reset the portfolio to an initial state.self.cash
+    = Decimal(str(initial_cash))
 
 
 
@@ -699,7 +721,9 @@ self.transaction_history = []
 
 
 
-self.portfolio_stats = {total_deposits: Decimal(str(initial_cash)),total_withdrawals": Decimal(0.0),trade_count": 0,total_fees": Decimal(0.0),last_update_time": time.time(),
+self.portfolio_stats
+    
+    = {total_deposits: Decimal(str(initial_cash)),total_withdrawals": Decimal(0.0),trade_count": 0,total_fees": Decimal(0.0),last_update_time": time.time(),
 
 
 

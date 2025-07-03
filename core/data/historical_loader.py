@@ -1,6 +1,4 @@
-from pathlib import Path
 
-import pandas as pd
 
 """
 
@@ -109,7 +107,8 @@ PREPROC_DIR = Path(core/data/preprocessed)
 
 
 
-def concat_csv_to_parquet():Concatenates CSV files for a given asset into a single Parquet file.folder = HIST_DIR / f{asset.lower()}_{quote.lower()}
+def concat_csv_to_parquet():Concatenates CSV files for a given asset into a single Parquet
+file.folder = HIST_DIR / f{asset.lower()}_{quote.lower()}
 
 
 
@@ -201,7 +200,8 @@ def load_historical_data():-> pd.DataFrame:
 
 
 
-    Loads historical data for a given asset, either from Parquet or by concatenating CSVs.parquet_file = PREPROC_DIR / f{asset.lower()}_{quote.lower()}.parquet
+Loads historical data for a given asset, either from Parquet or by concatenating CSVs.parquet_file =
+PREPROC_DIR / f{asset.lower()}_{quote.lower()}.parquet
 
 
 

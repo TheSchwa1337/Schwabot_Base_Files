@@ -1,9 +1,5 @@
-import hashlib
-import time
-from collections import deque
 from typing import Any, Dict, List, Optional, Tuple, Union
 
-import numpy as np
 
 """
 
@@ -144,7 +140,8 @@ Key functionalities include:
 
 
 
-- Integration with trade signal generation.class VolumeWeightedHashOscillator:Calculates a volume-weighted hash oscillator for market analysis.def __init__():,
+- Integration with trade signal generation.class VolumeWeightedHashOscillator:Calculates a
+volume-weighted hash oscillator for market analysis.def __init__():,
 
 
 
@@ -192,7 +189,8 @@ normalize: If True, normalize the oscillator output to the specified range.
 
 
 
-oscillator_range: The min and max values for the normalized oscillator output.if not (0 < hash_strength <= 64):  # SHA256 produces 64 hex characters
+oscillator_range: The min and max values for the normalized oscillator output.if not (0 <
+hash_strength <= 64):  # SHA256 produces 64 hex characters
 
 
 
@@ -256,7 +254,9 @@ self.smoothed_oscillator_values: deque[float] = deque(maxlen=smoothing_period)
 
 
 
-self.metrics: Dict[str, Any] = {last_calculation_time: None,total_calculations: 0,avg_calculation_time: 0.0,current_oscillator_value": None,
+self.metrics: Dict[str, Any]
+    
+    = {last_calculation_time: None,total_calculations: 0,avg_calculation_time: 0.0,current_oscillator_value": None,
 
 
 
@@ -268,7 +268,8 @@ self.metrics: Dict[str, Any] = {last_calculation_time: None,total_calculations: 
 
 
 
-def _generate_volume_weighted_hash():-> str:Generates a SHA256 hash weighted by volume.# Combine price and volume with a timestamp for uniqueness and
+def _generate_volume_weighted_hash():-> str:Generates a SHA256 hash weighted by volume.# Combine
+price and volume with a timestamp for uniqueness and
 
 
 
@@ -292,7 +293,8 @@ def _hash_to_integer():-> int:
 
 
 
-Converts a portion of the hash string to an integer.# Use the first `hash_strength` characters for the integer conversion
+Converts a portion of the hash string to an integer.# Use the first `hash_strength` characters for
+the integer conversion
 
 
 
@@ -536,7 +538,8 @@ self.raw_oscillator_values.append(raw_oscillator)
 
 
 
-if len(self.raw_oscillator_values) < self.smoothing_period: smoothed_value = np.mean(list(self.raw_oscillator_values))
+if len(self.raw_oscillator_values) < self.smoothing_period: smoothed_value
+    = np.mean(list(self.raw_oscillator_values))
 
 
 
@@ -628,7 +631,8 @@ self.metrics[last_calculation_time] = end_time
 
 
 
-self.metrics[avg_calculation_time] = (self.metrics[avg_calculation_time]* (self.metrics[total_calculations] - 1)
+self.metrics[avg_calculation_time]
+    = (self.metrics[avg_calculation_time]* (self.metrics[total_calculations] - 1)
 
 
 
@@ -648,7 +652,8 @@ self.metrics[avg_calculation_time] = (self.metrics[avg_calculation_time]* (self.
 
 
 
-def get_metrics():-> Dict[str, Any]:Returns the operational metrics of the oscillator.return self.metrics
+def get_metrics():-> Dict[str, Any]:Returns the operational metrics of the oscillator.return
+self.metrics
 
 
 
@@ -656,7 +661,8 @@ def get_metrics():-> Dict[str, Any]:Returns the operational metrics of the oscil
 
 
 
-def get_current_oscillator_value():-> Optional[float]:Returns the most recently calculated oscillator value.return self.metrics[current_oscillator_value]
+def get_current_oscillator_value():-> Optional[float]:Returns the most recently calculated
+oscillator value.return self.metrics[current_oscillator_value]
 
 
 
@@ -684,7 +690,9 @@ self.smoothed_oscillator_values.clear()
 
 
 
-self.metrics = {last_calculation_time: None,total_calculations": 0,avg_calculation_time": 0.0,current_oscillator_value": None,
+self.metrics
+    
+    = {last_calculation_time: None,total_calculations": 0,avg_calculation_time": 0.0,current_oscillator_value": None,
 
 
 
@@ -724,7 +732,9 @@ period=5, smoothing_period=3, hash_strength=8
 
 
 
-market_data = [{price: 100.0,volume: 1000},{price: 101.0,volume: 1200},{price: 100.5,volume": 900},{price: 102.0,volume": 1500},{price: 103.0,volume": 2000},{price: 102.5,volume": 1100},{price: 104.0,volume": 1800},{price: 103.5,volume": 1300},{price: 105.0,volume": 2200},{price: 104.5,volume": 1600},
+market_data
+    
+    = [{price: 100.0,volume: 1000},{price: 101.0,volume: 1200},{price: 100.5,volume": 900},{price: 102.0,volume": 1500},{price: 103.0,volume": 2000},{price: 102.5,volume": 1100},{price: 104.0,volume": 1800},{price: 103.5,volume": 1300},{price: 105.0,volume": 2200},{price: 104.5,volume": 1600},
 
 
 
@@ -836,7 +846,8 @@ oscillator.reset()
 
 
 
-print(f"Oscillator value after reset: {oscillator.get_current_oscillator_value()})print(fMetrics after reset: {oscillator.get_metrics()})"'"
+print(f"Oscillator value after reset: {oscillator.get_current_oscillator_value()})print(fMetrics
+after reset: {oscillator.get_metrics()})"'"
 
 
 

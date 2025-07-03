@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+# !/usr/bin/env python3
 """
 Profit Optimization Engine
 
@@ -15,13 +15,8 @@ This module provides:
 All functions are pure and can be unit-tested in isolation.
 """
 
-import math
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
 
-import numpy as np
 from numpy.typing import NDArray
 
 
@@ -132,7 +127,8 @@ Returns:
             if risk_metric == RiskMetric.SHARPE_RATIO:
                 objective, gradient = self._sharpe_ratio_gradient(weights, returns, cov_matrix)
             else:
-                objective, gradient = self._generic_risk_gradient(weights, returns, cov_matrix, risk_metric)
+                objective, gradient
+    = self._generic_risk_gradient(weights, returns, cov_matrix, risk_metric)
 
             # Update weights
             learning_rate = 0.1
@@ -202,10 +198,12 @@ Returns:
             for _ in range(population_size):
                 # Tournament selection
                 idx1, idx2 = np.random.choice(len(population), 2, replace=False)
-                parent1 = population[idx1] if fitness_scores[idx1] > fitness_scores[idx2] else population[idx2]
+                parent1
+    = population[idx1] if fitness_scores[idx1] > fitness_scores[idx2] else population[idx2]
 
                 idx3, idx4 = np.random.choice(len(population), 2, replace=False)
-                parent2 = population[idx3] if fitness_scores[idx3] > fitness_scores[idx4] else population[idx4]
+                parent2
+    = population[idx3] if fitness_scores[idx3] > fitness_scores[idx4] else population[idx4]
 
                 # Crossover
                 crossover_point = np.random.randint(1, num_assets)
@@ -236,24 +234,27 @@ Returns:
             }
         )
 
-    def _sharpe_ratio_gradient(self, weights: np.ndarray, returns: np.ndarray, cov_matrix: np.ndarray) -> Tuple[float, np.ndarray]:
+def _sharpe_ratio_gradient(self, weights: np.ndarray, returns: np.ndarray, cov_matrix: np.ndarray)
+-> Tuple[float, np.ndarray]:
         """Calculate Sharpe ratio and its gradient."""
         # Calculate portfolio return and volatility
         portfolio_return = np.mean(returns @ weights)
         portfolio_vol = np.sqrt(weights.T @ cov_matrix @ weights)
-        
+
         # Sharpe ratio
         sharpe_ratio = (portfolio_return - self.risk_free_rate) / portfolio_vol
-        
+
         # Gradient of Sharpe ratio
         if portfolio_vol > 0:
-            gradient = (returns.mean(axis=0) - self.risk_free_rate) / portfolio_vol - (portfolio_return - self.risk_free_rate) * (cov_matrix @ weights) / (portfolio_vol ** 3)
+            gradient = (returns.mean(axis=0) - self.risk_free_rate) / portfolio_vol
+    - (portfolio_return - self.risk_free_rate) * (cov_matrix @ weights) / (portfolio_vol ** 3)
         else:
             gradient = np.zeros_like(weights)
 
         return sharpe_ratio, gradient
 
-    def _generic_risk_gradient(self, weights: np.ndarray, returns: np.ndarray, cov_matrix: np.ndarray, risk_metric: RiskMetric) -> Tuple[float, np.ndarray]:
+def _generic_risk_gradient(self, weights: np.ndarray, returns: np.ndarray, cov_matrix: np.ndarray,
+risk_metric: RiskMetric) -> Tuple[float, np.ndarray]:
         """Calculate generic risk metric and gradient."""
         if risk_metric == RiskMetric.MAX_DRAWDOWN:
             return self._max_drawdown_gradient(weights, returns)
@@ -263,17 +264,18 @@ Returns:
             gradient = 2 * cov_matrix @ weights
             return -portfolio_var, -gradient
 
-    def _max_drawdown_gradient(self, weights: np.ndarray, returns: np.ndarray) -> Tuple[float, np.ndarray]:
+def _max_drawdown_gradient(self, weights: np.ndarray, returns: np.ndarray) -> Tuple[float,
+np.ndarray]:
         """Calculate maximum drawdown and its gradient."""
         portfolio_returns = returns @ weights
         cumulative_returns = np.cumprod(1 + portfolio_returns)
         running_max = np.maximum.accumulate(cumulative_returns)
         drawdown = (cumulative_returns - running_max) / running_max
         max_drawdown = np.min(drawdown)
-        
+
         # Simplified gradient (approximation)
         gradient = np.mean(returns, axis=0) * max_drawdown
-        
+
         return max_drawdown, gradient
 
     def _calculate_sharpe_ratio(self, weights: np.ndarray, returns: np.ndarray) -> float:
@@ -286,7 +288,8 @@ Returns:
         else:
             return 0.0
 
-    def _calculate_risk_metric(self, weights: np.ndarray, returns: np.ndarray, risk_metric: RiskMetric) -> float:
+def _calculate_risk_metric(self, weights: np.ndarray, returns: np.ndarray, risk_metric: RiskMetric)
+-> float:
         """Calculate risk metric for given weights."""
         if risk_metric == RiskMetric.SHARPE_RATIO:
             return self._calculate_sharpe_ratio(weights, returns)

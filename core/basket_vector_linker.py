@@ -13,11 +13,11 @@ class BasketVectorLinker:
             "no_match_found": 0,
             "last_resolution_time": None
         }
-    
+
     def register_strategy_vector(self, strategy_id, vector_signature):
         """Register a strategy vector."""
         self.strategy_vectors[strategy_id] = vector_signature
-    
+
     def resolve_strategy_basket(self, lattice_hash_vector, similarity_threshold=0.8):
         """Resolve strategy basket."""
         self.metrics["total_resolutions"] += 1
@@ -165,7 +165,8 @@ class BasketVectorLinker:
 
 
 
-                               are lists of floats representing their vector signatures.self.strategy_vectors: Dict[str, np.ndarray] = {
+are lists of floats representing their vector signatures.self.strategy_vectors: Dict[str,
+np.ndarray] = {
 
 
 
@@ -177,7 +178,8 @@ class BasketVectorLinker:
 
 
 
-        self.metrics: Dict[str, Any] = {total_resolutions: 0,successful_matches": 0,no_match_found": 0,last_resolution_time": None,
+        self.metrics: Dict[str, Any]
+    = {total_resolutions: 0,successful_matches": 0,no_match_found": 0,last_resolution_time": None,
 
 
 
@@ -189,7 +191,8 @@ class BasketVectorLinker:
 
 
 
-    def register_strategy_vector():-> None:Register or update a strategy's vector signature.self.strategy_vectors[strategy_id] = np.array(vector_signature)
+def register_strategy_vector():-> None:Register or update a strategy's vector
+signature.self.strategy_vectors[strategy_id] = np.array(vector_signature)
 
 
 
@@ -429,7 +432,8 @@ if __name__ == __main__:
 
 
 
-        MeanReversion_RSI: [0.8, 0.1, 0.05, 0.6, 0.1],VolatilityBreakout_BB: [0.2, 0.7, 0.1, 0.25, 0.8],Scalping_Volume": [0.05, 0.05, 0.05, 0.9, 0.95],
+MeanReversion_RSI: [0.8, 0.1, 0.05, 0.6, 0.1],VolatilityBreakout_BB: [0.2, 0.7, 0.1, 0.25,
+0.8],Scalping_Volume": [0.05, 0.05, 0.05, 0.9, 0.95],
 
 
 

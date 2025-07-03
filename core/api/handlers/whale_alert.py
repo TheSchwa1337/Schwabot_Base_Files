@@ -24,17 +24,13 @@ Tracks large crypto transactions and provides insights into whale movements.
 
 
 import asyncio
-import logging
 from typing import Any, Dict, List
 
-import aiohttp
-import requests
 
 from .base_handler import BaseAPIHandler
 
 try:
 
-    import aiohttp
 
 
 except ImportError:  # pragma: no cover
@@ -44,7 +40,6 @@ except ImportError:  # pragma: no cover
 
 try:
 
-    import requests
 
 
 except ImportError:  # pragma: no cover

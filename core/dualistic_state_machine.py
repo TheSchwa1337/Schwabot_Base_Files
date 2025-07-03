@@ -1,12 +1,5 @@
-import logging
-import math
-import time
-from collections import deque
-from dataclasses import dataclass, field
-from enum import Enum
 from typing import Any, Callable, Dict, List, Optional, Tuple
 
-import numpy as np
 
 """
 
@@ -225,7 +218,9 @@ class StateType(Enum):
 
 
 
-class TransitionTrigger(Enum):Triggers for state transitions.ENTROPY_THRESHOLD =  entropy_thresholdQUANTUM_PHASE_SHIFT =  quantum_phase_shiftPROFIT_DIFFERENTIAL =  profit_differentialMARKET_VOLATILITY =  market_volatilityMANUAL_OVERRIDE =  manual_overrideNIBBLE_RITTLE_IMBALANCE =  nibble_rittle_imbalance@dataclass
+class TransitionTrigger(Enum):Triggers for state transitions.ENTROPY_THRESHOLD
+    =  entropy_thresholdQUANTUM_PHASE_SHIFT =  quantum_phase_shiftPROFIT_DIFFERENTIAL 
+    =  profit_differentialMARKET_VOLATILITY =  market_volatilityMANUAL_OVERRIDE =  manual_overrideNIBBLE_RITTLE_IMBALANCE =  nibble_rittle_imbalance@dataclass
 
 
 
@@ -361,7 +356,8 @@ class DualisticSnapshot:Complete snapshot of dualistic state.timestamp: float
 
 
 
-class DualisticStateMachine:Advanced state machine for ALEPH/ALIF dualistic management.def __init__():-> None:
+class DualisticStateMachine:Advanced state machine for ALEPH/ALIF dualistic management.def
+__init__():-> None:
 
 
 
@@ -385,7 +381,8 @@ class DualisticStateMachine:Advanced state machine for ALEPH/ALIF dualistic mana
 
 
 
-            transition_cooldown_ms: Minimum time between state transitions.self.entropy_threshold = entropy_threshold
+            transition_cooldown_ms: Minimum time between state transitions.self.entropy_threshold
+    = entropy_threshold
 
 
 
@@ -489,7 +486,7 @@ class DualisticStateMachine:Advanced state machine for ALEPH/ALIF dualistic mana
 
 
 
-            quantum_phase: 0.25,nibble_rittle_balance: 0.2,profit_differential: 0.15,market_volatility: 0.1,
+quantum_phase: 0.25,nibble_rittle_balance: 0.2,profit_differential: 0.15,market_volatility: 0.1,
 
 
 
@@ -549,7 +546,8 @@ class DualisticStateMachine:Advanced state machine for ALEPH/ALIF dualistic mana
 
 
 
-            market_volatility: Optional market volatility override.self.nibble_score = max(0.0, min(1.0, nibble_score))
+            market_volatility: Optional market volatility override.self.nibble_score
+    = max(0.0, min(1.0, nibble_score))
 
 
 
@@ -697,7 +695,8 @@ class DualisticStateMachine:Advanced state machine for ALEPH/ALIF dualistic mana
 
 
 
-            Positive value favors ALEPH, negative favors ALIF.# ALEPH advantages: Low entropy, structured markets, high nibble scores
+Positive value favors ALEPH, negative favors ALIF.# ALEPH advantages: Low entropy, structured
+markets, high nibble scores
 
 
 
@@ -853,7 +852,8 @@ class DualisticStateMachine:Advanced state machine for ALEPH/ALIF dualistic mana
 
 
 
-    def get_current_snapshot():-> DualisticSnapshot:Get the current snapshot of the state machine.return self._create_snapshot()
+def get_current_snapshot():-> DualisticSnapshot:Get the current snapshot of the state machine.return
+self._create_snapshot()
 
 
 
@@ -861,7 +861,8 @@ class DualisticStateMachine:Advanced state machine for ALEPH/ALIF dualistic mana
 
 
 
-    def get_state_recommendations():-> Dict[str, Any]:Get recommendations based on the current state.suitability_aleph = self._calculate_state_suitability(StateType.ALEPH)
+def get_state_recommendations():-> Dict[str, Any]:Get recommendations based on the current
+state.suitability_aleph = self._calculate_state_suitability(StateType.ALEPH)
 
 
 
@@ -873,11 +874,13 @@ class DualisticStateMachine:Advanced state machine for ALEPH/ALIF dualistic mana
 
 
 
-        if suitability_aleph > suitability_alif + 0.1: recommendation = Maintain or transition to ALEPH
+        if suitability_aleph > suitability_alif + 0.1: recommendation
+    = Maintain or transition to ALEPH
 
 
 
-        elif suitability_alif > suitability_aleph + 0.1: recommendation = Maintain or transition to ALIF
+        elif suitability_alif > suitability_aleph + 0.1: recommendation
+    = Maintain or transition to ALIF
 
 
 
@@ -889,7 +892,8 @@ class DualisticStateMachine:Advanced state machine for ALEPH/ALIF dualistic mana
 
 
 
-        return {recommendation: recommendation,suitability_scores: {ALEPH: suitability_aleph,ALIF: suitability_alif,
+return {recommendation: recommendation,suitability_scores: {ALEPH: suitability_aleph,ALIF:
+suitability_alif,
 
 
 
@@ -905,7 +909,8 @@ class DualisticStateMachine:Advanced state machine for ALEPH/ALIF dualistic mana
 
 
 
-    def add_transition_callback():-> None:Add a callback function to be called on state transition.self.transition_callbacks.append(callback)
+def add_transition_callback():-> None:Add a callback function to be called on state
+transition.self.transition_callbacks.append(callback)
 
 
 
@@ -913,7 +918,8 @@ class DualisticStateMachine:Advanced state machine for ALEPH/ALIF dualistic mana
 
 
 
-    def _evaluate_transition():-> None:Evaluate if a state transition should occur.cooldown_passed = (
+    def _evaluate_transition():-> None:Evaluate if a state transition should occur.cooldown_passed
+    = (
 
 
 
@@ -973,7 +979,8 @@ class DualisticStateMachine:Advanced state machine for ALEPH/ALIF dualistic mana
 
 
 
-    def _calculate_trigger_values():-> Dict[str, float]:Calculate the values of various transition triggers.profit_diff = self.calculate_profit_differential()
+def _calculate_trigger_values():-> Dict[str, float]:Calculate the values of various transition
+triggers.profit_diff = self.calculate_profit_differential()
 
 
 
@@ -989,7 +996,9 @@ class DualisticStateMachine:Advanced state machine for ALEPH/ALIF dualistic mana
 
 
 
-            quantum_phase: math.sin(self.quantum_phase * 2 * math.pi),nibble_rittle_balance: 1.0 - nibble_rittle_imbalance,profit_differential: abs(profit_diff),market_volatility: self.market_volatility,
+            quantum_phase: math.sin(self.quantum_phase * 2 * math.pi),nibble_rittle_balance: 1.0
+    
+    - nibble_rittle_imbalance,profit_differential: abs(profit_diff),market_volatility: self.market_volatility,
 
 
 
@@ -1001,7 +1010,8 @@ class DualisticStateMachine:Advanced state machine for ALEPH/ALIF dualistic mana
 
 
 
-    def _calculate_transition_score():-> float:Calculate the overall transition score based on weighted triggers.score = sum(trigger_values.get(k, 0) * v for k, v in self.transition_weights.items())
+def _calculate_transition_score():-> float:Calculate the overall transition score based on weighted
+triggers.score = sum(trigger_values.get(k, 0) * v for k, v in self.transition_weights.items())
 
 
 
@@ -1013,7 +1023,8 @@ class DualisticStateMachine:Advanced state machine for ALEPH/ALIF dualistic mana
 
 
 
-    def _calculate_state_suitability():-> float:Calculate the suitability of a given state.if state == StateType.ALEPH:
+def _calculate_state_suitability():-> float:Calculate the suitability of a given state.if state ==
+StateType.ALEPH:
 
 
 
@@ -1045,7 +1056,8 @@ class DualisticStateMachine:Advanced state machine for ALEPH/ALIF dualistic mana
 
 
 
-    def _execute_transition():-> bool:Execute the state transition.if (time.time() - self.last_transition_time) * 1000 < self.transition_cooldown_ms:
+    def _execute_transition():-> bool:Execute the state transition.if (time.time()
+    - self.last_transition_time) * 1000 < self.transition_cooldown_ms:
 
 
 
@@ -1213,7 +1225,8 @@ class DualisticStateMachine:Advanced state machine for ALEPH/ALIF dualistic mana
 
 
 
-    def _update_state_metrics():-> None:Update metrics for the state that is being deactivated.duration = time.time() - self.state_activation_time
+def _update_state_metrics():-> None:Update metrics for the state that is being deactivated.duration
+= time.time() - self.state_activation_time
 
 
 
@@ -1237,7 +1250,8 @@ class DualisticStateMachine:Advanced state machine for ALEPH/ALIF dualistic mana
 
 
 
-    def _calculate_transition_confidence():-> float:Calculate the confidence of a transition.transition_score = self._calculate_transition_score(trigger_values)
+def _calculate_transition_confidence():-> float:Calculate the confidence of a
+transition.transition_score = self._calculate_transition_score(trigger_values)
 
 
 
@@ -1253,7 +1267,8 @@ class DualisticStateMachine:Advanced state machine for ALEPH/ALIF dualistic mana
 
 
 
-    def _create_snapshot():-> DualisticSnapshot:Create a snapshot of the current state.return DualisticSnapshot(
+def _create_snapshot():-> DualisticSnapshot:Create a snapshot of the current state.return
+DualisticSnapshot(
 
 
 
@@ -1305,7 +1320,8 @@ class DualisticStateMachine:Advanced state machine for ALEPH/ALIF dualistic mana
 
 
 
-    def _calculate_current_confidence():-> float:Calculate confidence in the current state's stability.coherence = self.calculate_coherence_score()
+def _calculate_current_confidence():-> float:Calculate confidence in the current state's
+stability.coherence = self.calculate_coherence_score()
 
 
 
@@ -1341,7 +1357,9 @@ class DualisticStateMachine:Advanced state machine for ALEPH/ALIF dualistic mana
 
 
 
-    def get_performance_stats():-> Dict[str, Any]:Get performance statistics for each state.return {ALEPH: self.metrics[StateType.ALEPH],ALIF: self.metrics[StateType.ALIF],total_transitions: len(self.transition_history),
+def get_performance_stats():-> Dict[str, Any]:Get performance statistics for each state.return
+{ALEPH: self.metrics[StateType.ALEPH],ALIF: self.metrics[StateType.ALIF],total_transitions:
+len(self.transition_history),
 
 
 
@@ -1357,7 +1375,8 @@ class DualisticStateMachine:Advanced state machine for ALEPH/ALIF dualistic mana
 
 
 
-def main():-> None:Demonstrate the DualisticStateMachine functionality.logging.basicConfig(level = logging.INFO)
+def main():-> None:Demonstrate the DualisticStateMachine functionality.logging.basicConfig(level
+    = logging.INFO)
 
 
 

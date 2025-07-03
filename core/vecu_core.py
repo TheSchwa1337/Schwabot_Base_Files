@@ -1,12 +1,5 @@
-import hashlib
-import logging
-import time
-from collections import deque
-from dataclasses import dataclass, field
-from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
 
-import numpy as np
 
 """
 
@@ -132,7 +125,9 @@ class VECUMode(Enum):
 
 
 
-    VECU operation modes.IDLE =  idleTIMING_SYNC =  timing_syncPWM_INJECTION =  pwm_injectionFEEDBACK_CORRECTION =  feedback_correctionPROFIT_BURST =  profit_burstTHERMAL_MANAGEMENT =  thermal_management@dataclass
+    VECU operation modes.IDLE =  idleTIMING_SYNC =  timing_syncPWM_INJECTION
+    =  pwm_injectionFEEDBACK_CORRECTION =  feedback_correctionPROFIT_BURST 
+    =  profit_burstTHERMAL_MANAGEMENT =  thermal_management@dataclass
 
 
 
@@ -568,7 +563,8 @@ class VECUCore:
 
 
 
-                    volume_phase: volume_phase,volatility_phase: volatility_phase,mathematical_factor: mathematical_factor,
+volume_phase: volume_phase,volatility_phase: volatility_phase,mathematical_factor:
+mathematical_factor,
 
 
 

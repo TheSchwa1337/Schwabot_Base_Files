@@ -1,6 +1,6 @@
 from core.advanced_tensor_algebra import *  # noqa: F401,F403
 
-#!/usr/bin/env python3
+# !/usr/bin/env python3
 
 
 """Unified Tensor Algebra  compatibility stub.

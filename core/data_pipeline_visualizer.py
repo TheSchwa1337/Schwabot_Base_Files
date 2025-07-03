@@ -1,15 +1,5 @@
 import asyncio
-import json
-import logging
-import math
-import random
-import threading
-import time
 import tkinter as tk
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
-from pathlib import Path
 from tkinter import Canvas, ttk
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -164,7 +154,9 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 
 
-Data Pipeline Visualizer - Real-time Data Flow Visualization.This module provides comprehensive visualization for Schwabot's data pipeline:'
+Data Pipeline Visualizer
+    
+    - Real-time Data Flow Visualization.This module provides comprehensive visualization for Schwabot's data pipeline:'
 
 
 
@@ -232,7 +224,9 @@ logger = logging.getLogger(__name__)
 
 
 
-class DataTier(Enum):Data storage tiers.RAM_CACHE = ram_cacheMID_TERM =  mid_termLONG_TERM = long_termARCHIVE =  archiveclass DataCategory(Enum):Data categories for pipeline.BTC_HASHING = btc_hashingTRADING_SIGNALS =  trading_signalsMARKET_DATA = market_dataRISK_METRICS =  risk_metricsPORTFOLIO_STATE = portfolio_stateANALYSIS_RESULTS =  analysis_resultsSYSTEM_LOGS = system_logsAPI_RESPONSES =  api_responses@dataclass
+class DataTier(Enum):Data storage tiers.RAM_CACHE = ram_cacheMID_TERM =  mid_termLONG_TERM
+    = long_termARCHIVE =  archiveclass DataCategory(Enum):Data categories for pipeline.BTC_HASHING 
+    = btc_hashingTRADING_SIGNALS =  trading_signalsMARKET_DATA = market_dataRISK_METRICS =  risk_metricsPORTFOLIO_STATE = portfolio_stateANALYSIS_RESULTS =  analysis_resultsSYSTEM_LOGS = system_logsAPI_RESPONSES =  api_responses@dataclass
 
 
 
@@ -380,7 +374,8 @@ warnings_count: int
 
 
 
-class DataPipelineVisualizer:Real-time data pipeline visualizer.def __init__():Initialize the data pipeline visualizer.self.config = config or self._default_config()
+class DataPipelineVisualizer:Real-time data pipeline visualizer.def __init__():Initialize the data
+pipeline visualizer.self.config = config or self._default_config()
 
 
 
@@ -416,7 +411,9 @@ self.tier_limits = {
 
 
 
-DataTier.RAM_CACHE: self.config[ram_cache_limit_mb] * 1024 * 1024,DataTier.MID_TERM: self.config[mid_term_limit_mb] * 1024 * 1024,DataTier.LONG_TERM: self.config[long_term_limit_mb] * 1024 * 1024,DataTier.ARCHIVE: self.config[archive_limit_mb] * 1024 * 1024,
+DataTier.RAM_CACHE: self.config[ram_cache_limit_mb] * 1024
+    * 1024,DataTier.MID_TERM: self.config[mid_term_limit_mb] * 1024 
+    * 1024,DataTier.LONG_TERM: self.config[long_term_limit_mb] * 1024 * 1024,DataTier.ARCHIVE: self.config[archive_limit_mb] * 1024 * 1024,
 
 
 
@@ -496,7 +493,10 @@ self._initialize_tier_metrics()
 
 
 
-def _default_config():-> Dict[str, Any]:Default configuration.return {ram_cache_limit_mb: 500,mid_term_limit_mb": 2000,long_term_limit_mb": 10000,archive_limit_mb": 50000,update_interval_ms": 1000,animation_fps": 30,particle_count": 50,auto_cleanup_enabled": True,compression_enabled": True,visualization_enabled": True,performance_alerts": True,
+def _default_config():-> Dict[str, Any]:Default configuration.return {ram_cache_limit_mb:
+500,mid_term_limit_mb": 2000,long_term_limit_mb": 10000,archive_limit_mb":
+50000,update_interval_ms": 1000,animation_fps": 30,particle_count": 50,auto_cleanup_enabled":
+True,compression_enabled": True,visualization_enabled": True,performance_alerts": True,
 
 
 
@@ -552,7 +552,8 @@ usage_percentage=0.0,
 
 
 
-def create_visualization_window():-> tk.Toplevel:Create the main visualization window.if parent: window = tk.Toplevel(parent)
+def create_visualization_window():-> tk.Toplevel:Create the main visualization window.if parent:
+window = tk.Toplevel(parent)
 
 
 
@@ -568,7 +569,8 @@ else:
 
 
 
-window.title(Schwabot Data Pipeline Visualizer)window.geometry(1200x800)window.configure(bg="# 1a1a1a)
+window.title(Schwabot Data Pipeline Visualizer)window.geometry(1200x800)window.configure(bg="#
+1a1a1a)
 
 
 
@@ -640,7 +642,9 @@ main_frame.pack(fill=both, expand = True, padx=10, pady=10)
 
 
 
-overview_frame = ttk.LabelFrame(main_frame, text=Data Pipeline Overview)overview_frame.pack(fill=x, pady = (0, 10))
+overview_frame
+    = ttk.LabelFrame(main_frame, text=Data Pipeline Overview)overview_frame.pack(fill=x, pady 
+    = (0, 10))
 
 
 
@@ -676,7 +680,8 @@ self.canvas.pack(fill=x, padx = 10, pady=10)
 
 
 
-control_frame = ttk.LabelFrame(main_frame, text=Pipeline Controls)control_frame.pack(fill=x, pady = (0, 10))
+control_frame = ttk.LabelFrame(main_frame, text=Pipeline Controls)control_frame.pack(fill=x, pady
+    = (0, 10))
 
 
 
@@ -804,7 +809,9 @@ self.flow_canvas.pack(fill=x)
 
 
 
-metrics_frame = ttk.LabelFrame(main_frame, text=Pipeline Metrics & Statistics)metrics_frame.pack(fill=both", expand = True)
+metrics_frame
+    
+    = ttk.LabelFrame(main_frame, text=Pipeline Metrics & Statistics)metrics_frame.pack(fill=both", expand = True)
 
 
 
@@ -1092,7 +1099,8 @@ else:
 
 
 
-        except Exception as e:logger.error(fError adding data unit: {e})return def remove_data_unit():-> bool:Remove a data unit from the pipeline.try:
+except Exception as e:logger.error(fError adding data unit: {e})return def remove_data_unit():->
+bool:Remove a data unit from the pipeline.try:
 
 
 
@@ -1272,7 +1280,8 @@ target_tier.value}: insufficient capacity)
 
 
 
-def _check_tier_capacity():-> bool:Check if tier has capacity for additional data.try: current_size = self.tier_metrics[tier].compressed_size_bytes
+def _check_tier_capacity():-> bool:Check if tier has capacity for additional data.try: current_size
+= self.tier_metrics[tier].compressed_size_bytes
 
 
 
@@ -1304,7 +1313,8 @@ limit = self.tier_limits[tier]
 
 
 
-def _get_next_tier(self, current_tier: DataTier): -> Optional[DataTier]:Get the next tier in the hierarchy.tier_hierarchy = [
+def _get_next_tier(self, current_tier: DataTier):
+    -> Optional[DataTier]:Get the next tier in the hierarchy.tier_hierarchy = [
 
 
 
@@ -1368,7 +1378,7 @@ def _calculate_compression_ratio():-> float:
 
 
 
-        Calculate compression ratio based on data category.# Different data types compress differently
+Calculate compression ratio based on data category.# Different data types compress differently
 
 
 
@@ -1868,7 +1878,8 @@ if cleaned_count > 0:
 
 
 
-def _create_particle_effect(self, tier: DataTier)::Create particle effect for data addition.if not self.animation_running or not self.flow_canvas:
+def _create_particle_effect(self, tier: DataTier)::Create particle effect for data addition.if not
+self.animation_running or not self.flow_canvas:
 
 
 
@@ -1880,7 +1891,9 @@ def _create_particle_effect(self, tier: DataTier)::Create particle effect for da
 
 
 
-particle = {tier: tier,x: random.randint(50, 200),y: random.randint(20, 130),dx": random.uniform(-2, 2),dy": random.uniform(-1, 1),life": 60,  # framescolor: self._get_tier_color(tier),
+particle
+    
+    = {tier: tier,x: random.randint(50, 200),y: random.randint(20, 130),dx": random.uniform(-2, 2),dy": random.uniform(-1, 1),life": 60,  # framescolor: self._get_tier_color(tier),
 
 
 
@@ -1924,7 +1937,9 @@ if len(self.particles) > self.config[particle_count]:
 
 
 
-def _get_tier_color():-> str:Get color for tier visualization.tier_colors = {DataTier.RAM_CACHE: # ff6b6b,DataTier.MID_TERM:# ffd93d,DataTier.LONG_TERM:# 6bcf7,DataTier.ARCHIVE:# 4ecdc4,
+def _get_tier_color():-> str:Get color for tier visualization.tier_colors
+    
+    = {DataTier.RAM_CACHE: # ff6b6b,DataTier.MID_TERM:# ffd93d,DataTier.LONG_TERM:# 6bcf7,DataTier.ARCHIVE:# 4ecdc4,
 
 
 
@@ -1936,7 +1951,8 @@ def _get_tier_color():-> str:Get color for tier visualization.tier_colors = {Dat
 
 
 
-def _start_update_loop():Start the update loop for real-time visualization.if self.update_thread and self.update_thread.is_alive():
+def _start_update_loop():Start the update loop for real-time visualization.if self.update_thread and
+self.update_thread.is_alive():
 
 
 
@@ -2380,7 +2396,9 @@ fTotal Units: {sum(m.total_units for m in self.tier_metrics.values())} |
 
 
 
-fTotal Size: {self._format_bytes(sum(m.total_size_bytes for m inself.tier_metrics.values()))} |fCompressed: {self._format_bytes(sum(m.compressed_size_bytes for m inself.tier_metrics.values()))} |fUptime: {self._format_uptime(time.time() - self.start_time)}
+fTotal Size: {self._format_bytes(sum(m.total_size_bytes for m inself.tier_metrics.values()))}
+|fCompressed: {self._format_bytes(sum(m.compressed_size_bytes for m inself.tier_metrics.values()))}
+|fUptime: {self._format_uptime(time.time() - self.start_time)}
 
 
 
@@ -2428,7 +2446,8 @@ fill=# ,font = (Arial, 10),
 
 
 
-def _update_flow_visualization():Update the data flow visualization with particles.if not self.flow_canvas:
+def _update_flow_visualization():Update the data flow visualization with particles.if not
+self.flow_canvas:
 
 
 
@@ -2520,7 +2539,8 @@ self.flow_canvas.create_oval(
 
 
 
-particle[x] - size,particle[y] - size,particle[x] + size,particle[y] + size,fill = particle[color],outline = particle[color],
+particle[x] - size,particle[y] - size,particle[x] + size,particle[y] + size,fill
+    = particle[color],outline = particle[color],
 
 
 
@@ -2828,7 +2848,8 @@ memory_percent = psutil.virtual_memory().percent
 
 
 
-metrics_lines.append(fCPU Usage: {cpu_percent:.1f}%)metrics_lines.append(fMemory Usage: {memory_percent:.1f}%)metrics_lines.append(fActive Particles: {len(self.particles)})
+metrics_lines.append(fCPU Usage: {cpu_percent:.1f}%)metrics_lines.append(fMemory Usage:
+{memory_percent:.1f}%)metrics_lines.append(fActive Particles: {len(self.particles)})
 
 
 
@@ -3056,7 +3077,8 @@ bytes_value /= 1024.0
 
 
 
-def _format_uptime():-> str:Format uptime into human readable format.hours, remainder = divmod(int(seconds), 3600)
+def _format_uptime():-> str:Format uptime into human readable format.hours, remainder
+    = divmod(int(seconds), 3600)
 
 
 
@@ -3168,15 +3190,21 @@ self.start_time = time.time()
 
 
 
-def _export_statistics():Export pipeline statistics.try: timestamp = datetime.now().strftime(%Y%m%d_%H%M%S)
+def _export_statistics():Export pipeline statistics.try: timestamp
+    = datetime.now().strftime(%Y%m%d_%H%M%S)
 
 
 
-export_data = {export_timestamp: datetime.now().isoformat(),pipeline_stats": {total_data_processed: self.pipeline_stats.total_data_processed,active_units": self.pipeline_stats.active_units,compression_ratio": self.pipeline_stats.compression_ratio,memory_efficiency": self.pipeline_stats.memory_efficiency,throughput_mbps": self.pipeline_stats.throughput_mbps,uptime_seconds": self.pipeline_stats.uptime_seconds,
+export_data
+    
+    = {export_timestamp: datetime.now().isoformat(),pipeline_stats": {total_data_processed: self.pipeline_stats.total_data_processed,active_units": self.pipeline_stats.active_units,compression_ratio": self.pipeline_stats.compression_ratio,memory_efficiency": self.pipeline_stats.memory_efficiency,throughput_mbps": self.pipeline_stats.throughput_mbps,uptime_seconds": self.pipeline_stats.uptime_seconds,
 
 
 
-},tier_metrics": {tier.value: {total_units: metrics.total_units,total_size_bytes": metrics.total_size_bytes,compressed_size_bytes": metrics.compressed_size_bytes,usage_percentage": metrics.usage_percentage,flow_rate_mbps": metrics.flow_rate_mbps,compression_savings": metrics.compression_savings,
+},tier_metrics": {tier.value: {total_units: metrics.total_units,total_size_bytes":
+metrics.total_size_bytes,compressed_size_bytes": metrics.compressed_size_bytes,usage_percentage":
+metrics.usage_percentage,flow_rate_mbps": metrics.flow_rate_mbps,compression_savings":
+metrics.compression_savings,
 
 
 
@@ -3224,7 +3252,9 @@ filepath = fpipeline_stats_{timestamp}.jsonwith open(filepath,w) as f:
 
 
 
-def get_pipeline_status():-> Dict[str, Any]:"Get current pipeline status.return {animation_running: self.animation_running,total_units": sum(m.total_units for m in self.tier_metrics.values()),total_size_bytes": sum(
+def get_pipeline_status():-> Dict[str, Any]:"Get current pipeline status.return {animation_running:
+self.animation_running,total_units": sum(m.total_units for m in
+self.tier_metrics.values()),total_size_bytes": sum(
 
 
 
@@ -3240,7 +3270,8 @@ m.compressed_size_bytes for m in self.tier_metrics.values()
 
 
 
-),active_particles": len(self.particles),uptime_seconds": time.time() - self.start_time,tier_metrics": {tier.value: metrics.__dict__
+),active_particles": len(self.particles),uptime_seconds": time.time()
+    - self.start_time,tier_metrics": {tier.value: metrics.__dict__
 
 
 

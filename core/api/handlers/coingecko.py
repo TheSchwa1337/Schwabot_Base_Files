@@ -26,19 +26,13 @@ Provides price data, market metrics, trending coins, and market dominance data.
 """
 
 import asyncio
-import json
-import logging
-import time
 from typing import Any, Dict
 
-import aiohttp
-import requests
 
 from .base_handler import BaseAPIHandler
 
 try:
 
-    import aiohttp
 
 
 except ImportError:
@@ -48,7 +42,6 @@ except ImportError:
 
 try:
 
-    import requests
 
 
 except ImportError:

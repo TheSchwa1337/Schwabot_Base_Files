@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+# !/usr/bin/env python3
 """
 Matrix Mapper - Hash-to-matrix similarity routing logic
 """
@@ -45,4 +45,4 @@ def match_hash_to_matrix(hash_vec, matrix_dir, threshold=0.8) -> Optional[str]:
             best_file = fname
     return best_file
 
-__all__ = ["match_hash_to_matrix", "cosine_similarity", "load_matrix_from_file", "load_matrix_vectors"] 
+__all__ = ["match_hash_to_matrix", "cosine_similarity", "load_matrix_from_file", "load_matrix_vectors"]

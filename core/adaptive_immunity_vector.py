@@ -88,7 +88,8 @@ Builds AI feedback resistance patterns R(t) for Schwabot's defense system.
 
 
 
-Implements temporal resistance to repeated entropy stress with immune shock detection.from dataclasses import dataclass
+Implements temporal resistance to repeated entropy stress with immune shock detection.from
+dataclasses import dataclass
 
 
 
@@ -117,7 +118,8 @@ Implements temporal resistance to repeated entropy stress with immune shock dete
 
 
 
-class ResistanceProfile:Represents a resistance profile R(t) for adaptive immunity.resistance_value: float
+class ResistanceProfile:Represents a resistance profile R(t) for adaptive immunity.resistance_value:
+float
 
 
 
@@ -193,7 +195,8 @@ class AdaptiveImmunityVector:Builds AI feedback resistance patterns for Schwabot
 
 
 
-    which represents temporal resistance to repeated entropy stress.def __init__():-> None:Initialize the adaptive immunity vector.
+which represents temporal resistance to repeated entropy stress.def __init__():-> None:Initialize
+the adaptive immunity vector.
 
 
 
@@ -461,7 +464,7 @@ class AdaptiveImmunityVector:Builds AI feedback resistance patterns for Schwabot
 
 
 
-                shock_count: self.immunity_state.shock_count,adaptation_rate: self.immunity_state.adaptation_rate,
+shock_count: self.immunity_state.shock_count,adaptation_rate: self.immunity_state.adaptation_rate,
 
 
 
@@ -721,7 +724,8 @@ class AdaptiveImmunityVector:Builds AI feedback resistance patterns for Schwabot
 
 
 
-        if len(self.immunity_state.resistance_history) >= 10: recent_avg = np.mean(self.immunity_state.resistance_history[-10:])
+        if len(self.immunity_state.resistance_history) >= 10: recent_avg
+    = np.mean(self.immunity_state.resistance_history[-10:])
 
 
 
@@ -773,7 +777,11 @@ class AdaptiveImmunityVector:Builds AI feedback resistance patterns for Schwabot
 
 
 
-            current_resistance: recent_profiles[-1].resistance_value,average_resistance: np.mean([p.resistance_value for p in recent_profiles]),immunity_level: self.immunity_state.immunity_level,shock_count: self.immunity_state.shock_count,adaptation_rate": self.immunity_state.adaptation_rate,total_profiles": len(self.resistance_profiles),last_shock_time": (
+current_resistance: recent_profiles[-1].resistance_value,average_resistance:
+np.mean([p.resistance_value for p in recent_profiles]),immunity_level:
+self.immunity_state.immunity_level,shock_count: self.immunity_state.shock_count,adaptation_rate":
+self.immunity_state.adaptation_rate,total_profiles": len(self.resistance_profiles),last_shock_time":
+(
 
 
 
@@ -801,7 +809,8 @@ class AdaptiveImmunityVector:Builds AI feedback resistance patterns for Schwabot
 
 
 
-    def apply_immunity_filter():-> np.ndarray:Apply immunity filter to strategy vector based on current resistance.
+def apply_immunity_filter():-> np.ndarray:Apply immunity filter to strategy vector based on current
+resistance.
 
 
 
@@ -869,7 +878,8 @@ class AdaptiveImmunityVector:Builds AI feedback resistance patterns for Schwabot
 
 
 
-    def reset_immunity_state():-> None:Reset immunity state to initial conditions.self.immunity_state = ImmunityState(
+def reset_immunity_state():-> None:Reset immunity state to initial conditions.self.immunity_state =
+ImmunityState(
 
 
 

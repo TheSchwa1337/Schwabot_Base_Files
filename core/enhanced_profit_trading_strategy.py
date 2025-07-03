@@ -1,4 +1,3 @@
-import numpy as np
 
 from core.enhanced_live_execution_mapper import (
     COMMENTED,
@@ -196,7 +195,8 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 
 
-Enhanced Profit-Driven Trading Strategy for BTC/USDC.This module implements a comprehensive profit-driven trading strategy that:
+Enhanced Profit-Driven Trading Strategy for BTC/USDC.This module implements a comprehensive
+profit-driven trading strategy that:
 
 
 
@@ -308,7 +308,9 @@ logger = logging.getLogger(__name__)
 
 
 
-class StrategyState(Enum):Trading strategy state.INITIALIZING = initializingANALYZING =  analyzingOPTIMIZING = optimizingEXECUTING =  executingMONITORING = monitoringPAUSED =  pausedclass ProfitSignal(Enum):Profit signal strength.STRONG_BUY = strong_buyBUY =  buyWEAK_BUY = weak_buyHOLD =  holdWEAK_SELL = weak_sellSELL =  sellSTRONG_SELL = strong_sell@dataclass
+class StrategyState(Enum):Trading strategy state.INITIALIZING = initializingANALYZING
+    =  analyzingOPTIMIZING = optimizingEXECUTING =  executingMONITORING = monitoringPAUSED 
+    =  pausedclass ProfitSignal(Enum):Profit signal strength.STRONG_BUY = strong_buyBUY =  buyWEAK_BUY = weak_buyHOLD =  holdWEAK_SELL = weak_sellSELL =  sellSTRONG_SELL = strong_sell@dataclass
 
 
 
@@ -516,7 +518,8 @@ class EnhancedProfitTradingStrategy:
 
 
 
-    Enhanced profit-driven trading strategy for BTC/USDC.def __init__():Initialize the enhanced profit trading strategy.self.config = config or self._default_config()
+Enhanced profit-driven trading strategy for BTC/USDC.def __init__():Initialize the enhanced profit
+trading strategy.self.config = config or self._default_config()
 
 
 
@@ -632,11 +635,13 @@ self.risk_limits = {max_daily_loss: self.config.get(max_daily_loss, 0.2),  # 2%
 
 
 """
-# 10%max_position_size: self.config.get(max_position_size", 0.1),min_confidence_threshold": self.config.get(min_confidence", 0.75),"
+# 10%max_position_size: self.config.get(max_position_size", 0.1),min_confidence_threshold":
+self.config.get(min_confidence", 0.75),"
 
 
 
-            # 0.5%min_profit_threshold: self.config.get(min_profit", 0.5),max_risk_score": self.config.get(max_risk_score", 0.3),"
+# 0.5%min_profit_threshold: self.config.get(min_profit", 0.5),max_risk_score":
+self.config.get(max_risk_score", 0.3),"
 
 
 
@@ -652,7 +657,9 @@ self.risk_limits = {max_daily_loss: self.config.get(max_daily_loss, 0.2),  # 2%
 
 
 
-        self.profit_params = {kelly_fraction: self.config.get(kelly_fraction, 0.25),profit_multiplier": self.config.get(profit_multiplier", 1.5),risk_multiplier": self.config.get(risk_multiplier", 0.8),confidence_weight": self.config.get(confidence_weight", 0.7),
+        self.profit_params
+    
+    = {kelly_fraction: self.config.get(kelly_fraction, 0.25),profit_multiplier": self.config.get(profit_multiplier", 1.5),risk_multiplier": self.config.get(risk_multiplier", 0.8),confidence_weight": self.config.get(confidence_weight", 0.7),
 
 
 
@@ -664,7 +671,7 @@ self.risk_limits = {max_daily_loss: self.config.get(max_daily_loss, 0.2),  # 2%
 
 
 
-            logger.info( Enhanced Profit Trading Strategy initializedf"(capital: ${initial_capital_usdc:,.2f},"
+logger.info( Enhanced Profit Trading Strategy initializedf"(capital: ${initial_capital_usdc:,.2f},"
 
 
 
@@ -680,7 +687,12 @@ fsimulation: {simulation_mode})
 
 
 
-def _default_config() -> Dict[str, Any]:"Default configuration for profit trading strategy.return {max_signal_history: 1000,max_daily_loss": 0.2,max_position_size": 0.1,min_confidence": 0.75,min_profit": 0.5,max_risk_score": 0.3,kelly_fraction": 0.25,profit_multiplier": 1.5,risk_multiplier": 0.8,confidence_weight": 0.7,signal_generation_interval": 60,  # secondsenable_dynamic_sizing: True,enable_profit_taking": True,enable_stop_loss": True,profit_target_multiplier": 2.0,stop_loss_multiplier": 1.0,"
+def _default_config() -> Dict[str, Any]:"Default configuration for profit trading strategy.return
+{max_signal_history: 1000,max_daily_loss": 0.2,max_position_size": 0.1,min_confidence":
+0.75,min_profit": 0.5,max_risk_score": 0.3,kelly_fraction": 0.25,profit_multiplier":
+1.5,risk_multiplier": 0.8,confidence_weight": 0.7,signal_generation_interval": 60,  #
+secondsenable_dynamic_sizing: True,enable_profit_taking": True,enable_stop_loss":
+True,profit_target_multiplier": 2.0,stop_loss_multiplier": 1.0,"
 
 
 
@@ -1136,7 +1148,8 @@ fprofit_potential: {profit_potential:.3f})
 
 
 
-def execute_profit_optimized_trade() -> EnhancedExecutionState:Execute trade based on profit-optimized signal.try:
+def execute_profit_optimized_trade() -> EnhancedExecutionState:Execute trade based on
+profit-optimized signal.try:
 
 
 
@@ -1196,7 +1209,8 @@ override_config={recommended_size: trading_signal.recommended_size_btc,
 
 
 
-confidence_override: trading_signal.confidence_score,profit_target: trading_signal.take_profit,stop_loss: trading_signal.stop_loss,
+confidence_override: trading_signal.confidence_score,profit_target:
+trading_signal.take_profit,stop_loss: trading_signal.stop_loss,
 
 
 
@@ -1276,7 +1290,8 @@ self.current_state = StrategyState.MONITORING
 
 
 
-def _determine_profit_signal_strength() -> ProfitSignal:Determine profit signal strength based on mathematical analysis.try:
+def _determine_profit_signal_strength() -> ProfitSignal:Determine profit signal strength based on
+mathematical analysis.try:
 
 
 
@@ -1420,7 +1435,8 @@ else:
 
 
 
-def _calculate_exit_levels() -> Tuple[Optional[float], Optional[float]]:Calculate stop loss and take profit levels.try:
+def _calculate_exit_levels() -> Tuple[Optional[float], Optional[float]]:Calculate stop loss and take
+profit levels.try:
 
 
 
@@ -1656,7 +1672,9 @@ price_str = f{btc_price:.2f}volume_str = f{usdc_volume:.0f}combined = f{price_st
 
 
 
-def _calculate_fallback_phase_alignment() -> float:Fallback phase alignment calculation.try: price_history = market_data.get(price_history, [])
+def _calculate_fallback_phase_alignment()
+    -> float:Fallback phase alignment calculation.try: price_history 
+    = market_data.get(price_history, [])
 
 
 
@@ -1840,7 +1858,8 @@ def _calculate_fallback_pattern() -> float:
 
 
 
-        Fallback pattern confidence calculation.try: price_history = market_data.get(price_history, [])volume_history = market_data.get(volume_history, [])
+        Fallback pattern confidence calculation.try: price_history
+    = market_data.get(price_history, [])volume_history = market_data.get(volume_history, [])
 
 
 
@@ -1876,7 +1895,8 @@ price_changes = np.diff(price_history[-3:])
 
 
 
-if len(price_changes) == len(volume_changes) and len(price_changes) > 1: correlation = np.corrcoef(price_changes, volume_changes)[0, 1]
+if len(price_changes) == len(volume_changes) and len(price_changes) > 1: correlation
+    = np.corrcoef(price_changes, volume_changes)[0, 1]
 
 
 
@@ -1924,7 +1944,8 @@ def _calculate_fallback_profit_potential() -> float:
 
 
 
-            volatility = market_data.get(volatility, 0.2)avg_volume = market_data.get(avg_volume, usdc_volume)
+            volatility = market_data.get(volatility, 0.2)avg_volume
+    = market_data.get(avg_volume, usdc_volume)
 
 
 
@@ -2020,7 +2041,8 @@ risk_score = base_risk + confidence_adjustment + profit_adjustment
 
 
 
-def _determine_fallback_trade_params() -> Tuple[TradeDirection, float]:Fallback trade parameter determination.try:
+def _determine_fallback_trade_params() -> Tuple[TradeDirection, float]:Fallback trade parameter
+determination.try:
 
 
 
@@ -2296,7 +2318,8 @@ state.profit_potential = signal.profit_potential
 
 
 
-def _simulate_trade_execution() -> EnhancedExecutionState:Simulate trade execution for demo mode.# Create base state
+def _simulate_trade_execution() -> EnhancedExecutionState:Simulate trade execution for demo mode.#
+Create base state
 
 
 
@@ -2388,7 +2411,9 @@ state.profit_potential = signal.profit_potential
 
 
 
-state.execution_details = {status:filled,executed_price: signal.btc_price,executed_quantity": signal.recommended_size_btc,fees": signal.recommended_size_btc * signal.btc_price * 0.75,simulation": True,"
+state.execution_details
+    
+    = {status:filled,executed_price: signal.btc_price,executed_quantity": signal.recommended_size_btc,fees": signal.recommended_size_btc * signal.btc_price * 0.75,simulation": True,"
 
 
 
@@ -2680,11 +2705,17 @@ def get_strategy_performance() -> Dict[str, Any]:Get comprehensive strategy perf
 
 
 
-            return {strategy_performance: {total_signals: self.performance.total_signals,profitable_signals": self.performance.profitable_signals,win_rate": self.performance.win_rate,total_return: self.performance.total_return,avg_profit_per_trade": self.performance.avg_profit_per_trade,avg_confidence": self.performance.avg_confidence,avg_profit_potential": self.performance.avg_profit_potential,avg_risk_score": self.performance.avg_risk_score,
+return {strategy_performance: {total_signals: self.performance.total_signals,profitable_signals":
+self.performance.profitable_signals,win_rate": self.performance.win_rate,total_return:
+self.performance.total_return,avg_profit_per_trade":
+self.performance.avg_profit_per_trade,avg_confidence":
+self.performance.avg_confidence,avg_profit_potential":
+self.performance.avg_profit_potential,avg_risk_score": self.performance.avg_risk_score,
 
 
 
-},risk_limits": self.risk_limits,profit_params": self.profit_params,current_state": self.current_state.value,signal_history_count": len(self.trading_signals),
+},risk_limits": self.risk_limits,profit_params": self.profit_params,current_state":
+self.current_state.value,signal_history_count": len(self.trading_signals),
 
 
 
@@ -2692,7 +2723,7 @@ def get_strategy_performance() -> Dict[str, Any]:Get comprehensive strategy perf
 
 
 
-        except Exception as e:logger.error(f"Error getting strategy performance: {e})return {error: str(e)}"
+except Exception as e:logger.error(f"Error getting strategy performance: {e})return {error: str(e)}"
 
 
 
@@ -2700,7 +2731,8 @@ def get_strategy_performance() -> Dict[str, Any]:Get comprehensive strategy perf
 
 
 
-def get_recent_signals() -> List[Dict[str, Any]]:Get recent trading signals.try: recent_signals = self.trading_signals[-count:]
+def get_recent_signals() -> List[Dict[str, Any]]:Get recent trading signals.try: recent_signals
+    = self.trading_signals[-count:]
 
 
 
@@ -2708,7 +2740,11 @@ def get_recent_signals() -> List[Dict[str, Any]]:Get recent trading signals.try:
 
 
 
-signal_id: signal.signal_id,timestamp: signal.timestamp,profit_signal: signal.profit_signal.value,confidence_score": signal.confidence_score,profit_potential": signal.profit_potential,risk_score": signal.risk_score,recommended_direction": signal.recommended_direction.value,recommended_size_btc": signal.recommended_size_btc,expected_return: signal.expected_return,"
+signal_id: signal.signal_id,timestamp: signal.timestamp,profit_signal:
+signal.profit_signal.value,confidence_score": signal.confidence_score,profit_potential":
+signal.profit_potential,risk_score": signal.risk_score,recommended_direction":
+signal.recommended_direction.value,recommended_size_btc":
+signal.recommended_size_btc,expected_return: signal.expected_return,"
 
 
 
@@ -2740,7 +2776,8 @@ for signal in recent_signals:
 
 
 
-def main():Demonstration of enhanced profit trading strategy.print( Enhanced Profit-Driven Trading Strategy Demo)
+def main():Demonstration of enhanced profit trading strategy.print( Enhanced Profit-Driven Trading
+Strategy Demo)
 
 
 
@@ -2776,7 +2813,9 @@ strategy = EnhancedProfitTradingStrategy(
 
 
 
-demo_market_data = {price_history: [45000, 45100, 45200, 45150, 45300],volume_history: [1000000, 1100000, 950000, 1200000, 1150000],volatility": 0.2,avg_volume": 1100000.0,
+demo_market_data
+    
+    = {price_history: [45000, 45100, 45200, 45150, 45300],volume_history: [1000000, 1100000, 950000, 1200000, 1150000],volatility": 0.2,avg_volume": 1100000.0,
 
 
 
@@ -2808,7 +2847,10 @@ demo_market_data = {price_history: [45000, 45100, 45200, 45150, 45300],volume_hi
 
 
 
-print(\n Generated Signal:)print(fSignal Strength: {signal.profit_signal.value})print(fConfidence: {signal.confidence_score:.3f})print(fProfit Potential: {signal.profit_potential:.3f})print(fRisk Score: {signal.risk_score:.3f})print(fDirection: {signal.recommended_direction.value})print(fSize: {signal.recommended_size_btc:.6f} BTC)
+print(\n Generated Signal:)print(fSignal Strength: {signal.profit_signal.value})print(fConfidence:
+{signal.confidence_score:.3f})print(fProfit Potential: {signal.profit_potential:.3f})print(fRisk
+Score: {signal.risk_score:.3f})print(fDirection: {signal.recommended_direction.value})print(fSize:
+{signal.recommended_size_btc:.6f} BTC)
 
 
 
@@ -2820,7 +2862,8 @@ print(\n Generated Signal:)print(fSignal Strength: {signal.profit_signal.value})
 
 
 
-        if signal.profit_signal != ProfitSignal.HOLD: execution = strategy.execute_profit_optimized_trade(
+        if signal.profit_signal != ProfitSignal.HOLD: execution
+    = strategy.execute_profit_optimized_trade(
 
 
 
@@ -2836,7 +2879,8 @@ signal, demo_market_data
 
 
 
-print(\n Execution Result:)print(fStatus: {execution.status})print(fExpected Profit: ${execution.expected_profit_usdc:.2f})
+print(\n Execution Result:)print(fStatus: {execution.status})print(fExpected Profit:
+${execution.expected_profit_usdc:.2f})
 
 
 

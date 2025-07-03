@@ -1,10 +1,8 @@
-#!/usr/bin/env python3
+# !/usr/bin/env python3
 """
 Strategy Loader - Loads and routes strategies by name or hash.
 """
 import importlib
-import os
-import logging
 from typing import Callable, Dict, Optional
 
 logger = logging.getLogger(__name__)
@@ -60,13 +58,13 @@ def load_strategy(name_or_hash: str) -> Optional[Callable]:
     """Load a strategy by name or hash."""
     key = HASH_MAP.get(name_or_hash, name_or_hash)
     strategy = STRATEGY_REGISTRY.get(key)
-    
+
     if strategy:
         logger.info(f"Strategy loaded: {key}")
     else:
         logger.warning(f"Strategy not found: {key}, using momentum fallback")
         strategy = STRATEGY_REGISTRY.get("momentum")
-    
+
     return strategy
 
-__all__ = ["load_strategy", "STRATEGY_REGISTRY"] 
+__all__ = ["load_strategy", "STRATEGY_REGISTRY"]

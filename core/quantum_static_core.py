@@ -1,9 +1,5 @@
-import time
-from dataclasses import dataclass
-from enum import Enum
 from typing import Any, Dict, Optional
 
-import numpy as np
 
 """
 
@@ -113,7 +109,9 @@ class QSCMode(Enum):
 
 
 
-    QSC operational modes.PASSIVE =  passiveACTIVE =  activeIMMUNE_RESPONSE =  immune_responseTIMEBAND_LOCKED =  timeband_lockedEMERGENCY_SHUTDOWN =  emergency_shutdownclass ResonanceLevel(Enum):Resonance classification levels.CRITICAL_LOW =  critical_low# < 0.3 - Block all trades
+    QSC operational modes.PASSIVE =  passiveACTIVE =  activeIMMUNE_RESPONSE
+    =  immune_responseTIMEBAND_LOCKED =  timeband_lockedEMERGENCY_SHUTDOWN 
+    =  emergency_shutdownclass ResonanceLevel(Enum):Resonance classification levels.CRITICAL_LOW =  critical_low# < 0.3 - Block all trades
 
 
 
@@ -233,7 +231,8 @@ class QSCResult:QSC analysis result.resonant: bool
 
 
 
-class QuantumProbe:Quantum-enhanced divergence detection probe.def __init__():Initialize quantum probe.
+class QuantumProbe:Quantum-enhanced divergence detection probe.def __init__():Initialize quantum
+probe.
 
 
 
@@ -261,7 +260,8 @@ class QuantumProbe:Quantum-enhanced divergence detection probe.def __init__():In
 
 
 
-    def check_vector_divergence():-> bool:Check for vector divergence between Fibonacci projection and actual prices.
+def check_vector_divergence():-> bool:Check for vector divergence between Fibonacci projection and
+actual prices.
 
 
 
@@ -545,7 +545,8 @@ class QuantumStaticCore:
 
 
 
-            timeband: Trading timeband identifier (e.g., M5,H1,D1)self.timeband = timeband or H1self.state = QSCState()
+            timeband: Trading timeband identifier (e.g., M5,H1,D1)self.timeband
+    = timeband or H1self.state = QSCState()
 
 
 
@@ -1021,7 +1022,8 @@ class QuantumStaticCore:
 
 
 
-    def should_override():-> bool:Determine if QSC should override normal trading logic.# Extract price and volume data
+def should_override():-> bool:Determine if QSC should override normal trading logic.# Extract price
+and volume data
 
 
 
@@ -1173,7 +1175,8 @@ class QuantumStaticCore:
 
 
 
-            entropy_stability: 1.0 - abs(self.state.entropy_flux - 0.5) * 2,timeband_coherence: 0.8 if not self.state.timeband_locked else 0.3,immune_confidence: 1.0
+            entropy_stability: 1.0 - abs(self.state.entropy_flux - 0.5)
+    * 2,timeband_coherence: 0.8 if not self.state.timeband_locked else 0.3,immune_confidence: 1.0
 
 
 
@@ -1289,7 +1292,10 @@ class QuantumStaticCore:
 
 
 
-            resonance_score: overall_resonance,resonance_level: self.state.resonance_level.value,entropy_flux: self.state.entropy_flux,fibonacci_divergence: self.state.fibonacci_divergence,cycles_approved": self.state.cycles_approved,cycles_blocked": self.state.cycles_blocked,immune_responses": self.state.total_immune_responses,timeband: self.timeband,mode": self.state.mode.value,
+resonance_score: overall_resonance,resonance_level: self.state.resonance_level.value,entropy_flux:
+self.state.entropy_flux,fibonacci_divergence: self.state.fibonacci_divergence,cycles_approved":
+self.state.cycles_approved,cycles_blocked": self.state.cycles_blocked,immune_responses":
+self.state.total_immune_responses,timeband: self.timeband,mode": self.state.mode.value,
 
 
 
@@ -1361,7 +1367,8 @@ class QuantumStaticCore:
 
 
 
-    def lock_timeband():-> None:Lock current timeband to prevent trades.lock_duration = duration or self.TIMEBAND_LOCK_DURATION
+    def lock_timeband():-> None:Lock current timeband to prevent trades.lock_duration
+    = duration or self.TIMEBAND_LOCK_DURATION
 
 
 
@@ -1421,7 +1428,13 @@ class QuantumStaticCore:
 
 
 
-    def get_immune_status():-> Dict[str, Any]:Get current immune system status.return {mode: self.state.mode.value,resonance_level: self.state.resonance_level.value,timeband_locked: self.state.timeband_locked,immune_triggered": self.state.immune_triggered,cycles_approved": self.state.cycles_approved,cycles_blocked": self.state.cycles_blocked,total_immune_responses": self.state.total_immune_responses,fibonacci_divergence": self.state.fibonacci_divergence,entropy_flux": self.state.entropy_flux,success_rate": self.state.cycles_approved
+def get_immune_status():-> Dict[str, Any]:Get current immune system status.return {mode:
+self.state.mode.value,resonance_level: self.state.resonance_level.value,timeband_locked:
+self.state.timeband_locked,immune_triggered": self.state.immune_triggered,cycles_approved":
+self.state.cycles_approved,cycles_blocked": self.state.cycles_blocked,total_immune_responses":
+self.state.total_immune_responses,fibonacci_divergence":
+self.state.fibonacci_divergence,entropy_flux": self.state.entropy_flux,success_rate":
+self.state.cycles_approved
 
 
 

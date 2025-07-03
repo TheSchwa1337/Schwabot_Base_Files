@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+# !/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 MathLib V4 - Advanced Mathematical Library for Schwabot
@@ -14,16 +14,9 @@ Comprehensive mathematical library providing:
 
 from __future__ import annotations
 
-import hashlib
-import logging
-import math
-import time
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
-from enum import Enum
 from typing import Any, Dict, List, Optional, Union
 
-import numpy as np
 
 # Configure logging
 logger = logging.getLogger(__name__)

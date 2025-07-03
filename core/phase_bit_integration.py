@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+# !/usr/bin/env python3
 """
 Phase Bit Integration Module
 
@@ -7,9 +7,6 @@ mathematical operations and strategy selections within Schwabot.
 This module is crucial for dynamic bitwise strategy adjustment.
 """
 
-import hashlib
-import logging
-from enum import Enum
 from typing import Any, Dict, NamedTuple, Optional
 
 logger = logging.getLogger(__name__)

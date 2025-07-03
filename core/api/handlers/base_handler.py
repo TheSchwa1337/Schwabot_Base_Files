@@ -1,16 +1,11 @@
 from __future__ import annotations
 
 import asyncio
-import json
-import logging
-import time
 from abc import ABC, abstractmethod
-from pathlib import Path
 from typing import Any, Dict, Optional
 
-import aiohttp  # Preferred for non-blocking IO
 
-#!/usr/bin/env python3
+# !/usr/bin/env python3
 
 
 # -*- coding: utf-8 -*-
@@ -45,7 +40,6 @@ for use by the cache sync subsystem.
 
 try:
 
-    import aiohttp  # type: ignore
 
 
 except ImportError:  # Fallback to requests for sync usage / testing

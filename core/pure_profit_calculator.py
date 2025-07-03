@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+# !/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Pure Profit Calculator - Mathematically Rigorous Core
@@ -15,15 +15,9 @@ CRITICAL GUARANTEE: ZPE/ZBE systems never appear in this calculation.
 They only affect computation time, never profit.
 """
 
-import hashlib
-import logging
 import sys
-import time
-from dataclasses import dataclass, field
-from enum import Enum
 from typing import Any, Dict, List
 
-import numpy as np
 
 logger = logging.getLogger(__name__)
 

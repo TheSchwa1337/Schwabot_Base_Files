@@ -163,7 +163,8 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 
 
-Live Execution Mapper for Schwabot's Glyph-Driven Trading System.Orchestrates the end-to-end process of translating glyph strategy outputs'
+Live Execution Mapper for Schwabot's Glyph-Driven Trading System.Orchestrates the end-to-end process
+of translating glyph strategy outputs'
 
 
 
@@ -391,7 +392,8 @@ class LiveExecutionMapper:
 
 
 
-Orchestrates the live (or simulated) execution of glyph-driven trade signals.def __init__():Initialize the LiveExecutionMapper.
+Orchestrates the live (or simulated) execution of glyph-driven trade signals.def
+__init__():Initialize the LiveExecutionMapper.
 
 
 
@@ -415,7 +417,8 @@ initial_portfolio_cash: Starting cash for the portfolio.
 
 
 
-            enable_portfolio_tracker: Whether to use the PortfolioTracker for updates.self.simulation_mode = simulation_mode
+enable_portfolio_tracker: Whether to use the PortfolioTracker for updates.self.simulation_mode =
+simulation_mode
 
 
 
@@ -475,7 +478,8 @@ PortfolioTracker,
 
 
 
-One or more core trading components failed to import. LiveExecutionMapper may notfunction correctly.)
+One or more core trading components failed to import. LiveExecutionMapper may notfunction
+correctly.)
 
 
 
@@ -575,7 +579,9 @@ self.stats = {
 
 
 """
-total_execution_requests: 0,successful_executions: 0,failed_executions": 0,risk_rejected_executions": 0,rejected_by_signal_threshold": 0,  # Added for clarityrejected_by_sizing: 0,  # Added for clarityavg_execution_flow_time: 0.0,"
+total_execution_requests: 0,successful_executions: 0,failed_executions":
+0,risk_rejected_executions": 0,rejected_by_signal_threshold": 0,  # Added for
+clarityrejected_by_sizing: 0,  # Added for clarityavg_execution_flow_time: 0.0,"
 
 
 
@@ -587,7 +593,8 @@ total_execution_requests: 0,successful_executions: 0,failed_executions": 0,risk_
 
 
 
-            logger.info(f"LiveExecutionMapper initialized in {'simulation' if self.simulation_mode else 'live'} mode.)"
+logger.info(f"LiveExecutionMapper initialized in {'simulation' if self.simulation_mode else 'live'}
+mode.)"
 
 
 
@@ -595,7 +602,8 @@ total_execution_requests: 0,successful_executions: 0,failed_executions": 0,risk_
 
 
 
-def _generate_trade_id() -> str:Generates a unique trade ID.self.trade_id_counter += 1return fTRADE-{self.trade_id_counter}-{int(time.time() * 1000)}
+def _generate_trade_id() -> str:Generates a unique trade ID.self.trade_id_counter
+    += 1return fTRADE-{self.trade_id_counter}-{int(time.time() * 1000)}
 
 
 
@@ -643,7 +651,8 @@ Returns:
 
 
 
-            An ExecutionState object detailing the outcome of the trade request.trade_id = self._generate_trade_id()
+            An ExecutionState object detailing the outcome of the trade request.trade_id
+    = self._generate_trade_id()
 
 
 
@@ -739,7 +748,9 @@ if not trade_signal:
 
 
 
-                execution_state.status =  rejected_by_signal_thresholdexecution_state.error_message = (Signal confidence too low or no signal generated.)self.stats[rejected_by_signal_threshold] += 1  # Updated stat
+                execution_state.status
+    =  rejected_by_signal_thresholdexecution_state.error_message 
+    = (Signal confidence too low or no signal generated.)self.stats[rejected_by_signal_threshold] += 1  # Updated stat
 
 
 
@@ -795,7 +806,9 @@ if portfolio_value <= 0:
 
 
 
-execution_state.error_message = (Portfolio value is zero or negative. Cannot execute trades.)self.stats[failed_executions] += 1logger.error(f[{trade_id}] {execution_state.error_message})
+execution_state.error_message
+    = (Portfolio value is zero or negative. Cannot execute trades.)self.stats[failed_executions] 
+    += 1logger.error(f[{trade_id}] {execution_state.error_message})
 
 
 
@@ -903,7 +916,9 @@ if order_result.get(status) not in [filled,dry_run_success]:
 
 
 
-                execution_state.status = failedexecution_state.error_message = fOrder placement failed: {order_result.get('error', 'Unknown error')}self.stats[failed_executions] += 1logger.error(f"[{trade_id}] {execution_state.error_message})"
+                execution_state.status = failedexecution_state.error_message
+    
+    = fOrder placement failed: {order_result.get('error', 'Unknown error')}self.stats[failed_executions] += 1logger.error(f"[{trade_id}] {execution_state.error_message})"
 
 
 
@@ -951,7 +966,8 @@ trade_signal.direction.value,
 
 
 
-)execution_state.status = portfolio_updatedlogger.info(f[{trade_id}] Portfolio updated for {asset}. Current cash:
+)execution_state.status
+    = portfolio_updatedlogger.info(f[{trade_id}] Portfolio updated for {asset}. Current cash:
 
 
 
@@ -967,7 +983,8 @@ self.stats[successful_executions] += 1
 
 
 
-            logger.info(f"[{trade_id}] Trade executed successfully for {glyph} ({asset}{trade_signal.direction.value} {size_to_execute:.4f} @ {price}))"
+logger.info(f"[{trade_id}] Trade executed successfully for {glyph}
+({asset}{trade_signal.direction.value} {size_to_execute:.4f} @ {price}))"
 
 
 
@@ -1015,7 +1032,9 @@ total_completed = (
 
 
 
-self.stats[successful_executions]+ self.stats[failed_executions]+ self.stats[rejected_by_signal_threshold]+ self.stats[rejected_by_sizing]+ self.stats[failed_executions]
+self.stats[successful_executions]+ self.stats[failed_executions]+
+self.stats[rejected_by_signal_threshold]+ self.stats[rejected_by_sizing]+
+self.stats[failed_executions]
 
 
 
@@ -1027,7 +1046,8 @@ if total_completed > 0:
 
 
 
-                self.stats[avg_execution_flow_time] = (self.stats[avg_execution_flow_time] * (total_completed - 1)
+                self.stats[avg_execution_flow_time] = (self.stats[avg_execution_flow_time]
+    * (total_completed - 1)
 
 
 
@@ -1039,7 +1059,8 @@ if total_completed > 0:
 
 
 
-            logger.debug(f[{trade_id}] Execution flow completed in {execution_flow_time:.4f} seconds withstatus: {execution_state.status})
+logger.debug(f[{trade_id}] Execution flow completed in {execution_flow_time:.4f} seconds withstatus:
+{execution_state.status})
 
 
 
@@ -1055,7 +1076,8 @@ if total_completed > 0:
 
 
 
-def get_execution_state() -> Optional[ExecutionState]:Retrieves the state of a specif ic trade execution.return self.execution_states.get(trade_id)
+def get_execution_state() -> Optional[ExecutionState]:Retrieves the state of a specif ic trade
+execution.return self.execution_states.get(trade_id)
 
 
 
@@ -1063,7 +1085,8 @@ def get_execution_state() -> Optional[ExecutionState]:Retrieves the state of a s
 
 
 
-def get_all_execution_states() -> Dict[str, ExecutionState]:Returns all tracked execution states.return self.execution_states.copy()
+def get_all_execution_states() -> Dict[str, ExecutionState]:Returns all tracked execution
+states.return self.execution_states.copy()
 
 
 
@@ -1071,7 +1094,9 @@ def get_all_execution_states() -> Dict[str, ExecutionState]:Returns all tracked 
 
 
 
-def get_performance_stats() -> Dict[str, Any]:Returns the overall performance statistics of the mapper.stats = self.stats.copy()
+def get_performance_stats()
+    -> Dict[str, Any]:Returns the overall performance statistics of the mapper.stats 
+    = self.stats.copy()
 
 
 
@@ -1151,7 +1176,9 @@ self.stats = {
 
 
 
-total_execution_requests: 0,successful_executions: 0,failed_executions": 0,risk_rejected_executions": 0,rejected_by_signal_threshold": 0,rejected_by_sizing": 0,avg_execution_flow_time": 0.0,"
+total_execution_requests: 0,successful_executions: 0,failed_executions":
+0,risk_rejected_executions": 0,rejected_by_signal_threshold": 0,rejected_by_sizing":
+0,avg_execution_flow_time": 0.0,"
 
 
 
@@ -1255,7 +1282,8 @@ if state1.xecution_details:
 
 
 
-state1.xecution_details.get('executed_price'):.2f})print(fError: {state1.rror_message})print(fPortfolio Cash: {mapper.portfolio_tracker.cash:.2f})
+state1.xecution_details.get('executed_price'):.2f})print(fError:
+{state1.rror_message})print(fPortfolio Cash: {mapper.portfolio_tracker.cash:.2f})
 
 
 
@@ -1391,7 +1419,8 @@ simulation_mode=True, initial_portfolio_cash=50000.0
 
 
 
-mapper_multi.execute_glyph_trade(hourglass", 2.06,ADA/USD", 0.5)mapper_multi.execute_glyph_trade(tornado", 5.06,SOL/USD", 150.0)
+mapper_multi.execute_glyph_trade(hourglass", 2.06,ADA/USD",
+0.5)mapper_multi.execute_glyph_trade(tornado", 5.06,SOL/USD", 150.0)
 
 
 

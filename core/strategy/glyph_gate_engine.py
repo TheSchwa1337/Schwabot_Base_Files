@@ -1,7 +1,3 @@
-import logging
-import time
-from dataclasses import dataclass, field
-from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 from core.basket_vector_linker import BasketVectorLinker
@@ -220,7 +216,8 @@ Combines various mathematical and logical components to make a final decision
 
 
 
-on whether a trading signal should pass through the gate.def __init__():Initializes the Glyph Gate Engine with integrated components.self.glyph_core = glyph_core or GlyphStrategyCore()
+on whether a trading signal should pass through the gate.def __init__():Initializes the Glyph Gate
+Engine with integrated components.self.glyph_core = glyph_core or GlyphStrategyCore()
 
 
 
@@ -280,7 +277,8 @@ self.decision_history: List[GlyphGateDecision] = []
 
 
 
-def evaluate_signal():-> GlyphGateDecision:Evaluates a trading signal through the integrated mathematical systems.
+def evaluate_signal():-> GlyphGateDecision:Evaluates a trading signal through the integrated
+mathematical systems.
 
 
 
@@ -328,7 +326,8 @@ Returns:
 
 
 
-            A GlyphGateDecision object indicating whether the gate is open and why.start_time = time.time()
+            A GlyphGateDecision object indicating whether the gate is open and why.start_time
+    = time.time()
 
 
 
@@ -644,7 +643,8 @@ if not strategy_matched_in_basket: gate_open = False
 
 
 
-decision_reason +=  No suitable strategy basket found.# Consider warp momentum and glyph phase behavior
+decision_reason +=  No suitable strategy basket found.# Consider warp momentum and glyph phase
+behavior
 
 
 
@@ -668,7 +668,8 @@ gate_open = False
 
 
 
-decision_reason +=  High warp turbulence and phase divergence.final_decision_status = gate_open and (
+decision_reason +=  High warp turbulence and phase divergence.final_decision_status
+    = gate_open and (
 
 
 
@@ -748,7 +749,10 @@ confidence_score=final_confidence,
 
 
 
-metadata={initial_confidence: initial_confidence,warp_momentum: warp_momentum,quantum_verified": quantum_verified,glyph_phase_behavior: glyph_phase_behavior,strategy_matched_in_basket": strategy_matched_in_basket,gate_evaluation": gate_evaluation,processing_time_ms": (time.time() - start_time) * 1000,
+metadata={initial_confidence: initial_confidence,warp_momentum: warp_momentum,quantum_verified":
+quantum_verified,glyph_phase_behavior: glyph_phase_behavior,strategy_matched_in_basket":
+strategy_matched_in_basket,gate_evaluation": gate_evaluation,processing_time_ms": (time.time() -
+start_time) * 1000,
 
 
 
@@ -784,7 +788,8 @@ decision.reason})
 
 
 
-def get_decision_history():-> List[GlyphGateDecision]:Returns recent gate decisions.return list(self.decision_history)[-limit:]
+def get_decision_history():-> List[GlyphGateDecision]:Returns recent gate decisions.return
+list(self.decision_history)[-limit:]
 
 
 
@@ -868,7 +873,8 @@ quantum_trigger_demo = QuantumSuperpositionalTrigger()
 
 
 
-initial_strategies_for_linker = {TrendFollowing_EMA: [0.1, 0.2, 0.7, 0.05, 0.3],MeanReversion_RSI: [0.8, 0.1, 0.05, 0.6, 0.1],
+initial_strategies_for_linker
+    = {TrendFollowing_EMA: [0.1, 0.2, 0.7, 0.05, 0.3],MeanReversion_RSI: [0.8, 0.1, 0.05, 0.6, 0.1],
 
 
 
@@ -948,7 +954,8 @@ market_ticks = [{
 
 
 
-glyph:brain,volume": 1.2e6,price": 48000.0,tick_id: 1,internal_data": {cpu_alignment: 0.8,mem_usage": 0.5},external_data": {market_volatility: 0.6,news_sentiment": 0.7},
+glyph:brain,volume": 1.2e6,price": 48000.0,tick_id: 1,internal_data": {cpu_alignment:
+0.8,mem_usage": 0.5},external_data": {market_volatility: 0.6,news_sentiment": 0.7},
 
 
 
@@ -956,7 +963,8 @@ glyph:brain,volume": 1.2e6,price": 48000.0,tick_id: 1,internal_data": {cpu_align
 
 
 
-{glyph:skull",volume": 3.5e6,price": 50500.0,tick_id: 2,internal_data": {cpu_alignment: 0.9,mem_usage": 0.4},external_data": {market_volatility: 0.4,news_sentiment": 0.8},
+{glyph:skull",volume": 3.5e6,price": 50500.0,tick_id: 2,internal_data": {cpu_alignment:
+0.9,mem_usage": 0.4},external_data": {market_volatility: 0.4,news_sentiment": 0.8},
 
 
 
@@ -964,7 +972,8 @@ glyph:brain,volume": 1.2e6,price": 48000.0,tick_id: 1,internal_data": {cpu_align
 
 
 
-{glyph:fire",volume": 6.0e6,price": 51000.0,tick_id: 3,internal_data": {cpu_alignment: 0.7,mem_usage": 0.6},
+{glyph:fire",volume": 6.0e6,price": 51000.0,tick_id: 3,internal_data": {cpu_alignment:
+0.7,mem_usage": 0.6},
 
 
 
@@ -996,7 +1005,9 @@ decision = engine.evaluate_signal(
 
 
 
-glyph = tick[glyph],volume_signal = tick[volume],current_price = tick[price],tick_id = tick[tick_id],internal_system_data = tick[internal_data],external_api_data = tick[external_data],
+glyph = tick[glyph],volume_signal = tick[volume],current_price = tick[price],tick_id
+    = tick[tick_id],internal_system_data = tick[internal_data],external_api_data 
+    = tick[external_data],
 
 
 

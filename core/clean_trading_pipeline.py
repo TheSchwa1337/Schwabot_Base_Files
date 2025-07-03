@@ -8,23 +8,26 @@ and error handling.
 """
 
 import asyncio
-import logging
-import time
 import uuid
-from dataclasses import dataclass, field
 from decimal import Decimal
-from enum import Enum
-from pathlib import Path
 from typing import Any, Dict, List, Optional, Union, Tuple
 
+import logging
+import time
+from enum import Enum
+from dataclasses import dataclass, field
+from pathlib import Path
 import numpy as np
+
 
 from .clean_math_foundation import BitPhase, CleanMathFoundation, ThermalState
 from .clean_profit_vectorization import CleanProfitVectorization, ProfitVector, VectorizationMode
 from .strategy_bit_mapper import StrategyBitMapper, ExpansionMode
-from .portfolio_tracker import PortfolioTracker # Import the existing PortfolioTracker
-from .ccxt_trading_executor import CCXTTradingExecutor, IntegratedTradingSignal, TradingPair # Import CCXT executor components
-from .phase_bit_integration import phase_bit_integration # Import phase bit integration for dualistic state analysis
+from .portfolio_tracker import PortfolioTracker
+from .ccxt_trading_executor import CCXTTradingExecutor, IntegratedTradingSignal, TradingPair
+from .phase_bit_integration import phase_bit_integration
+from .unified_math_system import create_unified_math_system, UnifiedMathSystem
+from .zpe_zbe_core import create_zpe_zbe_core, ZPEZBECore
 
 logger = logging.getLogger(__name__)
 
@@ -159,7 +162,7 @@ class CleanTradingPipeline:
         self.strategy_bit_mapper = StrategyBitMapper(matrix_dir=self.matrix_dir)
 
         # Initialize PortfolioTracker (assuming it handles real portfolio data eventually)
-        self.portfolio_tracker = PortfolioTracker() # Placeholder until actual implementation is verified
+        self.portfolio_tracker = PortfolioTracker()  # Placeholder until actual implementation is verified
 
         # Initialize CCXTTradingExecutor (needs a proper config for live trading)
         self.ccxt_executor = CCXTTradingExecutor(config={
@@ -170,6 +173,10 @@ class CleanTradingPipeline:
 
         # Initialize PhaseBitIntegration for dualistic state analysis
         self.phase_bit_integration = phase_bit_integration
+
+        # Initialize ZPE-ZBE Core and Unified Math System
+        self.zpe_zbe_core = create_zpe_zbe_core()
+        self.unified_math_system = create_unified_math_system()
 
         # Pipeline state
         self.state = PipelineState(
@@ -314,24 +321,38 @@ class CleanTradingPipeline:
             return None
 
     def _analyze_market_regime(self, market_data: MarketData) -> MarketRegime:
-        """Analyze current market regime using mathematical indicators."""
+        """Analyze current market regime using mathematical indicators and quantum insights."""
         if len(self.market_data_history) < 20:
             return MarketRegime.SIDEWAYS
 
+        # Prepare market data for quantum analysis
+        quantum_market_data = {
+            'price': market_data.price,
+            'volume': market_data.volume,
+            'volatility': market_data.volatility,
+            'entry_price': self.market_data_history[0].price if self.market_data_history else market_data.price,
+            'frequency': 7.83,  # Earth's Schumann resonance frequency
+            'mass_coefficient': market_data.volume / 1000000.0  # Normalize volume
+        }
+
+        # Perform quantum market analysis
+        quantum_analysis = self.unified_math_system.quantum_market_analysis(quantum_market_data)
+
         # Get recent price data
         recent_prices = [md.price for md in self.market_data_history[-20:]]
-        recent_volumes = [md.volume for md in self.market_data_history[-20:]]
-
-        # Calculate trend strength
         trend_slope = np.polyfit(range(len(recent_prices)), recent_prices, 1)[0]
         price_std = np.std(recent_prices)
-        volume_avg = np.mean(recent_volumes)
-
+        
         # Volatility analysis
         volatility = market_data.volatility
         high_vol_threshold = self.risk_params.volatility_threshold
 
-        # Regime classification logic
+        # Quantum-enhanced regime classification
+        if quantum_analysis.get('is_synced', False):
+            # During quantum sync, treat market as stable
+            return MarketRegime.CALM
+        
+        # Traditional regime logic with quantum insights
         if volatility > high_vol_threshold:
             return MarketRegime.VOLATILE
         elif abs(trend_slope) < price_std * 0.1:
@@ -368,18 +389,40 @@ class CleanTradingPipeline:
         return base_strategy
 
     def _update_thermal_state(self, market_data: MarketData):
-        """Update thermal state based on market conditions."""
+        """Update thermal state based on market conditions and quantum synchronization."""
+        # Prepare market data for quantum analysis
+        quantum_market_data = {
+            'price': market_data.price,
+            'volume': market_data.volume,
+            'volatility': market_data.volatility,
+            'entry_price': self.market_data_history[0].price if self.market_data_history else market_data.price,
+            'frequency': 7.83,  # Earth's Schumann resonance frequency
+            'mass_coefficient': market_data.volume / 1000000.0  # Normalize volume
+        }
+
+        # Perform quantum market analysis
+        quantum_analysis = self.unified_math_system.quantum_market_analysis(quantum_market_data)
+
         # Thermal state logic based on entropy and volatility
         entropy = market_data.entropy_level
         volatility = market_data.volatility
+        quantum_potential = quantum_analysis.get('quantum_potential', 0.0)
 
-        if entropy > 6.0 or volatility > 0.8:
+        # Quantum synchronization impacts thermal state
+        if quantum_analysis.get('is_synced', False):
+            # Quantum sync leads to a stable, cool state
+            self.state.thermal_state = ThermalState.COOL
+            self.state.bit_phase = BitPhase.EIGHT_BIT
+        elif entropy > 6.0 or volatility > 0.8 or quantum_potential > 0.7:
+            # High entropy, volatility, or quantum potential leads to hot state
             self.state.thermal_state = ThermalState.HOT
             self.state.bit_phase = BitPhase.THIRTY_TWO_BIT
-        elif entropy > 4.0 or volatility > 0.5:
+        elif entropy > 4.0 or volatility > 0.5 or quantum_potential > 0.3:
+            # Moderate conditions lead to warm state
             self.state.thermal_state = ThermalState.WARM
             self.state.bit_phase = BitPhase.SIXTEEN_BIT
         else:
+            # Low entropy and volatility lead to cool state
             self.state.thermal_state = ThermalState.COOL
             self.state.bit_phase = BitPhase.EIGHT_BIT
 
@@ -434,7 +477,7 @@ class CleanTradingPipeline:
             }
         else:
             signal_dict = signal
-        
+
         mode = self._select_vectorization_mode(self.state.active_strategy, market_data)
         return self.profit_vectorizer.calculate_profit_vector(
             market_data.price,
@@ -664,7 +707,7 @@ class CleanTradingPipeline:
                 context_hash=context_hash,
                 resolution_mode="auto"
             )
-            
+
             logger.info(f"Phase resolution: {phase_resolution.bit_phase.value} bits, "
                        f"strategy: {phase_resolution.strategy_type.value}, "
                        f"confidence: {phase_resolution.confidence:.3f}")
@@ -672,14 +715,14 @@ class CleanTradingPipeline:
             # 2. REAL ASSET SELECTION - Get available assets from portfolio
             portfolio_summary = self.portfolio_tracker.get_portfolio_summary()
             available_assets = []
-            
+
             # Extract available trading pairs from portfolio
             if "positions" in portfolio_summary and portfolio_summary["positions"]:
                 available_assets = list(portfolio_summary["positions"].keys())
             else:
                 # Fallback to default tradable assets if portfolio is empty
                 available_assets = [
-                    "BTC/USDC", "ETH/USDC", "XRP/USDC", 
+                    "BTC/USDC", "ETH/USDC", "XRP/USDC",
                     "BTC/USDT", "ETH/USDT", "SOL/USDC"
                 ]
                 logger.info("Using default tradable assets (portfolio empty)")
@@ -691,7 +734,7 @@ class CleanTradingPipeline:
             # 3. FERRIS WHEEL ASSET SELECTION - Use expanded strategy ID for deterministic selection
             asset_index = expanded_strategy_id % len(available_assets)
             selected_asset_symbol = available_assets[asset_index]
-            
+
             # Convert to TradingPair enum if possible
             try:
                 selected_trading_pair = TradingPair(selected_asset_symbol)
@@ -707,16 +750,16 @@ class CleanTradingPipeline:
             dualistic_state = self._analyze_dualistic_state(
                 market_data, expanded_strategy_id, phase_resolution
             )
-            
+
             # 5. PROFIT VECTORIZATION - Calculate expected profit vector for this asset/strategy
             profit_vector = await self._calculate_advanced_profit_vector(
-                market_data, selected_asset_symbol, expanded_strategy_id, 
+                market_data, selected_asset_symbol, expanded_strategy_id,
                 phase_resolution, dualistic_state
             )
 
             # 6. ADVANCED DECISION LOGIC - Integrate all mathematical components
             decision_data = self._integrate_decision_components(
-                market_data, profit_vector, dualistic_state, 
+                market_data, profit_vector, dualistic_state,
                 expanded_strategy_id, phase_resolution
             )
 
@@ -752,10 +795,10 @@ class CleanTradingPipeline:
                     ghost_route=f"ferris_wheel_{phase_resolution.strategy_type.value}",
                     timestamp=market_data.timestamp,
                 )
-                
+
                 logger.info(f"Generated signal: {signal.recommended_action} {quantity} {selected_asset_symbol} "
                            f"(Confidence: {signal.confidence_score}, Profit: {signal.profit_potential})")
-                
+
                 return signal, selected_asset_symbol
             else:
                 logger.info(f"No trade recommended for {selected_asset_symbol} "
@@ -775,7 +818,7 @@ class CleanTradingPipeline:
         """
         # Create a hash-based dualistic state determination
         state_hash = hash(f"{expanded_strategy_id}_{market_data.price}_{market_data.volume}")
-        
+
         # Determine state based on hash and market conditions
         if state_hash % 2 == 0:
             state = "positive_phase"
@@ -799,7 +842,7 @@ class CleanTradingPipeline:
         }
 
     async def _calculate_advanced_profit_vector(
-        self, market_data: MarketData, asset_symbol: str, 
+        self, market_data: MarketData, asset_symbol: str,
         expanded_strategy_id: int, phase_resolution: Any, dualistic_state: Dict[str, Any]
     ) -> ProfitVector:
         """
@@ -910,35 +953,35 @@ class CleanTradingPipeline:
         """
         # Base position size
         base_size = self.risk_params.max_position_size * self.state.current_capital
-        
+
         # Price adjustment
         price = market_data.price
         if price <= 0:
             return 0.0
-        
+
         # Volatility adjustment
         volatility_adjustment = 1.0 - (market_data.volatility * 0.5)
-        
+
         # Confidence adjustment
         confidence_adjustment = decision_data["confidence"]
-        
+
         # Profit potential adjustment
         profit_adjustment = min(profit_vector.profit_score * 10, 2.0)  # Cap at 2x
-        
+
         # Dualistic state adjustment
         dualistic_adjustment = dualistic_state["confidence_multiplier"]
-        
+
         # Thermal state adjustment
         thermal_multiplier = {
             ThermalState.COOL: 0.8,
             ThermalState.WARM: 1.0,
             ThermalState.HOT: 1.2,
         }.get(self.state.thermal_state, 1.0)
-        
+
         # Calculate final position size
-        adjusted_size = (base_size * volatility_adjustment * confidence_adjustment * 
+        adjusted_size = (base_size * volatility_adjustment * confidence_adjustment *
                         profit_adjustment * dualistic_adjustment * thermal_multiplier / price)
-        
+
         # Ensure positive and reasonable size
         return max(0.0, min(adjusted_size, base_size * 2.0))  # Cap at 2x base size
 
@@ -951,13 +994,13 @@ class CleanTradingPipeline:
         """
         # Volatility risk
         volatility_risk = market_data.volatility * 0.8
-        
+
         # Position risk (based on position size relative to capital)
         position_risk = min((quantity * market_data.price) / self.state.current_capital, 1.0)
-        
+
         # Strategy risk (based on confidence and profit potential)
         strategy_risk = 1.0 - decision_data["confidence"]
-        
+
         # Market regime risk
         if market_data.trend_strength < 0.3:
             regime_risk = 0.6
@@ -965,13 +1008,13 @@ class CleanTradingPipeline:
             regime_risk = 0.3
         else:
             regime_risk = 0.5
-        
+
         # Dualistic state risk
         if dualistic_state["state"].endswith("_volatile"):
             dualistic_risk = 0.7
         else:
             dualistic_risk = 0.4
-        
+
         # Overall risk (weighted average)
         overall_risk = (
             volatility_risk * 0.3 +
@@ -980,7 +1023,7 @@ class CleanTradingPipeline:
             regime_risk * 0.15 +
             dualistic_risk * 0.1
         )
-        
+
         return {
             "overall_risk": overall_risk,
             "volatility_risk": volatility_risk,

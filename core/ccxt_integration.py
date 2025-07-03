@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+# !/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 CCXT Integration Module - Functional Stub
@@ -7,8 +7,6 @@ This module provides basic CCXT exchange integration functionality.
 Currently implemented as a working stub to ensure system stability.
 """
 
-import logging
-from dataclasses import dataclass
 from typing import Any, Dict, Optional
 
 logger = logging.getLogger(__name__)

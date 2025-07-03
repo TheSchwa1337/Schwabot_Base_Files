@@ -1,6 +1,5 @@
 from core.unified_trade_router import UnifiedTradeRouter
 from core.unified_math_system import generate_unified_hash
-import time
 
 class VisualExecutionNode:
     """
@@ -26,7 +25,8 @@ class VisualExecutionNode:
         )
         return {
             "hash": signal_hash,
-            "visual_display": f"Signal: {self.asset} at ${self.price} | E:{signal['entropy']} D:{signal['drift']}"
+"visual_display": f"Signal: {self.asset} at ${self.price} | E:{signal['entropy']}
+D:{signal['drift']}"
         }
 
     def execute(self) -> dict:
@@ -39,4 +39,4 @@ class VisualExecutionNode:
             asset=self.asset,
             metadata={"packet_hash": packet["hash"]}
         )
-        return packet 
+        return packet

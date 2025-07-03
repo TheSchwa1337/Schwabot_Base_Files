@@ -1,12 +1,10 @@
-#!/usr/bin/env python3
+# !/usr/bin/env python3
 """
 Integration Orchestrator - Full-system async orchestrator
 """
 from core.unified_trading_pipeline import UnifiedTradingPipeline
 from core.matrix_mapper import match_hash_to_matrix
 from core.strategy_loader import load_strategy
-import numpy as np
-import os
 
 def orchestrate_trade(input_hash_vec, matrix_dir, strategy_name=None):
     """Route input hash or signal through the full pipeline."""
@@ -26,4 +24,4 @@ if __name__ == "__main__":
     # Example usage
     hash_vec = np.random.rand(10).tolist()
     matrix_dir = os.path.join(os.path.dirname(__file__), "data")
-    print(orchestrate_trade(hash_vec, matrix_dir)) 
+    print(orchestrate_trade(hash_vec, matrix_dir))

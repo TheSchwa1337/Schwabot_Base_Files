@@ -1,6 +1,5 @@
 """API enumeration types."""
 
-from enum import Enum
 
 """API System Enums ====================
 

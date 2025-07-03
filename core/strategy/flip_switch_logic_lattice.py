@@ -1,7 +1,5 @@
-import time
 from typing import Any, Callable, Dict, List, Optional
 
-import numpy as np
 
 """
 
@@ -108,11 +106,13 @@ based on predefined conditions and adaptive thresholds. This module
 
 
 
-facilitates rapid, deterministic switching between trading strategies.class FlipSwitchLogicLattice:A logic lattice that enables high-speed, condition-based switching
+facilitates rapid, deterministic switching between trading strategies.class FlipSwitchLogicLattice:A
+logic lattice that enables high-speed, condition-based switching
 
 
 
-between different trading strategies or operational modes.def __init__():Initializes the Flip-Switch Logic Lattice.
+between different trading strategies or operational modes.def __init__():Initializes the Flip-Switch
+Logic Lattice.
 
 
 
@@ -124,7 +124,8 @@ Args:
 
 
 
-            default_strategy_id: The ID of the strategy to use if no switch condition is met.self.strategies: Dict[str, Callable[[Dict[str, Any]], Dict[str, Any]]] = {}
+default_strategy_id: The ID of the strategy to use if no switch condition is met.self.strategies:
+Dict[str, Callable[[Dict[str, Any]], Dict[str, Any]]] = {}
 
 
 
@@ -140,7 +141,9 @@ self.active_strategy_id: str = default_strategy_id
 
 
 
-self.metrics: Dict[str, Any] = {total_evaluations: 0,total_switches: 0,last_switch_time": None,strategy_activations": {self.default_strategy_id: 0},
+self.metrics: Dict[str, Any]
+    
+    = {total_evaluations: 0,total_switches: 0,last_switch_time": None,strategy_activations": {self.default_strategy_id: 0},
 
 
 
@@ -172,7 +175,9 @@ self.default_strategy_id, self._default_pass_through_strategy
 
 
 
-def _default_pass_through_strategy():-> Dict[str, Any]:A default strategy that simply returns the input data, effectively doing nothing.return {status:passed_through,data: data,timestamp": time.time()}
+def _default_pass_through_strategy():-> Dict[str, Any]:A default strategy that simply returns the
+input data, effectively doing nothing.return {status:passed_through,data: data,timestamp":
+time.time()}
 
 
 
@@ -208,7 +213,8 @@ It should accept a dict (input data) and return a dict (result).if not callable(
 
 
 
-        self.strategies[strategy_id] = strategy_funcself.metrics[strategy_activations][strategy_id] = 0
+        self.strategies[strategy_id]
+    = strategy_funcself.metrics[strategy_activations][strategy_id] = 0
 
 
 
@@ -268,7 +274,8 @@ self.switch_conditions.append(
 
 
 
-{condition_func: condition_func,target_strategy_id: target_strategy_id,priority": priority,description": description or f"Switch to {target_strategy_id},
+{condition_func: condition_func,target_strategy_id: target_strategy_id,priority":
+priority,description": description or f"Switch to {target_strategy_id},
 
 
 
@@ -396,7 +403,8 @@ if next_strategy_id != self.active_strategy_id:
 
 
 
-fSwitching from {self.active_strategy_id} to {next_strategy_id})self.metrics[total_switches] += 1self.metrics[last_switch_time] = time.time()
+fSwitching from {self.active_strategy_id} to {next_strategy_id})self.metrics[total_switches]
+    += 1self.metrics[last_switch_time] = time.time()
 
 
 
@@ -408,7 +416,8 @@ self.active_strategy_id = next_strategy_id
 
 
 
-self.metrics[strategy_activations][self.active_strategy_id] = (self.metrics[strategy_activations].get(self.active_strategy_id, 0) + 1
+self.metrics[strategy_activations][self.active_strategy_id]
+    = (self.metrics[strategy_activations].get(self.active_strategy_id, 0) + 1
 
 
 
@@ -452,7 +461,8 @@ strategy_func = self.strategies[self.default_strategy_id]
 
 
 
-            self.metrics[strategy_activations][self.active_strategy_id] = (self.metrics[strategy_activations].get(self.active_strategy_id, 0) + 1
+            self.metrics[strategy_activations][self.active_strategy_id]
+    = (self.metrics[strategy_activations].get(self.active_strategy_id, 0) + 1
 
 
 
@@ -496,7 +506,8 @@ try: result = strategy_func(data)
 
 
 
-def get_metrics():-> Dict[str, Any]:Returns the performance metrics of the logic lattice.return self.metrics
+def get_metrics():-> Dict[str, Any]:Returns the performance metrics of the logic lattice.return
+self.metrics
 
 
 
@@ -504,7 +515,8 @@ def get_metrics():-> Dict[str, Any]:Returns the performance metrics of the logic
 
 
 
-def get_active_strategy_id():-> str:Returns the currently active strategy ID.return self.active_strategy_id
+def get_active_strategy_id():-> str:Returns the currently active strategy ID.return
+self.active_strategy_id
 
 
 
@@ -584,7 +596,8 @@ def strategy_c():-> Dict[str, Any]:'print(f"Executing Strategy C with data: {dat
 
 
 
-lattice.register_strategy(strat_A", strategy_a)lattice.register_strategy(strat_B", strategy_b)lattice.register_strategy(strat_C", strategy_c)
+lattice.register_strategy(strat_A", strategy_a)lattice.register_strategy(strat_B",
+strategy_b)lattice.register_strategy(strat_C", strategy_c)
 
 
 
