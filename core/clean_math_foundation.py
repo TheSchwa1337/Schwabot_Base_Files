@@ -1,420 +1,470 @@
-import hashlib
-import logging
-import math
-import time
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Any, Dict, List, Tuple, Union
-
-import numpy as np
-
-# -*- coding: utf-8 -*-
-
 """
 Clean Mathematical Foundation for Schwabot Trading System.
 
-This module provides a clean, working implementation of the core mathematical
-operations that power the Schwabot trading system, preserving all the advanced
-functionality but with proper syntax and structure.
+This module provides the core mathematical functions and utilities
+used throughout the Schwabot trading system. All functions are
+pure, well-documented, and thoroughly tested.
+
+Key Features:
+- Vector and matrix operations
+- Statistical calculations
+- Risk metrics
+- Optimization utilities
+- Mathematical constants and helpers
 """
 
-logger = logging.getLogger(__name__)
+from __future__ import annotations
+
+import math
+from typing import Any, Dict, List, Optional, Tuple, Union
+
+import numpy as np
+from numpy.typing import NDArray
+
+# Mathematical constants
+PI = math.pi
+E = math.e
+GOLDEN_RATIO = (1 + math.sqrt(5)) / 2
+SQRT_2 = math.sqrt(2)
+LN_2 = math.log(2)
 
 
-class ThermalState(Enum):
-    """Thermal states for mathematical operations."""
-    COOL = "cool"  # Low intensity operations (4-bit)
-    WARM = "warm"  # Medium intensity operations (8-bit)
-    HOT = "hot"  # High intensity operations (32-bit)
-    CRITICAL = "critical"  # Maximum intensity operations (42-bit)
-
-
-class BitPhase(Enum):
-    """Bit phase configurations for mathematical precision."""
-    FOUR_BIT = 4
-    EIGHT_BIT = 8
-    SIXTEEN_BIT = 16
-    THIRTY_TWO_BIT = 32
-    FORTY_TWO_BIT = 42
-
-
-class MathOperation(Enum):
-    """Mathematical operation types."""
-    # Basic arithmetic
-    ADD = "add"
-    SUBTRACT = "subtract"
-    MULTIPLY = "multiply"
-    DIVIDE = "divide"
-    POWER = "power"
-    
-    # Advanced functions
-    SQRT = "sqrt"
-    LOG = "log"
-    EXP = "exp"
-    
-    # Trigonometric
-    SIN = "sin"
-    COS = "cos"
-    TAN = "tan"
-    
-    # Statistical
-    MEAN = "mean"
-    STD = "std"
-    VAR = "var"
-    CORRELATION = "correlation"
-    
-    # Linear algebra
-    DOT_PRODUCT = "dot_product"
-    MATRIX_MULTIPLY = "matrix_multiply"
-    EIGENVALUES = "eigenvalues"
-    SVD = "svd"
-    
-    # Trading specific
-    HASH_RATE = "hash_rate"
-    PROFIT_VECTOR = "profit_vector"
-    TENSOR_CONTRACTION = "tensor_contraction"
-    THERMAL_CORRECTION = "thermal_correction"
-
-
-@dataclass
-class MathResult:
-    """Result container for mathematical operations."""
-    value: Any
-    operation: str
-    timestamp: float
-    thermal_state: ThermalState
-    bit_phase: BitPhase
-    metadata: Dict[str, Any] = field(default_factory=dict)
-
-
-@dataclass
-class TensorOperation:
-    """Tensor operation configuration."""
-    operation_type: str
-    input_shape: Tuple[int, ...]
-    output_shape: Tuple[int, ...]
-    thermal_requirement: ThermalState
-    precision_bits: int
-
-
-class CleanMathFoundation:
+def calculate_vector_norm(vector: np.ndarray, p: float = 2.0) -> float:
     """
-    Clean mathematical foundation for the Schwabot trading system.
-    
-    This class provides all the core mathematical operations needed for
-    trading calculations while maintaining proper code structure and syntax.
+    Calculate the p-norm of a vector.
+
+    Args:
+        vector: Input vector
+        p: Norm order (default: 2.0 for Euclidean norm)
+
+    Returns:
+        Vector norm value
+
+    Raises:
+        ValueError: If p < 1 or vector is empty
     """
-    
-    def __init__(self, precision: int = 64, default_thermal: ThermalState = ThermalState.WARM):
-        """Initialize the math foundation."""
-        self.precision = precision
-        self.thermal_state = default_thermal
-        self.bit_phase = BitPhase.THIRTY_TWO_BIT
-        
-        # Operation cache for performance
-        self.operation_cache: Dict[str, Any] = {}
-        
-        # Initialize mathematical constants
-        self.constants = {
-            'pi': math.pi,
-            'e': math.e,
-            'golden_ratio': (1 + math.sqrt(5)) / 2,
-            'euler_mascheroni': 0.5772156649015329
-        }
-        
-        logger.info(f"CleanMathFoundation initialized with precision {precision}")
+    if len(vector) == 0:
+        raise ValueError("Vector cannot be empty")
 
-    def compute(self, operation: MathOperation, *args, **kwargs) -> MathResult:
-        """
-        Compute a mathematical operation with proper error handling.
-        
-        Args:
-            operation: The mathematical operation to perform
-            *args: Arguments for the operation
-            **kwargs: Keyword arguments for the operation
-            
-        Returns:
-            MathResult: The result of the operation
-        """
-        start_time = time.time()
-        
-        try:
-            # Check cache first
-            cache_key = f"{operation.value}_{hash(str(args))}_{hash(str(kwargs))}"
-            if cache_key in self.operation_cache:
-                logger.debug(f"Cache hit for operation {operation.value}")
-                return self.operation_cache[cache_key]
-            
-            # Perform the operation
-            if operation == MathOperation.ADD:
-                result = self._add(*args, **kwargs)
-            elif operation == MathOperation.SUBTRACT:
-                result = self._subtract(*args, **kwargs)
-            elif operation == MathOperation.MULTIPLY:
-                result = self._multiply(*args, **kwargs)
-            elif operation == MathOperation.DIVIDE:
-                result = self._divide(*args, **kwargs)
-            elif operation == MathOperation.POWER:
-                result = self._power(*args, **kwargs)
-            elif operation == MathOperation.SQRT:
-                result = self._sqrt(*args, **kwargs)
-            elif operation == MathOperation.LOG:
-                result = self._log(*args, **kwargs)
-            elif operation == MathOperation.EXP:
-                result = self._exp(*args, **kwargs)
-            elif operation == MathOperation.SIN:
-                result = self._sin(*args, **kwargs)
-            elif operation == MathOperation.COS:
-                result = self._cos(*args, **kwargs)
-            elif operation == MathOperation.TAN:
-                result = self._tan(*args, **kwargs)
-            elif operation == MathOperation.MEAN:
-                result = self._mean(*args, **kwargs)
-            elif operation == MathOperation.STD:
-                result = self._std(*args, **kwargs)
-            elif operation == MathOperation.VAR:
-                result = self._var(*args, **kwargs)
-            elif operation == MathOperation.CORRELATION:
-                result = self._correlation(*args, **kwargs)
-            elif operation == MathOperation.DOT_PRODUCT:
-                result = self._dot_product(*args, **kwargs)
-            elif operation == MathOperation.MATRIX_MULTIPLY:
-                result = self._matrix_multiply(*args, **kwargs)
-            elif operation == MathOperation.EIGENVALUES:
-                result = self._eigenvalues(*args, **kwargs)
-            elif operation == MathOperation.SVD:
-                result = self._svd(*args, **kwargs)
-            elif operation == MathOperation.HASH_RATE:
-                result = self._hash_rate(*args, **kwargs)
-            elif operation == MathOperation.PROFIT_VECTOR:
-                result = self._profit_vector(*args, **kwargs)
-            elif operation == MathOperation.TENSOR_CONTRACTION:
-                result = self._tensor_contraction(*args, **kwargs)
-            elif operation == MathOperation.THERMAL_CORRECTION:
-                result = self._thermal_correction(*args, **kwargs)
-            else:
-                raise ValueError(f"Unknown operation: {operation}")
-            
-            # Create result object
-            math_result = MathResult(
-                value=result,
-                operation=operation.value,
-                timestamp=time.time(),
-                thermal_state=self.thermal_state,
-                bit_phase=self.bit_phase,
-                metadata={
-                    'computation_time': time.time() - start_time,
-                    'precision': self.precision,
-                    'cache_key': cache_key
-                }
-            )
-            
-            # Cache the result
-            self.operation_cache[cache_key] = math_result
-            
-            logger.debug(f"Computed {operation.value} in {math_result.metadata['computation_time']:.6f}s")
-            return math_result
-            
-        except Exception as e:
-            logger.error(f"Error computing {operation.value}: {e}")
-            raise
+    if p < 1:
+        raise ValueError("Norm order must be >= 1")
 
-    def _add(self, a: Union[float, np.ndarray], b: Union[float, np.ndarray]) -> Union[float, np.ndarray]:
-        """Add two numbers or arrays."""
-        if isinstance(a, (int, float)) and isinstance(b, (int, float)):
-            return float(a + b)
-        return np.add(a, b)
+    if p == float('inf'):
+        return float(np.max(np.abs(vector)))
 
-    def _subtract(self, a: Union[float, np.ndarray], b: Union[float, np.ndarray]) -> Union[float, np.ndarray]:
-        """Subtract two numbers or arrays."""
-        if isinstance(a, (int, float)) and isinstance(b, (int, float)):
-            return float(a - b)
-        return np.subtract(a, b)
+    return float(np.sum(np.abs(vector) ** p) ** (1 / p))
 
-    def _multiply(self, a: Union[float, np.ndarray], b: Union[float, np.ndarray]) -> Union[float, np.ndarray]:
-        """Multiply two numbers or arrays."""
-        if isinstance(a, (int, float)) and isinstance(b, (int, float)):
-            return float(a * b)
-        return np.multiply(a, b)
 
-    def _divide(self, a: Union[float, np.ndarray], b: Union[float, np.ndarray]) -> Union[float, np.ndarray]:
-        """Divide two numbers or arrays."""
-        if isinstance(a, (int, float)) and isinstance(b, (int, float)):
-            if b == 0:
-                raise ValueError("Division by zero")
-            return float(a / b)
-        return np.divide(a, b)
+def calculate_matrix_condition_number(matrix: np.ndarray) -> float:
+    """
+    Calculate the condition number of a matrix.
 
-    def _power(self, a: Union[float, np.ndarray], b: Union[float, np.ndarray]) -> Union[float, np.ndarray]:
-        """Raise a to the power of b."""
-        if isinstance(a, (int, float)) and isinstance(b, (int, float)):
-            return float(a ** b)
-        return np.power(a, b)
+    The condition number measures how sensitive the solution of a
+    linear system is to changes in the input data.
 
-    def _sqrt(self, a: Union[float, np.ndarray]) -> Union[float, np.ndarray]:
-        """Compute square root."""
-        if isinstance(a, (int, float)):
-            if a < 0:
-                raise ValueError("Cannot compute square root of negative number")
-            return float(math.sqrt(a))
-        return np.sqrt(a)
+    Args:
+        matrix: Input matrix
 
-    def _log(self, a: Union[float, np.ndarray], base: float = math.e) -> Union[float, np.ndarray]:
-        """Compute logarithm."""
-        if isinstance(a, (int, float)):
-            if a <= 0:
-                raise ValueError("Cannot compute logarithm of non-positive number")
-            return float(math.log(a, base))
-        return np.log(a) / np.log(base)
+    Returns:
+        Condition number (infinity if matrix is singular)
 
-    def _exp(self, a: Union[float, np.ndarray]) -> Union[float, np.ndarray]:
-        """Compute exponential."""
-        if isinstance(a, (int, float)):
-            return float(math.exp(a))
-        return np.exp(a)
+    Raises:
+        ValueError: If matrix is not square
+    """
+    if matrix.shape[0] != matrix.shape[1]:
+        raise ValueError("Matrix must be square")
 
-    def _sin(self, a: Union[float, np.ndarray]) -> Union[float, np.ndarray]:
-        """Compute sine."""
-        if isinstance(a, (int, float)):
-            return float(math.sin(a))
-        return np.sin(a)
+    try:
+        eigenvalues = np.linalg.eigvals(matrix)
+        max_eigenvalue = np.max(np.abs(eigenvalues))
+        min_eigenvalue = np.min(np.abs(eigenvalues))
 
-    def _cos(self, a: Union[float, np.ndarray]) -> Union[float, np.ndarray]:
-        """Compute cosine."""
-        if isinstance(a, (int, float)):
-            return float(math.cos(a))
-        return np.cos(a)
+        if min_eigenvalue == 0:
+            return float('inf')
 
-    def _tan(self, a: Union[float, np.ndarray]) -> Union[float, np.ndarray]:
-        """Compute tangent."""
-        if isinstance(a, (int, float)):
-            return float(math.tan(a))
-        return np.tan(a)
+        return float(max_eigenvalue / min_eigenvalue)
+    except np.linalg.LinAlgError:
+        return float('inf')
 
-    def _mean(self, data: Union[List[float], np.ndarray]) -> float:
-        """Compute mean of data."""
-        if isinstance(data, list):
-            if not data:
-                raise ValueError("Cannot compute mean of empty list")
-            return float(sum(data) / len(data))
-        return float(np.mean(data))
 
-    def _std(self, data: Union[List[float], np.ndarray]) -> float:
-        """Compute standard deviation of data."""
-        if isinstance(data, list):
-            if len(data) < 2:
-                raise ValueError("Need at least 2 values for standard deviation")
-            mean_val = self._mean(data)
-            variance = sum((x - mean_val) ** 2 for x in data) / (len(data) - 1)
-            return float(math.sqrt(variance))
-        return float(np.std(data, ddof=1))
+def calculate_correlation_matrix(returns: np.ndarray) -> np.ndarray:
+    """
+    Calculate the correlation matrix from returns data.
 
-    def _var(self, data: Union[List[float], np.ndarray]) -> float:
-        """Compute variance of data."""
-        if isinstance(data, list):
-            if len(data) < 2:
-                raise ValueError("Need at least 2 values for variance")
-            mean_val = self._mean(data)
-            return float(sum((x - mean_val) ** 2 for x in data) / (len(data) - 1))
-        return float(np.var(data, ddof=1))
+    Args:
+        returns: Returns matrix (time x assets)
 
-    def _correlation(self, x: Union[List[float], np.ndarray], y: Union[List[float], np.ndarray]) -> float:
-        """Compute correlation coefficient between x and y."""
-        if len(x) != len(y):
-            raise ValueError("Arrays must have the same length")
-        if len(x) < 2:
-            raise ValueError("Need at least 2 values for correlation")
-        
-        x_array = np.array(x)
-        y_array = np.array(y)
-        
-        return float(np.corrcoef(x_array, y_array)[0, 1])
+    Returns:
+        Correlation matrix
 
-    def _dot_product(self, a: np.ndarray, b: np.ndarray) -> Union[float, np.ndarray]:
-        """Compute dot product of two arrays."""
-        return np.dot(a, b)
+    Raises:
+        ValueError: If returns matrix is invalid
+    """
+    if returns.ndim != 2:
+        raise ValueError("Returns must be a 2D array")
 
-    def _matrix_multiply(self, a: np.ndarray, b: np.ndarray) -> np.ndarray:
-        """Multiply two matrices."""
-        return np.matmul(a, b)
+    if returns.shape[0] < 2:
+        raise ValueError("Need at least 2 time periods")
 
-    def _eigenvalues(self, matrix: np.ndarray) -> np.ndarray:
-        """Compute eigenvalues of a matrix."""
-        return np.linalg.eigvals(matrix)
+    if returns.shape[1] < 1:
+        raise ValueError("Need at least 1 asset")
 
-    def _svd(self, matrix: np.ndarray) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
-        """Compute singular value decomposition."""
-        return np.linalg.svd(matrix)
+    # Handle NaN values
+    returns_clean = returns.copy()
+    returns_clean = returns_clean[~np.isnan(returns_clean).any(axis=1)]
 
-    def _hash_rate(self, data: str) -> float:
-        """Compute hash rate for given data."""
-        hash_obj = hashlib.sha256(data.encode())
-        hash_hex = hash_obj.hexdigest()
-        # Convert hash to a numerical value
-        return float(int(hash_hex[:8], 16)) / (16 ** 8)
+    if len(returns_clean) < 2:
+        raise ValueError("Insufficient valid data after removing NaN")
 
-    def _profit_vector(self, prices: List[float], volumes: List[float]) -> np.ndarray:
-        """Compute profit vector from prices and volumes."""
-        if len(prices) != len(volumes):
-            raise ValueError("Prices and volumes must have the same length")
-        
-        prices_array = np.array(prices)
-        volumes_array = np.array(volumes)
-        
-        # Simple profit calculation: price * volume
-        return prices_array * volumes_array
+    return np.corrcoef(returns_clean.T)
 
-    def _tensor_contraction(self, tensor: np.ndarray, indices: Tuple[int, ...]) -> np.ndarray:
-        """Perform tensor contraction."""
-        # Simplified tensor contraction
-        return np.trace(tensor)
 
-    def _thermal_correction(self, value: Union[float, np.ndarray]) -> Union[float, np.ndarray]:
-        """Apply thermal correction based on current thermal state."""
-        correction_factors = {
-            ThermalState.COOL: 0.8,
-            ThermalState.WARM: 1.0,
-            ThermalState.HOT: 1.2,
-            ThermalState.CRITICAL: 1.5
-        }
-        
-        factor = correction_factors.get(self.thermal_state, 1.0)
-        
-        if isinstance(value, (int, float)):
-            return float(value * factor)
-        return value * factor
+def calculate_covariance_matrix(returns: np.ndarray, ddof: int = 1) -> np.ndarray:
+    """
+    Calculate the covariance matrix from returns data.
 
-    def set_thermal_state(self, state: ThermalState) -> None:
-        """Set the thermal state for operations."""
-        self.thermal_state = state
-        logger.info(f"Thermal state set to {state}")
+    Args:
+        returns: Returns matrix (time x assets)
+        ddof: Delta degrees of freedom (default: 1 for sample covariance)
 
-    def set_bit_phase(self, phase: BitPhase) -> None:
-        """Set the bit phase for precision."""
-        self.bit_phase = phase
-        logger.info(f"Bit phase set to {phase}")
+    Returns:
+        Covariance matrix
 
-    def clear_cache(self) -> None:
-        """Clear the operation cache."""
-        self.operation_cache.clear()
-        logger.info("Operation cache cleared")
+    Raises:
+        ValueError: If returns matrix is invalid
+    """
+    if returns.ndim != 2:
+        raise ValueError("Returns must be a 2D array")
 
-    def get_cache_stats(self) -> Dict[str, Any]:
-        """Get statistics about the operation cache."""
+    if returns.shape[0] < 2:
+        raise ValueError("Need at least 2 time periods")
+
+    if returns.shape[1] < 1:
+        raise ValueError("Need at least 1 asset")
+
+    # Handle NaN values
+    returns_clean = returns.copy()
+    returns_clean = returns_clean[~np.isnan(returns_clean).any(axis=1)]
+
+    if len(returns_clean) < 2:
+        raise ValueError("Insufficient valid data after removing NaN")
+
+    return np.cov(returns_clean.T, ddof=ddof)
+
+
+def calculate_sharpe_ratio(
+    returns: np.ndarray,
+    risk_free_rate: float = 0.0,
+    periods_per_year: int = 252
+) -> float:
+    """
+    Calculate the Sharpe ratio for a series of returns.
+
+    Args:
+        returns: Array of returns
+        risk_free_rate: Annual risk-free rate (default: 0.0)
+        periods_per_year: Number of periods per year (default: 252 for daily)
+
+    Returns:
+        Annualized Sharpe ratio
+
+    Raises:
+        ValueError: If returns array is empty
+    """
+    if len(returns) == 0:
+        raise ValueError("Returns array cannot be empty")
+
+    # Remove NaN values
+    returns_clean = returns[~np.isnan(returns)]
+
+    if len(returns_clean) == 0:
+        return 0.0
+
+    # Calculate excess returns
+    excess_returns = returns_clean - risk_free_rate / periods_per_year
+
+    # Calculate mean and standard deviation
+    mean_excess_return = np.mean(excess_returns)
+    std_return = np.std(returns_clean, ddof=1)
+
+    if std_return == 0:
+        return 0.0
+
+    # Annualize
+    sharpe_ratio = (mean_excess_return * periods_per_year) / (
+        std_return * math.sqrt(periods_per_year)
+    )
+
+    return float(sharpe_ratio)
+
+
+def calculate_sortino_ratio(
+    returns: np.ndarray,
+    risk_free_rate: float = 0.0,
+    periods_per_year: int = 252
+) -> float:
+    """
+    Calculate the Sortino ratio for a series of returns.
+
+    Args:
+        returns: Array of returns
+        risk_free_rate: Annual risk-free rate (default: 0.0)
+        periods_per_year: Number of periods per year (default: 252 for daily)
+
+    Returns:
+        Annualized Sortino ratio
+
+    Raises:
+        ValueError: If returns array is empty
+    """
+    if len(returns) == 0:
+        raise ValueError("Returns array cannot be empty")
+
+    # Remove NaN values
+    returns_clean = returns[~np.isnan(returns)]
+
+    if len(returns_clean) == 0:
+        return 0.0
+
+    # Calculate excess returns
+    excess_returns = returns_clean - risk_free_rate / periods_per_year
+
+    # Calculate downside deviation
+    downside_returns = excess_returns[excess_returns < 0]
+
+    if len(downside_returns) == 0:
+        return float('inf') if np.mean(excess_returns) > 0 else 0.0
+
+    downside_deviation = np.std(downside_returns, ddof=1)
+
+    if downside_deviation == 0:
+        return 0.0
+
+    # Annualize
+    sortino_ratio = (np.mean(excess_returns) * periods_per_year) / (
+        downside_deviation * math.sqrt(periods_per_year)
+    )
+
+    return float(sortino_ratio)
+
+
+def calculate_max_drawdown(returns: np.ndarray) -> Dict[str, float]:
+    """
+    Calculate maximum drawdown and related metrics.
+
+    Args:
+        returns: Array of returns
+
+    Returns:
+        Dictionary with drawdown metrics
+
+    Raises:
+        ValueError: If returns array is empty
+    """
+    if len(returns) == 0:
+        raise ValueError("Returns array cannot be empty")
+
+    # Remove NaN values
+    returns_clean = returns[~np.isnan(returns)]
+
+    if len(returns_clean) == 0:
         return {
-            'cache_size': len(self.operation_cache),
-            'cache_keys': list(self.operation_cache.keys())
+            'max_drawdown': 0.0,
+            'max_drawdown_pct': 0.0,
+            'drawdown_duration': 0,
+            'peak_idx': 0,
+            'trough_idx': 0,
         }
 
+    # Calculate cumulative returns
+    cumulative = np.cumprod(1 + returns_clean)
 
-# Convenience functions for direct access
-def create_math_foundation(precision: int = 64) -> CleanMathFoundation:
-    """Create a new math foundation instance."""
-    return CleanMathFoundation(precision=precision)
+    # Calculate running maximum
+    running_max = np.maximum.accumulate(cumulative)
+
+    # Calculate drawdown
+    drawdown = (cumulative - running_max) / running_max
+
+    # Find maximum drawdown
+    max_drawdown = np.min(drawdown)
+    max_drawdown_idx = np.argmin(drawdown)
+
+    # Find peak before maximum drawdown
+    peak_idx = np.argmax(cumulative[:max_drawdown_idx + 1])
+
+    # Calculate duration
+    drawdown_duration = max_drawdown_idx - peak_idx
+
+    return {
+        'max_drawdown': float(max_drawdown),
+        'max_drawdown_pct': float(max_drawdown * 100),
+        'drawdown_duration': int(drawdown_duration),
+        'peak_idx': int(peak_idx),
+        'trough_idx': int(max_drawdown_idx),
+    }
 
 
-def quick_calculation(operation: MathOperation, *args, **kwargs) -> Any:
-    """Perform a quick calculation without full tracking."""
-    foundation = CleanMathFoundation()
-    result = foundation.compute(operation, *args, **kwargs)
-    return result.value
+def calculate_value_at_risk(
+    returns: np.ndarray,
+    confidence_level: float = 0.05
+) -> float:
+    """
+    Calculate Value at Risk (VaR).
+
+    Args:
+        returns: Array of returns
+        confidence_level: Confidence level (default: 5%)
+
+    Returns:
+        VaR value
+
+    Raises:
+        ValueError: If returns array is empty or confidence level is invalid
+    """
+    if len(returns) == 0:
+        raise ValueError("Returns array cannot be empty")
+
+    if not 0 < confidence_level < 1:
+        raise ValueError("Confidence level must be between 0 and 1")
+
+    # Remove NaN values
+    returns_clean = returns[~np.isnan(returns)]
+
+    if len(returns_clean) == 0:
+        return 0.0
+
+    return float(np.percentile(returns_clean, confidence_level * 100))
+
+
+def calculate_conditional_var(
+    returns: np.ndarray,
+    confidence_level: float = 0.05
+) -> float:
+    """
+    Calculate Conditional Value at Risk (CVaR) / Expected Shortfall.
+
+    Args:
+        returns: Array of returns
+        confidence_level: Confidence level (default: 5%)
+
+    Returns:
+        CVaR value
+
+    Raises:
+        ValueError: If returns array is empty or confidence level is invalid
+    """
+    if len(returns) == 0:
+        raise ValueError("Returns array cannot be empty")
+
+    if not 0 < confidence_level < 1:
+        raise ValueError("Confidence level must be between 0 and 1")
+
+    # Remove NaN values
+    returns_clean = returns[~np.isnan(returns)]
+
+    if len(returns_clean) == 0:
+        return 0.0
+
+    var = calculate_value_at_risk(returns_clean, confidence_level)
+    tail_returns = returns_clean[returns_clean <= var]
+
+    if len(tail_returns) == 0:
+        return float(var)
+
+    return float(np.mean(tail_returns))
+
+
+def normalize_vector(vector: np.ndarray, norm_type: str = 'l2') -> np.ndarray:
+    """
+    Normalize a vector to unit length.
+
+    Args:
+        vector: Input vector
+        norm_type: Normalization type ('l1', 'l2', 'max')
+
+    Returns:
+        Normalized vector
+
+    Raises:
+        ValueError: If vector is empty or norm_type is invalid
+    """
+    if len(vector) == 0:
+        raise ValueError("Vector cannot be empty")
+
+    if norm_type == 'l1':
+        norm = np.sum(np.abs(vector))
+    elif norm_type == 'l2':
+        norm = np.linalg.norm(vector)
+    elif norm_type == 'max':
+        norm = np.max(np.abs(vector))
+    else:
+        raise ValueError("Invalid norm_type. Must be 'l1', 'l2', or 'max'")
+
+    if norm == 0:
+        return np.zeros_like(vector)
+
+    return vector / norm
+
+
+def calculate_eigenvalues(matrix: np.ndarray) -> np.ndarray:
+    """
+    Calculate eigenvalues of a matrix.
+
+    Args:
+        matrix: Input matrix
+
+    Returns:
+        Array of eigenvalues
+
+    Raises:
+        ValueError: If matrix is not square
+    """
+    if matrix.shape[0] != matrix.shape[1]:
+        raise ValueError("Matrix must be square")
+
+    try:
+        eigenvalues = np.linalg.eigvals(matrix)
+        return eigenvalues
+    except np.linalg.LinAlgError:
+        return np.array([])
+
+
+def calculate_eigenvectors(matrix: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+    """
+    Calculate eigenvalues and eigenvectors of a matrix.
+
+    Args:
+        matrix: Input matrix
+
+    Returns:
+        Tuple of (eigenvalues, eigenvectors)
+
+    Raises:
+        ValueError: If matrix is not square
+    """
+    if matrix.shape[0] != matrix.shape[1]:
+        raise ValueError("Matrix must be square")
+
+    try:
+        eigenvalues, eigenvectors = np.linalg.eig(matrix)
+        return eigenvalues, eigenvectors
+    except np.linalg.LinAlgError:
+        return np.array([]), np.array([])
+
+
+# Export main functions
+__all__ = [
+    'calculate_vector_norm',
+    'calculate_matrix_condition_number',
+    'calculate_correlation_matrix',
+    'calculate_covariance_matrix',
+    'calculate_sharpe_ratio',
+    'calculate_sortino_ratio',
+    'calculate_max_drawdown',
+    'calculate_value_at_risk',
+    'calculate_conditional_var',
+    'normalize_vector',
+    'calculate_eigenvalues',
+    'calculate_eigenvectors',
+] 
+

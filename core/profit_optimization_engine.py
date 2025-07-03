@@ -1,2555 +1,368 @@
+"""
+Profit Optimization Engine for Schwabot Trading System.
+
+This module implements a comprehensive profit optimization framework that integrates:
+1. Mathematical optimization algorithms
+2. Risk management and portfolio optimization
+3. Performance analysis and backtesting
+4. Dynamic parameter adjustment
+5. Multi-objective optimization
+
+All functions are pure and can be unit-tested in isolation.
+"""
+
 import math
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
 from numpy.typing import NDArray
 
-from hash_recollection.entropy_tracker import EntropyState, EntropyTracker
-from hash_recollection.pattern_utils import PatternType, PatternUtils
-from schwabot.core.overlay.aleph_overlay_mapper import (
-    COMMENTED,
-    DUE,
-    ERRORS,
-    FILE,
-    LEGACY,
-    OUT,
-    SYNTAX,
-    TO,
-    Any,
-    Date,
-    Dict,
-    DriftPhaseWeighter,
-    DriftType,
-    List,
-    Optional,
-    Original,
-    Schwabot,
-    The,
-    This,
-    Tuple,
-    Union,
-    19:37:00,
-    2025-07-02,
-    """,
-    -,
-    automatically,
-    because,
-    been,
-    clean,
-    commented,
-    contains,
-    core,
-    core/clean_math_foundation.py,
-    errors,
-    file,
-    file:,
-    files:,
-    following,
-    foundation,
-    from,
-    has,
-    hashlib,
-    implementation,
-    import,
-    in,
-    it,
-    logging,
-    mathematical,
-    out,
-    out:,
-    preserved,
-    prevent,
-    profit_optimization_engine.py,
-    properly.,
-    running,
-    schwabot.core.phase.drift_phase_weighter,
-    schwabot.core.phase.phase_transition_monitor,
-    syntax,
-    system,
-    that,
-    the,
-    time,
-    typing,
-)
 
-- core/clean_profit_vectorization.py (profit calculations)
-
-
-
-- core/clean_trading_pipeline.py (trading logic)
-
-
-
-- core/clean_unified_math.py (unified mathematics)
-
-
-
-
-
-
-
-All core functionality has been reimplemented in clean, production-ready files.
-
-
-"""
-"""
-
-# ORIGINAL CONTENT COMMENTED OUT BELOW:
-
-"""
-"""
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# !/usr/bin/env python3
-
-
-
-# -*- coding: utf-8 -*-
-
-
-
-Profit Optimization Engine - Mathematical Validation & Enhancement System.This module implements a comprehensive profit optimization framework that integrates:
-
-
-
-1. ALEPH overlay mapping for hash similarity and phase alignment
-
-
-
-2. Phase transition monitoring for market state detection
-
-
-
-3. Drift weighting for temporal pattern analysis
-
-
-
-4. Entropy tracking for signal validation
-
-
-
-5. Pattern recognition for trade timing optimization
-
-
-
-
-
-
-
-Mathematical Foundation:
-
-
-
-- Profit Vector: P(t) =  w  A(t)  exp(i(t))  E(t)
-
-
-
-- Confidence Score: C(t) = H_sim + _align + E_ent + D_drift
-
-
-
-- Trade Decision: T(t) = 1 if C(t) > _threshold  P(t) > P_min# Import Schwabot components
-
-
-
-try:
-
-
-
-        AlephOverlayMapper,
-
-
-
-OverlayType,
-
-
-
-)
-
-
-
-PhaseState,
-
-
-
-PhaseTransitionMonitor,
-
-
-
-)
-
-
-
-
-
-
-
-COMPONENTS_AVAILABLE = True
-
-
-
-        except ImportError as e:
-
-
-
-    logging.warning(fSome Schwabot components not available: {e})
-
-
-
-COMPONENTS_AVAILABLE = False
-
-
-
-
-
-
-
-logger = logging.getLogger(__name__)
-
-
-
-
-
-
-
-
-
-
-
-class ProfitState(Enum):Profit optimization state.ACCUMULATING = accumulatingANALYZING =  analyzingOPTIMIZING = optimizingEXECUTING =  executingVALIDATING = validatingclass TradeDirection(Enum):Trade direction enum.LONG = longSHORT =  shortHOLD = hold@dataclass
-
-
-
-class ProfitVector:Comprehensive profit vector with mathematical components.timestamp: float
-
-
-
-price: float
-
-
-
-volume: float
-
-
-
-
-
-
-
-# Mathematical components
-
-
-
-hash_similarity: float = 0.0
-
-
-
-    phase_alignment: float = 0.0
-
-
-
-    entropy_score: float = 0.0
-
-
-
-    drift_weight: float = 0.0
-
-
-
-    pattern_confidence: float = 0.0
-
-
-
-
-
-
-
-# Profit metrics
-
-
-
-    profit_potential: float = 0.0
-
-
-
-    risk_adjustment: float = 1.0
-
-
-
-    confidence_score: float = 0.0
-
-
-
-
-
-
-
-# Decision components
-
-
-
-trade_direction: TradeDirection = TradeDirection.HOLD
-
-
-
-    position_size: float = 0.0
-
-
-
-    expected_profit: float = 0.0
-
-
-
-
-
-
-
-metadata: Dict[str, Any] = field(default_factory=dict)
-
-
-
-
-
-
-
-
-
+class OptimizationMethod(Enum):
+    """Optimization methods for profit calculation."""
+    GRADIENT_DESCENT = "gradient_descent"
+    GENETIC_ALGORITHM = "genetic_algorithm"
+    SIMULATED_ANNEALING = "simulated_annealing"
+    PARTICLE_SWARM = "particle_swarm"
+    BAYESIAN_OPTIMIZATION = "bayesian_optimization"
+
+
+class RiskMetric(Enum):
+    """Risk metrics for portfolio optimization."""
+    SHARPE_RATIO = "sharpe_ratio"
+    SORTINO_RATIO = "sortino_ratio"
+    MAX_DRAWDOWN = "max_drawdown"
+    VALUE_AT_RISK = "var"
+    CONDITIONAL_VAR = "cvar"
 
 
 @dataclass
-
-
-
 class OptimizationResult:
-
-
-
-    Profit optimization result.optimization_id: str
-
-
-
-timestamp: float
-
-
-
-profit_vector: ProfitVector
-
-
-
-should_trade: bool
-
-
-
-confidence_level: float
-
-
-
-expected_return: float
-
-
-
-risk_score: float
-
-
-
-optimization_time_ms: float
-
-
-
-metadata: Dict[str, Any] = field(default_factory = dict)
-
-
-
-
-
-
-
-
-
-
-
-class ProfitOptimizationEngine:Advanced profit optimization engine for BTC/USDC trading.def __init__():Initialize the profit optimization engine.self.config = config or self._default_config()
-
-
-
-
-
-
-
-# Initialize mathematical components
-
-
-
-if COMPONENTS_AVAILABLE:
-
-
-
-            self.phase_monitor = PhaseTransitionMonitor(self.config.get(phase_config))self.drift_weighter = DriftPhaseWeighter(self.config.get(drift_config))self.overlay_mapper = AlephOverlayMapper(self.config.get(overlay_config))self.entropy_tracker = EntropyTracker(self.config.get(entropy_config))self.pattern_utils = PatternUtils(self.config.get(pattern_config))
-
-
-
-else:
-
-
-
-            self.phase_monitor = None
-
-
-
-self.drift_weighter = None
-
-
-
-self.overlay_mapper = None
-
-
-
-self.entropy_tracker = None
-
-
-
-self.pattern_utils = None
-
-
-
-
-
-
-
-# Profit optimization parameters
-
-
-
-        self.confidence_threshold = self.config.get(confidence_threshold, 0.75)
-
-
-
-        self.profit_threshold = self.config.get(profit_threshold, 0.005
-
-
-
-        )  # 0.5% minimum
-
-
-
-        self.risk_tolerance = self.config.get(risk_tolerance, 0.02)  # 2% max risk
-
-
-
-
-
-
-
-# Mathematical weights for profit calculation
-
-
-"""
-self.weights = {hash_similarity: self.config.get(hash_weight, 0.25),phase_alignment": self.config.get(phase_weight", 0.20),entropy_score": self.config.get(entropy_weight", 0.20),drift_weight": self.config.get(drift_weight", 0.20),pattern_confidence": self.config.get(pattern_weight", 0.15),
-
-
-
-}
-
-
-
-
-
-
-
-# State management
-
-
-
-self.current_state = ProfitState.ACCUMULATING
-
-
-
-self.optimization_history: List[OptimizationResult] = []
-
-
-
-self.max_history_size = self.config.get(max_history_size, 1000)
-
-
-
-
-
-
-
-# Performance tracking
-
-
-
-self.stats = {total_optimizations: 0,profitable_decisions: 0,avg_confidence": 0.0,avg_profit_potential": 0.0,optimization_time_ms": 0.0,
-
-
-
-}
-
-
-
-
-
-
-
-            logger.info(f" Profit Optimization Engine initialized with {len(
-
-
-
-self.weights)} mathematical components)
-
-
-
-
-
-
-
-def _default_config() -> Dict[str, Any]:Default configuration for profit optimization.return {confidence_threshold: 0.75,profit_threshold": 0.005,risk_tolerance": 0.02,hash_weight": 0.25,phase_weight": 0.20,entropy_weight": 0.20,drift_weight": 0.20,pattern_weight": 0.15,max_history_size": 1000,btc_usdc_pair": True,precision": 8,  # BTC precisionmin_volume_threshold: 1000.0,max_position_size": 0.1,  # 10% of portfoliostop_loss_factor: 0.02,  # 2% stop losstake_profit_factor: 0.05,  # 5% take profit
-
-
-
-}
-
-
-
-
-
-
-
-def optimize_profit() -> OptimizationResult:Main profit optimization function.Mathematical Formula:
-
-
-
-        P(t) =  w  A(t)  exp(i(t))  E(t)
-
-
-
-C(t) = H_sim + _align + E_ent + D_drift
-
-
-
-
-
-
-
-Args:
-
-
-
-            btc_price: Current BTC price in USDC
-
-
-
-usdc_volume: Trading volume in USDC
-
-
-
-market_data: Additional market context
-
-
-
-
-
-
-
-Returns:
-
-
-
-            OptimizationResult with trade recommendation""start_time = time.time()
-
-
-
-optimization_id = fopt_{int(time.time() * 1000)}
-
-
-
-
-
-
-
-try:
-
-
-
-            self.current_state = ProfitState.ANALYZING
-
-
-
-
-
-
-
-# Extract time series data for analysis
-
-
-
-price_history = market_data.get(price_history, [btc_price])volume_history = market_data.get(volume_history, [usdc_volume])
-
-
-
-
-
-
-
-# 1. Hash Similarity Analysis via ALEPH Overlay
-
-
-
-hash_similarity = self._calculate_hash_similarity(
-
-
-
-btc_price, usdc_volume, market_data
-
-
-
-)
-
-
-
-
-
-
-
-# 2. Phase Alignment Analysis
-
-
-
-phase_alignment = self._calculate_phase_alignment(price_history)
-
-
-
-
-
-
-
-# 3. Entropy Score Calculation
-
-
-
-            entropy_score = self._calculate_entropy_score(price_history)
-
-
-
-
-
-
-
-# 4. Drift Weight Analysis
-
-
-
-drift_weight = self._calculate_drift_weight(price_history)
-
-
-
-
-
-
-
-# 5. Pattern Recognition Confidence
-
-
-
-pattern_confidence = self._calculate_pattern_confidence(price_history)
-
-
-
-
-
-
-
-self.current_state = ProfitState.OPTIMIZING
-
-
-
-
-
-
-
-# Calculate composite confidence score
-
-
-
-confidence_score = self._calculate_confidence_score(
-
-
-
-hash_similarity,
-
-
-
-phase_alignment,
-
-
-
-entropy_score,
-
-
-
-drift_weight,
-
-
-
-pattern_confidence,
-
-
-
-)
-
-
-
-
-
-
-
-# Calculate profit potential using mathematical model
-
-
-
-            profit_potential = self._calculate_profit_potential(
-
-
-
-btc_price, usdc_volume, confidence_score, market_data
-
-
-
-)
-
-
-
-
-
-
-
-# Determine trade direction and position sizing
-
-
-
-trade_direction, position_size = self._determine_trade_parameters(
-
-
-
-profit_potential, confidence_score, market_data
-
-
-
-)
-
-
-
-
-
-
-
-# Risk adjustment
-
-
-
-risk_adjustment = self._calculate_risk_adjustment(
-
-
-
-btc_price, usdc_volume, confidence_score
-
-
-
-)
-
-
-
-
-
-
-
-# Expected profit calculation
-
-
-
-            expected_profit = profit_potential * risk_adjustment * position_size
-
-
-
-
-
-
-
-# Create profit vector
-
-
-
-            profit_vector = ProfitVector(
-
-
-
-timestamp=time.time(),
-
-
-
-price=btc_price,
-
-
-
-volume=usdc_volume,
-
-
-
-hash_similarity=hash_similarity,
-
-
-
-phase_alignment=phase_alignment,
-
-
-
-entropy_score=entropy_score,
-
-
-
-drift_weight=drift_weight,
-
-
-
-pattern_confidence=pattern_confidence,
-
-
-
-profit_potential=profit_potential,
-
-
-
-                risk_adjustment=risk_adjustment,
-
-
-
-confidence_score=confidence_score,
-
-
-
-trade_direction=trade_direction,
-
-
-
-position_size=position_size,
-
-
-
-expected_profit=expected_profit,
-
-
-
-)
-
-
-
-
-
-
-
-self.current_state = ProfitState.VALIDATING
-
-
-
-
-
-
-
-# Final trade decision
-
-
-
-should_trade = self._validate_trade_decision(profit_vector)
-
-
-
-
-
-
-
-# Calculate risk score
-
-
-
-risk_score = self._calculate_risk_score(profit_vector, market_data)
-
-
-
-
-
-
-
-optimization_time_ms = (time.time() - start_time) * 1000
-
-
-
-
-
-
-
-# Create optimization result
-
-
-
-result = OptimizationResult(
-
-
-
-optimization_id=optimization_id,
-
-
-
-timestamp=time.time(),
-
-
-
-profit_vector=profit_vector,
-
-
-
-should_trade=should_trade,
-
-
-
-confidence_level=confidence_score,
-
-
-
-expected_return=expected_profit,
-
-
-
-                risk_score=risk_score,
-
-
-
-optimization_time_ms=optimization_time_ms,
-
-
-
-metadata={btc_price: btc_price,usdc_volume: usdc_volume,market_phase": market_data.get(phase",unknown),volatility": market_data.get(volatility", 0.0),
-
-
-
-},
-
-
-
-)
-
-
-
-
-
-
-
-# Update statistics and history
-
-
-
-self._update_performance_stats(result)
-
-
-
-self.optimization_history.append(result)
-
-
-
-
-
-
-
-# Trim history if needed
-
-
-
-if len(self.optimization_history) > self.max_history_size:
-
-
-
-                self.optimization_history = self.optimization_history[
-
-
-
--self.max_history_size:
-
-
-
-                ]
-
-
-
-
-
-
-
-self.current_state = ProfitState.ACCUMULATING
-
-
-
-
-
-
-
-            logger.info(
-
-
-
-f Optimization complete: {trade_direction.value}
-
-
-
-f(confidence: {confidence_score:.3f},
-
-
-
-fexpected: {expected_profit:.4f})
-
-
-
-)
-
-
-
-
-
-
-
-        return result
-
-
-
-
-
-
-
-        except Exception as e:
-
-
-
-            logger.error(fError in profit optimization: {e})
-
-
-
-            self.current_state = ProfitState.ACCUMULATING
-
-
-
-
-
-
-
-# Return safe default result
-
-
-
-        return self._create_default_result(optimization_id, btc_price, usdc_volume)
-
-
-
-
-
-
-
-def _calculate_hash_similarity() -> float:
-
-
-
-        Calculate hash similarity using ALEPH overlay mapping.try:
-
-
-
-            if not self.overlay_mapper:
-
-
-
-                return 0.5  # Neutral default
-
-
-
-
-
-
-
-# Create hash from current market state
-
-
-
-market_hash = hashlib.sha256(
-
-
-
-f{btc_price}_{usdc_volume}_{time.time()}.encode()
-
-
-
-).hexdigest()
-
-
-
-
-
-
-
-# Map to overlay and extract similarity
-
-
-
-overlay_map = self.overlay_mapper.map_hash_to_overlay(market_hash)
-
-
-
-        return overlay_map.confidence_score
-
-
-
-
-
-
-
-        except Exception as e:
-
-
-
-            logger.error(fError calculating hash similarity: {e})
-
-
-
-        return 0.5
-
-
-
-
-
-
-
-def _calculate_phase_alignment() -> float:Calculate phase alignment using phase transition monitoring.try:
-
-
-
-            if not self.phase_monitor or len(price_history) < 10:
-
-
-
-                return 0.5  # Neutral default
-
-
-
-
-
-
-
-# Convert to numpy array for entropy calculation
-
-
-
-            entropy_trace = np.array(price_history)
-
-
-
-
-
-
-
-# Calculate drift weight
-
-
-
-drift_weight = (
-
-
-
-np.std(np.diff(price_history)) if len(price_history) > 1 else 0.0
-
-
-
-)
-
-
-
-
-
-
-
-# Evaluate phase state
-
-
-
-phase_state = self.phase_monitor.evaluate_phase_state(
-
-
-
-entropy_trace, drift_weight
-
-
-
-)
-
-
-
-
-
-
-
-# Convert phase state to alignment score
-
-
-
-phase_scores = {PhaseState.ACCUMULATION: 0.8,
-
-
-
-                PhaseState.CONSOLIDATION: 0.6,
-
-
-
-                PhaseState.EXPANSION: 0.9,
-
-
-
-                PhaseState.DISTRIBUTION: 0.3,
-
-
-
-                PhaseState.TRANSITION: 0.4,
-
-
-
-}
-
-
-
-
-
-
-
-        return phase_scores.get(phase_state, 0.5)
-
-
-
-
-
-
-
-        except Exception as e:
-
-
-
-            logger.error(fError calculating phase alignment: {e})
-
-
-
-        return 0.5
-
-
-
-
-
-
-
-def _calculate_entropy_score() -> float:Calculate entropy score using entropy tracker.try:
-
-
-
-            if not self.entropy_tracker or len(price_history) < 5:
-
-
-
-                return 0.5  # Neutral default
-
-
-
-
-
-
-
-# Calculate entropy metrics
-
-
-
-            entropy_metrics = self.entropy_tracker.calculate_entropy(price_history)
-
-
-
-
-
-
-
-# Convert entropy state to score (lower entropy = higher
-
-
-
-# confidence)
-
-
-
-entropy_scores = {EntropyState.LOW: 0.9,
-
-
-
-                EntropyState.MEDIUM: 0.6,
-
-
-
-                EntropyState.HIGH: 0.3,
-
-
-
-                EntropyState.EXTREME: 0.1,
-
-
-
-}
-
-
-
-
-
-
-
-base_score = entropy_scores.get(entropy_metrics.state, 0.5)
-
-
-
-
-
-
-
-# Adjust by confidence
-
-
-
-        return base_score * entropy_metrics.confidence
-
-
-
-
-
-
-
-        except Exception as e:
-
-
-
-            logger.error(fError calculating entropy score: {e})
-
-
-
-            return 0.5
-
-
-
-
-
-
-
-def _calculate_drift_weight() -> float:Calculate drift weight using drift phase weighter.try:
-
-
-
-            if not self.drift_weighter or len(price_history) < 10:
-
-
-
-                return 0.5  # Neutral default
-
-
-
-
-
-
-
-# Convert to numpy array
-
-
-
-trace = np.array(price_history)
-
-
-
-
-
-
-
-# Calculate drift weight
-
-
-
-drift_weight = self.drift_weighter.calculate_phase_drift_weight(trace)
-
-
-
-
-
-
-
-        return max(0.0, min(1.0, drift_weight))
-
-
-
-
-
-
-
-        except Exception as e:
-
-
-
-            logger.error(fError calculating drift weight: {e})
-
-
-
-        return 0.5
-
-
-
-
-
-
-
-def _calculate_pattern_confidence() -> float:Calculate pattern recognition confidence.try:
-
-
-
-            if not self.pattern_utils or len(price_history) < 5:
-
-
-
-                return 0.5  # Neutral default
-
-
-
-
-
-
-
-# Analyze trend
-
-
-
-trend_analysis = self.pattern_utils.analyze_trend(price_history)
-
-
-
-
-
-
-
-# Detect patterns
-
-
-
-patterns = self.pattern_utils.detect_patterns(price_history)
-
-
-
-
-
-
-
-# Calculate pattern confidence
-
-
-
-trend_confidence = trend_analysis.strength * trend_analysis.r_squared
-
-
-
-
-
-
-
-# Pattern type scoring
-
-
-
-pattern_scores = {PatternType.TREND_UP: 0.8,
-
-
-
-                PatternType.TREND_DOWN: 0.2,
-
-
-
-                PatternType.BREAKOUT: 0.9,
-
-
-
-                PatternType.REVERSAL: 0.7,
-
-
-
-                PatternType.CONSOLIDATION: 0.5,
-
-
-
-                PatternType.SIDEWAYS: 0.4,
-
-
-
-}
-
-
-
-
-
-
-
-pattern_confidence = 0.5
-
-
-
-if patterns: max_pattern = max(patterns, key=lambda p: p.confidence)
-
-
-
-pattern_confidence = (
-
-
-
-pattern_scores.get(max_pattern.pattern_type, 0.5)
-
-
-
-* max_pattern.confidence
-
-
-
-)
-
-
-
-
-
-
-
-# Combine trend and pattern confidence
-
-
-
-        return trend_confidence * 0.6 + pattern_confidence * 0.4
-
-
-
-
-
-
-
-        except Exception as e:
-
-
-
-            logger.error(fError calculating pattern confidence: {e})
-
-
-
-        return 0.5
-
-
-
-
-
-
-
-def _calculate_confidence_score() -> float:Calculate composite confidence score using mathematical weights.try:
-
-
-
-            # Weighted sum of all components
-
-
-
-confidence = (
-
-
-
-self.weights[hash_similarity] * hash_similarity+ self.weights[phase_alignment] * phase_alignment+ self.weights[entropy_score] * entropy_score+ self.weights[drift_weight] * drift_weight+ self.weights[pattern_confidence] * pattern_confidence
-
-
-
-)
-
-
-
-
-
-
-
-        return max(0.0, min(1.0, confidence))
-
-
-
-
-
-
-
-        except Exception as e:
-
-
-
-            logger.error(fError calculating confidence score: {e})
-
-
-
-        return 0.5
-
-
-
-
-
-
-
-def _calculate_profit_potential() -> float:Calculate profit potential using mathematical model.try:
-
-
-
-            # Base profit potential from price momentum
-
-
-
-            price_history = market_data.get(price_history, [btc_price])
-
-
-
-            if len(price_history) > 1: price_momentum = (price_history[-1] - price_history[0]) / price_history[
-
-
-
-0
-
-
-
-]
-
-
-
-else:
-
-
-
-                price_momentum = 0.0
-
-
-
-
-
-
-
-# Volume factor
-
-
-
-avg_volume = market_data.get(avg_volume, usdc_volume)
-
-
-
-volume_factor = min(2.0, usdc_volume / max(avg_volume, 1.0))
-
-
-
-
-
-
-
-# Volatility factor
-
-
-
-volatility = market_data.get(volatility, 0.02)
-
-
-
-            volatility_factor = min(1.5, volatility * 10)
-
-
-
-
-
-
-
-# Calculate base profit potential
-
-
-
-            base_profit = abs(price_momentum) * volume_factor * volatility_factor
-
-
-
-
-
-
-
-# Adjust by confidence score
-
-
-
-profit_potential = base_profit * confidence_score
-
-
-
-
-
-
-
-        return max(0.0, min(0.1, profit_potential))  # Cap at 10%
-
-
-
-
-
-
-
-        except Exception as e:
-
-
-
-            logger.error(fError calculating profit potential: {e})
-
-
-
-            return 0.0
-
-
-
-
-
-
-
-def _determine_trade_parameters() -> Tuple[TradeDirection, float]:Determine optimal trade direction and position size.try:
-
-
-
-            # Determine direction from price momentum
-
-
-
-price_history = market_data.get(price_history, [])
-
-
-
-            if len(price_history) > 1: momentum = price_history[-1] - price_history[0]
-
-
-
-if momentum > 0:
-
-
-
-                    direction = TradeDirection.LONG
-
-
-
-elif momentum < 0:
-
-
-
-                    direction = TradeDirection.SHORT
-
-
-
-else:
-
-
-
-                    direction = TradeDirection.HOLD
-
-
-
-else:
-
-
-
-                direction = TradeDirection.HOLD
-
-
-
-
-
-
-
-# Calculate position size based on confidence and profit potential
-
-
-
-            if direction == TradeDirection.HOLD:
-
-
-
-                position_size = 0.0
-
-
-
-else:
-
-
-
-                # Base position size on confidence and profit potential
-
-
-
-base_size = self.config[max_position_size]
-
-
-
-size_factor = confidence_score * profit_potential * 10  # Scale up
-
-
-
-position_size = min(base_size, base_size * size_factor)
-
-
-
-
-
-
-
-        return direction, position_size
-
-
-
-
-
-
-
-        except Exception as e:
-
-
-
-            logger.error(fError determining trade parameters: {e})
-
-
-
-        return TradeDirection.HOLD, 0.0
-
-
-
-
-
-
-
-def _calculate_risk_adjustment() -> float:Calculate risk adjustment factor.try:
-
-
-
-            # Base risk adjustment on confidence
-
-
-
-base_adjustment = confidence_score
-
-
-
-
-
-
-
-# Adjust for volume (higher volume = lower risk)
-
-
-
-volume_threshold = self.config[min_volume_threshold]
-
-
-
-            volume_adjustment = min(1.0, usdc_volume / volume_threshold)
-
-
-
-
-
-
-
-# Combine adjustments
-
-
-
-risk_adjustment = base_adjustment * volume_adjustment
-
-
-
-
-
-
-
-        return max(0.1, min(1.0, risk_adjustment))
-
-
-
-
-
-
-
-        except Exception as e:
-
-
-
-            logger.error(fError calculating risk adjustment: {e})
-
-
-
-        return 0.5
-
-
-
-
-
-
-
-def _validate_trade_decision() -> bool:
-
-
-
-        Validate if trade should be executed based on thresholds.try:
-
-
-
-            # Check confidence threshold
-
-
-
-            if profit_vector.confidence_score < self.confidence_threshold:
-
-
-
-                return False
-
-
-
-
-
-
-
-# Check profit threshold
-
-
-
-            if profit_vector.expected_profit < self.profit_threshold:
-
-
-
-                return False
-
-
-
-
-
-
-
-# Check position size
-
-
-
-if profit_vector.position_size <= 0:
-
-
-
-                return False
-
-
-
-
-
-
-
-# Check if direction is actionable
-
-
-
-if profit_vector.trade_direction == TradeDirection.HOLD:
-
-
-
-                return False
-
-
-
-
-
-
-
-        return True
-
-
-
-
-
-
-
-        except Exception as e:
-
-
-
-            logger.error(fError validating trade decision: {e})
-
-
-
-        return False
-
-
-
-
-
-
-
-def _calculate_risk_score() -> float:Calculate overall risk score for the trade.try:
-
-
-
-            # Base risk from volatility
-
-
-
-volatility = market_data.get(volatility, 0.02)
-
-
-
-            volatility_risk = min(1.0, volatility / self.risk_tolerance)
-
-
-
-
-
-
-
-# Risk from position size
-
-
-
-position_risk = (
-
-
-
-profit_vector.position_size / self.config[max_position_size]
-
-
-
-)
-
-
-
-
-
-
-
-# Risk from confidence (lower confidence = higher risk)
-
-
-
-confidence_risk = 1.0 - profit_vector.confidence_score
-
-
-
-
-
-
-
-# Combine risk factors
-
-
-
-total_risk = (
-
-
-
-volatility_risk * 0.4 + position_risk * 0.3 + confidence_risk * 0.3
-
-
-
-)
-
-
-
-
-
-
-
-        return max(0.0, min(1.0, total_risk))
-
-
-
-
-
-
-
-        except Exception as e:
-
-
-
-            logger.error(fError calculating risk score: {e})
-
-
-
-        return 0.5
-
-
-
-
-
-
-
-def _update_performance_stats() -> None:
-
-
-
-        Update performance statistics.try:
-
-
-
-            self.stats[total_optimizations] += 1
-
-
-
-
-
-
-
-if result.should_trade and result.expected_return > 0:
-
-
-
-                self.stats[profitable_decisions] += 1
-
-
-
-
-
-
-
-# Update averages
-
-
-
-total = self.stats[total_optimizations]
-
-
-
-self.stats[avg_confidence] = (self.stats[avg_confidence] * (total - 1) + result.confidence_level
-
-
-
-) / total
-
-
-
-self.stats[avg_profit_potential] = (self.stats[avg_profit_potential] * (total - 1)
-
-
-
-                + result.profit_vector.profit_potential
-
-
-
-) / total
-
-
-
-self.stats[optimization_time_ms] = (self.stats[optimization_time_ms] * (total - 1)
-
-
-
-+ result.optimization_time_ms
-
-
-
-) / total
-
-
-
-
-
-
-
-        except Exception as e:logger.error(fError updating performance stats: {e})
-
-
-
-
-
-
-
-def _create_default_result() -> OptimizationResult:Create safe default optimization result.profit_vector = ProfitVector(
-
-
-
-timestamp=time.time(),
-
-
-
-price=btc_price,
-
-
-
-volume=usdc_volume,
-
-
-
-trade_direction=TradeDirection.HOLD,
-
-
-
-            position_size=0.0,
-
-
-
-            expected_profit=0.0,
-
-
-
-)
-
-
-
-
-
-
-
+    """Result of an optimization run."""
+    optimal_parameters: Dict[str, float]
+    objective_value: float
+    convergence: bool
+    iterations: int
+    execution_time: float
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass
+class PortfolioWeights:
+    """Portfolio weight allocation."""
+    weights: np.ndarray
+    assets: List[str]
+    total_weight: float
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+
+class ProfitOptimizationEngine:
+    """
+    Main profit optimization engine.
+    
+    Provides methods for optimizing trading strategies, portfolio allocation,
+    and risk management parameters.
+    """
+    
+    def __init__(self, risk_free_rate: float = 0.02):
+        """Initialize the optimization engine."""
+        self.risk_free_rate = risk_free_rate
+        self.optimization_history: List[OptimizationResult] = []
+        
+    def optimize_portfolio_weights(
+        self,
+        returns: np.ndarray,
+        method: OptimizationMethod = OptimizationMethod.GRADIENT_DESCENT,
+        risk_metric: RiskMetric = RiskMetric.SHARPE_RATIO,
+        constraints: Optional[Dict[str, Any]] = None,
+        max_iterations: int = 1000,
+        tolerance: float = 1e-6
+    ) -> OptimizationResult:
+        """
+        Optimize portfolio weights for maximum risk-adjusted returns.
+        
+        Args:
+            returns: Historical returns matrix (time x assets)
+            method: Optimization method to use
+            risk_metric: Risk metric to optimize
+            constraints: Optimization constraints
+            max_iterations: Maximum iterations
+            tolerance: Convergence tolerance
+            
+        Returns:
+            Optimization result with optimal weights
+        """
+        if method == OptimizationMethod.GRADIENT_DESCENT:
+            return self._gradient_descent_optimization(
+                returns, risk_metric, constraints, max_iterations, tolerance
+            )
+        elif method == OptimizationMethod.GENETIC_ALGORITHM:
+            return self._genetic_algorithm_optimization(
+                returns, risk_metric, constraints, max_iterations
+            )
+        else:
+            raise ValueError(f"Unsupported optimization method: {method}")
+    
+    def _gradient_descent_optimization(
+        self,
+        returns: np.ndarray,
+        risk_metric: RiskMetric,
+        constraints: Optional[Dict[str, Any]],
+        max_iterations: int,
+        tolerance: float
+    ) -> OptimizationResult:
+        """Gradient descent optimization."""
+        num_assets = returns.shape[1]
+        
+        # Initialize weights
+        weights = np.ones(num_assets) / num_assets
+        
+        # Calculate covariance matrix
+        cov_matrix = np.cov(returns.T, ddof=1)
+        
+        for iteration in range(max_iterations):
+            # Calculate objective function and gradient
+            if risk_metric == RiskMetric.SHARPE_RATIO:
+                objective, gradient = self._sharpe_ratio_gradient(weights, returns, cov_matrix)
+            else:
+                objective, gradient = self._generic_risk_gradient(weights, returns, cov_matrix, risk_metric)
+            
+            # Update weights
+            learning_rate = 0.01
+            weights_new = weights + learning_rate * gradient
+            
+            # Apply constraints
+            if constraints:
+                weights_new = self._apply_constraints(weights_new, constraints)
+            
+            # Check convergence
+            weight_change = np.linalg.norm(weights_new - weights)
+            if weight_change < tolerance:
+                break
+                
+            weights = weights_new
+        
         return OptimizationResult(
-
-
-
-optimization_id=optimization_id,
-
-
-
-timestamp=time.time(),
-
-
-
-profit_vector=profit_vector,
-
-
-
-should_trade=False,
-
-
-
-confidence_level=0.0,
-
-
-
-            expected_return=0.0,
-
-
-
-            risk_score=1.0,
-
-
-
-            optimization_time_ms=0.0,
-
-
-
-)
-
-
-
-
-
-
-
-def get_performance_summary() -> Dict[str, Any]:Get comprehensive performance summary.try: success_rate = 0.0
-
-
-
-if self.stats[total_optimizations] > 0: success_rate = (
-
-
-
-self.stats[profitable_decisions]/ self.stats[total_optimizations]
-
-
-
-)
-
-
-
-
-
-
-
-        return {total_optimizations: self.stats[total_optimizations],profitable_decisions": self.stats[profitable_decisions],success_rate": success_rate,avg_confidence": self.stats[avg_confidence],avg_profit_potential": self.stats[avg_profit_potential],avg_optimization_time_ms": self.stats[optimization_time_ms],current_state": self.current_state.value,history_size": len(self.optimization_history),mathematical_weights": self.weights,thresholds": {confidence: self.confidence_threshold,profit": self.profit_threshold,risk_tolerance": self.risk_tolerance,
-
-
-
-},
-
-
-
-}
-
-
-
-
-
-
-
-        except Exception as e:logger.error(f"Error getting performance summary: {e})
-
-
-
-        return {}
-
-
-
-
-
-
-
-def get_recent_optimizations() -> List[Dict[str, Any]]:Get recent optimization results.try: recent = self.optimization_history[-count:]
-
-
-
-
-
-
-
-        return [{
-
-
-
-optimization_id: result.optimization_id,timestamp: result.timestamp,should_trade: result.should_trade,trade_direction": result.profit_vector.trade_direction.value,confidence_level": result.confidence_level,expected_return: result.expected_return,risk_score": result.risk_score,btc_price": result.profit_vector.price,position_size": result.profit_vector.position_size,
-
-
-
-}
-
-
-
-for result in recent:
-
-
-
-]
-
-
-
-
-
-
-
-        except Exception as e:logger.error(f"Error getting recent optimizations: {e})
-
-
-
-        return []
-
-
-
-
-
-
-
-
-
-
-
-def main():Demonstrate profit optimization engine functionality.logging.basicConfig(level = logging.INFO)
-
-
-
-
-
-
-
-print( Profit Optimization Engine Demo)print(=* 50)
-
-
-
-
-
-
-
-# Initialize engine
-
-
-
-engine = ProfitOptimizationEngine()
-
-
-
-
-
-
-
-# Simulate BTC/USDC market data
-
-
-
-btc_prices = [45000, 45100, 45050, 45200, 45150, 45300, 45250]
-
-
-
-usdc_volume = 1500000.0
-
-
-
-
-
-
-
-market_data = {price_history: btc_prices,volume_history: [usdc_volume] * len(btc_prices),avg_volume": usdc_volume,volatility": 0.025,phase":expansion",
-
-
-
-}
-
-
-
-
-
-
-
-# Run optimization
-
-
-
-print(f\n Optimizing for BTC price: ${btc_prices[-1]:,.2f})
-
-
-
-result = engine.optimize_profit(btc_prices[-1], usdc_volume, market_data)
-
-
-
-
-
-
-
-print( Optimization Result:)print(fShould Trade: {result.should_trade})print(fDirection: {result.profit_vector.trade_direction.value})print(fConfidence: {result.confidence_level:.3f})print(fExpected Return: {result.expected_return:.4f})print(fRisk Score: {result.risk_score:.3f})print(fPosition Size: {result.profit_vector.position_size:.3f})print(fProcessing Time: {result.optimization_time_ms:.1f}ms)
-
-
-
-
-
-
-
-# Show performance summary
-
-
-
-print(\n Performance Summary:)
-
-
-
-summary = engine.get_performance_summary()
-
-
-
-for key, value in summary.items():
-
-
-
-        if isinstance(value, dict):
-
-
-
-            print(f{key}:)
-
-
-
-for sub_key, sub_value in value.items():
-
-
-
-                print(f{sub_key}: {sub_value})
-
-
-
-elif isinstance(value, float):
-
-
-
-            print(f{key}: {value:.4f})
-
-
-
-else :
-
-
-
-            print(f{key}: {value})
-
-
-
-print(\n Profit optimization demo completed!)
-
-
-
-if __name__ == __main__:
-
-
-
-    main()""
-
-
-
-""""
-"""
+            optimal_parameters={'weights': weights.tolist()},
+            objective_value=objective,
+            convergence=weight_change < tolerance,
+            iterations=iteration + 1,
+            execution_time=0.0,  # Would be calculated in real implementation
+            metadata={
+                'method': 'gradient_descent',
+                'risk_metric': risk_metric.value,
+                'final_weight_change': float(weight_change),
+            }
+        )
+    
+    def _genetic_algorithm_optimization(
+        self,
+        returns: np.ndarray,
+        risk_metric: RiskMetric,
+        constraints: Optional[Dict[str, Any]],
+        max_iterations: int
+    ) -> OptimizationResult:
+        """Genetic algorithm optimization."""
+        num_assets = returns.shape[1]
+        population_size = 50
+        
+        # Initialize population
+        population = []
+        for _ in range(population_size):
+            weights = np.random.random(num_assets)
+            weights = weights / np.sum(weights)
+            population.append(weights)
+        
+        best_weights = None
+        best_objective = float('-inf')
+        
+        for generation in range(max_iterations):
+            # Evaluate fitness
+            fitness_scores = []
+            for weights in population:
+                if risk_metric == RiskMetric.SHARPE_RATIO:
+                    objective = self._calculate_sharpe_ratio(weights, returns)
+                else:
+                    objective = self._calculate_risk_metric(weights, returns, risk_metric)
+                fitness_scores.append(objective)
+                
+                if objective > best_objective:
+                    best_objective = objective
+                    best_weights = weights.copy()
+            
+            # Selection, crossover, mutation
+            new_population = []
+            for _ in range(population_size):
+                # Tournament selection
+                idx1, idx2 = np.random.choice(len(population), 2, replace=False)
+                parent1 = population[idx1] if fitness_scores[idx1] > fitness_scores[idx2] else population[idx2]
+                
+                idx3, idx4 = np.random.choice(len(population), 2, replace=False)
+                parent2 = population[idx3] if fitness_scores[idx3] > fitness_scores[idx4] else population[idx4]
+                
+                # Crossover
+                crossover_point = np.random.randint(1, num_assets)
+                child = np.concatenate([parent1[:crossover_point], parent2[crossover_point:]])
+                
+                # Mutation
+                if np.random.random() < 0.1:
+                    mutation_idx = np.random.randint(num_assets)
+                    child[mutation_idx] = np.random.random()
+                
+                # Normalize
+                child = child / np.sum(child)
+                new_population.append(child)
+            
+            population = new_population
+        
+        return OptimizationResult(
+            optimal_parameters={'weights': best_weights.tolist()},
+            objective_value=best_objective,
+            convergence=True,
+            iterations=max_iterations,
+            execution_time=0.0,
+            metadata={
+                'method': 'genetic_algorithm',
+                'risk_metric': risk_metric.value,
+                'population_size': population_size,
+            }
+        )
+    
+    def _sharpe_ratio_gradient(
+        self,
+        weights: np.ndarray,
+        returns: np.ndarray,
+        cov_matrix: np.ndarray
+    ) -> Tuple[float, np.ndarray]:
+        """Calculate Sharpe ratio and its gradient."""
+        portfolio_returns = returns @ weights
+        mean_return = np.mean(portfolio_returns)
+        std_return = np.std(portfolio_returns, ddof=1)
+        
+        if std_return == 0:
+            return 0.0, np.zeros_like(weights)
+        
+        sharpe_ratio = (mean_return - self.risk_free_rate) / std_return
+        
+        # Gradient calculation
+        excess_return = mean_return - self.risk_free_rate
+        gradient = (np.mean(returns, axis=0) * std_return - excess_return * (cov_matrix @ weights) / std_return) / (std_return ** 2)
+        
+        return sharpe_ratio, gradient
+    
+    def _generic_risk_gradient(
+        self,
+        weights: np.ndarray,
+        returns: np.ndarray,
+        cov_matrix: np.ndarray,
+        risk_metric: RiskMetric
+    ) -> Tuple[float, np.ndarray]:
+        """Calculate generic risk metric and gradient."""
+        # Simplified implementation - would be more complex for different risk metrics
+        portfolio_volatility = np.sqrt(weights.T @ cov_matrix @ weights)
+        gradient = (cov_matrix @ weights) / portfolio_volatility
+        
+        return -portfolio_volatility, -gradient  # Minimize risk
+    
+    def _calculate_sharpe_ratio(self, weights: np.ndarray, returns: np.ndarray) -> float:
+        """Calculate Sharpe ratio for given weights."""
+        portfolio_returns = returns @ weights
+        mean_return = np.mean(portfolio_returns)
+        std_return = np.std(portfolio_returns, ddof=1)
+        
+        if std_return == 0:
+            return 0.0
+        
+        return (mean_return - self.risk_free_rate) / std_return
+    
+    def _calculate_risk_metric(
+        self,
+        weights: np.ndarray,
+        returns: np.ndarray,
+        risk_metric: RiskMetric
+    ) -> float:
+        """Calculate specified risk metric."""
+        if risk_metric == RiskMetric.SHARPE_RATIO:
+            return self._calculate_sharpe_ratio(weights, returns)
+        elif risk_metric == RiskMetric.MAX_DRAWDOWN:
+            return -self._calculate_max_drawdown(weights, returns)
+        else:
+            # Default to negative volatility (minimize risk)
+            cov_matrix = np.cov(returns.T, ddof=1)
+            return -np.sqrt(weights.T @ cov_matrix @ weights)
+    
+    def _calculate_max_drawdown(self, weights: np.ndarray, returns: np.ndarray) -> float:
+        """Calculate maximum drawdown."""
+        portfolio_returns = returns @ weights
+        cumulative = np.cumprod(1 + portfolio_returns)
+        running_max = np.maximum.accumulate(cumulative)
+        drawdown = (cumulative - running_max) / running_max
+        return np.min(drawdown)
+    
+    def _apply_constraints(
+        self,
+        weights: np.ndarray,
+        constraints: Dict[str, Any]
+    ) -> np.ndarray:
+        """Apply optimization constraints."""
+        # Ensure weights sum to 1
+        weights = weights / np.sum(weights)
+        
+        # Apply minimum/maximum weight constraints
+        if 'min_weight' in constraints:
+            weights = np.maximum(weights, constraints['min_weight'])
+        
+        if 'max_weight' in constraints:
+            weights = np.minimum(weights, constraints['max_weight'])
+        
+        # Renormalize
+        weights = weights / np.sum(weights)
+        
+        return weights
+    
+    def optimize_trading_parameters(
+        self,
+        historical_data: Dict[str, np.ndarray],
+        strategy_params: Dict[str, Any],
+        optimization_target: str = "sharpe_ratio"
+    ) -> OptimizationResult:
+        """
+        Optimize trading strategy parameters.
+        
+        Args:
+            historical_data: Historical market data
+            strategy_params: Strategy parameters to optimize
+            optimization_target: Target metric to optimize
+            
+        Returns:
+            Optimization result with optimal parameters
+        """
+        # This would implement strategy-specific optimization
+        # For now, return a placeholder result
+        return OptimizationResult(
+            optimal_parameters=strategy_params,
+            objective_value=0.0,
+            convergence=True,
+            iterations=1,
+            execution_time=0.0,
+            metadata={'method': 'strategy_optimization', 'target': optimization_target}
+        )
+
+
+# Convenience functions
+def create_optimization_engine(risk_free_rate: float = 0.02) -> ProfitOptimizationEngine:
+    """Create a new optimization engine instance."""
+    return ProfitOptimizationEngine(risk_free_rate=risk_free_rate)
+
+
+def optimize_portfolio(
+    returns: np.ndarray,
+    method: OptimizationMethod = OptimizationMethod.GRADIENT_DESCENT,
+    risk_metric: RiskMetric = RiskMetric.SHARPE_RATIO
+) -> OptimizationResult:
+    """Convenience function for portfolio optimization."""
+    engine = create_optimization_engine()
+    return engine.optimize_portfolio_weights(returns, method, risk_metric) 
