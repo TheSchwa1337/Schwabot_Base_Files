@@ -1,48 +1,77 @@
 # -*- coding: utf-8 -*-
 """
-Tensor Operations for Schwabot New Math Library
+Advanced Tensor Operations for Schwabot New Math Library
 
-Connects to existing proven mathematical systems.
+This module provides tensor algebra operations by connecting to the
+existing proven mathematical foundation in core/clean_unified_math.py
 """
 
 import logging
 import numpy as np
 from typing import Tuple, Union, List
 
-# Connect to existing working math
+# Connect to existing working math systems
 try:
     from core.clean_unified_math import unified_math
 except ImportError:
-    # Simple fallback that works
-    class BasicMath:
-        @staticmethod
-        def dot_product(a, b):
-            return np.dot(a, b)
-        @staticmethod
-        def abs(x):
-            return np.abs(x)
-        @staticmethod
-        def max(x):
-            return np.max(x)
-        @staticmethod
-        def min(x):
-            return np.min(x)
-    unified_math = BasicMath()
+    try:
+        from core.clean_math_foundation import MathematicalFoundation
+        unified_math = MathematicalFoundation()
+    except ImportError:
+        # Final fallback
+        class BasicMath:
+            @staticmethod
+            def dot_product(a, b):
+                return np.dot(a, b)
+            @staticmethod
+            def abs(x):
+                return np.abs(x)
+            @staticmethod
+            def max(x):
+                return np.max(x)
+            @staticmethod
+            def min(x):
+                return np.min(x)
+        unified_math = BasicMath()
 
 logger = logging.getLogger(__name__)
 
 
 def tensor_contraction(A: np.ndarray, B: np.ndarray, axes: Union[int, List[int]] = 1) -> np.ndarray:
-    """Perform tensor contraction."""
+    """
+    Perform tensor contraction: T_ij = Σ_k A_ik · B_kj
+
+    Args:
+        A: First tensor
+        B: Second tensor
+        axes: Contraction axes
+
+    Returns:
+        Contracted tensor result
+    """
     try:
         return np.tensordot(A, B, axes=axes)
     except Exception as e:
         logger.error(f"Tensor contraction failed: {e}")
+        # Safe fallback
         return np.zeros((A.shape[0], B.shape[-1]), dtype=np.float64)
 
 
 def bit_phase_operations(strategy_id: int) -> Tuple[int, int, int]:
-    """Advanced bit phase tensor operations for strategy routing."""
+    """
+    Advanced bit phase tensor operations for strategy routing.
+
+    Mathematical Implementation:
+        φ₄ = strategy_id & 0b1111
+        φ₈ = (strategy_id >> 4) & 0xFF
+        φ₄₂ = (strategy_id >> 12) & 0x3FFFFFFFFFF
+
+    Args:
+        strategy_id: Strategy identifier
+
+    Returns:
+        Tuple of (phi_4, phi_8, phi_42) phase values
+    """
     try:
         phi_4 = strategy_id & 0b1111
         phi_8 = (strategy_id >> 4) & 0xFF
@@ -54,7 +83,19 @@ def bit_phase_operations(strategy_id: int) -> Tuple[int, int, int]:
 
 
 def matrix_basket_calc(prices: np.ndarray, weights: np.ndarray) -> np.ndarray:
-    """Calculate matrix basket operations for asset allocation."""
+    """
+    Calculate matrix basket operations for asset allocation.
+
+    Mathematical Implementation:
+        B = W · P^T (basket = weights × prices transpose)
+
+    Args:
+        prices: Price vector
+        weights: Weight matrix
+
+    Returns:
+        Basket allocation result
+    """
     try:
         if prices.ndim == 1:
             prices = prices.reshape(-1, 1)
@@ -65,20 +106,32 @@ def matrix_basket_calc(prices: np.ndarray, weights: np.ndarray) -> np.ndarray:
 
 
 def tensor_similarity(tensor_a: np.ndarray, tensor_b: np.ndarray) -> float:
-    """Calculate cosine similarity between tensors."""
+    """
+    Calculate cosine similarity between tensors.
+
+    Mathematical Implementation:
+        similarity = cos(θ) = (A·B) / (||A|| ||B||)
+
+    Args:
+        tensor_a: First tensor
+        tensor_b: Second tensor
+
+    Returns:
+        Similarity score [0, 1]
+    """
     try:
         flat_a = tensor_a.flatten()
         flat_b = tensor_b.flatten()
-        
+
         dot_product = unified_math.dot_product(flat_a, flat_b)
         norm_a = np.linalg.norm(flat_a)
         norm_b = np.linalg.norm(flat_b)
-        
+
         if norm_a < 1e-12 or norm_b < 1e-12:
             return 0.0
-            
+
         similarity = dot_product / (norm_a * norm_b)
-        return max(0.0, min(1.0, similarity))
+        return unified_math.max(0.0, unified_math.min(1.0, similarity))
     except Exception as e:
         logger.error(f"Tensor similarity calculation failed: {e}")
         return 0.0

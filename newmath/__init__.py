@@ -98,38 +98,30 @@ from .render_engine import (
 
 
 def quick_test() -> bool:
-    """Function implementation pending."""
-pass
-"""
-"""Quick validation test for the new math library.""""""
-""""""
-"""
-try:
+    """Quick validation test for the new math library."""
+    try:
         from .validation import run_basic_tests
-return run_basic_tests()
-    except Exception as e:"""
-safe_print(f"Quick test failed: {e}")
+        return run_basic_tests()
+    except Exception as e:
+        safe_print(f"Quick test failed: {e}")
         return False
 
 
 # Library status
 def library_status() -> dict:
-    """Function implementation pending."""
-pass
-"""
-"""Get status of all mathematical components.""""""
-""""""
-"""
-status = {"""
+    """Get status of all mathematical components."""
+    status = {
         "version": __version__,
         "modules_loaded": [],
         "all_operational": True
+    }
 
-modules = [
+    modules = [
         "tensor_ops", "profit_math", "entropy_calc",
         "hash_vectors", "matrix_utils", "render_engine", "validation"
-]
-for module in modules:
+    ]
+    
+    for module in modules:
         try:
             __import__(f"newmath.{module}")
             status["modules_loaded"].append(module)
@@ -137,7 +129,7 @@ for module in modules:
             status["all_operational"] = False
             status[f"{module}_error"] = str(e)
 
-return status
+    return status
 
 
 # Export main components
