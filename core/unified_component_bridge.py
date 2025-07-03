@@ -48,6 +48,7 @@ __all__ = [
 
 class BridgeMode(Enum):
     """Modes for the unified component bridge."""
+
     SYNCHRONOUS = "synchronous"
     ASYNCHRONOUS = "asynchronous"
     EVENT_DRIVEN = "event_driven"
@@ -56,6 +57,7 @@ class BridgeMode(Enum):
 
 class ComponentType(Enum):
     """Types of components in the system."""
+
     TRADING_PIPELINE = "trading_pipeline"
     MATH_FOUNDATION = "math_foundation"
     PROFIT_CALCULATOR = "profit_calculator"
@@ -68,6 +70,7 @@ class ComponentType(Enum):
 
 class ComponentStatus(Enum):
     """Status of a component."""
+
     ACTIVE = "active"
     INACTIVE = "inactive"
     ERROR = "error"
@@ -78,6 +81,7 @@ class ComponentStatus(Enum):
 @dataclass
 class BridgeMessage:
     """Message passed between components through the bridge."""
+
     timestamp: float
     source: ComponentType
     destination: ComponentType
@@ -90,6 +94,7 @@ class BridgeMessage:
 @dataclass
 class UnifiedSystemState:
     """Unified state of the entire system."""
+
     timestamp: float
     active_components: Dict[ComponentType, ComponentStatus]
     system_health: float
@@ -104,7 +109,7 @@ class UnifiedSystemState:
 class UnifiedComponentBridge:
     """
     Unified component bridge that manages communication between all system components.
-    
+
     This bridge provides:
     - Seamless component integration
     - Message routing and delivery
@@ -112,17 +117,17 @@ class UnifiedComponentBridge:
     - Component health monitoring
     - Unified data flow
     """
-    
+
     def __init__(self, mode: BridgeMode = BridgeMode.ASYNCHRONOUS):
         """Initialize the unified component bridge."""
         self.mode = mode
-        
+
         # Initialize all system components
         self.components: Dict[ComponentType, Any] = {}
         self.component_status: Dict[ComponentType, ComponentStatus] = {}
         self.message_queue: List[BridgeMessage] = []
         self.message_history: List[BridgeMessage] = []
-        
+
         # System state
         self.system_state = UnifiedSystemState(
             timestamp=time.time(),
@@ -134,54 +139,56 @@ class UnifiedComponentBridge:
             total_profit=0.0,
             risk_level=0.5,
         )
-        
+
         # Configuration
         self.max_message_history = 1000
         self.health_check_interval = 30.0
         self.last_health_check = 0.0
-        
+
         # Initialize components
         self._initialize_components()
-        
+
         logger.info(f"UnifiedComponentBridge initialized with mode: {mode.value}")
-    
+
     def _initialize_components(self) -> None:
         """Initialize all system components."""
         try:
             # Initialize mathematical foundation
             self.components[ComponentType.MATH_FOUNDATION] = CleanMathFoundation()
             self.component_status[ComponentType.MATH_FOUNDATION] = ComponentStatus.ACTIVE
-            
+
             # Initialize profit calculator with default strategy parameters
             default_strategy = StrategyParameters()
-            self.components[ComponentType.PROFIT_CALCULATOR] = PureProfitCalculator(default_strategy)
+            self.components[ComponentType.PROFIT_CALCULATOR] = PureProfitCalculator(
+                default_strategy
+            )
             self.component_status[ComponentType.PROFIT_CALCULATOR] = ComponentStatus.ACTIVE
-            
+
             # Initialize DLT analyzer
             self.components[ComponentType.DLT_ANALYZER] = MathLibV4()
             self.component_status[ComponentType.DLT_ANALYZER] = ComponentStatus.ACTIVE
-            
+
             # Initialize vectorizer
             self.components[ComponentType.VECTORIZER] = CleanProfitVectorization()
             self.component_status[ComponentType.VECTORIZER] = ComponentStatus.ACTIVE
-            
+
             # Initialize settings engine
             self.components[ComponentType.SETTINGS_ENGINE] = AdvancedSettingsEngine()
             self.component_status[ComponentType.SETTINGS_ENGINE] = ComponentStatus.ACTIVE
-            
+
             # Initialize trading pipeline
             self.components[ComponentType.TRADING_PIPELINE] = CleanTradingPipeline()
             self.component_status[ComponentType.TRADING_PIPELINE] = ComponentStatus.ACTIVE
-            
+
             # Update system state
             self.system_state.active_components = self.component_status.copy()
-            
+
             logger.info("All components initialized successfully")
-            
+
         except Exception as e:
             logger.error(f"Error initializing components: {e}")
             raise
-    
+
     async def send_message(
         self,
         source: ComponentType,
@@ -192,14 +199,14 @@ class UnifiedComponentBridge:
     ) -> bool:
         """
         Send a message between components.
-        
+
         Args:
             source: Source component
             destination: Destination component
             message_type: Type of message
             data: Message data
             priority: Message priority (higher = more important)
-            
+
         Returns:
             True if message was sent successfully
         """
@@ -212,7 +219,7 @@ class UnifiedComponentBridge:
                 data=data,
                 priority=priority,
             )
-            
+
             if self.mode == BridgeMode.ASYNCHRONOUS:
                 # Add to queue for async processing
                 self.message_queue.append(message)
@@ -220,19 +227,19 @@ class UnifiedComponentBridge:
             else:
                 # Process immediately
                 await self._process_message(message)
-            
+
             # Store in history
             self.message_history.append(message)
             if len(self.message_history) > self.max_message_history:
-                self.message_history = self.message_history[-self.max_message_history:]
-            
+                self.message_history = self.message_history[-self.max_message_history :]
+
             logger.debug(f"Message sent: {source.value} -> {destination.value} ({message_type})")
             return True
-            
+
         except Exception as e:
             logger.error(f"Error sending message: {e}")
             return False
-    
+
     async def _process_message_queue(self) -> None:
         """Process the message queue asynchronously."""
         while self.message_queue:
@@ -240,7 +247,7 @@ class UnifiedComponentBridge:
             self.message_queue.sort(key=lambda m: m.priority, reverse=True)
             message = self.message_queue.pop(0)
             await self._process_message(message)
-    
+
     async def _process_message(self, message: BridgeMessage) -> None:
         """Process a single message."""
         try:
@@ -257,15 +264,15 @@ class UnifiedComponentBridge:
                 await self._handle_system_status(message)
             else:
                 logger.warning(f"Unknown message type: {message.message_type}")
-                
+
         except Exception as e:
             logger.error(f"Error processing message: {e}")
-    
+
     async def _handle_market_data(self, message: BridgeMessage) -> None:
         """Handle market data messages."""
         if ComponentType.TRADING_PIPELINE in self.components:
             pipeline = self.components[ComponentType.TRADING_PIPELINE]
-            
+
             # Convert message data to MarketData
             market_data = MarketData(
                 symbol=message.data.get("symbol", "BTCUSDT"),
@@ -278,10 +285,10 @@ class UnifiedComponentBridge:
                 trend_strength=message.data.get("trend_strength", 0.5),
                 entropy_level=message.data.get("entropy_level", 4.0),
             )
-            
+
             # Process through trading pipeline
             decision = await pipeline.process_market_data(market_data)
-            
+
             if decision:
                 # Send decision to other components
                 await self.send_message(
@@ -297,15 +304,15 @@ class UnifiedComponentBridge:
                     },
                     priority=2,
                 )
-    
+
     async def _handle_profit_calculation(self, message: BridgeMessage) -> None:
         """Handle profit calculation messages."""
         if ComponentType.PROFIT_CALCULATOR in self.components:
             calculator = self.components[ComponentType.PROFIT_CALCULATOR]
-            
+
             # Calculate profit
             profit_result = calculator.calculate_profit(message.data)
-            
+
             # Send result back
             await self.send_message(
                 ComponentType.PROFIT_CALCULATOR,
@@ -319,18 +326,18 @@ class UnifiedComponentBridge:
                 },
                 priority=1,
             )
-    
+
     async def _handle_dlt_analysis(self, message: BridgeMessage) -> None:
         """Handle DLT analysis messages."""
         if ComponentType.DLT_ANALYZER in self.components:
             analyzer = self.components[ComponentType.DLT_ANALYZER]
-            
+
             # Perform DLT analysis
             pattern_data = message.data.get("pattern_data", [])
             confidence_threshold = message.data.get("confidence_threshold", 0.5)
-            
+
             dlt_result = analyzer.analyze_dlt_pattern(pattern_data, confidence_threshold)
-            
+
             # Send result back
             await self.send_message(
                 ComponentType.DLT_ANALYZER,
@@ -339,16 +346,16 @@ class UnifiedComponentBridge:
                 dlt_result,
                 priority=1,
             )
-    
+
     async def _handle_settings_update(self, message: BridgeMessage) -> None:
         """Handle settings update messages."""
         if ComponentType.SETTINGS_ENGINE in self.components:
             settings_engine = self.components[ComponentType.SETTINGS_ENGINE]
-            
+
             # Update settings
             for key, value in message.data.items():
                 settings_engine.set(key, value)
-            
+
             # Notify other components of settings change
             await self.send_message(
                 ComponentType.SETTINGS_ENGINE,
@@ -357,109 +364,113 @@ class UnifiedComponentBridge:
                 message.data,
                 priority=1,
             )
-    
+
     async def _handle_system_status(self, message: BridgeMessage) -> None:
         """Handle system status messages."""
         # Update system state
         self.system_state.timestamp = time.time()
-        
+
         # Update component status
         component = message.data.get("component")
         status = message.data.get("status")
         if component and status:
             self.component_status[ComponentType(component)] = ComponentStatus(status)
             self.system_state.active_components = self.component_status.copy()
-        
+
         # Update system health
-        active_count = sum(1 for status in self.component_status.values() if status == ComponentStatus.ACTIVE)
+        active_count = sum(
+            1 for status in self.component_status.values() if status == ComponentStatus.ACTIVE
+        )
         total_count = len(self.component_status)
         self.system_state.system_health = active_count / total_count if total_count > 0 else 0.0
-    
+
     def get_component(self, component_type: ComponentType) -> Optional[Any]:
         """Get a specific component."""
         return self.components.get(component_type)
-    
+
     def get_component_status(self, component_type: ComponentType) -> ComponentStatus:
         """Get the status of a specific component."""
         return self.component_status.get(component_type, ComponentStatus.INACTIVE)
-    
+
     def get_system_state(self) -> UnifiedSystemState:
         """Get the current system state."""
         # Update system state
         self.system_state.timestamp = time.time()
         self.system_state.active_components = self.component_status.copy()
-        
+
         # Calculate system health
-        active_count = sum(1 for status in self.component_status.values() if status == ComponentStatus.ACTIVE)
+        active_count = sum(
+            1 for status in self.component_status.values() if status == ComponentStatus.ACTIVE
+        )
         total_count = len(self.component_status)
         self.system_state.system_health = active_count / total_count if total_count > 0 else 0.0
-        
+
         return self.system_state
-    
+
     async def perform_health_check(self) -> Dict[str, Any]:
         """Perform a comprehensive health check of all components."""
         health_results = {}
-        
+
         for component_type, component in self.components.items():
             try:
                 # Basic health check - try to access component
-                if hasattr(component, 'is_loaded'):
+                if hasattr(component, "is_loaded"):
                     is_healthy = component.is_loaded()
-                elif hasattr(component, 'get_pipeline_summary'):
+                elif hasattr(component, "get_pipeline_summary"):
                     is_healthy = True  # Component is accessible
                 else:
                     is_healthy = component is not None
-                
+
                 health_results[component_type.value] = {
                     "status": "healthy" if is_healthy else "unhealthy",
                     "accessible": component is not None,
                 }
-                
+
                 # Update component status
                 self.component_status[component_type] = (
                     ComponentStatus.ACTIVE if is_healthy else ComponentStatus.ERROR
                 )
-                
+
             except Exception as e:
                 health_results[component_type.value] = {
                     "status": "error",
                     "error": str(e),
                 }
                 self.component_status[component_type] = ComponentStatus.ERROR
-        
+
         # Update system state
         self.system_state.active_components = self.component_status.copy()
         self.last_health_check = time.time()
-        
+
         return health_results
-    
+
     def get_message_history(self, limit: Optional[int] = None) -> List[BridgeMessage]:
         """Get message history."""
         if limit is None:
             return self.message_history.copy()
         else:
             return self.message_history[-limit:]
-    
+
     def clear_message_history(self) -> None:
         """Clear message history."""
         self.message_history.clear()
         logger.info("Message history cleared")
-    
+
     async def shutdown(self) -> None:
         """Shutdown the bridge and all components."""
         logger.info("Shutting down UnifiedComponentBridge")
-        
+
         # Mark all components as shutdown
         for component_type in self.component_status:
             self.component_status[component_type] = ComponentStatus.SHUTDOWN
-        
+
         # Clear queues
         self.message_queue.clear()
-        
+
         # Update system state
         self.system_state.active_components = self.component_status.copy()
         self.system_state.system_health = 0.0
-        
+
         logger.info("UnifiedComponentBridge shutdown complete")
 
 

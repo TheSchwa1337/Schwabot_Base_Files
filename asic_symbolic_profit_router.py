@@ -8,7 +8,6 @@ import logging
 import time
 
 
-
 # Initialize Unicode handler
 unicore = DualUnicoreHandler()
 
@@ -221,7 +220,7 @@ safe_symbol = f"SYMBOL_{len(symbol)}"
 return h_raw, h_safe, h_final
 
 
-def register_symbol():-> SymbolState:
+def register_symbol(): -> SymbolState:
     """Function implementation pending."""
 
 
@@ -301,7 +300,7 @@ else:
             return "COLD_STORAGE"
 
 
-def calculate_profit_vector():-> float:
+def calculate_profit_vector(): -> float:
     """Function implementation pending."""
 
 
@@ -335,7 +334,7 @@ time_factor = 1.0 / (1.0 + time_held * 0.1)  # Decay over time
 return profit
 
 
-def trigger_profit_event():time_held: float, confidence: float = 1.0) -> ProfitEvent: """
+def trigger_profit_event(): time_held: float, confidence: float = 1.0) -> ProfitEvent: """
         """"""
 """"""
 """"""

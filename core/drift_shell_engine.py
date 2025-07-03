@@ -9,13 +9,17 @@ from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 
 import numpy as np
 
-# QuantumDriftShellEngine import fixed
-class QuantumDriftShellEngine:
-    pass
 from core.risk_manager import RiskManager
 from data.temporal_intelligence_integration import TemporalIntelligenceIntegration
 from hash_recollection.entropy_tracker import EntropyTracker
 from hash_recollection.pattern_utils import PatternUtils
+
+# QuantumDriftShellEngine import fixed
+
+
+class QuantumDriftShellEngine:
+    pass
+
 
 """
 

@@ -14,8 +14,7 @@ Focuses on the "uppity in the air commie things" (Unicode/encoding issues) and o
 """
 
 
-
-def analyze_stub_patterns_in_file():-> Dict[str, any]:
+def analyze_stub_patterns_in_file(): -> Dict[str, any]:
     """Analyze specific stub patterns in a file."""
     analysis = {
         'file_path': str(file_path),
@@ -103,14 +102,14 @@ def analyze_stub_patterns_in_file():-> Dict[str, any]:
     return analysis
 
 
-def get_context():-> List[str]:
+def get_context(): -> List[str]:
     """Get context around a specific line."""
     start = max(0, line_num - context_size - 1)
     end = min(len(lines), line_num + context_size)
     return lines[start:end]
 
 
-def identify_common_stub_patterns():-> Dict[str, List[str]]:
+def identify_common_stub_patterns(): -> Dict[str, List[str]]:
     """Identify the most common stub patterns across the codebase."""
     core_dir = Path('core')
     all_patterns = {
@@ -134,7 +133,7 @@ def identify_common_stub_patterns():-> Dict[str, List[str]]:
     return all_patterns
 
 
-def create_automated_fix_strategy():-> Dict[str, str]:
+def create_automated_fix_strategy(): -> Dict[str, str]:
     """Create automated fix strategies for common patterns."""
     strategies = {
         'empty_pass': """
@@ -184,7 +183,7 @@ def function():
     return strategies
 
 
-def generate_fix_script():-> str:
+def generate_fix_script(): -> str:
     """Generate an automated fix script."""
     script_lines = [
         '#!/usr/bin/env python3',

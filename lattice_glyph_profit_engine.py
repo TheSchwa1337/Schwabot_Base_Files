@@ -11,8 +11,6 @@ import threading
 import time
 
 
-
-
 # Initialize Unicode handler
 unicore = DualUnicoreHandler()
 

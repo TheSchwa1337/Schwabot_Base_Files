@@ -273,7 +273,7 @@ if self._should_create_recursive_bag(profit_bag):
 return True
 
 
-def integrate_profit_volume():self,
+def integrate_profit_volume(): self,
         integration_bounds: Optional[Tuple[Tuple[float, float],
             Tuple[float, float], Tuple[float, float]]] = None,
         time_filter: Optional[TimeBand] = None

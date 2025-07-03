@@ -36,13 +36,13 @@ logging.basicConfig(
     handlers=[logging.StreamHandler(), logging.FileHandler("schwabot_launcher.log")],
 )
 
-logger = logging.getLogger(__name__)
+logger=logging.getLogger(__name__)
 
 
 def check_dependencies():
     """Check if required dependencies are available."""
-    required_modules = []
-    optional_modules = [
+    required_modules=[]
+    optional_modules=[
         ("numpy", "NumPy for mathematical operations"),
         ("scipy", "SciPy for advanced mathematical functions"),
         ("psutil", "PSUtil for system monitoring"),
@@ -51,8 +51,8 @@ def check_dependencies():
         ("aiohttp", "AioHTTP for async API operations"),
     ]
 
-    missing_required = []
-    missing_optional = []
+    missing_required=[]
+    missing_optional=[]
 
     # Check required modules
     for module in required_modules:
@@ -92,7 +92,7 @@ def create_demo_launcher():
     print("=" * 50)
 
     # Initialize demo components
-    components = {
+    components={
         "api_coordinator": None,
         "data_pipeline": None,
         "crwm_mapper": None,
@@ -103,7 +103,7 @@ def create_demo_launcher():
         # Try to import and initialize API coordinator
         try:
 
-            components["api_coordinator"] = SecureAPICoordinator()
+            components["api_coordinator"]=SecureAPICoordinator()
             logger.info("✅ Secure API Coordinator initialized")
         except ImportError as e:
             logger.warning(f"⚠️ API Coordinator not available: {e}")
@@ -115,7 +115,7 @@ def create_demo_launcher():
                 DataTier,
             )
 
-            components["data_pipeline"] = DataPipelineVisualizer()
+            components["data_pipeline"]=DataPipelineVisualizer()
             logger.info("✅ Data Pipeline Visualizer initialized")
         except ImportError as e:
             logger.warning(f"⚠️ Data Pipeline Visualizer not available: {e}")
@@ -125,7 +125,7 @@ def create_demo_launcher():
                 ChronoResonanceWeatherMapper,
             )
 
-            components["crwm_mapper"] = ChronoResonanceWeatherMapper()
+            components["crwm_mapper"]=ChronoResonanceWeatherMapper()
             logger.info("✅ ChronoResonance Weather Mapper initialized")
         except ImportError as e:
             logger.warning(f"⚠️ CRWM not available: {e}")

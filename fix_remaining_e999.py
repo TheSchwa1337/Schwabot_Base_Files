@@ -8,8 +8,7 @@ Comprehensive script to fix remaining E999 errors in mathematical and core files
 """
 
 
-
-def fix_complex_syntax_errors():-> bool:
+def fix_complex_syntax_errors(): -> bool:
     """Fix complex E999 syntax errors in a file.
 
     Args:
@@ -127,7 +126,7 @@ def fix_complex_syntax_errors():-> bool:
         return False
 
 
-def get_remaining_problematic_files():-> List[Path]:
+def get_remaining_problematic_files(): -> List[Path]:
     """Get list of files that still have E999 errors.
 
     Returns:

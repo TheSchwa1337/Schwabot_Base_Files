@@ -7,8 +7,6 @@ import sys
 import time
 
 
-
-
 # Initialize Unicode handler
 unicore = DualUnicoreHandler()
 

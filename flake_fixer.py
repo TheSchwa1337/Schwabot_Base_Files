@@ -78,4 +78,4 @@ if __name__ == "__main__":
         main()
     except subprocess.CalledProcessError as exc:
         print("[flake_fixer] ✖ command failed", file=sys.stderr)
-        sys.exit(exc.returncode) 
+        sys.exit(exc.returncode)

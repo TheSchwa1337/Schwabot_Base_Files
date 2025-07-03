@@ -5,7 +5,7 @@ for cryptocurrency market data, price feeds, and market analytics.
 
 This module provides both sync and async interfaces for:
 - Price data fetching
-- Market cap information  
+- Market cap information
 - Historical data retrieval
 - Volume and trading metrics
 

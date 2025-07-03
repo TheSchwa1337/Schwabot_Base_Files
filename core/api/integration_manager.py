@@ -66,7 +66,8 @@ class ApiIntegrationManager:
         try:
             if not self.config_path.exists():
                 logger.warning(
-                    f"Configuration file not found: {self.config_path}. No exchanges will be loaded."
+                    f"Configuration file not found: {
+                        self.config_path}. No exchanges will be loaded."
                 )
                 return
 
@@ -176,7 +177,9 @@ class ApiIntegrationManager:
         # For now, it's a placeholder for periodic background tasks.
         pass
 
-    async def place_order(self, exchange_name: str, order_request: OrderRequest) -> Optional[OrderResponse]:
+    async def place_order(
+        self, exchange_name: str, order_request: OrderRequest
+    ) -> Optional[OrderResponse]:
         """Place an order on a specific exchange."""
         connection = self.connections.get(exchange_name)
         if connection and connection.status == ConnectionStatus.CONNECTED:

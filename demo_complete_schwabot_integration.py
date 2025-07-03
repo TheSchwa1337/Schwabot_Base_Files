@@ -1,11 +1,11 @@
-        from core.mathlib_v4 import MathLibV4
-        from core.ccxt_integration import CCXTIntegration, OrderBookSnapshot
-        from core.ghost_core import GhostCore
-        from core.schwabot_unified_pipeline import SchwabotUnifiedPipeline
-        from core.schwabot_unified_pipeline import SchwabotUnifiedPipeline
-        from core.schwabot_unified_pipeline import SchwabotUnifiedPipeline
-        from core.vecu_core import VECUCore
-        from core.zpe_core import ZPECore
+from core.mathlib_v4 import MathLibV4
+from core.ccxt_integration import CCXTIntegration, OrderBookSnapshot
+from core.ghost_core import GhostCore
+from core.schwabot_unified_pipeline import SchwabotUnifiedPipeline
+from core.schwabot_unified_pipeline import SchwabotUnifiedPipeline
+from core.schwabot_unified_pipeline import SchwabotUnifiedPipeline
+from core.vecu_core import VECUCore
+from core.zpe_core import ZPECore
 import asyncio
 import logging
 import time
@@ -237,9 +237,8 @@ def test_profit_injection_and_compression():
         stats = pipeline.get_pipeline_stats()
         print("\nProfit Metrics:")
         print(f"  Total Profit: ${stats['total_profit']:,.2f}")
-        print(
-            f"  Profit per Trade: ${stats['total_profit'] / max(stats['successful_trades'], 1):,.2f}"
-        )
+        print(f"  Profit per Trade: ${stats['total_profit'] /
+                                      max(stats['successful_trades'], 1):,.2f}")
         print(
             f"  Capital Growth: {((stats['current_capital'] / 100000.0) - 1) * 100:.2f}%"
         )
@@ -288,8 +287,11 @@ def test_feedback_loops():
                 zpe_thermal = pipeline.current_state.zpe_thermal.thermal_state
 
                 print(
-                    f"Tick {i + 1}: {ghost_branch} | VECU: {vecu_amplification:.3f} | ZPE: {zpe_thermal:.3f}"
-                )
+                    f"Tick {
+                        i +
+                        1}: {ghost_branch} | VECU: {
+                        vecu_amplification:.3f} | ZPE: {
+                        zpe_thermal:.3f}")
 
         # Check component adaptation
         stats = pipeline.get_pipeline_stats()

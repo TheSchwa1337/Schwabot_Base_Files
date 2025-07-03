@@ -1,5 +1,5 @@
-        from core.unified_component_bridge import get_component_bridge
-        from schwabot_unified_launcher import SchwabotUnifiedLauncher
+from core.unified_component_bridge import get_component_bridge
+from schwabot_unified_launcher import SchwabotUnifiedLauncher
 from pathlib import Path
 import argparse
 import logging
@@ -158,7 +158,6 @@ def main():
     try:
         # Import and initialize the unified launcher
         print("🎯 Initializing Schwabot Unified Launcher...")
-
 
         # Initialize component bridge
         bridge = get_component_bridge()

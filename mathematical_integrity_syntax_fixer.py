@@ -20,7 +20,6 @@ Key Features:
 """
 
 
-
 class MathematicalIntegritySyntaxFixer:
     """Syntax fixer that preserves mathematical and trading logic."""
 
@@ -55,14 +54,14 @@ class MathematicalIntegritySyntaxFixer:
             "f_string_issues": self._fix_f_string_issues,
         }
 
-    def is_mathematical_line():-> bool:
+    def is_mathematical_line(): -> bool:
         """Check if a line contains mathematical content that should be preserved."""
         for pattern in self.math_patterns + self.trading_patterns:
             if re.search(pattern, line, re.IGNORECASE):
                 return True
         return False
 
-    def _fix_indentation():-> str:
+    def _fix_indentation(): -> str:
         """Fix indentation errors while preserving mathematical structure."""
         lines = content.split("\n")
         fixed_lines = []
@@ -96,7 +95,7 @@ class MathematicalIntegritySyntaxFixer:
 
         return "\n".join(fixed_lines)
 
-    def _fix_unterminated_strings():-> str:
+    def _fix_unterminated_strings(): -> str:
         """Fix unterminated strings while preserving mathematical expressions."""
         lines = content.split("\n")
         fixed_lines = []
@@ -118,7 +117,7 @@ class MathematicalIntegritySyntaxFixer:
                         # Look for the last quote and check context
                         last_quote_pos = line.rfind('"')
                         if last_quote_pos >= 0:
-                            after_quote = line[last_quote_pos + 1 :].strip()
+                            after_quote = line[last_quote_pos + 1:].strip()
                             if not after_quote or after_quote.startswith(
                                 (")", ",", "]", "}")
                             ):
@@ -139,7 +138,7 @@ class MathematicalIntegritySyntaxFixer:
                     else:
                         last_quote_pos = line.rfind("'")
                         if last_quote_pos >= 0:
-                            after_quote = line[last_quote_pos + 1 :].strip()
+                            after_quote = line[last_quote_pos + 1:].strip()
                             if not after_quote or after_quote.startswith(
                                 (")", ",", "]", "}")
                             ):
@@ -155,7 +154,7 @@ class MathematicalIntegritySyntaxFixer:
 
         return "\n".join(fixed_lines)
 
-    def _fix_missing_colons():-> str:
+    def _fix_missing_colons(): -> str:
         """Fix missing colons in function definitions."""
         lines = content.split("\n")
         fixed_lines = []
@@ -189,7 +188,7 @@ class MathematicalIntegritySyntaxFixer:
 
         return "\n".join(fixed_lines)
 
-    def _fix_malformed_docstrings():-> str:
+    def _fix_malformed_docstrings(): -> str:
         """Fix malformed docstrings while preserving mathematical content."""
         # Fix quadruple quotes
         content = content.replace('""""', '"""')
@@ -233,7 +232,7 @@ class MathematicalIntegritySyntaxFixer:
 
         return "\n".join(fixed_lines)
 
-    def _fix_import_errors():-> str:
+    def _fix_import_errors(): -> str:
         """Fix import statement errors."""
         lines = content.split("\n")
         fixed_lines = []
@@ -257,7 +256,7 @@ class MathematicalIntegritySyntaxFixer:
 
         return "\n".join(fixed_lines)
 
-    def _fix_f_string_issues():-> str:
+    def _fix_f_string_issues(): -> str:
         """Fix f-string syntax issues while preserving mathematical expressions."""
         lines = content.split("\n")
         fixed_lines = []
@@ -283,7 +282,7 @@ class MathematicalIntegritySyntaxFixer:
 
         return "\n".join(fixed_lines)
 
-    def fix_file():-> bool:
+    def fix_file(): -> bool:
         """Fix syntax errors in a file while preserving mathematical integrity."""
         try:
             with open(file_path, "r", encoding="utf-8") as f:
@@ -307,7 +306,7 @@ class MathematicalIntegritySyntaxFixer:
             print(f"Error fixing {file_path}: {e}")
             return False
 
-    def check_syntax_error():-> List[str]:
+    def check_syntax_error(): -> List[str]:
         """Check for syntax errors in a file."""
         try:
             result = subprocess.run(
@@ -323,7 +322,7 @@ class MathematicalIntegritySyntaxFixer:
         except Exception as e:
             return [str(e)]
 
-    def fix_all_files():-> Dict[str, int]:
+    def fix_all_files(): -> Dict[str, int]:
         """Fix all Python files in the core directory."""
         core_dir = Path("core")
         python_files = list(core_dir.rglob("*.py"))

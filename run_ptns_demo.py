@@ -77,7 +77,7 @@ print("\n🔍 Tier Validation Demonstration")
 
 # Test tier transition validation
 print("🎯 Testing TIER_1 -> TIER_3 transition:")
-    validation_result = validate_profit_tier_transition(
+    validation_result=validate_profit_tier_transition(
         from_tier=ProfitTier.TIER_1,
         to_tier=ProfitTier.TIER_3,
         current_phase=PhaseState.BIT_8,
@@ -101,8 +101,8 @@ if validation_result.recommendations:
 
 # Show optimal path
 print("\n🛤️ Optimal Path TIER_1 -> TIER_4:")
-    optimal_path = get_optimal_profit_tier_path(ProfitTier.TIER_1, ProfitTier.TIER_4)
-    path_str = " -> ".join([tier.value for tier in optimal_path])
+    optimal_path=get_optimal_profit_tier_path(ProfitTier.TIER_1, ProfitTier.TIER_4)
+    path_str=" -> ".join([tier.value for tier in optimal_path])
     print(f"📍 {path_str}")
 
 return validation_result
@@ -166,7 +166,7 @@ gpu_fallback_manager.start_monitoring()
 # Submit test tasks
 print("📤 Submitting GPU tasks...")
     for i in range(3):
-        task_success = submit_gpu_task(
+        task_success=submit_gpu_task(
             task_id=f"demo_task_{i:03d}",
             task_type="profit_optimization",
             data={
@@ -178,20 +178,20 @@ print("📤 Submitting GPU tasks...")
 print(f"  📋 Task {i + 1}: {'✅ Submitted' if task_success else '❌ Failed'}")
 
 # Check hardware status
-hardware_status = get_gpu_hardware_status()
+hardware_status=get_gpu_hardware_status()
     print(f"\n🔧 Hardware Status:")
     print(f"  💻 State: {hardware_status['hardware_state']}")
     print(f"  🛡️ Fallback Mode: {hardware_status['fallback_mode']}")
     print(f"  ❌ Error Count: {hardware_status['error_count']}")
 
 if hardware_status['metrics']:
-        metrics = hardware_status['metrics']
+        metrics=hardware_status['metrics']
         print(f"  📊 GPU Utilization: {metrics['gpu_utilization']:.1f}%")
         print(f"  💾 Memory Usage: {metrics['system_memory_used']:.1f}%")
         print(f"  ⏱️ Response Time: {metrics['last_response_time']:.4f}s")
 
 # Task queue status
-queues = hardware_status['task_queues']
+queues=hardware_status['task_queues']
     print(f"  📝 GPU Queue: {queues['gpu_queue_size']} tasks")
     print(f"  🛡️ Fallback Queue: {queues['fallback_queue_size']} tasks")
     print(f"  ✅ Completed: {queues['completed_tasks']} tasks")
@@ -275,24 +275,24 @@ print("🚀 Profit Tier Navigation System (PTNS) Demonstration")
     print("💎 With symbolic profit tier navigation and fallback safety")
     print("=" * 60)
 
-demo_start = time.time()
+demo_start=time.time()
 
 try:
     pass
 # Individual component demonstrations
-emoji_demo = demonstrate_emoji_navigation()
-        tier_demo = demonstrate_tier_validation()
-        profit_demo = demonstrate_profit_sequencing()
-        gpu_demo = demonstrate_gpu_fallback()
+emoji_demo=demonstrate_emoji_navigation()
+        tier_demo=demonstrate_tier_validation()
+        profit_demo=demonstrate_profit_sequencing()
+        gpu_demo=demonstrate_gpu_fallback()
 
 # Complete workflow demonstration
-workflow_demo = demonstrate_complete_workflow()
+workflow_demo=demonstrate_complete_workflow()
 
 # Run integration tests
 print("\n🧪 Running Integration Test Suite...")
-        test_results = test_ptns_complete_integration()
+        test_results=test_ptns_complete_integration()
 
-total_time = time.time() - demo_start
+total_time=time.time() - demo_start
 
 # Final summary
 print("\n" + "=" * 60)
@@ -324,5 +324,5 @@ return True
 
 
 if __name__ == "__main__":
-    success = main()
+    success=main()
     exit(0 if success else 1)

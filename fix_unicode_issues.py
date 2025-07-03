@@ -66,7 +66,7 @@ UNICODE_REPLACEMENTS = {
 }
 
 
-def fix_unicode_in_file():-> bool:
+def fix_unicode_in_file(): -> bool:
     """Fix Unicode characters in a single file."""
     try:
         # Read file content

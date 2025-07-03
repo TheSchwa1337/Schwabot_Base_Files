@@ -13,7 +13,6 @@ This creates a self-contained .exe that includes all working components.
 """
 
 
-
 def create_requirements_txt():
     """Create requirements.txt with minimal dependencies."""
     requirements = [

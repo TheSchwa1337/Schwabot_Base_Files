@@ -8,8 +8,8 @@ Currently implemented as a working stub to ensure system stability.
 """
 
 import logging
-from typing import Dict, Optional, Any
 from dataclasses import dataclass
+from typing import Any, Dict, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -17,6 +17,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class OrderBookSnapshot:
     """Order book snapshot data structure."""
+
     timestamp: float
     symbol: str
     bids: list
@@ -47,29 +48,26 @@ class CCXTIntegration:
                     "async": None,  # Placeholder for async exchange
                 }
                 logger.info(f"Initialized exchange: {exchange_id} (stub)")
-            
+
             self.initialized = True
         except Exception as e:
             logger.error(f"Failed to initialize exchanges: {e}")
 
     async def fetch_order_book(
-        self, 
-        exchange_id: str, 
-        symbol: str, 
-        limit: int = 20
+        self, exchange_id: str, symbol: str, limit: int = 20
     ) -> Optional[OrderBookSnapshot]:
         """Fetch order book from exchange."""
         try:
             # Stub implementation - returns mock data
             logger.info(f"Fetching order book for {symbol} from {exchange_id} (stub)")
-            
+
             # Mock order book data
             timestamp = 1640000000.0
             bids = [[50000.0, 1.0], [49999.0, 2.0]]
             asks = [[50001.0, 1.5], [50002.0, 2.5]]
 
             best_bid = bids[0][0] if bids else 0.0
-            best_ask = asks[0][0] if asks else float('inf')
+            best_ask = asks[0][0] if asks else float("inf")
             spread = best_ask - best_bid
             mid_price = (best_bid + best_ask) / 2
 
@@ -85,9 +83,9 @@ class CCXTIntegration:
                 mid_price=mid_price,
                 total_bid_volume=total_bid_volume,
                 total_ask_volume=total_ask_volume,
-                granularity="standard"
+                granularity="standard",
             )
-            
+
         except Exception as e:
             logger.error(f"Failed to fetch order book: {e}")
             return None
@@ -107,7 +105,7 @@ class CCXTIntegration:
             "initialized": self.initialized,
             "exchange_count": len(self.exchanges),
             "exchanges": list(self.exchanges.keys()),
-            "mode": "stub"
+            "mode": "stub",
         }
 
 
@@ -121,16 +119,13 @@ def create_ccxt_integration() -> CCXTIntegration:
 def demo_ccxt_integration():
     """Demonstrate CCXT integration functionality."""
     print("=== CCXT Integration Demo (Stub Mode) ===")
-    
+
     integration = create_ccxt_integration()
-    
+
     # Initialize with mock config
-    config = {
-        "binance": {"sandbox": True},
-        "coinbase": {"sandbox": True}
-    }
+    config = {"binance": {"sandbox": True}, "coinbase": {"sandbox": True}}
     integration.initialize_exchanges(config)
-    
+
     print(f"Status: {integration.get_exchange_status()}")
     print("CCXT Integration ready (stub mode)")
 

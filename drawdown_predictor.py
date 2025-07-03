@@ -50,7 +50,7 @@ class DrawdownPredictor:
         }
         logger.info("DrawdownPredictor initialized.")
 
-    def _calculate_drawdown():-> List[float]:
+    def _calculate_drawdown(): -> List[float]:
         """
         Calculates drawdown from a PnL series.
         Drawdown is the percentage decline from a peak in value.
@@ -93,7 +93,7 @@ class DrawdownPredictor:
             f"Historical PnL updated with {current_pnl}. History size: {len(self.historical_pnl)}"
         )
 
-    def predict_drawdown():-> Optional[Dict[str, Any]]:
+    def predict_drawdown(): -> Optional[Dict[str, Any]]:
         """
         Predicts the potential maximum future drawdown and its confidence interval.
         Uses historical data to project future risk.
@@ -128,7 +128,7 @@ class DrawdownPredictor:
         if self.use_adaptive_thresholds:
             # Example: if recent volatility is high, adjust bounds wider
             recent_volatility = (
-                np.std(list(self.historical_pnl)[-self.lookback_period // 4 :])
+                np.std(list(self.historical_pnl)[-self.lookback_period // 4:])
                 if len(self.historical_pnl) >= self.lookback_period // 4
                 else 0
             )
@@ -158,7 +158,7 @@ class DrawdownPredictor:
             "upper_bound": upper_bound,
         }
 
-    def get_metrics():-> Dict[str, Any]:
+    def get_metrics(): -> Dict[str, Any]:
         """
         Returns the operational metrics of the Drawdown Predictor.
         """

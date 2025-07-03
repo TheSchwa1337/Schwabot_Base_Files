@@ -155,7 +155,7 @@ class Flake8AutoFixer:
             f"auto_fix_log_{datetime.now().strftime('%Y%m%d_%H%M%S')}.md"
         )
 
-    def create_backup():-> str:
+    def create_backup(): -> str:
         """Create a backup of a file before modifying it."""
         if not os.path.exists(self.backup_dir):
             os.makedirs(self.backup_dir)
@@ -166,7 +166,7 @@ class Flake8AutoFixer:
         shutil.copy2(filepath, backup_path)
         return backup_path
 
-    def is_math_relevant_file():-> bool:
+    def is_math_relevant_file(): -> bool:
         """Check if a file contains mathematical content."""
         try:
             with open(filepath, "r", encoding="utf-8", errors="ignore") as f:
@@ -175,7 +175,7 @@ class Flake8AutoFixer:
         except Exception:
             return False
 
-    def run_autopep8():-> bool:
+    def run_autopep8(): -> bool:
         """Run autopep8 on a file to fix formatting issues."""
         try:
             # Create backup first
@@ -191,7 +191,7 @@ class Flake8AutoFixer:
                 "--aggressive",
                 "--max-line-length=999",  # More lenient for mathematical expressions
                 "--ignore=E226,E302,E41",  # Ignore some aggressive fixes
-                filepath.replace(os.sep, '/'), # Ensure forward slashes for autopep8
+                filepath.replace(os.sep, '/'),  # Ensure forward slashes for autopep8
             ]
             result = subprocess.run(cmd, capture_output=True, text=True, timeout=60)
 
@@ -228,7 +228,7 @@ class Flake8AutoFixer:
             print(f"Error running autopep8 on {filepath}: {e}")
             return False
 
-    def fix_imports():-> bool:
+    def fix_imports(): -> bool:
         """Fix import-related issues."""
         try:
             with open(filepath, "r", encoding="utf-8") as f:
@@ -258,7 +258,7 @@ class Flake8AutoFixer:
                                 new_lines = [
                                     f"{module} import {imp}\n" for imp in import_list
                                 ]
-                                lines[i : i + 1] = new_lines
+                                lines[i: i + 1] = new_lines
                                 modified = True
 
             if modified:
@@ -286,7 +286,7 @@ class Flake8AutoFixer:
             print(f"Error fixing imports in {filepath}: {e}")
             return False
 
-    def fix_trailing_whitespace():-> bool:
+    def fix_trailing_whitespace(): -> bool:
         """Fix trailing whitespace issues."""
         try:
             with open(filepath, "r", encoding="utf-8") as f:
@@ -331,7 +331,7 @@ class Flake8AutoFixer:
             print(f"Error fixing whitespace in {filepath}: {e}")
             return False
 
-    def get_python_files():-> List[str]:
+    def get_python_files(): -> List[str]:
         """Get all Python files in the codebase."""
         python_files = []
         for base_dir in CODEBASE_DIRS:
@@ -342,7 +342,7 @@ class Flake8AutoFixer:
                             python_files.append(os.path.join(root, file))
         return python_files
 
-    def generate_fix_report():-> str:
+    def generate_fix_report(): -> str:
         """Generate a report of all changes made."""
         report = []
         report.append("# Schwabot Flake8 Auto-Fix Report\n")

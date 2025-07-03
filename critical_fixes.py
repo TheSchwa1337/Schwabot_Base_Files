@@ -1,6 +1,6 @@
 import numpy as np
-    import cupy as cp
-    import numba
+import cupy as cp
+import numba
 from pathlib import Path
 from typing import List, Tuple, Optional, Union
 import logging
@@ -85,7 +85,7 @@ class CriticalFixer:
         except Exception as e:
             logger.error(f"Error fixing GPU file {file_path}: {e}")
 
-    def _fix_docstrings():-> str:
+    def _fix_docstrings(): -> str:
         """Fix malformed docstrings."""
         # Fix triple quote issues
         content = re.sub(r'""""""', '"""', content)
@@ -100,7 +100,7 @@ class CriticalFixer:
 
         return content
 
-    def _fix_syntax_errors():-> str:
+    def _fix_syntax_errors(): -> str:
         """Fix common syntax errors."""
         # Fix malformed string literals
         content = re.sub(r'""""""""', '"""', content)
@@ -114,7 +114,7 @@ class CriticalFixer:
 
         return content
 
-    def _implement_stub_functions():-> str:
+    def _implement_stub_functions(): -> str:
         """Implement stub functions with proper fallbacks."""
         # Replace pass statements with proper implementations
         content = re.sub(
@@ -125,7 +125,7 @@ class CriticalFixer:
 
         return content
 
-    def _fix_gpu_imports():-> str:
+    def _fix_gpu_imports(): -> str:
         """Fix GPU imports with proper fallbacks."""
         # Add proper try/except blocks for GPU imports
         if "import cupy" in content and "try:" not in content:
@@ -150,7 +150,7 @@ except ImportError:
 
         return content
 
-    def _fix_fallback_mechanisms():-> str:
+    def _fix_fallback_mechanisms(): -> str:
         """Ensure proper fallback mechanisms exist."""
         # Add fallback logic for GPU operations
         if "gpu_available" in content and "cpu_fallback" not in content:

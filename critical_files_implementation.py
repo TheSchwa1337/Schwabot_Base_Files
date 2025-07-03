@@ -22,7 +22,6 @@ Implements proper functionality while preserving mathematical logic.
 """
 
 
-
 def implement_strategy_loader():
     """Implement the strategy_loader.py file with proper functionality."""
     content = '''#!/usr/bin/env python3

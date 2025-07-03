@@ -4,7 +4,6 @@ import os
 import re
 
 
-
 # Initialize Unicode handler
 unicore = DualUnicoreHandler()
 

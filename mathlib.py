@@ -56,11 +56,10 @@ class MathLib:
 """
 
 
-def __init__():-> None: """
+def __init__(): -> None: """
     """Function implementation pending."""
 pass
 """
-
 
 """Initialize the mathematical library.""""""
 """"""

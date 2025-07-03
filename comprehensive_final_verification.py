@@ -1,17 +1,17 @@
-            from core.math.rbm_mathematics import RBMMathematics
-            import numpy as np
-            import pandas as pd
-                from enhanced_phase_risk_manager import EnhancedPhaseRiskManager
-                from schwabot.core.dlt_waveform_engine import DLTWaveformEngine
-                from schwabot.dual_unicore_handler import DualUnicoreHandler
-            from core.api_bridge import APIBridge
-            from core.chrono_resonance_mapper import ChronoResonanceMapper
-            from core.dualistic_thought_engines import DualisticThoughtEngines
-            from core.entry_exit_logic import EntryExitLogic
-            from core.hash_relay_system import hash_relay_system
-            from core.strategy_bit_mapper import StrategyBitMapper
-            import platform
-            import random
+ from core.math.rbm_mathematics import RBMMathematics
+  import numpy as np
+   import pandas as pd
+     from enhanced_phase_risk_manager import EnhancedPhaseRiskManager
+      from schwabot.core.dlt_waveform_engine import DLTWaveformEngine
+       from schwabot.dual_unicore_handler import DualUnicoreHandler
+    from core.api_bridge import APIBridge
+    from core.chrono_resonance_mapper import ChronoResonanceMapper
+    from core.dualistic_thought_engines import DualisticThoughtEngines
+    from core.entry_exit_logic import EntryExitLogic
+    from core.hash_relay_system import hash_relay_system
+    from core.strategy_bit_mapper import StrategyBitMapper
+    import platform
+    import random
 from decimal import Decimal
 from pathlib import Path
 from typing import Any, Dict
@@ -66,14 +66,14 @@ class ComprehensiveFinalVerification:
             "platform_compatibility": {},
         }
 
-    def test_bit_logic_systems():-> Dict[str, Any]:
+    def test_bit_logic_systems(): -> Dict[str, Any]:
         """Test all bit-flip, bit-switch, and precision systems."""
         logger.info("🔢 Testing Bit Logic Systems...")
 
         results = {}
 
         try:
-            # Test 2-bit, 4-bit, 8-bit, 64-bit precision
+           # Test 2-bit, 4-bit, 8-bit, 64-bit precision
 
             rbm = RBMMathematics(max_bits=64)
 
@@ -124,7 +124,7 @@ class ComprehensiveFinalVerification:
         self.verification_summary["bit_logic_systems"] = results
         return results
 
-    def test_mathematical_relay_system():-> Dict[str, Any]:
+    def test_mathematical_relay_system(): -> Dict[str, Any]:
         """Test hash relay and mathematical processing systems."""
         logger.info("🧮 Testing Mathematical Relay System...")
 
@@ -178,7 +178,7 @@ class ComprehensiveFinalVerification:
         self.verification_summary["mathematical_relay"] = results
         return results
 
-    def test_visualization_systems():-> Dict[str, Any]:
+    def test_visualization_systems(): -> Dict[str, Any]:
         """Test DLT waveform, Tesseract, and panel systems."""
         logger.info("📊 Testing Visualization Systems...")
 
@@ -270,7 +270,7 @@ class ComprehensiveFinalVerification:
         self.verification_summary["visualization_systems"] = results
         return results
 
-    def test_trading_logic():-> Dict[str, Any]:
+    def test_trading_logic(): -> Dict[str, Any]:
         """Test entry/exit logic, strategy mapping, and portfolio management."""
         logger.info("💰 Testing Trading Logic Systems...")
 
@@ -325,7 +325,7 @@ class ComprehensiveFinalVerification:
         self.verification_summary["trading_logic"] = results
         return results
 
-    def test_asic_dualistic_systems():-> Dict[str, Any]:
+    def test_asic_dualistic_systems(): -> Dict[str, Any]:
         """Test ASIC dualistic implementations and emoji codification."""
         logger.info("🤖 Testing ASIC Dualistic Systems...")
 
@@ -382,7 +382,7 @@ class ComprehensiveFinalVerification:
         self.verification_summary["asic_dualistic"] = results
         return results
 
-    def test_chrono_weather_mapping():-> Dict[str, Any]:
+    def test_chrono_weather_mapping(): -> Dict[str, Any]:
         """Test chrono resonant weather mapping for 72-hour maps."""
         logger.info("🌤️ Testing Chrono Resonant Weather Mapping...")
 
@@ -421,7 +421,7 @@ class ComprehensiveFinalVerification:
         self.verification_summary["weather_mapping"] = results
         return results
 
-    def test_portfolio_management():-> Dict[str, Any]:
+    def test_portfolio_management(): -> Dict[str, Any]:
         """Test portfolio randomization and management systems."""
         logger.info("📊 Testing Portfolio Management...")
 
@@ -481,7 +481,7 @@ class ComprehensiveFinalVerification:
         self.verification_summary["portfolio_management"] = results
         return results
 
-    def test_platform_compatibility():-> Dict[str, Any]:
+    def test_platform_compatibility(): -> Dict[str, Any]:
         """Test cross-platform compatibility."""
         logger.info("🖥️ Testing Platform Compatibility...")
 
@@ -534,7 +534,7 @@ class ComprehensiveFinalVerification:
         self.verification_summary["platform_compatibility"] = results
         return results
 
-    def run_comprehensive_verification():-> Dict[str, Any]:
+    def run_comprehensive_verification(): -> Dict[str, Any]:
         """Run all verification tests."""
         logger.info("🚀 Starting Comprehensive Final Verification")
         logger.info("=" * 80)
@@ -583,7 +583,7 @@ class ComprehensiveFinalVerification:
 
         return summary
 
-    def _determine_overall_status():-> str:
+    def _determine_overall_status(): -> str:
         """Determine overall verification status."""
         errors = []
         warnings = []

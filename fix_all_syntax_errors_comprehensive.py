@@ -69,14 +69,14 @@ def fix_syntax_errors_in_file(file_path: str) -> bool:
             if '"' in line and line.count('"') % 2 == 1:
                 last_quote_pos = line.rfind('"')
                 if last_quote_pos > 0:
-                    after_quote = line[last_quote_pos + 1 :].strip()
+                    after_quote = line[last_quote_pos + 1:].strip()
                     if after_quote and not after_quote.startswith((")", ",", "]", "}")):
                         line += '"'
 
             if "'" in line and line.count("'") % 2 == 1:
                 last_quote_pos = line.rfind("'")
                 if last_quote_pos > 0:
-                    after_quote = line[last_quote_pos + 1 :].strip()
+                    after_quote = line[last_quote_pos + 1:].strip()
                     if after_quote and not after_quote.startswith((")", ",", "]", "}")):
                         line += "'"
 

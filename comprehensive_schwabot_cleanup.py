@@ -1,4 +1,4 @@
-    import sys
+import sys
 from pathlib import Path
 from typing import List
 import re
@@ -18,7 +18,6 @@ This script will clean up the massive file clutter in the main directory:
 
 MATHEMATICAL PRESERVATION: All mathematical content is preserved in consolidated files.
 """
-
 
 
 class ComprehensiveSchwabitCleanup:
@@ -277,7 +276,7 @@ class ComprehensiveSchwabitCleanup:
 
         return files_to_delete, files_to_keep
 
-    def _matches_deletion_pattern():-> bool:
+    def _matches_deletion_pattern(): -> bool:
         """Check if filename matches any deletion pattern."""
         for pattern in self.deletion_patterns:
             if re.match(pattern, filename, re.IGNORECASE):
@@ -455,7 +454,7 @@ class ComprehensiveSchwabitCleanup:
             print("\n💡 To actually execute cleanup:")
             print("   python comprehensive_schwabot_cleanup.py --execute")
 
-    def _should_backup():-> bool:
+    def _should_backup(): -> bool:
         """Check if file should be backed up before deletion."""
         important_keywords = [
             "mathematical",

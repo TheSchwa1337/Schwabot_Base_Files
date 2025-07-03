@@ -5,16 +5,14 @@ Applies enhanced Windows CLI compatibility to mathematical validation systems
 in the SchwaBot trading intelligence build.
 """
 
-from typing import Any, Dict, Tuple
 import logging
 import os
 import re
 import shutil
+from typing import Any, Dict, Tuple
 
 # Setup logging
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 # Import our enhanced compatibility handler
@@ -28,9 +26,11 @@ except ImportError:
 # Enhanced Windows CLI Compatibility Integration
 try:
     from utils.safe_print import safe_print
+
     CLI_HANDLER_AVAILABLE = True
 except ImportError:
     CLI_HANDLER_AVAILABLE = False
+
     def safe_print(message):
         """Fallback safe print function"""
         print(message)
@@ -137,9 +137,7 @@ except ImportError:
                 insert_pos = 0
 
         # Insert the CLI imports
-        modified_content = (
-            content[:insert_pos] + self.CLI_IMPORT_STATEMENT + content[insert_pos:]
-        )
+        modified_content = content[:insert_pos] + self.CLI_IMPORT_STATEMENT + content[insert_pos:]
 
         return modified_content
 
@@ -170,9 +168,7 @@ except ImportError:
                     f.write(modified_content)
 
                 self.processed_files.append(file_path)
-                success_msg = (
-                    f"Successfully enhanced {file_path} with CLI compatibility"
-                )
+                success_msg = f"Successfully enhanced {file_path} with CLI compatibility"
                 logger.info(success_msg)
                 return True, success_msg
             else:
@@ -197,9 +193,7 @@ except ImportError:
         }
 
         logger.info(
-            "Starting CLI compatibility enhancement for {} files".format(
-                len(self.TARGET_FILES)
-            )
+            "Starting CLI compatibility enhancement for {} files".format(len(self.TARGET_FILES))
         )
 
         for file_path in self.TARGET_FILES:
@@ -226,8 +220,7 @@ def main():
     if CLI_HANDLER_AVAILABLE:
         safe_print("🚀 Enhanced CLI Compatibility Application Starting...")
         safe_print(
-            "   Applying bulletproof Windows CLI handling to mathematical "
-            "validation systems..."
+            "   Applying bulletproof Windows CLI handling to mathematical " "validation systems..."
         )
     else:
         print("[START] CLI Compatibility Application Starting...")
@@ -249,9 +242,7 @@ def main():
     if CLI_HANDLER_AVAILABLE:
         safe_print("📊 Processing Results:")
         safe_print(
-            "   Files Processed: {}/{}".format(
-                results["success_count"], results["total_files"]
-            )
+            "   Files Processed: {}/{}".format(results["success_count"], results["total_files"])
         )
         safe_print("   Success Rate: {:.1f}%".format(results["success_rate"]))
         safe_print("   Errors: {}".format(results["error_count"]))
@@ -270,11 +261,7 @@ def main():
             safe_print("\n⚠️ PARTIAL SUCCESS: Some files may need manual review.")
             safe_print("   Check the error log for specific issues.")
     else:
-        print(
-            "Files Processed: {}/{}".format(
-                results["success_count"], results["total_files"]
-            )
-        )
+        print("Files Processed: {}/{}".format(results["success_count"], results["total_files"]))
         print("Success Rate: {:.1f}%".format(results["success_rate"]))
         print("Errors: {}".format(results["error_count"]))
 

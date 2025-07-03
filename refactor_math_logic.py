@@ -8,7 +8,6 @@ import re
 import sys
 
 
-
 # Initialize Unicode handler
 unicore = DualUnicoreHandler()
 
@@ -289,7 +288,7 @@ import_line = 'from core.unified_math_system import unified_math'
 
 return '\n'.join(lines)
 
-def run_refactor():-> None:
+def run_refactor(): -> None:
     """Function implementation pending."""
 pass
 """

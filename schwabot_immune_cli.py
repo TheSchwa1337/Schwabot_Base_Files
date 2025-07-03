@@ -444,8 +444,8 @@ class SchwabotImmuneCLI:
             if status["overall_health"] > 0.7:
                 results["passed"] += 1
                 results["details"].append(
-                    f"✅ Market simulation completed with high health ({status['overall_health']:.2f})"
-                )
+                    f"✅ Market simulation completed with high health ({
+                        status['overall_health']:.2f})")
             else:
                 results["failed"] += 1
                 results["details"].append(
@@ -705,10 +705,9 @@ class SchwabotImmuneCLI:
 
         for i in range(50):
             healthy_op(i)
-            time.sleep(0.01) # Simulate time passing
+            time.sleep(0.01)  # Simulate time passing
 
         print("  - After a period of stability, system health should improve.")
-
 
     def setup_signal_handlers(self) -> None:
         """Set up signal handlers for graceful shutdown."""
@@ -788,7 +787,7 @@ class SchwabotImmuneCLI:
             time.sleep(0.05)
             status = self.immune_handler.get_full_status()
             print(
-                f"\r   - Error {i+1}/20 | Health: {status['overall_health']:.1%} | "
+                f"\r   - Error {i + 1}/20 | Health: {status['overall_health']:.1%} | "
                 f"Gateway: {status['neural_gateway_state']} | "
                 f"Antibodies: {status['antibody_count']}",
                 end="",

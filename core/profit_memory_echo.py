@@ -173,7 +173,7 @@ def retrieve_memory_projection():-> Optional[Dict[str, Any]]:Retrieves the recur
 
 
 
-F(t) = L(t - ) + L * 
+F(t) = L(t - ) + L *
 
 
 

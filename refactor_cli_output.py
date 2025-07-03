@@ -12,8 +12,6 @@ import re
 import sys
 
 
-
-
 # Initialize Unicode handler
 unicore = DualUnicoreHandler()
 
@@ -93,7 +91,6 @@ self.generic_visit(node)
 def _extract_fstring_content(self, node): """
         """Extract content from f - string nodes.""""""
 
-
 """"""
 """"""
 """"""
@@ -107,7 +104,7 @@ parts.append(f"{{{astunparse.unparse(part).strip()}}}")
         return ''.join(parts)
 
 
-def _contains_unicode():-> bool:
+def _contains_unicode(): -> bool:
     """Function implementation pending."""
 
 
@@ -200,7 +197,7 @@ self.python_files = filtered_files
         return filtered_files
 
 
-def analyze_file():-> Tuple[List[dict], List[str]]:
+def analyze_file(): -> Tuple[List[dict], List[str]]:
     """Function implementation pending."""
 
 
@@ -227,7 +224,7 @@ self.errors.append(f"Error analyzing {file_path}: {e}")
             return [], []
 
 
-def refactor_file():-> bool:
+def refactor_file(): -> bool:
     """Function implementation pending."""
 
 
@@ -269,7 +266,7 @@ self.errors.append(f"Error refactoring {file_path}: {e}")
             return False
 
 
-def _replace_unicode_prints():-> str:
+def _replace_unicode_prints(): -> str:
     """Function implementation pending."""
 
 

@@ -19,7 +19,6 @@ import random
 # -*- coding: utf - 8 -*-
 
 
-
 # Initialize Unicode handler
 unicore = DualUnicoreHandler()
 

@@ -4,13 +4,13 @@ CCXT Trading Executor.
 Trading executor for CCXT integration with Schwabot backtesting system.
 Provides interface for executing trades through various exchanges.
 """
+
 import logging
 import time
 from dataclasses import dataclass
 from decimal import Decimal
 from enum import Enum
 from typing import Any, Dict, Optional
-
 
 logger = logging.getLogger(__name__)
 

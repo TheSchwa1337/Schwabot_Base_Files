@@ -13,7 +13,6 @@ with all required dependencies and configuration.
 """
 
 
-
 def run_command(cmd, description=""):
     """Run a command and handle errors."""
     print(f"🔧 {description}")

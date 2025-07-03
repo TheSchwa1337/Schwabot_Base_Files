@@ -266,7 +266,7 @@ self.dispatch_history.append(dispatch_result)
 return dispatch_result
 
 
-def analyze_strategy_performance():-> Dict[str, Any]:
+def analyze_strategy_performance(): -> Dict[str, Any]:
     """Function implementation pending."""
 
 
@@ -321,7 +321,7 @@ return {
             "trust_evolution": trust_evolution,
             "historical_pattern_matches": len(profile.historical_pattern_matches)
 
-def optimize_fractal_depths():-> Dict[str, int]:
+def optimize_fractal_depths(): -> Dict[str, int]:
     """Function implementation pending."""
 pass
 """
@@ -348,7 +348,7 @@ if optimal_depth != profile.fractal_depth:
 
 return optimization_results
 
-def _precompute_fractal_weights():-> None:
+def _precompute_fractal_weights(): -> None:
     """Function implementation pending."""
 pass
 """

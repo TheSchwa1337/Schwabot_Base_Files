@@ -195,7 +195,7 @@ class Flake8Analyzer:
         self.critical_count = 0
         self.total_count = 0
 
-    def run_flake8():-> List[str]:
+    def run_flake8(): -> List[str]:
         """Run Flake8 on the codebase and return error lines."""
         try:
             # Run flake8 with specific error codes
@@ -205,8 +205,8 @@ class Flake8Analyzer:
                 "flake8",
                 "--isolated",  # Don't load existing configs
                 "--select=" + ",".join(AUTO_FIXABLE_CODES.union(CRITICAL_CODES)),
-                "--ignore=E501", # Ignore line length for now
-                "--max-line-length=999", # Allow very long lines
+                "--ignore=E501",  # Ignore line length for now
+                "--max-line-length=999",  # Allow very long lines
                 *CODEBASE_DIRS,
             ]
             process = subprocess.Popen(
@@ -235,7 +235,7 @@ class Flake8Analyzer:
             print(f"Error running Flake8: {e}")
             return []
 
-    def parse_error_line():-> Tuple[str, int, int, str, str]:
+    def parse_error_line(): -> Tuple[str, int, int, str, str]:
         """Parse a Flake8 error line."""
         try:
             # Format: path:line:column:code:message
@@ -251,7 +251,7 @@ class Flake8Analyzer:
             pass
         return None, 0, 0, "", ""
 
-    def is_math_relevant_file():-> bool:
+    def is_math_relevant_file(): -> bool:
         """Check if a file contains mathematical content."""
         try:
             with open(filepath, "r", encoding="utf-8", errors="ignore") as f:
@@ -285,7 +285,7 @@ class Flake8Analyzer:
                 if self.is_math_relevant_file(filepath):
                     self.math_relevant_files.add(filepath)
 
-    def generate_report():-> str:
+    def generate_report(): -> str:
         """Generate a comprehensive Flake8 error report."""
         report = []
         report.append("# Schwabot Flake8 Error Analysis Report\n")

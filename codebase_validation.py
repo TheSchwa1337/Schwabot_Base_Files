@@ -69,7 +69,7 @@ class CodebaseValidator:
             "hardware_optimization",
         ]
 
-    def scan_directory():-> List[Path]:
+    def scan_directory(): -> List[Path]:
         """Scan directory for Python files."""
         if directory is None:
             directory = self.root_dir
@@ -100,7 +100,7 @@ class CodebaseValidator:
 
         return python_files
 
-    def check_file_for_stubs():-> List[Dict[str, Any]]:
+    def check_file_for_stubs(): -> List[Dict[str, Any]]:
         """Check a single file for stub patterns and issues."""
         issues = []
 
@@ -157,7 +157,7 @@ class CodebaseValidator:
 
         return issues
 
-    def _check_gpu_cpu_implementation():-> List[Dict[str, Any]]:
+    def _check_gpu_cpu_implementation(): -> List[Dict[str, Any]]:
         """Check for proper GPU/CPU implementation patterns."""
         issues = []
 
@@ -194,7 +194,7 @@ class CodebaseValidator:
 
         return issues
 
-    def _check_imports():-> List[Dict[str, Any]]:
+    def _check_imports(): -> List[Dict[str, Any]]:
         """Check for import issues."""
         issues = []
 
@@ -243,7 +243,7 @@ class CodebaseValidator:
 
         return issues
 
-    def _check_module_exists():-> bool:
+    def _check_module_exists(): -> bool:
         """Check if a module can be imported."""
         try:
             importlib.import_module(module_name)
@@ -251,7 +251,7 @@ class CodebaseValidator:
         except ImportError:
             return False
 
-    def validate_codebase():-> Dict[str, Any]:
+    def validate_codebase(): -> Dict[str, Any]:
         """Run comprehensive validation of the entire codebase."""
         logger.info("Starting comprehensive codebase validation...")
 
@@ -332,7 +332,7 @@ class CodebaseValidator:
         except Exception as e:
             logger.error(f"Error running mypy: {e}")
 
-    def _generate_report():-> Dict[str, Any]:
+    def _generate_report(): -> Dict[str, Any]:
         """Generate comprehensive validation report."""
         report = {
             "summary": {
@@ -356,7 +356,7 @@ class CodebaseValidator:
         }
         return report
 
-    def _generate_recommendations():-> List[str]:
+    def _generate_recommendations(): -> List[str]:
         """Generate recommendations based on found issues."""
         recommendations = []
 

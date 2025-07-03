@@ -1,4 +1,4 @@
-                import ccxt
+import ccxt
 from pathlib import Path
 from typing import Dict, Optional
 import argparse
@@ -43,24 +43,24 @@ class SystemInfo:
         self.is_macos = self.platform == "darwin"
         self.is_linux = self.platform == "linux"
 
-    def get_python_version_str():-> str:
+    def get_python_version_str(): -> str:
         """Get Python version as string."""
         return f"{self.python_version.major}.{self.python_version.minor}.{
             self.python_version.micro
         }"
 
-    def check_python_version():-> bool:
+    def check_python_version(): -> bool:
         """Check if Python version is compatible."""
         return self.python_version >= (3, 8)
 
-    def get_pip_command():-> str:
+    def get_pip_command(): -> str:
         """Get appropriate pip command for the system."""
         if self.is_windows:
             return "python -m pip"
         else:
             return "pip3"
 
-    def get_venv_command():-> str:
+    def get_venv_command(): -> str:
         """Get appropriate virtual environment command."""
         if self.is_windows:
             return "python -m venv"
@@ -76,7 +76,7 @@ class DependencyManager:
         self.requirements_file = "requirements.txt"
         self.installed_packages = {}
 
-    def check_pip_available():-> bool:
+    def check_pip_available(): -> bool:
         """Check if pip is available."""
         try:
             result = subprocess.run(
@@ -91,7 +91,7 @@ class DependencyManager:
             logger.error("Pip not available")
             return False
 
-    def upgrade_pip():-> bool:
+    def upgrade_pip(): -> bool:
         """Upgrade pip to latest version."""
         try:
             logger.info("Upgrading pip...")
@@ -105,7 +105,7 @@ class DependencyManager:
             logger.error(f"❌ Failed to upgrade pip: {e}")
             return False
 
-    def install_requirements():-> bool:
+    def install_requirements(): -> bool:
         """Install requirements from requirements.txt."""
         try:
             logger.info("Installing requirements...")
@@ -118,7 +118,7 @@ class DependencyManager:
             ]
 
             if venv_path:
-                # Use virtual environment pip
+             # Use virtual environment pip
                 if self.system_info.is_windows:
                     pip_cmd = [
                         os.path.join(venv_path, "Scripts", "pip"),
@@ -142,7 +142,7 @@ class DependencyManager:
             logger.error(f"❌ Failed to install requirements: {e}")
             return False
 
-    def verify_installation():-> Dict[str, bool]:
+    def verify_installation(): -> Dict[str, bool]:
         """Verify that all required packages are installed."""
         required_packages = [
             "numpy",
@@ -176,7 +176,7 @@ class VirtualEnvironmentManager:
         self.system_info = system_info
         self.venv_name = "schwabot_env"
 
-    def create_venv():-> Optional[str]:
+    def create_venv(): -> Optional[str]:
         """Create virtual environment."""
         try:
             logger.info(f"Creating virtual environment: {self.venv_name}")
@@ -192,7 +192,7 @@ class VirtualEnvironmentManager:
             logger.error(f"❌ Failed to create virtual environment: {e}")
             return None
 
-    def activate_venv():-> bool:
+    def activate_venv(): -> bool:
         """Activate virtual environment."""
         try:
             if self.system_info.is_windows:
@@ -220,7 +220,7 @@ class ConfigurationManager:
         self.logs_dir = Path("logs")
         self.data_dir = Path("data")
 
-    def create_directories():-> bool:
+    def create_directories(): -> bool:
         """Create necessary directories."""
         try:
             directories = [self.config_dir, self.logs_dir, self.data_dir]
@@ -235,7 +235,7 @@ class ConfigurationManager:
             logger.error(f"❌ Failed to create directories: {e}")
             return False
 
-    def create_default_config():-> bool:
+    def create_default_config(): -> bool:
         """Create default configuration files."""
         try:
             # Create .env template
@@ -294,7 +294,7 @@ ENABLE_BACKTESTING=true
             logger.error(f"❌ Failed to create configuration: {e}")
             return False
 
-    def setup_logging():-> bool:
+    def setup_logging(): -> bool:
         """Setup logging configuration."""
         try:
             log_config = {
@@ -340,7 +340,7 @@ class InstallationManager:
         self.venv_manager = VirtualEnvironmentManager(self.system_info)
         self.config_manager = ConfigurationManager()
 
-    def check_system_requirements():-> bool:
+    def check_system_requirements(): -> bool:
         """Check if system meets requirements."""
         logger.info("🔍 Checking system requirements...")
 
@@ -368,7 +368,7 @@ class InstallationManager:
 
         return True
 
-    def install_dependencies():-> bool:
+    def install_dependencies(): -> bool:
         """Install system dependencies."""
         logger.info("📦 Installing dependencies...")
 
@@ -404,7 +404,7 @@ class InstallationManager:
 
         return all_installed
 
-    def setup_configuration():-> bool:
+    def setup_configuration(): -> bool:
         """Setup system configuration."""
         logger.info("⚙️ Setting up configuration...")
 
@@ -423,7 +423,7 @@ class InstallationManager:
         logger.info("✅ Configuration setup completed")
         return True
 
-    def run_tests():-> bool:
+    def run_tests(): -> bool:
         """Run basic system tests."""
         logger.info("🧪 Running system tests...")
 
@@ -456,7 +456,7 @@ class InstallationManager:
             logger.error(f"❌ Test failed: {e}")
             return False
 
-    def create_launcher_scripts():-> bool:
+    def create_launcher_scripts(): -> bool:
         """Create launcher scripts for different platforms."""
         try:
             logger.info("🚀 Creating launcher scripts...")
@@ -501,7 +501,7 @@ python3 main.py
             logger.error(f"❌ Failed to create launcher scripts: {e}")
             return False
 
-    def install():-> bool:
+    def install(): -> bool:
         """Run complete installation."""
         logger.info("🚀 Starting Schwabot installation...")
 

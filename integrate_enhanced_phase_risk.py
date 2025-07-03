@@ -83,7 +83,6 @@ class EnhancedPhaseRiskIntegrator:
 def __init__(self): """
         """Initialize the integrator.""""""
 
-
 """"""
 """"""
 """"""
@@ -95,7 +94,7 @@ self.phase_risk_manager = EnhancedPhaseRiskManager()
 logger.info("Enhanced Phase Risk Integrator initialized")
 
 
-def enhance_trade_execution_test():self,
+def enhance_trade_execution_test(): self,
         original_result: Dict[str, Any]
     ) -> Dict[str, Any]:
         """Enhance trade execution test with phase risk analysis.""""""

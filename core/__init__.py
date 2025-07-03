@@ -16,6 +16,7 @@ try:
         create_math_foundation,
         quick_calculation,
     )
+
     CLEAN_MATH_AVAILABLE = True
 except ImportError:
     CLEAN_MATH_AVAILABLE = False
@@ -27,6 +28,7 @@ try:
         VectorizationMode,
         create_profit_vectorizer,
     )
+
     CLEAN_PROFIT_AVAILABLE = True
 except ImportError:
     CLEAN_PROFIT_AVAILABLE = False
@@ -40,6 +42,7 @@ try:
         create_trading_pipeline,
         run_trading_simulation,
     )
+
     CLEAN_PIPELINE_AVAILABLE = True
 except ImportError:
     CLEAN_PIPELINE_AVAILABLE = False

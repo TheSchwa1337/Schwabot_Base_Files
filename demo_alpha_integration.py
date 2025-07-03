@@ -1,13 +1,13 @@
-        import traceback
+import traceback
 from schwabot.alpha_encryption import (
-from schwabot.session_context import (
-from schwabot.vortex_security import get_vortex_security
-import asyncio
-import random
-import time
+    from schwabot.session_context import (
+        from schwabot.vortex_security import get_vortex_security
+        import asyncio
+        import random
+        import time
 
-#!/usr/bin/env python3
-"""
+        #!/usr/bin/env python3
+        """
 SchwaBot Alpha Encryption (Ω-B-Γ Logic) Integration Demo
 =======================================================
 
@@ -26,10 +26,10 @@ through the synthesis of Alpha Encryption and VMSP frameworks.
 """
 
 
-    get_alpha_encryption,
-    alpha_encrypt_data,
-    analyze_alpha_security,
-)
+        get_alpha_encryption,
+        alpha_encrypt_data,
+        analyze_alpha_security,
+    )
     create_trading_session,
     log_trading_activity,
     update_session,

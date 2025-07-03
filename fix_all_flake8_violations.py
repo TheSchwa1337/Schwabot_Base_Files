@@ -110,7 +110,7 @@ def fix_line_length(file_path: str, max_length: int = 100) -> bool:
                     if "(" in line and ")" in line:
                         # Break at parameters
                         func_name = line[: line.find("(")]
-                        params = line[line.find("(") + 1 : line.rfind(")")]
+                        params = line[line.find("(") + 1: line.rfind(")")]
                         if len(func_name) + 4 < max_length:
                             fixed_lines.append(f"{func_name}(")
                             # Split parameters

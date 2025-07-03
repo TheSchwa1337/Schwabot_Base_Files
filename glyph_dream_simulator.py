@@ -55,7 +55,7 @@ def log_drift_vectors(matrix: List[List[str]]):
 # --- Phase Drift Engine (Animation Core) ---
 
 
-def drift_matrix():-> List[List[str]]:
+def drift_matrix(): -> List[List[str]]:
     """Apply a phase drift to the matrix."""
     drifted = []
     for y, row in enumerate(matrix):
@@ -63,7 +63,7 @@ def drift_matrix():-> List[List[str]]:
         if phase > 0:
             drifted.append([" "] * abs(phase) + row[: -abs(phase)])
         elif phase < 0:
-            drifted.append(row[abs(phase) :] + [" "] * abs(phase))
+            drifted.append(row[abs(phase):] + [" "] * abs(phase))
         else:
             drifted.append(row[:])
     return drifted
@@ -72,7 +72,7 @@ def drift_matrix():-> List[List[str]]:
 # --- Echo Correction (Anchor Normalization) ---
 
 
-def correct_glyph_row():-> List[str]:
+def correct_glyph_row(): -> List[str]:
     """Aligns glyphs to the mean anchor position."""
     anchors = [i for i, g in enumerate(glyph_row) if g == "1"]
     if not anchors:
@@ -86,14 +86,14 @@ def correct_glyph_row():-> List[str]:
     return corrected
 
 
-def correct_glyph_matrix():-> List[List[str]]:
+def correct_glyph_matrix(): -> List[List[str]]:
     return [correct_glyph_row(row) for row in matrix]
 
 
 # --- Entropic Residue Function ---
 
 
-def entropic_residue():-> float:
+def entropic_residue(): -> float:
     """Measures instability (drift) in a glyph row."""
     values = [1 if g == "1" else 0 for g in glyph_row]
     mu = np.mean(values)
@@ -103,7 +103,7 @@ def entropic_residue():-> float:
 # --- Bitwise Drift Collapse Correction ---
 
 
-def bitwise_drift_collapse():-> List[List[str]]:
+def bitwise_drift_collapse(): -> List[List[str]]:
     """Collapse drift using XOR between consecutive rows."""
     collapsed = [matrix[0]]
     for prev, curr in zip(matrix, matrix[1:]):
@@ -120,7 +120,7 @@ def bitwise_drift_collapse():-> List[List[str]]:
 # --- Lattice Collapse Function ---
 
 
-def lattice_collapse():-> List[List[str]]:
+def lattice_collapse(): -> List[List[str]]:
     """Collapse a list of matrices into a final stabilized lattice."""
     arr = np.array(matrix_list)
     final = []

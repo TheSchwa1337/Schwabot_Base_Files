@@ -19,7 +19,7 @@ This script will:
 # Clean implementation files that should NOT be commented out
 CLEAN_FILES = {
     'core/clean_math_foundation.py',
-    'core/clean_profit_vectorization.py', 
+    'core/clean_profit_vectorization.py',
     'core/clean_trading_pipeline.py',
     'core/clean_unified_math.py',
     'utils/price_bridge.py',
@@ -54,6 +54,7 @@ CLEAN_FILES = {
     'config/config_utils.py'
 }
 
+
 def check_syntax_error(file_path):
     """Check if a Python file has syntax errors."""
     try:
@@ -67,16 +68,17 @@ def check_syntax_error(file_path):
     except (subprocess.TimeoutExpired, subprocess.CalledProcessError):
         return True  # Assume problematic if we can't check
 
+
 def comment_out_file(file_path):
     """Comment out the entire content of a file and add explanation header."""
     try:
         # Read the original content
         with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
             original_content = f.read()
-        
+
         # Get current date
         current_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        
+
         # Create commented version with explanation header
         header = f'''"""
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
@@ -101,17 +103,18 @@ All core functionality has been reimplemented in clean, production-ready files.
 {original_content}
 """
 '''
-        
+
         # Write the commented version back to the file
         with open(file_path, 'w', encoding='utf-8') as f:
             f.write(header)
-        
+
         print(f"✓ Commented out: {file_path}")
         return True
-        
+
     except Exception as e:
         print(f"✗ Error commenting out {file_path}: {e}")
         return False
+
 
 def find_python_files(directory):
     """Find all Python files in a directory recursively."""
@@ -124,42 +127,43 @@ def find_python_files(directory):
                     python_files.append(full_path)
     return python_files
 
+
 def main():
     """Main function to process all Python files."""
     print("🔍 Scanning for problematic Python files...")
-    
+
     # Find all Python files
     python_files = []
     for directory in ['core', 'utils', 'config']:
         python_files.extend(find_python_files(directory))
-    
+
     print(f"Found {len(python_files)} Python files")
-    
+
     # Track statistics
     total_files = len(python_files)
     clean_files = 0
     problematic_files = 0
     commented_files = 0
     errors = 0
-    
+
     print("\n📋 Processing files...")
     print("=" * 60)
-    
+
     for file_path in python_files:
         # Normalize path for comparison (convert Windows backslashes to forward slashes)
         normalized_path = file_path.replace('\\', '/')
-        
+
         # Skip clean implementation files
         if normalized_path in CLEAN_FILES:
             print(f"✓ Preserved (clean): {file_path}")
             clean_files += 1
             continue
-        
+
         # Check for syntax errors
         if check_syntax_error(file_path):
             print(f"⚠️  Problematic: {file_path}")
             problematic_files += 1
-            
+
             # Comment out the file
             if comment_out_file(file_path):
                 commented_files += 1
@@ -168,7 +172,7 @@ def main():
         else:
             print(f"✓ Valid syntax: {file_path}")
             clean_files += 1
-    
+
     print("\n" + "=" * 60)
     print("📊 SUMMARY:")
     print(f"Total files processed: {total_files}")
@@ -176,7 +180,7 @@ def main():
     print(f"Problematic files found: {problematic_files}")
     print(f"Files successfully commented out: {commented_files}")
     print(f"Errors during processing: {errors}")
-    
+
     if commented_files > 0:
         print(f"\n✅ Successfully commented out {commented_files} problematic files!")
         print("The clean implementation is preserved and ready for use.")
@@ -187,5 +191,6 @@ def main():
     else:
         print("\n🎉 No problematic files found! All files are clean.")
 
+
 if __name__ == "__main__":
-    main() 
+    main()

@@ -1,6 +1,7 @@
 import os
 import sys
 
+
 def check_file(filepath):
     try:
         with open(filepath, 'r', encoding='utf-8') as f:
@@ -13,6 +14,7 @@ def check_file(filepath):
         print(f"Error reading {filepath}: {e}")
         return False
 
+
 def main(directory):
     problematic_files = []
     for root, _, files in os.walk(directory):
@@ -21,7 +23,7 @@ def main(directory):
                 filepath = os.path.join(root, file)
                 if not check_file(filepath):
                     problematic_files.append(filepath)
-    
+
     if problematic_files:
         print("Problematic files found:")
         for file in problematic_files:
@@ -31,5 +33,6 @@ def main(directory):
         print("No problematic files found.")
         sys.exit(0)
 
+
 if __name__ == "__main__":
-    main("core") 
+    main("core")

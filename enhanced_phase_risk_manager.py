@@ -16,7 +16,6 @@ import logging
 # -*- coding: utf - 8 -*-
 
 
-
 # Initialize Unicode handler
 unicore = DualUnicoreHandler()
 

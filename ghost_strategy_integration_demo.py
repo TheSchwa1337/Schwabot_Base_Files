@@ -9,7 +9,6 @@ import sys
 import time
 
 
-
 GhostSignal, GhostArray, BTCVector,
     build_ghost_array, extract_volatility_window, validate_ghost_array
 )

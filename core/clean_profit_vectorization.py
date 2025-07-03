@@ -17,11 +17,7 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
 
-from core.clean_math_foundation import (
-    BitPhase, 
-    ThermalState, 
-    CleanMathFoundation
-)
+from core.clean_math_foundation import BitPhase, CleanMathFoundation, ThermalState
 
 # -*- coding: utf-8 -*-
 
@@ -37,6 +33,7 @@ logger = logging.getLogger(__name__)
 
 class VectorizationMode(Enum):
     """Different profit vectorization modes."""
+
     STANDARD = "standard"
     ENTROPY_WEIGHTED = "entropy_weighted"
     CONSENSUS_VOTING = "consensus_voting"
@@ -56,6 +53,7 @@ class VectorizationMode(Enum):
 
 class AllocationMethod(Enum):
     """Different allocation methods."""
+
     EQUAL_WEIGHT = "equal_weight"
     KELLY_CRITERION = "kelly_criterion"
     ENTROPY_WEIGHTED = "entropy_weighted"
@@ -69,6 +67,7 @@ class AllocationMethod(Enum):
 @dataclass
 class ProfitVector:
     """Profit vector result."""
+
     vector_id: str
     btc_price: float
     volume: float
@@ -83,6 +82,7 @@ class ProfitVector:
 @dataclass
 class BitPhaseTrigger:
     """Bit-phase trigger data."""
+
     bit_phase: int
     phase_value: int
     trigger_strength: float
@@ -94,6 +94,7 @@ class BitPhaseTrigger:
 @dataclass
 class ConsensusVote:
     """Consensus voting data."""
+
     vote_id: str
     profit_vector: np.ndarray
     confidence: float
@@ -106,6 +107,7 @@ class ConsensusVote:
 @dataclass
 class DLTWaveformData:
     """DLT waveform data."""
+
     waveform_id: str
     bit_phase: int
     phase_values: np.ndarray
@@ -118,6 +120,7 @@ class DLTWaveformData:
 @dataclass
 class DynamicAllocationSlider:
     """Dynamic allocation slider data."""
+
     slider_id: str
     allocation_percentage: float
     min_allocation: float
@@ -166,7 +169,7 @@ class ProfitVectorCache:
             "size": len(self.cache),
             "max_size": self.max_size,
             "hit_rate": self._calculate_hit_rate(),
-            "total_accesses": sum(self.access_count.values())
+            "total_accesses": sum(self.access_count.values()),
         }
 
     def _calculate_hit_rate(self) -> float:
@@ -199,9 +202,7 @@ class CleanProfitVectorization:
         logger.info("Clean Profit Vectorization system initialized")
 
     def calculate_profit_vector(
-        self,
-        vector_input: Dict[str, Any],
-        mode: VectorizationMode = VectorizationMode.ADAPTIVE
+        self, vector_input: Dict[str, Any], mode: VectorizationMode = VectorizationMode.ADAPTIVE
     ) -> ProfitVector:
         """
         Calculate profit vector using specified mode.
@@ -242,7 +243,9 @@ class CleanProfitVectorization:
             precision_factor = self._calculate_precision_factor(vector_input)
 
             # Combine all factors
-            total_profit = base_profit * mode_multiplier * risk_factor * thermal_factor * precision_factor
+            total_profit = (
+                base_profit * mode_multiplier * risk_factor * thermal_factor * precision_factor
+            )
 
             # Ensure bounded result
             total_profit = max(-1.0, min(1.0, total_profit))
@@ -250,20 +253,20 @@ class CleanProfitVectorization:
             # Create profit vector
             profit_vector = ProfitVector(
                 vector_id=self._generate_vector_id(),
-                btc_price=vector_input.get('price', 0.0),
-                volume=vector_input.get('volume', 0.0),
+                btc_price=vector_input.get("price", 0.0),
+                volume=vector_input.get("volume", 0.0),
                 profit_score=total_profit,
                 confidence_score=self._calculate_confidence(vector_input, total_profit),
                 mode=mode.value,
                 method=AllocationMethod.EQUAL_WEIGHT.value,
                 timestamp=time.time(),
                 metadata={
-                    'mode_multiplier': mode_multiplier,
-                    'risk_factor': risk_factor,
-                    'thermal_factor': thermal_factor,
-                    'precision_factor': precision_factor,
-                    'calculation_id': self.calculation_count
-                }
+                    "mode_multiplier": mode_multiplier,
+                    "risk_factor": risk_factor,
+                    "thermal_factor": thermal_factor,
+                    "precision_factor": precision_factor,
+                    "calculation_id": self.calculation_count,
+                },
             )
 
             # Cache the result
@@ -289,14 +292,14 @@ class CleanProfitVectorization:
                 mode=VectorizationMode.STANDARD.value,
                 method=AllocationMethod.EQUAL_WEIGHT.value,
                 timestamp=time.time(),
-                metadata={'error': str(e)}
+                metadata={"error": str(e)},
             )
 
     def _calculate_base_profit(self, vector_input: Dict[str, Any]) -> float:
         """Calculate base profit from input data."""
-        price = vector_input.get('price', 0.0)
-        volume = vector_input.get('volume', 0.0)
-        volatility = vector_input.get('volatility', 0.5)
+        price = vector_input.get("price", 0.0)
+        volume = vector_input.get("volume", 0.0)
+        volatility = vector_input.get("volatility", 0.5)
 
         # Normalize inputs
         price_factor = min(1.0, price / 100000.0) if price > 0 else 0.0
@@ -304,7 +307,7 @@ class CleanProfitVectorization:
         volatility_factor = 1.0 - min(1.0, volatility)
 
         # Calculate base profit using weighted combination
-        base_profit = (price_factor * 0.3 + volume_factor * 0.4 + volatility_factor * 0.3)
+        base_profit = price_factor * 0.3 + volume_factor * 0.4 + volatility_factor * 0.3
 
         return base_profit
 
@@ -317,22 +320,22 @@ class CleanProfitVectorization:
             VectorizationMode.HIGH_FREQUENCY: 1.1,
             VectorizationMode.MOMENTUM_BASED: 1.2,
             VectorizationMode.MEAN_REVERSION: 0.9,
-            VectorizationMode.ADAPTIVE: 1.0
+            VectorizationMode.ADAPTIVE: 1.0,
         }
 
         base_multiplier = multipliers.get(mode, 1.0)
 
         # Adaptive mode adjusts based on input
         if mode == VectorizationMode.ADAPTIVE:
-            signal_strength = vector_input.get('signal_strength', 0.5)
+            signal_strength = vector_input.get("signal_strength", 0.5)
             base_multiplier = 0.8 + (signal_strength * 0.6)
 
         return base_multiplier
 
     def _calculate_risk_factor(self, vector_input: Dict[str, Any]) -> float:
         """Calculate risk adjustment factor."""
-        volatility = vector_input.get('volatility', 0.5)
-        quantity = vector_input.get('quantity', 0.0)
+        volatility = vector_input.get("volatility", 0.5)
+        quantity = vector_input.get("quantity", 0.0)
 
         # Risk increases with volatility and large positions
         volatility_risk = volatility * 0.5
@@ -345,33 +348,33 @@ class CleanProfitVectorization:
 
     def _calculate_thermal_factor(self, vector_input: Dict[str, Any]) -> float:
         """Calculate thermal state adjustment factor."""
-        thermal_state = vector_input.get('thermal_state', ThermalState.WARM)
+        thermal_state = vector_input.get("thermal_state", ThermalState.WARM)
 
         thermal_multipliers = {
             ThermalState.COOL: 0.9,
             ThermalState.WARM: 1.0,
-            ThermalState.HOT: 1.1
+            ThermalState.HOT: 1.1,
         }
 
         return thermal_multipliers.get(thermal_state, 1.0)
 
     def _calculate_precision_factor(self, vector_input: Dict[str, Any]) -> float:
         """Calculate bit phase precision factor."""
-        bit_phase = vector_input.get('bit_phase', BitPhase.SIXTEEN_BIT)
+        bit_phase = vector_input.get("bit_phase", BitPhase.SIXTEEN_BIT)
 
         precision_multipliers = {
             BitPhase.FOUR_BIT: 0.95,
             BitPhase.EIGHT_BIT: 0.98,
             BitPhase.SIXTEEN_BIT: 1.0,
             BitPhase.THIRTY_TWO_BIT: 1.02,
-            BitPhase.FORTY_TWO_BIT: 1.05
+            BitPhase.FORTY_TWO_BIT: 1.05,
         }
 
         return precision_multipliers.get(bit_phase, 1.0)
 
     def _calculate_confidence(self, vector_input: Dict[str, Any], profit_value: float) -> float:
         """Calculate confidence score for the profit vector."""
-        signal_strength = vector_input.get('signal_strength', 0.5)
+        signal_strength = vector_input.get("signal_strength", 0.5)
         data_quality = 1.0 - abs(profit_value)  # Higher confidence for moderate profits
 
         confidence = (signal_strength + data_quality) / 2.0
@@ -380,12 +383,12 @@ class CleanProfitVectorization:
     def _generate_cache_key(self, vector_input: Dict[str, Any], mode: VectorizationMode) -> str:
         """Generate cache key for input and mode."""
         key_data = {
-            'price': vector_input.get('price', 0.0),
-            'volume': vector_input.get('volume', 0.0),
-            'volatility': vector_input.get('volatility', 0.5),
-            'mode': mode.value,
-            'thermal_state': vector_input.get('thermal_state', ThermalState.WARM).value,
-            'bit_phase': vector_input.get('bit_phase', BitPhase.SIXTEEN_BIT).value
+            "price": vector_input.get("price", 0.0),
+            "volume": vector_input.get("volume", 0.0),
+            "volatility": vector_input.get("volatility", 0.5),
+            "mode": mode.value,
+            "thermal_state": vector_input.get("thermal_state", ThermalState.WARM).value,
+            "bit_phase": vector_input.get("bit_phase", BitPhase.SIXTEEN_BIT).value,
         }
 
         key_str = str(sorted(key_data.items()))
@@ -396,11 +399,11 @@ class CleanProfitVectorization:
         avg_time = self.total_calculation_time / max(1, self.calculation_count)
 
         return {
-            'total_calculations': self.calculation_count,
-            'total_calculation_time': self.total_calculation_time,
-            'average_calculation_time': avg_time,
-            'cache_info': self.cache.get_cache_info(),
-            'math_foundation_version': self.math_foundation.get_version_info()
+            "total_calculations": self.calculation_count,
+            "total_calculation_time": self.total_calculation_time,
+            "average_calculation_time": avg_time,
+            "cache_info": self.cache.get_cache_info(),
+            "math_foundation_version": self.math_foundation.get_version_info(),
         }
 
     def clear_cache(self) -> None:
@@ -419,15 +422,15 @@ def calculate_quick_profit_vector(
     price: float,
     volume: float,
     volatility: float = 0.5,
-    mode: VectorizationMode = VectorizationMode.BALANCED
+    mode: VectorizationMode = VectorizationMode.BALANCED,
 ) -> ProfitVector:
     """Quick profit vector calculation for simple use cases."""
     vectorizer = create_profit_vectorization()
     vector_input = {
-        'price': price,
-        'volume': volume,
-        'volatility': volatility,
-        'signal_strength': 0.7
+        "price": price,
+        "volume": volume,
+        "volatility": volatility,
+        "signal_strength": 0.7,
     }
     return vectorizer.calculate_profit_vector(vector_input, mode)
 
@@ -441,17 +444,19 @@ def demo_profit_vectorization():
 
     # Test different modes
     test_input = {
-        'price': 50000.0,
-        'volume': 1000.0,
-        'volatility': 0.3,
-        'signal_strength': 0.8,
-        'thermal_state': ThermalState.WARM,
-        'bit_phase': BitPhase.THIRTY_TWO_BIT
+        "price": 50000.0,
+        "volume": 1000.0,
+        "volatility": 0.3,
+        "signal_strength": 0.8,
+        "thermal_state": ThermalState.WARM,
+        "bit_phase": BitPhase.THIRTY_TWO_BIT,
     }
 
     for mode in VectorizationMode:
         vector = vectorizer.calculate_profit_vector(test_input, mode)
-        print(f"{mode.value}: {vector.profit_score:.6f} (confidence: {vector.confidence_score:.3f})")
+        print(
+            f"{mode.value}: {vector.profit_score:.6f} (confidence: {vector.confidence_score:.3f})"
+        )
 
     # Show performance metrics
     metrics = vectorizer.get_performance_metrics()
@@ -460,4 +465,4 @@ def demo_profit_vectorization():
 
 
 if __name__ == "__main__":
-    demo_profit_vectorization() 
+    demo_profit_vectorization()

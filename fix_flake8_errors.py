@@ -8,7 +8,6 @@ Fixes common patterns of syntax errors and unused imports.
 """
 
 
-
 def fix_common_patterns(file_path):
     """Fix common syntax error patterns in a file."""
     try:

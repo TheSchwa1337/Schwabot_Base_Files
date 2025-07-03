@@ -1,4 +1,4 @@
-            import random
+import random
 from schwabot.alpha_encryption import get_alpha_encryption, alpha_encrypt_data
 from schwabot.lantern_core import LanternEye, LanternMainLoop
 from schwabot.session_context import create_trading_session, log_trading_activity

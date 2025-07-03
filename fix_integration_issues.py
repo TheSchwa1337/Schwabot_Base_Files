@@ -1,5 +1,5 @@
-    from core.clean_unified_math import CleanUnifiedMathSystem
-        import json
+   from core.clean_unified_math import CleanUnifiedMathSystem
+       import json
     from core.brain_trading_engine import BrainTradingEngine
     from symbolic_profit_router import SymbolicProfitRouter
 from datetime import datetime
@@ -20,7 +20,6 @@ Quick Fix for Schwabot Integration Issues
 Fixes the critical syntax error in schwabot_unified_math.py and prepares
 the system for executable build.
 """
-
 
 
 def fix_unified_math_import():

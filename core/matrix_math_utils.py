@@ -81,26 +81,28 @@ def analyze_price_matrix(price_matrix: np.ndarray) -> Dict[str, Any]:
         condition_number = np.inf
 
     # Matrix stability score (lower is more stable)
-    stability_score = np.std(eigenvalues) / np.mean(np.abs(eigenvalues)) if len(eigenvalues) > 0 else np.inf
+    stability_score = (
+        np.std(eigenvalues) / np.mean(np.abs(eigenvalues)) if len(eigenvalues) > 0 else np.inf
+    )
 
     # Risk metrics
     portfolio_volatility = np.sqrt(np.sum(covariance_matrix))
     max_correlation = np.max(np.abs(correlation_matrix - np.eye(num_assets)))
 
     return {
-        'num_samples': num_samples,
-        'num_assets': num_assets,
-        'mean_returns': mean_returns.tolist(),
-        'std_returns': std_returns.tolist(),
-        'correlation_matrix': correlation_matrix.tolist(),
-        'covariance_matrix': covariance_matrix.tolist(),
-        'eigenvalues': eigenvalues.tolist(),
-        'condition_number': float(condition_number),
-        'stability_score': float(stability_score),
-        'portfolio_volatility': float(portfolio_volatility),
-        'max_correlation': float(max_correlation),
-        'is_stable': stability_score < 1.0,
-        'is_well_conditioned': condition_number < 1000.0,
+        "num_samples": num_samples,
+        "num_assets": num_assets,
+        "mean_returns": mean_returns.tolist(),
+        "std_returns": std_returns.tolist(),
+        "correlation_matrix": correlation_matrix.tolist(),
+        "covariance_matrix": covariance_matrix.tolist(),
+        "eigenvalues": eigenvalues.tolist(),
+        "condition_number": float(condition_number),
+        "stability_score": float(stability_score),
+        "portfolio_volatility": float(portfolio_volatility),
+        "max_correlation": float(max_correlation),
+        "is_stable": stability_score < 1.0,
+        "is_well_conditioned": condition_number < 1000.0,
     }
 
 
@@ -108,7 +110,7 @@ def risk_parity_weights(
     covariance_matrix: np.ndarray,
     target_volatility: Optional[float] = None,
     max_iterations: int = 100,
-    tolerance: float = 1e-6
+    tolerance: float = 1e-6,
 ) -> Tuple[np.ndarray, Dict[str, Any]]:
     """
     Calculate risk parity weights for a given covariance matrix.
@@ -160,7 +162,9 @@ def risk_parity_weights(
         target_risk_contribution = portfolio_vol / num_assets
 
         # Update weights
-        weight_updates = (target_risk_contribution - risk_contributions) / (covariance_matrix @ weights)
+        weight_updates = (target_risk_contribution - risk_contributions) / (
+            covariance_matrix @ weights
+        )
         weights += 0.1 * weight_updates  # Small step size for stability
 
         # Normalize weights to sum to 1
@@ -183,21 +187,18 @@ def risk_parity_weights(
     final_risk_contributions = (weights * (covariance_matrix @ weights)) / final_vol
 
     metadata = {
-        'iterations': iteration + 1,
-        'converged': risk_contribution_std < tolerance,
-        'portfolio_volatility': float(final_vol),
-        'risk_contributions': final_risk_contributions.tolist(),
-        'risk_contribution_std': float(np.std(final_risk_contributions)),
-        'weights_sum': float(np.sum(weights)),
+        "iterations": iteration + 1,
+        "converged": risk_contribution_std < tolerance,
+        "portfolio_volatility": float(final_vol),
+        "risk_contributions": final_risk_contributions.tolist(),
+        "risk_contribution_std": float(np.std(final_risk_contributions)),
+        "weights_sum": float(np.sum(weights)),
     }
 
     return weights, metadata
 
 
-def calculate_sharpe_ratio(
-    returns: np.ndarray,
-    risk_free_rate: float = 0.0
-) -> float:
+def calculate_sharpe_ratio(returns: np.ndarray, risk_free_rate: float = 0.0) -> float:
     """
     Calculate Sharpe ratio for a series of returns.
 
@@ -233,9 +234,9 @@ def calculate_max_drawdown(returns: np.ndarray) -> Dict[str, float]:
     """
     if len(returns) == 0:
         return {
-            'max_drawdown': 0.0,
-            'max_drawdown_pct': 0.0,
-            'drawdown_duration': 0,
+            "max_drawdown": 0.0,
+            "max_drawdown_pct": 0.0,
+            "drawdown_duration": 0,
         }
 
     # Calculate cumulative returns
@@ -252,24 +253,21 @@ def calculate_max_drawdown(returns: np.ndarray) -> Dict[str, float]:
     max_drawdown_idx = np.argmin(drawdown)
 
     # Find peak before maximum drawdown
-    peak_idx = np.argmax(cumulative[:max_drawdown_idx + 1])
+    peak_idx = np.argmax(cumulative[: max_drawdown_idx + 1])
 
     # Calculate duration
     drawdown_duration = max_drawdown_idx - peak_idx
 
     return {
-        'max_drawdown': float(max_drawdown),
-        'max_drawdown_pct': float(max_drawdown * 100),
-        'drawdown_duration': int(drawdown_duration),
-        'peak_idx': int(peak_idx),
-        'trough_idx': int(max_drawdown_idx),
+        "max_drawdown": float(max_drawdown),
+        "max_drawdown_pct": float(max_drawdown * 100),
+        "drawdown_duration": int(drawdown_duration),
+        "peak_idx": int(peak_idx),
+        "trough_idx": int(max_drawdown_idx),
     }
 
 
-def calculate_var(
-    returns: np.ndarray,
-    confidence_level: float = 0.05
-) -> float:
+def calculate_var(returns: np.ndarray, confidence_level: float = 0.05) -> float:
     """
     Calculate Value at Risk (VaR).
 
@@ -286,10 +284,7 @@ def calculate_var(
     return np.percentile(returns, confidence_level * 100)
 
 
-def calculate_cvar(
-    returns: np.ndarray,
-    confidence_level: float = 0.05
-) -> float:
+def calculate_cvar(returns: np.ndarray, confidence_level: float = 0.05) -> float:
     """
     Calculate Conditional Value at Risk (CVaR) / Expected Shortfall.
 
@@ -314,10 +309,10 @@ def calculate_cvar(
 
 # Export main functions
 __all__ = [
-    'analyze_price_matrix',
-    'risk_parity_weights',
-    'calculate_sharpe_ratio',
-    'calculate_max_drawdown',
-    'calculate_var',
-    'calculate_cvar',
+    "analyze_price_matrix",
+    "risk_parity_weights",
+    "calculate_sharpe_ratio",
+    "calculate_max_drawdown",
+    "calculate_var",
+    "calculate_cvar",
 ]

@@ -7,6 +7,7 @@ from typing import Dict, Optional
 try:
     import ccxt
     import ccxt.async_support as ccxt_async
+
     CCXT_AVAILABLE = True
 except ImportError:
     CCXT_AVAILABLE = False
@@ -212,7 +213,9 @@ class ExchangeConnection:
         try:
             balance = await self.async_exchange.fetch_balance()
             free_balances = {
-                currency: float(amount) for currency, amount in balance.get("free", {}).items() if float(amount) > 0
+                currency: float(amount)
+                for currency, amount in balance.get("free", {}).items()
+                if float(amount) > 0
             }
 
             self.successful_requests += 1

@@ -1,13 +1,13 @@
 import numpy as np
 from core.hardware_acceleration_manager import (
-from core.zbe_core import ZBECore, ZBEMode
-from core.zpe_core import ZPECore, ZPEMode
-from typing import Dict, Any
-import logging
-import time
+    from core.zbe_core import ZBECore, ZBEMode
+    from core.zpe_core import ZPECore, ZPEMode
+    from typing import Dict, Any
+    import logging
+    import time
 
-#!/usr/bin/env python3
-"""
+    #!/usr/bin/env python3
+    """
 Hardware Acceleration Integration Demo
 
 This script demonstrates how ZPE (Zero Point Energy) and ZBE (Zero Bit Energy)
@@ -25,7 +25,7 @@ They only optimize the computational performance of the underlying hardware.
 """
 
 
-# Import our hardware acceleration systems
+    # Import our hardware acceleration systems
     HardwareAccelerationManager,
     AccelerationMode,
 )
@@ -37,7 +37,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-def simulate_market_conditions():-> Dict[str, Any]:
+def simulate_market_conditions(): -> Dict[str, Any]:
     """Simulate realistic market conditions for testing."""
     return {
         "volatility": np.random.uniform(0.1, 0.3),
@@ -49,7 +49,7 @@ def simulate_market_conditions():-> Dict[str, Any]:
     }
 
 
-def simulate_mathematical_state():-> Dict[str, Any]:
+def simulate_mathematical_state(): -> Dict[str, Any]:
     """Simulate mathematical state for complexity estimation."""
     return {
         "complexity": np.random.uniform(0.3, 0.8),
@@ -96,8 +96,8 @@ def demonstrate_zpe_optimization():
             f"  🚀 Computational Throughput: {thermal_data.computational_throughput:.3f}"
         )
         print(
-            f"  📈 Tensor Calculation Multiplier: {boost_factors['tensor_calculation_multiplier']:.3f}"
-        )
+            f"  📈 Tensor Calculation Multiplier: {
+                boost_factors['tensor_calculation_multiplier']:.3f}")
         print(f"  🧠 CPU Utilization: {thermal_data.cpu_utilization:.3f}")
         print(f"  💾 Memory Utilization: {thermal_data.memory_utilization:.3f}")
         print()
@@ -150,8 +150,8 @@ def demonstrate_zbe_optimization():
             print(f"  🎯 Memory Efficiency: {memory_data.memory_efficiency:.3f}")
             print(f"  ⏱️  Memory Latency: {memory_data.memory_latency:.1f}ns")
         print(
-            f"  🚀 Optimization Factor: {optimization_factors['computational_optimization_factor']:.3f}"
-        )
+            f"  🚀 Optimization Factor: {
+                optimization_factors['computational_optimization_factor']:.3f}")
         print()
 
         time.sleep(0.5)

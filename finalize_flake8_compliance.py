@@ -12,8 +12,7 @@ in the Schwabot enhanced mathematical integration system.
 """
 
 
-
-def run_flake8_check():-> list:
+def run_flake8_check(): -> list:
     """Run flake8 check on a specific file and return violations."""
     try:
         result = subprocess.run(
@@ -35,7 +34,7 @@ def run_flake8_check():-> list:
         return []
 
 
-def fix_common_issues():-> bool:
+def fix_common_issues(): -> bool:
     """Fix common flake8 issues in a file."""
     try:
         with open(file_path, "r", encoding="utf-8") as f:

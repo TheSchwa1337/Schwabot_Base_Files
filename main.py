@@ -1,17 +1,17 @@
-    from core.mathematical_backlog_manager import MathematicalBacklogManager
-    from core.mathematical_relay_sequencer import MathematicalRelaySequencer
-    from backtesting.simple_backtester import SimpleBacktester
-    from core.ccxt_trading_executor import TradingPair
-    from core.system_integration import (
-from datetime import datetime
-from decimal import Decimal
-import argparse
-import asyncio
-import logging
-import sys
+from core.mathematical_backlog_manager import MathematicalBacklogManager
+from core.mathematical_relay_sequencer import MathematicalRelaySequencer
+from backtesting.simple_backtester import SimpleBacktester
+from core.ccxt_trading_executor import TradingPair
+from core.system_integration import (
+    from datetime import datetime
+    from decimal import Decimal
+    import argparse
+    import asyncio
+    import logging
+    import sys
 
-# -*- coding: utf-8 -*-
-"""
+    # -*- coding: utf-8 -*-
+    """
 Mathematical Relay System - Main Entry Point
 ===========================================
 
@@ -31,25 +31,25 @@ Usage:
 """
 
 
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    handlers=[
-        logging.FileHandler("logs/mathematical_relay_system.log"),
-        logging.StreamHandler(sys.stdout),
-    ],
-)
-
-logger = logging.getLogger(__name__)
-
-# Import system components
-try:
-        SystemIntegrationManager,
-        initialize_and_start_system,
+    # Configure logging
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+        handlers=[
+            logging.FileHandler("logs/mathematical_relay_system.log"),
+            logging.StreamHandler(sys.stdout),
+        ],
     )
 
-    SYSTEM_AVAILABLE = True
+    logger=logging.getLogger(__name__)
+
+    # Import system components
+    try:
+    SystemIntegrationManager,
+    initialize_and_start_system,
+)
+
+SYSTEM_AVAILABLE = True
 except ImportError as e:
     logger.error(f"System components not available: {e}")
     SYSTEM_AVAILABLE = False

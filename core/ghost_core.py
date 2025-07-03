@@ -12,7 +12,7 @@ from typing import (
     CallableGhost,
     Core,
     Dict,
-    Hash-Based,
+    Hash - Based,
     List,
     Optional,
     Strategy,
@@ -20,7 +20,7 @@ from typing import (
     System,
     Tuple,
     -,
-    ===================================================,
+    == == == == == == == == == == == == == == == == == == == == == == == == ===,
 )
 
 import numpy as np

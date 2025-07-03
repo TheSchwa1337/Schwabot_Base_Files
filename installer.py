@@ -26,7 +26,6 @@ import zipfile
 # -*- coding: utf - 8 -*-
 
 
-
 # Initialize Unicode handler
 unicore = DualUnicoreHandler()
 
@@ -60,7 +59,6 @@ class SchwabotInstaller:
 
 def __init__(self): """
         """Initialize the installer.""""""
-
 
 """"""
 """"""
@@ -104,7 +102,7 @@ timestamp = subprocess.run(["date"], capture_output=True, text=True).stdout.stri
         safe_print(f"  {message}")
 
 
-def check_system_requirements():-> bool:
+def check_system_requirements(): -> bool:
     """Function implementation pending."""
 
 

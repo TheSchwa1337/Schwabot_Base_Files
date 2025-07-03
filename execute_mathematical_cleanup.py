@@ -11,8 +11,6 @@ import os
 import shutil
 
 
-
-
 # Initialize Unicode handler
 unicore = DualUnicoreHandler()
 

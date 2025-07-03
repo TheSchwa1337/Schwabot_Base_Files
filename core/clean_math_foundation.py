@@ -25,6 +25,7 @@ from numpy.typing import NDArray
 
 class ThermalState(Enum):
     """Thermal state enumeration for trading system."""
+
     COOL = "cool"
     WARM = "warm"
     HOT = "hot"
@@ -32,6 +33,7 @@ class ThermalState(Enum):
 
 class BitPhase(Enum):
     """Bit phase enumeration for precision control."""
+
     FOUR_BIT = "4bit"
     EIGHT_BIT = "8bit"
     SIXTEEN_BIT = "16bit"
@@ -50,23 +52,23 @@ LN_2 = math.log(2)
 class CleanMathFoundation:
     """
     Clean mathematical foundation providing core mathematical operations.
-    
+
     This class serves as the foundation for all mathematical computations
     in the Schwabot trading system.
     """
-    
+
     def __init__(self):
         """Initialize the mathematical foundation."""
         self.version = "1.0.0"
         self.precision = 64
-        
+
     def get_version_info(self) -> Dict[str, Any]:
         """Get version information."""
         return {
             "version": self.version,
             "precision": self.precision,
             "thermal_states": [state.value for state in ThermalState],
-            "bit_phases": [phase.value for phase in BitPhase]
+            "bit_phases": [phase.value for phase in BitPhase],
         }
 
 
@@ -90,7 +92,7 @@ def calculate_vector_norm(vector: np.ndarray, p: float = 2.0) -> float:
     if p < 1:
         raise ValueError("Norm order must be >= 1")
 
-    if p == float('inf'):
+    if p == float("inf"):
         return float(np.max(np.abs(vector)))
 
     return float(np.sum(np.abs(vector) ** p) ** (1 / p))
@@ -121,11 +123,11 @@ def calculate_matrix_condition_number(matrix: np.ndarray) -> float:
         min_eigenvalue = np.min(np.abs(eigenvalues))
 
         if min_eigenvalue == 0:
-            return float('inf')
+            return float("inf")
 
         return float(max_eigenvalue / min_eigenvalue)
     except np.linalg.LinAlgError:
-        return float('inf')
+        return float("inf")
 
 
 def calculate_correlation_matrix(returns: np.ndarray) -> np.ndarray:
@@ -194,9 +196,7 @@ def calculate_covariance_matrix(returns: np.ndarray, ddof: int = 1) -> np.ndarra
 
 
 def calculate_sharpe_ratio(
-    returns: np.ndarray,
-    risk_free_rate: float = 0.0,
-    periods_per_year: int = 252
+    returns: np.ndarray, risk_free_rate: float = 0.0, periods_per_year: int = 252
 ) -> float:
     """
     Calculate the Sharpe ratio for a series of returns.
@@ -219,7 +219,7 @@ def calculate_sharpe_ratio(
     returns_clean = returns[~np.isnan(returns)]
 
     if len(returns_clean) == 0:
-            return 0.0
+        return 0.0
 
     # Calculate excess returns
     excess_returns = returns_clean - risk_free_rate / periods_per_year
@@ -240,9 +240,7 @@ def calculate_sharpe_ratio(
 
 
 def calculate_sortino_ratio(
-    returns: np.ndarray,
-    risk_free_rate: float = 0.0,
-    periods_per_year: int = 252
+    returns: np.ndarray, risk_free_rate: float = 0.0, periods_per_year: int = 252
 ) -> float:
     """
     Calculate the Sortino ratio for a series of returns.
@@ -274,7 +272,7 @@ def calculate_sortino_ratio(
     downside_returns = excess_returns[excess_returns < 0]
 
     if len(downside_returns) == 0:
-        return float('inf') if np.mean(excess_returns) > 0 else 0.0
+        return float("inf") if np.mean(excess_returns) > 0 else 0.0
 
     downside_deviation = np.std(downside_returns, ddof=1)
 
@@ -310,11 +308,11 @@ def calculate_max_drawdown(returns: np.ndarray) -> Dict[str, float]:
 
     if len(returns_clean) == 0:
         return {
-            'max_drawdown': 0.0,
-            'max_drawdown_pct': 0.0,
-            'drawdown_duration': 0,
-            'peak_idx': 0,
-            'trough_idx': 0,
+            "max_drawdown": 0.0,
+            "max_drawdown_pct": 0.0,
+            "drawdown_duration": 0,
+            "peak_idx": 0,
+            "trough_idx": 0,
         }
 
     # Calculate cumulative returns
@@ -331,24 +329,21 @@ def calculate_max_drawdown(returns: np.ndarray) -> Dict[str, float]:
     max_drawdown_idx = np.argmin(drawdown)
 
     # Find peak before maximum drawdown
-    peak_idx = np.argmax(cumulative[:max_drawdown_idx + 1])
+    peak_idx = np.argmax(cumulative[: max_drawdown_idx + 1])
 
     # Calculate duration
     drawdown_duration = max_drawdown_idx - peak_idx
 
     return {
-        'max_drawdown': float(max_drawdown),
-        'max_drawdown_pct': float(max_drawdown * 100),
-        'drawdown_duration': int(drawdown_duration),
-        'peak_idx': int(peak_idx),
-        'trough_idx': int(max_drawdown_idx),
+        "max_drawdown": float(max_drawdown),
+        "max_drawdown_pct": float(max_drawdown * 100),
+        "drawdown_duration": int(drawdown_duration),
+        "peak_idx": int(peak_idx),
+        "trough_idx": int(max_drawdown_idx),
     }
 
 
-def calculate_value_at_risk(
-    returns: np.ndarray,
-    confidence_level: float = 0.05
-) -> float:
+def calculate_value_at_risk(returns: np.ndarray, confidence_level: float = 0.05) -> float:
     """
     Calculate Value at Risk (VaR).
 
@@ -377,10 +372,7 @@ def calculate_value_at_risk(
     return float(np.percentile(returns_clean, confidence_level * 100))
 
 
-def calculate_conditional_var(
-    returns: np.ndarray,
-    confidence_level: float = 0.05
-) -> float:
+def calculate_conditional_var(returns: np.ndarray, confidence_level: float = 0.05) -> float:
     """
     Calculate Conditional Value at Risk (CVaR) / Expected Shortfall.
 
@@ -415,7 +407,7 @@ def calculate_conditional_var(
     return float(np.mean(tail_returns))
 
 
-def normalize_vector(vector: np.ndarray, norm_type: str = 'l2') -> np.ndarray:
+def normalize_vector(vector: np.ndarray, norm_type: str = "l2") -> np.ndarray:
     """
     Normalize a vector to unit length.
 
@@ -432,11 +424,11 @@ def normalize_vector(vector: np.ndarray, norm_type: str = 'l2') -> np.ndarray:
     if len(vector) == 0:
         raise ValueError("Vector cannot be empty")
 
-    if norm_type == 'l1':
+    if norm_type == "l1":
         norm = np.sum(np.abs(vector))
-    elif norm_type == 'l2':
+    elif norm_type == "l2":
         norm = np.linalg.norm(vector)
-    elif norm_type == 'max':
+    elif norm_type == "max":
         norm = np.max(np.abs(vector))
     else:
         raise ValueError("Invalid norm_type. Must be 'l1', 'l2', or 'max'")
@@ -495,17 +487,16 @@ def calculate_eigenvectors(matrix: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
 
 # Export main functions
 __all__ = [
-    'calculate_vector_norm',
-    'calculate_matrix_condition_number',
-    'calculate_correlation_matrix',
-    'calculate_covariance_matrix',
-    'calculate_sharpe_ratio',
-    'calculate_sortino_ratio',
-    'calculate_max_drawdown',
-    'calculate_value_at_risk',
-    'calculate_conditional_var',
-    'normalize_vector',
-    'calculate_eigenvalues',
-    'calculate_eigenvectors',
-] 
-
+    "calculate_vector_norm",
+    "calculate_matrix_condition_number",
+    "calculate_correlation_matrix",
+    "calculate_covariance_matrix",
+    "calculate_sharpe_ratio",
+    "calculate_sortino_ratio",
+    "calculate_max_drawdown",
+    "calculate_value_at_risk",
+    "calculate_conditional_var",
+    "normalize_vector",
+    "calculate_eigenvalues",
+    "calculate_eigenvectors",
+]

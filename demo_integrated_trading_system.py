@@ -1,18 +1,18 @@
-    from schwabot_unified_math import UnifiedTradingMathematics
+from schwabot_unified_math import UnifiedTradingMathematics
 import numpy as np
-    from core.profit_vector_forecast import (
+from core.profit_vector_forecast import (
     from core.risk_manager import RiskManager
     from core.strategy_logic import StrategyLogic, StrategyConfig, StrategyType
     from core.unified_profit_vectorization_system import (
-from collections import deque
-from dataclasses import dataclass
-from typing import Dict, List, Any, Tuple
-import hashlib
-import random
-import time
+        from collections import deque
+        from dataclasses import dataclass
+        from typing import Dict, List, Any, Tuple
+        import hashlib
+        import random
+        import time
 
-#!/usr/bin/env python3
-"""
+        #!/usr/bin/env python3
+        """
 🧠 Schwabot Integrated Trading System Demo
 ==========================================
 
@@ -32,16 +32,16 @@ and market dynamics learning.
 
 
 
-# Try importing core Schwabot modules
-try:
+        # Try importing core Schwabot modules
+        try:
         UnifiedProfitVectorizationSystem,
     )
-        ProfitVectorForecastEngine,
-        MarkovProfitModel,
-        ProfitAccuracyValidator,
-    )
+    ProfitVectorForecastEngine,
+    MarkovProfitModel,
+    ProfitAccuracyValidator,
+)
 
-    CORE_MODULES_AVAILABLE = True
+CORE_MODULES_AVAILABLE = True
 except ImportError as e:
     logging.warning(f"Some Schwabot modules not available: {e}")
     CORE_MODULES_AVAILABLE = False
@@ -89,10 +89,15 @@ class HolographicMarkovMemory:
         self.epoch_memory: List[MarketEpoch] = []
         self.success_amplifiers: Dict[str, float] = {}
 
-    def store_profit_echo():-> str:
+    def store_profit_echo(): -> str:
         """Store profitable pattern in holographic memory."""
         # Create holographic hash signature
-        echo_data = f"{price:.2f}_{profit:.4f}_{strategy}_{market_conditions.get('volatility', 0):.4f}"
+        echo_data = f"{
+            price:.2f}_{
+            profit:.4f}_{strategy}_{
+            market_conditions.get(
+                'volatility',
+                0):.4f}"
         hash_signature = hashlib.sha256(echo_data.encode()).hexdigest()[:16]
 
         profit_echo = {
@@ -137,13 +142,17 @@ class HolographicMarkovMemory:
 
         return hash_signature
 
-    def query_profit_echo():-> Dict[str, Any]:
+    def query_profit_echo(): -> Dict[str, Any]:
         """Query holographic memory for similar profitable patterns."""
         if not self.profit_echoes:
             return {"echo_strength": 0.0, "predicted_profit": 0.0, "confidence": 0.0}
 
         # Create query hash
-        query_data = f"{current_price:.2f}_query_{strategy}_{market_conditions.get('volatility', 0):.4f}"
+        query_data = f"{
+            current_price:.2f}_query_{strategy}_{
+            market_conditions.get(
+                'volatility',
+                0):.4f}"
         hashlib.sha256(query_data.encode()).hexdigest()[:16]
 
         # Find similar patterns using holographic matching
@@ -194,7 +203,7 @@ class HolographicMarkovMemory:
             "similar_pattern_count": len(similar_echoes),
         }
 
-    def create_market_epoch():-> MarketEpoch:
+    def create_market_epoch(): -> MarketEpoch:
         """Create a market learning epoch from trading data."""
         if not trades_in_period:
             return None
@@ -289,7 +298,7 @@ class IntegratedTradingSystem:
         print("📊 Epoch-based Learning: ENABLED")
         print(f"💰 Initial Capital: ${initial_capital:,.2f}")
 
-    def simulate_market_tick():-> Dict[str, Any]:
+    def simulate_market_tick(): -> Dict[str, Any]:
         """Simulate a market data tick with realistic price movement."""
         if not self.price_history:
             price = base_price
@@ -361,7 +370,7 @@ class IntegratedTradingSystem:
             "volatility": volatility,
         }
 
-    def run_trading_cycle():-> Dict[str, Any]:
+    def run_trading_cycle(): -> Dict[str, Any]:
         """Execute one complete trading cycle with holographic memory integration."""
         cycle_start = time.time()
 
@@ -474,7 +483,7 @@ class IntegratedTradingSystem:
 
         return cycle_results
 
-    def _execute_trade_with_stop_loss():-> Dict[str, Any]:
+    def _execute_trade_with_stop_loss(): -> Dict[str, Any]:
         """Execute a trade with proper stop-loss and take-profit protection."""
         # Get Kelly position sizing
         kelly_size = self.profit_system.get_kelly_position_size(base_position_size=0.1)
@@ -659,7 +668,7 @@ class IntegratedTradingSystem:
         self.current_epoch_start = time.time()
         self.trades_in_current_epoch = []
 
-    def _calculate_returns():-> List[float]:
+    def _calculate_returns(): -> List[float]:
         """Calculate portfolio returns."""
         if len(self.portfolio_history) < 2:
             return []
@@ -764,8 +773,10 @@ class IntegratedTradingSystem:
         # Holographic Memory Analytics
         print("\n🧿 Holographic Memory System:")
         print(
-            f"   Pattern Memory:      {self.performance_metrics.get('holographic_patterns', 0)} patterns"
-        )
+            f"   Pattern Memory:      {
+                self.performance_metrics.get(
+                    'holographic_patterns',
+                    0)} patterns")
         print(
             f"   Learning Epochs:     {self.performance_metrics.get('epoch_count', 0)} completed"
         )

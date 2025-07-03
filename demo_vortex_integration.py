@@ -1,12 +1,12 @@
-        import traceback
+import traceback
 from schwabot.session_context import (
-from schwabot.vortex_security import get_vortex_security
-import asyncio
-import random
-import time
+    from schwabot.vortex_security import get_vortex_security
+    import asyncio
+    import random
+    import time
 
-#!/usr/bin/env python3
-"""
+    #!/usr/bin/env python3
+    """
 SchwaBot Vortex Security Integration Demo
 ========================================
 

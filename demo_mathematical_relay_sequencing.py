@@ -30,7 +30,7 @@ This demo showcases:
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
-logger = logging.getLogger(__name__)
+logger=logging.getLogger(__name__)
 
 
 class MathematicalRelaySequencingDemo:
@@ -38,11 +38,11 @@ class MathematicalRelaySequencingDemo:
 
     def __init__(self):
         """Initialize the demo system."""
-        self.sequencer = None
-        self.demo_results = []
-        self.start_time = datetime.now()
+        self.sequencer=None
+        self.demo_results=[]
+        self.start_time=datetime.now()
 
-    def initialize_system():-> bool:
+    def initialize_system(): -> bool:
         """Initialize the mathematical relay sequencer."""
         print("🔧 Initializing Mathematical Relay Sequencing System")
         print("=" * 60)

@@ -56,7 +56,7 @@ def fix_complex_syntax_errors(file_path: str) -> bool:
                 last_quote_pos = line.rfind('"')
                 if last_quote_pos > 0:
                     # Check if there's content after the last quote
-                    after_quote = line[last_quote_pos + 1 :].strip()
+                    after_quote = line[last_quote_pos + 1:].strip()
                     if after_quote and not after_quote.startswith((")", ",", "]", "}")):
                         # Likely unterminated, add closing quote
                         line += '"'
@@ -65,7 +65,7 @@ def fix_complex_syntax_errors(file_path: str) -> bool:
             if "'" in line and line.count("'") % 2 == 1:
                 last_quote_pos = line.rfind("'")
                 if last_quote_pos > 0:
-                    after_quote = line[last_quote_pos + 1 :].strip()
+                    after_quote = line[last_quote_pos + 1:].strip()
                     if after_quote and not after_quote.startswith((")", ",", "]", "}")):
                         line += "'"
 

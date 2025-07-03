@@ -1,16 +1,16 @@
-                        from core.ghost_trigger_manager import add_profit_vector
+from core.ghost_trigger_manager import add_profit_vector
 from core.balance_loader import update_load_metrics, get_balance_statistics
 from core.ghost_trigger_manager import (
-from core.tick_management_system import run_tick_cycle, get_tick_statistics
-from typing import Dict, Any
-import asyncio
-import json
-import logging
-import time
-import websockets
+    from core.tick_management_system import run_tick_cycle, get_tick_statistics
+    from typing import Dict, Any
+    import asyncio
+    import json
+    import logging
+    import time
+    import websockets
 
-#!/usr/bin/env python3
-"""
+    #!/usr/bin/env python3
+    """
 Integrated Dashboard Demo
 ========================
 
@@ -22,7 +22,7 @@ to the Schwabot Altitude Dashboard.
 """
 
 
-# Import our integrated systems
+    # Import our integrated systems
     create_ghost_trigger,
     get_trigger_performance,
     AnchorStatus,
@@ -125,12 +125,12 @@ class DashboardDataProvider:
             # Store in history
             self.data_history.append(self.current_stats.copy())
             if len(self.data_history) > self.max_history:
-                self.data_history = self.data_history[-self.max_history // 2 :]
+                self.data_history = self.data_history[-self.max_history // 2:]
 
         except Exception as e:
             logger.error(f"Error updating system stats: {e}")
 
-    def _determine_system_health():-> str:
+    def _determine_system_health(): -> str:
         """Determine overall system health."""
         if tick_stats.get("success_rate", 0) < 0.8:
             return "degraded"
@@ -139,7 +139,7 @@ class DashboardDataProvider:
         else:
             return "healthy"
 
-    def _determine_alif_aleph_status():-> str:
+    def _determine_alif_aleph_status(): -> str:
         """Determine ALIF/ALEPH synchronization status."""
         mode = balance_stats.get("current_mode", "balanced")
         if mode == "balanced":
@@ -151,7 +151,7 @@ class DashboardDataProvider:
         else:
             return "compressed"
 
-    def get_dashboard_data():-> Dict[str, Any]:
+    def get_dashboard_data(): -> Dict[str, Any]:
         """Get formatted data for dashboard display."""
         return {
             "system_overview": {

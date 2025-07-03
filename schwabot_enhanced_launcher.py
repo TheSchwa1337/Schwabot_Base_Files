@@ -605,8 +605,10 @@ class SchawbotEnhancedLauncher:
                         f"📊 Performance Report (Runtime: {runtime / 3600:.1f}h)"
                     )
                     logger.info(
-                        f"   Unified Signal: {self.performance_metrics.get('last_unified_signal', 0):.3f}"
-                    )
+                        f"   Unified Signal: {
+                            self.performance_metrics.get(
+                                'last_unified_signal',
+                                0):.3f}")
                     logger.info(
                         f"   Drift Field: {self.performance_metrics.get('drift_field', 0):.3f}"
                     )

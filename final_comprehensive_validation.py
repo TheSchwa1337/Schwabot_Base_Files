@@ -1,8 +1,8 @@
-        from core.mathematical_optimization_bridge import MathematicalOptimizationBridge
-        import numpy as np
-        from core.enhanced_strategy_framework import EnhancedStrategyFramework
-        from core.smart_money_integration import SmartMoneyIntegrationFramework
-        import subprocess
+from core.mathematical_optimization_bridge import MathematicalOptimizationBridge
+import numpy as np
+from core.enhanced_strategy_framework import EnhancedStrategyFramework
+from core.smart_money_integration import SmartMoneyIntegrationFramework
+import subprocess
 from typing import Any, Dict
 import logging
 import sys
@@ -23,7 +23,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-def safe_print():-> None:
+def safe_print(): -> None:
     """Safe print function that handles Unicode characters."""
     try:
         print(message)
@@ -31,7 +31,7 @@ def safe_print():-> None:
         print(message.encode("ascii", "replace").decode("ascii"))
 
 
-def validate_imports():-> Dict[str, Any]:
+def validate_imports(): -> Dict[str, Any]:
     """Validate all critical imports are working."""
     safe_print("🔍 Validating Critical Imports...")
 
@@ -91,7 +91,7 @@ def validate_imports():-> Dict[str, Any]:
     return import_results
 
 
-def validate_smart_money_integration():-> Dict[str, Any]:
+def validate_smart_money_integration(): -> Dict[str, Any]:
     """Validate smart money integration functionality."""
     safe_print("\n💰 Validating Smart Money Integration...")
 
@@ -129,8 +129,11 @@ def validate_smart_money_integration():-> Dict[str, Any]:
             # Show signal details
             for i, signal in enumerate(signals[:3]):  # Show first 3 signals
                 safe_print(
-                    f"    Signal {i + 1}: {signal.metric.value} (strength: {signal.signal_strength:.2f})"
-                )
+                    f"    Signal {
+                        i +
+                        1}: {
+                        signal.metric.value} (strength: {
+                        signal.signal_strength:.2f})")
 
         return {
             "success": success,
@@ -143,7 +146,7 @@ def validate_smart_money_integration():-> Dict[str, Any]:
         return {"success": False, "error": str(e)}
 
 
-def validate_mathematical_optimization():-> Dict[str, Any]:
+def validate_mathematical_optimization(): -> Dict[str, Any]:
     """Validate mathematical optimization bridge."""
     safe_print("\n⚡ Validating Mathematical Optimization Bridge...")
 
@@ -161,8 +164,9 @@ def validate_mathematical_optimization():-> Dict[str, Any]:
 
         success = result.get("success", False)
         safe_print(
-            f"  {'✅' if success else '❌'} Mathematical Optimization: {'SUCCESS' if success else 'FAILED'}"
-        )
+            f"  {
+                '✅' if success else '❌'} Mathematical Optimization: {
+                'SUCCESS' if success else 'FAILED'}")
 
         if success:
             execution_time = result.get("execution_time", 0)
@@ -177,7 +181,7 @@ def validate_mathematical_optimization():-> Dict[str, Any]:
         return {"success": False, "error": str(e)}
 
 
-def validate_enhanced_strategy_framework():-> Dict[str, Any]:
+def validate_enhanced_strategy_framework(): -> Dict[str, Any]:
     """Validate enhanced strategy framework."""
     safe_print("\n🏛️ Validating Enhanced Strategy Framework...")
 
@@ -214,7 +218,7 @@ def validate_enhanced_strategy_framework():-> Dict[str, Any]:
         return {"success": False, "error": str(e)}
 
 
-def validate_code_quality():-> Dict[str, Any]:
+def validate_code_quality(): -> Dict[str, Any]:
     """Validate code quality standards."""
     safe_print("\n🔧 Validating Code Quality Standards...")
 
@@ -287,7 +291,7 @@ def validate_code_quality():-> Dict[str, Any]:
         return {"success": False, "error": str(e)}
 
 
-def main():-> Dict[str, Any]:
+def main(): -> Dict[str, Any]:
     """Main validation function."""
     safe_print("🎯 FINAL COMPREHENSIVE VALIDATION")
     safe_print("=" * 60)
@@ -350,8 +354,8 @@ def main():-> Dict[str, Any]:
         (component_successes / component_total) * 100 if component_total > 0 else 0.0
     )
     safe_print(
-        f"⚙️  Component Success Rate: {component_rate:.1f}% ({component_successes}/{component_total})"
-    )
+        f"⚙️  Component Success Rate: {
+            component_rate:.1f}% ({component_successes}/{component_total})")
 
     # Code quality
     code_quality = validation_results["code_quality"]

@@ -37,7 +37,7 @@ print(f"\n📋 {title}")
     print("-" * 40)
 
 
-def demo_hash_folding():-> None:
+def demo_hash_folding(): -> None:
     """Demonstrate hash folding to 2-bit sequences.""""""
 print_section("Hash Folding to 2-Bit Sequences")
 
@@ -75,13 +75,13 @@ def demo_strategy_decoding():-> None:
 print_section("Hash to Strategy Conversion")
 
 # Test strategy decoding
-test_strategies = [
+test_strategies=[
         "vault_trigger::BTC::long::32hr",
         "emoji_hash_match::ETH::mid::24hr",
         "momentum_shift::XRP::short::12hr"
 ]
 for strategy_input in test_strategies:
-        strategy = hash_to_strategy(strategy_input)
+        strategy=hash_to_strategy(strategy_input)
 
 print(f"Input: {strategy_input}")
         print(f"Decoded Strategy:")
@@ -93,7 +93,7 @@ print(f"Input: {strategy_input}")
         print()
 
 
-def demo_profit_phase_routing():-> None:
+def demo_profit_phase_routing(): -> None:
     """Demonstrate profit phase routing.""""""
 print_section("Profit Phase Routing")
 
@@ -149,7 +149,7 @@ def demo_profit_routing_engine():-> None:
 print_section("Profit Routing Engine")
 
 # Initialize engine
-config = ProfitRoutingConfig(
+config=ProfitRoutingConfig(
         enable_2bit_mapping=True,
         enable_hash_triggers=True,
         enable_recursive_learning=True,
@@ -161,10 +161,10 @@ config = ProfitRoutingConfig(
         log_level="INFO"
     )
 
-engine = ProfitRoutingEngine(config)
+engine=ProfitRoutingEngine(config)
 
 # Test routing scenarios
-routing_scenarios = [
+routing_scenarios=[
         {
             "name": "BTC Mid-tier Strategy",
             "payload": {
@@ -205,7 +205,7 @@ print(f"  Decision: {result.decision.value}")
         print()
 
 
-def demo_vault_activation():-> None:
+def demo_vault_activation(): -> None:
     """Demonstrate profit vault activation.""""""
 print_section("Profit Vault Activation")
 
@@ -275,7 +275,7 @@ print("🔄 Dualistic Integration:")
     print()
 
 
-def demo_statistics():-> None:
+def demo_statistics(): -> None:
     """Demonstrate system statistics.""""""
 print_section("System Statistics")
 

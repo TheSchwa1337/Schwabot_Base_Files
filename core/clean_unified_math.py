@@ -204,7 +204,9 @@ class CleanUnifiedMathSystem:
             logger.error(f"Mean calculation error: {e}")
             return 0.0
 
-    def optimize_profit(self, base_profit: float, enhancement_factor: float, confidence: float) -> float:
+    def optimize_profit(
+        self, base_profit: float, enhancement_factor: float, confidence: float
+    ) -> float:
         """Optimize profit based on enhancement factor and confidence."""
         try:
             # Apply enhancement factor
@@ -216,7 +218,9 @@ class CleanUnifiedMathSystem:
             logger.error(f"Profit optimization error: {e}")
             return base_profit
 
-    def calculate_risk_adjustment(self, profit: float, volatility: float, confidence: float) -> float:
+    def calculate_risk_adjustment(
+        self, profit: float, volatility: float, confidence: float
+    ) -> float:
         """Calculate risk-adjusted profit."""
         try:
             # Risk adjustment based on volatility and confidence
@@ -245,31 +249,35 @@ class CleanUnifiedMathSystem:
         try:
             if not returns or len(returns) < 2:
                 return 0.0
-            
+
             # Calculate mean return
             mean_return = self.mean(returns)
-            
+
             # Calculate standard deviation (volatility)
             squared_deviations = [self.power(ret - mean_return, 2) for ret in returns]
             variance = self.mean(squared_deviations)
             std_dev = self.sqrt(variance)
-            
+
             if std_dev == 0:
                 return 0.0
-            
+
             # Calculate excess return
             excess_return = self.subtract(mean_return, risk_free_rate)
-            
+
             # Calculate Sharpe ratio
             sharpe_ratio = self.divide(excess_return, std_dev)
-            
-            self._log_calculation("sharpe_ratio", sharpe_ratio, {
-                "returns": returns, 
-                "risk_free_rate": risk_free_rate,
-                "mean_return": mean_return,
-                "std_dev": std_dev
-            })
-            
+
+            self._log_calculation(
+                "sharpe_ratio",
+                sharpe_ratio,
+                {
+                    "returns": returns,
+                    "risk_free_rate": risk_free_rate,
+                    "mean_return": mean_return,
+                    "std_dev": std_dev,
+                },
+            )
+
             return sharpe_ratio
         except Exception as e:
             logger.error(f"Sharpe ratio calculation error: {e}")
@@ -369,7 +377,9 @@ class CleanUnifiedMathSystem:
 clean_unified_math = CleanUnifiedMathSystem()
 
 
-def optimize_brain_profit(price: float, volume: float, confidence: float, enhancement_factor: float) -> float:
+def optimize_brain_profit(
+    price: float, volume: float, confidence: float, enhancement_factor: float
+) -> float:
     """Optimized profit calculation for brain trading signals."""
     try:
         # Base profit calculation
@@ -391,7 +401,9 @@ def optimize_brain_profit(price: float, volume: float, confidence: float, enhanc
         return 0.0
 
 
-def calculate_position_size(confidence: float, portfolio_value: float, max_risk_percent: float) -> float:
+def calculate_position_size(
+    confidence: float, portfolio_value: float, max_risk_percent: float
+) -> float:
     """Calculate position size based on confidence and risk management."""
     try:
         # Calculate maximum position based on risk

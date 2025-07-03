@@ -5,16 +5,16 @@ Integrates advanced mathematical modeling for trade decision making.
 Provides robust error handling and validation mechanisms.
 """
 
-from dataclasses import dataclass, field
-from enum import Enum, auto
-import hashlib
-import uuid
 import datetime
-from typing import Optional, Dict, Any, Union, List
+import hashlib
 import logging
 import math
+import uuid
+from dataclasses import dataclass, field
+from enum import Enum, auto
+from typing import Any, Dict, List, Optional, Union
 
-from core.clean_unified_math import clean_unified_math, optimize_brain_profit, calculate_position_size
+from core.clean_unified_math import clean_unified_math, calculate_position_size, optimize_brain_profit
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -22,16 +22,19 @@ logger = logging.getLogger(__name__)
 
 class TradingError(Exception):
     """Base exception for trading-related errors."""
+
     pass
 
 
 class ValidationError(TradingError):
     """Raised when input validation fails."""
+
     pass
 
 
 class OrderType(Enum):
     """Order type for trade execution."""
+
     MARKET = "market"
     LIMIT = "limit"
     STOP_LOSS = "stop_loss"
@@ -40,12 +43,14 @@ class OrderType(Enum):
 
 class OrderSide(Enum):
     """Order side indicating buy or sell."""
+
     BUY = "buy"
     SELL = "sell"
 
 
 class ErrorSeverity(Enum):
     """Severity levels for trading errors."""
+
     LOW = auto()
     MEDIUM = auto()
     HIGH = auto()
@@ -55,31 +60,31 @@ class ErrorSeverity(Enum):
 def validate_positive_float(value: float, name: str, allow_zero: bool = False) -> float:
     """
     Validate that a float is positive (or zero).
-    
+
     Args:
         value (float): Value to validate
         name (str): Name of the parameter for error message
         allow_zero (bool): Whether zero is allowed
-    
+
     Raises:
         ValidationError: If value is invalid
-    
+
     Returns:
         float: Validated value
     """
     if not isinstance(value, (int, float)):
         raise ValidationError(f"{name} must be a number, got {type(value)}")
-    
+
     if math.isnan(value) or math.isinf(value):
         raise ValidationError(f"{name} cannot be NaN or infinite")
-    
+
     if allow_zero:
         if value < 0:
             raise ValidationError(f"{name} must be non-negative, got {value}")
     else:
         if value <= 0:
             raise ValidationError(f"{name} must be positive, got {value}")
-    
+
     return float(value)
 
 
@@ -89,6 +94,7 @@ class TradeSignal:
     Enhanced trade signal with advanced mathematical insights.
     Incorporates multiple dimensions of trading intelligence.
     """
+
     asset: str
     price: float
     volume: float
@@ -111,23 +117,20 @@ class TradeSignal:
         # Validate inputs
         if not isinstance(self.asset, str) or not self.asset:
             raise ValidationError("Asset must be a non-empty string")
-        
+
         # Validate numeric inputs
         self.price = validate_positive_float(self.price, "Price")
         self.volume = validate_positive_float(self.volume, "Volume")
-        
+
         # Validate confidence and risk-related inputs
         self.confidence = validate_positive_float(self.confidence, "Confidence", allow_zero=True)
         if self.confidence > 1:
             raise ValidationError("Confidence must be between 0 and 1")
-        
+
         # Calculate mathematical score using brain profit optimization
         try:
             self.mathematical_score = optimize_brain_profit(
-                self.price, 
-                self.volume, 
-                self.confidence, 
-                1.0  # Default enhancement factor
+                self.price, self.volume, self.confidence, 1.0  # Default enhancement factor
             )
         except Exception as e:
             logger.error(f"Mathematical score calculation failed: {e}")
@@ -136,9 +139,7 @@ class TradeSignal:
         # Calculate risk score
         try:
             self.risk_score = clean_unified_math.calculate_risk_adjustment(
-                self.mathematical_score, 
-                self.volatility, 
-                self.confidence
+                self.mathematical_score, self.volatility, self.confidence
             )
         except Exception as e:
             logger.error(f"Risk score calculation failed: {e}")
@@ -162,7 +163,7 @@ class TradeSignal:
             "mathematical_score": self.mathematical_score,
             "order_type": self.order_type.value,
             "order_side": self.order_side.value,
-            "timestamp": self.timestamp.isoformat()
+            "timestamp": self.timestamp.isoformat(),
         }
         base_dict.update(self.metadata)
         return base_dict
@@ -173,6 +174,7 @@ class TradeExecution:
     """
     Enhanced trade execution tracking with performance metrics.
     """
+
     signal_id: str
     asset: str
     execution_price: float
@@ -192,10 +194,10 @@ class TradeExecution:
         # Validate inputs
         if not isinstance(self.signal_id, str) or not self.signal_id:
             raise ValidationError("Signal ID must be a non-empty string")
-        
+
         if not isinstance(self.asset, str) or not self.asset:
             raise ValidationError("Asset must be a non-empty string")
-        
+
         # Validate numeric inputs
         self.execution_price = validate_positive_float(self.execution_price, "Execution Price")
         self.volume = validate_positive_float(self.volume, "Volume")
@@ -204,10 +206,10 @@ class TradeExecution:
     def calculate_performance(self, entry_price: float):
         """
         Calculate trade performance and generate performance score.
-        
+
         Args:
             entry_price (float): The original entry price of the trade
-        
+
         Raises:
             ValidationError: If entry price is invalid
         """
@@ -223,9 +225,7 @@ class TradeExecution:
         # Use mathematical system to score performance
         try:
             self.performance_score = clean_unified_math.optimize_profit(
-                abs(self.realized_profit), 
-                self.volume, 
-                0.7  # Default confidence
+                abs(self.realized_profit), self.volume, 0.7  # Default confidence
             )
         except Exception as e:
             logger.error(f"Performance score calculation failed: {e}")
@@ -233,7 +233,7 @@ class TradeExecution:
 
     def to_dict(self) -> Dict[str, Any]:
         """Convert execution to dictionary with performance metrics."""
-        return {
+            return {
             "id": self.id,
             "signal_id": self.signal_id,
             "asset": self.asset,
@@ -244,44 +244,40 @@ class TradeExecution:
             "order_side": self.order_side.value,
             "realized_profit": self.realized_profit,
             "performance_score": self.performance_score,
-            "timestamp": self.timestamp.isoformat()
+            "timestamp": self.timestamp.isoformat(),
         }
 
 
 def generate_trade_signal(
-    asset: str, 
-    price: float, 
-    volume: float, 
-    metadata: Optional[Dict[str, Any]] = None
+    asset: str, price: float, volume: float, metadata: Optional[Dict[str, Any]] = None
 ) -> TradeSignal:
     """
     Advanced trade signal generation using mathematical insights.
-    
+
     Args:
         asset (str): Trading asset symbol
         price (float): Current market price
         volume (float): Trading volume
         metadata (dict, optional): Additional signal metadata
-    
+
     Returns:
         TradeSignal: Generated trade signal
-    
+
     Raises:
         ValidationError: If input validation fails
     """
     # Validate inputs
     if not isinstance(asset, str) or not asset:
         raise ValidationError("Asset must be a non-empty string")
-    
+
     price = validate_positive_float(price, "Price")
     volume = validate_positive_float(volume, "Volume")
-    
+
     # Use mathematical system to generate signal parameters
     try:
-        math_result = clean_unified_math.integrate_all_systems({
-            "tensor": [[price, volume]],
-            "metadata": metadata or {}
-        })
+        math_result = clean_unified_math.integrate_all_systems(
+            {"tensor": [[price, volume]], "metadata": metadata or {}}
+        )
     except Exception as e:
         logger.error(f"Mathematical system integration failed: {e}")
         math_result = {}
@@ -290,11 +286,11 @@ def generate_trade_signal(
         asset=asset,
         price=price,
         volume=volume,
-        signal_strength=math_result.get('combined_score', 0.5),
-        entropy=math_result.get('volume_factor', 0.0),
-        volatility=math_result.get('momentum', 0.0),
-        confidence=math_result.get('confidence', 0.5),
-        metadata=metadata or {}
+        signal_strength=math_result.get("combined_score", 0.5),
+        entropy=math_result.get("volume_factor", 0.0),
+        volatility=math_result.get("momentum", 0.0),
+        confidence=math_result.get("confidence", 0.5),
+        metadata=metadata or {},
     )
 
     return signal
@@ -303,10 +299,10 @@ def generate_trade_signal(
 def _generate_signal_hash(signal: TradeSignal) -> str:
     """
     Generates a SHA-256 hash for the trade signal content.
-    
+
     Args:
         signal (TradeSignal): Trade signal to hash
-    
+
     Returns:
         str: SHA-256 hash of the signal
     """
@@ -319,16 +315,15 @@ def _generate_signal_hash(signal: TradeSignal) -> str:
 
 
 def log_trading_error(
-    error: Exception, 
-    severity: ErrorSeverity = ErrorSeverity.MEDIUM
+    error: Exception, severity: ErrorSeverity = ErrorSeverity.MEDIUM
 ) -> Dict[str, Any]:
     """
     Log and analyze trading-related errors.
-    
+
     Args:
         error (Exception): The error to log
         severity (ErrorSeverity): Error severity level
-    
+
     Returns:
         Dict containing error details
     """
@@ -337,9 +332,9 @@ def log_trading_error(
         "error_message": str(error),
         "severity": severity.name,
         "timestamp": datetime.datetime.utcnow().isoformat(),
-        "traceback": traceback.format_exc()
+        "traceback": traceback.format_exc(),
     }
-    
+
     logger.error(f"Trading Error [{severity.name}]: {error_details}")
-    
+
     return error_details

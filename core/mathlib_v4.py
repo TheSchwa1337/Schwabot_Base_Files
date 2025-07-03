@@ -32,6 +32,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class Optimized:
     """Trading optimization result."""
+
     profit_factor: float
     risk_score: float
     entry_confidence: float
@@ -41,6 +42,7 @@ class Optimized:
 
 class MathLibVersion(Enum):
     """MathLib version enumeration."""
+
     V1 = "1.0.0"
     V2 = "2.0.0"
     V3 = "3.0.0"
@@ -50,6 +52,7 @@ class MathLibVersion(Enum):
 @dataclass
 class PatternResult:
     """Result container for pattern analysis."""
+
     pattern_hash: str
     confidence: float
     mathematical_certainty: float
@@ -62,6 +65,7 @@ class PatternResult:
 @dataclass
 class DLTMetrics:
     """DLT analysis metrics."""
+
     pattern_hash: str
     triplet_lock: bool
     mean_delta: float
@@ -75,9 +79,11 @@ class DLTMetrics:
 
 # === Dual Number Automatic Differentiation ===
 
+
 @dataclass
 class Dual:
     """Dual number class for automatic differentiation."""
+
     val: float  # Real part
     eps: float  # Dual part (derivative)
 
@@ -104,10 +110,7 @@ class Dual:
 
     def __mul__(self, other) -> Dual:
         if isinstance(other, Dual):
-            return Dual(
-                self.val * other.val,
-                self.val * other.eps + self.eps * other.val
-            )
+            return Dual(self.val * other.val, self.val * other.eps + self.eps * other.val)
         else:
             return Dual(self.val * other, self.eps * other)
 
@@ -117,8 +120,7 @@ class Dual:
     def __truediv__(self, other) -> Dual:
         if isinstance(other, Dual):
             return Dual(
-                self.val / other.val,
-                (self.eps * other.val - self.val * other.eps) / (other.val ** 2)
+                self.val / other.val, (self.eps * other.val - self.val * other.eps) / (other.val**2)
             )
         else:
             return Dual(self.val / other, self.eps / other)
@@ -130,10 +132,7 @@ class Dual:
             b_ln_a = other * ln_a
             return b_ln_a.exp()
         else:
-            return Dual(
-                self.val ** other,
-                other * (self.val ** (other - 1)) * self.eps
-            )
+            return Dual(self.val**other, other * (self.val ** (other - 1)) * self.eps)
 
     def sin(self) -> Dual:
         return Dual(math.sin(self.val), math.cos(self.val) * self.eps)
@@ -176,18 +175,18 @@ class MathLibV4:
         This is YOUR mathematical algorithm for pattern analysis.
         """
         try:
-            prices = data.get('prices', [])
-            volumes = data.get('volumes', [])
-            timestamps = data.get('timestamps', [])
+            prices = data.get("prices", [])
+            volumes = data.get("volumes", [])
+            timestamps = data.get("timestamps", [])
 
             if len(prices) < 3:
                 raise ValueError("Need at least 3 data points for DLT analysis")
 
             # Calculate deltas using YOUR mathematical approach
-            deltas = [prices[i] - prices[i-1] for i in range(1, len(prices))]
+            deltas = [prices[i] - prices[i - 1] for i in range(1, len(prices))]
 
             # YOUR pattern hash algorithm
-            pattern_data = ''.join([f"{d:.6f}" for d in deltas])
+            pattern_data = "".join([f"{d:.6f}" for d in deltas])
             pattern_hash = hashlib.sha256(pattern_data.encode()).hexdigest()
 
             # YOUR triplet lock mechanism
@@ -215,19 +214,21 @@ class MathLibV4:
                 delta_sequence=deltas,
                 analysis_version=self.version.value,
                 warp_factor=warp_factor,
-                greyscale_score=greyscale_score
+                greyscale_score=greyscale_score,
             )
 
             # Cache the result
             self.pattern_cache[pattern_hash] = metrics
 
             # Add to history
-            self.analysis_history.append({
-                'timestamp': time.time(),
-                'pattern_hash': pattern_hash,
-                'confidence': confidence,
-                'operation': 'dlt_metrics'
-            })
+            self.analysis_history.append(
+                {
+                    "timestamp": time.time(),
+                    "pattern_hash": pattern_hash,
+                    "confidence": confidence,
+                    "operation": "dlt_metrics",
+                }
+            )
 
             return metrics
 
@@ -242,18 +243,20 @@ class MathLibV4:
 
         # YOUR specific triplet lock logic
         for i in range(len(deltas) - 2):
-            triplet = deltas[i:i+3]
+            triplet = deltas[i : i + 3]
             if abs(sum(triplet)) < 0.001:  # YOUR threshold
                 return True
         return False
 
-    def _calculate_confidence(self, deltas: List[float], mean_delta: float, std_dev: float) -> float:
+    def _calculate_confidence(
+        self, deltas: List[float], mean_delta: float, std_dev: float
+    ) -> float:
         """YOUR confidence calculation algorithm."""
         if std_dev == 0:
             return 1.0
 
         # YOUR confidence scoring formula
-        cv = abs(std_dev / mean_delta) if mean_delta != 0 else float('inf')
+        cv = abs(std_dev / mean_delta) if mean_delta != 0 else float("inf")
         confidence = 1.0 / (1.0 + cv)
 
         # YOUR additional confidence factors
@@ -270,7 +273,7 @@ class MathLibV4:
             return 1.0
 
         # YOUR warp factor algorithm
-        volume_deltas = [volumes[i] - volumes[i-1] for i in range(1, len(volumes))]
+        volume_deltas = [volumes[i] - volumes[i - 1] for i in range(1, len(volumes))]
 
         # YOUR correlation calculation
         if len(deltas) != len(volume_deltas):
@@ -287,8 +290,11 @@ class MathLibV4:
             return 0.0
 
         # YOUR greyscale calculation
-        normalized_deltas = [(d - min(deltas)) / (max(deltas) - min(deltas))
-                           for d in deltas] if max(deltas) != min(deltas) else [0.5] * len(deltas)
+        normalized_deltas = (
+            [(d - min(deltas)) / (max(deltas) - min(deltas)) for d in deltas]
+            if max(deltas) != min(deltas)
+            else [0.5] * len(deltas)
+        )
 
         # YOUR greyscale scoring formula
         greyscale_score = sum(normalized_deltas) / len(normalized_deltas)

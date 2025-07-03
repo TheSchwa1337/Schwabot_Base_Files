@@ -14,5 +14,4 @@ Full tensor operations are provided by `core.advanced_tensor_algebra`.
 """
 
 
-
 __all__ = [name for name in globals() if not name.startswith("_")]

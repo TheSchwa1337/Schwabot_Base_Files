@@ -82,6 +82,7 @@ class StrategyParameters:
 
 class ProfitCalculationMode(Enum):
     """Pure profit calculation modes."""
+
     CONSERVATIVE = "conservative"
     BALANCED = "balanced"
     AGGRESSIVE = "aggressive"
@@ -134,7 +135,7 @@ class PureProfitCalculator:
         self,
         market_data: MarketData,
         history_state: HistoryState,
-        mode: ProfitCalculationMode = ProfitCalculationMode.BALANCED
+        mode: ProfitCalculationMode = ProfitCalculationMode.BALANCED,
     ) -> ProfitResult:
         """
         Calculate pure profit using mathematical framework.
@@ -174,9 +175,10 @@ class PureProfitCalculator:
 
             # Final profit score - YOUR final formula
             total_profit_score = (
-                risk_adjusted_profit * confidence_score *
-                (1.0 + tensor_contribution + hash_contribution) *
-                mode_multiplier
+                risk_adjusted_profit
+                * confidence_score
+                * (1.0 + tensor_contribution + hash_contribution)
+                * mode_multiplier
             )
 
             # Ensure bounded result
@@ -194,11 +196,11 @@ class PureProfitCalculator:
                 hash_contribution=hash_contribution,
                 total_profit_score=total_profit_score,
                 calculation_metadata={
-                    'calculation_time': calculation_time,
-                    'mode': mode.value,
-                    'calculation_id': self.calculation_count,
-                    'mathematical_purity': True
-                }
+                    "calculation_time": calculation_time,
+                    "mode": mode.value,
+                    "calculation_id": self.calculation_count,
+                    "mathematical_purity": True,
+                },
             )
 
         except Exception as e:
@@ -224,24 +226,26 @@ class PureProfitCalculator:
 
         return base_profit
 
-    def _calculate_risk_adjustment(self, market_data: MarketData, history_state: HistoryState) -> float:
+    def _calculate_risk_adjustment(
+        self, market_data: MarketData, history_state: HistoryState
+    ) -> float:
         """Calculate risk adjustment factor using YOUR risk mathematics."""
         # YOUR risk tolerance calculation
-        risk_factor = 1.0 - (
-            market_data.volatility * self.strategy_params.risk_tolerance
-        )
+        risk_factor = 1.0 - (market_data.volatility * self.strategy_params.risk_tolerance)
 
         # YOUR historical risk calculation
         if history_state.profit_memory:
             historical_variance = np.var(history_state.profit_memory)
-            risk_factor *= (1.0 - historical_variance)
+            risk_factor *= 1.0 - historical_variance
 
         # YOUR Euler constant integration for risk
         euler_adjustment = 1.0 + (self.EULER_CONSTANT - 2.0) / 10.0
 
         return max(0.1, min(2.0, risk_factor * euler_adjustment))
 
-    def _calculate_confidence_score(self, market_data: MarketData, history_state: HistoryState) -> float:
+    def _calculate_confidence_score(
+        self, market_data: MarketData, history_state: HistoryState
+    ) -> float:
         """Calculate confidence score using YOUR confidence algorithm."""
         # YOUR signal strength calculation
         signal_strength = len(market_data.on_chain_signals) / 10.0
@@ -297,9 +301,9 @@ class PureProfitCalculator:
         """Get YOUR mode multiplier calculations."""
         multipliers = {
             ProfitCalculationMode.CONSERVATIVE: 0.8,  # YOUR conservative math
-            ProfitCalculationMode.BALANCED: 1.0,      # YOUR balanced math
-            ProfitCalculationMode.AGGRESSIVE: 1.3,    # YOUR aggressive math
-            ProfitCalculationMode.TENSOR_OPTIMIZED: 1.1  # YOUR tensor optimized math
+            ProfitCalculationMode.BALANCED: 1.0,  # YOUR balanced math
+            ProfitCalculationMode.AGGRESSIVE: 1.3,  # YOUR aggressive math
+            ProfitCalculationMode.TENSOR_OPTIMIZED: 1.1,  # YOUR tensor optimized math
         }
         return multipliers.get(mode, 1.0)
 
@@ -307,19 +311,19 @@ class PureProfitCalculator:
         """Get calculation metrics and performance data."""
         avg_time = self.total_calculation_time / max(1, self.calculation_count)
         return {
-            'total_calculations': self.calculation_count,
-            'total_calculation_time': self.total_calculation_time,
-            'average_calculation_time': avg_time,
-            'mathematical_constants': {
-                'golden_ratio': self.GOLDEN_RATIO,
-                'euler_constant': self.EULER_CONSTANT,
-                'pi': self.PI
+            "total_calculations": self.calculation_count,
+            "total_calculation_time": self.total_calculation_time,
+            "average_calculation_time": avg_time,
+            "mathematical_constants": {
+                "golden_ratio": self.GOLDEN_RATIO,
+                "euler_constant": self.EULER_CONSTANT,
+                "pi": self.PI,
             },
-            'strategy_parameters': {
-                'risk_tolerance': self.strategy_params.risk_tolerance,
-                'profit_target': self.strategy_params.profit_target,
-                'tensor_depth': self.strategy_params.tensor_depth
-            }
+            "strategy_parameters": {
+                "risk_tolerance": self.strategy_params.risk_tolerance,
+                "profit_target": self.strategy_params.profit_target,
+                "tensor_depth": self.strategy_params.tensor_depth,
+            },
         }
 
     def validate_profit_purity(self, market_data: MarketData, history_state: HistoryState) -> bool:
@@ -349,7 +353,7 @@ class PureProfitCalculator:
 
 def assert_zpe_isolation() -> None:
     """Assert that ZPE/ZBE systems are properly isolated from profit calculations."""
-    forbidden_imports = ['zpe_core', 'zbe_core', 'zero_point_energy']
+    forbidden_imports = ["zpe_core", "zbe_core", "zero_point_energy"]
     current_modules = list(sys.modules.keys())
 
     for forbidden in forbidden_imports:
@@ -369,11 +373,7 @@ def create_sample_market_data() -> MarketData:
         volatility=0.15,
         momentum=0.05,
         volume_profile=0.8,
-        on_chain_signals={
-            'whale_activity': 0.7,
-            'network_fees': 0.3,
-            'hash_rate': 0.9
-        }
+        on_chain_signals={"whale_activity": 0.7, "network_fees": 0.3, "hash_rate": 0.9},
     )
 
 
@@ -392,10 +392,10 @@ def demo_pure_profit_calculation():
     market_data = create_sample_market_data()
     history_state = HistoryState(
         timestamp=time.time(),
-        hash_matrices={'matrix_1': np.random.random((3, 3))},
-        tensor_buckets={'bucket_1': np.random.random(10)},
+        hash_matrices={"matrix_1": np.random.random((3, 3))},
+        tensor_buckets={"bucket_1": np.random.random(10)},
         profit_memory=[0.01, 0.02, -0.005, 0.015],
-        signal_history=[0.8, 0.7, 0.9, 0.6]
+        signal_history=[0.8, 0.7, 0.9, 0.6],
     )
 
     # Calculate profit

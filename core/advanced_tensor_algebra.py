@@ -37,7 +37,9 @@ class AdvancedTensorAlgebra:
         return np.full(shape, default_value, dtype=np.float64)
 
     @staticmethod
-    def contract_tensors(tensor_a: np.ndarray, tensor_b: np.ndarray, axes: Tuple[int, ...]) -> np.ndarray:
+    def contract_tensors(
+        tensor_a: np.ndarray, tensor_b: np.ndarray, axes: Tuple[int, ...]
+    ) -> np.ndarray:
         """
         Performs tensor contraction between two tensors along specified axes.
 

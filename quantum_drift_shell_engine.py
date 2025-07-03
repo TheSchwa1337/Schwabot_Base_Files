@@ -158,7 +158,7 @@ self.thermal_grid[position] = thermal_state
 logger.info(f"Initialized thermal grid with {len(self.thermal_grid)} states")
 
 
-def calculate_thermal_drift():self,
+def calculate_thermal_drift(): self,
         target_position: Tuple[int, int, int],
         time_delta: float = 1.0,
         drift_mode: DriftMode = DriftMode.ADAPTIVE

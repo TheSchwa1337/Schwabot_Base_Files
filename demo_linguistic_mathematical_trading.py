@@ -35,9 +35,9 @@ sys.path.append(os.path.join(os.path.dirname(__file__), "core"))
 
 def simulate_market_conditions():
     """Simulate realistic BTC market conditions."""
-    base_price = 47000 + random.randint(-5000, 8000)
-    volatility = random.uniform(0.5, 3.0)
-    volume = random.randint(800000, 2000000)
+    base_price=47000 + random.randint(-5000, 8000)
+    volatility=random.uniform(0.5, 3.0)
+    volume=random.randint(800000, 2000000)
 
     return {
         "btc_price": base_price,
@@ -117,7 +117,11 @@ async def linguistic_trading_demo_async():  # Changed to async function
                             tv['confidence']:.2f}, State: {tv['state']})"
                     )
                     print(
-                        f"   ⚡ News Linguistic Bit State: {la['bit_state']:02b} | Weight: {la['weight']:.3f} | Hash: {la['sha_hash'][:8]}..."
+                        f"   ⚡ News Linguistic Bit State: {
+    la['bit_state']:02b} | Weight: {
+        la['weight']:.3f} | Hash: {
+            la['sha_hash'][
+                :8]}..."
                     )
                     print(f"   🏷️ Generated Tags: {', '.join(tv['tags'])}")
                 else:

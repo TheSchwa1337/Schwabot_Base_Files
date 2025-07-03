@@ -1,4 +1,4 @@
-        import traceback
+import traceback
 from dataclasses import dataclass, field
 from typing import Dict, Any
 import hashlib
@@ -374,7 +374,7 @@ class BackupIntegrationDemo:
                 size = os.path.getsize(filepath)
                 print(f"  {filepath}: {size} bytes")
 
-    def _get_backup_directory_size():-> str:
+    def _get_backup_directory_size(): -> str:
         """Get backup directory size."""
         try:
             total_size = 0

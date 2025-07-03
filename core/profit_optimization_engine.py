@@ -1,15 +1,19 @@
-""""
-Profit Optimization Engine for Schwabot Trading System.
+#!/usr/bin/env python3
+"""
+Profit Optimization Engine
 
-This module implements a comprehensive profit optimization framework that integrates:
-    1. Mathematical optimization algorithms
-2. Risk management and portfolio optimization
-3. Performance analysis and backtesting
-4. Dynamic parameter adjustment
-5. Multi-objective optimization
+Advanced portfolio optimization engine using various mathematical methods
+including gradient descent, genetic algorithms, and other optimization techniques.
+
+This module provides:
+- Portfolio weight optimization
+- Risk-adjusted return maximization
+- Multiple optimization algorithms
+- Constraint handling
+- Performance metrics calculation
 
 All functions are pure and can be unit-tested in isolation.
-""""
+"""
 
 import math
 from dataclasses import dataclass, field
@@ -47,7 +51,7 @@ class OptimizationResult:
     convergence: bool
     iterations: int
     execution_time: float
-metadata: Dict[str, Any] = field(default_factory=dict)
+    metadata: Dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
@@ -60,17 +64,17 @@ class PortfolioWeights:
 
 
 class ProfitOptimizationEngine:
-    """"
+    """
     Main profit optimization engine.
 
     Provides methods for optimizing trading strategies, portfolio allocation,
     and risk management parameters.
-    """"
+    """
 
     def __init__(self, risk_free_rate: float = 0.2):
         """Initialize the optimization engine."""
         self.risk_free_rate = risk_free_rate
-self.optimization_history: List[OptimizationResult] = []
+        self.optimization_history: List[OptimizationResult] = []
 
     def optimize_portfolio_weights(
         self,
@@ -81,7 +85,7 @@ self.optimization_history: List[OptimizationResult] = []
         max_iterations: int = 1000,
         tolerance: float = 1e-6
     ) -> OptimizationResult:
-        """"
+        """
         Optimize portfolio weights for maximum risk-adjusted returns.
 
 Args:
@@ -94,7 +98,7 @@ Args:
 
 Returns:
             Optimization result with optimal weights
-        """"
+        """
         if method == OptimizationMethod.GRADIENT_DESCENT:
             return self._gradient_descent_optimization(
                 returns, risk_metric, constraints, max_iterations, tolerance
@@ -209,10 +213,11 @@ Returns:
 
                 # Mutation
                 if np.random.random() < 0.1:
-                    mutation_idx = np.random.randint(num_assets)
-                    child[mutation_idx] = np.random.random()
+                    mutation_idx = np.random.randint(0, num_assets)
+                    child[mutation_idx] += np.random.normal(0, 0.1)
+                    child = np.maximum(child, 0)  # Ensure non-negative weights
 
-                # Normalize
+                # Normalize weights
                 child = child / np.sum(child)
                 new_population.append(child)
 
@@ -231,131 +236,97 @@ Returns:
             }
         )
 
-    def _sharpe_ratio_gradient(
-        self,
-        weights: np.ndarray,
-        returns: np.ndarray,
-        cov_matrix: np.ndarray
-    ) -> Tuple[float, np.ndarray]:
+    def _sharpe_ratio_gradient(self, weights: np.ndarray, returns: np.ndarray, cov_matrix: np.ndarray) -> Tuple[float, np.ndarray]:
         """Calculate Sharpe ratio and its gradient."""
-        portfolio_returns = returns @ weights
-        mean_return = np.mean(portfolio_returns)
-        std_return = np.std(portfolio_returns, ddof=1)
-
-        if std_return == 0:
-            return 0.0, np.zeros_like(weights)
-
-        sharpe_ratio = (mean_return - self.risk_free_rate) / std_return
-
-        # Gradient calculation
-        excess_return = mean_return - self.risk_free_rate
-        gradient = (np.mean(returns, axis=0) * std_return - excess_return * (cov_matrix @ weights) / std_return) / (std_return ** 2)
+        # Calculate portfolio return and volatility
+        portfolio_return = np.mean(returns @ weights)
+        portfolio_vol = np.sqrt(weights.T @ cov_matrix @ weights)
+        
+        # Sharpe ratio
+        sharpe_ratio = (portfolio_return - self.risk_free_rate) / portfolio_vol
+        
+        # Gradient of Sharpe ratio
+        if portfolio_vol > 0:
+            gradient = (returns.mean(axis=0) - self.risk_free_rate) / portfolio_vol - (portfolio_return - self.risk_free_rate) * (cov_matrix @ weights) / (portfolio_vol ** 3)
+        else:
+            gradient = np.zeros_like(weights)
 
         return sharpe_ratio, gradient
 
-    def _generic_risk_gradient(
-        self,
-        weights: np.ndarray,
-        returns: np.ndarray,
-        cov_matrix: np.ndarray,
-        risk_metric: RiskMetric
-    ) -> Tuple[float, np.ndarray]:
+    def _generic_risk_gradient(self, weights: np.ndarray, returns: np.ndarray, cov_matrix: np.ndarray, risk_metric: RiskMetric) -> Tuple[float, np.ndarray]:
         """Calculate generic risk metric and gradient."""
-        # Simplified implementation - would be more complex for different risk metrics
-        portfolio_volatility = np.sqrt(weights.T @ cov_matrix @ weights)
-        gradient = (cov_matrix @ weights) / portfolio_volatility
+        if risk_metric == RiskMetric.MAX_DRAWDOWN:
+            return self._max_drawdown_gradient(weights, returns)
+        else:
+            # Default to variance-based risk
+            portfolio_var = weights.T @ cov_matrix @ weights
+            gradient = 2 * cov_matrix @ weights
+            return -portfolio_var, -gradient
 
-        return -portfolio_volatility, -gradient  # Minimize risk
+    def _max_drawdown_gradient(self, weights: np.ndarray, returns: np.ndarray) -> Tuple[float, np.ndarray]:
+        """Calculate maximum drawdown and its gradient."""
+        portfolio_returns = returns @ weights
+        cumulative_returns = np.cumprod(1 + portfolio_returns)
+        running_max = np.maximum.accumulate(cumulative_returns)
+        drawdown = (cumulative_returns - running_max) / running_max
+        max_drawdown = np.min(drawdown)
+        
+        # Simplified gradient (approximation)
+        gradient = np.mean(returns, axis=0) * max_drawdown
+        
+        return max_drawdown, gradient
 
     def _calculate_sharpe_ratio(self, weights: np.ndarray, returns: np.ndarray) -> float:
         """Calculate Sharpe ratio for given weights."""
-        portfolio_returns = returns @ weights
-        mean_return = np.mean(portfolio_returns)
-        std_return = np.std(portfolio_returns, ddof=1)
+        portfolio_return = np.mean(returns @ weights)
+        portfolio_vol = np.std(returns @ weights)
 
-        if std_return == 0:
+        if portfolio_vol > 0:
+            return (portfolio_return - self.risk_free_rate) / portfolio_vol
+        else:
             return 0.0
 
-        return (mean_return - self.risk_free_rate) / std_return
-
-    def _calculate_risk_metric(
-        self,
-        weights: np.ndarray,
-        returns: np.ndarray,
-        risk_metric: RiskMetric
-    ) -> float:
-        """Calculate specified risk metric."""
+    def _calculate_risk_metric(self, weights: np.ndarray, returns: np.ndarray, risk_metric: RiskMetric) -> float:
+        """Calculate risk metric for given weights."""
         if risk_metric == RiskMetric.SHARPE_RATIO:
             return self._calculate_sharpe_ratio(weights, returns)
         elif risk_metric == RiskMetric.MAX_DRAWDOWN:
-            return -self._calculate_max_drawdown(weights, returns)
-else:
-            # Default to negative volatility (minimize risk)
-            cov_matrix = np.cov(returns.T, ddof=1)
-            return -np.sqrt(weights.T @ cov_matrix @ weights)
+            portfolio_returns = returns @ weights
+            cumulative_returns = np.cumprod(1 + portfolio_returns)
+            running_max = np.maximum.accumulate(cumulative_returns)
+            drawdown = (cumulative_returns - running_max) / running_max
+            return np.min(drawdown)
+        else:
+            # Default to variance
+            return -np.var(returns @ weights)
 
-    def _calculate_max_drawdown(self, weights: np.ndarray, returns: np.ndarray) -> float:
-        """Calculate maximum drawdown."""
-        portfolio_returns = returns @ weights
-        cumulative = np.cumprod(1 + portfolio_returns)
-        running_max = np.maximum.accumulate(cumulative)
-        drawdown = (cumulative - running_max) / running_max
-        return np.min(drawdown)
-
-    def _apply_constraints(
-        self,
-        weights: np.ndarray,
-        constraints: Dict[str, Any]
-    ) -> np.ndarray:
-        """Apply optimization constraints."""
+    def _apply_constraints(self, weights: np.ndarray, constraints: Dict[str, Any]) -> np.ndarray:
+        """Apply optimization constraints to weights."""
         # Ensure weights sum to 1
         weights = weights / np.sum(weights)
 
-        # Apply minimum/maximum weight constraints
-        if 'min_weight' in constraints:
-            weights = np.maximum(weights, constraints['min_weight'])
-
-        if 'max_weight' in constraints:
-            weights = np.minimum(weights, constraints['max_weight'])
-
-        # Renormalize
-        weights = weights / np.sum(weights)
+        # Apply bounds if specified
+        if 'bounds' in constraints:
+            min_weight = constraints['bounds'].get('min', 0.0)
+            max_weight = constraints['bounds'].get('max', 1.0)
+            weights = np.clip(weights, min_weight, max_weight)
+            weights = weights / np.sum(weights)  # Renormalize
 
         return weights
 
-    def optimize_trading_parameters(
-        self,
-        historical_data: Dict[str, np.ndarray],
-        strategy_params: Dict[str, Any],
-        optimization_target: str = "sharpe_ratio"
-    ) -> OptimizationResult:
-        """"
-        Optimize trading strategy parameters.
+    def get_optimization_history(self) -> List[OptimizationResult]:
+        """Get optimization history."""
+        return self.optimization_history.copy()
 
-        Args:
-            historical_data: Historical market data
-            strategy_params: Strategy parameters to optimize
-            optimization_target: Target metric to optimize
-
-        Returns:
-            Optimization result with optimal parameters
-        """"
-        # This would implement strategy-specific optimization
-        # For now, return a placeholder result
-        return OptimizationResult(
-            optimal_parameters=strategy_params,
-            objective_value=0.0,
-            convergence=True,
-            iterations=1,
-            execution_time=0.0,
-            metadata={'method': 'strategy_optimization', 'target': optimization_target}
-        )
+    def clear_history(self) -> None:
+        """Clear optimization history."""
+        self.optimization_history.clear()
 
 
-# Convenience functions
+# Factory functions
 def create_optimization_engine(risk_free_rate: float = 0.2) -> ProfitOptimizationEngine:
     """Create a new optimization engine instance."""
-    return ProfitOptimizationEngine(risk_free_rate=risk_free_rate)
+    return ProfitOptimizationEngine(risk_free_rate)
 
 
 def optimize_portfolio(
@@ -364,5 +335,5 @@ def optimize_portfolio(
     risk_metric: RiskMetric = RiskMetric.SHARPE_RATIO
 ) -> OptimizationResult:
     """Convenience function for portfolio optimization."""
-    engine = create_optimization_engine()
+    engine = ProfitOptimizationEngine()
     return engine.optimize_portfolio_weights(returns, method, risk_metric)

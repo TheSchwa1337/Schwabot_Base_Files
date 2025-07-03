@@ -12,7 +12,6 @@ This script ensures consistent, modern formatting while preserving mathematical 
 """
 
 
-
 def run_command(cmd, description):
     """Run a command and handle errors gracefully."""
     print(f"\n🔄 {description}...")

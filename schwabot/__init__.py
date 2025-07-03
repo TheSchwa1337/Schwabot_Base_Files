@@ -47,6 +47,8 @@ except ImportError:
     UTILS_AVAILABLE = False
 
 # System status
+
+
 def get_system_status():
     """Get the current system status and available components."""
     return {
@@ -58,6 +60,8 @@ def get_system_status():
     }
 
 # Main system class for compatibility
+
+
 class SchwabotSystem:
     """Main Schwabot system interface."""
 
@@ -76,6 +80,7 @@ class SchwabotSystem:
     def get_status(self):
         """Get the system status."""
         return self.status
+
 
 # Export main classes and functions
 __all__ = [
