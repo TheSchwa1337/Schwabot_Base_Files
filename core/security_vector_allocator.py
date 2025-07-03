@@ -113,19 +113,19 @@ Computes security drift and applies trust rotation matrices.from dataclasses imp
 
 
 
-class SecurityAllocation:Represents a security allocation with drift and rotation.chi_value: float
+class SecurityAllocation:Represents a security allocation with drift and rotation.chi_value: floa
 
 
 
-    phi_drift: float
+    phi_drift: floa
 
 
 
-    psi_divergence: float
+    psi_divergence: floa
 
 
 
-    rotation_angle: float
+    rotation_angle: floa
 
 
 
@@ -257,7 +257,7 @@ class SecurityVectorAllocator:Implements (t) = /t +  for security vector allocat
 
 
 
-            # (t) = /t + 
+            # (t) = /t +
 
 
 

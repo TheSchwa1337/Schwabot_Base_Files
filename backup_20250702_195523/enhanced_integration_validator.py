@@ -1,6 +1,6 @@
+from __future__ import annotations
 from core.mathlib_v4 import MathLibV4
 from core.unified_math_system import UnifiedMathSystem
-from __future__ import annotations
 from core.advanced_tensor_algebra import UnifiedTensorAlgebra
 from core.enhanced_strategy_framework import EnhancedStrategyFramework
 from core.smart_money_integration import SmartMoneyIntegrationFramework

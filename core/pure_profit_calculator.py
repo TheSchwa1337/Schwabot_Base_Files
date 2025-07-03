@@ -257,7 +257,7 @@ class PureProfitCalculator:
 
     def _calculate_tensor_contribution(self, history_state: HistoryState) -> float:
         """Calculate tensor contribution using YOUR tensor mathematics."""
-        if not history_state.tensor_buckets:
+            if not history_state.tensor_buckets:
             return 0.0
 
         # YOUR tensor bucket analysis

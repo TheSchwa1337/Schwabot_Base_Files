@@ -1,29 +1,30 @@
-import numpy as np
-                    import threading
-                import http.server
-                import random
-                import socketserver
-            from core.biological_immune_error_handler import (
-from core.biological_immune_error_handler import ImmuneZone, immune_protected
-from core.enhanced_master_cycle_engine import EnhancedMasterCycleEngine
-from pathlib import Path
-from server.immune_diagnostic_websocket import ImmuneDiagnosticWebSocketServer
-from typing import Dict, Any
+#!/usr/bin/env python3
 import argparse
 import asyncio
+import http.server
 import logging
+import random
 import signal
+import socketserver
 import sys
+import threading
 import time
 import webbrowser
+from pathlib import Path
+from typing import Any, Dict
 
-#!/usr/bin/env python3
+import numpy as np
+from core.biological_immune_error_handler import (
+    ImmuneZone,
+    immune_protected,
+)
+from core.enhanced_master_cycle_engine import EnhancedMasterCycleEngine
+from server.immune_diagnostic_websocket import ImmuneDiagnosticWebSocketServer
+
 """Schwabot Biological Immune System CLI.
-
 Comprehensive command-line interface for launching and managing the enhanced
 Schwabot system with biological immune error handling, T-cell validation,
 neural gateways, swarm consensus, and zone-based response mechanisms.
-
 Features:
 - Complete immune system testing and validation
 - Real-time monitoring dashboard
@@ -31,8 +32,6 @@ Features:
 - Error injection and recovery testing
 - Production deployment tools
 """
-
-
 
 # Add project root to path
 sys.path.insert(0, str(Path(__file__).parent))
@@ -60,7 +59,7 @@ class SchwabotImmuneCLI:
         print("🧬 Schwabot Biological Immune System CLI")
         print("=" * 60)
 
-    async def initialize_systems():-> bool:
+    async def initialize_systems(self) -> bool:
         """Initialize all immune system components."""
         try:
             print("🧬 Initializing Biological Immune System...")
@@ -79,7 +78,7 @@ class SchwabotImmuneCLI:
             print(f"🚨 Initialization failed: {e}")
             return False
 
-    async def run_comprehensive_test():-> None:
+    async def run_comprehensive_test(self) -> None:
         """Run comprehensive immune system test suite."""
         print("\n🧬 Running Comprehensive Immune System Test Suite")
         print("=" * 60)
@@ -122,14 +121,14 @@ class SchwabotImmuneCLI:
         print("\n🧬 Comprehensive Test Suite Complete")
         self._print_system_status()
 
-    async def _test_basic_immune_protection():-> Dict[str, Any]:
+    async def _test_basic_immune_protection(self) -> Dict[str, Any]:
         """Test basic immune protection functionality."""
         results = {"passed": 0, "failed": 0, "details": []}
 
         try:
             # Test normal operation
             @immune_protected(self.immune_handler)
-            def normal_operation():-> float:
+            def normal_operation(x: float) -> float:
                 return x * 2.0
 
             result = normal_operation(5.0)
@@ -142,7 +141,7 @@ class SchwabotImmuneCLI:
 
             # Test error handling
             @immune_protected(self.immune_handler)
-            def error_operation():-> None:
+            def error_operation() -> None:
                 raise ValueError("Test error")
 
             result = error_operation()
@@ -159,11 +158,12 @@ class SchwabotImmuneCLI:
 
         return results
 
-    async def _test_tcell_validation():-> Dict[str, Any]:
+    async def _test_tcell_validation(self) -> Dict[str, Any]:
         """Test T-Cell validation system."""
         results = {"passed": 0, "failed": 0, "details": []}
 
         try:
+            from core.enhanced_tcell_system import (
                 TCellSignal,
                 ImmuneSignalType,
                 TCellValidator,
@@ -220,7 +220,7 @@ class SchwabotImmuneCLI:
 
         return results
 
-    async def _test_neural_gateway():-> Dict[str, Any]:
+    async def _test_neural_gateway(self) -> Dict[str, Any]:
         """Test neural gateway protection."""
         results = {"passed": 0, "failed": 0, "details": []}
 
@@ -278,748 +278,569 @@ class SchwabotImmuneCLI:
 
         return results
 
-    async def _test_swarm_consensus():-> Dict[str, Any]:
+    async def _test_swarm_consensus(self) -> Dict[str, Any]:
         """Test swarm consensus validation."""
         results = {"passed": 0, "failed": 0, "details": []}
 
         try:
-            swarm = self.immune_handler.swarm_matrix
+            from core.swarm_intelligence import SwarmConsensus
 
-            # Test normal consensus
-            test_vector = np.array([0.5, 0.5, 0.5])
-            consensus_result = swarm.simulate_swarm_dynamics(test_vector)
+            swarm = SwarmConsensus(node_id="test_node", peer_nodes=["peer1", "peer2"])
 
-            if "convergence" in consensus_result:
+            # Test consensus achievement
+            proposal = {"action": "BUY", "symbol": "BTC", "amount": 1.0}
+            swarm.propose_action(proposal)
+            swarm.record_vote("peer1", proposal, True)
+            swarm.record_vote("peer2", proposal, True)
+
+            consensus, details = swarm.check_consensus(proposal)
+            if consensus:
                 results["passed"] += 1
-                results["details"].append(
-                    f"✅ Swarm consensus computed: {consensus_result['recommendation']}"
-                )
+                results["details"].append("✅ Swarm consensus achieved successfully")
             else:
                 results["failed"] += 1
-                results["details"].append("❌ Swarm consensus failed to compute")
+                results["details"].append("❌ Swarm consensus failed")
 
-            # Test node health
-            healthy_nodes = sum(1 for node in swarm.nodes.values() if node.is_healthy())
-            total_nodes = len(swarm.nodes)
-            health_ratio = healthy_nodes / total_nodes
+            # Test consensus failure
+            proposal2 = {"action": "SELL", "symbol": "ETH", "amount": 10.0}
+            swarm.propose_action(proposal2)
+            swarm.record_vote("peer1", proposal2, True)
+            swarm.record_vote("peer2", proposal2, False)
 
-            if health_ratio > 0.8:
+            consensus, details = swarm.check_consensus(proposal2)
+            if not consensus:
                 results["passed"] += 1
-                results["details"].append(f"✅ Swarm health good: {health_ratio:.2%}")
+                results["details"].append("✅ Swarm consensus failure handled correctly")
             else:
                 results["failed"] += 1
-                results["details"].append(f"❌ Swarm health low: {health_ratio:.2%}")
-
-            # Test node update
-            test_node_id = list(swarm.nodes.keys())[0]
-            success = swarm.update_node_vector(
-                test_node_id, np.array([1.0, 0.0, 0.0]), 0.9
-            )
-            if success:
-                results["passed"] += 1
-                results["details"].append("✅ Node update successful")
-            else:
-                results["failed"] += 1
-                results["details"].append("❌ Node update failed")
+                results["details"].append("❌ Swarm consensus failure test failed")
 
         except Exception as e:
             results["failed"] += 1
-            results["details"].append(f"❌ Swarm consensus test exception: {e}")
+            results["details"].append(f"❌ Swarm Consensus test exception: {e}")
 
         return results
 
-    async def _test_zone_response():-> Dict[str, Any]:
-        """Test zone-based response system."""
+    async def _test_zone_response(self) -> Dict[str, Any]:
+        """Test zone-based response mechanism."""
         results = {"passed": 0, "failed": 0, "details": []}
 
         try:
-            zone_manager = self.immune_handler.zone_manager
-
-            # Test safe zone
-            safe_zone = zone_manager.classify_zone(
-                0.1, 0.9, 0.01
-            )  # Low noise, high confidence, low error
-            if safe_zone == ImmuneZone.SAFE:
+            # Trigger ALERT zone
+            self.immune_handler.log_error(ValueError("Test Alert"), ImmuneZone.ALERT)
+            if self.immune_handler.get_zone_status(ImmuneZone.ALERT)["errors"] > 0:
                 results["passed"] += 1
-                results["details"].append("✅ Safe zone classification correct")
+                results["details"].append("✅ ALERT zone triggered successfully")
             else:
                 results["failed"] += 1
-                results["details"].append(
-                    f"❌ Safe zone classification incorrect: {safe_zone}"
-                )
+                results["details"].append("❌ ALERT zone failed to trigger")
 
-            # Test toxic zone
-            toxic_zone = zone_manager.classify_zone(
-                0.8, 0.2, 0.2
-            )  # High noise, low confidence, high error
-            if toxic_zone in [ImmuneZone.TOXIC, ImmuneZone.QUARANTINE]:
-                results["passed"] += 1
-                results["details"].append(
-                    f"✅ Toxic zone classification correct: {toxic_zone}"
+            # Trigger TOXIC zone
+            for _ in range(15):
+                self.immune_handler.log_error(
+                    TypeError("Test Toxic"), ImmuneZone.TOXIC
                 )
+            if self.immune_handler.get_zone_status(ImmuneZone.TOXIC)["active"]:
+                results["passed"] += 1
+                results["details"].append("✅ TOXIC zone triggered successfully")
             else:
                 results["failed"] += 1
-                results["details"].append(
-                    f"❌ Toxic zone classification incorrect: {toxic_zone}"
-                )
+                results["details"].append("❌ TOXIC zone failed to trigger")
 
-            # Test zone response
-            response = zone_manager.get_zone_response(ImmuneZone.ALERT)
-            if response["action"] == "monitor":
+            # Reset zones
+            self.immune_handler.reset_zone_status()
+            if not self.immune_handler.get_zone_status(ImmuneZone.TOXIC)["active"]:
                 results["passed"] += 1
-                results["details"].append("✅ Alert zone response correct")
+                results["details"].append("✅ Zone reset successful")
             else:
                 results["failed"] += 1
-                results["details"].append(
-                    f"❌ Alert zone response incorrect: {response['action']}"
-                )
+                results["details"].append("❌ Zone reset failed")
 
         except Exception as e:
             results["failed"] += 1
-            results["details"].append(f"❌ Zone response test exception: {e}")
+            results["details"].append(f"❌ Zone Response test exception: {e}")
 
         return results
 
-    async def _test_error_recovery():-> Dict[str, Any]:
+    async def _test_error_recovery(self) -> Dict[str, Any]:
         """Test error recovery and antibody formation."""
         results = {"passed": 0, "failed": 0, "details": []}
-
         try:
-            # Clear existing antibody patterns
-            initial_patterns = len(self.immune_handler.antibody_patterns)
 
-            # Generate recurring errors to create antibody patterns
             @immune_protected(self.immune_handler)
             def recurring_error_operation():
-                raise ValueError("Recurring test error")
+                raise ConnectionError("Simulated recurring network error")
 
-            # Call multiple times to create pattern
-            for _ in range(3):
+            # Trigger error multiple times to form antibody
+            for i in range(10):
                 recurring_error_operation()
 
-            # Check if antibody pattern was created
-            final_patterns = len(self.immune_handler.antibody_patterns)
-            if final_patterns > initial_patterns:
-                results["passed"] += 1
-                results["details"].append(
-                    f"✅ Antibody pattern created ({
-                        final_patterns - initial_patterns
-                    } new patterns)"
-                )
-            else:
-                results["failed"] += 1
-                results["details"].append("❌ No antibody pattern created")
+            # Check if antibody was formed
+            error_signature = self.immune_handler._get_error_signature(
+                ConnectionError("..."), recurring_error_operation
+            )
+            antibody = self.immune_handler.antibodies.get(error_signature)
 
-            # Test mitochondrial health update
-            initial_health = self.immune_handler.mitochondrial_health
-            self.immune_handler._update_mitochondrial_health(True)  # Success
-            if self.immune_handler.mitochondrial_health >= initial_health:
+            if antibody and antibody.strength > 5:
                 results["passed"] += 1
-                results["details"].append("✅ Mitochondrial health improvement works")
+                results["details"].append(
+                    f"✅ Antibody formed for recurring error (strength: {antibody.strength})"
+                )
             else:
                 results["failed"] += 1
-                results["details"].append("❌ Mitochondrial health improvement failed")
+                results["details"].append("❌ Antibody formation failed")
 
-            # Test entropy monitoring
-            self.immune_handler._update_entropy_monitoring()
-            if 0.0 <= self.immune_handler.system_entropy <= 1.0:
+            # Check if recovery mechanism is triggered
+            initial_state = self.immune_handler.neural_gateway.current_state
+            recurring_error_operation()  # One more time to trigger response
+            final_state = self.immune_handler.neural_gateway.current_state
+
+            if final_state != initial_state:
                 results["passed"] += 1
                 results["details"].append(
-                    f"✅ Entropy monitoring works: {
-                        self.immune_handler.system_entropy:.3f}"
+                    f"✅ Recovery mechanism triggered (state changed to {final_state.name})"
                 )
             else:
                 results["failed"] += 1
-                results["details"].append(
-                    f"❌ Entropy monitoring failed: {
-                        self.immune_handler.system_entropy
-                    }"
-                )
+                results["details"].append("❌ Recovery mechanism failed to trigger")
 
         except Exception as e:
             results["failed"] += 1
-            results["details"].append(f"❌ Error recovery test exception: {e}")
+            results["details"].append(f"❌ Error Recovery test exception: {e}")
 
         return results
 
-    async def _test_market_simulation():-> Dict[str, Any]:
-        """Test market simulation with immune response."""
+    async def _test_market_simulation(self) -> Dict[str, Any]:
+        """Test market simulation with immune responses."""
         results = {"passed": 0, "failed": 0, "details": []}
-
         try:
-            # Generate test market data
-            market_data = {
-                "btc_price": 45000.0,
-                "orderbook": {"bids": [[44999, 1.0]], "asks": [[45001, 1.0]]},
-                "price_history": [44950, 44980, 45000, 45020, 45000],
-                "volume_history": [100, 120, 110, 90, 105],
-                "fibonacci_projection": [44960, 44990, 45010, 45030, 45010],
-                "volume": 1.5,
-                "trend": 0.1,
-            }
+            print("  - Simulating 100 market ticks...")
+            for i in range(100):
+                # Simulate market data
+                price = 50000 + (np.random.randn() * 500)
+                volume = 1000 + (np.random.rand() * 200)
 
-            # Process normal market tick
-            diagnostics = self.engine.process_market_tick_protected(market_data)
-            if hasattr(diagnostics, "trading_decision"):
-                results["passed"] += 1
-                results["details"].append(
-                    f"✅ Market tick processed: {diagnostics.trading_decision}"
-                )
-            else:
-                results["failed"] += 1
-                results["details"].append("❌ Market tick processing failed")
+                # Inject occasional errors
+                if random.random() < 0.1:
+                    error_type = random.choice(
+                        [ValueError, TypeError, KeyError, IndexError]
+                    )
+                    self.engine.process_market_data(
+                        price, volume, inject_error=error_type("Simulated market error")
+                    )
+                else:
+                    self.engine.process_market_data(price, volume)
 
-            # Test with divergent Fibonacci projection
-            divergent_data = market_data.copy()
-            divergent_data["fibonacci_projection"] = [
-                40000,
-                41000,
-                42000,
-                43000,
-                44000,
-            ]  # Highly divergent
-
-            divergent_diagnostics = self.engine.process_market_tick_protected(
-                divergent_data
-            )
-            if (
-                hasattr(divergent_diagnostics, "immune_response_active")
-                and divergent_diagnostics.immune_response_active
-            ):
-                results["passed"] += 1
-                results["details"].append(
-                    "✅ Fibonacci divergence detected and handled"
-                )
-            else:
-                results["passed"] += 1  # May not trigger immediately
-                results["details"].append(
-                    "✅ Divergent data processed (immune response may activate)"
-                )
-
-            # Test system status
-            status = self.engine.get_enhanced_system_status()
-            if "immune_system_status" in status:
-                results["passed"] += 1
-                results["details"].append("✅ System status retrieval works")
-            else:
-                results["failed"] += 1
-                results["details"].append("❌ System status retrieval failed")
-
-        except Exception as e:
-            results["failed"] += 1
-            results["details"].append(f"❌ Market simulation test exception: {e}")
-
-        return results
-
-    def _print_test_results():-> None:
-        """Print formatted test results."""
-        total_tests = results["passed"] + results["failed"]
-        success_rate = (results["passed"] / total_tests * 100) if total_tests > 0 else 0
-
-        print(
-            f"   {test_name}: {results['passed']}/{total_tests} passed ({success_rate:.1f}%)"
-        )
-        for detail in results["details"]:
-            print(f"     {detail}")
-
-    def _print_system_status():-> None:
-        """Print current system status."""
-        print("\n🧬 Current System Status:")
-        print("-" * 30)
-
-        status = self.immune_handler.get_immune_status()
-
-        print(
-            f"   Mitochondrial Health: {
-                status['system_health']['mitochondrial_health']:.3f}"
-        )
-        print(f"   System Entropy: {status['system_health']['system_entropy']:.3f}")
-        print(f"   Error Rate: {status['system_health']['current_error_rate']:.3f}")
-        print(f"   Current Zone: {status['system_health']['current_zone'].upper()}")
-        print(f"   Success Rate: {status['performance_metrics']['success_rate']:.3f}")
-        print(f"   Antibody Patterns: {status['antibody_patterns']}")
-
-    async def start_monitoring_dashboard():-> None:
-        """Start the real-time monitoring dashboard."""
-        print("\n🖥️ Starting Real-Time Monitoring Dashboard...")
-
-        try:
-            # Start WebSocket server
-            await self.websocket_server.start_server()
-
-            # Open dashboard in browser
-            dashboard_url = (
-                f"http://{self.websocket_server.host}:{self.websocket_server.port}"
-            )
-            print(f"📊 Dashboard URL: {dashboard_url}")
-
-            # Try to open in default browser
-            try:
-                # Create a simple HTTP server for the dashboard
-
-                class DashboardHandler(http.server.SimpleHTTPRequestHandler):
-                    def do_GET(self):
-                        if self.path == "/" or self.path == "/dashboard":
-                            self.send_response(200)
-                            self.send_header("Content-type", "text/html")
-                            self.end_headers()
-                            self.wfile.write(self.server.dashboard_html.encode())
-                        else:
-                            self.send_response(404)
-                            self.end_headers()
-
-                with socketserver.TCPServer(
-                    ("", self.websocket_server.port + 1), DashboardHandler
-                ) as httpd:
-                    httpd.dashboard_html = self.websocket_server.get_dashboard_html()
-
-                    dashboard_http_url = f"http://{self.websocket_server.host}:{
-                        self.websocket_server.port + 1
-                    }/dashboard"
-                    print(f"📊 Opening dashboard at: {dashboard_http_url}")
-
-                    # Start HTTP server in background
-
-                    server_thread = threading.Thread(target=httpd.serve_forever)
-                    server_thread.daemon = True
-                    server_thread.start()
-
-                    # Open browser
-                    webbrowser.open(dashboard_http_url)
-
-                    print("📱 Dashboard controls:")
-                    print("   🚀 Start Simulation - Begin market simulation")
-                    print("   ⏹️ Stop Simulation - Stop market simulation")
-                    print("   🔄 Reset System - Reset immune system to healthy state")
-                    print("   🚨 Trigger Emergency - Test emergency response")
-                    print(
-                        "   📱 Auto-Switch - Toggle automatic tab switching for alerts"
+                # Update websocket server
+                if self.websocket_server and self.websocket_server.is_running():
+                    await self.websocket_server.broadcast(
+                        self.immune_handler.get_full_status()
                     )
 
-                    print("\n✅ Dashboard started successfully!")
-                    print("   Press Ctrl+C to stop the server")
+                time.sleep(0.01)
 
-                    # Keep servers running
-                    while self.running:
-                        await asyncio.sleep(1)
-
-            except Exception as e:
-                print(f"⚠️ Could not open browser automatically: {e}")
-                print(f"   Please manually open: {dashboard_url}")
-
-        except Exception as e:
-            print(f"🚨 Failed to start dashboard: {e}")
-
-    async def run_stress_test():-> None:
-        """Run stress test to validate immune system under load."""
-        print("\n🔥 Running Immune System Stress Test...")
-        print("=" * 60)
-
-        stress_results = {
-            "operations": 0,
-            "errors": 0,
-            "immune_responses": 0,
-            "recoveries": 0,
-        }
-
-        try:
-            # Create various error scenarios
-            @immune_protected(self.immune_handler)
-            def random_operation(operation_type: str):
-
-                if operation_type == "normal":
-                    return random.uniform(0, 100)
-                elif operation_type == "error":
-                    raise ValueError(f"Random error {random.randint(1, 10)}")
-                elif operation_type == "timeout":
-                    time.sleep(0.1)  # Simulate slow operation
-                    return "timeout_result"
-                elif operation_type == "memory":
-                    # Simulate memory-intensive operation
-                    data = [random.random() for _ in range(1000)]
-                    return sum(data)
-
-            # Run stress operations
-            operation_types = ["normal", "error", "timeout", "memory"]
-
-            print("Running 100 random operations...")
-            for i in range(100):
-                operation_type = np.random.choice(
-                    operation_types, p=[0.6, 0.2, 0.1, 0.1]
+            # Check final system health
+            status = self.immune_handler.get_full_status()
+            if status["overall_health"] > 0.7:
+                results["passed"] += 1
+                results["details"].append(
+                    f"✅ Market simulation completed with high health ({status['overall_health']:.2f})"
+                )
+            else:
+                results["failed"] += 1
+                results["details"].append(
+                    f"❌ Market simulation ended with low health ({status['overall_health']:.2f})"
                 )
 
-                result = random_operation(operation_type)
-                stress_results["operations"] += 1
-
-                if hasattr(result, "zone"):  # ImmuneResponse
-                    stress_results["immune_responses"] += 1
-                    if result.zone in ["recovery", "safe"]:
-                        stress_results["recoveries"] += 1
-                elif operation_type == "error":
-                    stress_results["errors"] += 1
-
-                # Brief pause
-                await asyncio.sleep(0.01)
-
-                # Progress indicator
-                if i % 20 == 0:
-                    print(f"   Progress: {i}/100 operations completed")
-
-            # Print stress test results
-            print("\n🔥 Stress Test Results:")
-            print(f"   Total Operations: {stress_results['operations']}")
-            print(f"   Errors Handled: {stress_results['errors']}")
-            print(f"   Immune Responses: {stress_results['immune_responses']}")
-            print(f"   Recovery Operations: {stress_results['recoveries']}")
-
-            # Calculate metrics
-            error_rate = stress_results["errors"] / stress_results["operations"] * 100
-            immune_response_rate = (
-                stress_results["immune_responses"] / stress_results["operations"] * 100
-            )
-
-            print(f"   Error Rate: {error_rate:.1f}%")
-            print(f"   Immune Response Rate: {immune_response_rate:.1f}%")
-
-            # System health after stress test
-            self._print_system_status()
-
-            if self.immune_handler.mitochondrial_health > 0.5:
-                print("✅ System maintained good health under stress")
+            # Check for quarantined errors
+            if status["zones"]["QUARANTINE"]["errors"] > 0:
+                results["passed"] += 1
+                results["details"].append("✅ Errors were successfully quarantined")
             else:
-                print("⚠️ System health degraded under stress (expected behavior)")
+                results["failed"] += 1
+                results["details"].append("❌ No errors were quarantined during simulation")
 
         except Exception as e:
-            print(f"🚨 Stress test exception: {e}")
+            results["failed"] += 1
+            results["details"].append(f"❌ Market Simulation test exception: {e}")
 
-    async def demonstrate_immune_scenarios():-> None:
-        """Demonstrate various immune system scenarios."""
-        print("\n🎭 Demonstrating Immune System Scenarios...")
+        return results
+
+    def _print_test_results(self, test_name: str, results: Dict[str, Any]) -> None:
+        """Print formatted test results."""
+        total = results["passed"] + results["failed"]
+        pass_rate = (results["passed"] / total * 100) if total > 0 else 0
+        print(f"  - {test_name}: {results['passed']}/{total} passed ({pass_rate:.1f}%)")
+        for detail in results["details"]:
+            print(f"    {detail}")
+
+    def _print_system_status(self) -> None:
+        """Print the current status of the immune system."""
+        print("\n🧬 Current Immune System Status")
+        print("-" * 60)
+        status = self.immune_handler.get_full_status()
+        print(f"  - Overall Health: {status['overall_health']:.2%}")
+        print(f"  - Active Antibodies: {status['antibody_count']}")
+        print(f"  - Neural Gateway State: {status['neural_gateway_state']}")
+        for zone_name, zone_data in status["zones"].items():
+            print(
+                f"  - Zone '{zone_name}': {zone_data['errors']} errors, Active: {zone_data['active']}"
+            )
+        print("-" * 60)
+
+    async def start_monitoring_dashboard(self) -> None:
+        """Start the real-time monitoring dashboard."""
+        if not self.websocket_server:
+            print("🚨 WebSocket server not initialized.")
+            return
+
+        print("\n🚀 Starting Real-time Monitoring Dashboard")
         print("=" * 60)
 
-        scenarios = [
-            ("🟢 Healthy System", self._demo_healthy_system),
-            ("🟡 Alert Condition", self._demo_alert_condition),
-            ("🔴 Toxic Environment", self._demo_toxic_environment),
-            ("🟣 Quarantine Mode", self._demo_quarantine_mode),
-            ("🔵 Recovery Phase", self._demo_recovery_phase),
-        ]
+        # Start WebSocket server in a separate thread
+        ws_thread = threading.Thread(
+            target=asyncio.run, args=(self.websocket_server.start(),)
+        )
+        ws_thread.daemon = True
+        ws_thread.start()
 
-        for scenario_name, scenario_func in scenarios:
-            print(f"\n{scenario_name}:")
-            try:
-                await scenario_func()
-                await asyncio.sleep(2)  # Brief pause between scenarios
-            except Exception as e:
-                print(f"   🚨 Scenario error: {e}")
+        # Serve the HTML dashboard
+        dashboard_path = Path(__file__).parent / "server" / "immune_dashboard.html"
+        if not dashboard_path.exists():
+            print(f"🚨 Dashboard file not found at: {dashboard_path}")
+            return
 
-    async def _demo_healthy_system():-> None:
-        """Demonstrate healthy system operation."""
-        # Reset to healthy state
-        self.immune_handler.mitochondrial_health = 1.0
-        self.immune_handler.system_entropy = 0.1
-        self.immune_handler.current_error_rate = 0.0
+        PORT = 8008
+        Handler = http.server.SimpleHTTPRequestHandler
+        httpd = None
 
-        # Run normal operations
+        class DashboardHandler(http.server.SimpleHTTPRequestHandler):
+            def do_GET(self):
+                if self.path == "/":
+                    self.path = str(dashboard_path)
+                # Fallback to default behavior to serve other files like js, css
+                return http.server.SimpleHTTPRequestHandler.do_GET(self)
+
+        # Ensure we can reuse the address
+        socketserver.TCPServer.allow_reuse_address = True
+        try:
+            with socketserver.TCPServer(("", PORT), DashboardHandler) as httpd:
+                print(f"📈 Dashboard available at: http://localhost:{PORT}")
+                print("   (Press Ctrl+C to stop the dashboard)")
+                # Open browser
+                webbrowser.open_new_tab(f"http://localhost:{PORT}")
+
+                # Keep the server running until stopped
+                self.running = True
+                while self.running:
+                    httpd.handle_request()
+                    time.sleep(0.1)
+        except KeyboardInterrupt:
+            print("\n🛑 Stopping dashboard...")
+        except Exception as e:
+            print(f"🚨 Dashboard server failed: {e}")
+        finally:
+            if httpd:
+                httpd.server_close()
+            if self.websocket_server.is_running():
+                asyncio.run(self.websocket_server.stop())
+            self.running = False
+
+    async def run_stress_test(self) -> None:
+        """Run a continuous stress test on the immune system."""
+        print("\n🔥 Running Continuous Stress Test")
+        print("=" * 60)
+        print("   (Press Ctrl+C to stop the test)")
+
+        self.running = True
+        error_count = 0
+        start_time = time.time()
+
+        @immune_protected(self.immune_handler)
+        def random_operation(operation_type: str):
+            if operation_type == "math":
+                return np.log(random.random() * 100) / np.sqrt(random.random())
+            elif operation_type == "io":
+                time.sleep(random.random() * 0.01)
+                if random.random() < 0.2:
+                    raise IOError("Simulated IO error")
+                return True
+            elif operation_type == "data":
+                data = {"key": "value"}
+                if random.random() < 0.1:
+                    del data["key"]  # Trigger KeyError
+                return data["key"]
+            else:
+                return None
+
+        try:
+            while self.running:
+                try:
+                    op_type = random.choice(["math", "io", "data"])
+                    random_operation(op_type)
+                except Exception:
+                    error_count += 1
+
+                # Update status and broadcast
+                if self.websocket_server and self.websocket_server.is_running():
+                    await self.websocket_server.broadcast(
+                        self.immune_handler.get_full_status()
+                    )
+
+                if time.time() - start_time > 1:
+                    status = self.immune_handler.get_full_status()
+                    print(
+                        f"\r  - Health: {status['overall_health']:.1%}, "
+                        f"Errors: {error_count}, "
+                        f"Gateway: {status['neural_gateway_state']}, "
+                        f"Antibodies: {status['antibody_count']}",
+                        end="",
+                    )
+                    start_time = time.time()
+
+                await asyncio.sleep(0.001)
+
+        except KeyboardInterrupt:
+            print("\n🛑 Stopping stress test...")
+        finally:
+            self.running = False
+            self._print_system_status()
+
+    async def demonstrate_immune_scenarios(self) -> None:
+        """Run a demonstration of different immune scenarios."""
+        print("\n🎬 Demonstrating Immune System Scenarios")
+        print("=" * 60)
+
+        scenarios = {
+            "1": ("Healthy System", self._demo_healthy_system),
+            "2": ("Alert Condition", self._demo_alert_condition),
+            "3": ("Toxic Environment", self._demo_toxic_environment),
+            "4": ("Quarantine Mode", self._demo_quarantine_mode),
+            "5": ("Recovery Phase", self._demo_recovery_phase),
+        }
+
+        for key, (name, func) in scenarios.items():
+            print(f"\n--- Scenario {key}: {name} ---")
+            await self.reset_immune_system()
+            await func()
+            self._print_system_status()
+            input("   Press Enter to continue to the next scenario...")
+
+        print("\n🎬 Scenario demonstration complete.")
+
+    async def _demo_healthy_system(self) -> None:
+        """Demonstrate a healthy system with normal operations."""
+        print("  - Simulating 10 successful operations.")
+
         @immune_protected(self.immune_handler)
         def healthy_operation(x):
-            return x * 2
+            return x**2
 
-        for i in range(5):
-            result = healthy_operation(i)
-            print(
-                f"   Operation {i}: {
-                    '✅ Success' if not hasattr(result, 'zone') else '🛡️ Protected'
-                }"
-            )
+        for i in range(10):
+            healthy_operation(i)
+        print("  - Healthy operations completed without triggering immune response.")
 
-        status = self.immune_handler.get_immune_status()
-        print(f"   Zone: {status['system_health']['current_zone']}")
-        print(f"   Health: {status['system_health']['mitochondrial_health']:.3f}")
-
-    async def _demo_alert_condition():-> None:
-        """Demonstrate alert condition."""
-        # Set alert conditions
-        self.immune_handler.system_entropy = 0.5
-        self.immune_handler.current_error_rate = 0.08
-
-        # Update neural gateway state
-        self.immune_handler.neural_gateway.update_gate_state(0.5, 0.08)
+    async def _demo_alert_condition(self) -> None:
+        """Demonstrate an alert condition from minor, infrequent errors."""
+        print("  - Simulating 5 minor errors (ValueError).")
 
         @immune_protected(self.immune_handler)
         def alert_operation(x):
-            if x > 3:
-                raise ValueError("Alert condition error")
-            return x * 2
+            if x % 2 == 0:
+                raise ValueError("Simulated minor error")
+            return True
 
-        for i in range(5):
-            result = alert_operation(i)
-            print(
-                f"   Operation {i}: {
-                    '✅ Success' if not hasattr(result, 'zone') else '🛡️ Blocked'
-                }"
-            )
-
-        status = self.immune_handler.get_immune_status()
-        print(f"   Zone: {status['system_health']['current_zone']}")
+        for i in range(10):
+            alert_operation(i)
         print(
-            f"   Gateway State: {status['immune_components']['neural_gateway_state']}"
+            "  - Minor errors triggered ALERT zone but system remains largely healthy."
         )
 
-    async def _demo_toxic_environment():-> None:
-        """Demonstrate toxic environment response."""
-        # Set toxic conditions
-        self.immune_handler.system_entropy = 0.8
-        self.immune_handler.current_error_rate = 0.15
-        self.immune_handler.mitochondrial_health = 0.4
+    async def _demo_toxic_environment(self) -> None:
+        """Demonstrate a toxic environment from frequent, severe errors."""
+        print("  - Simulating 20 severe errors (TypeError).")
 
         @immune_protected(self.immune_handler)
         def toxic_operation(x):
-            raise ValueError(f"Toxic error {x}")
+            # This will always raise a TypeError
+            return "a" + x
 
-        for i in range(3):
-            result = toxic_operation(i)
-            print(
-                f"   Operation {i}: {
-                    '🚨 Error'
-                    if not hasattr(result, 'zone')
-                    else f'🛡️ Immune Response ({result.zone.value})'
-                }"
-            )
-
-        status = self.immune_handler.get_immune_status()
-        print(f"   Zone: {status['system_health']['current_zone']}")
+        for i in range(20):
+            toxic_operation(i)
         print(
-            f"   Mitochondrial Health: {
-                status['system_health']['mitochondrial_health']:.3f}"
+            "  - Frequent, severe errors triggered TOXIC zone and reduced system health."
         )
 
-    async def _demo_quarantine_mode():-> None:
-        """Demonstrate quarantine mode."""
-        # Set quarantine conditions
-        self.immune_handler.system_entropy = 0.9
-        self.immune_handler.current_error_rate = 0.25
-        self.immune_handler.mitochondrial_health = 0.2
+    async def _demo_quarantine_mode(self) -> None:
+        """Demonstrate quarantine mode from a recurring, specific error."""
+        print("  - Simulating 15 occurrences of the same ConnectionError.")
 
         @immune_protected(self.immune_handler)
         def quarantine_operation(x):
-            return f"Should not execute: {x}"
+            raise ConnectionError("Simulated persistent connection failure")
 
-        for i in range(3):
-            result = quarantine_operation(i)
-            print(
-                f"   Operation {i}: {
-                    '🚨 Executed'
-                    if not hasattr(result, 'zone')
-                    else f'🛡️ Quarantined ({result.zone.value})'
-                }"
-            )
-
-        status = self.immune_handler.get_immune_status()
-        print(f"   Zone: {status['system_health']['current_zone']}")
-        print("   All operations should be quarantined")
-
-    async def _demo_recovery_phase():-> None:
-        """Demonstrate recovery phase."""
-        # Trigger recovery
-        await self.immune_handler._check_mitochondrial_drift()
-
-        # Gradually improve conditions
-        self.immune_handler.system_entropy = 0.4
-        self.immune_handler.current_error_rate = 0.05
-
-        @immune_protected(self.immune_handler)
-        def recovery_operation(x):
-            return f"Recovery operation {x}"
-
-        for i in range(3):
-            result = recovery_operation(i)
-            print(
-                f"   Operation {i}: {
-                    '✅ Recovery'
-                    if not hasattr(result, 'zone')
-                    else f'🛡️ Protected ({result.zone.value})'
-                }"
-            )
-
-            # Improve health slightly
-            self.immune_handler._update_mitochondrial_health(True)
-
-        status = self.immune_handler.get_immune_status()
-        print(f"   Zone: {status['system_health']['current_zone']}")
+        for i in range(15):
+            quarantine_operation(i)
         print(
-            f"   Health Recovery: {status['system_health']['mitochondrial_health']:.3f}"
+            "  - Recurring error led to antibody formation and QUARANTINE zone activation."
         )
 
-    def setup_signal_handlers():-> None:
-        """Setup signal handlers for graceful shutdown."""
+    async def _demo_recovery_phase(self) -> None:
+        """Demonstrate the recovery phase after an immune response."""
+        print("  - First, triggering a TOXIC environment...")
+
+        @immune_protected(self.immune_handler)
+        def error_op(x):
+            raise TypeError("Make it toxic")
+
+        for i in range(20):
+            error_op(i)
+        self._print_system_status()
+
+        print("\n  - Now, simulating a period of healthy operations for recovery.")
+
+        @immune_protected(self.immune_handler)
+        def healthy_op(x):
+            return x
+
+        for i in range(50):
+            healthy_op(i)
+            time.sleep(0.01) # Simulate time passing
+
+        print("  - After a period of stability, system health should improve.")
+
+
+    def setup_signal_handlers(self) -> None:
+        """Set up signal handlers for graceful shutdown."""
 
         def signal_handler(signum, frame):
-            print(f"\n🛑 Received signal {signum}, shutting down gracefully...")
+            print(f"\nReceived signal {signum}, shutting down...")
             self.running = False
-            sys.exit(0)
 
         signal.signal(signal.SIGINT, signal_handler)
         signal.signal(signal.SIGTERM, signal_handler)
 
-    async def main_menu():-> None:
-        """Display main menu and handle user input."""
+    async def main_menu(self) -> None:
+        """Display the main menu and handle user input."""
         self.setup_signal_handlers()
+        if not await self.initialize_systems():
+            return
+
         self.running = True
-
         while self.running:
-            print("\n🧬 Schwabot Biological Immune System")
-            print("=" * 40)
-            print("1. 🧪 Run Comprehensive Test Suite")
-            print("2. 🖥️ Start Real-Time Monitoring Dashboard")
-            print("3. 🔥 Run Stress Test")
-            print("4. 🎭 Demonstrate Immune Scenarios")
-            print("5. 📊 Show Current System Status")
-            print("6. 🔄 Reset Immune System")
-            print("7. 🚨 Trigger Emergency Scenario")
-            print("0. 🚪 Exit")
+            print("\n--- Main Menu ---")
+            print("1. Run Comprehensive Test Suite")
+            print("2. Start Real-time Monitoring Dashboard")
+            print("3. Run Continuous Stress Test")
+            print("4. Demonstrate Immune Scenarios")
+            print("5. Trigger Emergency Quarantine Scenario")
+            print("6. Reset Immune System State")
+            print("7. View Current System Status")
+            print("8. Exit")
+            choice = input("Enter your choice: ")
 
-            try:
-                choice = input("\nSelect option (0-7): ").strip()
-
-                if choice == "1":
-                    await self.run_comprehensive_test()
-                elif choice == "2":
-                    await self.start_monitoring_dashboard()
-                elif choice == "3":
-                    await self.run_stress_test()
-                elif choice == "4":
-                    await self.demonstrate_immune_scenarios()
-                elif choice == "5":
-                    self._print_system_status()
-                elif choice == "6":
-                    await self.reset_immune_system()
-                elif choice == "7":
-                    await self.trigger_emergency_scenario()
-                elif choice == "0":
-                    print("👋 Goodbye!")
-                    self.running = False
-                    break
-                else:
-                    print("❌ Invalid option. Please try again.")
-
-                if choice != "0":
-                    input("\nPress Enter to continue...")
-
-            except KeyboardInterrupt:
-                print("\n🛑 Exiting...")
+            if choice == "1":
+                await self.run_comprehensive_test()
+            elif choice == "2":
+                await self.start_monitoring_dashboard()
+            elif choice == "3":
+                await self.run_stress_test()
+            elif choice == "4":
+                await self.demonstrate_immune_scenarios()
+            elif choice == "5":
+                await self.trigger_emergency_scenario()
+            elif choice == "6":
+                await self.reset_immune_system()
+            elif choice == "7":
+                self._print_system_status()
+            elif choice == "8":
                 self.running = False
-                break
-            except Exception as e:
-                print(f"🚨 Menu error: {e}")
+            else:
+                print("Invalid choice, please try again.")
 
-    async def reset_immune_system():-> None:
-        """Reset immune system to healthy state."""
-        print("🔄 Resetting Immune System...")
+        print("\n🧬 Shutting down Schwabot Immune CLI. Goodbye!")
 
-        self.immune_handler.mitochondrial_health = 1.0
-        self.immune_handler.system_entropy = 0.1
-        self.immune_handler.current_error_rate = 0.0
-        self.immune_handler.antibody_patterns.clear()
-        self.immune_handler.error_history.clear()
+    async def reset_immune_system(self) -> None:
+        """Reset the entire immune system to its initial state."""
+        print("\n🔄 Resetting Immune System State...")
+        self.immune_handler.reset_all()
+        # Re-initialize engine to reset its internal state as well
+        self.engine = EnhancedMasterCycleEngine()
+        self.immune_handler = self.engine.immune_handler
+        print("✅ Immune system has been reset.")
 
-        # Reset neural gateway
-        self.immune_handler.neural_gateway.current_state = (
-            self.immune_handler.neural_gateway.current_state.PERMISSIVE
+    async def trigger_emergency_scenario(self) -> None:
+        """Manually trigger an emergency quarantine scenario."""
+        print("\n🚨 Triggering Emergency Quarantine Scenario")
+        print("-" * 60)
+        print(
+            "   This will simulate a critical, recurring error to demonstrate"
         )
+        print("   antibody formation and quarantine response.")
 
-        # Reset zone manager
-        self.immune_handler.zone_manager.current_zone = ImmuneZone.SAFE
+        @immune_protected(self.immune_handler)
+        def critical_error_op(x):
+            raise MemoryError("Simulated critical memory leak")
 
-        print("✅ Immune system reset to healthy state")
-        self._print_system_status()
-
-    async def trigger_emergency_scenario():-> None:
-        """Trigger emergency scenario for testing."""
-        print("🚨 Triggering Emergency Scenario...")
-
-        # Simulate system degradation
-        self.immune_handler.mitochondrial_health = 0.1
-        self.immune_handler.system_entropy = 0.95
-        self.immune_handler.current_error_rate = 0.3
-
-        # Add multiple error patterns
-        for i in range(15):
-            self.immune_handler.error_history.append(
-                {
-                    "timestamp": time.time(),
-                    "error_type": f"EmergencyError{i % 5}",
-                    "error_message": f"Emergency test error {i}",
-                    "operation": "emergency_test",
-                    "args_count": 1,
-                    "kwargs_count": 0,
-                    "traceback": f"Emergency traceback {i}",
-                }
+        print("\n   Injecting 20 critical errors...")
+        for i in range(20):
+            critical_error_op(i)
+            time.sleep(0.05)
+            status = self.immune_handler.get_full_status()
+            print(
+                f"\r   - Error {i+1}/20 | Health: {status['overall_health']:.1%} | "
+                f"Gateway: {status['neural_gateway_state']} | "
+                f"Antibodies: {status['antibody_count']}",
+                end="",
             )
-
-        # Update antibody patterns
-        for i in range(5):
-            pattern_key = f"emergency_pattern_{i}"
-            self.immune_handler.antibody_patterns[pattern_key] = {
-                "pattern_type": "emergency_test",
-                "first_occurrence": time.time(),
-                "occurrence_count": 3,
-                "rejection_strength": 0.8,
-            }
-
-        print("🚨 Emergency scenario activated")
-        print("   System health critically degraded")
-        print("   Multiple error patterns injected")
-        print("   High rejection antibodies created")
-
+        print("\n\n   Emergency scenario complete.")
         self._print_system_status()
 
 
 async def main():
-    """Main entry point."""
+    """Main entry point for the CLI."""
     parser = argparse.ArgumentParser(
         description="Schwabot Biological Immune System CLI"
     )
     parser.add_argument(
-        "--test", action="store_true", help="Run comprehensive test suite and exit"
+        "--test", action="store_true", help="Run the comprehensive test suite and exit"
     )
     parser.add_argument(
-        "--dashboard", action="store_true", help="Start monitoring dashboard"
+        "--dashboard", action="store_true", help="Launch the monitoring dashboard"
     )
-    parser.add_argument("--stress", action="store_true", help="Run stress test")
-    parser.add_argument("--demo", action="store_true", help="Run immune scenarios demo")
+    parser.add_argument(
+        "--stress", action="store_true", help="Run a continuous stress test"
+    )
+    parser.add_argument(
+        "--demo", action="store_true", help="Run the immune scenario demonstration"
+    )
 
     args = parser.parse_args()
-
-    # Initialize CLI
     cli = SchwabotImmuneCLI()
 
-    # Initialize systems
-    if not await cli.initialize_systems():
-        print("🚨 Failed to initialize systems. Exiting.")
-        return 1
-
-    try:
-        if args.test:
-            await cli.run_comprehensive_test()
-        elif args.dashboard:
-            await cli.start_monitoring_dashboard()
-        elif args.stress:
-            await cli.run_stress_test()
-        elif args.demo:
-            await cli.demonstrate_immune_scenarios()
-        else:
-            await cli.main_menu()
-
-    except KeyboardInterrupt:
-        print("\n🛑 Interrupted by user")
-    except Exception as e:
-        print(f"🚨 Fatal error: {e}")
-        return 1
-
-    print("✅ Schwabot Biological Immune System CLI completed")
-    return 0
+    if args.test:
+        await cli.initialize_systems()
+        await cli.run_comprehensive_test()
+    elif args.dashboard:
+        await cli.initialize_systems()
+        await cli.start_monitoring_dashboard()
+    elif args.stress:
+        await cli.initialize_systems()
+        await cli.run_stress_test()
+    elif args.demo:
+        await cli.initialize_systems()
+        await cli.demonstrate_immune_scenarios()
+    else:
+        await cli.main_menu()
 
 
 if __name__ == "__main__":
-    sys.exit(asyncio.run(main()))
+    try:
+        asyncio.run(main())
+    except KeyboardInterrupt:
+        print("\nCLI terminated by user.")
+    except Exception as e:
+        print(f"🚨 An unexpected error occurred: {e}")
+        import traceback
+        traceback.print_exc()
+        sys.exit(1)

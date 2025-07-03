@@ -9,7 +9,6 @@ This script addresses the specific critical issues found in the quality check.
 import os
 import sys
 import subprocess
-import re
 from pathlib import Path
 
 def fix_core_init():

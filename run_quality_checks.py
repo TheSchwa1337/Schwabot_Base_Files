@@ -11,21 +11,21 @@ import os
 import sys
 import subprocess
 import time
-from datetime import datetime
+from typing import List, Tuple
 
-def print_header(title):
+def print_header(title: str) -> None:
     """Print a formatted header."""
     print(f"\n{'='*60}")
     print(f" {title}")
     print(f"{'='*60}")
 
-def print_section(title):
+def print_section(title: str) -> None:
     """Print a formatted section header."""
     print(f"\n{'-'*40}")
     print(f" {title}")
     print(f"{'-'*40}")
 
-def run_check(command, description):
+def run_check(command: str, description: str) -> Tuple[bool, str, str, float]:
     """Run a quality check and return results."""
     print(f"\n[*] {description}")
     print(f"Command: {command}")
@@ -49,18 +49,19 @@ def run_check(command, description):
         print(f"❌ ERROR ({duration:.2f}s): {e}")
         return False, "", str(e), duration
 
-def check_python_files():
+def check_python_files() -> List[str]:
     """Count Python files in the project."""
     python_files = []
+    skipped_dirs = ['.git', '__pycache__', '.venv', 'venv', 'build', 'dist']
     for root, _, files in os.walk('.'):
-        if any(skip in root for skip in ['.git', '__pycache__', '.venv', 'venv', 'build', 'dist']):
+        if any(skip in root for skip in skipped_dirs):
             continue
         for file in files:
             if file.endswith('.py'):
                 python_files.append(os.path.join(root, file))
     return python_files
 
-def main():
+def main() -> bool:
     """Main function to run all quality checks."""
     print_header("SCHWABOT COMPREHENSIVE QUALITY CHECK")
     
@@ -77,6 +78,7 @@ def main():
     # Quality checks
     print_section("Quality Checks")
     
+    dirs_str = " ".join(valid_dirs)
     checks = [
         # Basic compilation
         ('python -m py_compile core/__init__.py', 'Core module compilation'),
@@ -85,16 +87,16 @@ def main():
         ('python find_null_byte_files.py', 'Null byte detection'),
         
         # Linting
-        (f'flake8 {" ".join(valid_dirs)} --max-line-length=100 --count', 'Flake8 style check'),
+        (f'flake8 {dirs_str} --max-line-length=100 --count', 'Flake8 style check'),
         
         # Import sorting
-        (f'isort {" ".join(valid_dirs)} --check-only --profile black', 'Import sorting check'),
+        (f'isort {dirs_str} --check-only --profile black', 'Import sorting check'),
         
         # Type checking
-        (f'mypy {" ".join(valid_dirs)} --ignore-missing-imports', 'MyPy type checking'),
+        (f'mypy {dirs_str} --ignore-missing-imports', 'MyPy type checking'),
         
         # Security
-        (f'bandit -r {" ".join(valid_dirs)}', 'Bandit security check'),
+        (f'bandit -r {dirs_str}', 'Bandit security check'),
     ]
     
     results = []
