@@ -4,7 +4,7 @@ LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 This file has been automatically commented out because it contains syntax errors
 that prevent the Schwabot system from running properly.
 
-Original file: core\profit_memory_echo.py
+Original file: core\\profit_memory_echo.py
 Date commented out: 2025-07-02 19:37:00
 
 The clean implementation has been preserved in the following files:

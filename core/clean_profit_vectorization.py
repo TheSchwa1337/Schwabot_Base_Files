@@ -676,4 +676,4 @@ def create_profit_vectorizer(
     mode: VectorizationMode = VectorizationMode.STANDARD
 ) -> CleanProfitVectorization:
     """Create a new profit vectorization system."""
-    return CleanProfitVectorization(risk_free_rate=risk_free_rate, default_mode=mode) 
+    return CleanProfitVectorization(risk_free_rate=risk_free_rate, default_mode=mode)

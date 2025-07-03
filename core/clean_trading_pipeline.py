@@ -815,4 +815,4 @@ async def run_trading_simulation(
         "decisions_made": len(decisions_made),
         "pipeline_summary": pipeline.get_pipeline_summary(),
         "final_capital": pipeline.state.current_capital + pipeline.state.total_profit
-    } 
+    }

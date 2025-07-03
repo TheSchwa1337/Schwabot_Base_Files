@@ -14,7 +14,7 @@ from .data_models import APICredentials, OrderRequest, OrderResponse, MarketData
 # !/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-API Integration Manager =======================
+API Integration Manager == == == == == == == == == == == =
 
 The central coordinator for the Schwabot live API integration system.
 Manages all exchange connections and provides a unified interface.
@@ -22,7 +22,7 @@ Manages all exchange connections and provides a unified interface.
 logger = logging.getLogger(__name__)
 
 
-class ApiIntegrationManager:The main live API integration system.def __init__(self, config_path: str = config/api_keys.json):
+class ApiIntegrationManager: The main live API integration system.def __init__(self, config_path: str=config/api_keys.json):
         self.config_path = Path(config_path)
         self.connections: Dict[str, ExchangeConnection] = {}
         self.running = False

@@ -165,7 +165,7 @@ class AdaptiveImmunityVector:Builds AI feedback resistance patterns for Schwabot
         immune_shock: bool,
         timestamp: datetime,
     ) -> None:
-        
+
         Update immunity state based on current resistance and shock detection.
 
         Args:
@@ -260,7 +260,7 @@ if __name__ == __main__:
     for chi in chi_values[:5]:
         profile = immunity.calculate_adaptive_resistance(chi)
         print(
-            fχ(t)={chi:.2f} → R(t)={profile.resistance_value:.4f} 
+            fχ(t)={chi:.2f} → R(t)={profile.resistance_value:.4f}
             f(Shock: {profile.immune_shock_detected})
         )
 

@@ -4,7 +4,7 @@ LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 This file has been automatically commented out because it contains syntax errors
 that prevent the Schwabot system from running properly.
 
-Original file: core\strategy_bit_mapper.py
+Original file: core\\strategy_bit_mapper.py
 Date commented out: 2025-07-02 19:37:03
 
 The clean implementation has been preserved in the following files:
@@ -50,7 +50,7 @@ logger = logging.getLogger(__name__)
 
 
 class StrategyBitMapper:
-    
+
 Maps and expands 4-bit strategy identifiers into higher-bit representations.
 
 Incorporates randomization, mirror functions, and self-similarity detection.def __init__():Initialize the strategy bit mapper.Args:
@@ -82,9 +82,9 @@ self.max_history_size = 1000
 
             logger.info(
 StrategyBitMapper initialized:
-frandomization = {enable_randomization}, 
-fmirror_functions = {enable_mirror_functions}, 
-fself_similarity = {enable_self_similarity}, 
+frandomization = {enable_randomization},
+fmirror_functions = {enable_mirror_functions},
+fself_similarity = {enable_self_similarity},
 fpool_size = {strategy_pool_size}
 )
 

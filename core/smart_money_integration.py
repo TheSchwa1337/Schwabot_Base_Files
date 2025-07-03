@@ -4,7 +4,7 @@ LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 This file has been automatically commented out because it contains syntax errors
 that prevent the Schwabot system from running properly.
 
-Original file: core\smart_money_integration.py
+Original file: core\\smart_money_integration.py
 Date commented out: 2025-07-02 19:37:02
 
 The clean implementation has been preserved in the following files:
@@ -118,7 +118,7 @@ timestamp: float = field(default_factory=time.time)
 
 
 class SmartMoneyIntegrationFramework:
-    
+
 Smart Money Integration Framework.
 
 Bridges Wall Street trading strategies with smart money metrics,

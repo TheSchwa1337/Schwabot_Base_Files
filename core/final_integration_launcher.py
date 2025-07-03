@@ -41,7 +41,9 @@ Mathematical Foundation:
 - System Integration: S = Π(component_health × integration_coherence)
 - Error Recovery: R = f(error_type, severity, fallback_available)
 - Import Management: I = Σ(module_status × fallback_weight)
-- Flake Gate Prevention: F = f(import_order, dependency_graph, fallback_chain)
+- Flake Gate Prevention: F = f( import _order
+- Flake Gate Prevention: F = f( import dependency_graph
+- Flake Gate Prevention: F = f( import fallback_chain)
 - Bit-Level Integration: B = Σ(bit_level × logic_gate × confidence)
 - Cross-Dynamical State: C = f(bit_levels, phase_values, trigger_strengths)
 

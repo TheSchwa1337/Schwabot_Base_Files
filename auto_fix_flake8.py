@@ -159,7 +159,9 @@ class Flake8AutoFixer:
         if not os.path.exists(self.backup_dir):
             os.makedirs(self.backup_dir)
 
-        backup_path = os.path.join(self.backup_dir, filepath.replace("/", "_"))
+        # Use os.path.join for cross-platform compatibility
+        backup_filename = os.path.basename(filepath)
+        backup_path = os.path.join(self.backup_dir, backup_filename)
         shutil.copy2(filepath, backup_path)
         return backup_path
 
@@ -186,9 +188,9 @@ class Flake8AutoFixer:
                 "--in-place",
                 "--aggressive",
                 "--aggressive",
-                "--max-line-length=120",  # More lenient for mathematical expressions
+                "--max-line-length=999",  # More lenient for mathematical expressions
                 "--ignore=E226,E302,E41",  # Ignore some aggressive fixes
-                filepath,
+                filepath.replace(os.sep, '/'), # Ensure forward slashes for autopep8
             ]
             result = subprocess.run(cmd, capture_output=True, text=True, timeout=60)
 

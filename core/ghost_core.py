@@ -4,7 +4,7 @@ LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 This file has been automatically commented out because it contains syntax errors
 that prevent the Schwabot system from running properly.
 
-Original file: core\ghost_core.py
+Original file: core\\ghost_core.py
 Date commented out: 2025-07-02 19:36:58
 
 The clean implementation has been preserved in the following files:
@@ -137,7 +137,7 @@ hash_signature: str,
 market_conditions: Dict[str, Any],
 mathematical_state: Optional[Dict[str, Any]] = None
 ) -> StrategyBranch:
-        
+
 Determine which strategy branch to activate based on hash and conditions.
 
 Args:
@@ -191,7 +191,7 @@ hash_signature: str,
 market_conditions: Dict[str, Any],
 mathematical_state: Optional[Dict[str, Any]] = None
 ) -> GhostState:
-        
+
 Switch to a new strategy based on hash and conditions.
 
 Args:

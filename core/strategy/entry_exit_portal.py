@@ -4,7 +4,7 @@ LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 This file has been automatically commented out because it contains syntax errors
 that prevent the Schwabot system from running properly.
 
-Original file: core\strategy\entry_exit_portal.py
+Original file: core\\strategy\\entry_exit_portal.py
 Date commented out: 2025-07-02 19:37:05
 
 The clean implementation has been preserved in the following files:
@@ -115,7 +115,7 @@ self.signal_history: List[TradeSignal] = []
 self.stats = {total_signals: 0,executed_trades: 0,rejected_signals": 0,avg_processing_time": 0.0,
 }
 
-            logger.info(EntryExitPortal initialized:f"risk_mgmt = {enable_risk_management}, 
+            logger.info(EntryExitPortal initialized:f"risk_mgmt = {enable_risk_management},
             fportfolio_tracking = {enable_portfolio_tracking}
 )
 
@@ -231,7 +231,7 @@ else:  # Medium volume
 def calculate_position_size(:
 self, signal: TradeSignal, portfolio_value: float = 10000.0
 ) -> PositionSizing:
-        
+
 Calculate position size based on signal and risk parameters.
 
 Args:
@@ -272,7 +272,7 @@ signal: TradeSignal,
 portfolio_value: float = 10000.0,
 dry_run: bool = True,
 ) -> Dict[str, any]:
-        
+
 Execute a trading signal.
 
 Args:
@@ -353,7 +353,7 @@ asset: str = BTC/USD,
 price: float = 50000.0,
 dry_run: bool = True,
 ) -> Dict[str, any]:
-    
+
 Process a glyph signal and execute a simulated trade using a temporary portal instance.
 Intended for quick, stateless trade simulations.temp_portal = EntryExitPortal(
 enable_risk_management=False, enable_portfolio_tracking=False

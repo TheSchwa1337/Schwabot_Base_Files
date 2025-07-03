@@ -4,7 +4,7 @@ LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 This file has been automatically commented out because it contains syntax errors
 that prevent the Schwabot system from running properly.
 
-Original file: core\qsc_enhanced_profit_allocator.py
+Original file: core\\qsc_enhanced_profit_allocator.py
 Date commented out: 2025-07-02 19:37:00
 
 The clean implementation has been preserved in the following files:
@@ -112,7 +112,7 @@ class QSCEnhancedProfitAllocator:QSC-Enhanced Profit Cycle Allocator.def __init_
         if is_approved:
             self.immune_approvals += 1
             logger.info(
-                f✅ QSC Immune Approval: {qsc_result.recommended_cycle} 
+                f✅ QSC Immune Approval: {qsc_result.recommended_cycle}
                 f(confidence: {qsc_result.confidence:.3f})
             )
         else:

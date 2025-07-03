@@ -4,7 +4,7 @@ LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 This file has been automatically commented out because it contains syntax errors
 that prevent the Schwabot system from running properly.
 
-Original file: core\strategy\glyph_strategy_core.py
+Original file: core\\strategy\\glyph_strategy_core.py
 Date commented out: 2025-07-02 19:37:06
 
 The clean implementation has been preserved in the following files:
@@ -104,7 +104,7 @@ self.stats = {total_selections: 0,gear_shifts: 0,fractal_stores": 0,avg_processi
 if random_seed is not None:
             random.seed(random_seed)
 
-            logger.info(GlyphStrategyCore initialized:ffractal_memory = {enable_fractal_memory}, 
+            logger.info(GlyphStrategyCore initialized:ffractal_memory = {enable_fractal_memory},
 fgear_shifting = {enable_gear_shifting}
 )
 
@@ -134,7 +134,7 @@ binary = bin(int(hex_sub, 16))[2:].zfill(bit_depth)
         return int(binary[:bit_depth], 2)
 
 def glyph_strategy_lookup(self, glyph: str, gear_state: int = 4) -> int:
-        
+
 Translate glyph to strategy ID through SHA256 mapping.
 
 Args:
@@ -273,7 +273,7 @@ self.stats = {total_selections: 0,gear_shifts": 0,fractal_stores": 0,avg_process
 
 
 def glyph_to_strategy(glyph: str, volume: float = 0.0) -> Dict[str, any]:
-    
+
 Convert a single glyph to a strategy using a temporary GlyphStrategyCore instance.
 Intended for quick, stateless conversions.temp_core = GlyphStrategyCore(
 enable_fractal_memory=False, enable_gear_shifting=True

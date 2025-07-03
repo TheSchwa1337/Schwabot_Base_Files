@@ -4,7 +4,7 @@ LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 This file has been automatically commented out because it contains syntax errors
 that prevent the Schwabot system from running properly.
 
-Original file: core\schwabot_unified_pipeline.py
+Original file: core\\schwabot_unified_pipeline.py
 Date commented out: 2025-07-02 19:37:02
 
 The clean implementation has been preserved in the following files:
@@ -93,7 +93,7 @@ metadata: Dict[str, Any] = field(default_factory = dict)
 
 
 class SchwabotUnifiedPipeline:
-    
+
 Schwabot Unified Pipeline - Complete trading system integration.
 
 This is the master orchestrator that coordinates all Schwabot components

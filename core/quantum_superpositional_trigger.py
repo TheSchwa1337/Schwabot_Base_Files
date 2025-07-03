@@ -4,7 +4,7 @@ LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 This file has been automatically commented out because it contains syntax errors
 that prevent the Schwabot system from running properly.
 
-Original file: core\quantum_superpositional_trigger.py
+Original file: core\\quantum_superpositional_trigger.py
 Date commented out: 2025-07-02 19:37:01
 
 The clean implementation has been preserved in the following files:
@@ -59,7 +59,7 @@ class QuantumSuperpositionalTrigger:
 
         # Process 'R': Integrate recursive hash states
         # For simplicity, we'll combine hash states as a new 'integrated_hash'
-        integrated_hash_str =  
+        integrated_hash_str =
         for key, value in recursive_hash_states.items():
             integrated_hash_str += str(value)
         integrated_hash_value = int(hashlib.sha256(integrated_hash_str.encode()).hexdigest(), 16)

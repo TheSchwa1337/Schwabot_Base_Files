@@ -173,7 +173,7 @@ class VECUCore:
     def pwm_profit_injection(
         self, timing_data: VECUTimingData, market_conditions: Dict[str, Any]
     ) -> PWMInjectionData:
-        
+
         VECU PWM profit injection.
 
         Args:

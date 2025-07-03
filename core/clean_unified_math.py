@@ -7,7 +7,7 @@ from dataclasses import dataclass
 
 # -*- coding: utf-8 -*-
 
-Clean Unified Mathematics System for Schwabot ============================================
+Clean Unified Mathematics System for Schwabot == == == == == == == == == == == == == == == == == == == == == ==
 
 Clean mathematical framework that integrates with the brain trading system.
 Provides mathematical operations, optimization algorithms, and integration bridges.
@@ -17,13 +17,13 @@ logger = logging.getLogger(__name__)
 
 
 @dataclass
-class MathResult:Result container for mathematical operations.value: Any
+class MathResult: Result container for mathematical operations.value: Any
     operation: str
     timestamp: float
     metadata: Dict[str, Any]
 
 
-class CleanUnifiedMathSystem:Clean unif ied mathematical framework for trading calculations.def __init__():Initialize the unified math system.self.operation_cache: Dict[str, Any] = {}
+class CleanUnifiedMathSystem: Clean unif ied mathematical framework for trading calculations.def __init__(): Initialize the unified math system.self.operation_cache: Dict[str, Any] = {}
         self.calculation_history: List[MathResult] = []
 
     def multiply(self, a: Union[float, int], b: Union[float, int]) -> float:Multiply two numbers.try: result = float(a) * float(b)
@@ -331,7 +331,7 @@ clean_unified_math = CleanUnifiedMathSystem()
 def optimize_brain_profit(
     price: float, volume: float, confidence: float, enhancement_factor: float = 1.0
 ) -> float:
-    
+
     Optimized profit calculation for brain trading signals.
 
     Args:
@@ -368,7 +368,7 @@ def optimize_brain_profit(
 def calculate_position_size(
     confidence: float, portfolio_value: float, max_risk_percent: float = 0.1
 ) -> float:
-    
+
     Calculate position size based on confidence and risk management.
 
     Args:
@@ -378,7 +378,7 @@ def calculate_position_size(
 
     Returns:
         Position size in dollars
-    
+
     try:
         # Calculate maximum position based on risk
         max_position = clean_unified_math.multiply(portfolio_value, max_risk_percent)

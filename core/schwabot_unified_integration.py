@@ -4,7 +4,7 @@ LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 This file has been automatically commented out because it contains syntax errors
 that prevent the Schwabot system from running properly.
 
-Original file: core\schwabot_unified_integration.py
+Original file: core\\schwabot_unified_integration.py
 Date commented out: 2025-07-02 19:37:02
 
 The clean implementation has been preserved in the following files:
@@ -213,7 +213,7 @@ class SchwabotUnifiedIntegration:Unified integration system for all Schwabot com
             self.active_integrations[integration_id] = result
 
             logger.info(
-                f✅ Unified integration {integration_id} completed successfully 
+                f✅ Unified integration {integration_id} completed successfully
                 fin {integration_time:.3f}s
             )
 

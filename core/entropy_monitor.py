@@ -4,7 +4,7 @@ LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 This file has been automatically commented out because it contains syntax errors
 that prevent the Schwabot system from running properly.
 
-Original file: core\entropy_monitor.py
+Original file: core\\entropy_monitor.py
 Date commented out: 2025-07-02 19:36:57
 
 The clean implementation has been preserved in the following files:
@@ -146,7 +146,7 @@ class EntropyMonitor:Monitors and analyzes adversarial entropy flow Ψ_sec.
         return anomaly
 
     def get_entropy_report(self: EntropyMonitor) -> Dict[str, float]:
-        
+
         Generate comprehensive entropy monitoring report.
 
         Returns:

@@ -472,7 +472,7 @@ class EnhancedUnifiedProfitVectorizationSystem:Enhanced profit vectorization sys
     def calculate_sharpe_ratio(
         self, returns: List[float], risk_free_rate: Optional[float] = None
     ) -> float:
-        
+
         Calculate Sharpe ratio for risk-adjusted returns in tick analysis.
 
         Args:
@@ -526,7 +526,7 @@ class EnhancedUnifiedProfitVectorizationSystem:Enhanced profit vectorization sys
         return float(sortino)
 
     def calculate_kelly_criterion(self, win_rate: float, avg_win: float, avg_loss: float) -> float:
-        
+
         Calculate Kelly Criterion for optimal position sizing in tick analysis.
 
 Args:
@@ -553,7 +553,7 @@ exit_price: float,
 quantity: float,
 trade_direction: str,
     ) -> float:
-        
+
         Calculates the profit or loss for a single trade in the pipeline.
 
 Args:
@@ -574,7 +574,7 @@ self.profit_history.append(profit)
         return profit
 
     def calculate_returns_from_profits(self, initial_capital: float = 10000.0) -> List[float]:
-        
+
         Convert profit history to returns for ratio calculations in mathematical pipeline.
 
 Args:
@@ -644,20 +644,20 @@ profits = np.array(self.profit_history)
 
     def get_performance_summary(self) -> Dict[str, Any]:
         Get comprehensive performance summary for mathematical confirmations.
-        
+
         Returns:
             Dictionary containing all performance metrics for tensor bucket analysisreturn {**self.performance_metrics,
             profit_factor: self.calculate_profit_factor(),total_trades: len(self.profit_history),risk_free_rate: self.risk_free_rate,
         }
 
     def vectorize_profit_patterns(self) -> Dict[str, Any]:Vectorize profit patterns for jerf pattern waveform analysis.
-        
+
         Returns:
             Vectorized profit data for mathematical pipeline integrationif not self.profit_history:
             return {error:No profit history available}
 
         profits = np.array(self.profit_history)
-        
+
         return {profit_vector: profits.tolist(),
             profit_magnitude: float(np.linalg.norm(profits)),profit_mean: float(np.mean(profits)),profit_std: float(np.std(profits)),profit_correlation: self._calculate_autocorrelation(profits),profit_trend": self._calculate_trend(profits),
         }
@@ -671,7 +671,7 @@ profits = np.array(self.profit_history)
     def _calculate_trend(self, data: np.ndarray) -> float:
         Calculate trend slope for mathematical pipeline.if len(data) < 2:
             return 0.0
-        
+
         x = np.arange(len(data))
         slope, _ = np.polyfit(x, data, 1)
         return float(slope)

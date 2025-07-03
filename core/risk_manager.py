@@ -258,7 +258,7 @@ class RiskManager:Handles real-time risk assessment and management.def __init__(
         return min(current_drawdown, 1.0)  # Cap at 100%
 
     def calculate_var(self, returns: List[float], confidence: float = 0.05) -> float:
-        
+
         Calculate Value at Risk (VaR) at given confidence level.
 
         Args:
@@ -276,7 +276,7 @@ class RiskManager:Handles real-time risk assessment and management.def __init__(
         return abs(var_value)  # Return positive value
 
     def calculate_sharpe_ratio(self, returns: List[float], risk_free_rate: float = 0.02) -> float:
-        
+
         Calculate Sharpe ratio for risk-adjusted returns.
 
         Args:
@@ -305,7 +305,7 @@ class RiskManager:Handles real-time risk assessment and management.def __init__(
         volatility: Optional[float] = None,
         kelly_fraction: Optional[float] = None,
     ) -> float:
-        
+
         Calculate optimal position size using multiple risk management techniques.
 
         Args:
@@ -346,7 +346,7 @@ class RiskManager:Handles real-time risk assessment and management.def __init__(
         return min(final_position_size, max_shares)
 
     def update_risk_metrics(self, portfolio_data: Dict[str, Any]) -> Dict[str, float]:
-        
+
         Update comprehensive risk metrics with portfolio data.
 
         Args:
@@ -486,7 +486,7 @@ class RiskManager:Handles real-time risk assessment and management.def __init__(
     def get_risk_adjusted_signal_strength(
         self, original_strength: float, market_conditions: Dict[str, Any]
     ) -> float:
-        
+
         Adjust signal strength based on current risk conditions.
 
         Args:

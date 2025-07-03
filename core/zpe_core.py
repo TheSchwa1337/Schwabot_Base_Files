@@ -4,7 +4,7 @@ LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 This file has been automatically commented out because it contains syntax errors
 that prevent the Schwabot system from running properly.
 
-Original file: core\zpe_core.py
+Original file: core\\zpe_core.py
 Date commented out: 2025-07-02 19:37:04
 
 The clean implementation has been preserved in the following files:
@@ -116,14 +116,14 @@ class ZPECore:
     def calculate_rotational_torque(
         self, liquidity_depth: float, trend_change_rate: float
     ) -> float:
-        
+
         Rotational Vectorization: τ = I · α
 
         Where:
             - τ: Torque applied to profit wheel (rotational force)
             - I: Market inertia (resistance from liquidity walls, spread delay)
             - α: Angular acceleration (rate of directional bias change)
-        
+
         inertia = 1.0 / (1.0 + liquidity_depth)  # Higher liquidity = lower inertia
         angular_acceleration = math.atan(trend_change_rate)  # Bounded acceleration
         torque = inertia * angular_acceleration
@@ -177,7 +177,7 @@ class ZPECore:
         return result
 
     def update_recursive_cycle_depth(self, tick_interval: float, price_trigger: float) -> int:
-        
+
         Recursive Cycle Depth: Rₙ = f(Rₙ₋₁, Δt, Pₙ)
         # Simple complexity calculation based on price trigger variance
         complexity = unified_math.min(16.0, 1.0 + unified_math.abs(price_trigger) * 10.0)
@@ -186,7 +186,7 @@ class ZPECore:
         return self.recursion_depth
 
     def update_agent_consensus(self, agent_name: str, confidence: float) -> float:
-        
+
         Agent Consensus Feedback Function: C(t) = (R1 + GPT4o + Claude + Schwafit) / 4if agent_name in self.agent_consensus:
             self.agent_consensus[agent_name] = confidence
             average_consensus = sum(self.agent_consensus.values()) / len(self.agent_consensus)
@@ -207,7 +207,7 @@ class ZPECore:
         return phase_difference
 
     def map_news_lantern_signals(self, news_density: float, sentiment_delta: float) -> float:
-        
+
         News/Lantern API Signal Mapping: Lₙ = g(nₙ, ΔSₙ)
         normalized_density = unified_math.max(0.0, unified_math.min(1.0, news_density))
         normalized_sentiment = max(-1.0, unified_math.min(1.0, sentiment_delta))

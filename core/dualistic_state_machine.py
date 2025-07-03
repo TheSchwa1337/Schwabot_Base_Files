@@ -4,7 +4,7 @@ LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 This file has been automatically commented out because it contains syntax errors
 that prevent the Schwabot system from running properly.
 
-Original file: core\dualistic_state_machine.py
+Original file: core\\dualistic_state_machine.py
 Date commented out: 2025-07-02 19:36:56
 
 The clean implementation has been preserved in the following files:
@@ -323,7 +323,7 @@ class DualisticStateMachine:Advanced state machine for ALEPH/ALIF dualistic mana
                 logger.error(fError in transition callback: {e})
 
         logger.info(
-            f🎭 State transition: {from_state.value} -> {target_state.value} 
+            f🎭 State transition: {from_state.value} -> {target_state.value}
             f(Trigger: {trigger.value}, Confidence: {confidence:.2f})
         )
         return True
@@ -371,7 +371,7 @@ def main() -> None:Demonstrate the DualisticStateMachine functionality.logging.b
 
     def on_transition(event: TransitionEvent) -> None:
         print(
-            fCallback received: Transition from {event.from_state.value} to 
+            fCallback received: Transition from {event.from_state.value} to
             f{event.to_state.value} triggered by {event.trigger.value}
         )
 

@@ -4,7 +4,7 @@ LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 This file has been automatically commented out because it contains syntax errors
 that prevent the Schwabot system from running properly.
 
-Original file: core\strategy_integration_bridge.py
+Original file: core\\strategy_integration_bridge.py
 Date commented out: 2025-07-02 19:37:03
 
 The clean implementation has been preserved in the following files:
@@ -127,7 +127,7 @@ visualization_connected: bool = False
 
 
 class StrategyIntegrationBridge:
-    
+
 Integration bridge connecting Wall Street strategies with Schwabot pipeline.
 
 This bridge orchestrates the integration between:

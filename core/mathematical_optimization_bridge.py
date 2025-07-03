@@ -4,7 +4,7 @@ LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 This file has been automatically commented out because it contains syntax errors
 that prevent the Schwabot system from running properly.
 
-Original file: core\mathematical_optimization_bridge.py
+Original file: core\\mathematical_optimization_bridge.py
 Date commented out: 2025-07-02 19:36:59
 
 The clean implementation has been preserved in the following files:

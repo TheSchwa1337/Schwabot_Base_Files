@@ -736,7 +736,7 @@ class BiologicalImmuneErrorHandler:Biological immune error handler with enhanced
                 # Log status periodically
                 if self.total_operations % 100 == 0: status = self.get_enhanced_immune_status()
                     logger.info(
-                        f🧬 Immune status: Zone = {status['system_health']['current_zone']}, 
+                        f🧬 Immune status: Zone = {status['system_health']['current_zone']},
                         fHealth = {status['system_health']['mitochondrial_health']:.2f}
                     )
                 await asyncio.sleep(self.config.get(monitoring_interval, 5.0))

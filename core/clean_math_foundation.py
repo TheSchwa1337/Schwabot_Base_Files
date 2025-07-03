@@ -44,29 +44,29 @@ class MathOperation(Enum):
     MULTIPLY = "multiply"
     DIVIDE = "divide"
     POWER = "power"
-    
+
     # Advanced functions
     SQRT = "sqrt"
     LOG = "log"
     EXP = "exp"
-    
+
     # Trigonometric
     SIN = "sin"
     COS = "cos"
     TAN = "tan"
-    
+
     # Statistical
     MEAN = "mean"
     STD = "std"
     VAR = "var"
     CORRELATION = "correlation"
-    
+
     # Linear algebra
     DOT_PRODUCT = "dot_product"
     MATRIX_MULTIPLY = "matrix_multiply"
     EIGENVALUES = "eigenvalues"
     SVD = "svd"
-    
+
     # Trading specific
     HASH_RATE = "hash_rate"
     PROFIT_VECTOR = "profit_vector"
@@ -98,21 +98,21 @@ class TensorOperation:
 class CleanMathFoundation:
     """
     Clean mathematical foundation for the Schwabot trading system.
-    
+
     This class provides all the core mathematical operations needed for
     trading calculations while maintaining proper code structure and syntax.
     """
-    
+
     def __init__(self, precision: int = 64, default_thermal: ThermalState = ThermalState.WARM):
         """Initialize the math foundation."""
         self.precision = precision
         self.thermal_state = default_thermal
         self.bit_phase = BitPhase.THIRTY_TWO_BIT
-        
+
         # Operation cache for performance
         self.operation_cache: Dict[str, Any] = {}
         self.calculation_history: List[MathResult] = []
-        
+
         # Performance metrics
         self.metrics = {
             "total_operations": 0,
@@ -121,13 +121,13 @@ class CleanMathFoundation:
             "cache_hits": 0,
             "cache_misses": 0
         }
-        
+
         logger.info(f"CleanMathFoundation initialized with precision {precision}")
-    
+
     def execute_operation(self, operation: MathOperation, *args, **kwargs) -> MathResult:
         """Execute a mathematical operation with full tracking."""
         start_time = time.time()
-        
+
         try:
             # Check cache first
             cache_key = self._generate_cache_key(operation, args, kwargs)
@@ -142,15 +142,15 @@ class CleanMathFoundation:
                     bit_phase=self.bit_phase,
                     metadata={"cached": True}
                 )
-            
+
             self.metrics["cache_misses"] += 1
-            
+
             # Execute the operation
             result = self._execute_raw_operation(operation, *args, **kwargs)
-            
+
             # Cache the result
             self.operation_cache[cache_key] = result
-            
+
             # Create result object
             math_result = MathResult(
                 value=result,
@@ -163,21 +163,21 @@ class CleanMathFoundation:
                     "cached": False
                 }
             )
-            
+
             # Track the calculation
             self.calculation_history.append(math_result)
             self.metrics["total_operations"] += 1
-            
+
             # Keep history manageable
             if len(self.calculation_history) > 1000:
                 self.calculation_history = self.calculation_history[-500:]
-            
+
             return math_result
-            
+
         except Exception as e:
             logger.error(f"Operation {operation.value} failed: {e}")
             raise
-    
+
     def _execute_raw_operation(self, operation: MathOperation, *args, **kwargs) -> Any:
         """Execute the raw mathematical operation."""
         if operation == MathOperation.ADD:
@@ -226,7 +226,7 @@ class CleanMathFoundation:
             return self._thermal_correction(*args)
         else:
             raise ValueError(f"Unsupported operation: {operation}")
-    
+
     # Basic arithmetic operations
     def _add(self, *args) -> Union[float, np.ndarray]:
         """Add multiple values or arrays."""
@@ -234,27 +234,27 @@ class CleanMathFoundation:
             return 0.0
         if len(args) == 1:
             return args[0]
-        
+
         # Handle numpy arrays
         if any(isinstance(arg, np.ndarray) for arg in args):
             arrays = [np.asarray(arg) for arg in args]
             return np.sum(arrays, axis=0)
-        
+
         return sum(args)
-    
+
     def _subtract(self, a, b) -> Union[float, np.ndarray]:
         """Subtract two values or arrays."""
         if isinstance(a, np.ndarray) or isinstance(b, np.ndarray):
             return np.asarray(a) - np.asarray(b)
         return a - b
-    
+
     def _multiply(self, *args) -> Union[float, np.ndarray]:
         """Multiply multiple values or arrays."""
         if not args:
             return 1.0
         if len(args) == 1:
             return args[0]
-        
+
         result = args[0]
         for arg in args[1:]:
             if isinstance(result, np.ndarray) or isinstance(arg, np.ndarray):
@@ -262,26 +262,26 @@ class CleanMathFoundation:
             else:
                 result = result * arg
         return result
-    
+
     def _divide(self, a, b) -> Union[float, np.ndarray]:
         """Divide two values or arrays."""
         if isinstance(a, np.ndarray) or isinstance(b, np.ndarray):
             return np.asarray(a) / np.asarray(b)
         return a / b
-    
+
     def _power(self, base, exponent) -> Union[float, np.ndarray]:
         """Raise base to exponent."""
         if isinstance(base, np.ndarray) or isinstance(exponent, np.ndarray):
             return np.power(np.asarray(base), np.asarray(exponent))
         return math.pow(base, exponent)
-    
+
     # Advanced mathematical functions
     def _sqrt(self, x) -> Union[float, np.ndarray]:
         """Square root."""
         if isinstance(x, np.ndarray):
             return np.sqrt(x)
         return math.sqrt(x)
-    
+
     def _log(self, x, base=math.e) -> Union[float, np.ndarray]:
         """Logarithm."""
         if isinstance(x, np.ndarray):
@@ -290,39 +290,39 @@ class CleanMathFoundation:
             else:
                 return np.log(x) / np.log(base)
         return math.log(x, base)
-    
+
     def _exp(self, x) -> Union[float, np.ndarray]:
         """Exponential function."""
         if isinstance(x, np.ndarray):
             return np.exp(x)
         return math.exp(x)
-    
+
     # Trigonometric functions
     def _sin(self, x) -> Union[float, np.ndarray]:
         """Sine function."""
         if isinstance(x, np.ndarray):
             return np.sin(x)
         return math.sin(x)
-    
+
     def _cos(self, x) -> Union[float, np.ndarray]:
         """Cosine function."""
         if isinstance(x, np.ndarray):
             return np.cos(x)
         return math.cos(x)
-    
+
     def _tan(self, x) -> Union[float, np.ndarray]:
         """Tangent function."""
         if isinstance(x, np.ndarray):
             return np.tan(x)
         return math.tan(x)
-    
+
     # Statistical functions
     def _mean(self, data) -> float:
         """Calculate mean."""
         if isinstance(data, np.ndarray):
             return np.mean(data)
         return sum(data) / len(data)
-    
+
     def _std(self, data) -> float:
         """Calculate standard deviation."""
         if isinstance(data, np.ndarray):
@@ -330,54 +330,54 @@ class CleanMathFoundation:
         mean_val = self._mean(data)
         variance = sum((x - mean_val) ** 2 for x in data) / len(data)
         return math.sqrt(variance)
-    
+
     def _var(self, data) -> float:
         """Calculate variance."""
         if isinstance(data, np.ndarray):
             return np.var(data)
         mean_val = self._mean(data)
         return sum((x - mean_val) ** 2 for x in data) / len(data)
-    
+
     # Linear algebra operations
     def _dot_product(self, a, b) -> Union[float, np.ndarray]:
         """Dot product of two arrays."""
         return np.dot(np.asarray(a), np.asarray(b))
-    
+
     def _matrix_multiply(self, a, b) -> np.ndarray:
         """Matrix multiplication."""
         return np.matmul(np.asarray(a), np.asarray(b))
-    
+
     def _eigenvalues(self, matrix) -> np.ndarray:
         """Calculate eigenvalues of a matrix."""
         return np.linalg.eigvals(np.asarray(matrix))
-    
+
     def _svd(self, matrix) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
         """Singular Value Decomposition."""
         return np.linalg.svd(np.asarray(matrix))
-    
+
     # Trading-specific operations
     def _hash_rate(self, price: float, volume: float, timestamp: float) -> str:
         """Calculate hash rate for price/volume data."""
         data_string = f"{price:.8f}-{volume:.8f}-{timestamp:.6f}"
         return hashlib.sha256(data_string.encode()).hexdigest()
-    
+
     def _profit_vector(self, price: float, volume: float, risk_factor: float = 0.02) -> Dict[str, float]:
         """Calculate profit vector for trading decision."""
         base_profit = price * volume * 0.001  # 0.1% base profit
         risk_adjusted_profit = base_profit * (1 - risk_factor)
         confidence = 1.0 - risk_factor
-        
+
         return {
             "base_profit": base_profit,
             "risk_adjusted_profit": risk_adjusted_profit,
             "confidence": confidence,
             "risk_factor": risk_factor
         }
-    
+
     def _tensor_contraction(self, tensor_a: np.ndarray, tensor_b: np.ndarray, axes: List[int]) -> np.ndarray:
         """Tensor contraction operation."""
         return np.tensordot(tensor_a, tensor_b, axes=axes)
-    
+
     def _thermal_correction(self, value: Union[float, np.ndarray], thermal_factor: float = 1.0) -> Union[float, np.ndarray]:
         """Apply thermal correction to mathematical values."""
         correction_factor = {
@@ -386,10 +386,10 @@ class CleanMathFoundation:
             ThermalState.HOT: 1.05,
             ThermalState.CRITICAL: 1.1
         }[self.thermal_state]
-        
+
         corrected_value = value * correction_factor * thermal_factor
         return corrected_value
-    
+
     # Utility methods
     def _generate_cache_key(self, operation: MathOperation, args: tuple, kwargs: dict) -> str:
         """Generate cache key for operation."""
@@ -397,21 +397,21 @@ class CleanMathFoundation:
         kwargs_str = str(sorted(kwargs.items()))
         key_string = f"{operation.value}-{args_str}-{kwargs_str}"
         return hashlib.md5(key_string.encode()).hexdigest()
-    
+
     def set_thermal_state(self, new_state: ThermalState) -> None:
         """Change thermal state."""
         if new_state != self.thermal_state:
             self.metrics["thermal_transitions"] += 1
             logger.info(f"Thermal state changed: {self.thermal_state.value} -> {new_state.value}")
             self.thermal_state = new_state
-    
+
     def set_bit_phase(self, new_phase: BitPhase) -> None:
         """Change bit phase."""
         if new_phase != self.bit_phase:
             self.metrics["phase_switches"] += 1
             logger.info(f"Bit phase changed: {self.bit_phase.value} -> {new_phase.value}")
             self.bit_phase = new_phase
-    
+
     def get_metrics(self) -> Dict[str, Any]:
         """Get performance metrics."""
         cache_total = self.metrics["cache_hits"] + self.metrics["cache_misses"]
@@ -424,7 +424,7 @@ class CleanMathFoundation:
             "current_thermal_state": self.thermal_state.value,
             "current_bit_phase": self.bit_phase.value
         }
-    
+
     def clear_cache(self) -> None:
         """Clear the operation cache."""
         cache_size = len(self.operation_cache)
@@ -442,4 +442,4 @@ def quick_calculation(operation: MathOperation, *args, **kwargs) -> Any:
     """Perform a quick calculation without full tracking."""
     foundation = CleanMathFoundation()
     result = foundation.execute_operation(operation, *args, **kwargs)
-    return result.value 
+    return result.value

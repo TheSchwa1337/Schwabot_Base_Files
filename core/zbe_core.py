@@ -4,7 +4,7 @@ LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 This file has been automatically commented out because it contains syntax errors
 that prevent the Schwabot system from running properly.
 
-Original file: core\zbe_core.py
+Original file: core\\zbe_core.py
 Date commented out: 2025-07-02 19:37:04
 
 The clean implementation has been preserved in the following files:
@@ -317,7 +317,7 @@ class ZBECore:ZBE Core - Zero Bit Energy Core for Schwabot.
             return None
 
     def get_computational_optimization(self) -> Dict[str, float]:
-        
+
         Get current computational optimization factors.
 
         These factors can be used by tensor calculations to optimize performance

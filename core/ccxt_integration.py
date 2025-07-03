@@ -4,7 +4,7 @@ LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 This file has been automatically commented out because it contains syntax errors
 that prevent the Schwabot system from running properly.
 
-Original file: core\ccxt_integration.py
+Original file: core\\ccxt_integration.py
 Date commented out: 2025-07-02 19:36:56
 
 The clean implementation has been preserved in the following files:
@@ -199,7 +199,7 @@ class CCXTIntegration:CCXT integration for exchange connectivity and order optim
     def detect_buy_sell_walls(
         self, order_book: OrderBookSnapshot, min_wall_strength: float = 0.1
     ) -> List[BuySellWall]:
-        
+
         Detect buy and sell walls in order book.
 
         Args:
@@ -249,7 +249,7 @@ class CCXTIntegration:CCXT integration for exchange connectivity and order optim
     async def detect_arbitrage_opportunities(
         self, symbol: str, min_spread: Optional[float] = None
     ) -> List[ArbitrageOpportunity]:
-        
+
         Detect arbitrage opportunities across exchanges.
 
         Args:
@@ -294,7 +294,7 @@ class CCXTIntegration:CCXT integration for exchange connectivity and order optim
     def _calculate_arbitrage_risk(
         self, buy_exchange: str, sell_exchange: str, spread: float, volume: float
     ) -> float:
-        
+
         Calculate risk score for an arbitrage opportunity.
         (Placeholder implementation)
         return 0.1
@@ -306,7 +306,7 @@ class CCXTIntegration:CCXT integration for exchange connectivity and order optim
         side: str,
         max_slippage: float = 0.001,
     ) -> Dict[str, Any]:
-        
+
         Optimize order size to minimize slippage.# ... (implementation)
         return {}
 

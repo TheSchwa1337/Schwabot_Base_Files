@@ -4,7 +4,7 @@ LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 This file has been automatically commented out because it contains syntax errors
 that prevent the Schwabot system from running properly.
 
-Original file: core\schwabot_integration_pipeline.py
+Original file: core\\schwabot_integration_pipeline.py
 Date commented out: 2025-07-02 19:37:01
 
 The clean implementation has been preserved in the following files:
@@ -90,7 +90,7 @@ class IntegrationMessage:Message format for cross-layer communication.source_lay
     message_type: str
     data: Dict[str, Any]
     timestamp: float = field(default_factory=time.time)
-    correlation_id: str = 
+    correlation_id: str =
     priority: int = 1
     encrypted: bool = False
 

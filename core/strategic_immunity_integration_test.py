@@ -4,7 +4,7 @@ LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 This file has been automatically commented out because it contains syntax errors
 that prevent the Schwabot system from running properly.
 
-Original file: core\strategic_immunity_integration_test.py
+Original file: core\\strategic_immunity_integration_test.py
 Date commented out: 2025-07-02 19:37:02
 
 The clean implementation has been preserved in the following files:
@@ -36,7 +36,7 @@ from vector_fortification_matrix import VectorFortificationMatrix
 
 
 class StrategicImmunityStack:
-    
+
     Complete Strategic Recursive Vector Immunity Stack.
 
     Integrates all four components into a unified defense system:

@@ -198,7 +198,7 @@ signal_strength = 0.6 * price_momentum + 0.4 * volume_momentum
         return 0.0
 
 def _calculate_brain_enhancement(self, price: float, volume: float) -> float:
-        
+
 Calculate brain enhancement factor using advanced mathematical modeling.
 This implements the corebrainalgorithm logic.try:
             # Base enhancement from price-volume relationship

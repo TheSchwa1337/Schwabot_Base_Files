@@ -4,7 +4,7 @@ LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 This file has been automatically commented out because it contains syntax errors
 that prevent the Schwabot system from running properly.
 
-Original file: core\error_handling_and_flake_gate_prevention.py
+Original file: core\\error_handling_and_flake_gate_prevention.py
 Date commented out: 2025-07-02 19:36:58
 
 The clean implementation has been preserved in the following files:
@@ -22,7 +22,8 @@ All core functionality has been reimplemented in clean, production-ready files.
 # -*- coding: utf-8 -*-
 Comprehensive Error Handling and Flake Gate Prevention System
 
-Complete system for preventing flake gate issues, handling import errors,
+Complete system for preventing flake gate issues, handling import errors
+Complete system for preventing flake gate issues, handling import
 managing missing modules, and ensuring proper system integration for the
 Schwabot trading system.
 
@@ -39,7 +40,9 @@ Mathematical Foundation:
 - Error Recovery: R = f(error_type, severity, fallback_available)
 - Import Management: I = Σ(module_status × fallback_weight)
 - System Integrity: S = Π(component_health × integration_coherence)
-- Flake Gate Prevention: F = f(import_order, dependency_graph, fallback_chain)
+- Flake Gate Prevention: F = f( import _order
+- Flake Gate Prevention: F = f( import dependency_graph
+- Flake Gate Prevention: F = f( import fallback_chain)
 
 
 import asyncio
@@ -119,7 +122,7 @@ class SystemHealth:Overall system health status.overall_health: float  # 0.0 to 
 
 
 class ComprehensiveErrorHandler:
-    
+
     Comprehensive error handling and flake gate prevention system.
 
     Features:
@@ -176,7 +179,8 @@ class ComprehensiveErrorHandler:
             self.module_status[module_name] = ModuleStatus(
                 module_name = module_name,
                 is_available=False,
-                import_error=None,
+ import _error=None
+ import
                 fallback_available=False,
                 fallback_module=None,
                 dependencies=[],
@@ -283,8 +287,11 @@ class ComprehensiveErrorHandler:
 
         return FallbackZPECore()
 
-    def safe_import(self, module_name: str, fallback_enabled: bool = True) -> Tuple[Any, bool]:
-        
+def safe_ import (self
+def safe_ import module_name: str
+def safe_ import fallback_enabled: bool = True) -> Tuple[Any
+def safe_ import bool]:
+
         Safely import a module with error handling and fallback.
 
         Args:
@@ -339,7 +346,8 @@ class ComprehensiveErrorHandler:
             return None, False
 
     def _determine_error_severity(self, module_name: str) -> ErrorSeverity:
-        Determine error severity based on module importance.if module_name in self.config.get(critical_modules, []):
+Determine error severity based on module import ance.if module_name in self.config.get(critical_modules
+Determine error severity based on module import []):
             return ErrorSeverity.CRITICAL
         elif module_name in self.config.get(optional_modules, []):
             return ErrorSeverity.MEDIUM
@@ -633,7 +641,10 @@ class ComprehensiveErrorHandler:
             return {error: str(e)}
 
     def validate_import_chain(self, module_name: str) -> Dict[str, Any]:Validate import chain for a module.try: validation_result = {module_name: module_name,
-                is_available: False,dependencies: [],import_chain: [],issues": [],recommendations": [],
+is_available: False,dependencies: [], import _chain: []
+is_available: False,dependencies: [], import issues": []
+is_available: False,dependencies: [], import recommendations": []
+is_available: False,dependencies: [], import
             }
 
             # Check if module is available

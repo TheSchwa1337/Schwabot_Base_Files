@@ -4,7 +4,7 @@ LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 This file has been automatically commented out because it contains syntax errors
 that prevent the Schwabot system from running properly.
 
-Original file: core\strategy\volume_weighted_hash_oscillator.py
+Original file: core\\strategy\volume_weighted_hash_oscillator.py
 Date commented out: 2025-07-02 19:37:06
 
 The clean implementation has been preserved in the following files:
@@ -44,7 +44,7 @@ hash_strength: int = 16,  # Number of hex characters to use from hash for calcul
 normalize: bool = True,
 oscillator_range: Tuple[float, float] = (0.0, 100.0),
 ):
-        
+
 Initializes the VolumeWeightedHashOscillator.
 
 Args:

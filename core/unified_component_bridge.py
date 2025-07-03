@@ -433,17 +433,17 @@ lines = output.split(\n)
 for line in lines:
             if passedin line.lower():
                 # Extract test pass count
-match = re.search(r(\d+)\s+passed, line)
+match = re.search(r(\\d+)\\s+passed, line)
 if match:
                     metrics[tests_passed] = int(match.group(1))
 eliffailedin line.lower():
                 # Extract test fail count
-match = re.search(r(\d+)\s+failed, line)
+match = re.search(r(\\d+)\\s+failed, line)
 if match:
                     metrics[tests_failed] = int(match.group(1))
 eliftime: in line.lower() orsecondsin line.lower():
                 # Extract timing information
-match = re.search(r([\d.]+)\s*seconds?, line)
+match = re.search(r([\\d.]+)\\s*seconds?, line)
 if match:
                     metrics[execution_time] = float(match.group(1))
 

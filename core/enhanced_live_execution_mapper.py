@@ -4,7 +4,7 @@ LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 This file has been automatically commented out because it contains syntax errors
 that prevent the Schwabot system from running properly.
 
-Original file: core\enhanced_live_execution_mapper.py
+Original file: core\\enhanced_live_execution_mapper.py
 Date commented out: 2025-07-02 19:36:57
 
 The clean implementation has been preserved in the following files:
@@ -258,8 +258,8 @@ optimization_result.expected_return * btc_price
 )
 
             logger.info(
-💡 Optimization complete: 
-fconfidence = {optimization_result.confidence_level:.3f}, 
+💡 Optimization complete:
+fconfidence = {optimization_result.confidence_level:.3f},
 fshould_trade = {optimization_result.should_trade}
 )
 
@@ -427,8 +427,8 @@ max_btc = self.btc_usdc_config[max_trade_size_btc]
 final_position_btc = max(min_btc, min(max_btc, adjusted_position_btc))
 
             logger.debug(
-fPosition sizing: base = {position_btc:.6f}, 
-fadjusted = {adjusted_position_btc:.6f}, 
+fPosition sizing: base = {position_btc:.6f},
+fadjusted = {adjusted_position_btc:.6f},
 ffinal = {final_position_btc:.6f} BTC
 )
 

@@ -4,7 +4,7 @@ LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 This file has been automatically commented out because it contains syntax errors
 that prevent the Schwabot system from running properly.
 
-Original file: core\immune\qsc_gate.py
+Original file: core\\immune\\qsc_gate.py
 Date commented out: 2025-07-02 19:37:05
 
 The clean implementation has been preserved in the following files:
@@ -297,7 +297,7 @@ class QSCGate:Quantum Static Core Gate for immune signal processing.def __init__
             self.learning_rate = max(0.001, self.learning_rate * 0.9)
 
             logger.debug(
-            f🧬 Performance feedback: success_rate = {success_rate:.3f}, 
+            f🧬 Performance feedback: success_rate = {success_rate:.3f},
             flearning_rate = {self.learning_rate:.4f}
         )
 

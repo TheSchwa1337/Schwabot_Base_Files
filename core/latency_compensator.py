@@ -4,7 +4,7 @@ LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 This file has been automatically commented out because it contains syntax errors
 that prevent the Schwabot system from running properly.
 
-Original file: core\latency_compensator.py
+Original file: core\\latency_compensator.py
 Date commented out: 2025-07-02 19:36:58
 
 The clean implementation has been preserved in the following files:
@@ -234,7 +234,7 @@ adjustment_factor = 1 + quantum_sensitivity * (1 - quantum_coherence)
 adjusted_latency = base_latency_ms * adjustment_factor
 
             logger.debug(
-f🌀 Quantum adjustment: {base_latency_ms:.2f}ms → {adjusted_latency:.2f}ms 
+f🌀 Quantum adjustment: {base_latency_ms:.2f}ms → {adjusted_latency:.2f}ms
 f(coherence = {quantum_coherence:.3f})
 )
 

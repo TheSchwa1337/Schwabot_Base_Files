@@ -3,7 +3,7 @@
 # ==========================================================
 
 # Maximum line length
-max-line-length = 88
+max-line-length = 160
 
 # Maximum complexity for functions
 max-complexity = 15

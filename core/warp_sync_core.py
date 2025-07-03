@@ -4,7 +4,7 @@ LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 This file has been automatically commented out because it contains syntax errors
 that prevent the Schwabot system from running properly.
 
-Original file: core\warp_sync_core.py
+Original file: core\\warp_sync_core.py
 Date commented out: 2025-07-02 19:37:04
 
 The clean implementation has been preserved in the following files:
@@ -21,7 +21,8 @@ All core functionality has been reimplemented in clean, production-ready files.
 import time
 from typing import Any, Dict, List, Optional
 
-import numpy as npWarp Sync Core Module.Implements the Warp Gradient Drift Envelope and Warp Decay Function,
+ import numpy as npWarp Sync Core Module.Implements the Warp Gradient Drift Envelope and Warp Decay Function
+ import
 essential for temporal acceleration and dynamic lattice management within Schwabot.
 This module helps throttle entry timing or delay trades until ideal vector return.
 

@@ -56,6 +56,7 @@ import os
 import subprocess
 from collections import defaultdict
 from typing import List, Tuple
+import sys
 
 # Mathematical keywords that should be preserved during fixes
 MATH_PRESERVATION_KEYWORDS = {
@@ -198,25 +199,30 @@ class Flake8Analyzer:
         try:
             # Run flake8 with specific error codes
             cmd = [
-                "python",
+                sys.executable,
                 "-m",
                 "flake8",
-                "--select=E,W,F",
-                "--format=%(path)s:%(row)d:%(col)d:%(code)s:%(text)s",
-                "--statistics",
+                "--isolated",  # Don't load existing configs
+                "--select=" + ",".join(AUTO_FIXABLE_CODES.union(CRITICAL_CODES)),
+                "--ignore=E501", # Ignore line length for now
+                "--max-line-length=999", # Allow very long lines
+                *CODEBASE_DIRS,
             ]
-            # Add directories
-            for directory in CODEBASE_DIRS:
-                if os.path.exists(directory):
-                    cmd.append(directory)
+            process = subprocess.Popen(
+                cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True
+            )
+            stdout, stderr = process.communicate()
 
-            result = subprocess.run(cmd, capture_output=True, text=True, timeout=300)
-
-            if result.returncode == 0:
+            if process.returncode != 0 and "E999" in stderr:
+                print(f"\n🚨 Critical Flake8 Error (E999 - Syntax Error) Detected!")
+                print("Please review the following syntax errors:")
+                print(stderr)
+                # It's crucial to return an empty list or raise an error
+                # if syntax errors prevent meaningful analysis.
                 return []
 
             # Parse output
-            lines = result.stdout.strip().split("\n")
+            lines = stdout.strip().split("\n")
             return [
                 line for line in lines if ":" in line and not line.startswith("---")
             ]

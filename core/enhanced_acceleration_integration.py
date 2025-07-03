@@ -4,7 +4,7 @@ LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 This file has been automatically commented out because it contains syntax errors
 that prevent the Schwabot system from running properly.
 
-Original file: core\enhanced_acceleration_integration.py
+Original file: core\\enhanced_acceleration_integration.py
 Date commented out: 2025-07-02 19:36:56
 
 The clean implementation has been preserved in the following files:
@@ -248,7 +248,7 @@ class EnhancedAccelerationIntegration:
         history_state: HistoryState,
         calculation_mode: str =  balanced,
     ) -> Tuple[ProfitResult, AccelerationFactors]:
-        
+
         Compute profit with acceleration - MATHEMATICAL PURITY GUARANTEED.
 
         This function demonstrates the complete separation:

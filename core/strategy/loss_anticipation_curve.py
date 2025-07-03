@@ -4,7 +4,7 @@ LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 This file has been automatically commented out because it contains syntax errors
 that prevent the Schwabot system from running properly.
 
-Original file: core\strategy\loss_anticipation_curve.py
+Original file: core\\strategy\\loss_anticipation_curve.py
 Date commented out: 2025-07-02 19:37:06
 
 The clean implementation has been preserved in the following files:
@@ -38,7 +38,7 @@ Key functionalities include:
 
 
 class LossAnticipationCurve:
-    
+
 Calculates and manages a dynamic loss anticipation curve.def __init__():Initializes the LossAnticipationCurve.
 
 Args:
