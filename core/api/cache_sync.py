@@ -1,4 +1,5 @@
 """A service for synchronizing API data caches."""
+
 from __future__ import annotations
 
 import asyncio
@@ -10,7 +11,6 @@ from types import ModuleType
 from typing import List
 
 from .handlers.base_handler import BaseAPIHandler
-
 
 # # Cache Sync Service
 # ==================
@@ -48,7 +48,9 @@ class CacheSyncService:
             logger.warning("CacheSyncService already running")
             return await self._discover_handlers()
         self._task = asyncio.create_task(self._run_loop())
-        logger.info(f"[Service Started] CacheSyncService started with {len(self.handlers)} handlers")
+        logger.info(
+            f"[Service Started] CacheSyncService started with {len(self.handlers)} handlers"
+        )
 
     async def stop(self) -> None:
         """Stop the cache sync service."""

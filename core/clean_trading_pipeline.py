@@ -15,14 +15,15 @@ from typing import Any, Dict, List, Optional
 
 import numpy as np
 
-from .clean_math_foundation import CleanMathFoundation, ThermalState, BitPhase
-from .clean_profit_vectorization import CleanProfitVectorization, VectorizationMode, ProfitVector
+from .clean_math_foundation import BitPhase, CleanMathFoundation, ThermalState
+from .clean_profit_vectorization import CleanProfitVectorization, ProfitVector, VectorizationMode
 
 logger = logging.getLogger(__name__)
 
 
 class TradingAction(Enum):
     """Trading actions."""
+
     BUY = "BUY"
     SELL = "SELL"
     HOLD = "HOLD"
@@ -30,6 +31,7 @@ class TradingAction(Enum):
 
 class StrategyBranch(Enum):
     """Strategy branches."""
+
     MEAN_REVERSION = "mean_reversion"
     MOMENTUM = "momentum"
     ARBITRAGE = "arbitrage"
@@ -40,6 +42,7 @@ class StrategyBranch(Enum):
 
 class MarketRegime(Enum):
     """Market regimes."""
+
     TRENDING_UP = "trending_up"
     TRENDING_DOWN = "trending_down"
     SIDEWAYS = "sideways"
@@ -50,6 +53,7 @@ class MarketRegime(Enum):
 @dataclass
 class MarketData:
     """Market data snapshot."""
+
     symbol: str
     price: float
     volume: float
@@ -65,6 +69,7 @@ class MarketData:
 @dataclass
 class TradingDecision:
     """Trading decision output."""
+
     timestamp: float
     symbol: str
     action: TradingAction
@@ -83,6 +88,7 @@ class TradingDecision:
 @dataclass
 class PipelineState:
     """Current state of the trading pipeline."""
+
     timestamp: float
     active_strategy: StrategyBranch
     current_capital: float
@@ -100,10 +106,11 @@ class PipelineState:
 @dataclass
 class RiskParameters:
     """Risk management parameters."""
+
     max_position_size: float = 0.1  # 10% max position
-    stop_loss_pct: float = 0.02     # 2% stop loss
-    take_profit_pct: float = 0.04   # 4% take profit
-    max_daily_loss: float = 0.05    # 5% max daily loss
+    stop_loss_pct: float = 0.02  # 2% stop loss
+    take_profit_pct: float = 0.04  # 4% take profit
+    max_daily_loss: float = 0.05  # 5% max daily loss
     volatility_threshold: float = 0.8  # High volatility threshold
     correlation_threshold: float = 0.9  # High correlation threshold
 
@@ -125,7 +132,7 @@ class CleanTradingPipeline:
         initial_capital: float = 100000.0,
         risk_params: Optional[RiskParameters] = None,
         default_strategy: StrategyBranch = StrategyBranch.MEAN_REVERSION,
-        default_vectorization: VectorizationMode = VectorizationMode.STANDARD
+        default_vectorization: VectorizationMode = VectorizationMode.STANDARD,
     ):
         """Initialize the clean trading pipeline."""
         self.initial_capital = initial_capital
@@ -136,8 +143,7 @@ class CleanTradingPipeline:
         # Initialize core components
         self.math_foundation = CleanMathFoundation(precision=64)
         self.profit_vectorization = CleanProfitVectorization(
-            risk_free_rate=0.02,
-            default_mode=default_vectorization
+            risk_free_rate=0.02, default_mode=default_vectorization
         )
 
         # Pipeline state
@@ -152,7 +158,7 @@ class CleanTradingPipeline:
             current_risk_level=0.02,
             market_regime=MarketRegime.SIDEWAYS,
             thermal_state=ThermalState.WARM,
-            bit_phase=BitPhase.THIRTY_TWO_BIT
+            bit_phase=BitPhase.THIRTY_TWO_BIT,
         )
 
         # Trading history
@@ -167,11 +173,10 @@ class CleanTradingPipeline:
             StrategyBranch.ARBITRAGE: 0.15,
             StrategyBranch.SCALPING: 0.1,
             StrategyBranch.SWING: 0.15,
-            StrategyBranch.GRID: 0.05
+            StrategyBranch.GRID: 0.05,
         }
 
-        logger.info(f"Clean Trading Pipeline initialized with "
-                    f"${initial_capital:,.2f} capital")
+        logger.info(f"Clean Trading Pipeline initialized with " f"${initial_capital:,.2f} capital")
 
     async def process_market_data(self, market_data: MarketData) -> Optional[TradingDecision]:
         """
@@ -201,8 +206,10 @@ class CleanTradingPipeline:
             # 3. Determine optimal strategy based on market regime
             optimal_strategy = self._determine_optimal_strategy(market_regime, market_data)
             if optimal_strategy != self.state.active_strategy:
-                logger.info(f"Strategy switch: {self.state.active_strategy.value} -> "
-                            f"{optimal_strategy.value}")
+                logger.info(
+                    f"Strategy switch: {self.state.active_strategy.value} -> "
+                    f"{optimal_strategy.value}"
+                )
                 self.state.active_strategy = optimal_strategy
 
             # 4. Adjust thermal state and bit phase based on market conditions
@@ -213,7 +220,7 @@ class CleanTradingPipeline:
                 btc_price=market_data.price,
                 volume=market_data.volume,
                 market_data=self._market_data_to_dict(market_data),
-                mode=self._select_vectorization_mode(market_regime)
+                mode=self._select_vectorization_mode(market_regime),
             )
 
             # 6. Generate trading signal
@@ -240,8 +247,8 @@ class CleanTradingPipeline:
                     metadata={
                         "processing_time": time.time() - start_time,
                         "market_regime": market_regime.value,
-                        "vectorization_mode": profit_vector.mode
-                    }
+                        "vectorization_mode": profit_vector.mode,
+                    },
                 )
 
                 # Track the decision
@@ -268,12 +275,14 @@ class CleanTradingPipeline:
             # Calculate trend strength
             price_changes = np.diff(recent_prices)
             trend_direction = np.mean(price_changes)
-            trend_strength = (abs(trend_direction) / np.std(recent_prices)
-                              if np.std(recent_prices) > 0 else 0)
+            trend_strength = (
+                abs(trend_direction) / np.std(recent_prices) if np.std(recent_prices) > 0 else 0
+            )
 
             # Calculate volatility
-            volatility = (np.std(price_changes) / np.mean(recent_prices)
-                          if np.mean(recent_prices) > 0 else 0)
+            volatility = (
+                np.std(price_changes) / np.mean(recent_prices) if np.mean(recent_prices) > 0 else 0
+            )
 
             # Determine regime
             if volatility > 0.05:  # High volatility threshold
@@ -291,26 +300,25 @@ class CleanTradingPipeline:
             logger.error(f"Error analyzing market regime: {e}")
             return MarketRegime.SIDEWAYS
 
-    def _determine_optimal_strategy(self, regime: MarketRegime,
-                                    market_data: MarketData) -> StrategyBranch:
+    def _determine_optimal_strategy(
+        self, regime: MarketRegime, market_data: MarketData
+    ) -> StrategyBranch:
         """Determine optimal strategy based on market regime."""
         strategy_preferences = {
             MarketRegime.TRENDING_UP: StrategyBranch.MOMENTUM,
             MarketRegime.TRENDING_DOWN: StrategyBranch.MEAN_REVERSION,
             MarketRegime.SIDEWAYS: StrategyBranch.GRID,
             MarketRegime.VOLATILE: StrategyBranch.SCALPING,
-            MarketRegime.CALM: StrategyBranch.SWING
+            MarketRegime.CALM: StrategyBranch.SWING,
         }
 
         optimal = strategy_preferences.get(regime, self.default_strategy)
 
         # Add some randomness based on profit vector performance
-        if hasattr(self.profit_vectorization, 'mode_performance'):
+        if hasattr(self.profit_vectorization, "mode_performance"):
             mode_performance = self.profit_vectorization.mode_performance
             best_performing_modes = sorted(
-                mode_performance.items(),
-                key=lambda x: x[1].get('total_profit', 0),
-                reverse=True
+                mode_performance.items(), key=lambda x: x[1].get("total_profit", 0), reverse=True
             )
 
             # Occasionally switch to complement best performing modes
@@ -360,13 +368,14 @@ class CleanTradingPipeline:
             MarketRegime.TRENDING_DOWN: VectorizationMode.ENTROPY_WEIGHTED,
             MarketRegime.SIDEWAYS: VectorizationMode.CONSENSUS_VOTING,
             MarketRegime.VOLATILE: VectorizationMode.BIT_PHASE_TRIGGER,
-            MarketRegime.CALM: VectorizationMode.HYBRID_BLEND
+            MarketRegime.CALM: VectorizationMode.HYBRID_BLEND,
         }
 
         return mode_preferences.get(regime, VectorizationMode.STANDARD)
 
-    def _generate_trading_signal(self, market_data: MarketData,
-                                 profit_vector: ProfitVector) -> Optional[Dict[str, Any]]:
+    def _generate_trading_signal(
+        self, market_data: MarketData, profit_vector: ProfitVector
+    ) -> Optional[Dict[str, Any]]:
         """Generate trading signal based on strategy and profit vector."""
         try:
             strategy = self.state.active_strategy
@@ -390,8 +399,9 @@ class CleanTradingPipeline:
             logger.error(f"Error generating trading signal: {e}")
             return None
 
-    def _mean_reversion_signal(self, market_data: MarketData,
-                               profit_vector: ProfitVector) -> Dict[str, Any]:
+    def _mean_reversion_signal(
+        self, market_data: MarketData, profit_vector: ProfitVector
+    ) -> Dict[str, Any]:
         """Generate mean reversion trading signal."""
         if len(self.market_data_history) < 20:
             return {"action": TradingAction.HOLD, "quantity": 0, "confidence": 0}
@@ -423,19 +433,21 @@ class CleanTradingPipeline:
             "action": action,
             "quantity": quantity,
             "confidence": confidence * profit_vector.confidence_score,
-            "metadata": {"z_score": z_score, "mean_price": mean_price}
+            "metadata": {"z_score": z_score, "mean_price": mean_price},
         }
 
-    def _momentum_signal(self, market_data: MarketData,
-                         profit_vector: ProfitVector) -> Dict[str, Any]:
+    def _momentum_signal(
+        self, market_data: MarketData, profit_vector: ProfitVector
+    ) -> Dict[str, Any]:
         """Generate momentum trading signal."""
         if len(self.market_data_history) < 10:
             return {"action": TradingAction.HOLD, "quantity": 0, "confidence": 0}
 
         # Calculate momentum
         recent_prices = [md.price for md in self.market_data_history[-10:]]
-        momentum = ((recent_prices[-1] - recent_prices[0]) / recent_prices[0]
-                    if recent_prices[0] > 0 else 0)
+        momentum = (
+            (recent_prices[-1] - recent_prices[0]) / recent_prices[0] if recent_prices[0] > 0 else 0
+        )
 
         # Generate signal based on momentum
         if momentum > 0.02:  # Strong upward momentum
@@ -455,15 +467,15 @@ class CleanTradingPipeline:
             "action": action,
             "quantity": quantity,
             "confidence": confidence * profit_vector.confidence_score,
-            "metadata": {"momentum": momentum}
+            "metadata": {"momentum": momentum},
         }
 
-    def _arbitrage_signal(self, market_data: MarketData,
-                          profit_vector: ProfitVector) -> Dict[str, Any]:
+    def _arbitrage_signal(
+        self, market_data: MarketData, profit_vector: ProfitVector
+    ) -> Dict[str, Any]:
         """Generate arbitrage trading signal."""
         # Simplified arbitrage logic - would need multiple exchange data in practice
-        spread = ((market_data.ask - market_data.bid)
-                  if market_data.ask and market_data.bid else 0)
+        spread = (market_data.ask - market_data.bid) if market_data.ask and market_data.bid else 0
 
         if spread > market_data.price * 0.001:  # Spread > 0.1% of price
             action = TradingAction.BUY  # Buy at bid, sell at ask
@@ -478,11 +490,12 @@ class CleanTradingPipeline:
             "action": action,
             "quantity": quantity,
             "confidence": confidence * profit_vector.confidence_score,
-            "metadata": {"spread": spread}
+            "metadata": {"spread": spread},
         }
 
-    def _scalping_signal(self, market_data: MarketData,
-                         profit_vector: ProfitVector) -> Dict[str, Any]:
+    def _scalping_signal(
+        self, market_data: MarketData, profit_vector: ProfitVector
+    ) -> Dict[str, Any]:
         """Generate scalping trading signal."""
         # Quick in-and-out trades based on small price movements
         if len(self.market_data_history) < 5:
@@ -490,8 +503,11 @@ class CleanTradingPipeline:
 
         # Look for quick price movements
         recent_prices = [md.price for md in self.market_data_history[-5:]]
-        short_term_change = ((recent_prices[-1] - recent_prices[-3]) / recent_prices[-3]
-                             if recent_prices[-3] > 0 else 0)
+        short_term_change = (
+            (recent_prices[-1] - recent_prices[-3]) / recent_prices[-3]
+            if recent_prices[-3] > 0
+            else 0
+        )
 
         if abs(short_term_change) > 0.005:  # 0.5% quick movement
             action = TradingAction.BUY if short_term_change > 0 else TradingAction.SELL
@@ -507,11 +523,10 @@ class CleanTradingPipeline:
             "action": action,
             "quantity": quantity,
             "confidence": confidence * profit_vector.confidence_score,
-            "metadata": {"short_term_change": short_term_change}
+            "metadata": {"short_term_change": short_term_change},
         }
 
-    def _swing_signal(self, market_data: MarketData,
-                      profit_vector: ProfitVector) -> Dict[str, Any]:
+    def _swing_signal(self, market_data: MarketData, profit_vector: ProfitVector) -> Dict[str, Any]:
         """Generate swing trading signal."""
         # Medium-term trades based on larger price swings
         if len(self.market_data_history) < 50:
@@ -524,8 +539,7 @@ class CleanTradingPipeline:
         current = recent_prices[-1]
 
         # Position within range
-        position_in_range = ((current - low) / (high - low)
-                             if (high - low) > 0 else 0.5)
+        position_in_range = (current - low) / (high - low) if (high - low) > 0 else 0.5
 
         if position_in_range < 0.2:  # Near bottom of range
             action = TradingAction.BUY
@@ -546,16 +560,15 @@ class CleanTradingPipeline:
             "metadata": {
                 "position_in_range": position_in_range,
                 "range_high": high,
-                "range_low": low
-            }
+                "range_low": low,
+            },
         }
 
-    def _grid_signal(self, market_data: MarketData,
-                     profit_vector: ProfitVector) -> Dict[str, Any]:
+    def _grid_signal(self, market_data: MarketData, profit_vector: ProfitVector) -> Dict[str, Any]:
         """Generate grid trading signal."""
         # Grid trading with multiple levels
         base_price = 50000  # Example base price - would be dynamically set
-        grid_spacing = 100   # $100 grid spacing
+        grid_spacing = 100  # $100 grid spacing
 
         current_price = market_data.price
         price_level = round((current_price - base_price) / grid_spacing)
@@ -574,11 +587,12 @@ class CleanTradingPipeline:
             "action": action,
             "quantity": quantity,
             "confidence": confidence * profit_vector.confidence_score,
-            "metadata": {"price_level": price_level, "grid_spacing": grid_spacing}
+            "metadata": {"price_level": price_level, "grid_spacing": grid_spacing},
         }
 
-    def _default_signal(self, market_data: MarketData,
-                        profit_vector: ProfitVector) -> Dict[str, Any]:
+    def _default_signal(
+        self, market_data: MarketData, profit_vector: ProfitVector
+    ) -> Dict[str, Any]:
         """Default trading signal when no specific strategy applies."""
         # Conservative default approach
         if profit_vector.confidence_score > 0.7 and profit_vector.profit_score > 0:
@@ -594,11 +608,12 @@ class CleanTradingPipeline:
             "action": action,
             "quantity": quantity,
             "confidence": confidence,
-            "metadata": {"default_strategy": True}
+            "metadata": {"default_strategy": True},
         }
 
-    def _apply_risk_management(self, signal: Dict[str, Any],
-                               market_data: MarketData) -> Optional[Dict[str, Any]]:
+    def _apply_risk_management(
+        self, signal: Dict[str, Any], market_data: MarketData
+    ) -> Optional[Dict[str, Any]]:
         """Apply risk management rules to trading signal."""
         if not signal or signal["action"] == TradingAction.HOLD:
             return signal
@@ -613,8 +628,9 @@ class CleanTradingPipeline:
             # Check volatility limits
             if market_data.volatility > self.risk_params.volatility_threshold:
                 signal["quantity"] *= 0.5  # Reduce position size in high volatility
-                logger.info(f"Position size reduced due to high volatility: "
-                            f"{market_data.volatility}")
+                logger.info(
+                    f"Position size reduced due to high volatility: " f"{market_data.volatility}"
+                )
 
             # Check daily loss limits
             daily_pnl = self._calculate_daily_pnl()
@@ -651,16 +667,15 @@ class CleanTradingPipeline:
             performance_risk = 0.0
             if len(self.trading_history) > 5:
                 recent_decisions = self.trading_history[-5:]
-                losing_streak = sum(1 for d in recent_decisions
-                                    if d.profit_potential < 0)
+                losing_streak = sum(1 for d in recent_decisions if d.profit_potential < 0)
                 performance_risk = losing_streak / 5
 
             # Combine risk components
             total_risk = (
-                volatility_risk * 0.4 +
-                trend_risk * 0.3 +
-                concentration_risk * 0.2 +
-                performance_risk * 0.1
+                volatility_risk * 0.4
+                + trend_risk * 0.3
+                + concentration_risk * 0.2
+                + performance_risk * 0.1
             )
 
             return min(total_risk, 1.0)
@@ -676,8 +691,7 @@ class CleanTradingPipeline:
             day_start = current_time - (current_time % 86400)  # Start of current day
 
             daily_trades = [
-                decision for decision in self.trading_history
-                if decision.timestamp >= day_start
+                decision for decision in self.trading_history if decision.timestamp >= day_start
             ]
 
             return sum(decision.profit_potential for decision in daily_trades)
@@ -696,7 +710,7 @@ class CleanTradingPipeline:
             "trend_strength": market_data.trend_strength,
             "entropy_level": market_data.entropy_level,
             "timestamp": market_data.timestamp,
-            **market_data.metadata
+            **market_data.metadata,
         }
 
     def _update_pipeline_metrics(self, decision: TradingDecision) -> None:
@@ -718,13 +732,9 @@ class CleanTradingPipeline:
 
     def get_pipeline_summary(self) -> Dict[str, Any]:
         """Get comprehensive pipeline performance summary."""
-        win_rate = (
-            self.state.winning_trades / max(1, self.state.total_trades)
-        )
+        win_rate = self.state.winning_trades / max(1, self.state.total_trades)
 
-        avg_profit = (
-            self.state.total_profit / max(1, self.state.total_trades)
-        )
+        avg_profit = self.state.total_profit / max(1, self.state.total_trades)
 
         return {
             "state": {
@@ -738,7 +748,7 @@ class CleanTradingPipeline:
                 "active_strategy": self.state.active_strategy.value,
                 "market_regime": self.state.market_regime.value,
                 "thermal_state": self.state.thermal_state.value,
-                "bit_phase": self.state.bit_phase.value
+                "bit_phase": self.state.bit_phase.value,
             },
             "math_foundation": self.math_foundation.get_metrics(),
             "profit_vectorization": self.profit_vectorization.get_performance_summary(),
@@ -748,10 +758,10 @@ class CleanTradingPipeline:
                     "symbol": d.symbol,
                     "action": d.action.value,
                     "profit_potential": d.profit_potential,
-                    "confidence": d.confidence
+                    "confidence": d.confidence,
                 }
                 for d in self.trading_history[-5:]
-            ]
+            ],
         }
 
 
@@ -759,20 +769,18 @@ class CleanTradingPipeline:
 def create_trading_pipeline(
     initial_capital: float = 100000.0,
     strategy: StrategyBranch = StrategyBranch.MEAN_REVERSION,
-    vectorization: VectorizationMode = VectorizationMode.STANDARD
+    vectorization: VectorizationMode = VectorizationMode.STANDARD,
 ) -> CleanTradingPipeline:
     """Create a new trading pipeline instance."""
     return CleanTradingPipeline(
         initial_capital=initial_capital,
         default_strategy=strategy,
-        default_vectorization=vectorization
+        default_vectorization=vectorization,
     )
 
 
 async def run_trading_simulation(
-    pipeline: CleanTradingPipeline,
-    duration_seconds: int = 3600,
-    tick_interval: float = 1.0
+    pipeline: CleanTradingPipeline, duration_seconds: int = 3600, tick_interval: float = 1.0
 ) -> Dict[str, Any]:
     """Run a trading simulation for testing."""
     logger.info(f"Starting trading simulation for {duration_seconds} seconds")
@@ -794,15 +802,17 @@ async def run_trading_simulation(
                 timestamp=time.time(),
                 volatility=volatility,
                 trend_strength=np.random.uniform(0.0, 1.0),
-                entropy_level=np.random.uniform(2.0, 6.0)
+                entropy_level=np.random.uniform(2.0, 6.0),
             )
 
             # Process through pipeline
             decision = await pipeline.process_market_data(market_data)
             if decision:
                 decisions_made.append(decision)
-                logger.info(f"Decision: {decision.action.value} {decision.quantity:.2f} "
-                            f"@ {decision.price:.2f}")
+                logger.info(
+                    f"Decision: {decision.action.value} {decision.quantity:.2f} "
+                    f"@ {decision.price:.2f}"
+                )
 
             await asyncio.sleep(tick_interval)
 
@@ -814,5 +824,5 @@ async def run_trading_simulation(
         "duration": time.time() - start_time,
         "decisions_made": len(decisions_made),
         "pipeline_summary": pipeline.get_pipeline_summary(),
-        "final_capital": pipeline.state.current_capital + pipeline.state.total_profit
+        "final_capital": pipeline.state.current_capital + pipeline.state.total_profit,
     }

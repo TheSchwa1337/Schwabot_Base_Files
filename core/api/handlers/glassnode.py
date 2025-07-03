@@ -1,14 +1,14 @@
 from __future__ import annotations
 
-import logging
-from typing import Any, Dict, List
 import asyncio
+import logging
 import time
+from typing import Any, Dict
 
 import aiohttp
 import requests
-from .base_handler import BaseAPIHandler
 
+from .base_handler import BaseAPIHandler
 
 """Glassnode API Handler
 
@@ -34,6 +34,7 @@ BASE_URL = "https://api.glassnode.com/v1/metrics"
 
 class GlassnodeHandler(BaseAPIHandler):
     """Glassnode API handler for on-chain cryptocurrency metrics."""
+
     NAME = "glassnode"
     CACHE_SUBDIR = "onchain_data"
     REFRESH_INTERVAL = 900  # 15-minute updates for on-chain data
@@ -209,7 +210,7 @@ class GlassnodeHandler(BaseAPIHandler):
             # Market valuation score
             mvrv = latest_values.get("mvrv", 1.0)
             nvt = latest_values.get("nvt", 50.0)
-            sopr = latest_values.get("sopr", 1.0)
+            latest_values.get("sopr", 1.0)
 
             # Valuation assessment (simplified)
             if mvrv > 3.0:
@@ -241,9 +242,7 @@ class GlassnodeHandler(BaseAPIHandler):
 
             # Combine into an overall score
             overall_score = (
-                scores["network_health"]
-                + scores["valuation_health"]
-                + scores["activity_score"]
+                scores["network_health"] + scores["valuation_health"] + scores["activity_score"]
             ) / 3
             scores["overall_score"] = round(overall_score, 2)
 

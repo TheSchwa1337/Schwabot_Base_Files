@@ -21,14 +21,16 @@ logger = logging.getLogger(__name__)
 
 class ThermalState(Enum):
     """Thermal states for mathematical operations."""
-    COOL = "cool"          # Low intensity operations (4-bit)
-    WARM = "warm"          # Medium intensity operations (8-bit)
-    HOT = "hot"            # High intensity operations (32-bit)
+
+    COOL = "cool"  # Low intensity operations (4-bit)
+    WARM = "warm"  # Medium intensity operations (8-bit)
+    HOT = "hot"  # High intensity operations (32-bit)
     CRITICAL = "critical"  # Maximum intensity operations (42-bit)
 
 
 class BitPhase(Enum):
     """Bit phase configurations for mathematical precision."""
+
     FOUR_BIT = 4
     EIGHT_BIT = 8
     SIXTEEN_BIT = 16
@@ -38,6 +40,7 @@ class BitPhase(Enum):
 
 class MathOperation(Enum):
     """Mathematical operation types."""
+
     # Basic arithmetic
     ADD = "add"
     SUBTRACT = "subtract"
@@ -77,6 +80,7 @@ class MathOperation(Enum):
 @dataclass
 class MathResult:
     """Result container for mathematical operations."""
+
     value: Any
     operation: str
     timestamp: float
@@ -88,6 +92,7 @@ class MathResult:
 @dataclass
 class TensorOperation:
     """Tensor operation configuration."""
+
     operation_type: str
     input_shape: Tuple[int, ...]
     output_shape: Tuple[int, ...]
@@ -119,7 +124,7 @@ class CleanMathFoundation:
             "thermal_transitions": 0,
             "phase_switches": 0,
             "cache_hits": 0,
-            "cache_misses": 0
+            "cache_misses": 0,
         }
 
         logger.info(f"CleanMathFoundation initialized with precision {precision}")
@@ -140,7 +145,7 @@ class CleanMathFoundation:
                     timestamp=time.time(),
                     thermal_state=self.thermal_state,
                     bit_phase=self.bit_phase,
-                    metadata={"cached": True}
+                    metadata={"cached": True},
                 )
 
             self.metrics["cache_misses"] += 1
@@ -158,10 +163,7 @@ class CleanMathFoundation:
                 timestamp=time.time(),
                 thermal_state=self.thermal_state,
                 bit_phase=self.bit_phase,
-                metadata={
-                    "execution_time": time.time() - start_time,
-                    "cached": False
-                }
+                metadata={"execution_time": time.time() - start_time, "cached": False},
             )
 
             # Track the calculation
@@ -361,7 +363,9 @@ class CleanMathFoundation:
         data_string = f"{price:.8f}-{volume:.8f}-{timestamp:.6f}"
         return hashlib.sha256(data_string.encode()).hexdigest()
 
-    def _profit_vector(self, price: float, volume: float, risk_factor: float = 0.02) -> Dict[str, float]:
+    def _profit_vector(
+        self, price: float, volume: float, risk_factor: float = 0.02
+    ) -> Dict[str, float]:
         """Calculate profit vector for trading decision."""
         base_profit = price * volume * 0.001  # 0.1% base profit
         risk_adjusted_profit = base_profit * (1 - risk_factor)
@@ -371,20 +375,24 @@ class CleanMathFoundation:
             "base_profit": base_profit,
             "risk_adjusted_profit": risk_adjusted_profit,
             "confidence": confidence,
-            "risk_factor": risk_factor
+            "risk_factor": risk_factor,
         }
 
-    def _tensor_contraction(self, tensor_a: np.ndarray, tensor_b: np.ndarray, axes: List[int]) -> np.ndarray:
+    def _tensor_contraction(
+        self, tensor_a: np.ndarray, tensor_b: np.ndarray, axes: List[int]
+    ) -> np.ndarray:
         """Tensor contraction operation."""
         return np.tensordot(tensor_a, tensor_b, axes=axes)
 
-    def _thermal_correction(self, value: Union[float, np.ndarray], thermal_factor: float = 1.0) -> Union[float, np.ndarray]:
+    def _thermal_correction(
+        self, value: Union[float, np.ndarray], thermal_factor: float = 1.0
+    ) -> Union[float, np.ndarray]:
         """Apply thermal correction to mathematical values."""
         correction_factor = {
             ThermalState.COOL: 0.95,
             ThermalState.WARM: 1.0,
             ThermalState.HOT: 1.05,
-            ThermalState.CRITICAL: 1.1
+            ThermalState.CRITICAL: 1.1,
         }[self.thermal_state]
 
         corrected_value = value * correction_factor * thermal_factor
@@ -422,7 +430,7 @@ class CleanMathFoundation:
             "cache_efficiency": cache_efficiency,
             "total_calculations": len(self.calculation_history),
             "current_thermal_state": self.thermal_state.value,
-            "current_bit_phase": self.bit_phase.value
+            "current_bit_phase": self.bit_phase.value,
         }
 
     def clear_cache(self) -> None:

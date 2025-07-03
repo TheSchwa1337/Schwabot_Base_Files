@@ -3,9 +3,8 @@
 import logging
 import math
 import time
-import numpy as np
-from typing import Any, Dict, List, Optional, Tuple, Union
 from dataclasses import dataclass
+from typing import Any, Dict, List, Union
 
 # -*- coding: utf-8 -*-
 
@@ -22,6 +21,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class MathResult:
     """Result container for mathematical operations."""
+
     value: Any
     operation: str
     timestamp: float
@@ -234,9 +234,7 @@ class CleanUnifiedMathSystem:
             confidence_factor = self.add(confidence, 0.1)  # Minimum confidence boost
 
             # Apply risk adjustment
-            adjusted_profit = self.multiply(
-                profit, self.multiply(risk_factor, confidence_factor)
-            )
+            adjusted_profit = self.multiply(profit, self.multiply(risk_factor, confidence_factor))
 
             self._log_calculation(
                 "risk_adjustment",
@@ -348,11 +346,13 @@ class CleanUnifiedMathSystem:
         except Exception as e:
             logger.error(f"System integration error: {e}")
             import time
+
             return {"error": str(e), "timestamp": time.time()}
 
     def _log_calculation(self, operation: str, result: Any, metadata: Dict[str, Any]) -> None:
         """Log a calculation for debugging and analysis."""
         import time
+
         math_result = MathResult(
             value=result,
             operation=operation,

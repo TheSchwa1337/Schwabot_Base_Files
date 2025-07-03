@@ -4,13 +4,15 @@ Fetches comprehensive cryptocurrency market data from CoinGecko API.
 Provides price data, market metrics, trending coins, and market dominance data.
 """
 
-from .base_handler import BaseAPIHandler
-import requests
-import aiohttp
-from typing import Any, Dict
-import time
-import logging
 import asyncio
+import logging
+import time
+from typing import Any, Dict
+
+import aiohttp
+import requests
+
+from .base_handler import BaseAPIHandler
 
 try:
     import aiohttp
@@ -30,6 +32,7 @@ BASE_URL = "https://api.coingecko.com/api/v3"
 
 class CoinGeckoHandler(BaseAPIHandler):
     """CoinGecko API handler for comprehensive cryptocurrency market data."""
+
     NAME = "coingecko"
     CACHE_SUBDIR = "market_data"
     REFRESH_INTERVAL = 300  # 5-minute updates for market data
@@ -222,7 +225,9 @@ class CoinGeckoHandler(BaseAPIHandler):
                 parsed_data["global_metrics"] = {
                     "total_market_cap_usd": global_data.get("total_market_cap", {}).get("usd", 0),
                     "total_volume_24h_usd": global_data.get("total_volume", {}).get("usd", 0),
-                    "market_cap_change_24h": global_data.get("market_cap_change_percentage_24h_usd", 0),
+                    "market_cap_change_24h": global_data.get(
+                        "market_cap_change_percentage_24h_usd", 0
+                    ),
                     "active_cryptocurrencies": global_data.get("active_cryptocurrencies", 0),
                     "markets": global_data.get("markets", 0),
                     "defi_volume_24h": global_data.get("defi_volume_24h", 0),
@@ -282,7 +287,10 @@ class CoinGeckoHandler(BaseAPIHandler):
         if "trending_coins" in parsed_data:
             sentiment_score += len(parsed_data["trending_coins"]) * 5
 
-        if "global_metrics" in parsed_data and "market_cap_change_24h" in parsed_data["global_metrics"]:
+        if (
+            "global_metrics" in parsed_data
+            and "market_cap_change_24h" in parsed_data["global_metrics"]
+        ):
             change = parsed_data["global_metrics"]["market_cap_change_24h"]
             if change > 0:
                 sentiment_score += min(int(change / 10), 20)
@@ -295,7 +303,11 @@ class CoinGeckoHandler(BaseAPIHandler):
 
         return {
             "score": sentiment_score,
-            "interpretation": "Positive" if sentiment_score > 0 else "Negative" if sentiment_score < 0 else "Neutral",
+            "interpretation": (
+                "Positive"
+                if sentiment_score > 0
+                else "Negative" if sentiment_score < 0 else "Neutral"
+            ),
         }
 
 

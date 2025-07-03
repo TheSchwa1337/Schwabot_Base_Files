@@ -1,39 +1,29 @@
 import asyncio
-import csv
 import hashlib
 import json
 import logging
-import os
 import time
-from datetime import datetime, timedelta
-from pathlib import Path
-from typing import Dict, List, Optional, Any, Union, Tuple
 from dataclasses import dataclass, field
 from enum import Enum
+from pathlib import Path
+from typing import Any, Dict, List, Optional
 
-import ccxt
 import pandas as pd
-import numpy as np
-from cryptography.fernet import Fernet
 
-from utils.secure_config_manager import get_secure_api_key
-from utils.price_bridge import get_secure_price, PriceData
-from core.secure_api_coordinator import SecureAPICoordinator, APIProvider
 from core.clean_unified_math import UnifiedMathSystem
 from core.enhanced_tcell_system import EnhancedTCellSystem
-from core.strategy_logic import StrategyLogic
-from core.risk_manager import RiskManager
 from core.portfolio_tracker import PortfolioTracker
+from core.risk_manager import RiskManager
+from core.strategy_logic import StrategyLogic
+from utils.price_bridge import PriceData, get_secure_price
 
 try:
     from core.api import (
         ApiIntegrationManager,
         OrderRequest,
-        MarketData,
-        OrderSide as APIOrderSide,
-        OrderType as APIOrderType,
-        ExchangeType
     )
+    from core.api import OrderSide as APIOrderSide
+    from core.api import OrderType as APIOrderType
 except ImportError as e:
     logging.warning(f"Some Schwabot core modules unavailable: {e}")
 
@@ -87,7 +77,7 @@ class TradeSignal:
 
     def _generate_signal_hash(self) -> str:
         signal_data = f"{self.symbol}:{self.side.value}:{self.quantity}:{self.timestamp}:{self.signal_strength}"
-        return hashlib.sha256(signal_data.encode('utf-8')).hexdigest()
+        return hashlib.sha256(signal_data.encode("utf-8")).hexdigest()
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -131,7 +121,7 @@ class TradeExecution:
 
     def _generate_execution_hash(self) -> str:
         execution_data = f"{self.signal.mathematical_hash}:{self.order_id}:{self.execution_time}"
-        return hashlib.sha256(execution_data.encode('utf-8')).hexdigest()
+        return hashlib.sha256(execution_data.encode("utf-8")).hexdigest()
 
 
 class SchwabotTradingEngine:
@@ -241,7 +231,7 @@ class SchwabotTradingEngine:
                     "fee": {"cost": cost * 0.001, "currency": "USDC"},
                     "filled": amount,
                     "remaining": 0,
-                    "cost": cost
+                    "cost": cost,
                 }
 
         self.demo_exchanges["demo"] = DemoExchange("demo")
@@ -301,7 +291,9 @@ class SchwabotTradingEngine:
 
             # Apply mathematical framework analysis
             if self.math_system:
-                analysis["mathematical_indicators"] = await self._apply_mathematical_analysis(price_data, historical_df)
+                analysis["mathematical_indicators"] = await self._apply_mathematical_analysis(
+                    price_data, historical_df
+                )
 
             # Apply T-Cell immune system analysis
             if self.tcell_system:
@@ -309,7 +301,9 @@ class SchwabotTradingEngine:
 
             # Generate trading signals
             if self.strategy_logic:
-                analysis["trading_signals"] = await self._generate_trading_signals(price_data, historical_df)
+                analysis["trading_signals"] = await self._generate_trading_signals(
+                    price_data, historical_df
+                )
 
             # Risk assessment
             if self.risk_manager:
@@ -327,7 +321,9 @@ class SchwabotTradingEngine:
             logger.error(f"Market analysis error: {e}")
             return {"error": str(e)}
 
-    async def _apply_mathematical_analysis(self, price_data: PriceData, historical_df: pd.DataFrame) -> Dict[str, Any]:
+    async def _apply_mathematical_analysis(
+        self, price_data: PriceData, historical_df: pd.DataFrame
+    ) -> Dict[str, Any]:
         try:
             # Calculate drift field value
             drift_field = self.math_system.calculate_drift_field(price_data.price)
@@ -370,7 +366,9 @@ class SchwabotTradingEngine:
             logger.error(f"Immune analysis error: {e}")
             return {}
 
-    async def _generate_trading_signals(self, price_data: PriceData, historical_df: pd.DataFrame) -> Dict[str, Any]:
+    async def _generate_trading_signals(
+        self, price_data: PriceData, historical_df: pd.DataFrame
+    ) -> Dict[str, Any]:
         try:
             # Generate entry signals
             entry_signals = self.strategy_logic.generate_entry_signals(price_data.price)
@@ -391,7 +389,9 @@ class SchwabotTradingEngine:
             logger.error(f"Signal generation error: {e}")
             return {}
 
-    async def _assess_risk(self, price_data: PriceData, historical_df: pd.DataFrame) -> Dict[str, Any]:
+    async def _assess_risk(
+        self, price_data: PriceData, historical_df: pd.DataFrame
+    ) -> Dict[str, Any]:
         try:
             # Calculate position size
             position_size = self.risk_manager.calculate_position_size(price_data.price)
@@ -476,7 +476,7 @@ class SchwabotTradingEngine:
                 side=APIOrderSide(signal.side.value.lower()),
                 order_type=APIOrderType(signal.order_type.value.lower()),
                 amount=signal.quantity,
-                price=signal.price
+                price=signal.price,
             )
 
             order_response = await self.api_manager.place_order(target_exchange, order_request)
@@ -491,7 +491,11 @@ class SchwabotTradingEngine:
                 logger.info(f"Live trade executed successfully: {execution.order_id}")
             else:
                 execution.status = "failed"
-                execution.error_message = order_response.error_message if order_response else "No response from API manager."
+                execution.error_message = (
+                    order_response.error_message
+                    if order_response
+                    else "No response from API manager."
+                )
                 logger.error(f"Live trade execution failed: {execution.error_message}")
 
         except Exception as e:
@@ -678,7 +682,7 @@ async def test_trading_engine():
             order_type=OrderType.MARKET,
             quantity=0.01,
             signal_strength=0.85,
-            confidence_level=0.9
+            confidence_level=0.9,
         )
         execution_result = await engine.execute_trade(demo_signal)
         print("Execution Result:", execution_result)
@@ -716,5 +720,5 @@ async def test_trading_engine():
 
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-    asyncio.run(test_trading_engine()) 
+    logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+    asyncio.run(test_trading_engine())

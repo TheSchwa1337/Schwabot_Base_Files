@@ -6,9 +6,8 @@ Contains all data models (dataclasses) for the Schwabot live API
 integration system.
 """
 
-import time
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Any
+from typing import Any, Dict, Optional
 
 from .enums import ExchangeType, OrderSide, OrderType
 
@@ -16,6 +15,7 @@ from .enums import ExchangeType, OrderSide, OrderType
 @dataclass
 class APICredentials:
     """API credentials for exchanges."""
+
     exchange: ExchangeType
     api_key: str
     secret: str
@@ -27,6 +27,7 @@ class APICredentials:
 @dataclass
 class MarketData:
     """Real-time market data."""
+
     symbol: str
     price: float
     volume: float
@@ -43,6 +44,7 @@ class MarketData:
 @dataclass
 class OrderRequest:
     """Order request structure."""
+
     symbol: str
     side: OrderSide
     order_type: OrderType
@@ -57,6 +59,7 @@ class OrderRequest:
 @dataclass
 class OrderResponse:
     """Order response structure."""
+
     order_id: str
     client_order_id: Optional[str]
     symbol: str
@@ -78,6 +81,7 @@ class OrderResponse:
 @dataclass
 class PortfolioPosition:
     """Portfolio position."""
+
     symbol: str
     amount: float
     entry_price: float
@@ -98,6 +102,7 @@ class PortfolioPosition:
 @dataclass
 class APIPricePoint:
     """Represents a single price point in a time series."""
+
     timestamp: int
     price: float
     volume: Optional[float] = None
@@ -106,6 +111,7 @@ class APIPricePoint:
 @dataclass
 class APIMarketDepth:
     """Represents the market depth for an asset."""
+
     last_update_id: int
     bids: list[tuple[float, float]]  # (price, quantity)
     asks: list[tuple[float, float]]  # (price, quantity)
@@ -114,6 +120,7 @@ class APIMarketDepth:
 @dataclass
 class APITrade:
     """Represents a single executed trade."""
+
     id: int
     price: float
     qty: float
@@ -125,6 +132,7 @@ class APITrade:
 @dataclass
 class APINewsArticle:
     """Represents a single news article."""
+
     id: str
     source: str
     headline: str
@@ -137,6 +145,7 @@ class APINewsArticle:
 @dataclass
 class APIFearAndGreedIndex:
     """Represents a Fear and Greed Index value."""
+
     value: int  # 0-100
     value_classification: str  # e.g., Extreme Fear
     timestamp: int
@@ -145,6 +154,7 @@ class APIFearAndGreedIndex:
 @dataclass
 class APIGenericData:
     """A generic container for other data types."""
+
     source: str
     data_type: str
     content: Dict[str, Any] = field(default_factory=dict)

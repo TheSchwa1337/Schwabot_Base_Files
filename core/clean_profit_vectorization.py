@@ -21,6 +21,7 @@ logger = logging.getLogger(__name__)
 
 class VectorizationMode(Enum):
     """Different profit vectorization modes."""
+
     STANDARD = "standard"
     ENTROPY_WEIGHTED = "entropy_weighted"
     CONSENSUS_VOTING = "consensus_voting"
@@ -33,6 +34,7 @@ class VectorizationMode(Enum):
 
 class AllocationMethod(Enum):
     """Different allocation methods."""
+
     EQUAL_WEIGHT = "equal_weight"
     KELLY_CRITERION = "kelly_criterion"
     ENTROPY_WEIGHTED = "entropy_weighted"
@@ -46,6 +48,7 @@ class AllocationMethod(Enum):
 @dataclass
 class ProfitVector:
     """Profit vector result."""
+
     vector_id: str
     btc_price: float
     volume: float
@@ -60,6 +63,7 @@ class ProfitVector:
 @dataclass
 class BitPhaseTrigger:
     """Bit-phase trigger data."""
+
     bit_phase: int
     phase_value: int
     trigger_strength: float
@@ -71,6 +75,7 @@ class BitPhaseTrigger:
 @dataclass
 class ConsensusVote:
     """Consensus voting data."""
+
     vote_id: str
     profit_vector: np.ndarray
     confidence: float
@@ -83,6 +88,7 @@ class ConsensusVote:
 @dataclass
 class DLTWaveformData:
     """DLT waveform data."""
+
     waveform_id: str
     bit_phase: int
     phase_values: np.ndarray
@@ -95,6 +101,7 @@ class DLTWaveformData:
 @dataclass
 class DynamicAllocationSlider:
     """Dynamic allocation slider data."""
+
     slider_id: str
     allocation_percentage: float
     min_allocation: float
@@ -116,7 +123,7 @@ class CleanProfitVectorization:
     def __init__(
         self,
         risk_free_rate: float = 0.02,
-        default_mode: VectorizationMode = VectorizationMode.STANDARD
+        default_mode: VectorizationMode = VectorizationMode.STANDARD,
     ):
         """Initialize the profit vectorization system."""
         self.risk_free_rate = risk_free_rate
@@ -147,11 +154,7 @@ class CleanProfitVectorization:
 
         # Mode-specific performance tracking
         self.mode_performance = {
-            mode.value: {
-                "total_profit": 0.0,
-                "success_rate": 0.0,
-                "avg_confidence": 0.0
-            }
+            mode.value: {"total_profit": 0.0, "success_rate": 0.0, "avg_confidence": 0.0}
             for mode in VectorizationMode
         }
 
@@ -161,8 +164,7 @@ class CleanProfitVectorization:
         self.bit_phase_weights = {4: 0.2, 8: 0.3, 16: 0.2, 32: 0.2, 42: 0.1}
         self.dlt_modulation_factor = 0.5
 
-        logger.info(f"Clean Profit Vectorization initialized with "
-                    f"{default_mode.value} mode")
+        logger.info(f"Clean Profit Vectorization initialized with " f"{default_mode.value} mode")
 
     def calculate_profit_vectorization(
         self,
@@ -187,39 +189,33 @@ class CleanProfitVectorization:
 
         try:
             if mode == VectorizationMode.STANDARD:
-                result = self._calculate_standard_vectorization(btc_price, volume,
-                                                                market_data)
+                result = self._calculate_standard_vectorization(btc_price, volume, market_data)
             elif mode == VectorizationMode.ENTROPY_WEIGHTED:
-                result = self._calculate_entropy_weighted_vectorization(btc_price,
-                                                                        volume,
-                                                                        market_data)
+                result = self._calculate_entropy_weighted_vectorization(
+                    btc_price, volume, market_data
+                )
             elif mode == VectorizationMode.CONSENSUS_VOTING:
-                result = self._calculate_consensus_voting_vectorization(btc_price,
-                                                                        volume,
-                                                                        market_data)
+                result = self._calculate_consensus_voting_vectorization(
+                    btc_price, volume, market_data
+                )
             elif mode == VectorizationMode.BIT_PHASE_TRIGGER:
-                result = self._calculate_bit_phase_trigger_vectorization(btc_price,
-                                                                         volume,
-                                                                         market_data)
+                result = self._calculate_bit_phase_trigger_vectorization(
+                    btc_price, volume, market_data
+                )
             elif mode == VectorizationMode.DLT_WAVEFORM:
-                result = self._calculate_dlt_waveform_vectorization(btc_price,
-                                                                    volume,
-                                                                    market_data)
+                result = self._calculate_dlt_waveform_vectorization(btc_price, volume, market_data)
             elif mode == VectorizationMode.DYNAMIC_SLIDER:
-                result = self._calculate_dynamic_slider_vectorization(btc_price,
-                                                                      volume,
-                                                                      market_data)
+                result = self._calculate_dynamic_slider_vectorization(
+                    btc_price, volume, market_data
+                )
             elif mode == VectorizationMode.PERCENTAGE_BASED:
-                result = self._calculate_percentage_based_vectorization(btc_price,
-                                                                        volume,
-                                                                        market_data)
+                result = self._calculate_percentage_based_vectorization(
+                    btc_price, volume, market_data
+                )
             elif mode == VectorizationMode.HYBRID_BLEND:
-                result = self._calculate_hybrid_blend_vectorization(btc_price,
-                                                                    volume,
-                                                                    market_data)
+                result = self._calculate_hybrid_blend_vectorization(btc_price, volume, market_data)
             else:
-                result = self._calculate_standard_vectorization(btc_price, volume,
-                                                                market_data)
+                result = self._calculate_standard_vectorization(btc_price, volume, market_data)
 
             # Track the result
             self.profit_history.append(result)
@@ -230,8 +226,7 @@ class CleanProfitVectorization:
         except Exception as e:
             logger.error(f"Error in profit vectorization ({mode.value}): {e}")
             # Fallback to standard mode
-            return self._calculate_standard_vectorization(btc_price, volume,
-                                                          market_data)
+            return self._calculate_standard_vectorization(btc_price, volume, market_data)
 
     def _calculate_standard_vectorization(
         self, btc_price: float, volume: float, market_data: Dict[str, Any]
@@ -248,7 +243,7 @@ class CleanProfitVectorization:
             confidence_score=confidence,
             mode=VectorizationMode.STANDARD.value,
             method="standard_unified",
-            timestamp=time.time()
+            timestamp=time.time(),
         )
 
     def _calculate_entropy_weighted_vectorization(
@@ -280,13 +275,12 @@ class CleanProfitVectorization:
                 metadata={
                     "entropy_level": entropy_level,
                     "entropy_weight": entropy_weight,
-                    "volatility": volatility
-                }
+                    "volatility": volatility,
+                },
             )
         except Exception as e:
             logger.error(f"Error in entropy-weighted vectorization: {e}")
-            return self._calculate_standard_vectorization(btc_price, volume,
-                                                          market_data)
+            return self._calculate_standard_vectorization(btc_price, volume, market_data)
 
     def _calculate_consensus_voting_vectorization(
         self, btc_price: float, volume: float, market_data: Dict[str, Any]
@@ -321,7 +315,7 @@ class CleanProfitVectorization:
                 confidence=consensus_confidence,
                 bit_pattern=bit_pattern,
                 market_data=market_data,
-                timestamp=time.time()
+                timestamp=time.time(),
             )
             self.consensus_votes.append(vote)
 
@@ -336,13 +330,12 @@ class CleanProfitVectorization:
                 timestamp=time.time(),
                 metadata={
                     "consensus_weight": consensus_weight,
-                    "bit_pattern": bit_pattern.tolist()
-                }
+                    "bit_pattern": bit_pattern.tolist(),
+                },
             )
         except Exception as e:
             logger.error(f"Error in consensus voting vectorization: {e}")
-            return self._calculate_standard_vectorization(btc_price, volume,
-                                                          market_data)
+            return self._calculate_standard_vectorization(btc_price, volume, market_data)
 
     def _calculate_bit_phase_trigger_vectorization(
         self, btc_price: float, volume: float, market_data: Dict[str, Any]
@@ -354,10 +347,8 @@ class CleanProfitVectorization:
             bit_phase = self._determine_optimal_bit_phase(volatility)
 
             # Calculate phase value and trigger strength
-            phase_value = int(btc_price * volume) % (2 ** bit_phase)
-            trigger_strength = self._calculate_trigger_strength(bit_phase,
-                                                                phase_value,
-                                                                market_data)
+            phase_value = int(btc_price * volume) % (2**bit_phase)
+            trigger_strength = self._calculate_trigger_strength(bit_phase, phase_value, market_data)
 
             # Calculate profit with bit-phase weighting
             base_profit = btc_price * volume * 0.001
@@ -373,7 +364,7 @@ class CleanProfitVectorization:
                 phase_value=phase_value,
                 trigger_strength=trigger_strength,
                 confidence=confidence,
-                timestamp=time.time()
+                timestamp=time.time(),
             )
             self.bit_phase_triggers.append(trigger)
 
@@ -389,13 +380,12 @@ class CleanProfitVectorization:
                 metadata={
                     "bit_phase": bit_phase,
                     "phase_value": phase_value,
-                    "trigger_strength": trigger_strength
-                }
+                    "trigger_strength": trigger_strength,
+                },
             )
         except Exception as e:
             logger.error(f"Error in bit-phase trigger vectorization: {e}")
-            return self._calculate_standard_vectorization(btc_price, volume,
-                                                          market_data)
+            return self._calculate_standard_vectorization(btc_price, volume, market_data)
 
     def _calculate_dlt_waveform_vectorization(
         self, btc_price: float, volume: float, market_data: Dict[str, Any]
@@ -426,7 +416,7 @@ class CleanProfitVectorization:
                 phase_values=phase_values,
                 probability_density=probability_density,
                 strategy_slots=["default"],
-                timestamp=time.time()
+                timestamp=time.time(),
             )
             self.dlt_waveforms.append(waveform)
 
@@ -441,13 +431,12 @@ class CleanProfitVectorization:
                 timestamp=time.time(),
                 metadata={
                     "waveform_factor": waveform_factor,
-                    "waveform_stability": waveform_stability
-                }
+                    "waveform_stability": waveform_stability,
+                },
             )
         except Exception as e:
             logger.error(f"Error in DLT waveform vectorization: {e}")
-            return self._calculate_standard_vectorization(btc_price, volume,
-                                                          market_data)
+            return self._calculate_standard_vectorization(btc_price, volume, market_data)
 
     def _calculate_dynamic_slider_vectorization(
         self, btc_price: float, volume: float, market_data: Dict[str, Any]
@@ -463,8 +452,7 @@ class CleanProfitVectorization:
             max_allocation = 0.9
             # Inverse relationship with volatility
             current_position = 0.5 + (0.3 * (0.5 - volatility))
-            current_position = max(min_allocation,
-                                   min(max_allocation, current_position))
+            current_position = max(min_allocation, min(max_allocation, current_position))
 
             # Calculate adjustment factor
             adjustment_factor = 1.0 + (current_position - 0.5) * 0.2
@@ -484,7 +472,7 @@ class CleanProfitVectorization:
                 max_allocation=max_allocation,
                 current_position=current_position,
                 adjustment_factor=adjustment_factor,
-                timestamp=time.time()
+                timestamp=time.time(),
             )
             self.dynamic_sliders.append(slider)
 
@@ -499,13 +487,12 @@ class CleanProfitVectorization:
                 timestamp=time.time(),
                 metadata={
                     "allocation_percentage": current_position * 100,
-                    "adjustment_factor": adjustment_factor
-                }
+                    "adjustment_factor": adjustment_factor,
+                },
             )
         except Exception as e:
             logger.error(f"Error in dynamic slider vectorization: {e}")
-            return self._calculate_standard_vectorization(btc_price, volume,
-                                                          market_data)
+            return self._calculate_standard_vectorization(btc_price, volume, market_data)
 
     def _calculate_percentage_based_vectorization(
         self, btc_price: float, volume: float, market_data: Dict[str, Any]
@@ -544,13 +531,12 @@ class CleanProfitVectorization:
                 metadata={
                     "allocation_percentage": allocation_percentage * 100,
                     "volatility_adjustment": volatility_adjustment,
-                    "trend_adjustment": trend_adjustment
-                }
+                    "trend_adjustment": trend_adjustment,
+                },
             )
         except Exception as e:
             logger.error(f"Error in percentage-based vectorization: {e}")
-            return self._calculate_standard_vectorization(btc_price, volume,
-                                                          market_data)
+            return self._calculate_standard_vectorization(btc_price, volume, market_data)
 
     def _calculate_hybrid_blend_vectorization(
         self, btc_price: float, volume: float, market_data: Dict[str, Any]
@@ -561,30 +547,31 @@ class CleanProfitVectorization:
             modes_to_blend = [
                 VectorizationMode.STANDARD,
                 VectorizationMode.ENTROPY_WEIGHTED,
-                VectorizationMode.BIT_PHASE_TRIGGER
+                VectorizationMode.BIT_PHASE_TRIGGER,
             ]
 
             results = []
             for mode in modes_to_blend:
                 if mode == VectorizationMode.STANDARD:
-                    result = self._calculate_standard_vectorization(btc_price, volume,
-                                                                    market_data)
+                    result = self._calculate_standard_vectorization(btc_price, volume, market_data)
                 elif mode == VectorizationMode.ENTROPY_WEIGHTED:
-                    result = self._calculate_entropy_weighted_vectorization(btc_price,
-                                                                            volume,
-                                                                            market_data)
+                    result = self._calculate_entropy_weighted_vectorization(
+                        btc_price, volume, market_data
+                    )
                 elif mode == VectorizationMode.BIT_PHASE_TRIGGER:
-                    result = self._calculate_bit_phase_trigger_vectorization(btc_price,
-                                                                             volume,
-                                                                             market_data)
+                    result = self._calculate_bit_phase_trigger_vectorization(
+                        btc_price, volume, market_data
+                    )
                 results.append(result)
 
             # Blend the results
             weights = [0.4, 0.3, 0.3]  # Weights for each mode
-            blended_profit = sum(result.profit_score * weight
-                                 for result, weight in zip(results, weights))
-            blended_confidence = sum(result.confidence_score * weight
-                                     for result, weight in zip(results, weights))
+            blended_profit = sum(
+                result.profit_score * weight for result, weight in zip(results, weights)
+            )
+            blended_confidence = sum(
+                result.confidence_score * weight for result, weight in zip(results, weights)
+            )
 
             return ProfitVector(
                 vector_id=f"hybrid_{int(time.time() * 1000)}",
@@ -597,18 +584,16 @@ class CleanProfitVectorization:
                 timestamp=time.time(),
                 metadata={
                     "blend_weights": weights,
-                    "component_modes": [mode.value for mode in modes_to_blend]
-                }
+                    "component_modes": [mode.value for mode in modes_to_blend],
+                },
             )
         except Exception as e:
             logger.error(f"Error in hybrid blend vectorization: {e}")
-            return self._calculate_standard_vectorization(btc_price, volume,
-                                                          market_data)
+            return self._calculate_standard_vectorization(btc_price, volume, market_data)
 
     # Helper methods
     def _calculate_consensus_weight(
-        self, bit_pattern: np.ndarray, profit_vector: np.ndarray,
-        market_data: Dict[str, Any]
+        self, bit_pattern: np.ndarray, profit_vector: np.ndarray, market_data: Dict[str, Any]
     ) -> float:
         """Calculate consensus weight from bit pattern and market data."""
         # Simple consensus calculation based on bit pattern alignment
@@ -625,15 +610,16 @@ class CleanProfitVectorization:
         elif volatility < 0.6:
             return 16  # Medium precision
         elif volatility < 0.8:
-            return 8   # Low precision for volatile markets
+            return 8  # Low precision for volatile markets
         else:
-            return 4   # Minimal precision for extreme volatility
+            return 4  # Minimal precision for extreme volatility
 
-    def _calculate_trigger_strength(self, bit_phase: int, phase_value: int,
-                                    market_data: Dict[str, Any]) -> float:
+    def _calculate_trigger_strength(
+        self, bit_phase: int, phase_value: int, market_data: Dict[str, Any]
+    ) -> float:
         """Calculate trigger strength for bit-phase operations."""
         # Normalize phase value to [0, 1]
-        normalized_phase = phase_value / (2 ** bit_phase)
+        normalized_phase = phase_value / (2**bit_phase)
 
         # Calculate trigger strength based on phase alignment
         optimal_phase = 0.618  # Golden ratio for optimal trigger
@@ -666,14 +652,13 @@ class CleanProfitVectorization:
             "mode_performance": self.mode_performance,
             "math_foundation_metrics": self.math_foundation.get_metrics(),
             "total_calculations": len(self.profit_history),
-            "recent_profits": [p.profit_score for p in self.profit_history[-10:]]
+            "recent_profits": [p.profit_score for p in self.profit_history[-10:]],
         }
 
 
 # Convenience functions
 def create_profit_vectorizer(
-    risk_free_rate: float = 0.02,
-    mode: VectorizationMode = VectorizationMode.STANDARD
+    risk_free_rate: float = 0.02, mode: VectorizationMode = VectorizationMode.STANDARD
 ) -> CleanProfitVectorization:
     """Create a new profit vectorization system."""
     return CleanProfitVectorization(risk_free_rate=risk_free_rate, default_mode=mode)

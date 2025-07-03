@@ -26,22 +26,19 @@ Integrates all Schwabot components for comprehensive trading operations.
 """
 
 import logging
+import random
 import time
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 
-import random
-from enum import Enum
-
 # Import all core components
 try:
-    from core.ccxt_integration import CCXTIntegration, OrderBookSnapshot, BuySellWall
-    from core.matrix_math_utils import analyze_price_matrix
     from core.brain_trading_engine import BrainTradingEngine
-    from core.risk_manager import RiskManager
-    from core.unified_profit_vectorization_system import UnifiedProfitVectorizationSystem
-    from core.strategy_logic import StrategyLogic, StrategyBranch, GhostState
+    from core.ccxt_integration import CCXTIntegration, OrderBookSnapshot
     from core.profit_vector_forecast import ProfitVectorForecastEngine
+    from core.risk_manager import RiskManager
+    from core.strategy_logic import GhostState, StrategyBranch, StrategyLogic
+    from core.unified_profit_vectorization_system import UnifiedProfitVectorizationSystem
 
     # This seems to be a custom math library, likely in the schwabot package
     # from schwabot_unified_math import UnifiedTradingMathematics
@@ -57,6 +54,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class TradingDecision:
     """Represents a complete trading decision."""
+
     timestamp: float
     symbol: str
     action: str  # 'BUY', 'SELL', 'HOLD'
@@ -75,6 +73,7 @@ class TradingDecision:
 @dataclass
 class PipelineState:
     """Current state of the unified trading pipeline."""
+
     timestamp: float
     active_strategy: StrategyBranch
     current_capital: float
@@ -204,7 +203,7 @@ class UnifiedTradingPipeline:
                 self.market_data_history = self.market_data_history[-500:]
 
             # 2. Generate Ghost Core hash and switch strategy
-            mathematical_state = self._calculate_mathematical_state(market_data)
+            self._calculate_mathematical_state(market_data)
             # ... ghost core logic here ...
             ghost_state = None  # Placeholder
 
@@ -244,11 +243,7 @@ async def run_trading_simulation():
         volume = random.uniform(100, 1000)
 
         decision = await pipeline.process_market_data(
-            symbol="BTC/USDC",
-            price=price,
-            volume=volume,
-            granularity=2,
-            tick_index=i
+            symbol="BTC/USDC", price=price, volume=volume, granularity=2, tick_index=i
         )
 
         if decision:
@@ -259,4 +254,5 @@ async def run_trading_simulation():
 
 if __name__ == "__main__":
     import asyncio
+
     asyncio.run(run_trading_simulation())

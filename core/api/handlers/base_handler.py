@@ -10,7 +10,6 @@ from typing import Any, Dict, Optional
 
 import aiohttp  # Preferred for non-blocking IO
 
-
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 

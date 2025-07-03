@@ -28,9 +28,7 @@ class SpeedLatticeTradingIntegrator:
         """Register a strategy function."""
         self.strategy_map[strategy_id] = strategy_func
 
-    def execute(
-        self, price: float, volume: float, timestamp: Optional[float] = None
-    ) -> Dict:
+    def execute(self, price: float, volume: float, timestamp: Optional[float] = None) -> Dict:
         """Execute trading strategies on tick data."""
         timestamp = timestamp or time.time()
         tick_hash = self.hash_tick(price, volume, timestamp)

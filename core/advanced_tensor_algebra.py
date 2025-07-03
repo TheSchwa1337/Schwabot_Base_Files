@@ -8,8 +8,9 @@ mathematical operations like tensor contraction and decomposition.
 """
 
 import logging
-import numpy as np
 from typing import List, Tuple
+
+import numpy as np
 
 # Logging setup
 logger = logging.getLogger(__name__)

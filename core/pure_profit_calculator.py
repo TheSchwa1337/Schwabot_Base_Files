@@ -14,13 +14,14 @@ CRITICAL GUARANTEE: ZPE/ZBE systems never appear in this calculation.
 They only affect computation time 𝑇, never profit 𝒫.
 """
 
+import hashlib
 import logging
 import time
-import numpy as np
-from typing import Dict, List, Optional, Any, Tuple
 from dataclasses import dataclass, field
 from enum import Enum
-import hashlib
+from typing import Any, Dict, List
+
+import numpy as np
 
 logger = logging.getLogger(__name__)
 
@@ -28,6 +29,7 @@ logger = logging.getLogger(__name__)
 @dataclass(frozen=True)
 class MarketData:
     """Immutable market data structure - 𝑆(𝑡)."""
+
     timestamp: float
     btc_price: float
     eth_price: float
@@ -48,6 +50,7 @@ class MarketData:
 @dataclass(frozen=True)
 class HistoryState:
     """Immutable history state - 𝐻(𝑡)."""
+
     timestamp: float
     hash_matrices: Dict[str, np.ndarray] = field(default_factory=dict)
     tensor_buckets: Dict[str, np.ndarray] = field(default_factory=dict)
@@ -56,15 +59,14 @@ class HistoryState:
 
     def get_hash_signature(self) -> str:
         """Generate deterministic hash signature for state."""
-        state_str = (
-            f"{self.timestamp}_{len(self.hash_matrices)}_{len(self.tensor_buckets)}"
-        )
+        state_str = f"{self.timestamp}_{len(self.hash_matrices)}_{len(self.tensor_buckets)}"
         return hashlib.sha256(state_str.encode()).hexdigest()
 
 
 @dataclass(frozen=True)
 class StrategyParameters:
     """Immutable strategy parameters - Θ."""
+
     risk_tolerance: float = 0.02
     profit_target: float = 0.05
     stop_loss: float = 0.01
@@ -78,6 +80,7 @@ class StrategyParameters:
 
 class ProfitCalculationMode(Enum):
     """Pure profit calculation modes."""
+
     CONSERVATIVE = "conservative"
     BALANCED = "balanced"
     AGGRESSIVE = "aggressive"
@@ -87,6 +90,7 @@ class ProfitCalculationMode(Enum):
 @dataclass(frozen=True)
 class ProfitResult:
     """Immutable profit calculation result."""
+
     timestamp: float
     base_profit: float
     risk_adjusted_profit: float
@@ -437,7 +441,9 @@ def assert_zpe_isolation() -> None:
     import sys
 
     # Check that ZPE/ZBE modules are not imported
-    zpe_modules = [name for name in sys.modules.keys() if "zpe" in name.lower() or "zbe" in name.lower()]
+    zpe_modules = [
+        name for name in sys.modules.keys() if "zpe" in name.lower() or "zbe" in name.lower()
+    ]
 
     if zpe_modules:
         logger.warning("⚠️ ZPE/ZBE modules detected in system: %s", zpe_modules)

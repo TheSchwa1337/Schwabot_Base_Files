@@ -9,7 +9,7 @@ This is a stub implementation for the unified API coordinator functionality.
 
 class UnifiedAPICoordinator:
     """Unified API Coordinator - handles API call coordination."""
-    
+
     def __init__(self, config=None):
         """Initialize the API coordinator."""
         self.config = config or {}
@@ -17,7 +17,4 @@ class UnifiedAPICoordinator:
 
     def coordinate_api_calls(self, requests):
         """Coordinate multiple API calls."""
-        return {
-            "coordinated": True,
-            "responses": []
-        }
+        return {"coordinated": True, "responses": []}

@@ -4,12 +4,11 @@ import logging
 import time
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Dict, List, Optional, Any
+from typing import Any, Dict, Optional
 
-from .enums import ExchangeType, ConnectionStatus
+from .data_models import APICredentials, MarketData, OrderRequest, OrderResponse, PortfolioPosition
+from .enums import ConnectionStatus, ExchangeType
 from .exchange_connection import ExchangeConnection
-from .data_models import APICredentials, OrderRequest, OrderResponse, MarketData, PortfolioPosition
-
 
 # API Integration Manager
 # ======================
@@ -148,7 +147,6 @@ class ApiIntegrationManager:
         """Trigger portfolio updates for all connected exchanges."""
         # This can be expanded to fetch all balances and update a central portfolio model.
         # For now, it's a placeholder for periodic background tasks.
-        pass
 
     async def place_order(
         self, exchange_name: str, order_request: OrderRequest

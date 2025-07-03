@@ -9,7 +9,6 @@ real-time updates, and persistence to a configuration file.
 
 import json
 import logging
-import time
 from dataclasses import dataclass
 from pathlib import Path
 from threading import Lock
@@ -52,9 +51,7 @@ class AdvancedSettingsEngine:
         if name in self.setting_definitions:
             logger.warning(f"Setting '{name}' is already registered. Overwriting.")
 
-        definition = SettingDefinition(
-            setting_type, default_value, description, validator
-        )
+        definition = SettingDefinition(setting_type, default_value, description, validator)
         self.setting_definitions[name] = definition
         if name not in self.settings_state:
             self.settings_state[name] = default_value

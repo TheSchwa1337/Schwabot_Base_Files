@@ -6,7 +6,6 @@ This subpackage contains concrete third-party API handlers used by
 
 from importlib import import_module as _imp
 from pathlib import Path as _Path
-import inspect
 
 # Ensure that when the package is imported standalone, all modules are
 # loaded so that `inspect.getmembers` in CacheSyncService can discover
