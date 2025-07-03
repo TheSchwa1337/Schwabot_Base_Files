@@ -1,3 +1,5 @@
+from core.unified_math_system import unified_math
+
 # -*- coding: utf - 8 -*-
 """Ghost condition - gate for routing decisions.""""""
 """"""
@@ -17,8 +19,7 @@
 # -*- coding: utf - 8 -*-
 
 
-from core.unified_math_system import unified_math
-def exec_gate(psi: float, xi_sent: float, phi_drift: float) -> bool:"""
+def exec_gate():-> bool:"""
 """Return True when \\u03c3(\\u03c8 \\u00b7 \\u03be \\u00b7 \\u03d5) \\u2265 0.5."
 
 Compute logistic gate: C_exec(t) = \\u03c3(\\u03a8_path \\u00b7 \\u03be_sent \\u00b7 \\u03d5_drift)

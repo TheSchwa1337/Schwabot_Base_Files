@@ -1,3 +1,18 @@
+            from utils.market_data_utils import pull_news_headlines
+            import requests
+        from core.lantern_core_integration import lantern_core
+from core.lantern_core_integration import (
+from core.trading_engine_integration import SchwabotTradingEngine, TradingMode
+from flask import Flask, render_template, request, jsonify
+from typing import Dict, Any
+from utils.market_data_utils import create_market_snapshot
+from utils.price_bridge import get_secure_price
+from utils.secure_config_manager import SecureConfigManager, get_secure_api_key
+import asyncio
+import os
+import sys
+import threading
+
 #!/usr/bin/env python3
 # update
 """
@@ -8,21 +23,10 @@ Main entry point for Schwabot trading bot system with secure API key management
 and integration with existing mathematical framework.
 """
 
-from core.trading_engine_integration import SchwabotTradingEngine, TradingMode
-from core.lantern_core_integration import (
     start_lantern_core,
     stop_lantern_core,
     get_lantern_core_status,
 )
-from utils.price_bridge import get_secure_price
-from utils.market_data_utils import create_market_snapshot
-from utils.secure_config_manager import SecureConfigManager, get_secure_api_key
-import os
-import sys
-import threading
-import asyncio
-from typing import Dict, Any
-from flask import Flask, render_template, request, jsonify
 
 # Add project root to path for imports
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -69,7 +73,7 @@ class SchwabotLauncher:
                 print(f"Error checking market data: {e}")
                 self.system_status["market_data_available"] = False
 
-    def get_system_status(self) -> Dict[str, Any]:
+    def get_system_status():-> Dict[str, Any]:
         """Get current system status."""
         self.update_system_status()
         return self.system_status
@@ -171,7 +175,6 @@ def test_connection(service):
     """Test API connection for a specific service."""
     try:
         if service == "news":
-            from utils.market_data_utils import pull_news_headlines
 
             headlines = pull_news_headlines()
             success = len(headlines) > 0
@@ -214,7 +217,6 @@ def test_connection(service):
                 )
 
             # Test with a simple request
-            import requests
 
             url = "https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest"
             headers = {"X-CMC_PRO_API_KEY": api_key}
@@ -364,7 +366,6 @@ def api_load_historical_data():
             return jsonify({"success": False, "error": "CSV file path required"})
 
         # Load historical data
-        from core.lantern_core_integration import lantern_core
 
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)

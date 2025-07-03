@@ -1,3 +1,17 @@
+            from core.unified_math_system import unified_math
+from core.unified_math_system import unified_math
+from core.unified_math_system import unified_math
+from dataclasses import dataclass, asdict
+from datetime import datetime, timedelta
+from pathlib import Path
+from typing import Dict, List, Any, Optional, Tuple
+from utils.safe_print import safe_print, info, warn, error, success, debug
+import json
+import logging
+import threading
+import time
+import yaml
+
 # -*- coding: utf-8 -*-
 """"""
 """"""
@@ -12,8 +26,6 @@
 """"""
 """
 
-from core.unified_math_system import unified_math
-from utils.safe_print import safe_print, info, warn, error, success, debug
 
 
 Schwabot Settings Controller
@@ -22,16 +34,6 @@ Manages mathematical flow parameters and reinforcement learning from backtest fa
 """"""
 """
 
-import json
-import yaml
-import logging
-from typing import Dict, List, Any, Optional, Tuple
-from dataclasses import dataclass, asdict
-from pathlib import Path
-from core.unified_math_system import unified_math
-from datetime import datetime, timedelta
-import threading
-import time
 
 # Configure logging
 logging.basicConfig(level = logging.INFO)
@@ -129,7 +131,7 @@ self.load_configuration()
 # Start background updates
 self.start_background_updates()
 
-def load_configuration(self) -> None:"""
+def load_configuration():-> None:"""
     """Function implementation pending."""
 pass
 """
@@ -169,7 +171,7 @@ except Exception as e:
             logger.error(f"Error loading configuration: {e}")
             self.create_default_configuration()
 
-def save_configuration(self) -> None:
+def save_configuration():-> None:
     """Function implementation pending."""
 pass
 """
@@ -202,7 +204,7 @@ logger.info("Configuration saved successfully")
 except Exception as e:
             logger.error(f"Error saving configuration: {e}")
 
-def create_default_configuration(self) -> None:
+def create_default_configuration():-> None:
     """Function implementation pending."""
 pass
 """
@@ -211,7 +213,7 @@ pass
 """
 self.save_configuration()
 
-def update_mathematical_flow(self, **kwargs) -> None:"""
+def update_mathematical_flow():-> None:"""
     """Function implementation pending."""
 pass
 """
@@ -226,7 +228,7 @@ with self.lock:
 
 self.save_configuration()
 
-def update_reinforcement_learning(self, **kwargs) -> None:
+def update_reinforcement_learning():-> None:
     """Function implementation pending."""
 pass
 """
@@ -241,7 +243,7 @@ with self.lock:
 
 self.save_configuration()
 
-def update_demo_backtest(self, **kwargs) -> None:
+def update_demo_backtest():-> None:
     """Function implementation pending."""
 pass
 """
@@ -256,7 +258,7 @@ with self.lock:
 
 self.save_configuration()
 
-def record_backtest_failure(self, failure_data: Dict[str, Any]) -> None:
+def record_backtest_failure():-> None:
     """Function implementation pending."""
 pass
 """
@@ -277,7 +279,7 @@ self._apply_failure_learning(failure_data)
 """
 logger.info(f"Recorded backtest failure: {failure_data.get('reason', 'Unknown')}")
 
-def record_backtest_success(self, success_data: Dict[str, Any]) -> None:
+def record_backtest_success():-> None:
     """Function implementation pending."""
 pass
 """
@@ -298,7 +300,7 @@ self._apply_success_learning(success_data)
 """
 logger.info(f"Recorded backtest success: {success_data.get('profit', 0):.2f}")
 
-def _apply_failure_learning(self, failure_data: Dict[str, Any]) -> None:
+def _apply_failure_learning():-> None:
     """Function implementation pending."""
 pass
 """
@@ -326,7 +328,7 @@ new_threshold = self.math_params.volume_delta_threshold * (1 + self.rl_params.fa
 if self.rl_params.adaptive_learning:
             self.rl_params.learning_rate *= 0.99  # Gradually reduce learning rate
 
-def _apply_success_learning(self, success_data: Dict[str, Any]) -> None:"""
+def _apply_success_learning():-> None:"""
     """Function implementation pending."""
 pass
 """
@@ -349,7 +351,7 @@ new_confidence = self.math_params.vector_confidence_min * \
                     (1 - self.rl_params.success_reward_weight * 0.05)
                 self.math_params.vector_confidence_min = unified_math.max(0.3, new_confidence)
 
-def get_optimized_parameters(self) -> Dict[str, Any]:"""
+def get_optimized_parameters():-> Dict[str, Any]:"""
     """Function implementation pending."""
 pass
 """
@@ -368,7 +370,7 @@ with self.lock:
                     'last_update': self.last_update.isoformat(),
                     'update_count': self.update_count
 
-def add_known_bad_vector(self, vector_hash: str, reason: str, parameters: Dict[str, Any]) -> None:"""
+def add_known_bad_vector():-> None:"""
     """Function implementation pending."""
 pass
 """
@@ -383,7 +385,7 @@ with self.lock:
                 'avoid_count': 0
 self.save_configuration()
 
-def is_known_bad_vector(self, vector_hash: str) -> bool:"""
+def is_known_bad_vector():-> bool:"""
     """Function implementation pending."""
 pass
 """
@@ -392,7 +394,7 @@ pass
 """
 return vector_hash in self.known_bad_vectors
 
-def get_vector_avoidance_count(self, vector_hash: str) -> int:"""
+def get_vector_avoidance_count():-> int:"""
     """Function implementation pending."""
 pass
 """
@@ -403,7 +405,7 @@ if vector_hash in self.known_bad_vectors:
             return self.known_bad_vectors[vector_hash].get('avoid_count', 0)
         return 0
 
-def increment_avoidance_count(self, vector_hash: str) -> None:"""
+def increment_avoidance_count():-> None:"""
     """Function implementation pending."""
 pass
 """
@@ -414,7 +416,7 @@ if vector_hash in self.known_bad_vectors:
             self.known_bad_vectors[vector_hash]['avoid_count'] += 1
             self.save_configuration()
 
-def start_background_updates(self) -> None:"""
+def start_background_updates():-> None:"""
     """Function implementation pending."""
 pass
 """
@@ -427,7 +429,7 @@ if not self.running:
             self.update_thread.start()"""
             logger.info("Background parameter updates started")
 
-def stop_background_updates(self) -> None:
+def stop_background_updates():-> None:
     """Function implementation pending."""
 pass
 """
@@ -439,7 +441,7 @@ self.running = False
             self.update_thread.join(timeout = 5)"""
         logger.info("Background parameter updates stopped")
 
-def _background_update_loop(self) -> None:
+def _background_update_loop():-> None:
     """Function implementation pending."""
 pass
 """
@@ -462,7 +464,7 @@ except Exception as e:"""
 logger.error(f"Error in background update loop: {e}")
                 time.sleep(5)
 
-def _optimize_parameters(self) -> None:
+def _optimize_parameters():-> None:
     """Function implementation pending."""
 pass
 """
@@ -490,7 +492,7 @@ if self.update_count > self.rl_params.max_iterations:
 """
 logger.info(f"Parameter optimization completed - Success rate: {success_rate:.2f}")
 
-def get_performance_metrics(self) -> Dict[str, Any]:
+def get_performance_metrics():-> Dict[str, Any]:
     """Function implementation pending."""
 pass
 """
@@ -515,7 +517,7 @@ return {
                 'current_parameters': self.get_optimized_parameters(),
                 'last_optimization': self.last_update.isoformat()
 
-def reset_learning(self) -> None:"""
+def reset_learning():-> None:"""
     """Function implementation pending."""
 pass
 """
@@ -530,7 +532,7 @@ with self.lock:
             self.save_configuration()"""
             logger.info("Learning history reset")
 
-def export_configuration(self, filepath: str) -> None:
+def export_configuration():-> None:
     """Function implementation pending."""
 pass
 """
@@ -550,7 +552,7 @@ with open(filepath, 'w') as f:
 """
 logger.info(f"Configuration exported to {filepath}")
 
-def import_configuration(self, filepath: str) -> None:
+def import_configuration():-> None:
     """Function implementation pending."""
 pass
 """
@@ -578,7 +580,7 @@ self.save_configuration()"""
 settings_controller = SettingsController()
 
 
-def get_settings_controller() -> SettingsController:
+def get_settings_controller():-> SettingsController:
         """
         Calculate profit optimization for BTC trading.
         
@@ -592,7 +594,6 @@ def get_settings_controller() -> SettingsController:
         """
         try:
             # Import unified math system
-            from core.unified_math_system import unified_math
             
             # Calculate profit using unified mathematical framework
             base_profit = price_data * volume_data * 0.001  # 0.1% base

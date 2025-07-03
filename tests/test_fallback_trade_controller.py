@@ -1,7 +1,5 @@
-# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
-# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
-# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
-# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
+            from core.unified_math_system import unified_math
+from core.unified_math_system import unified_math
 from dataclasses import dataclass
 from dual_unicore_handler import DualUnicoreHandler
 from enum import Enum
@@ -10,7 +8,11 @@ import logging
 import time
 import unittest
 
-from core.unified_math_system import unified_math
+# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
+
 
 
 # Initialize Unicode handler
@@ -142,7 +144,7 @@ self.test_cases = [
 ]
 logger.info("\\u1f6e1\\ufe0f Fallback Trade Controller Test initialized")
 
-def test_fallback_system_initialization(self) -> Dict[str, Any]:
+def test_fallback_system_initialization():-> Dict[str, Any]:
     """Function implementation pending."""
 pass
 """
@@ -214,7 +216,7 @@ if results['success']:
 
 return results
 
-def test_primary_system_failure_detection(self) -> Dict[str, Any]:
+def test_primary_system_failure_detection():-> Dict[str, Any]:
     """Function implementation pending."""
 pass
 """
@@ -278,7 +280,7 @@ if results['success']:
 
 return results
 
-def test_fallback_mode_activation(self) -> Dict[str, Any]:
+def test_fallback_mode_activation():-> Dict[str, Any]:
     """Function implementation pending."""
 pass
 """
@@ -342,7 +344,7 @@ if results['success']:
 
 return results
 
-def test_reduced_functionality_validation(self) -> Dict[str, Any]:
+def test_reduced_functionality_validation():-> Dict[str, Any]:
     """Function implementation pending."""
 pass
 """
@@ -411,7 +413,7 @@ if results['success']:
 
 return results
 
-def test_system_recovery_procedures(self) -> Dict[str, Any]:
+def test_system_recovery_procedures():-> Dict[str, Any]:
     """Function implementation pending."""
 pass
 """
@@ -478,7 +480,7 @@ if results['success']:
 
 return results
 
-def test_emergency_stop_mechanisms(self) -> Dict[str, Any]:
+def test_emergency_stop_mechanisms():-> Dict[str, Any]:
     """Function implementation pending."""
 pass
 """
@@ -566,7 +568,7 @@ if results['success']:
 
 return results
 
-def _simulate_failure_detection(self, test_case: FallbackTestCase) -> Dict[str, Any]:
+def _simulate_failure_detection():-> Dict[str, Any]:
     """Function implementation pending."""
 pass
 """
@@ -592,7 +594,7 @@ return {
             'failed_components': failed_components,
             'failure_severity': failure_severity
 
-def _simulate_fallback_activation(self, test_case: FallbackTestCase) -> Dict[str, Any]:"""
+def _simulate_fallback_activation():-> Dict[str, Any]:"""
     """Function implementation pending."""
 pass
 """
@@ -620,7 +622,7 @@ return {
             'functionality_level': functionality,
             'activation_time': time.time()
 
-def _simulate_reduced_functionality(self, test_case: FallbackTestCase) -> Dict[str, Any]:"""
+def _simulate_reduced_functionality():-> Dict[str, Any]:"""
     """Function implementation pending."""
 pass
 """
@@ -654,7 +656,7 @@ return {
             'available_features': available_features,
             'disabled_features': disabled_features
 
-def _simulate_system_recovery(self, test_case: FallbackTestCase) -> Dict[str, Any]:"""
+def _simulate_system_recovery():-> Dict[str, Any]:"""
     """Function implementation pending."""
 pass
 """
@@ -680,7 +682,7 @@ return {
             'recovery_time': recovery_time,
             'components_recovered': components_recovered
 
-def _simulate_emergency_stop(self, scenario: Dict[str, Any]) -> Dict[str, Any]:"""
+def _simulate_emergency_stop():-> Dict[str, Any]:"""
     """Function implementation pending."""
 pass
 """
@@ -697,7 +699,7 @@ return {
             'scenario': scenario['scenario'],
             'trigger_condition': scenario['trigger_condition']
 
-def run_comprehensive_test(self) -> Dict[str, Any]:"""
+def run_comprehensive_test():-> Dict[str, Any]:"""
     """Function implementation pending."""
 pass
 """
@@ -748,7 +750,7 @@ return comprehensive_result
 
 
 # Global test function for registry
-def test_fallback_trade_controller() -> Dict[str, Any]:
+def test_fallback_trade_controller():-> Dict[str, Any]:
         """
         Analyze BTC market conditions for trading decisions.
         
@@ -761,7 +763,6 @@ def test_fallback_trade_controller() -> Dict[str, Any]:
             Analysis results dictionary
         """
         try:
-            from core.unified_math_system import unified_math
             
             # Perform BTC analysis using unified mathematics
             analysis = {

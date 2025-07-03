@@ -1,13 +1,18 @@
-# -*- coding: utf - 8 -*-
-# -*- coding: utf - 8 -*-
-# -*- coding: utf - 8 -*-
-# -*- coding: utf - 8 -*-
+            from core.math_core import MathCore
+        from core.unified_math_system import unified_math
+from core.unified_math_system import unified_math
+        from core.constants import FERRIS_PRIMARY_CYCLE
+from core.constants import PSI_INFINITY
 from dual_unicore_handler import DualUnicoreHandler
 import os
 import platform
 import sys
 
-from core.unified_math_system import unified_math
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+
 
 
 # Initialize Unicode handler
@@ -124,7 +129,6 @@ for i, test_case in enumerate(test_cases, 1):
 safe_print_with_fallback("\\n\\u1f9ea MATHEMATICAL VALIDATION CLI SAFETY:")
 
 try:
-        from core.unified_math_system import unified_math
 
 safe_print_with_fallback("\\u2705 NumPy imported successfully")
 
@@ -149,15 +153,12 @@ safe_print_with_fallback("\\n\\u1f3af TESTING CORE MATHEMATICAL MODULES:")
 try:
         # Test importing our core modules
 sys.path.insert(0, os.path.dirname(__file__))
-        from core.constants import FERRIS_PRIMARY_CYCLE
-from core.constants import PSI_INFINITY
 
 safe_print_with_fallback("\\u2705 Core constants imported successfully")
         safe_print_with_fallback(f"\\u1f522 Golden Ratio (PSI): {PSI_INFINITY}")
         safe_print_with_fallback(f"\\u1f3a1 Ferris Cycle: {FERRIS_PRIMARY_CYCLE}")
 
 try:
-            from core.math_core import MathCore
 
 math_core = MathCore()
             safe_print_with_fallback("\\u2705 MathCore initialized successfully")

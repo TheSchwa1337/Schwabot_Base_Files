@@ -1,3 +1,16 @@
+from fractal_core import FractalCore, FractalState, GrayscaleCollapseResult
+from ghost_strategy_handler import GhostStrategyHandler, GhostEntry
+from hash_confidence_evaluator import HashConfidenceEvaluator, HashResonance
+from tick_backlog_router import TickBacklogRouter, BacklogProfit
+from typing import Dict, Any, List, Optional
+from unittest.mock import Mock, patch, MagicMock
+from volume_tick_router import VolumeTickRouter, VolumeConfidence
+import json
+import os
+import sys
+import time
+import unittest
+
 """Test Fractal Sync - Cyclical Memory and Fractal State Estimator."""
 """Test Fractal Sync - Cyclical Memory and Fractal State Estimator."""
 """Test Fractal Sync - Cyclical Memory and Fractal State Estimator."""
@@ -20,18 +33,6 @@ Flake8 compliant with comprehensive test coverage."""
 """"""
 """
 
-from ghost_strategy_handler import GhostStrategyHandler, GhostEntry
-from volume_tick_router import VolumeTickRouter, VolumeConfidence
-from tick_backlog_router import TickBacklogRouter, BacklogProfit
-from hash_confidence_evaluator import HashConfidenceEvaluator, HashResonance
-from fractal_core import FractalCore, FractalState, GrayscaleCollapseResult
-import unittest
-import time
-import json
-import os
-import sys
-from typing import Dict, Any, List, Optional
-from unittest.mock import Mock, patch, MagicMock
 
 # Add core directory to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'core'))

@@ -1,8 +1,19 @@
+from __future__ import annotations
+from core.bit_phase_sequencer import BitPhase, BitSequence
+from core.dual_error_handler import PhaseState, SickType, SickState
+from core.emoji_bitpath_mapper import (
+from core.gpu_fallback_manager import (
+from core.profit_tier_sequencer import (
+from core.symbolic_profit_router import ProfitTier, FlipBias, SymbolicState
+from core.tier_validation_matrix import (
+from dataclasses import dataclass
+from typing import Dict, Any, List
+import time
+
 # -*- coding: utf - 8 -*-
 """"""
 """
 # -*- coding: utf - 8 -*-
-from __future__ import annotations
 """
 """"""
 """
@@ -21,32 +32,22 @@ Tests the complete Profit Tier Navigation System integration including:
 - 2 - bit Phase Logic"""
 """
 
-import time
-from typing import Dict, Any, List
-from dataclasses import dataclass
 
 # Import core PTNS modules
-from core.profit_tier_sequencer import (
     ProfitTierSequencer, ProfitVector, TierAction, SymbolZone,
     sequence_profit_tier
 )
-from core.emoji_bitpath_mapper import (
     EmojiBitPathMapper, EmojiPortalType, BitPathState,
     map_emoji_to_profit_portal, navigate_emoji_profit_path
 )
-from core.tier_validation_matrix import (
     TierValidationMatrix, ValidationLevel, TierCompatibility,
     validate_profit_tier_transition, get_optimal_profit_tier_path
 )
-from core.gpu_fallback_manager import (
     GPUFallbackManager, HardwareState, FallbackMode,
     submit_gpu_task, get_gpu_hardware_status
 )
 
 # Import mathematical modules
-from core.symbolic_profit_router import ProfitTier, FlipBias, SymbolicState
-from core.dual_error_handler import PhaseState, SickType, SickState
-from core.bit_phase_sequencer import BitPhase, BitSequence
 
 
 class PTNSIntegrationTest:"""
@@ -62,7 +63,7 @@ self.tests_run = 0
 # Test results storage
 self.test_results: List[Dict[str, Any]] = []
 
-def run_complete_integration_test(self) -> Dict[str, Any]:"""
+def run_complete_integration_test():-> Dict[str, Any]:"""
         """
 Run complete PTNS integration test suite.
 
@@ -495,7 +496,7 @@ if results['tests_failed'] == 0:
 print("=" * 60)
 
 
-def test_ptns_complete_integration() -> Dict[str, Any]:
+def test_ptns_complete_integration():-> Dict[str, Any]:
     """
 Main function to run complete PTNS integration test.
 
@@ -506,7 +507,7 @@ test_suite = PTNSIntegrationTest()
     return test_suite.run_complete_integration_test()
 
 
-def main() -> None:"""
+def main():-> None:"""
     """Main execution function."""
 try:"""
 print("🎯 PTNS Integration Test Suite")

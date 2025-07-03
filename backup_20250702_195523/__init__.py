@@ -1,3 +1,10 @@
+from .entry_exit_portal import EntryExitPortal
+from .flip_switch_logic_lattice import FlipSwitchLogicLattice
+from .glyph_gate_engine import GlyphGateEngine
+from .glyph_strategy_core import GlyphStrategyCore
+from .multi_phase_strategy_weight_tensor import (
+from .zygot_zalgo_entropy_dual_key_gate import ZygotZalgoEntropyDualKeyGate
+
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 
@@ -18,12 +25,6 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
 """
-from .entry_exit_portal import EntryExitPortal
-from .flip_switch_logic_lattice import FlipSwitchLogicLattice
-from .glyph_gate_engine import GlyphGateEngine
-from .glyph_strategy_core import GlyphStrategyCore
-from .multi_phase_strategy_weight_tensor import (
-from .zygot_zalgo_entropy_dual_key_gate import ZygotZalgoEntropyDualKeyGate
 
 
 

@@ -1,3 +1,8 @@
+from pathlib import Path
+import re
+import subprocess
+import sys
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -10,10 +15,6 @@ Targets specific complex syntax issues:
 - Malformed function definitions
 """
 
-import re
-import subprocess
-import sys
-from pathlib import Path
 
 
 class ComplexSyntaxFixer:
@@ -23,7 +24,7 @@ class ComplexSyntaxFixer:
         """Initialize the fixer."""
         self.fixed_files = []
 
-    def fix_missing_try_statements(self, content: str) -> str:
+    def fix_missing_try_statements():-> str:
         """Fix missing try: statements in functions."""
         lines = content.split("\n")
         fixed_lines = []
@@ -54,7 +55,7 @@ class ComplexSyntaxFixer:
 
         return "\n".join(fixed_lines)
 
-    def fix_indentation_errors(self, content: str) -> str:
+    def fix_indentation_errors():-> str:
         """Fix indentation errors in the code."""
         lines = content.split("\n")
         fixed_lines = []
@@ -74,14 +75,14 @@ class ComplexSyntaxFixer:
 
         return "\n".join(fixed_lines)
 
-    def fix_unterminated_strings(self, content: str) -> str:
+    def fix_unterminated_strings():-> str:
         """Fix unterminated string literals."""
         # Fix common unterminated string patterns
         content = re.sub(r"'([^']*)$", r"'\1'", content, flags=re.MULTILINE)
         content = re.sub(r'"([^"]*)$', r'"\1"', content, flags=re.MULTILINE)
         return content
 
-    def fix_function_definitions(self, content: str) -> str:
+    def fix_function_definitions():-> str:
         """Fix malformed function definitions."""
         # Fix triple colons
         content = re.sub(r":::", ":", content)
@@ -91,7 +92,7 @@ class ComplexSyntaxFixer:
         )
         return content
 
-    def fix_specific_file(self, file_path: str) -> bool:
+    def fix_specific_file():-> bool:
         """Fix a specific file with complex syntax errors."""
         try:
             with open(file_path, "r", encoding="utf-8") as f:

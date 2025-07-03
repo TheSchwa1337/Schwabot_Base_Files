@@ -1,3 +1,13 @@
+        from core.mathematical_optimization_bridge import MathematicalOptimizationBridge
+        import numpy as np
+        from core.enhanced_strategy_framework import EnhancedStrategyFramework
+        from core.smart_money_integration import SmartMoneyIntegrationFramework
+        import subprocess
+from typing import Any, Dict
+import logging
+import sys
+import time
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -7,17 +17,13 @@ Complete validation of Schwabot's enhanced mathematical integration system
 with fully integrated requirements and mypy compliance.
 """
 
-import logging
-import sys
-import time
-from typing import Any, Dict
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-def safe_print(message: str) -> None:
+def safe_print():-> None:
     """Safe print function that handles Unicode characters."""
     try:
         print(message)
@@ -25,7 +31,7 @@ def safe_print(message: str) -> None:
         print(message.encode("ascii", "replace").decode("ascii"))
 
 
-def validate_imports() -> Dict[str, Any]:
+def validate_imports():-> Dict[str, Any]:
     """Validate all critical imports are working."""
     safe_print("🔍 Validating Critical Imports...")
 
@@ -85,12 +91,11 @@ def validate_imports() -> Dict[str, Any]:
     return import_results
 
 
-def validate_smart_money_integration() -> Dict[str, Any]:
+def validate_smart_money_integration():-> Dict[str, Any]:
     """Validate smart money integration functionality."""
     safe_print("\n💰 Validating Smart Money Integration...")
 
     try:
-        from core.smart_money_integration import SmartMoneyIntegrationFramework
 
         # Initialize framework
         smart_money = SmartMoneyIntegrationFramework()
@@ -138,13 +143,11 @@ def validate_smart_money_integration() -> Dict[str, Any]:
         return {"success": False, "error": str(e)}
 
 
-def validate_mathematical_optimization() -> Dict[str, Any]:
+def validate_mathematical_optimization():-> Dict[str, Any]:
     """Validate mathematical optimization bridge."""
     safe_print("\n⚡ Validating Mathematical Optimization Bridge...")
 
     try:
-        from core.mathematical_optimization_bridge import MathematicalOptimizationBridge
-        import numpy as np
 
         # Initialize bridge
         bridge = MathematicalOptimizationBridge()
@@ -174,12 +177,11 @@ def validate_mathematical_optimization() -> Dict[str, Any]:
         return {"success": False, "error": str(e)}
 
 
-def validate_enhanced_strategy_framework() -> Dict[str, Any]:
+def validate_enhanced_strategy_framework():-> Dict[str, Any]:
     """Validate enhanced strategy framework."""
     safe_print("\n🏛️ Validating Enhanced Strategy Framework...")
 
     try:
-        from core.enhanced_strategy_framework import EnhancedStrategyFramework
 
         # Initialize framework
         framework = EnhancedStrategyFramework()
@@ -212,12 +214,11 @@ def validate_enhanced_strategy_framework() -> Dict[str, Any]:
         return {"success": False, "error": str(e)}
 
 
-def validate_code_quality() -> Dict[str, Any]:
+def validate_code_quality():-> Dict[str, Any]:
     """Validate code quality standards."""
     safe_print("\n🔧 Validating Code Quality Standards...")
 
     try:
-        import subprocess
 
         # Check flake8 compliance
         result = subprocess.run(
@@ -286,7 +287,7 @@ def validate_code_quality() -> Dict[str, Any]:
         return {"success": False, "error": str(e)}
 
 
-def main() -> Dict[str, Any]:
+def main():-> Dict[str, Any]:
     """Main validation function."""
     safe_print("🎯 FINAL COMPREHENSIVE VALIDATION")
     safe_print("=" * 60)

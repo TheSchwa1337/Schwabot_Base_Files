@@ -1,3 +1,14 @@
+    import time
+from .bit_operations import BitOperations, create_bit_operations_api_endpoints
+from .entropy_tracker import EntropyTracker, create_entropy_api_endpoints
+from .pattern_utils import PatternUtils, create_pattern_utils_api_endpoints
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel, Field
+from typing import Dict, List, Optional, Any
+import logging
+import uvicorn
+
 #!/usr/bin/env python3
 """
 Hash Recollection API Integration
@@ -7,17 +18,8 @@ Main API integration module that brings together all hash_recollection
 modules and provides a unified FastAPI interface for trading bot operations.
 """
 
-import logging
-from typing import Dict, List, Optional, Any
-from fastapi import FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel, Field
-import uvicorn
 
 # Import hash_recollection modules
-from .entropy_tracker import EntropyTracker, create_entropy_api_endpoints
-from .bit_operations import BitOperations, create_bit_operations_api_endpoints
-from .pattern_utils import PatternUtils, create_pattern_utils_api_endpoints
 
 logger = logging.getLogger(__name__)
 
@@ -330,6 +332,5 @@ def create_and_run_api(host: str = "0.0.0.0", port: int = 8000, debug: bool = Fa
 
 
 if __name__ == "__main__":
-    import time
 
     create_and_run_api()

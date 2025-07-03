@@ -1,16 +1,17 @@
+    import ccxt
+    import ccxt.async_support as ccxt_async
+from .data_models import APICredentials, MarketData, OrderRequest, OrderResponse
+from .enums import ConnectionStatus
 from __future__ import annotations
-
+from typing import Dict, Optional
 import asyncio
 import logging
 import time
-from typing import Dict, Optional
 
-from .data_models import APICredentials, MarketData, OrderRequest, OrderResponse
-from .enums import ConnectionStatus
+
+
 
 try:
-    import ccxt
-    import ccxt.async_support as ccxt_async
 
     CCXT_AVAILABLE = True
 except ImportError: CCXT_AVAILABLE = False
@@ -49,7 +50,7 @@ class ExchangeConnection:Manages the connection and communication with a single 
 
         logger.info(fExchange connection initialized for {credentials.exchange.value})
 
-    async def connect(self) -> bool:Establishes connection to the exchange.if not CCXT_AVAILABLE:
+    async def connect():-> bool:Establishes connection to the exchange.if not CCXT_AVAILABLE:
             logger.error(CCXT library not available. Cannot connect to exchange.)
             self.status = ConnectionStatus.ERROR
             self.last_error = CCXT library not installed.return False
@@ -103,7 +104,7 @@ class ExchangeConnection:Manages the connection and communication with a single 
         except Exception as e:
             logger.error(fError during disconnection: {e}, exc_info = True)
 
-    async def get_market_data(self, symbol: str) -> Optional[MarketData]:Fetches market data for a given symbol, using a cache.if self.status != ConnectionStatus.CONNECTED:
+    async def get_market_data():-> Optional[MarketData]:Fetches market data for a given symbol, using a cache.if self.status != ConnectionStatus.CONNECTED:
             return None
 
         # Check cache first
@@ -142,7 +143,7 @@ class ExchangeConnection:Manages the connection and communication with a single 
             )
             return None
 
-    async def place_order(self, order_request: OrderRequest) -> OrderResponse:Places a trade order on the exchange.if self.status != ConnectionStatus.CONNECTED:
+    async def place_order():-> OrderResponse:Places a trade order on the exchange.if self.status != ConnectionStatus.CONNECTED:
             return self._create_error_response(order_request, Exchange not connected.)
 
         try: params = {}
@@ -176,7 +177,7 @@ class ExchangeConnection:Manages the connection and communication with a single 
             )
             return self._create_error_response(order_request, str(e))
 
-    async def get_balance(self) -> Dict[str, float]:Fetches the account balance from the exchange.if self.status != ConnectionStatus.CONNECTED:
+    async def get_balance():-> Dict[str, float]:Fetches the account balance from the exchange.if self.status != ConnectionStatus.CONNECTED:
             return {}
         try: balance = await self.async_exchange.fetch_balance()
             free_balances = {
@@ -193,7 +194,7 @@ class ExchangeConnection:Manages the connection and communication with a single 
             logger.error(fError fetching balance from {self.credentials.exchange.value}: {e})
             return {}
 
-    def _create_success_response(self, order: Dict) -> OrderResponse:Creates a successful OrderResponse from CCXT order data.return OrderResponse(
+    def _create_success_response():-> OrderResponse:Creates a successful OrderResponse from CCXT order data.return OrderResponse(
             order_id = str(order.get(id,)),
             client_order_id = order.get(clientOrderId),
             symbol = order.get(symbol,),
@@ -212,7 +213,7 @@ class ExchangeConnection:Manages the connection and communication with a single 
             error_message=None,
         )
 
-    def _create_error_response(self, req: OrderRequest, error_msg: str) -> OrderResponse:Creates an error OrderResponse.return OrderResponse(
+    def _create_error_response():-> OrderResponse:Creates an error OrderResponse.return OrderResponse(
             order_id=,
             client_order_id = req.client_order_id,
             symbol=req.symbol,

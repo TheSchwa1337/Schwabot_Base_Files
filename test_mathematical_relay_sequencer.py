@@ -1,3 +1,12 @@
+        from core.mathematical_relay_sequencer import (
+        import threading
+from datetime import datetime, timedelta
+import json
+import logging
+import os
+import sys
+import time
+
 #!/usr/bin/env python3
 """
 Mathematical Relay Sequencer Test Suite
@@ -14,12 +23,6 @@ Comprehensive test of the mathematical relay sequencer system, including:
 - Real-time sequencing validation and error recovery
 """
 
-import sys
-import time
-import logging
-import json
-import os
-from datetime import datetime, timedelta
 
 # Configure logging
 logging.basicConfig(
@@ -34,7 +37,6 @@ def test_sequencer_initialization():
     print("=" * 60)
 
     try:
-        from core.mathematical_relay_sequencer import (
             MathematicalRelaySequencer,
             TimeLogLevel,
         )
@@ -548,7 +550,6 @@ def test_performance_and_scalability(sequencer):
         # Test concurrent access
         print("\n🔄 Testing Concurrent Access")
 
-        import threading
 
         def create_sequences(thread_id, count):
             for i in range(count):

@@ -1,3 +1,13 @@
+import math
+        import traceback
+    from core.correction_overlay_matrix import CorrectionOverlayMatrix
+    from core.drift_shell_engine import DriftShellEngine, TimingMetrics
+    from core.profit_vector_forecast import ProfitVectorForecastEngine
+from typing import Dict, List, Any
+import logging
+import sys
+import time
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """Complete Drift Shell Engine Demonstration - Temporal Cohesion Framework.
@@ -21,11 +31,6 @@ This ensures Schwabot knows:
 - How to dynamically correct for timing drift
 """
 
-import time
-import math
-import logging
-import sys
-from typing import Dict, List, Any
 
 # Configure logging for beautiful output
 logging.basicConfig(
@@ -36,9 +41,6 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 try:
-    from core.drift_shell_engine import DriftShellEngine, TimingMetrics
-    from core.profit_vector_forecast import ProfitVectorForecastEngine
-    from core.correction_overlay_matrix import CorrectionOverlayMatrix
 except ImportError as e:
     print(f"⚠️ Import Error: {e}")
     print("Please ensure all core modules are available in the core/ directory.")
@@ -81,7 +83,7 @@ class CompleteDriftShellDemo:
         print("✅ All components initialized successfully")
         print()
 
-    def simulate_market_tick(self, scenario: str = "normal") -> Dict[str, Any]:
+    def simulate_market_tick():-> Dict[str, Any]:
         """Simulate a market tick with various scenarios."""
         self.current_tick += 1
 
@@ -144,9 +146,7 @@ class CompleteDriftShellDemo:
             "scenario": scenario,
         }
 
-    def demonstrate_timing_validation(
-        self, market_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    def demonstrate_timing_validation():-> Dict[str, Any]:
         """Demonstrate temporal drift compensation and memory validation."""
         print(f"⏱️ TIMING VALIDATION - Tick {market_data['tick_id']}")
         print("-" * 50)
@@ -234,9 +234,7 @@ class CompleteDriftShellDemo:
         print()
         return {"memory_hash": memory_hash, "timing_results": results}
 
-    def demonstrate_profit_forecasting(
-        self, market_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    def demonstrate_profit_forecasting():-> Dict[str, Any]:
         """Demonstrate 3D profit vector forecasting."""
         print(f"📈 PROFIT VECTOR FORECASTING - {market_data['scenario'].upper()}")
         print("-" * 50)
@@ -304,9 +302,7 @@ class CompleteDriftShellDemo:
         print()
         return {"profit_vector": profit_vector, "timeframes": timeframes}
 
-    def demonstrate_anomaly_correction(
-        self, market_data: Dict[str, Any], profit_vector
-    ) -> Dict[str, Any]:
+    def demonstrate_anomaly_correction():-> Dict[str, Any]:
         """Demonstrate anomaly detection and correction injection."""
         print("🔧 ANOMALY DETECTION & CORRECTION")
         print("-" * 50)
@@ -366,12 +362,7 @@ class CompleteDriftShellDemo:
         print()
         return {"anomalies": anomalies, "corrections": correction_factors}
 
-    def demonstrate_unified_confidence(
-        self,
-        timing_results: List[Dict[str, Any]],
-        profit_vector,
-        correction_data: Dict[str, Any],
-    ) -> Dict[str, Any]:
+    def demonstrate_unified_confidence():-> Dict[str, Any]:
         """Demonstrate the unified confidence validator."""
         print("✅ UNIFIED CONFIDENCE VALIDATION")
         print("-" * 50)
@@ -567,7 +558,6 @@ def main():
 
     except Exception as e:
         print(f"\n\n❌ Demo failed with error: {e}")
-        import traceback
 
         traceback.print_exc()
 

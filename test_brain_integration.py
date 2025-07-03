@@ -1,3 +1,13 @@
+                    import math
+        from core.brain_trading_engine import BrainTradingEngine
+        from core.brain_trading_engine import BrainTradingEngine
+        import subprocess
+from pathlib import Path
+import asyncio
+import json
+import logging
+import time
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -8,11 +18,6 @@ Comprehensive test of brain trading functionality with working implementations.
 This replaces placeholders with functional brain trading algorithms.
 """
 
-import asyncio
-import logging
-import time
-import json
-from pathlib import Path
 
 # Configure logging
 logging.basicConfig(
@@ -27,7 +32,6 @@ def test_brain_trading_engine():
     print("=" * 50)
 
     try:
-        from core.brain_trading_engine import BrainTradingEngine
 
         # Initialize with custom configuration
         config = {
@@ -121,7 +125,6 @@ def test_mathematical_functions():
                 elif operation == "sqrt":
                     result = value**0.5
                 elif operation == "sin":
-                    import math
 
                     result = math.sin(value)
                 else:
@@ -168,7 +171,6 @@ async def run_backtest_simulation():
     print("=" * 50)
 
     try:
-        from core.brain_trading_engine import BrainTradingEngine
 
         engine = BrainTradingEngine(
             {"base_profit_rate": 0.001, "confidence_threshold": 0.7}
@@ -273,7 +275,6 @@ def run_flake8_check():
     print("=" * 50)
 
     try:
-        import subprocess
 
         # Check our brain trading engine
         result = subprocess.run(

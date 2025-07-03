@@ -1,3 +1,16 @@
+from core.basket_vector_linker import BasketVectorLinker
+from core.glyph_phase_resolver import GlyphPhaseResolver
+from core.profit_memory_echo import ProfitMemoryEcho
+from core.strategy.glyph_strategy_core import GlyphStrategyCore, GlyphStrategyResult
+from core.strategy.zygot_zalgo_entropy_dual_key_gate import ZygotZalgoEntropyDualKeyGate
+from core.warp_sync_core import WarpSyncCore
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Tuple
+import logging
+import time
+
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 
@@ -18,21 +31,9 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
 """
-import logging
-import time
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
 
-from core.basket_vector_linker import BasketVectorLinker
-from core.glyph_phase_resolver import GlyphPhaseResolver
-from core.profit_memory_echo import ProfitMemoryEcho
 
-from core.strategy.glyph_strategy_core import GlyphStrategyCore, GlyphStrategyResult
-from core.strategy.zygot_zalgo_entropy_dual_key_gate import ZygotZalgoEntropyDualKeyGate
 
-from core.warp_sync_core import WarpSyncCore
-from typing import Tuple
 
 
 
@@ -70,16 +71,7 @@ self.decision_history: List[GlyphGateDecision] = []
 
             logger.info(GlyphGateEngine initialized with all core mathematical systems.)
 
-def evaluate_signal(
-self,:
-glyph: str,
-volume_signal: float,
-current_price: float,
-tick_id: int,
-internal_system_data: Dict[str, Any],
-external_api_data: Dict[str, Any],
-performance_feedback: Optional[Dict[str, Any]] = None,
-) -> GlyphGateDecision:Evaluates a trading signal through the integrated mathematical systems.
+def evaluate_signal():-> GlyphGateDecision:Evaluates a trading signal through the integrated mathematical systems.
 
 Args:
             glyph: The input glyph for strategy selection.
@@ -205,7 +197,7 @@ decision.gate_open}, Reason={
 decision.reason})
         return decision
 
-def get_decision_history(self, limit: int = 100) -> List[GlyphGateDecision]:Returns recent gate decisions.return list(self.decision_history)[-limit:]
+def get_decision_history():-> List[GlyphGateDecision]:Returns recent gate decisions.return list(self.decision_history)[-limit:]
 
 def reset_engine(self):'Resets the engine's history and internal states of integrated components.'
 self.decision_history.clear()

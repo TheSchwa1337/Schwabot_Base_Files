@@ -1,3 +1,9 @@
+from dataclasses import dataclass, field
+from decimal import Decimal, getcontext
+from typing import Any, Dict, List, Optional, Union
+import logging
+import time
+
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 
@@ -18,11 +24,6 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
 """
-import logging
-import time
-from dataclasses import dataclass, field
-from decimal import Decimal, getcontext
-from typing import Any, Dict, List, Optional, Union
 
 
 
@@ -45,10 +46,10 @@ current_price: Decimal
 last_update: float = field(default_factory=time.time)
 
 @property
-def value(self) -> Decimal:Current market value of the position.return self.quantity * self.current_price
+def value():-> Decimal:Current market value of the position.return self.quantity * self.current_price
 
 @property
-def unrealized_pnl(self) -> Decimal:Unrealized Profit and Loss.return (self.current_price - self.avg_price) * self.quantity
+def unrealized_pnl():-> Decimal:Unrealized Profit and Loss.return (self.current_price - self.avg_price) * self.quantity
 
 
 class PortfolioTracker:Tracks and manages the trading portfolio.def __init__():Initialize the portfolio tracker.Args:
@@ -62,14 +63,14 @@ self.portfolio_stats = {total_deposits: Decimal(0.0),total_withdrawals: Decimal(
 }self.portfolio_stats[total_deposits] += self.cash
             logger.info(f"PortfolioTracker initialized with cash: {self.cash:.2f})
 
-def deposit(self, amount: Union[float, str, Decimal]) -> None:"Deposit cash into the portfolio.amount_dec = Decimal(str(amount))
+def deposit():-> None:"Deposit cash into the portfolio.amount_dec = Decimal(str(amount))
 if amount_dec <= 0:
             logger.warning(fAttempted to deposit non-positive amount: {amount_dec})
 return self.cash += amount_dec
 self.portfolio_stats[total_deposits] += amount_decself.portfolio_stats[last_update_time] = time.time()
             logger.info(f"Deposited {amount_dec:.2f}. New cash: {self.cash:.2f})
 
-def withdraw(self, amount: Union[float, str, Decimal]) -> None:"Withdraw cash from the portfolio.amount_dec = Decimal(str(amount))
+def withdraw():-> None:"Withdraw cash from the portfolio.amount_dec = Decimal(str(amount))
 if amount_dec <= 0 or amount_dec > self.cash:
             logger.warning(
 fAttempted to withdraw invalid amount {
@@ -78,14 +79,7 @@ return self.cash -= amount_dec
 self.portfolio_stats[total_withdrawals] += amount_decself.portfolio_stats[last_update_time] = time.time()
             logger.info(f"Withdrew {amount_dec:.2f}. New cash: {self.cash:.2f})
 
-def update_position(
-self,:
-asset: str,
-direction: str,
-quantity: float,
-price: float,
-fees: float = 0.0,
-) -> None:Update an asset position based on a trade execution.Args:asset: The asset traded (e.g.,BTC/USD).direction:buyorsell.
+def update_position():-> None:Update an asset position based on a trade execution.Args:asset: The asset traded (e.g.,BTC/USD).direction:buyorsell.
 quantity: The quantity of the asset traded.
 price: The price at which the trade occurred.
 fees: Any fees incurred in the trade.qty_dec = Decimal(str(quantity))
@@ -146,13 +140,13 @@ self.transaction_history.append(
 }
 )
 
-def update_market_prices(self, current_prices: Dict[str, float]) -> None:"Update current market prices for all held positions.for asset, price in current_prices.items():
+def update_market_prices():-> None:"Update current market prices for all held positions.for asset, price in current_prices.items():
             if asset in self.positions:
                 self.positions[asset].current_price = Decimal(str(price))
 self.positions[asset].last_update = time.time()
 self.portfolio_stats[last_update_time] = time.time()
 
-def get_portfolio_summary(self) -> Dict[str, Any]:"Get a summary of the current portfolio state.total_assets_value = Decimal(0.0)unrealized_pnl = Decimal(0.0)
+def get_portfolio_summary():-> Dict[str, Any]:"Get a summary of the current portfolio state.total_assets_value = Decimal(0.0)unrealized_pnl = Decimal(0.0)
 positions_summary = {}
 
 for asset, pos in self.positions.items():
@@ -167,16 +161,14 @@ total_pnl = self.realized_pnl + unrealized_pnl
         return {cash: float(self.cash),total_assets_value: float(total_assets_value),total_value": float(total_value),realized_pnl": float(self.realized_pnl),unrealized_pnl": float(unrealized_pnl),total_pnl": float(total_pnl),positions": positions_summary,last_update_time": time.time(),
 }
 
-def get_transaction_history(self, limit: int = 100) -> List[Dict[str, Any]]:Retrieve a portion of the transaction history.return list(self.transaction_history)[-limit:]
+def get_transaction_history():-> List[Dict[str, Any]]:Retrieve a portion of the transaction history.return list(self.transaction_history)[-limit:]
 
-def get_performance_stats(self) -> Dict[str, Any]:Return the performance statistics of the portfolio tracker.stats = self.portfolio_stats.copy()
+def get_performance_stats():-> Dict[str, Any]:Return the performance statistics of the portfolio tracker.stats = self.portfolio_stats.copy()
         summary = self.get_portfolio_summary()
 stats[current_total_value] = summary[total_value]stats[current_realized_pnl] = summary[realized_pnl]stats[current_unrealized_pnl] = summary[unrealized_pnl]stats[current_total_pnl] = summary[total_pnl]
         return stats
 
-def reset_portfolio(:
-self, initial_cash: Union[float, str, Decimal] =100000.0
-) -> None:Reset the portfolio to an initial state.self.cash = Decimal(str(initial_cash))
+def reset_portfolio():-> None:Reset the portfolio to an initial state.self.cash = Decimal(str(initial_cash))
 self.positions = {}
 self.realized_pnl = Decimal(0.0)
 self.transaction_history = []

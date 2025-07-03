@@ -1,3 +1,14 @@
+                        from core.ghost_trigger_manager import add_profit_vector
+from core.balance_loader import update_load_metrics, get_balance_statistics
+from core.ghost_trigger_manager import (
+from core.tick_management_system import run_tick_cycle, get_tick_statistics
+from typing import Dict, Any
+import asyncio
+import json
+import logging
+import time
+import websockets
+
 #!/usr/bin/env python3
 """
 Integrated Dashboard Demo
@@ -10,17 +21,8 @@ This script provides a WebSocket server that feeds real-time data
 to the Schwabot Altitude Dashboard.
 """
 
-import asyncio
-import json
-import logging
-import time
-import websockets
-from typing import Dict, Any
 
 # Import our integrated systems
-from core.tick_management_system import run_tick_cycle, get_tick_statistics
-from core.balance_loader import update_load_metrics, get_balance_statistics
-from core.ghost_trigger_manager import (
     create_ghost_trigger,
     get_trigger_performance,
     AnchorStatus,
@@ -128,7 +130,7 @@ class DashboardDataProvider:
         except Exception as e:
             logger.error(f"Error updating system stats: {e}")
 
-    def _determine_system_health(self, tick_stats: Dict, balance_stats: Dict) -> str:
+    def _determine_system_health():-> str:
         """Determine overall system health."""
         if tick_stats.get("success_rate", 0) < 0.8:
             return "degraded"
@@ -137,7 +139,7 @@ class DashboardDataProvider:
         else:
             return "healthy"
 
-    def _determine_alif_aleph_status(self, balance_stats: Dict) -> str:
+    def _determine_alif_aleph_status():-> str:
         """Determine ALIF/ALEPH synchronization status."""
         mode = balance_stats.get("current_mode", "balanced")
         if mode == "balanced":
@@ -149,7 +151,7 @@ class DashboardDataProvider:
         else:
             return "compressed"
 
-    def get_dashboard_data(self) -> Dict[str, Any]:
+    def get_dashboard_data():-> Dict[str, Any]:
         """Get formatted data for dashboard display."""
         return {
             "system_overview": {
@@ -275,7 +277,6 @@ async def system_simulation():
                     if tick_context.echo_strength > 0.6 and tick_context.entropy < 0.8:
                         entry_price = 65000.0 + (tick_context.tick_id * 10)
                         exit_price = entry_price + 150
-                        from core.ghost_trigger_manager import add_profit_vector
 
                         add_profit_vector(
                             trigger.trigger_hash,

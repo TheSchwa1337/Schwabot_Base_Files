@@ -1,3 +1,7 @@
+from pathlib import Path
+import os
+import sys
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -8,9 +12,6 @@ Setup script for packaging Schwabot with brain trading functionality into an exe
 This creates a self-contained .exe that includes all working components.
 """
 
-import os
-import sys
-from pathlib import Path
 
 
 def create_requirements_txt():

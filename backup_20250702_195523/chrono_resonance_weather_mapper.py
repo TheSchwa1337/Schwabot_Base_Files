@@ -1,3 +1,21 @@
+from scipy import signal
+from scipy.fft import fft, fftfreq
+import math
+import numpy as np
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
+from typing import Tuple
+import asyncio
+import json
+import logging
+import os
+import random
+import requests
+import time
+
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 
@@ -18,25 +36,8 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
 """
-import asyncio
-import json
-import logging
-import math
-import os
-import time
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
-from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
 
-import numpy as np
-from scipy import signal
-from scipy.fft import fft, fftfreq
-import requests
 
-import random
-from typing import Tuple
 
 
 
@@ -125,15 +126,15 @@ self.storage_path = self._get_storage_path()
 
             logger.info(🌤️ ChronoResonance Weather Mapper initialized)
 
-def _default_config(self) -> Dict[str, Any]:Default configuration.return {max_weather_history: 10000,max_price_history": 10000,correlation_window_hours": 168,  # 1 weekresonance_analysis_enabled: True,gradient_smoothing": True,atmospheric_modeling": True,prediction_horizon_hours": 24,confidence_threshold": 0.7,auto_calibration": True,data_retention_days": 30,
+def _default_config():-> Dict[str, Any]:Default configuration.return {max_weather_history: 10000,max_price_history": 10000,correlation_window_hours": 168,  # 1 weekresonance_analysis_enabled: True,gradient_smoothing": True,atmospheric_modeling": True,prediction_horizon_hours": 24,confidence_threshold": 0.7,auto_calibration": True,data_retention_days": 30,
 }
 
-def _get_storage_path(self) -> Path:"Get storage path for CRWM data.if os.name == nt:  # Windows
+def _get_storage_path():-> Path:"Get storage path for CRWM data.if os.name == nt:  # Windows
 storage_path = Path(os.environ.get(APPDATA,)) /Schwabot/crwmelse:  # Linux/Mac
 storage_path = Path.home() / .schwabot/crwmstorage_path.mkdir(parents = True, exist_ok=True)
         return storage_path
 
-def _initialize_resonance_frequencies(self) -> Dict[str, float]:Initialize resonance frequency analysis parameters.return {atmospheric_base: 11.78,  # Earth's Schumann resonance (Hz)'diurnal_cycle: 1 / (24 * 3600),  # Daily cyclepressure_wave: 0.5,  # Pressure wave frequencytemperature_oscillation: 2.0,  # Temperature oscillationhumidity_cycle: 0.25,  # Humidity cyclewind_pattern: 1.5,  # Wind pattern frequencymarket_sentiment: 3.14159,  # Market resonance(π Hz)
+def _initialize_resonance_frequencies():-> Dict[str, float]:Initialize resonance frequency analysis parameters.return {atmospheric_base: 11.78,  # Earth's Schumann resonance (Hz)'diurnal_cycle: 1 / (24 * 3600),  # Daily cyclepressure_wave: 0.5,  # Pressure wave frequencytemperature_oscillation: 2.0,  # Temperature oscillationhumidity_cycle: 0.25,  # Humidity cyclewind_pattern: 1.5,  # Wind pattern frequencymarket_sentiment: 3.14159,  # Market resonance(π Hz)
 fibonacci_golden: 1.618,  # Golden ratio frequency
 }
 
@@ -228,9 +229,7 @@ len(signatures)} new signatures)
 
         except Exception as e:logger.error(fError in resonance analysis: {e})
 
-def _analyze_frequency_domain(:
-self, frequencies: np.ndarray, fft_data: np.ndarray, pattern: WeatherPattern
-) -> Optional[ResonanceSignature]:Analyze frequency domain data for resonance signatures.try:
+def _analyze_frequency_domain():-> Optional[ResonanceSignature]:Analyze frequency domain data for resonance signatures.try:
             # Calculate magnitude spectrum
 magnitude = np.abs(fft_data)
 
@@ -269,7 +268,7 @@ harmonic_order=self._calculate_harmonic_order(dominant_freq),
             logger.error(fError analyzing frequency domain: {e})
         return None
 
-def _calculate_resonance_correlation(self, frequency: float) -> float:Calculate correlation with known resonance frequencies.try: max_correlation = 0.0
+def _calculate_resonance_correlation():-> float:Calculate correlation with known resonance frequencies.try: max_correlation = 0.0
 
 for name, ref_freq in self.resonance_frequencies.items():
                 # Calculate correlation considering harmonics
@@ -286,9 +285,7 @@ max_correlation = max(max_correlation, correlation)
             logger.error(fError calculating resonance correlation: {e})
         return 0.0
 
-def _classify_resonance_mode(:
-self, frequency: float, correlation: float
-) -> ResonanceMode:
+def _classify_resonance_mode():-> ResonanceMode:
         Classify the resonance mode.try:
             if correlation > 0.8:
                 if frequency < 1.0:
@@ -306,7 +303,7 @@ else:
             logger.error(fError classifying resonance mode: {e})
         return ResonanceMode.CHAOS
 
-def _calculate_harmonic_order(self, frequency: float) -> int:Calculate the harmonic order.try: fundamental = self.resonance_frequencies[atmospheric_base]
+def _calculate_harmonic_order():-> int:Calculate the harmonic order.try: fundamental = self.resonance_frequencies[atmospheric_base]
         return max(1, round(frequency / fundamental))
 
         except Exception as e:
@@ -361,13 +358,7 @@ f🔄 Updated correlation analysis: {len(correlations)} correlations)
 
         except Exception as e:logger.error(fError in correlation analysis: {e})
 
-def _calculate_weather_price_correlation(
-self,:
-weather_data: List[WeatherDataPoint],
-price_data: List[Tuple[datetime, float]],
-weather_extractor,
-param_name: str,
-) -> Optional[WeatherPriceCorrelation]:Calculate correlation between weather parameter and price.try:
+def _calculate_weather_price_correlation():-> Optional[WeatherPriceCorrelation]:Calculate correlation between weather parameter and price.try:
             # Align time series data
 aligned_weather, aligned_prices = self._align_time_series(
 weather_data, price_data, weather_extractor
@@ -433,12 +424,7 @@ prediction_accuracy=prediction_accuracy,
             logger.error(fError calculating weather-price correlation: {e})
         return None
 
-def _align_time_series(
-self,:
-weather_data: List[WeatherDataPoint],
-price_data: List[Tuple[datetime, float]],
-weather_extractor,
-) -> Tuple[List[float], List[float]]:Align weather and price time series data.try: aligned_weather = []
+def _align_time_series():-> Tuple[List[float], List[float]]:Align weather and price time series data.try: aligned_weather = []
 aligned_prices = []
 
 # Sort data by timestamp
@@ -483,9 +469,7 @@ current_time += timedelta(hours=1)
             logger.error(fError aligning time series: {e})
         return [], []
 
-def calculate_atmospheric_gradient(:
-self, location_radius_km: float = 50
-) -> Optional[AtmosphericGradient]:
+def calculate_atmospheric_gradient():-> Optional[AtmosphericGradient]:
         Calculate atmospheric gradient for the specified area.try:
             if len(self.weather_history) < 4:
                 return None
@@ -536,7 +520,7 @@ stability_index=stability_index,
             logger.error(fError calculating atmospheric gradient: {e})
         return None
 
-def _calculate_temporal_gradient(self, values: List[float]) -> float:Calculate temporal gradient of a parameter.try:
+def _calculate_temporal_gradient():-> float:Calculate temporal gradient of a parameter.try:
             if len(values) < 2:
                 return 0.0
 
@@ -558,7 +542,7 @@ slope = (n * sum_xy - sum_x * sum_y) / (n * sum_x2 - sum_x**2)
             logger.error(fError calculating temporal gradient: {e})
         return 0.0
 
-def _calculate_stability_index(self, weather_data: List[WeatherDataPoint]) -> float:Calculate atmospheric stability index.try:
+def _calculate_stability_index():-> float:Calculate atmospheric stability index.try:
             if len(weather_data) < 3:
                 return 0.5  # Neutral stability
 
@@ -587,9 +571,7 @@ temp_stability + pressure_stability + wind_stability
             logger.error(fError calculating stability index: {e})
         return 0.5
 
-def get_weather_signature(:
-self, time_window: str = 1h
-) -> Optional[Dict[str, Any]]:Get current weather signature for trading decisions.try:
+def get_weather_signature():-> Optional[Dict[str, Any]]:Get current weather signature for trading decisions.try:
             if not self.weather_history:
                 return None
 
@@ -644,9 +626,7 @@ gradient, correlations, weather_momentum
             logger.error(fError getting weather signature: {e})
         return None
 
-def _calculate_weather_momentum(:
-self, weather_data: List[WeatherDataPoint]
-) -> Dict[str, float]:Calculate weather momentum indicators.try:
+def _calculate_weather_momentum():-> Dict[str, float]:Calculate weather momentum indicators.try:
             if len(weather_data) < 3:
                 return {momentum: 0.0,acceleration: 0.0,pressure_momentum: 0.0}
 
@@ -675,12 +655,7 @@ overall_momentum = math.sqrt(temp_momentum**2 + pressure_momentum**2)
 
         except Exception as e:logger.error(f"Error calculating weather momentum: {e})return {momentum: 0.0,acceleration: 0.0,pressure_momentum: 0.0}
 
-def _generate_trading_signals(
-self,:
-gradient: Optional[AtmosphericGradient],
-correlations: Dict[str, WeatherPriceCorrelation],
-momentum: Dict[str, float],
-) -> Dict[str, Any]:"Generate trading signals based on weather analysis.try: signals = {signal_strength: 0.0,direction:neutral,confidence": 0.0,components": {},
+def _generate_trading_signals():-> Dict[str, Any]:"Generate trading signals based on weather analysis.try: signals = {signal_strength: 0.0,direction:neutral,confidence": 0.0,components": {},
 }
 
 signal_components = []
@@ -723,9 +698,7 @@ signals[direction] = (bullishif signals[signal_strength] > 0.1:
         return {signal_strength: 0.0,direction:neutral",confidence": 0.0,components": {},
 }
 
-def predict_weather_price_movement(:
-self, horizon_hours: int = 6
-) -> Optional[Dict[str, Any]]:Predict price movement based on weather patterns.try:
+def predict_weather_price_movement():-> Optional[Dict[str, Any]]:Predict price movement based on weather patterns.try:
             if len(self.weather_history) < 24 or len(self.price_history) < 24:
                 return None
 
@@ -781,7 +754,7 @@ final_confidence = total_confidence / len(predictions)
             logger.error(fError predicting weather-price movement: {e})
         return None
 
-def get_crwm_status(self) -> Dict[str, Any]:Get comprehensive CRWM system status.try:
+def get_crwm_status():-> Dict[str, Any]:Get comprehensive CRWM system status.try:
             return {system_status:activeif self.weather_history elseinactive,data_points": {weather_history: len(self.weather_history),price_history": len(self.price_history),resonance_signatures": len(self.resonance_signatures),
 },analysis_results": {active_correlations: len(self.correlation_cache),strongest_correlation": max(
 (
@@ -803,7 +776,7 @@ else None
 
         except Exception as e:logger.error(f"Error getting CRWM status: {e})return {system_status:error,error: str(e)}
 
-def export_crwm_data(self, filepath: str) -> bool:"Export CRWM data and analysis results.try: export_data = {export_timestamp: datetime.now().isoformat(),system_status: self.get_crwm_status(),recent_weather_data": [{timestamp: w.timestamp.isoformat(),location": w.location,temperature": w.temperature,pressure": w.pressure,humidity": w.humidity,wind_speed": w.wind_speed,weather_type: w.weather_type,
+def export_crwm_data():-> bool:"Export CRWM data and analysis results.try: export_data = {export_timestamp: datetime.now().isoformat(),system_status: self.get_crwm_status(),recent_weather_data": [{timestamp: w.timestamp.isoformat(),location": w.location,temperature": w.temperature,pressure": w.pressure,humidity": w.humidity,wind_speed": w.wind_speed,weather_type: w.weather_type,
 }
 for w in self.weather_history[-100:]  # Last 100 points
 ],resonance_signatures: [{frequency: s.frequency,amplitude": s.amplitude,correlation": s.correlation,confidence": s.confidence,pattern_type: s.pattern_type.value,resonance_mode": s.resonance_mode.value,

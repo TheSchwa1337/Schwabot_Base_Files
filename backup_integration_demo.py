@@ -1,3 +1,11 @@
+        import traceback
+from dataclasses import dataclass, field
+from typing import Dict, Any
+import hashlib
+import json
+import os
+import time
+
 #!/usr/bin/env python3
 """
 Backup Integration Demo
@@ -8,12 +16,6 @@ into the three core engines: Ghost Flip Executor, Profit Orbit Engine, and Pair 
 This demo shows the concepts and functionality without importing problematic modules.
 """
 
-import json
-import os
-import hashlib
-import time
-from typing import Dict, Any
-from dataclasses import dataclass, field
 
 # Demo data structures to show the backup logic integration
 
@@ -372,7 +374,7 @@ class BackupIntegrationDemo:
                 size = os.path.getsize(filepath)
                 print(f"  {filepath}: {size} bytes")
 
-    def _get_backup_directory_size(self) -> str:
+    def _get_backup_directory_size():-> str:
         """Get backup directory size."""
         try:
             total_size = 0
@@ -425,7 +427,6 @@ def main():
 
     except Exception as e:
         print(f"\n[ERROR] Demo failed: {e}")
-        import traceback
 
         traceback.print_exc()
 

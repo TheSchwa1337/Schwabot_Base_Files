@@ -1,7 +1,3 @@
-# -*- coding: utf - 8 -*-
-# -*- coding: utf - 8 -*-
-# -*- coding: utf - 8 -*-
-# -*- coding: utf - 8 -*-
 from datetime import datetime
 from demo_integration_system import get_demo_integration_system
 from dual_unicore_handler import DualUnicoreHandler
@@ -9,6 +5,7 @@ from matrix_allocator import get_matrix_allocator
 from pathlib import Path
 from settings_controller import get_settings_controller
 from typing import Dict, List, Any, Optional
+from utils.safe_print import safe_print, info, warn, error, success, debug
 from vector_validator import get_vector_validator
 import argparse
 import json
@@ -16,7 +13,11 @@ import sys
 import time
 import yaml
 
-from utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+
 
 
 # Initialize Unicode handler
@@ -61,7 +62,7 @@ self.scenarios = ["conservative", "moderate", "aggressive"]
 # Available optimization strategies
 self.optimization_strategies = ["risk_parity", "max_sharpe", "equal_weight", "performance_weighted"]
 
-def run_backtest(self, scenario: str = "moderate", duration: int = None) -> None:
+def run_backtest():-> None:
         """Run a complete backtest""""""
 """"""
 """"""
@@ -79,7 +80,7 @@ safe_print(f"\\u2705 Backtest completed in {end_time - start_time:.2f} seconds")
 # Display results
 self._display_backtest_results(result)
 
-def _display_backtest_results(self, result) -> None:
+def _display_backtest_results():-> None:
     """Function implementation pending."""
 pass
 """
@@ -113,7 +114,7 @@ if result.recommendations:
                 safe_print(f"{i}. {rec}")
             print()
 
-def test_vector_validation(self, vector_data: Dict[str, Any]) -> None:
+def test_vector_validation():-> None:
     """Function implementation pending."""
 pass
 """
@@ -148,7 +149,7 @@ if result.recommendations:
                 safe_print(f"  \\u2022 {rec}")
             print()
 
-def test_matrix_allocation(self, basket_id: str = "test_basket") -> None:
+def test_matrix_allocation():-> None:
     """Function implementation pending."""
 pass
 """
@@ -206,7 +207,7 @@ if result.success:
 
 print()
 
-def show_system_status(self) -> None:
+def show_system_status():-> None:
     """Function implementation pending."""
 pass
 """
@@ -257,7 +258,7 @@ safe_print("\\u1f3ae DEMO SYSTEM")
         safe_print(f"Active Sessions: {demo_stats['active_sessions']}")
         print()
 
-def show_configuration(self) -> None:
+def show_configuration():-> None:
     """Function implementation pending."""
 pass
 """
@@ -317,7 +318,7 @@ safe_print("\\u1f3ae DEMO BACKTEST PARAMETERS")
         safe_print(f"Validation Mode: {demo_params.validation_mode}")
         print()
 
-def update_parameter(self, param_type: str, param_name: str, value: Any) -> None:
+def update_parameter():-> None:
     """Function implementation pending."""
 pass
 """
@@ -342,7 +343,7 @@ safe_print(f"\\u2705 Successfully updated {param_name}")
 except Exception as e:
             safe_print(f"\\u274c Error updating parameter: {e}")
 
-def export_data(self, export_type: str, filepath: str) -> None:
+def export_data():-> None:
     """Function implementation pending."""
 pass
 """
@@ -369,7 +370,7 @@ safe_print(f"\\u2705 Successfully exported {export_type} data")
 except Exception as e:
             safe_print(f"\\u274c Error exporting data: {e}")
 
-def run_quick_test(self) -> None:
+def run_quick_test():-> None:
     """Function implementation pending."""
 pass
 """
@@ -396,7 +397,7 @@ safe_print("3. Running Quick Backtest...")
 
 safe_print("\\u2705 Quick test completed!")
 
-def show_help(self) -> None:
+def show_help():-> None:
     """Function implementation pending."""
 pass
 """

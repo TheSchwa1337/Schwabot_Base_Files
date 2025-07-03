@@ -1,3 +1,17 @@
+from core.mathlib_v4 import MathLibV4
+from core.unified_math_system import UnifiedMathSystem
+from __future__ import annotations
+from core.advanced_tensor_algebra import UnifiedTensorAlgebra
+from core.enhanced_strategy_framework import EnhancedStrategyFramework
+from core.smart_money_integration import SmartMoneyIntegrationFramework
+from dataclasses import dataclass, field
+from typing import Any, Dict, List, Optional
+from utils.safe_print import safe_print
+import logging
+import os
+import sys
+import time
+
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 
@@ -18,21 +32,8 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
 """
-from __future__ import annotations
 
-import logging
-import os
-import sys
-import time
-from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional
 
-from core.mathlib_v4 import MathLibV4
-from core.enhanced_strategy_framework import EnhancedStrategyFramework
-from core.smart_money_integration import SmartMoneyIntegrationFramework
-from core.unified_math_system import UnifiedMathSystem
-from core.advanced_tensor_algebra import UnifiedTensorAlgebra
-from utils.safe_print import safe_print
 
 
 # !/usr/bin/env python3
@@ -51,7 +52,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 logger = logging.getLogger(__name__)
 
 
-def safe_print() -> None:
+def safe_print():-> None:
     Safe print function that handles Unicode characters.try:
         print(message)
         except UnicodeEncodeError:'
@@ -78,11 +79,11 @@ test_results: List[SystemIntegrationTestResult]
 metadata: Dict[str, Any] = field(default_factory = dict)
 
 
-class CompleteSystemIntegrationValidator:Complete system integration validator for Schwabot.def __init__(self) -> None:Initialize the complete system integration validator.# Validation results
+class CompleteSystemIntegrationValidator:Complete system integration validator for Schwabot.def __init__():-> None:Initialize the complete system integration validator.# Validation results
 self.validation_results: List[SystemIntegrationValidationResult] = []
             logger.info(Complete System Integration Validator initialized)
 
-def validate_core_mathematical_foundations(self) -> SystemIntegrationValidationResult:"Validate core mathematical foundations integration.test_results = []
+def validate_core_mathematical_foundations():-> SystemIntegrationValidationResult:"Validate core mathematical foundations integration.test_results = []
 start_time = time.time()
 
 try:
@@ -159,7 +160,7 @@ execution_time=time.time() - start_time,
 test_results=test_results
 )
 
-def validate_trading_integration(self) -> SystemIntegrationValidationResult:Validate trading component integration.test_results = []
+def validate_trading_integration():-> SystemIntegrationValidationResult:Validate trading component integration.test_results = []
 start_time = time.time()
 
 try:
@@ -200,7 +201,7 @@ execution_time=time.time() - start_time,
 test_results=test_results
 )
 
-def validate_smart_money_integration(self) -> SystemIntegrationValidationResult:Validate smart money integration.test_results = []
+def validate_smart_money_integration():-> SystemIntegrationValidationResult:Validate smart money integration.test_results = []
 start_time = time.time()
 
 try:
@@ -245,7 +246,7 @@ execution_time=time.time() - start_time,
 test_results=test_results
 )
 
-def run_complete_validation(self) -> Dict[str, Any]:Run complete system validation.safe_print(🔍 Complete System Integration Validation)safe_print(=* 60)
+def run_complete_validation():-> Dict[str, Any]:Run complete system validation.safe_print(🔍 Complete System Integration Validation)safe_print(=* 60)
 
 # Run all validation tests
 validations = [
@@ -290,10 +291,10 @@ else :
 }
 
 
-def create_enhanced_integration_validator() -> CompleteSystemIntegrationValidator:"Factory function to create enhanced integration validator.return CompleteSystemIntegrationValidator()
+def create_enhanced_integration_validator():-> CompleteSystemIntegrationValidator:"Factory function to create enhanced integration validator.return CompleteSystemIntegrationValidator()
 
 
-def run_enhanced_validation() -> Dict[str, Any]:Run enhanced integration validation.validator = create_enhanced_integration_validator()
+def run_enhanced_validation():-> Dict[str, Any]:Run enhanced integration validation.validator = create_enhanced_integration_validator()
         return validator.run_complete_validation()
 
 

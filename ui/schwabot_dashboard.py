@@ -1,7 +1,11 @@
-# -*- coding: utf - 8 -*-
-# -*- coding: utf - 8 -*-
-# -*- coding: utf - 8 -*-
-# -*- coding: utf - 8 -*-
+    from core.phantom_lag_model import PhantomLagModel
+    from core.settings_manager import get_settings_manager, get_setting, set_setting
+from core.fallback_logic_router import FallbackLogicRouter
+from core.hash_registry_manager import HashRegistryManager
+from core.meta_layer_ghost_bridge import MetaLayerGhostBridge
+from core.system_integration_orchestrator import SystemIntegrationOrchestrator
+from core.tensor_harness_matrix import TensorHarnessMatrix
+from core.voltage_lane_mapper import VoltageLaneMapper
 from datetime import datetime, timedelta
 from dual_unicore_handler import DualUnicoreHandler
 from flask import Flask, render_template, jsonify, request, redirect, url_for, flash
@@ -9,16 +13,21 @@ from flask_cors import CORS
 from flask_socketio import SocketIO, emit
 from pathlib import Path
 from typing import Dict, Any, List, Optional
+from utils.safe_print import safe_print, info, warn, error, success, debug
 import asyncio
 import json
 import logging
 import os
 import sys
+import threading
 import time
 
-import threading
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
 
-from utils.safe_print import safe_print, info, warn, error, success, debug
+
 
 
 # Initialize Unicode handler
@@ -49,14 +58,6 @@ sys.path.append(str(Path(__file__).parent.parent))
 
 # Import Schwabot components
 try:
-    from core.settings_manager import get_settings_manager, get_setting, set_setting
-    from core.phantom_lag_model import PhantomLagModel
-from core.meta_layer_ghost_bridge import MetaLayerGhostBridge
-from core.fallback_logic_router import FallbackLogicRouter
-from core.hash_registry_manager import HashRegistryManager
-from core.tensor_harness_matrix import TensorHarnessMatrix
-from core.voltage_lane_mapper import VoltageLaneMapper
-from core.system_integration_orchestrator import SystemIntegrationOrchestrator
 IMPORTS_SUCCESSFUL = True
 except ImportError as e:"""
 safe_print(f"Warning: Some core components not available: {e}")

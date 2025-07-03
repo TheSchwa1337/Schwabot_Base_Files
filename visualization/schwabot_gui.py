@@ -1,3 +1,10 @@
+    from core.clean_unified_math import CleanUnifiedMathSystem
+    from core.brain_trading_engine import BrainTradingEngine
+    from symbolic_profit_router import SymbolicProfitRouter
+from datetime import datetime
+from tkinter import ttk, scrolledtext
+import tkinter as tk
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -7,14 +14,8 @@ Schwabot GUI Launcher
 Basic GUI interface for Schwabot trading system.
 """
 
-import tkinter as tk
-from tkinter import ttk, scrolledtext
-from datetime import datetime
 
 try:
-    from core.brain_trading_engine import BrainTradingEngine
-    from symbolic_profit_router import SymbolicProfitRouter
-    from core.clean_unified_math import CleanUnifiedMathSystem
 except ImportError as e:
     print(f"Import error: {e}")
 

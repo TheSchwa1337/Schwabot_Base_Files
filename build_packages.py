@@ -6,6 +6,8 @@ import platform
 import shutil
 import subprocess
 import sys
+import sys
+
 
 
 # Initialize Unicode handler
@@ -58,7 +60,7 @@ class PackageBuilder:
         print(f"📁 Build directory: {self.build_dir}")
         print(f"📦 Dist directory: {self.dist_dir}")
 
-    def clean_build(self) -> None:
+    def clean_build():-> None:
         """Clean build directories."""
         print("🧹 Cleaning build directories...")
 
@@ -82,7 +84,7 @@ class PackageBuilder:
 
         print("✅ Build directories cleaned")
 
-    def build_python_packages(self) -> None:
+    def build_python_packages():-> None:
         """Build Python wheel and source distribution."""
         print("🐍 Building Python packages...")
 
@@ -108,7 +110,7 @@ class PackageBuilder:
             print(f"❌ Failed to build Python packages: {e}")
             raise
 
-    def build_linux_packages(self) -> None:
+    def build_linux_packages():-> None:
         """Build Linux packages (.deb, .rpm, AppImage)."""
         print("🐧 Building Linux packages...")
 
@@ -123,7 +125,7 @@ class PackageBuilder:
 
         print("✅ Linux packages built successfully")
 
-    def _build_deb_package(self) -> None:
+    def _build_deb_package():-> None:
         """Build Debian package."""
         print("🐧 Building .deb package...")
 
@@ -163,7 +165,7 @@ Schwabot is a comprehensive trading system with mathematical precision,
         except (subprocess.CalledProcessError, FileNotFoundError) as e:
             print(f"❌ Could not build .deb package: {e}")
 
-    def _build_rpm_package(self) -> None:
+    def _build_rpm_package():-> None:
         """Build RPM package."""
         print("🐧 Building .rpm package...")
 
@@ -213,7 +215,7 @@ python3 -m pip uninstall -y {self.package_name}"""
         except (subprocess.CalledProcessError, FileNotFoundError) as e:
             print(f"❌ Could not build .rpm package: {e}")
 
-    def _build_appimage(self) -> None:
+    def _build_appimage():-> None:
         """Build AppImage package."""
         print("🐧 Building AppImage...")
 
@@ -262,7 +264,7 @@ Categories = Office;Finance;"""
         except (subprocess.CalledProcessError, FileNotFoundError) as e:
             print(f"❌ Could not build AppImage: {e}")
 
-    def build_windows_packages(self) -> None:
+    def build_windows_packages():-> None:
         """Build Windows packages (.exe, .msi)."""
         print("🪟 Building Windows packages...")
 
@@ -277,7 +279,7 @@ Categories = Office;Finance;"""
 
         print("✅ Windows packages built successfully")
 
-    def _build_windows_exe(self) -> None:
+    def _build_windows_exe():-> None:
         """Build Windows executable using PyInstaller."""
         print("🪟 Building .exe package...")
 
@@ -313,7 +315,7 @@ Categories = Office;Finance;"""
         except subprocess.CalledProcessError as e:
             print(f"❌ Could not build .exe package: {e}")
 
-    def _build_windows_msi(self) -> None:
+    def _build_windows_msi():-> None:
         """Build Windows MSI installer."""
         print("🪟 Building .msi package...")
 
@@ -325,7 +327,6 @@ Categories = Office;Finance;"""
 
             # Create setup script for cx_Freeze
             setup_cx_content = f"""from cx_Freeze import setup, Executable
-import sys
 
 build_exe_options = {{
     "packages": ["core", "ui", "config", "utils"],
@@ -365,7 +366,7 @@ setup(
         except subprocess.CalledProcessError as e:
             print(f"❌ Could not build .msi package: {e}")
 
-    def _build_windows_portable(self) -> None:
+    def _build_windows_portable():-> None:
         """Build Windows portable package."""
         print("🪟 Building portable package...")
 
@@ -412,7 +413,7 @@ pause"""
         except Exception as e:
             print(f"❌ Could not build portable package: {e}")
 
-    def build_macos_packages(self) -> None:
+    def build_macos_packages():-> None:
         """Build macOS packages (.dmg, .pkg, App bundle)."""
         print("🍎 Building macOS packages...")
 
@@ -427,7 +428,7 @@ pause"""
 
         print("✅ macOS packages built successfully")
 
-    def _build_macos_app(self) -> None:
+    def _build_macos_app():-> None:
         """Build macOS App bundle."""
         print("🍎 Building .app bundle...")
 
@@ -489,7 +490,7 @@ setup(
         except subprocess.CalledProcessError as e:
             print(f"❌ Could not build .app bundle: {e}")
 
-    def _build_macos_dmg(self) -> None:
+    def _build_macos_dmg():-> None:
         """Build macOS DMG package."""
         print("🍎 Building .dmg package...")
 
@@ -522,7 +523,7 @@ setup(
         except (subprocess.CalledProcessError, FileNotFoundError) as e:
             print(f"❌ Could not build .dmg package: {e}")
 
-    def _build_macos_pkg(self) -> None:
+    def _build_macos_pkg():-> None:
         """Build macOS PKG installer."""
         print("🍎 Building .pkg package...")
 
@@ -551,7 +552,7 @@ setup(
         except (subprocess.CalledProcessError, FileNotFoundError) as e:
             print(f"❌ Could not build .pkg package: {e}")
 
-    def build_docker_image(self) -> None:
+    def build_docker_image():-> None:
         """Build Docker image."""
         print("🐳 Building Docker image...")
 
@@ -612,7 +613,7 @@ CMD ["python", "run_schwabot.py"]
         except (subprocess.CalledProcessError, FileNotFoundError) as e:
             print(f"❌ Could not build Docker image: {e}")
 
-    def create_installer_scripts(self) -> None:
+    def create_installer_scripts():-> None:
         """Create platform-specific installer scripts."""
         print("�� Creating installer scripts...")
 
@@ -691,7 +692,7 @@ echo "Run 'schwabot' to start the system"
         macos_installer.chmod(0o755)
         print("✅ Installer scripts created")
 
-    def generate_package_summary(self) -> None:
+    def generate_package_summary():-> None:
         """Generate a summary of all built packages."""
         print("🔍 Generating package summary...")
 

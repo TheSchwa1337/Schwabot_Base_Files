@@ -1,10 +1,12 @@
-# -*- coding: utf - 8 -*-
-# -*- coding: utf - 8 -*-
-# -*- coding: utf - 8 -*-
-# -*- coding: utf - 8 -*-
+            from core.unified_math_system import unified_math
+            import numpy as np
+from core.unified_math_system import unified_math
+            import psutil
 from dual_unicore_handler import DualUnicoreHandler
 from pathlib import Path
 from typing import Dict, List, Any, Optional
+from utils.safe_print import safe_print, info, warn, error, success, debug
+from win32com.client import Dispatch
 import argparse
 import json
 import os
@@ -14,11 +16,15 @@ import subprocess
 import sys
 import tarfile
 import urllib.request
+import winshell
 import yaml
 import zipfile
 
-from core.unified_math_system import unified_math
-from utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+
 
 
 # Initialize Unicode handler
@@ -98,7 +104,7 @@ timestamp = subprocess.run(["date"], capture_output=True, text=True).stdout.stri
         safe_print(f"  {message}")
 
 
-def check_system_requirements(self) -> bool:
+def check_system_requirements():-> bool:
     """Function implementation pending."""
 
 
@@ -126,7 +132,6 @@ self.unified_math.log(
 
 # Check available memory
 try:
-            import psutil
 memory = psutil.virtual_memory()
             memory_gb = memory.total / (1024**3)
             if memory_gb < 4:
@@ -158,7 +163,7 @@ try:
 
 return True
 
-def create_directories(self) -> bool:
+def create_directories():-> bool:
     """Function implementation pending."""
 pass
 """
@@ -190,7 +195,7 @@ except Exception as e:
             self.errors.append(f"Directory creation failed: {e}")
             return False
 
-def install_python_package(self, package_path: Optional[str] = None) -> bool:
+def install_python_package():-> bool:
     """Function implementation pending."""
 pass
 """
@@ -232,7 +237,7 @@ except subprocess.CalledProcessError as e:
             self.errors.append(f"Package installation failed: {e}")
             return False
 
-def install_platform_package(self, package_path: str) -> bool:
+def install_platform_package():-> bool:
     """Function implementation pending."""
 pass
 """
@@ -263,7 +268,7 @@ except Exception as e:
             self.errors.append(f"Platform installation failed: {e}")
             return False
 
-def _install_linux_package(self, package_path: str) -> bool:
+def _install_linux_package():-> bool:
     """Function implementation pending."""
 pass
 """
@@ -297,7 +302,7 @@ else:
 
 return True
 
-def _install_windows_package(self, package_path: str) -> bool:
+def _install_windows_package():-> bool:
     """Function implementation pending."""
 pass
 """
@@ -330,7 +335,7 @@ else:
 
 return True
 
-def _install_macos_package(self, package_path: str) -> bool:
+def _install_macos_package():-> bool:
     """Function implementation pending."""
 pass
 """
@@ -372,7 +377,7 @@ else:
 
 return True
 
-def setup_configuration(self) -> bool:
+def setup_configuration():-> bool:
     """Function implementation pending."""
 pass
 """
@@ -452,7 +457,7 @@ except Exception as e:
             self.errors.append(f"Configuration setup failed: {e}")
             return False
 
-def setup_launcher_scripts(self) -> bool:
+def setup_launcher_scripts():-> bool:
     """Function implementation pending."""
 pass
 """
@@ -544,7 +549,7 @@ except Exception as e:
             self.errors.append(f"Launcher script creation failed: {e}")
             return False
 
-def setup_desktop_integration(self) -> bool:
+def setup_desktop_integration():-> bool:
     """Function implementation pending."""
 pass
 """
@@ -580,8 +585,6 @@ self.log("\\u2705 Desktop entry created")
 
 elif self.platform == "windows":
 # Create Start Menu shortcut
-import winshell
-from win32com.client import Dispatch
 
 start_menu = winshell.start_menu()
                 programs = os.path.join(start_menu, "Programs")
@@ -607,7 +610,7 @@ except Exception as e:
 # Not critical, continue installation
             return True
 
-def validate_installation(self) -> bool:
+def validate_installation():-> bool:
     """Function implementation pending."""
 pass
 """
@@ -664,7 +667,7 @@ except Exception as e:
             self.errors.append(f"Installation validation failed: {e}")
             return False
 
-def create_uninstaller(self) -> bool:
+def create_uninstaller():-> bool:
         """
         Optimize mathematical function for trading performance.
 
@@ -677,8 +680,6 @@ def create_uninstaller(self) -> bool:
             Optimized result
         """
         try:
-            import numpy as np
-            from core.unified_math_system import unified_math
 
             # Apply mathematical optimization
             if target is not None:
@@ -761,7 +762,7 @@ except Exception as e:
             self.unified_math.log(f"\\u26a0\\ufe0f  Uninstaller creation failed: {e}", "WARNING")
             return True  # Not critical
 
-def save_installation_log(self) -> None:
+def save_installation_log():-> None:
     """Function implementation pending."""
 pass
 """
@@ -776,7 +777,7 @@ log_file = self.install_dir / "install.log"
 
 self.unified_math.log(f"\\u1f4cb Installation log saved: {log_file}")
 
-def print_summary(self) -> None:
+def print_summary():-> None:
     """Function implementation pending."""
 pass
 """

@@ -1,3 +1,12 @@
+        import traceback
+        import traceback
+        import traceback
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Dict, List, Optional, Callable
+import sys
+import time
+
 #!/usr/bin/env python3
 """
 Standalone VMM Test
@@ -7,11 +16,6 @@ Completely standalone test for the Vitruvian Man Management system
 that includes all necessary code without external dependencies.
 """
 
-import sys
-import time
-from enum import Enum
-from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Callable
 
 # Mathematical constants
 PHI = 1.618033988749895  # Golden ratio
@@ -99,7 +103,7 @@ class VitruvianManager:
         for zone in VitruvianZone:
             self.current_state.zone_activations[zone] = False
 
-    def _calculate_phi_center(self, price: float, rsi: float) -> float:
+    def _calculate_phi_center():-> float:
         """Calculate phi center (ZPLS integration point)."""
         # ZPLS = Zero-Point Logic Stack centered at navel
         base_center = 5.0 / 8.0  # 0.625 (navel position)
@@ -126,7 +130,7 @@ class VitruvianManager:
             self.current_state.phi_center
         )
 
-    def _calculate_ncco_state(self, price: float, rsi: float, entropy: float) -> float:
+    def _calculate_ncco_state():-> float:
         """Calculate NCCO state based on market data."""
         # NCCO = Network Control and Coordination Orchestrator
         price_factor = (price % 100000) / 100000
@@ -136,25 +140,25 @@ class VitruvianManager:
         ncco_state = price_factor * 0.4 + rsi_factor * 0.3 + entropy_factor * 0.3
         return ncco_state
 
-    def _calculate_sfs_state(self, entropy: float, echo_strength: float) -> float:
+    def _calculate_sfs_state():-> float:
         """Calculate SFS (Sequential Fractal Stack) state."""
         # SFS = Sequential Fractal Stack
         sfs_state = entropy * echo_strength * PHI
         return sfs_state
 
-    def _calculate_ufs_state(self, drift_score: float) -> float:
+    def _calculate_ufs_state():-> float:
         """Calculate UFS (Unified Fault System) state."""
         # UFS = Unified Fault System
         ufs_state = 1.0 - abs(drift_score)  # Invert drift for stability
         return max(0.0, min(1.0, ufs_state))
 
-    def _calculate_zpls_state(self, phi_center: float) -> float:
+    def _calculate_zpls_state():-> float:
         """Calculate ZPLS (Zero-Point Logic Stack) state."""
         # ZPLS = Zero-Point Logic Stack
         zpls_state = phi_center * PHI
         return zpls_state
 
-    def _calculate_rbms_state(self) -> float:
+    def _calculate_rbms_state():-> float:
         """Calculate RBMS (Recursive Binary Matrix Strategy) state."""
         # RBMS = Recursive Binary Matrix Strategy
         limb_sum = sum(abs(pos) for pos in self.current_state.limb_positions.values())
@@ -200,15 +204,7 @@ class VitruvianManager:
         else:
             self.current_state.zone_activations[VitruvianZone.HALO_PEAK] = True
 
-    def update_state(
-        self,
-        price: float,
-        rsi: float,
-        volume: float,
-        entropy: float,
-        echo_strength: float,
-        drift_score: float,
-    ) -> VitruvianState:
+    def update_state():-> VitruvianState:
         """Update the complete Vitruvian state."""
         # Update timestamp
         self.current_state.timestamp = time.time()
@@ -248,9 +244,7 @@ class VitruvianManager:
 
         return self.current_state
 
-    def get_optimal_trading_route(
-        self, price: float, rsi: float, volume: float
-    ) -> dict:
+    def get_optimal_trading_route():-> dict:
         """Get optimal trading route based on Vitruvian analysis."""
         # Determine action based on RSI and volume
         if rsi < 30 and volume > 500000:
@@ -293,7 +287,7 @@ class VitruvianManager:
         """Register a callback for trigger events."""
         self.trigger_callbacks.append(callback)
 
-    def get_statistics(self) -> dict:
+    def get_statistics():-> dict:
         """Get comprehensive system statistics."""
         return {
             "total_triggers": len(self.trigger_history),
@@ -328,7 +322,7 @@ class VitruvianManager:
 _vmm_manager: Optional[VitruvianManager] = None
 
 
-def get_vitruvian_manager() -> VitruvianManager:
+def get_vitruvian_manager():-> VitruvianManager:
     """Get the global VMM manager instance."""
     global _vmm_manager
     if _vmm_manager is None:
@@ -336,26 +330,19 @@ def get_vitruvian_manager() -> VitruvianManager:
     return _vmm_manager
 
 
-def update_vitruvian_state(
-    price: float,
-    rsi: float,
-    volume: float,
-    entropy: float,
-    echo_strength: float,
-    drift_score: float,
-) -> VitruvianState:
+def update_vitruvian_state():-> VitruvianState:
     """Update the global VMM state."""
     vmm = get_vitruvian_manager()
     return vmm.update_state(price, rsi, volume, entropy, echo_strength, drift_score)
 
 
-def get_optimal_trading_route(price: float, rsi: float, volume: float) -> dict:
+def get_optimal_trading_route():-> dict:
     """Get optimal trading route from global VMM manager."""
     vmm = get_vitruvian_manager()
     return vmm.get_optimal_trading_route(price, rsi, volume)
 
 
-def get_vitruvian_statistics() -> dict:
+def get_vitruvian_statistics():-> dict:
     """Get statistics from global VMM manager."""
     vmm = get_vitruvian_manager()
     return vmm.get_statistics()
@@ -432,7 +419,6 @@ def test_vmm_basic():
 
     except Exception as e:
         print(f"❌ VMM basic test failed: {e}")
-        import traceback
 
         traceback.print_exc()
         return False
@@ -480,7 +466,6 @@ def test_mathematical_integration():
 
     except Exception as e:
         print(f"❌ Mathematical integration test failed: {e}")
-        import traceback
 
         traceback.print_exc()
         return False
@@ -519,7 +504,6 @@ def test_vitruvian_calculations():
 
     except Exception as e:
         print(f"❌ Vitruvian calculations test failed: {e}")
-        import traceback
 
         traceback.print_exc()
         return False

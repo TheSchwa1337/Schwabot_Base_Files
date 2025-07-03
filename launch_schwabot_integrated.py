@@ -1,3 +1,18 @@
+        import math
+            from core.chrono_resonance_weather_mapper import (
+            from core.data_pipeline_visualizer import (
+            from core.enhanced_profit_trading_strategy import (
+            from core.secure_api_coordinator import SecureAPICoordinator
+            import random
+        from core.chrono_resonance_weather_mapper import WeatherDataPoint
+        from core.data_pipeline_visualizer import DataCategory
+        from core.schwabot_integrated_launcher import SchwabotIntegratedLauncher
+        from datetime import datetime, timedelta
+        import random
+        import random
+import logging
+import sys
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """Schwabot Integrated Launcher Demo - Complete System Demonstration.
@@ -13,8 +28,6 @@ Usage:
     python launch_schwabot_integrated.py
 """
 
-import sys
-import logging
 
 # Set up logging
 logging.basicConfig(
@@ -89,7 +102,6 @@ def create_demo_launcher():
     try:
         # Try to import and initialize API coordinator
         try:
-            from core.secure_api_coordinator import SecureAPICoordinator
 
             components["api_coordinator"] = SecureAPICoordinator()
             logger.info("✅ Secure API Coordinator initialized")
@@ -98,7 +110,6 @@ def create_demo_launcher():
 
         # Try to import and initialize data pipeline visualizer
         try:
-            from core.data_pipeline_visualizer import (
                 DataPipelineVisualizer,
                 DataCategory,
                 DataTier,
@@ -111,7 +122,6 @@ def create_demo_launcher():
 
         # Try to import and initialize CRWM
         try:
-            from core.chrono_resonance_weather_mapper import (
                 ChronoResonanceWeatherMapper,
             )
 
@@ -122,7 +132,6 @@ def create_demo_launcher():
 
         # Try to import profit optimization
         try:
-            from core.enhanced_profit_trading_strategy import (
                 EnhancedProfitTradingStrategy,
             )
 
@@ -157,8 +166,6 @@ def run_demo_without_ui(components):
         pipeline = components["data_pipeline"]
 
         # Add some demo data
-        from core.data_pipeline_visualizer import DataCategory
-        import random
 
         for i in range(10):
             category = random.choice(list(DataCategory))
@@ -177,10 +184,6 @@ def run_demo_without_ui(components):
         crwm = components["crwm_mapper"]
 
         # Add demo weather data
-        from core.chrono_resonance_weather_mapper import WeatherDataPoint
-        from datetime import datetime, timedelta
-        import random
-        import math
 
         base_time = datetime.now() - timedelta(hours=2)
         for i in range(10):
@@ -228,7 +231,6 @@ def run_demo_without_ui(components):
         # Run demo analysis
         try:
             # Simulate market data
-            import random
 
             demo_market_data = {
                 "btc_price": 45000 + random.uniform(-1000, 1000),
@@ -254,7 +256,6 @@ def run_ui_demo(components):
 
     try:
         # Try to run the main integrated launcher
-        from core.schwabot_integrated_launcher import SchwabotIntegratedLauncher
 
         print("🚀 Starting Schwabot Integrated Control Center...")
         launcher = SchwabotIntegratedLauncher()

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 # -*- coding: utf - 8 -*-
 """Profit cycle allocator for basket distribution.""""""
 """"""
@@ -16,10 +18,9 @@
 # -*- coding: utf - 8 -*-
 # -*- coding: utf - 8 -*-
 
-from __future__ import annotations
 
 
-def allocate(phi: float, alphas: list[float]) -> np.ndarray:"""
+def allocate():-> np.ndarray:"""
     """Split entry weight across baskets proportionally."
 
 Compute allocation: alloc_i = \\u03b1_i\\u00b7\\u03a6 / \\u03a3\\u03b1

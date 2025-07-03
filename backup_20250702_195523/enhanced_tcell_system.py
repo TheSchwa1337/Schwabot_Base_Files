@@ -1,3 +1,16 @@
+import numpy as np
+from collections import deque
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, List
+from typing import Callable
+from typing import Tuple
+import hashlib
+import inspect
+import logging
+import random
+import time
+
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 
@@ -18,19 +31,7 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
 """
-import logging
-import random
-import time
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Any, Dict, List
 
-import numpy as np
-from collections import deque
-from typing import Tuple
-from typing import Callable
-import hashlib
-import inspect
 
 
 
@@ -56,7 +57,7 @@ timestamp: float
 confidence: float  # Signal confidence level
 metadata: Dict[str, Any] = field(default_factory = dict)
 
-def is_valid(self) -> bool:Check if signal is within valid parameters.return (
+def is_valid():-> bool:Check if signal is within valid parameters.return (
 0.0 <= self.strength <= 1.0
             and 0.0 <= self.confidence <= 1.0
 and self.timestamp > 0
@@ -104,9 +105,7 @@ self.threshold_adjustment_rate = 0.01
 
             logger.info(🧬 Enhanced T-Cell Validator initialized)
 
-def validate_signals(:
-self, signals: List[EnhancedTCellSignal]
-) -> Tuple[bool, float, Dict[str, Any]]:Validate multiple immune signals using enhanced T-cell logic.Args:
+def validate_signals():-> Tuple[bool, float, Dict[str, Any]]:Validate multiple immune signals using enhanced T-cell logic.Args:
             signals: List of enhanced immune signals to validate
 
 Returns:
@@ -155,7 +154,7 @@ analysis_data = {total_score: total_score,normalized_score: normalized_score,ave
 
         return activation, normalized_score, analysis_data
 
-def _store_signal_pattern(self, signals: List[EnhancedTCellSignal]) -> None:Store signal pattern for analysis and learning.pattern_hash = self._calculate_pattern_hash(signals)
+def _store_signal_pattern():-> None:Store signal pattern for analysis and learning.pattern_hash = self._calculate_pattern_hash(signals)
 signal_types = [s.signal_type for s in signals]
         avg_strength = np.mean([s.strength for s in signals]) if signals else 0.0
 
@@ -179,14 +178,12 @@ self.signal_history.append(
 }
 )
 
-def _calculate_pattern_hash(self, signals: List[EnhancedTCellSignal]) -> str:"Calculate hash for signal pattern.signal_info = [(s.signal_type.value, round(s.strength, 3)) for s in signals]
+def _calculate_pattern_hash():-> str:"Calculate hash for signal pattern.signal_info = [(s.signal_type.value, round(s.strength, 3)) for s in signals]
         signal_info.sort()  # Sort for consistent hashing
         pattern_str = str(signal_info)
         return hashlib.md5(pattern_str.encode()).hexdigest()[:8]
 
-def update_performance_feedback(:
-self, pattern_hash: str, was_successful: bool
-) -> None:Update performance feedback for signal patterns.Args:
+def update_performance_feedback():-> None:Update performance feedback for signal patterns.Args:
             pattern_hash: Hash of the signal pattern
 was_successful: Whether the operation was successfulif pattern_hash in self.signal_patterns: pattern = self.signal_patterns[pattern_hash]
 
@@ -204,7 +201,7 @@ else:
                 # This would be updated based on actual operation outcome
 pass
 
-def adjust_threshold() -> None:
+def adjust_threshold():-> None:
         Adjust activation threshold based on recent performance.Args:
             recent_success_rate: Recent success rate(0.0 to 1.0)# Adjust threshold based on success rate
         if recent_success_rate < 0.5:  # Too many failures
@@ -218,7 +215,7 @@ elif recent_success_rate > 0.8:  # Good performance
 
             logger.debug(f🧬 T-Cell threshold adjusted to: {self.adaptive_threshold:.3f})
 
-def get_signal_statistics(self) -> Dict[str, Any]:Get comprehensive signal statistics.return {total_validations: self.total_validations,successful_validations": self.successful_validations,success_rate": self.successful_validations
+def get_signal_statistics():-> Dict[str, Any]:Get comprehensive signal statistics.return {total_validations: self.total_validations,successful_validations": self.successful_validations,success_rate": self.successful_validations
 / max(1, self.total_validations),adaptive_threshold": self.adaptive_threshold,pattern_count": len(self.signal_patterns),signal_history_size": len(self.signal_history),recent_patterns": [{hash: pattern.pattern_hash,types": [t.value for t in pattern.signal_combination],success_rate": pattern.success_rate,occurrence_count": pattern.occurrence_count,
 }
 # Last 10 patterns
@@ -234,9 +231,7 @@ self.risk_patterns: Dict[str, float] = {}
 
             logger.info(🧬 Enhanced Signal Generator initialized)
 
-def generate_comprehensive_signals(:
-self, operation: Callable, args: tuple, kwargs: dict
-) -> List[EnhancedTCellSignal]:"Generate comprehensive immune signals for T-Cell validation.Args:
+def generate_comprehensive_signals():-> List[EnhancedTCellSignal]:"Generate comprehensive immune signals for T-Cell validation.Args:
             operation: Function to execute
 args: Operation arguments
 kwargs: Operation keyword arguments
@@ -371,9 +366,7 @@ metadata={risk_score: risk_strength,risk_factors: self._assess_risk_factors(oper
 
         return signals
 
-def _calculate_primary_signal_strength(:
-self, operation: Callable, args: tuple, kwargs: dict
-) -> float:Calculate enhanced primary signal strength.operation_name = getattr(operation, __name__,unknown)
+def _calculate_primary_signal_strength():-> float:Calculate enhanced primary signal strength.operation_name = getattr(operation, __name__,unknown)
 
 # Base complexity
 complexity = (
@@ -394,9 +387,7 @@ base_strength * (0.5 + historical_factor * 0.5) * (1.0 - risk_factor * 0.3)
 
         return max(0.1, min(1.0, adjusted_strength))
 
-def _calculate_inhibitory_signal_strength(:
-self, operation: Callable, args: tuple, kwargs: dict
-) -> float:
+def _calculate_inhibitory_signal_strength():-> float:
         Calculate inhibitory signal strength (CRITICAL FIX).operation_name = getattr(operation, __name__,unknown)
 
 # Check for known problematic patterns
@@ -432,9 +423,7 @@ if recent_failures > 2:
 
         return min(1.0, inhibitory_strength)
 
-def _calculate_memory_signal_strength(:
-self, operation: Callable, args: tuple, kwargs: dict
-) -> float:
+def _calculate_memory_signal_strength():-> float:
         Calculate enhanced memory signal strength.operation_name = getattr(operation, __name__,unknown)operation_pattern = f{operation_name}_{len(args)}_{len(kwargs)}
 
 # Check antibody patterns
@@ -448,9 +437,7 @@ if similar_patterns:
 
         return 0.0
 
-def _calculate_contextual_signal_strength(:
-self, operation: Callable, args: tuple, kwargs: dict
-) -> float:Calculate contextual signal strength.# System load factor
+def _calculate_contextual_signal_strength():-> float:Calculate contextual signal strength.# System load factor
 system_load = len(self.immune_handler.error_history) / 1000.0  # Normalized
 
 # Time-based factors
@@ -463,9 +450,7 @@ frequency_factor = self._get_operation_frequency(operation_name)
 
         return min(1.0, (system_load + time_factor + frequency_factor) / 3.0)
 
-def _calculate_risk_assessment_signal_strength(:
-self, operation: Callable, args: tuple, kwargs: dict
-) -> float:Calculate risk assessment signal strength.risk_factors = self._assess_risk_factors(operation, args, kwargs)
+def _calculate_risk_assessment_signal_strength():-> float:Calculate risk assessment signal strength.risk_factors = self._assess_risk_factors(operation, args, kwargs)
 
 # Combine risk factors
 total_risk = sum(risk_factors.values())
@@ -473,9 +458,7 @@ total_risk = sum(risk_factors.values())
 
         return normalized_risk
 
-def _identify_risk_factors(:
-self, operation: Callable, args: tuple, kwargs: dict
-) -> Dict[str, float]:Identify risk factors for the operation.risk_factors = {}
+def _identify_risk_factors():-> Dict[str, float]:Identify risk factors for the operation.risk_factors = {}
 
 # Argument type risks
 for i, arg in enumerate(args):
@@ -497,12 +480,12 @@ if len(args) + len(kwargs) > 15:
 
         return risk_factors
 
-def _get_historical_success_rate() -> float:Get historical success rate for operation.if operation_name in self.operation_history: history = self.operation_history[operation_name]
+def _get_historical_success_rate():-> float:Get historical success rate for operation.if operation_name in self.operation_history: history = self.operation_history[operation_name]
 total = history.get(total, 0)successful = history.get(successful, 0)
         return successful / max(1, total)
         return 0.5  # Neutral rate for unknown operations
 
-def _get_recent_failures() -> int:
+def _get_recent_failures():-> int:
         Get recent failure count for operation.recent_errors = [e
 for e in self.immune_handler.error_history:
 if e.get(operation) == operation_name:
@@ -516,7 +499,7 @@ for key, value in self.immune_handler.antibody_patterns.items():
 similar_patterns.append(value)
         return similar_patterns
 
-def _get_operation_frequency() -> float:
+def _get_operation_frequency():-> float:
         Get operation frequency factor.recent_operations = [e
 for e in self.immune_handler.error_history:
 if e.get(operation) == operation_name:
@@ -524,14 +507,10 @@ and time.time() - e.get(timestamp, 0) < 300
 ]  # Last 5 minutes
         return min(1.0, len(recent_operations) / 10.0)
 
-def _assess_risk_factors(:
-self, operation: Callable, args: tuple, kwargs: dict
-) -> Dict[str, float]:Assess comprehensive risk factors.return {complexity_risk: min(1.0, (len(args) + len(kwargs)) / 20.0),system_entropy_risk: self.immune_handler.system_entropy,error_rate_risk": self.immune_handler.current_error_rate,health_risk": 1.0 - self.immune_handler.mitochondrial_health,pattern_risk": self._get_pattern_risk(operation, args, kwargs),
+def _assess_risk_factors():-> Dict[str, float]:Assess comprehensive risk factors.return {complexity_risk: min(1.0, (len(args) + len(kwargs)) / 20.0),system_entropy_risk: self.immune_handler.system_entropy,error_rate_risk": self.immune_handler.current_error_rate,health_risk": 1.0 - self.immune_handler.mitochondrial_health,pattern_risk": self._get_pattern_risk(operation, args, kwargs),
 }
 
-def _get_pattern_risk(:
-self, operation: Callable, args: tuple, kwargs: dict
-) -> float:"Get pattern-based risk.operation_name = getattr(operation, __name__,unknown)operation_pattern = f{operation_name}_{len(args)}_{len(kwargs)}
+def _get_pattern_risk():-> float:"Get pattern-based risk.operation_name = getattr(operation, __name__,unknown)operation_pattern = f{operation_name}_{len(args)}_{len(kwargs)}
 
 if operation_pattern in self.immune_handler.antibody_patterns:
             return self.immune_handler.antibody_patterns[operation_pattern].get(rejection_strength, 0.0
@@ -539,32 +518,24 @@ if operation_pattern in self.immune_handler.antibody_patterns:
 
         return 0.0
 
-def _calculate_complexity_score(:
-self, operation: Callable, args: tuple, kwargs: dict
-) -> float:Calculate operation complexity score.return min(
+def _calculate_complexity_score():-> float:Calculate operation complexity score.return min(
 1.0,
 (len(args) + len(kwargs) + len(inspect.signature(operation).parameters))
 / 20.0,
 )
 
-def _analyze_operation_context(:
-self, operation: Callable, args: tuple, kwargs: dict
-) -> Dict[str, Any]:Analyze operation context.return {timestamp: time.time(),system_health": self.immune_handler.mitochondrial_health,error_rate": self.immune_handler.current_error_rate,entropy": self.immune_handler.system_entropy,
+def _analyze_operation_context():-> Dict[str, Any]:Analyze operation context.return {timestamp: time.time(),system_health": self.immune_handler.mitochondrial_health,error_rate": self.immune_handler.current_error_rate,entropy": self.immune_handler.system_entropy,
 }
 
-def _get_environmental_conditions(self) -> Dict[str, Any]:"Get environmental conditions.return {total_operations: self.immune_handler.total_operations,successful_operations": self.immune_handler.successful_operations,blocked_operations": self.immune_handler.blocked_operations,
+def _get_environmental_conditions():-> Dict[str, Any]:"Get environmental conditions.return {total_operations: self.immune_handler.total_operations,successful_operations": self.immune_handler.successful_operations,blocked_operations": self.immune_handler.blocked_operations,
 }
 
 def _get_operation_history(self, operation_name: str): -> Dict[str, Any]:"Get operation history.return self.operation_history.get(operation_name, {})
 
-def _assess_operation_risk(:
-self, operation: Callable, args: tuple, kwargs: dict
-) -> float:Assess overall operation risk.risk_factors = self._assess_risk_factors(operation, args, kwargs)
+def _assess_operation_risk():-> float:Assess overall operation risk.risk_factors = self._assess_risk_factors(operation, args, kwargs)
         return sum(risk_factors.values()) / len(risk_factors)
 
-def update_operation_history(:
-self, operation_name: str, was_successful: bool
-) -> None:Update operation history.if operation_name not in self.operation_history:
+def update_operation_history():-> None:Update operation history.if operation_name not in self.operation_history:
             self.operation_history[operation_name] = {total: 0,successful": 0}
 
 history = self.operation_history[operation_name]

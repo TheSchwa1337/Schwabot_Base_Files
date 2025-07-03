@@ -8,6 +8,7 @@ import re
 import sys
 
 
+
 # Initialize Unicode handler
 unicore = DualUnicoreHandler()
 
@@ -149,7 +150,7 @@ self.math_functions = {
             'eigenvectors(': 'unified_math.eigenvectors(',
             'svd(': 'unified_math.svd(',
 
-def find_python_files(self) -> List[Path]:"""
+def find_python_files():-> List[Path]:"""
         """Find all Python files in the codebase.""""""
 """"""
 """"""
@@ -177,7 +178,7 @@ self.python_files = filtered_files
         info(f"Found {len(self.python_files)} Python files to process")
         return filtered_files
 
-def scan_for_math_usage(self, file_path: Path) -> Dict[str, List[str]]:
+def scan_for_math_usage():-> Dict[str, List[str]]:
     """Function implementation pending."""
 pass
 """
@@ -217,7 +218,7 @@ except Exception as e:
             self.errors.append(f"Error scanning {file_path}: {e}")
             return {'imports': [], 'functions': [], 'lines': []}
 
-def refactor_file(self, file_path: Path) -> bool:
+def refactor_file():-> bool:
     """Function implementation pending."""
 pass
 """
@@ -263,7 +264,7 @@ except Exception as e: """
 self.errors.append(f"Error refactoring {file_path}: {e}")
             return False
 
-def _add_unified_math_import(self, content: str) -> str:
+def _add_unified_math_import():-> str:
     """Function implementation pending."""
 pass
 """
@@ -288,7 +289,7 @@ import_line = 'from core.unified_math_system import unified_math'
 
 return '\n'.join(lines)
 
-def run_refactor(self) -> None:
+def run_refactor():-> None:
     """Function implementation pending."""
 pass
 """
@@ -375,3 +376,4 @@ refactor = MathLogicRefactor()
 if __name__ == '__main__':
     main()
 """
+))))))))))))))))))))))))))))))))))))))))))))))))))))

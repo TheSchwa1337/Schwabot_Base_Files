@@ -1,3 +1,19 @@
+import numpy as np
+from core.fallback_logic import FallbackLogic, FallbackType
+from core.ferris_rde import FerrisRDE, FerrisPhase
+from core.fractal_core import FractalCore, FractalType, FractalState
+from core.glyph_vm import GlyphVM, GlyphType, GlyphState
+from core.matrix_fault_resolver import MatrixFaultResolver
+from core.matrix_map_logic import MatrixMapLogic, MatrixType, LogicHashType
+from core.profit_cycle_allocator import ProfitCycleAllocator
+from core.strategy_mapper import StrategyMapper, StrategyType
+from core.wallet_tracker import WalletTracker, AssetType, PositionType
+from typing import Dict, Any
+import logging
+import os
+import sys
+import time
+
 #!/usr/bin/env python3
 """
 Schwabot v0.05 Test Suite
@@ -7,26 +23,11 @@ Comprehensive test suite for Schwabot v0.05 modules.
 Tests all core functionality and integration.
 """
 
-import sys
-import os
-import time
-import logging
-import numpy as np
-from typing import Dict, Any
 
 # Add schwabot to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "schwabot"))
 
 # Import all Schwabot modules
-from core.strategy_mapper import StrategyMapper, StrategyType
-from core.ferris_rde import FerrisRDE, FerrisPhase
-from core.profit_cycle_allocator import ProfitCycleAllocator
-from core.wallet_tracker import WalletTracker, AssetType, PositionType
-from core.fallback_logic import FallbackLogic, FallbackType
-from core.glyph_vm import GlyphVM, GlyphType, GlyphState
-from core.matrix_map_logic import MatrixMapLogic, MatrixType, LogicHashType
-from core.fractal_core import FractalCore, FractalType, FractalState
-from core.matrix_fault_resolver import MatrixFaultResolver
 
 # Configure logging
 logging.basicConfig(
@@ -56,7 +57,7 @@ class SchwabotV05Tester:
 
         logger.info("🚀 Schwabot v0.05 Test Suite initialized")
 
-    def run_all_tests(self) -> Dict[str, Any]:
+    def run_all_tests():-> Dict[str, Any]:
         """Run all tests and return results."""
         logger.info("Starting comprehensive Schwabot v0.05 tests...")
 
@@ -104,7 +105,7 @@ class SchwabotV05Tester:
         logger.info(f"🎯 Test Summary: {passed_tests}/{total_tests} tests passed")
         return summary
 
-    def test_strategy_mapper(self) -> Dict[str, Any]:
+    def test_strategy_mapper():-> Dict[str, Any]:
         """Test strategy mapper functionality."""
         try:
             # Test strategy creation
@@ -139,7 +140,7 @@ class SchwabotV05Tester:
         except Exception as e:
             return {"status": "FAILED", "error": str(e), "details": {}}
 
-    def test_ferris_rde(self) -> Dict[str, Any]:
+    def test_ferris_rde():-> Dict[str, Any]:
         """Test Ferris RDE functionality."""
         try:
             # Test cycle creation
@@ -185,7 +186,7 @@ class SchwabotV05Tester:
         except Exception as e:
             return {"status": "FAILED", "error": str(e), "details": {}}
 
-    def test_profit_allocator(self) -> Dict[str, Any]:
+    def test_profit_allocator():-> Dict[str, Any]:
         """Test profit cycle allocator functionality."""
         try:
             # Test cycle creation
@@ -214,7 +215,7 @@ class SchwabotV05Tester:
         except Exception as e:
             return {"status": "FAILED", "error": str(e), "details": {}}
 
-    def test_wallet_tracker(self) -> Dict[str, Any]:
+    def test_wallet_tracker():-> Dict[str, Any]:
         """Test wallet tracker functionality."""
         try:
             # Test position creation
@@ -251,7 +252,7 @@ class SchwabotV05Tester:
         except Exception as e:
             return {"status": "FAILED", "error": str(e), "details": {}}
 
-    def test_fallback_logic(self) -> Dict[str, Any]:
+    def test_fallback_logic():-> Dict[str, Any]:
         """Test fallback logic functionality."""
         try:
             # Test stall detection
@@ -286,7 +287,7 @@ class SchwabotV05Tester:
         except Exception as e:
             return {"status": "FAILED", "error": str(e), "details": {}}
 
-    def test_glyph_vm(self) -> Dict[str, Any]:
+    def test_glyph_vm():-> Dict[str, Any]:
         """Test glyph VM functionality."""
         try:
             # Test glyph creation
@@ -319,7 +320,7 @@ class SchwabotV05Tester:
         except Exception as e:
             return {"status": "FAILED", "error": str(e), "details": {}}
 
-    def test_matrix_logic(self) -> Dict[str, Any]:
+    def test_matrix_logic():-> Dict[str, Any]:
         """Test matrix map logic functionality."""
         try:
             # Test matrix creation
@@ -361,7 +362,7 @@ class SchwabotV05Tester:
         except Exception as e:
             return {"status": "FAILED", "error": str(e), "details": {}}
 
-    def test_fractal_core(self) -> Dict[str, Any]:
+    def test_fractal_core():-> Dict[str, Any]:
         """Test fractal core functionality."""
         try:
             # Test fractal creation
@@ -391,7 +392,7 @@ class SchwabotV05Tester:
         except Exception as e:
             return {"status": "FAILED", "error": str(e), "details": {}}
 
-    def test_fault_resolver(self) -> Dict[str, Any]:
+    def test_fault_resolver():-> Dict[str, Any]:
         """Test matrix fault resolver functionality."""
         try:
             # Test matrix health analysis
@@ -426,7 +427,7 @@ class SchwabotV05Tester:
         except Exception as e:
             return {"status": "FAILED", "error": str(e), "details": {}}
 
-    def test_integration(self) -> Dict[str, Any]:
+    def test_integration():-> Dict[str, Any]:
         """Test integration between modules."""
         try:
             # Simulate a complete trading cycle

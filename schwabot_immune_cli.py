@@ -1,3 +1,22 @@
+import numpy as np
+                    import threading
+                import http.server
+                import random
+                import socketserver
+            from core.biological_immune_error_handler import (
+from core.biological_immune_error_handler import ImmuneZone, immune_protected
+from core.enhanced_master_cycle_engine import EnhancedMasterCycleEngine
+from pathlib import Path
+from server.immune_diagnostic_websocket import ImmuneDiagnosticWebSocketServer
+from typing import Dict, Any
+import argparse
+import asyncio
+import logging
+import signal
+import sys
+import time
+import webbrowser
+
 #!/usr/bin/env python3
 """Schwabot Biological Immune System CLI.
 
@@ -13,19 +32,6 @@ Features:
 - Production deployment tools
 """
 
-import numpy as np
-from server.immune_diagnostic_websocket import ImmuneDiagnosticWebSocketServer
-from core.biological_immune_error_handler import ImmuneZone, immune_protected
-from core.enhanced_master_cycle_engine import EnhancedMasterCycleEngine
-from pathlib import Path
-from typing import Dict, Any
-import argparse
-import asyncio
-import logging
-import signal
-import sys
-import time
-import webbrowser
 
 
 # Add project root to path
@@ -54,7 +60,7 @@ class SchwabotImmuneCLI:
         print("🧬 Schwabot Biological Immune System CLI")
         print("=" * 60)
 
-    async def initialize_systems(self) -> bool:
+    async def initialize_systems():-> bool:
         """Initialize all immune system components."""
         try:
             print("🧬 Initializing Biological Immune System...")
@@ -73,7 +79,7 @@ class SchwabotImmuneCLI:
             print(f"🚨 Initialization failed: {e}")
             return False
 
-    async def run_comprehensive_test(self) -> None:
+    async def run_comprehensive_test():-> None:
         """Run comprehensive immune system test suite."""
         print("\n🧬 Running Comprehensive Immune System Test Suite")
         print("=" * 60)
@@ -116,14 +122,14 @@ class SchwabotImmuneCLI:
         print("\n🧬 Comprehensive Test Suite Complete")
         self._print_system_status()
 
-    async def _test_basic_immune_protection(self) -> Dict[str, Any]:
+    async def _test_basic_immune_protection():-> Dict[str, Any]:
         """Test basic immune protection functionality."""
         results = {"passed": 0, "failed": 0, "details": []}
 
         try:
             # Test normal operation
             @immune_protected(self.immune_handler)
-            def normal_operation(x: float) -> float:
+            def normal_operation():-> float:
                 return x * 2.0
 
             result = normal_operation(5.0)
@@ -136,7 +142,7 @@ class SchwabotImmuneCLI:
 
             # Test error handling
             @immune_protected(self.immune_handler)
-            def error_operation() -> None:
+            def error_operation():-> None:
                 raise ValueError("Test error")
 
             result = error_operation()
@@ -153,12 +159,11 @@ class SchwabotImmuneCLI:
 
         return results
 
-    async def _test_tcell_validation(self) -> Dict[str, Any]:
+    async def _test_tcell_validation():-> Dict[str, Any]:
         """Test T-Cell validation system."""
         results = {"passed": 0, "failed": 0, "details": []}
 
         try:
-            from core.biological_immune_error_handler import (
                 TCellSignal,
                 ImmuneSignalType,
                 TCellValidator,
@@ -215,7 +220,7 @@ class SchwabotImmuneCLI:
 
         return results
 
-    async def _test_neural_gateway(self) -> Dict[str, Any]:
+    async def _test_neural_gateway():-> Dict[str, Any]:
         """Test neural gateway protection."""
         results = {"passed": 0, "failed": 0, "details": []}
 
@@ -273,7 +278,7 @@ class SchwabotImmuneCLI:
 
         return results
 
-    async def _test_swarm_consensus(self) -> Dict[str, Any]:
+    async def _test_swarm_consensus():-> Dict[str, Any]:
         """Test swarm consensus validation."""
         results = {"passed": 0, "failed": 0, "details": []}
 
@@ -323,7 +328,7 @@ class SchwabotImmuneCLI:
 
         return results
 
-    async def _test_zone_response(self) -> Dict[str, Any]:
+    async def _test_zone_response():-> Dict[str, Any]:
         """Test zone-based response system."""
         results = {"passed": 0, "failed": 0, "details": []}
 
@@ -375,7 +380,7 @@ class SchwabotImmuneCLI:
 
         return results
 
-    async def _test_error_recovery(self) -> Dict[str, Any]:
+    async def _test_error_recovery():-> Dict[str, Any]:
         """Test error recovery and antibody formation."""
         results = {"passed": 0, "failed": 0, "details": []}
 
@@ -437,7 +442,7 @@ class SchwabotImmuneCLI:
 
         return results
 
-    async def _test_market_simulation(self) -> Dict[str, Any]:
+    async def _test_market_simulation():-> Dict[str, Any]:
         """Test market simulation with immune response."""
         results = {"passed": 0, "failed": 0, "details": []}
 
@@ -506,7 +511,7 @@ class SchwabotImmuneCLI:
 
         return results
 
-    def _print_test_results(self, test_name: str, results: Dict[str, Any]) -> None:
+    def _print_test_results():-> None:
         """Print formatted test results."""
         total_tests = results["passed"] + results["failed"]
         success_rate = (results["passed"] / total_tests * 100) if total_tests > 0 else 0
@@ -517,7 +522,7 @@ class SchwabotImmuneCLI:
         for detail in results["details"]:
             print(f"     {detail}")
 
-    def _print_system_status(self) -> None:
+    def _print_system_status():-> None:
         """Print current system status."""
         print("\n🧬 Current System Status:")
         print("-" * 30)
@@ -534,7 +539,7 @@ class SchwabotImmuneCLI:
         print(f"   Success Rate: {status['performance_metrics']['success_rate']:.3f}")
         print(f"   Antibody Patterns: {status['antibody_patterns']}")
 
-    async def start_monitoring_dashboard(self) -> None:
+    async def start_monitoring_dashboard():-> None:
         """Start the real-time monitoring dashboard."""
         print("\n🖥️ Starting Real-Time Monitoring Dashboard...")
 
@@ -551,8 +556,6 @@ class SchwabotImmuneCLI:
             # Try to open in default browser
             try:
                 # Create a simple HTTP server for the dashboard
-                import http.server
-                import socketserver
 
                 class DashboardHandler(http.server.SimpleHTTPRequestHandler):
                     def do_GET(self):
@@ -576,7 +579,6 @@ class SchwabotImmuneCLI:
                     print(f"📊 Opening dashboard at: {dashboard_http_url}")
 
                     # Start HTTP server in background
-                    import threading
 
                     server_thread = threading.Thread(target=httpd.serve_forever)
                     server_thread.daemon = True
@@ -608,7 +610,7 @@ class SchwabotImmuneCLI:
         except Exception as e:
             print(f"🚨 Failed to start dashboard: {e}")
 
-    async def run_stress_test(self) -> None:
+    async def run_stress_test():-> None:
         """Run stress test to validate immune system under load."""
         print("\n🔥 Running Immune System Stress Test...")
         print("=" * 60)
@@ -624,7 +626,6 @@ class SchwabotImmuneCLI:
             # Create various error scenarios
             @immune_protected(self.immune_handler)
             def random_operation(operation_type: str):
-                import random
 
                 if operation_type == "normal":
                     return random.uniform(0, 100)
@@ -691,7 +692,7 @@ class SchwabotImmuneCLI:
         except Exception as e:
             print(f"🚨 Stress test exception: {e}")
 
-    async def demonstrate_immune_scenarios(self) -> None:
+    async def demonstrate_immune_scenarios():-> None:
         """Demonstrate various immune system scenarios."""
         print("\n🎭 Demonstrating Immune System Scenarios...")
         print("=" * 60)
@@ -712,7 +713,7 @@ class SchwabotImmuneCLI:
             except Exception as e:
                 print(f"   🚨 Scenario error: {e}")
 
-    async def _demo_healthy_system(self) -> None:
+    async def _demo_healthy_system():-> None:
         """Demonstrate healthy system operation."""
         # Reset to healthy state
         self.immune_handler.mitochondrial_health = 1.0
@@ -736,7 +737,7 @@ class SchwabotImmuneCLI:
         print(f"   Zone: {status['system_health']['current_zone']}")
         print(f"   Health: {status['system_health']['mitochondrial_health']:.3f}")
 
-    async def _demo_alert_condition(self) -> None:
+    async def _demo_alert_condition():-> None:
         """Demonstrate alert condition."""
         # Set alert conditions
         self.immune_handler.system_entropy = 0.5
@@ -765,7 +766,7 @@ class SchwabotImmuneCLI:
             f"   Gateway State: {status['immune_components']['neural_gateway_state']}"
         )
 
-    async def _demo_toxic_environment(self) -> None:
+    async def _demo_toxic_environment():-> None:
         """Demonstrate toxic environment response."""
         # Set toxic conditions
         self.immune_handler.system_entropy = 0.8
@@ -793,7 +794,7 @@ class SchwabotImmuneCLI:
                 status['system_health']['mitochondrial_health']:.3f}"
         )
 
-    async def _demo_quarantine_mode(self) -> None:
+    async def _demo_quarantine_mode():-> None:
         """Demonstrate quarantine mode."""
         # Set quarantine conditions
         self.immune_handler.system_entropy = 0.9
@@ -818,7 +819,7 @@ class SchwabotImmuneCLI:
         print(f"   Zone: {status['system_health']['current_zone']}")
         print("   All operations should be quarantined")
 
-    async def _demo_recovery_phase(self) -> None:
+    async def _demo_recovery_phase():-> None:
         """Demonstrate recovery phase."""
         # Trigger recovery
         await self.immune_handler._check_mitochondrial_drift()
@@ -850,7 +851,7 @@ class SchwabotImmuneCLI:
             f"   Health Recovery: {status['system_health']['mitochondrial_health']:.3f}"
         )
 
-    def setup_signal_handlers(self) -> None:
+    def setup_signal_handlers():-> None:
         """Setup signal handlers for graceful shutdown."""
 
         def signal_handler(signum, frame):
@@ -861,7 +862,7 @@ class SchwabotImmuneCLI:
         signal.signal(signal.SIGINT, signal_handler)
         signal.signal(signal.SIGTERM, signal_handler)
 
-    async def main_menu(self) -> None:
+    async def main_menu():-> None:
         """Display main menu and handle user input."""
         self.setup_signal_handlers()
         self.running = True
@@ -912,7 +913,7 @@ class SchwabotImmuneCLI:
             except Exception as e:
                 print(f"🚨 Menu error: {e}")
 
-    async def reset_immune_system(self) -> None:
+    async def reset_immune_system():-> None:
         """Reset immune system to healthy state."""
         print("🔄 Resetting Immune System...")
 
@@ -933,7 +934,7 @@ class SchwabotImmuneCLI:
         print("✅ Immune system reset to healthy state")
         self._print_system_status()
 
-    async def trigger_emergency_scenario(self) -> None:
+    async def trigger_emergency_scenario():-> None:
         """Trigger emergency scenario for testing."""
         print("🚨 Triggering Emergency Scenario...")
 

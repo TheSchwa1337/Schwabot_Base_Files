@@ -1,3 +1,6 @@
+from core.bit_phase_sequencer import BitPhase, BitSequence
+from core.dual_error_handler import PhaseState, SickType, SickState
+from core.symbolic_profit_router import ProfitTier, FlipBias, SymbolicState
 from dual_unicore_handler import DualUnicoreHandler
 from pathlib import Path
 from safe_print import safe_print, info, warn, error, success
@@ -6,9 +9,7 @@ import os
 import re
 import sys
 
-from core.bit_phase_sequencer import BitPhase, BitSequence
-from core.dual_error_handler import PhaseState, SickType, SickState
-from core.symbolic_profit_router import ProfitTier, FlipBias, SymbolicState
+
 
 
 # Initialize Unicode handler
@@ -106,7 +107,7 @@ r'[\\u2013\\u2014""''\\u2026\\u2022\\u25e6\\u25aa\\u25ab\\u25ac\\u25ad\\u25ae\\u
 # Combined Unicode pattern
 self.unicode_regex = re.compile('|'.join(self.unicode_patterns))
 
-def find_python_files(self) -> List[Path]:
+def find_python_files():-> List[Path]:
         """Find all Python files in the codebase.""""""
 """"""
 """"""
@@ -134,7 +135,7 @@ self.python_files = filtered_files
         info(f"Found {len(self.python_files)} Python files to process")
         return filtered_files
 
-def contains_unicode(self, text: str) -> bool:
+def contains_unicode():-> bool:
     """Function implementation pending."""
 pass
 """
@@ -145,7 +146,7 @@ pass
 """
 return bool(self.unicode_regex.search(text))
 
-def refactor_file(self, file_path: Path) -> bool:"""
+def refactor_file():-> bool:"""
     """Function implementation pending."""
 pass
 """
@@ -200,7 +201,7 @@ except Exception as e:"""
 self.errors.append(f"Error refactoring {file_path}: {e}")
             return False
 
-def _add_safe_print_import(self, content: str) -> str:
+def _add_safe_print_import():-> str:
     """Function implementation pending."""
 pass
 """
@@ -225,7 +226,7 @@ import_line = 'from utils.safe_print import safe_print, info, warn, error, succe
 
 return '\n'.join(lines)
 
-def scan_for_unicode_prints(self, file_path: Path) -> List[str]:
+def scan_for_unicode_prints():-> List[str]:
     """Function implementation pending."""
 pass
 """
@@ -252,7 +253,7 @@ except Exception as e:"""
 self.errors.append(f"Error scanning {file_path}: {e}")
             return []
 
-def run_refactor(self) -> None:
+def run_refactor():-> None:
     """Function implementation pending."""
 pass
 """

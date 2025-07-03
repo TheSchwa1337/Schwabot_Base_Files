@@ -1,3 +1,10 @@
+        from core.api_bridge import APIBridge
+        from core.dualistic_thought_engines import DualisticThoughtEngines
+        from core.dualistic_thought_engines import DualisticThoughtEngines
+        from core.hash_relay_system import hash_relay_system
+        from core.hash_relay_system import hash_relay_system
+import time
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -7,7 +14,6 @@ Simple System Test - Core Functionality Verification
 Quick test to verify core system components are working.
 """
 
-import time
 
 
 def test_core_imports():
@@ -34,7 +40,6 @@ def test_api_bridge_basic():
     print("\nTesting API Bridge basic functionality...")
 
     try:
-        from core.api_bridge import APIBridge
 
         bridge = APIBridge(sandbox=True)
         print("✓ API Bridge initialized")
@@ -54,7 +59,6 @@ def test_dualistic_engines_basic():
     print("\nTesting Dualistic Thought Engines basic functionality...")
 
     try:
-        from core.dualistic_thought_engines import DualisticThoughtEngines
 
         engines = DualisticThoughtEngines()
         print("✓ Dualistic Thought Engines initialized")
@@ -93,7 +97,6 @@ def test_hash_relay_basic():
     print("\nTesting Hash Relay System basic functionality...")
 
     try:
-        from core.hash_relay_system import hash_relay_system
 
         # Test subscription
         relay_received = []
@@ -133,8 +136,6 @@ def test_integration_basic():
     print("\nTesting basic integration...")
 
     try:
-        from core.dualistic_thought_engines import DualisticThoughtEngines
-        from core.hash_relay_system import hash_relay_system
 
         # Track relay events
         relay_events = []

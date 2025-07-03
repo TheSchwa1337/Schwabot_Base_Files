@@ -1,14 +1,15 @@
+from core.phase_bit_integration import (
+import hashlib
+
 #!/usr/bin/env python3
 """Test Phase-Bit Integration System."""
 
-from core.phase_bit_integration import (
     PhaseBitIntegration,
     FerrisPhase,
     resolve_bit_phases,
     process_hash_with_phase,
     get_phase_optimized_strategy,
 )
-import hashlib
 
 
 def test_phase_bit_integration():

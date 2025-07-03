@@ -1,10 +1,26 @@
+import numpy as np
+import numpy as np
+import pandas as pd
+import scipy.linalg as la
+from pathlib import Path
+from pathlib import Path
+from pathlib import Path
+from typing import Dict, List, Optional, Any
+from typing import Dict, List, Optional, Any
+from typing import List, Tuple, Optional, Union
+import asyncio
+import json
+import json
+import logging
+import os
+import yaml
+
 #!/usr/bin/env python3
 """
 Critical files implementation - focuses on the most important files first.
 Implements proper functionality while preserving mathematical logic.
 """
 
-from pathlib import Path
 
 
 def implement_strategy_loader():
@@ -14,13 +30,6 @@ def implement_strategy_loader():
 Strategy Loader - Core component for loading and managing trading strategies.
 """
 
-import os
-import json
-import yaml
-from pathlib import Path
-from typing import Dict, List, Optional, Any
-import numpy as np
-import pandas as pd
 
 
 class StrategyLoader:
@@ -36,7 +45,7 @@ class StrategyLoader:
         self.strategies = {}
         self.loaded_strategies = {}
 
-    def load_strategy(self, strategy_name: str) -> Dict[str, Any]:
+    def load_strategy():-> Dict[str, Any]:
         """Load a specific strategy by name.
 
         Args:
@@ -57,7 +66,7 @@ class StrategyLoader:
         except Exception as e:
             raise RuntimeError(f"Failed to load strategy {strategy_name}: {e}")
 
-    def load_all_strategies(self) -> Dict[str, Dict[str, Any]]:
+    def load_all_strategies():-> Dict[str, Dict[str, Any]]:
         """Load all available strategies.
 
         Returns:
@@ -71,7 +80,7 @@ class StrategyLoader:
         except Exception as e:
             raise RuntimeError(f"Failed to load all strategies: {e}")
 
-    def validate_strategy(self, strategy: Dict[str, Any]) -> bool:
+    def validate_strategy():-> bool:
         """Validate strategy configuration.
 
         Args:
@@ -83,7 +92,7 @@ class StrategyLoader:
         required_fields = ['name', 'type', 'parameters']
         return all(field in strategy for field in required_fields)
 
-    def get_strategy_parameters(self, strategy_name: str) -> Dict[str, Any]:
+    def get_strategy_parameters():-> Dict[str, Any]:
         """Get parameters for a specific strategy.
 
         Args:
@@ -96,7 +105,7 @@ class StrategyLoader:
             self.load_strategy(strategy_name)
         return self.loaded_strategies[strategy_name].get('parameters', {})
 
-    def list_available_strategies(self) -> List[str]:
+    def list_available_strategies():-> List[str]:
         """List all available strategy files.
 
         Returns:
@@ -133,15 +142,12 @@ def implement_matrix_mapper():
 Matrix Mapper - Core mathematical component for matrix operations and mapping.
 """
 
-import numpy as np
-from typing import List, Tuple, Optional, Union
-import scipy.linalg as la
 
 
 class MatrixMapper:
     """Handles matrix operations and transformations for trading algorithms."""
 
-    def __init__(self, dimensions: Tuple[int, int] = (3, 3)):
+    def __init__():):
         """Initialize matrix mapper.
 
         Args:
@@ -151,7 +157,7 @@ class MatrixMapper:
         self.matrix = np.zeros(dimensions)
         self.mapping_cache = {}
 
-    def create_identity_matrix(self, size: int) -> np.ndarray:
+    def create_identity_matrix():-> np.ndarray:
         """Create identity matrix of specified size.
 
         Args:
@@ -162,8 +168,7 @@ class MatrixMapper:
         """
         return np.eye(size)
 
-    def create_transformation_matrix(self, rotation: float = 0.0,
-                                   scale: float = 1.0) -> np.ndarray:
+    def create_transformation_matrix():-> np.ndarray:
         """Create 2D transformation matrix.
 
         Args:
@@ -181,8 +186,7 @@ class MatrixMapper:
             [scale * sin_r, scale * cos_r]
         ])
 
-    def apply_transformation(self, data: np.ndarray,
-                           transformation: np.ndarray) -> np.ndarray:
+    def apply_transformation():-> np.ndarray:
         """Apply transformation matrix to data.
 
         Args:
@@ -194,7 +198,7 @@ class MatrixMapper:
         """
         return np.dot(data, transformation.T)
 
-    def calculate_eigenvalues(self, matrix: np.ndarray) -> np.ndarray:
+    def calculate_eigenvalues():-> np.ndarray:
         """Calculate eigenvalues of a matrix.
 
         Args:
@@ -205,7 +209,7 @@ class MatrixMapper:
         """
         return la.eigvals(matrix)
 
-    def calculate_eigenvectors(self, matrix: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+    def calculate_eigenvectors():-> Tuple[np.ndarray, np.ndarray]:
         """Calculate eigenvalues and eigenvectors of a matrix.
 
         Args:
@@ -216,7 +220,7 @@ class MatrixMapper:
         """
         return la.eig(matrix)
 
-    def matrix_inverse(self, matrix: np.ndarray) -> np.ndarray:
+    def matrix_inverse():-> np.ndarray:
         """Calculate matrix inverse.
 
         Args:
@@ -227,7 +231,7 @@ class MatrixMapper:
         """
         return la.inv(matrix)
 
-    def matrix_determinant(self, matrix: np.ndarray) -> float:
+    def matrix_determinant():-> float:
         """Calculate matrix determinant.
 
         Args:
@@ -238,7 +242,7 @@ class MatrixMapper:
         """
         return la.det(matrix)
 
-    def solve_linear_system(self, A: np.ndarray, b: np.ndarray) -> np.ndarray:
+    def solve_linear_system():-> np.ndarray:
         """Solve linear system Ax = b.
 
         Args:
@@ -250,7 +254,7 @@ class MatrixMapper:
         """
         return la.solve(A, b)
 
-    def normalize_matrix(self, matrix: np.ndarray) -> np.ndarray:
+    def normalize_matrix():-> np.ndarray:
         """Normalize matrix to unit norm.
 
         Args:
@@ -295,11 +299,6 @@ def implement_integration_orchestrator():
 Integration Orchestrator - Coordinates system integration and communication.
 """
 
-import asyncio
-import logging
-from typing import Dict, List, Optional, Any
-from pathlib import Path
-import json
 
 
 class IntegrationOrchestrator:
@@ -316,7 +315,7 @@ class IntegrationOrchestrator:
         self.active_integrations = {}
         self.logger = logging.getLogger(__name__)
 
-    def load_config(self) -> Dict[str, Any]:
+    def load_config():-> Dict[str, Any]:
         """Load integration configuration.
 
         Returns:
@@ -332,7 +331,7 @@ class IntegrationOrchestrator:
             self.logger.error(f"Failed to load config: {e}")
             return self.get_default_config()
 
-    def get_default_config(self) -> Dict[str, Any]:
+    def get_default_config():-> Dict[str, Any]:
         """Get default configuration.
 
         Returns:
@@ -350,7 +349,7 @@ class IntegrationOrchestrator:
                 "log_level": "INFO"
 }
 }
-    async def start_integration(self, integration_name: str) -> bool:
+    async def start_integration():-> bool:
         """Start a specific integration.
 
         Args:
@@ -403,7 +402,7 @@ class IntegrationOrchestrator:
         self.logger.info(f"Initializing messaging integration: {name}")
         await asyncio.sleep(0.1)  # Simulate initialization
 
-    async def stop_integration(self, integration_name: str) -> bool:
+    async def stop_integration():-> bool:
         """Stop a specific integration.
 
         Args:
@@ -422,7 +421,7 @@ class IntegrationOrchestrator:
             self.logger.error(f"Failed to stop integration {integration_name}: {e}")
             return False
 
-    def get_active_integrations(self) -> List[str]:
+    def get_active_integrations():-> List[str]:
         """Get list of active integrations.
 
         Returns:
@@ -430,7 +429,7 @@ class IntegrationOrchestrator:
         """
         return list(self.active_integrations.keys())
 
-    def get_integration_status(self, integration_name: str) -> Dict[str, Any]:
+    def get_integration_status():-> Dict[str, Any]:
         """Get status of a specific integration.
 
         Args:

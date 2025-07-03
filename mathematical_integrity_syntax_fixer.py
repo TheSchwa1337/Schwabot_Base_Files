@@ -1,3 +1,9 @@
+from pathlib import Path
+from typing import List, Dict
+import re
+import subprocess
+import sys
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -13,11 +19,6 @@ Key Features:
 - Ensures trading strategy integrity
 """
 
-import re
-import subprocess
-import sys
-from pathlib import Path
-from typing import List, Dict
 
 
 class MathematicalIntegritySyntaxFixer:
@@ -54,14 +55,14 @@ class MathematicalIntegritySyntaxFixer:
             "f_string_issues": self._fix_f_string_issues,
         }
 
-    def is_mathematical_line(self, line: str) -> bool:
+    def is_mathematical_line():-> bool:
         """Check if a line contains mathematical content that should be preserved."""
         for pattern in self.math_patterns + self.trading_patterns:
             if re.search(pattern, line, re.IGNORECASE):
                 return True
         return False
 
-    def _fix_indentation(self, content: str) -> str:
+    def _fix_indentation():-> str:
         """Fix indentation errors while preserving mathematical structure."""
         lines = content.split("\n")
         fixed_lines = []
@@ -95,7 +96,7 @@ class MathematicalIntegritySyntaxFixer:
 
         return "\n".join(fixed_lines)
 
-    def _fix_unterminated_strings(self, content: str) -> str:
+    def _fix_unterminated_strings():-> str:
         """Fix unterminated strings while preserving mathematical expressions."""
         lines = content.split("\n")
         fixed_lines = []
@@ -154,7 +155,7 @@ class MathematicalIntegritySyntaxFixer:
 
         return "\n".join(fixed_lines)
 
-    def _fix_missing_colons(self, content: str) -> str:
+    def _fix_missing_colons():-> str:
         """Fix missing colons in function definitions."""
         lines = content.split("\n")
         fixed_lines = []
@@ -188,7 +189,7 @@ class MathematicalIntegritySyntaxFixer:
 
         return "\n".join(fixed_lines)
 
-    def _fix_malformed_docstrings(self, content: str) -> str:
+    def _fix_malformed_docstrings():-> str:
         """Fix malformed docstrings while preserving mathematical content."""
         # Fix quadruple quotes
         content = content.replace('""""', '"""')
@@ -232,7 +233,7 @@ class MathematicalIntegritySyntaxFixer:
 
         return "\n".join(fixed_lines)
 
-    def _fix_import_errors(self, content: str) -> str:
+    def _fix_import_errors():-> str:
         """Fix import statement errors."""
         lines = content.split("\n")
         fixed_lines = []
@@ -256,7 +257,7 @@ class MathematicalIntegritySyntaxFixer:
 
         return "\n".join(fixed_lines)
 
-    def _fix_f_string_issues(self, content: str) -> str:
+    def _fix_f_string_issues():-> str:
         """Fix f-string syntax issues while preserving mathematical expressions."""
         lines = content.split("\n")
         fixed_lines = []
@@ -282,7 +283,7 @@ class MathematicalIntegritySyntaxFixer:
 
         return "\n".join(fixed_lines)
 
-    def fix_file(self, file_path: str) -> bool:
+    def fix_file():-> bool:
         """Fix syntax errors in a file while preserving mathematical integrity."""
         try:
             with open(file_path, "r", encoding="utf-8") as f:
@@ -306,7 +307,7 @@ class MathematicalIntegritySyntaxFixer:
             print(f"Error fixing {file_path}: {e}")
             return False
 
-    def check_syntax_error(self, file_path: str) -> List[str]:
+    def check_syntax_error():-> List[str]:
         """Check for syntax errors in a file."""
         try:
             result = subprocess.run(
@@ -322,7 +323,7 @@ class MathematicalIntegritySyntaxFixer:
         except Exception as e:
             return [str(e)]
 
-    def fix_all_files(self) -> Dict[str, int]:
+    def fix_all_files():-> Dict[str, int]:
         """Fix all Python files in the core directory."""
         core_dir = Path("core")
         python_files = list(core_dir.rglob("*.py"))

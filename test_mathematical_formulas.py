@@ -1,3 +1,11 @@
+    from advanced_mathematical_core import (
+import numpy as np
+        import traceback
+    from constants import (
+    from type_defs import QuantumState, Temperature, Vector, Matrix, Tensor
+import os
+import sys
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -6,15 +14,11 @@ Comprehensive Mathematical Formulas Test
 Tests all mathematical formulas from the MATHEMATICAL_FORMULAS_REFERENCE.md
 """
 
-import numpy as np
-import sys
-import os
 
 # Add the core directory to the path
 sys.path.append(os.path.join(os.path.dirname(__file__), "core"))
 
 try:
-    from advanced_mathematical_core import (
         safe_delta_calculation,
         normalized_delta_tanh,
         shannon_entropy_stable,
@@ -23,8 +27,6 @@ try:
         stable_activation_matrix,
         robust_matrix_inverse,
     )
-    from type_defs import QuantumState, Temperature, Vector, Matrix, Tensor
-    from constants import (
         EPSILON_FLOAT64,
         THERMAL_CONDUCTIVITY_BTC,
         REDUCED_PLANCK,
@@ -560,7 +562,6 @@ def main():
 
     except Exception as e:
         print(f"\n❌ Test failed with error: {e}")
-        import traceback
 
         traceback.print_exc()
         return 1
@@ -570,3 +571,4 @@ def main():
 
 if __name__ == "__main__":
     exit(main())
+))))))

@@ -1,3 +1,17 @@
+import numpy as np
+from .hardware_acceleration_manager import HardwareAccelerationManager
+from .pure_profit_calculator import (
+from .zbe_core import ZBECore
+from .zpe_core import ZPECore
+from collections import deque
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Dict, List, Optional, Any, Callable, Union
+import logging
+import psutil
+import threading
+import time
+
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 
@@ -31,17 +45,7 @@ This module implements the separation-of-concerns framework from ZPE_Acceleratio
 GUARANTEE: ZPE/ZBE only affect execution time T, NEVER profit P.
 
 
-import logging
-import time
-import threading
-import numpy as np
-from typing import Dict, List, Optional, Any, Callable, Union
-from dataclasses import dataclass, field
-from enum import Enum
-import psutil
-from collections import deque
 
-from .pure_profit_calculator import (
     PureProfitCalculator,
     MarketData,
     HistoryState,
@@ -49,9 +53,6 @@ from .pure_profit_calculator import (
     ProfitResult,
     assert_zpe_isolation,
 )
-from .hardware_acceleration_manager import HardwareAccelerationManager
-from .zpe_core import ZPECore
-from .zbe_core import ZBECore
 
 logger = logging.getLogger(__name__)
 
@@ -124,7 +125,7 @@ class EnhancedAccelerationIntegration:
         # Validate ZPE isolation on startup
         self._validate_zpe_isolation()
 
-    def _validate_zpe_isolation(self) -> None:Validate ZPE/ZBE isolation from profit calculations.try:
+    def _validate_zpe_isolation():-> None:Validate ZPE/ZBE isolation from profit calculations.try:
             assert_zpe_isolation()
             logger.info(✅ ZPE isolation validation passed)
         except Exception as e:
@@ -132,7 +133,7 @@ class EnhancedAccelerationIntegration:
             if not self.safe_mode:
                 raise
 
-    def set_acceleration_mode(self, mode: AccelerationMode) -> None:Set acceleration mode with safety validation.try: old_mode = self.acceleration_mode
+    def set_acceleration_mode():-> None:Set acceleration mode with safety validation.try: old_mode = self.acceleration_mode
             self.acceleration_mode = mode
 
             # Apply mode-specific configurations
@@ -156,9 +157,7 @@ class EnhancedAccelerationIntegration:
         except Exception as e:
             logger.error(❌ Failed to set acceleration mode: %s, e)
 
-    def calculate_acceleration_factors(
-        self, market_conditions: Dict[str, Any], mathematical_state: Optional[Dict[str, Any]] = None
-    ) -> AccelerationFactors:Calculate pure acceleration factors WITHOUT affecting profit calculations.
+    def calculate_acceleration_factors():-> AccelerationFactors:Calculate pure acceleration factors WITHOUT affecting profit calculations.
 
         Implements: T = T₀/α where α = f_ZPE(thermal) × f_ZBE(memory)
         try: timestamp = time.time()
@@ -242,12 +241,7 @@ class EnhancedAccelerationIntegration:
                 speedup_ratio=1.0,
             )
 
-    def compute_profit_with_acceleration(
-        self,
-        market_data: MarketData,
-        history_state: HistoryState,
-        calculation_mode: str =  balanced,
-    ) -> Tuple[ProfitResult, AccelerationFactors]:
+    def compute_profit_with_acceleration():-> Tuple[ProfitResult, AccelerationFactors]:
 
         Compute profit with acceleration - MATHEMATICAL PURITY GUARANTEED.
 
@@ -301,12 +295,7 @@ class EnhancedAccelerationIntegration:
             logger.error(❌ Accelerated profit computation failed: %s, e)
             raise
 
-    def optimize_tensor_computation(
-        self,
-        tensor_operation: Callable[[], Any],
-        complexity: float,
-        operation_type: str = general,
-    ) -> Tuple[Any, float]:Optimize tensor computation with acceleration.
+    def optimize_tensor_computation():-> Tuple[Any, float]:Optimize tensor computation with acceleration.
 
         This function accelerates tensor operations WITHOUT changing results.try:
             if not self.acceleration_enabled or not self.current_acceleration:
@@ -346,14 +335,14 @@ class EnhancedAccelerationIntegration:
             # Return unoptimized result
             return tensor_operation(), 0.001
 
-    def _dummy_computation(self) -> float:
+    def _dummy_computation():-> float:
         Dummy computation for baseline timing.# Simple mathematical operation for timing baseline
         x = np.random.rand(100, 100)
         y = np.random.rand(100, 100)
         result = np.dot(x, y)
         return np.sum(result)
 
-    def _update_performance_metrics(self, acceleration_factors: AccelerationFactors) -> None:
+    def _update_performance_metrics():-> None:
         Update performance tracking metrics.try: metrics = self.performance_metrics
 
             metrics.total_computations += 1
@@ -377,7 +366,7 @@ class EnhancedAccelerationIntegration:
             logger.error(❌ Performance metrics update failed: %s, e)
             self.performance_metrics.error_count += 1
 
-    def get_performance_report(self) -> Dict[str, Any]:Get comprehensive performance report.try: metrics = self.performance_metrics
+    def get_performance_report():-> Dict[str, Any]:Get comprehensive performance report.try: metrics = self.performance_metrics
 
             if metrics.total_computations == 0:
                 return {status: no_data,message:No computations recorded}
@@ -406,7 +395,7 @@ class EnhancedAccelerationIntegration:
             logger.error(❌ Performance report generation failed: %s", e)
             return {status:error,message: f"Report generation failed: {e}}
 
-    def run_purity_validation_suite(self) -> Dict[str, bool]:Run comprehensive purity validation suite.
+    def run_purity_validation_suite():-> Dict[str, bool]:Run comprehensive purity validation suite.
 
         This validates that acceleration never affects profit calculations.try: validation_results = {}
 
@@ -481,13 +470,13 @@ class EnhancedAccelerationIntegration:
             logger.error(❌ Purity validation suite failed: %s, e)
             return {overall_validation: False,error: str(e)}
 
-    def enable_acceleration(self) -> None:Enable acceleration systems.self.acceleration_enabled = True
+    def enable_acceleration():-> None:Enable acceleration systems.self.acceleration_enabled = True
         logger.info(🚀 Acceleration enabled)
 
-    def disable_acceleration(self) -> None:Disable acceleration systems for baseline operation.self.acceleration_enabled = False
+    def disable_acceleration():-> None:Disable acceleration systems for baseline operation.self.acceleration_enabled = False
         logger.info(⏸️ Acceleration disabled - baseline mode)
 
-    def reset_performance_metrics(self) -> None:Reset performance tracking metrics.self.performance_metrics = PerformanceMetrics()
+    def reset_performance_metrics():-> None:Reset performance tracking metrics.self.performance_metrics = PerformanceMetrics()
         self.acceleration_history.clear()
         logger.info(🔄 Performance metrics reset)
 

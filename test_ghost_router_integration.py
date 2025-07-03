@@ -1,3 +1,17 @@
+        import traceback
+    from core.coldbase_balt_system import (
+    from core.dualistic_thought_engines import (
+    from core.dualistic_thought_engines import ThoughtState
+    from core.ferris_rde_core import ferris_rde_core
+    from core.ghost_router import GhostRouter, RouterInput
+    from core.lantern_core import enhanced_lantern_core
+    from core.recursive_lattice_theorem import (
+from typing import Any
+import json
+import os
+import sys
+import time
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -24,11 +38,6 @@ Tests cover:
 - Complete cross-asset trading pipeline
 """
 
-import sys
-import os
-import time
-import json
-from typing import Any
 
 # Add core to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "core"))
@@ -41,7 +50,7 @@ def print_banner(text: str, char: str = "="):
     print(char * 80)
 
 
-def format_results(data: Any) -> str:
+def format_results():-> str:
     """Format results as readable text."""
     if isinstance(data, dict):
         return json.dumps(data, indent=2, default=str)
@@ -50,13 +59,10 @@ def format_results(data: Any) -> str:
 
 # Import all required components
 try:
-    from core.ghost_router import GhostRouter, RouterInput
-    from core.coldbase_balt_system import (
         coldbase_balt,
         store_balt_pattern,
         retest_balt_pattern,
     )
-    from core.dualistic_thought_engines import (
         dualistic_thought_core,
         process_dualistic_thought,
         ALEPHEngine,
@@ -64,12 +70,9 @@ try:
         RITLEngine,
         RITTLEEngine,
     )
-    from core.recursive_lattice_theorem import (
         recursive_lattice,
         process_recursive_cycle,
     )
-    from core.lantern_core import enhanced_lantern_core
-    from core.ferris_rde_core import ferris_rde_core
 
     INTEGRATION_AVAILABLE = True
 except ImportError as e:
@@ -251,7 +254,6 @@ def test_dualistic_thought_engines():
     print("✴️ Testing ALEPH Engine:")
     aleph_engine = ALEPHEngine()
 
-    from core.dualistic_thought_engines import ThoughtState
 
     test_state = ThoughtState(
         glyph="profit_signal",
@@ -597,7 +599,6 @@ def main():
 
     except Exception as e:
         print(f"\n❌ Test suite failed: {e}")
-        import traceback
 
         traceback.print_exc()
 

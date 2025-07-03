@@ -1,3 +1,9 @@
+from datetime import datetime
+from pathlib import Path
+import json
+import subprocess
+import sys
+
 #!/usr/bin/env python3
 """
 Final Flake8 Validation Script
@@ -7,11 +13,6 @@ This script provides a comprehensive final validation of flake8 compliance
 across the entire Schwabot codebase and summarizes the complete elimination strategy.
 """
 
-import subprocess
-import sys
-from pathlib import Path
-from datetime import datetime
-import json
 
 
 def run_flake8_validation():

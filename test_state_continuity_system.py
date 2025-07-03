@@ -1,3 +1,15 @@
+import numpy as np
+        from core.dynamic_handoff_orchestrator import DynamicHandoffOrchestrator
+        from core.internal_state.fileization_manager import FileizationManager
+        from core.internal_state.state_continuity_manager import (
+        from core.internal_state.state_continuity_manager import (
+        from core.internal_state.state_continuity_manager import StateType
+        from core.internal_state.visualizer_integration import VisualizerIntegration
+        import subprocess
+import logging
+import sys
+import time
+
 #!/usr/bin/env python3
 """
 State Continuity System Test
@@ -11,10 +23,6 @@ Comprehensive test of the internal state management system, including:
 - Lint compliance validation
 """
 
-import sys
-import time
-import logging
-import numpy as np
 
 # Configure logging
 logging.basicConfig(
@@ -29,7 +37,6 @@ def test_state_continuity_manager():
     print("=" * 50)
 
     try:
-        from core.internal_state.state_continuity_manager import (
             StateContinuityManager,
             StateType,
         )
@@ -86,7 +93,6 @@ def test_fileization_manager():
     print("=" * 50)
 
     try:
-        from core.internal_state.fileization_manager import FileizationManager
 
         # Create manager
         manager = FileizationManager()
@@ -137,8 +143,6 @@ def test_visualizer_integration():
     print("=" * 50)
 
     try:
-        from core.internal_state.visualizer_integration import VisualizerIntegration
-        from core.internal_state.state_continuity_manager import StateType
 
         # Create integration
         integration = VisualizerIntegration()
@@ -185,7 +189,6 @@ def test_orchestrator_integration():
     print("=" * 50)
 
     try:
-        from core.dynamic_handoff_orchestrator import DynamicHandoffOrchestrator
 
         # Create orchestrator
         orchestrator = DynamicHandoffOrchestrator()
@@ -224,7 +227,6 @@ def test_json_hangup_prevention():
     print("=" * 50)
 
     try:
-        from core.internal_state.state_continuity_manager import (
             StateContinuityManager,
             StateType,
         )
@@ -269,7 +271,6 @@ def test_lint_compliance():
     print("=" * 50)
 
     try:
-        import subprocess
 
         # Test flake8 compliance
         modules = [

@@ -1,3 +1,20 @@
+            from core.clean_unified_math import (
+            from core.clean_unified_math import CleanUnifiedMathSystem
+            from core.brain_trading_engine import BrainTradingEngine
+            from core.brain_trading_engine import BrainTradingEngine
+            from core.schwabot_integration_pipeline import IntegrationOrchestrator
+            from core.schwabot_integration_pipeline import SecureAPIManager
+            from symbolic_profit_router import SymbolicProfitRouter
+            from symbolic_profit_router import SymbolicProfitRouter
+            import requests
+            import requests
+from typing import Dict, List, Any
+import ast
+import json
+import logging
+import os
+import sys
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -8,12 +25,6 @@ Complete validation of all system components, mathematical integrations,
 and functionality requirements before building the executable.
 """
 
-import ast
-import json
-import logging
-import os
-import sys
-from typing import Dict, List, Any
 
 # Configure logging
 logging.basicConfig(
@@ -30,7 +41,7 @@ class SystemAudit:
         self.errors = []
         self.warnings = []
 
-    def run_comprehensive_audit(self) -> Dict[str, Any]:
+    def run_comprehensive_audit():-> Dict[str, Any]:
         """Run complete system audit."""
         print("🔍 SCHWABOT COMPREHENSIVE SYSTEM AUDIT")
         print("=" * 70)
@@ -61,7 +72,7 @@ class SystemAudit:
 
         return self.results
 
-    def audit_code_quality(self) -> None:
+    def audit_code_quality():-> None:
         """Audit code quality and linting compliance."""
         print("\n📝 CODE QUALITY AUDIT")
         print("-" * 40)
@@ -115,7 +126,7 @@ class SystemAudit:
 
         self.results["code_quality"] = quality_results
 
-    def audit_mathematical_integration(self) -> None:
+    def audit_mathematical_integration():-> None:
         """Audit mathematical system integration."""
         print("\n🧮 MATHEMATICAL INTEGRATION AUDIT")
         print("-" * 40)
@@ -124,7 +135,6 @@ class SystemAudit:
 
         # Check Clean Unified Math System
         try:
-            from core.clean_unified_math import (
                 CleanUnifiedMathSystem,
                 optimize_brain_profit,
             )
@@ -157,7 +167,6 @@ class SystemAudit:
 
         # Check Brain Trading Engine Math
         try:
-            from core.brain_trading_engine import BrainTradingEngine
 
             brain_engine = BrainTradingEngine()
 
@@ -187,7 +196,7 @@ class SystemAudit:
 
         self.results["mathematical_integration"] = math_checks
 
-    def audit_component_functionality(self) -> None:
+    def audit_component_functionality():-> None:
         """Audit individual component functionality."""
         print("\n🔧 COMPONENT FUNCTIONALITY AUDIT")
         print("-" * 40)
@@ -196,7 +205,6 @@ class SystemAudit:
 
         # Brain Trading Engine
         try:
-            from core.brain_trading_engine import BrainTradingEngine
 
             engine = BrainTradingEngine()
 
@@ -222,7 +230,6 @@ class SystemAudit:
 
         # Symbolic Profit Router
         try:
-            from symbolic_profit_router import SymbolicProfitRouter
 
             router = SymbolicProfitRouter()
 
@@ -253,7 +260,6 @@ class SystemAudit:
 
         # Integration Pipeline
         try:
-            from core.schwabot_integration_pipeline import IntegrationOrchestrator
 
             orchestrator = IntegrationOrchestrator()
 
@@ -272,7 +278,7 @@ class SystemAudit:
 
         self.results["component_functionality"] = components
 
-    def audit_visual_connections(self) -> None:
+    def audit_visual_connections():-> None:
         """Audit visual layer connections and tab switching capability."""
         print("\n👁️ VISUAL LAYER CONNECTIONS AUDIT")
         print("-" * 40)
@@ -313,7 +319,7 @@ class SystemAudit:
 
         self.results["visual_connections"] = visual_components
 
-    def audit_api_integration(self) -> None:
+    def audit_api_integration():-> None:
         """Audit API integration capabilities."""
         print("\n🔌 API INTEGRATION AUDIT")
         print("-" * 40)
@@ -322,7 +328,6 @@ class SystemAudit:
 
         # Check CCXT integration potential
         try:
-            import requests
 
             ccxt_available = True
             print("  ✅ Requests library: Available for API calls")
@@ -345,7 +350,6 @@ class SystemAudit:
 
         # Check secure API manager
         try:
-            from core.schwabot_integration_pipeline import SecureAPIManager
 
             SecureAPIManager({})
             secure_api_ready = True
@@ -363,7 +367,7 @@ class SystemAudit:
 
         self.results["api_integration"] = api_checks
 
-    def audit_btc_integration(self) -> None:
+    def audit_btc_integration():-> None:
         """Audit BTC mining and processing integration."""
         print("\n₿ BTC INTEGRATION AUDIT")
         print("-" * 40)
@@ -402,7 +406,7 @@ class SystemAudit:
 
         self.results["btc_integration"] = btc_components
 
-    def check_missing_components(self) -> None:
+    def check_missing_components():-> None:
         """Check for missing critical components."""
         print("\n🔍 MISSING COMPONENTS CHECK")
         print("-" * 40)
@@ -427,7 +431,7 @@ class SystemAudit:
 
         self.results["missing_components"] = missing
 
-    def assess_system_readiness(self) -> None:
+    def assess_system_readiness():-> None:
         """Assess overall system readiness for production."""
         print("\n🎯 SYSTEM READINESS ASSESSMENT")
         print("-" * 40)
@@ -492,22 +496,21 @@ class SystemAudit:
         }
 
     # Helper methods for specific checks
-    def check_required_imports(self, content: str) -> bool:
+    def check_required_imports():-> bool:
         """Check if file has required imports."""
         required_patterns = ["import", "from"]
         return any(pattern in content for pattern in required_patterns)
 
-    def check_class_structure(self, content: str) -> bool:
+    def check_class_structure():-> bool:
         """Check if file has proper class structure."""
         return "class " in content and "def " in content
 
-    def check_bit_logic_systems(self) -> Dict[str, Any]:
+    def check_bit_logic_systems():-> Dict[str, Any]:
         """Check 4-bit and 8-bit logic systems."""
         bit_systems = {}
 
         # Check for bit logic in symbolic router
         try:
-            from symbolic_profit_router import SymbolicProfitRouter
 
             router = SymbolicProfitRouter()
 
@@ -531,7 +534,7 @@ class SystemAudit:
 
         return bit_systems
 
-    def check_gui_frameworks(self) -> List[str]:
+    def check_gui_frameworks():-> List[str]:
         """Check available GUI frameworks."""
         frameworks = []
 
@@ -545,49 +548,47 @@ class SystemAudit:
 
         return frameworks
 
-    def check_gui_framework_complete(self) -> bool:
+    def check_gui_framework_complete():-> bool:
         """Check if GUI framework is complete."""
         return len(self.check_gui_frameworks()) > 0
 
-    def check_ccxt_integration(self) -> bool:
+    def check_ccxt_integration():-> bool:
         """Check CCXT integration readiness."""
         try:
-            import requests
 
             return True
         except ImportError:
             return False
 
-    def check_visualization_complete(self) -> bool:
+    def check_visualization_complete():-> bool:
         """Check if visualization system is complete."""
         viz_files = ["visualization/lantern_eye_gui.py"]
         return any(os.path.exists(f) for f in viz_files)
 
-    def check_btc_processing_complete(self) -> bool:
+    def check_btc_processing_complete():-> bool:
         """Check if BTC processing is complete."""
         return False  # Would need implementation
 
-    def check_live_trading_interface(self) -> bool:
+    def check_live_trading_interface():-> bool:
         """Check live trading interface."""
         return os.path.exists("core/schwabot_integration_pipeline.py")
 
-    def check_error_handling_complete(self) -> bool:
+    def check_error_handling_complete():-> bool:
         """Check error handling completeness."""
         return True  # Our code has try/except blocks
 
-    def check_config_management(self) -> bool:
+    def check_config_management():-> bool:
         """Check configuration management."""
         return os.path.exists("config/master_integration.yaml")
 
-    def check_test_coverage(self) -> bool:
+    def check_test_coverage():-> bool:
         """Check test coverage."""
         test_files = ["test_core_integration.py", "test_full_integration.py"]
         return any(os.path.exists(f) for f in test_files)
 
-    def check_btc_math_readiness(self) -> bool:
+    def check_btc_math_readiness():-> bool:
         """Check if mathematical framework is ready for BTC processing."""
         try:
-            from core.clean_unified_math import CleanUnifiedMathSystem
 
             math_system = CleanUnifiedMathSystem()
 
@@ -597,7 +598,7 @@ class SystemAudit:
         except:
             return False
 
-    def export_audit_results(self, filename: str = "system_audit_results.json") -> None:
+    def export_audit_results():-> None:
         """Export audit results to file."""
         try:
             with open(filename, "w") as f:

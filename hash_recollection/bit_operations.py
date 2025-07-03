@@ -1,3 +1,11 @@
+    from core.unified_math_system import unified_math
+import numpy as np
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Dict, List, Optional, Any
+import logging
+import time
+
 #!/usr/bin/env python3
 """
 Bit Operations Module
@@ -8,16 +16,9 @@ phase state management, bit manipulation, and binary pattern recognition.
 Integrates with the unified math system and provides API endpoints.
 """
 
-import numpy as np
-import time
-import logging
-from typing import Dict, List, Optional, Any
-from dataclasses import dataclass, field
-from enum import Enum
 
 # Import unified math system
 try:
-    from core.unified_math_system import unified_math
 
     UNIFIED_MATH_AVAILABLE = True
 except ImportError:
@@ -110,7 +111,7 @@ class BitOperations:
 
         logger.info("🔢 Bit Operations initialized")
 
-    def _default_config(self) -> Dict[str, Any]:
+    def _default_config():-> Dict[str, Any]:
         """Default configuration."""
         return {
             "max_history_size": 1000,
@@ -125,7 +126,7 @@ class BitOperations:
             "pattern_detection_window": 32,
         }
 
-    def analyze_bit_phase(self, value: float) -> BitPhase:
+    def analyze_bit_phase():-> BitPhase:
         """
         Analyze bit phase from a continuous value.
 
@@ -178,7 +179,7 @@ class BitOperations:
             logger.error(f"Error analyzing bit phase: {e}")
             return self._create_default_bit_phase()
 
-    def _create_default_bit_phase(self) -> BitPhase:
+    def _create_default_bit_phase():-> BitPhase:
         """Create default bit phase."""
         return BitPhase(
             timestamp=time.time(),
@@ -188,9 +189,7 @@ class BitOperations:
             transition_probability=0.5,
         )
 
-    def _calculate_phase_confidence(
-        self, value: float, phase_state: PhaseState
-    ) -> float:
+    def _calculate_phase_confidence():-> float:
         """Calculate confidence in phase state."""
         if phase_state == PhaseState.ZERO:
             return 1.0 - value
@@ -201,7 +200,7 @@ class BitOperations:
         else:
             return 0.5
 
-    def _calculate_transition_probability(self, value: float) -> float:
+    def _calculate_transition_probability():-> float:
         """Calculate probability of phase transition."""
         # Higher probability near 0.5
         return 1.0 - abs(value - 0.5) * 2
@@ -215,7 +214,7 @@ class BitOperations:
         self.current_phase = bit_phase.phase_state
         self.last_update = bit_phase.timestamp
 
-    def create_bit_sequence(self, values: List[float]) -> BitSequence:
+    def create_bit_sequence():-> BitSequence:
         """
         Create bit sequence from continuous values.
 
@@ -250,7 +249,7 @@ class BitOperations:
                 sequence_id="error", bits=[], phases=[], length=0, timestamp=time.time()
             )
 
-    def detect_patterns(self, bit_sequence: List[int]) -> List[BitPattern]:
+    def detect_patterns():-> List[BitPattern]:
         """
         Detect patterns in bit sequence.
 
@@ -284,7 +283,7 @@ class BitOperations:
 
         return patterns
 
-    def _detect_repeating_patterns(self, bits: List[int]) -> List[BitPattern]:
+    def _detect_repeating_patterns():-> List[BitPattern]:
         """Detect repeating patterns in bit sequence."""
         patterns = []
 
@@ -321,7 +320,7 @@ class BitOperations:
 
         return patterns
 
-    def _detect_alternating_patterns(self, bits: List[int]) -> List[BitPattern]:
+    def _detect_alternating_patterns():-> List[BitPattern]:
         """Detect alternating patterns in bit sequence."""
         patterns = []
 
@@ -356,7 +355,7 @@ class BitOperations:
 
         return patterns
 
-    def _detect_trend_patterns(self, bits: List[int]) -> List[BitPattern]:
+    def _detect_trend_patterns():-> List[BitPattern]:
         """Detect trend patterns in bit sequence."""
         patterns = []
 
@@ -402,7 +401,7 @@ class BitOperations:
 
         return patterns
 
-    def get_bit_summary(self) -> Dict[str, Any]:
+    def get_bit_summary():-> Dict[str, Any]:
         """Get summary of bit operations."""
         if not self.bit_history:
             return {"status": "no_data"}
@@ -422,7 +421,7 @@ class BitOperations:
             "pattern_history_size": len(self.pattern_history),
         }
 
-    def get_recent_patterns(self, count: int = 10) -> List[Dict[str, Any]]:
+    def get_recent_patterns():-> List[Dict[str, Any]]:
         """Get recent detected patterns."""
         recent_patterns = self.pattern_history[-count:]
         return [

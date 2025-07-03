@@ -1,3 +1,6 @@
+from typing import Any, DictGlyph Phase Resolver Module.Implements the Zygot/Zalgo phase router, dynamically routing glyph logic
+import time
+
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 
@@ -18,9 +21,7 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
 """
-import time
-from typing import Any, DictGlyph Phase Resolver Module.Implements the Zygot/Zalgo phase router, dynamically routing glyph logic
-based on paradoxical phase shifts and entropy corridors.class GlyphPhaseResolver:Routes glyph logic based on observed phase shifts and entropy dynamics.def __init__(self, phase_shift_threshold: float = 0.1) -> None:
+based on paradoxical phase shifts and entropy corridors.class GlyphPhaseResolver:Routes glyph logic based on observed phase shifts and entropy dynamics.def __init__():-> None:
 Initializes the GlyphPhaseResolver.
 
 Args:
@@ -28,9 +29,7 @@ Args:
 self.metrics: Dict[str, Any] = {total_resolutions: 0,phase_shift_alerts": 0,last_resolution_time": None,
 }
 
-def resolve_glyph_phase(:
-self, phase_shift_operator: float, entropy_corridor_status: Dict[str, Any]
-) -> str:Resolves the appropriate glyph phase based on the phase shift operator
+def resolve_glyph_phase():-> str:Resolves the appropriate glyph phase based on the phase shift operator
 and entropy corridor status.
 
 Args:
@@ -54,15 +53,15 @@ if entropy_corridor_status.get(high_entropy_detected, False):
 
         return routing_behavior
 
-def get_metrics(self) -> Dict[str, Any]:
+def get_metrics():-> Dict[str, Any]:
 Returns the operational metrics of the Glyph Phase Resolver.return self.metrics
 
-def update_threshold() -> None:
+def update_threshold():-> None:
 Updates the phase shift threshold.self.phase_shift_threshold = new_threshold
 print(
 fGlyph Phase Resolver threshold updated to: {self.phase_shif t_threshold})
 
-def reset(self) -> None:Resets the resolver's metrics.'self.metrics = {total_resolutions: 0,phase_shift_alerts: 0,last_resolution_time": None,
+def reset():-> None:Resets the resolver's metrics.'self.metrics = {total_resolutions: 0,phase_shift_alerts: 0,last_resolution_time": None,
 }
 if __name__ == __main__:
     print(--- Glyph Phase Resolver Demo ---)

@@ -1,3 +1,11 @@
+        import traceback
+from schwabot.alpha_encryption import (
+from schwabot.session_context import (
+from schwabot.vortex_security import get_vortex_security
+import asyncio
+import random
+import time
+
 #!/usr/bin/env python3
 """
 SchwaBot Alpha Encryption (Ω-B-Γ Logic) Integration Demo
@@ -17,17 +25,11 @@ This shows how mathematical security emerges from recursive pattern legitimacy
 through the synthesis of Alpha Encryption and VMSP frameworks.
 """
 
-import asyncio
-import time
-import random
 
-from schwabot.alpha_encryption import (
     get_alpha_encryption,
     alpha_encrypt_data,
     analyze_alpha_security,
 )
-from schwabot.vortex_security import get_vortex_security
-from schwabot.session_context import (
     create_trading_session,
     log_trading_activity,
     update_session,
@@ -471,7 +473,6 @@ async def main():
 
     except Exception as e:
         print(f"\n💥 Demo encountered error: {e}")
-        import traceback
 
         traceback.print_exc()
 

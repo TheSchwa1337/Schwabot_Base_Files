@@ -1,3 +1,6 @@
+from utils.safe_print import safe_print, info, warn, error, success, debug
+import logging
+
 # -*- coding: utf-8 -*-
 """CLI compatibility handler for Windows systems."""
 """CLI compatibility handler for Windows systems."""
@@ -11,8 +14,6 @@ across different Windows CLI environments."""
 """"""
 """
 
-from utils.safe_print import safe_print, info, warn, error, success, debug
-import logging
 
 logger = logging.getLogger(__name__)
 
@@ -24,7 +25,7 @@ class CLIHandler:
 """
 
 @staticmethod
-def safe_emoji_print(message: str, force_ascii: bool = False) -> str:"""
+def safe_emoji_print():-> str:"""
     """Function implementation pending."""
 pass
 """
@@ -85,7 +86,7 @@ if force_ascii:
 return message
 
 @staticmethod
-def safe_print(message: str, force_ascii: bool = False) -> None:
+def safe_print():-> None:
     """Function implementation pending."""
 pass
 """
@@ -101,9 +102,7 @@ safe_message = CLIHandler.safe_emoji_print(message, force_ascii)
         print(safe_message)
 
 
-def safe_log()
-
-logger_instance: logging.Logger,
+def safe_log():logger_instance: logging.Logger,
     level: str,
     message: str,"""
     context: str = "",

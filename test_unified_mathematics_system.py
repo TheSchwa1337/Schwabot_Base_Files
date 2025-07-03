@@ -1,3 +1,12 @@
+from core.math.ferris_wheel_rde import FerrisWheelRDE
+from core.math.rbm_mathematics import RBMMathematics
+from core.math.unified_mathematics import UnifiedMathematics
+        import traceback
+from datetime import datetime
+import asyncio
+import json
+import time
+
 #!/usr/bin/env python3
 """
 Unified Mathematics System Test
@@ -13,15 +22,8 @@ for Schwabot trading, including:
 This test shows the full mathematical foundation and trading system integration.
 """
 
-import asyncio
-import json
-import time
-from datetime import datetime
 
 # Import the mathematical systems
-from core.math.rbm_mathematics import RBMMathematics
-from core.math.ferris_wheel_rde import FerrisWheelRDE
-from core.math.unified_mathematics import UnifiedMathematics
 
 
 def test_rbm_mathematics():
@@ -434,7 +436,6 @@ async def main():
 
     except Exception as e:
         print(f"\n[ERROR] Test failed: {e}")
-        import traceback
 
         traceback.print_exc()
 

@@ -1,16 +1,18 @@
+            import traceback
+from core.btc_vector_processor import BTCVectorProcessor, GhostStrategyEngine
+from core.ghost_signal_types import ()
+from dual_unicore_handler import DualUnicoreHandler
 from pathlib import Path
 from typing import List, Dict, Any
 import json
 import sys
 import time
 
-from core.ghost_signal_types import ()
+
 
 GhostSignal, GhostArray, BTCVector,
     build_ghost_array, extract_volatility_window, validate_ghost_array
 )
-from core.btc_vector_processor import BTCVectorProcessor, GhostStrategyEngine
-from dual_unicore_handler import DualUnicoreHandler
 
 
 # Initialize Unicode handler
@@ -60,9 +62,7 @@ pass
 self.engine = GhostStrategyEngine()
         self.signal_history = []
 
-def simulate_market_data(self, base_price: float = 50000.0,)
-
-num_signals: int = 20) -> List[GhostSignal]:"""
+def simulate_market_data():num_signals: int = 20) -> List[GhostSignal]:"""
         """Simulate realistic market data for demonstration.""""""
 """"""
 """"""
@@ -344,7 +344,6 @@ print(f"\\n\\u1f4c1 Demo results saved to: ghost_strategy_demo_results.json")
 
 except Exception as e:
             print(f"\\u274c Demo failed: {e}")
-            import traceback
 traceback.print_exc()
 
 

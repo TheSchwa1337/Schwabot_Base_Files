@@ -1,3 +1,7 @@
+import os
+import subprocess
+import sys
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -7,12 +11,9 @@ Comprehensive script to fix all remaining flake8 violations
 in the Schwabot enhanced mathematical integration system.
 """
 
-import os
-import subprocess
-import sys
 
 
-def run_flake8_check(file_path: str) -> list:
+def run_flake8_check():-> list:
     """Run flake8 check on a specific file and return violations."""
     try:
         result = subprocess.run(
@@ -34,7 +35,7 @@ def run_flake8_check(file_path: str) -> list:
         return []
 
 
-def fix_common_issues(file_path: str) -> bool:
+def fix_common_issues():-> bool:
     """Fix common flake8 issues in a file."""
     try:
         with open(file_path, "r", encoding="utf-8") as f:

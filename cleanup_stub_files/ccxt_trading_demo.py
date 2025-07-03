@@ -1,3 +1,4 @@
+
 # -*- coding: utf-8 -*-
 """ccxt_trading_demo.py \\u2014 TEMPORARY STUB GENERATED AUTOMATICALLY."""
 """ccxt_trading_demo.py \\u2014 TEMPORARY STUB GENERATED AUTOMATICALLY."""
@@ -13,7 +14,7 @@ remains importable.  Replace with a clean implementation ASAP."""
 """
 
 
-def main() -> None:"""
+def main():-> None:"""
     """Function implementation pending."""
 pass
 """

@@ -1,3 +1,6 @@
+from core.bit_phase_sequencer import BitPhase, BitSequence
+from core.dual_error_handler import PhaseState, SickType, SickState
+from core.symbolic_profit_router import ProfitTier, FlipBias, SymbolicState
 from dual_unicore_handler import DualUnicoreHandler
 from pathlib import Path
 from safe_print import safe_print, info, warn, error, success
@@ -8,9 +11,7 @@ import os
 import re
 import sys
 
-from core.bit_phase_sequencer import BitPhase, BitSequence
-from core.dual_error_handler import PhaseState, SickType, SickState
-from core.symbolic_profit_router import ProfitTier, FlipBias, SymbolicState
+
 
 
 # Initialize Unicode handler
@@ -106,7 +107,7 @@ parts.append(f"{{{astunparse.unparse(part).strip()}}}")
         return ''.join(parts)
 
 
-def _contains_unicode(self, text: str) -> bool:
+def _contains_unicode():-> bool:
     """Function implementation pending."""
 
 
@@ -165,7 +166,7 @@ self.import_patterns = [
             'from utils.safe_print import safe_phase, safe_math, safe_trade, safe_profit',
             'from utils.safe_print import safe_vector, safe_bitmap, safe_hash, safe_risk',
 ]
-def find_python_files(self) -> List[Path]:"""
+def find_python_files():-> List[Path]:"""
     """Function implementation pending."""
 
 
@@ -199,7 +200,7 @@ self.python_files = filtered_files
         return filtered_files
 
 
-def analyze_file(self, file_path: Path) -> Tuple[List[dict], List[str]]:
+def analyze_file():-> Tuple[List[dict], List[str]]:
     """Function implementation pending."""
 
 
@@ -226,7 +227,7 @@ self.errors.append(f"Error analyzing {file_path}: {e}")
             return [], []
 
 
-def refactor_file(self, file_path: Path) -> bool:
+def refactor_file():-> bool:
     """Function implementation pending."""
 
 
@@ -268,7 +269,7 @@ self.errors.append(f"Error refactoring {file_path}: {e}")
             return False
 
 
-def _replace_unicode_prints(self, content: str) -> str:
+def _replace_unicode_prints():-> str:
     """Function implementation pending."""
 
 
@@ -313,7 +314,7 @@ return f'safe_print({args_str})'
 
 return re.sub(print_pattern, replace_print, content, flags = re.DOTALL)
 
-def _add_safe_print_import(self, content: str) -> str:
+def _add_safe_print_import():-> str:
     """Function implementation pending."""
 pass
 """
@@ -338,7 +339,7 @@ import_line = 'from utils.safe_print import safe_print, info, warn, error, succe
 
 return '\n'.join(lines)
 
-def _contains_unicode(self, text: str) -> bool:
+def _contains_unicode():-> bool:
     """Function implementation pending."""
 pass
 """
@@ -349,7 +350,7 @@ pass
 """
 return any(ord(char) > 127 for char in text)
 
-def run_refactor(self) -> None:"""
+def run_refactor():-> None:"""
     """Function implementation pending."""
 pass
 """

@@ -1,3 +1,17 @@
+        import math
+        import random
+    import argparse
+from concurrent.futures import ThreadPoolExecutor
+from core.master_cycle_engine import MasterCycleEngine
+from typing import Dict, List, Optional, Any, Set
+from utils.logging_setup import setup_logging
+import asyncio
+import json
+import os
+import sys
+import time
+import websockets
+
 #!/usr/bin/env python3
 """QSC Diagnostic WebSocket Server.
 
@@ -6,21 +20,11 @@ GTS (Generalized Tensor Solutions) diagnostic data to React visualization.
 Provides real-time immune system monitoring and visual alerts.
 """
 
-import asyncio
-import websockets
-import json
-import time
-from typing import Dict, List, Optional, Any, Set
-from concurrent.futures import ThreadPoolExecutor
 
 # Import our core modules
-import sys
-import os
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from core.master_cycle_engine import MasterCycleEngine
-from utils.logging_setup import setup_logging
 
 # Setup logging
 logger = setup_logging(__name__)
@@ -67,7 +71,7 @@ class QSCDiagnosticServer:
             f"🧬📡 QSC Diagnostic Server initialized on port {self.config.get('port', 8766)}"
         )
 
-    def _default_config(self) -> Dict[str, Any]:
+    def _default_config():-> Dict[str, Any]:
         """Default configuration."""
         return {
             "host": "localhost",
@@ -121,10 +125,8 @@ class QSCDiagnosticServer:
             f"🔗 QSC Diagnostic client unregistered. Active connections: {self.active_connections}"
         )
 
-    def generate_market_data(self) -> Dict[str, Any]:
+    def generate_market_data():-> Dict[str, Any]:
         """Generate market data for testing purposes."""
-        import random
-        import math
 
         current_time = time.time()
 
@@ -166,7 +168,7 @@ class QSCDiagnosticServer:
             "timestamp": current_time,
         }
 
-    def process_diagnostics(self, market_data: Dict[str, Any]) -> Dict[str, Any]:
+    def process_diagnostics():-> Dict[str, Any]:
         """Process market data through master cycle engine and generate diagnostics."""
         diagnostics = self.master_engine.process_market_tick(market_data)
 
@@ -234,7 +236,7 @@ class QSCDiagnosticServer:
 
         return diagnostic_data
 
-    def _check_for_alerts(self, diagnostics) -> List[Dict[str, Any]]:
+    def _check_for_alerts():-> List[Dict[str, Any]]:
         """Check for system alerts and generate notifications."""
         new_alerts = []
         current_time = time.time()
@@ -510,7 +512,7 @@ class QSCDiagnosticServer:
         self.executor.shutdown(wait=True)
         logger.info("🛑 QSC Diagnostic WebSocket server stopped")
 
-    def get_server_stats(self) -> Dict[str, Any]:
+    def get_server_stats():-> Dict[str, Any]:
         """Get QSC diagnostic server statistics."""
         return {
             "active_connections": self.active_connections,
@@ -525,7 +527,6 @@ class QSCDiagnosticServer:
 
 async def main():
     """Main function for running the QSC diagnostic server."""
-    import argparse
 
     parser = argparse.ArgumentParser(description="QSC Diagnostic WebSocket Server")
     parser.add_argument("--host", default="localhost", help="Server host")

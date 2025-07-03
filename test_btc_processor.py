@@ -1,13 +1,22 @@
+        from core.drift_shells import DriftShells
+        from core.entropic_vectorizer import EntropicVectorizer
+        from core.gpu_accelerator import GPUAccelerator
+        from core.integrators.autonomic_strategy_reflex_layer import (
+        from core.memory_backlog import MemoryBacklog
+        from core.multi_bit_btc_processor import MultiBitBTCProcessor
+        from core.triplet_harmony import TripletHarmony
+        import traceback
+import asyncio
+import logging
+import os
+import sys
+
 #!/usr/bin/env python3
 """
 Test script for the MultiBitBTCProcessor and its components.
 This script tests the BTC processor in isolation to avoid core module import issues.
 """
 
-import asyncio
-import logging
-import sys
-import os
 
 # Add the current directory to the path so we can import core modules
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -23,13 +32,6 @@ async def test_btc_processor():
 
     try:
         # Import the processor directly
-        from core.multi_bit_btc_processor import MultiBitBTCProcessor
-        from core.entropic_vectorizer import EntropicVectorizer
-        from core.triplet_harmony import TripletHarmony
-        from core.drift_shells import DriftShells
-        from core.memory_backlog import MemoryBacklog
-        from core.gpu_accelerator import GPUAccelerator
-        from core.integrators.autonomic_strategy_reflex_layer import (
             AutonomicStrategyReflexLayer,
         )
 
@@ -124,7 +126,6 @@ async def test_btc_processor():
         print("This might be due to missing dependencies. Check requirements.txt")
     except Exception as e:
         print(f"❌ Test failed with error: {e}")
-        import traceback
 
         traceback.print_exc()
 

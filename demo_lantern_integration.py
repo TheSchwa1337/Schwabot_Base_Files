@@ -1,3 +1,11 @@
+            import random
+from schwabot.alpha_encryption import get_alpha_encryption, alpha_encrypt_data
+from schwabot.lantern_core import LanternEye, LanternMainLoop
+from schwabot.session_context import create_trading_session, log_trading_activity
+from schwabot.vortex_security import get_vortex_security
+import asyncio
+import time
+
 #!/usr/bin/env python3
 """
 Lantern Eye Integration Demonstration
@@ -9,14 +17,8 @@ integrated with SchwaBot's Alpha Encryption and VMSP security.
 Created by TheSchwa1337 & Nexus AI
 """
 
-import time
-import asyncio
 
 # Import SchwaBot components
-from schwabot.lantern_core import LanternEye, LanternMainLoop
-from schwabot.alpha_encryption import get_alpha_encryption, alpha_encrypt_data
-from schwabot.session_context import create_trading_session, log_trading_activity
-from schwabot.vortex_security import get_vortex_security
 
 
 def print_banner():
@@ -163,7 +165,6 @@ def demo_memory_building():
 
         for i in range(phase["periods"]):
             # Apply trend and volatility
-            import random
 
             base_price *= phase["trend"] * (
                 1 + random.uniform(-phase["volatility"], phase["volatility"])

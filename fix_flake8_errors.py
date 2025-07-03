@@ -1,11 +1,12 @@
+from pathlib import Path
+import re
+
 #!/usr/bin/env python3
 """
 Systematic Flake8 Error Fixer for Schwabot Core
 Fixes common patterns of syntax errors and unused imports.
 """
 
-import re
-from pathlib import Path
 
 
 def fix_common_patterns(file_path):
@@ -248,3 +249,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+))

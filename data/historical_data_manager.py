@@ -1,3 +1,12 @@
+import numpy as np
+import pandas as pd
+from . import (
+from datetime import datetime, timedelta
+from decimal import Decimal, ROUND_DOWN
+from typing import Dict, Optional, Any
+import hashlib
+import logging
+
 #!/usr/bin/env python3
 """Historical Data Manager - BTC/USDC Trading Data Pipeline.
 
@@ -12,16 +21,8 @@ Key Features:
 - Real-time historical context for trading decisions
 """
 
-import logging
-import hashlib
-import pandas as pd
-import numpy as np
-from typing import Dict, Optional, Any
-from datetime import datetime, timedelta
-from decimal import Decimal, ROUND_DOWN
 
 # Import Schwabot components
-from . import (
     BTC_USDC_DIR,
     BTC_USDC_COMBINED,
     BTC_USDC_HASH_MEMORY,
@@ -61,7 +62,7 @@ class HistoricalDataManager:
 
         logger.info("📊 Historical Data Manager initialized")
 
-    def _default_config(self) -> Dict[str, Any]:
+    def _default_config():-> Dict[str, Any]:
         """Default configuration for historical data manager."""
         return {
             "data_sources": {"coingecko": True, "binance": True, "ccxt": True},
@@ -78,7 +79,7 @@ class HistoricalDataManager:
             "refresh_interval": 3600,  # 1 hour
         }
 
-    def load_historical_data(self, force_refresh: bool = False) -> bool:
+    def load_historical_data():-> bool:
         """Load historical BTC/USDC data from multiple sources.
 
         Args:
@@ -133,7 +134,7 @@ class HistoricalDataManager:
             logger.error(f"❌ Failed to load historical data: {e}")
             return False
 
-    def _load_raw_historical_files(self) -> Optional[pd.DataFrame]:
+    def _load_raw_historical_files():-> Optional[pd.DataFrame]:
         """Load raw historical data files from BTC_USDC_DIR."""
         data_files = list(BTC_USDC_DIR.glob("*.csv"))
 
@@ -177,7 +178,7 @@ class HistoricalDataManager:
         logger.info(f"📊 Combined {len(combined_data):,} unique historical records")
         return combined_data
 
-    def _standardize_columns(self, df: pd.DataFrame) -> pd.DataFrame:
+    def _standardize_columns():-> pd.DataFrame:
         """Standardize column names and data types."""
         # Expected column mappings
         column_mappings = {
@@ -236,7 +237,7 @@ class HistoricalDataManager:
 
         return df
 
-    def _preprocess_historical_data(self, raw_data: pd.DataFrame) -> pd.DataFrame:
+    def _preprocess_historical_data():-> pd.DataFrame:
         """Preprocess historical data for Schwabot analysis."""
         logger.info("🔧 Preprocessing historical data...")
 
@@ -270,7 +271,7 @@ class HistoricalDataManager:
         logger.info(f"✅ Preprocessed {len(processed_data):,} records")
         return processed_data
 
-    def _calculate_rsi(self, prices: pd.Series, period: int = 14) -> pd.Series:
+    def _calculate_rsi():-> pd.Series:
         """Calculate RSI technical indicator."""
         delta = prices.diff()
         gain = (delta.where(delta > 0, 0)).rolling(window=period).mean()
@@ -279,7 +280,7 @@ class HistoricalDataManager:
         rsi = 100 - (100 / (1 + rs))
         return rsi
 
-    def _generate_hash_memory(self) -> None:
+    def _generate_hash_memory():-> None:
         """Generate hash memory from historical data for pattern recognition."""
         logger.info("🔐 Generating hash memory from historical data...")
 
@@ -317,7 +318,7 @@ class HistoricalDataManager:
 
         logger.info(f"✅ Generated hash memory for {len(self.hash_memory):,} patterns")
 
-    def _generate_window_hash(self, window_data: pd.DataFrame) -> Dict[str, Any]:
+    def _generate_window_hash():-> Dict[str, Any]:
         """Generate hash pattern for a window of historical data."""
         # Create hash input string
         price_sequence = window_data["close"].values
@@ -359,7 +360,7 @@ class HistoricalDataManager:
             "pattern_strength": pattern_strength,
         }
 
-    def _generate_precision_analysis(self) -> None:
+    def _generate_precision_analysis():-> None:
         """Generate multi-decimal precision analysis from historical data."""
         logger.info("📊 Generating multi-decimal precision analysis...")
 
@@ -394,7 +395,7 @@ class HistoricalDataManager:
             f"✅ Generated precision analysis for {len(self.precision_analysis):,} records"
         )
 
-    def _analyze_precision_levels(self, window_data: pd.DataFrame) -> Dict[str, Any]:
+    def _analyze_precision_levels():-> Dict[str, Any]:
         """Analyze price data at multiple decimal precision levels."""
         latest_price = window_data["close"].iloc[-1]
 
@@ -444,27 +445,25 @@ class HistoricalDataManager:
             / window_data["close"].iloc[0],
         }
 
-    def _format_price(self, price: float, decimals: int) -> str:
+    def _format_price():-> str:
         """Format price with specific decimal precision."""
         quant = Decimal("1." + ("0" * decimals))
         d_price = Decimal(str(price)).quantize(quant, rounding=ROUND_DOWN)
         return f"{d_price:.{decimals}f}"
 
-    def _hash_price(self, price_str: str, timestamp: float, prefix: str) -> str:
+    def _hash_price():-> str:
         """Generate SHA256 hash for price with timestamp and prefix."""
         data = f"{prefix}_{price_str}_{timestamp:.3f}"
         return hashlib.sha256(data.encode()).hexdigest()[:16]
 
-    def _map_to_16bit(self, price: float) -> int:
+    def _map_to_16bit():-> int:
         """Map BTC price to 16-bit integer (0-65535)."""
         min_price, max_price = 10000.0, 100000.0
         clamped_price = max(min_price, min(max_price, price))
         normalized = (clamped_price - min_price) / (max_price - min_price)
         return int(normalized * 65535)
 
-    def _calculate_profit_score(
-        self, price_hash: str, precision_level: str, window_data: pd.DataFrame
-    ) -> float:
+    def _calculate_profit_score():-> float:
         """Calculate profit score based on hash pattern and historical context."""
         # Calculate hash entropy
         hash_bytes = bytes.fromhex(price_hash)
@@ -487,15 +486,13 @@ class HistoricalDataManager:
         )
         return min(1.0, modified_score)
 
-    def _save_preprocessed_data(self) -> None:
+    def _save_preprocessed_data():-> None:
         """Save preprocessed historical data."""
         if self.historical_data is not None:
             self.historical_data.to_parquet(BTC_USDC_COMBINED)
             logger.info(f"✅ Saved preprocessed data to {BTC_USDC_COMBINED}")
 
-    def get_historical_context(
-        self, current_price: float, lookback_days: int = 30
-    ) -> Dict[str, Any]:
+    def get_historical_context():-> Dict[str, Any]:
         """Get historical context for current trading decision.
 
         Args:
@@ -564,7 +561,7 @@ class HistoricalDataManager:
             "lookback_days": lookback_days,
         }
 
-    def get_system_status(self) -> Dict[str, Any]:
+    def get_system_status():-> Dict[str, Any]:
         """Get comprehensive system status."""
         return {
             "data_loaded": self.data_loaded,
@@ -590,9 +587,7 @@ class HistoricalDataManager:
 
 
 # Helper function for easy integration
-def create_historical_data_manager(
-    config: Optional[Dict[str, Any]] = None,
-) -> HistoricalDataManager:
+def create_historical_data_manager():-> HistoricalDataManager:
     """Create and initialize historical data manager.
 
     Args:

@@ -1,3 +1,20 @@
+            from core.mathematical_optimization_bridge import (
+            from core.mathematical_optimization_bridge import (
+            from core.mathlib_v4 import MathLibV4
+            from core.mathlib_v4 import MathLibV4
+import numpy as np
+            from core.advanced_tensor_algebra import UnifiedTensorAlgebra
+            from core.advanced_tensor_algebra import UnifiedTensorAlgebra
+            from core.advanced_tensor_algebra import UnifiedTensorAlgebra
+            from core.enhanced_integration_validator import (
+            from core.enhanced_strategy_framework import EnhancedStrategyFramework
+            from core.enhanced_strategy_framework import EnhancedStrategyFramework
+            from core.strategy_integration_bridge import StrategyIntegrationBridge
+            from core.strategy_integration_bridge import StrategyIntegrationBridge
+from typing import Dict, Any
+import logging
+import time
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -16,11 +33,7 @@ Tests:
 6. Comprehensive System Performance
 """
 
-import logging
-import time
-from typing import Dict, Any
 
-import numpy as np
 
 logger = logging.getLogger(__name__)
 
@@ -33,12 +46,11 @@ class EnhancedMathematicalIntegrationTester:
         self.test_results = {}
         self.overall_success_rate = 0.0
 
-    def test_advanced_tensor_algebra(self) -> Dict[str, Any]:
+    def test_advanced_tensor_algebra():-> Dict[str, Any]:
         """Test advanced tensor algebra integration."""
         print("🔢 Testing Advanced Tensor Algebra...")
 
         try:
-            from core.advanced_tensor_algebra import UnifiedTensorAlgebra
 
             # Initialize tensor algebra
             tensor_algebra = UnifiedTensorAlgebra()
@@ -73,12 +85,11 @@ class EnhancedMathematicalIntegrationTester:
                 "error": str(e),
             }
 
-    def test_mathematical_optimization_bridge(self) -> Dict[str, Any]:
+    def test_mathematical_optimization_bridge():-> Dict[str, Any]:
         """Test mathematical optimization bridge."""
         print("⚡ Testing Mathematical Optimization Bridge...")
 
         try:
-            from core.mathematical_optimization_bridge import (
                 MathematicalOptimizationBridge,
             )
 
@@ -117,12 +128,11 @@ class EnhancedMathematicalIntegrationTester:
                 "error": str(e),
             }
 
-    def test_dual_number_autodiff(self) -> Dict[str, Any]:
+    def test_dual_number_autodiff():-> Dict[str, Any]:
         """Test dual-number automatic differentiation."""
         print("📐 Testing Dual-Number Automatic Differentiation...")
 
         try:
-            from core.mathlib_v4 import MathLibV4
 
             # Initialize MathLibV4 with dual number support
             mathlib = MathLibV4()
@@ -162,12 +172,11 @@ class EnhancedMathematicalIntegrationTester:
                 "error": str(e),
             }
 
-    def test_enhanced_validation_framework(self) -> Dict[str, Any]:
+    def test_enhanced_validation_framework():-> Dict[str, Any]:
         """Test enhanced validation framework."""
         print("✅ Testing Enhanced Validation Framework...")
 
         try:
-            from core.enhanced_integration_validator import (
                 CompleteSystemIntegrationValidator,
             )
 
@@ -198,14 +207,11 @@ class EnhancedMathematicalIntegrationTester:
                 "error": str(e),
             }
 
-    def test_wall_street_integration(self) -> Dict[str, Any]:
+    def test_wall_street_integration():-> Dict[str, Any]:
         """Test integration with Wall Street strategies."""
         print("📈 Testing Wall Street Strategy Integration...")
 
         try:
-            from core.enhanced_strategy_framework import EnhancedStrategyFramework
-            from core.strategy_integration_bridge import StrategyIntegrationBridge
-            from core.advanced_tensor_algebra import UnifiedTensorAlgebra
 
             # Initialize components
             strategy_framework = EnhancedStrategyFramework()
@@ -251,19 +257,14 @@ class EnhancedMathematicalIntegrationTester:
                 "error": str(e),
             }
 
-    def test_comprehensive_performance(self) -> Dict[str, Any]:
+    def test_comprehensive_performance():-> Dict[str, Any]:
         """Test comprehensive system performance."""
         print("🚀 Testing Comprehensive System Performance...")
 
         try:
             # Import all enhanced components
-            from core.enhanced_strategy_framework import EnhancedStrategyFramework
-            from core.strategy_integration_bridge import StrategyIntegrationBridge
-            from core.advanced_tensor_algebra import UnifiedTensorAlgebra
-            from core.mathematical_optimization_bridge import (
                 MathematicalOptimizationBridge,
             )
-            from core.mathlib_v4 import MathLibV4
 
             start_time = time.time()
 
@@ -326,7 +327,7 @@ class EnhancedMathematicalIntegrationTester:
                 "error": str(e),
             }
 
-    def run_all_tests(self) -> Dict[str, Any]:
+    def run_all_tests():-> Dict[str, Any]:
         """Run all enhanced mathematical integration tests."""
         print("🧪 Enhanced Mathematical Integration Test Suite")
         print("=" * 60)

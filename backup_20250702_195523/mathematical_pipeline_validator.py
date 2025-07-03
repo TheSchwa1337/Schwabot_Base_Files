@@ -1,3 +1,22 @@
+        from unified_math_system import unified_math
+    from .unified_math_system import unified_math
+import numpy as np
+                    from advanced_tensor_algebra import UnifiedTensorAlgebra
+                    from unified_profit_vectorization_system import UnifiedProfitVectorizationSystem
+                    from zpe_core import ZPECore
+                from .advanced_tensor_algebra import UnifiedTensorAlgebra
+                from .unified_profit_vectorization_system import UnifiedProfitVectorizationSystem
+                from .zpe_core import ZPECore
+            import psutil
+    from utils.safe_print import debug, error, info, safe_print, success, warn
+from dataclasses import dataclass, field
+from datetime import datetime
+from typing import Any, Dict, List, Optional, Tuple
+import hashlib
+import json
+import logging
+import time
+
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 
@@ -36,22 +55,12 @@ Validates:
 - Performance optimization
 
 This is the final validation step before going live with Schwabot UROS v1.0.import asyncio
-import hashlib
-import json
-import logging
-import time
-from dataclasses import dataclass, field
-from datetime import datetime
-from typing import Any, Dict, List, Optional, Tuple
 
-import numpy as np
 
 # Fix import paths
 try:
-    from .unified_math_system import unified_math
 except ImportError:
     try:
-        from unified_math_system import unified_math
     except ImportError:
         # Fallback for testing
         class unified_math:
@@ -65,7 +74,6 @@ except ImportError:
 
 
 try:
-    from utils.safe_print import debug, error, info, safe_print, success, warn
 except ImportError:
     # Fallback for testing
     def safe_print(message):
@@ -139,13 +147,11 @@ class MathematicalPipelineValidator:Comprehensive validator for Schwabot's mathe
 
             # Import tensor algebra if available
             try:
-                from .advanced_tensor_algebra import UnifiedTensorAlgebra
 
                 self.tensor_algebra = UnifiedTensorAlgebra()
                 TENSOR_ALGEBRA_AVAILABLE = True
             except ImportError:
                 try:
-                    from advanced_tensor_algebra import UnifiedTensorAlgebra
 
                     self.tensor_algebra = UnifiedTensorAlgebra()
                     TENSOR_ALGEBRA_AVAILABLE = True
@@ -156,13 +162,11 @@ class MathematicalPipelineValidator:Comprehensive validator for Schwabot's mathe
 
             # Import ZPE core if available
             try:
-                from .zpe_core import ZPECore
 
                 self.zpe_core = ZPECore()
                 ZPE_CORE_AVAILABLE = True
             except ImportError:
                 try:
-                    from zpe_core import ZPECore
 
                     self.zpe_core = ZPECore()
                     ZPE_CORE_AVAILABLE = True
@@ -173,13 +177,11 @@ class MathematicalPipelineValidator:Comprehensive validator for Schwabot's mathe
 
             # Import other core components
             try:
-                from .unified_profit_vectorization_system import UnifiedProfitVectorizationSystem
 
                 self.profit_vectorization = UnifiedProfitVectorizationSystem()
                 PROFIT_VECTORIZATION_AVAILABLE = True
             except ImportError:
                 try:
-                    from unified_profit_vectorization_system import UnifiedProfitVectorizationSystem
 
                     self.profit_vectorization = UnifiedProfitVectorizationSystem()
                     PROFIT_VECTORIZATION_AVAILABLE = True
@@ -194,7 +196,7 @@ class MathematicalPipelineValidator:Comprehensive validator for Schwabot's mathe
             logger.error(fFailed to initialize validation components: {e})
             self.critical_issues.append(fComponent initialization failed: {e})
 
-    async def run_comprehensive_validation(self) -> ComprehensiveValidationReport:Run comprehensive validation of the entire mathematical pipeline.
+    async def run_comprehensive_validation():-> ComprehensiveValidationReport:Run comprehensive validation of the entire mathematical pipeline.
 
         Returns:
             Comprehensive validation reportstart_time = time.time()
@@ -229,7 +231,7 @@ class MathematicalPipelineValidator:Comprehensive validator for Schwabot's mathe
 
         return report
 
-    async def _validate_unified_math_system(self) -> PipelineValidationResult:Validate unified math system.start_time = time.time()
+    async def _validate_unified_math_system():-> PipelineValidationResult:Validate unified math system.start_time = time.time()
         recommendations = []
         warnings = []
         error_count = 0
@@ -284,7 +286,7 @@ class MathematicalPipelineValidator:Comprehensive validator for Schwabot's mathe
             warnings=warnings,
         )
 
-    async def _validate_tensor_algebra(self) -> PipelineValidationResult:Validate tensor algebra system.start_time = time.time()
+    async def _validate_tensor_algebra():-> PipelineValidationResult:Validate tensor algebra system.start_time = time.time()
         recommendations = []
         warnings = []
         error_count = 0
@@ -343,7 +345,7 @@ class MathematicalPipelineValidator:Comprehensive validator for Schwabot's mathe
             warnings=warnings,
         )
 
-    async def _validate_zpe_core(self) -> PipelineValidationResult:Validate ZPE core system.start_time = time.time()
+    async def _validate_zpe_core():-> PipelineValidationResult:Validate ZPE core system.start_time = time.time()
         recommendations = []
         warnings = []
         error_count = 0
@@ -410,7 +412,7 @@ class MathematicalPipelineValidator:Comprehensive validator for Schwabot's mathe
             warnings=warnings,
         )
 
-    async def _validate_profit_vectorization(self) -> PipelineValidationResult:Validate profit vectorization system.start_time = time.time()
+    async def _validate_profit_vectorization():-> PipelineValidationResult:Validate profit vectorization system.start_time = time.time()
         recommendations = []
         warnings = []
         error_count = 0
@@ -456,7 +458,7 @@ class MathematicalPipelineValidator:Comprehensive validator for Schwabot's mathe
             warnings=warnings,
         )
 
-    async def _validate_mathematical_coherence(self) -> PipelineValidationResult:Validate mathematical coherence across all components.start_time = time.time()
+    async def _validate_mathematical_coherence():-> PipelineValidationResult:Validate mathematical coherence across all components.start_time = time.time()
         recommendations = []
         warnings = []
         error_count = 0
@@ -510,7 +512,7 @@ class MathematicalPipelineValidator:Comprehensive validator for Schwabot's mathe
             warnings=warnings,
         )
 
-    async def _validate_performance_optimization(self) -> PipelineValidationResult:Validate performance optimization.start_time = time.time()
+    async def _validate_performance_optimization():-> PipelineValidationResult:Validate performance optimization.start_time = time.time()
         recommendations = []
         warnings = []
         error_count = 0
@@ -550,7 +552,7 @@ class MathematicalPipelineValidator:Comprehensive validator for Schwabot's mathe
             warnings=warnings,
         )
 
-    async def _validate_production_readiness(self) -> PipelineValidationResult:Validate overall production readiness.start_time = time.time()
+    async def _validate_production_readiness():-> PipelineValidationResult:Validate overall production readiness.start_time = time.time()
         recommendations = []
         warnings = []
         error_count = 0
@@ -610,14 +612,14 @@ class MathematicalPipelineValidator:Comprehensive validator for Schwabot's mathe
             warnings=warnings,
         )
 
-    def _test_bit_level_processing(self, bit_level: int, test_data: np.ndarray) -> float:Test processing at a specific bit level.try:
+    def _test_bit_level_processing():-> float:Test processing at a specific bit level.try:
             # Simulate bit-level processing
             processed_data = test_data[: min(bit_level, len(test_data))]
             return float(np.sum(processed_data))
         except Exception:
             return 0.0
 
-    def _test_tensor_consistency(self) -> bool:
+    def _test_tensor_consistency():-> bool:
         Test tensor operations consistency.try:
             # Test basic tensor operations
             test_tensor = np.random.random((3, 3, 3))
@@ -626,14 +628,14 @@ class MathematicalPipelineValidator:Comprehensive validator for Schwabot's mathe
         except Exception:
             return False
 
-    def _test_hash_rotation(self) -> bool:
+    def _test_hash_rotation():-> bool:
         Test hash rotation performance.try: test_data = np.random.random(1000)
             hash_value = hashlib.sha256(test_data.tobytes()).hexdigest()
             return len(hash_value) == 64
         except Exception:
             return False
 
-    def _test_load_performance(self) -> float:
+    def _test_load_performance():-> float:
         Test load performance.try: start_time = time.time()
             # Simulate load test
             for _ in range(100):
@@ -642,18 +644,15 @@ class MathematicalPipelineValidator:Comprehensive validator for Schwabot's mathe
         except Exception:
             return 1000.0
 
-    def _test_memory_usage(self) -> float:
+    def _test_memory_usage():-> float:
         Test memory usage.try:
-            import psutil
 
             process = psutil.Process()
             return process.memory_info().rss / 1024 / 1024  # Convert to MB
         except Exception:
             return 50.0  # Default estimate
 
-    def _generate_comprehensive_report(
-        self, total_execution_time: float
-    ) -> ComprehensiveValidationReport:
+    def _generate_comprehensive_report():-> ComprehensiveValidationReport:
         Generate comprehensive validation report.total_components = len(self.validation_results)
         passed_components = sum(
             1 for r in self.validation_results.values() if r.validation_status == PASS)

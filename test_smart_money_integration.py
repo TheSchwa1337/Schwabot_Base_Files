@@ -1,9 +1,10 @@
+import numpy as np
 from core.enhanced_strategy_framework import EnhancedStrategyFramework
-from core.smart_money_integration import SmartMoneyIntegrationFramework
 from core.smart_money_integration import enhance_wall_street_with_smart_money
+from core.smart_money_integration import SmartMoneyIntegrationFramework
 from typing import Any, Dict
 import logging
-import numpy as np
+
 
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
@@ -24,7 +25,7 @@ Features Tested:
 logger = logging.getLogger(__name__)
 
 
-def safe_print(message: str) -> None:
+def safe_print():-> None:
     """Safe print function that handles Unicode characters."""
     try:
         print(message)
@@ -35,12 +36,12 @@ def safe_print(message: str) -> None:
 class SmartMoneyIntegrationTester:
     """Test suite for smart money integration with Wall Street strategies."""
 
-    def __init__(self) -> None:
+    def __init__():-> None:
         """Initialize test suite."""
         self.test_results = {}
         self.overall_success_rate = 0.0
 
-    def test_smart_money_metrics_calculation(self) -> Dict[str, Any]:
+    def test_smart_money_metrics_calculation():-> Dict[str, Any]:
         """Test smart money metrics calculation."""
         safe_print("💰 Testing Smart Money Metrics Calculation...")
 
@@ -96,7 +97,7 @@ class SmartMoneyIntegrationTester:
                 "error": str(e),
             }
 
-    def test_wall_street_smart_money_integration(self) -> Dict[str, Any]:
+    def test_wall_street_smart_money_integration():-> Dict[str, Any]:
         """Test integration between Wall Street strategies and smart money metrics."""
         safe_print("🏛️ Testing Wall Street-Smart Money Integration...")
 
@@ -159,7 +160,7 @@ class SmartMoneyIntegrationTester:
                 "error": str(e),
             }
 
-    def test_order_flow_analysis(self) -> Dict[str, Any]:
+    def test_order_flow_analysis():-> Dict[str, Any]:
         """Test order flow imbalance analysis."""
         safe_print("📊 Testing Order Flow Analysis...")
 
@@ -207,7 +208,7 @@ class SmartMoneyIntegrationTester:
                 "error": str(e),
             }
 
-    def test_whale_detection(self) -> Dict[str, Any]:
+    def test_whale_detection():-> Dict[str, Any]:
         """Test whale activity detection."""
         safe_print("🐋 Testing Whale Activity Detection...")
 
@@ -257,7 +258,7 @@ class SmartMoneyIntegrationTester:
                 "error": str(e),
             }
 
-    def test_vwap_analysis(self) -> Dict[str, Any]:
+    def test_vwap_analysis():-> Dict[str, Any]:
         """Test VWAP-based smart money analysis."""
         safe_print("📈 Testing VWAP Analysis...")
 
@@ -299,7 +300,7 @@ class SmartMoneyIntegrationTester:
             logger.error(f"VWAP analysis test failed: {e}")
             return {"component": "VWAP Analysis", "success": False, "error": str(e)}
 
-    def test_dark_pool_detection(self) -> Dict[str, Any]:
+    def test_dark_pool_detection():-> Dict[str, Any]:
         """Test dark pool activity detection."""
         safe_print("🌑 Testing Dark Pool Detection...")
 
@@ -344,7 +345,7 @@ class SmartMoneyIntegrationTester:
                 "error": str(e),
             }
 
-    def run_all_tests(self) -> Dict[str, Any]:
+    def run_all_tests():-> Dict[str, Any]:
         """Run all smart money integration tests."""
         safe_print("💎 Smart Money Integration Test Suite")
         safe_print("=" * 60)
@@ -430,7 +431,7 @@ class SmartMoneyIntegrationTester:
         }
 
 
-def main() -> Dict[str, Any]:
+def main():-> Dict[str, Any]:
     """Run smart money integration tests."""
     tester = SmartMoneyIntegrationTester()
     return tester.run_all_tests()

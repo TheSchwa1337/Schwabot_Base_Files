@@ -1,3 +1,11 @@
+        from core.mathlib_v4 import MathLibV4
+        from core.mathlib_v4 import MathLibV4
+        from core.matrix_math_utils import analyze_price_matrix
+        from core.unified_math_system import UnifiedMathSystem
+        import numpy as np
+import logging
+import time
+
 #!/usr/bin/env python3
 """
 Test MathLibV4 Integration
@@ -7,8 +15,6 @@ Simple test to verify that MathLibV4 is properly integrated
 into the Schwabot pipeline and working correctly.
 """
 
-import logging
-import time
 
 # Configure logging
 logging.basicConfig(
@@ -22,7 +28,6 @@ def test_mathlib_v4_standalone():
     print("🧮 Testing MathLibV4 Standalone...")
 
     try:
-        from core.mathlib_v4 import MathLibV4
 
         ml4 = MathLibV4(precision=64)
 
@@ -56,7 +61,6 @@ def test_unified_math_integration():
     print("\n🔗 Testing Unified Math System Integration...")
 
     try:
-        from core.unified_math_system import UnifiedMathSystem
 
         ums = UnifiedMathSystem()
 
@@ -91,8 +95,6 @@ def test_demo_integration():
 
     try:
         # Test imports
-        from core.matrix_math_utils import analyze_price_matrix
-        from core.mathlib_v4 import MathLibV4
 
         print("✅ All core components imported successfully")
 
@@ -101,7 +103,6 @@ def test_demo_integration():
         print(f"✅ MathLibV4 initialized: v{ml4.version.value}")
 
         # Test matrix math utils
-        import numpy as np
 
         test_matrix = np.array([[1.0, 2.0], [3.0, 4.0], [5.0, 6.0]])
         matrix_result = analyze_price_matrix(test_matrix)

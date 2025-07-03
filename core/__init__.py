@@ -1,12 +1,12 @@
+"""
+Core module for Schwabot trading system.
+
+This module provides clean, error-free implementations of the core
+mathematical and trading components.
+"""
+
 # -*- coding: utf-8 -*-
-"""
-Core module for the Schwabot Trading System.
 
-This module provides access to the clean implementations that are
-fully functional and error-free.
-"""
-
-# Clean implementations - fully functional and error-free
 try:
     from .clean_math_foundation import (
         BitPhase,
@@ -16,7 +16,6 @@ try:
         create_math_foundation,
         quick_calculation,
     )
-
     CLEAN_MATH_AVAILABLE = True
 except ImportError:
     CLEAN_MATH_AVAILABLE = False
@@ -28,7 +27,6 @@ try:
         VectorizationMode,
         create_profit_vectorizer,
     )
-
     CLEAN_PROFIT_AVAILABLE = True
 except ImportError:
     CLEAN_PROFIT_AVAILABLE = False
@@ -42,7 +40,6 @@ try:
         create_trading_pipeline,
         run_trading_simulation,
     )
-
     CLEAN_PIPELINE_AVAILABLE = True
 except ImportError:
     CLEAN_PIPELINE_AVAILABLE = False
@@ -93,7 +90,10 @@ def get_system_status():
 def create_clean_trading_system(initial_capital=100000.0):
     """
     Create a complete clean trading system with all components.
-
+    
+    Args:
+        initial_capital: Initial capital for the trading system
+        
     Returns:
         Dictionary with all initialized components
     """

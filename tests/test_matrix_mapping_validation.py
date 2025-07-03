@@ -1,25 +1,27 @@
-# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
-# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
-# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
-# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
-
+            from core.unified_math_system import unified_math
+from core.unified_math_system import unified_math
 from core.dlt_waveform_engine import DLTWaveformEngine
 from core.fault_bus import FaultBus
 from core.riddle_gemm import RiddleGEMM
 from core.type_defs import ()
+from dataclasses import dataclass
+from dual_unicore_handler import DualUnicoreHandler
+from enum import Enum
+from typing import Dict, Any, List, Optional
+import logging
+import time
+import unittest
+
+# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
+
 
 MatrixController, MatrixControllerType, RecursiveIdentityState,
     GhostLogicState, AIFeedbackState, CrossBasketTrigger
 )
-from enum import Enum
-from dataclasses import dataclass
-from typing import Dict, Any, List, Optional
-import time
-import logging
-import unittest
-from dual_unicore_handler import DualUnicoreHandler
 
-from core.unified_math_system import unified_math
 
 
 # Initialize Unicode handler
@@ -163,7 +165,7 @@ self.test_scenarios = [
 ]
 logger.info("\\u1f9ee Matrix Mapping Validation Test initialized")
 
-def test_matrix_controller_initialization(self) -> Dict[str, Any]:
+def test_matrix_controller_initialization():-> Dict[str, Any]:
     """Function implementation pending."""
 pass
 """
@@ -219,7 +221,7 @@ if results['success']:
 
 return results
 
-def test_bit_depth_phase_transitions(self) -> Dict[str, Any]:
+def test_bit_depth_phase_transitions():-> Dict[str, Any]:
     """Function implementation pending."""
 pass
 """
@@ -279,7 +281,7 @@ if results['success']:
 
 return results
 
-def test_hash_pattern_matching(self) -> Dict[str, Any]:
+def test_hash_pattern_matching():-> Dict[str, Any]:
     """Function implementation pending."""
 pass
 """
@@ -336,7 +338,7 @@ if results['success']:
 
 return results
 
-def test_matrix_overlay_operations(self) -> Dict[str, Any]:
+def test_matrix_overlay_operations():-> Dict[str, Any]:
     """Function implementation pending."""
 pass
 """
@@ -414,7 +416,7 @@ if results['success']:
 
 return results
 
-def test_recursive_identity_tracking(self) -> Dict[str, Any]:
+def test_recursive_identity_tracking():-> Dict[str, Any]:
     """Function implementation pending."""
 pass
 """
@@ -489,7 +491,7 @@ if results['success']:
 
 return results
 
-def test_cross_basket_triggers(self) -> Dict[str, Any]:
+def test_cross_basket_triggers():-> Dict[str, Any]:
     """Function implementation pending."""
 pass
 """
@@ -581,7 +583,7 @@ if results['success']:
 
 return results
 
-def run_comprehensive_test(self) -> Dict[str, Any]:
+def run_comprehensive_test():-> Dict[str, Any]:
     """Function implementation pending."""
 pass
 """
@@ -632,7 +634,7 @@ return comprehensive_result
 
 
 # Global test function for registry
-def test_matrix_mapping_validation() -> Dict[str, Any]:
+def test_matrix_mapping_validation():-> Dict[str, Any]:
         """
         Analyze BTC market conditions for trading decisions.
         
@@ -645,7 +647,6 @@ def test_matrix_mapping_validation() -> Dict[str, Any]:
             Analysis results dictionary
         """
         try:
-            from core.unified_math_system import unified_math
             
             # Perform BTC analysis using unified mathematics
             analysis = {

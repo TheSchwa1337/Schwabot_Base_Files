@@ -1,3 +1,6 @@
+import pandas as pd
+from pathlib import Path
+
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 
@@ -18,9 +21,7 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
 """
-from pathlib import Path
 
-import pandas as pd
 
 
 HIST_DIR = Path(core/data/historical)
@@ -49,7 +50,7 @@ def concat_csv_to_parquet():Concatenates CSV files for a given asset into a sing
     return out_path
 
 
-def load_historical_data(asset: str, quote: str = usdc) -> pd.DataFrame:
+def load_historical_data():-> pd.DataFrame:
     Loads historical data for a given asset, either from Parquet or by concatenating CSVs.parquet_file = PREPROC_DIR / f{asset.lower()}_{quote.lower()}.parquet
     if not parquet_file.exists():
         print(f[!] Parquet not found, creating for {asset.upper()}...)

@@ -1,3 +1,11 @@
+        import traceback
+from core.ghost_flip_executor import ghost_trigger, get_backup_statistics
+from core.pair_flip_orbit import (
+from core.profit_orbit_engine import (
+from typing import Dict, Any
+import json
+import os
+
 #!/usr/bin/env python3
 """
 Backup Integration Test
@@ -11,16 +19,10 @@ This test shows how the backup logic from previous systems is integrated into th
 providing comprehensive memory management, validation, and performance tracking.
 """
 
-import json
-import os
-from typing import Dict, Any
-from core.ghost_flip_executor import ghost_trigger, get_backup_statistics
-from core.profit_orbit_engine import (
     run_orbit_cycle,
     update_volume_weights,
     get_orbit_backup_statistics,
 )
-from core.pair_flip_orbit import (
     bit_flip,
     get_pair_flip,
     update_pair_memory,
@@ -28,7 +30,7 @@ from core.pair_flip_orbit import (
 )
 
 
-def create_test_flipmatrix() -> None:
+def create_test_flipmatrix():-> None:
     """Create a test flipmatrix.json file for demonstration."""
     flipmatrix = {
         "BTC→ETH": {
@@ -59,7 +61,7 @@ def create_test_flipmatrix() -> None:
     print(f"[SETUP] Created test flipmatrix.json with {len(flipmatrix)} pairs")
 
 
-def create_test_market_data() -> Dict[str, Any]:
+def create_test_market_data():-> Dict[str, Any]:
     """Create test market data for orbit cycles."""
     return {
         "BTC→ETH": {"price": 0.05, "trend": "up", "volume": 1000},
@@ -70,7 +72,7 @@ def create_test_market_data() -> Dict[str, Any]:
     }
 
 
-def test_bit_flip_operations() -> None:
+def test_bit_flip_operations():-> None:
     """Test bit flip operations with backup tracking."""
     print("\n" + "=" * 60)
     print("TESTING BIT FLIP OPERATIONS WITH BACKUP TRACKING")
@@ -98,7 +100,7 @@ def test_bit_flip_operations() -> None:
     )
 
 
-def test_pair_flip_operations() -> None:
+def test_pair_flip_operations():-> None:
     """Test pair flip operations with backup validation."""
     print("\n" + "=" * 60)
     print("TESTING PAIR FLIP OPERATIONS WITH BACKUP VALIDATION")
@@ -129,7 +131,7 @@ def test_pair_flip_operations() -> None:
         )
 
 
-def test_ghost_trigger_events() -> None:
+def test_ghost_trigger_events():-> None:
     """Test ghost trigger events with backup validation."""
     print("\n" + "=" * 60)
     print("TESTING GHOST TRIGGER EVENTS WITH BACKUP VALIDATION")
@@ -178,7 +180,7 @@ def test_ghost_trigger_events() -> None:
     )
 
 
-def test_profit_orbit_cycles() -> None:
+def test_profit_orbit_cycles():-> None:
     """Test profit orbit cycles with backup tracking."""
     print("\n" + "=" * 60)
     print("TESTING PROFIT ORBIT CYCLES WITH BACKUP TRACKING")
@@ -219,7 +221,7 @@ def test_profit_orbit_cycles() -> None:
     )
 
 
-def test_integrated_trading_cycle() -> None:
+def test_integrated_trading_cycle():-> None:
     """Test a complete integrated trading cycle using all three engines."""
     print("\n" + "=" * 60)
     print("TESTING INTEGRATED TRADING CYCLE")
@@ -246,7 +248,7 @@ def test_integrated_trading_cycle() -> None:
     print_backup_statistics()
 
 
-def print_backup_statistics() -> None:
+def print_backup_statistics():-> None:
     """Print comprehensive backup statistics from all three engines."""
     print("\n" + "=" * 60)
     print("COMPREHENSIVE BACKUP STATISTICS")
@@ -318,7 +320,7 @@ def print_backup_statistics() -> None:
     )
 
 
-def _get_total_backup_size() -> str:
+def _get_total_backup_size():-> str:
     """Get total size of all backup directories."""
     try:
         backup_dirs = [
@@ -343,7 +345,7 @@ def _get_total_backup_size() -> str:
         return "unknown"
 
 
-def main() -> None:
+def main():-> None:
     """Main test function."""
     print("BACKUP INTEGRATION TEST")
     print("=" * 60)
@@ -371,7 +373,6 @@ def main() -> None:
 
     except Exception as e:
         print(f"\n[ERROR] Test failed: {e}")
-        import traceback
 
         traceback.print_exc()
 

@@ -1,3 +1,20 @@
+from numpy.typing import NDArray
+import math
+import numpy as np
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
+from hash_recollection.entropy_tracker import EntropyState, EntropyTracker
+from hash_recollection.pattern_utils import PatternType, PatternUtils
+from schwabot.core.overlay.aleph_overlay_mapper import (
+from schwabot.core.phase.drift_phase_weighter import DriftPhaseWeighter, DriftType
+from schwabot.core.phase.phase_transition_monitor import (
+from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Tuple
+import hashlib
+import logging
+import time
+
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 
@@ -18,24 +35,8 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
 """
-import hashlib
-import logging
-import math
-import time
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
 
-import numpy as np
-from numpy.typing import NDArray
 
-from hash_recollection.entropy_tracker import EntropyState, EntropyTracker
-from hash_recollection.pattern_utils import PatternType, PatternUtils
-from schwabot.core.overlay.aleph_overlay_mapper import (
-from schwabot.core.phase.drift_phase_weighter import DriftPhaseWeighter, DriftType
-from schwabot.core.phase.phase_transition_monitor import (
-from typing import Tuple
 
 
 # !/usr/bin/env python3
@@ -139,12 +140,10 @@ self.stats = {total_optimizations: 0,profitable_decisions: 0,avg_confidence": 0.
             logger.info(f"💰 Profit Optimization Engine initialized with {len(
 self.weights)} mathematical components)
 
-def _default_config(self) -> Dict[str, Any]:Default configuration for profit optimization.return {confidence_threshold: 0.75,profit_threshold": 0.005,risk_tolerance": 0.02,hash_weight": 0.25,phase_weight": 0.20,entropy_weight": 0.20,drift_weight": 0.20,pattern_weight": 0.15,max_history_size": 1000,btc_usdc_pair": True,precision": 8,  # BTC precisionmin_volume_threshold: 1000.0,max_position_size": 0.1,  # 10% of portfoliostop_loss_factor: 0.02,  # 2% stop losstake_profit_factor: 0.05,  # 5% take profit
+def _default_config():-> Dict[str, Any]:Default configuration for profit optimization.return {confidence_threshold: 0.75,profit_threshold": 0.005,risk_tolerance": 0.02,hash_weight": 0.25,phase_weight": 0.20,entropy_weight": 0.20,drift_weight": 0.20,pattern_weight": 0.15,max_history_size": 1000,btc_usdc_pair": True,precision": 8,  # BTC precisionmin_volume_threshold: 1000.0,max_position_size": 0.1,  # 10% of portfoliostop_loss_factor: 0.02,  # 2% stop losstake_profit_factor: 0.05,  # 5% take profit
 }
 
-def optimize_profit(:
-self, btc_price: float, usdc_volume: float, market_data: Dict[str, Any]
-) -> OptimizationResult:Main profit optimization function.Mathematical Formula:
+def optimize_profit():-> OptimizationResult:Main profit optimization function.Mathematical Formula:
         P(t) = ∑ᵢ wᵢ · Aᵢ(t) · exp(iφᵢ(t)) · Eᵢ(t)
 C(t) = α·H_sim + β·φ_align + γ·E_ent + δ·D_drift
 
@@ -278,9 +277,7 @@ fexpected: {expected_profit:.4f})
 # Return safe default result
         return self._create_default_result(optimization_id, btc_price, usdc_volume)
 
-def _calculate_hash_similarity(:
-self, btc_price: float, usdc_volume: float, market_data: Dict[str, Any]
-) -> float:
+def _calculate_hash_similarity():-> float:
         Calculate hash similarity using ALEPH overlay mapping.try:
             if not self.overlay_mapper:
                 return 0.5  # Neutral default
@@ -298,7 +295,7 @@ overlay_map = self.overlay_mapper.map_hash_to_overlay(market_hash)
             logger.error(fError calculating hash similarity: {e})
         return 0.5
 
-def _calculate_phase_alignment(self, price_history: List[float]) -> float:Calculate phase alignment using phase transition monitoring.try:
+def _calculate_phase_alignment():-> float:Calculate phase alignment using phase transition monitoring.try:
             if not self.phase_monitor or len(price_history) < 10:
                 return 0.5  # Neutral default
 
@@ -329,7 +326,7 @@ phase_scores = {PhaseState.ACCUMULATION: 0.8,
             logger.error(fError calculating phase alignment: {e})
         return 0.5
 
-def _calculate_entropy_score(self, price_history: List[float]) -> float:Calculate entropy score using entropy tracker.try:
+def _calculate_entropy_score():-> float:Calculate entropy score using entropy tracker.try:
             if not self.entropy_tracker or len(price_history) < 5:
                 return 0.5  # Neutral default
 
@@ -353,7 +350,7 @@ base_score = entropy_scores.get(entropy_metrics.state, 0.5)
             logger.error(fError calculating entropy score: {e})
             return 0.5
 
-def _calculate_drift_weight(self, price_history: List[float]) -> float:Calculate drift weight using drift phase weighter.try:
+def _calculate_drift_weight():-> float:Calculate drift weight using drift phase weighter.try:
             if not self.drift_weighter or len(price_history) < 10:
                 return 0.5  # Neutral default
 
@@ -369,7 +366,7 @@ drift_weight = self.drift_weighter.calculate_phase_drift_weight(trace)
             logger.error(fError calculating drift weight: {e})
         return 0.5
 
-def _calculate_pattern_confidence(self, price_history: List[float]) -> float:Calculate pattern recognition confidence.try:
+def _calculate_pattern_confidence():-> float:Calculate pattern recognition confidence.try:
             if not self.pattern_utils or len(price_history) < 5:
                 return 0.5  # Neutral default
 
@@ -405,14 +402,7 @@ pattern_scores.get(max_pattern.pattern_type, 0.5)
             logger.error(fError calculating pattern confidence: {e})
         return 0.5
 
-def _calculate_confidence_score(
-self,:
-hash_similarity: float,
-phase_alignment: float,
-entropy_score: float,
-drift_weight: float,
-pattern_confidence: float,
-) -> float:Calculate composite confidence score using mathematical weights.try:
+def _calculate_confidence_score():-> float:Calculate composite confidence score using mathematical weights.try:
             # Weighted sum of all components
 confidence = (
 self.weights[hash_similarity] * hash_similarity+ self.weights[phase_alignment] * phase_alignment+ self.weights[entropy_score] * entropy_score+ self.weights[drift_weight] * drift_weight+ self.weights[pattern_confidence] * pattern_confidence
@@ -424,13 +414,7 @@ self.weights[hash_similarity] * hash_similarity+ self.weights[phase_alignment] *
             logger.error(fError calculating confidence score: {e})
         return 0.5
 
-def _calculate_profit_potential(
-self,:
-btc_price: float,
-usdc_volume: float,
-confidence_score: float,
-market_data: Dict[str, Any],
-) -> float:Calculate profit potential using mathematical model.try:
+def _calculate_profit_potential():-> float:Calculate profit potential using mathematical model.try:
             # Base profit potential from price momentum
             price_history = market_data.get(price_history, [btc_price])
             if len(price_history) > 1: price_momentum = (price_history[-1] - price_history[0]) / price_history[
@@ -459,12 +443,7 @@ profit_potential = base_profit * confidence_score
             logger.error(fError calculating profit potential: {e})
             return 0.0
 
-def _determine_trade_parameters(
-self,:
-profit_potential: float,
-confidence_score: float,
-market_data: Dict[str, Any],
-) -> Tuple[TradeDirection, float]:Determine optimal trade direction and position size.try:
+def _determine_trade_parameters():-> Tuple[TradeDirection, float]:Determine optimal trade direction and position size.try:
             # Determine direction from price momentum
 price_history = market_data.get(price_history, [])
             if len(price_history) > 1: momentum = price_history[-1] - price_history[0]
@@ -492,9 +471,7 @@ position_size = min(base_size, base_size * size_factor)
             logger.error(fError determining trade parameters: {e})
         return TradeDirection.HOLD, 0.0
 
-def _calculate_risk_adjustment(:
-self, btc_price: float, usdc_volume: float, confidence_score: float
-) -> float:Calculate risk adjustment factor.try:
+def _calculate_risk_adjustment():-> float:Calculate risk adjustment factor.try:
             # Base risk adjustment on confidence
 base_adjustment = confidence_score
 
@@ -511,7 +488,7 @@ risk_adjustment = base_adjustment * volume_adjustment
             logger.error(fError calculating risk adjustment: {e})
         return 0.5
 
-def _validate_trade_decision() -> bool:
+def _validate_trade_decision():-> bool:
         Validate if trade should be executed based on thresholds.try:
             # Check confidence threshold
             if profit_vector.confidence_score < self.confidence_threshold:
@@ -535,9 +512,7 @@ if profit_vector.trade_direction == TradeDirection.HOLD:
             logger.error(fError validating trade decision: {e})
         return False
 
-def _calculate_risk_score(:
-        self, profit_vector: ProfitVector, market_data: Dict[str, Any]
-) -> float:Calculate overall risk score for the trade.try:
+def _calculate_risk_score():-> float:Calculate overall risk score for the trade.try:
             # Base risk from volatility
 volatility = market_data.get(volatility, 0.02)
             volatility_risk = min(1.0, volatility / self.risk_tolerance)
@@ -561,7 +536,7 @@ volatility_risk * 0.4 + position_risk * 0.3 + confidence_risk * 0.3
             logger.error(fError calculating risk score: {e})
         return 0.5
 
-def _update_performance_stats() -> None:
+def _update_performance_stats():-> None:
         Update performance statistics.try:
             self.stats[total_optimizations] += 1
 
@@ -581,9 +556,7 @@ self.stats[optimization_time_ms] = (self.stats[optimization_time_ms] * (total - 
 
         except Exception as e:logger.error(fError updating performance stats: {e})
 
-def _create_default_result(:
-self, optimization_id: str, btc_price: float, usdc_volume: float
-) -> OptimizationResult:Create safe default optimization result.profit_vector = ProfitVector(
+def _create_default_result():-> OptimizationResult:Create safe default optimization result.profit_vector = ProfitVector(
 timestamp=time.time(),
 price=btc_price,
 volume=usdc_volume,
@@ -603,7 +576,7 @@ confidence_level=0.0,
             optimization_time_ms=0.0,
 )
 
-def get_performance_summary(self) -> Dict[str, Any]:Get comprehensive performance summary.try: success_rate = 0.0
+def get_performance_summary():-> Dict[str, Any]:Get comprehensive performance summary.try: success_rate = 0.0
 if self.stats[total_optimizations] > 0: success_rate = (
 self.stats[profitable_decisions]/ self.stats[total_optimizations]
 )
@@ -615,7 +588,7 @@ self.stats[profitable_decisions]/ self.stats[total_optimizations]
         except Exception as e:logger.error(f"Error getting performance summary: {e})
         return {}
 
-def get_recent_optimizations(self, count: int = 10) -> List[Dict[str, Any]]:Get recent optimization results.try: recent = self.optimization_history[-count:]
+def get_recent_optimizations():-> List[Dict[str, Any]]:Get recent optimization results.try: recent = self.optimization_history[-count:]
 
         return [{
 optimization_id: result.optimization_id,timestamp: result.timestamp,should_trade: result.should_trade,trade_direction": result.profit_vector.trade_direction.value,confidence_level": result.confidence_level,expected_return: result.expected_return,risk_score": result.risk_score,btc_price": result.profit_vector.price,position_size": result.profit_vector.position_size,

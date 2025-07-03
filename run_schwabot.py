@@ -1,14 +1,22 @@
-# -*- coding: utf-8 -*-
+        from core.fallback_logic_router import FallbackLogicRouter
+        from core.meta_layer_ghost_bridge import MetaLayerGhostBridge
+        from core.phantom_lag_model import PhantomLagModel
+    from core.chrono_causal_orchestrator import ChronoCausalOrchestrator
+    from core.settings_manager import get_settings_manager
+    from core.system_integration_orchestrator import SystemIntegrationOrchestrator
+    from ui.schwabot_dashboard import app, socketio
 from core.dual_unicore_handler import DualUnicoreHandler
 from pathlib import Path
+from utils.safe_print import safe_print
 import logging
 import os
 import sys
+import threading
 import time
 
-import threading
+# -*- coding: utf-8 -*-
 
-from utils.safe_print import safe_print
+
 
 
 # Initialize Unicode handler
@@ -38,10 +46,6 @@ sys.path.append(str(Path(__file__).parent / "core"))
 
 # Import Schwabot components
 try:
-    from core.settings_manager import get_settings_manager
-    from core.system_integration_orchestrator import SystemIntegrationOrchestrator
-    from ui.schwabot_dashboard import app, socketio
-    from core.chrono_causal_orchestrator import ChronoCausalOrchestrator
 
     IMPORTS_SUCCESSFUL = True
 except ImportError as e:
@@ -106,9 +110,6 @@ def initialize_components():
 
         # Initialize mathematical components
         logger.info("Initializing mathematical components...")
-        from core.phantom_lag_model import PhantomLagModel
-        from core.meta_layer_ghost_bridge import MetaLayerGhostBridge
-        from core.fallback_logic_router import FallbackLogicRouter
 
         phantom_model = PhantomLagModel()
         meta_bridge = MetaLayerGhostBridge()

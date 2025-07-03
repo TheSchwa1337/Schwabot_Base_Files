@@ -1,3 +1,16 @@
+import numpy as np
+from core.galileo_tensor_bridge import GalileoTensorBridge
+from core.qsc_enhanced_profit_allocator import (
+from core.quantum_static_core import QSCMode, QuantumStaticCore, ResonanceLevel
+from core.warp_sync_core import WarpSyncCore
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple
+from typing import Tuple
+import asyncio
+import logging
+import time
+
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 
@@ -18,20 +31,8 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
 """
-import asyncio
-import logging
-import time
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
 
-import numpy as np
 
-from core.galileo_tensor_bridge import GalileoTensorBridge
-from core.qsc_enhanced_profit_allocator import (
-from core.quantum_static_core import QSCMode, QuantumStaticCore, ResonanceLevel
-from core.warp_sync_core import WarpSyncCore
-from typing import Tuple
 
 
 
@@ -93,10 +94,10 @@ self.ccxt_client = None  # Would be initialized with real exchange
 
             logger.info(🎯 Master Cycle Engine initialized)
 
-def _default_config(self) -> Dict[str, Any]:Default configuration.return {fibonacci_divergence_threshold: 0.007,orderbook_imbalance_threshold": 0.15,immune_activation_threshold": 0.85,ghost_floor_threshold": 0.2,emergency_shutdown_threshold": 0.1,quantum_confidence_threshold": 0.8,enable_auto_immune_response": True,enable_ghost_floor_mode": True,enable_emergency_protocols": True,tick_interval": 1.0,max_consecutive_blocks": 5,
+def _default_config():-> Dict[str, Any]:Default configuration.return {fibonacci_divergence_threshold: 0.007,orderbook_imbalance_threshold": 0.15,immune_activation_threshold": 0.85,ghost_floor_threshold": 0.2,emergency_shutdown_threshold": 0.1,quantum_confidence_threshold": 0.8,enable_auto_immune_response": True,enable_ghost_floor_mode": True,enable_emergency_protocols": True,tick_interval": 1.0,max_consecutive_blocks": 5,
 }
 
-def process_market_tick(self, market_data: Dict[str, Any]) -> SystemDiagnostics:"Process a market tick through the complete immune system.current_time = time.time()
+def process_market_tick():-> SystemDiagnostics:"Process a market tick through the complete immune system.current_time = time.time()
 self.total_decisions += 1
 
 # Extract market data
@@ -203,9 +204,7 @@ self._log_decision(diagnostics)
 
         return diagnostics
 
-def _check_fibonacci_divergence(:
-self, price_history: List[float], fibonacci_projection: List[float]
-) -> bool:
+def _check_fibonacci_divergence():-> bool:
         Check for Fibonacci divergence using quantum probe.current_time = time.time()
 
 if current_time - self.last_fibonacci_check < self.fibonacci_check_interval:
@@ -222,19 +221,12 @@ price_array = np.array(price_history)
 
         return self.qsc.quantum_probe.check_vector_divergence(fib_array, price_array)
 
-def _validate_orderbook_stability(self, orderbook_data: Dict[str, Any]) -> bool:Validate order book stability using immune system.if not orderbook_data:
+def _validate_orderbook_stability():-> bool:Validate order book stability using immune system.if not orderbook_data:
             return False
 
         return self.profit_allocator.check_orderbook_immune_validation(orderbook_data)
 
-def _make_trading_decision(
-self,:
-qsc_override: bool,
-qsc_result,
-tensor_result,
-orderbook_stable: bool,
-fib_divergence: bool,
-) -> Tuple[TradingDecision, float]:Make trading decision based on all immune system inputs.# Emergency conditions
+def _make_trading_decision():-> Tuple[TradingDecision, float]:Make trading decision based on all immune system inputs.# Emergency conditions
 if self.emergency_override:
             return TradingDecision.EMERGENCY_EXIT, 0.0
 
@@ -268,9 +260,7 @@ if confidence_score >= self.config[quantum_confidence_threshold]:
 else:
             return TradingDecision.BLOCK, confidence_score
 
-def _assess_risk_level(:
-        self, qsc_result, tensor_result, orderbook_imbalance: float
-) -> str:Assess overall risk level.risk_factors = [1.0 - qsc_result.confidence,  # Low confidence = high risk
+def _assess_risk_level():-> str:Assess overall risk level.risk_factors = [1.0 - qsc_result.confidence,  # Low confidence = high risk
 orderbook_imbalance,  # High imbalance = high risk
 # Extreme scores = risk
 abs(tensor_result.sp_integration[quantum_score]) / 2.0,
@@ -282,7 +272,7 @@ avg_risk = np.mean(risk_factors)
 if avg_risk > 0.7:
             return HIGHelif avg_risk > 0.4:
             returnMEDIUMelse :
-            returnLOWdef _cancel_all_orders(self) -> None:Cancel all pending orders due to immune response.logger.warning(🛑 IMMUNE RESPONSE: Canceling all pending orders)
+            returnLOWdef _cancel_all_orders():-> None:Cancel all pending orders due to immune response.logger.warning(🛑 IMMUNE RESPONSE: Canceling all pending orders)
 
 # In real implementation, would cancel orders via CCXT
 if self.ccxt_client:
@@ -296,7 +286,7 @@ pass
 self.ghost_floor_active = True
 self.system_mode = SystemMode.GHOST_FLOOR
 
-def _emergency_shutdown(self) -> None:Emergency shutdown protocol.logger.critical(🚨 EMERGENCY SHUTDOWN ACTIVATED)
+def _emergency_shutdown():-> None:Emergency shutdown protocol.logger.critical(🚨 EMERGENCY SHUTDOWN ACTIVATED)
 
 self.emergency_override = True
 self.system_mode = SystemMode.EMERGENCY_SHUTDOWN
@@ -311,7 +301,7 @@ self.qsc.lock_timeband(duration=1800)  # 30 minutes
 # Engage profit allocator fallback
         self.profit_allocator.engage_fallback_mode()
 
-def _log_decision() -> None:
+def _log_decision():-> None:
         Log trading decision with full context.log_level = logging.INFO
 
 if diagnostics.trading_decision == TradingDecision.EMERGENCY_EXIT: log_level = logging.CRITICAL
@@ -330,7 +320,7 @@ if diagnostics.diagnostic_messages:
             for msg in diagnostics.diagnostic_messages:
                 logger.log(log_level, f{msg})
 
-def enter_ghost_floor_mode(self) -> None:Enter Ghost Floor Mode - Wait for system re-validation.logger.warning(👻 Entering Ghost Floor Mode)
+def enter_ghost_floor_mode():-> None:Enter Ghost Floor Mode - Wait for system re-validation.logger.warning(👻 Entering Ghost Floor Mode)
 
 self.ghost_floor_active = True
 self.system_mode = SystemMode.GHOST_FLOOR
@@ -341,7 +331,7 @@ self._cancel_all_orders()
 # Lock timeband
 self.qsc.lock_timeband(duration=300)  # 5 minutes
 
-def exit_ghost_floor_mode(self) -> None:Exit Ghost Floor Mode after re-validation.logger.info(👻 Exiting Ghost Floor Mode - System re-validated)
+def exit_ghost_floor_mode():-> None:Exit Ghost Floor Mode after re-validation.logger.info(👻 Exiting Ghost Floor Mode - System re-validated)
 
 self.ghost_floor_active = False
 self.system_mode = SystemMode.NORMAL
@@ -349,7 +339,7 @@ self.system_mode = SystemMode.NORMAL
 # Unlock timeband
 self.qsc.unlock_timeband()
 
-def get_system_status(self) -> Dict[str, Any]:Get comprehensive system status.total_trades = self.successful_trades + self.blocked_trades
+def get_system_status():-> Dict[str, Any]:Get comprehensive system status.total_trades = self.successful_trades + self.blocked_trades
 success_rate = self.successful_trades / max(total_trades, 1)
 
         return {system_mode: self.system_mode.value,ghost_floor_active: self.ghost_floor_active,emergency_override: self.emergency_override,total_decisions": self.total_decisions,successful_trades": self.successful_trades,blocked_trades": self.blocked_trades,success_rate": success_rate,immune_activations": self.immune_activations,ghost_floor_activations": self.ghost_floor_activations,emergency_shutdowns": self.emergency_shutdowns,qsc_status": self.qsc.get_immune_status(),profit_allocator_performance": self.profit_allocator.get_qsc_performance_summary(),last_decision": (
@@ -357,7 +347,7 @@ self.decision_history[-1].__dict__ if self.decision_history else None
 ),
 }
 
-def get_fibonacci_echo_data(self) -> Dict[str, Any]:Get Fibonacci echo plot data for visualization.if not self.decision_history:
+def get_fibonacci_echo_data():-> Dict[str, Any]:Get Fibonacci echo plot data for visualization.if not self.decision_history:
             return {}
 
 recent_decisions = self.decision_history[-50:]
@@ -367,7 +357,7 @@ recent_decisions = self.decision_history[-50:]
 ],orderbook_stability": [d.orderbook_stability for d in recent_decisions],system_modes": [d.system_mode.value for d in recent_decisions],trading_decisions": [d.trading_decision.value for d in recent_decisions],risk_assessments": [d.risk_assessment for d in recent_decisions],
 }
 
-def reset_emergency_override(self) -> None:Reset emergency override (manual intervention).logger.info(🔄 Emergency override reset - Manual intervention)
+def reset_emergency_override():-> None:Reset emergency override (manual intervention).logger.info(🔄 Emergency override reset - Manual intervention)
 
 self.emergency_override = False
 self.system_mode = SystemMode.NORMAL
@@ -376,7 +366,7 @@ self.ghost_floor_active = False
 # Reset QSC
 self.qsc.reset_immune_state()
 
-async def run_continuous_monitoring(self, market_data_stream) -> None:Run continuous monitoring loop.logger.info(🎯 Starting continuous monitoring loop)
+async def run_continuous_monitoring():-> None:Run continuous monitoring loop.logger.info(🎯 Starting continuous monitoring loop)
 
 async for market_data in market_data_stream:
             try: diagnostics = self.process_market_tick(market_data)

@@ -1,3 +1,12 @@
+            from core.mathematical_relay_sequencer import (
+from datetime import datetime
+from typing import Dict, Any
+import json
+import logging
+import os
+import sys
+import time
+
 #!/usr/bin/env python3
 """
 Mathematical Relay Sequencing Demo
@@ -16,13 +25,6 @@ This demo showcases:
 - Comprehensive time log management and export
 """
 
-import sys
-import time
-import logging
-import json
-import os
-from datetime import datetime
-from typing import Dict, Any
 
 # Configure logging
 logging.basicConfig(
@@ -40,13 +42,12 @@ class MathematicalRelaySequencingDemo:
         self.demo_results = []
         self.start_time = datetime.now()
 
-    def initialize_system(self) -> bool:
+    def initialize_system():-> bool:
         """Initialize the mathematical relay sequencer."""
         print("🔧 Initializing Mathematical Relay Sequencing System")
         print("=" * 60)
 
         try:
-            from core.mathematical_relay_sequencer import (
                 MathematicalRelaySequencer,
                 TimeLogLevel,
             )
@@ -79,7 +80,7 @@ class MathematicalRelaySequencingDemo:
             print(f"❌ Error initializing system: {e}")
             return False
 
-    def demo_btc_price_hash_sequencing(self) -> Dict[str, Any]:
+    def demo_btc_price_hash_sequencing():-> Dict[str, Any]:
         """Demonstrate BTC price hash sequencing with precise timing."""
         print("\n🪙 BTC Price Hash Sequencing Demo")
         print("=" * 40)
@@ -191,7 +192,7 @@ class MathematicalRelaySequencingDemo:
             print(f"❌ Error in BTC price hash sequencing demo: {e}")
             return {"type": "btc_price_hash", "error": str(e), "success": False}
 
-    def demo_bit_depth_switching(self) -> Dict[str, Any]:
+    def demo_bit_depth_switching():-> Dict[str, Any]:
         """Demonstrate bit depth switching with phase tracking."""
         print("\n🔄 Bit Depth Switching Demo")
         print("=" * 35)
@@ -300,7 +301,7 @@ class MathematicalRelaySequencingDemo:
             print(f"❌ Error in bit depth switching demo: {e}")
             return {"type": "bit_depth_switch", "error": str(e), "success": False}
 
-    def demo_profit_optimization(self) -> Dict[str, Any]:
+    def demo_profit_optimization():-> Dict[str, Any]:
         """Demonstrate profit optimization with basket-tier navigation."""
         print("\n💰 Profit Optimization Demo")
         print("=" * 35)
@@ -409,7 +410,7 @@ class MathematicalRelaySequencingDemo:
             print(f"❌ Error in profit optimization demo: {e}")
             return {"type": "profit_optimization", "error": str(e), "success": False}
 
-    def demo_quicktime_events(self) -> Dict[str, Any]:
+    def demo_quicktime_events():-> Dict[str, Any]:
         """Demonstrate QuickTime event handling with sequencing."""
         print("\n⚡ QuickTime Events Demo")
         print("=" * 30)
@@ -502,7 +503,7 @@ class MathematicalRelaySequencingDemo:
             print(f"❌ Error in QuickTime events demo: {e}")
             return {"type": "quicktime_events", "error": str(e), "success": False}
 
-    def demo_time_log_analysis(self) -> Dict[str, Any]:
+    def demo_time_log_analysis():-> Dict[str, Any]:
         """Demonstrate comprehensive time log analysis."""
         print("\n⏱️ Time Log Analysis Demo")
         print("=" * 35)
@@ -584,7 +585,7 @@ class MathematicalRelaySequencingDemo:
             print(f"❌ Error in time log analysis demo: {e}")
             return {"type": "time_log_analysis", "error": str(e), "success": False}
 
-    def demo_data_export(self) -> Dict[str, Any]:
+    def demo_data_export():-> Dict[str, Any]:
         """Demonstrate data export and persistence."""
         print("\n💾 Data Export Demo")
         print("=" * 25)
@@ -651,7 +652,7 @@ class MathematicalRelaySequencingDemo:
             print(f"❌ Error in data export demo: {e}")
             return {"type": "data_export", "error": str(e), "success": False}
 
-    def run_comprehensive_demo(self) -> bool:
+    def run_comprehensive_demo():-> bool:
         """Run the comprehensive mathematical relay sequencing demo."""
         print("🧮 Mathematical Relay Sequencing Demo")
         print("=" * 60)

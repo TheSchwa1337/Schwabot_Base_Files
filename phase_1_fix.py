@@ -4,6 +4,7 @@ import os
 import re
 
 
+
 # Initialize Unicode handler
 unicore = DualUnicoreHandler()
 
@@ -24,7 +25,7 @@ This script fixes E999 syntax errors that prevent code execution."""
 """
 
 
-def fix_syntax_errors(file_path: str) -> bool:"""
+def fix_syntax_errors():-> bool:"""
     """Fix syntax errors in a single file."""
 
 """

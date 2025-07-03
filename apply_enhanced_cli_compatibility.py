@@ -1,3 +1,11 @@
+    from core.enhanced_windows_cli_compatibility import (
+    from core.enhanced_windows_cli_compatibility import safe_print
+from typing import Any, Dict, Tuple
+import logging
+import os
+import re
+import shutil
+
 #!/usr/bin/env python3
 """Enhanced CLI Compatibility Applicator.
 
@@ -5,11 +13,6 @@ Applies enhanced Windows CLI compatibility to mathematical validation systems
 in the SchwaBot trading intelligence build.
 """
 
-import logging
-import os
-import re
-import shutil
-from typing import Any, Dict, Tuple
 
 # Setup logging
 logging.basicConfig(
@@ -19,7 +22,6 @@ logger = logging.getLogger(__name__)
 
 # Import our enhanced compatibility handler
 try:
-    from core.enhanced_windows_cli_compatibility import safe_print
 
     CLI_HANDLER_AVAILABLE = True
 except ImportError:
@@ -47,7 +49,6 @@ class CliCompatibilityApplicator:
     CLI_IMPORT_STATEMENT = """
 # Enhanced Windows CLI compatibility
 try:
-    from core.enhanced_windows_cli_compatibility import (
         EnhancedWindowsCliCompatibilityHandler,
         cli_safe,
         safe_print,
@@ -92,7 +93,7 @@ except ImportError:
         self.backup_files = []
         self.errors = []
 
-    def create_backup(self, file_path: str) -> str:
+    def create_backup():-> str:
         """Create backup of file before modification."""
         backup_path = f"{file_path}.cli_backup"
         try:
@@ -105,7 +106,7 @@ except ImportError:
             logger.error(error_msg)
             return ""
 
-    def add_cli_imports(self, content: str) -> str:
+    def add_cli_imports():-> str:
         """Add CLI compatibility imports to file content."""
         # Check if imports already exist
         if "enhanced_windows_cli_compatibility" in content:
@@ -134,7 +135,7 @@ except ImportError:
 
         return modified_content
 
-    def process_file(self, file_path: str) -> Tuple[bool, str]:
+    def process_file():-> Tuple[bool, str]:
         """Process a single file for CLI compatibility."""
         if not os.path.exists(file_path):
             error_msg = f"File not found: {file_path}"
@@ -177,7 +178,7 @@ except ImportError:
             logger.error(error_msg)
             return False, error_msg
 
-    def apply_to_all_targets(self) -> Dict[str, Any]:
+    def apply_to_all_targets():-> Dict[str, Any]:
         """Apply CLI compatibility to all target files."""
         results = {
             "processed": [],

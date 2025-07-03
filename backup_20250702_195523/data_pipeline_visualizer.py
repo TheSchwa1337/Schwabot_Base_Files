@@ -1,3 +1,20 @@
+import math
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
+from pathlib import Path
+from tkinter import Canvas, ttk
+from typing import Any, Dict, List, Optional, Tuple
+from typing import Tuple
+import asyncio
+import json
+import logging
+import psutil
+import random
+import threading
+import time
+import tkinter as tk
+
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 
@@ -18,24 +35,8 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
 """
-import asyncio
-import json
-import logging
 
-import math
-import random
-import threading
-import time
-import tkinter as tk
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
-from pathlib import Path
-from tkinter import Canvas, ttk
-from typing import Any, Dict, List, Optional, Tuple
 
-import psutil
-from typing import Tuple
 
 
 
@@ -124,7 +125,7 @@ self._initialize_tier_metrics()
 
             logger.info(📊 Data Pipeline Visualizer initialized)
 
-def _default_config(self) -> Dict[str, Any]:Default configuration.return {ram_cache_limit_mb: 500,mid_term_limit_mb": 2000,long_term_limit_mb": 10000,archive_limit_mb": 50000,update_interval_ms": 1000,animation_fps": 30,particle_count": 50,auto_cleanup_enabled": True,compression_enabled": True,visualization_enabled": True,performance_alerts": True,
+def _default_config():-> Dict[str, Any]:Default configuration.return {ram_cache_limit_mb: 500,mid_term_limit_mb": 2000,long_term_limit_mb": 10000,archive_limit_mb": 50000,update_interval_ms": 1000,animation_fps": 30,particle_count": 50,auto_cleanup_enabled": True,compression_enabled": True,visualization_enabled": True,performance_alerts": True,
 }
 
 def _initialize_tier_metrics():Initialize tier metrics.for tier in DataTier:
@@ -138,7 +139,7 @@ usage_percentage=0.0,
                 compression_savings=0.0,
 )
 
-def create_visualization_window(self, parent=None) -> tk.Toplevel:Create the main visualization window.if parent: window = tk.Toplevel(parent)
+def create_visualization_window():-> tk.Toplevel:Create the main visualization window.if parent: window = tk.Toplevel(parent)
 else:
             window = tk.Tk()
 
@@ -218,14 +219,7 @@ self.metrics_text.configure(yscrollcommand=scrollbar.set)
 self.metrics_text.pack(side=left", fill="both", expand = True)
 scrollbar.pack(side=right", fill="y)
 
-def add_data_unit(
-self,:
-category: DataCategory,
-data_size: int,
-tier: DataTier = DataTier.RAM_CACHE,
-priority: int = 1,
-metadata: Optional[Dict[str, Any]] = None,
-) -> str:Add a new data unit to the pipeline.try: unit_id = f{category.value}_{
+def add_data_unit():-> str:Add a new data unit to the pipeline.try: unit_id = f{category.value}_{
 int(
 time.time() *
 1000)}_{
@@ -280,7 +274,7 @@ self._update_tier_metrics(tier)
 else:
                         logger.warning(⚠️ Unable to store data unit, all tiers full)return
 
-        except Exception as e:logger.error(fError adding data unit: {e})return def remove_data_unit() -> bool:Remove a data unit from the pipeline.try:
+        except Exception as e:logger.error(fError adding data unit: {e})return def remove_data_unit():-> bool:Remove a data unit from the pipeline.try:
             if unit_id in self.data_units: data_unit = self.data_units[unit_id]
 tier = data_unit.tier
 del self.data_units[unit_id]
@@ -295,7 +289,7 @@ tier.value})
             logger.error(fError removing data unit: {e})
         return False
 
-def move_data_unit() -> bool:Move a data unit between tiers.try:
+def move_data_unit():-> bool:Move a data unit between tiers.try:
             if unit_id not in self.data_units:
                 return False
 
@@ -325,7 +319,7 @@ target_tier.value}: insufficient capacity)
             logger.error(fError moving data unit: {e})
         return False
 
-def _check_tier_capacity() -> bool:Check if tier has capacity for additional data.try: current_size = self.tier_metrics[tier].compressed_size_bytes
+def _check_tier_capacity():-> bool:Check if tier has capacity for additional data.try: current_size = self.tier_metrics[tier].compressed_size_bytes
 limit = self.tier_limits[tier]
         return (current_size + additional_size) <= limit
 
@@ -348,7 +342,7 @@ if current_index < len(tier_hierarchy) - 1:
         except ValueError:
             return None
 
-def _calculate_compression_ratio() -> float:
+def _calculate_compression_ratio():-> float:
         Calculate compression ratio based on data category.# Different data types compress differently
 compression_ratios = {DataCategory.BTC_HASHING: 0.8,  # Binary data, moderate compression
             DataCategory.TRADING_SIGNALS: 0.6,  # JSON data, good compression
@@ -414,7 +408,7 @@ metrics.flow_rate_mbps = self._calculate_flow_rate(tier)
         except Exception as e:
             logger.error(fError updating tier metrics: {e})
 
-def _calculate_flow_rate() -> float:Calculate data flow rate for a tier.try:
+def _calculate_flow_rate():-> float:Calculate data flow rate for a tier.try:
             # Get recent units (last minute)
 recent_cutoff = datetime.now() - timedelta(minutes=1)
 recent_units = [
@@ -488,7 +482,7 @@ if len(self.particles) > self.config[particle_count]:
 
         except Exception as e:logger.error(fError creating particle effect: {e})
 
-def _get_tier_color() -> str:Get color for tier visualization.tier_colors = {DataTier.RAM_CACHE: # ff6b6b,DataTier.MID_TERM:# ffd93d,DataTier.LONG_TERM:# 6bcf7,DataTier.ARCHIVE:# 4ecdc4,
+def _get_tier_color():-> str:Get color for tier visualization.tier_colors = {DataTier.RAM_CACHE: # ff6b6b,DataTier.MID_TERM:# ffd93d,DataTier.LONG_TERM:# 6bcf7,DataTier.ARCHIVE:# 4ecdc4,
 }return tier_colors.get(tier, # )
 
 def _start_update_loop():Start the update loop for real-time visualization.if self.update_thread and self.update_thread.is_alive():
@@ -765,13 +759,13 @@ self.pipeline_stats.uptime_seconds * 1024 * 1024
         except Exception as e:
             logger.error(fError updating pipeline stats: {e})
 
-def _format_bytes() -> str:Format bytes into human readable format.for unit in [B,KB,MB",GB",TB]:
+def _format_bytes():-> str:Format bytes into human readable format.for unit in [B,KB,MB",GB",TB]:
             if bytes_value < 1024.0:
                 return f{bytes_value:.1f} {unit}
 bytes_value /= 1024.0
         return f{bytes_value:.1f} PB
 
-def _format_uptime() -> str:Format uptime into human readable format.hours, remainder = divmod(int(seconds), 3600)
+def _format_uptime():-> str:Format uptime into human readable format.hours, remainder = divmod(int(seconds), 3600)
 minutes, seconds = divmod(remainder, 60)
         return f{hours:02d}:{minutes:02d}:{seconds:02d}
 
@@ -813,7 +807,7 @@ filepath = fpipeline_stats_{timestamp}.jsonwith open(filepath,w) as f:
 
         except Exception as e:logger.error(fError exporting statistics: {e})
 
-def get_pipeline_status(self) -> Dict[str, Any]:"Get current pipeline status.return {animation_running: self.animation_running,total_units": sum(m.total_units for m in self.tier_metrics.values()),total_size_bytes": sum(
+def get_pipeline_status():-> Dict[str, Any]:"Get current pipeline status.return {animation_running: self.animation_running,total_units": sum(m.total_units for m in self.tier_metrics.values()),total_size_bytes": sum(
 m.total_size_bytes for m in self.tier_metrics.values()
 ),compressed_size_bytes": sum(
 m.compressed_size_bytes for m in self.tier_metrics.values()

@@ -1,3 +1,5 @@
+import re
+
 #!/usr/bin/env python3
 """
 Targeted Syntax Fix for Core Files
@@ -6,7 +8,6 @@ Targeted Syntax Fix for Core Files
 Fix specific syntax issues in core files that the systematic fix missed.
 """
 
-import re
 
 
 def fix_settings_manager():

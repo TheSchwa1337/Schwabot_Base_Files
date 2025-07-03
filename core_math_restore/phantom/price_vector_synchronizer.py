@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 # -*- coding: utf - 8 -*-
 """Price vector synchronizer with EMA smoothing.""""""
 """"""
@@ -17,8 +19,7 @@
 # -*- coding: utf - 8 -*-
 
 
-from __future__ import annotations
-def ema(prices: list[float], tau: int = 12) -> float:"""
+def ema():-> float:"""
     """Calculate exponential moving average of price sequence."
 
 Compute smoothed price: \\u03a8_sync = EMA(price, \\u03c4)

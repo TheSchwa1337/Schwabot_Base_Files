@@ -1,3 +1,12 @@
+import numpy as np
+import pandas as pd
+from . import BTC_USDC_HASH_MEMORY, BTC_USDC_PRECISION_ANALYSIS
+from decimal import Decimal, ROUND_DOWN
+from typing import Dict, List, Optional, Any
+import hashlib
+import logging
+import time
+
 #!/usr/bin/env python3
 """Hash Memory Generator - Historical Pattern Recognition.
 
@@ -12,15 +21,7 @@ Key Features:
 - Real-time hash pattern matching and learning
 """
 
-import time
-import logging
-import hashlib
-import pandas as pd
-import numpy as np
-from typing import Dict, List, Optional, Any
-from decimal import Decimal, ROUND_DOWN
 
-from . import BTC_USDC_HASH_MEMORY, BTC_USDC_PRECISION_ANALYSIS
 
 logger = logging.getLogger(__name__)
 
@@ -51,7 +52,7 @@ class HashMemoryGenerator:
 
         logger.info("🔐 Hash Memory Generator initialized")
 
-    def _default_config(self) -> Dict[str, Any]:
+    def _default_config():-> Dict[str, Any]:
         """Default configuration for hash memory generator."""
         return {
             "hash_memory_window": 1000,  # Hash memory lookback window
@@ -67,7 +68,7 @@ class HashMemoryGenerator:
             "success_rate_decay": 0.95,  # Success rate decay factor
         }
 
-    def generate_hash_memory(self, historical_data: pd.DataFrame) -> bool:
+    def generate_hash_memory():-> bool:
         """Generate hash memory from historical data.
 
         Args:
@@ -146,7 +147,7 @@ class HashMemoryGenerator:
             logger.error(f"❌ Failed to generate hash memory: {e}")
             return False
 
-    def _generate_window_hash(self, window_data: pd.DataFrame) -> Dict[str, Any]:
+    def _generate_window_hash():-> Dict[str, Any]:
         """Generate hash pattern for a window of historical data."""
         # Create hash input string
         price_sequence = window_data["close"].values
@@ -205,7 +206,7 @@ class HashMemoryGenerator:
             "temporal_features": temporal_features,
         }
 
-    def _generate_precision_analysis(self, historical_data: pd.DataFrame) -> None:
+    def _generate_precision_analysis():-> None:
         """Generate multi-decimal precision analysis from historical data."""
         logger.info("📊 Generating multi-decimal precision analysis...")
 
@@ -236,7 +237,7 @@ class HashMemoryGenerator:
             f"✅ Generated precision analysis for {len(self.precision_analysis):,} records"
         )
 
-    def _analyze_precision_levels(self, window_data: pd.DataFrame) -> Dict[str, Any]:
+    def _analyze_precision_levels():-> Dict[str, Any]:
         """Analyze price data at multiple decimal precision levels."""
         latest_price = window_data["close"].iloc[-1]
 
@@ -286,27 +287,25 @@ class HashMemoryGenerator:
             / window_data["close"].iloc[0],
         }
 
-    def _format_price(self, price: float, decimals: int) -> str:
+    def _format_price():-> str:
         """Format price with specific decimal precision."""
         quant = Decimal("1." + ("0" * decimals))
         d_price = Decimal(str(price)).quantize(quant, rounding=ROUND_DOWN)
         return f"{d_price:.{decimals}f}"
 
-    def _hash_price(self, price_str: str, timestamp: float, prefix: str) -> str:
+    def _hash_price():-> str:
         """Generate SHA256 hash for price with timestamp and prefix."""
         data = f"{prefix}_{price_str}_{timestamp:.3f}"
         return hashlib.sha256(data.encode()).hexdigest()[:16]
 
-    def _map_to_16bit(self, price: float) -> int:
+    def _map_to_16bit():-> int:
         """Map BTC price to 16-bit integer (0-65535)."""
         min_price, max_price = 10000.0, 100000.0
         clamped_price = max(min_price, min(max_price, price))
         normalized = (clamped_price - min_price) / (max_price - min_price)
         return int(normalized * 65535)
 
-    def _calculate_profit_score(
-        self, price_hash: str, precision_level: str, window_data: pd.DataFrame
-    ) -> float:
+    def _calculate_profit_score():-> float:
         """Calculate profit score based on hash pattern and historical context."""
         # Calculate hash entropy
         hash_bytes = bytes.fromhex(price_hash)
@@ -329,7 +328,7 @@ class HashMemoryGenerator:
         )
         return min(1.0, modified_score)
 
-    def _extract_temporal_features(self, window_data: pd.DataFrame) -> Dict[str, float]:
+    def _extract_temporal_features():-> Dict[str, float]:
         """Extract temporal features from window data."""
         return {
             "hour_of_day": window_data["timestamp"].iloc[-1].hour,
@@ -349,13 +348,13 @@ class HashMemoryGenerator:
             / window_data["close"].mean(),
         }
 
-    def _save_hash_memory(self) -> None:
+    def _save_hash_memory():-> None:
         """Save hash memory to file."""
         if self.hash_memory is not None:
             self.hash_memory.to_parquet(BTC_USDC_HASH_MEMORY)
             logger.info(f"✅ Saved hash memory to {BTC_USDC_HASH_MEMORY}")
 
-    def _update_pattern_tracking(self) -> None:
+    def _update_pattern_tracking():-> None:
         """Update pattern tracking statistics."""
         if self.hash_memory is None:
             return
@@ -385,9 +384,7 @@ class HashMemoryGenerator:
                     -self.config["max_pattern_history"] :
                 ]
 
-    def find_similar_patterns(
-        self, current_hash: str, precision_level: str = "standard"
-    ) -> List[Dict[str, Any]]:
+    def find_similar_patterns():-> List[Dict[str, Any]]:
         """Find similar hash patterns in historical data.
 
         Args:
@@ -438,7 +435,7 @@ class HashMemoryGenerator:
 
         return similar_patterns[:10]  # Return top 10 similar patterns
 
-    def _calculate_hash_similarity(self, hash1: str, hash2: str) -> float:
+    def _calculate_hash_similarity():-> float:
         """Calculate similarity between two hash patterns."""
         if len(hash1) != len(hash2):
             return 0.0
@@ -453,7 +450,7 @@ class HashMemoryGenerator:
         similarity = 1.0 - (hamming_distance / max_distance)
         return similarity
 
-    def update_pattern_success(self, hash_pattern: str, success: bool) -> None:
+    def update_pattern_success():-> None:
         """Update pattern success rate based on trading outcome.
 
         Args:
@@ -475,7 +472,7 @@ class HashMemoryGenerator:
         decay = self.config["success_rate_decay"]
         self.pattern_success_rates[hash_pattern] = new_rate * decay + 0.5 * (1 - decay)
 
-    def get_pattern_statistics(self) -> Dict[str, Any]:
+    def get_pattern_statistics():-> Dict[str, Any]:
         """Get comprehensive pattern statistics."""
         if self.hash_memory is None:
             return {}
@@ -506,7 +503,7 @@ class HashMemoryGenerator:
             "hash_patterns_tracked": len(self.hash_patterns),
         }
 
-    def get_system_status(self) -> Dict[str, Any]:
+    def get_system_status():-> Dict[str, Any]:
         """Get comprehensive system status."""
         return {
             "hash_memory_loaded": self.hash_memory is not None,
@@ -519,9 +516,7 @@ class HashMemoryGenerator:
 
 
 # Helper function for easy integration
-def create_hash_memory_generator(
-    config: Optional[Dict[str, Any]] = None,
-) -> HashMemoryGenerator:
+def create_hash_memory_generator():-> HashMemoryGenerator:
     """Create and initialize hash memory generator.
 
     Args:

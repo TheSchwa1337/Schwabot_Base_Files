@@ -1,3 +1,10 @@
+            import glob
+from datetime import datetime
+from typing import List
+import os
+import subprocess
+import sys
+
 #!/usr/bin/env python3
 """
 Schwabot Flake8 Error Reduction Workflow
@@ -14,14 +21,9 @@ Workflow:
 5. Provide recommendations for manual fixes
 """
 
-import os
-import subprocess
-import sys
-from datetime import datetime
-from typing import List
 
 
-def run_command(cmd: List[str], description: str) -> bool:
+def run_command():-> bool:
     """Run a command and handle errors."""
     print(f"\n[RUN] {description}")
     print(f"Command: {' '.join(cmd)}")
@@ -48,7 +50,7 @@ def run_command(cmd: List[str], description: str) -> bool:
         return False
 
 
-def check_dependencies() -> bool:
+def check_dependencies():-> bool:
     """Check if required dependencies are installed."""
     print("🔍 Checking dependencies...")
 
@@ -76,28 +78,28 @@ def check_dependencies() -> bool:
     return True
 
 
-def run_analysis() -> bool:
+def run_analysis():-> bool:
     """Run the Flake8 analysis."""
     return run_command(
         [sys.executable, "flake8_analyzer.py"], "Running Flake8 analysis"
     )
 
 
-def run_auto_fix() -> bool:
+def run_auto_fix():-> bool:
     """Run the auto-fix process."""
     return run_command(
         [sys.executable, "auto_fix_flake8.py"], "Running auto-fix process"
     )
 
 
-def run_post_fix_analysis() -> bool:
+def run_post_fix_analysis():-> bool:
     """Run Flake8 analysis after fixes to see improvement."""
     return run_command(
         [sys.executable, "flake8_analyzer.py"], "Running post-fix Flake8 analysis"
     )
 
 
-def generate_workflow_report() -> str:
+def generate_workflow_report():-> str:
     """Generate a comprehensive workflow report."""
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
@@ -116,7 +118,6 @@ def generate_workflow_report() -> str:
     for pattern in analysis_files:
         if "*" in pattern:
             # Handle wildcard patterns
-            import glob
 
             files = glob.glob(pattern)
             for file in files:

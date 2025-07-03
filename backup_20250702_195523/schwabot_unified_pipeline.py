@@ -1,3 +1,25 @@
+from .mathlib_v4 import MathLibV4
+from .matrix_math_utils import analyze_price_matrix
+import numpy as np
+from .brain_trading_engine import BrainTradingEngine, BrainSignal
+from .ccxt_integration import CCXTIntegration
+from .profit_vector_forecast import ProfitVectorForecastEngine
+from .risk_manager import RiskManager
+from .strategy_logic import StrategyLogic
+from .unified_profit_vectorization_system import UnifiedProfitVectorizationSystem
+from .vecu_core import VECUCore, VECUTimingData, PWMInjectionData, VECUFeedbackData
+from .zpe_core import ZPECore, ZPEThermalData, ZPEResonanceData, ZPEQuantumData
+from collections import deque
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Dict, List, Optional, Any, Tuple
+from typing import Tuple
+import asyncio
+import hashlib
+import logging
+import threading
+import time
+
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 
@@ -18,29 +40,8 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
 """
-import asyncio
-import hashlib
-import logging
-import time
-import threading
-from typing import Dict, List, Optional, Any, Tuple
-from dataclasses import dataclass, field
-from enum import Enum
-from collections import deque
 
-import numpy as np
 
-from .vecu_core import VECUCore, VECUTimingData, PWMInjectionData, VECUFeedbackData
-from .zpe_core import ZPECore, ZPEThermalData, ZPEResonanceData, ZPEQuantumData
-from .mathlib_v4 import MathLibV4
-from .ccxt_integration import CCXTIntegration
-from .brain_trading_engine import BrainTradingEngine, BrainSignal
-from .risk_manager import RiskManager
-from .unified_profit_vectorization_system import UnifiedProfitVectorizationSystem
-from .strategy_logic import StrategyLogic
-from .profit_vector_forecast import ProfitVectorForecastEngine
-from .matrix_math_utils import analyze_price_matrix
-from typing import Tuple
 
 
 
@@ -134,16 +135,10 @@ self.pipeline_thread: Optional[threading.Thread] = None
 
             logger.info(🚀 Schwabot Unified Pipeline initialized)
 
-def set_mode() -> None:Set pipeline operation mode.self.mode = mode
+def set_mode():-> None:Set pipeline operation mode.self.mode = mode
             logger.info(🔄 Pipeline mode set to: %s, mode.value)
 
-async def process_market_tick(
-self,:
-symbol: str,
-price: float,
-volume: float,
-timestamp: Optional[float] = None
-) -> Optional[TradingDecision]:Process a single market tick through the complete pipeline.
+async def process_market_tick():-> Optional[TradingDecision]:Process a single market tick through the complete pipeline.
 
 Args:
             symbol: Trading symbol
@@ -254,7 +249,7 @@ self.total_cycles += 1
             logger.error(❌ Pipeline processing failed: %s, e)
         return None
 
-def _calculate_mathematical_state(self) -> Dict[str, Any]:Calculate mathematical state from price history.try:
+def _calculate_mathematical_state():-> Dict[str, Any]:Calculate mathematical state from price history.try:
             if len(self.price_buffer) >= 2: price_matrix = np.array(list(self.price_buffer)[-20:]).reshape(-1, 1)
                 matrix_analysis = analyze_price_matrix(price_matrix)
 else:
@@ -309,23 +304,10 @@ volatility = 0.02
         return {'price': price,'volume': volume,'momentum': 0.0,'volume_profile': 1.0,'volatility': 0.02,'timestamp': time.time()
 }
 
-def _create_brain_signal(
-self,:
-ghost_state: Any,
-vecu_timing: VECUTimingData,
-zpe_quantum: ZPEQuantumData,
-dlt_analysis: Dict[str, Any],
-market_conditions: Dict[str, Any]
-) -> Dict[str, Any]:Create brain signal from all components.return {'ghost_branch': ghost_state.current_branch.value,'ghost_confidence': ghost_state.confidence,'ghost_profit_potential': ghost_state.profit_potential,'vecu_amplification': vecu_timing.profit_amplification,'vecu_sync_confidence': vecu_timing.sync_confidence,'zpe_quantum_state': zpe_quantum.quantum_state,'zpe_coherence_time': zpe_quantum.coherence_time,'dlt_pattern_hash': dlt_analysis.get('pattern_hash', '),'dlt_confidence': dlt_analysis.get('confidence', 0.5),'market_volatility': market_conditions.get('volatility', 0.02),'market_momentum': market_conditions.get('momentum', 0.0),'market_volume_profile': market_conditions.get('volume_profile', 1.0),'timestamp': time.time()
+def _create_brain_signal():-> Dict[str, Any]:Create brain signal from all components.return {'ghost_branch': ghost_state.current_branch.value,'ghost_confidence': ghost_state.confidence,'ghost_profit_potential': ghost_state.profit_potential,'vecu_amplification': vecu_timing.profit_amplification,'vecu_sync_confidence': vecu_timing.sync_confidence,'zpe_quantum_state': zpe_quantum.quantum_state,'zpe_coherence_time': zpe_quantum.coherence_time,'dlt_pattern_hash': dlt_analysis.get('pattern_hash', '),'dlt_confidence': dlt_analysis.get('confidence', 0.5),'market_volatility': market_conditions.get('volatility', 0.02),'market_momentum': market_conditions.get('momentum', 0.0),'market_volume_profile': market_conditions.get('volume_profile', 1.0),'timestamp': time.time()
 }
 
-def _calculate_risk_metrics(
-self,:
-price: float,
-brain_decision: Dict[str, Any],
-market_conditions: Dict[str, Any],
-mathematical_state: Dict[str, Any]
-) -> Dict[str, Any]:Calculate risk metrics and position sizing.try:
+def _calculate_risk_metrics():-> Dict[str, Any]:Calculate risk metrics and position sizing.try:
             # Calculate position size
 position_size = self.risk_manager.calculate_position_size(
 entry_price=price,
@@ -345,14 +327,7 @@ risk_assessment = {'position_size': position_size,'entry_price': price,'stop_los
         return {'position_size': 0.01,'entry_price': price,'stop_loss_price': price * 0.98,'portfolio_value': self.current_capital,'volatility': 0.02,'confidence': 0.5,'profit_potential': 0.0
 }
 
-def _generate_trading_decision(
-self,:
-symbol: str,
-price: float,
-brain_decision: Dict[str, Any],
-risk_metrics: Dict[str, Any],
-ghost_state: Any
-) -> Optional[TradingDecision]:Generate final trading decision.try:
+def _generate_trading_decision():-> Optional[TradingDecision]:Generate final trading decision.try:
             # Determine action based on brain decision'
 confidence = brain_decision.get('confidence', 0.5)'
             profit_potential = brain_decision.get('expected_profit', 0.0)
@@ -389,16 +364,7 @@ self.decision_history.append(decision)
             logger.error(❌ Trading decision generation failed: %s, e)
         return None
 
-def _update_pipeline_state(
-self,:
-timestamp: float,
-ghost_state: Any,
-vecu_timing: VECUTimingData,
-zpe_thermal: ZPEThermalData,
-mathematical_state: Dict[str, Any],
-market_conditions: Dict[str, Any],
-trading_decision: Optional[TradingDecision]
-) -> None:Update pipeline state.try:
+def _update_pipeline_state():-> None:Update pipeline state.try:
             # Calculate profit metrics
             profit_metrics = {'total_profit': self.total_profit,'successful_trades': self.successful_trades,'success_rate': self.successful_trades / max(self.total_cycles, 1),'current_capital': self.current_capital
 }
@@ -423,11 +389,7 @@ self.state_history.append(state)
         except Exception as e:
             logger.error(❌ Pipeline state update failed: %s, e)
 
-def _track_profit_metrics(
-self,:
-trading_decision: TradingDecision,
-market_conditions: Dict[str, Any]
-) -> None:Track profit metrics for executed trades.try:
+def _track_profit_metrics():-> None:Track profit metrics for executed trades.try:
             # Simulate trade execution(in real implementation, this would be actual execution)
 if trading_decision.action == BUY:
                 # Simulate profit/loss based on market conditions
@@ -450,21 +412,21 @@ self.profit_history.append(profit_record)
         except Exception as e:
             logger.error(❌ Profit tracking failed: %s, e)
 
-def get_pipeline_stats(self) -> Dict[str, Any]:Get comprehensive pipeline statistics.return {'mode': self.mode.value,'total_cycles': self.total_cycles,'successful_trades': self.successful_trades,'total_profit': self.total_profit,'current_capital': self.current_capital,'success_rate': self.successful_trades / max(self.total_cycles, 1),'state_history_size': len(self.state_history),'decision_history_size': len(self.decision_history),'profit_history_size': len(self.profit_history),'ghost_stats': self.ghost_core.get_system_status(),'vecu_stats': self.vecu_core.get_performance_stats(),'zpe_stats': self.zpe_core.get_performance_stats()
+def get_pipeline_stats():-> Dict[str, Any]:Get comprehensive pipeline statistics.return {'mode': self.mode.value,'total_cycles': self.total_cycles,'successful_trades': self.successful_trades,'total_profit': self.total_profit,'current_capital': self.current_capital,'success_rate': self.successful_trades / max(self.total_cycles, 1),'state_history_size': len(self.state_history),'decision_history_size': len(self.decision_history),'profit_history_size': len(self.profit_history),'ghost_stats': self.ghost_core.get_system_status(),'vecu_stats': self.vecu_core.get_performance_stats(),'zpe_stats': self.zpe_core.get_performance_stats()
 }
 
-def start_pipeline(self) -> None:Start the pipeline in background mode.if not self.running:
+def start_pipeline():-> None:Start the pipeline in background mode.if not self.running:
             self.running = True
 self.pipeline_thread = threading.Thread(target=self._pipeline_loop, daemon=True)
 self.pipeline_thread.start()
             logger.info(🚀 Pipeline started in background mode)
 
-def stop_pipeline(self) -> None:"Stop the pipeline.self.running = False
+def stop_pipeline():-> None:"Stop the pipeline.self.running = False
 if self.pipeline_thread:
             self.pipeline_thread.join(timeout=5.0)
             logger.info(🛑 Pipeline stopped)
 
-def _pipeline_loop(self) -> None:"Background pipeline loop.while self.running:
+def _pipeline_loop():-> None:"Background pipeline loop.while self.running:
             try:
                 # This would typically process real-time market data'
 # For now, we'll just maintain the loop'

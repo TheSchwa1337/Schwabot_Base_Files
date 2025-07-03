@@ -1,3 +1,13 @@
+import math  # Added for entropy calculation
+import numpy as np
+from __future__ import annotations
+from collections import deque
+from enum import Enum
+from typing import Any, Dict, List, Optional, Union
+import logging
+import random
+import time
+
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 
@@ -18,17 +28,8 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
 """
-from __future__ import annotations
 
-import logging
-import math  # Added for entropy calculation
-import random
-import time
-from collections import deque
-from enum import Enum
-from typing import Any, Dict, List, Optional, Union
 
-import numpy as np
 
 
 
@@ -88,20 +89,14 @@ fself_similarity = {enable_self_similarity},
 fpool_size = {strategy_pool_size}
 )
 
-def _generate_strategy_pool(self) -> List[int]:Generate strategy pool for randomization.pool = []
+def _generate_strategy_pool():-> List[int]:Generate strategy pool for randomization.pool = []
 for i in range(self.strategy_pool_size):
             # Generate 4-bit strategies
 strategy = random.randint(0, 15)  # 0 to 15 (4 bits)
 pool.append(strategy)
         return pool
 
-def expand_strategy_bits(
-self,:
-base_bits: int,
-target_depth: int = 8,
-mode: str =  flip,
-ferris_phase: Optional[float] = None,
-) -> List[int]:Expand 4-bit strategy to 8-bit or 16-bit with specified mode.Args:
+def expand_strategy_bits():-> List[int]:Expand 4-bit strategy to 8-bit or 16-bit with specified mode.Args:
             base_bits: Base 4-bit strategy (0-15)
 target_depth: Target bit depth (8 or 16)
 mode: Expansion mode ('flip', 'mirror', 'random', 'ferris')
@@ -198,9 +193,7 @@ strategies.append(strategy)
 self.mapping_stats[random_mappings] += 1
         return strategies
 
-def _ferris_expansion(:
-self, base_bits: int, target_depth: int, ferris_phase: float
-) -> List[int]:Ferris wheel phase-dependent expansion.strategies = []
+def _ferris_expansion():-> List[int]:Ferris wheel phase-dependent expansion.strategies = []
 num_strategies = target_depth // 4
 
 # Use Ferris phase to modulate expansion
@@ -223,9 +216,7 @@ strategies.append(strategy)
 
         return strategies
 
-def detect_self_similarity(:
-self, current_strategies: List[int], similarity_threshold: float = 0.8
-) -> Dict[str, Union[bool, float, List[int]]]:
+def detect_self_similarity():-> Dict[str, Union[bool, float, List[int]]]:
         Detect self-similarity in strategy patterns.Args:
             current_strategies: Current strategy list
 similarity_threshold: Threshold for similarity detection
@@ -258,31 +249,21 @@ fSelf-similarity detection: {is_similar} (score: {max_similarity_score:.3f})
         return {is_similar: is_similar,similarity_score: max_similarity_score,matching_patterns": matching_patterns,
 }
 
-def _calculate_pattern_similarity(:
-self, pattern1: List[int], pattern2: List[int]
-) -> float:"Calculate similarity between two strategy patterns (simple intersection).set1 = set(pattern1)
+def _calculate_pattern_similarity():-> float:"Calculate similarity between two strategy patterns (simple intersection).set1 = set(pattern1)
 set2 = set(pattern2)
 intersection = len(set1.intersection(set2))
 union = len(set1.union(set2))
         return intersection / union if union > 0 else 0.0
 
-def _store_strategy_history(
-self,:
-base_bits: int,
-expanded_strategies: List[int],
-mode: str,
-ferris_phase: Optional[float],
-) -> None:Store the expanded strategy in history for self-similarity detection.record = {timestamp: time.time(),base_bits": base_bits,expanded_strategies": expanded_strategies,mode": mode,ferris_phase": ferris_phase,
+def _store_strategy_history():-> None:Store the expanded strategy in history for self-similarity detection.record = {timestamp: time.time(),base_bits": base_bits,expanded_strategies": expanded_strategies,mode": mode,ferris_phase": ferris_phase,
 }
 self.strategy_history.append(record)
 
-def _update_stats() -> None:Update internal statistics.self.mapping_stats[total_mappings] += 1if self.mapping_stats[total_mappings] > 0:
+def _update_stats():-> None:Update internal statistics.self.mapping_stats[total_mappings] += 1if self.mapping_stats[total_mappings] > 0:
             self.mapping_stats[avg_processing_time] = (self.mapping_stats[avg_processing_time]* (self.mapping_stats[total_mappings] - 1)
 + processing_time) / self.mapping_stats[total_mappings]
 
-def get_strategy_metrics(:
-self, strategies: List[int]
-) -> Dict[str, Union[int, float]]:"Analyze and return metrics for a given set of strategies.num_strategies = len(strategies)
+def get_strategy_metrics():-> Dict[str, Union[int, float]]:"Analyze and return metrics for a given set of strategies.num_strategies = len(strategies)
 unique_strategies = len(set(strategies))
 entropy = -sum(
 p * math.log2(p)
@@ -292,12 +273,10 @@ for p in [strategies.count(x) / num_strategies for x in set(strategies)]:
         return {num_strategies: num_strategies,unique_strategies: unique_strategies,entropy": entropy,
 }
 
-def get_performance_stats(self) -> Dict[str, Any]:"Return the performance statistics.return self.mapping_stats.copy()
+def get_performance_stats():-> Dict[str, Any]:"Return the performance statistics.return self.mapping_stats.copy()
 
 
-def expand_strategy_bits(:
-    base_bits: int, strategy_pool: List[int], mode: str = flip
-) -> List[int]:Utility function to expand 4-bit strategy to 8-bit or 16-bit.This is a standalone function for external use, mirroring the internal logic.mapper = StrategyBitMapper()
+def expand_strategy_bits():-> List[int]:Utility function to expand 4-bit strategy to 8-bit or 16-bit.This is a standalone function for external use, mirroring the internal logic.mapper = StrategyBitMapper()
         return mapper.expand_strategy_bits(
 base_bits, target_depth=8, mode=mode
 )  # Default to 8-bit

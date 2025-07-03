@@ -1,3 +1,12 @@
+import math
+import numpy as np
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple
+import hashlib
+import logging
+import time
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """Standalone Enhanced Profit-Driven Trading Strategy for BTC/USDC.
@@ -16,14 +25,6 @@ Mathematical Foundation:
 - Confidence Score: C(t) = α·H_sim + β·φ_align + γ·E_ent + δ·D_drift + ε·P_pattern
 """
 
-import hashlib
-import logging
-import math
-import time
-from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Tuple
-from enum import Enum
-import numpy as np
 
 logger = logging.getLogger(__name__)
 
@@ -214,7 +215,7 @@ class EnhancedProfitTradingStrategy:
             f"💰 Enhanced Profit Strategy initialized with ${initial_capital_usdc:,.2f}"
         )
 
-    def _default_config(self) -> Dict[str, Any]:
+    def _default_config():-> Dict[str, Any]:
         """Default configuration."""
         return {
             "simulation_mode": True,
@@ -226,9 +227,7 @@ class EnhancedProfitTradingStrategy:
             "enable_stop_loss": True,
         }
 
-    def analyze_market_vector(
-        self, btc_price: float, usdc_volume: float, market_data: Dict[str, Any]
-    ) -> MarketVector:
+    def analyze_market_vector():-> MarketVector:
         """Analyze market data and create mathematical vector."""
         try:
             self.current_state = StrategyState.ANALYZING
@@ -291,9 +290,7 @@ class EnhancedProfitTradingStrategy:
             logger.error(f"Error analyzing market vector: {e}")
             return self._create_default_market_vector(btc_price, usdc_volume)
 
-    def _calculate_hash_similarity(
-        self, btc_price: float, usdc_volume: float, market_data: Dict[str, Any]
-    ) -> float:
+    def _calculate_hash_similarity():-> float:
         """Calculate ALEPH hash similarity for market state mapping."""
         try:
             # Create market state hash
@@ -327,7 +324,7 @@ class EnhancedProfitTradingStrategy:
             logger.error(f"Error calculating hash similarity: {e}")
             return 0.5
 
-    def _calculate_phase_alignment(self, market_data: Dict[str, Any]) -> float:
+    def _calculate_phase_alignment():-> float:
         """Calculate phase transition alignment score."""
         try:
             price_history = market_data.get("price_history", [])
@@ -364,7 +361,7 @@ class EnhancedProfitTradingStrategy:
             logger.error(f"Error calculating phase alignment: {e}")
             return 0.5
 
-    def _calculate_entropy_score(self, market_data: Dict[str, Any]) -> float:
+    def _calculate_entropy_score():-> float:
         """Calculate NCCO entropy score for market predictability."""
         try:
             price_history = market_data.get("price_history", [])
@@ -398,7 +395,7 @@ class EnhancedProfitTradingStrategy:
             logger.error(f"Error calculating entropy score: {e}")
             return 0.5
 
-    def _calculate_drift_weight(self, market_data: Dict[str, Any]) -> float:
+    def _calculate_drift_weight():-> float:
         """Calculate drift compensation weight."""
         try:
             price_history = market_data.get("price_history", [])
@@ -430,7 +427,7 @@ class EnhancedProfitTradingStrategy:
             logger.error(f"Error calculating drift weight: {e}")
             return 0.5
 
-    def _calculate_pattern_confidence(self, market_data: Dict[str, Any]) -> float:
+    def _calculate_pattern_confidence():-> float:
         """Calculate pattern recognition confidence."""
         try:
             price_history = market_data.get("price_history", [])
@@ -475,14 +472,7 @@ class EnhancedProfitTradingStrategy:
             logger.error(f"Error calculating pattern confidence: {e}")
             return 0.5
 
-    def _calculate_composite_confidence(
-        self,
-        hash_similarity: float,
-        phase_alignment: float,
-        entropy_score: float,
-        drift_weight: float,
-        pattern_confidence: float,
-    ) -> float:
+    def _calculate_composite_confidence():-> float:
         """Calculate composite confidence using mathematical weights."""
         try:
             confidence = (
@@ -499,13 +489,7 @@ class EnhancedProfitTradingStrategy:
             logger.error(f"Error calculating composite confidence: {e}")
             return 0.5
 
-    def _calculate_profit_potential(
-        self,
-        btc_price: float,
-        usdc_volume: float,
-        confidence_score: float,
-        market_data: Dict[str, Any],
-    ) -> float:
+    def _calculate_profit_potential():-> float:
         """Calculate profit potential using mathematical model."""
         try:
             # Base profit from volatility
@@ -536,12 +520,7 @@ class EnhancedProfitTradingStrategy:
             logger.error(f"Error calculating profit potential: {e}")
             return 0.005  # 0.5% fallback
 
-    def _calculate_risk_score(
-        self,
-        confidence_score: float,
-        profit_potential: float,
-        market_data: Dict[str, Any],
-    ) -> float:
+    def _calculate_risk_score():-> float:
         """Calculate comprehensive risk score."""
         try:
             # Base risk from confidence (lower confidence = higher risk)
@@ -569,7 +548,7 @@ class EnhancedProfitTradingStrategy:
             logger.error(f"Error calculating risk score: {e}")
             return 0.5
 
-    def _calculate_volatility(self, market_data: Dict[str, Any]) -> float:
+    def _calculate_volatility():-> float:
         """Calculate market volatility."""
         try:
             price_history = market_data.get("price_history", [])
@@ -585,7 +564,7 @@ class EnhancedProfitTradingStrategy:
             logger.error(f"Error calculating volatility: {e}")
             return 0.02
 
-    def generate_trading_signal(self, market_vector: MarketVector) -> TradingSignal:
+    def generate_trading_signal():-> TradingSignal:
         """Generate profit-optimized trading signal from market vector."""
         try:
             self.current_state = StrategyState.OPTIMIZING
@@ -649,7 +628,7 @@ class EnhancedProfitTradingStrategy:
             logger.error(f"Error generating trading signal: {e}")
             return self._create_default_signal(market_vector)
 
-    def _determine_signal_strength(self, market_vector: MarketVector) -> ProfitSignal:
+    def _determine_signal_strength():-> ProfitSignal:
         """Determine profit signal strength."""
         try:
             # Calculate composite signal score
@@ -679,7 +658,7 @@ class EnhancedProfitTradingStrategy:
             logger.error(f"Error determining signal strength: {e}")
             return ProfitSignal.HOLD
 
-    def _determine_trade_direction(self, market_vector: MarketVector) -> TradeDirection:
+    def _determine_trade_direction():-> TradeDirection:
         """Determine optimal trade direction."""
         try:
             # Check if we should trade at all
@@ -707,9 +686,7 @@ class EnhancedProfitTradingStrategy:
             logger.error(f"Error determining trade direction: {e}")
             return TradeDirection.HOLD
 
-    def _calculate_kelly_position_size(
-        self, market_vector: MarketVector
-    ) -> Tuple[float, float]:
+    def _calculate_kelly_position_size():-> Tuple[float, float]:
         """Calculate position size using Kelly criterion."""
         try:
             if not self.config["enable_kelly_sizing"]:
@@ -771,9 +748,7 @@ class EnhancedProfitTradingStrategy:
             logger.error(f"Error calculating Kelly position size: {e}")
             return 0.0, 0.0
 
-    def _calculate_exit_levels(
-        self, market_vector: MarketVector, direction: TradeDirection
-    ) -> Tuple[Optional[float], Optional[float]]:
+    def _calculate_exit_levels():-> Tuple[Optional[float], Optional[float]]:
         """Calculate stop loss and take profit levels."""
         try:
             if direction == TradeDirection.HOLD:
@@ -800,7 +775,7 @@ class EnhancedProfitTradingStrategy:
             logger.error(f"Error calculating exit levels: {e}")
             return None, None
 
-    def execute_trade(self, signal: TradingSignal) -> ExecutionResult:
+    def execute_trade():-> ExecutionResult:
         """Execute trade based on signal (simulation)."""
         try:
             self.current_state = StrategyState.EXECUTING
@@ -916,9 +891,7 @@ class EnhancedProfitTradingStrategy:
         except Exception as e:
             logger.error(f"Error updating performance: {e}")
 
-    def _create_default_market_vector(
-        self, btc_price: float, usdc_volume: float
-    ) -> MarketVector:
+    def _create_default_market_vector():-> MarketVector:
         """Create default market vector for error cases."""
         return MarketVector(
             timestamp=time.time(),
@@ -929,7 +902,7 @@ class EnhancedProfitTradingStrategy:
             risk_score=0.5,
         )
 
-    def _create_default_signal(self, market_vector: MarketVector) -> TradingSignal:
+    def _create_default_signal():-> TradingSignal:
         """Create default hold signal."""
         return TradingSignal(
             signal_id=f"default_{int(time.time() * 1000)}",
@@ -941,7 +914,7 @@ class EnhancedProfitTradingStrategy:
             expected_return=0.0,
         )
 
-    def get_performance_summary(self) -> Dict[str, Any]:
+    def get_performance_summary():-> Dict[str, Any]:
         """Get comprehensive performance summary."""
         return {
             "capital": {

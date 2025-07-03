@@ -1,18 +1,19 @@
+from speed_lattice_vault import (
+import json
+import os
+import sys
+import time
+
 """
 Test Script for Speed Lattice Vault System - SP 1.27 AE
 Comprehensive validation of temporal anchor equations, recursive drift catch loops,
 and strategic containment zones with full delta mapping capabilities.
 """
 
-import sys
-import os
-import time
-import json
 
 # Add core directory to path
 sys.path.append(os.path.join(os.path.dirname(__file__), "core"))
 
-from speed_lattice_vault import (
     SpeedLatticeVault,
     LatticeVaultExecutor,
     ChronoBiasLevel,

@@ -1,3 +1,18 @@
+import math
+import numpy as np
+from collections import deque
+from core.drift_shell_engine import CorrectionFactors, ProfitVector
+from core.quantum_drift_shell_engine import QuantumDriftShellEngine
+from data.temporal_intelligence_integration import TemporalIntelligenceIntegration
+from dataclasses import dataclass, field
+from enum import Enum
+from hash_recollection.entropy_tracker import EntropyTracker
+from hash_recollection.pattern_utils import PatternUtils
+from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Tuple
+import logging
+import time
+
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 
@@ -18,22 +33,8 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
 """
-import logging
-import math
-import time
-from collections import deque
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
 
-import numpy as np
 
-from core.drift_shell_engine import CorrectionFactors, ProfitVector
-from core.quantum_drift_shell_engine import QuantumDriftShellEngine
-from data.temporal_intelligence_integration import TemporalIntelligenceIntegration
-from hash_recollection.entropy_tracker import EntropyTracker
-from hash_recollection.pattern_utils import PatternUtils
-from typing import Tuple
 
 
 # -*- coding: utf-8 -*-
@@ -136,14 +137,7 @@ self.stats = {total_corrections: 0,anomalies_detected: 0,successful_corrections"
 f🔧 Correction Overlay Matrix initialized with {anomaly_sensitivity} sensitivity
 )
 
-def detect_anomalies(
-self,:
-current_vector: ProfitVector,
-current_price: float,
-current_volume: float,
-current_hash: str,
-market_context: Dict[str, Any],
-) -> List[AnomalyDetection]:"Detect market anomalies by comparing current state to historical patterns.Args:
+def detect_anomalies():-> List[AnomalyDetection]:"Detect market anomalies by comparing current state to historical patterns.Args:
             current_vector: Current profit vector
 current_price: Current market price
 current_volume: Current market volume
@@ -297,9 +291,7 @@ correction_priority = 2,
 
         return None
 
-def _detect_momentum_reversal(:
-self, current_vector: ProfitVector
-) -> Optional[AnomalyDetection]:Detect sudden momentum reversals.if len(self.profit_vector_history) < 3:
+def _detect_momentum_reversal():-> Optional[AnomalyDetection]:Detect sudden momentum reversals.if len(self.profit_vector_history) < 3:
             return None
 
 recent_vectors = [entry[vector] for entry in list(self.profit_vector_history)[-3:]
@@ -335,9 +327,7 @@ correction_priority=3,
 
         return None
 
-def _detect_volatility_shock(:
-self, market_context: Dict[str, Any]
-) -> Optional[AnomalyDetection]:Detect volatility shocks.current_volatility = market_context.get(volatility, 0.02)
+def _detect_volatility_shock():-> Optional[AnomalyDetection]:Detect volatility shocks.current_volatility = market_context.get(volatility, 0.02)
 
 # Detect shock based on volatility spike
 shock_threshold = self.baselines[price_volatility] * 4
@@ -362,9 +352,7 @@ correction_priority=4,
 
         return None
 
-def _detect_black_swan_event(:
-self, current_vector: ProfitVector, market_context: Dict[str, Any]
-) -> Optional[AnomalyDetection]:Detect potential black swan events (multiple simultaneous anomalies).# Black swan = multiple extreme conditions
+def _detect_black_swan_event():-> Optional[AnomalyDetection]:Detect potential black swan events (multiple simultaneous anomalies).# Black swan = multiple extreme conditions
 extreme_conditions = 0
 total_severity = 0.0
 
@@ -403,12 +391,7 @@ correction_priority=5,  # Highest priority
 
         return None
 
-def apply_correction(
-self,:
-current_vector: ProfitVector,
-anomalies: List[AnomalyDetection],
-market_context: Dict[str, Any],
-) -> CorrectionFactors:
+def apply_correction():-> CorrectionFactors:
         Apply multi-model correction based on detected anomalies.Implements: C(t) = ε * Corr_Q(t) + β * Corr_G(t) + δ * Corr_SM(t)
 
 Args:
@@ -478,12 +461,7 @@ self._update_avg_correction_time(processing_time)
 
         return correction_factors
 
-def _calculate_individual_corrections(
-self,:
-vector: ProfitVector,
-anomalies: List[AnomalyDetection],
-total_deviation: float,
-) -> Dict[str, float]:
+def _calculate_individual_corrections():-> Dict[str, float]:
         Calculate individual model corrections.corrections = {quantum: 0.0,tensor: 0.0,smart_money: 0.0}
 
 for anomaly in anomalies:
@@ -522,9 +500,7 @@ corrections[quantum] += base_correction * 0.3
 
         return corrections
 
-def _adjust_confidence_weights(:
-self, anomalies: List[AnomalyDetection], max_priority: int
-) -> Dict[str, float]:Adjust confidence weights based on anomaly characteristics.base_weights = self.correction_weights.copy()
+def _adjust_confidence_weights():-> Dict[str, float]:Adjust confidence weights based on anomaly characteristics.base_weights = self.correction_weights.copy()
 
 # Increase quantum weight for high-priority anomalies
 if max_priority >= 4:
@@ -552,32 +528,26 @@ if total_weight > 0: base_weights = {k: v / total_weight for k, v in base_weight
 
         return base_weights
 
-def _limit_correction() -> float:
+def _limit_correction():-> float:
         Apply magnitude limits to corrections.
         return max(
 -self.max_correction_magnitude,
 min(self.max_correction_magnitude, correction),
 )
 
-def _calculate_hash_similarity() -> float:Calculate hash similarity using Hamming distance.if len(hash1) != len(hash2):
+def _calculate_hash_similarity():-> float:Calculate hash similarity using Hamming distance.if len(hash1) != len(hash2):
             return 0.0
 
 differences = sum(c1 != c2 for c1, c2 in zip(hash1, hash2))
 similarity = 1.0 - (differences / len(hash1))
         return similarity
 
-def _store_correction_result(
-self,:
-original_vector: ProfitVector,
-correction_factors: CorrectionFactors,
-anomalies: List[AnomalyDetection],
-processing_time: float,
-) -> None:Store correction result for analysis.correction_record = {timestamp: time.time(),original_vector: original_vector,correction_factors": correction_factors,anomalies": anomalies,processing_time": processing_time,
+def _store_correction_result():-> None:Store correction result for analysis.correction_record = {timestamp: time.time(),original_vector: original_vector,correction_factors": correction_factors,anomalies": anomalies,processing_time": processing_time,
 }
 
 self.correction_history.append(correction_record)
 
-def _update_avg_correction_time() -> None:Update average correction time metric.total_corrections = self.stats[total_corrections]current_avg = self.stats[avg_correction_time]
+def _update_avg_correction_time():-> None:Update average correction time metric.total_corrections = self.stats[total_corrections]current_avg = self.stats[avg_correction_time]
 
 if total_corrections == 1:
             self.stats[avg_correction_time] = new_time
@@ -586,7 +556,7 @@ else :
 current_avg * (total_corrections - 1) + new_time
 ) / total_corrections
 
-def update_baselines(self, market_data: Dict[str, float]) -> None:"Update statistical baselines based on recent market behavior.# This would implement adaptive baseline updates
+def update_baselines():-> None:"Update statistical baselines based on recent market behavior.# This would implement adaptive baseline updates
 # For now, use simple exponential moving average
 alpha = 0.1  # Learning rate
 
@@ -595,7 +565,7 @@ if volatilityin market_data:
 ifvolume_ratioin market_data:
             self.baselines[volume_ratio] = (1 - alpha) * self.baselines[volume_ratio] + alpha * market_data[volume_ratio]
 
-def get_performance_stats(self) -> Dict[str, Any]:Get comprehensive performance statistics.stats = self.stats.copy()
+def get_performance_stats():-> Dict[str, Any]:Get comprehensive performance statistics.stats = self.stats.copy()
 
 # Calculate success rate
 if self.stats[total_corrections] > 0:

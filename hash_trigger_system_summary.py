@@ -1,7 +1,13 @@
+        from ghost_signal import GhostSignalProcessor
+        from ghost_strategy_integration import GhostStrategyIntegrator
+        from hash_trigger_mapper import HashTriggerMapper
+        from hash_trigger_mapper import HashTriggerMapper
 from dual_unicore_handler import DualUnicoreHandler
+from ghost_strategy_integration import GhostStrategyIntegrator
 from typing import Dict, Any
 import sys
 import time
+
 
 
 # Initialize Unicode handler
@@ -47,7 +53,6 @@ def demonstrate_hash_trigger_mapper():"""
   print("=" * 50)
 
    try:
-        from hash_trigger_mapper import HashTriggerMapper
 
 mapper = HashTriggerMapper()
 
@@ -96,7 +101,6 @@ def demonstrate_ghost_signal():
   print("=" * 50)
 
    try:
-        from ghost_signal import GhostSignalProcessor
 
 processor = GhostSignalProcessor()
 
@@ -170,7 +174,6 @@ def demonstrate_integration():
   print("=" * 50)
 
    try:
-        from ghost_strategy_integration import GhostStrategyIntegrator
 
 integrator = GhostStrategyIntegrator()
 
@@ -286,8 +289,6 @@ def demonstrate_error_handling():
   print("=" * 50)
 
    try:
-        from hash_trigger_mapper import HashTriggerMapper
-from ghost_strategy_integration import GhostStrategyIntegrator
 
 mapper = HashTriggerMapper()
         integrator = GhostStrategyIntegrator()

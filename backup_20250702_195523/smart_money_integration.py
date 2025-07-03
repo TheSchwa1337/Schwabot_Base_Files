@@ -1,3 +1,14 @@
+from core.mathematical_optimization_bridge import MathematicalOptimizationBridge
+import numpy as np
+from __future__ import annotations
+from core.advanced_tensor_algebra import UnifiedTensorAlgebra
+from core.enhanced_strategy_framework import EnhancedStrategyFramework, StrategySignal
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, List, Optional
+import logging
+import time
+
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 
@@ -18,19 +29,9 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
 """
-from __future__ import annotations
 
-import logging
-import time
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Any, Dict, List, Optional
 
-import numpy as np
 
-from core.enhanced_strategy_framework import EnhancedStrategyFramework, StrategySignal
-from core.advanced_tensor_algebra import UnifiedTensorAlgebra
-from core.mathematical_optimization_bridge import MathematicalOptimizationBridge
 
 
 # !/usr/bin/env python3
@@ -148,17 +149,11 @@ self.almgren_chriss_params = {risk_aversion: 5e-6,permanent_impact: 0.1,temporar
 }
             logger.info(f"Smart Money Integration Framework v{self.version} initialized)
 
-def _default_config(self) -> Dict[str, Any]:"Default configuration for smart money integration.return {whale_threshold: 1000000,  # $1M+ tradesdark_pool_threshold: 0.15,  # 15% of volumeorder_flow_imbalance_threshold: 0.6,correlation_threshold": 0.7,execution_urgency_thresholds": {low: 0.3,medium": 0.6,high": 0.8,critical": 0.9
+def _default_config():-> Dict[str, Any]:"Default configuration for smart money integration.return {whale_threshold: 1000000,  # $1M+ tradesdark_pool_threshold: 0.15,  # 15% of volumeorder_flow_imbalance_threshold: 0.6,correlation_threshold": 0.7,execution_urgency_thresholds": {low: 0.3,medium": 0.6,high": 0.8,critical": 0.9
 },smart_money_weight": 0.4,wall_street_weight": 0.6
 }
 
-def analyze_smart_money_metrics(
-self,:
-asset: str,
-price_data: List[float],
-        volume_data: List[float],
-order_book_data: Optional[Dict[str, Any]] = None
-) -> List[SmartMoneySignal]:"Analyze smart money metrics for given asset.try: signals = []
+def analyze_smart_money_metrics():-> List[SmartMoneySignal]:"Analyze smart money metrics for given asset.try: signals = []
 
 # 1. On-Balance Volume (OBV) Analysis
 obv_signal = self._calculate_obv_signal(asset, price_data, volume_data)
@@ -198,12 +193,7 @@ self.smart_money_signals.extend(signals)
             logger.error(fSmart money analysis failed: {e})
         return []
 
-def _calculate_obv_signal(
-self,:
-asset: str,
-price_data: List[float],
-        volume_data: List[float]
-) -> Optional[SmartMoneySignal]:Calculate On-Balance Volume signal.try:
+def _calculate_obv_signal():-> Optional[SmartMoneySignal]:Calculate On-Balance Volume signal.try:
             if len(price_data) < 2 or len(volume_data) < 2:
                 return None
 
@@ -242,12 +232,7 @@ dark_pool_activity=0.0,  # Not available in basic OBV
             logger.error(fOBV calculation failed: {e})
         return None
 
-def _calculate_vwap_signal(
-self,:
-asset: str,
-price_data: List[float],
-        volume_data: List[float]
-) -> Optional[SmartMoneySignal]:Calculate VWAP-based smart money signal.try:
+def _calculate_vwap_signal():-> Optional[SmartMoneySignal]:Calculate VWAP-based smart money signal.try:
             if len(price_data) != len(volume_data) or len(price_data) < 10:
                 return None
 
@@ -286,12 +271,7 @@ price_impact_estimate=abs(vwap_deviation) * 0.5,
             logger.error(fVWAP calculation failed: {e})
         return None
 
-def _calculate_cvd_signal(
-self,:
-asset: str,
-price_data: List[float],
-        volume_data: List[float]
-) -> Optional[SmartMoneySignal]:Calculate Cumulative Volume Delta signal.try:
+def _calculate_cvd_signal():-> Optional[SmartMoneySignal]:Calculate Cumulative Volume Delta signal.try:
             if len(price_data) < 2:
                 return None
 
@@ -335,11 +315,7 @@ price_impact_estimate=signal_strength * 0.002,
             logger.error(fCVD calculation failed: {e})
         return None
 
-def _calculate_dark_pool_index(
-self,:
-asset: str,
-volume_data: List[float]
-) -> Optional[SmartMoneySignal]:Calculate Dark Pool Index signal.try:
+def _calculate_dark_pool_index():-> Optional[SmartMoneySignal]:Calculate Dark Pool Index signal.try:
             # Simulate dark pool detection (in real implementation, this would use exchange data)
 total_volume = sum(volume_data)
 if total_volume == 0:
@@ -374,11 +350,7 @@ execution_urgency=highif dark_pool_activity elselow)
             logger.error(fDark pool index calculation failed: {e})
         return None
 
-def _calculate_order_flow_imbalance(
-self,:
-asset: str,
-order_book_data: Dict[str, Any]
-) -> Optional[SmartMoneySignal]:Calculate order flow imbalance from order book data.try: bids = order_book_data.get(bids, [])asks = order_book_data.get(asks, [])
+def _calculate_order_flow_imbalance():-> Optional[SmartMoneySignal]:Calculate order flow imbalance from order book data.try: bids = order_book_data.get(bids, [])asks = order_book_data.get(asks, [])
 
 if not bids or not asks:
                 return None
@@ -417,12 +389,7 @@ price_impact_estimate=signal_strength * 0.0015,
             logger.error(fOrder flow imbalance calculation failed: {e})
         return None
 
-def _detect_whale_activity(
-self,:
-asset: str,
-volume_data: List[float],
-        price_data: List[float]
-) -> Optional[SmartMoneySignal]:Detect whale activity based on volume and price movements.try:
+def _detect_whale_activity():-> Optional[SmartMoneySignal]:Detect whale activity based on volume and price movements.try:
             if len(volume_data) < 10:
                 return None
 
@@ -466,12 +433,7 @@ execution_urgency=critical)
             logger.error(fWhale detection failed: {e})
         return None
 
-def integrate_wall_street_with_smart_money(
-self,:
-wall_street_signals: List[StrategySignal],
-smart_money_signals: List[SmartMoneySignal],
-asset: str
-) -> List[WallStreetSmartMoneyBridge]:Integrate Wall Street strategies with smart money metrics.try: integrated_signals = []
+def integrate_wall_street_with_smart_money():-> List[WallStreetSmartMoneyBridge]:Integrate Wall Street strategies with smart money metrics.try: integrated_signals = []
 
 for ws_signal in wall_street_signals:
                 best_correlation = 0.0
@@ -533,11 +495,7 @@ if len(self.correlation_history) > 1000:
             logger.error(fWall Street smart money integration failed: {e})
         return []
 
-def _calculate_signal_correlation(
-self,:
-ws_signal: StrategySignal,
-sm_signal: SmartMoneySignal
-) -> float:Calculate correlation between Wall Street and smart money signals.try:
+def _calculate_signal_correlation():-> float:Calculate correlation between Wall Street and smart money signals.try:
             # Directional agreement
 ws_bullish = ws_signal.action == BUYsm_bullish = sm_signal.order_flow_imbalance > 0 or sm_signal.whale_activity
 
@@ -563,22 +521,12 @@ directional_agreement * 0.5 +
             logger.error(fSignal correlation calculation failed: {e})
         return 0.0
 
-def _determine_execution_recommendation(
-self,:
-ws_signal: StrategySignal,
-sm_signal: SmartMoneySignal,
-correlation: float
-) -> str:Determine execution recommendation based on integrated analysis.if correlation > 0.8 and ws_signal.confidence > 0.7 and sm_signal.institutional_confidence:
+def _determine_execution_recommendation():-> str:Determine execution recommendation based on integrated analysis.if correlation > 0.8 and ws_signal.confidence > 0.7 and sm_signal.institutional_confidence:
 > 0.7:returnSTRONG_EXECUTEelif correlation > 0.6 and (ws_signal.confidence > 0.6 or
 sm_signal.institutional_confidence > 0.6):
             returnEXECUTEelif correlation > 0.4:
             returnCAUTIOUS_EXECUTEelse :
-            returnHOLDdef _calculate_risk_adjusted_sizing(
-self,:
-ws_signal: StrategySignal,
-sm_signal: SmartMoneySignal,
-combined_confidence: float
-) -> float:Calculate risk-adjusted position sizing.# Base sizing from Wall Street signal
+            returnHOLDdef _calculate_risk_adjusted_sizing():-> float:Calculate risk-adjusted position sizing.# Base sizing from Wall Street signal
 base_size = ws_signal.position_size
 
 # Adjust based on smart money confidence
@@ -601,7 +549,7 @@ combined_confidence
 
         return min(risk_adjusted_size, base_size * 2.0)  # Cap at 2x base size
 
-def _calculate_execution_window() -> float:
+def _calculate_execution_window():-> float:
         Calculate optimal execution window in seconds.base_windows = {low: 300,      # 5 minutesmedium: 120,   # 2 minuteshigh: 60,      # 1 minutecritical: 30   # 30 seconds
 }
 
@@ -612,13 +560,13 @@ correlation_multiplier = 1.0 - (correlation * 0.5)
 
         return base_window * correlation_multiplier
 
-def _determine_urgency() -> str:
+def _determine_urgency():-> str:
         Determine execution urgency based on signal strength.thresholds = self.config[execution_urgency_thresholds]
 if signal_strength >= thresholds[critical]:
             returncriticalelif signal_strength >= thresholds[high]:
             returnhighelif signal_strength >= thresholds[medium]:
             returnmediumelse :
-            returnlowdef get_smart_money_analytics(self) -> Dict[str, Any]:Get comprehensive smart money analytics.if not self.smart_money_signals:
+            returnlowdef get_smart_money_analytics():-> Dict[str, Any]:Get comprehensive smart money analytics.if not self.smart_money_signals:
             return {error:No smart money signals available}
 
 recent_signals = self.smart_money_signals[-50:]  # Last 50 signals
@@ -644,17 +592,11 @@ total_signals: len(self.smart_money_signals),recent_signals: len(recent_signals)
 }
 
 
-def create_smart_money_integration() -> SmartMoneyIntegrationFramework:"Factory function to create smart money integration framework.return SmartMoneyIntegrationFramework()
+def create_smart_money_integration():-> SmartMoneyIntegrationFramework:"Factory function to create smart money integration framework.return SmartMoneyIntegrationFramework()
 
 
 # Integration with existing components
-def enhance_wall_street_with_smart_money(:
-enhanced_framework: EnhancedStrategyFramework,
-asset: str,
-price_data: List[float],
-    volume_data: List[float],
-order_book_data: Optional[Dict[str, Any]] = None
-) -> Dict[str, Any]:Enhance Wall Street strategies with smart money analysis.try:
+def enhance_wall_street_with_smart_money():-> Dict[str, Any]:Enhance Wall Street strategies with smart money analysis.try:
         # Initialize smart money framework
 smart_money = SmartMoneyIntegrationFramework()
 

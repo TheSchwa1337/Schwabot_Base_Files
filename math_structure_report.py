@@ -1,6 +1,7 @@
+from collections import defaultdict
 import os
 import re
-from collections import defaultdict
+
 
 # Keywords and modules that indicate mathematical relevance
 MATH_KEYWORDS = [

@@ -1,3 +1,6 @@
+from setuptools import setup, find_packages
+import os
+
 #!/usr/bin/env python3
 """
 Setup script for Hash Recollection Trading System
@@ -6,8 +9,6 @@ Setup script for Hash Recollection Trading System
 Cross-platform installation script for Windows, macOS, and Linux.
 """
 
-from setuptools import setup, find_packages
-import os
 
 # Read the README file
 

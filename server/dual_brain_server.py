@@ -1,3 +1,16 @@
+    from core.unified_math_system import UnifiedMathSystem
+            from { box-shadow: 0 0 5px rgba(255,255,255,0.5); }
+    from core.dual_brain_architecture import DualBrainArchitecture, dual_brain
+    from core.whale_tracker_integration import whale_tracker
+from flask import Flask, render_template, jsonify
+from flask_socketio import SocketIO, emit
+import asyncio
+import logging
+import os
+import sys
+import threading
+import time
+
 # -*- coding: utf-8 -*-
 """
 Dual Brain Server
@@ -16,23 +29,12 @@ Features:
     - Performance metrics dashboard
 """
 
-import asyncio
-import logging
-import os
-import threading
-import time
-from flask import Flask, render_template, jsonify
-from flask_socketio import SocketIO, emit
-import sys
 
 # Add parent directory to path for imports
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # Import core systems
 try:
-    from core.dual_brain_architecture import DualBrainArchitecture, dual_brain
-    from core.whale_tracker_integration import whale_tracker
-    from core.unified_math_system import UnifiedMathSystem
 
     CORE_SYSTEMS_AVAILABLE = True
 except ImportError as e:
@@ -446,7 +448,6 @@ def create_templates():
         .thermal-critical { background: #8e44ad; animation: glow 0.5s infinite alternate; }
         
         @keyframes glow {
-            from { box-shadow: 0 0 5px rgba(255,255,255,0.5); }
             to { box-shadow: 0 0 20px rgba(255,255,255,0.8); }
 }
         .metrics-grid {

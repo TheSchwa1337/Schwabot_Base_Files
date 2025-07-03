@@ -1,3 +1,10 @@
+import math
+from collections import deque
+from dataclasses import dataclass
+from typing import Any, Dict, Optional
+import logging
+import time
+
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 
@@ -18,12 +25,6 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
 """
-import logging
-import math
-import time
-from collections import deque
-from dataclasses import dataclass
-from typing import Any, Dict, Optional
 
 
 
@@ -85,7 +86,7 @@ total_measurements: 0,corrected_operations: 0,avg_latency_ms": 0.0,drift_correct
             logger.info(f"⏱️ Latency Compensator initialized with {max_acceptable_latency_ms}ms threshold
 )
 
-def start_operation() -> int:Start timing an operation and return the start timestamp.
+def start_operation():-> int:Start timing an operation and return the start timestamp.
 
 Args:
             operation_id: Unique identifier for this operationoperation_type: Type of operation (e.g.,memory_read,hash_calc,trade_exec)
@@ -99,8 +100,7 @@ f⏱️ Started operation {operation_id} ({operation_type}) at {start_time_ns}
 )
         return start_time_ns
 
-def end_operation(:
-self, operation_id: str, operation_type: str, hash_context: str = ) -> LatencyMeasurement:End timing an operation and calculate latency.Args:
+def end_operation():-> LatencyMeasurement:End timing an operation and calculate latency.Args:
             operation_id: Unique identifier for this operation
 operation_type: Type of operation
 hash_context: Hash or context identifier for correction correlation
@@ -153,9 +153,7 @@ if correction > 0:
 )
         return measurement
 
-def calculate_memory_validity(:
-self, current_hash: str, cached_hash: str, cache_age_ms: float
-) -> float:Calculate memory validity accounting for temporal drift.Mathematical formula: V(t) = LC(t, σ) * Hash_Similarity(current, cached)
+def calculate_memory_validity():-> float:Calculate memory validity accounting for temporal drift.Mathematical formula: V(t) = LC(t, σ) * Hash_Similarity(current, cached)
 
 Args:
             current_hash: Current market state hash
@@ -177,14 +175,7 @@ validity = latency_correction * hash_similarity * dualistic_adjustment
 
         return min(1.0, max(0.0, validity))
 
-def update_dualistic_state(
-self,:
-state_type: str,
-quantum_phase: float,
-entropy_level: float,
-        nibble_score: float = 0.0,
-        rittle_score: float = 0.0,
-) -> None:
+def update_dualistic_state():-> None:
         Update the current dualistic state (ALEPH/ALIF).Args:state_type:ALEPHorALIFquantum_phase: Current quantum phase (0.0 to 1.0)
             entropy_level: Current entropy level (0.0 to 1.0)
 nibble_score: Nibble scoring component
@@ -217,9 +208,7 @@ confidence:.3f}))
 self.current_dualistic_state = new_state
 self.dualistic_state_history.append(new_state)
 
-def apply_quantum_adjustment(:
-self, base_latency_ms: float, quantum_coherence: float
-) -> float:Apply quantum static core adjustment to latency correction.Args:
+def apply_quantum_adjustment():-> float:Apply quantum static core adjustment to latency correction.Args:
             base_latency_ms: Base measured latency
 quantum_coherence: Quantum coherence factor (0.0 to 1.0)
 
@@ -240,15 +229,13 @@ f(coherence = {quantum_coherence:.3f})
 
         return adjusted_latency
 
-def get_drift_correction_factor() -> float:Get the drift correction factor for a given operation age.Args:
+def get_drift_correction_factor():-> float:Get the drift correction factor for a given operation age.Args:
             operation_age_ms: Age of the operation in milliseconds
 
 Returns:
             Correction factor between 0.0 and 1.0return self._calculate_temporal_correction(operation_age_ms, general)
 
-def _calculate_temporal_correction(:
-self, latency_ms: float, operation_type: str
-) -> float:Calculate temporal drift correction factor.if latency_ms <= self.max_acceptable_latency_ms:
+def _calculate_temporal_correction():-> float:Calculate temporal drift correction factor.if latency_ms <= self.max_acceptable_latency_ms:
             return 0.0  # No correction needed
 
 # Exponential decay correction: C = 1 - exp(-α * (L - L_max))
@@ -265,16 +252,16 @@ self.stats[drift_corrections] += 1
 
         return min(1.0, correction * scale)
 
-def _calculate_latency_correction() -> float:Calculate latency correction factor: LC(t) = exp(-α * t).return math.exp(-self.correction_alpha * age_ms / 1000.0)
+def _calculate_latency_correction():-> float:Calculate latency correction factor: LC(t) = exp(-α * t).return math.exp(-self.correction_alpha * age_ms / 1000.0)
 
-def _calculate_hash_similarity() -> float:Calculate hash similarity using Hamming distance.if not hash1 or not hash2 or len(hash1) != len(hash2):
+def _calculate_hash_similarity():-> float:Calculate hash similarity using Hamming distance.if not hash1 or not hash2 or len(hash1) != len(hash2):
             return 0.0
 
 differences = sum(c1 != c2 for c1, c2 in zip(hash1, hash2))
 similarity = 1.0 - (differences / len(hash1))
         return similarity
 
-def _calculate_confidence() -> float:Calculate confidence based on latency.if latency_ms <= 100:
+def _calculate_confidence():-> float:Calculate confidence based on latency.if latency_ms <= 100:
             return 1.0
 elif latency_ms <= self.max_acceptable_latency_ms:
             return (
@@ -285,7 +272,7 @@ else:
 0.1, 0.7 - (latency_ms - self.max_acceptable_latency_ms) / 1000.0
 )
 
-def _get_dualistic_adjustment(self) -> float:Get adjustment factor based on current dualistic state.if not self.current_dualistic_state:
+def _get_dualistic_adjustment():-> float:Get adjustment factor based on current dualistic state.if not self.current_dualistic_state:
             return 1.0
 
 state = self.current_dualistic_state
@@ -305,7 +292,7 @@ phase_adjustment = 1.0 + math.sin(state.quantum_phase * 2 * math.pi) * 0.05
 
         return base_adjustment * phase_adjustment * entropy_adjustment
 
-def _update_avg_latency() -> None:
+def _update_avg_latency():-> None:
         Update average latency metric.total_measurements = self.stats[total_measurements]current_avg = self.stats[avg_latency_ms]
 
 if total_measurements == 1:
@@ -315,7 +302,7 @@ else :
 current_avg * (total_measurements - 1) + new_latency_ms
 ) / total_measurements
 
-def get_performance_stats(self) -> Dict[str, Any]:Get comprehensive performance statistics.stats = self.stats.copy()
+def get_performance_stats():-> Dict[str, Any]:Get comprehensive performance statistics.stats = self.stats.copy()
 
 # Calculate additional metrics
 if self.stats[total_measurements] > 0:
@@ -333,7 +320,7 @@ if self.current_dualistic_state:
 
         return stats
 
-def reset_stats(self) -> None:Reset performance statistics.self.stats = {total_measurements: 0,corrected_operations": 0,avg_latency_ms": 0.0,drift_corrections": 0,dualistic_transitions": 0,quantum_adjustments": 0,
+def reset_stats():-> None:Reset performance statistics.self.stats = {total_measurements: 0,corrected_operations": 0,avg_latency_ms": 0.0,drift_corrections": 0,dualistic_transitions": 0,quantum_adjustments": 0,
 }
             logger.info(🔄 Latency compensator statistics reset)
 

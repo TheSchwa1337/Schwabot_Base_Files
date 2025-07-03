@@ -1,3 +1,16 @@
+from schwabot.core.truth_lattice_math import TruthLatticeMath
+import numpy as np
+from pathlib import Path
+from schwabot.core.ghost_field_stabilizer import GhostFieldStabilizer
+from schwabot.core.overlay.aleph_overlay_mapper import AlephOverlayMapper
+from schwabot.core.phase.bit_wave_propagator import BitWavePropagator
+from schwabot.core.phase.drift_phase_weighter import DriftPhaseWeighter
+from schwabot.core.phase.phase_transition_monitor import PhaseTransitionMonitor
+import json
+import logging
+import sys
+import time
+
 #!/usr/bin/env python3
 """
 Advanced Schwabot Components Test
@@ -7,24 +20,12 @@ Comprehensive test demonstrating all advanced Schwabot components working togeth
 including phase, drift, consensus, and overlay modules.
 """
 
-import sys
-import time
-import json
-import logging
-import numpy as np
-from pathlib import Path
 
 # Add schwabot to path
 current_dir = Path(__file__).parent
 sys.path.insert(0, str(current_dir))
 
 # Import advanced components
-from schwabot.core.phase.drift_phase_weighter import DriftPhaseWeighter
-from schwabot.core.ghost_field_stabilizer import GhostFieldStabilizer
-from schwabot.core.truth_lattice_math import TruthLatticeMath
-from schwabot.core.phase.bit_wave_propagator import BitWavePropagator
-from schwabot.core.overlay.aleph_overlay_mapper import AlephOverlayMapper
-from schwabot.core.phase.phase_transition_monitor import PhaseTransitionMonitor
 
 # Import existing components
 
@@ -35,7 +36,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-def generate_test_signal(length: int = 100, signal_type: str = "random") -> np.ndarray:
+def generate_test_signal():-> np.ndarray:
     """Generate test signal for component testing."""
     if signal_type == "random":
         return np.random.random(length)

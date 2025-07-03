@@ -1,3 +1,19 @@
+            import numpy as np
+    from schwabot_unified_math import (
+            import shutil
+        from schwabot_enhanced_launcher import (
+    from core.advanced_settings_engine import AdvancedSettingsEngine
+    from core.api.cache_sync import CacheSyncService
+    from core.api.handlers.alt_fear_greed import FearGreedHandler
+    from core.api.handlers.coingecko import CoinGeckoHandler
+    from core.api.handlers.glassnode import GlassnodeHandler
+    from core.api.handlers.whale_alert import WhaleAlertHandler
+from pathlib import Path
+import asyncio
+import logging
+import sys
+import time
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -14,29 +30,16 @@ work together properly. This tests:
 - Trading Signal Processing
 """
 
-import asyncio
-import logging
-import sys
-import time
-from pathlib import Path
 
 # Core testing imports
 try:
-    from schwabot_unified_math import (
         UnifiedMathematicsFramework,
         BTC256SHAPipeline,
         unified_trading_math,
     )
-    from core.advanced_settings_engine import AdvancedSettingsEngine
-    from core.api.cache_sync import CacheSyncService
-    from core.api.handlers.whale_alert import WhaleAlertHandler
-    from core.api.handlers.glassnode import GlassnodeHandler
-    from core.api.handlers.coingecko import CoinGeckoHandler
-    from core.api.handlers.alt_fear_greed import FearGreedHandler
 
     # Test if enhanced launcher is available
     try:
-        from schwabot_enhanced_launcher import (
             EnhancedDataIntegrator,
             SchawbotEnhancedLauncher,
         )
@@ -63,7 +66,7 @@ class SchawbotIntegrationTester:
         self.test_results = {}
         self.start_time = time.time()
 
-    async def run_all_tests(self) -> bool:
+    async def run_all_tests():-> bool:
         """Run all integration tests."""
         logger.info("🧪 Starting Schwabot Integration Test Suite")
 
@@ -101,7 +104,7 @@ class SchawbotIntegrationTester:
         self.print_test_summary(all_passed)
         return all_passed
 
-    async def test_unified_math_framework(self) -> bool:
+    async def test_unified_math_framework():-> bool:
         """Test unified mathematics framework."""
         try:
             framework = UnifiedMathematicsFramework()
@@ -111,7 +114,6 @@ class SchawbotIntegrationTester:
             assert isinstance(drift_field, float), "Drift field should return float"
 
             # Test entropy calculation
-            import numpy as np
 
             test_vector = np.array([0.5, 0.5, 0.0, 0.0])
             entropy = framework.compute_unified_entropy(test_vector)
@@ -143,7 +145,7 @@ class SchawbotIntegrationTester:
             logger.error(f"  ❌ Unified math framework test failed: {e}")
             return False
 
-    async def test_advanced_settings_engine(self) -> bool:
+    async def test_advanced_settings_engine():-> bool:
         """Test advanced settings engine."""
         try:
             # Create temporary settings directory
@@ -180,7 +182,6 @@ class SchawbotIntegrationTester:
             engine.update_profit_feedback("test_setting", 0.05)
 
             # Clean up
-            import shutil
 
             shutil.rmtree(settings_dir, ignore_errors=True)
 
@@ -191,7 +192,7 @@ class SchawbotIntegrationTester:
             logger.error(f"  ❌ Advanced settings engine test failed: {e}")
             return False
 
-    async def test_api_handlers(self) -> bool:
+    async def test_api_handlers():-> bool:
         """Test API handlers."""
         try:
             # Test each handler initialization
@@ -225,7 +226,7 @@ class SchawbotIntegrationTester:
             logger.error(f"  ❌ API handler test failed: {e}")
             return False
 
-    async def test_cache_sync_service(self) -> bool:
+    async def test_cache_sync_service():-> bool:
         """Test cache sync service."""
         try:
             service = CacheSyncService(refresh_interval=60)
@@ -248,7 +249,7 @@ class SchawbotIntegrationTester:
             logger.error(f"  ❌ Cache sync service test failed: {e}")
             return False
 
-    async def test_data_integration(self) -> bool:
+    async def test_data_integration():-> bool:
         """Test data integration components."""
         try:
             if not LAUNCHER_AVAILABLE:
@@ -299,7 +300,7 @@ class SchawbotIntegrationTester:
             logger.error(f"  ❌ Data integration test failed: {e}")
             return False
 
-    async def test_trading_mathematics(self) -> bool:
+    async def test_trading_mathematics():-> bool:
         """Test core trading mathematics."""
         try:
             result = unified_trading_math(
@@ -318,7 +319,7 @@ class SchawbotIntegrationTester:
             logger.error(f"  ❌ Core trading math test failed: {e}")
             return False
 
-    async def test_signal_processing(self) -> bool:
+    async def test_signal_processing():-> bool:
         """Test signal processing logic."""
         try:
             framework = UnifiedMathematicsFramework()
@@ -350,7 +351,7 @@ class SchawbotIntegrationTester:
             logger.error(f"  ❌ Signal processing logic test failed: {e}")
             return False
 
-    async def test_enhanced_launcher(self) -> bool:
+    async def test_enhanced_launcher():-> bool:
         """Test enhanced launcher functionality."""
         if not LAUNCHER_AVAILABLE:
             logger.info("  ⚠️  Enhanced launcher not available, skipping test")
@@ -378,7 +379,7 @@ class SchawbotIntegrationTester:
             logger.error(f"  ❌ Enhanced launcher test failed: {e}")
             return False
 
-    def print_test_summary(self, all_passed: bool) -> None:
+    def print_test_summary():-> None:
         """Print test results summary."""
         end_time = time.time()
         duration = end_time - self.start_time

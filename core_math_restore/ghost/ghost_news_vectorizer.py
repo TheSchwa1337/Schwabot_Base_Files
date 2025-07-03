@@ -1,3 +1,7 @@
+    from sklearn.feature_extraction.text import TfidfVectorizer
+from core.unified_math_system import unified_math
+from __future__ import annotations
+
 # -*- coding: utf - 8 -*-
 """News\\u2192sentiment vectoriser for ghost routing.""""""
 """"""
@@ -16,12 +20,9 @@
 # -*- coding: utf - 8 -*-
 # -*- coding: utf - 8 -*-
 
-from __future__ import annotations
-from core.unified_math_system import unified_math
 
 
 try:
-    from sklearn.feature_extraction.text import TfidfVectorizer
 except ImportError:
     TfidfVectorizer = None
 
@@ -31,7 +32,7 @@ _VEC: TfidfVectorizer | None = None
 _W: np.ndarray = np.random.randn(512) * 0.03  # Will be learned later
 
 
-def sentiment_lambda(corpus: list[str]) -> float:"""
+def sentiment_lambda():-> float:"""
     """Return \\u03bb_sent \\u2208 [-1,1] for latest news headline batch."
 
 Compute sentiment using TF - IDF vectorization:

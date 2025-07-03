@@ -1,3 +1,16 @@
+from core.advanced_mathematical_core import (
+import numpy as np
+            import psutil
+    import json
+from core.dualistic_thought_engines import DualisticThoughtEngines
+from core.multi_bit_state_manager import MultiBitStateManager, ProcessingMode
+from core.trading_pipeline_integration import TradingPipelineIntegration
+from typing import Dict, Any
+from utils.safe_print import error, info, success, warn
+import asyncio
+import logging
+import time
+
 # -*- coding: utf-8 -*-
 """
 Comprehensive Test Suite for Multi-Bit Trading System.
@@ -10,23 +23,13 @@ Tests the complete integration of:
 - Chrome-inspired memory management
 """
 
-import asyncio
-import logging
-import time
-from typing import Dict, Any
-import numpy as np
 
-from core.multi_bit_state_manager import MultiBitStateManager, ProcessingMode
-from core.trading_pipeline_integration import TradingPipelineIntegration
-from core.dualistic_thought_engines import DualisticThoughtEngines
-from core.advanced_mathematical_core import (
     calculate_ferris_wheel_state,
     calculate_quantum_thermal_state,
     calculate_void_well_metrics,
     calculate_profit_state,
     calculate_kelly_metrics,
 )
-from utils.safe_print import error, info, success, warn
 
 # Configure logging
 logging.basicConfig(
@@ -54,7 +57,7 @@ class MultiBitTradingSystemTester:
         }
         logger.info("MultiBitTradingSystemTester initialized")
 
-    def test_multi_bit_state_management(self) -> Dict[str, Any]:
+    def test_multi_bit_state_management():-> Dict[str, Any]:
         """Test multi-bit state management functionality."""
         info("Testing Multi-Bit State Management...")
 
@@ -174,7 +177,7 @@ class MultiBitTradingSystemTester:
         self.test_results["multi_bit_tests"] = results
         return results
 
-    def test_mathematical_framework(self) -> Dict[str, Any]:
+    def test_mathematical_framework():-> Dict[str, Any]:
         """Test mathematical framework functionality."""
         info("Testing Mathematical Framework...")
 
@@ -280,7 +283,7 @@ class MultiBitTradingSystemTester:
         self.test_results["mathematical_tests"] = results
         return results
 
-    async def test_trading_pipeline(self) -> Dict[str, Any]:
+    async def test_trading_pipeline():-> Dict[str, Any]:
         """Test trading pipeline integration."""
         info("Testing Trading Pipeline Integration...")
 
@@ -372,7 +375,7 @@ class MultiBitTradingSystemTester:
         self.test_results["pipeline_tests"] = results
         return results
 
-    def test_dualistic_thought_engines(self) -> Dict[str, Any]:
+    def test_dualistic_thought_engines():-> Dict[str, Any]:
         """Test dualistic thought engines."""
         info("Testing Dualistic Thought Engines...")
 
@@ -464,7 +467,7 @@ class MultiBitTradingSystemTester:
         self.test_results["integration_tests"] = results
         return results
 
-    def test_performance_and_scalability(self) -> Dict[str, Any]:
+    def test_performance_and_scalability():-> Dict[str, Any]:
         """Test performance and scalability."""
         info("Testing Performance and Scalability...")
 
@@ -532,7 +535,6 @@ class MultiBitTradingSystemTester:
             # Test 2: Memory Efficiency
             info("  Testing memory efficiency...")
 
-            import psutil
 
             process = psutil.Process()
             memory_usage = process.memory_info().rss / 1024 / 1024  # MB
@@ -594,7 +596,7 @@ class MultiBitTradingSystemTester:
         self.test_results["performance_tests"] = results
         return results
 
-    def run_all_tests(self) -> Dict[str, Any]:
+    def run_all_tests():-> Dict[str, Any]:
         """Run all tests and return comprehensive results."""
         info("Starting Comprehensive Multi-Bit Trading System Tests")
         info("=" * 60)
@@ -682,7 +684,6 @@ def main():
     results = tester.run_all_tests()
 
     # Save results to file
-    import json
 
     with open("test_results_multi_bit_system.json", "w") as f:
         json.dump(results, f, indent=2, default=str)

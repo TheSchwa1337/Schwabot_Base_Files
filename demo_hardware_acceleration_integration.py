@@ -1,3 +1,11 @@
+import numpy as np
+from core.hardware_acceleration_manager import (
+from core.zbe_core import ZBECore, ZBEMode
+from core.zpe_core import ZPECore, ZPEMode
+from typing import Dict, Any
+import logging
+import time
+
 #!/usr/bin/env python3
 """
 Hardware Acceleration Integration Demo
@@ -16,15 +24,8 @@ CRITICAL: These systems do NOT make trading decisions or affect profit calculati
 They only optimize the computational performance of the underlying hardware.
 """
 
-import time
-import logging
-import numpy as np
-from typing import Dict, Any
 
 # Import our hardware acceleration systems
-from core.zpe_core import ZPECore, ZPEMode
-from core.zbe_core import ZBECore, ZBEMode
-from core.hardware_acceleration_manager import (
     HardwareAccelerationManager,
     AccelerationMode,
 )
@@ -36,7 +37,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-def simulate_market_conditions() -> Dict[str, Any]:
+def simulate_market_conditions():-> Dict[str, Any]:
     """Simulate realistic market conditions for testing."""
     return {
         "volatility": np.random.uniform(0.1, 0.3),
@@ -48,7 +49,7 @@ def simulate_market_conditions() -> Dict[str, Any]:
     }
 
 
-def simulate_mathematical_state() -> Dict[str, Any]:
+def simulate_mathematical_state():-> Dict[str, Any]:
     """Simulate mathematical state for complexity estimation."""
     return {
         "complexity": np.random.uniform(0.3, 0.8),

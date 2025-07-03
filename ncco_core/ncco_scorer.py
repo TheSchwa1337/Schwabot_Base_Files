@@ -1,3 +1,8 @@
+    from core.clean_unified_math import clean_unified_math as unified_math
+from typing import Any, List
+import os
+import platform
+
 # -*- coding: utf-8 -*-
 """
 NCCO Scorer Module for NCCO_CORE
@@ -9,12 +14,8 @@ Purpose: Score NCCO candidates to determine which strategy should be selected
 during the collapse process.
 """
 
-import os
-from typing import Any, List
-import platform
 
 try:
-    from core.clean_unified_math import clean_unified_math as unified_math
 except ImportError:
     # Fallback for development
     class UnifiedMathMock:
@@ -32,7 +33,7 @@ class WindowsCliCompatibilityHandler:
     """Windows CLI compatibility for emoji and Unicode handling."""
 
     @staticmethod
-    def is_windows_cli() -> bool:
+    def is_windows_cli():-> bool:
         """Detect if running in Windows CLI environment."""
         return platform.system() == "Windows" and (
             "cmd" in os.environ.get("COMSPEC", "").lower()
@@ -40,7 +41,7 @@ class WindowsCliCompatibilityHandler:
         )
 
     @staticmethod
-    def safe_print(message: str, use_emoji: bool = True) -> str:
+    def safe_print():-> str:
         """Print message safely with Windows CLI compatibility."""
         if WindowsCliCompatibilityHandler.is_windows_cli() and use_emoji:
             emoji_mapping = {
@@ -56,7 +57,7 @@ class WindowsCliCompatibilityHandler:
         return message
 
     @staticmethod
-    def log_safe(logger: Any, level: str, message: str) -> None:
+    def log_safe():-> None:
         """Log message safely with Windows CLI compatibility."""
         safe_message = WindowsCliCompatibilityHandler.safe_print(message)
         try:
@@ -72,7 +73,7 @@ class WindowsCliCompatibilityHandler:
 # NCCO SCORING FUNCTIONS
 # =====================================
 
-def score_nccos(nccos: List[Any]) -> List[Any]:
+def score_nccos():-> List[Any]:
     """
     Score a list of NCCO candidates based on price deltas and bit modes.
     
@@ -107,7 +108,7 @@ def score_nccos(nccos: List[Any]) -> List[Any]:
     return nccos
 
 
-def rank_nccos_by_score(nccos: List[Any]) -> List[Any]:
+def rank_nccos_by_score():-> List[Any]:
     """
     Rank NCCOs by their calculated scores in descending order.
     
@@ -120,7 +121,7 @@ def rank_nccos_by_score(nccos: List[Any]) -> List[Any]:
     return sorted(nccos, key=lambda x: getattr(x, 'score', 0), reverse=True)
 
 
-def filter_nccos_by_threshold(nccos: List[Any], min_score: float = 0.1) -> List[Any]:
+def filter_nccos_by_threshold():-> List[Any]:
     """
     Filter NCCOs to only include those above a minimum score threshold.
     
@@ -134,7 +135,7 @@ def filter_nccos_by_threshold(nccos: List[Any], min_score: float = 0.1) -> List[
     return [ncco for ncco in nccos if getattr(ncco, 'score', 0) >= min_score]
 
 
-def calculate_confidence_score(ncco: Any) -> float:
+def calculate_confidence_score():-> float:
     """
     Calculate a confidence score for a single NCCO based on multiple factors.
     

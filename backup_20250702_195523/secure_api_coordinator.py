@@ -1,3 +1,18 @@
+from cryptography.fernet import Fernet
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Union
+import aiohttp
+import asyncio
+import hashlib
+import json
+import logging
+import os
+import requests
+import time
+
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 
@@ -18,21 +33,7 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
 """
-import asyncio
-import hashlib
-import json
-import logging
-import os
-import time
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
-from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
 
-import aiohttp
-import requests
-from cryptography.fernet import Fernet
 
 
 
@@ -126,10 +127,10 @@ self._initialize_rate_limits()
 
             logger.info(🔐 Secure API Coordinator initialized)
 
-def _default_config(self) -> Dict[str, Any]:"Default configuration.return {storage_path: None,  # Will use defaultrequest_timeout: 30,connection_timeout": 10,max_retries": 3,retry_delay": 1.0,enable_rate_limiting": True,enable_request_logging": True,auto_key_rotation": False,key_rotation_days": 90,
+def _default_config():-> Dict[str, Any]:"Default configuration.return {storage_path: None,  # Will use defaultrequest_timeout: 30,connection_timeout": 10,max_retries": 3,retry_delay": 1.0,enable_rate_limiting": True,enable_request_logging": True,auto_key_rotation": False,key_rotation_days": 90,
 }
 
-def _get_storage_path(self) -> Path:"Get secure storage path.if self.config.get(storage_path):
+def _get_storage_path():-> Path:"Get secure storage path.if self.config.get(storage_path):
             return Path(self.config[storage_path])
 
 # Default secure paths by OS
@@ -145,7 +146,7 @@ try:
 
         return storage_path
 
-def _get_or_create_encryption_key(self) -> bytes:
+def _get_or_create_encryption_key():-> bytes:
         Get or create encryption key.key_file = self.storage_path / encryption.key
 
 if key_file.exists():
@@ -255,15 +256,7 @@ APIProvider.KRAKEN: RateLimit(20, 200, 10),
 for provider, rate_limit in rate_limit_configs.items():
             self.rate_limits[provider] = rate_limit
 
-def store_credentials(
-self,:
-provider: APIProvider,
-api_key: str,
-api_secret: Optional[str] = None,
-passphrase: Optional[str] = None,
-sandbox: bool = True,
-security_level: SecurityLevel = SecurityLevel.API_KEY,
-) -> bool:Store API credentials securely.try: credentials = APICredentials(
+def store_credentials():-> bool:Store API credentials securely.try: credentials = APICredentials(
 provider=provider,
 api_key=api_key,
 api_secret=api_secret,
@@ -284,7 +277,7 @@ fFailed to store credentials for {
 provider.value}: {e})
         return False
 
-def remove_credentials() -> bool:Remove stored credentials.try:
+def remove_credentials():-> bool:Remove stored credentials.try:
             if provider in self.credentials:
                 del self.credentials[provider]
 self._save_credentials()
@@ -298,7 +291,7 @@ fFailed to remove credentials for {
 provider.value}: {e})
         return False
 
-def test_credentials() -> bool:Test API credentials.try:
+def test_credentials():-> bool:Test API credentials.try:
             if provider not in self.credentials:
                 logger.error(fNo credentials found for {provider.value})
         return False
@@ -330,15 +323,7 @@ fError testing credentials for {
 provider.value}: {e})
         return False
 
-def make_request(
-self,:
-provider: APIProvider,
-endpoint: str,
-method: str = GET,
-params: Optional[Dict[str, Any]] = None,
-data: Optional[Dict[str, Any]] = None,
-headers: Optional[Dict[str, str]] = None,
-) -> Optional[Dict[str, Any]]:Make authenticated API request.try:
+def make_request():-> Optional[Dict[str, Any]]:Make authenticated API request.try:
             # Check credentials
 if provider not in self.credentials:
                 logger.error(fNo credentials found for {provider.value})
@@ -424,7 +409,7 @@ if len(self.request_history) > self.max_history:
 self.stats[failed_requests] += 1
         return None
 
-def _check_rate_limit() -> bool:Check if request is within rate limits.if not self.config.get(enable_rate_limiting, True):
+def _check_rate_limit():-> bool:Check if request is within rate limits.if not self.config.get(enable_rate_limiting, True):
             return True
 
 if provider not in self.rate_limits:
@@ -453,7 +438,7 @@ rate_limit.last_request = now
 
         return True
 
-def _build_url() -> str:
+def _build_url():-> str:
         Build full URL for API request.base_urls = {APIProvider.COINMARKETCAP: https://pro-api.coinmarketcap.com,APIProvider.OPENWEATHER:https://api.openweathermap.org,APIProvider.NEWSAPI:https://newsapi.org,APIProvider.TWITTER:https://api.twitter.com,APIProvider.BINANCE:https://api.binance.com,APIProvider.COINBASE:https://api.coinbase.com,APIProvider.KRAKEN:https://api.kraken.com,
 }
 base_url = base_urls.get(provider,)if not endpoint.startswith(/):
@@ -461,9 +446,7 @@ base_url = base_urls.get(provider,)if not endpoint.startswith(/):
 
         return base_url + endpoint
 
-def _build_headers(:
-self, provider: APIProvider, headers: Dict[str, str]
-) -> Dict[str, str]:Build authentication headers.creds = self.credentials[provider]
+def _build_headers():-> Dict[str, str]:Build authentication headers.creds = self.credentials[provider]
 
 # Provider-specific authentication
 if provider == APIProvider.COINMARKETCAP:
@@ -487,7 +470,7 @@ headers[X-API-Key] = creds.api_key
 
 # Specialized API methods for different services
 
-def get_btc_price(self) -> Optional[float]:Get current BTC price from CoinMarketCap.try: response = self.make_request(
+def get_btc_price():-> Optional[float]:Get current BTC price from CoinMarketCap.try: response = self.make_request(
 APIProvider.COINMARKETCAP,
 /v1/cryptocurrency/quotes/latest,params = {symbol:BTC,convert:USD},
 )
@@ -501,7 +484,7 @@ if response and response.get(success):
             logger.error(fError getting BTC price: {e})
         return None
 
-def get_weather_data(self, location: str = London) -> Optional[Dict[str, Any]]:Get weather data for CRWM analysis.try: creds = self.credentials.get(APIProvider.OPENWEATHER)
+def get_weather_data():-> Optional[Dict[str, Any]]:Get weather data for CRWM analysis.try: creds = self.credentials.get(APIProvider.OPENWEATHER)
 if not creds:
                 logger.error(OpenWeather credentials not found)
         return None
@@ -525,9 +508,7 @@ crwm_data = {location: weather_data[name],temperature": weather_data[main][temp]
             logger.error(fError getting weather data: {e})
         return None
 
-def get_news_sentiment(:
-self, query: str = bitcoin, max_articles: int = 10
-) -> Optional[List[Dict[str, Any]]]:Get news articles for sentiment analysis.try: response = self.make_request(
+def get_news_sentiment():-> Optional[List[Dict[str, Any]]]:Get news articles for sentiment analysis.try: response = self.make_request(
 APIProvider.NEWSAPI,
 /v2/everything,
 params = {q: query,pageSize: max_articles,sortBy":publishedAt",language":en",
@@ -552,9 +533,7 @@ len(processed_articles)} articles for '{query}')
             logger.error(fError getting news sentiment: {e})
         return None
 
-def get_social_sentiment(:
-self, query: str = bitcoin, max_tweets: int = 10
-) -> Optional[List[Dict[str, Any]]]:Get social media sentiment from Twitter.try: response = self.make_request(
+def get_social_sentiment():-> Optional[List[Dict[str, Any]]]:Get social media sentiment from Twitter.try: response = self.make_request(
 APIProvider.TWITTER,
 /2/tweets/search/recent,
 params = {query: query,max_results: max_tweets,tweet.fields:created_at,public_metrics",
@@ -579,7 +558,7 @@ len(processed_tweets)} tweets for '{query}')
             logger.error(fError getting social sentiment: {e})
         return None
 
-def get_api_status(self) -> Dict[str, Any]:Get comprehensive API status.try: status = {total_providers: len(self.credentials),active_providers: [],inactive_providers": [],rate_limit_status": {},performance_stats: self.stats.copy(),last_requests": {},
+def get_api_status():-> Dict[str, Any]:Get comprehensive API status.try: status = {total_providers: len(self.credentials),active_providers: [],inactive_providers": [],rate_limit_status": {},performance_stats: self.stats.copy(),last_requests": {},
 }
 
 # Check each provider
@@ -630,7 +609,7 @@ cleaned_count = original_count - len(self.request_history)
         except Exception as e:
             logger.error(fError cleaning up old data: {e})
 
-def export_api_data() -> bool:Export API configuration and statistics.try: export_data = {export_timestamp: datetime.now().isoformat(),api_status: self.get_api_status(),configuration": self.config,request_history": [{provider: req.provider.value,endpoint: req.endpoint,method": req.method,success": req.success,response_time": req.response_time,timestamp": req.timestamp.isoformat(),
+def export_api_data():-> bool:Export API configuration and statistics.try: export_data = {export_timestamp: datetime.now().isoformat(),api_status: self.get_api_status(),configuration": self.config,request_history": [{provider: req.provider.value,endpoint: req.endpoint,method": req.method,success": req.success,response_time": req.response_time,timestamp": req.timestamp.isoformat(),
 }
 for req in self.request_history[-100:]  # Last 100 requests
 ],
@@ -664,7 +643,7 @@ self._save_credentials()
 api_coordinator = None
 
 
-def get_api_coordinator() -> SecureAPICoordinator:Get global API coordinator instance.global api_coordinator
+def get_api_coordinator():-> SecureAPICoordinator:Get global API coordinator instance.global api_coordinator
 if api_coordinator is None: api_coordinator = SecureAPICoordinator()
         return api_coordinator
 

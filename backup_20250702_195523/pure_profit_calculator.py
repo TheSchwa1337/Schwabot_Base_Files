@@ -1,3 +1,11 @@
+import numpy as np
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Dict, List, Optional, Any, Tuple
+import hashlib
+import logging
+import time
+
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 
@@ -31,13 +39,6 @@ Where:
 CRITICAL GUARANTEE: ZPE/ZBE systems never appear in this calculation.
 They only affect computation time 𝑇, never profit 𝒫.
 
-import logging
-import time
-import numpy as np
-from typing import Dict, List, Optional, Any, Tuple
-from dataclasses import dataclass, field
-from enum import Enum
-import hashlib
 
 logger = logging.getLogger(__name__)
 
@@ -66,7 +67,7 @@ class HistoryState:Immutable history state - 𝐻(𝑡).timestamp: float
     profit_memory: List[float] = field(default_factory=list)
     signal_history: List[float] = field(default_factory=list)
 
-    def get_hash_signature(self) -> str:Generate deterministic hash signature for state.state_str = f{self.timestamp}_{len(self.hash_matrices)}_{len(self.tensor_buckets)}
+    def get_hash_signature():-> str:Generate deterministic hash signature for state.state_str = f{self.timestamp}_{len(self.hash_matrices)}_{len(self.tensor_buckets)}
         return hashlib.sha256(state_str.encode()).hexdigest()
 
 
@@ -114,12 +115,7 @@ class PureProfitCalculator:Pure Profit Calculator - Mathematically Rigorous Impl
 
         logger.info(🧮 Pure Profit Calculator initialized - Mathematical Mode)
 
-    def calculate_profit(
-        self,
-        market_data: MarketData,
-        history_state: HistoryState,
-        mode: ProfitCalculationMode = ProfitCalculationMode.BALANCED,
-    ) -> ProfitResult:
+    def calculate_profit():-> ProfitResult:
         Calculate pure profit using mathematical framework.
 
         Implements: 𝒫 = 𝐹(𝑀(𝑡), 𝐻(𝑡), Θ)
@@ -199,7 +195,7 @@ class PureProfitCalculator:Pure Profit Calculator - Mathematically Rigorous Impl
             logger.error(❌ Pure profit calculation failed: %s, e)
             raise
 
-    def _calculate_base_profit(self, market_data: MarketData) -> float:Calculate base profit from market data.try:
+    def _calculate_base_profit():-> float:Calculate base profit from market data.try:
             # Price momentum component
             price_momentum = market_data.momentum * self.strategy_params.momentum_weight
 
@@ -225,7 +221,7 @@ class PureProfitCalculator:Pure Profit Calculator - Mathematically Rigorous Impl
             logger.error(❌ Base profit calculation failed: %s, e)
             return 0.0
 
-    def _calculate_risk_adjustment(self, market_data: MarketData) -> float:Calculate risk adjustment factor.try:
+    def _calculate_risk_adjustment():-> float:Calculate risk adjustment factor.try:
             # Volatility risk factor
             volatility_risk = min(1.0, market_data.volatility / 0.5)
 
@@ -244,9 +240,7 @@ class PureProfitCalculator:Pure Profit Calculator - Mathematically Rigorous Impl
             logger.error(❌ Risk adjustment calculation failed: %s, e)
             return 0.5
 
-    def _calculate_tensor_contribution(
-        self, market_data: MarketData, history_state: HistoryState
-    ) -> float:
+    def _calculate_tensor_contribution():-> float:
         Calculate tensor contribution from historical patterns.try:
             if not history_state.tensor_buckets:
                 return 0.0
@@ -283,9 +277,7 @@ class PureProfitCalculator:Pure Profit Calculator - Mathematically Rigorous Impl
             logger.error(❌ Tensor contribution calculation failed: %s, e)
             return 0.0
 
-    def _calculate_hash_contribution(
-        self, market_data: MarketData, history_state: HistoryState
-    ) -> float:
+    def _calculate_hash_contribution():-> float:
         Calculate hash memory contribution.try:
             if not history_state.profit_memory:
                 return 0.0
@@ -317,9 +309,7 @@ class PureProfitCalculator:Pure Profit Calculator - Mathematically Rigorous Impl
             logger.error(❌ Hash contribution calculation failed: %s, e)
             return 0.0
 
-    def _calculate_confidence_score(
-        self, market_data: MarketData, history_state: HistoryState
-    ) -> float:
+    def _calculate_confidence_score():-> float:
         Calculate confidence score based on signal alignment.try: confidence_factors = []
 
             # Price-volume alignment
@@ -350,7 +340,7 @@ class PureProfitCalculator:Pure Profit Calculator - Mathematically Rigorous Impl
             logger.error(❌ Confidence score calculation failed: %s, e)
             return 0.5
 
-    def _get_mode_multiplier(self, mode: ProfitCalculationMode) -> float:
+    def _get_mode_multiplier():-> float:
         Get mode-specific multiplier.multipliers = {
             ProfitCalculationMode.CONSERVATIVE: 0.7,
             ProfitCalculationMode.BALANCED: 1.0,
@@ -359,7 +349,7 @@ class PureProfitCalculator:Pure Profit Calculator - Mathematically Rigorous Impl
         }
         return multipliers.get(mode, 1.0)
 
-    def get_calculation_metrics(self) -> Dict[str, Any]:Get pure calculation metrics.if self.calculation_count == 0:
+    def get_calculation_metrics():-> Dict[str, Any]:Get pure calculation metrics.if self.calculation_count == 0:
             return {status: no_calculations}
 
         avg_calculation_time = self.total_calculation_time / self.calculation_count
@@ -371,7 +361,7 @@ class PureProfitCalculator:Pure Profit Calculator - Mathematically Rigorous Impl
             },
         }
 
-    def validate_profit_purity(self, market_data: MarketData, history_state: HistoryState) -> bool:Validate that profit calculation is mathematically pure.
+    def validate_profit_purity():-> bool:Validate that profit calculation is mathematically pure.
 
         This test ensures that the same inputs always produce the same outputs,
         regardless of external factors like ZPE/ZBE acceleration.try:
@@ -392,7 +382,7 @@ class PureProfitCalculator:Pure Profit Calculator - Mathematically Rigorous Impl
             return False
 
 
-def assert_zpe_isolation() -> None:
+def assert_zpe_isolation():-> None:
     Assert that ZPE/ZBE systems are completely isolated from profit calculation.
 
     This function ensures that no ZPE/ZBE imports or references exist in
@@ -409,7 +399,7 @@ def assert_zpe_isolation() -> None:
     logger.info(✅ ZPE isolation check completed)
 
 
-def create_sample_market_data() -> MarketData:Create sample market data for testing.return MarketData(
+def create_sample_market_data():-> MarketData:Create sample market data for testing.return MarketData(
         timestamp = time.time(),
         btc_price=50000.0,
         eth_price=3000.0,
@@ -421,7 +411,7 @@ def create_sample_market_data() -> MarketData:Create sample market data for test
     )
 
 
-def create_sample_history_state() -> HistoryState:Create sample history state for testing.return HistoryState(
+def create_sample_history_state():-> HistoryState:Create sample history state for testing.return HistoryState(
         timestamp = time.time(),
         hash_matrices={btc_pattern: np.random.rand(4, 4)},
         tensor_buckets = {momentum_bucket: np.array([0.1, 0.2, 0.15, 1.1])},

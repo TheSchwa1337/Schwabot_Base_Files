@@ -1,3 +1,9 @@
+import numpy as np
+from collections import deque
+from typing import Dict, Any, List, Optional
+import logging
+import time
+
 """
 Drawdown Predictor Module
 -------------------------
@@ -6,11 +12,6 @@ This module leverages statistical models and historical data to provide risk ins
 helping to modulate trading strategies based on anticipated market corrections.
 """
 
-import time
-import numpy as np
-import logging
-from typing import Dict, Any, List, Optional
-from collections import deque
 
 logger = logging.getLogger(__name__)
 
@@ -49,7 +50,7 @@ class DrawdownPredictor:
         }
         logger.info("DrawdownPredictor initialized.")
 
-    def _calculate_drawdown(self, pnl_series: List[float]) -> List[float]:
+    def _calculate_drawdown():-> List[float]:
         """
         Calculates drawdown from a PnL series.
         Drawdown is the percentage decline from a peak in value.
@@ -92,7 +93,7 @@ class DrawdownPredictor:
             f"Historical PnL updated with {current_pnl}. History size: {len(self.historical_pnl)}"
         )
 
-    def predict_drawdown(self) -> Optional[Dict[str, Any]]:
+    def predict_drawdown():-> Optional[Dict[str, Any]]:
         """
         Predicts the potential maximum future drawdown and its confidence interval.
         Uses historical data to project future risk.
@@ -157,7 +158,7 @@ class DrawdownPredictor:
             "upper_bound": upper_bound,
         }
 
-    def get_metrics(self) -> Dict[str, Any]:
+    def get_metrics():-> Dict[str, Any]:
         """
         Returns the operational metrics of the Drawdown Predictor.
         """

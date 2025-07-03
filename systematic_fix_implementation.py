@@ -1,15 +1,16 @@
+from pathlib import Path
+from typing import Dict, List
+import os
+import re
+import shutil
+import subprocess
+
 #!/usr/bin/env python3
 """
 Systematic fix implementation that preserves critical math logic while fixing issues.
 This script implements a safe approach to fix E999 errors and implement stubs while maintaining system operability.
 """
 
-import os
-import re
-import shutil
-import subprocess
-from pathlib import Path
-from typing import Dict, List
 
 
 class MathLogicPreserver:
@@ -61,7 +62,7 @@ class MathLogicPreserver:
             "dimension",
         ]
 
-    def extract_math_logic(self, content: str) -> Dict[str, any]:
+    def extract_math_logic():-> Dict[str, any]:
         """Extract critical mathematical logic from content."""
         math_logic = {
             "imports": [],
@@ -127,7 +128,7 @@ class MathLogicPreserver:
 
         return math_logic
 
-    def _extract_function_body(self, lines: List[str], start_line: int) -> List[str]:
+    def _extract_function_body():-> List[str]:
         """Extract function body from start line."""
         body = []
         indent_level = len(lines[start_line]) - len(lines[start_line].lstrip())
@@ -145,7 +146,7 @@ class MathLogicPreserver:
 
         return body
 
-    def _extract_class_body(self, lines: List[str], start_line: int) -> List[str]:
+    def _extract_class_body():-> List[str]:
         """Extract class body from start line."""
         body = []
         indent_level = len(lines[start_line]) - len(lines[start_line].lstrip())
@@ -167,7 +168,7 @@ class MathLogicPreserver:
 class SyntaxFixer:
     """Fixes E999 syntax errors while preserving functionality."""
 
-    def fix_unterminated_strings(self, content: str) -> str:
+    def fix_unterminated_strings():-> str:
         """Fix unterminated string literals."""
         lines = content.split("\n")
         fixed_lines = []
@@ -186,7 +187,7 @@ class SyntaxFixer:
 
         return "\n".join(fixed_lines)
 
-    def fix_unmatched_parentheses(self, content: str) -> str:
+    def fix_unmatched_parentheses():-> str:
         """Fix unmatched parentheses."""
         lines = content.split("\n")
         fixed_lines = []
@@ -205,7 +206,7 @@ class SyntaxFixer:
 
         return "\n".join(fixed_lines)
 
-    def fix_indentation_errors(self, content: str) -> str:
+    def fix_indentation_errors():-> str:
         """Fix indentation errors."""
         lines = content.split("\n")
         fixed_lines = []
@@ -227,7 +228,7 @@ class SyntaxFixer:
 
         return "\n".join(fixed_lines)
 
-    def fix_invalid_decimal_literals(self, content: str) -> str:
+    def fix_invalid_decimal_literals():-> str:
         """Fix invalid decimal literals."""
         # Fix patterns like 1.2.3 or 1..2
         content = re.sub(r"(\d+)\.(\d+)\.(\d+)", r"\1.\2_\3", content)
@@ -239,7 +240,7 @@ class SyntaxFixer:
 class StubImplementer:
     """Implements proper functionality for stubbed code."""
 
-    def implement_empty_pass_functions(self, content: str) -> str:
+    def implement_empty_pass_functions():-> str:
         """Replace empty pass statements with proper implementations."""
         lines = content.split("\n")
         fixed_lines = []
@@ -267,9 +268,7 @@ class StubImplementer:
 
         return "\n".join(fixed_lines)
 
-    def _generate_function_implementation(
-        self, function_name: str, definition: str
-    ) -> List[str]:
+    def _generate_function_implementation():-> List[str]:
         """Generate proper implementation for a function."""
         # Extract parameters
         params_match = re.search(r"def \w+\(([^)]*)\)", definition)
@@ -335,7 +334,7 @@ class StubImplementer:
 
         return implementation
 
-    def implement_missing_imports(self, content: str) -> str:
+    def implement_missing_imports():-> str:
         """Add missing imports based on usage."""
         imports_needed = []
 
@@ -373,7 +372,7 @@ class SystematicFixer:
         self.syntax_fixer = SyntaxFixer()
         self.stub_implementer = StubImplementer()
 
-    def fix_file_systematically(self, file_path: Path) -> bool:
+    def fix_file_systematically():-> bool:
         """Fix a file systematically while preserving math logic."""
         try:
             # Read original content
@@ -419,9 +418,7 @@ class SystematicFixer:
             print(f"Error fixing {file_path}: {e}")
             return False
 
-    def _verify_math_logic_preserved(
-        self, original_math_logic: Dict, new_content: str
-    ) -> bool:
+    def _verify_math_logic_preserved():-> bool:
         """Verify that critical math logic is preserved."""
         new_math_logic = self.math_preserver.extract_math_logic(new_content)
 
@@ -441,7 +438,7 @@ class SystematicFixer:
 
         return True
 
-    def get_critical_files(self) -> List[Path]:
+    def get_critical_files():-> List[Path]:
         """Get list of critical files that need fixing."""
 
         critical_files = []

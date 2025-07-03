@@ -1,3 +1,15 @@
+from core.ferris_rde_daemon import FerrisRDEDaemon, DaemonConfig, get_daemon_instance
+from pathlib import Path
+from typing import Optional
+from utils.safe_print import info, success, error
+import argparse
+import asyncio
+import logging
+import os
+import signal
+import sys
+import yaml
+
 #!/usr/bin/env python3
 """
 Ferris RDE Daemon Startup Script
@@ -13,22 +25,11 @@ configuration and monitoring. It includes:
 - Logging setup
 """
 
-import argparse
-import asyncio
-import logging
-import os
-import signal
-import sys
-from pathlib import Path
-from typing import Optional
-
-import yaml
-
-from core.ferris_rde_daemon import FerrisRDEDaemon, DaemonConfig, get_daemon_instance
-from utils.safe_print import info, success, error
 
 
-def load_config(config_path: str) -> Optional[dict]:
+
+
+def load_config():-> Optional[dict]:
     """
     Load configuration from YAML file.
 
@@ -56,7 +57,7 @@ def load_config(config_path: str) -> Optional[dict]:
         return None
 
 
-def create_daemon_config(config_dict: dict) -> DaemonConfig:
+def create_daemon_config():-> DaemonConfig:
     """
     Create DaemonConfig from configuration dictionary.
 

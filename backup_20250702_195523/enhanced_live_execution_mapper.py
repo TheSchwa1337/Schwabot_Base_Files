@@ -1,3 +1,13 @@
+import numpy as np
+from core.live_execution_mapper import ExecutionState, LiveExecutionMapper
+from core.profit_optimization_engine import (
+from dataclasses import dataclass
+from typing import Any, Dict, List, Optional, Tuple
+from typing import Tuple
+import logging
+import random
+import time
+
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 
@@ -18,18 +28,9 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
 """
-import logging
-import time
-from dataclasses import dataclass
-from typing import Any, Dict, List, Optional, Tuple
 
-import numpy as np
 
-from core.live_execution_mapper import ExecutionState, LiveExecutionMapper
 
-from core.profit_optimization_engine import (
-from typing import Tuple
-import random
 
 
 # !/usr/bin/env python3
@@ -183,16 +184,10 @@ self.btc_usdc_config = {precision: 8,  # BTC precisionmin_trade_size_btc: 0.001,
 finitial_usdc: ${initial_portfolio_usdc:,.2f})
 )
 
-def _default_config(self) -> Dict[str, Any]:"Return default configuration for enhanced execution.return {max_state_history: 1000,math_confidence_min: 0.75,profit_potential_min: 0.005,  # 0.5%risk_score_max: 0.3,  # 30%entropy_score_min: 0.6,  # 60%phase_alignment_min: 0.7,  # 70%optimization_timeout_ms: 5000,enable_mathematical_validation": True,enable_profit_optimization": True,btc_usdc_pair_only": True,stop_loss_enabled": True,take_profit_enabled": True,dynamic_position_sizing": True,
+def _default_config():-> Dict[str, Any]:"Return default configuration for enhanced execution.return {max_state_history: 1000,math_confidence_min: 0.75,profit_potential_min: 0.005,  # 0.5%risk_score_max: 0.3,  # 30%entropy_score_min: 0.6,  # 60%phase_alignment_min: 0.7,  # 70%optimization_timeout_ms: 5000,enable_mathematical_validation": True,enable_profit_optimization": True,btc_usdc_pair_only": True,stop_loss_enabled": True,take_profit_enabled": True,dynamic_position_sizing": True,
 }
 
-def execute_optimized_btc_trade(
-self,:
-btc_price: float,
-usdc_volume: float,
-market_data: Dict[str, Any],
-override_config: Optional[Dict[str, Any]] = None,
-) -> EnhancedExecutionState:"Execute a mathematically optimized BTC/USDC trade.This is the main entry point for enhanced trading that integrates
+def execute_optimized_btc_trade():-> EnhancedExecutionState:"Execute a mathematically optimized BTC/USDC trade.This is the main entry point for enhanced trading that integrates
 all mathematical components for optimal profit generation.
 
 Args:
@@ -353,7 +348,7 @@ finally:
             # Cleanup old states
 self._cleanup_state_history()
 
-def _validate_mathematical_thresholds() -> bool:Validate mathematical thresholds for trade execution.try: thresholds = self.enhanced_thresholds
+def _validate_mathematical_thresholds():-> bool:Validate mathematical thresholds for trade execution.try: thresholds = self.enhanced_thresholds
 
 # Check mathematical confidence
 if (:
@@ -396,9 +391,7 @@ and state.optimization_result.risk_score > thresholds[risk_score_max]
             logger.error(fError validating mathematical thresholds: {e})
         return False
 
-def _calculate_enhanced_position_size(:
-self, state: EnhancedExecutionState, market_data: Dict[str, Any]
-) -> float:Calculate enhanced position size using mathematical optimization.try:
+def _calculate_enhanced_position_size():-> float:Calculate enhanced position size using mathematical optimization.try:
             # Base position size from optimization
 if state.profit_vector: base_size = state.profit_vector.position_size
 else:
@@ -438,9 +431,7 @@ ffinal = {final_position_btc:.6f} BTC
             logger.error(fError calculating enhanced position size: {e})
         return self.btc_usdc_config[min_trade_size_btc]
 
-def _validate_enhanced_risk(:
-self, state: EnhancedExecutionState, market_data: Dict[str, Any]
-) -> Tuple[bool, str]:Validate enhanced risk management criteria.try:
+def _validate_enhanced_risk():-> Tuple[bool, str]:Validate enhanced risk management criteria.try:
             # Check volatility
 volatility = market_data.get(volatility, 0.02)
             if volatility > 0.05:  # 5% volatility threshold
@@ -468,14 +459,10 @@ fDrift weight too high: {state.drift_weight:.3f},
 
         return True, Risk validation passedexcept Exception as e:logger.error(fError in risk validation: {e})return False, fRisk validation error: {str(e)}
 
-def _prepare_base_market_data(:
-self, state: EnhancedExecutionState, market_data: Dict[str, Any]
-) -> Dict[str, Any]:Prepare market data for base execution system.return {price_history: market_data.get(price_history", [state.btc_price]),volume_history": market_data.get(volume_history", [state.usdc_volume]),volatility": market_data.get(volatility", 0.02),confidence_override": state.mathematical_confidence,position_size_override": state.risk_adjusted_size,
+def _prepare_base_market_data():-> Dict[str, Any]:Prepare market data for base execution system.return {price_history: market_data.get(price_history", [state.btc_price]),volume_history": market_data.get(volume_history", [state.usdc_volume]),volatility": market_data.get(volatility", 0.02),confidence_override": state.mathematical_confidence,position_size_override": state.risk_adjusted_size,
 }
 
-def _simulate_enhanced_execution(:
-self, state: EnhancedExecutionState
-) -> EnhancedExecutionState:"Simulate enhanced execution when base system unavailable.try:
+def _simulate_enhanced_execution():-> EnhancedExecutionState:"Simulate enhanced execution when base system unavailable.try:
             # Simulate successful execution
 executed_price = state.btc_price * (
                 1 + np.random.uniform(-0.001, 0.001)
@@ -494,9 +481,7 @@ state.status = executed_successfullylogger.info(fSimulated execution: {executed_
             logger.error(fError in simulated execution: {e})state.status = failedstate.error_message = fSimulation error: {str(e)}
         return state
 
-def _update_enhanced_performance_metrics(:
-self, state: EnhancedExecutionState
-) -> None:Update enhanced performance metrics.try:
+def _update_enhanced_performance_metrics():-> None:Update enhanced performance metrics.try:
             self.performance_metrics.total_trades += 1
 if state.status == executed_successfullyand state.execution_details:
                 self.performance_metrics.successful_trades += 1
@@ -544,7 +529,7 @@ if state.profit_potential > 0:
         except Exception as e:
             logger.error(fError updating performance metrics: {e})
 
-def _cleanup_state_history(self) -> None:Clean up old execution states to manage memory.try:
+def _cleanup_state_history():-> None:Clean up old execution states to manage memory.try:
             if len(self.enhanced_states) > self.max_state_history:
                 # Keep only the most recent states
 sorted_states = sorted(
@@ -563,7 +548,7 @@ fCleaned up state history, kept {len(keep_states)} states
 
         except Exception as e:logger.error(fError cleaning up state history: {e})
 
-def get_enhanced_performance_summary(self) -> Dict[str, Any]:Get comprehensive enhanced performance summary.try: base_summary = {}
+def get_enhanced_performance_summary():-> Dict[str, Any]:Get comprehensive enhanced performance summary.try: base_summary = {}
 if self.base_mapper:
                 base_summary = self.base_mapper.get_performance_stats()
 
@@ -584,7 +569,7 @@ if base_summary:
             logger.error(fError getting enhanced performance summary: {e})
         return {}
 
-def get_recent_enhanced_executions(self, count: int = 10) -> List[Dict[str, Any]]:Get recent enhanced execution results.try:
+def get_recent_enhanced_executions():-> List[Dict[str, Any]]:Get recent enhanced execution results.try:
             # Sort by timestamp
 sorted_states = sorted(
 self.enhanced_states.values(), key=lambda x: x.timestamp, reverse=True

@@ -1,16 +1,17 @@
+    import ccxt
+    import ccxt.async_support as ccxt_async
+from .data_models import APICredentials, MarketData, OrderRequest, OrderResponse
+from .enums import ConnectionStatus
 from __future__ import annotations
-
+from typing import Dict, Optional
 import asyncio
 import logging
 import time
-from typing import Dict, Optional
 
-from .data_models import APICredentials, MarketData, OrderRequest, OrderResponse
-from .enums import ConnectionStatus
+
+
 
 try:
-    import ccxt
-    import ccxt.async_support as ccxt_async
 
     CCXT_AVAILABLE = True
 except ImportError:
@@ -55,7 +56,7 @@ class ExchangeConnection:
 
         logger.info(f"Exchange connection initialized for {credentials.exchange.value}")
 
-    async def connect(self) -> bool:
+    async def connect():-> bool:
         """Establishes connection to the exchange."""
         if not CCXT_AVAILABLE:
             logger.error("CCXT library not available. Cannot connect to exchange.")
@@ -117,7 +118,7 @@ class ExchangeConnection:
         except Exception as e:
             logger.error(f"Error during disconnection: {e}", exc_info = True)
 
-    async def get_market_data(self, symbol: str) -> Optional[MarketData]:
+    async def get_market_data():-> Optional[MarketData]:
         """Fetches market data for a given symbol, using a cache."""
         if self.status != ConnectionStatus.CONNECTED:
             return None
@@ -158,7 +159,7 @@ class ExchangeConnection:
             )
             return None
 
-    async def place_order(self, order_request: OrderRequest) -> OrderResponse:
+    async def place_order():-> OrderResponse:
         """Places a trade order on the exchange."""
         if self.status != ConnectionStatus.CONNECTED:
             return self._create_error_response(order_request, "Exchange not connected.")
@@ -195,7 +196,7 @@ class ExchangeConnection:
             )
             return self._create_error_response(order_request, str(e))
 
-    async def get_balance(self) -> Dict[str, float]:
+    async def get_balance():-> Dict[str, float]:
         """Fetches the account balance from the exchange."""
         if self.status != ConnectionStatus.CONNECTED:
             return {}
@@ -215,7 +216,7 @@ class ExchangeConnection:
             logger.error(f"Error fetching balance from {self.credentials.exchange.value}: {e}")
             return {}
 
-    def _create_success_response(self, order: Dict) -> OrderResponse:
+    def _create_success_response():-> OrderResponse:
         """Creates a successful OrderResponse from CCXT order data."""
         return OrderResponse(
             order_id=str(order.get("id")),
@@ -236,7 +237,7 @@ class ExchangeConnection:
             error_message=None,
         )
 
-    def _create_error_response(self, req: OrderRequest, error_msg: str) -> OrderResponse:
+    def _create_error_response():-> OrderResponse:
         """Creates an error OrderResponse."""
         return OrderResponse(
             order_id="",

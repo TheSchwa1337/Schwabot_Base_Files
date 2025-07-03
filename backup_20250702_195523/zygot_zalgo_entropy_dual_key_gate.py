@@ -1,3 +1,10 @@
+import numpy as np
+from typing import Any, Dict, Optional, Union
+import hashlib
+import random
+import secrets
+import time
+
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 
@@ -18,13 +25,7 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
 """
-import hashlib
-import secrets
-import time
-from typing import Any, Dict, Optional, Union
 
-import numpy as np
-import random
 
 
 
@@ -56,10 +57,10 @@ self._zalgo_key.encode()
 ).hexdigest(),
 }
 
-def _generate_key(self, length: int = 32) -> str:
+def _generate_key():-> str:
 Generates a random cryptographic key.return secrets.token_hex(length // 2)  # Each byte is 2 hex chars
 
-def _generate_zygot_entropy(self, internal_data: Dict[str, Any]) -> float:
+def _generate_zygot_entropy():-> float:
 Generates internal (Zygot) entropy based on system-internal data.
         This is a placeholder. Real implementation would involve complex metrics.# Example: based on system uptime, CPU load, memory usage, internal
 # data consistency checks
@@ -72,7 +73,7 @@ entropy_source = f{time.time()}-{internal_data.get('cpu_load','
 # Use first 8 hex chars (32 bits)
         return int(hashed_entropy[:8], 16) / 0xFFFFFFFF
 
-def _generate_zalgo_entropy(self, external_data: Dict[str, Any]) -> float:
+def _generate_zalgo_entropy():-> float:
 Generates external (Zalgo) entropy based on external market data or APIs.
         This is a placeholder. Real implementation would involve external API calls.# Example: based on market volatility, news sentiment, external API
 # health
@@ -82,9 +83,7 @@ external_data.get('api_latency', 0.1)}hashed_entropy = hashlib.sha256(entropy_so
 # Convert hash to a float between 0 and 1 (simplified for demo)
         return int(hashed_entropy[:8], 16) / 0xFFFFFFFF
 
-def _perform_dual_key_verification(:
-self, signal_hash: str, zygot_key: str, zalgo_key: str
-) -> bool:
+def _perform_dual_key_verification():-> bool:
 Performs cryptographic verification using both Zygot and Zalgo keys.
 This is a simplified verification. Real system would use proper HMAC/signatures.combined_hash = hashlib.sha256(
 f{signal_hash}-{zygot_key}-{zalgo_key}.encode()
@@ -109,13 +108,7 @@ Adapts the entropy thresholds based on system performance feedback.
         self.zygot_entropy_threshold = np.clip(self.zygot_entropy_threshold, 0.1, 0.9)
         self.zalgo_entropy_threshold = np.clip(self.zalgo_entropy_threshold, 0.1, 0.9)
 
-def evaluate_gate(
-self,:
-trade_signal_data: Dict[str, Any],
-internal_system_data: Dict[str, Any],
-external_api_data: Dict[str, Any],
-performance_feedback: Optional[Dict[str, Any]] = None,
-) -> Dict[str, Any]:
+def evaluate_gate():-> Dict[str, Any]:
 Evaluates whether a trade signal should pass through the gate.
 
 Args:
@@ -168,7 +161,7 @@ if not is_verified:
             self.metrics[gates_closed] += 1return {gate_open: False,reason:Dual-key verification failed.}
 self.metrics[gates_opened] += 1return {gate_open: True,reason:All entropy and key conditions met.}
 
-def get_metrics(self) -> Dict[str, Any]:Returns the operational metrics of the dual-key gate.return self.metrics
+def get_metrics():-> Dict[str, Any]:Returns the operational metrics of the dual-key gate.return self.metrics
 
 def rotate_keys():
 Rotates (generates new) both Zygot and Zalgo keys.self._zygot_key = self._generate_key()

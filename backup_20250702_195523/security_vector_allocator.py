@@ -1,3 +1,6 @@
+import numpy as np
+from typing import Dict, Optional
+
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 
@@ -22,9 +25,7 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 Implements χ(t) = ∂Φ/∂t + ∇·Ψ for Schwabot's security system.
 Computes security drift and applies trust rotation matrices.from dataclasses import dataclass
-from typing import Dict, Optional
 
-import numpy as np
 
 
 @dataclass
@@ -40,7 +41,7 @@ class SecurityVectorAllocator:Implements χ(t) = ∂Φ/∂t + ∇·Ψ for securi
     This class computes security drift from strategy confidence changes
     and applies trust rotation matrices to strategy vectors.
 
-    def __init__(self:SecurityVectorAllocator, phi: float, psi_field: np.ndarray) -> None:Initialize the security vector allocator.
+    def __init__():-> None:Initialize the security vector allocator.
 
         Args:
             phi: Strategy confidence change rate
@@ -48,7 +49,7 @@ class SecurityVectorAllocator:Implements χ(t) = ∂Φ/∂t + ∇·Ψ for securi
         self.psi_field = psi_field
         self.allocation_history = []
 
-    def compute_chi(self: SecurityVectorAllocator) -> float:Compute χ(t) = ∂Φ/∂t + ∇·Ψ.
+    def compute_chi():-> float:Compute χ(t) = ∂Φ/∂t + ∇·Ψ.
 
         χ(t) represents the security drift from strategy confidence
         changes and entropy field divergence.
@@ -73,7 +74,7 @@ class SecurityVectorAllocator:Implements χ(t) = ∂Φ/∂t + ∇·Ψ for securi
             print(fError computing χ(t): {e})
             return 0.0
 
-    def compute_trust_rotation_matrix(self: SecurityVectorAllocator, theta: float) -> np.ndarray:
+    def compute_trust_rotation_matrix():-> np.ndarray:
         Compute trust rotation matrix Λ_secure(θ).
 
         This matrix applies security-based rotation to strategy vectors.
@@ -89,9 +90,7 @@ class SecurityVectorAllocator:Implements χ(t) = ∂Φ/∂t + ∇·Ψ for securi
 
         return rotation_matrix
 
-    def apply_security_allocation(
-        self: SecurityVectorAllocator, strategy_vector: np.ndarray, theta: float
-    ) -> np.ndarray:
+    def apply_security_allocation():-> np.ndarray:
         Apply security allocation to strategy vector.
 
         Args:

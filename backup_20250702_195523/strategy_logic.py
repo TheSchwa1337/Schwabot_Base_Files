@@ -1,3 +1,17 @@
+from core.unified_math_system import UnifiedMathSystem
+import numpy as np
+import numpy.typing as npt
+from __future__ import annotations
+from dataclasses import dataclass, field
+from decimal import Decimal, getcontext
+from enum import Enum
+from typing import Tuple
+from typing import TYPE_CHECKING, Any, Dict, List, Optional, Union, Tuple
+from utils.safe_print import safe_print
+import logging
+import random
+import time
+
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 
@@ -18,22 +32,9 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
 """
-from __future__ import annotations
 
-import logging
-import random
-import time
-from dataclasses import dataclass, field
-from decimal import Decimal, getcontext
-from enum import Enum
-from typing import TYPE_CHECKING, Any, Dict, List, Optional, Union, Tuple
 
-import numpy as np
-import numpy.typing as npt
 
-from core.unified_math_system import UnifiedMathSystem
-from utils.safe_print import safe_print
-from typing import Tuple
 
 
 
@@ -133,10 +134,10 @@ self._initialize_default_strategies()
 
             logger.info(fStrategyLogic v{self.version} initialized)
 
-def _default_config(self) -> Dict[str, Any]:Default configuration.return {max_signals_history: 1000,default_risk_tolerance": 0.5,default_max_position_size": 0.1,min_signal_confidence": 0.6,enable_performance_tracking": True,enable_signal_filtering": True,signal_cooldown_period": 1.0,  # seconds
+def _default_config():-> Dict[str, Any]:Default configuration.return {max_signals_history: 1000,default_risk_tolerance": 0.5,default_max_position_size": 0.1,min_signal_confidence": 0.6,enable_performance_tracking": True,enable_signal_filtering": True,signal_cooldown_period": 1.0,  # seconds
 }
 
-def _initialize_default_strategies(self) -> None:Initialize default trading strategies.default_strategies = [StrategyConfig(
+def _initialize_default_strategies():-> None:Initialize default trading strategies.default_strategies = [StrategyConfig(
 strategy_type=StrategyType.MEAN_REVERSION,
 name=mean_reversion_v1,
 enabled = True,
@@ -175,7 +176,7 @@ self.performance[strategy.name] = StrategyPerformance(
 strategy_name = strategy.name
 )
 
-def process_data(self, data: Dict[str, Any]) -> List[TradingSignal]:Process incoming market data and generate trading signals.generated_signals: List[TradingSignal] = []
+def process_data():-> List[TradingSignal]:Process incoming market data and generate trading signals.generated_signals: List[TradingSignal] = []
 current_time = time.time()
 
 for strategy_name, config in self.strategies.items():
@@ -201,9 +202,7 @@ fGenerated {signal.signal_type.value} signal for {
 
         return generated_signals
 
-def _generate_signal(:
-self, strategy_name: str, config: StrategyConfig, data: Dict[str, Any]
-) -> Optional[TradingSignal]:Internal method to generate a trading signal based on strategy logic.asset = data.get(asset,BTC/USD)current_price = data.get(price, 0.0)current_volume = data.get(volume, 0.0)price_history = data.get(price_history, [current_price])
+def _generate_signal():-> Optional[TradingSignal]:Internal method to generate a trading signal based on strategy logic.asset = data.get(asset,BTC/USD)current_price = data.get(price, 0.0)current_volume = data.get(volume, 0.0)price_history = data.get(price_history, [current_price])
 
 # Get strategy performance for Kelly calculation
 strategy_perf = self.performance.get(strategy_name)
@@ -237,7 +236,7 @@ config, asset, current_price, current_volume, kelly_multiplier
 # Add other strategy types here
         return None
 
-def _calculate_kelly_multiplier() -> float:
+def _calculate_kelly_multiplier():-> float:
         Calculate Kelly criterion multiplier for position sizing.if strategy_perf.total_trades < 10:
             return 0.3  # Conservative for new strategies
 
@@ -268,7 +267,7 @@ reward_risk_ratio * win_rate - (1 - win_rate)
 
         return 0.3
 
-def _calculate_rsi(self, prices: List[float], period: int = 14) -> float:
+def _calculate_rsi():-> float:
         Calculate Relative Strength Index.if len(prices) < period + 1:
             return 50.0  # Neutral RSI
 
@@ -286,14 +285,12 @@ rs = avg_gain / avg_loss
 rsi = 100 - (100 / (1 + rs))
         return float(rsi)
 
-def _calculate_moving_average() -> float:
+def _calculate_moving_average():-> float:
         Calculate simple moving average.if len(prices) < period:
             return prices[-1] if prices else 0.0
         return float(np.mean(prices[-period:]))
 
-def _calculate_bollinger_bands(:
-self, prices: List[float], period: int = 20, std_dev: float = 2.0
-) -> Dict[str, float]:Calculate Bollinger Bands.if len(prices) < period: current_price = prices[-1] if prices else 0.0
+def _calculate_bollinger_bands():-> Dict[str, float]:Calculate Bollinger Bands.if len(prices) < period: current_price = prices[-1] if prices else 0.0
         return {upper: current_price * 1.02,middle: current_price,lower: current_price * 0.98,
 }
 
@@ -304,9 +301,7 @@ middle = np.mean(recent_prices)
         return {upper: float(middle + (std_dev * std)),middle: float(middle),lower: float(middle - (std_dev * std)),
 }
 
-def _flipswitch_trigger(:
-self, market_data: Dict[str, Any], strategy_stats: Dict[str, float]
-) -> Tuple[bool, float]:Dynamic FlipSwitch logic based on market conditions and Kelly criterion.
+def _flipswitch_trigger():-> Tuple[bool, float]:Dynamic FlipSwitch logic based on market conditions and Kelly criterion.
 
 Returns:
             Tuple of(flip_state, confidence)kelly_weight = strategy_stats.get('kelly_multiplier', 0.3)'
@@ -337,15 +332,7 @@ confidence = 0.8
 
         return flip_state, confidence
 
-def _generate_mean_reversion_signal(
-self,:
-config: StrategyConfig,
-asset: str,
-price: float,
-volume: float,
-price_history: List[float],
-kelly_multiplier: float,
-) -> TradingSignal:
+def _generate_mean_reversion_signal():-> TradingSignal:
         Generate a mean reversion signal with real statistical analysis.# Calculate technical indicators
 bollinger = self._calculate_bollinger_bands(price_history)
         rsi = self._calculate_rsi(price_history)
@@ -416,15 +403,7 @@ bollinger_upper: bollinger['upper'],'bollinger_lower: bollinger['lower'],sma_20:
 },
 )
 
-def _generate_momentum_signal(
-self,:
-config: StrategyConfig,
-asset: str,
-price: float,
-volume: float,
-price_history: List[float],
-kelly_multiplier: float,
-) -> TradingSignal:"Generate a momentum signal with real technical analysis.# Calculate technical indicators
+def _generate_momentum_signal():-> TradingSignal:"Generate a momentum signal with real technical analysis.# Calculate technical indicators
 rsi = self._calculate_rsi(price_history)
         sma_10 = self._calculate_moving_average(price_history, 10)
         sma_20 = self._calculate_moving_average(price_history, 20)
@@ -499,14 +478,7 @@ momentum_5: momentum_5,momentum_1: momentum_1,rsi: rsi,sma_10: sma_10,sma_20": s
 },
 )
 
-def _generate_arbitrage_signal(
-self,:
-config: StrategyConfig,
-asset: str,
-price: float,
-volume: float,
-kelly_multiplier: float,
-) -> TradingSignal:"Generate an arbitrage signal with realistic price difference detection.# Simulate multi-exchange price checking
+def _generate_arbitrage_signal():-> TradingSignal:"Generate an arbitrage signal with realistic price difference detection.# Simulate multi-exchange price checking
 exchange_a_price = price
 price_variance = config.parameters.get(price_variance, 0.002)
 exchange_b_price = price * (
@@ -551,9 +523,7 @@ spread / spread_threshold if spread_threshold > 0 else 0
 },
 )
 
-def execute_signal(:
-self, signal: TradingSignal, dry_run: bool = False
-) -> Dict[str, Any]:Execute a trading signal.Args:
+def execute_signal():-> Dict[str, Any]:Execute a trading signal.Args:
             signal: The trading signal to execute.
 dry_run: If True, simulate execution without actual trades.
 
@@ -593,9 +563,7 @@ self._update_performance_metrics(signal, execution_result)
 
         return execution_result
 
-def _update_performance_metrics(:
-self, signal: TradingSignal, result: Dict[str, Any]
-) -> None:Update strategy performance metrics based on trade execution (simplified).perf = self.performance.get(signal.strategy_name)
+def _update_performance_metrics():-> None:Update strategy performance metrics based on trade execution (simplified).perf = self.performance.get(signal.strategy_name)
 if not perf or not self.config.get(enable_performance_tracking, True):
             return perf.total_trades += 1
 if result[status] ==success":
@@ -635,13 +603,11 @@ perf.last_updated = time.time()
 fUpdated performance for {signal.strategy_name}: PnL = {
 perf.total_pnl:.2f})
 
-def get_strategy_performance(:
-        self, strategy_name: str
-) -> Optional[StrategyPerformance]:Retrieve performance metrics for a specif ic strategy.return self.performance.get(strategy_name)
+def get_strategy_performance():-> Optional[StrategyPerformance]:Retrieve performance metrics for a specif ic strategy.return self.performance.get(strategy_name)
 
-def get_all_strategy_performance(self) -> Dict[str, StrategyPerformance]:Retrieve performance metrics for all strategies.return self.performance.copy()
+def get_all_strategy_performance():-> Dict[str, StrategyPerformance]:Retrieve performance metrics for all strategies.return self.performance.copy()
 
-def get_signal_history(self, num_signals: int = 100) -> List[TradingSignal]:Retrieve a portion of the signal history.return list(self.signal_history)[-num_signals:]
+def get_signal_history():-> List[TradingSignal]:Retrieve a portion of the signal history.return list(self.signal_history)[-num_signals:]
 
 
 def main():Main function to demonstrate StrategyLogic functionality.logging.basicConfig(

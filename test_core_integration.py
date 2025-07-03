@@ -1,3 +1,11 @@
+        from core.clean_unified_math import (
+        from core.brain_trading_engine import BrainTradingEngine
+        from symbolic_profit_router import SymbolicProfitRouter
+    import sys
+from pathlib import Path
+import json
+import time
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -13,9 +21,6 @@ Focused test of the working core integration components:
 This demonstrates the complete integration pipeline working successfully.
 """
 
-import json
-import time
-from pathlib import Path
 
 
 def test_core_integration_pipeline():
@@ -30,7 +35,6 @@ def test_core_integration_pipeline():
     print("-" * 40)
 
     try:
-        from core.brain_trading_engine import BrainTradingEngine
 
         brain_config = {
             "base_profit_rate": 0.002,
@@ -91,7 +95,6 @@ def test_core_integration_pipeline():
     print("-" * 40)
 
     try:
-        from symbolic_profit_router import SymbolicProfitRouter
 
         router = SymbolicProfitRouter()
 
@@ -155,7 +158,6 @@ def test_core_integration_pipeline():
     print("-" * 40)
 
     try:
-        from core.clean_unified_math import (
             CleanUnifiedMathSystem,
             optimize_brain_profit,
             calculate_position_size,
@@ -451,7 +453,6 @@ def main():
 
 
 if __name__ == "__main__":
-    import sys
 
     # Run the test
     exit_code = main()

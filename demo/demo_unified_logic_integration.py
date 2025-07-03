@@ -1,18 +1,20 @@
+from core.unified_logic.phase_math import phase_adjust
+from core.unified_logic.btc_tick_backlog import save_btc_tick, BTCTick
+from core.unified_logic.entry_logic import entry_score
+from core.unified_logic.float_valuation import float_valuation
+from core.unified_logic.ghost_conditionals import ghost_conditional
+from core.unified_logic.unicode_emoji_asic import label_state
+from datetime import datetime
+from typing import Dict, Any
+import random
+import time
+import yaml
+
 # -*- coding: utf-8 -*-
 """Demo script for unified logic integration with live phase simulation and backlogging."""
 
-import time
-import yaml
-from datetime import datetime
-from typing import Dict, Any
 
 # Import unified logic modules
-from core.unified_logic.btc_tick_backlog import save_btc_tick, BTCTick
-from core.unified_logic.float_valuation import float_valuation
-from core.unified_logic.ghost_conditionals import ghost_conditional
-from core.unified_logic.entry_logic import entry_score
-from core.unified_logic.unicode_emoji_asic import label_state
-from core.unified_logic.phase_math import phase_adjust
 
 class UnifiedLogicDemo:"""
 """Demo class for testing and demonstrating unified logic integration."""
@@ -25,10 +27,9 @@ def __init__(self):
         """
 
 
-def simulate_btc_tick(self, phase: str = "mid") -> Dict[str, Any]:
+def simulate_btc_tick():-> Dict[str, Any]:
         """Simulate a BTC tick with hash rate and price data."""
 # Simulate realistic BTC data
-import random
         
 base_price = 50000.0
         base_hash_rate = 200.0  # EH/s
@@ -58,7 +59,7 @@ return {
             "float_valuation": float_val,
             "unicode_label": unicode_label
     
-def process_ghost_conditional(self, tick_data: Dict[str, Any]) -> Dict[str, Any]:
+def process_ghost_conditional():-> Dict[str, Any]:
         """Process ghost conditional logic for routing decisions."""
 # Simulate coefficients based on tick data"""
 psi = 0.5 + (tick_data["price"] - 50000) / 10000  # Path coefficient
@@ -82,7 +83,7 @@ decision = ghost_conditional(
 self.decision_history.append(decision)
         return decision
     
-def process_entry_logic(self, tick_data: Dict[str, Any]) -> Dict[str, Any]:
+def process_entry_logic():-> Dict[str, Any]:
         """Process entry logic for trading signals."""
 # Calculate normalized price change and volatility"""
 dp_norm = (tick_data["price"] - 50000) / 50000  # Normalized price change
@@ -173,7 +174,7 @@ if self.backlog_data:
             print(f"Average Price: ${avg_price:,.2f}")
             print(f"Average Hash Rate: {avg_hash_rate:.1f} EH/s")
     
-def generate_yaml_config(self) -> str:
+def generate_yaml_config():-> str:
         """Generate YAML configuration for API integration."""
 config = {"""
             "unified_logic": {

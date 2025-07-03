@@ -1,3 +1,13 @@
+from core.dual_error_handler import PhaseState
+from core.emoji_bitpath_mapper import (
+from core.gpu_fallback_manager import (
+from core.profit_tier_sequencer import (
+from core.symbolic_profit_router import ProfitTier
+from core.tier_validation_matrix import (
+from tests.test_ptns_integration import test_ptns_complete_integration
+from typing import Dict, Any
+import time
+
 # -*- coding: utf - 8 -*-
 """"""
 """
@@ -18,29 +28,20 @@ This script demonstrates the complete PTNS implementation including:
 - Complete trading workflow integration"""
 """
 
-import time
-from typing import Dict, Any
 
 # Import PTNS components
-from core.profit_tier_sequencer import (
     ProfitVector, TierAction, SymbolZone, sequence_profit_tier
 )
-from core.emoji_bitpath_mapper import (
     map_emoji_to_profit_portal, navigate_emoji_profit_path
 )
-from core.tier_validation_matrix import (
     validate_profit_tier_transition, get_optimal_profit_tier_path
 )
-from core.gpu_fallback_manager import (
     submit_gpu_task, get_gpu_hardware_status, gpu_fallback_manager
 )
 
 # Import test suite
-from tests.test_ptns_integration import test_ptns_complete_integration
 
 # Import mathematical modules
-from core.symbolic_profit_router import ProfitTier
-from core.dual_error_handler import PhaseState
 
 
 def demonstrate_emoji_navigation():"""

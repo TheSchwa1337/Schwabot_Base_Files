@@ -1,3 +1,13 @@
+from pathlib import Path
+from schwabot.core.ferris_rde import FerrisRDE
+from schwabot.core.portfolio_integration import PortfolioIntegration
+from schwabot.core.strategy_mapper import StrategyMapper
+from schwabot.core.wallet_tracker import WalletTracker, AssetType
+import logging
+import os
+import sys
+import time
+
 #!/usr/bin/env python3
 """
 Wallet Integration Example
@@ -7,19 +17,10 @@ Demonstrates how to use the wallet tracker with CCXT/Coinbase API integration
 and how it connects to the entire Schwabot strategy system.
 """
 
-import os
-import sys
-import time
-import logging
-from pathlib import Path
 
 # Add schwabot to path
 sys.path.append(str(Path(__file__).parent.parent))
 
-from schwabot.core.wallet_tracker import WalletTracker, AssetType
-from schwabot.core.portfolio_integration import PortfolioIntegration
-from schwabot.core.strategy_mapper import StrategyMapper
-from schwabot.core.ferris_rde import FerrisRDE
 
 # Configure logging
 logging.basicConfig(

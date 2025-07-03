@@ -1,15 +1,16 @@
-"""A service for synchronizing API data caches."""
+from .handlers.base_handler import BaseAPIHandler
 from __future__ import annotations
-
+from pathlib import Path
+from types import ModuleType
+from typing import List
 import asyncio
 import importlib
 import inspect
 import logging
-from pathlib import Path
-from types import ModuleType
-from typing import List
 
-from .handlers.base_handler import BaseAPIHandler
+"""A service for synchronizing API data caches."""
+
+
 
 
 # # Cache Sync Service
@@ -32,7 +33,7 @@ DEFAULT_REFRESH: int = 300  # seconds
 class CacheSyncService:
     """Background service that refreshes all API handler caches."""
 
-    def __init__(self, refresh_interval: int = DEFAULT_REFRESH) -> None:
+    def __init__():-> None:
         """Initialize the CacheSyncService.
 
         Args:
@@ -42,7 +43,7 @@ class CacheSyncService:
         self.handlers: List[BaseAPIHandler] = []
         self._task: asyncio.Task | None = None
 
-    async def start(self) -> None:
+    async def start():-> None:
         """Start the cache sync service."""
         if self._task and not self._task.done():
             logger.warning("CacheSyncService already running")
@@ -50,7 +51,7 @@ class CacheSyncService:
         self._task = asyncio.create_task(self._run_loop())
         logger.info(f"[Service Started] CacheSyncService started with {len(self.handlers)} handlers")
 
-    async def stop(self) -> None:
+    async def stop():-> None:
         """Stop the cache sync service."""
         if self._task:
             self._task.cancel()
@@ -63,7 +64,7 @@ class CacheSyncService:
         await asyncio.gather(*(h.close() for h in self.handlers), return_exceptions=True)
         logger.info("[Service Stopped] CacheSyncService stopped")
 
-    async def _run_loop(self) -> None:
+    async def _run_loop():-> None:
         """The main loop that periodically refreshes the cache."""
         while True:
             try:
@@ -72,7 +73,7 @@ class CacheSyncService:
                 logger.error("CacheSyncService iteration failed: %s", exc, exc_info=True)
             await asyncio.sleep(self.refresh_interval)
 
-    async def _discover_handlers(self) -> None:
+    async def _discover_handlers():-> None:
         """Dynamically import every module in `core.api.handlers` and register subclasses."""
         pkg = importlib.import_module(HANDLER_PACKAGE)
         pkg_path = Path(pkg.__file__).parent  # type: ignore[arg-type]
@@ -95,3 +96,4 @@ logger.error("Failed to import exc)
                         logger.info("Registered handler: %s", handler.NAME)
                     except Exception as exc:  # noqa: BLE001
                         logger.error("Failed to initialise handler %s: %s", obj, exc)
+))

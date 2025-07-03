@@ -1,3 +1,15 @@
+from core.math.ferris_wheel_rde import FerrisWheelRDE
+from matplotlib import pyplot as plt
+import math
+import numpy as np
+import pandas as pd
+from dataclasses import dataclass, field
+from typing import Any, Dict, List, Optional, Tuple
+import json
+import logging
+import random
+import time
+
 """
 Ferris Wheel RDE Backtesting System
 ===================================
@@ -15,19 +27,8 @@ Features:
 - Performance visualization
 """
 
-import json
-import logging
-import math
-import random
-import time
-from typing import Any, Dict, List, Optional, Tuple
-from dataclasses import dataclass, field
 
-import numpy as np
-import pandas as pd
-from matplotlib import pyplot as plt
 
-from core.math.ferris_wheel_rde import FerrisWheelRDE
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -93,9 +94,7 @@ class FerrisWheelBacktester:
             f"🎯 Ferris Wheel Backtester initialized with ${initial_balance:,.2f}"
         )
 
-    def generate_historical_data(
-        self, days: int = 365, volatility: float = 0.02
-    ) -> List[Tuple[float, float]]:
+    def generate_historical_data():-> List[Tuple[float, float]]:
         """
         Generate realistic historical price data for backtesting.
 
@@ -140,15 +139,7 @@ class FerrisWheelBacktester:
         )
         return prices
 
-    def execute_trade(
-        self,
-        price: float,
-        strategy: str,
-        probability: float,
-        bit_mode: int,
-        phase: str,
-        entropy: float,
-    ) -> TradeRecord:
+    def execute_trade():-> TradeRecord:
         """
         Execute a trade based on RDE decision.
 
@@ -218,7 +209,7 @@ class FerrisWheelBacktester:
 
         return trade
 
-    def calculate_risk_metrics(self) -> Dict[str, float]:
+    def calculate_risk_metrics():-> Dict[str, float]:
         """Calculate comprehensive risk metrics."""
         if not self.performance_history:
             return {}
@@ -268,7 +259,7 @@ class FerrisWheelBacktester:
             "winning_trades": winning_trades,
         }
 
-    def validate_mathematics(self) -> Dict[str, bool]:
+    def validate_mathematics():-> Dict[str, bool]:
         """Validate mathematical components of the RDE system."""
         checks = {}
 
@@ -310,7 +301,7 @@ class FerrisWheelBacktester:
         self.mathematical_checks = checks
         return checks
 
-    def calculate_live_ready_score(self) -> float:
+    def calculate_live_ready_score():-> float:
         """Calculate a score indicating readiness for live trading."""
         if not self.trade_history:
             return 0.0
@@ -355,7 +346,7 @@ class FerrisWheelBacktester:
 
         return sum(score_components)
 
-    def run_backtest(self, days: int = 90, volatility: float = 0.02) -> BacktestResult:
+    def run_backtest():-> BacktestResult:
         """
         Run comprehensive backtest.
 

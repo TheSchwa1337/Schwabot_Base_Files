@@ -1,17 +1,18 @@
+from pathlib import Path
+from typing import Dict, List
+import os
+import re
+import subprocess
+
 #!/usr/bin/env python3
 """
 Simple analysis of stub patterns and persistent Flake8 errors.
 Identifies the most important files that need implementation.
 """
 
-import os
-import re
-import subprocess
-from pathlib import Path
-from typing import Dict, List
 
 
-def get_flake8_errors() -> Dict[str, List[str]]:
+def get_flake8_errors():-> Dict[str, List[str]]:
     """Get all Flake8 errors organized by file."""
     errors_by_file = {}
 
@@ -39,7 +40,7 @@ def get_flake8_errors() -> Dict[str, List[str]]:
     return errors_by_file
 
 
-def analyze_file_stubs(file_path: Path) -> Dict[str, any]:
+def analyze_file_stubs():-> Dict[str, any]:
     """Analyze a file for stub patterns."""
     analysis = {
         "file_path": str(file_path),
@@ -101,7 +102,7 @@ def analyze_file_stubs(file_path: Path) -> Dict[str, any]:
     return analysis
 
 
-def identify_important_files() -> List[str]:
+def identify_important_files():-> List[str]:
     """Identify the most important files based on naming patterns."""
     important_patterns = [
         "mathlib*.py",

@@ -1,17 +1,21 @@
+import numpy as np
+import pandas as pd
+import scipy as sp
+from pathlib import Path
+from typing import Dict, List, Tuple, Set
+import os
+import re
+import subprocess
+
 #!/usr/bin/env python3
 """
 Analyze specific stub patterns and create automated fixes for persistent issues.
 Focuses on the "uppity in the air commie things" (Unicode/encoding issues) and other common patterns.
 """
 
-import os
-import re
-import subprocess
-from pathlib import Path
-from typing import Dict, List, Tuple, Set
 
 
-def analyze_stub_patterns_in_file(file_path: Path) -> Dict[str, any]:
+def analyze_stub_patterns_in_file():-> Dict[str, any]:
     """Analyze specific stub patterns in a file."""
     analysis = {
         'file_path': str(file_path),
@@ -99,14 +103,14 @@ def analyze_stub_patterns_in_file(file_path: Path) -> Dict[str, any]:
     return analysis
 
 
-def get_context(lines: List[str], line_num: int, context_size: int = 3) -> List[str]:
+def get_context():-> List[str]:
     """Get context around a specific line."""
     start = max(0, line_num - context_size - 1)
     end = min(len(lines), line_num + context_size)
     return lines[start:end]
 
 
-def identify_common_stub_patterns() -> Dict[str, List[str]]:
+def identify_common_stub_patterns():-> Dict[str, List[str]]:
     """Identify the most common stub patterns across the codebase."""
     core_dir = Path('core')
     all_patterns = {
@@ -130,7 +134,7 @@ def identify_common_stub_patterns() -> Dict[str, List[str]]:
     return all_patterns
 
 
-def create_automated_fix_strategy() -> Dict[str, str]:
+def create_automated_fix_strategy():-> Dict[str, str]:
     """Create automated fix strategies for common patterns."""
     strategies = {
         'empty_pass': """
@@ -162,9 +166,6 @@ def function_name():
 # Strategy: Add missing imports
 # Pattern: Using modules without importing them
 # Fix: Add proper import statements at top of file
-import numpy as np
-import scipy as sp
-import pandas as pd
 """,
 
         'incomplete_functions': """
@@ -183,7 +184,7 @@ def function():
     return strategies
 
 
-def generate_fix_script() -> str:
+def generate_fix_script():-> str:
     """Generate an automated fix script."""
     script_lines = [
         '#!/usr/bin/env python3',
@@ -197,7 +198,7 @@ def generate_fix_script() -> str:
         'from pathlib import Path',
         'from typing import List, Dict',
         '',
-        'def fix_unicode_issues(content: str) -> str:',
+        'def fix_unicode_issues():-> str:',
         '    """Fix Unicode/encoding issues in content."""',
         '    # Replace problematic Unicode characters',
         '    replacements = {',
@@ -222,7 +223,7 @@ def generate_fix_script() -> str:
         '    ',
         '    return content',
         '',
-        'def fix_empty_pass_statements(content: str) -> str:',
+        'def fix_empty_pass_statements():-> str:',
         '    """Replace empty pass statements with proper stubs."""',
         '    lines = content.split("\\n")',
         '    fixed_lines = []',
@@ -248,7 +249,7 @@ def generate_fix_script() -> str:
         '    ',
         '    return "\\n".join(fixed_lines)',
         '',
-        'def fix_missing_imports(content: str) -> str:',
+        'def fix_missing_imports():-> str:',
         '    """Add missing imports based on usage."""',
         '    imports_needed = []',
         '    ',
@@ -278,7 +279,7 @@ def generate_fix_script() -> str:
         '    ',
         '    return content',
         '',
-        'def fix_file(file_path: Path) -> bool:',
+        'def fix_file():-> bool:',
         '    """Fix a single file."""',
         '    try:',
         '        with open(file_path, "r", encoding="utf-8", errors="ignore") as f:',

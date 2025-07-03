@@ -1,3 +1,15 @@
+import numpy as np
+        from core.api_bridge import api_bridge  # Corrected to import the instance
+        from core.dualistic_thought_engines import DualisticThoughtEngines
+        from core.lantern_news_intelligence_bridge import LanternNewsIntelligenceBridge
+        from core.linguistic_glyph_engine import (
+        import traceback
+import asyncio  # Import asyncio for async operations
+import os
+import random
+import sys
+import time
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -16,12 +28,6 @@ This demonstrates how Schwabot processes natural language with glyphs
 and converts them into precise mathematical trading actions.
 """
 
-import sys
-import os
-import time
-import random
-import numpy as np
-import asyncio  # Import asyncio for async operations
 
 # Add core to path
 sys.path.append(os.path.join(os.path.dirname(__file__), "core"))
@@ -54,18 +60,14 @@ async def linguistic_trading_demo_async():  # Changed to async function
     print()
 
     try:
-        from core.linguistic_glyph_engine import (
             linguistic_engine,
             process_linguistic_command,
             forever_fractal,
             paradox_fractal,
             echo_fractal,
         )
-        from core.dualistic_thought_engines import DualisticThoughtEngines
-        from core.api_bridge import api_bridge  # Corrected to import the instance
 
         # Import news components
-        from core.lantern_news_intelligence_bridge import LanternNewsIntelligenceBridge
 
         # Initialize trading engines
         thought_engines = DualisticThoughtEngines()
@@ -296,7 +298,6 @@ async def linguistic_trading_demo_async():  # Changed to async function
         }
     except Exception as e:
         print(f"❌ Demo failed: {e}")
-        import traceback
 
         traceback.print_exc()
         return False, str(e)

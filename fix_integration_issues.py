@@ -1,3 +1,16 @@
+    from core.clean_unified_math import CleanUnifiedMathSystem
+        import json
+    from core.brain_trading_engine import BrainTradingEngine
+    from symbolic_profit_router import SymbolicProfitRouter
+from datetime import datetime
+from pathlib import Path
+from tkinter import ttk, scrolledtext
+import json
+import os
+import threading
+import time
+import tkinter as tk
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -8,8 +21,6 @@ Fixes the critical syntax error in schwabot_unified_math.py and prepares
 the system for executable build.
 """
 
-import os
-from pathlib import Path
 
 
 def fix_unified_math_import():
@@ -67,7 +78,6 @@ def create_missing_config_files():
     }
 
     if not os.path.exists("config/api_keys.json"):
-        import json
 
         with open("config/api_keys.json", "w") as f:
             json.dump(api_keys_content, f, indent=2)
@@ -107,17 +117,8 @@ Schwabot GUI Launcher
 Basic GUI interface for Schwabot trading system.
 """
 
-import tkinter as tk
-from tkinter import ttk, scrolledtext
-import json
-import threading
-import time
-from datetime import datetime
 
 try:
-    from core.brain_trading_engine import BrainTradingEngine
-    from symbolic_profit_router import SymbolicProfitRouter
-    from core.clean_unified_math import CleanUnifiedMathSystem
 except ImportError as e:
     print(f"Import error: {e}")
 
@@ -417,13 +418,13 @@ class BTCBlockProcessor:
         self.current_difficulty = 0
         self.block_reward = 6.25
 
-    def calculate_hash_rate(self, gpu_count: int = 1) -> float:
+    def calculate_hash_rate():-> float:
         """Calculate expected hash rate for GPU mining."""
         # Placeholder implementation
         base_hash_rate = 50_000_000  # 50 MH/s per GPU
         return base_hash_rate * gpu_count
 
-    def estimate_mining_profit(self, hash_rate: float, power_cost: float = 0.1) -> float:
+    def estimate_mining_profit():-> float:
         """Estimate mining profitability."""
         # Simplified profitability calculation
         btc_price = 50000  # USD

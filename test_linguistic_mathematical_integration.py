@@ -1,3 +1,15 @@
+import numpy as np
+        from core.dualistic_thought_engines import DualisticThoughtEngines
+        from core.linguistic_glyph_engine import (
+        from core.linguistic_glyph_engine import ASICBitState, linguistic_engine
+        from core.linguistic_glyph_engine import linguistic_engine
+        from core.linguistic_glyph_engine import linguistic_engine
+        from core.linguistic_glyph_engine import process_linguistic_command
+import json
+import os
+import sys
+import time
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -18,11 +30,6 @@ This verifies that Schwabot can process natural language commands and convert
 them into mathematical trading decisions with full fractal memory support.
 """
 
-import sys
-import os
-import time
-import json
-import numpy as np
 
 # Add core to path
 sys.path.append(os.path.join(os.path.dirname(__file__), "core"))
@@ -33,7 +40,6 @@ def test_linguistic_glyph_engine():
     print("🧠 Testing Linguistic Glyph Engine...")
 
     try:
-        from core.linguistic_glyph_engine import process_linguistic_command
 
         # Test basic language processing
         commands = [
@@ -65,7 +71,6 @@ def test_fractal_mathematical_functions():
     print("\n🌀 Testing Fractal Mathematical Functions...")
 
     try:
-        from core.linguistic_glyph_engine import (
             forever_fractal,
             paradox_fractal,
             echo_fractal,
@@ -124,7 +129,6 @@ def test_dualistic_thought_integration():
     print("\n🧬 Testing Dualistic Thought Engine Integration...")
 
     try:
-        from core.dualistic_thought_engines import DualisticThoughtEngines
 
         # Initialize engines
         thought_engines = DualisticThoughtEngines()
@@ -171,7 +175,6 @@ def test_asic_bit_logic_states():
     print("\n🔧 Testing ASIC Bit Logic States...")
 
     try:
-        from core.linguistic_glyph_engine import ASICBitState, linguistic_engine
 
         # Test bit state mappings
         test_cases = [
@@ -227,7 +230,6 @@ def test_profit_vectorization_synthesis():
     print("\n💰 Testing Profit Vectorization Synthesis...")
 
     try:
-        from core.linguistic_glyph_engine import linguistic_engine
 
         # Reset engine state
         linguistic_engine.profit_containment = np.zeros(256)
@@ -299,7 +301,6 @@ def test_zalgo_zygot_mathematical_processing():
     print("\n🕷️ Testing Zalgo & Zygot Mathematical Processing...")
 
     try:
-        from core.linguistic_glyph_engine import linguistic_engine
 
         # Test Zalgo overlay with different bit patterns
         test_patterns = [

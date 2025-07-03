@@ -1,3 +1,15 @@
+from core.portfolio_tracker import PortfolioTracker
+from core.risk_manager import RiskManager
+from core.strategy.glyph_strategy_core import GlyphStrategyCore, GlyphStrategyResult
+from core.strategy_logic import SignalStrength, SignalType, StrategyLogic
+from core.trade_executor import TradeExecutor
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Dict, List, Optional, Tuple, Union
+from typing import Tuple
+import logging
+import time
+
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 
@@ -18,18 +30,7 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
 """
-import logging
-import time
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Dict, List, Optional, Tuple, Union
 
-from core.strategy.glyph_strategy_core import GlyphStrategyCore, GlyphStrategyResult
-from core.portfolio_tracker import PortfolioTracker
-from core.risk_manager import RiskManager
-from core.strategy_logic import SignalStrength, SignalType, StrategyLogic
-from core.trade_executor import TradeExecutor
-from typing import Tuple
 
 
 # -*- coding: utf-8 -*-
@@ -119,14 +120,7 @@ self.stats = {total_signals: 0,executed_trades: 0,rejected_signals": 0,avg_proce
             fportfolio_tracking = {enable_portfolio_tracking}
 )
 
-def process_glyph_signal(
-self,:
-glyph: str,
-volume_signal: float,
-asset: str = BTC/USD,
-current_price: float = 0.0,
-        confidence_boost: float = 0.0,
-) -> Optional[TradeSignal]:
+def process_glyph_signal():-> Optional[TradeSignal]:
 Process glyph signal and generate trade signal.
 
 Args:
@@ -194,12 +188,7 @@ strategy_result.confidence:.3f}))
             logger.error(fSignal processing failed: {e})
         return None
 
-def _determine_signal_direction(
-self,:
-strategy_result: GlyphStrategyResult,
-        volume_signal: float,
-current_price: float,
-) -> SignalDirection:Determine signal direction based on strategy and market conditions.
+def _determine_signal_direction():-> SignalDirection:Determine signal direction based on strategy and market conditions.
 
 Args:
             strategy_result: Glyph strategy result
@@ -228,9 +217,7 @@ else:
 else:  # Medium volume
         return base_direction
 
-def calculate_position_size(:
-self, signal: TradeSignal, portfolio_value: float = 10000.0
-) -> PositionSizing:
+def calculate_position_size():-> PositionSizing:
 
 Calculate position size based on signal and risk parameters.
 
@@ -266,12 +253,7 @@ max_position_size=self.max_position_size,
 min_position_size=0.0,  # Assuming 0 as min for simplicity
 )
 
-def execute_signal(
-self,:
-signal: TradeSignal,
-portfolio_value: float = 10000.0,
-dry_run: bool = True,
-) -> Dict[str, any]:
+def execute_signal():-> Dict[str, any]:
 
 Execute a trading signal.
 
@@ -328,11 +310,11 @@ self.portfolio_tracker.get_portfolio_summary()})
 
         return execution_result
 
-def get_active_signals(self) -> List[TradeSignal]:Return list of currently active signals.return self.active_signals.copy()
+def get_active_signals():-> List[TradeSignal]:Return list of currently active signals.return self.active_signals.copy()
 
-def get_signal_history(self, limit: int = 100) -> List[TradeSignal]:Return a portion of the signal history.return list(self.signal_history)[-limit:]
+def get_signal_history():-> List[TradeSignal]:Return a portion of the signal history.return list(self.signal_history)[-limit:]
 
-def get_performance_stats(self) -> Dict[str, any]:Return performance statistics.stats = self.stats.copy()
+def get_performance_stats():-> Dict[str, any]:Return performance statistics.stats = self.stats.copy()
 if self.portfolio_tracker:
             stats[portfolio_summary] = self.portfolio_tracker.get_portfolio_summary()
         return stats
@@ -346,13 +328,7 @@ self.stats = {total_signals: 0,executed_trades": 0,rejected_signals": 0,avg_proc
 # Standalone utility function (for direct import if needed)
 
 
-def process_glyph_trade_signal(:
-glyph: str,
-volume: float,
-asset: str = BTC/USD,
-price: float = 50000.0,
-dry_run: bool = True,
-) -> Dict[str, any]:
+def process_glyph_trade_signal():-> Dict[str, any]:
 
 Process a glyph signal and execute a simulated trade using a temporary portal instance.
 Intended for quick, stateless trade simulations.temp_portal = EntryExitPortal(

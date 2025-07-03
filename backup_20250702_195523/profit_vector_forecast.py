@@ -1,3 +1,17 @@
+import math
+import numpy as np
+from collections import defaultdict
+from collections import deque
+from core.drift_shell_engine import ProfitVector
+from data.temporal_intelligence_integration import TemporalIntelligenceIntegration
+from dataclasses import dataclass
+from hash_recollection.pattern_utils import PatternUtils
+from typing import Any, Dict, List, Optional, Tuple
+from typing import Tuple
+import logging
+import random
+import time
+
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 
@@ -18,21 +32,8 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
 """
-import logging
-import math
-import time
-from collections import deque
-from dataclasses import dataclass
-from typing import Any, Dict, List, Optional, Tuple
 
-import numpy as np
 
-from core.drift_shell_engine import ProfitVector
-from data.temporal_intelligence_integration import TemporalIntelligenceIntegration
-from hash_recollection.pattern_utils import PatternUtils
-from collections import defaultdict
-from typing import Tuple
-import random
 
 
 # -*- coding: utf-8 -*-
@@ -107,7 +108,7 @@ self.state_history = deque(maxlen=memory_size)
 self.profit_thresholds = {high_profit: 0.02,    # >2% profitlow_profit: 0.005,    # 0.5-2% profitneutral: -0.005,      # -0.5% to 0.5%loss_zone: -0.02,     # -2% to -0.5%high_loss: float('-in')  # <-2%
 }
 
-def classify_profit_state() -> str:Classif y profit percentage into discrete states.if profit_pct >= self.profit_thresholds[high_profit]:
+def classify_profit_state():-> str:Classif y profit percentage into discrete states.if profit_pct >= self.profit_thresholds[high_profit]:
             returnhigh_profitelif profit_pct >= self.profit_thresholds[low_profit]:
             returnlow_profitelif profit_pct >= self.profit_thresholds[neutral]:
             returnneutralelif profit_pct >= self.profit_thresholds[loss_zone]:
@@ -119,10 +120,7 @@ self.state_counts[current_state] += 1
 self.state_history.append({'state': next_state,'timestamp': time.time(),'transition_from': current_state
 })
 
-def predict_next_state(
-self,:
-current_state: str,
-method: str = probabilistic)Predict next state using different methods.if current_state not in self.transition_matrix:
+def predict_next_state():Predict next state using different methods.if current_state not in self.transition_matrix:
             return None
 
 transitions = self.transition_matrix[current_state]
@@ -153,7 +151,7 @@ if total == 0:
             return {}
         return {s: count / total for s, count in self.transition_matrix[state].items()}
 
-def get_steady_state_probabilities(self) -> Dict[str, float]:Calculate long-term steady state probabilities.all_states = set()
+def get_steady_state_probabilities():-> Dict[str, float]:Calculate long-term steady state probabilities.all_states = set()
 for from_state in self.transition_matrix:
             all_states.add(from_state)
 for to_state in self.transition_matrix[from_state]:
@@ -173,7 +171,7 @@ if total_observations == 0:
 
         return {state: count / total_observations for state, count in state_frequencies.items()}
 
-def simulate_future_path(self, current_state: str, steps: int = 10) -> List[str]:
+def simulate_future_path():-> List[str]:
         Simulate future profit states using Monte Carlo.path = [current_state]
 state = current_state
 
@@ -216,7 +214,7 @@ accuracy = correct_predictions / total_predictions if total_predictions > 0 else
 self.accuracy_history.append({'accuracy': accuracy,'timestamp': time.time(),'sample_size': total_predictions
 })
 
-def get_accuracy_metrics(self) -> Dict[str, float]:Get comprehensive accuracy metrics.if not self.accuracy_history:
+def get_accuracy_metrics():-> Dict[str, float]:Get comprehensive accuracy metrics.if not self.accuracy_history:
             return {'current_accuracy': 0.0,'average_accuracy': 0.0,'accuracy_trend': 0.0,'confidence_correlation': 0.0
 }
 '
@@ -237,7 +235,7 @@ confidence_correlation = self._calculate_confidence_correlation()
         return {'current_accuracy': float(current_accuracy),'average_accuracy': float(average_accuracy),'accuracy_trend': float(accuracy_trend),'confidence_correlation': float(confidence_correlation),'total_predictions': len(self.predictions)
 }
 
-def _calculate_confidence_correlation(self) -> float:
+def _calculate_confidence_correlation():-> float:
         Calculate correlation between prediction confidence and accuracy.if len(self.predictions) < 5:
             return 0.0
 
@@ -291,15 +289,7 @@ else None
             logger.info(f📈 Profit Vector Forecast Engine initialized with {lookback_periods} period lookback
 )
 
-def add_market_data(
-self,:
-price: float,
-volume: float,
-rsi: float,
-momentum: float,
-timestamp: Optional[float] = None,
-signal_hash: Optional[str] = None,
-) -> None:Add new market data for analysis.Args:
+def add_market_data():-> None:Add new market data for analysis.Args:
             price: Current price
 volume: Current volume
 rsi: RSI indicator value
@@ -318,7 +308,7 @@ if signal_hash:
 }
 )
 
-def calculate_hash_gradient() -> float:Calculate hash gradient component ∇(H ⊕ G).Args:
+def calculate_hash_gradient():-> float:Calculate hash gradient component ∇(H ⊕ G).Args:
             current_hash: Current market state hash
 
 Returns:
@@ -349,7 +339,7 @@ g * w for g, w in zip(gradients, weights)
 
         return 0.0
 
-def calculate_momentum_rsi_component() -> float:
+def calculate_momentum_rsi_component():-> float:
         Calculate momentum-RSI component tanh(m(t) * RSI(t)).
 
 Args:
@@ -368,9 +358,7 @@ component = math.tanh(momentum_rsi_product)
 
         return component
 
-def detect_market_phase(:
-self, current_price: float, lookback: int = 20
-) -> MarketPhase:
+def detect_market_phase():-> MarketPhase:
         Detect current market phase for ψ(t) calculation.Args:
             current_price: Current market price
 lookback: Number of periods to analyze for phase detection
@@ -449,9 +437,7 @@ self.phase_history.append(phase)
 
         return phase
 
-def calculate_timeframe_confluence(:
-self, timeframes: Dict[str, Dict[str, float]]
-) -> List[TimeframeConfluence]:
+def calculate_timeframe_confluence():-> List[TimeframeConfluence]:
         Calculate multi-timeframe confluence analysis.Args:
             timeframes: Dictionary of timeframe data{timeframe: {rsi: value,momentum: value,volume: value}}
 
@@ -482,7 +468,7 @@ confluence_analysis.append(confluence)
 
         return confluence_analysis
 
-def calculate_volatility_profile(self) -> VolatilityProfile:Calculate volatility profile for profit scaling.Returns:
+def calculate_volatility_profile():-> VolatilityProfile:Calculate volatility profile for profit scaling.Returns:
             VolatilityProfile with current volatility analysisif len(self.price_history) < self.volatility_window:
             return VolatilityProfile(0.02, 0.02, normal,stable, 1.0)
 
@@ -534,16 +520,7 @@ volatility_trend=trend,
 profit_scale_factor=scale_factor,
 )
 
-def generate_profit_vector(
-self,:
-current_price: float,
-current_volume: float,
-current_rsi: float,
-current_momentum: float,
-current_hash: str,
-ghost_alignment: float = 0.0,
-timeframes: Optional[Dict[str, Dict[str, float]]] = None,
-) -> ProfitVector:Generate complete 3D profit vector forecast.Implements: PV(t) = ∇(H ⊕ G) + tanh(m(t) * RSI(t)) + ψ(t) + Δ_confluence + σ_scale
+def generate_profit_vector():-> ProfitVector:Generate complete 3D profit vector forecast.Implements: PV(t) = ∇(H ⊕ G) + tanh(m(t) * RSI(t)) + ψ(t) + Δ_confluence + σ_scale
 
 Args:
             current_price: Current market price
@@ -643,9 +620,7 @@ scale = phase.strength * phase.confidence
 
         return tuple(component * scale for component in base_vector)
 
-def _calculate_confluence_delta(:
-self, confluence_analysis: List[TimeframeConfluence]
-) -> float:
+def _calculate_confluence_delta():-> float:
         Calculate confluence delta from multi-timeframe analysis.if not confluence_analysis:
             return 0.0
 
@@ -673,14 +648,12 @@ else:
 
         return confluence_delta * 0.3  # Scale to appropriate range
 
-def _store_forecast_for_validation(:
-self, profit_vector: ProfitVector, current_price: float, current_hash: str
-) -> None:
+def _store_forecast_for_validation():-> None:
         Store forecast for future accuracy validation.# This would store forecasts for later validation against actual outcomes
 # Implementation depends on validation requirements
 pass
 
-def _update_avg_processing_time() -> None:Update average processing time metric.total_forecasts = self.stats[total_forecasts]current_avg = self.stats[avg_processing_time]
+def _update_avg_processing_time():-> None:Update average processing time metric.total_forecasts = self.stats[total_forecasts]current_avg = self.stats[avg_processing_time]
 
 if total_forecasts == 1:
             self.stats[avg_processing_time] = new_time
@@ -689,9 +662,7 @@ else :
 current_avg * (total_forecasts - 1) + new_time
 ) / total_forecasts
 
-def validate_forecast_accuracy(:
-self, actual_direction: str, actual_magnitude: float
-) -> Dict[str, float]:Validate forecast accuracy against actual outcomes.Args:actual_direction: Actual market direction (long",short",hold)
+def validate_forecast_accuracy():-> Dict[str, float]:Validate forecast accuracy against actual outcomes.Args:actual_direction: Actual market direction (long",short",hold)
 actual_magnitude: Actual magnitude of price movement
 
 Returns:
@@ -700,7 +671,7 @@ Returns:
         return {direction_accuracy: 0.75,magnitude_accuracy: 0.68,overall_accuracy": 0.71,
 }
 
-def get_performance_stats(self) -> Dict[str, Any]:"Get comprehensive performance statistics.stats = self.stats.copy()
+def get_performance_stats():-> Dict[str, Any]:"Get comprehensive performance statistics.stats = self.stats.copy()
 stats.update(
 {historical_signals: len(self.historical_signals),price_history_length": len(self.price_history),current_phase": (self.current_phase.phase_type if self.current_phase elseunknown),phase_confidence": (
 self.current_phase.confidence if self.current_phase else 0.0

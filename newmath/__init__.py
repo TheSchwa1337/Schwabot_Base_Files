@@ -1,3 +1,21 @@
+    from newmath import tensor_ops, profit_math, entropy_calc
+    from newmath.validation import run_full_tests"""
+from . import profit_math
+from .profit_math import (
+        from .validation import run_basic_tests
+from . import entropy_calc
+from . import hash_vectors
+from . import matrix_utils
+from . import render_engine
+from . import tensor_ops
+from . import validation
+from .entropy_calc import (
+from .hash_vectors import (
+from .matrix_utils import (
+from .render_engine import (
+from .tensor_ops import (
+from utils.safe_print import safe_print, info, warn, error, success, debug
+
 # -*- coding: utf-8 -*-
 """"""
 """"""
@@ -13,7 +31,6 @@
 """
 
 
-from utils.safe_print import safe_print, info, warn, error, success, debug
 SCHWABOT NEW MATHEMATICAL LIBRARY
 == == == == == == == == == == == == == == == == ==
 
@@ -31,8 +48,6 @@ Core Modules:
 - validation: Comprehensive testing framework
 
 Usage:
-    from newmath import tensor_ops, profit_math, entropy_calc
-    from newmath.validation import run_full_tests"""
 """"""
 """"""
 """
@@ -43,51 +58,38 @@ __author__ = "Schwabot Development Team"
 __license__ = "Proprietary"
 
 # Import core modules
-from . import tensor_ops
-from . import profit_math
-from . import entropy_calc
-from . import hash_vectors
-from . import matrix_utils
-from . import render_engine
-from . import validation
 
 # Import key functions for convenience
-from .tensor_ops import (
     tensor_contraction,
     bit_phase_operations,
     matrix_basket_calc,
     tensor_similarity
 )
 
-from .profit_math import (
     profit_derivative,
     should_execute_trade,
     profit_momentum,
     risk_calculation
 )
 
-from .entropy_calc import (
     calculate_entropy,
     entropy_trigger,
     volume_entropy,
     delta_compensation
 )
 
-from .hash_vectors import (
     generate_hash_vector,
     hash_similarity_score,
     memory_encoding,
     pattern_matching
 )
 
-from .matrix_utils import (
     safe_matrix_multiply,
     resolve_singular_matrix,
     eigenvalue_analysis,
     condition_check
 )
 
-from .render_engine import (
     render_price_line,
     plot_function,
     visualize_tensor,
@@ -97,10 +99,9 @@ from .render_engine import (
 # Quick validation function
 
 
-def quick_test() -> bool:
+def quick_test():-> bool:
     """Quick validation test for the new math library."""
 try:
-        from .validation import run_basic_tests
 return run_basic_tests()
     except Exception as e:
 safe_print(f"Quick test failed: {e}")
@@ -108,7 +109,7 @@ safe_print(f"Quick test failed: {e}")
 
 
 # Library status
-def library_status() -> dict:
+def library_status():-> dict:
     """Get status of all mathematical components."""
     status = {
         "version": __version__,

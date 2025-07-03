@@ -1,3 +1,9 @@
+from collections import defaultdict
+from typing import List, Tuple
+import os
+import subprocess
+import sys
+
 #!/usr/bin/env python3
 """
 Schwabot Flake8 Error Analyzer & Auto-Fix System
@@ -52,11 +58,6 @@ Error Categories:
 - W606: 'async' and 'await' are reserved keywords (auto-fixable)
 """
 
-import os
-import subprocess
-from collections import defaultdict
-from typing import List, Tuple
-import sys
 
 # Mathematical keywords that should be preserved during fixes
 MATH_PRESERVATION_KEYWORDS = {
@@ -194,7 +195,7 @@ class Flake8Analyzer:
         self.critical_count = 0
         self.total_count = 0
 
-    def run_flake8(self) -> List[str]:
+    def run_flake8():-> List[str]:
         """Run Flake8 on the codebase and return error lines."""
         try:
             # Run flake8 with specific error codes
@@ -234,7 +235,7 @@ class Flake8Analyzer:
             print(f"Error running Flake8: {e}")
             return []
 
-    def parse_error_line(self, line: str) -> Tuple[str, int, int, str, str]:
+    def parse_error_line():-> Tuple[str, int, int, str, str]:
         """Parse a Flake8 error line."""
         try:
             # Format: path:line:column:code:message
@@ -250,7 +251,7 @@ class Flake8Analyzer:
             pass
         return None, 0, 0, "", ""
 
-    def is_math_relevant_file(self, filepath: str) -> bool:
+    def is_math_relevant_file():-> bool:
         """Check if a file contains mathematical content."""
         try:
             with open(filepath, "r", encoding="utf-8", errors="ignore") as f:
@@ -284,7 +285,7 @@ class Flake8Analyzer:
                 if self.is_math_relevant_file(filepath):
                     self.math_relevant_files.add(filepath)
 
-    def generate_report(self) -> str:
+    def generate_report():-> str:
         """Generate a comprehensive Flake8 error report."""
         report = []
         report.append("# Schwabot Flake8 Error Analysis Report\n")

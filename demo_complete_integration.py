@@ -1,3 +1,16 @@
+    from core.matrix_math_utils import analyze_price_matrix
+    from schwabot_unified_math import UnifiedTradingMathematics
+import numpy as np
+    from core.brain_trading_engine import BrainTradingEngine
+    from core.ghost_core import GhostCore, StrategyBranch
+    from core.profit_vector_forecast import ProfitVectorForecastEngine
+    from core.risk_manager import RiskManager
+    from core.strategy_logic import StrategyLogic
+    from core.unified_profit_vectorization_system import (
+from typing import Dict, List, Any, Optional
+import logging
+import time
+
 #!/usr/bin/env python3
 """
 🧠 Schwabot Complete Integration Demo
@@ -18,10 +31,6 @@ comprehensive, internalized trading system with proper mathematical
 foundations and profit optimization.
 """
 
-import logging
-import time
-import numpy as np
-from typing import Dict, List, Any, Optional
 
 # Configure logging
 logging.basicConfig(
@@ -31,16 +40,8 @@ logger = logging.getLogger(__name__)
 
 # Import all components
 try:
-    from core.ghost_core import GhostCore, StrategyBranch
-    from core.brain_trading_engine import BrainTradingEngine
-    from core.risk_manager import RiskManager
-    from core.unified_profit_vectorization_system import (
         UnifiedProfitVectorizationSystem,
     )
-    from core.strategy_logic import StrategyLogic
-    from core.profit_vector_forecast import ProfitVectorForecastEngine
-    from core.matrix_math_utils import analyze_price_matrix
-    from schwabot_unified_math import UnifiedTradingMathematics
 
     # Note: CCXT integration requires actual exchange API keys for live trading
     # For demo purposes, we'll simulate the CCXT functionality
@@ -60,7 +61,7 @@ class SimulatedCCXTIntegration:
         self.order_books = {}
         self.base_price = 50000.0
 
-    def generate_order_book(self, symbol: str, price: float) -> Dict[str, Any]:
+    def generate_order_book():-> Dict[str, Any]:
         """Generate simulated order book data."""
         # Simulate bid/ask spread
         spread = price * 0.0001  # 0.01% spread
@@ -89,7 +90,7 @@ class SimulatedCCXTIntegration:
             "timestamp": time.time() * 1000,
         }
 
-    def detect_buy_sell_walls(self, order_book: Dict[str, Any]) -> List[Dict[str, Any]]:
+    def detect_buy_sell_walls():-> List[Dict[str, Any]]:
         """Detect buy/sell walls in order book."""
         walls = []
 
@@ -119,9 +120,7 @@ class SimulatedCCXTIntegration:
 
         return walls
 
-    def calculate_profit_vector(
-        self, order_book: Dict[str, Any], walls: List[Dict[str, Any]]
-    ) -> Dict[str, Any]:
+    def calculate_profit_vector():-> Dict[str, Any]:
         """Calculate profit vector from order book and walls."""
         spread = order_book["spread"]
         mid_price = order_book["mid_price"]
@@ -210,9 +209,7 @@ class CompleteIntegrationDemo:
 
         logger.info("✅ All components initialized successfully")
 
-    def process_market_tick(
-        self, symbol: str, price: float, volume: float, tick_index: int
-    ) -> Dict[str, Any]:
+    def process_market_tick():-> Dict[str, Any]:
         """Process a single market tick through the complete pipeline."""
         try:
             # 1. Update price history
@@ -338,7 +335,7 @@ class CompleteIntegrationDemo:
             logger.error("Error processing market tick: %s", e)
             return {"error": str(e)}
 
-    def _calculate_mathematical_state(self) -> Dict[str, Any]:
+    def _calculate_mathematical_state():-> Dict[str, Any]:
         """Calculate mathematical state from price history."""
         try:
             # Calculate matrix analysis only if enough data
@@ -377,7 +374,7 @@ class CompleteIntegrationDemo:
             logger.error("Error calculating mathematical state: %s", e)
             return {"complexity": 0.5, "stability": 0.5, "volatility": 0.02}
 
-    def _analyze_market_conditions(self, price: float, volume: float) -> Dict[str, Any]:
+    def _analyze_market_conditions():-> Dict[str, Any]:
         """Analyze current market conditions."""
         try:
             if len(self.price_history) < 5:
@@ -412,18 +409,7 @@ class CompleteIntegrationDemo:
             logger.error("Error analyzing market conditions: %s", e)
             return {"volatility": 0.02, "momentum": 0.0, "volume_profile": 1.0}
 
-    def _generate_trading_decision(
-        self,
-        symbol: str,
-        price: float,
-        volume: float,
-        ghost_state: Any,
-        brain_decision: Dict[str, Any],
-        profit_vector: Dict[str, Any],
-        risk_metrics: Dict[str, Any],
-        market_conditions: Dict[str, Any],
-        mathematical_state: Dict[str, Any],
-    ) -> Optional[Dict[str, Any]]:
+    def _generate_trading_decision():-> Optional[Dict[str, Any]]:
         """Generate final trading decision."""
         try:
             brain_action = brain_decision.get("action", "HOLD")
@@ -464,7 +450,7 @@ class CompleteIntegrationDemo:
             logger.error("Error generating trading decision: %s", e)
             return {"action": "HOLD", "reason": "Error in decision generation"}
 
-    def _execute_trade(self, decision: Dict[str, Any]) -> Dict[str, Any]:
+    def _execute_trade():-> Dict[str, Any]:
         """Execute a trading decision."""
         try:
             action = decision.get("action")
@@ -518,7 +504,7 @@ class CompleteIntegrationDemo:
             logger.error("Error executing trade: %s", e)
             return {"executed": False, "error": str(e)}
 
-    def run_demo(self, num_ticks: int = 200) -> Dict[str, Any]:
+    def run_demo():-> Dict[str, Any]:
         """Run the complete integration demo."""
         logger.info("Starting complete integration demo with %d ticks", num_ticks)
 

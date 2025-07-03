@@ -1,7 +1,5 @@
-# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
-# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
-# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
-# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
+            from core.unified_math_system import unified_math
+from core.unified_math_system import unified_math
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from dual_unicore_handler import DualUnicoreHandler
@@ -10,7 +8,11 @@ import logging
 import time
 import unittest
 
-from core.unified_math_system import unified_math
+# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
+
 
 
 # Initialize Unicode handler
@@ -141,7 +143,7 @@ self.test_cases = [
 ]
 logger.info("\\u1f50c API Price Entry Feedback Test initialized")
 
-def test_ccxt_api_integration(self) -> Dict[str, Any]:
+def test_ccxt_api_integration():-> Dict[str, Any]:
     """Function implementation pending."""
 pass
 """
@@ -222,7 +224,7 @@ if results['success']:
 
 return results
 
-def test_coinbase_api_feedback(self) -> Dict[str, Any]:
+def test_coinbase_api_feedback():-> Dict[str, Any]:
     """Function implementation pending."""
 pass
 """
@@ -285,7 +287,7 @@ if results['success']:
 
 return results
 
-def test_multi_source_consensus(self) -> Dict[str, Any]:
+def test_multi_source_consensus():-> Dict[str, Any]:
     """Function implementation pending."""
 pass
 """
@@ -350,7 +352,7 @@ if results['success']:
 
 return results
 
-def test_price_discrepancy_detection(self) -> Dict[str, Any]:
+def test_price_discrepancy_detection():-> Dict[str, Any]:
     """Function implementation pending."""
 pass
 """
@@ -426,7 +428,7 @@ if results['success']:
 
 return results
 
-def test_volume_data_integration(self) -> Dict[str, Any]:
+def test_volume_data_integration():-> Dict[str, Any]:
     """Function implementation pending."""
 pass
 """
@@ -486,7 +488,7 @@ if results['success']:
 
 return results
 
-def test_api_rate_limiting(self) -> Dict[str, Any]:
+def test_api_rate_limiting():-> Dict[str, Any]:
     """Function implementation pending."""
 pass
 """
@@ -556,7 +558,7 @@ if results['success']:
 
 return results
 
-def _simulate_ccxt_api_call(self) -> Dict[str, Any]:
+def _simulate_ccxt_api_call():-> Dict[str, Any]:
     """Function implementation pending."""
 pass
 """
@@ -586,7 +588,7 @@ return {
                 'version': '1.0_0',
                 'status': 'active'
 
-def _simulate_coinbase_feedback(self, test_case: APITestCase) -> Dict[str, Any]:"""
+def _simulate_coinbase_feedback():-> Dict[str, Any]:"""
     """Function implementation pending."""
 pass
 """
@@ -608,7 +610,7 @@ return {
             'volume_reliability': volume_reliability,
             'feedback_quality': feedback_quality
 
-def _simulate_multi_source_consensus(self, test_case: APITestCase) -> Dict[str, Any]:"""
+def _simulate_multi_source_consensus():-> Dict[str, Any]:"""
     """Function implementation pending."""
 pass
 """
@@ -651,7 +653,7 @@ return {
             'confidence': confidence,
             'arbitrage_opportunities': arbitrage_opportunities
 
-def _detect_price_discrepancy(self, prices: Dict[str, float], threshold: float) -> Dict[str, Any]:"""
+def _detect_price_discrepancy():-> Dict[str, Any]:"""
     """Function implementation pending."""
 pass
 """
@@ -680,7 +682,7 @@ return {
             'max_discrepancy': max_discrepancy,
             'affected_exchanges': affected_exchanges
 
-def _simulate_volume_integration(self, test_case: APITestCase) -> Dict[str, Any]:"""
+def _simulate_volume_integration():-> Dict[str, Any]:"""
     """Function implementation pending."""
 pass
 """
@@ -723,7 +725,7 @@ return {
             'trend': trend,
             'spike_detected': spike_detected
 
-def _simulate_rate_limiting(self, scenario: Dict[str, Any]) -> Dict[str, Any]:
+def _simulate_rate_limiting():-> Dict[str, Any]:
     """Function implementation pending."""
 pass
 """
@@ -749,7 +751,7 @@ return {
             'throttled': throttled,
             'retry_after': retry_after
 
-def run_comprehensive_test(self) -> Dict[str, Any]:"""
+def run_comprehensive_test():-> Dict[str, Any]:"""
     """Function implementation pending."""
 pass
 """
@@ -800,7 +802,7 @@ return comprehensive_result
 
 
 # Global test function for registry
-def test_api_price_entry_feedback() -> Dict[str, Any]:
+def test_api_price_entry_feedback():-> Dict[str, Any]:
         """
         Calculate profit optimization for BTC trading.
         
@@ -814,7 +816,6 @@ def test_api_price_entry_feedback() -> Dict[str, Any]:
         """
         try:
             # Import unified math system
-            from core.unified_math_system import unified_math
             
             # Calculate profit using unified mathematical framework
             base_profit = price_data * volume_data * 0.001  # 0.1% base

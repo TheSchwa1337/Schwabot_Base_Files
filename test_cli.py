@@ -1,8 +1,21 @@
+            import schwabot_immune_cli
+            import schwabot_qsc_cli
+            import schwabot_tensor_cli
+        from schwabot.alpha_encryption import get_alpha_encryption, alpha_encrypt_data, analyze_alpha_security
+        from schwabot.cli import main
+        from schwabot.cli import main
+        from schwabot.lantern_core import get_lantern_eye, LanternMainLoop
+        from schwabot.session_context import create_trading_session, log_trading_activity
+        from schwabot.update import do_update
+        from schwabot.vortex_security import get_vortex_security
+    from io import StringIO
+    import argparse
+import os
+import sys
+
 #!/usr/bin/env python3
 """Test script to verify CLI functionality."""
 
-import sys
-import os
 
 # Add the project root to sys.path
 sys.path.append(os.path.abspath(os.path.dirname(__file__)))
@@ -13,17 +26,11 @@ def test_cli_help():
     
     try:
         # Import the CLI module
-        from schwabot.cli import main
         
         # Test if we can import all dependencies
         print("✅ Successfully imported CLI module")
         
         # Test if we can import all required modules
-        from schwabot.vortex_security import get_vortex_security
-        from schwabot.session_context import create_trading_session, log_trading_activity
-        from schwabot.alpha_encryption import get_alpha_encryption, alpha_encrypt_data, analyze_alpha_security
-        from schwabot.lantern_core import get_lantern_eye, LanternMainLoop
-        from schwabot.update import do_update
         
         print("✅ Successfully imported all required modules")
         
@@ -32,21 +39,18 @@ def test_cli_help():
         
         # Test QSC CLI
         try:
-            import schwabot_qsc_cli
             print("✅ QSC CLI module imported successfully")
         except ImportError as e:
             print(f"❌ QSC CLI import failed: {e}")
         
         # Test Immune CLI
         try:
-            import schwabot_immune_cli
             print("✅ Immune CLI module imported successfully")
         except ImportError as e:
             print(f"❌ Immune CLI import failed: {e}")
         
         # Test Tensor CLI
         try:
-            import schwabot_tensor_cli
             print("✅ Tensor CLI module imported successfully")
         except ImportError as e:
             print(f"❌ Tensor CLI import failed: {e}")
@@ -66,11 +70,8 @@ def test_cli_commands():
     print("\nTesting CLI commands...")
     
     # Test help command by simulating argparse
-    import argparse
-    from io import StringIO
     
     try:
-        from schwabot.cli import main
         
         # Capture help output
         help_output = StringIO()

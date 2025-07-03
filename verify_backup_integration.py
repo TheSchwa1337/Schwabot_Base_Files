@@ -1,3 +1,11 @@
+        from core.mathlib_v4 import MathLibV4
+        from core.matrix_math_utils import analyze_price_matrix
+        from core.unified_math_system import UnifiedMathSystem
+        import numpy as np
+from pathlib import Path
+import logging
+import sys
+
 #!/usr/bin/env python3
 """
 Backup Integration Verification Script
@@ -10,9 +18,6 @@ Comprehensive verification of:
 4. Core system functionality
 """
 
-import logging
-import sys
-from pathlib import Path
 
 # Configure logging
 logging.basicConfig(
@@ -72,7 +77,6 @@ def check_mathematical_integration():
     }
 
     try:
-        from core.mathlib_v4 import MathLibV4
 
         ml4 = MathLibV4()
         math_status["mathlib_v4"] = True
@@ -81,7 +85,6 @@ def check_mathematical_integration():
         print(f"   ❌ MathLibV4 failed: {e}")
 
     try:
-        from core.unified_math_system import UnifiedMathSystem
 
         UnifiedMathSystem()
         math_status["unified_math_system"] = True
@@ -90,8 +93,6 @@ def check_mathematical_integration():
         print(f"   ❌ Unified Math System failed: {e}")
 
     try:
-        from core.matrix_math_utils import analyze_price_matrix
-        import numpy as np
 
         test_matrix = np.array([[1.0, 2.0], [3.0, 4.0]])
         analyze_price_matrix(test_matrix)

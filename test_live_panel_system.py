@@ -1,13 +1,14 @@
+from core.speed_lattice_visualizer import SpeedLatticeLivePanelSystem, PanelType
+import json
+import sys
+import time
+
 #!/usr/bin/env python3
 """
 Live Panel System Test - Speed Lattice Vault SP 1.27 AE
 Tests the complete live panel system with API connectivity and dynamic switching.
 """
 
-import sys
-import time
-import json
-from core.speed_lattice_visualizer import SpeedLatticeLivePanelSystem, PanelType
 
 
 def test_panel_system():

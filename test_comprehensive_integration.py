@@ -1,3 +1,27 @@
+            from core.mathlib_v4 import MathLibV4
+            from core.matrix_math_utils import analyze_price_matrix
+            from core.unified_math_system import UnifiedMathSystem
+            import numpy as np
+        from core.mathlib_v4 import MathLibV4
+        from core.matrix_math_utils import analyze_price_matrix
+        from core.unified_math_system import UnifiedMathSystem
+        from core.enhanced_strategy_framework import (
+        from core.enhanced_strategy_framework import (
+        from core.risk_manager import RiskManager
+        from core.risk_manager import RiskManager
+        from core.strategy_integration_bridge import (
+        from core.strategy_integration_bridge import create_strategy_integration_bridge
+        from core.strategy_integration_bridge import create_strategy_integration_bridge
+        from core.strategy_integration_bridge import create_strategy_integration_bridge
+        from core.strategy_logic import StrategyLogic
+        from core.unified_trading_pipeline import UnifiedTradingPipeline
+        import subprocess
+from pathlib import Path
+import asyncio
+import logging
+import sys
+import time
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """Comprehensive Integration Test - Enhanced Strategy Framework with Schwabot Pipeline.
@@ -15,11 +39,6 @@ integrations work correctly together for a production-ready trading bot.
 Windows CLI compatible with detailed error reporting.
 """
 
-import asyncio
-import logging
-import sys
-import time
-from pathlib import Path
 
 # Configure logging
 logging.basicConfig(
@@ -41,7 +60,6 @@ def check_import_compatibility():
     }
 
     try:
-        from core.enhanced_strategy_framework import (
             EnhancedStrategyFramework,
             WallStreetStrategy,
             TimeFrame,
@@ -54,7 +72,6 @@ def check_import_compatibility():
         print(f"   ❌ Enhanced Strategy Framework import failed: {e}")
 
     try:
-        from core.strategy_integration_bridge import (
             StrategyIntegrationBridge,
             IntegratedTradingSignal,
             create_strategy_integration_bridge,
@@ -66,9 +83,6 @@ def check_import_compatibility():
         print(f"   ❌ Strategy Integration Bridge import failed: {e}")
 
     try:
-        from core.mathlib_v4 import MathLibV4
-        from core.unified_math_system import UnifiedMathSystem
-        from core.matrix_math_utils import analyze_price_matrix
 
         import_status["mathematical_components"] = True
         print("   ✅ Mathematical components imported successfully")
@@ -76,9 +90,6 @@ def check_import_compatibility():
         print(f"   ❌ Mathematical components import failed: {e}")
 
     try:
-        from core.unified_trading_pipeline import UnifiedTradingPipeline
-        from core.risk_manager import RiskManager
-        from core.strategy_logic import StrategyLogic
 
         import_status["core_components"] = True
         print("   ✅ Core trading components imported successfully")
@@ -93,7 +104,6 @@ def test_enhanced_strategy_framework():
     print("\n📊 Testing Enhanced Strategy Framework...")
 
     try:
-        from core.enhanced_strategy_framework import (
             EnhancedStrategyFramework,
             TimeFrame,
         )
@@ -169,7 +179,6 @@ async def test_strategy_integration_bridge():
     print("\n🌉 Testing Strategy Integration Bridge...")
 
     try:
-        from core.strategy_integration_bridge import create_strategy_integration_bridge
 
         # Create integration bridge
         config = {
@@ -250,7 +259,6 @@ def test_mathematical_integration():
     try:
         # Test MathLibV4 integration
         try:
-            from core.mathlib_v4 import MathLibV4
 
             mathlib = MathLibV4(precision=64)
 
@@ -272,7 +280,6 @@ def test_mathematical_integration():
 
         # Test Unified Math System
         try:
-            from core.unified_math_system import UnifiedMathSystem
 
             unified_math = UnifiedMathSystem()
             state = unified_math.get_system_state()
@@ -284,8 +291,6 @@ def test_mathematical_integration():
 
         # Test Matrix Math Utils
         try:
-            from core.matrix_math_utils import analyze_price_matrix
-            import numpy as np
 
             test_matrix = np.array([[50000.0, 50100.0], [50200.0, 50300.0]])
             result = analyze_price_matrix(test_matrix)
@@ -307,7 +312,6 @@ def test_risk_management_integration():
     print("\n⚖️ Testing Risk Management Integration...")
 
     try:
-        from core.risk_manager import RiskManager
 
         # Initialize risk manager
         config = {
@@ -345,7 +349,6 @@ def test_api_visualization_integration():
     print("\n🖥️ Testing API and Visualization Integration...")
 
     try:
-        from core.strategy_integration_bridge import create_strategy_integration_bridge
 
         bridge = create_strategy_integration_bridge()
         api_endpoints = bridge.get_api_endpoints()
@@ -388,7 +391,6 @@ async def test_end_to_end_integration():
     print("\n🔄 Testing End-to-End Integration...")
 
     try:
-        from core.strategy_integration_bridge import create_strategy_integration_bridge
 
         # Create complete integration
         config = {
@@ -452,7 +454,6 @@ def test_flake8_compliance():
     print("\n🔍 Testing Flake8 Compliance...")
 
     try:
-        import subprocess
 
         files_to_check = [
             "core/enhanced_strategy_framework.py",

@@ -1,7 +1,5 @@
-# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
-# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
-# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
-# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
+            from core.unified_math_system import unified_math
+from core.unified_math_system import unified_math
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from dual_unicore_handler import DualUnicoreHandler
@@ -10,7 +8,11 @@ import logging
 import time
 import unittest
 
-from core.unified_math_system import unified_math
+# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
+
 
 
 # Initialize Unicode handler
@@ -123,7 +125,7 @@ self.test_cases = [
 ]
 logger.info("\\u1f504 Trade Chain Timeline Replay Test initialized")
 
-def test_timeline_reconstruction(self) -> Dict[str, Any]:
+def test_timeline_reconstruction():-> Dict[str, Any]:
     """Function implementation pending."""
 pass
 """
@@ -182,7 +184,7 @@ if results['success']:
 
 return results
 
-def test_ai_memory_anchoring(self) -> Dict[str, Any]:
+def test_ai_memory_anchoring():-> Dict[str, Any]:
     """Function implementation pending."""
 pass
 """
@@ -244,7 +246,7 @@ if results['success']:
 
 return results
 
-def test_hash_echo_loop_functionality(self) -> Dict[str, Any]:
+def test_hash_echo_loop_functionality():-> Dict[str, Any]:
     """Function implementation pending."""
 pass
 """
@@ -304,7 +306,7 @@ if results['success']:
 
 return results
 
-def test_recursive_decision_feedback(self) -> Dict[str, Any]:
+def test_recursive_decision_feedback():-> Dict[str, Any]:
     """Function implementation pending."""
 pass
 """
@@ -365,7 +367,7 @@ if results['success']:
 
 return results
 
-def test_ghost_memory_state_preservation(self) -> Dict[str, Any]:
+def test_ghost_memory_state_preservation():-> Dict[str, Any]:
     """Function implementation pending."""
 pass
 """
@@ -429,7 +431,7 @@ if results['success']:
 
 return results
 
-def test_timeline_debugging_analysis(self) -> Dict[str, Any]:
+def test_timeline_debugging_analysis():-> Dict[str, Any]:
     """Function implementation pending."""
 pass
 """
@@ -490,7 +492,7 @@ if results['success']:
 
 return results
 
-def _generate_profitable_timeline(self) -> List[TradeTimelineEvent]:
+def _generate_profitable_timeline():-> List[TradeTimelineEvent]:
     """Function implementation pending."""
 pass
 """
@@ -520,7 +522,7 @@ events.append(event)
 
 return events
 
-def _generate_mixed_timeline(self) -> List[TradeTimelineEvent]:
+def _generate_mixed_timeline():-> List[TradeTimelineEvent]:
     """Function implementation pending."""
 pass
 """
@@ -550,7 +552,7 @@ events.append(event)
 
 return events
 
-def _generate_losing_timeline(self) -> List[TradeTimelineEvent]:
+def _generate_losing_timeline():-> List[TradeTimelineEvent]:
     """Function implementation pending."""
 pass
 """
@@ -580,7 +582,7 @@ events.append(event)
 
 return events
 
-def _generate_high_frequency_timeline(self) -> List[TradeTimelineEvent]:
+def _generate_high_frequency_timeline():-> List[TradeTimelineEvent]:
     """Function implementation pending."""
 pass
 """
@@ -610,7 +612,7 @@ events.append(event)
 
 return events
 
-def _reconstruct_timeline(self, events: List[TradeTimelineEvent]) -> List[TradeTimelineEvent]:
+def _reconstruct_timeline():-> List[TradeTimelineEvent]:
     """Function implementation pending."""
 pass
 """
@@ -628,7 +630,7 @@ reconstructed = []
 
 return reconstructed
 
-def _validate_timeline_continuity(self, timeline: List[TradeTimelineEvent]) -> bool:"""
+def _validate_timeline_continuity():-> bool:"""
     """Function implementation pending."""
 pass
 """
@@ -647,7 +649,7 @@ return False
 
 return True
 
-def _validate_event_ordering(self, timeline: List[TradeTimelineEvent]) -> bool:"""
+def _validate_event_ordering():-> bool:"""
     """Function implementation pending."""
 pass
 """
@@ -663,7 +665,7 @@ for i in range(1, len(timeline)):
 
 return True
 
-def _validate_event(self, event: TradeTimelineEvent) -> bool:"""
+def _validate_event():-> bool:"""
     """Function implementation pending."""
 pass
 """
@@ -678,7 +680,7 @@ event.volume > 0 and
             event.action in ['buy', 'sell', 'hold']
         )
 
-def _build_memory_anchors(self, events: List[TradeTimelineEvent]) -> List[Dict[str, Any]]:"""
+def _build_memory_anchors():-> List[Dict[str, Any]]:"""
     """Function implementation pending."""
 pass
 """
@@ -700,7 +702,7 @@ for event in events:
 
 return anchors
 
-def _calculate_memory_strength(self, event: TradeTimelineEvent) -> float:"""
+def _calculate_memory_strength():-> float:"""
     """Function implementation pending."""
 pass
 """
@@ -719,7 +721,7 @@ volume_boost = unified_math.min(0.2, event.volume / 10000.0)
 
 return unified_math.min(1.0, strength + recency_boost + volume_boost)
 
-def _calculate_memory_anchor_quality(self, anchors: List[Dict[str, Any]]) -> float:"""
+def _calculate_memory_anchor_quality():-> float:"""
     """Function implementation pending."""
 pass
 """
@@ -738,7 +740,7 @@ unique_actions = len(set(anchor['action'] for anchor in anchors))
 
 return (avg_strength + diversity_score) / 2.0
 
-def _build_ai_context(self, anchors: List[Dict[str, Any]]) -> Dict[str, Any]:"""
+def _build_ai_context():-> Dict[str, Any]:"""
     """Function implementation pending."""
 pass
 """
@@ -775,7 +777,7 @@ if anchor['confidence'] >= 0.8
 ]
 return context
 
-def _validate_ai_context(self, context: Dict[str, Any]) -> bool:"""
+def _validate_ai_context():-> bool:"""
     """Function implementation pending."""
 pass
 """
@@ -792,7 +794,7 @@ required_fields = ['total_events', 'avg_confidence', 'action_distribution']
 
 return True
 
-def _simulate_hash_echo_loop(self, events: List[TradeTimelineEvent]) -> Dict[str, Any]:"""
+def _simulate_hash_echo_loop():-> Dict[str, Any]:"""
     """Function implementation pending."""
 pass
 """
@@ -834,7 +836,7 @@ return {
             'loop_instability': loop_instability,
             'echo_cycles': echo_cycles
 
-def _simulate_recursive_feedback(self, events: List[TradeTimelineEvent]) -> Dict[str, Any]:"""
+def _simulate_recursive_feedback():-> Dict[str, Any]:"""
     """Function implementation pending."""
 pass
 """
@@ -882,7 +884,7 @@ return {
             'ai_consensus': ai_consensus,
             'decision_consistency': decision_consistency
 
-def _initialize_ghost_memory(self) -> Dict[str, Any]:"""
+def _initialize_ghost_memory():-> Dict[str, Any]:"""
     """Function implementation pending."""
 pass
 """
@@ -896,7 +898,7 @@ return {
                 'last_updated': time.time(),
                 'total_events': 0
 
-def _store_in_ghost_memory(self, ghost_memory: Dict[str, Any], event: TradeTimelineEvent) -> None:"""
+def _store_in_ghost_memory():-> None:"""
     """Function implementation pending."""
 pass
 """
@@ -913,7 +915,7 @@ ghost_memory['events'].append({
 ghost_memory['metadata']['total_events'] += 1
         ghost_memory['metadata']['last_updated'] = time.time()
 
-def _get_ghost_memory_state(self, ghost_memory: Dict[str, Any]) -> Dict[str, Any]:"""
+def _get_ghost_memory_state():-> Dict[str, Any]:"""
     """Function implementation pending."""
 pass
 """
@@ -929,7 +931,7 @@ return {
             'utilization': total_events / max_capacity,
             'total_events': total_events
 
-def _analyze_timeline(self, events: List[TradeTimelineEvent]) -> Dict[str, Any]:"""
+def _analyze_timeline():-> Dict[str, Any]:"""
     """Function implementation pending."""
 pass
 """
@@ -976,7 +978,7 @@ return {
             'avg_confidence': avg_confidence,
             'trade_frequency': trade_frequency
 
-def run_comprehensive_test(self) -> Dict[str, Any]:"""
+def run_comprehensive_test():-> Dict[str, Any]:"""
     """Function implementation pending."""
 pass
 """
@@ -1027,7 +1029,7 @@ return comprehensive_result
 
 
 # Global test function for registry
-def test_trade_chain_timeline_replay() -> Dict[str, Any]:
+def test_trade_chain_timeline_replay():-> Dict[str, Any]:
         """
         Calculate profit optimization for BTC trading.
         
@@ -1041,7 +1043,6 @@ def test_trade_chain_timeline_replay() -> Dict[str, Any]:
         """
         try:
             # Import unified math system
-            from core.unified_math_system import unified_math
             
             # Calculate profit using unified mathematical framework
             base_profit = price_data * volume_data * 0.001  # 0.1% base

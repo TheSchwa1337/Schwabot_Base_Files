@@ -1,19 +1,20 @@
-# -*- coding: utf - 8 -*-
-# -*- coding: utf - 8 -*-
-# -*- coding: utf - 8 -*-
-# -*- coding: utf - 8 -*-
-from dual_unicore_handler import DualUnicoreHandler
-from typing import Dict, Any, List
-import logging
-import time
-
 import numpy as np
-
 from core.bit_phase_sequencer import BitPhase, BitSequence
 from core.dual_error_handler import PhaseState, SickType, SickState
 from core.profit_optimizer import ProfitOptimizer
 from core.recursive_profit_engine import RecursiveProfitEngine
 from core.symbolic_profit_router import ProfitTier, FlipBias, SymbolicState, ProfitSequence
+from dual_unicore_handler import DualUnicoreHandler
+from typing import Dict, Any, List
+import logging
+import time
+
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+
+
 
 
 
@@ -52,7 +53,7 @@ self.bit_sequencer = BitSequence(
             long_term_logic=True
         )
 
-def test_recursive_profit_calculation(self) -> Dict[str, Any]:"""
+def test_recursive_profit_calculation():-> Dict[str, Any]:"""
         """Test recursive profit calculation with phase logic.""""""
 logger.info("🔄 Testing recursive profit calculation with phase analysis")
 
@@ -149,7 +150,7 @@ if results['success']:
 
 return results
 
-def test_profit_optimization(self) -> Dict[str, Any]:
+def test_profit_optimization():-> Dict[str, Any]:
         """Test profit optimization with 2 - bit phase logic.""""""
 logger.info("📈 Testing profit optimization with phase logic")
 
@@ -227,7 +228,7 @@ if results['success']:
 
 return results
 
-def test_phase_profit_correlation(self) -> Dict[str, Any]:
+def test_phase_profit_correlation():-> Dict[str, Any]:
         """Test correlation between phase states and profit performance.""""""
 logger.info("🔗 Testing phase - profit correlation analysis")
 
@@ -279,7 +280,7 @@ if results['success']:
 
 return results
 
-def run_comprehensive_test(self) -> Dict[str, Any]:
+def run_comprehensive_test():-> Dict[str, Any]:
         """Run comprehensive recursive profit test with all phase logic.""""""
 logger.info("🚀 Running comprehensive recursive profit test with 2 - bit phase system")
 
@@ -319,7 +320,7 @@ return comprehensive_result
 
 
 # Global test function for registry
-def test_recursive_profit_functionality() -> Dict[str, Any]:
+def test_recursive_profit_functionality():-> Dict[str, Any]:
     """Main test function for recursive profit functionality with 2 - bit phase logic."""
 try:
         test_suite = RecursiveProfitTest()
@@ -333,7 +334,7 @@ logger.error(f"Recursive profit functionality test failed: {e}")
             'execution_time': 0.0
 
 
-def main() -> None:
+def main():-> None:
     """Main function for recursive profit testing."""
 # Set up logging
 logging.basicConfig(

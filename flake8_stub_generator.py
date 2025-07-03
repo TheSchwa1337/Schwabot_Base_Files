@@ -1,3 +1,11 @@
+from core.bit_phase_sequencer import BitPhase, BitSequence
+from core.dual_error_handler import PhaseState, SickType, SickState
+from core.symbolic_profit_router import ProfitTier, FlipBias, SymbolicState
+from dual_unicore_handler import DualUnicoreHandler
+from typing import Dict, List, Set
+import os
+import re
+
 # -*- coding: utf - 8 -*-
 # -*- coding: utf - 8 -*-
 """"""
@@ -43,15 +51,8 @@ Strategy:
 """"""
 """
 
-import os
-import re
-from typing import Dict, List, Set
-from dual_unicore_handler import DualUnicoreHandler
 
 # Import core mathematical modules
-from core.bit_phase_sequencer import BitPhase, BitSequence
-from core.symbolic_profit_router import ProfitTier, FlipBias, SymbolicState
-from core.dual_error_handler import PhaseState, SickType, SickState
 
 
 class Flake8StubGenerator:
@@ -82,7 +83,7 @@ self.stub_functions = {
             'ferris_wheel_rotation': '🎡',
             'lantern_trigger_activation': '🏮'
 
-def generate_stub_file(self, module_name: str, functions: List[str] = None) -> str:"""
+def generate_stub_file():-> str:"""
     """Function implementation pending."""
 pass
 """
@@ -116,7 +117,7 @@ fallback_wrappers = []
 
 # Create stub functions manually to avoid formatting issues
 manual_stubs = '''
-def calculate_vector_profit(hash_block: str, vector_data: dict) -> float:
+def calculate_vector_profit():-> float:
     """Function implementation pending."""
 pass
 """
@@ -134,7 +135,7 @@ Example Model: P = gradient.Phi(hash) / delta_t"""
 """
 return 0.0  # fallback value
 """
-def trigger_portal(emoji_code: str = "") -> str:
+def trigger_portal():-> str:
     """Function implementation pending."""
 pass
 """
@@ -148,7 +149,7 @@ if emoji_code:
         return "portal_triggered_" + sha_hash[:8]
     return "stubbed - response"
 
-def memory_key_pull(key: str) -> dict:
+def memory_key_pull():-> dict:
     """Function implementation pending."""
 pass
 """
@@ -183,7 +184,7 @@ stub_file = header + "\n  # Generated stub functions for " + module_name + "\n"
 
 return stub_file
 
-def process_existing_stub_files(self, directory: str = ".") -> Dict[str, bool]:
+def process_existing_stub_files():-> Dict[str, bool]:
     """Function implementation pending."""
 pass
 """
@@ -225,7 +226,7 @@ except Exception as e:
 
 return results
 
-def _is_stub_file(self, content: str) -> bool:
+def _is_stub_file():-> bool:
     """Function implementation pending."""
 pass
 """
@@ -249,7 +250,7 @@ stub_indicators = [
 content_lower = content.lower()
         return any(indicator in content_lower for indicator in stub_indicators)
 
-def _fix_stub_file(self, content: str, file_path: str) -> str:"""
+def _fix_stub_file():-> str:"""
     """Function implementation pending."""
 pass
 """
@@ -300,7 +301,7 @@ fixed_lines.insert(insert_index, import_section)
 
 return '\n'.join(fixed_lines)
 """
-def generate_mathematical_stub(self, function_name: str, equation: str = "") -> str:
+def generate_mathematical_stub():-> str:
     """Function implementation pending."""
 pass
 """
@@ -349,7 +350,7 @@ logger.error(f"Error in {function_name}: {{e}}")
 '''
 return stub
 
-def _convert_math_symbols(self, equation: str) -> str:
+def _convert_math_symbols():-> str:
     """Function implementation pending."""
 pass
 """

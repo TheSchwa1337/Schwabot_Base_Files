@@ -1,3 +1,16 @@
+        from core.balance_loader import (
+        from core.balance_loader import update_load_metrics, get_balance_statistics
+        from core.ghost_trigger_manager import (
+        from core.ghost_trigger_manager import (
+        from core.multi_bit_btc_processor import MultiBitBTCProcessor
+        from core.tick_management_system import (
+        from core.tick_management_system import run_tick_cycle, get_tick_statistics
+import asyncio
+import logging
+import os
+import sys
+import time
+
 #!/usr/bin/env python3
 """
 Integrated Systems Test
@@ -13,11 +26,6 @@ This test shows how all systems work together to create a cohesive
 ALIF/ALEPH coordination system with balance loading and ghost trigger management.
 """
 
-import asyncio
-import logging
-import sys
-import os
-import time
 
 # Add the current directory to the path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -36,7 +44,6 @@ def test_tick_management_system():
     print("=" * 50)
 
     try:
-        from core.tick_management_system import (
             get_tick_manager,
             run_tick_cycle,
             get_tick_statistics,
@@ -87,7 +94,6 @@ def test_balance_loader():
     print("=" * 50)
 
     try:
-        from core.balance_loader import (
             get_balance_loader,
             update_load_metrics,
             get_balance_statistics,
@@ -154,7 +160,6 @@ def test_ghost_trigger_manager():
     print("=" * 50)
 
     try:
-        from core.ghost_trigger_manager import (
             get_ghost_trigger_manager,
             create_ghost_trigger,
             create_fallback_trigger,
@@ -263,7 +268,6 @@ async def test_btc_processor_integration():
     print("=" * 50)
 
     try:
-        from core.multi_bit_btc_processor import MultiBitBTCProcessor
 
         # Initialize BTC processor
         processor = MultiBitBTCProcessor()
@@ -308,9 +312,6 @@ def test_integrated_workflow():
     print("=" * 50)
 
     try:
-        from core.tick_management_system import run_tick_cycle, get_tick_statistics
-        from core.balance_loader import update_load_metrics, get_balance_statistics
-        from core.ghost_trigger_manager import (
             create_ghost_trigger,
             add_profit_vector,
             AnchorStatus,

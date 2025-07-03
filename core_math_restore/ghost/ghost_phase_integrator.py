@@ -1,3 +1,6 @@
+from __future__ import annotations
+from dataclasses import dataclass
+
 # -*- coding: utf - 8 -*-
 """Phase packet builder for ghost routing system.""""""
 """"""
@@ -15,8 +18,6 @@
 """Phase packet builder for ghost routing system."""
 # -*- coding: utf - 8 -*-
 # -*- coding: utf - 8 -*-
-from __future__ import annotations
-from dataclasses import dataclass
 
 
 @dataclass
@@ -34,10 +35,7 @@ zeta: float  # \\u03b6_final coefficient
 theta: float  # \\u0398_drift coefficient
 
 
-def build_packet()
-
-
-hash_seq: list[int], echo_seq: list[float], drift: float
+def build_packet():hash_seq: list[int], echo_seq: list[float], drift: float
 ) -> PhasePacket: """
 """Compute \\u0393, \\u03bc, \\u03b6, \\u0398 from last two ticks."
 

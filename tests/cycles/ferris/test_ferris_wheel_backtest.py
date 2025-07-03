@@ -1,3 +1,17 @@
+from matplotlib import pyplot as plt
+import math
+import numpy as np
+import pandas as pd
+from dataclasses import dataclass, field
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
+import hashlib
+import json
+import logging
+import random
+import sys
+import time
+
 """
 Ferris Wheel RDE Backtesting System
 ===================================
@@ -15,22 +29,9 @@ Features:
 - Performance visualization
 """
 
-import json
-import logging
-import math
-import random
-import time
-from typing import Any, Dict, List, Optional, Tuple
-from dataclasses import dataclass, field
-import hashlib
 
-import numpy as np
-import pandas as pd
-from matplotlib import pyplot as plt
 
 # Adjusting import path for the new location
-import sys
-from pathlib import Path
 
 core_dir = Path(__file__).parent.parent.parent.parent / "core"
 sys.path.insert(0, str(core_dir))
@@ -128,9 +129,7 @@ class FerrisWheelBacktester:
             f"🎯 Ferris Wheel Backtester initialized with ${initial_balance:,.2f}"
         )
 
-    def generate_historical_data(
-        self, days: int = 365, volatility: float = 0.02
-    ) -> List[Tuple[float, float]]:
+    def generate_historical_data():-> List[Tuple[float, float]]:
         """
         Generate realistic historical price data for backtesting.
         """
@@ -155,15 +154,7 @@ class FerrisWheelBacktester:
         )
         return prices
 
-    def execute_trade(
-        self,
-        price: float,
-        strategy: str,
-        probability: float,
-        bit_mode: int,
-        phase: str,
-        entropy: float,
-    ) -> TradeRecord:
+    def execute_trade():-> TradeRecord:
         """
         Execute a trade based on RDE decision.
         """
@@ -215,7 +206,7 @@ class FerrisWheelBacktester:
         self.performance_history.append(self.balance)
         return trade
 
-    def calculate_risk_metrics(self) -> Dict[str, float]:
+    def calculate_risk_metrics():-> Dict[str, float]:
         """Calculate comprehensive risk metrics."""
         if not self.performance_history:
             return {}
@@ -270,7 +261,7 @@ class FerrisWheelBacktester:
             print(f"❌ Cycle hash logic test failed: {e}")
             self.mathematical_checks["cycle_hash_logic"] = False
 
-    def validate_mathematics(self) -> Dict[str, bool]:
+    def validate_mathematics():-> Dict[str, bool]:
         """Validate the core mathematical formulas of the RDE."""
         logger.info("🔬 Validating core mathematics...")
         self.test_cycle_hash_logic()
@@ -296,7 +287,7 @@ class FerrisWheelBacktester:
             self.mathematical_checks["strategy_selection"] = False
         return self.mathematical_checks
 
-    def calculate_live_ready_score(self) -> float:
+    def calculate_live_ready_score():-> float:
         """Calculate a score indicating readiness for live trading."""
         score = 0
         if all(self.mathematical_checks.values()):
@@ -310,7 +301,7 @@ class FerrisWheelBacktester:
             score += 0.2
         return min(1.0, score)
 
-    def run_backtest(self, days: int = 90, volatility: float = 0.02) -> BacktestResult:
+    def run_backtest():-> BacktestResult:
         """Run a full backtest simulation."""
         logger.info(f"🚀 Starting backtest for {days} days...")
         historical_data = self.generate_historical_data(days, volatility)

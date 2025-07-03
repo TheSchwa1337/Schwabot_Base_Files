@@ -1,3 +1,11 @@
+    from advanced_mathematical_core import (
+import numpy as np
+        import traceback
+    from constants import EPSILON_FLOAT64, FERRIS_PRIMARY_CYCLE, KELLY_SAFETY_FACTOR
+    from type_defs import QuantumState, Temperature
+import os
+import sys
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -6,15 +14,11 @@ Test Mathematical State Structures
 Comprehensive test suite for all mathematical state structures in advanced_mathematical_core.py
 """
 
-import numpy as np
-import sys
-import os
 
 # Add the core directory to the path
 sys.path.append(os.path.join(os.path.dirname(__file__), "core"))
 
 try:
-    from advanced_mathematical_core import (
         FerrisWheelState,
         QuantumThermalState,
         VoidWellMetrics,
@@ -31,8 +35,6 @@ try:
         safe_delta_calculation,
         normalized_delta_tanh,
     )
-    from type_defs import QuantumState, Temperature
-    from constants import EPSILON_FLOAT64, FERRIS_PRIMARY_CYCLE, KELLY_SAFETY_FACTOR
 
     print("✅ Successfully imported all mathematical state modules")
 except ImportError as e:
@@ -295,7 +297,6 @@ def main():
 
     except Exception as e:
         print(f"\n❌ Test failed with error: {e}")
-        import traceback
 
         traceback.print_exc()
         return 1
@@ -305,3 +306,4 @@ def main():
 
 if __name__ == "__main__":
     exit(main())
+))

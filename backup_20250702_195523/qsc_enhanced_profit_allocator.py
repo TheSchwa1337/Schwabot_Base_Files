@@ -1,3 +1,13 @@
+import math
+import numpy as np
+from .galileo_tensor_bridge import GalileoTensorBridge
+from .quantum_static_core import QuantumStaticCore, QSCResult, ResonanceLevel
+from dataclasses import dataclass, field
+from decimal import Decimal, getcontext
+from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple
+import time
+
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 
@@ -24,17 +34,8 @@ QSC Enhanced Profit Allocator
 
 This module provides quantum-static-core enhanced profit allocation with
 dynamic risk assessment and Fibonacci-based position sizing.import logging
-import math
-import time
-from dataclasses import dataclass, field
-from decimal import Decimal, getcontext
-from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
 
-import numpy as np
 
-from .galileo_tensor_bridge import GalileoTensorBridge
-from .quantum_static_core import QuantumStaticCore, QSCResult, ResonanceLevel
 
 logger = logging.getLogger(__name__)
 
@@ -88,12 +89,10 @@ class QSCEnhancedProfitAllocator:QSC-Enhanced Profit Cycle Allocator.def __init_
 
         logger.info(🧬💰 QSC-Enhanced Profit Allocator initialized)
 
-    def _default_config(self) -> Dict[str, Any]:Default configuration.return {qsc_validation_enabled: True,tensor_integration_enabled: True,immune_system_active: True,min_resonance_threshold": 0.618,max_entropy_threshold": 0.7,fibonacci_alignment_weight": 0.3,quantum_score_weight": 0.4,emergency_stop_threshold": 0.2,auto_optimization_enabled": True,profit_threshold": 10.0,max_allocation_per_cycle": 0.8,
+    def _default_config():-> Dict[str, Any]:Default configuration.return {qsc_validation_enabled: True,tensor_integration_enabled: True,immune_system_active: True,min_resonance_threshold": 0.618,max_entropy_threshold": 0.7,fibonacci_alignment_weight": 0.3,quantum_score_weight": 0.4,emergency_stop_threshold": 0.2,auto_optimization_enabled": True,profit_threshold": 10.0,max_allocation_per_cycle": 0.8,
         }
 
-    def validate_with_qsc(
-        self, profit_amount: float, market_data: Dict[str, Any]
-    ) -> Tuple[bool, QSCResult]:Validate profit allocation using QSC immune system.# Prepare tick data for QSC
+    def validate_with_qsc():-> Tuple[bool, QSCResult]:Validate profit allocation using QSC immune system.# Prepare tick data for QSC
         tick_data = {prices: market_data.get(price_history, []),volumes: market_data.get(volume_history", []),
         }
 
@@ -121,9 +120,7 @@ class QSCEnhancedProfitAllocator:QSC-Enhanced Profit Cycle Allocator.def __init_
 
         return is_approved, qsc_result
 
-    def calculate_resonance_optimized_allocation(
-        self, profit_amount: float, qsc_result: QSCResult
-    ) -> Dict[str, float]:Calculate allocation amounts optimized for resonance.cycle_config = self.qsc_profit_cycles[qsc_result.recommended_cycle]
+    def calculate_resonance_optimized_allocation():-> Dict[str, float]:Calculate allocation amounts optimized for resonance.cycle_config = self.qsc_profit_cycles[qsc_result.recommended_cycle]
 
         # Base allocation percentage
         base_allocation = cycle_config[max_allocation]
@@ -144,9 +141,7 @@ class QSCEnhancedProfitAllocator:QSC-Enhanced Profit Cycle Allocator.def __init_
 
         return allocation_amounts
 
-    def allocate_profit_with_qsc(
-        self, profit_amount: float, market_data: Dict[str, Any], btc_price: float
-    ) -> QSCProfitCycle:
+    def allocate_profit_with_qsc():-> QSCProfitCycle:
         Allocate profit using QSC validation and optimization.current_time = time.time()
 
         # Generate cycle ID
@@ -231,9 +226,7 @@ class QSCEnhancedProfitAllocator:QSC-Enhanced Profit Cycle Allocator.def __init_
 
         return qsc_cycle
 
-    def _execute_qsc_allocation(
-        self, allocation_type: str, amount: float, qsc_result: QSCResult, tensor_result
-    ) -> Dict[str, Any]:Execute individual QSC-validated allocation.try:
+    def _execute_qsc_allocation():-> Dict[str, Any]:Execute individual QSC-validated allocation.try:
             # Simulate allocation execution
             # In real implementation, this would interface with trading system
 
@@ -257,7 +250,7 @@ class QSCEnhancedProfitAllocator:QSC-Enhanced Profit Cycle Allocator.def __init_
             return {allocation_type: allocation_type,amount: amount,timestamp: time.time(),success": False,error: str(e),
             }
 
-    def engage_fallback_mode(self) -> None:Engage fallback mode when QSC fails to find resonance.logger.warning(🚨 QSC Fallback Mode Engaged)
+    def engage_fallback_mode():-> None:Engage fallback mode when QSC fails to find resonance.logger.warning(🚨 QSC Fallback Mode Engaged)
 
         # Lock timeband
         self.qsc.lock_timeband(duration = 600)  # 10 minutes
@@ -272,7 +265,7 @@ class QSCEnhancedProfitAllocator:QSC-Enhanced Profit Cycle Allocator.def __init_
 
         logger.info(🛡️ Profit allocations reduced to emergency levels)
 
-    def check_orderbook_immune_validation(self, orderbook_data: Dict[str, Any]) -> bool:Validate order book using immune system.imbalance = self.qsc.assess_orderbook_stability(orderbook_data)
+    def check_orderbook_immune_validation():-> bool:Validate order book using immune system.imbalance = self.qsc.assess_orderbook_stability(orderbook_data)
 
         # Immune tolerance level
         tolerance_threshold = 0.15  # 15% imbalance tolerance
@@ -283,7 +276,7 @@ class QSCEnhancedProfitAllocator:QSC-Enhanced Profit Cycle Allocator.def __init_
 
         return True
 
-    def cancel_all_pending_allocations(self) -> None:
+    def cancel_all_pending_allocations():-> None:
         Cancel all pending allocations due to immune response.logger.warning(🛑 Canceling all pending allocations - Immune response active)
 
         if self.current_cycle:
@@ -291,7 +284,7 @@ class QSCEnhancedProfitAllocator:QSC-Enhanced Profit Cycle Allocator.def __init_
             self.current_cycle.diagnostic_data[emergency_stop] = True
             self.current_cycle.end_time = time.time()
 
-    def get_qsc_performance_summary(self) -> Dict[str, Any]:Get QSC performance summary.total_immune_checks = self.immune_approvals + self.immune_blocks
+    def get_qsc_performance_summary():-> Dict[str, Any]:Get QSC performance summary.total_immune_checks = self.immune_approvals + self.immune_blocks
         immune_success_rate = self.immune_approvals / max(total_immune_checks, 1)
 
         return {immune_approvals: self.immune_approvals,
@@ -302,7 +295,7 @@ class QSCEnhancedProfitAllocator:QSC-Enhanced Profit Cycle Allocator.def __init_
             ),
         }
 
-    def optimize_cycles_with_qsc(self) -> None:Optimize profit cycles using QSC learning.if len(self.cycle_history) < 3:
+    def optimize_cycles_with_qsc():-> None:Optimize profit cycles using QSC learning.if len(self.cycle_history) < 3:
             return # Analyze recent cycle performance
         recent_cycles = self.cycle_history[-10:]
 
@@ -331,7 +324,7 @@ class QSCEnhancedProfitAllocator:QSC-Enhanced Profit Cycle Allocator.def __init_
 
         self.resonance_optimizations += 1
 
-    def get_fibonacci_echo_plot_data(self) -> Dict[str, Any]:Get data for Fibonacci echo plot visualization.if not self.cycle_history:
+    def get_fibonacci_echo_plot_data():-> Dict[str, Any]:Get data for Fibonacci echo plot visualization.if not self.cycle_history:
             return {}
 
         recent_cycles = self.cycle_history[-20:]

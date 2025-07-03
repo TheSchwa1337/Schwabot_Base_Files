@@ -1,3 +1,10 @@
+import numpy as np
+from collections import deque
+from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Tuple
+import hashlib
+import time
+
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 
@@ -18,13 +25,7 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
 """
-import hashlib
-import time
-from collections import deque
-from typing import Any, Dict, List, Optional, Tuple, Union
 
-import numpy as np
-from typing import Tuple
 Volume-Weighted Hash Oscillator Module
 --------------------------------------
 Implements a technical indicator that generates an oscillatory signal
@@ -36,13 +37,7 @@ Key functionalities include:
 - Real-time calculation of volume-weighted hashes.
 - Generation of an oscillatory signal from these hashes.
 - Adaptive smoothing and normalization of the oscillator.
-- Integration with trade signal generation.class VolumeWeightedHashOscillator:Calculates a volume-weighted hash oscillator for market analysis.def __init__(
-self,:
-period: int = 14,
-smoothing_period: int = 3,
-hash_strength: int = 16,  # Number of hex characters to use from hash for calculation
-normalize: bool = True,
-oscillator_range: Tuple[float, float] = (0.0, 100.0),
+- Integration with trade signal generation.class VolumeWeightedHashOscillator:Calculates a volume-weighted hash oscillator for market analysis.def __init__():,
 ):
 
 Initializes the VolumeWeightedHashOscillator.
@@ -73,12 +68,12 @@ self.smoothed_oscillator_values: deque[float] = deque(maxlen=smoothing_period)
 self.metrics: Dict[str, Any] = {last_calculation_time: None,total_calculations: 0,avg_calculation_time: 0.0,current_oscillator_value": None,
 }
 
-def _generate_volume_weighted_hash() -> str:Generates a SHA256 hash weighted by volume.# Combine price and volume with a timestamp for uniqueness and
+def _generate_volume_weighted_hash():-> str:Generates a SHA256 hash weighted by volume.# Combine price and volume with a timestamp for uniqueness and
 # sensitivity
 payload = f{price}-{volume}-{time.time()}.encode()
         return hashlib.sha256(payload).hexdigest()
 
-def _hash_to_integer() -> int:
+def _hash_to_integer():-> int:
 Converts a portion of the hash string to an integer.# Use the first `hash_strength` characters for the integer conversion
         if len(hash_string) < self.hash_strength:
             raise ValueError(
@@ -86,7 +81,7 @@ fHash string too short for specified hash_strength({len(hash_string)} < {
                     self.hash_strength}))
         return int(hash_string[: self.hash_strength], 16)
 
-def _normalize_value() -> float:
+def _normalize_value():-> float:
 Normalizes a value to the specified oscillator range.if max_val == min_val:
             return self.oscillator_range[0]  # Avoid division by zero
 
@@ -96,9 +91,7 @@ normalized_0_1 = (value - min_val) / (max_val - min_val)
 self.oscillator_range[1] - self.oscillator_range[0]
 )
 
-def calculate_oscillator(:
-self, current_price: float, current_volume: float
-) -> Optional[float]:
+def calculate_oscillator():-> Optional[float]:
 Calculates the current value of the Volume-Weighted Hash Oscillator.
 
 Args:
@@ -170,9 +163,9 @@ self.metrics[avg_calculation_time] = (self.metrics[avg_calculation_time]* (self.
 
         return final_oscillator_value
 
-def get_metrics(self) -> Dict[str, Any]:Returns the operational metrics of the oscillator.return self.metrics
+def get_metrics():-> Dict[str, Any]:Returns the operational metrics of the oscillator.return self.metrics
 
-def get_current_oscillator_value(self) -> Optional[float]:Returns the most recently calculated oscillator value.return self.metrics[current_oscillator_value]
+def get_current_oscillator_value():-> Optional[float]:Returns the most recently calculated oscillator value.return self.metrics[current_oscillator_value]
 
 def reset():'
 Resets the oscillator's history and metrics.'self.price_history.clear()

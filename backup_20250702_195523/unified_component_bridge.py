@@ -1,3 +1,20 @@
+from dataclasses import dataclass, field
+from pathlib import Path
+from typing import Any, Callable, Dict, List, Optional, Union
+from typing import Callable
+import importlib
+import json
+import logging
+import os
+import re
+import re
+import re
+import subprocess
+import sys
+import threading
+import time
+import yaml
+
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 
@@ -18,26 +35,10 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
 """
-import importlib
-import json
-import logging
-import os
-import subprocess
-import sys
-import threading
-import time
-from dataclasses import dataclass, field
-from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional, Union
 
-import yaml
 
-import re
 
-import re
 
-import re
-from typing import Callable
 
 
 
@@ -161,7 +162,7 @@ for name, info in all_components.items():
 )
 
 # Plugin Management (Settings as Plugins)
-def enable_plugin() -> bool:
+def enable_plugin():-> bool:
         Enable a plugin-like settings configuration.try: full_name = fplugin_{plugin_name}
 if full_name not in self.components:
                 logger.error(fPlugin {plugin_name} not found)
@@ -189,7 +190,7 @@ else:
             logger.error(fFailed to enable plugin {plugin_name}: {e})self.components[full_name].health = errorself.components[full_name].error_message = str(e)
         return False
 
-def disable_plugin() -> bool:Disable a plugin-like settings configuration.try: full_name = fplugin_{plugin_name}
+def disable_plugin():-> bool:Disable a plugin-like settings configuration.try: full_name = fplugin_{plugin_name}
 if full_name in self.components:
                 self.components[full_name].active = False
 self.components[full_name].health =  unknownlogger.info(f🔴 Plugin {plugin_name} disabled)
@@ -245,14 +246,14 @@ execution_time:.2f}s)
             logger.error(fBenchmark {benchmark_name} timed out)return {success: False,error:Benchmark timed out}
         except Exception as e:logger.error(fFailed to run benchmark {benchmark_name}: {e})return {success: False,error: str(e)}
 
-def run_all_benchmarks(self) -> Dict[str, Dict[str, Any]]:"Run all available benchmarks.results = {}
+def run_all_benchmarks():-> Dict[str, Dict[str, Any]]:"Run all available benchmarks.results = {}
 for benchmark_name in self.benchmark_tests.keys():
             results[benchmark_name] = self.run_benchmark(benchmark_name)
 time.sleep(1)  # Brief pause between benchmarks
         return results
 
 # Device Management (Flask/Ngrok as Devices)
-def start_device() -> bool:
+def start_device():-> bool:
         Start a device-like connectivity system.try: full_name = fdevice_{device_name}
 if full_name not in self.components:
                 logger.error(fDevice {device_name} not found)
@@ -274,7 +275,7 @@ else:
             logger.error(fFailed to start device {device_name}: {e})
         return False
 
-def stop_device() -> bool:Stop a device-like connectivity system.try: full_name = fdevice_{device_name}
+def stop_device():-> bool:Stop a device-like connectivity system.try: full_name = fdevice_{device_name}
 if full_name in self.active_processes: process = self.active_processes[full_name]
 process.terminate()
 process.wait(timeout=10)
@@ -289,7 +290,7 @@ self.components[full_name].health = unknownlogger.info(f🔴 Device {device_name
         return False
 
 # Processor Management (BTC Processor, etc.)
-def start_processor() -> bool:
+def start_processor():-> bool:
         Start a processor-like engine system.try: full_name = fprocessor_{processor_name}
 if full_name not in self.components:
                 logger.error(fProcessor {processor_name} not found)
@@ -310,7 +311,7 @@ else:
             logger.error(fFailed to start processor {processor_name}: {e})
         return False
 
-def stop_processor() -> bool:Stop a processor-like engine system.try: full_name = fprocessor_{processor_name}
+def stop_processor():-> bool:Stop a processor-like engine system.try: full_name = fprocessor_{processor_name}
 if full_name in self.active_processes: process = self.active_processes[full_name]
 process.terminate()
 process.wait(timeout=10)
@@ -325,7 +326,7 @@ self.components[full_name].health = unknownlogger.info(f🔴 Processor {processo
         return False
 
 # Manager Systems (Tick/Task Management)
-def start_manager() -> bool:
+def start_manager():-> bool:
         Start a manager-like system (tick/task management).try: full_name = fmanager_{manager_name}
 if full_name not in self.components:
                 logger.error(fManager {manager_name} not found)
@@ -346,7 +347,7 @@ else:
             logger.error(fFailed to start manager {manager_name}: {e})
         return False
 
-def stop_manager() -> bool:Stop a manager-like system.try: full_name = fmanager_{manager_name}
+def stop_manager():-> bool:Stop a manager-like system.try: full_name = fmanager_{manager_name}
 if full_name in self.active_processes: process = self.active_processes[full_name]
 process.terminate()
 process.wait(timeout=10)
@@ -361,7 +362,7 @@ self.components[full_name].health = unknownlogger.info(f🔴 Manager {manager_na
         return False
 
 # Health Monitoring
-def check_component_health() -> str:
+def check_component_health():-> str:
         Check the health of a specific component.if component_name in self.components: component = self.components[component_name]
 
 # Perform health check based on component type
@@ -376,7 +377,7 @@ elif component.type == processor:
 elif component.type == manager:
                 return self._check_manager_health(component)
 else:
-                returnunknownreturnnot_founddef get_system_overview(self) -> Dict[str, Any]:Get comprehensive system overview.overview = {total_components: len(self.components),active_components": sum(1 for c in self.components.values() if c.active),healthy_components": sum(1 for c in self.components.values() if c.health == healthy),components_by_type: {},active_processes: len(self.active_processes),system_health":unknown",
+                returnunknownreturnnot_founddef get_system_overview():-> Dict[str, Any]:Get comprehensive system overview.overview = {total_components: len(self.components),active_components": sum(1 for c in self.components.values() if c.active),healthy_components": sum(1 for c in self.components.values() if c.health == healthy),components_by_type: {},active_processes: len(self.active_processes),system_health":unknown",
 }
 
 # Group by type
@@ -450,36 +451,36 @@ if match:
         return metrics
 
 # Specific component startup methods (placeholders)
-def _start_flask_server() -> bool:
+def _start_flask_server():-> bool:
         Start Flask API server.# Implementation would start actual Flask server
 component.active = True
 component.health =  healthylogger.info(🌐 Flask API server started)
         return True
 
-def _start_ngrok_tunnel() -> bool:Start Ngrok tunnel.# Implementation would start actual Ngrok tunnel
+def _start_ngrok_tunnel():-> bool:Start Ngrok tunnel.# Implementation would start actual Ngrok tunnel
 component.active = True
 component.health =  healthylogger.info(🔗 Ngrok tunnel established)
         return True
 
-def _start_btc_processor() -> bool:Start BTC mining processor.# Implementation would start actual BTC processor
+def _start_btc_processor():-> bool:Start BTC mining processor.# Implementation would start actual BTC processor
 component.active = True
 component.health =  healthylogger.info(⛏️ BTC mining processor started)
         return True
 
-def _start_tick_manager() -> bool:Start tick manager system.# Implementation would start actual tick manager
+def _start_tick_manager():-> bool:Start tick manager system.# Implementation would start actual tick manager
 component.active = True
 component.health =  healthylogger.info(📊 Tick manager started)
         return True
 
 # Health check methods (placeholders)
-def _check_plugin_health() -> str:
-        Check plugin health.returnhealthyif component.active elseunknowndef _check_benchmark_health() -> str:Check benchmark health.return component.health
+def _check_plugin_health():-> str:
+        Check plugin health.returnhealthyif component.active elseunknowndef _check_benchmark_health():-> str:Check benchmark health.return component.health
 
-def _check_device_health() -> str:Check device health.returnhealthyif component.active elseunknowndef _check_processor_health() -> str:Check processor health.returnhealthyif component.active elseunknowndef _check_manager_health() -> str:Check manager health.returnhealthyif component.active elseunknown# Singleton instance for global access
+def _check_device_health():-> str:Check device health.returnhealthyif component.active elseunknowndef _check_processor_health():-> str:Check processor health.returnhealthyif component.active elseunknowndef _check_manager_health():-> str:Check manager health.returnhealthyif component.active elseunknown# Singleton instance for global access
 _bridge_instance = None
 
 
-def get_component_bridge() -> UnifiedComponentBridge:Get the singleton component bridge instance.global _bridge_instance
+def get_component_bridge():-> UnifiedComponentBridge:Get the singleton component bridge instance.global _bridge_instance
 if _bridge_instance is None: _bridge_instance = UnifiedComponentBridge()
         return _bridge_instance
 

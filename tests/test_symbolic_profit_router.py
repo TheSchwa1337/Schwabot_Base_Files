@@ -1,3 +1,12 @@
+from core.profit_routing_engine import (
+from core.symbolic_profit_router import (
+from datetime import datetime
+from unittest.mock import Mock, patch
+import hashlib
+import os
+import sys
+import unittest
+
 # -*- coding: utf-8 -*-
 """
 Test Symbolic Profit Router - Schwabot UROS v1.0
@@ -6,23 +15,15 @@ Test Symbolic Profit Router - Schwabot UROS v1.0
 Comprehensive tests for the symbolic profit router and 2-bit mapping system."""
 """
 
-import unittest
-import hashlib
-from datetime import datetime
-from unittest.mock import Mock, patch
 
-import sys
-import os
 
 # Add the core directory to the path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
-from core.symbolic_profit_router import (
     SymbolicProfitRouter, ProfitTier, ProfitVaultAction, 
     ProfitTrigger, TriggerType, BitPhase, route_profit_phase,
     hash_to_strategy, fold_hash_to_2bit
 )
-from core.profit_routing_engine import (
     ProfitRoutingEngine, RoutingDecision, ProfitRoutingConfig,
     route_profit, activate_profit_vault
 )

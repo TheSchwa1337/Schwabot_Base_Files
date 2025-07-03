@@ -1,7 +1,8 @@
+from core.unified_math_system import (
+
 #!/usr/bin/env python3
 """Guard tests for unified math backfill functions."""
 
-from core.unified_math_system import (
     compute_unified_entropy,
     compute_unified_drift_field,
     generate_unified_hash,

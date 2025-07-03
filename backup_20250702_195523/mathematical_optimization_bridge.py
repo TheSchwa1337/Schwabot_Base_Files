@@ -1,3 +1,17 @@
+from core.mathlib_v4 import MathLibV4
+from core.unified_math_system import unified_math
+import numpy as np
+import numpy.typing as npt
+from __future__ import annotations
+from collections import deque
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple
+from typing import Tuple
+import logging
+import random
+import time
+
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 
@@ -18,20 +32,7 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
 """
-from __future__ import annotations
-from collections import deque
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
-import logging
-import numpy as np
-import numpy.typing as npt
-import time
 
-from core.unified_math_system import unified_math
-from core.mathlib_v4 import MathLibV4
-from typing import Tuple
-import random
 
 
 # !/usr/bin/env python3
@@ -44,9 +45,9 @@ with GEMM acceleration, multi-vector operations, and performance optimization.tr
         except ImportError:
     # Fallback implementations
 class unified_math:Fallback unif ied math implementation.@staticmethod
-def abs() -> float:Return absolute value.return abs(x)
+def abs():-> float:Return absolute value.return abs(x)
 
-class MathLibV4:Fallback MathLibV4 implementation.def __init__(self) -> None:Initialize fallback MathLibV4."self.version = 4.0.0
+class MathLibV4:Fallback MathLibV4 implementation.def __init__():-> None:Initialize fallback MathLibV4."self.version = 4.0.0
 
 logger = logging.getLogger(__name__)
 
@@ -76,7 +77,7 @@ convergence_history: List[float]
 timestamp: float
 
 
-class MathematicalOptimizationBridge:Mathematical optimization bridge that enhances existing components.def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:Initialize mathematical optimization bridge."self.version = 1.0.0
+class MathematicalOptimizationBridge:Mathematical optimization bridge that enhances existing components.def __init__():-> None:Initialize mathematical optimization bridge."self.version = 1.0.0
 self.config = config or self._default_config()
 
 # Initialize existing mathematical components
@@ -102,15 +103,10 @@ self.optimization_thread_pool = self.config.get(thread_pool_size, 4)
 self.parallel_enabled = self.config.get(enable_parallel, True)
             logger.info(fMathematical Optimization Bridge v{self.version} initialized)
 
-def _default_config(self) -> Dict[str, Any]:Default configuration for optimization bridge.return {max_history_size: 1000,thread_pool_size": 4,enable_parallel": True,optimization_tolerance": 1e-6,max_iterations": 1000,gemm_acceleration": True
+def _default_config():-> Dict[str, Any]:Default configuration for optimization bridge.return {max_history_size: 1000,thread_pool_size": 4,enable_parallel": True,optimization_tolerance": 1e-6,max_iterations": 1000,gemm_acceleration": True
 }
 
-def optimize_multi_vector_operation(
-self,:
-primary_vector: Vector,
-        operation_matrix: Matrix,
-optimization_mode: OptimizationMode = OptimizationMode.GEMM_ACCELERATED
-) -> Dict[str, Any]:Optimize multi-vector mathematical operation.start_time = time.time()
+def optimize_multi_vector_operation():-> Dict[str, Any]:Optimize multi-vector mathematical operation.start_time = time.time()
 
 try:
             # Validate inputs
@@ -141,10 +137,10 @@ self.operation_history.append({operation_type: multi_vector_optimization,executi
         return {success: False,error: str(e),execution_time": time.time() - start_time
 }
 
-def _gemm_accelerated_operation() -> Vector:GEMM-accelerated matrix-vector operation.# Use optimized BLAS operations
+def _gemm_accelerated_operation():-> Vector:GEMM-accelerated matrix-vector operation.# Use optimized BLAS operations
         return np.dot(matrix, vector)
 
-def _hybrid_optimization() -> Vector:
+def _hybrid_optimization():-> Vector:
         Hybrid optimization combining multiple techniques.# Combine GEMM with statistical optimization
 base_result = np.dot(matrix, vector)
 
@@ -153,7 +149,7 @@ enhanced_result = base_result * (1 + 0.1 * np.random.normal(0, 0.01, base_result
 
         return enhanced_result
 
-def get_optimization_statistics(self) -> Dict[str, Any]:Get comprehensive optimization statistics.avg_execution_time = (
+def get_optimization_statistics():-> Dict[str, Any]:Get comprehensive optimization statistics.avg_execution_time = (
 self.total_optimization_time / max(1, self.total_operations)
 )
 
@@ -163,5 +159,5 @@ self.total_optimization_time),cache_sizes": {matrix_cache: len(self.matrix_cache
 }
 
 
-def create_mathematical_optimization_bridge() -> MathematicalOptimizationBridge:"Factory function to create mathematical optimization bridge.return MathematicalOptimizationBridge()"
+def create_mathematical_optimization_bridge():-> MathematicalOptimizationBridge:"Factory function to create mathematical optimization bridge.return MathematicalOptimizationBridge()"
 """

@@ -1,3 +1,9 @@
+import numpy as np
+        import traceback
+from core.advanced_tensor_algebra import UnifiedTensorAlgebra
+from datetime import datetime
+import logging
+
 #!/usr/bin/env python3
 """
 Simple Dualistic Profit Vectorization Demo
@@ -6,12 +12,8 @@ Simple Dualistic Profit Vectorization Demo
 A focused demonstration of Schwabot's bit-form tensor flip matrices.
 """
 
-import numpy as np
-import logging
-from datetime import datetime
 
 # Simple direct import
-from core.advanced_tensor_algebra import UnifiedTensorAlgebra
 
 
 def main():
@@ -138,6 +140,5 @@ if __name__ == "__main__":
         print("\n\n⚠️  Demo interrupted by user")
     except Exception as e:
         print(f"\n\n❌ Error during demonstration: {e}")
-        import traceback
 
         traceback.print_exc()

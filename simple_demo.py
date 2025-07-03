@@ -1,3 +1,7 @@
+import numpy as np
+from core import (
+import time
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -5,11 +9,8 @@ Simple demonstration of the Clean Schwabot Trading System.
 
 This script shows the fully functional, clean implementation working correctly.
 """
-import time
-import numpy as np
 
 # Import our clean implementations
-from core import (
     create_clean_trading_system, get_system_status,
     MathOperation, VectorizationMode, StrategyBranch, MarketData
 )

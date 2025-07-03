@@ -1,3 +1,15 @@
+        from core.mathlib_v4 import MathLibV4
+        from core.ccxt_integration import CCXTIntegration, OrderBookSnapshot
+        from core.ghost_core import GhostCore
+        from core.schwabot_unified_pipeline import SchwabotUnifiedPipeline
+        from core.schwabot_unified_pipeline import SchwabotUnifiedPipeline
+        from core.schwabot_unified_pipeline import SchwabotUnifiedPipeline
+        from core.vecu_core import VECUCore
+        from core.zpe_core import ZPECore
+import asyncio
+import logging
+import time
+
 #!/usr/bin/env python3
 """
 Complete Schwabot Integration Demo
@@ -18,9 +30,6 @@ The demo demonstrates:
 5. API connectivity simulation
 """
 
-import asyncio
-import logging
-import time
 
 # Configure logging
 logging.basicConfig(
@@ -37,7 +46,6 @@ def test_individual_components():
     # Test MathLibV4
     print("\n[1] Testing MathLibV4...")
     try:
-        from core.mathlib_v4 import MathLibV4
 
         ml4 = MathLibV4(precision=64)
 
@@ -60,7 +68,6 @@ def test_individual_components():
     # Test VECU Core
     print("\n[2] Testing VECU Core...")
     try:
-        from core.vecu_core import VECUCore
 
         vecu = VECUCore(precision=64)
 
@@ -77,7 +84,6 @@ def test_individual_components():
     # Test ZPE Core
     print("\n[3] Testing ZPE Core...")
     try:
-        from core.zpe_core import ZPECore
 
         zpe = ZPECore(precision=64)
 
@@ -97,7 +103,6 @@ def test_individual_components():
     # Test Ghost Core
     print("\n[4] Testing Ghost Core...")
     try:
-        from core.ghost_core import GhostCore
 
         ghost = GhostCore(memory_depth=100)
 
@@ -132,7 +137,6 @@ def test_unified_pipeline():
     print("=" * 50)
 
     try:
-        from core.schwabot_unified_pipeline import SchwabotUnifiedPipeline
 
         # Initialize pipeline
         pipeline = SchwabotUnifiedPipeline()
@@ -196,7 +200,6 @@ def test_profit_injection_and_compression():
     print("=" * 50)
 
     try:
-        from core.schwabot_unified_pipeline import SchwabotUnifiedPipeline
 
         pipeline = SchwabotUnifiedPipeline()
 
@@ -254,7 +257,6 @@ def test_feedback_loops():
     print("=" * 50)
 
     try:
-        from core.schwabot_unified_pipeline import SchwabotUnifiedPipeline
 
         pipeline = SchwabotUnifiedPipeline()
 
@@ -309,7 +311,6 @@ def test_api_connectivity_simulation():
     print("=" * 50)
 
     try:
-        from core.ccxt_integration import CCXTIntegration, OrderBookSnapshot
 
         ccxt = CCXTIntegration()
 

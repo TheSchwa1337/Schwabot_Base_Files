@@ -1,3 +1,7 @@
+from typing import Any, Dict
+import os
+import platform
+
 # -*- coding: utf-8 -*-
 """
 Harmony Memory Module for NCCO_CORE
@@ -10,9 +14,6 @@ Purpose: Maintain a memory bank of successful trading patterns to guide
 future strategy collapse decisions.
 """
 
-from typing import Any, Dict
-import os
-import platform
 
 
 # =====================================
@@ -23,7 +24,7 @@ class WindowsCliCompatibilityHandler:
     """Windows CLI compatibility for emoji and Unicode handling."""
 
     @staticmethod
-    def is_windows_cli() -> bool:
+    def is_windows_cli():-> bool:
         """Detect if running in Windows CLI environment."""
         return platform.system() == "Windows" and (
             "cmd" in os.environ.get("COMSPEC", "").lower()
@@ -31,7 +32,7 @@ class WindowsCliCompatibilityHandler:
         )
 
     @staticmethod
-    def safe_print(message: str, use_emoji: bool = True) -> str:
+    def safe_print():-> str:
         """Print message safely with Windows CLI compatibility."""
         if WindowsCliCompatibilityHandler.is_windows_cli() and use_emoji:
             emoji_mapping = {
@@ -47,7 +48,7 @@ class WindowsCliCompatibilityHandler:
         return message
 
     @staticmethod
-    def log_safe(logger: Any, level: str, message: str) -> None:
+    def log_safe():-> None:
         """Log message safely with Windows CLI compatibility."""
         safe_message = WindowsCliCompatibilityHandler.safe_print(message)
         try:
@@ -71,13 +72,13 @@ class HarmonyMemory:
     future strategy collapse decisions through memory echo feedback.
     """
 
-    def __init__(self) -> None:
+    def __init__():-> None:
         """Initialize Harmony Memory with empty pattern storage."""
         self.patterns = {}
         self.profit_history = {}
         self.hash_signatures = {}
 
-    def add_pattern(self, pattern_id: str, pattern_data: Dict[str, Any]) -> None:
+    def add_pattern():-> None:
         """
         Add a trading pattern to memory.
         
@@ -95,7 +96,7 @@ class HarmonyMemory:
         if 'profit' in pattern_data:
             self.profit_history[pattern_id] = pattern_data['profit']
 
-    def get_pattern(self, pattern_id: str) -> Dict[str, Any]:
+    def get_pattern():-> Dict[str, Any]:
         """
         Retrieve a pattern from memory.
         
@@ -107,7 +108,7 @@ class HarmonyMemory:
         """
         return self.patterns.get(pattern_id)
 
-    def get_pattern_by_hash(self, hash_value: str) -> Dict[str, Any]:
+    def get_pattern_by_hash():-> Dict[str, Any]:
         """
         Retrieve a pattern by its hash signature.
         
@@ -122,7 +123,7 @@ class HarmonyMemory:
             return self.patterns.get(pattern_id)
         return None
 
-    def get_best_patterns(self, limit: int = 10) -> list:
+    def get_best_patterns():-> list:
         """
         Get the most profitable patterns from memory.
         
@@ -143,7 +144,7 @@ class HarmonyMemory:
             for pattern_id, _ in sorted_patterns[:limit]
         ]
 
-    def clear_old_patterns(self, max_age_days: int = 30) -> None:
+    def clear_old_patterns():-> None:
         """
         Remove old patterns from memory to prevent bloat.
         

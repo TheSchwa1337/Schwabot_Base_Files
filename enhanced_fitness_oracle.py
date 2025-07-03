@@ -1,20 +1,23 @@
-# -*- coding: utf - 8 -*-
-# -*- coding: utf - 8 -*-
+from core.unified_math_system import unified_math
+                    import yaml  # Lazy import to avoid hard dep
 from __future__ import annotations
-
-# -*- coding: utf - 8 -*-
-# -*- coding: utf - 8 -*-
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from dual_unicore_handler import DualUnicoreHandler
 from pathlib import Path
 from typing import Any, Dict, List, Optional
+from utils.safe_print import safe_print, info, warn, error, success, debug
 import asyncio
 import json
 import logging
+import random
 
-from core.unified_math_system import unified_math
-from utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+
 
 
 # Initialize Unicode handler
@@ -108,7 +111,7 @@ The goal is *dependency satisfaction*, not production trading accuracy."""
 """"""
 """
 
-def __init__(self, config_path: str | Path | None = None) -> None:  # noqa: D401"""
+def __init__():-> None:  # noqa: D401"""
         """Load configuration (JSON or YAML) and warm - up state.""""""
 """"""
 """"""
@@ -119,7 +122,6 @@ self.config_path = Path(config_path) if config_path else None
         if self.config_path and self.config_path.exists():
             try: """
 if self.config_path.suffix.lower() in {".yml", ".yaml"}:
-                    import yaml  # Lazy import to avoid hard dep
 
 with self.config_path.open("r", encoding="utf - 8") as fh:
                         self.config = yaml.safe_load(fh) or {}
@@ -142,7 +144,7 @@ logger.info(
 # Public async helpers expected by the scheduler
 # ------------------------------------------------------------------
 
-async def capture_market_snapshot(self, market_data: Dict[str, Any]) -> Dict[str, Any]:
+async def capture_market_snapshot():-> Dict[str, Any]:
         """Pretend to analyse `market_data` and return an enriched snapshot."
 
 The *real* implementation would run FFTs, GAN filters, etc.  Here we just
@@ -179,7 +181,7 @@ return snapshot
 
 # ------------------------------------------------------------------
 
-def calculate_unified_fitness(self, snapshot: Dict[str, Any]) -> UnifiedFitnessScore:  # noqa: D401
+def calculate_unified_fitness():-> UnifiedFitnessScore:  # noqa: D401
 
 """Return a toy *fitness* score based on snapshot stats."
 
@@ -244,9 +246,8 @@ return fitness
 # ---------------------------------------------------------------------------
 
 
-def _demo() -> None:  # pragma: no cover \\u2013 manual smoke - test
+def _demo():-> None:  # pragma: no cover \\u2013 manual smoke - test
 
-import random
 
 oracle = EnhancedFitnessOracle()
     dummy_market = {

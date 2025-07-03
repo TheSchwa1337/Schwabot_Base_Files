@@ -1,3 +1,12 @@
+import numpy as np
+        import traceback
+from core.dualistic_thought_engines import DualisticThoughtEngines, DualisticState
+from typing import Dict, Any
+import os
+import random
+import sys
+import time
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -17,28 +26,13 @@ Features tested:
 - Performance metrics and statistics
 """
 
-import sys
-import os
-import time
-import random
-import numpy as np
-from typing import Dict, Any
 
 # Add the core directory to the path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "core"))
 
-from core.dualistic_thought_engines import DualisticThoughtEngines, DualisticState
 
 
-def create_market_data(
-    price: float = 50000.0,
-    volume: float = 1000000.0,
-    rsi: float = 50.0,
-    volatility: float = 0.5,
-    momentum: float = 0.0,
-    include_ai_feedback: bool = True,
-    include_errors: bool = False,
-) -> Dict[str, Any]:
+def create_market_data():-> Dict[str, Any]:
     """Create realistic market data for testing."""
 
     market_data = {
@@ -381,7 +375,6 @@ def main():
 
     except Exception as e:
         print(f"❌ Test failed with error: {e}")
-        import traceback
 
         traceback.print_exc()
         return 1

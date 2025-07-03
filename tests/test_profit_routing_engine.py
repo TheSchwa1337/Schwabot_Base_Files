@@ -1,4 +1,11 @@
+from core.utils.math_utils import (
+import numpy as np
 from core.profit_routing_engine import ()
+from decimal import Decimal
+from dual_unicore_handler import DualUnicoreHandler
+from typing import List, Tuple
+import unittest
+
 
 ProfitRoutingEngine,
     ProfitAllocationStrategy,
@@ -8,7 +15,6 @@ ProfitRoutingEngine,
     create_profit_routing_system,
     simulate_profit_allocation,
 )
-from core.utils.math_utils import (
     calculate_entropy,
     calculate_correlation,
     moving_average,
@@ -29,11 +35,6 @@ from core.utils.math_utils import (
     validate_spatial_dimensions,
     create_spatial_grid,
 )
-from typing import List, Tuple
-from decimal import Decimal
-import numpy as np
-import unittest
-from dual_unicore_handler import DualUnicoreHandler
 
 
 # Initialize Unicode handler

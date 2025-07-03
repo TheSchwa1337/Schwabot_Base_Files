@@ -1,3 +1,10 @@
+    import sys
+from core.ferris_rde_daemon import FerrisRDEDaemon, DaemonConfig, get_daemon_instance
+from utils.safe_print import success, error, safe_print
+import asyncio
+import logging
+import time
+
 #!/usr/bin/env python3
 """
 Test Script for Ferris RDE Daemon
@@ -10,12 +17,7 @@ This script demonstrates the Ferris RDE daemon functionality with:
 - Mathematical state integration testing
 """
 
-import asyncio
-import logging
-import time
 
-from core.ferris_rde_daemon import FerrisRDEDaemon, DaemonConfig, get_daemon_instance
-from utils.safe_print import success, error, safe_print
 
 
 async def test_daemon_initialization():
@@ -455,7 +457,6 @@ async def quick_demo():
 
 def main():
     """Main function."""
-    import sys
 
     if len(sys.argv) > 1 and sys.argv[1] == "demo":
         # Quick demo mode

@@ -1,3 +1,9 @@
+import numpy as np
+from enum import Enum  # Added missing import for Enum
+from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Tuple
+import time
+
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 
@@ -18,12 +24,7 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
 """
-import time
-from enum import Enum  # Added missing import for Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
 
-import numpy as np
-from typing import Tuple
 
 
 
@@ -143,7 +144,7 @@ self.weight_tensor = np.maximum(self.weight_tensor, 0.0)
 # Re-normalize weights for the current phase column
 self._normalize_weights()
 
-def get_current_state(self) -> Dict[str, Any]:
+def get_current_state():-> Dict[str, Any]:
 Returns the current state of the tensor and related metrics.return {# Convert numpy array to list for readability
 current_weight_tensor: self.weight_tensor.tolist(),strategy_ids: self.strategy_ids,phases: self.phases,current_phase": self.current_phase.value,metrics": self.metrics,
 }
@@ -160,7 +161,7 @@ self.current_phase = MarketPhase.UNKNOWN
 self.metrics = {last_update_time: None,total_updates: 0,phase_transitions": 0,active_phase": self.current_phase.value,
 }
 
-def get_active_phase(self) -> MarketPhase:Returns the currently active market phase.return self.current_phase
+def get_active_phase():-> MarketPhase:Returns the currently active market phase.return self.current_phase
 
 
 if __name__ == __main__:

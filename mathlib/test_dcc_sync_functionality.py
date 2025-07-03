@@ -1,5 +1,6 @@
-# Import core mathematical modules
 from dual_unicore_handler import DualUnicoreHandler
+
+# Import core mathematical modules
 
 # from core.bit_phase_sequencer import BitPhase, BitSequence  # FIXME: Unused import
 # from core.dual_error_handler import PhaseState, SickType, SickState  # FIXME: Unused import
@@ -16,7 +17,7 @@ unicore = DualUnicoreHandler()
 """
 
 
-def main() -> None:"""
+def main():-> None:"""
     """Stub main function.""""""
 """[BRAIN] Placeholder function - SHA - 256 ID = [autogen]"""
 

@@ -1,8 +1,20 @@
+        from schwabot.alpha_encryption import get_alpha_encryption, alpha_encrypt_data, analyze_alpha_security
+        from schwabot.cli import main
+        from schwabot.cli import main
+        from schwabot.lantern_core import get_lantern_eye, LanternMainLoop
+        from schwabot.session_context import create_trading_session, log_trading_activity
+        from schwabot.update import do_update
+        from schwabot.vortex_security import get_vortex_security
+        import argparse
+        import schwabot_immune_cli
+        import schwabot_qsc_cli
+        import schwabot_tensor_cli
+import os
+import sys
+
 #!/usr/bin/env python3
 """Simple CLI test script."""
 
-import sys
-import os
 
 # Add the project root to sys.path
 sys.path.append(os.path.abspath(os.path.dirname(__file__)))
@@ -14,35 +26,26 @@ def test_cli_imports():
     
     try:
         # Test basic CLI import
-        from schwabot.cli import main
         print("✅ Successfully imported CLI main function")
         
         # Test required module imports
-        from schwabot.vortex_security import get_vortex_security
         print("✅ Successfully imported vortex_security")
         
-        from schwabot.session_context import create_trading_session, log_trading_activity
         print("✅ Successfully imported session_context")
         
-        from schwabot.alpha_encryption import get_alpha_encryption, alpha_encrypt_data, analyze_alpha_security
         print("✅ Successfully imported alpha_encryption")
         
-        from schwabot.lantern_core import get_lantern_eye, LanternMainLoop
         print("✅ Successfully imported lantern_core")
         
-        from schwabot.update import do_update
         print("✅ Successfully imported update module")
         
         # Test specialized CLI modules
         print("\nTesting specialized CLI modules...")
         
-        import schwabot_qsc_cli
         print("✅ QSC CLI module imported")
         
-        import schwabot_immune_cli
         print("✅ Immune CLI module imported")
         
-        import schwabot_tensor_cli
         print("✅ Tensor CLI module imported")
         
         print("\n🎉 All CLI imports successful!")
@@ -61,8 +64,6 @@ def test_cli_structure():
     print("=" * 40)
     
     try:
-        from schwabot.cli import main
-        import argparse
         
         # Test that main function exists and is callable
         if callable(main):

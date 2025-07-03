@@ -1,3 +1,11 @@
+import matplotlib.pyplot as plt
+import numpy as np
+        import traceback
+from core.advanced_drift_shell_integration import (
+from utils.safe_print import safe_print, info, error, success
+import os
+import sys
+
 #!/usr/bin/env python3
 """
 Shift Pattern Engine Demo - Comprehensive Differential States Implementation
@@ -6,18 +14,12 @@ This demo showcases all six differential states and their practical application
 in trading dynamics analysis.
 """
 
-import numpy as np
-import matplotlib.pyplot as plt
-import sys
-import os
 
 # Add parent directory to path for imports
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from core.advanced_drift_shell_integration import (
     ShiftPatternEngine,
 )
-from utils.safe_print import safe_print, info, error, success
 
 
 class ShiftPatternDemo:
@@ -581,7 +583,6 @@ def main():
         demo.run_comprehensive_demo()
     except Exception as e:
         error(f"Demo failed: {e}")
-        import traceback
 
         traceback.print_exc()
 

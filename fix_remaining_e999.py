@@ -1,14 +1,15 @@
+from pathlib import Path
+from typing import List
+import re
+
 #!/usr/bin/env python3
 """
 Comprehensive script to fix remaining E999 errors in mathematical and core files.
 """
 
-import re
-from pathlib import Path
-from typing import List
 
 
-def fix_complex_syntax_errors(file_path: Path) -> bool:
+def fix_complex_syntax_errors():-> bool:
     """Fix complex E999 syntax errors in a file.
 
     Args:
@@ -126,7 +127,7 @@ def fix_complex_syntax_errors(file_path: Path) -> bool:
         return False
 
 
-def get_remaining_problematic_files() -> List[Path]:
+def get_remaining_problematic_files():-> List[Path]:
     """Get list of files that still have E999 errors.
 
     Returns:

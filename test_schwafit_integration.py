@@ -1,3 +1,12 @@
+        from core import (
+        from core.schwafit_core import SchwafitCore
+        from core.schwafit_trading_integration import SchwafitTradingIntegration
+        from core.schwafit_trading_integration import SchwafitTradingIntegration
+from datetime import datetime
+import asyncio
+import logging
+import sys
+
 #!/usr/bin/env python3
 """
 Test Schwafit Integration - Comprehensive Testing Suite
@@ -14,10 +23,6 @@ This script verifies:
 - Performance tracking
 """
 
-import asyncio
-import logging
-import sys
-from datetime import datetime
 
 # Add the current directory to the path for imports
 sys.path.insert(0, ".")
@@ -40,7 +45,6 @@ def test_schwafit_core():
     print_banner("TESTING SCHWAFIT CORE - Mathematical Frameworks", "🧮")
 
     try:
-        from core.schwafit_core import SchwafitCore
 
         # Initialize Schwafit core
         schwafit_core = SchwafitCore()
@@ -101,7 +105,6 @@ def test_schwafit_trading_integration():
     print_banner("TESTING SCHWAFIT TRADING INTEGRATION - Complete System", "⚡")
 
     try:
-        from core.schwafit_trading_integration import SchwafitTradingIntegration
 
         # Initialize trading integration
         schwafit_integration = SchwafitTradingIntegration(
@@ -171,7 +174,6 @@ async def test_multiple_trading_cycles():
     print_banner("TESTING MULTIPLE TRADING CYCLES - Market Simulation", "📊")
 
     try:
-        from core.schwafit_trading_integration import SchwafitTradingIntegration
 
         # Initialize trading integration
         schwafit_integration = SchwafitTradingIntegration(
@@ -262,7 +264,6 @@ def test_core_system_integration():
     print_banner("TESTING CORE SYSTEM INTEGRATION - Component Management", "🔧")
 
     try:
-        from core import (
             initialize_core_system,
             get_schwafit_trading_integration,
             shutdown_core_system,

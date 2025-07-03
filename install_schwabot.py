@@ -1,14 +1,24 @@
-#!/usr/bin/env python3
-""""""
-import yaml
-import json
-from typing import List, Dict, Any, Optional
+                from core.gpu_cpu_calculation_bridge import get_gpu_cpu_bridge
+                from core.settings_manager import get_settings_manager
+            from win32com.client import Dispatch
+            import pip
+            import shutil
+            import tkinter
+            import traceback
+            import urllib.request
+            import winshell
 from pathlib import Path
+from typing import List, Dict, Any, Optional
+import json
 import logging
+import os
 import platform
 import subprocess
 import sys
-import os
+import yaml
+
+#!/usr/bin/env python3
+""""""
 Schwabot Complete System Installer
 == == == == == == == == == == == == == == == == ==
 
@@ -58,7 +68,7 @@ class SchwabotInstaller:
         print(f"Installation Directory: {self.install_dir}")
         print()
 
-    def check_system_requirements(self) -> bool:
+    def check_system_requirements():-> bool:
         """Check if system meets minimum requirements."""
         print("🔍 Checking System Requirements")
         print("-" * 40)
@@ -89,7 +99,6 @@ class SchwabotInstaller:
 
         # Check pip
         try:
-            import pip
             print("✅ pip is available")
         except ImportError:
             print("❌ pip is required but not available")
@@ -97,7 +106,6 @@ class SchwabotInstaller:
 
         # Check disk space (minimum 1GB)
         try:
-            import shutil
             free_space = shutil.disk_usage(self.install_dir).free / (1024**3)
             if free_space < 1.0:
                 print(
@@ -110,7 +118,6 @@ class SchwabotInstaller:
 
         # Check internet connection
         try:
-            import urllib.request
             urllib.request.urlopen('https://pypi.org', timeout=10)
             print("✅ Internet connection available")
         except Exception:
@@ -119,7 +126,7 @@ class SchwabotInstaller:
         print()
         return True
 
-    def install_core_dependencies(self) -> bool:
+    def install_core_dependencies():-> bool:
         """Install core Python dependencies."""
         print("📦 Installing Core Dependencies")
         print("-" * 40)
@@ -136,7 +143,7 @@ class SchwabotInstaller:
 ]
         return self._install_packages(core_packages, "Core")
 
-    def install_gui_dependencies(self) -> bool:
+    def install_gui_dependencies():-> bool:
         """Install GUI and visualization dependencies."""
         print("🖼️ Installing GUI Dependencies")
         print("-" * 40)
@@ -148,14 +155,13 @@ class SchwabotInstaller:
 ]
         # tkinter is usually included with Python, but check anyway
         try:
-            import tkinter
             print("✅ tkinter (GUI toolkit) is available")
         except ImportError:
             print("⚠️ tkinter not available - GUI features will be limited")
 
         return self._install_packages(gui_packages, "GUI")
 
-    def install_trading_dependencies(self) -> bool:
+    def install_trading_dependencies():-> bool:
         """Install trading and API dependencies."""
         print("📈 Installing Trading Dependencies")
         print("-" * 40)
@@ -168,7 +174,7 @@ class SchwabotInstaller:
 ]
         return self._install_packages(trading_packages, "Trading")
 
-    def install_performance_dependencies(self) -> bool:
+    def install_performance_dependencies():-> bool:
         """Install performance optimization dependencies."""
         print("⚡ Installing Performance Dependencies")
         print("-" * 40)
@@ -200,7 +206,7 @@ class SchwabotInstaller:
 
         return success
 
-    def install_optional_dependencies(self) -> bool:
+    def install_optional_dependencies():-> bool:
         """Install optional dependencies for enhanced features."""
         print("🔧 Installing Optional Dependencies")
         print("-" * 40)
@@ -213,7 +219,7 @@ class SchwabotInstaller:
 ]
         return self._install_packages(optional_packages, "Optional", continue_on_error=True)
 
-    def install_development_dependencies(self) -> bool:
+    def install_development_dependencies():-> bool:
         """Install development and testing dependencies."""
         print("🧪 Installing Development Dependencies")
         print("-" * 40)
@@ -227,8 +233,7 @@ class SchwabotInstaller:
 ]
         return self._install_packages(dev_packages, "Development", continue_on_error=True)
 
-    def _install_packages(self, packages: List[str], category: str, )
-                         continue_on_error: bool = False) -> bool:
+    def _install_packages():continue_on_error: bool = False) -> bool:
         """Install a list of packages."""
         success = True
 
@@ -282,7 +287,7 @@ class SchwabotInstaller:
 
         return success
 
-    def _check_cuda_availability(self) -> bool:
+    def _check_cuda_availability():-> bool:
         """Check if CUDA is available on the system."""
         try:
             # Check for nvidia-smi
@@ -296,7 +301,7 @@ class SchwabotInstaller:
         except (subprocess.TimeoutExpired, FileNotFoundError):
             return False
 
-    def setup_directory_structure(self) -> bool:
+    def setup_directory_structure():-> bool:
         """Create necessary directory structure."""
         print("📁 Setting Up Directory Structure")
         print("-" * 40)
@@ -326,7 +331,7 @@ class SchwabotInstaller:
             print(f"❌ Failed to create directory structure: {e}")
             return False
 
-    def create_configuration_files(self) -> bool:
+    def create_configuration_files():-> bool:
         """Create initial configuration files."""
         print("⚙️ Creating Configuration Files")
         print("-" * 40)
@@ -390,7 +395,7 @@ MIN_TRADE_AMOUNT=10.0
             print(f"❌ Failed to create configuration files: {e}")
             return False
 
-    def verify_installation(self) -> bool:
+    def verify_installation():-> bool:
         """Verify that the installation was successful."""
         print("🔍 Verifying Installation")
         print("-" * 40)
@@ -414,14 +419,12 @@ MIN_TRADE_AMOUNT=10.0
 
             # Test Schwabot components
             try:
-                from core.settings_manager import get_settings_manager
                 settings = get_settings_manager()
                 print("✅ Settings Manager working")
             except Exception as e:
                 print(f"⚠️ Settings Manager test failed: {e}")
 
             try:
-                from core.gpu_cpu_calculation_bridge import get_gpu_cpu_bridge
                 bridge = get_gpu_cpu_bridge()
                 print(f"✅ GPU/CPU Bridge working (GPU: {bridge.gpu_available})")
             except Exception as e:
@@ -434,7 +437,7 @@ MIN_TRADE_AMOUNT=10.0
             print(f"❌ Installation verification failed: {e}")
             return False
 
-    def create_shortcuts(self) -> bool:
+    def create_shortcuts():-> bool:
         """Create desktop shortcuts and start menu entries."""
         print("🔗 Creating Shortcuts")
         print("-" * 40)
@@ -454,11 +457,9 @@ MIN_TRADE_AMOUNT=10.0
             print(f"⚠️ Failed to create shortcuts: {e}")
             return True  # Non-critical failure
 
-    def _create_windows_shortcuts(self) -> bool:
+    def _create_windows_shortcuts():-> bool:
         """Create Windows shortcuts."""
         try:
-            import winshell
-            from win32com.client import Dispatch
 
             desktop = winshell.desktop()
             shell = Dispatch('WScript.Shell')
@@ -482,13 +483,13 @@ MIN_TRADE_AMOUNT=10.0
             print(f"⚠️ Windows shortcut creation failed: {e}")
             return True
 
-    def _create_macos_shortcuts(self) -> bool:
+    def _create_macos_shortcuts():-> bool:
         """Create macOS shortcuts."""
         # macOS shortcut creation would go here
         print("ℹ️ macOS shortcuts not yet implemented")
         return True
 
-    def _create_linux_shortcuts(self) -> bool:
+    def _create_linux_shortcuts():-> bool:
         """Create Linux shortcuts."""
         try:
             desktop_dir = Path.home() / "Desktop"
@@ -520,7 +521,7 @@ Categories=Office;Finance;
             print(f"⚠️ Linux shortcut creation failed: {e}")
             return True
 
-    def generate_installation_report(self) -> str:
+    def generate_installation_report():-> str:
         """Generate a comprehensive installation report."""
         report = f""""""
 Schwabot Installation Report
@@ -557,7 +558,7 @@ For support, documentation, and updates:
 
         return report
 
-    def run_installation(self) -> bool:
+    def run_installation():-> bool:
         """Run the complete installation process."""
         print("🚀 Starting Schwabot Installation")
         print("=" * 60)
@@ -614,7 +615,6 @@ For support, documentation, and updates:
             return False
         except Exception as e:
             print(f"\n❌ Installation failed: {e}")
-            import traceback
             traceback.print_exc()
             return False
 

@@ -1,3 +1,7 @@
+from pathlib import Path
+import logging
+import os
+
 #!/usr/bin/env python3
 """Schwabot Historical Data Pipeline.
 
@@ -12,9 +16,6 @@ Key Features:
 - Real-time historical context for trading decisions
 """
 
-import os
-import logging
-from pathlib import Path
 
 logger = logging.getLogger(__name__)
 

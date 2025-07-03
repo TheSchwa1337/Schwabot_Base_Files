@@ -1,3 +1,13 @@
+    from .control_panel import AdvancedControlPanel
+    from .fill_conjunction import FillConjunctionEngine
+    from .harmony_memory import HarmonyMemory
+    from .ncco import NCCO
+    from .ncco_generator import generate_nccos
+    from .ncco_scorer import score_nccos
+from typing import Any
+import os
+import platform
+
 # update
 # -*- coding: utf-8 -*-
 """
@@ -13,17 +23,8 @@ all trade strategy noise into a singular, decisive action based on:
 Purpose: Bridge the gap between chaos and clarity in recursive AI trading decisions.
 """
 
-import platform
-import os
-from typing import Any
 
 try:
-    from .ncco_scorer import score_nccos
-    from .ncco_generator import generate_nccos
-    from .ncco import NCCO
-    from .harmony_memory import HarmonyMemory
-    from .control_panel import AdvancedControlPanel
-    from .fill_conjunction import FillConjunctionEngine
 except ImportError:
     # Fallback imports for development
     score_nccos = None
@@ -42,7 +43,7 @@ class WindowsCliCompatibilityHandler:
     """Windows CLI compatibility for emoji and Unicode handling."""
 
     @staticmethod
-    def is_windows_cli() -> bool:
+    def is_windows_cli():-> bool:
         """Detect if running in Windows CLI environment."""
         return platform.system() == "Windows" and (
             "cmd" in os.environ.get("COMSPEC", "").lower()
@@ -50,7 +51,7 @@ class WindowsCliCompatibilityHandler:
         )
 
     @staticmethod
-    def safe_print(message: str, use_emoji: bool = True) -> str:
+    def safe_print():-> str:
         """Print message safely with Windows CLI compatibility."""
         if WindowsCliCompatibilityHandler.is_windows_cli() and use_emoji:
             emoji_mapping = {
@@ -66,7 +67,7 @@ class WindowsCliCompatibilityHandler:
         return message
 
     @staticmethod
-    def log_safe(logger: Any, level: str, message: str) -> None:
+    def log_safe():-> None:
         """Log message safely with Windows CLI compatibility."""
         safe_message = WindowsCliCompatibilityHandler.safe_print(message)
         try:

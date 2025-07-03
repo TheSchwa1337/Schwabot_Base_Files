@@ -1,3 +1,5 @@
+from typing import Optional, Any, Dict
+
 #!/usr/bin/env python3
 """
 Hash Recollection Exceptions
@@ -7,7 +9,6 @@ Custom exceptions for the hash_recollection trading system.
 All exceptions are designed to be informative and actionable.
 """
 
-from typing import Optional, Any, Dict
 
 
 class HashRecollectionError(Exception):

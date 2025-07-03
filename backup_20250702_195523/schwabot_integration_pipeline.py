@@ -1,3 +1,18 @@
+    from core.clean_unified_math import CleanUnifiedMathSystem as UnifiedMathematicsFramework
+    from core.brain_trading_engine import BrainTradingEngine
+    from symbolic_profit_router import SymbolicProfitRouter
+from concurrent.futures import ThreadPoolExecutor
+from dataclasses import dataclass, field
+from enum import Enum
+from pathlib import Path
+from typing import Any, Dict, List, Optional
+import hashlib
+import json
+import logging
+import random
+import time
+import yaml
+
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 
@@ -34,34 +49,20 @@ Master integration system that coordinates all 8 layers of Schwabot:
 
 This pipeline ensures proper data flow, error handling, and coordination
 between all system components with secure API integration.import asyncio
-import hashlib
-import json
-import logging
-import random
-import time
-import yaml
-from concurrent.futures import ThreadPoolExecutor
-from dataclasses import dataclass, field
-from enum import Enum
-from pathlib import Path
-from typing import Any, Dict, List, Optional
 
 # Import all layer components
 try:
-    from core.brain_trading_engine import BrainTradingEngine
 
     BRAIN_ENGINE_AVAILABLE = True
 except ImportError: BRAIN_ENGINE_AVAILABLE = False
 
 try:
-    from symbolic_profit_router import SymbolicProfitRouter
 
     SYMBOLIC_ROUTER_AVAILABLE = True
 except ImportError:
     SYMBOLIC_ROUTER_AVAILABLE = False
 
 try:
-    from core.clean_unified_math import CleanUnifiedMathSystem as UnifiedMathematicsFramework
 
     UNIFIED_MATH_AVAILABLE = True
 except ImportError:
@@ -95,32 +96,29 @@ class IntegrationMessage:Message format for cross-layer communication.source_lay
     encrypted: bool = False
 
 
-class SecureAPIManager:Manages API keys and secure connections.def __init__(self:SecureAPIManager, config: Dict[str, Any]) -> None:Initialize API manager with configuration.self.config = config.get(api_security_layer, {})
+class SecureAPIManager:Manages API keys and secure connections.def __init__():-> None:Initialize API manager with configuration.self.config = config.get(api_security_layer, {})
         self.encrypted_keys: Dict[str, str] = {}
         self.api_connections: Dict[str, Any] = {}
 
-    def encrypt_api_key(self: SecureAPIManager, key: str, api_name: str) -> str:Encrypt API key using internal hash system.# Simple encryption using SHA-256 (in production, use proper encryption)
+    def encrypt_api_key():-> str:Encrypt API key using internal hash system.# Simple encryption using SHA-256 (in production, use proper encryption)
         salt = fschwabot_{api_name}_{int(time.time())}
         encrypted = hashlib.sha256(f{key}_{salt}.encode()).hexdigest()
         self.encrypted_keys[api_name] = encrypted
         return encrypted
 
-    def get_api_connection(self: SecureAPIManager, api_name: str) -> Optional[Any]:Get secure API connection.return self.api_connections.get(api_name)
+    def get_api_connection():-> Optional[Any]:Get secure API connection.return self.api_connections.get(api_name)
 
-    def validate_api_access(self: SecureAPIManager, api_name: str) -> bool:Validate API access and rate limits.# Implementation for rate limiting and validation
+    def validate_api_access():-> bool:Validate API access and rate limits.# Implementation for rate limiting and validation
         return True
 
 
 class MarketDataLayer:
-    Layer 1: Market Data Ingestion with multiple API sources.def __init__(
-        self:MarketDataLayer, config: Dict[str, Any], api_manager:SecureAPIManager) -> None:Initialize market data layer.self.config = config.get(market_data_layer, {})
+    Layer 1: Market Data Ingestion with multiple API sources.def __init__():-> None:Initialize market data layer.self.config = config.get(market_data_layer, {})
         self.api_manager = api_manager
         self.last_data: Dict[str, Any] = {}
         self.data_cache: Dict[str, Any] = {}
 
-    async def fetch_coingecko_data(
-        self: MarketDataLayer, symbol: str = bitcoin
-    ) -> Dict[str, Any]:Fetch data from CoinGecko API.try:
+    async def fetch_coingecko_data():-> Dict[str, Any]:Fetch data from CoinGecko API.try:
             # Simulation of API call (replace with actual aiohttp request)
             price = 50000 + random.uniform(-5000, 5000)
             volume = 1000 + random.uniform(-500, 500)
@@ -134,9 +132,7 @@ class MarketDataLayer:
             logger.error(fCoinGecko API error: {e})
             return {}
 
-    async def fetch_coinmarketcap_data(
-        self: MarketDataLayer, symbol: str = BTC
-    ) -> Dict[str, Any]:Fetch data from CoinMarketCap API.try:
+    async def fetch_coinmarketcap_data():-> Dict[str, Any]:Fetch data from CoinMarketCap API.try:
             # Simulation of API call
             price = 50000 + random.uniform(-3000, 3000)
             volume = 1200 + random.uniform(-400, 400)
@@ -150,7 +146,7 @@ class MarketDataLayer:
             logger.error(fCoinMarketCap API error: {e})
             return {}
 
-    async def get_aggregated_data(self: MarketDataLayer) -> Dict[str, Any]:Get aggregated market data from all sources.try:
+    async def get_aggregated_data():-> Dict[str, Any]:Get aggregated market data from all sources.try:
             # Fetch from all enabled APIs
             tasks = []
             if self.config.get(apis, {}).get(coingecko, {}).get(enabled, False):
@@ -185,9 +181,7 @@ class MarketDataLayer:
             return {}
 
 
-class IntegrationOrchestrator:Layer 8: Main orchestration system that coordinates all layers.def __init__(
-        self:IntegrationOrchestrator, config_path: str = config/master_integration.yaml
-    ) -> None:Initialize integration orchestrator.self.config_path = Path(config_path)
+class IntegrationOrchestrator:Layer 8: Main orchestration system that coordinates all layers.def __init__():-> None:Initialize integration orchestrator.self.config_path = Path(config_path)
         self.config: Dict[str, Any] = {}
         self.layers: Dict[str, LayerState] = {}
         self.message_queue: asyncio.Queue = asyncio.Queue()
@@ -208,7 +202,7 @@ class IntegrationOrchestrator:Layer 8: Main orchestration system that coordinate
         self.load_configuration()
         self.initialize_layers()
 
-    def load_configuration(self: IntegrationOrchestrator) -> None:Load master integration configuration.try:
+    def load_configuration():-> None:Load master integration configuration.try:
             if self.config_path.exists():
                 with open(self.config_path,r", encoding="utf-8) as f:
                     self.config = yaml.safe_load(f)
@@ -220,10 +214,10 @@ class IntegrationOrchestrator:Layer 8: Main orchestration system that coordinate
             logger.error(fConfiguration loading error: {e})
             self.config = self.get_default_config()
 
-    def get_default_config(self: IntegrationOrchestrator) -> Dict[str, Any]:Get default configuration if file is missing.return {market_data_layer: {enabled: True,priority: 1},brain_engine_layer": {enabled: BRAIN_ENGINE_AVAILABLE,priority": 2},symbolic_profit_layer": {enabled: SYMBOLIC_ROUTER_AVAILABLE,priority": 3},unified_math_layer": {enabled: UNIFIED_MATH_AVAILABLE,priority": 4},api_security_layer": {enabled: True,priority": 5},visualization_layer": {enabled: False,priority": 6},risk_management_layer": {enabled: True,priority": 7},orchestration_layer": {enabled: True,priority": 8},
+    def get_default_config():-> Dict[str, Any]:Get default configuration if file is missing.return {market_data_layer: {enabled: True,priority: 1},brain_engine_layer": {enabled: BRAIN_ENGINE_AVAILABLE,priority": 2},symbolic_profit_layer": {enabled: SYMBOLIC_ROUTER_AVAILABLE,priority": 3},unified_math_layer": {enabled: UNIFIED_MATH_AVAILABLE,priority": 4},api_security_layer": {enabled: True,priority": 5},visualization_layer": {enabled: False,priority": 6},risk_management_layer": {enabled: True,priority": 7},orchestration_layer": {enabled: True,priority": 8},
         }
 
-    def initialize_layers(self:IntegrationOrchestrator) -> None:Initialize all system layers based on configuration.try:
+    def initialize_layers():-> None:Initialize all system layers based on configuration.try:
             # Initialize layer states
             for layer_name in self.config.keys():
                 if layer_name.endswith(_layer):
@@ -313,7 +307,7 @@ class IntegrationOrchestrator:Layer 8: Main orchestration system that coordinate
         except Exception as e:
             logger.error(fLayer initialization error: {e})
 
-    async def start_integration_pipeline(self:IntegrationOrchestrator) -> None:Start the full integration pipeline.try:
+    async def start_integration_pipeline():-> None:Start the full integration pipeline.try:
             self.running = True
             logger.info(🚀 Starting Schwabot Integration Pipeline)
 
@@ -338,7 +332,7 @@ class IntegrationOrchestrator:Layer 8: Main orchestration system that coordinate
             logger.error(fIntegration pipeline startup error: {e})
             await self.emergency_shutdown()
 
-    async def start_layer(self:IntegrationOrchestrator, layer_name: str) -> bool:Start a specific layer.try:
+    async def start_layer():-> bool:Start a specific layer.try:
             if layer_name not in self.layers:
                 logger.error(f"Unknown layer: {layer_name})
                 return False
@@ -380,7 +374,7 @@ class IntegrationOrchestrator:Layer 8: Main orchestration system that coordinate
                 self.layers[layer_name].status = LayerStatus.ERROR
             return False
 
-    async def main_trading_loop(self: IntegrationOrchestrator) -> None:Main trading loop that coordinates all layers.logger.info(🔄 Starting main trading loop)
+    async def main_trading_loop():-> None:Main trading loop that coordinates all layers.logger.info(🔄 Starting main trading loop)
 
         while self.running:
             try:
@@ -445,7 +439,7 @@ class IntegrationOrchestrator:Layer 8: Main orchestration system that coordinate
                 logger.error(f❌ Error in main trading loop: {e})
                 await asyncio.sleep(5.0)  # Longer delay on error
 
-    async def message_processing_loop(self: IntegrationOrchestrator) -> None:Process messages from the queue.logger.info(📨 Starting message processing loop)
+    async def message_processing_loop():-> None:Process messages from the queue.logger.info(📨 Starting message processing loop)
 
         while self.running:
             try: message = await asyncio.wait_for(self.message_queue.get(), timeout=1.0)
@@ -455,7 +449,7 @@ class IntegrationOrchestrator:Layer 8: Main orchestration system that coordinate
             except Exception as e:
                 logger.error(f❌ Message processing error: {e})
 
-    async def process_message(self: IntegrationOrchestrator, message: IntegrationMessage) -> None:Process a single integration message.try:
+    async def process_message():-> None:Process a single integration message.try:
             if message.target_layer == all:
                 # Broadcast message to all layers
                 logger.debug(f📢 Broadcasting message: {message.message_type})
@@ -471,15 +465,11 @@ class IntegrationOrchestrator:Layer 8: Main orchestration system that coordinate
         except Exception as e:
             logger.error(f❌ Message processing error: {e})
 
-    async def handle_brain_message(
-        self:IntegrationOrchestrator, message: IntegrationMessage
-    ) -> None:Handle brain engine specific messages.logger.debug(f"🧠 Brain message: {message.message_type})
+    async def handle_brain_message():-> None:Handle brain engine specific messages.logger.debug(f"🧠 Brain message: {message.message_type})
 
-    async def handle_symbolic_message(
-        self:IntegrationOrchestrator, message: IntegrationMessage
-    ) -> None:Handle symbolic router specific messages.logger.debug(f"🔮 Symbolic message: {message.message_type})
+    async def handle_symbolic_message():-> None:Handle symbolic router specific messages.logger.debug(f"🔮 Symbolic message: {message.message_type})
 
-    async def health_monitoring_loop(self:IntegrationOrchestrator) -> None:Monitor health of all layers.logger.info(💚 Starting health monitoring loop)
+    async def health_monitoring_loop():-> None:Monitor health of all layers.logger.info(💚 Starting health monitoring loop)
 
         while self.running:
             try:
@@ -501,7 +491,7 @@ class IntegrationOrchestrator:Layer 8: Main orchestration system that coordinate
                 logger.error(f❌ Health monitoring error: {e})
                 await asyncio.sleep(60.0)
 
-    async def performance_monitoring_loop(self: IntegrationOrchestrator) -> None:Monitor performance metrics.logger.info(📊 Starting performance monitoring loop)
+    async def performance_monitoring_loop():-> None:Monitor performance metrics.logger.info(📊 Starting performance monitoring loop)
 
         while self.running:
             try:
@@ -528,12 +518,7 @@ class IntegrationOrchestrator:Layer 8: Main orchestration system that coordinate
                 logger.error(f❌ Performance monitoring error: {e})
                 await asyncio.sleep(120.0)
 
-    def update_performance_metrics(
-        self:IntegrationOrchestrator,
-        market_data: Dict[str, Any],
-        brain_signal: Any,
-        symbolic_result: Dict[str, Any],
-    ) -> None:Update performance metrics with latest data.try:
+    def update_performance_metrics():-> None:Update performance metrics with latest data.try:
             self.performance_metrics.update(
                 {last_market_update: time.time(),data_quality": market_data.get(data_quality", 0.0),brain_signal_available": brain_signal is not None,symbolic_result_available": len(symbolic_result) > 0,
                 }
@@ -541,7 +526,7 @@ class IntegrationOrchestrator:Layer 8: Main orchestration system that coordinate
         except Exception as e:
             logger.error(f"❌ Performance metrics update error: {e})
 
-    async def emergency_shutdown(self:IntegrationOrchestrator) -> None:Emergency shutdown of all systems.logger.warning(🚨 Emergency shutdown initiated)
+    async def emergency_shutdown():-> None:Emergency shutdown of all systems.logger.warning(🚨 Emergency shutdown initiated)
 
         self.running = False
 
@@ -555,16 +540,14 @@ class IntegrationOrchestrator:Layer 8: Main orchestration system that coordinate
 
         logger.info(🏁 Emergency shutdown completed)
 
-    def get_system_status(self:IntegrationOrchestrator) -> Dict[str, Any]:Get comprehensive system status.return {running: self.running,layers: {name: {
+    def get_system_status():-> Dict[str, Any]:Get comprehensive system status.return {running: self.running,layers: {name: {
                     status: layer.status.value,health_score": layer.health_score,error_count": layer.error_count,last_update": layer.last_update,
                 }
                 for name, layer in self.layers.items()
             },performance_metrics": self.performance_metrics,error_history": self.error_history[-10:] if self.error_history else [],
         }
 
-    def export_system_state(
-        self:IntegrationOrchestrator, filepath: str = system_state.json
-    ) -> bool:Export current system state to file.try: state = self.get_system_status()
+    def export_system_state():-> bool:Export current system state to file.try: state = self.get_system_status()
             with open(filepath, w, encoding=utf-8) as f:
                 json.dump(state, f, indent = 2, default=str)
             logger.info(f💾 System state exported to {filepath})
@@ -574,7 +557,7 @@ class IntegrationOrchestrator:Layer 8: Main orchestration system that coordinate
             return False
 
 
-async def main() -> None:Main entry point for the integration pipeline.logging.basicConfig(
+async def main():-> None:Main entry point for the integration pipeline.logging.basicConfig(
         level = logging.INFO, format=%(asctime)s - %(name)s - %(levelname)s - %(message)s)
 
     print(🚀 SCHWABOT INTEGRATION PIPELINE)

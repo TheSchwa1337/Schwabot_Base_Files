@@ -1,3 +1,7 @@
+import os
+import subprocess
+import sys
+
 #!/usr/bin/env python3
 """
 Schwabot Codebase Formatter
@@ -7,9 +11,6 @@ Comprehensive formatting script using autopep8 and Black for the Schwabot tradin
 This script ensures consistent, modern formatting while preserving mathematical functionality.
 """
 
-import os
-import sys
-import subprocess
 
 
 def run_command(cmd, description):

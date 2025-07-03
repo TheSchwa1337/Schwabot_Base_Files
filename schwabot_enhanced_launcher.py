@@ -1,3 +1,24 @@
+from schwabot_unified_math import (
+                import json
+    from core.risk_manager import RiskManager
+    from core.strategy_logic import StrategyLogic
+    from core.trade_executor import TradeExecutor
+from __future__ import annotations
+from core.advanced_settings_engine import AdvancedSettingsEngine
+from core.api.cache_sync import CacheSyncService
+from core.api.handlers.alt_fear_greed import FearGreedHandler
+from core.api.handlers.coingecko import CoinGeckoHandler
+from core.api.handlers.glassnode import GlassnodeHandler
+from core.api.handlers.whale_alert import WhaleAlertHandler
+from pathlib import Path
+from symbolic_profit_router import SymbolicProfitRouter
+from typing import Dict, Any, Optional
+import asyncio
+import logging
+import signal
+import sys
+import time
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -15,38 +36,19 @@ This launcher implements the complete Schwabot spatial momentum system
 with recursive logic and adaptive memory.
 """
 
-from __future__ import annotations
 
-import asyncio
-import logging
-import signal
-import sys
-import time
-from pathlib import Path
-from typing import Dict, Any, Optional
 
 # Core Schwabot imports
-from schwabot_unified_math import (
     UnifiedMathematicsFramework,
     BTC256SHAPipeline,
     FerrisWheelVisualizer,
     unified_trading_math,
 )
-from core.advanced_settings_engine import AdvancedSettingsEngine
-from symbolic_profit_router import SymbolicProfitRouter
 
 # API and data integration
-from core.api.cache_sync import CacheSyncService
-from core.api.handlers.whale_alert import WhaleAlertHandler
-from core.api.handlers.glassnode import GlassnodeHandler
-from core.api.handlers.coingecko import CoinGeckoHandler
-from core.api.handlers.alt_fear_greed import FearGreedHandler
 
 # Trading and execution
 try:
-    from core.strategy_logic import StrategyLogic
-    from core.trade_executor import TradeExecutor
-    from core.risk_manager import RiskManager
 except ImportError:
     # Fallback implementations
     StrategyLogic = None
@@ -74,7 +76,7 @@ class EnhancedDataIntegrator:
             "market_sentiment": 0.3,
         }
 
-    async def integrate_cached_data(self) -> Dict[str, float]:
+    async def integrate_cached_data():-> Dict[str, float]:
         """Integrate all cached data sources into unified trading signals."""
         signals = {}
 
@@ -117,12 +119,11 @@ class EnhancedDataIntegrator:
             logger.error(f"Failed to integrate cached data: {e}")
             return {}
 
-    async def _load_cached_data(self, cache_path: str) -> Optional[Dict]:
+    async def _load_cached_data():-> Optional[Dict]:
         """Load data from cache file."""
         try:
             cache_file = Path("flask/feeds") / cache_path
             if cache_file.exists():
-                import json
 
                 with open(cache_file, "r") as f:
                     return json.load(f)
@@ -130,7 +131,7 @@ class EnhancedDataIntegrator:
             logger.error(f"Failed to load cached data from {cache_path}: {e}")
         return None
 
-    def _process_fear_greed_signal(self, data: Dict) -> float:
+    def _process_fear_greed_signal():-> float:
         """Process Fear & Greed Index into trading signal (-1 to 1)."""
         try:
             fg_value = data.get("value", 50)
@@ -151,7 +152,7 @@ class EnhancedDataIntegrator:
             logger.error(f"Failed to process fear greed signal: {e}")
             return 0.0
 
-    def _process_whale_signal(self, data: Dict) -> float:
+    def _process_whale_signal():-> float:
         """Process whale transaction data into trading signal."""
         try:
             summary = data.get("summary", {})
@@ -170,7 +171,7 @@ class EnhancedDataIntegrator:
             logger.error(f"Failed to process whale signal: {e}")
             return 0.0
 
-    def _process_onchain_signal(self, data: Dict) -> float:
+    def _process_onchain_signal():-> float:
         """Process on-chain metrics into trading signal."""
         try:
             scores = data.get("composite_scores", {})
@@ -189,7 +190,7 @@ class EnhancedDataIntegrator:
             logger.error(f"Failed to process onchain signal: {e}")
             return 0.0
 
-    def _process_market_signal(self, data: Dict) -> float:
+    def _process_market_signal():-> float:
         """Process market sentiment into trading signal."""
         try:
             sentiment = data.get("market_sentiment", {})
@@ -248,7 +249,7 @@ class SchawbotEnhancedLauncher:
         self.performance_metrics: Dict[str, Any] = {}
         self.start_time = 0.0
 
-    async def initialize(self) -> bool:
+    async def initialize():-> bool:
         """Initialize all Schwabot components."""
         try:
             logger.info("🚀 Initializing Schwabot Enhanced System...")
@@ -302,7 +303,7 @@ class SchawbotEnhancedLauncher:
             logger.error(f"❌ Failed to initialize Schwabot system: {e}")
             return False
 
-    async def _register_api_handlers(self) -> None:
+    async def _register_api_handlers():-> None:
         """Register all API handlers with the cache sync service."""
         # Fear & Greed Index handler
         fear_greed_handler = FearGreedHandler()
@@ -322,7 +323,7 @@ class SchawbotEnhancedLauncher:
 
         logger.info(f"Registered {len(self.cache_sync_service.handlers)} API handlers")
 
-    async def _initialize_trading_components(self) -> None:
+    async def _initialize_trading_components():-> None:
         """Initialize trading components if available."""
         try:
             if StrategyLogic:
@@ -340,7 +341,7 @@ class SchawbotEnhancedLauncher:
         except Exception as e:
             logger.warning(f"Some trading components not available: {e}")
 
-    def _setup_signal_handlers(self) -> None:
+    def _setup_signal_handlers():-> None:
         """Setup signal handlers for graceful shutdown."""
 
         def signal_handler(signum, frame):
@@ -350,7 +351,7 @@ class SchawbotEnhancedLauncher:
         signal.signal(signal.SIGINT, signal_handler)
         signal.signal(signal.SIGTERM, signal_handler)
 
-    async def start(self) -> None:
+    async def start():-> None:
         """Start all Schwabot services and the main trading loop."""
         if not await self.initialize():
             logger.error("Failed to initialize, cannot start")
@@ -399,7 +400,7 @@ class SchawbotEnhancedLauncher:
         finally:
             await self.shutdown()
 
-    async def _monitor_cache_sync(self) -> None:
+    async def _monitor_cache_sync():-> None:
         """Monitor cache sync service health."""
         while self.running:
             try:
@@ -417,7 +418,7 @@ class SchawbotEnhancedLauncher:
                 logger.error(f"Error in cache sync monitor: {e}")
                 await asyncio.sleep(30)
 
-    async def _monitor_settings(self) -> None:
+    async def _monitor_settings():-> None:
         """Monitor settings engine and apply adaptive recommendations."""
         while self.running:
             try:
@@ -447,7 +448,7 @@ class SchawbotEnhancedLauncher:
                 logger.error(f"Error in settings monitor: {e}")
                 await asyncio.sleep(60)
 
-    async def _data_integration_loop(self) -> None:
+    async def _data_integration_loop():-> None:
         """Main data integration loop combining all signals."""
         while self.running:
             try:
@@ -477,7 +478,7 @@ class SchawbotEnhancedLauncher:
                 logger.error(f"Error in data integration loop: {e}")
                 await asyncio.sleep(60)
 
-    async def _enhanced_trading_loop(self) -> None:
+    async def _enhanced_trading_loop():-> None:
         """Enhanced trading loop with spatial momentum system."""
         while self.running:
             try:
@@ -505,7 +506,7 @@ class SchawbotEnhancedLauncher:
                 logger.error(f"Error in enhanced trading loop: {e}")
                 await asyncio.sleep(30)
 
-    async def _process_market_tick(self) -> None:
+    async def _process_market_tick():-> None:
         """Process current market tick data."""
         try:
             # Simulate market data processing
@@ -527,9 +528,7 @@ class SchawbotEnhancedLauncher:
         except Exception as e:
             logger.error(f"Error processing market tick: {e}")
 
-    async def _apply_spatial_momentum(
-        self, unified_signal: float, breakdown: Dict[str, float]
-    ) -> None:
+    async def _apply_spatial_momentum():-> None:
         """Apply spatial momentum calculations to trading decisions."""
         try:
             # Calculate momentum vector using unified math framework
@@ -553,7 +552,7 @@ class SchawbotEnhancedLauncher:
         except Exception as e:
             logger.error(f"Error in spatial momentum calculation: {e}")
 
-    async def _execute_trading_decisions(self, unified_signal: float) -> None:
+    async def _execute_trading_decisions():-> None:
         """Execute trading decisions based on unified signal."""
         try:
             # Apply signal threshold from settings
@@ -582,7 +581,7 @@ class SchawbotEnhancedLauncher:
         except Exception as e:
             logger.error(f"Error in trading execution: {e}")
 
-    async def _calculate_profit_optimization(self, signal: float) -> float:
+    async def _calculate_profit_optimization():-> float:
         """Calculate profit optimization using brain glyph processing."""
         try:
             # Use unified trading math for profit calculation
@@ -603,7 +602,7 @@ class SchawbotEnhancedLauncher:
             logger.error(f"Error calculating profit optimization: {e}")
             return 0.0
 
-    async def _update_trading_performance(self) -> None:
+    async def _update_trading_performance():-> None:
         """Update trading performance metrics."""
         try:
             current_time = time.time()
@@ -622,7 +621,7 @@ class SchawbotEnhancedLauncher:
         except Exception as e:
             logger.error(f"Error updating performance: {e}")
 
-    async def _performance_monitor(self) -> None:
+    async def _performance_monitor():-> None:
         """Monitor system performance and log key metrics."""
         while self.running:
             try:
@@ -652,7 +651,7 @@ class SchawbotEnhancedLauncher:
                 logger.error(f"Error in performance monitor: {e}")
                 await asyncio.sleep(60)
 
-    async def shutdown(self) -> None:
+    async def shutdown():-> None:
         """Gracefully shutdown all services."""
         logger.info("🛑 Initiating Schwabot Enhanced System shutdown...")
 

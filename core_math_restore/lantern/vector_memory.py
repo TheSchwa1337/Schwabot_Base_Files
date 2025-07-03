@@ -1,3 +1,7 @@
+    from sklearn.decomposition import PCA
+from core.unified_math_system import unified_math
+from __future__ import annotations
+
 # -*- coding: utf - 8 -*-
 """Vector memory with rolling PCA analysis.""""""
 """"""
@@ -16,17 +20,14 @@
 # -*- coding: utf - 8 -*-
 # -*- coding: utf - 8 -*-
 
-from __future__ import annotations
-from core.unified_math_system import unified_math
 
 
 try:
-    from sklearn.decomposition import PCA
 except ImportError:
     PCA = None
 
 
-def rolling_pca(vecs: list[list[float]], n_components: int = 4) -> np.ndarray:"""
+def rolling_pca():-> np.ndarray:"""
 """Compute rolling PCA on vector history."
 
 Calculate principal axes for last N vectors to maintain

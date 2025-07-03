@@ -1,7 +1,6 @@
-# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
-# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
-# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
-# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
+            from core.unified_math_system import unified_math
+            import numpy as np
+from core.unified_math_system import unified_math
 from dataclasses import dataclass
 from datetime import datetime
 from dual_unicore_handler import DualUnicoreHandler
@@ -10,7 +9,11 @@ import logging
 import time
 import unittest
 
-from core.unified_math_system import unified_math
+# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
+
 
 
 # Initialize Unicode handler
@@ -76,7 +79,7 @@ self.test_cases = [
 ]
 logger.info("\\u23f1\\ufe0f Entry / Exit Sequence Integrity Test initialized")
 
-def test_entry_vector_calculation(self) -> Dict[str, Any]:
+def test_entry_vector_calculation():-> Dict[str, Any]:
     """Function implementation pending."""
 pass
 """
@@ -123,7 +126,7 @@ if results['success']:
 
 return results
 
-def test_time_tick_logic_integrity(self) -> Dict[str, Any]:
+def test_time_tick_logic_integrity():-> Dict[str, Any]:
     """Function implementation pending."""
 pass
 """
@@ -177,7 +180,7 @@ if results['success']:
 
 return results
 
-def run_comprehensive_test(self) -> Dict[str, Any]:
+def run_comprehensive_test():-> Dict[str, Any]:
     """Function implementation pending."""
 pass
 """
@@ -217,7 +220,7 @@ return comprehensive_result
 
 
 # Global test function for registry
-def test_entry_exit_sequence_integrity() -> Dict[str, Any]:
+def test_entry_exit_sequence_integrity():-> Dict[str, Any]:
         """
         Optimize mathematical function for trading performance.
         
@@ -230,8 +233,6 @@ def test_entry_exit_sequence_integrity() -> Dict[str, Any]:
             Optimized result
         """
         try:
-            import numpy as np
-            from core.unified_math_system import unified_math
             
             # Apply mathematical optimization
             if target is not None:

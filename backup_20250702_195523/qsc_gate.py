@@ -1,3 +1,11 @@
+import numpy as np
+from dataclasses import dataclass
+from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple
+from typing import Tuple
+import logging
+import time
+
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 
@@ -18,14 +26,7 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
 """
-import logging
-import time
-from dataclasses import dataclass
-from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
 
-import numpy as np
-from typing import Tuple
 
 
 
@@ -89,12 +90,10 @@ class QSCGate:Quantum Static Core Gate for immune signal processing.def __init__
 
             logger.info(🧬 QSC Gate initialized with immune signal processing)
 
-    def _default_config(self) -> Dict[str, Any]:Return default configuration for QSC Gate.return {w1_price_weight: 0.4,w2_volume_weight": 0.3,w3_entropy_weight": 0.3,tau_threshold": 0.55,learning_rate": 0.01,sigmoid_sharpness": 1.0,max_history": 1000,adaptation_enabled": True,
+    def _default_config():-> Dict[str, Any]:Return default configuration for QSC Gate.return {w1_price_weight: 0.4,w2_volume_weight": 0.3,w3_entropy_weight": 0.3,tau_threshold": 0.55,learning_rate": 0.01,sigmoid_sharpness": 1.0,max_history": 1000,adaptation_enabled": True,
         }
 
-    def immune_trigger(:
-        self, signal_data: ImmuneSignalData
-    ) -> Tuple[bool, float, Dict[str, Any]]:"Process immune trigger using biological T-cell activation math.Mathematical Model: I_act = σ(w1*S1 + w2*S2 + w3*S3 - τ)
+    def immune_trigger():-> Tuple[bool, float, Dict[str, Any]]:"Process immune trigger using biological T-cell activation math.Mathematical Model: I_act = σ(w1*S1 + w2*S2 + w3*S3 - τ)
 
         Where:
         - S1: Price Delta Recognition
@@ -151,9 +150,7 @@ class QSCGate:Quantum Static Core Gate for immune signal processing.def __init__
 
         return triggered, activation_strength, analysis
 
-    def _update_adaptive_threshold(:
-        self, activation_strength: float, triggered: bool
-    ) -> None:Update adaptive threshold based on recent performance.# Simple adaptive mechanism - adjust threshold based on activation
+    def _update_adaptive_threshold():-> None:Update adaptive threshold based on recent performance.# Simple adaptive mechanism - adjust threshold based on activation
         # frequency
         recent_triggers = sum(
             1
@@ -180,12 +177,7 @@ class QSCGate:Quantum Static Core Gate for immune signal processing.def __init__
             f(trigger rate: {trigger_rate:.3f})
         )
 
-    def process_immune_response(
-        self,:
-        signal_data: ImmuneSignalData,
-        swarm_vector: Optional[np.ndarray] = None,
-        gts_sync_score: Optional[float] = None,
-    ) -> QSCImmuneResponse:Process complete immune response with swarm and GTS integration.Args:
+    def process_immune_response():-> QSCImmuneResponse:Process complete immune response with swarm and GTS integration.Args:
             signal_data: Immune signal data
             swarm_vector: Swarm vector from swarm matrix
             gts_sync_score: Galileo tensor sync score
@@ -236,12 +228,7 @@ class QSCGate:Quantum Static Core Gate for immune signal processing.def __init__
 
         return response
 
-    def _make_immune_decision(
-        self,:
-        level: ImmuneResponseLevel,
-        activation_strength: float,
-        gts_sync_score: float,
-    ) -> str:Make immune decision based on activation level and GTS sync.# High confidence decisions
+    def _make_immune_decision():-> str:Make immune decision based on activation level and GTS sync.# High confidence decisions
         if level == ImmuneResponseLevel.EMERGENCY:
             if gts_sync_score > 0.8:
                 return IMMEDIATE_ENTRYelse :
@@ -257,7 +244,7 @@ class QSCGate:Quantum Static Core Gate for immune signal processing.def __init__
             if gts_sync_score > 0.9:
                 returnWEAK_ENTRY_OPPORTUNITYelse :
                 returnCONTINUE_MONITORINGelse:  # DORMANT
-            returnNO_ACTIONdef get_immune_status(self) -> Dict[str, Any]:Get comprehensive immune system status.recent_responses = self.response_history[-100:] if self.response_history else []
+            returnNO_ACTIONdef get_immune_status():-> Dict[str, Any]:Get comprehensive immune system status.recent_responses = self.response_history[-100:] if self.response_history else []
 
         # Calculate statistics
         activation_levels = [r.activation_level.value for r in recent_responses]
@@ -279,9 +266,7 @@ class QSCGate:Quantum Static Core Gate for immune signal processing.def __init__
             },
         }
 
-    def update_performance_feedback(:
-        self, response_id: str, was_successful: bool
-    ) -> None:"Update performance feedback for learning.Args:
+    def update_performance_feedback():-> None:"Update performance feedback for learning.Args:
             response_id: ID of the response to update
             was_successful: Whether the decision was successful"if was_successful:
             self.successful_predictions += 1
@@ -302,12 +287,7 @@ class QSCGate:Quantum Static Core Gate for immune signal processing.def __init__
         )
 
 
-def create_signal_from_market_data(:
-    price_delta: float,
-    volume_spike: float,
-    entropy_level: float,
-    source: str = market_data,
-) -> ImmuneSignalData:Create immune signal data from market data.
+def create_signal_from_market_data():-> ImmuneSignalData:Create immune signal data from market data.
 
     Args:
         price_delta: Normalized price change (-1 to 1)

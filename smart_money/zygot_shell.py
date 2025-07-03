@@ -1,15 +1,14 @@
+import numpy as np
+from typing import Dict, Any, Optional
+import logging
+
 # smart_money/zygot_shell.py
 
-import numpy as np
-import logging
-from typing import Dict, Any, Optional
 
 logger = logging.getLogger(__name__)
 
 
-def compute_stability_index(
-    Z: float, N: float, params: Optional[Dict[str, float]] = None
-) -> float:
+def compute_stability_index():-> float:
     """
     Compute nuclear-inspired stability index for trade logic.
     Mathematical Logic: PnL / A = StabilityIndex (derived from semi-empirical mass formula)
@@ -51,9 +50,7 @@ def compute_stability_index(
     return stability_index
 
 
-def check_shell_trade_signal(
-    volume_signal: float, volatility_map: float, config: Optional[Dict[str, Any]] = None
-) -> str:
+def check_shell_trade_signal():-> str:
     """
     Decides whether to enter a trade using post-Euler stability logic.
 

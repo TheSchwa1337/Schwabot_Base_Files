@@ -1,3 +1,21 @@
+            from core.unified_math_system import unified_math
+from core.unified_math_system import unified_math
+from core.unified_math_system import unified_math
+from dataclasses import dataclass, asdict
+from datetime import datetime, timedelta
+from pathlib import Path
+from settings.matrix_allocator import get_matrix_allocator
+from settings.settings_controller import get_settings_controller
+from settings.vector_validator import get_vector_validator
+from typing import Dict, List, Any, Optional, Tuple
+from utils.safe_print import safe_print, info, warn, error, success, debug
+import hashlib
+import json
+import random
+import threading
+import time
+import yaml
+
 # -*- coding: utf-8 -*-
 """"""
 """"""
@@ -12,8 +30,6 @@
 """"""
 """
 
-from core.unified_math_system import unified_math
-from utils.safe_print import safe_print, info, warn, error, success, debug
 
 
 Schwabot Demo Trade Sequence Module
@@ -25,21 +41,7 @@ Provides comprehensive trade simulation with realistic market conditions."""
 """"""
 """
 
-import json
-import yaml
-from core.unified_math_system import unified_math
-from typing import Dict, List, Any, Optional, Tuple
-from dataclasses import dataclass, asdict
-from datetime import datetime, timedelta
-import hashlib
-from pathlib import Path
-import threading
-import time
-import random
 
-from settings.settings_controller import get_settings_controller
-from settings.vector_validator import get_vector_validator
-from settings.matrix_allocator import get_matrix_allocator
 
 
 @dataclass
@@ -265,7 +267,7 @@ positions_data = {
 except Exception as e:
             safe_print(f"Error saving trade data: {e}")
 
-def generate_market_data(self, num_ticks: int = 100) -> List[Dict[str, Any]]:
+def generate_market_data():-> List[Dict[str, Any]]:
     """Function implementation pending."""
 pass
 """
@@ -303,9 +305,7 @@ market_data.append({"""
 
 return market_data
 
-def create_trade_signal(self, signal_type: str, strategy: str, overlay: str,)
-
-price: float, volume: float, confidence: float,
+def create_trade_signal():price: float, volume: float, confidence: float,
                             metadata: Dict[str, Any] = None) -> TradeSignal:
         """Create a new trade signal with validation and allocation""""""
 """"""
@@ -352,7 +352,7 @@ signal = TradeSignal(
 self.trade_signals.append(signal)
         return signal
 
-def execute_trade_signal(self, signal: TradeSignal) -> TradeExecution:
+def execute_trade_signal():-> TradeExecution:
     """Function implementation pending."""
 pass
 """
@@ -403,7 +403,7 @@ self._update_performance_metrics()
 
 return execution
 
-def create_position(self, entry_signal: TradeSignal, entry_execution: TradeExecution) -> TradePosition:
+def create_position():-> TradePosition:
     """Function implementation pending."""
 pass
 """
@@ -444,7 +444,7 @@ position = TradePosition(
 self.active_positions[position_id] = position
         return position
 
-def update_position(self, position_id: str, current_price: float) -> TradePosition:
+def update_position():-> TradePosition:
     """Function implementation pending."""
 pass
 """
@@ -472,7 +472,7 @@ if current_price <= position.stop_loss:
 
 return position
 
-def close_position(self, position_id: str, exit_price: float, exit_reason: str = "manual") -> TradeExecution:
+def close_position():-> TradeExecution:
     """Function implementation pending."""
 pass
 """
@@ -572,7 +572,7 @@ if cumulative_pnl:
                 std_return = unified_math.unified_math.std(returns)
                 self.performance_metrics["sharpe_ratio"] = avg_return / std_return if std_return > 0 else 0.0
 
-def run_trade_sequence(self, num_trades: int = 10, strategy: str = "moderate") -> Dict[str, Any]:
+def run_trade_sequence():-> Dict[str, Any]:
     """Function implementation pending."""
 pass
 """
@@ -650,7 +650,7 @@ safe_print(f"\\u1f4ca Trade sequence completed: {trades_executed} trades, {posit
 
 return report
 
-def generate_trade_report(self) -> Dict[str, Any]:
+def generate_trade_report():-> Dict[str, Any]:
     """Function implementation pending."""
 pass
 """
@@ -707,7 +707,7 @@ report["overlay_performance"] = overlay_performance
 return report
 
 
-def get_demo_trade_sequence() -> DemoTradeSequence:
+def get_demo_trade_sequence():-> DemoTradeSequence:
         """
         Calculate profit optimization for BTC trading.
         
@@ -721,7 +721,6 @@ def get_demo_trade_sequence() -> DemoTradeSequence:
         """
         try:
             # Import unified math system
-            from core.unified_math_system import unified_math
             
             # Calculate profit using unified mathematical framework
             base_profit = price_data * volume_data * 0.001  # 0.1% base

@@ -1,3 +1,9 @@
+import numpy as np
+from adaptive_immunity_vector import AdaptiveImmunityVector
+from entropy_monitor import EntropyMonitor
+from security_vector_allocator import SecurityVectorAllocator
+from vector_fortification_matrix import VectorFortificationMatrix
+
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 
@@ -26,13 +32,8 @@ Demonstrates the complete integration of all four components:
 3. adaptive_immunity_vector.py - R(t) resistance profiles
 4. vector_fortification_matrix.py - M_fortify defense matricesfrom datetime import datetime
 
-import numpy as np
 
 # Import our immunity stack components
-from adaptive_immunity_vector import AdaptiveImmunityVector
-from entropy_monitor import EntropyMonitor
-from security_vector_allocator import SecurityVectorAllocator
-from vector_fortification_matrix import VectorFortificationMatrix
 
 
 class StrategicImmunityStack:
@@ -40,7 +41,7 @@ class StrategicImmunityStack:
     Complete Strategic Recursive Vector Immunity Stack.
 
     Integrates all four components into a unified defense system:
-    Ψ_sec → χ(t) → R(t) → M_fortify → Secured Strategy Vectordef __init__(self:StrategicImmunityStack, config: dict = None) -> None:
+    Ψ_sec → χ(t) → R(t) → M_fortify → Secured Strategy Vectordef __init__():-> None:
         Initialize the complete immunity stack.
 
         Args:
@@ -59,11 +60,7 @@ class StrategicImmunityStack:
         self.integration_history = []
         self.last_secured_vector = None
 
-    def process_strategy_vector(
-        self: StrategicImmunityStack,
-        strategy_vector: np.ndarray,
-        market_data: dict,
-    ) -> np.ndarray:Process strategy vector through complete immunity stack.
+    def process_strategy_vector():-> np.ndarray:Process strategy vector through complete immunity stack.
 
         Pipeline: Ψ_sec → χ(t) → R(t) → M_fortify → Secured Vector
 
@@ -152,7 +149,7 @@ class StrategicImmunityStack:
             print(fError in immunity stack processing: {e})
             return strategy_vector
 
-    def get_integration_report(self: StrategicImmunityStack) -> dict:Generate comprehensive integration report.
+    def get_integration_report():-> dict:Generate comprehensive integration report.
 
         Returns:
             dict: Complete immunity stack statisticsif not self.integration_history:
@@ -166,7 +163,7 @@ class StrategicImmunityStack:
             ),entropy_report": self.entropy_monitor.get_entropy_report(),immunity_report": self.immunity_vector.get_immunity_report(),fortification_report": self.fortification_matrix.get_fortification_report(),
         }
 
-    def reset_integration_state(self:StrategicImmunityStack) -> None:Reset all integration state.self.integration_history = []
+    def reset_integration_state():-> None:Reset all integration state.self.integration_history = []
         self.last_secured_vector = None
         self.entropy_monitor.field_history = []
         self.immunity_vector.reset_immunity_state()

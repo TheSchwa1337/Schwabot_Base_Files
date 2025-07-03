@@ -1,5 +1,9 @@
+from core.data_pipeline_visualizer import (
+from core.drift_shell_engine import DriftShellEngine
+from core.dualistic_state_machine import DualisticStateMachine, StateType
 import pathlib
 import sys
+
 
 # Ensure the project root is on sys.path so that `import core.*` works even when
 # the repository isn't installed as a package (CI / local checkout).
@@ -8,12 +12,9 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 
-from core.dualistic_state_machine import DualisticStateMachine, StateType
-from core.data_pipeline_visualizer import (
     DataPipelineVisualizer,
     DataCategory,
 )
-from core.drift_shell_engine import DriftShellEngine
 
 
 def test_dualistic_state_machine_basic():

@@ -1,3 +1,12 @@
+            import psutil
+from .zbe_core import ZBECore
+from .zpe_core import ZPECore
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, List, Optional
+import threading
+import time
+
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 
@@ -22,14 +31,7 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 Provides unified hardware acceleration and computational optimization
 without interfering with profit calculations or trading decisions.import logging
-import threading
-import time
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Any, Dict, List, Optional
 
-from .zbe_core import ZBECore
-from .zpe_core import ZPECore
 
 
 logger = logging.getLogger(__name__)
@@ -71,7 +73,7 @@ class HardwareAccelerationManager:Hardware Acceleration Manager - Coordinates ZP
         2. No trading decisions are affected by hardware optimization
         3. Computational speed is maximized for tensor calculations
         4. Hardware resources are optimally utilized
-        5. Thermal management prevents performance degradationdef __init__(self:HardwareAccelerationManager, precision: int = 64) -> None:Initialize hardware acceleration manager.self.precision = precision
+        5. Thermal management prevents performance degradationdef __init__():-> None:Initialize hardware acceleration manager.self.precision = precision
         self.mode = AccelerationMode.IDLE
 
         # Initialize ZPE and ZBE cores
@@ -101,8 +103,7 @@ class HardwareAccelerationManager:Hardware Acceleration Manager - Coordinates ZP
 
         logger.info(🚀 Hardware Acceleration Manager initialized - UNIFIED OPTIMIZATION MODE)
 
-    def _initialize_hardware_profile(self:HardwareAccelerationManager) -> HardwareProfile:Initialize complete hardware profile.try:
-            import psutil
+    def _initialize_hardware_profile():-> HardwareProfile:Initialize complete hardware profile.try:
 
             cpu_info = psutil.cpu_freq()
             memory_info = psutil.virtual_memory()
@@ -134,14 +135,10 @@ class HardwareAccelerationManager:Hardware Acceleration Manager - Coordinates ZP
                 thermal_capacity=1.0,
             )
 
-    def set_mode(self: HardwareAccelerationManager, mode: AccelerationMode) -> None:Set acceleration mode.self.mode = mode
+    def set_mode():-> None:Set acceleration mode.self.mode = mode
         logger.info(🔄 Acceleration mode set to: %s, mode.value)
 
-    def calculate_unified_acceleration(
-        self:HardwareAccelerationManager",
-        market_conditions: Dict[str, Any],
-        mathematical_state: Optional[Dict[str, Any]] = None,
-    ) -> AccelerationMetrics:Calculate unified acceleration metrics.
+    def calculate_unified_acceleration():-> AccelerationMetrics:Calculate unified acceleration metrics.
 
         This function coordinates ZPE and ZBE systems to provide optimal
         computational performance WITHOUT affecting trading decisions.
@@ -249,7 +246,7 @@ class HardwareAccelerationManager:Hardware Acceleration Manager - Coordinates ZP
         finally:
             self.is_optimizing = False
 
-    def get_acceleration_factors(self: HardwareAccelerationManager) -> Dict[str, float]:Get current acceleration factors.return {unified_boost_factor: self.unified_boost_factor,thermal_optimization_factor: self.thermal_optimization_factor,computational_optimization_factor: self.computational_optimization_factor,memory_optimization_factor: self.memory_optimization_factor,overall_performance_boost: (
+    def get_acceleration_factors():-> Dict[str, float]:Get current acceleration factors.return {unified_boost_factor: self.unified_boost_factor,thermal_optimization_factor: self.thermal_optimization_factor,computational_optimization_factor: self.computational_optimization_factor,memory_optimization_factor: self.memory_optimization_factor,overall_performance_boost: (
                 self.unified_boost_factor
                 * self.thermal_optimization_factor
                 * self.computational_optimization_factor
@@ -258,12 +255,7 @@ class HardwareAccelerationManager:Hardware Acceleration Manager - Coordinates ZP
             ** 0.25,
         }
 
-    def optimize_tensor_calculations(
-        self:HardwareAccelerationManager",
-        tensor_complexity: float,
-        tensor_size: int,
-        operation_type: str = general,
-    ) -> Dict[str, float]:Optimize tensor calculations using unified acceleration.
+    def optimize_tensor_calculations():-> Dict[str, float]:Optimize tensor calculations using unified acceleration.
 
         This function provides optimal parameters for tensor calculations
         WITHOUT affecting the mathematical results or trading decisions.
@@ -315,7 +307,7 @@ class HardwareAccelerationManager:Hardware Acceleration Manager - Coordinates ZP
             return {speedup_multiplier: 1.0,memory_optimization: 0.5,thermal_optimization: 0.5,optimal_batch_size": 1,parallelization_factor: 1,operation_type: operation_type,tensor_complexity": tensor_complexity,tensor_size": tensor_size,
             }
 
-    def get_performance_report(self:HardwareAccelerationManager) -> Dict[str, Any]:Get comprehensive performance report.try:
+    def get_performance_report():-> Dict[str, Any]:Get comprehensive performance report.try:
             # Get current acceleration factors
             acceleration_factors = self.get_acceleration_factors()
 
@@ -344,30 +336,30 @@ class HardwareAccelerationManager:Hardware Acceleration Manager - Coordinates ZP
                 is_optimizing: False,history_size": 0,
             }
 
-    def reset_acceleration(self:HardwareAccelerationManager) -> None:Reset acceleration to default state.self.unified_boost_factor = 1.0
+    def reset_acceleration():-> None:Reset acceleration to default state.self.unified_boost_factor = 1.0
         self.thermal_optimization_factor = 1.0
         self.computational_optimization_factor = 1.0
         self.memory_optimization_factor = 1.0
         logger.info(🔄 Hardware acceleration reset to default state)
 
-    def get_acceleration_history(self:HardwareAccelerationManager) -> List[AccelerationMetrics]:Get acceleration history.return self.acceleration_history.copy()
+    def get_acceleration_history():-> List[AccelerationMetrics]:Get acceleration history.return self.acceleration_history.copy()
 
-    def clear_history(self: HardwareAccelerationManager) -> None:Clear acceleration history.self.acceleration_history.clear()
+    def clear_history():-> None:Clear acceleration history.self.acceleration_history.clear()
         logger.info(🗑️ Acceleration history cleared)
 
 
-def get_hardware_acceleration_manager() -> HardwareAccelerationManager:Return hardware acceleration manager instance.# ⚠️ PHANTOM_MATH: Implementation placeholder
+def get_hardware_acceleration_manager():-> HardwareAccelerationManager:Return hardware acceleration manager instance.# ⚠️ PHANTOM_MATH: Implementation placeholder
     pass
 
 
-def demo_hardware_acceleration() -> None:Demonstrate hardware acceleration functionality.# ⚠️ PHANTOM_MATH: Implementation placeholder
+def demo_hardware_acceleration():-> None:Demonstrate hardware acceleration functionality.# ⚠️ PHANTOM_MATH: Implementation placeholder
     pass
 
 
 # === Bridge & Backfill Stub ===
 
 
-def get_gpu_energy_ratio() -> float:  # pragma: no cover
+def get_gpu_energy_ratio():-> float:  # pragma: no cover
     Return placeholder GPU energy ratio until full implementation.logger.warning(⚠️ HARDWARE STUB: Returning default GPU energy ratio = 1.0)
     return 1.0
 

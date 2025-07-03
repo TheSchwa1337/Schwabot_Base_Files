@@ -1,3 +1,7 @@
 #!/usr/bin/env python3
-"""Master Cycle Engine Enhanced — compatibility stub."""
+
+
+"""Master Cycle Engine Enhanced  compatibility stub."""
+
+
 __all__: list[str] = []

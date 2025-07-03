@@ -1,3 +1,10 @@
+from datetime import datetime
+from pathlib import Path
+import glob
+import os
+import subprocess
+import sys
+
 #!/usr/bin/env python3
 """
 Script to comment out problematic legacy files while preserving clean implementation.
@@ -8,12 +15,6 @@ This script will:
 4. Preserve clean implementation files
 """
 
-import os
-import sys
-import subprocess
-import glob
-from pathlib import Path
-from datetime import datetime
 
 # Clean implementation files that should NOT be commented out
 CLEAN_FILES = {

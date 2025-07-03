@@ -1,3 +1,17 @@
+import numpy as np
+        import argparse
+        import subprocess
+    import json
+from datetime import datetime
+from typing import Any, Optional
+import asyncio
+import importlib
+import logging
+import os
+import sys
+import time
+import traceback
+
 #!/usr/bin/env python3
 """
 Schwabot System Comprehensive Validation
@@ -18,17 +32,7 @@ to ensure all logical resolutions are functional, including:
 This ensures the system can execute actual trades with proper mathematical foundations.
 """
 
-import asyncio
-import importlib
-import logging
-import os
-import sys
-import time
-import traceback
-from datetime import datetime
-from typing import Any, Optional
 
-import numpy as np
 
 # Configure logging
 logging.basicConfig(
@@ -56,7 +60,7 @@ def print_banner(title: str, emoji: str = "🔍"):
     print(f"{emoji} " + "=" * 60)
 
 
-def safe_import(module_name: str, description: str = "") -> Optional[Any]:
+def safe_import():-> Optional[Any]:
     """Safely import a module and track results."""
     try:
         module = importlib.import_module(module_name)
@@ -604,7 +608,6 @@ def test_cross_platform_compatibility():
             fs_operations["error"] = str(e)
 
         # Test CLI argument parsing simulation
-        import argparse
 
         parser = argparse.ArgumentParser(description="Schwabot CLI Test")
         parser.add_argument(
@@ -654,7 +657,6 @@ def test_flake8_compliance():
     test_results = {"status": "unknown", "details": {}, "errors": []}
 
     try:
-        import subprocess
 
         # Run flake8 check
         try:
@@ -779,7 +781,6 @@ def generate_summary():
         print(f"   {status_icon} {test_name}: {result['status']}")
 
     # Save results to file
-    import json
 
     with open("system_validation_results.json", "w", encoding="utf-8") as f:
         json.dump(validation_results, f, indent=2, default=str)

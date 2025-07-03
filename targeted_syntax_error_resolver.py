@@ -1,3 +1,9 @@
+from pathlib import Path
+from typing import Dict, Optional
+import re
+import subprocess
+import sys
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -14,11 +20,6 @@ This resolver handles:
 - F-string syntax problems
 """
 
-import re
-import subprocess
-import sys
-from pathlib import Path
-from typing import Dict, Optional
 
 
 class TargetedSyntaxErrorResolver:
@@ -34,7 +35,7 @@ class TargetedSyntaxErrorResolver:
             "unterminated_triple": r"SyntaxError: unterminated triple-quoted string",
         }
 
-    def get_specific_error_info(self, file_path: str) -> Optional[Dict[str, str]]:
+    def get_specific_error_info():-> Optional[Dict[str, str]]:
         """Get specific error information for a file."""
         try:
             result = subprocess.run(
@@ -69,7 +70,7 @@ class TargetedSyntaxErrorResolver:
         except Exception as e:
             return {"file": file_path, "error_type": "exception", "full_error": str(e)}
 
-    def fix_unterminated_string_advanced(self, content: str, line_num: int) -> str:
+    def fix_unterminated_string_advanced():-> str:
         """Advanced fix for unterminated string literals."""
         lines = content.split("\n")
         if line_num and line_num <= len(lines):
@@ -125,7 +126,7 @@ class TargetedSyntaxErrorResolver:
 
         return "\n".join(lines)
 
-    def fix_indentation_advanced(self, content: str, line_num: int) -> str:
+    def fix_indentation_advanced():-> str:
         """Advanced fix for indentation errors."""
         lines = content.split("\n")
         if line_num and line_num <= len(lines):
@@ -144,7 +145,7 @@ class TargetedSyntaxErrorResolver:
 
         return "\n".join(lines)
 
-    def fix_complex_string_issues(self, content: str) -> str:
+    def fix_complex_string_issues():-> str:
         """Fix complex string and quote issues."""
         # Fix common patterns
 
@@ -161,7 +162,7 @@ class TargetedSyntaxErrorResolver:
 
         return content
 
-    def fix_file_targeted(self, file_path: str) -> bool:
+    def fix_file_targeted():-> bool:
         """Fix a specific file using targeted error resolution."""
         try:
             # Get specific error information
@@ -205,7 +206,7 @@ class TargetedSyntaxErrorResolver:
             print(f"    Error fixing {file_path}: {e}")
             return False
 
-    def resolve_all_syntax_errors(self) -> Dict[str, int]:
+    def resolve_all_syntax_errors():-> Dict[str, int]:
         """Resolve all syntax errors in the core directory."""
         core_dir = Path("core")
         python_files = list(core_dir.rglob("*.py"))
@@ -265,7 +266,7 @@ class TargetedSyntaxErrorResolver:
 
         return results
 
-    def generate_report(self, results: Dict[str, int]) -> None:
+    def generate_report():-> None:
         """Generate a comprehensive report of the resolution process."""
         print("\n" + "=" * 60)
         print("📊 TARGETED SYNTAX ERROR RESOLUTION SUMMARY")

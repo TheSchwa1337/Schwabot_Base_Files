@@ -1,3 +1,20 @@
+        from core.strategy import create_glyph_trading_system
+        from core.strategy import create_glyph_trading_system
+from core.basket_vector_linker import BasketVectorLinker
+from core.glyph_phase_resolver import GlyphPhaseResolver
+from core.profit_memory_echo import ProfitMemoryEcho
+from core.quantum_superpositional_trigger import QuantumSuperpositionalTrigger
+from core.strategy.entry_exit_portal import EntryExitPortal  # Moved to top-level
+from core.strategy.glyph_gate_engine import GlyphGateEngine
+from core.strategy.glyph_strategy_core import GlyphStrategyCore
+from core.strategy.zygot_zalgo_entropy_dual_key_gate import ZygotZalgoEntropyDualKeyGate
+from core.warp_sync_core import WarpSyncCore
+from drawdown_predictor import DrawdownPredictor  # Assuming it's in the root
+import logging
+import os
+import sys
+import traceback
+
 # -*- coding: utf-8 -*-
 """
 Test Script for Glyph Strategy System
@@ -13,25 +30,11 @@ This script demonstrates:
 5. Simulated trade execution
 """
 
-import sys
-import os
-import logging
-import traceback
 
 # Add the parent directory to sys.path to allow imports from 'core'
 sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 
 # Import the newly created modules for testing
-from core.warp_sync_core import WarpSyncCore
-from core.quantum_superpositional_trigger import QuantumSuperpositionalTrigger
-from core.basket_vector_linker import BasketVectorLinker
-from core.glyph_phase_resolver import GlyphPhaseResolver
-from core.profit_memory_echo import ProfitMemoryEcho
-from core.strategy.glyph_gate_engine import GlyphGateEngine
-from drawdown_predictor import DrawdownPredictor  # Assuming it's in the root
-from core.strategy.glyph_strategy_core import GlyphStrategyCore
-from core.strategy.zygot_zalgo_entropy_dual_key_gate import ZygotZalgoEntropyDualKeyGate
-from core.strategy.entry_exit_portal import EntryExitPortal  # Moved to top-level
 
 # Configure logging
 logging.basicConfig(
@@ -216,7 +219,6 @@ def test_integrated_workflow():
     print("=" * 60)
 
     try:
-        from core.strategy import create_glyph_trading_system
 
         # Create complete system
         glyph_core, portal = create_glyph_trading_system(
@@ -321,7 +323,6 @@ def test_glyph_gate_engine():
 
     try:
         # Initialize individual components for the engine
-        from core.strategy import create_glyph_trading_system
 
         glyph_core_test, _ = create_glyph_trading_system(
             enable_fractal_memory=True, enable_gear_shifting=True

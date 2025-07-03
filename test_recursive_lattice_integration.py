@@ -1,3 +1,18 @@
+        from core.math.trading_tensor_ops import trading_tensor_ops
+import numpy as np
+        import traceback
+    from core.ccxt_trading_executor import ccxt_executor, execute_trading_signal
+    from core.ferris_rde_core import ferris_rde_core
+    from core.ghost_router import GhostRouter
+    from core.integrated_ferris_glyph_controller import integrated_controller, process_btc_cycle
+    from core.lantern_core import enhanced_lantern_core, map_btc_price_to_word
+    from core.recursive_lattice_theorem import (
+from typing import Dict, Any, List
+import json
+import os
+import sys
+import time
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -21,19 +36,12 @@ Tests cover:
 - Visual phenomenon mathematical explanation
 """
 
-import sys
-import os
-import time
-import json
-import numpy as np
-from typing import Dict, Any, List
 
 # Add core to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'core'))
 
 # Import recursive lattice theorem
 try:
-    from core.recursive_lattice_theorem import (
         recursive_lattice, process_recursive_cycle, get_lattice_statistics,
         explain_system_mathematics, MathematicalConstant, PhaseGrade
     )
@@ -44,12 +52,6 @@ except ImportError as e:
 
 # Import existing Schwabot systems
 try:
-    from core.lantern_core import enhanced_lantern_core, map_btc_price_to_word
-    from core.integrated_ferris_glyph_controller import integrated_controller, process_btc_cycle
-    from core.ccxt_trading_executor import ccxt_executor, execute_trading_signal
-    from core.ferris_rde_core import ferris_rde_core
-    from core.ghost_router import GhostRouter
-        from core.math.trading_tensor_ops import trading_tensor_ops
     SCHWABOT_CORE_AVAILABLE = True
 except ImportError as e:
     print(f"❌ Schwabot core components not available: {e}")
@@ -61,7 +63,7 @@ def print_banner(text: str, char: str = "="):
     print(f" {text}")
     print(char * 80)
 
-def format_results(data: Any) -> str:
+def format_results():-> str:
     """Format results as readable text."""
     if isinstance(data, dict):
         return json.dumps(data, indent=2, default=str)
@@ -486,7 +488,6 @@ def main():
 
     except Exception as e:
         print(f"\n❌ Test suite failed: {e}")
-        import traceback
         traceback.print_exc()
 
 if __name__ == "__main__":

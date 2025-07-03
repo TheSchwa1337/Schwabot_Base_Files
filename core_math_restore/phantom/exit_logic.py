@@ -1,3 +1,5 @@
+import time
+
 # -*- coding: utf - 8 -*-
 """Phantom exit logic for profit - target based signals.""""""
 """"""
@@ -17,8 +19,7 @@
 # -*- coding: utf - 8 -*-
 
 
-import time
-def exit_weight(p_profit: float, p_target: float, half_life_sec: int = 900) -> float:"""
+def exit_weight():-> float:"""
     """Calculate exit weight based on profit vs target."
 
 Compute exit signal: \\u03a6_exit = sign(P - P_target) \\u00b7 \\u03ba_decay(t)

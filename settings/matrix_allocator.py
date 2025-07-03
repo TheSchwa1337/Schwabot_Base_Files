@@ -1,3 +1,20 @@
+            from core.unified_math_system import unified_math
+            import numpy as np
+from core.unified_math_system import unified_math
+from core.unified_math_system import unified_math
+from core.unified_math_system import unified_math
+from collections import defaultdict, deque
+from dataclasses import dataclass, asdict
+from datetime import datetime, timedelta
+from pathlib import Path
+from typing import Dict, List, Any, Optional, Tuple, Union
+from utils.safe_print import safe_print, info, warn, error, success, debug
+import json
+import logging
+import threading
+import time
+import yaml
+
 # -*- coding: utf-8 -*-
 """"""
 """"""
@@ -12,8 +29,6 @@
 """"""
 """
 
-from core.unified_math_system import unified_math
-from utils.safe_print import safe_print, info, warn, error, success, debug
 
 
 Schwabot Matrix Allocator
@@ -22,18 +37,6 @@ Manages matrix basket allocation and provides real - time optimization"""
 """"""
 """
 
-import json
-import yaml
-import logging
-from core.unified_math_system import unified_math
-from typing import Dict, List, Any, Optional, Tuple, Union
-from dataclasses import dataclass, asdict
-from pathlib import Path
-from datetime import datetime, timedelta
-import threading
-import time
-from core.unified_math_system import unified_math
-from collections import defaultdict, deque
 
 # Configure logging
 logging.basicConfig(level = logging.INFO)
@@ -124,9 +127,7 @@ self.performance_window = deque(maxlen = 1000)
 # Start background allocation monitoring
 self.start_background_monitoring()
 
-def create_matrix_basket(self, basket_id: str, total_capacity: float,)
-
-risk_budget: float, return_target: float) -> MatrixBasket:"""
+def create_matrix_basket():risk_budget: float, return_target: float) -> MatrixBasket:"""
         """Create a new matrix basket""""""
 """"""
 """
@@ -146,7 +147,7 @@ self.matrix_baskets[basket_id] = basket"""
             logger.info(f"Created matrix basket: {basket_id}")
             return basket
 
-def add_matrix_to_basket(self, basket_id: str, matrix_data: Dict[str, Any]) -> bool:
+def add_matrix_to_basket():-> bool:
     """Function implementation pending."""
 pass
 """
@@ -185,7 +186,7 @@ basket.matrices.append(matrix_allocation)
             logger.info(f"Added matrix {matrix_allocation.matrix_id} to basket {basket_id}")
             return True
 
-def optimize_allocation(self, basket_id: str, optimization_strategy: str = "risk_parity") -> AllocationResult:
+def optimize_allocation():-> AllocationResult:
     """Function implementation pending."""
 pass
 """
@@ -284,7 +285,7 @@ except Exception as e:
                 allocation_duration = time.time() - start_time
             )
 
-def _risk_parity_optimization(self, basket: MatrixBasket) -> List[MatrixAllocation]:
+def _risk_parity_optimization():-> List[MatrixAllocation]:
     """Function implementation pending."""
 pass
 """
@@ -317,7 +318,7 @@ total_allocation = sum(m.allocation_percentage for m in matrices)
 
 return matrices
 
-def _max_sharpe_optimization(self, basket: MatrixBasket) -> List[MatrixAllocation]:"""
+def _max_sharpe_optimization():-> List[MatrixAllocation]:"""
     """Function implementation pending."""
 pass
 """
@@ -351,7 +352,7 @@ equal_weight = 1.0 / len(matrices)
 
 return matrices
 
-def _equal_weight_optimization(self, basket: MatrixBasket) -> List[MatrixAllocation]:"""
+def _equal_weight_optimization():-> List[MatrixAllocation]:"""
     """Function implementation pending."""
 pass
 """
@@ -369,7 +370,7 @@ equal_weight = 1.0 / len(matrices)
 
 return matrices
 
-def _performance_weighted_optimization(self, basket: MatrixBasket) -> List[MatrixAllocation]:"""
+def _performance_weighted_optimization():-> List[MatrixAllocation]:"""
     """Function implementation pending."""
 pass
 """
@@ -395,7 +396,7 @@ equal_weight = 1.0 / len(matrices)
 
 return matrices
 
-def _calculate_portfolio_risk(self, matrices: List[MatrixAllocation]) -> float:"""
+def _calculate_portfolio_risk():-> float:"""
     """Function implementation pending."""
 pass
 """
@@ -422,7 +423,7 @@ portfolio_variance = unified_math.unified_math.dot_product(weights.T, unified_ma
 
 return unified_math.unified_math.sqrt(portfolio_variance)
 
-def _calculate_expected_return(self, matrices: List[MatrixAllocation]) -> float:"""
+def _calculate_expected_return():-> float:"""
     """Function implementation pending."""
 pass
 """
@@ -434,7 +435,7 @@ if not matrices:
 
 return sum(m.allocation_percentage * m.expected_return for m in matrices)
 
-def _calculate_diversification_score(self, matrices: List[MatrixAllocation]) -> float:"""
+def _calculate_diversification_score():-> float:"""
     """Function implementation pending."""
 pass
 """
@@ -454,9 +455,7 @@ if len(matrices) <= 1:
 
 return unified_math.max(0.0, unified_math.min(1.0, diversification_score))
 
-def _generate_allocation_recommendations(self, matrices: List[MatrixAllocation],)
-
-risk_score: float, expected_return: float,
+def _generate_allocation_recommendations():risk_score: float, expected_return: float,
                                                 diversification_score: float) -> List[str]:"""
         """Generate allocation recommendations""""""
 """"""
@@ -493,7 +492,7 @@ low_performance_matrices = [m for m in matrices if m.performance_score < 0.3]
 
 return recommendations
 
-def _record_allocation(self, result: AllocationResult, basket_id: str) -> None:
+def _record_allocation():-> None:
     """Function implementation pending."""
 pass
 """
@@ -529,7 +528,7 @@ if result.success:
                     'timestamp': result.timestamp
 })
 
-def get_allocation_statistics(self) -> Dict[str, Any]:"""
+def get_allocation_statistics():-> Dict[str, Any]:"""
     """Function implementation pending."""
 pass
 """
@@ -568,7 +567,7 @@ return {
                 'recent_allocations': len(self.allocation_history),
                 'last_allocation': asdict(self.last_allocation) if self.last_allocation else None
 
-def get_basket_performance(self, basket_id: str) -> Dict[str, Any]:"""
+def get_basket_performance():-> Dict[str, Any]:"""
     """Function implementation pending."""
 pass
 """
@@ -599,7 +598,7 @@ return {
                 'last_rebalance': basket.last_rebalance,
                 'matrices': [asdict(m) for m in basket.matrices]
 
-def start_background_monitoring(self) -> None:"""
+def start_background_monitoring():-> None:"""
     """Function implementation pending."""
 pass
 """
@@ -612,7 +611,7 @@ if not self.running:
             self.allocation_thread.start()"""
             logger.info("Background allocation monitoring started")
 
-def stop_background_monitoring(self) -> None:
+def stop_background_monitoring():-> None:
     """Function implementation pending."""
 pass
 """
@@ -624,7 +623,7 @@ self.running = False
             self.allocation_thread.join(timeout = 5)"""
         logger.info("Background allocation monitoring stopped")
 
-def _background_monitoring_loop(self) -> None:
+def _background_monitoring_loop():-> None:
     """Function implementation pending."""
 pass
 """
@@ -655,7 +654,7 @@ except Exception as e:
                 logger.error(f"Error in background monitoring loop: {e}")
                 time.sleep(60)
 
-def export_allocation_data(self, filepath: str) -> None:
+def export_allocation_data():-> None:
     """Function implementation pending."""
 pass
 """
@@ -675,7 +674,7 @@ with open(filepath, 'w') as f:
 """
 logger.info(f"Allocation data exported to {filepath}")
 
-def clear_allocation_history(self) -> None:
+def clear_allocation_history():-> None:
     """Function implementation pending."""
 pass
 """
@@ -697,7 +696,7 @@ with self.lock:
 matrix_allocator = MatrixAllocator()
 
 
-def get_matrix_allocator() -> MatrixAllocator:
+def get_matrix_allocator():-> MatrixAllocator:
         """
         Optimize mathematical function for trading performance.
         
@@ -710,8 +709,6 @@ def get_matrix_allocator() -> MatrixAllocator:
             Optimized result
         """
         try:
-            import numpy as np
-            from core.unified_math_system import unified_math
             
             # Apply mathematical optimization
             if target is not None:

@@ -1,3 +1,8 @@
+import json
+import os
+import re
+import sys
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -7,10 +12,6 @@ Scans the codebase for phantom math routines defined in bucket_registry.json
 and injects stub definitions for any missing functions, marked with TODO comments.
 """
 
-import json
-import os
-import re
-import sys
 
 REGISTRY_FILE = "bucket_registry.json"
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))

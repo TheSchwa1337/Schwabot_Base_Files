@@ -1,14 +1,24 @@
+import numpy as np
+        from core.drift_shells import DriftShells
+        from core.entropic_vectorizer import EntropicVectorizer
+        from core.feeds.chain_ws import BlockEvent
+        from core.feeds.stratum_sniffer import ShareEvent
+        from core.gpu_accelerator import GPUAccelerator
+        from core.integrators.autonomic_strategy_reflex_layer import (
+        from core.memory_backlog import MemoryBacklog
+        from core.triplet_harmony import TripletHarmony
+        import collections
+import asyncio
+import logging
+import os
+import sys
+
 #!/usr/bin/env python3
 """
 Simple test script for BTC processor components.
 Tests individual components without importing the entire core module.
 """
 
-import asyncio
-import logging
-import sys
-import os
-import numpy as np
 
 # Add the current directory to the path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -22,7 +32,6 @@ logging.basicConfig(
 def test_entropic_vectorizer():
     """Test the EntropicVectorizer component."""
     try:
-        from core.entropic_vectorizer import EntropicVectorizer
 
         config = {"enabled": True, "output_bits": 16}
         ev = EntropicVectorizer(config)
@@ -44,13 +53,11 @@ def test_entropic_vectorizer():
 def test_triplet_harmony():
     """Test the TripletHarmony component."""
     try:
-        from core.triplet_harmony import TripletHarmony
 
         config = {"enabled": True, "coherence_threshold": 0.85}
         th = TripletHarmony(config)
 
         # Test with sample vectors
-        import collections
 
         test_vectors = collections.deque(
             [
@@ -74,7 +81,6 @@ def test_triplet_harmony():
 def test_drift_shells():
     """Test the DriftShells component."""
     try:
-        from core.drift_shells import DriftShells
 
         config = {
             "enable_fractal_lock": True,
@@ -101,7 +107,6 @@ def test_drift_shells():
 def test_memory_backlog():
     """Test the MemoryBacklog component."""
     try:
-        from core.memory_backlog import MemoryBacklog
 
         config = {
             "enabled": True,
@@ -124,7 +129,6 @@ def test_memory_backlog():
 def test_gpu_accelerator():
     """Test the GPUAccelerator component."""
     try:
-        from core.gpu_accelerator import GPUAccelerator
 
         config = {"enabled": True, "provider": "numpy"}
         gpu = GPUAccelerator(config)
@@ -145,7 +149,6 @@ def test_gpu_accelerator():
 def test_asrl():
     """Test the AutonomicStrategyReflexLayer component."""
     try:
-        from core.integrators.autonomic_strategy_reflex_layer import (
             AutonomicStrategyReflexLayer,
         )
 
@@ -172,7 +175,6 @@ def test_asrl():
 def test_chain_ws():
     """Test the chain_ws module."""
     try:
-        from core.feeds.chain_ws import BlockEvent
 
         # Test BlockEvent creation
         block_event = BlockEvent(
@@ -196,7 +198,6 @@ def test_chain_ws():
 def test_stratum_sniffer():
     """Test the stratum_sniffer module."""
     try:
-        from core.feeds.stratum_sniffer import ShareEvent
 
         # Test ShareEvent creation
         share_event = ShareEvent(pool="test_pool", diff=1000.0, timestamp=1234567890.0)

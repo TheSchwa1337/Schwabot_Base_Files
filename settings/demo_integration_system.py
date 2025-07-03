@@ -1,7 +1,5 @@
-# -*- coding: utf - 8 -*-
-# -*- coding: utf - 8 -*-
-# -*- coding: utf - 8 -*-
-# -*- coding: utf - 8 -*-
+            from core.unified_math_system import unified_math
+from core.unified_math_system import unified_math
 from collections import defaultdict, deque
 from dataclasses import dataclass, asdict
 from datetime import datetime, timedelta
@@ -10,16 +8,20 @@ from matrix_allocator import MatrixAllocator, get_matrix_allocator
 from pathlib import Path
 from settings_controller import SettingsController, get_settings_controller
 from typing import Dict, List, Any, Optional, Tuple
+from utils.safe_print import safe_print, info, warn, error, success, debug
 from vector_validator import VectorValidator, get_vector_validator
 import json
 import logging
+import threading
 import time
 import yaml
 
-import threading
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
 
-from core.unified_math_system import unified_math
-from utils.safe_print import safe_print, info, warn, error, success, debug
+
 
 
 # Initialize Unicode handler
@@ -129,7 +131,7 @@ self.total_sessions = 0
 # Start background monitoring
 self.start_background_monitoring()
 
-def _load_demo_configuration(self) -> DemoConfiguration:"""
+def _load_demo_configuration():-> DemoConfiguration:"""
         """Load demo configuration from YAML file""""""
 """"""
 """
@@ -148,7 +150,7 @@ except Exception as e:
             logger.error(f"Error loading demo configuration: {e}")
             return DemoConfiguration()
 
-def start_demo_session(self, session_id: str, scenario: str = "moderate") -> bool:
+def start_demo_session():-> bool:
     """Function implementation pending."""
 pass
 """
@@ -186,7 +188,7 @@ except Exception as e:
             logger.error(f"Error starting demo session: {e}")
             return False
 
-def _load_scenario_config(self, scenario: str) -> Dict[str, Any]:
+def _load_scenario_config():-> Dict[str, Any]:
     """Function implementation pending."""
 pass
 """
@@ -204,7 +206,7 @@ except Exception as e:
             logger.error(f"Error loading scenario config: {e}")
             return {}
 
-def stop_demo_session(self, session_id: str) -> Optional[DemoResult]:
+def stop_demo_session():-> Optional[DemoResult]:
     """Function implementation pending."""
 pass
 """
@@ -250,7 +252,7 @@ except Exception as e:
             logger.error(f"Error stopping demo session: {e}")
             return None
 
-def _calculate_session_result(self, session: Dict[str, Any]) -> DemoResult:
+def _calculate_session_result():-> DemoResult:
     """Function implementation pending."""
 pass
 """
@@ -317,7 +319,7 @@ return DemoResult(
             timestamp = datetime.now().isoformat()
         )
 
-def _calculate_max_drawdown(self, balances: List[float]) -> float:"""
+def _calculate_max_drawdown():-> float:"""
     """Function implementation pending."""
 pass
 """
@@ -338,7 +340,7 @@ for balance in balances:
 
 return max_dd
 
-def _calculate_max_consecutive_losses(self, trades: List[Dict[str, Any]]) -> int:"""
+def _calculate_max_consecutive_losses():-> int:"""
     """Function implementation pending."""
 pass
 """
@@ -357,9 +359,7 @@ for trade in trades:
 
 return max_consecutive
 
-def _generate_session_recommendations(self, session: Dict[str, Any],)
-
-total_return: float, sharpe_ratio: float,
+def _generate_session_recommendations():total_return: float, sharpe_ratio: float,
                                             max_drawdown: float, win_rate: float) -> List[str]:"""
         """Generate recommendations based on session performance""""""
 """"""
@@ -396,7 +396,7 @@ if len(session['trades']) < 10:
 
 return recommendations
 
-def _apply_session_learning(self, result: DemoResult) -> None:
+def _apply_session_learning():-> None:
     """Function implementation pending."""
 pass
 """
@@ -427,7 +427,7 @@ self.settings_controller.record_backtest_failure({
 except Exception as e:"""
 logger.error(f"Error applying session learning: {e}")
 
-def run_backtest(self, scenario: str = "moderate", duration: int = None) -> DemoResult:
+def run_backtest():-> DemoResult:
     """Function implementation pending."""
 pass
 """
@@ -477,7 +477,7 @@ return DemoResult(
                 timestamp = datetime.now().isoformat()
             )
 
-def _simulate_trading(self, session_id: str, duration: int) -> None:
+def _simulate_trading():-> None:
     """Function implementation pending."""
 pass
 """
@@ -522,7 +522,7 @@ time.sleep(self.demo_config.tick_interval)
 except Exception as e:
             logger.error(f"Error in trading simulation: {e}")
 
-def _generate_market_data(self, session: Dict[str, Any]) -> Dict[str, Any]:
+def _generate_market_data():-> Dict[str, Any]:
     """Function implementation pending."""
 pass
 """
@@ -554,7 +554,7 @@ return {
             'market_condition': np.random.choice(['bull', 'bear', 'sideways']),
             'volatility': volatility
 
-def _make_trade_decision(self, session: Dict[str, Any], market_data: Dict[str, Any]) -> Optional[Dict[str, Any]]:"""
+def _make_trade_decision():-> Optional[Dict[str, Any]]:"""
     """Function implementation pending."""
 pass
 """
@@ -592,7 +592,7 @@ except Exception as e:"""
 logger.error(f"Error making trade decision: {e}")
             return None
 
-def _execute_trade(self, session: Dict[str, Any], decision: Dict[str, Any]) -> Dict[str, Any]:
+def _execute_trade():-> Dict[str, Any]:
     """Function implementation pending."""
 pass
 """
@@ -640,7 +640,7 @@ logger.error(f"Error executing trade: {e}")
                 'duration': 0.0,
                 'reason': 'execution_error'
 
-def _update_matrix_allocation(self, session: Dict[str, Any]) -> None:
+def _update_matrix_allocation():-> None:
     """Function implementation pending."""
 pass
 """
@@ -669,7 +669,7 @@ if result.success:
 except Exception as e:
             logger.error(f"Error updating matrix allocation: {e}")
 
-def get_demo_statistics(self) -> Dict[str, Any]:
+def get_demo_statistics():-> Dict[str, Any]:
     """Function implementation pending."""
 pass
 """
@@ -705,7 +705,7 @@ return {
                 'active_sessions': len(self.active_sessions),
                 'recent_sessions': len(self.session_history)
 
-def start_background_monitoring(self) -> None:"""
+def start_background_monitoring():-> None:"""
     """Function implementation pending."""
 pass
 """
@@ -718,7 +718,7 @@ if not self.running:
             self.demo_thread.start()"""
             logger.info("Background demo monitoring started")
 
-def stop_background_monitoring(self) -> None:
+def stop_background_monitoring():-> None:
     """Function implementation pending."""
 pass
 """
@@ -730,7 +730,7 @@ self.running = False
             self.demo_thread.join(timeout = 5)"""
         logger.info("Background demo monitoring stopped")
 
-def _background_monitoring_loop(self) -> None:
+def _background_monitoring_loop():-> None:
     """Function implementation pending."""
 pass
 """
@@ -761,7 +761,7 @@ except Exception as e:
                 logger.error(f"Error in background monitoring loop: {e}")
                 time.sleep(30)
 
-def export_demo_data(self, filepath: str) -> None:
+def export_demo_data():-> None:
     """Function implementation pending."""
 pass
 """
@@ -782,7 +782,7 @@ with open(filepath, 'w') as f:
 """
 logger.info(f"Demo data exported to {filepath}")
 
-def clear_demo_history(self) -> None:
+def clear_demo_history():-> None:
     """Function implementation pending."""
 pass
 """
@@ -802,7 +802,7 @@ with self.lock:
 demo_integration_system = DemoIntegrationSystem()
 
 
-def get_demo_integration_system() -> DemoIntegrationSystem:
+def get_demo_integration_system():-> DemoIntegrationSystem:
         """
         Calculate profit optimization for BTC trading.
         
@@ -816,7 +816,6 @@ def get_demo_integration_system() -> DemoIntegrationSystem:
         """
         try:
             # Import unified math system
-            from core.unified_math_system import unified_math
             
             # Calculate profit using unified mathematical framework
             base_profit = price_data * volume_data * 0.001  # 0.1% base

@@ -1,7 +1,8 @@
+import os
+
 #!/usr/bin/env python3
 """Strategic Cleanup Script - Auto-generated"""
 
-import os
 
 def delete_non_essential_files():
     """Delete files that don't contribute to mathematical/trading core"""

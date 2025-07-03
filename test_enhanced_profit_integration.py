@@ -1,3 +1,10 @@
+    from core.enhanced_live_execution_mapper import (
+    from core.profit_optimization_engine import (
+from unittest.mock import MagicMock
+import logging
+import time
+import unittest
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """Test Suite for Enhanced Profit Optimization Integration.
@@ -11,15 +18,10 @@ This test suite validates the complete integration of:
 Tests cover both successful and failure scenarios to ensure robust operation.
 """
 
-import logging
-import time
-import unittest
-from unittest.mock import MagicMock
 
 
 # Import the systems to test
 try:
-    from core.profit_optimization_engine import (
         ProfitOptimizationEngine,
         ProfitVector,
         OptimizationResult,
@@ -32,7 +34,6 @@ except ImportError:
     PROFIT_ENGINE_AVAILABLE = False
 
 try:
-    from core.enhanced_live_execution_mapper import (
         EnhancedLiveExecutionMapper,
         EnhancedExecutionState,
         TradingPerformanceMetrics,

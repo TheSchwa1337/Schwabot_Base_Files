@@ -1,3 +1,10 @@
+        from core.unified_component_bridge import get_component_bridge
+        from schwabot_unified_launcher import SchwabotUnifiedLauncher
+from pathlib import Path
+import argparse
+import logging
+import sys
+
 #!/usr/bin/env python3
 """Schwabot Unified Launcher - Quick Start Script.
 
@@ -9,10 +16,6 @@ This script launches the complete unified Schwabot platform with:
 - Plugin/benchmark/device/processor/manager tabs
 """
 
-import sys
-import logging
-import argparse
-from pathlib import Path
 
 # Ensure we can import all modules
 sys.path.append(str(Path(__file__).parent))
@@ -156,8 +159,6 @@ def main():
         # Import and initialize the unified launcher
         print("🎯 Initializing Schwabot Unified Launcher...")
 
-        from schwabot_unified_launcher import SchwabotUnifiedLauncher
-        from core.unified_component_bridge import get_component_bridge
 
         # Initialize component bridge
         bridge = get_component_bridge()

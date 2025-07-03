@@ -1,3 +1,15 @@
+import numpy as np
+                import cupy as cp
+            from numba import cuda
+            import cupy as cp
+            import numba
+from datetime import datetime
+from typing import List, Tuple, Callable, Optional, Dict, Any
+import csv
+import logging
+import os
+import time
+
 #!/usr/bin/env python3
 """
 Trading Matrix Visualizer (Enhanced)
@@ -12,13 +24,6 @@ Trading Matrix Visualizer (Enhanced)
 - Flake8/mypy compliant
 """
 
-import numpy as np
-import time
-import os
-import csv
-import logging
-from typing import List, Tuple, Callable, Optional, Dict, Any
-from datetime import datetime
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -39,7 +44,6 @@ class HardwareOptimizer:
     def _detect_hardware(self):
         """Detect available hardware for optimization."""
         try:
-            import cupy as cp
 
             self.gpu_available = True
             self.cuda_available = True
@@ -48,8 +52,6 @@ class HardwareOptimizer:
             logger.info("CuPy not available, using CPU fallback")
 
         try:
-            import numba
-            from numba import cuda
 
             self.numba_available = True
             logger.info("Numba CUDA acceleration detected")
@@ -63,7 +65,7 @@ class HardwareOptimizer:
 
         logger.info(f"Hardware optimization mode: {self.optimization_mode}")
 
-    def get_optimization_info(self) -> Dict[str, Any]:
+    def get_optimization_info():-> Dict[str, Any]:
         """Get current optimization configuration."""
         return {
             "gpu_available": self.gpu_available,
@@ -78,12 +80,7 @@ class HardwareOptimizer:
 class TradingMatrix:
     """High-speed trading matrix for prices, signals, and positions with GPU/CPU optimization."""
 
-    def __init__(
-        self,
-        n_assets: int,
-        window: int = 32,
-        optimizer: Optional[HardwareOptimizer] = None,
-    ) -> None:
+    def __init__():-> None:
         self.n_assets = n_assets
         self.window = window
         self.optimizer = optimizer or HardwareOptimizer()
@@ -105,7 +102,7 @@ class TradingMatrix:
             f"TradingMatrix initialized: {n_assets} assets, {window} window, {self.optimizer.optimization_mode} mode"
         )
 
-    def update(self, prices: np.ndarray, signals: np.ndarray) -> None:
+    def update():-> None:
         """Update matrices with new prices and signals using optimized operations."""
         start_time = time.time()
 
@@ -129,22 +126,21 @@ class TradingMatrix:
             self.performance_metrics["total_time"] / self.performance_metrics["updates"]
         )
 
-    def generate_positions(self, signals: np.ndarray) -> np.ndarray:
+    def generate_positions():-> np.ndarray:
         """Fast bitwise signal-to-position logic with optimization."""
         if self.optimizer.optimization_mode == "gpu":
             return self._generate_positions_gpu(signals)
         else:
             return self._generate_positions_cpu(signals)
 
-    def _generate_positions_cpu(self, signals: np.ndarray) -> np.ndarray:
+    def _generate_positions_cpu():-> np.ndarray:
         """CPU-optimized position generation."""
         return np.where(signals > 0.5, 1, np.where(signals < -0.5, -1, 0))
 
-    def _generate_positions_gpu(self, signals: np.ndarray) -> np.ndarray:
+    def _generate_positions_gpu():-> np.ndarray:
         """GPU-optimized position generation with fallback."""
         try:
             if self.optimizer.gpu_available:
-                import cupy as cp
 
                 signals_gpu = cp.array(signals)
                 positions_gpu = cp.where(
@@ -157,7 +153,7 @@ class TradingMatrix:
             logger.warning(f"GPU position generation failed, falling back to CPU: {e}")
             return self._generate_positions_cpu(signals)
 
-    def get_recent(self) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+    def get_recent():-> Tuple[np.ndarray, np.ndarray, np.ndarray]:
         """Get recent data with proper indexing."""
         if self.ptr == 0:
             return self.price_matrix, self.signal_matrix, self.position_matrix
@@ -172,7 +168,7 @@ class TradingMatrix:
             self.position_matrix[indices],
         )
 
-    def drift_vector(self) -> np.ndarray:
+    def drift_vector():-> np.ndarray:
         """Calculate drift vector with optimization."""
         prices, _, _ = self.get_recent()
         if len(prices) == 0:
@@ -181,7 +177,7 @@ class TradingMatrix:
         anchor = np.mean(prices, axis=0)
         return prices[-1] - anchor
 
-    def entropy(self) -> np.ndarray:
+    def entropy():-> np.ndarray:
         """Calculate entropy with optimization."""
         prices, _, _ = self.get_recent()
         if len(prices) == 0:
@@ -189,7 +185,7 @@ class TradingMatrix:
 
         return np.std(prices, axis=0)
 
-    def consensus(self) -> np.ndarray:
+    def consensus():-> np.ndarray:
         """Calculate consensus with optimization."""
         _, signals, _ = self.get_recent()
         if len(signals) == 0:
@@ -197,7 +193,7 @@ class TradingMatrix:
 
         return np.where(np.mean(signals > 0, axis=0) > 0.5, 1, -1)
 
-    def get_performance_metrics(self) -> Dict[str, Any]:
+    def get_performance_metrics():-> Dict[str, Any]:
         """Get performance metrics."""
         return {
             **self.performance_metrics,
@@ -211,9 +207,7 @@ class TradingMatrix:
 GLYPHS = ["1", "i", "·", " ", "⊥"]
 
 
-def trading_state_to_glyphs(
-    drift: np.ndarray, entropy: np.ndarray, consensus: np.ndarray
-) -> List[List[str]]:
+def trading_state_to_glyphs():-> List[List[str]]:
     """Map trading state to a glyph matrix for visualization."""
     n = len(drift)
     matrix: List[List[str]] = []
@@ -233,16 +227,14 @@ def trading_state_to_glyphs(
     return matrix
 
 
-def print_glyph_matrix(matrix: List[List[str]]) -> None:
+def print_glyph_matrix():-> None:
     """Print glyph matrix with proper formatting."""
     for row in matrix:
         print("".join(row))
 
 
 # --- Market Data Loader ---
-def load_market_data_csv(
-    filename: str, n_assets: int, price_col_start: int = 1
-) -> np.ndarray:
+def load_market_data_csv():-> np.ndarray:
     """Load market data from CSV with error handling."""
     if not os.path.exists(filename):
         raise FileNotFoundError(f"CSV file not found: {filename}")
@@ -271,7 +263,7 @@ def load_market_data_csv(
 
 
 # --- Strategy Function Example ---
-def example_strategy_fn(prices: np.ndarray, bar_index: int) -> np.ndarray:
+def example_strategy_fn():-> np.ndarray:
     """Simple momentum strategy: signal = price change over last bar."""
     if bar_index == 0:
         return np.zeros_like(prices)
@@ -284,12 +276,7 @@ def example_strategy_fn(prices: np.ndarray, bar_index: int) -> np.ndarray:
 
 
 # --- Backtesting Loop ---
-def run_backtest(
-    price_data: np.ndarray,
-    strategy_fn: Callable[[np.ndarray, int], np.ndarray],
-    delay: float = 0.08,
-    optimizer: Optional[HardwareOptimizer] = None,
-) -> None:
+def run_backtest():-> None:
     """Run backtest with hardware optimization."""
     n_bars, n_assets = price_data.shape
     optimizer = optimizer or HardwareOptimizer()
@@ -339,7 +326,7 @@ def run_backtest(
 
 
 # --- Main Entrypoint ---
-def main() -> None:
+def main():-> None:
     """Main entry point with comprehensive error handling."""
     try:
         # Initialize hardware optimizer

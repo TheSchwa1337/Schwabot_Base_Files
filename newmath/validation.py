@@ -1,14 +1,25 @@
-# -*- coding: utf - 8 -*-
-# -*- coding: utf - 8 -*-
-# -*- coding: utf - 8 -*-
-# -*- coding: utf - 8 -*-
+        from . import profit_math
+from . import profit_math
+from core.unified_math_system import unified_math
+        from . import entropy_calc
+        from . import hash_vectors
+        from . import matrix_utils
+        from . import render_engine
+        from . import tensor_ops
+from . import entropy_calc
+from . import hash_vectors
+from . import tensor_ops
 from dual_unicore_handler import DualUnicoreHandler
 from typing import Dict, Any
+from utils.safe_print import safe_print, info, warn, error, success, debug
 import logging
 import time
 
-from core.unified_math_system import unified_math
-from utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+
 
 
 # Initialize Unicode handler
@@ -30,7 +41,7 @@ Clean implementation for testing all mathematical components."""
 logger = logging.getLogger(__name__)
 
 
-def run_basic_tests() -> bool:"""
+def run_basic_tests():-> bool:"""
     """"""
 """
 
@@ -47,7 +58,6 @@ Returns:
 safe_print("\\u1f52c Running NewMath Basic Validation Tests...")
 
 # Test tensor operations
-from . import tensor_ops
 A = np.random.random((2, 3))
         B = np.random.random((3, 2))
         result = tensor_ops.tensor_contraction(A, B)
@@ -55,20 +65,17 @@ A = np.random.random((2, 3))
         safe_print(f"\\u2713 Tensor contraction: {'PASS' if tensor_test else 'FAIL'}")
 
 # Test profit math
-from . import profit_math
 prices = np.array([100.0, 101.5, 99.8, 102.3])
         derivatives = profit_math.profit_derivative(prices)
         profit_test = len(derivatives) == len(prices) - 1
         safe_print(f"\\u2713 Profit derivative: {'PASS' if profit_test else 'FAIL'}")
 
 # Test entropy calculations
-from . import entropy_calc
 entropy = entropy_calc.calculate_entropy(1000.0, 0.1)
         entropy_test = entropy > 0
         safe_print(f"\\u2713 Entropy calculation: {'PASS' if entropy_test else 'FAIL'}")
 
 # Test hash vectors
-from . import hash_vectors
 hash_vec = hash_vectors.generate_hash_vector(100.0, 2.5, 42)
         hash_test = len(hash_vec) == 64
         safe_print(f"\\u2713 Hash generation: {'PASS' if hash_test else 'FAIL'}")
@@ -82,7 +89,7 @@ except Exception as e:
         return False
 
 
-def run_full_tests() -> Dict[str, Any]:
+def run_full_tests():-> Dict[str, Any]:
     """"""
 """
 
@@ -166,14 +173,13 @@ results["success_rate"] = success_rate
 return results
 
 
-def _test_tensor_operations() -> Dict[str, Any]:
+def _test_tensor_operations():-> Dict[str, Any]:
     """Test tensor operations module."""
 
 """
 """"""
 """
    try:
-        from . import tensor_ops
 
 # Test tensor contraction
 A = np.random.random((3, 4))
@@ -202,14 +208,13 @@ except Exception as e:
         return {"passed": False, "error": str(e)}
 
 
-def _test_profit_math() -> Dict[str, Any]:
+def _test_profit_math():-> Dict[str, Any]:
     """Test profit mathematics module."""
 
 """
 """"""
 """
    try:
-        from . import profit_math
 
 # Test profit derivative
 prices = np.array([100.0, 101.5, 99.8, 102.3, 98.7])
@@ -235,14 +240,13 @@ except Exception as e:
         return {"passed": False, "error": str(e)}
 
 
-def _test_entropy_calc() -> Dict[str, Any]:
+def _test_entropy_calc():-> Dict[str, Any]:
     """Test entropy calculations module."""
 
 """
 """"""
 """
    try:
-        from . import entropy_calc
 
 # Test basic entropy
 entropy = entropy_calc.calculate_entropy(1000.0, 0.1)
@@ -269,14 +273,13 @@ except Exception as e:
         return {"passed": False, "error": str(e)}
 
 
-def _test_hash_vectors() -> Dict[str, Any]:
+def _test_hash_vectors():-> Dict[str, Any]:
     """Test hash vectors module."""
 
 """
 """"""
 """
    try:
-        from . import hash_vectors
 
 # Test hash generation
 hash_vec = hash_vectors.generate_hash_vector(100.0, 2.5, 42)
@@ -304,14 +307,13 @@ except Exception as e:
         return {"passed": False, "error": str(e)}
 
 
-def _test_matrix_utils() -> Dict[str, Any]:
+def _test_matrix_utils():-> Dict[str, Any]:
     """Test matrix utilities module."""
 
 """
 """"""
 """
    try:
-        from . import matrix_utils
 
 # Test safe multiplication
 A = np.random.random((3, 4))
@@ -331,14 +333,13 @@ except Exception as e:
         return {"passed": False, "error": str(e)}
 
 
-def _test_render_engine() -> Dict[str, Any]:
+def _test_render_engine():-> Dict[str, Any]:
     """Test render engine module."""
 
 """
 """"""
 """
    try:
-        from . import render_engine
 
 # Test price line rendering
 prices = [100.0, 101.5, 99.8, 102.3]

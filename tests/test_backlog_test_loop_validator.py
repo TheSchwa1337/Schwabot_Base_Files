@@ -1,16 +1,24 @@
-# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
-# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
-# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
-# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
+            from core.unified_math_system import unified_math
+from core.unified_math_system import unified_math
+    from core.event_impact_mapper import EventImpact
+    from core.unified_confidence_matrix import UnifiedConfidenceMatrix, calculate_unified_confidence
+from core.fault_bus import FaultBus
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from dual_unicore_handler import DualUnicoreHandler
+from tests.test_api_price_entry_feedback import test_api_price_entry_feedback
+from tests.test_legacy_backlog_hydrator import test_legacy_backlog_hydrator
+from tests.test_tick_hold_logic import test_tick_hold_logic
 from typing import Dict, Any, List, Optional
 import logging
 import time
 import unittest
 
-from core.unified_math_system import unified_math
+# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
+
 
 
 # Initialize Unicode handler
@@ -38,12 +46,6 @@ Key Validations:
 
 # Import core components
 try:
-    from core.unified_confidence_matrix import UnifiedConfidenceMatrix, calculate_unified_confidence
-    from core.event_impact_mapper import EventImpact
-from core.fault_bus import FaultBus
-from tests.test_legacy_backlog_hydrator import test_legacy_backlog_hydrator
-from tests.test_tick_hold_logic import test_tick_hold_logic
-from tests.test_api_price_entry_feedback import test_api_price_entry_feedback
 except ImportError as e:"""
 logging.warning(f"Some imports failed: {e}")
 
@@ -160,7 +162,7 @@ self.cycle_states: List[BacklogTestState] = []
 
 logger.info("\\u1f504 Backlog - Test Loop Validator initialized")
 
-def test_backlog_persistence_across_cycles(self) -> Dict[str, Any]:
+def test_backlog_persistence_across_cycles():-> Dict[str, Any]:
     """Function implementation pending."""
 pass
 """
@@ -225,7 +227,7 @@ if results['success']:
 
 return results
 
-def test_ferris_wheel_backlog_synchronization(self) -> Dict[str, Any]:
+def test_ferris_wheel_backlog_synchronization():-> Dict[str, Any]:
     """Function implementation pending."""
 pass
 """
@@ -295,7 +297,7 @@ if results['success']:
 
 return results
 
-def test_confidence_backlog_correlation(self) -> Dict[str, Any]:
+def test_confidence_backlog_correlation():-> Dict[str, Any]:
     """Function implementation pending."""
 pass
 """
@@ -389,7 +391,7 @@ if results['success']:
 
 return results
 
-def test_matrix_controller_backlog_integration(self) -> Dict[str, Any]:
+def test_matrix_controller_backlog_integration():-> Dict[str, Any]:
     """Function implementation pending."""
 pass
 """
@@ -467,7 +469,7 @@ if results['success']:
 
 return results
 
-def test_memory_state_retention(self) -> Dict[str, Any]:
+def test_memory_state_retention():-> Dict[str, Any]:
     """Function implementation pending."""
 pass
 """
@@ -535,7 +537,7 @@ if results['success']:
 
 return results
 
-def _simulate_test_cycle(self, backlog_state: Dict[str, Any], cycle: int) -> Dict[str, Any]:
+def _simulate_test_cycle():-> Dict[str, Any]:
     """Function implementation pending."""
 pass
 """
@@ -568,9 +570,7 @@ logger.error(f"Error simulating test cycle: {e}")
                 'execution_time': 0.0,
                 'backlog_state_used': backlog_state.copy()
 
-def _simulate_test_cycle_with_ferris(self, backlog_state: Dict[str, Any],)
-
-ferris_wheel_position: int, cycle: int) -> Dict[str, Any]:
+def _simulate_test_cycle_with_ferris():ferris_wheel_position: int, cycle: int) -> Dict[str, Any]:
         """Simulate a test cycle with Ferris wheel integration.""""""
 """"""
 """
@@ -592,9 +592,7 @@ except Exception as e:"""
 logger.error(f"Error simulating test cycle with Ferris wheel: {e}")
             return self._simulate_test_cycle(backlog_state, cycle)
 
-def _update_backlog_state(self, current_state: Dict[str, Any],)
-
-test_result: Dict[str, Any]) -> Dict[str, Any]:
+def _update_backlog_state():test_result: Dict[str, Any]) -> Dict[str, Any]:
         """Update backlog state based on test result.""""""
 """"""
 """
@@ -625,9 +623,7 @@ except Exception as e:"""
 logger.error(f"Error updating backlog state: {e}")
             return current_state
 
-def _update_matrix_controller_state(self, matrix_state: Dict[str, Any],)
-
-backlog_state: Dict[str, Any]) -> Dict[str, Any]:
+def _update_matrix_controller_state():backlog_state: Dict[str, Any]) -> Dict[str, Any]:
         """Update matrix controller state based on backlog.""""""
 """"""
 """
@@ -659,7 +655,7 @@ except Exception as e:"""
 logger.error(f"Error updating matrix controller state: {e}")
             return matrix_state
 
-def _calculate_backlog_metric(self, backlog_state: Dict[str, Any]) -> float:
+def _calculate_backlog_metric():-> float:
     """Function implementation pending."""
 pass
 """
@@ -678,9 +674,7 @@ except Exception as e:"""
 logger.error(f"Error calculating backlog metric: {e}")
             return 0.5
 
-def _validate_backlog_persistence(self, initial_state: Dict[str, Any],)
-
-final_state: Dict[str, Any],
+def _validate_backlog_persistence():final_state: Dict[str, Any],
                                         cycle_results: List[Dict[str, Any]]) -> bool:
         """Validate that backlog state persists correctly.""""""
 """"""
@@ -706,9 +700,7 @@ except Exception as e:"""
 logger.error(f"Error validating backlog persistence: {e}")
             return False
 
-def _validate_ferris_synchronization(self, sync_results: List[Dict[str, Any]],)
-
-expected_sync: bool) -> bool:
+def _validate_ferris_synchronization():expected_sync: bool) -> bool:
         """Validate Ferris wheel synchronization.""""""
 """"""
 """
@@ -734,9 +726,7 @@ except Exception as e:"""
 logger.error(f"Error validating Ferris synchronization: {e}")
             return False
 
-def _validate_matrix_integration(self, matrix_state: Dict[str, Any],)
-
-backlog_state: Dict[str, Any]) -> bool:
+def _validate_matrix_integration():backlog_state: Dict[str, Any]) -> bool:
         """Validate matrix controller integration.""""""
 """"""
 """
@@ -764,7 +754,7 @@ except Exception as e:"""
 logger.error(f"Error validating matrix integration: {e}")
             return False
 
-def _validate_memory_retention(self, memory_state: Dict[str, Any]) -> bool:
+def _validate_memory_retention():-> bool:
     """Function implementation pending."""
 pass
 """
@@ -793,7 +783,7 @@ except Exception as e:"""
 logger.error(f"Error validating memory retention: {e}")
             return False
 
-def run_comprehensive_test(self) -> Dict[str, Any]:
+def run_comprehensive_test():-> Dict[str, Any]:
     """Function implementation pending."""
 pass
 """
@@ -842,7 +832,7 @@ return comprehensive_result
 
 
 # Global test function for registry
-def test_backlog_test_loop_validator() -> Dict[str, Any]:
+def test_backlog_test_loop_validator():-> Dict[str, Any]:
         """
         Calculate profit optimization for BTC trading.
         
@@ -856,7 +846,6 @@ def test_backlog_test_loop_validator() -> Dict[str, Any]:
         """
         try:
             # Import unified math system
-            from core.unified_math_system import unified_math
             
             # Calculate profit using unified mathematical framework
             base_profit = price_data * volume_data * 0.001  # 0.1% base

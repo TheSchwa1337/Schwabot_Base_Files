@@ -1,20 +1,22 @@
+import numpy as np
+        import time
+from core.advanced_drift_shell_integration import (
+from core.type_defs import Tensor, Entropy
+from datetime import datetime
+import pytest
+
 """
 Comprehensive test suite for the Shift Pattern Engine.
 
 Tests all differential states and their mathematical implementations.
 """
 
-import pytest
-import numpy as np
-from datetime import datetime
 
-from core.advanced_drift_shell_integration import (
     ShiftPatternEngine,
     AdvancedDriftShellIntegration,
     GrayscaleDriftTensorCore,
     AdvancedTensorMemoryFeedback,
 )
-from core.type_defs import Tensor, Entropy
 
 
 class TestShiftPatternEngine:
@@ -570,7 +572,6 @@ class TestIntegrationScenarios:
         engine = ShiftPatternEngine()
 
         # Test computational efficiency
-        import time
 
         start_time = time.time()
         for i in range(1000):

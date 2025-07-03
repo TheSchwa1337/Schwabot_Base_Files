@@ -1,5 +1,6 @@
 from typing import Dict, Any, List
 
+
 # Placeholder for actual strategy definitions
 # In a real system, these would be loaded from a config or learned dynamically
 STRATEGIES = {
@@ -31,7 +32,7 @@ STRATEGIES = {
 }
 
 
-def match_strategy(signal_hash_data: Dict[str, Any]) -> Dict[str, Any]:
+def match_strategy():-> Dict[str, Any]:
     """
     Matches a given signal hash to a predefined trading strategy.
 
@@ -83,9 +84,7 @@ def match_strategy(signal_hash_data: Dict[str, Any]) -> Dict[str, Any]:
     return strategy_match
 
 
-def select_best_trade_batch(
-    hash_batch: List[Dict[str, Any]],
-) -> Optional[Dict[str, Any]]:
+def select_best_trade_batch():-> Optional[Dict[str, Any]]:
     """
     Iterates through a batch of hashes and selects the best one to execute based on strategy match.
     Prioritization will be more sophisticated with matrix_engine integration.

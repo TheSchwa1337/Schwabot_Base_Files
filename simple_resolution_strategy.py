@@ -1,7 +1,14 @@
 from dual_unicore_handler import DualUnicoreHandler
 from pathlib import Path
+from pathlib import Path
+from pathlib import Path
 import json
 import os
+import os
+import os
+import re
+import re
+
 
 
 # Initialize Unicode handler
@@ -276,11 +283,8 @@ This script fixes E999 syntax errors that prevent code execution."""
 """"""
 """
 
-import re
-import os
-from pathlib import Path
 
-def fix_syntax_errors(file_path: str) -> bool:"""
+def fix_syntax_errors():-> bool:"""
     """
 Perform mathematical operation for trading system.
 Part of unified mathematical framework.
@@ -436,11 +440,8 @@ This script fixes import errors and undefined names."""
 """"""
 """
 
-import re
-import os
-from pathlib import Path
 
-def fix_import_errors(file_path: str) -> bool:"""
+def fix_import_errors():-> bool:"""
     """
 Perform mathematical operation for trading system.
 Part of unified mathematical framework.

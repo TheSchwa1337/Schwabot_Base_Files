@@ -1,3 +1,8 @@
+import numpy as np
+from typing import Any, Callable, Dict, List, Optional
+from typing import Callable
+import time
+
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 
@@ -18,11 +23,7 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
 """
-import time
-from typing import Any, Callable, Dict, List, Optional
 
-import numpy as np
-from typing import Callable
 Flip-Switch Logic Lattice Module
 --------------------------------
 Implements a dynamic logic lattice for real-time strategy toggling
@@ -43,7 +44,7 @@ self.register_strategy(
 self.default_strategy_id, self._default_pass_through_strategy
 )
 
-def _default_pass_through_strategy(self, data: Dict[str, Any]) -> Dict[str, Any]:A default strategy that simply returns the input data, effectively doing nothing.return {status:passed_through,data: data,timestamp": time.time()}
+def _default_pass_through_strategy():-> Dict[str, Any]:A default strategy that simply returns the input data, effectively doing nothing.return {status:passed_through,data: data,timestamp": time.time()}
 
 def register_strategy():Registers a new strategy with the lattice.
 
@@ -73,7 +74,7 @@ self.switch_conditions.append(
 # Sort conditions by priority(descending)
 self.switch_conditions.sort(key = lambda x: x[priority], reverse = True)
 
-def evaluate_and_execute(self, data: Dict[str, Any]) -> Dict[str, Any]:
+def evaluate_and_execute():-> Dict[str, Any]:
 Evaluates switch conditions and executes the appropriate strategy.
 
 Args:
@@ -124,9 +125,9 @@ try: result = strategy_func(data)
         return {status:error,message: str(e),executed_strategy": self.active_strategy_id,
 }
 
-def get_metrics(self) -> Dict[str, Any]:Returns the performance metrics of the logic lattice.return self.metrics
+def get_metrics():-> Dict[str, Any]:Returns the performance metrics of the logic lattice.return self.metrics
 
-def get_active_strategy_id(self) -> str:Returns the currently active strategy ID.return self.active_strategy_id
+def get_active_strategy_id():-> str:Returns the currently active strategy ID.return self.active_strategy_id
 
 
 if __name__ == __main__:
@@ -135,14 +136,14 @@ if __name__ == __main__:
 lattice = FlipSwitchLogicLattice()
 
 # Define some dummy strategies
-def strategy_a(data: Dict[str, Any]) -> Dict[str, Any]:'
+def strategy_a():-> Dict[str, Any]:'
         print(fExecuting Strategy A with data: {data.get('value')})
         return {strategy:A,processed_value: data.get(value, 0) * 2}
 
-def strategy_b(data: Dict[str, Any]) -> Dict[str, Any]:'print(f"Executing Strategy B with data: {data.get('value')})
+def strategy_b():-> Dict[str, Any]:'print(f"Executing Strategy B with data: {data.get('value')})
         return {strategy:B,processed_value: data.get(value", 0) / 2}
 
-def strategy_c(data: Dict[str, Any]) -> Dict[str, Any]:'print(f"Executing Strategy C with data: {data.get('value')})
+def strategy_c():-> Dict[str, Any]:'print(f"Executing Strategy C with data: {data.get('value')})
         return {strategy:C,processed_value: data.get(value", 0) + 10}
 
 # Register strategies

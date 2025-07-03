@@ -1,3 +1,15 @@
+import numpy as np
+from core.biological_immune_error_handler import (
+from core.enhanced_master_cycle_engine import (
+from dataclasses import dataclass, asdict
+from enum import Enum
+from typing import Dict, List, Any, Set
+import asyncio
+import json
+import logging
+import time
+import websockets
+
 #!/usr/bin/env python3
 """Immune Diagnostic WebSocket Server.
 
@@ -6,24 +18,13 @@ Provides comprehensive diagnostics, alerts, and auto-tab switching for critical 
 Streams immune system metrics, zone changes, and recovery operations.
 """
 
-from typing import Dict, List, Any, Set
-import asyncio
-import json
-import logging
-import time
-
-import numpy as np
-import websockets
-
-from dataclasses import dataclass, asdict
-from enum import Enum
 
 
-from core.enhanced_master_cycle_engine import (
+
+
     EnhancedMasterCycleEngine,
     EnhancedSystemMode,
 )
-from core.biological_immune_error_handler import (
     ImmuneZone,
 )
 
@@ -99,7 +100,7 @@ class ImmuneDiagnosticWebSocketServer:
             f"🧬 Immune Diagnostic WebSocket Server initialized on {host}:{port}"
         )
 
-    async def start_server(self) -> None:
+    async def start_server():-> None:
         """Start the WebSocket server."""
         self.running = True
 
@@ -118,7 +119,7 @@ class ImmuneDiagnosticWebSocketServer:
         )
         return server
 
-    async def stop_server(self) -> None:
+    async def stop_server():-> None:
         """Stop the WebSocket server."""
         self.running = False
         await self.engine.stop_enhanced_monitoring()
@@ -145,13 +146,13 @@ class ImmuneDiagnosticWebSocketServer:
         finally:
             self.clients.discard(websocket)
 
-    async def send_initial_status(self, websocket) -> None:
+    async def send_initial_status():-> None:
         """Send initial system status to new client."""
         status = self.get_comprehensive_status()
         message = {"type": "initial_status", "timestamp": time.time(), "data": status}
         await websocket.send(json.dumps(message))
 
-    async def handle_message(self, websocket, message: str) -> None:
+    async def handle_message():-> None:
         """Handle incoming WebSocket messages."""
         try:
             data = json.loads(message)
@@ -203,7 +204,7 @@ class ImmuneDiagnosticWebSocketServer:
         except Exception as e:
             logger.error(f"🚨 Message handling error: {e}")
 
-    async def broadcast_message(self, message: Dict[str, Any]) -> None:
+    async def broadcast_message():-> None:
         """Broadcast message to all connected clients."""
         if not self.clients:
             return
@@ -223,7 +224,7 @@ class ImmuneDiagnosticWebSocketServer:
         # Clean up disconnected clients
         self.clients -= disconnected_clients
 
-    async def _monitoring_loop(self) -> None:
+    async def _monitoring_loop():-> None:
         """Main monitoring loop for immune system diagnostics."""
         while self.running:
             try:
@@ -283,7 +284,7 @@ class ImmuneDiagnosticWebSocketServer:
                 logger.error(f"🚨 Monitoring loop error: {e}")
                 await asyncio.sleep(5.0)
 
-    async def _market_simulation_loop(self) -> None:
+    async def _market_simulation_loop():-> None:
         """Market simulation loop for testing immune responses."""
         while self.running:
             try:
@@ -334,7 +335,7 @@ class ImmuneDiagnosticWebSocketServer:
                 logger.error(f"🚨 Market simulation error: {e}")
                 await asyncio.sleep(2.0)
 
-    def generate_simulated_market_data(self) -> Dict[str, Any]:
+    def generate_simulated_market_data():-> Dict[str, Any]:
         """Generate simulated market data for testing."""
         # Add some randomness and trends
         price_change = np.random.uniform(-200, 200) + (self.price_trend * 10)
@@ -376,7 +377,7 @@ class ImmuneDiagnosticWebSocketServer:
             "trend": self.price_trend,
         }
 
-    def get_comprehensive_status(self) -> Dict[str, Any]:
+    def get_comprehensive_status():-> Dict[str, Any]:
         """Get comprehensive system status."""
         engine_status = self.engine.get_enhanced_system_status()
 
@@ -404,7 +405,7 @@ class ImmuneDiagnosticWebSocketServer:
             "current_btc_price": self.btc_price,
         }
 
-    def check_for_alerts(self, status: Dict[str, Any]) -> List[ImmuneAlert]:
+    def check_for_alerts():-> List[ImmuneAlert]:
         """Check for system alerts based on current status."""
         alerts = []
         current_time = time.time()
@@ -515,7 +516,7 @@ class ImmuneDiagnosticWebSocketServer:
 
         return alerts
 
-    async def process_alert(self, alert: ImmuneAlert) -> None:
+    async def process_alert():-> None:
         """Process and broadcast alert."""
         # Broadcast alert
         await self.broadcast_message(
@@ -535,7 +536,7 @@ class ImmuneDiagnosticWebSocketServer:
             f"{emoji} {alert.level.value.upper()}: {alert.message} (Zone: {alert.zone})"
         )
 
-    async def reset_immune_system(self) -> None:
+    async def reset_immune_system():-> None:
         """Reset the immune system to healthy state."""
         # Reset immune handler
         self.immune_handler.mitochondrial_health = 1.0
@@ -553,7 +554,7 @@ class ImmuneDiagnosticWebSocketServer:
 
         logger.info("🧬 Immune system reset completed")
 
-    async def trigger_emergency_scenario(self) -> None:
+    async def trigger_emergency_scenario():-> None:
         """Trigger emergency scenario for testing."""
         # Simulate system degradation
         self.immune_handler.mitochondrial_health = 0.2
@@ -583,7 +584,7 @@ class ImmuneDiagnosticWebSocketServer:
 
         logger.warning("🚨 Emergency scenario triggered")
 
-    def get_dashboard_html(self) -> str:
+    def get_dashboard_html():-> str:
         """Generate HTML dashboard for immune system monitoring."""
         return f"""
 <!DOCTYPE html>

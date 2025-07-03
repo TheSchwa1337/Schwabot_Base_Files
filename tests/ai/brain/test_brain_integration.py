@@ -1,3 +1,11 @@
+from pathlib import Path
+from typing import Dict, List, Any
+import asyncio
+import json
+import logging
+import sys
+import time
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -8,13 +16,6 @@ Comprehensive test of brain trading functionality with working implementations.
 This replaces placeholders with functional brain trading algorithms.
 """
 
-import asyncio
-import logging
-import time
-import json
-import sys
-from pathlib import Path
-from typing import Dict, List, Any
 
 # Add core directory to path for robust imports
 core_dir = Path(__file__).resolve().parent.parent.parent.parent / "core"
@@ -28,7 +29,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-def compute_confidence(profit_score: float, volatility: float) -> float:
+def compute_confidence():-> float:
     """
     Computes trading confidence based on profit score and volatility.
     """

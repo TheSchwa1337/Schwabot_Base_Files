@@ -1,10 +1,33 @@
+            from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+            import matplotlib.pyplot as plt
+        import numpy as np
+        import numpy as np
+        from core.ccxt_trading_executor import CCXTTradingExecutor
+        from core.glyph.glyph_entropy_system import GlyphEntropySystem
+        from core.gpu_cpu_calculation_bridge import get_gpu_cpu_bridge
+        from core.gpu_cpu_calculation_bridge import get_gpu_cpu_bridge
+        from core.gpu_cpu_calculation_bridge import get_gpu_cpu_bridge
+        from core.settings_manager import get_settings_manager
+        from core.settings_manager import get_settings_manager
+        from core.speed_lattice_visualizer import SpeedLatticeLivePanelSystem
+        from core.speed_lattice_visualizer import SpeedLatticeLivePanelSystem, PanelType
+        from core.strategy_vector_fidelity import StrategyVectorFidelitySystem
+        from core.symbolic_collapse import SymbolicCollapseSystem
+        from core.trading_pipeline_integration import TradingPipelineIntegration
+        from core.trading_pipeline_integration import TradingPipelineIntegration
+        from core.unified_connectivity_manager import UnifiedConnectivityManager
+        from core.zygote_reentry import ZygoteReentrySystem
+        from tkinter import ttk
+        import tkinter as tk
+        import traceback
+from datetime import datetime
+from typing import Dict, Any
+import asyncio
+import logging
+import time
+
 #!/usr/bin/env python3
 """"""
-from typing import Dict, Any
-from datetime import datetime
-import time
-import logging
-import asyncio
 Complete Schwabot System Demo
 == == == == == == == == == == == == == ==
 
@@ -34,37 +57,31 @@ def test_core_imports():
     print("=" * 50)
 
     try:
-        from core.settings_manager import get_settings_manager
         print("✅ Settings Manager imported")
     except Exception as e:
         print(f"❌ Settings Manager failed: {e}")
 
     try:
-        from core.gpu_cpu_calculation_bridge import get_gpu_cpu_bridge
         print("✅ GPU/CPU Bridge imported")
     except Exception as e:
         print(f"❌ GPU/CPU Bridge failed: {e}")
 
     try:
-        from core.trading_pipeline_integration import TradingPipelineIntegration
         print("✅ Trading Pipeline imported")
     except Exception as e:
         print(f"❌ Trading Pipeline failed: {e}")
 
     try:
-        from core.ccxt_trading_executor import CCXTTradingExecutor
         print("✅ CCXT Trading Executor imported")
     except Exception as e:
         print(f"❌ CCXT Trading Executor failed: {e}")
 
     try:
-        from core.speed_lattice_visualizer import SpeedLatticeLivePanelSystem
         print("✅ Speed Lattice Visualizer imported")
     except Exception as e:
         print(f"❌ Speed Lattice Visualizer failed: {e}")
 
     try:
-        from core.unified_connectivity_manager import UnifiedConnectivityManager
         print("✅ Unified Connectivity Manager imported")
     except Exception as e:
         print(f"❌ Unified Connectivity Manager failed: {e}")
@@ -78,7 +95,6 @@ def test_settings_system():
     print("=" * 50)
 
     try:
-        from core.settings_manager import get_settings_manager
 
         # Get settings manager
         settings_manager = get_settings_manager()
@@ -122,8 +138,6 @@ def test_gpu_cpu_bridge():
     print("=" * 50)
 
     try:
-        from core.gpu_cpu_calculation_bridge import get_gpu_cpu_bridge
-        import numpy as np
 
         # Get bridge
         bridge = get_gpu_cpu_bridge()
@@ -161,7 +175,6 @@ async def test_trading_pipeline():
     print("=" * 50)
 
     try:
-        from core.trading_pipeline_integration import TradingPipelineIntegration
 
         # Initialize pipeline
         pipeline = TradingPipelineIntegration()
@@ -217,7 +230,6 @@ def test_mathematical_systems():
 
     try:
         # Test mathematical states
-        from core.glyph.glyph_entropy_system import GlyphEntropySystem
 
         entropy_system = GlyphEntropySystem()
         test_glyphs = ["alpha", "beta", "gamma", "delta"]
@@ -228,7 +240,6 @@ def test_mathematical_systems():
         print(f"⚠️ Glyph entropy system: {e}")
 
     try:
-        from core.strategy_vector_fidelity import StrategyVectorFidelitySystem
 
         fidelity_system = StrategyVectorFidelitySystem()
         test_vector = [0.1, 0.2, 0.3, 0.4]
@@ -240,7 +251,6 @@ def test_mathematical_systems():
         print(f"⚠️ Strategy vector fidelity: {e}")
 
     try:
-        from core.symbolic_collapse import SymbolicCollapseSystem
 
         collapse_system = SymbolicCollapseSystem()
         test_symbols = {"symbol_1": 0.8, "symbol_2": 0.6, "symbol_3": 0.4}
@@ -251,7 +261,6 @@ def test_mathematical_systems():
         print(f"⚠️ Symbolic collapse system: {e}")
 
     try:
-        from core.zygote_reentry import ZygoteReentrySystem
 
         zygote_system = ZygoteReentrySystem()
         test_states = [{"profit": 0.1, "time": 100}, {"profit": 0.2, "time": 200}]
@@ -270,7 +279,6 @@ def test_visualization_systems():
     print("=" * 50)
 
     try:
-        from core.speed_lattice_visualizer import SpeedLatticeLivePanelSystem, PanelType
 
         # Initialize visualizer
         visualizer = SpeedLatticeLivePanelSystem()
@@ -300,8 +308,6 @@ def test_gui_availability():
     print("=" * 50)
 
     try:
-        import tkinter as tk
-        from tkinter import ttk
         print("✅ Tkinter GUI available")
 
         # Test basic GUI creation
@@ -311,8 +317,6 @@ def test_gui_availability():
 
         # Test matplotlib integration
         try:
-            import matplotlib.pyplot as plt
-            from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
             print("✅ Matplotlib GUI integration available")
         except ImportError:
             print("⚠️ Matplotlib GUI integration not available")
@@ -332,8 +336,6 @@ def run_performance_benchmark():
     print("=" * 50)
 
     try:
-        import numpy as np
-        from core.gpu_cpu_calculation_bridge import get_gpu_cpu_bridge
 
         bridge = get_gpu_cpu_bridge()
 
@@ -418,5 +420,4 @@ if __name__ == "__main__":
         print("\n🛑 Demo interrupted by user")
     except Exception as e:
         print(f"\n❌ Demo failed with error: {e}")
-        import traceback
         traceback.print_exc()

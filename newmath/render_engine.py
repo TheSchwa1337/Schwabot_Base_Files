@@ -1,3 +1,8 @@
+from core.unified_math_system import unified_math
+from core.unified_math_system import unified_math
+from typing import List, Dict, Any, Optional, Tuple
+import logging
+
 # -*- coding: utf-8 -*-
 """"""
 """"""
@@ -13,7 +18,6 @@
 """
 
 
-from core.unified_math_system import unified_math
 NEWMATH RENDER ENGINE
 == == == == == == == == == ==
 
@@ -23,16 +27,11 @@ Clean implementation for plotting, charting, and data visualization."""
 """"""
 """
 
-from core.unified_math_system import unified_math
-from typing import List, Dict, Any, Optional, Tuple
-import logging
 
 logger = logging.getLogger(__name__)
 
 
-def render_price_line()
-
-prices: List[float],
+def render_price_line():prices: List[float],
         timestamps: Optional[List[float]] = None,
         max_points: int = 10000
 ) -> Dict[str, Any]:"""
@@ -79,9 +78,7 @@ except Exception as e:
         return {"points": [], "error": str(e)}
 
 
-def plot_function()
-
-func_values: List[float],
+def plot_function():func_values: List[float],
         x_range: Optional[Tuple[float, float]] = None,
         plot_type: str = 'line'
 ) -> Dict[str, Any]:
@@ -124,9 +121,7 @@ return {
         return {"points": [], "error": str(e)}
 
 
-def visualize_tensor()
-
-tensor_data: np.ndarray,
+def visualize_tensor():tensor_data: np.ndarray,
         visualization_type: str = 'heatmap'
 ) -> Dict[str, Any]:
     """"""
@@ -179,7 +174,7 @@ except Exception as e:
         return {"data": [], "error": str(e)}
 
 
-def create_chart(data: Dict[str, np.ndarray], chart_type: str = 'multi_line') -> Dict[str, Any]:
+def create_chart():-> Dict[str, Any]:
     """Function implementation pending."""
 pass
 """

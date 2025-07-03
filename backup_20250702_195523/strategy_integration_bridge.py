@@ -1,3 +1,19 @@
+from core.mathlib_v4 import MathLibV4
+from core.unified_math_system import UnifiedMathSystem
+    from core.strategy_logic import StrategyLogic
+from __future__ import annotations
+from core.brain_trading_engine import BrainTradingEngine
+from core.ccxt_integration import CCXTIntegration
+from core.enhanced_strategy_framework import (
+from core.risk_manager import RiskManager
+from core.unified_trading_pipeline import UnifiedTradingPipeline, TradingDecision
+from dataclasses import dataclass, field
+from typing import Any, Dict, List, Optional
+import asyncio
+import asyncio
+import logging
+import time
+
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 
@@ -18,25 +34,10 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
 """
-from __future__ import annotations
 
-import asyncio
-import logging
-import time
-from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional
 
-from core.enhanced_strategy_framework import (
-from core.unified_trading_pipeline import UnifiedTradingPipeline, TradingDecision
-from core.mathlib_v4 import MathLibV4
-from core.unified_math_system import UnifiedMathSystem
-from core.risk_manager import RiskManager
-    from core.strategy_logic import StrategyLogic
 
-from core.ccxt_integration import CCXTIntegration
-from core.brain_trading_engine import BrainTradingEngine
 
-import asyncio
 
 
 
@@ -158,10 +159,10 @@ self.api_endpoints = {/api/strategies/status: self._api_strategy_status,/api/sig
 }
             logger.info(f"Strategy Integration Bridge v{self.version} initialized)
 
-def _default_config(self) -> Dict[str, Any]:"Default configuration for integration bridge.return {correlation_threshold: 0.6,max_integrated_signals": 1000,optimization_interval": 3600,  # 1 hourapi_update_interval: 5,  # 5 secondsenable_real_time_optimization: True,enable_api_endpoints": True,visualization_update_interval": 1,  # 1 secondrisk_correlation_weight: 0.3,mathematical_confidence_weight": 0.4,wall_street_confidence_weight": 0.3,
+def _default_config():-> Dict[str, Any]:"Default configuration for integration bridge.return {correlation_threshold: 0.6,max_integrated_signals": 1000,optimization_interval": 3600,  # 1 hourapi_update_interval: 5,  # 5 secondsenable_real_time_optimization: True,enable_api_endpoints": True,visualization_update_interval": 1,  # 1 secondrisk_correlation_weight: 0.3,mathematical_confidence_weight": 0.4,wall_street_confidence_weight": 0.3,
 }
 
-def _initialize_components(self) -> None:"Initialize all integration components.try:
+def _initialize_components():-> None:"Initialize all integration components.try:
             # Enhanced Strategy Framework
 framework_config = self.config.get(enhanced_framework, {})
 self.enhanced_framework = EnhancedStrategyFramework(framework_config)
@@ -204,13 +205,7 @@ self.orchestration_state.wall_street_strategies_active
             logger.error(f❌ Component initialization failed: {e})
 raise
 
-async def process_integrated_trading_signal(
-self,:
-asset: str,
-price: float,
-volume: float,
-timeframe: TimeFrame = TimeFrame.ONE_HOUR,
-) -> List[IntegratedTradingSignal]:
+async def process_integrated_trading_signal():-> List[IntegratedTradingSignal]:
 Process market data through integrated strategy pipeline.
 
 This orchestrates the complete flow:
@@ -262,9 +257,7 @@ fGenerated {len(filtered_signals)} integrated signals for {asset}
             logger.error(fError processing integrated trading signal: {e})
         return []
 
-async def _perform_mathematical_analysis(:
-self, asset: str, price: float, volume: float
-) -> Dict[str, Any]:Perform comprehensive Schwabot mathematical analysis.analysis = {dlt_metrics: {},unified_math_state: {},mathematical_confidence: 0.5,risk_assessment": {},
+async def _perform_mathematical_analysis():-> Dict[str, Any]:Perform comprehensive Schwabot mathematical analysis.analysis = {dlt_metrics: {},unified_math_state: {},mathematical_confidence: 0.5,risk_assessment": {},
 }
 
 try:
@@ -306,14 +299,7 @@ analysis[risk_assessment] = risk_metrics
 
         return analysis
 
-async def _create_integrated_signal(
-self,:
-wall_street_signal: StrategySignal,
-mathematical_analysis: Dict[str, Any],
-asset: str,
-price: float,
-volume: float,
-) -> Optional[IntegratedTradingSignal]:Create integrated trading signal combining Wall Street and Schwabot analysis.try:
+async def _create_integrated_signal():-> Optional[IntegratedTradingSignal]:Create integrated trading signal combining Wall Street and Schwabot analysis.try:
             # Calculate correlation between Wall Street signal and mathematical analysis
 correlation_score = self._calculate_signal_correlation(
 wall_street_signal, mathematical_analysis
@@ -373,9 +359,7 @@ if composite_confidence < self.config[correlation_threshold]:
             logger.error(fFailed to create integrated signal: {e})
         return None
 
-def _calculate_signal_correlation(:
-self, wall_street_signal: StrategySignal, mathematical_analysis: Dict[str, Any]
-) -> float:Calculate correlation between Wall Street signal and mathematical analysis.try:
+def _calculate_signal_correlation():-> float:Calculate correlation between Wall Street signal and mathematical analysis.try:
             # Base correlation on signal direction vs mathematical indicators
 signal_direction = 1.0 if wall_street_signal.action == BUYelse -1.0
 
@@ -412,12 +396,7 @@ correlation *= wall_street_signal.strength * wall_street_signal.confidence
             logger.error(fCorrelation calculation failed: {e})
         return 0.5  # Default correlation
 
-def _calculate_integrated_position_sizing(
-self,:
-wall_street_signal: StrategySignal,
-mathematical_analysis: Dict[str, Any],
-composite_confidence: float,
-) -> Dict[str, Any]:Calculate position sizing based on integrated analysis.base_position_size = wall_street_signal.position_size
+def _calculate_integrated_position_sizing():-> Dict[str, Any]:Calculate position sizing based on integrated analysis.base_position_size = wall_street_signal.position_size
 
 # Adjust based on mathematical confidence
 math_confidence = mathematical_analysis.get(mathematical_confidence, 0.5)
@@ -452,12 +431,7 @@ max_position = self.config.get(max_position_size, 0.1)
         return {base_size: base_position_size,adjusted_size: adjusted_size,final_size: final_size,math_adjustment": math_adjustment,risk_adjustment": risk_adjustment,dlt_adjustment": dlt_adjustment,confidence_factor: composite_confidence,
 }
 
-def _calculate_execution_priority(
-self,:
-wall_street_signal: StrategySignal,
-correlation_score: float,
-composite_confidence: float,
-) -> int:"Calculate execution priority (1 = highest, 10=lowest).# Base priority on signal quality
+def _calculate_execution_priority():-> int:"Calculate execution priority (1 = highest, 10=lowest).# Base priority on signal quality
 if wall_street_signal.quality.value == excellent:
             base_priority = 1
 elif wall_street_signal.quality.value == good:
@@ -486,9 +460,7 @@ elif wall_street_signal.risk_reward_ratio < 1.5:
 
         return max(1, min(10, base_priority))
 
-def _filter_integrated_signals(:
-self, signals: List[IntegratedTradingSignal]
-) -> List[IntegratedTradingSignal]:
+def _filter_integrated_signals():-> List[IntegratedTradingSignal]:
         Filter and rank integrated signals.# Filter by composite confidence
 filtered = [s
 for s in signals:
@@ -502,9 +474,7 @@ filtered.sort(key=lambda s: (s.execution_priority, -s.composite_confidence))
 max_signals = self.config.get(max_integrated_signals_per_cycle, 5)
         return filtered[:max_signals]
 
-def _update_integration_metrics(:
-self, signals: List[IntegratedTradingSignal]
-) -> None:Update integration performance metrics.if not signals:
+def _update_integration_metrics():-> None:Update integration performance metrics.if not signals:
             return # Update correlation scores
 correlation_scores = [s.correlation_score for s in signals]
 self.integration_metrics[correlation_scores].extend(correlation_scores)
@@ -525,9 +495,7 @@ if signals:
 high_correlation_signals
 ) / len(signals)
 
-async def execute_integrated_signal(:
-self, integrated_signal: IntegratedTradingSignal
-) -> Dict[str, Any]:Execute integrated trading signal through unified pipeline.try:
+async def execute_integrated_signal():-> Dict[str, Any]:Execute integrated trading signal through unified pipeline.try:
             # Convert integrated signal to unified pipeline format
 trading_decision = self._convert_to_trading_decision(integrated_signal)
 
@@ -555,9 +523,7 @@ integrated_signal.wall_street_signal, execution_result
         except Exception as e:
             logger.error(fSignal execution failed: {e})return {executed: False,error: str(e)}
 
-def _convert_to_trading_decision(:
-self, integrated_signal: IntegratedTradingSignal
-) -> Any:  # Would be TradingDecision if importedConvert integrated signal to unified pipeline trading decision.ws_signal = integrated_signal.wall_street_signal
+def _convert_to_trading_decision():-> Any:  # Would be TradingDecision if importedConvert integrated signal to unified pipeline trading decision.ws_signal = integrated_signal.wall_street_signal
 
 # Create trading decision compatible with unified pipeline
 if CORE_COMPONENTS_AVAILABLE:
@@ -583,7 +549,7 @@ else:
 }
 
 # API Integration Methods
-async def _api_strategy_status(self) -> Dict[str, Any]:API endpoint for strategy status.return {wall_street_strategies: {strategy.value: {active: self.enhanced_framework.active_strategies.get(
+async def _api_strategy_status():-> Dict[str, Any]:API endpoint for strategy status.return {wall_street_strategies: {strategy.value: {active: self.enhanced_framework.active_strategies.get(
 strategy, False
 ),weight": self.enhanced_framework.strategy_weights.get(
                         strategy, 0.0
@@ -596,7 +562,7 @@ for strategy in WallStreetStrategy:
 },
 }
 
-async def _api_current_signals(self) -> Dict[str, Any]:"API endpoint for current trading signals.recent_signals = (
+async def _api_current_signals():-> Dict[str, Any]:"API endpoint for current trading signals.recent_signals = (
 self.integrated_signals[-10:] if self.integrated_signals else []
 )
 
@@ -606,25 +572,25 @@ for signal in recent_signals:
 ],signal_count": len(recent_signals),total_today": self.orchestration_state.signals_generated_today,
 }
 
-async def _api_performance_metrics(self) -> Dict[str, Any]:"API endpoint for performance metrics.return {integration_metrics: self.integration_metrics,strategy_performance": self.enhanced_framework.get_all_performance_metrics(),orchestration_stats": {signals_generated_today: self.orchestration_state.signals_generated_today,signals_executed_today": self.orchestration_state.signals_executed_today,execution_rate": (
+async def _api_performance_metrics():-> Dict[str, Any]:"API endpoint for performance metrics.return {integration_metrics: self.integration_metrics,strategy_performance": self.enhanced_framework.get_all_performance_metrics(),orchestration_stats": {signals_generated_today: self.orchestration_state.signals_generated_today,signals_executed_today": self.orchestration_state.signals_executed_today,execution_rate": (
 self.orchestration_state.signals_executed_today
 / max(1, self.orchestration_state.signals_generated_today)
 ),
 },
 }
 
-async def _api_integration_health(self) -> Dict[str, Any]:"API endpoint for integration health check.return {status:healthy,version": self.version,components": {enhanced_framework: hasattr(self,enhanced_framework),mathlib_v4": hasattr(self,mathlib_v4),unified_math": hasattr(self,unified_math),unified_pipeline": hasattr(self,unified_pipeline),risk_manager": hasattr(self,risk_manager),ccxt_integration": hasattr(self,ccxt_integration),
+async def _api_integration_health():-> Dict[str, Any]:"API endpoint for integration health check.return {status:healthy,version": self.version,components": {enhanced_framework: hasattr(self,enhanced_framework),mathlib_v4": hasattr(self,mathlib_v4),unified_math": hasattr(self,unified_math),unified_pipeline": hasattr(self,unified_pipeline),risk_manager": hasattr(self,risk_manager),ccxt_integration": hasattr(self,ccxt_integration),
 },last_optimization": self.orchestration_state.last_optimization,next_optimization": self.orchestration_state.next_optimization,
 }
 
-async def _api_orchestration_state(self) -> Dict[str, Any]:"API endpoint for orchestration state.return {orchestration_state: {total_strategies_active: self.orchestration_state.total_strategies_active,wall_street_strategies_active":
+async def _api_orchestration_state():-> Dict[str, Any]:"API endpoint for orchestration state.return {orchestration_state: {total_strategies_active: self.orchestration_state.total_strategies_active,wall_street_strategies_active":
 self.orchestration_state.wall_street_strategies_active,schwabot_strategies_active": self.orchestration_state.schwabot_strategies_active,signals_generated_today": self.orchestration_state.signals_generated_today,signals_executed_today": self.orchestration_state.signals_executed_today,current_market_regime": self.orchestration_state.current_market_regime,strategy_performance_score": self.orchestration_state.strategy_performance_score,api_endpoints_active": self.orchestration_state.api_endpoints_active,visualization_connected": self.orchestration_state.visualization_connected,
 }
 }
 
-def get_api_endpoints(self) -> Dict[str, Any]:"Get available API endpoints for integration.return self.api_endpoints
+def get_api_endpoints():-> Dict[str, Any]:"Get available API endpoints for integration.return self.api_endpoints
 
-async def optimize_integration(self) -> None:Optimize integration performance.try:
+async def optimize_integration():-> None:Optimize integration performance.try:
             # Optimize strategy weights
 self.enhanced_framework.optimize_strategy_weights()
 
@@ -644,7 +610,7 @@ self.orchestration_state.strategy_performance_score = avg_correlation
 
         except Exception as e:logger.error(f"Integration optimization failed: {e})
 
-def get_integration_status(self) -> Dict[str, Any]:"Get comprehensive integration status.return {bridge_version: self.version,component_status": {enhanced_framework: hasattr(self,enhanced_framework),core_components": CORE_COMPONENTS_AVAILABLE,trading_components": TRADING_COMPONENTS_AVAILABLE,
+def get_integration_status():-> Dict[str, Any]:"Get comprehensive integration status.return {bridge_version: self.version,component_status": {enhanced_framework: hasattr(self,enhanced_framework),core_components": CORE_COMPONENTS_AVAILABLE,trading_components": TRADING_COMPONENTS_AVAILABLE,
 },orchestration_state": self.orchestration_state,integration_metrics": self.integration_metrics,api_endpoints": list(self.api_endpoints.keys()),signal_history_size": len(self.integrated_signals),last_signal_time": (
 self.integrated_signals[-1].integration_timestamp
 if self.integrated_signals:
@@ -653,9 +619,7 @@ else 0
 }
 
 
-def create_strategy_integration_bridge(:
-config: Optional[Dict[str, Any]] = None,
-) -> StrategyIntegrationBridge:"Factory function to create strategy integration bridge.return StrategyIntegrationBridge(config)
+def create_strategy_integration_bridge():-> StrategyIntegrationBridge:"Factory function to create strategy integration bridge.return StrategyIntegrationBridge(config)
 
 
 async def run_integration_demo():Demo function showing integration capabilities.print(🚀 Strategy Integration Bridge Demo)print(=* 50)

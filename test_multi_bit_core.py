@@ -1,3 +1,9 @@
+import numpy as np
+        from core.multi_bit_state_manager import MultiBitStateManager, ProcessingMode
+    import json
+import logging
+import time
+
 # -*- coding: utf-8 -*-
 """
 Simplified Test for Multi-Bit Trading System Core.
@@ -6,9 +12,6 @@ Tests the essential multi-bit state management and mathematical
 framework integration without complex dependencies.
 """
 
-import logging
-import time
-import numpy as np
 
 # Configure logging
 logging.basicConfig(
@@ -142,7 +145,6 @@ def test_multi_bit_logic():
     }
     try:
         # Import the actual MultiBitStateManager
-        from core.multi_bit_state_manager import MultiBitStateManager, ProcessingMode
 
         # Test 1: Bit Depth Determination
         print("  Testing bit depth determination...")
@@ -493,7 +495,6 @@ def main():
         print("❌ Multiple test failures detected")
 
     # Save results
-    import json
 
     results_summary = {
         "test_results": all_results,

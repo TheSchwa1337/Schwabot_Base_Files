@@ -1,5 +1,9 @@
 # !/usr/bin/env python3
+
+
 # -*- coding: utf-8 -*-
+
+
 from .data_models import APICredentials, MarketData, OrderRequest, OrderResponse, PortfolioPosition
 from .enums import ConnectionStatus, ExchangeType, OrderSide, OrderType
 from .exchange_connection import ExchangeConnection
@@ -7,11 +11,30 @@ from .integration_manager import ApiIntegrationManager
 
 """Schwabot Core API Package
 
+
+
+
+
+
+
 This package contains all modules related to live exchange API integration.
 
+
+
+
+
+
+
 It exposes the primary classes for easy access from other parts of the
+
+
+
 Schwabot system.
+
+
+
 """
+
 
 __all__ = [
     # Enums

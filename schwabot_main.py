@@ -1,3 +1,28 @@
+                    import numpy as np
+    from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+    from matplotlib.figure import Figure
+    import matplotlib.pyplot as plt
+    from core.brain_trading_engine import BrainTradingEngine, BrainSignal
+    from core.ccxt_trading_executor import CCXTTradingExecutor
+    from core.gpu_cpu_calculation_bridge import get_gpu_cpu_bridge
+    from core.settings_manager import get_settings_manager
+    from schwabot.speed_lattice_live_panel_system import SpeedLatticeLivePanelSystem
+    from schwabot.trading_pipeline_integration import TradingPipelineIntegration
+    from symbolic_profit_router import SymbolicProfitRouter
+    from tkinter import ttk, filedialog, messagebox
+    import tkinter as tk
+from datetime import datetime
+from pathlib import Path
+from typing import Dict, List, Optional, Any
+import argparse
+import asyncio
+import json
+import logging
+import signal
+import sys
+import threading
+import time
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -8,17 +33,6 @@ Main launcher for Schwabot with integrated brain trading functionality.
 This replaces placeholder implementations with working brain algorithms.
 """
 
-from typing import Dict, List, Optional, Any
-from pathlib import Path
-from datetime import datetime
-import time
-import threading
-import sys
-import signal
-import logging
-import json
-import asyncio
-import argparse
 
 Schwabot Advanced Trading System
 == == == == == == == == == == == == == == == =
@@ -38,11 +52,6 @@ Features:
 # GUI imports with fallback
 GUI_AVAILABLE = True
 try:
-    import tkinter as tk
-    from tkinter import ttk, filedialog, messagebox
-    import matplotlib.pyplot as plt
-    from matplotlib.figure import Figure
-    from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
     plt.style.use('dark_background')
 except ImportError as e:
     print(f"GUI libraries not available: {e}")
@@ -51,11 +60,6 @@ except ImportError as e:
 # Core system imports with fallback
 CORE_AVAILABLE = True
 try:
-    from core.settings_manager import get_settings_manager
-    from core.gpu_cpu_calculation_bridge import get_gpu_cpu_bridge
-    from core.ccxt_trading_executor import CCXTTradingExecutor
-    from schwabot.trading_pipeline_integration import TradingPipelineIntegration
-    from schwabot.speed_lattice_live_panel_system import SpeedLatticeLivePanelSystem
 except ImportError as e:
     print(f"Core systems not available: {e}")
     CORE_AVAILABLE = False
@@ -73,14 +77,12 @@ logger = logging.getLogger(__name__)
 
 # Import core components
 try:
-    from core.brain_trading_engine import BrainTradingEngine, BrainSignal
     BRAIN_ENGINE_AVAILABLE = True
 except ImportError:
     logger.error("Brain Trading Engine not available")
     BRAIN_ENGINE_AVAILABLE = False
 
 try:
-    from symbolic_profit_router import SymbolicProfitRouter
     SYMBOLIC_ROUTER_AVAILABLE = True
 except ImportError:
     logger.error("Symbolic Profit Router not available")
@@ -648,7 +650,6 @@ class SchwabotCLI:
 
                 # Simulate GPU processing
                 if gpu_cpu_bridge.gpu_available:
-                    import numpy as np
                     test_data = np.random.random((1000, 1000))
                     result = gpu_cpu_bridge.process_matrix_operation(
                         test_data, "multiply", test_data)

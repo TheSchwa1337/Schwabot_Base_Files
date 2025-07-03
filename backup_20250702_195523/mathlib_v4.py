@@ -1,3 +1,14 @@
+import math
+import numpy as np
+from __future__ import annotations
+from abc import ABC, abstractmethod
+from dataclasses import dataclass
+from enum import Enum
+from typing import Any, Dict, List, Optional, Union
+import hashlib
+import logging
+import time
+
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 
@@ -18,18 +29,8 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
 """
-from __future__ import annotations
 
-import hashlib
-import logging
-import math
-import time
-from abc import ABC, abstractmethod
-from dataclasses import dataclass
-from enum import Enum
-from typing import Any, Dict, List, Optional, Union
 
-import numpy as np
 
 
 # !/usr/bin/env python3
@@ -91,25 +92,25 @@ class Dual:
     Dual number class for automatic differentiation.val: float  # Real part
     eps: float  # Dual part (derivative)
 
-    def __add__(self, other: Union[Dual, float]) ->Dual:
+    def __add__():->Dual:
         if isinstance(other, Dual):
             return Dual(self.val + other.val, self.eps + other.eps)
         else:
             return Dual(self.val + other, self.eps)
 
-    def __radd__(self, other: float) -> Dual:
+    def __radd__():-> Dual:
         return self.__add__(other)
 
-    def __sub__(self, other: Union[Dual, float]) ->Dual:
+    def __sub__():->Dual:
         if isinstance(other, Dual):
             return Dual(self.val - other.val, self.eps - other.eps)
         else:
             return Dual(self.val - other, self.eps)
 
-    def __rsub__(self, other: float) -> Dual:
+    def __rsub__():-> Dual:
         return Dual(other - self.val, -self.eps)
 
-    def __mul__(self, other: Union[Dual, float]) ->Dual:
+    def __mul__():->Dual:
         if isinstance(other, Dual):
             return Dual(
                 self.val * other.val,
@@ -118,10 +119,10 @@ class Dual:
         else:
             return Dual(self.val * other, self.eps * other)
 
-    def __rmul__(self, other: float) -> Dual:
+    def __rmul__():-> Dual:
         return self.__mul__(other)
 
-    def __truediv__(self, other: Union[Dual, float]) ->Dual:
+    def __truediv__():->Dual:
         if isinstance(other, Dual):
             val = self.val / other.val
             eps = (self.eps * other.val - self.val * other.eps) / (other.val**2)
@@ -129,48 +130,48 @@ class Dual:
         else:
             return Dual(self.val / other, self.eps / other)
 
-    def __rtruediv__(self, other: float) -> Dual: val = other / self.val
+    def __rtruediv__():-> Dual: val = other / self.val
         eps = -other * self.eps / (self.val**2)
         return Dual(val, eps)
 
-    def __pow__(self, n: float) -> Dual:
+    def __pow__():-> Dual:
         if self.val == 0 and n <= 0:
             raise ValueError(Cannot raise zero to non-positive power)
         val = self.val**n
         eps = n * (self.val ** (n - 1)) * self.eps
         return Dual(val, eps)
 
-    def __neg__(self) -> Dual:
+    def __neg__():-> Dual:
         return Dual(-self.val, -self.eps)
 
-    def __abs__(self) -> Dual:
+    def __abs__():-> Dual:
         if self.val >= 0:
             return Dual(self.val, self.eps)
         else:
             return Dual(-self.val, -self.eps)
 
-    def sin(self) -> Dual:
+    def sin():-> Dual:
         return Dual(math.sin(self.val), math.cos(self.val) * self.eps)
 
-    def cos(self) -> Dual:
+    def cos():-> Dual:
         return Dual(math.cos(self.val), -math.sin(self.val) * self.eps)
 
-    def exp(self) -> Dual:
+    def exp():-> Dual:
         exp_val = math.exp(self.val)
         return Dual(exp_val, exp_val * self.eps)
 
-    def log(self) -> Dual:
+    def log():-> Dual:
         if self.val <= 0:
             raise ValueError(Cannot take log of non-positive number)
         return Dual(math.log(self.val), self.eps / self.val)
 
-    def sqrt(self) -> Dual:
+    def sqrt():-> Dual:
         if self.val < 0:
             raise ValueError(Cannot take sqrt of negative number)
         sqrt_val = math.sqrt(self.val)
         return Dual(sqrt_val, self.eps / (2 * sqrt_val) if sqrt_val != 0 else 0)
 
-    def tanh(self) -> Dual: tanh_val = math.tanh(self.val)
+    def tanh():-> Dual: tanh_val = math.tanh(self.val)
         sech_squared = 1 - tanh_val**2
         return Dual(tanh_val, sech_squared * self.eps)
 
@@ -191,7 +192,7 @@ class MathLibV4:MathLib Version 4 - Advanced mathematical library for Schwabot.
 
         logger.info(fMathLibV4 v{self.version.value} initialized with {precision}-bit precision)
 
-    def calculate_dlt_metrics(self, data: Dict[str, Any]) -> DLTMetrics:Calculate comprehensive DLT (Distributed Ledger Technology) metrics.
+    def calculate_dlt_metrics():-> DLTMetrics:Calculate comprehensive DLT (Distributed Ledger Technology) metrics.
 
         Args:
                     data: Dictionary containing price/volume data and metadata
@@ -250,47 +251,43 @@ class MathLibV4:MathLib Version 4 - Advanced mathematical library for Schwabot.
             logger.error(fError calculating DLT metrics: {e})
             raise
 
-    def confirm_triplet_lock(self, sequence: np.ndarray) -> bool:Confirms a triplet lock pattern in the sequence.if len(sequence) < 3:
+    def confirm_triplet_lock():-> bool:Confirms a triplet lock pattern in the sequence.if len(sequence) < 3:
             return False
         # Simple example: check if first three elements are unique and non-zero
         return len(set(sequence[:3])) == 3 and np.all(sequence[:3] != 0)
 
-    def _generate_pattern_hash(self, sequence: np.ndarray) -> str:
+    def _generate_pattern_hash():-> str:
         Generates a SHA256 hash from the sequence data.return hashlib.sha256(sequence.tobytes()).hexdigest()
 
-    def _calculate_greyscale_confidence(self, sequence: np.ndarray) -> float:Calculates confidence based on sequence stability (e.g., inverse of variance).if len(sequence) < 2 or np.std(sequence) == 0:
+    def _calculate_greyscale_confidence():-> float:Calculates confidence based on sequence stability (e.g., inverse of variance).if len(sequence) < 2 or np.std(sequence) == 0:
             return 1.0  # Max confidence for stable data
         return float(1.0 / (1.0 + np.std(sequence)))
 
-    def _calculate_warp_drift_correction(
-        self, sequence: np.ndarray, volumes: Optional[List[float]] = None
-    ) -> float:Calculates a warp drift correction factor based on sequence and optional volume.# Placeholder for more complex temporal analysis
+    def _calculate_warp_drift_correction():-> float:Calculates a warp drift correction factor based on sequence and optional volume.# Placeholder for more complex temporal analysis
         if volumes and len(volumes) == len(sequence):
             volume_weights = np.array(volumes) / np.sum(volumes)
             return float(np.dot(sequence, volume_weights))
         return float(np.mean(sequence))
 
-    def calculate_similarity_score(self, pattern1: str, pattern2: str) -> float:
+    def calculate_similarity_score():-> float:
         Calculate similarity between two pattern hashes.# Simple XOR-based similarity (can be enhanced)
         return 1.0 - (bin(int(pattern1[:8], 16) ^ int(pattern2[:8], 16)).count(1) / 32.0)
 
-    def compute_gradient_at_point(
-        self, function: callable, x: float, epsilon: float = 1e-9
-    ) -> float:Compute numerical gradient at a point.return (function(x + epsilon) - function(x - epsilon)) / (2 * epsilon)
+    def compute_gradient_at_point():-> float:Compute numerical gradient at a point.return (function(x + epsilon) - function(x - epsilon)) / (2 * epsilon)
 
-    def compute_dual_gradient(self, function: callable, x: float) -> float:Compute gradient using dual numbers for automatic differentiation.dual_x = Dual(x, 1.0)
+    def compute_dual_gradient():-> float:Compute gradient using dual numbers for automatic differentiation.dual_x = Dual(x, 1.0)
         result = function(dual_x)
         return result.eps
 
-    def get_pattern_cache(self) -> Dict[str, DLTMetrics]:Get the current pattern cache.return self.pattern_cache.copy()
+    def get_pattern_cache():-> Dict[str, DLTMetrics]:Get the current pattern cache.return self.pattern_cache.copy()
 
-    def get_analysis_history(self) -> List[Dict[str, Any]]:Get the analysis history.return self.analysis_history.copy()
+    def get_analysis_history():-> List[Dict[str, Any]]:Get the analysis history.return self.analysis_history.copy()
 
-    def clear_cache(self) -> None:Clear the pattern cache and analysis history.self.pattern_cache.clear()
+    def clear_cache():-> None:Clear the pattern cache and analysis history.self.pattern_cache.clear()
         self.analysis_history.clear()
         logger.info(MathLibV4 cache cleared)
 
-    def get_version_info(self) -> Dict[str, Any]:Get version and configuration information.return {version: self.version.value,precision: self.precision,cache_size: len(self.pattern_cache),history_size": len(self.analysis_history),numpy_version": np.__version__,
+    def get_version_info():-> Dict[str, Any]:Get version and configuration information.return {version: self.version.value,precision: self.precision,cache_size: len(self.pattern_cache),history_size": len(self.analysis_history),numpy_version": np.__version__,
         }
 
 
@@ -312,7 +309,7 @@ def demo_mathlib_v4():Demonstration of MathLibV4 capabilities.print(=== MathLibV
     print(fWarp Factor: {metrics.warp_factor:.4f})
 
     # Demonstrate dual number automatic differentiation
-    def f(x_dual: Dual) -> Dual:
+    def f():-> Dual:
         return x_dual * x_dual + x_dual.sin()
 
     gradient = mathlib.compute_dual_gradient(f, 2.0)

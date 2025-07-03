@@ -1,3 +1,18 @@
+from core.mathlib_v3 import MathLibV3, Dual
+from matplotlib.animation import FuncAnimation
+import matplotlib.pyplot as plt
+import numpy as np
+from __future__ import annotations
+from dataclasses import dataclass, asdict
+from datetime import datetime
+from typing import Any, Dict, List
+import json
+import logging
+import queue
+import threading
+import time
+import tkinter as tk
+
 # -*- coding: utf-8 -*-
 """
 MathLib V3 Visualizer - Live Mathematical Operations Dashboard
@@ -15,21 +30,7 @@ Features:
 - Internal state management and persistence
 """
 
-from __future__ import annotations
-import logging
-import json
-import time
-import threading
-from typing import Any, Dict, List
-from dataclasses import dataclass, asdict
-from datetime import datetime
-import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib.animation import FuncAnimation
-import tkinter as tk
-import queue
 
-from core.mathlib_v3 import MathLibV3, Dual
 
 logger = logging.getLogger(__name__)
 
@@ -215,7 +216,7 @@ class MathLibV3Visualizer:
                 logger.error(f"Error in backtest simulation: {e}")
                 self.state.error_log.append(f"Backtest error: {e}")
 
-    def _collect_live_data(self) -> Dict[str, Any]:
+    def _collect_live_data():-> Dict[str, Any]:
         """Collect live data from API/CCXT sources."""
         # Placeholder for live data collection
         # In real implementation, this would connect to your API/CCXT
@@ -227,7 +228,7 @@ class MathLibV3Visualizer:
             "source": "live_api",
         }
 
-    def _generate_demo_data(self) -> Dict[str, Any]:
+    def _generate_demo_data():-> Dict[str, Any]:
         """Generate simulated data for demo mode."""
         return {
             "timestamp": datetime.now().isoformat(),
@@ -237,7 +238,7 @@ class MathLibV3Visualizer:
             "source": "demo_simulation",
         }
 
-    def _process_backtest_data(self) -> Dict[str, Any]:
+    def _process_backtest_data():-> Dict[str, Any]:
         """Process historical data for backtest mode."""
         if self.current_index < len(self.historical_data):
             data_point = self.historical_data[self.current_index]
@@ -459,11 +460,11 @@ class MathLibV3Visualizer:
             logger.error(f"Error performing math operations: {e}")
             self.state.error_log.append(f"Math operations error: {e}")
 
-    def _compute_dual_operations(self, x: float) -> Dict[str, Any]:
+    def _compute_dual_operations():-> Dict[str, Any]:
         """Compute dual number operations."""
         try:
             # Test function: f(x) = x^2 + 2x + 1
-            def test_function(dual_x: Dual) -> Dual:
+            def test_function():-> Dual:
                 return dual_x * dual_x + 2 * dual_x + 1
 
             val, grad_val = self.mathlib.compute_dual_gradient(test_function, x)
@@ -478,7 +479,7 @@ class MathLibV3Visualizer:
             logger.error(f"Error computing dual operations: {e}")
             return {"error": str(e)}
 
-    def _compute_risk_assessment(self, data: Dict[str, Any]) -> Dict[str, Any]:
+    def _compute_risk_assessment():-> Dict[str, Any]:
         """Compute risk assessment metrics."""
         try:
             if len(self.state.calculation_history) < 5:
@@ -507,11 +508,11 @@ class MathLibV3Visualizer:
             logger.error(f"Error computing risk assessment: {e}")
             return {"error": str(e)}
 
-    def _compute_optimization(self, data: Dict[str, Any]) -> Dict[str, Any]:
+    def _compute_optimization():-> Dict[str, Any]:
         """Compute optimization results."""
         try:
             # Simple quadratic optimization
-            def objective(x: np.ndarray) -> float:
+            def objective():-> float:
                 return float(
                     np.sum((x - np.array([data.get("price", 50000), 0.1])) ** 2)
                 )
@@ -526,7 +527,7 @@ class MathLibV3Visualizer:
             logger.error(f"Error computing optimization: {e}")
             return {"error": str(e)}
 
-    def _compute_performance_metrics(self) -> Dict[str, Any]:
+    def _compute_performance_metrics():-> Dict[str, Any]:
         """Compute performance metrics."""
         try:
             if not self.state.calculation_history:
@@ -558,7 +559,7 @@ class MathLibV3Visualizer:
             logger.error(f"Error computing performance metrics: {e}")
             return {"error": str(e)}
 
-    def _get_integration_status(self) -> Dict[str, Any]:
+    def _get_integration_status():-> Dict[str, Any]:
         """Get integration status."""
         return {
             "api_connected": self.state.api_connected,
@@ -923,7 +924,7 @@ class MathLibV3Visualizer:
         plt.close("all")
         logger.info("MathLib V3 Visualizer stopped")
 
-    def save_state(self, filename: str = None) -> str:
+    def save_state():-> str:
         """Save visualizer state to file."""
         if filename is None:
             filename = f"mathlib_v3_visualizer_state_{
@@ -942,7 +943,7 @@ class MathLibV3Visualizer:
         logger.info(f"Visualizer state saved to {filename}")
         return filename
 
-    def load_state(self, filename: str) -> bool:
+    def load_state():-> bool:
         """Load visualizer state from file."""
         try:
             with open(filename, "r") as f:
@@ -959,7 +960,7 @@ class MathLibV3Visualizer:
             logger.error(f"Error loading visualizer state: {e}")
             return False
 
-    def get_integration_hooks(self) -> Dict[str, Any]:
+    def get_integration_hooks():-> Dict[str, Any]:
         """Get integration hooks for external systems."""
         return {
             "mathlib": self.mathlib,

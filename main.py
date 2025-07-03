@@ -1,3 +1,15 @@
+    from core.mathematical_backlog_manager import MathematicalBacklogManager
+    from core.mathematical_relay_sequencer import MathematicalRelaySequencer
+    from backtesting.simple_backtester import SimpleBacktester
+    from core.ccxt_trading_executor import TradingPair
+    from core.system_integration import (
+from datetime import datetime
+from decimal import Decimal
+import argparse
+import asyncio
+import logging
+import sys
+
 # -*- coding: utf-8 -*-
 """
 Mathematical Relay System - Main Entry Point
@@ -18,12 +30,6 @@ Usage:
     python main.py --full             # Run complete system
 """
 
-import asyncio
-import argparse
-import logging
-import sys
-from datetime import datetime
-from decimal import Decimal
 
 # Configure logging
 logging.basicConfig(
@@ -39,14 +45,9 @@ logger = logging.getLogger(__name__)
 
 # Import system components
 try:
-    from core.system_integration import (
         SystemIntegrationManager,
         initialize_and_start_system,
     )
-    from core.ccxt_trading_executor import TradingPair
-    from core.mathematical_relay_sequencer import MathematicalRelaySequencer
-    from core.mathematical_backlog_manager import MathematicalBacklogManager
-    from backtesting.simple_backtester import SimpleBacktester
 
     SYSTEM_AVAILABLE = True
 except ImportError as e:

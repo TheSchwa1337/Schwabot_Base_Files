@@ -1,3 +1,11 @@
+    from core.unified_math_system import unified_math
+import numpy as np
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Dict, List, Optional, Any
+import logging
+import time
+
 #!/usr/bin/env python3
 """
 Pattern Utilities Module
@@ -8,16 +16,9 @@ including technical patterns, trend analysis, and signal generation.
 Integrates with the unified math system and provides API endpoints.
 """
 
-import numpy as np
-import time
-import logging
-from typing import Dict, List, Optional, Any
-from dataclasses import dataclass, field
-from enum import Enum
 
 # Import unified math system
 try:
-    from core.unified_math_system import unified_math
 
     UNIFIED_MATH_AVAILABLE = True
 except ImportError:
@@ -92,7 +93,7 @@ class PatternUtils:
 
         logger.info("📊 Pattern Utils initialized")
 
-    def _default_config(self) -> Dict[str, Any]:
+    def _default_config():-> Dict[str, Any]:
         """Default configuration."""
         return {
             "max_patterns": 500,
@@ -103,7 +104,7 @@ class PatternUtils:
             "breakout_threshold": 0.02,
         }
 
-    def analyze_trend(self, price_data: List[float]) -> TrendAnalysis:
+    def analyze_trend():-> TrendAnalysis:
         """
         Analyze trend in price data.
 
@@ -156,7 +157,7 @@ class PatternUtils:
             logger.error(f"Error analyzing trend: {e}")
             return self._create_default_trend()
 
-    def _create_default_trend(self) -> TrendAnalysis:
+    def _create_default_trend():-> TrendAnalysis:
         """Create default trend analysis."""
         return TrendAnalysis(
             trend_direction="sideways",
@@ -166,7 +167,7 @@ class PatternUtils:
             r_squared=0.0,
         )
 
-    def detect_patterns(self, price_data: List[float]) -> List[PatternMatch]:
+    def detect_patterns():-> List[PatternMatch]:
         """
         Detect patterns in price data.
 
@@ -201,7 +202,7 @@ class PatternUtils:
 
         return patterns
 
-    def _detect_trend_patterns(self, price_data: List[float]) -> List[PatternMatch]:
+    def _detect_trend_patterns():-> List[PatternMatch]:
         """Detect trend patterns."""
         patterns = []
 
@@ -228,7 +229,7 @@ class PatternUtils:
 
         return patterns
 
-    def _detect_breakout_patterns(self, price_data: List[float]) -> List[PatternMatch]:
+    def _detect_breakout_patterns():-> List[PatternMatch]:
         """Detect breakout patterns."""
         patterns = []
 
@@ -269,7 +270,7 @@ class PatternUtils:
 
         return patterns
 
-    def _detect_reversal_patterns(self, price_data: List[float]) -> List[PatternMatch]:
+    def _detect_reversal_patterns():-> List[PatternMatch]:
         """Detect reversal patterns."""
         patterns = []
 
@@ -327,9 +328,7 @@ class PatternUtils:
 
         return patterns
 
-    def _detect_consolidation_patterns(
-        self, price_data: List[float]
-    ) -> List[PatternMatch]:
+    def _detect_consolidation_patterns():-> List[PatternMatch]:
         """Detect consolidation patterns."""
         patterns = []
 
@@ -360,7 +359,7 @@ class PatternUtils:
 
         return patterns
 
-    def get_pattern_summary(self) -> Dict[str, Any]:
+    def get_pattern_summary():-> Dict[str, Any]:
         """Get summary of pattern analysis."""
         if not self.pattern_history:
             return {"status": "no_data"}
@@ -385,7 +384,7 @@ class PatternUtils:
             ),
         }
 
-    def get_recent_patterns(self, count: int = 10) -> List[Dict[str, Any]]:
+    def get_recent_patterns():-> List[Dict[str, Any]]:
         """Get recent detected patterns."""
         recent_patterns = self.pattern_history[-count:]
         return [

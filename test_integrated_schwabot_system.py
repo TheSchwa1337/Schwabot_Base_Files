@@ -1,3 +1,16 @@
+    from core.unified_math_system import unified_math
+    import numpy as np
+        import traceback
+    from core.ccxt_trading_executor import (
+    from core.integrated_ferris_glyph_controller import (
+    from core.lantern_core import enhanced_lantern_core, EntropyMode, map_btc_price_to_word
+from decimal import Decimal
+from typing import Dict, Any, List
+import json
+import os
+import sys
+import time
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -19,26 +32,16 @@ Mathematical Flow Validation:
 5. CCXT Executor: Multi-pair trading (BTC/USDC, ETH/USDC)
 """
 
-import sys
-import os
-import time
-import json
-from typing import Dict, Any, List
-from decimal import Decimal
 
 # Add core to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'core'))
 
 # Import all integrated components
 try:
-    from core.lantern_core import enhanced_lantern_core, EntropyMode, map_btc_price_to_word
-    from core.integrated_ferris_glyph_controller import (
         integrated_controller, process_btc_cycle, TradingTimeframe
     )
-    from core.ccxt_trading_executor import (
         ccxt_executor, execute_trading_signal, TradingPair, ExecutionStrategy
     )
-    from core.unified_math_system import unified_math
     print("✅ All integrated components imported successfully")
     COMPONENTS_AVAILABLE = True
 except ImportError as e:
@@ -51,7 +54,7 @@ def print_banner(text: str, char: str = "="):
     print(f" {text}")
     print(char * 80)
 
-def format_json(data: Any) -> str:
+def format_json():-> str:
     """Format data as pretty JSON."""
     return json.dumps(data, indent=2, default=str)
 
@@ -166,7 +169,6 @@ def test_mathematical_unified_system():
     print("📊 Testing core mathematical operations...")
 
     # Test basic operations
-    import numpy as np
     a = np.array([1, 2, 3, 4, 5])
     b = np.array([5, 4, 3, 2, 1])
 
@@ -325,7 +327,6 @@ def main():
 
     except Exception as e:
         print(f"\n❌ Test suite failed: {e}")
-        import traceback
         traceback.print_exc()
 
 if __name__ == "__main__":

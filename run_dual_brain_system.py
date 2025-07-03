@@ -1,3 +1,27 @@
+                import numpy
+        from core.unified_math_system import UnifiedMathSystem
+                import aiohttp
+                import asyncio
+                import ccxt
+                import flask
+                import flask_socketio
+                import requests
+        from core.dual_brain_architecture import DualBrainArchitecture
+        from core.dual_brain_architecture import DualBrainArchitecture
+        from core.dual_unicore_handler import DualUnicoreHandler
+        from core.exchange_plumbing import ExchangePlumbing
+        from core.phase_bit_integration import PhaseBitIntegration
+        from core.whale_tracker_integration import WhaleTrackerIntegration
+        from server.dual_brain_server import run_server
+from datetime import datetime
+from pathlib import Path
+import asyncio
+import logging
+import os
+import sys
+import time
+import traceback
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -18,14 +42,6 @@ Usage:
 Then navigate to: http://localhost:5000
 """
 
-import asyncio
-import logging
-import os
-import sys
-import time
-import traceback
-from datetime import datetime
-from pathlib import Path
 
 # Add current directory to Python path
 sys.path.insert(0, str(Path(__file__).parent))
@@ -110,32 +126,26 @@ def run_system_tests():
         # Test imports
         logger.info("Testing core system imports...")
 
-        from core.unified_math_system import UnifiedMathSystem
 
         UnifiedMathSystem()
         logger.info("✅ UnifiedMathSystem initialized")
 
-        from core.phase_bit_integration import PhaseBitIntegration
 
         PhaseBitIntegration()
         logger.info("✅ PhaseBitIntegration initialized")
 
-        from core.dual_unicore_handler import DualUnicoreHandler
 
         DualUnicoreHandler()
         logger.info("✅ DualUnicoreHandler initialized")
 
-        from core.whale_tracker_integration import WhaleTrackerIntegration
 
         WhaleTrackerIntegration()
         logger.info("✅ WhaleTrackerIntegration initialized")
 
-        from core.exchange_plumbing import ExchangePlumbing
 
         ExchangePlumbing()
         logger.info("✅ ExchangePlumbing initialized")
 
-        from core.dual_brain_architecture import DualBrainArchitecture
 
         DualBrainArchitecture()
         logger.info("✅ DualBrainArchitecture initialized")
@@ -215,19 +225,12 @@ def check_dependencies():
     for package in required_packages:
         try:
             if package == "asyncio":
-                import asyncio
             elif package == "numpy":
-                import numpy
             elif package == "aiohttp":
-                import aiohttp
             elif package == "flask":
-                import flask
             elif package == "flask-socketio":
-                import flask_socketio
             elif package == "ccxt":
-                import ccxt
             elif package == "requests":
-                import requests
             else:
                 __import__(package)
             logger.info(f"   ✅ {package}")
@@ -271,7 +274,6 @@ async def run_system_demo():
     logger.info("🎬 Running system demonstration...")
 
     try:
-        from core.dual_brain_architecture import DualBrainArchitecture
 
         # Create dual brain instance
         dual_brain = DualBrainArchitecture()
@@ -371,7 +373,6 @@ def main():
 
     # Launch the Flask server
     try:
-        from server.dual_brain_server import run_server
 
         run_server()
     except KeyboardInterrupt:

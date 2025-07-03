@@ -1,3 +1,12 @@
+import math
+import numpy as np
+from dataclasses import dataclass
+from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple
+from typing import Tuple
+import logging
+import time
+
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 
@@ -18,15 +27,7 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
 """
-import logging
-import math
-import time
-from dataclasses import dataclass
-from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
 
-import numpy as np
-from typing import Tuple
 
 
 
@@ -85,16 +86,10 @@ self.adaptive_mu = self.mu
 self.learning_rate = self.config.get(learning_rate, 0.01)
             logger.info(🔭 Galileo Tensor Field initialized)
 
-def _default_config(self) -> Dict[str, Any]:"Default configuration for tensor field.return {sync_sharpness: 10.0,sync_threshold": 0.05,harmony_threshold": 0.8,learning_rate": 0.01,max_history": 1000,confidence_weight": 0.3,angular_normalization": True,adaptive_threshold": True,
+def _default_config():-> Dict[str, Any]:"Default configuration for tensor field.return {sync_sharpness: 10.0,sync_threshold": 0.05,harmony_threshold": 0.8,learning_rate": 0.01,max_history": 1000,confidence_weight": 0.3,angular_normalization": True,adaptive_threshold": True,
 }
 
-def galileo_tensor_sync(
-self,:
-theta: float,
-phi: float,
-qsc_confidence: float = 1.0,
-        gts_confidence: float = 1.0,
-    ) -> Tuple[float, TensorSyncResult]:Calculate Galileo tensor synchronization score.Mathematical Model:
+def galileo_tensor_sync():-> Tuple[float, TensorSyncResult]:Calculate Galileo tensor synchronization score.Mathematical Model:
         f_sync(Δθ, Δφ) = 1 / (1 + e^(-α(|Δθ - Δφ| - μ)))
 
 Where:
@@ -181,13 +176,13 @@ alignment.value}
 
         return weighted_sync_score, result
 
-def _normalize_angle() -> float:Normalize angle to [-π, π] range.while angle > math.pi:
+def _normalize_angle():-> float:Normalize angle to [-π, π] range.while angle > math.pi:
             angle -= 2 * math.pi
 while angle < -math.pi:
             angle += 2 * math.pi
         return angle
 
-def _classify_alignment() -> TensorAlignment:Classify tensor alignment based on sync score and angular difference.if sync_score >= 0.9:
+def _classify_alignment():-> TensorAlignment:Classify tensor alignment based on sync score and angular difference.if sync_score >= 0.9:
             return TensorAlignment.HARMONIZED
         elif sync_score >= 0.7:
             return TensorAlignment.SYNCHRONIZED
@@ -198,9 +193,7 @@ elif delta > math.pi / 2:  # 90 degrees or more
 else:
             return TensorAlignment.MISALIGNED
 
-def _update_adaptive_threshold(:
-        self, sync_score: float, alignment: TensorAlignment
-) -> None:Update adaptive threshold based on recent performance.# Count recent harmonized alignments
+def _update_adaptive_threshold():-> None:Update adaptive threshold based on recent performance.# Count recent harmonized alignments
 recent_results = self.sync_history[-50:] if self.sync_history else []
 harmony_rate = sum(
 1
@@ -221,13 +214,7 @@ self.adaptive_mu = max(0.01, min(0.2, self.adaptive_mu + adjustment))
 f🔭 Adaptive threshold updated: {self.adaptive_mu:.4f} (harmony rate: {
 harmony_rate:.3f}))
 
-def add_qsc_solution(
-self,:
-theta: float,
-confidence: float = 1.0,
-source: str =  qsc,
-metadata: Optional[Dict[str, Any]] = None,
-) -> str:Add QSC solution to the tensor field.Args:
+def add_qsc_solution():-> str:Add QSC solution to the tensor field.Args:
             theta: Solution angle
 confidence: Solution confidence
 source: Source identifier
@@ -252,13 +239,7 @@ if len(self.qsc_solutions) > self.config.get(max_history, 1000):
 
         return solution_id
 
-def add_gts_solution(
-self,:
-phi: float,
-confidence: float = 1.0,
-source: str =  gts,
-metadata: Optional[Dict[str, Any]] = None,
-) -> str:Add GTS solution to the tensor field.Args:
+def add_gts_solution():-> str:Add GTS solution to the tensor field.Args:
             phi: Detection angle
 confidence: Solution confidence
 source: Source identifier
@@ -283,9 +264,7 @@ if len(self.gts_solutions) > self.config.get(max_history, 1000):
 
         return solution_id
 
-def find_harmonic_solutions(:
-self, time_window: float = 60.0
-) -> List[Dict[str, Any]]:Find harmonic solution pairs within time window.Args:
+def find_harmonic_solutions():-> List[Dict[str, Any]]:Find harmonic solution pairs within time window.Args:
             time_window: Time window in seconds
 
 Returns:
@@ -328,9 +307,7 @@ harmonic_pairs.sort(key = lambda x: x[sync_result].sync_score, reverse = True)
 
         return harmonic_pairs
 
-def get_consensus_direction(:
-self, time_window: float = 30.0
-) -> Tuple[Optional[float], float]:
+def get_consensus_direction():-> Tuple[Optional[float], float]:
         Get consensus direction from recent harmonized solutions.
 
 Args:
@@ -368,9 +345,7 @@ consensus_confidence = min(1.0, total_weight / len(weighted_angles))
 
         return consensus_angle, consensus_confidence
 
-def validate_trajectory_immune_trust(:
-self, theta: float, phi: float
-) -> Tuple[bool, str]:
+def validate_trajectory_immune_trust():-> Tuple[bool, str]:
         Validate trajectory for immune trust.Args:
             theta: QSC solution angle
 phi: GTS detection angle
@@ -391,7 +366,7 @@ if consensus_angle is not None and consensus_confidence > 0.6: consensus_diff = 
 if consensus_diff < 0.3:  # Within ~17 degrees
         return True, Aligned with consensus - conditional immune trust
 
-        return False, Partial alignment - insufficient for immune trustdef get_tensor_field_status(self) -> Dict[str, Any]:Get comprehensive tensor field status.recent_syncs = self.sync_history[-100:] if self.sync_history else []
+        return False, Partial alignment - insufficient for immune trustdef get_tensor_field_status():-> Dict[str, Any]:Get comprehensive tensor field status.recent_syncs = self.sync_history[-100:] if self.sync_history else []
 
 # Calculate alignment distribution
 alignment_counts = {}
@@ -420,9 +395,7 @@ else 0.0
 }
 
 
-def create_market_solution(:
-price_direction: float, momentum: float, source: str = market
-) -> Tuple[float, float]:Create tensor solution from market data.
+def create_market_solution():-> Tuple[float, float]:Create tensor solution from market data.
 
 Args:
         price_direction: Price direction(-1 to 1)

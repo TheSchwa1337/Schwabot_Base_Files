@@ -1,3 +1,20 @@
+import math
+import numpy as np
+from collections import deque
+from core.quantum_drift_shell_engine import QuantumDriftShellEngine
+from core.risk_manager import RiskManager
+from data.temporal_intelligence_integration import TemporalIntelligenceIntegration
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from hash_recollection.entropy_tracker import EntropyTracker
+from hash_recollection.pattern_utils import PatternUtils
+from typing import Any, Callable, Dict, List, Optional, Tuple, Union
+from typing import Callable
+from typing import Tuple
+import hashlib
+import logging
+import time
+
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 
@@ -18,24 +35,8 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
 """
-import hashlib
-import logging
-import math
-import time
-from collections import deque
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 
-import numpy as np
 
-from core.quantum_drift_shell_engine import QuantumDriftShellEngine
-from core.risk_manager import RiskManager
-from data.temporal_intelligence_integration import TemporalIntelligenceIntegration
-from hash_recollection.entropy_tracker import EntropyTracker
-from hash_recollection.pattern_utils import PatternUtils
-from typing import Tuple
-from typing import Callable
 
 
 # -*- coding: utf-8 -*-
@@ -143,15 +144,7 @@ total_evaluations: 0,valid_memory_recalls: 0,drift_rejections": 0,correction_inj
             logger.info(f"🕰️ Advanced Drift Shell Engine initialized with {memory_buffer_size} memory slots
 )
 
-def record_memory(
-self,:
-tick_id: str,
-price: float,
-volume: float,
-context_snapshot: Dict[str, Any],
-rsi: Optional[float] = None,
-momentum: Optional[float] = None,
-) -> str:"Record a new memory snapshot with tensor compression.Args:
+def record_memory():-> str:"Record a new memory snapshot with tensor compression.Args:
             tick_id: Unique tick identifier
 price: Current price
 volume: Current volume
@@ -188,13 +181,7 @@ self.hash_memory[hash_val] = memory
 
         return hash_val
 
-def evaluate_drift(
-self,:
-current_price: float,
-current_volume: float,
-current_hash: str,
-timing_metrics: Optional[TimingMetrics] = None,
-) -> Dict[str, Any]:
+def evaluate_drift():-> Dict[str, Any]:
         Evaluate temporal drift and memory validity using TDCF.Implements: Validity(ΔT) = exp(−(σ_tick * ΔT + α_exec)) * ρ_hash
 
 Args:
@@ -280,9 +267,7 @@ self._update_avg_validation_time(validation_time)
         return {valid_recalls: valid_recalls,drift_scores: drift_scores,total_memories: len(self.memory_log),validation_time": validation_time,timing_metrics": timing_metrics,
 }
 
-def calculate_bitmap_confidence(:
-self, current_context: Dict[str, Any], profit_projection: float
-) -> BitmapConfidence:"Calculate confidence overlay for 16-bit vs 10k-bit bitmap selection using BCOE.Implements: B_total(t) = Softmax([B₁(t) * ζ, B₂(t) * Θ * Δ_profit])
+def calculate_bitmap_confidence():-> BitmapConfidence:"Calculate confidence overlay for 16-bit vs 10k-bit bitmap selection using BCOE.Implements: B_total(t) = Softmax([B₁(t) * ζ, B₂(t) * Θ * Δ_profit])
 
 Args:
             current_context: Current market context
@@ -331,15 +316,7 @@ tensor_heat_signature=tensor_heat_signature,
             profit_delta=profit_projection,
 )
 
-def forecast_profit_vector(
-self,:
-historical_signals: List[Dict[str, Any]],
-ghost_alignment: float,
-rsi: float,
-volume: float,
-momentum: float,
-phase_vector: Tuple[float, float, float],
-    ) -> ProfitVector:Calculate profit vector forecast using PVF for directional movement prediction.Implements: PV(t) = ∇(H ⊕ G) + tanh(m(t) * RSI(t)) + ψ(t)
+def forecast_profit_vector():-> ProfitVector:Calculate profit vector forecast using PVF for directional movement prediction.Implements: PV(t) = ∇(H ⊕ G) + tanh(m(t) * RSI(t)) + ψ(t)
 
 Args:
             historical_signals: List of historical signal hashes
@@ -383,12 +360,7 @@ if magnitude < 0.1:
 x = pv_x, y=pv_y, z=pv_z, magnitude=magnitude, direction=direction
 )
 
-def inject_correction(
-self,:
-current_profit_vector: ProfitVector,
-deviation_magnitude: float,
-quantum_state: Optional[Dict[str, Any]] = None,
-) -> CorrectionFactors:Apply correction injection for dynamic anomaly mitigation using CIF.Implements: C(t) = ε * Corr_Q(t) + β * Corr_G(t) + δ * Corr_SM(t)
+def inject_correction():-> CorrectionFactors:Apply correction injection for dynamic anomaly mitigation using CIF.Implements: C(t) = ε * Corr_Q(t) + β * Corr_G(t) + δ * Corr_SM(t)
 
 Args:
             current_profit_vector: Current PV calculation
@@ -442,13 +414,7 @@ smart_money_correction=smart_money_correction,
 confidence_weights=confidence_weights,
 )
 
-def unified_confidence_validator(
-self,:
-drift_result: Dict[str, Any],
-bitmap_confidence: BitmapConfidence,
-profit_vector: ProfitVector,
-correction_factors: Optional[CorrectionFactors] = None,
-) -> Dict[str, Any]:Unified activation validator implementing the complete confidence equation.Implements: Confidence(t) = Validity(ΔT) + B_total(t) + PV(t) + C(t) ≥ χ_activation
+def unified_confidence_validator():-> Dict[str, Any]:Unified activation validator implementing the complete confidence equation.Implements: Confidence(t) = Validity(ΔT) + B_total(t) + PV(t) + C(t) ≥ χ_activation
 
 Args:
             drift_result: Result from drift evaluation
@@ -512,12 +478,12 @@ final_confidence = total_confidence * risk_adjustment
 else10k-bit),trade_direction": profit_vector.direction,timing_window": (valid_recalls[0][timing_window] if valid_recalls elsenone),
 }
 
-def _compress_to_tensor(self, context_snapshot: Dict[str, Any]) -> np.ndarray:"Compress market context into tensor format for GPU processing.# Extract key features and convert to float16 tensor
+def _compress_to_tensor():-> np.ndarray:"Compress market context into tensor format for GPU processing.# Extract key features and convert to float16 tensor
 features = [context_snapshot.get(price, 0.0),context_snapshot.get(volume, 0.0),context_snapshot.get(rsi", 50.0),context_snapshot.get(momentum", 0.0),context_snapshot.get(volatility", 0.0),context_snapshot.get(trend_strength", 0.0),
 ]
         return np.array(features, dtype = np.float16)
 
-def _calculate_hash_similarity() -> float:Calculate hash similarity using Hamming distance.if len(hash1) != len(hash2):
+def _calculate_hash_similarity():-> float:Calculate hash similarity using Hamming distance.if len(hash1) != len(hash2):
             return 0.0
 
 # Calculate Hamming distance
@@ -525,7 +491,7 @@ differences = sum(c1 != c2 for c1, c2 in zip(hash1, hash2))
 similarity = 1.0 - (differences / len(hash1))
         return similarity
 
-def _update_avg_validation_time() -> None:
+def _update_avg_validation_time():-> None:
         Update average validation time metric.total_evals = self.stats[total_evaluations]current_avg = self.stats[avg_validation_time]
 
 if total_evals == 1:
@@ -535,7 +501,7 @@ else :
 current_avg * (total_evals - 1) + new_time
 ) / total_evals
 
-def get_performance_stats(self) -> Dict[str, Any]:Get comprehensive performance statistics.stats = self.stats.copy()
+def get_performance_stats():-> Dict[str, Any]:Get comprehensive performance statistics.stats = self.stats.copy()
 stats.update(
 {memory_usage: len(self.memory_log),hash_memory_size": len(self.hash_memory),tensor_cache_size": len(self.tensor_cache),memory_buffer_utilization": len(self.memory_log)
 / self.memory_buffer_size,drift_rejection_rate": self.stats[drift_rejections]/ max(self.stats[total_evaluations], 1),bitmap_16_preference": self.stats[bitmap_16_selections]
@@ -546,7 +512,7 @@ stats.update(
 )
         return stats
 
-def cleanup_expired_memory(self, max_age_seconds: float = 3600) -> int:Clean up expired memory entries to maintain performance.current_time = time.time()
+def cleanup_expired_memory():-> int:Clean up expired memory entries to maintain performance.current_time = time.time()
 initial_count = len(self.memory_log)
 
 # Filter out expired memories

@@ -1,16 +1,21 @@
+        from mathlib_v2 import CoreMathLibV2
+from mathlib_v2 import CoreMathLibV2
+        from aleph_unitizer_lib import AlephUnitizer, TesseractPortal
+        from rittle_gemm import RittleGEMM, RingLayer
+        from schwabot_stop import SchwabotStopBook, StopPatternState
+from aleph_unitizer_lib import AlephUnitizer, TesseractPortal
+from dataclasses import asdict
+from rittle_gemm import RittleGEMM, RingLayer
+from schwabot_stop import SchwabotStopBook, StopPatternState
+from typing import Dict, Any
 import asyncio
+import hashlib
 import json
 import random
+import threading
 import time
 import websockets
-import threading
-from typing import Dict, Any
-import hashlib
-from dataclasses import asdict
-from mathlib_v2 import CoreMathLibV2
-from schwabot_stop import SchwabotStopBook, StopPatternState
-from rittle_gemm import RittleGEMM, RingLayer
-from aleph_unitizer_lib import AlephUnitizer, TesseractPortal
+
 
 
 class SchwabootDashboardEngine:
@@ -452,10 +457,6 @@ if __name__ == "__main__":
     # This is a temporary check for development. In a proper setup,
     # you'd ensure these paths are correct or handle ModuleNotFoundError.
     try:
-        from mathlib_v2 import CoreMathLibV2
-        from schwabot_stop import SchwabotStopBook, StopPatternState
-        from rittle_gemm import RittleGEMM, RingLayer
-        from aleph_unitizer_lib import AlephUnitizer, TesseractPortal
     except ImportError as e:
         print(
             f"ERROR: Missing a required module. Please ensure all backend modules are in your Python path. {e}"

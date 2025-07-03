@@ -1,14 +1,16 @@
+        import traceback
+    from core.speed_lattice_visualizer import SpeedLatticeLivePanelSystem, PanelType
+import sys
+import time
+
 #!/usr/bin/env python3
 """
 Simple Live Panel System Test
 """
 
-import sys
-import time
 
 # Import only the visualizer
 try:
-    from core.speed_lattice_visualizer import SpeedLatticeLivePanelSystem, PanelType
 
     print("✅ Successfully imported SpeedLatticeLivePanelSystem")
 except ImportError as e:
@@ -77,7 +79,6 @@ def simple_test():
 
     except Exception as e:
         print(f"❌ Test failed: {e}")
-        import traceback
 
         traceback.print_exc()
         return False

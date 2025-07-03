@@ -1,7 +1,10 @@
-# -*- coding: utf - 8 -*-
-# -*- coding: utf - 8 -*-
-# -*- coding: utf - 8 -*-
-# -*- coding: utf - 8 -*-
+from core.unified_math_system import unified_math
+from core.demo_backtest_runner import get_demo_backtest_runner
+from core.demo_entry_simulator import get_demo_entry_simulator
+from core.demo_integration_system import get_demo_integration_system
+from core.dlt_waveform_engine import get_dlt_waveform_engine
+from core.multi_bit_btc_processor import get_multi_bit_btc_processor
+from core.temporal_execution_correction_layer import get_temporal_execution_correction_layer
 from dataclasses import dataclass, asdict
 from datetime import datetime, timedelta
 from demo.demo_logic_flow import get_demo_logic_flow
@@ -12,24 +15,22 @@ from settings.matrix_allocator import get_matrix_allocator
 from settings.settings_controller import get_settings_controller
 from settings.vector_validator import get_vector_validator
 from typing import Dict, List, Any, Optional, Tuple
+from utils.safe_print import safe_print, info, warn, error, success, debug
 import argparse
 import asyncio
 import hashlib
 import json
 import sys
+import threading
 import time
 import yaml
 
-import threading
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
 
-from core.demo_backtest_runner import get_demo_backtest_runner
-from core.demo_entry_simulator import get_demo_entry_simulator
-from core.demo_integration_system import get_demo_integration_system
-from core.dlt_waveform_engine import get_dlt_waveform_engine
-from core.multi_bit_btc_processor import get_multi_bit_btc_processor
-from core.temporal_execution_correction_layer import get_temporal_execution_correction_layer
-from core.unified_math_system import unified_math
-from utils.safe_print import safe_print, info, warn, error, success, debug
+
 
 
 # Initialize Unicode handler
@@ -218,9 +219,7 @@ if self.demo_results:
 self.demo_performance["best_demo"] = best_demo.demo_id
             self.demo_performance["worst_demo"] = worst_demo.demo_id
 
-def create_demo_configuration(self, components: List[str] = None, duration: int = 3600,)
-
-num_trades: int = 50, strategies: List[str] = None,
+def create_demo_configuration():num_trades: int = 50, strategies: List[str] = None,
                                     market_conditions: List[str] = None,
                                     enable_reinforcement_learning: bool = True,
                                     enable_performance_tracking: bool = True,
@@ -273,7 +272,7 @@ config = DemoConfiguration(
 self.demo_configurations.append(config)
         return config
 
-async def run_comprehensive_demo(self, config: DemoConfiguration) -> DemoResult:
+async def run_comprehensive_demo():-> DemoResult:
         """Run a comprehensive demo with all components""""""
 """"""
 """
@@ -407,7 +406,7 @@ self.temporal_layer.register_temporal_event(
                 metadata={"status": "initialized"}
             )
 
-async def _run_backtest_scenarios(self, config: DemoConfiguration) -> Dict[str, Any]:
+async def _run_backtest_scenarios():-> Dict[str, Any]:
         """Run backtest scenarios""""""
 """"""
 """
@@ -433,7 +432,7 @@ return {"""
             "total_profit": result.total_profit,
             "execution_time": result.execution_time
 
-async def _run_trade_sequences(self, config: DemoConfiguration) -> Dict[str, Any]:
+async def _run_trade_sequences():-> Dict[str, Any]:
         """Run trade sequences""""""
 """"""
 """
@@ -462,7 +461,7 @@ return {
             "total_profit": total_profit,
             "success_rate": sum(r["performance_metrics"]["win_rate"] for r in results.values()) / len(results)
 
-async def _run_logic_flows(self, config: DemoConfiguration) -> Dict[str, Any]:
+async def _run_logic_flows():-> Dict[str, Any]:
         """Run logic flows""""""
 """"""
 """
@@ -478,7 +477,7 @@ return {"""
             "successful_flows": result["flow_performance"]["successful_flows"],
             "total_flows": result["flow_performance"]["total_flows"]
 
-async def _run_integration_system(self, config: DemoConfiguration) -> Dict[str, Any]:
+async def _run_integration_system():-> Dict[str, Any]:
         """Run integration system""""""
 """"""
 """
@@ -491,7 +490,7 @@ return {"""
             "components_integrated": len(config.components),
             "integration_time": 1.0
 
-async def _collect_performance_metrics(self, config: DemoConfiguration) -> Dict[str, Any]:
+async def _collect_performance_metrics():-> Dict[str, Any]:
         """Collect performance metrics from all components""""""
 """"""
 """
@@ -516,9 +515,7 @@ metrics["demo_performance"] = self.demo_performance
 
 return metrics
 
-def _generate_recommendations(self, component_results: Dict[str, Any],)
-
-performance_metrics: Dict[str, Any]) -> List[str]:
+def _generate_recommendations():performance_metrics: Dict[str, Any]) -> List[str]:
         """Generate recommendations based on demo results""""""
 """"""
 """
@@ -548,7 +545,7 @@ if not recommendations:
 
 return recommendations
 
-def get_demo_summary(self) -> Dict[str, Any]:
+def get_demo_summary():-> Dict[str, Any]:
     """Function implementation pending."""
 pass
 """
@@ -573,7 +570,7 @@ for result in sorted(self.demo_results, key = lambda x: x.timestamp, reverse = T
             "component_usage": self._get_component_usage_stats(),
             "recommendations": self._get_system_recommendations()
 
-def _get_component_usage_stats(self) -> Dict[str, int]:
+def _get_component_usage_stats():-> Dict[str, int]:
     """Function implementation pending."""
 pass
 """
@@ -588,7 +585,7 @@ component_usage = {}
 
 return component_usage
 
-def _get_system_recommendations(self) -> List[str]:"""
+def _get_system_recommendations():-> List[str]:"""
     """Function implementation pending."""
 pass
 """

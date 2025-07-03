@@ -1,3 +1,14 @@
+import numpy as np
+import numpy.typing as npt
+from __future__ import annotations
+from dataclasses import dataclass, field
+from decimal import Decimal, getcontext
+from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple
+from typing import Tuple
+import logging
+import time
+
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 
@@ -18,18 +29,8 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
 """
-from __future__ import annotations
 
-import logging
-import time
-from dataclasses import dataclass, field
-from decimal import Decimal, getcontext
-from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
 
-import numpy as np
-import numpy.typing as npt
-from typing import Tuple
 
 
 
@@ -148,10 +149,10 @@ self._initialize_wall_street_strategies()
 
             logger.info(fEnhanced Strategy Framework v{self.version} initialized)
 
-def _default_config(self) -> Dict[str, Any]:Default configuration for enhanced framework.return {max_signal_history: 10000,max_price_history": 1000,strategy_optimization_interval": 3600,  # 1 hourmin_signal_confidence: 0.7,max_position_size": 0.1,default_risk_reward_ratio": 2.0,enable_multi_timeframe": True,enable_dynamic_weights": True,performance_tracking_enabled": True,
+def _default_config():-> Dict[str, Any]:Default configuration for enhanced framework.return {max_signal_history: 10000,max_price_history": 1000,strategy_optimization_interval": 3600,  # 1 hourmin_signal_confidence: 0.7,max_position_size": 0.1,default_risk_reward_ratio": 2.0,enable_multi_timeframe": True,enable_dynamic_weights": True,performance_tracking_enabled": True,
 }
 
-def _initialize_wall_street_strategies(self) -> None:"Initialize Wall Street trading strategies.strategies = [
+def _initialize_wall_street_strategies():-> None:"Initialize Wall Street trading strategies.strategies = [
 WallStreetStrategy.RSI_DIVERGENCE,
 WallStreetStrategy.MACD_CROSSOVER,
 WallStreetStrategy.BOLLINGER_BANDS,
@@ -170,9 +171,7 @@ self.strategy_weights[strategy] = 1.0 / len(strategies)
                 strategy_name=strategy.value
 )
 
-def analyze_market_conditions(:
-self, asset: str, price_data: List[float], volume_data: List[float]
-) -> MarketCondition:Analyze current market conditions.if len(price_data) < 20:
+def analyze_market_conditions():-> MarketCondition:Analyze current market conditions.if len(price_data) < 20:
             return MarketCondition(
 trend=unknown",
 volatility = 0.0,
@@ -209,13 +208,7 @@ momentum=momentum,
 self.market_conditions[asset] = market_condition
         return market_condition
 
-def generate_wall_street_signals(
-self,:
-asset: str,
-price: float,
-volume: float,
-timeframe: TimeFrame = TimeFrame.ONE_HOUR,
-) -> List[StrategySignal]:
+def generate_wall_street_signals():-> List[StrategySignal]:
         Generate signals using Wall Street strategies.signals = []
 
 # Update price and volume history
@@ -254,15 +247,7 @@ self.signal_history.extend(signals)
 
         return signals
 
-def _generate_strategy_signal(
-self,:
-strategy: WallStreetStrategy,
-asset: str,
-price: float,
-volume: float,
-timeframe: TimeFrame,
-market_condition: MarketCondition,
-) -> Optional[StrategySignal]:
+def _generate_strategy_signal():-> Optional[StrategySignal]:
         Generate signal for specific Wall Street strategy.price_history = self.price_history.get(asset, [])
         volume_history = self.volume_history.get(asset, [])
 
@@ -307,14 +292,7 @@ asset, price, volume, timeframe, market_condition
 
         return None
 
-def _rsi_divergence_signal(
-self,:
-asset: str,
-price: float,
-volume: float,
-timeframe: TimeFrame,
-market_condition: MarketCondition,
-) -> Optional[StrategySignal]:Generate RSI divergence signal.price_history = self.price_history.get(asset, [])
+def _rsi_divergence_signal():-> Optional[StrategySignal]:Generate RSI divergence signal.price_history = self.price_history.get(asset, [])
         if len(price_history) < 14:
             return None
 
@@ -353,14 +331,7 @@ market_condition=market_condition,
 mathematical_state = {rsi: rsi},metadata = {indicator:RSI,period: 14},
 )
 
-def _macd_crossover_signal(
-self,:
-asset: str,
-price: float,
-volume: float,
-timeframe: TimeFrame,
-market_condition: MarketCondition,
-) -> Optional[StrategySignal]:Generate MACD crossover signal.price_history = self.price_history.get(asset, [])
+def _macd_crossover_signal():-> Optional[StrategySignal]:Generate MACD crossover signal.price_history = self.price_history.get(asset, [])
         if len(price_history) < 26:
             return None
 
@@ -411,14 +382,7 @@ mathematical_state={macd_line: macd_line,signal_line: signal_line,histogram": hi
 },metadata = {indicator:MACD,fast: 12,slow": 26,signal": 9},
 )
 
-def _bollinger_bands_signal(
-self,:
-asset: str,
-price: float,
-volume: float,
-timeframe: TimeFrame,
-market_condition: MarketCondition,
-) -> Optional[StrategySignal]:"Generate Bollinger Bands signal.price_history = self.price_history.get(asset, [])
+def _bollinger_bands_signal():-> Optional[StrategySignal]:"Generate Bollinger Bands signal.price_history = self.price_history.get(asset, [])
         if len(price_history) < 20:
             return None
 
@@ -464,14 +428,7 @@ mathematical_state={bb_upper: bb_upper,bb_middle: bb_middle,bb_lower": bb_lower,
 },metadata = {indicator:Bollinger Bands,period: 20,std_dev": 2.0},
 )
 
-def _golden_cross_signal(
-self,:
-asset: str,
-price: float,
-volume: float,
-timeframe: TimeFrame,
-market_condition: MarketCondition,
-) -> Optional[StrategySignal]:"Generate Golden Cross signal.price_history = self.price_history.get(asset, [])
+def _golden_cross_signal():-> Optional[StrategySignal]:"Generate Golden Cross signal.price_history = self.price_history.get(asset, [])
         if len(price_history) < 200:
             return None
 
@@ -522,14 +479,7 @@ market_condition=market_condition,
 mathematical_state = {ma_50: ma_50,ma_200: ma_200},metadata = {indicator:Golden Cross,fast_ma: 50,slow_ma: 200},
 )
 
-def _vwap_signal(
-self,:
-asset: str,
-price: float,
-volume: float,
-timeframe: TimeFrame,
-market_condition: MarketCondition,
-) -> Optional[StrategySignal]:Generate VWAP signal.price_history = self.price_history.get(asset, [])
+def _vwap_signal():-> Optional[StrategySignal]:Generate VWAP signal.price_history = self.price_history.get(asset, [])
         volume_history = self.volume_history.get(asset, [])
 
 if len(price_history) < 20 or len(volume_history) < 20:
@@ -574,14 +524,7 @@ mathematical_state = {vwap: vwap},metadata = {indicator:VWAP,period: len(price_h
 # Additional strategy implementations would continue here...
 # (Implementing all 9 strategies would make this too long for a single response)
 
-def _momentum_breakout_signal(
-self,:
-asset: str,
-price: float,
-volume: float,
-timeframe: TimeFrame,
-market_condition: MarketCondition,
-) -> Optional[StrategySignal]:Generate momentum breakout signal.# Simplified implementation
+def _momentum_breakout_signal():-> Optional[StrategySignal]:Generate momentum breakout signal.# Simplified implementation
 if market_condition.momentum > 0.3 and market_condition.volatility > 0.02:
             return StrategySignal(
 strategy = WallStreetStrategy.MOMENTUM_BREAKOUT,
@@ -602,14 +545,7 @@ market_condition=market_condition,
 )
         return None
 
-def _volatility_breakout_signal(
-self,:
-asset: str,
-price: float,
-volume: float,
-timeframe: TimeFrame,
-market_condition: MarketCondition,
-) -> Optional[StrategySignal]:Generate volatility breakout signal.# Simplif ied implementation
+def _volatility_breakout_signal():-> Optional[StrategySignal]:Generate volatility breakout signal.# Simplif ied implementation
 if market_condition.volatility > 0.05: action = BUY if market_condition.momentum > 0 elseSELLreturn StrategySignal(
 strategy = WallStreetStrategy.VOLATILITY_BREAKOUT,
 action=action,
@@ -628,14 +564,7 @@ market_condition=market_condition,
 )
         return None
 
-def _statistical_arbitrage_signal(
-self,:
-asset: str,
-price: float,
-volume: float,
-timeframe: TimeFrame,
-market_condition: MarketCondition,
-) -> Optional[StrategySignal]:Generate statistical arbitrage signal.# Simplified implementation
+def _statistical_arbitrage_signal():-> Optional[StrategySignal]:Generate statistical arbitrage signal.# Simplified implementation
 price_history = self.price_history.get(asset, [])
         if len(price_history) < 50:
             return None
@@ -666,14 +595,7 @@ mathematical_state={z_score: z_score,mean: mean_price,std: std_price,
 )
         return None
 
-def _turtle_trading_signal(
-self,:
-asset: str,
-price: float,
-volume: float,
-timeframe: TimeFrame,
-market_condition: MarketCondition,
-) -> Optional[StrategySignal]:Generate Turtle Trading signal.# Simplified implementation
+def _turtle_trading_signal():-> Optional[StrategySignal]:Generate Turtle Trading signal.# Simplified implementation
 price_history = self.price_history.get(asset, [])
         if len(price_history) < 20:
             return None
@@ -708,7 +630,7 @@ mathematical_state = {high_20: high_20,low_20: low_20},
 )
 
 # Helper methods for calculations
-def _update_market_data() -> None:Update market data history.if asset not in self.price_history:
+def _update_market_data():-> None:Update market data history.if asset not in self.price_history:
             self.price_history[asset] = []
         if asset not in self.volume_history:
             self.volume_history[asset] = []
@@ -721,11 +643,11 @@ max_history = self.config.get(max_price_history, 1000)
         if len(self.volume_history[asset]) > max_history:
             self.volume_history[asset] = self.volume_history[asset][-max_history // 2 :]
 
-def _calculate_trend(self, price_data: List[float]) -> str:Calculate trend direction.if len(price_data) < 10: returnunknownrecent_slope = (price_data[-1] - price_data[-10]) / 10
+def _calculate_trend():-> str:Calculate trend direction.if len(price_data) < 10: returnunknownrecent_slope = (price_data[-1] - price_data[-10]) / 10
         if recent_slope > price_data[-1] * 0.001:
             returnbullishelif recent_slope < -price_data[-1] * 0.001:
             returnbearishelse :
-            returnsidewaysdef _calculate_volatility(self, price_data: List[float]) -> float:Calculate volatility.if len(price_data) < 2:
+            returnsidewaysdef _calculate_volatility():-> float:Calculate volatility.if len(price_data) < 2:
             return 0.0
 
 returns = [
@@ -734,7 +656,7 @@ returns = [
 ]
         return float(np.std(returns))
 
-def _analyze_volume_profile(self, volume_data: List[float]) -> str:Analyze volume profile.if len(volume_data) < 10: returnunknownrecent_avg = np.mean(volume_data[-5:])
+def _analyze_volume_profile():-> str:Analyze volume profile.if len(volume_data) < 10: returnunknownrecent_avg = np.mean(volume_data[-5:])
 historical_avg = (
 np.mean(volume_data[-20:-5])
             if len(volume_data) >= 25:
@@ -744,7 +666,7 @@ np.mean(volume_data[-20:-5])
 if recent_avg > historical_avg * 1.2:
             returnhighelif recent_avg < historical_avg * 0.8:
             returnlowelse :
-            returnnormaldef _find_support_resistance(self, price_data: List[float]) -> Tuple[float, float]:Find support and resistance levels.if len(price_data) < 20:
+            returnnormaldef _find_support_resistance():-> Tuple[float, float]:Find support and resistance levels.if len(price_data) < 20:
             return 0.0, 0.0
 
 # Simplified implementation
@@ -754,15 +676,13 @@ resistance = max(recent_data)
 
         return support, resistance
 
-def _calculate_momentum(self, price_data: List[float]) -> float:Calculate momentum.if len(price_data) < 10:
+def _calculate_momentum():-> float:Calculate momentum.if len(price_data) < 10:
             return 0.0
 
 momentum = (price_data[-1] - price_data[-10]) / price_data[-10]
         return max(-1.0, min(1.0, momentum * 10))  # Normalize to -1 to 1
 
-def _calculate_rsi(:
-self, price_data: List[float], period: int = 14
-) -> Optional[float]:
+def _calculate_rsi():-> Optional[float]:
         Calculate RSI.if len(price_data) < period + 1:
             return None
 
@@ -792,9 +712,7 @@ rsi = 100 - (100 / (1 + rs))
 
         return rsi
 
-def _calculate_macd(:
-self, price_data: List[float], fast: int = 12, slow: int = 26, signal: int = 9
-) -> Tuple[Optional[float], Optional[float], Optional[float]]:Calculate MACD.if len(price_data) < slow:
+def _calculate_macd():-> Tuple[Optional[float], Optional[float], Optional[float]]:Calculate MACD.if len(price_data) < slow:
             return None, None, None
 
 # Calculate EMAs
@@ -827,9 +745,7 @@ for price in price_data[1:]:
 
         return ema
 
-def _calculate_bollinger_bands(:
-self, price_data: List[float], period: int = 20, std_dev: float = 2.0
-) -> Tuple[Optional[float], Optional[float], Optional[float]]:Calculate Bollinger Bands.if len(price_data) < period:
+def _calculate_bollinger_bands():-> Tuple[Optional[float], Optional[float], Optional[float]]:Calculate Bollinger Bands.if len(price_data) < period:
             return None, None, None
 
 recent_data = price_data[-period:]
@@ -841,16 +757,12 @@ lower = middle - (std * std_dev)
 
         return upper, middle, lower
 
-def _calculate_moving_average(:
-self, price_data: List[float], period: int
-) -> Optional[float]:Calculate moving average.if len(price_data) < period:
+def _calculate_moving_average():-> Optional[float]:Calculate moving average.if len(price_data) < period:
             return None
 
         return np.mean(price_data[-period:])
 
-def _calculate_vwap(:
-self, price_data: List[float], volume_data: List[float]
-) -> Optional[float]:Calculate VWAP.if len(price_data) != len(volume_data) or len(price_data) == 0:
+def _calculate_vwap():-> Optional[float]:Calculate VWAP.if len(price_data) != len(volume_data) or len(price_data) == 0:
             return None
 
 total_volume = sum(volume_data)
@@ -862,12 +774,10 @@ price * volume for price, volume in zip(price_data, volume_data)
 )
         return weighted_sum / total_volume
 
-def _calculate_position_size() -> float:Calculate position size based on confidence.base_size = self.config.get(max_position_size, 0.1)
+def _calculate_position_size():-> float:Calculate position size based on confidence.base_size = self.config.get(max_position_size, 0.1)
         return base_size * confidence
 
-def _filter_and_rank_signals(:
-self, signals: List[StrategySignal]
-) -> List[StrategySignal]:Filter and rank signals by quality and confidence.# Filter by minimum confidence
+def _filter_and_rank_signals():-> List[StrategySignal]:Filter and rank signals by quality and confidence.# Filter by minimum confidence
 filtered = [s for s in signals if s.confidence >= self.config[min_signal_confidence]
 ]
 
@@ -877,9 +787,7 @@ filtered.sort(key = lambda s: s.confidence * s.strength, reverse=True)
 # Limit to top signals
         return filtered[:5]
 
-def update_strategy_performance(:
-self, signal: StrategySignal, trade_result: Dict[str, Any]
-) -> None:
+def update_strategy_performance():-> None:
         Update strategy performance metrics.strategy_name = signal.strategy.value
         if strategy_name not in self.strategy_metrics:
             return metrics = self.strategy_metrics[strategy_name]
@@ -911,14 +819,12 @@ if total_losses > 0:
 
 metrics.last_updated = time.time()
 
-def get_strategy_performance(:
-self, strategy: WallStreetStrategy
-) -> Optional[StrategyPerformanceMetrics]:
+def get_strategy_performance():-> Optional[StrategyPerformanceMetrics]:
         Get performance metrics for a strategy.return self.strategy_metrics.get(strategy.value)
 
-def get_all_performance_metrics(self) -> Dict[str, StrategyPerformanceMetrics]:Get all strategy performance metrics.return self.strategy_metrics.copy()
+def get_all_performance_metrics():-> Dict[str, StrategyPerformanceMetrics]:Get all strategy performance metrics.return self.strategy_metrics.copy()
 
-def optimize_strategy_weights(self) -> None:Optimize strategy weights based on performance.if not self.dynamic_weight_adjustment:
+def optimize_strategy_weights():-> None:Optimize strategy weights based on performance.if not self.dynamic_weight_adjustment:
             return total_performance = 0.0
         strategy_scores = {}
 
@@ -939,7 +845,7 @@ if total_performance > 0:
 else:
                     self.strategy_weights[strategy] = 0.1  # Default weight
 
-def get_framework_status(self) -> Dict[str, Any]:Get comprehensive framework status.return {version: self.version,active_strategies: len([s for s in self.active_strategies.values() if s]),total_signals_generated": len(self.signal_history),strategy_weights": {s.value: w for s, w in self.strategy_weights.items()},performance_summary: {name: {win_rate: metrics.win_rate,total_trades": metrics.executed_trades,total_pnl": float(metrics.total_pnl),profit_factor: metrics.profit_factor,
+def get_framework_status():-> Dict[str, Any]:Get comprehensive framework status.return {version: self.version,active_strategies: len([s for s in self.active_strategies.values() if s]),total_signals_generated": len(self.signal_history),strategy_weights": {s.value: w for s, w in self.strategy_weights.items()},performance_summary: {name: {win_rate: metrics.win_rate,total_trades": metrics.executed_trades,total_pnl": float(metrics.total_pnl),profit_factor: metrics.profit_factor,
 }
 for name, metrics in self.strategy_metrics.items():
 },market_conditions": {asset: {trend: condition.trend,volatility": condition.volatility,momentum": condition.momentum,
@@ -949,15 +855,11 @@ for asset, condition in self.market_conditions.items():
 }
 
 
-def create_enhanced_strategy_framework(:
-config: Optional[Dict[str, Any]] = None,
-) -> EnhancedStrategyFramework:"Factory function to create enhanced strategy framework.return EnhancedStrategyFramework(config)
+def create_enhanced_strategy_framework():-> EnhancedStrategyFramework:"Factory function to create enhanced strategy framework.return EnhancedStrategyFramework(config)
 
 
 # Integration with existing Schwabot components
-def integrate_with_schwabot_pipeline(:
-framework: EnhancedStrategyFramework, unif ied_pipeline
-) -> None:Integrate enhanced framework with Schwabot unified pipeline.# This function would integrate the enhanced framework with the existing pipeline
+def integrate_with_schwabot_pipeline():-> None:Integrate enhanced framework with Schwabot unified pipeline.# This function would integrate the enhanced framework with the existing pipeline
 # Implementation would depend on the specific integration requirements
 pass
 

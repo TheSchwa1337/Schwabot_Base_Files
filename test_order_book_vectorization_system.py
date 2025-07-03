@@ -1,3 +1,13 @@
+import numpy as np
+from core.api_bridge import APIBridge
+from core.entry_exit_logic import EntryExitLogic
+from core.order_book_vectorizer import OrderBookVectorizer
+from core.strategy_bit_mapper import StrategyBitMapper
+from typing import Dict, List, Any
+import asyncio
+import logging
+import time
+
 # -*- coding: utf-8 -*-
 """
 Comprehensive Test for Order Book Vectorization System.
@@ -13,16 +23,7 @@ Demonstrates the system working with live-like data and
 shows how all components integrate together.
 """
 
-import asyncio
-import logging
-import time
-from typing import Dict, List, Any
-import numpy as np
 
-from core.order_book_vectorizer import OrderBookVectorizer
-from core.strategy_bit_mapper import StrategyBitMapper
-from core.api_bridge import APIBridge
-from core.entry_exit_logic import EntryExitLogic
 
 # Configure logging
 logging.basicConfig(
@@ -47,7 +48,7 @@ class OrderBookVectorizationSystem:
 
         logger.info("OrderBookVectorizationSystem initialized")
 
-    async def run_full_integration_test(self) -> Dict[str, Any]:
+    async def run_full_integration_test():-> Dict[str, Any]:
         """
         Run full integration test of the complete system.
 
@@ -105,7 +106,7 @@ class OrderBookVectorizationSystem:
 
         return test_results
 
-    async def _test_order_book_vectorization(self) -> Dict[str, Any]:
+    async def _test_order_book_vectorization():-> Dict[str, Any]:
         """Test order book vectorization functionality."""
         results = {
             "success": False,
@@ -173,7 +174,7 @@ class OrderBookVectorizationSystem:
 
         return results
 
-    async def _test_strategy_bit_mapping(self) -> Dict[str, Any]:
+    async def _test_strategy_bit_mapping():-> Dict[str, Any]:
         """Test strategy bit mapping functionality."""
         results = {
             "success": False,
@@ -259,7 +260,7 @@ class OrderBookVectorizationSystem:
 
         return results
 
-    async def _test_api_bridge(self) -> Dict[str, Any]:
+    async def _test_api_bridge():-> Dict[str, Any]:
         """Test API bridge functionality."""
         results = {
             "success": False,
@@ -314,7 +315,7 @@ class OrderBookVectorizationSystem:
 
         return results
 
-    async def _test_entry_exit_logic(self) -> Dict[str, Any]:
+    async def _test_entry_exit_logic():-> Dict[str, Any]:
         """Test entry/exit logic functionality."""
         results = {
             "success": False,
@@ -372,7 +373,7 @@ class OrderBookVectorizationSystem:
 
         return results
 
-    async def _test_full_pipeline(self) -> Dict[str, Any]:
+    async def _test_full_pipeline():-> Dict[str, Any]:
         """Test the complete pipeline integration."""
         results = {
             "success": False,
@@ -480,7 +481,7 @@ class OrderBookVectorizationSystem:
 
         return results
 
-    def _generate_sample_order_book(self) -> Dict[str, List]:
+    def _generate_sample_order_book():-> Dict[str, List]:
         """Generate sample order book data for testing."""
         base_price = 62000.0
         spread = 0.001
@@ -500,7 +501,7 @@ class OrderBookVectorizationSystem:
 
         return {"bids": bids, "asks": asks}
 
-    def _compute_ferris_phase(self) -> float:
+    def _compute_ferris_phase():-> float:
         """Compute Ferris wheel phase for testing."""
         # Simulate Ferris wheel phase based on current time
         current_time = time.time()
@@ -508,14 +509,14 @@ class OrderBookVectorizationSystem:
         phase = (current_time % period) / period * 2 * np.pi
         return phase
 
-    def _compute_ghost_input(self, vector: np.ndarray) -> float:
+    def _compute_ghost_input():-> float:
         """Compute Ghost input for testing."""
         # Simulate Ghost overlay based on vector characteristics
         vector_entropy = -np.sum(vector * np.log2(vector + 1e-12))
         ghost_input = np.tanh(vector_entropy / 10.0)  # Normalize
         return ghost_input
 
-    def _collect_performance_metrics(self) -> Dict[str, Any]:
+    def _collect_performance_metrics():-> Dict[str, Any]:
         """Collect performance metrics from all components."""
         return {
             "order_book_vectorizer": self.order_book_vectorizer.get_performance_summary(),

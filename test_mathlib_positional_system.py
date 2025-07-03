@@ -1,3 +1,9 @@
+    from mathlib_positional_state_system import (
+    from flake8_positional_corrector import Flake8PositionalCorrector, flake8_corrector
+from pathlib import Path
+import json
+import sys
+
 # -*- coding: utf-8 -*-
 """
 Test MathLib Positional State System and Flake8 Corrections
@@ -17,22 +23,17 @@ Test Coverage:
 - Comprehensive reporting and logging
 """
 
-import sys
-import json
-from pathlib import Path
 
 # Add core directory to path
 core_dir = Path(__file__).parent / "core"
 sys.path.insert(0, str(core_dir))
 
 try:
-    from mathlib_positional_state_system import (
         MathLibPositionalStateSystem,
         MathLibVersion,
         BitPhase,
         positional_state_system,
     )
-    from flake8_positional_corrector import Flake8PositionalCorrector, flake8_corrector
 except ImportError as e:
     print(f"❌ Import error: {e}")
     print("Make sure the core modules are available")

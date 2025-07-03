@@ -1,3 +1,12 @@
+import numpy as np
+    import cupy as cp
+    import numba
+from pathlib import Path
+from typing import List, Tuple, Optional, Union
+import logging
+import re
+import shutil
+
 #!/usr/bin/env python3
 """
 Critical Fixes for Codebase
@@ -10,10 +19,6 @@ This script addresses the most critical issues found in the codebase validation:
 4. Fix syntax errors
 """
 
-import re
-import shutil
-from pathlib import Path
-import logging
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -80,7 +85,7 @@ class CriticalFixer:
         except Exception as e:
             logger.error(f"Error fixing GPU file {file_path}: {e}")
 
-    def _fix_docstrings(self, content: str) -> str:
+    def _fix_docstrings():-> str:
         """Fix malformed docstrings."""
         # Fix triple quote issues
         content = re.sub(r'""""""', '"""', content)
@@ -95,7 +100,7 @@ class CriticalFixer:
 
         return content
 
-    def _fix_syntax_errors(self, content: str) -> str:
+    def _fix_syntax_errors():-> str:
         """Fix common syntax errors."""
         # Fix malformed string literals
         content = re.sub(r'""""""""', '"""', content)
@@ -109,7 +114,7 @@ class CriticalFixer:
 
         return content
 
-    def _implement_stub_functions(self, content: str) -> str:
+    def _implement_stub_functions():-> str:
         """Implement stub functions with proper fallbacks."""
         # Replace pass statements with proper implementations
         content = re.sub(
@@ -120,14 +125,13 @@ class CriticalFixer:
 
         return content
 
-    def _fix_gpu_imports(self, content: str) -> str:
+    def _fix_gpu_imports():-> str:
         """Fix GPU imports with proper fallbacks."""
         # Add proper try/except blocks for GPU imports
         if "import cupy" in content and "try:" not in content:
             content = content.replace(
                 "import cupy as cp",
                 """try:
-    import cupy as cp
     GPU_AVAILABLE = True
 except ImportError:
     GPU_AVAILABLE = False
@@ -138,7 +142,6 @@ except ImportError:
             content = content.replace(
                 "import numba",
                 """try:
-    import numba
     NUMBA_AVAILABLE = True
 except ImportError:
     NUMBA_AVAILABLE = False
@@ -147,7 +150,7 @@ except ImportError:
 
         return content
 
-    def _fix_fallback_mechanisms(self, content: str) -> str:
+    def _fix_fallback_mechanisms():-> str:
         """Ensure proper fallback mechanisms exist."""
         # Add fallback logic for GPU operations
         if "gpu_available" in content and "cpu_fallback" not in content:
@@ -238,8 +241,6 @@ Unified Tensor Algebra Module
 Provides tensor operations for the unified math system.
 """
 
-import numpy as np
-from typing import List, Tuple, Optional, Union
 
 class UnifiedTensorAlgebra:
     """Unified tensor algebra operations."""
@@ -248,15 +249,15 @@ class UnifiedTensorAlgebra:
         """Initialize tensor algebra system."""
         pass
 
-    def tensor_contraction(self, tensor_a: np.ndarray, tensor_b: np.ndarray) -> np.ndarray:
+    def tensor_contraction():-> np.ndarray:
         """Perform tensor contraction."""
         return np.tensordot(tensor_a, tensor_b, axes=([-1], [0]))
 
-    def tensor_product(self, tensor_a: np.ndarray, tensor_b: np.ndarray) -> np.ndarray:
+    def tensor_product():-> np.ndarray:
         """Compute tensor product."""
         return np.outer(tensor_a, tensor_b)
 
-    def tensor_norm(self, tensor: np.ndarray) -> float:
+    def tensor_norm():-> float:
         """Compute tensor norm."""
         return np.linalg.norm(tensor)
 '''

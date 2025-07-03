@@ -1,3 +1,10 @@
+import numpy as np
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Dict, Any, List
+import hashlib
+import time
+
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 
@@ -21,13 +28,7 @@ All core functionality has been reimplemented in clean, production-ready files.
 # !/usr/bin/env python3
 # -*- coding: utf-8 -*-
 Quantum Superpositional Trigger - Advanced quantum market state detectionimport logging
-import time
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Dict, Any, List
 
-import hashlib
-import numpy as np
 
 
 class QuantumSuperpositionalTrigger:
@@ -36,12 +37,7 @@ class QuantumSuperpositionalTrigger:
         self.metrics: Dict[str, Any] = {total_collapses: 0,last_collapse_time: None,avg_collapse_time: 0.0,
         }
 
-    def collapse_superposition(
-        self,
-        recursive_hash_states: Dict[str, Any],
-        conscious_processor_status: Dict[str, Any],
-        purposeful_logic_collapse: bool,
-    ) -> Dict[str, Any]:Collapses superposed trade states into a definite trade decision.
+    def collapse_superposition():-> Dict[str, Any]:Collapses superposed trade states into a definite trade decision.
 
         U(t) = R · C · P = U
 
@@ -88,9 +84,9 @@ class QuantumSuperpositionalTrigger:
 
         return {trade_decision: trade_decision,metrics: self.metrics}
 
-    def get_metrics(self) -> Dict[str, Any]:Returns the operational metrics of the Quantum Superpositional Trigger.return self.metrics
+    def get_metrics():-> Dict[str, Any]:Returns the operational metrics of the Quantum Superpositional Trigger.return self.metrics
 
-    def get_recursive_hash_states(self) -> Dict[str, Any]:
+    def get_recursive_hash_states():-> Dict[str, Any]:
         Returns the currently stored recursive hash states.return self.recursive_hash_states
 
     def reset():Resets the trigger's states and metrics.self.recursive_hash_states = {}

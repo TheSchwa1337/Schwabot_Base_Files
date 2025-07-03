@@ -1,3 +1,10 @@
+        import traceback
+from schwabot.session_context import (
+from schwabot.vortex_security import get_vortex_security
+import asyncio
+import random
+import time
+
 #!/usr/bin/env python3
 """
 SchwaBot Vortex Security Integration Demo
@@ -15,12 +22,7 @@ This shows how mathematical security emerges from pattern legitimacy
 rather than traditional cryptographic primitives.
 """
 
-import asyncio
-import time
-import random
 
-from schwabot.vortex_security import get_vortex_security
-from schwabot.session_context import (
     create_trading_session,
     get_current_session,
     log_trading_activity,
@@ -348,7 +350,6 @@ async def main():
 
     except Exception as e:
         print(f"\n💥 Demo encountered error: {e}")
-        import traceback
 
         traceback.print_exc()
 

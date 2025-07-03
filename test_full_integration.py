@@ -1,3 +1,17 @@
+        from core.clean_unified_math import (
+        from core.brain_trading_engine import BrainTradingEngine
+        from core.schwabot_integration_pipeline import IntegrationMessage
+        from core.schwabot_integration_pipeline import IntegrationOrchestrator
+        from core.schwabot_integration_pipeline import SecureAPIManager
+        from symbolic_profit_router import SymbolicProfitRouter
+        import yaml
+    import sys
+from pathlib import Path
+import asyncio
+import json
+import logging
+import time
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -17,11 +31,6 @@ Comprehensive test of the complete 8-layer Schwabot integration system:
 This test validates the complete integration pipeline with real data flow.
 """
 
-import asyncio
-import json
-import logging
-import time
-from pathlib import Path
 
 # Configure logging
 logging.basicConfig(
@@ -42,7 +51,6 @@ async def test_full_integration_pipeline():
     print("-" * 40)
 
     try:
-        import yaml
 
         config_path = Path("config/master_integration.yaml")
 
@@ -68,7 +76,6 @@ async def test_full_integration_pipeline():
     print("-" * 40)
 
     try:
-        from core.brain_trading_engine import BrainTradingEngine
 
         brain_config = {
             "base_profit_rate": 0.002,
@@ -126,7 +133,6 @@ async def test_full_integration_pipeline():
     print("-" * 40)
 
     try:
-        from symbolic_profit_router import SymbolicProfitRouter
 
         router = SymbolicProfitRouter()
 
@@ -183,7 +189,6 @@ async def test_full_integration_pipeline():
     print("-" * 40)
 
     try:
-        from core.clean_unified_math import (
             CleanUnifiedMathSystem,
             optimize_brain_profit,
         )
@@ -277,7 +282,6 @@ async def test_full_integration_pipeline():
     print("-" * 40)
 
     try:
-        from core.schwabot_integration_pipeline import IntegrationOrchestrator
 
         # Initialize orchestrator
         orchestrator = IntegrationOrchestrator()
@@ -330,7 +334,6 @@ async def test_full_integration_pipeline():
     print("-" * 40)
 
     try:
-        from core.schwabot_integration_pipeline import SecureAPIManager
 
         # Test API manager
         config = {
@@ -367,7 +370,6 @@ async def test_full_integration_pipeline():
 
     try:
         # Test message creation and processing
-        from core.schwabot_integration_pipeline import IntegrationMessage
 
         test_messages = []
 
@@ -518,7 +520,6 @@ async def main():
 
 
 if __name__ == "__main__":
-    import sys
 
     # Run the test
     exit_code = asyncio.run(main())

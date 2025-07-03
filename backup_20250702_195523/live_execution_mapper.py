@@ -1,3 +1,17 @@
+from core.portfolio_tracker import PortfolioTracker, Position
+from core.risk_manager import RiskManager, RiskMetric
+from core.strategy.entry_exit_portal import (
+from core.strategy.glyph_strategy_core import GlyphStrategyCore, GlyphStrategyResult
+from core.trade_executor import Order, TradeExecutor
+from dataclasses import dataclass, field
+from decimal import Decimal
+from enum import Enum
+from typing import Any, Dict, List, Optional, Union
+import logging
+import os
+import sys
+import time
+
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 
@@ -18,20 +32,7 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
 """
-import logging
-import os
-import sys
-import time
-from dataclasses import dataclass, field
-from decimal import Decimal
-from enum import Enum
-from typing import Any, Dict, List, Optional, Union
 
-from core.portfolio_tracker import PortfolioTracker, Position
-from core.risk_manager import RiskManager, RiskMetric
-from core.strategy.entry_exit_portal import (
-from core.strategy.glyph_strategy_core import GlyphStrategyCore, GlyphStrategyResult
-from core.trade_executor import Order, TradeExecutor
 
 
 # !/usr/bin/env python3
@@ -144,16 +145,9 @@ total_execution_requests: 0,successful_executions: 0,failed_executions": 0,risk_
 
             logger.info(f"LiveExecutionMapper initialized in {'simulation' if self.simulation_mode else 'live'} mode.)
 
-def _generate_trade_id(self) -> str:Generates a unique trade ID.self.trade_id_counter += 1return fTRADE-{self.trade_id_counter}-{int(time.time() * 1000)}
+def _generate_trade_id():-> str:Generates a unique trade ID.self.trade_id_counter += 1return fTRADE-{self.trade_id_counter}-{int(time.time() * 1000)}
 
-def execute_glyph_trade(
-self,:
-glyph: str,
-volume: float,
-asset: str,
-price: float,
-confidence_boost: float = 0.0,
-) -> ExecutionState:
+def execute_glyph_trade():-> ExecutionState:
 Executes a trade based on a glyph signal through the full pipeline.
 
 Args:
@@ -268,9 +262,9 @@ if total_completed > 0:
 
 def get_execution_state(self, trade_id: str): -> Optional[ExecutionState]:Retrieves the state of a specif ic trade execution.return self.execution_states.get(trade_id)
 
-def get_all_execution_states(self) -> Dict[str, ExecutionState]:Returns all tracked execution states.return self.execution_states.copy()
+def get_all_execution_states():-> Dict[str, ExecutionState]:Returns all tracked execution states.return self.execution_states.copy()
 
-def get_performance_stats(self) -> Dict[str, Any]:Returns the overall performance statistics of the mapper.stats = self.stats.copy()
+def get_performance_stats():-> Dict[str, Any]:Returns the overall performance statistics of the mapper.stats = self.stats.copy()
 if self.portfolio_tracker:
             stats[portfolio_summary] = self.portfolio_tracker.get_portfolio_summary()
 if self.trade_executor:

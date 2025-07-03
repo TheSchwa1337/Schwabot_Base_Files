@@ -1,3 +1,28 @@
+from core.unified_math_system import UnifiedMathSystem
+    from core.portfolio_tracker import PortfolioTracker
+    from core.risk_manager import RiskManager
+from core.biological_immune_error_handler import BiologicalImmuneErrorHandler
+from core.chrono_resonance_weather_mapper import ChronoResonanceWeatherMapper
+from core.enhanced_live_execution_mapper import EnhancedLiveExecutionMapper
+from core.enhanced_master_cycle_profit_engine import EnhancedMasterCycleProfitEngine
+from core.enhanced_tcell_system import EnhancedTCellSystem
+from core.secure_api_coordinator import SecureAPICoordinator, APIProvider
+from core.strategy_logic import StrategyLogic
+from core.trading_engine_integration import (
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from pathlib import Path
+from typing import Dict, List, Optional, Any, Union
+from utils.market_data_utils import create_market_snapshot, display_market_snapshot
+from utils.price_bridge import (
+from utils.secure_config_manager import get_secure_api_key, SecureConfigManager
+import asyncio
+import hashlib
+import json
+import logging
+import os
+import time
+
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 
@@ -18,31 +43,7 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
 """
-import asyncio
-import hashlib
-import json
-import logging
-import os
-import time
-from datetime import datetime, timedelta
-from pathlib import Path
-from typing import Dict, List, Optional, Any, Union
-from dataclasses import dataclass, field
 
-from utils.secure_config_manager import get_secure_api_key, SecureConfigManager
-from utils.price_bridge import (
-from utils.market_data_utils import create_market_snapshot, display_market_snapshot
-from core.secure_api_coordinator import SecureAPICoordinator, APIProvider
-from core.trading_engine_integration import (
-from core.unified_math_system import UnifiedMathSystem
-from core.enhanced_tcell_system import EnhancedTCellSystem
-from core.strategy_logic import StrategyLogic
-    from core.risk_manager import RiskManager
-    from core.portfolio_tracker import PortfolioTracker
-from core.enhanced_live_execution_mapper import EnhancedLiveExecutionMapper
-from core.chrono_resonance_weather_mapper import ChronoResonanceWeatherMapper
-from core.enhanced_master_cycle_profit_engine import EnhancedMasterCycleProfitEngine
-from core.biological_immune_error_handler import BiologicalImmuneErrorHandler
 
 
 # !/usr/bin/env python3
@@ -103,7 +104,7 @@ current_quantum_state: Optional[str] = None
 current_market_hash: Optional[str] = None
 last_market_snapshot: Optional[Dict[str, Any]] = None
 
-def to_dict(self) -> Dict[str, Any]:Convert to dictionary.return {is_initialized: self.is_initialized,is_running: self.is_running,last_sync_time": self.last_sync_time,secure_config_ready": self.secure_config_ready,price_bridge_ready": self.price_bridge_ready,trading_engine_ready": self.trading_engine_ready,math_framework_ready": self.math_framework_ready,immune_system_ready": self.immune_system_ready,total_operations": self.total_operations,successful_operations": self.successful_operations,failed_operations": self.failed_operations,avg_response_time": self.avg_response_time,current_drift_field": self.current_drift_field,current_entropy_level": self.current_entropy_level,current_quantum_state": self.current_quantum_state,current_market_hash: self.current_market_hash,
+def to_dict():-> Dict[str, Any]:Convert to dictionary.return {is_initialized: self.is_initialized,is_running: self.is_running,last_sync_time": self.last_sync_time,secure_config_ready": self.secure_config_ready,price_bridge_ready": self.price_bridge_ready,trading_engine_ready": self.trading_engine_ready,math_framework_ready": self.math_framework_ready,immune_system_ready": self.immune_system_ready,total_operations": self.total_operations,successful_operations": self.successful_operations,failed_operations": self.failed_operations,avg_response_time": self.avg_response_time,current_drift_field": self.current_drift_field,current_entropy_level": self.current_entropy_level,current_quantum_state": self.current_quantum_state,current_market_hash: self.current_market_hash,
 }
 
 
@@ -128,7 +129,7 @@ self.max_operation_history = 1000
 
             logger.info(🚀 Lantern Core Integration initialized)
 
-def _default_config(self) -> Dict[str, Any]:Default configuration.return {sync_interval: 30,  # secondsmarket_analysis_interval: 60,  # secondstrading_signal_threshold: 0.7,risk_management_enabled": True,immune_system_enabled": True,mathematical_framework_enabled": True,historical_data_enabled": True,performance_monitoring_enabled": True,error_recovery_enabled": True,max_retry_attempts": 3,retry_delay": 5.0,
+def _default_config():-> Dict[str, Any]:Default configuration.return {sync_interval: 30,  # secondsmarket_analysis_interval: 60,  # secondstrading_signal_threshold: 0.7,risk_management_enabled": True,immune_system_enabled": True,mathematical_framework_enabled": True,historical_data_enabled": True,performance_monitoring_enabled": True,error_recovery_enabled": True,max_retry_attempts": 3,retry_delay": 5.0,
 }
 
 def _initialize_core_systems():Initialize all core Schwabot systems.try:
@@ -277,7 +278,7 @@ await asyncio.sleep(300)  # 5 minutes
                 logger.error(f❌ Performance monitoring error: {e})
 await asyncio.sleep(60)
 
-async def _create_enhanced_market_snapshot(self) -> Optional[Dict[str, Any]]:Create enhanced market snapshot with all systems.try:
+async def _create_enhanced_market_snapshot():-> Optional[Dict[str, Any]]:Create enhanced market snapshot with all systems.try:
             # Get basic market snapshot
 snapshot = create_market_snapshot()
 if not snapshot:
@@ -305,7 +306,7 @@ snapshot[weather_mapping] = await self._get_weather_mapping_data()
             logger.error(f❌ Enhanced market snapshot error: {e})
         return None
 
-async def _get_mathematical_framework_data(self) -> Dict[str, Any]:Get mathematical framework data.try:
+async def _get_mathematical_framework_data():-> Dict[str, Any]:Get mathematical framework data.try:
             # Get current price
 price_data = await get_secure_price(BTC)
             if not price_data:
@@ -325,7 +326,7 @@ price_data.price
         except Exception as e:logger.error(f❌ Mathematical framework data error: {e})
         return {}
 
-async def _get_immune_system_data(self) -> Dict[str, Any]:Get immune system data.try: price_data = await get_secure_price(BTC)
+async def _get_immune_system_data():-> Dict[str, Any]:Get immune system data.try: price_data = await get_secure_price(BTC)
             if not price_data:
                 return {}
 
@@ -341,13 +342,13 @@ price_data.price
         except Exception as e:logger.error(f"❌ Immune system data error: {e})
         return {}
 
-async def _get_weather_mapping_data(self) -> Dict[str, Any]:Get weather mapping data.try:
+async def _get_weather_mapping_data():-> Dict[str, Any]:Get weather mapping data.try:
             return {weather_pattern: self.weather_mapper.get_current_pattern(),resonance_level": self.weather_mapper.calculate_resonance(),chrono_state": self.weather_mapper.get_chrono_state(),
 }
         except Exception as e:logger.error(f"❌ Weather mapping data error: {e})
         return {}
 
-async def _get_profit_engine_data(self) -> Dict[str, Any]:Get profit engine data.try:
+async def _get_profit_engine_data():-> Dict[str, Any]:Get profit engine data.try:
             return {profit_cycle: self.profit_engine.get_current_cycle(),profit_potential": self.profit_engine.calculate_profit_potential(),cycle_phase": self.profit_engine.get_cycle_phase(),
 }
         except Exception as e:logger.error(f"❌ Profit engine data error: {e})
@@ -367,7 +368,7 @@ self.math_system.calculate_quantum_state(price_data.price)
         except Exception as e:
             logger.error(f❌ Mathematical state update error: {e})
 
-async def _generate_trading_signals(self) -> List[TradeSignal]:"Generate trading signals using all systems.signals = []
+async def _generate_trading_signals():-> List[TradeSignal]:"Generate trading signals using all systems.signals = []
 
 try:
             # Get current price
@@ -406,7 +407,7 @@ signals.extend(immune_signals)
 
         return signals
 
-def _generate_mathematical_signals(self, price_data) -> List[TradeSignal]:Generate signals from mathematical framework.signals = []
+def _generate_mathematical_signals():-> List[TradeSignal]:Generate signals from mathematical framework.signals = []
 
 try:
             # Example mathematical signal generation
@@ -442,7 +443,7 @@ signals.append(signal)
 
         return signals
 
-def _generate_immune_signals(self, price_data) -> List[TradeSignal]:Generate signals from immune system.signals = []
+def _generate_immune_signals():-> List[TradeSignal]:Generate signals from immune system.signals = []
 
 try:
             # Get immune system analysis
@@ -530,7 +531,7 @@ def _calculate_performance_metrics():Calculate performance metrics.if self.opera
 self.operation_times
 )
 
-async def get_system_status(self) -> Dict[str, Any]:Get comprehensive system status.try: status = {lantern_core: self.state.to_dict(),components: {secure_config: self.state.secure_config_ready,price_bridge": self.state.price_bridge_ready,trading_engine": self.state.trading_engine_ready,math_framework": self.state.math_framework_ready,immune_system": self.state.immune_system_ready,
+async def get_system_status():-> Dict[str, Any]:Get comprehensive system status.try: status = {lantern_core: self.state.to_dict(),components: {secure_config: self.state.secure_config_ready,price_bridge": self.state.price_bridge_ready,trading_engine": self.state.trading_engine_ready,math_framework": self.state.math_framework_ready,immune_system": self.state.immune_system_ready,
 },market_data": self.state.last_market_snapshot,performance": {total_operations: self.state.total_operations,success_rate": self.state.successful_operations
 / max(self.state.total_operations, 1),avg_response_time": self.state.avg_response_time,
 },
@@ -541,7 +542,7 @@ async def get_system_status(self) -> Dict[str, Any]:Get comprehensive system sta
         except Exception as e:
             logger.error(f❌ System status error: {e})return {error: str(e)}
 
-async def load_historical_data() -> bool:Load historical data from CSV file.try:
+async def load_historical_data():-> bool:Load historical data from CSV file.try:
             # This would integrate with your existing historical data manager'
 # For now, we'll just log the request'
             logger.info(f📊 Loading historical data from: {csv_file_path})

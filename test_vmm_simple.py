@@ -1,3 +1,12 @@
+        import traceback
+        import traceback
+        import traceback
+        import VMM_Schwabot
+        import VMM_Schwabot
+        import VMM_Schwabot
+import os
+import sys
+
 #!/usr/bin/env python3
 """
 Simple VMM Test
@@ -7,8 +16,6 @@ Simplified test for the Vitruvian Man Management system that doesn't depend
 on problematic imports.
 """
 
-import sys
-import os
 
 # Add the current directory to the path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -24,7 +31,6 @@ def test_vmm_basic():
         sys.path.insert(0, os.path.join(os.path.dirname(__file__), "core"))
 
         # Import the VMM module directly
-        import VMM_Schwabot
 
         print("✅ VMM module imported successfully")
 
@@ -87,7 +93,6 @@ def test_vmm_basic():
 
     except Exception as e:
         print(f"❌ VMM basic test failed: {e}")
-        import traceback
 
         traceback.print_exc()
         return False
@@ -99,7 +104,6 @@ def test_mathematical_integration():
     print("=" * 50)
 
     try:
-        import VMM_Schwabot
 
         VMM_Schwabot.get_vitruvian_manager()
 
@@ -139,7 +143,6 @@ def test_mathematical_integration():
 
     except Exception as e:
         print(f"❌ Mathematical integration test failed: {e}")
-        import traceback
 
         traceback.print_exc()
         return False
@@ -151,7 +154,6 @@ def test_vitruvian_calculations():
     print("=" * 50)
 
     try:
-        import VMM_Schwabot
 
         # Test golden ratio calculations
         phi = VMM_Schwabot.PHI
@@ -181,7 +183,6 @@ def test_vitruvian_calculations():
 
     except Exception as e:
         print(f"❌ Vitruvian calculations test failed: {e}")
-        import traceback
 
         traceback.print_exc()
         return False

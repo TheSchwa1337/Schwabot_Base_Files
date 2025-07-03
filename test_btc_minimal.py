@@ -1,14 +1,23 @@
+import numpy as np
+        from drift_shells import DriftShells
+        from entropic_vectorizer import EntropicVectorizer
+        from feeds.chain_ws import BlockEvent
+        from feeds.stratum_sniffer import ShareEvent
+        from gpu_accelerator import GPUAccelerator
+        from integrators.autonomic_strategy_reflex_layer import (
+        from memory_backlog import MemoryBacklog
+        from triplet_harmony import TripletHarmony
+import collections
+import os
+import sys
+import time
+
 #!/usr/bin/env python3
 """
 Minimal test script for BTC processor components.
 Tests individual components without importing problematic dependencies.
 """
 
-import sys
-import os
-import numpy as np
-import time
-import collections
 
 # Add the current directory to the path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -19,7 +28,6 @@ def test_entropic_vectorizer_direct():
     try:
         # Import only the specific module
         sys.path.insert(0, os.path.join(os.path.dirname(__file__), "core"))
-        from entropic_vectorizer import EntropicVectorizer
 
         config = {"enabled": True, "output_bits": 16}
         ev = EntropicVectorizer(config)
@@ -41,7 +49,6 @@ def test_entropic_vectorizer_direct():
 def test_triplet_harmony_direct():
     """Test TripletHarmony functionality directly."""
     try:
-        from triplet_harmony import TripletHarmony
 
         config = {"enabled": True, "coherence_threshold": 0.85}
         th = TripletHarmony(config)
@@ -69,7 +76,6 @@ def test_triplet_harmony_direct():
 def test_drift_shells_direct():
     """Test DriftShells functionality directly."""
     try:
-        from drift_shells import DriftShells
 
         config = {
             "enable_fractal_lock": True,
@@ -96,7 +102,6 @@ def test_drift_shells_direct():
 def test_memory_backlog_direct():
     """Test MemoryBacklog functionality directly."""
     try:
-        from memory_backlog import MemoryBacklog
 
         config = {
             "enabled": True,
@@ -119,7 +124,6 @@ def test_memory_backlog_direct():
 def test_gpu_accelerator_direct():
     """Test GPUAccelerator functionality directly."""
     try:
-        from gpu_accelerator import GPUAccelerator
 
         config = {"enabled": True, "provider": "numpy"}
         gpu = GPUAccelerator(config)
@@ -140,7 +144,6 @@ def test_gpu_accelerator_direct():
 def test_asrl_direct():
     """Test AutonomicStrategyReflexLayer functionality directly."""
     try:
-        from integrators.autonomic_strategy_reflex_layer import (
             AutonomicStrategyReflexLayer,
         )
 
@@ -167,7 +170,6 @@ def test_asrl_direct():
 def test_chain_ws_direct():
     """Test chain_ws module directly."""
     try:
-        from feeds.chain_ws import BlockEvent
 
         # Test BlockEvent creation
         block_event = BlockEvent(
@@ -191,7 +193,6 @@ def test_chain_ws_direct():
 def test_stratum_sniffer_direct():
     """Test stratum_sniffer module directly."""
     try:
-        from feeds.stratum_sniffer import ShareEvent
 
         # Test ShareEvent creation
         share_event = ShareEvent(pool="test_pool", diff=1000.0, timestamp=time.time())

@@ -1,3 +1,16 @@
+        import random
+    import argparse
+from concurrent.futures import ThreadPoolExecutor
+from core.galileo_tensor_bridge import GalileoTensorBridge
+from typing import Dict, Optional, Any, Set
+from utils.logging_setup import setup_logging
+import asyncio
+import json
+import os
+import sys
+import time
+import websockets
+
 #!/usr/bin/env python3
 """Tensor WebSocket Server.
 
@@ -6,21 +19,11 @@ to React visualization clients. Integrates with BTC price feeds and
 Schwabot's trading system.
 """
 
-import asyncio
-import websockets
-import json
-import time
-from typing import Dict, Optional, Any, Set
-from concurrent.futures import ThreadPoolExecutor
 
 # Import our core modules
-import sys
-import os
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from core.galileo_tensor_bridge import GalileoTensorBridge
-from utils.logging_setup import setup_logging
 
 # Setup logging
 logger = setup_logging(__name__)
@@ -57,7 +60,7 @@ class TensorWebSocketServer:
             f"🌐 Tensor WebSocket Server initialized on port {self.config.get('port', 8765)}"
         )
 
-    def _default_config(self) -> Dict[str, Any]:
+    def _default_config():-> Dict[str, Any]:
         """Default configuration."""
         return {
             "host": "localhost",
@@ -186,7 +189,7 @@ class TensorWebSocketServer:
         except Exception as e:
             logger.error(f"Error handling client message: {e}")
 
-    async def run_analysis(self, btc_price: float) -> Dict[str, Any]:
+    async def run_analysis():-> Dict[str, Any]:
         """Run tensor analysis in executor to avoid blocking."""
         loop = asyncio.get_event_loop()
         await loop.run_in_executor(
@@ -194,9 +197,8 @@ class TensorWebSocketServer:
         )
         return self.tensor_bridge.get_analysis_for_react()
 
-    def simulate_btc_price(self) -> float:
+    def simulate_btc_price():-> float:
         """Simulate BTC price movement."""
-        import random
 
         price_range = self.config.get("btc_price_range", (40000, 70000))
         base_price = (price_range[0] + price_range[1]) / 2
@@ -301,7 +303,7 @@ class TensorWebSocketServer:
         self.executor.shutdown(wait=True)
         logger.info("🛑 WebSocket server stopped")
 
-    def get_server_stats(self) -> Dict[str, Any]:
+    def get_server_stats():-> Dict[str, Any]:
         """Get server statistics."""
         return {
             "active_connections": self.active_connections,
@@ -315,7 +317,6 @@ class TensorWebSocketServer:
 
 async def main():
     """Main function for running the server."""
-    import argparse
 
     parser = argparse.ArgumentParser(description="Tensor WebSocket Server")
     parser.add_argument("--host", default="localhost", help="Server host")

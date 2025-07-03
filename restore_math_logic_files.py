@@ -1,10 +1,11 @@
+from pathlib import Path
+import shutil
+
 #!/usr/bin/env python3
 """
 Restore selected math/logic files from backup to a clean directory, preserving structure.
 """
 
-import shutil
-from pathlib import Path
 
 # List of files to restore (relative to cleanup_backup/core)
 FILES_TO_RESTORE = [

@@ -1,3 +1,13 @@
+import numpy as np
+from core.api_bridge import initialize_api_bridge, APIBridge
+from core.entry_exit_logic import EntryExitLogic
+from typing import Dict, Any
+import asyncio
+import logging
+import os
+import sys
+import time
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -14,19 +24,10 @@ Requirements:
     - Install required dependencies: ccxt, numpy
 """
 
-import asyncio
-import logging
-import os
-import sys
-import time
-from typing import Dict, Any
 
 # Add parent directory to path for imports
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from core.api_bridge import initialize_api_bridge, APIBridge
-from core.entry_exit_logic import EntryExitLogic
-import numpy as np
 
 # Configure logging
 logging.basicConfig(
@@ -40,13 +41,13 @@ class SchawbotAPIDemo:
     Demonstration of the API bridge integrated with the mathematical pipeline.
     """
 
-    def __init__(self) -> None:
+    def __init__():-> None:
         """Initialize the demo system."""
         self.api_bridge: APIBridge = None
         self.entry_exit_logic: EntryExitLogic = None
         self.trading_symbols = ["BTC/USDC", "ETH/USDC", "BTC/USDT"]
 
-    async def initialize(self) -> None:
+    async def initialize():-> None:
         """Initialize the API bridge and trading components."""
         logger.info("🚀 Initializing Schwabot API Bridge Demo...")
 
@@ -74,7 +75,7 @@ class SchawbotAPIDemo:
 
         logger.info("✅ Initialization complete!")
 
-    async def test_price_data_fetching(self) -> Dict[str, Any]:
+    async def test_price_data_fetching():-> Dict[str, Any]:
         """Test price data fetching functionality."""
         logger.info("📊 Testing price data fetching...")
 
@@ -96,7 +97,7 @@ class SchawbotAPIDemo:
 
         return price_results
 
-    async def test_order_book_fetching(self) -> Dict[str, Any]:
+    async def test_order_book_fetching():-> Dict[str, Any]:
         """Test order book data fetching functionality."""
         logger.info("📈 Testing order book fetching...")
 
@@ -125,7 +126,7 @@ class SchawbotAPIDemo:
 
         return order_book_results
 
-    async def test_mathematical_integration(self) -> Dict[str, Any]:
+    async def test_mathematical_integration():-> Dict[str, Any]:
         """Test integration with the mathematical pipeline."""
         logger.info("🧮 Testing mathematical pipeline integration...")
 
@@ -179,7 +180,7 @@ class SchawbotAPIDemo:
 
         return math_results
 
-    async def run_performance_test(self) -> None:
+    async def run_performance_test():-> None:
         """Run a performance test of the API bridge."""
         logger.info("⚡ Running performance test...")
 
@@ -203,7 +204,7 @@ class SchawbotAPIDemo:
         stats = self.api_bridge.get_api_performance_summary()
         logger.info(f"📈 API Statistics: {stats}")
 
-    async def run_demo(self) -> None:
+    async def run_demo():-> None:
         """Run the complete API bridge demonstration."""
         try:
             await self.initialize()
@@ -236,7 +237,7 @@ class SchawbotAPIDemo:
             raise
 
 
-async def main() -> None:
+async def main():-> None:
     """Main entry point."""
     demo = SchawbotAPIDemo()
     await demo.run_demo()

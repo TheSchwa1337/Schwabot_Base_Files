@@ -1,8 +1,9 @@
+from core.hardware_acceleration_manager import get_gpu_energy_ratio
+from core.zpe_core import get_quantum_density
+
 #!/usr/bin/env python3
 """Tests for ZPE and hardware backfill stubs."""
 
-from core.zpe_core import get_quantum_density
-from core.hardware_acceleration_manager import get_gpu_energy_ratio
 
 
 def test_zpe_density():

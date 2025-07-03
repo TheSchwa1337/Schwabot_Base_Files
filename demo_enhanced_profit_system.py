@@ -1,3 +1,11 @@
+import numpy as np
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, List, Tuple
+import hashlib
+import logging
+import time
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """Standalone Demo of Enhanced Profit Optimization System.
@@ -8,14 +16,7 @@ syntax issues. It demonstrates the complete profit-driven decision
 making process for BTC/USDC trading.
 """
 
-import hashlib
-import logging
-import time
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Any, Dict, List, Tuple
 
-import numpy as np
 
 # Configure logging
 logging.basicConfig(
@@ -113,9 +114,7 @@ class SimpleProfitOptimizer:
 
         logger.info("💰 SimpleProfitOptimizer initialized")
 
-    def optimize_profit(
-        self, btc_price: float, usdc_volume: float, market_data: Dict[str, Any]
-    ) -> OptimizationResult:
+    def optimize_profit():-> OptimizationResult:
         """Main profit optimization function."""
         start_time = time.time()
         optimization_id = f"opt_{int(time.time() * 1000)}"
@@ -219,7 +218,7 @@ class SimpleProfitOptimizer:
             logger.error(f"Error in profit optimization: {e}")
             return self._create_default_result(optimization_id, btc_price, usdc_volume)
 
-    def _calculate_hash_similarity(self, btc_price: float, usdc_volume: float) -> float:
+    def _calculate_hash_similarity():-> float:
         """Calculate hash similarity using market state."""
         try:
             # Create hash from current market state
@@ -237,7 +236,7 @@ class SimpleProfitOptimizer:
             logger.error(f"Error calculating hash similarity: {e}")
             return 0.5
 
-    def _calculate_phase_alignment(self, price_history: List[float]) -> float:
+    def _calculate_phase_alignment():-> float:
         """Calculate phase alignment from price history."""
         try:
             if len(price_history) < 3:
@@ -261,7 +260,7 @@ class SimpleProfitOptimizer:
             logger.error(f"Error calculating phase alignment: {e}")
             return 0.5
 
-    def _calculate_entropy_score(self, price_history: List[float]) -> float:
+    def _calculate_entropy_score():-> float:
         """Calculate entropy score from price history."""
         try:
             if len(price_history) < 5:
@@ -283,7 +282,7 @@ class SimpleProfitOptimizer:
             logger.error(f"Error calculating entropy score: {e}")
             return 0.5
 
-    def _calculate_drift_weight(self, price_history: List[float]) -> float:
+    def _calculate_drift_weight():-> float:
         """Calculate drift weight from price history."""
         try:
             if len(price_history) < 5:
@@ -306,7 +305,7 @@ class SimpleProfitOptimizer:
             logger.error(f"Error calculating drift weight: {e}")
             return 0.5
 
-    def _calculate_pattern_confidence(self, price_history: List[float]) -> float:
+    def _calculate_pattern_confidence():-> float:
         """Calculate pattern recognition confidence."""
         try:
             if len(price_history) < 5:
@@ -332,13 +331,7 @@ class SimpleProfitOptimizer:
             logger.error(f"Error calculating pattern confidence: {e}")
             return 0.5
 
-    def _calculate_profit_potential(
-        self,
-        btc_price: float,
-        usdc_volume: float,
-        confidence_score: float,
-        market_data: Dict[str, Any],
-    ) -> float:
+    def _calculate_profit_potential():-> float:
         """Calculate profit potential using mathematical model."""
         try:
             # Base profit from market conditions
@@ -357,12 +350,7 @@ class SimpleProfitOptimizer:
             logger.error(f"Error calculating profit potential: {e}")
             return 0.0
 
-    def _determine_trade_parameters(
-        self,
-        profit_potential: float,
-        confidence_score: float,
-        market_data: Dict[str, Any],
-    ) -> Tuple[TradeDirection, float]:
+    def _determine_trade_parameters():-> Tuple[TradeDirection, float]:
         """Determine optimal trade direction and position size."""
         try:
             price_history = market_data.get("price_history", [])
@@ -394,7 +382,7 @@ class SimpleProfitOptimizer:
             logger.error(f"Error determining trade parameters: {e}")
             return TradeDirection.HOLD, 0.0
 
-    def _validate_trade_decision(self, profit_vector: ProfitVector) -> bool:
+    def _validate_trade_decision():-> bool:
         """Validate if trade should be executed."""
         try:
             # Check confidence threshold
@@ -419,9 +407,7 @@ class SimpleProfitOptimizer:
             logger.error(f"Error validating trade decision: {e}")
             return False
 
-    def _calculate_risk_score(
-        self, profit_vector: ProfitVector, market_data: Dict[str, Any]
-    ) -> float:
+    def _calculate_risk_score():-> float:
         """Calculate overall risk score."""
         try:
             volatility = market_data.get("volatility", 0.02)
@@ -442,7 +428,7 @@ class SimpleProfitOptimizer:
             logger.error(f"Error calculating risk score: {e}")
             return 0.5
 
-    def _update_stats(self, result: OptimizationResult) -> None:
+    def _update_stats():-> None:
         """Update performance statistics."""
         try:
             self.stats["total_optimizations"] += 1
@@ -466,9 +452,7 @@ class SimpleProfitOptimizer:
         except Exception as e:
             logger.error(f"Error updating stats: {e}")
 
-    def _create_default_result(
-        self, optimization_id: str, btc_price: float, usdc_volume: float
-    ) -> OptimizationResult:
+    def _create_default_result():-> OptimizationResult:
         """Create safe default result."""
         profit_vector = ProfitVector(
             timestamp=time.time(),
@@ -490,7 +474,7 @@ class SimpleProfitOptimizer:
             optimization_time_ms=0.0,
         )
 
-    def get_performance_summary(self) -> Dict[str, Any]:
+    def get_performance_summary():-> Dict[str, Any]:
         """Get performance summary."""
         success_rate = 0.0
         if self.stats["total_optimizations"] > 0:

@@ -1,3 +1,10 @@
+from core.profit_routing_engine import (
+from core.symbolic_profit_router import (
+from datetime import datetime
+from typing import Dict, Any
+import hashlib
+import json
+
 # -*- coding: utf-8 -*-
 """
 Symbolic Profit Router Demo - Schwabot UROS v1.0
@@ -7,36 +14,30 @@ Demonstration of the dualistic 2-bit mapping system for profit tier navigation.
 Shows how symbolic triggers, hash-driven logic, and profit tier routing work together."""
 """
 
-import hashlib
-import json
-from datetime import datetime
-from typing import Dict, Any
 
 # Import our modules
-from core.symbolic_profit_router import (
     SymbolicProfitRouter, ProfitTier, BitPhase, TriggerType,
     route_profit_phase, hash_to_strategy, fold_hash_to_2bit
 )
-from core.profit_routing_engine import (
     ProfitRoutingEngine, RoutingDecision, ProfitRoutingConfig,
     route_profit, activate_profit_vault
 )
 
 
-def print_header(title: str) -> None:"""
+def print_header():-> None:"""
     """Print a formatted header.""""""
 print("\n" + "=" * 60)
     print(f"🧠 {title}")
     print("=" * 60)
 
 
-def print_section(title: str) -> None:
+def print_section():-> None:
     """Print a formatted section header.""""""
 print(f"\n📋 {title}")
     print("-" * 40)
 
 
-def demo_hash_folding() -> None:
+def demo_hash_folding():-> None:
     """Demonstrate hash folding to 2-bit sequences.""""""
 print_section("Hash Folding to 2-Bit Sequences")
 
@@ -67,7 +68,7 @@ print(f"Input: {input_str}")
         print()
 
 
-def demo_strategy_decoding() -> None:
+def demo_strategy_decoding():-> None:
     """Demonstrate hash to strategy conversion.""""""
 
 
@@ -92,7 +93,7 @@ print(f"Input: {strategy_input}")
         print()
 
 
-def demo_profit_phase_routing() -> None:
+def demo_profit_phase_routing():-> None:
     """Demonstrate profit phase routing.""""""
 print_section("Profit Phase Routing")
 
@@ -141,7 +142,7 @@ print(f"  Tier: {vault_action.tier.value}")
         print()
 
 
-def demo_profit_routing_engine() -> None:
+def demo_profit_routing_engine():-> None:
     """Demonstrate the profit routing engine.""""""
 
 
@@ -204,7 +205,7 @@ print(f"  Decision: {result.decision.value}")
         print()
 
 
-def demo_vault_activation() -> None:
+def demo_vault_activation():-> None:
     """Demonstrate profit vault activation.""""""
 print_section("Profit Vault Activation")
 
@@ -248,7 +249,7 @@ print(f"  Decision: {result.decision.value}")
         print()
 
 
-def demo_dualistic_system() -> None:
+def demo_dualistic_system():-> None:
     """Demonstrate the dualistic system architecture.""""""
 print_section("Dualistic System Architecture")
 
@@ -274,7 +275,7 @@ print("🔄 Dualistic Integration:")
     print()
 
 
-def demo_statistics() -> None:
+def demo_statistics():-> None:
     """Demonstrate system statistics.""""""
 print_section("System Statistics")
 
@@ -325,7 +326,7 @@ print("\n📊 Decision Distribution:")
         print(f"  {decision}: {count}")
 
 
-def main() -> None:
+def main():-> None:
     """Main demonstration function.""""""
 print_header("Symbolic Profit Router & 2-Bit Mapping System Demo")
 

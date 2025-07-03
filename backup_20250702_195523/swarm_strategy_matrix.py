@@ -1,3 +1,12 @@
+import numpy as np
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple
+from typing import Tuple
+import logging
+import random
+import time
+
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 
@@ -18,15 +27,7 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
 """
-import logging
-import time
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
 
-import numpy as np
-from typing import Tuple
-import random
 
 
 
@@ -52,9 +53,9 @@ confidence: float  # Node confidence level
 last_update: float
 success_history: List[bool] = field(default_factory = list)
 
-def get_weighted_vector(self) -> np.ndarray:Get profit-weighted direction vector.return self.direction_vector * self.profit_weight * self.confidence
+def get_weighted_vector():-> np.ndarray:Get profit-weighted direction vector.return self.direction_vector * self.profit_weight * self.confidence
 
-def update_success() -> None:Update success history.self.success_history.append(was_successful)
+def update_success():-> None:Update success history.self.success_history.append(was_successful)
 if len(self.success_history) > 100:  # Keep last 100
 self.success_history.pop(0)
 
@@ -97,10 +98,10 @@ self._initialize_swarm_nodes()
 
             logger.info(🐝 Swarm Strategy Matrix initialized)
 
-def _default_config(self) -> Dict[str, Any]:Default configuration for swarm matrix.return {consensus_threshold: 0.7,stability_requirement": 5,max_nodes": 64,strategy_types": [momentum,reversal",breakout",scalping",swing],risk_tolerance": 0.6,adaptation_rate": 0.1,min_confidence": 0.3,
+def _default_config():-> Dict[str, Any]:Default configuration for swarm matrix.return {consensus_threshold: 0.7,stability_requirement": 5,max_nodes": 64,strategy_types": [momentum,reversal",breakout",scalping",swing],risk_tolerance": 0.6,adaptation_rate": 0.1,min_confidence": 0.3,
 }
 
-def _initialize_swarm_nodes(self) -> None:"Initialize swarm nodes with different strategy types.strategy_types = self.config.get(strategy_types, [momentum,reversal",breakout]
+def _initialize_swarm_nodes():-> None:"Initialize swarm nodes with different strategy types.strategy_types = self.config.get(strategy_types, [momentum,reversal",breakout]
 )max_nodes = self.config.get(max_nodes, 64)
 nodes_per_strategy = max_nodes // len(strategy_types)
 
@@ -181,9 +182,7 @@ self.strategy_clusters[strategy_type] = cluster_nodes
 f🐝 Initialized {len(self.nodes)} swarm nodes across {len(strategy_types)} strategies
 )
 
-def swarm_vector_response(:
-        self, market_conditions: Dict[str, float], immune_activation: float = 0.5
-) -> SwarmResponse:Compute swarm vector response based on market conditions.Mathematical Model:
+def swarm_vector_response():-> SwarmResponse:Compute swarm vector response based on market conditions.Mathematical Model:
         V_swarm(t) = Σ(v_i(t) · p_i(t)) for i = 1 to N
 
 Where:
@@ -292,9 +291,7 @@ if len(self.response_history) > 1000:
 
         return response
 
-def _determine_swarm_mode(:
-self, immune_activation: float, market_conditions: Dict[str, float]
-) -> SwarmMode:Determine optimal swarm mode based on conditions.volatility = market_conditions.get(volatility, 0.0)trend_strength = market_conditions.get(trend_strength, 0.0)
+def _determine_swarm_mode():-> SwarmMode:Determine optimal swarm mode based on conditions.volatility = market_conditions.get(volatility, 0.0)trend_strength = market_conditions.get(trend_strength, 0.0)
 
 if immune_activation > 0.8:
             return SwarmMode.DEFENSIVE
@@ -310,9 +307,7 @@ elif volatility > 0.5:
 else:
             return SwarmMode.RECONNAISSANCE
 
-def _filter_active_nodes(:
-self, swarm_mode: SwarmMode, market_conditions: Dict[str, float]
-) -> List[str]:Filter nodes based on swarm mode and market conditions.active_nodes = []
+def _filter_active_nodes():-> List[str]:Filter nodes based on swarm mode and market conditions.active_nodes = []
 
 for node_id, node in self.nodes.items():
             # Basic health check
@@ -345,9 +340,7 @@ active_nodes.append(node_id)
 
         return active_nodes
 
-def _calculate_immune_modulation(:
-self, immune_activation: float, strategy_type: str
-) -> float:Calculate immune system modulation for different strategies.base_modulation = (
+def _calculate_immune_modulation():-> float:Calculate immune system modulation for different strategies.base_modulation = (
 1.0 - immune_activation * 0.3
 )  # Reduce activity under immune stress
 
@@ -360,13 +353,7 @@ sensitivity = strategy_sensitivity.get(strategy_type, 1.0)
 
         return max(0.1, min(1.0, modulation))
 
-def _make_strategy_recommendation(
-self,:
-consensus_vector: np.ndarray,
-consensus_strength: float,
-swarm_mode: SwarmMode,
-avg_risk: float,
-) -> str:
+def _make_strategy_recommendation():-> str:
         Make strategy recommendation based on swarm consensus.if consensus_strength < 0.3:
             returnNO_CONSENSUS# Analyze consensus vector components
         trend_component = consensus_vector[0]  # Trend direction
@@ -388,7 +375,7 @@ elif consensus_strength > 0.3:
             if swarm_mode == SwarmMode.DEFENSIVE:
                 return DEFENSIVE_HOLDelif avg_risk < 0.4:
                 returnCONSERVATIVE_ENTRYelse :
-                returnMONITOR_SIGNALSreturnINSUFFICIENT_CONSENSUSdef _create_neutral_response() -> SwarmResponse:Create neutral response when no consensus is possible.return SwarmResponse(
+                returnMONITOR_SIGNALSreturnINSUFFICIENT_CONSENSUSdef _create_neutral_response():-> SwarmResponse:Create neutral response when no consensus is possible.return SwarmResponse(
 swarm_vector = np.array([0.0, 0.0, 0.0]),
             consensus_strength=0.0,
 participating_nodes=0,
@@ -398,7 +385,7 @@ strategy_recommendation=NO_ACTION,
 metadata = {reason:no_active_nodes},
 )
 
-def update_node_performance() -> None:Update performance for nodes of a specific strategy type.Args:
+def update_node_performance():-> None:Update performance for nodes of a specific strategy type.Args:
             strategy_type: Type of strategy that was executed
 was_successful: Whether the strategy was successfulif strategy_type in self.strategy_clusters:
             for node_id in self.strategy_clusters[strategy_type]:
@@ -408,7 +395,7 @@ was_successful: Whether the strategy was successfulif strategy_type in self.stra
             logger.debug(f"🐝 Updated {strategy_type} strategy performance: success = {was_successful}
 )
 
-def get_swarm_status(self) -> Dict[str, Any]:Get comprehensive swarm status.strategy_performance = {}
+def get_swarm_status():-> Dict[str, Any]:Get comprehensive swarm status.strategy_performance = {}
 
 for strategy_type, node_ids in self.strategy_clusters.items():
             nodes = [self.nodes[nid] for nid in node_ids if nid in self.nodes]

@@ -1,3 +1,12 @@
+import numpy as np
+from __future__ import annotations
+from dataclasses import dataclass
+from datetime import datetime
+from typing import Any, Dict, List, TYPE_CHECKING
+import hashlib
+import json
+import logging
+
 # -*- coding: utf-8 -*-
 """
 Mathematical Library V2 - Enhanced Mathematical Functions.
@@ -9,15 +18,7 @@ V2 Focus: Advanced indicators, statistical analysis, pattern recognition
 Integrates with: mathlib.py(V1), mathlib_v3.py, advanced_mathematical_core.py
 """
 
-from __future__ import annotations
 
-import numpy as np
-import logging
-from typing import Any, Dict, List, TYPE_CHECKING
-from dataclasses import dataclass
-import hashlib
-import json
-from datetime import datetime
 
 if TYPE_CHECKING:
     pass
@@ -56,7 +57,7 @@ class HashMemoryBlock:
 class CoreMathLibV2:
     """Enhanced mathematical library V2 with hash-based fractal memory."""
 
-    def __init__(self) -> None:
+    def __init__():-> None:
         """Initialize the enhanced mathematical library."""
         self.version = "2.0_0"
         self.initialized = True
@@ -66,7 +67,7 @@ class CoreMathLibV2:
 
         logger.info(f"CoreMathLibV2 v{self.version} initialized")
 
-    def calculate_vwap(self, prices: Vector, volumes: Vector) -> Vector:
+    def calculate_vwap():-> Vector:
         """Calculate Volume Weighted Average Price."""
         if len(prices) != len(volumes) or len(prices) == 0:
             return np.zeros_like(prices)
@@ -83,7 +84,7 @@ class CoreMathLibV2:
         )
         return vwap
 
-    def calculate_true_range(self, high: Vector, low: Vector, close: Vector) -> Vector:
+    def calculate_true_range():-> Vector:
         """Calculate True Range for ATR."""
         if len(high) != len(low) or len(low) != len(close) or len(high) < 2:
             return np.zeros_like(high)
@@ -101,9 +102,7 @@ class CoreMathLibV2:
         true_range = np.maximum(tr1, np.maximum(tr2, tr3))
         return true_range
 
-    def calculate_atr(
-        self, high: Vector, low: Vector, close: Vector, period: int = 14
-    ) -> Vector:
+    def calculate_atr():-> Vector:
         """Calculate Average True Range."""
         true_range = self.calculate_true_range(high, low, close)
 
@@ -122,7 +121,7 @@ class CoreMathLibV2:
 
         return atr
 
-    def calculate_rsi(self, prices: Vector, period: int = 14) -> Vector:
+    def calculate_rsi():-> Vector:
         """Calculate Relative Strength Index."""
         if len(prices) < period + 1:
             return np.full_like(prices, 50.0)
@@ -153,9 +152,7 @@ class CoreMathLibV2:
 
         return np.clip(rsi, 0, 100)
 
-    def calculate_williams_r(
-        self, high: Vector, low: Vector, close: Vector, period: int = 14
-    ) -> Vector:
+    def calculate_williams_r():-> Vector:
         """Calculate Williams % R."""
         if len(high) < period:
             return np.zeros_like(high)
@@ -175,14 +172,7 @@ class CoreMathLibV2:
 
         return williams_r
 
-    def calculate_stochastic(
-        self,
-        high: Vector,
-        low: Vector,
-        close: Vector,
-        k_period: int = 14,
-        d_period: int = 3,
-    ) -> Dict[str, Vector]:
+    def calculate_stochastic():-> Dict[str, Vector]:
         """Calculate Stochastic Oscillator."""
         if len(high) < k_period:
             return {
@@ -209,9 +199,7 @@ class CoreMathLibV2:
 
         return {"k_percent": k_percent, "d_percent": d_percent}
 
-    def calculate_cci(
-        self, high: Vector, low: Vector, close: Vector, period: int = 20
-    ) -> Vector:
+    def calculate_cci():-> Vector:
         """Calculate Commodity Channel Index."""
         if len(high) < period:
             return np.zeros_like(high)
@@ -233,7 +221,7 @@ class CoreMathLibV2:
 
         return cci
 
-    def advanced_statistical_analysis(self, data: Vector) -> Dict[str, float]:
+    def advanced_statistical_analysis():-> Dict[str, float]:
         """Perform advanced statistical analysis of data."""
         if len(data) == 0:
             return {"error": "Empty data"}
@@ -277,7 +265,7 @@ class CoreMathLibV2:
             "iqr": float(np.percentile(data, 75) - np.percentile(data, 25)),
         }
 
-    def entropy_analysis(self, data: Vector, bins: int = 10) -> Dict[str, float]:
+    def entropy_analysis():-> Dict[str, float]:
         """Perform entropy analysis of data distribution."""
         if len(data) == 0:
             return {"shannon_entropy": 0.0, "normalized_entropy": 0.0}
@@ -304,9 +292,7 @@ class CoreMathLibV2:
             "max_entropy": float(max_entropy),
         }
 
-    def moving_average_variants(
-        self, data: Vector, period: int = 20
-    ) -> Dict[str, float]:
+    def moving_average_variants():-> Dict[str, float]:
         """Calculate various moving average types."""
         if len(data) < period:
             period = len(data)
@@ -347,12 +333,12 @@ class CoreMathLibV2:
             "hull_ma": float(hull_ma),
         }
 
-    def generate_hash_signature(self, data: Vector, strategy_id: str) -> str:
+    def generate_hash_signature():-> str:
         """Generate SHA-256 hash signature for data and strategy."""
         data_str = f"{strategy_id}_{np.array2string(data, precision=6)}"
         return hashlib.sha256(data_str.encode()).hexdigest()
 
-    def hash_similarity_score(self, new_hash: str, memory_hashes: List[str]) -> float:
+    def hash_similarity_score():-> float:
         """Calculate hash similarity score using Hamming distance."""
         if not memory_hashes:
             return 0.0
@@ -373,7 +359,7 @@ class CoreMathLibV2:
 
         return np.mean(similarities)
 
-    def store_hash_memory(self, hash_block: HashMemoryBlock) -> None:
+    def store_hash_memory():-> None:
         """Store hash memory block in fractal memory system."""
         # Add to memory blocks
         self.memory_blocks.append(hash_block)
@@ -387,9 +373,7 @@ class CoreMathLibV2:
 
         logger.info(f"Stored hash memory: {hash_block.hash_signature[:16]}...")
 
-    def recall_profitable_patterns(
-        self, current_hash: str, threshold: float = 0.8
-    ) -> List[HashMemoryBlock]:
+    def recall_profitable_patterns():-> List[HashMemoryBlock]:
         """Recall profitable patterns based on hash similarity."""
         profitable_patterns = []
 
@@ -408,7 +392,7 @@ class CoreMathLibV2:
 
         return profitable_patterns
 
-    def export_hash_memory(self, filename: str = None) -> str:
+    def export_hash_memory():-> str:
         """Export hash memory to JSON file."""
         if filename is None:
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -437,9 +421,7 @@ class CoreMathLibV2:
         return filename
 
 
-def process_waveform(
-    signal: Vector, sample_rate: float = 1.0, analysis_type: str = "basic"
-) -> Dict[str, Any]:
+def process_waveform():-> Dict[str, Any]:
     """
     Process waveform data with various analysis types.
 
@@ -505,7 +487,7 @@ def process_waveform(
         return {"status": "error", "error": str(e)}
 
 
-def main() -> None:
+def main():-> None:
     """Demo of CoreMathLibV2 capabilities."""
     try:
         mathlib = CoreMathLibV2()

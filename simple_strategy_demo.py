@@ -1,3 +1,8 @@
+import numpy as np
+from collections import defaultdict, deque
+from typing import Dict, List, Any, Tuple
+import random
+
 #!/usr/bin/env python3
 """
 🧠 Schwabot Mathematical Strategy Demo
@@ -14,11 +19,7 @@ This demonstrates 31 days of mathematical framework development
 in a self-contained, flake8-compliant script.
 """
 
-import random
-from collections import defaultdict, deque
-from typing import Dict, List, Any, Tuple
 
-import numpy as np
 
 
 class PerformanceMetrics:
@@ -34,7 +35,7 @@ class PerformanceMetrics:
         if len(self.returns_history) > 252:  # Keep last year
             self.returns_history = self.returns_history[-252:]
 
-    def calculate_sharpe_ratio(self) -> float:
+    def calculate_sharpe_ratio():-> float:
         """Calculate real Sharpe ratio."""
         if len(self.returns_history) < 10:
             return 0.0
@@ -49,7 +50,7 @@ class PerformanceMetrics:
         sharpe = np.mean(excess_returns) / std_dev * np.sqrt(252)
         return float(sharpe)
 
-    def calculate_sortino_ratio(self) -> float:
+    def calculate_sortino_ratio():-> float:
         """Calculate real Sortino ratio (downside deviation only)."""
         if len(self.returns_history) < 10:
             return 0.0
@@ -87,7 +88,7 @@ class KellyCriterion:
         if len(self.trade_history) > 100:
             self.trade_history = self.trade_history[-100:]
 
-    def calculate_kelly_fraction(self) -> float:
+    def calculate_kelly_fraction():-> float:
         """Calculate Kelly criterion fraction."""
         if len(self.trade_history) < 10:
             return 0.25  # Conservative default
@@ -127,7 +128,7 @@ class MarkovProfitPredictor:
         self.current_state = "neutral"
         self.state_history = deque(maxlen=50)
 
-    def classify_profit(self, profit_pct: float) -> str:
+    def classify_profit():-> str:
         """Classify profit into discrete states."""
         if profit_pct < -0.02:
             return "loss"
@@ -150,7 +151,7 @@ class MarkovProfitPredictor:
         self.state_history.append(new_state)
         self.current_state = new_state
 
-    def predict_next_state(self) -> Tuple[str, float]:
+    def predict_next_state():-> Tuple[str, float]:
         """Predict next state with probability."""
         if self.state_counts[self.current_state] == 0:
             return "neutral", 0.25
@@ -184,7 +185,7 @@ class VolatilityCalculator:
         if len(self.price_history) > self.window * 2:
             self.price_history = self.price_history[-self.window * 2 :]
 
-    def calculate_volatility(self) -> float:
+    def calculate_volatility():-> float:
         """Calculate rolling volatility."""
         if len(self.price_history) < 2:
             return 0.02  # Default 2%
@@ -218,13 +219,7 @@ class FlipSwitchLogic:
         self.aggressive_mode = False
         self.switch_threshold = 0.6
 
-    def should_flip_aggressive(
-        self,
-        kelly_fraction: float,
-        volatility: float,
-        momentum: float,
-        forecast_confidence: float,
-    ) -> Tuple[bool, float]:
+    def should_flip_aggressive():-> Tuple[bool, float]:
         """
         Determine if strategy should flip to aggressive mode.
 
@@ -275,7 +270,7 @@ class IntegratedStrategy:
         self.winning_trades = 0
         self.portfolio_history = [initial_capital]
 
-    def execute_trading_cycle(self, current_price: float) -> Dict[str, Any]:
+    def execute_trading_cycle():-> Dict[str, Any]:
         """Execute one complete trading cycle."""
         # 1. Update price and calculate volatility
         self.volatility.add_price(current_price)

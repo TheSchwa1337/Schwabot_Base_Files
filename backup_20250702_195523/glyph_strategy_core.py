@@ -1,3 +1,16 @@
+from ..unified_math_system import UnifiedMathSystem
+from ..strategy_bit_mapper import StrategyBitMapper
+from ..strategy_logic import SignalType, StrategyLogic, StrategyType
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
+from typing import Dict, List, Optional, Tuple, Union
+from typing import Tuple
+import hashlib
+import logging
+import random
+import time
+
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 
@@ -18,19 +31,7 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
 """
-import hashlib
-import logging
-import random
-import time
-from dataclasses import dataclass, field
-from datetime import datetime
-from enum import Enum
-from typing import Dict, List, Optional, Tuple, Union
 
-from ..strategy_bit_mapper import StrategyBitMapper
-from ..strategy_logic import SignalType, StrategyLogic, StrategyType
-from ..unified_math_system import UnifiedMathSystem
-from typing import Tuple
 
 
 # -*- coding: utf-8 -*-
@@ -72,11 +73,7 @@ class GlyphStrategyCore:
 Core glyph-to-strategy mapping system.
 
 Maps emojis/glyphs to trading strategies via SHA256 hashing,
-with support for gear-driven bit depth selection and fractal memory.def __init__(
-self,:
-enable_fractal_memory: bool = True,
-enable_gear_shifting: bool = True,
-volume_thresholds: Tuple[float, float] = (1.5e6, 5e6),
+with support for gear-driven bit depth selection and fractal memory.def __init__():,
 random_seed: Optional[int] = None,
 ):
 Initialize the glyph strategy core.
@@ -108,7 +105,7 @@ if random_seed is not None:
 fgear_shifting = {enable_gear_shifting}
 )
 
-def glyph_to_sha() -> str:
+def glyph_to_sha():-> str:
 Convert glyph to SHA-256 hash.
 
 Args:
@@ -117,7 +114,7 @@ Args:
 Returns:
             SHA-256 hash stringreturn hashlib.sha256(glyph.encode(utf-8)).hexdigest()
 
-def sha_to_strategy_bits(self, sha: str, bit_depth: int = 4) -> int:
+def sha_to_strategy_bits():-> int:
 Convert SHA-256 hash to strategy bit pattern.
 
 Args:
@@ -133,7 +130,7 @@ hex_sub = sha[:hex_length]
 binary = bin(int(hex_sub, 16))[2:].zfill(bit_depth)
         return int(binary[:bit_depth], 2)
 
-def glyph_strategy_lookup(self, glyph: str, gear_state: int = 4) -> int:
+def glyph_strategy_lookup():-> int:
 
 Translate glyph to strategy ID through SHA256 mapping.
 
@@ -146,7 +143,7 @@ Returns:
 strategy_bits = self.sha_to_strategy_bits(sha, bit_depth=gear_state)
         return strategy_bits
 
-def gear_shift() -> int:
+def gear_shift():-> int:
 Determine gear state based on volume signal.
 
 Args:
@@ -167,9 +164,7 @@ else:
 self.stats[gear_shifts] += 1
         return gear_state
 
-def store_fractal_hash(:
-self, glyph: str, strategy_id: int, timestamp: Optional[str] = None
-) -> str:
+def store_fractal_hash():-> str:
 Encode glyph + strategy into persistent fractal identity hash.
 
 Args:
@@ -191,9 +186,7 @@ if len(self.forever_fractal_hashes) > self.fractal_memory_size:
 self.stats[fractal_stores] += 1
         return fractal_hash
 
-def select_strategy(:
-self, glyph: str, volume_signal: float = 0.0, confidence_boost: float = 0.0
-) -> GlyphStrategyResult:
+def select_strategy():-> GlyphStrategyResult:
 Combined strategy selection function for runtime use.
 
 Args:
@@ -245,9 +238,7 @@ fractal_hash=error,
 confidence = 0.0,
 )
 
-def expand_strategy(:
-self, base_strategy: int, target_depth: int = 8, mode: str = flip
-) -> List[int]:Expand a base 4-bit strategy to a higher bit depth.
+def expand_strategy():-> List[int]:Expand a base 4-bit strategy to a higher bit depth.
 '
 This method wraps the StrategyBitMapper's expand_strategy_bits for convenience.'if self.bit_mapper:
             return self.bit_mapper.expand_strategy_bits(
@@ -257,10 +248,10 @@ else:
             logger.warning(StrategyBitMapper not available. Cannot expand strategy.)
         return [base_strategy] * (target_depth // 4)
 
-def get_fractal_memory_stats(self) -> Dict[str, any]:Return fractal memory statistics.return {total_hashes: len(self.forever_fractal_hashes),memory_size": self.fractal_memory_size,
+def get_fractal_memory_stats():-> Dict[str, any]:Return fractal memory statistics.return {total_hashes: len(self.forever_fractal_hashes),memory_size": self.fractal_memory_size,
 }
 
-def get_performance_stats(self) -> Dict[str, any]:"Return performance statistics.stats = self.stats.copy()
+def get_performance_stats():-> Dict[str, any]:"Return performance statistics.stats = self.stats.copy()
 stats[fractal_memory] = self.get_fractal_memory_stats()
         return stats
 
@@ -272,7 +263,7 @@ self.stats = {total_selections: 0,gear_shifts": 0,fractal_stores": 0,avg_process
 # Standalone utility function (for direct import if needed)
 
 
-def glyph_to_strategy(glyph: str, volume: float = 0.0) -> Dict[str, any]:
+def glyph_to_strategy():-> Dict[str, any]:
 
 Convert a single glyph to a strategy using a temporary GlyphStrategyCore instance.
 Intended for quick, stateless conversions.temp_core = GlyphStrategyCore(

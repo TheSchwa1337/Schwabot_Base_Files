@@ -1,3 +1,7 @@
+from pathlib import Path
+import subprocess
+import sys
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -8,9 +12,6 @@ This script helps set up the Schwabot trading system environment
 with all required dependencies and configuration.
 """
 
-import subprocess
-import sys
-from pathlib import Path
 
 
 def run_command(cmd, description=""):

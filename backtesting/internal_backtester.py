@@ -1,4 +1,14 @@
+from core.matrix_math_utils import analyze_price_matrix
+import numpy as np
 from __future__ import annotations
+from core.brain_trading_engine import register_risk_manager, update_risk_threshold
+from core.ccxt_integration import CCXTIntegration
+from core.ghost_core import GhostCore
+from demo_integrated_trading_system import IntegratedTradingSystem
+from typing import List, Dict, Any, Sequence, Tuple
+import random
+import time
+
 
 """Internal Backtester for Schwabot
 ===================================
@@ -12,26 +22,14 @@ strategy aggressiveness are adapted in-flight according to market
 stability metrics.
 """
 
-from typing import List, Dict, Any, Sequence, Tuple
-import time
-import random
 
-import numpy as np
 
-from demo_integrated_trading_system import IntegratedTradingSystem
-from core.matrix_math_utils import analyze_price_matrix
-from core.brain_trading_engine import register_risk_manager, update_risk_threshold
-from core.ghost_core import GhostCore
-from core.ccxt_integration import CCXTIntegration
 
 
 class InternalBacktester:
     """Simple sliding-window back-tester with self-correction."""
 
-    def __init__(
-        self,
-        price_series: Sequence[Tuple[float, float]],  # (timestamp, price)
-        base_price: float = 50_000.0,
+    def __init__():base_price: float = 50_000.0,
         window: int = 100,
     ) -> None:
         self.price_series = price_series
@@ -51,7 +49,7 @@ class InternalBacktester:
     # ---------------------------------------------------------------------
     # Helper methods
     # ---------------------------------------------------------------------
-    def _create_market_data(self, price: float) -> Dict[str, Any]:
+    def _create_market_data():-> Dict[str, Any]:
         """Construct a market-data dict compatible with system API."""
         if len(self.price_buffer) >= 20:
             returns = np.diff(np.array(self.price_buffer[-20:])) / np.array(
@@ -73,7 +71,7 @@ class InternalBacktester:
         }
 
     # ------------------------------------------------------------------
-    def run(self) -> None:
+    def run():-> None:
         """Execute back-test over the full price series."""
         for idx, (_ts, price) in enumerate(self.price_series, start=1):
             self.price_buffer.append(price)
@@ -91,7 +89,7 @@ class InternalBacktester:
         self.system.print_performance_summary()
 
     # ------------------------------------------------------------------
-    def _self_correct(self, idx: int) -> None:
+    def _self_correct():-> None:
         """Analyse price matrix and tune risk parameters."""
         # Ensure enough data for matrix analysis
         if len(self.price_buffer) < self.window:

@@ -1,3 +1,10 @@
+import numpy as np
+from dataclasses import dataclass, field
+from typing import Dict, List, Any, Tuple
+import logging
+import psutil
+import time
+
 #!/usr/bin/env python3
 """
 Standalone Enhanced Acceleration Integration Demo
@@ -12,12 +19,6 @@ Mathematical Framework:
 3. Isolation Guarantee: ZPE/ZBE never affect profit calculations
 """
 
-import time
-import logging
-import numpy as np
-import psutil
-from typing import Dict, List, Any, Tuple
-from dataclasses import dataclass, field
 
 # Setup logging
 logging.basicConfig(
@@ -85,7 +86,7 @@ class PureProfitCalculator:
         self.GOLDEN_RATIO = 1.618033988749
         self.PI = 3.141592653589793
 
-    def calculate_profit(self, market_data: MarketData) -> ProfitResult:
+    def calculate_profit():-> ProfitResult:
         """
         Calculate pure profit - NEVER affected by acceleration.
 
@@ -150,7 +151,7 @@ class PureProfitCalculator:
             logger.error(f"Profit calculation failed: {e}")
             raise
 
-    def validate_purity(self, market_data: MarketData) -> bool:
+    def validate_purity():-> bool:
         """Validate that identical inputs produce identical outputs."""
         result1 = self.calculate_profit(market_data)
         result2 = self.calculate_profit(market_data)
@@ -163,7 +164,7 @@ class PureProfitCalculator:
 
         return is_pure
 
-    def get_performance_metrics(self) -> Dict[str, Any]:
+    def get_performance_metrics():-> Dict[str, Any]:
         """Get calculation performance metrics."""
         if self.calculation_count == 0:
             return {"status": "no_calculations"}
@@ -180,9 +181,7 @@ class PureProfitCalculator:
 class MockZPECore:
     """Mock ZPE core for thermal acceleration simulation."""
 
-    def calculate_thermal_efficiency(
-        self, volatility: float, system_load: float
-    ) -> float:
+    def calculate_thermal_efficiency():-> float:
         """Calculate thermal acceleration factor."""
         try:
             # Simulate thermal state calculation
@@ -202,9 +201,7 @@ class MockZPECore:
 class MockZBECore:
     """Mock ZBE core for bit-level acceleration simulation."""
 
-    def calculate_bit_efficiency(
-        self, computational_load: float, memory_usage: float
-    ) -> float:
+    def calculate_bit_efficiency():-> float:
         """Calculate bit-level acceleration factor."""
         try:
             # Simulate memory efficiency calculation
@@ -250,9 +247,7 @@ class EnhancedAccelerationIntegration:
         self.EPSILON = 1e-10
         self.MAX_ACCELERATION = 5.0
 
-    def calculate_acceleration_factors(
-        self, market_data: MarketData
-    ) -> AccelerationFactors:
+    def calculate_acceleration_factors():-> AccelerationFactors:
         """
         Calculate acceleration factors WITHOUT affecting profit.
 
@@ -305,9 +300,7 @@ class EnhancedAccelerationIntegration:
                 speedup_ratio=1.0,
             )
 
-    def compute_profit_with_acceleration(
-        self, market_data: MarketData
-    ) -> Tuple[ProfitResult, AccelerationFactors]:
+    def compute_profit_with_acceleration():-> Tuple[ProfitResult, AccelerationFactors]:
         """
         Compute profit with acceleration - MATHEMATICAL PURITY GUARANTEED.
 
@@ -346,14 +339,14 @@ class EnhancedAccelerationIntegration:
             logger.error(f"Accelerated computation failed: {e}")
             raise
 
-    def _dummy_computation(self) -> float:
+    def _dummy_computation():-> float:
         """Dummy computation for baseline timing."""
         x = np.random.rand(50, 50)
         y = np.random.rand(50, 50)
         result = np.dot(x, y)
         return np.sum(result)
 
-    def run_validation_suite(self) -> Dict[str, bool]:
+    def run_validation_suite():-> Dict[str, bool]:
         """Run comprehensive validation of mathematical purity."""
         try:
             validation_results = {}
@@ -411,7 +404,7 @@ class EnhancedAccelerationIntegration:
             logger.error(f"Validation suite failed: {e}")
             return {"overall_validation": False, "error": str(e)}
 
-    def get_performance_report(self) -> Dict[str, Any]:
+    def get_performance_report():-> Dict[str, Any]:
         """Get comprehensive performance report."""
         try:
             if not self.acceleration_history:

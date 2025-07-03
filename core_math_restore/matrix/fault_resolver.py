@@ -1,3 +1,5 @@
+from core.unified_math_system import unified_math
+
 # -*- coding: utf - 8 -*-
 """Matrix fault resolver for rank consistency checking.""""""
 """"""
@@ -17,8 +19,7 @@
 # -*- coding: utf - 8 -*-
 
 
-from core.unified_math_system import unified_math
-def check_rank(matrix: np.ndarray, eps: int = 0) -> None:"""
+def check_rank():-> None:"""
 """Check matrix rank consistency and raise if drift exceeds threshold."
 
 Verify rank stability: \\u03b4 = rank(A) \\u2013 rank(A\\u00b7A\\u1d40)

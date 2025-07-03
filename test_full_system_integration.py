@@ -1,3 +1,17 @@
+        from core.api_bridge import APIBridge
+        from core.api_bridge import APIBridge, fetch_price_data, fetch_order_book_data
+        from core.api_bridge import fetch_price_data
+        from core.dualistic_thought_engines import DualisticThoughtEngines
+        from core.dualistic_thought_engines import DualisticThoughtEngines
+        from core.dualistic_thought_engines import DualisticThoughtEngines
+        from core.hash_relay_system import hash_relay_system
+        from core.hash_relay_system import hash_relay_system
+        from core.hash_relay_system import hash_relay_system
+from typing import Dict, Any
+import asyncio
+import logging
+import time
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -12,10 +26,6 @@ Tests the complete Schwabot trading system pipeline:
 5. Live Trading Channel Simulation
 """
 
-import asyncio
-import logging
-import time
-from typing import Dict, Any
 
 # Configure logging
 logging.basicConfig(
@@ -31,7 +41,6 @@ def test_api_bridge():
     print("=" * 60)
 
     try:
-        from core.api_bridge import APIBridge, fetch_price_data, fetch_order_book_data
 
         # Test API Bridge initialization
         APIBridge(
@@ -89,7 +98,6 @@ def test_dualistic_thought_engines():
     print("=" * 60)
 
     try:
-        from core.dualistic_thought_engines import DualisticThoughtEngines
 
         # Initialize engines
         engines = DualisticThoughtEngines()
@@ -145,7 +153,6 @@ def test_hash_relay_system():
     print("=" * 60)
 
     try:
-        from core.hash_relay_system import hash_relay_system
 
         # Test relay subscription
         relay_received = []
@@ -189,9 +196,6 @@ def test_integrated_pipeline():
     print("=" * 60)
 
     try:
-        from core.api_bridge import fetch_price_data
-        from core.dualistic_thought_engines import DualisticThoughtEngines
-        from core.hash_relay_system import hash_relay_system
 
         # Track relay events
         relay_events = []
@@ -261,9 +265,6 @@ def test_trading_channel_simulation():
     print("=" * 60)
 
     try:
-        from core.api_bridge import APIBridge
-        from core.dualistic_thought_engines import DualisticThoughtEngines
-        from core.hash_relay_system import hash_relay_system
 
         # Initialize components
         APIBridge(sandbox=True)

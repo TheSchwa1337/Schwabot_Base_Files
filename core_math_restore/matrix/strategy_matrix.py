@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 # -*- coding: utf - 8 -*-
 """Strategy matrix for adaptive vector projection.""""""
 """"""
@@ -16,10 +18,9 @@
 # -*- coding: utf - 8 -*-
 # -*- coding: utf - 8 -*-
 
-from __future__ import annotations
 
 
-def project(weights: np.ndarray, vectors: np.ndarray) -> np.ndarray:"""
+def project():-> np.ndarray:"""
     """Compute adaptive projection \\u03a0\\u2093 = \\u03a3 w\\u1d62\\u00b7V\\u1d62."
 
 Perform vectorized dot product for weighted vector combination

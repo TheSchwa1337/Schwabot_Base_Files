@@ -1,7 +1,5 @@
-# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
-# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
-# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
-# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
+            from core.unified_math_system import unified_math
+from core.unified_math_system import unified_math
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from dual_unicore_handler import DualUnicoreHandler
@@ -11,7 +9,11 @@ import logging
 import time
 import unittest
 
-from core.unified_math_system import unified_math
+# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
+
 
 
 # Initialize Unicode handler
@@ -192,7 +194,7 @@ self.test_cases = [
 ]
 logger.info("\\u1f4da Legacy Backlog Hydrator Test initialized")
 
-def test_historical_trade_loading(self) -> Dict[str, Any]:
+def test_historical_trade_loading():-> Dict[str, Any]:
     """Function implementation pending."""
 pass
 """
@@ -268,7 +270,7 @@ if results['success']:
 
 return results
 
-def test_trade_backlog_integrity(self) -> Dict[str, Any]:
+def test_trade_backlog_integrity():-> Dict[str, Any]:
     """Function implementation pending."""
 pass
 """
@@ -339,7 +341,7 @@ if results['success']:
 
 return results
 
-def test_loss_trade_identification(self) -> Dict[str, Any]:
+def test_loss_trade_identification():-> Dict[str, Any]:
     """Function implementation pending."""
 pass
 """
@@ -406,7 +408,7 @@ if results['success']:
 
 return results
 
-def test_backtest_data_reconstruction(self) -> Dict[str, Any]:
+def test_backtest_data_reconstruction():-> Dict[str, Any]:
     """Function implementation pending."""
 pass
 """
@@ -474,7 +476,7 @@ if results['success']:
 
 return results
 
-def test_historical_pattern_recognition(self) -> Dict[str, Any]:
+def test_historical_pattern_recognition():-> Dict[str, Any]:
     """Function implementation pending."""
 pass
 """
@@ -566,7 +568,7 @@ if results['success']:
 
 return results
 
-def run_comprehensive_test(self) -> Dict[str, Any]:
+def run_comprehensive_test():-> Dict[str, Any]:
     """Function implementation pending."""
 pass
 """
@@ -615,7 +617,7 @@ return comprehensive_result
 
 
 # Global test function for registry
-def test_legacy_backlog_hydrator() -> Dict[str, Any]:
+def test_legacy_backlog_hydrator():-> Dict[str, Any]:
         """
         Calculate profit optimization for BTC trading.
         
@@ -629,7 +631,6 @@ def test_legacy_backlog_hydrator() -> Dict[str, Any]:
         """
         try:
             # Import unified math system
-            from core.unified_math_system import unified_math
             
             # Calculate profit using unified mathematical framework
             base_profit = price_data * volume_data * 0.001  # 0.1% base

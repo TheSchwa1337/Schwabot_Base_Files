@@ -1,8 +1,18 @@
+from core.unified_math_system import unified_math
+from core.unified_math_system import unified_math
+from core.unified_math_system import unified_math
+import numpy.typing as npt
+    from typing_extensions import Self
+from __future__ import annotations
+from decimal import getcontext
+from typing import Any, Dict, TYPE_CHECKING
+from utils.safe_print import safe_print, info, warn, error, success, debug
+import logging
+
 # -*- coding: utf - 8 -*-
 """Mathematical Library V1 - Core Mathematical Framework."""
 """Mathematical Library V1 - Core Mathematical Framework."
 # -*- coding: utf - 8 -*-
-from __future__ import annotations
 """
 """Mathematical Library V1 - Core Mathematical Framework."""
 """Mathematical Library V1 - Core Mathematical Framework."
@@ -23,17 +33,9 @@ for trading system calculations, statistical analysis, and numerical operations.
 """
 
 
-from utils.safe_print import safe_print, info, warn, error, success, debug
-from core.unified_math_system import unified_math
-from decimal import getcontext
-import logging
-from typing import Any, Dict, TYPE_CHECKING
 
-from core.unified_math_system import unified_math
-import numpy.typing as npt
 
 if TYPE_CHECKING:
-    from typing_extensions import Self
 
 # Set high precision for financial calculations
 getcontext().prec = 18
@@ -54,7 +56,7 @@ class MathLib:
 """
 
 
-def __init__(self) -> None: """
+def __init__():-> None: """
     """Function implementation pending."""
 pass
 """
@@ -69,9 +71,7 @@ self.version = "1.0_0"
         self.epsilon = 1e - 12
         logger.info(f"MathLib v{self.version} initialized")
 
-def calculate()
-
-self: Self, operation: str, data: Vector, *args: Any, **kwargs: Any
+def calculate():self: Self, operation: str, data: Vector, *args: Any, **kwargs: Any
     ) -> Dict[str, Any]:
         """Calculate various mathematical operations.""""""
 """"""
@@ -123,7 +123,7 @@ pass
 """
 return float(unified_math.unified_math.mean(data))
 
-def standard_deviation(self: Self, data: Vector, ddof: int = 1) -> float:"""
+def standard_deviation():-> float:"""
     """Function implementation pending."""
 pass
 """
@@ -134,7 +134,7 @@ pass
 """
 return float(unified_math.unified_math.std(data, ddof = ddof))
 
-def variance(self: Self, data: Vector, ddof: int = 1) -> float:"""
+def variance():-> float:"""
     """Function implementation pending."""
 pass
 """
@@ -145,7 +145,7 @@ pass
 """
 return float(unified_math.unified_math.var(data, ddof = ddof))
 
-def median(self: Self, data: Vector) -> float:"""
+def median():-> float:"""
     """Function implementation pending."""
 pass
 """
@@ -156,7 +156,7 @@ pass
 """
 return float(np.median(data))
 
-def shannon_entropy(self: Self, data: Vector, bins: int = 50) -> float:"""
+def shannon_entropy():-> float:"""
     """Function implementation pending."""
 pass
 """
@@ -171,7 +171,7 @@ hist, _ = np.histogram(data, bins = bins, density = True)
         entropy = -np.sum(hist * np.log2(hist))
         return float(entropy)
 
-def volatility(self: Self, prices: Vector, window: int = 20) -> float:"""
+def volatility():-> float:"""
     """Function implementation pending."""
 pass
 """
@@ -183,7 +183,7 @@ pass
 returns = self.calculate_returns(prices)
         return float(unified_math.unified_math.std(returns[-window:], ddof = 1))
 
-def calculate_returns(self: Self, prices: Vector) -> Vector:"""
+def calculate_returns():-> Vector:"""
     """Function implementation pending."""
 pass
 """
@@ -195,7 +195,7 @@ pass
 return np.diff(prices) / prices[:-1]
 
 
-def main() -> None:"""
+def main():-> None:"""
     """Function implementation pending."""
 pass
 """
@@ -204,7 +204,6 @@ pass
 """"""
 """"""
 """
-from core.unified_math_system import unified_math
 
 mathlib = MathLib()
     test_data = np.array([1, 2, 3, 4, 5])"""

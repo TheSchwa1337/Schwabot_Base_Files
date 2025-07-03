@@ -1,14 +1,15 @@
+from .data_models import APICredentials, OrderRequest, OrderResponse, MarketData, PortfolioPosition
+from .enums import ExchangeType, ConnectionStatus
+from .exchange_connection import ExchangeConnection
+from datetime import datetime, timedelta
+from pathlib import Path
+from typing import Dict, List, Optional, Any
 import asyncio
 import json
 import logging
 import time
-from datetime import datetime, timedelta
-from pathlib import Path
-from typing import Dict, List, Optional, Any
 
-from .enums import ExchangeType, ConnectionStatus
-from .exchange_connection import ExchangeConnection
-from .data_models import APICredentials, OrderRequest, OrderResponse, MarketData, PortfolioPosition
+
 
 
 # !/usr/bin/env python3
@@ -40,7 +41,7 @@ class ApiIntegrationManager:The main live API integration system.def __init__(se
         self.load_configuration()
         logger.info(🚀 Live API Integration Manager initialized)
 
-    def load_configuration(self) -> None:Load API configurations from the specified JSON file.logger.info(fLoading API configuration from {self.config_path}...)
+    def load_configuration():-> None:Load API configurations from the specified JSON file.logger.info(fLoading API configuration from {self.config_path}...)
         try:
             if not self.config_path.exists():
                 logger.warning(
@@ -68,7 +69,7 @@ class ApiIntegrationManager:The main live API integration system.def __init__(se
         except Exception as e:
             logger.error(f❌ Error loading API configuration: {e}, exc_info = True)
 
-    async def start(self) -> None:Start the API integration system and all connections.if self.running:
+    async def start():-> None:Start the API integration system and all connections.if self.running:
             logger.warning(API integration manager is already running.)
             return self.running = True
         self.start_time = time.time()
@@ -80,7 +81,7 @@ class ApiIntegrationManager:The main live API integration system.def __init__(se
 
         logger.info(✅ Live API Integration Manager started successfully.)
 
-    async def stop(self) -> None:Stop the API integration system gracefully.if not self.running:
+    async def stop():-> None:Stop the API integration system gracefully.if not self.running:
             return logger.info(🛑 Stopping Live API Integration Manager...)
         self.running = False
 
@@ -97,10 +98,10 @@ class ApiIntegrationManager:The main live API integration system.def __init__(se
         await asyncio.gather(*(conn.disconnect() for conn in self.connections.values()))
         logger.info(✅ Live API Integration Manager stopped.)
 
-    async def _connect_all_exchanges(self) -> None:Attempt to connect to all loaded exchange configurations.connection_tasks = [conn.connect() for conn in self.connections.values()]
+    async def _connect_all_exchanges():-> None:Attempt to connect to all loaded exchange configurations.connection_tasks = [conn.connect() for conn in self.connections.values()]
         await asyncio.gather(*connection_tasks)
 
-    async def _main_loop(self) -> None:Run the main operational loop for health checks and portfolio updates.while self.running:
+    async def _main_loop():-> None:Run the main operational loop for health checks and portfolio updates.while self.running:
             try:
                 await self._heartbeat_check()
                 await self._update_all_portfolios()
@@ -111,7 +112,7 @@ class ApiIntegrationManager:The main live API integration system.def __init__(se
                 logger.error(f"Error in main loop: {e}, exc_info = True)
                 await asyncio.sleep(self.reconnect_interval)
 
-    async def _heartbeat_check(self) -> None:Periodically check connection health and reconnect if necessary.for name, conn in self.connections.items():
+    async def _heartbeat_check():-> None:Periodically check connection health and reconnect if necessary.for name, conn in self.connections.items():
             if conn.status == ConnectionStatus.ERROR or (
                 conn.status == ConnectionStatus.CONNECTED
                 and time.time() - conn.last_heartbeat > self.heartbeat_interval
@@ -126,25 +127,23 @@ class ApiIntegrationManager:The main live API integration system.def __init__(se
                         logger.error(fMax reconnect attempts reached for {name}. Disabling.)
                         conn.status = ConnectionStatus.ERROR
 
-    async def _update_all_portfolios(self) -> None:Trigger portfolio updates for all connected exchanges.# This can be expanded to fetch all balances and update a central portfolio model.
+    async def _update_all_portfolios():-> None:Trigger portfolio updates for all connected exchanges.# This can be expanded to fetch all balances and update a central portfolio model.
         # For now, it's a placeholder for periodic background tasks.
         pass
 
-    async def place_order(
-        self, exchange_name: str, order_request: OrderRequest
-    ) -> Optional[OrderResponse]:Place an order on a specific exchange.connection = self.connections.get(exchange_name)
+    async def place_order():-> Optional[OrderResponse]:Place an order on a specific exchange.connection = self.connections.get(exchange_name)
         if connection and connection.status == ConnectionStatus.CONNECTED:
             return await connection.place_order(order_request)
         logger.error(fCannot place order: exchange '{exchange_name}' is not available.)
         return None
 
-    async def get_market_data(self, exchange_name: str, symbol: str) -> Optional[MarketData]:Get market data from a specific exchange.connection = self.connections.get(exchange_name)
+    async def get_market_data():-> Optional[MarketData]:Get market data from a specific exchange.connection = self.connections.get(exchange_name)
         if connection and connection.status == ConnectionStatus.CONNECTED:
             return await connection.get_market_data(symbol)
         logger.warning(fCannot get market data: exchange '{exchange_name}' is not available.)
         return None
 
-    def get_system_status(self) -> Dict[str, Any]:Provide a status overview of the entire API integration system.uptime = time.time() - self.start_time if self.running else 0
+    def get_system_status():-> Dict[str, Any]:Provide a status overview of the entire API integration system.uptime = time.time() - self.start_time if self.running else 0
 
         return {running: self.running,
             uptime_seconds: uptime,uptime_formatted: str(timedelta(seconds = int(uptime))),

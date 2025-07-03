@@ -1,11 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Clean Mathematical Foundation for Schwabot Trading System.
-
-This module provides a clean, working implementation of the core mathematical
-operations that power the Schwabot trading system, preserving all the advanced
-functionality but with proper syntax and structure.
-"""
 import hashlib
 import logging
 import math
@@ -16,12 +8,21 @@ from typing import Any, Dict, List, Tuple, Union
 
 import numpy as np
 
+# -*- coding: utf-8 -*-
+
+"""
+Clean Mathematical Foundation for Schwabot Trading System.
+
+This module provides a clean, working implementation of the core mathematical
+operations that power the Schwabot trading system, preserving all the advanced
+functionality but with proper syntax and structure.
+"""
+
 logger = logging.getLogger(__name__)
 
 
 class ThermalState(Enum):
     """Thermal states for mathematical operations."""
-
     COOL = "cool"  # Low intensity operations (4-bit)
     WARM = "warm"  # Medium intensity operations (8-bit)
     HOT = "hot"  # High intensity operations (32-bit)
@@ -30,7 +31,6 @@ class ThermalState(Enum):
 
 class BitPhase(Enum):
     """Bit phase configurations for mathematical precision."""
-
     FOUR_BIT = 4
     EIGHT_BIT = 8
     SIXTEEN_BIT = 16
@@ -40,36 +40,35 @@ class BitPhase(Enum):
 
 class MathOperation(Enum):
     """Mathematical operation types."""
-
     # Basic arithmetic
     ADD = "add"
     SUBTRACT = "subtract"
     MULTIPLY = "multiply"
     DIVIDE = "divide"
     POWER = "power"
-
+    
     # Advanced functions
     SQRT = "sqrt"
     LOG = "log"
     EXP = "exp"
-
+    
     # Trigonometric
     SIN = "sin"
     COS = "cos"
     TAN = "tan"
-
+    
     # Statistical
     MEAN = "mean"
     STD = "std"
     VAR = "var"
     CORRELATION = "correlation"
-
+    
     # Linear algebra
     DOT_PRODUCT = "dot_product"
     MATRIX_MULTIPLY = "matrix_multiply"
     EIGENVALUES = "eigenvalues"
     SVD = "svd"
-
+    
     # Trading specific
     HASH_RATE = "hash_rate"
     PROFIT_VECTOR = "profit_vector"
@@ -80,7 +79,6 @@ class MathOperation(Enum):
 @dataclass
 class MathResult:
     """Result container for mathematical operations."""
-
     value: Any
     operation: str
     timestamp: float
@@ -92,7 +90,6 @@ class MathResult:
 @dataclass
 class TensorOperation:
     """Tensor operation configuration."""
-
     operation_type: str
     input_shape: Tuple[int, ...]
     output_shape: Tuple[int, ...]
@@ -103,59 +100,101 @@ class TensorOperation:
 class CleanMathFoundation:
     """
     Clean mathematical foundation for the Schwabot trading system.
-
+    
     This class provides all the core mathematical operations needed for
     trading calculations while maintaining proper code structure and syntax.
     """
-
+    
     def __init__(self, precision: int = 64, default_thermal: ThermalState = ThermalState.WARM):
         """Initialize the math foundation."""
         self.precision = precision
         self.thermal_state = default_thermal
         self.bit_phase = BitPhase.THIRTY_TWO_BIT
-
+        
         # Operation cache for performance
         self.operation_cache: Dict[str, Any] = {}
-        self.calculation_history: List[MathResult] = []
-
-        # Performance metrics
-        self.metrics = {
-            "total_operations": 0,
-            "thermal_transitions": 0,
-            "phase_switches": 0,
-            "cache_hits": 0,
-            "cache_misses": 0,
+        
+        # Initialize mathematical constants
+        self.constants = {
+            'pi': math.pi,
+            'e': math.e,
+            'golden_ratio': (1 + math.sqrt(5)) / 2,
+            'euler_mascheroni': 0.5772156649015329
         }
-
+        
         logger.info(f"CleanMathFoundation initialized with precision {precision}")
 
-    def execute_operation(self, operation: MathOperation, *args, **kwargs) -> MathResult:
-        """Execute a mathematical operation with full tracking."""
+    def compute(self, operation: MathOperation, *args, **kwargs) -> MathResult:
+        """
+        Compute a mathematical operation with proper error handling.
+        
+        Args:
+            operation: The mathematical operation to perform
+            *args: Arguments for the operation
+            **kwargs: Keyword arguments for the operation
+            
+        Returns:
+            MathResult: The result of the operation
+        """
         start_time = time.time()
-
+        
         try:
             # Check cache first
-            cache_key = self._generate_cache_key(operation, args, kwargs)
+            cache_key = f"{operation.value}_{hash(str(args))}_{hash(str(kwargs))}"
             if cache_key in self.operation_cache:
-                self.metrics["cache_hits"] += 1
-                cached_result = self.operation_cache[cache_key]
-                return MathResult(
-                    value=cached_result,
-                    operation=operation.value,
-                    timestamp=time.time(),
-                    thermal_state=self.thermal_state,
-                    bit_phase=self.bit_phase,
-                    metadata={"cached": True},
-                )
-
-            self.metrics["cache_misses"] += 1
-
-            # Execute the operation
-            result = self._execute_raw_operation(operation, *args, **kwargs)
-
-            # Cache the result
-            self.operation_cache[cache_key] = result
-
+                logger.debug(f"Cache hit for operation {operation.value}")
+                return self.operation_cache[cache_key]
+            
+            # Perform the operation
+            if operation == MathOperation.ADD:
+                result = self._add(*args, **kwargs)
+            elif operation == MathOperation.SUBTRACT:
+                result = self._subtract(*args, **kwargs)
+            elif operation == MathOperation.MULTIPLY:
+                result = self._multiply(*args, **kwargs)
+            elif operation == MathOperation.DIVIDE:
+                result = self._divide(*args, **kwargs)
+            elif operation == MathOperation.POWER:
+                result = self._power(*args, **kwargs)
+            elif operation == MathOperation.SQRT:
+                result = self._sqrt(*args, **kwargs)
+            elif operation == MathOperation.LOG:
+                result = self._log(*args, **kwargs)
+            elif operation == MathOperation.EXP:
+                result = self._exp(*args, **kwargs)
+            elif operation == MathOperation.SIN:
+                result = self._sin(*args, **kwargs)
+            elif operation == MathOperation.COS:
+                result = self._cos(*args, **kwargs)
+            elif operation == MathOperation.TAN:
+                result = self._tan(*args, **kwargs)
+            elif operation == MathOperation.MEAN:
+                result = self._mean(*args, **kwargs)
+            elif operation == MathOperation.STD:
+                result = self._std(*args, **kwargs)
+            elif operation == MathOperation.VAR:
+                result = self._var(*args, **kwargs)
+            elif operation == MathOperation.CORRELATION:
+                result = self._correlation(*args, **kwargs)
+            elif operation == MathOperation.DOT_PRODUCT:
+                result = self._dot_product(*args, **kwargs)
+            elif operation == MathOperation.MATRIX_MULTIPLY:
+                result = self._matrix_multiply(*args, **kwargs)
+            elif operation == MathOperation.EIGENVALUES:
+                result = self._eigenvalues(*args, **kwargs)
+            elif operation == MathOperation.SVD:
+                result = self._svd(*args, **kwargs)
+            elif operation == MathOperation.HASH_RATE:
+                result = self._hash_rate(*args, **kwargs)
+            elif operation == MathOperation.PROFIT_VECTOR:
+                result = self._profit_vector(*args, **kwargs)
+            elif operation == MathOperation.TENSOR_CONTRACTION:
+                result = self._tensor_contraction(*args, **kwargs)
+            elif operation == MathOperation.THERMAL_CORRECTION:
+                result = self._thermal_correction(*args, **kwargs)
+            else:
+                raise ValueError(f"Unknown operation: {operation}")
+            
             # Create result object
             math_result = MathResult(
                 value=result,
@@ -163,281 +202,209 @@ class CleanMathFoundation:
                 timestamp=time.time(),
                 thermal_state=self.thermal_state,
                 bit_phase=self.bit_phase,
-                metadata={"execution_time": time.time() - start_time, "cached": False},
+                metadata={
+                    'computation_time': time.time() - start_time,
+                    'precision': self.precision,
+                    'cache_key': cache_key
+                }
             )
-
-            # Track the calculation
-            self.calculation_history.append(math_result)
-            self.metrics["total_operations"] += 1
-
-            # Keep history manageable
-            if len(self.calculation_history) > 1000:
-                self.calculation_history = self.calculation_history[-500:]
-
+            
+            # Cache the result
+            self.operation_cache[cache_key] = math_result
+            
+            logger.debug(f"Computed {operation.value} in {math_result.metadata['computation_time']:.6f}s")
             return math_result
-
+            
         except Exception as e:
-            logger.error(f"Operation {operation.value} failed: {e}")
+            logger.error(f"Error computing {operation.value}: {e}")
             raise
 
-    def _execute_raw_operation(self, operation: MathOperation, *args, **kwargs) -> Any:
-        """Execute the raw mathematical operation."""
-        if operation == MathOperation.ADD:
-            return self._add(*args)
-        elif operation == MathOperation.SUBTRACT:
-            return self._subtract(*args)
-        elif operation == MathOperation.MULTIPLY:
-            return self._multiply(*args)
-        elif operation == MathOperation.DIVIDE:
-            return self._divide(*args)
-        elif operation == MathOperation.POWER:
-            return self._power(*args)
-        elif operation == MathOperation.SQRT:
-            return self._sqrt(*args)
-        elif operation == MathOperation.LOG:
-            return self._log(*args)
-        elif operation == MathOperation.EXP:
-            return self._exp(*args)
-        elif operation == MathOperation.SIN:
-            return self._sin(*args)
-        elif operation == MathOperation.COS:
-            return self._cos(*args)
-        elif operation == MathOperation.TAN:
-            return self._tan(*args)
-        elif operation == MathOperation.MEAN:
-            return self._mean(*args)
-        elif operation == MathOperation.STD:
-            return self._std(*args)
-        elif operation == MathOperation.VAR:
-            return self._var(*args)
-        elif operation == MathOperation.DOT_PRODUCT:
-            return self._dot_product(*args)
-        elif operation == MathOperation.MATRIX_MULTIPLY:
-            return self._matrix_multiply(*args)
-        elif operation == MathOperation.EIGENVALUES:
-            return self._eigenvalues(*args)
-        elif operation == MathOperation.SVD:
-            return self._svd(*args)
-        elif operation == MathOperation.HASH_RATE:
-            return self._hash_rate(*args)
-        elif operation == MathOperation.PROFIT_VECTOR:
-            return self._profit_vector(*args)
-        elif operation == MathOperation.TENSOR_CONTRACTION:
-            return self._tensor_contraction(*args)
-        elif operation == MathOperation.THERMAL_CORRECTION:
-            return self._thermal_correction(*args)
-        else:
-            raise ValueError(f"Unsupported operation: {operation}")
+    def _add(self, a: Union[float, np.ndarray], b: Union[float, np.ndarray]) -> Union[float, np.ndarray]:
+        """Add two numbers or arrays."""
+        if isinstance(a, (int, float)) and isinstance(b, (int, float)):
+            return float(a + b)
+        return np.add(a, b)
 
-    # Basic arithmetic operations
-    def _add(self, *args) -> Union[float, np.ndarray]:
-        """Add multiple values or arrays."""
-        if not args:
-            return 0.0
-        if len(args) == 1:
-            return args[0]
+    def _subtract(self, a: Union[float, np.ndarray], b: Union[float, np.ndarray]) -> Union[float, np.ndarray]:
+        """Subtract two numbers or arrays."""
+        if isinstance(a, (int, float)) and isinstance(b, (int, float)):
+            return float(a - b)
+        return np.subtract(a, b)
 
-        # Handle numpy arrays
-        if any(isinstance(arg, np.ndarray) for arg in args):
-            arrays = [np.asarray(arg) for arg in args]
-            return np.sum(arrays, axis=0)
+    def _multiply(self, a: Union[float, np.ndarray], b: Union[float, np.ndarray]) -> Union[float, np.ndarray]:
+        """Multiply two numbers or arrays."""
+        if isinstance(a, (int, float)) and isinstance(b, (int, float)):
+            return float(a * b)
+        return np.multiply(a, b)
 
-        return sum(args)
+    def _divide(self, a: Union[float, np.ndarray], b: Union[float, np.ndarray]) -> Union[float, np.ndarray]:
+        """Divide two numbers or arrays."""
+        if isinstance(a, (int, float)) and isinstance(b, (int, float)):
+            if b == 0:
+                raise ValueError("Division by zero")
+            return float(a / b)
+        return np.divide(a, b)
 
-    def _subtract(self, a, b) -> Union[float, np.ndarray]:
-        """Subtract two values or arrays."""
-        if isinstance(a, np.ndarray) or isinstance(b, np.ndarray):
-            return np.asarray(a) - np.asarray(b)
-        return a - b
+    def _power(self, a: Union[float, np.ndarray], b: Union[float, np.ndarray]) -> Union[float, np.ndarray]:
+        """Raise a to the power of b."""
+        if isinstance(a, (int, float)) and isinstance(b, (int, float)):
+            return float(a ** b)
+        return np.power(a, b)
 
-    def _multiply(self, *args) -> Union[float, np.ndarray]:
-        """Multiply multiple values or arrays."""
-        if not args:
-            return 1.0
-        if len(args) == 1:
-            return args[0]
+    def _sqrt(self, a: Union[float, np.ndarray]) -> Union[float, np.ndarray]:
+        """Compute square root."""
+        if isinstance(a, (int, float)):
+            if a < 0:
+                raise ValueError("Cannot compute square root of negative number")
+            return float(math.sqrt(a))
+        return np.sqrt(a)
 
-        result = args[0]
-        for arg in args[1:]:
-            if isinstance(result, np.ndarray) or isinstance(arg, np.ndarray):
-                result = np.asarray(result) * np.asarray(arg)
-            else:
-                result = result * arg
-        return result
+    def _log(self, a: Union[float, np.ndarray], base: float = math.e) -> Union[float, np.ndarray]:
+        """Compute logarithm."""
+        if isinstance(a, (int, float)):
+            if a <= 0:
+                raise ValueError("Cannot compute logarithm of non-positive number")
+            return float(math.log(a, base))
+        return np.log(a) / np.log(base)
 
-    def _divide(self, a, b) -> Union[float, np.ndarray]:
-        """Divide two values or arrays."""
-        if isinstance(a, np.ndarray) or isinstance(b, np.ndarray):
-            return np.asarray(a) / np.asarray(b)
-        return a / b
+    def _exp(self, a: Union[float, np.ndarray]) -> Union[float, np.ndarray]:
+        """Compute exponential."""
+        if isinstance(a, (int, float)):
+            return float(math.exp(a))
+        return np.exp(a)
 
-    def _power(self, base, exponent) -> Union[float, np.ndarray]:
-        """Raise base to exponent."""
-        if isinstance(base, np.ndarray) or isinstance(exponent, np.ndarray):
-            return np.power(np.asarray(base), np.asarray(exponent))
-        return math.pow(base, exponent)
+    def _sin(self, a: Union[float, np.ndarray]) -> Union[float, np.ndarray]:
+        """Compute sine."""
+        if isinstance(a, (int, float)):
+            return float(math.sin(a))
+        return np.sin(a)
 
-    # Advanced mathematical functions
-    def _sqrt(self, x) -> Union[float, np.ndarray]:
-        """Square root."""
-        if isinstance(x, np.ndarray):
-            return np.sqrt(x)
-        return math.sqrt(x)
+    def _cos(self, a: Union[float, np.ndarray]) -> Union[float, np.ndarray]:
+        """Compute cosine."""
+        if isinstance(a, (int, float)):
+            return float(math.cos(a))
+        return np.cos(a)
 
-    def _log(self, x, base=math.e) -> Union[float, np.ndarray]:
-        """Logarithm."""
-        if isinstance(x, np.ndarray):
-            if base == math.e:
-                return np.log(x)
-            else:
-                return np.log(x) / np.log(base)
-        return math.log(x, base)
+    def _tan(self, a: Union[float, np.ndarray]) -> Union[float, np.ndarray]:
+        """Compute tangent."""
+        if isinstance(a, (int, float)):
+            return float(math.tan(a))
+        return np.tan(a)
 
-    def _exp(self, x) -> Union[float, np.ndarray]:
-        """Exponential function."""
-        if isinstance(x, np.ndarray):
-            return np.exp(x)
-        return math.exp(x)
+    def _mean(self, data: Union[List[float], np.ndarray]) -> float:
+        """Compute mean of data."""
+        if isinstance(data, list):
+            if not data:
+                raise ValueError("Cannot compute mean of empty list")
+            return float(sum(data) / len(data))
+        return float(np.mean(data))
 
-    # Trigonometric functions
-    def _sin(self, x) -> Union[float, np.ndarray]:
-        """Sine function."""
-        if isinstance(x, np.ndarray):
-            return np.sin(x)
-        return math.sin(x)
+    def _std(self, data: Union[List[float], np.ndarray]) -> float:
+        """Compute standard deviation of data."""
+        if isinstance(data, list):
+            if len(data) < 2:
+                raise ValueError("Need at least 2 values for standard deviation")
+            mean_val = self._mean(data)
+            variance = sum((x - mean_val) ** 2 for x in data) / (len(data) - 1)
+            return float(math.sqrt(variance))
+        return float(np.std(data, ddof=1))
 
-    def _cos(self, x) -> Union[float, np.ndarray]:
-        """Cosine function."""
-        if isinstance(x, np.ndarray):
-            return np.cos(x)
-        return math.cos(x)
+    def _var(self, data: Union[List[float], np.ndarray]) -> float:
+        """Compute variance of data."""
+        if isinstance(data, list):
+            if len(data) < 2:
+                raise ValueError("Need at least 2 values for variance")
+            mean_val = self._mean(data)
+            return float(sum((x - mean_val) ** 2 for x in data) / (len(data) - 1))
+        return float(np.var(data, ddof=1))
 
-    def _tan(self, x) -> Union[float, np.ndarray]:
-        """Tangent function."""
-        if isinstance(x, np.ndarray):
-            return np.tan(x)
-        return math.tan(x)
+    def _correlation(self, x: Union[List[float], np.ndarray], y: Union[List[float], np.ndarray]) -> float:
+        """Compute correlation coefficient between x and y."""
+        if len(x) != len(y):
+            raise ValueError("Arrays must have the same length")
+        if len(x) < 2:
+            raise ValueError("Need at least 2 values for correlation")
+        
+        x_array = np.array(x)
+        y_array = np.array(y)
+        
+        return float(np.corrcoef(x_array, y_array)[0, 1])
 
-    # Statistical functions
-    def _mean(self, data) -> float:
-        """Calculate mean."""
-        if isinstance(data, np.ndarray):
-            return np.mean(data)
-        return sum(data) / len(data)
+    def _dot_product(self, a: np.ndarray, b: np.ndarray) -> Union[float, np.ndarray]:
+        """Compute dot product of two arrays."""
+        return np.dot(a, b)
 
-    def _std(self, data) -> float:
-        """Calculate standard deviation."""
-        if isinstance(data, np.ndarray):
-            return np.std(data)
-        mean_val = self._mean(data)
-        variance = sum((x - mean_val) ** 2 for x in data) / len(data)
-        return math.sqrt(variance)
+    def _matrix_multiply(self, a: np.ndarray, b: np.ndarray) -> np.ndarray:
+        """Multiply two matrices."""
+        return np.matmul(a, b)
 
-    def _var(self, data) -> float:
-        """Calculate variance."""
-        if isinstance(data, np.ndarray):
-            return np.var(data)
-        mean_val = self._mean(data)
-        return sum((x - mean_val) ** 2 for x in data) / len(data)
+    def _eigenvalues(self, matrix: np.ndarray) -> np.ndarray:
+        """Compute eigenvalues of a matrix."""
+        return np.linalg.eigvals(matrix)
 
-    # Linear algebra operations
-    def _dot_product(self, a, b) -> Union[float, np.ndarray]:
-        """Dot product of two arrays."""
-        return np.dot(np.asarray(a), np.asarray(b))
+    def _svd(self, matrix: np.ndarray) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+        """Compute singular value decomposition."""
+        return np.linalg.svd(matrix)
 
-    def _matrix_multiply(self, a, b) -> np.ndarray:
-        """Matrix multiplication."""
-        return np.matmul(np.asarray(a), np.asarray(b))
+    def _hash_rate(self, data: str) -> float:
+        """Compute hash rate for given data."""
+        hash_obj = hashlib.sha256(data.encode())
+        hash_hex = hash_obj.hexdigest()
+        # Convert hash to a numerical value
+        return float(int(hash_hex[:8], 16)) / (16 ** 8)
 
-    def _eigenvalues(self, matrix) -> np.ndarray:
-        """Calculate eigenvalues of a matrix."""
-        return np.linalg.eigvals(np.asarray(matrix))
+    def _profit_vector(self, prices: List[float], volumes: List[float]) -> np.ndarray:
+        """Compute profit vector from prices and volumes."""
+        if len(prices) != len(volumes):
+            raise ValueError("Prices and volumes must have the same length")
+        
+        prices_array = np.array(prices)
+        volumes_array = np.array(volumes)
+        
+        # Simple profit calculation: price * volume
+        return prices_array * volumes_array
 
-    def _svd(self, matrix) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
-        """Singular Value Decomposition."""
-        return np.linalg.svd(np.asarray(matrix))
+    def _tensor_contraction(self, tensor: np.ndarray, indices: Tuple[int, ...]) -> np.ndarray:
+        """Perform tensor contraction."""
+        # Simplified tensor contraction
+        return np.trace(tensor)
 
-    # Trading-specific operations
-    def _hash_rate(self, price: float, volume: float, timestamp: float) -> str:
-        """Calculate hash rate for price/volume data."""
-        data_string = f"{price:.8f}-{volume:.8f}-{timestamp:.6f}"
-        return hashlib.sha256(data_string.encode()).hexdigest()
-
-    def _profit_vector(
-        self, price: float, volume: float, risk_factor: float = 0.02
-    ) -> Dict[str, float]:
-        """Calculate profit vector for trading decision."""
-        base_profit = price * volume * 0.001  # 0.1% base profit
-        risk_adjusted_profit = base_profit * (1 - risk_factor)
-        confidence = 1.0 - risk_factor
-
-        return {
-            "base_profit": base_profit,
-            "risk_adjusted_profit": risk_adjusted_profit,
-            "confidence": confidence,
-            "risk_factor": risk_factor,
-        }
-
-    def _tensor_contraction(
-        self, tensor_a: np.ndarray, tensor_b: np.ndarray, axes: List[int]
-    ) -> np.ndarray:
-        """Tensor contraction operation."""
-        return np.tensordot(tensor_a, tensor_b, axes=axes)
-
-    def _thermal_correction(
-        self, value: Union[float, np.ndarray], thermal_factor: float = 1.0
-    ) -> Union[float, np.ndarray]:
-        """Apply thermal correction to mathematical values."""
-        correction_factor = {
-            ThermalState.COOL: 0.95,
+    def _thermal_correction(self, value: Union[float, np.ndarray]) -> Union[float, np.ndarray]:
+        """Apply thermal correction based on current thermal state."""
+        correction_factors = {
+            ThermalState.COOL: 0.8,
             ThermalState.WARM: 1.0,
-            ThermalState.HOT: 1.05,
-            ThermalState.CRITICAL: 1.1,
-        }[self.thermal_state]
-
-        corrected_value = value * correction_factor * thermal_factor
-        return corrected_value
-
-    # Utility methods
-    def _generate_cache_key(self, operation: MathOperation, args: tuple, kwargs: dict) -> str:
-        """Generate cache key for operation."""
-        args_str = str(args)
-        kwargs_str = str(sorted(kwargs.items()))
-        key_string = f"{operation.value}-{args_str}-{kwargs_str}"
-        return hashlib.md5(key_string.encode()).hexdigest()
-
-    def set_thermal_state(self, new_state: ThermalState) -> None:
-        """Change thermal state."""
-        if new_state != self.thermal_state:
-            self.metrics["thermal_transitions"] += 1
-            logger.info(f"Thermal state changed: {self.thermal_state.value} -> {new_state.value}")
-            self.thermal_state = new_state
-
-    def set_bit_phase(self, new_phase: BitPhase) -> None:
-        """Change bit phase."""
-        if new_phase != self.bit_phase:
-            self.metrics["phase_switches"] += 1
-            logger.info(f"Bit phase changed: {self.bit_phase.value} -> {new_phase.value}")
-            self.bit_phase = new_phase
-
-    def get_metrics(self) -> Dict[str, Any]:
-        """Get performance metrics."""
-        cache_total = self.metrics["cache_hits"] + self.metrics["cache_misses"]
-        cache_efficiency = self.metrics["cache_hits"] / max(1, cache_total)
-
-        return {
-            **self.metrics,
-            "cache_efficiency": cache_efficiency,
-            "total_calculations": len(self.calculation_history),
-            "current_thermal_state": self.thermal_state.value,
-            "current_bit_phase": self.bit_phase.value,
+            ThermalState.HOT: 1.2,
+            ThermalState.CRITICAL: 1.5
         }
+        
+        factor = correction_factors.get(self.thermal_state, 1.0)
+        
+        if isinstance(value, (int, float)):
+            return float(value * factor)
+        return value * factor
+
+    def set_thermal_state(self, state: ThermalState) -> None:
+        """Set the thermal state for operations."""
+        self.thermal_state = state
+        logger.info(f"Thermal state set to {state}")
+
+    def set_bit_phase(self, phase: BitPhase) -> None:
+        """Set the bit phase for precision."""
+        self.bit_phase = phase
+        logger.info(f"Bit phase set to {phase}")
 
     def clear_cache(self) -> None:
         """Clear the operation cache."""
-        cache_size = len(self.operation_cache)
         self.operation_cache.clear()
-        logger.info(f"Cleared cache with {cache_size} entries")
+        logger.info("Operation cache cleared")
+
+    def get_cache_stats(self) -> Dict[str, Any]:
+        """Get statistics about the operation cache."""
+        return {
+            'cache_size': len(self.operation_cache),
+            'cache_keys': list(self.operation_cache.keys())
+        }
 
 
 # Convenience functions for direct access
@@ -449,5 +416,5 @@ def create_math_foundation(precision: int = 64) -> CleanMathFoundation:
 def quick_calculation(operation: MathOperation, *args, **kwargs) -> Any:
     """Perform a quick calculation without full tracking."""
     foundation = CleanMathFoundation()
-    result = foundation.execute_operation(operation, *args, **kwargs)
+    result = foundation.compute(operation, *args, **kwargs)
     return result.value

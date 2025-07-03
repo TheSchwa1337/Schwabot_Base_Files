@@ -1,10 +1,11 @@
+from pathlib import Path
+
 #!/usr/bin/env python3
 """
 Fix Unicode character issues in Python files.
 Replaces Unicode characters with ASCII equivalents to prevent syntax errors.
 """
 
-from pathlib import Path
 
 # Unicode to ASCII character mappings
 UNICODE_REPLACEMENTS = {
@@ -65,7 +66,7 @@ UNICODE_REPLACEMENTS = {
 }
 
 
-def fix_unicode_in_file(file_path: Path) -> bool:
+def fix_unicode_in_file():-> bool:
     """Fix Unicode characters in a single file."""
     try:
         # Read file content

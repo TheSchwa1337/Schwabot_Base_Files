@@ -1,18 +1,20 @@
-# -*- coding: utf - 8 -*-
-# -*- coding: utf - 8 -*-
-# -*- coding: utf - 8 -*-
-# -*- coding: utf - 8 -*-
+            from core.unified_math_system import unified_math
+from core.unified_math_system import unified_math
 from dataclasses import dataclass, field
 from datetime import datetime
 from dual_unicore_handler import DualUnicoreHandler
 from enum import Enum
 from pathlib import Path
 from typing import Dict, List, Any, Optional
+from utils.safe_print import safe_print, info, warn, error, success, debug
 import asyncio
 import logging
 
-from core.unified_math_system import unified_math
-from utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+
 
 
 # Initialize Unicode handler
@@ -276,9 +278,7 @@ self.integration_status = {
 """
 logger.info("Enhanced Phase Risk Manager initialized")
 
-def calculate_phase_risk_score()
-
-self,
+def calculate_phase_risk_score():self,
         price_changes: List[float],
         volumes: List[float],
         entropy_levels: List[float],
@@ -337,9 +337,7 @@ except Exception as e:"""
 logger.error(f"Error calculating phase risk score: {e}")
             return 0.5
 
-def analyze_volume_differential()
-
-self,
+def analyze_volume_differential():self,
         current_volume: float,
         historical_volumes: List[float],
         time_window: int = 100
@@ -387,9 +385,7 @@ except Exception as e:"""
 logger.error(f"Error analyzing volume differential: {e}")
             return 0.0
 
-def perform_cross_bitmap_analysis()
-
-self,
+def perform_cross_bitmap_analysis():self,
         bitmap_data: Dict[BitmapType, np.ndarray],
         phase_data: Dict[int, List[float]]
     ) -> CrossBitmapAnalysis:
@@ -491,9 +487,7 @@ logger.error(f"Error performing cross - bitmap analysis: {e}")
                 cross_validation_score = 0.5
             )
 
-def assess_successive_trade_risk()
-
-self,
+def assess_successive_trade_risk():self,
         trade_sequence: List[Dict[str, Any]],
         max_sequence_length: int = 10
     ) -> SuccessiveTradeRisk:
@@ -586,9 +580,7 @@ logger.error(f"Error assessing successive trade risk: {e}")
                 phase_transition_risk = 0.0
             )
 
-def calculate_entry_exit_confidence()
-
-self,
+def calculate_entry_exit_confidence():self,
         market_data: Dict[str, Any],
         phase_metrics: PhaseRiskMetrics
 ) -> float:
@@ -634,9 +626,7 @@ except Exception as e:"""
 logger.error(f"Error calculating entry / exit confidence: {e}")
             return 0.5
 
-def optimize_altitude_mapping()
-
-self,
+def optimize_altitude_mapping():self,
         current_altitude: float,
         target_altitude: float,
         phase_metrics: PhaseRiskMetrics
@@ -680,9 +670,7 @@ except Exception as e:"""
 logger.error(f"Error optimizing altitude mapping: {e}")
             return current_altitude
 
-def integrate_dlt_waveform()
-
-self,
+def integrate_dlt_waveform():self,
         waveform_data: Dict[str, Any]
     ) -> DLTWaveformData:
         """"""
@@ -751,9 +739,7 @@ except Exception as e:
                 tensor_score = 0.5
             )
 
-def integrate_tesseract_visualization()
-
-self,
+def integrate_tesseract_visualization():self,
         tesseract_data: Dict[str, Any]
     ) -> TesseractVisualizationData:
         """"""
@@ -806,9 +792,7 @@ logger.error(f"Error integrating Tesseract visualization: {e}")
                 intensity_map={}
             )
 
-def add_backlog_entry()
-
-self,
+def add_backlog_entry():self,
         trade_data: Dict[str, Any],
         risk_assessment: Dict[str, Any],
         performance_metrics: Dict[str, Any],
@@ -846,9 +830,7 @@ except Exception as e:
                 training_tags=[]
             )
 
-def get_comprehensive_risk_assessment()
-
-self,
+def get_comprehensive_risk_assessment():self,
         market_data: Dict[str, Any],
         trade_history: List[Dict[str, Any]]
     ) -> Dict[str, Any]:
@@ -944,7 +926,7 @@ logger.error(f"Error in comprehensive risk assessment: {e}")
                 'error': str(e),
                 'risk_level': RiskLevel.MEDIUM.value
 
-def _calculate_phase_coherence(self, bitmap_array: np.ndarray) -> float:
+def _calculate_phase_coherence():-> float:
     """Function implementation pending."""
 pass
 """
@@ -975,7 +957,7 @@ except Exception as e:"""
 logger.error(f"Error calculating phase coherence: {e}")
             return 0.5
 
-def _calculate_bitmap_entropy(self, bitmap_array: np.ndarray) -> float:
+def _calculate_bitmap_entropy():-> float:
     """Function implementation pending."""
 pass
 """
@@ -1006,7 +988,7 @@ except Exception as e:"""
 logger.error(f"Error calculating bitmap entropy: {e}")
             return 0.5
 
-def _calculate_pattern_stability(self, bitmap_array: np.ndarray) -> float:
+def _calculate_pattern_stability():-> float:
     """Function implementation pending."""
 pass
 """
@@ -1029,9 +1011,7 @@ except Exception as e:"""
 logger.error(f"Error calculating pattern stability: {e}")
             return 0.5
 
-def _calculate_cross_validation_score()
-
-self,
+def _calculate_cross_validation_score():self,
         bitmap_data: Dict[BitmapType, np.ndarray],
         phase_data: Dict[int, List[float]]
     ) -> float:
@@ -1057,7 +1037,7 @@ except Exception as e:"""
 logger.error(f"Error calculating cross - validation score: {e}")
             return 0.5
 
-def _calculate_position_correlation(self, trades: List[Dict[str, Any]]) -> float:
+def _calculate_position_correlation():-> float:
     """Function implementation pending."""
 pass
 """
@@ -1083,7 +1063,7 @@ except Exception as e:"""
 logger.error(f"Error calculating position correlation: {e}")
             return 0.0
 
-def _calculate_phase_transition_risk(self, phases: List[int]) -> float:
+def _calculate_phase_transition_risk():-> float:
     """Function implementation pending."""
 pass
 """
@@ -1113,9 +1093,7 @@ except Exception as e:"""
 logger.error(f"Error calculating phase transition risk: {e}")
             return 0.0
 
-def _generate_risk_recommendations()
-
-self,
+def _generate_risk_recommendations():self,
         phase_metrics: PhaseRiskMetrics
 ) -> List[str]:
         """Generate risk management recommendations.""""""
@@ -1150,7 +1128,7 @@ if not recommendations:
 return recommendations
 
 
-def create_enhanced_phase_risk_manager() -> EnhancedPhaseRiskManager:
+def create_enhanced_phase_risk_manager():-> EnhancedPhaseRiskManager:
         """
         Calculate profit optimization for BTC trading.
 
@@ -1164,7 +1142,6 @@ def create_enhanced_phase_risk_manager() -> EnhancedPhaseRiskManager:
         """
         try:
             # Import unified math system
-            from core.unified_math_system import unified_math
 
             # Calculate profit using unified mathematical framework
             base_profit = price_data * volume_data * 0.001  # 0.1% base

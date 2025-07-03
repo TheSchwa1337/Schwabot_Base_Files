@@ -1,3 +1,8 @@
+    from core.bit_phase_sequencer import BitPhase, BitSequence
+    from core.dual_error_handler import PhaseState, SickType, SickState
+    from core.symbolic_profit_router import ProfitTier, FlipBias, SymbolicState
+    from dual_unicore_handler import DualUnicoreHandler
+
 # update
 # -*- coding: utf-8 -*-
 """
@@ -9,10 +14,6 @@ within the NCCO_CORE system.
 
 # Import core mathematical modules
 try:
-    from dual_unicore_handler import DualUnicoreHandler
-    from core.bit_phase_sequencer import BitPhase, BitSequence
-    from core.dual_error_handler import PhaseState, SickType, SickState
-    from core.symbolic_profit_router import ProfitTier, FlipBias, SymbolicState
 except ImportError:
     # Mock classes for testing when imports fail
     class DualUnicoreHandler:
@@ -39,7 +40,7 @@ except ImportError:
 unicore = DualUnicoreHandler()
 
 
-def main() -> None:
+def main():-> None:
     """Test Ferris RDE functionality."""
     print("[BRAIN] Testing Ferris RDE functionality - SHA-256 ID = [autogen]")
     

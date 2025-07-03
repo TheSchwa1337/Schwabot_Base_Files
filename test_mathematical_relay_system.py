@@ -1,3 +1,26 @@
+        from core.mathematical_relay_integration import MathematicalRelayIntegration
+        from core.mathematical_relay_integration import MathematicalRelayIntegration
+        from core.mathematical_relay_integration import MathematicalRelayIntegration
+        from core.mathematical_relay_navigator import (
+        from core.mathematical_relay_navigator import (
+        from core.mathematical_relay_navigator import (
+        from core.mathematical_relay_navigator import MathematicalRelayNavigator
+        from core.mathematical_relay_navigator import MathematicalRelayNavigator
+import numpy as np
+        import traceback
+        import traceback
+        import traceback
+        import traceback
+        import traceback
+        import traceback
+        import traceback
+        import traceback
+from datetime import datetime
+import hashlib
+import logging
+import sys
+import time
+
 #!/usr/bin/env python3
 """
 Mathematical Relay Navigation System Test Suite
@@ -15,12 +38,6 @@ Comprehensive test of the mathematical relay navigation system, including:
 - Live API integration with connected backlogs
 """
 
-import sys
-import time
-import logging
-import hashlib
-import numpy as np
-from datetime import datetime
 
 # Configure logging
 logging.basicConfig(
@@ -35,7 +52,6 @@ def test_mathematical_relay_navigator():
     print("=" * 50)
 
     try:
-        from core.mathematical_relay_navigator import (
             MathematicalRelayNavigator,
             BitDepth,
             ChannelType,
@@ -99,7 +115,6 @@ def test_mathematical_relay_navigator():
 
     except Exception as e:
         print(f"❌ MathematicalRelayNavigator test failed: {e}")
-        import traceback
 
         traceback.print_exc()
         return False
@@ -111,7 +126,6 @@ def test_bit_depth_switching():
     print("=" * 50)
 
     try:
-        from core.mathematical_relay_navigator import (
             MathematicalRelayNavigator,
             BitDepth,
         )
@@ -178,7 +192,6 @@ def test_bit_depth_switching():
 
     except Exception as e:
         print(f"❌ Bit depth switching test failed: {e}")
-        import traceback
 
         traceback.print_exc()
         return False
@@ -190,7 +203,6 @@ def test_channel_switching():
     print("=" * 50)
 
     try:
-        from core.mathematical_relay_navigator import (
             MathematicalRelayNavigator,
             ChannelType,
         )
@@ -233,7 +245,6 @@ def test_channel_switching():
 
     except Exception as e:
         print(f"❌ Channel switching test failed: {e}")
-        import traceback
 
         traceback.print_exc()
         return False
@@ -245,7 +256,6 @@ def test_profit_navigation():
     print("=" * 50)
 
     try:
-        from core.mathematical_relay_navigator import MathematicalRelayNavigator
 
         # Create navigator
         navigator = MathematicalRelayNavigator(mode="demo", log_level="INFO")
@@ -316,7 +326,6 @@ def test_profit_navigation():
 
     except Exception as e:
         print(f"❌ Profit navigation test failed: {e}")
-        import traceback
 
         traceback.print_exc()
         return False
@@ -328,7 +337,6 @@ def test_fallback_mechanisms():
     print("=" * 50)
 
     try:
-        from core.mathematical_relay_navigator import MathematicalRelayNavigator
 
         # Create navigator
         navigator = MathematicalRelayNavigator(mode="demo", log_level="INFO")
@@ -394,7 +402,6 @@ def test_fallback_mechanisms():
 
     except Exception as e:
         print(f"❌ Fallback mechanisms test failed: {e}")
-        import traceback
 
         traceback.print_exc()
         return False
@@ -406,7 +413,6 @@ def test_mathematical_relay_integration():
     print("=" * 50)
 
     try:
-        from core.mathematical_relay_integration import MathematicalRelayIntegration
 
         # Create integration
         integration = MathematicalRelayIntegration(mode="demo", log_level="INFO")
@@ -492,7 +498,6 @@ def test_mathematical_relay_integration():
 
     except Exception as e:
         print(f"❌ MathematicalRelayIntegration test failed: {e}")
-        import traceback
 
         traceback.print_exc()
         return False
@@ -504,7 +509,6 @@ def test_information_state_management():
     print("=" * 50)
 
     try:
-        from core.mathematical_relay_integration import MathematicalRelayIntegration
 
         # Create integration
         integration = MathematicalRelayIntegration(mode="demo", log_level="INFO")
@@ -571,7 +575,6 @@ def test_information_state_management():
 
     except Exception as e:
         print(f"❌ Information state management test failed: {e}")
-        import traceback
 
         traceback.print_exc()
         return False
@@ -583,7 +586,6 @@ def test_live_api_integration():
     print("=" * 50)
 
     try:
-        from core.mathematical_relay_integration import MathematicalRelayIntegration
 
         # Create integration
         integration = MathematicalRelayIntegration(mode="demo", log_level="INFO")
@@ -653,7 +655,6 @@ def test_live_api_integration():
 
     except Exception as e:
         print(f"❌ Live API integration test failed: {e}")
-        import traceback
 
         traceback.print_exc()
         return False

@@ -1,17 +1,18 @@
+from pathlib import Path
+from typing import Dict, List
+import os
+import re
+import subprocess
+
 #!/usr/bin/env python3
 """
 Analyze missing/stubbed logic and persistent Flake8 errors in the codebase.
 Identifies the most important files that need implementation and common error patterns.
 """
 
-import os
-import re
-import subprocess
-from pathlib import Path
-from typing import Dict, List
 
 
-def get_flake8_errors() -> Dict[str, List[str]]:
+def get_flake8_errors():-> Dict[str, List[str]]:
     """Get all Flake8 errors organized by file."""
     errors_by_file = {}
 
@@ -33,7 +34,7 @@ def get_flake8_errors() -> Dict[str, List[str]]:
     return errors_by_file
 
 
-def analyze_file_content(file_path: Path) -> Dict[str, any]:
+def analyze_file_content():-> Dict[str, any]:
     """Analyze a file for missing/stubbed logic."""
     analysis = {
         "file_path": str(file_path),
@@ -104,7 +105,7 @@ def analyze_file_content(file_path: Path) -> Dict[str, any]:
     return analysis
 
 
-def identify_important_files() -> List[str]:
+def identify_important_files():-> List[str]:
     """Identify the most important files based on naming patterns."""
     important_patterns = [
         "mathlib*.py",
@@ -128,9 +129,7 @@ def identify_important_files() -> List[str]:
     return list(set(important_files))
 
 
-def analyze_common_error_patterns(
-    errors_by_file: Dict[str, List[str]],
-) -> Dict[str, int]:
+def analyze_common_error_patterns():-> Dict[str, int]:
     """Analyze common error patterns across the codebase."""
     error_patterns = {
         "E999": 0,  # Syntax errors

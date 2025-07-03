@@ -1,10 +1,17 @@
+            from core.unified_math_system import unified_math
+from core.unified_math_system import unified_math
+from core.unified_mathematical_trading_controller import UnifiedMathematicalTradingController
+from core.bit_phase_sequencer import BitPhase, BitSequence
+from core.dual_error_handler import PhaseState, SickType, SickState
+from core.ferris_wheel_engine import FerrisWheelEngine
+from core.symbolic_profit_router import ProfitTier, FlipBias, SymbolicState
 from dataclasses import dataclass
 from dual_unicore_handler import DualUnicoreHandler
 from typing import Dict, Any, List
 import logging
 import time
 
-from core.unified_math_system import unified_math
+
 
 
 
@@ -30,13 +37,8 @@ and validation of results using 2 - bit phase logic system."""
 )
 
 # Import 2 - bit phase logic system
-from core.bit_phase_sequencer import BitPhase, BitSequence
-from core.symbolic_profit_router import ProfitTier, FlipBias, SymbolicState
-from core.dual_error_handler import PhaseState, SickType, SickState
 
 # Import trading controllers
-from core.unified_mathematical_trading_controller import UnifiedMathematicalTradingController
-from core.ferris_wheel_engine import FerrisWheelEngine
 
 # Import safe print for Windows compatibility
 try:
@@ -188,7 +190,7 @@ self.test_cases = [
 ]
 logger.info("💰 Profit Vector Calibration Test initialized with 2 - bit phase logic")
 
-def test_profit_calculation_accuracy(self) -> Dict[str, Any]:
+def test_profit_calculation_accuracy():-> Dict[str, Any]:
     """Function implementation pending."""
 pass
 """
@@ -293,7 +295,7 @@ if results['success']:
 
 return results
 
-def _get_phase_multiplier(self, phase_state: PhaseState) -> float:
+def _get_phase_multiplier():-> float:
     """Function implementation pending."""
 pass
 """
@@ -306,7 +308,7 @@ phase_multipliers = {
             PhaseState.BIT_256: 2.0  # High - frequency logic
 return phase_multipliers.get(phase_state, 1.0)
 
-def test_profit_memory_integration(self) -> Dict[str, Any]:"""
+def test_profit_memory_integration():-> Dict[str, Any]:"""
     """Function implementation pending."""
 pass
 """
@@ -384,7 +386,7 @@ if results['success']:
 
 return results
 
-def _get_profit_summary(self) -> tuple:
+def _get_profit_summary():-> tuple:
     """Function implementation pending."""
 pass
 """
@@ -397,7 +399,7 @@ try:
         except Exception:
             return (0.0, 0.0, 0.0)
 
-def test_ferris_wheel_integration(self) -> Dict[str, Any]:"""
+def test_ferris_wheel_integration():-> Dict[str, Any]:"""
     """Function implementation pending."""
 pass
 """
@@ -459,7 +461,7 @@ if results['success']:
 
 return results
 
-def test_ghost_signal_detection(self) -> Dict[str, Any]:
+def test_ghost_signal_detection():-> Dict[str, Any]:
     """Function implementation pending."""
 pass
 """
@@ -533,7 +535,7 @@ if results['success']:
 
 return results
 
-def run_comprehensive_test(self) -> Dict[str, Any]:
+def run_comprehensive_test():-> Dict[str, Any]:
     """Function implementation pending."""
 pass
 """
@@ -579,7 +581,7 @@ return comprehensive_result
 
 
 # Global test function for registry
-def test_profit_vector_calibration() -> Dict[str, Any]:
+def test_profit_vector_calibration():-> Dict[str, Any]:
         """
         Calculate profit optimization for BTC trading.
         
@@ -593,7 +595,6 @@ def test_profit_vector_calibration() -> Dict[str, Any]:
         """
         try:
             # Import unified math system
-            from core.unified_math_system import unified_math
             
             # Calculate profit using unified mathematical framework
             base_profit = price_data * volume_data * 0.001  # 0.1% base

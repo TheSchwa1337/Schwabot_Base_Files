@@ -1,10 +1,18 @@
+        from core.unified_math_system import UnifiedMathSystem
+        from core.dual_unicore_handler import DualUnicoreHandler
+        from core.dualistic_thought_engines import DualisticThoughtEngines
+        from core.phase_bit_integration import PhaseBitIntegration
+        from core.price_precision_utils import format_price
+        from core.unified_api_coordinator import ExchangeType, UnifiedApiCoordinator
+        from core.unified_profit_vectorization_system import (
+import sys
+import traceback
+
 #!/usr/bin/env python3
 """
 Test script to verify all core module imports and basic functionality.
 """
 
-import sys
-import traceback
 
 
 def test_imports():
@@ -60,34 +68,29 @@ def test_functionality():
 
     try:
         # Test UnifiedMathSystem
-        from core.unified_math_system import UnifiedMathSystem
 
         math_system = UnifiedMathSystem()
         result = math_system.add(10.5, 5.2)
         print(f"✅ Math system add: {result}")
 
         # Test price formatting
-        from core.price_precision_utils import format_price
 
         formatted_price = format_price(50321.123456789, decimals=6)
         print(f"✅ Price formatting: {formatted_price}")
 
         # Test exchange types
-        from core.unified_api_coordinator import ExchangeType, UnifiedApiCoordinator
 
         coordinator = UnifiedApiCoordinator()
         coordinator.add_exchange(ExchangeType.COINBASE, {"api_key": "test"})
         print(f"✅ API coordinator: {len(coordinator.exchanges)} exchanges")
 
         # Test phase bit integration
-        from core.phase_bit_integration import PhaseBitIntegration
 
         phase_system = PhaseBitIntegration()
         result = phase_system.resolve_bit_phase("test_data", "auto")
         print(f"✅ Phase bit integration: {result.bit_phase.value}")
 
         # Test profit vectorization
-        from core.unified_profit_vectorization_system import (
             UnifiedProfitVectorizationSystem,
         )
 
@@ -97,7 +100,6 @@ def test_functionality():
         print(f"✅ Profit vectorization: efficiency {result.profit_efficiency:.3f}")
 
         # Test dual core handler
-        from core.dual_unicore_handler import DualUnicoreHandler
 
         handler = DualUnicoreHandler(max_workers=2)
         math_result = handler.execute_mathematical_operation(
@@ -107,7 +109,6 @@ def test_functionality():
         print(f"✅ Dual core handler: mean = {math_result['result']:.2f}")
 
         # Test dualistic thought engines
-        from core.dualistic_thought_engines import DualisticThoughtEngines
 
         engines = DualisticThoughtEngines()
 

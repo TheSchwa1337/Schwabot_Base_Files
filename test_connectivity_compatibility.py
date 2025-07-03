@@ -1,3 +1,14 @@
+from core.unified_math_system import unified_math
+import numpy as np
+from core.gpu_cpu_calculation_bridge import (
+from core.gpu_offload_manager import GPUOffloadManager
+from dataclasses import dataclass
+from typing import Dict, List, Any
+from utils.safe_print import safe_print, warn, error, success
+import logging
+import sys
+import time
+
 #!/usr/bin/env python3
 """
 Connectivity and Compatibility Test Suite
@@ -8,24 +19,14 @@ improvements between GPU and CPU systems, ensuring consistent functionality
 as in the legacy system.
 """
 
-import sys
-import time
-import logging
-import numpy as np
-from typing import Dict, List, Any
-from dataclasses import dataclass
 
 # Add the project root to the path
 sys.path.insert(0, ".")
 
-from core.gpu_cpu_calculation_bridge import (
     get_gpu_cpu_bridge,
     ExecutionPath,
     ThermalState,
 )
-from core.gpu_offload_manager import GPUOffloadManager
-from core.unified_math_system import unified_math
-from utils.safe_print import safe_print, warn, error, success
 
 # Configure logging
 logging.basicConfig(
@@ -60,7 +61,7 @@ class ConnectivityCompatibilityTester:
         self.gpu_manager = GPUOffloadManager()
         self.test_results: List[TestResult] = []
 
-    def run_all_tests(self) -> Dict[str, Any]:
+    def run_all_tests():-> Dict[str, Any]:
         """Run all connectivity and compatibility tests."""
         safe_print("🔗 Starting Connectivity and Compatibility Test Suite")
         safe_print("=" * 60)
@@ -106,7 +107,7 @@ class ConnectivityCompatibilityTester:
         self._print_summary(results)
         return results
 
-    def test_calculation_consistency(self) -> bool:
+    def test_calculation_consistency():-> bool:
         """Test that GPU and CPU calculations produce consistent results."""
         try:
             # Test matrix multiplication
@@ -148,7 +149,7 @@ class ConnectivityCompatibilityTester:
             logger.error(f"Error in calculation consistency test: {e}")
             return False
 
-    def test_thermal_state_integration(self) -> bool:
+    def test_thermal_state_integration():-> bool:
         """Test thermal state management integration."""
         try:
             # Test thermal state updates
@@ -208,7 +209,7 @@ class ConnectivityCompatibilityTester:
             logger.error(f"Error in thermal state integration test: {e}")
             return False
 
-    def test_error_recovery(self) -> bool:
+    def test_error_recovery():-> bool:
         """Test error recovery mechanisms."""
         try:
             # Test GPU fallback when GPU is not available
@@ -245,7 +246,7 @@ class ConnectivityCompatibilityTester:
             logger.error(f"Error in error recovery test: {e}")
             return False
 
-    def test_memory_management(self) -> bool:
+    def test_memory_management():-> bool:
         """Test memory management functionality."""
         try:
             # Test GPU memory usage tracking
@@ -278,7 +279,7 @@ class ConnectivityCompatibilityTester:
             logger.error(f"Error in memory management test: {e}")
             return False
 
-    def test_legacy_compatibility(self) -> bool:
+    def test_legacy_compatibility():-> bool:
         """Test legacy system compatibility."""
         try:
             # Test that unified math system still works
@@ -313,7 +314,7 @@ class ConnectivityCompatibilityTester:
             logger.error(f"Error in legacy compatibility test: {e}")
             return False
 
-    def test_performance_monitoring(self) -> bool:
+    def test_performance_monitoring():-> bool:
         """Test performance monitoring functionality."""
         try:
             # Get initial performance stats
@@ -350,7 +351,7 @@ class ConnectivityCompatibilityTester:
             logger.error(f"Error in performance monitoring test: {e}")
             return False
 
-    def test_gpu_cpu_fallback(self) -> bool:
+    def test_gpu_cpu_fallback():-> bool:
         """Test GPU to CPU fallback mechanisms."""
         try:
             # Test bit phase resolution
@@ -382,7 +383,7 @@ class ConnectivityCompatibilityTester:
             logger.error(f"Error in GPU-CPU fallback test: {e}")
             return False
 
-    def test_matrix_operations(self) -> bool:
+    def test_matrix_operations():-> bool:
         """Test matrix operations consistency."""
         try:
             test_matrix = np.random.rand(15, 15)
@@ -433,7 +434,7 @@ class ConnectivityCompatibilityTester:
             logger.error(f"Error in matrix operations test: {e}")
             return False
 
-    def test_wave_entropy(self) -> bool:
+    def test_wave_entropy():-> bool:
         """Test wave entropy calculation consistency."""
         try:
             test_sequences = [[1.0, 2.0, 3.0, 4.0], [0.5, 1.5, 2.5, 3.5]]
@@ -470,7 +471,7 @@ class ConnectivityCompatibilityTester:
             logger.error(f"Error in wave entropy test: {e}")
             return False
 
-    def test_tensor_scores(self) -> bool:
+    def test_tensor_scores():-> bool:
         """Test tensor score calculation consistency."""
         try:
             entry_prices = [100.0, 200.0, 300.0]

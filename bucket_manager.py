@@ -1,6 +1,7 @@
-# bucket_manager.py
-import yaml
 from pathlib import Path
+import yaml
+
+# bucket_manager.py
 
 
 class BucketManager:

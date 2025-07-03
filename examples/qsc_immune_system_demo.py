@@ -1,3 +1,12 @@
+from core.master_cycle_engine import MasterCycleEngine
+from core.qsc_enhanced_profit_allocator import (
+from pathlib import Path
+from server.qsc_diagnostic_websocket import QSCDiagnosticServer
+from typing import Dict, Any
+from utils.logging_setup import setup_logging
+import asyncio
+import sys
+
 #!/usr/bin/env python3
 """QSC + GTS Immune System Demo.
 
@@ -13,21 +22,13 @@ This demo shows:
 6. Complete trading decision flow
 """
 
-import asyncio
-from typing import Dict, Any
-import sys
-from pathlib import Path
 
 # Add project root to path
 project_root = Path(__file__).parent.parent
 sys.path.append(str(project_root))
 
-from core.master_cycle_engine import MasterCycleEngine
-from core.qsc_enhanced_profit_allocator import (
     QSCEnhancedProfitAllocator,
 )
-from server.qsc_diagnostic_websocket import QSCDiagnosticServer
-from utils.logging_setup import setup_logging
 
 # Setup logging
 logger = setup_logging(__name__)
@@ -53,7 +54,7 @@ class QSCImmuneSystemDemo:
 
         logger.info("🧬🎯 QSC Immune System Demo initialized")
 
-    def generate_scenario_data(self, scenario: str) -> Dict[str, Any]:
+    def generate_scenario_data():-> Dict[str, Any]:
         """Generate market data for different test scenarios."""
         base_data = {
             "btc_price": 51200.0,
@@ -164,7 +165,7 @@ class QSCImmuneSystemDemo:
 
         return base_data
 
-    def analyze_scenario_results(self, scenario: str, diagnostics) -> None:
+    def analyze_scenario_results():-> None:
         """Analyze and explain the results of each scenario."""
         print(f"\n🔬 Analysis of {scenario.replace('_', ' ').title()} Scenario:")
 
@@ -214,7 +215,7 @@ class QSCImmuneSystemDemo:
             else:
                 print("  ⚠️ System still in protective mode")
 
-    async def run_scenario_sequence(self) -> None:
+    async def run_scenario_sequence():-> None:
         """Run through all test scenarios sequentially."""
         print("🧬🎯 Starting QSC + GTS Immune System Demo")
         print("=" * 70)
@@ -251,7 +252,7 @@ class QSCImmuneSystemDemo:
         print(f"  Ghost Floor Activations: {final_status['ghost_floor_activations']}")
         print(f"  Emergency Shutdowns: {final_status['emergency_shutdowns']}")
 
-    async def run_profit_allocation_demo(self) -> None:
+    async def run_profit_allocation_demo():-> None:
         """Demonstrate QSC-enhanced profit allocation."""
         print("\n💰 QSC-Enhanced Profit Allocation Demo")
         print("-" * 50)
@@ -283,7 +284,7 @@ class QSCImmuneSystemDemo:
             print(f"  Immune Approved: {cycle.immune_approved}")
             print(f"  Resonance Score: {cycle.resonance_score:.3f}")
 
-    async def run_websocket_demo(self) -> None:
+    async def run_websocket_demo():-> None:
         """Demonstrate WebSocket diagnostic streaming."""
         print("\n📡 WebSocket Diagnostic Streaming Demo")
         print("-" * 50)
@@ -308,7 +309,7 @@ class QSCImmuneSystemDemo:
 
         await self.qsc_server.stop_server()
 
-    async def run_fibonacci_echo_demo(self) -> None:
+    async def run_fibonacci_echo_demo():-> None:
         """Demonstrate Fibonacci echo visualization data."""
         print("\n📈 Fibonacci Echo Visualization Demo")
         print("-" * 50)
@@ -337,7 +338,7 @@ class QSCImmuneSystemDemo:
         else:
             print("📊 No echo data available yet")
 
-    async def run_complete_demo(self) -> None:
+    async def run_complete_demo():-> None:
         """Run the complete comprehensive demo."""
         print("🧬⚡ Starting Complete QSC + GTS Immune System Demo")
         print("=" * 80)

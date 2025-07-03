@@ -1,3 +1,8 @@
+import numpy as np
+        import traceback
+import os
+import sys
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -6,9 +11,6 @@ Simple Mathematical State Test
 Direct test of mathematical state structures without complex imports.
 """
 
-import numpy as np
-import sys
-import os
 
 # Add the core directory to the path
 sys.path.append(os.path.join(os.path.dirname(__file__), "core"))
@@ -267,7 +269,6 @@ def test_mathematical_structures():
 
     except Exception as e:
         print(f"\n❌ Test failed with error: {e}")
-        import traceback
 
         traceback.print_exc()
         return False
@@ -276,3 +277,4 @@ def test_mathematical_structures():
 if __name__ == "__main__":
     success = test_mathematical_structures()
     exit(0 if success else 1)
+)

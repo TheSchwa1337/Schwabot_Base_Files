@@ -1,3 +1,7 @@
+import numpy as np
+from datetime import datetime
+from typing import Dict, List, Optional
+
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 
@@ -22,10 +26,7 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 Monitors and controls adversarial entropy flow Ψ_sec in Schwabot's defense system.
 Implements vector field analysis for entropy detection and response.from dataclasses import dataclass
-from datetime import datetime
-from typing import Dict, List, Optional
 
-import numpy as np
 
 
 @dataclass
@@ -39,7 +40,7 @@ class EntropyField:Represents the Ψ_sec vector field for adversarial entropy co
 class EntropyMonitor:Monitors and analyzes adversarial entropy flow Ψ_sec.
 
     This class implements the mathematical containment for Ψ_sec,
-    which represents the vector field of adversarial entropy control.def __init__(self:EntropyMonitor, config: Optional[Dict] = None) -> None:Initialize the entropy monitor.
+    which represents the vector field of adversarial entropy control.def __init__():-> None:Initialize the entropy monitor.
 
         Args:
             config: Configuration dictionary for entropy monitoringself.config = config or {}
@@ -47,7 +48,7 @@ class EntropyMonitor:Monitors and analyzes adversarial entropy flow Ψ_sec.
         self.field_history: List[EntropyField] = []
         self.alert_level = 0.0
 
-    def calculate_adversarial_entropy(self: EntropyMonitor, vector_field: np.ndarray) -> float:Ψ_sec models adversarial entropy detection from vector field Ψ.
+    def calculate_adversarial_entropy():-> float:Ψ_sec models adversarial entropy detection from vector field Ψ.
 
         Args:
             vector_field: Input vector field representing market entropy
@@ -71,9 +72,7 @@ class EntropyMonitor:Monitors and analyzes adversarial entropy flow Ψ_sec.
             print(fError calculating adversarial entropy: {e})
             return 0.0
 
-    def analyze_entropy_field(
-        self: EntropyMonitor, market_data: Dict[str, float]
-    ) -> EntropyField:
+    def analyze_entropy_field():-> EntropyField:
         Analyze market data to extract entropy field characteristics.
 
         Args:
@@ -126,7 +125,7 @@ class EntropyMonitor:Monitors and analyzes adversarial entropy flow Ψ_sec.
                 timestamp=datetime.now(),
             )
 
-    def detect_entropy_anomaly(self: EntropyMonitor, current_field: EntropyField) -> bool:
+    def detect_entropy_anomaly():-> bool:
         Detect anomalies in entropy field patterns.
 
         Args:
@@ -145,7 +144,7 @@ class EntropyMonitor:Monitors and analyzes adversarial entropy flow Ψ_sec.
 
         return anomaly
 
-    def get_entropy_report(self: EntropyMonitor) -> Dict[str, float]:
+    def get_entropy_report():-> Dict[str, float]:
 
         Generate comprehensive entropy monitoring report.
 

@@ -1,3 +1,12 @@
+from core.clean_math_foundation import (
+import numpy as np
+from core.clean_profit_vectorization import (
+from core.clean_trading_pipeline import (
+from typing import Dict, Any
+import asyncio
+import logging
+import time
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -6,21 +15,13 @@ Demonstration of the Clean Schwabot Trading System.
 This script demonstrates the fully functional, clean implementation of the
 Schwabot trading system with all mathematical components working correctly.
 """
-import asyncio
-import logging
-import time
-from typing import Dict, Any
 
-import numpy as np
 
 # Import our clean implementations
-from core.clean_math_foundation import (
     CleanMathFoundation, MathOperation, ThermalState, BitPhase, create_math_foundation
 )
-from core.clean_profit_vectorization import (
     CleanProfitVectorization, VectorizationMode, create_profit_vectorizer
 )
-from core.clean_trading_pipeline import (
     CleanTradingPipeline, MarketData, StrategyBranch, create_trading_pipeline, run_trading_simulation
 )
 

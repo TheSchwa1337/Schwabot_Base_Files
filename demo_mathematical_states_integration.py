@@ -1,3 +1,8 @@
+from core.glyph.glyph_entropy_system import GlyphEntropySystem
+from core.trading_pipeline_integration import TradingPipelineIntegration
+import asyncio
+import logging
+
 # -*- coding: utf-8 -*-
 """
 Demo Script for Comprehensive Mathematical States Integration in Schwabot's Trading Pipeline.
@@ -11,14 +16,10 @@ It simulates market data and showcases how these mathematical models contribute
 to the overall trading decision-making process.
 """
 
-import asyncio
-import logging
 
 # Import core components
-from core.trading_pipeline_integration import TradingPipelineIntegration
 
 # To directly interact for state history
-from core.glyph.glyph_entropy_system import GlyphEntropySystem
 
 # Setup logging
 logging.basicConfig(

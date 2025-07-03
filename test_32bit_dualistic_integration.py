@@ -1,3 +1,9 @@
+        import traceback
+from core.ferris_rde_core import FerrisPhase, FerrisRDECore
+from core.phase_bit_integration import (
+from core.unified_profit_vectorization_system import (
+import logging
+
 #!/usr/bin/env python3
 """
 Test 32-bit Dualistic Phase Switching Integration
@@ -8,17 +14,13 @@ profit vectorization pipeline for dynamic profit vectorization management
 through mathematical portals where relevant.
 """
 
-import logging
 
 # Import the enhanced systems
-from core.phase_bit_integration import (
     PhaseBitIntegration,
     resolve_bit_phases,
     process_hash_with_phase,
     get_phase_optimized_strategy,
 )
-from core.ferris_rde_core import FerrisPhase, FerrisRDECore
-from core.unified_profit_vectorization_system import (
     UnifiedProfitVectorizationSystem,
     calculate_profit_vectorization,
     get_32bit_dualistic_status,
@@ -309,6 +311,5 @@ if __name__ == "__main__":
 
     except Exception as e:
         print(f"\n❌ Test failed: {e}")
-        import traceback
 
         traceback.print_exc()

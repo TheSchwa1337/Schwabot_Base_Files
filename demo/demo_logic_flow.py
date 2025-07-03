@@ -1,3 +1,23 @@
+            from core.unified_math_system import unified_math
+from core.unified_math_system import unified_math
+from core.unified_math_system import unified_math
+from dataclasses import dataclass, asdict
+from datetime import datetime, timedelta
+from demo.demo_trade_sequence import get_demo_trade_sequence
+from enum import Enum
+from pathlib import Path
+from settings.matrix_allocator import get_matrix_allocator
+from settings.settings_controller import get_settings_controller
+from settings.vector_validator import get_vector_validator
+from typing import Dict, List, Any, Optional, Tuple
+from utils.safe_print import safe_print, info, warn, error, success, debug
+import asyncio
+import hashlib
+import json
+import threading
+import time
+import yaml
+
 # -*- coding: utf-8 -*-
 """"""
 """"""
@@ -12,8 +32,6 @@
 """"""
 """
 
-from core.unified_math_system import unified_math
-from utils.safe_print import safe_print, info, warn, error, success, debug
 
 
 Schwabot Demo Logic Flow Module
@@ -25,23 +43,7 @@ Provides comprehensive logic flow management with integration to all demo compon
 """"""
 """
 
-import json
-import yaml
-from core.unified_math_system import unified_math
-from typing import Dict, List, Any, Optional, Tuple
-from dataclasses import dataclass, asdict
-from datetime import datetime, timedelta
-import hashlib
-from pathlib import Path
-import threading
-import time
-import asyncio
-from enum import Enum
 
-from settings.settings_controller import get_settings_controller
-from settings.vector_validator import get_vector_validator
-from settings.matrix_allocator import get_matrix_allocator
-from demo.demo_trade_sequence import get_demo_trade_sequence
 
 
 class FlowStep(Enum):
@@ -229,7 +231,7 @@ flows_data = [asdict(flow) for flow in self.completed_flows]"""
 except Exception as e:
             safe_print(f"Error saving flow data: {e}")
 
-def create_logic_flow(self, flow_type: str, metadata: Dict[str, Any] = None) -> LogicFlow:
+def create_logic_flow():-> LogicFlow:
     """Function implementation pending."""
 pass
 """
@@ -281,7 +283,7 @@ flow = LogicFlow(
 self.active_flows[flow_id] = flow
         return flow
 
-async def execute_logic_flow(self, flow: LogicFlow, input_data: Dict[str, Any] = None) -> Dict[str, Any]:
+async def execute_logic_flow():-> Dict[str, Any]:
         """Execute a complete logic flow""""""
 """"""
 """
@@ -343,7 +345,7 @@ return {
             "results": [asdict(result) for result in flow.results],
             "final_data": current_data
 
-async def _execute_flow_step(self, step: FlowStep, input_data: Dict[str, Any], flow: LogicFlow) -> FlowStepResult:
+async def _execute_flow_step():-> FlowStepResult:
         """Execute a single flow step""""""
 """"""
 """
@@ -398,7 +400,7 @@ return FlowStepResult(
             metadata={}
         )
 
-async def _execute_market_analysis(self, input_data: Dict[str, Any]) -> Dict[str, Any]:
+async def _execute_market_analysis():-> Dict[str, Any]:
         """Execute market analysis step""""""
 """"""
 """
@@ -429,7 +431,7 @@ analysis_result = {
 
 return {"market_analysis": analysis_result}
 
-async def _execute_overlay_application(self, input_data: Dict[str, Any]) -> Dict[str, Any]:
+async def _execute_overlay_application():-> Dict[str, Any]:
         """Execute overlay application step""""""
 """"""
 """
@@ -479,7 +481,7 @@ if technical_indicators.get("volume_spike", 1.0) > 2.0:
 
 return {"overlay_signals": overlays}
 
-async def _execute_vector_validation(self, input_data: Dict[str, Any]) -> Dict[str, Any]:
+async def _execute_vector_validation():-> Dict[str, Any]:
         """Execute vector validation step""""""
 """"""
 """
@@ -512,7 +514,7 @@ return {
             "validation_results": validation_results,
             "validated_vectors": valid_signals
 
-async def _execute_matrix_allocation(self, input_data: Dict[str, Any]) -> Dict[str, Any]:
+async def _execute_matrix_allocation():-> Dict[str, Any]:
         """Execute matrix allocation step""""""
 """"""
 """
@@ -545,7 +547,7 @@ return {
             "allocation_decisions": allocation_decisions,
             "allocated_signals": allocated_signals
 
-async def _execute_trade_execution(self, input_data: Dict[str, Any]) -> Dict[str, Any]:
+async def _execute_trade_execution():-> Dict[str, Any]:
         """Execute trade execution step""""""
 """"""
 """
@@ -578,7 +580,7 @@ return {
             "execution_results": execution_results,
             "successful_executions": [result for result in execution_results if result["success"]]
 
-async def _execute_position_monitoring(self, input_data: Dict[str, Any]) -> Dict[str, Any]:
+async def _execute_position_monitoring():-> Dict[str, Any]:
         """Execute position monitoring step""""""
 """"""
 """
@@ -604,7 +606,7 @@ return {
             "monitoring_results": monitoring_results,
             "active_positions": len(active_positions)
 
-async def _execute_exit_decision(self, input_data: Dict[str, Any]) -> Dict[str, Any]:
+async def _execute_exit_decision():-> Dict[str, Any]:
         """Execute exit decision step""""""
 """"""
 """
@@ -655,7 +657,7 @@ return {
             "exit_decisions": exit_decisions,
             "positions_to_exit": [decision for decision in exit_decisions if decision["should_exit"]]
 
-async def _execute_position_closure(self, input_data: Dict[str, Any]) -> Dict[str, Any]:
+async def _execute_position_closure():-> Dict[str, Any]:
         """Execute position closure step""""""
 """"""
 """
@@ -684,7 +686,7 @@ return {
             "closure_results": closure_results,
             "closed_positions": len(closure_results)
 
-async def _execute_performance_recording(self, input_data: Dict[str, Any]) -> Dict[str, Any]:
+async def _execute_performance_recording():-> Dict[str, Any]:
         """Execute performance recording step""""""
 """"""
 """
@@ -704,7 +706,7 @@ return {
             "performance_data": performance_data,
             "metrics_recorded": True
 
-async def _execute_reinforcement_learning(self, input_data: Dict[str, Any]) -> Dict[str, Any]:
+async def _execute_reinforcement_learning():-> Dict[str, Any]:
         """Execute reinforcement learning step""""""
 """"""
 """
@@ -780,7 +782,7 @@ if result.execution_time:
 
 self.flow_performance["step_performance"] = step_performance
 
-async def run_complete_demo_cycle(self, num_cycles: int = 3) -> Dict[str, Any]:
+async def run_complete_demo_cycle():-> Dict[str, Any]:
         """Run a complete demo cycle with entry, exit, and reinforcement learning flows""""""
 """"""
 """
@@ -824,7 +826,7 @@ safe_print(f"\\n\\u1f4ca Demo cycle completed: {num_cycles} cycles")
 
 return report
 
-def generate_flow_report(self, cycle_results: List[Dict[str, Any]] = None) -> Dict[str, Any]:
+def generate_flow_report():-> Dict[str, Any]:
     """Function implementation pending."""
 pass
 """
@@ -847,7 +849,7 @@ report = {"""
 
 return report
 
-def _generate_flow_recommendations(self) -> List[str]:
+def _generate_flow_recommendations():-> List[str]:
     """Function implementation pending."""
 pass
 """
@@ -873,7 +875,7 @@ if not recommendations:
 return recommendations
 
 
-def get_demo_logic_flow() -> DemoLogicFlow:
+def get_demo_logic_flow():-> DemoLogicFlow:
         """
         Calculate profit optimization for BTC trading.
         
@@ -887,7 +889,6 @@ def get_demo_logic_flow() -> DemoLogicFlow:
         """
         try:
             # Import unified math system
-            from core.unified_math_system import unified_math
             
             # Calculate profit using unified mathematical framework
             base_profit = price_data * volume_data * 0.001  # 0.1% base

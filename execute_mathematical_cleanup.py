@@ -1,3 +1,6 @@
+from core.bit_phase_sequencer import BitPhase, BitSequence
+from core.dual_error_handler import PhaseState, SickType, SickState
+from core.symbolic_profit_router import ProfitTier, FlipBias, SymbolicState
 from datetime import datetime
 from dual_unicore_handler import DualUnicoreHandler
 from pathlib import Path
@@ -7,9 +10,7 @@ import logging
 import os
 import shutil
 
-from core.bit_phase_sequencer import BitPhase, BitSequence
-from core.dual_error_handler import PhaseState, SickType, SickState
-from core.symbolic_profit_router import ProfitTier, FlipBias, SymbolicState
+
 
 
 # Initialize Unicode handler

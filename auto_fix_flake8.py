@@ -1,3 +1,9 @@
+from datetime import datetime
+from typing import List
+import os
+import shutil
+import subprocess
+
 #!/usr/bin/env python3
 """
 Schwabot Flake8 Auto-Fix System
@@ -14,11 +20,6 @@ Features:
 - Handles critical vs auto-fixable errors differently
 """
 
-import os
-import subprocess
-import shutil
-from datetime import datetime
-from typing import List
 
 # Mathematical keywords that should be preserved
 MATH_PRESERVATION_KEYWORDS = {
@@ -154,7 +155,7 @@ class Flake8AutoFixer:
             f"auto_fix_log_{datetime.now().strftime('%Y%m%d_%H%M%S')}.md"
         )
 
-    def create_backup(self, filepath: str) -> str:
+    def create_backup():-> str:
         """Create a backup of a file before modifying it."""
         if not os.path.exists(self.backup_dir):
             os.makedirs(self.backup_dir)
@@ -165,7 +166,7 @@ class Flake8AutoFixer:
         shutil.copy2(filepath, backup_path)
         return backup_path
 
-    def is_math_relevant_file(self, filepath: str) -> bool:
+    def is_math_relevant_file():-> bool:
         """Check if a file contains mathematical content."""
         try:
             with open(filepath, "r", encoding="utf-8", errors="ignore") as f:
@@ -174,7 +175,7 @@ class Flake8AutoFixer:
         except Exception:
             return False
 
-    def run_autopep8(self, filepath: str) -> bool:
+    def run_autopep8():-> bool:
         """Run autopep8 on a file to fix formatting issues."""
         try:
             # Create backup first
@@ -227,7 +228,7 @@ class Flake8AutoFixer:
             print(f"Error running autopep8 on {filepath}: {e}")
             return False
 
-    def fix_imports(self, filepath: str) -> bool:
+    def fix_imports():-> bool:
         """Fix import-related issues."""
         try:
             with open(filepath, "r", encoding="utf-8") as f:
@@ -285,7 +286,7 @@ class Flake8AutoFixer:
             print(f"Error fixing imports in {filepath}: {e}")
             return False
 
-    def fix_trailing_whitespace(self, filepath: str) -> bool:
+    def fix_trailing_whitespace():-> bool:
         """Fix trailing whitespace issues."""
         try:
             with open(filepath, "r", encoding="utf-8") as f:
@@ -330,7 +331,7 @@ class Flake8AutoFixer:
             print(f"Error fixing whitespace in {filepath}: {e}")
             return False
 
-    def get_python_files(self) -> List[str]:
+    def get_python_files():-> List[str]:
         """Get all Python files in the codebase."""
         python_files = []
         for base_dir in CODEBASE_DIRS:
@@ -341,7 +342,7 @@ class Flake8AutoFixer:
                             python_files.append(os.path.join(root, file))
         return python_files
 
-    def generate_fix_report(self) -> str:
+    def generate_fix_report():-> str:
         """Generate a report of all changes made."""
         report = []
         report.append("# Schwabot Flake8 Auto-Fix Report\n")

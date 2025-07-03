@@ -1,3 +1,16 @@
+    from core_backup.chrono_resonance_mapper import ChronoResonanceMapper
+    from core_backup.memory_allocation_manager import (
+    from core_backup.persistent_state_manager import PersistentStateManager
+    from core_backup.secure_api_manager import APIType, SecureAPIManager, SecurityLevel
+from pathlib import Path
+from tkinter import ttk
+from typing import Any, Dict, Optional
+import os
+import psutil
+import sys
+import time
+import tkinter as tk
+
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 
@@ -28,28 +41,16 @@ This is the main launcher that provides:
 4. ChronoResonance Weather Mapping (CRWM) integration
 5. Complete system monitoring and control
 6. Safe file path management and installation handlingimport logging
-import os
-import sys
-import time
-import tkinter as tk
-from pathlib import Path
-from tkinter import ttk
-from typing import Any, Dict, Optional
 
-import psutil
 
 # Add project paths
 sys.path.append(str(Path(__file__).parent.parent))
 
 # Import core components
 try:
-    from core_backup.chrono_resonance_mapper import ChronoResonanceMapper
-    from core_backup.secure_api_manager import APIType, SecureAPIManager, SecurityLevel
-    from core_backup.memory_allocation_manager import (
         DataCategory,
         MemoryAllocationManager,
     )
-    from core_backup.persistent_state_manager import PersistentStateManager
 
     PROFIT_COMPONENTS_AVAILABLE = True
 except ImportError: PROFIT_COMPONENTS_AVAILABLE = False
@@ -96,7 +97,7 @@ class SchwabotIntegratedLauncher:
 
         logger.info(🚀 Schwabot Integrated Launcher initialized)
 
-    def _load_default_config(self) -> Dict[str, Any]:Load default configuration.return {security: {encryption_enabled: True,api_timeout_seconds: 30,max_retry_attempts": 3,
+    def _load_default_config():-> Dict[str, Any]:Load default configuration.return {security: {encryption_enabled: True,api_timeout_seconds: 30,max_retry_attempts": 3,
             },data_pipeline": {short_term_retention_hours: 24,mid_term_retention_days": 7,long_term_retention_days": 30,max_ram_usage_mb": 500,compression_enabled": True,
             },visualization": {real_time_updates: True,update_interval_ms": 1000,max_chart_points": 1000,
             },apis": {coinmarketcap: {enabled: False,security_level":low},openweather": {enabled: False,security_level":low},newsapi": {enabled: False,security_level":medium},twitter": {enabled: False,security_level":high},exchange_apis": {enabled: False,security_level":high},
@@ -104,7 +105,7 @@ class SchwabotIntegratedLauncher:
             },
         }
 
-    def _get_installation_path(self) -> Path:Get or create installation path.# Try to get from environment
+    def _get_installation_path():-> Path:Get or create installation path.# Try to get from environment
         install_path = os.environ.get(SCHWABOT_INSTALL_PATH)
         if install_path and Path(install_path).exists():
             return Path(install_path)
@@ -760,7 +761,7 @@ class SchwabotIntegratedLauncher:
             messagebox.showerror(Error, f"Failed to save settings: {e})
 
     # Helper methods
-    def _is_system_active(self) -> bool:Check if system is active.return PROFIT_COMPONENTS_AVAILABLE and API_COMPONENTS_AVAILABLE and DATA_PIPELINE_AVAILABLE
+    def _is_system_active():-> bool:Check if system is active.return PROFIT_COMPONENTS_AVAILABLE and API_COMPONENTS_AVAILABLE and DATA_PIPELINE_AVAILABLE
 
     def _get_api_type_from_key():Get API type from key name.api_type_map = {coinmarketcap: APIType.COINMARKETCAP,openweather: APIType.COINMARKETCAP,  # Placeholder
             newsapi: APIType.INTRAPEAT,  # Placeholder

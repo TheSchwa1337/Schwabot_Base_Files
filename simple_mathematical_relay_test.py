@@ -1,3 +1,16 @@
+        from core.mathematical_relay_integration import MathematicalRelayIntegration
+        from core.mathematical_relay_navigator import (
+        from core.mathematical_relay_navigator import (
+        from core.mathematical_relay_navigator import MathematicalRelayNavigator
+        import traceback
+        import traceback
+        import traceback
+        import traceback
+from datetime import datetime
+import hashlib
+import logging
+import sys
+
 #!/usr/bin/env python3
 """
 Simple Mathematical Relay Navigation Test
@@ -6,10 +19,6 @@ Simple Mathematical Relay Navigation Test
 Basic test of the mathematical relay navigation system functionality.
 """
 
-import sys
-import logging
-import hashlib
-from datetime import datetime
 
 # Configure logging
 logging.basicConfig(
@@ -23,7 +32,6 @@ def test_mathematical_relay_navigator():
     print("=" * 50)
 
     try:
-        from core.mathematical_relay_navigator import (
             MathematicalRelayNavigator,
             BitDepth,
             ChannelType,
@@ -87,7 +95,6 @@ def test_mathematical_relay_navigator():
 
     except Exception as e:
         print(f"❌ MathematicalRelayNavigator test failed: {e}")
-        import traceback
 
         traceback.print_exc()
         return False
@@ -99,7 +106,6 @@ def test_mathematical_relay_integration():
     print("=" * 50)
 
     try:
-        from core.mathematical_relay_integration import MathematicalRelayIntegration
 
         # Create integration
         integration = MathematicalRelayIntegration(mode="demo", log_level="INFO")
@@ -155,7 +161,6 @@ def test_mathematical_relay_integration():
 
     except Exception as e:
         print(f"❌ MathematicalRelayIntegration test failed: {e}")
-        import traceback
 
         traceback.print_exc()
         return False
@@ -167,7 +172,6 @@ def test_bit_depth_switching():
     print("=" * 50)
 
     try:
-        from core.mathematical_relay_navigator import (
             MathematicalRelayNavigator,
             BitDepth,
         )
@@ -229,7 +233,6 @@ def test_bit_depth_switching():
 
     except Exception as e:
         print(f"❌ Bit depth switching test failed: {e}")
-        import traceback
 
         traceback.print_exc()
         return False
@@ -241,7 +244,6 @@ def test_profit_navigation():
     print("=" * 50)
 
     try:
-        from core.mathematical_relay_navigator import MathematicalRelayNavigator
 
         # Create navigator
         navigator = MathematicalRelayNavigator(mode="demo", log_level="INFO")
@@ -299,7 +301,6 @@ def test_profit_navigation():
 
     except Exception as e:
         print(f"❌ Profit navigation test failed: {e}")
-        import traceback
 
         traceback.print_exc()
         return False

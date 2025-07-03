@@ -1,3 +1,9 @@
+    from core.clean_unified_math import unified_math
+from scipy.signal import correlate2d
+import numpy as np
+from typing import Tuple, Union, List
+import logging
+
 # -*- coding: utf-8 -*-
 """
 Tensor Operations for Schwabot New Math Library
@@ -5,13 +11,9 @@ Tensor Operations for Schwabot New Math Library
 Connects to existing proven mathematical systems.
 """
 
-import logging
-import numpy as np
-from typing import Tuple, Union, List
 
 # Connect to existing working math
 try:
-    from core.clean_unified_math import unified_math
 except ImportError:
     # Simple fallback that works
     class BasicMath:
@@ -32,7 +34,7 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 
-def tensor_contraction(A: np.ndarray, B: np.ndarray, axes: Union[int, List[int]] = 1) -> np.ndarray:
+def tensor_contraction():-> np.ndarray:
     """Perform tensor contraction."""
 try:
         return np.tensordot(A, B, axes=axes)
@@ -41,7 +43,7 @@ logger.error(f"Tensor contraction failed: {e}")
         return np.zeros((A.shape[0], B.shape[-1]), dtype=np.float64)
 
 
-def bit_phase_operations(strategy_id: int) -> Tuple[int, int, int]:
+def bit_phase_operations():-> Tuple[int, int, int]:
     """Advanced bit phase tensor operations for strategy routing."""
 try:
         phi_4 = strategy_id & 0b1111
@@ -53,7 +55,7 @@ logger.error(f"Bit phase operations failed: {e}")
         return (0, 0, 0)
 
 
-def matrix_basket_calc(prices: np.ndarray, weights: np.ndarray) -> np.ndarray:
+def matrix_basket_calc():-> np.ndarray:
     """Calculate matrix basket operations for asset allocation."""
 try:
         if prices.ndim == 1:
@@ -64,7 +66,7 @@ logger.error(f"Matrix basket calculation failed: {e}")
         return np.zeros_like(weights)
 
 
-def tensor_similarity(tensor_a: np.ndarray, tensor_b: np.ndarray) -> float:
+def tensor_similarity():-> float:
     """Calculate cosine similarity between tensors."""
 try:
         flat_a = tensor_a.flatten()
@@ -84,7 +86,7 @@ logger.error(f"Tensor similarity calculation failed: {e}")
         return 0.0
 
 
-def tensor_decomposition(tensor: np.ndarray) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+def tensor_decomposition():-> Tuple[np.ndarray, np.ndarray, np.ndarray]:
 """
 Perform SVD decomposition of tensor.
 
@@ -109,7 +111,7 @@ logger.error(f"Tensor decomposition failed: {e}")
         return np.eye(n), np.ones(unified_math.min(n, m)), np.eye(m)
 
 
-def tensor_normalize(tensor: np.ndarray, method: str = 'l2') -> np.ndarray:
+def tensor_normalize():-> np.ndarray:
 """
 Normalize tensor using specified method.
 
@@ -142,7 +144,7 @@ logger.error(f"Tensor normalization failed: {e}")
         return tensor
 
 
-def tensor_convolution(tensor_a: np.ndarray, kernel: np.ndarray) -> np.ndarray:
+def tensor_convolution():-> np.ndarray:
     """Function implementation pending."""
 pass
 """
@@ -165,7 +167,6 @@ try:
             return np.convolve(tensor_a, kernel, mode='same')
         elif tensor_a.ndim == 2 and kernel.ndim == 2:
 # 2D convolution using correlation
-from scipy.signal import correlate2d
 return correlate2d(tensor_a, kernel, mode='same')
         else:
 # Fallback to element - wise multiplication
@@ -177,7 +178,7 @@ logger.error(f"Tensor convolution failed: {e}")
         return tensor_a
 
 
-def advanced_tensor_transform(tensor: np.ndarray, transform_type: str = 'fft') -> np.ndarray:
+def advanced_tensor_transform():-> np.ndarray:
     """Function implementation pending."""
 pass
 """

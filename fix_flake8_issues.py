@@ -1,3 +1,7 @@
+from pathlib import Path
+import subprocess
+import sys
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -18,12 +22,9 @@ Usage:
     python fix_flake8_issues.py
 """
 
-import subprocess
-import sys
-from pathlib import Path
 
 
-def check_tools_available() -> bool:
+def check_tools_available():-> bool:
     """Check if required formatting tools are available."""
     tools = ["autopep8", "black", "flake8"]
     missing_tools = []
@@ -45,7 +46,7 @@ def check_tools_available() -> bool:
     return True
 
 
-def run_autopep8(file_path: Path) -> bool:
+def run_autopep8():-> bool:
     """Run autopep8 on a file with mathematical preservation settings."""
     try:
         # Autopep8 with careful settings to preserve mathematical logic
@@ -71,7 +72,7 @@ def run_autopep8(file_path: Path) -> bool:
         return False
 
 
-def run_black(file_path: Path) -> bool:
+def run_black():-> bool:
     """Run black on a file with mathematical preservation settings."""
     try:
         # Black with settings to preserve mathematical logic
@@ -96,7 +97,7 @@ def run_black(file_path: Path) -> bool:
         return False
 
 
-def check_flake8_issues(file_path: Path) -> dict:
+def check_flake8_issues():-> dict:
     """Check flake8 issues in a file."""
     try:
         cmd = [
@@ -123,7 +124,7 @@ def check_flake8_issues(file_path: Path) -> dict:
         return {"W293": 0, "E501": 0, "F401": 0, "total": 0}
 
 
-def fix_manual_whitespace_issues(file_path: Path) -> bool:
+def fix_manual_whitespace_issues():-> bool:
     """Manually fix whitespace-only lines that autopep8 might miss."""
     try:
         with open(file_path, "r", encoding="utf-8") as f:
@@ -153,7 +154,7 @@ def fix_manual_whitespace_issues(file_path: Path) -> bool:
         return False
 
 
-def process_file(file_path: Path) -> dict:
+def process_file():-> dict:
     """Process a single file with all formatting tools."""
     print(f"\n📄 Processing {file_path.name}...")
 

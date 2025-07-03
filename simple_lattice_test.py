@@ -1,3 +1,11 @@
+import math
+import numpy as np
+        from core.recursive_lattice_theorem import (
+        import traceback
+import os
+import sys
+import time
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -8,11 +16,6 @@ A simplified test that demonstrates the core recursive lattice mathematical
 operations without external dependencies that might have syntax errors.
 """
 
-import sys
-import os
-import time
-import math
-import numpy as np
 
 # Add core to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "core"))
@@ -24,7 +27,6 @@ def test_direct_lattice():
     print("=" * 60)
 
     try:
-        from core.recursive_lattice_theorem import (
             recursive_lattice,
             process_recursive_cycle,
             MathematicalConstant,
@@ -76,7 +78,6 @@ def test_direct_lattice():
 
     except Exception as e:
         print(f"❌ Error: {e}")
-        import traceback
 
         traceback.print_exc()
         return False

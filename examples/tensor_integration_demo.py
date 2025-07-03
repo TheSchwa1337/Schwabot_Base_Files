@@ -1,3 +1,14 @@
+            from core.strategy_logic import (
+            from core.strategy_logic import TradingSignal, SignalType, SignalStrength
+from core.galileo_tensor_bridge import GalileoTensorBridge
+from pathlib import Path
+from server.tensor_websocket_server import TensorWebSocketServer
+from typing import Any
+from utils.logging_setup import setup_logging
+import asyncio
+import sys
+import time
+
 #!/usr/bin/env python3
 """Tensor Integration Demo.
 
@@ -6,19 +17,11 @@ with Schwabot's trading infrastructure. Shows real-time analysis,
 WebSocket streaming, and trading strategy integration.
 """
 
-import asyncio
-import time
-from typing import Any
-import sys
-from pathlib import Path
 
 # Add project root to path
 project_root = Path(__file__).parent.parent
 sys.path.append(str(project_root))
 
-from core.galileo_tensor_bridge import GalileoTensorBridge
-from server.tensor_websocket_server import TensorWebSocketServer
-from utils.logging_setup import setup_logging
 
 # Setup logging
 logger = setup_logging(__name__)
@@ -127,7 +130,6 @@ class TensorIntegrationDemo:
 
         try:
             # Import strategy components
-            from core.strategy_logic import (
                 StrategyLogic,
                 StrategyConfig,
                 StrategyType,
@@ -186,10 +188,9 @@ class TensorIntegrationDemo:
             logger.warning("Strategy components not available for demo")
             print("⚠️ Strategy integration requires full Schwabot installation")
 
-    def _generate_tensor_signal(self, tensor_result, btc_price) -> Any:
+    def _generate_tensor_signal():-> Any:
         """Generate trading signal from tensor analysis."""
         try:
-            from core.strategy_logic import TradingSignal, SignalType, SignalStrength
         except ImportError:
             return None
 

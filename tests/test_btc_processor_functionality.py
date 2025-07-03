@@ -1,7 +1,7 @@
-# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
-# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
-# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
-# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
+from schwabot.mathlib.sfsss_tensor import SFSSTensor
+from schwabot.mathlib.ufs_tensor import UFSTensor
+            import psutil
+    from schwabot.core.multi_bit_btc_processor import (
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from dual_unicore_handler import DualUnicoreHandler
@@ -11,6 +11,11 @@ import os
 import sys
 import time
 import unittest
+
+# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
+# -*- coding: utf - 8 -*-\\nfrom utils.safe_print import safe_print, info, warn, error, success, debug
 
 
 
@@ -43,12 +48,9 @@ Test Coverage:
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
 try:
-    from schwabot.core.multi_bit_btc_processor import (
         MultiBitBTCProcessor, TickStream, EntropyMetrics,
         ProfitDrift, CompressionHash, ProcessingMetrics
     )
-from schwabot.mathlib.sfsss_tensor import SFSSTensor
-from schwabot.mathlib.ufs_tensor import UFSTensor
 except ImportError as e:"""
 safe_print(f"Warning: Could not import required modules: {e}")
 # Create mock classes for testing
@@ -104,7 +106,7 @@ self.processor = MultiBitBTCProcessor()
             "memory_usage": 100,  # MB
             "accuracy_threshold": 0.95
 
-def _generate_test_data(self) -> TestData:
+def _generate_test_data():-> TestData:
     """Function implementation pending."""
 pass
 """
@@ -357,7 +359,7 @@ except (ImportError, AttributeError):
 # Skip if mathematical libraries are not available"""
 self.skipTest("Mathematical libraries not available")
 
-def _get_memory_usage(self) -> float:
+def _get_memory_usage():-> float:
     """Function implementation pending."""
 pass
 """
@@ -365,7 +367,6 @@ pass
 """"""
 """
 try:
-            import psutil
 process = psutil.Process()
             return process.memory_info().rss / 1024 / 1024
         except ImportError:

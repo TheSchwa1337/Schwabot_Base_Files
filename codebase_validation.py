@@ -1,3 +1,13 @@
+from pathlib import Path
+from typing import List, Dict, Any
+import ast
+import importlib
+import json
+import logging
+import os
+import subprocess
+import sys
+
 #!/usr/bin/env python3
 """
 Codebase Validation Script
@@ -11,15 +21,6 @@ Comprehensive validation of the entire codebase to ensure:
 - Consistent code quality across all modules
 """
 
-import os
-import sys
-import ast
-import importlib
-import logging
-from typing import List, Dict, Any
-from pathlib import Path
-import subprocess
-import json
 
 # Configure logging
 logging.basicConfig(
@@ -68,7 +69,7 @@ class CodebaseValidator:
             "hardware_optimization",
         ]
 
-    def scan_directory(self, directory: str = None) -> List[Path]:
+    def scan_directory():-> List[Path]:
         """Scan directory for Python files."""
         if directory is None:
             directory = self.root_dir
@@ -99,7 +100,7 @@ class CodebaseValidator:
 
         return python_files
 
-    def check_file_for_stubs(self, file_path: Path) -> List[Dict[str, Any]]:
+    def check_file_for_stubs():-> List[Dict[str, Any]]:
         """Check a single file for stub patterns and issues."""
         issues = []
 
@@ -156,9 +157,7 @@ class CodebaseValidator:
 
         return issues
 
-    def _check_gpu_cpu_implementation(
-        self, content: str, lines: List[str]
-    ) -> List[Dict[str, Any]]:
+    def _check_gpu_cpu_implementation():-> List[Dict[str, Any]]:
         """Check for proper GPU/CPU implementation patterns."""
         issues = []
 
@@ -195,9 +194,7 @@ class CodebaseValidator:
 
         return issues
 
-    def _check_imports(
-        self, content: str, lines: List[str], file_path: Path
-    ) -> List[Dict[str, Any]]:
+    def _check_imports():-> List[Dict[str, Any]]:
         """Check for import issues."""
         issues = []
 
@@ -246,7 +243,7 @@ class CodebaseValidator:
 
         return issues
 
-    def _check_module_exists(self, module_name: str) -> bool:
+    def _check_module_exists():-> bool:
         """Check if a module can be imported."""
         try:
             importlib.import_module(module_name)
@@ -254,7 +251,7 @@ class CodebaseValidator:
         except ImportError:
             return False
 
-    def validate_codebase(self) -> Dict[str, Any]:
+    def validate_codebase():-> Dict[str, Any]:
         """Run comprehensive validation of the entire codebase."""
         logger.info("Starting comprehensive codebase validation...")
 
@@ -335,7 +332,7 @@ class CodebaseValidator:
         except Exception as e:
             logger.error(f"Error running mypy: {e}")
 
-    def _generate_report(self) -> Dict[str, Any]:
+    def _generate_report():-> Dict[str, Any]:
         """Generate comprehensive validation report."""
         report = {
             "summary": {
@@ -359,7 +356,7 @@ class CodebaseValidator:
         }
         return report
 
-    def _generate_recommendations(self) -> List[str]:
+    def _generate_recommendations():-> List[str]:
         """Generate recommendations based on found issues."""
         recommendations = []
 

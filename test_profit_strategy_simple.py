@@ -1,3 +1,8 @@
+import numpy as np
+from dataclasses import dataclass
+from typing import Dict, Any
+import hashlib
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """Test Enhanced Profit-Driven BTC/USDC Trading Strategy.
@@ -5,10 +10,6 @@
 Simple test to demonstrate profit optimization logic without Unicode issues.
 """
 
-import hashlib
-import numpy as np
-from dataclasses import dataclass
-from typing import Dict, Any
 
 
 @dataclass
@@ -60,9 +61,7 @@ class ProfitTradingStrategy:
         print("Enhanced Profit Trading Strategy initialized")
         print(f"Initial Capital: ${self.initial_capital:,.2f}")
 
-    def analyze_market(
-        self, btc_price: float, usdc_volume: float, market_data: Dict[str, Any]
-    ) -> ProfitAnalysis:
+    def analyze_market():-> ProfitAnalysis:
         """Analyze market using mathematical components."""
 
         # 1. ALEPH Hash Similarity
@@ -133,9 +132,7 @@ class ProfitTradingStrategy:
             expected_return_pct=profit_potential,
         )
 
-    def _calculate_hash_similarity(
-        self, btc_price: float, usdc_volume: float, market_data: Dict[str, Any]
-    ) -> float:
+    def _calculate_hash_similarity():-> float:
         """ALEPH hash similarity calculation."""
         try:
             # Create market state hash
@@ -147,7 +144,7 @@ class ProfitTradingStrategy:
         except Exception:
             return 0.5
 
-    def _calculate_phase_alignment(self, market_data: Dict[str, Any]) -> float:
+    def _calculate_phase_alignment():-> float:
         """Phase transition alignment calculation."""
         try:
             price_history = market_data.get("price_history", [])
@@ -170,7 +167,7 @@ class ProfitTradingStrategy:
         except Exception:
             return 0.5
 
-    def _calculate_entropy_score(self, market_data: Dict[str, Any]) -> float:
+    def _calculate_entropy_score():-> float:
         """NCCO entropy score calculation."""
         try:
             price_history = market_data.get("price_history", [])
@@ -187,7 +184,7 @@ class ProfitTradingStrategy:
         except Exception:
             return 0.5
 
-    def _calculate_drift_weight(self, market_data: Dict[str, Any]) -> float:
+    def _calculate_drift_weight():-> float:
         """Drift weight calculation."""
         try:
             price_history = market_data.get("price_history", [])
@@ -207,7 +204,7 @@ class ProfitTradingStrategy:
         except Exception:
             return 0.5
 
-    def _calculate_pattern_confidence(self, market_data: Dict[str, Any]) -> float:
+    def _calculate_pattern_confidence():-> float:
         """Pattern confidence calculation."""
         try:
             price_history = market_data.get("price_history", [])
@@ -230,13 +227,7 @@ class ProfitTradingStrategy:
         except Exception:
             return 0.5
 
-    def _calculate_profit_potential(
-        self,
-        btc_price: float,
-        usdc_volume: float,
-        confidence: float,
-        market_data: Dict[str, Any],
-    ) -> float:
+    def _calculate_profit_potential():-> float:
         """Calculate profit potential."""
         try:
             # Base profit from volatility
@@ -255,9 +246,7 @@ class ProfitTradingStrategy:
         except Exception:
             return 0.005
 
-    def _calculate_risk_score(
-        self, confidence: float, profit_potential: float, market_data: Dict[str, Any]
-    ) -> float:
+    def _calculate_risk_score():-> float:
         """Calculate risk score."""
         try:
             # Risk factors
@@ -271,9 +260,7 @@ class ProfitTradingStrategy:
         except Exception:
             return 0.5
 
-    def _calculate_kelly_fraction(
-        self, confidence: float, profit_potential: float, risk_score: float
-    ) -> float:
+    def _calculate_kelly_fraction():-> float:
         """Calculate Kelly criterion position size."""
         try:
             win_probability = confidence
@@ -298,7 +285,7 @@ class ProfitTradingStrategy:
         except Exception:
             return 0.0
 
-    def execute_trade(self, analysis: ProfitAnalysis) -> Dict[str, Any]:
+    def execute_trade():-> Dict[str, Any]:
         """Execute trade based on analysis."""
         if not analysis.should_trade:
             return {"status": "HOLD", "reason": "Thresholds not met", "profit": 0.0}

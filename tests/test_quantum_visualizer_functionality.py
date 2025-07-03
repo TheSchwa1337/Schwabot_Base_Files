@@ -1,17 +1,18 @@
-# -*- coding: utf - 8 -*-
-# -*- coding: utf - 8 -*-
-# -*- coding: utf - 8 -*-
-# -*- coding: utf - 8 -*-
-from dual_unicore_handler import DualUnicoreHandler
-from typing import Dict, Any, List
-import logging
-import time
-
 from core.bit_phase_sequencer import BitPhase, BitSequence
 from core.dual_error_handler import PhaseState, SickType, SickState
 from core.quantum_state_mapper import QuantumStateMapper
 from core.quantum_visualizer import QuantumVisualizer
 from core.symbolic_profit_router import ProfitTier, FlipBias, SymbolicState
+from dual_unicore_handler import DualUnicoreHandler
+from typing import Dict, Any, List
+import logging
+import time
+
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+# -*- coding: utf - 8 -*-
+
 
 
 
@@ -51,7 +52,7 @@ self.bit_sequencer = BitSequence(
             long_term_logic=True
         )
 
-def test_quantum_state_visualization(self) -> Dict[str, Any]:"""
+def test_quantum_state_visualization():-> Dict[str, Any]:"""
         """Test quantum state visualization with phase logic.""""""
 logger.info("🔮 Testing quantum state visualization with phase analysis")
 
@@ -137,7 +138,7 @@ if results['success']:
 
 return results
 
-def test_phase_transition_visualization(self) -> Dict[str, Any]:
+def test_phase_transition_visualization():-> Dict[str, Any]:
         """Test phase transition visualization with 2 - bit logic.""""""
 logger.info("🔄 Testing phase transition visualization")
 
@@ -191,7 +192,7 @@ if results['success']:
 
 return results
 
-def run_comprehensive_test(self) -> Dict[str, Any]:
+def run_comprehensive_test():-> Dict[str, Any]:
         """Run comprehensive quantum visualizer test with all phase logic.""""""
 logger.info("🚀 Running comprehensive quantum visualizer test with 2 - bit phase system")
 
@@ -229,7 +230,7 @@ return comprehensive_result
 
 
 # Global test function for registry
-def test_quantum_visualizer_functionality() -> Dict[str, Any]:
+def test_quantum_visualizer_functionality():-> Dict[str, Any]:
     """Main test function for quantum visualizer functionality with 2 - bit phase logic."""
 try:
         test_suite = QuantumVisualizerTest()
@@ -243,7 +244,7 @@ logger.error(f"Quantum visualizer functionality test failed: {e}")
             'execution_time': 0.0
 
 
-def main() -> None:
+def main():-> None:
     """Main function for quantum visualizer testing."""
 # Set up logging
 logging.basicConfig(

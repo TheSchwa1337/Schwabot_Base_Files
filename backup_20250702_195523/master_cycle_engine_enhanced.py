@@ -1,3 +1,18 @@
+import numpy as np
+from biological_immune_error_handler import BiologicalImmuneErrorHandler
+from dataclasses import dataclass, field
+from enhanced_tcell_system import EnhancedSignalGenerator, EnhancedTCellValidator
+from entropy.galileo_tensor_field import GalileoTensorField, create_market_solution
+from enum import Enum
+from immune.qsc_gate import ImmuneSignalData, QSCGate, create_signal_
+from swarm.swarm_strategy_matrix import SwarmStrategyMatrix
+from typing import Any, Dict, List, Optional, Tuple
+from typing import Tuple
+import asyncio
+import logging
+import random
+import time
+
 """
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 
@@ -18,22 +33,8 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
 """
-import asyncio
-import logging
-import time
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
 
-import numpy as np
-from biological_immune_error_handler import BiologicalImmuneErrorHandler
 
-from enhanced_tcell_system import EnhancedSignalGenerator, EnhancedTCellValidator
-from entropy.galileo_tensor_field import GalileoTensorField, create_market_solution
-from immune.qsc_gate import ImmuneSignalData, QSCGate, create_signal_
-from swarm.swarm_strategy_matrix import SwarmStrategyMatrix
-from typing import Tuple
-import random
 
 
 
@@ -122,11 +123,11 @@ self.monitoring_task = None
             logger.info(
 🧬🚀 Enhanced Master Cycle Engine initialized with biological immune integration)
 
-def _default_config(self) -> Dict[str, Any]:Default configuration for master cycle engine.return {decision_cooldown: 5.0,  # Minimum seconds between decisionsmax_position_size: 1.0,  # Maximum position sizerisk_tolerance: 0.6,  # Risk tolerance(0.0 to 1.0)
+def _default_config():-> Dict[str, Any]:Default configuration for master cycle engine.return {decision_cooldown: 5.0,  # Minimum seconds between decisionsmax_position_size: 1.0,  # Maximum position sizerisk_tolerance: 0.6,  # Risk tolerance(0.0 to 1.0)
             confidence_threshold: 0.5,  # Minimum confidence for actionimmune_trust_required: True,  # Require immune trust for tradesemergency_exit_threshold: 0.9,  # Emergency exit triggermax_history: 1000,immune_config": {},qsc_config: {},swarm_config: {},tensor_config: {},
 }
 
-def process_market_tick() -> BiologicalTradingDecision:Process market tick and generate biological trading decision.Args:
+def process_market_tick():-> BiologicalTradingDecision:Process market tick and generate biological trading decision.Args:
             market_data: Current market data
 
 Returns:
@@ -230,14 +231,7 @@ fimmune_trust: {decision.immune_trust})
 # Create emergency decision
         return self._create_emergency_decision(market_data, str(e))
 
-def _execute_unified_decision_logic(
-self,:
-market_data: MarketData,
-qsc_response,
-swarm_response,
-tensor_result,
-immune_trust: bool,
-) -> BiologicalTradingDecision:Execute unified decision logic with all biological components.This is the core decision tree that integrates all immune responses.decision_path = []
+def _execute_unified_decision_logic():-> BiologicalTradingDecision:Execute unified decision logic with all biological components.This is the core decision tree that integrates all immune responses.decision_path = []
 
 # Extract component scores
 tcell_activation = qsc_response.trigger_strength
@@ -385,7 +379,7 @@ metadata={market_data: market_data,current_position": self.current_position,
 
         return biological_decision
 
-def _classify_confidence() -> ConfidenceLevel:Classify confidence score into confidence level.if confidence_score >= 0.8:
+def _classify_confidence():-> ConfidenceLevel:Classify confidence score into confidence level.if confidence_score >= 0.8:
             return ConfidenceLevel.VERY_HIGH
 elif confidence_score >= 0.6:
             return ConfidenceLevel.HIGH
@@ -396,9 +390,7 @@ elif confidence_score >= 0.2:
 else:
             return ConfidenceLevel.VERY_LOW
 
-def _calculate_risk_level(:
-self, market_data: MarketData, qsc_response, swarm_response
-) -> float:Calculate overall risk level.# Base risk from market conditions
+def _calculate_risk_level():-> float:Calculate overall risk level.# Base risk from market conditions
 market_risk = (market_data.volatility + market_data.entropy_level) / 2
 
 # Immune system risk assessment
@@ -417,21 +409,14 @@ overall_risk = np.mean(
 
         return min(1.0, overall_risk)
 
-def _calculate_position_size(:
-self, confidence_score: float, risk_level: float
-) -> float:Calculate recommended position size.base_size = confidence_score * self.config.get(max_position_size, 1.0)
+def _calculate_position_size():-> float:Calculate recommended position size.base_size = confidence_score * self.config.get(max_position_size, 1.0)
         risk_adjusted_size = base_size * (1.0 - risk_level * 0.5)
 
         return max(
 0.1, min(self.config.get(max_position_size, 1.0), risk_adjusted_size)
 )
 
-def _calculate_risk_management(
-self,:
-market_data: MarketData,
-decision: TradingDecision,
-confidence_score: float,
-) -> Tuple[Optional[float], Optional[float]]:Calculate stop loss and take profit levels.if decision in [TradingDecision.NO_ACTION, TradingDecision.DEFENSIVE_HOLD]:
+def _calculate_risk_management():-> Tuple[Optional[float], Optional[float]]:Calculate stop loss and take profit levels.if decision in [TradingDecision.NO_ACTION, TradingDecision.DEFENSIVE_HOLD]:
             return None, None
 
 # ATR-based risk management
@@ -450,7 +435,7 @@ take_profit = None
 
         return stop_loss, take_profit
 
-def _update_position_tracking() -> None:
+def _update_position_tracking():-> None:
         Update current position tracking.if decision.decision == TradingDecision.ENTRY_LONG:
             self.current_position = decision.position_size
 self.last_entry_price = decision.metadata[market_data].price
@@ -477,9 +462,7 @@ TradingDecision.EMERGENCY_EXIT,
             self.current_position = 0.0
 self.last_entry_price = None
 
-def _create_cooldown_decision(:
-self, market_data: MarketData
-) -> BiologicalTradingDecision:Create decision during cooldown period.return BiologicalTradingDecision(
+def _create_cooldown_decision():-> BiologicalTradingDecision:Create decision during cooldown period.return BiologicalTradingDecision(
 decision = TradingDecision.NO_ACTION,
 confidence=ConfidenceLevel.LOW,
 confidence_score=0.0,
@@ -498,9 +481,7 @@ timestamp=time.time(),
 metadata = {reason:cooldown_period,market_data: market_data},
 )
 
-def _create_immune_blocked_decision(:
-self, market_data: MarketData, immune_response
-) -> BiologicalTradingDecision:Create decision when blocked by immune system.return BiologicalTradingDecision(
+def _create_immune_blocked_decision():-> BiologicalTradingDecision:Create decision when blocked by immune system.return BiologicalTradingDecision(
 decision = TradingDecision.DEFENSIVE_HOLD,
 confidence=ConfidenceLevel.VERY_LOW,
 confidence_score=0.0,
@@ -518,9 +499,7 @@ timestamp = time.time(),
 metadata = {reason:immune_blocked,market_data: market_data},
 )
 
-def _create_emergency_decision(:
-self, market_data: MarketData, error: str
-) -> BiologicalTradingDecision:Create emergency decision on error.return BiologicalTradingDecision(
+def _create_emergency_decision():-> BiologicalTradingDecision:Create emergency decision on error.return BiologicalTradingDecision(
 decision = (
 TradingDecision.EMERGENCY_EXIT
 if self.current_position != 0:
@@ -543,7 +522,7 @@ timestamp=time.time(),
 metadata = {reason:error,error: error,market_data: market_data},
 )
 
-def get_system_status(self) -> Dict[str, Any]:"Get comprehensive system status.return {engine_status: {total_decisions: self.total_decisions,successful_trades": self.successful_trades,immune_blocks": self.immune_blocks,emergency_exits": self.emergency_exits,current_position": self.current_position,last_entry_price": self.last_entry_price,
+def get_system_status():-> Dict[str, Any]:"Get comprehensive system status.return {engine_status: {total_decisions: self.total_decisions,successful_trades": self.successful_trades,immune_blocks": self.immune_blocks,emergency_exits": self.emergency_exits,current_position": self.current_position,last_entry_price": self.last_entry_price,
 },immune_components": {qsc_gate: self.qsc_gate.get_immune_status(),swarm_matrix": self.swarm_matrix.get_swarm_status(),tensor_field": self.tensor_field.get_tensor_field_status(),immune_handler": self.immune_handler.get_enhanced_immune_status(),
 },recent_decisions": [{decision: d.decision.value,confidence": d.confidence_score,immune_trust": d.immune_trust,timestamp": d.timestamp,
 }
@@ -551,20 +530,18 @@ for d in self.decision_history[-10:]  # Last 10 decisions
 ],configuration: self.config,
 }
 
-async def start_monitoring(self) -> None:"Start background system monitoring.if self.monitoring_active:
+async def start_monitoring():-> None:"Start background system monitoring.if self.monitoring_active:
             return self.monitoring_active = True
 await self.immune_handler.start_monitoring()
             logger.info(🧬🚀 Enhanced Master Cycle Engine monitoring started)
 
-async def stop_monitoring(self) -> None:Stop background system monitoring.self.monitoring_active = False
+async def stop_monitoring():-> None:Stop background system monitoring.self.monitoring_active = False
 await self.immune_handler.stop_monitoring()
             logger.info(🧬🚀 Enhanced Master Cycle Engine monitoring stopped)
 
 
 # Helper function to create market data from price and volume
-def create_market_data_from_tick(:
-price: float, volume: float, previous_data: Optional[MarketData] = None
-) -> MarketData:Create market data from basic price and volume tick.
+def create_market_data_from_tick():-> MarketData:Create market data from basic price and volume tick.
 
 Args:
         price: Current price
