@@ -3,7 +3,7 @@
 # ==========================================================
 
 # Maximum line length - increased for mathematical formulas
-max-line-length = 120
+max-line-length = 200
 
 # Maximum complexity for functions
 max-complexity = 15

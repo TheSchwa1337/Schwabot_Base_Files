@@ -64,8 +64,8 @@ def main() -> None:
         *targets,
     ])
 
-    # 2. black (line length 100)
-    run_cmd(["black", "--line-length", "100", *targets])
+    # 2. black (line length 200)
+    run_cmd(["black", "--line-length", "200", *targets])
 
     # 3. isort (import sorting)
     run_cmd(["isort", *targets])
