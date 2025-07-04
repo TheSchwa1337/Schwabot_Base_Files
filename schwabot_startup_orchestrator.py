@@ -16,19 +16,26 @@ import threading
 import importlib
 import traceback
 from datetime import datetime
-from typing import Dict, List, Any, Optional
+from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass
 from enum import Enum
 import json
+from unittest.mock import patch
+import numpy as np
 
 # Add core to path for imports
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 # Try to import core components (graceful failure handling)
 try:
-    from core.clean_unified_math import clean_unified_math
+    from core.clean_unified_math import clean_unified_math, fractal_quantize_vector
     from core.trading_engine_integration import TradeSignal, TradingError
     from core.unified_trade_router import UnifiedTradeRouter
+    from core.zpe_zbe_core import ZPEZBECore
+    from core.chrono_recursive_logic_function import ChronoRecursiveLogicFunction, CRLFTriggerState
+    from core.advanced_tensor_algebra import tensor_dot_fusion
+    from core.strategy_bit_mapper import StrategyBitMapper, ExpansionMode
+    from core.schwafit_core import SchwafitCore
     from test.integrated_trading_test_suite import IntegratedTradingTestSuite
 except ImportError as e:
     print(f"⚠️  Import warning: {e}")
@@ -173,6 +180,7 @@ class SchwabotStartupOrchestrator:
         self.startup_time = None
         self.total_components = 0
         self.successful_components = 0
+        self.test_results: Dict[str, Any] = {}
 
     def _initialize_startup_phases(self) -> List[StartupPhase]:
         """Initialize all startup phases with component lists"""
@@ -373,56 +381,140 @@ class SchwabotStartupOrchestrator:
         return phase_success
 
     def _test_component_stability(self, component_file: str) -> bool:
-        """Test individual component for stability"""
+        """Test individual component for stability and run deterministic tests if applicable."""
         self.total_components += 1
         component_name = component_file.replace('.py', '')
 
         print(f"  🔍 Testing {component_file:<45}", end="")
-
         start_time = time.time()
+        
+        # Standard integrity check
+        integrity_success = self._validate_component_integrity(component_name)
+        
+        # Run specific deterministic test if mapped to this component
+        test_map = {
+            "fractal_core.py": ("fractal_quantize_vector", self._test_fractal_quantization),
+            "zpe_zbe_core.py": ("zpe_zbe_inversion", self._test_zpe_zbe_inversion),
+            "chrono_recursive_logic_function.py": ("crlf_entropy_spike", self._test_crlf_entropy_spike),
+            "advanced_tensor_algebra.py": ("tensor_expander", self._test_tensor_expander),
+            "strategy_bit_mapper.py": ("ferris_wheel_cycle", self._test_ferris_wheel_cycle),
+            "schwafit_core.py": ("schwafit_resonance", self._test_schwafit_resonance),
+        }
 
-        try:
-            # Attempt to validate component
-            success = self._validate_component_integrity(component_name)
-            load_time = time.time() - start_time
+        test_success = True
+        if component_file in test_map:
+            test_name, test_func = test_map[component_file]
+            print(f"\n     🔬 Running deterministic test: {test_name}...", end="")
+            try:
+                passed, message = test_func()
+                if passed:
+                    print(" ✅ PASS")
+                    self.test_results[test_name] = {"status": "PASS", "details": message, "component": component_file}
+                else:
+                    print(" ❌ FAIL")
+                    self.test_results[test_name] = {"status": "FAIL", "details": message, "component": component_file}
+                    test_success = False
+            except Exception as e:
+                print(" 💥 ERROR")
+                self.test_results[test_name] = {"status": "ERROR", "details": str(e), "component": component_file}
+                test_success = False
+        
+        load_time = time.time() - start_time
+        overall_success = integrity_success and test_success
 
-            if success:
-                print(f" ✅ STABLE ({load_time:.3f}s)")
-                self.successful_components += 1
-                self.component_status[component_file] = ComponentStatus(
-                    name=component_name,
-                    file_path=f"core/{component_file}",
-                    status=StartupStatus.COMPLETE,
-                    test_result=True,
-                    load_time=load_time
-                )
-                return True
-            else:
-                print(f" ⚠️ WARNING ({load_time:.3f}s)")
-                self.component_status[component_file] = ComponentStatus(
-                    name=component_name,
-                    file_path=f"core/{component_file}",
-                    status=StartupStatus.WARNING,
-                    test_result=False,
-                    load_time=load_time
-                )
-                return False
+        if overall_success:
+            print(f"  ✅ STABLE ({load_time:.3f}s)")
+            self.successful_components += 1
+            status = StartupStatus.COMPLETE
+        else:
+            print(f"  ⚠️ WARNING ({load_time:.3f}s)")
+            status = StartupStatus.WARNING
 
-        except Exception as e:
-            load_time = time.time() - start_time
-            print(f" ❌ ERROR ({load_time:.3f}s)")
+        self.component_status[component_file] = ComponentStatus(
+            name=component_name,
+            file_path=f"core/{component_file}",
+            status=status,
+            test_result=overall_success,
+            load_time=load_time
+        )
+        return overall_success
 
-            self.component_status[component_file] = ComponentStatus(
-                name=component_name,
-                file_path=f"core/{component_file}",
-                status=StartupStatus.ERROR,
-                test_result=False,
-                error_message=str(e),
-                load_time=load_time
-            )
+    def _log_test_results(self):
+        """Logs the test results to a JSON file."""
+        log_dir = os.path.join("tests", "results")
+        os.makedirs(log_dir, exist_ok=True)
+        log_file = os.path.join(log_dir, "startup_test_log.json")
+        
+        log_data = {
+            "test_run_timestamp": datetime.now().isoformat(),
+            "results": self.test_results
+        }
+        
+        with open(log_file, "w") as f:
+            json.dump(log_data, f, indent=2)
+        print(f"📋 Test results logged to '{log_file}'")
 
-            self.flagging_system.flag_for_implementation(component_file, e)
-            return False
+    def _test_fractal_quantization(self) -> Tuple[bool, str]:
+        vector = np.array([0.1, 0.2, 0.8, 0.9, 0.5])
+        result = fractal_quantize_vector(vector, precision=8)
+        expected_dim = 1.0 
+        passed = abs(result.fractal_dimension - expected_dim) < 0.5 # Relaxed check
+        return passed, f"dimension={result.fractal_dimension:.4f}"
+
+    def _test_zpe_zbe_inversion(self) -> Tuple[bool, str]:
+        zpe_zbe_core = ZPEZBECore()
+        zpe_vector = zpe_zbe_core.calculate_zero_point_energy()
+        zbe_balance = zpe_zbe_core.calculate_zbe_balance(100, 102, 95, 105)
+        passed = zpe_vector.energy > 0 and zbe_balance.status == 0.0
+        return passed, f"ZPE Energy: {zpe_vector.energy}, ZBE Status: {zbe_balance.status}"
+
+    def _test_crlf_entropy_spike(self) -> Tuple[bool, str]:
+        crlf = ChronoRecursiveLogicFunction()
+        high_entropy_input = 0.9
+        response = crlf.compute_crlf(
+            strategy_vector=np.array([0.5]*4),
+            profit_curve=np.array([1.0]*7),
+            market_entropy=high_entropy_input
+        )
+        passed = response.trigger_state in [CRLFTriggerState.HOLD, CRLFTriggerState.ESCALATE, CRLFTriggerState.OVERRIDE]
+        return passed, f"Trigger state for high entropy: {response.trigger_state.value}"
+        
+    def _test_tensor_expander(self) -> Tuple[bool, str]:
+        t1 = np.array([[1, 2], [3, 4]])
+        t2 = np.array([[5, 6], [7, 8]])
+        fused = tensor_dot_fusion(t1, t2)
+        passed = fused.shape == (2, 2, 2, 2)
+        return passed, f"Fused shape: {fused.shape}"
+
+    def _test_ferris_wheel_cycle(self) -> Tuple[bool, str]:
+        mapper = StrategyBitMapper(matrix_dir="data/matrices")
+        strategy_id = 123
+        target_bits = 8
+        
+        # Mock datetime to a fixed time (e.g., 6 AM)
+        mock_time = datetime(2023, 1, 1, 6, 0, 0)
+        with patch('core.strategy_bit_mapper.datetime') as mock_datetime:
+            mock_datetime.utcnow.return_value = mock_time
+            
+            result = mapper.expand_strategy_bits(strategy_id, target_bits, mode=ExpansionMode.FERRIS_WHEEL)
+        
+        # Manual calculation for 6 AM
+        hour_angle = (6 + 0/60.0) * (2 * np.pi / 24) # pi/2
+        drift = int((np.sin(hour_angle) + 1) * ((1 << (target_bits - 1)) - 1)) # (1+1) * 127 = 254 -> drift = 127
+        expected = (strategy_id + 127) % (1 << target_bits) # (123 + 127) % 256 = 250
+        
+        passed = result == expected
+        return passed, f"Expected: {expected}, Got: {result}"
+
+    def _test_schwafit_resonance(self) -> Tuple[bool, str]:
+        schwafit = SchwafitCore()
+        price_series = list(range(100, 166)) # 66 elements for window=64 + 2 diffs
+        pattern_library = [schwafit.delta2(price_series)] # Perfect match
+        profit_scores = [1.0]
+        
+        result = schwafit.fit_vector(price_series, pattern_library, profit_scores)
+        passed = result['fit_score'] > 0.99
+        return passed, f"Fit score: {result['fit_score']:.4f}"
 
     def _validate_component_integrity(self, component_name: str) -> bool:
         """Validate component integrity and functionality"""

@@ -183,6 +183,7 @@ class CRLFEnhancedMarketData:
     trigger_state: CRLFTriggerState
     metadata: Dict[str, Any] = field(default_factory=dict)
 
+
 @dataclass
 class CRLFEnhancedTradingDecision:
     """Trading decision enhanced with CRLF analysis."""
@@ -243,16 +244,12 @@ class CleanTradingPipeline:
         risk_params: Optional[RiskParameters] = None,
         matrix_dir: Union[str, Path] = "data/matrices",
         registry_file: Optional[str] = None,
-        pipeline_config: Optional[Dict[str, Any]] = None,
-        safe_mode: bool = False
+        pipeline_config: Optional[Dict[str, Any]] = None
     ):
         """Initialize the trading pipeline."""
         self.symbol = symbol
         self.initial_capital = initial_capital
         self.risk_params = risk_params or RiskParameters()
-        self.safe_mode = safe_mode
-        if self.safe_mode:
-            logger.warning("Pipeline starting in SAFE MODE. External plugins (GPU, GANs) will be disabled.")
 
         # Initialize mathematical foundation
         self.math_foundation = CleanMathFoundation()
@@ -371,11 +368,11 @@ class CleanTradingPipeline:
     async def process_market_data(self, market_data: Optional[Dict] = None, force_refresh: bool = False) -> Optional[Dict]:
         """
         Process market data through unified pipeline and execute trading logic.
-
+        
         Args:
             market_data: Optional manual market data (for testing)
             force_refresh: Force refresh from APIs
-
+            
         Returns:
             Trade result dictionary
         """
@@ -428,7 +425,7 @@ class CleanTradingPipeline:
         except Exception as e:
             logger.error(f"Error processing market data: {e}")
             return None
-
+    
     def _convert_market_packet_to_legacy_format(self, packet: MarketDataPacket) -> Dict[str, Any]:
         """Convert MarketDataPacket to legacy format for existing pipeline compatibility."""
         return {
@@ -649,9 +646,69 @@ class CleanTradingPipeline:
             "take_profit_distance": risk_assessment.get("take_profit_distance", 0.04)
         }
     
-    async def _execute_trade_with_market_data(self, trade_action: Dict[str, Any], packet: Optional[MarketDataPacket], data: Dict[str, Any]) -> Dict[str, Any]:
-        # duplicate placeholder removed to avoid override
-        return {"error": "duplicate removed"}
+    async def _execute_trade_with_market_data(
+        self, 
+        trade_action: Dict[str, Any], 
+        packet: Optional[MarketDataPacket], 
+        data: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """Execute trade with enhanced market data context."""
+        try:
+            current_price = packet.price if packet else data.get("price", 0.0)
+            action = trade_action["action"]
+            position_size = trade_action["position_size"]
+            
+            # Calculate trade parameters
+            if action == "buy":
+                entry_price = current_price
+                stop_loss = entry_price * (1 - trade_action["stop_loss_distance"])
+                take_profit = entry_price * (1 + trade_action["take_profit_distance"])
+                trade_amount = self.state.current_capital * position_size
+                
+            elif action == "sell":
+                entry_price = current_price
+                stop_loss = entry_price * (1 + trade_action["stop_loss_distance"])
+                take_profit = entry_price * (1 - trade_action["take_profit_distance"])
+                # Use available capital for sell amount calculation
+                trade_amount = self.state.current_capital * position_size * 0.5  # Max 50% of capital
+            else:
+                return {"error": "Invalid trade action"}
+            
+            # Simulate trade execution (replace with actual exchange API)
+            trade_result = {
+                "trade_id": f"{int(time.time())}_{action}_{self.symbol}",
+                "timestamp": time.time(),
+                "symbol": self.symbol,
+                "action": action,
+                "entry_price": entry_price,
+                "amount": trade_amount,
+                "stop_loss": stop_loss,
+                "take_profit": take_profit,
+                "position_size_pct": position_size,
+                "status": "executed",
+                "fees": trade_amount * 0.001,  # 0.1% fee
+                "market_context": {
+                    "rsi": data.get("rsi", 50),
+                    "volatility": data.get("volatility", 0.5),
+                    "data_quality": data.get("data_quality", "unknown"),
+                    "signal_strength": trade_action["signal_strength"],
+                    "confidence": trade_action["confidence"]
+                }
+            }
+            
+            # Update pipeline capital directly
+            if action == "buy":
+                self.state.current_capital -= (trade_amount + trade_result["fees"])
+            elif action == "sell":
+                self.state.current_capital += (trade_amount - trade_result["fees"])
+            
+            logger.info(f"Trade executed: {action} {trade_amount:.2f} {self.symbol} at ${entry_price:.2f}")
+            
+            return trade_result
+            
+        except Exception as e:
+            logger.error(f"Error executing trade: {e}")
+            return {"error": str(e)}
     
     def _log_trade_to_registry(
         self, 
@@ -2004,80 +2061,12 @@ class CleanTradingPipeline:
             },
         }
 
-    def set_mode(self, mode: str = "demo") -> None:
-        """Set pipeline operating mode (testing/demo/live)."""
-        if mode not in {"testing", "demo", "live"}:
-            raise ValueError(f"Unsupported mode: {mode}")
-        self.mode = mode
-        logger.info(f"Pipeline mode set to {mode.upper()}")
-
-    # ---------------------------------------------------------------------
-    #  Historical-feed helpers (for DEMO / back-testing)
-    # ---------------------------------------------------------------------
-    def load_historical_feed(self, dataset_path: str, speed_multiplier: float = 1.0) -> None:
-        """Load a JSON candle file for demo/back-test playback.
-
-        Expected schema: list of {"timestamp": int, "open": float, "high": float, "low": float, "close": float, "volume": float}
-        """
-        import json, os
-        if not os.path.exists(dataset_path):
-            raise FileNotFoundError(dataset_path)
-        with open(dataset_path, "r", encoding="utf-8") as f:
-            self._historical_feed = json.load(f)
-        self._historical_cursor = 0
-        self._historical_speed = max(speed_multiplier, 0.1)
-        logger.info(f"Historical feed loaded: {len(self._historical_feed)} candles from {dataset_path} (x{self._historical_speed} speed)")
-
-    async def process_candle(self, candle: Dict[str, Any]) -> Optional[Dict[str, Any]]:
-        """Process a single OHLCV candle through the same logic used in live trading."""
-        # Map candle to minimal market_data dict expected by _calculate_enhanced_trading_signals
-        try:
-            market_packet = None  # Not using MarketDataPacket in back-test minimal path
-            data = {
-                "symbol": self.symbol,
-                "price": candle["close"],
-                "volume": candle.get("volume", 0.0),
-                "timestamp": candle["timestamp"],
-            }
-            signals = self._calculate_enhanced_trading_signals(market_packet, data)
-            risk_assessment = self._assess_risk_with_market_data(market_packet, signals)
-            trade_action = self._determine_trade_action(signals, risk_assessment)
-            if trade_action["action"] != "hold":
-                return await self._execute_trade_with_market_data(trade_action, market_packet, data)
-            return None
-        except Exception as e:
-            logger.error(f"Back-test candle processing error: {e}")
-            return None
-
-    # ---------------------------------------------------------------------
-    #  Override execute trade for LIVE-mode risk filters
-    # ---------------------------------------------------------------------
-    async def _execute_trade_with_market_data(self, trade_action: Dict[str, Any], packet: Optional[MarketDataPacket], data: Dict[str, Any]) -> Dict[str, Any]:
-        # ... existing code untouched until just before simulation block ...
-        # REPLACE simulation gate with live filters
-        # Begin live-mode additional safety filters
-            if hasattr(self, "mode") and self.mode == "live":
-                spread = abs(data.get("ask", current_price) - data.get("bid", current_price)) / current_price if data.get("bid") and data.get("ask") else 0
-                volatility = data.get("volatility", 0.0)
-                if spread > 0.003 or volatility > 2.0:  # >0.3% spread or >2σ intrabar volatility
-                    logger.warning("Trade blocked by spread/volatility filter")
-                    return {"blocked": True, "reason": "spread/volatility"}
-                if trade_action.get("confidence", 0) < 0.81:
-                    logger.warning("Trade blocked by low confidence filter")
-                    return {"blocked": True, "reason": "confidence"}
-            # Continue with original execution logic
-        # ... existing code remains ...
-
 
 def create_trading_pipeline(
-    symbol: str = "BTCUSDT", initial_capital: float = 10000.0, safe_mode: bool = False
+    symbol: str = "BTCUSDT", initial_capital: float = 10000.0
 ) -> CleanTradingPipeline:
     """Create a new trading pipeline instance."""
-    return CleanTradingPipeline(
-        symbol=symbol,
-        initial_capital=initial_capital,
-        safe_mode=safe_mode
-    )
+    return CleanTradingPipeline(symbol=symbol, initial_capital=initial_capital)
 
 
 async def run_trading_simulation(

@@ -1,4 +1,7 @@
-from typing import Dict, Optional, List
+import json
+import time
+from typing import List, Dict, Any, Optional
+from collections import defaultdict
 
 
 @dataclass
@@ -14,147 +17,86 @@ class SoulprintEntry:
 
 
 class SoulprintRegistry:
-    _default_registry_path
-    = os.environ.get("SOULPRINT_REGISTRY_PATH", "data/soulprint_registry.json")
+    """
+    Registry for logging and querying Schwafit triggers, profit vectors, phase/drift optimization, and cross-asset analytics.
+    """
+    def __init__(self, registry_file: Optional[str] = None):
+        self.triggers: List[Dict[str, Any]] = []
+        self.registry_file = registry_file
+        if registry_file:
+            self._load()
 
-    @classmethod
-    def set_default_registry_path(cls, path: str):
-        """Set a new default path for the soulprint registry."""
-        cls._default_registry_path = path
-
-    def __init__(self, registry_path: Optional[str] = None):
-        """
-        Initialize the SoulprintRegistry.
-        Args:
-registry_path: Optional custom path for the registry file. If not provided, uses env var or default.
-        """
-        self.registry_path = registry_path or self._default_registry_path
-        self.registry: Dict[str, SoulprintEntry] = {}
-        self._load_registry()
-
-    def _load_registry(self):
-        if os.path.exists(self.registry_path):
-            with open(self.registry_path, 'r') as f:
-                data = json.load(f)
-                self.registry = {
-                    k: SoulprintEntry(**v) for k, v in data.items()
-                }
-        else:
-            self.registry = {}
-
-    def _save_registry(self):
-        parent_dir = os.path.dirname(self.registry_path)
-        if parent_dir:
-            os.makedirs(parent_dir, exist_ok=True)
-        with open(self.registry_path, 'w') as f:
-            json.dump({k: asdict(v) for k, v in self.registry.items()}, f, indent=2)
-
-def register_soulprint(self, vector: Dict[str, float], strategy_id: str, confidence: float) -> str:
-        raw_components = [
-            vector.get('pair', ''),
-            str(vector.get('entropy', 0)),
-            str(vector.get('momentum', 0)),
-            str(vector.get('volatility', 0)),
-            str(vector.get('temporal_variance', 0))
-        ]
-        hash_input = "|".join(raw_components)
-        soulprint = hashlib.sha256(hash_input.encode()).hexdigest()
-
-        entry = SoulprintEntry(
-            soulprint=soulprint,
-            timestamp=datetime.now(timezone.utc).isoformat(),
-            vector=vector,
-            strategy_id=strategy_id,
-            confidence=confidence
-        )
-
-        self.registry[soulprint] = entry
-        self._save_registry()
-        return soulprint
-
-    def mark_executed(self, soulprint: str, profit_result: Optional[float] = None):
-        if soulprint in self.registry:
-            self.registry[soulprint].is_executed = True
-            self.registry[soulprint].profit_result = profit_result
-            self._save_registry()
-
-    def get_entry(self, soulprint: str) -> Optional[SoulprintEntry]:
-        return self.registry.get(soulprint)
-
-    def find_replayable(self, min_confidence: float = 0.8) -> List[SoulprintEntry]:
-        return [
-            e for e in self.registry.values()
-            if e.replayable and e.confidence >= min_confidence and not e.is_executed
-        ]
-
-    def all_entries(self) -> List[SoulprintEntry]:
-        return list(self.registry.values())
-
-    def get_similar_soulprints(self, target_vector: Dict[str, float], threshold: float = 0.85)
-    -> List[SoulprintEntry]:
-        """
-        Find soulprints with similar vector characteristics
-        Uses simple Euclidean distance for similarity
-        """
-        similar_entries = []
-
-        for entry in self.registry.values():
-            # Calculate similarity based on key vector components
-            target_components = [
-                target_vector.get('entropy', 0),
-                target_vector.get('momentum', 0),
-                target_vector.get('volatility', 0)
-            ]
-
-            entry_components = [
-                entry.vector.get('entropy', 0),
-                entry.vector.get('momentum', 0),
-                entry.vector.get('volatility', 0)
-            ]
-
-            # Simple Euclidean distance
-            distance = sum((a - b) ** 2 for a, b in zip(target_components, entry_components)) ** 0.5
-            similarity = 1.0 / (1.0 + distance)  # Convert to similarity score
-
-            if similarity >= threshold:
-                similar_entries.append(entry)
-
-        return similar_entries
-
-    def get_profitable_patterns(self, min_profit: float = 0.01) -> List[SoulprintEntry]:
-        """
-        Find soulprints that resulted in profitable trades
-        """
-        return [
-            e for e in self.registry.values()
-            if e.is_executed and e.profit_result and e.profit_result >= min_profit
-        ]
-
-    def get_registry_stats(self) -> Dict[str, any]:
-        """
-        Get statistics about the soulprint registry
-        """
-        total_entries = len(self.registry)
-        executed_entries = sum(1 for e in self.registry.values() if e.is_executed)
-        replayable_entries = sum(1 for e in self.registry.values() if e.replayable)
-
-        profitable_entries = [
-            e for e in self.registry.values()
-            if e.is_executed and e.profit_result and e.profit_result > 0
-        ]
-
-        avg_confidence = sum(e.confidence for e in self.registry.values())
-    / total_entries if total_entries > 0 else 0
-
-        return {
-            'total_entries': total_entries,
-            'executed_entries': executed_entries,
-            'replayable_entries': replayable_entries,
-            'profitable_entries': len(profitable_entries),
-            'avg_confidence': avg_confidence,
-            'execution_rate': executed_entries / total_entries if total_entries > 0 else 0,
-            'profit_rate': len(profitable_entries) / executed_entries if executed_entries > 0 else 0
+    def log_trigger(self, asset: str, phase: float, drift: float, schwafit_info: dict, trade_result: dict, timestamp: Optional[float] = None):
+        """Log a trigger event (entry/exit) with all math, phase, drift, and trade outcome."""
+        entry = {
+            "asset": asset,
+            "phase": phase,
+            "drift": drift,
+            "schwafit_info": schwafit_info,
+            "trade_result": trade_result,
+            "timestamp": timestamp or time.time()
         }
+        self.triggers.append(entry)
+        if self.registry_file:
+            self._save()
+
+    def log_backtest_signal(self, signal_data: Dict[str, Any]):
+        """Logs a signal from a backtest run, capturing key performance and context indicators."""
+        entry = {
+            "type": "backtest_signal",
+            "timestamp": signal_data.get("timestamp", time.time()),
+            "asset": signal_data.get("asset"),
+            "mode": signal_data.get("mode"),
+            "hash_id": signal_data.get("hash_id"),
+            "signal_vector": signal_data.get("signal_vector"),
+            "projected_gain": signal_data.get("projected_gain"),
+            "trade_details": signal_data.get("trade_details")  # Store the full signal for deep analysis
+        }
+        self.triggers.append(entry)
+        if self.registry_file:
+            self._save()
+
+    def get_best_phase(self, asset: str, window: int = 1000) -> dict:
+        """Return the phase/drift/tensor config with the highest profit in the last N triggers."""
+        filtered = [t for t in self.triggers if t["asset"] == asset][-window:]
+        if not filtered:
+            return {}
+        best = max(filtered, key=lambda t: t["trade_result"].get("profit", 0))
+        return best
+
+    def get_profit_vector(self, asset: str, phase: float = None, drift: float = None, window: int = 1000) -> List[float]:
+        """Return the rolling profit vector for a given asset/phase/drift."""
+        filtered = [t for t in self.triggers if t["asset"] == asset][-window:]
+        if phase is not None:
+            filtered = [t for t in filtered if abs(t["phase"] - phase) < 1e-4]
+        if drift is not None:
+            filtered = [t for t in filtered if abs(t["drift"] - drift) < 1e-4]
+        return [t["trade_result"].get("profit", 0) for t in filtered]
+
+    def get_cross_asset_best(self, window: int = 1000) -> dict:
+        """Return the best asset/phase/drift combo for profit in the last N triggers."""
+        filtered = self.triggers[-window:]
+        if not filtered:
+            return {}
+        best = max(filtered, key=lambda t: t["trade_result"].get("profit", 0))
+        return best
+
+    def get_last_triggers(self, asset: str, n: int = 10) -> List[Dict[str, Any]]:
+        """Return the last N triggers for an asset, with all math and trade info."""
+        filtered = [t for t in self.triggers if t["asset"] == asset]
+        return filtered[-n:]
+
+    def _save(self):
+        if self.registry_file:
+            with open(self.registry_file, "w") as f:
+                json.dump(self.triggers, f, indent=2)
+
+    def _load(self):
+        try:
+            with open(self.registry_file, "r") as f:
+                self.triggers = json.load(f)
+        except Exception:
+            self.triggers = []
 
 
 # Example usage and testing

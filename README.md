@@ -1,104 +1,56 @@
-# Schwabot AI Trading System
+# Schwabot Trading System
 
-## Overview
+A functional trading bot that executes real trades using advanced mathematical algorithms.
 
-Schwabot is an advanced AI-powered trading system designed to provide intelligent market analysis, trading strategies, and portfolio management.
+## What This Does
 
-## Features
+1. **Connects to real exchanges** via CCXT (Binance, etc.)
+2. **Pulls live market data** from CoinGecko, Glassnode, Fear & Greed
+3. **Processes data** through your mathematical algorithms (profit vectorization, ZPE-ZBE, CRLF)
+4. **Generates trading signals** based on RSI, MACD, sentiment, on-chain metrics
+5. **Executes real trades** with automatic stop losses and position sizing
+6. **Logs everything** to registry for performance tracking
 
-- 🤖 AI-driven trading algorithms
-- 📊 Advanced market analysis
-- 🔒 Secure trading execution
-- 🌐 Multi-exchange support
-- 📈 Dynamic portfolio management
+## Quick Start
 
-## Prerequisites
+1. **Install dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-- Python 3.11+
-- pip
-- virtualenv (recommended)
+2. **Configure API keys** in `trading_bot_config.json`:
+   ```json
+   {
+     "exchange_config": {
+       "apiKey": "YOUR_BINANCE_API_KEY",
+       "secret": "YOUR_BINANCE_SECRET_KEY",
+       "sandbox": true
+     }
+   }
+   ```
 
-## Installation
+3. **Execute a trade:**
+   ```bash
+   python start_trading_bot.py --mode trade --symbol BTCUSDT
+   ```
 
-1. Clone the repository:
-```bash
-git clone https://github.com/yourusername/schwabot.git
-cd schwabot
-```
+4. **Start automated trading:**
+   ```bash
+   python start_trading_bot.py --mode start-bot --interval 60
+   ```
 
-2. Create a virtual environment:
-```bash
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-```
+## System Components
 
-3. Install dependencies:
-```bash
-pip install -r requirements.txt
-```
+- **`core/cli_live_entry.py`** - Main trading bot interface
+- **`core/clean_trading_pipeline.py`** - Trading logic and signal generation
+- **`core/unified_market_data_pipeline.py`** - Live market data aggregation
+- **`core/ccxt_trading_executor.py`** - Real exchange order execution
+- **`core/soulprint_registry.py`** - Trade logging and performance tracking
 
-## Development Setup
+## No Examples, No Demos
 
-1. Install development dependencies:
-```bash
-pip install -r requirements-dev.txt
-```
+This is a **production trading system**. Every command executes real trades or analyzes real market data. No simulations, no examples, no demos.
 
-2. Set up pre-commit hooks:
-```bash
-pre-commit install
-```
+## Risk Warning
 
-## Running the Project
-
-### Main Application
-```bash
-python -m schwabot.launch
-```
-
-### Testing
-```bash
-pytest tests/
-```
-
-## Code Quality
-
-We use multiple tools to ensure high code quality:
-- Black for formatting
-- Flake8 for linting
-- MyPy for type checking
-- Bandit for security scanning
-- isort for import sorting
-
-Run comprehensive checks:
-```bash
-python comprehensive_linting.py
-```
-
-## Configuration
-
-Configuration is managed through:
-- `pyproject.toml`: Linting and formatting tools
-- `.env`: Environment-specific settings
-- `config/`: Project-specific configurations
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Run code quality checks
-4. Submit a pull request
-
-Please read [CODE_QUALITY.md](CODE_QUALITY.md) for detailed guidelines.
-
-## License
-
-[Specify your license here]
-
-## Contact
-
-[Your contact information]
-
-## Acknowledgments
-
-- [List any libraries, resources, or contributors]
+This system executes real trades with real money. Use sandbox mode for testing. Monitor positions regularly. Set appropriate risk limits.

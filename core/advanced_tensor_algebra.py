@@ -434,13 +434,13 @@ class InformationGeometry:
         Mathematical Formula:
         d²x^μ/ds² + Γ^μ_νλ (dx^ν/ds)(dx^λ/ds) = 0
         where Γ^μ_νλ are Christoffel symbols
-        
+
         Args:
             start_point: Starting point in manifold
             end_point: Ending point in manifold
             metric_tensor: Metric tensor at each point
             n_steps: Number of integration steps
-            
+
         Returns:
             Geodesic path
         """
@@ -459,10 +459,10 @@ class InformationGeometry:
         
         Mathematical Formula:
         R = g^ij R_ij where R_ij is Ricci tensor
-        
+
         Args:
             metric_tensor: Metric tensor
-            
+
         Returns:
             Scalar curvature
         """
