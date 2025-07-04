@@ -4,6 +4,11 @@ Fractal Core - Fractal mathematics for Schwabot trading system.
 
 Provides fractal quantization, pattern recognition, and mathematical
 fractal operations for the trading system.
+
+CUDA Integration:
+- GPU-accelerated fractal operations with automatic CPU fallback
+- Performance monitoring and optimization
+- Cross-platform compatibility (Windows, macOS, Linux)
 """
 
 import math
@@ -11,6 +16,36 @@ import logging
 import numpy as np
 from typing import Any, Dict, List, Tuple, Union
 from dataclasses import dataclass, field
+
+# CUDA Helper Integration
+try:
+    from ..utils.cuda_helper import (
+        xp, USING_CUDA, safe_cuda_operation, safe_matrix_multiply,
+        safe_tensor_contraction, safe_fft, safe_convolution,
+        safe_eigenvalue_decomposition, safe_matrix_inverse, safe_svd,
+        get_cuda_status, report_cuda_status
+    )
+    CUDA_AVAILABLE = True
+    logger = logging.getLogger(__name__)
+    logger.info("⚡ CUDA acceleration enabled in Fractal Core")
+except ImportError:
+    # Fallback to CPU-only mode
+    xp = np
+    USING_CUDA = False
+    CUDA_AVAILABLE = False
+    logger = logging.getLogger(__name__)
+    logger.warning("🔄 CUDA not available - using CPU-only mode in Fractal Core")
+
+# Dual State Router Integration
+try:
+    from ..system.dual_state_router import (
+        get_dual_state_router, route_task, StrategyTier, ComputeMode
+    )
+    DUAL_STATE_AVAILABLE = True
+    logger.info("🔄 Dual State Router integration enabled in Fractal Core")
+except ImportError:
+    DUAL_STATE_AVAILABLE = False
+    logger.warning("⚠️ Dual State Router not available in Fractal Core")
 
 logger = logging.getLogger(__name__)
 
@@ -40,14 +75,61 @@ def fractal_quantize_vector(vector: Union[List[float], np.ndarray],
         FractalQuantizationResult with quantized vector and metadata
     """
     try:
+        # Use dual state router if available for profit-tiered orchestration
+        if DUAL_STATE_AVAILABLE:
+            dual_state_router = get_dual_state_router()
+            task_data = {
+                'vector': vector.tolist() if hasattr(vector, 'tolist') else list(vector),
+                'precision': precision,
+                'method': method,
+                'operation': 'fractal_quantization'
+            }
+            
+            result = dual_state_router.route(
+                task_id="fractal_quantization",
+                data=task_data
+            )
+            
+            if result.get('success', False) and 'quantized_vector' in result:
+                # Extract result from dual state router
+                quantized_vector = np.array(result['quantized_vector'])
+                fractal_dim = result.get('fractal_dimension', 1.0)
+                similarity = result.get('self_similarity_score', 0.5)
+                compression = result.get('compression_ratio', 1.0)
+                
+                return FractalQuantizationResult(
+                    quantized_vector=quantized_vector,
+                    fractal_dimension=fractal_dim,
+                    self_similarity_score=similarity,
+                    compression_ratio=compression,
+                    metadata={
+                        "method": method,
+                        "precision": precision,
+                        "original_length": len(vector),
+                        "quantized_length": len(quantized_vector),
+                        "dual_state_routed": True
+                    }
+                )
+            else:
+                # Fallback to direct computation
+                logger.debug("Dual state router returned no result, using direct computation")
+        
+        # Direct computation (fallback or when dual state router not available)
         # Convert to numpy array if needed
         if isinstance(vector, list):
             vector = np.array(vector, dtype=np.float64)
 
-        # Normalize vector to [0, 1] range
-        v_min, v_max = vector.min(), vector.max()
+        # Normalize vector to [0, 1] range with CUDA acceleration
+        v_min, v_max = safe_cuda_operation(
+            lambda: (xp.min(vector), xp.max(vector)),
+            lambda: (np.min(vector), np.max(vector))
+        )
+        
         if v_max > v_min:
-            normalized = (vector - v_min) / (v_max - v_min)
+            normalized = safe_cuda_operation(
+                lambda: (vector - v_min) / (v_max - v_min),
+                lambda: (vector - v_min) / (v_max - v_min)
+            )
         else:
             normalized = vector * 0.5  # Handle constant vectors
 
@@ -61,10 +143,10 @@ def fractal_quantize_vector(vector: Union[List[float], np.ndarray],
         else:
             quantized = _mandelbrot_quantize(normalized, precision)  # Default
 
-        # Calculate fractal dimension
+        # Calculate fractal dimension with CUDA acceleration
         fractal_dim = _calculate_fractal_dimension(quantized)
 
-        # Calculate self-similarity score
+        # Calculate self-similarity score with CUDA acceleration
         similarity = _calculate_self_similarity(quantized)
 
         # Calculate compression ratio
@@ -79,7 +161,8 @@ def fractal_quantize_vector(vector: Union[List[float], np.ndarray],
                 "method": method,
                 "precision": precision,
                 "original_length": len(vector),
-                "quantized_length": len(quantized)
+                "quantized_length": len(quantized),
+                "dual_state_routed": False
             }
         )
 
@@ -91,7 +174,7 @@ def fractal_quantize_vector(vector: Union[List[float], np.ndarray],
             fractal_dimension=1.0,
             self_similarity_score=0.5,
             compression_ratio=1.0,
-            metadata={"error": str(e), "method": "fallback"}
+            metadata={"error": str(e), "method": "fallback", "dual_state_routed": False}
         )
 
 
@@ -111,9 +194,12 @@ def quantize_vector(vector: Union[List[float], np.ndarray],
         if isinstance(vector, list):
             vector = np.array(vector, dtype=np.float64)
         
-        # Simple quantization to discrete levels
+        # Simple quantization to discrete levels with CUDA acceleration
         max_val = 2 ** precision - 1
-        quantized = np.round(vector * max_val) / max_val
+        quantized = safe_cuda_operation(
+            lambda: xp.round(vector * max_val) / max_val,
+            lambda: np.round(vector * max_val) / max_val
+        )
         
         return quantized
         
@@ -126,7 +212,10 @@ def _mandelbrot_quantize(vector: np.ndarray, precision: int) -> np.ndarray:
     """Quantize using Mandelbrot set mathematics."""
     # Mandelbrot iteration count for each point
     max_iter = 2 ** precision
-    quantized = np.zeros_like(vector)
+    quantized = safe_cuda_operation(
+        lambda: xp.zeros_like(vector),
+        lambda: np.zeros_like(vector)
+    )
 
     for i, val in enumerate(vector):
         # Use value as complex number parameter
@@ -148,7 +237,10 @@ def _mandelbrot_quantize(vector: np.ndarray, precision: int) -> np.ndarray:
 def _julia_quantize(vector: np.ndarray, precision: int) -> np.ndarray:
     """Quantize using Julia set mathematics."""
     max_iter = 2 ** precision
-    quantized = np.zeros_like(vector)
+    quantized = safe_cuda_operation(
+        lambda: xp.zeros_like(vector),
+        lambda: np.zeros_like(vector)
+    )
 
     # Fixed Julia parameter
     c = complex(-0.7, 0.27)
@@ -170,7 +262,10 @@ def _julia_quantize(vector: np.ndarray, precision: int) -> np.ndarray:
 
 def _sierpinski_quantize(vector: np.ndarray, precision: int) -> np.ndarray:
     """Quantize using Sierpinski triangle mathematics."""
-    quantized = np.zeros_like(vector)
+    quantized = safe_cuda_operation(
+        lambda: xp.zeros_like(vector),
+        lambda: np.zeros_like(vector)
+    )
 
     for i, val in enumerate(vector):
         # Convert to binary representation
@@ -198,27 +293,35 @@ def _calculate_fractal_dimension(vector: np.ndarray) -> float:
             if size >= len(vector):
                 break
 
-            # Count boxes needed
-            count = 0
-            for i in range(0, len(vector), size):
-                segment = vector[i:i+size]
-                if len(segment) > 0 and np.std(segment) > 0.01:
-                    count += 1
-
-            box_counts.append(count)
+            # Count boxes needed to cover the vector
+            boxes_needed = safe_cuda_operation(
+                lambda: xp.ceil(len(vector) / size),
+                lambda: np.ceil(len(vector) / size)
+            )
+            box_counts.append(boxes_needed)
 
         if len(box_counts) < 2:
             return 1.0
 
-        # Calculate fractal dimension from slope
-        log_sizes = [math.log(size) for size in box_sizes[:len(box_counts)]]
-        log_counts = [math.log(count) if count > 0 else 0 for count in box_counts]
+        # Calculate fractal dimension using log-log plot slope
+        log_sizes = [math.log(1/size) for size in box_sizes[:len(box_counts)]]
+        log_counts = [math.log(count) for count in box_counts]
 
-        # Linear regression for slope
-        slope = np.polyfit(log_sizes, log_counts, 1)[0]
+        # Linear regression to find slope
+        n = len(log_sizes)
+        sum_x = sum(log_sizes)
+        sum_y = sum(log_counts)
+        sum_xy = sum(x * y for x, y in zip(log_sizes, log_counts))
+        sum_x2 = sum(x * x for x in log_sizes)
+
+        if sum_x2 * n - sum_x * sum_x == 0:
+            return 1.0
+
+        slope = (n * sum_xy - sum_x * sum_y) / (n * sum_x2 - sum_x * sum_x)
         return abs(slope)
 
-    except Exception:
+    except Exception as e:
+        logger.error(f"Fractal dimension calculation failed: {e}")
         return 1.0
 
 

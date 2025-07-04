@@ -583,18 +583,18 @@ def validate_trading_data(data: TradingData) -> ValidationResult:
     errors = []
     warnings = []
     
-        if isinstance(data, MarketData):
-            if data.price <= 0:
+    if isinstance(data, MarketData):
+        if data.price <= 0:
             errors.append("Price must be positive")
         if data.bid and data.ask and data.bid >= data.ask:
             errors.append("Bid must be less than ask")
     
-        elif isinstance(data, TradeSignal):
+    elif isinstance(data, TradeSignal):
         if not (0 <= data.confidence <= 1):
             errors.append("Confidence must be in [0,1]")
     
-        elif isinstance(data, Position):
-            if data.size <= 0:
+    elif isinstance(data, Position):
+        if data.size <= 0:
             errors.append("Position size must be positive")
     
     return ValidationResult(

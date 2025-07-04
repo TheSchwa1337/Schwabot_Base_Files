@@ -76,11 +76,11 @@ class WeatherDataPoint:
     altitude: float
     
     # Core weather data
-temperature: float  # Celsius
+    temperature: float  # Celsius
     pressure: float    # hPa
     humidity: float    # %
-wind_speed: float  # m/s
-wind_direction: float  # degrees
+    wind_speed: float  # m/s
+    wind_direction: float  # degrees
 
     # Advanced weather data
     schumann_frequency: float = 7.83  # Hz (default Schumann resonance)
@@ -159,10 +159,10 @@ class WeatherSignature:
     """Weather-price resonance signature."""
     
     frequency: float
-amplitude: float
-phase: float
-pattern_type: WeatherPattern
-resonance_mode: ResonanceMode
+    amplitude: float
+    phase: float
+    pattern_type: WeatherPattern
+    resonance_mode: ResonanceMode
     confidence: float
     timestamp: datetime
     location: GeoLocation
@@ -185,7 +185,7 @@ class WeatherPriceCorrelation:
     weather_factor: str
     price_factor: str
     sample_size: int
-confidence_interval: Tuple[float, float]
+    confidence_interval: Tuple[float, float]
 
     # CRWF enhanced
     entropy_weighted_correlation: float
@@ -205,7 +205,7 @@ class ChronoResonanceWeatherMapper:
     def __init__(self, api_key: Optional[str] = None):
         """Initialize the CRWF system."""
         self.api_key = api_key
-self.weather_history: List[WeatherDataPoint] = []
+        self.weather_history: List[WeatherDataPoint] = []
         self.location_cache: Dict[str, GeoLocation] = {}
         
         # CRWF parameters
@@ -297,7 +297,7 @@ self.weather_history: List[WeatherDataPoint] = []
                 resonance_strength=resonance_strength,
                 weather_pattern=weather_pattern,
                 temperature_gradient=temp_gradient,
-pressure_gradient=pressure_gradient,
+                pressure_gradient=pressure_gradient,
                 geo_alignment_score=geo_alignment['alignment_score'],
                 ley_line_resonance=geo_alignment['ley_line_resonance'],
                 geomagnetic_factor=geo_alignment['geomagnetic_factor'],
@@ -350,7 +350,7 @@ pressure_gradient=pressure_gradient,
     def _compute_pressure_gradient(self, weather_data: WeatherDataPoint) -> float:
         """Compute barometric pressure gradient ∇P(t,φ,λ)."""
         if len(self.weather_history) < 2:
-        return 0.0
+            return 0.0
 
         # Get recent pressure history for this location
         recent_pressures = [

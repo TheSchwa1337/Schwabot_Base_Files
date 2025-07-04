@@ -1,4 +1,10 @@
-"""Strategy Bit Mapper - Handles bitwise strategy expansion and hash-to-matrix matching."""
+"""Strategy Bit Mapper - Handles bitwise strategy expansion and hash-to-matrix matching.
+
+CUDA Integration:
+- GPU-accelerated strategy operations with automatic CPU fallback
+- Performance monitoring and optimization
+- Cross-platform compatibility (Windows, macOS, Linux)
+"""
 
 import logging
 import random
@@ -6,6 +12,36 @@ from datetime import datetime
 from typing import Any, Callable, Dict, Optional
 
 import numpy as np
+
+# CUDA Helper Integration
+try:
+    from ..utils.cuda_helper import (
+        xp, USING_CUDA, safe_cuda_operation, safe_matrix_multiply,
+        safe_tensor_contraction, safe_fft, safe_convolution,
+        safe_eigenvalue_decomposition, safe_matrix_inverse, safe_svd,
+        get_cuda_status, report_cuda_status
+    )
+    CUDA_AVAILABLE = True
+    logger = logging.getLogger(__name__)
+    logger.info("⚡ CUDA acceleration enabled in Strategy Bit Mapper")
+except ImportError:
+    # Fallback to CPU-only mode
+    xp = np
+    USING_CUDA = False
+    CUDA_AVAILABLE = False
+    logger = logging.getLogger(__name__)
+    logger.warning("🔄 CUDA not available - using CPU-only mode in Strategy Bit Mapper")
+
+# Dual State Router Integration
+try:
+    from ..system.dual_state_router import (
+        get_dual_state_router, route_task, StrategyTier, ComputeMode
+    )
+    DUAL_STATE_AVAILABLE = True
+    logger.info("🔄 Dual State Router integration enabled in Strategy Bit Mapper")
+except ImportError:
+    DUAL_STATE_AVAILABLE = False
+    logger.warning("⚠️ Dual State Router not available in Strategy Bit Mapper")
 
 from core.advanced_tensor_algebra import (
     AdvancedTensorAlgebra,
@@ -59,6 +95,7 @@ class StrategyBitMapper:
     - API data integration
     - Real-time strategy adaptation
     - Schwafit-driven fit/decision logic
+    - CUDA-accelerated mathematical operations
     """
 
     def __init__(self, matrix_dir, dashboard_hook: Optional[Callable] = None, weather_api_key: Optional[str] = None):
@@ -79,13 +116,24 @@ class StrategyBitMapper:
         self.information_geometry = information_geometry
         self.spectral_analysis = spectral_analysis
 
+        # Initialize dual state router for profit-tiered orchestration
+        if DUAL_STATE_AVAILABLE:
+            self.dual_state_router = get_dual_state_router()
+            logger.info("🔄 Dual State Router initialized for profit-tiered orchestration")
+        else:
+            self.dual_state_router = None
+            logger.info("⚠️ Using direct operations (no dual state router)")
+
         # Live handler feed integration
         self.live_handlers: Dict[str, Any] = {}
         self.handler_weights: Dict[str, float] = {}
         self.api_data_cache: Dict[str, Any] = {}
 
-        # Tensor weight rebalancing
-        self.tensor_weights: np.ndarray = np.ones(64)  # 64-bit strategy space
+        # Tensor weight rebalancing with CUDA acceleration
+        self.tensor_weights = safe_cuda_operation(
+            lambda: xp.ones(64),
+            lambda: np.ones(64)
+        )  # 64-bit strategy space
         self.weight_update_rate = 0.01
         self.rebalancing_threshold = 0.1
 
@@ -94,15 +142,24 @@ class StrategyBitMapper:
         self.schwafit = SchwafitCore(window=64)
 
     def normalize_vector(self, v: np.ndarray) -> np.ndarray:
-        """Normalize vector to unit length."""
-        norm = np.linalg.norm(v)
-        return v / norm if norm != 0 else v
+        """Normalize vector to unit length with CUDA acceleration."""
+        norm = safe_cuda_operation(
+            lambda: xp.linalg.norm(v),
+            lambda: np.linalg.norm(v)
+        )
+        return safe_cuda_operation(
+            lambda: v / norm if norm != 0 else v,
+            lambda: v / norm if norm != 0 else v
+        )
 
     def compute_cosine_similarity(self, a: np.ndarray, b: np.ndarray) -> float:
-        """Compute cosine similarity between two vectors."""
+        """Compute cosine similarity between two vectors with CUDA acceleration."""
         a = self.normalize_vector(a)
         b = self.normalize_vector(b)
-        return float(np.dot(a, b))
+        return float(safe_cuda_operation(
+            lambda: xp.dot(a, b),
+            lambda: np.dot(a, b)
+        ))
 
     def expand_strategy_bits(
         self, strategy_id: int, target_bits: int = 8, 
@@ -131,19 +188,46 @@ class StrategyBitMapper:
             return strategy_id
 
     def _tensor_weighted_expansion(self, strategy_id: int, target_bits: int) -> int:
-        """Expand strategy bits using tensor weights and API data."""
+        """Expand strategy bits using tensor weights and API data with CUDA acceleration."""
         try:
+            # Use dual state router if available for profit-tiered orchestration
+            if self.dual_state_router is not None:
+                task_data = {
+                    'strategy_id': strategy_id,
+                    'target_bits': target_bits,
+                    'tensor_weights': self.tensor_weights.tolist(),
+                    'operation': 'tensor_weighted_expansion'
+                }
+                
+                result = self.dual_state_router.route(
+                    task_id="tensor_weighted_expansion",
+                    data=task_data
+                )
+                
+                if result.get('success', False) and 'expanded_id' in result:
+                    return result['expanded_id']
+                else:
+                    # Fallback to direct computation
+                    logger.debug("Dual state router returned no result, using direct computation")
+            
+            # Direct computation (fallback or when dual state router not available)
             # Convert strategy_id to binary vector
             strategy_vector = np.array(
                 [int(b) for b in format(strategy_id, f'0{target_bits}b')]
             )
 
-            # Apply tensor weights
-            weighted_vector = strategy_vector * self.tensor_weights[:target_bits]
+            # Apply tensor weights with CUDA acceleration
+            weighted_vector = safe_cuda_operation(
+                lambda: strategy_vector * self.tensor_weights[:target_bits],
+                lambda: strategy_vector * self.tensor_weights[:target_bits]
+            )
 
             # Apply temporal alignment
             temporal_factor = self.temporal_algebra.ferris_wheel_alignment()
-            weighted_vector *= temporal_factor
+            weighted_vector = safe_cuda_operation(
+                lambda: weighted_vector * temporal_factor,
+                lambda: weighted_vector * temporal_factor
+            )
 
             # Apply information geometry transformation
             if len(weighted_vector) >= 2:
@@ -152,11 +236,14 @@ class StrategyBitMapper:
                 fisher_metric = self.information_geometry.fisher_information_metric(
                     strategy_data, "normal"
                 )
-                # Apply metric transformation
-                weighted_vector = fisher_metric @ weighted_vector
+                # Apply metric transformation with CUDA acceleration
+                weighted_vector = safe_matrix_multiply(fisher_metric, weighted_vector)
 
             # Quantize back to integer
-            expanded_id = int(np.sum(weighted_vector * (2 ** np.arange(target_bits))))
+            expanded_id = int(safe_cuda_operation(
+                lambda: xp.sum(weighted_vector * (2 ** xp.arange(target_bits))),
+                lambda: np.sum(weighted_vector * (2 ** np.arange(target_bits)))
+            ))
             return expanded_id % (1 << target_bits)
 
         except Exception as e:

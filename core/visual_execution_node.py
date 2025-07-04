@@ -25,8 +25,7 @@ class VisualExecutionNode:
         )
         return {
             "hash": signal_hash,
-"visual_display": f"Signal: {self.asset} at ${self.price} | E:{signal['entropy']}
-D:{signal['drift']}"
+            "visual_display": f"Signal: {self.asset} at ${self.price} | E:{signal['entropy']} D:{signal['drift']}"
         }
 
     def execute(self) -> dict:

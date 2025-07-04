@@ -1,3 +1,7 @@
+import logging
+from dataclasses import dataclass, field
+import time
+import numpy as np
 from typing import Any, Dict, List, Optional, Tuple
 
 
@@ -221,7 +225,11 @@ profit_score: float
 
 
 
-confidence: floatsymbol: str = BTC
+confidence: float
+
+
+
+symbol: str = field(default=BTC)
 
 
 
@@ -237,31 +245,31 @@ confidence: floatsymbol: str = BTC
 
 
 
-class TradingMetrics:Trading performance metrics.total_signals: int = 0
+class TradingMetrics:Trading performance metrics.total_signals: int = field(default=0)
 
 
 
-profitable_signals: int = 0
+profitable_signals: int = field(default=0)
 
 
 
-total_profit: float = 0.0
+total_profit: float = field(default=0.0)
 
 
 
-avg_profit_per_signal: float = 0.0
+avg_profit_per_signal: float = field(default=0.0)
 
 
 
-win_rate: float = 0.0
+win_rate: float = field(default=0.0)
 
 
 
-sharpe_ratio: float = 0.0
+sharpe_ratio: float = field(default=0.0)
 
 
 
-max_drawdown: float = 0.0
+max_drawdown: float = field(default=0.0)
 
 
 

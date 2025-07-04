@@ -13,6 +13,8 @@ if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
 from core.clean_trading_pipeline import create_trading_pipeline, CleanTradingPipeline
+from core.api.integration_manager import ApiIntegrationManager
+from core.api.data_models import OrderRequest
 
 # --- Application Setup ---
 app = FastAPI(
@@ -24,6 +26,7 @@ app = FastAPI(
 # --- Global State ---
 pipeline: CleanTradingPipeline = None
 config: dict = {}
+pipeline_api: ApiIntegrationManager = None
 
 # --- WebSocket Manager ---
 class ConnectionManager:
@@ -70,6 +73,12 @@ async def startup_event():
         initial_capital=config.get("initial_capital", 10000.0)
     )
     await manager.broadcast("Schwabot backend initialized.")
+
+    # Initialize the API Integration Manager
+    global pipeline_api
+    pipeline_api = ApiIntegrationManager(config_path=os.path.join(project_root, "config", "api_keys.json"))
+    await pipeline_api.start()
+    await manager.broadcast("API Integration Manager started.")
 
 @app.get("/status")
 async def get_status():
@@ -120,6 +129,47 @@ async def websocket_endpoint(websocket: WebSocket):
     except WebSocketDisconnect:
         manager.disconnect(websocket)
         await manager.broadcast("A client has disconnected.")
+
+# New API endpoints for trading integration
+@app.post("/api/place_order")
+async def place_order(order: dict):
+    """Place an order via the API Integration Manager."""
+    if not pipeline_api:
+        return {"error": "API Integration Manager not initialized"}
+    exchange = order.get("exchange")
+    order_req = OrderRequest(**order.get("order", {}))
+    resp = await pipeline_api.place_order(exchange, order_req)
+    return resp
+
+@app.get("/api/system_status")
+async def api_system_status():
+    """Get system status from the API Integration Manager."""
+    if not pipeline_api:
+        return {"error": "API Integration Manager not initialized"}
+    return pipeline_api.get_system_status()
+
+@app.get("/api/market_data/{exchange}/{symbol}")
+async def api_market_data(exchange: str, symbol: str):
+    """Fetch market data via the API Integration Manager."""
+    if not pipeline_api:
+        return {"error": "API Integration Manager not initialized"}
+    data = await pipeline_api.get_market_data(exchange, symbol)
+    return data
+
+@app.post("/process_market_data")
+async def process_market_data_endpoint(market_data: dict):
+    """Process incoming market data through the unified pipeline."""
+    if not pipeline:
+        return {"error": "Pipeline not initialized"}
+    result = pipeline.process_market_data(
+        market_data.get("symbol"),
+        market_data.get("price"),
+        market_data.get("volume"),
+        market_data.get("granularity", 1),
+        market_data.get("tick_index", 0)
+    )
+    await manager.broadcast(json.dumps({"type": "signal", "data": result}))
+    return {"status": "success", "data": result}
 
 # --- Main execution ---
 if __name__ == "__main__":

@@ -92,10 +92,10 @@ class LiveTradingBot:
                 )
             else:
                 return {"error": "Invalid trade action"}
-            
-            return result
-            
-        except Exception as e:
+
+        return result
+
+    except Exception as e:
             return {"error": f"Trade execution failed: {e}"}
     
     def _log_trade_result(self, trade_result: Dict[str, Any]):
@@ -125,8 +125,8 @@ class LiveTradingBot:
                 schwafit_info=schwafit_info,
                 trade_result=trade_result.get("execution_result", {})
             )
-            
-        except Exception as e:
+
+    except Exception as e:
             print(f"Failed to log trade: {e}")
     
     async def start_automated_trading(self, interval: int = 60):
@@ -236,7 +236,7 @@ async def execute_single_trade(config: Dict[str, Any], args):
                     print(f"💰 Order ID: {execution.get('id', 'N/A')}")
                     print(f"💵 Amount: {execution.get('amount', 0)}")
                     print(f"💲 Price: {execution.get('price', 0)}")
-                else:
+        else:
                     print(f"❌ Execution error: {execution['error']}")
             
             return 0
