@@ -1,25 +1,267 @@
 # !/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Schwabot Type Definitions
+Schwabot Type Definitions - Complete Mathematical Architecture
 
 Type definitions for the Schwabot unified mathematics and trading system.
-Provides consistent type annotations across all modules.
+Provides consistent type annotations across all modules with advanced mathematical structures.
+
+Core Mathematical Types:
+- Vector64: 64-dimensional vector for strategy space
+- FractalMatrix: Self-similar matrix structures
+- EntropySignal: Entropy-based trading signals
+- Tensor64: 64-bit tensor operations
+- QuantumState: Quantum superposition states
+- DualState: Dual-state execution parameters
+
+Historical Integration:
+- Evolved from early covariance matrix manipulation
+- Absorbed entropy modulation and tensor contraction
+- Supports quantum-inspired trading logic
+- Implements ZPE-ZBE signal triggers
 """
 
 from __future__ import annotations
 
-from typing import Any, Callable, Dict, List, NewType, Optional, Tuple, Union
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Callable, Dict, List, NewType, Optional, Tuple, Union, NamedTuple
+import numpy as np
+from numpy.typing import NDArray
 
 
-# Basic mathematical types
+# =============================================================================
+# CORE MATHEMATICAL TYPES - Advanced Architecture
+# =============================================================================
+
+class Vector64(NamedTuple):
+    """
+    64-dimensional vector for strategy space mapping.
+    
+    Mathematical Properties:
+    - Dimension: 64 (2^6 for binary strategy encoding)
+    - Norm: L2 norm for similarity calculations
+    - Operations: Tensor fusion, phase rotation, entropy quantization
+    
+    Historical Purpose:
+    - Strategy bit mapping and hash-to-vector conversion
+    - Cosine similarity calculations for matrix matching
+    - Tensor weight rebalancing in dual-state execution
+    """
+    values: NDArray[np.float64]  # 64-dimensional float array
+    
+    def __post_init__(self):
+        if len(self.values) != 64:
+            raise ValueError("Vector64 must have exactly 64 dimensions")
+    
+    def norm(self) -> float:
+        """Calculate L2 norm: ||v|| = sqrt(Σv_i²)"""
+        return float(np.linalg.norm(self.values))
+    
+    def normalize(self) -> Vector64:
+        """Normalize to unit vector: v/||v||"""
+        norm_val = self.norm()
+        if norm_val == 0:
+            return Vector64(np.zeros(64))
+        return Vector64(self.values / norm_val)
+    
+    def cosine_similarity(self, other: Vector64) -> float:
+        """Calculate cosine similarity: cos(θ) = (a·b)/(||a||·||b||)"""
+        return float(np.dot(self.values, other.values) / (self.norm() * other.norm()))
+
+
+class FractalMatrix(NamedTuple):
+    """
+    Self-similar matrix structure for recursive strategy matching.
+    
+    Mathematical Properties:
+    - Self-similarity: M[i,j] = f(M[i/2, j/2]) for recursive patterns
+    - Determinant: det(M) for stability analysis
+    - Eigenvalues: λ_i for spectral decomposition
+    
+    Historical Purpose:
+    - Matrix ID extraction from hash patterns
+    - Recursive strategy lookup and fallback
+    - Fractal fingerprint comparison
+    """
+    matrix: NDArray[np.float64]  # 2D array with fractal properties
+    scale_factor: float = 1.0
+    recursion_depth: int = 0
+    
+    def __post_init__(self):
+        if self.matrix.ndim != 2:
+            raise ValueError("FractalMatrix must be 2-dimensional")
+    
+    def determinant(self) -> float:
+        """Calculate matrix determinant for stability analysis"""
+        return float(np.linalg.det(self.matrix))
+    
+    def eigenvalues(self) -> NDArray[np.complex128]:
+        """Calculate eigenvalues for spectral analysis"""
+        return np.linalg.eigvals(self.matrix)
+    
+    def fractal_dimension(self) -> float:
+        """Calculate fractal dimension using box-counting method"""
+        # Simplified box-counting for fractal dimension
+        size = min(self.matrix.shape)
+        boxes = 0
+        for i in range(0, self.matrix.shape[0], size//4):
+            for j in range(0, self.matrix.shape[1], size//4):
+                if np.any(self.matrix[i:i+size//4, j:j+size//4] != 0):
+                    boxes += 1
+        return float(np.log(boxes) / np.log(4)) if boxes > 0 else 1.0
+
+
+class EntropySignal(NamedTuple):
+    """
+    Entropy-based trading signal with quantum coherence.
+    
+    Mathematical Properties:
+    - Entropy: H(X) = -Σp(x) log p(x)
+    - Coherence: Quantum coherence factor [0,1]
+    - Confidence: Signal confidence level [0,1]
+    
+    Historical Purpose:
+    - Market entropy calculation and signal generation
+    - Quantum-inspired trading decision making
+    - ZPE-ZBE signal trigger integration
+    """
+    hash: str  # Signal hash identifier
+    volatility_index: float  # Market volatility measure
+    entropy_value: float  # Shannon entropy H(X)
+    coherence_factor: float  # Quantum coherence [0,1]
+    confidence_level: float  # Signal confidence [0,1]
+    timestamp: float  # Signal timestamp
+    
+    def __post_init__(self):
+        # Validate ranges
+        if not (0 <= self.coherence_factor <= 1):
+            raise ValueError("Coherence factor must be in [0,1]")
+        if not (0 <= self.confidence_level <= 1):
+            raise ValueError("Confidence level must be in [0,1]")
+
+
+class Tensor64(NamedTuple):
+    """
+    64-bit tensor for advanced mathematical operations.
+    
+    Mathematical Properties:
+    - Rank: Variable rank tensor operations
+    - Contraction: Einstein summation convention
+    - Fusion: T = A ⊗ B tensor product
+    
+    Historical Purpose:
+    - Tensor fusion operations for strategy combination
+    - Phase rotation and entropy quantization
+    - Advanced matrix operations in dual-state execution
+    """
+    tensor: NDArray[np.float64]  # Multi-dimensional tensor
+    rank: int  # Tensor rank (number of dimensions)
+    shape: Tuple[int, ...]  # Tensor shape
+    
+    def __post_init__(self):
+        if self.tensor.ndim != self.rank:
+            raise ValueError(f"Tensor rank {self.rank} doesn't match dimensions {self.tensor.ndim}")
+        if self.tensor.shape != self.shape:
+            raise ValueError(f"Tensor shape {self.tensor.shape} doesn't match declared shape {self.shape}")
+    
+    def contract(self, other: Tensor64, axes: Tuple[int, int]) -> Tensor64:
+        """Tensor contraction: T_ij = A_ik B_kj"""
+        result = np.tensordot(self.tensor, other.tensor, axes=axes)
+        return Tensor64(result, result.ndim, result.shape)
+    
+    def fuse(self, other: Tensor64) -> Tensor64:
+        """Tensor fusion: T = A ⊗ B"""
+        result = np.outer(self.tensor.flatten(), other.tensor.flatten())
+        return Tensor64(result, result.ndim, result.shape)
+
+
+class QuantumState(NamedTuple):
+    """
+    Quantum state representation for superposition trading.
+    
+    Mathematical Properties:
+    - Amplitude: Complex amplitude |ψ⟩ = α|0⟩ + β|1⟩
+    - Phase: Phase angle φ in radians
+    - Coherence: Quantum coherence factor [0,1]
+    
+    Historical Purpose:
+    - Quantum-inspired trading decision making
+    - Superposition of trading strategies
+    - Quantum mirror layer for ZBE tracking
+    """
+    amplitude: complex  # Complex amplitude
+    phase: float  # Phase angle in radians
+    coherence: float  # Quantum coherence [0,1]
+    entanglement: Optional[float] = None  # Entanglement measure
+    
+    def __post_init__(self):
+        if not (0 <= self.coherence <= 1):
+            raise ValueError("Coherence must be in [0,1]")
+        if not (0 <= self.phase <= 2*np.pi):
+            raise ValueError("Phase must be in [0, 2π]")
+    
+    def collapse(self) -> float:
+        """Collapse quantum state to classical probability"""
+        return float(abs(self.amplitude)**2)
+    
+    def rotate(self, angle: float) -> QuantumState:
+        """Apply phase rotation: R(θ)|ψ⟩"""
+        new_phase = (self.phase + angle) % (2*np.pi)
+        new_amplitude = self.amplitude * np.exp(1j * angle)
+        return QuantumState(new_amplitude, new_phase, self.coherence, self.entanglement)
+
+
+class DualState(NamedTuple):
+    """
+    Dual-state execution parameters for Ψ_trade(t) = α·H(t) + β·S(t).
+    
+    Mathematical Properties:
+    - Alpha: Long-hold weight α ∈ [0,1]
+    - Beta: Scalp weight β ∈ [0,1]
+    - Constraint: α + β = 1 (normalization)
+    
+    Historical Purpose:
+    - Dual-state trading execution model
+    - Balance between long-term and short-term strategies
+    - Adaptive weight tuning based on entropy and success rates
+    """
+    alpha: float  # Long-hold weight α
+    beta: float   # Scalp weight β
+    timestamp: float  # State timestamp
+    
+    def __post_init__(self):
+        if not (0 <= self.alpha <= 1):
+            raise ValueError("Alpha must be in [0,1]")
+        if not (0 <= self.beta <= 1):
+            raise ValueError("Beta must be in [0,1]")
+        if abs(self.alpha + self.beta - 1.0) > 1e-6:
+            raise ValueError("Alpha + Beta must equal 1.0")
+    
+    def normalize(self) -> DualState:
+        """Normalize weights to ensure α + β = 1"""
+        total = self.alpha + self.beta
+        return DualState(self.alpha/total, self.beta/total, self.timestamp)
+    
+    def calculate_psi_trade(self, H_t: float, S_t: float) -> float:
+        """Calculate dual-state execution: Ψ_trade(t) = α·H(t) + β·S(t)"""
+        return float(self.alpha * H_t + self.beta * S_t)
+
+
+# =============================================================================
+# BASIC MATHEMATICAL TYPES
+# =============================================================================
+
 Vector = NewType("Vector", np.ndarray)
 Matrix = NewType("Matrix", np.ndarray)
 Tensor = NewType("Tensor", np.ndarray)
 Scalar = Union[int, float, np.number]
 
 
-# Trading types
+# =============================================================================
+# TRADING TYPES
+# =============================================================================
+
 class TradingAction(Enum):
     """Trading action types."""
 
@@ -37,7 +279,10 @@ class OrderType(Enum):
     STOP_LIMIT = "stop_limit"
 
 
-# Entropy and information types
+# =============================================================================
+# ENTROPY AND INFORMATION TYPES
+# =============================================================================
+
 @dataclass
 class Entropy:
     """Entropy value with metadata."""
@@ -106,13 +351,19 @@ class RiskMetrics:
     beta: Optional[float] = None
 
 
-# Strategy types
+# =============================================================================
+# STRATEGY TYPES
+# =============================================================================
+
 StrategyFunction = Callable[[MarketData], TradeSignal]
 RiskFunction = Callable[[Position], RiskMetrics]
 SignalProcessor = Callable[[List[TradeSignal]], TradeSignal]
 
 
-# Mathematical operation types
+# =============================================================================
+# MATHEMATICAL OPERATION TYPES
+# =============================================================================
+
 class MathOperation(Enum):
     """Mathematical operation types."""
 
@@ -126,28 +377,24 @@ class MathOperation(Enum):
     SIN = "sin"
     COS = "cos"
     TAN = "tan"
+    TENSOR_FUSION = "tensor_fusion"
+    PHASE_ROTATION = "phase_rotation"
+    ENTROPY_QUANTIZATION = "entropy_quantization"
 
 
 @dataclass
 class CalculationResult:
     """Result of a mathematical calculation."""
 
-    value: Union[Scalar, Vector, Matrix, Tensor]
+    value: Union[Scalar, Vector, Matrix, Tensor, Vector64, FractalMatrix, Tensor64]
     operation: MathOperation
     inputs: List[Any]
     metadata: Dict[str, Any] = field(default_factory=dict)
 
 
-# Quantum and advanced types
-@dataclass
-class QuantumState:
-    """Quantum state representation."""
-
-    amplitude: complex
-    phase: float
-    coherence: float
-    entanglement: Optional[float] = None
-
+# =============================================================================
+# QUANTUM AND ADVANCED TYPES
+# =============================================================================
 
 @dataclass
 class WaveFunction:
@@ -163,7 +410,10 @@ class WaveFunction:
         return self.states[0]
 
 
-# Error and status types
+# =============================================================================
+# ERROR AND STATUS TYPES
+# =============================================================================
+
 class ComponentStatus(Enum):
     """Component status types."""
 
@@ -185,7 +435,10 @@ class SystemStatus:
     metrics: Dict[str, Any] = field(default_factory=dict)
 
 
-# Configuration types
+# =============================================================================
+# CONFIGURATION TYPES
+# =============================================================================
+
 @dataclass
 class TradingConfig:
     """Trading configuration."""
@@ -216,21 +469,30 @@ class SystemConfig:
     enable_profiling: bool = False
 
 
-# Unified types for backward compatibility
+# =============================================================================
+# UNIFIED TYPES FOR BACKWARD COMPATIBILITY
+# =============================================================================
+
 TradingData = Union[MarketData, TradeSignal, Position]
-MathData = Union[Vector, Matrix, Tensor, Scalar]
+MathData = Union[Vector, Matrix, Tensor, Scalar, Vector64, FractalMatrix, Tensor64]
 StatusData = Union[SystemStatus, ComponentStatus]
 ConfigData = Union[TradingConfig, MathConfig, SystemConfig]
 
 
-# Type aliases for complex structures
+# =============================================================================
+# TYPE ALIASES FOR COMPLEX STRUCTURES
+# =============================================================================
+
 TensorOperation = Callable[[Tensor, Tensor], Tensor]
 StrategyPipeline = List[StrategyFunction]
 RiskPipeline = List[RiskFunction]
 ValidationFunction = Callable[[Any], bool]
 
 
-# Advanced mathematical structures
+# =============================================================================
+# ADVANCED MATHEMATICAL STRUCTURES
+# =============================================================================
+
 @dataclass
 class ComplexMatrix:
     """Complex-valued matrix."""
@@ -259,7 +521,10 @@ class SparseTensor:
         return Tensor(dense)
 
 
-# Profit and performance types
+# =============================================================================
+# PROFIT AND PERFORMANCE TYPES
+# =============================================================================
+
 @dataclass
 class ProfitMetrics:
     """Profit and performance metrics."""
@@ -286,107 +551,101 @@ class TradeRecord:
     slippage: float = 0.0
 
 
-# Integration and pipeline types
-IntegrationResult = Dict[str, Any]
-PipelineStage = Callable[[Any], Any]
-ValidationResult = Tuple[bool, str]
-ProcessingPipeline = List[PipelineStage]
+# =============================================================================
+# VALIDATION TYPES
+# =============================================================================
+
+@dataclass
+class ValidationResult:
+    """Validation result container."""
+
+    is_valid: bool
+    errors: List[str] = field(default_factory=list)
+    warnings: List[str] = field(default_factory=list)
 
 
-# Export list for easy imports
-__all__ = [
-    # Basic types
-    "Vector",
-    "Matrix",
-    "Tensor",
-    "Scalar",
-    # Enums
-    "TradingAction",
-    "OrderType",
-    "MathOperation",
-    "ComponentStatus",
-    # Dataclasses
-    "Entropy",
-    "PricePoint",
-    "MarketData",
-    "TradeSignal",
-    "Position",
-    "RiskMetrics",
-    "CalculationResult",
-    "QuantumState",
-    "WaveFunction",
-    "SystemStatus",
-    "TradingConfig",
-    "MathConfig",
-    "SystemConfig",
-    "ComplexMatrix",
-    "SparseTensor",
-    "ProfitMetrics",
-    "TradeRecord",
-    # Type aliases
-    "TradingData",
-    "MathData",
-    "StatusData",
-    "ConfigData",
-    "TensorOperation",
-    "StrategyPipeline",
-    "RiskPipeline",
-    "ValidationFunction",
-    "IntegrationResult",
-    "PipelineStage",
-    "ValidationResult",
-    "ProcessingPipeline",
-    # Function types
-    "StrategyFunction",
-    "RiskFunction",
-    "SignalProcessor",
-]
-
+# =============================================================================
+# FACTORY FUNCTIONS
+# =============================================================================
 
 def create_default_market_data(symbol: str = "BTC/USDC") -> MarketData:
-    """Create default market data for testing."""
-    return MarketData(
-        symbol=symbol, price=50000.0, bid=49999.0, ask=50001.0, volume=1000.0, timestamp=None
-    )
+    """Create default market data."""
+    return MarketData(symbol=symbol, price=50000.0)
 
 
 def create_default_trade_signal() -> TradeSignal:
-    """Create default trade signal for testing."""
-    return TradeSignal(action=TradingAction.HOLD, confidence=0.5, reason="Default signal")
+    """Create default trade signal."""
+    return TradeSignal(action=TradingAction.HOLD, confidence=0.5)
 
 
 def validate_trading_data(data: TradingData) -> ValidationResult:
-    """Validate trading data structure."""
-    try:
-        if isinstance(data, MarketData):
-            if data.price <= 0:
-                return False, "Invalid price"
-        elif isinstance(data, TradeSignal):
-            if not 0 <= data.confidence <= 1:
-                return False, "Invalid confidence range"
-        elif isinstance(data, Position):
-            if data.size <= 0:
-                return False, "Invalid position size"
+    """Validate trading data."""
+    errors = []
+    warnings = []
+    
+    if isinstance(data, MarketData):
+        if data.price <= 0:
+            errors.append("Price must be positive")
+        if data.bid and data.ask and data.bid >= data.ask:
+            errors.append("Bid must be less than ask")
+    
+    elif isinstance(data, TradeSignal):
+        if not (0 <= data.confidence <= 1):
+            errors.append("Confidence must be in [0,1]")
+    
+    elif isinstance(data, Position):
+        if data.size <= 0:
+            errors.append("Position size must be positive")
+    
+    return ValidationResult(
+        is_valid=len(errors) == 0,
+        errors=errors,
+        warnings=warnings
+    )
 
-        return True, "Valid"
-    except Exception as e:
-        return False, f"Validation error: {e}"
 
+# =============================================================================
+# MATHEMATICAL CONSTANTS
+# =============================================================================
 
-if __name__ == "__main__":
-    # Test the type definitions
-    print("Testing Schwabot Type Definitions...")
+# Mathematical constants for calculations
+PI = np.pi
+E = np.e
+GOLDEN_RATIO = (1 + np.sqrt(5)) / 2
+EULER_MASCHERONI = 0.5772156649015329
 
-    # Test market data
-    market_data = create_default_market_data()
-    print(f"Market data: {market_data}")
+# Trading constants
+DEFAULT_ENTROPY_THRESHOLD = 0.6
+DEFAULT_QUANTUM_COHERENCE_THRESHOLD = 0.8
+DEFAULT_DUAL_STATE_LEARNING_RATE = 0.01
 
-    # Test trade signal
-    signal = create_default_trade_signal()
-    print(f"Trade signal: {signal}")
+# Strategy constants
+STRATEGY_VECTOR_DIMENSION = 64
+FRACTAL_MATRIX_MIN_SIZE = 8
+TENSOR_FUSION_THRESHOLD = 0.7
 
-    # Test validation
-    valid, msg = validate_trading_data(market_data)
-    print(f"Market data validation: {valid} - {msg}")
-
-    print("Type definitions test completed!")
+# Export all types
+__all__ = [
+    # Core mathematical types
+    "Vector64", "FractalMatrix", "EntropySignal", "Tensor64", "QuantumState", "DualState",
+    
+    # Basic types
+    "Vector", "Matrix", "Tensor", "Scalar",
+    
+    # Trading types
+    "TradingAction", "OrderType", "MarketData", "TradeSignal", "Position", "RiskMetrics",
+    
+    # Mathematical types
+    "MathOperation", "CalculationResult", "ComplexMatrix", "SparseTensor",
+    
+    # System types
+    "ComponentStatus", "SystemStatus", "TradingConfig", "MathConfig", "SystemConfig",
+    
+    # Utility types
+    "ValidationResult", "ProfitMetrics", "TradeRecord",
+    
+    # Constants
+    "PI", "E", "GOLDEN_RATIO", "EULER_MASCHERONI",
+    "DEFAULT_ENTROPY_THRESHOLD", "DEFAULT_QUANTUM_COHERENCE_THRESHOLD",
+    "STRATEGY_VECTOR_DIMENSION", "FRACTAL_MATRIX_MIN_SIZE"
+]

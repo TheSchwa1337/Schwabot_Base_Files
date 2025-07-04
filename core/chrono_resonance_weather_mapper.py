@@ -76,23 +76,23 @@ class WeatherDataPoint:
     altitude: float
     
     # Core weather data
-    temperature: float  # Celsius
+temperature: float  # Celsius
     pressure: float    # hPa
     humidity: float    # %
-    wind_speed: float  # m/s
-    wind_direction: float  # degrees
-    
+wind_speed: float  # m/s
+wind_direction: float  # degrees
+
     # Advanced weather data
     schumann_frequency: float = 7.83  # Hz (default Schumann resonance)
     geomagnetic_index: float = 0.0    # Kp index
     solar_flux: float = 100.0         # Solar flux units
-    
+
     # CRWF computed values
     temperature_gradient: float = 0.0
     pressure_gradient: float = 0.0
     entropy_score: float = 0.0
     resonance_strength: float = 0.0
-    
+
     # Metadata
     weather_type: str = "unknown"
     source: str = "api"
@@ -159,10 +159,10 @@ class WeatherSignature:
     """Weather-price resonance signature."""
     
     frequency: float
-    amplitude: float
-    phase: float
-    pattern_type: WeatherPattern
-    resonance_mode: ResonanceMode
+amplitude: float
+phase: float
+pattern_type: WeatherPattern
+resonance_mode: ResonanceMode
     confidence: float
     timestamp: datetime
     location: GeoLocation
@@ -185,8 +185,8 @@ class WeatherPriceCorrelation:
     weather_factor: str
     price_factor: str
     sample_size: int
-    confidence_interval: Tuple[float, float]
-    
+confidence_interval: Tuple[float, float]
+
     # CRWF enhanced
     entropy_weighted_correlation: float
     resonance_adjusted_correlation: float
@@ -205,7 +205,7 @@ class ChronoResonanceWeatherMapper:
     def __init__(self, api_key: Optional[str] = None):
         """Initialize the CRWF system."""
         self.api_key = api_key
-        self.weather_history: List[WeatherDataPoint] = []
+self.weather_history: List[WeatherDataPoint] = []
         self.location_cache: Dict[str, GeoLocation] = {}
         
         # CRWF parameters
@@ -297,7 +297,7 @@ class ChronoResonanceWeatherMapper:
                 resonance_strength=resonance_strength,
                 weather_pattern=weather_pattern,
                 temperature_gradient=temp_gradient,
-                pressure_gradient=pressure_gradient,
+pressure_gradient=pressure_gradient,
                 geo_alignment_score=geo_alignment['alignment_score'],
                 ley_line_resonance=geo_alignment['ley_line_resonance'],
                 geomagnetic_factor=geo_alignment['geomagnetic_factor'],
@@ -323,7 +323,7 @@ class ChronoResonanceWeatherMapper:
             logger.debug(f"CRWF computed: {crwf_output:.4f}, Entropy: {entropy_score:.3f}")
             
             return response
-            
+
         except Exception as e:
             logger.error(f"Error computing CRWF: {e}")
             return self._create_fallback_response(weather_data, location)
@@ -341,8 +341,8 @@ class ChronoResonanceWeatherMapper:
         ]
         
         if len(recent_temps) < 2:
-            return 0.0
-        
+                return 0.0
+
         # Compute gradient using finite difference
         temp_gradient = np.gradient(recent_temps)
         return float(np.mean(temp_gradient))
@@ -350,8 +350,8 @@ class ChronoResonanceWeatherMapper:
     def _compute_pressure_gradient(self, weather_data: WeatherDataPoint) -> float:
         """Compute barometric pressure gradient ∇P(t,φ,λ)."""
         if len(self.weather_history) < 2:
-            return 0.0
-        
+        return 0.0
+
         # Get recent pressure history for this location
         recent_pressures = [
             w.pressure for w in self.weather_history[-24:]  # Last 24 hours
@@ -662,7 +662,7 @@ class ChronoResonanceWeatherMapper:
             if not api_key:
                 logger.warning("No API key provided for weather data fetch")
                 return None
-            
+
             # OpenWeatherMap API call
             url = "http://api.openweathermap.org/data/2.5/weather"
             params = {
@@ -694,11 +694,11 @@ class ChronoResonanceWeatherMapper:
             
             logger.info(f"Weather data fetched for {latitude:.2f}, {longitude:.2f}")
             return weather_data
-            
+
         except Exception as e:
             logger.error(f"Error fetching weather data: {e}")
-            return None
-    
+        return None
+
     def get_location(self, latitude: float, longitude: float, name: str = "") -> GeoLocation:
         """Get or create a GeoLocation with computed resonance properties."""
         location_key = f"{latitude:.3f},{longitude:.3f}"

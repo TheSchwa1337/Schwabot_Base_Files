@@ -25,29 +25,23 @@ Provides price data, market metrics, trending coins, and market dominance data.
 
 """
 
+from __future__ import annotations
+
 import asyncio
+import logging
 from typing import Any, Dict
 
-
-from .base_handler import BaseAPIHandler
-
 try:
-
-
-
+    import aiohttp
 except ImportError:
-
     aiohttp = None
 
-
 try:
-
-
-
+    import requests
 except ImportError:
-
     requests = None
 
+from .base_handler import BaseAPIHandler
 
 logger = logging.getLogger(__name__)
 

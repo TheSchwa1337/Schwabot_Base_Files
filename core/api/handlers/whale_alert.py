@@ -1,54 +1,22 @@
-# !/usr/bin/env python3
-
-
-# -*- coding: utf-8 -*-
-
-
-"""WhaleAlert API Handler
-
-
-
-
-
-
-
-Fetches whale transaction data from WhaleAlert API.
-
-
-
-Tracks large crypto transactions and provides insights into whale movements.
-
-
-
-"""
-
+from __future__ import annotations
 
 import asyncio
+import logging
 from typing import Any, Dict, List
 
+try:
+    import aiohttp
+except ImportError:  # pragma: no cover
+    aiohttp = None
+
+try:
+    import requests
+except ImportError:  # pragma: no cover
+    requests = None
 
 from .base_handler import BaseAPIHandler
 
-try:
-
-
-
-except ImportError:  # pragma: no cover
-
-    aiohttp = None
-
-
-try:
-
-
-
-except ImportError:  # pragma: no cover
-
-    requests = None
-
-
 logger = logging.getLogger(__name__)
-
 
 # WhaleAlert API configuration
 

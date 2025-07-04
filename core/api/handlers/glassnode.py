@@ -1,8 +1,19 @@
 from __future__ import annotations
 
 import asyncio
+import logging
+import time
 from typing import Any, Dict
 
+try:
+    import aiohttp
+except ImportError:
+    aiohttp = None
+
+try:
+    import requests
+except ImportError:
+    requests = None
 
 from .base_handler import BaseAPIHandler
 
@@ -14,27 +25,6 @@ and advanced cryptocurrency market intelligence.
 Provides network health, market valuation, and activity metrics.
 
 """
-
-
-try:
-
-
-
-except ImportError:
-
-    aiohttp = None
-
-
-try:
-
-
-
-except ImportError:
-
-    requests = None
-
-
-logger = logging.getLogger(__name__)
 
 
 # Glassnode API configuration

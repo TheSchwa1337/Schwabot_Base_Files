@@ -3,6 +3,8 @@
 Strategy Loader - Loads and routes strategies by name or hash.
 """
 import importlib
+import logging
+import os
 from typing import Callable, Dict, Optional
 
 logger = logging.getLogger(__name__)
@@ -12,18 +14,22 @@ STRATEGY_DIR = os.path.join(os.path.dirname(__file__), "strategy")
 # Dynamically load all strategy modules in the strategy/ folder
 STRATEGY_REGISTRY: Dict[str, Callable] = {}
 
+
 # Fallback strategy implementations
 def momentum_strategy(data):
     """Default momentum strategy."""
     return {"action": "buy", "confidence": 0.8, "strategy": "momentum"}
 
+
 def mean_reversion_strategy(data):
     """Default mean reversion strategy."""
     return {"action": "sell", "confidence": 0.7, "strategy": "mean_reversion"}
 
+
 def entropy_driven_strategy(data):
     """Default entropy driven strategy."""
     return {"action": "hold", "confidence": 0.6, "strategy": "entropy_driven"}
+
 
 # Add fallback strategies
 STRATEGY_REGISTRY.update({
@@ -54,6 +60,7 @@ HASH_MAP = {
     "entropy_driven": "entropy_driven"
 }
 
+
 def load_strategy(name_or_hash: str) -> Optional[Callable]:
     """Load a strategy by name or hash."""
     key = HASH_MAP.get(name_or_hash, name_or_hash)
@@ -66,5 +73,6 @@ def load_strategy(name_or_hash: str) -> Optional[Callable]:
         strategy = STRATEGY_REGISTRY.get("momentum")
 
     return strategy
+
 
 __all__ = ["load_strategy", "STRATEGY_REGISTRY"]

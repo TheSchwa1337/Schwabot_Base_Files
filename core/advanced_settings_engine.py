@@ -16,12 +16,16 @@ Features:
 - CLI integration for settings management
 """
 
-from __future__ import annotations
-
-from typing import Any, Dict, List, Optional, Union
+import json
+import logging
+import time
+from dataclasses import dataclass, field
+from enum import Enum
+from pathlib import Path
+from typing import Any, Dict, List, Optional
 
 import yaml
-from jsonschema import Draft7Validator, ValidationError
+from jsonschema import Draft7Validator
 
 logger = logging.getLogger(__name__)
 
