@@ -6,7 +6,11 @@ Provides fractal quantization, pattern recognition, and mathematical
 fractal operations for the trading system.
 """
 
-from typing import Any, Dict, List, Optional, Tuple, Union
+import math
+import logging
+import numpy as np
+from typing import Any, Dict, List, Tuple, Union
+from dataclasses import dataclass, field
 
 logger = logging.getLogger(__name__)
 
@@ -89,6 +93,33 @@ def fractal_quantize_vector(vector: Union[List[float], np.ndarray],
             compression_ratio=1.0,
             metadata={"error": str(e), "method": "fallback"}
         )
+
+
+def quantize_vector(vector: Union[List[float], np.ndarray],
+                   precision: int = 8) -> np.ndarray:
+    """
+    Simple vector quantization function.
+    
+    Args:
+        vector: Input vector to quantize
+        precision: Bit precision for quantization
+        
+    Returns:
+        Quantized vector
+    """
+    try:
+        if isinstance(vector, list):
+            vector = np.array(vector, dtype=np.float64)
+        
+        # Simple quantization to discrete levels
+        max_val = 2 ** precision - 1
+        quantized = np.round(vector * max_val) / max_val
+        
+        return quantized
+        
+    except Exception as e:
+        logger.error(f"Vector quantization failed: {e}")
+        return np.array(vector, dtype=np.float64)
 
 
 def _mandelbrot_quantize(vector: np.ndarray, precision: int) -> np.ndarray:
@@ -198,104 +229,106 @@ def _calculate_self_similarity(vector: np.ndarray) -> float:
             return 0.5
 
         # Compare different scales of the vector
-        scales = [2, 4, 8]
+        scales = [1, 2, 4]
         similarities = []
 
         for scale in scales:
             if scale >= len(vector):
                 break
 
-            # Create downsampled version
-            downsampled = vector[::scale]
+            # Create scaled version
+            scaled = vector[::scale]
+            if len(scaled) < 2:
+                continue
 
             # Calculate correlation with original
-            if len(downsampled) > 1:
-                correlation = np.corrcoef(vector[:len(downsampled)*scale],
-                                        np.repeat(downsampled, scale))[0, 1]
-                if not np.isnan(correlation):
-                    similarities.append(abs(correlation))
+            correlation = np.corrcoef(vector[:len(scaled)], scaled)[0, 1]
+            if not np.isnan(correlation):
+                similarities.append(abs(correlation))
 
-        return np.mean(similarities) if similarities else 0.5
+        if similarities:
+            return float(np.mean(similarities))
+        else:
+            return 0.5
 
     except Exception:
         return 0.5
 
 
 def generate_fractal_hash(vector: np.ndarray, length: int = 64) -> str:
-    """Generate a fractal hash from a vector."""
+    """
+    Generate fractal hash from vector.
+
+    Args:
+        vector: Input vector
+        length: Hash length in bits
+
+    Returns:
+        Fractal hash string
+    """
     try:
-        # Quantize the vector
-        result = fractal_quantize_vector(vector)
-
-        # Use quantized values to generate hash
-        hash_values = []
-        for val in result.quantized_vector:
-            # Convert to integer and take modulo
-            int_val = int(val * 255)
-            hash_values.append(int_val)
-
-        # Pad or truncate to desired length
-        while len(hash_values) < length:
-            hash_values.extend(hash_values[:length - len(hash_values)])
-
-        hash_values = hash_values[:length]
-
-        # Convert to hex string
-        hex_hash = ''.join(f'{val:02x}' for val in hash_values)
+        # Quantize vector
+        quantized = fractal_quantize_vector(vector, precision=8)
+        
+        # Convert to binary string
+        binary = ""
+        for val in quantized.quantized_vector:
+            # Convert to binary representation
+            binary_val = format(int(val * 255), '08b')
+            binary += binary_val
+        
+        # Truncate or pad to desired length
+        if len(binary) > length:
+            binary = binary[:length]
+        else:
+            binary = binary.ljust(length, '0')
+        
+        # Convert to hex
+        hex_hash = ""
+        for i in range(0, len(binary), 4):
+            chunk = binary[i:i+4]
+            hex_hash += format(int(chunk, 2), 'x')
+        
         return hex_hash
-
+        
     except Exception as e:
         logger.error(f"Fractal hash generation failed: {e}")
-        return "0" * length
+        return "0" * (length // 4)
 
 
 def fractal_pattern_match(pattern: np.ndarray, target: np.ndarray,
                          threshold: float = 0.8) -> Tuple[bool, float]:
     """
-    Match fractal patterns between two vectors.
+    Match fractal pattern in target vector.
+
+    Args:
+        pattern: Pattern to match
+        target: Target vector
+        threshold: Similarity threshold
 
     Returns:
         Tuple of (match_found, similarity_score)
     """
     try:
-        # Quantize both vectors
-        pattern_result = fractal_quantize_vector(pattern)
-        target_result = fractal_quantize_vector(target)
+        if len(pattern) > len(target):
+            return False, 0.0
 
-        # Calculate similarity using multiple metrics
-        similarities = []
+        best_score = 0.0
+        
+        # Slide pattern over target
+        for i in range(len(target) - len(pattern) + 1):
+            segment = target[i:i+len(pattern)]
+            
+            # Calculate similarity
+            correlation = np.corrcoef(pattern, segment)[0, 1]
+            if not np.isnan(correlation):
+                score = abs(correlation)
+                if score > best_score:
+                    best_score = score
 
-        # Vector similarity
-        if len(pattern_result.quantized_vector) == len(target_result.quantized_vector):
-            vec_sim = np.corrcoef(pattern_result.quantized_vector,
-                                target_result.quantized_vector)[0, 1]
-            if not np.isnan(vec_sim):
-                similarities.append(abs(vec_sim))
-
-        # Fractal dimension similarity
-        dim_sim = 1.0 - abs(pattern_result.fractal_dimension - target_result.fractal_dimension)
-        similarities.append(dim_sim)
-
-        # Self-similarity score similarity
-        sim_sim = 1.0 - abs(pattern_result.self_similarity_score
-    - target_result.self_similarity_score)
-        similarities.append(sim_sim)
-
-        # Average similarity
-        avg_similarity = np.mean(similarities) if similarities else 0.0
-        match_found = avg_similarity >= threshold
-
-        return match_found, avg_similarity
+        match_found = best_score >= threshold
+        return match_found, float(best_score)
 
     except Exception as e:
         logger.error(f"Fractal pattern matching failed: {e}")
         return False, 0.0
-
-
-# Export main functions
-__all__ = [
-    "fractal_quantize_vector",
-    "generate_fractal_hash",
-    "fractal_pattern_match",
-    "FractalQuantizationResult"
-]

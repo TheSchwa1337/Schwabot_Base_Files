@@ -5,6 +5,7 @@ This module provides a comprehensive mathematical foundation
 integrating quantum-inspired computational models.
 """
 
+import hashlib
 from typing import Any, Dict
 
 from .clean_math_foundation import CleanMathFoundation
@@ -14,6 +15,27 @@ from .zpe_zbe_core import (
     ZPEZBECore,
     ZPEZBEPerformanceTracker
 )
+
+
+def generate_unified_hash(data: Any) -> str:
+    """
+    Generate unified hash from data.
+    
+    Args:
+        data: Data to hash
+        
+    Returns:
+        Hash string
+    """
+    if isinstance(data, (list, tuple)):
+        data_str = str(sorted(data))
+    elif isinstance(data, dict):
+        data_str = str(sorted(data.items()))
+    else:
+        data_str = str(data)
+    
+    return hashlib.sha256(data_str.encode()).hexdigest()[:16]
+
 
 class UnifiedMathSystem:
     """

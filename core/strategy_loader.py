@@ -1,11 +1,9 @@
 # !/usr/bin/env python3
-"""
-Strategy Loader - Loads and routes strategies by name or hash.
-"""
+"""Strategy Loader - Loads and routes strategies by name or hash."""
 import importlib
 import logging
 import os
-from typing import Callable, Dict, Optional
+from typing import Callable, Dict, Optional, Any
 
 logger = logging.getLogger(__name__)
 
@@ -16,18 +14,18 @@ STRATEGY_REGISTRY: Dict[str, Callable] = {}
 
 
 # Fallback strategy implementations
-def momentum_strategy(data):
-    """Default momentum strategy."""
+def momentum_strategy(data: Dict[str, Any]) -> Dict[str, Any]:
+    """Return default momentum strategy."""
     return {"action": "buy", "confidence": 0.8, "strategy": "momentum"}
 
 
-def mean_reversion_strategy(data):
-    """Default mean reversion strategy."""
+def mean_reversion_strategy(data: Dict[str, Any]) -> Dict[str, Any]:
+    """Return default mean reversion strategy."""
     return {"action": "sell", "confidence": 0.7, "strategy": "mean_reversion"}
 
 
-def entropy_driven_strategy(data):
-    """Default entropy driven strategy."""
+def entropy_driven_strategy(data: Dict[str, Any]) -> Dict[str, Any]:
+    """Return default entropy driven strategy."""
     return {"action": "hold", "confidence": 0.6, "strategy": "entropy_driven"}
 
 
@@ -46,7 +44,7 @@ if os.path.exists(STRATEGY_DIR):
             try:
                 mod = importlib.import_module(f"core.strategy.{mod_name}")
                 if hasattr(mod, "execute"):
-                    STRATEGY_REGISTRY[mod_name] = getattr(mod, "execute")
+                    STRATEGY_REGISTRY[mod_name] = mod.execute
                     logger.info(f"Loaded strategy: {mod_name}")
             except ImportError as e:
                 logger.warning(f"Could not import strategy {mod_name}: {e}")

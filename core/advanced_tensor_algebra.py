@@ -491,11 +491,11 @@ class SpectralAnalysis:
         Mathematical Formula:
         X(f) = ∫ x(t) e^(-i2πft) dt
         P(f) = |X(f)|² (power spectrum)
-        
+
         Args:
             time_series: Market time series
             sampling_rate: Sampling rate in Hz
-            
+
         Returns:
             Tuple of (frequencies, power_spectrum)
         """
@@ -523,12 +523,12 @@ class SpectralAnalysis:
         Mathematical Formula:
         W(a,b) = (1/√|a|) ∫ x(t) ψ*((t-b)/a) dt
         where ψ is the mother wavelet
-        
+
         Args:
             time_series: Market time series
             wavelet_type: Type of wavelet ('db4', 'haar', etc.)
             scales: Wavelet scales to use
-            
+
         Returns:
             Tuple of (coefficients, scales, frequencies)
         """
@@ -549,12 +549,12 @@ class SpectralAnalysis:
         Mathematical Formula:
         d²x/dt² + 2ζω₀ dx/dt + ω₀²x = 0
         where ζ is damping ratio, ω₀ is natural frequency
-        
+
         Args:
             price_data: Price time series
             time_axis: Time axis
             damping_factor: Damping coefficient
-            
+
         Returns:
             Dictionary with fitted parameters and predictions
         """
@@ -593,11 +593,11 @@ class SpectralAnalysis:
         Mathematical Formula:
         P(f) = lim(T→∞) (1/T) |X_T(f)|²
         where X_T(f) is Fourier transform of windowed signal
-        
+
         Args:
             time_series: Market time series
             method: Estimation method ('welch', 'periodogram', 'burg')
-            
+
         Returns:
             Tuple of (frequencies, power_spectral_density)
         """
@@ -658,11 +658,11 @@ class GroupTheoryOperations:
         
         Mathematical Formula:
         G: V → V where G is group element, V is vector space
-        
+
         Args:
             market_data: Market data array
             symmetry_type: Type of symmetry to apply
-            
+
         Returns:
             Transformed market data
         """
@@ -687,11 +687,11 @@ class GroupTheoryOperations:
         Mathematical Formula:
         [X_i, X_j] = c_ij^k X_k
         where c_ij^k are structure constants
-        
+
         Args:
             group_type: Type of Lie group ('SO', 'SU', 'SL')
             dimension: Dimension of the group
-            
+
         Returns:
             Basis matrices for the Lie algebra
         """
@@ -716,11 +716,11 @@ class GroupTheoryOperations:
         Mathematical Formula:
         I(x) = I(g·x) for all g ∈ G
         where G is the symmetry group
-        
+
         Args:
             market_data: Market data
             group_operation: Group operation function
-            
+
         Returns:
             Invariant quantity value
         """
@@ -764,12 +764,12 @@ class AdvancedTensorAlgebra:
         
         Mathematical Formula:
         T_ij = A_ik B_kj (Einstein summation convention)
-        
+
         Args:
             A: First tensor (strategy vector)
             B: Second tensor (price matrix) 
             axes: Axes to contract along (default: axis 1)
-            
+
         Returns:
             Contracted tensor for predictive flow modeling
         """
@@ -800,11 +800,11 @@ class AdvancedTensorAlgebra:
         Mathematical Formula:
         R(θ) = [cos(θ) -sin(θ); sin(θ) cos(θ)]
         x_rotated = R(θ) x
-        
+
         Args:
             x: Input vector
             theta: Rotation angle (auto-calculated if None)
-            
+
         Returns:
             Rotated vector for dual-state execution
         """
@@ -847,11 +847,11 @@ class AdvancedTensorAlgebra:
         Mathematical Formula:
         V = det(M) (volume preservation)
         M_reshaped = M * (V_target/V_original)^(1/dim)
-        
+
         Args:
             M: Input matrix
             target_shape: Target shape (auto-calculated if None)
-            
+
         Returns:
             Volume-preserving reshaped matrix
         """
@@ -883,11 +883,11 @@ class AdvancedTensorAlgebra:
         Mathematical Formula:
         H(X) = -∑p(x) log p(x)
         Q(x) = round(x * (2^H - 1)) / (2^H - 1)
-        
+
         Args:
             V: Input vector
             E: Entropy level (0-1)
-            
+
         Returns:
             Quantized vector
         """
@@ -919,10 +919,10 @@ class AdvancedTensorAlgebra:
         tr(M) = ∑M_ii (trace)
         det(M) = ∏λ_i (determinant)
         ||M||₂ = max|λ_i| (spectral norm)
-        
+
         Args:
             M: Input matrix
-            
+
         Returns:
             Dictionary of trace conditions
         """
@@ -955,11 +955,11 @@ class AdvancedTensorAlgebra:
         
         Mathematical Formula:
         ||M||₂ = max|λ_i| where λ_i are eigenvalues
-        
+
         Args:
             M: Current matrix
             history_length: Length of tracking history
-            
+
         Returns:
             Spectral norm tracking data
         """
@@ -997,10 +997,10 @@ class AdvancedTensorAlgebra:
         Mathematical Formula:
         φ(t) = 2π * (t mod T) / T
         alignment = (sin(φ) + 1) / 2
-        
+
         Args:
             current_time: Current timestamp (uses current time if None)
-            
+
         Returns:
             Cycle alignment factor (0-1)
         """
@@ -1025,11 +1025,11 @@ class AdvancedTensorAlgebra:
     def quantum_tensor_operations(self, A: np.ndarray, B: np.ndarray) -> Dict[str, Any]:
         """
         Perform quantum tensor operations including fusion and entanglement.
-        
+
         Args:
             A: First quantum tensor
             B: Second quantum tensor
-            
+
         Returns:
             Dictionary with quantum operation results
         """
@@ -1059,11 +1059,11 @@ class AdvancedTensorAlgebra:
                                 modulation_strength: float = 1.0) -> np.ndarray:
         """
         Apply entropy-based modulation to tensor.
-        
+
         Args:
             tensor: Input tensor
             modulation_strength: Modulation strength [0,1]
-            
+
         Returns:
             Entropy-modulated tensor
         """

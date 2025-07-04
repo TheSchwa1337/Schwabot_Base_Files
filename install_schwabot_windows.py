@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Schwabot Advanced Strategy System Installer
-==========================================
+Schwabot Advanced Strategy System Installer (Windows Compatible)
+==============================================================
 
-Comprehensive installation script for the updated Schwabot trading system
+Windows-compatible installation script for the updated Schwabot trading system
 with advanced mathematical frameworks, dualistic trading execution, and
 quantum-inspired algorithms.
 
@@ -27,20 +27,20 @@ import shutil
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
-# Configure logging
+# Configure logging for Windows compatibility
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler('schwabot_install.log'),
-        logging.StreamHandler()
+        logging.FileHandler('schwabot_install.log', encoding='utf-8'),
+        logging.StreamHandler(sys.stdout)
     ]
 )
 logger = logging.getLogger(__name__)
 
 class SchwabotInstaller:
     """Comprehensive installer for Schwabot Advanced Strategy System."""
-
+    
     def __init__(self):
         self.project_root = Path.cwd()
         self.venv_name = "schwabot_env"
@@ -50,28 +50,28 @@ class SchwabotInstaller:
         
     def check_system_requirements(self) -> bool:
         """Check if system meets requirements."""
-        logger.info("🔍 Checking system requirements...")
-
+        logger.info("Checking system requirements...")
+        
         # Check Python version
         if self.python_version < (3, 8):
-            logger.error(f"❌ Python 3.8+ required, found {self.python_version}")
+            logger.error(f"Python 3.8+ required, found {self.python_version}")
             return False
-        logger.info(f"✅ Python {self.python_version.major}.{self.python_version.minor}.{self.python_version.micro}")
-
+        logger.info(f"Python {self.python_version.major}.{self.python_version.minor}.{self.python_version.micro}")
+        
         # Check pip
         try:
             result = subprocess.run([sys.executable, "-m", "pip", "--version"], 
                                   capture_output=True, text=True, check=True)
-            logger.info(f"✅ Pip available: {result.stdout.strip()}")
+            logger.info(f"Pip available: {result.stdout.strip()}")
         except subprocess.CalledProcessError:
-            logger.error("❌ Pip not available")
+            logger.error("Pip not available")
             return False
-
+            
         return True
     
     def create_virtual_environment(self) -> bool:
         """Create virtual environment for Schwabot."""
-        logger.info("🔧 Creating virtual environment...")
+        logger.info("Creating virtual environment...")
         
         if self.venv_path.exists():
             logger.info("Virtual environment already exists, removing...")
@@ -79,11 +79,11 @@ class SchwabotInstaller:
         
         try:
             subprocess.run([sys.executable, "-m", "venv", str(self.venv_path)], check=True)
-            logger.info(f"✅ Virtual environment created: {self.venv_path}")
+            logger.info(f"Virtual environment created: {self.venv_path}")
             return True
         except subprocess.CalledProcessError as e:
-            logger.error(f"❌ Failed to create virtual environment: {e}")
-                return False
+            logger.error(f"Failed to create virtual environment: {e}")
+            return False
     
     def get_venv_pip(self) -> str:
         """Get pip command for virtual environment."""
@@ -101,30 +101,33 @@ class SchwabotInstaller:
     
     def upgrade_pip(self) -> bool:
         """Upgrade pip in virtual environment."""
-        logger.info("⬆️ Upgrading pip...")
+        logger.info("Upgrading pip...")
         try:
-            subprocess.run([self.get_venv_pip(), "install", "--upgrade", "pip"], check=True)
-            logger.info("✅ Pip upgraded successfully")
-        return True
+            # Use python -m pip install --upgrade pip instead of direct pip command
+            subprocess.run([self.get_venv_python(), "-m", "pip", "install", "--upgrade", "pip"], check=True)
+            logger.info("Pip upgraded successfully")
+            return True
         except subprocess.CalledProcessError as e:
-            logger.error(f"❌ Failed to upgrade pip: {e}")
-            return False
+            logger.error(f"Failed to upgrade pip: {e}")
+            # Continue anyway as this is not critical
+            logger.info("Continuing with existing pip version...")
+            return True
     
     def install_core_dependencies(self) -> bool:
         """Install core dependencies."""
-        logger.info("📦 Installing core dependencies...")
+        logger.info("Installing core dependencies...")
         
         core_packages = [
             "numpy>=1.21.0",
-                "pandas>=1.3.0",
-                    "scipy>=1.7.0",
+            "pandas>=1.3.0", 
+            "scipy>=1.7.0",
             "requests>=2.25.0",
             "aiohttp>=3.8.0",
             "websockets>=10.0",
             "ccxt>=2.0.0",
             "scikit-learn>=1.0.0",
             "matplotlib>=3.5.0",
-                "seaborn>=0.11.0",
+            "seaborn>=0.11.0",
             "pyyaml>=6.0",
             "jsonschema>=4.0.0",
             "structlog>=21.5.0",
@@ -141,25 +144,25 @@ class SchwabotInstaller:
         try:
             for package in core_packages:
                 logger.info(f"Installing {package}...")
-                subprocess.run([self.get_venv_pip(), "install", package], check=True)
+                subprocess.run([self.get_venv_python(), "-m", "pip", "install", package], check=True)
             
-            logger.info("✅ Core dependencies installed successfully")
+            logger.info("Core dependencies installed successfully")
             return True
         except subprocess.CalledProcessError as e:
-            logger.error(f"❌ Failed to install core dependencies: {e}")
+            logger.error(f"Failed to install core dependencies: {e}")
             return False
     
     def install_development_dependencies(self) -> bool:
         """Install development dependencies."""
-        logger.info("🔧 Installing development dependencies...")
+        logger.info("Installing development dependencies...")
         
         dev_packages = [
             "pytest>=6.2.0",
-                "pytest-asyncio>=0.18.0",
+            "pytest-asyncio>=0.18.0", 
             "pytest-cov>=3.0.0",
-                    "flake8>=4.0.0",
+            "flake8>=4.0.0",
             "black>=22.0.0",
-                    "mypy>=0.950",
+            "mypy>=0.950",
             "isort>=5.10.0",
             "types-requests>=2.28.0",
             "types-PyYAML>=6.0.0"
@@ -168,18 +171,18 @@ class SchwabotInstaller:
         try:
             for package in dev_packages:
                 logger.info(f"Installing {package}...")
-                subprocess.run([self.get_venv_pip(), "install", package], check=True)
+                subprocess.run([self.get_venv_python(), "-m", "pip", "install", package], check=True)
             
-            logger.info("✅ Development dependencies installed successfully")
+            logger.info("Development dependencies installed successfully")
             return True
         except subprocess.CalledProcessError as e:
-            logger.error(f"❌ Failed to install development dependencies: {e}")
+            logger.error(f"Failed to install development dependencies: {e}")
             return False
-
+    
     def create_directories(self) -> bool:
         """Create necessary directories."""
-        logger.info("📁 Creating directories...")
-
+        logger.info("Creating directories...")
+        
         directories = [
             "data",
             "logs", 
@@ -187,21 +190,21 @@ class SchwabotInstaller:
             "cache",
             "backups",
             "reports"
-]
+        ]
         
         try:
             for directory in directories:
                 dir_path = self.project_root / directory
                 dir_path.mkdir(exist_ok=True)
-                logger.info(f"✅ Created directory: {directory}")
+                logger.info(f"Created directory: {directory}")
             return True
         except Exception as e:
-            logger.error(f"❌ Failed to create directories: {e}")
+            logger.error(f"Failed to create directories: {e}")
             return False
-
+    
     def create_configuration_files(self) -> bool:
         """Create configuration files."""
-        logger.info("⚙️ Creating configuration files...")
+        logger.info("Creating configuration files...")
         
         # Main configuration
         config = {
@@ -241,17 +244,17 @@ class SchwabotInstaller:
         
         try:
             config_file = self.project_root / "config" / "schwabot_config.json"
-            with open(config_file, 'w') as f:
-                json.dump(config, f, indent=2)
-            logger.info("✅ Configuration file created")
+            with open(config_file, 'w', encoding='utf-8') as f:
+                json.dump(config, f, indent=2, ensure_ascii=False)
+            logger.info("Configuration file created")
             return True
         except Exception as e:
-            logger.error(f"❌ Failed to create configuration: {e}")
+            logger.error(f"Failed to create configuration: {e}")
             return False
-
+    
     def create_launcher_scripts(self) -> bool:
         """Create launcher scripts."""
-        logger.info("🚀 Creating launcher scripts...")
+        logger.info("Creating launcher scripts...")
         
         # Windows batch file
         if self.is_windows:
@@ -263,9 +266,9 @@ python start_schwabot.py
 pause
 """
             batch_file = self.project_root / "start_schwabot.bat"
-            with open(batch_file, 'w') as f:
+            with open(batch_file, 'w', encoding='utf-8') as f:
                 f.write(batch_content)
-            logger.info("✅ Windows launcher created: start_schwabot.bat")
+            logger.info("Windows launcher created: start_schwabot.bat")
         
         # Unix shell script
         shell_content = f"""#!/bin/bash
@@ -275,19 +278,19 @@ source "{self.venv_path}/bin/activate"
 python start_schwabot.py
 """
         shell_file = self.project_root / "start_schwabot.sh"
-        with open(shell_file, 'w') as f:
+        with open(shell_file, 'w', encoding='utf-8') as f:
             f.write(shell_content)
         
         # Make shell script executable on Unix systems
         if not self.is_windows:
             os.chmod(shell_file, 0o755)
-        logger.info("✅ Unix launcher created: start_schwabot.sh")
+        logger.info("Unix launcher created: start_schwabot.sh")
         
-            return True
-
+        return True
+    
     def run_system_tests(self) -> bool:
         """Run basic system tests."""
-        logger.info("🧪 Running system tests...")
+        logger.info("Running system tests...")
         
         test_script = f"""
 import sys
@@ -302,9 +305,9 @@ try:
     import requests
     import aiohttp
     import flask
-    print("✅ Core imports successful")
+    print("Core imports successful")
 except ImportError as e:
-    print(f"❌ Import error: {{e}}")
+    print(f"Import error: {{e}}")
     sys.exit(1)
 
 # Test core modules
@@ -313,12 +316,12 @@ try:
     from core.advanced_tensor_algebra import AdvancedTensorAlgebra
     from core.advanced_dualistic_trading_execution_system import DualisticTradingExecutionSystem
     from core.strategy_bit_mapper import StrategyBitMapper
-    print("✅ Core modules imported successfully")
+    print("Core modules imported successfully")
 except ImportError as e:
-    print(f"❌ Core module import error: {{e}}")
+    print(f"Core module import error: {{e}}")
     sys.exit(1)
 
-print("✅ All tests passed!")
+print("All tests passed!")
 """
         
         try:
@@ -330,18 +333,18 @@ print("✅ All tests passed!")
             )
             
             if result.returncode == 0:
-                logger.info("✅ System tests passed")
+                logger.info("System tests passed")
                 return True
             else:
-                logger.error(f"❌ System tests failed: {result.stderr}")
+                logger.error(f"System tests failed: {result.stderr}")
                 return False
         except subprocess.CalledProcessError as e:
-            logger.error(f"❌ Failed to run system tests: {e}")
+            logger.error(f"Failed to run system tests: {e}")
             return False
     
     def create_activation_script(self) -> bool:
         """Create script to activate virtual environment."""
-        logger.info("🔧 Creating activation script...")
+        logger.info("Creating activation script...")
         
         if self.is_windows:
             activate_content = f"""@echo off
@@ -351,9 +354,9 @@ echo Environment activated! You can now run: python start_schwabot.py
 cmd /k
 """
             activate_file = self.project_root / "activate_schwabot.bat"
-            with open(activate_file, 'w') as f:
+            with open(activate_file, 'w', encoding='utf-8') as f:
                 f.write(activate_content)
-            logger.info("✅ Windows activation script created: activate_schwabot.bat")
+            logger.info("Windows activation script created: activate_schwabot.bat")
         else:
             activate_content = f"""#!/bin/bash
 echo "Activating Schwabot environment..."
@@ -362,16 +365,16 @@ echo "Environment activated! You can now run: python start_schwabot.py"
 bash
 """
             activate_file = self.project_root / "activate_schwabot.sh"
-            with open(activate_file, 'w') as f:
+            with open(activate_file, 'w', encoding='utf-8') as f:
                 f.write(activate_content)
             os.chmod(activate_file, 0o755)
-            logger.info("✅ Unix activation script created: activate_schwabot.sh")
+            logger.info("Unix activation script created: activate_schwabot.sh")
         
         return True
-
+    
     def install(self) -> bool:
         """Complete installation process."""
-        logger.info("🚀 Starting Schwabot Advanced Strategy System Installation")
+        logger.info("Starting Schwabot Advanced Strategy System Installation")
         logger.info("=" * 60)
         
         steps = [
@@ -387,16 +390,16 @@ bash
             ("System Tests", self.run_system_tests)
         ]
         
-            for step_name, step_func in steps:
-            logger.info(f"\n📋 {step_name}...")
-                if not step_func():
-                logger.error(f"❌ Installation failed at: {step_name}")
+        for step_name, step_func in steps:
+            logger.info(f"\n{step_name}...")
+            if not step_func():
+                logger.error(f"Installation failed at: {step_name}")
                 return False
-            logger.info(f"✅ {step_name} completed")
+            logger.info(f"{step_name} completed")
         
         logger.info("\n" + "=" * 60)
-        logger.info("🎉 Schwabot Advanced Strategy System Installation Complete!")
-        logger.info("\n📋 Next Steps:")
+        logger.info("Schwabot Advanced Strategy System Installation Complete!")
+        logger.info("\nNext Steps:")
         logger.info("1. Activate the environment:")
         if self.is_windows:
             logger.info("   Run: activate_schwabot.bat")
@@ -406,29 +409,29 @@ bash
         logger.info("   Run: python start_schwabot.py")
         logger.info("3. Access the dashboard:")
         logger.info("   Open: http://127.0.0.1:5000")
-        logger.info("\n📚 Documentation:")
+        logger.info("\nDocumentation:")
         logger.info("   - Read SCHWABOT_README.md for detailed information")
         logger.info("   - Check logs/ directory for system logs")
         logger.info("   - Review config/ directory for configuration options")
-
-            return True
+        
+        return True
 
 def main():
     """Main installation function."""
-        installer = SchwabotInstaller()
+    installer = SchwabotInstaller()
     
     if len(sys.argv) > 1 and sys.argv[1] == "--check":
         # Just check system requirements
         if installer.check_system_requirements():
-            print("✅ System requirements met")
+            print("System requirements met")
             sys.exit(0)
         else:
-            print("❌ System requirements not met")
+            print("System requirements not met")
             sys.exit(1)
-
+    
     # Full installation
     success = installer.install()
     sys.exit(0 if success else 1)
 
 if __name__ == "__main__":
-    main()
+    main() 

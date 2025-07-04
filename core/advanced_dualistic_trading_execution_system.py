@@ -933,7 +933,7 @@ class AdvancedDualisticTradingExecutionSystem:
         """Execute trade with enhanced quantum and dual-state capabilities."""
         try:
             execution_id = f"{mode.value}_{int(time.time() * 1000)}"
-            
+
             if mode == ExecutionMode.BIT_FLIP:
                 result = await self.execute_bit_flip_entry(target_quantity, market_data)
             elif mode == ExecutionMode.CONSENSUS_VOTING:
@@ -981,16 +981,16 @@ class AdvancedDualisticTradingExecutionSystem:
                     metadata=result
                 )
             else:
-                execution = TradingExecution(
-                    execution_id=execution_id,
-                    mode=mode,
+            execution = TradingExecution(
+                execution_id=execution_id,
+                mode=mode,
                     entry_price=market_data.get("price", 50000.0),
                     entry_quantity=0.0,
                     success=False,
                     confidence=0.0,
-                    timestamp=time.time(),
+                timestamp=time.time(),
                     metadata={"error": result.get("error", "Unknown error")}
-                )
+            )
 
             self.execution_history.append(execution)
             return execution
@@ -1036,7 +1036,7 @@ class AdvancedDualisticTradingExecutionSystem:
         """Calculate success rate from execution history."""
         if not self.execution_history:
             return 0.0
-        
+
         successful_executions = sum(1 for exec in self.execution_history if exec.success)
         return successful_executions / len(self.execution_history)
 
@@ -1051,7 +1051,7 @@ def create_trading_execution_system(
 async def demo_trading_execution():
     """Demonstrate the trading execution system."""
     system = create_trading_execution_system()
-    
+
     # Mock market data
     market_data = {
         "symbol": "BTC/USDC",

@@ -11,19 +11,15 @@ Enhanced with:
 
 import os
 import json
+import logging
 import numpy as np
 from typing import Dict, Any, Optional, List, Tuple
 from numpy.linalg import norm
 from dataclasses import dataclass, field
 from datetime import datetime
 
-from .chrono_resonance_weather_mapper import (
-    ChronoResonanceWeatherMapper, GeoLocation, CRWFResponse, create_crwf_mapper
-)
-from .chrono_recursive_logic_function import (
-    ChronoRecursiveLogicFunction, CRLFResponse, create_crlf
-)
-from .crwf_crlf_integration import CRWFCRLFIntegration, create_crwf_crlf_integration
+from .crwf_crlf_integration import create_crwf_crlf_integration
+from .schwafit_core import SchwafitCore  # <-- NEW: Import SchwafitCore
 
 logger = logging.getLogger(__name__)
 
@@ -44,7 +40,7 @@ class EnhancedMatrixEntry:
     crlf_adjustment_factor: float
     
     # Location data
-    location: Optional[GeoLocation] = None
+    location: Optional[Any] = None  # GeoLocation type
     weather_data: Optional[Dict[str, Any]] = None
     
     # Performance tracking
@@ -71,7 +67,8 @@ class EnhancedMatrixMapper:
         self.matrix_dir = matrix_dir
         self.matrices: Dict[str, EnhancedMatrixEntry] = {}
         self.crwf_crlf_integration = create_crwf_crlf_integration(weather_api_key)
-        
+        self.schwafit = SchwafitCore(window=64)  # <-- NEW: Schwafit instance
+
         # Load existing matrices
         self._load_existing_matrices()
         
@@ -108,7 +105,7 @@ class EnhancedMatrixMapper:
     def enhance_matrix_with_crwf_crlf(
         self,
         matrix_name: str,
-        location: GeoLocation,
+        location: Any,  # GeoLocation type
         weather_data: Optional[Dict[str, Any]] = None
     ) -> bool:
         """
@@ -177,51 +174,60 @@ class EnhancedMatrixMapper:
     def match_hash_to_enhanced_matrix(
         self,
         hash_vec: np.ndarray,
-        location: GeoLocation,
+        location: Any,  # GeoLocation type
         threshold: float = 0.8
-    ) -> Optional[Tuple[str, EnhancedMatrixEntry, float]]:
+    ) -> Optional[Tuple[str, EnhancedMatrixEntry, float, Dict[str, Any]]]:  # <-- NEW: Add Schwafit info block
         """
-        Match hash vector to enhanced matrix with location-aware scoring.
-        
-        Args:
-            hash_vec: Hash vector to match
-            location: Geographic location for enhanced scoring
-            threshold: Minimum similarity threshold
-            
+        Match hash vector to enhanced matrix with location-aware scoring and Schwafit fit info.
+
         Returns:
-            Tuple of (matrix_name, enhanced_entry, enhanced_score) or None
+            Tuple of (matrix_name, enhanced_entry, schwafit_fit_score, schwafit_info_block) or None
         """
         try:
             best_score = -1
             best_file = None
             best_entry = None
-            
+            best_schwafit_info = None
+
             for fname, entry in self.matrices.items():
-                # Base cosine similarity
-                base_score = cosine_similarity(hash_vec, entry.hash_vector)
-                
-                # Enhanced scoring with location and weather factors
-                enhanced_score = self._compute_enhanced_similarity(
-                    base_score, entry, location
+                # Extract strategy vector and profit curve for Schwafit
+                strategy_vector = self._extract_strategy_vector(entry)
+                profit_curve = self._generate_profit_curve(entry)
+                # Prepare pattern library and profit scores for Schwafit
+                pattern_library = [strategy_vector]
+                profit_scores = [float(np.mean(profit_curve)) if len(profit_curve) else 0.0]
+
+                # Use Schwafit to compute fit
+                schwafit_info = self.schwafit.fit_vector(
+                    price_series=hash_vec.tolist(),
+                    pattern_library=pattern_library,
+                    profit_scores=profit_scores
                 )
-                
-                if enhanced_score > best_score and enhanced_score >= threshold:
+                schwafit_score = schwafit_info["fit_score"]
+
+                # Optionally, combine with enhanced similarity (location, weather, entropy, etc.)
+                enhanced_score = self._compute_enhanced_similarity(
+                    schwafit_score, entry, location
+                )
+
+                if enhanced_score > best_score and enhanced_score > threshold:
                     best_score = enhanced_score
                     best_file = fname
                     best_entry = entry
-            
-            if best_file:
-                return (best_file, best_entry, best_score)
-            else:
-                return None
-                
+                    best_schwafit_info = schwafit_info
+
+            if best_file and best_entry:
+                return best_file, best_entry, best_score, best_schwafit_info  # <-- Return Schwafit info block
+
+            return None
+
         except Exception as e:
             logger.error(f"Error matching hash to enhanced matrix: {e}")
             return None
     
     def get_entropy_aligned_matrices(
         self,
-        location: GeoLocation,
+        location: Any,  # GeoLocation type
         min_entropy_score: float = 0.7
     ) -> List[Tuple[str, EnhancedMatrixEntry]]:
         """
@@ -232,15 +238,14 @@ class EnhancedMatrixMapper:
             min_entropy_score: Minimum entropy alignment score
             
         Returns:
-            List of (matrix_name, entry) tuples with high entropy alignment
+            List of (matrix_name, entry) tuples
         """
         aligned_matrices = []
         
         for fname, entry in self.matrices.items():
-            if entry.entropy_alignment_score >= min_entropy_score:
-                # Check if location is compatible
-                if self._is_location_compatible(entry, location):
-                    aligned_matrices.append((fname, entry))
+            if (entry.entropy_alignment_score >= min_entropy_score and
+                self._is_location_compatible(entry, location)):
+                aligned_matrices.append((fname, entry))
         
         # Sort by entropy alignment score
         aligned_matrices.sort(key=lambda x: x[1].entropy_alignment_score, reverse=True)
@@ -250,51 +255,70 @@ class EnhancedMatrixMapper:
     def create_geo_optimized_matrix(
         self,
         base_hash_vector: np.ndarray,
-        location: GeoLocation,
+        location: Any,  # GeoLocation type
         strategy_weights: Dict[str, float],
         weather_data: Optional[Dict[str, Any]] = None
     ) -> Optional[str]:
         """
-        Create a geo-optimized matrix for a specific location.
+        Create a new geo-optimized matrix entry.
         
         Args:
             base_hash_vector: Base hash vector
-            location: Target location
-            strategy_weights: Strategy weights
+            location: Geographic location
+            strategy_weights: Strategy weight dictionary
             weather_data: Optional weather data
             
         Returns:
-            Matrix filename if successful, None otherwise
+            Matrix name if successful, None otherwise
         """
         try:
+            # Get weather data if not provided
+            if weather_data is None:
+                weather_data = self._get_weather_data_for_location(location)
+            
+            # Create weather data point
+            weather_point = self._create_weather_data_point(location, weather_data)
+            
+            # Compute CRWF for the new location
+            crwf_response = self.crwf_crlf_integration.crwf_mapper.compute_crwf(
+                weather_point, location
+            )
+            
+            # Create strategy vector
+            strategy_vector = np.array(list(strategy_weights.values()))
+            profit_curve = np.ones(len(strategy_vector)) * 0.5  # Default profit curve
+            
+            # Compute CRLF
+            crlf_response = self.crwf_crlf_integration.crlf_function.compute_crlf(
+                strategy_vector, profit_curve, crwf_response.entropy_score
+            )
+            
             # Create enhanced matrix entry
             entry = EnhancedMatrixEntry(
                 hash_vector=base_hash_vector,
                 strategy_weights=strategy_weights,
-                confidence_score=0.5,  # Will be enhanced
-                entropy_alignment_score=0.5,  # Will be enhanced
-                weather_resonance_factor=1.0,  # Will be enhanced
-                geo_alignment_score=0.5,  # Will be enhanced
-                crlf_adjustment_factor=1.0,  # Will be enhanced
+                confidence_score=0.8,
+                entropy_alignment_score=crwf_response.entropy_score,
+                weather_resonance_factor=crwf_response.resonance_strength,
+                geo_alignment_score=crwf_response.geo_alignment_score,
+                crlf_adjustment_factor=crwf_response.crlf_adjustment_factor,
                 location=location,
                 weather_data=weather_data
             )
             
-            # Enhance with CRWF-CRLF
-            matrix_name = f"geo_optimized_{location.name}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
-            
-            success = self.enhance_matrix_with_crwf_crlf(
-                matrix_name, location, weather_data
+            # Generate matrix name
+            matrix_name = (
+                f"geo_optimized_{location.lat:.2f}_{location.lon:.2f}_"
+                f"{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
             )
             
-            if success:
-                self.matrices[matrix_name] = entry
-                logger.info(f"✅ Created geo-optimized matrix: {matrix_name}")
-                return matrix_name
-            else:
-                logger.error(f"❌ Failed to create geo-optimized matrix")
-                return None
-                
+            # Save matrix
+            self._save_enhanced_matrix(matrix_name, entry)
+            self.matrices[matrix_name] = entry
+            
+            logger.info(f"✅ Created geo-optimized matrix: {matrix_name}")
+            return matrix_name
+            
         except Exception as e:
             logger.error(f"Error creating geo-optimized matrix: {e}")
             return None
@@ -303,107 +327,110 @@ class EnhancedMatrixMapper:
         self,
         base_score: float,
         entry: EnhancedMatrixEntry,
-        location: GeoLocation
+        location: Any  # GeoLocation type
     ) -> float:
-        """Compute enhanced similarity score with location and weather factors."""
-        # Base similarity weight
-        base_weight = 0.6
-        
-        # Location alignment weight
-        location_weight = 0.2
-        location_score = 1.0 - abs(entry.geo_alignment_score - location.resonance_factor)
-        
-        # Weather resonance weight
-        weather_weight = 0.1
-        weather_score = entry.weather_resonance_factor
-        
-        # Entropy alignment weight
-        entropy_weight = 0.1
-        entropy_score = entry.entropy_alignment_score
-        
-        # Combined enhanced score
-        enhanced_score = (
-            base_score * base_weight +
-            location_score * location_weight +
-            weather_score * weather_weight +
-            entropy_score * entropy_weight
-        )
-        
-        return float(np.clip(enhanced_score, 0.0, 1.0))
+        """Compute enhanced similarity score with location awareness."""
+        try:
+            # Location compatibility factor
+            location_factor = 1.0
+            if entry.location:
+                # Calculate distance-based factor
+                distance = self._calculate_distance(location, entry.location)
+                location_factor = 1.0 / (1.0 + distance / 1000.0)  # Decay over 1000km
+            
+            # Weather resonance factor
+            weather_factor = entry.weather_resonance_factor
+            
+            # Entropy alignment factor
+            entropy_factor = entry.entropy_alignment_score
+            
+            # Combine factors
+            enhanced_score = (
+                base_score * 0.4 +
+                location_factor * 0.2 +
+                weather_factor * 0.2 +
+                entropy_factor * 0.2
+            )
+            
+            return float(enhanced_score)
+            
+        except Exception as e:
+            logger.error(f"Error computing enhanced similarity: {e}")
+            return base_score
     
     def _is_location_compatible(
         self,
         entry: EnhancedMatrixEntry,
-        location: GeoLocation
+        location: Any  # GeoLocation type
     ) -> bool:
-        """Check if matrix entry is compatible with location."""
+        """Check if matrix entry is compatible with given location."""
         if entry.location is None:
             return True  # No location constraint
         
-        # Check geographic proximity (simplified)
-        lat_diff = abs(entry.location.latitude - location.latitude)
-        lon_diff = abs(entry.location.longitude - location.longitude)
+        # Calculate distance
+        distance = self._calculate_distance(location, entry.location)
         
-        # Within 10 degrees (roughly 1100 km)
-        return lat_diff < 10.0 and lon_diff < 10.0
+        # Consider compatible if within 500km
+        return distance <= 500.0
     
-    def _get_weather_data_for_location(self, location: GeoLocation) -> Dict[str, Any]:
-        """Get weather data for location."""
-        # This would integrate with actual weather API
-        return {
-            'temperature': 20.0,
-            'pressure': 1013.25,
-            'humidity': 60.0,
-            'wind_speed': 5.0,
-            'weather_type': 'clear'
-        }
+    def _calculate_distance(self, loc1: Any, loc2: Any) -> float:  # GeoLocation types
+        """Calculate distance between two locations in kilometers."""
+        import math
+        
+        lat1, lon1 = math.radians(loc1.lat), math.radians(loc1.lon)
+        lat2, lon2 = math.radians(loc2.lat), math.radians(loc2.lon)
+        
+        dlat = lat2 - lat1
+        dlon = lon2 - lon1
+        
+        a = (math.sin(dlat/2)**2 + 
+             math.cos(lat1) * math.cos(lat2) * math.sin(dlon/2)**2)
+        c = 2 * math.asin(math.sqrt(a))
+        
+        return 6371 * c  # Earth radius in km
+    
+    def _get_weather_data_for_location(self, location: Any) -> Dict[str, Any]:  # GeoLocation type
+        """Get weather data for a location."""
+        try:
+            # This would typically call a weather API
+            # For now, return mock data
+            return {
+                "temperature": 20.0,
+                "humidity": 60.0,
+                "pressure": 1013.25,
+                "wind_speed": 5.0,
+                "conditions": "clear"
+            }
+        except Exception as e:
+            logger.error(f"Error getting weather data: {e}")
+            return {}
     
     def _create_weather_data_point(
         self,
-        location: GeoLocation,
+        location: Any,  # GeoLocation type
         weather_data: Dict[str, Any]
     ):
-        """Create weather data point from location and weather data."""
-        from .chrono_resonance_weather_mapper import WeatherDataPoint
-        
-        return WeatherDataPoint(
-            timestamp=datetime.now(),
-            latitude=location.latitude,
-            longitude=location.longitude,
-            altitude=location.altitude,
-            temperature=weather_data.get('temperature', 20.0),
-            pressure=weather_data.get('pressure', 1013.25),
-            humidity=weather_data.get('humidity', 60.0),
-            wind_speed=weather_data.get('wind_speed', 5.0),
-            wind_direction=0.0,
-            weather_type=weather_data.get('weather_type', 'unknown')
-        )
+        """Create weather data point for CRWF analysis."""
+        # This would create the appropriate data structure
+        # Implementation depends on the CRWF interface
+        return weather_data
     
     def _extract_strategy_vector(self, entry: EnhancedMatrixEntry) -> np.ndarray:
         """Extract strategy vector from matrix entry."""
-        # Convert strategy weights to vector
-        strategies = ['momentum', 'scalping', 'mean_reversion', 'swing']
-        vector = []
-        
-        for strategy in strategies:
-            weight = entry.strategy_weights.get(strategy, 0.25)
-            vector.append(weight)
-        
-        return np.array(vector)
+        return np.array(list(entry.strategy_weights.values()))
     
     def _generate_profit_curve(self, entry: EnhancedMatrixEntry) -> np.ndarray:
         """Generate profit curve from performance history."""
         if entry.performance_history:
-            # Use recent performance history
-            recent_performance = entry.performance_history[-7:]  # Last 7 entries
-            return np.array(recent_performance)
+            return np.array(entry.performance_history)
         else:
-            # Default profit curve
-            return np.array([100, 105, 103, 108, 110, 107, 112])
+            return np.ones(len(entry.strategy_weights)) * 0.5
     
     def _save_enhanced_matrix(self, matrix_name: str, entry: EnhancedMatrixEntry):
         """Save enhanced matrix to file."""
         try:
+            filepath = os.path.join(self.matrix_dir, matrix_name)
+            
             data = {
                 'hash_vector': entry.hash_vector.tolist(),
                 'strategy_weights': entry.strategy_weights,
@@ -412,110 +439,131 @@ class EnhancedMatrixMapper:
                 'weather_resonance_factor': entry.weather_resonance_factor,
                 'geo_alignment_score': entry.geo_alignment_score,
                 'crlf_adjustment_factor': entry.crlf_adjustment_factor,
-                'last_updated': entry.last_updated.isoformat(),
-                'performance_history': entry.performance_history,
                 'metadata': entry.metadata
             }
             
-            filepath = os.path.join(self.matrix_dir, matrix_name)
             with open(filepath, "w") as f:
                 json.dump(data, f, indent=2)
             
-            logger.debug(f"💾 Saved enhanced matrix: {matrix_name}")
+            logger.info(f"💾 Saved enhanced matrix: {matrix_name}")
             
         except Exception as e:
             logger.error(f"Error saving enhanced matrix {matrix_name}: {e}")
     
     def get_matrix_performance_summary(self) -> Dict[str, Any]:
-        """Get comprehensive matrix performance summary."""
-        if not self.matrices:
-            return {'error': 'No matrices available'}
-        
-        entries = list(self.matrices.values())
-        
-        return {
-            'total_matrices': len(self.matrices),
-            'average_entropy_alignment': np.mean([e.entropy_alignment_score for e in entries]),
-            'average_weather_resonance': np.mean([e.weather_resonance_factor for e in entries]),
-            'average_geo_alignment': np.mean([e.geo_alignment_score for e in entries]),
-            'average_crlf_adjustment': np.mean([e.crlf_adjustment_factor for e in entries]),
-            'recently_updated': len([e for e in entries if (datetime.now() - e.last_updated).days < 1]),
-            'location_distribution': self._get_location_distribution(),
-            'performance_trends': self._get_performance_trends()
-        }
+        """Get performance summary of all matrices."""
+        try:
+            total_matrices = len(self.matrices)
+            if total_matrices == 0:
+                return {"total_matrices": 0}
+            
+            # Calculate average scores
+            avg_entropy = np.mean([e.entropy_alignment_score for e in self.matrices.values()])
+            avg_weather = np.mean([e.weather_resonance_factor for e in self.matrices.values()])
+            avg_geo = np.mean([e.geo_alignment_score for e in self.matrices.values()])
+            
+            # Get location distribution
+            location_dist = self._get_location_distribution()
+            
+            # Get performance trends
+            performance_trends = self._get_performance_trends()
+            
+            return {
+                "total_matrices": total_matrices,
+                "average_entropy_alignment": float(avg_entropy),
+                "average_weather_resonance": float(avg_weather),
+                "average_geo_alignment": float(avg_geo),
+                "location_distribution": location_dist,
+                "performance_trends": performance_trends
+            }
+            
+        except Exception as e:
+            logger.error(f"Error getting performance summary: {e}")
+            return {"total_matrices": 0}
     
     def _get_location_distribution(self) -> Dict[str, int]:
         """Get distribution of matrix locations."""
-        distribution = {}
+        location_counts = {}
+        
         for entry in self.matrices.values():
-            if entry.location and entry.location.name:
-                location_name = entry.location.name
-                distribution[location_name] = distribution.get(location_name, 0) + 1
-        return distribution
+            if entry.location:
+                location_key = f"{entry.location.lat:.1f},{entry.location.lon:.1f}"
+                location_counts[location_key] = location_counts.get(location_key, 0) + 1
+        
+        return location_counts
     
     def _get_performance_trends(self) -> Dict[str, float]:
-        """Get performance trends across matrices."""
-        if not self.matrices:
-            return {}
-        
-        entries = list(self.matrices.values())
-        
-        return {
-            'high_entropy_count': len([e for e in entries if e.entropy_alignment_score > 0.8]),
-            'high_resonance_count': len([e for e in entries if e.weather_resonance_factor > 1.5]),
-            'high_geo_alignment_count': len([e for e in entries if e.geo_alignment_score > 0.8]),
-            'average_performance_history_length': np.mean([len(e.performance_history) for e in entries])
-        }
+        """Get performance trends from matrix history."""
+        try:
+            all_performances = []
+            for entry in self.matrices.values():
+                all_performances.extend(entry.performance_history)
+            
+            if not all_performances:
+                return {"average_performance": 0.0, "trend": 0.0}
+            
+            avg_performance = np.mean(all_performances)
+            
+            # Calculate trend (simple linear regression)
+            if len(all_performances) > 1:
+                x = np.arange(len(all_performances))
+                trend = np.polyfit(x, all_performances, 1)[0]
+            else:
+                trend = 0.0
+            
+            return {
+                "average_performance": float(avg_performance),
+                "trend": float(trend)
+            }
+            
+        except Exception as e:
+            logger.error(f"Error calculating performance trends: {e}")
+            return {"average_performance": 0.0, "trend": 0.0}
 
 
-def cosine_similarity(a, b):
-    """Compute cosine similarity between two vectors."""
-    a = np.array(a)
-    b = np.array(b)
-    return float(np.dot(a, b) / (norm(a) * norm(b) + 1e-8))
+def cosine_similarity(a: np.ndarray, b: np.ndarray) -> float:
+    """Calculate cosine similarity between two vectors."""
+    return float(np.dot(a, b) / (norm(a) * norm(b)))
 
 
 def load_matrix_vectors(matrix_dir: str) -> Dict[str, Any]:
-    """Load all matrix vectors from JSON files in a directory."""
+    """Load matrix vectors from directory."""
     matrices = {}
     for fname in os.listdir(matrix_dir):
-        if fname.endswith(".json"):
-            with open(os.path.join(matrix_dir, fname), "r") as f:
-                matrices[fname] = json.load(f)
+        if fname.endswith(".npy"):
+            filepath = os.path.join(matrix_dir, fname)
+            matrices[fname] = np.load(filepath)
     return matrices
 
 
 def load_matrix_from_file(matrix_file) -> np.ndarray:
-    """Load a matrix from a file (supports .npy and .json formats)."""
-    if str(matrix_file).endswith('.npy'):
+    """Load matrix from file."""
+    if matrix_file.suffix == ".npy":
         return np.load(matrix_file)
-    elif str(matrix_file).endswith('.json'):
-        with open(matrix_file, 'r') as f:
-            data = json.load(f)
-            return np.array(data)
     else:
-        raise ValueError(f"Unsupported file format: {matrix_file}")
+        # Handle other formats as needed
+        return np.array([])
 
 
-def match_hash_to_matrix(hash_vec, matrix_dir, threshold=0.8) -> Optional[str]:
-    """Match a hash vector to the closest matrix file above threshold."""
-    matrices = load_matrix_vectors(matrix_dir)
+def match_hash_to_matrix(hash_vec: np.ndarray, matrix_dir, threshold: float = 0.8) -> Optional[str]:
+    """Match hash vector to matrix file."""
     best_score = -1
     best_file = None
-    for fname, vec in matrices.items():
-        score = cosine_similarity(hash_vec, vec)
-        if score > best_score and score >= threshold:
-            best_score = score
-            best_file = fname
-    return best_file
+    
+    for matrix_file in matrix_dir.glob("*.npy"):
+        matrix = load_matrix_from_file(matrix_file)
+        if len(matrix) > 0:
+            score = cosine_similarity(hash_vec, matrix)
+            if score > best_score:
+                best_score = score
+                best_file = matrix_file
+    
+    if best_score > threshold and best_file:
+        return str(best_file)
+    
+    return None
 
 
 def create_enhanced_matrix_mapper(matrix_dir: str, weather_api_key: Optional[str] = None) -> EnhancedMatrixMapper:
-    """Factory function to create an enhanced matrix mapper."""
+    """Create enhanced matrix mapper instance."""
     return EnhancedMatrixMapper(matrix_dir, weather_api_key)
-
-
-__all__ = [
-    "match_hash_to_matrix", "cosine_similarity", "load_matrix_from_file", "load_matrix_vectors",
-    "EnhancedMatrixMapper", "EnhancedMatrixEntry", "create_enhanced_matrix_mapper"
-]
