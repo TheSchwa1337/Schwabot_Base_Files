@@ -10,6 +10,15 @@ import logging
 import time
 from typing import Dict, Any
 
+from core.zpe_zbe_core import (
+    QuantumPerformanceRegistry, 
+    QuantumPerformanceEntry,
+    ZPEZBEPerformanceTracker, 
+    ZPEVector, 
+    ZBEBalance, 
+    QuantumSyncStatus
+)
+
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -20,8 +29,6 @@ class TestQuantumPerformanceRegistry(unittest.TestCase):
     
     def setUp(self):
         """Set up test fixtures."""
-        from core.zpe_zbe_core import QuantumPerformanceRegistry, QuantumPerformanceEntry
-        
         self.registry = QuantumPerformanceRegistry(max_entries=5)
         self.test_entry = QuantumPerformanceEntry(
             strategy_id="test_strategy",
@@ -113,8 +120,6 @@ class TestZPEZBEPerformanceTracker(unittest.TestCase):
     
     def setUp(self):
         """Set up test fixtures."""
-        from core.zpe_zbe_core import ZPEZBEPerformanceTracker, ZPEVector, ZBEBalance, QuantumSyncStatus
-        
         self.tracker = ZPEZBEPerformanceTracker()
         self.zpe_vector = ZPEVector(
             energy=1e-33,

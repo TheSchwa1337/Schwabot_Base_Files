@@ -19,23 +19,23 @@ from typing import Dict, List, Optional, Tuple, Any
 try:
     from core.clean_unified_math import clean_unified_math as unified_math
 except ImportError:
-    # Fallback for testing
-    class unified_math:
-        @staticmethod
-        def sin(x):
-            return np.sin(x)
+        # Fallback for testing
+        class unified_math:
+            @staticmethod
+            def sin(x):
+                return np.sin(x)
 
-        @staticmethod
-        def max(x, y):
-            return max(x, y)
+            @staticmethod
+            def max(x, y):
+                return max(x, y)
 
-        @staticmethod
-        def min(x, y):
-            return min(x, y)
+            @staticmethod
+            def min(x, y):
+                return min(x, y)
 
-        @staticmethod
-        def abs(x):
-            return abs(x)
+            @staticmethod
+            def abs(x):
+                return abs(x)
 
         @staticmethod
         def multiply(x, y):

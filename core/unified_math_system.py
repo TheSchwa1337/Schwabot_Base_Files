@@ -1,211 +1,199 @@
-# -*- coding: utf-8 -*-
 """
-Unified Mathematical System for Schwabot
+Unified Mathematical System for Schwabot.
 
-This module provides a comprehensive mathematical foundation 
+This module provides a comprehensive mathematical foundation
 integrating quantum-inspired computational models.
 """
 
-import numpy as np
-from typing import Dict, Any, Optional, Union
+from typing import Any, Dict
 
 from .clean_math_foundation import CleanMathFoundation
 from .zpe_zbe_core import (
-    ZPEZBECore, 
-    QuantumSyncStatus, 
-    ZPEVector, 
-    ZBEBalance, 
+    ZBEBalance,
+    ZPEVector,
+    ZPEZBECore,
     ZPEZBEPerformanceTracker
 )
-
 
 class UnifiedMathSystem:
     """
     Comprehensive mathematical system that integrates:
+
     - Clean Mathematical Foundation
     - Zero Point Energy (ZPE) calculations
     - Zero-Based Equilibrium (ZBE) analysis
     - Quantum synchronization mechanisms
     """
 
-    def __init__(
-        self, 
-        math_foundation: Optional[CleanMathFoundation] = None,
-        zpe_zbe_core: Optional[ZPEZBECore] = None,
-        performance_tracker: Optional[ZPEZBEPerformanceTracker] = None
-    ) -> None:
+    def __init__(self) -> None:
+        """Initialize the unified mathematical system."""
+        self.math_foundation = CleanMathFoundation()
+        self.zpe_zbe_core = ZPEZBECore(self.math_foundation)
+        self.performance_tracker = ZPEZBEPerformanceTracker()
+
+    def quantum_market_analysis(self, market_data: Dict[str, Any]) -> Dict[str, Any]:
         """
-        Initialize Unified Mathematical System with performance tracking.
-        
+        Perform comprehensive quantum market analysis.
+
         Args:
-            math_foundation: Optional mathematical foundation instance
-            zpe_zbe_core: Optional ZPE-ZBE core instance
-            performance_tracker: Optional performance tracking instance
-        """
-        self.math_foundation: CleanMathFoundation = math_foundation or CleanMathFoundation()
-        self.zpe_zbe_core: ZPEZBECore = zpe_zbe_core or ZPEZBECore(self.math_foundation)
-        self.performance_tracker: ZPEZBEPerformanceTracker = (
-            performance_tracker or ZPEZBEPerformanceTracker()
-        )
-        
-    def quantum_market_analysis(
-        self, 
-        market_data: Dict[str, Any]
-    ) -> Dict[str, Union[float, str, bool]]:
-        """
-        Perform quantum-inspired market analysis using ZPE and ZBE.
-        
-        Args:
-            market_data: Comprehensive market data dictionary
-        
+            market_data: Market data dictionary containing price, bounds, etc.
+
         Returns:
-            Quantum market synchronization analysis
+            Quantum analysis results with ZPE and ZBE calculations
         """
-        # Extract relevant market parameters
-        current_price = market_data.get('price', 0.0)
-        entry_price = market_data.get('entry_price', current_price)
-        
-        # Default bounds if not provided
-        lower_bound = market_data.get('lower_bound', current_price * 0.95)
-        upper_bound = market_data.get('upper_bound', current_price * 1.05)
-        
+        # Extract market data
+        price = market_data.get('price', 0.0)
+        entry_price = market_data.get('entry_price', price)
+        lower_bound = market_data.get('lower_bound', price * 0.95)
+        upper_bound = market_data.get('upper_bound', price * 1.05)
+        frequency = market_data.get('frequency', 7.83)
+        mass_coefficient = market_data.get('mass_coefficient', 1e-6)
+
         # Calculate ZPE vector
         zpe_vector = self.zpe_zbe_core.calculate_zero_point_energy(
-            frequency=market_data.get('frequency', 7.83),
-            mass_coefficient=market_data.get('mass_coefficient', 1e-6)
+            frequency=frequency,
+            mass_coefficient=mass_coefficient
         )
-        
+
         # Calculate ZBE balance
         zbe_balance = self.zpe_zbe_core.calculate_zbe_balance(
             entry_price=entry_price,
-            current_price=current_price,
+            current_price=price,
             lower_bound=lower_bound,
             upper_bound=upper_bound
         )
-        
-        # Determine dual matrix sync
+
+        # Generate quantum soulprint vector
+        soulprint_vector = self.zpe_zbe_core.generate_quantum_soulprint_vector(
+            zpe_vector, zbe_balance
+        )
+
+        # Assess strategy confidence
+        confidence = self.zpe_zbe_core.assess_quantum_strategy_confidence(
+            zpe_vector, zbe_balance
+        )
+
+        # Dual matrix sync trigger
         sync_trigger = self.zpe_zbe_core.dual_matrix_sync_trigger(
             zpe_vector, zbe_balance
         )
-        
+
         return {
-            **sync_trigger,
+            "is_synced": sync_trigger["is_synced"],
+            "sync_strategy": sync_trigger["sync_strategy"],
             "zpe_energy": zpe_vector.energy,
             "zpe_sync_status": zpe_vector.sync_status.value,
             "zbe_status": zbe_balance.status,
             "zbe_stability_score": zbe_balance.stability_score,
             "quantum_potential": zpe_vector.metadata.get('quantum_potential', 0.0),
-            "resonance_factor": zpe_vector.metadata.get('resonance_factor', 1.0)
+            "resonance_factor": zpe_vector.metadata.get('resonance_factor', 1.0),
+            "soulprint_vector": soulprint_vector,
+            "strategy_confidence": confidence,
+            "recommended_action": sync_trigger["recommended_action"]
         }
-    
+
     def advanced_quantum_decision_router(
-        self, 
-        quantum_analysis: Dict[str, Any]
+        self, quantum_analysis: Dict[str, Any]
     ) -> Dict[str, Any]:
         """
-        Advanced decision routing based on quantum market analysis.
-        
+        Advanced quantum decision routing based on analysis.
+
         Args:
-            quantum_analysis: Quantum market analysis results
-        
+            quantum_analysis: Results from quantum market analysis
+
         Returns:
-            Recommended trading strategy and parameters
+            Decision routing with strategy and action recommendations
         """
-        # Decision logic based on quantum synchronization
-        if quantum_analysis.get('is_synced', False):
-            return {
-                "strategy": quantum_analysis.get('sync_strategy', 'LotusHold_Ω33'),
-                "action": "hold",
-                "confidence": 0.9,
-                "quantum_potential": quantum_analysis.get('quantum_potential', 0.0),
-                "risk_adjustment": 0.1  # Minimal risk during quantum sync
-            }
-        
-        # Adaptive strategy based on ZPE and ZBE metrics
+        is_synced = quantum_analysis.get('is_synced', False)
         zpe_energy = quantum_analysis.get('zpe_energy', 0.0)
         zbe_status = quantum_analysis.get('zbe_status', 0.0)
-        
-        if zpe_energy > self.zpe_zbe_core.QUANTUM_SYNC_THRESHOLD and abs(zbe_status) < 0.5:
-            return {
-                "strategy": "AdaptiveHold",
-                "action": "monitor",
-                "confidence": 0.7,
-                "quantum_potential": quantum_analysis.get('quantum_potential', 0.0),
-                "risk_adjustment": 0.3
-            }
-        
-        # Default fallback strategy
+        quantum_potential = quantum_analysis.get('quantum_potential', 0.0)
+        confidence = quantum_analysis.get('strategy_confidence', 0.5)
+
+        # Decision logic based on quantum synchronization
+        if is_synced and confidence > 0.8:
+            strategy = "LotusHold_Ω33"
+            action = "hold"
+            risk_adjustment = 0.1
+        elif is_synced and confidence > 0.6:
+            strategy = "QuantumResonance"
+            action = "monitor"
+            risk_adjustment = 0.3
+        elif quantum_potential > 0.5:
+            strategy = "PotentialSeeker"
+            action = "assess"
+            risk_adjustment = 0.5
+        else:
+            strategy = "NeutralObserver"
+            action = "wait"
+            risk_adjustment = 0.7
+
         return {
-            "strategy": "NeutralMonitor",
-            "action": "assess",
-            "confidence": 0.5,
-            "quantum_potential": 0.0,
-            "risk_adjustment": 0.5
+            "strategy": strategy,
+            "action": action,
+            "confidence": confidence,
+            "quantum_potential": quantum_potential,
+            "risk_adjustment": risk_adjustment,
+            "zpe_energy": zpe_energy,
+            "zbe_status": zbe_status
         }
-    
-    def get_system_entropy(
-        self, 
-        quantum_analysis: Dict[str, Any]
-    ) -> float:
+
+    def get_system_entropy(self, quantum_analysis: Dict[str, Any]) -> float:
         """
         Calculate system entropy based on quantum analysis.
-        
+
         Args:
             quantum_analysis: Quantum market analysis results
-        
+
         Returns:
-            Calculated entropy value
+            System entropy value
         """
         zpe_energy = quantum_analysis.get('zpe_energy', 0.0)
         zbe_status = quantum_analysis.get('zbe_status', 0.0)
         quantum_potential = quantum_analysis.get('quantum_potential', 0.0)
-        
-        # Entropy calculation incorporating ZPE and ZBE metrics
-        entropy = (
-            abs(zpe_energy) * 
-            (1 + abs(zbe_status)) * 
-            (1 + quantum_potential)
-        )
-        
-        return entropy
+
+        # Calculate entropy based on quantum state variance
+        energy_entropy = abs(zpe_energy - 2.72e-33) / 2.72e-33
+        status_entropy = abs(zbe_status)
+        potential_entropy = 1.0 - quantum_potential
+
+        # Composite entropy calculation
+        total_entropy = (energy_entropy + status_entropy + potential_entropy) / 3.0
+
+        return max(0.0, min(1.0, total_entropy))
 
     def log_strategy_performance(
-        self, 
-        zpe_vector: ZPEVector, 
+        self,
+        zpe_vector: ZPEVector,
         zbe_balance: ZBEBalance,
         strategy_metadata: Dict[str, Any]
     ) -> None:
         """
-        Log performance of a quantum-synchronized strategy.
-        
+        Log strategy performance for adaptive learning.
+
         Args:
             zpe_vector: Zero Point Energy vector
             zbe_balance: Zero-Based Equilibrium balance
-            strategy_metadata: Additional strategy performance metadata
+            strategy_metadata: Strategy performance metadata
         """
         self.performance_tracker.log_strategy_performance(
             zpe_vector, zbe_balance, strategy_metadata
         )
-    
+
     def get_quantum_strategy_recommendations(self) -> Dict[str, Any]:
         """
-        Get quantum strategy recommendations based on historical performance.
-        
+        Get quantum strategy recommendations based on performance history.
+
         Returns:
             Recommended strategy parameters
         """
         return self.performance_tracker.get_quantum_strategy_recommendations()
-    
+
     def get_performance_analysis(self) -> Dict[str, Any]:
         """
         Get comprehensive performance analysis.
-        
+
         Returns:
             Detailed performance analysis
         """
         return self.performance_tracker.get_performance_analysis()
-
-
-def create_unified_math_system() -> UnifiedMathSystem:
-    """Factory function for creating Unified Math System instance."""
-    return UnifiedMathSystem()

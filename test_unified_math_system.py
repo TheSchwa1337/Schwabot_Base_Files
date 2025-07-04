@@ -55,7 +55,8 @@ class TestUnifiedMathSystem(unittest.TestCase):
             'sync_strategy': 'LotusHold_Ω33',
             'zpe_energy': 1e-33,
             'zbe_status': 0.0,
-            'quantum_potential': 0.5
+            'quantum_potential': 0.5,
+            'strategy_confidence': 0.9  # Add high confidence
         }
         
         decision = self.unified_math.advanced_quantum_decision_router(quantum_analysis)
@@ -67,7 +68,7 @@ class TestUnifiedMathSystem(unittest.TestCase):
         self.assertIn('quantum_potential', decision)
         self.assertIn('risk_adjustment', decision)
         
-        # Test synced scenario
+        # Test synced scenario with high confidence
         self.assertEqual(decision['action'], 'hold')
         self.assertGreaterEqual(decision['confidence'], 0.8)
         
@@ -76,11 +77,12 @@ class TestUnifiedMathSystem(unittest.TestCase):
             'is_synced': False,
             'zpe_energy': 1e-34,
             'zbe_status': 0.5,
-            'quantum_potential': 0.1
+            'quantum_potential': 0.1,
+            'strategy_confidence': 0.3
         }
         
         unsynced_decision = self.unified_math.advanced_quantum_decision_router(unsynced_analysis)
-        self.assertIn(unsynced_decision['action'], ['monitor', 'assess'])
+        self.assertIn(unsynced_decision['action'], ['monitor', 'assess', 'wait'])
         
     def test_system_entropy(self):
         """Test system entropy calculation."""

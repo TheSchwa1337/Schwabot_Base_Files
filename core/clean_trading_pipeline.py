@@ -27,7 +27,15 @@ from .portfolio_tracker import PortfolioTracker
 from .ccxt_trading_executor import CCXTTradingExecutor, IntegratedTradingSignal, TradingPair
 from .phase_bit_integration import phase_bit_integration
 from .unified_math_system import create_unified_math_system, UnifiedMathSystem
-from .zpe_zbe_core import create_zpe_zbe_core, ZPEZBECore
+from .zpe_zbe_core import (
+    ZPEZBECore, ZPEVector, ZBEBalance, QuantumSyncStatus,
+    QuantumPerformanceEntry, QuantumPerformanceRegistry,
+    ZPEZBEPerformanceTracker, create_zpe_zbe_core
+)
+from .chrono_recursive_logic_function import (
+    ChronoRecursiveLogicFunction, CRLFState, CRLFResponse, CRLFTriggerState, create_crlf
+)
+
 
 logger = logging.getLogger(__name__)
 
@@ -116,6 +124,94 @@ class PipelineState:
 
 
 @dataclass
+class ZPEZBEPipelineState:
+    """Enhanced pipeline state with ZPE-ZBE tracking."""
+    
+    base_state: PipelineState
+    current_zpe_energy: float
+    current_zbe_status: float
+    quantum_sync_status: QuantumSyncStatus
+    quantum_potential: float
+    system_entropy: float
+    performance_registry: QuantumPerformanceRegistry
+    last_zpe_analysis: Optional[Dict[str, Any]] = None
+    last_zbe_analysis: Optional[Dict[str, Any]] = None
+
+
+@dataclass
+class CRLFEnhancedPipelineState:
+    """Pipeline state enhanced with CRLF tracking."""
+    
+    base_state: PipelineState
+    crlf_instance: ChronoRecursiveLogicFunction
+    current_crlf_output: float
+    current_trigger_state: CRLFTriggerState
+    strategy_alignment_trend: List[float]
+    temporal_resonance_history: List[float]
+    recursion_depth_history: List[int]
+    last_crlf_analysis: Optional[Dict[str, Any]] = None
+
+
+
+@dataclass
+class ZPEZBEMarketData:
+    """Enhanced market data with ZPE-ZBE analysis."""
+    
+    base_market_data: MarketData
+    zpe_vector: ZPEVector
+    zbe_balance: ZBEBalance
+    quantum_sync_status: QuantumSyncStatus
+    quantum_potential: float
+    resonance_factor: float
+    strategy_confidence: float
+    soulprint_vector: Dict[str, float]
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+
+
+@dataclass
+class CRLFEnhancedMarketData:
+    """Market data enhanced with CRLF analysis."""
+    
+    base_market_data: MarketData
+    crlf_response: CRLFResponse
+    strategy_alignment_score: float
+    temporal_resonance: float
+    recursion_depth: int
+    trigger_state: CRLFTriggerState
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass
+class CRLFEnhancedTradingDecision:
+    """Trading decision enhanced with CRLF analysis."""
+    
+    base_decision: TradingDecision
+    crlf_output: float
+    trigger_state: CRLFTriggerState
+    strategy_alignment: float
+    temporal_urgency: str
+    recursion_depth: int
+    risk_adjustment: float
+    strategy_weights: Dict[str, float]
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+@dataclass
+class ZPEZBETradingDecision:
+    """Enhanced trading decision with ZPE-ZBE analysis."""
+    
+    base_decision: TradingDecision
+    zpe_energy: float
+    zbe_status: float
+    quantum_sync_status: QuantumSyncStatus
+    quantum_potential: float
+    strategy_confidence: float
+    recommended_action: str
+    risk_adjustment: float
+    system_entropy: float
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+@dataclass
 class RiskParameters:
     """Risk management parameters."""
 
@@ -191,6 +287,36 @@ class CleanTradingPipeline:
             market_regime=MarketRegime.SIDEWAYS,
             thermal_state=ThermalState.WARM,
             bit_phase=BitPhase.EIGHT_BIT,
+        )
+
+
+        # Initialize ZPE-ZBE Performance Tracker
+        self.zpe_zbe_performance_tracker = ZPEZBEPerformanceTracker()
+        
+        # Enhanced pipeline state with ZPE-ZBE tracking
+
+        # Initialize Chrono-Recursive Logic Function
+        self.crlf = create_crlf()
+        
+        # Enhanced pipeline state with CRLF tracking
+        self.crlf_enhanced_state = CRLFEnhancedPipelineState(
+            base_state=self.state,
+            crlf_instance=self.crlf,
+            current_crlf_output=0.0,
+            current_trigger_state=CRLFTriggerState.HOLD,
+            strategy_alignment_trend=[],
+            temporal_resonance_history=[],
+            recursion_depth_history=[]
+        )
+
+        self.zpe_zbe_state = ZPEZBEPipelineState(
+            base_state=self.state,
+            current_zpe_energy=0.0,
+            current_zbe_status=0.0,
+            quantum_sync_status=QuantumSyncStatus.UNSYNCED,
+            quantum_potential=0.0,
+            system_entropy=0.0,
+            performance_registry=QuantumPerformanceRegistry()
         )
 
         # Market data history for analysis
@@ -320,6 +446,503 @@ class CleanTradingPipeline:
             logger.error(f"Error processing market data: {e}", exc_info=True)
             return None
 
+
+
+    def _enhance_market_data_with_crlf(self, market_data: MarketData) -> CRLFEnhancedMarketData:
+        """
+        Enhance market data with CRLF analysis.
+        
+        Args:
+            market_data: Base market data
+            
+        Returns:
+            Enhanced market data with CRLF analysis
+        """
+        # Prepare strategy vector from market data
+        strategy_vector = np.array([
+            market_data.volatility,      # Momentum component
+            market_data.trend_strength,  # Scalping component
+            1.0 - market_data.volatility,  # Mean reversion component
+            market_data.entropy_level / 10.0  # Swing component (normalized)
+        ])
+        
+        # Prepare profit curve from market data history
+        if len(self.market_data_history) >= 7:
+            profit_curve = np.array([
+                md.price for md in self.market_data_history[-7:]
+            ])
+        else:
+            # Use current price repeated if not enough history
+            profit_curve = np.array([market_data.price] * 7)
+        
+        # Compute CRLF
+        crlf_response = self.crlf.compute_crlf(
+            strategy_vector=strategy_vector,
+            profit_curve=profit_curve,
+            market_entropy=market_data.entropy_level / 10.0,
+            time_offset=0.0
+        )
+        
+        # Calculate strategy alignment score
+        strategy_alignment = self._compute_strategy_alignment_score(crlf_response)
+        
+        # Calculate temporal resonance
+        temporal_resonance = self._compute_temporal_resonance(crlf_response)
+        
+        return CRLFEnhancedMarketData(
+            base_market_data=market_data,
+            crlf_response=crlf_response,
+            strategy_alignment_score=strategy_alignment,
+            temporal_resonance=temporal_resonance,
+            recursion_depth=crlf_response.recursion_depth,
+            trigger_state=crlf_response.trigger_state
+        )
+
+    def _enhance_market_data_with_zpe_zbe(self, market_data: MarketData) -> ZPEZBEMarketData:
+        """
+        Enhance market data with ZPE-ZBE analysis.
+        
+        Args:
+            market_data: Base market data
+            
+        Returns:
+            Enhanced market data with ZPE-ZBE analysis
+        """
+        # Prepare market data for quantum analysis
+        quantum_market_data = {
+            'price': market_data.price,
+            'entry_price': market_data.price,  # Could be enhanced with actual entry price
+            'lower_bound': market_data.price * 0.95,
+            'upper_bound': market_data.price * 1.05,
+            'frequency': 7.83,  # Earth's Schumann resonance
+            'mass_coefficient': 1e-6
+        }
+        
+        # Perform quantum market analysis
+        quantum_analysis = self.unified_math_system.quantum_market_analysis(quantum_market_data)
+        
+        # Calculate ZPE vector
+        zpe_vector = self.zpe_zbe_core.calculate_zero_point_energy(
+            frequency=quantum_market_data['frequency'],
+            mass_coefficient=quantum_market_data['mass_coefficient']
+        )
+        
+        # Calculate ZBE balance
+        zbe_balance = self.zpe_zbe_core.calculate_zbe_balance(
+            entry_price=quantum_market_data['entry_price'],
+            current_price=quantum_market_data['price'],
+            lower_bound=quantum_market_data['lower_bound'],
+            upper_bound=quantum_market_data['upper_bound']
+        )
+        
+        return ZPEZBEMarketData(
+            base_market_data=market_data,
+            zpe_vector=zpe_vector,
+            zbe_balance=zbe_balance,
+            quantum_sync_status=zpe_vector.sync_status,
+            quantum_potential=quantum_analysis['quantum_potential'],
+            resonance_factor=quantum_analysis['resonance_factor'],
+            strategy_confidence=quantum_analysis['strategy_confidence'],
+            soulprint_vector=quantum_analysis['soulprint_vector']
+        )
+
+    def _enhance_strategy_selection_with_zpe_zbe(
+        self, 
+        market_data: MarketData, 
+        regime: MarketRegime
+    ) -> Tuple[StrategyBranch, Dict[str, Any]]:
+        """
+        Enhance strategy selection with ZPE-ZBE analysis.
+        
+        Args:
+            market_data: Market data
+            regime: Market regime
+            
+        Returns:
+            Tuple of (strategy_branch, zpe_zbe_analysis)
+        """
+        # Get base strategy
+        base_strategy = self._determine_optimal_strategy(regime, market_data)
+        
+        # Enhance with ZPE-ZBE analysis
+        zpe_zbe_market_data = self._enhance_market_data_with_zpe_zbe(market_data)
+        
+        # Get quantum strategy recommendations
+        quantum_recommendations = self.unified_math_system.get_quantum_strategy_recommendations()
+        
+        # Adjust strategy based on quantum analysis
+        if zpe_zbe_market_data.quantum_sync_status in [
+            QuantumSyncStatus.FULL_SYNC, QuantumSyncStatus.RESONANCE
+        ]:
+            # High quantum sync - use more conservative strategy
+            if base_strategy == StrategyBranch.MOMENTUM:
+                adjusted_strategy = StrategyBranch.SWING
+            elif base_strategy == StrategyBranch.SCALPING:
+                adjusted_strategy = StrategyBranch.MEAN_REVERSION
+            else:
+                adjusted_strategy = base_strategy
+        else:
+            # Low quantum sync - use more aggressive strategy
+            if base_strategy == StrategyBranch.SWING:
+                adjusted_strategy = StrategyBranch.MOMENTUM
+            elif base_strategy == StrategyBranch.MEAN_REVERSION:
+                adjusted_strategy = StrategyBranch.SCALPING
+            else:
+                adjusted_strategy = base_strategy
+        
+        return adjusted_strategy, {
+            'zpe_energy': zpe_zbe_market_data.zpe_vector.energy,
+            'zbe_status': zpe_zbe_market_data.zbe_balance.status,
+            'quantum_sync_status': zpe_zbe_market_data.quantum_sync_status.value,
+            'quantum_potential': zpe_zbe_market_data.quantum_potential,
+            'strategy_confidence': zpe_zbe_market_data.strategy_confidence,
+            'recommendations': quantum_recommendations
+        }
+
+    def _enhance_trading_decision_with_zpe_zbe(
+        self, 
+        base_decision: TradingDecision, 
+        zpe_zbe_market_data: ZPEZBEMarketData
+    ) -> ZPEZBETradingDecision:
+        """
+        Enhance trading decision with ZPE-ZBE analysis.
+        
+        Args:
+            base_decision: Base trading decision
+            zpe_zbe_market_data: Enhanced market data with ZPE-ZBE analysis
+            
+        Returns:
+            Enhanced trading decision with ZPE-ZBE analysis
+        """
+        # Get quantum decision routing
+        quantum_analysis = {
+            'is_synced': zpe_zbe_market_data.quantum_sync_status in [
+                QuantumSyncStatus.FULL_SYNC, QuantumSyncStatus.RESONANCE
+            ],
+            'zpe_energy': zpe_zbe_market_data.zpe_vector.energy,
+            'zbe_status': zpe_zbe_market_data.zbe_balance.status,
+            'quantum_potential': zpe_zbe_market_data.quantum_potential,
+            'strategy_confidence': zpe_zbe_market_data.strategy_confidence
+        }
+        
+        quantum_decision = self.unified_math_system.advanced_quantum_decision_router(quantum_analysis)
+        
+        # Calculate system entropy
+        system_entropy = self.unified_math_system.get_system_entropy(quantum_analysis)
+        
+        # Log performance for adaptive learning
+        strategy_metadata = {
+            'strategy_id': base_decision.strategy_branch.value,
+            'profit': base_decision.profit_potential,
+            'risk_score': base_decision.risk_score,
+            'thermal_state': base_decision.thermal_state.value,
+            'bit_phase': base_decision.bit_phase.value
+        }
+        
+        self.unified_math_system.log_strategy_performance(
+            zpe_zbe_market_data.zpe_vector,
+            zpe_zbe_market_data.zbe_balance,
+            strategy_metadata
+        )
+        
+        return ZPEZBETradingDecision(
+            base_decision=base_decision,
+            zpe_energy=zpe_zbe_market_data.zpe_vector.energy,
+            zbe_status=zpe_zbe_market_data.zbe_balance.status,
+            quantum_sync_status=zpe_zbe_market_data.quantum_sync_status,
+            quantum_potential=zpe_zbe_market_data.quantum_potential,
+            strategy_confidence=zpe_zbe_market_data.strategy_confidence,
+            recommended_action=quantum_decision['action'],
+            risk_adjustment=quantum_decision['risk_adjustment'],
+            system_entropy=system_entropy
+        )
+
+    def _enhance_risk_management_with_zpe_zbe(
+        self, 
+        signal: Dict[str, Any], 
+        zpe_zbe_market_data: ZPEZBEMarketData
+    ) -> Dict[str, Any]:
+        """
+        Enhance risk management with ZPE-ZBE analysis.
+        
+        Args:
+            signal: Trading signal
+            zpe_zbe_market_data: Enhanced market data with ZPE-ZBE analysis
+            
+        Returns:
+            Enhanced signal with ZPE-ZBE risk adjustments
+        """
+        # Get base risk parameters
+        enhanced_signal = signal.copy()
+        
+        # Adjust risk based on quantum sync status
+        if zpe_zbe_market_data.quantum_sync_status == QuantumSyncStatus.RESONANCE:
+            # High quantum sync - reduce risk
+            enhanced_signal['risk_multiplier'] = 0.5
+            enhanced_signal['position_size_multiplier'] = 1.5
+        elif zpe_zbe_market_data.quantum_sync_status == QuantumSyncStatus.FULL_SYNC:
+            # Good quantum sync - moderate risk
+            enhanced_signal['risk_multiplier'] = 0.8
+            enhanced_signal['position_size_multiplier'] = 1.2
+        elif zpe_zbe_market_data.quantum_sync_status == QuantumSyncStatus.PARTIAL_SYNC:
+            # Partial quantum sync - normal risk
+            enhanced_signal['risk_multiplier'] = 1.0
+            enhanced_signal['position_size_multiplier'] = 1.0
+        else:
+            # No quantum sync - increase risk
+            enhanced_signal['risk_multiplier'] = 1.5
+            enhanced_signal['position_size_multiplier'] = 0.8
+        
+        # Adjust based on ZBE status
+        if abs(zpe_zbe_market_data.zbe_balance.status) > 0.5:
+            # Far from equilibrium - reduce position size
+            enhanced_signal['position_size_multiplier'] *= 0.7
+        
+        # Adjust based on strategy confidence
+        if zpe_zbe_market_data.strategy_confidence > 0.8:
+            enhanced_signal['confidence_multiplier'] = 1.2
+        elif zpe_zbe_market_data.strategy_confidence < 0.4:
+            enhanced_signal['confidence_multiplier'] = 0.6
+        else:
+            enhanced_signal['confidence_multiplier'] = 1.0
+        
+        return enhanced_signal
+
+    def _update_zpe_zbe_performance_metrics(self, zpe_zbe_decision: ZPEZBETradingDecision) -> None:
+        """
+        Update ZPE-ZBE performance metrics.
+        
+        Args:
+            zpe_zbe_decision: Enhanced trading decision with ZPE-ZBE analysis
+        """
+        # Update ZPE-ZBE state
+        self.zpe_zbe_state.current_zpe_energy = zpe_zbe_decision.zpe_energy
+        self.zpe_zbe_state.current_zbe_status = zpe_zbe_decision.zbe_status
+        self.zpe_zbe_state.quantum_sync_status = zpe_zbe_decision.quantum_sync_status
+        self.zpe_zbe_state.quantum_potential = zpe_zbe_decision.quantum_potential
+        self.zpe_zbe_state.system_entropy = zpe_zbe_decision.system_entropy
+        
+        # Store last analysis
+        self.zpe_zbe_state.last_zpe_analysis = {
+            'energy': zpe_zbe_decision.zpe_energy,
+            'sync_status': zpe_zbe_decision.quantum_sync_status.value,
+            'potential': zpe_zbe_decision.quantum_potential
+        }
+        
+        self.zpe_zbe_state.last_zbe_analysis = {
+            'status': zpe_zbe_decision.zbe_status,
+            'stability_score': zpe_zbe_decision.base_decision.metadata.get('zbe_stability_score', 0.0)
+        }
+
+
+    def _enhance_trading_decision_with_crlf(
+        self, 
+        base_decision: TradingDecision, 
+        crlf_market_data: CRLFEnhancedMarketData
+    ) -> CRLFEnhancedTradingDecision:
+        """
+        Enhance trading decision with CRLF analysis.
+        
+        Args:
+            base_decision: Base trading decision
+            crlf_market_data: Enhanced market data with CRLF analysis
+            
+        Returns:
+            Enhanced trading decision with CRLF analysis
+        """
+        crlf_response = crlf_market_data.crlf_response
+        
+        # Adjust decision based on CRLF trigger state
+        adjusted_decision = self._adjust_decision_with_crlf(base_decision, crlf_response)
+        
+        # Update CRLF state
+        self._update_crlf_pipeline_state(crlf_response)
+        
+        return CRLFEnhancedTradingDecision(
+            base_decision=adjusted_decision,
+            crlf_output=crlf_response.crlf_output,
+            trigger_state=crlf_response.trigger_state,
+            strategy_alignment=crlf_market_data.strategy_alignment_score,
+            temporal_urgency=crlf_response.recommendations.get('temporal_urgency', 'MEDIUM'),
+            recursion_depth=crlf_response.recursion_depth,
+            risk_adjustment=crlf_response.recommendations.get('risk_adjustment', 1.0),
+            strategy_weights=crlf_response.recommendations.get('strategy_weights', {})
+        )
+
+    def _adjust_decision_with_crlf(
+        self, 
+        base_decision: TradingDecision, 
+        crlf_response: CRLFResponse
+    ) -> TradingDecision:
+        """
+        Adjust trading decision based on CRLF analysis.
+        
+        Args:
+            base_decision: Base trading decision
+            crlf_response: CRLF response
+            
+        Returns:
+            Adjusted trading decision
+        """
+        adjusted_decision = base_decision
+        
+        # Adjust based on trigger state
+        if crlf_response.trigger_state == CRLFTriggerState.OVERRIDE:
+            # Override - increase position size and confidence
+            adjusted_decision.quantity *= 1.5
+            adjusted_decision.confidence = min(1.0, adjusted_decision.confidence * 1.2)
+            adjusted_decision.metadata['crlf_override'] = True
+            adjusted_decision.metadata['override_matrix'] = "FastProfitOverrideΩ"
+            
+        elif crlf_response.trigger_state == CRLFTriggerState.ESCALATE:
+            # Escalate - moderate increase
+            adjusted_decision.quantity *= 1.2
+            adjusted_decision.confidence = min(1.0, adjusted_decision.confidence * 1.1)
+            adjusted_decision.metadata['crlf_escalate'] = True
+            
+        elif crlf_response.trigger_state == CRLFTriggerState.HOLD:
+            # Hold - reduce position size
+            adjusted_decision.quantity *= 0.7
+            adjusted_decision.confidence *= 0.9
+            adjusted_decision.metadata['crlf_hold'] = True
+            adjusted_decision.metadata['hold_duration'] = crlf_response.recommendations.get('hold_duration', 300)
+            
+        elif crlf_response.trigger_state == CRLFTriggerState.RECURSIVE_RESET:
+            # Reset - use fallback strategy
+            adjusted_decision.quantity *= 0.5
+            adjusted_decision.confidence *= 0.7
+            adjusted_decision.metadata['crlf_reset'] = True
+            adjusted_decision.metadata['fallback_strategy'] = "Conservative_Mean_Reversion"
+        
+        # Apply risk adjustment
+        risk_adjustment = crlf_response.recommendations.get('risk_adjustment', 1.0)
+        adjusted_decision.risk_score *= risk_adjustment
+        
+        # Add CRLF metadata
+        adjusted_decision.metadata.update({
+            'crlf_output': crlf_response.crlf_output,
+            'crlf_confidence': crlf_response.confidence,
+            'recursion_depth': crlf_response.recursion_depth,
+            'strategy_weights': crlf_response.recommendations.get('strategy_weights', {})
+        })
+        
+        return adjusted_decision
+
+    def _update_crlf_pipeline_state(self, crlf_response: CRLFResponse):
+        """
+        Update CRLF pipeline state with latest response.
+        
+        Args:
+            crlf_response: Latest CRLF response
+        """
+        # Update current state
+        self.crlf_enhanced_state.current_crlf_output = crlf_response.crlf_output
+        self.crlf_enhanced_state.current_trigger_state = crlf_response.trigger_state
+        
+        # Update history
+        self.crlf_enhanced_state.strategy_alignment_trend.append(
+            self._compute_strategy_alignment_score(crlf_response)
+        )
+        self.crlf_enhanced_state.temporal_resonance_history.append(
+            self._compute_temporal_resonance(crlf_response)
+        )
+        self.crlf_enhanced_state.recursion_depth_history.append(
+            crlf_response.recursion_depth
+        )
+        
+        # Keep history manageable
+        max_history = 100
+        if len(self.crlf_enhanced_state.strategy_alignment_trend) > max_history:
+            self.crlf_enhanced_state.strategy_alignment_trend = self.crlf_enhanced_state.strategy_alignment_trend[-max_history:]
+            self.crlf_enhanced_state.temporal_resonance_history = self.crlf_enhanced_state.temporal_resonance_history[-max_history:]
+            self.crlf_enhanced_state.recursion_depth_history = self.crlf_enhanced_state.recursion_depth_history[-max_history:]
+        
+        # Store last analysis
+        self.crlf_enhanced_state.last_crlf_analysis = {
+            'crlf_output': crlf_response.crlf_output,
+            'trigger_state': crlf_response.trigger_state.value,
+            'confidence': crlf_response.confidence,
+            'recursion_depth': crlf_response.recursion_depth,
+            'recommendations': crlf_response.recommendations
+        }
+
+    def _compute_strategy_alignment_score(self, crlf_response: CRLFResponse) -> float:
+        """
+        Compute strategy alignment score from CRLF response.
+        
+        Args:
+            crlf_response: CRLF response
+            
+        Returns:
+            Strategy alignment score (0.0 to 1.0)
+        """
+        # Higher confidence and lower entropy = better alignment
+        alignment = crlf_response.confidence * (1.0 - crlf_response.entropy_updated)
+        return np.clip(alignment, 0.0, 1.0)
+    
+    def _compute_temporal_resonance(self, crlf_response: CRLFResponse) -> float:
+        """
+        Compute temporal resonance from CRLF response.
+        
+        Args:
+            crlf_response: CRLF response
+            
+        Returns:
+            Temporal resonance score (0.0 to 1.0)
+        """
+        # Temporal resonance based on CRLF output magnitude and confidence
+        resonance = abs(crlf_response.crlf_output) * crlf_response.confidence
+        return np.clip(resonance, 0.0, 1.0)
+    
+    def get_crlf_performance_summary(self) -> Dict[str, Any]:
+        """
+        Get CRLF performance summary.
+        
+        Returns:
+            CRLF performance summary
+        """
+        crlf_summary = self.crlf.get_performance_summary()
+        
+        return {
+            'crlf_performance': crlf_summary,
+            'pipeline_crlf_state': {
+                'current_crlf_output': self.crlf_enhanced_state.current_crlf_output,
+                'current_trigger_state': self.crlf_enhanced_state.current_trigger_state.value,
+                'strategy_alignment_trend': self.crlf_enhanced_state.strategy_alignment_trend[-10:] if self.crlf_enhanced_state.strategy_alignment_trend else [],
+                'temporal_resonance_history': self.crlf_enhanced_state.temporal_resonance_history[-10:] if self.crlf_enhanced_state.temporal_resonance_history else [],
+                'recursion_depth_history': self.crlf_enhanced_state.recursion_depth_history[-10:] if self.crlf_enhanced_state.recursion_depth_history else [],
+                'last_crlf_analysis': self.crlf_enhanced_state.last_crlf_analysis
+            }
+        }
+
+    def get_zpe_zbe_pipeline_summary(self) -> Dict[str, Any]:
+        """
+        Get ZPE-ZBE enhanced pipeline summary.
+        
+        Returns:
+            Enhanced pipeline summary with ZPE-ZBE metrics
+        """
+        base_summary = self.get_pipeline_summary()
+        
+        # Get performance analysis
+        performance_analysis = self.unified_math_system.get_performance_analysis()
+        quantum_recommendations = self.unified_math_system.get_quantum_strategy_recommendations()
+        
+        return {
+            **base_summary,
+            'zpe_zbe_metrics': {
+                'current_zpe_energy': self.zpe_zbe_state.current_zpe_energy,
+                'current_zbe_status': self.zpe_zbe_state.current_zbe_status,
+                'quantum_sync_status': self.zpe_zbe_state.quantum_sync_status.value,
+                'quantum_potential': self.zpe_zbe_state.quantum_potential,
+                'system_entropy': self.zpe_zbe_state.system_entropy,
+                'last_zpe_analysis': self.zpe_zbe_state.last_zpe_analysis,
+                'last_zbe_analysis': self.zpe_zbe_state.last_zbe_analysis
+            },
+            'quantum_performance': performance_analysis,
+            'quantum_recommendations': quantum_recommendations
+        }
+
     def _analyze_market_regime(self, market_data: MarketData) -> MarketRegime:
         """Analyze current market regime using mathematical indicators and quantum insights."""
         if len(self.market_data_history) < 20:
@@ -342,7 +965,7 @@ class CleanTradingPipeline:
         recent_prices = [md.price for md in self.market_data_history[-20:]]
         trend_slope = np.polyfit(range(len(recent_prices)), recent_prices, 1)[0]
         price_std = np.std(recent_prices)
-        
+
         # Volatility analysis
         volatility = market_data.volatility
         high_vol_threshold = self.risk_params.volatility_threshold

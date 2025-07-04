@@ -190,11 +190,11 @@ This report documents the testing of the new ZPE-ZBE core implementation.
    - End-to-end workflow integration
 
 ## Implementation Status
-✅ Core functionality implemented
-✅ Performance tracking implemented
-✅ Unified math system implemented
-✅ Comprehensive test suite created
-✅ Old test files cleaned up
+- Core functionality implemented
+- Performance tracking implemented
+- Unified math system implemented
+- Comprehensive test suite created
+- Old test files cleaned up
 
 ## Next Steps
 1. Integrate into clean trading pipeline
@@ -203,7 +203,7 @@ This report documents the testing of the new ZPE-ZBE core implementation.
 4. Add monitoring and alerting
 """
     
-    with open('ZPE_ZBE_TEST_REPORT.md', 'w') as f:
+    with open('ZPE_ZBE_TEST_REPORT.md', 'w', encoding='utf-8') as f:
         f.write(report_content)
     
     logger.info("📝 Test report created: ZPE_ZBE_TEST_REPORT.md")
