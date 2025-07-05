@@ -17,8 +17,9 @@ This subpackage contains concrete third-party API handlers used by
 
 """
 
-from importlib import import_module as _imp
-from pathlib import Path
+import importlib
+from pathlib import Path as _Path
+from pkgutil import iter_modules as _iter_modules
 
 # Ensure that when the package is imported standalone, all modules are
 
@@ -29,16 +30,13 @@ from pathlib import Path
 # subclasses of BaseAPIHandler without needing to import them manually.
 
 
-_pkg_path = Path(__file__).parent
+_pkg_path = _Path(__file__).parent
 
 
-for _py in _pkg_path.glob("*.py"):
-
-    if _py.name in {"__init__.py", "base_handler.py"} or _py.name.startswith("_"):
-
-        continue
-
-    _imp(f"{__name__}.{_py.stem}")
+# Import all modules in this directory
+for _, _module_name, _ in _iter_modules([_pkg_path]):
+    if not _module_name.startswith("_"):
+        importlib.import_module(f".{_module_name}", __package__)
 
 
-del _imp, _Path, _pkg_path, _py  # Cleanup namespace
+del importlib, _Path, _pkg_path  # Cleanup namespace

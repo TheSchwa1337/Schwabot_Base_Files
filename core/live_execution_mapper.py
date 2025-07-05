@@ -1,1561 +1,519 @@
-from core.portfolio_tracker import PortfolioTracker, Position
-from core.risk_manager import RiskManager, RiskMetric
-from core.strategy.entry_exit_portal import (
-    COMMENTED,
-    DUE,
-    ERRORS,
-    FILE,
-    LEGACY,
-    OUT,
-    SYNTAX,
-    TO,
-    Any,
-    Date,
-    Decimal,
-    Dict,
-    Enum,
-    GlyphStrategyCore,
-    GlyphStrategyResult,
-    List,
-    Optional,
-    Order,
-    Original,
-    Schwabot,
-    The,
-    This,
-    TradeExecutor,
-    Union,
-    19: 36: 58,
-    2025 - 7 - 2,
-    ",
-    """,
-    -,
-    automatically,
-    because,
-    been,
-    clean,
-    commented,
-    contains,
-    core,
-    core.strategy.glyph_strategy_core,
-    core.trade_executor,
-    core/clean_math_foundation.py,
-    dataclass,
-    dataclasses,
-    decimal,
-    enum,
-    errors,
-    field,
-    file,
-    file:,
-    files:,
-    following,
-    foundation,
-    from,
-    has,
-    implementation,
-    import,
-    in,
-    it,
-    live_execution_mapper.py,
-    logging,
-    mathematical,
-    os,
-    out,
-    out:,
-    preserved,
-    prevent,
-    properly.,
-    running,
-    syntax,
-    sys,
-    system,
-    that,
-    the,
-    time,
-    typing,
-)
-
-- core/clean_profit_vectorization.py (profit calculations)
-
-
-
-- core/clean_trading_pipeline.py (trading logic)
-
-
-
-- core/clean_unified_math.py (unified mathematics)
-
-
-
-
-
-
-
-All core functionality has been reimplemented in clean, production-ready files.
-
-
+#!/usr/bin/env python3
 """
+Live Execution Mapper for Schwabot Trading System
+Connects short/mid/long-term timing buckets to specific trade executions via strategy registry
+Implements tick-driven market momentum scoring and time-band trade selection logic
 """
 
-# ORIGINAL CONTENT COMMENTED OUT BELOW:
-
-"""
-"""
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# !/usr/bin/env python3
-
-
-
-# -*- coding: utf-8 -*-
-
-
-
-Live Execution Mapper for Schwabot's Glyph-Driven Trading System.Orchestrates the end-to-end process
-of translating glyph strategy outputs'
-
-
-
-into live or simulated trade actions, integrating risk management and
-
-
-
-portfolio tracking. This module acts as the central hub for the
-
-
-
-glyph-execution mapping pipeline.
-
-
-
-
-
-
-
-Key Responsibilities:
-
-
-
-- Receive glyph-based trade signals from the Entry/Exit Portal.
-
-
-
-- Coordinate with Risk Manager for pre-trade risk assessment and position sizing.
-
-
-
-- Coordinate with Trade Executor for order placement and management.
-
-
-
-- Update Portfolio Tracker with executed trade details.
-
-
-
-- Implement robust error handling and logging for the entire execution flow.
-
-
-
-- Maintain a clear state of the execution pipeline for debugging and monitoring.''
-
-
-
-# Add the parent directory to sys.path to allow imports from 'core'
-
-
-
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), ..)))
-
-
-
-
-
-
-
-# Import necessary components from the core package
-
-
-
-try:
-
-
-
-        EntryExitPortal,
-
-
-
-SignalDirection,
-
-
-
-TradeSignal,
-
-
-
-)
-
-
-
-        except ImportError as e:
-
-
-
-    # This block is for robustness in isolated testing environments or partial deployments
-
-
-
-# In a fully integrated system, these imports are expected to succeed.
-
-
-
-logging.error(fFailed to import core trading components: {e})
-
-
-
-GlyphStrategyCore = None
-
-
-
-GlyphStrategyResult = None
-
-
-
-EntryExitPortal = None
-
-
-
-TradeSignal = None
-
-
-
-SignalDirection = None
-
-
-
-TradeExecutor = None
-
-
-
-Order = None
-
-
-
-RiskManager = None
-
-
-
-RiskMetric = None
-
-
-
-PortfolioTracker = None
-
-
-
-Position = None
-
-
-
-
-
-
+import numpy as np
+import logging
+import time
+from typing import Dict, Any, Optional, List, Tuple
+from dataclasses import dataclass, field
+from enum import Enum
+from collections import deque
+import threading
+from concurrent.futures import ThreadPoolExecutor
 
 logger = logging.getLogger(__name__)
 
+class StrategyTier(Enum):
+    """Strategy timing tiers."""
+    SHORT_TERM = "short_term"
+    MID_TERM = "mid_term"
+    LONG_TERM = "long_term"
+    ULTRA_SHORT = "ultra_short"
+    ULTRA_LONG = "ultra_long"
 
-
-
-
-
-
-
-
-
+class ExecutionMode(Enum):
+    """Execution modes."""
+    LIVE = "live"
+    SIMULATION = "simulation"
+    BACKTEST = "backtest"
+    PAPER = "paper"
 
 @dataclass
+class TimingBucket:
+    """Represents a timing bucket for trade execution."""
+    tier: StrategyTier
+    tau_short: int = 5    # Short EMA period
+    tau_long: int = 20    # Long EMA period
+    threshold: float = 0.0  # Momentum threshold
+    baseline_vol: float = 0.0  # Baseline volatility
+    weight: float = 1.0   # Bucket weight
 
+@dataclass
+class MarketMomentum:
+    """Market momentum analysis results."""
+    momentum_score: float
+    ema_short: float
+    ema_long: float
+    volatility: float
+    trend_confirmed: bool
+    volume_adjusted: bool
+    recommended_tier: StrategyTier
+    confidence: float
 
+@dataclass
+class ProfitVector:
+    """Profit vector for asset/strategy matching."""
+    asset: str
+    strategy_deltas: Dict[str, float]
+    volume_weights: Dict[str, float]
+    expected_returns: Dict[str, float]
+    risk_metrics: Dict[str, float]
+    optimal_allocation: float
 
-class ExecutionState:Represents the current state of a trade execution request.trade_id: str
-
-
-
-glyph: str
-
-
-
-asset: str
-
-
-
-initial_signal: TradeSignal
-
-
-
-# pending, signal_processed, risk_checked, sized, ordered, executed, failed, canceled
-
-
-
-status: str = pending
-
-
-
-timestamp: float = field(default_factory=time.time)
-
-
-
-risk_assessment: Optional[Dict[str, Any]] = None
-
-
-
-position_sizing_details: Optional[Dict[str, Any]] = None
-
-
-
-order_details: Optional[Dict[str, Any]] = None
-
-
-
-execution_details: Optional[Dict[str, Any]] = None
-
-
-
-error_message: Optional[str] = None
-
-
-
-metadata: Dict[str, Any] = field(default_factory=dict)
-
-
-
-
-
-
-
-
-
-
+@dataclass
+class ExecutionSignal:
+    """Execution signal from strategy to mapper."""
+    symbol: str
+    side: str
+    amount: float
+    strategy_tier: StrategyTier
+    confidence: float
+    market_momentum: MarketMomentum
+    profit_vector: ProfitVector
+    timestamp: float
+    execution_mode: ExecutionMode
 
 class LiveExecutionMapper:
-
-
-
-Orchestrates the live (or simulated) execution of glyph-driven trade signals.def
-__init__():Initialize the LiveExecutionMapper.
-
-
-
-
-
-
-
-Args:
-
-
-
-            simulation_mode: If True, all trades are simulated.
-
-
-
-initial_portfolio_cash: Starting cash for the portfolio.
-
-
-
-            enable_risk_manager: Whether to use the RiskManager for assessments.
-
-
-
-enable_portfolio_tracker: Whether to use the PortfolioTracker for updates.self.simulation_mode =
-simulation_mode
-
-
-
-self.enable_risk_manager = enable_risk_manager
-
-
-
-        self.enable_portfolio_tracker = enable_portfolio_tracker
-
-
-
-
-
-
-
-# Initialize core components
-
-
-
-if not all(:
-
-
-
-[
-
-
-
-GlyphStrategyCore,
-
-
-
-EntryExitPortal,
-
-
-
-TradeExecutor,
-
-
-
-RiskManager,
-
-
-
-PortfolioTracker,
-
-
-
-]
-
-
-
-):
-
-
-
-            logger.critical(
-
-
-
-One or more core trading components failed to import. LiveExecutionMapper may notfunction
-correctly.)
-
-
-
-# Depending on desired behavior, could raise an exception or run in
-
-
-
-# a very limited mode
-
-
-
-raise ImportError(Critical trading components are missing. Please check your core package imports.)
-
-
-
-
-
-
-
-self.glyph_core = GlyphStrategyCore()
-
-
-
-self.portal = EntryExitPortal(
-
-
-
-glyph_core=self.glyph_core,
-
-
-
-enable_risk_management=enable_risk_manager,
-
-
-
-            enable_portfolio_tracking=enable_portfolio_tracker,
-
-
-
-)
-
-
-
-self.trade_executor = TradeExecutor(simulation_mode=simulation_mode)
-
-
-
-self.risk_manager = RiskManager() if enable_risk_manager else None
-
-
-
-        self.portfolio_tracker = (
-
-
-
-            PortfolioTracker(initial_cash=initial_portfolio_cash)
-
-
-
-            if enable_portfolio_tracker:
-
-
-
-else None
-
-
-
-)
-
-
-
-
-
-
-
-# State management
-
-
-
-self.execution_states: Dict[str, ExecutionState] = {}
-
-
-
-self.trade_id_counter = 0
-
-
-
-
-
-
-
-# Performance metrics
-
-
-
-self.stats = {
-
-
-"""
-total_execution_requests: 0,successful_executions: 0,failed_executions":
-0,risk_rejected_executions": 0,rejected_by_signal_threshold": 0,  # Added for
-clarityrejected_by_sizing: 0,  # Added for clarityavg_execution_flow_time: 0.0,"
-
-
-
-}
-
-
-
-
-
-
-
-logger.info(f"LiveExecutionMapper initialized in {'simulation' if self.simulation_mode else 'live'}
-mode.)"
-
-
-
-
-
-
-
-def _generate_trade_id() -> str:Generates a unique trade ID.self.trade_id_counter
-    += 1return fTRADE-{self.trade_id_counter}-{int(time.time() * 1000)}
-
-
-
-
-
-
-
-def execute_glyph_trade() -> ExecutionState:
-
-
-
-Executes a trade based on a glyph signal through the full pipeline.
-
-
-
-
-
-
-
-Args:
-
-
-
-            glyph: The input glyph.
-
-
-
-volume: Current market volume.asset: The trading asset (e.g.,BTC/USD).
-
-
-
-price: Current asset price.
-
-
-
-confidence_boost: Optional confidence boost for signal generation.
-
-
-
-
-
-
-
-Returns:
-
-
-
-            An ExecutionState object detailing the outcome of the trade request.trade_id
-    = self._generate_trade_id()
-
-
-
-current_time = time.time()
-
-
-
-self.stats[total_execution_requests] += 1
-
-
-
-
-
-
-
-execution_state = ExecutionState(
-
-
-
-trade_id=trade_id,
-
-
-
-glyph=glyph,
-
-
-
-asset=asset,
-
-
-
-initial_signal=None,  # Will be populated if signal is generated
-
-
-
-)
-
-
-
-self.execution_states[trade_id] = execution_state
-
-
-
-
-
-
-
-            logger.info(
-
-
-
-f[{trade_id}] Initiating glyph trade for {glyph} on {asset} @ {price} with volume{volume})
-
-
-
-
-
-
-
-try:
-
-
-
-            # Step 1: Process Glyph Signal via EntryExitPortal
-
-
-
-trade_signal = self.portal.process_glyph_signal(
-
-
-
-glyph, volume, asset, price, confidence_boost
-
-
-
-)
-
-
-
-execution_state.initial_signal = trade_signal
-
-
-
-execution_state.status =  signal_processed
-
-
-
-
-
-
-
-if not trade_signal:
-
-
-
-                execution_state.status
-    =  rejected_by_signal_thresholdexecution_state.error_message 
-    = (Signal confidence too low or no signal generated.)self.stats[rejected_by_signal_threshold] += 1  # Updated stat
-
-
-
-            logger.warning(
-
-
-
-f[{trade_id}] Signal rejected: {execution_state.error_message}
-
-
-
-)
-
-
-
-        return execution_state
-
-
-
-
-
-
-
-# Step 2: Risk Assessment and Position Sizing
-
-
-
-portfolio_value = (
-
-
-
-                self.portfolio_tracker.get_portfolio_summary()[total_value]
-
-
-
-                if self.portfolio_tracker:
-
-
-
-                else 0.0
-
-
-
-)
-
-
-
-if portfolio_value <= 0:
-
-
-
-                execution_state.status =  failed
-
-
-
-execution_state.error_message
-    = (Portfolio value is zero or negative. Cannot execute trades.)self.stats[failed_executions] 
-    += 1logger.error(f[{trade_id}] {execution_state.error_message})
-
-
-
-        return execution_state
-
-
-
-
-
-
-
-position_sizing = self.portal.calculate_position_size(
-
-
-
-trade_signal, portfolio_value
-
-
-
-)
-
-
-
-# Convert dataclass to dict
-
-
-
-execution_state.position_sizing_details = position_sizing.__dict__
-
-
-
-execution_state.status =  position_sized
-
-
-
-
-
-
-
-size_to_execute = position_sizing.risk_adjusted_size
-
-
-
-
-
-
-
-if size_to_execute <= 0:
-
-
-
-                execution_state.status =  rejected_by_sizing
-
-
-
-execution_state.error_message = fCalculated position size is zero ({
-
-
-
-size_to_execute:.4f}). Trade not executed.self.stats[rejected_by_sizing] += 1  # Updated stat
-
-
-
-            logger.warning(f[{trade_id}] {execution_state.error_message})
-
-
-
-        return execution_state
-
-
-
-
-
-
-
-# Step 3: Execute Trade via TradeExecutor
-
-
-
-order_result = self.trade_executor.place_order(
-
-
-
-asset, trade_signal.direction.value, size_to_execute, price
-
-
-
-)
-
-
-
-execution_state.order_details = order_result
-
-
-
-execution_state.status =  order_placed
-
-
-
-
-
-
-
-if order_result.get(status) not in [filled,dry_run_success]:
-
-
-
-                execution_state.status = failedexecution_state.error_message
+    """
+    Live execution mapper that connects timing buckets to trade executions.
     
-    = fOrder placement failed: {order_result.get('error', 'Unknown error')}self.stats[failed_executions] += 1logger.error(f"[{trade_id}] {execution_state.error_message})"
-
-
-
-        return execution_state
-
-
-
-
-
-
-
-# Step 4: Update Portfolio Tracker
-
-
-
-if self.portfolio_tracker:
-
-
-
-                self.portfolio_tracker.update_position(
-
-
-
-asset,
-
-
-
-trade_signal.direction.value,
-
-
-
-# Use actual executed quantity if available
-
-
-
-                    order_result.get(executed_quantity, size_to_execute),
-
-
-
-                    # Use actual executed price if available
-
-
-
-                    order_result.get(executed_price, price),order_result.get(fees", 0.0),"
-
-
-
-)execution_state.status
-    = portfolio_updatedlogger.info(f[{trade_id}] Portfolio updated for {asset}. Current cash:
-
-
-
-{self.portfolio_tracker.cash:.2f})
-
-
-
-execution_state.status = executed_successfullyexecution_state.execution_details = order_result
-
-
-
-self.stats[successful_executions] += 1
-
-
-
-logger.info(f"[{trade_id}] Trade executed successfully for {glyph}
-({asset}{trade_signal.direction.value} {size_to_execute:.4f} @ {price}))"
-
-
-
-
-
-
-
-        except Exception as e:execution_state.status = failedexecution_state.error_message = (
-
-
-
-fAn unexpected error occurred during trade execution: {)str(e)}self.stats[failed_executions] += 1
-
-
-
-            logger.critical(f"[{trade_id}] CRITICAL ERROR: {execution_state.error_message},"
-
-
-
-exc_info = True,
-
-
-
-)
-
-
-
-
-
-
-
-finally:
-
-
-
-            # Update average execution flow time
-
-
-
-execution_flow_time = time.time() - current_time
-
-
-
-total_completed = (
-
-
-
-self.stats[successful_executions]+ self.stats[failed_executions]+
-self.stats[rejected_by_signal_threshold]+ self.stats[rejected_by_sizing]+
-self.stats[failed_executions]
-
-
-
-)
-
-
-
-if total_completed > 0:
-
-
-
-                self.stats[avg_execution_flow_time] = (self.stats[avg_execution_flow_time]
-    * (total_completed - 1)
-
-
-
-+ execution_flow_time
-
-
-
-) / total_completedexecution_state.metadata[total_flow_time] = execution_flow_time
-
-
-
-logger.debug(f[{trade_id}] Execution flow completed in {execution_flow_time:.4f} seconds withstatus:
-{execution_state.status})
-
-
-
-
-
-
-
-        return execution_state
-
-
-
-
-
-
-
-def get_execution_state() -> Optional[ExecutionState]:Retrieves the state of a specif ic trade
-execution.return self.execution_states.get(trade_id)
-
-
-
-
-
-
-
-def get_all_execution_states() -> Dict[str, ExecutionState]:Returns all tracked execution
-states.return self.execution_states.copy()
-
-
-
-
-
-
-
-def get_performance_stats()
-    -> Dict[str, Any]:Returns the overall performance statistics of the mapper.stats 
-    = self.stats.copy()
-
-
-
-if self.portfolio_tracker:
-
-
-
-            stats[portfolio_summary] = self.portfolio_tracker.get_portfolio_summary()
-
-
-
-if self.trade_executor:
-
-
-
-            stats[trade_executor_stats] = self.trade_executor.get_performance_stats()
-
-
-
-if self.risk_manager:
-
-
-
-            stats[risk_manager_stats] = self.risk_manager.get_performance_stats()
-
-
-
-        return stats
-
-
-
-
-
-
-
-def reset_system():Resets all integrated components and mapper state.self.glyph_core.reset_memory()
-
-
-
-self.portal.clear_signals()
-
-
-
-if self.portfolio_tracker:
-
-
-
-            self.portfolio_tracker.reset_portfolio()''
-
-
-
-# Note: TradeExecutor and RiskManager don't have direct reset methods defined,'
-
-
-
-# so they'll retain their state unless re-instantiated.'
-
-
-
-# If needed, add reset methods to those classes.
-
-
-
-
-
-
-
-self.execution_states = {}
-
-
-
-self.trade_id_counter = 0
-
-
-
-self.stats = {
-
-
-
-total_execution_requests: 0,successful_executions: 0,failed_executions":
-0,risk_rejected_executions": 0,rejected_by_signal_threshold": 0,rejected_by_sizing":
-0,avg_execution_flow_time": 0.0,"
-
-
-
-}logger.info(LiveExecutionMapper and integrated components reset.)
-
-
-
-
-
-
-
-
-
-
-
-def main():Demonstrate LiveExecutionMapper functionality.logging.basicConfig(
-
-
-
-level = logging.INFO,
-
-
-
-format=%(asctime)s - %(name)s - %(levelname)s - %(message)s","
-
-
-
-)
-
-
-
-print(\n--- Live Execution Mapper Demo (Simulation Mode) ---)
-
-
-
-
-
-
-
-# Initialize mapper in simulation mode
-
-
-
-mapper = LiveExecutionMapper(simulation_mode=True, initial_portfolio_cash=100000.0)
-
-
-
-
-
-
-
-# Scenario 1: Successful trade''
-
-
-
-print(\nScenario 1: Successful Trade(Glyph 'brain'))
-
-
-
-state1 = mapper.execute_glyph_trade(
-
-
-
-glyph=brain,
-
-
-
-volume = 3.56,
-
-
-
-asset=BTC/USD","
-
-
-
-price = 50000.0,
-
-
-
-        confidence_boost=0.1,
-
-
-
-)
-
-
-
-print(fTrade ID: {state1.rade_id}, Final Status: {state1.tatus})
-
-
-
-if state1.xecution_details:
-
-
-
-        print(fExecuted Size: {''
-
-
-
-                state1.xecution_details.get('executed_quantity'):.4f},fPrice: {''
-
-
-
-state1.xecution_details.get('executed_price'):.2f})print(fError:
-{state1.rror_message})print(fPortfolio Cash: {mapper.portfolio_tracker.cash:.2f})
-
-
-
-
-
-
-
-# Scenario 2: Signal rejected due to low confidence (simulate by setting
-
-
-
-# very low confidence boost)''
-
-
-
-print(\nScenario 2: Signal Rejected(Glyph 'skull', low confidence))
-
-
-
-state2 = mapper.execute_glyph_trade(
-
-
-
-glyph=skull,
-
-
-
-volume = 1.06,
-
-
-
-asset=ETH/USD","
-
-
-
-price = 3000.0,
-
-
-
-        confidence_boost=-0.5,  # Force low confidence
-
-
-
-)
-
-
-
-print(fTrade ID: {state2.rade_id}, Final Status: {state2.tatus})print(fError: {state2.rror_message})
-
-
-
-# Should be unchanged
-
-
-
-print(fPortfolio Cash: {mapper.portfolio_tracker.cash:.2f})
-
-
-
-
-
-
-
-# Scenario 3: Trade rejected by position sizing (simulate by having 0
-
-
-
-# portfolio value)''
-
-
-
-print(\nScenario 3: Trade Rejected by Sizing(Glyph 'fire', no funds))
-
-
-
-mapper_no_funds = LiveExecutionMapper(
-
-
-
-simulation_mode=True, initial_portfolio_cash=0.0
-
-
-
-)
-
-
-
-state3 = mapper_no_funds.execute_glyph_trade(
-
-
-
-        glyph=fire, volume = 4.06, asset=LTC/USD, price = 200.0
-
-
-
-)
-
-
-
-print(fTrade ID: {state3.rade_id}, Final Status: {state3.tatus})print(fError: {state3.rror_message})
-
-
-
-print(fPortfolio Cash (no funds): {
-
-
-
-mapper_no_funds.portfolio_tracker.cash:.2f})
-
-
-
-
-
-
-
-# Scenario 4: Multiple trades and check performance stats
-
-
-
-print(\nScenario 4: Multiple Trades and Performance Stats)
-
-
-
-mapper_multi = LiveExecutionMapper(
-
-
-
-simulation_mode=True, initial_portfolio_cash=50000.0
-
-
-
-)
-
-
-
-mapper_multi.execute_glyph_trade(hourglass", 2.06,ADA/USD",
-0.5)mapper_multi.execute_glyph_trade(tornado", 5.06,SOL/USD", 150.0)
-
-
-
-    mapper_multi.execute_glyph_trade(lightning", 0.56,XRP/USD", 0.6, confidence_boost = 0.1
-
-
-
-)  # Low volume, may reject
-
-
-
-
-
-
-
-print(\n--- Overall Performance Statistics ---)
-
-
-
-stats = mapper_multi.get_performance_stats()
-
-
-
-for key, value in stats.items():
-
-
-
-        if isinstance(value, dict):
-
-
-
-            print(f{key}:)
-
-
-
-for sub_key, sub_value in value.items():
-
-
-
-                if isinstance(sub_value, (float, type(Decimal(1.0)))):
-
-
-
-                    print(f{sub_key}: {sub_value:.2f})
-
-
-
-else :
-
-
-
-                    print(f{sub_key}: {sub_value})
-
-
-
-else:
-
-
-
-            print(f{key}: {value:.2f}
-
-
-
-if isinstance(value, float):
-
-
-
-else f{key}: {value}
-
-
-
-)
-
-
-
-print(\n--- All Execution States ---)
-
-
-
-for trade_id, state in mapper_multi.get_all_execution_states().items():
-
-
-
-        print(f[{trade_id}] Glyph: {state.glyph}, Asset: {
-
-
-
-state.asset}, Status: {
-
-
-
-state.status}, Error: {
-
-
-
-state.error_message})
-
-
-
-
-
-
-
-# Reset system
-
-
-
-print(\n--- Resetting the system ---)
-
-
-
-mapper.reset_system()
-
-
-
-print(f"Initial portfolio cash after reset: {mapper.portfolio_tracker.cash:.2f})"
-
-
-
-print(fTotal execution requests after reset: {''
-
-
-
-mapper.get_performance_stats()['total_execution_requests']})
-
-
-
-if __name__ == __main__:
-
-
-
-    main()""'""'
-
-
-
-"""
-"""
+    Implements:
+    1. Tick-driven market momentum scoring
+    2. Time-band trade selection logic
+    3. Profit vector matching
+    4. Dynamic tier routing
+    """
+    
+    def __init__(self, config: Optional[Dict[str, Any]] = None):
+        self.config = config or self._default_config()
+        self.version = "2.1.0"
+        
+        # Initialize timing buckets
+        self.timing_buckets = self._initialize_timing_buckets()
+        
+        # Market data storage
+        self.price_history: Dict[str, deque] = {}
+        self.volume_history: Dict[str, deque] = {}
+        self.momentum_history: Dict[str, deque] = {}
+        
+        # Execution tracking
+        self.execution_history: List[ExecutionSignal] = []
+        self.performance_metrics: Dict[str, Any] = {}
+        
+        # Threading
+        self.lock = threading.Lock()
+        self.thread_pool = ThreadPoolExecutor(max_workers=4)
+        
+        # Asset weights for profit vector calculation
+        self.asset_weights = {
+            "BTC": 0.4,
+            "ETH": 0.3,
+            "XRP": 0.2,
+            "ADA": 0.1
+        }
+        
+        logger.info(f"Live Execution Mapper v{self.version} initialized")
+    
+    def _default_config(self) -> Dict[str, Any]:
+        """Default configuration for execution mapper."""
+        return {
+            "max_history": 1000,
+            "momentum_threshold": 0.02,
+            "volatility_threshold": 0.05,
+            "confidence_threshold": 0.7,
+            "max_workers": 4,
+            "update_interval": 1.0
+        }
+    
+    def _initialize_timing_buckets(self) -> Dict[StrategyTier, TimingBucket]:
+        """Initialize timing buckets with default parameters."""
+        return {
+            StrategyTier.ULTRA_SHORT: TimingBucket(
+                tier=StrategyTier.ULTRA_SHORT,
+                tau_short=3,
+                tau_long=8,
+                threshold=0.01,
+                baseline_vol=0.02,
+                weight=0.8
+            ),
+            StrategyTier.SHORT_TERM: TimingBucket(
+                tier=StrategyTier.SHORT_TERM,
+                tau_short=5,
+                tau_long=15,
+                threshold=0.015,
+                baseline_vol=0.03,
+                weight=1.0
+            ),
+            StrategyTier.MID_TERM: TimingBucket(
+                tier=StrategyTier.MID_TERM,
+                tau_short=15,
+                tau_long=50,
+                threshold=0.02,
+                baseline_vol=0.04,
+                weight=1.2
+            ),
+            StrategyTier.LONG_TERM: TimingBucket(
+                tier=StrategyTier.LONG_TERM,
+                tau_short=50,
+                tau_long=200,
+                threshold=0.025,
+                baseline_vol=0.05,
+                weight=1.5
+            ),
+            StrategyTier.ULTRA_LONG: TimingBucket(
+                tier=StrategyTier.ULTRA_LONG,
+                tau_short=100,
+                tau_long=500,
+                threshold=0.03,
+                baseline_vol=0.06,
+                weight=2.0
+            )
+        }
+    
+    def calculate_ema(self, prices: List[float], period: int) -> float:
+        """Calculate Exponential Moving Average."""
+        if len(prices) < period:
+            return np.mean(prices) if prices else 0.0
+        
+        prices_array = np.array(prices)
+        alpha = 2.0 / (period + 1)
+        ema = prices_array[0]
+        
+        for price in prices_array[1:]:
+            ema = alpha * price + (1 - alpha) * ema
+        
+        return ema
+    
+    def calculate_market_momentum(self, symbol: str, current_price: float) -> MarketMomentum:
+        """
+        Calculate tick-driven market momentum scoring.
+        
+        Mathematical formula:
+        Momentum(t) = EMA(P, τ_short) - EMA(P, τ_long)
+        """
+        # Ensure price history exists
+        if symbol not in self.price_history:
+            self.price_history[symbol] = deque(maxlen=self.config.get("max_history", 1000))
+        
+        # Add current price to history
+        self.price_history[symbol].append(current_price)
+        
+        # Get price history as list
+        prices = list(self.price_history[symbol])
+        
+        if len(prices) < 10:  # Need minimum history
+            return MarketMomentum(
+                momentum_score=0.0,
+                ema_short=current_price,
+                ema_long=current_price,
+                volatility=0.0,
+                trend_confirmed=False,
+                volume_adjusted=False,
+                recommended_tier=StrategyTier.MID_TERM,
+                confidence=0.0
+            )
+        
+        # Calculate EMAs for different time frames
+        ema_short = self.calculate_ema(prices, 5)
+        ema_long = self.calculate_ema(prices, 20)
+        
+        # Calculate momentum score
+        momentum_score = ema_short - ema_long
+        
+        # Calculate volatility
+        returns = np.diff(prices) / np.array(prices[:-1])
+        volatility = np.std(returns[-20:]) if len(returns) >= 20 else np.std(returns)
+        
+        # Determine trend confirmation
+        trend_confirmed = abs(momentum_score) > self.config.get("momentum_threshold", 0.02)
+        
+        # Volume adjustment (simplified)
+        volume_adjusted = volatility > self.config.get("volatility_threshold", 0.05)
+        
+        # Determine recommended tier
+        recommended_tier = self._determine_strategy_tier(momentum_score, volatility, trend_confirmed)
+        
+        # Calculate confidence
+        confidence = min(1.0, abs(momentum_score) / (volatility + 1e-6))
+        
+        momentum = MarketMomentum(
+            momentum_score=momentum_score,
+            ema_short=ema_short,
+            ema_long=ema_long,
+            volatility=volatility,
+            trend_confirmed=trend_confirmed,
+            volume_adjusted=volume_adjusted,
+            recommended_tier=recommended_tier,
+            confidence=confidence
+        )
+        
+        # Store in history
+        if symbol not in self.momentum_history:
+            self.momentum_history[symbol] = deque(maxlen=self.config.get("max_history", 1000))
+        self.momentum_history[symbol].append(momentum)
+        
+        return momentum
+    
+    def _determine_strategy_tier(self, momentum: float, volatility: float, 
+                               trend_confirmed: bool) -> StrategyTier:
+        """
+        Determine optimal strategy tier based on market conditions.
+        
+        Time-band trade selection logic:
+        if Momentum > θ: Strategy_tier = "Short-term"
+        elif trend_confirmed() and Vol_adj > baseline: Strategy_tier = "Mid-term"
+        else: Strategy_tier = "Long-term"
+        """
+        theta = self.config.get("momentum_threshold", 0.02)
+        
+        if abs(momentum) > theta:
+            if volatility > 0.1:  # High volatility
+                return StrategyTier.ULTRA_SHORT
+            else:
+                return StrategyTier.SHORT_TERM
+        elif trend_confirmed and volatility > 0.05:
+            return StrategyTier.MID_TERM
+        elif volatility < 0.02:  # Low volatility
+            return StrategyTier.LONG_TERM
+        else:
+            return StrategyTier.MID_TERM
+    
+    def calculate_profit_vector(self, symbol: str, momentum: MarketMomentum) -> ProfitVector:
+        """
+        Calculate profit vector for asset/strategy matching.
+        
+        Mathematical formula:
+        Profit_Matrix = [
+            [Δ_short, Δ_mid, Δ_long],  # strategy delta vs asset
+            [Vol_XRP, Vol_BTC, Vol_ETH]
+        ]
+        Decision_Vector = argmax(Profit_Matrix × Asset_Weight_Vector)
+        """
+        # Extract asset type from symbol
+        asset = symbol.split('/')[0] if '/' in symbol else symbol
+        
+        # Calculate strategy deltas
+        strategy_deltas = {
+            "short_term": momentum.momentum_score * 2.0,
+            "mid_term": momentum.momentum_score * 1.5,
+            "long_term": momentum.momentum_score * 1.0
+        }
+        
+        # Calculate volume weights
+        volume_weights = {
+            "BTC": self.asset_weights.get("BTC", 0.4),
+            "ETH": self.asset_weights.get("ETH", 0.3),
+            "XRP": self.asset_weights.get("XRP", 0.2),
+            "ADA": self.asset_weights.get("ADA", 0.1)
+        }
+        
+        # Calculate expected returns
+        expected_returns = {}
+        for strategy, delta in strategy_deltas.items():
+            weight = volume_weights.get(asset, 0.1)
+            expected_returns[strategy] = delta * weight * momentum.confidence
+        
+        # Calculate risk metrics
+        risk_metrics = {
+            "volatility": momentum.volatility,
+            "drawdown_risk": momentum.volatility * 2.0,
+            "liquidity_risk": 1.0 - momentum.confidence
+        }
+        
+        # Calculate optimal allocation
+        max_return = max(expected_returns.values()) if expected_returns else 0.0
+        optimal_allocation = min(1.0, max_return / (momentum.volatility + 1e-6))
+        
+        return ProfitVector(
+            asset=asset,
+            strategy_deltas=strategy_deltas,
+            volume_weights=volume_weights,
+            expected_returns=expected_returns,
+            risk_metrics=risk_metrics,
+            optimal_allocation=optimal_allocation
+        )
+    
+    def create_execution_signal(self, symbol: str, side: str, amount: float,
+                              current_price: float, execution_mode: ExecutionMode = ExecutionMode.LIVE) -> ExecutionSignal:
+        """Create execution signal from market data."""
+        # Calculate market momentum
+        momentum = self.calculate_market_momentum(symbol, current_price)
+        
+        # Calculate profit vector
+        profit_vector = self.calculate_profit_vector(symbol, momentum)
+        
+        # Create execution signal
+        signal = ExecutionSignal(
+            symbol=symbol,
+            side=side,
+            amount=amount,
+            strategy_tier=momentum.recommended_tier,
+            confidence=momentum.confidence,
+            market_momentum=momentum,
+            profit_vector=profit_vector,
+            timestamp=time.time(),
+            execution_mode=execution_mode
+        )
+        
+        # Store in history
+        with self.lock:
+            self.execution_history.append(signal)
+            if len(self.execution_history) > self.config.get("max_history", 1000):
+                self.execution_history.pop(0)
+        
+        logger.info(f"Execution signal created: {symbol} {side} {amount} "
+                   f"tier={momentum.recommended_tier.value} confidence={momentum.confidence:.3f}")
+        
+        return signal
+    
+    def should_execute_signal(self, signal: ExecutionSignal) -> bool:
+        """Determine if execution signal should be executed."""
+        # Check confidence threshold
+        if signal.confidence < self.config.get("confidence_threshold", 0.7):
+            return False
+        
+        # Check momentum requirements
+        if not signal.market_momentum.trend_confirmed:
+            return False
+        
+        # Check timing bucket requirements
+        bucket = self.timing_buckets.get(signal.strategy_tier)
+        if bucket and abs(signal.market_momentum.momentum_score) < bucket.threshold:
+            return False
+        
+        return True
+    
+    def get_execution_recommendations(self, symbol: str, 
+                                   current_price: float) -> List[ExecutionSignal]:
+        """Get execution recommendations for a symbol."""
+        recommendations = []
+        
+        # Calculate momentum for different scenarios
+        momentum = self.calculate_market_momentum(symbol, current_price)
+        
+        # Generate buy signal if momentum is positive
+        if momentum.momentum_score > 0:
+            signal = self.create_execution_signal(
+                symbol=symbol,
+                side="buy",
+                amount=self._calculate_optimal_amount(symbol, momentum),
+                current_price=current_price
+            )
+            
+            if self.should_execute_signal(signal):
+                recommendations.append(signal)
+        
+        # Generate sell signal if momentum is negative
+        elif momentum.momentum_score < 0:
+            signal = self.create_execution_signal(
+                symbol=symbol,
+                side="sell",
+                amount=self._calculate_optimal_amount(symbol, momentum),
+                current_price=current_price
+            )
+            
+            if self.should_execute_signal(signal):
+                recommendations.append(signal)
+        
+        return recommendations
+    
+    def _calculate_optimal_amount(self, symbol: str, momentum: MarketMomentum) -> float:
+        """Calculate optimal trade amount based on momentum and risk."""
+        base_amount = 1000.0  # Base amount in USD
+        
+        # Adjust based on confidence
+        confidence_factor = momentum.confidence
+        
+        # Adjust based on volatility (lower volatility = higher amount)
+        volatility_factor = 1.0 / (1.0 + momentum.volatility)
+        
+        # Adjust based on tier
+        tier_weights = {
+            StrategyTier.ULTRA_SHORT: 0.5,
+            StrategyTier.SHORT_TERM: 0.8,
+            StrategyTier.MID_TERM: 1.0,
+            StrategyTier.LONG_TERM: 1.2,
+            StrategyTier.ULTRA_LONG: 1.5
+        }
+        tier_factor = tier_weights.get(momentum.recommended_tier, 1.0)
+        
+        optimal_amount = base_amount * confidence_factor * volatility_factor * tier_factor
+        
+        return max(10.0, min(optimal_amount, 10000.0))  # Clamp between $10 and $10,000
+    
+    def update_timing_buckets(self, market_data: Dict[str, Any]) -> None:
+        """Update timing bucket parameters based on market conditions."""
+        with self.lock:
+            for tier, bucket in self.timing_buckets.items():
+                # Adjust thresholds based on market volatility
+                market_vol = market_data.get("volatility", 0.05)
+                bucket.threshold = bucket.threshold * (1.0 + market_vol)
+                bucket.baseline_vol = 0.8 * bucket.baseline_vol + 0.2 * market_vol
+    
+    def get_performance_metrics(self) -> Dict[str, Any]:
+        """Get comprehensive performance metrics."""
+        with self.lock:
+            if not self.execution_history:
+                return {"total_signals": 0}
+            
+            # Calculate tier distribution
+            tier_counts = {}
+            confidence_scores = []
+            
+            for signal in self.execution_history:
+                tier = signal.strategy_tier.value
+                tier_counts[tier] = tier_counts.get(tier, 0) + 1
+                confidence_scores.append(signal.confidence)
+            
+            # Calculate average metrics
+            avg_confidence = np.mean(confidence_scores)
+            
+            return {
+                "total_signals": len(self.execution_history),
+                "tier_distribution": tier_counts,
+                "average_confidence": avg_confidence,
+                "timing_buckets": {
+                    tier.value: {
+                        "threshold": bucket.threshold,
+                        "baseline_vol": bucket.baseline_vol,
+                        "weight": bucket.weight
+                    }
+                    for tier, bucket in self.timing_buckets.items()
+                },
+                "symbols_tracked": len(self.price_history),
+                "momentum_history_size": sum(len(hist) for hist in self.momentum_history.values())
+            }
+    
+    def reset_history(self) -> None:
+        """Reset all historical data."""
+        with self.lock:
+            self.price_history.clear()
+            self.volume_history.clear()
+            self.momentum_history.clear()
+            self.execution_history.clear()
+            logger.info("Live Execution Mapper history reset")
+    
+    def shutdown(self):
+        """Shutdown the execution mapper."""
+        self.thread_pool.shutdown(wait=True)
+        logger.info("Live Execution Mapper shutdown complete")
+
+# Global instance for easy access
+_global_mapper = None
+
+def get_execution_mapper() -> LiveExecutionMapper:
+    """Get global execution mapper instance."""
+    global _global_mapper
+    if _global_mapper is None:
+        _global_mapper = LiveExecutionMapper()
+    return _global_mapper
+
+def create_execution_signal(symbol: str, side: str, amount: float, 
+                          current_price: float) -> ExecutionSignal:
+    """Convenience function to create execution signal."""
+    mapper = get_execution_mapper()
+    return mapper.create_execution_signal(symbol, side, amount, current_price)

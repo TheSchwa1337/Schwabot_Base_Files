@@ -1,553 +1,378 @@
-from __future__ import annotations
-
-from typing import Any, Dict, List, Optional, Tuple
-
-import numpy.typing as npt
-
-from core.mathlib_v4 import MathLibV4
-from core.unified_math_system import unified_math
-
+#!/usr/bin/env python3
+"""
+Mathematical Optimization Bridge for Schwabot Trading System
+Implements entropy-weighted routing between CPU (ZBE) and GPU (ZPE) processing
+Based on Zero-Point Entropy and Zero-Bound Entropy mathematical frameworks
 """
 
-
-
-LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
-
-
-
-
-
-
-
-This file has been automatically commented out because it contains syntax errors
-
-
-
-that prevent the Schwabot system from running properly.
-
-
-
-
-
-
-
-Original file: core\\mathematical_optimization_bridge.py
-
-
-
-Date commented out: 2025-7-2 19:36:59
-
-
-
-
-
-
-
-The clean implementation has been preserved in the following files:
-
-
-
-- core/clean_math_foundation.py (mathematical foundation)
-
-
-
-- core/clean_profit_vectorization.py (profit calculations)
-
-
-
-- core/clean_trading_pipeline.py (trading logic)
-
-
-
-- core/clean_unified_math.py (unified mathematics)
-
-
-
-
-
-
-
-All core functionality has been reimplemented in clean, production-ready files.
-
-
-"""
-"""
-
-# ORIGINAL CONTENT COMMENTED OUT BELOW:
-
-"""
-"""
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# !/usr/bin/env python3
-
-
-
-# -*- coding: utf-8 -*-
-
-
-
-
-
-
-
-Mathematical Optimization Bridge.
-
-
-
-
-
-
-
-Advanced optimization bridge that enhances existing mathematical components
-
-
-
-with GEMM acceleration, multi-vector operations, and performance optimization.try:
-
-
-
-        except ImportError:
-
-
-
-    # Fallback implementations
-
-
-
-class unified_math:Fallback unif ied math implementation.@staticmethod
-
-
-
-def abs() -> float:Return absolute value.return abs(x)
-
-
-
-
-
-
-"""
-
-
-class MathLibV4: Fallback MathLibV4 implementation.def __init__()
-    -> None: Initialize fallback MathLibV4."self.version = 4.0.0"
-
+import numpy as np
+import logging
+import time
+from typing import Dict, Any, Optional, Union, Callable, List
+from dataclasses import dataclass, field
+from enum import Enum
+import threading
+from concurrent.futures import ThreadPoolExecutor
+from scipy.fft import fft, ifft
+from scipy.stats import norm
+
+try:
+    import cupy as cp
+    GPU_AVAILABLE = True
+except ImportError:
+    GPU_AVAILABLE = False
+    cp = None
 
 logger = logging.getLogger(__name__)
 
+class OptimizationMode(Enum):
+    """Optimization processing modes."""
+    CPU_ONLY = "cpu_only"
+    GPU_ONLY = "gpu_only"
+    HYBRID = "hybrid"
+    AUTO_ROUTE = "auto_route"
 
-# Type definitions
-
-
-Vector = npt.NDArray[np.float64]
-
-
-Matrix = npt.NDArray[np.float64]
-
-
-Tensor = npt.NDArray[np.float64]
-
-
-class OptimizationMode(Enum): Optimization mode enumeration.GEMM_ACCELERATED
-    = gemm_acceleratedDUAL_NUMBER = dual_numberQUANTUM_ENHANCED = quantum_enhancedHYBRID
-    =  hybridADAPTIVE = adaptiveclass MathematicalOperation(Enum): Mathematical operation enumeration.MATRIX_MULTIPLY = matrix_multiplyEIGENVALUE_DECOMPOSITION = eigenvalue_decompositionSVD_DECOMPOSITION = svd_decompositionOPTIMIZATION = optimizationSTATISTICAL_ANALYSIS = statistical_analysisSIGNAL_PROCESSING = signal_processing @ dataclass
-
-
-class OptimizationResult: Optimization result container.result: Any
-
-
-operation_type: MathematicalOperation
-
-
-optimization_mode: OptimizationMode
-
-
-execution_time: float
-
-
-iterations: int
-
-
-convergence: bool
-
-
-error: Optional[str] = None
-
-
-metadata: Dict[str, Any] = field(default_factory=dict)
-
+class EntropyState(Enum):
+    """Entropy processing states."""
+    ZBE_BOUNDED = "zbe_bounded"  # CPU processing
+    ZPE_POINT = "zpe_point"      # GPU processing
+    TRANSITION = "transition"     # Switching states
 
 @dataclass
-class MultiVectorState: Multi - vector mathematical state.primary_vector: Vector
-
-    secondary_vectors: List[Vector]
-
-    coupling_matrix: Matrix
-
-    optimization_weights: Vector
-
-
-convergence_history: List[float]
-
-
-timestamp: float
-
-
-class MathematicalOptimizationBridge: Mathematical optimization bridge that enhances existing
-
-
-components.def __init__() -> None: Initialize mathematical optimization bridge."self.version = 1.0.0"
-
-
-self.config = config or self._default_config()
-
-
-# Initialize existing mathematical components
-
-
-self.mathlib_v4 = MathLibV4() if MathLibV4 in globals() else None
-
-
-# Performance tracking
-
-
-self.operation_history: deque = deque(
-
-
-
-maxlen=self.config.get(max_history_size, 1000)
-
-
-
-)
-
-
-self.total_operations = 0
-
-
-self.total_optimization_time = 0.0
-
-
-# Multi-vector state management
-
-        self.multi_vector_states: Dict[str, MultiVectorState] = {}
-
-
-# Optimization caches
-
-
-self.matrix_cache: Dict[str, Matrix] = {}
-
-        self.eigenvalue_cache: Dict[str, Tuple[Vector, Matrix]] = {}
-
-        self.svd_cache: Dict[str, Tuple[Matrix, Vector, Matrix]] = {}
-
-
-# Threading and parallel processing
-
-
-self.optimization_thread_pool = self.config.get(thread_pool_size, 4)
-
-
-self.parallel_enabled = self.config.get(enable_parallel, True)
-
-            logger.info(fMathematical Optimization Bridge v{self.version} initialized)
-
-
-def _default_config() -> Dict[str, Any]: Default configuration for optimization bridge.return
-
-
-{max_history_size: 1000, thread_pool_size": 4,enable_parallel": True, optimization_tolerance":
-1e-6,max_iterations": 1000,gemm_acceleration": True"
-
-
-
-}
-
-
-
-
-
-
-
-def optimize_multi_vector_operation()
-    -> Dict[str, Any]:Optimize multi-vector mathematical operation.start_time = time.time()
-
-
-
-
-
-
-
-try:
-
-
-
-            # Validate inputs
-
-
-
-if primary_vector.shape[0] != operation_matrix.shape[1]:
-
-
-
-                raise ValueError(Vector and matrix dimensions incompatible)
-
-
-
-
-
-
-
-# Perform optimization based on mode
-
-
-
-if optimization_mode == OptimizationMode.GEMM_ACCELERATED: result
-    = self._gemm_accelerated_operation(primary_vector, operation_matrix)
-
-
-
-elif optimization_mode == OptimizationMode.HYBRID:
-
-
-
-                result = self._hybrid_optimization(primary_vector, operation_matrix)
-
-
-
-else:
-
-
-
-                # Fallback to standard operation
-
-
-
-result = np.dot(operation_matrix, primary_vector)
-
-
-
-
-
-
-
-execution_time = time.time() - start_time
-
-
-
-
-
-
-
-# Update performance tracking
-
-
-
-self.total_operations += 1
-
-
-
-self.total_optimization_time += execution_time
-
-
-
-
-
-
-
-self.operation_history.append({operation_type: multi_vector_optimization,execution_time:
-execution_time,vector_size": primary_vector.shape[0],matrix_size":
-operation_matrix.shape,optimization_mode": optimization_mode.value"
-
-
-
-})
-
-
-
-
-
-
-
-return {success: True,result": result,execution_time": execution_time,optimization_mode":
-optimization_mode.value,performance_score": 1.0 / max(0.1, execution_time)
-
-
-
-}
-
-
-
-
-
-
-
-        except Exception as e:logger.error(f"Multi-vector optimization failed: {e})"
-
-
-
-        return {success: False,error: str(e),execution_time": time.time() - start_time"
-
-
-
-}
-
-
-
-
-
-
-
-def _gemm_accelerated_operation() -> Vector:GEMM-accelerated matrix-vector operation.# Use optimized
-BLAS operations
-
-
-
-        return np.dot(matrix, vector)
-
-
-
-
-
-
-
-def _hybrid_optimization() -> Vector:
-
-
-
-Hybrid optimization combining multiple techniques.# Combine GEMM with statistical optimization
-
-
-
-base_result = np.dot(matrix, vector)
-
-
-
-
-
-
-
-# Apply statistical enhancement
-
-
-
-enhanced_result = base_result * (1 + 0.1 * np.random.normal(0, 0.1, base_result.shape))
-
-
-
-
-
-
-
-        return enhanced_result
-
-
-
-
-
-
-
-def get_optimization_statistics()
-    -> Dict[str, Any]:Get comprehensive optimization statistics.avg_execution_time = (
-
-
-
-self.total_optimization_time / max(1, self.total_operations)
-
-
-
-)
-
-
-
-
-
-
-
-return {total_operations: self.total_operations,average_execution_time:
-avg_execution_time,total_optimization_time: self.total_optimization_time,operations_per_second":
-self.total_operations / max(0.1,"
-
-
-
-self.total_optimization_time),cache_sizes": {matrix_cache: len(self.matrix_cache),eigenvalue_cache":
-len(self.eigenvalue_cache),svd_cache": len(self.svd_cache)"
-
-
-
-}
-
-
-
-}
-
-
-
-
-
-
-
-
-
-
-
-def create_mathematical_optimization_bridge() -> MathematicalOptimizationBridge:"Factory function to
-create mathematical optimization bridge.return MathematicalOptimizationBridge()"
-
-
-
-"""
-"""
+class OptimizationResult:
+    """Container for optimization results."""
+    success: bool
+    result: Any
+    execution_time: float
+    optimization_mode: str
+    entropy_state: str
+    performance_score: float
+    error: Optional[str] = None
+
+@dataclass
+class EntropyMetrics:
+    """Entropy calculation metrics."""
+    z_score: float
+    entropy_shift: float
+    routing_coefficient: float
+    computational_demand: float
+    switch_cost: float
+    timestamp: float
+
+class MathematicalOptimizationBridge:
+    """
+    Mathematical optimization bridge implementing entropy-weighted routing
+    between CPU (ZBE: Zero-Bound Entropy) and GPU (ZPE: Zero-Point Entropy).
+    """
+    
+    def __init__(self, config: Optional[Dict[str, Any]] = None):
+        self.config = config or self._default_config()
+        self.version = "3.1.0"
+        
+        # Entropy routing parameters
+        self.alpha_0 = self.config.get("alpha_0", 0.7)  # Z-score weight
+        self.beta_0 = self.config.get("beta_0", 0.3)    # Entropy shift weight
+        self.theta_gpu = self.config.get("theta_gpu", 1.5)  # GPU routing threshold
+        self.gamma = self.config.get("gamma", 0.1)      # Switch cost coefficient
+        self.lambda_decay = self.config.get("lambda_decay", 0.05)  # Decay rate
+        
+        # Performance tracking
+        self.total_operations = 0
+        self.total_optimization_time = 0.0
+        self.operation_history = []
+        self.entropy_history = []
+        
+        # Threading
+        self.thread_pool = ThreadPoolExecutor(max_workers=self.config.get("max_workers", 4))
+        self.lock = threading.Lock()
+        
+        # Current state
+        self.current_entropy_state = EntropyState.ZBE_BOUNDED
+        self.last_switch_time = time.time()
+        
+        logger.info(f"Mathematical Optimization Bridge v{self.version} initialized")
+        logger.info(f"GPU Available: {GPU_AVAILABLE}")
+    
+    def _default_config(self) -> Dict[str, Any]:
+        """Default configuration for optimization bridge."""
+        return {
+            "alpha_0": 0.7,
+            "beta_0": 0.3,
+            "theta_gpu": 1.5,
+            "gamma": 0.1,
+            "lambda_decay": 0.05,
+            "max_workers": 4,
+            "max_history": 1000,
+            "optimization_tolerance": 1e-6,
+            "max_iterations": 1000
+        }
+    
+    def calculate_entropy_metrics(self, data: np.ndarray, computational_load: float) -> EntropyMetrics:
+        """
+        Calculate entropy metrics for routing decisions.
+        
+        Mathematical formulas:
+        Z_score = μ_c(t) / σ_c(t)   # Normalized computational demand
+        E_shift = ∇Φ(t) / ∂t        # Rate of entropy field shift
+        ζ = α₀ * Z_score + β₀ * E_shift
+        """
+        current_time = time.time()
+        
+        # Calculate Z-score (normalized computational demand)
+        mean_load = np.mean(data) if len(data) > 0 else computational_load
+        std_load = np.std(data) if len(data) > 1 else 1.0
+        z_score = mean_load / max(std_load, 1e-6)
+        
+        # Calculate entropy shift rate (gradient approximation)
+        if len(self.entropy_history) > 1:
+            recent_entropy = [h.routing_coefficient for h in self.entropy_history[-10:]]
+            entropy_shift = np.gradient(recent_entropy)[-1] if len(recent_entropy) > 1 else 0.0
+        else:
+            entropy_shift = 0.0
+        
+        # Calculate routing coefficient
+        routing_coefficient = self.alpha_0 * z_score + self.beta_0 * entropy_shift
+        
+        # Calculate switch cost
+        delta_t = current_time - self.last_switch_time
+        switch_cost = self.gamma * np.exp(-self.lambda_decay * delta_t)
+        
+        metrics = EntropyMetrics(
+            z_score=z_score,
+            entropy_shift=entropy_shift,
+            routing_coefficient=routing_coefficient,
+            computational_demand=computational_load,
+            switch_cost=switch_cost,
+            timestamp=current_time
+        )
+        
+        # Update history
+        self.entropy_history.append(metrics)
+        if len(self.entropy_history) > self.config.get("max_history", 1000):
+            self.entropy_history.pop(0)
+        
+        return metrics
+    
+    def determine_optimal_routing(self, metrics: EntropyMetrics) -> OptimizationMode:
+        """
+        Determine optimal routing based on entropy metrics.
+        
+        Routing logic:
+        if ζ > θ_gpu: route_to = "GPU"
+        else: route_to = "CPU"
+        """
+        if not GPU_AVAILABLE:
+            return OptimizationMode.CPU_ONLY
+        
+        # Apply routing threshold with switch cost consideration
+        effective_threshold = self.theta_gpu + metrics.switch_cost
+        
+        if metrics.routing_coefficient > effective_threshold:
+            return OptimizationMode.GPU_ONLY
+        elif metrics.routing_coefficient > effective_threshold * 0.7:
+            return OptimizationMode.HYBRID
+        else:
+            return OptimizationMode.CPU_ONLY
+    
+    def optimize_tensor_operation(
+        self, 
+        tensor_a: np.ndarray, 
+        tensor_b: np.ndarray,
+        operation: str = "dot",
+        mode: Optional[OptimizationMode] = None
+    ) -> OptimizationResult:
+        """
+        Optimize tensor operations with entropy-based routing.
+        """
+        start_time = time.time()
+        
+        try:
+            # Calculate computational load estimate
+            computational_load = tensor_a.size * tensor_b.size / 1e6  # Rough FLOPS estimate
+            
+            # Calculate entropy metrics
+            combined_data = np.concatenate([tensor_a.flatten(), tensor_b.flatten()])
+            metrics = self.calculate_entropy_metrics(combined_data, computational_load)
+            
+            # Determine routing if not specified
+            if mode is None:
+                mode = self.determine_optimal_routing(metrics)
+            
+            # Execute operation based on routing decision
+            if mode == OptimizationMode.GPU_ONLY and GPU_AVAILABLE:
+                result = self._execute_gpu_operation(tensor_a, tensor_b, operation)
+                entropy_state = EntropyState.ZPE_POINT
+            elif mode == OptimizationMode.HYBRID and GPU_AVAILABLE:
+                result = self._execute_hybrid_operation(tensor_a, tensor_b, operation)
+                entropy_state = EntropyState.TRANSITION
+            else:
+                result = self._execute_cpu_operation(tensor_a, tensor_b, operation)
+                entropy_state = EntropyState.ZBE_BOUNDED
+            
+            execution_time = time.time() - start_time
+            
+            # Update state
+            self.current_entropy_state = entropy_state
+            if entropy_state != self.current_entropy_state:
+                self.last_switch_time = time.time()
+            
+            # Update performance tracking
+            with self.lock:
+                self.total_operations += 1
+                self.total_optimization_time += execution_time
+                
+                self.operation_history.append({
+                    "operation": operation,
+                    "mode": mode.value,
+                    "entropy_state": entropy_state.value,
+                    "execution_time": execution_time,
+                    "tensor_sizes": [tensor_a.shape, tensor_b.shape],
+                    "routing_coefficient": metrics.routing_coefficient,
+                    "timestamp": time.time()
+                })
+                
+                if len(self.operation_history) > self.config.get("max_history", 1000):
+                    self.operation_history.pop(0)
+            
+            return OptimizationResult(
+                success=True,
+                result=result,
+                execution_time=execution_time,
+                optimization_mode=mode.value,
+                entropy_state=entropy_state.value,
+                performance_score=1.0 / max(0.001, execution_time)
+            )
+            
+        except Exception as e:
+            logger.error(f"Tensor optimization failed: {e}")
+            return OptimizationResult(
+                success=False,
+                result=None,
+                execution_time=time.time() - start_time,
+                optimization_mode=mode.value if mode else "unknown",
+                entropy_state="error",
+                performance_score=0.0,
+                error=str(e)
+            )
+    
+    def _execute_cpu_operation(self, tensor_a: np.ndarray, tensor_b: np.ndarray, operation: str) -> np.ndarray:
+        """Execute operation on CPU (ZBE: Zero-Bound Entropy)."""
+        if operation == "dot":
+            return np.dot(tensor_a, tensor_b)
+        elif operation == "multiply":
+            return np.multiply(tensor_a, tensor_b)
+        elif operation == "add":
+            return np.add(tensor_a, tensor_b)
+        elif operation == "matmul":
+            return np.matmul(tensor_a, tensor_b)
+        else:
+            raise ValueError(f"Unsupported operation: {operation}")
+    
+    def _execute_gpu_operation(self, tensor_a: np.ndarray, tensor_b: np.ndarray, operation: str) -> np.ndarray:
+        """Execute operation on GPU (ZPE: Zero-Point Entropy)."""
+        if not GPU_AVAILABLE:
+            raise RuntimeError("GPU not available")
+        
+        # Transfer to GPU
+        gpu_a = cp.asarray(tensor_a)
+        gpu_b = cp.asarray(tensor_b)
+        
+        # Execute operation
+        if operation == "dot":
+            gpu_result = cp.dot(gpu_a, gpu_b)
+        elif operation == "multiply":
+            gpu_result = cp.multiply(gpu_a, gpu_b)
+        elif operation == "add":
+            gpu_result = cp.add(gpu_a, gpu_b)
+        elif operation == "matmul":
+            gpu_result = cp.matmul(gpu_a, gpu_b)
+        else:
+            raise ValueError(f"Unsupported operation: {operation}")
+        
+        # Transfer back to CPU
+        return cp.asnumpy(gpu_result)
+    
+    def _execute_hybrid_operation(self, tensor_a: np.ndarray, tensor_b: np.ndarray, operation: str) -> np.ndarray:
+        """Execute hybrid CPU/GPU operation."""
+        # Split tensors for parallel processing
+        if tensor_a.size > 1000:  # Large tensors use GPU
+            return self._execute_gpu_operation(tensor_a, tensor_b, operation)
+        else:  # Small tensors use CPU
+            return self._execute_cpu_operation(tensor_a, tensor_b, operation)
+    
+    def laplace_entropy_spectrum(self, data: np.ndarray) -> np.ndarray:
+        """
+        Apply Laplace entropy transform for signal processing.
+        Formula: L(f) = FFT(data) * exp(-0.05 * range(len(data)))
+        """
+        fft_data = fft(data)
+        entropy_decay = np.exp(-0.05 * np.arange(len(data)))
+        return fft_data * entropy_decay
+    
+    def entropy_modulated_fourier_path(self, signal: np.ndarray) -> np.ndarray:
+        """
+        Apply entropy-modulated Fourier pathway analysis.
+        """
+        f = fft(signal)
+        entropy_curve = np.log2(np.abs(f) + 1)
+        return f * entropy_curve
+    
+    def gaussian_collapse(self, series: np.ndarray, scale: float = 1.0) -> np.ndarray:
+        """Apply Gaussian signal collapse transformation."""
+        return norm.pdf(series, loc=np.mean(series), scale=np.std(series) * scale)
+    
+    def zscore_filter(self, data: np.ndarray, threshold: float = 2.0) -> np.ndarray:
+        """Apply Z-score filtering to remove outliers."""
+        z_scores = np.abs((data - np.mean(data)) / np.std(data))
+        return data[z_scores < threshold]
+    
+    def get_performance_metrics(self) -> Dict[str, Any]:
+        """Get current performance metrics."""
+        with self.lock:
+            avg_execution_time = (
+                self.total_optimization_time / max(1, self.total_operations)
+            )
+            
+            return {
+                "total_operations": self.total_operations,
+                "total_optimization_time": self.total_optimization_time,
+                "average_execution_time": avg_execution_time,
+                "current_entropy_state": self.current_entropy_state.value,
+                "gpu_available": GPU_AVAILABLE,
+                "recent_operations": len(self.operation_history),
+                "routing_efficiency": self._calculate_routing_efficiency()
+            }
+    
+    def _calculate_routing_efficiency(self) -> float:
+        """Calculate routing efficiency score."""
+        if not self.operation_history:
+            return 0.0
+        
+        recent_ops = self.operation_history[-100:]  # Last 100 operations
+        total_score = sum(op.get("performance_score", 0) for op in recent_ops)
+        return total_score / len(recent_ops)
+    
+    def shutdown(self):
+        """Shutdown the optimization bridge."""
+        self.thread_pool.shutdown(wait=True)
+        logger.info("Mathematical Optimization Bridge shutdown complete")
+
+# Global instance for easy access
+_global_bridge = None
+
+def get_optimization_bridge() -> MathematicalOptimizationBridge:
+    """Get global optimization bridge instance."""
+    global _global_bridge
+    if _global_bridge is None:
+        _global_bridge = MathematicalOptimizationBridge()
+    return _global_bridge
+
+def optimize_tensor_operation(
+    tensor_a: np.ndarray, 
+    tensor_b: np.ndarray,
+    operation: str = "dot",
+    mode: Optional[OptimizationMode] = None
+) -> OptimizationResult:
+    """Convenience function for tensor optimization."""
+    bridge = get_optimization_bridge()
+    return bridge.optimize_tensor_operation(tensor_a, tensor_b, operation, mode)

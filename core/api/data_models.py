@@ -218,9 +218,6 @@ class APIGenericData:
     """A generic container for other data types."""
 
     source: str
-
     data_type: str
-
-    content: Dict[str, Any] = field(default_factory=dict)
-
     timestamp: int
+    content: Dict[str, Any] = field(default_factory=dict)

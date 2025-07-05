@@ -1,2440 +1,582 @@
-from core.biological_immune_error_handler import BiologicalImmuneErrorHandler
-from core.chrono_resonance_weather_mapper import ChronoResonanceWeatherMapper
-from core.enhanced_live_execution_mapper import EnhancedLiveExecutionMapper
-from core.enhanced_master_cycle_profit_engine import EnhancedMasterCycleProfitEngine
-from core.enhanced_tcell_system import EnhancedTCellSystem
-from core.portfolio_tracker import PortfolioTracker
-from core.risk_manager import RiskManager
-from core.secure_api_coordinator import APIProvider, SecureAPICoordinator
-from core.strategy_logic import StrategyLogic
-from core.trading_engine_integration import (
-    COMMENTED,
-    DUE,
-    ERRORS,
-    FILE,
-    LEGACY,
-    OUT,
-    SYNTAX,
-    TO,
-    Any,
-    Date,
-    Dict,
-    List,
-    Optional,
-    Original,
-    Path,
-    Schwabot,
-    SecureConfigManager,
-    The,
-    This,
-    Union,
-    19: 36: 58,
-    2025 - 7 - 2,
-    ",
-    """,
-    -,
-    asyncio,
-    automatically,
-    because,
-    been,
-    clean,
-    commented,
-    contains,
-    core,
-    core/clean_math_foundation.py,
-    create_market_snapshot,
-    dataclass,
-    dataclasses,
-    datetime,
-    display_market_snapshot,
-    errors,
-    field,
-    file,
-    file:,
-    files:,
-    following,
-    foundation,
-    from,
-    get_secure_api_key,
-    has,
-    hashlib,
-    implementation,
-    import,
-    in,
-    it,
-    json,
-    lantern_core_integration.py,
-    logging,
-    mathematical,
-    os,
-    out,
-    out:,
-    pathlib,
-    preserved,
-    prevent,
-    properly.,
-    running,
-    syntax,
-    system,
-    that,
-    the,
-    time,
-    timedelta,
-    typing,
-    utils.market_data_utils,
-    utils.price_bridge,
-    utils.secure_config_manager,
-)
-from core.unified_math_system import UnifiedMathSystem
-
-- core/clean_profit_vectorization.py (profit calculations)
-
-
-
-- core/clean_trading_pipeline.py (trading logic)
-
-
-
-- core/clean_unified_math.py (unified mathematics)
-
-
-
-
-
-
-
-All core functionality has been reimplemented in clean, production-ready files.
-
-
+#!/usr/bin/env python3
 """
+Lantern Core Integration for Schwabot Trading System
+Implements backwards-facing scan of past tick zones, re-entry triggers after dips,
+and recursive re-purchase analysis with time-fuel harvesting
 """
 
-# ORIGINAL CONTENT COMMENTED OUT BELOW:
-
-"""
-"""
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# !/usr/bin/env python3
-
-
-
-
-
-
-
-Schwabot Lantern Core Integration ================================
-
-
-
-
-
-
-
-Integrates all Schwabot systems with the existing Lantern Core:
-
-
-
-- Secure API management
-
-
-
-- Price bridge integration
-
-
-
-- Trading engine coordination
-
-
-
-- Mathematical framework synchronization
-
-
-
-- Historical data management
-
-
-
-- Portfolio tracking
-
-
-
-- Risk management
-
-
-
-- Performance monitoring# Import Schwabot's core systems'
-
-
-
-try:
-
-
-
-        get_secure_price,
-
-
-
-get_multiple_secure_prices,
-
-
-
-SchwabotPriceBridge,
-
-
-
-)
-
-
-
-SchwabotTradingEngine,
-
-
-
-TradingMode,
-
-
-
-TradeSignal,
-
-
-
-OrderSide,
-
-
-
-OrderType,
-
-
-
-)
-
-
-
-        except ImportError as e:
-
-
-
-    logging.warning(fSome Schwabot core modules unavailable: {e})
-
-
-
-
-
-
+import numpy as np
+import logging
+import time
+import asyncio
+from typing import Dict, Any, Optional, List, Tuple
+from dataclasses import dataclass, field
+from enum import Enum
+from collections import deque
+import threading
+from concurrent.futures import ThreadPoolExecutor
+import json
+import hashlib
+from datetime import datetime, timedelta
+from pathlib import Path
+
+# Import utilities
+from utils.secure_config_manager import SecureConfigManager
+from utils.market_data_utils import create_market_snapshot, display_market_snapshot
+from utils.price_bridge import get_secure_api_key
 
 logger = logging.getLogger(__name__)
 
+class LanternMode(Enum):
+    """Lantern scanning modes."""
+    BACKWARDS_SCAN = "backwards_scan"
+    DIP_DETECTION = "dip_detection"
+    RE_ENTRY_ANALYSIS = "re_entry_analysis"
+    TIME_FUEL_HARVEST = "time_fuel_harvest"
 
-
-
-
-
-
-
-
-
+class ZoneType(Enum):
+    """Zone types for pattern matching."""
+    SELL_ZONE = "sell_zone"
+    BUY_ZONE = "buy_zone"
+    NEUTRAL_ZONE = "neutral_zone"
+    ACCUMULATION_ZONE = "accumulation_zone"
+    DISTRIBUTION_ZONE = "distribution_zone"
 
 @dataclass
-
-
-
-class LanternCoreState:State management for Lantern Core integration.# System status
-
-
-
-is_initialized: bool = False
-
-
-
-is_running: bool = False
-
-
-
-last_sync_time: int = field(default_factory=lambda: int(time.time()))
-
-
-
-
-
-
-
-# Component status
-
-
-
-secure_config_ready: bool = False
-
-
-
-price_bridge_ready: bool = False
-
-
-
-trading_engine_ready: bool = False
-
-
-
-math_framework_ready: bool = False
-
-
-
-immune_system_ready: bool = False
-
-
-
-
-
-
-
-# Performance metrics
-
-
-
-total_operations: int = 0
-
-
-
-successful_operations: int = 0
-
-
-
-failed_operations: int = 0
-
-
-
-avg_response_time: float = 0.0
-
-
-
-
-
-
-
-# Mathematical framework state
-
-
-
-current_drift_field: Optional[float] = None
-
-
-
-current_entropy_level: Optional[float] = None
-
-
-
-current_quantum_state: Optional[str] = None
-
-
-
-
-
-
-
-# Market state
-
-
-
-current_market_hash: Optional[str] = None
-
-
-
-last_market_snapshot: Optional[Dict[str, Any]] = None
-
-
-
-
-
-
-"""
-def to_dict() -> Dict[str, Any]:Convert to dictionary.return {is_initialized:
-self.is_initialized,is_running: self.is_running,last_sync_time":
-self.last_sync_time,secure_config_ready": self.secure_config_ready,price_bridge_ready":
-self.price_bridge_ready,trading_engine_ready": self.trading_engine_ready,math_framework_ready":
-self.math_framework_ready,immune_system_ready": self.immune_system_ready,total_operations":
-self.total_operations,successful_operations": self.successful_operations,failed_operations":
-self.failed_operations,avg_response_time": self.avg_response_time,current_drift_field":
-self.current_drift_field,current_entropy_level": self.current_entropy_level,current_quantum_state":
-self.current_quantum_state,current_market_hash: self.current_market_hash,"
-
-
-
-}
-
-
-
-
-
-
-
-
-
-
-
-class LanternCoreIntegration:Comprehensive integration of all Schwabot systems with Lantern Core.
-
-
-
-
-
-
-
-Features:
-
-
-
-    - Unified system coordination
-
-
-
-- Mathematical framework synchronization
-
-
-
-- Real-time market analysis
-
-
-
-- Trading signal generation
-
-
-
-- Risk management integration
-
-
-
-- Performance monitoring
-
-
-
-- Error handling and recovery"def __init__():Initialize Lantern Core integration.self.config
-    = config or self._default_config()"
-
-
-
-self.state = LanternCoreState()
-
-
-
-
-
-
-
-# Initialize core systems
-
-
-
-self._initialize_core_systems()
-
-
-
-
-
-
-
-# Performance tracking
-
-
-
-self.operation_times: List[float] = []
-
-
-
-self.max_operation_history = 1000
-
-
-
-
-
-
-
-            logger.info( Lantern Core Integration initialized)
-
-
-
-
-
-
-
-def _default_config() -> Dict[str, Any]:Default configuration.return {sync_interval: 30,  #
-secondsmarket_analysis_interval: 60,  # secondstrading_signal_threshold:
-0.7,risk_management_enabled": True,immune_system_enabled": True,mathematical_framework_enabled":
-True,historical_data_enabled": True,performance_monitoring_enabled": True,error_recovery_enabled":
-True,max_retry_attempts": 3,retry_delay": 5.0,
-
-
-
-}
-
-
-
-
-
-
-
-def _initialize_core_systems():Initialize all core Schwabot systems.try:
-
-
-
-            # Initialize secure configuration manager
-
-
-
-self.secure_config = SecureConfigManager()
-
-
-
-self.state.secure_config_ready = True
-
-
-
-            logger.info( Secure Configuration Manager initialized)
-
-
-
-
-
-
-
-# Initialize price bridge
-
-
-
-self.price_bridge = SchwabotPriceBridge()
-
-
-
-            self.state.price_bridge_ready = True
-
-
-
-            logger.info( Price Bridge initialized)
-
-
-
-
-
-
-
-# Initialize trading engine (demo mode by default)
-
-
-
-self.trading_engine = SchwabotTradingEngine(TradingMode.DEMO)
-
-
-
-self.state.trading_engine_ready = True
-
-
-
-            logger.info( Trading Engine initialized)
-
-
-
-
-
-
-
-# Initialize mathematical framework
-
-
-
-self.math_system = Unif iedMathSystem()
-
-
-
-self.state.math_framework_ready = True
-
-
-
-            logger.info( Mathematical Framework initialized)
-
-
-
-
-
-
-
-# Initialize T-Cell immune system
-
-
-
-self.tcell_system = EnhancedTCellSystem()
-
-
-
-self.state.immune_system_ready = True
-
-
-
-            logger.info( T-Cell Immune System initialized)
-
-
-
-
-
-
-
-# Initialize strategy logic
-
-
-
-self.strategy_logic = StrategyLogic()
-
-
-
-            logger.info( Strategy Logic initialized)
-
-
-
-
-
-
-
-# Initialize risk manager
-
-
-
-self.risk_manager = RiskManager()
-
-
-
-            logger.info( Risk Manager initialized)
-
-
-
-
-
-
-
-# Initialize portfolio tracker
-
-
-
-self.portfolio_tracker = PortfolioTracker()
-
-
-
-            logger.info( Portfolio Tracker initialized)
-
-
-
-
-
-
-
-# Initialize enhanced live execution mapper
-
-
-
-self.execution_mapper = EnhancedLiveExecutionMapper()
-
-
-
-            logger.info( Enhanced Live Execution Mapper initialized)
-
-
-
-
-
-
-
-# Initialize chrono resonance weather mapper
-
-
-
-self.weather_mapper = ChronoResonanceWeatherMapper()
-
-
-
-            logger.info( Chrono Resonance Weather Mapper initialized)
-
-
-
-
-
-
-
-# Initialize enhanced master cycle profit engine
-
-
-
-            self.profit_engine = EnhancedMasterCycleProfitEngine()
-
-
-
-            logger.info( Enhanced Master Cycle Profit Engine initialized)
-
-
-
-
-
-
-
-# Initialize biological immune error handler
-
-
-
-self.error_handler = BiologicalImmuneErrorHandler()
-
-
-
-            logger.info( Biological Immune Error Handler initialized)
-
-
-
-
-
-
-
-self.state.is_initialized = True
-
-
-
-            logger.info( All core systems initialized successfully)
-
-
-
-
-
-
-
-        except Exception as e:
-
-
-
-            logger.error(f" Failed to initialize core systems: {e})"
-
-
-
-self.state.is_initialized = False
-
-
-
-
-
-
-
-async def start_integration():Start the Lantern Core integration.if not self.state.is_initialized:
-
-
-
-            logger.error( Cannot start integration - systems not initialized)
-
-
-
-        return False
-
-
-
-
-
-
-
-self.state.is_running = True
-
-
-
-            logger.info( Lantern Core Integration started)
-
-
-
-
-
-
-
-# Start background tasks
-
-
-
-asyncio.create_task(self._market_analysis_loop())
-
-
-
-asyncio.create_task(self._system_sync_loop())
-
-
-
-asyncio.create_task(self._performance_monitoring_loop())
-
-
-
-
-
-
-
-        return True
-
-
-
-
-
-
-
-async def stop_integration():
-
-
-
-        Stop the Lantern Core integration.self.state.is_running = False
-
-
-
-            logger.info( Lantern Core Integration stopped)
-
-
-
-
-
-
-
-async def _market_analysis_loop():Continuous market analysis loop.while self.state.is_running:
-
-
-
-            try: start_time = time.time()
-
-
-
-
-
-
-
-# Create market snapshot
-
-
-
-snapshot = await self._create_enhanced_market_snapshot()
-
-
-
-if snapshot:
-
-
-
-                    self.state.last_market_snapshot = snapshot
-
-
-
-self.state.current_market_hash = snapshot.get(market_hash)
-
-
-
-
-
-
-
-# Update mathematical framework state
-
-
-
-await self._update_mathematical_state()
-
-
-
-
-
-
-
-# Generate trading signals
-
-
-
-signals = await self._generate_trading_signals()
-
-
-
-
-
-
-
-# Execute signals if threshold met
-
-
-
-for signal in signals:
-
-
-
-                    if (:
-
-
-
-signal.signal_strength
-
-
-
-                        >= self.config[trading_signal_threshold]
-
-
-
-):
-
-
-
-                        await self._execute_trading_signal(signal)
-
-
-
-
-
-
-
-# Update performance metrics
-
-
-
-operation_time = time.time() - start_time
-
-
-
-self._update_performance_metrics(operation_time, True)
-
-
-
-
-
-
-
-# Wait for next iteration
-
-
-
-await asyncio.sleep(self.config[market_analysis_interval])
-
-
-
-
-
-
-
-        except Exception as e:
-
-
-
-                logger.error(f Market analysis loop error: {e})
-
-
-
-self._update_performance_metrics(0, False)
-
-
-
-await asyncio.sleep(self.config[retry_delay])
-
-
-
-
-
-
-
-async def _system_sync_loop():System synchronization loop.while self.state.is_running:
-
-
-
-            try:
-
-
-
-                # Sync all systems
-
-
-
-await self._sync_all_systems()
-
-
-
-
-
-
-
-# Update state
-
-
-
-self.state.last_sync_time = int(time.time())
-
-
-
-
-
-
-
-# Wait for next sync
-
-
-
-await asyncio.sleep(self.config[sync_interval])
-
-
-
-
-
-
-
-        except Exception as e:
-
-
-
-logger.error(f System sync loop error: {e})await asyncio.sleep(self.config[retry_delay])
-
-
-
-
-
-
-
-async def _performance_monitoring_loop():Performance monitoring loop.while self.state.is_running:
-
-
-
-            try:
-
-
-
-                # Calculate performance metrics
-
-
-
-self._calculate_performance_metrics()
-
-
-
-
-
-
-
-# Log performance if significant
-
-
-
-if self.state.total_operations % 100 == 0:
-
-
-
-                    logger.info(
-
-
-
-Performance:{self.state.successful_operations}/{self.state.total_operations}fsuccessful
-({self.state.avg_response_time:.3f}s avg)
-
-
-
-)
-
-
-
-
-
-
-
-# Wait for next monitoring cycle
-
-
-
-await asyncio.sleep(300)  # 5 minutes
-
-
-
-
-
-
-
-        except Exception as e:
-
-
-
-                logger.error(f Performance monitoring error: {e})
-
-
-
-await asyncio.sleep(60)
-
-
-
-
-
-
-
-async def _create_enhanced_market_snapshot() -> Optional[Dict[str, Any]]:Create enhanced market
-snapshot with all systems.try:
-
-
-
-            # Get basic market snapshot
-
-
-
-snapshot = create_market_snapshot()
-
-
-
-if not snapshot:
-
-
-
-                return None
-
-
-
-
-
-
-
-# Enhance with mathematical framework data
-
-
-
-if self.state.math_framework_ready:
-
-
-
-                snapshot[mathematical_framework] = (
-
-
-
-await self._get_mathematical_framework_data()
-
-
-
-)
-
-
-
-
-
-
-
-# Enhance with immune system data
-
-
-
-if self.state.immune_system_ready:
-
-
-
-                snapshot[immune_system] = await self._get_immune_system_data()
-
-
-
-
-
-
-
-# Enhance with weather mapping data
-
-
-
-snapshot[weather_mapping] = await self._get_weather_mapping_data()
-
-
-
-
-
-
-
-# Enhance with profit engine data
-
-
-
-            snapshot[profit_engine] = await self._get_profit_engine_data()
-
-
-
-
-
-
-
-        return snapshot
-
-
-
-
-
-
-
-        except Exception as e:
-
-
-
-            logger.error(f Enhanced market snapshot error: {e})
-
-
-
-        return None
-
-
-
-
-
-
-
-async def _get_mathematical_framework_data() -> Dict[str, Any]:Get mathematical framework data.try:
-
-
-
-            # Get current price
-
-
-
-price_data = await get_secure_price(BTC)
-
-
-
-            if not price_data:
-
-
-
-                return {}
-
-
-
-
-
-
-
-# Calculate mathematical indicators
-
-
-
-drift_field = self.math_system.calculate_drift_field(price_data.price)
-
-
-
-            entropy = self.math_system.calculate_entropy(price_data.price)
-
-
-
-            quantum_state = self.math_system.calculate_quantum_state(price_data.price)
-
-
-
-
-
-
-
-        return {
-
-
-
-drift_field_value: drift_field,entropy_level: entropy,quantum_state: quantum_state,price_momentum":
-self.math_system.calculate_momentum(price_data.price),volatility_index":
-self.math_system.calculate_volatility(
-
-
-
-price_data.price
-
-
-
-),mathematical_hash: hashlib.sha256(f"{drift_field}:{entropy}:{quantum_state}.encode()"
-
-
-
-).hexdigest(),
-
-
-
-}
-
-
-
-        except Exception as e:logger.error(f Mathematical framework data error: {e})
-
-
-
-        return {}
-
-
-
-
-
-
-
-async def _get_immune_system_data() -> Dict[str, Any]:Get immune system data.try: price_data
-    = await get_secure_price(BTC)
-
-
-
-            if not price_data:
-
-
-
-                return {}
-
-
-
-
-
-
-
-        return {
-
-
-
-market_health: self.tcell_system.analyze_market_health(
-
-
-
-price_data.price
-
-
-
-),anomalies_detected: self.tcell_system.detect_anomalies(
-
-
-
-price_data.price
-
-
-
-),immune_response": self.tcell_system.generate_response("
-
-
-
-price_data.price
-
-
-
-),risk_level": self.tcell_system.calculate_risk_level(price_data.price),"
-
-
-
-}
-
-
-
-        except Exception as e:logger.error(f" Immune system data error: {e})"
-
-
-
-        return {}
-
-
-
-
-
-
-
-async def _get_weather_mapping_data() -> Dict[str, Any]:Get weather mapping data.try:
-
-
-
-return {weather_pattern: self.weather_mapper.get_current_pattern(),resonance_level":
-self.weather_mapper.calculate_resonance(),chrono_state": self.weather_mapper.get_chrono_state(),
-
-
-
-}
-
-
-
-        except Exception as e:logger.error(f" Weather mapping data error: {e})"
-
-
-
-        return {}
-
-
-
-
-
-
-
-async def _get_profit_engine_data() -> Dict[str, Any]:Get profit engine data.try:
-
-
-
-return {profit_cycle: self.profit_engine.get_current_cycle(),profit_potential":
-self.profit_engine.calculate_profit_potential(),cycle_phase": self.profit_engine.get_cycle_phase(),
-
-
-
-}
-
-
-
-        except Exception as e:logger.error(f" Profit engine data error: {e})"
-
-
-
-        return {}
-
-
-
-
-
-
-
-async def _update_mathematical_state():Update mathematical framework state.try: price_data
-    = await get_secure_price(BTC)
-
-
-
-            if price_data:
-
-
-
-                self.state.current_drift_field = self.math_system.calculate_drift_field(
-
-
-
-price_data.price
-
-
-
-)
-
-
-
-self.state.current_entropy_level = self.math_system.calculate_entropy(
-
-
-
-                    price_data.price
-
-
-
-)
-
-
-
-self.state.current_quantum_state = (
-
-
-
-self.math_system.calculate_quantum_state(price_data.price)
-
-
-
-)
-
-
-
-        except Exception as e:
-
-
-
-            logger.error(f Mathematical state update error: {e})
-
-
-
-
-
-
-
-async def _generate_trading_signals()
-    -> List[TradeSignal]:"Generate trading signals using all systems.signals = []"
-
-
-
-
-
-
-
-try:
-
-
-
-            # Get current price
-
-
-
-price_data = await get_secure_price(BTC)
-
-
-
-            if not price_data:
-
-
-
-                return signals
-
-
-
-
-
-
-
-# Generate signals from strategy logic
-
-
-
-if self.strategy_logic: strategy_signals = self.strategy_logic.generate_signals(
-
-
-
-                    price_data.price
-
-
-
-)
-
-
-
-for signal_data in strategy_signals:
-
-
-
-                    signal = TradeSignal(
-
-
-
-symbol=BTC,
-
-
-
-side = (
-
-
-
-OrderSide.BUY
-
-
-
-                            if signal_data[type] == buy:
-
-
-
-                            else OrderSide.SELL
-
-
-
-),
-
-
-
-order_type = OrderType.MARKET,
-
-
-
-quantity = signal_data.get(quantity, 0.1),signal_strength
-    = signal_data.get(strength, 0.0),confidence_level = signal_data.get(confidence, 0.0),
-
-
-
-)
-
-
-
-signals.append(signal)
-
-
-
-
-
-
-
-# Generate signals from mathematical framework
-
-
-
-if self.state.math_framework_ready: math_signals = self._generate_mathematical_signals(price_data)
-
-
-
-signals.extend(math_signals)
-
-
-
-
-
-
-
-# Generate signals from immune system
-
-
-
-if self.state.immune_system_ready:
-
-
-
-                immune_signals = self._generate_immune_signals(price_data)
-
-
-
-signals.extend(immune_signals)
-
-
-
-
-
-
-
-        except Exception as e:
-
-
-
-            logger.error(f Trading signal generation error: {e})
-
-
-
-
-
-
-
-        return signals
-
-
-
-
-
-
-
-def _generate_mathematical_signals()
-    -> List[TradeSignal]:Generate signals from mathematical framework.signals = []
-
-
-
-
-
-
-
-try:
-
-
-
-            # Example mathematical signal generation
-
-
-
-drift_field = self.math_system.calculate_drift_field(price_data.price)
-
-
-
-            entropy = self.math_system.calculate_entropy(price_data.price)
-
-
-
-
-
-
-
-# Simple signal logic based on mathematical indicators
-
-
-
-if drift_field > 0.7 and entropy < 0.3: signal = TradeSignal(
-
-
-
-symbol=BTC,
-
-
-
-side = OrderSide.BUY,
-
-
-
-order_type=OrderType.MARKET,
-
-
-
-quantity=0.1,
-
-
-
-                    signal_strength=0.8,
-
-
-
-                    confidence_level=0.7,
-
-
-
-drift_field_value=drift_field,
-
-
-
-entropy_level=entropy,
-
-
-
-)
-
-
-
-signals.append(signal)
-
-
-
-elif drift_field < -0.7 and entropy > 0.7: signal = TradeSignal(
-
-
-
-symbol=BTC,
-
-
-
-side = OrderSide.SELL,
-
-
-
-order_type=OrderType.MARKET,
-
-
-
-quantity=0.1,
-
-
-
-                    signal_strength=0.8,
-
-
-
-                    confidence_level=0.7,
-
-
-
-drift_field_value=drift_field,
-
-
-
-entropy_level=entropy,
-
-
-
-)
-
-
-
-signals.append(signal)
-
-
-
-
-
-
-
-        except Exception as e:
-
-
-
-            logger.error(f Mathematical signal generation error: {e})
-
-
-
-
-
-
-
-        return signals
-
-
-
-
-
-
-
-def _generate_immune_signals() -> List[TradeSignal]:Generate signals from immune system.signals = []
-
-
-
-
-
-
-
-try:
-
-
-
-            # Get immune system analysis
-
-
-
-market_health = self.tcell_system.analyze_market_health(price_data.price)
-
-
-
-            risk_level = self.tcell_system.calculate_risk_level(price_data.price)
-
-
-
-
-
-
-
-# Generate signals based on immune response
-
-
-
-if market_health > 0.8 and risk_level < 0.3: signal = TradeSignal(
-
-
-
-symbol=BTC,
-
-
-
-side = OrderSide.BUY,
-
-
-
-order_type=OrderType.MARKET,
-
-
-
-quantity=0.1,
-
-
-
-                    signal_strength=0.7,
-
-
-
-                    confidence_level=0.6,
-
-
-
-)
-
-
-
-signals.append(signal)
-
-
-
-elif market_health < 0.2 and risk_level > 0.7: signal = TradeSignal(
-
-
-
-symbol=BTC,
-
-
-
-side = OrderSide.SELL,
-
-
-
-order_type=OrderType.MARKET,
-
-
-
-quantity=0.1,
-
-
-
-                    signal_strength=0.7,
-
-
-
-                    confidence_level=0.6,
-
-
-
-)
-
-
-
-signals.append(signal)
-
-
-
-
-
-
-
-        except Exception as e:
-
-
-
-            logger.error(f Immune signal generation error: {e})
-
-
-
-
-
-
-
-        return signals
-
-
-
-
-
-
-
-async def _execute_trading_signal(self, signal: TradeSignal)::::Execute a trading signal.try:
-
-
-
-            # Check risk management
-
-
-
-if self.config[risk_management_enabled] and self.risk_manager:
-
-
-
-                if not self.risk_manager.validate_signal(signal):
-
-
-
-                    logger.warning(f  Signal rejected by risk manager: {signal.mathematical_hash}
-
-
-
-)
-
-
-
-return # Execute trade
-
-
-
-            execution = await self.trading_engine.execute_trade(signal)
-
-
-
-
-
-
-
-# Log execution
-
-
-
-if execution.status == closed:
-
-
-
-                logger.info(
-
-
-
-f Trade executed successfully: {signal.side.value} {signal.quantity} BTC
-
-
-
-)
-
-
-
-else :
-
-
-
-                logger.warning(f  Trade execution failed: {execution.error_message})
-
-
-
-
-
-
-
-        except Exception as e:logger.error(f Trading signal execution error: {e})
-
-
-
-
-
-
-
-async def _sync_all_systems():Synchronize all systems.try:
-
-
-
-            # Sync price bridge
-
-
-
-if self.state.price_bridge_ready:
-
-
-
-                await self.price_bridge.get_price(BTC)
-
-
-
-
-
-
-
-# Sync trading engine
-
-
-
-if self.state.trading_engine_ready:
-
-
-
-                await self.trading_engine.get_portfolio_status()
-
-
-
-
-
-
-
-# Sync mathematical framework
-
-
-
-if self.state.math_framework_ready:
-
-
-
-                await self._update_mathematical_state()
-
-
-
-
-
-
-
-# Sync immune system
-
-
-
-if self.state.immune_system_ready: price_data = await get_secure_price(BTC)
-
-
-
-                if price_data:
-
-
-
-                    self.tcell_system.update_state(price_data.price)
-
-
-
-
-
-
-
-        except Exception as e:logger.error(f System sync error: {e})
-
-
-
-
-
-
-
-def _update_performance_metrics(self, operation_time: float, success: bool)::::Update performance
-metrics.self.state.total_operations += 1
-
-
-
-
-
-
-
-if success:
-
-
-
-            self.state.successful_operations += 1
-
-
-
-self.operation_times.append(operation_time)
-
-
-
-
-
-
-
-# Keep only recent operation times
-
-
-
-if len(self.operation_times) > self.max_operation_history:
-
-
-
-                self.operation_times.pop(0)
-
-
-
-else:
-
-
-
-            self.state.failed_operations += 1
-
-
-
-
-
-
-
-def _calculate_performance_metrics():Calculate performance metrics.if self.operation_times:
-
-
-
-            self.state.avg_response_time = sum(self.operation_times) / len(
-
-
-
-self.operation_times
-
-
-
-)
-
-
-
-
-
-
-
-async def get_system_status() -> Dict[str, Any]:Get comprehensive system status.try: status
+class TickZone:
+    """Represents a tick zone with pattern data."""
+    zone_id: str
+    zone_type: ZoneType
+    price_range: Tuple[float, float]
+    volume_profile: List[float]
+    pattern_hash: str
+    timestamp: float
+    strength: float
+    liquidity_factor: float
+
+@dataclass
+class DipPattern:
+    """Represents a dip pattern for re-entry analysis."""
+    symbol: str
+    sell_price: float
+    current_price: float
+    dip_percentage: float
+    pattern_match_score: float
+    time_since_sell: float
+    expected_gain: float
+    liquidity_factor: float
+    re_entry_signal: bool
+
+@dataclass
+class LanternScan:
+    """Results from backwards-facing lantern scan."""
+    symbol: str
+    zones_scanned: List[TickZone]
+    dip_patterns: List[DipPattern]
+    re_entry_opportunities: List[Dict[str, Any]]
+    time_fuel_harvested: float
+    scan_efficiency: float
+    timestamp: float
+
+class LanternCoreIntegration:
+    """
+    Comprehensive integration implementing LanternScan backwards-facing analysis.
     
-    = {lantern_core: self.state.to_dict(),components: {secure_config: self.state.secure_config_ready,price_bridge": self.state.price_bridge_ready,trading_engine": self.state.trading_engine_ready,math_framework": self.state.math_framework_ready,immune_system": self.state.immune_system_ready,
-
-
-
-},market_data": self.state.last_market_snapshot,performance": {total_operations:
-self.state.total_operations,success_rate": self.state.successful_operations"
-
-
-
-/ max(self.state.total_operations, 1),avg_response_time": self.state.avg_response_time,"
-
-
-
-},
-
-
-
-}
-
-
-
-
-
-
-
-        return status
-
-
-
-
-
-
-
+    Implements:
+    1. Backwards-facing scan of past tick zones
+    2. Delta drop detection and re-entry triggers
+    3. Recursive re-purchase analysis
+    4. Time-fuel harvesting optimization
+    """
+    
+    def __init__(self, config: Optional[Dict[str, Any]] = None):
+        self.config = config or self._default_config()
+        self.version = "2.0.0"
+        
+        # Core components
+        self.secure_config = SecureConfigManager()
+        
+        # Lantern parameters
+        self.lambda_thresh = self.config.get("lambda_thresh", 0.15)  # 15% dip threshold
+        self.rho_pattern = self.config.get("rho_pattern", 0.7)       # Pattern match threshold
+        self.kappa_gain = self.config.get("kappa_gain", 1.2)         # Recursive gain exponent
+        self.tau_window = self.config.get("tau_window", 3600)        # Time window (1 hour)
+        
+        # Data storage
+        self.tick_zones: Dict[str, List[TickZone]] = {}
+        self.sell_history: Dict[str, List[Dict[str, Any]]] = {}
+        self.scan_history: List[LanternScan] = []
+        self.time_fuel_bank: float = 0.0
+        
+        # Threading
+        self.lock = threading.Lock()
+        self.thread_pool = ThreadPoolExecutor(max_workers=4)
+        
+        # Pattern matching cache
+        self.pattern_cache: Dict[str, np.ndarray] = {}
+        
+        logger.info(f"Lantern Core Integration v{self.version} initialized")
+    
+    def _default_config(self) -> Dict[str, Any]:
+        """Default configuration for Lantern Core."""
+        return {
+            "lambda_thresh": 0.15,
+            "rho_pattern": 0.7,
+            "kappa_gain": 1.2,
+            "tau_window": 3600,
+            "max_zones": 1000,
+            "max_history": 5000,
+            "scan_interval": 60,
+            "pattern_cache_size": 100
+        }
+    
+    def create_tick_zone(self, symbol: str, price_data: Dict[str, Any], 
+                        zone_type: ZoneType) -> TickZone:
+        """Create a tick zone from price data."""
+        price_range = (
+            min(price_data.get("prices", [0])),
+            max(price_data.get("prices", [0]))
+        )
+        
+        volume_profile = price_data.get("volumes", [])
+        
+        # Create pattern hash
+        pattern_data = {
+            "prices": price_data.get("prices", []),
+            "volumes": volume_profile,
+            "zone_type": zone_type.value
+        }
+        pattern_hash = hashlib.sha256(
+            json.dumps(pattern_data, sort_keys=True).encode()
+        ).hexdigest()[:16]
+        
+        # Calculate zone strength
+        strength = self._calculate_zone_strength(price_data, volume_profile)
+        
+        # Calculate liquidity factor
+        liquidity_factor = np.mean(volume_profile) if volume_profile else 1.0
+        
+        zone = TickZone(
+            zone_id=f"{symbol}_{zone_type.value}_{int(time.time())}",
+            zone_type=zone_type,
+            price_range=price_range,
+            volume_profile=volume_profile,
+            pattern_hash=pattern_hash,
+            timestamp=time.time(),
+            strength=strength,
+            liquidity_factor=liquidity_factor
+        )
+        
+        # Store in zones
+        with self.lock:
+            if symbol not in self.tick_zones:
+                self.tick_zones[symbol] = []
+            self.tick_zones[symbol].append(zone)
+            
+            # Limit zone history
+            if len(self.tick_zones[symbol]) > self.config.get("max_zones", 1000):
+                self.tick_zones[symbol].pop(0)
+        
+        return zone
+    
+    def _calculate_zone_strength(self, price_data: Dict[str, Any], 
+                               volume_profile: List[float]) -> float:
+        """Calculate zone strength based on price and volume data."""
+        prices = price_data.get("prices", [])
+        if not prices:
+            return 0.0
+        
+        # Price volatility component
+        price_volatility = np.std(prices) / np.mean(prices) if np.mean(prices) > 0 else 0.0
+        
+        # Volume consistency component
+        volume_consistency = 1.0 - (np.std(volume_profile) / np.mean(volume_profile)) if volume_profile and np.mean(volume_profile) > 0 else 0.0
+        
+        # Combined strength
+        strength = (0.6 * price_volatility + 0.4 * volume_consistency)
+        
+        return min(1.0, max(0.0, strength))
+    
+    def detect_dip_pattern(self, symbol: str, current_price: float) -> List[DipPattern]:
+        """
+        Detect dip patterns for re-entry analysis.
+        
+        Mathematical formula:
+        Δ_drop = P_sell_prev - P_now
+        Trigger_Lantern = (Δ_drop / P_sell_prev) > λ_thresh ∧ pattern_match(H_now, H_sell) > ρ
+        """
+        dip_patterns = []
+        
+        # Get sell history for symbol
+        sell_history = self.sell_history.get(symbol, [])
+        if not sell_history:
+            return dip_patterns
+        
+        current_time = time.time()
+        
+        for sell_record in sell_history:
+            sell_price = sell_record.get("price", 0)
+            sell_time = sell_record.get("timestamp", 0)
+            
+            if sell_price <= 0:
+                continue
+            
+            # Calculate delta drop
+            delta_drop = sell_price - current_price
+            dip_percentage = delta_drop / sell_price
+            
+            # Check dip threshold
+            if dip_percentage > self.lambda_thresh:
+                # Calculate pattern match score
+                pattern_match_score = self._calculate_pattern_match(
+                    symbol, sell_record, current_price
+                )
+                
+                # Check pattern match threshold
+                if pattern_match_score > self.rho_pattern:
+                    # Calculate time since sell
+                    time_since_sell = current_time - sell_time
+                    
+                    # Check time window
+                    if time_since_sell <= self.tau_window:
+                        # Calculate expected gain
+                        expected_gain = self._calculate_expected_gain(
+                            dip_percentage, current_price, sell_record
+                        )
+                        
+                        # Calculate liquidity factor
+                        liquidity_factor = sell_record.get("liquidity_factor", 1.0)
+                        
+                        # Create dip pattern
+                        dip_pattern = DipPattern(
+                            symbol=symbol,
+                            sell_price=sell_price,
+                            current_price=current_price,
+                            dip_percentage=dip_percentage,
+                            pattern_match_score=pattern_match_score,
+                            time_since_sell=time_since_sell,
+                            expected_gain=expected_gain,
+                            liquidity_factor=liquidity_factor,
+                            re_entry_signal=True
+                        )
+                        
+                        dip_patterns.append(dip_pattern)
+        
+        return dip_patterns
+    
+    def _calculate_pattern_match(self, symbol: str, sell_record: Dict[str, Any], 
+                               current_price: float) -> float:
+        """Calculate pattern matching score between current and historical patterns."""
+        # Get historical pattern
+        historical_pattern = sell_record.get("pattern_data", [])
+        if not historical_pattern:
+            return 0.0
+        
+        # Get current pattern (simplified)
+        current_pattern = self._get_current_pattern(symbol, current_price)
+        
+        if not current_pattern:
+            return 0.0
+        
+        # Normalize patterns
+        hist_array = np.array(historical_pattern)
+        curr_array = np.array(current_pattern)
+        
+        # Ensure same length
+        min_len = min(len(hist_array), len(curr_array))
+        if min_len < 3:
+            return 0.0
+        
+        hist_norm = hist_array[:min_len] / (np.linalg.norm(hist_array[:min_len]) + 1e-8)
+        curr_norm = curr_array[:min_len] / (np.linalg.norm(curr_array[:min_len]) + 1e-8)
+        
+        # Calculate cosine similarity
+        cosine_sim = np.dot(hist_norm, curr_norm)
+        
+        return max(0.0, min(1.0, cosine_sim))
+    
+    def _get_current_pattern(self, symbol: str, current_price: float) -> List[float]:
+        """Get current price pattern for matching."""
+        # Get recent zones for the symbol
+        zones = self.tick_zones.get(symbol, [])
+        if not zones:
+            return []
+        
+        # Extract recent price patterns
+        recent_zones = zones[-10:]  # Last 10 zones
+        pattern = []
+        
+        for zone in recent_zones:
+            # Use average of price range
+            avg_price = (zone.price_range[0] + zone.price_range[1]) / 2
+            pattern.append(avg_price)
+        
+        # Add current price
+        pattern.append(current_price)
+        
+        return pattern
+    
+    def _calculate_expected_gain(self, dip_percentage: float, current_price: float, 
+                               sell_record: Dict[str, Any]) -> float:
+        """
+        Calculate expected gain from recursive re-entry.
+        
+        Mathematical formula:
+        Expected_Gain = (1 + Δ_drop / P_now)^κ × liquidity_factor
+        """
+        liquidity_factor = sell_record.get("liquidity_factor", 1.0)
+        
+        # Calculate recursive gain
+        gain_factor = (1 + dip_percentage) ** self.kappa_gain
+        expected_gain = gain_factor * liquidity_factor
+        
+        return expected_gain
+    
+    def perform_backwards_scan(self, symbol: str, scan_depth: int = 100) -> LanternScan:
+        """
+        Perform backwards-facing scan of past tick zones.
+        
+        Implements LanternScan: backwards-facing scan of past tick zones,
+        re-entry triggers after dips, and recursive re-purchase analysis.
+        """
+        start_time = time.time()
+        
+        # Get zones to scan
+        zones = self.tick_zones.get(symbol, [])
+        zones_to_scan = zones[-scan_depth:] if len(zones) > scan_depth else zones
+        
+        # Get current price (simplified)
+        current_price = self._get_current_price(symbol)
+        
+        # Detect dip patterns
+        dip_patterns = self.detect_dip_pattern(symbol, current_price)
+        
+        # Identify re-entry opportunities
+        re_entry_opportunities = []
+        for dip in dip_patterns:
+            if dip.re_entry_signal:
+                opportunity = {
+                    "symbol": symbol,
+                    "entry_price": dip.current_price,
+                    "expected_gain": dip.expected_gain,
+                    "confidence": dip.pattern_match_score,
+                    "time_factor": self._calculate_time_factor(dip.time_since_sell),
+                    "liquidity_factor": dip.liquidity_factor
+                }
+                re_entry_opportunities.append(opportunity)
+        
+        # Calculate time fuel harvested
+        time_fuel_harvested = self._calculate_time_fuel(zones_to_scan, dip_patterns)
+        
+        # Calculate scan efficiency
+        scan_efficiency = len(re_entry_opportunities) / max(1, len(zones_to_scan))
+        
+        # Create scan result
+        scan_result = LanternScan(
+            symbol=symbol,
+            zones_scanned=zones_to_scan,
+            dip_patterns=dip_patterns,
+            re_entry_opportunities=re_entry_opportunities,
+            time_fuel_harvested=time_fuel_harvested,
+            scan_efficiency=scan_efficiency,
+            timestamp=time.time()
+        )
+        
+        # Store in history
+        with self.lock:
+            self.scan_history.append(scan_result)
+            if len(self.scan_history) > self.config.get("max_history", 5000):
+                self.scan_history.pop(0)
+        
+        execution_time = time.time() - start_time
+        logger.info(f"Backwards scan completed for {symbol}: "
+                   f"{len(re_entry_opportunities)} opportunities found in {execution_time:.3f}s")
+        
+        return scan_result
+    
+    def _get_current_price(self, symbol: str) -> float:
+        """Get current price for symbol (simplified implementation)."""
+        # In a real implementation, this would fetch from market data
+        # For now, use the latest zone data
+        zones = self.tick_zones.get(symbol, [])
+        if zones:
+            latest_zone = zones[-1]
+            return (latest_zone.price_range[0] + latest_zone.price_range[1]) / 2
+        return 100.0  # Default price
+    
+    def _calculate_time_factor(self, time_since_sell: float) -> float:
+        """Calculate time factor for re-entry scoring."""
+        # Time factor decreases as time increases
+        time_factor = np.exp(-time_since_sell / self.tau_window)
+        return max(0.1, min(1.0, time_factor))
+    
+    def _calculate_time_fuel(self, zones: List[TickZone], 
+                           dip_patterns: List[DipPattern]) -> float:
+        """Calculate time fuel harvested from scan."""
+        # Time fuel is based on zone strength and pattern quality
+        zone_fuel = sum(zone.strength * zone.liquidity_factor for zone in zones)
+        pattern_fuel = sum(pattern.pattern_match_score * pattern.expected_gain 
+                         for pattern in dip_patterns)
+        
+        total_fuel = zone_fuel + pattern_fuel
+        
+        # Add to time fuel bank
+        with self.lock:
+            self.time_fuel_bank += total_fuel
+        
+        return total_fuel
+    
+    def execute_dip_reentry(self, symbol: str, opportunity: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Execute dip re-entry trade.
+        
+        Dip_Reentry(t) = {
+            if T_last_exit - T_now ∈ τ_window and Trigger_Lantern: 
+                Re_buy(Asset, Vol_adj, Bucket)
+        }
+        """
+        try:
+            # Validate opportunity
+            if opportunity.get("confidence", 0) < self.rho_pattern:
+                return {"success": False, "error": "Confidence too low"}
+            
+            # Calculate volume adjustment
+            vol_adj = self._calculate_volume_adjustment(opportunity)
+            
+            # Determine bucket allocation
+            bucket = self._determine_bucket_allocation(opportunity)
+            
+            # Execute re-entry (simulation)
+            execution_result = {
+                "success": True,
+                "symbol": symbol,
+                "action": "re_buy",
+                "entry_price": opportunity.get("entry_price", 0),
+                "volume_adjusted": vol_adj,
+                "bucket": bucket,
+                "expected_gain": opportunity.get("expected_gain", 0),
+                "timestamp": time.time()
+            }
+            
+            # Store sell record for future reference
+            self._store_sell_record(symbol, execution_result)
+            
+            logger.info(f"Dip re-entry executed for {symbol}: "
+                       f"price={execution_result['entry_price']:.2f} "
+                       f"expected_gain={execution_result['expected_gain']:.2f}")
+            
+            return execution_result
+            
         except Exception as e:
-
-
-
-            logger.error(f System status error: {e})return {error: str(e)}
-
-
-
-
-
-
-
-async def load_historical_data() -> bool:Load historical data from CSV file.try:
-
-
-
-            # This would integrate with your existing historical data manager''
-
-
-
-# For now, we'll just log the request'
-
-
-
-            logger.info(f Loading historical data from: {csv_file_path})
-
-
-
-        return True
-
-
-
-        except Exception as e:
-
-
-
-            logger.error(f Historical data loading error: {e})
-
-
-
-        return False
-
-
-
-
-
-
-
-
-
-
-
-# Global Lantern Core integration instance
-
-
-
-lantern_core = LanternCoreIntegration()
-
-
-
-
-
-
-
-
-
-
-
-async def start_lantern_core():
-
-
-
-    Start Lantern Core integration.global lantern_core
-
-
-
-        return await lantern_core.start_integration()
-
-
-
-
-
-
-
-
-
-
-
-async def stop_lantern_core():Stop Lantern Core integration.global lantern_core
-
-
-
-await lantern_core.stop_integration()
-
-
-
-
-
-
-
-
-
-
-
-async def get_lantern_core_status():Get Lantern Core status.global lantern_core
-
-
-
-        return await lantern_core.get_system_status()
-
-
-
-
-
-
-
-
-
-
-
-if __name__ == __main__:Test Lantern Core integration.async def test_lantern_core():
-
-
-
-        print( Testing Lantern Core Integration)print(=* 50)
-
-
-
-
-
-
-
-# Initialize integration
-
-
-
-integration = LanternCoreIntegration()
-
-
-
-
-
-
-
-# Test system status
-
-
-
-print(\n Testing system status:)
-
-
-
-status = await integration.get_system_status()
-
-
-
-print(fStatus: {json.dumps(status, indent = 2)})
-
-
-
-
-
-
-
-# Test market snapshot
-
-
-
-print(\n Testing market snapshot:)
-
-
-
-snapshot = await integration._create_enhanced_market_snapshot()
-
-
-
-if snapshot:
-
-
-
-print(Snapshot created successfully)'print(fMarket hash: {snapshot.get('market_hash', 'N/A')})'
-
-
-
-else :
-
-
-
-            print(Failed to create market snapshot)
-
-
-
-
-
-
-
-# Test trading signals
-
-
-
-print(\n Testing trading signals:)
-
-
-
-signals = await integration._generate_trading_signals()
-
-
-
-print(fGenerated {len(signals)} trading signals)
-
-
-
-
-
-
-
-for signal in signals:
-
-
-
-            print(f- {signal.side.value} {signal.quantity} BTC (strength:{signal.signal_strength}))
-
-
-
-
-
-
-
-# Run the test
-
-
-
-asyncio.run(test_lantern_core())'""'
-
-
-
-"""
-"""
+            logger.error(f"Dip re-entry failed for {symbol}: {e}")
+            return {"success": False, "error": str(e)}
+    
+    def _calculate_volume_adjustment(self, opportunity: Dict[str, Any]) -> float:
+        """Calculate volume adjustment based on opportunity metrics."""
+        base_volume = 1.0
+        
+        # Adjust based on confidence
+        confidence_factor = opportunity.get("confidence", 0.5)
+        
+        # Adjust based on expected gain
+        gain_factor = min(2.0, opportunity.get("expected_gain", 1.0))
+        
+        # Adjust based on liquidity
+        liquidity_factor = opportunity.get("liquidity_factor", 1.0)
+        
+        vol_adj = base_volume * confidence_factor * gain_factor * liquidity_factor
+        
+        return max(0.1, min(vol_adj, 10.0))  # Clamp between 0.1 and 10
+    
+    def _determine_bucket_allocation(self, opportunity: Dict[str, Any]) -> str:
+        """Determine bucket allocation for re-entry."""
+        time_factor = opportunity.get("time_factor", 0.5)
+        
+        if time_factor > 0.8:
+            return "high_priority"
+        elif time_factor > 0.5:
+            return "medium_priority"
+        else:
+            return "low_priority"
+    
+    def _store_sell_record(self, symbol: str, execution_result: Dict[str, Any]) -> None:
+        """Store sell record for future lantern scanning."""
+        sell_record = {
+            "symbol": symbol,
+            "price": execution_result.get("entry_price", 0),
+            "timestamp": execution_result.get("timestamp", time.time()),
+            "volume": execution_result.get("volume_adjusted", 1.0),
+            "liquidity_factor": 1.0,
+            "pattern_data": self._get_current_pattern(symbol, execution_result.get("entry_price", 0))
+        }
+        
+        with self.lock:
+            if symbol not in self.sell_history:
+                self.sell_history[symbol] = []
+            self.sell_history[symbol].append(sell_record)
+            
+            # Limit history
+            if len(self.sell_history[symbol]) > 100:
+                self.sell_history[symbol].pop(0)
+    
+    def get_lantern_performance(self) -> Dict[str, Any]:
+        """Get comprehensive Lantern Core performance metrics."""
+        with self.lock:
+            total_scans = len(self.scan_history)
+            total_opportunities = sum(len(scan.re_entry_opportunities) for scan in self.scan_history)
+            
+            avg_efficiency = np.mean([scan.scan_efficiency for scan in self.scan_history]) if self.scan_history else 0.0
+            
+            return {
+                "total_scans": total_scans,
+                "total_opportunities": total_opportunities,
+                "average_efficiency": avg_efficiency,
+                "time_fuel_bank": self.time_fuel_bank,
+                "symbols_tracked": len(self.tick_zones),
+                "total_zones": sum(len(zones) for zones in self.tick_zones.values()),
+                "sell_records": sum(len(records) for records in self.sell_history.values()),
+                "pattern_cache_size": len(self.pattern_cache)
+            }
+    
+    def reset_lantern_data(self) -> None:
+        """Reset all Lantern Core data."""
+        with self.lock:
+            self.tick_zones.clear()
+            self.sell_history.clear()
+            self.scan_history.clear()
+            self.pattern_cache.clear()
+            self.time_fuel_bank = 0.0
+            logger.info("Lantern Core data reset")
+    
+    def shutdown(self):
+        """Shutdown the Lantern Core Integration."""
+        self.thread_pool.shutdown(wait=True)
+        logger.info("Lantern Core Integration shutdown complete")
+
+# Global instance for easy access
+_global_lantern = None
+
+def get_lantern_core() -> LanternCoreIntegration:
+    """Get global Lantern Core instance."""
+    global _global_lantern
+    if _global_lantern is None:
+        _global_lantern = LanternCoreIntegration()
+    return _global_lantern
+
+async def main():
+    """Main function for testing Lantern Core Integration."""
+    lantern = LanternCoreIntegration()
+    
+    # Test backwards scan
+    scan_result = lantern.perform_backwards_scan("BTC/USDT")
+    print(f"Scan completed: {len(scan_result.re_entry_opportunities)} opportunities found")
+    
+    # Get performance metrics
+    performance = lantern.get_lantern_performance()
+    print("Lantern performance:", performance)
+    
+    # Shutdown
+    lantern.shutdown()
+
+if __name__ == "__main__":
+    asyncio.run(main())

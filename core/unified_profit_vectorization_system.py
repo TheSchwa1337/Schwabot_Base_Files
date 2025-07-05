@@ -26,7 +26,9 @@ import numpy as np
 
 from .clean_math_foundation import BitPhase, CleanMathFoundation, ThermalState
 from .clean_profit_vectorization import CleanProfitVectorization, ProfitVector, VectorizationMode
-from .pure_profit_calculator import PureProfitCalculator, StrategyParameters
+from .pure_profit_calculator import PureProfitCalculator, StrategyParameters, MarketData, HistoryState, ProfitResult
+from .orbital_shell_brain_system import OrbitalBRAINSystem, ShellConsensus, AltitudeVector
+from .qutrit_signal_matrix import QutritSignalMatrix, QutritState, QutritMatrixResult
 
 logger = logging.getLogger(__name__)
 
@@ -35,6 +37,7 @@ __all__ = [
     "ProfitIntegrationMode",
     "VectorizationStrategy",
     "UnifiedProfitResult",
+    "TriStateFallbackMatrix",
 ]
 
 
@@ -46,6 +49,7 @@ class ProfitIntegrationMode(Enum):
     CONSENSUS = "consensus"
     ADAPTIVE = "adaptive"
     HIERARCHICAL = "hierarchical"
+    ORBITAL_CONSENSUS = "orbital_consensus"
 
 
 class VectorizationStrategy(Enum):
@@ -72,6 +76,35 @@ class UnifiedProfitResult:
     performance_metrics: Dict[str, float] = field(default_factory=dict)
 
 
+class TriStateFallbackMatrix:
+    """Provides structured fallback vectors for different failure scenarios."""
+    
+    @staticmethod
+    def get_hold_vector() -> np.ndarray:
+        """Return [0, 0, 0] for complete hold state."""
+        return np.array([0.0, 0.0, 0.0])
+    
+    @staticmethod
+    def get_minimal_buy_vector() -> np.ndarray:
+        """Return [0, 1, 0] for minimal buy signal."""
+        return np.array([0.0, 1.0, 0.0])
+    
+    @staticmethod
+    def get_conservative_vector() -> np.ndarray:
+        """Return [0.1, 0.1, 0.1] for conservative approach."""
+        return np.array([0.1, 0.1, 0.1])
+    
+    @staticmethod
+    def get_fallback_for_error(error_type: str) -> np.ndarray:
+        """Get appropriate fallback based on error type."""
+        if "matrix" in error_type.lower() or "corrupt" in error_type.lower():
+            return TriStateFallbackMatrix.get_hold_vector()
+        elif "nan" in error_type.lower() or "invalid" in error_type.lower():
+            return TriStateFallbackMatrix.get_minimal_buy_vector()
+        else:
+            return TriStateFallbackMatrix.get_conservative_vector()
+
+
 class UnifiedProfitVectorizationSystem:
     """
     Unified profit vectorization system that integrates all components.
@@ -89,6 +122,7 @@ class UnifiedProfitVectorizationSystem:
         self.math_foundation = CleanMathFoundation()
         self.profit_calculator = PureProfitCalculator(StrategyParameters())
         self.profit_vectorizer = CleanProfitVectorization()
+        self.orbital_brain = OrbitalBRAINSystem()
 
         # System state
         self.last_calculation_time = 0.0
@@ -110,6 +144,8 @@ class UnifiedProfitVectorizationSystem:
         strategy: VectorizationStrategy = VectorizationStrategy.STANDARD,
         thermal_state: Optional[ThermalState] = None,
         bit_phase: Optional[BitPhase] = None,
+        shell_consensus: Optional[ShellConsensus] = None,
+        altitude_vector: Optional[AltitudeVector] = None,
     ) -> UnifiedProfitResult:
         """
         Calculate unified profit using all available systems.
@@ -119,6 +155,8 @@ class UnifiedProfitVectorizationSystem:
             strategy: Vectorization strategy to use
             thermal_state: Current thermal state
             bit_phase: Current bit phase
+            shell_consensus: Orbital shell consensus state
+            altitude_vector: Mathematical altitude vector
 
         Returns:
             UnifiedProfitResult with comprehensive profit analysis
@@ -149,6 +187,10 @@ class UnifiedProfitVectorizationSystem:
             elif self.integration_mode == ProfitIntegrationMode.ADAPTIVE:
                 result = self._calculate_adaptive_mode(
                     market_data, strategy, thermal_state, bit_phase
+                )
+            elif self.integration_mode == ProfitIntegrationMode.ORBITAL_CONSENSUS:
+                result = self._calculate_orbital_consensus_mode(
+                    market_data, strategy, thermal_state, bit_phase, shell_consensus, altitude_vector
                 )
             else:  # HIERARCHICAL
                 result = self._calculate_hierarchical_mode(
@@ -451,9 +493,69 @@ class UnifiedProfitVectorizationSystem:
             },
         )
 
+    def _calculate_orbital_consensus_mode(
+        self,
+        market_data: Dict[str, Any],
+        strategy: VectorizationStrategy,
+        thermal_state: ThermalState,
+        bit_phase: BitPhase,
+        shell_consensus: Optional[ShellConsensus] = None,
+        altitude_vector: Optional[AltitudeVector] = None,
+    ) -> UnifiedProfitResult:
+        """Calculate profit using orbital consensus and altitude vector."""
+        if not shell_consensus:
+            shell_consensus = self.orbital_brain.calculate_shell_consensus(market_data)
+        if not altitude_vector:
+            altitude_vector = self.orbital_brain.calculate_altitude_vector(market_data)
+
+        # Get base profit from pure calculator
+        pure_profit = self._safe_calculate_profit(market_data)
+        pure_profit_value = pure_profit.total_profit_score
+        pure_conf = pure_profit.confidence_score
+        
+        # Calculate orbital adjustment factor
+        # α·ℵₐ(t) + β·𝒞ₛ
+        alpha = 0.3
+        beta = 0.4
+        orbital_adjustment = (alpha * altitude_vector.altitude_value) + (beta * shell_consensus.consensus_score)
+
+        # Apply adjustment to profit and confidence
+        adjusted_profit = pure_profit_value * (1 + orbital_adjustment)
+        adjusted_confidence = pure_conf * shell_consensus.consensus_score
+
+        # Get profit vector for additional context
+        vector_input = {
+            "price": market_data.get("price", 0.0),
+            "volume": market_data.get("volume", 0.0),
+            "volatility": market_data.get("volatility", 0.5),
+            "signal_strength": market_data.get("signal_strength", 0.5),
+            "quantity": market_data.get("quantity", 1.0),
+            "thermal_state": thermal_state,
+            "bit_phase": bit_phase,
+        }
+        vectorization_mode = self._select_vectorization_mode(strategy)
+        profit_vector = self.profit_vectorizer.calculate_profit_vector(
+            vector_input, vectorization_mode
+        )
+
+        return UnifiedProfitResult(
+            timestamp=time.time(),
+            profit_value=adjusted_profit,
+            confidence=adjusted_confidence,
+            vector=profit_vector,
+            integration_mode=self.integration_mode,
+            strategy=strategy,
+            metadata={
+                "orbital_adjustment": orbital_adjustment,
+                "altitude_value": altitude_vector.altitude_value,
+                "consensus_score": shell_consensus.consensus_score,
+                "pure_profit": pure_profit_value,
+            },
+        )
+
     def _select_vectorization_mode(self, strategy: VectorizationStrategy) -> VectorizationMode:
-        """Select appropriate vectorization mode based on strategy."""
-        strategy_mapping = {
+        """Selects the vectorization mode based on the strategy."""
+        mode_map = {
             VectorizationStrategy.STANDARD: VectorizationMode.STANDARD,
             VectorizationStrategy.ENHANCED: VectorizationMode.ENTROPY_WEIGHTED,
             VectorizationStrategy.OPTIMIZED: VectorizationMode.ADAPTIVE,
@@ -461,7 +563,7 @@ class UnifiedProfitVectorizationSystem:
             VectorizationStrategy.BATCH: VectorizationMode.CONSERVATIVE,
         }
 
-        return strategy_mapping.get(strategy, VectorizationMode.STANDARD)
+        return mode_map.get(strategy, VectorizationMode.STANDARD)
 
     def _determine_thermal_state(self, market_data: Dict[str, Any]) -> ThermalState:
         """Determine thermal state based on market data."""
@@ -529,11 +631,14 @@ class UnifiedProfitVectorizationSystem:
             profit_value=0.0,
             confidence=0.0,
             vector=ProfitVector(
+                vector_id="fallback",
+                btc_price=market_data.get("price", 0.0),
+                volume=market_data.get("volume", 0.0),
+                profit_score=0.0,
+                confidence_score=0.0,
+                mode=VectorizationMode.STANDARD.value,
+                method="fallback",
                 timestamp=time.time(),
-                total_profit=0.0,
-                confidence=0.0,
-                mode=VectorizationMode.STANDARD,
-                components={},
                 metadata={"fallback": True},
             ),
             integration_mode=self.integration_mode,
@@ -566,6 +671,60 @@ class UnifiedProfitVectorizationSystem:
         self.performance_history.clear()
         self.calculation_count = 0
         logger.info("Performance tracking reset")
+
+    def _build_market_objects(self, data: Dict[str, Any]):
+        """Convert raw dict to MarketData and dummy HistoryState objects."""
+        ts = data.get("timestamp", time.time())
+        market_obj = MarketData(
+            timestamp=ts,
+            btc_price=float(data.get("price", data.get("btc_price", 0.0))),
+            eth_price=float(data.get("eth_price", 0.0)),
+            usdc_volume=float(data.get("volume", data.get("usdc_volume", 0.0))),
+            volatility=float(data.get("volatility", 0.5)),
+            momentum=float(data.get("momentum", 0.0)),
+            volume_profile=float(data.get("volume_profile", 0.0)),
+            on_chain_signals={},
+        )
+        history_obj = HistoryState(timestamp=ts)
+        return market_obj, history_obj
+
+    def _safe_calculate_profit(self, data: Dict[str, Any]) -> ProfitResult:
+        market_obj, history_obj = self._build_market_objects(data)
+        return self.profit_calculator.calculate_profit(market_obj, history_obj)
+
+    def _safe_calculate_profit_with_fallback(self, strategy_matrix: np.ndarray, market_data: Dict[str, Any]) -> np.ndarray:
+        """Safe profit calculation with fallback to tri-state vectors."""
+        try:
+            # Generate qutrit matrix for signal processing
+            seed = market_data.get("seed", f"profit_{time.time()}")
+            qutrit_matrix = QutritSignalMatrix(seed, market_data)
+            qutrit_result = qutrit_matrix.get_matrix_result()
+            
+            # Log qutrit state for debugging
+            logger.debug(f"Qutrit state: {qutrit_result.state} (confidence: {qutrit_result.confidence:.3f})")
+            
+            # Real profit vector calc with qutrit overlay
+            result = self._build_market_objects(market_data)
+            if result is None or np.isnan(result).any():
+                raise ValueError("Qutrit matrix result invalid.")
+            
+            # Apply qutrit state influence to result
+            if qutrit_result.state == QutritState.DEFER:
+                # Reduce signal strength for defer state
+                result = result * 0.5
+            elif qutrit_result.state == QutritState.EXECUTE:
+                # Enhance signal strength for execute state
+                result = result * 1.2
+            # RECHECK state keeps original result
+            
+            return result
+        except Exception as e:
+            logger.warning(f"[Fallback Triggered] Reason: {str(e)} — Injecting fallback profit vector.")
+            return self._generate_fallback_vector(str(e))
+
+    def _generate_fallback_vector(self, error_type: str = "unknown") -> np.ndarray:
+        """Generate tri-state fallback vector based on error type."""
+        return TriStateFallbackMatrix.get_fallback_for_error(error_type)
 
 
 def create_unified_profit_system(

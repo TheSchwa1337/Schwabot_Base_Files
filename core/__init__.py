@@ -34,6 +34,12 @@ except ImportError:
     CLEAN_PROFIT_AVAILABLE = False
 
 try:
+    from .orbital_shell_brain_system import OrbitalBRAINSystem, OrbitalShell
+    ORBITAL_BRAIN_AVAILABLE = True
+except ImportError:
+    ORBITAL_BRAIN_AVAILABLE = False
+
+try:
     from .clean_trading_pipeline import (
         CleanTradingPipeline,
         MarketData,
@@ -66,10 +72,14 @@ __all__ = [
     "StrategyBranch",
     "create_trading_pipeline",
     "run_trading_simulation",
+    # New orbital brain components
+    "OrbitalBRAINSystem",
+    "OrbitalShell",
     # Availability flags
     "CLEAN_MATH_AVAILABLE",
     "CLEAN_PROFIT_AVAILABLE",
     "CLEAN_PIPELINE_AVAILABLE",
+    "ORBITAL_BRAIN_AVAILABLE",
     # Utility functions
     "get_system_status",
     "create_clean_trading_system",
@@ -83,6 +93,7 @@ def get_system_status():
             "math_foundation": CLEAN_MATH_AVAILABLE,
             "profit_vectorization": CLEAN_PROFIT_AVAILABLE,
             "trading_pipeline": CLEAN_PIPELINE_AVAILABLE,
+            "orbital_brain_system": ORBITAL_BRAIN_AVAILABLE,
         },
         "system_operational": (
             CLEAN_MATH_AVAILABLE and CLEAN_PROFIT_AVAILABLE and CLEAN_PIPELINE_AVAILABLE
@@ -103,8 +114,13 @@ def create_clean_trading_system(initial_capital=100000.0):
     if not (CLEAN_MATH_AVAILABLE and CLEAN_PROFIT_AVAILABLE and CLEAN_PIPELINE_AVAILABLE):
         raise ImportError("Clean implementations not available")
 
-    return {
+    system = {
         "math_foundation": create_math_foundation(),
         "profit_vectorizer": create_profit_vectorizer(),
         "trading_pipeline": create_trading_pipeline(initial_capital=initial_capital),
     }
+
+    if ORBITAL_BRAIN_AVAILABLE:
+        system["orbital_brain"] = OrbitalBRAINSystem()
+
+    return system
