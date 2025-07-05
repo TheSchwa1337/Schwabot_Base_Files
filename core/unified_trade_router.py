@@ -7,8 +7,8 @@ Enhanced to work with the improved trading engine integration.
 
 import logging
 import time
-from typing import Any, Dict, List, Optional
 from dataclasses import dataclass, field
+from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -16,6 +16,7 @@ logger = logging.getLogger(__name__)
 # Fallback implementations for missing imports
 class ErrorSeverity:
     """Error severity levels."""
+
     LOW = "LOW"
     MEDIUM = "MEDIUM"
     HIGH = "HIGH"
@@ -24,12 +25,14 @@ class ErrorSeverity:
 
 class OrderSide:
     """Order side types."""
+
     BUY = "BUY"
     SELL = "SELL"
 
 
 class OrderType:
     """Order types."""
+
     MARKET = "MARKET"
     LIMIT = "LIMIT"
     STOP = "STOP"
@@ -38,6 +41,7 @@ class OrderType:
 @dataclass
 class TradeSignal:
     """Trade signal with enhanced tracking."""
+
     id: str
     asset: str
     price: float
@@ -65,13 +69,14 @@ class TradeSignal:
             "signal_strength": self.signal_strength,
             "mathematical_score": self.mathematical_score,
             "timestamp": self.timestamp,
-            "metadata": self.metadata
+            "metadata": self.metadata,
         }
 
 
 @dataclass
 class TradeExecution:
     """Trade execution with performance tracking."""
+
     id: str
     signal_id: str
     asset: str
@@ -107,25 +112,24 @@ class TradeExecution:
             "order_side": self.order_side,
             "performance_score": self.performance_score,
             "timestamp": self.timestamp,
-            "metadata": self.metadata
+            "metadata": self.metadata,
         }
 
 
 class ValidationError(Exception):
     """Validation error."""
+
     pass
 
 
 class TradingError(Exception):
     """Trading error."""
+
     pass
 
 
 def generate_trade_signal(
-    asset: str,
-    price: float,
-    volume: float,
-    metadata: Dict[str, Any]
+    asset: str, price: float, volume: float, metadata: Dict[str, Any]
 ) -> TradeSignal:
     """Generate trade signal with enhanced validation."""
     if price <= 0:
@@ -137,7 +141,8 @@ def generate_trade_signal(
 
     # Simple signal generation logic
     signal_strength = min(1.0, volume / 1000.0)  # Normalize volume
-    mathematical_score = 0.5 + (signal_strength * 0.5)  # Base score + volume factor
+    # Base score + volume factor
+    mathematical_score = 0.5 + (signal_strength * 0.5)
 
     # Determine order type and side based on metadata
     order_type = OrderType.MARKET
@@ -152,7 +157,7 @@ def generate_trade_signal(
         order_side=order_side,
         signal_strength=signal_strength,
         mathematical_score=mathematical_score,
-        metadata=metadata
+        metadata=metadata,
     )
 
 
@@ -328,12 +333,18 @@ class UnifiedTradeRouter:
                 "average_mathematical_score": round(avg_math_score, 4),
                 "average_performance_score": round(avg_performance, 4),
                 "last_signal_time": (
-time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(self.signal_history[-1].timestamp))
-                    if self.signal_history else None
+                    time.strftime(
+                        "%Y-%m-%d %H:%M:%S", time.localtime(self.signal_history[-1].timestamp)
+                    )
+                    if self.signal_history
+                    else None
                 ),
                 "last_execution_time": (
-time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(self.execution_log[-1].timestamp))
-                    if self.execution_log else None
+                    time.strftime(
+                        "%Y-%m-%d %H:%M:%S", time.localtime(self.execution_log[-1].timestamp)
+                    )
+                    if self.execution_log
+                    else None
                 ),
             }
 

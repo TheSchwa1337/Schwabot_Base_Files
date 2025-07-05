@@ -1,6 +1,5 @@
 from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 
-
 from core.risk_manager import RiskManager
 from data.temporal_intelligence_integration import TemporalIntelligenceIntegration
 from hash_recollection.entropy_tracker import EntropyTracker
@@ -155,7 +154,7 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 
 Advanced Drift Shell Engine
-    
+
     - Temporal Cohesion & Memory Validity System.Implements the complete mathematical framework for timing alignment between memory
 
 
@@ -810,7 +809,7 @@ if not timing_metrics: timing_metrics = TimingMetrics()
 
 
 timing_windows
-    
+
     = {immediate: 0.110,  # 0-110ms: Valid for immediate phase-matchconfirmation: 0.180,  # 110-180ms: Valid for AI confirmationdrift_zone: 0.300,  # 180-300ms: Drift zone, needs revalidationmacro_only: float(in),  # 300ms+: Use only long-term logic
 
 
@@ -1111,7 +1110,7 @@ Returns:
 
 
 volatility = current_context.get(volatility, 0.0)volume_spike
-    = current_context.get(volume_spike, 0.0)trend_strength 
+    = current_context.get(volume_spike, 0.0)trend_strength
     = current_context.get(trend_strength, 0.0)
 
 
@@ -1326,7 +1325,7 @@ ProfitVector with 3D directional forecast# Calculate historical signal hash grad
 
 
 if historical_signals and len(historical_signals) >= 2: recent_hash
-    = int(historical_signals[-1].get(hash,0)[:8], 16) / (2**32)prev_hash 
+    = int(historical_signals[-1].get(hash,0)[:8], 16) / (2**32)prev_hash
     = int(historical_signals[-2].get(hash,0)[:8], 16) / (2**32)
 
 
@@ -1673,7 +1672,7 @@ confidence_weights=confidence_weights,
 
 
 def unified_confidence_validator():-> Dict[str, Any]:Unified activation validator implementing the
-complete confidence equation.Implements: Confidence(t) = Validity(T) + B_total(t) + PV(t) + C(t) 
+complete confidence equation.Implements: Confidence(t) = Validity(T) + B_total(t) + PV(t) + C(t)
 _activation
 
 
@@ -1939,7 +1938,7 @@ processing.# Extract key features and convert to float16 tensor
 
 
 features
-    
+
     = [context_snapshot.get(price, 0.0),context_snapshot.get(volume, 0.0),context_snapshot.get(rsi", 50.0),context_snapshot.get(momentum", 0.0),context_snapshot.get(volatility", 0.0),context_snapshot.get(trend_strength", 0.0),
 
 

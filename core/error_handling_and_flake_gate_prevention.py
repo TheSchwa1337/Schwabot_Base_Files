@@ -28,7 +28,6 @@ import traceback
 from collections import defaultdict
 from typing import Any, Dict, List, Optional, Set, Tuple, Union
 
-
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,

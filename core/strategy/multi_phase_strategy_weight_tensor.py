@@ -1,6 +1,5 @@
 from typing import Any, Dict, List, Optional, Tuple, Union
 
-
 """
 
 
@@ -329,7 +328,7 @@ self.current_phase: MarketPhase = MarketPhase.UNKNOWN
 
 
 self.metrics: Dict[str, Any]
-    
+
     = {last_update_time: None,total_updates: 0,phase_transitions: 0,active_phase": self.current_phase.value,
 
 
@@ -637,7 +636,7 @@ self.current_phase = MarketPhase.UNKNOWN
 
 
 self.metrics
-    
+
     = {last_update_time: None,total_updates: 0,phase_transitions": 0,active_phase": self.current_phase.value,
 
 
@@ -789,7 +788,7 @@ print(tensor_manager.get_strategy_weights_for_phase(MarketPhase.CONSOLIDATION))
 
 
 performance_volatility
-    
+
     = {EMA_Cross: {pnl: 0.00,volatility": 0.005},RSI_Divergence": {pnl: 0.01,volatility": 0.006},Bollinger_Squeeze": {pnl: -0.008,volatility": 0.002},Volume_Breakout": {pnl: 0.04,volatility": 0.01},
 
 

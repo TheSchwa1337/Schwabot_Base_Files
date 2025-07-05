@@ -327,87 +327,63 @@ self.validation_results: List[SystemIntegrationValidationResult] = []
 
 
 """
-def validate_core_mathematical_foundations()
-    
-    -> SystemIntegrationValidationResult:"Validate core mathematical foundations integration.test_results = []"
 
+
+def validate_core_mathematical_foundations()
+
+    -> SystemIntegrationValidationResult: "Validate core mathematical foundations integration.test_results = []"
 
 
 start_time = time.time()
 
 
-
-
-
-
-
 try:
 
-
-
             # Test 1: MathLibV4 Integration
-
 
 
 test_start = time.time()
 
 
-
 try: mathlib = MathLibV4()
 
 
-
 test_data
-    
-    = {'prices': [100, 101, 102, 103, 104],'volumes': [1000, 1100, 1200, 1300, 1400],'timestamps': [time.time() - i for i in range(5)]
+
+    = {'prices': [100, 101, 102, 103, 104], 'volumes': [1000, 1100, 1200, 1300, 1400], 'timestamps': [time.time() - i for i in range(5)]
 
 
 
 }
 
 
-
 dlt_result = mathlib.calculate_dlt_metrics(test_data)''
-
 
 
 success = dlt_result.get('status') == 'success'
 
-
-
         except Exception as e:
 
-
-
                 success = False
-
 
 
 error_msg = str(e)
 
 
-
 else:
 
-
-
                 error_msg = None
-
-
-
-
-
 
 
 test_results.append(SystemIntegrationTestResult(
 
 
 
-test_name=MathLibV4 Integration,component=Core Mathematical Foundations,
+test_name=MathLibV4 Integration, component=Core Mathematical Foundations,
 
 
 
-success = success,
+success=success,
 
 
 
@@ -420,66 +396,44 @@ error_message=error_msg
 
 
 ))
-
-
-
-
-
 
 
 # Test 2: Unified Math System Integration
 
 
-
 test_start = time.time()
-
 
 
 try: ums = UnifiedMathSystem()
 
 
-
 system_state = ums.get_system_state()
-
 
 
 success = system_state is not None
 
-
-
         except Exception as e:
 
-
-
                 success = False
-
 
 
 error_msg = str(e)
 
 
-
 else:
 
-
-
                 error_msg = None
-
-
-
-
-
 
 
 test_results.append(SystemIntegrationTestResult(
 
 
 
-test_name=Unified Math System Integration,component=Core Mathematical Foundations,
+test_name=Unified Math System Integration, component=Core Mathematical Foundations,
 
 
 
-success = success,
+success=success,
 
 
 
@@ -494,28 +448,18 @@ error_message=error_msg
 ))
 
 
-
-
-
-
-
 # Test 3: Advanced Tensor Algebra Integration
-
 
 
 test_start = time.time()
 
 
-
 try: tensor_algebra = UnifiedTensorAlgebra()
-
-
 
                 bit_result = tensor_algebra.resolve_bit_phases(test_strategy)''
 
-
-
-                success = bit_result is not None and hasattr(bit_result, 'cycle_score')
+                success = bit_result is not None and hasattr(
+                    bit_result, 'cycle_score')
 
 
 

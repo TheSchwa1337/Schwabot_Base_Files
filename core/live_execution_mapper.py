@@ -25,9 +25,10 @@ from core.strategy.entry_exit_portal import (
     This,
     TradeExecutor,
     Union,
-    19:36:58,
-    2025-7-2,
-    ""","
+    19: 36: 58,
+    2025 - 7 - 2,
+    ",
+    """,
     -,
     automatically,
     because,

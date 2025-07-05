@@ -1,7 +1,6 @@
 import secrets
 from typing import Any, Dict, Optional, Union
 
-
 """
 
 
@@ -118,7 +117,7 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 
 Zygot-Zalgo Entropy Dual Key Gate
-    
+
     - Advanced Entropic Gate System.Implements the dual-key entropy gate system that combines Zygot and Zalgo
 
 
@@ -199,7 +198,7 @@ initial_zalgo_key if initial_zalgo_key else self._generate_key()
 
 
 self.metrics: Dict[str, Any]
-    
+
     = {total_evaluations: 0,gates_opened": 0,gates_closed": 0,last_evaluation_time": None,current_zygot_entropy": 0.0,current_zalgo_entropy": 0.0,current_zygot_key_hash: hashlib.sha256(
 
 
@@ -835,7 +834,7 @@ print(fGate Result: {result4})print(fNew Zygot Threshold:
 
 
 print(\n--- Test Case 5: Key Rotation ---)initial_zygot_hash
-    = gate.get_metrics()[current_zygot_key_hash]initial_zalgo_hash 
+    = gate.get_metrics()[current_zygot_key_hash]initial_zalgo_hash
     = gate.get_metrics()[current_zalgo_key_hash]
 
 

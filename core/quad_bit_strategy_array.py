@@ -13,14 +13,14 @@ Advanced 4-bit strategy array for multi-pair cryptocurrency trading with:
 """
 
 import asyncio
-from typing import Dict, List, Optional, Tuple, Any
-from decimal import Decimal, ROUND_DOWN
+from decimal import ROUND_DOWN, Decimal
+from typing import Any, Dict, List, Optional, Tuple
 
-from .clean_unified_math import clean_unified_math as unified_math
-from .clean_trading_pipeline import TradingDecision, TradingAction
-from .clean_profit_vectorization import ProfitVector, VectorizationMode
-from .trading_engine_integration import SchwabotTradingEngine, TradingMode
 from .ccxt_integration import CCXTIntegration
+from .clean_profit_vectorization import ProfitVector, VectorizationMode
+from .clean_trading_pipeline import TradingAction, TradingDecision
+from .clean_unified_math import clean_unified_math as unified_math
+from .trading_engine_integration import SchwabotTradingEngine, TradingMode
 
 logger = logging.getLogger(__name__)
 
@@ -101,7 +101,10 @@ class TensorBasket:
                 basket_value += prices[pair.value] * weight
         return basket_value
 
-    def get_correlation_score(self, pair1: TradingPair, pair2: TradingPair) -> float:
+    def get_correlation_score(
+    self,
+    pair1: TradingPair,
+     pair2: TradingPair) -> float:
         """Get correlation between two pairs."""
         idx1 = self.pairs.index(pair1)
         idx2 = self.pairs.index(pair2)
@@ -112,7 +115,8 @@ class TensorBasket:
 class StrategyState:
     """Current state of the 4-bit strategy array."""
     active_sequence: DriftSequence
-    pair_states: Dict[TradingPair, Dict[str, Any]] = field(default_factory=dict)
+    pair_states: Dict[TradingPair, Dict[str, Any]
+        ] = field(default_factory=dict)
     basket_states: Dict[str, TensorBasket] = field(default_factory=dict)
     last_update: float = field(default_factory=time.time)
 
@@ -148,15 +152,15 @@ class QuadBitStrategyArray:
         # Strategy parameters
         self.entry_thresholds = {
             TradingPair.BTC_USDC: 0.02,  # 2% for BTC (more conservative)
-            TradingPair.ETH_USDC: 0.025, # 2.5% for ETH
+            TradingPair.ETH_USDC: 0.025,  # 2.5% for ETH
             TradingPair.SOL_USDC: 0.03,  # 3% for SOL
-            TradingPair.XRP_USDC: 0.035, # 3.5% for XRP
+            TradingPair.XRP_USDC: 0.035,  # 3.5% for XRP
         }
 
         self.exit_thresholds = {
-            TradingPair.BTC_USDC: 0.015, # 1.5% for BTC
+            TradingPair.BTC_USDC: 0.015,  # 1.5% for BTC
             TradingPair.ETH_USDC: 0.02,  # 2% for ETH
-            TradingPair.SOL_USDC: 0.025, # 2.5% for SOL
+            TradingPair.SOL_USDC: 0.025,  # 2.5% for SOL
             TradingPair.XRP_USDC: 0.03,  # 3% for XRP
         }
 
@@ -173,7 +177,8 @@ class QuadBitStrategyArray:
             [0.5, 0.6, 0.7, 1.0],  # XRP correlations
         ])
 
-        volatility_vector = np.array([0.02, 0.025, 0.03, 0.035])  # Historical volatilities
+        volatility_vector = np.array(
+            [0.02, 0.025, 0.03, 0.035])  # Historical volatilities
 
         self.state.basket_states["main"] = TensorBasket(
             pairs=all_pairs,
@@ -198,7 +203,11 @@ class QuadBitStrategyArray:
 
         logger.info("Tensor baskets initialized")
 
-def calculate_4bit_strategy(self, pair: TradingPair, market_data: Dict[str, Any]) -> DriftSequence:
+
+def calculate_4bit_strategy(self,
+    pair: TradingPair,
+    market_data: Dict[str,
+     Any]) -> DriftSequence:
         """Calculate 4-bit strategy based on market conditions."""
         # Bit 0: Entry/Exit timing (based on price momentum)
         momentum = self._calculate_momentum(market_data)
@@ -214,7 +223,8 @@ def calculate_4bit_strategy(self, pair: TradingPair, market_data: Dict[str, Any]
 
         # Bit 3: Profit optimization (based on market conditions)
         market_condition = self._assess_market_condition(market_data)
-        bit_3 = 1 if market_condition > 0.7 else 0  # Aggressive profit if good conditions
+        # Aggressive profit if good conditions
+        bit_3 = 1 if market_condition > 0.7 else 0
 
         # Combine bits to get sequence
         sequence_value = (bit_0 << 3) | (bit_1 << 2) | (bit_2 << 1) | bit_3

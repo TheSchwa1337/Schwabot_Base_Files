@@ -1,7 +1,7 @@
-    from core.secure_api_coordinator import APIProvider, SecureAPICoordinator
-    from secure_config_manager import get_secure_api_key
-    from utils.secure_config_manager import get_secure_api_key
-    import asyncio
+from core.secure_api_coordinator import APIProvider, SecureAPICoordinator
+from secure_config_manager import get_secure_api_key
+from utils.secure_config_manager import get_secure_api_key
+import asyncio
 
 import asyncio
 import hashlib
@@ -59,28 +59,15 @@ Emergency: CCXT Exchange APIs
 """
 
 
-
-
-
-
-
-
-
-
-
-
 # Import Schwabot's secure systems
 
 
 try:
 
 
-
-
 except ImportError:
 
     # Fallback for direct execution
-
 
 
 logger = logging.getLogger(__name__)
@@ -141,14 +128,18 @@ class PriceData:
 
             self.market_state_hash = self._generate_market_state_hash()
 
-    def _generate_price_hash():-> str:
+    def _generate_price_hash(): -> str:
         """Generate SHA-256 hash of price data using Schwabot's framework."""
 
-        price_data = f"{self.symbol}:{self.price}:{self.currency}:{self.timestamp}"
+        price_data = f"{
+            self.symbol}:{
+            self.price}:{
+            self.currency}:{
+                self.timestamp}"
 
         return hashlib.sha256(price_data.encode("utf-8")).hexdigest()
 
-    def _generate_market_state_hash():-> str:
+    def _generate_market_state_hash(): -> str:
         """Generate comprehensive market state hash."""
 
         market_data = {
@@ -164,7 +155,7 @@ class PriceData:
 
         return hashlib.sha256(market_json.encode("utf-8")).hexdigest()
 
-    def to_dict():-> Dict[str, Any]:
+    def to_dict(): -> Dict[str, Any]:
         """Convert to dictionary for API responses."""
 
         return {
@@ -312,7 +303,7 @@ class SchwabotPriceBridge:
 
         logger.info(" Schwabot Price Bridge initialized")
 
-    def _get_api_key():-> Optional[str]:
+    def _get_api_key(): -> Optional[str]:
         """Get API key from secure config manager."""
 
         try:
@@ -325,7 +316,7 @@ class SchwabotPriceBridge:
 
             return None
 
-    def _is_cache_valid():-> bool:
+    def _is_cache_valid(): -> bool:
         """Check if cached price data is still valid."""
 
         if symbol not in self.price_cache:
@@ -346,7 +337,7 @@ class SchwabotPriceBridge:
             "timestamp": int(time.time()),
         }
 
-    async def get_coinmarketcap_price():-> Optional[PriceData]:
+    async def get_coinmarketcap_price(): -> Optional[PriceData]:
         """Get price from CoinMarketCap API."""
 
         try:
@@ -364,17 +355,19 @@ class SchwabotPriceBridge:
             if self.api_coordinator:
 
                 response = self.api_coordinator.make_request(
-                    APIProvider.CUSTOM,
-                    f"{self.endpoints['coinmarketcap']['base_url']}{self.endpoints['coinmarketcap']['cryptocurrency_quotes']}",
-                    params={"symbol": symbol, "convert": "USD"},
-                    headers={"X-CMC_PRO_API_KEY": api_key},
-                )
+                    APIProvider.CUSTOM, f"{
+                        self.endpoints['coinmarketcap']['base_url']}{
+                        self.endpoints['coinmarketcap']['cryptocurrency_quotes']}", params={
+                        "symbol": symbol, "convert": "USD"}, headers={
+                        "X-CMC_PRO_API_KEY": api_key}, )
 
             else:
 
                 # Direct request with rate limiting
 
-                url = f"{self.endpoints['coinmarketcap']['base_url']}{self.endpoints['coinmarketcap']['cryptocurrency_quotes']}"
+                url = f"{
+                    self.endpoints['coinmarketcap']['base_url']}{
+                    self.endpoints['coinmarketcap']['cryptocurrency_quotes']}"
 
                 headers = {"X-CMC_PRO_API_KEY": api_key}
 
@@ -386,7 +379,9 @@ class SchwabotPriceBridge:
 
                         if response.status != 200:
 
-                            logger.error(f" CoinMarketCap API error: {response.status}")
+                            logger.error(
+                                f" CoinMarketCap API error: {
+                                    response.status}")
 
                             return None
 
@@ -419,7 +414,9 @@ class SchwabotPriceBridge:
                 max_supply=float(data.get("max_supply", 0)),
             )
 
-            logger.info(f" CoinMarketCap price for {symbol}: ${price_data.price:,.2f}")
+            logger.info(
+                f" CoinMarketCap price for {symbol}: ${
+                    price_data.price:,.2f}")
 
             return price_data
 
@@ -429,12 +426,14 @@ class SchwabotPriceBridge:
 
             return None
 
-    async def get_coingecko_price():-> Optional[PriceData]:
+    async def get_coingecko_price(): -> Optional[PriceData]:
         """Get price from CoinGecko API (fallback)."""
 
         try:
 
-            url = f"{self.endpoints['coingecko']['base_url']}{self.endpoints['coingecko']['simple_price']}"
+            url = f"{
+                self.endpoints['coingecko']['base_url']}{
+                self.endpoints['coingecko']['simple_price']}"
 
             params = {
                 "ids": symbol,
@@ -449,7 +448,9 @@ class SchwabotPriceBridge:
 
                     if response.status != 200:
 
-                        logger.error(f" CoinGecko API error: {response.status}")
+                        logger.error(
+                            f" CoinGecko API error: {
+                                response.status}")
 
                         return None
 
@@ -464,16 +465,17 @@ class SchwabotPriceBridge:
             coin_data = data[symbol]
 
             price_data = PriceData(
-                symbol=symbol.upper(),
-                price=float(coin_data["usd"]),
-                currency="USD",
-                timestamp=int(time.time()),
-                source="coingecko",
-                price_change_percent_24h=float(coin_data.get("usd_24h_change", 0)),
-                market_cap=float(coin_data.get("usd_market_cap", 0)),
-            )
+                symbol=symbol.upper(), price=float(
+                    coin_data["usd"]), currency="USD", timestamp=int(
+                    time.time()), source="coingecko", price_change_percent_24h=float(
+                    coin_data.get(
+                        "usd_24h_change", 0)), market_cap=float(
+                        coin_data.get(
+                            "usd_market_cap", 0)), )
 
-            logger.info(f" CoinGecko price for {symbol}: ${price_data.price:,.2f}")
+            logger.info(
+                f" CoinGecko price for {symbol}: ${
+                    price_data.price:,.2f}")
 
             return price_data
 
@@ -483,7 +485,7 @@ class SchwabotPriceBridge:
 
             return None
 
-    async def get_price():-> Optional[PriceData]:
+    async def get_price(): -> Optional[PriceData]:
         """
 
 
@@ -536,7 +538,10 @@ class SchwabotPriceBridge:
 
         # Fallback to CoinGecko
 
-        symbol_mapping = {"BTC": "bitcoin", "ETH": "ethereum", "ADA": "cardano"}
+        symbol_mapping = {
+            "BTC": "bitcoin",
+            "ETH": "ethereum",
+            "ADA": "cardano"}
 
         coingecko_symbol = symbol_mapping.get(symbol, symbol.lower())
 
@@ -552,7 +557,7 @@ class SchwabotPriceBridge:
 
         return None
 
-    async def get_multiple_prices():-> Dict[str, PriceData]:
+    async def get_multiple_prices(): -> Dict[str, PriceData]:
         """Get prices for multiple symbols."""
 
         results = {}
@@ -581,7 +586,7 @@ class SchwabotPriceBridge:
 
         return results
 
-    def get_cache_status():-> Dict[str, Any]:
+    def get_cache_status(): -> Dict[str, Any]:
         """Get cache status and statistics."""
 
         cache_info = {
@@ -611,13 +616,13 @@ class SchwabotPriceBridge:
 price_bridge = SchwabotPriceBridge()
 
 
-async def get_secure_price():-> Optional[PriceData]:
+async def get_secure_price(): -> Optional[PriceData]:
     """Global function to get secure price data."""
 
     return await price_bridge.get_price(symbol)
 
 
-async def get_multiple_secure_prices():-> Dict[str, PriceData]:
+async def get_multiple_secure_prices(): -> Dict[str, PriceData]:
     """Global function to get multiple secure prices."""
 
     return await price_bridge.get_multiple_prices(symbols)
@@ -626,7 +631,6 @@ async def get_multiple_secure_prices():-> Dict[str, PriceData]:
 if __name__ == "__main__":
 
     """Test the price bridge functionality."""
-
 
     async def test_price_bridge():
 

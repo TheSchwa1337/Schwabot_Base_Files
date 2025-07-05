@@ -30,6 +30,8 @@ from __future__ import annotations
 import asyncio
 import logging
 from typing import Any, Dict
+import time
+import json
 
 try:
     import aiohttp
@@ -410,7 +412,8 @@ class CoinGeckoHandler(BaseAPIHandler):
 
         sentiment_score = 0
 
-        # Example: Simple calculation based on trending coins and global market cap change
+        # Example: Simple calculation based on trending coins and global market
+        # cap change
 
         if "trending_coins" in parsed_data:
 

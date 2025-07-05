@@ -1,7 +1,8 @@
 import json
 import time
-from typing import List, Dict, Any, Optional
 from collections import defaultdict
+from typing import Any, Dict, List, Optional
+from dataclasses import dataclass
 
 
 @dataclass
@@ -20,13 +21,22 @@ class SoulprintRegistry:
     """
     Registry for logging and querying Schwafit triggers, profit vectors, phase/drift optimization, and cross-asset analytics.
     """
+
     def __init__(self, registry_file: Optional[str] = None):
         self.triggers: List[Dict[str, Any]] = []
         self.registry_file = registry_file
         if registry_file:
             self._load()
 
-    def log_trigger(self, asset: str, phase: float, drift: float, schwafit_info: dict, trade_result: dict, timestamp: Optional[float] = None):
+    def log_trigger(
+        self,
+        asset: str,
+        phase: float,
+        drift: float,
+        schwafit_info: dict,
+        trade_result: dict,
+        timestamp: Optional[float] = None,
+    ):
         """Log a trigger event (entry/exit) with all math, phase, drift, and trade outcome."""
         entry = {
             "asset": asset,
@@ -34,7 +44,7 @@ class SoulprintRegistry:
             "drift": drift,
             "schwafit_info": schwafit_info,
             "trade_result": trade_result,
-            "timestamp": timestamp or time.time()
+            "timestamp": timestamp or time.time(),
         }
         self.triggers.append(entry)
         if self.registry_file:
@@ -50,7 +60,8 @@ class SoulprintRegistry:
             "hash_id": signal_data.get("hash_id"),
             "signal_vector": signal_data.get("signal_vector"),
             "projected_gain": signal_data.get("projected_gain"),
-            "trade_details": signal_data.get("trade_details")  # Store the full signal for deep analysis
+            # Store the full signal for deep analysis
+            "trade_details": signal_data.get("trade_details"),
         }
         self.triggers.append(entry)
         if self.registry_file:
@@ -64,7 +75,9 @@ class SoulprintRegistry:
         best = max(filtered, key=lambda t: t["trade_result"].get("profit", 0))
         return best
 
-    def get_profit_vector(self, asset: str, phase: float = None, drift: float = None, window: int = 1000) -> List[float]:
+    def get_profit_vector(
+        self, asset: str, phase: float = None, drift: float = None, window: int = 1000
+    ) -> List[float]:
         """Return the rolling profit vector for a given asset/phase/drift."""
         filtered = [t for t in self.triggers if t["asset"] == asset][-window:]
         if phase is not None:
@@ -109,17 +122,15 @@ def main():
 
     # Example: Register a soulprint from a drift vector
     test_vector = {
-        'pair': 'BTC/USDC',
-        'entropy': 0.88,
-        'momentum': 0.04,
-        'volatility': 0.19,
-        'temporal_variance': 0.92
+        "pair": "BTC/USDC",
+        "entropy": 0.88,
+        "momentum": 0.04,
+        "volatility": 0.19,
+        "temporal_variance": 0.92,
     }
 
     soulprint = registry.register_soulprint(
-        vector=test_vector,
-        strategy_id='momentum_breakout',
-        confidence=0.85
+        vector=test_vector, strategy_id="momentum_breakout", confidence=0.85
     )
 
     print(f"🌀 Registered Soulprint: {soulprint}")

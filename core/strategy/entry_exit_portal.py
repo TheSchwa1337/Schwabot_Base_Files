@@ -1120,7 +1120,7 @@ signal.price})
 
 
 execution_result
-    
+
     = {status:dry_run_success,order_id:simulated_+ str(int(time.time())),executed_size": size_to_execute,price": signal.price,fees": size_to_execute * 0.001,  # Simulate 0.1% feemessage:Simulated trade execution",
 
 
@@ -1166,7 +1166,7 @@ signal.asset, signal.direction.value, size_to_execute, signal.price
 
 
 execution_result
-    
+
     = {status:live_executed,order_id: order.get(order_id,N/A),executed_size": order.get(executed_size", 0.0),price": order.get(price", 0.0),fees": order.get(fees", 0.0),message":Live trade execution",
 
 

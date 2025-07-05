@@ -10,10 +10,11 @@ and bit-level optimization in trading systems.
 import datetime
 import logging
 import time
-import numpy as np
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Dict, List, Optional, Tuple, Any
+from typing import Any, Dict, List, Optional, Tuple
+
+import numpy as np
 
 # Import clean math system
 try:
@@ -52,6 +53,7 @@ except ImportError:
 
 class ZBEMode(Enum):
     """ZBE operation modes."""
+
     IDLE = "idle"
     BIT_OPTIMIZATION = "bit_optimization"
     MEMORY_MANAGEMENT = "memory_management"
@@ -64,6 +66,7 @@ class ZBEMode(Enum):
 @dataclass
 class ZBEBitData:
     """ZBE bit-level optimization data."""
+
     timestamp: float
     bit_efficiency: float
     memory_bandwidth: float
@@ -77,6 +80,7 @@ class ZBEBitData:
 @dataclass
 class ZBEMemoryData:
     """ZBE memory management data."""
+
     timestamp: float
     memory_efficiency: float
     cache_efficiency: float
@@ -152,7 +156,7 @@ class ZBECore:
         computational_load: float,
         memory_usage: float,
         cache_usage: float,
-        register_usage: float
+        register_usage: float,
     ) -> ZBEBitData:
         """
         Calculate ZBE bit-level efficiency.
@@ -169,7 +173,7 @@ class ZBECore:
         try:
             # Calculate bit efficiency based on usage patterns
             base_efficiency = self.ZBE_CONSTANTS["BIT_EFFICIENCY_BASE"]
-            
+
             # Efficiency decreases with high usage
             load_factor = 1.0 - (computational_load * 0.3)
             memory_factor = 1.0 - (memory_usage * 0.2)
@@ -177,19 +181,25 @@ class ZBECore:
             register_factor = 1.0 - (register_usage * 0.1)
 
             # Overall bit efficiency
-            bit_efficiency = base_efficiency * load_factor * memory_factor * cache_factor * register_factor
+            bit_efficiency = (
+                base_efficiency * load_factor * memory_factor * cache_factor * register_factor
+            )
 
             # Calculate memory bandwidth (inverse relationship with usage)
             memory_bandwidth = self.ZBE_CONSTANTS["MEMORY_BANDWIDTH_MAX"] * (1.0 - memory_usage)
 
             # Calculate cache hit rate (optimal at moderate usage)
-            cache_hit_rate = self.ZBE_CONSTANTS["CACHE_HIT_RATE_TARGET"] * (1.0 - abs(cache_usage - 0.5))
+            cache_hit_rate = self.ZBE_CONSTANTS["CACHE_HIT_RATE_TARGET"] * (
+                1.0 - abs(cache_usage - 0.5)
+            )
 
             # Calculate register utilization (optimal at high usage)
             register_utilization = self.ZBE_CONSTANTS["REGISTER_UTILIZATION_MAX"] * register_usage
 
             # Calculate computational density
-            computational_density = self.ZBE_CONSTANTS["COMPUTATIONAL_DENSITY_BASE"] * computational_load
+            computational_density = (
+                self.ZBE_CONSTANTS["COMPUTATIONAL_DENSITY_BASE"] * computational_load
+            )
 
             # Calculate bit throughput
             bit_throughput = self.ZBE_CONSTANTS["BIT_THROUGHPUT_MAX"] * bit_efficiency
@@ -209,18 +219,20 @@ class ZBECore:
                     "memory_usage": memory_usage,
                     "cache_usage": cache_usage,
                     "register_usage": register_usage,
-                }
+                },
             )
 
             # Update bit state
-            self.bit_state.update({
-                "current_efficiency": bit_efficiency,
-                "memory_bandwidth": memory_bandwidth,
-                "cache_hit_rate": cache_hit_rate,
-                "register_utilization": register_utilization,
-                "computational_density": computational_density,
-                "bit_throughput": bit_throughput,
-            })
+            self.bit_state.update(
+                {
+                    "current_efficiency": bit_efficiency,
+                    "memory_bandwidth": memory_bandwidth,
+                    "cache_hit_rate": cache_hit_rate,
+                    "register_utilization": register_utilization,
+                    "computational_density": computational_density,
+                    "bit_throughput": bit_throughput,
+                }
+            )
 
             # Store in history
             self.bit_history.append(bit_data)
@@ -240,15 +252,11 @@ class ZBECore:
                 register_utilization=0.0,
                 computational_density=0.0,
                 bit_throughput=0.0,
-                metadata={"error": str(e)}
+                metadata={"error": str(e)},
             )
 
     def calculate_memory_efficiency(
-        self,
-        memory_load: float,
-        cache_size: float,
-        memory_latency: float,
-        bandwidth_usage: float
+        self, memory_load: float, cache_size: float, memory_latency: float, bandwidth_usage: float
     ) -> Optional[ZBEMemoryData]:
         """
         Calculate ZBE memory efficiency.
@@ -272,18 +280,20 @@ class ZBECore:
             cache_efficiency = 1.0 - abs(cache_size - optimal_cache_size) / optimal_cache_size
 
             # Calculate memory latency (lower is better)
-            latency_efficiency = self.ZBE_CONSTANTS["MEMORY_LATENCY_MIN"] / max(memory_latency, 0.001)
+            latency_efficiency = self.ZBE_CONSTANTS["MEMORY_LATENCY_MIN"] / max(
+                memory_latency, 0.001
+            )
 
             # Calculate bandwidth utilization (optimal at moderate usage)
             bandwidth_efficiency = 1.0 - abs(bandwidth_usage - 0.7)  # Optimal at 70%
 
             # Calculate memory throughput
             memory_throughput = (
-                memory_efficiency * 
-                cache_efficiency * 
-                latency_efficiency * 
-                bandwidth_efficiency * 
-                self.ZBE_CONSTANTS["MEMORY_BANDWIDTH_MAX"]
+                memory_efficiency
+                * cache_efficiency
+                * latency_efficiency
+                * bandwidth_efficiency
+                * self.ZBE_CONSTANTS["MEMORY_BANDWIDTH_MAX"]
             )
 
             memory_data = ZBEMemoryData(
@@ -299,17 +309,19 @@ class ZBECore:
                     "memory_load": memory_load,
                     "cache_size": cache_size,
                     "bandwidth_usage": bandwidth_usage,
-                }
+                },
             )
 
             # Update memory state
-            self.memory_state.update({
-                "memory_efficiency": memory_efficiency,
-                "cache_efficiency": cache_efficiency,
-                "memory_latency": memory_latency,
-                "bandwidth_utilization": bandwidth_usage,
-                "memory_throughput": memory_throughput,
-            })
+            self.memory_state.update(
+                {
+                    "memory_efficiency": memory_efficiency,
+                    "cache_efficiency": cache_efficiency,
+                    "memory_latency": memory_latency,
+                    "bandwidth_utilization": bandwidth_usage,
+                    "memory_throughput": memory_throughput,
+                }
+            )
 
             # Store in history
             self.memory_history.append(memory_data)
@@ -339,10 +351,10 @@ class ZBECore:
 
             # Calculate overall optimization
             overall_optimization = (
-                bit_optimization * 0.4 +
-                memory_optimization * 0.3 +
-                cache_optimization * 0.2 +
-                register_optimization * 0.1
+                bit_optimization * 0.4
+                + memory_optimization * 0.3
+                + cache_optimization * 0.2
+                + register_optimization * 0.1
             )
 
             # Calculate precision factor
@@ -350,9 +362,9 @@ class ZBECore:
 
             # Calculate energy efficiency
             energy_efficiency = (
-                self.bit_state["bit_efficiency"] * 
-                self.memory_state["memory_efficiency"] * 
-                self.ZBE_CONSTANTS["BIT_ENERGY_CONSTANT"]
+                self.bit_state["bit_efficiency"]
+                * self.memory_state["memory_efficiency"]
+                * self.ZBE_CONSTANTS["BIT_ENERGY_CONSTANT"]
             )
 
             optimization_factors = {
@@ -383,9 +395,14 @@ class ZBECore:
 
             # Update average efficiency
             if self.bit_history:
-                self.average_efficiency = np.mean([data.bit_efficiency for data in self.bit_history[-100:]])
+                self.average_efficiency = np.mean(
+                    [data.bit_efficiency for data in self.bit_history[-100:]]
+                )
 
-            self.logger.debug(f"Computational optimization: {overall_optimization:.3f}")
+            self.logger.debug(
+                f"Computational optimization: {
+                    overall_optimization:.3f}"
+            )
             return optimization_factors
 
         except Exception as e:
@@ -401,7 +418,7 @@ class ZBECore:
                 "computational_density": 1.0,
                 "bit_throughput": 1000.0,
                 "memory_throughput": 100.0,
-                "error": str(e)
+                "error": str(e),
             }
 
     def calculate_bit_throughput(self, computational_load: float) -> float:
@@ -417,13 +434,13 @@ class ZBECore:
         try:
             # Base throughput
             base_throughput = self.ZBE_CONSTANTS["BIT_THROUGHPUT_MAX"]
-            
+
             # Efficiency factor based on load
             efficiency_factor = 1.0 - (computational_load * 0.5)  # Peak at 50% load
-            
+
             # Calculate throughput
             throughput = base_throughput * efficiency_factor * self.bit_state["current_efficiency"]
-            
+
             return throughput
 
         except Exception as e:
@@ -444,14 +461,14 @@ class ZBECore:
         try:
             # Optimal cache usage is around 70%
             usage_efficiency = 1.0 - abs(cache_usage - 0.7)
-            
+
             # Size efficiency (optimal around 1000MB)
             optimal_size = 1000.0
             size_efficiency = 1.0 - abs(cache_size - optimal_size) / optimal_size
-            
+
             # Overall cache efficiency
             cache_efficiency = usage_efficiency * size_efficiency
-            
+
             return max(0.0, min(1.0, cache_efficiency))
 
         except Exception as e:
@@ -478,7 +495,7 @@ class ZBECore:
                 utilization = 0.6
             else:
                 utilization = register_usage * 0.5
-            
+
             return utilization
 
         except Exception as e:
@@ -505,7 +522,7 @@ class ZBECore:
                 "bit_history": len(self.bit_history),
                 "memory_history": len(self.memory_history),
                 "optimization_history": len(self.optimization_history),
-            }
+            },
         }
 
     def reset_state(self) -> None:
@@ -518,7 +535,7 @@ class ZBECore:
             "computational_density": 0.0,
             "bit_throughput": 0.0,
         }
-        
+
         self.memory_state = {
             "memory_efficiency": 0.0,
             "cache_efficiency": 0.0,
@@ -526,11 +543,11 @@ class ZBECore:
             "bandwidth_utilization": 0.0,
             "memory_throughput": 0.0,
         }
-        
+
         self.bit_history.clear()
         self.memory_history.clear()
         self.optimization_history.clear()
-        
+
         self.total_optimizations = 0
         self.average_efficiency = 0.0
         self.last_optimization_time = None
@@ -557,7 +574,10 @@ def test_zbe_core():
 
     # Test computational optimization
     optimization_factors = core.get_computational_optimization()
-    print(f"Overall Optimization: {optimization_factors['overall_optimization']:.3f}")
+    print(
+        f"Overall Optimization: {
+            optimization_factors['overall_optimization']:.3f}"
+    )
 
     # Test bit throughput
     throughput = core.calculate_bit_throughput(0.5)
@@ -579,4 +599,4 @@ def test_zbe_core():
 
 
 if __name__ == "__main__":
-    test_zbe_core() 
+    test_zbe_core()

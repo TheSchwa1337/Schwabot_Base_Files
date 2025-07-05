@@ -7,7 +7,7 @@ echo previous profitable logic by replaying or biasing decisions based
 on past successful lattice states.
 """
 
-from typing import Any, Dict, Optional, List
+from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -36,7 +36,8 @@ class LatticeState:
 class ProfitMemoryEcho:
     """Manages the recursive memory projection to leverage past profitable lattice states."""
 
-    def __init__(self, memory_offset: int = 72, volatility_scalar: float = 1.0):
+    def __init__(self, memory_offset: int = 72,
+                 volatility_scalar: float = 1.0):
         """Initializes the ProfitMemoryEcho.
 
         Args:
@@ -54,7 +55,9 @@ class ProfitMemoryEcho:
             "average_projection_confidence": 0.0,
         }
 
-logger.info(f"ProfitMemoryEcho initialized with offset={memory_offset}, scalar={volatility_scalar}")
+
+logger.info(
+    f"ProfitMemoryEcho initialized with offset={memory_offset}, scalar={volatility_scalar}")
 
     def store_lattice_state(self, tick_id: int, lattice_value: float, profit_change: float,
                            metadata: Dict[str, Any] = None) -> None:
@@ -82,7 +85,8 @@ logger.info(f"ProfitMemoryEcho initialized with offset={memory_offset}, scalar={
         except Exception as e:
             logger.error(f"Failed to store lattice state: {e}")
 
-    def retrieve_memory_projection(self, current_tick_id: int) -> Optional[MemoryProjection]:
+    def retrieve_memory_projection(
+    self, current_tick_id: int) -> Optional[MemoryProjection]:
         """Retrieves the recursive memory projection (F(t)) based on the memory offset.
 
         F(t) = L(t - τ) + ΔL / σ
@@ -107,14 +111,16 @@ logger.info(f"ProfitMemoryEcho initialized with offset={memory_offset}, scalar={
                 l_t_minus_tau = historical_data.lattice_value
                 delta_l = historical_data.profit_change
 
-                # Ensure volatility_scalar is not zero to avoid division by zero
+                # Ensure volatility_scalar is not zero to avoid division by
+                # zero
                 effective_volatility_scalar = max(self.volatility_scalar, 1e-9)
 
                 # Calculate projected value: F(t) = L(t-τ) + ΔL/σ
                 f_e_t = l_t_minus_tau + (delta_l / effective_volatility_scalar)
 
                 # Calculate confidence based on historical data quality
-                confidence = self._calculate_projection_confidence(historical_data)
+                confidence = self._calculate_projection_confidence(
+                    historical_data)
 
                 self.metrics["successful_echoes"] += 1
                 self._update_average_confidence(confidence)
@@ -134,7 +140,8 @@ logger.info(f"ProfitMemoryEcho initialized with offset={memory_offset}, scalar={
                 )
             else:
                 self.metrics["failed_projections"] += 1
-                logger.debug(f"No historical data found for tick {historical_tick_id}")
+                logger.debug(
+    f"No historical data found for tick {historical_tick_id}")
                 return None
 
         except Exception as e:
@@ -142,13 +149,15 @@ logger.info(f"ProfitMemoryEcho initialized with offset={memory_offset}, scalar={
             logger.error(f"Memory projection failed: {e}")
             return None
 
-    def _calculate_projection_confidence(self, historical_data: LatticeState) -> float:
+    def _calculate_projection_confidence(
+    self, historical_data: LatticeState) -> float:
         """Calculate confidence in the memory projection."""
         try:
             # Base confidence on data quality
             confidence = 0.5  # Base confidence
 
-            # Adjust based on profit change magnitude (larger changes = higher confidence)
+            # Adjust based on profit change magnitude (larger changes = higher
+            # confidence)
             profit_magnitude = abs(historical_data.profit_change)
             if profit_magnitude > 0.1:
                 confidence += 0.3
@@ -219,7 +228,8 @@ logger.info(f"ProfitMemoryEcho initialized with offset={memory_offset}, scalar={
             historical_tick_id = current_tick_id - offset
             if historical_tick_id in self.lattice_history:
                 historical_data = self.lattice_history[historical_tick_id]
-                confidence = self._calculate_projection_confidence(historical_data)
+                confidence = self._calculate_projection_confidence(
+                    historical_data)
 
                 if confidence > best_confidence:
                     best_confidence = confidence

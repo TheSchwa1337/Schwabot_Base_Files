@@ -5,8 +5,13 @@ Warp Sync Core Stub Implementation
 Minimal stub for WarpSyncCore to satisfy module imports and basic instantiation.
 """
 
+import time
+import math
+
 from typing import Any, Dict, Optional
+
 from core.clean_unified_math import clean_unified_math
+
 
 class WarpSyncCore:
     """Stub WarpSyncCore for timing and decay."""
@@ -25,7 +30,7 @@ class WarpSyncCore:
         exp_decay = math.exp(-self.lambda_decay * t)
         variance_ratio = self.sigma_sq / abs(delta_psi)
         omega = clean_unified_math.multiply(exp_decay, variance_ratio)
-        self.metrics['current_warp_momentum'] = omega
+        self.metrics["current_warp_momentum"] = omega
         return omega
 
     def quantum_weighted_strategy_evaluation(
@@ -37,15 +42,18 @@ class WarpSyncCore:
         return {
             "quantum_score": result.get("combined_score", 0.0),
             "is_stable": result.get("combined_score", 0.0) > 0.5,
-            "components": result
+            "components": result,
         }
+
 
 # Global stub instance
 warp_sync_core = WarpSyncCore()
 
+
 def test_warp_sync_core():
     """Test function for WarpSyncCore stub."""
     print("WarpSyncCore stub test passed")
+
 
 if __name__ == "__main__":
     test_warp_sync_core()

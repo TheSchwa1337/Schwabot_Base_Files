@@ -8,6 +8,7 @@ This module is crucial for dynamic bitwise strategy adjustment.
 """
 
 import logging
+import hashlib
 from enum import Enum
 from typing import Any, Dict, NamedTuple, Optional
 
@@ -73,7 +74,8 @@ class PhaseBitIntegration:
         try:
             # Generate context hash if not provided
             if context_hash is None:
-                context_data = f"{resolution_mode}_{self.resolution_count}_{kwargs}"
+                context_data = f"{resolution_mode}_{
+                    self.resolution_count}_{kwargs}"
                 context_hash = hashlib.md5(context_data.encode()).hexdigest()
 
             self.resolution_count += 1

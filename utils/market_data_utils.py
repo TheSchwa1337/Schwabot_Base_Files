@@ -1,23 +1,22 @@
-    from price_bridge import get_secure_price
-    from secure_config_manager import get_secure_api_key
+from price_bridge import get_secure_price
+from secure_config_manager import get_secure_api_key
 
-    from utils.price_bridge import (
-        Any,
-        Dict,
-        List,
-        Optional,
-        asyncio,
-        from,
-        get_secure_api_key,
-        get_secure_price,
-        hashlib,
-        import,
-        requests,
-        rt,
-        typing,
-        utils.secure_config_manager,
-    )
-
+from utils.price_bridge import (
+    Any,
+    Dict,
+    List,
+    Optional,
+    asyncio,
+    from,
+    get_secure_api_key,
+    get_secure_price,
+    hashlib,
+    import,
+    requests,
+    rt,
+    typing,
+    utils.secure_config_manager,
+)
 
 
 except ImportError:
@@ -25,9 +24,7 @@ except ImportError:
     # Fallback for direct execution
 
 
-
-
-def pull_news_headlines():-> List[str]:
+def pull_news_headlines(): -> List[str]:
     """
 
 
@@ -62,7 +59,8 @@ def pull_news_headlines():-> List[str]:
 
         articles = response.json().get("articles", [])
 
-        return [article["title"] for article in articles][:5]  # Get top 5 headlines
+        return [article["title"]
+                for article in articles][:5]  # Get top 5 headlines
 
     except requests.exceptions.RequestException as e:
 
@@ -71,7 +69,7 @@ def pull_news_headlines():-> List[str]:
         return []
 
 
-def get_btc_price():-> float:
+def get_btc_price(): -> float:
     """
 
 
@@ -115,7 +113,7 @@ def get_btc_price():-> float:
         return 0.0
 
 
-def get_secure_price_data():-> Optional[Dict[str, Any]]:
+def get_secure_price_data(): -> Optional[Dict[str, Any]]:
     """
 
 
@@ -155,7 +153,7 @@ def get_secure_price_data():-> Optional[Dict[str, Any]]:
         return None
 
 
-def hash_market_state():-> str:
+def hash_market_state(): -> str:
     """
 
 
@@ -175,7 +173,7 @@ def hash_market_state():-> str:
     return hashlib.sha256(text_to_hash.encode("utf-8")).hexdigest()
 
 
-def create_market_snapshot():-> Optional[Dict[str, Any]]:
+def create_market_snapshot(): -> Optional[Dict[str, Any]]:
     """
 
 
@@ -272,7 +270,8 @@ def display_market_snapshot(snapshot: Dict[str, Any]):
 
     if price_data.get("market_state_hash"):
 
-        print(f"  Market State Hash: {price_data['market_state_hash'][:16]}...")
+        print(
+            f"  Market State Hash: {price_data['market_state_hash'][:16]}...")
 
     # Display market hash
 
@@ -283,7 +282,7 @@ def display_market_snapshot(snapshot: Dict[str, Any]):
     print("\n" + "=" * 60)
 
 
-async def create_async_market_snapshot():-> Optional[Dict[str, Any]]:
+async def create_async_market_snapshot(): -> Optional[Dict[str, Any]]:
     """
 
 

@@ -2,16 +2,18 @@
 # import numpy as np  # unused
 # from scipy.spatial.distance import cosine  # unused
 
+
 # Add stub class to fix import errors
 class BasketVectorLinker:
     """Stub BasketVectorLinker class to fix import errors."""
+
     def __init__(self):
         self.strategy_vectors = {}
         self.metrics = {
             "total_resolutions": 0,
             "successful_matches": 0,
             "no_match_found": 0,
-            "last_resolution_time": None
+            "last_resolution_time": None,
         }
 
     def register_strategy_vector(self, strategy_id, vector_signature):
@@ -22,6 +24,7 @@ class BasketVectorLinker:
         """Resolve strategy basket."""
         self.metrics["total_resolutions"] += 1
         return None, 0.0
+
 
 """
 

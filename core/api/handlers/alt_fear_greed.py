@@ -61,13 +61,17 @@ class FearGreedHandler(BaseAPIHandler):
                     )
                 else:
                     raise RuntimeError("Neither aiohttp nor requests is available for HTTP calls")
-                    
+
             except Exception as exc:
                 logger.warning(f"Attempt {attempt + 1}/{self.MAX_RETRIES} failed: {exc}")
                 if attempt < self.MAX_RETRIES - 1:
                     await asyncio.sleep(self.RETRY_DELAY * (attempt + 1))
                 else:
-                    logger.error(f"All {self.MAX_RETRIES} attempts failed for {self.NAME}")
+                    logger.error(
+                        f"All {
+                            self.MAX_RETRIES} attempts failed for {
+                            self.NAME}"
+                    )
                     raise
 
     async def _parse_raw(self, raw: Any) -> Dict[str, Any]:
@@ -75,32 +79,30 @@ class FearGreedHandler(BaseAPIHandler):
         try:
             if not isinstance(raw, dict) or "data" not in raw:
                 raise ValueError("Invalid API response structure")
-                
+
             data = raw["data"][0]
-            
+
             # Validate required fields
             required_fields = ["value", "value_classification", "timestamp"]
             for field in required_fields:
                 if field not in data:
                     raise ValueError(f"Missing required field: {field}")
-            
+
             parsed_data = {
                 "value": int(data["value"]),
                 "value_classification": data.get("value_classification", "Unknown"),
                 "timestamp": int(data["timestamp"]),
-                "time_until_update": int(
-                    raw.get("metadata", {}).get("time_until_update", 0)
-                ),
+                "time_until_update": int(raw.get("metadata", {}).get("time_until_update", 0)),
                 "normalized_value": self._normalize_fear_greed_value(int(data["value"])),
                 "sentiment_score": self._calculate_sentiment_score(int(data["value"])),
-                "cache_timestamp": int(time.time())
+                "cache_timestamp": int(time.time()),
             }
-            
+
             # Set cache expiry
             self._cache_expiry_time = time.time() + self.CACHE_EXPIRY
-            
+
             return parsed_data
-            
+
         except Exception as exc:
             logger.error(f"{self.NAME}: failed to parse payload - {exc}")
             # Return a fallback response structure
@@ -133,12 +135,12 @@ class FearGreedHandler(BaseAPIHandler):
     async def get_data(self, force_refresh: bool = False) -> Dict[str, Any]:
         """Return cached data, refreshing from the remote API if needed."""
         current_time = time.time()
-        
+
         # Check cache expiry
         if current_time > self._cache_expiry_time:
             force_refresh = True
             logger.debug(f"{self.NAME}: Cache expired, forcing refresh")
-        
+
         if force_refresh or (current_time - self._last_refresh > self.REFRESH_INTERVAL):
             try:
                 raw = await self._fetch_raw()
@@ -163,7 +165,7 @@ class FearGreedHandler(BaseAPIHandler):
                         "normalized_value": 0.5,
                         "sentiment_score": 0.0,
                         "cache_timestamp": int(current_time),
-                        "error": "No data available"
+                        "error": "No data available",
                     }
 
         return await self._read_cache()  # Return cached data if no refresh needed

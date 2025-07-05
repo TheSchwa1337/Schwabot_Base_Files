@@ -7,19 +7,20 @@ for the Schwabot trading system.
 """
 
 import logging
-from enum import Enum
-from dataclasses import dataclass, field
-import time
 import random
-import numpy as np
+import time
+from dataclasses import dataclass, field
+from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
 
+import numpy as np
 
 logger = logging.getLogger(__name__)
 
 
 class RiskLevel(Enum):
     """Risk level enumeration."""
+
     LOW = "low"
     MEDIUM = "medium"
     HIGH = "high"
@@ -29,6 +30,7 @@ class RiskLevel(Enum):
 @dataclass
 class RiskMetric:
     """Represents a risk metric."""
+
     name: str
     value: float
     threshold: float
@@ -40,6 +42,7 @@ class RiskMetric:
 @dataclass
 class RiskAssessment:
     """Complete risk assessment result."""
+
     overall_risk_score: float
     risk_level: RiskLevel
     metrics: Dict[str, RiskMetric]
@@ -100,7 +103,9 @@ class RiskManager:
             "leverage", 1.0, self.config["max_leverage"], "green"
         )
 
-    def assess_risk(self, portfolio_value: float, asset_exposures: Dict[str, float]) -> RiskAssessment:
+    def assess_risk(
+        self, portfolio_value: float, asset_exposures: Dict[str, float]
+    ) -> RiskAssessment:
         """Assess overall portfolio risk based on current state.
 
         Args:
@@ -113,7 +118,8 @@ class RiskManager:
         start_time = time.time()
         self.assessment_stats["total_assessments"] += 1
 
-        # Calculate drawdown (simplified - in real implementation would use historical data)
+        # Calculate drawdown (simplified - in real implementation would use
+        # historical data)
         current_drawdown = self._calculate_drawdown(portfolio_value)
         self.risk_metrics["drawdown"].value = current_drawdown
         self.risk_metrics["drawdown"].status = self._get_status(
@@ -150,7 +156,7 @@ class RiskManager:
             overall_risk_score=risk_score,
             risk_level=risk_level,
             metrics=self.risk_metrics.copy(),
-            recommendations=recommendations
+            recommendations=recommendations,
         )
 
     def _calculate_drawdown(self, portfolio_value: float) -> float:
@@ -224,8 +230,9 @@ class RiskManager:
         else:
             return "green"
 
-    def adjust_position_size(self, proposed_size: float, confidence: float,
-                           current_price: float) -> float:
+    def adjust_position_size(
+        self, proposed_size: float, confidence: float, current_price: float
+    ) -> float:
         """Adjust proposed position size based on risk assessment.
 
         Args:
@@ -243,14 +250,16 @@ class RiskManager:
         if self.risk_metrics["drawdown"].status == "red":
             adjusted_size *= 0.5  # Halve position size
             logger.warning(
-                f"Reducing position due to high drawdown risk. New size: {adjusted_size:.4f}"
+                f"Reducing position due to high drawdown risk. New size: {
+                    adjusted_size:.4f}"
             )
 
         # Reduce size if high exposure risk
         if self.risk_metrics["exposure_btc"].status == "red":
             adjusted_size *= 0.7  # Reduce by 30%
             logger.warning(
-                f"Reducing position due to high exposure risk. New size: {adjusted_size:.4f}"
+                f"Reducing position due to high exposure risk. New size: {
+                    adjusted_size:.4f}"
             )
 
         # Adjust based on confidence
@@ -342,14 +351,17 @@ class RiskManager:
     def get_risk_summary(self) -> Dict[str, Any]:
         """Get summary of current risk state."""
         return {
-            "risk_metrics": {name: {
-                "value": metric.value,
-                "threshold": metric.threshold,
-                "status": metric.status
-            } for name, metric in self.risk_metrics.items()},
+            "risk_metrics": {
+                name: {
+                    "value": metric.value,
+                    "threshold": metric.threshold,
+                    "status": metric.status,
+                }
+                for name, metric in self.risk_metrics.items()
+            },
             "assessment_stats": self.assessment_stats,
             "last_assessment": self.last_assessment_time,
-            "config": self.config
+            "config": self.config,
         }
 
 

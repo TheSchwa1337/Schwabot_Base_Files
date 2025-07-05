@@ -12,13 +12,14 @@ from typing import Any, Dict, List, Union
 # ============================================
 
 
-# 
+#
 
 
 # Clean mathematical framework that integrates with the brain trading system.
 
 
-# Provides mathematical operations, optimization algorithms, and integration bridges.
+# Provides mathematical operations, optimization algorithms, and
+# integration bridges.
 
 
 # Configure logging
@@ -27,8 +28,9 @@ from typing import Any, Dict, List, Union
 import logging
 import math
 import time
-import numpy as np
 from dataclasses import dataclass, field
+
+import numpy as np
 
 logger = logging.getLogger(__name__)
 

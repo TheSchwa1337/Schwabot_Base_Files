@@ -8,10 +8,10 @@ Provides interface for executing trades through various exchanges.
 import asyncio
 import logging
 import time
-from decimal import Decimal
-from typing import Any, Dict, Optional
 from dataclasses import dataclass
+from decimal import Decimal
 from enum import Enum
+from typing import Any, Dict, Optional
 
 try:
     import ccxt.async_support as ccxt
@@ -90,21 +90,23 @@ class CCXTTradingExecutor:
         }
         self.price_data: Dict[TradingPair, Decimal] = {}
         self.monitoring_active = False
-        
+
         if ccxt is None:
             logger.error("CCXT not available. Install with: pip install ccxt")
             return
-            
+
         try:
             # Initialize exchange connection
             exchange_name = config.get("exchange", "binance")
-            self.exchange = getattr(ccxt, exchange_name)({
-                'apiKey': config.get('apiKey'),
-                'secret': config.get('secret'),
-                'sandbox': config.get('sandbox', True),
-                'enableRateLimit': config.get('enableRateLimit', True),
-                'timeout': config.get('timeout', 30000)
-            })
+            self.exchange = getattr(ccxt, exchange_name)(
+                {
+                    "apiKey": config.get("apiKey"),
+                    "secret": config.get("secret"),
+                    "sandbox": config.get("sandbox", True),
+                    "enableRateLimit": config.get("enableRateLimit", True),
+                    "timeout": config.get("timeout", 30000),
+                }
+            )
             logger.info(f"CCXT Trading Executor initialized with {exchange_name}")
         except Exception as e:
             logger.error(f"Failed to initialize exchange: {e}")
@@ -114,7 +116,7 @@ class CCXTTradingExecutor:
         """Place a market buy order."""
         if not self.exchange:
             return {"error": "Exchange not initialized"}
-        
+
         try:
             order = await self.exchange.create_market_buy_order(symbol, amount)
             logger.info(f"Buy order placed: {order}")
@@ -127,7 +129,7 @@ class CCXTTradingExecutor:
         """Place a market sell order."""
         if not self.exchange:
             return {"error": "Exchange not initialized"}
-        
+
         try:
             order = await self.exchange.create_market_sell_order(symbol, amount)
             logger.info(f"Sell order placed: {order}")
@@ -140,7 +142,7 @@ class CCXTTradingExecutor:
         """Get account balance."""
         if not self.exchange:
             return {"error": "Exchange not initialized"}
-        
+
         try:
             balance = await self.exchange.fetch_balance()
             return balance
@@ -152,7 +154,7 @@ class CCXTTradingExecutor:
         """Get current ticker for symbol."""
         if not self.exchange:
             return {"error": "Exchange not initialized"}
-        
+
         try:
             ticker = await self.exchange.fetch_ticker(symbol)
             return ticker
@@ -200,7 +202,7 @@ class CCXTTradingExecutor:
         try:
             symbol = signal.target_pair.value
             amount = float(signal.quantity)
-            
+
             if self.exchange:
                 # Real exchange execution
                 order = await self.place_market_buy_order(symbol, amount)
@@ -212,20 +214,20 @@ class CCXTTradingExecutor:
                         executed=False,
                         error_message=order["error"],
                     )
-                
+
                 return ExecutionResult(
                     signal_id=signal.signal_id,
                     pair=signal.target_pair,
                     strategy=signal.ghost_route,
                     executed=True,
-                    fill_amount=Decimal(str(order.get('amount', 0))),
-                    fill_price=Decimal(str(order.get('price', 0))),
+                    fill_amount=Decimal(str(order.get("amount", 0))),
+                    fill_price=Decimal(str(order.get("price", 0))),
                     profit_realized=Decimal("0"),
                 )
             else:
                 # Simulated execution
                 return await self._simulate_buy(signal)
-                
+
         except Exception as e:
             logger.error(f"Buy execution failed: {e}")
             return ExecutionResult(
@@ -241,7 +243,7 @@ class CCXTTradingExecutor:
         try:
             symbol = signal.target_pair.value
             amount = float(signal.quantity)
-            
+
             if self.exchange:
                 # Real exchange execution
                 order = await self.place_market_sell_order(symbol, amount)
@@ -253,20 +255,20 @@ class CCXTTradingExecutor:
                         executed=False,
                         error_message=order["error"],
                     )
-                
+
                 return ExecutionResult(
                     signal_id=signal.signal_id,
                     pair=signal.target_pair,
                     strategy=signal.ghost_route,
                     executed=True,
-                    fill_amount=Decimal(str(order.get('amount', 0))),
-                    fill_price=Decimal(str(order.get('price', 0))),
+                    fill_amount=Decimal(str(order.get("amount", 0))),
+                    fill_price=Decimal(str(order.get("price", 0))),
                     profit_realized=Decimal("0"),
                 )
             else:
                 # Simulated execution
                 return await self._simulate_sell(signal)
-                
+
         except Exception as e:
             logger.error(f"Sell execution failed: {e}")
             return ExecutionResult(
@@ -283,7 +285,7 @@ class CCXTTradingExecutor:
         current_price = self.price_data.get(pair, Decimal("50000"))
         available_usdc = self.portfolio_balance.get("USDC", Decimal("0"))
         position_size = available_usdc * Decimal("0.1")
-        
+
         if position_size >= Decimal("10"):
             quantity = position_size / current_price
             self.portfolio_balance["USDC"] -= position_size
@@ -293,7 +295,7 @@ class CCXTTradingExecutor:
                 self.portfolio_balance["ETH"] += quantity
             elif pair == TradingPair.XRP_USDC:
                 self.portfolio_balance["XRP"] += quantity
-            
+
             return ExecutionResult(
                 signal_id=signal.signal_id,
                 pair=pair,
@@ -323,7 +325,7 @@ class CCXTTradingExecutor:
             asset = "ETH"
         elif pair == TradingPair.XRP_USDC:
             asset = "XRP"
-        
+
         available_quantity = self.portfolio_balance.get(asset, Decimal("0"))
         if available_quantity > Decimal("0"):
             sell_quantity = available_quantity * Decimal("0.5")
@@ -331,7 +333,7 @@ class CCXTTradingExecutor:
             self.portfolio_balance[asset] -= sell_quantity
             self.portfolio_balance["USDC"] += usdc_received
             profit = usdc_received * Decimal("0.01")
-            
+
             return ExecutionResult(
                 signal_id=signal.signal_id,
                 pair=pair,

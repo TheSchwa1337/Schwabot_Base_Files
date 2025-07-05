@@ -7,6 +7,7 @@ Minimal stub for unified trading pipeline to satisfy module imports and basic in
 
 import asyncio
 from typing import Any, Dict, Optional
+
 from core.clean_trading_pipeline import CleanTradingPipeline, MarketData
 
 logger = logging.getLogger(__name__)
@@ -19,7 +20,8 @@ class UnifiedTradingPipeline:
         """Initialize the unified trading pipeline with a real CleanTradingPipeline."""
         self.config = config
         self.pipeline = CleanTradingPipeline()
-        logger.info("UnifiedTradingPipeline initialized and linked to CleanTradingPipeline")
+        logger.info(
+            "UnifiedTradingPipeline initialized and linked to CleanTradingPipeline")
 
     def process_market_data(
         self,
@@ -31,7 +33,11 @@ class UnifiedTradingPipeline:
     ) -> Optional[Dict[str, Any]]:
         """Process market data through CleanTradingPipeline."""
         logger.debug(f"Processing market data for {symbol} at {price}")
-        md = MarketData(symbol=symbol, price=price, volume=volume, timestamp=time.time())
+        md = MarketData(
+            symbol=symbol,
+            price=price,
+            volume=volume,
+            timestamp=time.time())
         decision = asyncio.get_event_loop().run_until_complete(
             self.pipeline.process_market_data(md)
         )
@@ -39,6 +45,8 @@ class UnifiedTradingPipeline:
 
 
 def create_unified_trading_pipeline(config: Optional[Dict[str, Any]] = None)
-    -> UnifiedTradingPipeline:
+
+
+-> UnifiedTradingPipeline:
     """Factory function to create a UnifiedTradingPipeline instance."""
     return UnifiedTradingPipeline(config)

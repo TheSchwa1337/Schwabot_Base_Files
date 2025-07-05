@@ -1,6 +1,5 @@
 """API enumeration types."""
 
-
 """API System Enums ====================
 
 
@@ -14,6 +13,8 @@ Contains all enumerations for the Schwabot live API integration system.
 
 
 """
+
+from enum import Enum
 
 
 # =====================================================================

@@ -1,6 +1,5 @@
 from typing import Any, Callable, Dict, List, Optional, Tuple
 
-
 """
 
 
@@ -219,7 +218,7 @@ class StateType(Enum):
 
 
 class TransitionTrigger(Enum):Triggers for state transitions.ENTROPY_THRESHOLD
-    =  entropy_thresholdQUANTUM_PHASE_SHIFT =  quantum_phase_shiftPROFIT_DIFFERENTIAL 
+    =  entropy_thresholdQUANTUM_PHASE_SHIFT =  quantum_phase_shiftPROFIT_DIFFERENTIAL
     =  profit_differentialMARKET_VOLATILITY =  market_volatilityMANUAL_OVERRIDE =  manual_overrideNIBBLE_RITTLE_IMBALANCE =  nibble_rittle_imbalance@dataclass
 
 
@@ -997,7 +996,7 @@ triggers.profit_diff = self.calculate_profit_differential()
 
 
             quantum_phase: math.sin(self.quantum_phase * 2 * math.pi),nibble_rittle_balance: 1.0
-    
+
     - nibble_rittle_imbalance,profit_differential: abs(profit_diff),market_volatility: self.market_volatility,
 
 

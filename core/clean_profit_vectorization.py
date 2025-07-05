@@ -275,7 +275,11 @@ class CleanProfitVectorization:
             calculation_time = time.time() - start_time
             self.total_calculation_time += calculation_time
 
-            logger.debug(f"Calculated profit vector: {total_profit:.6f} in {calculation_time:.4f}s")
+            logger.debug(
+                f"Calculated profit vector: {
+                    total_profit:.6f} in {
+                    calculation_time:.4f}s"
+            )
 
             return profit_vector
 
@@ -374,7 +378,8 @@ class CleanProfitVectorization:
     def _calculate_confidence(self, vector_input: Dict[str, Any], profit_value: float) -> float:
         """Calculate confidence score for the profit vector."""
         signal_strength = vector_input.get("signal_strength", 0.5)
-        data_quality = 1.0 - abs(profit_value)  # Higher confidence for moderate profits
+        # Higher confidence for moderate profits
+        data_quality = 1.0 - abs(profit_value)
 
         confidence = (signal_strength + data_quality) / 2.0
         return max(0.0, min(1.0, confidence))

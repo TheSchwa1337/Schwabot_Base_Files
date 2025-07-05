@@ -4,12 +4,13 @@ Automated Strategy Engine - Learning from Trading Patterns
 Automatically formulates buy/sell walls based on mathematical tensor movements
 """
 
-from typing import Dict, List, Optional, Tuple, Any
 import pickle
+from typing import Any, Dict, List, Optional, Tuple
 
-from .automated_trading_engine import AutomatedTradingEngine, TradingSignal, BatchOrder
+from .automated_trading_engine import AutomatedTradingEngine, BatchOrder, TradingSignal
 
 logger = logging.getLogger(__name__)
+
 
 @dataclass
 class StrategyPattern:
@@ -24,6 +25,7 @@ class StrategyPattern:
     confidence: float
     last_seen: datetime
     occurrence_count: int = 1
+
 
 @dataclass
 class AutomatedDecision:
@@ -43,10 +45,14 @@ class AutomatedDecision:
         if self.timestamp is None:
             self.timestamp = datetime.now()
 
+
 class AutomatedStrategyEngine:
     """Engine that learns from trading patterns and makes automated decisions."""
 
-    def __init__(self, trading_engine: AutomatedTradingEngine, learning_config: Dict = None):
+    def __init__(
+    self,
+    trading_engine: AutomatedTradingEngine,
+     learning_config: Dict = None):
         """
         Initialize automated strategy engine.
 
@@ -115,11 +121,13 @@ class AutomatedStrategyEngine:
     def _start_background_learning(self):
         """Start background learning processes."""
         # Pattern learning thread
-        self.learning_thread = threading.Thread(target=self._background_learning, daemon=True)
+        self.learning_thread = threading.Thread(
+    target=self._background_learning, daemon=True)
         self.learning_thread.start()
 
         # Performance monitoring thread
-        self.monitoring_thread = threading.Thread(target=self._monitor_performance, daemon=True)
+        self.monitoring_thread = threading.Thread(
+    target=self._monitor_performance, daemon=True)
         self.monitoring_thread.start()
 
         logger.info("Started background learning processes")
@@ -150,21 +158,17 @@ class AutomatedStrategyEngine:
             recent_prices = price_history[-momentum_window:]
 
             # Short-term momentum (last 5 periods)
-            short_momentum = (recent_prices[-1] - recent_prices[-5])
-    / recent_prices[-5] if len(recent_prices) >= 5 else 0
+            short_momentum = (recent_prices[-1] - recent_prices[-5]) / recent_prices[-5] if len(recent_prices) >= 5 else 0
 
             # Medium-term momentum (last 10 periods)
-            medium_momentum = (recent_prices[-1] - recent_prices[-10])
-    / recent_prices[-10] if len(recent_prices) >= 10 else 0
+            medium_momentum = (recent_prices[-1] - recent_prices[-10]) / recent_prices[-10] if len(recent_prices) >= 10 else 0
 
             # Long-term momentum (full window)
             long_momentum = (recent_prices[-1] - recent_prices[0]) / recent_prices[0]
 
             # Volatility analysis
             volatility_window = self.learning_config['volatility_window']
-            volatility_data
-    
-    = price_history[-volatility_window:] if len(price_history) >= volatility_window else price_history
+            volatility_data = price_history[-volatility_window:] if len(price_history) >= volatility_window else price_history
             volatility = np.std(volatility_data) / np.mean(volatility_data)
 
             # Price trend analysis
@@ -276,8 +280,7 @@ class AutomatedStrategyEngine:
 
         return np.array(features)
 
-def _calculate_pattern_similarity(self, prices: List[float], pattern_signature: np.ndarray) ->
-float:
+    def _calculate_pattern_similarity(self, prices: List[float], pattern_signature: np.ndarray) -> float:
         """Calculate similarity between current prices and a learned pattern."""
         current_signature = self._calculate_tensor_signature(prices)
 
@@ -336,8 +339,7 @@ float:
                     'timestamp': datetime.now()
                 })
 
-logger.info(f"Made automated decision for {symbol}: {decision.action} (confidence:
-{decision.confidence:.2f})")
+                logger.info(f"Made automated decision for {symbol}: {decision.action} (confidence: {decision.confidence:.2f})")
 
             return decision
 
@@ -345,8 +347,7 @@ logger.info(f"Made automated decision for {symbol}: {decision.action} (confidenc
             logger.error(f"Error making automated decision for {symbol}: {e}")
             return None
 
-def _evaluate_patterns_for_decision(self, symbol: str, analysis: Dict, current_price: float) ->
-Optional[AutomatedDecision]:
+    def _evaluate_patterns_for_decision(self, symbol: str, analysis: Dict, current_price: float) -> Optional[AutomatedDecision]:
         """Evaluate patterns and create trading decision."""
         patterns = analysis.get('patterns', [])
         momentum = analysis.get('momentum', {})
@@ -400,8 +401,7 @@ Optional[AutomatedDecision]:
             batch_count=batch_count,
             spread_seconds=spread_seconds,
             strategy_id=f"auto_{best_pattern['pattern_id']}",
-reasoning=f"Pattern {best_pattern['pattern_id']} with {confidence:.2f} confidence, expected
-movement: {expected_movement:.3f}"
+            reasoning=f"Pattern {best_pattern['pattern_id']} with {confidence:.2f} confidence, expected movement: {expected_movement:.3f}"
         )
 
         return decision
@@ -515,8 +515,7 @@ movement: {expected_movement:.3f}"
 
             # Update success rate
             total_occurrences = pattern.occurrence_count + 1
-            new_success_rate = (pattern.success_rate * pattern.occurrence_count
-    + (1 if success else 0)) / total_occurrences
+            new_success_rate = (pattern.success_rate * pattern.occurrence_count + (1 if success else 0)) / total_occurrences
 
             # Update pattern
             pattern.success_rate = new_success_rate
@@ -526,8 +525,7 @@ movement: {expected_movement:.3f}"
             # Update confidence based on success rate
             pattern.confidence = min(1.0, pattern.confidence + (0.01 if success else -0.01))
 
-logger.info(f"Updated pattern {pattern_id}: success_rate={new_success_rate:.3f},
-confidence={pattern.confidence:.3f}")
+            logger.info(f"Updated pattern {pattern_id}: success_rate={new_success_rate:.3f}, confidence={pattern.confidence:.3f}")
 
     def _update_pattern_performance(self):
         """Update overall pattern performance metrics."""
@@ -538,8 +536,7 @@ confidence={pattern.confidence:.3f}")
         avg_success_rate = np.mean([p.success_rate for p in self.learned_patterns.values()])
         avg_confidence = np.mean([p.confidence for p in self.learned_patterns.values()])
 
-logger.info(f"Pattern performance: {total_patterns} patterns, avg_success={avg_success_rate:.3f},
-avg_confidence={avg_confidence:.3f}")
+        logger.info(f"Pattern performance: {total_patterns} patterns, avg_success={avg_success_rate:.3f}, avg_confidence={avg_confidence:.3f}")
 
     def _optimize_strategies(self):
         """Optimize trading strategies based on performance."""

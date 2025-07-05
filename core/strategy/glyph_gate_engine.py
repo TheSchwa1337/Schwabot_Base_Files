@@ -1006,7 +1006,7 @@ decision = engine.evaluate_signal(
 
 
 glyph = tick[glyph],volume_signal = tick[volume],current_price = tick[price],tick_id
-    = tick[tick_id],internal_system_data = tick[internal_data],external_api_data 
+    = tick[tick_id],internal_system_data = tick[internal_data],external_api_data
     = tick[external_data],
 
 

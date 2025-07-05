@@ -17,12 +17,14 @@ except ImportError:
 
 logger = logging.getLogger(__name__)
 
+
 @dataclass
 class TensorConstants:
     """Tensor constants for Galileo calculations."""
     PSI: float = 0.6180339887498948  # Golden ratio
     EPSILON: float = 2.718281828459045  # Euler's number
     TAU: float = 6.283185307179586  # 2*pi
+
 
 @dataclass
 class QSS2Constants:
@@ -34,6 +36,7 @@ class QSS2Constants:
     QUANTUM_THRESHOLD: float = 0.5
     RESONANCE_THRESHOLD: float = 0.5
 
+
 @dataclass
 class GUTMetrics:
     """Grand Unified Theory metrics."""
@@ -42,11 +45,13 @@ class GUTMetrics:
     stability_metric: float
     timestamp: float = field(default_factory=time.time)
 
+
 class GalileoTensorBridge:
     """
     Galileo Tensor Bridge for advanced mathematical operations.
     Emits dashboard events and logs profit/trigger events for real-time visualization.
     """
+
     def __init__(self):
         self.tensor_constants = TensorConstants()
         self.qss2_constants = QSS2Constants()
@@ -67,7 +72,9 @@ class GalileoTensorBridge:
             [0, tau, math.pi, epsilon],
             [math.pi, 0, epsilon, psi],
         ])
-        emit_dashboard_event("tensor_field_initialized", {"tensor_field": tensor_field.tolist()})
+        emit_dashboard_event(
+    "tensor_field_initialized", {
+        "tensor_field": tensor_field.tolist()})
         return tensor_field
 
     def calculate_stability_factors(self) -> Dict[str, float]:
@@ -84,7 +91,9 @@ class GalileoTensorBridge:
         entropy_base = self.qss2_constants.ENTROPY_BASE
         beta = self.qss2_constants.BETA
         entropy = 1 - (beta * math.log(freq / base_freq) * entropy_base)
-        emit_dashboard_event("entropy_variation", {"freq": freq, "entropy": entropy})
+        emit_dashboard_event(
+    "entropy_variation", {
+        "freq": freq, "entropy": entropy})
         return entropy
 
     def calculate_qss2_phase_alignment(self, freq: float) -> float:
@@ -92,14 +101,22 @@ class GalileoTensorBridge:
         quantum_baseline = self.qss2_constants.QUANTUM_BASELINE
         phase = math.sin(2 * math.pi * freq * time_resolution)
         result = phase * quantum_baseline
-        emit_dashboard_event("phase_alignment", {"freq": freq, "phase": result})
+        emit_dashboard_event(
+    "phase_alignment", {
+        "freq": freq, "phase": result})
         return result
 
     def check_qss2_stability(self, phase: float, entropy: float) -> bool:
         quantum_threshold = self.qss2_constants.QUANTUM_THRESHOLD
         resonance_threshold = self.qss2_constants.RESONANCE_THRESHOLD
-        stable = (abs(phase) >= quantum_threshold) and (entropy >= resonance_threshold)
-emit_dashboard_event("qss2_stability", {"phase": phase, "entropy": entropy, "stable": stable})
+        stable = (
+    abs(phase) >= quantum_threshold) and (
+        entropy >= resonance_threshold)
+
+
+emit_dashboard_event(
+    "qss2_stability", {
+        "phase": phase, "entropy": entropy, "stable": stable})
         return stable
 
     def calculate_gut_metrics(self, btc_price: float = 50000.0) -> GUTMetrics:

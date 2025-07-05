@@ -1,6 +1,5 @@
 from typing import Any, Dict, List, Optional, Union
 
-
 """
 
 
@@ -119,7 +118,7 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 
 Trade Executor
-    
+
     - Real-time Trade Execution Engine.Handles the actual execution of trades with advanced order management,
 
 
@@ -458,7 +457,7 @@ new_order.metadata[execution_time] = time.time() - start_timeself.execution_stat
 
 
             new_order.status
-    
+
     = failedlogger.error(fOrder {order_id} failed: {e})return {status:failed,order_id: order_id,error: str(e)}
 
 

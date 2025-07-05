@@ -18,6 +18,7 @@ This subpackage contains concrete third-party API handlers used by
 """
 
 from importlib import import_module as _imp
+from pathlib import Path
 
 # Ensure that when the package is imported standalone, all modules are
 
@@ -28,7 +29,7 @@ from importlib import import_module as _imp
 # subclasses of BaseAPIHandler without needing to import them manually.
 
 
-_pkg_path = _Path(__file__).parent
+_pkg_path = Path(__file__).parent
 
 
 for _py in _pkg_path.glob("*.py"):

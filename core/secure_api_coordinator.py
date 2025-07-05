@@ -143,7 +143,7 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 
 Secure API Coordinator
-    
+
     - Centralized API Management for Schwabot.This module provides secure, centralized management for all API integrations:
 
 
@@ -213,7 +213,7 @@ Security Features:
 
 
 class APIProvider(Enum):Supported API providers.COINMARKETCAP = coinmarketcapOPENWEATHER
-    =  openweatherNEWSAPI = newsapiTWITTER =  twitterBINANCE = binanceCOINBASE =  coinbaseKRAKEN 
+    =  openweatherNEWSAPI = newsapiTWITTER =  twitterBINANCE = binanceCOINBASE =  coinbaseKRAKEN
     = krakenCUSTOM =  customclass SecurityLevel(Enum):API security levels.PUBLIC = public# No authentication needed
 
 
@@ -464,7 +464,7 @@ self.max_history = 1000
 
 
 self.stats
-    
+
     = {total_requests: 0,successful_requests: 0,failed_requests": 0,avg_response_time": 0.0,rate_limit_hits": 0,
 
 
@@ -1496,7 +1496,7 @@ self.credentials[provider].last_used = datetime.now()
 
 
 result
-    
+
     = {success: True,data: response.json(),status_code: response.status_code,response_time": response_time,request_id: request_id,
 
 
@@ -1760,7 +1760,7 @@ def _build_url():-> str:
 
 
         Build full URL for API request.base_urls
-    
+
     = {APIProvider.COINMARKETCAP: https://pro-api.coinmarketcap.com,APIProvider.OPENWEATHER:https://api.openweathermap.org,APIProvider.NEWSAPI:https://newsapi.org,APIProvider.TWITTER:https://api.twitter.com,APIProvider.BINANCE:https://api.binance.com,APIProvider.COINBASE:https://api.coinbase.com,APIProvider.KRAKEN:https://api.kraken.com,
 
 
@@ -1999,7 +1999,7 @@ if response and response.get(success):
 
 
 crwm_data
-    
+
     = {location: weather_data[name],temperature": weather_data[main][temp],pressure": weather_data[main][pressure],humidity": weather_data[main][humidity],weather": weather_data[weather][0][main],wind_speed": weather_data[wind][speed],timestamp": datetime.now().isoformat(),
 
 
@@ -2090,7 +2090,7 @@ processed_articles = []
 
 
 for article in articles: processed_article
-    
+
     = {title: article[title],description: article[description],url": article[url],published_at": article[publishedAt],source": article[source][name],
 
 
@@ -2193,7 +2193,7 @@ processed_tweets = []
 
 
 for tweet in tweets: processed_tweet
-    
+
     = {text: tweet[text],created_at: tweet[created_at],retweet_count": tweet[public_metrics][retweet_count],like_count": tweet[public_metrics][like_count],
 
 
@@ -2251,7 +2251,7 @@ len(processed_tweets)} tweets for '{query}')
 
 
 def get_api_status():-> Dict[str, Any]:Get comprehensive API status.try: status
-    
+
     = {total_providers: len(self.credentials),active_providers: [],inactive_providers": [],rate_limit_status": {},performance_stats: self.stats.copy(),last_requests": {},
 
 
@@ -2330,7 +2330,7 @@ if provider in self.rate_limits: rate_limit = self.rate_limits[provider]
 
 
 status[rate_limit_status][provider.value]
-    
+
     = {requests_per_minute: rate_limit.requests_per_minute,current_count: rate_limit.current_count,last_request": (
 
 
@@ -2368,7 +2368,7 @@ recent_requests = self.request_history[-10:] if self.request_history else []
 
 
 status[recent_requests]
-    
+
     = [{provider: req.provider.value,endpoint: req.endpoint,success": req.success,response_time": req.response_time,timestamp": req.timestamp.isoformat(),
 
 
@@ -2463,7 +2463,7 @@ cleaned_count = original_count - len(self.request_history)
 
 
 def export_api_data():-> bool:Export API configuration and statistics.try: export_data
-    
+
     = {export_timestamp: datetime.now().isoformat(),api_status: self.get_api_status(),configuration": self.config,request_history": [{provider: req.provider.value,endpoint: req.endpoint,method": req.method,success": req.success,response_time": req.response_time,timestamp": req.timestamp.isoformat(),
 
 

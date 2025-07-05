@@ -1,20 +1,26 @@
-import numpy as np
 import hashlib
 import logging
-from typing import List, Dict, Any, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
+
+import numpy as np
 
 logger = logging.getLogger("schwafit_core")
+
 
 class SchwafitCore:
     """
     Schwafit: Recursive, shape-matching, volatility-aware prediction system.
     Implements delta, normalization, cosine/DTW, entropy, memory, and fit decision.
     """
-    def __init__(self, window: int = 64, entropy_threshold: float = 2.5, fit_threshold: float = 0.85):
+
+    def __init__(
+        self, window: int = 64, entropy_threshold: float = 2.5, fit_threshold: float = 0.85
+    ):
         self.window = window
         self.entropy_threshold = entropy_threshold
         self.fit_threshold = fit_threshold
-        self.memory: List[Dict[str, Any]] = []  # Stores fit hashes, scores, profit, volatility
+        # Stores fit hashes, scores, profit, volatility
+        self.memory: List[Dict[str, Any]] = []
 
     @staticmethod
     def delta2(series: List[float]) -> np.ndarray:
@@ -49,44 +55,52 @@ class SchwafitCore:
         p = p[p > 0]
         return float(-np.sum(p * np.log(p))) if len(p) > 0 else 0.0
 
-    def fit_vector(self, price_series: List[float], pattern_library: List[np.ndarray], profit_scores: List[float]) -> Dict[str, Any]:
+    def fit_vector(
+        self,
+        price_series: List[float],
+        pattern_library: List[np.ndarray],
+        profit_scores: List[float],
+    ) -> Dict[str, Any]:
         """
         Main fit function. Returns dict with fit score, entropy, best matches, and decision.
         """
-        v = self.delta2(price_series[-(self.window+2):])
+        v = self.delta2(price_series[-(self.window + 2) :])
         v_norm = self.normalize(v)
         ent = self.entropy(v_norm)
         v_hash = hashlib.sha256(v_norm.tobytes()).hexdigest()
-        
+
         # Cosine similarity to all patterns
         sims = [self.cosine_similarity(v_norm, s) for s in pattern_library]
         top_indices = np.argsort(sims)[-3:][::-1]  # Top 3 matches
         top_scores = [sims[i] for i in top_indices]
         top_profits = [profit_scores[i] for i in top_indices]
-        fit_score = float(np.average([s*p for s, p in zip(top_scores, top_profits)]) if top_scores else 0.0)
-        
-        # Decision logic
-        decision = (
-            fit_score > self.fit_threshold and
-            ent < self.entropy_threshold
+        fit_score = float(
+            np.average([s * p for s, p in zip(top_scores, top_profits)]) if top_scores else 0.0
         )
+
+        # Decision logic
+        decision = fit_score > self.fit_threshold and ent < self.entropy_threshold
         # Memory update
-        self.memory.append({
-            "hash": v_hash,
-            "fit_score": fit_score,
-            "entropy": ent,
-            "top_scores": top_scores,
-            "top_profits": top_profits,
-            "decision": decision
-        })
-        logger.info(f"Schwafit fit: hash={v_hash[:8]}, fit_score={fit_score:.3f}, entropy={ent:.3f}, decision={decision}")
+        self.memory.append(
+            {
+                "hash": v_hash,
+                "fit_score": fit_score,
+                "entropy": ent,
+                "top_scores": top_scores,
+                "top_profits": top_profits,
+                "decision": decision,
+            }
+        )
+        logger.info(
+            f"Schwafit fit: hash={v_hash[:8]}, fit_score={fit_score:.3f}, entropy={ent:.3f}, decision={decision}"
+        )
         return {
             "fit_score": fit_score,
             "entropy": ent,
             "top_scores": top_scores,
             "top_profits": top_profits,
             "decision": decision,
-            "hash": v_hash
+            "hash": v_hash,
         }
 
     def fit_memory(self) -> List[Dict[str, Any]]:
@@ -94,4 +108,4 @@ class SchwafitCore:
         return self.memory
 
     def last_fit(self) -> Optional[Dict[str, Any]]:
-        return self.memory[-1] if self.memory else None 
+        return self.memory[-1] if self.memory else None

@@ -3,7 +3,7 @@
 import importlib
 import logging
 import os
-from typing import Callable, Dict, Optional, Any
+from typing import Any, Callable, Dict, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -30,11 +30,13 @@ def entropy_driven_strategy(data: Dict[str, Any]) -> Dict[str, Any]:
 
 
 # Add fallback strategies
-STRATEGY_REGISTRY.update({
-    "momentum": momentum_strategy,
-    "mean_reversion": mean_reversion_strategy,
-    "entropy_driven": entropy_driven_strategy
-})
+STRATEGY_REGISTRY.update(
+    {
+        "momentum": momentum_strategy,
+        "mean_reversion": mean_reversion_strategy,
+        "entropy_driven": entropy_driven_strategy,
+    }
+)
 
 # Try to load actual strategy files if they exist
 if os.path.exists(STRATEGY_DIR):
@@ -55,7 +57,7 @@ if os.path.exists(STRATEGY_DIR):
 HASH_MAP = {
     "momentum": "momentum",
     "mean_reversion": "mean_reversion",
-    "entropy_driven": "entropy_driven"
+    "entropy_driven": "entropy_driven",
 }
 
 

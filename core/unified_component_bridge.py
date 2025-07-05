@@ -19,8 +19,11 @@ This bridge integrates:
 from __future__ import annotations
 
 import asyncio
+import logging
+from enum import Enum
+from dataclasses import dataclass, field
+import time
 from typing import Any, Dict, List, Optional, Tuple, Union
-
 
 from .advanced_settings_engine import AdvancedSettingsEngine
 from .clean_math_foundation import BitPhase, CleanMathFoundation, ThermalState
@@ -143,7 +146,10 @@ class UnifiedComponentBridge:
         # Initialize components
         self._initialize_components()
 
-        logger.info(f"UnifiedComponentBridge initialized with mode: {mode.value}")
+        logger.info(
+            f"UnifiedComponentBridge initialized with mode: {
+                mode.value}"
+        )
 
     def _initialize_components(self) -> None:
         """Initialize all system components."""

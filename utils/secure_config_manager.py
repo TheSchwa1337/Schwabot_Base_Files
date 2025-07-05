@@ -68,7 +68,7 @@ class SecureConfigManager:
 
         self.cipher = Fernet(self.encryption_key)
 
-    def _hash_api_key():-> str:
+    def _hash_api_key(): -> str:
         """Create a secure hash of the API key using Schwabot's mathematical framework."""
 
         # Combine service name with key for unique hashing
@@ -77,17 +77,20 @@ class SecureConfigManager:
 
         return hashlib.sha256(combined.encode("utf-8")).hexdigest()
 
-    def _encrypt_data():-> str:
+    def _encrypt_data(): -> str:
         """Encrypt sensitive data."""
 
-        return base64.b64encode(self.cipher.encrypt(data.encode("utf-8"))).decode("utf-8")
+        return base64.b64encode(
+            self.cipher.encrypt(
+                data.encode("utf-8"))).decode("utf-8")
 
-    def _decrypt_data():-> str:
+    def _decrypt_data(): -> str:
         """Decrypt sensitive data."""
 
-        return self.cipher.decrypt(base64.b64decode(encrypted_data.encode("utf-8"))).decode("utf-8")
+        return self.cipher.decrypt(base64.b64decode(
+            encrypted_data.encode("utf-8"))).decode("utf-8")
 
-    def secure_input():-> Dict[str, str]:
+    def secure_input(): -> Dict[str, str]:
         """
 
 
@@ -131,7 +134,7 @@ class SecureConfigManager:
             "timestamp": str(int(os.time.time())),
         }
 
-    def store_api_key():-> bool:
+    def store_api_key(): -> bool:
         """
 
 
@@ -170,7 +173,7 @@ class SecureConfigManager:
 
             return False
 
-    def get_api_key():-> Optional[str]:
+    def get_api_key(): -> Optional[str]:
         """
 
 
@@ -203,14 +206,14 @@ class SecureConfigManager:
 
             return None
 
-    def list_stored_services():-> list:
+    def list_stored_services(): -> list:
         """List all services with stored API keys."""
 
         config = self._load_config()
 
         return list(config.keys())
 
-    def remove_api_key():-> bool:
+    def remove_api_key(): -> bool:
         """Remove a stored API key."""
 
         try:
@@ -235,7 +238,7 @@ class SecureConfigManager:
 
             return False
 
-    def _load_config():-> Dict[str, Any]:
+    def _load_config(): -> Dict[str, Any]:
         """Load encrypted configuration file."""
 
         if not self.config_file.exists():
@@ -259,7 +262,7 @@ class SecureConfigManager:
 
             json.dump(config, f, indent=2)
 
-    def setup_required_keys():-> Dict[str, bool]:
+    def setup_required_keys(): -> Dict[str, bool]:
         """
 
 
@@ -315,7 +318,8 @@ class SecureConfigManager:
 
             if response in ["y", "yes"]:
 
-                success = self.store_api_key(service, f"Enter {service} API key")
+                success = self.store_api_key(
+                    service, f"Enter {service} API key")
 
                 results[service] = success
 
@@ -334,13 +338,13 @@ class SecureConfigManager:
 secure_config = SecureConfigManager()
 
 
-def get_secure_api_key():-> Optional[str]:
+def get_secure_api_key(): -> Optional[str]:
     """Global function to retrieve API keys securely."""
 
     return secure_config.get_api_key(service_name)
 
 
-def setup_api_keys():-> Dict[str, bool]:
+def setup_api_keys(): -> Dict[str, bool]:
     """Global function to setup all required API keys."""
 
     return secure_config.setup_required_keys()

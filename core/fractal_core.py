@@ -11,20 +11,30 @@ CUDA Integration:
 - Cross-platform compatibility (Windows, macOS, Linux)
 """
 
-import math
 import logging
-import numpy as np
-from typing import Any, Dict, List, Tuple, Union
+import math
 from dataclasses import dataclass, field
+from typing import Any, Dict, List, Tuple, Union
+
+import numpy as np
 
 # CUDA Helper Integration
 try:
     from ..utils.cuda_helper import (
-        xp, USING_CUDA, safe_cuda_operation, safe_matrix_multiply,
-        safe_tensor_contraction, safe_fft, safe_convolution,
-        safe_eigenvalue_decomposition, safe_matrix_inverse, safe_svd,
-        get_cuda_status, report_cuda_status
+        USING_CUDA,
+        get_cuda_status,
+        report_cuda_status,
+        safe_convolution,
+        safe_cuda_operation,
+        safe_eigenvalue_decomposition,
+        safe_fft,
+        safe_matrix_inverse,
+        safe_matrix_multiply,
+        safe_svd,
+        safe_tensor_contraction,
+        xp,
     )
+
     CUDA_AVAILABLE = True
     logger = logging.getLogger(__name__)
     logger.info("⚡ CUDA acceleration enabled in Fractal Core")
@@ -39,8 +49,12 @@ except ImportError:
 # Dual State Router Integration
 try:
     from ..system.dual_state_router import (
-        get_dual_state_router, route_task, StrategyTier, ComputeMode
+        ComputeMode,
+        StrategyTier,
+        get_dual_state_router,
+        route_task,
     )
+
     DUAL_STATE_AVAILABLE = True
     logger.info("🔄 Dual State Router integration enabled in Fractal Core")
 except ImportError:
@@ -53,6 +67,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class FractalQuantizationResult:
     """Result of fractal quantization operation."""
+
     quantized_vector: np.ndarray
     fractal_dimension: float
     self_similarity_score: float
@@ -60,9 +75,9 @@ class FractalQuantizationResult:
     metadata: Dict[str, Any] = field(default_factory=dict)
 
 
-def fractal_quantize_vector(vector: Union[List[float], np.ndarray],
-                           precision: int = 8,
-                           method: str = "mandelbrot") -> FractalQuantizationResult:
+def fractal_quantize_vector(
+    vector: Union[List[float], np.ndarray], precision: int = 8, method: str = "mandelbrot"
+) -> FractalQuantizationResult:
     """
     Quantize a vector using fractal mathematics.
 
@@ -79,24 +94,21 @@ def fractal_quantize_vector(vector: Union[List[float], np.ndarray],
         if DUAL_STATE_AVAILABLE:
             dual_state_router = get_dual_state_router()
             task_data = {
-                'vector': vector.tolist() if hasattr(vector, 'tolist') else list(vector),
-                'precision': precision,
-                'method': method,
-                'operation': 'fractal_quantization'
+                "vector": vector.tolist() if hasattr(vector, "tolist") else list(vector),
+                "precision": precision,
+                "method": method,
+                "operation": "fractal_quantization",
             }
-            
-            result = dual_state_router.route(
-                task_id="fractal_quantization",
-                data=task_data
-            )
-            
-            if result.get('success', False) and 'quantized_vector' in result:
+
+            result = dual_state_router.route(task_id="fractal_quantization", data=task_data)
+
+            if result.get("success", False) and "quantized_vector" in result:
                 # Extract result from dual state router
-                quantized_vector = np.array(result['quantized_vector'])
-                fractal_dim = result.get('fractal_dimension', 1.0)
-                similarity = result.get('self_similarity_score', 0.5)
-                compression = result.get('compression_ratio', 1.0)
-                
+                quantized_vector = np.array(result["quantized_vector"])
+                fractal_dim = result.get("fractal_dimension", 1.0)
+                similarity = result.get("self_similarity_score", 0.5)
+                compression = result.get("compression_ratio", 1.0)
+
                 return FractalQuantizationResult(
                     quantized_vector=quantized_vector,
                     fractal_dimension=fractal_dim,
@@ -107,13 +119,13 @@ def fractal_quantize_vector(vector: Union[List[float], np.ndarray],
                         "precision": precision,
                         "original_length": len(vector),
                         "quantized_length": len(quantized_vector),
-                        "dual_state_routed": True
-                    }
+                        "dual_state_routed": True,
+                    },
                 )
             else:
                 # Fallback to direct computation
                 logger.debug("Dual state router returned no result, using direct computation")
-        
+
         # Direct computation (fallback or when dual state router not available)
         # Convert to numpy array if needed
         if isinstance(vector, list):
@@ -121,14 +133,13 @@ def fractal_quantize_vector(vector: Union[List[float], np.ndarray],
 
         # Normalize vector to [0, 1] range with CUDA acceleration
         v_min, v_max = safe_cuda_operation(
-            lambda: (xp.min(vector), xp.max(vector)),
-            lambda: (np.min(vector), np.max(vector))
+            lambda: (xp.min(vector), xp.max(vector)), lambda: (np.min(vector), np.max(vector))
         )
-        
+
         if v_max > v_min:
             normalized = safe_cuda_operation(
                 lambda: (vector - v_min) / (v_max - v_min),
-                lambda: (vector - v_min) / (v_max - v_min)
+                lambda: (vector - v_min) / (v_max - v_min),
             )
         else:
             normalized = vector * 0.5  # Handle constant vectors
@@ -162,8 +173,8 @@ def fractal_quantize_vector(vector: Union[List[float], np.ndarray],
                 "precision": precision,
                 "original_length": len(vector),
                 "quantized_length": len(quantized),
-                "dual_state_routed": False
-            }
+                "dual_state_routed": False,
+            },
         )
 
     except Exception as e:
@@ -174,35 +185,34 @@ def fractal_quantize_vector(vector: Union[List[float], np.ndarray],
             fractal_dimension=1.0,
             self_similarity_score=0.5,
             compression_ratio=1.0,
-            metadata={"error": str(e), "method": "fallback", "dual_state_routed": False}
+            metadata={"error": str(e), "method": "fallback", "dual_state_routed": False},
         )
 
 
-def quantize_vector(vector: Union[List[float], np.ndarray],
-                   precision: int = 8) -> np.ndarray:
+def quantize_vector(vector: Union[List[float], np.ndarray], precision: int = 8) -> np.ndarray:
     """
     Simple vector quantization function.
-    
+
     Args:
         vector: Input vector to quantize
         precision: Bit precision for quantization
-        
+
     Returns:
         Quantized vector
     """
     try:
         if isinstance(vector, list):
             vector = np.array(vector, dtype=np.float64)
-        
+
         # Simple quantization to discrete levels with CUDA acceleration
-        max_val = 2 ** precision - 1
+        max_val = 2**precision - 1
         quantized = safe_cuda_operation(
             lambda: xp.round(vector * max_val) / max_val,
-            lambda: np.round(vector * max_val) / max_val
+            lambda: np.round(vector * max_val) / max_val,
         )
-        
+
         return quantized
-        
+
     except Exception as e:
         logger.error(f"Vector quantization failed: {e}")
         return np.array(vector, dtype=np.float64)
@@ -211,11 +221,8 @@ def quantize_vector(vector: Union[List[float], np.ndarray],
 def _mandelbrot_quantize(vector: np.ndarray, precision: int) -> np.ndarray:
     """Quantize using Mandelbrot set mathematics."""
     # Mandelbrot iteration count for each point
-    max_iter = 2 ** precision
-    quantized = safe_cuda_operation(
-        lambda: xp.zeros_like(vector),
-        lambda: np.zeros_like(vector)
-    )
+    max_iter = 2**precision
+    quantized = safe_cuda_operation(lambda: xp.zeros_like(vector), lambda: np.zeros_like(vector))
 
     for i, val in enumerate(vector):
         # Use value as complex number parameter
@@ -236,11 +243,8 @@ def _mandelbrot_quantize(vector: np.ndarray, precision: int) -> np.ndarray:
 
 def _julia_quantize(vector: np.ndarray, precision: int) -> np.ndarray:
     """Quantize using Julia set mathematics."""
-    max_iter = 2 ** precision
-    quantized = safe_cuda_operation(
-        lambda: xp.zeros_like(vector),
-        lambda: np.zeros_like(vector)
-    )
+    max_iter = 2**precision
+    quantized = safe_cuda_operation(lambda: xp.zeros_like(vector), lambda: np.zeros_like(vector))
 
     # Fixed Julia parameter
     c = complex(-0.7, 0.27)
@@ -262,17 +266,14 @@ def _julia_quantize(vector: np.ndarray, precision: int) -> np.ndarray:
 
 def _sierpinski_quantize(vector: np.ndarray, precision: int) -> np.ndarray:
     """Quantize using Sierpinski triangle mathematics."""
-    quantized = safe_cuda_operation(
-        lambda: xp.zeros_like(vector),
-        lambda: np.zeros_like(vector)
-    )
+    quantized = safe_cuda_operation(lambda: xp.zeros_like(vector), lambda: np.zeros_like(vector))
 
     for i, val in enumerate(vector):
         # Convert to binary representation
-        binary = format(int(val * (2**precision - 1)), f'0{precision}b')
+        binary = format(int(val * (2**precision - 1)), f"0{precision}b")
 
         # Count 1s in binary (Sierpinski pattern)
-        ones_count = binary.count('1')
+        ones_count = binary.count("1")
         quantized[i] = ones_count / precision
 
     return quantized
@@ -295,8 +296,7 @@ def _calculate_fractal_dimension(vector: np.ndarray) -> float:
 
             # Count boxes needed to cover the vector
             boxes_needed = safe_cuda_operation(
-                lambda: xp.ceil(len(vector) / size),
-                lambda: np.ceil(len(vector) / size)
+                lambda: xp.ceil(len(vector) / size), lambda: np.ceil(len(vector) / size)
             )
             box_counts.append(boxes_needed)
 
@@ -304,7 +304,7 @@ def _calculate_fractal_dimension(vector: np.ndarray) -> float:
             return 1.0
 
         # Calculate fractal dimension using log-log plot slope
-        log_sizes = [math.log(1/size) for size in box_sizes[:len(box_counts)]]
+        log_sizes = [math.log(1 / size) for size in box_sizes[: len(box_counts)]]
         log_counts = [math.log(count) for count in box_counts]
 
         # Linear regression to find slope
@@ -345,7 +345,7 @@ def _calculate_self_similarity(vector: np.ndarray) -> float:
                 continue
 
             # Calculate correlation with original
-            correlation = np.corrcoef(vector[:len(scaled)], scaled)[0, 1]
+            correlation = np.corrcoef(vector[: len(scaled)], scaled)[0, 1]
             if not np.isnan(correlation):
                 similarities.append(abs(correlation))
 
@@ -372,35 +372,36 @@ def generate_fractal_hash(vector: np.ndarray, length: int = 64) -> str:
     try:
         # Quantize vector
         quantized = fractal_quantize_vector(vector, precision=8)
-        
+
         # Convert to binary string
         binary = ""
         for val in quantized.quantized_vector:
             # Convert to binary representation
-            binary_val = format(int(val * 255), '08b')
+            binary_val = format(int(val * 255), "08b")
             binary += binary_val
-        
+
         # Truncate or pad to desired length
         if len(binary) > length:
             binary = binary[:length]
         else:
-            binary = binary.ljust(length, '0')
-        
+            binary = binary.ljust(length, "0")
+
         # Convert to hex
         hex_hash = ""
         for i in range(0, len(binary), 4):
-            chunk = binary[i:i+4]
-            hex_hash += format(int(chunk, 2), 'x')
-        
+            chunk = binary[i : i + 4]
+            hex_hash += format(int(chunk, 2), "x")
+
         return hex_hash
-        
+
     except Exception as e:
         logger.error(f"Fractal hash generation failed: {e}")
         return "0" * (length // 4)
 
 
-def fractal_pattern_match(pattern: np.ndarray, target: np.ndarray,
-                         threshold: float = 0.8) -> Tuple[bool, float]:
+def fractal_pattern_match(
+    pattern: np.ndarray, target: np.ndarray, threshold: float = 0.8
+) -> Tuple[bool, float]:
     """
     Match fractal pattern in target vector.
 
@@ -417,11 +418,11 @@ def fractal_pattern_match(pattern: np.ndarray, target: np.ndarray,
             return False, 0.0
 
         best_score = 0.0
-        
+
         # Slide pattern over target
         for i in range(len(target) - len(pattern) + 1):
-            segment = target[i:i+len(pattern)]
-            
+            segment = target[i : i + len(pattern)]
+
             # Calculate similarity
             correlation = np.corrcoef(pattern, segment)[0, 1]
             if not np.isnan(correlation):

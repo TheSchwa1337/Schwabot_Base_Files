@@ -37,15 +37,6 @@ Saves data in the format expected by your trading system.
 """
 
 
-
-
-
-
-
-
-
-
-
 logger = logging.getLogger(__name__)
 
 
@@ -61,7 +52,7 @@ BASE_URL = "https://api.coingecko.com/api/v3"
 COIN_IDS = {"BTC": "bitcoin", "ETH": "ethereum", "XRP": "ripple"}
 
 
-async def download_historical_data():-> Optional[pd.DataFrame]:
+async def download_historical_data(): -> Optional[pd.DataFrame]:
     """
 
 
@@ -112,7 +103,10 @@ async def download_historical_data():-> Optional[pd.DataFrame]:
 
         url = f"{BASE_URL}/coins/{coin_id}/market_chart"
 
-        params = {"vs_currency": vs_currency, "days": days, "interval": interval}
+        params = {
+            "vs_currency": vs_currency,
+            "days": days,
+            "interval": interval}
 
         async with aiohttp.ClientSession() as session:
 
@@ -135,7 +129,7 @@ async def download_historical_data():-> Optional[pd.DataFrame]:
         return None
 
 
-def parse_historical_data():-> pd.DataFrame:
+def parse_historical_data(): -> pd.DataFrame:
     """Parse CoinGecko historical data into DataFrame."""
 
     # Extract price data
@@ -181,7 +175,7 @@ def parse_historical_data():-> pd.DataFrame:
     return df
 
 
-async def download_all_historical_data():-> None:
+async def download_all_historical_data(): -> None:
     """
 
 
@@ -238,7 +232,9 @@ async def download_all_historical_data():-> None:
 
             df.to_csv(csv_path)
 
-            logger.info(f" Saved {symbol} data: {len(df)} points to {csv_path}")
+            logger.info(
+                f" Saved {symbol} data: {
+                    len(df)} points to {csv_path}")
 
             logger.info(f"   Date range: {df.index[0]} to {df.index[-1]}")
 

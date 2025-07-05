@@ -34,12 +34,6 @@ Provides hash signature validation, data integrity verification, and collision d
 """
 
 
-
-
-
-
-
-
 # Configure logging
 
 
@@ -79,7 +73,7 @@ class HashValidator:
 
         logger.info("Hash Validator initialized")
 
-    def validate_hash_signature():-> HashValidationResult:
+    def validate_hash_signature(): -> HashValidationResult:
         """Validate a hash signature against provided data."""
 
         try:
@@ -134,7 +128,7 @@ class HashValidator:
                 error_message=str(e),
             )
 
-    def validate_data_integrity():-> HashValidationResult:
+    def validate_data_integrity(): -> HashValidationResult:
         """Validate data integrity using hash signature."""
 
         try:
@@ -173,14 +167,14 @@ class HashValidator:
                 error_message=str(e),
             )
 
-    def detect_hash_collisions():-> Dict[str, List[str]]:
+    def detect_hash_collisions(): -> Dict[str, List[str]]:
         """Detect hash collisions in a list of hashes."""
 
         collision_map = {}
 
         for i, hash1 in enumerate(hash_list):
 
-            for j, hash2 in enumerate(hash_list[i + 1 :], i + 1):
+            for j, hash2 in enumerate(hash_list[i + 1:], i + 1):
 
                 if hash1 == hash2:
 
@@ -198,7 +192,7 @@ class HashValidator:
 
         return collision_map
 
-    def get_validation_statistics():-> Dict[str, Any]:
+    def get_validation_statistics(): -> Dict[str, Any]:
         """Get validation statistics."""
 
         if not self.validation_history:
@@ -207,7 +201,8 @@ class HashValidator:
 
         total = len(self.validation_history)
 
-        successful = sum(1 for result in self.validation_history if result.is_valid)
+        successful = sum(
+            1 for result in self.validation_history if result.is_valid)
 
         success_rate = successful / total if total > 0 else 0.0
 
@@ -220,7 +215,7 @@ class HashValidator:
         }
 
 
-def main():-> None:
+def main(): -> None:
     """Test the hash validation system."""
 
     validator = HashValidator()

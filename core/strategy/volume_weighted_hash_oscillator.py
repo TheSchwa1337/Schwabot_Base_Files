@@ -1,6 +1,5 @@
 from typing import Any, Dict, List, Optional, Tuple, Union
 
-
 """
 
 
@@ -255,7 +254,7 @@ self.smoothed_oscillator_values: deque[float] = deque(maxlen=smoothing_period)
 
 
 self.metrics: Dict[str, Any]
-    
+
     = {last_calculation_time: None,total_calculations: 0,avg_calculation_time: 0.0,current_oscillator_value": None,
 
 
@@ -691,7 +690,7 @@ self.smoothed_oscillator_values.clear()
 
 
 self.metrics
-    
+
     = {last_calculation_time: None,total_calculations": 0,avg_calculation_time": 0.0,current_oscillator_value": None,
 
 
@@ -733,7 +732,7 @@ period=5, smoothing_period=3, hash_strength=8
 
 
 market_data
-    
+
     = [{price: 100.0,volume: 1000},{price: 101.0,volume: 1200},{price: 100.5,volume": 900},{price: 102.0,volume": 1500},{price: 103.0,volume": 2000},{price: 102.5,volume": 1100},{price: 104.0,volume": 1800},{price: 103.5,volume": 1300},{price: 105.0,volume": 2200},{price: 104.5,volume": 1600},
 
 

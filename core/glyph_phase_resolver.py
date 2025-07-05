@@ -44,10 +44,10 @@ class GlyphPhaseResolver:
 
     def __init__(self, phase_shift_threshold: float = 0.1):
         """
-        Initialize the GlyphPhaseResolver.
+                Initialize the GlyphPhaseResolver.
 
-Args:
-            phase_shift_threshold: The threshold for significant phase shifts.
+        Args:
+                    phase_shift_threshold: The threshold for significant phase shifts.
         """
         self.phase_shift_threshold = phase_shift_threshold
         self.metrics: Dict[str, Any] = {
@@ -64,14 +64,14 @@ Args:
         entropy_corridor_status: Optional[Dict[str, Any]] = None,
     ) -> str:
         """
-        Resolve the appropriate glyph phase based on phase shift and entropy.
+                Resolve the appropriate glyph phase based on phase shift and entropy.
 
-Args:
-            phase_shift_operator: The (t) value indicating phase divergence.
-entropy_corridor_status: Dictionary with entropy-related metrics.
+        Args:
+                    phase_shift_operator: The (t) value indicating phase divergence.
+        entropy_corridor_status: Dictionary with entropy-related metrics.
 
-Returns:
-            A string indicating the resolved glyph routing behavior.
+        Returns:
+                    A string indicating the resolved glyph routing behavior.
         """
         try:
             # Update metrics

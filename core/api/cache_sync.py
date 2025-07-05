@@ -4,6 +4,9 @@ import asyncio
 import importlib
 import inspect
 from types import ModuleType
+import logging
+from typing import List
+from pathlib import Path
 
 from .handlers.base_handler import BaseAPIHandler
 
@@ -16,7 +19,7 @@ from .handlers.base_handler import BaseAPIHandler
 # ==================
 
 
-# 
+#
 
 
 # Periodically refreshes all registered API handlers and stores their
@@ -25,7 +28,7 @@ from .handlers.base_handler import BaseAPIHandler
 # normalised JSON payloads into the local `flask/feeds/` cache hierarchy.
 
 
-# 
+#
 
 
 # This service is **independent** from the trading loop  it can be run as
@@ -37,7 +40,7 @@ from .handlers.base_handler import BaseAPIHandler
 # `ApiIntegrationManager`.
 
 
-# 
+#
 
 
 logger = logging.getLogger(__name__)
@@ -114,7 +117,8 @@ class CacheSyncService:
             for _, obj in inspect.getmembers(mod, inspect.isclass):
                 if issubclass(obj, BaseAPIHandler) and obj is not BaseAPIHandler:
                     try:
-                        handler: BaseAPIHandler = obj()  # type: ignore[call-arg]
+                        # type: ignore[call-arg]
+                        handler: BaseAPIHandler = obj()
                         self.handlers.append(handler)
                         logger.info("Registered handler: %s", handler.NAME)
                     except Exception as exc:  # noqa: BLE001

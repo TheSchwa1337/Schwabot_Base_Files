@@ -1,6 +1,5 @@
 from typing import Any, Dict, List, Optional, Tuple
 
-
 """
 
 
@@ -592,7 +591,7 @@ confidence_product=confidence_product,
 
 
 metadata={raw_sync_score: sync_score,confidence_weighted: weighted_sync_score
-    != sync_score,adaptive_threshold: threshold,alpha": self.alpha,processing_time": time.time() 
+    != sync_score,adaptive_threshold: threshold,alpha": self.alpha,processing_time": time.time()
     - current_time,
 
 
@@ -1474,7 +1473,7 @@ if consensus_diff < 0.3:  # Within ~17 degrees
 
 
         return False, Partial alignment
-    
+
     - insufficient for immune trustdef get_tensor_field_status():-> Dict[str, Any]:Get comprehensive tensor field status.recent_syncs = self.sync_history[-100:] if self.sync_history else []
 
 

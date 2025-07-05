@@ -1,6 +1,5 @@
 from typing import Any, Dict, List, Optional, Tuple
 
-
 """
 
 
@@ -126,7 +125,7 @@ class VECUMode(Enum):
 
 
     VECU operation modes.IDLE =  idleTIMING_SYNC =  timing_syncPWM_INJECTION
-    =  pwm_injectionFEEDBACK_CORRECTION =  feedback_correctionPROFIT_BURST 
+    =  pwm_injectionFEEDBACK_CORRECTION =  feedback_correctionPROFIT_BURST
     =  profit_burstTHERMAL_MANAGEMENT =  thermal_management@dataclass
 
 

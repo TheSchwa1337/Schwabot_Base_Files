@@ -5,15 +5,17 @@ Handles automated trading with proper rate limiting, exchange-specific validatio
 and Linux-compatible error handling for batch orders (1-50 per batch).
 """
 
-import ccxt
 import asyncio
 import signal
 import sys
-from typing import Dict, List, Optional, Tuple, Any
-from queue import Queue, Empty
-from decimal import Decimal, ROUND_DOWN, ROUND_UP
+from decimal import ROUND_DOWN, ROUND_UP, Decimal
+from queue import Empty, Queue
+from typing import Any, Dict, List, Optional, Tuple
+
+import ccxt
 
 logger = logging.getLogger(__name__)
+
 
 @dataclass
 class ExchangeLimits:
@@ -28,6 +30,7 @@ class ExchangeLimits:
     supports_batch_orders: bool
     max_orders_per_batch: int
     min_time_between_orders: float  # seconds
+
 
 @dataclass
 class EnhancedTradingSignal:
@@ -48,6 +51,7 @@ class EnhancedTradingSignal:
         if self.timestamp is None:
             self.timestamp = datetime.now()
 
+
 @dataclass
 class EnhancedBatchOrder:
     """Enhanced batch order with proper validation."""
@@ -61,6 +65,7 @@ class EnhancedBatchOrder:
     priority: int = 1
     exchange_limits: Optional[ExchangeLimits] = None
     validated: bool = False
+
 
 class RateLimiter:
     """Rate limiter for exchange API calls."""
@@ -77,7 +82,8 @@ class RateLimiter:
         with self.lock:
             now = time.time()
             # Clean old timestamps
-            self.request_times = [t for t in self.request_times if now - t < 60]
+            self.request_times = [
+    t for t in self.request_times if now - t < 60]
 
             if len(self.request_times) >= self.requests_per_minute:
                 sleep_time = 60 - (now - self.request_times[0])
@@ -99,6 +105,7 @@ class RateLimiter:
                     time.sleep(sleep_time)
 
             self.order_times.append(time.time())
+
 
 class EnhancedCCXTTradingEngine:
     """Enhanced CCXT trading engine with Linux compatibility and proper batch ordering."""
@@ -143,7 +150,11 @@ class EnhancedCCXTTradingEngine:
         )
     }
 
-    def __init__(self, exchange_config: Dict, api_key: str = None, secret: str = None):
+    def __init__(
+    self,
+    exchange_config: Dict,
+    api_key: str = None,
+     secret: str = None):
         """
         Initialize enhanced CCXT trading engine.
 
@@ -193,12 +204,16 @@ class EnhancedCCXTTradingEngine:
         # Start background processors
         self._start_background_processors()
 
-logger.info(f"Enhanced CCXT Trading Engine initialized for {self.exchange_limits.exchange_name}")
+
+logger.info(
+    f"Enhanced CCXT Trading Engine initialized for {
+        self.exchange_limits.exchange_name}")
 
     def _setup_signal_handlers(self):
         """Setup Linux-compatible signal handlers."""
         def signal_handler(signum, frame):
-            logger.info(f"Received signal {signum}, initiating graceful shutdown...")
+            logger.info(
+    f"Received signal {signum}, initiating graceful shutdown...")
             self.running = False
             self.shutdown()
             sys.exit(0)
@@ -245,15 +260,18 @@ logger.info(f"Enhanced CCXT Trading Engine initialized for {self.exchange_limits
 
         exchange = exchange_class(exchange_config)
 
-        logger.info(f"Initialized {exchange_name} exchange with enhanced configuration")
+        logger.info(
+    f"Initialized {exchange_name} exchange with enhanced configuration")
         return exchange
 
     def _get_exchange_limits(self) -> ExchangeLimits:
         """Get exchange-specific limits."""
         exchange_name = self.exchange_config.get('name', 'coinbase').lower()
-        return self.EXCHANGE_LIMITS.get(exchange_name, self.EXCHANGE_LIMITS['coinbase'])
+        return self.EXCHANGE_LIMITS.get(
+    exchange_name, self.EXCHANGE_LIMITS['coinbase'])
 
-    def _validate_order_parameters(self, signal: EnhancedTradingSignal) -> Tuple[bool, str]:
+    def _validate_order_parameters(
+        self, signal: EnhancedTradingSignal) -> Tuple[bool, str]:
         """
         Validate order parameters against exchange limits.
 
@@ -273,14 +291,17 @@ logger.info(f"Enhanced CCXT Trading Engine initialized for {self.exchange_limits
                     return False, "Cannot determine order value for market order"
 
             if order_value < self.exchange_limits.min_order_size:
-return False, f"Order value {order_value} below minimum {self.exchange_limits.min_order_size}"
+return False, f"Order value {order_value} below minimum {
+    self.exchange_limits.min_order_size}"
 
             if order_value > self.exchange_limits.max_order_size:
-return False, f"Order value {order_value} above maximum {self.exchange_limits.max_order_size}"
+return False, f"Order value {order_value} above maximum {
+    self.exchange_limits.max_order_size}"
 
             # Check quantity precision
             quantity_str = str(signal.quantity)
-            decimal_places = len(quantity_str.split('.')[-1]) if '.' in quantity_str else 0
+            decimal_places = len(quantity_str.split(
+                '.')[-1]) if '.' in quantity_str else 0
             if decimal_places > self.exchange_limits.amount_precision:
 return False, f"Quantity precision {decimal_places} exceeds limit
 {self.exchange_limits.amount_precision}"

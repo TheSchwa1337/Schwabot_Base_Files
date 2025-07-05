@@ -155,7 +155,7 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 
 Data Pipeline Visualizer
-    
+
     - Real-time Data Flow Visualization.This module provides comprehensive visualization for Schwabot's data pipeline:'
 
 
@@ -225,7 +225,7 @@ logger = logging.getLogger(__name__)
 
 
 class DataTier(Enum):Data storage tiers.RAM_CACHE = ram_cacheMID_TERM =  mid_termLONG_TERM
-    = long_termARCHIVE =  archiveclass DataCategory(Enum):Data categories for pipeline.BTC_HASHING 
+    = long_termARCHIVE =  archiveclass DataCategory(Enum):Data categories for pipeline.BTC_HASHING
     = btc_hashingTRADING_SIGNALS =  trading_signalsMARKET_DATA = market_dataRISK_METRICS =  risk_metricsPORTFOLIO_STATE = portfolio_stateANALYSIS_RESULTS =  analysis_resultsSYSTEM_LOGS = system_logsAPI_RESPONSES =  api_responses@dataclass
 
 
@@ -412,7 +412,7 @@ self.tier_limits = {
 
 
 DataTier.RAM_CACHE: self.config[ram_cache_limit_mb] * 1024
-    * 1024,DataTier.MID_TERM: self.config[mid_term_limit_mb] * 1024 
+    * 1024,DataTier.MID_TERM: self.config[mid_term_limit_mb] * 1024
     * 1024,DataTier.LONG_TERM: self.config[long_term_limit_mb] * 1024 * 1024,DataTier.ARCHIVE: self.config[archive_limit_mb] * 1024 * 1024,
 
 
@@ -643,7 +643,7 @@ main_frame.pack(fill=both, expand = True, padx=10, pady=10)
 
 
 overview_frame
-    = ttk.LabelFrame(main_frame, text=Data Pipeline Overview)overview_frame.pack(fill=x, pady 
+    = ttk.LabelFrame(main_frame, text=Data Pipeline Overview)overview_frame.pack(fill=x, pady
     = (0, 10))
 
 
@@ -810,7 +810,7 @@ self.flow_canvas.pack(fill=x)
 
 
 metrics_frame
-    
+
     = ttk.LabelFrame(main_frame, text=Pipeline Metrics & Statistics)metrics_frame.pack(fill=both", expand = True)
 
 
@@ -1892,7 +1892,7 @@ self.animation_running or not self.flow_canvas:
 
 
 particle
-    
+
     = {tier: tier,x: random.randint(50, 200),y: random.randint(20, 130),dx": random.uniform(-2, 2),dy": random.uniform(-1, 1),life": 60,  # framescolor: self._get_tier_color(tier),
 
 
@@ -1938,7 +1938,7 @@ if len(self.particles) > self.config[particle_count]:
 
 
 def _get_tier_color():-> str:Get color for tier visualization.tier_colors
-    
+
     = {DataTier.RAM_CACHE: # ff6b6b,DataTier.MID_TERM:# ffd93d,DataTier.LONG_TERM:# 6bcf7,DataTier.ARCHIVE:# 4ecdc4,
 
 
@@ -3196,7 +3196,7 @@ def _export_statistics():Export pipeline statistics.try: timestamp
 
 
 export_data
-    
+
     = {export_timestamp: datetime.now().isoformat(),pipeline_stats": {total_data_processed: self.pipeline_stats.total_data_processed,active_units": self.pipeline_stats.active_units,compression_ratio": self.pipeline_stats.compression_ratio,memory_efficiency": self.pipeline_stats.memory_efficiency,throughput_mbps": self.pipeline_stats.throughput_mbps,uptime_seconds": self.pipeline_stats.uptime_seconds,
 
 

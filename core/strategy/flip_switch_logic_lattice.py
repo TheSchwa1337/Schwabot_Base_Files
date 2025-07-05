@@ -1,6 +1,5 @@
 from typing import Any, Callable, Dict, List, Optional
 
-
 """
 
 
@@ -142,7 +141,7 @@ self.active_strategy_id: str = default_strategy_id
 
 
 self.metrics: Dict[str, Any]
-    
+
     = {total_evaluations: 0,total_switches: 0,last_switch_time": None,strategy_activations": {self.default_strategy_id: 0},
 
 

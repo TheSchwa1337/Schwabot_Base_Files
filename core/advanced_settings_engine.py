@@ -148,7 +148,10 @@ class SettingsSection:
         return key in self._data
 
     def __repr__(self) -> str:
-        return f"<SettingsSection '{self.name}' with {len(self._data)} settings>"
+        return f"<SettingsSection '{
+            self.name}' with {
+            len(
+                self._data)} settings>"
 
 
 class AdvancedSettingsEngine:
@@ -451,7 +454,7 @@ class AdvancedSettingsEngine:
         """Get the name of the currently active profile."""
         return self._active_profile
 
-    def diff(self, other: AdvancedSettingsEngine) -> Dict[str, Any]:
+    def diff(self, other: "AdvancedSettingsEngine") -> Dict[str, Any]:
         """
         Compare this engine's settings with another.
 

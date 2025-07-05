@@ -38,17 +38,17 @@ from scipy.special import sigmoid
 
 from .advanced_tensor_algebra import (
     AdvancedTensorAlgebra,
-    temporal_algebra,
     information_geometry,
-    spectral_analysis
+    spectral_analysis,
+    temporal_algebra,
 )
-from .type_defs import TradingAction, MarketData, TradeSignal, Position, DualState
+from .type_defs import DualState, MarketData, Position, TradeSignal, TradingAction
 
 logger = logging.getLogger(__name__)
 
 __all__ = [
     "ExecutionMode",
-    "BitFlipOperation", 
+    "BitFlipOperation",
     "ConsensusVote",
     "TradingExecution",
     "AdvancedDualisticTradingExecutionSystem",
@@ -119,73 +119,74 @@ class TradingExecution:
 class SigmoidProfitTrigger:
     """
     Sigmoid profit trigger system for dynamic trade switching.
-    
+
     Mathematical Foundation:
     - Sigmoid function: D(x) = 1/(1 + e^(-kx))
     - Decision threshold: θ_switch based on market entropy
     - Adaptive k-factor: k = k_0 * (1 + entropy_factor)
     """
-    
+
     def __init__(self, k_factor: float = 1.0, threshold: float = 0.7):
         self.k_factor = k_factor
         self.threshold = threshold
         self.decision_history: List[Dict[str, Any]] = []
-        
+
     def sigmoid(self, x: float) -> float:
         """
         Sigmoid function: D(x) = 1/(1 + e^(-kx))
-        
+
         Args:
             x: Input value
-            
+
         Returns:
             Sigmoid output [0,1]
         """
         return float(1.0 / (1.0 + np.exp(-self.k_factor * x)))
-    
-    def calculate_decision_curve(self, profit_delta: float, 
-                               market_entropy: float = 0.5) -> float:
+
+    def calculate_decision_curve(self, profit_delta: float,
+                                 market_entropy: float = 0.5) -> float:
         """
         Calculate decision curve with entropy modulation.
-        
+
         Mathematical Formula:
         D(t) = 1/(1 + e^(-k(1 + H)Δprofit))
         where H is market entropy, k is base factor
-        
+
         Args:
             profit_delta: Change in profit
             market_entropy: Market entropy [0,1]
-            
+
         Returns:
             Decision probability [0,1]
         """
         # Adaptive k-factor based on entropy
         adaptive_k = self.k_factor * (1.0 + market_entropy)
-        
+
         # Calculate sigmoid decision
         decision_prob = 1.0 / (1.0 + np.exp(-adaptive_k * profit_delta))
-        
+
         return float(decision_prob)
-    
-    def resolve_trade_switch(self, current_profit: float, 
-                           target_profit: float,
-                           market_entropy: float) -> Dict[str, Any]:
+
+    def resolve_trade_switch(self, current_profit: float,
+                             target_profit: float,
+                             market_entropy: float) -> Dict[str, Any]:
         """
         Resolve trade switching decision based on profit dynamics.
-        
+
         Args:
             current_profit: Current profit level
             target_profit: Target profit level
             market_entropy: Current market entropy
-            
+
         Returns:
             Switch decision and parameters
         """
         profit_delta = target_profit - current_profit
-        
+
         # Calculate decision probability
-        decision_prob = self.calculate_decision_curve(profit_delta, market_entropy)
-        
+        decision_prob = self.calculate_decision_curve(
+            profit_delta, market_entropy)
+
         # Determine switch action
         if decision_prob > self.threshold:
             action = "switch_to_long"
@@ -196,7 +197,7 @@ class SigmoidProfitTrigger:
         else:
             action = "hold_current"
             confidence = 0.5
-        
+
         decision = {
             "action": action,
             "confidence": confidence,
@@ -206,7 +207,7 @@ class SigmoidProfitTrigger:
             "k_factor": self.k_factor,
             "timestamp": time.time()
         }
-        
+
         self.decision_history.append(decision)
         return decision
 
@@ -214,33 +215,33 @@ class SigmoidProfitTrigger:
 class GhostShellInjection:
     """
     Ghost shell injection for zero-impact execution and ZBE tracking.
-    
+
     Mathematical Foundation:
     - Zero-impact execution: quantity = 0, real_impact = 0
     - Quantum mirror: |ψ⟩_ghost = |ψ⟩_real ⊗ |0⟩_impact
     - ZBE tracking: E_ghost = E_real - E_impact
     """
-    
+
     def __init__(self):
         self.ghost_mode_active = False
         self.zbe_tracking_enabled = True
         self.ghost_executions: List[Dict[str, Any]] = []
-        
+
     def inject_ghost_shell(self, trade_signal: TradeSignal,
-                          market_data: MarketData) -> Dict[str, Any]:
+                           market_data: MarketData) -> Dict[str, Any]:
         """
         Inject Ghost shell for zero-impact execution.
-        
+
         Args:
             trade_signal: Original trade signal
             market_data: Current market data
-            
+
         Returns:
             Ghost execution result
         """
         if not self.ghost_mode_active:
             return {"success": False, "reason": "Ghost mode inactive"}
-        
+
         # Create ghost execution with zero real impact
         ghost_execution = {
             "execution_id": f"ghost_{int(time.time() * 1000)}",
@@ -262,55 +263,60 @@ class GhostShellInjection:
                 "entanglement": 0.0
             }
         }
-        
+
         self.ghost_executions.append(ghost_execution)
-        
+
         return ghost_execution
-    
+
     def calculate_zbe_impact(self, real_execution: Dict[str, Any],
-                           ghost_execution: Dict[str, Any]) -> float:
+                             ghost_execution: Dict[str, Any]) -> float:
         """
         Calculate ZBE impact difference.
-        
+
         Mathematical Formula:
         ΔZBE = E_real - E_ghost
         where E is execution energy/impact
-        
+
         Args:
             real_execution: Real execution result
             ghost_execution: Ghost execution result
-            
+
         Returns:
             ZBE impact difference
         """
-        real_impact = real_execution.get("metadata", {}).get("real_impact", 0.0)
-        ghost_impact = ghost_execution.get("metadata", {}).get("real_impact", 0.0)
-        
+        real_impact = real_execution.get(
+            "metadata", {}).get(
+            "real_impact", 0.0)
+        ghost_impact = ghost_execution.get(
+            "metadata", {}).get(
+            "real_impact", 0.0)
+
         return float(real_impact - ghost_impact)
 
 
 class QuantumMirrorLayer:
     """Quantum mirror layer for ZBE tracking and ghost mode execution."""
-    
+
     def __init__(self):
         self.mirror_states: Dict[str, np.ndarray] = {}
         self.ghost_mode_active = False
         self.zbe_tracking_enabled = True
-        
-    def create_mirror_state(self, original_state: np.ndarray, 
-                           mirror_id: str) -> np.ndarray:
+
+    def create_mirror_state(self, original_state: np.ndarray,
+                            mirror_id: str) -> np.ndarray:
         """Create quantum mirror state for parallel execution."""
         # Apply quantum mirror transformation
-        mirror_state = original_state * np.exp(1j * np.pi / 2)  # 90-degree phase shift
+        mirror_state = original_state * \
+            np.exp(1j * np.pi / 2)  # 90-degree phase shift
         self.mirror_states[mirror_id] = mirror_state
         return mirror_state
-    
+
     def execute_ghost_trade(self, trade_signal: TradeSignal,
-                           market_data: MarketData) -> Dict[str, Any]:
+                            market_data: MarketData) -> Dict[str, Any]:
         """Execute trade in ghost mode for ZBE tracking."""
         if not self.ghost_mode_active:
             return {"success": False, "reason": "Ghost mode inactive"}
-        
+
         # Ghost execution with zero real impact
         ghost_execution = {
             "execution_id": f"ghost_{int(time.time() * 1000)}",
@@ -323,53 +329,53 @@ class QuantumMirrorLayer:
             "metadata": {"ghost_mode": True, "zbe_tracking": True},
             "quantum_state": {"mirror_id": "ghost_execution"}
         }
-        
+
         return ghost_execution
 
 
 class DynamicTradeResolutionLayer:
     """Dynamic Trade Resolution Layer using sigmoid decision curves."""
-    
+
     def __init__(self, k_factor: float = 1.0):
         self.k_factor = k_factor
         self.decision_history: List[Dict[str, Any]] = []
-        
+
     def calculate_decision_curve(self, profit_delta: float) -> float:
         """
         Calculate decision curve using sigmoid: D(t) = 1/(1 + e^(-k(Δprofit)))
-        
+
         Args:
             profit_delta: Change in profit
-            
+
         Returns:
             Decision probability (0-1)
         """
         decision_prob = 1.0 / (1.0 + np.exp(-self.k_factor * profit_delta))
         return float(decision_prob)
-    
-    def resolve_trade_switch(self, current_profit: float, 
-                           target_profit: float,
-                           market_entropy: float) -> Dict[str, Any]:
+
+    def resolve_trade_switch(self, current_profit: float,
+                             target_profit: float,
+                             market_entropy: float) -> Dict[str, Any]:
         """
         Resolve trade switching decision based on profit dynamics.
-        
+
         Args:
             current_profit: Current profit level
             target_profit: Target profit level
             market_entropy: Current market entropy
-            
+
         Returns:
             Switch decision and parameters
         """
         profit_delta = target_profit - current_profit
-        
+
         # Calculate decision probability
         decision_prob = self.calculate_decision_curve(profit_delta)
-        
+
         # Adjust for market entropy
         entropy_factor = 1.0 - market_entropy  # Lower entropy = higher confidence
         adjusted_prob = decision_prob * entropy_factor
-        
+
         # Determine switch action
         if adjusted_prob > 0.7:
             action = "switch_to_long"
@@ -380,7 +386,7 @@ class DynamicTradeResolutionLayer:
         else:
             action = "switch_to_short"
             confidence = 1.0 - adjusted_prob
-        
+
         decision = {
             "action": action,
             "confidence": confidence,
@@ -390,7 +396,7 @@ class DynamicTradeResolutionLayer:
             "entropy_factor": entropy_factor,
             "timestamp": time.time()
         }
-        
+
         self.decision_history.append(decision)
         return decision
 
@@ -401,18 +407,18 @@ class AdvancedDualisticTradingExecutionSystem:
     def __init__(self, config: Optional[Dict[str, Any]] = None):
         """Initialize the trading execution system."""
         self.config = config or self._default_config()
-        
+
         # Core components
         self.bit_flip_operations: List[BitFlipOperation] = []
         self.consensus_votes: List[ConsensusVote] = []
         self.execution_history: List[TradingExecution] = []
-        
+
         # Mathematical subsystems
         self.tensor_algebra = AdvancedTensorAlgebra()
         self.temporal_algebra = temporal_algebra
         self.information_geometry = information_geometry
         self.spectral_analysis = spectral_analysis
-        
+
         # Quantum and dual-state components
         self.quantum_mirror = QuantumMirrorLayer()
         self.dynamic_resolution = DynamicTradeResolutionLayer(
@@ -422,13 +428,13 @@ class AdvancedDualisticTradingExecutionSystem:
             k_factor=self.config.get("sigmoid_k_factor", 1.0)
         )
         self.ghost_shell = GhostShellInjection()
-        
+
         # State tracking
         self.current_alpha = 0.5  # Long-hold weight
         self.current_beta = 0.5   # Scalp weight
         self.entropy_history: List[float] = []
         self.success_rate_history: List[float] = []
-        
+
         self.initialized = True
         logger.info("Advanced Dualistic Trading Execution System initialized")
 
@@ -450,13 +456,14 @@ class AdvancedDualisticTradingExecutionSystem:
             "ghost_mode_enabled": False
         }
 
-    def calculate_dual_state_execution(self, 
-                                     market_data: MarketData,
-                                     long_hold_signal: TradeSignal,
-                                     scalp_signal: TradeSignal) -> Dict[str, Any]:
+    def calculate_dual_state_execution(self,
+                                       market_data: MarketData,
+                                       long_hold_signal: TradeSignal,
+                                       scalp_signal: TradeSignal) -> Dict[str,
+                                                                          Any]:
         """
         Calculate dual-state execution: Ψ_trade(t) = α·H(t) + β·S(t)
-        
+
         Mathematical Formula:
         Ψ_trade(t) = α·H(t) + β·S(t)
         where:
@@ -465,39 +472,41 @@ class AdvancedDualisticTradingExecutionSystem:
         - H(t) is long-hold strength
         - S(t) is scalp vector strength
         - Constraint: α + β = 1
-        
+
         Args:
             market_data: Current market data
             long_hold_signal: Long-hold strategy signal
             scalp_signal: Scalp strategy signal
-            
+
         Returns:
             Dual-state execution parameters
         """
         try:
             # Calculate H(t) - long-hold strength
-            H_t = self._calculate_long_hold_strength(long_hold_signal, market_data)
-            
+            H_t = self._calculate_long_hold_strength(
+                long_hold_signal, market_data)
+
             # Calculate S(t) - scalp vector strength
             S_t = self._calculate_scalp_strength(scalp_signal, market_data)
-            
+
             # Get current weights α, β
             alpha = self.current_alpha
             beta = self.current_beta
-            
+
             # Calculate dual-state execution
             psi_trade = alpha * H_t + beta * S_t
-            
+
             # Normalize to ensure α + β = 1
             total_weight = alpha + beta
             if total_weight > 0:
                 alpha_norm = alpha / total_weight
                 beta_norm = beta / total_weight
                 psi_trade = alpha_norm * H_t + beta_norm * S_t
-            
+
             # Calculate confidence based on signal coherence
-            confidence = self._calculate_signal_coherence(long_hold_signal, scalp_signal)
-            
+            confidence = self._calculate_signal_coherence(
+                long_hold_signal, scalp_signal)
+
             # Determine execution mode
             if psi_trade > 0.7:
                 mode = ExecutionMode.DUAL_STATE
@@ -508,7 +517,7 @@ class AdvancedDualisticTradingExecutionSystem:
             else:
                 mode = ExecutionMode.ENTROPY_WEIGHTED
                 action = TradingAction.HOLD
-            
+
             return {
                 "psi_trade": float(psi_trade),
                 "alpha": float(alpha_norm),
@@ -520,7 +529,7 @@ class AdvancedDualisticTradingExecutionSystem:
                 "confidence": confidence,
                 "timestamp": time.time()
             }
-            
+
         except Exception as e:
             logger.error(f"Dual-state execution calculation failed: {e}")
             return {
@@ -535,35 +544,38 @@ class AdvancedDualisticTradingExecutionSystem:
                 "timestamp": time.time()
             }
 
-    def _calculate_long_hold_strength(self, signal: TradeSignal, 
-                                    market_data: MarketData) -> float:
+    def _calculate_long_hold_strength(self, signal: TradeSignal,
+                                      market_data: MarketData) -> float:
         """Calculate long-hold strength H(t) from projected profit matrix."""
         try:
             # Use tensor algebra for profit projection
             price_vector = np.array([market_data.price])
             signal_vector = np.array([signal.confidence])
-            
+
             # Project profit using tensor fusion
             profit_projection = self.tensor_algebra.tensor_dot_fusion(
                 price_vector, signal_vector
             )
-            
+
             # Apply temporal evolution
             time_factor = self.temporal_algebra.ferris_wheel_alignment()
-            
+
             # Calculate strength with market entropy consideration
             market_entropy = self._calculate_market_entropy(market_data)
             entropy_factor = 1.0 - market_entropy
-            
-            strength = float(profit_projection[0] * time_factor * entropy_factor)
+
+            strength = float(
+                profit_projection[0] *
+                time_factor *
+                entropy_factor)
             return np.clip(strength, -1.0, 1.0)
-            
+
         except Exception as e:
             logger.error(f"Long-hold strength calculation failed: {e}")
             return 0.0
 
-    def _calculate_scalp_strength(self, signal: TradeSignal, 
-                                market_data: MarketData) -> float:
+    def _calculate_scalp_strength(self, signal: TradeSignal,
+                                  market_data: MarketData) -> float:
         """Calculate scalp vector strength S(t) from real-time delta."""
         try:
             # Calculate real-time price delta
@@ -572,45 +584,48 @@ class AdvancedDualisticTradingExecutionSystem:
                 spread_factor = 1.0 / (1.0 + spread / market_data.price)
             else:
                 spread_factor = 1.0
-            
+
             # Apply spectral analysis for short-term patterns
             price_history = self._get_recent_price_history(market_data.symbol)
             if len(price_history) > 10:
                 frequencies, power_spectrum = self.spectral_analysis.fourier_spectrum(
-                    np.array(price_history)
-                )
+                    np.array(price_history))
                 # Use high-frequency components for scalp signals
                 high_freq_power = np.sum(power_spectrum[frequencies > 0.1])
                 spectral_factor = np.log(1.0 + high_freq_power)
             else:
                 spectral_factor = 1.0
-            
+
             # Calculate scalp strength
-            strength = float(signal.confidence * spread_factor * spectral_factor)
+            strength = float(
+                signal.confidence *
+                spread_factor *
+                spectral_factor)
             return np.clip(strength, -1.0, 1.0)
-            
+
         except Exception as e:
             logger.error(f"Scalp strength calculation failed: {e}")
             return 0.0
 
-    def _calculate_signal_coherence(self, signal1: TradeSignal, 
-                                  signal2: TradeSignal) -> float:
+    def _calculate_signal_coherence(self, signal1: TradeSignal,
+                                    signal2: TradeSignal) -> float:
         """Calculate coherence between two trading signals."""
         try:
             # Use information geometry to measure signal coherence
-            signal_vector1 = np.array([signal1.confidence, signal1.price or 0.0])
-            signal_vector2 = np.array([signal2.confidence, signal2.price or 0.0])
-            
+            signal_vector1 = np.array(
+                [signal1.confidence, signal1.price or 0.0])
+            signal_vector2 = np.array(
+                [signal2.confidence, signal2.price or 0.0])
+
             # Calculate Fisher information metric
             combined_data = np.vstack([signal_vector1, signal_vector2])
             fisher_metric = self.information_geometry.fisher_information_metric(
-                combined_data, "normal"
-            )
-            
+                combined_data, "normal")
+
             # Calculate coherence as inverse of metric determinant
             coherence = 1.0 / (1.0 + linalg.det(fisher_metric))
             return float(coherence)
-            
+
         except Exception as e:
             logger.error(f"Signal coherence calculation failed: {e}")
             return 0.5
@@ -627,13 +642,13 @@ class AdvancedDualisticTradingExecutionSystem:
                 normalized_entropy = 1.0 / (1.0 + np.exp(-entropy))
             else:
                 normalized_entropy = 0.5
-            
+
             self.entropy_history.append(normalized_entropy)
             if len(self.entropy_history) > 100:
                 self.entropy_history.pop(0)
-            
+
             return float(normalized_entropy)
-            
+
         except Exception as e:
             logger.error(f"Market entropy calculation failed: {e}")
             return 0.5
@@ -645,22 +660,22 @@ class AdvancedDualisticTradingExecutionSystem:
         return [50000.0 + i * 10.0 for i in range(50)]
 
     def update_dual_state_weights(self, execution_result: Dict[str, Any],
-                                success_rate: float) -> None:
+                                  success_rate: float) -> None:
         """
         Update dual-state weights α, β based on execution success.
-        
+
         Mathematical Formula:
         α_new = α_old + η * (success_rate - 0.5)
         β_new = β_old + η * (0.5 - success_rate)
         where η is learning rate
-        
+
         Args:
             execution_result: Result from dual-state execution
             success_rate: Current strategy success rate
         """
         try:
             learning_rate = self.config.get("dual_state_learning_rate", 0.01)
-            
+
             # Update based on success rate
             if success_rate > 0.6:
                 # Successful execution - reinforce current weights
@@ -670,32 +685,39 @@ class AdvancedDualisticTradingExecutionSystem:
                 # Poor performance - adjust weights
                 alpha_adjustment = -learning_rate * (0.5 - success_rate)
                 beta_adjustment = learning_rate * (0.5 - success_rate)
-            
+
             # Apply adjustments
-            self.current_alpha = np.clip(self.current_alpha + alpha_adjustment, 0.1, 0.9)
-            self.current_beta = np.clip(self.current_beta + beta_adjustment, 0.1, 0.9)
-            
+            self.current_alpha = np.clip(
+                self.current_alpha + alpha_adjustment, 0.1, 0.9)
+            self.current_beta = np.clip(
+                self.current_beta + beta_adjustment, 0.1, 0.9)
+
             # Normalize
             total_weight = self.current_alpha + self.current_beta
             self.current_alpha /= total_weight
             self.current_beta /= total_weight
-            
-            logger.debug(f"Updated dual-state weights: α={self.current_alpha:.3f}, β={self.current_beta:.3f}")
-            
+
+            logger.debug(
+                f"Updated dual-state weights: α={
+                    self.current_alpha:.3f}, β={
+                    self.current_beta:.3f}")
+
         except Exception as e:
             logger.error(f"Weight update failed: {e}")
 
-    async def execute_dual_state_trade(self, market_data: MarketData,
-                                     long_hold_signal: TradeSignal,
-                                     scalp_signal: TradeSignal) -> TradingExecution:
+    async def execute_dual_state_trade(
+            self,
+            market_data: MarketData,
+            long_hold_signal: TradeSignal,
+            scalp_signal: TradeSignal) -> TradingExecution:
         """
         Execute dual-state trade with quantum mirror layer and Ghost shell injection.
-        
+
         Args:
             market_data: Current market data
             long_hold_signal: Long-hold strategy signal
             scalp_signal: Scalp strategy signal
-            
+
         Returns:
             Trading execution result
         """
@@ -704,7 +726,7 @@ class AdvancedDualisticTradingExecutionSystem:
             dual_state_result = self.calculate_dual_state_execution(
                 market_data, long_hold_signal, scalp_signal
             )
-            
+
             # Execute quantum mirror if enabled
             if self.config.get("ghost_mode_enabled", False):
                 ghost_result = self.ghost_shell.inject_ghost_shell(
@@ -712,7 +734,7 @@ class AdvancedDualisticTradingExecutionSystem:
                 )
                 if ghost_result["success"]:
                     logger.info("Ghost shell injected for ZBE tracking")
-            
+
             # Create execution record
             execution = TradingExecution(
                 execution_id=f"dual_state_{int(time.time() * 1000)}",
@@ -733,15 +755,15 @@ class AdvancedDualisticTradingExecutionSystem:
                 },
                 dual_state_weights=(dual_state_result["alpha"], dual_state_result["beta"])
             )
-            
+
             self.execution_history.append(execution)
-            
+
             # Update weights based on historical success
             success_rate = self._calculate_success_rate()
             self.update_dual_state_weights(dual_state_result, success_rate)
-            
+
             return execution
-            
+
         except Exception as e:
             logger.error(f"Dual-state trade execution failed: {e}")
             return TradingExecution(
@@ -755,24 +777,25 @@ class AdvancedDualisticTradingExecutionSystem:
                 metadata={"error": str(e)}
             )
 
-    def _calculate_position_size(self, dual_state_result: Dict[str, Any]) -> float:
+    def _calculate_position_size(
+            self, dual_state_result: Dict[str, Any]) -> float:
         """Calculate position size based on dual-state result."""
         try:
             psi_trade = dual_state_result["psi_trade"]
             confidence = dual_state_result["confidence"]
-            
+
             # Base position size
             base_size = self.config.get("min_trade_amount", 0.001)
             max_size = self.config.get("max_trade_amount", 1.0)
-            
+
             # Scale by confidence and psi_trade magnitude
             position_size = base_size * abs(psi_trade) * confidence
-            
+
             # Apply limits
             position_size = np.clip(position_size, base_size, max_size)
-            
+
             return float(position_size)
-            
+
         except Exception as e:
             logger.error(f"Position size calculation failed: {e}")
             return self.config.get("min_trade_amount", 0.001)
@@ -791,9 +814,10 @@ class AdvancedDualisticTradingExecutionSystem:
             bit_depth = self.config["bit_depth"]
             flip_strength = 0.8
             confidence = 0.7
-            
+
             # Calculate quantum coherence
-            quantum_coherence = self._calculate_quantum_coherence(original_value, flipped_value)
+            quantum_coherence = self._calculate_quantum_coherence(
+                original_value, flipped_value)
 
             bit_flip_op = BitFlipOperation(
                 operation_id=operation_id,
@@ -811,12 +835,13 @@ class AdvancedDualisticTradingExecutionSystem:
             # Enhanced price calculation with tensor algebra
             base_price = market_data.get("price", 50000.0)
             price_adjustment = (flipped_value - original_value) / 256 * 0.01
-            
+
             # Apply quantum phase rotation
             price_vector = np.array([base_price])
-            rotated_price = self.tensor_algebra.bit_phase_rotation(price_vector)
+            rotated_price = self.tensor_algebra.bit_phase_rotation(
+                price_vector)
             entry_price = rotated_price[0] * (1 + price_adjustment)
-            
+
             entry_quantity = target_quantity * flip_strength * quantum_coherence
 
             return {
@@ -832,7 +857,8 @@ class AdvancedDualisticTradingExecutionSystem:
             logger.error(f"Error in bit-flip entry logic: {e}")
             return {"success": False, "error": str(e)}
 
-    def _calculate_quantum_coherence(self, original: int, flipped: int) -> float:
+    def _calculate_quantum_coherence(
+            self, original: int, flipped: int) -> float:
         """Calculate quantum coherence between original and flipped states."""
         try:
             # Simple coherence measure based on bit difference
@@ -854,9 +880,10 @@ class AdvancedDualisticTradingExecutionSystem:
             bit_pattern = np.random.randint(0, 2, 8)
             consensus_weight = np.mean(bit_pattern) * 0.8
             confidence = consensus_weight
-            
+
             # Calculate quantum amplitude
-            quantum_amplitude = complex(consensus_weight, 1.0 - consensus_weight)
+            quantum_amplitude = complex(
+                consensus_weight, 1.0 - consensus_weight)
             superposition_state = abs(quantum_amplitude) > 0.5
 
             vote = ConsensusVote(
@@ -896,19 +923,22 @@ class AdvancedDualisticTradingExecutionSystem:
         try:
             # Enhanced entropy calculation using spectral analysis
             entropy_level = market_data.get("entropy", 0.5)
-            
+
             # Apply spectral analysis for entropy refinement
             if "price_history" in market_data:
                 price_history = market_data["price_history"]
                 if len(price_history) > 10:
                     frequencies, power_spectrum = self.spectral_analysis.fourier_spectrum(
-                        np.array(price_history)
-                    )
+                        np.array(price_history))
                     # Use spectral entropy for refinement
-                    spectral_entropy = -np.sum(power_spectrum * np.log(power_spectrum + 1e-6))
+                    spectral_entropy = - \
+                        np.sum(power_spectrum * np.log(power_spectrum + 1e-6))
                     entropy_level = (entropy_level + spectral_entropy) / 2
-            
-            weight_factor = min(1.0, entropy_level / self.config["entropy_threshold"])
+
+            weight_factor = min(
+                1.0,
+                entropy_level /
+                self.config["entropy_threshold"])
 
             base_price = market_data.get("price", 50000.0)
             entry_price = base_price * (1 + weight_factor * 0.003)
@@ -927,9 +957,11 @@ class AdvancedDualisticTradingExecutionSystem:
             logger.error(f"Error in entropy-weighted entry logic: {e}")
             return {"success": False, "error": str(e)}
 
-    async def execute_trade(
-        self, mode: ExecutionMode, target_quantity: float, market_data: Dict[str, Any]
-    ) -> TradingExecution:
+    async def execute_trade(self,
+                            mode: ExecutionMode,
+                            target_quantity: float,
+                            market_data: Dict[str,
+                                              Any]) -> TradingExecution:
         """Execute trade with enhanced quantum and dual-state capabilities."""
         try:
             execution_id = f"{mode.value}_{int(time.time() * 1000)}"
@@ -952,7 +984,7 @@ class AdvancedDualisticTradingExecutionSystem:
                     confidence=0.6,
                     price=market_data.get("price", 50000.0)
                 )
-                
+
                 # Convert market_data to MarketData object
                 market_data_obj = MarketData(
                     symbol=market_data.get("symbol", "BTC/USDC"),
@@ -961,7 +993,7 @@ class AdvancedDualisticTradingExecutionSystem:
                     ask=market_data.get("ask"),
                     volume=market_data.get("volume")
                 )
-                
+
                 return await self.execute_dual_state_trade(
                     market_data_obj, long_hold_signal, scalp_signal
                 )
@@ -981,16 +1013,16 @@ class AdvancedDualisticTradingExecutionSystem:
                     metadata=result
                 )
             else:
-            execution = TradingExecution(
-                execution_id=execution_id,
-                mode=mode,
+                execution = TradingExecution(
+                    execution_id=execution_id,
+                    mode=mode,
                     entry_price=market_data.get("price", 50000.0),
                     entry_quantity=0.0,
                     success=False,
                     confidence=0.0,
-                timestamp=time.time(),
+                    timestamp=time.time(),
                     metadata={"error": result.get("error", "Unknown error")}
-            )
+                )
 
             self.execution_history.append(execution)
             return execution
@@ -1037,7 +1069,8 @@ class AdvancedDualisticTradingExecutionSystem:
         if not self.execution_history:
             return 0.0
 
-        successful_executions = sum(1 for exec in self.execution_history if exec.success)
+        successful_executions = sum(
+            1 for exec in self.execution_history if exec.success)
         return successful_executions / len(self.execution_history)
 
 
@@ -1061,11 +1094,11 @@ async def demo_trading_execution():
         "volume": 1000.0,
         "entropy": 0.3
     }
-    
+
     # Test different execution modes
-    modes = [ExecutionMode.BIT_FLIP, ExecutionMode.CONSENSUS_VOTING, 
+    modes = [ExecutionMode.BIT_FLIP, ExecutionMode.CONSENSUS_VOTING,
              ExecutionMode.ENTROPY_WEIGHTED, ExecutionMode.DUAL_STATE]
-    
+
     for mode in modes:
         print(f"\nTesting {mode.value} execution:")
         result = await system.execute_trade(mode, 0.1, market_data)
@@ -1073,7 +1106,7 @@ async def demo_trading_execution():
         print(f"  Entry Price: {result.entry_price}")
         print(f"  Entry Quantity: {result.entry_quantity}")
         print(f"  Confidence: {result.confidence}")
-    
+
     # Show system status
     status = system.get_system_status()
     print(f"\nSystem Status:")
@@ -1086,4 +1119,4 @@ async def demo_trading_execution():
 
 if __name__ == "__main__":
     import asyncio
-    asyncio.run(demo_trading_execution()) 
+    asyncio.run(demo_trading_execution())

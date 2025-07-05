@@ -1,9 +1,9 @@
 import logging
-from dataclasses import dataclass, field
 import time
-import numpy as np
+from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Tuple
 
+import numpy as np
 
 from core.clean_unified_math import clean_unified_math as unified_math
 

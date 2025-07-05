@@ -211,7 +211,11 @@ def print_exception(exc: Exception, context: Optional[str] = None) -> None:
 
         context_str = f" in {context}" if context else ""
 
-        safe_print(f"[EXCEPTION{context_str}] {type(exc).__name__}: {exc}", file=sys.stderr)
+        safe_print(
+            f"[EXCEPTION{context_str}] {
+                type(exc).__name__}: {exc}",
+            file=sys.stderr,
+        )
 
         # Print traceback safely
 
@@ -371,7 +375,10 @@ def print_status(component: str, status: bool, details: Optional[str] = None) ->
 
     except Exception as e:
 
-        safe_print(f"[STATUS PRINT ERROR: {e}] {component}: {'OK' if status else 'FAIL'}")
+        safe_print(
+            f"[STATUS PRINT ERROR: {e}] {component}: {
+                'OK' if status else 'FAIL'}"
+        )
 
 
 def print_progress(current: int, total: int, description: str = "", bar_length: int = 40) -> None:
@@ -391,7 +398,8 @@ def print_progress(current: int, total: int, description: str = "", bar_length: 
 
         bar = "" * filled_length + "" * (bar_length - filled_length)
 
-        progress_line = f"{description}: |{bar}| {percent:.1f}% ({current}/{total})"
+        progress_line = f"{description}: |{bar}| {
+            percent:.1f}% ({current}/{total})"
 
         safe_print(f"\r{progress_line}", end="", flush=True)
 

@@ -1,4 +1,4 @@
-                import shutil
+import shutil
 
 import hashlib
 import logging
@@ -36,14 +36,6 @@ Provides checksum validation, corruption detection, and repair capabilities.
 
 
 """
-
-
-
-
-
-
-
-
 
 
 # Configure logging
@@ -87,7 +79,7 @@ class FileIntegrityChecker:
 
         logger.info("File Integrity Checker initialized")
 
-    def calculate_file_checksum():-> str:
+    def calculate_file_checksum(): -> str:
         """Calculate checksum for a file."""
 
         try:
@@ -108,7 +100,7 @@ class FileIntegrityChecker:
 
             return ""
 
-    def check_file_integrity():-> IntegrityCheckResult:
+    def check_file_integrity(): -> IntegrityCheckResult:
         """Check integrity of a file."""
 
         try:
@@ -193,7 +185,8 @@ class FileIntegrityChecker:
 
             self.check_count += 1
 
-            logger.debug(f"File integrity check completed: {file_path} - {is_valid}")
+            logger.debug(
+                f"File integrity check completed: {file_path} - {is_valid}")
 
             return result
 
@@ -210,7 +203,7 @@ class FileIntegrityChecker:
                 error_message=str(e),
             )
 
-    def check_directory_integrity():-> List[IntegrityCheckResult]:
+    def check_directory_integrity(): -> List[IntegrityCheckResult]:
         """Check integrity of all files in a directory."""
 
         results = []
@@ -239,7 +232,9 @@ class FileIntegrityChecker:
 
             files = [f for f in files if f.is_file()]
 
-            logger.info(f"Checking integrity of {len(files)} files in {directory_path}")
+            logger.info(
+                f"Checking integrity of {
+                    len(files)} files in {directory_path}")
 
             for file_path in files:
 
@@ -255,7 +250,7 @@ class FileIntegrityChecker:
 
             return results
 
-    def detect_corrupted_files():-> List[str]:
+    def detect_corrupted_files(): -> List[str]:
         """Detect corrupted files in a directory."""
 
         corrupted = []
@@ -280,7 +275,9 @@ class FileIntegrityChecker:
 
                     corrupted.append(result.file_path)
 
-            logger.info(f"Detected {len(corrupted)} corrupted files in {directory_path}")
+            logger.info(
+                f"Detected {
+                    len(corrupted)} corrupted files in {directory_path}")
 
             return corrupted
 
@@ -290,7 +287,7 @@ class FileIntegrityChecker:
 
             return corrupted
 
-    def repair_corrupted_file():-> bool:
+    def repair_corrupted_file(): -> bool:
         """Attempt to repair a corrupted file."""
 
         try:
@@ -304,7 +301,6 @@ class FileIntegrityChecker:
             # Try to restore from backup
 
             if backup_path and os.path.exists(backup_path):
-
 
                 shutil.copy2(backup_path, file_path)
 
@@ -322,13 +318,15 @@ class FileIntegrityChecker:
 
                 else:
 
-                    logger.error(f"File still corrupted after backup restoration: {file_path}")
+                    logger.error(
+                        f"File still corrupted after backup restoration: {file_path}")
 
                     return False
 
             else:
 
-                logger.error(f"No backup available for corrupted file: {file_path}")
+                logger.error(
+                    f"No backup available for corrupted file: {file_path}")
 
                 return False
 
@@ -338,12 +336,13 @@ class FileIntegrityChecker:
 
             return False
 
-    def get_integrity_statistics():-> Dict[str, Any]:
+    def get_integrity_statistics(): -> Dict[str, Any]:
         """Get integrity check statistics."""
 
         total_checks = len(self.check_history)
 
-        valid_files = sum(1 for result in self.check_history if result.is_valid)
+        valid_files = sum(
+            1 for result in self.check_history if result.is_valid)
 
         success_rate = valid_files / total_checks if total_checks > 0 else 0.0
 
@@ -355,7 +354,7 @@ class FileIntegrityChecker:
             "check_count": self.check_count,
         }
 
-    def export_checksums():-> bool:
+    def export_checksums(): -> bool:
         """Export all stored checksums to a file."""
 
         try:
@@ -366,7 +365,10 @@ class FileIntegrityChecker:
 
                     f.write(f"{file_path}:{checksum}\n")
 
-            logger.info(f"Exported {len(self.file_checksums)} checksums to {output_file}")
+            logger.info(
+                f"Exported {
+                    len(
+                        self.file_checksums)} checksums to {output_file}")
 
             return True
 
@@ -376,7 +378,7 @@ class FileIntegrityChecker:
 
             return False
 
-    def import_checksums():-> bool:
+    def import_checksums(): -> bool:
         """Import checksums from a file."""
 
         try:
@@ -393,7 +395,10 @@ class FileIntegrityChecker:
 
                         self.file_checksums[file_path] = checksum
 
-            logger.info(f"Imported {len(self.file_checksums)} checksums from {input_file}")
+            logger.info(
+                f"Imported {
+                    len(
+                        self.file_checksums)} checksums from {input_file}")
 
             return True
 
@@ -404,7 +409,7 @@ class FileIntegrityChecker:
             return False
 
 
-def main():-> None:
+def main(): -> None:
     """Main function for testing file integrity checking."""
 
     checker = FileIntegrityChecker()

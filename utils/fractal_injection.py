@@ -1,4 +1,4 @@
-    from core.unified_math_system import unified_math
+from core.unified_math_system import unified_math
 
 import logging
 import time
@@ -38,19 +38,10 @@ Provides fractal pattern injection, synchronization, and decision-making capabil
 """
 
 
-
-
-
-
-
-
-
-
 # Import unified math system
 
 
 try:
-
 
 
 except ImportError:
@@ -99,7 +90,7 @@ class FractalInjector:
 
         logger.info("Fractal Injector initialized")
 
-    def inject_fractal_pattern():-> FractalInjectionResult:
+    def inject_fractal_pattern(): -> FractalInjectionResult:
         """Inject a fractal pattern into the system."""
 
         try:
@@ -110,7 +101,8 @@ class FractalInjector:
 
             # Process fractal pattern
 
-            processed_pattern = self._process_fractal_pattern(pattern_data, fractal_type)
+            processed_pattern = self._process_fractal_pattern(
+                pattern_data, fractal_type)
 
             # Create fractal state
 
@@ -158,7 +150,7 @@ class FractalInjector:
                 error_message=str(e),
             )
 
-    def _process_fractal_pattern():-> np.ndarray:
+    def _process_fractal_pattern(): -> np.ndarray:
         """Process fractal pattern based on type."""
 
         if fractal_type == "mandelbrot":
@@ -177,7 +169,7 @@ class FractalInjector:
 
             return pattern_data
 
-    def _process_mandelbrot_pattern():-> np.ndarray:
+    def _process_mandelbrot_pattern(): -> np.ndarray:
         """Process Mandelbrot fractal pattern."""
 
         # Apply Mandelbrot-specific processing
@@ -190,7 +182,7 @@ class FractalInjector:
             else processed
         )
 
-    def _process_julia_pattern():-> np.ndarray:
+    def _process_julia_pattern(): -> np.ndarray:
         """Process Julia fractal pattern."""
 
         # Apply Julia-specific processing
@@ -199,14 +191,14 @@ class FractalInjector:
 
         return processed / (2 * np.pi)
 
-    def _process_sierpinski_pattern():-> np.ndarray:
+    def _process_sierpinski_pattern(): -> np.ndarray:
         """Process Sierpinski fractal pattern."""
 
         # Apply Sierpinski-specific processing
 
         return pattern_data.astype(bool).astype(float)
 
-    def synchronize_fractal_state():-> bool:
+    def synchronize_fractal_state(): -> bool:
         """Synchronize fractal state."""
 
         try:
@@ -221,7 +213,8 @@ class FractalInjector:
 
             else:
 
-                logger.warning(f"Fractal not found for synchronization: {fractal_id}")
+                logger.warning(
+                    f"Fractal not found for synchronization: {fractal_id}")
 
                 return False
 
@@ -231,7 +224,7 @@ class FractalInjector:
 
             return False
 
-    def detect_fractal_cycles():-> List[Dict[str, Any]]:
+    def detect_fractal_cycles(): -> List[Dict[str, Any]]:
         """Detect cycles in fractal patterns."""
 
         try:
@@ -284,7 +277,7 @@ class FractalInjector:
 
             return []
 
-    def get_fractal_decision():-> Dict[str, Any]:
+    def get_fractal_decision(): -> Dict[str, Any]:
         """Get decision based on fractal analysis."""
 
         try:
@@ -303,7 +296,11 @@ class FractalInjector:
 
             # Calculate correlation between input and fractal pattern
 
-            correlation = np.corrcoef(input_data.flatten(), pattern.flatten())[0, 1]
+            correlation = np.corrcoef(
+                input_data.flatten(),
+                pattern.flatten())[
+                0,
+                1]
 
             # Make decision based on correlation
 
@@ -350,14 +347,16 @@ class FractalInjector:
 
             return {"decision": "error", "confidence": 0.0, "error": str(e)}
 
-    def get_injection_statistics():-> Dict[str, Any]:
+    def get_injection_statistics(): -> Dict[str, Any]:
         """Get injection statistics."""
 
         total_injections = len(self.injection_history)
 
-        successful_injections = sum(1 for result in self.injection_history if result.success)
+        successful_injections = sum(
+            1 for result in self.injection_history if result.success)
 
-        success_rate = successful_injections / total_injections if total_injections > 0 else 0.0
+        success_rate = successful_injections / \
+            total_injections if total_injections > 0 else 0.0
 
         return {
             "total_injections": total_injections,
@@ -368,7 +367,7 @@ class FractalInjector:
         }
 
 
-def main():-> None:
+def main(): -> None:
     """Test the fractal injection system."""
 
     # Initialize fractal injector

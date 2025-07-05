@@ -1,6 +1,5 @@
 from typing import Any, Dict, List, Optional, Tuple, Union
 
-
 from core.drift_shell_engine import CorrectionFactors, ProfitVector
 from data.temporal_intelligence_integration import TemporalIntelligenceIntegration
 from hash_recollection.entropy_tracker import EntropyTracker
@@ -149,7 +148,7 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 
 Correction Overlay Matrix
-    
+
     - Dynamic Anomaly Detection & Multi-Model Correction.Implements the Correction Injection Function (CIF) for dynamic anomaly mitigation:
 
 
@@ -287,7 +286,7 @@ logger = logging.getLogger(__name__)
 
 
 class AnomalyType(Enum):Types of market anomalies that can be detected.PRICE_SPIKE
-    =  price_spikeVOLUME_SURGE =  volume_surgeHASH_DIVERGENCE =  hash_divergenceMOMENTUM_REVERSAL 
+    =  price_spikeVOLUME_SURGE =  volume_surgeHASH_DIVERGENCE =  hash_divergenceMOMENTUM_REVERSAL
     =  momentum_reversalVOLATILITY_SHOCK = volatility_shockBLACK_SWAN =  black_swanTECHNICAL_BREAKDOWN = technical_breakdownCORRELATION_BREAKDOWN =  correlation_breakdownclass CorrectionModel(Enum):Available correction models.QUANTUM_STATIC_CORE = qscGALILEO_TENSOR =  tensorSMART_MONEY_REPLAY = smart_moneyFIBONACCI_REVERSION =  fibonacciSTATISTICAL_REVERSION = statisticalENSEMBLE_HYBRID =  ensemble@dataclass
 
 
@@ -407,7 +406,7 @@ self.max_correction_magnitude = max_correction_magnitude
 
 
 self.correction_weights
-    
+
     = correction_weights or {quantum: 0.3,  # : Quantum correction weighttensor: 0.4,  # : Tensor correction weightsmart_money: 0.3,  # : Smart money correction weight
 
 
@@ -445,7 +444,7 @@ self.correction_history = deque(maxlen=100)
 
 
 self.baselines
-    
+
     = {price_volatility: 0.02,volume_ratio: 1.0,hash_similarity": 0.8,momentum_change": 0.1,vector_magnitude": 0.3,
 
 
@@ -527,7 +526,7 @@ self.pattern_utils = PatternUtils() if PatternUtilsin globals() else None
 
 
 self.stats
-    
+
     = {total_corrections: 0,anomalies_detected: 0,successful_corrections": 0,avg_correction_time": 0.0,correction_accuracy": 0.0,model_usage": {model.value: 0 for model in CorrectionModel},
 
 
@@ -2191,7 +2190,7 @@ similarity = 1.0 - (differences / len(hash1))
 
 
 def _store_correction_result():-> None:Store correction result for analysis.correction_record
-    
+
     = {timestamp: time.time(),original_vector: original_vector,correction_factors": correction_factors,anomalies": anomalies,processing_time": processing_time,
 
 

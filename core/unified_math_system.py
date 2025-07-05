@@ -9,21 +9,16 @@ import hashlib
 from typing import Any, Dict
 
 from .clean_math_foundation import CleanMathFoundation
-from .zpe_zbe_core import (
-    ZBEBalance,
-    ZPEVector,
-    ZPEZBECore,
-    ZPEZBEPerformanceTracker
-)
+from .zpe_zbe_core import ZBEBalance, ZPEVector, ZPEZBECore, ZPEZBEPerformanceTracker
 
 
 def generate_unified_hash(data: Any) -> str:
     """
     Generate unified hash from data.
-    
+
     Args:
         data: Data to hash
-        
+
     Returns:
         Hash string
     """
@@ -33,7 +28,7 @@ def generate_unified_hash(data: Any) -> str:
         data_str = str(sorted(data.items()))
     else:
         data_str = str(data)
-    
+
     return hashlib.sha256(data_str.encode()).hexdigest()[:16]
 
 
@@ -64,17 +59,16 @@ class UnifiedMathSystem:
             Quantum analysis results with ZPE and ZBE calculations
         """
         # Extract market data
-        price = market_data.get('price', 0.0)
-        entry_price = market_data.get('entry_price', price)
-        lower_bound = market_data.get('lower_bound', price * 0.95)
-        upper_bound = market_data.get('upper_bound', price * 1.05)
-        frequency = market_data.get('frequency', 7.83)
-        mass_coefficient = market_data.get('mass_coefficient', 1e-6)
+        price = market_data.get("price", 0.0)
+        entry_price = market_data.get("entry_price", price)
+        lower_bound = market_data.get("lower_bound", price * 0.95)
+        upper_bound = market_data.get("upper_bound", price * 1.05)
+        frequency = market_data.get("frequency", 7.83)
+        mass_coefficient = market_data.get("mass_coefficient", 1e-6)
 
         # Calculate ZPE vector
         zpe_vector = self.zpe_zbe_core.calculate_zero_point_energy(
-            frequency=frequency,
-            mass_coefficient=mass_coefficient
+            frequency=frequency, mass_coefficient=mass_coefficient
         )
 
         # Calculate ZBE balance
@@ -82,7 +76,7 @@ class UnifiedMathSystem:
             entry_price=entry_price,
             current_price=price,
             lower_bound=lower_bound,
-            upper_bound=upper_bound
+            upper_bound=upper_bound,
         )
 
         # Generate quantum soulprint vector
@@ -91,14 +85,10 @@ class UnifiedMathSystem:
         )
 
         # Assess strategy confidence
-        confidence = self.zpe_zbe_core.assess_quantum_strategy_confidence(
-            zpe_vector, zbe_balance
-        )
+        confidence = self.zpe_zbe_core.assess_quantum_strategy_confidence(zpe_vector, zbe_balance)
 
         # Dual matrix sync trigger
-        sync_trigger = self.zpe_zbe_core.dual_matrix_sync_trigger(
-            zpe_vector, zbe_balance
-        )
+        sync_trigger = self.zpe_zbe_core.dual_matrix_sync_trigger(zpe_vector, zbe_balance)
 
         return {
             "is_synced": sync_trigger["is_synced"],
@@ -107,16 +97,14 @@ class UnifiedMathSystem:
             "zpe_sync_status": zpe_vector.sync_status.value,
             "zbe_status": zbe_balance.status,
             "zbe_stability_score": zbe_balance.stability_score,
-            "quantum_potential": zpe_vector.metadata.get('quantum_potential', 0.0),
-            "resonance_factor": zpe_vector.metadata.get('resonance_factor', 1.0),
+            "quantum_potential": zpe_vector.metadata.get("quantum_potential", 0.0),
+            "resonance_factor": zpe_vector.metadata.get("resonance_factor", 1.0),
             "soulprint_vector": soulprint_vector,
             "strategy_confidence": confidence,
-            "recommended_action": sync_trigger["recommended_action"]
+            "recommended_action": sync_trigger["recommended_action"],
         }
 
-    def advanced_quantum_decision_router(
-        self, quantum_analysis: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    def advanced_quantum_decision_router(self, quantum_analysis: Dict[str, Any]) -> Dict[str, Any]:
         """
         Advanced quantum decision routing based on analysis.
 
@@ -126,11 +114,11 @@ class UnifiedMathSystem:
         Returns:
             Decision routing with strategy and action recommendations
         """
-        is_synced = quantum_analysis.get('is_synced', False)
-        zpe_energy = quantum_analysis.get('zpe_energy', 0.0)
-        zbe_status = quantum_analysis.get('zbe_status', 0.0)
-        quantum_potential = quantum_analysis.get('quantum_potential', 0.0)
-        confidence = quantum_analysis.get('strategy_confidence', 0.5)
+        is_synced = quantum_analysis.get("is_synced", False)
+        zpe_energy = quantum_analysis.get("zpe_energy", 0.0)
+        zbe_status = quantum_analysis.get("zbe_status", 0.0)
+        quantum_potential = quantum_analysis.get("quantum_potential", 0.0)
+        confidence = quantum_analysis.get("strategy_confidence", 0.5)
 
         # Decision logic based on quantum synchronization
         if is_synced and confidence > 0.8:
@@ -157,7 +145,7 @@ class UnifiedMathSystem:
             "quantum_potential": quantum_potential,
             "risk_adjustment": risk_adjustment,
             "zpe_energy": zpe_energy,
-            "zbe_status": zbe_status
+            "zbe_status": zbe_status,
         }
 
     def get_system_entropy(self, quantum_analysis: Dict[str, Any]) -> float:
@@ -170,9 +158,9 @@ class UnifiedMathSystem:
         Returns:
             System entropy value
         """
-        zpe_energy = quantum_analysis.get('zpe_energy', 0.0)
-        zbe_status = quantum_analysis.get('zbe_status', 0.0)
-        quantum_potential = quantum_analysis.get('quantum_potential', 0.0)
+        zpe_energy = quantum_analysis.get("zpe_energy", 0.0)
+        zbe_status = quantum_analysis.get("zbe_status", 0.0)
+        quantum_potential = quantum_analysis.get("quantum_potential", 0.0)
 
         # Calculate entropy based on quantum state variance
         energy_entropy = abs(zpe_energy - 2.72e-33) / 2.72e-33
@@ -185,10 +173,7 @@ class UnifiedMathSystem:
         return max(0.0, min(1.0, total_entropy))
 
     def log_strategy_performance(
-        self,
-        zpe_vector: ZPEVector,
-        zbe_balance: ZBEBalance,
-        strategy_metadata: Dict[str, Any]
+        self, zpe_vector: ZPEVector, zbe_balance: ZBEBalance, strategy_metadata: Dict[str, Any]
     ) -> None:
         """
         Log strategy performance for adaptive learning.

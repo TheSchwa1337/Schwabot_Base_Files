@@ -6,14 +6,18 @@ This module provides quantum-static-core enhanced profit allocation with
 dynamic risk assessment and Fibonacci-based position sizing.
 """
 
-from typing import Any, Dict, List, Optional, Tuple
-
+import logging
+from enum import Enum
+from dataclasses import dataclass, field
+import time
+from typing import Dict, Any, List, Optional
 
 logger = logging.getLogger(__name__)
 
 
 class QSCAllocationMode(Enum):
     """QSC-enhanced allocation modes."""
+
     IMMUNE_VALIDATED = "immune_validated"
     RESONANCE_OPTIMIZED = "resonance_optimized"
     QUANTUM_ENHANCED = "quantum_enhanced"
@@ -25,6 +29,7 @@ class QSCAllocationMode(Enum):
 @dataclass
 class QSCProfitCycle:
     """QSC-enhanced profit cycle."""
+
     cycle_id: str
     start_time: float
     qsc_mode: QSCAllocationMode
@@ -63,7 +68,7 @@ class QSCEnhancedProfitAllocator:
                 "risk_factor": 0.2,
                 "entropy_tolerance": 0.4,
                 "fibonacci_requirement": 0.6,
-                "quantum_threshold": 0.8
+                "quantum_threshold": 0.8,
             },
             "moderate": {
                 "max_allocation": 0.6,
@@ -71,7 +76,7 @@ class QSCEnhancedProfitAllocator:
                 "risk_factor": 0.4,
                 "entropy_tolerance": 0.6,
                 "fibonacci_requirement": 0.4,
-                "quantum_threshold": 0.6
+                "quantum_threshold": 0.6,
             },
             "aggressive": {
                 "max_allocation": 0.9,
@@ -79,8 +84,8 @@ class QSCEnhancedProfitAllocator:
                 "risk_factor": 0.7,
                 "entropy_tolerance": 0.8,
                 "fibonacci_requirement": 0.2,
-                "quantum_threshold": 0.4
-            }
+                "quantum_threshold": 0.4,
+            },
         }
 
         self.active_cycles: Dict[str, QSCProfitCycle] = {}
@@ -95,13 +100,14 @@ class QSCEnhancedProfitAllocator:
             "max_risk_per_cycle": 0.1,
             "qsc_validation_required": True,
             "tensor_coherence_threshold": 0.7,
-            "fibonacci_sequence_length": 10
+            "fibonacci_sequence_length": 10,
         }
 
     def _create_qsc_core(self):
         """Create QSC core instance."""
         try:
             from .quantum_static_core import QuantumStaticCore
+
             return QuantumStaticCore()
         except ImportError:
             logger.warning("QuantumStaticCore not available, using mock")
@@ -111,6 +117,7 @@ class QSCEnhancedProfitAllocator:
         """Create tensor bridge instance."""
         try:
             from .galileo_tensor_bridge import GalileoTensorBridge
+
             return GalileoTensorBridge()
         except ImportError:
             logger.warning("GalileoTensorBridge not available, using mock")
@@ -118,20 +125,26 @@ class QSCEnhancedProfitAllocator:
 
     def _create_mock_qsc(self):
         """Create mock QSC core for testing."""
+
         class MockQSC:
             def validate_profit_cycle(self, cycle_data):
                 return {"approved": True, "score": 0.8, "risk_level": "low"}
+
             def calculate_quantum_score(self, data):
                 return 0.75
+
         return MockQSC()
 
     def _create_mock_tensor_bridge(self):
         """Create mock tensor bridge for testing."""
+
         class MockTensorBridge:
             def calculate_coherence(self, data):
                 return 0.8
+
             def validate_tensor_operations(self, operations):
                 return True
+
         return MockTensorBridge()
 
     def create_profit_cycle(
@@ -139,7 +152,7 @@ class QSCEnhancedProfitAllocator:
         cycle_id: str,
         initial_profit: float,
         market_conditions: Dict[str, Any],
-        risk_profile: str = "moderate"
+        risk_profile: str = "moderate",
     ) -> QSCProfitCycle:
         """Create a new QSC-enhanced profit cycle."""
         if len(self.active_cycles) >= self.config["max_concurrent_cycles"]:
@@ -161,19 +174,21 @@ class QSCEnhancedProfitAllocator:
         )
 
         # QSC validation
-        qsc_validation = self.qsc.validate_profit_cycle({
-            "cycle_id": cycle_id,
-            "initial_profit": initial_profit,
-            "market_conditions": market_conditions,
-            "risk_profile": risk_profile,
-            "qsc_metrics": {
-                "resonance_score": resonance_score,
-                "fibonacci_alignment": fibonacci_alignment,
-                "entropy_stability": entropy_stability,
-                "tensor_coherence": tensor_coherence,
-                "quantum_score": quantum_score
+        qsc_validation = self.qsc.validate_profit_cycle(
+            {
+                "cycle_id": cycle_id,
+                "initial_profit": initial_profit,
+                "market_conditions": market_conditions,
+                "risk_profile": risk_profile,
+                "qsc_metrics": {
+                    "resonance_score": resonance_score,
+                    "fibonacci_alignment": fibonacci_alignment,
+                    "entropy_stability": entropy_stability,
+                    "tensor_coherence": tensor_coherence,
+                    "quantum_score": quantum_score,
+                },
             }
-        })
+        )
 
         # Create cycle
         cycle = QSCProfitCycle(
@@ -188,19 +203,19 @@ class QSCEnhancedProfitAllocator:
             recommended_by_qsc=qsc_validation["approved"],
             quantum_score=quantum_score,
             phase_bucket=self._determine_phase_bucket(quantum_score, tensor_coherence),
-            total_profit=initial_profit
+            total_profit=initial_profit,
         )
 
         self.active_cycles[cycle_id] = cycle
-        logger.info(f"Created QSC profit cycle {cycle_id} with mode {qsc_mode.value}")
+        logger.info(
+            f"Created QSC profit cycle {cycle_id} with mode {
+                qsc_mode.value}"
+        )
 
         return cycle
 
     def allocate_profit(
-        self,
-        cycle_id: str,
-        profit_amount: float,
-        allocation_targets: List[Dict[str, Any]]
+        self, cycle_id: str, profit_amount: float, allocation_targets: List[Dict[str, Any]]
     ) -> Dict[str, Any]:
         """Allocate profit using QSC-enhanced logic."""
         if cycle_id not in self.active_cycles:
@@ -215,16 +230,10 @@ class QSCEnhancedProfitAllocator:
         if not cycle.recommended_by_qsc:
             logger.warning(f"Cycle {cycle_id} not recommended by QSC, blocking allocation")
             cycle.qsc_blocked_amount += profit_amount
-            return {
-                "allocated": 0.0,
-                "blocked": profit_amount,
-                "reason": "QSC validation failed"
-            }
+            return {"allocated": 0.0, "blocked": profit_amount, "reason": "QSC validation failed"}
 
         # Calculate allocation based on QSC mode
-        allocation_result = self._calculate_qsc_allocation(
-            cycle, profit_amount, allocation_targets
-        )
+        allocation_result = self._calculate_qsc_allocation(cycle, profit_amount, allocation_targets)
 
         # Update cycle
         cycle.allocated_profit += allocation_result["allocated"]
@@ -259,7 +268,7 @@ class QSCEnhancedProfitAllocator:
         sequence = [1.0, 1.0]
 
         for i in range(2, length):
-            sequence.append(sequence[i-1] + sequence[i-2])
+            sequence.append(sequence[i - 1] + sequence[i - 2])
 
         return sequence
 
@@ -280,7 +289,7 @@ class QSCEnhancedProfitAllocator:
         resonance_score: float,
         fibonacci_alignment: float,
         entropy_stability: float,
-        quantum_score: float
+        quantum_score: float,
     ) -> QSCAllocationMode:
         """Determine QSC allocation mode based on metrics."""
         avg_score = (resonance_score + fibonacci_alignment + entropy_stability + quantum_score) / 4
@@ -310,10 +319,7 @@ class QSCEnhancedProfitAllocator:
             return "entropy_phase"
 
     def _calculate_qsc_allocation(
-        self,
-        cycle: QSCProfitCycle,
-        profit_amount: float,
-        allocation_targets: List[Dict[str, Any]]
+        self, cycle: QSCProfitCycle, profit_amount: float, allocation_targets: List[Dict[str, Any]]
     ) -> Dict[str, Any]:
         """Calculate allocation using QSC-enhanced logic."""
         # Get allocation template based on QSC mode
@@ -336,7 +342,7 @@ class QSCEnhancedProfitAllocator:
             "blocked": blocked_amount,
             "qsc_mode": cycle.qsc_mode.value,
             "allocation_percentage": adjusted_allocation,
-            "targets": allocation_targets
+            "targets": allocation_targets,
         }
 
     def close_cycle(self, cycle_id: str) -> QSCProfitCycle:
@@ -369,7 +375,7 @@ class QSCEnhancedProfitAllocator:
             "quantum_score": cycle.quantum_score,
             "tensor_coherence": cycle.tensor_coherence,
             "recommended_by_qsc": cycle.recommended_by_qsc,
-            "phase_bucket": cycle.phase_bucket
+            "phase_bucket": cycle.phase_bucket,
         }
 
     def get_system_stats(self) -> Dict[str, Any]:
@@ -379,7 +385,7 @@ class QSCEnhancedProfitAllocator:
             "total_cycles": len(self.cycle_history),
             "max_concurrent_cycles": self.config["max_concurrent_cycles"],
             "total_profit_allocated": sum(c.allocated_profit for c in self.active_cycles.values()),
-            "total_profit_blocked": sum(c.qsc_blocked_amount for c in self.active_cycles.values())
+            "total_profit_blocked": sum(c.qsc_blocked_amount for c in self.active_cycles.values()),
         }
 
 

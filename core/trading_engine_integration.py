@@ -5,20 +5,22 @@ Integrates advanced mathematical modeling for trade decision making.
 Provides robust error handling and validation mechanisms.
 """
 
+import datetime
+import logging
+import math
 import traceback
 import uuid
-import logging
-from enum import Enum
 from dataclasses import dataclass, field
-import math
-import datetime
+from enum import Enum, auto
 from typing import Any, Dict, List, Optional, Union
 
 from core.clean_unified_math import (
-    clean_unified_math, 
     calculate_position_size,
-    optimize_brain_profit
+    clean_unified_math,
+    optimize_brain_profit,
 )
+
+import hashlib
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -229,7 +231,10 @@ class TradeExecution:
         # Use mathematical system to score performance
         try:
             self.performance_score = clean_unified_math.optimize_profit(
-                abs(self.realized_profit), self.volume, 0.7  # Default confidence
+                # Default confidence
+                abs(self.realized_profit),
+                self.volume,
+                0.7,
             )
         except Exception as e:
             logger.error(f"Performance score calculation failed: {e}")

@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+import logging
+import time
+
 from typing import Dict, Optional
 
 try:
@@ -53,7 +56,10 @@ class ExchangeConnection:
         self.market_data_cache: Dict[str, MarketData] = {}
         self.cache_expiry = config.get("market_data_cache_expiry", 30)
 
-        logger.info(f"Exchange connection initialized for {credentials.exchange.value}")
+        logger.info(
+            f"Exchange connection initialized for {
+                credentials.exchange.value}"
+        )
 
     async def connect(self) -> bool:
         """Establishes connection to the exchange."""
@@ -101,7 +107,9 @@ class ExchangeConnection:
             self.status = ConnectionStatus.ERROR
             self.last_error = str(e)
             logger.error(
-                f" Failed to connect to {self.credentials.exchange.value}: {e}", exc_info=True
+                f" Failed to connect to {
+                    self.credentials.exchange.value}: {e}",
+                exc_info=True,
             )
             return False
 
@@ -160,7 +168,8 @@ class ExchangeConnection:
             self.failed_requests += 1
             self.last_error = str(e)
             logger.error(
-                f"Error fetching market data for {symbol} on {self.credentials.exchange.value}: {e}"
+                f"Error fetching market data for {symbol} on {
+                    self.credentials.exchange.value}: {e}"
             )
             return None
 
@@ -191,7 +200,11 @@ class ExchangeConnection:
 
             self.last_heartbeat = time.time()
 
-            logger.info(f" Order placed on {self.credentials.exchange.value}: {response.order_id}")
+            logger.info(
+                f" Order placed on {
+                    self.credentials.exchange.value}: {
+                    response.order_id}"
+            )
 
             return response
 
@@ -199,7 +212,9 @@ class ExchangeConnection:
             self.failed_requests += 1
             self.last_error = str(e)
             logger.error(
-                f" Error placing order on {self.credentials.exchange.value}: {e}", exc_info=True
+                f" Error placing order on {
+                    self.credentials.exchange.value}: {e}",
+                exc_info=True,
             )
             return self._create_error_response(order_request, str(e))
 
@@ -225,7 +240,10 @@ class ExchangeConnection:
         except Exception as e:
             self.failed_requests += 1
             self.last_error = str(e)
-            logger.error(f"Error fetching balance from {self.credentials.exchange.value}: {e}")
+            logger.error(
+                f"Error fetching balance from {
+                    self.credentials.exchange.value}: {e}"
+            )
             return {}
 
     def _create_success_response(self, order) -> OrderResponse:

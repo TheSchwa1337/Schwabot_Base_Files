@@ -17,13 +17,12 @@ This system integrates:
 from __future__ import annotations
 
 import logging
-from enum import Enum
-from dataclasses import dataclass, field
 import time
-import numpy as np
-
+from dataclasses import dataclass, field
+from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
 
+import numpy as np
 
 from .clean_math_foundation import BitPhase, CleanMathFoundation, ThermalState
 from .clean_profit_vectorization import CleanProfitVectorization, ProfitVector, VectorizationMode
@@ -101,7 +100,8 @@ class UnifiedProfitVectorizationSystem:
         self.performance_tracking = True
 
         logger.info(
-            f"UnifiedProfitVectorizationSystem initialized with mode: {integration_mode.value}"
+            f"UnifiedProfitVectorizationSystem initialized with mode: {
+                integration_mode.value}"
         )
 
     def calculate_unified_profit(
@@ -132,7 +132,8 @@ class UnifiedProfitVectorizationSystem:
             if bit_phase is None:
                 bit_phase = self._determine_bit_phase(market_data)
 
-            # Calculate profit using different methods based on integration mode
+            # Calculate profit using different methods based on integration
+            # mode
             if self.integration_mode == ProfitIntegrationMode.UNIFIED:
                 result = self._calculate_unified_mode(
                     market_data, strategy, thermal_state, bit_phase
@@ -162,7 +163,10 @@ class UnifiedProfitVectorizationSystem:
             self.last_calculation_time = time.time()
             self.calculation_count += 1
 
-            logger.debug(f"Unified profit calculation completed in {calculation_time:.4f}s")
+            logger.debug(
+                f"Unified profit calculation completed in {
+                    calculation_time:.4f}s"
+            )
 
             return result
 

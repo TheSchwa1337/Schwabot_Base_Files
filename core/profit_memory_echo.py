@@ -1,6 +1,5 @@
 from typing import Any, Dict, Optional
 
-
 """
 
 
@@ -157,7 +156,7 @@ lattice_state: The L(t) value for the current tick.
 
 
 profit_vector: The L (change in lattice state
-    = profit vector) for the current tick.self.lattice_history[tick_id] 
+    = profit vector) for the current tick.self.lattice_history[tick_id]
     = {L(t): lattice_state,L: profit_vector,timestamp": time.time(),
 
 

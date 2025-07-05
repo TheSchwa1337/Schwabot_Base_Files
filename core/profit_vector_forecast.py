@@ -1,7 +1,6 @@
 from collections import defaultdict, deque
 from typing import Any, Dict, List, Optional, Tuple
 
-
 from core.drift_shell_engine import ProfitVector
 from data.temporal_intelligence_integration import TemporalIntelligenceIntegration
 from hash_recollection.pattern_utils import PatternUtils
@@ -139,7 +138,7 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 
 Profit Vector Forecast Engine
-    
+
     - Advanced Directional Movement Prediction.Implements sophisticated profit vectorization mathematics for 3-dimensional market
 
 
@@ -419,7 +418,7 @@ self.state_history = deque(maxlen=memory_size)
 
 
 self.profit_thresholds
-    = {high_profit: 0.02,    # >2% profitlow_profit: 0.005,    # 0.5-2% profitneutral: 
+    = {high_profit: 0.02,    # >2% profitlow_profit: 0.005,    # 0.5-2% profitneutral:
     -0.005,      # -0.5% to 0.5%loss_zone: -0.02,     # -2% to -0.5%high_loss: float('-in')  # <-2%
 
 
@@ -1117,7 +1116,7 @@ self.phase_history = deque(maxlen=20)
 
 
 self.stats
-    
+
     = {total_forecasts: 0,correct_directions: 0,avg_magnitude_accuracy: 0.0,phase_detection_accuracy": 0.0,confluence_signals": 0,avg_processing_time": 0.0,
 
 
@@ -2731,7 +2730,7 @@ self.current_phase.confidence if self.current_phase else 0.0
 
 
 ),memory_utilization": {signals: len(self.historical_signals)
-    / self.lookback_periods,prices": len(self.price_history) / (self.lookback_periods 
+    / self.lookback_periods,prices": len(self.price_history) / (self.lookback_periods
     * 2),volumes": len(self.volume_history) / self.lookback_periods,
 
 
@@ -2870,7 +2869,7 @@ engine.add_market_data(price, volume, rsi, momentum, signal_hash = hash_val)
 
 
 timeframes
-    
+
     = {1m: {rsi: 58,momentum: 0.08,volume: 1.2},5m": {rsi: 62,momentum": 0.12,volume": 1.1},15m": {rsi: 65,momentum": 0.15,volume": 1.0},1h": {rsi: 59,momentum": 0.06,volume": 0.9},
 
 

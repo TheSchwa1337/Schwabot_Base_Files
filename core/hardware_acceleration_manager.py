@@ -144,7 +144,7 @@ class AccelerationMode(Enum):
 
 
     Hardware acceleration modes.IDLE =  idleTHERMAL_OPTIMIZATION
-    =  thermal_optimizationBIT_LEVEL_OPTIMIZATION =  bit_level_optimizationUNIFIED_ACCELERATION 
+    =  thermal_optimizationBIT_LEVEL_OPTIMIZATION =  bit_level_optimizationUNIFIED_ACCELERATION
     =  unified_accelerationPERFORMANCE_MODE =  performance_modeEFFICIENCY_MODE =  efficiency_mode@dataclass
 
 
@@ -457,7 +457,10 @@ class HardwareAccelerationManager:Hardware Acceleration Manager - Coordinates ZP
 
 
 
-                cache_hierarchy={L1: 32 * 1024, L2: 256 * 1024, L3: 8 * 1024 * 1024},
+                cache_hierarchy={
+    L1: 32 * 1024,
+    L2: 256 * 1024,
+     L3: 8 * 1024 * 1024},
 
 
 
@@ -513,7 +516,10 @@ class HardwareAccelerationManager:Hardware Acceleration Manager - Coordinates ZP
 
 
 
-                cache_hierarchy={L1: 32 * 1024, L2: 256 * 1024,L3: 8 * 1024 * 1024},
+                cache_hierarchy={
+    L1: 32 * 1024,
+    L2: 256 * 1024,
+    L3: 8 * 1024 * 1024},
 
 
 
@@ -645,7 +651,8 @@ def calculate_unified_acceleration() -> AccelerationMetrics:Calculate unified ac
 
 
 
-                    computational_load=market_conditions.get(computational_load, 0.5),
+                    computational_load=market_conditions.get(
+                        computational_load, 0.5),
 
 
 
@@ -705,7 +712,8 @@ def calculate_unified_acceleration() -> AccelerationMetrics:Calculate unified ac
 
 
 
-                combined_acceleration = (zpe_boost_factor * zbe_optimization_factor) ** 0.5
+                combined_acceleration = (
+    zpe_boost_factor * zbe_optimization_factor) ** 0.5
 
 
 
@@ -1155,7 +1163,8 @@ matrix_multiply: 1.2,tensor_contraction: 1.1,eigenvalue_decomposition: 0.9,svd_d
 
 
 
-            optimal_batch_size = max(1, int(tensor_size * speedup_multiplier / 1000))
+            optimal_batch_size = max(
+                1, int(tensor_size * speedup_multiplier / 1000))
 
 
 
@@ -1199,12 +1208,10 @@ matrix_multiply: 1.2,tensor_contraction: 1.1,eigenvalue_decomposition: 0.9,svd_d
 
 
 """
-memory_optimization: memory_optimization,thermal_optimization:
-thermal_optimization,optimal_batch_size: optimal_batch_size,parallelization_factor:
-parallelization_factor,operation_type: operation_type,tensor_complexity:
-tensor_complexity,tensor_size": tensor_size,"
-
-
+memory_optimization: memory_optimization, thermal_optimization:
+thermal_optimization, optimal_batch_size: optimal_batch_size, parallelization_factor:
+parallelization_factor, operation_type: operation_type, tensor_complexity:
+tensor_complexity, tensor_size": tensor_size,"
 
             }
 

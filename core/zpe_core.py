@@ -10,48 +10,50 @@ import datetime
 import logging
 import math
 import time
-import numpy as np
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Dict, List, Optional, Tuple, Any
+from typing import Any, Dict, List, Optional, Tuple
+
+import numpy as np
 
 # Import clean math system
 try:
     from core.clean_unified_math import clean_unified_math as unified_math
 except ImportError:
-        # Fallback for testing
-        class unified_math:
-            @staticmethod
-            def sin(x):
-                return np.sin(x)
-
-            @staticmethod
-            def max(x, y):
-                return max(x, y)
-
-            @staticmethod
-            def min(x, y):
-                return min(x, y)
-
-            @staticmethod
-            def abs(x):
-                return abs(x)
+    # Fallback for testing
+    class unified_math:
+        @staticmethod
+        def sin(x):
+            return np.sin(x)
 
         @staticmethod
-        def multiply(x, y):
-            return x * y
+        def max(x, y):
+            return max(x, y)
 
         @staticmethod
-        def tanh(x):
-            return np.tanh(x)
+        def min(x, y):
+            return min(x, y)
 
         @staticmethod
-        def atan(x):
-            return np.arctan(x)
+        def abs(x):
+            return abs(x)
+
+    @staticmethod
+    def multiply(x, y):
+        return x * y
+
+    @staticmethod
+    def tanh(x):
+        return np.tanh(x)
+
+    @staticmethod
+    def atan(x):
+        return np.arctan(x)
 
 
 class ZPEMode(Enum):
     """ZPE operation modes."""
+
     IDLE = "idle"
     THERMAL_MANAGEMENT = "thermal_management"
     QUANTUM_OPTIMIZATION = "quantum_optimization"
@@ -63,6 +65,7 @@ class ZPEMode(Enum):
 @dataclass
 class ThermalData:
     """Thermal efficiency data."""
+
     timestamp: float
     thermal_efficiency: float
     thermal_integrity: float
@@ -75,6 +78,7 @@ class ThermalData:
 @dataclass
 class ZPEWorkData:
     """ZPE work calculation data."""
+
     timestamp: float
     work_value: float
     force_magnitude: float
@@ -86,6 +90,7 @@ class ZPEWorkData:
 @dataclass
 class RotationalTorqueData:
     """Rotational torque calculation data."""
+
     timestamp: float
     torque_value: float
     inertia: float
@@ -193,10 +198,7 @@ class ZPECore:
             return self.ZPE_CONSTANTS["ZERO_POINT_BASELINE"]
 
     def calculate_thermal_efficiency(
-        self, 
-        energy_input: float, 
-        energy_output: float, 
-        thermal_state: Optional[str] = None
+        self, energy_input: float, energy_output: float, thermal_state: Optional[str] = None
     ) -> ThermalData:
         """
         Calculate thermal efficiency: η = W_out / Q_in
@@ -247,7 +249,7 @@ class ZPECore:
                     "mode": self.mode.value,
                     "precision": self.precision,
                     "zpe_constants": self.ZPE_CONSTANTS,
-                }
+                },
             )
 
             # Store in history
@@ -271,7 +273,7 @@ class ZPECore:
                 thermal_state="ERROR",
                 energy_consumption=0.0,
                 heat_dissipation=0.0,
-                metadata={"error": str(e)}
+                metadata={"error": str(e)},
             )
 
     def calculate_zpe_work(self, trend_strength: float, entry_exit_range: float) -> ZPEWorkData:
@@ -292,7 +294,8 @@ class ZPECore:
             ZPEWorkData with work calculations
         """
         try:
-            # Calculate market force using hyperbolic tangent for bounded output
+            # Calculate market force using hyperbolic tangent for bounded
+            # output
             market_force = unified_math.tanh(trend_strength)  # Bounded between -1 and 1
 
             # Calculate work performed
@@ -311,7 +314,7 @@ class ZPECore:
                     "trend_strength": trend_strength,
                     "market_force": market_force,
                     "work_constant": self.ZPE_CONSTANTS["WORK_CONSTANT"],
-                }
+                },
             )
 
             # Store in history
@@ -333,13 +336,11 @@ class ZPECore:
                 force_magnitude=0.0,
                 displacement=0.0,
                 profit_potential=0.0,
-                metadata={"error": str(e)}
+                metadata={"error": str(e)},
             )
 
     def calculate_rotational_torque(
-        self, 
-        liquidity_depth: float, 
-        trend_change_rate: float
+        self, liquidity_depth: float, trend_change_rate: float
     ) -> RotationalTorqueData:
         """
         Calculate Rotational Torque: τ = I · α
@@ -367,7 +368,7 @@ class ZPECore:
             torque = inertia * angular_acceleration * self.ZPE_CONSTANTS["TORQUE_CONSTANT"]
 
             # Calculate rotational energy
-            rotational_energy = 0.5 * inertia * (angular_acceleration ** 2)
+            rotational_energy = 0.5 * inertia * (angular_acceleration**2)
 
             torque_data = RotationalTorqueData(
                 timestamp=time.time(),
@@ -379,7 +380,7 @@ class ZPECore:
                     "liquidity_depth": liquidity_depth,
                     "trend_change_rate": trend_change_rate,
                     "torque_constant": self.ZPE_CONSTANTS["TORQUE_CONSTANT"],
-                }
+                },
             )
 
             # Store in history
@@ -401,7 +402,7 @@ class ZPECore:
                 inertia=0.0,
                 angular_acceleration=0.0,
                 rotational_energy=0.0,
-                metadata={"error": str(e)}
+                metadata={"error": str(e)},
             )
 
     def spin_profit_wheel(self, market_data: Dict[str, Any]) -> Dict[str, Any]:
@@ -439,18 +440,20 @@ class ZPECore:
             thermal_balance = thermal_data.thermal_integrity
 
             # Update profit wheel state
-            self.profit_wheel_state.update({
-                "is_spinning": spin_frequency > 0.1,
-                "spin_frequency": spin_frequency,
-                "profit_momentum": profit_momentum,
-                "thermal_balance": thermal_balance,
-            })
+            self.profit_wheel_state.update(
+                {
+                    "is_spinning": spin_frequency > 0.1,
+                    "spin_frequency": spin_frequency,
+                    "profit_momentum": profit_momentum,
+                    "thermal_balance": thermal_balance,
+                }
+            )
 
             # Calculate overall profit score
             profit_score = (
-                zpe_work.profit_potential * 0.4 +
-                rotational_torque.rotational_energy * 0.3 +
-                thermal_data.thermal_efficiency * 0.3
+                zpe_work.profit_potential * 0.4
+                + rotational_torque.rotational_energy * 0.3
+                + thermal_data.thermal_efficiency * 0.3
             )
 
             # Determine trading signal
@@ -488,10 +491,13 @@ class ZPECore:
                     "precision": self.precision,
                     "total_work_performed": self.total_work_performed,
                     "rotational_momentum": self.rotational_momentum,
-                }
+                },
             }
 
-            self.logger.info(f"Profit wheel result: {signal} (confidence: {confidence:.3f})")
+            self.logger.info(
+                f"Profit wheel result: {signal} (confidence: {
+                    confidence:.3f})"
+            )
             return result
 
         except Exception as e:
@@ -502,7 +508,7 @@ class ZPECore:
                 "confidence": 0.0,
                 "profit_score": 0.0,
                 "error": str(e),
-                "metadata": {"mode": self.mode.value}
+                "metadata": {"mode": self.mode.value},
             }
 
     def get_computational_boost(self) -> Dict[str, float]:
@@ -540,7 +546,7 @@ class ZPECore:
                 "momentum_boost": 1.0,
                 "overall_boost": 1.0,
                 "precision_factor": 1.0,
-                "error": str(e)
+                "error": str(e),
             }
 
     def calculate_quantum_field_fluctuation(self, price_data: List[float]) -> float:

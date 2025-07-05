@@ -708,7 +708,7 @@ Stack.print( Strategic Recursive Vector Immunity Stack Demo)
 
 
     config
-    
+
     = {entropy: {entropy_threshold: 0.3},immunity: {shock_threshold: 0.7},fortification: {adaptive_scaling: True},
 
 

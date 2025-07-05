@@ -4,12 +4,20 @@ Automated Trading Engine - Core CCXT Integration
 Handles automated trading with batch orders, buy/sell walls, and real-time price tracking
 """
 
-import ccxt
 import asyncio
-from typing import Dict, List, Optional, Tuple
 from queue import Queue
+from typing import Dict, List, Optional, Tuple
+
+import ccxt
+import logging
+from dataclasses import dataclass
+from datetime import datetime
+import threading
+import time
+import numpy as np
 
 logger = logging.getLogger(__name__)
+
 
 @dataclass
 class TradingSignal:
@@ -29,6 +37,7 @@ class TradingSignal:
         if self.timestamp is None:
             self.timestamp = datetime.now()
 
+
 @dataclass
 class BatchOrder:
     """Batch order configuration for automated trading."""
@@ -41,10 +50,15 @@ class BatchOrder:
     strategy: str
     priority: int = 1
 
+
 class AutomatedTradingEngine:
     """Core automated trading engine with CCXT integration."""
 
-    def __init__(self, exchange_config: Dict, api_key: str = None, secret: str = None):
+    def __init__(
+    self,
+    exchange_config: Dict,
+    api_key: str = None,
+     secret: str = None):
         """
         Initialize automated trading engine.
 
@@ -110,17 +124,20 @@ class AutomatedTradingEngine:
             }
         })
 
-        logger.info(f"Initialized {exchange_name} exchange for automated trading")
+        logger.info(
+    f"Initialized {exchange_name} exchange for automated trading")
         return exchange
 
     def _start_background_processors(self):
         """Start background processors for automated trading."""
         # Start batch order processor
-        self.batch_processor = threading.Thread(target=self._process_batch_orders, daemon=True)
+        self.batch_processor = threading.Thread(
+    target=self._process_batch_orders, daemon=True)
         self.batch_processor.start()
 
         # Start price tracker
-        self.price_tracker = threading.Thread(target=self._track_prices, daemon=True)
+        self.price_tracker = threading.Thread(
+    target=self._track_prices, daemon=True)
         self.price_tracker.start()
 
         logger.info("Started background processors for automated trading")
@@ -156,7 +173,8 @@ class AutomatedTradingEngine:
                         self._update_tensor_state(symbol, ticker['last'])
 
                     except Exception as e:
-                        logger.warning(f"Failed to fetch price for {symbol}: {e}")
+                        logger.warning(
+    f"Failed to fetch price for {symbol}: {e}")
 
                 time.sleep(1)  # Update every second
 
@@ -180,7 +198,8 @@ class AutomatedTradingEngine:
 
         # Calculate momentum
         if len(momentum_data) > 1:
-            momentum = (momentum_data[-1] - momentum_data[-2]) / momentum_data[-2]
+            momentum = (momentum_data[-1] -
+                        momentum_data[-2]) / momentum_data[-2]
             self.tensor_state['momentum'][symbol] = momentum
 
         # Calculate volatility (rolling standard deviation)
@@ -291,7 +310,9 @@ class AutomatedTradingEngine:
                 )
                 self._execute_signal(signal)
 
-        logger.info(f"Created basket order {basket_id} for {len(basket_symbols)} symbols")
+        logger.info(
+    f"Created basket order {basket_id} for {
+        len(basket_symbols)} symbols")
         return basket_id
 
     def _process_batch_orders(self):
@@ -322,10 +343,8 @@ class AutomatedTradingEngine:
                     price = batch_order.price_range[0]
                 else:
                     # Distribute prices across range
-                    price_ratio = i / (batch_order.batch_count
-    - 1) if batch_order.batch_count > 1 else 0.5
-                    price = batch_order.price_range[0] + (batch_order.price_range[1]
-    - batch_order.price_range[0]) * price_ratio
+                    price_ratio = i / (batch_order.batch_count - 1) if batch_order.batch_count > 1 else 0.5
+                    price = batch_order.price_range[0] + (batch_order.price_range[1] - batch_order.price_range[0]) * price_ratio
 
                 # Create trading signal
                 signal = TradingSignal(
@@ -352,7 +371,9 @@ class AutomatedTradingEngine:
                 if i < batch_order.batch_count - 1:
                     time.sleep(time_between_orders)
 
-            logger.info(f"Executed batch order {batch_id} with {batch_order.batch_count} orders")
+            logger.info(
+    f"Executed batch order {batch_id} with {
+        batch_order.batch_count} orders")
 
         except Exception as e:
             logger.error(f"Error executing batch order {batch_id}: {e}")
@@ -383,7 +404,7 @@ class AutomatedTradingEngine:
                 'timestamp': datetime.now()
             }
 
-logger.info(f"Executed {signal.side} order {order_id} for {signal.quantity} {signal.symbol}")
+            logger.info(f"Executed {signal.side} order {order_id} for {signal.quantity} {signal.symbol}")
             return order_id
 
         except Exception as e:
@@ -472,8 +493,7 @@ logger.info(f"Executed {signal.side} order {order_id} for {signal.quantity} {sig
             logger.error(f"Error calculating basket correlation: {e}")
             return np.array([])
 
-    def optimize_basket_weights(self, symbols: List[str], target_volatility: float = 0.1)
-    -> List[float]:
+    def optimize_basket_weights(self, symbols: List[str], target_volatility: float = 0.1) -> List[float]:
         """
         Optimize basket weights based on mathematical tensor analysis.
 

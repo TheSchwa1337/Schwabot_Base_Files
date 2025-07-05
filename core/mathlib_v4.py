@@ -14,14 +14,15 @@ Comprehensive mathematical library providing:
 
 from __future__ import annotations
 
-import logging
-from enum import Enum
-from dataclasses import dataclass, field
-import time
-import numpy as np
-import math
 import hashlib
+import logging
+import math
+import time
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import List, Dict, Any
 
+import numpy as np
 
 # Configure logging
 logger = logging.getLogger(__name__)

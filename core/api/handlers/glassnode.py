@@ -3,6 +3,7 @@ from __future__ import annotations
 import asyncio
 import logging
 import time
+import json
 from typing import Any, Dict
 
 try:
@@ -16,6 +17,8 @@ except ImportError:
     requests = None
 
 from .base_handler import BaseAPIHandler
+
+logger = logging.getLogger(__name__)
 
 """Glassnode API Handler
 
@@ -99,7 +102,10 @@ class GlassnodeHandler(BaseAPIHandler):
 
                         elif resp.status != 200:
 
-                            logger.warning(f"Glassnode API error {resp.status} for metric {metric}")
+                            logger.warning(
+                                f"Glassnode API error {
+                                    resp.status} for metric {metric}"
+                            )
 
                             all_data[metric] = []
 
@@ -129,7 +135,8 @@ class GlassnodeHandler(BaseAPIHandler):
                     elif response.status_code != 200:
 
                         logger.warning(
-                            f"Glassnode API error {response.status_code} for metric {metric}"
+                            f"Glassnode API error {
+                                response.status_code} for metric {metric}"
                         )
 
                         all_data[metric] = []
@@ -275,8 +282,10 @@ class GlassnodeHandler(BaseAPIHandler):
                 100,
                 (
                     (hash_rate / 1e18 * 20)  # Hash rate component
-                    + (active_addresses / 1000000 * 30)  # Active addresses component
-                    + (transaction_count / 300000 * 50)  # Transaction count component
+                    # Active addresses component
+                    + (active_addresses / 1000000 * 30)
+                    # Transaction count component
+                    + (transaction_count / 300000 * 50)
                 ),
             )
 
@@ -361,7 +370,8 @@ if __name__ == "__main__":
 
     logging.basicConfig(level=logging.INFO)
 
-    handler = GlassnodeHandler(api_key="YOUR_GLASSNODE_API_KEY")  # Replace with your actual API key
+    # Replace with your actual API key
+    handler = GlassnodeHandler(api_key="YOUR_GLASSNODE_API_KEY")
 
     async def main():
 

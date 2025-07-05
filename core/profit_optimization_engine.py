@@ -125,7 +125,8 @@ Returns:
         for iteration in range(max_iterations):
             # Calculate objective function and gradient
             if risk_metric == RiskMetric.SHARPE_RATIO:
-                objective, gradient = self._sharpe_ratio_gradient(weights, returns, cov_matrix)
+                objective, gradient = self._sharpe_ratio_gradient(
+                    weights, returns, cov_matrix)
             else:
                 objective, gradient
     = self._generic_risk_gradient(weights, returns, cov_matrix, risk_metric)

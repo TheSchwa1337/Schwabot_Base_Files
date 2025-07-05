@@ -15,15 +15,15 @@ CRITICAL GUARANTEE: ZPE/ZBE systems never appear in this calculation.
 They only affect computation time, never profit.
 """
 
-import sys
-from typing import Any, Dict, List
-import logging
-from enum import Enum
-from dataclasses import dataclass, field
-import time
-import numpy as np
 import hashlib
+import logging
+import sys
+import time
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, List
 
+import numpy as np
 
 logger = logging.getLogger(__name__)
 
@@ -61,7 +61,12 @@ class HistoryState:
 
     def get_hash_signature(self) -> str:
         """Generate deterministic hash signature for state."""
-        state_str = f"{self.timestamp}_{len(self.hash_matrices)}_{len(self.tensor_buckets)}"
+        state_str = f"{
+            self.timestamp}_{
+            len(
+                self.hash_matrices)}_{
+                len(
+                    self.tensor_buckets)}"
         return hashlib.sha256(state_str.encode()).hexdigest()
 
 
@@ -402,7 +407,10 @@ def demo_pure_profit_calculation():
     result = calculator.calculate_profit(market_data, history_state)
     print(f"Total Profit Score: {result.total_profit_score:.6f}")
     print(f"Confidence Score: {result.confidence_score:.6f}")
-    print(f"Mathematical Purity: {result.calculation_metadata['mathematical_purity']}")
+    print(
+        f"Mathematical Purity: {
+            result.calculation_metadata['mathematical_purity']}"
+    )
 
     # Validate purity
     is_pure = calculator.validate_profit_purity(market_data, history_state)
@@ -410,7 +418,10 @@ def demo_pure_profit_calculation():
 
     # Show metrics
     metrics = calculator.get_calculation_metrics()
-    print(f"Average Calculation Time: {metrics['average_calculation_time']:.6f}s")
+    print(
+        f"Average Calculation Time: {
+            metrics['average_calculation_time']:.6f}s"
+    )
 
 
 if __name__ == "__main__":

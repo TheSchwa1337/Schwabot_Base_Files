@@ -1,9 +1,11 @@
 from decimal import Decimal, getcontext
 from typing import Any, Dict, List, Optional, Union
 
+
 # Add stub class to fix import errors
 class PortfolioTracker:
     """Stub PortfolioTracker class to fix import errors."""
+
     def __init__(self):
         self.positions = {}
         self.total_value = 0.0
@@ -13,8 +15,9 @@ class PortfolioTracker:
         return {
             "total_value": self.total_value,
             "total_pnl": self.total_pnl,
-            "positions": self.positions
+            "positions": self.positions,
         }
+
 
 """
 
@@ -250,7 +253,7 @@ self.transaction_history: List[Dict[str, Any]] = []
 
 
 self.portfolio_stats
-    
+
     = {total_deposits: Decimal(0.0),total_withdrawals: Decimal(0.0),trade_count": 0,total_fees": Decimal(0.0),last_update_time": time.time(),
 
 
@@ -632,7 +635,7 @@ unrealized_pnl += pos.unrealized_pnl
 
 
 positions_summary[asset]
-    
+
     = {quantity: float(pos.quantity),avg_price": float(pos.avg_price),current_price": float(pos.current_price),value": float(pos.value),unrealized_pnl": float(pos.unrealized_pnl),
 
 
@@ -691,7 +694,7 @@ tracker.stats = self.portfolio_stats.copy()
 
 
 stats[current_total_value] = summary[total_value]stats[current_realized_pnl]
-    = summary[realized_pnl]stats[current_unrealized_pnl] 
+    = summary[realized_pnl]stats[current_unrealized_pnl]
     = summary[unrealized_pnl]stats[current_total_pnl] = summary[total_pnl]
 
 
@@ -722,7 +725,7 @@ self.transaction_history = []
 
 
 self.portfolio_stats
-    
+
     = {total_deposits: Decimal(str(initial_cash)),total_withdrawals": Decimal(0.0),trade_count": 0,total_fees": Decimal(0.0),last_update_time": time.time(),
 
 

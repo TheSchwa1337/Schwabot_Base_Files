@@ -1,15 +1,14 @@
+from core.soulprint_registry import SoulprintRegistry
+from core.clean_trading_pipeline import CleanTradingPipeline, create_trading_pipeline
+import argparse
 import asyncio
 import json
-import argparse
 import os
 import sys
-from typing import List, Dict, Any
+from typing import Any, Dict, List
 
 # Adjust path to import from core
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from core.clean_trading_pipeline import create_trading_pipeline, CleanTradingPipeline
-from core.soulprint_registry import SoulprintRegistry
 
 
 async def run_backtest(config: Dict[str, Any]):
@@ -27,7 +26,7 @@ async def run_backtest(config: Dict[str, Any]):
     pipeline: CleanTradingPipeline = create_trading_pipeline(
         symbol=config.get("symbol", "BTC/USDT"),
         initial_capital=config.get("initial_capital", 10000.0),
-        registry_file=config.get("registry_file")
+        registry_file=config.get("registry_file"),
     )
     pipeline.set_mode("demo")  # Set to demo mode for back-testing
 
@@ -40,7 +39,11 @@ async def run_backtest(config: Dict[str, Any]):
     try:
         with open(dataset_path, "r", encoding="utf-8") as f:
             historical_candles = json.load(f)
-        print(f"✅ Loaded {len(historical_candles)} candles from '{os.path.basename(dataset_path)}'.")
+        print(
+            f"✅ Loaded {
+                len(historical_candles)} candles from '{
+                os.path.basename(dataset_path)}'."
+        )
     except json.JSONDecodeError:
         print(f"❌ Error: Could not decode JSON from '{dataset_path}'.")
         return
@@ -52,17 +55,18 @@ async def run_backtest(config: Dict[str, Any]):
     print("⏳ Processing historical candles...")
     trade_signals = []
     for i, candle in enumerate(historical_candles):
-        print(f"   - Processing candle {i + 1}/{len(historical_candles)}", end='\r')
+        print(f"   - Processing candle {i + 1}/{len(historical_candles)}", end="\r")
         signal = await pipeline.process_candle(candle)
 
         if signal and not signal.get("blocked"):
             trade_signals.append(signal)
             if soulprint_registry:
-                # Per user request: log timestamp, asset, mode, hash_id, signal vector, projected gain
+                # Per user request: log timestamp, asset, mode, hash_id, signal
+                # vector, projected gain
                 market_context = signal.get("market_context", {})
                 entry_price = signal.get("entry_price", 0)
                 take_profit = signal.get("take_profit", 0)
-                
+
                 if signal.get("action") == "buy" and take_profit > entry_price:
                     projected_gain = take_profit - entry_price
                 elif signal.get("action") == "sell" and entry_price > take_profit:
@@ -81,9 +85,10 @@ async def run_backtest(config: Dict[str, Any]):
                         "signal_strength": market_context.get("signal_strength"),
                     },
                     "projected_gain": projected_gain,
-                    "trade_details": signal # Store original signal for full context
+                    "trade_details": signal,  # Store original signal for full context
                 }
-                # This method will be added to SoulprintRegistry in the next step
+                # This method will be added to SoulprintRegistry in the next
+                # step
                 if hasattr(soulprint_registry, "log_backtest_signal"):
                     soulprint_registry.log_backtest_signal(log_data)
 
@@ -96,19 +101,32 @@ def main():
     """Main entry point for the back-test driver."""
     parser = argparse.ArgumentParser(
         description="Schwabot Backtest Driver",
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
-    parser.add_argument("--dataset", type=str, required=True, help="Path to historical candle data JSON file.")
-    parser.add_argument("--config", type=str, required=True, help="Path to the trading bot configuration file.")
-    parser.add_argument("--symbol", type=str, default="BTC/USDT", help="Trading symbol for the back-test.")
-    parser.add_argument("--capital", type=float, default=10000.0, help="Initial capital for the simulation.")
-    parser.add_argument("--registry-file", type=str, default="data/logs/backtest_registry.json", help="File to log back-test signals.")
-    
+    parser.add_argument(
+        "--dataset", type=str, required=True, help="Path to historical candle data JSON file."
+    )
+    parser.add_argument(
+        "--config", type=str, required=True, help="Path to the trading bot configuration file."
+    )
+    parser.add_argument(
+        "--symbol", type=str, default="BTC/USDT", help="Trading symbol for the back-test."
+    )
+    parser.add_argument(
+        "--capital", type=float, default=10000.0, help="Initial capital for the simulation."
+    )
+    parser.add_argument(
+        "--registry-file",
+        type=str,
+        default="data/logs/backtest_registry.json",
+        help="File to log back-test signals.",
+    )
+
     args = parser.parse_args()
 
     # Load base configuration
     try:
-        with open(args.config, 'r') as f:
+        with open(args.config, "r") as f:
             config = json.load(f)
     except FileNotFoundError:
         print(f"❌ Error: Base config file not found at '{args.config}'")
@@ -122,7 +140,7 @@ def main():
     config["symbol"] = args.symbol
     config["initial_capital"] = args.capital
     config["registry_file"] = args.registry_file
-    
+
     # Ensure log directory exists
     log_dir = os.path.dirname(args.registry_file)
     if log_dir:
@@ -136,5 +154,5 @@ if __name__ == "__main__":
     project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     if project_root not in sys.path:
         sys.path.insert(0, project_root)
-        
-    main() 
+
+    main()

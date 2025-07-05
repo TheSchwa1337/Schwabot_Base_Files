@@ -14,10 +14,9 @@ This bridge orchestrates the integration between:
 import asyncio
 from typing import Any, Dict, List, Optional, Tuple, Union
 
-
 # Core imports with error handling
 try:
-    from core.clean_risk_manager import RiskManager, RiskAssessment
+    from core.clean_risk_manager import RiskAssessment, RiskManager
     RISK_MANAGER_AVAILABLE = True
 except ImportError:
     RISK_MANAGER_AVAILABLE = False
@@ -25,7 +24,7 @@ except ImportError:
     RiskAssessment = None
 
 try:
-    from core.clean_profit_memory_echo import ProfitMemoryEcho, MemoryProjection
+    from core.clean_profit_memory_echo import MemoryProjection, ProfitMemoryEcho
     PROFIT_MEMORY_AVAILABLE = True
 except ImportError:
     PROFIT_MEMORY_AVAILABLE = False
@@ -197,11 +196,15 @@ class StrategyIntegrationBridge:
                 self.orchestration_state.schwabot_strategies_active
             )
 
-logger.info(f"Initialized {self.orchestration_state.total_strategies_active} components")
+
+logger.info(
+    f"Initialized {
+        self.orchestration_state.total_strategies_active} components")
 
         except Exception as e:
             logger.error(f"Component initialization error: {e}")
             # Continue with available components
+
 
 async def process_integrated_trading_signal(self, asset: str, price: float, volume: float,
 timeframe: str) -> List[IntegratedTradingSignal]:
@@ -241,17 +244,20 @@ timeframe: str) -> List[IntegratedTradingSignal]:
                     integrated_signals.append(integrated_signal)
 
             # Step 4: Filter and rank integrated signals
-            filtered_signals = self._filter_integrated_signals(integrated_signals)
+            filtered_signals = self._filter_integrated_signals(
+                integrated_signals)
 
             # Step 5: Update signal history and metrics
             self.integrated_signals.extend(filtered_signals)
             self._update_integration_metrics(filtered_signals)
 
             # Step 6: Update orchestration state
-            self.orchestration_state.signals_generated_today += len(filtered_signals)
+            self.orchestration_state.signals_generated_today += len(
+                filtered_signals)
 
             logger.info(
-                f"Generated {len(filtered_signals)} integrated signals for {asset}"
+                f"Generated {
+    len(filtered_signals)} integrated signals for {asset}"
             )
 
             return filtered_signals
@@ -260,7 +266,10 @@ timeframe: str) -> List[IntegratedTradingSignal]:
             logger.error(f"Error processing integrated trading signal: {e}")
             return []
 
+
 def _generate_wall_street_signals(self, asset: str, price: float, volume: float, timeframe: str) ->
+
+
 List[Dict[str, Any]]:
         """Generate Wall Street strategy signals (simplified implementation)."""
         try:
@@ -320,6 +329,7 @@ List[Dict[str, Any]]:
             logger.error(f"Error generating Wall Street signals: {e}")
             return []
 
+
 async def _perform_mathematical_analysis(self, asset: str, price: float, volume: float) -> Dict[str,
 Any]:
         """Perform comprehensive Schwabot mathematical analysis."""
@@ -335,8 +345,10 @@ Any]:
             # DLT Analysis using MathLibV4
             if hasattr(self, 'mathlib_v4'):
                 # Prepare data for DLT analysis
-                price_history = [price] * 50  # Simplified - would use real price history
-                volume_history = [volume] * 50  # Simplified - would use real volume history
+                # Simplified - would use real price history
+                price_history = [price] * 50
+                # Simplified - would use real volume history
+                volume_history = [volume] * 50
 
                 if len(price_history) >= 3:
                     dlt_data = {
@@ -354,7 +366,8 @@ Any]:
 
                     if "error" not in dlt_result:
                         analysis["dlt_metrics"] = dlt_result
-                        analysis["mathematical_confidence"] = dlt_result.get("confidence", 0.5)
+                        analysis["mathematical_confidence"] = dlt_result.get(
+                            "confidence", 0.5)
 
             # Unified Math System Analysis
             if hasattr(self, 'unified_math'):

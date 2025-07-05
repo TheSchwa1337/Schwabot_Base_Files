@@ -2,8 +2,11 @@
 """
 Mathlib v3 Visualizer - Minimal stub for import and placeholder plot
 """
-import matplotlib.pyplot as plt
 from io import BytesIO
+
+import matplotlib.pyplot as plt
+import numpy as np
+
 
 def get_placeholder_plot() -> bytes:
     """Return a dummy image buffer (PNG) for placeholder visualization."""
@@ -17,5 +20,6 @@ def get_placeholder_plot() -> bytes:
     plt.close(fig)
     buf.seek(0)
     return buf.read()
+
 
 __all__ = ["get_placeholder_plot"]

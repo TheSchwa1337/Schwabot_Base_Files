@@ -29,7 +29,7 @@ for use by the cache sync subsystem.
 class BaseAPIHandler(ABC):
     """Abstract base-class for external API handlers with enhanced features."""
 
-    # --- Class-level configuration -------------------------------------------------
+    # --- Class-level configuration ------------------------------------------
 
     NAME: str = "generic_api"  # Override in subclass (e.g. lunarcrush)
 
@@ -53,18 +53,18 @@ class BaseAPIHandler(ABC):
         self.cache_root: Path = Path(cache_root)
         self._last_refresh: float = 0.0
         self._session: Optional[aiohttp.ClientSession] = None if aiohttp else None
-        
+
         # Rate limiting state
         self._request_count: int = 0
         self._rate_limit_window_start: float = time.time()
         self._last_request_time: float = 0.0
-        
+
         # Error tracking
         self._error_count: int = 0
         self._last_error_time: float = 0.0
         self._consecutive_errors: int = 0
 
-    # Public API --------------------------------------------------------------------
+    # Public API -------------------------------------------------------------
 
     async def get_data(self, force_refresh: bool = False) -> Dict[str, Any]:
         """Return cached data, refreshing from the remote API if needed."""
@@ -72,16 +72,16 @@ class BaseAPIHandler(ABC):
             try:
                 # Check rate limits before making request
                 await self._check_rate_limit()
-                
+
                 raw = await self._fetch_raw()
                 parsed = await self._parse_raw(raw)
                 await self._write_cache(parsed)
                 self._last_refresh = time.time()
-                
+
                 # Reset error counters on success
                 self._consecutive_errors = 0
                 self._error_count = 0
-                
+
                 return parsed
             except Exception as exc:
                 self._handle_error(exc)
@@ -115,7 +115,7 @@ class BaseAPIHandler(ABC):
             cached_data = asyncio.run(self._read_cache())
             if not cached_data:
                 return 0.5  # Default entropy
-            
+
             # Calculate entropy based on data variability
             if isinstance(cached_data, dict):
                 # Use timestamp variance as entropy measure
@@ -123,11 +123,14 @@ class BaseAPIHandler(ABC):
                 for value in cached_data.values():
                     if isinstance(value, (int, float)):
                         timestamps.append(float(value))
-                
+
                 if timestamps:
-                    variance = sum((x - sum(timestamps)/len(timestamps))**2 for x in timestamps) / len(timestamps)
-                    return min(1.0, max(0.0, variance / 1000.0))  # Normalize to [0, 1]
-            
+                    variance = sum(
+                        (x - sum(timestamps) / len(timestamps)) ** 2 for x in timestamps
+                    ) / len(timestamps)
+                    # Normalize to [0, 1]
+                    return min(1.0, max(0.0, variance / 1000.0))
+
             return 0.5
         except Exception:
             return 0.5
@@ -136,17 +139,17 @@ class BaseAPIHandler(ABC):
         """Get current rate limit status."""
         current_time = time.time()
         window_elapsed = current_time - self._rate_limit_window_start
-        
+
         if window_elapsed > self.RATE_LIMIT_WINDOW:
             # Reset window
             self._rate_limit_window_start = current_time
             self._request_count = 0
-        
+
         return {
             "requests_used": self._request_count,
             "requests_remaining": max(0, self.RATE_LIMIT_REQUESTS - self._request_count),
             "window_remaining": max(0, self.RATE_LIMIT_WINDOW - window_elapsed),
-            "rate_limit_exceeded": self._request_count >= self.RATE_LIMIT_REQUESTS
+            "rate_limit_exceeded": self._request_count >= self.RATE_LIMIT_REQUESTS,
         }
 
     def get_error_status(self) -> Dict[str, Any]:
@@ -155,10 +158,10 @@ class BaseAPIHandler(ABC):
             "total_errors": self._error_count,
             "consecutive_errors": self._consecutive_errors,
             "last_error_time": self._last_error_time,
-            "time_since_last_error": time.time() - self._last_error_time
+            "time_since_last_error": time.time() - self._last_error_time,
         }
 
-    # Abstract methods --------------------------------------------------------------
+    # Abstract methods -------------------------------------------------------
 
     @abstractmethod
     async def _fetch_raw(self) -> Any:  # pragma: no cover  implemented by subclass
@@ -173,32 +176,36 @@ class BaseAPIHandler(ABC):
         """
         return raw  # type: ignore[return-value]
 
-    # Rate limiting helpers ---------------------------------------------------------
+    # Rate limiting helpers --------------------------------------------------
 
     async def _check_rate_limit(self) -> None:
         """Check and enforce rate limits."""
         current_time = time.time()
-        
+
         # Check if we need to reset the window
         if current_time - self._rate_limit_window_start > self.RATE_LIMIT_WINDOW:
             self._rate_limit_window_start = current_time
             self._request_count = 0
-        
+
         # Check if we've exceeded the rate limit
         if self._request_count >= self.RATE_LIMIT_REQUESTS:
-            window_remaining = self.RATE_LIMIT_WINDOW - (current_time - self._rate_limit_window_start)
+            window_remaining = self.RATE_LIMIT_WINDOW - (
+                current_time - self._rate_limit_window_start
+            )
             if window_remaining > 0:
-                logger.warning(f"{self.NAME}: Rate limit exceeded, waiting {window_remaining:.1f} seconds")
+                logger.warning(
+                    f"{self.NAME}: Rate limit exceeded, waiting {window_remaining:.1f} seconds"
+                )
                 await asyncio.sleep(window_remaining)
                 self._rate_limit_window_start = current_time
                 self._request_count = 0
-        
+
         # Enforce delay between requests
         time_since_last = current_time - self._last_request_time
         if time_since_last < self.RATE_LIMIT_DELAY:
             delay_needed = self.RATE_LIMIT_DELAY - time_since_last
             await asyncio.sleep(delay_needed)
-        
+
         self._request_count += 1
         self._last_request_time = time.time()
 
@@ -207,11 +214,16 @@ class BaseAPIHandler(ABC):
         self._error_count += 1
         self._consecutive_errors += 1
         self._last_error_time = time.time()
-        
-        # Log error with context
-        logger.error(f"{self.NAME}: Error occurred (total: {self._error_count}, consecutive: {self._consecutive_errors}) - {exc}")
 
-    # Caching helpers ---------------------------------------------------------------
+        # Log error with context
+        logger.error(
+            f"{
+                self.NAME}: Error occurred (total: {
+                self._error_count}, consecutive: {
+                self._consecutive_errors}) - {exc}"
+        )
+
+    # Caching helpers --------------------------------------------------------
 
     @property
     def _cache_file(self) -> Path:
@@ -235,9 +247,10 @@ class BaseAPIHandler(ABC):
         text = await loop.run_in_executor(None, path.read_text)
         return json.loads(text)
 
-    # Session helper for aiohttp ----------------------------------------------------
+    # Session helper for aiohttp ---------------------------------------------
 
-    async def _get_session(self) -> aiohttp.ClientSession:  # type: ignore[return-type]
+    # type: ignore[return-type]
+    async def _get_session(self) -> aiohttp.ClientSession:
         if not aiohttp:
             raise RuntimeError("aiohttp is required for async HTTP but not installed")
 
@@ -251,17 +264,17 @@ class BaseAPIHandler(ABC):
         if self._session and not self._session.closed:
             await self._session.close()
 
-    # Validation methods ------------------------------------------------------------
+    # Validation methods -----------------------------------------------------
 
     def validate_implementation(self) -> bool:
         """Validate that the handler implements all required methods."""
-        required_methods = ['_fetch_raw', 'get_data', 'fetch_data']
-        
+        required_methods = ["_fetch_raw", "get_data", "fetch_data"]
+
         for method_name in required_methods:
             if not hasattr(self, method_name):
                 logger.error(f"{self.NAME}: Missing required method '{method_name}'")
                 return False
-        
+
         return True
 
     def get_handler_info(self) -> Dict[str, Any]:
@@ -278,5 +291,5 @@ class BaseAPIHandler(ABC):
             "is_fresh": self.is_fresh(),
             "rate_limit_status": self.get_rate_limit_status(),
             "error_status": self.get_error_status(),
-            "implementation_valid": self.validate_implementation()
+            "implementation_valid": self.validate_implementation(),
         }

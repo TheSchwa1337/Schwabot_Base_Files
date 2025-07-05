@@ -9,7 +9,6 @@ for the Schwabot trading system.
 from decimal import Decimal, getcontext
 from typing import Any, Dict, List, Optional, Tuple, Union
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -95,7 +94,11 @@ class RiskManager:
             "leverage", 1.0, self.config["max_leverage"], "green"
         )
 
-def assess_risk(self, portfolio_value: float, asset_exposures: Dict[str, float]) -> RiskAssessment:
+
+def assess_risk(self,
+    portfolio_value: float,
+    asset_exposures: Dict[str,
+     float]) -> RiskAssessment:
         """Assess overall portfolio risk based on current state.
 
         Args:
@@ -108,7 +111,8 @@ def assess_risk(self, portfolio_value: float, asset_exposures: Dict[str, float])
         start_time = time.time()
         self.assessment_stats["total_assessments"] += 1
 
-        # Calculate drawdown (simplified - in real implementation would use historical data)
+        # Calculate drawdown (simplified - in real implementation would use
+        # historical data)
         current_drawdown = self._calculate_drawdown(portfolio_value)
         self.risk_metrics["drawdown"].value = current_drawdown
         self.risk_metrics["drawdown"].status = self._get_status(
@@ -117,7 +121,8 @@ def assess_risk(self, portfolio_value: float, asset_exposures: Dict[str, float])
 
         # Calculate asset exposure
         total_btc_exposure = (
-            asset_exposures.get("BTC/USD", 0.0) / portfolio_value if portfolio_value > 0 else 0.0
+            asset_exposures.get("BTC/USD", 0.0) /
+                                portfolio_value if portfolio_value > 0 else 0.0
         )
         self.risk_metrics["exposure_btc"].value = total_btc_exposure
         self.risk_metrics["exposure_btc"].status = self._get_status(

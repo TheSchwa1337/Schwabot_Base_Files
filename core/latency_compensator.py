@@ -56,7 +56,7 @@ LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 
 
 Latency Compensator
-    
+
     - Temporal Drift Correction Engine.Implements sophisticated timing drift compensation for Schwabot's dualistic'
 
 
@@ -1220,7 +1220,7 @@ if self.current_dualistic_state:
 
 
             stats[current_dualistic_state]
-    
+
     = {type: self.current_dualistic_state.state_type,confidence": self.current_dualistic_state.confidence,quantum_phase": self.current_dualistic_state.quantum_phase,entropy_level": self.current_dualistic_state.entropy_level,
 
 
@@ -1242,7 +1242,7 @@ if self.current_dualistic_state:
 
 
 def reset_stats():-> None:Reset performance statistics.self.stats
-    
+
     = {total_measurements: 0,corrected_operations": 0,avg_latency_ms": 0.0,drift_corrections": 0,dualistic_transitions": 0,quantum_adjustments": 0,
 
 
@@ -1349,7 +1349,7 @@ time.sleep(0.05)  # 50ms operation
 
 
     measurement
-    
+
     = compensator.end_operation(op_id, memory_read,hash_abc123)print(fLatency: {measurement.delta_ns / 1_000_000:.2f}ms)print(fConfidence: {measurement.confidence:.3f})print(fCorrection: {measurement.correction_applied:.4f})
 
 
@@ -1372,7 +1372,7 @@ time.sleep(0.3)  # 300ms operation
 
 
     measurement
-    
+
     = compensator.end_operation(op_id, trade_exec,hash_def456)print(fLatency: {measurement.delta_ns / 1_000_000:.2f}ms)print(fConfidence: {measurement.confidence:.3f})print(fCorrection: {measurement.correction_applied:.4f})
 
 

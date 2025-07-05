@@ -3,7 +3,7 @@
 # ==========================================================
 
 # Maximum line length - increased for mathematical formulas
-max-line-length = 200
+max-line-length = 120
 
 # Maximum complexity for functions
 max-complexity = 15
@@ -38,22 +38,11 @@ exclude =
     .venv,
     venv,
     env,
-    .env,
     build,
     dist,
     *.egg-info,
-    .pytest_cache,
-    .coverage,
-    htmlcov,
-    .tox,
     .mypy_cache,
-    .ruff_cache,
-    node_modules,
-    docs/_build,
-    tests/__pycache__,
-    core/__pycache__,
-    utils/__pycache__,
-    server/__pycache__
+    .pytest_cache
 
 # Per-file-ignores
 per-file-ignores = 
@@ -108,6 +97,7 @@ per-file-ignores =
     core/api/handlers/coingecko.py:F811,F821
     core/api/handlers/glassnode.py:F401,F811,F821,F841
     core/api/handlers/whale_alert.py:F811
+    */migrations/*:E501
 
 # Statistics
 statistics = True
@@ -181,3 +171,4 @@ use-vulture = False
 use-xenon = False
 use-yapf = False
 use-autopep8 = False
+docstring-convention = google

@@ -14,10 +14,9 @@ This bridge orchestrates the integration between:
 import asyncio
 from typing import Any, Dict, List, Optional, Tuple, Union
 
-
 # Core imports with error handling
 try:
-    from core.clean_risk_manager import RiskManager, RiskAssessment
+    from core.clean_risk_manager import RiskAssessment, RiskManager
     RISK_MANAGER_AVAILABLE = True
 except ImportError:
     RISK_MANAGER_AVAILABLE = False
@@ -25,7 +24,7 @@ except ImportError:
     RiskAssessment = None
 
 try:
-    from core.clean_profit_memory_echo import ProfitMemoryEcho, MemoryProjection
+    from core.clean_profit_memory_echo import MemoryProjection, ProfitMemoryEcho
     PROFIT_MEMORY_AVAILABLE = True
 except ImportError:
     PROFIT_MEMORY_AVAILABLE = False
@@ -66,6 +65,8 @@ class IntegratedTradingSignal:
 # Schwabot mathematical analysis
     mathematical_confidence: float = 0.0
     dlt_metrics: Dict[str, Any] = field(default_factory=dict)
+
+
 unified_math_state: Dict[str, Any] = field(default_factory=dict)
 
 # Risk analysis
@@ -88,6 +89,8 @@ estimated_slippage: float = 0.1
 class StrategyOrchestrationState:
     """State management for strategy orchestration."""
     total_strategies_active: int = 0
+
+
 wall_street_strategies_active: int = 0
 schwabot_strategies_active: int = 0
 signals_generated_today: int = 0
@@ -113,6 +116,7 @@ This bridge orchestrates the integration between:
         """Initialize strategy integration bridge."""
         self.config = config or self._default_config()
         self.version = "1.0.0"
+
 
 # Initialize orchestration state
 self.orchestration_state = StrategyOrchestrationState()

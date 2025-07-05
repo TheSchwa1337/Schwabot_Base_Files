@@ -31,13 +31,6 @@ keep external dependencies to a minimum while staying Flake8/mypy compliant.
 """
 
 
-
-
-
-
-
-
-
 __all__ = [
     "calculate_entropy",
     "moving_average",
@@ -46,7 +39,7 @@ __all__ = [
 ]
 
 
-def calculate_entropy():-> float:
+def calculate_entropy(): -> float:
     """Return Shannon entropy of *values*.
 
 
@@ -78,7 +71,7 @@ def calculate_entropy():-> float:
     return float(-np.sum(hist * np.log2(hist)))
 
 
-def moving_average():-> np.ndarray:
+def moving_average(): -> np.ndarray:
     """Simple centered moving average.
 
 
@@ -110,7 +103,7 @@ def moving_average():-> np.ndarray:
     return ma
 
 
-def hash_distance():-> int:
+def hash_distance(): -> int:
     """Return XOR Hamming distance between blake2b digests of *a* and *b*."""
 
     h_a = blake2b(a.encode(), digest_size=digest_bits // 8).digest()
@@ -122,7 +115,7 @@ def hash_distance():-> int:
     return xor_bytes.bit_count()
 
 
-def cosine_similarity():-> float:
+def cosine_similarity(): -> float:
     """Return cosine similarity between two equal-length vectors.
 
 
