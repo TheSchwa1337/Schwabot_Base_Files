@@ -1,7 +1,7 @@
 # !/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Advanced Tensor Algebra - Complete Mathematical Engine
+Advanced Tensor Algebra - Complete Mathematical Engine.
 
 Provides high-level math structures for vector folding, bit-phase analysis, 
 matrix compression, and entropy vector quantization.
