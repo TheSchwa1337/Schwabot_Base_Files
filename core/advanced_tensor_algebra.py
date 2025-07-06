@@ -36,17 +36,34 @@ import logging
 import time
 from typing import Any, Dict, List, Optional, Tuple, Union
 
-import numpy as np
-from scipy import linalg, signal, stats
-from scipy.fft import fft, fftfreq, ifft
-from scipy.optimize import minimize
-from scipy.sparse import csr_matrix
-from scipy.special import gamma, zeta
+# CUDA Integration with Fallback
+try:
+    import cupy as cp
+    USING_CUDA = True
+    _backend = 'cupy (GPU)'
+    xp = cp
+except ImportError:
+    import numpy as np
+    USING_CUDA = False
+    _backend = 'numpy (CPU)'
+    xp = np
 
-# CUDA Helper Integration
+# Import scipy with fallback
+try:
+    from scipy import linalg, signal, stats
+    from scipy.fft import fft, fftfreq, ifft
+    from scipy.optimize import minimize
+    from scipy.sparse import csr_matrix
+    from scipy.special import gamma, zeta
+    SCIPY_AVAILABLE = True
+except ImportError:
+    SCIPY_AVAILABLE = False
+    logger = logging.getLogger(__name__)
+    logger.warning("🔄 SciPy not available - some advanced functions may be limited")
+
+# CUDA Helper Integration (for additional utilities)
 try:
     from ..utils.cuda_helper import (
-        USING_CUDA,
         get_cuda_status,
         report_cuda_status,
         safe_convolution,
@@ -57,19 +74,16 @@ try:
         safe_matrix_multiply,
         safe_svd,
         safe_tensor_contraction,
-        xp,
+        xp as helper_xp,
     )
-
     CUDA_AVAILABLE = True
     logger = logging.getLogger(__name__)
-    logger.info("⚡ CUDA acceleration enabled in Advanced Tensor Algebra")
+    logger.info(f"⚡ CUDA acceleration enabled in Advanced Tensor Algebra: {_backend}")
 except ImportError:
     # Fallback to CPU-only mode
-    xp = np
-    USING_CUDA = False
     CUDA_AVAILABLE = False
     logger = logging.getLogger(__name__)
-    logger.warning("🔄 CUDA not available - using CPU-only mode in Advanced Tensor Algebra")
+    logger.warning("🔄 CUDA helper not available - using CPU-only mode in Advanced Tensor Algebra")
 
 # Dual State Router Integration
 try:
@@ -100,6 +114,7 @@ from .type_defs import (
 )
 
 logger = logging.getLogger(__name__)
+logger.info(f"Advanced Tensor Algebra initialized with backend: {_backend}")
 
 __all__ = [
     "AdvancedTensorAlgebra",

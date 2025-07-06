@@ -1,26 +1,44 @@
+#!/usr/bin/env python3
 """
-Clean Mathematical Foundation for Schwabot Trading System.
+Clean Math Foundation - Core Mathematical Operations
 
-This module provides the core mathematical functions and utilities
-used throughout the Schwabot trading system. All functions are
-pure, well-documented, and thoroughly tested.
+Provides a clean, unified interface for mathematical operations used throughout
+the Schwabot system. This module serves as the mathematical foundation for all
+trading calculations, ensuring consistency and reliability.
 
 Key Features:
-- Vector and matrix operations
-- Statistical calculations
-- Risk metrics
-- Optimization utilities
-- Mathematical constants and helpers
+- Unified mathematical operations
+- Bit phase management
+- Thermal state tracking
+- Error handling and validation
+- Performance optimization
 """
 
-from __future__ import annotations
-
+import logging
 import math
+import time
+from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
 
-import numpy as np
-from numpy.typing import NDArray
+# CUDA Integration with Fallback
+try:
+    import cupy as cp
+    USING_CUDA = True
+    _backend = 'cupy (GPU)'
+    xp = cp
+except ImportError:
+    import numpy as np
+    USING_CUDA = False
+    _backend = 'numpy (CPU)'
+    xp = np
+
+# Log backend status
+logger = logging.getLogger(__name__)
+if USING_CUDA:
+    logger.info(f"⚡ Clean Math Foundation using GPU acceleration: {_backend}")
+else:
+    logger.info(f"🔄 Clean Math Foundation using CPU fallback: {_backend}")
 
 
 class ThermalState(Enum):

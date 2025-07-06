@@ -14,7 +14,17 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
 
-import numpy as np
+# CUDA Integration with Fallback
+try:
+    import cupy as cp
+    USING_CUDA = True
+    _backend = 'cupy (GPU)'
+    xp = cp
+except ImportError:
+    import numpy as np
+    USING_CUDA = False
+    _backend = 'numpy (CPU)'
+    xp = np
 
 # Import clean math system
 try:
@@ -24,7 +34,7 @@ except ImportError:
     class unified_math:
         @staticmethod
         def sin(x):
-            return np.sin(x)
+            return xp.sin(x)
 
         @staticmethod
         def max(x, y):
@@ -44,11 +54,18 @@ except ImportError:
 
     @staticmethod
     def tanh(x):
-        return np.tanh(x)
+        return xp.tanh(x)
 
     @staticmethod
     def atan(x):
-        return np.arctan(x)
+        return xp.arctan(x)
+
+# Log backend status
+logger = logging.getLogger(__name__)
+if USING_CUDA:
+    logger.info(f"⚡ ZPE Core using GPU acceleration: {_backend}")
+else:
+    logger.info(f"🔄 ZPE Core using CPU fallback: {_backend}")
 
 
 class ZPEMode(Enum):
@@ -180,10 +197,10 @@ class ZPECore:
         """
         try:
             # Convert to angular frequency
-            angular_freq = 2 * np.pi * frequency
+            angular_freq = 2 * xp.pi * frequency
 
             # Reduced Planck constant
-            h_bar = self.ZPE_CONSTANTS["PLANCK_CONSTANT"] / (2 * np.pi)
+            h_bar = self.ZPE_CONSTANTS["PLANCK_CONSTANT"] / (2 * xp.pi)
 
             # Zero Point Energy calculation
             zpe = 0.5 * h_bar * angular_freq * amplitude
@@ -564,11 +581,11 @@ class ZPECore:
                 return 0.0
 
             # Calculate price variations
-            price_diff = np.diff(price_data)
-            variance = np.var(price_diff)
+            price_diff = xp.diff(price_data)
+            variance = xp.var(price_diff)
 
             # Quantum fluctuation model
-            fluctuation = np.sqrt(variance) * self.ZPE_CONSTANTS["QUANTUM_FLUCTUATION"]
+            fluctuation = xp.sqrt(variance) * self.ZPE_CONSTANTS["QUANTUM_FLUCTUATION"]
 
             # Apply field coupling
             coupled_fluctuation = fluctuation * self.ZPE_CONSTANTS["FIELD_COUPLING"]
@@ -699,13 +716,13 @@ class ZPECore:
                 return {"signal": "HOLD", "confidence": 0.0, "reason": "Insufficient data"}
 
             # Calculate market metrics
-            price_changes = np.diff(historical_prices)
-            volatility = np.std(price_changes) / np.mean(historical_prices)
+            price_changes = xp.diff(historical_prices)
+            volatility = xp.std(price_changes) / xp.mean(historical_prices)
             momentum = (current_price - historical_prices[-10]) / historical_prices[-10]
 
             # Calculate frequency from price oscillations
             frequency = (
-                abs(np.fft.fftfreq(len(price_changes))[1]) * self.ZPE_CONSTANTS["FREQUENCY_BASE"]
+                abs(xp.fft.fftfreq(len(price_changes))[1]) * self.ZPE_CONSTANTS["FREQUENCY_BASE"]
             )
 
             # Update energy fields

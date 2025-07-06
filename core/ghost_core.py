@@ -17,7 +17,23 @@ from concurrent.futures import ThreadPoolExecutor
 import hashlib
 import json
 
+# CUDA Integration with Fallback
+try:
+    import cupy as cp
+    USING_CUDA = True
+    _backend = 'cupy (GPU)'
+    xp = cp
+except ImportError:
+    import numpy as np
+    USING_CUDA = False
+    _backend = 'numpy (CPU)'
+    xp = np
+
 logger = logging.getLogger(__name__)
+if USING_CUDA:
+    logger.info(f"⚡ Ghost Core using GPU acceleration: {_backend}")
+else:
+    logger.info(f"🔄 Ghost Core using CPU fallback: {_backend}")
 
 class StrategyBranch(Enum):
     """Enumeration of available strategy branches."""

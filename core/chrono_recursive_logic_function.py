@@ -19,12 +19,27 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
 
-import numpy as np
+# CUDA Integration with Fallback
+try:
+    import cupy as cp
+    USING_CUDA = True
+    _backend = 'cupy (GPU)'
+    xp = cp
+except ImportError:
+    import numpy as np
+    USING_CUDA = False
+    _backend = 'numpy (CPU)'
+    xp = np
 
 from .clean_math_foundation import BitPhase, CleanMathFoundation, ThermalState
 from .zpe_zbe_core import QuantumSyncStatus, ZBEBalance, ZPEVector
 
+# Log backend status
 logger = logging.getLogger(__name__)
+if USING_CUDA:
+    logger.info(f"⚡ CRLF using GPU acceleration: {_backend}")
+else:
+    logger.info(f"🔄 CRLF using CPU fallback: {_backend}")
 
 
 class CRLFTriggerState(Enum):

@@ -21,6 +21,7 @@ from datetime import datetime, timedelta
 from typing import Dict, List, Optional, Any, Tuple
 from dataclasses import dataclass, field
 from enum import Enum
+import numpy as np
 
 # Add core directory to path
 sys.path.append(os.path.join(os.path.dirname(__file__), 'core'))
@@ -33,6 +34,10 @@ from core.profit_optimization_engine import ProfitOptimizationEngine, Optimizati
 from core.enhanced_ccxt_trading_engine import EnhancedCCXTTradingEngine
 from core.automated_strategy_engine import AutomatedStrategyEngine
 from nano_core.strategy_switch import match_strategy, select_best_trade_batch
+from core.reentry_logic import ReentryLogic
+from core.swing_pattern_recognition import SwingPatternRecognizer
+from core.profit_tier_adjuster import ProfitTierAdjuster
+from core.order_wall_analyzer import OrderWallAnalyzer
 
 # Setup logging
 logging.basicConfig(
@@ -110,6 +115,12 @@ class SchwabotExecutableCore:
         self.profit_optimizer = ProfitOptimizationEngine()
         self.trading_engine = EnhancedCCXTTradingEngine()
         self.strategy_engine = AutomatedStrategyEngine()
+
+        # Initialize enhanced modules
+        self.reentry_logic = ReentryLogic()
+        self.swing_recognizer = SwingPatternRecognizer()
+        self.profit_tier_adjuster = ProfitTierAdjuster(self.config["profit_tier_thresholds"])
+        self.order_wall_analyzer = OrderWallAnalyzer()
         
         # Ferris wheel state
         self.ferris_wheel = FerrisWheelState()
@@ -185,26 +196,41 @@ class SchwabotExecutableCore:
         """Execute a single tick cycle."""
         tick_number = self.ferris_wheel.current_tick
         cycle_id = f"tick_{tick_number:02d}_{int(time.time())}"
-        
+
         logger.info(f"🔄 Executing tick cycle {tick_number}/16 - {cycle_id}")
-        
+
         try:
             # 1. Get current market state
             market_state = self._get_market_state()
-            
+
+            # Enhanced: Swing pattern recognition
+            swing_metrics = self.swing_recognizer.identify_swing_patterns(market_state.get("price_history", []))
+            logger.debug(f"Swing metrics: {swing_metrics}")
+
+            # Enhanced: Order wall analysis
+            wall_signals = self.order_wall_analyzer.analyze_order_book(market_state.get("order_book", {}))
+            logger.debug(f"Order wall signals: {wall_signals}")
+
             # 2. Calculate mathematical vectors
             drift_vector = self._calculate_drift_vector(market_state)
-            
+
             # 3. Register soulprint
             soulprint_hash = self.soulprint_registry.register_soulprint(
                 vector=drift_vector,
                 strategy_id=f"tick_{tick_number}",
                 confidence=drift_vector.get('confidence', 0.5)
             )
-            
+
             # 4. Determine profit tier
             profit_tier = self._determine_profit_tier(drift_vector)
-            
+
+            # Enhanced: Dynamic profit tier adjustment
+            adjusted_tier = self.profit_tier_adjuster.adjust_tier(profit_tier, swing_metrics, wall_signals, drift_vector)
+            if adjusted_tier != profit_tier:
+                logger.info(f"Profit tier adjusted from {profit_tier} to {adjusted_tier}")
+            profit_tier = adjusted_tier
+            tick_cycle.profit_tier = profit_tier
+
             # 5. Get strategy recommendation
             strategy_data = {
                 "hash": soulprint_hash,
@@ -237,12 +263,19 @@ class SchwabotExecutableCore:
                 trade_result = self._execute_trade_decision(tick_cycle, strategy_recommendation)
                 tick_cycle.executed_trades.append(trade_result)
                 tick_cycle.profit_result = trade_result.get('profit', 0.0)
-                
+
                 # Update soulprint with execution result
                 self.soulprint_registry.mark_executed(
                     soulprint_hash, 
                     profit_result=trade_result.get('profit', 0.0)
                 )
+
+            # Enhanced: Evaluate re-entry logic
+            should_reenter, reentry_amount = self.reentry_logic.evaluate_reentry(tick_cycle, swing_metrics, drift_vector)
+            if should_reenter and reentry_amount > 0:
+                reentry_trade = self._execute_reentry(tick_cycle, reentry_amount)
+                tick_cycle.executed_trades.append(reentry_trade)
+                tick_cycle.profit_result += reentry_trade.get('profit', 0.0)
             
             # 8. Complete tick cycle
             tick_cycle.is_complete = True
@@ -269,10 +302,25 @@ class SchwabotExecutableCore:
             usdc_balance = self.config["initial_balance"]
             btc_balance = 0.0
             
+            # Fetch recent price history
+            try:
+                ohlcv = self.trading_engine.fetch_ohlcv(self.config["base_pair"], timeframe='1m', limit=50)
+                price_history = [float(candle[4]) for candle in ohlcv]
+            except Exception:
+                price_history = [btc_price] * 50
+
+            # Fetch order book
+            try:
+                order_book = self.trading_engine.fetch_order_book(self.config["base_pair"])
+            except Exception:
+                order_book = {"bids": [], "asks": []}
+
             return {
                 "btc_price": btc_price,
                 "usdc_balance": usdc_balance,
                 "btc_balance": btc_balance,
+                "price_history": price_history,
+                "order_book": order_book,
                 "timestamp": time.time()
             }
         except Exception as e:
@@ -281,6 +329,8 @@ class SchwabotExecutableCore:
                 "btc_price": 60000.0,
                 "usdc_balance": self.config["initial_balance"],
                 "btc_balance": 0.0,
+                "price_history": [],
+                "order_book": {"bids": [], "asks": []},
                 "timestamp": time.time()
             }
     
@@ -436,6 +486,34 @@ class SchwabotExecutableCore:
             logger.error(f"Error executing trade: {e}")
             return {
                 "action": "ERROR",
+                "amount": 0.0,
+                "price": tick_cycle.btc_price,
+                "confidence": 0.0,
+                "profit": 0.0,
+                "timestamp": time.time(),
+                "tick_cycle": tick_cycle.cycle_id,
+                "error": str(e)
+            }
+    
+    def _execute_reentry(self, tick_cycle: TickCycle, usdc_amount: float) -> Dict[str, Any]:
+        """Execute re-entry buy trade."""
+        try:
+            btc_amount = usdc_amount / tick_cycle.btc_price
+            trade_result = {
+                "action": "BUY",
+                "amount": btc_amount,
+                "price": tick_cycle.btc_price,
+                "confidence": tick_cycle.confidence_score,
+                "profit": 0.0,
+                "timestamp": time.time(),
+                "tick_cycle": tick_cycle.cycle_id
+            }
+            logger.info(f"↪️ Re-entry BUY executed: {btc_amount:.6f} BTC at ${tick_cycle.btc_price:,.2f}")
+            return trade_result
+        except Exception as e:
+            logger.error(f"Error executing re-entry: {e}")
+            return {
+                "action": "ERROR_REENTRY",
                 "amount": 0.0,
                 "price": tick_cycle.btc_price,
                 "confidence": 0.0,

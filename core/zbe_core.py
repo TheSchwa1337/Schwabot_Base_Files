@@ -14,7 +14,17 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
 
-import numpy as np
+# CUDA Integration with Fallback
+try:
+    import cupy as cp
+    USING_CUDA = True
+    _backend = 'cupy (GPU)'
+    xp = cp
+except ImportError:
+    import numpy as np
+    USING_CUDA = False
+    _backend = 'numpy (CPU)'
+    xp = np
 
 # Import clean math system
 try:
@@ -24,7 +34,7 @@ except ImportError:
     class unified_math:
         @staticmethod
         def sin(x):
-            return np.sin(x)
+            return xp.sin(x)
 
         @staticmethod
         def max(x, y):
@@ -44,11 +54,18 @@ except ImportError:
 
         @staticmethod
         def sqrt(x):
-            return np.sqrt(x)
+            return xp.sqrt(x)
 
         @staticmethod
         def log(x):
-            return np.log(x)
+            return xp.log(x)
+
+# Log backend status
+logger = logging.getLogger(__name__)
+if USING_CUDA:
+    logger.info(f"⚡ ZBE Core using GPU acceleration: {_backend}")
+else:
+    logger.info(f"🔄 ZBE Core using CPU fallback: {_backend}")
 
 
 class ZBEMode(Enum):

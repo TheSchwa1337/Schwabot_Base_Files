@@ -10,10 +10,25 @@ Distributed Architecture:
 - Fault-tolerant mathematical operations
 - Load balancing and resource optimization
 - Mathematical stability and error recovery
+
+CUDA Integration:
+- GPU-accelerated distributed operations with automatic CPU fallback
+- Performance monitoring and optimization
+- Cross-platform compatibility (Windows, macOS, Linux)
 """
 
-import numpy as np
-import cupy as cp
+# CUDA Integration with Fallback
+try:
+    import cupy as cp
+    USING_CUDA = True
+    _backend = 'cupy (GPU)'
+    xp = cp
+except ImportError:
+    import numpy as np
+    USING_CUDA = False
+    _backend = 'numpy (CPU)'
+    xp = np
+
 from typing import Dict, List, Tuple, Optional, Any, Callable
 from dataclasses import dataclass
 import logging
@@ -29,11 +44,24 @@ import json
 from queue import Queue, Empty
 import psutil
 import gc
-from scipy.optimize import minimize_scalar, minimize
-from scipy.linalg import LinAlgError
+
+# Import scipy with fallback
+try:
+    from scipy.optimize import minimize_scalar, minimize
+    from scipy.linalg import LinAlgError
+    SCIPY_AVAILABLE = True
+except ImportError:
+    SCIPY_AVAILABLE = False
+    logger = logging.getLogger(__name__)
+    logger.warning("🔄 SciPy not available - some optimization functions may be limited")
+
 import warnings
 
 logger = logging.getLogger(__name__)
+if USING_CUDA:
+    logger.info(f"⚡ Distributed Mathematical Processor using GPU acceleration: {_backend}")
+else:
+    logger.info(f"🔄 Distributed Mathematical Processor using CPU fallback: {_backend}")
 
 @dataclass
 class ComputationNode:
@@ -273,7 +301,7 @@ class ResourceMonitor:
             }
             
             # GPU resources if available
-            if cp.cuda.is_available():
+            if USING_CUDA and cp.cuda.is_available():
                 gpu_memory = cp.cuda.MemoryPool().used_bytes() / (1024**3)
                 resources['gpu_memory_used_gb'] = gpu_memory
             
@@ -297,7 +325,7 @@ class DistributedMathematicalProcessor:
     
     def __init__(self, max_workers: int = None, use_gpu: bool = True):
         self.max_workers = max_workers or mp.cpu_count()
-        self.use_gpu = use_gpu and cp.cuda.is_available()
+        self.use_gpu = use_gpu and USING_CUDA
         
         # Initialize components
         self.resource_manager = ResourceManager()
@@ -524,7 +552,7 @@ class DistributedMathematicalProcessor:
         try:
             matrix_b = parameters.get('matrix_b', np.eye(data.shape[1]))
             
-            if self.use_gpu and cp.cuda.is_available():
+            if self.use_gpu and USING_CUDA:
                 # GPU computation
                 data_gpu = cp.asarray(data)
                 matrix_b_gpu = cp.asarray(matrix_b)
@@ -832,7 +860,7 @@ class DistributedMathematicalProcessor:
             self.failed_tasks.clear()
             
             # Clear CUDA cache if using GPU
-            if self.use_gpu and cp.cuda.is_available():
+            if self.use_gpu and USING_CUDA:
                 cp.cuda.MemoryPool().free_all_blocks()
             
             # Force garbage collection

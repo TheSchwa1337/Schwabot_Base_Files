@@ -1,0 +1,60 @@
+{
+  "layer8_status": "\u2705 FULLY OPERATIONAL",
+  "components_validated": 4,
+  "successful_imports": 4,
+  "integration_success": true,
+  "total_issues": 5,
+  "component_results": {
+    "core.hash_glyph_compression": {
+      "status": "\u2705 Valid",
+      "classes": {
+        "HashGlyphCompressor": "\u2705 Found and instantiable",
+        "HashGlyphCompressor_stats": "\u2705 Stats method works",
+        "GlyphMemoryChunk": "\u26a0\ufe0f Found but instantiation failed: GlyphMemoryChunk.__init__() missing 7 required positional arguments: 'hash_key', 'glyph', 'vector', 'votes', 'strategy_id', 'timestamp', and 'confidence'"
+      },
+      "import_success": true
+    },
+    "core.ai_matrix_consensus": {
+      "status": "\u2705 Valid",
+      "classes": {
+        "AIMatrixConsensus": "\u2705 Found and instantiable",
+        "AgentVote": "\u26a0\ufe0f Found but instantiation failed: EnumType.__call__() missing 1 required positional argument: 'value'",
+        "ConsensusResult": "\u26a0\ufe0f Found but instantiation failed: ConsensusResult.__init__() missing 6 required positional arguments: 'blended_vector', 'consensus_vote', 'confidence', 'agent_weights', 'vote_distribution', and 'reasoning'"
+      },
+      "import_success": true
+    },
+    "core.visual_decision_engine": {
+      "status": "\u2705 Valid",
+      "classes": {
+        "VisualDecisionEngine": "\u2705 Found and instantiable"
+      },
+      "import_success": true
+    },
+    "core.loop_strategy_switcher": {
+      "status": "\u2705 Valid",
+      "classes": {
+        "StrategyLoopSwitcher": "\u2705 Found and instantiable",
+        "AssetTarget": "\u26a0\ufe0f Found but instantiation failed: AssetTarget.__init__() missing 6 required positional arguments: 'symbol', 'current_price', 'volume_24h', 'price_change_24h', 'market_cap', and 'is_held'",
+        "StrategyResult": "\u26a0\ufe0f Found but instantiation failed: StrategyResult.__init__() missing 9 required positional arguments: 'asset', 'strategy_id', 'qutrit_matrix', 'profit_vector', 'confidence', 'ghost_shell_used', 'fractal_match', 'execution_time', and 'market_context'"
+      },
+      "import_success": true
+    },
+    "integration": {
+      "status": "\u2705 Integration successful",
+      "tests": {
+        "compression_store": "\u2705 Store works",
+        "compression_retrieve": "\u2705 Retrieve works",
+        "consensus_vote": "\u2705 Vote works",
+        "path_blending": "\u2705 Path blending works",
+        "strategy_execution": "\u2705 Strategy execution works (3 results)"
+      }
+    }
+  },
+  "issues": [
+    "core.hash_glyph_compression.GlyphMemoryChunk: GlyphMemoryChunk.__init__() missing 7 required positional arguments: 'hash_key', 'glyph', 'vector', 'votes', 'strategy_id', 'timestamp', and 'confidence'",
+    "core.ai_matrix_consensus.AgentVote: EnumType.__call__() missing 1 required positional argument: 'value'",
+    "core.ai_matrix_consensus.ConsensusResult: ConsensusResult.__init__() missing 6 required positional arguments: 'blended_vector', 'consensus_vote', 'confidence', 'agent_weights', 'vote_distribution', and 'reasoning'",
+    "core.loop_strategy_switcher.AssetTarget: AssetTarget.__init__() missing 6 required positional arguments: 'symbol', 'current_price', 'volume_24h', 'price_change_24h', 'market_cap', and 'is_held'",
+    "core.loop_strategy_switcher.StrategyResult: StrategyResult.__init__() missing 9 required positional arguments: 'asset', 'strategy_id', 'qutrit_matrix', 'profit_vector', 'confidence', 'ghost_shell_used', 'fractal_match', 'execution_time', and 'market_context'"
+  ]
+}

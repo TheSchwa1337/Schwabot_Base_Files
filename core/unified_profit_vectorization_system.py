@@ -12,17 +12,30 @@ This system integrates:
 - Mathematical foundations from MathLibV4
 - Trading pipeline integration
 - Real-time profit optimization
+
+CUDA Integration:
+- GPU-accelerated profit vectorization with automatic CPU fallback
+- Performance monitoring and optimization
+- Cross-platform compatibility (Windows, macOS, Linux)
 """
 
-from __future__ import annotations
+# CUDA Integration with Fallback
+try:
+    import cupy as cp
+    USING_CUDA = True
+    _backend = 'cupy (GPU)'
+    xp = cp
+except ImportError:
+    import numpy as np
+    USING_CUDA = False
+    _backend = 'numpy (CPU)'
+    xp = np
 
 import logging
 import time
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
-
-import numpy as np
 
 from .clean_math_foundation import BitPhase, CleanMathFoundation, ThermalState
 from .clean_profit_vectorization import CleanProfitVectorization, ProfitVector, VectorizationMode
@@ -31,6 +44,10 @@ from .orbital_shell_brain_system import OrbitalBRAINSystem, ShellConsensus, Alti
 from .qutrit_signal_matrix import QutritSignalMatrix, QutritState, QutritMatrixResult
 
 logger = logging.getLogger(__name__)
+if USING_CUDA:
+    logger.info(f"⚡ UnifiedProfitVectorizationSystem using GPU acceleration: {_backend}")
+else:
+    logger.info(f"🔄 UnifiedProfitVectorizationSystem using CPU fallback: {_backend}")
 
 __all__ = [
     "UnifiedProfitVectorizationSystem",

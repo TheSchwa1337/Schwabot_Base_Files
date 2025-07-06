@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-GPU Handlers - ZBE (Zero Bottleneck Entropy) Operations
+GPU Handlers - GPU/CPU switching logic for Schwabot trading system.
 
-Uses CUDA acceleration for complex matrix and tensor operations.
-Handles mid- to long-term, batch-matrix, parallel strategy engines.
+Provides GPU-accelerated handlers with automatic CPU fallback for all
+matrix, tensor, and vector operations.
 """
 
 import logging
@@ -13,10 +13,27 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
 
-# CUDA Helper Integration
+# CUDA Integration with Fallback
+try:
+    import cupy as cp
+    USING_CUDA = True
+    _backend = 'cupy (GPU)'
+    xp = cp
+except ImportError:
+    import numpy as np
+    USING_CUDA = False
+    _backend = 'numpy (CPU)'
+    xp = np
+
+logger = logging.getLogger(__name__)
+if USING_CUDA:
+    logger.info(f"⚡ GPU Handlers using GPU acceleration: {_backend}")
+else:
+    logger.info(f"🔄 GPU Handlers using CPU fallback: {_backend}")
+
+# CUDA Helper Integration (for additional utilities)
 try:
     from ..utils.cuda_helper import (
-        USING_CUDA,
         get_cuda_status,
         report_cuda_status,
         safe_convolution,
@@ -32,13 +49,12 @@ try:
 
     CUDA_AVAILABLE = True
     logger = logging.getLogger(__name__)
-    logger.info("⚡ CUDA acceleration available for GPU Handlers")
+    logger.info(f"⚡ CUDA acceleration available for GPU Handlers: {_backend}")
 except ImportError:
     xp = np
-    USING_CUDA = False
     CUDA_AVAILABLE = False
     logger = logging.getLogger(__name__)
-    logger.warning("🔄 CUDA not available - using CPU fallback for GPU Handlers")
+    logger.warning("🔄 CUDA helper not available - using CPU fallback for GPU Handlers")
 
 # Import CPU handlers for fallback
 try:
@@ -50,6 +66,7 @@ except ImportError:
 
 
 logger = logging.getLogger(__name__)
+logger.info(f"GPU Handlers initialized with backend: {_backend}")
 
 
 def run_gpu_strategy(task_id: str, data: Dict[str, Any]) -> Dict[str, Any]:

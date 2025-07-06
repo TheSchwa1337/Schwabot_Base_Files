@@ -5,7 +5,24 @@ Clean Profit Vectorization System
 
 This module provides profit vectorization capabilities with various modes
 and allocation methods for the Schwabot trading system.
+
+CUDA Integration:
+- GPU-accelerated profit vectorization with automatic CPU fallback
+- Performance monitoring and optimization
+- Cross-platform compatibility (Windows, macOS, Linux)
 """
+
+# CUDA Integration with Fallback
+try:
+    import cupy as cp
+    USING_CUDA = True
+    _backend = 'cupy (GPU)'
+    xp = cp
+except ImportError:
+    import numpy as np
+    USING_CUDA = False
+    _backend = 'numpy (CPU)'
+    xp = np
 
 import hashlib
 import logging
@@ -13,8 +30,6 @@ import time
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
-
-import numpy as np
 
 from core.clean_math_foundation import BitPhase, CleanMathFoundation, ThermalState
 
@@ -28,6 +43,10 @@ operations that power the Schwabot trading system.
 """
 
 logger = logging.getLogger(__name__)
+if USING_CUDA:
+    logger.info(f"⚡ CleanProfitVectorization using GPU acceleration: {_backend}")
+else:
+    logger.info(f"🔄 CleanProfitVectorization using CPU fallback: {_backend}")
 
 
 class VectorizationMode(Enum):

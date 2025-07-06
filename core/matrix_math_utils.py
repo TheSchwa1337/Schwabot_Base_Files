@@ -12,14 +12,36 @@ Key Features:
 
 All public helpers are pure functions and NumPy-based so they can be
 unit-tested in isolation.
+
+CUDA Integration:
+- GPU-accelerated matrix utilities with automatic CPU fallback
+- Performance monitoring and optimization
+- Cross-platform compatibility (Windows, macOS, Linux)
 """
 
+# CUDA Integration with Fallback
+try:
+    import cupy as cp
+    USING_CUDA = True
+    _backend = 'cupy (GPU)'
+    xp = cp
+    la = cp.linalg
+except ImportError:
+    import numpy as np
+    USING_CUDA = False
+    _backend = 'numpy (CPU)'
+    xp = np
+    la = np.linalg
+
 from __future__ import annotations
-
 from typing import Any, Dict, List, Optional, Tuple, Union
+import logging
 
-import numpy as np
-import numpy.linalg as la
+logger = logging.getLogger(__name__)
+if USING_CUDA:
+    logger.info(f"⚡ MatrixMathUtils using GPU acceleration: {_backend}")
+else:
+    logger.info(f"🔄 MatrixMathUtils using CPU fallback: {_backend}")
 
 
 def analyze_price_matrix(price_matrix: np.ndarray) -> Dict[str, Any]:

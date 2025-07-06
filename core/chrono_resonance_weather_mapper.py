@@ -37,7 +37,18 @@ from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
 
-import numpy as np
+# CUDA Integration with Fallback
+try:
+    import cupy as cp
+    USING_CUDA = True
+    _backend = 'cupy (GPU)'
+    xp = cp
+except ImportError:
+    import numpy as np
+    USING_CUDA = False
+    _backend = 'numpy (CPU)'
+    xp = np
+
 import requests
 from scipy import signal
 from scipy.fft import fft, fftfreq
@@ -45,7 +56,12 @@ from scipy.fft import fft, fftfreq
 from .chrono_recursive_logic_function import CRLFResponse, CRLFTriggerState
 from .zpe_zbe_core import ZBEBalance, ZPEVector
 
+# Log backend status
 logger = logging.getLogger(__name__)
+if USING_CUDA:
+    logger.info(f"⚡ CRWF using GPU acceleration: {_backend}")
+else:
+    logger.info(f"🔄 CRWF using CPU fallback: {_backend}")
 
 
 class WeatherPattern(Enum):
@@ -343,8 +359,8 @@ class ChronoResonanceWeatherMapper:
             return 0.0
 
         # Compute gradient using finite difference
-        temp_gradient = np.gradient(recent_temps)
-        return float(np.mean(temp_gradient))
+        temp_gradient = xp.gradient(recent_temps)
+        return float(xp.mean(temp_gradient))
 
     def _compute_pressure_gradient(self, weather_data: WeatherDataPoint) -> float:
         """Compute barometric pressure gradient ∇P(t,φ,λ)."""
@@ -363,8 +379,8 @@ class ChronoResonanceWeatherMapper:
             return 0.0
 
         # Compute gradient using finite difference
-        pressure_gradient = np.gradient(recent_pressures)
-        return float(np.mean(pressure_gradient))
+        pressure_gradient = xp.gradient(recent_pressures)
+        return float(xp.mean(pressure_gradient))
 
     def _compute_schumann_interference(
         self, weather_data: WeatherDataPoint, location: GeoLocation
@@ -382,7 +398,7 @@ class ChronoResonanceWeatherMapper:
         geomagnetic_factor = weather_data.geomagnetic_index / 9.0  # Normalize Kp index
 
         # Altitude factor (higher altitude = stronger interference)
-        altitude_factor = math.exp(weather_data.altitude / 10000.0)
+        altitude_factor = xp.exp(weather_data.altitude / 10000.0)
 
         # Solar flux factor
         solar_factor = weather_data.solar_flux / 200.0  # Normalize solar flux
@@ -394,12 +410,12 @@ class ChronoResonanceWeatherMapper:
             resonance_strength = 1.0 / (i + 1)
 
             # Phase difference between current and resonant frequency
-            phase_diff = abs(schumann_base - freq) / freq
+            phase_diff = xp.abs(schumann_base - freq) / freq
 
             # Interference contribution
             interference += (
                 resonance_strength
-                * math.exp(-phase_diff)
+                * xp.exp(-phase_diff)
                 * (1.0 + geomagnetic_factor)
                 * altitude_factor
                 * solar_factor
@@ -417,13 +433,13 @@ class ChronoResonanceWeatherMapper:
         entropy_score = 0.25 * temp_var + 0.5 * pressure_drop + 0.25 * schumann_deviation
         """
         # Temperature variation
-        temp_var = abs(weather_data.temperature - 15.0)  # Deviation from 15°C baseline
+        temp_var = xp.abs(weather_data.temperature - 15.0)  # Deviation from 15°C baseline
 
         # Pressure drop (normalized)
-        pressure_drop = max(0, 1013.25 - weather_data.pressure) / 1013.25
+        pressure_drop = xp.maximum(0, 1013.25 - weather_data.pressure) / 1013.25
 
         # Schumann frequency deviation
-        schumann_deviation = abs(weather_data.schumann_frequency - 7.83) / 7.83
+        schumann_deviation = xp.abs(weather_data.schumann_frequency - 7.83) / 7.83
 
         # Compute entropy score
         entropy_score = (
@@ -442,7 +458,7 @@ class ChronoResonanceWeatherMapper:
     ) -> float:
         """Compute resonance strength based on CRWF output and location factors."""
         # Base resonance from CRWF output
-        base_resonance = abs(crwf_output)
+        base_resonance = xp.abs(crwf_output)
 
         # Location resonance factor
         location_resonance = location.resonance_factor
@@ -462,7 +478,7 @@ class ChronoResonanceWeatherMapper:
             base_resonance * location_resonance * weather_resonance * geomagnetic_resonance
         )
 
-        return float(np.clip(resonance_strength, 0.0, 10.0))
+        return float(xp.clip(resonance_strength, 0.0, 10.0))
 
     def _determine_weather_pattern(
         self, weather_data: WeatherDataPoint, crwf_output: float
@@ -474,9 +490,9 @@ class ChronoResonanceWeatherMapper:
             return WeatherPattern.LOW_PRESSURE
         elif weather_data.geomagnetic_index > self.geomagnetic_threshold:
             return WeatherPattern.GEOMAGNETIC_STORM
-        elif abs(crwf_output) > 2.0:
+        elif xp.abs(crwf_output) > 2.0:
             return WeatherPattern.STORM_FRONT
-        elif abs(crwf_output) < 0.5:
+        elif xp.abs(crwf_output) < 0.5:
             return WeatherPattern.ATMOSPHERIC_STABILITY
         else:
             return WeatherPattern.WEATHER_TRANSITION
@@ -502,7 +518,7 @@ class ChronoResonanceWeatherMapper:
         phase_alignment = ley_line_resonance * geomagnetic_factor * cold_base_factor
 
         # Overall alignment score
-        alignment_score = np.clip(phase_alignment, 0.0, 1.0)
+        alignment_score = xp.clip(phase_alignment, 0.0, 1.0)
 
         return {
             "alignment_score": float(alignment_score),
@@ -517,11 +533,11 @@ class ChronoResonanceWeatherMapper:
         """Compute temporal resonance based on time and location."""
         # Time-based resonance (hour of day)
         hour = weather_data.timestamp.hour
-        time_resonance = 1.0 + 0.2 * math.sin(2 * math.pi * hour / 24.0)
+        time_resonance = 1.0 + 0.2 * xp.sin(2 * xp.pi * hour / 24.0)
 
         # Seasonal resonance
         day_of_year = weather_data.timestamp.timetuple().tm_yday
-        seasonal_resonance = 1.0 + 0.1 * math.sin(2 * math.pi * day_of_year / 365.0)
+        seasonal_resonance = 1.0 + 0.1 * xp.sin(2 * xp.pi * day_of_year / 365.0)
 
         # Location temporal factor
         location_temporal = location.resonance_factor
@@ -529,7 +545,7 @@ class ChronoResonanceWeatherMapper:
         # Combined temporal resonance
         temporal_resonance = time_resonance * seasonal_resonance * location_temporal
 
-        return float(np.clip(temporal_resonance, 0.0, 2.0))
+        return float(xp.clip(temporal_resonance, 0.0, 2.0))
 
     def _compute_crlf_adjustment(
         self, crwf_output: float, market_entropy: float, entropy_score: float
@@ -545,7 +561,7 @@ class ChronoResonanceWeatherMapper:
         # Combined adjustment
         adjustment = base_adjustment * entropy_adjustment
 
-        return float(np.clip(adjustment, 0.5, 2.0))
+        return float(xp.clip(adjustment, 0.5, 2.0))
 
     def _generate_recommendations(
         self, crwf_output: float, weather_pattern: WeatherPattern, entropy_score: float
@@ -558,8 +574,8 @@ class ChronoResonanceWeatherMapper:
             ),
             "crwf_strength": (
                 "strong"
-                if abs(crwf_output) > 2.0
-                else "moderate" if abs(crwf_output) > 1.0 else "weak"
+                if xp.abs(crwf_output) > 2.0
+                else "moderate" if xp.abs(crwf_output) > 1.0 else "weak"
             ),
         }
 
@@ -696,12 +712,12 @@ class ChronoResonanceWeatherMapper:
         tiger_lat, tiger_lon = 34.8, -83.4
 
         # Distance from Tiger, GA
-        distance = math.sqrt((latitude - tiger_lat) ** 2 + (longitude - tiger_lon) ** 2)
+        distance = xp.sqrt((latitude - tiger_lat) ** 2 + (longitude - tiger_lon) ** 2)
 
         # Ley line strength decreases with distance from known intersections
-        ley_strength = math.exp(-distance / 10.0)  # 10 degree decay
+        ley_strength = xp.exp(-distance / 10.0)  # 10 degree decay
 
-        return float(np.clip(ley_strength, 0.0, 1.0))
+        return float(xp.clip(ley_strength, 0.0, 1.0))
 
     def _compute_geomagnetic_density(self, latitude: float, longitude: float) -> float:
         """Compute geomagnetic density at given coordinates."""
@@ -709,12 +725,12 @@ class ChronoResonanceWeatherMapper:
         # Higher density near poles, lower near equator
 
         # Distance from magnetic equator (simplified)
-        magnetic_latitude = abs(latitude)
+        magnetic_latitude = xp.abs(latitude)
 
         # Geomagnetic density increases with magnetic latitude
         geomagnetic_density = 0.3 + 0.7 * (magnetic_latitude / 90.0)
 
-        return float(np.clip(geomagnetic_density, 0.0, 1.0))
+        return float(xp.clip(geomagnetic_density, 0.0, 1.0))
 
     def _compute_entropy_zone_multiplier(self, latitude: float, longitude: float) -> float:
         """Compute entropy zone multiplier for location."""
@@ -722,12 +738,12 @@ class ChronoResonanceWeatherMapper:
         # Higher entropy in equatorial regions, lower in polar regions
 
         # Distance from equator
-        equator_distance = abs(latitude)
+        equator_distance = xp.abs(latitude)
 
         # Entropy multiplier decreases with distance from equator
         entropy_multiplier = 1.5 - 0.5 * (equator_distance / 90.0)
 
-        return float(np.clip(entropy_multiplier, 0.5, 1.5))
+        return float(xp.clip(entropy_multiplier, 0.5, 1.5))
 
     def _compute_resonance_factor(self, latitude: float, longitude: float) -> float:
         """Compute resonance factor for location."""
@@ -739,9 +755,9 @@ class ChronoResonanceWeatherMapper:
 
         # Resonance factor is geometric mean of ley strength and geomagnetic
         # density
-        resonance_factor = math.sqrt(ley_strength * geomagnetic_density)
+        resonance_factor = xp.sqrt(ley_strength * geomagnetic_density)
 
-        return float(np.clip(resonance_factor, 0.0, 1.0))
+        return float(xp.clip(resonance_factor, 0.0, 1.0))
 
     def get_performance_summary(self) -> Dict[str, Any]:
         """Get comprehensive CRWF performance summary."""
@@ -753,9 +769,9 @@ class ChronoResonanceWeatherMapper:
 
         return {
             "total_computations": len(self.computation_history),
-            "average_crwf_output": np.mean([r.crwf_output for r in recent_responses]),
-            "average_entropy_score": np.mean([r.entropy_score for r in recent_responses]),
-            "average_resonance_strength": np.mean([r.resonance_strength for r in recent_responses]),
+            "average_crwf_output": xp.mean([r.crwf_output for r in recent_responses]),
+            "average_entropy_score": xp.mean([r.entropy_score for r in recent_responses]),
+            "average_resonance_strength": xp.mean([r.resonance_strength for r in recent_responses]),
             "weather_pattern_distribution": self._get_weather_pattern_distribution(),
             "geo_alignment_trend": self._get_geo_alignment_trend(),
             "crwf_output_statistics": self._get_crwf_statistics(),
@@ -783,11 +799,11 @@ class ChronoResonanceWeatherMapper:
             return {}
 
         return {
-            "mean": np.mean(outputs),
-            "std": np.std(outputs),
-            "min": np.min(outputs),
-            "max": np.max(outputs),
-            "median": np.median(outputs),
+            "mean": xp.mean(outputs),
+            "std": xp.std(outputs),
+            "min": xp.min(outputs),
+            "max": xp.max(outputs),
+            "median": xp.median(outputs),
         }
 
 

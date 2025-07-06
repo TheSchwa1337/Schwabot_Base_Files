@@ -12,10 +12,20 @@ from datetime import datetime
 from typing import Any, Callable, Dict, Optional
 import time
 import numpy as np
+try:
+    import cupy as cp
+    USING_CUDA = True
+    _backend = 'cupy (GPU)'
+except ImportError:
+    cp = np
+    USING_CUDA = False
+    _backend = 'numpy (CPU)'
+import logging
+logger = logging.getLogger(__name__)
+logger.info(f"StrategyBitMapper using backend: {_backend}")
 
 # CUDA Helper Integration
 try:
-    import cupy as cp
     from core.gpu_handlers import get_gpu_memory, select_best_gpu
     from utils.cuda_helper import safe_cuda_operation, xp, USING_CUDA
     CUDA_AVAILABLE = True

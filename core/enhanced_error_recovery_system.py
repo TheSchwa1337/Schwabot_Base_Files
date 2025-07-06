@@ -1,40 +1,53 @@
 #!/usr/bin/env python3
 """
-Enhanced Error Recovery System - Sophisticated Error Handling and Recovery
-Implements advanced error handling, mathematical stability monitoring,
-and automatic recovery mechanisms for trading operations.
+Enhanced Error Recovery System for Schwabot Trading System
 
-Recovery Architecture:
-- Multi-level error detection and classification
-- Automatic recovery strategies
-- Mathematical stability monitoring
-- Graceful degradation and failover
+Provides comprehensive error detection, classification, and recovery mechanisms
+for mathematical operations, network issues, and system failures.
+
+Features:
+- Multi-level error classification and severity assessment
+- Automatic recovery strategies with fallback mechanisms
+- Mathematical stability monitoring and correction
 - System health monitoring and alerting
+- Graceful degradation and failover capabilities
+
+CUDA Integration:
+- GPU-accelerated error recovery with automatic CPU fallback
+- Performance monitoring and optimization
+- Cross-platform compatibility (Windows, macOS, Linux)
 """
 
-import numpy as np
 import logging
-import traceback
-import time
 import threading
-import asyncio
-from typing import Dict, List, Tuple, Optional, Any, Callable
-from dataclasses import dataclass, field
-from enum import Enum
-from concurrent.futures import ThreadPoolExecutor
-import psutil
-import gc
-import pickle
-import json
-from datetime import datetime, timedelta
-from functools import wraps
-import warnings
+import time
+import traceback
 from contextlib import contextmanager
-import signal
-import sys
-import os
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
+from functools import wraps
+from typing import Any, Callable, Dict, List, Optional, Tuple
+
+# CUDA Integration with Fallback
+try:
+    import cupy as cp
+    USING_CUDA = True
+    _backend = 'cupy (GPU)'
+    xp = cp
+except ImportError:
+    import numpy as np
+    USING_CUDA = False
+    _backend = 'numpy (CPU)'
+    xp = np
+
+import psutil
 
 logger = logging.getLogger(__name__)
+if USING_CUDA:
+    logger.info(f"⚡ Enhanced Error Recovery System using GPU acceleration: {_backend}")
+else:
+    logger.info(f"🔄 Enhanced Error Recovery System using CPU fallback: {_backend}")
 
 class ErrorSeverity(Enum):
     """Error severity levels"""
@@ -112,9 +125,9 @@ class MathematicalStabilityChecker:
         self.stability_threshold = 1e-12
         self.condition_number_threshold = 1e15
         self.convergence_threshold = 1e-10
-        self.numerical_precision = np.finfo(float).eps
+        self.numerical_precision = xp.finfo(float).eps
     
-    def check_matrix_stability(self, matrix: np.ndarray) -> Dict[str, Any]:
+    def check_matrix_stability(self, matrix: xp.ndarray) -> Dict[str, Any]:
         """Check matrix stability and conditioning"""
         try:
             stability_report = {
@@ -127,14 +140,14 @@ class MathematicalStabilityChecker:
             }
             
             # Check for NaN or Inf values
-            if np.any(np.isnan(matrix)) or np.any(np.isinf(matrix)):
+            if xp.any(xp.isnan(matrix)) or xp.any(xp.isinf(matrix)):
                 stability_report['is_stable'] = False
                 stability_report['numerical_issues'].append('NaN or Inf values detected')
             
             # Check matrix conditioning
             if matrix.ndim == 2 and matrix.shape[0] == matrix.shape[1]:
                 try:
-                    cond_num = np.linalg.cond(matrix)
+                    cond_num = xp.linalg.cond(matrix)
                     stability_report['condition_number'] = float(cond_num)
                     
                     if cond_num > self.condition_number_threshold:
@@ -142,7 +155,7 @@ class MathematicalStabilityChecker:
                         stability_report['numerical_issues'].append(f'Ill-conditioned matrix (cond={cond_num:.2e})')
                     
                     # Check determinant
-                    det = np.linalg.det(matrix)
+                    det = xp.linalg.det(matrix)
                     stability_report['determinant'] = float(det)
                     
                     if abs(det) < self.stability_threshold:
@@ -150,7 +163,7 @@ class MathematicalStabilityChecker:
                         stability_report['numerical_issues'].append('Matrix is nearly singular')
                     
                     # Check rank
-                    rank = np.linalg.matrix_rank(matrix)
+                    rank = xp.linalg.matrix_rank(matrix)
                     stability_report['rank'] = int(rank)
                     
                     if rank < min(matrix.shape):
@@ -158,12 +171,12 @@ class MathematicalStabilityChecker:
                         stability_report['numerical_issues'].append('Matrix is rank deficient')
                     
                     # Check eigenvalues for stability
-                    eigenvalues = np.linalg.eigvals(matrix)
-                    if np.any(np.real(eigenvalues) < -self.stability_threshold):
+                    eigenvalues = xp.linalg.eigvals(matrix)
+                    if xp.any(xp.real(eigenvalues) < -self.stability_threshold):
                         stability_report['eigenvalue_issues'] = True
                         stability_report['numerical_issues'].append('Unstable eigenvalues detected')
                 
-                except np.linalg.LinAlgError as e:
+                except xp.linalg.LinAlgError as e:
                     stability_report['is_stable'] = False
                     stability_report['numerical_issues'].append(f'Linear algebra error: {str(e)}')
             
@@ -173,30 +186,30 @@ class MathematicalStabilityChecker:
             logger.error(f"Error checking matrix stability: {e}")
             return {'is_stable': False, 'error': str(e)}
     
-    def stabilize_matrix(self, matrix: np.ndarray, method: str = 'ridge') -> np.ndarray:
+    def stabilize_matrix(self, matrix: xp.ndarray, method: str = 'ridge') -> xp.ndarray:
         """Apply stabilization techniques to matrices"""
         try:
             stabilized = matrix.copy()
             
             # Replace NaN and Inf values
-            stabilized = np.nan_to_num(stabilized, nan=0.0, posinf=1e10, neginf=-1e10)
+            stabilized = xp.nan_to_num(stabilized, nan=0.0, posinf=1e10, neginf=-1e10)
             
             if method == 'ridge' and matrix.ndim == 2 and matrix.shape[0] == matrix.shape[1]:
                 # Ridge regularization
-                regularization = 1e-10 * np.eye(matrix.shape[0])
+                regularization = 1e-10 * xp.eye(matrix.shape[0])
                 stabilized += regularization
             
             elif method == 'truncated_svd':
                 # Truncated SVD for low-rank approximation
-                U, s, Vt = np.linalg.svd(stabilized, full_matrices=False)
+                U, s, Vt = xp.linalg.svd(stabilized, full_matrices=False)
                 # Keep only significant singular values
-                threshold = np.max(s) * 1e-10
-                s_truncated = np.where(s > threshold, s, 0)
-                stabilized = U @ np.diag(s_truncated) @ Vt
+                threshold = xp.max(s) * 1e-10
+                s_truncated = xp.where(s > threshold, s, 0)
+                stabilized = U @ xp.diag(s_truncated) @ Vt
             
             elif method == 'clipping':
                 # Clip extreme values
-                stabilized = np.clip(stabilized, -1e10, 1e10)
+                stabilized = xp.clip(stabilized, -1e10, 1e10)
             
             return stabilized
             
@@ -468,7 +481,7 @@ class RecoveryManager:
     def _get_safe_default(self, category: ErrorCategory) -> Any:
         """Get safe default values for different error categories"""
         defaults = {
-            ErrorCategory.MATHEMATICAL: np.array([0.0]),
+            ErrorCategory.MATHEMATICAL: xp.array([0.0]),
             ErrorCategory.COMPUTATION: 0.0,
             ErrorCategory.DATA: None,
             ErrorCategory.TRADING: {'action': 'hold', 'quantity': 0.0},
@@ -547,14 +560,16 @@ class SystemHealthMonitor:
             
             # GPU usage (if available)
             gpu_usage = None
-            try:
-                import cupy as cp
-                if cp.cuda.is_available():
+            if USING_CUDA:
+                try:
                     gpu_memory = cp.cuda.MemoryPool().used_bytes()
                     gpu_total = cp.cuda.MemoryPool().total_bytes()
                     gpu_usage = (gpu_memory / gpu_total) * 100 if gpu_total > 0 else 0
-            except ImportError:
-                pass
+                except Exception as e:
+                    logger.warning(f"Could not get GPU usage: {e}")
+                    gpu_usage = None # Indicate failure
+            else:
+                gpu_usage = 0.0 # No GPU, so 0% usage
             
             # Network latency (simplified)
             network_latency = 0.0  # Placeholder
@@ -610,7 +625,7 @@ class SystemHealthMonitor:
                 alerts.append(f"High disk usage: {health.disk_usage:.1f}%")
             
             # GPU usage alert
-            if health.gpu_usage and health.gpu_usage > 90.0:
+            if health.gpu_usage is not None and health.gpu_usage > 90.0:
                 alerts.append(f"High GPU usage: {health.gpu_usage:.1f}%")
             
             # Error rate alert
@@ -773,11 +788,11 @@ class EnhancedErrorRecoverySystem:
         """Register a degraded mode function for graceful degradation"""
         self.recovery_manager.register_degraded_mode(function_name, degraded_func)
     
-    def check_mathematical_stability(self, data: np.ndarray) -> Dict[str, Any]:
+    def check_mathematical_stability(self, data: xp.ndarray) -> Dict[str, Any]:
         """Check mathematical stability of data"""
         return self.stability_checker.check_matrix_stability(data)
     
-    def stabilize_mathematical_data(self, data: np.ndarray, method: str = 'ridge') -> np.ndarray:
+    def stabilize_mathematical_data(self, data: xp.ndarray, method: str = 'ridge') -> xp.ndarray:
         """Stabilize mathematical data"""
         return self.stability_checker.stabilize_matrix(data, method)
     

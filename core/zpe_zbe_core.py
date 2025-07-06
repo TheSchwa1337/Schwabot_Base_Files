@@ -5,7 +5,27 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Optional
 
+# CUDA Integration with Fallback
+try:
+    import cupy as cp
+    USING_CUDA = True
+    _backend = 'cupy (GPU)'
+    xp = cp
+except ImportError:
+    import numpy as np
+    USING_CUDA = False
+    _backend = 'numpy (CPU)'
+    xp = np
+
 from .clean_math_foundation import CleanMathFoundation
+
+# Log backend status
+import logging
+logger = logging.getLogger(__name__)
+if USING_CUDA:
+    logger.info(f"⚡ ZPE-ZBE Core using GPU acceleration: {_backend}")
+else:
+    logger.info(f"🔄 ZPE-ZBE Core using CPU fallback: {_backend}")
 
 
 class QuantumSyncStatus(Enum):

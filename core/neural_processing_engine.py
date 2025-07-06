@@ -1,34 +1,38 @@
 #!/usr/bin/env python3
 """
-Neural Processing Engine - Advanced Neural Networks for Trading
-Implements deep learning, pattern recognition, and signal processing
-for enhanced BTC/USDC trading automation and profit optimization.
+Neural Processing Engine - Neural mathematics for Schwabot trading system.
 
-Neural Architecture:
-- Deep Convolutional Networks for price pattern recognition
-- LSTM/GRU for temporal sequence modeling
-- Transformer architecture for attention-based processing
-- Reinforcement Learning for trading strategy optimization
+Provides neural quantization, pattern recognition, and mathematical
+neural operations for the trading system.
+
+CUDA Integration:
+- GPU-accelerated neural operations with automatic CPU fallback
+- Performance monitoring and optimization
+- Cross-platform compatibility (Windows, macOS, Linux)
 """
 
-import numpy as np
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
-import torch.optim as optim
-from torch.utils.data import DataLoader, TensorDataset
-from typing import Dict, List, Tuple, Optional, Any
-from dataclasses import dataclass
 import logging
-from concurrent.futures import ThreadPoolExecutor
-import threading
-from sklearn.preprocessing import StandardScaler, MinMaxScaler
-from sklearn.metrics import accuracy_score, precision_score, recall_score
-import pandas as pd
-from collections import deque
-import asyncio
+import math
+from dataclasses import dataclass, field
+from typing import Any, Dict, List, Tuple, Union
+
+# CUDA Integration with Fallback
+try:
+    import cupy as cp
+    USING_CUDA = True
+    _backend = 'cupy (GPU)'
+    xp = cp
+except ImportError:
+    import numpy as np
+    USING_CUDA = False
+    _backend = 'numpy (CPU)'
+    xp = np
 
 logger = logging.getLogger(__name__)
+if USING_CUDA:
+    logger.info(f"⚡ Neural Processing Engine using GPU acceleration: {_backend}")
+else:
+    logger.info(f"🔄 Neural Processing Engine using CPU fallback: {_backend}")
 
 @dataclass
 class NeuralPrediction:

@@ -19,11 +19,14 @@ from scipy.stats import norm
 try:
     import cupy as cp
     GPU_AVAILABLE = True
+    _backend = 'cupy (GPU)'
 except ImportError:
+    cp = np
     GPU_AVAILABLE = False
-    cp = None
-
+    _backend = 'numpy (CPU)'
+import logging
 logger = logging.getLogger(__name__)
+logger.info(f"MathematicalOptimizationBridge using backend: {_backend}")
 
 class OptimizationMode(Enum):
     """Optimization processing modes."""

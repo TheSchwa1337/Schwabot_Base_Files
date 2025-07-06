@@ -1,38 +1,44 @@
-from typing import Any, Dict, List, Union
+#!/usr/bin/env python3
+"""
+Clean Unified Math System - Advanced Mathematical Operations
 
-"""Clean Unified Mathematics System for Schwabot."""
+Provides a comprehensive, unified mathematical system for the Schwabot trading
+platform. This module integrates various mathematical operations into a single
+cohesive interface with GPU/CPU acceleration support.
 
-
-# -*- coding: utf-8 -*-
-
-
-# Clean Unified Mathematics System for Schwabot
-
-
-# ============================================
-
-
-#
-
-
-# Clean mathematical framework that integrates with the brain trading system.
-
-
-# Provides mathematical operations, optimization algorithms, and
-# integration bridges.
-
-
-# Configure logging
-
+Key Features:
+- Unified mathematical operations with GPU acceleration
+- Advanced statistical calculations
+- Risk management metrics
+- Portfolio optimization
+- Performance tracking and analysis
+"""
 
 import logging
 import math
 import time
 from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple, Union
 
-import numpy as np
+# CUDA Integration with Fallback
+try:
+    import cupy as cp
+    USING_CUDA = True
+    _backend = 'cupy (GPU)'
+    xp = cp
+except ImportError:
+    import numpy as np
+    USING_CUDA = False
+    _backend = 'numpy (CPU)'
+    xp = np
 
+# Log backend status
 logger = logging.getLogger(__name__)
+if USING_CUDA:
+    logger.info(f"⚡ Clean Unified Math using GPU acceleration: {_backend}")
+else:
+    logger.info(f"🔄 Clean Unified Math using CPU fallback: {_backend}")
 
 
 @dataclass

@@ -8,10 +8,25 @@ Mathematical Foundations:
 - Quantum Superposition: |ψ⟩ = α|0⟩ + β|1⟩
 - Quantum Entanglement: |ψ⟩ = (|00⟩ + |11⟩)/√2
 - Quantum Tensor Operations: T_quantum = ∑ᵢ αᵢ|ψᵢ⟩⊗|φᵢ⟩
+
+CUDA Integration:
+- GPU-accelerated quantum operations with automatic CPU fallback
+- Performance monitoring and optimization
+- Cross-platform compatibility (Windows, macOS, Linux)
 """
 
-import numpy as np
-import cupy as cp
+# CUDA Integration with Fallback
+try:
+    import cupy as cp
+    USING_CUDA = True
+    _backend = 'cupy (GPU)'
+    xp = cp
+except ImportError:
+    import numpy as np
+    USING_CUDA = False
+    _backend = 'numpy (CPU)'
+    xp = np
+
 from typing import Dict, List, Tuple, Optional, Any
 from dataclasses import dataclass
 from concurrent.futures import ThreadPoolExecutor
@@ -22,6 +37,10 @@ from scipy.optimize import minimize
 import logging
 
 logger = logging.getLogger(__name__)
+if USING_CUDA:
+    logger.info(f"⚡ QuantumMathematicalBridge using GPU acceleration: {_backend}")
+else:
+    logger.info(f"🔄 QuantumMathematicalBridge using CPU fallback: {_backend}")
 
 @dataclass
 class QuantumState:
@@ -71,15 +90,15 @@ class QuantumMathematicalBridge:
     def _initialize_quantum_matrices(self):
         """Initialize fundamental quantum matrices"""
         # Pauli matrices
-        self.pauli_x = np.array([[0, 1], [1, 0]], dtype=complex)
-        self.pauli_y = np.array([[0, -1j], [1j, 0]], dtype=complex)
-        self.pauli_z = np.array([[1, 0], [0, -1]], dtype=complex)
+        self.pauli_x = xp.array([[0, 1], [1, 0]], dtype=complex)
+        self.pauli_y = xp.array([[0, -1j], [1j, 0]], dtype=complex)
+        self.pauli_z = xp.array([[1, 0], [0, -1]], dtype=complex)
         
         # Hadamard gate
-        self.hadamard = np.array([[1, 1], [1, -1]], dtype=complex) / np.sqrt(2)
+        self.hadamard = xp.array([[1, 1], [1, -1]], dtype=complex) / xp.sqrt(2)
         
         # CNOT gate
-        self.cnot = np.array([
+        self.cnot = xp.array([
             [1, 0, 0, 0],
             [0, 1, 0, 0],
             [0, 0, 0, 1],
@@ -91,12 +110,12 @@ class QuantumMathematicalBridge:
     
     def _generate_qft_matrix(self, n: int) -> np.ndarray:
         """Generate Quantum Fourier Transform matrix"""
-        omega = np.exp(2j * np.pi / n)
-        qft = np.zeros((n, n), dtype=complex)
+        omega = xp.exp(2j * xp.pi / n)
+        qft = xp.zeros((n, n), dtype=complex)
         
         for i in range(n):
             for j in range(n):
-                qft[i, j] = omega**(i * j) / np.sqrt(n)
+                qft[i, j] = omega**(i * j) / xp.sqrt(n)
         
         return qft
     
@@ -109,8 +128,8 @@ class QuantumMathematicalBridge:
         """
         try:
             # Normalize signals to create valid quantum amplitudes
-            signals = np.array(trading_signals, dtype=complex)
-            norm = np.linalg.norm(signals)
+            signals = xp.array(trading_signals, dtype=complex)
+            norm = xp.linalg.norm(signals)
             
             if norm == 0:
                 raise ValueError("Cannot create superposition from zero signals")
@@ -119,18 +138,18 @@ class QuantumMathematicalBridge:
             
             # Calculate quantum amplitudes and phases
             amplitudes = normalized_signals
-            phases = np.angle(amplitudes)
-            probabilities = np.abs(amplitudes)**2
+            phases = xp.angle(amplitudes)
+            probabilities = xp.abs(amplitudes)**2
             
             # Create superposition components
             superposition_components = {}
             for i, (amp, phase) in enumerate(zip(amplitudes, phases)):
-                superposition_components[f"signal_{i}"] = amp * np.exp(1j * phase)
+                superposition_components[f"signal_{i}"] = amp * xp.exp(1j * phase)
             
             quantum_state = QuantumState(
-                amplitude=np.sum(amplitudes),
-                phase=np.mean(phases),
-                probability=np.sum(probabilities),
+                amplitude=xp.sum(amplitudes),
+                phase=xp.mean(phases),
+                probability=xp.sum(probabilities),
                 entangled_pairs=[],
                 superposition_components=superposition_components
             )
@@ -151,7 +170,7 @@ class QuantumMathematicalBridge:
         """
         try:
             # Create Bell state (maximally entangled)
-            bell_coefficient = 1 / np.sqrt(2)
+            bell_coefficient = 1 / xp.sqrt(2)
             
             # Entangle the states
             entangled_amplitude1 = bell_coefficient * (state1.amplitude + state2.amplitude)
@@ -163,7 +182,7 @@ class QuantumMathematicalBridge:
             entangled_state1 = QuantumState(
                 amplitude=entangled_amplitude1,
                 phase=state1.phase,
-                probability=abs(entangled_amplitude1)**2,
+                probability=xp.abs(entangled_amplitude1)**2,
                 entangled_pairs=[entanglement_id],
                 superposition_components=state1.superposition_components
             )
@@ -171,7 +190,7 @@ class QuantumMathematicalBridge:
             entangled_state2 = QuantumState(
                 amplitude=entangled_amplitude2,
                 phase=state2.phase,
-                probability=abs(entangled_amplitude2)**2,
+                probability=xp.abs(entangled_amplitude2)**2,
                 entangled_pairs=[entanglement_id],
                 superposition_components=state2.superposition_components
             )
@@ -179,7 +198,7 @@ class QuantumMathematicalBridge:
             self.entanglement_registry[entanglement_id] = {
                 'state1': entangled_state1,
                 'state2': entangled_state2,
-                'creation_time': np.datetime64('now'),
+                'creation_time': xp.datetime64('now'),
                 'coherence': 1.0
             }
             
@@ -198,14 +217,14 @@ class QuantumMathematicalBridge:
         T_quantum = ∑ᵢ αᵢ|ψᵢ⟩⊗|φᵢ⟩
         """
         try:
-            if self.use_gpu and cp.cuda.is_available():
+            if USING_CUDA and cp.cuda.is_available():
                 tensor_data = cp.asarray(tensor_data)
             
             # Create quantum tensor
             quantum_tensor = QuantumTensor(
                 data=tensor_data,
                 quantum_dimension=self.quantum_dimension,
-                entanglement_matrix=np.eye(tensor_data.shape[0], dtype=complex),
+                entanglement_matrix=xp.eye(tensor_data.shape[0], dtype=complex),
                 coherence_time=1.0,
                 fidelity=1.0
             )
@@ -233,13 +252,13 @@ class QuantumMathematicalBridge:
     def _apply_quantum_fourier_transform(self, tensor: QuantumTensor) -> QuantumTensor:
         """Apply Quantum Fourier Transform to tensor"""
         try:
-            if self.use_gpu and cp.cuda.is_available():
+            if USING_CUDA and cp.cuda.is_available():
                 data = cp.asarray(tensor.data)
                 qft_matrix = cp.asarray(self.qft_matrix)
                 transformed_data = cp.dot(qft_matrix, data)
                 transformed_data = cp.asnumpy(transformed_data)
             else:
-                transformed_data = np.dot(self.qft_matrix, tensor.data)
+                transformed_data = xp.dot(self.qft_matrix, tensor.data)
             
             return QuantumTensor(
                 data=transformed_data,
@@ -258,11 +277,11 @@ class QuantumMathematicalBridge:
         try:
             # Apply Hadamard to create superposition
             if tensor.data.shape[0] >= 2:
-                hadamard_expanded = np.kron(self.hadamard, np.eye(tensor.data.shape[0] // 2))
+                hadamard_expanded = xp.kron(self.hadamard, xp.eye(tensor.data.shape[0] // 2))
                 if hadamard_expanded.shape[0] > tensor.data.shape[0]:
                     hadamard_expanded = hadamard_expanded[:tensor.data.shape[0], :tensor.data.shape[0]]
                 
-                transformed_data = np.dot(hadamard_expanded, tensor.data)
+                transformed_data = xp.dot(hadamard_expanded, tensor.data)
             else:
                 transformed_data = tensor.data
             
@@ -278,11 +297,11 @@ class QuantumMathematicalBridge:
             logger.error(f"Error applying Hadamard transform: {e}")
             raise
     
-    def _apply_phase_shift(self, tensor: QuantumTensor, phase: float = np.pi/4) -> QuantumTensor:
+    def _apply_phase_shift(self, tensor: QuantumTensor, phase: float = xp.pi/4) -> QuantumTensor:
         """Apply phase shift transformation"""
         try:
-            phase_matrix = np.diag(np.exp(1j * phase * np.arange(tensor.data.shape[0])))
-            transformed_data = np.dot(phase_matrix, tensor.data)
+            phase_matrix = xp.diag(xp.exp(1j * phase * xp.arange(tensor.data.shape[0])))
+            transformed_data = xp.dot(phase_matrix, tensor.data)
             
             return QuantumTensor(
                 data=transformed_data,
@@ -300,14 +319,14 @@ class QuantumMathematicalBridge:
         """Calculate quantum fidelity between states"""
         try:
             # Quantum fidelity: F = |⟨ψ|φ⟩|²
-            overlap = np.vdot(original.data, transformed.data)
-            norm_original = np.linalg.norm(original.data)
-            norm_transformed = np.linalg.norm(transformed.data)
+            overlap = xp.vdot(original.data, transformed.data)
+            norm_original = xp.linalg.norm(original.data)
+            norm_transformed = xp.linalg.norm(transformed.data)
             
             if norm_original == 0 or norm_transformed == 0:
                 return 0.0
             
-            fidelity = abs(overlap)**2 / (norm_original**2 * norm_transformed**2)
+            fidelity = xp.abs(overlap)**2 / (norm_original**2 * norm_transformed**2)
             return float(fidelity)
             
         except Exception as e:
@@ -332,17 +351,17 @@ class QuantumMathematicalBridge:
             
             # Calculate profit vector using quantum amplitudes
             profit_amplitude = entangled_entry.amplitude * entangled_exit.amplitude.conjugate()
-            profit_probability = abs(profit_amplitude)**2
+            profit_probability = xp.abs(profit_amplitude)**2
             
             # Quantum profit calculation
             quantum_profit = btc_price * profit_probability * usdc_hold
             
             # Apply quantum tensor operations for optimization
-            profit_tensor_data = np.array([quantum_profit, btc_price, usdc_hold, profit_probability])
+            profit_tensor_data = xp.array([quantum_profit, btc_price, usdc_hold, profit_probability])
             profit_tensor = self.quantum_tensor_operation(profit_tensor_data, "qft")
             
             # Extract optimized values
-            optimized_values = np.real(profit_tensor.data)
+            optimized_values = xp.real(profit_tensor.data)
             
             result = {
                 'quantum_profit': float(optimized_values[0]),
@@ -374,16 +393,16 @@ class QuantumMathematicalBridge:
             
             # Measure each superposition component
             for component, amplitude in state.superposition_components.items():
-                probability = abs(amplitude)**2
+                probability = xp.abs(amplitude)**2
                 measurements[component] = probability
             
             # Normalize measurements
-            total_prob = sum(measurements.values())
+            total_prob = xp.sum(measurements.values())
             if total_prob > 0:
                 measurements = {k: v/total_prob for k, v in measurements.items()}
             
             # Add quantum metrics
-            measurements['total_amplitude'] = abs(state.amplitude)
+            measurements['total_amplitude'] = xp.abs(state.amplitude)
             measurements['phase'] = state.phase
             measurements['coherence'] = state.probability
             
@@ -406,9 +425,9 @@ class QuantumMathematicalBridge:
             correction_factor = 1.0
             
             # Check for amplitude normalization
-            total_prob = sum(abs(amp)**2 for amp in corrupted_state.superposition_components.values())
+            total_prob = xp.sum(xp.abs(amp)**2 for amp in corrupted_state.superposition_components.values())
             if total_prob > 0:
-                correction_factor = 1.0 / np.sqrt(total_prob)
+                correction_factor = 1.0 / xp.sqrt(total_prob)
             
             # Correct superposition components
             corrected_components = {}
@@ -416,9 +435,9 @@ class QuantumMathematicalBridge:
                 corrected_components[component] = amplitude * correction_factor
             
             # Recalculate quantum properties
-            corrected_amplitude = sum(corrected_components.values())
-            corrected_phase = np.angle(corrected_amplitude)
-            corrected_probability = abs(corrected_amplitude)**2
+            corrected_amplitude = xp.sum(corrected_components.values())
+            corrected_phase = xp.angle(corrected_amplitude)
+            corrected_probability = xp.abs(corrected_amplitude)**2
             
             corrected_state = QuantumState(
                 amplitude=corrected_amplitude,

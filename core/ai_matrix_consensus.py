@@ -7,17 +7,37 @@ Blends multiple AI agent votes into weighted strategy vectors.
 Enables cross-agent path blending and consensus-based decision making.
 
 Core Concept: Blend all AI opinions into vector modulation function
+
+CUDA Integration:
+- GPU-accelerated matrix operations with automatic CPU fallback
+- Performance monitoring and optimization
+- Cross-platform compatibility (Windows, macOS, Linux)
 """
 
 import random
 import time
 import logging
-import numpy as np
 from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass
 from enum import Enum
 
+# CUDA Integration with Fallback
+try:
+    import cupy as cp
+    USING_CUDA = True
+    _backend = 'cupy (GPU)'
+    xp = cp
+except ImportError:
+    import numpy as np
+    USING_CUDA = False
+    _backend = 'numpy (CPU)'
+    xp = np
+
 logger = logging.getLogger(__name__)
+if USING_CUDA:
+    logger.info(f"⚡ AI Matrix Consensus using GPU acceleration: {_backend}")
+else:
+    logger.info(f"🔄 AI Matrix Consensus using CPU fallback: {_backend}")
 
 class AgentVote(Enum):
     """AI agent vote types"""

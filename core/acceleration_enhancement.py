@@ -26,7 +26,17 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Callable, Dict, List, Optional, Tuple
 
-import numpy as np
+# CUDA Integration with Fallback
+try:
+    import cupy as cp
+    USING_CUDA = True
+    _backend = 'cupy (GPU)'
+    xp = cp
+except ImportError:
+    import numpy as np
+    USING_CUDA = False
+    _backend = 'numpy (CPU)'
+    xp = np
 
 # Import existing system components
 try:
@@ -46,17 +56,12 @@ except ImportError as e:
         MID = "mid"
         LONG = "long"
 
-
-# CUDA imports with fallback
-try:
-    import cupy as cp
-
-    CUDA_AVAILABLE = True
-except ImportError:
-    CUDA_AVAILABLE = False
-    cp = None
-
+# Log backend status
 logger = logging.getLogger(__name__)
+if USING_CUDA:
+    logger.info(f"⚡ Acceleration Enhancement using GPU acceleration: {_backend}")
+else:
+    logger.info(f"🔄 Acceleration Enhancement using CPU fallback: {_backend}")
 
 
 class AccelerationMode(Enum):
@@ -144,7 +149,7 @@ class AccelerationEnhancement:
         self.lock = threading.Lock()
 
         # CUDA availability
-        self.cuda_available = CUDA_AVAILABLE
+        self.cuda_available = USING_CUDA
         if self.cuda_available:
             logger.info("🚀 CUDA acceleration enhancement available")
         else:
@@ -752,7 +757,7 @@ def demo_acceleration_enhancement():
         return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
 
     def gpu_cosine_sim(a, b):
-        if CUDA_AVAILABLE:
+        if USING_CUDA:
             a_gpu = cp.asarray(a)
             b_gpu = cp.asarray(b)
             return float(cp.dot(a_gpu, b_gpu) / (cp.linalg.norm(a_gpu) * cp.linalg.norm(b_gpu)))
