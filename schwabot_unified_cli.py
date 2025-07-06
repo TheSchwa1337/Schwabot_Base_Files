@@ -11,6 +11,7 @@ Available CLI Tools:
 - System Monitor CLI (system monitoring)
 - Live Trading CLI (real trading)
 - Strategy CLI (strategy management)
+- Digest Time Mapper CLI (phase wheel & temporal socketing)
 - Cross-platform validation
 
 Usage:
@@ -61,10 +62,45 @@ class SchwabotUnifiedCLI:
                 "module": "schwabot_cli",
                 "help": "Manage trading strategies and bit mapping"
             },
+            "digest": {
+                "description": "Digest Time Mapper",
+                "module": "cli.digest_time_mapper_cli",
+                "help": "Phase wheel & temporal socketing for millisecond tick processing"
+            },
+            "profit": {
+                "description": "Pure Profit Calculator",
+                "module": "cli.pure_profit_calculator_cli",
+                "help": "Mathematical profit calculation with full introspection"
+            },
             "validate": {
                 "description": "Cross-Platform Validation",
                 "module": "cross_platform_cli_validator",
                 "help": "Validate CLI functionality across platforms"
+            },
+            "orbit": {
+                "description": "Orbital Profit Control",
+                "module": "core.cli_orbital_profit_control",
+                "help": "Control the Orbital Profit Control System"
+            },
+            "entropy": {
+                "description": "Entropy Risk Manager",
+                "module": "core.cli_entropy_manager",
+                "help": "CLI for Entropy-Driven Risk Management"
+            },
+            "pipeline": {
+                "description": "Automated Trading Pipeline",
+                "module": "cli.automated_trading_pipeline_cli",
+                "help": "Unified decision engine connecting all core systems"
+            },
+            "exchange": {
+                "description": "Secure Exchange Manager",
+                "module": "cli.secure_exchange_cli",
+                "help": "Professional API key & exchange management with security"
+            },
+            "deploy": {
+                "description": "Production Deployment Manager",
+                "module": "cli.production_deployment_cli",
+                "help": "Enterprise-grade production deployment with environment validation"
             }
         }
     
@@ -163,6 +199,28 @@ class SchwabotUnifiedCLI:
                 info("  live-tick                 Simulate a live tick")
                 info("  entry-exit                Calculate entry/exit")
                 info("  ghost-trade               Simulate ghost trade")
+            elif tool_name == "digest":
+                info("Usage: python schwabot_unified_cli.py digest [command] [options]")
+                info("Commands:")
+                info("  init [--frame-window MS] [--phase-period MS]  Initialize mapper")
+                info("  process-tick <price> [--volume] [--bid] [--ask]  Process price tick")
+                info("  generate-digest [--frame-count N]  Generate SHA digest from frames")
+                info("  ferris-wheel <duration>  Run continuous processing loop")
+                info("  analyze <digest>  Analyze temporal patterns in digest")
+                info("  status  Show mapper statistics")
+                info("  stop  Stop processing loop")
+            elif tool_name == "profit":
+                info("Usage: python schwabot_unified_cli.py profit [command] [options]")
+                info("Commands:")
+                info("  init [--risk-tolerance] [--profit-target] [--position-size] [--mode]  Initialize calculator")
+                info("  flash  Display flash screen with current state")
+                info("  calculate <btc_price> [--eth-price] [--usdc-volume] [--volatility] [--momentum] [--volume-profile]  Perform profit calculation")
+                info("  explain [--full]  Explain last calculation (summary or full)")
+                info("  metrics  Show calculation metrics and performance")
+                info("  test  Run comprehensive test suite")
+                info("  validate  Validate profit calculation purity")
+                info("  errors  Show error summary and recent errors")
+                info("  reset  Reset error log and metrics")
             elif tool_name == "validate":
                 info("Usage: python schwabot_unified_cli.py validate [options]")
                 info("Options:")
@@ -172,6 +230,40 @@ class SchwabotUnifiedCLI:
                 info("  --network                 Test network functionality")
                 info("  --math                    Test mathematical operations")
                 info("  --report                  Generate validation report")
+            elif tool_name == "orbit":
+                info("Usage: python schwabot_unified_cli.py orbit [command] [options]")
+                info("Commands:")
+                info("  init                      Initialise and start the orbital system")
+                info("  status                    Show status snapshot")
+                info("  optimize [--market-data]  Run one optimise cycle with optional data")
+                info("  stop                      Gracefully stop the system")
+            elif tool_name == "entropy":
+                info("Usage: python schwabot_unified_cli.py entropy [command] [options]")
+                info("Commands:")
+                info("  init [--active]           Initialise (and optionally start) manager")
+                info("  status                    Show status snapshot")
+                info("  process [--market-data]   Single risk-management pass")
+                info("  stop                      Stop manager (placeholder)")
+            elif tool_name == "pipeline":
+                info("Usage: python schwabot_unified_cli.py pipeline [command] [options]")
+                info("Commands:")
+                info("  init [--risk-tolerance] [--profit-target] [--position-size] [--mode] [--registry-path]  Initialize pipeline")
+                info("  process-tick <price> [--volume] [--bid] [--ask]  Process single price tick")
+                info("  run-stream <duration> [--max-decisions]  Run continuous pipeline on simulated stream")
+                info("  explain  Explain last trading decision")
+                info("  metrics  Show pipeline performance metrics")
+                info("  decisions [--count]  Show recent trading decisions")
+                info("  stop  Stop continuous pipeline")
+            elif tool_name == "exchange":
+                info("Usage: python schwabot_unified_cli.py exchange [command] [options]")
+                info("Commands:")
+                info("  init                      Initialize secure exchange manager")
+                info("  status                    Show current API key status")
+                info("  add-key <api_key> <secret>  Add new API key")
+                info("  remove-key <api_key>      Remove API key")
+                info("  list-keys                 List all API keys")
+                info("  test-connection           Test API key connection")
+                info("  interactive               Run interactive mode")
         except Exception as e:
             warn(f"Could not load specific help for {tool_name}: {e}")
     
@@ -200,6 +292,20 @@ class SchwabotUnifiedCLI:
                 from schwabot_cli import main as tool_main
             elif module_name == "cross_platform_cli_validator":
                 from cross_platform_cli_validator import main as tool_main
+            elif module_name == "core.cli_orbital_profit_control":
+                 from core.cli_orbital_profit_control import main as tool_main
+            elif module_name == "core.cli_entropy_manager":
+                 from core.cli_entropy_manager import main as tool_main
+            elif module_name == "cli.digest_time_mapper_cli":
+                 from cli.digest_time_mapper_cli import main as tool_main
+            elif module_name == "cli.pure_profit_calculator_cli":
+                 from cli.pure_profit_calculator_cli import main as tool_main
+            elif module_name == "cli.automated_trading_pipeline_cli":
+                 from cli.automated_trading_pipeline_cli import main as tool_main
+            elif module_name == "cli.secure_exchange_cli":
+                 from cli.secure_exchange_cli import main as tool_main
+            elif module_name == "cli.production_deployment_cli":
+                 from cli.production_deployment_cli import main as tool_main
             else:
                 error(f"Unknown module: {module_name}")
                 return 1

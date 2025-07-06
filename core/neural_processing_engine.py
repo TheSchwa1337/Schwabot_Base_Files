@@ -13,8 +13,20 @@ CUDA Integration:
 
 import logging
 import math
+import numpy as np
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Tuple, Union
+from typing import Any, Dict, List, Tuple, Union, Optional
+
+# PyTorch imports
+try:
+    import torch
+    import torch.nn as nn
+    import torch.optim as optim
+    import torch.nn.functional as F
+    PYTORCH_AVAILABLE = True
+except ImportError:
+    PYTORCH_AVAILABLE = False
+    print("⚠️ PyTorch not available - neural networks will be disabled")
 
 # CUDA Integration with Fallback
 try:
@@ -23,7 +35,6 @@ try:
     _backend = 'cupy (GPU)'
     xp = cp
 except ImportError:
-    import numpy as np
     USING_CUDA = False
     _backend = 'numpy (CPU)'
     xp = np
@@ -53,206 +64,220 @@ class TrainingMetrics:
     f1_score: float
     epoch: int
 
-class PricePatternCNN(nn.Module):
-    """Convolutional Neural Network for price pattern recognition"""
-    
-    def __init__(self, input_channels: int = 1, sequence_length: int = 100, num_classes: int = 3):
-        super(PricePatternCNN, self).__init__()
+# Only define PyTorch-based neural network classes if PyTorch is available
+if PYTORCH_AVAILABLE:
+    class PricePatternCNN(nn.Module):
+        """Convolutional Neural Network for price pattern recognition"""
         
-        # Convolutional layers
-        self.conv1 = nn.Conv1d(input_channels, 32, kernel_size=3, padding=1)
-        self.conv2 = nn.Conv1d(32, 64, kernel_size=3, padding=1)
-        self.conv3 = nn.Conv1d(64, 128, kernel_size=3, padding=1)
+        def __init__(self, input_channels: int = 1, sequence_length: int = 100, num_classes: int = 3):
+            super(PricePatternCNN, self).__init__()
+            
+            # Convolutional layers
+            self.conv1 = nn.Conv1d(input_channels, 32, kernel_size=3, padding=1)
+            self.conv2 = nn.Conv1d(32, 64, kernel_size=3, padding=1)
+            self.conv3 = nn.Conv1d(64, 128, kernel_size=3, padding=1)
+            
+            # Batch normalization
+            self.bn1 = nn.BatchNorm1d(32)
+            self.bn2 = nn.BatchNorm1d(64)
+            self.bn3 = nn.BatchNorm1d(128)
+            
+            # Dropout for regularization
+            self.dropout = nn.Dropout(0.3)
+            
+            # Adaptive pooling
+            self.adaptive_pool = nn.AdaptiveAvgPool1d(1)
+            
+            # Fully connected layers
+            self.fc1 = nn.Linear(128, 64)
+            self.fc2 = nn.Linear(64, 32)
+            self.fc3 = nn.Linear(32, num_classes)
+            
+            # Activation functions
+            self.relu = nn.ReLU()
+            self.softmax = nn.Softmax(dim=1)
         
-        # Batch normalization
-        self.bn1 = nn.BatchNorm1d(32)
-        self.bn2 = nn.BatchNorm1d(64)
-        self.bn3 = nn.BatchNorm1d(128)
-        
-        # Dropout for regularization
-        self.dropout = nn.Dropout(0.3)
-        
-        # Adaptive pooling
-        self.adaptive_pool = nn.AdaptiveAvgPool1d(1)
-        
-        # Fully connected layers
-        self.fc1 = nn.Linear(128, 64)
-        self.fc2 = nn.Linear(64, 32)
-        self.fc3 = nn.Linear(32, num_classes)
-        
-        # Activation functions
-        self.relu = nn.ReLU()
-        self.softmax = nn.Softmax(dim=1)
-    
-    def forward(self, x):
-        # Convolutional layers with batch norm and activation
-        x = self.relu(self.bn1(self.conv1(x)))
-        x = self.relu(self.bn2(self.conv2(x)))
-        x = self.relu(self.bn3(self.conv3(x)))
-        
-        # Adaptive pooling
-        x = self.adaptive_pool(x)
-        x = x.view(x.size(0), -1)
-        
-        # Fully connected layers
-        x = self.dropout(self.relu(self.fc1(x)))
-        x = self.dropout(self.relu(self.fc2(x)))
-        x = self.fc3(x)
-        
-        return x
+        def forward(self, x):
+            # Convolutional layers with batch norm and activation
+            x = self.relu(self.bn1(self.conv1(x)))
+            x = self.relu(self.bn2(self.conv2(x)))
+            x = self.relu(self.bn3(self.conv3(x)))
+            
+            # Adaptive pooling
+            x = self.adaptive_pool(x)
+            x = x.view(x.size(0), -1)
+            
+            # Fully connected layers
+            x = self.dropout(self.relu(self.fc1(x)))
+            x = self.dropout(self.relu(self.fc2(x)))
+            x = self.fc3(x)
+            
+            return x
 
-class TradingLSTM(nn.Module):
-    """LSTM Network for temporal sequence modeling in trading"""
-    
-    def __init__(self, input_size: int = 10, hidden_size: int = 128, num_layers: int = 3, output_size: int = 1):
-        super(TradingLSTM, self).__init__()
+    class TradingLSTM(nn.Module):
+        """LSTM Network for temporal sequence modeling in trading"""
         
-        self.hidden_size = hidden_size
-        self.num_layers = num_layers
+        def __init__(self, input_size: int = 10, hidden_size: int = 128, num_layers: int = 3, output_size: int = 1):
+            super(TradingLSTM, self).__init__()
+            
+            self.hidden_size = hidden_size
+            self.num_layers = num_layers
+            
+            # LSTM layers
+            self.lstm = nn.LSTM(input_size, hidden_size, num_layers, batch_first=True, dropout=0.2)
+            
+            # Attention mechanism
+            self.attention = nn.MultiheadAttention(hidden_size, num_heads=8, batch_first=True)
+            
+            # Fully connected layers
+            self.fc1 = nn.Linear(hidden_size, 64)
+            self.fc2 = nn.Linear(64, 32)
+            self.fc3 = nn.Linear(32, output_size)
+            
+            # Dropout and activation
+            self.dropout = nn.Dropout(0.3)
+            self.relu = nn.ReLU()
+            self.tanh = nn.Tanh()
         
-        # LSTM layers
-        self.lstm = nn.LSTM(input_size, hidden_size, num_layers, batch_first=True, dropout=0.2)
-        
-        # Attention mechanism
-        self.attention = nn.MultiheadAttention(hidden_size, num_heads=8, batch_first=True)
-        
-        # Fully connected layers
-        self.fc1 = nn.Linear(hidden_size, 64)
-        self.fc2 = nn.Linear(64, 32)
-        self.fc3 = nn.Linear(32, output_size)
-        
-        # Dropout and activation
-        self.dropout = nn.Dropout(0.3)
-        self.relu = nn.ReLU()
-        self.tanh = nn.Tanh()
-    
-    def forward(self, x):
-        # LSTM forward pass
-        lstm_out, (hidden, cell) = self.lstm(x)
-        
-        # Apply attention mechanism
-        attention_out, attention_weights = self.attention(lstm_out, lstm_out, lstm_out)
-        
-        # Use the last output
-        x = attention_out[:, -1, :]
-        
-        # Fully connected layers
-        x = self.dropout(self.relu(self.fc1(x)))
-        x = self.dropout(self.relu(self.fc2(x)))
-        x = self.tanh(self.fc3(x))
-        
-        return x, attention_weights
+        def forward(self, x):
+            # LSTM forward pass
+            lstm_out, (hidden, cell) = self.lstm(x)
+            
+            # Apply attention mechanism
+            attention_out, attention_weights = self.attention(lstm_out, lstm_out, lstm_out)
+            
+            # Use the last output
+            x = attention_out[:, -1, :]
+            
+            # Fully connected layers
+            x = self.dropout(self.relu(self.fc1(x)))
+            x = self.dropout(self.relu(self.fc2(x)))
+            x = self.tanh(self.fc3(x))
+            
+            return x, attention_weights
 
-class TradingTransformer(nn.Module):
-    """Transformer architecture for advanced trading signal processing"""
-    
-    def __init__(self, input_dim: int = 10, d_model: int = 256, nhead: int = 8, 
-                 num_layers: int = 6, output_dim: int = 1):
-        super(TradingTransformer, self).__init__()
+    class TradingTransformer(nn.Module):
+        """Transformer architecture for advanced trading signal processing"""
         
-        self.d_model = d_model
+        def __init__(self, input_dim: int = 10, d_model: int = 256, nhead: int = 8, 
+                     num_layers: int = 6, output_dim: int = 1):
+            super(TradingTransformer, self).__init__()
+            
+            self.d_model = d_model
+            
+            # Input projection
+            self.input_projection = nn.Linear(input_dim, d_model)
+            
+            # Positional encoding
+            self.positional_encoding = nn.Parameter(torch.randn(1000, d_model))
+            
+            # Transformer encoder
+            encoder_layer = nn.TransformerEncoderLayer(
+                d_model=d_model,
+                nhead=nhead,
+                dim_feedforward=d_model * 4,
+                dropout=0.1,
+                batch_first=True
+            )
+            self.transformer_encoder = nn.TransformerEncoder(encoder_layer, num_layers=num_layers)
+            
+            # Output layers
+            self.output_projection = nn.Linear(d_model, output_dim)
+            self.dropout = nn.Dropout(0.1)
         
-        # Input projection
-        self.input_projection = nn.Linear(input_dim, d_model)
-        
-        # Positional encoding
-        self.positional_encoding = nn.Parameter(torch.randn(1000, d_model))
-        
-        # Transformer encoder
-        encoder_layer = nn.TransformerEncoderLayer(
-            d_model=d_model,
-            nhead=nhead,
-            dim_feedforward=d_model * 4,
-            dropout=0.1,
-            batch_first=True
-        )
-        self.transformer_encoder = nn.TransformerEncoder(encoder_layer, num_layers=num_layers)
-        
-        # Output layers
-        self.output_projection = nn.Linear(d_model, output_dim)
-        self.dropout = nn.Dropout(0.1)
-    
-    def forward(self, x):
-        seq_len = x.size(1)
-        
-        # Input projection
-        x = self.input_projection(x)
-        
-        # Add positional encoding
-        x = x + self.positional_encoding[:seq_len, :].unsqueeze(0)
-        
-        # Transformer encoding
-        x = self.transformer_encoder(x)
-        
-        # Global average pooling
-        x = x.mean(dim=1)
-        
-        # Output projection
-        x = self.dropout(x)
-        x = self.output_projection(x)
-        
-        return x
+        def forward(self, x):
+            seq_len = x.size(1)
+            
+            # Input projection
+            x = self.input_projection(x)
+            
+            # Add positional encoding
+            x = x + self.positional_encoding[:seq_len, :].unsqueeze(0)
+            
+            # Transformer encoding
+            x = self.transformer_encoder(x)
+            
+            # Global average pooling
+            x = x.mean(dim=1)
+            
+            # Output projection
+            x = self.dropout(x)
+            x = self.output_projection(x)
+            
+            return x
 
-class ReinforcementLearningAgent(nn.Module):
-    """Deep Q-Network for reinforcement learning in trading"""
+    class ReinforcementLearningAgent(nn.Module):
+        """Deep Q-Network for reinforcement learning in trading"""
+        
+        def __init__(self, state_size: int = 20, action_size: int = 3, hidden_sizes: List[int] = [256, 128, 64]):
+            super(ReinforcementLearningAgent, self).__init__()
+            
+            # Create sequential layers
+            layers = []
+            input_size = state_size
+            for hidden_size in hidden_sizes:
+                layers.append(nn.Linear(input_size, hidden_size))
+                layers.append(nn.ReLU())
+                layers.append(nn.Dropout(0.2))
+                input_size = hidden_size
+            
+            # Output layer
+            layers.append(nn.Linear(input_size, action_size))
+            
+            self.network = nn.Sequential(*layers)
+            
+            # Experience replay buffer
+            self.memory = []
+            self.epsilon = 1.0  # Exploration rate
+            self.epsilon_min = 0.01
+            self.epsilon_decay = 0.995
+            self.learning_rate = 0.001
+            self.gamma = 0.95  # Discount factor
+            
+            # Initialize optimizer
+            self.optimizer = optim.Adam(self.parameters(), lr=self.learning_rate)
+            self.loss_fn = nn.MSELoss()
+        
+        def forward(self, state):
+            return self.network(state)
+        
+        def remember(self, state, action, reward, next_state, done):
+            self.memory.append((state, action, reward, next_state, done))
+        
+        def act(self, state):
+            if np.random.random() <= self.epsilon:
+                return np.random.choice(self.network[-1].out_features)
+            
+            state_tensor = torch.FloatTensor(state).unsqueeze(0)
+            q_values = self.forward(state_tensor)
+            return np.argmax(q_values.cpu().data.numpy())
+        
+        def replay(self, batch_size=32):
+            if len(self.memory) < batch_size:
+                return
+            
+            batch = np.random.sample(self.memory, batch_size)
+            # Implementation would continue here...
+            
+            if self.epsilon > self.epsilon_min:
+                self.epsilon *= self.epsilon_decay
+else:
+    # Create placeholder classes if PyTorch is not available
+    class PricePatternCNN:
+        def __init__(self, *args, **kwargs):
+            raise ImportError("PyTorch not available - neural networks disabled")
     
-    def __init__(self, state_size: int = 20, action_size: int = 3, hidden_sizes: List[int] = [256, 128, 64]):
-        super(ReinforcementLearningAgent, self).__init__()
-        
-        self.state_size = state_size
-        self.action_size = action_size
-        
-        # Build the network
-        layers = []
-        prev_size = state_size
-        
-        for hidden_size in hidden_sizes:
-            layers.append(nn.Linear(prev_size, hidden_size))
-            layers.append(nn.ReLU())
-            layers.append(nn.Dropout(0.2))
-            prev_size = hidden_size
-        
-        layers.append(nn.Linear(prev_size, action_size))
-        
-        self.network = nn.Sequential(*layers)
-        
-        # Experience replay buffer
-        self.memory = deque(maxlen=10000)
-        self.epsilon = 1.0
-        self.epsilon_decay = 0.995
-        self.epsilon_min = 0.01
+    class TradingLSTM:
+        def __init__(self, *args, **kwargs):
+            raise ImportError("PyTorch not available - neural networks disabled")
     
-    def forward(self, state):
-        return self.network(state)
+    class TradingTransformer:
+        def __init__(self, *args, **kwargs):
+            raise ImportError("PyTorch not available - neural networks disabled")
     
-    def remember(self, state, action, reward, next_state, done):
-        self.memory.append((state, action, reward, next_state, done))
-    
-    def act(self, state):
-        if np.random.random() <= self.epsilon:
-            return np.random.choice(self.action_size)
-        
-        q_values = self.forward(state)
-        return torch.argmax(q_values).item()
-    
-    def replay(self, batch_size=32):
-        if len(self.memory) < batch_size:
-            return
-        
-        batch = np.random.choice(len(self.memory), batch_size, replace=False)
-        states = torch.stack([torch.tensor(self.memory[i][0]) for i in batch])
-        actions = torch.tensor([self.memory[i][1] for i in batch])
-        rewards = torch.tensor([self.memory[i][2] for i in batch])
-        next_states = torch.stack([torch.tensor(self.memory[i][3]) for i in batch])
-        dones = torch.tensor([self.memory[i][4] for i in batch])
-        
-        current_q_values = self.forward(states).gather(1, actions.unsqueeze(1))
-        next_q_values = self.forward(next_states).max(1)[0].detach()
-        target_q_values = rewards + (0.99 * next_q_values * (1 - dones))
-        
-        loss = F.mse_loss(current_q_values.squeeze(), target_q_values)
-        
-        return loss
+    class ReinforcementLearningAgent:
+        def __init__(self, *args, **kwargs):
+            raise ImportError("PyTorch not available - neural networks disabled")
 
 class NeuralProcessingEngine:
     """

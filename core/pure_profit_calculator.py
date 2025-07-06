@@ -39,7 +39,7 @@ import hashlib
 import logging
 import sys
 import time
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, asdict
 from enum import Enum
 from typing import Any, Dict, List, Union
 
@@ -172,6 +172,7 @@ class PureProfitCalculator:
         self.calculation_count = 0
         self.total_calculation_time = 0.0
         self.error_log: List[CalculationError] = []
+        self.last_calculation_data: Dict[str, Any] = {}
 
         # Performance metrics
         self.performance_metrics = {
@@ -261,6 +262,18 @@ class PureProfitCalculator:
             calculation_time = time.time() - start_time
             self.total_calculation_time += calculation_time
             self._update_performance_metrics(calculation_time)
+
+            # Store last calculation data for introspection
+            self.last_calculation_data = {
+                "market_data": asdict(market_data) if hasattr(market_data, "__dict__") else market_data,
+                "history_state_summary": {
+                    "hash_matrices": len(history_state.hash_matrices),
+                    "tensor_buckets": len(history_state.tensor_buckets),
+                    "profit_memory_length": len(history_state.profit_memory),
+                },
+                "profit_result": asdict(result) if hasattr(result, "__dict__") else result,
+                "processing_mode": mode.value,
+            }
 
             return ProfitResult(
                 timestamp=market_data.timestamp,
@@ -484,8 +497,9 @@ class PureProfitCalculator:
     def _calculate_hash_contribution_gpu(self, history_state: HistoryState) -> float:
         """GPU-accelerated hash contribution calculation."""
         try:
+            # Validate input
             if not history_state.hash_matrices:
-            return 0.0
+                return 0.0
 
             # Calculate hash contribution using GPU
             hash_values = []
@@ -506,8 +520,9 @@ class PureProfitCalculator:
     def _calculate_hash_contribution_cpu(self, history_state: HistoryState) -> float:
         """CPU-based hash contribution calculation."""
         try:
-        if not history_state.hash_matrices:
-            return 0.0
+            # Validate input
+            if not history_state.hash_matrices:
+                return 0.0
 
             # Calculate hash contribution using CPU
             hash_values = []
@@ -624,6 +639,50 @@ class PureProfitCalculator:
         self.error_log.clear()
         logger.info("Pure profit calculator error log reset")
 
+    def flash_screen(self) -> None:
+        """Display a startup flash screen with current parameters and state."""
+        banner = (
+            "\n" + "=" * 60 + "\n" +
+            "🚀 SCHWABOT PURE PROFIT CALCULATOR 🚀\n" +
+            "=" * 60 + "\n"
+        )
+        print(banner)
+        print(f"Risk tolerance       : {self.strategy_params.risk_tolerance}")
+        print(f"Profit target        : {self.strategy_params.profit_target}")
+        print(f"Position size        : {self.strategy_params.position_size}")
+        print(f"Processing mode      : {self.processing_mode.value} -> Backend: {_backend}")
+        print("=" * 60)
+
+    def explain_last_calculation(self, detail_level: str = "summary") -> str:
+        """Return a human-readable explanation of the last profit calculation."""
+        if not self.last_calculation_data:
+            return "❌ No calculation has been performed in this session."
+
+        result = self.last_calculation_data["profit_result"]
+        md = self.last_calculation_data["market_data"]
+        hist = self.last_calculation_data["history_state_summary"]
+        mode = self.last_calculation_data["processing_mode"]
+
+        lines = [
+            "📊 LAST PROFIT CALCULATION", "-" * 40,
+            f"Processing mode : {mode}",
+            f"BTC price       : {md['btc_price'] if isinstance(md, dict) else md.btc_price}",
+            f"Base profit     : {result['base_profit'] if isinstance(result, dict) else result.base_profit:.6f}",
+            f"Risk-adjusted   : {result['risk_adjusted_profit'] if isinstance(result, dict) else result.risk_adjusted_profit:.6f}",
+            f"Confidence      : {result['confidence_score'] if isinstance(result, dict) else result.confidence_score:.4f}",
+            f"Tensor contrib  : {result['tensor_contribution'] if isinstance(result, dict) else result.tensor_contribution:.6f}",
+            f"Hash contrib    : {result['hash_contribution'] if isinstance(result, dict) else result.hash_contribution:.6f}",
+            f"Total score     : {result['total_profit_score'] if isinstance(result, dict) else result.total_profit_score:.6f}",
+            f"Hash matrices   : {hist['hash_matrices']}",
+            f"Tensor buckets  : {hist['tensor_buckets']}",
+            f"Profit memory   : {hist['profit_memory_length']}",
+        ]
+
+        if detail_level == "full":
+            lines.append("\n🧮 FULL RESULT OBJECT:\n" + str(result))
+
+        return "\n".join(lines)
+
 
 def assert_zpe_isolation() -> None:
     """Assert that ZPE/ZBE systems are not imported."""
@@ -664,17 +723,18 @@ def demo_pure_profit_calculation():
     # Create calculator
     calculator = create_pure_profit_calculator()
 
+    # Flash screen display
+    calculator.flash_screen()
+
     # Create sample data
     market_data = create_sample_market_data()
     history_state = HistoryState(timestamp=time.time())
-    
-    # Test different modes
-    for mode in ProfitCalculationMode:
-        try:
-            result = calculator.calculate_profit(market_data, history_state, mode)
-            print(f"{mode.value}: {result.total_profit_score:.6f} (confidence: {result.confidence_score:.3f})")
-        except Exception as e:
-            print(f"{mode.value}: Error - {e}")
+
+    # Perform calculation
+    result = calculator.calculate_profit(market_data, history_state)
+    print(calculator.explain_last_calculation())
+
+    print("\nRaw ProfitResult object:\n", result)
 
     # Show metrics
     metrics = calculator.get_calculation_metrics()
