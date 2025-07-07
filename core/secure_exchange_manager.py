@@ -9,6 +9,7 @@ Provides secure, properly labeled exchange integration with:
 - Validation and connectivity testing
 - Comprehensive logging without exposing secrets
 - Integration with automated trading pipeline
+- Advanced fill handling for partial fills and retries
 
 Security Features:
 - Never logs or displays actual secret keys
@@ -16,6 +17,7 @@ Security Features:
 - Supports multiple exchanges with proper isolation
 - Environment variable priority over local storage
 - Encrypted local storage for development/testing
+- Advanced fill management for crypto trading reliability
 
 Usage:
     # Environment variables (recommended for production)
@@ -50,6 +52,14 @@ try:
 except ImportError:
     SECURE_STORAGE_AVAILABLE = False
     logging.warning("Secure storage not available. Using environment variables only.")
+
+# Fill handler for advanced crypto trading
+try:
+    from core.fill_handler import FillHandler, create_fill_handler, FillEvent, OrderState
+    FILL_HANDLER_AVAILABLE = True
+except ImportError:
+    FILL_HANDLER_AVAILABLE = False
+    logging.warning("Fill handler not available. Install with: pip install -r requirements.txt")
 
 logger = logging.getLogger(__name__)
 
@@ -99,6 +109,19 @@ class ExchangeStatus:
         status = "🟢" if self.connected else "🔴"
         return f"{status} {self.exchange.value}: Connected={self.connected}, Trading={self.trading_enabled}"
 
+@dataclass
+class TradeResult:
+    """Result of a trade execution with fill handling."""
+    success: bool
+    order_id: Optional[str] = None
+    fill_events: List[FillEvent] = field(default_factory=list)
+    total_filled: float = 0.0
+    average_price: float = 0.0
+    total_fee: float = 0.0
+    error_message: Optional[str] = None
+    retry_count: int = 0
+    partial_fills: bool = False
+
 class SecureExchangeManager:
     """
     Secure exchange manager with proper key handling and validation.
@@ -109,6 +132,7 @@ class SecureExchangeManager:
     - Never logs secrets
     - Validates connectivity before trading
     - Clear labeling of public vs private keys
+    - Advanced fill handling for crypto trading reliability
     """
     
     def __init__(self, config_path: Optional[str] = None):
@@ -116,6 +140,14 @@ class SecureExchangeManager:
         self.exchanges: Dict[ExchangeType, ExchangeCredentials] = {}
         self.status: Dict[ExchangeType, ExchangeStatus] = {}
         self.ccxt_instances: Dict[ExchangeType, Any] = {}
+        
+        # Initialize fill handler for advanced crypto trading
+        self.fill_handler: Optional[FillHandler] = None
+        if FILL_HANDLER_AVAILABLE:
+            self.fill_handler = None  # Will be initialized when needed
+            logger.info("🔧 Fill handler available for advanced crypto trading")
+        else:
+            logger.warning("⚠️ Fill handler not available - basic trading only")
         
         # Initialize secure storage if available
         if SECURE_STORAGE_AVAILABLE:
@@ -127,7 +159,25 @@ class SecureExchangeManager:
         # Load configuration
         self._load_exchange_configs()
         
-        logger.info("🔐 Secure Exchange Manager initialized")
+        logger.info("🔐 Secure Exchange Manager initialized with advanced fill handling")
+    
+    async def _initialize_fill_handler(self):
+        """Initialize the fill handler if available."""
+        if FILL_HANDLER_AVAILABLE and self.fill_handler is None:
+            try:
+                self.fill_handler = await create_fill_handler({
+                    'retry_config': {
+                        'max_retries': 3,
+                        'base_delay': 1.0,
+                        'max_delay': 30.0,
+                        'exponential_base': 2.0,
+                        'jitter_factor': 0.1
+                    }
+                })
+                logger.info("✅ Fill handler initialized for advanced crypto trading")
+            except Exception as e:
+                logger.error(f"❌ Failed to initialize fill handler: {e}")
+                self.fill_handler = None
     
     def _load_exchange_configs(self):
         """Load exchange configurations from environment variables and secure storage."""
@@ -204,31 +254,11 @@ class SecureExchangeManager:
             logger.error(f"❌ Error loading from secure storage: {e}")
         
         return None
-    
+
     def setup_exchange(self, exchange: ExchangeType, api_key: str, secret: str, 
                       passphrase: Optional[str] = None, sandbox: bool = True) -> bool:
-        """
-        Setup exchange credentials with proper validation.
-        
-        Args:
-            exchange: Exchange type
-            api_key: PUBLIC API KEY (safe to log)
-            secret: SECRET KEY (never logged)
-            passphrase: Additional secret for some exchanges
-            sandbox: Use sandbox/testnet mode
-        
-        Returns:
-            True if setup successful
-        """
+        """Setup exchange with credentials."""
         try:
-            logger.info(f"🔧 Setting up {exchange.value} exchange...")
-            logger.info(f"📋 API Key: {api_key[:8]}... (public)")
-            logger.info(f"🔐 Secret: [REDACTED] (length: {len(secret)})")
-            
-            if passphrase:
-                logger.info(f"🔐 Passphrase: [REDACTED] (length: {len(passphrase)})")
-            
-            # Create credentials
             credentials = ExchangeCredentials(
                 exchange=exchange,
                 api_key=api_key,
@@ -238,24 +268,23 @@ class SecureExchangeManager:
                 testnet=sandbox
             )
             
-            # Store credentials
             self.exchanges[exchange] = credentials
             self.status[exchange] = ExchangeStatus(exchange=exchange)
             
-            # Test connectivity
+            # Test connection
             if self._test_exchange_connection(exchange):
-                logger.info(f"✅ {exchange.value} setup successful and connected")
+                logger.info(f"✅ {exchange.value} setup successful")
                 return True
             else:
-                logger.error(f"❌ {exchange.value} setup failed - connection test failed")
+                logger.error(f"❌ {exchange.value} connection test failed")
                 return False
                 
         except Exception as e:
             logger.error(f"❌ Error setting up {exchange.value}: {e}")
             return False
-    
+
     def _test_exchange_connection(self, exchange: ExchangeType) -> bool:
-        """Test exchange connectivity without exposing secrets."""
+        """Test exchange connection and authentication."""
         if not CCXT_AVAILABLE:
             logger.error("❌ CCXT not available for connection testing")
             return False
@@ -273,239 +302,328 @@ class SecureExchangeManager:
                 'secret': credentials.secret,
                 'passphrase': credentials.passphrase,
                 'sandbox': credentials.sandbox,
+                'testnet': credentials.testnet,
                 'enableRateLimit': True,
-                'timeout': 30000,
+                'options': {
+                    'defaultType': 'spot'
+                }
             })
             
-            # Test basic connectivity
-            logger.info(f"🔍 Testing {exchange.value} connectivity...")
+            # Test connection
+            ccxt_instance.load_markets()
             
-            # Fetch time (public endpoint, no authentication required)
-            server_time = ccxt_instance.fetch_time()
-            logger.info(f"✅ {exchange.value} server time: {server_time}")
-            
-            # Test authentication (private endpoint)
+            # Test authentication (try to fetch balance)
             try:
                 balance = ccxt_instance.fetch_balance()
-                logger.info(f"✅ {exchange.value} authentication successful")
-                logger.info(f"💰 Balance available: {len(balance.get('total', {}))} currencies")
-                
-                self.status[exchange].connected = True
                 self.status[exchange].authenticated = True
                 self.status[exchange].balance_available = True
-                self.status[exchange].trading_enabled = True
-                self.ccxt_instances[exchange] = ccxt_instance
-                
-                return True
-                
+                logger.info(f"✅ {exchange.value} authentication successful")
             except Exception as auth_error:
                 logger.warning(f"⚠️ {exchange.value} authentication failed: {auth_error}")
-                # Still mark as connected if we can reach the server
-                self.status[exchange].connected = True
                 self.status[exchange].authenticated = False
-                self.ccxt_instances[exchange] = ccxt_instance
-                return True
-                
+            
+            self.status[exchange].connected = True
+            self.status[exchange].trading_enabled = True
+            self.status[exchange].last_check = asyncio.get_event_loop().time()
+            self.ccxt_instances[exchange] = ccxt_instance
+            
+            return True
+            
         except Exception as e:
-            logger.error(f"❌ {exchange.value} connection test failed: {e}")
+            self.status[exchange].connected = False
             self.status[exchange].error_message = str(e)
+            logger.error(f"❌ {exchange.value} connection test failed: {e}")
             return False
-    
+
     def get_exchange_status(self) -> Dict[str, ExchangeStatus]:
         """Get status of all configured exchanges."""
         return {exchange.value: status for exchange, status in self.status.items()}
-    
+
     def get_available_exchanges(self) -> List[ExchangeType]:
-        """Get list of exchanges that are connected and ready for trading."""
-        return [
-            exchange for exchange, status in self.status.items()
-            if status.connected and status.authenticated and status.trading_enabled
-        ]
-    
-    def execute_trade(self, exchange: ExchangeType, symbol: str, side: str, 
-                     amount: float, order_type: str = 'market') -> Dict[str, Any]:
-        """
-        Execute a trade with proper validation and logging.
-        
-        Args:
-            exchange: Exchange to use
-            symbol: Trading symbol (e.g., 'BTC/USDT')
-            side: 'buy' or 'sell'
-            amount: Order amount
-            order_type: 'market' or 'limit'
-        
-        Returns:
-            Order result or error information
-        """
+        """Get list of available exchanges."""
+        return [exchange for exchange in self.exchanges.keys() 
+                if self.status[exchange].connected]
+
+    async def execute_trade(self, exchange: ExchangeType, symbol: str, side: str, 
+                          amount: float, order_type: str = 'market') -> TradeResult:
+        """Execute a trade with advanced fill handling."""
         try:
-            # Validate exchange status
-            if exchange not in self.status:
-                return {"error": f"Exchange {exchange.value} not configured"}
+            # Initialize fill handler if needed
+            await self._initialize_fill_handler()
             
-            status = self.status[exchange]
-            if not status.trading_enabled:
-                return {"error": f"Trading not enabled for {exchange.value}"}
+            # Validate exchange
+            if not self.status[exchange].connected:
+                return TradeResult(
+                    success=False,
+                    error_message=f"Exchange {exchange.value} not connected"
+                )
+            
+            if not self.status[exchange].authenticated:
+                return TradeResult(
+                    success=False,
+                    error_message=f"Exchange {exchange.value} not authenticated"
+                )
             
             # Get CCXT instance
             ccxt_instance = self.ccxt_instances.get(exchange)
             if not ccxt_instance:
-                return {"error": f"Exchange {exchange.value} not connected"}
-            
-            # Log trade attempt (without sensitive data)
-            logger.info(f"🎯 Executing {side} order: {amount} {symbol} on {exchange.value}")
+                return TradeResult(
+                    success=False,
+                    error_message=f"CCXT instance not available for {exchange.value}"
+                )
             
             # Execute order
-            if order_type == 'market':
-                if side == 'buy':
-                    order = ccxt_instance.create_market_buy_order(symbol, amount)
-                else:
-                    order = ccxt_instance.create_market_sell_order(symbol, amount)
-            else:
-                # For limit orders, you'd need price parameter
-                return {"error": "Limit orders not implemented yet"}
+            logger.info(f"🚀 Executing {side} {amount} {symbol} on {exchange.value}")
             
-            # Log successful order (without sensitive data)
-            logger.info(f"✅ Order executed: {order.get('id', 'unknown')} - {order.get('status', 'unknown')}")
-            
-            return {
-                "success": True,
-                "order_id": order.get('id'),
-                "status": order.get('status'),
-                "symbol": order.get('symbol'),
-                "side": order.get('side'),
-                "amount": order.get('amount'),
-                "filled": order.get('filled'),
-                "remaining": order.get('remaining'),
-                "cost": order.get('cost'),
-                "fee": order.get('fee'),
+            order_params = {
+                'symbol': symbol,
+                'type': order_type,
+                'side': side,
+                'amount': amount
             }
             
+            # Add exchange-specific parameters
+            if exchange == ExchangeType.BINANCE:
+                order_params['newOrderRespType'] = 'FULL'  # Get detailed response with fills
+            
+            order = await ccxt_instance.create_order(**order_params)
+            
+            # Process with fill handler if available
+            if self.fill_handler and order:
+                return await self._process_order_with_fill_handler(order, exchange, symbol)
+            else:
+                # Basic processing without fill handler
+                return self._process_basic_order(order)
+                
         except Exception as e:
             logger.error(f"❌ Trade execution failed: {e}")
-            return {"error": str(e)}
+            return TradeResult(
+                success=False,
+                error_message=str(e)
+            )
     
-    def get_balance(self, exchange: ExchangeType, currency: str = None) -> Dict[str, Any]:
-        """Get account balance for specified exchange."""
+    async def _process_order_with_fill_handler(self, order: Dict[str, Any], 
+                                             exchange: ExchangeType, 
+                                             symbol: str) -> TradeResult:
+        """Process order with advanced fill handling."""
         try:
+            order_id = order.get('id', '')
+            status = order.get('status', '').lower()
+            
+            # Initialize order state in fill handler
+            if self.fill_handler:
+                # Create initial order state
+                order_state = OrderState(
+                    order_id=order_id,
+                    symbol=symbol,
+                    side=order.get('side', ''),
+                    order_type=order.get('type', ''),
+                    original_amount=float(order.get('amount', 0))
+                )
+                self.fill_handler.active_orders[order_id] = order_state
+            
+            # Process fills if present
+            fill_events = []
+            if 'fills' in order and order['fills']:
+                for fill_data in order['fills']:
+                    try:
+                        fill_event = await self.fill_handler.process_fill_event({
+                            'orderId': order_id,
+                            'symbol': symbol,
+                            'side': order.get('side', ''),
+                            **fill_data
+                        })
+                        fill_events.append(fill_event)
+                    except Exception as e:
+                        logger.error(f"Error processing fill: {e}")
+            
+            # Calculate totals
+            total_filled = sum(float(fill.amount) for fill in fill_events)
+            total_fee = sum(float(fill.fee) for fill in fill_events)
+            average_price = 0.0
+            if total_filled > 0:
+                total_cost = sum(float(fill.amount * fill.price) for fill in fill_events)
+                average_price = total_cost / total_filled
+            
+            # Check for partial fills
+            original_amount = float(order.get('amount', 0))
+            partial_fills = total_filled < original_amount
+            
+            return TradeResult(
+                success=status in ['filled', 'closed', 'partial'],
+                order_id=order_id,
+                fill_events=fill_events,
+                total_filled=total_filled,
+                average_price=average_price,
+                total_fee=total_fee,
+                partial_fills=partial_fills
+            )
+            
+        except Exception as e:
+            logger.error(f"Error processing order with fill handler: {e}")
+            return TradeResult(
+                success=False,
+                error_message=str(e)
+            )
+    
+    def _process_basic_order(self, order: Dict[str, Any]) -> TradeResult:
+        """Process order without fill handler (basic mode)."""
+        try:
+            order_id = order.get('id', '')
+            status = order.get('status', '').lower()
+            
+            # Basic fill processing
+            fill_events = []
+            if 'fills' in order and order['fills']:
+                for fill_data in order['fills']:
+                    # Create basic fill event
+                    fill_event = FillEvent(
+                        order_id=order_id,
+                        trade_id=fill_data.get('tradeId', ''),
+                        symbol=order.get('symbol', ''),
+                        side=order.get('side', ''),
+                        amount=float(fill_data.get('qty', 0)),
+                        price=float(fill_data.get('price', 0)),
+                        fee=float(fill_data.get('commission', 0)),
+                        fee_currency=fill_data.get('commissionAsset', ''),
+                        timestamp=int(asyncio.get_event_loop().time() * 1000)
+                    )
+                    fill_events.append(fill_event)
+            
+            total_filled = sum(float(fill.amount) for fill in fill_events)
+            total_fee = sum(float(fill.fee) for fill in fill_events)
+            average_price = 0.0
+            if total_filled > 0:
+                total_cost = sum(float(fill.amount * fill.price) for fill in fill_events)
+                average_price = total_cost / total_filled
+            
+            return TradeResult(
+                success=status in ['filled', 'closed', 'partial'],
+                order_id=order_id,
+                fill_events=fill_events,
+                total_filled=total_filled,
+                average_price=average_price,
+                total_fee=total_fee,
+                partial_fills=total_filled < float(order.get('amount', 0))
+            )
+            
+        except Exception as e:
+            logger.error(f"Error processing basic order: {e}")
+            return TradeResult(
+                success=False,
+                error_message=str(e)
+            )
+
+    async def handle_partial_fill(self, order_id: str, fill_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Handle partial fill scenario with retry logic."""
+        if not self.fill_handler:
+            return {"status": "error", "message": "Fill handler not available"}
+        
+        try:
+            return await self.fill_handler.handle_partial_fill(order_id, fill_data)
+        except Exception as e:
+            logger.error(f"Error handling partial fill: {e}")
+            return {"status": "error", "message": str(e)}
+
+    def get_balance(self, exchange: ExchangeType, currency: str = None) -> Dict[str, Any]:
+        """Get account balance."""
+        try:
+            if not self.status[exchange].connected:
+                return {"error": f"Exchange {exchange.value} not connected"}
+            
             ccxt_instance = self.ccxt_instances.get(exchange)
             if not ccxt_instance:
-                return {"error": f"Exchange {exchange.value} not connected"}
+                return {"error": f"CCXT instance not available for {exchange.value}"}
             
             balance = ccxt_instance.fetch_balance()
             
             if currency:
                 return {
                     "currency": currency,
-                    "free": balance.get('free', {}).get(currency, 0),
-                    "used": balance.get('used', {}).get(currency, 0),
-                    "total": balance.get('total', {}).get(currency, 0),
+                    "free": balance.get(currency, {}).get('free', 0),
+                    "used": balance.get(currency, {}).get('used', 0),
+                    "total": balance.get(currency, {}).get('total', 0)
                 }
             else:
-                # Return all balances (filter out zero balances)
-                total_balances = balance.get('total', {})
-                non_zero = {curr: amount for curr, amount in total_balances.items() if amount > 0}
-                return {"balances": non_zero}
+                return balance
                 
         except Exception as e:
-            logger.error(f"❌ Failed to get balance: {e}")
+            logger.error(f"❌ Error fetching balance: {e}")
             return {"error": str(e)}
-    
+
     def validate_trading_ready(self) -> Tuple[bool, List[str]]:
-        """
-        Validate that the system is ready for automated trading.
-        
-        Returns:
-            (is_ready, list_of_issues)
-        """
-        issues = []
+        """Validate that trading is ready."""
+        errors = []
         
         if not CCXT_AVAILABLE:
-            issues.append("CCXT library not available")
-            return False, issues
+            errors.append("CCXT library not available")
         
-        available_exchanges = self.get_available_exchanges()
-        if not available_exchanges:
-            issues.append("No exchanges configured and ready for trading")
-            return False, issues
-        
-        # Check each available exchange
-        for exchange in available_exchanges:
-            status = self.status[exchange]
-            if not status.connected:
-                issues.append(f"{exchange.value} not connected")
-            if not status.authenticated:
-                issues.append(f"{exchange.value} not authenticated")
-            if not status.trading_enabled:
-                issues.append(f"{exchange.value} trading not enabled")
-        
-        is_ready = len(available_exchanges) > 0 and len(issues) == 0
-        
-        if is_ready:
-            logger.info(f"✅ Trading system ready with {len(available_exchanges)} exchanges")
-        else:
-            logger.warning(f"⚠️ Trading system not ready: {issues}")
-        
-        return is_ready, issues
-    
-    def get_secure_summary(self) -> Dict[str, Any]:
-        """Get a secure summary of exchange status without exposing secrets."""
-        summary = {
-            "total_exchanges": len(self.exchanges),
-            "connected_exchanges": len([s for s in self.status.values() if s.connected]),
-            "trading_ready": len(self.get_available_exchanges()),
-            "exchanges": {}
-        }
+        if not self.exchanges:
+            errors.append("No exchanges configured")
         
         for exchange, status in self.status.items():
-            summary["exchanges"][exchange.value] = {
-                "configured": exchange in self.exchanges,
-                "connected": status.connected,
-                "authenticated": status.authenticated,
-                "trading_enabled": status.trading_enabled,
-                "balance_available": status.balance_available,
-                "last_check": status.last_check,
-                "error": status.error_message
-            }
+            if not status.connected:
+                errors.append(f"{exchange.value} not connected")
+            elif not status.authenticated:
+                errors.append(f"{exchange.value} not authenticated")
+        
+        if not FILL_HANDLER_AVAILABLE:
+            errors.append("Fill handler not available - limited functionality")
+        
+        return len(errors) == 0, errors
+
+    def get_secure_summary(self) -> Dict[str, Any]:
+        """Get secure summary without exposing sensitive data."""
+        summary = {
+            "exchanges_configured": len(self.exchanges),
+            "exchanges_connected": len([s for s in self.status.values() if s.connected]),
+            "exchanges_authenticated": len([s for s in self.status.values() if s.authenticated]),
+            "fill_handler_available": FILL_HANDLER_AVAILABLE,
+            "secure_storage_available": SECURE_STORAGE_AVAILABLE,
+            "ccxt_available": CCXT_AVAILABLE
+        }
+        
+        # Add fill handler statistics if available
+        if self.fill_handler:
+            summary["fill_statistics"] = self.fill_handler.get_fill_statistics()
         
         return summary
 
+    async def get_fill_statistics(self) -> Dict[str, Any]:
+        """Get fill handling statistics."""
+        if self.fill_handler:
+            return self.fill_handler.get_fill_statistics()
+        else:
+            return {"error": "Fill handler not available"}
 
-# Global instance for easy access
-secure_exchange_manager = SecureExchangeManager()
+    async def export_fill_state(self) -> Dict[str, Any]:
+        """Export fill handler state for persistence."""
+        if self.fill_handler:
+            return self.fill_handler.export_state()
+        else:
+            return {"error": "Fill handler not available"}
+
+    async def import_fill_state(self, state_data: Dict[str, Any]):
+        """Import fill handler state from persistence."""
+        if self.fill_handler:
+            self.fill_handler.import_state(state_data)
+        else:
+            logger.warning("Fill handler not available for state import")
 
 
+# Convenience functions
 def get_exchange_manager() -> SecureExchangeManager:
-    """Get the global secure exchange manager instance."""
-    return secure_exchange_manager
-
+    """Get the global exchange manager instance."""
+    return SecureExchangeManager()
 
 def setup_exchange_from_env(exchange_name: str) -> bool:
     """Setup exchange from environment variables."""
     try:
         exchange = ExchangeType(exchange_name.lower())
         manager = get_exchange_manager()
-        
-        # Check if already configured
-        if exchange in manager.exchanges:
-            logger.info(f"✅ {exchange.value} already configured")
-            return True
-        
-        # Try to load from environment
-        credentials = manager._load_from_environment(exchange)
-        if credentials:
-            manager.exchanges[exchange] = credentials
-            manager.status[exchange] = ExchangeStatus(exchange=exchange)
-            
-            # Test connection
-            if manager._test_exchange_connection(exchange):
-                logger.info(f"✅ {exchange.value} setup from environment successful")
-                return True
-        
-        logger.warning(f"⚠️ Could not setup {exchange.value} from environment variables")
-        return False
-        
+        return manager._test_exchange_connection(exchange)
     except Exception as e:
-        logger.error(f"❌ Error setting up {exchange_name}: {e}")
+        logger.error(f"Error setting up exchange {exchange_name}: {e}")
         return False
 
 
@@ -520,12 +638,12 @@ if __name__ == "__main__":
     
     # Show status
     status = manager.get_secure_summary()
-    print(f"Total exchanges: {status['total_exchanges']}")
-    print(f"Connected: {status['connected_exchanges']}")
-    print(f"Trading ready: {status['trading_ready']}")
+    print(f"Total exchanges: {status['exchanges_configured']}")
+    print(f"Connected: {status['exchanges_connected']}")
+    print(f"Trading ready: {status['exchanges_authenticated']}")
     
     # Show individual exchange status
-    for exchange_name, exchange_status in status['exchanges'].items():
+    for exchange_name, exchange_status in status.items():
         print(f"\n{exchange_name}:")
         for key, value in exchange_status.items():
             print(f"  {key}: {value}")

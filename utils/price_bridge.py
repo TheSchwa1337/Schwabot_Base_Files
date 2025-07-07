@@ -13,6 +13,9 @@ from typing import Any, Dict, List, Optional
 
 import aiohttp
 
+# Add CCXT import at the top
+import ccxt.async_support as ccxt
+
 #!/usr/bin/env python3
 
 
@@ -128,18 +131,14 @@ class PriceData:
 
             self.market_state_hash = self._generate_market_state_hash()
 
-    def _generate_price_hash(): -> str:
+    def _generate_price_hash(self) -> str:
         """Generate SHA-256 hash of price data using Schwabot's framework."""
 
-        price_data = f"{
-            self.symbol}:{
-            self.price}:{
-            self.currency}:{
-                self.timestamp}"
+        price_data = f"{self.symbol}:{self.price}:{self.currency}:{self.timestamp}"
 
         return hashlib.sha256(price_data.encode("utf-8")).hexdigest()
 
-    def _generate_market_state_hash(): -> str:
+    def _generate_market_state_hash(self) -> str:
         """Generate comprehensive market state hash."""
 
         market_data = {
@@ -155,7 +154,7 @@ class PriceData:
 
         return hashlib.sha256(market_json.encode("utf-8")).hexdigest()
 
-    def to_dict(): -> Dict[str, Any]:
+    def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary for API responses."""
 
         return {
@@ -485,76 +484,92 @@ class SchwabotPriceBridge:
 
             return None
 
-    async def get_price(): -> Optional[PriceData]:
+    async def get_ccxt_price(self, symbol: str, exchange_name: str = 'coinbase') -> Optional[PriceData]:
+        """Get price from CCXT exchange (emergency fallback)."""
+        try:
+            # Initialize exchange
+            exchange_class = getattr(ccxt, exchange_name)
+            exchange = exchange_class({
+                'enableRateLimit': True,
+                'options': {
+                    'defaultType': 'spot',
+                    'adjustForTimeDifference': True,
+                }
+            })
+            
+            # Fetch ticker
+            ticker = await exchange.fetch_ticker(f"{symbol}/USD")
+            await exchange.close()
+            
+            if ticker and ticker['last']:
+                price_data = PriceData(
+                    symbol=symbol,
+                    price=float(ticker['last']),
+                    currency="USD",
+                    timestamp=int(ticker['timestamp'] / 1000) if ticker['timestamp'] else int(time.time()),
+                    source=f"ccxt_{exchange_name}",
+                    volume_24h=float(ticker.get('baseVolume', 0)),
+                    high_24h=float(ticker.get('high', 0)),
+                    low_24h=float(ticker.get('low', 0)),
+                )
+                
+                logger.info(f"CCXT {exchange_name} price for {symbol}: ${price_data.price:,.2f}")
+                return price_data
+                
+        except Exception as e:
+            logger.error(f"CCXT {exchange_name} API error: {e}")
+        
+        return None
+
+    async def get_price(self, symbol: str, use_cache: bool = True) -> Optional[PriceData]:
         """
-
-
-
-        Get price data with fallback mechanism.
-
-
-
-
-
-
-
+        Get price data with comprehensive fallback mechanism.
+        
         Priority:
-
-
-
         1. CoinMarketCap (if API key configured)
-
-
-
         2. CoinGecko (free fallback)
-
-
-
-        3. Cached data (if valid)
-
-
-
+        3. CCXT Exchange APIs (emergency fallback)
+        4. Cached data (if valid)
         """
-
         # Check cache first
-
         if use_cache and self._is_cache_valid(symbol):
-
             cached_data = self.price_cache[symbol]["data"]
-
-            logger.info(f" Using cached price for {symbol}")
-
+            logger.info(f"Using cached price for {symbol}")
             return PriceData(**cached_data)
 
         # Try CoinMarketCap first
-
         price_data = await self.get_coinmarketcap_price(symbol)
-
         if price_data:
-
             self._update_cache(symbol, price_data)
-
             return price_data
 
         # Fallback to CoinGecko
-
         symbol_mapping = {
             "BTC": "bitcoin",
-            "ETH": "ethereum",
-            "ADA": "cardano"}
-
+            "ETH": "ethereum", 
+            "ADA": "cardano",
+            "SOL": "solana",
+            "XRP": "ripple",
+            "DOT": "polkadot",
+            "DOGE": "dogecoin",
+            "AVAX": "avalanche-2",
+            "LINK": "chainlink"
+        }
         coingecko_symbol = symbol_mapping.get(symbol, symbol.lower())
-
         price_data = await self.get_coingecko_price(coingecko_symbol)
-
         if price_data:
-
             self._update_cache(symbol, price_data)
-
             return price_data
 
-        logger.error(f" Failed to get price for {symbol} from all sources")
+        # Emergency fallback to CCXT exchanges
+        ccxt_exchanges = ['coinbase', 'binance', 'bybit']
+        for exchange_name in ccxt_exchanges:
+            price_data = await self.get_ccxt_price(symbol, exchange_name)
+            if price_data:
+                self._update_cache(symbol, price_data)
+                return price_data
 
+        logger.error(f"Failed to get price for {symbol} from all sources")
         return None
 
     async def get_multiple_prices(): -> Dict[str, PriceData]:

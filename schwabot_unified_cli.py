@@ -101,6 +101,11 @@ class SchwabotUnifiedCLI:
                 "description": "Production Deployment Manager",
                 "module": "cli.production_deployment_cli",
                 "help": "Enterprise-grade production deployment with environment validation"
+            },
+            "fill": {
+                "description": "Fill Handler Management",
+                "module": "cli.fill_handler_cli",
+                "help": "Advanced crypto trading fill management with partial fills and retries"
             }
         }
     

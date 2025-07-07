@@ -28,7 +28,7 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
 
-from .api.handlers.alt_fear_greed import AltFearGreedHandler
+from .api.handlers.alt_fear_greed import FearGreedHandler
 
 # Import API handlers
 from .api.handlers.coingecko import CoinGeckoHandler
@@ -240,7 +240,7 @@ class UnifiedMarketDataPipeline:
                     logger.warning("Glassnode API key not provided, handler disabled")
 
             if self.config["apis"]["fear_greed"]["enabled"]:
-                self.handlers["fear_greed"] = AltFearGreedHandler()
+                self.handlers["fear_greed"] = FearGreedHandler()
 
             if self.config["apis"]["whale_alert"]["enabled"]:
                 api_key = self.config.get("whale_alert_api_key")
