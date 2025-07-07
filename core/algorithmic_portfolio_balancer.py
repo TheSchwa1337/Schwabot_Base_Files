@@ -418,6 +418,80 @@ class AlgorithmicPortfolioBalancer:
             logger.error(f"Error calculating performance metrics: {e}")
             return {"return": 0.0, "volatility": 0.0, "sharpe_ratio": 0.0}
 
+    async def calculate_performance_metrics(self) -> Dict[str, Any]:
+        """Calculate comprehensive performance metrics for the portfolio."""
+        try:
+            # Get basic performance metrics
+            basic_metrics = self._calculate_performance_metrics()
+            
+            # Calculate additional metrics
+            current_time = time.time()
+            
+            # Calculate total return
+            if len(self.performance_history) >= 2:
+                initial_value = self.performance_history[0]["value"]
+                current_value = float(self.portfolio_state.total_value)
+                total_return = (current_value - initial_value) / initial_value if initial_value > 0 else 0.0
+            else:
+                total_return = 0.0
+            
+            # Calculate max drawdown
+            max_drawdown = 0.0
+            if len(self.performance_history) > 1:
+                peak = self.performance_history[0]["value"]
+                for record in self.performance_history:
+                    if record["value"] > peak:
+                        peak = record["value"]
+                    drawdown = (peak - record["value"]) / peak if peak > 0 else 0.0
+                    max_drawdown = max(max_drawdown, drawdown)
+            
+            # Calculate drift score
+            drift_score = 0.0
+            if self.portfolio_state.asset_weights:
+                for symbol, allocation in self.asset_allocations.items():
+                    current_weight = self.portfolio_state.asset_weights.get(symbol, 0.0)
+                    target_weight = allocation.target_weight
+                    drift_score += abs(current_weight - target_weight)
+                drift_score /= len(self.asset_allocations)
+            
+            # Count rebalances today
+            today_start = current_time - (current_time % 86400)  # Start of today
+            rebalances_today = sum(1 for record in self.rebalance_history if record["timestamp"] >= today_start)
+            
+            # Format last rebalance time
+            if self.portfolio_state.last_rebalance > 0:
+                last_rebalance = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(self.portfolio_state.last_rebalance))
+            else:
+                last_rebalance = "Never"
+            
+            return {
+                "total_return": total_return,
+                "sharpe_ratio": basic_metrics.get("sharpe_ratio", 0.0),
+                "volatility": basic_metrics.get("volatility", 0.0),
+                "max_drawdown": max_drawdown,
+                "last_rebalance": last_rebalance,
+                "rebalances_today": rebalances_today,
+                "drift_score": drift_score,
+                "total_value": float(self.portfolio_state.total_value),
+                "cash_balance": float(self.portfolio_state.cash_balance),
+                "asset_weights": self.portfolio_state.asset_weights
+            }
+            
+        except Exception as e:
+            logger.error(f"Error calculating performance metrics: {e}")
+            return {
+                "total_return": 0.0,
+                "sharpe_ratio": 0.0,
+                "volatility": 0.0,
+                "max_drawdown": 0.0,
+                "last_rebalance": "Never",
+                "rebalances_today": 0,
+                "drift_score": 0.0,
+                "total_value": 0.0,
+                "cash_balance": 0.0,
+                "asset_weights": {}
+            }
+
 
 # Factory function for easy integration
 def create_portfolio_balancer(config: Dict[str, Any]) -> AlgorithmicPortfolioBalancer:

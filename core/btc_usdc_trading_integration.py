@@ -169,6 +169,129 @@ class BTCUSDCTradingIntegration:
             logger.error(f"Error executing trade: {e}")
             return False
 
+    async def validate_trading_decision(self, decision: TradingDecision) -> bool:
+        """Validate trading decision (async wrapper for _validate_trading_decision)."""
+        try:
+            return self._validate_trading_decision(decision)
+        except Exception as e:
+            logger.error(f"Error validating trading decision: {e}")
+            return False
+
+    async def calculate_performance_metrics(self) -> Dict[str, Any]:
+        """Calculate comprehensive performance metrics."""
+        try:
+            # Get basic performance metrics
+            basic_metrics = await self.get_performance_metrics()
+            
+            # Calculate additional metrics
+            if self.trade_history:
+                # Calculate win rate
+                winning_trades = sum(1 for trade in self.trade_history if trade.get("pnl", 0) > 0)
+                total_trades = len(self.trade_history)
+                win_rate = winning_trades / total_trades if total_trades > 0 else 0.0
+                
+                # Calculate average profit/loss
+                profits = [trade.get("pnl", 0) for trade in self.trade_history if trade.get("pnl", 0) > 0]
+                losses = [trade.get("pnl", 0) for trade in self.trade_history if trade.get("pnl", 0) < 0]
+                
+                avg_profit = np.mean(profits) if profits else 0.0
+                avg_loss = np.mean(losses) if losses else 0.0
+                
+                # Calculate profit factor
+                total_profit = sum(profits) if profits else 0.0
+                total_loss = abs(sum(losses)) if losses else 0.0
+                profit_factor = total_profit / total_loss if total_loss > 0 else float('inf')
+                
+                # Calculate max drawdown
+                cumulative_pnl = []
+                running_total = 0.0
+                for trade in self.trade_history:
+                    running_total += trade.get("pnl", 0)
+                    cumulative_pnl.append(running_total)
+                
+                max_drawdown = 0.0
+                peak = 0.0
+                for pnl in cumulative_pnl:
+                    if pnl > peak:
+                        peak = pnl
+                    drawdown = (peak - pnl) / peak if peak > 0 else 0.0
+                    max_drawdown = max(max_drawdown, drawdown)
+            else:
+                win_rate = 0.0
+                avg_profit = 0.0
+                avg_loss = 0.0
+                profit_factor = 0.0
+                max_drawdown = 0.0
+            
+            # Combine metrics
+            performance_metrics = {
+                **basic_metrics,
+                "win_rate": win_rate,
+                "avg_profit": avg_profit,
+                "avg_loss": avg_loss,
+                "profit_factor": profit_factor,
+                "max_drawdown": max_drawdown,
+                "total_trades": len(self.trade_history),
+                "current_position": self.current_position,
+                "daily_trades": self.daily_trades
+            }
+            
+            return performance_metrics
+            
+        except Exception as e:
+            logger.error(f"Error calculating performance metrics: {e}")
+            return {
+                "win_rate": 0.0,
+                "avg_profit": 0.0,
+                "avg_loss": 0.0,
+                "profit_factor": 0.0,
+                "max_drawdown": 0.0,
+                "total_trades": 0,
+                "current_position": 0.0,
+                "daily_trades": 0
+            }
+
+    async def get_system_status(self) -> Dict[str, Any]:
+        """Get system status information."""
+        try:
+            # Check if trading executor is available
+            executor_status = "available" if self.trading_executor else "not_available"
+            
+            # Check if portfolio balancer is available
+            balancer_status = "available" if self.portfolio_balancer else "not_available"
+            
+            # Check market data freshness
+            current_time = time.time()
+            btc_data = self.market_data_cache.get("BTC", {})
+            last_update = btc_data.get("timestamp", 0)
+            data_age = current_time - last_update if last_update > 0 else float('inf')
+            
+            data_status = "fresh" if data_age < 60 else "stale" if data_age < 300 else "very_stale"
+            
+            # Overall system status
+            if executor_status == "available" and balancer_status == "available" and data_status == "fresh":
+                overall_status = "operational"
+            elif executor_status == "available" and balancer_status == "available":
+                overall_status = "degraded"
+            else:
+                overall_status = "error"
+            
+            return {
+                "status": overall_status,
+                "executor_status": executor_status,
+                "balancer_status": balancer_status,
+                "data_status": data_status,
+                "data_age_seconds": data_age,
+                "current_position": self.current_position,
+                "daily_trades": self.daily_trades,
+                "market_data_cache_size": len(self.market_data_cache),
+                "order_book_cache_size": len(self.order_book_cache)
+            }
+            
+        except Exception as e:
+            logger.error(f"Error getting system status: {e}")
+            return {"status": "error", "error": str(e)}
+
     async def _analyze_market_conditions(self) -> Dict[str, Any]:
         """Analyze current market conditions."""
         try:

@@ -204,3 +204,17 @@ class UnifiedMathSystem:
             Detailed performance analysis
         """
         return self.performance_tracker.get_performance_analysis()
+
+
+# Factory function for easy integration
+def create_unified_math_system() -> UnifiedMathSystem:
+    """Create a unified math system instance."""
+    return UnifiedMathSystem()
+
+
+# Export key functions and classes
+__all__ = [
+    "UnifiedMathSystem",
+    "generate_unified_hash",
+    "create_unified_math_system"
+]
