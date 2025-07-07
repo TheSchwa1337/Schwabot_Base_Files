@@ -12,11 +12,14 @@ Key Features:
 - Performance monitoring and optimization
 - Cross-platform compatibility (Windows, macOS, Linux)
 - Mathematical integrity preservation
+- System-aware hardware scaling and fit testing
 """
 
 import logging
 import time
 import warnings
+import hashlib
+import json
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Callable, Dict, List, Optional, Tuple, Union
@@ -49,6 +52,23 @@ class FallbackMetrics:
     success: bool
     error_message: Optional[str] = None
     performance_ratio: float = 1.0
+
+
+@dataclass
+class SystemFitProfile:
+    """System-aware hardware profile for GPU scaling and fit testing."""
+    
+    gpu_tier: str
+    device_type: str
+    matrix_size: int
+    precision: str
+    system_hash: str
+    gpu_hash: str
+    can_run_gpu_logic: bool
+    memory_gb: float = 0.0
+    compute_capability: str = ""
+    max_threads_per_block: int = 0
+    max_blocks_per_grid: int = 0
 
 
 class CUDADetector:
@@ -122,6 +142,116 @@ class CUDADetector:
         }
 
 
+def build_system_fit_profile() -> SystemFitProfile:
+    """Build system-aware hardware profile for GPU scaling."""
+    
+    # Default CPU profile
+    cpu_profile = {
+        "cores": 4,
+        "memory_gb": 8.0,
+        "architecture": "x86_64"
+    }
+    
+    # Default GPU profile
+    gpu_profile = {
+        "tier": "TIER_LOW",
+        "memory_gb": 2.0,
+        "compute_capability": "3.5",
+        "matrix_size": 16,
+        "use_half_precision": False,
+        "max_threads_per_block": 1024,
+        "max_blocks_per_grid": 65535
+    }
+    
+    device_type = "DESKTOP"  # Default
+    
+    # Try to detect actual GPU capabilities
+    try:
+        if USING_CUDA:
+            import cupy as cp
+            mem_info = cp.cuda.runtime.memGetInfo()
+            gpu_profile["memory_gb"] = mem_info[1] / (1024**3)  # Total memory in GB
+            
+            # Determine GPU tier based on memory
+            if gpu_profile["memory_gb"] >= 8:
+                gpu_profile["tier"] = "TIER_ULTRA"
+                gpu_profile["matrix_size"] = 64
+                gpu_profile["use_half_precision"] = True
+            elif gpu_profile["memory_gb"] >= 4:
+                gpu_profile["tier"] = "TIER_HIGH"
+                gpu_profile["matrix_size"] = 32
+                gpu_profile["use_half_precision"] = True
+            elif gpu_profile["memory_gb"] >= 2:
+                gpu_profile["tier"] = "TIER_MID"
+                gpu_profile["matrix_size"] = 24
+            else:
+                gpu_profile["tier"] = "TIER_LOW"
+                gpu_profile["matrix_size"] = 16
+                
+    except Exception as e:
+        logger.warning(f"Could not detect GPU capabilities: {e}")
+    
+    # Try to detect CPU profile
+    try:
+        import psutil
+        cpu_profile["cores"] = psutil.cpu_count()
+        cpu_profile["memory_gb"] = psutil.virtual_memory().total / (1024**3)
+        
+        # Determine device type
+        if cpu_profile["memory_gb"] < 4:
+            device_type = "EMBEDDED"
+        elif cpu_profile["memory_gb"] < 8:
+            device_type = "LAPTOP"
+        else:
+            device_type = "DESKTOP"
+            
+    except ImportError:
+        logger.warning("psutil not available - using default CPU profile")
+    
+    # Create combined profile
+    combined = {
+        "gpu": gpu_profile,
+        "cpu": cpu_profile,
+        "device_type": device_type
+    }
+    
+    system_hash = hashlib.sha256(json.dumps(combined, sort_keys=True).encode()).hexdigest()
+    gpu_hash = hashlib.sha256(json.dumps(gpu_profile, sort_keys=True).encode()).hexdigest()
+    
+    # Determine if GPU logic can run
+    can_run_gpu_logic = gpu_profile["tier"] in ["TIER_MID", "TIER_HIGH", "TIER_ULTRA"]
+    
+    precision = 'half' if gpu_profile.get('use_half_precision') else 'float'
+    
+    return SystemFitProfile(
+        gpu_tier=gpu_profile['tier'],
+        device_type=device_type,
+        matrix_size=gpu_profile['matrix_size'],
+        precision=precision,
+        system_hash=system_hash,
+        gpu_hash=gpu_hash,
+        can_run_gpu_logic=can_run_gpu_logic,
+        memory_gb=gpu_profile['memory_gb'],
+        compute_capability=gpu_profile['compute_capability'],
+        max_threads_per_block=gpu_profile['max_threads_per_block'],
+        max_blocks_per_grid=gpu_profile['max_blocks_per_grid']
+    )
+
+
+def test_matrix_fit() -> bool:
+    """Test if matrix operations fit the current system profile."""
+    try:
+        A = xp.random.rand(FIT_PROFILE.matrix_size, FIT_PROFILE.matrix_size)
+        B = xp.random.rand(FIT_PROFILE.matrix_size, FIT_PROFILE.matrix_size)
+        result = xp.dot(A, B)
+        assert result.shape == (FIT_PROFILE.matrix_size, FIT_PROFILE.matrix_size)
+        logger.info(f"✅ Matrix fit test passed: {FIT_PROFILE.matrix_size}x{FIT_PROFILE.matrix_size}")
+        return True
+    except Exception as e:
+        logger.warning(f"❌ Matrix fit test failed: {str(e)}")
+        return False
+
+
 # Global CUDA detector instance
 _cuda_detector = CUDADetector()
 
@@ -136,6 +266,20 @@ except ImportError:
     xp = np
     USING_CUDA = False
     logger.info("🔄 CPU Fallback Mode Active (NumPy)")
+
+# Build system fit profile
+FIT_PROFILE = build_system_fit_profile()
+
+# Log system profile
+logger.info(f"🧠 Detected GPU Tier: {FIT_PROFILE.gpu_tier}")
+logger.info(f"🧠 Device Type: {FIT_PROFILE.device_type}")
+logger.info(f"🧠 Matrix Ops Size: {FIT_PROFILE.matrix_size} ({FIT_PROFILE.precision}-precision)")
+logger.info(f"🧠 System Hash: {FIT_PROFILE.system_hash[:12]}...")
+logger.info(f"🧠 GPU Memory: {FIT_PROFILE.memory_gb:.1f}GB")
+
+# Test matrix fit
+if USING_CUDA:
+    test_matrix_fit()
 
 
 def safe_cuda_operation(operation: Callable, fallback_operation: Optional[Callable] = None) -> Any:
@@ -272,4 +416,8 @@ __all__ = [
     "ComputeMode",
     "FallbackMetrics",
     "CUDADetector",
+    "SystemFitProfile",
+    "FIT_PROFILE",
+    "build_system_fit_profile",
+    "test_matrix_fit",
 ]

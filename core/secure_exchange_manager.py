@@ -254,7 +254,7 @@ class SecureExchangeManager:
             logger.error(f"❌ Error loading from secure storage: {e}")
         
         return None
-
+    
     def setup_exchange(self, exchange: ExchangeType, api_key: str, secret: str, 
                       passphrase: Optional[str] = None, sandbox: bool = True) -> bool:
         """Setup exchange with credentials."""
@@ -282,7 +282,7 @@ class SecureExchangeManager:
         except Exception as e:
             logger.error(f"❌ Error setting up {exchange.value}: {e}")
             return False
-
+    
     def _test_exchange_connection(self, exchange: ExchangeType) -> bool:
         """Test exchange connection and authentication."""
         if not CCXT_AVAILABLE:
@@ -328,17 +328,17 @@ class SecureExchangeManager:
             self.ccxt_instances[exchange] = ccxt_instance
             
             return True
-            
+                
         except Exception as e:
             self.status[exchange].connected = False
             self.status[exchange].error_message = str(e)
             logger.error(f"❌ {exchange.value} connection test failed: {e}")
             return False
-
+    
     def get_exchange_status(self) -> Dict[str, ExchangeStatus]:
         """Get status of all configured exchanges."""
         return {exchange.value: status for exchange, status in self.status.items()}
-
+    
     def get_available_exchanges(self) -> List[ExchangeType]:
         """Get list of available exchanges."""
         return [exchange for exchange in self.exchanges.keys() 
@@ -394,7 +394,7 @@ class SecureExchangeManager:
             else:
                 # Basic processing without fill handler
                 return self._process_basic_order(order)
-                
+            
         except Exception as e:
             logger.error(f"❌ Trade execution failed: {e}")
             return TradeResult(
@@ -524,7 +524,7 @@ class SecureExchangeManager:
         except Exception as e:
             logger.error(f"Error handling partial fill: {e}")
             return {"status": "error", "message": str(e)}
-
+    
     def get_balance(self, exchange: ExchangeType, currency: str = None) -> Dict[str, Any]:
         """Get account balance."""
         try:
@@ -550,7 +550,7 @@ class SecureExchangeManager:
         except Exception as e:
             logger.error(f"❌ Error fetching balance: {e}")
             return {"error": str(e)}
-
+    
     def validate_trading_ready(self) -> Tuple[bool, List[str]]:
         """Validate that trading is ready."""
         errors = []
@@ -571,7 +571,7 @@ class SecureExchangeManager:
             errors.append("Fill handler not available - limited functionality")
         
         return len(errors) == 0, errors
-
+    
     def get_secure_summary(self) -> Dict[str, Any]:
         """Get secure summary without exposing sensitive data."""
         summary = {

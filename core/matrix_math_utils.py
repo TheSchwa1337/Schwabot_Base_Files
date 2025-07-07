@@ -19,6 +19,8 @@ CUDA Integration:
 - Cross-platform compatibility (Windows, macOS, Linux)
 """
 
+from __future__ import annotations
+
 # CUDA Integration with Fallback
 try:
     import cupy as cp
@@ -33,7 +35,6 @@ except ImportError:
     xp = np
     la = np.linalg
 
-from __future__ import annotations
 from typing import Any, Dict, List, Optional, Tuple, Union
 import logging
 
