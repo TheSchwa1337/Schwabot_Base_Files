@@ -1,9 +1,18 @@
-import asyncio
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Clean Trading Pipeline for Schwabot System.
+
+This module provides a clean, working implementation of the unified trading
+pipeline that integrates all components while maintaining proper code structure
+and error handling.
+"""
+
+import json
 import logging
+import os
 import time
 import uuid
-import json
-import os
 from dataclasses import dataclass, field
 from decimal import Decimal
 from enum import Enum
@@ -15,19 +24,21 @@ import numpy as np
 from .chrono_recursive_logic_function import (
     ChronoRecursiveLogicFunction,
     CRLFResponse,
-    CRLFState,
     CRLFTriggerState,
     create_crlf,
 )
 from .clean_math_foundation import BitPhase, CleanMathFoundation, ThermalState
-from .clean_profit_vectorization import CleanProfitVectorization, ProfitVector, VectorizationMode
+from .clean_profit_vectorization import (
+    CleanProfitVectorization,
+    ProfitVector,
+    VectorizationMode,
+)
 from .phase_bit_integration import phase_bit_integration
 from .portfolio_tracker import PortfolioTracker
 from .soulprint_registry import SoulprintRegistry
-from .strategy_bit_mapper import ExpansionMode, StrategyBitMapper
+from .strategy_bit_mapper import StrategyBitMapper
 from .unified_market_data_pipeline import (
     MarketDataPacket,
-    UnifiedMarketDataPipeline,
     create_unified_pipeline,
 )
 from .unified_math_system import UnifiedMathSystem, create_unified_math_system
@@ -42,15 +53,6 @@ from .zpe_zbe_core import (
     create_zpe_zbe_core,
 )
 from .ccxt_trading_executor import CCXTTradingExecutor, IntegratedTradingSignal, TradingPair
-
-# -*- coding: utf-8 -*-
-"""
-Clean Trading Pipeline for Schwabot System.
-
-This module provides a clean, working implementation of the unified trading
-pipeline that integrates all components while maintaining proper code structure
-and error handling.
-"""
 
 logger = logging.getLogger(__name__)
 
@@ -2111,9 +2113,8 @@ class CleanTradingPipeline:
         self._historical_speed = max(speed_multiplier, 0.1)
         logger.info(
             "Historical feed loaded: {0} candles from {1} (x{2} speed)".format(
-                len(
-                    self._historical_feed), dataset_path, 
-                self._historical_speed)
+                len(self._historical_feed), dataset_path, self._historical_speed
+            )
         )
 
     async def process_candle(self, candle: Dict[str, Any]) -> Optional[Dict[str, Any]]:

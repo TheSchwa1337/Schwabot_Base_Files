@@ -78,7 +78,7 @@ class ZPEZBECore:
     EARTH_SCHUMANN_FREQUENCY = 7.83  # Hz, Earth's fundamental resonance frequency
     QUANTUM_SYNC_THRESHOLD = 2.72e-33  # Quantum synchronization energy threshold
 
-    def __init__(self, math_foundation: Optional[CleanMathFoundation] = None) -> None:
+    def __init__(self: Any, math_foundation: Optional[CleanMathFoundation] = None) -> None:
         """
         Initialize ZPE-ZBE Core with optional mathematical foundation.
 
@@ -88,7 +88,7 @@ class ZPEZBECore:
         self.math_foundation: CleanMathFoundation = math_foundation or CleanMathFoundation()
 
     def calculate_zero_point_energy(
-        self, frequency: float = EARTH_SCHUMANN_FREQUENCY, mass_coefficient: float = 1e-6
+        self: Any, frequency: float = EARTH_SCHUMANN_FREQUENCY, mass_coefficient: float = 1e-6
     ) -> ZPEVector:
         """
         Calculate Zero Point Energy with quantum synchronization assessment.
@@ -119,7 +119,7 @@ class ZPEZBECore:
         )
 
     def calculate_zbe_balance(
-        self, entry_price: float, current_price: float, lower_bound: float, upper_bound: float
+        self: Any, entry_price: float, current_price: float, lower_bound: float, upper_bound: float
     ) -> ZBEBalance:
         """
         Calculate Zero-Based Equilibrium Balance.
@@ -159,7 +159,7 @@ class ZPEZBECore:
             },
         )
 
-    def _assess_quantum_sync(self, zpe_energy: float) -> QuantumSyncStatus:
+    def _assess_quantum_sync(self: Any, zpe_energy: float) -> QuantumSyncStatus:
         """
         Assess quantum synchronization status based on ZPE energy.
 
@@ -178,7 +178,9 @@ class ZPEZBECore:
         else:
             return QuantumSyncStatus.UNSYNCED
 
-    def dual_matrix_sync_trigger(self, zpe_vector: ZPEVector, zbe_balance: ZBEBalance) -> Dict[str, Any]:
+    def dual_matrix_sync_trigger(
+        self: Any, zpe_vector: ZPEVector, zbe_balance: ZBEBalance
+    ) -> Dict[str, Any]:
         """
         Determine dual matrix synchronization trigger conditions.
 
@@ -191,7 +193,9 @@ class ZPEZBECore:
         """
         # Quantum sync conditions
         is_quantum_synced = (
-            zpe_vector.sync_status in [QuantumSyncStatus.FULL_SYNC, QuantumSyncStatus.RESONANCE]
+            zpe_vector.sync_status in [
+                QuantumSyncStatus.FULL_SYNC, QuantumSyncStatus.RESONANCE
+            ]
             and zbe_balance.status == 0
         )
 
@@ -203,7 +207,9 @@ class ZPEZBECore:
             "recommended_action": "hold" if is_quantum_synced else "monitor",
         }
 
-    def generate_quantum_soulprint_vector(self, zpe_vector: ZPEVector, zbe_balance: ZBEBalance) -> Dict[str, float]:
+    def generate_quantum_soulprint_vector(
+        self: Any, zpe_vector: ZPEVector, zbe_balance: ZBEBalance
+    ) -> Dict[str, float]:
         """
         Generate a soulprint-compatible vector from ZPE and ZBE calculations.
 
@@ -223,7 +229,9 @@ class ZPEZBECore:
             "zbe_status": zbe_balance.status,
         }
 
-    def assess_quantum_strategy_confidence(self, zpe_vector: ZPEVector, zbe_balance: ZBEBalance) -> float:
+    def assess_quantum_strategy_confidence(
+        self: Any, zpe_vector: ZPEVector, zbe_balance: ZBEBalance
+    ) -> float:
         """
         Calculate confidence score based on quantum synchronization metrics.
 
@@ -283,7 +291,7 @@ class QuantumPerformanceRegistry:
     Performance tracking and adaptive learning registry for quantum-synchronized strategies.
     """
 
-    def __init__(self, max_entries: int = 1000) -> None:
+    def __init__(self: Any, max_entries: int = 1000) -> None:
         """
         Initialize the quantum performance registry.
 
@@ -293,7 +301,7 @@ class QuantumPerformanceRegistry:
         self.performance_entries: List[QuantumPerformanceEntry] = []
         self.max_entries: int = max_entries
 
-    def add_performance_entry(self, entry: QuantumPerformanceEntry) -> None:
+    def add_performance_entry(self: Any, entry: QuantumPerformanceEntry) -> None:
         """
         Add a new performance entry, maintaining max size.
 
@@ -306,7 +314,7 @@ class QuantumPerformanceRegistry:
 
         self.performance_entries.append(entry)
 
-    def analyze_quantum_performance(self) -> Dict[str, Any]:
+    def analyze_quantum_performance(self: Any) -> Dict[str, Any]:
         """
         Analyze overall quantum strategy performance.
 
@@ -345,8 +353,13 @@ class QuantumPerformanceRegistry:
 
         # Normalize performance metrics
         for status, metrics in sync_performance.items():
-            metrics["avg_profit"] = metrics["total_profit"] / metrics["count"] if metrics["count"] > 0 else 0.0
-            metrics["avg_risk_score"] /= metrics["count"] if metrics["count"] > 0 else 1.0
+            metrics["avg_profit"] = (
+                metrics["total_profit"] / metrics["count"]
+                if metrics["count"] > 0 else 0.0
+            )
+            metrics["avg_risk_score"] /= (
+                metrics["count"] if metrics["count"] > 0 else 1.0
+            )
 
         # Determine optimal thermal state
         thermal_performance = {}
@@ -360,7 +373,8 @@ class QuantumPerformanceRegistry:
         optimal_thermal_state = (
             max(
                 thermal_performance.items(),
-                key=lambda x: x[1]["total_profit"] / (x[1]["count"] or 1),
+                key=lambda x: x[1]["total_profit"] /
+                (x[1]["count"] or 1),
             )[0]
             if thermal_performance
             else "neutral"
@@ -368,13 +382,19 @@ class QuantumPerformanceRegistry:
 
         return {
             "total_strategies": len(self.performance_entries),
-            "average_profit": (total_profit / len(self.performance_entries) if self.performance_entries else 0.0),
-            "profit_rate": (profitable_entries / len(self.performance_entries) if self.performance_entries else 0.0),
+            "average_profit": (
+                total_profit / len(self.performance_entries)
+                if self.performance_entries else 0.0
+            ),
+            "profit_rate": (
+                profitable_entries / len(self.performance_entries)
+                if self.performance_entries else 0.0
+            ),
             "performance_by_sync_status": sync_performance,
             "optimal_thermal_state": optimal_thermal_state,
         }
 
-    def recommend_quantum_strategy_params(self) -> Dict[str, Any]:
+    def recommend_quantum_strategy_params(self: Any) -> Dict[str, Any]:
         """
         Recommend optimal strategy parameters based on historical performance.
 
@@ -411,14 +431,14 @@ class ZPEZBEPerformanceTracker:
     Performance tracking and adaptive learning for ZPE-ZBE quantum strategies.
     """
 
-    def __init__(self) -> None:
+    def __init__(self: Any) -> None:
         """
         Initialize performance tracking for ZPE-ZBE quantum strategies.
         """
         self.performance_registry: QuantumPerformanceRegistry = QuantumPerformanceRegistry()
 
     def log_strategy_performance(
-        self, zpe_vector: ZPEVector, zbe_balance: ZBEBalance, strategy_metadata: Dict[str, Any]
+        self: Any, zpe_vector: ZPEVector, zbe_balance: ZBEBalance, strategy_metadata: Dict[str, Any]
     ) -> None:
         """
         Log performance of a quantum-synchronized strategy.
@@ -443,7 +463,7 @@ class ZPEZBEPerformanceTracker:
 
         self.performance_registry.add_performance_entry(performance_entry)
 
-    def get_quantum_strategy_recommendations(self) -> Dict[str, Any]:
+    def get_quantum_strategy_recommendations(self: Any) -> Dict[str, Any]:
         """
         Get quantum strategy recommendations based on historical performance.
 
@@ -452,7 +472,7 @@ class ZPEZBEPerformanceTracker:
         """
         return self.performance_registry.recommend_quantum_strategy_params()
 
-    def get_performance_analysis(self) -> Dict[str, Any]:
+    def get_performance_analysis(self: Any) -> Dict[str, Any]:
         """
         Get comprehensive performance analysis.
 

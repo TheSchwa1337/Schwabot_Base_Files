@@ -225,7 +225,7 @@ def initialize_gpu_system():
     """Initialize GPU system with proper error handling."""
     try:
         if SYSTEM_PROFILER_AVAILABLE:
-            profiler = create_system_profiler()
+            _ = create_system_profiler()
             system_profile = get_system_profile()
 
             if system_profile.gpu_tier != GPUTier.NONE:
@@ -247,9 +247,9 @@ def create_clean_trading_system(initial_capital=100000.0, enable_gpu_acceleratio
     """Create a clean trading system with all components."""
     try:
         # Initialize GPU if requested
-        gpu_available = False
+        _ = False
         if enable_gpu_acceleration:
-            gpu_available = initialize_gpu_system()
+            _ = initialize_gpu_system()
 
         # Create trading pipeline
         if CLEAN_PIPELINE_AVAILABLE:

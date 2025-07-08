@@ -105,8 +105,16 @@ class GPUShaderIntegration:
             logger.info("✅ GPU Shader Integration Initialized in {0:.2f}s".format(init_time))
             logger.info("🔧 System: {0}".format(self.system_profile.device_type))
             logger.info("🎮 GPU: {0}".format(self.system_profile.gpu.renderer))
-            logger.info("📊 Matrix Size: {0}x{0}".format(self.shader_config.matrix_size, self.shader_config.matrix_size))
-            logger.info("⚡ Performance Multiplier: {0}x".format(self.shader_config.performance_multiplier))
+            logger.info(
+                "📊 Matrix Size: {0}x{0}".format(
+                    self.shader_config.matrix_size, self.shader_config.matrix_size
+                )
+            )
+            logger.info(
+                "⚡ Performance Multiplier: {0}x".format(
+                    self.shader_config.performance_multiplier
+                )
+            )
 
             return True
 
@@ -285,7 +293,11 @@ class GPUShaderIntegration:
 
             # Execute shader
             similarities = self._execute_cosine_shader(
-                tick_texture, strategy_texture, framebuffer, tick_vector.shape[0], strategy_vectors.shape[0]
+                tick_texture,
+                strategy_texture,
+                framebuffer,
+                tick_vector.shape[0],
+                strategy_vectors.shape[0],
             )
 
             # Cleanup GPU resources
@@ -296,11 +308,14 @@ class GPUShaderIntegration:
             execution_time = time.time() - start_time
             self.performance_metrics["operations_count"] += 1
             self.performance_metrics["average_execution_time"] = (
-                self.performance_metrics["average_execution_time"] * (self.performance_metrics["operations_count"] - 1)
-                + execution_time
+                self.performance_metrics["average_execution_time"] * (
+                    self.performance_metrics["operations_count"] - 1
+                ) + execution_time
             ) / self.performance_metrics["operations_count"]
 
-            logger.debug(f"🔥 GPU cosine similarity computed in {execution_time:.3f}s")
+            logger.debug(
+                "🔥 GPU cosine similarity computed in {0:.3f}s".format(execution_time)
+            )
 
             return similarities
 
@@ -411,7 +426,13 @@ class GPUShaderIntegration:
             batch_size = batch_end - strategy_idx
 
             glReadPixels(
-                strategy_idx, 0, batch_size, 1, GL_RED, GL_FLOAT, results[strategy_idx : strategy_idx + batch_size]
+                strategy_idx,
+                0,
+                batch_size,
+                1,
+                GL_RED,
+                GL_FLOAT,
+                results[strategy_idx : strategy_idx + batch_size],
             )
 
         # Restore default framebuffer
@@ -456,7 +477,9 @@ class GPUShaderIntegration:
             **self.performance_metrics,
             "gpu_tier": self.shader_config.gpu_tier if self.shader_config else "unknown",
             "matrix_size": self.shader_config.matrix_size if self.shader_config else 0,
-            "morphing_enabled": self.shader_config.shader_morph_enabled if self.shader_config else False,
+            "morphing_enabled": (
+                self.shader_config.shader_morph_enabled if self.shader_config else False
+            ),
             "opengl_available": OPENGL_AVAILABLE,
             "opengl_initialized": self.opengl_initialized,
         }
@@ -486,11 +509,15 @@ def create_gpu_shader_integration() -> GPUShaderIntegration:
     return integration
 
 
-def compute_strategy_similarities_gpu(tick_vector: np.ndarray, strategy_vectors: np.ndarray) -> np.ndarray:
+def compute_strategy_similarities_gpu(
+    tick_vector: np.ndarray, strategy_vectors: np.ndarray
+) -> np.ndarray:
     """Compute strategy similarities using GPU acceleration."""
     integration = create_gpu_shader_integration()
     try:
-        return integration.compute_strategy_similarity(tick_vector, strategy_vectors)
+        return integration.compute_strategy_similarity(
+            tick_vector, strategy_vectors
+        )
     finally:
         integration.cleanup()
 

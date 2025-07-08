@@ -48,6 +48,7 @@ except ImportError as e:
     logging.warning("Some existing system components not available: {0}".format(e))
     EXISTING_SYSTEM_AVAILABLE = False
     # Create fallback classes
+
     class StrategyTier:
         """Fallback strategy tier enum."""
         SHORT = "short"
@@ -190,7 +191,9 @@ class AccelerationEnhancement:
 
         logger.info("🎯 Acceleration Enhancement Layer initialized")
 
-    def should_use_gpu_enhancement(self, op_name: str, entropy_score: float, profit_weight: float) -> bool:
+    def should_use_gpu_enhancement(
+        self, op_name: str, entropy_score: float, profit_weight: float
+    ) -> bool:
         """
         Enhanced switch logic that works alongside existing ZPE/ZBE routing.
 
@@ -215,7 +218,8 @@ class AccelerationEnhancement:
 
         # Log decision
         with self.lock:
-            self.mode_log.append((op_name, AccelerationMode.GPU_ONLY if use_gpu else AccelerationMode.CPU_ONLY))
+            mode = AccelerationMode.GPU_ONLY if use_gpu else AccelerationMode.CPU_ONLY
+            self.mode_log.append((op_name, mode))
 
         logger.debug(
             "🎯 {0}: Entropy={1:.3f}, Profit={2:.3f}, Threshold={3:.3f} → {4}".format(
@@ -326,7 +330,9 @@ class AccelerationEnhancement:
 
         return result
 
-    def calculate_zpe_enhancement(self, tick_delta: float, registry_swing: float) -> ZPEEnhancementData:
+    def calculate_zpe_enhancement(
+        self, tick_delta: float, registry_swing: float
+    ) -> ZPEEnhancementData:
         """
         Calculate ZPE enhancement data that complements existing ZPE core.
 
@@ -372,7 +378,9 @@ class AccelerationEnhancement:
             logger.error("ZPE enhancement calculation failed: {0}".format(e))
             return ZPEEnhancementData(0.0, 0.0, 0.0, 0.5, 1.0, 1.0)
 
-    def calculate_zbe_enhancement(self, failure_count: int, recent_weight: float) -> ZBEEnhancementData:
+    def calculate_zbe_enhancement(
+        self, failure_count: int, recent_weight: float
+    ) -> ZBEEnhancementData:
         """
         Calculate ZBE enhancement data that complements existing ZBE core.
 
@@ -418,7 +426,9 @@ class AccelerationEnhancement:
             logger.error("ZBE enhancement calculation failed: {0}".format(e))
             return ZBEEnhancementData(0, 0.0, 0.0, 0.5, 1.0, 1.0)
 
-    def get_combined_entropy_score(self, zpe_data: ZPEEnhancementData, zbe_data: ZBEEnhancementData) -> float:
+    def get_combined_entropy_score(
+        self, zpe_data: ZPEEnhancementData, zbe_data: ZBEEnhancementData
+    ) -> float:
         """
         Combine ZPE and ZBE enhancement data into a single entropy score.
 
@@ -436,7 +446,10 @@ class AccelerationEnhancement:
             zpe_weight = 0.6
             zbe_weight = 0.4
 
-            combined_score = zpe_data.entropy_score * zpe_weight + zbe_data.entropy_score * zbe_weight
+            combined_score = (
+                zpe_data.entropy_score * zpe_weight + 
+                zbe_data.entropy_score * zbe_weight
+            )
 
             return min(1.0, max(0.0, combined_score))
 
@@ -465,7 +478,10 @@ class AccelerationEnhancement:
                     return {"enhancement_available": False}
 
                 # Get operation-specific performance
-                op_performance = [op for op in self.performance_history if op.operation_name == operation_name]
+                op_performance = [
+                    op for op in self.performance_history 
+                    if op.operation_name == operation_name
+                ]
 
                 if len(op_performance) < 3:
                     return {
@@ -475,14 +491,26 @@ class AccelerationEnhancement:
                     }
 
                 # Calculate performance metrics
-                cpu_ops = [op for op in op_performance if op.compute_mode in [AccelerationMode.CPU_ONLY]]
-                gpu_ops = [op for op in op_performance if op.compute_mode in [AccelerationMode.GPU_ONLY]]
+                cpu_ops = [
+                    op for op in op_performance 
+                    if op.compute_mode in [AccelerationMode.CPU_ONLY]
+                ]
+                gpu_ops = [
+                    op for op in op_performance 
+                    if op.compute_mode in [AccelerationMode.GPU_ONLY]
+                ]
 
                 cpu_success_rate = np.mean([op.success for op in cpu_ops]) if cpu_ops else 0.0
                 gpu_success_rate = np.mean([op.success for op in gpu_ops]) if gpu_ops else 0.0
 
-                cpu_avg_time = np.mean([op.execution_time for op in cpu_ops]) if cpu_ops else float("inf")
-                gpu_avg_time = np.mean([op.execution_time for op in gpu_ops]) if gpu_ops else float("inf")
+                cpu_avg_time = (
+                    np.mean([op.execution_time for op in cpu_ops]) 
+                    if cpu_ops else float("inf")
+                )
+                gpu_avg_time = (
+                    np.mean([op.execution_time for op in gpu_ops]) 
+                    if gpu_ops else float("inf")
+                )
 
                 # Enhancement recommendation logic
                 if gpu_success_rate > cpu_success_rate and gpu_avg_time < cpu_avg_time:
@@ -536,29 +564,65 @@ class AccelerationEnhancement:
                 failed = self.failed_operations
 
                 # Calculate success rates
-                cpu_success_rate = (cpu_ops - failed) / max(cpu_ops, 1) if cpu_ops > 0 else 0.0
-                gpu_success_rate = (gpu_ops - failed) / max(gpu_ops, 1) if gpu_ops > 0 else 0.0
+                cpu_success_rate = (
+                    (cpu_ops - failed) / max(cpu_ops, 1) if cpu_ops > 0 else 0.0
+                )
+                gpu_success_rate = (
+                    (gpu_ops - failed) / max(gpu_ops, 1) if gpu_ops > 0 else 0.0
+                )
 
                 # Recent performance (last 100 operations)
-                recent_ops = self.performance_history[-100:] if self.performance_history else []
-                recent_cpu_ops = len([op for op in recent_ops if op.compute_mode in [AccelerationMode.CPU_ONLY]])
-                recent_gpu_ops = len([op for op in recent_ops if op.compute_mode in [AccelerationMode.GPU_ONLY]])
+                recent_ops = (
+                    self.performance_history[-100:] if self.performance_history else []
+                )
+                recent_cpu_ops = len([
+                    op for op in recent_ops 
+                    if op.compute_mode in [AccelerationMode.CPU_ONLY]
+                ])
+                recent_gpu_ops = len([
+                    op for op in recent_ops 
+                    if op.compute_mode in [AccelerationMode.GPU_ONLY]
+                ])
 
                 # Average execution times
-                cpu_times = [op.execution_time for op in recent_ops if op.compute_mode in [AccelerationMode.CPU_ONLY]]
-                gpu_times = [op.execution_time for op in recent_ops if op.compute_mode in [AccelerationMode.GPU_ONLY]]
+                cpu_times = [
+                    op.execution_time for op in recent_ops 
+                    if op.compute_mode in [AccelerationMode.CPU_ONLY]
+                ]
+                gpu_times = [
+                    op.execution_time for op in recent_ops 
+                    if op.compute_mode in [AccelerationMode.GPU_ONLY]
+                ]
 
                 avg_cpu_time = np.mean(cpu_times) if cpu_times else 0.0
                 avg_gpu_time = np.mean(gpu_times) if gpu_times else 0.0
 
                 # ZPE/ZBE enhancement statistics
-                recent_zpe = self.zpe_enhancement_history[-50:] if self.zpe_enhancement_history else []
-                recent_zbe = self.zbe_enhancement_history[-50:] if self.zbe_enhancement_history else []
+                recent_zpe = (
+                    self.zpe_enhancement_history[-50:] 
+                    if self.zpe_enhancement_history else []
+                )
+                recent_zbe = (
+                    self.zbe_enhancement_history[-50:] 
+                    if self.zbe_enhancement_history else []
+                )
 
-                avg_zpe_entropy = np.mean([zpe.entropy_score for zpe in recent_zpe]) if recent_zpe else 0.0
-                avg_zbe_entropy = np.mean([zbe.entropy_score for zbe in recent_zbe]) if recent_zbe else 0.0
-                avg_zpe_enhancement = np.mean([zpe.enhancement_factor for zpe in recent_zpe]) if recent_zpe else 1.0
-                avg_zbe_enhancement = np.mean([zbe.enhancement_factor for zbe in recent_zbe]) if recent_zbe else 1.0
+                avg_zpe_entropy = (
+                    np.mean([zpe.entropy_score for zpe in recent_zpe]) 
+                    if recent_zpe else 0.0
+                )
+                avg_zbe_entropy = (
+                    np.mean([zbe.entropy_score for zbe in recent_zbe]) 
+                    if recent_zbe else 0.0
+                )
+                avg_zpe_enhancement = (
+                    np.mean([zpe.enhancement_factor for zpe in recent_zpe]) 
+                    if recent_zpe else 1.0
+                )
+                avg_zbe_enhancement = (
+                    np.mean([zbe.enhancement_factor for zbe in recent_zbe]) 
+                    if recent_zbe else 1.0
+                )
 
                 return {
                     "status": "active",
@@ -576,20 +640,29 @@ class AccelerationEnhancement:
                     "recent_distribution": {
                         "cpu_operations": recent_cpu_ops,
                         "gpu_operations": recent_gpu_ops,
-                        "cpu_percentage": recent_cpu_ops / max(len(recent_ops), 1) * 100,
-                        "gpu_percentage": recent_gpu_ops / max(len(recent_ops), 1) * 100,
+                        "cpu_percentage": (
+                            recent_cpu_ops / max(len(recent_ops), 1) * 100
+                        ),
+                        "gpu_percentage": (
+                            recent_gpu_ops / max(len(recent_ops), 1) * 100
+                        ),
                     },
                     "performance_metrics": {
                         "avg_cpu_time_ms": avg_cpu_time * 1000,
                         "avg_gpu_time_ms": avg_gpu_time * 1000,
-                        "speedup_ratio": (avg_cpu_time / max(avg_gpu_time, 0.001) if avg_gpu_time > 0 else 1.0),
+                        "speedup_ratio": (
+                            avg_cpu_time / max(avg_gpu_time, 0.001) 
+                            if avg_gpu_time > 0 else 1.0
+                        ),
                     },
                     "enhancement_metrics": {
                         "avg_zpe_entropy": avg_zpe_entropy,
                         "avg_zbe_entropy": avg_zbe_entropy,
                         "avg_zpe_enhancement_factor": avg_zpe_enhancement,
                         "avg_zbe_enhancement_factor": avg_zbe_enhancement,
-                        "combined_entropy": (avg_zpe_entropy * 0.6 + avg_zbe_entropy * 0.4),
+                        "combined_entropy": (
+                            avg_zpe_entropy * 0.6 + avg_zbe_entropy * 0.4
+                        ),
                     },
                     "history_size": {
                         "performance_history": len(self.performance_history),
@@ -656,29 +729,34 @@ class AccelerationEnhancement:
                 integration_status["dual_state_router"] = True
                 integration_status["integration_available"] = True
                 integration_status["recommendations"].append(
-                    "Enhancement layer can provide operation-specific recommendations to Dual State Router"
+                    "Enhancement layer can provide operation-specific recommendations "
+                    "to Dual State Router"
                 )
 
             if zpe_core:
                 integration_status["zpe_core"] = True
                 integration_status["integration_available"] = True
                 integration_status["recommendations"].append(
-                    "Enhancement layer can enhance ZPE calculations with additional acceleration options"
+                    "Enhancement layer can enhance ZPE calculations with "
+                    "additional acceleration options"
                 )
 
             if zbe_core:
                 integration_status["zbe_core"] = True
                 integration_status["integration_available"] = True
                 integration_status["recommendations"].append(
-                    "Enhancement layer can enhance ZBE calculations with additional acceleration options"
+                    "Enhancement layer can enhance ZBE calculations with "
+                    "additional acceleration options"
                 )
 
             if integration_status["integration_available"]:
                 integration_status["recommendations"].append(
-                    "Use get_enhancement_recommendations() to get operation-specific acceleration advice"
+                    "Use get_enhancement_recommendations() to get "
+                    "operation-specific acceleration advice"
                 )
                 integration_status["recommendations"].append(
-                    "Use execute_with_enhancement() to run operations with enhanced acceleration"
+                    "Use execute_with_enhancement() to run operations "
+                    "with enhanced acceleration"
                 )
 
             return integration_status
@@ -729,7 +807,10 @@ def demo_acceleration_enhancement() -> None:
         if USING_CUDA:
             a_gpu = cp.asarray(a)
             b_gpu = cp.asarray(b)
-            return float(cp.dot(a_gpu, b_gpu) / (cp.linalg.norm(a_gpu) * cp.linalg.norm(b_gpu)))
+            return float(
+                cp.dot(a_gpu, b_gpu) / 
+                (cp.linalg.norm(a_gpu) * cp.linalg.norm(b_gpu))
+            )
         else:
             return cpu_cosine_sim(a, b)
 
@@ -750,9 +831,13 @@ def demo_acceleration_enhancement() -> None:
         print("\n📊 {0}:".format(description))
 
         # Calculate ZPE/ZBE enhancement data
-        zpe_data = enhancement.calculate_zpe_enhancement(tick_delta=entropy * 0.5, registry_swing=entropy * 0.8)
+        zpe_data = enhancement.calculate_zpe_enhancement(
+            tick_delta=entropy * 0.5, registry_swing=entropy * 0.8
+        )
 
-        zbe_data = enhancement.calculate_zbe_enhancement(failure_count=int(entropy * 3), recent_weight=profit_weight)
+        zbe_data = enhancement.calculate_zbe_enhancement(
+            failure_count=int(entropy * 3), recent_weight=profit_weight
+        )
 
         combined_entropy = enhancement.get_combined_entropy_score(zpe_data, zbe_data)
 
@@ -780,9 +865,7 @@ def demo_acceleration_enhancement() -> None:
     recommendations = enhancement.get_enhancement_recommendations("cosine_sim")
     print(
         "  Available: {0}".format(
-            recommendations.get(
-                'enhancement_available',
-                False))
+            recommendations.get('enhancement_available', False))
     )
     print("  Recommendation: {0}".format(recommendations.get('recommendation', 'none')))
     print("  Confidence: {0:.3f}".format(recommendations.get('confidence', 0.0)))
