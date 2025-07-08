@@ -1,14 +1,5 @@
-import logging
-import math
-import time
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
-    import cupy as cp
-
-    import numpy as np
-
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
 Clean Math Foundation - Core Mathematical Operations
 
@@ -24,22 +15,39 @@ Key Features:
 - Performance optimization
 """
 
+import logging
+import time
+import threading
+from dataclasses import dataclass, field
+from typing import Dict, List, Optional, Tuple, Any, Union
+from enum import Enum
+import numpy as np
+import cupy as cp
+from concurrent.futures import ThreadPoolExecutor
+import asyncio
+from scipy.optimize import minimize
+from scipy.linalg import expm, norm
+from scipy.stats import entropy
+import hashlib
+import json
+from datetime import datetime, timedelta
+
 # CUDA Integration with Fallback
 try:
     USING_CUDA = True
     _backend = 'cupy (GPU)'
     xp = cp
 except ImportError:
+    import numpy as np
     USING_CUDA = False
     _backend = 'numpy (CPU)'
     xp = np
 
-# Log backend status
 logger = logging.getLogger(__name__)
 if USING_CUDA:
-    logger.info("⚡ Clean Math Foundation using GPU acceleration: {0}".format(_backend))
+    logger.info(f"⚡ CleanMathFoundation using GPU acceleration: {_backend}")
 else:
-    logger.info("🔄 Clean Math Foundation using CPU fallback: {0}".format(_backend))
+    logger.info(f"🔄 CleanMathFoundation using CPU fallback: {_backend}")
 
 
 class ThermalState(Enum):
@@ -61,11 +69,11 @@ class BitPhase(Enum):
 
 
 # Mathematical constants
-PI = math.pi
-E = math.e
-GOLDEN_RATIO = (1 + math.sqrt(5)) / 2
-SQRT_2 = math.sqrt(2)
-LN_2 = math.log(2)
+PI = np.pi
+E = np.e
+GOLDEN_RATIO = (1 + np.sqrt(5)) / 2
+SQRT_2 = np.sqrt(2)
+LN_2 = np.log(2)
 
 
 class CleanMathFoundation:
@@ -218,38 +226,34 @@ def calculate_sharpe_ratio(returns: np.ndarray, risk_free_rate: float = 0.0, per
     """
     Calculate the Sharpe ratio for a series of returns.
 
+    The Sharpe ratio measures the excess return per unit of risk.
+
     Args:
         returns: Array of returns
-        risk_free_rate: Annual risk-free rate (default: 0.0)
-        periods_per_year: Number of periods per year (default: 252 for daily)
+        risk_free_rate: Risk-free rate (annualized)
+        periods_per_year: Number of periods per year for annualization
 
     Returns:
-        Annualized Sharpe ratio
+        Sharpe ratio
 
     Raises:
-        ValueError: If returns array is empty
+        ValueError: If returns array is empty or invalid
     """
     if len(returns) == 0:
         raise ValueError("Returns array cannot be empty")
 
-    # Remove NaN values
-    returns_clean = returns[~np.isnan(returns)]
-
-    if len(returns_clean) == 0:
-        return 0.0
-
     # Calculate excess returns
-    excess_returns = returns_clean - risk_free_rate / periods_per_year
+    excess_returns = returns - risk_free_rate / periods_per_year
 
     # Calculate mean and standard deviation
-    mean_excess_return = np.mean(excess_returns)
-    std_return = np.std(returns_clean, ddof=1)
+    mean_return = np.mean(excess_returns)
+    std_return = np.std(excess_returns, ddof=1)
 
     if std_return == 0:
         return 0.0
 
     # Annualize
-    sharpe_ratio = (mean_excess_return * periods_per_year) / (std_return * math.sqrt(periods_per_year))
+    sharpe_ratio = mean_return / std_return * np.sqrt(periods_per_year)
 
     return float(sharpe_ratio)
 
@@ -258,34 +262,33 @@ def calculate_sortino_ratio(returns: np.ndarray, risk_free_rate: float = 0.0, pe
     """
     Calculate the Sortino ratio for a series of returns.
 
+    The Sortino ratio measures the excess return per unit of downside risk.
+
     Args:
         returns: Array of returns
-        risk_free_rate: Annual risk-free rate (default: 0.0)
-        periods_per_year: Number of periods per year (default: 252 for daily)
+        risk_free_rate: Risk-free rate (annualized)
+        periods_per_year: Number of periods per year for annualization
 
     Returns:
-        Annualized Sortino ratio
+        Sortino ratio
 
     Raises:
-        ValueError: If returns array is empty
+        ValueError: If returns array is empty or invalid
     """
     if len(returns) == 0:
         raise ValueError("Returns array cannot be empty")
 
-    # Remove NaN values
-    returns_clean = returns[~np.isnan(returns)]
-
-    if len(returns_clean) == 0:
-        return 0.0
-
     # Calculate excess returns
-    excess_returns = returns_clean - risk_free_rate / periods_per_year
+    excess_returns = returns - risk_free_rate / periods_per_year
 
-    # Calculate downside deviation
+    # Calculate mean
+    mean_return = np.mean(excess_returns)
+
+    # Calculate downside deviation (only negative returns)
     downside_returns = excess_returns[excess_returns < 0]
-
+    
     if len(downside_returns) == 0:
-        return float("inf") if np.mean(excess_returns) > 0 else 0.0
+        return float("inf") if mean_return > 0 else 0.0
 
     downside_deviation = np.std(downside_returns, ddof=1)
 
@@ -293,20 +296,20 @@ def calculate_sortino_ratio(returns: np.ndarray, risk_free_rate: float = 0.0, pe
         return 0.0
 
     # Annualize
-    sortino_ratio = (np.mean(excess_returns) * periods_per_year) / (downside_deviation * math.sqrt(periods_per_year))
+    sortino_ratio = mean_return / downside_deviation * np.sqrt(periods_per_year)
 
     return float(sortino_ratio)
 
 
 def calculate_max_drawdown(returns: np.ndarray) -> Dict[str, float]:
     """
-    Calculate maximum drawdown and related metrics.
+    Calculate the maximum drawdown from a series of returns.
 
     Args:
         returns: Array of returns
 
     Returns:
-        Dictionary with drawdown metrics
+        Dictionary with max drawdown and related metrics
 
     Raises:
         ValueError: If returns array is empty
@@ -314,53 +317,37 @@ def calculate_max_drawdown(returns: np.ndarray) -> Dict[str, float]:
     if len(returns) == 0:
         raise ValueError("Returns array cannot be empty")
 
-    # Remove NaN values
-    returns_clean = returns[~np.isnan(returns)]
-
-    if len(returns_clean) == 0:
-        return {
-            "max_drawdown": 0.0,
-            "max_drawdown_pct": 0.0,
-            "drawdown_duration": 0,
-            "peak_idx": 0,
-            "trough_idx": 0,
-        }
-
     # Calculate cumulative returns
-    cumulative = np.cumprod(1 + returns_clean)
-
+    cumulative_returns = np.cumprod(1 + returns)
+    
     # Calculate running maximum
-    running_max = np.maximum.accumulate(cumulative)
-
+    running_max = np.maximum.accumulate(cumulative_returns)
+    
     # Calculate drawdown
-    drawdown = (cumulative - running_max) / running_max
-
+    drawdown = (cumulative_returns - running_max) / running_max
+    
     # Find maximum drawdown
     max_drawdown = np.min(drawdown)
-    max_drawdown_idx = np.argmin(drawdown)
-
-    # Find peak before maximum drawdown
-    peak_idx = np.argmax(cumulative[: max_drawdown_idx + 1])
-
-    # Calculate duration
-    drawdown_duration = max_drawdown_idx - peak_idx
-
+    
+    # Find start and end indices of max drawdown
+    end_idx = np.argmin(drawdown)
+    start_idx = np.argmax(cumulative_returns[:end_idx + 1])
+    
     return {
         "max_drawdown": float(max_drawdown),
-        "max_drawdown_pct": float(max_drawdown * 100),
-        "drawdown_duration": int(drawdown_duration),
-        "peak_idx": int(peak_idx),
-        "trough_idx": int(max_drawdown_idx),
+        "start_index": int(start_idx),
+        "end_index": int(end_idx),
+        "duration": int(end_idx - start_idx)
     }
 
 
 def calculate_value_at_risk(returns: np.ndarray, confidence_level: float = 0.05) -> float:
     """
-    Calculate Value at Risk (VaR).
+    Calculate Value at Risk (VaR) for a series of returns.
 
     Args:
         returns: Array of returns
-        confidence_level: Confidence level (default: 5%)
+        confidence_level: Confidence level (e.g., 0.05 for 95% VaR)
 
     Returns:
         VaR value
@@ -371,25 +358,22 @@ def calculate_value_at_risk(returns: np.ndarray, confidence_level: float = 0.05)
     if len(returns) == 0:
         raise ValueError("Returns array cannot be empty")
 
-    if not 0 < confidence_level < 1:
+    if not (0 < confidence_level < 1):
         raise ValueError("Confidence level must be between 0 and 1")
 
-    # Remove NaN values
-    returns_clean = returns[~np.isnan(returns)]
+    # Calculate VaR using empirical quantile
+    var = np.percentile(returns, confidence_level * 100)
 
-    if len(returns_clean) == 0:
-        return 0.0
-
-    return float(np.percentile(returns_clean, confidence_level * 100))
+    return float(var)
 
 
 def calculate_conditional_var(returns: np.ndarray, confidence_level: float = 0.05) -> float:
     """
-    Calculate Conditional Value at Risk (CVaR) / Expected Shortfall.
+    Calculate Conditional Value at Risk (CVaR) for a series of returns.
 
     Args:
         returns: Array of returns
-        confidence_level: Confidence level (default: 5%)
+        confidence_level: Confidence level (e.g., 0.05 for 95% CVaR)
 
     Returns:
         CVaR value
@@ -400,37 +384,36 @@ def calculate_conditional_var(returns: np.ndarray, confidence_level: float = 0.0
     if len(returns) == 0:
         raise ValueError("Returns array cannot be empty")
 
-    if not 0 < confidence_level < 1:
+    if not (0 < confidence_level < 1):
         raise ValueError("Confidence level must be between 0 and 1")
 
-    # Remove NaN values
-    returns_clean = returns[~np.isnan(returns)]
-
-    if len(returns_clean) == 0:
-        return 0.0
-
-    var = calculate_value_at_risk(returns_clean, confidence_level)
-    tail_returns = returns_clean[returns_clean <= var]
-
+    # Calculate VaR
+    var = calculate_value_at_risk(returns, confidence_level)
+    
+    # Calculate CVaR (expected value of returns below VaR)
+    tail_returns = returns[returns <= var]
+    
     if len(tail_returns) == 0:
-        return float(var)
+        return var
 
-    return float(np.mean(tail_returns))
+    cvar = np.mean(tail_returns)
+
+    return float(cvar)
 
 
 def normalize_vector(vector: np.ndarray, norm_type: str = "l2") -> np.ndarray:
     """
-    Normalize a vector to unit length.
+    Normalize a vector using the specified norm.
 
     Args:
         vector: Input vector
-        norm_type: Normalization type ('l1', 'l2', 'max')
+        norm_type: Type of normalization ("l1", "l2", "max")
 
     Returns:
         Normalized vector
 
     Raises:
-        ValueError: If vector is empty or norm_type is invalid
+        ValueError: If norm_type is invalid or vector is empty
     """
     if len(vector) == 0:
         raise ValueError("Vector cannot be empty")
@@ -445,7 +428,7 @@ def normalize_vector(vector: np.ndarray, norm_type: str = "l2") -> np.ndarray:
         raise ValueError("Invalid norm_type. Must be 'l1', 'l2', or 'max'")
 
     if norm == 0:
-        return np.zeros_like(vector)
+        return vector
 
     return vector / norm
 
@@ -469,8 +452,8 @@ def calculate_eigenvalues(matrix: np.ndarray) -> np.ndarray:
     try:
         eigenvalues = np.linalg.eigvals(matrix)
         return eigenvalues
-    except np.linalg.LinAlgError:
-        return np.array([])
+    except np.linalg.LinAlgError as e:
+        raise ValueError("Failed to calculate eigenvalues: {}".format(e))
 
 
 def calculate_eigenvectors(matrix: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
@@ -492,22 +475,46 @@ def calculate_eigenvectors(matrix: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
     try:
         eigenvalues, eigenvectors = np.linalg.eig(matrix)
         return eigenvalues, eigenvectors
-    except np.linalg.LinAlgError:
-        return np.array([]), np.array([])
+    except np.linalg.LinAlgError as e:
+        raise ValueError("Failed to calculate eigenvectors: {}".format(e))
 
 
-# Export main functions
-__all__ = [
-    "calculate_vector_norm",
-    "calculate_matrix_condition_number",
-    "calculate_correlation_matrix",
-    "calculate_covariance_matrix",
-    "calculate_sharpe_ratio",
-    "calculate_sortino_ratio",
-    "calculate_max_drawdown",
-    "calculate_value_at_risk",
-    "calculate_conditional_var",
-    "normalize_vector",
-    "calculate_eigenvalues",
-    "calculate_eigenvectors",
-]
+# Factory functions
+def create_math_foundation() -> CleanMathFoundation:
+    """Create a new math foundation instance."""
+    return CleanMathFoundation()
+
+
+def quick_calculation(operation: str, *args, **kwargs) -> Any:
+    """
+    Quick calculation wrapper for common operations.
+
+    Args:
+        operation: Operation name
+        *args: Positional arguments
+        **kwargs: Keyword arguments
+
+    Returns:
+        Calculation result
+
+    Raises:
+        ValueError: If operation is not supported
+    """
+    if operation == "vector_norm":
+        return calculate_vector_norm(*args, **kwargs)
+    elif operation == "correlation":
+        return calculate_correlation_matrix(*args, **kwargs)
+    elif operation == "covariance":
+        return calculate_covariance_matrix(*args, **kwargs)
+    elif operation == "sharpe":
+        return calculate_sharpe_ratio(*args, **kwargs)
+    elif operation == "sortino":
+        return calculate_sortino_ratio(*args, **kwargs)
+    elif operation == "max_drawdown":
+        return calculate_max_drawdown(*args, **kwargs)
+    elif operation == "var":
+        return calculate_value_at_risk(*args, **kwargs)
+    elif operation == "cvar":
+        return calculate_conditional_var(*args, **kwargs)
+    else:
+        raise ValueError("Unsupported operation: {}".format(operation))

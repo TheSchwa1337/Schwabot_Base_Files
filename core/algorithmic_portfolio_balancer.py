@@ -149,7 +149,7 @@ class AlgorithmicPortfolioBalancer:
             self.portfolio_state.asset_values = asset_values
             self.portfolio_state.asset_weights = asset_weights
 
-            logger.debug("Portfolio state updated: ${0}".format(total_value:,.2f))
+            logger.debug("Portfolio state updated: ${0:,.2f}".format(total_value))
 
         except Exception as e:
             logger.error("Error updating portfolio state: {0}".format(e))
@@ -168,7 +168,7 @@ class AlgorithmicPortfolioBalancer:
             target_weight = allocation.target_weight
 
             if abs(current_weight - target_weight) > self.rebalance_threshold:
-                logger.info("Rebalancing needed: {0} weight {1} vs target {2}".format(symbol, current_weight:.3f, target_weight:.3f))
+                logger.info("Rebalancing needed: {0} weight {1:.3f} vs target {2:.3f}".format(symbol, current_weight, target_weight))
                 return True
 
         return False

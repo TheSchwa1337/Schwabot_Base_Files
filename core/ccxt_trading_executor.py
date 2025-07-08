@@ -6,7 +6,7 @@ from decimal import Decimal
 from enum import Enum
 from typing import Any, Dict, Optional
 
-    import ccxt.async_support as ccxt
+import ccxt.async_support as ccxt
 
 """
 CCXT Trading Executor.
@@ -14,11 +14,6 @@ CCXT Trading Executor.
 Trading executor for CCXT integration with Schwabot trading system.
 Provides interface for executing trades through various exchanges.
 """
-
-try:
-except ImportError:
-    ccxt = None
-    logging.warning("CCXT not installed. Install with: pip install ccxt")
 
 logger = logging.getLogger(__name__)
 

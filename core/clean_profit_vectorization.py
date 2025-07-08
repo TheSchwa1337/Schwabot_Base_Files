@@ -1,12 +1,30 @@
-    import cupy as cp
-import hashlib
 import logging
 import time
+import threading
 from dataclasses import dataclass, field
+from typing import Dict, List, Optional, Tuple, Any, Union
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
+import numpy as np
+import cupy as cp
+from concurrent.futures import ThreadPoolExecutor
+import asyncio
+from scipy.optimize import minimize
+from scipy.linalg import expm, norm
+from scipy.stats import entropy
+import hashlib
+import json
+from datetime import datetime, timedelta
 
+# CUDA Integration with Fallback
+try:
+    USING_CUDA = True
+    _backend = 'cupy (GPU)'
+    xp = cp
+except ImportError:
     import numpy as np
+    USING_CUDA = False
+    _backend = 'numpy (CPU)'
+    xp = np
 
 from core.clean_math_foundation import BitPhase, CleanMathFoundation, ThermalState
 
@@ -24,16 +42,6 @@ CUDA Integration:
 - Cross-platform compatibility (Windows, macOS, Linux)
 """
 
-# CUDA Integration with Fallback
-try:
-    USING_CUDA = True
-    _backend = 'cupy (GPU)'
-    xp = cp
-except ImportError:
-    USING_CUDA = False
-    _backend = 'numpy (CPU)'
-    xp = np
-
 # -*- coding: utf-8 -*-
 
 """
@@ -45,9 +53,9 @@ operations that power the Schwabot trading system.
 
 logger = logging.getLogger(__name__)
 if USING_CUDA:
-    logger.info("⚡ CleanProfitVectorization using GPU acceleration: {0}".format(_backend))
+    logger.info(f"⚡ CleanProfitVectorization using GPU acceleration: {_backend}")
 else:
-    logger.info("🔄 CleanProfitVectorization using CPU fallback: {0}".format(_backend))
+    logger.info(f"🔄 CleanProfitVectorization using CPU fallback: {_backend}")
 
 
 class VectorizationMode(Enum):
@@ -294,9 +302,9 @@ class CleanProfitVectorization:
             self.total_calculation_time += calculation_time
 
             logger.debug(
-                "Calculated profit vector: {0} in {1}s".format(
-                    total_profit:.6f, 
-                    calculation_time:.4f)
+                "Calculated profit vector: {:.6f} in {:.4f}s".format(
+                    total_profit, calculation_time
+                )
             )
 
             return profit_vector
@@ -476,12 +484,12 @@ def demo_profit_vectorization():
 
     for mode in VectorizationMode:
         vector = vectorizer.calculate_profit_vector(test_input, mode)
-        print("{0}: {1} (confidence: {2})".format(mode.value, vector.profit_score:.6f, vector.confidence_score:.3f))
+        print("{0}: {1:.6f} (confidence: {2:.3f})".format(mode.value, vector.profit_score, vector.confidence_score))
 
     # Show performance metrics
     metrics = vectorizer.get_performance_metrics()
     print("\nCalculations: {0}".format(metrics['total_calculations']))
-    print("Avg time: {0}s".format(metrics['average_calculation_time']:.6f))
+    print("Avg time: {0:.6f}s".format(metrics['average_calculation_time']))
 
 
 if __name__ == "__main__":

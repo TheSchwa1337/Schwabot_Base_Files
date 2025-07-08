@@ -4,11 +4,11 @@ import time
 import json
 import os
 import sys
+import argparse
 from typing import Dict, List, Optional, Any, Union
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from enum import Enum
-    import argparse
 
 import aiohttp
 import ccxt.async_support as ccxt

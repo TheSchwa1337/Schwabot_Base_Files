@@ -200,7 +200,7 @@ class BTCUSDCTradingIntegration:
                 # Calculate profit factor
                 total_profit = sum(profits) if profits else 0.0
                 total_loss = abs(sum(losses)) if losses else 0.0
-                profit_factor = total_profit / total_loss if total_loss > 0 else float('in")
+                profit_factor = total_profit / total_loss if total_loss > 0 else float('inf')
 
                 # Calculate max drawdown
                 cumulative_pnl = []
@@ -224,13 +224,31 @@ class BTCUSDCTradingIntegration:
                 max_drawdown = 0.0
 
             # Combine metrics
-            performance_metrics = {1}
+            performance_metrics = {
+                "win_rate": win_rate,
+                "avg_profit": avg_profit,
+                "avg_loss": avg_loss,
+                "profit_factor": profit_factor,
+                "max_drawdown": max_drawdown,
+                "total_trades": len(self.trade_history),
+                "current_position": self.current_position,
+                "daily_trades": self.daily_trades,
+            }
 
             return performance_metrics
 
         except Exception as e:
-            logger.error("Error calculating performance metrics: {1}".format(e))
-            return {2}
+            logger.error(f"Error calculating performance metrics: {e}")
+            return {
+                "win_rate": 0.0,
+                "avg_profit": 0.0,
+                "avg_loss": 0.0,
+                "profit_factor": 0.0,
+                "max_drawdown": 0.0,
+                "total_trades": 0,
+                "current_position": 0.0,
+                "daily_trades": 0,
+            }
 
     async def get_system_status(self) -> Dict[str, Any]:
         """Get system status information."""
@@ -243,28 +261,9 @@ class BTCUSDCTradingIntegration:
 
             # Check market data freshness
             current_time = time.time()
-            btc_data = self.market_data_cache.get("BTC", {3})
+            btc_data = self.market_data_cache.get("BTC", {})
             last_update = btc_data.get("timestamp", 0)
-            data_age = current_time - last_update if last_update > 0 else float(".format(
-                **basic_metrics,
-                "win_rate": win_rate,
-                "avg_profit": avg_profit,
-                "avg_loss": avg_loss,
-                "profit_factor": profit_factor,
-                "max_drawdown": max_drawdown,
-                "total_trades": len(self.trade_history),
-                "current_position": self.current_position,
-                "daily_trades": self.daily_trades,
-            , 0, 
-                "win_rate": 0.0,
-                "avg_profit": 0.0,
-                "avg_loss": 0.0,
-                "profit_factor": 0.0,
-                "max_drawdown": 0.0,
-                "total_trades": 0,
-                "current_position": 0.0,
-                "daily_trades": 0,
-            , )in")
+            data_age = current_time - last_update if last_update > 0 else float('inf')
 
             data_status = "fresh" if data_age < 60 else "stale" if data_age < 300 else "very_stale"
 
@@ -276,19 +275,25 @@ class BTCUSDCTradingIntegration:
             else:
                 overall_status = "error"
 
-            return {1}
+            return {
+                "overall_status": overall_status,
+                "executor_status": executor_status,
+                "balancer_status": balancer_status,
+                "data_status": data_status,
+                "data_age_seconds": data_age,
+            }
 
         except Exception as e:
-            logger.error("Error getting system status: {1}".format(e))
-            return {2}
+            logger.error(f"Error getting system status: {e}")
+            return {"overall_status": "error", "reason": str(e)}
 
     async def _analyze_market_conditions(self) -> Dict[str, Any]:
         """Analyze current market conditions."""
         try:
-            analysis = {3}
+            analysis = {}
 
             # Get current price and volume
-            btc_data = self.market_data_cache.get("BTC", {3})
+            btc_data = self.market_data_cache.get("BTC", {})
             current_price = btc_data.get("price", 0)
             volume_24h = btc_data.get("volume", 0)
 
@@ -296,7 +301,7 @@ class BTCUSDCTradingIntegration:
             volume_sufficient = volume_24h >= self.config.volume_threshold
 
             # Analyze order book
-            order_book = self.order_book_cache.get("BTC/USDC", {3})
+            order_book = self.order_book_cache.get("BTC/USDC", {})
             spread = self._calculate_spread(order_book)
             spread_acceptable = spread <= self.config.spread_threshold
 
@@ -304,14 +309,20 @@ class BTCUSDCTradingIntegration:
             volatility = self._calculate_volatility()
 
             analysis.update(
-                {6}
+                {
+                    "market_ready": volume_sufficient and spread_acceptable,
+                    "current_price": current_price,
+                    "volume_24h": volume_24h,
+                    "spread": spread,
+                    "volatility": volatility,
+                }
             )
 
             return analysis
 
         except Exception as e:
-            logger.error("Error analyzing market conditions: {1}".format(e))
-            return {8}
+            logger.error(f"Error analyzing market conditions: {e}")
+            return {"market_ready": False, "reason": str(e)}
 
     async def _check_phantom_signals(self) -> Optional[Dict[str, Any]]:
         """Check Phantom Math signals for BTC."""
@@ -338,10 +349,15 @@ class BTCUSDCTradingIntegration:
                     signal_strength = min(1.0, 1.0 - avg_potential)
                     signal_direction = "sell"
 
-            return {9}
+            return {
+                "signal_strength": signal_strength,
+                "signal_direction": signal_direction,
+                "avg_entropy": avg_entropy,
+                "avg_potential": avg_potential,
+            }
 
         except Exception as e:
-            logger.error("Error checking Phantom signals: {1}".format(e))
+            logger.error(f"Error checking Phantom signals: {e}")
             return None
 
     async def _check_portfolio_balancing(self) -> Optional[Dict[str, Any]]:
@@ -361,12 +377,17 @@ class BTCUSDCTradingIntegration:
                 btc_decision = next((d for d in decisions if d.symbol == "BTC/USDC"), None)
 
                 if btc_decision:
-                    return {11}
+                    return {
+                        "needs_rebalancing": True,
+                        "action": btc_decision.action,
+                        "quantity": btc_decision.quantity,
+                        "confidence": btc_decision.confidence,
+                    }
 
-            return {12}
+            return {"needs_rebalancing": False}
 
         except Exception as e:
-            logger.error("Error checking portfolio balancing: {1}".format(e))
+            logger.error(f"Error checking portfolio balancing: {e}")
             return None
 
     async def _generate_trading_decision(
@@ -421,7 +442,12 @@ class BTCUSDCTradingIntegration:
                 strategy_branch="btc_usdc_integration",
                 profit_potential=self.config.take_profit_pct,
                 risk_score=self.config.stop_loss_pct,
-                metadata={14},
+                metadata={
+                    "market_analysis": market_analysis,
+                    "phantom_signal": phantom_signal,
+                    "portfolio_signal": portfolio_signal,
+                    "position_size": self.current_position,
+                },
             )
 
             return decision
@@ -483,7 +509,7 @@ class BTCUSDCTradingIntegration:
         portfolio_value = float(self.portfolio_balancer.portfolio_state.total_value)
         max_position_value = portfolio_value * self.config.max_position_size_pct
 
-        current_price = self.market_data_cache.get("BTC", {3}).get("price", 1)
+        current_price = self.market_data_cache.get("BTC", {}).get("price", 1)
         return max_position_value / current_price if current_price > 0 else 0
 
     def _calculate_spread(self, order_book: Dict[str, Any]) -> float:
@@ -493,52 +519,20 @@ class BTCUSDCTradingIntegration:
             asks = order_book.get("asks", [])
 
             if not bids or not asks:
-                return float(".format(
-                "status": overall_status,
-                "executor_status": executor_status,
-                "balancer_status": balancer_status,
-                "data_status": data_status,
-                "data_age_seconds": data_age,
-                "current_position": self.current_position,
-                "daily_trades": self.daily_trades,
-                "market_data_cache_size": len(self.market_data_cache),
-                "order_book_cache_size": len(self.order_book_cache),
-            , 0, "status": "error", "error": str(e), , , , 
-                    "current_price": current_price,
-                    "volume_sufficient": volume_sufficient,
-                    "spread_acceptable": spread_acceptable,
-                    "volatility": volatility,
-                    "market_ready": volume_sufficient and spread_acceptable,
-                , 0, "market_ready": False, 
-                "signal_strength": signal_strength,
-                "signal_direction": signal_direction,
-                "avg_entropy": avg_entropy,
-                "avg_potential": avg_potential,
-                "zones_count": len(recent_zones),
-            , 0, 
-                        "needs_rebalancing": True,
-                        "action": btc_decision.action,
-                        "quantity": btc_decision.quantity,
-                        "confidence": btc_decision.confidence,
-                    , "needs_rebalancing": False, 0, 
-                    "market_analysis": market_analysis,
-                    "phantom_signal": phantom_signal,
-                    "portfolio_signal": portfolio_signal,
-                    "position_size": self.current_position,
-                , 0, 0, )inf')
+                return float('inf')
 
             best_bid = bids[0][0] if bids else 0
             best_ask = asks[0][0] if asks else 0
 
             if best_bid <= 0 or best_ask <= 0:
-                return float('in")
+                return float('inf')
 
             spread = (best_ask - best_bid) / best_bid
             return spread
 
         except Exception as e:
             logger.error("Error calculating spread: {0}".format(e))
-            return float(".format(0)in")
+            return float('inf')
 
     def _calculate_volatility(self) -> float:
         """Calculate price volatility."""
@@ -561,50 +555,34 @@ class BTCUSDCTradingIntegration:
             return 0.0
 
     async def _update_position(self, decision: TradingDecision) -> None:
-        """Update current position after trade."""
-        try:
-            if decision.action == TradingAction.BUY:
-                self.current_position += decision.quantity
-                if self.position_entry_price == 0:
-                    self.position_entry_price = decision.price
-            elif decision.action == TradingAction.SELL:
-                self.current_position -= decision.quantity
-                if self.current_position == 0:
-                    self.position_entry_price = 0
-
-            self.daily_trades += 1
-            self.last_trade_time = time.time()
-
-        except Exception as e:
-            logger.error("Error updating position: {1}".format(e))
+        """Update current position based on trade decision."""
+        if decision.action == TradingAction.BUY:
+            self.current_position += decision.quantity
+        elif decision.action == TradingAction.SELL:
+            self.current_position -= decision.quantity
 
     async def _check_and_execute_rebalancing(self) -> None:
-        """Check and execute portfolio rebalancing."""
-        try:
-            if await self.portfolio_balancer.check_rebalancing_needs():
-                decisions = await self.portfolio_balancer.generate_rebalancing_decisions(self.market_data_cache)
-
-                if decisions:
-                    await self.portfolio_balancer.execute_rebalancing(decisions)
-
-        except Exception as e:
-            logger.error("Error in portfolio rebalancing: {1}".format(e))
+        """Check for rebalancing needs and execute if necessary."""
+        rebalancing_signal = await self._check_portfolio_balancing()
+        if rebalancing_signal and rebalancing_signal.get("needs_rebalancing"):
+            decision = TradingDecision(
+                timestamp=time.time(),
+                symbol="BTC/USDC",
+                action=rebalancing_signal["action"],
+                quantity=rebalancing_signal["quantity"],
+                price=self.market_data_cache.get("BTC", {}).get("price", 0),
+                confidence=rebalancing_signal["confidence"],
+                strategy_branch="portfolio_rebalancing",
+                profit_potential=0,
+                risk_score=0,
+                metadata={"type": "rebalancing"},
+            )
+            await self.execute_trade(decision)
 
     def _log_trade(self, decision: TradingDecision) -> None:
         """Log trade for performance tracking."""
         try:
-            trade_record = {3}
-
-            self.trade_history.append(trade_record)
-
-        except Exception as e:
-            logger.error("Error logging trade: {1}".format(e))
-
-    async def _update_market_data(self) -> None:
-        """Update market data from exchange."""
-        try:
-            # This would fetch real market data from your exchange
-            # For now, we".format(0, 0, 0, 
+            trade_record = {
                 "timestamp": decision.timestamp,
                 "symbol": decision.symbol,
                 "action": decision.action.value,
@@ -612,11 +590,20 @@ class BTCUSDCTradingIntegration:
                 "price": decision.price,
                 "confidence": decision.confidence,
                 "position_size": self.current_position,
-            , 0)ll use placeholder data
-            self.market_data_cache["BTC"] = {"price": 50000.0, "volume": 2000000, "timestamp": time.time()}
-
+            }
+            self.trade_history.append(trade_record)
+            self.daily_trades += 1
         except Exception as e:
-            logger.error("Error updating market data: {0}".format(e))
+            logger.error(f"Error logging trade: {e}")
+
+    async def _update_market_data(self) -> None:
+        """Fetch and update market data (placeholder)."""
+        try:
+            # This would fetch real market data from your exchange
+            # For now, we will use placeholder data
+            self.market_data_cache["BTC"] = {"price": 50000.0, "volume": 2000000, "timestamp": time.time()}
+        except Exception as e:
+            logger.error(f"Error updating market data: {e}")
 
     async def get_performance_metrics(self) -> Dict[str, Any]:
         """Get trading performance metrics."""

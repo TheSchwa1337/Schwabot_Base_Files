@@ -1,15 +1,13 @@
 import logging
 import math
+import os
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Tuple, Union, Optional
-    import torch
-    import torch.nn as nn
-    import torch.optim as optim
-    import torch.nn.functional as F
-    import cupy as cp
-            import os
-            import os
-
+import torch
+import torch.nn as nn
+import torch.optim as optim
+import torch.nn.functional as F
+import cupy as cp
 import numpy as np
 
 #!/usr/bin/env python3
@@ -44,9 +42,9 @@ except ImportError:
 
 logger = logging.getLogger(__name__)
 if USING_CUDA:
-    logger.info("⚡ Neural Processing Engine using GPU acceleration: {0}".format(_backend))
+    logger.info("⚡ Neural Processing Engine using GPU acceleration: {}".format(_backend))
 else:
-    logger.info("🔄 Neural Processing Engine using CPU fallback: {0}".format(_backend))
+    logger.info("🔄 Neural Processing Engine using CPU fallback: {}".format(_backend))
 
 
 @dataclass
@@ -666,7 +664,7 @@ class NeuralProcessingEngine:
                 training_metrics.append(metrics)
 
                 if epoch % 10 == 0:
-                    logger.info("Epoch {0}: Loss={1}, Accuracy={2}".format(epoch, avg_loss:.4f, accuracy:.4f))
+                    logger.info(f"Epoch {epoch}: Loss={avg_loss:.4f}, Accuracy={accuracy:.4f}")
 
             # Store training history
             self.training_history[model_name] = training_metrics
@@ -736,7 +734,7 @@ class NeuralProcessingEngine:
                 'profit_multiplier': profit_multiplier,
             }
 
-            logger.info("Neural profit optimization: {0}, Action: {1}".format(optimized_profit:.6f, rl_action['action_name']))
+            logger.info(f"Neural profit optimization: {optimized_profit:.6f}, Action: {rl_action['action_name']}")
             return result
 
         except Exception as e:

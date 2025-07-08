@@ -4,11 +4,12 @@ import time
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
-    import cupy as cp
+
+import cupy as cp
+import numpy as np
+
 from .clean_math_foundation import BitPhase, CleanMathFoundation, ThermalState
 from .zpe_zbe_core import QuantumSyncStatus, ZBEBalance, ZPEVector
-
-    import numpy as np
 
 #!/usr/bin/env python3
 """
@@ -202,7 +203,7 @@ class ChronoRecursiveLogicFunction:
             # Update performance metrics
             self._update_performance_metrics(response)
 
-            logger.debug("CRLF computed: {0} -> {1}".format(crlf_output:.4f, trigger_state.value))
+            logger.debug("CRLF computed: {0:.4f} -> {1}".format(crlf_output, trigger_state.value))
 
             return response
 
@@ -578,9 +579,9 @@ if __name__ == "__main__":
 
     response = crlf.compute_crlf(strategy_vector, profit_curve, market_entropy)
 
-    print("CRLF Output: {0}".format(response.crlf_output:.4f))
+    print("CRLF Output: {0:.4f}".format(response.crlf_output))
     print("Trigger State: {0}".format(response.trigger_state.value))
-    print("Confidence: {0}".format(response.confidence:.3f))
+    print("Confidence: {0:.3f}".format(response.confidence))
     print("Recommendations: {0}".format(response.recommendations))
 
     # Get performance summary

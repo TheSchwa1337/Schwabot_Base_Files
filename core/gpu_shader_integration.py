@@ -3,9 +3,9 @@ import os
 import time
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Tuple, Union
-    from OpenGL.GL import *
-    from OpenGL.GL.shaders import *
-    import pygame
+from OpenGL.GL import *
+from OpenGL.GL.shaders import *
+import pygame
 from .system_state_profiler import get_system_profile, SystemProfile
 from .gpu_dna_autodetect import detect_gpu_dna, get_gpu_shader_config, get_cosine_similarity_config, ShaderConfig
 
@@ -99,7 +99,7 @@ class GPUShaderIntegration:
             init_time = time.time() - start_time
             self.performance_metrics["gpu_init_time"] = init_time
 
-            logger.info("✅ GPU Shader Integration Initialized in {0}s".format(init_time:.2f))
+            logger.info(f"✅ GPU Shader Integration Initialized in {init_time:.2f}s")
             logger.info("🔧 System: {0}".format(self.system_profile.device_type))
             logger.info("🎮 GPU: {0}".format(self.system_profile.gpu.renderer))
             logger.info("📊 Matrix Size: {0}x{0}".format(self.shader_config.matrix_size, self.shader_config.matrix_size))
@@ -184,7 +184,7 @@ class GPUShaderIntegration:
             compile_time = time.time() - start_time
             self.performance_metrics["shader_compile_time"] = compile_time
 
-            logger.info("✅ Shaders compiled successfully in {0}s".format(compile_time:.2f))
+            logger.info(f"✅ Shaders compiled successfully in {compile_time:.2f}s")
             logger.info("🔧 Precision: {0}".format(self.cosine_shader_program.precision_mode))
             logger.info("🌊 Morphing: {0}".format('Enabled' if self.cosine_shader_program.morphing_enabled else 'Disabled'))
 
@@ -297,7 +297,7 @@ class GPUShaderIntegration:
                 + execution_time
             ) / self.performance_metrics["operations_count"]
 
-            logger.debug("🔥 GPU cosine similarity computed in {0}s".format(execution_time:.3f))
+            logger.debug(f"🔥 GPU cosine similarity computed in {execution_time:.3f}s")
 
             return similarities
 
@@ -432,7 +432,7 @@ class GPUShaderIntegration:
 
     def _compute_cpu_fallback(self, tick_vector: np.ndarray, strategy_vectors: np.ndarray) -> np.ndarray:
         """CPU fallback for cosine similarity computation."""
-        logger.debug("🔄 Using CPU fallback for cosine similarity")
+        logger.debug("�� Using CPU fallback for cosine similarity")
 
         # Normalize vectors
         tick_norm = np.linalg.norm(tick_vector)

@@ -7,14 +7,13 @@ import threading
 import json
 from datetime import datetime
 import hashlib
-    from .quantum_mathematical_bridge import QuantumMathematicalBridge, QuantumState
-    from .neural_processing_engine import NeuralProcessingEngine, NeuralPrediction
-    from .distributed_mathematical_processor import DistributedMathematicalProcessor
-    from .enhanced_error_recovery_system import EnhancedErrorRecoverySystem
-    from .unified_profit_vectorization_system import UnifiedProfitVectorizationSystem
-    from .ghost_core import GhostCore, StrategyBranch
-
 import numpy as np
+from .quantum_mathematical_bridge import QuantumMathematicalBridge, QuantumState
+from .neural_processing_engine import NeuralProcessingEngine, NeuralPrediction
+from .distributed_mathematical_processor import DistributedMathematicalProcessor
+from .enhanced_error_recovery_system import EnhancedErrorRecoverySystem
+from .unified_profit_vectorization_system import UnifiedProfitVectorizationSystem
+from .ghost_core import GhostCore, StrategyBranch
 
 #!/usr/bin/env python3
 """
@@ -418,7 +417,7 @@ class OrbitalBRAINSystem:
             transfer_amount = allocation * ratio
             from_state.asset_allocation[asset] -= transfer_amount
             to_state.asset_allocation[asset] = to_state.asset_allocation.get(asset, 0.0) + transfer_amount
-        logger.info("🔄 Transferred {0} from {1} to {2}".format(ratio:.1%, from_shell.name, to_shell.name))
+        logger.info("🔄 Transferred {:.1%} from {} to {}".format(ratio, from_shell.name, to_shell.name))
 
     def encode_shell_dna(self, shell: OrbitalShell) -> str:
         """Encode Shell DNA Vector: Dₛ = hash(ℳₛ + strategy_id + asset_vector)"""
@@ -471,9 +470,11 @@ class OrbitalBRAINSystem:
                     0.02, self.current_altitude_vector, self.current_shell_consensus
                 )
                 logger.info(
-                    "Consensus: {0}, ".format(self.current_shell_consensus.consensus_score:.3f)
-                    "Altitude: {0}, ".format(self.current_altitude_vector.altitude_value:.3f)
-                    "Bucket: {0}".format(bucket.bucket_id)
+                    "Consensus: {:.3f}, Altitude: {:.3f}, Bucket: {}".format(
+                        self.current_shell_consensus.consensus_score,
+                        self.current_altitude_vector.altitude_value,
+                        bucket.bucket_id
+                    )
                 )
             time.sleep(self.config['rotation_interval'])
 

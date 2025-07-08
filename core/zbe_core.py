@@ -4,11 +4,9 @@ import time
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
-    import cupy as cp
-
-    import numpy as np
-
-    from core.clean_unified_math import clean_unified_math as unified_math
+import cupy as cp
+import numpy as np
+from core.clean_unified_math import clean_unified_math as unified_math
 
 #!/usr/bin/env python3
 """
@@ -31,6 +29,7 @@ except ImportError:
 
 # Import clean math system
 try:
+    from core.clean_unified_math import clean_unified_math as unified_math
 except ImportError:
     # Fallback for testing
     class unified_math:
@@ -253,7 +252,7 @@ class ZBECore:
             if len(self.bit_history) > 1000:
                 self.bit_history = self.bit_history[-1000:]
 
-            self.logger.debug("Bit efficiency: {0}".format(bit_efficiency:.6f))
+            self.logger.debug("Bit efficiency: {:.6f}".format(bit_efficiency))
             return bit_data
 
         except Exception as e:
@@ -340,7 +339,7 @@ class ZBECore:
             if len(self.memory_history) > 1000:
                 self.memory_history = self.memory_history[-1000:]
 
-            self.logger.debug("Memory efficiency: {0}".format(memory_efficiency:.6f))
+            self.logger.debug("Memory efficiency: {:.6f}".format(memory_efficiency))
             return memory_data
 
         except Exception as e:
@@ -410,8 +409,7 @@ class ZBECore:
                 self.average_efficiency = np.mean([data.bit_efficiency for data in self.bit_history[-100:]])
 
             self.logger.debug(
-                "Computational optimization: {0}".format(
-                    overall_optimization:.3f)
+                "Computational optimization: {:.3f}".format(overall_optimization)
             )
             return optimization_factors
 
@@ -575,31 +573,32 @@ def test_zbe_core():
 
     # Test bit efficiency
     bit_data = core.calculate_bit_efficiency(0.5, 0.6, 0.7, 0.8)
-    print("Bit Efficiency: {0}".format(bit_data.bit_efficiency:.6f))
+    print("Bit Efficiency: {:.6f}".format(bit_data.bit_efficiency))
 
     # Test memory efficiency
     memory_data = core.calculate_memory_efficiency(0.4, 1000.0, 0.002, 0.7)
     if memory_data:
-        print("Memory Efficiency: {0}".format(memory_data.memory_efficiency:.6f))
+        print("Memory Efficiency: {:.6f}".format(memory_data.memory_efficiency))
 
     # Test computational optimization
     optimization_factors = core.get_computational_optimization()
     print(
-        "Overall Optimization: {0}".format(
-            optimization_factors['overall_optimization']:.3f)
+        "Overall Optimization: {:.3f}".format(
+            optimization_factors['overall_optimization']
+        )
     )
 
     # Test bit throughput
     throughput = core.calculate_bit_throughput(0.5)
-    print("Bit Throughput: {0} bits/s".format(throughput:.0f))
+    print("Bit Throughput: {:.0f} bits/s".format(throughput))
 
     # Test cache efficiency
     cache_efficiency = core.calculate_cache_efficiency(0.7, 1000.0)
-    print("Cache Efficiency: {0}".format(cache_efficiency:.6f))
+    print("Cache Efficiency: {:.6f}".format(cache_efficiency))
 
     # Test register utilization
     register_utilization = core.calculate_register_utilization(0.9)
-    print("Register Utilization: {0}".format(register_utilization:.6f))
+    print("Register Utilization: {:.6f}".format(register_utilization))
 
     # Test current state
     state = core.get_current_state()

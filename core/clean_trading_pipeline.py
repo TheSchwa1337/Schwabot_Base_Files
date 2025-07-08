@@ -2,12 +2,23 @@ import asyncio
 import logging
 import time
 import uuid
+import json
+import os
 from dataclasses import dataclass, field
 from decimal import Decimal
 from enum import Enum
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple, Union
+
+import numpy as np
+
 from .chrono_recursive_logic_function import (
+    ChronoRecursiveLogicFunction,
+    CRLFResponse,
+    CRLFState,
+    CRLFTriggerState,
+    create_crlf,
+)
 from .clean_math_foundation import BitPhase, CleanMathFoundation, ThermalState
 from .clean_profit_vectorization import CleanProfitVectorization, ProfitVector, VectorizationMode
 from .phase_bit_integration import phase_bit_integration
@@ -15,12 +26,21 @@ from .portfolio_tracker import PortfolioTracker
 from .soulprint_registry import SoulprintRegistry
 from .strategy_bit_mapper import ExpansionMode, StrategyBitMapper
 from .unified_market_data_pipeline import (
+    MarketDataPacket,
+    UnifiedMarketDataPipeline,
+    create_unified_pipeline,
+)
 from .unified_math_system import UnifiedMathSystem, create_unified_math_system
 from .zpe_zbe_core import (
-        import json
-        import os
-
-import numpy as np
+    QuantumPerformanceEntry,
+    QuantumPerformanceRegistry,
+    QuantumSyncStatus,
+    ZBEBalance,
+    ZPEVector,
+    ZPEZBECore,
+    ZPEZBEPerformanceTracker,
+    create_zpe_zbe_core,
+)
 from .ccxt_trading_executor import CCXTTradingExecutor, IntegratedTradingSignal, TradingPair
 
 # -*- coding: utf-8 -*-
@@ -31,26 +51,6 @@ This module provides a clean, working implementation of the unified trading
 pipeline that integrates all components while maintaining proper code structure
 and error handling.
 """
-
-    ChronoRecursiveLogicFunction,
-    CRLFResponse,
-    CRLFState,
-    CRLFTriggerState,
-    create_crlf,
-)
-    MarketDataPacket,
-    UnifiedMarketDataPipeline,
-    create_unified_pipeline,
-)
-    QuantumPerformanceEntry,
-    QuantumPerformanceRegistry,
-    QuantumSyncStatus,
-    ZBEBalance,
-    ZPEVector,
-    ZPEZBECore,
-    ZPEZBEPerformanceTracker,
-    create_zpe_zbe_core,
-)
 
 logger = logging.getLogger(__name__)
 
@@ -669,14 +669,14 @@ class CleanTradingPipeline:
         if confidence >= min_confidence:
             if signal_strength > 0.5:
                 action = "buy"
-                reason = "Strong buy signals (strength: {0}, confidence: {1})".format(
-                    signal_strength:.2f, 
-                    confidence:.2f)
+                reason = "Strong buy signals (strength: {0:.2f}, confidence: {1:.2f})".format(
+                    signal_strength, 
+                    confidence)
             elif signal_strength < -0.5:
                 action = "sell"
-                reason = "Strong sell signals (strength: {0}, confidence: {1})".format(
-                    signal_strength:.2f, 
-                    confidence:.2f)
+                reason = "Strong sell signals (strength: {0:.2f}, confidence: {1:.2f})".format(
+                    signal_strength, 
+                    confidence)
 
         return {
             "action": action,
@@ -1623,12 +1623,11 @@ class CleanTradingPipeline:
             )
 
             logger.info(
-                "Phase resolution: {0} bits, ".format(
-                    phase_resolution.bit_phase.value)
-                "strategy: {0}, ".format(
-                    phase_resolution.strategy_type.value)
-                "confidence: {0}".format(
-                    phase_resolution.confidence:.3f)
+                "Phase resolution: {0} bits, strategy: {1}, confidence: {2:.3f}".format(
+                    phase_resolution.bit_phase.value,
+                    phase_resolution.strategy_type.value,
+                    phase_resolution.confidence
+                )
             )
 
             # 2. REAL ASSET SELECTION - Get available assets from portfolio
@@ -1668,8 +1667,9 @@ class CleanTradingPipeline:
                 logger.warning("Unsupported trading pair: {0}, using default".format(selected_asset_symbol))
 
             logger.info(
-                "Ferris Wheel selected: {0} (ID: {1}, ".format(selected_asset_symbol, expanded_strategy_id)
-                "Index: {0}/{1})".format(asset_index, len(available_assets))
+                "Ferris Wheel selected: {0} (ID: {1}, Index: {2}/{3})".format(
+                    selected_asset_symbol, expanded_strategy_id, asset_index, len(available_assets)
+                )
             )
 
             # 4. DUALISTIC STATE ANALYSIS - Determine current market state and
@@ -1726,19 +1726,18 @@ class CleanTradingPipeline:
                 )
 
                 logger.info(
-                    "Generated signal: {0} {1} {2} ".format(
-                        signal.recommended_action, quantity, selected_asset_symbol)
-                    "(Confidence: {0}, Profit: {1})".format(
-                        signal.confidence_score, 
-                        signal.profit_potential)
+                    "Generated signal: {0} {1} {2} (Confidence: {3}, Profit: {4})".format(
+                        signal.recommended_action, quantity, selected_asset_symbol,
+                        signal.confidence_score, signal.profit_potential
+                    )
                 )
 
                 return signal, selected_asset_symbol
             else:
                 logger.info(
-                    "No trade recommended for {0} ".format(selected_asset_symbol)
-                    "(Action: {0}, Quantity: {1})".format(
-                        decision_data['action'], quantity)
+                    "No trade recommended for {0} (Action: {1}, Quantity: {2})".format(
+                        selected_asset_symbol, decision_data['action'], quantity
+                    )
                 )
                 return None, selected_asset_symbol
 

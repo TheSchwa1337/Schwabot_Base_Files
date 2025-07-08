@@ -55,9 +55,8 @@ class ProfitMemoryEcho:
             "average_projection_confidence": 0.0,
         }
 
-
-logger.info(
-    "ProfitMemoryEcho initialized with offset={0}, scalar={1}".format(memory_offset, volatility_scalar))
+        logger.info(
+            "ProfitMemoryEcho initialized with offset={0}, scalar={1}".format(memory_offset, volatility_scalar))
 
     def store_lattice_state(self, tick_id: int, lattice_value: float, profit_change: float,
                            metadata: Dict[str, Any] = None) -> None:
@@ -250,8 +249,7 @@ logger.info(
         if new_volatility_scalar is not None:
             self.volatility_scalar = new_volatility_scalar
 
-logger.info("Profit Memory Echo parameters updated: offset={0},
-scalar={1}".format(self.memory_offset, self.volatility_scalar))
+        logger.info("Profit Memory Echo parameters updated: offset={0}, scalar={1}".format(self.memory_offset, self.volatility_scalar))
 
     def reset(self) -> None:
         """Resets the memory echo's history and metrics."""

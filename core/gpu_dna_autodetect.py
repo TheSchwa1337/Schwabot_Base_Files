@@ -4,9 +4,9 @@ import os
 import time
 from dataclasses import dataclass
 from typing import Any, Dict, Optional, Tuple
-    from OpenGL.GL import *
-    from OpenGL.GL.shaders import *
-    import pygame
+from OpenGL.GL import *
+from OpenGL.GL.shaders import *
+import pygame
 from .system_state_profiler import SystemStateProfiler, GPUTier, GPUProfile, get_system_profile
 
 #!/usr/bin/env python3
@@ -182,7 +182,7 @@ class GPUDNAAutoDetect:
         logger.info(f"✅ GPU DNA Detection Complete")
         logger.info("🎮 GPU: {0} ({1})".format(gpu_profile.renderer, gpu_profile.gpu_tier.value))
         logger.info("📊 Matrix Size: {0}x{0}".format(self.shader_config.matrix_size, self.shader_config.matrix_size))
-        logger.info("⚡ Performance Multiplier: {0}x".format(self.shader_config.performance_multiplier))
+        logger.info(f"⚡ Performance Multiplier: {self.shader_config.performance_multiplier}x")
         logger.info("🔧 Shader Morph: {0}".format('Enabled' if self.shader_config.shader_morph_enabled else 'Disabled'))
 
         return dna_profile

@@ -3,10 +3,8 @@ import math
 import logging
 from collections import Counter
 from typing import Iterable, Sequence, Union
-    import cupy as cp
-
-    import numpy as np
-        import numpy as np
+import cupy as cp
+import numpy as np
 
 #!/usr/bin/env python3
 """Entropy Math 📊
@@ -40,9 +38,9 @@ except ImportError:
 
 logger = logging.getLogger(__name__)
 if USING_CUDA:
-    logger.info("⚡ EntropyMath using GPU acceleration: {0}".format(_backend))
+    logger.info("⚡ EntropyMath using GPU acceleration: {}".format(_backend))
 else:
-    logger.info("🔄 EntropyMath using CPU fallback: {0}".format(_backend))
+    logger.info("🔄 EntropyMath using CPU fallback: {}".format(_backend))
 
 Number = Union[int, float]
 
