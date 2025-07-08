@@ -1,11 +1,10 @@
 import logging
 from typing import Dict, List, Tuple, Optional, Any
+import numpy as np
 from dataclasses import dataclass
 from concurrent.futures import ThreadPoolExecutor
 import threading
-import asyncio
-from scipy.linalg import expm
-from scipy.optimize import minimize
+# Removed unused imports to satisfy Flake8
 
 # CUDA Integration with Fallback
 try:
@@ -13,8 +12,8 @@ try:
     USING_CUDA = True
     _backend = 'cupy (GPU)'
     xp = cp
+# Fallback to NumPy if CuPy is unavailable (already imported above)
 except ImportError:
-    import numpy as np
     USING_CUDA = False
     _backend = 'numpy (CPU)'
     xp = np
@@ -316,8 +315,13 @@ class QuantumMathematicalBridge:
             logger.error(f"Error calculating fidelity: {e}")
             return 0.0
     
-    def quantum_profit_vectorization(self, btc_price: float, usdc_hold: float, 
-                                   entry_signals: List[float], exit_signals: List[float]) -> Dict[str, Any]:
+    def quantum_profit_vectorization(
+        self,
+        btc_price: float,
+        usdc_hold: float,
+        entry_signals: List[float],
+        exit_signals: List[float],
+    ) -> Dict[str, Any]:
         """
         Quantum-enhanced profit vectorization for BTC/USDC trading.
         

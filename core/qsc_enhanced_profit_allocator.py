@@ -3,8 +3,8 @@ from enum import Enum
 from dataclasses import dataclass, field
 import time
 from typing import Dict, Any, List, Optional
-            from .quantum_static_core import QuantumStaticCore
-            from .galileo_tensor_bridge import GalileoTensorBridge
+from .quantum_static_core import QuantumStaticCore
+from .galileo_tensor_bridge import GalileoTensorBridge
 
 # !/usr/bin/env python3
 """

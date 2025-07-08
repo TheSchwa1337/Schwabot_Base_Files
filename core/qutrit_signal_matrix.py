@@ -224,9 +224,9 @@ class QutritSignalMatrix:
         confidence = self.calculate_confidence()
 
         descriptions = {
-            QutritState.DEFER: "DEFER (confidence: {0}) - Hold position, wait for better signal".format(confidence:.3f),
-            QutritState.EXECUTE: "EXECUTE (confidence: {0}) - Execute trade with current signal".format(confidence:.3f),
-            QutritState.RECHECK: "RECHECK (confidence: {0}) - Re-evaluate market conditions".format(confidence:.3f),
+            QutritState.DEFER: f"DEFER (confidence: {confidence:.3f}) - Hold position, wait for better signal",
+            QutritState.EXECUTE: f"EXECUTE (confidence: {confidence:.3f}) - Execute trade with current signal",
+            QutritState.RECHECK: f"RECHECK (confidence: {confidence:.3f}) - Re-evaluate market conditions",
         }
 
         return descriptions.get(state, "UNKNOWN STATE")
@@ -260,7 +260,7 @@ def test_qutrit_matrix():
     print("Seed: {0}".format(seed))
     print("Matrix:\n{0}".format(qutrit_matrix.get_matrix()))
     print("State: {0}".format(qutrit_matrix.get_state_decision()))
-    print("Confidence: {0}".format(qutrit_matrix.calculate_confidence():.3f))
+    print(f"Confidence: {qutrit_matrix.calculate_confidence():.3f}")
     print("Description: {0}".format(qutrit_matrix.get_state_description()))
 
     # Test volatility overlay
@@ -272,7 +272,7 @@ def test_qutrit_matrix():
     print(f"\nComplete Result:")
     print("  Hash Segment: {0}".format(result.hash_segment))
     print("  State: {0}".format(result.state))
-    print("  Confidence: {0}".format(result.confidence:.3f))
+    print(f"  Confidence: {result.confidence:.3f}")
 
 
 if __name__ == "__main__":

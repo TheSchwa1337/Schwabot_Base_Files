@@ -204,10 +204,11 @@ class QuadBitStrategyArray:
         logger.info("Tensor baskets initialized")
 
 
-def calculate_4bit_strategy(self,
-    pair: TradingPair,
-    market_data: Dict[str,
-     Any]) -> DriftSequence:
+    def calculate_4bit_strategy(
+        self,
+        pair: TradingPair,
+        market_data: Dict[str, Any],
+    ) -> DriftSequence:
         """Calculate 4-bit strategy based on market conditions."""
         # Bit 0: Entry/Exit timing (based on price momentum)
         momentum = self._calculate_momentum(market_data)
@@ -279,45 +280,6 @@ def calculate_4bit_strategy(self,
 
         return (volume_score + rsi_score) / 2
 
-    async def execute_strategy(self, pair_str: str, market_data: Dict[str, Any]) -> TradingDecision:
-        """Execute strategy for a specific trading pair."""
-        # Convert string to TradingPair enum
-        pair_mapping = {
-            'BTC/USDC': TradingPair.BTC_USDC,
-            'ETH/USDC': TradingPair.ETH_USDC,
-            'SOL/USDC': TradingPair.SOL_USDC,
-            'XRP/USDC': TradingPair.XRP_USDC
-        }
-
-        if pair_str not in pair_mapping:
-            raise ValueError("Invalid trading pair: {0}".format(pair_str))
-
-        pair = pair_mapping[pair_str]
-
-        # Calculate 4-bit strategy
-        sequence = self.calculate_4bit_strategy(pair, market_data)
-        self.state.active_sequence = sequence
-
-        # Get strategy parameters based on sequence
-        params = self._get_sequence_parameters(sequence)
-
-        # Special BTC treatment
-        if pair == TradingPair.BTC_USDC:
-            params = self._apply_btc_special_treatment(params, market_data)
-
-        # Generate trading decision
-        decision = self._generate_trading_decision(pair, market_data, params)
-
-        # Update state
-        self.state.update_pair_state(pair, {
-            'sequence': sequence,
-            'params': params,
-            'decision': decision,
-            'market_data': market_data
-        })
-
-        return decision
-
     def _get_sequence_parameters(self, sequence: DriftSequence) -> Dict[str, Any]:
         """Get strategy parameters for a specific sequence."""
         # Extract bits from sequence
@@ -338,8 +300,11 @@ def calculate_4bit_strategy(self,
 
         return params
 
-def _apply_btc_special_treatment(self, params: Dict[str, Any], market_data: Dict[str, Any]) ->
-Dict[str, Any]:
+    def _apply_btc_special_treatment(
+        self,
+        params: Dict[str, Any],
+        market_data: Dict[str, Any],
+    ) -> Dict[str, Any]:
         """Apply special treatment for BTC/USDC."""
         # BTC gets more conservative treatment
         params['stop_loss_pct'] *= 0.8  # 20% tighter stop loss
@@ -352,8 +317,12 @@ Dict[str, Any]:
 
         return params
 
-def _generate_trading_decision(self, pair: TradingPair, market_data: Dict[str, Any], params:
-Dict[str, Any]) -> TradingDecision:
+    def _generate_trading_decision(
+        self,
+        pair: TradingPair,
+        market_data: Dict[str, Any],
+        params: Dict[str, Any],
+    ) -> TradingDecision:
         """Generate trading decision based on strategy parameters."""
         current_price = market_data.get('current_price', 0)
         if current_price == 0:
@@ -418,6 +387,45 @@ Dict[str, Any]) -> TradingDecision:
 
         return size
 
+    async def execute_strategy(self, pair_str: str, market_data: Dict[str, Any]) -> TradingDecision:
+        """Execute strategy for a specific trading pair."""
+        # Convert string to TradingPair enum
+        pair_mapping = {
+            'BTC/USDC': TradingPair.BTC_USDC,
+            'ETH/USDC': TradingPair.ETH_USDC,
+            'SOL/USDC': TradingPair.SOL_USDC,
+            'XRP/USDC': TradingPair.XRP_USDC
+        }
+
+        if pair_str not in pair_mapping:
+            raise ValueError("Invalid trading pair: {0}".format(pair_str))
+
+        pair = pair_mapping[pair_str]
+
+        # Calculate 4-bit strategy
+        sequence = self.calculate_4bit_strategy(pair, market_data)
+        self.state.active_sequence = sequence
+
+        # Get strategy parameters based on sequence
+        params = self._get_sequence_parameters(sequence)
+
+        # Special BTC treatment
+        if pair == TradingPair.BTC_USDC:
+            params = self._apply_btc_special_treatment(params, market_data)
+
+        # Generate trading decision
+        decision = self._generate_trading_decision(pair, market_data, params)
+
+        # Update state
+        self.state.update_pair_state(pair, {
+            'sequence': sequence,
+            'params': params,
+            'decision': decision,
+            'market_data': market_data
+        })
+
+        return decision
+
     async def execute_basket_rebalancing(self) -> List[TradingDecision]:
         """Execute basket rebalancing across all pairs."""
         decisions = []
@@ -458,8 +466,12 @@ Dict[str, Any]) -> TradingDecision:
             logger.error("Error getting market data for {0}: {1}".format(pair, e))
             return None
 
-async def _generate_rebalancing_decision(self, pair: TradingPair, asset: AssetProfile, market_data:
-Dict[str, Any]) -> Optional[TradingDecision]:
+    async def _generate_rebalancing_decision(
+        self,
+        pair: TradingPair,
+        asset: AssetProfile,
+        market_data: Dict[str, Any],
+    ) -> Optional[TradingDecision]:
         """Generate rebalancing decision for an asset."""
         current_price = market_data.get('current_price', 0)
         if current_price == 0:

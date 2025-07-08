@@ -7,7 +7,12 @@ import time
 import hashlib
 
 import numpy as np
-    import ccxt.async_support as ccxt
+
+try:
+    import ccxt.async_support as ccxt  # type: ignore
+except ImportError:
+    ccxt = None  # type: ignore
+    print("❌ CCXT not installed. Run: pip install ccxt")
 
 from utils.secure_config_manager import SecureConfigManager
 
@@ -18,10 +23,7 @@ Supports multiple exchanges with mathematical arbitrage detection and routing op
 Based on Schwabot's mathematical optimization framework
 """
 
-try:
-except ImportError:
-    ccxt = None
-    print("❌ CCXT not installed. Run: pip install ccxt")
+# Removed redundant placeholder try/except block
 
 logger = logging.getLogger(__name__)
 
@@ -168,7 +170,7 @@ class RealMultiExchangeTrader:
             latency = time.time() - start_time
             self.latency_cache[name] = latency
 
-            logger.info("🔗 {0} connection test passed (latency: {1}s)".format(name.upper(), latency:.3f))
+            logger.info(f"🔗 {name.upper()} connection test passed (latency: {latency:.3f}s)")
 
         except Exception as e:
             raise Exception("Connection test failed for {0}: {1}".format(name, e))
@@ -276,7 +278,9 @@ class RealMultiExchangeTrader:
         # Select exchange with highest score
         best_score = max(scores, key=lambda x: x.score)
 
-        logger.info("Selected {0} for {1} (score: {2})".format(best_score.exchange, symbol, best_score.score:.3f))
+        logger.info(
+            f"Selected {best_score.exchange} for {symbol} (score: {best_score.score:.3f})"
+        )
         return best_score.exchange
 
     async def scan_arbitrage_opportunities(self, symbols: List[str]) -> List[ArbitrageOpportunity]:
@@ -322,9 +326,8 @@ class RealMultiExchangeTrader:
                             if opportunity:
                                 opportunities.append(opportunity)
                                 logger.info(
-                                    "Arbitrage opportunity: {0} ".format(symbol)
-                                    "{0}→{1} ".format(buy_exchange, sell_exchange)
-                                    "profit: {0}".format(opportunity.profit_percentage:.2%)
+                                    f"Arbitrage opportunity: {symbol} {buy_exchange}→{sell_exchange} "
+                                    f"profit: {opportunity.profit_percentage:.2%}"
                                 )
 
             except Exception as e:
@@ -369,7 +372,9 @@ class RealMultiExchangeTrader:
             # Store in execution history
             self.execution_history.append(result)
 
-            logger.info("🚀 Arbitrage executed: {0} ".format(opportunity.symbol) "profit: ${0}".format(actual_profit:.2f))
+            logger.info(
+                f"🚀 Arbitrage executed: {opportunity.symbol} profit: ${actual_profit:.2f}"
+            )
 
             return result
 
@@ -436,8 +441,7 @@ class RealMultiExchangeTrader:
             self.execution_history.append(result)
 
             logger.info(
-                "🚀 REAL TRADE EXECUTED on {0}: ".format(exchange_name.upper())
-                "{0} {1} {2} in {3}s".format(side, amount, symbol, execution_time:.3f)
+                f"🚀 REAL TRADE EXECUTED on {exchange_name.upper()}: {side} {amount} {symbol} in {execution_time:.3f}s"
             )
 
             return result
@@ -478,7 +482,7 @@ class RealMultiExchangeTrader:
         hash(str(input_vector)) % 1024
         """
         hash_value = hash(str(input_vector)) % 1024
-        return "route_{0}".format(hash_value:04d)
+        return f"route_{hash_value:04d}"
 
     def get_performance_metrics(self) -> Dict[str, Any]:
         """Get comprehensive performance metrics."""
