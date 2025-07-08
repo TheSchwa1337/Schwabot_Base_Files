@@ -213,8 +213,8 @@ class UnifiedProfitVectorizationSystem:
             self.calculation_count += 1
 
             logger.debug(
-                "Unified profit calculation completed in {0}s".format(
-                    calculation_time:.4f))
+                "Unified profit calculation completed in {0:.4f}s".format(
+                    calculation_time))
 
             return result
 
@@ -686,8 +686,8 @@ class UnifiedProfitVectorizationSystem:
             qutrit_result = qutrit_matrix.get_matrix_result()
 
             # Log qutrit state for debugging
-            logger.debug("Qutrit state: {0} (confidence: {1})".format(
-                qutrit_result.state, qutrit_result.confidence:.3f))
+            logger.debug("Qutrit state: {0} (confidence: {1:.3f})".format(
+                qutrit_result.state, qutrit_result.confidence))
 
             # Real profit vector calc with qutrit overlay
             result = self._build_market_objects(market_data)

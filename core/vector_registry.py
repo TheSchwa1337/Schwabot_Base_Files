@@ -161,8 +161,8 @@ class VectorRegistry:
             if matches:
                 self.successful_matches += 1
 
-            logger.debug("Found {0} similar digests in {1}s".format(
-                len(matches), search_time:.4f))
+            logger.debug("Found {0} similar digests in {1:.4f}s".format(
+                len(matches), search_time))
             return matches
 
         except Exception as e:
@@ -232,8 +232,8 @@ class VectorRegistry:
             self._save_registry()
 
             logger.debug(
-                "Updated digest {0}... success_rate={1}, avg_profit={2}".format(
-                    digest_hex[:16], vector.success_rate:.3f, vector.avg_profit:.4f))
+                "Updated digest {0}... success_rate={1:.3f}, avg_profit={2:.4f}".format(
+                    digest_hex[:16], vector.success_rate, vector.avg_profit))
             return True
 
         except Exception as e:

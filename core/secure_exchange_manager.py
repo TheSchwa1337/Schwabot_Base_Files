@@ -1,15 +1,22 @@
-import os
 import logging
-import asyncio
-from typing import Dict, Optional, List, Any, Tuple
+import os
 from dataclasses import dataclass, field
-from pathlib import Path
 from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple
 
+try:
     import ccxt
-
     from utils.secure_config_manager import SecureConfigManager
     from core.fill_handler import FillHandler, create_fill_handler, FillEvent, OrderState
+    CCXT_AVAILABLE = True
+except ImportError:
+    ccxt = None
+    SecureConfigManager = None
+    FillHandler = None
+    create_fill_handler = None
+    FillEvent = None
+    OrderState = None
+    CCXT_AVAILABLE = False
 
 #!/usr/bin/env python3
 """

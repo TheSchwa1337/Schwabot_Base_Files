@@ -204,7 +204,7 @@ class SchwabotRheologyIntegration:
 
     def _generate_phase_id(self, stress: float, viscosity: float, shear_rate: float) -> str:
         """Generate a unique phase identifier for the current rheological state"""
-        state_signature = "{0}_{1}_{2}_{3}".format(stress:.3f, viscosity:.3f, shear_rate:.3f, time.time():.0f)
+        state_signature = "{0:.3f}_{1:.3f}_{2:.3f}_{3:.0f}".format(stress, viscosity, shear_rate, time.time())
         return hashlib.md5(state_signature.encode()).hexdigest()[:8]
 
     def create_rheological_tag(

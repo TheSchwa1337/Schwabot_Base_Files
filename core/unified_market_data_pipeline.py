@@ -935,8 +935,8 @@ async def demo_pipeline():
     # Get market data for Bitcoin
     btc_data = await pipeline.get_market_data("BTC")
 
-    print("BTC Price: ${0}".format(btc_data.price:,.2f))
-    print("RSI: {0}".format(btc_data.technical_indicators.rsi_14:.2f))
+    print("BTC Price: ${0:,.2f}".format(btc_data.price))
+    print("RSI: {0:.2f}".format(btc_data.technical_indicators.rsi_14))
     print("Data Quality: {0}".format(btc_data.data_quality.value))
     print("Sources Used: {0}".format(', '.join(btc_data.sources_used)))
 

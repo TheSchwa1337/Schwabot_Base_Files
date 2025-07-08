@@ -773,7 +773,7 @@ class VisualExecutionNode:
         self.canvas.create_text(
             pattern_viz.x,
             pattern_viz.y + radius + 25,
-            text="b:{0}".format(pattern_viz.burst_score:.1f),
+            text="b:{0:.1f}".format(pattern_viz.burst_score),
             fill=self.color_scheme["fg"],
             font=("Consolas", 8),
         )
@@ -801,8 +801,8 @@ Avg Entropy: {stats.get('average_entropy', 0.0):.3f}
             top_patterns = stats.get('top_patterns', [])
             for i, pattern in enumerate(top_patterns[:5], 1):
                 stats_text += "{0}. {1} {2} ".format(i, pattern.get('pattern', '??'), pattern.get('emoji_symbol', '❓'))
-                stats_text += "(f:{0}, b:{1})\n".format(
-                    pattern.get('frequency', 0), pattern.get('burst_score', 0.0):.1f)
+                stats_text += "(f:{0}, b:{1:.1f})\n".format(
+                    pattern.get('frequency', 0), pattern.get('burst_score', 0.0))
 
             stats_text += f"""
 🛡️ SYSTEM HEALTH:
@@ -857,7 +857,7 @@ Memory Usage: {stats.get('memory_usage_mb', 0):.1f} MB
                 price_color = self.color_scheme["success"] if data["change_24h"] > 0 else self.color_scheme["error"]
                 price_label = tk.Label(
                     self.market_display,
-                    text="${0}".format(data['price']:.2f),
+                    text="${0:.2f}".format(data['price']),
                     bg=self.color_scheme["bg"],
                     fg=price_color,
                     font=("Consolas", 12),
@@ -865,8 +865,8 @@ Memory Usage: {stats.get('memory_usage_mb', 0):.1f} MB
                 price_label.grid(row=row, column=1, padx=10, pady=5)
 
                 # Change
-                change_text = "{0} {1}%".format(
-                    '↗️' if data['change_24h'] > 0 else '↘️', data['change_24h']:+.2f)
+                change_text = "{0} {1:+.2f}%".format(
+                    '↗️' if data['change_24h'] > 0 else '↘️', data['change_24h'])
                 change_label = tk.Label(
                     self.market_display,
                     text=change_text,
@@ -879,7 +879,7 @@ Memory Usage: {stats.get('memory_usage_mb', 0):.1f} MB
                 # Volume
                 volume_label = tk.Label(
                     self.market_display,
-                    text="Vol: {0}".format(data['volume']:,.0f),
+                    text="Vol: {0:,.0f}".format(data['volume']),
                     bg=self.color_scheme["bg"],
                     fg=self.color_scheme["fg"],
                     font=("Consolas", 9),
@@ -933,7 +933,7 @@ Memory Usage: {stats.get('memory_usage_mb', 0):.1f} MB
                     self.balance_canvas.create_text(
                         text_x,
                         text_y,
-                        text="{0}\n{1}".format(asset, weight:.1%),
+                        text="{0}\n{1:.1%}".format(asset, weight),
                         fill=color,
                         font=("Consolas", 10, "bold"),
                         justify="center",
@@ -945,7 +945,7 @@ Memory Usage: {stats.get('memory_usage_mb', 0):.1f} MB
             self.balance_canvas.create_text(
                 center_x,
                 center_y,
-                text="Total\n${0}".format(total_value:.2f),
+                text="Total\n${0:.2f}".format(total_value),
                 fill=self.color_scheme["fg"],
                 font=("Consolas", 14, "bold"),
                 justify="center",
@@ -1001,7 +1001,7 @@ Drift Score: {performance.get('drift_score', 0.0):.3f}
                     "Portfolio Balancer": "🟢 Healthy" if self.portfolio_balancer else "🔴 Not Available",
                     "BTC/USDC Integration": "🟢 Healthy" if self.btc_usdc_integration else "🔴 Not Available",
                     "Network Status": "🟢 Connected",
-                    "Memory Usage": "🟡 {0} MB".format(self._get_memory_usage():.1f),
+                    "Memory Usage": "🟡 {0:.1f} MB".format(self._get_memory_usage()),
                 }
 
                 for name, status in health_status.items():
@@ -1117,8 +1117,8 @@ CPU Health: {health_check.get('cpu_health', 'Good')}
             if self.two_gram_detector and time.time() - self.last_update_time > 30:
                 stats = await self.two_gram_detector.get_pattern_statistics()
                 info(
-                    "🧬 Patterns: {0}, Health: {1}".format(
-                        stats.get('active_patterns', 0), stats.get('system_health_score', 0.0):.2f))
+                    "🧬 Patterns: {0}, Health: {1:.2f}".format(
+                        stats.get('active_patterns', 0), stats.get('system_health_score', 0.0)))
                 self.last_update_time = time.time()
 
         except Exception as e:

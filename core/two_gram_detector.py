@@ -252,8 +252,9 @@ class TwoGramDetector:
                 info("🧬 Detected {0} significant 2-gram patterns".format(len(significant_signals)))
                 for signal in significant_signals:
                     debug(
-                        "  {0} {1}: burst={2}, ".format(signal.emoji_symbol, signal.pattern, signal.burst_score:.2f)
-                        "entropy={0}, health={1}".format(signal.entropy:.3f, signal.system_health_score:.2f)
+                        "  {0} {1}: burst={2:.2f}, entropy={3:.3f}, health={4:.2f}".format(
+                            signal.emoji_symbol, signal.pattern, signal.burst_score, 
+                            signal.entropy, signal.system_health_score)
                     )
 
             return signals

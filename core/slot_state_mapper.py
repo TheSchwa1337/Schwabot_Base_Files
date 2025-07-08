@@ -6,7 +6,7 @@ import time
 from collections import deque
 from dataclasses import dataclass, field
 from typing import Deque, List, Tuple
-    import random
+import random
 
 import numpy as np
 
@@ -167,7 +167,7 @@ class DigestMomentumBuilder:
             return False, b""
 
         # build 32-byte bit-vector (=256 bits)
-        bitstring = "".join("{0}".format(code:02b) for code in self.bits_buffer)
+        bitstring = "".join("{:02b}".format(code) for code in self.bits_buffer)
         preimage_bytes = int(bitstring, 2).to_bytes(32, "big")
 
         # momentum coupling
