@@ -1,21 +1,5 @@
-import logging
-import time
-from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Tuple, Any, Callable
-from enum import Enum
-import threading
-import json
-from datetime import datetime
-import hashlib
-import numpy as np
-from .quantum_mathematical_bridge import QuantumMathematicalBridge, QuantumState
-from .neural_processing_engine import NeuralProcessingEngine, NeuralPrediction
-from .distributed_mathematical_processor import DistributedMathematicalProcessor
-from .enhanced_error_recovery_system import EnhancedErrorRecoverySystem
-from .unified_profit_vectorization_system import UnifiedProfitVectorizationSystem
-from .ghost_core import GhostCore, StrategyBranch
-
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
 🧠⚛️ SCHWABOT ORBITAL SHELL + BRAIN NEURAL PATHWAY SYSTEM
 ======================================================
@@ -33,8 +17,26 @@ Mathematical Architecture:
 - 𝒞ₛ = Σ(Ψₛ · Θₛ · ωₛ) for s=1 to 8
 """
 
+import hashlib
+import json
+import logging
+import threading
+import time
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple
+
+import numpy as np
+
 # Import existing Schwabot components
 try:
+    from .quantum_mathematical_bridge import QuantumMathematicalBridge, QuantumState
+    from .neural_processing_engine import NeuralProcessingEngine, NeuralPrediction
+    from .distributed_mathematical_processor import DistributedMathematicalProcessor
+    from .enhanced_error_recovery_system import EnhancedErrorRecoverySystem
+    from .unified_profit_vectorization_system import UnifiedProfitVectorizationSystem
+    from .ghost_core import GhostCore, StrategyBranch
     SCHWABOT_COMPONENTS_AVAILABLE = True
 except ImportError as e:
     print("⚠️ Some Schwabot components not available: {0}".format(e))
@@ -320,7 +322,9 @@ class OrbitalBRAINSystem:
             confidence_level=confidence_level,
         )
 
-    def calculate_neural_shell_confidence(self, shell: OrbitalShell, memory_tensor: ShellMemoryTensor) -> float:
+    def calculate_neural_shell_confidence(
+        self, shell: OrbitalShell, memory_tensor: ShellMemoryTensor
+    ) -> float:
         """Calculate shell confidence: Θₛ = softmax(W₁·tanh(W₂·ℳₛ + b))"""
         memory_vector = memory_tensor.memory_vector
         W1 = self.neural_shell_weights[shell.value, :32]
@@ -328,7 +332,11 @@ class OrbitalBRAINSystem:
         b = 0.1
 
         if len(memory_vector) != len(W2):
-            memory_vector = np.pad(memory_vector, (0, max(0, len(W2) - len(memory_vector))), 'constant')[: len(W2)]
+            memory_vector = np.pad(
+                memory_vector, 
+                (0, max(0, len(W2) - len(memory_vector))), 
+                'constant'
+            )[: len(W2)]
 
         hidden = np.dot(W2, memory_vector) + b
         activated = np.tanh(hidden)
@@ -336,7 +344,11 @@ class OrbitalBRAINSystem:
         # W1 and activated are vectors, but if hidden is scalar, activated will be too
         if isinstance(activated, np.ndarray):
             if len(W1) != len(activated):
-                W1 = np.pad(W1, (0, max(0, len(activated) - len(W1))), 'constant')[: len(activated)]
+                W1 = np.pad(
+                    W1, 
+                    (0, max(0, len(activated) - len(W1))), 
+                    'constant'
+                )[: len(activated)]
             output = np.dot(W1, activated)
         else:  # activated is a scalar
             output = W1[0] * activated
@@ -354,13 +366,17 @@ class OrbitalBRAINSystem:
             shell_activations[shell] = 1.0 if confidence > 0.6 else 0.0
 
             pnl_history = memory_tensor.pnl_history
-            shell_weights[shell] = max(0.0, min(1.0, (np.mean(pnl_history) + 1.0) / 2.0)) if pnl_history else 0.5
+            shell_weights[shell] = (
+                max(0.0, min(1.0, (np.mean(pnl_history) + 1.0) / 2.0)) 
+                if pnl_history else 0.5
+            )
 
             if shell_activations[shell] > 0.5:
                 active_shells.append(shell)
 
         consensus_score = sum(
-            shell_activations[s] * shell_confidences[s] * shell_weights[s] for s in OrbitalShell
+            shell_activations[s] * shell_confidences[s] * shell_weights[s] 
+            for s in OrbitalShell
         ) / len(OrbitalShell)
 
         return ShellConsensus(
@@ -377,7 +393,9 @@ class OrbitalBRAINSystem:
     ) -> ProfitTierBucket:
         """Calculate Profit-Tier Vector Bucket: 𝒱ₚ = B(ΔPnL) + α·ℵₐ(t) + β·𝒞ₛ"""
         α, β = 0.3, 0.4
-        enhanced_pnl = pnl + α * altitude.altitude_value + β * consensus.consensus_score
+        enhanced_pnl = (
+            pnl + α * altitude.altitude_value + β * consensus.consensus_score
+        )
 
         for bucket in self.profit_buckets:
             min_pnl, max_pnl = bucket.profit_range
@@ -395,7 +413,10 @@ class OrbitalBRAINSystem:
             pnl_history = self.shell_memory_tensors[shell].pnl_history
             vol_history = self.shell_memory_tensors[shell].volatility_history
 
-            delta = (pnl_history[-1] - pnl_history[-2]) if len(pnl_history) >= 2 else 0.0
+            delta = (
+                (pnl_history[-1] - pnl_history[-2]) 
+                if len(pnl_history) >= 2 else 0.0
+            )
             volatility = vol_history[-1] if vol_history else 0.2
 
             if delta > profit_threshold and volatility < σ_max:
@@ -412,16 +433,28 @@ class OrbitalBRAINSystem:
             self._transfer_shell_allocation(shell, OrbitalShell(shell.value + 1), 0.2)
 
     def _transfer_shell_allocation(self, from_shell, to_shell, ratio):
-        from_state, to_state = self.orbital_states[from_shell], self.orbital_states[to_shell]
+        from_state, to_state = (
+            self.orbital_states[from_shell], 
+            self.orbital_states[to_shell]
+        )
         for asset, allocation in from_state.asset_allocation.items():
             transfer_amount = allocation * ratio
             from_state.asset_allocation[asset] -= transfer_amount
-            to_state.asset_allocation[asset] = to_state.asset_allocation.get(asset, 0.0) + transfer_amount
-        logger.info("🔄 Transferred {:.1%} from {} to {}".format(ratio, from_shell.name, to_shell.name))
+            to_state.asset_allocation[asset] = (
+                to_state.asset_allocation.get(asset, 0.0) + transfer_amount
+            )
+        logger.info(
+            "🔄 Transferred {:.1%} from {} to {}".format(
+                ratio, from_shell.name, to_shell.name
+            )
+        )
 
     def encode_shell_dna(self, shell: OrbitalShell) -> str:
         """Encode Shell DNA Vector: Dₛ = hash(ℳₛ + strategy_id + asset_vector)"""
-        memory, orbital = self.shell_memory_tensors[shell], self.orbital_states[shell]
+        memory, orbital = (
+            self.shell_memory_tensors[shell], 
+            self.orbital_states[shell]
+        )
         dna_data = {
             'shell': shell.value,
             'memory_vector': memory.memory_vector.tolist(),
@@ -441,7 +474,9 @@ class OrbitalBRAINSystem:
         if self.active:
             return
         self.active = True
-        self.rotation_thread = threading.Thread(target=self._orbital_brain_loop, daemon=True)
+        self.rotation_thread = threading.Thread(
+            target=self._orbital_brain_loop, daemon=True
+        )
         self.rotation_thread.start()
         logger.info("🧠⚛️ Orbital BRAIN System started successfully!")
 

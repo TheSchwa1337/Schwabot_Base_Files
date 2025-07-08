@@ -41,7 +41,7 @@ class SystemAudit:
         self.errors = []
         self.warnings = []
 
-    def run_comprehensive_audit():-> Dict[str, Any]:
+    def run_comprehensive_audit(self) -> Dict[str, Any]:
         """Run complete system audit."""
         print("🔍 SCHWABOT COMPREHENSIVE SYSTEM AUDIT")
         print("=" * 70)
@@ -72,7 +72,7 @@ class SystemAudit:
 
         return self.results
 
-    def audit_code_quality():-> None:
+    def audit_code_quality(self) -> None:
         """Audit code quality and linting compliance."""
         print("\n📝 CODE QUALITY AUDIT")
         print("-" * 40)
@@ -126,7 +126,7 @@ class SystemAudit:
 
         self.results["code_quality"] = quality_results
 
-    def audit_mathematical_integration():-> None:
+    def audit_mathematical_integration(self) -> None:
         """Audit mathematical system integration."""
         print("\n🧮 MATHEMATICAL INTEGRATION AUDIT")
         print("-" * 40)
@@ -196,7 +196,7 @@ class SystemAudit:
 
         self.results["mathematical_integration"] = math_checks
 
-    def audit_component_functionality():-> None:
+    def audit_component_functionality(self) -> None:
         """Audit individual component functionality."""
         print("\n🔧 COMPONENT FUNCTIONALITY AUDIT")
         print("-" * 40)
@@ -243,7 +243,7 @@ class SystemAudit:
                     viz = router.get_profit_tier_visualization(symbol)
                     if "tier" in viz:
                         processed_count += 1
-                except:
+                except Exception:
                     continue
 
             components["symbolic_router"] = {
@@ -278,7 +278,7 @@ class SystemAudit:
 
         self.results["component_functionality"] = components
 
-    def audit_visual_connections():-> None:
+    def audit_visual_connections(self) -> None:
         """Audit visual layer connections and tab switching capability."""
         print("\n👁️ VISUAL LAYER CONNECTIONS AUDIT")
         print("-" * 40)
@@ -319,7 +319,7 @@ class SystemAudit:
 
         self.results["visual_connections"] = visual_components
 
-    def audit_api_integration():-> None:
+    def audit_api_integration(self) -> None:
         """Audit API integration capabilities."""
         print("\n🔌 API INTEGRATION AUDIT")
         print("-" * 40)
@@ -367,7 +367,7 @@ class SystemAudit:
 
         self.results["api_integration"] = api_checks
 
-    def audit_btc_integration():-> None:
+    def audit_btc_integration(self) -> None:
         """Audit BTC mining and processing integration."""
         print("\n₿ BTC INTEGRATION AUDIT")
         print("-" * 40)
@@ -406,7 +406,7 @@ class SystemAudit:
 
         self.results["btc_integration"] = btc_components
 
-    def check_missing_components():-> None:
+    def check_missing_components(self) -> None:
         """Check for missing critical components."""
         print("\n🔍 MISSING COMPONENTS CHECK")
         print("-" * 40)
@@ -431,7 +431,7 @@ class SystemAudit:
 
         self.results["missing_components"] = missing
 
-    def assess_system_readiness():-> None:
+    def assess_system_readiness(self) -> None:
         """Assess overall system readiness for production."""
         print("\n🎯 SYSTEM READINESS ASSESSMENT")
         print("-" * 40)
@@ -496,16 +496,16 @@ class SystemAudit:
         }
 
     # Helper methods for specific checks
-    def check_required_imports():-> bool:
+    def check_required_imports(self, content: str) -> bool:
         """Check if file has required imports."""
         required_patterns = ["import", "from"]
         return any(pattern in content for pattern in required_patterns)
 
-    def check_class_structure():-> bool:
+    def check_class_structure(self, content: str) -> bool:
         """Check if file has proper class structure."""
         return "class " in content and "def " in content
 
-    def check_bit_logic_systems():-> Dict[str, Any]:
+    def check_bit_logic_systems(self) -> Dict[str, Any]:
         """Check 4-bit and 8-bit logic systems."""
         bit_systems = {}
 
@@ -534,7 +534,7 @@ class SystemAudit:
 
         return bit_systems
 
-    def check_gui_frameworks():-> List[str]:
+    def check_gui_frameworks(self) -> List[str]:
         """Check available GUI frameworks."""
         frameworks = []
 
@@ -548,11 +548,11 @@ class SystemAudit:
 
         return frameworks
 
-    def check_gui_framework_complete():-> bool:
+    def check_gui_framework_complete(self) -> bool:
         """Check if GUI framework is complete."""
         return len(self.check_gui_frameworks()) > 0
 
-    def check_ccxt_integration():-> bool:
+    def check_ccxt_integration(self) -> bool:
         """Check CCXT integration readiness."""
         try:
 
@@ -560,33 +560,33 @@ class SystemAudit:
         except ImportError:
             return False
 
-    def check_visualization_complete():-> bool:
+    def check_visualization_complete(self) -> bool:
         """Check if visualization system is complete."""
         viz_files = ["visualization/lantern_eye_gui.py"]
         return any(os.path.exists(f) for f in viz_files)
 
-    def check_btc_processing_complete():-> bool:
+    def check_btc_processing_complete(self) -> bool:
         """Check if BTC processing is complete."""
         return False  # Would need implementation
 
-    def check_live_trading_interface():-> bool:
+    def check_live_trading_interface(self) -> bool:
         """Check live trading interface."""
         return os.path.exists("core/schwabot_integration_pipeline.py")
 
-    def check_error_handling_complete():-> bool:
+    def check_error_handling_complete(self) -> bool:
         """Check error handling completeness."""
         return True  # Our code has try/except blocks
 
-    def check_config_management():-> bool:
+    def check_config_management(self) -> bool:
         """Check configuration management."""
         return os.path.exists("config/master_integration.yaml")
 
-    def check_test_coverage():-> bool:
+    def check_test_coverage(self) -> bool:
         """Check test coverage."""
         test_files = ["test_core_integration.py", "test_full_integration.py"]
         return any(os.path.exists(f) for f in test_files)
 
-    def check_btc_math_readiness():-> bool:
+    def check_btc_math_readiness(self) -> bool:
         """Check if mathematical framework is ready for BTC processing."""
         try:
 
@@ -598,7 +598,7 @@ class SystemAudit:
         except:
             return False
 
-    def export_audit_results():-> None:
+    def export_audit_results(self, filename: str) -> None:
         """Export audit results to file."""
         try:
             with open(filename, "w") as f:
@@ -614,7 +614,7 @@ def main():
     results = audit.run_comprehensive_audit()
 
     # Export results
-    audit.export_audit_results()
+    audit.export_audit_results("audit_results.json")
 
     # Final summary
     readiness = results.get("system_readiness", {})

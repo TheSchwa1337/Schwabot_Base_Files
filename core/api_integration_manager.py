@@ -340,7 +340,7 @@ class APIIntegrationManager:
                                 usd_value = amount * price_data.price
                                 total_balance += usd_value
                                 positions[currency] = usd_value
-                        except:
+                        except Exception:
                             positions[currency] = amount
 
             return PortfolioData(
@@ -431,7 +431,7 @@ class APIIntegrationManager:
         for exchange in self.exchanges.values():
             try:
                 await exchange.close()
-            except:
+            except Exception:
                 pass
 
         if self.session:
@@ -483,13 +483,13 @@ class APIIntegrationCLI:
 
         if order_book:
             success("✅ Order book for {0}".format(symbol))
-            info(f"   Top 5 Bids:")
+            info("   Top 5 Bids:")
             for i, (price, qty) in enumerate(order_book.bids[:5]):
-                info("     {0}. ${1} - {2}".format(i+1, price:,.2f, qty:.4f))
+                info("     {0}. ${1} - {2}".format(i+1, price, qty))
 
-            info(f"   Top 5 Asks:")
+            info("   Top 5 Asks:")
             for i, (price, qty) in enumerate(order_book.asks[:5]):
-                info("     {0}. ${1} - {2}".format(i+1, price:,.2f, qty:.4f))
+                info("     {0}. ${1} - {2}".format(i+1, price, qty))
         else:
             error("❌ Failed to get order book for {0}".format(symbol))
 

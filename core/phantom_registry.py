@@ -117,7 +117,7 @@ class PhantomRegistry:
         self, entry_tick: float, exit_tick: float, duration: float, confidence: float, entropy_delta: float
     ) -> str:
         """Generate unique hash for Phantom Zone."""
-        key = "{0}-{1}-{2}-{3}-{4}".format(entry_tick, exit_tick, duration, confidence:.4f, entropy_delta:.6f)
+        key = "{0}-{1}-{2}-{3:.4f}-{4:.6f}".format(entry_tick, exit_tick, duration, confidence, entropy_delta)
         return hashlib.sha256(key.encode()).hexdigest()
 
     def store_zone(
@@ -343,7 +343,7 @@ class PhantomRegistry:
         """Get Phantom patterns for specific hour of day."""
         try:
             patterns = []
-            target_time_hash = hashlib.sha256("{0}00".format(hour:02d).encode()).hexdigest()[:8]
+            target_time_hash = hashlib.sha256("{0:02d}00".format(hour).encode()).hexdigest()[:8]
 
             for hash_sig, entry in self.registry.items():
                 if entry['time_of_day_hash'].startswith(target_time_hash[:4]):

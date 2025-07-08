@@ -174,7 +174,7 @@ class ProfitOptimizationEngine:
             population.append(weights)
 
         best_weights = None
-        best_objective = float('-in")
+        best_objective = float('-inf')
 
         for generation in range(max_iterations):
             # Evaluate fitness
@@ -217,13 +217,13 @@ class ProfitOptimizationEngine:
             population = new_population
 
         return OptimizationResult(
-            optimal_parameters={0},
+            optimal_parameters={'weights': best_weights.tolist()},
             objective_value=best_objective,
             convergence=True,
             iterations=max_iterations,
             execution_time=0.0,
             metadata={
-                ".format('weights': best_weights.tolist())method': 'genetic_algorithm',
+                'method': 'genetic_algorithm',
                 'risk_metric': risk_metric.value,
                 'population_size': population_size,
             },

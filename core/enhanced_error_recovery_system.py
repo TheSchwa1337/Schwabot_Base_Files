@@ -872,7 +872,7 @@ class EnhancedErrorRecoverySystem:
         """Destructor to ensure resource cleanup"""
         try:
             self.cleanup_resources()
-        except:
+        except Exception:
             pass
 
 

@@ -1,50 +1,49 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Neural Processing Engine for Schwabot Trading System.
+
+Advanced neural network ensemble for price prediction, pattern recognition,
+and reinforcement learning-based trading decisions.
+
+Features:
+- CNN for price pattern recognition
+- LSTM for temporal sequence prediction
+- Transformer for attention-based modeling
+- Reinforcement learning agent for action selection
+- Ensemble prediction with confidence weighting
+- GPU acceleration support
+"""
+
 import logging
-import math
 import os
-from dataclasses import dataclass, field
-from typing import Any, Dict, List, Tuple, Union, Optional
-import torch
-import torch.nn as nn
-import torch.optim as optim
-import torch.nn.functional as F
-import cupy as cp
+import time
+from dataclasses import dataclass
+from typing import Any, Dict, List, Optional, Tuple
+
 import numpy as np
 
-#!/usr/bin/env python3
-"""
-Neural Processing Engine - Neural mathematics for Schwabot trading system.
-
-Provides neural quantization, pattern recognition, and mathematical
-neural operations for the trading system.
-
-CUDA Integration:
-- GPU-accelerated neural operations with automatic CPU fallback
-- Performance monitoring and optimization
-- Cross-platform compatibility (Windows, macOS, Linux)
-"""
-
-# PyTorch imports
+# Try to import PyTorch components
 try:
-    PYTORCH_AVAILABLE = True
+    import torch
+    import torch.nn as nn
+    import torch.nn.functional as F
+    import torch.optim as optim
+    from torch.utils.data import TensorDataset, DataLoader
+    TORCH_AVAILABLE = True
 except ImportError:
-    PYTORCH_AVAILABLE = False
-    print("⚠️ PyTorch not available - neural networks will be disabled")
+    TORCH_AVAILABLE = False
+    print("⚠️ PyTorch not available - neural processing will be limited")
 
-# CUDA Integration with Fallback
+# Try to import scikit-learn components
 try:
-    USING_CUDA = True
-    _backend = 'cupy (GPU)'
-    xp = cp
+    from sklearn.metrics import accuracy_score, precision_score, recall_score
+    SKLEARN_AVAILABLE = True
 except ImportError:
-    USING_CUDA = False
-    _backend = 'numpy (CPU)'
-    xp = np
+    SKLEARN_AVAILABLE = False
+    print("⚠️ Scikit-learn not available - some metrics will be approximated")
 
 logger = logging.getLogger(__name__)
-if USING_CUDA:
-    logger.info("⚡ Neural Processing Engine using GPU acceleration: {}".format(_backend))
-else:
-    logger.info("🔄 Neural Processing Engine using CPU fallback: {}".format(_backend))
 
 
 @dataclass
@@ -71,12 +70,14 @@ class TrainingMetrics:
 
 
 # Only define PyTorch-based neural network classes if PyTorch is available
-if PYTORCH_AVAILABLE:
+if TORCH_AVAILABLE:
 
     class PricePatternCNN(nn.Module):
         """Convolutional Neural Network for price pattern recognition"""
 
-        def __init__(self, input_channels: int = 1, sequence_length: int = 100, num_classes: int = 3):
+        def __init__(
+            self, input_channels: int = 1, sequence_length: int = 100, num_classes: int = 3
+        ):
             super(PricePatternCNN, self).__init__()
 
             # Convolutional layers
@@ -124,14 +125,18 @@ if PYTORCH_AVAILABLE:
     class TradingLSTM(nn.Module):
         """LSTM Network for temporal sequence modeling in trading"""
 
-        def __init__(self, input_size: int = 10, hidden_size: int = 128, num_layers: int = 3, output_size: int = 1):
+        def __init__(
+            self, input_size: int = 10, hidden_size: int = 128, num_layers: int = 3, output_size: int = 1
+        ):
             super(TradingLSTM, self).__init__()
 
             self.hidden_size = hidden_size
             self.num_layers = num_layers
 
             # LSTM layers
-            self.lstm = nn.LSTM(input_size, hidden_size, num_layers, batch_first=True, dropout=0.2)
+            self.lstm = nn.LSTM(
+                input_size, hidden_size, num_layers, batch_first=True, dropout=0.2
+            )
 
             # Attention mechanism
             self.attention = nn.MultiheadAttention(hidden_size, num_heads=8, batch_first=True)
@@ -167,7 +172,8 @@ if PYTORCH_AVAILABLE:
         """Transformer architecture for advanced trading signal processing"""
 
         def __init__(
-            self, input_dim: int = 10, d_model: int = 256, nhead: int = 8, num_layers: int = 6, output_dim: int = 1
+            self, input_dim: int = 10, d_model: int = 256, nhead: int = 8, 
+            num_layers: int = 6, output_dim: int = 1
         ):
             super(TradingTransformer, self).__init__()
 
@@ -181,7 +187,8 @@ if PYTORCH_AVAILABLE:
 
             # Transformer encoder
             encoder_layer = nn.TransformerEncoderLayer(
-                d_model=d_model, nhead=nhead, dim_feedforward=d_model * 4, dropout=0.1, batch_first=True
+                d_model=d_model, nhead=nhead, dim_feedforward=d_model * 4, 
+                dropout=0.1, batch_first=True
             )
             self.transformer_encoder = nn.TransformerEncoder(encoder_layer, num_layers=num_layers)
 
@@ -213,7 +220,10 @@ if PYTORCH_AVAILABLE:
     class ReinforcementLearningAgent(nn.Module):
         """Deep Q-Network for reinforcement learning in trading"""
 
-        def __init__(self, state_size: int = 20, action_size: int = 3, hidden_sizes: List[int] = [256, 128, 64]):
+        def __init__(
+            self, state_size: int = 20, action_size: int = 3, 
+            hidden_sizes: List[int] = [256, 128, 64]
+        ):
             super(ReinforcementLearningAgent, self).__init__()
 
             # Create sequential layers
@@ -297,18 +307,15 @@ class NeuralProcessingEngine:
     """
 
     def __init__(self, device: str = "cuda" if torch.cuda.is_available() else "cpu"):
-        self.device = torch.device(device)
+        self.device = torch.device(device) if TORCH_AVAILABLE else None
         self.models = {}
         self.optimizers = {}
         self.scalers = {}
         self.training_history = {}
 
-        # Initialize neural networks
-        self._initialize_models()
-
-        # Threading for parallel processing
-        self.neural_executor = ThreadPoolExecutor(max_workers=4)
-        self.neural_lock = threading.Lock()
+        # Initialize neural networks if PyTorch is available
+        if TORCH_AVAILABLE:
+            self._initialize_models()
 
         logger.info("Neural Processing Engine initialized on {0}".format(device))
 
@@ -317,11 +324,15 @@ class NeuralProcessingEngine:
         try:
             # Price pattern CNN
             self.models['pattern_cnn'] = PricePatternCNN().to(self.device)
-            self.optimizers['pattern_cnn'] = optim.Adam(self.models['pattern_cnn'].parameters(), lr=0.001)
+            self.optimizers['pattern_cnn'] = optim.Adam(
+                self.models['pattern_cnn'].parameters(), lr=0.001
+            )
 
             # Trading LSTM
             self.models['trading_lstm'] = TradingLSTM().to(self.device)
-            self.optimizers['trading_lstm'] = optim.Adam(self.models['trading_lstm'].parameters(), lr=0.001)
+            self.optimizers['trading_lstm'] = optim.Adam(
+                self.models['trading_lstm'].parameters(), lr=0.001
+            )
 
             # Trading Transformer
             self.models['trading_transformer'] = TradingTransformer().to(self.device)
@@ -331,11 +342,9 @@ class NeuralProcessingEngine:
 
             # Reinforcement Learning Agent
             self.models['rl_agent'] = ReinforcementLearningAgent().to(self.device)
-            self.optimizers['rl_agent'] = optim.Adam(self.models['rl_agent'].parameters(), lr=0.001)
-
-            # Initialize scalers
-            self.scalers['standard'] = StandardScaler()
-            self.scalers['minmax'] = MinMaxScaler()
+            self.optimizers['rl_agent'] = optim.Adam(
+                self.models['rl_agent'].parameters(), lr=0.001
+            )
 
             logger.info("All neural models initialized successfully")
 
@@ -346,18 +355,19 @@ class NeuralProcessingEngine:
     def preprocess_data(self, data: np.ndarray, scaler_type: str = "standard") -> np.ndarray:
         """Preprocess data for neural network input"""
         try:
-            if scaler_type not in self.scalers:
-                raise ValueError("Unknown scaler type: {0}".format(scaler_type))
-
-            scaler = self.scalers[scaler_type]
-
-            # Fit and transform data
-            if not hasattr(scaler, 'mean_') and not hasattr(scaler, 'scale_'):
-                scaled_data = scaler.fit_transform(data)
+            # Simple preprocessing without scikit-learn
+            if scaler_type == "standard":
+                # Standard scaling
+                mean = np.mean(data, axis=0)
+                std = np.std(data, axis=0)
+                return (data - mean) / (std + 1e-8)
+            elif scaler_type == "minmax":
+                # Min-max scaling
+                min_val = np.min(data, axis=0)
+                max_val = np.max(data, axis=0)
+                return (data - min_val) / (max_val - min_val + 1e-8)
             else:
-                scaled_data = scaler.transform(data)
-
-            return scaled_data
+                return data
 
         except Exception as e:
             logger.error("Error preprocessing data: {0}".format(e))
@@ -374,6 +384,15 @@ class NeuralProcessingEngine:
             NeuralPrediction with pattern classification
         """
         try:
+            if not TORCH_AVAILABLE:
+                # Fallback prediction
+                return NeuralPrediction(
+                    prediction=0.0,
+                    confidence=0.5,
+                    probability_distribution=np.array([0.33, 0.33, 0.34]),
+                    feature_importance={'price_trend': 0.4, 'volatility': 0.3, 'volume': 0.2, 'momentum': 0.1}
+                )
+
             self.models['pattern_cnn'].eval()
 
             # Preprocess data
@@ -381,7 +400,9 @@ class NeuralProcessingEngine:
 
             # Convert to tensor
             if len(processed_data.shape) == 2:
-                processed_data = processed_data.reshape(processed_data.shape[0], 1, processed_data.shape[1])
+                processed_data = processed_data.reshape(
+                    processed_data.shape[0], 1, processed_data.shape[1]
+                )
 
             input_tensor = torch.FloatTensor(processed_data).to(self.device)
 
@@ -396,7 +417,9 @@ class NeuralProcessingEngine:
                 prob_dist = probabilities.cpu().numpy()
 
             # Feature importance (simplified)
-            feature_importance = {'price_trend': 0.4, 'volatility': 0.3, 'volume': 0.2, 'momentum': 0.1}
+            feature_importance = {
+                'price_trend': 0.4, 'volatility': 0.3, 'volume': 0.2, 'momentum': 0.1
+            }
 
             result = NeuralPrediction(
                 prediction=float(prediction[0]) if len(prediction) > 0 else 0.0,
@@ -405,7 +428,11 @@ class NeuralProcessingEngine:
                 feature_importance=feature_importance,
             )
 
-            logger.debug("Price pattern prediction: {0}, confidence: {1}".format(result.prediction, result.confidence))
+            logger.debug(
+                "Price pattern prediction: {0}, confidence: {1}".format(
+                    result.prediction, result.confidence
+                )
+            )
             return result
 
         except Exception as e:
@@ -423,10 +450,24 @@ class NeuralProcessingEngine:
             NeuralPrediction with temporal prediction
         """
         try:
+            if not TORCH_AVAILABLE:
+                # Fallback prediction
+                return NeuralPrediction(
+                    prediction=0.0,
+                    confidence=0.5,
+                    probability_distribution=np.array([0.5, 0.5]),
+                    feature_importance={
+                        'temporal_pattern': 0.35, 'price_momentum': 0.25, 
+                        'volume_trend': 0.20, 'volatility_pattern': 0.20
+                    }
+                )
+
             self.models['trading_lstm'].eval()
 
             # Preprocess data
-            processed_data = self.preprocess_data(sequence_data.reshape(-1, sequence_data.shape[-1]), "standard")
+            processed_data = self.preprocess_data(
+                sequence_data.reshape(-1, sequence_data.shape[-1]), "standard"
+            )
             processed_data = processed_data.reshape(sequence_data.shape)
 
             # Convert to tensor
@@ -445,10 +486,8 @@ class NeuralProcessingEngine:
 
             # Feature importance from attention weights
             feature_importance = {
-                'temporal_pattern': 0.35,
-                'price_momentum': 0.25,
-                'volume_trend': 0.20,
-                'volatility_pattern': 0.20,
+                'temporal_pattern': 0.35, 'price_momentum': 0.25, 
+                'volume_trend': 0.20, 'volatility_pattern': 0.20
             }
 
             result = NeuralPrediction(
@@ -459,7 +498,11 @@ class NeuralProcessingEngine:
                 attention_weights=attention_weights.cpu().numpy(),
             )
 
-            logger.debug("Temporal sequence prediction: {0}, confidence: {1}".format(result.prediction, result.confidence))
+            logger.debug(
+                "Temporal sequence prediction: {0}, confidence: {1}".format(
+                    result.prediction, result.confidence
+                )
+            )
             return result
 
         except Exception as e:
@@ -477,10 +520,24 @@ class NeuralProcessingEngine:
             NeuralPrediction with transformer prediction
         """
         try:
+            if not TORCH_AVAILABLE:
+                # Fallback prediction
+                return NeuralPrediction(
+                    prediction=0.0,
+                    confidence=0.5,
+                    probability_distribution=np.array([0.5, 0.5]),
+                    feature_importance={
+                        'global_context': 0.30, 'local_patterns': 0.25, 
+                        'attention_focus': 0.25, 'temporal_relationships': 0.20
+                    }
+                )
+
             self.models['trading_transformer'].eval()
 
             # Preprocess data
-            processed_data = self.preprocess_data(input_data.reshape(-1, input_data.shape[-1]), "standard")
+            processed_data = self.preprocess_data(
+                input_data.reshape(-1, input_data.shape[-1]), "standard"
+            )
             processed_data = processed_data.reshape(input_data.shape)
 
             # Convert to tensor
@@ -498,10 +555,8 @@ class NeuralProcessingEngine:
 
             # Feature importance for transformer
             feature_importance = {
-                'global_context': 0.30,
-                'local_patterns': 0.25,
-                'attention_focus': 0.25,
-                'temporal_relationships': 0.20,
+                'global_context': 0.30, 'local_patterns': 0.25, 
+                'attention_focus': 0.25, 'temporal_relationships': 0.20
             }
 
             result = NeuralPrediction(
@@ -511,7 +566,11 @@ class NeuralProcessingEngine:
                 feature_importance=feature_importance,
             )
 
-            logger.debug("Transformer prediction: {0}, confidence: {1}".format(result.prediction, result.confidence))
+            logger.debug(
+                "Transformer prediction: {0}, confidence: {1}".format(
+                    result.prediction, result.confidence
+                )
+            )
             return result
 
         except Exception as e:
@@ -529,6 +588,16 @@ class NeuralProcessingEngine:
             Dictionary with action and Q-values
         """
         try:
+            if not TORCH_AVAILABLE:
+                # Fallback action
+                return {
+                    'action': 0,
+                    'action_name': 'Hold',
+                    'q_values': np.array([0.5, 0.3, 0.2]),
+                    'confidence': 0.3,
+                    'epsilon': 0.1
+                }
+
             self.models['rl_agent'].eval()
 
             # Preprocess state
@@ -554,7 +623,11 @@ class NeuralProcessingEngine:
                 'epsilon': self.models['rl_agent'].epsilon,
             }
 
-            logger.debug("RL action: {0}, Q-values: {1}".format(result['action_name'], result['q_values']))
+            logger.debug(
+                "RL action: {0}, Q-values: {1}".format(
+                    result['action_name'], result['q_values']
+                )
+            )
             return result
 
         except Exception as e:
@@ -562,7 +635,8 @@ class NeuralProcessingEngine:
             raise
 
     def train_model(
-        self, model_name: str, train_data: np.ndarray, train_labels: np.ndarray, epochs: int = 100, batch_size: int = 32
+        self, model_name: str, train_data: np.ndarray, train_labels: np.ndarray, 
+        epochs: int = 100, batch_size: int = 32
     ) -> List[TrainingMetrics]:
         """
         Train a specific neural network model.
@@ -578,6 +652,10 @@ class NeuralProcessingEngine:
             List of training metrics for each epoch
         """
         try:
+            if not TORCH_AVAILABLE:
+                logger.warning("PyTorch not available - training skipped")
+                return []
+
             if model_name not in self.models:
                 raise ValueError("Unknown model: {0}".format(model_name))
 
@@ -589,7 +667,9 @@ class NeuralProcessingEngine:
             processed_data = self.preprocess_data(train_data, "standard")
 
             # Create dataset and dataloader
-            dataset = TensorDataset(torch.FloatTensor(processed_data), torch.FloatTensor(train_labels))
+            dataset = TensorDataset(
+                torch.FloatTensor(processed_data), torch.FloatTensor(train_labels)
+            )
             dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
 
             training_metrics = []
@@ -645,10 +725,14 @@ class NeuralProcessingEngine:
                 # Calculate metrics
                 avg_loss = total_loss / len(dataloader)
 
-                if model_name == 'pattern_cnn':
+                if model_name == 'pattern_cnn' and SKLEARN_AVAILABLE:
                     accuracy = accuracy_score(actuals, predictions)
-                    precision = precision_score(actuals, predictions, average='weighted', zero_division=0)
-                    recall = recall_score(actuals, predictions, average='weighted', zero_division=0)
+                    precision = precision_score(
+                        actuals, predictions, average='weighted', zero_division=0
+                    )
+                    recall = recall_score(
+                        actuals, predictions, average='weighted', zero_division=0
+                    )
                 else:
                     # For regression models, use different metrics
                     accuracy = 1.0 - np.mean(np.abs(np.array(predictions) - np.array(actuals)))
@@ -658,13 +742,18 @@ class NeuralProcessingEngine:
                 f1 = 2 * (precision * recall) / (precision + recall) if (precision + recall) > 0 else 0
 
                 metrics = TrainingMetrics(
-                    loss=avg_loss, accuracy=accuracy, precision=precision, recall=recall, f1_score=f1, epoch=epoch
+                    loss=avg_loss, accuracy=accuracy, precision=precision, 
+                    recall=recall, f1_score=f1, epoch=epoch
                 )
 
                 training_metrics.append(metrics)
 
                 if epoch % 10 == 0:
-                    logger.info(f"Epoch {epoch}: Loss={avg_loss:.4f}, Accuracy={accuracy:.4f}")
+                    logger.info(
+                        "Epoch {0}: Loss={1:.4f}, Accuracy={2:.4f}".format(
+                            epoch, avg_loss, accuracy
+                        )
+                    )
 
             # Store training history
             self.training_history[model_name] = training_metrics
@@ -677,7 +766,8 @@ class NeuralProcessingEngine:
             raise
 
     def neural_profit_optimization(
-        self, btc_price: float, usdc_hold: float, market_data: np.ndarray, historical_data: np.ndarray
+        self, btc_price: float, usdc_hold: float, market_data: np.ndarray, 
+        historical_data: np.ndarray
     ) -> Dict[str, Any]:
         """
         Optimize profit using neural network ensemble.
@@ -694,13 +784,21 @@ class NeuralProcessingEngine:
         try:
             # Get predictions from all models
             pattern_pred = self.predict_price_pattern(market_data.reshape(1, -1))
-            temporal_pred = self.predict_temporal_sequence(historical_data.reshape(1, -1, historical_data.shape[-1]))
-            transformer_pred = self.predict_with_transformer(historical_data.reshape(1, -1, historical_data.shape[-1]))
+            temporal_pred = self.predict_temporal_sequence(
+                historical_data.reshape(1, -1, historical_data.shape[-1])
+            )
+            transformer_pred = self.predict_with_transformer(
+                historical_data.reshape(1, -1, historical_data.shape[-1])
+            )
             rl_action = self.reinforcement_learning_action(market_data)
 
             # Ensemble prediction
-            predictions = [pattern_pred.prediction, temporal_pred.prediction, transformer_pred.prediction]
-            confidences = [pattern_pred.confidence, temporal_pred.confidence, transformer_pred.confidence]
+            predictions = [
+                pattern_pred.prediction, temporal_pred.prediction, transformer_pred.prediction
+            ]
+            confidences = [
+                pattern_pred.confidence, temporal_pred.confidence, transformer_pred.confidence
+            ]
 
             # Weighted ensemble
             weights = np.array(confidences) / np.sum(confidences)
@@ -734,7 +832,11 @@ class NeuralProcessingEngine:
                 'profit_multiplier': profit_multiplier,
             }
 
-            logger.info(f"Neural profit optimization: {optimized_profit:.6f}, Action: {rl_action['action_name']}")
+            logger.info(
+                "Neural profit optimization: {0:.6f}, Action: {1}".format(
+                    optimized_profit, rl_action['action_name']
+                )
+            )
             return result
 
         except Exception as e:
@@ -744,6 +846,10 @@ class NeuralProcessingEngine:
     def save_models(self, save_path: str):
         """Save all trained models"""
         try:
+            if not TORCH_AVAILABLE:
+                logger.warning("PyTorch not available - models not saved")
+                return
+
             os.makedirs(save_path, exist_ok=True)
 
             for model_name, model in self.models.items():
@@ -760,6 +866,10 @@ class NeuralProcessingEngine:
     def load_models(self, load_path: str):
         """Load trained models"""
         try:
+            if not TORCH_AVAILABLE:
+                logger.warning("PyTorch not available - models not loaded")
+                return
+
             for model_name, model in self.models.items():
                 model_path = os.path.join(load_path, "{0}.pth".format(model_name))
                 if os.path.exists(model_path):
@@ -777,6 +887,9 @@ class NeuralProcessingEngine:
     def cleanup_neural_resources(self):
         """Clean up neural processing resources"""
         try:
+            if not TORCH_AVAILABLE:
+                return
+
             # Clear models
             for model in self.models.values():
                 del model
@@ -789,9 +902,6 @@ class NeuralProcessingEngine:
             if torch.cuda.is_available():
                 torch.cuda.empty_cache()
 
-            # Shutdown executor
-            self.neural_executor.shutdown(wait=True)
-
             logger.info("Neural processing resources cleaned up")
 
         except Exception as e:
@@ -801,5 +911,5 @@ class NeuralProcessingEngine:
         """Destructor to ensure resource cleanup"""
         try:
             self.cleanup_neural_resources()
-        except:
+        except Exception:
             pass

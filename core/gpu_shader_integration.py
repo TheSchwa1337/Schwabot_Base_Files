@@ -491,13 +491,13 @@ class GPUShaderIntegration:
                 glDeleteProgram(self.cosine_shader_program.program_id)
                 glDeleteShader(self.cosine_shader_program.vertex_shader_id)
                 glDeleteShader(self.cosine_shader_program.fragment_shader_id)
-            except:
+            except Exception:
                 pass
 
         if self.opengl_initialized:
             try:
                 pygame.quit()
-            except:
+            except Exception:
                 pass
 
 

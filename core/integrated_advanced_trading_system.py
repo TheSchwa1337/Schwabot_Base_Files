@@ -688,5 +688,5 @@ class IntegratedAdvancedTradingSystem:
         """Destructor to ensure resource cleanup"""
         try:
             self.cleanup_resources()
-        except:
+        except Exception:
             pass

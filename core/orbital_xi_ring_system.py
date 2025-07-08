@@ -1,22 +1,5 @@
-import logging
-import time
-import hashlib
-from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Tuple, Any, Callable
-from enum import Enum
-import threading
-import json
-from datetime import datetime
-from collections import deque
-import math
-    from .quantum_mathematical_bridge import QuantumMathematicalBridge, QuantumState
-    from .orbital_shell_brain_system import OrbitalBRAINSystem, OrbitalShell
-
-import numpy as np
-
-    from .schwabot_rheology_integration import SchwabotRheologyIntegration, RheologicalState
-
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
 🪐 ORBITAL Ξ RING SYSTEM — SCHWABOT GRAVITY-MEMORY PHASE RECURSION
 ================================================================
@@ -46,8 +29,23 @@ Orbital Ring Architecture:
 - Ξ₄+: Event Horizon (entropy-locked memory)
 """
 
+import logging
+import math
+import threading
+import time
+import hashlib
+from collections import deque
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple
+
+import numpy as np
+
 # Import existing Schwabot components
 try:
+    from .quantum_mathematical_bridge import QuantumMathematicalBridge, QuantumState
+    from .orbital_shell_brain_system import OrbitalBRAINSystem, OrbitalShell
+    from .schwabot_rheology_integration import SchwabotRheologyIntegration, RheologicalState
     SCHWABOT_COMPONENTS_AVAILABLE = True
 except ImportError as e:
     print("⚠️ Some Schwabot components not available: {0}".format(e))
@@ -697,7 +695,7 @@ class OrbitalXiRingSystem:
 
                 # Select best strategy based on fitness
                 best_strategy = None
-                best_fitness = -float('in")
+                best_fitness = -float('in')
 
                 for strategy_id in ring_strategies:
                     ring_state = self.ring_states[ring_level]
@@ -720,12 +718,9 @@ class OrbitalXiRingSystem:
     def get_system_status(self) -> Dict[str, Any]:
         """Get comprehensive system status"""
         try:
-            ring_status = {4}
+            ring_status = {}
             for ring_level, ring_state in self.ring_states.items():
-                ring_status["Xi_{2}".format(ring_level.value)] = {6}
-
-            return {
-                ".format(0, 1, 0, 0, , 0, 
+                ring_status["Xi_{2}".format(ring_level.value)] = {
                     'entropy': ring_state.entropy,
                     'oscillation_frequency': ring_state.oscillation_frequency,
                     'inertial_mass': ring_state.inertial_mass,
@@ -735,7 +730,10 @@ class OrbitalXiRingSystem:
                     'active_strategies': len(
                         [orbit for orbit in self.strategy_orbits.values() if orbit.current_ring == ring_level]
                     ),
-                )system_active': self.system_active,
+                }
+
+            return {
+                'system_active': self.system_active,
                 'total_strategies': len(self.strategy_orbits),
                 'ring_status': ring_status,
                 'orbital_mechanics': {

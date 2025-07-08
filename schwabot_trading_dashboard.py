@@ -178,7 +178,7 @@ class SchwabotTradingDashboard:
                             for balance in portfolio.get('total', {}).values()
                         )
                         self.state.config.portfolio_value = total_value
-                    except:
+                    except Exception:
                         pass
                 
                 time.sleep(30)  # Update every 30 seconds

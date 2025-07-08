@@ -458,5 +458,5 @@ class QuantumMathematicalBridge:
         """Destructor to ensure resource cleanup"""
         try:
             self.cleanup_quantum_resources()
-        except:
+        except Exception:
             pass 
