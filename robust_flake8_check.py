@@ -73,8 +73,8 @@ def run_flake8_on_file(filepath):
             return 0
 
         # Run flake8 with comprehensive checks
-        result = subprocess.run(
-            ['flake8', filepath,
+        result = subprocess.run()
+            ['flake8', filepath,]
              '--max-line-length=100',
              '--show-source',
              '--select=E,F,W',

@@ -16,7 +16,7 @@ def orchestrate_trade(input_hash_vec, matrix_dir, strategy_name=None):
     """Route input hash or signal through the full pipeline."""
     # Step 1: Find best matrix
     matrix_file = match_hash_to_matrix(input_hash_vec, matrix_dir)
-    # Step 2: Load strategy (by name or default)
+    # Step 2: Load strategy (by name or, default)
     strategy = load_strategy(strategy_name or "momentum")
     # Step 3: Run through pipeline
     pipeline = UnifiedTradingPipeline()

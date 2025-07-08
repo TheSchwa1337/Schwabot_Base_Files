@@ -1,6 +1,6 @@
 from core.unified_math_system import unified_math
 from core.unified_math_system import unified_math
-    from core.drift_shell_engine import DriftShellEngine
+from core.drift_shell_engine import DriftShellEngine
 from __future__ import annotations
 from core.drift_shell_engine import SubsurfaceGrayscaleMapper
 from core.quantum_drift_shell_engine import PhaseDriftHarmonizer
@@ -55,6 +55,7 @@ Based on systematic elimination of Flake8 issues and SP 1.27 - AE framework.
 
 # Import from other core modules
 try:
+    pass
 except ImportError:
     pass
 # Fallback for testing

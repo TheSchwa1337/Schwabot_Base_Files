@@ -11,16 +11,16 @@ class BucketManager:
 
     def lock_incremental_profit(self, profit_value, volatility, entropy_score):
         vol_cfg = self.config["volatility_thresholds"]
-        weights = (
+        weights = ()
             vol_cfg["high_volatility"]
             if volatility >= 0.5
             else vol_cfg["low_volatility"]
         )
 
-        entropy_factor = (
+        entropy_factor = ()
             (1 - entropy_score) if self.config["entropy_weighting_enabled"] else 1
         )
-        lock_amount = (
+        lock_amount = ()
             profit_value * self.config["incremental_locking_pct"] * entropy_factor
         )
 

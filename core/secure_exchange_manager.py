@@ -1,3 +1,4 @@
+import asyncio
 import logging
 import os
 from dataclasses import dataclass, field
@@ -7,9 +8,15 @@ from typing import Any, Dict, List, Optional, Tuple
 try:
     import ccxt
     from utils.secure_config_manager import SecureConfigManager
-    from core.fill_handler import FillHandler, create_fill_handler, FillEvent, OrderState
+    from core.fill_handler import ()
+        FillHandler,
+        create_fill_handler,
+        FillEvent,
+        OrderState,
+    )
+
     CCXT_AVAILABLE = True
-except ImportError:
+    except ImportError:
     ccxt = None
     SecureConfigManager = None
     FillHandler = None
@@ -40,7 +47,7 @@ Security Features:
 - Advanced fill management for crypto trading reliability
 
 Usage:
-    # Environment variables (recommended for production)
+    # Environment variables (recommended for, production)
     export BINANCE_API_KEY="your_public_api_key"
     export BINANCE_API_SECRET="your_secret_key"
 
@@ -50,25 +57,27 @@ Usage:
 """
 
 # CCXT for exchange integration
-try:
+    try:
     CCXT_AVAILABLE = True
-except ImportError:
+    except ImportError:
     CCXT_AVAILABLE = False
     logging.warning("CCXT not available. Install with: pip install ccxt")
 
 # Local secure storage
-try:
+    try:
     SECURE_STORAGE_AVAILABLE = True
-except ImportError:
+    except ImportError:
     SECURE_STORAGE_AVAILABLE = False
     logging.warning("Secure storage not available. Using environment variables only.")
 
 # Fill handler for advanced crypto trading
-try:
+    try:
     FILL_HANDLER_AVAILABLE = True
-except ImportError:
+    except ImportError:
     FILL_HANDLER_AVAILABLE = False
-    logging.warning("Fill handler not available. Install with: pip install -r requirements.txt")
+    logging.warning()
+        "Fill handler not available. Install with: pip install -r requirements.txt"
+    )
 
 logger = logging.getLogger(__name__)
 
@@ -84,12 +93,12 @@ class ExchangeType(Enum):
 
 
 @dataclass
-class ExchangeCredentials:
+    class ExchangeCredentials:
     """Securely stored exchange credentials with clear labeling."""
 
     exchange: ExchangeType
-    api_key: str  # PUBLIC API KEY (can be logged safely)
-    secret: str  # SECRET KEY (never logged)
+    api_key: str  # PUBLIC API KEY (can be logged, safely)
+    secret: str  # SECRET KEY (never, logged)
     passphrase: Optional[str] = None  # Additional secret for some exchanges
     sandbox: bool = True
     testnet: bool = True
@@ -97,18 +106,26 @@ class ExchangeCredentials:
     def __post_init__(self):
         """Validate credentials after initialization."""
         if not self.api_key or not self.secret:
-            raise ValueError("API key and secret are required for {0}".format(self.exchange.value))
+            raise ValueError()
+                "API key and secret are required for {0}".format(self.exchange.value)
+            )
 
-        # Log only the public key (safe to display)
-        logger.info("✅ Configured {0} with API key: {1}...".format(self.exchange.value, self.api_key[:8]))
+        # Log only the public key (safe to, display)
+        logger.info()
+            "✅ Configured {0} with API key: {1}...".format()
+                self.exchange.value, self.api_key[:8]
+            )
+        )
         logger.info("🔐 Secret key configured (length: {0})".format(len(self.secret)))
 
         if self.passphrase:
-            logger.info("🔐 Passphrase configured (length: {0})".format(len(self.passphrase)))
+            logger.info()
+                "🔐 Passphrase configured (length: {0})".format(len(self.passphrase))
+            )
 
 
 @dataclass
-class ExchangeStatus:
+    class ExchangeStatus:
     """Exchange connection and trading status."""
 
     exchange: ExchangeType
@@ -122,11 +139,13 @@ class ExchangeStatus:
     def __str__(self) -> str:
         """Safe string representation without sensitive data."""
         status = "🟢" if self.connected else "🔴"
-        return "{0} {1}: Connected={2}, Trading={3}".format(status, self.exchange.value, self.connected, self.trading_enabled)
+        return "{0} {1}: Connected={2}, Trading={3}".format()
+            status, self.exchange.value, self.connected, self.trading_enabled
+        )
 
 
 @dataclass
-class TradeResult:
+    class TradeResult:
     """Result of a trade execution with fill handling."""
 
     success: bool
@@ -172,25 +191,29 @@ class SecureExchangeManager:
             self.secure_config = SecureConfigManager()
         else:
             self.secure_config = None
-            logger.warning("🔐 Secure storage not available. Using environment variables only.")
+            logger.warning()
+                "🔐 Secure storage not available. Using environment variables only."
+            )
 
         # Load configuration
         self._load_exchange_configs()
 
-        logger.info("🔐 Secure Exchange Manager initialized with advanced fill handling")
+        logger.info()
+            "🔐 Secure Exchange Manager initialized with advanced fill handling"
+        )
 
     async def _initialize_fill_handler(self):
         """Initialize the fill handler if available."""
         if FILL_HANDLER_AVAILABLE and self.fill_handler is None:
             try:
-                self.fill_handler = await create_fill_handler(
-                    {
-                        'retry_config': {
-                            'max_retries': 3,
-                            'base_delay': 1.0,
-                            'max_delay': 30.0,
-                            'exponential_base': 2.0,
-                            'jitter_factor': 0.1,
+                self.fill_handler = await create_fill_handler()
+                    {}
+                        "retry_config": {}
+                            "max_retries": 3,
+                            "base_delay": 1.0,
+                            "max_delay": 30.0,
+                            "exponential_base": 2.0,
+                            "jitter_factor": 0.1,
                         }
                     }
                 )
@@ -205,12 +228,16 @@ class SecureExchangeManager:
 
         for exchange in ExchangeType:
             try:
-                # Try environment variables first (most secure)
+                # Try environment variables first (most, secure)
                 env_credentials = self._load_from_environment(exchange)
                 if env_credentials:
                     self.exchanges[exchange] = env_credentials
                     self.status[exchange] = ExchangeStatus(exchange=exchange)
-                    logger.info("✅ Loaded {0} from environment variables".format(exchange.value))
+                    logger.info()
+                        "✅ Loaded {0} from environment variables".format()
+                            exchange.value
+                        )
+                    )
                     continue
 
                 # Try secure storage as fallback
@@ -219,7 +246,9 @@ class SecureExchangeManager:
                     if secure_credentials:
                         self.exchanges[exchange] = secure_credentials
                         self.status[exchange] = ExchangeStatus(exchange=exchange)
-                        logger.info("✅ Loaded {0} from secure storage".format(exchange.value))
+                        logger.info()
+                            "✅ Loaded {0} from secure storage".format(exchange.value)
+                        )
                         continue
 
                 logger.info("⚠️ No credentials found for {0}".format(exchange.value))
@@ -227,7 +256,9 @@ class SecureExchangeManager:
             except Exception as e:
                 logger.error("❌ Error loading {0}: {1}".format(exchange.value, e))
 
-    def _load_from_environment(self, exchange: ExchangeType) -> Optional[ExchangeCredentials]:
+    def _load_from_environment()
+        self, exchange: ExchangeType
+    ) -> Optional[ExchangeCredentials]:
         """Load credentials from environment variables."""
         exchange_name = exchange.value.upper()
 
@@ -237,8 +268,12 @@ class SecureExchangeManager:
         passphrase = os.environ.get("{0}_PASSPHRASE".format(exchange_name))
 
         if api_key and secret:
-            logger.info("🔍 Found {0} credentials in environment variables".format(exchange.value))
-            return ExchangeCredentials(
+            logger.info()
+                "🔍 Found {0} credentials in environment variables".format()
+                    exchange.value
+                )
+            )
+            return ExchangeCredentials()
                 exchange=exchange,
                 api_key=api_key,
                 secret=secret,
@@ -249,33 +284,51 @@ class SecureExchangeManager:
 
         return None
 
-    def _load_from_secure_storage(self, exchange: ExchangeType) -> Optional[ExchangeCredentials]:
+    def _load_from_secure_storage()
+        self, exchange: ExchangeType
+    ) -> Optional[ExchangeCredentials]:
         """Load credentials from secure storage."""
         if not self.secure_config:
             return None
 
         try:
             exchange_name = exchange.value
-            api_key = self.secure_config.get_api_key("{0}_api_key".format(exchange_name))
+            api_key = self.secure_config.get_api_key()
+                "{0}_api_key".format(exchange_name)
+            )
             secret = self.secure_config.get_api_key("{0}_secret".format(exchange_name))
-            passphrase = self.secure_config.get_api_key("{0}_passphrase".format(exchange_name))
+            passphrase = self.secure_config.get_api_key()
+                "{0}_passphrase".format(exchange_name)
+            )
 
             if api_key and secret:
-                logger.info("🔍 Found {0} credentials in secure storage".format(exchange.value))
-                return ExchangeCredentials(
-                    exchange=exchange, api_key=api_key, secret=secret, passphrase=passphrase, sandbox=True, testnet=True
+                logger.info()
+                    "🔍 Found {0} credentials in secure storage".format(exchange.value)
+                )
+                return ExchangeCredentials()
+                    exchange=exchange,
+                    api_key=api_key,
+                    secret=secret,
+                    passphrase=passphrase,
+                    sandbox=True,
+                    testnet=True,
                 )
         except Exception as e:
             logger.error("❌ Error loading from secure storage: {0}".format(e))
 
         return None
 
-    def setup_exchange(
-        self, exchange: ExchangeType, api_key: str, secret: str, passphrase: Optional[str] = None, sandbox: bool = True
+    def setup_exchange()
+        self,
+        exchange: ExchangeType,
+        api_key: str,
+        secret: str,
+        passphrase: Optional[str] = None,
+        sandbox: bool = True,
     ) -> bool:
         """Setup exchange with credentials."""
         try:
-            credentials = ExchangeCredentials(
+            credentials = ExchangeCredentials()
                 exchange=exchange,
                 api_key=api_key,
                 secret=secret,
@@ -313,29 +366,33 @@ class SecureExchangeManager:
 
             # Create CCXT instance
             exchange_class = getattr(ccxt, exchange.value)
-            ccxt_instance = exchange_class(
-                {
-                    'apiKey': credentials.api_key,
-                    'secret': credentials.secret,
-                    'passphrase': credentials.passphrase,
-                    'sandbox': credentials.sandbox,
-                    'testnet': credentials.testnet,
-                    'enableRateLimit': True,
-                    'options': {'defaultType': 'spot'},
+            ccxt_instance = exchange_class()
+                {}
+                    "apiKey": credentials.api_key,
+                    "secret": credentials.secret,
+                    "passphrase": credentials.passphrase,
+                    "sandbox": credentials.sandbox,
+                    "testnet": credentials.testnet,
+                    "enableRateLimit": True,
+                    "options": {"defaultType": "spot"},
                 }
             )
 
             # Test connection
             ccxt_instance.load_markets()
 
-            # Test authentication (try to fetch balance)
+            # Test authentication (try to fetch, balance)
             try:
                 balance = ccxt_instance.fetch_balance()
                 self.status[exchange].authenticated = True
                 self.status[exchange].balance_available = True
                 logger.info("✅ {0} authentication successful".format(exchange.value))
             except Exception as auth_error:
-                logger.warning("⚠️ {0} authentication failed: {1}".format(exchange.value, auth_error))
+                logger.warning()
+                    "⚠️ {0} authentication failed: {1}".format()
+                        exchange.value, auth_error
+                    )
+                )
                 self.status[exchange].authenticated = False
 
             self.status[exchange].connected = True
@@ -357,10 +414,19 @@ class SecureExchangeManager:
 
     def get_available_exchanges(self) -> List[ExchangeType]:
         """Get list of available exchanges."""
-        return [exchange for exchange in self.exchanges.keys() if self.status[exchange].connected]
+        return []
+            exchange
+            for exchange in self.exchanges.keys()
+            if self.status[exchange].connected
+        ]
 
-    async def execute_trade(
-        self, exchange: ExchangeType, symbol: str, side: str, amount: float, order_type: str = 'market'
+    async def execute_trade()
+        self,
+        exchange: ExchangeType,
+        symbol: str,
+        side: str,
+        amount: float,
+        order_type: str = "market",
     ) -> TradeResult:
         """Execute a trade with advanced fill handling."""
         try:
@@ -369,30 +435,56 @@ class SecureExchangeManager:
 
             # Validate exchange
             if not self.status[exchange].connected:
-                return TradeResult(success=False, error_message="Exchange {0} not connected".format(exchange.value))
+                return TradeResult()
+                    success=False,
+                    error_message="Exchange {0} not connected".format(exchange.value),
+                )
 
             if not self.status[exchange].authenticated:
-                return TradeResult(success=False, error_message="Exchange {0} not authenticated".format(exchange.value))
+                return TradeResult()
+                    success=False,
+                    error_message="Exchange {0} not authenticated".format()
+                        exchange.value
+                    ),
+                )
 
             # Get CCXT instance
             ccxt_instance = self.ccxt_instances.get(exchange)
             if not ccxt_instance:
-                return TradeResult(success=False, error_message="CCXT instance not available for {0}".format(exchange.value))
+                return TradeResult()
+                    success=False,
+                    error_message="CCXT instance not available for {0}".format()
+                        exchange.value
+                    ),
+                )
 
             # Execute order
-            logger.info("🚀 Executing {0} {1} {2} on {3}".format(side, amount, symbol, exchange.value))
+            logger.info()
+                "🚀 Executing {0} {1} {2} on {3}".format()
+                    side, amount, symbol, exchange.value
+                )
+            )
 
-            order_params = {'symbol': symbol, 'type': order_type, 'side': side, 'amount': amount}
+            order_params = {}
+                "symbol": symbol,
+                "type": order_type,
+                "side": side,
+                "amount": amount,
+            }
 
             # Add exchange-specific parameters
             if exchange == ExchangeType.BINANCE:
-                order_params['newOrderRespType'] = 'FULL'  # Get detailed response with fills
+                order_params["newOrderRespType"] = ()
+                    "FULL"  # Get detailed response with fills
+                )
 
             order = await ccxt_instance.create_order(**order_params)
 
             # Process with fill handler if available
             if self.fill_handler and order:
-                return await self._process_order_with_fill_handler(order, exchange, symbol)
+                return await self._process_order_with_fill_handler()
+                    order, exchange, symbol
+                )
             else:
                 # Basic processing without fill handler
                 return self._process_basic_order(order)
@@ -401,33 +493,38 @@ class SecureExchangeManager:
             logger.error("❌ Trade execution failed: {0}".format(e))
             return TradeResult(success=False, error_message=str(e))
 
-    async def _process_order_with_fill_handler(
+    async def _process_order_with_fill_handler()
         self, order: Dict[str, Any], exchange: ExchangeType, symbol: str
     ) -> TradeResult:
         """Process order with advanced fill handling."""
         try:
-            order_id = order.get('id', '')
-            status = order.get('status', '').lower()
+            order_id = order.get("id", "")
+            status = order.get("status", "").lower()
 
             # Initialize order state in fill handler
             if self.fill_handler:
                 # Create initial order state
-                order_state = OrderState(
+                order_state = OrderState()
                     order_id=order_id,
                     symbol=symbol,
-                    side=order.get('side', ''),
-                    order_type=order.get('type', ''),
-                    original_amount=float(order.get('amount', 0)),
+                    side=order.get("side", ""),
+                    order_type=order.get("type", ""),
+                    original_amount=float(order.get("amount", 0)),
                 )
                 self.fill_handler.active_orders[order_id] = order_state
 
             # Process fills if present
             fill_events = []
-            if 'fills' in order and order['fills']:
-                for fill_data in order['fills']:
+            if "fills" in order and order["fills"]:
+                for fill_data in order["fills"]:
                     try:
-                        fill_event = await self.fill_handler.process_fill_event(
-                            {'orderId': order_id, 'symbol': symbol, 'side': order.get('side', ''), **fill_data}
+                        fill_event = await self.fill_handler.process_fill_event()
+                            {}
+                                "orderId": order_id,
+                                "symbol": symbol,
+                                "side": order.get("side", ""),
+                                **fill_data,
+                            }
                         )
                         fill_events.append(fill_event)
                     except Exception as e:
@@ -438,15 +535,17 @@ class SecureExchangeManager:
             total_fee = sum(float(fill.fee) for fill in fill_events)
             average_price = 0.0
             if total_filled > 0:
-                total_cost = sum(float(fill.amount * fill.price) for fill in fill_events)
+                total_cost = sum()
+                    float(fill.amount * fill.price) for fill in fill_events
+                )
                 average_price = total_cost / total_filled
 
             # Check for partial fills
-            original_amount = float(order.get('amount', 0))
+            original_amount = float(order.get("amount", 0))
             partial_fills = total_filled < original_amount
 
-            return TradeResult(
-                success=status in ['filled', 'closed', 'partial'],
+            return TradeResult()
+                success=status in ["filled", "closed", "partial"],
                 order_id=order_id,
                 fill_events=fill_events,
                 total_filled=total_filled,
@@ -460,25 +559,25 @@ class SecureExchangeManager:
             return TradeResult(success=False, error_message=str(e))
 
     def _process_basic_order(self, order: Dict[str, Any]) -> TradeResult:
-        """Process order without fill handler (basic mode)."""
+        """Process order without fill handler (basic, mode)."""
         try:
-            order_id = order.get('id', '')
-            status = order.get('status', '').lower()
+            order_id = order.get("id", "")
+            status = order.get("status", "").lower()
 
             # Basic fill processing
             fill_events = []
-            if 'fills' in order and order['fills']:
-                for fill_data in order['fills']:
+            if "fills" in order and order["fills"]:
+                for fill_data in order["fills"]:
                     # Create basic fill event
-                    fill_event = FillEvent(
+                    fill_event = FillEvent()
                         order_id=order_id,
-                        trade_id=fill_data.get('tradeId', ''),
-                        symbol=order.get('symbol', ''),
-                        side=order.get('side', ''),
-                        amount=float(fill_data.get('qty', 0)),
-                        price=float(fill_data.get('price', 0)),
-                        fee=float(fill_data.get('commission', 0)),
-                        fee_currency=fill_data.get('commissionAsset', ''),
+                        trade_id=fill_data.get("tradeId", ""),
+                        symbol=order.get("symbol", ""),
+                        side=order.get("side", ""),
+                        amount=float(fill_data.get("qty", 0)),
+                        price=float(fill_data.get("price", 0)),
+                        fee=float(fill_data.get("commission", 0)),
+                        fee_currency=fill_data.get("commissionAsset", ""),
                         timestamp=int(asyncio.get_event_loop().time() * 1000),
                     )
                     fill_events.append(fill_event)
@@ -487,24 +586,28 @@ class SecureExchangeManager:
             total_fee = sum(float(fill.fee) for fill in fill_events)
             average_price = 0.0
             if total_filled > 0:
-                total_cost = sum(float(fill.amount * fill.price) for fill in fill_events)
+                total_cost = sum()
+                    float(fill.amount * fill.price) for fill in fill_events
+                )
                 average_price = total_cost / total_filled
 
-            return TradeResult(
-                success=status in ['filled', 'closed', 'partial'],
+            return TradeResult()
+                success=status in ["filled", "closed", "partial"],
                 order_id=order_id,
                 fill_events=fill_events,
                 total_filled=total_filled,
                 average_price=average_price,
                 total_fee=total_fee,
-                partial_fills=total_filled < float(order.get('amount', 0)),
+                partial_fills=total_filled < float(order.get("amount", 0)),
             )
 
         except Exception as e:
             logger.error("Error processing basic order: {0}".format(e))
             return TradeResult(success=False, error_message=str(e))
 
-    async def handle_partial_fill(self, order_id: str, fill_data: Dict[str, Any]) -> Dict[str, Any]:
+    async def handle_partial_fill()
+        self, order_id: str, fill_data: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Handle partial fill scenario with retry logic."""
         if not self.fill_handler:
             return {"status": "error", "message": "Fill handler not available"}
@@ -515,7 +618,9 @@ class SecureExchangeManager:
             logger.error("Error handling partial fill: {0}".format(e))
             return {"status": "error", "message": str(e)}
 
-    def get_balance(self, exchange: ExchangeType, currency: str = None) -> Dict[str, Any]:
+    def get_balance()
+        self, exchange: ExchangeType, currency: str = None
+    ) -> Dict[str, Any]:
         """Get account balance."""
         try:
             if not self.status[exchange].connected:
@@ -523,16 +628,20 @@ class SecureExchangeManager:
 
             ccxt_instance = self.ccxt_instances.get(exchange)
             if not ccxt_instance:
-                return {"error": "CCXT instance not available for {0}".format(exchange.value)}
+                return {}
+                    "error": "CCXT instance not available for {0}".format()
+                        exchange.value
+                    )
+                }
 
             balance = ccxt_instance.fetch_balance()
 
             if currency:
-                return {
+                return {}
                     "currency": currency,
-                    "free": balance.get(currency, {}).get('free', 0),
-                    "used": balance.get(currency, {}).get('used', 0),
-                    "total": balance.get(currency, {}).get('total', 0),
+                    "free": balance.get(currency, {}).get("free", 0),
+                    "used": balance.get(currency, {}).get("used", 0),
+                    "total": balance.get(currency, {}).get("total", 0),
                 }
             else:
                 return balance
@@ -564,10 +673,14 @@ class SecureExchangeManager:
 
     def get_secure_summary(self) -> Dict[str, Any]:
         """Get secure summary without exposing sensitive data."""
-        summary = {
+        summary = {}
             "exchanges_configured": len(self.exchanges),
-            "exchanges_connected": len([s for s in self.status.values() if s.connected]),
-            "exchanges_authenticated": len([s for s in self.status.values() if s.authenticated]),
+            "exchanges_connected": len()
+                [s for s in self.status.values() if s.connected]
+            ),
+            "exchanges_authenticated": len()
+                [s for s in self.status.values() if s.authenticated]
+            ),
             "fill_handler_available": FILL_HANDLER_AVAILABLE,
             "secure_storage_available": SECURE_STORAGE_AVAILABLE,
             "ccxt_available": CCXT_AVAILABLE,
@@ -602,7 +715,7 @@ class SecureExchangeManager:
 
 
 # Convenience functions
-def get_exchange_manager() -> SecureExchangeManager:
+    def get_exchange_manager() -> SecureExchangeManager:
     """Get the global exchange manager instance."""
     return SecureExchangeManager()
 
@@ -629,9 +742,9 @@ if __name__ == "__main__":
 
     # Show status
     status = manager.get_secure_summary()
-    print("Total exchanges: {0}".format(status['exchanges_configured']))
-    print("Connected: {0}".format(status['exchanges_connected']))
-    print("Trading ready: {0}".format(status['exchanges_authenticated']))
+    print("Total exchanges: {0}".format(status["exchanges_configured"]))
+    print("Connected: {0}".format(status["exchanges_connected"]))
+    print("Trading ready: {0}".format(status["exchanges_authenticated"]))
 
     # Show individual exchange status
     for exchange_name, exchange_status in status.items():

@@ -1,5 +1,5 @@
-        import traceback
-    from core.speed_lattice_visualizer import SpeedLatticeLivePanelSystem, PanelType
+import traceback
+from core.speed_lattice_visualizer import SpeedLatticeLivePanelSystem, PanelType
 import sys
 import time
 
@@ -10,10 +10,10 @@ Simple Live Panel System Test
 
 
 # Import only the visualizer
-try:
+    try:
 
     print("✅ Successfully imported SpeedLatticeLivePanelSystem")
-except ImportError as e:
+    except ImportError as e:
     print(f"❌ Import error: {e}")
     sys.exit(1)
 
@@ -32,7 +32,7 @@ def simple_test():
         print(f"✅ Initialized {len(panel_system.panels)} panels")
 
         # Test panel switching
-        test_panels = [
+        test_panels = []
             PanelType.DRIFT_MATRIX,
             PanelType.TRADING_STATE,
             PanelType.POOL_ANALYSIS,
@@ -58,10 +58,10 @@ def simple_test():
         print(f"✅ Saved state to: {filename}")
 
         # Test system status
-        status_items = [
+        status_items = []
             ("Total Panels", len(panel_system.panels)),
             ("API Connections", len(panel_system.api_connections)),
-            (
+            ()
                 "Current Panel",
                 panel_system.current_panel.value
                 if panel_system.current_panel

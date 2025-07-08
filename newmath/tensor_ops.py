@@ -1,4 +1,4 @@
-    from core.clean_unified_math import unified_math
+from core.clean_unified_math import unified_math
 from scipy.signal import correlate2d
 import numpy as np
 from typing import Tuple, Union, List
@@ -14,6 +14,7 @@ Connects to existing proven mathematical systems.
 
 # Connect to existing working math
 try:
+    pass
 except ImportError:
     # Simple fallback that works
     class BasicMath:

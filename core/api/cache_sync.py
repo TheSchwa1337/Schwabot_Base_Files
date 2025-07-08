@@ -51,7 +51,7 @@ class CacheSyncService:
     """Background service that refreshes all API handler caches."""
 
     def __init__(self, refresh_interval: int = DEFAULT_REFRESH) -> None:
-        """Initialize the CacheSyncService.
+        """Initialize the CacheSyncService."
 
         Args:
             refresh_interval: The interval in seconds to refresh the cache.
@@ -68,7 +68,11 @@ class CacheSyncService:
 
         await self._discover_handlers()
         self._task = asyncio.create_task(self._run_loop())
-        logger.info("[Service Started] CacheSyncService started with {0} handlers".format(len(self.handlers)))
+        logger.info()
+            "[Service Started] CacheSyncService started with {0} handlers".format()
+                len(self.handlers)
+            )
+        )
 
     async def stop(self) -> None:
         """Stop the cache sync service."""
@@ -81,16 +85,22 @@ class CacheSyncService:
             self._task = None
 
         # Close handler sessions
-        await asyncio.gather(*(h.close() for h in self.handlers), return_exceptions=True)
+        await asyncio.gather()
+            *(h.close() for h in self.handlers), return_exceptions=True
+        )
         logger.info("[Service Stopped] CacheSyncService stopped")
 
     async def _run_loop(self) -> None:
         """The main loop that periodically refreshes the cache."""
         while True:
             try:
-                await asyncio.gather(*(h.get_data(force_refresh=True) for h in self.handlers))
+                await asyncio.gather()
+                    *(h.get_data(force_refresh=True) for h in self.handlers)
+                )
             except Exception as exc:  # noqa: BLE001
-                logger.error("CacheSyncService iteration failed: %s", exc, exc_info=True)
+                logger.error()
+                    "CacheSyncService iteration failed: %s", exc, exc_info=True
+                )
 
             await asyncio.sleep(self.refresh_interval)
 

@@ -1,5 +1,3 @@
-from typing import Any, Dict, List, Optional
-
 """
 
 
@@ -28,7 +26,7 @@ Original file: core\\strategy\\loss_anticipation_curve.py
 
 
 
-Date commented out: 2025-07-02 19:37:06
+Date commented out: 2025-7-2 19:37:6
 
 
 
@@ -40,19 +38,19 @@ The clean implementation has been preserved in the following files:
 
 
 
-- core/clean_math_foundation.py (mathematical foundation)
+- core/clean_math_foundation.py (mathematical, foundation)
 
 
 
-- core/clean_profit_vectorization.py (profit calculations)
+- core/clean_profit_vectorization.py (profit, calculations)
 
 
 
-- core/clean_trading_pipeline.py (trading logic)
+- core/clean_trading_pipeline.py (trading, logic)
 
 
 
-- core/clean_unified_math.py (unified mathematics)
+- core/clean_unified_math.py (unified, mathematics)
 
 
 
@@ -67,7 +65,6 @@ All core functionality has been reimplemented in clean, production-ready files.
 """
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
-
 
 """
 
@@ -198,7 +195,7 @@ self.anticipated_curve: List[float] = []
 
 
 self.metrics: Dict[str, Any]
-    = {last_prediction_time: None,total_predictions: 0,avg_prediction_time": 0.0,
+    = {last_prediction_time: None,total_predictions: 0,avg_prediction_time": 0.0,"}
 
 
 
@@ -357,7 +354,7 @@ predicted_losses: List[float] = []
 
 
 
-if self._model and self._model.get(type) ==average":
+if self._model and self._model.get(type) ==average":"
 
 
 
@@ -365,7 +362,7 @@ if self._model and self._model.get(type) ==average":
 
 
 
-else: base_loss = 0.001  # Default small anticipated loss if no model
+else: base_loss = 0.01  # Default small anticipated loss if no model
 
 
 
@@ -385,7 +382,7 @@ for i in range(self.prediction_horizon):
 
 
 
-            # Factor in market data (e.g., higher volatility -> higher
+            # Factor in market data (e.g., higher volatility -> higher)
 
 
 
@@ -397,7 +394,7 @@ volatility_impact = current_market_data.get(volatility, 1.0)
 
 
 
-anticipated = base_loss * (
+anticipated = base_loss * ()
 
 
 
@@ -430,7 +427,7 @@ prediction_time = end_time - start_time
 
 
 self.metrics[last_prediction_time] = end_timeself.metrics[avg_prediction_time]
-    = (self.metrics[avg_prediction_time]* (self.metrics[total_predictions] - 1)
+    = (self.metrics[avg_prediction_time]* (self.metrics[total_predictions] - 1))
 
 
 
@@ -480,7 +477,7 @@ self.anticipated_curve = []
 
 
 
-self.metrics = {last_prediction_time: None,total_predictions: 0,avg_prediction_time": 0.0,
+self.metrics = {last_prediction_time: None,total_predictions: 0,avg_prediction_time": 0.0,"}
 
 
 
@@ -524,19 +521,19 @@ lac = LossAnticipationCurve(prediction_horizon=5, risk_aversion_factor=1.2)
 
 
 
-lac.update_historical_losses(0.01)
+lac.update_historical_losses(0.1)
 
 
 
-    lac.update_historical_losses(0.005)
+    lac.update_historical_losses(0.05)
 
 
 
-    lac.update_historical_losses(0.02)
+    lac.update_historical_losses(0.2)
 
 
 
-    lac.update_historical_losses(0.008)
+    lac.update_historical_losses(0.08)
 
 
 
@@ -556,8 +553,8 @@ print(fHistorical Losses: {lac.historical_losses})
 
 
 
-market_data1 = {volatility: 1.5,price_change: -0.01}market_data2
-    = {volatility: 0.8,price_change: 0.005}
+market_data1 = {volatility: 1.5,price_change: -0.1}market_data2
+    = {volatility: 0.8,price_change: 0.05}
 
 
 
@@ -569,7 +566,7 @@ curve1 = lac.anticipate_losses(market_data1)'
 
 
 
-print(fAnticipated Loss Curve: {["{0}".format(x:.4f) for x in curve1]})
+print(fAnticipated Loss Curve: {["{0}".format(x) for x in curve1]})
 
 
 
@@ -581,7 +578,7 @@ curve2 = lac.anticipate_losses(market_data2)'
 
 
 
-print(fAnticipated Loss Curve: {["{0}".format(x:.4f) for x in curve2]})
+print(fAnticipated Loss Curve: {["{0}".format(x) for x in curve2]})
 
 
 
@@ -609,8 +606,8 @@ lac.reset()
 
 
 
-print("Historical Losses after reset: {0})print(fMetrics after reset:
-{1})".format(lac.historical_losses, lac.get_metrics())'"
+print("Historical Losses after reset: {0})print(fMetrics after reset:")
+{1})".format(lac.historical_losses, lac.get_metrics())'"'
 
 
 

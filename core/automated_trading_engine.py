@@ -1,7 +1,5 @@
-import asyncio
 from queue import Queue
 from typing import Dict, List, Optional, Tuple
-from abc import ABC, abstractmethod
 import logging
 from dataclasses import dataclass
 from datetime import datetime
@@ -21,17 +19,17 @@ logger = logging.getLogger(__name__)
 
 
 @dataclass
-class TradingSignal:
+    class TradingSignal:
     """Trading signal with automated execution parameters."""
 
     symbol: str
     side: str  # 'buy' or 'sell'
     quantity: float
     price: Optional[float] = None  # None for market orders
-    order_type: str = 'market'  # 'market', 'limit', 'stop'
+    order_type: str = "market"  # 'market', 'limit', 'stop'
     batch_size: int = 1  # Number of orders in batch
     spread_seconds: int = 0  # Spread orders across time
-    strategy_id: str = 'automated'
+    strategy_id: str = "automated"
     confidence: float = 0.8
     timestamp: datetime = None
 
@@ -41,7 +39,7 @@ class TradingSignal:
 
 
 @dataclass
-class BatchOrder:
+    class BatchOrder:
     """Batch order configuration for automated trading."""
 
     symbol: str
@@ -65,30 +63,32 @@ class ExchangeManager:
 
     def _initialize_exchange(self) -> ccxt.Exchange:
         """Initialize CCXT exchange with proper configuration."""
-        exchange_name = self.exchange_config.get('name', 'coinbase')
+        exchange_name = self.exchange_config.get("name", "coinbase")
 
-        exchange_map = {
-            'coinbase': ccxt.coinbase,
-            'binance': ccxt.binance,
-            'kraken': ccxt.kraken,
-            'kucoin': ccxt.kucoin,
+        exchange_map = {}
+            "coinbase": ccxt.coinbase,
+            "binance": ccxt.binance,
+            "kraken": ccxt.kraken,
+            "kucoin": ccxt.kucoin,
         }
 
         exchange_class = exchange_map.get(exchange_name.lower(), ccxt.coinbase)
 
-        exchange = exchange_class(
-            {
-                'apiKey': self.api_key,
-                'secret': self.secret,
-                'sandbox': self.exchange_config.get('sandbox', False),
-                'enableRateLimit': True,
-                'options': {
-                    'defaultType': 'spot',
+        exchange = exchange_class()
+            {}
+                "apiKey": self.api_key,
+                "secret": self.secret,
+                "sandbox": self.exchange_config.get("sandbox", False),
+                "enableRateLimit": True,
+                "options": {}
+                    "defaultType": "spot",
                 },
             }
         )
 
-        logger.info("Initialized {0} exchange for automated trading".format(exchange_name))
+        logger.info()
+            "Initialized {0} exchange for automated trading".format(exchange_name)
+        )
         return exchange
 
     def execute_order(self, order_params: Dict) -> Dict:
@@ -131,7 +131,12 @@ class PriceTracker:
     def __init__(self, exchange_manager: ExchangeManager):
         self.exchange_manager = exchange_manager
         self.price_cache = {}
-        self.tensor_state = {'momentum': {}, 'volatility': {}, 'correlation_matrix': {}, 'basket_weights': {}}
+        self.tensor_state = {}
+            "momentum": {},
+            "volatility": {},
+            "correlation_matrix": {},
+            "basket_weights": {},
+        }
         self.tracking_symbols = set()
         self._running = False
         self._thread = None
@@ -176,10 +181,12 @@ class PriceTracker:
                 for symbol in self.tracking_symbols:
                     try:
                         ticker = self.exchange_manager.exchange.fetch_ticker(symbol)
-                        self.price_cache[symbol] = ticker['last']
-                        self._update_tensor_state(symbol, ticker['last'])
+                        self.price_cache[symbol] = ticker["last"]
+                        self._update_tensor_state(symbol, ticker["last"])
                     except Exception as e:
-                        logger.warning("Failed to fetch price for {0}: {1}".format(symbol, e))
+                        logger.warning()
+                            "Failed to fetch price for {0}: {1}".format(symbol, e)
+                        )
 
                 time.sleep(1)
             except Exception as e:
@@ -188,11 +195,11 @@ class PriceTracker:
 
     def _update_tensor_state(self, symbol: str, price: float):
         """Update mathematical tensor state with new price data."""
-        if symbol not in self.tensor_state['momentum']:
-            self.tensor_state['momentum'][symbol] = []
-            self.tensor_state['volatility'][symbol] = []
+        if symbol not in self.tensor_state["momentum"]:
+            self.tensor_state["momentum"][symbol] = []
+            self.tensor_state["volatility"][symbol] = []
 
-        momentum_data = self.tensor_state['momentum'][symbol]
+        momentum_data = self.tensor_state["momentum"][symbol]
         momentum_data.append(price)
 
         if len(momentum_data) > 100:
@@ -200,12 +207,12 @@ class PriceTracker:
 
         if len(momentum_data) > 1:
             momentum = (momentum_data[-1] - momentum_data[-2]) / momentum_data[-2]
-            self.tensor_state['momentum'][symbol] = momentum
+            self.tensor_state["momentum"][symbol] = momentum
 
         if len(momentum_data) > 10:
             recent_prices = momentum_data[-10:]
             volatility = np.std(recent_prices) / np.mean(recent_prices)
-            self.tensor_state['volatility'][symbol] = volatility
+            self.tensor_state["volatility"][symbol] = volatility
 
 
 class OrderManager:
@@ -219,28 +226,30 @@ class OrderManager:
     def execute_signal(self, signal: TradingSignal) -> str:
         """Execute a single trading signal."""
         try:
-            order_params = {
-                'symbol': signal.symbol,
-                'type': signal.order_type,
-                'side': signal.side,
-                'amount': signal.quantity,
+            order_params = {}
+                "symbol": signal.symbol,
+                "type": signal.order_type,
+                "side": signal.side,
+                "amount": signal.quantity,
             }
 
-            if signal.price and signal.order_type == 'limit':
-                order_params['price'] = signal.price
+            if signal.price and signal.order_type == "limit":
+                order_params["price"] = signal.price
 
             order = self.exchange_manager.execute_order(order_params)
-            order_id = order['id']
+            order_id = order["id"]
 
-            self.active_orders[order_id] = {
-                'signal': signal,
-                'order': order,
-                'status': 'pending',
-                'timestamp': datetime.now(),
+            self.active_orders[order_id] = {}
+                "signal": signal,
+                "order": order,
+                "status": "pending",
+                "timestamp": datetime.now(),
             }
 
-            logger.info(
-                "Executed {0} order {1} for {2} {3}".format(signal.side, order_id, signal.quantity, signal.symbol)
+            logger.info()
+                "Executed {0} order {1} for {2} {3}".format()
+                    signal.side, order_id, signal.quantity, signal.symbol
+                )
             )
             return order_id
 
@@ -253,16 +262,18 @@ class OrderManager:
         if order_id in self.active_orders:
             try:
                 order = self.exchange_manager.fetch_order_status(order_id)
-                self.active_orders[order_id]['order'] = order
-                self.active_orders[order_id]['status'] = order['status']
+                self.active_orders[order_id]["order"] = order
+                self.active_orders[order_id]["status"] = order["status"]
 
-                if order['status'] in ['closed', 'canceled']:
+                if order["status"] in ["closed", "canceled"]:
                     self.order_history.append(self.active_orders[order_id])
                     del self.active_orders[order_id]
 
                 return self.active_orders[order_id]
             except Exception as e:
-                logger.warning("Could not fetch order status for {0}: {1}".format(order_id, e))
+                logger.warning()
+                    "Could not fetch order status for {0}: {1}".format(order_id, e)
+                )
                 return self.active_orders.get(order_id, {})
 
         return {}
@@ -272,7 +283,7 @@ class OrderManager:
         try:
             success = self.exchange_manager.cancel_order(order_id)
             if success and order_id in self.active_orders:
-                self.active_orders[order_id]['status'] = 'canceled'
+                self.active_orders[order_id]["status"] = "canceled"
                 self.order_history.append(self.active_orders[order_id])
                 del self.active_orders[order_id]
 
@@ -297,7 +308,9 @@ class BatchOrderProcessor:
         """Start batch order processing thread."""
         if not self._running:
             self._running = True
-            self._thread = threading.Thread(target=self._process_batch_orders, daemon=True)
+            self._thread = threading.Thread()
+                target=self._process_batch_orders, daemon=True
+            )
             self._thread.start()
             logger.info("Started batch order processing")
 
@@ -335,12 +348,12 @@ class BatchOrderProcessor:
             for i in range(batch_order.batch_count):
                 price = self._calculate_order_price(batch_order, i)
 
-                signal = TradingSignal(
+                signal = TradingSignal()
                     symbol=batch_order.symbol,
                     side=batch_order.side,
                     quantity=quantity_per_order,
                     price=price,
-                    order_type='limit',
+                    order_type="limit",
                     batch_size=1,
                     strategy_id=batch_order.strategy,
                 )
@@ -350,18 +363,31 @@ class BatchOrderProcessor:
                 if i < batch_order.batch_count - 1:
                     time.sleep(time_between_orders)
 
-            logger.info("Executed batch order {0} with {1} orders".format(batch_id, batch_order.batch_count))
+            logger.info()
+                "Executed batch order {0} with {1} orders".format()
+                    batch_id, batch_order.batch_count
+                )
+            )
 
         except Exception as e:
             logger.error("Error executing batch order {0}: {1}".format(batch_id, e))
 
-    def _calculate_order_price(self, batch_order: BatchOrder, order_index: int) -> float:
+    def _calculate_order_price()
+        self, batch_order: BatchOrder, order_index: int
+    ) -> float:
         """Calculate price for a specific order in the batch."""
         if batch_order.price_range[0] == batch_order.price_range[1]:
             return batch_order.price_range[0]
 
-        price_ratio = order_index / (batch_order.batch_count - 1) if batch_order.batch_count > 1 else 0.5
-        return batch_order.price_range[0] + (batch_order.price_range[1] - batch_order.price_range[0]) * price_ratio
+        price_ratio = ()
+            order_index / (batch_order.batch_count - 1)
+            if batch_order.batch_count > 1
+            else 0.5
+        )
+        return ()
+            batch_order.price_range[0]
+            + (batch_order.price_range[1] - batch_order.price_range[0]) * price_ratio
+        )
 
 
 class AutomatedTradingEngine:
@@ -378,7 +404,7 @@ class AutomatedTradingEngine:
         self.price_tracker.start_tracking()
         self.batch_processor.start_processing()
 
-    def create_buy_wall(
+    def create_buy_wall()
         self,
         symbol: str,
         total_quantity: float,
@@ -389,20 +415,20 @@ class AutomatedTradingEngine:
         """Create automated buy wall with batch orders."""
         batch_id = "buy_wall_{0}_{1}".format(symbol, int(time.time()))
 
-        batch_order = BatchOrder(
+        batch_order = BatchOrder()
             symbol=symbol,
-            side='buy',
+            side="buy",
             total_quantity=total_quantity,
             batch_count=min(batch_count, 50),
             price_range=price_range,
             spread_seconds=spread_seconds,
-            strategy='buy_wall',
+            strategy="buy_wall",
         )
 
         self.batch_processor.add_batch_order(batch_id, batch_order)
         return batch_id
 
-    def create_sell_wall(
+    def create_sell_wall()
         self,
         symbol: str,
         total_quantity: float,
@@ -413,21 +439,25 @@ class AutomatedTradingEngine:
         """Create automated sell wall with batch orders."""
         batch_id = "sell_wall_{0}_{1}".format(symbol, int(time.time()))
 
-        batch_order = BatchOrder(
+        batch_order = BatchOrder()
             symbol=symbol,
-            side='sell',
+            side="sell",
             total_quantity=total_quantity,
             batch_count=min(batch_count, 50),
             price_range=price_range,
             spread_seconds=spread_seconds,
-            strategy='sell_wall',
+            strategy="sell_wall",
         )
 
         self.batch_processor.add_batch_order(batch_id, batch_order)
         return batch_id
 
-    def create_basket_order(
-        self, basket_symbols: List[str], weights: List[float], total_value: float, strategy: str = 'basket'
+    def create_basket_order()
+        self,
+        basket_symbols: List[str],
+        weights: List[float],
+        total_value: float,
+        strategy: str = "basket",
     ) -> str:
         """Create automated basket order across multiple symbols."""
         basket_id = "basket_{0}_{1}".format(strategy, int(time.time()))
@@ -443,10 +473,20 @@ class AutomatedTradingEngine:
 
         for symbol, quantity in zip(basket_symbols, quantities):
             if quantity > 0:
-                signal = TradingSignal(symbol=symbol, side='buy', quantity=quantity, strategy_id=strategy, batch_size=1)
+                signal = TradingSignal()
+                    symbol=symbol,
+                    side="buy",
+                    quantity=quantity,
+                    strategy_id=strategy,
+                    batch_size=1,
+                )
                 self.order_manager.execute_signal(signal)
 
-        logger.info("Created basket order {0} for {1} symbols".format(basket_id, len(basket_symbols)))
+        logger.info()
+            "Created basket order {0} for {1} symbols".format()
+                basket_id, len(basket_symbols)
+            )
+        )
         return basket_id
 
     # Delegate methods to appropriate managers
@@ -489,8 +529,8 @@ class AutomatedTradingEngine:
         try:
             price_data = []
             for symbol in symbols:
-                if symbol in self.price_tracker.tensor_state['momentum']:
-                    prices = self.price_tracker.tensor_state['momentum'][symbol]
+                if symbol in self.price_tracker.tensor_state["momentum"]:
+                    prices = self.price_tracker.tensor_state["momentum"][symbol]
                     if len(prices) > 10:
                         price_data.append(prices[-10:])
 
@@ -504,12 +544,14 @@ class AutomatedTradingEngine:
             logger.error("Error calculating basket correlation: {0}".format(e))
             return np.array([])
 
-    def optimize_basket_weights(self, symbols: List[str], target_volatility: float = 0.1) -> List[float]:
+    def optimize_basket_weights()
+        self, symbols: List[str], target_volatility: float = 0.1
+    ) -> List[float]:
         """Optimize basket weights based on mathematical tensor analysis."""
         try:
             volatilities = []
             for symbol in symbols:
-                vol = self.price_tracker.tensor_state['volatility'].get(symbol, 0.1)
+                vol = self.price_tracker.tensor_state["volatility"].get(symbol, 0.1)
                 volatilities.append(vol)
 
             weights = [1.0 / len(symbols)] * len(symbols)

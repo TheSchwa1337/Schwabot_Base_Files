@@ -57,7 +57,7 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-__all__ = [
+__all__ = []
     "configure_logging",
     "set_level",
 ]
@@ -78,7 +78,7 @@ def setup_logging(name: str = None) -> logging.Logger:
 # ---------------------------------------------------------------------------
 
 
-def configure_logging(
+def configure_logging()
     name: str | None = None,
     *,
     level: str | int = "INFO",
@@ -86,7 +86,7 @@ def configure_logging(
     datefmt: str | None = None,
     **basic_cfg: Any,
 ) -> logging.Logger:
-    """Return a module-level logger configured once per process.
+    """Return a module-level logger configured once per process."
 
 
 
@@ -126,7 +126,7 @@ def configure_logging(
 
 
 
-        Schwabot's default format.
+        Schwabot's default format.'
 
 
 
@@ -156,7 +156,7 @@ def configure_logging(
 
         # Root not configured yet  set it up
 
-        logging.basicConfig(
+        logging.basicConfig()
             level=numeric_level,
             format=fmt or "%(asctime)s | %(levelname)-8s | %(name)s: %(message)s",
             datefmt=datefmt or "%Y-%m-%d %H:%M:%S",
@@ -169,7 +169,7 @@ def configure_logging(
 
         logging.getLogger().setLevel(numeric_level)
 
-    return logging.getLogger(name or __name__)
+    return logging.getLogger(name or, __name__)
 
 
 def set_level(level: str | int) -> None:

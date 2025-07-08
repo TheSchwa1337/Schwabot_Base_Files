@@ -3,12 +3,12 @@ import sys
 import traceback
 from datetime import datetime
 from typing import Dict, List, Any
-        from .antipole_router import (
-        from .automated_trading_engine import (
-        import logging
-        import threading
+from .antipole_router import ()
+from .automated_trading_engine import ()
+import logging
+import threading
 
-        import numpy as np
+import numpy as np
 
 #!/usr/bin/env python3
 """
@@ -165,7 +165,7 @@ def test_automated_trading_engine():
 
         # Test BatchOrder
         try:
-            batch = BatchOrder(
+            batch = BatchOrder()
                 symbol="BTC/USD",
                 side="buy",
                 total_quantity=1.0,
@@ -273,7 +273,7 @@ def run_comprehensive_system_test():
     logger.info("   Total Tests: {0}".format(total_tests))
     logger.info("   Passed: {0}".format(passed_tests))
     logger.info("   Failed: {0}".format(total_tests - passed_tests))
-    logger.info("   Success Rate: {0}%".format(success_rate:.1f))
+    logger.info("   Success, Rate))"
 
     if success_rate >= 80:
         logger.info("🎉 SYSTEM STATUS: HEALTHY")

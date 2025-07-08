@@ -1,6 +1,6 @@
-        import math
-        import random
-    import argparse
+import math
+import random
+import argparse
 from concurrent.futures import ThreadPoolExecutor
 from core.master_cycle_engine import MasterCycleEngine
 from typing import Dict, List, Optional, Any, Set

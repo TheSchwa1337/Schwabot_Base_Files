@@ -14,7 +14,7 @@ import unittest
 from typing import List, Dict, Any
 
 # Configure logging
-logging.basicConfig(
+logging.basicConfig()
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s'
 )
@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
 
 def cleanup_old_test_files():
     """Remove old test files that are no longer compatible."""
-    old_test_files = [
+    old_test_files = []
         'test_zpe_zbe_integration.py',  # Old integration test
         'test_integration.py',          # Generic integration test
         'test_api_simple.py',           # Simple API test
@@ -32,9 +32,9 @@ def cleanup_old_test_files():
         'test_batch_order_validation_system.py',
         'test_enhanced_ccxt_linux_compatibility.py'
     ]
-    
+
     logger.info("🧹 Cleaning up old test files...")
-    
+
     for test_file in old_test_files:
         if os.path.exists(test_file):
             try:
@@ -49,15 +49,15 @@ def cleanup_old_test_files():
 def run_test_file(test_file: str) -> bool:
     """Run a specific test file and return success status."""
     logger.info(f"🧪 Running {test_file}...")
-    
+
     try:
-        result = subprocess.run(
+        result = subprocess.run()
             [sys.executable, test_file],
             capture_output=True,
             text=True,
             timeout=60
         )
-        
+
         if result.returncode == 0:
             logger.info(f"   ✅ {test_file} passed")
             return True
@@ -65,7 +65,7 @@ def run_test_file(test_file: str) -> bool:
             logger.error(f"   ❌ {test_file} failed")
             logger.error(f"   Error output: {result.stderr}")
             return False
-            
+
     except subprocess.TimeoutExpired:
         logger.error(f"   ⏰ {test_file} timed out")
         return False
@@ -79,22 +79,22 @@ def run_all_tests():
     logger.info("=" * 80)
     logger.info("🚀 STARTING COMPREHENSIVE ZPE-ZBE TEST SUITE")
     logger.info("=" * 80)
-    
+
     # Clean up old test files first
     cleanup_old_test_files()
-    
+
     # Define test files to run
-    test_files = [
+    test_files = []
         'test_zpe_zbe_core_comprehensive.py',
         'test_performance_tracking.py',
         'test_unified_math_system.py'
     ]
-    
+
     # Track results
     test_results: Dict[str, bool] = {}
     total_tests = len(test_files)
     passed_tests = 0
-    
+
     # Run each test file
     for test_file in test_files:
         if os.path.exists(test_file):
@@ -105,7 +105,7 @@ def run_all_tests():
         else:
             logger.warning(f"   ⚠️  Test file not found: {test_file}")
             test_results[test_file] = False
-    
+
     # Print summary
     logger.info("=" * 80)
     logger.info("📊 TEST SUMMARY")
@@ -113,11 +113,11 @@ def run_all_tests():
     logger.info(f"Total tests: {total_tests}")
     logger.info(f"Passed: {passed_tests}")
     logger.info(f"Failed: {total_tests - passed_tests}")
-    
+
     for test_file, success in test_results.items():
         status = "✅ PASSED" if success else "❌ FAILED"
         logger.info(f"   {test_file}: {status}")
-    
+
     if passed_tests == total_tests:
         logger.info("🎉 ALL TESTS PASSED! ZPE-ZBE core is ready for implementation.")
         return True
@@ -129,20 +129,20 @@ def run_all_tests():
 def validate_core_files():
     """Validate that core files exist and are importable."""
     logger.info("🔍 Validating core files...")
-    
-    core_files = [
+
+    core_files = []
         'core/zpe_zbe_core.py',
         'core/unified_math_system.py',
         'core/clean_math_foundation.py'
     ]
-    
+
     for core_file in core_files:
         if os.path.exists(core_file):
             logger.info(f"   ✅ Found: {core_file}")
         else:
             logger.error(f"   ❌ Missing: {core_file}")
             return False
-    
+
     # Test imports
     try:
         from core.zpe_zbe_core import ZPEZBECore, QuantumSyncStatus, ZPEVector, ZBEBalance
@@ -202,10 +202,10 @@ This report documents the testing of the new ZPE-ZBE core implementation.
 3. Implement strategy execution
 4. Add monitoring and alerting
 """
-    
+
     with open('ZPE_ZBE_TEST_REPORT.md', 'w', encoding='utf-8') as f:
         f.write(report_content)
-    
+
     logger.info("📝 Test report created: ZPE_ZBE_TEST_REPORT.md")
 
 
@@ -213,24 +213,24 @@ def main():
     """Main test runner function."""
     logger.info("🔧 ZPE-ZBE Core Test Runner")
     logger.info("=" * 50)
-    
+
     # Validate core files first
     if not validate_core_files():
         logger.error("❌ Core file validation failed. Exiting.")
         return False
-    
+
     # Run all tests
     success = run_all_tests()
-    
+
     # Create test report
     create_test_report()
-    
+
     if success:
         logger.info("🎯 ZPE-ZBE core is ready for clean pipeline integration!")
         logger.info("📋 Review ZPE_ZBE_TEST_REPORT.md for details")
     else:
         logger.error("🔧 Please fix test failures before integration")
-    
+
     return success
 
 

@@ -26,7 +26,7 @@ shows how all components integrate together.
 
 
 # Configure logging
-logging.basicConfig(
+logging.basicConfig()
     level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
@@ -57,7 +57,7 @@ class OrderBookVectorizationSystem:
         """
         logger.info("Starting full integration test...")
 
-        test_results = {
+        test_results = {}
             "test_timestamp": time.time(),
             "components_tested": [],
             "performance_metrics": {},
@@ -108,7 +108,7 @@ class OrderBookVectorizationSystem:
 
     async def _test_order_book_vectorization():-> Dict[str, Any]:
         """Test order book vectorization functionality."""
-        results = {
+        results = {}
             "success": False,
             "vectorization_tests": [],
             "performance_metrics": {},
@@ -118,11 +118,11 @@ class OrderBookVectorizationSystem:
             sample_order_book = self._generate_sample_order_book()
 
             # Test 16-bit vectorization
-            vector_16 = self.order_book_vectorizer.vectorize_order_book(
+            vector_16 = self.order_book_vectorizer.vectorize_order_book()
                 sample_order_book, bit_depth=16, symbol="BTC/USDC"
             )
 
-            vectorization_test = {
+            vectorization_test = {}
                 "test_name": "16-bit_vectorization",
                 "success": True,
                 "vector_shape": vector_16.shape,
@@ -133,11 +133,11 @@ class OrderBookVectorizationSystem:
             results["vectorization_tests"].append(vectorization_test)
 
             # Test 32-bit vectorization
-            vector_32 = self.order_book_vectorizer.vectorize_order_book(
+            vector_32 = self.order_book_vectorizer.vectorize_order_book()
                 sample_order_book, bit_depth=32, symbol="BTC/USDC"
             )
 
-            vectorization_test_32 = {
+            vectorization_test_32 = {}
                 "test_name": "32-bit_vectorization",
                 "success": True,
                 "vector_shape": vector_32.shape,
@@ -154,11 +154,11 @@ class OrderBookVectorizationSystem:
             # Test batch vectorization
             order_books = [sample_order_book] * 3
             symbols = ["BTC/USDC", "ETH/USDC", "XRP/USDC"]
-            batch_vectors = self.order_book_vectorizer.vectorize_order_book_batch(
+            batch_vectors = self.order_book_vectorizer.vectorize_order_book_batch()
                 order_books, symbols, bit_depth=16
             )
 
-            batch_test = {
+            batch_test = {}
                 "test_name": "batch_vectorization",
                 "success": len(batch_vectors) == 3,
                 "batch_size": len(batch_vectors),
@@ -176,7 +176,7 @@ class OrderBookVectorizationSystem:
 
     async def _test_strategy_bit_mapping():-> Dict[str, Any]:
         """Test strategy bit mapping functionality."""
-        results = {
+        results = {}
             "success": False,
             "mapping_tests": [],
             "performance_metrics": {},
@@ -185,11 +185,11 @@ class OrderBookVectorizationSystem:
             base_strategy = 0b1010  # 10 in decimal
 
             # Test flip expansion
-            flip_strategies = self.strategy_bit_mapper.expand_strategy_bits(
+            flip_strategies = self.strategy_bit_mapper.expand_strategy_bits()
                 base_strategy, target_depth=8, mode="flip"
             )
 
-            flip_test = {
+            flip_test = {}
                 "test_name": "flip_expansion",
                 "success": len(flip_strategies) == 2,  # 8-bit = 2 strategies
                 "strategies_count": len(flip_strategies),
@@ -198,11 +198,11 @@ class OrderBookVectorizationSystem:
             results["mapping_tests"].append(flip_test)
 
             # Test mirror expansion
-            mirror_strategies = self.strategy_bit_mapper.expand_strategy_bits(
+            mirror_strategies = self.strategy_bit_mapper.expand_strategy_bits()
                 base_strategy, target_depth=8, mode="mirror"
             )
 
-            mirror_test = {
+            mirror_test = {}
                 "test_name": "mirror_expansion",
                 "success": len(mirror_strategies) == 2,
                 "strategies_count": len(mirror_strategies),
@@ -211,11 +211,11 @@ class OrderBookVectorizationSystem:
             results["mapping_tests"].append(mirror_test)
 
             # Test random expansion
-            random_strategies = self.strategy_bit_mapper.expand_strategy_bits(
+            random_strategies = self.strategy_bit_mapper.expand_strategy_bits()
                 base_strategy, target_depth=8, mode="random"
             )
 
-            random_test = {
+            random_test = {}
                 "test_name": "random_expansion",
                 "success": len(random_strategies) == 2,
                 "strategies_count": len(random_strategies),
@@ -224,11 +224,11 @@ class OrderBookVectorizationSystem:
             results["mapping_tests"].append(random_test)
 
             # Test Ferris expansion
-            ferris_strategies = self.strategy_bit_mapper.expand_strategy_bits(
+            ferris_strategies = self.strategy_bit_mapper.expand_strategy_bits()
                 base_strategy, target_depth=8, mode="ferris", ferris_phase=np.pi / 4
             )
 
-            ferris_test = {
+            ferris_test = {}
                 "test_name": "ferris_expansion",
                 "success": len(ferris_strategies) == 2,
                 "strategies_count": len(ferris_strategies),
@@ -237,11 +237,11 @@ class OrderBookVectorizationSystem:
             results["mapping_tests"].append(ferris_test)
 
             # Test self-similarity detection
-            similarity_result = self.strategy_bit_mapper.detect_self_similarity(
+            similarity_result = self.strategy_bit_mapper.detect_self_similarity()
                 flip_strategies, similarity_threshold=0.8
             )
 
-            similarity_test = {
+            similarity_test = {}
                 "test_name": "self_similarity_detection",
                 "success": True,
                 "similarity_result": similarity_result,
@@ -262,7 +262,7 @@ class OrderBookVectorizationSystem:
 
     async def _test_api_bridge():-> Dict[str, Any]:
         """Test API bridge functionality."""
-        results = {
+        results = {}
             "success": False,
             "api_tests": [],
             "performance_metrics": {},
@@ -271,7 +271,7 @@ class OrderBookVectorizationSystem:
             # Test order book fetching
             order_book = await self.api_bridge.fetch_order_book("BTC/USDC", limit=10)
 
-            order_book_test = {
+            order_book_test = {}
                 "test_name": "order_book_fetch",
                 "success": "bids" in order_book and "asks" in order_book,
                 "bids_count": len(order_book.get("bids", [])),
@@ -282,7 +282,7 @@ class OrderBookVectorizationSystem:
             # Test price data fetching
             price_data = await self.api_bridge.fetch_price_data("BTC/USDC")
 
-            price_test = {
+            price_test = {}
                 "test_name": "price_data_fetch",
                 "success": "price" in price_data,
                 "price": price_data.get("price", 0),
@@ -293,11 +293,11 @@ class OrderBookVectorizationSystem:
             # Test news sentiment fetching
             news_data = await self.api_bridge.fetch_news_sentiment("BTC", limit=5)
 
-            news_test = {
+            news_test = {}
                 "test_name": "news_sentiment_fetch",
                 "success": len(news_data) > 0,
                 "news_count": len(news_data),
-                "avg_sentiment": np.mean(
+                "avg_sentiment": np.mean()
                     [item.get("sentiment", 0) for item in news_data]
                 ),
             }
@@ -317,7 +317,7 @@ class OrderBookVectorizationSystem:
 
     async def _test_entry_exit_logic():-> Dict[str, Any]:
         """Test entry/exit logic functionality."""
-        results = {
+        results = {}
             "success": False,
             "logic_tests": [],
             "performance_metrics": {},
@@ -329,11 +329,11 @@ class OrderBookVectorizationSystem:
             test_ghost_input = 0.5
 
             # Test entry signal
-            entry_result = self.entry_exit_logic.compute_entry_signal(
+            entry_result = self.entry_exit_logic.compute_entry_signal()
                 test_vector, test_ferris_phase, test_ghost_input
             )
 
-            entry_test = {
+            entry_test = {}
                 "test_name": "entry_signal",
                 "success": "should_enter" in entry_result,
                 "should_enter": entry_result.get("should_enter", False),
@@ -343,7 +343,7 @@ class OrderBookVectorizationSystem:
             results["logic_tests"].append(entry_test)
 
             # Test exit signal
-            exit_result = self.entry_exit_logic.compute_exit_signal(
+            exit_result = self.entry_exit_logic.compute_exit_signal()
                 test_vector,
                 test_ferris_phase,
                 test_ghost_input,
@@ -352,7 +352,7 @@ class OrderBookVectorizationSystem:
                 time_held=3600.0,
             )
 
-            exit_test = {
+            exit_test = {}
                 "test_name": "exit_signal",
                 "success": "should_exit" in exit_result,
                 "should_exit": exit_result.get("should_exit", False),
@@ -375,7 +375,7 @@ class OrderBookVectorizationSystem:
 
     async def _test_full_pipeline():-> Dict[str, Any]:
         """Test the complete pipeline integration."""
-        results = {
+        results = {}
             "success": False,
             "pipeline_steps": [],
             "final_result": {},
@@ -385,7 +385,7 @@ class OrderBookVectorizationSystem:
             logger.info("Pipeline Step 1: Fetching order book data...")
             order_book = await self.api_bridge.fetch_order_book("BTC/USDC", limit=8)
 
-            step1 = {
+            step1 = {}
                 "step": "fetch_order_book",
                 "success": "bids" in order_book and "asks" in order_book,
                 "data_shape": f"bids: {len(order_book.get('bids', []))}, asks: {len(order_book.get('asks', []))}",
@@ -394,11 +394,11 @@ class OrderBookVectorizationSystem:
 
             # Step 2: Vectorize order book
             logger.info("Pipeline Step 2: Vectorizing order book...")
-            vector = self.order_book_vectorizer.vectorize_order_book(
+            vector = self.order_book_vectorizer.vectorize_order_book()
                 order_book, bit_depth=16
             )
 
-            step2 = {
+            step2 = {}
                 "step": "vectorize_order_book",
                 "success": vector.shape == (16,),
                 "vector_shape": vector.shape,
@@ -410,7 +410,7 @@ class OrderBookVectorizationSystem:
             logger.info("Pipeline Step 3: Computing Ferris phase...")
             ferris_phase = self._compute_ferris_phase()
 
-            step3 = {
+            step3 = {}
                 "step": "compute_ferris_phase",
                 "success": True,
                 "ferris_phase": ferris_phase,
@@ -421,7 +421,7 @@ class OrderBookVectorizationSystem:
             logger.info("Pipeline Step 4: Computing Ghost input...")
             ghost_input = self._compute_ghost_input(vector)
 
-            step4 = {
+            step4 = {}
                 "step": "compute_ghost_input",
                 "success": True,
                 "ghost_input": ghost_input,
@@ -430,11 +430,11 @@ class OrderBookVectorizationSystem:
 
             # Step 5: Compute entry signal
             logger.info("Pipeline Step 5: Computing entry signal...")
-            entry_signal = self.entry_exit_logic.compute_entry_signal(
+            entry_signal = self.entry_exit_logic.compute_entry_signal()
                 vector, ferris_phase, ghost_input
             )
 
-            step5 = {
+            step5 = {}
                 "step": "compute_entry_signal",
                 "success": "should_enter" in entry_signal,
                 "should_enter": entry_signal.get("should_enter", False),
@@ -446,18 +446,18 @@ class OrderBookVectorizationSystem:
             logger.info("Pipeline Step 6: Expanding strategy bits...")
             if entry_signal.get("should_enter", False):
                 base_strategy = 0b1010
-                expanded_strategies = self.strategy_bit_mapper.expand_strategy_bits(
+                expanded_strategies = self.strategy_bit_mapper.expand_strategy_bits()
                     base_strategy, target_depth=8, mode="flip"
                 )
 
-                step6 = {
+                step6 = {}
                     "step": "expand_strategy_bits",
                     "success": len(expanded_strategies) == 2,
                     "strategies_count": len(expanded_strategies),
                     "strategies": expanded_strategies,
                 }
             else:
-                step6 = {
+                step6 = {}
                     "step": "expand_strategy_bits",
                     "success": True,
                     "note": "No entry signal, skipping strategy expansion",
@@ -465,11 +465,11 @@ class OrderBookVectorizationSystem:
             results["pipeline_steps"].append(step6)
 
             # Final result
-            results["final_result"] = {
+            results["final_result"] = {}
                 "entry_decision": entry_signal.get("should_enter", False),
                 "signal_strength": entry_signal.get("signal_strength", 0),
                 "position_size": entry_signal.get("position_size", 0),
-                "risk_score": entry_signal.get("risk_assessment", {}).get(
+                "risk_score": entry_signal.get("risk_assessment", {}).get()
                     "risk_score", 0.5
                 ),
             }
@@ -484,14 +484,14 @@ class OrderBookVectorizationSystem:
     def _generate_sample_order_book():-> Dict[str, List]:
         """Generate sample order book data for testing."""
         base_price = 62000.0
-        spread = 0.001
+        spread = 0.01
 
         bids = []
         asks = []
 
         for i in range(8):
-            bid_price = base_price * (1 - spread / 2 - i * 0.0001)
-            ask_price = base_price * (1 + spread / 2 + i * 0.0001)
+            bid_price = base_price * (1 - spread / 2 - i * 0.001)
+            ask_price = base_price * (1 + spread / 2 + i * 0.001)
 
             bid_volume = np.random.uniform(0.1, 2.0)
             ask_volume = np.random.uniform(0.1, 2.0)
@@ -518,7 +518,7 @@ class OrderBookVectorizationSystem:
 
     def _collect_performance_metrics():-> Dict[str, Any]:
         """Collect performance metrics from all components."""
-        return {
+        return {}
             "order_book_vectorizer": self.order_book_vectorizer.get_performance_summary(),
             "strategy_bit_mapper": self.strategy_bit_mapper.get_performance_summary(),
             "api_bridge": self.api_bridge.get_api_performance_summary(),
@@ -557,25 +557,25 @@ async def main():
 
             if "vectorization_tests" in component_results:
                 for test in component_results["vectorization_tests"]:
-                    print(
+                    print()
                         f"  - {test['test_name']}: {'✅' if test['success'] else '❌'}"
                     )
 
             if "mapping_tests" in component_results:
                 for test in component_results["mapping_tests"]:
-                    print(
+                    print()
                         f"  - {test['test_name']}: {'✅' if test['success'] else '❌'}"
                     )
 
             if "api_tests" in component_results:
                 for test in component_results["api_tests"]:
-                    print(
+                    print()
                         f"  - {test['test_name']}: {'✅' if test['success'] else '❌'}"
                     )
 
             if "logic_tests" in component_results:
                 for test in component_results["logic_tests"]:
-                    print(
+                    print()
                         f"  - {test['test_name']}: {'✅' if test['success'] else '❌'}"
                     )
 
@@ -602,14 +602,14 @@ async def main():
     # Print final pipeline result
     if "full_pipeline" in results["integration_results"]:
         pipeline_results = results["integration_results"]["full_pipeline"]
-        if (
+        if ()
             pipeline_results.get("success", False)
             and "final_result" in pipeline_results
         ):
             final_result = pipeline_results["final_result"]
             print("\nFINAL PIPELINE RESULT:")
             print("-" * 40)
-            print(
+            print()
                 f"Entry Decision: {'✅ ENTER' if final_result['entry_decision'] else '❌ HOLD'}"
             )
             print(f"Signal Strength: {final_result['signal_strength']:.4f}")

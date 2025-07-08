@@ -37,7 +37,7 @@ class MemoryState(Enum):
 
 
 @dataclass
-class GhostShellMemory:
+    class GhostShellMemory:
     """Memory entry for a ghost shell"""
 
     strategy_id: str
@@ -73,7 +73,11 @@ class ShellMemoryEngine:
         self.memory_ttl = memory_ttl
         self.access_history: List[Tuple[str, float]] = []
 
-        logger.info("Ghost Shell Memory Engine initialized (max: {0}, ttl: {1}s)".format(max_memory_size, memory_ttl))
+        logger.info()
+            "Ghost Shell Memory Engine initialized (max: {0}, ttl: {1}s)".format()
+                max_memory_size, memory_ttl
+            )
+        )
 
     def _generate_hash_key(self, strategy_id: str, q_matrix: np.ndarray) -> str:
         """
@@ -94,7 +98,7 @@ class ShellMemoryEngine:
         hash_key = hashlib.sha256(composite.encode()).hexdigest()[:16]
         return hash_key
 
-    def save_shell(
+    def save_shell()
         self,
         strategy_id: str,
         q_matrix: np.ndarray,
@@ -121,7 +125,7 @@ class ShellMemoryEngine:
             current_time = time.time()
 
             # Create memory entry
-            memory_entry = GhostShellMemory(
+            memory_entry = GhostShellMemory()
                 strategy_id=strategy_id,
                 q_matrix=q_matrix.tolist(),
                 profit_vector=profit_vector.tolist(),
@@ -143,14 +147,18 @@ class ShellMemoryEngine:
             # Cleanup if needed
             self._cleanup_old_memories()
 
-            logger.debug("Ghost shell saved: {0} for strategy {1}".format(hash_key, strategy_id))
+            logger.debug()
+                "Ghost shell saved: {0} for strategy {1}".format(hash_key, strategy_id)
+            )
             return hash_key
 
         except Exception as e:
             logger.error("Error saving ghost shell: {0}".format(e))
             return ""
 
-    def load_shell(self, strategy_id: str, q_matrix: np.ndarray) -> Optional[Dict[str, Any]]:
+    def load_shell()
+        self, strategy_id: str, q_matrix: np.ndarray
+    ) -> Optional[Dict[str, Any]]:
         """
         Load a ghost shell memory entry
 
@@ -180,9 +188,13 @@ class ShellMemoryEngine:
                 # Update access history
                 self.access_history.append((hash_key, time.time()))
 
-                logger.debug("Ghost shell loaded: {0} (access count: {1})".format(hash_key, memory_entry.access_count))
+                logger.debug()
+                    "Ghost shell loaded: {0} (access count: {1})".format()
+                        hash_key, memory_entry.access_count
+                    )
+                )
 
-                return {
+                return {}
                     "q_matrix": np.array(memory_entry.q_matrix),
                     "profit_vector": np.array(memory_entry.profit_vector),
                     "confidence": memory_entry.confidence,
@@ -198,7 +210,9 @@ class ShellMemoryEngine:
             logger.error("Error loading ghost shell: {0}".format(e))
             return None
 
-    def find_similar_shells(self, q_matrix: np.ndarray, similarity_threshold: float = 0.8) -> List[Dict[str, Any]]:
+    def find_similar_shells()
+        self, q_matrix: np.ndarray, similarity_threshold: float = 0.8
+    ) -> List[Dict[str, Any]]:
         """
         Find similar ghost shells using matrix similarity
 
@@ -221,8 +235,8 @@ class ShellMemoryEngine:
                 similarity = self._cosine_similarity(current_flat, stored_flat)
 
                 if similarity >= similarity_threshold:
-                    similar_shells.append(
-                        {
+                    similar_shells.append()
+                        {}
                             "hash_key": hash_key,
                             "similarity": similarity,
                             "strategy_id": memory_entry.strategy_id,
@@ -269,8 +283,12 @@ class ShellMemoryEngine:
         """
         try:
             if hash_key in self.memory_store:
-                self.memory_store[hash_key].confidence = max(0.0, min(1.0, new_confidence))
-                logger.debug("Updated confidence for {0}: {1}".format(hash_key, new_confidence))
+                self.memory_store[hash_key].confidence = max()
+                    0.0, min(1.0, new_confidence)
+                )
+                logger.debug()
+                    "Updated confidence for {0}: {1}".format(hash_key, new_confidence)
+                )
                 return True
             return False
         except Exception as e:
@@ -281,16 +299,28 @@ class ShellMemoryEngine:
         """Get memory statistics"""
         try:
             total_memories = len(self.memory_store)
-            active_memories = sum(1 for m in self.memory_store.values() if m.state == MemoryState.ACTIVE)
-            dormant_memories = sum(1 for m in self.memory_store.values() if m.state == MemoryState.DORMANT)
-            archived_memories = sum(1 for m in self.memory_store.values() if m.state == MemoryState.ARCHIVED)
-
-            avg_confidence = np.mean([m.confidence for m in self.memory_store.values()]) if total_memories > 0 else 0.0
-            avg_access_count = (
-                np.mean([m.access_count for m in self.memory_store.values()]) if total_memories > 0 else 0.0
+            active_memories = sum()
+                1 for m in self.memory_store.values() if m.state == MemoryState.ACTIVE
+            )
+            dormant_memories = sum()
+                1 for m in self.memory_store.values() if m.state == MemoryState.DORMANT
+            )
+            archived_memories = sum()
+                1 for m in self.memory_store.values() if m.state == MemoryState.ARCHIVED
             )
 
-            return {
+            avg_confidence = ()
+                np.mean([m.confidence for m in self.memory_store.values()])
+                if total_memories > 0
+                else 0.0
+            )
+            avg_access_count = ()
+                np.mean([m.access_count for m in self.memory_store.values()])
+                if total_memories > 0
+                else 0.0
+            )
+
+            return {}
                 "total_memories": total_memories,
                 "active_memories": active_memories,
                 "dormant_memories": dormant_memories,
@@ -326,8 +356,9 @@ class ShellMemoryEngine:
 
             # If still over limit, remove least accessed
             if len(self.memory_store) > self.max_memory_size:
-                sorted_memories = sorted(
-                    self.memory_store.items(), key=lambda x: (x[1].access_count, x[1].last_accessed)
+                sorted_memories = sorted()
+                    self.memory_store.items(),
+                    key=lambda x: (x[1].access_count, x[1].last_accessed),
                 )
 
                 to_remove = len(self.memory_store) - self.max_memory_size
@@ -342,8 +373,8 @@ class ShellMemoryEngine:
     def export_memories(self, filepath: str) -> bool:
         """Export memories to JSON file"""
         try:
-            export_data = {
-                "metadata": {
+            export_data = {}
+                "metadata": {}
                     "export_time": time.time(),
                     "total_memories": len(self.memory_store),
                     "max_memory_size": self.max_memory_size,
@@ -352,10 +383,12 @@ class ShellMemoryEngine:
                 "memories": [asdict(memory) for memory in self.memory_store.values()],
             }
 
-            with open(filepath, 'w') as f:
+            with open(filepath, "w") as f:
                 json.dump(export_data, f, indent=2)
 
-            logger.info("Exported {0} memories to {1}".format(len(self.memory_store), filepath))
+            logger.info()
+                "Exported {0} memories to {1}".format(len(self.memory_store), filepath)
+            )
             return True
 
         except Exception as e:
@@ -365,13 +398,13 @@ class ShellMemoryEngine:
     def import_memories(self, filepath: str) -> bool:
         """Import memories from JSON file"""
         try:
-            with open(filepath, 'r') as f:
+            with open(filepath, "r") as f:
                 import_data = json.load(f)
 
             imported_count = 0
             for memory_data in import_data.get("memories", []):
                 # Convert back to GhostShellMemory object
-                memory_entry = GhostShellMemory(
+                memory_entry = GhostShellMemory()
                     strategy_id=memory_data["strategy_id"],
                     q_matrix=memory_data["q_matrix"],
                     profit_vector=memory_data["profit_vector"],
@@ -387,7 +420,9 @@ class ShellMemoryEngine:
                 self.memory_store[memory_entry.hash_key] = memory_entry
                 imported_count += 1
 
-            logger.info("Imported {0} memories from {1}".format(imported_count, filepath))
+            logger.info()
+                "Imported {0} memories from {1}".format(imported_count, filepath)
+            )
             return True
 
         except Exception as e:
@@ -395,7 +430,9 @@ class ShellMemoryEngine:
             return False
 
 
-def create_shell_memory_engine(max_size: int = 1000, ttl: float = 86400) -> ShellMemoryEngine:
+def create_shell_memory_engine()
+    max_size: int = 1000, ttl: float = 86400
+) -> ShellMemoryEngine:
     """
     Factory function to create ShellMemoryEngine
 
@@ -424,7 +461,9 @@ def test_shell_memory_engine():
 
     # Test save
     print("📝 Testing memory save...")
-    hash_key = memory_engine.save_shell(strategy_id, q_matrix, profit_vector, confidence=0.8)
+    hash_key = memory_engine.save_shell()
+        strategy_id, q_matrix, profit_vector, confidence=0.8
+    )
     print("Saved with hash key: {0}".format(hash_key))
 
     # Test load
@@ -438,7 +477,9 @@ def test_shell_memory_engine():
     # Test similar shells
     print("\n🔍 Testing similar shell search...")
     similar_q_matrix = np.array([[0, 1, 2], [2, 0, 1], [1, 2, 1]])  # Slightly different
-    similar_shells = memory_engine.find_similar_shells(similar_q_matrix, similarity_threshold=0.7)
+    similar_shells = memory_engine.find_similar_shells()
+        similar_q_matrix, similarity_threshold=0.7
+    )
     print("Found {0} similar shells".format(len(similar_shells)))
 
     # Test stats

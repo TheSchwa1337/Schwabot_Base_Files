@@ -17,7 +17,7 @@ MathLib V4 - Advanced Mathematical Library for Schwabot
 
 Comprehensive mathematical library providing:
 - Pattern recognition and analysis
-- DLT (Distributed Ledger Technology) metrics
+- DLT (Distributed Ledger, Technology) metrics
 - Dual-number automatic differentiation
 - Advanced statistical operations
 - Waveform analysis and drift correction
@@ -166,7 +166,7 @@ class MathLibV4:
 
     def calculate_dlt_metrics(self, data: Dict[str, Any]) -> DLTMetrics:
         """
-        Calculate DLT (Distributed Ledger Technology) metrics for market data.
+        Calculate DLT (Distributed Ledger, Technology) metrics for market data.
 
         This is YOUR mathematical algorithm for pattern analysis.
         """
@@ -182,7 +182,7 @@ class MathLibV4:
             deltas = [prices[i] - prices[i - 1] for i in range(1, len(prices))]
 
             # YOUR pattern hash algorithm
-            pattern_data = "".join(["{0}".format(d:.6f) for d in deltas])
+            pattern_data = "".join(["{0}".format(d) for d in deltas])
             pattern_hash = hashlib.sha256(pattern_data.encode()).hexdigest()
 
             # YOUR triplet lock mechanism
@@ -217,14 +217,12 @@ class MathLibV4:
             self.pattern_cache[pattern_hash] = metrics
 
             # Add to history
-            self.analysis_history.append(
-                {
-                    "timestamp": time.time(),
-                    "pattern_hash": pattern_hash,
-                    "confidence": confidence,
-                    "operation": "dlt_metrics",
-                }
-            )
+            self.analysis_history.append({
+                "timestamp": time.time(),
+                "pattern_hash": pattern_hash,
+                "confidence": confidence,
+                "operation": "dlt_metrics",
+            })
 
             return metrics
 
@@ -240,7 +238,7 @@ class MathLibV4:
         # YOUR specific triplet lock logic
         for i in range(len(deltas) - 2):
             triplet = deltas[i : i + 3]
-            if abs(sum(triplet)) < 0.001:  # YOUR threshold
+            if abs(sum(triplet)) < 0.01:  # YOUR threshold
                 return True
         return False
 
@@ -284,11 +282,9 @@ class MathLibV4:
             return 0.0
 
         # YOUR greyscale calculation
-        normalized_deltas = (
-            [(d - min(deltas)) / (max(deltas) - min(deltas)) for d in deltas]
-            if max(deltas) != min(deltas)
-            else [0.5] * len(deltas)
-        )
+        normalized_deltas = [(d - min(deltas)) / (max(deltas) - min(deltas)) for d in deltas]
+        if max(deltas) != min(deltas):
+            normalized_deltas = [0.5] * len(deltas)
 
         # YOUR greyscale scoring formula
         greyscale_score = sum(normalized_deltas) / len(normalized_deltas)
@@ -370,15 +366,15 @@ def demo_mathlib_v4():
     metrics = mathlib.calculate_dlt_metrics(sample_data)
     print("Pattern Hash: {0}...".format(metrics.pattern_hash[:16]))
     print("Triplet Lock: {0}".format(metrics.triplet_lock))
-    print("Confidence: {0}".format(metrics.confidence:.4f))
-    print("Warp Factor: {0}".format(metrics.warp_factor:.4f))
+    print("Confidence: {0}".format(metrics.confidence))
+    print("Warp Factor: {0}".format(metrics.warp_factor))
 
     # Demonstrate dual number automatic differentiation
     def f(x_dual: Dual) -> Dual:
         return x_dual * x_dual + x_dual.sin()
 
     gradient = mathlib.compute_dual_gradient(f, 2.0)
-    print("Gradient at x = 2.0: {0}".format(gradient:.4f))
+    print("Gradient at x = 2.0: {0}".format(gradient))
 
     # Show version info
     version_info = mathlib.get_version_info()

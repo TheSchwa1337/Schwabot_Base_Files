@@ -52,7 +52,7 @@ class PrintStatementFinder(ast.NodeVisitor):
 
 def __init__(self): """
     """Function implementation pending."""
-pass
+    pass
 
 self.print_statements = []
         self.unicode_strings = []
@@ -74,14 +74,14 @@ args = []
                 else:
                     args.append(str(astunparse.unparse(arg).strip()))
 
-self.print_statements.append({
+self.print_statements.append({)}
                 'node': node,
                 'args': args,
                 'lineno': node.lineno
 })
 
 # Check for Unicode characters
-for arg in args:
+    for arg in args:
                 if self._contains_unicode(arg):
                     self.unicode_strings.append(arg)
 
@@ -115,7 +115,7 @@ pass
 """"""
 """"""
 """
-return any(ord(char) > 127 for char in text)
+    return any(ord(char) > 127 for char in text)
 
 
 class CLIRefactor:
@@ -129,7 +129,7 @@ class CLIRefactor:
 
 def __init__(self, root_dir: str = '.'): """
     """Function implementation pending."""
-pass
+    pass
 
 self.root_dir = Path(root_dir)
         self.python_files = []
@@ -138,7 +138,7 @@ self.root_dir = Path(root_dir)
         self.errors = []
 
 # Files to skip
-self.skip_patterns = [
+self.skip_patterns = []
             r'__pycache__',
             r'\\.git',
             r'\\.mypy_cache',
@@ -157,13 +157,13 @@ self.skip_patterns = [
             r'utils / safe_print\\.py',  # Skip our own utility
 ]
 # Import patterns to add
-self.import_patterns = [
+self.import_patterns = []
             'from utils.safe_print import safe_print, info, warn, error, success, debug',
             'from utils.safe_print import safe_log, safe_progress, safe_status',
             'from utils.safe_print import safe_phase, safe_math, safe_trade, safe_profit',
             'from utils.safe_print import safe_vector, safe_bitmap, safe_hash, safe_risk',
 ]
-def find_python_files():-> List[Path]:"""
+    def find_python_files():-> List[Path]:"""
     """Function implementation pending."""
 
 
@@ -208,7 +208,7 @@ pass
 """"""
 """"""
 """
-try:
+    try:
             with open(file_path, 'r', encoding='utf - 8') as f:
                 content = f.read()
 
@@ -235,7 +235,7 @@ pass
 """"""
 """"""
 """
-try:
+    try:
             with open(file_path, 'r', encoding='utf - 8') as f:
                 content = f.read()
 
@@ -248,11 +248,11 @@ has_safe_print_import = 'from utils.safe_print' in content or 'import utils.safe
 content = self._replace_unicode_prints(content)
 
 # Add import if needed and content was modified
-if content != original_content and not has_safe_print_import:
+    if content != original_content and not has_safe_print_import:
                 content = self._add_safe_print_import(content)
 
 # Write back if modified
-if content != original_content:
+    if content != original_content:
                 with open(file_path, 'w', encoding='utf - 8') as f:
                     f.write(content)
 
@@ -283,37 +283,37 @@ print_pattern = r'print\\s*\\((.*?)\\)'
 
 def replace_print(match):"""
     """Function implementation pending."""
-pass
+    pass
 
 args_str = match.group(1)
 
 # Check if this print statement contains Unicode
-if not self._contains_unicode(args_str):
+    if not self._contains_unicode(args_str):
                 return match.group(0)  # No change needed
 
 # Parse the arguments
-try:
+    try:
     pass
 # Simple parsing for common cases"""
-if args_str.strip().startswith('"') or args_str.strip().startswith("'"): '"
+    if args_str.strip().startswith('"') or args_str.strip().startswith("'"): '"
 # Single string argument
-return f'safe_print({args_str})'
+    return f'safe_print({args_str})'
                 elif 'f"' in args_str or "f'" in args_str:'"
 # f - string
-return f'safe_print({args_str})'
+    return f'safe_print({args_str})'
                 else:
 # Complex arguments - use safe_print with all args
-return f'safe_print({args_str})'
+    return f'safe_print({args_str})'
             except:
     pass
 # Fallback to safe_print
-return f'safe_print({args_str})'
+    return f'safe_print({args_str})'
 
 return re.sub(print_pattern, replace_print, content, flags = re.DOTALL)
 
 def _add_safe_print_import():-> str:
     """Function implementation pending."""
-pass
+    pass
 """
 """Add safe_print import to the file.""""""
 """"""
@@ -322,7 +322,7 @@ pass
 """
 lines = content.split('\n')
 
-# Find the best place to add import (after existing imports)
+# Find the best place to add import (after existing, imports)
         import_end = 0
         for i, line in enumerate(lines):
             if line.strip().startswith(('import ', 'from ')):
@@ -338,18 +338,18 @@ return '\n'.join(lines)
 
 def _contains_unicode():-> bool:
     """Function implementation pending."""
-pass
+    pass
 """
 """Check if text contains Unicode characters.""""""
 """"""
 """"""
 """"""
 """
-return any(ord(char) > 127 for char in text)
+    return any(ord(char) > 127 for char in text)
 
 def run_refactor():-> None:"""
     """Function implementation pending."""
-pass
+    pass
 """
 """Run the complete refactor process.""""""
 """"""
@@ -376,7 +376,7 @@ if unicode_strings:
                     info(f"  Found {len(unicode_strings)} Unicode strings in print statements")
 
 # Refactor file
-if self.refactor_file(file_path):
+    if self.refactor_file(file_path):
                         modified_count += 1
                         success(f"  Refactored {file_path}")
                     else:
@@ -388,7 +388,7 @@ if self.refactor_file(file_path):
 """"""
 """"""
 """
-pass
+    pass
 
 except Exception as e:"""
 error(f"Error processing {file_path}: {e}")
@@ -413,7 +413,7 @@ if self.modified_files:
 
 def main():
     """Function implementation pending."""
-pass
+    pass
 """
 """Main entry point.""""""
 """"""

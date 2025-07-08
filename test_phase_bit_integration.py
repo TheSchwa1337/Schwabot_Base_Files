@@ -1,4 +1,4 @@
-from core.phase_bit_integration import (
+from core.phase_bit_integration import ()
 import hashlib
 
 #!/usr/bin/env python3
@@ -23,7 +23,7 @@ def test_phase_bit_integration():
     print("\n📊 Phase to Bit Mappings:")
     for phase in [FerrisPhase.LOW, FerrisPhase.MID, FerrisPhase.HIGH]:
         mapping = integration.get_phase_bit_mapping(phase)
-        print(
+        print()
             f"  {phase.value.upper():4} → {mapping.bit_phase.value}-bit "
             f"({mapping.strategy_type.value}) "
             f"Math Factor: {mapping.mathematical_factor:.1f}"
@@ -31,7 +31,7 @@ def test_phase_bit_integration():
 
     # Test 2: Bit Phase Resolution
     print("\n🔄 Bit Phase Resolution (φ₄, φ₈, φ₄₂):")
-    test_strategy_id = "0x123456789abcdef"
+    test_strategy_id = "0x123456789abcdef""
     bit_result = resolve_bit_phases(test_strategy_id)
     print(f"  Strategy ID: {test_strategy_id}")
     print(f"  φ₄ (4-bit):  {bit_result.phi_4}")
@@ -44,7 +44,7 @@ def test_phase_bit_integration():
     test_hash = hashlib.sha256("BTC_52000".encode()).hexdigest()
     for phase in [FerrisPhase.LOW, FerrisPhase.MID, FerrisPhase.HIGH]:
         result = process_hash_with_phase(test_hash, phase)
-        print(
+        print()
             f"  {phase.value.upper():4}: "
             f"{result['bit_phase']}-bit, "
             f"Strategy: {result['strategy_type']}, "
@@ -53,16 +53,16 @@ def test_phase_bit_integration():
 
     # Test 4: Phase-Optimized Strategies
     print("\n📈 Phase-Optimized Strategies:")
-    market_data = {"volatility": 0.03, "entropy_level": 5.0, "btc_price": 52000.0}
+    market_data = {"volatility": 0.3, "entropy_level": 5.0, "btc_price": 52000.0}
     for phase in [FerrisPhase.LOW, FerrisPhase.MID, FerrisPhase.HIGH]:
         strategy = get_phase_optimized_strategy(phase, market_data)
-        print(
+        print()
             f"  {phase.value.upper():4}: "
             f"{strategy['strategy_type']} "
-            f"(Risk: {strategy['risk_tolerance']:.2f}, "
+            f"(Risk: {strategy['risk_tolerance']:.2f}, ")
             f"Pos: {strategy['position_multiplier']:.2f})"
         )
-        print(
+        print()
             f"    Allocation: BTC {strategy['allocation']['BTC']:.1%}, "
             f"USDC {strategy['allocation']['USDC']:.1%}, "
             f"ETH {strategy['allocation']['ETH']:.1%}"
@@ -70,16 +70,16 @@ def test_phase_bit_integration():
 
     # Test 5: Phase-Adjusted Bit Operations
     print("\n⚙️ Phase-Adjusted Bit Operations:")
-    base_operations = {
+    base_operations = {}
         "tensor_score": 1.0,
         "hash_sensitivity": 0.6,
         "mathematical_factor": 1.0,
     }
     for phase in [FerrisPhase.LOW, FerrisPhase.MID, FerrisPhase.HIGH]:
-        adjusted = integration.calculate_phase_adjusted_bit_operations(
+        adjusted = integration.calculate_phase_adjusted_bit_operations()
             phase, base_operations
         )
-        print(
+        print()
             f"  {phase.value.upper():4}: "
             f"Tensor: {adjusted['tensor_score']:.3f}, "
             f"Hash: {adjusted['hash_sensitivity']:.3f}, "
@@ -90,7 +90,7 @@ def test_phase_bit_integration():
     print("\n📊 System Status:")
     status = integration.get_system_status()
     print(f"  Phase Mappings: {len(status['phase_bit_mappings'])} configured")
-    print(
+    print()
         f"  Bit Weights: α={status['bit_phase_weights']['alpha_weight']:.1f}, "
         f"β={status['bit_phase_weights']['beta_weight']:.1f}, "
         f"γ={status['bit_phase_weights']['gamma_weight']:.1f}"
@@ -103,15 +103,15 @@ def test_phase_bit_integration():
     expected_phi_8 = (strategy_int >> 4) & 0b11111111
     expected_phi_42 = (strategy_int >> 12) & 0x3FFFFFFFFFF
 
-    print(
+    print()
         f"  Expected φ₄: {expected_phi_4}, Actual: {bit_result.phi_4} "
         f"({'✅' if expected_phi_4 == bit_result.phi_4 else '❌'})"
     )
-    print(
+    print()
         f"  Expected φ₈: {expected_phi_8}, Actual: {bit_result.phi_8} "
         f"({'✅' if expected_phi_8 == bit_result.phi_8 else '❌'})"
     )
-    print(
+    print()
         f"  Expected φ₄₂: {expected_phi_42}, Actual: {bit_result.phi_42} "
         f"({'✅' if expected_phi_42 == bit_result.phi_42 else '❌'})"
     )

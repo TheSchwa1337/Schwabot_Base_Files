@@ -1,9 +1,10 @@
 from __future__ import annotations
-    import cupy as cp
-from typing import Any, Dict, List, Optional, Tuple, Union
 import logging
+import time
+from dataclasses import dataclass, field
+from typing import Dict, Any, Tuple, List, Optional
 
-    import numpy as np
+import numpy as np
 
 """
 Matrix Math Utilities for Schwabot Trading System.
@@ -28,310 +29,600 @@ CUDA Integration:
 
 # CUDA Integration with Fallback
 try:
+    import cupy as cp
     USING_CUDA = True
     _backend = 'cupy (GPU)'
     xp = cp
-    la = cp.linalg
 except ImportError:
+    import numpy as cp  # fallback to numpy
     USING_CUDA = False
     _backend = 'numpy (CPU)'
-    xp = np
-    la = np.linalg
+    xp = cp
 
+# Log backend status
 logger = logging.getLogger(__name__)
 if USING_CUDA:
-    logger.info("⚡ MatrixMathUtils using GPU acceleration: {0}".format(_backend))
+    logger.info("⚡ Matrix Math Utils using GPU acceleration: {0}".format(_backend))
 else:
-    logger.info("🔄 MatrixMathUtils using CPU fallback: {0}".format(_backend))
+    logger.info("🔄 Matrix Math Utils using CPU fallback: {0}".format(_backend))
 
 
-def analyze_price_matrix(price_matrix: np.ndarray) -> Dict[str, Any]:
+@dataclass
+class MatrixResult:
+    """Result container for matrix operations."""
+
+    result: Any
+    operation: str
+    timestamp: float
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+
+class MatrixMathUtils:
     """
-    Analyze a 2-D matrix of prices or returns.
+    Advanced matrix mathematical utilities for trading calculations.
 
-    The input shape is (N, M) where N is the number of samples/timesteps
-    and M is the number of assets.
-
-    Returns a dictionary of diagnostics suitable for adaptive
-    parameter tuning.
-
-    Args:
-        price_matrix: 2D numpy array of prices or returns
-
-    Returns:
-        Dictionary containing matrix analysis results
-
-    Raises:
-        TypeError: If price_matrix is not a numpy array
-        ValueError: If price_matrix is not 2D
+    Implements matrix operations, eigenvalue analysis, and matrix-based
+    trading metrics with GPU acceleration support.
     """
-    if not isinstance(price_matrix, np.ndarray):
-        raise TypeError("price_matrix must be a NumPy array")
-
-    if price_matrix.ndim != 2:
-        raise ValueError("price_matrix must be 2D (samples, assets)")
-
-    num_samples, num_assets = price_matrix.shape
-
-    if num_samples < 2:
-        raise ValueError("Need at least 2 samples for analysis")
-
-    if num_assets < 1:
-        raise ValueError("Need at least 1 asset for analysis")
-
-    # Calculate returns if input is prices
-    if np.all(price_matrix > 0):  # Likely prices
-        returns = np.diff(price_matrix, axis=0) / price_matrix[:-1]
-    else:  # Likely already returns
-        returns = price_matrix
-
-    # Basic statistics
-    mean_returns = np.mean(returns, axis=0)
-    std_returns = np.std(returns, axis=0, ddof=1)
-
-    # Correlation matrix
-    correlation_matrix = np.corrcoef(returns.T)
-
-    # Covariance matrix
-    covariance_matrix = np.cov(returns.T, ddof=1)
-
-    # Eigenvalue analysis
-    try:
-        eigenvalues = la.eigvals(covariance_matrix)
-        condition_number = np.max(np.abs(eigenvalues)) / np.min(np.abs(eigenvalues))
-    except la.LinAlgError:
-        eigenvalues = np.array([])
-        condition_number = np.inf
-
-    # Matrix stability score (lower is more stable)
-    stability_score = np.std(eigenvalues) / np.mean(np.abs(eigenvalues)) if len(eigenvalues) > 0 else np.inf
-
-    # Risk metrics
-    portfolio_volatility = np.sqrt(np.sum(covariance_matrix))
-    max_correlation = np.max(np.abs(correlation_matrix - np.eye(num_assets)))
-
-    return {
-        "num_samples": num_samples,
-        "num_assets": num_assets,
-        "mean_returns": mean_returns.tolist(),
-        "std_returns": std_returns.tolist(),
-        "correlation_matrix": correlation_matrix.tolist(),
-        "covariance_matrix": covariance_matrix.tolist(),
-        "eigenvalues": eigenvalues.tolist(),
-        "condition_number": float(condition_number),
-        "stability_score": float(stability_score),
-        "portfolio_volatility": float(portfolio_volatility),
-        "max_correlation": float(max_correlation),
-        "is_stable": stability_score < 1.0,
-        "is_well_conditioned": condition_number < 1000.0,
-    }
-
-
-def risk_parity_weights(
-    covariance_matrix: np.ndarray,
-    target_volatility: Optional[float] = None,
-    max_iterations: int = 100,
-    tolerance: float = 1e-6,
-) -> Tuple[np.ndarray, Dict[str, Any]]:
-    """
-    Calculate risk parity weights for a given covariance matrix.
-
-    Risk parity aims to equalize the risk contribution of each asset
-    to the portfolio.
-
-    Args:
-        covariance_matrix: Asset covariance matrix
-        target_volatility: Target portfolio volatility (optional)
-        max_iterations: Maximum iterations for optimization
-        tolerance: Convergence tolerance
-
-    Returns:
-        Tuple of (weights, metadata)
-
-    Raises:
-        ValueError: If covariance matrix is invalid
-    """
-    if not isinstance(covariance_matrix, np.ndarray):
-        raise TypeError("covariance_matrix must be a NumPy array")
-
-    if covariance_matrix.ndim != 2:
-        raise ValueError("covariance_matrix must be 2D")
-
-    if covariance_matrix.shape[0] != covariance_matrix.shape[1]:
-        raise ValueError("covariance_matrix must be square")
-
-    num_assets = covariance_matrix.shape[0]
-
-    if num_assets < 1:
-        raise ValueError("Need at least 1 asset")
-
-    # Initialize equal weights
-    weights = np.ones(num_assets) / num_assets
 
-    # Iterative optimization
-    for iteration in range(max_iterations):
-        # Calculate portfolio volatility
-        portfolio_vol = np.sqrt(weights.T @ covariance_matrix @ weights)
-
-        if portfolio_vol == 0:
-            break
-
-        # Calculate risk contributions
-        risk_contributions = (weights * (covariance_matrix @ weights)) / portfolio_vol
-
-        # Calculate target risk contribution (equal for all assets)
-        target_risk_contribution = portfolio_vol / num_assets
-
-        # Update weights
-        weight_updates = (target_risk_contribution - risk_contributions) / (covariance_matrix @ weights)
-        weights += 0.1 * weight_updates  # Small step size for stability
-
-        # Normalize weights to sum to 1
-        weights = np.maximum(weights, 0)  # Ensure non-negative
-        weights = weights / np.sum(weights)
-
-        # Check convergence
-        risk_contribution_std = np.std(risk_contributions)
-        if risk_contribution_std < tolerance:
-            break
-
-    # Scale to target volatility if specified
-    if target_volatility is not None:
-        current_vol = np.sqrt(weights.T @ covariance_matrix @ weights)
-        if current_vol > 0:
-            weights = weights * (target_volatility / current_vol)
-
-    # Calculate final metrics
-    final_vol = np.sqrt(weights.T @ covariance_matrix @ weights)
-    final_risk_contributions = (weights * (covariance_matrix @ weights)) / final_vol
-
-    metadata = {
-        "iterations": iteration + 1,
-        "converged": risk_contribution_std < tolerance,
-        "portfolio_volatility": float(final_vol),
-        "risk_contributions": final_risk_contributions.tolist(),
-        "risk_contribution_std": float(np.std(final_risk_contributions)),
-        "weights_sum": float(np.sum(weights)),
-    }
-
-    return weights, metadata
-
-
-def calculate_sharpe_ratio(returns: np.ndarray, risk_free_rate: float = 0.0) -> float:
-    """
-    Calculate Sharpe ratio for a series of returns.
-
-    Args:
-        returns: Array of returns
-        risk_free_rate: Risk-free rate (default: 0.0)
-
-    Returns:
-        Sharpe ratio
-    """
-    if len(returns) == 0:
-        return 0.0
-
-    excess_returns = returns - risk_free_rate
-    mean_excess_return = np.mean(excess_returns)
-    std_return = np.std(returns, ddof=1)
-
-    if std_return == 0:
-        return 0.0
-
-    return mean_excess_return / std_return
-
-
-def calculate_max_drawdown(returns: np.ndarray) -> Dict[str, float]:
-    """
-    Calculate maximum drawdown and related metrics.
-
-    Args:
-        returns: Array of returns
-
-    Returns:
-        Dictionary with drawdown metrics
-    """
-    if len(returns) == 0:
-        return {
-            "max_drawdown": 0.0,
-            "max_drawdown_pct": 0.0,
-            "drawdown_duration": 0,
-        }
-
-    # Calculate cumulative returns
-    cumulative = np.cumprod(1 + returns)
-
-    # Calculate running maximum
-    running_max = np.maximum.accumulate(cumulative)
-
-    # Calculate drawdown
-    drawdown = (cumulative - running_max) / running_max
-
-    # Find maximum drawdown
-    max_drawdown = np.min(drawdown)
-    max_drawdown_idx = np.argmin(drawdown)
-
-    # Find peak before maximum drawdown
-    peak_idx = np.argmax(cumulative[: max_drawdown_idx + 1])
-
-    # Calculate duration
-    drawdown_duration = max_drawdown_idx - peak_idx
-
-    return {
-        "max_drawdown": float(max_drawdown),
-        "max_drawdown_pct": float(max_drawdown * 100),
-        "drawdown_duration": int(drawdown_duration),
-        "peak_idx": int(peak_idx),
-        "trough_idx": int(max_drawdown_idx),
-    }
-
-
-def calculate_var(returns: np.ndarray, confidence_level: float = 0.05) -> float:
-    """
-    Calculate Value at Risk (VaR).
-
-    Args:
-        returns: Array of returns
-        confidence_level: Confidence level (default: 5%)
-
-    Returns:
-        VaR value
-    """
-    if len(returns) == 0:
-        return 0.0
-
-    return np.percentile(returns, confidence_level * 100)
-
-
-def calculate_cvar(returns: np.ndarray, confidence_level: float = 0.05) -> float:
-    """
-    Calculate Conditional Value at Risk (CVaR) / Expected Shortfall.
-
-    Args:
-        returns: Array of returns
-        confidence_level: Confidence level (default: 5%)
-
-    Returns:
-        CVaR value
-    """
-    if len(returns) == 0:
-        return 0.0
-
-    var = calculate_var(returns, confidence_level)
-    tail_returns = returns[returns <= var]
-
-    if len(tail_returns) == 0:
-        return var
-
-    return np.mean(tail_returns)
-
-
-# Export main functions
-__all__ = [
-    "analyze_price_matrix",
-    "risk_parity_weights",
-    "calculate_sharpe_ratio",
-    "calculate_max_drawdown",
-    "calculate_var",
-    "calculate_cvar",
-]
+    def __init__(self):
+        """Initialize the matrix math utilities."""
+        self.operation_history: List[MatrixResult] = []
+        self.matrix_cache: Dict[str, Any] = {}
+
+    def matrix_multiply(self, matrix_a: xp.ndarray, matrix_b: xp.ndarray) -> xp.ndarray:
+        """
+        Multiply two matrices with GPU acceleration.
+
+        Args:
+            matrix_a: First matrix
+            matrix_b: Second matrix
+
+        Returns:
+            Result matrix
+        """
+        try:
+            if matrix_a.shape[1] != matrix_b.shape[0]:
+                raise ValueError("Matrix dimensions incompatible for multiplication")
+
+            result = xp.dot(matrix_a, matrix_b)
+            
+            self._log_operation("matrix_multiply", result, {
+                "matrix_a_shape": matrix_a.shape,
+                "matrix_b_shape": matrix_b.shape,
+                "result_shape": result.shape
+            })
+            return result
+
+        except Exception as e:
+            logger.error("Error in matrix multiplication: {0}".format(e))
+            return xp.array([])
+
+    def matrix_inverse(self, matrix: xp.ndarray) -> xp.ndarray:
+        """
+        Calculate matrix inverse with GPU acceleration.
+
+        Args:
+            matrix: Input matrix
+
+        Returns:
+            Inverse matrix
+        """
+        try:
+            if matrix.shape[0] != matrix.shape[1]:
+                raise ValueError("Matrix must be square for inverse")
+
+            # Check if matrix is invertible
+            det = xp.linalg.det(matrix)
+            if abs(det) < 1e-10:
+                logger.warning("Matrix is nearly singular, using pseudo-inverse")
+                result = xp.linalg.pinv(matrix)
+            else:
+                result = xp.linalg.inv(matrix)
+
+            self._log_operation("matrix_inverse", result, {
+                "matrix_shape": matrix.shape,
+                "determinant": det
+            })
+            return result
+
+        except Exception as e:
+            logger.error("Error in matrix inverse: {0}".format(e))
+            return xp.array([])
+
+    def eigenvalue_decomposition(self, matrix: xp.ndarray) -> Tuple[xp.ndarray, xp.ndarray]:
+        """
+        Perform eigenvalue decomposition.
+
+        Args:
+            matrix: Input matrix
+
+        Returns:
+            Tuple of (eigenvalues, eigenvectors)
+        """
+        try:
+            if matrix.shape[0] != matrix.shape[1]:
+                raise ValueError("Matrix must be square for eigenvalue decomposition")
+
+            eigenvalues, eigenvectors = xp.linalg.eig(matrix)
+            
+            self._log_operation("eigenvalue_decomposition", (eigenvalues, eigenvectors), {
+                "matrix_shape": matrix.shape,
+                "num_eigenvalues": len(eigenvalues)
+            })
+            return eigenvalues, eigenvectors
+
+        except Exception as e:
+            logger.error("Error in eigenvalue decomposition: {0}".format(e))
+            return xp.array([]), xp.array([])
+
+    def singular_value_decomposition(self, matrix: xp.ndarray) -> Tuple[xp.ndarray, xp.ndarray, xp.ndarray]:
+        """
+        Perform singular value decomposition.
+
+        Args:
+            matrix: Input matrix
+
+        Returns:
+            Tuple of (U, S, V) matrices
+        """
+        try:
+            U, S, V = xp.linalg.svd(matrix)
+            
+            self._log_operation("svd", (U, S, V), {
+                "matrix_shape": matrix.shape,
+                "num_singular_values": len(S)
+            })
+            return U, S, V
+
+        except Exception as e:
+            logger.error("Error in SVD: {0}".format(e))
+            return xp.array([]), xp.array([]), xp.array([])
+
+    def matrix_rank(self, matrix: xp.ndarray, tolerance: float = 1e-10) -> int:
+        """
+        Calculate matrix rank.
+
+        Args:
+            matrix: Input matrix
+            tolerance: Tolerance for singular values
+
+        Returns:
+            Matrix rank
+        """
+        try:
+            S = xp.linalg.svd(matrix, compute_uv=False)
+            rank = xp.sum(S > tolerance)
+            
+            self._log_operation("matrix_rank", rank, {
+                "matrix_shape": matrix.shape,
+                "tolerance": tolerance,
+                "singular_values": S
+            })
+            return int(rank)
+
+        except Exception as e:
+            logger.error("Error calculating matrix rank: {0}".format(e))
+            return 0
+
+    def matrix_condition_number(self, matrix: xp.ndarray) -> float:
+        """
+        Calculate matrix condition number.
+
+        Args:
+            matrix: Input matrix
+
+        Returns:
+            Condition number
+        """
+        try:
+            S = xp.linalg.svd(matrix, compute_uv=False)
+            condition_number = xp.max(S) / xp.min(S)
+            
+            self._log_operation("matrix_condition_number", condition_number, {
+                "matrix_shape": matrix.shape,
+                "singular_values": S
+            })
+            return float(condition_number)
+
+        except Exception as e:
+            logger.error("Error calculating condition number: {0}".format(e))
+            return float('inf')
+
+    def matrix_norm(self, matrix: xp.ndarray, norm_type: str = 'frobenius') -> float:
+        """
+        Calculate matrix norm.
+
+        Args:
+            matrix: Input matrix
+            norm_type: Type of norm ('frobenius', 'spectral', 'nuclear')
+
+        Returns:
+            Matrix norm
+        """
+        try:
+            if norm_type == 'frobenius':
+                norm = xp.linalg.norm(matrix, 'fro')
+            elif norm_type == 'spectral':
+                norm = xp.linalg.norm(matrix, 2)
+            elif norm_type == 'nuclear':
+                S = xp.linalg.svd(matrix, compute_uv=False)
+                norm = xp.sum(S)
+            else:
+                raise ValueError("Unknown norm type: {0}".format(norm_type))
+
+            self._log_operation("matrix_norm", norm, {
+                "matrix_shape": matrix.shape,
+                "norm_type": norm_type
+            })
+            return float(norm)
+
+        except Exception as e:
+            logger.error("Error calculating matrix norm: {0}".format(e))
+            return 0.0
+
+    def matrix_trace(self, matrix: xp.ndarray) -> float:
+        """
+        Calculate matrix trace.
+
+        Args:
+            matrix: Input matrix
+
+        Returns:
+            Matrix trace
+        """
+        try:
+            if matrix.shape[0] != matrix.shape[1]:
+                raise ValueError("Matrix must be square for trace calculation")
+
+            trace = xp.trace(matrix)
+            
+            self._log_operation("matrix_trace", trace, {
+                "matrix_shape": matrix.shape
+            })
+            return float(trace)
+
+        except Exception as e:
+            logger.error("Error calculating matrix trace: {0}".format(e))
+            return 0.0
+
+    def matrix_determinant(self, matrix: xp.ndarray) -> float:
+        """
+        Calculate matrix determinant.
+
+        Args:
+            matrix: Input matrix
+
+        Returns:
+            Matrix determinant
+        """
+        try:
+            if matrix.shape[0] != matrix.shape[1]:
+                raise ValueError("Matrix must be square for determinant calculation")
+
+            det = xp.linalg.det(matrix)
+            
+            self._log_operation("matrix_determinant", det, {
+                "matrix_shape": matrix.shape
+            })
+            return float(det)
+
+        except Exception as e:
+            logger.error("Error calculating matrix determinant: {0}".format(e))
+            return 0.0
+
+    def matrix_power(self, matrix: xp.ndarray, power: int) -> xp.ndarray:
+        """
+        Calculate matrix power.
+
+        Args:
+            matrix: Input matrix
+            power: Power to raise matrix to
+
+        Returns:
+            Matrix raised to power
+        """
+        try:
+            if matrix.shape[0] != matrix.shape[1]:
+                raise ValueError("Matrix must be square for power calculation")
+
+            if power == 0:
+                result = xp.eye(matrix.shape[0])
+            elif power == 1:
+                result = matrix
+            elif power > 1:
+                result = xp.linalg.matrix_power(matrix, power)
+            else:
+                # Negative power: matrix^(-n) = (matrix^(-1))^n
+                result = xp.linalg.matrix_power(xp.linalg.inv(matrix), -power)
+
+            self._log_operation("matrix_power", result, {
+                "matrix_shape": matrix.shape,
+                "power": power
+            })
+            return result
+
+        except Exception as e:
+            logger.error("Error calculating matrix power: {0}".format(e))
+            return xp.array([])
+
+    def matrix_exponential(self, matrix: xp.ndarray) -> xp.ndarray:
+        """
+        Calculate matrix exponential.
+
+        Args:
+            matrix: Input matrix
+
+        Returns:
+            Matrix exponential
+        """
+        try:
+            if matrix.shape[0] != matrix.shape[1]:
+                raise ValueError("Matrix must be square for exponential calculation")
+
+            result = xp.linalg.expm(matrix)
+            
+            self._log_operation("matrix_exponential", result, {
+                "matrix_shape": matrix.shape
+            })
+            return result
+
+        except Exception as e:
+            logger.error("Error calculating matrix exponential: {0}".format(e))
+            return xp.array([])
+
+    def matrix_logarithm(self, matrix: xp.ndarray) -> xp.ndarray:
+        """
+        Calculate matrix logarithm.
+
+        Args:
+            matrix: Input matrix
+
+        Returns:
+            Matrix logarithm
+        """
+        try:
+            if matrix.shape[0] != matrix.shape[1]:
+                raise ValueError("Matrix must be square for logarithm calculation")
+
+            result = xp.linalg.logm(matrix)
+            
+            self._log_operation("matrix_logarithm", result, {
+                "matrix_shape": matrix.shape
+            })
+            return result
+
+        except Exception as e:
+            logger.error("Error calculating matrix logarithm: {0}".format(e))
+            return xp.array([])
+
+    def matrix_sqrt(self, matrix: xp.ndarray) -> xp.ndarray:
+        """
+        Calculate matrix square root.
+
+        Args:
+            matrix: Input matrix
+
+        Returns:
+            Matrix square root
+        """
+        try:
+            if matrix.shape[0] != matrix.shape[1]:
+                raise ValueError("Matrix must be square for square root calculation")
+
+            result = xp.linalg.sqrtm(matrix)
+            
+            self._log_operation("matrix_sqrt", result, {
+                "matrix_shape": matrix.shape
+            })
+            return result
+
+        except Exception as e:
+            logger.error("Error calculating matrix square root: {0}".format(e))
+            return xp.array([])
+
+    def matrix_pseudo_inverse(self, matrix: xp.ndarray) -> xp.ndarray:
+        """
+        Calculate matrix pseudo-inverse (Moore-Penrose inverse).
+
+        Args:
+            matrix: Input matrix
+
+        Returns:
+            Pseudo-inverse matrix
+        """
+        try:
+            result = xp.linalg.pinv(matrix)
+            
+            self._log_operation("matrix_pseudo_inverse", result, {
+                "matrix_shape": matrix.shape,
+                "result_shape": result.shape
+            })
+            return result
+
+        except Exception as e:
+            logger.error("Error calculating matrix pseudo-inverse: {0}".format(e))
+            return xp.array([])
+
+    def matrix_cholesky_decomposition(self, matrix: xp.ndarray) -> xp.ndarray:
+        """
+        Perform Cholesky decomposition.
+
+        Args:
+            matrix: Input matrix (must be positive definite)
+
+        Returns:
+            Lower triangular matrix L
+        """
+        try:
+            if matrix.shape[0] != matrix.shape[1]:
+                raise ValueError("Matrix must be square for Cholesky decomposition")
+
+            result = xp.linalg.cholesky(matrix)
+            
+            self._log_operation("matrix_cholesky", result, {
+                "matrix_shape": matrix.shape
+            })
+            return result
+
+        except Exception as e:
+            logger.error("Error in Cholesky decomposition: {0}".format(e))
+            return xp.array([])
+
+    def matrix_qr_decomposition(self, matrix: xp.ndarray) -> Tuple[xp.ndarray, xp.ndarray]:
+        """
+        Perform QR decomposition.
+
+        Args:
+            matrix: Input matrix
+
+        Returns:
+            Tuple of (Q, R) matrices
+        """
+        try:
+            Q, R = xp.linalg.qr(matrix)
+            
+            self._log_operation("matrix_qr", (Q, R), {
+                "matrix_shape": matrix.shape
+            })
+            return Q, R
+
+        except Exception as e:
+            logger.error("Error in QR decomposition: {0}".format(e))
+            return xp.array([]), xp.array([])
+
+    def matrix_lu_decomposition(self, matrix: xp.ndarray) -> Tuple[xp.ndarray, xp.ndarray, xp.ndarray]:
+        """
+        Perform LU decomposition.
+
+        Args:
+            matrix: Input matrix
+
+        Returns:
+            Tuple of (P, L, U) matrices
+        """
+        try:
+            if matrix.shape[0] != matrix.shape[1]:
+                raise ValueError("Matrix must be square for LU decomposition")
+
+            P, L, U = xp.linalg.lu(matrix)
+            
+            self._log_operation("matrix_lu", (P, L, U), {
+                "matrix_shape": matrix.shape
+            })
+            return P, L, U
+
+        except Exception as e:
+            logger.error("Error in LU decomposition: {0}".format(e))
+            return xp.array([]), xp.array([]), xp.array([])
+
+    def _log_operation(self, operation: str, result: Any, metadata: Dict[str, Any]) -> None:
+        """Log a matrix operation for debugging and analysis."""
+        matrix_result = MatrixResult(
+            result=result,
+            operation=operation,
+            timestamp=time.time(),
+            metadata=metadata
+        )
+        self.operation_history.append(matrix_result)
+
+        # Cache result
+        cache_key = f"{operation}_{hash(str(metadata))}"
+        self.matrix_cache[cache_key] = result
+
+    def get_operation_history(self) -> List[MatrixResult]:
+        """Get operation history."""
+        return self.operation_history.copy()
+
+    def clear_cache(self) -> None:
+        """Clear the matrix cache."""
+        self.matrix_cache.clear()
+        logger.info("Matrix cache cleared")
+
+    def get_statistics(self) -> Dict[str, Any]:
+        """Get matrix operation statistics."""
+        try:
+            if not self.operation_history:
+                return {"error": "No operation history available"}
+
+            # Calculate statistics by operation type
+            operation_counts = {}
+            operation_times = {}
+
+            for op in self.operation_history:
+                op_type = op.operation
+                operation_counts[op_type] = operation_counts.get(op_type, 0) + 1
+                
+                if op_type not in operation_times:
+                    operation_times[op_type] = []
+                operation_times[op_type].append(op.timestamp)
+
+            # Calculate average times by operation type
+            operation_avg_times = {}
+            for op_type, times in operation_times.items():
+                if len(times) > 1:
+                    intervals = [times[i] - times[i-1] for i in range(1, len(times))]
+                    operation_avg_times[op_type] = xp.mean(intervals)
+                else:
+                    operation_avg_times[op_type] = 0.0
+
+            return {
+                "total_operations": len(self.operation_history),
+                "operation_counts": operation_counts,
+                "operation_avg_times": operation_avg_times,
+                "cache_size": len(self.matrix_cache),
+                "last_operation_time": self.operation_history[-1].timestamp if self.operation_history else 0
+            }
+
+        except Exception as e:
+            logger.error("Error getting statistics: {0}".format(e))
+            return {"error": str(e)}
+
+
+def create_matrix_math_utils() -> MatrixMathUtils:
+    """Factory function to create a matrix math utils instance."""
+    return MatrixMathUtils()
+
+
+# Example usage and testing
+if __name__ == "__main__":
+    # Configure logging
+    logging.basicConfig(level=logging.INFO)
+
+    # Create matrix math utils
+    matrix_utils = create_matrix_math_utils()
+
+    print("=== Testing Matrix Math Utils ===")
+
+    # Test matrix operations
+    matrix_a = xp.array([[1, 2], [3, 4]], dtype=float)
+    matrix_b = xp.array([[5, 6], [7, 8]], dtype=float)
+
+    # Test matrix multiplication
+    result = matrix_utils.matrix_multiply(matrix_a, matrix_b)
+    print("Matrix multiplication result:\n{0}".format(result))
+
+    # Test matrix inverse
+    inverse = matrix_utils.matrix_inverse(matrix_a)
+    print("Matrix inverse:\n{0}".format(inverse))
+
+    # Test eigenvalue decomposition
+    eigenvalues, eigenvectors = matrix_utils.eigenvalue_decomposition(matrix_a)
+    print("Eigenvalues: {0}".format(eigenvalues))
+    print("Eigenvectors:\n{0}".format(eigenvectors))
+
+    # Test matrix norm
+    norm = matrix_utils.matrix_norm(matrix_a, 'frobenius')
+    print("Frobenius norm: {0}".format(norm))
+
+    # Test matrix determinant
+    det = matrix_utils.matrix_determinant(matrix_a)
+    print("Determinant: {0}".format(det))
+
+    # Get statistics
+    stats = matrix_utils.get_statistics()
+    print("\nMatrix Statistics:")
+    print("Total operations: {0}".format(stats.get("total_operations", 0)))
+    print("Operation counts: {0}".format(stats.get("operation_counts", {})))
+
+    print("Matrix Math Utils test completed")

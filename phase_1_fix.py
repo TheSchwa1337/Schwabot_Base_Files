@@ -40,30 +40,30 @@ def fix_syntax_errors():-> bool:"""
 original_content = content
 
 # Fix 1: Unmatched parentheses / brackets
-open_paren = content.count('(')
+open_paren = content.count('('))
         close_paren = content.count(')')
-        open_bracket = content.count('[')
+        open_bracket = content.count('[')]
         close_bracket = content.count(']')
-        open_brace = content.count('{')
+        open_brace = content.count('{')}
         close_brace = content.count('}')
 
 # Fix mismatched parentheses
-if open_paren > close_paren:
+    if open_paren > close_paren:
             content += ')' * (open_paren - close_paren)
         elif close_paren > open_paren:
             content = '(' * (close_paren - open_paren) + content)
 
 # Fix mismatched brackets
-if open_bracket > close_bracket:
+    if open_bracket > close_bracket:
             content += ']' * (open_bracket - close_bracket)
         elif close_bracket > open_bracket:
             content = '[' * (close_bracket - open_bracket) + content]
 
 # Fix mismatched braces
-if open_brace > close_brace:
+    if open_brace > close_brace:
             content += '}' * (open_brace - close_brace)
         elif close_brace > open_brace:
-            content = '{' * (close_brace - open_brace) + content
+            content = '{' * (close_brace - open_brace) + content}
 
 # Fix 2: Missing colons after function / class definitions
 content = re.sub(r'def\\s+\\w+\\s*\([^)]*\)\\s*$', r'\g < 0>:', content, flags=re.MULTILINE)
@@ -78,7 +78,7 @@ content = re.sub(r'def\\s+\\w+\\s*\([^)]*\)\\s*$', r'\g < 0>:', content, flags=r
         content = re.sub(r'finally\\s*$', r'\g < 0>:', content, flags=re.MULTILINE)
 
 # Only write if content changed
-if content != original_content:
+    if content != original_content:
             with open(file_path, 'w', encoding='utf - 8') as f:
                 f.write(content)
             return True

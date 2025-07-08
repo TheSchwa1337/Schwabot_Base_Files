@@ -3,5 +3,4 @@
 
 """Smart Money Integration  compatibility stub."""
 
-
 __all__: list[str] = []

@@ -1,6 +1,6 @@
-    from core.clean_unified_math import CleanUnifiedMathSystem
-    from core.brain_trading_engine import BrainTradingEngine
-    from symbolic_profit_router import SymbolicProfitRouter
+from core.clean_unified_math import CleanUnifiedMathSystem
+from core.brain_trading_engine import BrainTradingEngine
+from symbolic_profit_router import SymbolicProfitRouter
 from datetime import datetime
 from tkinter import ttk, scrolledtext
 import tkinter as tk
@@ -16,6 +16,7 @@ Basic GUI interface for Schwabot trading system.
 
 
 try:
+    pass
 except ImportError as e:
     print(f"Import error: {e}")
 

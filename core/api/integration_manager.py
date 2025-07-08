@@ -73,7 +73,7 @@ class ApiIntegrationManager:
             for exchange_name, exchange_config in config.items():
                 if exchange_config.get("enabled", True):
                     try:
-                        credentials = APICredentials(
+                        credentials = APICredentials()
                             exchange=ExchangeType(exchange_name),
                             api_key=exchange_config.get("api_key"),
                             secret=exchange_config.get("secret"),
@@ -150,7 +150,7 @@ class ApiIntegrationManager:
     async def _heartbeat_check(self) -> None:
         """Periodically check connection health and reconnect if necessary."""
         for name, conn in self.connections.items():
-            if conn.status == ConnectionStatus.ERROR or (
+            if conn.status == ConnectionStatus.ERROR or ()
                 conn.status == ConnectionStatus.CONNECTED
                 and time.time() - conn.last_heartbeat > self.heartbeat_interval
             ):
@@ -168,8 +168,7 @@ class ApiIntegrationManager:
     async def _update_all_portfolios(self) -> None:
         """Trigger portfolio updates for all connected exchanges."""
         # This can be expanded to fetch all balances and update a central portfolio model.
-        # For now, it's a placeholder for periodic background tasks.
-        pass
+        # For now, it's a placeholder for periodic background tasks.'
 
     async def place_order(self, exchange_name: str, order_request: OrderRequest) -> Optional[OrderResponse]:
         """Place an order on a specific exchange."""
@@ -193,14 +192,14 @@ class ApiIntegrationManager:
         """Provide a status overview of the entire API integration system."""
         uptime = time.time() - self.start_time if self.running else 0
 
-        return {
+        return {}
             "running": self.running,
             "uptime_seconds": uptime,
             "uptime_formatted": str(timedelta(seconds=int(uptime))),
-            "connections": {
-                name: {
+            "connections": {}
+                name: {}
                     "status": conn.status.value,
-                    "last_heartbeat": (
+                    "last_heartbeat": ()
                         datetime.fromtimestamp(conn.last_heartbeat).isoformat() if conn.last_heartbeat else None
                     ),
                     "reconnect_attempts": conn.reconnect_attempts,

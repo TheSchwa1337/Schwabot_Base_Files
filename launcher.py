@@ -26,7 +26,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from utils.market_data_utils import create_market_snapshot, pull_news_headlines
 from utils.price_bridge import get_secure_price
 from utils.secure_config_manager import SecureConfigManager, get_secure_api_key
-from core.lantern_core_integration import (
+from core.lantern_core_integration import ()
     start_lantern_core,
     stop_lantern_core,
     get_lantern_core_status,
@@ -48,7 +48,7 @@ app.config['UPLOAD_FOLDER'] = str(UPLOAD_FOLDER)
 app.config['MAX_CONTENT_LENGTH'] = MAX_FILE_SIZE
 
 # Ensure upload directories exist
-for pair in ['btc_usdc', 'xrp_usdc', 'sol_usdc', 'eth_usdc']:
+    for pair in ['btc_usdc', 'xrp_usdc', 'sol_usdc', 'eth_usdc']:
     (UPLOAD_FOLDER / pair).mkdir(parents=True, exist_ok=True)
 
 # Initialize quad-bit strategy array
@@ -75,18 +75,18 @@ def validate_csv_format(file_path):
     try:
         df = pd.read_csv(file_path, nrows=5)  # Read first 5 rows to check format
         required_columns = ['timestamp', 'open', 'high', 'low', 'close', 'volume']
-        
+
         # Check if all required columns exist
         missing_columns = [col for col in required_columns if col not in df.columns]
         if missing_columns:
             return False, f"Missing required columns: {missing_columns}"
-        
+
         # Check if timestamp column can be parsed
         try:
             pd.to_datetime(df['timestamp'].iloc[0])
         except:
             return False, "Timestamp column cannot be parsed"
-        
+
         return True, "Valid CSV format"
     except Exception as e:
         return False, f"Error reading CSV: {str(e)}"
@@ -100,7 +100,7 @@ class SchwabotLauncher:
 
     def __init__(self):
         self.secure_config = secure_config
-        self.system_status = {
+        self.system_status = {}
             "api_keys_configured": False,
             "market_data_available": False,
             "trading_engine_ready": False,
@@ -114,7 +114,7 @@ class SchwabotLauncher:
         required_keys = ["NEWS_API", "COINMARKETCAP_API", "CCXT_API", "COINBASE_API"]
         configured_keys = self.secure_config.list_stored_services()
 
-        self.system_status["api_keys_configured"] = all(
+        self.system_status["api_keys_configured"] = all()
             key in configured_keys for key in required_keys
         )
 
@@ -139,27 +139,27 @@ launcher = SchwabotLauncher()
 
 
 @app.route("/")
-def index():
+    def index():
     """Main dashboard page."""
     status = launcher.get_system_status()
     return render_template("dashboard.html", status=status)
 
 
 @app.route("/api/status")
-def api_status():
+    def api_status():
     """API endpoint for system status."""
     return jsonify(launcher.get_system_status())
 
 
 @app.route("/setup")
-def setup_page():
+    def setup_page():
     """API key setup page."""
     configured_keys = secure_config.list_stored_services()
     return render_template("setup.html", configured_keys=configured_keys)
 
 
 @app.route("/api/setup", methods=["POST"])
-def setup_api_key():
+    def setup_api_key():
     """API endpoint for setting up API keys."""
     try:
         data = request.get_json()
@@ -167,22 +167,22 @@ def setup_api_key():
         api_key = data.get("api_key")
 
         if not service_name or not api_key:
-            return jsonify(
+            return jsonify()
                 {"success": False, "error": "Missing service name or API key"}
             )
 
         # Store the API key securely
-        success = secure_config.store_api_key(
+        success = secure_config.store_api_key()
             service_name, f"Enter {service_name} API key"
         )
 
         if success:
             launcher.update_system_status()
-            return jsonify(
+            return jsonify()
                 {"success": True, "message": f"{service_name} API key stored securely"}
             )
         else:
-            return jsonify(
+            return jsonify()
                 {"success": False, "error": f"Failed to store {service_name} API key"}
             )
 
@@ -191,14 +191,14 @@ def setup_api_key():
 
 
 @app.route("/api/market-snapshot")
-def get_market_snapshot():
+    def get_market_snapshot():
     """API endpoint for getting current market snapshot."""
     try:
         snapshot = create_market_snapshot()
         if snapshot:
             return jsonify({"success": True, "data": snapshot})
         else:
-            return jsonify(
+            return jsonify()
                 {"success": False, "error": "Failed to create market snapshot"}
             )
     except Exception as e:
@@ -206,44 +206,44 @@ def get_market_snapshot():
 
 
 @app.route("/api/configured-keys")
-def get_configured_keys():
+    def get_configured_keys():
     """API endpoint for getting list of configured API keys."""
     keys = secure_config.list_stored_services()
     return jsonify({"keys": keys})
 
 
 @app.route("/trading")
-def trading_dashboard():
+    def trading_dashboard():
     """Trading dashboard page."""
     status = launcher.get_system_status()
     return render_template("trading.html", status=status)
 
 
 @app.route("/visualization")
-def visualization_dashboard():
+    def visualization_dashboard():
     """Visualization dashboard page."""
     return render_template("visualization.html")
 
 
 @app.route("/data-upload")
-def data_upload_page():
+    def data_upload_page():
     """Data upload page for historical cryptocurrency data."""
     return render_template("data_upload.html")
 
 
 @app.route("/api/test-connection/<service>")
-def test_connection(service):
+    def test_connection(service):
     """Test API connection for a specific service."""
     try:
         if service == "news":
 
             headlines = pull_news_headlines()
             success = len(headlines) > 0
-            return jsonify(
-                {
+            return jsonify()
+                {}
                     "success": success,
                     "data": headlines[:3] if success else [],
-                    "message": (
+                    "message": ()
                         f"Found {len(headlines)} headlines"
                         if success
                         else "No headlines found"
@@ -258,11 +258,11 @@ def test_connection(service):
             loop.close()
 
             success = price_data is not None
-            return jsonify(
-                {
+            return jsonify()
+                {}
                     "success": success,
                     "data": price_data.to_dict() if success else {},
-                    "message": (
+                    "message": ()
                         f"Price: ${price_data.price:,.2f} ({price_data.source})"
                         if success
                         else "Price data unavailable"
@@ -273,7 +273,7 @@ def test_connection(service):
             # Test CoinMarketCap specifically
             api_key = get_secure_api_key("COINMARKETCAP_API")
             if not api_key:
-                return jsonify(
+                return jsonify()
                     {"success": False, "error": "CoinMarketCap API key not configured"}
                 )
 
@@ -289,16 +289,16 @@ def test_connection(service):
             if success:
                 data = response.json()
                 btc_price = data["data"]["BTC"]["quote"]["USD"]["price"]
-                return jsonify(
-                    {
+                return jsonify()
+                    {}
                         "success": True,
                         "data": {"price": btc_price},
                         "message": f"CoinMarketCap working: ${btc_price:,.2f}",
                     }
                 )
             else:
-                return jsonify(
-                    {
+                return jsonify()
+                    {}
                         "success": False,
                         "error": f"CoinMarketCap API error: {response.status_code}",
                     }
@@ -311,11 +311,11 @@ def test_connection(service):
             loop.close()
 
             success = "error" not in status
-            return jsonify(
-                {
+            return jsonify()
+                {}
                     "success": success,
                     "data": status,
-                    "message": (
+                    "message": ()
                         "Lantern Core integration working"
                         if success
                         else "Lantern Core integration failed"
@@ -330,7 +330,7 @@ def test_connection(service):
 
 
 @app.route("/api/start-lantern-core")
-def api_start_lantern_core():
+    def api_start_lantern_core():
     """Start Lantern Core integration."""
     try:
         loop = asyncio.new_event_loop()
@@ -338,10 +338,10 @@ def api_start_lantern_core():
         success = loop.run_until_complete(start_lantern_core())
         loop.close()
 
-        return jsonify(
-            {
+        return jsonify()
+            {}
                 "success": success,
-                "message": (
+                "message": ()
                     "Lantern Core started successfully"
                     if success
                     else "Failed to start Lantern Core"
@@ -353,7 +353,7 @@ def api_start_lantern_core():
 
 
 @app.route("/api/stop-lantern-core")
-def api_stop_lantern_core():
+    def api_stop_lantern_core():
     """Stop Lantern Core integration."""
     try:
         loop = asyncio.new_event_loop()
@@ -361,7 +361,7 @@ def api_stop_lantern_core():
         loop.run_until_complete(stop_lantern_core())
         loop.close()
 
-        return jsonify(
+        return jsonify()
             {"success": True, "message": "Lantern Core stopped successfully"}
         )
     except Exception as e:
@@ -369,7 +369,7 @@ def api_stop_lantern_core():
 
 
 @app.route("/api/lantern-core-status")
-def api_lantern_core_status():
+    def api_lantern_core_status():
     """Get Lantern Core status."""
     try:
         loop = asyncio.new_event_loop()
@@ -383,12 +383,12 @@ def api_lantern_core_status():
 
 
 @app.route("/api/start-trading/<mode>")
-def api_start_trading(mode):
+    def api_start_trading(mode):
     """Start trading engine in specified mode."""
     try:
         if mode not in ["demo", "live", "simulation"]:
-            return jsonify(
-                {
+            return jsonify()
+                {}
                     "success": False,
                     "error": "Invalid mode. Use: demo, live, or simulation",
                 }
@@ -409,7 +409,7 @@ def api_start_trading(mode):
         thread = threading.Thread(target=start_trading_loop, daemon=True)
         thread.start()
 
-        return jsonify(
+        return jsonify()
             {"success": True, "message": f"Trading engine started in {mode} mode"}
         )
     except Exception as e:
@@ -417,7 +417,7 @@ def api_start_trading(mode):
 
 
 @app.route("/api/load-historical-data", methods=["POST"])
-def api_load_historical_data():
+    def api_load_historical_data():
     """Load historical data from CSV file."""
     try:
         data = request.get_json()
@@ -430,15 +430,15 @@ def api_load_historical_data():
 
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
-        success = loop.run_until_complete(
+        success = loop.run_until_complete()
             lantern_core.load_historical_data(csv_file_path)
         )
         loop.close()
 
-        return jsonify(
-            {
+        return jsonify()
+            {}
                 "success": success,
-                "message": (
+                "message": ()
                     "Historical data loaded successfully"
                     if success
                     else "Failed to load historical data"
@@ -450,46 +450,46 @@ def api_load_historical_data():
 
 
 @app.route("/api/upload-historical-data", methods=["POST"])
-def api_upload_historical_data():
+    def api_upload_historical_data():
     """API endpoint for uploading historical cryptocurrency data."""
     try:
         # Check if file was uploaded
         if 'file' not in request.files:
             return jsonify({"success": False, "error": "No file uploaded"})
-        
+
         file = request.files['file']
         if file.filename == '':
             return jsonify({"success": False, "error": "No file selected"})
-        
+
         # Get trading pair from form data
         trading_pair = request.form.get('trading_pair', 'btc_usdc').lower()
         if trading_pair not in ['btc_usdc', 'xrp_usdc', 'sol_usdc', 'eth_usdc']:
             return jsonify({"success": False, "error": "Invalid trading pair"})
-        
+
         # Check file extension
         if not allowed_file(file.filename):
             return jsonify({"success": False, "error": "Only CSV files are allowed"})
-        
+
         # Secure filename and save
         filename = secure_filename(file.filename)
         upload_dir = UPLOAD_FOLDER / trading_pair
         file_path = upload_dir / filename
-        
+
         # Save file
         file.save(str(file_path))
-        
+
         # Validate CSV format
         is_valid, message = validate_csv_format(file_path)
         if not is_valid:
             # Remove invalid file
             file_path.unlink()
             return jsonify({"success": False, "error": f"Invalid CSV format: {message}"})
-        
+
         # Process and integrate the data
         success = process_uploaded_data(file_path, trading_pair)
-        
+
         if success:
-            return jsonify({
+            return jsonify({)}
                 "success": True, 
                 "message": f"Successfully uploaded {filename} for {trading_pair.upper()}",
                 "file_path": str(file_path),
@@ -497,25 +497,25 @@ def api_upload_historical_data():
             })
         else:
             return jsonify({"success": False, "error": "Failed to process uploaded data"})
-            
+
     except Exception as e:
         logging.error(f"Error uploading file: {e}")
         return jsonify({"success": False, "error": str(e)})
 
 
 @app.route("/api/list-uploaded-files")
-def api_list_uploaded_files():
+    def api_list_uploaded_files():
     """API endpoint for listing uploaded historical data files."""
     try:
         files_data = {}
-        
+
         for pair in ['btc_usdc', 'xrp_usdc', 'sol_usdc', 'eth_usdc']:
             pair_dir = UPLOAD_FOLDER / pair
             if pair_dir.exists():
                 files = []
                 for file_path in pair_dir.glob('*.csv'):
                     stat = file_path.stat()
-                    files.append({
+                    files.append({)}
                         'filename': file_path.name,
                         'size_mb': round(stat.st_size / (1024 * 1024), 2),
                         'upload_date': pd.Timestamp(stat.st_mtime, unit='s').strftime('%Y-%m-%d %H:%M:%S'),
@@ -524,35 +524,35 @@ def api_list_uploaded_files():
                 files_data[pair] = sorted(files, key=lambda x: x['upload_date'], reverse=True)
             else:
                 files_data[pair] = []
-        
+
         return jsonify({"success": True, "files": files_data})
-        
+
     except Exception as e:
         logging.error(f"Error listing files: {e}")
         return jsonify({"success": False, "error": str(e)})
 
 
 @app.route("/api/delete-uploaded-file", methods=["POST"])
-def api_delete_uploaded_file():
+    def api_delete_uploaded_file():
     """API endpoint for deleting uploaded historical data files."""
     try:
         data = request.get_json()
         file_path = data.get('file_path')
-        
+
         if not file_path:
             return jsonify({"success": False, "error": "File path required"})
-        
+
         # Security check - ensure file is in upload directory
         file_path = Path(file_path)
         if not str(file_path).startswith(str(UPLOAD_FOLDER)):
             return jsonify({"success": False, "error": "Invalid file path"})
-        
+
         if file_path.exists():
             file_path.unlink()
             return jsonify({"success": True, "message": "File deleted successfully"})
         else:
             return jsonify({"success": False, "error": "File not found"})
-            
+
     except Exception as e:
         logging.error(f"Error deleting file: {e}")
         return jsonify({"success": False, "error": str(e)})
@@ -563,15 +563,15 @@ def process_uploaded_data(file_path, trading_pair):
     try:
         # Read the CSV file
         df = pd.read_csv(file_path)
-        
+
         # Standardize column names
-        column_mappings = {
+        column_mappings = {}
             'time': 'timestamp', 'date': 'timestamp', 'datetime': 'timestamp',
             'price': 'close', 'last': 'close',
             'amount': 'volume', 'vol': 'volume', 'volumeto': 'volume', 'volumefrom': 'volume'
         }
         df = df.rename(columns=column_mappings)
-        
+
         # Ensure required columns exist
         required_columns = ['timestamp', 'open', 'high', 'low', 'close', 'volume']
         for col in required_columns:
@@ -584,43 +584,43 @@ def process_uploaded_data(file_path, trading_pair):
                     df['low'] = df['close']
                 elif col == 'volume':
                     df['volume'] = 1000.0  # Default volume
-        
+
         # Convert timestamp to datetime
         df['timestamp'] = pd.to_datetime(df['timestamp'])
-        
+
         # Sort by timestamp and remove duplicates
         df = df.sort_values('timestamp').drop_duplicates(subset=['timestamp'])
-        
+
         # Add trading pair identifier
         df['trading_pair'] = trading_pair
-        
+
         # Save processed data
         processed_dir = Path('data/preprocessed')
         processed_dir.mkdir(parents=True, exist_ok=True)
         processed_file = processed_dir / f"{trading_pair}_uploaded.parquet"
         df.to_parquet(processed_file)
-        
+
         logging.info(f"Successfully processed {len(df)} records for {trading_pair}")
         return True
-        
+
     except Exception as e:
         logging.error(f"Error processing uploaded data: {e}")
         return False
 
 
 @app.route("/quad-bit-strategy")
-def quad_bit_strategy_page():
+    def quad_bit_strategy_page():
     """Quad-bit strategy array dashboard page."""
     return render_template("quad_bit_strategy.html")
 
 
 @app.route("/api/quad-bit-strategy/status")
-def api_quad_bit_strategy_status():
+    def api_quad_bit_strategy_status():
     """Get quad-bit strategy array status."""
     try:
         if quad_bit_strategy is None:
             return jsonify({"success": False, "error": "Quad-bit strategy not initialized"})
-        
+
         status = quad_bit_strategy.get_system_status()
         return jsonify({"success": True, "data": status})
     except Exception as e:
@@ -628,45 +628,45 @@ def api_quad_bit_strategy_status():
 
 
 @app.route("/api/quad-bit-strategy/execute/<pair>")
-def api_quad_bit_strategy_execute(pair):
+    def api_quad_bit_strategy_execute(pair):
     """Execute strategy for a specific trading pair."""
     try:
         if quad_bit_strategy is None:
             return jsonify({"success": False, "error": "Quad-bit strategy not initialized"})
-        
+
         # Convert pair format
-        pair_mapping = {
+        pair_mapping = {}
             'BTC_USDC': 'BTC/USDC',
             'ETH_USDC': 'ETH/USDC', 
             'SOL_USDC': 'SOL/USDC',
             'XRP_USDC': 'XRP/USDC'
         }
-        
+
         if pair not in pair_mapping:
             return jsonify({"success": False, "error": f"Invalid pair: {pair}"})
-        
+
         # Mock market data for demonstration
-        market_data = {
+        market_data = {}
             'current_price': 50000.0 if pair == 'BTC_USDC' else 3000.0,
             'close_prices': [50000.0, 50100.0, 50200.0, 50300.0, 50400.0],
             'volume': 1000000,
             'rsi': 55.0
         }
-        
+
         # Execute strategy
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
-        decision = loop.run_until_complete(
+        decision = loop.run_until_complete()
             quad_bit_strategy.execute_strategy(pair_mapping[pair], market_data)
         )
         loop.close()
-        
+
         if decision is None:
             return jsonify({"success": False, "error": "No decision generated"})
-        
-        return jsonify({
+
+        return jsonify({)}
             "success": True,
-            "data": {
+            "data": {}
                 "pair": pair,
                 "decision": decision.action.value if decision.action else "HOLD",
                 "price": decision.price if decision.price else 0,
@@ -681,26 +681,26 @@ def api_quad_bit_strategy_execute(pair):
 
 
 @app.route("/api/quad-bit-strategy/rebalance")
-def api_quad_bit_strategy_rebalance():
+    def api_quad_bit_strategy_rebalance():
     """Execute basket rebalancing."""
     try:
         if quad_bit_strategy is None:
             return jsonify({"success": False, "error": "Quad-bit strategy not initialized"})
-        
+
         # Execute rebalancing
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
-        decisions = loop.run_until_complete(
+        decisions = loop.run_until_complete()
             quad_bit_strategy.execute_basket_rebalancing()
         )
         loop.close()
-        
-        return jsonify({
+
+        return jsonify({)}
             "success": True,
-            "data": {
+            "data": {}
                 "decisions_count": len(decisions),
-                "decisions": [
-                    {
+                "decisions": []
+                    {}
                         "pair": d.symbol,
                         "signal": d.action.value if d.action else "HOLD",
                         "price": d.price if d.price else 0,
@@ -716,11 +716,11 @@ def api_quad_bit_strategy_rebalance():
 
 
 @app.route("/api/quad-bit-strategy/initialize")
-def api_quad_bit_strategy_initialize():
+    def api_quad_bit_strategy_initialize():
     """Initialize the quad-bit strategy array."""
     try:
         success = initialize_quad_bit_strategy()
-        return jsonify({
+        return jsonify({)}
             "success": success,
             "message": "Quad-bit strategy array initialized" if success else "Failed to initialize"
         })
@@ -730,7 +730,7 @@ def api_quad_bit_strategy_initialize():
 
 def create_templates():
     """Create HTML templates for the web interface."""
-    dashboard_html = """<!DOCTYPE html>
+    dashboard_html = """<!DOCTYPE html>"
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -760,7 +760,7 @@ def create_templates():
     <div class="container">
         <div class="header">
             <h1>🚀 Schwabot Trading Bot Launcher</h1>
-            <p>Unified control center for Schwabot's biological immune system</p>
+            <p>Unified control center for Schwabot's biological immune system</p>'
         </div>
 
         <div class="nav-buttons">
@@ -821,11 +821,11 @@ def create_templates():
 
     <script>
         // Auto-refresh market snapshot
-        function updateMarketSnapshot() {
+        function updateMarketSnapshot() {}
             fetch('/api/market-snapshot')
                 .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
+                .then(data => {)}
+                    if (data.success) {}
                         const snapshot = data.data;
                         document.getElementById('snapshot-content').innerHTML = `
                             <p><strong>BTC Price:</strong> $${snapshot.price_data.price.toLocaleString()}</p>
@@ -836,17 +836,17 @@ def create_templates():
                         document.getElementById('snapshot-content').innerHTML = '<p style="color: #f44336;">Failed to load market data</p>';
                     }
                 })
-                .catch(error => {
+                .catch(error => {)}
                     document.getElementById('snapshot-content').innerHTML = '<p style="color: #f44336;">Error loading market data</p>';
                 });
         }
 
         // Update Lantern Core status
-        function updateLanternCoreStatus() {
+        function updateLanternCoreStatus() {}
             fetch('/api/lantern-core-status')
                 .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
+                .then(data => {)}
+                    if (data.success) {}
                         const status = data.data;
                         const isRunning = status.lantern_core?.is_running || false;
                         const isInitialized = status.lantern_core?.is_initialized || false;
@@ -855,7 +855,7 @@ def create_templates():
                         const indicator = statusDiv.querySelector('.status-indicator');
                         const text = statusDiv.querySelector('p');
 
-                        if (isRunning && isInitialized) {
+                        if (isRunning && isInitialized) {}
                             indicator.className = 'status-indicator status-good';
                             text.innerHTML = '<span class="status-indicator status-good"></span>Lantern Core running';
                         } else if (isInitialized) {
@@ -875,61 +875,61 @@ def create_templates():
                         `;
                     }
                 })
-                .catch(error => {
+                .catch(error => {)}
                     console.error('Error updating Lantern Core status:', error);
                 });
         }
 
         // Control functions
-        function startLanternCore() {
+        function startLanternCore() {}
             fetch('/api/start-lantern-core')
                 .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
+                .then(data => {)}
+                    if (data.success) {}
                         alert('Lantern Core started successfully!');
                         updateLanternCoreStatus();
                     } else {
                         alert('Failed to start Lantern Core: ' + data.error);
                     }
                 })
-                .catch(error => {
+                .catch(error => {)}
                     alert('Error starting Lantern Core: ' + error);
                 });
         }
 
-        function stopLanternCore() {
+        function stopLanternCore() {}
             fetch('/api/stop-lantern-core')
                 .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
+                .then(data => {)}
+                    if (data.success) {}
                         alert('Lantern Core stopped successfully!');
                         updateLanternCoreStatus();
                     } else {
                         alert('Failed to stop Lantern Core: ' + data.error);
                     }
                 })
-                .catch(error => {
+                .catch(error => {)}
                     alert('Error stopping Lantern Core: ' + error);
                 });
         }
 
-        function startTrading(mode) {
-            if (mode === 'live') {
-                if (!confirm('Are you sure you want to start LIVE trading? This will execute real trades!')) {
+        function startTrading(mode) {}
+            if (mode === 'live') {}
+                if (!confirm('Are you sure you want to start LIVE trading? This will execute real trades!')) {}
                     return;
                 }
             }
 
             fetch(`/api/start-trading/${mode}`)
                 .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
+                .then(data => {)}
+                    if (data.success) {}
                         alert(`Trading engine started in ${mode} mode!`);
                     } else {
                         alert('Failed to start trading: ' + data.error);
                     }
                 })
-                .catch(error => {
+                .catch(error => {)}
                     alert('Error starting trading: ' + error);
                 });
         }
@@ -944,7 +944,7 @@ def create_templates():
 </html>"""
 
     # Setup template
-    setup_html = """<!DOCTYPE html>
+    setup_html = """<!DOCTYPE html>"
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -991,20 +991,20 @@ def create_templates():
         </div>
     </div>
     <script>
-        document.getElementById('setup-form').addEventListener('submit', function(e) {
+        document.getElementById('setup-form').addEventListener('submit', function(e) {)}
             e.preventDefault();
             const formData = new FormData(e.target);
             const data = Object.fromEntries(formData);
 
-            fetch('/api/setup', {
+            fetch('/api/setup', {)}
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
             })
             .then(response => response.json())
-            .then(data => {
+            .then(data => {)}
                 const statusDiv = document.getElementById('status-message');
-                if (data.success) {
+                if (data.success) {}
                     statusDiv.innerHTML = '<div class="alert alert-success">Configuration saved successfully!</div>';
                 } else {
                     statusDiv.innerHTML = '<div class="alert alert-error">Error: ' + data.error + '</div>';
@@ -1016,7 +1016,7 @@ def create_templates():
 </html>"""
 
     # Data upload template
-    data_upload_html = """<!DOCTYPE html>
+    data_upload_html = """<!DOCTYPE html>"
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -1079,7 +1079,7 @@ def create_templates():
             </ul>
             <p><strong>Example:</strong></p>
             <code>timestamp,open,high,low,close,volume<br>
-2023-01-01 00:00:00,16500.50,16550.75,16480.25,16525.30,1250.45</code>
+2023-1-1 0:0:0,16500.50,16550.75,16480.25,16525.30,1250.45</code>
         </div>
 
         <div class="upload-section">
@@ -1117,11 +1117,11 @@ def create_templates():
 
     <script>
         // File info display
-        document.getElementById('file').addEventListener('change', function(e) {
+        document.getElementById('file').addEventListener('change', function(e) {)}
             const file = e.target.files[0];
             const fileInfo = document.getElementById('file-info');
-            
-            if (file) {
+
+            if (file) {}
                 const sizeMB = (file.size / (1024 * 1024)).toFixed(2);
                 fileInfo.innerHTML = `
                     <strong>File:</strong> ${file.name}<br>
@@ -1135,37 +1135,37 @@ def create_templates():
         });
 
         // Upload form handling
-        document.getElementById('upload-form').addEventListener('submit', function(e) {
+        document.getElementById('upload-form').addEventListener('submit', function(e) {)}
             e.preventDefault();
-            
+
             const formData = new FormData(this);
             const progressBar = document.getElementById('upload-progress');
             const progressFill = document.getElementById('progress-fill');
             const statusDiv = document.getElementById('upload-status');
-            
+
             // Show progress bar
             progressBar.style.display = 'block';
             progressFill.style.width = '0%';
             statusDiv.innerHTML = '<div class="alert alert-warning">Uploading...</div>';
-            
+
             // Simulate progress
             let progress = 0;
-            const progressInterval = setInterval(() => {
+            const progressInterval = setInterval(() => {)}
                 progress += Math.random() * 20;
                 if (progress > 90) progress = 90;
                 progressFill.style.width = progress + '%';
             }, 200);
-            
-            fetch('/api/upload-historical-data', {
+
+            fetch('/api/upload-historical-data', {)}
                 method: 'POST',
                 body: formData
             })
             .then(response => response.json())
-            .then(data => {
+            .then(data => {)}
                 clearInterval(progressInterval);
                 progressFill.style.width = '100%';
-                
-                if (data.success) {
+
+                if (data.success) {}
                     statusDiv.innerHTML = `<div class="alert alert-success">${data.message}</div>`;
                     document.getElementById('upload-form').reset();
                     document.getElementById('file-info').style.display = 'none';
@@ -1173,12 +1173,12 @@ def create_templates():
                 } else {
                     statusDiv.innerHTML = `<div class="alert alert-error">Error: ${data.error}</div>`;
                 }
-                
-                setTimeout(() => {
+
+                setTimeout(() => {)}
                     progressBar.style.display = 'none';
                 }, 2000);
             })
-            .catch(error => {
+            .catch(error => {)}
                 clearInterval(progressInterval);
                 statusDiv.innerHTML = `<div class="alert alert-error">Upload failed: ${error}</div>`;
                 progressBar.style.display = 'none';
@@ -1186,40 +1186,40 @@ def create_templates():
         });
 
         // Load uploaded files
-        function loadUploadedFiles() {
+        function loadUploadedFiles() {}
             fetch('/api/list-uploaded-files')
                 .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
+                .then(data => {)}
+                    if (data.success) {}
                         displayFiles(data.files);
                     } else {
                         document.getElementById('files-container').innerHTML = 
                             '<div class="alert alert-error">Failed to load files: ' + data.error + '</div>';
                     }
                 })
-                .catch(error => {
+                .catch(error => {)}
                     document.getElementById('files-container').innerHTML = 
                         '<div class="alert alert-error">Error loading files: ' + error + '</div>';
                 });
         }
 
         // Display uploaded files
-        function displayFiles(files) {
+        function displayFiles(files) {}
             const container = document.getElementById('files-container');
-            
-            if (Object.values(files).every(arr => arr.length === 0)) {
+
+            if (Object.values(files).every(arr => arr.length === 0)) {}
                 container.innerHTML = '<p>No files uploaded yet.</p>';
                 return;
             }
-            
+
             let html = '<div class="files-grid">';
-            
-            for (const [pair, fileList] of Object.entries(files)) {
-                if (fileList.length > 0) {
+
+            for (const [pair, fileList] of Object.entries(files)) {}
+                if (fileList.length > 0) {}
                     html += `<div class="file-card">
                         <h4>${pair.toUpperCase()}</h4>`;
-                    
-                    fileList.forEach(file => {
+
+                    fileList.forEach(file => {)}
                         html += `
                             <div style="margin: 10px 0; padding: 10px; background: #333; border-radius: 5px;">
                                 <strong>${file.filename}</strong><br>
@@ -1228,36 +1228,36 @@ def create_templates():
                             </div>
                         `;
                     });
-                    
+
                     html += '</div>';
                 }
             }
-            
+
             html += '</div>';
             container.innerHTML = html;
         }
 
         // Delete file
-        function deleteFile(filePath) {
-            if (!confirm('Are you sure you want to delete this file?')) {
+        function deleteFile(filePath) {}
+            if (!confirm('Are you sure you want to delete this file?')) {}
                 return;
             }
-            
-            fetch('/api/delete-uploaded-file', {
+
+            fetch('/api/delete-uploaded-file', {)}
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ file_path: filePath })
             })
             .then(response => response.json())
-            .then(data => {
-                if (data.success) {
+            .then(data => {)}
+                if (data.success) {}
                     alert('File deleted successfully!');
                     loadUploadedFiles(); // Refresh file list
                 } else {
                     alert('Error deleting file: ' + data.error);
                 }
             })
-            .catch(error => {
+            .catch(error => {)}
                 alert('Error deleting file: ' + error);
             });
         }
@@ -1269,7 +1269,7 @@ def create_templates():
 </html>"""
 
     # Quad-bit strategy template
-    quad_bit_strategy_html = """<!DOCTYPE html>
+    quad_bit_strategy_html = """<!DOCTYPE html>"
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -1418,16 +1418,16 @@ def create_templates():
 
     <script>
         // Initialize sequence grid
-        function initializeSequenceGrid() {
+        function initializeSequenceGrid() {}
             const grid = document.getElementById('sequence-grid');
-            const sequences = [
-                '0000', '0001', '0010', '0011',
-                '0100', '0101', '0110', '0111',
+            const sequences = []
+                '000', '001', '010', '011',
+                '100', '101', '110', '111',
                 '1000', '1001', '1010', '1011',
                 '1100', '1101', '1110', '1111'
             ];
-            
-            sequences.forEach(seq => {
+
+            sequences.forEach(seq => {)}
                 const item = document.createElement('div');
                 item.className = 'sequence-item';
                 item.textContent = seq;
@@ -1436,35 +1436,35 @@ def create_templates():
             });
         }
 
-        function selectSequence(sequence) {
+        function selectSequence(sequence) {}
             // Remove active class from all items
-            document.querySelectorAll('.sequence-item').forEach(item => {
+            document.querySelectorAll('.sequence-item').forEach(item => {)}
                 item.classList.remove('active');
             });
-            
+
             // Add active class to selected item
             event.target.classList.add('active');
-            
+
             // Update bit display
             updateBitDisplay(sequence);
         }
 
-        function updateBitDisplay(sequence) {
+        function updateBitDisplay(sequence) {}
             const bits = sequence.split('').map(bit => parseInt(bit));
             const bitElements = document.querySelectorAll('#bit-display .bit');
-            
-            bits.forEach((bit, index) => {
+
+            bits.forEach((bit, index) => {)}
                 bitElements[index].className = `bit bit-${bit}`;
                 bitElements[index].textContent = bit;
             });
         }
 
         // Initialize strategy
-        function initializeStrategy() {
+        function initializeStrategy() {}
             fetch('/api/quad-bit-strategy/initialize')
                 .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
+                .then(data => {)}
+                    if (data.success) {}
                         document.getElementById('system-status').innerHTML = 
                             '<p><span class="status-indicator status-good"></span>System initialized</p>';
                         updateStatus();
@@ -1473,61 +1473,61 @@ def create_templates():
                             '<p><span class="status-indicator status-bad"></span>Initialization failed: ' + data.error + '</p>';
                     }
                 })
-                .catch(error => {
+                .catch(error => {)}
                     document.getElementById('system-status').innerHTML = 
                         '<p><span class="status-indicator status-bad"></span>Error: ' + error + '</p>';
                 });
         }
 
         // Update status
-        function updateStatus() {
+        function updateStatus() {}
             fetch('/api/quad-bit-strategy/status')
                 .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
+                .then(data => {)}
+                    if (data.success) {}
                         const status = data.data;
-                        
+
                         // Update active sequence
                         const sequence = status.active_sequence;
                         const sequenceBinary = sequence.toString(2).padStart(4, '0');
                         document.getElementById('active-sequence').innerHTML = 
                             `<p>Sequence ${sequence} (${sequenceBinary})</p>`;
                         updateBitDisplay(sequenceBinary);
-                        
+
                         // Update pair states
                         const pairStates = status.pair_states;
                         let pairHtml = '';
-                        for (const [pair, state] of Object.entries(pairStates)) {
+                        for (const [pair, state] of Object.entries(pairStates)) {}
                             const sequence = state.sequence || 'None';
                             const lastUpdate = new Date(state.last_update * 1000).toLocaleTimeString();
                             pairHtml += `<p><strong>${pair}:</strong> Sequence ${sequence} (${lastUpdate})</p>`;
                         }
                         document.getElementById('pair-states').innerHTML = pairHtml || '<p>No pair states</p>';
-                        
+
                         // Update asset profiles
                         const assetProfiles = status.asset_profiles;
                         let assetHtml = '';
-                        for (const [symbol, profile] of Object.entries(assetProfiles)) {
+                        for (const [symbol, profile] of Object.entries(assetProfiles)) {}
                             const needsRebalancing = profile.needs_rebalancing ? '⚠️' : '✅';
                             assetHtml += `<p>${needsRebalancing} <strong>${symbol}:</strong> ${profile.allocation.toFixed(1)}% / ${profile.target.toFixed(1)}%</p>`;
                         }
                         document.getElementById('asset-profiles').innerHTML = assetHtml || '<p>No asset profiles</p>';
-                        
+
                     } else {
                         console.error('Failed to get status:', data.error);
                     }
                 })
-                .catch(error => {
+                .catch(error => {)}
                     console.error('Error updating status:', error);
                 });
         }
 
         // Execute strategy for a pair
-        function executeStrategy(pair) {
+        function executeStrategy(pair) {}
             fetch(`/api/quad-bit-strategy/execute/${pair}`)
                 .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
+                .then(data => {)}
+                    if (data.success) {}
                         const result = data.data;
                         const resultsDiv = document.getElementById('execution-results');
                         resultsDiv.innerHTML = `
@@ -1545,18 +1545,18 @@ def create_templates():
                             `<div class="alert alert-error">Error: ${data.error}</div>`;
                     }
                 })
-                .catch(error => {
+                .catch(error => {)}
                     document.getElementById('execution-results').innerHTML = 
                         `<div class="alert alert-error">Error: ${error}</div>`;
                 });
         }
 
         // Execute rebalancing
-        function executeRebalancing() {
+        function executeRebalancing() {}
             fetch('/api/quad-bit-strategy/rebalance')
                 .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
+                .then(data => {)}
+                    if (data.success) {}
                         const result = data.data;
                         const resultsDiv = document.getElementById('execution-results');
                         resultsDiv.innerHTML = `
@@ -1571,7 +1571,7 @@ def create_templates():
                             `<div class="alert alert-error">Error: ${data.error}</div>`;
                     }
                 })
-                .catch(error => {
+                .catch(error => {)}
                     document.getElementById('execution-results').innerHTML = 
                         `<div class="alert alert-error">Error: ${error}</div>`;
                 });
@@ -1604,7 +1604,7 @@ def main():
     """Main entry point for the Schwabot launcher."""
     print("🚀 Starting Schwabot Unified Launcher...")
 
-    # Create templates if they don't exist
+    # Create templates if they don't exist'
     create_templates()
 
     # Check if API keys are configured

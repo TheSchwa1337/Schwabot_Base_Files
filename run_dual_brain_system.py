@@ -1,18 +1,18 @@
-                import numpy
-        from core.unified_math_system import UnifiedMathSystem
-                import aiohttp
-                import asyncio
-                import ccxt
-                import flask
-                import flask_socketio
-                import requests
-        from core.dual_brain_architecture import DualBrainArchitecture
-        from core.dual_brain_architecture import DualBrainArchitecture
-        from core.dual_unicore_handler import DualUnicoreHandler
-        from core.exchange_plumbing import ExchangePlumbing
-        from core.phase_bit_integration import PhaseBitIntegration
-        from core.whale_tracker_integration import WhaleTrackerIntegration
-        from server.dual_brain_server import run_server
+import numpy
+from core.unified_math_system import UnifiedMathSystem
+import aiohttp
+import asyncio
+import ccxt
+import flask
+import flask_socketio
+import requests
+from core.dual_brain_architecture import DualBrainArchitecture
+from core.dual_brain_architecture import DualBrainArchitecture
+from core.dual_unicore_handler import DualUnicoreHandler
+from core.exchange_plumbing import ExchangePlumbing
+from core.phase_bit_integration import PhaseBitIntegration
+from core.whale_tracker_integration import WhaleTrackerIntegration
+from server.dual_brain_server import run_server
 from datetime import datetime
 from pathlib import Path
 import asyncio
@@ -47,10 +47,10 @@ Then navigate to: http://localhost:5000
 sys.path.insert(0, str(Path(__file__).parent))
 
 # Configure comprehensive logging
-logging.basicConfig(
+logging.basicConfig()
     level=logging.INFO,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    handlers=[
+    handlers=[]
         logging.StreamHandler(sys.stdout),
         logging.FileHandler("dual_brain_system.log"),
     ],
@@ -208,7 +208,7 @@ def check_dependencies():
     """Check required dependencies."""
     logger.info("🔍 Checking dependencies...")
 
-    required_packages = [
+    required_packages = []
         "numpy",
         "asyncio",
         "aiohttp",
@@ -240,7 +240,7 @@ def check_dependencies():
 
     if missing_packages:
         logger.warning(f"Missing packages: {', '.join(missing_packages)}")
-        logger.info(
+        logger.info()
             "Install missing packages with: pip install " + " ".join(missing_packages)
         )
         return False
@@ -253,7 +253,7 @@ def create_directory_structure():
     """Create necessary directory structure."""
     logger.info("📁 Creating directory structure...")
 
-    directories = [
+    directories = []
         "core",
         "core/math",
         "core/math/tensor_algebra",
@@ -284,15 +284,15 @@ async def run_system_demo():
             logger.info(f"   Cycle {i + 1}/3...")
             decision = await dual_brain.run_dual_brain_cycle()
 
-            logger.info(
+            logger.info()
                 f"   🧠 Left Brain: {decision.left_brain_state.last_decision} "
                 f"(thermal: {decision.left_brain_state.thermal_state})"
             )
-            logger.info(
+            logger.info()
                 f"   🧠 Right Brain: {decision.right_brain_state.last_decision} "
                 f"(thermal: {decision.right_brain_state.thermal_state})"
             )
-            logger.info(
+            logger.info()
                 f"   ⚡ Flip Logic: {decision.flip_logic_result.flip_signal.value}"
             )
             logger.info(f"   🎯 Decision: {decision.synchronized_action}")
@@ -330,7 +330,7 @@ def main():
     import_success, successful_imports, failed_imports = import_core_systems()
 
     if not import_success:
-        logger.error(
+        logger.error()
             "❌ Core system imports failed. Please check error messages above."
         )
         return False

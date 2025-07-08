@@ -1,5 +1,3 @@
-from typing import Any, Dict, List, Optional, Tuple
-
 """
 
 
@@ -28,7 +26,7 @@ Original file: core\\immune\\qsc_gate.py
 
 
 
-Date commented out: 2025-07-02 19:37:05
+Date commented out: 2025-7-2 19:37:5
 
 
 
@@ -40,19 +38,19 @@ The clean implementation has been preserved in the following files:
 
 
 
-- core/clean_math_foundation.py (mathematical foundation)
+- core/clean_math_foundation.py (mathematical, foundation)
 
 
 
-- core/clean_profit_vectorization.py (profit calculations)
+- core/clean_profit_vectorization.py (profit, calculations)
 
 
 
-- core/clean_trading_pipeline.py (trading logic)
+- core/clean_trading_pipeline.py (trading, logic)
 
 
 
-- core/clean_unified_math.py (unified mathematics)
+- core/clean_unified_math.py (unified, mathematics)
 
 
 
@@ -67,7 +65,6 @@ All core functionality has been reimplemented in clean, production-ready files.
 """
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
-
 
 """
 
@@ -114,7 +111,7 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 
 
-QSC Gate (Quantum Static Core Gate)
+QSC Gate (Quantum Static Core, Gate)
 
     - Immune System Integration.Advanced gate system that integrates quantum static calculations with immune
 
@@ -242,7 +239,7 @@ Gate.Args:
 
 
 
-            config: Configuration parameters"self.config = config or self._default_config()
+            config: Configuration parameters"self.config = config or self._default_config()"
 
 
 
@@ -250,15 +247,15 @@ Gate.Args:
 
 
 
-        # Immune signal weights (biological T-cell weights)
+        # Immune signal weights (biological T-cell, weights)
 
 
 
-        self.signal_weights = np.array(
+        self.signal_weights = np.array()
 
 
 
-            [self.config.get(w1_price_weight, 0.4),  # Price delta weight
+            [self.config.get(w1_price_weight, 0.4),  # Price delta weight]
 
 
 
@@ -266,7 +263,7 @@ Gate.Args:
 
 
 
-                self.config.get(w3_entropy_weight", 0.3),  # Entropy anomaly weight
+                self.config.get(w3_entropy_weight", 0.3),  # Entropy anomaly weight"
 
 
 
@@ -318,7 +315,7 @@ Gate.Args:
 
 
 
-        self.learning_rate = self.config.get(learning_rate, 0.01)
+        self.learning_rate = self.config.get(learning_rate, 0.1)
 
 
 
@@ -346,7 +343,7 @@ Gate.Args:
 
 
 
-            logger.info( QSC Gate initialized with immune signal processing)
+            logger.info( QSC Gate initialized with immune signal, processing)
 
 
 
@@ -355,8 +352,8 @@ Gate.Args:
 
 
 def _default_config():-> Dict[str, Any]:Return default configuration for QSC Gate.return
-{w1_price_weight: 0.4,w2_volume_weight": 0.3,w3_entropy_weight": 0.3,tau_threshold":
-0.55,learning_rate": 0.01,sigmoid_sharpness": 1.0,max_history": 1000,adaptation_enabled": True,
+{w1_price_weight: 0.4,w2_volume_weight": 0.3,w3_entropy_weight": 0.3,tau_threshold":"}
+0.55,learning_rate": 0.1,sigmoid_sharpness": 1.0,max_history": 1000,adaptation_enabled": True,
 
 
 
@@ -368,7 +365,7 @@ def _default_config():-> Dict[str, Any]:Return default configuration for QSC Gat
 
 
 
-def immune_trigger():-> Tuple[bool, float, Dict[str, Any]]:"Process immune trigger using biological
+def immune_trigger():-> Tuple[bool, float, Dict[str, Any]]:"Process immune trigger using biological"
 T-cell activation math.Mathematical Model: I_act = (w1*S1 + w2*S2 + w3*S3 - )
 
 
@@ -546,12 +543,12 @@ T-cell activation math.Mathematical Model: I_act = (w1*S1 + w2*S2 + w3*S3 - )
 
 
         analysis
-    = {signal_components: {S1_price_delta: S1,S2_volume_spike: S2,S3_entropy_anomaly": S3,
+    = {signal_components: {S1_price_delta: S1,S2_volume_spike: S2,S3_entropy_anomaly": S3,"}}
 
 
 
 },weighted_sum: weighted_sum,adaptive_threshold": self.adaptive_tau,z_score":
-z,activation_strength": activation_strength,triggered": triggered,signal_weights":
+z,activation_strength": activation_strength,triggered": triggered,signal_weights":"
 self.signal_weights.tolist(),timestamp": signal_data.timestamp,source": signal_data.source,
 
 
@@ -568,7 +565,7 @@ self.signal_weights.tolist(),timestamp": signal_data.timestamp,source": signal_d
 
 
 
-        if self.config.get(adaptation_enabled", True):
+        if self.config.get(adaptation_enabled", True):"
 
 
 
@@ -580,7 +577,7 @@ self.signal_weights.tolist(),timestamp": signal_data.timestamp,source": signal_d
 
 
 
-            logger.debug(" Immune trigger: {0} (strength: {1})
+            logger.debug(" Immune trigger: {0} (strength: {1})")
 
 
 
@@ -609,7 +606,7 @@ Simple adaptive mechanism - adjust threshold based on activation
 
 
 
-        recent_triggers = sum(
+        recent_triggers = sum()
 
 
 
@@ -633,7 +630,7 @@ Simple adaptive mechanism - adjust threshold based on activation
 
 
 
-        trigger_rate = (
+        trigger_rate = ()
 
 
 
@@ -689,7 +686,7 @@ Simple adaptive mechanism - adjust threshold based on activation
 
 
 
-            logger.debug(
+            logger.debug()
 
 
 
@@ -826,7 +823,7 @@ GTS integration.Args:
 
 
 
-        decision = self._make_immune_decision(
+        decision = self._make_immune_decision()
 
 
 
@@ -846,7 +843,7 @@ GTS integration.Args:
 
 
 
-        response = QSCImmuneResponse(
+        response = QSCImmuneResponse()
 
 
 
@@ -1004,22 +1001,21 @@ status.recent_responses = self.response_history[-100:] if self.response_history 
 
 
 
-        return {5},recent_performance".format(triggered, activation_strength:.3f, self.adaptive_tau:.3f, trigger_rate:.3f, analysis: analysis,signal_source: signal_data.source,confidence:
-signal_data.confidence,processing_time: time.time() - signal_data.timestamp,
+        return {5},recent_performance".format(triggered, activation_strength) - signal_data.timestamp,"
 
 
 
-            , gate_status: {
+            , gate_status: {}
 
 
 
-total_signals: self.total_signals,triggered_responses: self.triggered_responses,trigger_rate":
-self.triggered_responses / max(1, self.total_signals),adaptive_threshold":
-self.adaptive_tau,signal_weights": self.signal_weights.tolist(),
+total_signals: self.total_signals,triggered_responses: self.triggered_responses,trigger_rate":"
+self.triggered_responses / max(1, self.total_signals),adaptive_threshold":"
+self.adaptive_tau,signal_weights": self.signal_weights.tolist(),"
 
 
 
-            ): {response_count: len(recent_responses),avg_trigger_strength": (
+            ): {response_count: len(recent_responses),avg_trigger_strength": ("}
 
 
 
@@ -1028,7 +1024,7 @@ self.adaptive_tau,signal_weights": self.signal_weights.tolist(),
 
 
 ),avg_gts_sync": np.mean(gts_sync_scores) if gts_sync_scores else 0.0,activation_distribution":
-{level: activation_levels.count(level)
+{level: activation_levels.count(level)}
 
 
 
@@ -1040,7 +1036,7 @@ self.adaptive_tau,signal_weights": self.signal_weights.tolist(),
 
 
 
-            },configuration: self.config,last_signal": {timestamp: (
+            },configuration: self.config,last_signal": {timestamp: (")
 
 
 
@@ -1048,7 +1044,7 @@ self.adaptive_tau,signal_weights": self.signal_weights.tolist(),
 
 
 
-                ),source": (
+                ),source": ("
 
 
 
@@ -1072,7 +1068,7 @@ self.adaptive_tau,signal_weights": self.signal_weights.tolist(),
 
 
 
-    def update_performance_feedback():-> None:"Update performance feedback for learning.Args:
+    def update_performance_feedback():-> None:"Update performance feedback for learning.Args:"
 
 
 
@@ -1080,7 +1076,7 @@ self.adaptive_tau,signal_weights": self.signal_weights.tolist(),
 
 
 
-            was_successful: Whether the decision was successful"if was_successful:
+            was_successful: Whether the decision was successful"if was_successful:"
 
 
 
@@ -1116,7 +1112,7 @@ self.adaptive_tau,signal_weights": self.signal_weights.tolist(),
 
 
 
-            self.learning_rate = min(0.05, self.learning_rate * 1.1)
+            self.learning_rate = min(0.5, self.learning_rate * 1.1)
 
 
 
@@ -1124,7 +1120,7 @@ self.adaptive_tau,signal_weights": self.signal_weights.tolist(),
 
 
 
-            self.learning_rate = max(0.001, self.learning_rate * 0.9)
+            self.learning_rate = max(0.01, self.learning_rate * 0.9)
 
 
 
@@ -1132,7 +1128,7 @@ self.adaptive_tau,signal_weights": self.signal_weights.tolist(),
 
 
 
-            logger.debug(
+            logger.debug()
 
 
 
@@ -1192,7 +1188,7 @@ def create_signal_from_market_data():-> ImmuneSignalData:Create immune signal da
 
 
 
-        ImmuneSignalData objectreturn ImmuneSignalData(
+        ImmuneSignalData objectreturn ImmuneSignalData()
 
 
 
@@ -1236,7 +1232,7 @@ if __name__ == __main__:
 
 
 
-    print( QSC Gate Demo)
+    print( QSC Gate, Demo)
 
 
 
@@ -1262,7 +1258,7 @@ if __name__ == __main__:
 
     test_signals
 
-    = [create_signal_from_market_data(0.3, 0.7, 0.2, test_1),create_signal_from_market_data(0.8, 0.9, 0.6,test_2),create_signal_from_market_data(-0.2, 0.1, 0.8,test_3),create_signal_from_market_data(0.9, 0.8, 0.9,test_4),
+    = [create_signal_from_market_data(0.3, 0.7, 0.2, test_1),create_signal_from_market_data(0.8, 0.9, 0.6,test_2),create_signal_from_market_data(-0.2, 0.1, 0.8,test_3),create_signal_from_market_data(0.9, 0.8, 0.9,test_4),]
 
 
 
@@ -1278,7 +1274,7 @@ if __name__ == __main__:
 
 
 
-        response = qsc_gate.process_immune_response(
+        response = qsc_gate.process_immune_response()
 
 
 
@@ -1290,7 +1286,7 @@ if __name__ == __main__:
 
 
 
-        print(
+        print()
 
 
 
@@ -1319,17 +1315,16 @@ if __name__ == __main__:
 
 
 
-print(fTotal signals: {status['gate_status']['total_signals']})'print("Trigger rate:
-{0})'print(f".format(status['gate_status']['trigger_rate']:.3f)Adaptive threshold:
-{status['gate_status']['adaptive_threshold']:.3f})
+print(fTotal signals: {status['gate_status']['total_signals']})'print("Trigger rate:'")
+{0})'print(f".format(status['gate_status']['trigger_rate'])Adaptive threshold)'"
 
 
 
-    print( QSC Gate Demo Complete)
+    print( QSC Gate Demo, Complete)
 
 
 
-'"
+'"'
 
 
 

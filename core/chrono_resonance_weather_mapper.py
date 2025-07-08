@@ -6,11 +6,10 @@ from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
-    import cupy as cp
+import numpy as np
 from .chrono_recursive_logic_function import CRLFResponse, CRLFTriggerState
 from .zpe_zbe_core import ZBEBalance, ZPEVector
 
-    import numpy as np
 import requests
 from scipy import signal
 from scipy.fft import fft, fftfreq
@@ -47,13 +46,15 @@ Where:
 
 # CUDA Integration with Fallback
 try:
+    import cupy as cp
     USING_CUDA = True
     _backend = 'cupy (GPU)'
     xp = cp
 except ImportError:
+    import numpy as cp  # fallback to numpy
     USING_CUDA = False
     _backend = 'numpy (CPU)'
-    xp = np
+    xp = cp
 
 # Log backend status
 logger = logging.getLogger(__name__)
@@ -101,7 +102,7 @@ class WeatherDataPoint:
     wind_direction: float  # degrees
 
     # Advanced weather data
-    schumann_frequency: float = 7.83  # Hz (default Schumann resonance)
+    schumann_frequency: float = 7.83  # Hz (default Schumann, resonance)
     geomagnetic_index: float = 0.0  # Kp index
     solar_flux: float = 100.0  # Solar flux units
 
@@ -322,9 +323,7 @@ class ChronoResonanceWeatherMapper:
                 self.weather_history = self.weather_history[-max_history:]
 
             logger.debug(
-                "CRWF computed: {0}, Entropy: {1}".format(
-                    crwf_output:.4f, 
-                    entropy_score:.3f)
+                "CRWF computed: {0}, Entropy: {1}".format(crwf_output, entropy_score)
             )
 
             return response
@@ -384,7 +383,7 @@ class ChronoResonanceWeatherMapper:
         # Geomagnetic activity factor
         geomagnetic_factor = weather_data.geomagnetic_index / 9.0  # Normalize Kp index
 
-        # Altitude factor (higher altitude = stronger interference)
+        # Altitude factor (higher altitude = stronger, interference)
         altitude_factor = xp.exp(weather_data.altitude / 10000.0)
 
         # Solar flux factor
@@ -617,8 +616,7 @@ class ChronoResonanceWeatherMapper:
                 timestamp=datetime.now(),
                 latitude=latitude,
                 longitude=longitude,
-                altitude=data.get("main", {}).get("pressure", 1013.25) / 10.0,
-                # Rough altitude estimate
+                altitude=data.get("main", {}).get("pressure", 1013.25) / 10.0,  # Rough altitude estimate
                 temperature=data["main"]["temp"],
                 pressure=data["main"]["pressure"],
                 humidity=data["main"]["humidity"],
@@ -629,19 +627,17 @@ class ChronoResonanceWeatherMapper:
             )
 
             logger.info(
-                "Weather data fetched for {0}, {1}".format(
-                    latitude:.2f, 
-                    longitude:.2f)
+                "Weather data fetched for {0}, {1}".format(latitude, longitude)
             )
             return weather_data
 
         except Exception as e:
             logger.error("Error fetching weather data: {0}".format(e))
-        return None
+            return None
 
     def get_location(self, latitude: float, longitude: float, name: str = "") -> GeoLocation:
         """Get or create a GeoLocation with computed resonance properties."""
-        location_key = "{0},{1}".format(latitude:.3f, longitude:.3f)
+        location_key = "{0},{1}".format(latitude, longitude)
 
         if location_key in self.location_cache:
             return self.location_cache[location_key]
@@ -710,8 +706,7 @@ class ChronoResonanceWeatherMapper:
         ley_strength = self._compute_ley_line_strength(latitude, longitude)
         geomagnetic_density = self._compute_geomagnetic_density(latitude, longitude)
 
-        # Resonance factor is geometric mean of ley strength and geomagnetic
-        # density
+        # Resonance factor is geometric mean of ley strength and geomagnetic density
         resonance_factor = xp.sqrt(ley_strength * geomagnetic_density)
 
         return float(xp.clip(resonance_factor, 0.0, 1.0))
@@ -799,11 +794,11 @@ if __name__ == "__main__":
     # Compute CRWF
     response = crwf.compute_crwf(test_weather, test_location)
 
-    print("CRWF Output: {0}".format(response.crwf_output:.4f))
-    print("Entropy Score: {0}".format(response.entropy_score:.3f))
+    print("CRWF Output: {0}".format(response.crwf_output))
+    print("Entropy Score: {0}".format(response.entropy_score))
     print("Weather Pattern: {0}".format(response.weather_pattern.value))
-    print("Geo Alignment: {0}".format(response.geo_alignment_score:.3f))
-    print("CRLF Adjustment: {0}".format(response.crlf_adjustment_factor:.3f))
+    print("Geo Alignment: {0}".format(response.geo_alignment_score))
+    print("CRLF Adjustment: {0}".format(response.crlf_adjustment_factor))
 
     # Get performance summary
     summary = crwf.get_performance_summary()

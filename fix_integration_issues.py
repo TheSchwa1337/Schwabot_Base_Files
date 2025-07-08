@@ -38,7 +38,7 @@ def fix_unified_math_import():
 
                 # Replace problematic import with working one
                 if "from schwabot_unified_math import" in content:
-                    content = content.replace(
+                    content = content.replace()
                         "from schwabot_unified_math import UnifiedMathematicsFramework",
                         "from core.clean_unified_math import CleanUnifiedMathSystem as UnifiedMathematicsFramework",
                     )
@@ -57,19 +57,19 @@ def create_missing_config_files():
 
     print("📄 Creating missing configuration files...")
 
-    # Create config directory if it doesn't exist
+    # Create config directory if it doesn't exist'
     config_dir = Path("config")
     config_dir.mkdir(exist_ok=True)
 
     # Create API keys template
-    api_keys_content = {
-        "coinbase": {
+    api_keys_content = {}
+        "coinbase": {}
             "api_key": "YOUR_COINBASE_API_KEY",
             "secret": "YOUR_COINBASE_SECRET",
             "passphrase": "YOUR_COINBASE_PASSPHRASE",
             "sandbox": True,
         },
-        "binance": {
+        "binance": {}
             "api_key": "YOUR_BINANCE_API_KEY",
             "secret": "YOUR_BINANCE_SECRET",
             "testnet": True,
@@ -83,9 +83,9 @@ def create_missing_config_files():
         print("  ✅ Created config/api_keys.json")
 
     # Create trading pairs config
-    trading_pairs_content = {
+    trading_pairs_content = {}
         "default_pairs": ["BTC/USD", "ETH/USD", "BTC/USDT"],
-        "exchanges": {
+        "exchanges": {}
             "coinbase": ["BTC-USD", "ETH-USD"],
             "binance": ["BTCUSDT", "ETHUSDT"],
         },
@@ -107,7 +107,7 @@ def create_basic_gui_components():
     viz_dir.mkdir(exist_ok=True)
 
     # Create basic GUI launcher
-    gui_content = '''#!/usr/bin/env python3
+    gui_content = '''#!/usr/bin/env python3'
 # -*- coding: utf-8 -*-
 """
 Schwabot GUI Launcher
@@ -118,7 +118,7 @@ Basic GUI interface for Schwabot trading system.
 
 
 try:
-except ImportError as e:
+    except ImportError as e:
     print(f"Import error: {e}")
 
 
@@ -169,7 +169,7 @@ class SchwabotuGUI:
         self.setup_status_tab()
 
         # Status bar
-        self.status_bar = tk.Label(self.root, text=self.status,
+        self.status_bar = tk.Label(self.root, text=self.status,)
                                   relief=tk.SUNKEN, anchor=tk.W)
         self.status_bar.pack(side=tk.BOTTOM, fill=tk.X)
 
@@ -190,7 +190,7 @@ class SchwabotuGUI:
         self.volume_entry.insert(0, "1000")
         self.volume_entry.grid(row=0, column=3, padx=5)
 
-        ttk.Button(input_frame, text="Process Signal",
+        ttk.Button(input_frame, text="Process Signal",)
                   command=self.process_brain_signal).grid(row=0, column=4, padx=10)
 
         # Results frame
@@ -212,7 +212,7 @@ class SchwabotuGUI:
         self.symbol_entry.insert(0, "🧠")
         self.symbol_entry.grid(row=0, column=1, padx=5)
 
-        ttk.Button(input_frame, text="Process Symbol",
+        ttk.Button(input_frame, text="Process Symbol",)
                   command=self.process_symbol).grid(row=0, column=2, padx=10)
 
         # Results
@@ -231,11 +231,11 @@ class SchwabotuGUI:
 
         ttk.Label(calc_frame, text="Operation:").grid(row=0, column=0, sticky=tk.W, padx=5)
         self.operation_var = tk.StringVar(value="optimize_profit")
-        operation_combo = ttk.Combobox(calc_frame, textvariable=self.operation_var,
+        operation_combo = ttk.Combobox(calc_frame, textvariable=self.operation_var,)
                                      values=["optimize_profit", "calculate_sharpe", "portfolio_weight"])
         operation_combo.grid(row=0, column=1, padx=5)
 
-        ttk.Button(calc_frame, text="Calculate",
+        ttk.Button(calc_frame, text="Calculate",)
                   command=self.perform_calculation).grid(row=0, column=2, padx=10)
 
         # Results
@@ -255,7 +255,7 @@ class SchwabotuGUI:
         self.status_text.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
 
         # Auto-refresh button
-        ttk.Button(status_frame, text="Refresh Status",
+        ttk.Button(status_frame, text="Refresh Status",)
                   command=self.refresh_status).pack(pady=5)
 
         # Initial status
@@ -319,7 +319,7 @@ class SchwabotuGUI:
                 result = self.math_system.optimize_profit(1000, 1.5, 0.8)
                 result_text = f"Optimized Profit: ${result:.2f}"
             elif operation == "calculate_sharpe":
-                returns = [0.05, 0.02, -0.01, 0.03, 0.01]
+                returns = [0.5, 0.2, -0.1, 0.3, 0.1]
                 result = self.math_system.calculate_sharpe_ratio(returns)
                 result_text = f"Sharpe Ratio: {result:.3f}"
             elif operation == "portfolio_weight":
@@ -402,7 +402,7 @@ def create_btc_integration_stubs():
     btc_dir.mkdir(exist_ok=True)
 
     # BTC Block Processor stub
-    block_processor_content = '''# -*- coding: utf-8 -*-
+    block_processor_content = '''# -*- coding: utf-8 -*-'
 """
 BTC Block Processor
 ==================
@@ -452,9 +452,9 @@ def main():
     print("\\n✅ ALL FIXES COMPLETED!")
     print("\\n🚀 System is now ready for executable build!")
     print("\\nNext steps:")
-    print("  1. Run: python visualization/schwabot_gui.py (to test GUI)")
-    print("  2. Run: python test_core_integration.py (to verify)")
-    print("  3. Run: python setup_package.py (to build executable)")
+    print("  1. Run: python visualization/schwabot_gui.py (to test, GUI)")
+    print("  2. Run: python test_core_integration.py (to, verify)")
+    print("  3. Run: python setup_package.py (to build, executable)")
 
 
 if __name__ == "__main__":

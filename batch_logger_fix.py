@@ -17,7 +17,7 @@ unicore = DualUnicoreHandler()
 Batch Logger Import Fix Script
 
 This script automatically adds logger imports to Python files that use logger
-but don't have the proper import statements."""'
+but don't have the proper import statements."""'"
 """"""
 """"""
 """"""
@@ -33,12 +33,12 @@ def add_logger_imports(file_path):"""
 """"""
 """"""
 """
-try:
+    try:
         with open(file_path, 'r', encoding='utf - 8') as f:
             content = f.read()
 
 # Check if logger is used but not properly imported
-if 'logger.' in content:
+    if 'logger.' in content:
             lines = content.split('\n')
             has_logging_import = 'import logging' in content
             has_logger_definition = 'logger = logging.getLogger(__name__)' in content
@@ -46,23 +46,23 @@ if 'logger.' in content:
 if not has_logging_import:"""
 print(f"Adding logging import to: {file_path}")
 # Add import logging at the top
-for i, line in enumerate(lines):
+    for i, line in enumerate(lines):
                     if line.strip().startswith('import ') or line.strip().startswith('from '):
                         lines.insert(i, 'import logging')
                         lines.insert(i + 1, '')
                         break
-else:
+    else:
                     lines.insert(0, 'import logging')
                     lines.insert(1, '')
 
 if not has_logger_definition:
                 print(f"Adding logger definition to: {file_path}")
 # Add logger definition after import logging
-for i, line in enumerate(lines):
+    for i, line in enumerate(lines):
                     if line.strip() == 'import logging':
                         lines.insert(i + 1, 'logger = logging.getLogger(__name__)')
                         break
-else:
+    else:
 # If no import logging found, add both
                     if not has_logging_import:
                         lines.insert(0, 'import logging')
@@ -74,7 +74,7 @@ with open(file_path, 'w', encoding='utf - 8') as f:
                 f.write('\n'.join(lines))
 
 return True
-else:
+    else:
             return False
 
 except Exception as e:
@@ -101,12 +101,12 @@ for file_path in python_files:
                 content = f.read()
 
 # Check if logger is used
-if 'logger.' in content:
+    if 'logger.' in content:
                 has_logging_import = 'import logging' in content
                 has_logger_definition = 'logger = logging.getLogger(__name__)' in content
 
 # Add to fix list if missing either import or definition
-if not has_logging_import or not has_logger_definition:
+    if not has_logging_import or not has_logger_definition:
                     files_to_fix.append(str(file_path))
 
 except Exception as e:"""

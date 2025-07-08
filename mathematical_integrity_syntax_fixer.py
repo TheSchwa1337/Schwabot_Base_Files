@@ -26,7 +26,7 @@ class MathematicalIntegritySyntaxFixer:
     def __init__(self):
         """Initialize the fixer with mathematical preservation rules."""
         # Mathematical patterns to preserve
-        self.math_patterns = [
+        self.math_patterns = []
             r"φ_?\d+",  # Phi variables (φ₄, φ₈, φ₄₂)
             r"α|β|γ|θ|λ|μ|σ|τ|ω|Ω",  # Greek letters
             r"\d+\.\d+f?",  # Floating point numbers
@@ -37,7 +37,7 @@ class MathematicalIntegritySyntaxFixer:
         ]
 
         # Trading-specific patterns to preserve
-        self.trading_patterns = [
+        self.trading_patterns = []
             r"price_|profit_|volume_|signal_",  # Trading variables
             r"buy|sell|hold|execute",  # Trading actions
             r"strategy_|portfolio_|risk_",  # Strategy components
@@ -45,7 +45,7 @@ class MathematicalIntegritySyntaxFixer:
         ]
 
         # Safe transformation rules
-        self.safe_fixes = {
+        self.safe_fixes = {}
             "indentation": self._fix_indentation,
             "unterminated_strings": self._fix_unterminated_strings,
             "missing_colons": self._fix_missing_colons,
@@ -76,11 +76,11 @@ class MathematicalIntegritySyntaxFixer:
             if line.startswith("    ") and i > 0:
                 prev_line = lines[i - 1].strip()
 
-                # If previous line doesn't end with colon and current line is indented,
+                # If previous line doesn't end with colon and current line is indented,'
                 # it might be an indentation error
                 if not prev_line.endswith(":") and not prev_line.endswith("\\"):
                     # Check if this is a mathematical formula continuation
-                    if self.is_mathematical_line(line) and self.is_mathematical_line(
+                    if self.is_mathematical_line(line) and self.is_mathematical_line()
                         prev_line
                     ):
                         # Preserve mathematical indentation
@@ -102,53 +102,53 @@ class MathematicalIntegritySyntaxFixer:
 
         for line in lines:
             # Count quotes
-            double_quotes = line.count('"')
-            single_quotes = line.count("'")
+            double_quotes = line.count('"')"
+            single_quotes = line.count("'")'
 
             # Handle unterminated double quotes
             if double_quotes % 2 == 1:
                 # Check if this is a mathematical string or formula
                 if self.is_mathematical_line(line):
                     # Be more careful with mathematical content
-                    if line.strip().endswith('"'):
+                    if line.strip().endswith('"'):"
                         # Already properly terminated
                         fixed_lines.append(line)
                     else:
                         # Look for the last quote and check context
-                        last_quote_pos = line.rfind('"')
+                        last_quote_pos = line.rfind('"')"
                         if last_quote_pos >= 0:
                             after_quote = line[last_quote_pos + 1:].strip()
-                            if not after_quote or after_quote.startswith(
+                            if not after_quote or after_quote.startswith()
                                 (")", ",", "]", "}")
                             ):
-                                line += '"'
+                                line += '"'"
                 else:
                     # Non-mathematical line, fix normally
-                    if not line.strip().endswith('"""') and not line.strip().endswith(
+                    if not line.strip().endswith('"""') and not line.strip().endswith(")
                         '""'
                     ):
-                        line += '"'
+                        line += '"'"
 
             # Handle unterminated single quotes
             if single_quotes % 2 == 1:
                 if self.is_mathematical_line(line):
                     # Be careful with mathematical content
-                    if line.strip().endswith("'"):
+                    if line.strip().endswith("'"):'
                         fixed_lines.append(line)
                     else:
-                        last_quote_pos = line.rfind("'")
+                        last_quote_pos = line.rfind("'")'
                         if last_quote_pos >= 0:
                             after_quote = line[last_quote_pos + 1:].strip()
-                            if not after_quote or after_quote.startswith(
+                            if not after_quote or after_quote.startswith()
                                 (")", ",", "]", "}")
                             ):
-                                line += "'"
+                                line += "'"'
                 else:
                     # Non-mathematical line, fix normally
-                    if not line.strip().endswith("'''") and not line.strip().endswith(
+                    if not line.strip().endswith("'''") and not line.strip().endswith(')
                         "''"
                     ):
-                        line += "'"
+                        line += "'"'
 
             fixed_lines.append(line)
 
@@ -162,12 +162,12 @@ class MathematicalIntegritySyntaxFixer:
         for line in lines:
             # Look for function definitions missing colons
             if "def " in line and line.strip().endswith(")"):
-                # Check if it's missing a colon
+                # Check if it's missing a colon'
                 if not line.endswith(":"):
                     line += ":"
 
             # Look for other patterns that need colons
-            patterns = [
+            patterns = []
                 r"(\s*def\s+\w+\([^)]*\))\s*$",  # Function definitions
                 r"(\s*class\s+\w+[^:]*)\s*$",  # Class definitions
                 r"(\s*if\s+[^:]+)\s*$",  # If statements
@@ -191,7 +191,7 @@ class MathematicalIntegritySyntaxFixer:
     def _fix_malformed_docstrings(): -> str:
         """Fix malformed docstrings while preserving mathematical content."""
         # Fix quadruple quotes
-        content = content.replace('""""', '"""')
+        content = content.replace('""""', '"""')"
 
         # Fix unterminated docstrings
         lines = content.split("\n")
@@ -203,11 +203,11 @@ class MathematicalIntegritySyntaxFixer:
             stripped = line.strip()
 
             # Check for docstring start
-            if stripped.startswith('"""') or stripped.startswith("'''"):
-                if stripped.startswith('"""'):
-                    docstring_quote_type = '"""'
+            if stripped.startswith('"""') or stripped.startswith("'''"):'
+                if stripped.startswith('"""'):"
+                    docstring_quote_type = '"""'"
                 else:
-                    docstring_quote_type = "'''"
+                    docstring_quote_type = "'''"'
 
                 # Check if docstring ends on same line
                 if stripped.count(docstring_quote_type) >= 2:
@@ -226,7 +226,7 @@ class MathematicalIntegritySyntaxFixer:
             else:
                 fixed_lines.append(line)
 
-        # If we're still in a docstring at the end, close it
+        # If we're still in a docstring at the end, close it'
         if in_docstring and docstring_quote_type:
             fixed_lines.append(docstring_quote_type)
 
@@ -263,7 +263,7 @@ class MathematicalIntegritySyntaxFixer:
 
         for line in lines:
             # Handle f-strings with missing braces
-            if ('f"' in line or "f'" in line) and "{" not in line and "}" not in line:
+            if ('f"' in line or "f'" in, line) and "{" not in line and "}" not in line:'
                 # Check if this contains mathematical content
                 if self.is_mathematical_line(line):
                     # Convert to regular string to preserve mathematical content
@@ -273,10 +273,10 @@ class MathematicalIntegritySyntaxFixer:
                     line = line.replace('f"', '"').replace("f'", "'")
 
             # Handle malformed f-string expressions
-            if 'f"' in line or "f'" in line:
+            if 'f"' in line or "f'" in line:'
                 # Fix incomplete f-string expressions
-                line = re.sub(r'f"([^"]*)\{"', r'f"\1{', line)
-                line = re.sub(r"f\'([^\']*)\{\'", r"f'\1{", line)
+                line = re.sub(r'f"([^"]*)\{"', r'f"\1{', line)"}}
+                line = re.sub(r"f\'([^\']*)\{\'", r"f'\1{", line)}}
 
             fixed_lines.append(line)
 
@@ -309,7 +309,7 @@ class MathematicalIntegritySyntaxFixer:
     def check_syntax_error(): -> List[str]:
         """Check for syntax errors in a file."""
         try:
-            result = subprocess.run(
+            result = subprocess.run()
                 [sys.executable, "-m", "py_compile", file_path],
                 capture_output=True,
                 text=True,
@@ -327,7 +327,7 @@ class MathematicalIntegritySyntaxFixer:
         core_dir = Path("core")
         python_files = list(core_dir.rglob("*.py"))
 
-        results = {
+        results = {}
             "total_files": len(python_files),
             "files_with_errors": 0,
             "files_fixed": 0,
@@ -387,19 +387,19 @@ def main():
     print(f"📉 Syntax Errors After: {results['syntax_errors_after']}")
 
     if results["syntax_errors_before"] > 0:
-        improvement = (
+        improvement = ()
             (results["syntax_errors_before"] - results["syntax_errors_after"])
             / results["syntax_errors_before"]
         ) * 100
         print(f"📈 Improvement: {improvement:.1f}%")
 
     if results["syntax_errors_after"] == 0:
-        print(
+        print()
             "🎉 Perfect! All syntax errors resolved with mathematical integrity preserved!"
         )
         return 0
     elif results["syntax_errors_after"] < results["syntax_errors_before"]:
-        print(
+        print()
             "✅ Good progress! Mathematical integrity maintained while fixing errors."
         )
         return 1

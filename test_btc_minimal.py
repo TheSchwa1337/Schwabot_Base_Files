@@ -1,12 +1,12 @@
 import numpy as np
-        from drift_shells import DriftShells
-        from entropic_vectorizer import EntropicVectorizer
-        from feeds.chain_ws import BlockEvent
-        from feeds.stratum_sniffer import ShareEvent
-        from gpu_accelerator import GPUAccelerator
-        from integrators.autonomic_strategy_reflex_layer import (
-        from memory_backlog import MemoryBacklog
-        from triplet_harmony import TripletHarmony
+from drift_shells import DriftShells
+from entropic_vectorizer import EntropicVectorizer
+from feeds.chain_ws import BlockEvent
+from feeds.stratum_sniffer import ShareEvent
+from gpu_accelerator import GPUAccelerator
+from integrators.autonomic_strategy_reflex_layer import ()
+from memory_backlog import MemoryBacklog
+from triplet_harmony import TripletHarmony
 import collections
 import os
 import sys
@@ -33,11 +33,11 @@ def test_entropic_vectorizer_direct():
         ev = EntropicVectorizer(config)
 
         # Test with sample data
-        class_id, risk_scalar, xor_drift = ev.build_strategy_vec(
+        class_id, risk_scalar, xor_drift = ev.build_strategy_vec()
             "test_block_hash", "test_price_hash", b"test_seed"
         )
 
-        print(
+        print()
             f"✅ EntropicVectorizer: class_id={class_id}, risk={risk_scalar:.3f}, xor_drift={xor_drift:.3f}"
         )
         return True
@@ -54,8 +54,8 @@ def test_triplet_harmony_direct():
         th = TripletHarmony(config)
 
         # Test with sample vectors
-        test_vectors = collections.deque(
-            [
+        test_vectors = collections.deque()
+            []
                 np.array([1.0, 2.0, 3.0]),
                 np.array([1.1, 2.1, 3.1]),
                 np.array([1.2, 2.2, 3.2]),
@@ -64,7 +64,7 @@ def test_triplet_harmony_direct():
 
         is_harmonic, coherence, hash_val = th.check_harmony(test_vectors)
 
-        print(
+        print()
             f"✅ TripletHarmony: harmonic={is_harmonic}, coherence={coherence:.3f}, hash={hash_val[:16]}..."
         )
         return True
@@ -77,10 +77,10 @@ def test_drift_shells_direct():
     """Test DriftShells functionality directly."""
     try:
 
-        config = {
+        config = {}
             "enable_fractal_lock": True,
             "shell_layers": 6,
-            "delta_n_thresholds": {"lock": 0.001, "reset": 0.015},
+            "delta_n_thresholds": {"lock": 0.01, "reset": 0.15},
         }
         ds = DriftShells(config)
 
@@ -90,7 +90,7 @@ def test_drift_shells_direct():
 
         result = ds.probe_drift({"shell_id": 0, "Q": test_q})
 
-        print(
+        print()
             f"✅ DriftShells: status={result['status']}, delta_n={result['delta_n']:.6f}"
         )
         return True
@@ -103,7 +103,7 @@ def test_memory_backlog_direct():
     """Test MemoryBacklog functionality directly."""
     try:
 
-        config = {
+        config = {}
             "enabled": True,
             "backlog_depth": {"short_term": 96, "mid_term": 672, "long_term": 8760},
         }
@@ -132,7 +132,7 @@ def test_gpu_accelerator_direct():
         test_data = b"test_data_for_hashing"
         hash_result = gpu.sha256_projection(test_data)
 
-        print(
+        print()
             f"✅ GPUAccelerator: GPU_available={gpu.is_gpu_available()}, hash={hash_result[:16]}..."
         )
         return True
@@ -147,7 +147,7 @@ def test_asrl_direct():
             AutonomicStrategyReflexLayer,
         )
 
-        config = {
+        config = {}
             "alpha": 0.4,
             "beta": 0.3,
             "gamma": 0.3,
@@ -172,9 +172,9 @@ def test_chain_ws_direct():
     try:
 
         # Test BlockEvent creation
-        block_event = BlockEvent(
+        block_event = BlockEvent()
             height=800000,
-            hash="test_hash_1234567890abcdef",
+            hash="test_hash_1234567890abcdef","
             timestamp=1234567890.0,
             interval=600.0,
             size=1000000,
@@ -213,7 +213,7 @@ def main():
     original_cwd = os.getcwd()
     os.chdir(os.path.join(original_cwd, "core"))
 
-    tests = [
+    tests = []
         ("EntropicVectorizer", test_entropic_vectorizer_direct),
         ("TripletHarmony", test_triplet_harmony_direct),
         ("DriftShells", test_drift_shells_direct),

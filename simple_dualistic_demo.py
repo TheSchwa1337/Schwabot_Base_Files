@@ -1,5 +1,5 @@
 import numpy as np
-        import traceback
+import traceback
 from core.advanced_tensor_algebra import UnifiedTensorAlgebra
 from datetime import datetime
 import logging
@@ -9,7 +9,7 @@ import logging
 Simple Dualistic Profit Vectorization Demo
 ==========================================
 
-A focused demonstration of Schwabot's bit-form tensor flip matrices.
+A focused demonstration of Schwabot's bit-form tensor flip matrices.'
 """
 
 
@@ -27,7 +27,7 @@ def main():
     tensor_algebra = UnifiedTensorAlgebra()
 
     # Create realistic market data
-    market_data = {
+    market_data = {}
         "price": 65432.10,
         "previous_price": 64890.50,
         "volume": 2500,
@@ -39,7 +39,7 @@ def main():
     print("\n📊 Market Conditions:")
     print(f"  Price: ${market_data['price']:,.2f}")
     print(f"  Previous: ${market_data['previous_price']:,.2f}")
-    print(
+    print()
         f"  Change: {((market_data['price'] / market_data['previous_price']) - 1) * 100:+.2f}%"
     )
     print(f"  Volume: {market_data['volume']:,}")
@@ -48,9 +48,9 @@ def main():
 
     # Execute dualistic profit vectorization
     print("\n🧮 Executing Dualistic Profit Vectorization...")
-    print("  (Pure mathematical decision-making through bit-form tensor flip matrices)")
+    print("  (Pure mathematical decision-making through bit-form tensor flip, matrices)")
 
-    consensus_result = tensor_algebra.execute_dualistic_profit_vectorization(
+    consensus_result = tensor_algebra.execute_dualistic_profit_vectorization()
         market_data
     )
 
@@ -63,8 +63,8 @@ def main():
     vector = consensus_result.final_profit_vector
     print("\n📐 Profit Vector Analysis:")
     print(f"  Price Direction: {vector[0]:+.3f} (positive = bullish)")
-    print(f"  Time Direction: {vector[1]:+.3f} (temporal momentum)")
-    print(f"  Risk Direction: {vector[2]:+.3f} (risk-adjusted factor)")
+    print(f"  Time Direction: {vector[1]:+.3f} (temporal, momentum)")
+    print(f"  Risk Direction: {vector[2]:+.3f} (risk-adjusted, factor)")
     print(f"  Vector Magnitude: {np.linalg.norm(vector):.3f}")
 
     # Show mathematical proof
@@ -84,26 +84,26 @@ def main():
     # Test multiple scenarios
     print("\n🔬 Testing Multiple Market Scenarios...")
 
-    scenarios = [
-        {
+    scenarios = []
+        {}
             "name": "Bull Market",
             "price": 67000,
             "previous_price": 65000,
             "volatility": 0.12,
         },
-        {
+        {}
             "name": "Bear Market",
             "price": 62000,
             "previous_price": 65000,
             "volatility": 0.25,
         },
-        {
+        {}
             "name": "Sideways",
             "price": 65100,
             "previous_price": 65000,
-            "volatility": 0.08,
+            "volatility": 0.8,
         },
-        {
+        {}
             "name": "High Volatility",
             "price": 66500,
             "previous_price": 63500,
@@ -118,7 +118,7 @@ def main():
         result = tensor_algebra.execute_dualistic_profit_vectorization(test_data)
         certainty = result.mathematical_proof.get("mathematical_certainty", 0)
 
-        print(
+        print()
             f"  {scenario['name']:15} → {result.execution_signal:5} "
             f"(conf: {result.consensus_confidence:.2f}, cert: {certainty:.2f})"
         )

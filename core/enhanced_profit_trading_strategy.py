@@ -1,7 +1,6 @@
 import logging
 import time
-import hashlib
-from typing import Dict, Any, Optional, List, Tuple
+from typing import Dict, Any, Optional, List
 from dataclasses import dataclass, field
 from enum import Enum
 
@@ -31,7 +30,7 @@ class StrategyMode(Enum):
 
 
 @dataclass
-class TradingSignal:
+    class TradingSignal:
     """Enhanced trading signal with profit optimization."""
 
     symbol: str
@@ -83,15 +82,19 @@ class EnhancedProfitTradingStrategy:
                 return None
 
             # Calculate optimal quantity
-            quantity = self._calculate_optimal_quantity(market_data, profit_potential, risk_score)
+            quantity = self._calculate_optimal_quantity()
+                market_data, profit_potential, risk_score
+            )
 
             # Create signal
-            signal = TradingSignal(
+            signal = TradingSignal()
                 symbol=market_data.get("symbol", "BTC/USDC"),
                 action=action,
                 quantity=quantity,
                 price=market_data.get("price"),
-                confidence=self._calculate_confidence(profit_potential, risk_score, entropy_level),
+                confidence=self._calculate_confidence()
+                    profit_potential, risk_score, entropy_level
+                ),
                 profit_potential=profit_potential,
                 risk_score=risk_score,
                 entropy_level=entropy_level,
@@ -111,7 +114,7 @@ class EnhancedProfitTradingStrategy:
     def _validate_market_data(self, market_data: Dict[str, Any]) -> bool:
         """Validate market data."""
         required_fields = ["symbol", "price"]
-        return all(field in market_data for field in required_fields)
+        return all(field in market_data for field in, required_fields)
 
     def _calculate_profit_potential(self, market_data: Dict[str, Any]) -> float:
         """Calculate profit potential using mathematical validation."""
@@ -156,7 +159,9 @@ class EnhancedProfitTradingStrategy:
 
         return min(1.0, max(0.0, drift))
 
-    def _determine_action(self, profit_potential: float, risk_score: float, entropy_level: float) -> str:
+    def _determine_action()
+        self, profit_potential: float, risk_score: float, entropy_level: float
+    ) -> str:
         """Determine trading action based on analysis."""
         # Decision logic
         if profit_potential > 0.7 and risk_score < 0.3:
@@ -166,7 +171,7 @@ class EnhancedProfitTradingStrategy:
         else:
             return "hold"
 
-    def _calculate_optimal_quantity(
+    def _calculate_optimal_quantity()
         self, market_data: Dict[str, Any], profit_potential: float, risk_score: float
     ) -> float:
         """Calculate optimal position size."""
@@ -175,9 +180,11 @@ class EnhancedProfitTradingStrategy:
         # Adjust based on profit potential and risk
         quantity = base_quantity * profit_potential * (1.0 - risk_score)
 
-        return max(0.001, min(1.0, quantity))  # Min 0.001, Max 1.0 BTC
+        return max(0.01, min(1.0, quantity))  # Min 0.01, Max 1.0 BTC
 
-    def _calculate_confidence(self, profit_potential: float, risk_score: float, entropy_level: float) -> float:
+    def _calculate_confidence()
+        self, profit_potential: float, risk_score: float, entropy_level: float
+    ) -> float:
         """Calculate signal confidence."""
         # Confidence based on profit potential, low risk, and stable entropy
         confidence = profit_potential * (1.0 - risk_score) * (1.0 - entropy_level)
@@ -193,18 +200,26 @@ class EnhancedProfitTradingStrategy:
         buy_signals = sum(1 for s in self.signal_history if s.action == "buy")
         sell_signals = sum(1 for s in self.signal_history if s.action == "sell")
 
-        avg_profit_potential = (
-            sum(s.profit_potential for s in self.signal_history) / total_signals if total_signals > 0 else 0.0
+        avg_profit_potential = ()
+            sum(s.profit_potential for s in self.signal_history) / total_signals
+            if total_signals > 0
+            else 0.0
         )
-        avg_confidence = sum(s.confidence for s in self.signal_history) / total_signals if total_signals > 0 else 0.0
+        avg_confidence = ()
+            sum(s.confidence for s in self.signal_history) / total_signals
+            if total_signals > 0
+            else 0.0
+        )
 
-        return {
+        return {}
             "total_signals": total_signals,
             "buy_signals": buy_signals,
             "sell_signals": sell_signals,
             "average_profit_potential": avg_profit_potential,
             "average_confidence": avg_confidence,
-            "last_signal": self.signal_history[-1].timestamp if self.signal_history else None,
+            "last_signal": self.signal_history[-1].timestamp
+            if self.signal_history
+            else None,
         }
 
 
@@ -217,7 +232,7 @@ def test_enhanced_profit_strategy():
     strategy = EnhancedProfitTradingStrategy()
 
     # Test market data
-    test_market_data = {
+    test_market_data = {}
         "symbol": "BTC/USDC",
         "price": 50000.0,
         "volume": 5000.0,

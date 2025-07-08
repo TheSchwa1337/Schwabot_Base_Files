@@ -7,13 +7,13 @@ import threading
 import time
 from enum import Enum
 import math
-    from .zpe_core import ZPECore
-    from .zbe_core import ZBECore
-    from .fractal_core import FractalCore
-    from .strategy_bit_mapper import StrategyBitMapper
-    from .profit_optimization_engine import ProfitOptimizationEngine
-    from .soulprint_registry import SoulprintRegistry
-    from .ghost_core import GhostCore
+from .zpe_core import ZPECore
+from .zbe_core import ZBECore
+from .fractal_core import FractalCore
+from .strategy_bit_mapper import StrategyBitMapper
+from .profit_optimization_engine import ProfitOptimizationEngine
+from .soulprint_registry import SoulprintRegistry
+from .ghost_core import GhostCore
 
 import numpy as np
 
@@ -34,38 +34,45 @@ Mathematical Components:
 """
 
 # Import core components with proper error handling
-try:
-except ImportError:
+    try:
+    pass
+    except ImportError:
     logger.warning("ZPECore not available - using mock")
     ZPECore = None
 
 try:
-except ImportError:
+    pass
+    except ImportError:
     logger.warning("ZBECore not available - using mock")
     ZBECore = None
 
 try:
-except ImportError:
+    pass
+    except ImportError:
     logger.warning("FractalCore not available - using mock")
     FractalCore = None
 
 try:
-except ImportError:
+    pass
+    except ImportError:
     logger.warning("StrategyBitMapper not available - using mock")
     StrategyBitMapper = None
 
 try:
-except ImportError:
+    pass
+    except ImportError:
     logger.warning("ProfitOptimizationEngine not available - using mock")
     ProfitOptimizationEngine = None
 
 try:
-except ImportError:
+    pass
+    except ImportError:
     logger.warning("SoulprintRegistry not available - using mock")
     SoulprintRegistry = None
 
 try:
-except ImportError:
+    pass
+    except ImportError:
     logger.warning("GhostCore not available - using mock")
     GhostCore = None
 
@@ -82,7 +89,7 @@ class PolarityState(Enum):
 
 
 @dataclass
-class StrategyVector:
+    class StrategyVector:
     """Strategy vector representation for mathematical operations."""
 
     entry_timing: str = "early"  # early, mid, late
@@ -99,8 +106,8 @@ class StrategyVector:
         asset_map = {"BTC": 1, "ETH": 0.8, "XRP": 0.6, "USDC": -1}
         risk_map = {"conservative": -1, "moderate": 0, "aggressive": 1}
 
-        return np.array(
-            [
+        return np.array()
+            []
                 timing_map.get(self.entry_timing, 0),
                 vol_map.get(self.vol_type, 0),
                 asset_map.get(self.asset, 0),
@@ -111,7 +118,7 @@ class StrategyVector:
 
 
 @dataclass
-class TradeMemory:
+    class TradeMemory:
     """Trade memory sequence for mirror allocation."""
 
     entries: List[Dict] = field(default_factory=list)
@@ -155,7 +162,7 @@ class ProfitFadeDetectionEngine:
     ∀t∈[t−n,t], ∑ΔP(t−i) < −n⋅α ⇒ Trigger Antipole
     """
 
-    def __init__(self, alpha: float = 0.01, n: int = 10, tau: float = 300.0):
+    def __init__(self, alpha: float = 0.1, n: int = 10, tau: float = 300.0):
         """
         Initialize PFDE with mathematical parameters.
 
@@ -213,7 +220,7 @@ class ProfitFadeDetectionEngine:
         fade_detected = delta_sum < threshold
 
         if fade_detected:
-            logger.info("Profit fade detected: sum={0}, threshold={1}".format(delta_sum:.6f, threshold:.6f))
+            logger.info("Profit fade detected: sum={0}, threshold={1}".format(delta_sum))
 
         return fade_detected
 
@@ -253,7 +260,7 @@ class HashEchoPolarityVerifier:
     def _initialize_valid_pairs(self):
         """Initialize set of valid antipole hash pairs."""
         # Generate some valid XOR patterns for antipole verification
-        base_patterns = [
+        base_patterns = []
             0x5A5A5A5A5A5A5A5A,  # Alternating pattern
             0x3C3C3C3C3C3C3C3C,  # Another pattern
             0x0F0F0F0F0F0F0F0F,  # Binary pattern
@@ -270,7 +277,7 @@ class HashEchoPolarityVerifier:
     def hash_strategy(self, strategy: StrategyVector) -> int:
         """Generate hash for strategy vector."""
         # Convert strategy to string representation
-        strategy_str = "{0}_{1}_{2}_{3}_{4}".format(strategy.entry_timing, strategy.vol_type, strategy.asset, strategy.risk_profile, strategy.confidence:.6f)
+        strategy_str = "{0}_{1}_{2}_{3}_{4}".format(strategy.entry_timing, strategy.vol_type, strategy.asset, strategy.risk_profile, strategy.confidence)
 
         # Generate SHA-256 hash
         hash_bytes = hashlib.sha256(strategy_str.encode()).digest()
@@ -324,11 +331,11 @@ class StrategyInversionVectorizer:
     def __init__(self):
         """Initialize SIV with inversion matrix."""
         # Define inversion matrix ℐ = diag(-1, -1, asset_flip, inverse_risk_profile)
-        self.inversion_matrix = np.array(
-            [
+        self.inversion_matrix = np.array()
+            []
                 [-1, 0, 0, 0, 0],  # Timing inversion
                 [0, -1, 0, 0, 0],  # Volatility inversion
-                [0, 0, -1, 0, 0],  # Asset flip (handled specially)
+                [0, 0, -1, 0, 0],  # Asset flip (handled, specially)
                 [0, 0, 0, -1, 0],  # Risk profile inversion
                 [0, 0, 0, 0, 1],  # Confidence remains same
             ]
@@ -357,7 +364,7 @@ class StrategyInversionVectorizer:
             Inverted antipole strategy
         """
         # Create antipole with flipped attributes
-        antipole = StrategyVector(
+        antipole = StrategyVector()
             entry_timing=self.timing_flip_map[strategy.entry_timing],
             vol_type=self.vol_flip_map[strategy.vol_type],
             asset=self.asset_flip_map[strategy.asset],
@@ -366,7 +373,7 @@ class StrategyInversionVectorizer:
             timestamp=datetime.now(),
         )
 
-        logger.info(
+        logger.info()
             "Strategy inversion: {0}/{1} -> {2}/{3}".format(strategy.asset, strategy.risk_profile, antipole.asset, antipole.risk_profile)
         )
 
@@ -377,7 +384,7 @@ class StrategyInversionVectorizer:
         s_vec = strategy.to_numeric_vector()
         a_vec = antipole.to_numeric_vector()
 
-        # Calculate dot product (should be negative for good inversion)
+        # Calculate dot product (should be negative for good, inversion)
         dot_product = np.dot(s_vec[:-1], a_vec[:-1])  # Exclude confidence
 
         # Normalize to [0, 1] where 1 is perfect inversion
@@ -401,7 +408,7 @@ class MemoryMirrorAllocator:
     With mirror(eᵢ) = price_flip(eᵢ) + timing_drift_correction
     """
 
-    def __init__(self, drift_correction_factor: float = 0.001):
+    def __init__(self, drift_correction_factor: float = 0.01):
         """
         Initialize MMA with drift correction parameters.
 
@@ -608,10 +615,10 @@ class CPUGPUDispatchScheduler:
     def calculate_latency_vector(self, strategy: StrategyVector) -> float:
         """Calculate strategy latency vector λ_s."""
         # Convert strategy to computational complexity
-        base_latency = 0.01  # Base latency in seconds
+        base_latency = 0.1  # Base latency in seconds
 
         # Add complexity based on strategy attributes
-        complexity_factors = {
+        complexity_factors = {}
             'entry_timing': {'early': 1.2, 'mid': 1.0, 'late': 1.3},
             'vol_type': {'low': 0.8, 'medium': 1.0, 'high': 1.5},
             'risk_profile': {'conservative': 0.9, 'moderate': 1.0, 'aggressive': 1.4},
@@ -672,8 +679,8 @@ class CPUGPUDispatchScheduler:
             dispatch_target = 'CPU'
 
         # Log dispatch decision
-        self.dispatch_history.append(
-            {
+        self.dispatch_history.append()
+            {}
                 'strategy': strategy,
                 'operation': operation,
                 'lambda_s': lambda_s,
@@ -683,7 +690,7 @@ class CPUGPUDispatchScheduler:
             }
         )
 
-        logger.info("Dispatched {0} to {1} (λ_s={2}, Z={3})".format(operation, dispatch_target, lambda_s:.6f, z_value:.6f))
+        logger.info("Dispatched {0} to {1} (λ_s={2}, Z={3})".format(operation, dispatch_target, lambda_s))
 
         return dispatch_target
 
@@ -757,7 +764,7 @@ class RegistryUpdateBasketReweigher:
 
         return r_b
 
-    def rebalance_basket(
+    def rebalance_basket()
         self,
         original_strategy: StrategyVector,
         antipole_strategy: StrategyVector,
@@ -803,8 +810,8 @@ class RegistryUpdateBasketReweigher:
         new_basket = {asset: weight for asset, weight in zip(self.basket_assets, new_weights)}
 
         # Log rebalance
-        self.rebalance_history.append(
-            {
+        self.rebalance_history.append()
+            {}
                 'original_strategy': original_strategy,
                 'antipole_strategy': antipole_strategy,
                 'gamma': gamma,
@@ -814,11 +821,11 @@ class RegistryUpdateBasketReweigher:
             }
         )
 
-        logger.info("Rebalanced basket with γ={0}: {1}".format(gamma:.4f, new_basket))
+        logger.info("Rebalanced basket with γ={0}: {1}".format(gamma))
 
         return new_basket
 
-    def update_registry(
+    def update_registry()
         self,
         antipole_strategy: StrategyVector,
         corrected_memory: TradeMemory,
@@ -826,7 +833,7 @@ class RegistryUpdateBasketReweigher:
         new_weights: Dict[str, float],
     ):
         """Update registry with antipole strategy information."""
-        registry_entry = {
+        registry_entry = {}
             'antipole_strategy': antipole_strategy,
             'corrected_memory': corrected_memory,
             'dispatch_target': dispatch_target,
@@ -835,7 +842,7 @@ class RegistryUpdateBasketReweigher:
         }
 
         # Store in registry
-        self.registry.store_strategy_state(
+        self.registry.store_strategy_state()
             strategy_id="antipole_{0}".format(int(datetime.now().timestamp())), state_data=registry_entry
         )
 
@@ -869,7 +876,7 @@ class AntipoleRouter:
     Integrates all mathematical components for complete antipole navigation.
     """
 
-    def __init__(
+    def __init__()
         self,
         zpe_core=None,
         zbe_core=None,
@@ -912,7 +919,7 @@ class AntipoleRouter:
 
         logger.info("Antipole Router initialized with full mathematical architecture")
 
-    def antipole_router(
+    def antipole_router()
         self, strategy: StrategyVector, profit_data: List[float], memory: TradeMemory, current_values: Dict[str, float]
     ) -> StrategyVector:
         """
@@ -956,11 +963,11 @@ class AntipoleRouter:
 
                         # 7. Rebalance basket using RUBR
                         unrealized_loss = sum(p for p in profit_data if p < 0) if profit_data else 0
-                        predicted_gain = self.profit_engine.calculate_expected_return(
+                        predicted_gain = self.profit_engine.calculate_expected_return()
                             antipole_strategy.asset, antipole_strategy.confidence
                         )
 
-                        new_weights = self.rubr.rebalance_basket(
+                        new_weights = self.rubr.rebalance_basket()
                             strategy, antipole_strategy, current_values, unrealized_loss, predicted_gain
                         )
 
@@ -976,12 +983,12 @@ class AntipoleRouter:
                         self.current_antipole = antipole_strategy
 
                         # Record antipole activation
-                        self.antipole_history.append(
-                            {
+                        self.antipole_history.append()
+                            {}
                                 'original': strategy,
                                 'antipole': antipole_strategy,
                                 'fade_strength': self.pfde.get_fade_strength(),
-                                'inversion_strength': self.siv.calculate_inversion_strength(
+                                'inversion_strength': self.siv.calculate_inversion_strength()
                                     strategy, antipole_strategy
                                 ),
                                 'dispatch_target': dispatch_target,
@@ -1009,7 +1016,7 @@ class AntipoleRouter:
 
     def get_antipole_state(self) -> Dict[str, Any]:
         """Get current antipole router state."""
-        return {
+        return {}
             'polarity_state': self.polarity_state.value,
             'current_strategy': self.current_strategy,
             'current_antipole': self.current_antipole,
@@ -1054,7 +1061,7 @@ class AntipoleRouter:
         # Calculate fade strength
         fade_strength = self.pfde.get_fade_strength()
 
-        # Calculate strategy complexity (affects antipole likelihood)
+        # Calculate strategy complexity (affects antipole, likelihood)
         complexity = self.cgds.calculate_latency_vector(strategy)
 
         # Calculate ZPE/ZBE balance
@@ -1067,10 +1074,10 @@ class AntipoleRouter:
 
 
 # Integration hooks for other modules
-def request_antipole_hash(strategy_bits: Dict) -> int:
+    def request_antipole_hash(strategy_bits: Dict) -> int:
     """Hook for strategy_bit_mapper.py to request antipole hash."""
     # Convert strategy bits to strategy vector
-    strategy = StrategyVector(
+    strategy = StrategyVector()
         entry_timing=strategy_bits.get('timing', 'mid'),
         vol_type=strategy_bits.get('volatility', 'medium'),
         asset=strategy_bits.get('asset', 'BTC'),
@@ -1098,7 +1105,7 @@ def mirror_trade_path(fractal_data: Dict) -> Dict:
 
 def dispatch_tensor_op(strategy_data: Dict, zpe_core: ZPECore, zbe_core: ZBECore) -> str:
     """Hook for galileo_tensor_bridge.py to dispatch tensor operations."""
-    strategy = StrategyVector(
+    strategy = StrategyVector()
         entry_timing=strategy_data.get('timing', 'mid'),
         vol_type=strategy_data.get('volatility', 'medium'),
         asset=strategy_data.get('asset', 'BTC'),
@@ -1117,7 +1124,7 @@ def compute_gamma_shift(unrealized_loss: float, predicted_gain: float) -> float:
 
 def log_antipole_strategy(strategy_data: Dict, registry: SoulprintRegistry):
     """Hook for soulprint_registry.py to log antipole strategies."""
-    registry.store_strategy_state(
+    registry.store_strategy_state()
         strategy_id="antipole_log_{0}".format(int(datetime.now().timestamp())), state_data=strategy_data
     )
 

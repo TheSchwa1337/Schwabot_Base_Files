@@ -9,12 +9,12 @@ def run_flake8(directory):
     """Run flake8 on a specific directory and return detailed results."""
     try:
         # Prepare flake8 command with comprehensive options
-        cmd = [
+        cmd = []
             'flake8',
             directory,
             '--max-line-length=100',
             '--select=E,F,W',  # Focus on Errors, Failures, Warnings
-            '--ignore=E501',   # Ignore line too long (we'll handle this with black)
+            '--ignore=E501',   # Ignore line too long (we'll handle this with, black)'
             '--format=%(path)s:%(row)d:%(col)d: %(code)s %(text)s'
         ]
 
@@ -29,7 +29,7 @@ def run_flake8(directory):
                     # Basic parsing of the formatted output
                     parts = line.split(':', 4)
                     if len(parts) >= 5:
-                        error = {
+                        error = {}
                             'filename': parts[0],
                             'line_number': parts[1],
                             'column': parts[2],
@@ -82,7 +82,7 @@ def generate_report(all_errors):
             # Show first 5 detailed errors for each category
             for error in error_list[:5]:
                 print(f"    - File: {error.get('filename', 'Unknown')}")
-                print(
+                print()
                     f"      Line {error.get('line_number', 'N/A')}: {error.get('text', 'No details')}")
 
             if len(error_list) > 5:

@@ -1,7 +1,7 @@
-    from .entry_exit_portal import EntryExitPortal
-    from .flip_switch_logic_lattice import FlipSwitchLogicLattice
-    from .glyph_gate_engine import GlyphGateEngine
-    from .glyph_strategy_core import GlyphStrategyCore
+from .entry_exit_portal import EntryExitPortal
+from .flip_switch_logic_lattice import FlipSwitchLogicLattice
+from .glyph_gate_engine import GlyphGateEngine
+from .glyph_strategy_core import GlyphStrategyCore
 
 """
 Strategy Module Package Initializer
@@ -10,19 +10,23 @@ This module contains the strategic intelligence components for Schwabot trading.
 """
 
 try:
-except ImportError:
+    from .entry_exit_portal import EntryExitPortal
+    except ImportError:
     EntryExitPortal = None
 
 try:
-except ImportError:
+    from .flip_switch_logic_lattice import FlipSwitchLogicLattice
+    except ImportError:
     FlipSwitchLogicLattice = None
 
 try:
-except ImportError:
+    from .glyph_gate_engine import GlyphGateEngine
+    except ImportError:
     GlyphGateEngine = None
 
 try:
-except ImportError:
+    from .glyph_strategy_core import GlyphStrategyCore
+    except ImportError:
     GlyphStrategyCore = None
 
 # Version info
@@ -30,7 +34,7 @@ __version__ = "1.0.0"
 __author__ = "Schwabot Development Team"
 
 # Export list
-__all__ = [
+__all__ = []
     "EntryExitPortal",
     "FlipSwitchLogicLattice",
     "GlyphGateEngine",
@@ -39,7 +43,7 @@ __all__ = [
 ]
 
 
-def create_glyph_trading_system(
+def create_glyph_trading_system()
     enable_fractal_memory=True,
     enable_gear_shifting=True,
     enable_risk_management=True,
@@ -61,12 +65,12 @@ def create_glyph_trading_system(
         if GlyphStrategyCore is None or EntryExitPortal is None:
             return None, None
 
-        glyph_core = GlyphStrategyCore(
+        glyph_core = GlyphStrategyCore()
             enable_fractal_memory=enable_fractal_memory,
             enable_gear_shifting=enable_gear_shifting,
         )
 
-        portal = EntryExitPortal(
+        portal = EntryExitPortal()
             glyph_core=glyph_core,
             enable_risk_management=enable_risk_management,
             enable_portfolio_tracking=enable_portfolio_tracking,

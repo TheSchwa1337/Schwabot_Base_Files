@@ -1,8 +1,8 @@
-        from core.mathlib_v4 import MathLibV4
-        from core.mathlib_v4 import MathLibV4
-        from core.matrix_math_utils import analyze_price_matrix
-        from core.unified_math_system import UnifiedMathSystem
-        import numpy as np
+from core.mathlib_v4 import MathLibV4
+from core.mathlib_v4 import MathLibV4
+from core.matrix_math_utils import analyze_price_matrix
+from core.unified_math_system import UnifiedMathSystem
+import numpy as np
 import logging
 import time
 
@@ -17,7 +17,7 @@ into the Schwabot pipeline and working correctly.
 
 
 # Configure logging
-logging.basicConfig(
+logging.basicConfig()
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
@@ -32,7 +32,7 @@ def test_mathlib_v4_standalone():
         ml4 = MathLibV4(precision=64)
 
         # Test data
-        test_data = {
+        test_data = {}
             "prices": [50000, 50001, 50002, 50001, 50003, 50005, 50004, 50006],
             "volumes": [1000, 1200, 800, 1100, 900, 1300, 950, 1100],
             "timestamps": [time.time() - i for i in range(8, 0, -1)],
@@ -65,7 +65,7 @@ def test_unified_math_integration():
         ums = UnifiedMathSystem()
 
         # Test data
-        test_data = {
+        test_data = {}
             "prices": [50000, 50001, 50002, 50001, 50003, 50005, 50004, 50006],
             "volumes": [1000, 1200, 800, 1100, 900, 1300, 950, 1100],
         }
@@ -106,7 +106,7 @@ def test_demo_integration():
 
         test_matrix = np.array([[1.0, 2.0], [3.0, 4.0], [5.0, 6.0]])
         matrix_result = analyze_price_matrix(test_matrix)
-        print(
+        print()
             f"✅ Matrix math utils working: {matrix_result.get('stability_score', 'N/A'):.3f}"
         )
 
@@ -122,7 +122,7 @@ def main():
     print("🧠 MathLibV4 Integration Test Suite")
     print("=" * 50)
 
-    tests = [
+    tests = []
         test_mathlib_v4_standalone,
         test_unified_math_integration,
         test_demo_integration,

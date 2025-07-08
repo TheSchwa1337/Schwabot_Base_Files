@@ -7,10 +7,10 @@ from enum import Enum
 from collections import deque
 import threading
 import json
-    from .orbital_xi_ring_system import OrbitalXiRingSystem, XiRingLevel
-    from .matrix_mapper import MatrixMapper, FallbackDecision
-    from .quantum_mathematical_bridge import QuantumMathematicalBridge
-    from .strategy_loader import load_strategy
+from .orbital_xi_ring_system import OrbitalXiRingSystem, XiRingLevel
+from .matrix_mapper import MatrixMapper, FallbackDecision
+from .quantum_mathematical_bridge import QuantumMathematicalBridge
+from .strategy_loader import load_strategy
 
 import numpy as np
 from scipy.integrate import odeint
@@ -46,9 +46,9 @@ Integration Points:
 """
 
 # Import existing Schwabot components
-try:
+    try:
     SCHWABOT_COMPONENTS_AVAILABLE = True
-except ImportError as e:
+    except ImportError as e:
     print("⚠️ Some Schwabot components not available: {0}".format(e))
     SCHWABOT_COMPONENTS_AVAILABLE = False
 
@@ -77,7 +77,7 @@ class ReceptorState(Enum):
 
 
 @dataclass
-class CellularSignalState:
+    class CellularSignalState:
     """State representation for cellular signals"""
 
     signal_type: CellularSignalType
@@ -90,7 +90,7 @@ class CellularSignalState:
     ligand_concentration: float = 0.0  # L(t) - Input signal
     activation_rate: float = 1.0  # k_on
     deactivation_rate: float = 0.1  # k_off
-    feedback_rate: float = 0.05  # k_feedback
+    feedback_rate: float = 0.5  # k_feedback
 
     # Memory and timing
     signal_history: deque = field(default_factory=lambda: deque(maxlen=100))
@@ -102,14 +102,14 @@ class CellularSignalState:
     half_saturation: float = 0.5  # K - Half-max constant
     max_response: float = 1.0  # Maximum response
 
-    # Cascade parameters (for RTK)
+    # Cascade parameters (for, RTK)
     cascade_levels: List[float] = field(default_factory=lambda: [0.0] * 5)
     cascade_delays: List[float] = field(default_factory=lambda: [0.1, 0.2, 0.3, 0.4, 0.5])
     cascade_amplifications: List[float] = field(default_factory=lambda: [1.2, 1.5, 1.8, 2.0, 2.2])
 
 
 @dataclass
-class BioCellularResponse:
+    class BioCellularResponse:
     """Response from cellular signaling system"""
 
     signal_type: CellularSignalType
@@ -174,10 +174,10 @@ class BioCellularSignaling:
         # Signal processing parameters
         self.TIME_STEP = 0.1  # seconds
         self.INTEGRATION_STEPS = 10
-        self.NOISE_AMPLITUDE = 0.01
+        self.NOISE_AMPLITUDE = 0.1
 
         # Performance tracking
-        self.signal_performance: Dict[CellularSignalType, List[float]] = {
+        self.signal_performance: Dict[CellularSignalType, List[float]] = {}
             signal_type: [] for signal_type in CellularSignalType
         }
 
@@ -185,7 +185,7 @@ class BioCellularSignaling:
 
     def _default_config(self) -> Dict[str, Any]:
         """Default configuration for bio-cellular signaling"""
-        return {
+        return {}
             'beta2_ar_sensitivity': 1.0,
             'rtk_cascade_depth': 5,
             'calcium_pulse_frequency': 0.1,
@@ -202,8 +202,8 @@ class BioCellularSignaling:
 
     def _initialize_cellular_signals(self):
         """Initialize all cellular signal types"""
-        signal_configs = {
-            CellularSignalType.BETA2_AR: {
+        signal_configs = {}
+            CellularSignalType.BETA2_AR: {}
                 'activation_rate': 2.0,
                 'deactivation_rate': 0.5,
                 'feedback_rate': 0.3,
@@ -211,7 +211,7 @@ class BioCellularSignaling:
                 'half_saturation': 0.3,
                 'receptor_density': 1000,
             },
-            CellularSignalType.RTK_CASCADE: {
+            CellularSignalType.RTK_CASCADE: {}
                 'activation_rate': 1.5,
                 'deactivation_rate': 0.3,
                 'feedback_rate': 0.1,
@@ -219,7 +219,7 @@ class BioCellularSignaling:
                 'half_saturation': 0.4,
                 'receptor_density': 500,
             },
-            CellularSignalType.CALCIUM_OSCILLATION: {
+            CellularSignalType.CALCIUM_OSCILLATION: {}
                 'activation_rate': 5.0,
                 'deactivation_rate': 2.0,
                 'feedback_rate': 0.8,
@@ -227,7 +227,7 @@ class BioCellularSignaling:
                 'half_saturation': 0.2,
                 'receptor_density': 2000,
             },
-            CellularSignalType.TGF_BETA_FEEDBACK: {
+            CellularSignalType.TGF_BETA_FEEDBACK: {}
                 'activation_rate': 0.8,
                 'deactivation_rate': 0.1,
                 'feedback_rate': 1.2,
@@ -235,7 +235,7 @@ class BioCellularSignaling:
                 'half_saturation': 0.6,
                 'receptor_density': 300,
             },
-            CellularSignalType.NF_KB_TRANSLOCATION: {
+            CellularSignalType.NF_KB_TRANSLOCATION: {}
                 'activation_rate': 1.2,
                 'deactivation_rate': 0.2,
                 'feedback_rate': 0.4,
@@ -243,9 +243,9 @@ class BioCellularSignaling:
                 'half_saturation': 0.35,
                 'receptor_density': 800,
             },
-            CellularSignalType.MTOR_GATING: {
+            CellularSignalType.MTOR_GATING: {}
                 'activation_rate': 0.5,
-                'deactivation_rate': 0.05,
+                'deactivation_rate': 0.5,
                 'feedback_rate': 0.15,
                 'hill_coefficient': 1.8,
                 'half_saturation': 0.5,
@@ -254,7 +254,7 @@ class BioCellularSignaling:
         }
 
         for signal_type, config in signal_configs.items():
-            self.signal_states[signal_type] = CellularSignalState(
+            self.signal_states[signal_type] = CellularSignalState()
                 signal_type=signal_type,
                 activation_rate=config['activation_rate'],
                 deactivation_rate=config['deactivation_rate'],
@@ -264,7 +264,7 @@ class BioCellularSignaling:
             )
             self.receptor_populations[signal_type] = config['receptor_density']
 
-    def beta2_ar_signaling(
+    def beta2_ar_signaling()
         self, ligand_concentration: float, current_state: CellularSignalState, dt: float = 0.1
     ) -> CellularSignalState:
         """
@@ -284,7 +284,7 @@ class BioCellularSignaling:
                 S, F, P = state
 
                 # Activation with ligand binding
-                dS_dt = (
+                dS_dt = ()
                     current_state.activation_rate * ligand_concentration * (1 - S)
                     - (current_state.deactivation_rate + current_state.feedback_rate * F) * S
                 )
@@ -328,7 +328,7 @@ class BioCellularSignaling:
             logger.error("Error in β₂-AR signaling: {0}".format(e))
             return current_state
 
-    def rtk_cascade_signaling(
+    def rtk_cascade_signaling()
         self, growth_factor: float, current_state: CellularSignalState, dt: float = 0.1
     ) -> CellularSignalState:
         """
@@ -350,7 +350,7 @@ class BioCellularSignaling:
                 current_state.cascade_levels = [0.0] * 5
 
             # First level - direct activation
-            current_state.cascade_levels[0] = (
+            current_state.cascade_levels[0] = ()
                 current_state.activation_rate * growth_factor * (1 - current_state.cascade_levels[0])
                 - current_state.deactivation_rate * current_state.cascade_levels[0]
             ) * dt + current_state.cascade_levels[0]
@@ -360,7 +360,7 @@ class BioCellularSignaling:
                 delay_factor = np.exp(-current_state.cascade_delays[i - 1] / dt)
                 amplification = current_state.cascade_amplifications[i - 1]
 
-                current_state.cascade_levels[i] = (
+                current_state.cascade_levels[i] = ()
                     amplification
                     * current_state.cascade_levels[i - 1]
                     * delay_factor
@@ -392,7 +392,7 @@ class BioCellularSignaling:
             logger.error("Error in RTK cascade signaling: {0}".format(e))
             return current_state
 
-    def calcium_oscillation_signaling(
+    def calcium_oscillation_signaling()
         self, calcium_stimulus: float, current_state: CellularSignalState, dt: float = 0.1
     ) -> CellularSignalState:
         """
@@ -416,7 +416,7 @@ class BioCellularSignaling:
                 J_reuptake = 2.0 * Ca**2 / (0.1 + Ca**2)
 
                 # Background leak
-                J_leak = 0.05 * Ca
+                J_leak = 0.5 * Ca
 
                 # IP3 dynamics
                 dIP3_dt = 0.8 * calcium_stimulus - 0.3 * IP3
@@ -443,7 +443,7 @@ class BioCellularSignaling:
             # Pulse detection
             if len(current_state.signal_history) > 5:
                 recent_signals = list(current_state.signal_history)[-5:]
-                if current_state.activation_level > 0.6 and all(s < 0.4 for s in recent_signals):
+                if current_state.activation_level > 0.6 and all(s < 0.4 for s in, recent_signals):
                     # Pulse detected
                     current_time = time.time()
                     if current_state.last_pulse_time > 0:
@@ -468,7 +468,7 @@ class BioCellularSignaling:
             logger.error("Error in calcium oscillation signaling: {0}".format(e))
             return current_state
 
-    def tgf_beta_feedback_signaling(
+    def tgf_beta_feedback_signaling()
         self, growth_signal: float, current_state: CellularSignalState, dt: float = 0.1
     ) -> CellularSignalState:
         """
@@ -525,7 +525,7 @@ class BioCellularSignaling:
             logger.error("Error in TGF-β feedback signaling: {0}".format(e))
             return current_state
 
-    def nf_kb_translocation_signaling(
+    def nf_kb_translocation_signaling()
         self, inflammatory_signal: float, current_state: CellularSignalState, dt: float = 0.1
     ) -> CellularSignalState:
         """
@@ -587,7 +587,7 @@ class BioCellularSignaling:
             logger.error("Error in NF-κB translocation signaling: {0}".format(e))
             return current_state
 
-    def mtor_gating_signaling(
+    def mtor_gating_signaling()
         self, nutrient_level: float, energy_level: float, current_state: CellularSignalState, dt: float = 0.1
     ) -> CellularSignalState:
         """
@@ -601,7 +601,7 @@ class BioCellularSignaling:
             def heaviside(x):
                 return 1.0 if x >= 0 else 0.0
 
-            # Update ligand concentration (combined signal)
+            # Update ligand concentration (combined, signal)
             current_state.ligand_concentration = (nutrient_level + energy_level) / 2
 
             # mTOR gating logic
@@ -616,7 +616,7 @@ class BioCellularSignaling:
                 mTOR, S6K1 = state
 
                 # mTOR activation only if both gates are open
-                dmTOR_dt = (
+                dmTOR_dt = ()
                     current_state.activation_rate * gating_signal * (1 - mTOR) - current_state.deactivation_rate * mTOR
                 )
 
@@ -659,7 +659,7 @@ class BioCellularSignaling:
             logger.error("Error in mTOR gating signaling: {0}".format(e))
             return current_state
 
-    def hill_kinetics_smoothing(
+    def hill_kinetics_smoothing()
         self, ligand_concentration: float, hill_coefficient: float, half_saturation: float, max_response: float = 1.0
     ) -> float:
         """
@@ -739,7 +739,7 @@ class BioCellularSignaling:
             logger.error("Error processing market signal: {0}".format(e))
             return {}
 
-    def _generate_cellular_response(
+    def _generate_cellular_response()
         self, signal_state: CellularSignalState, market_data: Dict[str, Any]
     ) -> BioCellularResponse:
         """Generate trading response from cellular signal state"""
@@ -769,7 +769,7 @@ class BioCellularSignaling:
                 xi_ring_target = XiRingLevel.XI_3
 
             # Create response
-            response = BioCellularResponse(
+            response = BioCellularResponse()
                 signal_type=signal_state.signal_type,
                 trade_action=trade_action,
                 position_delta=signal_state.position_size,
@@ -787,7 +787,7 @@ class BioCellularSignaling:
 
         except Exception as e:
             logger.error("Error generating cellular response: {0}".format(e))
-            return BioCellularResponse(
+            return BioCellularResponse()
                 signal_type=signal_state.signal_type,
                 trade_action="hold",
                 position_delta=0.0,
@@ -799,7 +799,7 @@ class BioCellularSignaling:
                 receptor_density=1000,
             )
 
-    def integrate_with_xi_rings(
+    def integrate_with_xi_rings()
         self, cellular_responses: Dict[CellularSignalType, BioCellularResponse], strategy_id: str
     ) -> bool:
         """Integrate cellular responses with Xi ring system"""
@@ -817,7 +817,7 @@ class BioCellularSignaling:
                 # Check if ring transition is needed
                 current_orbit = self.xi_ring_system.strategy_orbits[strategy_id]
                 if current_orbit.current_ring != best_response.xi_ring_target:
-                    self.xi_ring_system.execute_ring_transition(
+                    self.xi_ring_system.execute_ring_transition()
                         strategy_id, best_response.xi_ring_target, "cellular_signal"
                     )
 
@@ -832,7 +832,7 @@ class BioCellularSignaling:
         try:
             signal_status = {}
             for signal_type, signal_state in self.signal_states.items():
-                signal_status[signal_type.value] = {
+                signal_status[signal_type.value] = {}
                     'activation_level': signal_state.activation_level,
                     'feedback_level': signal_state.feedback_level,
                     'position_size': signal_state.position_size,
@@ -842,12 +842,12 @@ class BioCellularSignaling:
                     'receptor_density': self.receptor_populations.get(signal_type, 1000),
                 }
 
-            return {
+            return {}
                 'system_active': self.system_active,
                 'signal_states': signal_status,
                 'total_signals': len(self.signal_states),
                 'integration_enabled': SCHWABOT_COMPONENTS_AVAILABLE,
-                'biological_constants': {
+                'biological_constants': {}
                     'temperature': self.TEMPERATURE,
                     'membrane_potential': self.MEMBRANE_POTENTIAL,
                     'time_step': self.TIME_STEP,

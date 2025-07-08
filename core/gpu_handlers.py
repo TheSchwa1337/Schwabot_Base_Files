@@ -1,26 +1,12 @@
 import logging
 import time
 from typing import Any, Dict, List, Optional, Tuple, Union
-    import cupy as cp
-    from .cpu_handlers import run_cpu_strategy
-        import asyncio
-
+import asyncio
 import numpy as np
-    import numpy as np
-
-    from ..utils.cuda_helper import (
-
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-GPU Handlers - GPU/CPU switching logic for Schwabot trading system.
-
-Provides GPU-accelerated handlers with automatic CPU fallback for all
-matrix, tensor, and vector operations.
-"""
 
 # CUDA Integration with Fallback
 try:
+    import cupy as cp
     USING_CUDA = True
     _backend = 'cupy (GPU)'
     xp = cp
@@ -29,14 +15,9 @@ except ImportError:
     _backend = 'numpy (CPU)'
     xp = np
 
-logger = logging.getLogger(__name__)
-if USING_CUDA:
-    logger.info("⚡ GPU Handlers using GPU acceleration: {0}".format(_backend))
-else:
-    logger.info("🔄 GPU Handlers using CPU fallback: {0}".format(_backend))
-
-# CUDA Helper Integration (for additional utilities)
+# CUDA Helper Integration (for additional, utilities)
 try:
+    from utils.cuda_helper import (
         get_cuda_status,
         report_cuda_status,
         safe_convolution,
@@ -47,9 +28,7 @@ try:
         safe_matrix_multiply,
         safe_svd,
         safe_tensor_contraction,
-        xp,
     )
-
     CUDA_AVAILABLE = True
     logger = logging.getLogger(__name__)
     logger.info("⚡ CUDA acceleration available for GPU Handlers: {0}".format(_backend))
@@ -61,10 +40,11 @@ except ImportError:
 
 # Import CPU handlers for fallback
 try:
+    from .cpu_handlers import run_cpu_strategy
 except ImportError:
-
     def run_cpu_strategy(task_id: str, data: Dict[str, Any]) -> Dict[str, Any]:
-        return {"profit_delta": 0.0, "error": "CPU handlers not available"}
+        """Fallback CPU strategy when GPU is not available."""
+        return {"profit_delta": 0.0, "success": False, "fallback": True}
 
 
 logger = logging.getLogger(__name__)
@@ -73,7 +53,7 @@ logger.info("GPU Handlers initialized with backend: {0}".format(_backend))
 
 def run_gpu_strategy(task_id: str, data: Dict[str, Any]) -> Dict[str, Any]:
     """
-    Execute GPU-based strategy using ZBE (Zero Bottleneck Entropy).
+    Execute GPU-based strategy using ZBE (Zero Bottleneck, Entropy).
 
     Args:
         task_id: Strategy identifier
@@ -113,21 +93,16 @@ def run_gpu_strategy(task_id: str, data: Dict[str, Any]) -> Dict[str, Any]:
         execution_time_ms = (time.time() - start_time) * 1000
 
         # Add performance metrics
-        result.update(
-            {
-                "task_id": task_id,
-                "execution_time_ms": execution_time_ms,
-                "compute_mode": "zbe",
-                "execution_engine": "gpu",
-                "success": True,
-                "cuda_available": CUDA_AVAILABLE,
-            }
-        )
+        result.update({
+            "task_id": task_id,
+            "execution_time_ms": execution_time_ms,
+            "compute_mode": "zbe",
+            "execution_engine": "gpu",
+            "success": True,
+            "cuda_available": CUDA_AVAILABLE,
+        })
 
-        logger.debug(
-            "GPU strategy {0} completed in {1}ms".format(task_id, 
-                execution_time_ms:.2f)
-        )
+        logger.debug("GPU strategy {0} completed in {1}ms".format(task_id, execution_time_ms))
         return result
 
     except Exception as e:
@@ -234,8 +209,8 @@ def _gpu_ghost_tick_detector(data: Dict[str, Any]) -> Dict[str, Any]:
             lambda: price_change * (1.0 - min(abs(volume_anomaly), 1.0)),
         )
 
-        # Calculate profit potential (higher for GPU)
-        profit_delta = float(ghost_score * 0.08)  # 8% of ghost score
+        # Calculate profit potential (higher for, GPU)
+        profit_delta = float(ghost_score * 0.8)  # 8% of ghost score
 
         return {
             "profit_delta": profit_delta,
@@ -286,12 +261,12 @@ def _gpu_altitude_rebalance(data: Dict[str, Any]) -> Dict[str, Any]:
             lambda: xp.sum(xp.abs(rebalance_diffs)), lambda: np.sum(np.abs(rebalance_diffs))
         )
 
-        # Calculate profit potential (higher for GPU)
-        profit_delta = float(rebalance_magnitude * 0.03)  # 3% of rebalancing magnitude
+        # Calculate profit potential (higher for, GPU)
+        profit_delta = float(rebalance_magnitude * 0.3)  # 3% of rebalancing magnitude
 
         return {
             "profit_delta": profit_delta,
-            "rebalanced": float(rebalance_magnitude) > 0.05,
+            "rebalanced": float(rebalance_magnitude) > 0.5,
             "rebalance_magnitude": float(rebalance_magnitude),
             "current_weights": current_weights.tolist(),
             "target_weights": target_weights.tolist(),
@@ -324,8 +299,8 @@ def _gpu_fractal_analysis(data: Dict[str, Any]) -> Dict[str, Any]:
         # Detect fractal patterns
         fractal_score = safe_cuda_operation(lambda: fractal_dim * similarity, lambda: fractal_dim * similarity)
 
-        # Calculate profit potential (higher for GPU)
-        profit_delta = float(fractal_score * 0.05)  # 5% of fractal score
+        # Calculate profit potential (higher for, GPU)
+        profit_delta = float(fractal_score * 0.5)  # 5% of fractal score
 
         return {
             "profit_delta": profit_delta,
@@ -375,8 +350,8 @@ def _gpu_tensor_operations(data: Dict[str, Any]) -> Dict[str, Any]:
             lambda: tensor_a.size * tensor_b.size / 1000.0,
         )
 
-        # Calculate profit potential (higher for GPU)
-        profit_delta = float(complexity * 0.015)  # 1.5% of complexity
+        # Calculate profit potential (higher for, GPU)
+        profit_delta = float(complexity * 0.15)  # 1.5% of complexity
 
         return {
             "profit_delta": profit_delta,
@@ -438,17 +413,15 @@ def _gpu_spectral_analysis(data: Dict[str, Any]) -> Dict[str, Any]:
             lambda: -np.sum(normalized_power * np.log(normalized_power + 1e-10)),
         )
 
-        # Calculate profit potential (higher for GPU)
-        profit_delta = float(spectral_entropy * 0.03)  # 3% of spectral entropy
+        # Calculate profit potential (higher for, GPU)
+        profit_delta = float(spectral_entropy * 0.3)  # 3% of spectral entropy
 
         return {
             "profit_delta": profit_delta,
             "spectral_analyzed": True,
             "dominant_frequency": float(dominant_frequency),
             "spectral_entropy": float(spectral_entropy),
-            "power_spectrum_max": float(
-                safe_cuda_operation(lambda: xp.max(power_spectrum), lambda: np.max(power_spectrum))
-            ),
+            "power_spectrum_max": float(safe_cuda_operation(lambda: xp.max(power_spectrum), lambda: np.max(power_spectrum))),
             "gpu_accelerated": True,
         }
 
@@ -491,8 +464,8 @@ def _gpu_entropy_calculation(data: Dict[str, Any]) -> Dict[str, Any]:
             lambda: entropy / max_entropy if max_entropy > 0 else 0,
         )
 
-        # Calculate profit potential (higher for GPU)
-        profit_delta = float(normalized_entropy * 0.06)  # 6% of normalized entropy
+        # Calculate profit potential (higher for, GPU)
+        profit_delta = float(normalized_entropy * 0.6)  # 6% of normalized entropy
 
         return {
             "profit_delta": profit_delta,
@@ -525,8 +498,8 @@ def _gpu_generic_strategy(data: Dict[str, Any]) -> Dict[str, Any]:
             max_val = safe_cuda_operation(lambda: xp.max(input_array), lambda: np.max(input_array))
             min_val = safe_cuda_operation(lambda: xp.min(input_array), lambda: np.min(input_array))
 
-            # Calculate simple profit metric (higher for GPU)
-            profit_delta = float((max_val - min_val) * 0.015)  # 1.5% of range
+            # Calculate simple profit metric (higher for, GPU)
+            profit_delta = float((max_val - min_val) * 0.15)  # 1.5% of range
         else:
             profit_delta = 0.0
             mean_val = std_val = max_val = min_val = 0.0
@@ -630,12 +603,7 @@ def _gpu_calculate_self_similarity(time_series: np.ndarray) -> float:
             if not safe_cuda_operation(lambda: xp.isnan(correlation), lambda: np.isnan(correlation)):
                 similarities.append(abs(correlation))
 
-        return float(
-            safe_cuda_operation(
-                lambda: xp.mean(similarities) if similarities else 0.5,
-                lambda: np.mean(similarities) if similarities else 0.5,
-            )
-        )
+        return float(safe_cuda_operation(lambda: xp.mean(similarities) if similarities else 0.5, lambda: np.mean(similarities) if similarities else 0.5))
 
     except Exception:
         return 0.5
@@ -656,7 +624,7 @@ __all__ = [
 
 
 class GPUHandlers:
-    """GPU Handlers class for ZBE (Zero Bottleneck Entropy) operations."""
+    """GPU Handlers class for ZBE (Zero Bottleneck, Entropy) operations."""
 
     def __init__(self):
         """Initialize GPU handlers."""

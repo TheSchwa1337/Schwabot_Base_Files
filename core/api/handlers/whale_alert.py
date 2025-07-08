@@ -4,15 +4,17 @@ import logging
 from typing import Any, Dict, List
 from .base_handler import BaseAPIHandler
 
-    import aiohttp
-    import requests
+import aiohttp
+import requests
 
 try:
-except ImportError:  # pragma: no cover
+    pass
+    except ImportError:  # pragma: no cover
     aiohttp = None
 
 try:
-except ImportError:  # pragma: no cover
+    pass
+    except ImportError:  # pragma: no cover
     requests = None
 
 logger = logging.getLogger(__name__)
@@ -44,7 +46,7 @@ class WhaleAlertHandler(BaseAPIHandler):
     async def _fetch_raw(self) -> Any:
         """Fetch raw whale transaction data from WhaleAlert API."""
 
-        params = {
+        params = {}
             "api_key": self.api_key,
             "min_value": self.min_value,
             "limit": 100,
@@ -70,7 +72,7 @@ class WhaleAlertHandler(BaseAPIHandler):
 
             loop = asyncio.get_running_loop()
 
-            response = await loop.run_in_executor(
+            response = await loop.run_in_executor()
                 None, lambda: requests.get("{0}/transactions".format(BASE_URL), params=params, timeout=15)
             )
 
@@ -113,7 +115,7 @@ class WhaleAlertHandler(BaseAPIHandler):
 
             for tx in transactions:
 
-                processed_tx = {
+                processed_tx = {}
                     "id": tx.get("id"),
                     "blockchain": tx.get("blockchain"),
                     "symbol": tx.get("symbol"),
@@ -148,7 +150,7 @@ class WhaleAlertHandler(BaseAPIHandler):
 
             # Create summary statistics
 
-            summary = {
+            summary = {}
                 "total_transactions": len(processed_transactions),
                 "total_volume_usd": total_volume_usd,
                 "btc_volume_usd": btc_volume,
@@ -159,7 +161,7 @@ class WhaleAlertHandler(BaseAPIHandler):
                 "dominant_blockchain": self._get_dominant_blockchain(processed_transactions),
             }
 
-            return {
+            return {}
                 "transactions": processed_transactions,
                 "summary": summary,
                 "last_updated": raw.get("cursor", {}).get("last", 0),

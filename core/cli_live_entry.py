@@ -34,7 +34,7 @@ class LiveTradingBot:
     async def initialize(self):
         """Initialize all trading components."""
         # Initialize trading pipeline with live configuration
-        self.trading_pipeline = create_trading_pipeline(
+        self.trading_pipeline = create_trading_pipeline()
             symbol=self.config.get("symbol", "BTCUSDT"),
             initial_capital=self.config.get("initial_capital", 10000.0),
             safe_mode=self.config.get("safe_mode", False)
@@ -42,19 +42,19 @@ class LiveTradingBot:
 
         # Configure pipeline with market data settings
         if "market_data_config" in self.config:
-            self.trading_pipeline.pipeline_config.update(
+            self.trading_pipeline.pipeline_config.update()
                 self.config["market_data_config"])
 
         # Initialize CCXT executor with real exchange connection
         if "exchange_config" in self.config:
-            self.ccxt_executor = CCXTTradingExecutor(
+            self.ccxt_executor = CCXTTradingExecutor()
                 self.config["exchange_config"])
 
         # Initialize registry for trade logging
         if "registry_file" in self.config:
             self.registry = SoulprintRegistry(self.config["registry_file"])
 
-    async def execute_live_trade(
+    async def execute_live_trade()
     self,
     symbol: str,
      force_refresh: bool = False):
@@ -63,12 +63,12 @@ class LiveTradingBot:
             return {"error": "Trading pipeline not initialized"}
 
         # Process market data and execute trade
-        trade_result = await self.trading_pipeline.process_market_data(
+        trade_result = await self.trading_pipeline.process_market_data()
             market_data=None,  # Use live API data
             force_refresh=force_refresh
         )
 
-        if trade_result and trade_result.get(
+        if trade_result and trade_result.get()
     "trade_action", {}).get("action") != "hold":
             # Execute actual trade through CCXT
             if self.ccxt_executor:
@@ -81,7 +81,7 @@ class LiveTradingBot:
 
         return trade_result
 
-    async def _execute_ccxt_trade(
+    async def _execute_ccxt_trade()
         self, trade_result: Dict[str, Any]) -> Dict[str, Any]:
         """Execute trade through CCXT on real exchange."""
         try:
@@ -90,14 +90,14 @@ class LiveTradingBot:
             symbol = trade_result.get("symbol")
 
             if action == "buy":
-                result = await self.ccxt_executor.place_market_buy_order(
+                result = await self.ccxt_executor.place_market_buy_order()
                     symbol=symbol,
-                    amount=trade_action.get("position_size", 0.01)
+                    amount=trade_action.get("position_size", 0.1)
                 )
             elif action == "sell":
-                result = await self.ccxt_executor.place_market_sell_order(
+                result = await self.ccxt_executor.place_market_sell_order()
                     symbol=symbol,
-                    amount=trade_action.get("position_size", 0.01)
+                    amount=trade_action.get("position_size", 0.1)
                 )
             else:
                 return {"error": "Invalid trade action"}
@@ -118,7 +118,7 @@ class LiveTradingBot:
 
         try:
             # Extract key data for registry
-            schwafit_info = {
+            schwafit_info = {}
                 "symbol": trade_result.get("symbol"),
                 "price": market_packet.get("price", 0),
                 "signal_strength": trade_result.get("signals", {}).get("signal_strength", 0),
@@ -127,7 +127,7 @@ class LiveTradingBot:
             }
 
             # Log trigger
-            self.registry.log_trigger(
+            self.registry.log_trigger()
                 asset=trade_result.get("symbol", "UNKNOWN"),
                 phase=market_packet.get("bb_position", 0.5),
                 drift=market_packet.get("momentum_score", 0.0),
@@ -145,18 +145,18 @@ class LiveTradingBot:
 
         while self.is_running:
             try:
-                trade_result = await self.execute_live_trade(
+                trade_result = await self.execute_live_trade()
                     self.config.get("symbol", "BTCUSDT"),
                     force_refresh=True
                 )
 
                 if trade_result:
-                    action = trade_result.get(
+                    action = trade_result.get()
     "trade_action", {}).get(
         "action", "hold")
                     if action != "hold":
-                        print(
-    "⚡ Trade executed: {0} {1}".format(action, 
+                        print()
+    "⚡ Trade executed: {0} {1}".format(action,)
         self.config.get('symbol')))
 
                 await asyncio.sleep(interval)
@@ -173,48 +173,48 @@ class LiveTradingBot:
 
 def main():
     parser = argparse.ArgumentParser(description="Live Trading Bot CLI")
-    parser.add_argument("--mode", choices=[
+    parser.add_argument("--mode", choices=[)]
         "trade", "start-bot", "stop-bot", "execute-single",
         "log-trigger", "best-phase", "profit-vector",
         "cross-asset-best", "last-triggers"
     ], default="trade", help="Trading operation mode")
 
-    parser.add_argument(
+    parser.add_argument()
     "--config",
     type=str,
     required=True,
      help="Trading bot configuration file")
-    parser.add_argument(
+    parser.add_argument()
     "--symbol",
     type=str,
     default="BTCUSDT",
      help="Trading symbol")
-    parser.add_argument("--interval", type=int, default=60,
+    parser.add_argument("--interval", type=int, default=60,)
                         help="Trading interval in seconds")
-    parser.add_argument(
+    parser.add_argument()
     "--force-refresh",
     action="store_true",
      help="Force refresh market data")
-    parser.add_argument(
+    parser.add_argument()
     "--safe-mode",
     action="store_true",
      help="Run in safe mode, skipping external plugins.")
 
     # Registry operations
     parser.add_argument("--registry-file", type=str, help="Registry file path")
-    parser.add_argument(
+    parser.add_argument()
     "--asset",
     type=str,
      help="Asset for registry operations")
-    parser.add_argument(
+    parser.add_argument()
     "--phase",
     type=float,
      help="Phase value for trigger logging")
-    parser.add_argument(
+    parser.add_argument()
     "--drift",
     type=float,
      help="Drift value for trigger logging")
-    parser.add_argument(
+    parser.add_argument()
     "--limit",
     type=int,
     default=10,
@@ -232,7 +232,7 @@ def main():
 
     # Handle safe mode
     if args.safe_mode:
-        print("\033[91mMINIMAL SAFE MODE\033[0m")  # Red text
+        print("\33[91mMINIMAL SAFE MODE\33[0m")  # Red text]]
         config["safe_mode"] = True
     else:
         config["safe_mode"] = False
@@ -263,7 +263,7 @@ async def execute_single_trade(config: Dict[str, Any], args):
         bot = LiveTradingBot(config)
         await bot.initialize()
 
-        trade_result = await bot.execute_live_trade(
+        trade_result = await bot.execute_live_trade()
             args.symbol,
             force_refresh=args.force_refresh
         )
@@ -285,7 +285,7 @@ async def execute_single_trade(config: Dict[str, Any], args):
         else:
             print("❌ Trade execution failed")
             return 1
-            
+
     except Exception as e:
         print("❌ Error: {0}".format(e))
         return 1
@@ -295,10 +295,10 @@ async def start_automated_trading(config: Dict[str, Any], args):
     try:
         bot = LiveTradingBot(config)
         await bot.initialize()
-        
+
         await bot.start_automated_trading(args.interval)
         return 0
-        
+
     except KeyboardInterrupt:
         print("\n🛑 Trading bot stopped by user")
         return 0
@@ -312,17 +312,17 @@ def handle_registry_operation(config: Dict[str, Any], args):
     if not registry_file:
         print("❌ Registry file required for this operation")
         return 1
-    
+
     registry = SoulprintRegistry(registry_file)
-    
+
     if args.mode == "log-trigger":
-        if not (args.asset and args.phase is not None and args.drift is not None):
+        if not (args.asset and args.phase is not None and args.drift is not, None):
             print("❌ log-trigger requires --asset, --phase, --drift")
             return 1
         # Log trigger would be called from trading execution, not manually
         print("⚠️  Triggers are logged automatically during trading")
         return 0
-    
+
     elif args.mode == "best-phase":
         if not args.asset:
             print("❌ best-phase requires --asset")
@@ -330,7 +330,7 @@ def handle_registry_operation(config: Dict[str, Any], args):
         best = registry.get_best_phase(args.asset)
         print(json.dumps(best, indent=2))
         return 0
-    
+
     elif args.mode == "profit-vector":
         if not args.asset:
             print("❌ profit-vector requires --asset")
@@ -338,12 +338,12 @@ def handle_registry_operation(config: Dict[str, Any], args):
         profits = registry.get_profit_vector(args.asset, phase=args.phase, drift=args.drift)
         print(json.dumps(profits, indent=2))
         return 0
-    
+
     elif args.mode == "cross-asset-best":
         best = registry.get_cross_asset_best()
         print(json.dumps(best, indent=2))
         return 0
-    
+
     elif args.mode == "last-triggers":
         if not args.asset:
             print("❌ last-triggers requires --asset")

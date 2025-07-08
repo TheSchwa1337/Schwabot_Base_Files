@@ -5,7 +5,7 @@ import hashlib
 
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Test Enhanced Profit-Driven BTC/USDC Trading Strategy.
+"""Test Enhanced Profit-Driven BTC/USDC Trading Strategy."
 
 Simple test to demonstrate profit optimization logic without Unicode issues.
 """
@@ -13,7 +13,7 @@ Simple test to demonstrate profit optimization logic without Unicode issues.
 
 
 @dataclass
-class ProfitAnalysis:
+    class ProfitAnalysis:
     """Profit analysis results."""
 
     btc_price: float
@@ -45,7 +45,7 @@ class ProfitTradingStrategy:
         self.current_capital = initial_capital
 
         # Mathematical weights
-        self.weights = {
+        self.weights = {}
             "hash_similarity": 0.25,
             "phase_alignment": 0.20,
             "entropy_score": 0.20,
@@ -55,7 +55,7 @@ class ProfitTradingStrategy:
 
         # Risk thresholds
         self.min_confidence = 0.75
-        self.min_profit = 0.005  # 0.5%
+        self.min_profit = 0.05  # 0.5%
         self.max_risk = 0.30
 
         print("Enhanced Profit Trading Strategy initialized")
@@ -65,7 +65,7 @@ class ProfitTradingStrategy:
         """Analyze market using mathematical components."""
 
         # 1. ALEPH Hash Similarity
-        hash_similarity = self._calculate_hash_similarity(
+        hash_similarity = self._calculate_hash_similarity()
             btc_price, usdc_volume, market_data
         )
 
@@ -82,7 +82,7 @@ class ProfitTradingStrategy:
         pattern_confidence = self._calculate_pattern_confidence(market_data)
 
         # 6. Composite Confidence
-        confidence_score = (
+        confidence_score = ()
             self.weights["hash_similarity"] * hash_similarity
             + self.weights["phase_alignment"] * phase_alignment
             + self.weights["entropy_score"] * entropy_score
@@ -91,32 +91,32 @@ class ProfitTradingStrategy:
         )
 
         # 7. Profit Potential
-        profit_potential = self._calculate_profit_potential(
+        profit_potential = self._calculate_profit_potential()
             btc_price, usdc_volume, confidence_score, market_data
         )
 
         # 8. Risk Score
-        risk_score = self._calculate_risk_score(
+        risk_score = self._calculate_risk_score()
             confidence_score, profit_potential, market_data
         )
 
         # 9. Trading Decision
-        should_trade = (
+        should_trade = ()
             confidence_score >= self.min_confidence
             and profit_potential >= self.min_profit
             and risk_score <= self.max_risk
         )
 
-        # 10. Position Sizing (Kelly Criterion)
+        # 10. Position Sizing (Kelly, Criterion)
         position_size_btc = 0.0
         if should_trade:
-            kelly_fraction = self._calculate_kelly_fraction(
+            kelly_fraction = self._calculate_kelly_fraction()
                 confidence_score, profit_potential, risk_score
             )
             position_usdc = self.current_capital * kelly_fraction
             position_size_btc = position_usdc / btc_price
 
-        return ProfitAnalysis(
+        return ProfitAnalysis()
             btc_price=btc_price,
             usdc_volume=usdc_volume,
             hash_similarity=hash_similarity,
@@ -152,7 +152,7 @@ class ProfitTradingStrategy:
                 return 0.5
 
             # Calculate momentum alignment
-            recent_momentum = (price_history[-1] - price_history[-2]) / price_history[
+            recent_momentum = (price_history[-1] - price_history[-2]) / price_history[]
                 -2
             ]
             trend_momentum = (price_history[-1] - price_history[0]) / price_history[0]
@@ -178,7 +178,7 @@ class ProfitTradingStrategy:
             returns = np.diff(price_history) / price_history[:-1]
             volatility = np.std(returns)
 
-            # Lower volatility = higher entropy score (more predictable)
+            # Lower volatility = higher entropy score (more, predictable)
             entropy_score = 1.0 / (1.0 + volatility * 100)
             return max(0.1, min(0.9, entropy_score))
         except Exception:
@@ -231,27 +231,27 @@ class ProfitTradingStrategy:
         """Calculate profit potential."""
         try:
             # Base profit from volatility
-            volatility = market_data.get("volatility", 0.02)
-            volatility_profit = min(0.05, volatility * 2.0)
+            volatility = market_data.get("volatility", 0.2)
+            volatility_profit = min(0.5, volatility * 2.0)
 
             # Volume factor
             avg_volume = market_data.get("avg_volume", usdc_volume)
             volume_factor = min(2.0, usdc_volume / max(avg_volume, 1.0))
 
             # Base profit calculation
-            base_profit = volatility_profit * volume_factor * 0.01
+            base_profit = volatility_profit * volume_factor * 0.1
             confidence_adjusted = base_profit * confidence
 
-            return max(0.0, min(0.05, confidence_adjusted))
+            return max(0.0, min(0.5, confidence_adjusted))
         except Exception:
-            return 0.005
+            return 0.05
 
     def _calculate_risk_score():-> float:
         """Calculate risk score."""
         try:
             # Risk factors
             confidence_risk = (1.0 - confidence) * 0.4
-            volatility = market_data.get("volatility", 0.02)
+            volatility = market_data.get("volatility", 0.2)
             volatility_risk = min(0.4, volatility * 10)
 
             # Combine risks
@@ -265,14 +265,14 @@ class ProfitTradingStrategy:
         try:
             win_probability = confidence
             expected_win = profit_potential
-            expected_loss = risk_score * 0.05  # 5% max loss
+            expected_loss = risk_score * 0.5  # 5% max loss
 
             if expected_loss <= 0:
-                expected_loss = 0.01
+                expected_loss = 0.1
 
             # Kelly formula
             win_loss_ratio = expected_win / expected_loss
-            kelly_fraction = (
+            kelly_fraction = ()
                 win_probability * win_loss_ratio - (1 - win_probability)
             ) / win_loss_ratio
 
@@ -292,14 +292,14 @@ class ProfitTradingStrategy:
 
         # Simulate execution
         position_value = analysis.position_size_btc * analysis.btc_price
-        fees = position_value * 0.00075  # 0.075% fee
+        fees = position_value * 0.0075  # 0.75% fee
         expected_profit = position_value * analysis.expected_return_pct
         net_profit = expected_profit - fees
 
         # Update capital
         self.current_capital += net_profit
 
-        return {
+        return {}
             "status": "EXECUTED",
             "position_btc": analysis.position_size_btc,
             "position_value": position_value,
@@ -319,37 +319,37 @@ def test_profit_strategy():
     strategy = ProfitTradingStrategy(initial_capital=100000.0)
 
     # Test scenarios
-    scenarios = [
-        {
+    scenarios = []
+        {}
             "name": "Bull Market Scenario",
             "btc_price": 45000.0,
             "usdc_volume": 2500000.0,
-            "market_data": {
+            "market_data": {}
                 "price_history": [44500, 44700, 44900, 45100, 45000],
                 "volume_history": [2000000, 2200000, 2400000, 2600000, 2500000],
-                "volatility": 0.015,
+                "volatility": 0.15,
                 "avg_volume": 2000000.0,
             },
         },
-        {
+        {}
             "name": "Volatile Market Scenario",
             "btc_price": 43200.0,
             "usdc_volume": 1800000.0,
-            "market_data": {
+            "market_data": {}
                 "price_history": [44000, 43500, 44200, 42800, 43200],
                 "volume_history": [1500000, 1700000, 1600000, 1900000, 1800000],
-                "volatility": 0.035,
+                "volatility": 0.35,
                 "avg_volume": 1600000.0,
             },
         },
-        {
+        {}
             "name": "Bear Market Scenario",
             "btc_price": 42000.0,
             "usdc_volume": 800000.0,
-            "market_data": {
+            "market_data": {}
                 "price_history": [43000, 42800, 42500, 42200, 42000],
                 "volume_history": [1200000, 1000000, 900000, 850000, 800000],
-                "volatility": 0.025,
+                "volatility": 0.25,
                 "avg_volume": 1000000.0,
             },
         },
@@ -360,7 +360,7 @@ def test_profit_strategy():
         print("-" * 40)
 
         # Analyze market
-        analysis = strategy.analyze_market(
+        analysis = strategy.analyze_market()
             scenario["btc_price"], scenario["usdc_volume"], scenario["market_data"]
         )
 
@@ -373,7 +373,7 @@ def test_profit_strategy():
         print(f"  Drift Weight: {analysis.drift_weight:.3f}")
         print(f"  Pattern Confidence: {analysis.pattern_confidence:.3f}")
         print(f"  Composite Confidence: {analysis.confidence_score:.3f}")
-        print(
+        print()
             f"  Profit Potential: {analysis.profit_potential:.3f} ({analysis.profit_potential * 100:.1f}%)"
         )
         print(f"  Risk Score: {analysis.risk_score:.3f}")
@@ -381,7 +381,7 @@ def test_profit_strategy():
 
         if analysis.should_trade:
             print(f"  Position Size: {analysis.position_size_btc:.6f} BTC")
-            print(
+            print()
                 f"  Expected Return: {analysis.expected_return_pct:.3f} ({analysis.expected_return_pct * 100:.1f}%)"
             )
 
@@ -422,7 +422,7 @@ def test_profit_strategy():
     print("- Comprehensive risk management")
     print("- Profit-driven decision making")
 
-    print(
+    print()
         "\nAll trading decisions are mathematically validated for profit optimization!"
     )
 

@@ -31,15 +31,15 @@ def fix_syntax_errors_in_file(file_path: str) -> bool:
         for i, line in enumerate(lines):
             # Fix 1: Handle unterminated strings
             if '"' in line and line.count('"') % 2 == 1:
-                # Check if it's actually unterminated
-                if not line.strip().endswith('""') and not line.strip().endswith('"""'):
-                    if not line.endswith('"'):
-                        line += '"'
+                # Check if it's actually unterminated'
+                if not line.strip().endswith('""') and not line.strip().endswith('"""'):"
+                    if not line.endswith('"'):"
+                        line += '"'"
 
             if "'" in line and line.count("'") % 2 == 1:
-                if not line.strip().endswith("''") and not line.strip().endswith("'''"):
-                    if not line.endswith("'"):
-                        line += "'"
+                if not line.strip().endswith("''") and not line.strip().endswith("'''"):'
+                    if not line.endswith("'"):'
+                        line += "'"'
 
             # Fix 2: Handle missing colons after function parameters
             # Look for patterns like: parameter_name: type)
@@ -48,37 +48,37 @@ def fix_syntax_errors_in_file(file_path: str) -> bool:
                 line = re.sub(r":\s*(\w+)\s*\)", r": \1):", line)
 
             # Fix 3: Handle f-strings with missing placeholders
-            if ('f"' in line or "f'" in line) and "{" not in line and "}" not in line:
+            if ('f"' in line or "f'" in, line) and "{" not in line and "}" not in line:'
                 line = line.replace('f"', '"').replace("f'", "'")
 
             # Fix 4: Handle unterminated strings with escape sequences
-            if "\\" in line and ('"' in line or "'" in line):
-                double_quotes = len(re.findall(r'(?<!\\)"', line))
-                single_quotes = len(re.findall(r"(?<!\\)'", line))
+            if "\\" in line and ('"' in line or "'" in, line):'
+                double_quotes = len(re.findall(r'(?<!\\)"', line))"
+                single_quotes = len(re.findall(r"(?<!\\)'", line))'
 
                 if double_quotes % 2 == 1:
-                    line += '"'
+                    line += '"'"
                 if single_quotes % 2 == 1:
-                    line += "'"
+                    line += "'"'
 
             # Fix 5: Handle malformed docstrings
             if '""""' in line:
-                line = line.replace('""""', '"""')
+                line = line.replace('""""', '"""')"
 
             # Fix 6: Handle unterminated strings in the middle of lines
             if '"' in line and line.count('"') % 2 == 1:
-                last_quote_pos = line.rfind('"')
+                last_quote_pos = line.rfind('"')"
                 if last_quote_pos > 0:
                     after_quote = line[last_quote_pos + 1:].strip()
                     if after_quote and not after_quote.startswith((")", ",", "]", "}")):
-                        line += '"'
+                        line += '"'"
 
             if "'" in line and line.count("'") % 2 == 1:
-                last_quote_pos = line.rfind("'")
+                last_quote_pos = line.rfind("'")'
                 if last_quote_pos > 0:
                     after_quote = line[last_quote_pos + 1:].strip()
                     if after_quote and not after_quote.startswith((")", ",", "]", "}")):
-                        line += "'"
+                        line += "'"'
 
             fixed_lines.append(line)
 
@@ -100,7 +100,7 @@ def fix_syntax_errors_in_file(file_path: str) -> bool:
 def check_syntax_error(file_path: str) -> List[str]:
     """Check for syntax errors in a file."""
     try:
-        result = subprocess.run(
+        result = subprocess.run()
             [sys.executable, "-m", "py_compile", file_path],
             capture_output=True,
             text=True,
@@ -117,8 +117,8 @@ def check_syntax_error(file_path: str) -> List[str]:
 def run_flake8_syntax_check(file_path: str) -> List[str]:
     """Run flake8 syntax check on a file."""
     try:
-        result = subprocess.run(
-            [
+        result = subprocess.run()
+            []
                 sys.executable,
                 "-m",
                 "flake8",

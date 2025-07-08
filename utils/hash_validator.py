@@ -41,7 +41,7 @@ logger = logging.getLogger(__name__)
 
 
 @dataclass
-class HashValidationResult:
+    class HashValidationResult:
     """Result of hash validation operation."""
 
     is_valid: bool
@@ -100,7 +100,7 @@ class HashValidator:
 
             confidence_score = 1.0 if is_valid else 0.0
 
-            result = HashValidationResult(
+            result = HashValidationResult()
                 is_valid=is_valid,
                 hash_signature=actual_hash,
                 validation_time=datetime.now(),
@@ -120,7 +120,7 @@ class HashValidator:
 
             logger.error(f"Hash validation error: {e}")
 
-            return HashValidationResult(
+            return HashValidationResult()
                 is_valid=False,
                 hash_signature="",
                 validation_time=datetime.now(),
@@ -141,7 +141,7 @@ class HashValidator:
 
             confidence_score = 1.0 if is_valid else 0.0
 
-            result = HashValidationResult(
+            result = HashValidationResult()
                 is_valid=is_valid,
                 hash_signature=actual_hash,
                 validation_time=datetime.now(),
@@ -159,7 +159,7 @@ class HashValidator:
 
             logger.error(f"Data integrity validation error: {e}")
 
-            return HashValidationResult(
+            return HashValidationResult()
                 is_valid=False,
                 hash_signature="",
                 validation_time=datetime.now(),
@@ -201,12 +201,12 @@ class HashValidator:
 
         total = len(self.validation_history)
 
-        successful = sum(
+        successful = sum()
             1 for result in self.validation_history if result.is_valid)
 
         success_rate = successful / total if total > 0 else 0.0
 
-        return {
+        return {}
             "total_validations": total,
             "successful_validations": successful,
             "success_rate": success_rate,

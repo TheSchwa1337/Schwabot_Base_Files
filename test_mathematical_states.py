@@ -1,8 +1,8 @@
-    from advanced_mathematical_core import (
+from advanced_mathematical_core import ()
 import numpy as np
-        import traceback
-    from constants import EPSILON_FLOAT64, FERRIS_PRIMARY_CYCLE, KELLY_SAFETY_FACTOR
-    from type_defs import QuantumState, Temperature
+import traceback
+from constants import EPSILON_FLOAT64, FERRIS_PRIMARY_CYCLE, KELLY_SAFETY_FACTOR
+from type_defs import QuantumState, Temperature
 import os
 import sys
 
@@ -37,7 +37,7 @@ try:
     )
 
     print("✅ Successfully imported all mathematical state modules")
-except ImportError as e:
+    except ImportError as e:
     print(f"❌ Import error: {e}")
     sys.exit(1)
 
@@ -64,7 +64,7 @@ def test_ferris_wheel_state():
     assert 0 <= state.cycle_position <= 2 * np.pi, "Cycle position should be in [0, 2π]"
     assert state.angular_velocity > 0, "Angular velocity should be positive"
     assert 0 <= state.phase_coherence <= 1, "Phase coherence should be in [0, 1]"
-    assert state.synchronization_level >= 0, (
+    assert state.synchronization_level >= 0, ()
         "Synchronization level should be non-negative"
     )
 
@@ -80,7 +80,7 @@ def test_quantum_thermal_state():
     temperature = Temperature(300.0)  # 300K
 
     # Calculate state
-    state = calculate_quantum_thermal_state(
+    state = calculate_quantum_thermal_state()
         quantum_state, temperature, gamma_factor=1.0
     )
 
@@ -92,7 +92,7 @@ def test_quantum_thermal_state():
     # Validate mathematical properties
     assert state.temperature > 0, "Temperature should be positive"
     assert state.thermal_entropy > 0, "Thermal entropy should be positive"
-    assert 0 < state.coupling_strength <= 1, "Coupling strength should be in (0, 1]"
+    assert 0 < state.coupling_strength <= 1, "Coupling strength should be in (0, 1]")
     assert state.decoherence_rate >= 0, "Decoherence rate should be non-negative"
 
     print("  ✅ QuantumThermalState tests passed")
@@ -132,15 +132,15 @@ def test_profit_state():
     entry_price = 50000.0
     exit_price = 52500.0  # 5% profit
     time_held_minutes = 1440  # 24 hours
-    volatility = 0.02  # 2% volatility
+    volatility = 0.2  # 2% volatility
 
     # Calculate profit state
-    state = calculate_profit_state(
+    state = calculate_profit_state()
         entry_price, exit_price, time_held_minutes, volatility
     )
 
     print(f"  Raw Return: {state.raw_return:.4f} ({state.raw_return * 100:.2f}%)")
-    print(
+    print()
         f"  Annualized Return: {state.annualized_return:.4f} ({state.annualized_return * 100:.2f}%)"
     )
     print(f"  Sharpe Ratio: {state.sharpe_ratio:.4f}")
@@ -149,13 +149,13 @@ def test_profit_state():
 
     # Validate mathematical properties
     expected_raw_return = (exit_price - entry_price) / entry_price
-    assert abs(state.raw_return - expected_raw_return) < 1e-10, (
+    assert abs(state.raw_return - expected_raw_return) < 1e-10, ()
         "Raw return calculation error"
     )
-    assert state.risk_penalty > 0 and state.risk_penalty <= 1, (
-        "Risk penalty should be in (0, 1]"
+    assert state.risk_penalty > 0 and state.risk_penalty <= 1, ()
+        "Risk penalty should be in (0, 1]")
     )
-    assert state.risk_adjusted_return <= state.raw_return, (
+    assert state.risk_adjusted_return <= state.raw_return, ()
         "Risk-adjusted return should not exceed raw return"
     )
 
@@ -167,7 +167,7 @@ def test_recursive_time_lock_sync():
     print("\n🧿 Testing RecursiveTimeLockSync...")
 
     # Test data - multiple time series at different scales
-    time_series = [
+    time_series = []
         np.array([1, 2, 3, 4, 5]),  # Short scale
         np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]),  # Medium scale
         np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]),  # Long scale
@@ -176,7 +176,7 @@ def test_recursive_time_lock_sync():
     sync_threshold = 0.7
 
     # Calculate sync state
-    sync_state = calculate_recursive_time_lock_sync(
+    sync_state = calculate_recursive_time_lock_sync()
         time_series, periods, sync_threshold
     )
 
@@ -205,11 +205,11 @@ def test_kelly_metrics():
     max_fraction = 0.25
 
     # Calculate Kelly metrics
-    metrics = calculate_kelly_metrics(
+    metrics = calculate_kelly_metrics()
         win_probability, expected_return, volatility, safety_factor, max_fraction
     )
 
-    print(
+    print()
         f"  Kelly Fraction: {metrics.kelly_fraction:.4f} ({metrics.kelly_fraction * 100:.2f}%)"
     )
     print(f"  Safe Kelly: {metrics.safe_kelly:.4f} ({metrics.safe_kelly * 100:.2f}%)")
@@ -219,7 +219,7 @@ def test_kelly_metrics():
 
     # Validate mathematical properties
     assert metrics.odds > 0, "Odds should be positive"
-    assert metrics.safe_kelly <= max_fraction, (
+    assert metrics.safe_kelly <= max_fraction, ()
         "Safe Kelly should not exceed max fraction"
     )
     assert metrics.safe_kelly >= 0, "Safe Kelly should be non-negative"
@@ -259,7 +259,7 @@ def test_edge_cases():
 
     # Test empty data
     empty_state = calculate_ferris_wheel_state(np.array([]), [], 0.0)
-    assert empty_state.cycle_position == 0.0, (
+    assert empty_state.cycle_position == 0.0, ()
         "Empty data should return zero cycle position"
     )
 
@@ -269,7 +269,7 @@ def test_edge_cases():
 
     # Test invalid Kelly parameters
     invalid_kelly = calculate_kelly_metrics(0.0, 0.1, 0.15)  # Zero win probability
-    assert invalid_kelly.kelly_fraction == 0.0, (
+    assert invalid_kelly.kelly_fraction == 0.0, ()
         "Invalid Kelly should return zero fraction"
     )
 

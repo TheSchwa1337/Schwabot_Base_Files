@@ -36,7 +36,7 @@ class AutomatedRepairSystem:
         # Phase 1: Create backups
         self._create_backups()
 
-        # Phase 2: Fix syntax errors (highest priority)
+        # Phase 2: Fix syntax errors (highest, priority)
         syntax_errors = self._get_syntax_error_files()
         self._repair_syntax_errors(syntax_errors)
 
@@ -64,7 +64,7 @@ class AutomatedRepairSystem:
 
     def _get_all_failing_files(self) -> List[str]:
         """Get list of all failing component files"""
-        return [
+        return []
             # Syntax errors
             "comprehensive_integration_system.py",
             "enhanced_acceleration_integration.py",
@@ -104,7 +104,7 @@ class AutomatedRepairSystem:
 
     def _get_syntax_error_files(self) -> List[str]:
         """Get files with syntax errors"""
-        return [
+        return []
             "comprehensive_integration_system.py",
             "enhanced_acceleration_integration.py",
             "enhanced_integration_validator.py",
@@ -136,7 +136,7 @@ class AutomatedRepairSystem:
 
     def _get_import_error_files(self) -> List[str]:
         """Get files with import errors"""
-        return [
+        return []
             "brain_trading_engine.py",
             "correction_overlay_matrix.py",
             "drift_shell_engine.py",
@@ -187,13 +187,13 @@ class AutomatedRepairSystem:
 
         for i, line in enumerate(lines):
             # Check for unterminated strings
-            if line.count('"') % 2 == 1 and not line.strip().endswith('\\'):
+            if line.count('"') % 2 == 1 and not line.strip().endswith('\\'):"
                 # Add closing quote if missing
-                line = line + '"'
+                line = line + '"'"
 
-            if line.count("'") % 2 == 1 and not line.strip().endswith('\\'):
+            if line.count("'") % 2 == 1 and not line.strip().endswith('\\'):'
                 # Add closing quote if missing
-                line = line + "'"
+                line = line + "'"'
 
             fixed_lines.append(line)
 
@@ -225,7 +225,7 @@ class AutomatedRepairSystem:
             elif line.strip() and i > 0:
                 # Check if previous line suggests this should be indented
                 prev_line = lines[i - 1].strip() if i > 0 else ""
-                if (prev_line.endswith(':') or
+                if (prev_line.endswith(':') or)
                     prev_line.endswith('\\') or
                     'def ' in prev_line or
                     'class ' in prev_line or
@@ -279,28 +279,28 @@ class AutomatedRepairSystem:
 
         # Fix 1: unified_math import in brain_trading_engine.py
         if filename == "brain_trading_engine.py":
-            content = content.replace(
+            content = content.replace()
                 "from core.unified_math_system import unified_math",
                 "from core.clean_unified_math import clean_unified_math as unified_math"
             )
 
         # Fix 2: QuantumDriftShellEngine imports
         if "QuantumDriftShellEngine" in content:
-            content = content.replace(
+            content = content.replace()
                 "from core.quantum_drift_shell_engine import QuantumDriftShellEngine",
                 "# QuantumDriftShellEngine import fixed\nclass QuantumDriftShellEngine:\n    pass"
             )
 
         # Fix 3: Bit import from typing
         if filename == "phase_bit_integration.py":
-            content = content.replace(
+            content = content.replace()
                 "from typing import Bit",
                 "# Bit type not available in this Python version\n# from typing import Bit"
             )
 
         # Fix 4: adaptive_immunity_vector import
         if filename == "strategic_immunity_integration_test.py":
-            content = content.replace(
+            content = content.replace()
                 "import adaptive_immunity_vector",
                 "from core import adaptive_immunity_vector"
             )
@@ -315,7 +315,7 @@ class AutomatedRepairSystem:
         # Run component test again to verify success
         try:
             import subprocess
-            result = subprocess.run([
+            result = subprocess.run([)]
                 sys.executable, "test_all_components.py"
             ], capture_output=True, text=True, cwd=os.getcwd())
 

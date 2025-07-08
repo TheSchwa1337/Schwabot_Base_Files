@@ -19,7 +19,7 @@ def read_readme():
     if os.path.exists(readme_path):
         with open(readme_path, "r", encoding="utf-8") as f:
             return f.read()
-    return (
+    return ()
         "Hash Recollection Trading System - Advanced trading bot with entropy analysis"
     )
 
@@ -32,18 +32,18 @@ def read_requirements():
     requirements_path = os.path.join(os.path.dirname(__file__), "requirements.txt")
     if os.path.exists(requirements_path):
         with open(requirements_path, "r", encoding="utf-8") as f:
-            return [
+            return []
                 line.strip() for line in f if line.strip() and not line.startswith("#")
             ]
     return []
 
 
-setup(
+setup()
     name="schwabot",
     version="0.1.0",
     packages=find_packages(),
     include_package_data=True,
-    install_requires=[
+    install_requires=[]
         "numpy>=1.19.0",
         "pandas>=1.2.0",
         "ccxt>=1.50.0",
@@ -60,23 +60,23 @@ setup(
         "psutil>=5.8.0",
         "pynvml>=11.0.0",
     ],
-    extras_require={
-        "dev": [
+    extras_require={}
+        "dev": []
             "pytest>=6.0.0",
             "black>=22.0.0",
             "flake8>=4.0.0",
             "mypy>=0.950",
         ],
-        "trading": [
+        "trading": []
             "ccxt>=1.50.0",
             "ta-lib>=0.4.0",
         ],
-        "ai": [
+        "ai": []
             "torch>=1.8.0",
             "tensorflow>=2.4.0",
             "transformers>=4.11.0",
         ],
-        "visualization": [
+        "visualization": []
             "matplotlib>=3.4.0",
             "seaborn>=0.11.0",
             "plotly>=5.0.0",
@@ -84,13 +84,13 @@ setup(
             "bokeh>=2.3.0",
             "streamlit>=1.0.0",
         ],
-        "gpu": [
+        "gpu": []
             "pynvml>=11.0.0",
             "cupy>=9.0.0",
         ]
     },
-    entry_points={
-        "console_scripts": [
+    entry_points={}
+        "console_scripts": []
             "schwabot=schwabot.cli:main",
             "schwabot-hub=schwabot.integration_hub:main",
             "schwabot-tensor=schwabot.tensor_cli:main",
@@ -104,7 +104,7 @@ setup(
     author="Schwabot Team",
     author_email="team@schwabot.com",
     url="https://github.com/schwabot/schwabot",
-    classifiers=[
+    classifiers=[]
         "Development Status :: 4 - Beta",
         "Intended Audience :: Financial and Insurance Industry",
         "License :: OSI Approved :: MIT License",

@@ -3,13 +3,17 @@ import math
 import time
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
-
-import cupy as cp
+from typing import Any, Dict, List, Optional
 import numpy as np
 
-from .clean_math_foundation import BitPhase, CleanMathFoundation, ThermalState
-from .zpe_zbe_core import QuantumSyncStatus, ZBEBalance, ZPEVector
+try:
+    import cupy as cp
+    CUPY_AVAILABLE = True
+except ImportError:
+    import numpy as cp
+    CUPY_AVAILABLE = False
+
+from .clean_math_foundation import CleanMathFoundation
 
 #!/usr/bin/env python3
 """
@@ -27,6 +31,7 @@ This module implements:
 
 # CUDA Integration with Fallback
 try:
+    import cupy as cp
     USING_CUDA = True
     _backend = 'cupy (GPU)'
     xp = cp
@@ -114,7 +119,7 @@ class ChronoRecursiveLogicFunction:
     Where:
     - τ: Elapsed tick time since last successful strategy hash
     - ψ: Current strategy state vector
-    - ∇ψ: Spatial gradient of strategy shift (profit curve directionality)
+    - ∇ψ: Spatial gradient of strategy shift (profit curve, directionality)
     - Δₜ: Tick-phase decay offset for alignment
     - E: Entropy or error accumulation across logic pathways
     - Ψₙ(τ): Recursive state propagation function at time τ
@@ -133,15 +138,9 @@ class ChronoRecursiveLogicFunction:
 
     def _create_default_state(self) -> CRLFState:
         """Create a default CRLF state."""
-        return CRLFState(
-            tau=0.0,
-            psi=np.array([0.5, 0.5, 0.5, 0.5]),  # 4D strategy vector
-            delta_t=0.0,
-            entropy=0.1,
-        )
+        return CRLFState()
 
-    def compute_crlf(
-        self,
+    def compute_crlf(self,
         strategy_vector: np.ndarray,
         profit_curve: np.ndarray,
         market_entropy: float,
@@ -187,15 +186,14 @@ class ChronoRecursiveLogicFunction:
             self._update_state_history(psi_n, entropy_updated, crlf_output)
 
             # Create response
-            response = CRLFResponse(
-                crlf_output=crlf_output,
-                trigger_state=trigger_state,
-                psi_n=psi_n,
-                entropy_updated=entropy_updated,
-                recursion_depth=self.state.recursion_depth,
-                confidence=self._compute_confidence(crlf_output, entropy_updated),
-                recommendations=recommendations,
-            )
+            response = CRLFResponse()
+            response.crlf_output = crlf_output
+            response.trigger_state = trigger_state
+            response.psi_n = psi_n
+            response.entropy_updated = entropy_updated
+            response.recursion_depth = self.state.recursion_depth
+            response.confidence = self._compute_confidence(crlf_output, entropy_updated)
+            response.recommendations = recommendations
 
             # Store execution history
             self.execution_history.append(response)
@@ -277,17 +275,19 @@ class ChronoRecursiveLogicFunction:
         strategy_gradient = np.zeros(len(self.state.psi))
 
         # Simple mapping: use profit trend to adjust strategy weights
-        avg_profit_trend = np.mean(profit_gradient[-5:]) if len(profit_gradient) >= 5 else np.mean(profit_gradient)
+        avg_profit_trend = (
+            np.mean(profit_gradient[-5:]) if len(profit_gradient) >= 5 else np.mean(profit_gradient)
+        )
 
         # Adjust strategy vector based on profit trend
         if avg_profit_trend > 0:
             # Positive trend - increase aggressive strategies
             strategy_gradient[0] = 0.1  # Momentum
-            strategy_gradient[1] = 0.05  # Scalping
+            strategy_gradient[1] = 0.5  # Scalping
         else:
             # Negative trend - increase conservative strategies
             strategy_gradient[2] = 0.1  # Mean reversion
-            strategy_gradient[3] = 0.05  # Swing
+            strategy_gradient[3] = 0.5  # Swing
 
         return strategy_gradient
 
@@ -305,9 +305,7 @@ class ChronoRecursiveLogicFunction:
             delta_psi = 0.0
 
         # Update entropy with exponential decay
-        new_entropy = self.state.lambda_decay * self.state.entropy + (1 - self.state.lambda_decay) * (
-            market_entropy + delta_psi
-        )
+        new_entropy = self.state.lambda_decay * self.state.entropy + (1 - self.state.lambda_decay) * (market_entropy + delta_psi)
 
         return np.clip(new_entropy, 0.0, 1.0)
 
@@ -351,38 +349,31 @@ class ChronoRecursiveLogicFunction:
 
     def _generate_recommendations(self, crlf_output: float, trigger_state: CRLFTriggerState) -> Dict[str, Any]:
         """Generate recommendations based on CRLF output and trigger state."""
-        recommendations = {
-            "action": trigger_state.value,
-            "confidence": self._compute_confidence(crlf_output, self.state.entropy),
-            "risk_adjustment": self._compute_risk_adjustment(crlf_output),
-            "strategy_weights": self._compute_strategy_weights(crlf_output),
-            "temporal_urgency": self._compute_temporal_urgency(crlf_output),
-        }
+        recommendations = {}
+        recommendations["action"] = trigger_state.value
+        recommendations["confidence"] = self._compute_confidence(crlf_output, self.state.entropy)
+        recommendations["risk_adjustment"] = self._compute_risk_adjustment(crlf_output)
+        recommendations["strategy_weights"] = self._compute_strategy_weights(crlf_output)
+        recommendations["temporal_urgency"] = self._compute_temporal_urgency(crlf_output)
 
         # Add state-specific recommendations
         if trigger_state == CRLFTriggerState.OVERRIDE:
-            recommendations.update(
-                {
-                    "override_matrix": "FastProfitOverrideΩ",
-                    "priority": "HIGH",
-                    "timeout": 300,  # 5 minutes
-                }
-            )
+            recommendations.update({
+                "override_matrix": "FastProfitOverrideΩ",
+                "priority": "HIGH",
+                "timeout": 300,  # 5 minutes
+            })
         elif trigger_state == CRLFTriggerState.RECURSIVE_RESET:
-            recommendations.update(
-                {
-                    "reset_cycle": "Recursive_Fallback_7D",
-                    "fallback_strategy": "Conservative_Mean_Reversion",
-                    "recovery_time": 604800,  # 7 days
-                }
-            )
+            recommendations.update({
+                "reset_cycle": "Recursive_Fallback_7D",
+                "fallback_strategy": "Conservative_Mean_Reversion",
+                "recovery_time": 604800,  # 7 days
+            })
         elif trigger_state == CRLFTriggerState.HOLD:
-            recommendations.update(
-                {
-                    "hold_duration": self._compute_hold_duration(crlf_output),
-                    "monitoring_frequency": "HIGH",
-                }
-            )
+            recommendations.update({
+                "hold_duration": self._compute_hold_duration(crlf_output),
+                "monitoring_frequency": "HIGH",
+            })
 
         return recommendations
 
@@ -470,7 +461,9 @@ class ChronoRecursiveLogicFunction:
             self.state.recursion_depth = 0
             self.state.strategy_corrections += 1
         else:
-            self.state.recursion_depth = min(self.state.recursion_depth + 1, self.state.max_recursion_depth)
+            self.state.recursion_depth = min(
+                self.state.recursion_depth + 1, self.state.max_recursion_depth
+            )
 
     def _compute_strategy_alignment(self, response: CRLFResponse) -> float:
         """Compute strategy alignment score."""
@@ -480,19 +473,19 @@ class ChronoRecursiveLogicFunction:
 
     def _create_fallback_response(self) -> CRLFResponse:
         """Create a fallback response when computation fails."""
-        return CRLFResponse(
-            crlf_output=-1.0,
-            trigger_state=CRLFTriggerState.RECURSIVE_RESET,
-            psi_n=self.state.psi.copy(),
-            entropy_updated=1.0,
-            recursion_depth=0,
-            confidence=0.0,
-            recommendations={
-                "action": "recursive_reset",
-                "fallback_strategy": "Conservative_Mean_Reversion",
-                "error": "Computation failed",
-            },
-        )
+        response = CRLFResponse()
+        response.crlf_output = -1.0
+        response.trigger_state = CRLFTriggerState.RECURSIVE_RESET
+        response.psi_n = self.state.psi.copy()
+        response.entropy_updated = 1.0
+        response.recursion_depth = 0
+        response.confidence = 0.0
+        response.recommendations = {
+            "action": "recursive_reset",
+            "fallback_strategy": "Conservative_Mean_Reversion",
+            "error": "Computation failed",
+        }
+        return response
 
     def get_performance_summary(self) -> Dict[str, Any]:
         """Get comprehensive performance summary."""
@@ -581,7 +574,7 @@ if __name__ == "__main__":
 
     print("CRLF Output: {0:.4f}".format(response.crlf_output))
     print("Trigger State: {0}".format(response.trigger_state.value))
-    print("Confidence: {0:.3f}".format(response.confidence))
+    print("Confidence: {0:.2f}".format(response.confidence))
     print("Recommendations: {0}".format(response.recommendations))
 
     # Get performance summary

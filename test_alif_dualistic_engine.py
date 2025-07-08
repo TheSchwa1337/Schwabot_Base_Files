@@ -1,5 +1,5 @@
 import numpy as np
-        import traceback
+import traceback
 from core.dualistic_thought_engines import DualisticThoughtEngines, DualisticState
 from typing import Dict, Any
 import os
@@ -13,7 +13,7 @@ import time
 ALIF Dualistic State Engine Test Script
 =======================================
 
-This script demonstrates the concrete implementation of the ALIF (Adaptive Learning
+This script demonstrates the concrete implementation of the ALIF (Adaptive, Learning)
 Interference Filter) dualistic state engine across various market scenarios.
 
 Features tested:
@@ -35,40 +35,40 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "core"))
 def create_market_data():-> Dict[str, Any]:
     """Create realistic market data for testing."""
 
-    market_data = {
+    market_data = {}
         "current_price": price,
-        "previous_price": price * (1 + random.uniform(-0.02, 0.02)),
+        "previous_price": price * (1 + random.uniform(-0.2, 0.2)),
         "volume": volume,
         "previous_volume": volume * random.uniform(0.8, 1.2),
         "average_volume": volume * random.uniform(0.9, 1.1),
         "rsi": rsi,
         "volatility": volatility,
         "price_momentum": momentum,
-        "macd_signal": random.uniform(-0.01, 0.01),
+        "macd_signal": random.uniform(-0.1, 0.1),
         "volume_change": random.uniform(-0.3, 0.3),
-        "moving_average": price * random.uniform(0.98, 1.02),
-        "previous_close": price * random.uniform(0.98, 1.02),
+        "moving_average": price * random.uniform(0.98, 1.2),
+        "previous_close": price * random.uniform(0.98, 1.2),
         "consensus_signal": random.choice(["buy", "sell", "hold", "neutral"]),
-        "price_history": [price * (1 + random.uniform(-0.05, 0.05)) for _ in range(20)],
+        "price_history": [price * (1 + random.uniform(-0.5, 0.5)) for _ in range(20)],
         "volume_history": [volume * random.uniform(0.7, 1.3) for _ in range(20)],
         "phase_data": [random.uniform(0, 2 * np.pi) for _ in range(4)],
     }
     # Add AI feedback if requested
     if include_ai_feedback:
-        market_data["ai_feedback"] = [
-            {
+        market_data["ai_feedback"] = []
+            {}
                 "model": "GPT-4",
                 "confidence": random.uniform(0.6, 0.9),
                 "weight": 0.4,
                 "prediction": random.choice(["bullish", "bearish", "neutral"]),
             },
-            {
+            {}
                 "model": "Claude-3",
                 "confidence": random.uniform(0.5, 0.8),
                 "weight": 0.3,
                 "prediction": random.choice(["bullish", "bearish", "neutral"]),
             },
-            {
+            {}
                 "model": "R1",
                 "confidence": random.uniform(0.7, 0.95),
                 "weight": 0.3,
@@ -77,13 +77,13 @@ def create_market_data():-> Dict[str, Any]:
         ]
     # Add error logs if requested
     if include_errors:
-        market_data["error_logs"] = [
-            {
+        market_data["error_logs"] = []
+            {}
                 "severity": random.uniform(0.1, 0.5),
                 "message": "API timeout",
                 "timestamp": time.time() - random.uniform(0, 3600),
             },
-            {
+            {}
                 "severity": random.uniform(0.2, 0.6),
                 "message": "Data inconsistency",
                 "timestamp": time.time() - random.uniform(0, 1800),
@@ -101,12 +101,12 @@ def test_alif_basic_functionality():
     engine = DualisticThoughtEngines()
 
     # Create test market data
-    market_data = create_market_data(
+    market_data = create_market_data()
         price=50000.0,
         volume=1000000.0,
         rsi=45.0,
         volatility=0.3,
-        momentum=0.02,
+        momentum=0.2,
         include_ai_feedback=True,
         include_errors=False,
     )
@@ -125,7 +125,7 @@ def test_alif_basic_functionality():
         print(f"ALIF Routing: {thought_vector.alif_feedback.routing_target}")
         print(f"Volume Delta: {thought_vector.alif_feedback.volume_delta:.3f}")
         print(f"Resonance Delta: {thought_vector.alif_feedback.resonance_delta:.3f}")
-        print(
+        print()
             f"AI Feedback Score: {thought_vector.alif_feedback.ai_feedback_score:.3f}"
         )
 
@@ -140,10 +140,10 @@ def test_alif_state_activation():
     engine = DualisticThoughtEngines()
 
     # Test scenarios that should activate ALIF
-    scenarios = [
-        (
+    scenarios = []
+        ()
             "High AI Confidence",
-            create_market_data(
+            create_market_data()
                 price=50000.0,
                 rsi=30.0,
                 volatility=0.8,
@@ -151,9 +151,9 @@ def test_alif_state_activation():
                 include_ai_feedback=True,
             ),
         ),
-        (
+        ()
             "High Volume",
-            create_market_data(
+            create_market_data()
                 price=50000.0,
                 volume=2000000.0,
                 rsi=70.0,
@@ -161,9 +161,9 @@ def test_alif_state_activation():
                 include_ai_feedback=True,
             ),
         ),
-        (
+        ()
             "Error Correction",
-            create_market_data(
+            create_market_data()
                 price=50000.0,
                 rsi=50.0,
                 volatility=0.4,
@@ -199,7 +199,7 @@ def test_alif_memory_and_learning():
     engine = DualisticThoughtEngines()
 
     # Add some AI feedback
-    engine.add_ai_feedback(
+    engine.add_ai_feedback()
         {"model": "GPT-4", "confidence": 0.85, "prediction": "bullish"}
     )
 
@@ -208,7 +208,7 @@ def test_alif_memory_and_learning():
 
     # Process multiple market data points
     for i in range(5):
-        market_data = create_market_data(
+        market_data = create_market_data()
             price=50000.0 + i * 100,
             volume=1000000.0 + i * 50000,
             rsi=45.0 + i * 5,
@@ -216,7 +216,7 @@ def test_alif_memory_and_learning():
         )
 
         thought_vector = engine.process_market_data(market_data)
-        print(
+        print()
             f"Iteration {i + 1}: ALIF Score = {thought_vector.alif_score:.3f}, State = {thought_vector.state.value}"
         )
 
@@ -242,7 +242,7 @@ def test_alif_configuration():
     engine.set_alif_threshold(0.5)
 
     # Test weight configuration
-    new_weights = {
+    new_weights = {}
         "volume": 0.5,
         "resonance": 0.2,
         "ai_feedback": 0.2,
@@ -276,16 +276,16 @@ def test_alif_performance_metrics():
     engine = DualisticThoughtEngines()
 
     # Process multiple scenarios to generate metrics
-    scenarios = [
-        ("Bullish", create_market_data(price=50000.0, rsi=30.0, momentum=0.05)),
-        ("Bearish", create_market_data(price=50000.0, rsi=70.0, momentum=-0.05)),
+    scenarios = []
+        ("Bullish", create_market_data(price=50000.0, rsi=30.0, momentum=0.5)),
+        ("Bearish", create_market_data(price=50000.0, rsi=70.0, momentum=-0.5)),
         ("Neutral", create_market_data(price=50000.0, rsi=50.0, momentum=0.0)),
         ("High Volatility", create_market_data(price=50000.0, volatility=0.8)),
         ("Low Volume", create_market_data(price=50000.0, volume=500000.0)),
     ]
     for scenario_name, market_data in scenarios:
         thought_vector = engine.process_market_data(market_data)
-        print(
+        print()
             f"{scenario_name}: ALIF Score = {thought_vector.alif_score:.3f}, Decision = {thought_vector.decision}"
         )
 
@@ -318,19 +318,19 @@ def test_alif_force_state():
     engine = DualisticThoughtEngines()
 
     # Create market data
-    market_data = create_market_data(
+    market_data = create_market_data()
         price=50000.0, rsi=50.0, volatility=0.3, include_ai_feedback=True
     )
 
     # Normal processing
     normal_vector = engine.process_market_data(market_data)
-    print(
+    print()
         f"Normal Processing - State: {normal_vector.state.value}, ALIF Score: {normal_vector.alif_score:.3f}"
     )
 
     # Force ALIF state
     forced_vector = engine.force_alif_state(market_data)
-    print(
+    print()
         f"Forced ALIF - State: {forced_vector.state.value}, ALIF Score: {forced_vector.alif_score:.3f}"
     )
 

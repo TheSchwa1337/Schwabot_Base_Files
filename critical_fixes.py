@@ -88,11 +88,11 @@ class CriticalFixer:
     def _fix_docstrings(): -> str:
         """Fix malformed docstrings."""
         # Fix triple quote issues
-        content = re.sub(r'""""""', '"""', content)
-        content = re.sub(r'""""', '"""', content)
+        content = re.sub(r'""""""', '"""', content)"
+        content = re.sub(r'""""', '"""', content)"
 
         # Fix emergency placeholder docstrings
-        content = re.sub(
+        content = re.sub()
             r'""""""Emergency placeholder docstring\.""""""',
             '"""Placeholder implementation."""',
             content,
@@ -103,7 +103,7 @@ class CriticalFixer:
     def _fix_syntax_errors(): -> str:
         """Fix common syntax errors."""
         # Fix malformed string literals
-        content = re.sub(r'""""""""', '"""', content)
+        content = re.sub(r'""""""""', '"""', content)"
         content = re.sub(r'"""""""', '"""', content)
 
         # Fix malformed function definitions
@@ -117,7 +117,7 @@ class CriticalFixer:
     def _implement_stub_functions(): -> str:
         """Implement stub functions with proper fallbacks."""
         # Replace pass statements with proper implementations
-        content = re.sub(
+        content = re.sub()
             r'def (\w+)\([^)]*\):\s*"""Function implementation pending\."""\s*pass',
             r'def \1(self, *args, **kwargs):\n        """Implementation with fallback."""\n        try:\n            # Implementation here\n            return None\n        except Exception as e:\n            logger.warning(f"\\1 failed: {e}")\n            return None',
             content,
@@ -129,23 +129,23 @@ class CriticalFixer:
         """Fix GPU imports with proper fallbacks."""
         # Add proper try/except blocks for GPU imports
         if "import cupy" in content and "try:" not in content:
-            content = content.replace(
+            content = content.replace()
                 "import cupy as cp",
-                """try:
+                """try:"
     GPU_AVAILABLE = True
-except ImportError:
+    except ImportError:
     GPU_AVAILABLE = False
-    cp = None""",
+    cp = None""","
             )
 
         if "import numba" in content and "try:" not in content:
-            content = content.replace(
+            content = content.replace()
                 "import numba",
-                """try:
+                """try:"
     NUMBA_AVAILABLE = True
-except ImportError:
+    except ImportError:
     NUMBA_AVAILABLE = False
-    numba = None""",
+    numba = None""","
             )
 
         return content
@@ -170,7 +170,7 @@ except ImportError:
         """Remove files in trash directories to clean up the codebase."""
         logger.info("Removing trash files...")
 
-        trash_dirs = [
+        trash_dirs = []
             self.root_dir / "trash",
             self.root_dir / "cleanup_backup",
             self.root_dir / "backup_memory_stack",
@@ -208,10 +208,10 @@ except ImportError:
                     # Check if the import is actually used
                     if "unified_math." not in content:
                         # Remove unused import
-                        content = content.replace(
+                        content = content.replace()
                             "from core.unified_math_system import unified_math\n", ""
                         )
-                        content = content.replace(
+                        content = content.replace()
                             "from core.unified_math_system import unified_math", ""
                         )
 
@@ -234,7 +234,7 @@ except ImportError:
 
         tensor_algebra_file = tensor_algebra_dir / "unified_tensor_algebra.py"
         if not tensor_algebra_file.exists():
-            tensor_algebra_content = '''"""
+            tensor_algebra_content = '''"""'
 Unified Tensor Algebra Module
 ============================
 

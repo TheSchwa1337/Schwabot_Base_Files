@@ -1,5 +1,5 @@
-    from core.enhanced_live_execution_mapper import (
-    from core.profit_optimization_engine import (
+from core.enhanced_live_execution_mapper import ()
+from core.profit_optimization_engine import ()
 from unittest.mock import MagicMock
 import logging
 import time
@@ -7,7 +7,7 @@ import unittest
 
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Test Suite for Enhanced Profit Optimization Integration.
+"""Test Suite for Enhanced Profit Optimization Integration."
 
 This test suite validates the complete integration of:
 1. Profit optimization engine
@@ -21,7 +21,7 @@ Tests cover both successful and failure scenarios to ensure robust operation.
 
 
 # Import the systems to test
-try:
+    try:
         ProfitOptimizationEngine,
         ProfitVector,
         OptimizationResult,
@@ -30,7 +30,7 @@ try:
     )
 
     PROFIT_ENGINE_AVAILABLE = True
-except ImportError:
+    except ImportError:
     PROFIT_ENGINE_AVAILABLE = False
 
 try:
@@ -40,7 +40,7 @@ try:
     )
 
     ENHANCED_MAPPER_AVAILABLE = True
-except ImportError:
+    except ImportError:
     ENHANCED_MAPPER_AVAILABLE = False
 
 # Configure logging for tests
@@ -59,11 +59,11 @@ class TestProfitOptimizationEngine(unittest.TestCase):
         self.engine = ProfitOptimizationEngine()
         self.sample_btc_price = 45000.0
         self.sample_usdc_volume = 1500000.0
-        self.sample_market_data = {
+        self.sample_market_data = {}
             "price_history": [44800, 44900, 45000, 45100, 45000],
             "volume_history": [1400000, 1450000, 1500000, 1550000, 1500000],
             "avg_volume": 1500000.0,
-            "volatility": 0.025,
+            "volatility": 0.25,
             "phase": "expansion",
         }
 
@@ -76,7 +76,7 @@ class TestProfitOptimizationEngine(unittest.TestCase):
 
     def test_profit_optimization_basic(self):
         """Test basic profit optimization functionality."""
-        result = self.engine.optimize_profit(
+        result = self.engine.optimize_profit()
             btc_price=self.sample_btc_price,
             usdc_volume=self.sample_usdc_volume,
             market_data=self.sample_market_data,
@@ -90,7 +90,7 @@ class TestProfitOptimizationEngine(unittest.TestCase):
 
     def test_profit_vector_components(self):
         """Test profit vector contains all required mathematical components."""
-        result = self.engine.optimize_profit(
+        result = self.engine.optimize_profit()
             btc_price=self.sample_btc_price,
             usdc_volume=self.sample_usdc_volume,
             market_data=self.sample_market_data,
@@ -118,22 +118,22 @@ class TestProfitOptimizationEngine(unittest.TestCase):
     def test_confidence_score_calculation(self):
         """Test confidence score calculation logic."""
         # Test with high confidence inputs
-        high_conf_result = self.engine.optimize_profit(
+        high_conf_result = self.engine.optimize_profit()
             btc_price=self.sample_btc_price,
             usdc_volume=self.sample_usdc_volume * 2,  # Higher volume
-            market_data={
+            market_data={}
                 **self.sample_market_data,
-                "volatility": 0.01,  # Lower volatility
+                "volatility": 0.1,  # Lower volatility
             },
         )
 
         # Test with low confidence inputs
-        low_conf_result = self.engine.optimize_profit(
+        low_conf_result = self.engine.optimize_profit()
             btc_price=self.sample_btc_price,
             usdc_volume=self.sample_usdc_volume * 0.5,  # Lower volume
-            market_data={
+            market_data={}
                 **self.sample_market_data,
-                "volatility": 0.05,  # Higher volatility
+                "volatility": 0.5,  # Higher volatility
             },
         )
 
@@ -148,7 +148,7 @@ class TestProfitOptimizationEngine(unittest.TestCase):
 
         # Run multiple optimizations
         for _ in range(3):
-            self.engine.optimize_profit(
+            self.engine.optimize_profit()
                 btc_price=self.sample_btc_price,
                 usdc_volume=self.sample_usdc_volume,
                 market_data=self.sample_market_data,
@@ -156,7 +156,7 @@ class TestProfitOptimizationEngine(unittest.TestCase):
 
         updated_stats = self.engine.get_performance_summary()
 
-        self.assertGreater(
+        self.assertGreater()
             updated_stats["total_optimizations"], initial_stats["total_optimizations"]
         )
         self.assertIn("avg_confidence", updated_stats)
@@ -171,17 +171,17 @@ class TestEnhancedLiveExecutionMapper(unittest.TestCase):
         if not ENHANCED_MAPPER_AVAILABLE:
             self.skipTest("Enhanced live execution mapper not available")
 
-        self.mapper = EnhancedLiveExecutionMapper(
+        self.mapper = EnhancedLiveExecutionMapper()
             simulation_mode=True, initial_portfolio_usdc=100000.0
         )
 
         self.sample_btc_price = 45000.0
         self.sample_usdc_volume = 2000000.0
-        self.sample_market_data = {
+        self.sample_market_data = {}
             "price_history": [44500, 44700, 44900, 45100, 45000],
             "volume_history": [1800000, 1900000, 2000000, 2100000, 2000000],
             "avg_volume": 2000000.0,
-            "volatility": 0.02,
+            "volatility": 0.2,
             "phase": "expansion",
             "trend": "upward",
         }
@@ -191,14 +191,14 @@ class TestEnhancedLiveExecutionMapper(unittest.TestCase):
         self.assertIsInstance(self.mapper, EnhancedLiveExecutionMapper)
         self.assertEqual(self.mapper.simulation_mode, True)
         self.assertEqual(self.mapper.initial_portfolio_usdc, 100000.0)
-        self.assertIsInstance(
+        self.assertIsInstance()
             self.mapper.performance_metrics, TradingPerformanceMetrics
         )
         self.assertIsInstance(self.mapper.enhanced_states, dict)
 
     def test_enhanced_execution_basic(self):
         """Test basic enhanced execution functionality."""
-        result = self.mapper.execute_optimized_btc_trade(
+        result = self.mapper.execute_optimized_btc_trade()
             btc_price=self.sample_btc_price,
             usdc_volume=self.sample_usdc_volume,
             market_data=self.sample_market_data,
@@ -208,9 +208,9 @@ class TestEnhancedLiveExecutionMapper(unittest.TestCase):
         self.assertEqual(result.asset, "BTC/USDC")
         self.assertEqual(result.btc_price, self.sample_btc_price)
         self.assertEqual(result.usdc_volume, self.sample_usdc_volume)
-        self.assertIn(
+        self.assertIn()
             result.status,
-            [
+            []
                 "executed_successfully",
                 "rejected_mathematical",
                 "rejected_optimization",
@@ -223,13 +223,13 @@ class TestEnhancedLiveExecutionMapper(unittest.TestCase):
     def test_mathematical_validation(self):
         """Test mathematical threshold validation."""
         # Test with a state that should pass validation
-        good_state = EnhancedExecutionState(
+        good_state = EnhancedExecutionState()
             trade_id="test_good",
             glyph="",
             asset="BTC/USDC",
             initial_signal=None,
             mathematical_confidence=0.8,
-            profit_potential=0.01,
+            profit_potential=0.1,
             entropy_score=0.7,
             phase_alignment=0.8,
         )
@@ -238,13 +238,13 @@ class TestEnhancedLiveExecutionMapper(unittest.TestCase):
         self.assertTrue(result)
 
         # Test with a state that should fail validation
-        bad_state = EnhancedExecutionState(
+        bad_state = EnhancedExecutionState()
             trade_id="test_bad",
             glyph="",
             asset="BTC/USDC",
             initial_signal=None,
             mathematical_confidence=0.5,  # Too low
-            profit_potential=0.001,  # Too low
+            profit_potential=0.01,  # Too low
             entropy_score=0.4,  # Too low
             phase_alignment=0.5,  # Too low
         )
@@ -254,7 +254,7 @@ class TestEnhancedLiveExecutionMapper(unittest.TestCase):
 
     def test_position_sizing(self):
         """Test enhanced position sizing calculation."""
-        test_state = EnhancedExecutionState(
+        test_state = EnhancedExecutionState()
             trade_id="test_sizing",
             glyph="",
             asset="BTC/USDC",
@@ -262,45 +262,45 @@ class TestEnhancedLiveExecutionMapper(unittest.TestCase):
             btc_price=self.sample_btc_price,
             usdc_volume=self.sample_usdc_volume,
             mathematical_confidence=0.8,
-            profit_potential=0.02,
+            profit_potential=0.2,
         )
 
         # Mock profit vector for testing
         test_state.profit_vector = MagicMock()
-        test_state.profit_vector.position_size = 0.05  # 5% of portfolio
+        test_state.profit_vector.position_size = 0.5  # 5% of portfolio
 
-        position_size = self.mapper._calculate_enhanced_position_size(
+        position_size = self.mapper._calculate_enhanced_position_size()
             test_state, self.sample_market_data
         )
 
         self.assertIsInstance(position_size, float)
-        self.assertGreaterEqual(
+        self.assertGreaterEqual()
             position_size, self.mapper.btc_usdc_config["min_trade_size_btc"]
         )
-        self.assertLessEqual(
+        self.assertLessEqual()
             position_size, self.mapper.btc_usdc_config["max_trade_size_btc"]
         )
 
     def test_risk_validation(self):
         """Test enhanced risk validation."""
-        test_state = EnhancedExecutionState(
+        test_state = EnhancedExecutionState()
             trade_id="test_risk",
             glyph="",
             asset="BTC/USDC",
             initial_signal=None,
             btc_price=self.sample_btc_price,
-            risk_adjusted_size=0.01,  # Small safe position
+            risk_adjusted_size=0.1,  # Small safe position
             entropy_score=0.7,
             drift_weight=0.3,
         )
 
         # Test with safe market conditions
-        safe_market_data = {
+        safe_market_data = {}
             **self.sample_market_data,
-            "volatility": 0.02,  # Moderate volatility
+            "volatility": 0.2,  # Moderate volatility
         }
 
-        is_valid, message = self.mapper._validate_enhanced_risk(
+        is_valid, message = self.mapper._validate_enhanced_risk()
             test_state, safe_market_data
         )
 
@@ -308,12 +308,12 @@ class TestEnhancedLiveExecutionMapper(unittest.TestCase):
         self.assertIn("passed", message.lower())
 
         # Test with risky market conditions
-        risky_market_data = {
+        risky_market_data = {}
             **self.sample_market_data,
-            "volatility": 0.08,  # High volatility
+            "volatility": 0.8,  # High volatility
         }
 
-        is_valid, message = self.mapper._validate_enhanced_risk(
+        is_valid, message = self.mapper._validate_enhanced_risk()
             test_state, risky_market_data
         )
 
@@ -324,7 +324,7 @@ class TestEnhancedLiveExecutionMapper(unittest.TestCase):
         """Test performance metrics tracking."""
 
         # Execute a trade
-        self.mapper.execute_optimized_btc_trade(
+        self.mapper.execute_optimized_btc_trade()
             btc_price=self.sample_btc_price,
             usdc_volume=self.sample_usdc_volume,
             market_data=self.sample_market_data,
@@ -343,7 +343,7 @@ class TestEnhancedLiveExecutionMapper(unittest.TestCase):
         """Test execution state cleanup functionality."""
         # Fill up the state history
         for i in range(self.mapper.max_state_history + 10):
-            state = EnhancedExecutionState(
+            state = EnhancedExecutionState()
                 trade_id=f"test_{i}",
                 glyph="",
                 asset="BTC/USDC",
@@ -356,7 +356,7 @@ class TestEnhancedLiveExecutionMapper(unittest.TestCase):
         self.mapper._cleanup_state_history()
 
         # Check that history was trimmed
-        self.assertLessEqual(
+        self.assertLessEqual()
             len(self.mapper.enhanced_states), self.mapper.max_state_history
         )
 
@@ -366,25 +366,25 @@ class TestIntegrationScenarios(unittest.TestCase):
 
     def setUp(self):
         """Set up integration test fixtures."""
-        if not (PROFIT_ENGINE_AVAILABLE and ENHANCED_MAPPER_AVAILABLE):
+        if not (PROFIT_ENGINE_AVAILABLE and, ENHANCED_MAPPER_AVAILABLE):
             self.skipTest("Required components not available for integration tests")
 
-        self.mapper = EnhancedLiveExecutionMapper(
+        self.mapper = EnhancedLiveExecutionMapper()
             simulation_mode=True, initial_portfolio_usdc=50000.0
         )
 
     def test_profitable_bull_market_scenario(self):
         """Test execution in a profitable bull market scenario."""
-        bull_market_data = {
+        bull_market_data = {}
             "price_history": [44000, 44200, 44500, 44800, 45000, 45200],
             "volume_history": [2000000] * 6,
             "avg_volume": 2000000.0,
-            "volatility": 0.015,  # Low volatility
+            "volatility": 0.15,  # Low volatility
             "phase": "expansion",
             "trend": "strong_upward",
         }
 
-        result = self.mapper.execute_optimized_btc_trade(
+        result = self.mapper.execute_optimized_btc_trade()
             btc_price=45200.0, usdc_volume=2500000.0, market_data=bull_market_data
         )
 
@@ -401,16 +401,16 @@ class TestIntegrationScenarios(unittest.TestCase):
 
     def test_volatile_market_scenario(self):
         """Test execution in a volatile market scenario."""
-        volatile_market_data = {
+        volatile_market_data = {}
             "price_history": [45000, 44500, 45500, 44200, 45800, 44000],
             "volume_history": [3000000] * 6,
             "avg_volume": 3000000.0,
-            "volatility": 0.06,  # High volatility
+            "volatility": 0.6,  # High volatility
             "phase": "transition",
             "trend": "chaotic",
         }
 
-        result = self.mapper.execute_optimized_btc_trade(
+        result = self.mapper.execute_optimized_btc_trade()
             btc_price=44000.0, usdc_volume=3500000.0, market_data=volatile_market_data
         )
 
@@ -424,16 +424,16 @@ class TestIntegrationScenarios(unittest.TestCase):
 
     def test_low_volume_scenario(self):
         """Test execution in a low volume scenario."""
-        low_volume_data = {
+        low_volume_data = {}
             "price_history": [45000, 45050, 45100, 45080, 45120],
             "volume_history": [500000] * 5,  # Low volume
             "avg_volume": 500000.0,
-            "volatility": 0.02,
+            "volatility": 0.2,
             "phase": "consolidation",
             "trend": "sideways",
         }
 
-        result = self.mapper.execute_optimized_btc_trade(
+        result = self.mapper.execute_optimized_btc_trade()
             btc_price=45120.0,
             usdc_volume=400000.0,  # Below average
             market_data=low_volume_data,
@@ -460,7 +460,7 @@ def run_comprehensive_test_suite():
     print(f"  Profit Engine: {'✅' if PROFIT_ENGINE_AVAILABLE else '❌'}")
     print(f"  Enhanced Mapper: {'✅' if ENHANCED_MAPPER_AVAILABLE else '❌'}")
 
-    if not (PROFIT_ENGINE_AVAILABLE and ENHANCED_MAPPER_AVAILABLE):
+    if not (PROFIT_ENGINE_AVAILABLE and, ENHANCED_MAPPER_AVAILABLE):
         print("⚠️  Some components unavailable - running limited tests")
 
     # Create test suite
@@ -485,7 +485,7 @@ def run_comprehensive_test_suite():
     print(f"  Tests Run: {result.testsRun}")
     print(f"  Failures: {len(result.failures)}")
     print(f"  Errors: {len(result.errors)}")
-    print(
+    print()
         f"  Success Rate: {((result.testsRun - len(result.failures) - len(result.errors)) / max(1, result.testsRun)):.1%}"
     )
 

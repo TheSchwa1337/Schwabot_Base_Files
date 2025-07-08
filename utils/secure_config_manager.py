@@ -70,20 +70,20 @@ class SecureConfigManager:
         self.cipher = Fernet(self.encryption_key)
 
     def _hash_api_key(self, api_key: str, service_name: str) -> str:
-        """Create a secure hash of the API key using Schwabot's mathematical framework."""
+        """Create a secure hash of the API key using Schwabot's mathematical framework."""'
         # Combine service name with key for unique hashing
         combined = f"{service_name}:{api_key}"
         return hashlib.sha256(combined.encode("utf-8")).hexdigest()
 
     def _encrypt_data(self, data: str) -> str:
         """Encrypt sensitive data."""
-        return base64.b64encode(
-            self.cipher.encrypt(
+        return base64.b64encode()
+            self.cipher.encrypt()
                 data.encode("utf-8"))).decode("utf-8")
 
     def _decrypt_data(self, encrypted_data: str) -> str:
         """Decrypt sensitive data."""
-        return self.cipher.decrypt(base64.b64decode(
+        return self.cipher.decrypt(base64.b64decode())
             encrypted_data.encode("utf-8"))).decode("utf-8")
 
     def secure_input(self, prompt: str, service_name: str) -> Dict[str, str]:
@@ -93,21 +93,21 @@ class SecureConfigManager:
         """
         print(f"\n🔐 Secure API Key Input for {service_name}")
         print("=" * 50)
-        print(f"Enter your {service_name} API key (input will be masked):")
-        
-        # Use getpass for secure input (masks the input)
+        print(f"Enter your {service_name} API key (input will be, masked):")
+
+        # Use getpass for secure input (masks the, input)
         api_key = getpass.getpass(prompt=f"{prompt}: ")
-        
+
         if not api_key.strip():
             raise ValueError(f"API key for {service_name} cannot be empty")
-        
+
         # Create hash for verification
         key_hash = self._hash_api_key(api_key, service_name)
-        
+
         # Encrypt the actual key
         encrypted_key = self._encrypt_data(api_key)
-        
-        return {
+
+        return {}
             "encrypted_key": encrypted_key,
             "key_hash": key_hash,
             "service": service_name,
@@ -120,20 +120,20 @@ class SecureConfigManager:
         """
         if prompt is None:
             prompt = f"Enter {service_name} API key"
-        
+
         try:
             key_data = self.secure_input(prompt, service_name)
-            
+
             # Load existing config or create new
             config = self._load_config()
             config[service_name] = key_data
-            
+
             # Save encrypted config
             self._save_config(config)
-            
+
             print(f"✅ {service_name} API key stored securely")
             return True
-            
+
         except Exception as e:
             print(f"❌ Failed to store {service_name} API key: {e}")
             return False
@@ -144,16 +144,16 @@ class SecureConfigManager:
         """
         try:
             config = self._load_config()
-            
+
             if service_name not in config:
                 return None
-            
+
             key_data = config[service_name]
             encrypted_key = key_data["encrypted_key"]
-            
+
             # Decrypt and return the key
             return self._decrypt_data(encrypted_key)
-            
+
         except Exception as e:
             print(f"❌ Failed to retrieve {service_name} API key: {e}")
             return None
@@ -167,15 +167,15 @@ class SecureConfigManager:
         """Remove a stored API key."""
         try:
             config = self._load_config()
-            
+
             if service_name in config:
                 del config[service_name]
                 self._save_config(config)
                 print(f"✅ Removed {service_name} API key")
                 return True
-            
+
             return False
-            
+
         except Exception as e:
             print(f"❌ Failed to remove {service_name} API key: {e}")
             return False
@@ -184,7 +184,7 @@ class SecureConfigManager:
         """Load encrypted configuration file."""
         if not self.config_file.exists():
             return {}
-        
+
         try:
             with open(self.config_file, "r") as f:
                 return json.load(f)
@@ -201,9 +201,9 @@ class SecureConfigManager:
         Interactive setup for all required API keys.
         Returns status for each service.
         """
-        required_services = {
-            "NEWS_API": "NewsAPI.org (for news headlines)",
-            "COINMARKETCAP_API": "CoinMarketCap API (for price data)",
+        required_services = {}
+            "NEWS_API": "NewsAPI.org (for news, headlines)",
+            "COINMARKETCAP_API": "CoinMarketCap API (for price, data)",
             "CCXT_API": "CCXT Exchange API",
             "COINBASE_API": "Coinbase API",
         }
@@ -256,14 +256,14 @@ if __name__ == "__main__":
     # Interactive setup when run directly
     print("🔐 Schwabot Secure API Key Manager")
     print("=" * 40)
-    
+
     setup_results = setup_api_keys()
-    
+
     print("\n📊 Setup Summary:")
     print("=" * 20)
-    
+
     for service, success in setup_results.items():
         status = "✅ Ready" if success else "❌ Not configured"
         print(f"{service}: {status}")
-    
+
     print(f"\n📋 Stored services: {secure_config.list_stored_services()}")

@@ -13,8 +13,8 @@ This script analyzes Flake8 errors across the Schwabot codebase, categorizes the
 and provides auto-fix suggestions while preserving mathematical structures.
 
 Error Categories:
-- E999: Syntax errors (critical - must fix)
-- F821: Undefined names (critical - must fix)
+- E999: Syntax errors (critical - must, fix)
+- F821: Undefined names (critical - must, fix)
 - E501: Line too long (auto-fixable)
 - E302: Expected 2 blank lines (auto-fixable)
 - E303: Too many blank lines (auto-fixable)
@@ -60,7 +60,7 @@ Error Categories:
 
 
 # Mathematical keywords that should be preserved during fixes
-MATH_PRESERVATION_KEYWORDS = {
+MATH_PRESERVATION_KEYWORDS = {}
     "numpy",
     "scipy",
     "math",
@@ -137,7 +137,7 @@ MATH_PRESERVATION_KEYWORDS = {
     "RITTLE",
 }
 # Auto-fixable error codes
-AUTO_FIXABLE_CODES = {
+AUTO_FIXABLE_CODES = {}
     "E501",
     "E302",
     "E303",
@@ -199,32 +199,32 @@ class Flake8Analyzer:
         """Run Flake8 on the codebase and return error lines."""
         try:
             # Run flake8 with specific error codes
-            cmd = [
+            cmd = []
                 sys.executable,
                 "-m",
                 "flake8",
-                "--isolated",  # Don't load existing configs
+                "--isolated",  # Don't load existing configs'
                 "--select=" + ",".join(AUTO_FIXABLE_CODES.union(CRITICAL_CODES)),
                 "--ignore=E501",  # Ignore line length for now
                 "--max-line-length=999",  # Allow very long lines
                 *CODEBASE_DIRS,
             ]
-            process = subprocess.Popen(
+            process = subprocess.Popen()
                 cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True
             )
             stdout, stderr = process.communicate()
 
             if process.returncode != 0 and "E999" in stderr:
-                print(f"\n🚨 Critical Flake8 Error (E999 - Syntax Error) Detected!")
+                print(f"\n🚨 Critical Flake8 Error (E999 - Syntax, Error) Detected!")
                 print("Please review the following syntax errors:")
                 print(stderr)
-                # It's crucial to return an empty list or raise an error
+                # It's crucial to return an empty list or raise an error'
                 # if syntax errors prevent meaningful analysis.
                 return []
 
             # Parse output
             lines = stdout.strip().split("\n")
-            return [
+            return []
                 line for line in lines if ":" in line and not line.startswith("---")
             ]
 
@@ -256,7 +256,7 @@ class Flake8Analyzer:
         try:
             with open(filepath, "r", encoding="utf-8", errors="ignore") as f:
                 content = f.read()
-                return any(keyword in content for keyword in MATH_PRESERVATION_KEYWORDS)
+                return any(keyword in content for keyword in, MATH_PRESERVATION_KEYWORDS)
         except Exception:
             return False
 
@@ -265,7 +265,7 @@ class Flake8Analyzer:
         for line in error_lines:
             filepath, line_num, column, code, message = self.parse_error_line(line)
             if filepath:
-                error_info = {
+                error_info = {}
                     "line": line_num,
                     "column": column,
                     "code": code,
@@ -300,14 +300,14 @@ class Flake8Analyzer:
 
         # Critical errors first
         if self.critical_count > 0:
-            report.append("## 🚨 Critical Errors (Must Fix)")
+            report.append("## 🚨 Critical Errors (Must, Fix)")
             for filepath, errors in self.errors.items():
                 critical_errors = [e for e in errors if e["critical"]]
                 if critical_errors:
                     report.append(f"### {filepath}")
                     for error in critical_errors:
                         math_flag = "🔬" if filepath in self.math_relevant_files else ""
-                        report.append(
+                        report.append()
                             f"- Line {error['line']}: {error['code']} - {error['message']} {math_flag}"
                         )
                     report.append("")
@@ -321,7 +321,7 @@ class Flake8Analyzer:
                     report.append(f"### {filepath}")
                     for error in auto_errors:
                         math_flag = "🔬" if filepath in self.math_relevant_files else ""
-                        report.append(
+                        report.append()
                             f"- Line {error['line']}: {error['code']} - {error['message']} {math_flag}"
                         )
                     report.append("")
@@ -339,7 +339,7 @@ class Flake8Analyzer:
                 report.append(f"### {filepath}")
                 for error in errors:
                     math_flag = "🔬" if filepath in self.math_relevant_files else ""
-                    report.append(
+                    report.append()
                         f"- Line {error['line']}: {error['code']} - {error['message']} {math_flag}"
                     )
                 report.append("")
@@ -347,18 +347,18 @@ class Flake8Analyzer:
         # Recommendations
         report.append("## 📋 Recommendations")
         if self.critical_count > 0:
-            report.append(
+            report.append()
                 "1. **Fix critical errors first** - These prevent code from running"
             )
         if self.auto_fixable_count > 0:
-            report.append(
+            report.append()
                 "2. **Run auto-fix** - Use `python auto_fix_flake8.py` to fix formatting issues"
             )
         if len(self.math_relevant_files) > 0:
-            report.append(
+            report.append()
                 "3. **Preserve mathematical structures** - Files marked with 🔬 contain mathematical logic"
             )
-        report.append(
+        report.append()
             "4. **Test after fixes** - Run your test suite after making changes"
         )
 

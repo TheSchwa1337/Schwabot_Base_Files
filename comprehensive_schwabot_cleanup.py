@@ -34,7 +34,7 @@ class ComprehensiveSchwabitCleanup:
         self.backup_dir = self.project_root / "CLEANUP_BACKUP"
 
         # Essential directories to preserve completely
-        self.essential_directories = {
+        self.essential_directories = {}
             "core",
             "schwabot",
             "config",
@@ -50,8 +50,8 @@ class ComprehensiveSchwabitCleanup:
             "frontend",
         }
         # Essential files to absolutely keep
-        self.essential_files = {
-            # Core configuration (keep only the working ones)
+        self.essential_files = {}
+            # Core configuration (keep only the working, ones)
             "requirements.txt",  # Current working requirements
             "pyproject.toml",
             ".flake8",
@@ -69,8 +69,8 @@ class ComprehensiveSchwabitCleanup:
             # Cleanup and analysis scripts
             "comprehensive_schwabot_cleanup.py",
         }
-        # Files to definitely delete (the clutter you mentioned)
-        self.files_to_delete = [
+        # Files to definitely delete (the clutter you, mentioned)
+        self.files_to_delete = []
             # Multiple requirements variants (keep only requirements.txt)
             "requirements-dev.txt",
             "requirements_base.txt",
@@ -78,7 +78,7 @@ class ComprehensiveSchwabitCleanup:
             "requirements_news_integration.txt",
             "requirements-prod.txt",
             "requirements_clean.txt",
-            "requirements_fixed.txt",  # We'll consolidate into requirements.txt
+            "requirements_fixed.txt",  # We'll consolidate into requirements.txt'
             # Temporary fix files
             "d401.txt",
             "d401_all.txt",
@@ -139,8 +139,8 @@ class ComprehensiveSchwabitCleanup:
             "hash_registry.json",
         ]
         # Pattern-based deletions for the scattered reports
-        self.deletion_patterns = [
-            # All the FINAL_*, COMPREHENSIVE_*, etc. reports (the main clutter)
+        self.deletion_patterns = []
+            # All the FINAL_*, COMPREHENSIVE_*, etc. reports (the main, clutter)
             r"^FINAL_.*\.md$",
             r"^COMPREHENSIVE_.*\.md$",
             r"^BATCH_.*\.md$",
@@ -237,7 +237,7 @@ class ComprehensiveSchwabitCleanup:
         files_to_delete = []
         files_to_keep = []
 
-        # Get all files in the current directory (not recursive for directories)
+        # Get all files in the current directory (not recursive for, directories)
         for item in self.project_root.iterdir():
             if item.is_file():
                 all_files.append(item)
@@ -261,7 +261,7 @@ class ComprehensiveSchwabitCleanup:
             # Check pattern-based deletions
             if self._matches_deletion_pattern(filename):
                 # Exception: keep our new consolidated files
-                if filename in [
+                if filename in []
                     "MATH_DOCUMENTATION.md",
                     "IMPLEMENTATION_GUIDE.md",
                     "SYSTEM_ARCHITECTURE.md",
@@ -290,7 +290,7 @@ class ComprehensiveSchwabitCleanup:
         print(f"Total files to delete: {len(files_to_delete)}")
 
         # Group by category for better understanding
-        categories = {
+        categories = {}
             "Scattered Markdown Reports": [],
             "Requirements Variants": [],
             "Temporary Fix Files": [],
@@ -304,9 +304,9 @@ class ComprehensiveSchwabitCleanup:
         for file_path in files_to_delete:
             filename = file_path.name
 
-            if filename.endswith(".md") and any(
+            if filename.endswith(".md") and any()
                 prefix in filename.upper()
-                for prefix in [
+                for prefix in []
                     "FINAL_",
                     "COMPREHENSIVE_",
                     "BATCH_",
@@ -321,9 +321,9 @@ class ComprehensiveSchwabitCleanup:
                 categories["Scattered Markdown Reports"].append(filename)
             elif "requirements" in filename.lower():
                 categories["Requirements Variants"].append(filename)
-            elif any(
+            elif any()
                 pattern in filename.lower()
-                for pattern in [
+                for pattern in []
                     "d401",
                     "d_full",
                     "d_remaining",
@@ -332,20 +332,20 @@ class ComprehensiveSchwabitCleanup:
                 ]
             ):
                 categories["Temporary Fix Files"].append(filename)
-            elif any(
+            elif any()
                 pattern in filename.lower() for pattern in ["error", "check", "flake8"]
             ) and filename.endswith(".txt"):
                 categories["Error Logs & Checks"].append(filename)
-            elif any(
+            elif any()
                 pattern in filename.lower() for pattern in ["demo", "test", "result"]
             ) and filename.endswith((".json", ".log", ".db")):
                 categories["Demo/Test Results"].append(filename)
-            elif any(
+            elif any()
                 pattern in filename.lower()
                 for pattern in ["config", ".flake8_temp", "pre-commit"]
             ):
                 categories["Config Duplicates"].append(filename)
-            elif filename.endswith(".py") and any(
+            elif filename.endswith(".py") and any()
                 pattern in filename.lower()
                 for pattern in ["_fixer", "_fix", "debug_", "test_", "demo"]
             ):
@@ -368,7 +368,7 @@ class ComprehensiveSchwabitCleanup:
         """Consolidate requirements files into a single working requirements.txt."""
         print("\n📋 Consolidating requirements files...")
 
-        # Check if requirements_fixed.txt exists (our working version)
+        # Check if requirements_fixed.txt exists (our working, version)
         requirements_fixed = self.project_root / "schwabot" / "requirements_fixed.txt"
         main_requirements = self.project_root / "requirements.txt"
 
@@ -382,7 +382,7 @@ class ComprehensiveSchwabitCleanup:
             except Exception as e:
                 print(f"⚠️ Could not consolidate requirements: {e}")
         else:
-            print(
+            print()
                 "ℹ️ No requirements_fixed.txt found - keeping existing requirements.txt"
             )
 
@@ -393,7 +393,7 @@ class ComprehensiveSchwabitCleanup:
         # Check if we have the consolidated docs from schwabot directory
         source_dir = self.project_root / "schwabot"
 
-        docs_to_copy = [
+        docs_to_copy = []
             "MATH_DOCUMENTATION.md",
             "IMPLEMENTATION_GUIDE.md",
             "SYSTEM_ARCHITECTURE.md",
@@ -456,7 +456,7 @@ class ComprehensiveSchwabitCleanup:
 
     def _should_backup(): -> bool:
         """Check if file should be backed up before deletion."""
-        important_keywords = [
+        important_keywords = []
             "mathematical",
             "algorithm",
             "system",
@@ -467,13 +467,13 @@ class ComprehensiveSchwabitCleanup:
         ]
         filename_lower = file_path.name.lower()
 
-        return any(keyword in filename_lower for keyword in important_keywords)
+        return any(keyword in filename_lower for keyword in, important_keywords)
 
     def run_comprehensive_cleanup(self, dry_run: bool = True):
         """Run the complete comprehensive cleanup."""
         print("🚀 COMPREHENSIVE SCHWABOT DIRECTORY CLEANUP")
         print("=" * 70)
-        print(
+        print()
             "Cleaning up 200+ scattered files while preserving mathematical functionality"
         )
 
@@ -489,8 +489,8 @@ class ComprehensiveSchwabitCleanup:
         print("\n📊 COMPREHENSIVE SCAN RESULTS:")
         print(f"   Files to keep: {len(files_to_keep)}")
         print(f"   Files to delete: {len(files_to_delete)}")
-        print(
-            f"   Cleanup reduction: {
+        print()
+            f"   Cleanup reduction: {"}
                 len(files_to_delete)
                 / (len(files_to_delete) + len(files_to_keep))
                 * 100:.1f}%"
@@ -515,8 +515,8 @@ class ComprehensiveSchwabitCleanup:
             print("   📄 MATH_DOCUMENTATION.md")
             print("   📄 IMPLEMENTATION_GUIDE.md")
             print("   📄 SYSTEM_ARCHITECTURE.md")
-            print("   📁 core/ (mathematical systems)")
-            print("   📁 schwabot/ (main application)")
+            print("   📁 core/ (mathematical, systems)")
+            print("   📁 schwabot/ (main, application)")
             print("   📁 config/ (configuration)")
             print("   📁 Essential directories preserved")
 
@@ -524,11 +524,11 @@ class ComprehensiveSchwabitCleanup:
 def main():
     """Run the comprehensive cleanup."""
 
-    # Check if user wants to execute (not dry run)
+    # Check if user wants to execute (not dry, run)
     execute = "--execute" in sys.argv or "--real" in sys.argv
 
     cleanup = ComprehensiveSchwabitCleanup()
-    cleanup.run_comprehensive_cleanup(dry_run=not execute)
+    cleanup.run_comprehensive_cleanup(dry_run=not, execute)
 
 
 if __name__ == "__main__":

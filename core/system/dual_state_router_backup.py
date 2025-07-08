@@ -5,19 +5,19 @@ from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
-            from ..cpu_handlers import run_cpu_strategy
-            from ..gpu_handlers import run_gpu_strategy
+from ..cpu_handlers import run_cpu_strategy
+from ..gpu_handlers import run_gpu_strategy
 
 import numpy as np
 
-    from ..utils.cuda_helper import (
+from ..utils.cuda_helper import ()
 
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Dual State Router - Profit-Tiered CUDA Orchestration System
 
-Implements ZPE (Zero Point Efficiency) vs ZBE (Zero Bottleneck Entropy) routing
+Implements ZPE (Zero Point, Efficiency) vs ZBE (Zero Bottleneck, Entropy) routing
 based on profit density and strategy context, not just raw performance.
 
 Core Concept:
@@ -32,7 +32,7 @@ The router learns which strategies "deserve" GPU based on:
 """
 
 # CUDA Helper Integration
-try:
+    try:
         USING_CUDA,
         get_cuda_status,
         report_cuda_status,
@@ -43,7 +43,7 @@ try:
     CUDA_AVAILABLE = True
     logger = logging.getLogger(__name__)
     logger.info("⚡ CUDA acceleration available for Dual State Router")
-except ImportError:
+    except ImportError:
     xp = np
     USING_CUDA = False
     CUDA_AVAILABLE = False
@@ -69,12 +69,12 @@ class ComputeMode(Enum):
 
 
 @dataclass
-class StrategyMetadata:
+    class StrategyMetadata:
     """Metadata for strategy routing decisions."""
 
     strategy_id: str
     tier: StrategyTier
-    priority: float  # 0.0 to 1.0 (profit density)
+    priority: float  # 0.0 to 1.0 (profit, density)
     avg_compute_time_ms: float
     avg_profit_margin: float
     success_rate: float
@@ -91,7 +91,7 @@ class StrategyMetadata:
 
 
 @dataclass
-class ExecutionResult:
+    class ExecutionResult:
     """Result of strategy execution with performance metrics."""
 
     strategy_id: str
@@ -104,7 +104,7 @@ class ExecutionResult:
 
 
 @dataclass
-class ProfitRegistry:
+    class ProfitRegistry:
     """Registry for tracking profit density and strategy performance."""
 
     strategies: Dict[str, StrategyMetadata] = field(default_factory=dict)
@@ -115,7 +115,7 @@ class ProfitRegistry:
         """Update strategy performance based on execution result."""
         if result.strategy_id not in self.strategies:
             # Create new strategy metadata
-            self.strategies[result.strategy_id] = StrategyMetadata(
+            self.strategies[result.strategy_id] = StrategyMetadata()
                 strategy_id=result.strategy_id,
                 tier=self._infer_tier(result.execution_time_ms),
                 priority=0.5,  # Default priority
@@ -133,15 +133,15 @@ class ProfitRegistry:
             strategy.execution_count += 1
 
             # Update running averages
-            strategy.avg_compute_time_ms = (
+            strategy.avg_compute_time_ms = ()
                 strategy.avg_compute_time_ms * (strategy.execution_count - 1) + result.execution_time_ms
             ) / strategy.execution_count
-            strategy.avg_profit_margin = (
+            strategy.avg_profit_margin = ()
                 strategy.avg_profit_margin * (strategy.execution_count - 1) + result.profit_delta
             ) / strategy.execution_count
 
             # Update success rate
-            total_successes = sum(
+            total_successes = sum()
                 1 for r in self.execution_history if r.strategy_id == result.strategy_id and r.success
             )
             strategy.success_rate = total_successes / strategy.execution_count
@@ -189,7 +189,7 @@ class ProfitRegistry:
             return StrategyTier.LONG
 
     def _calculate_profit_density(self, strategy: StrategyMetadata) -> float:
-        """Calculate profit density (ROI per millisecond)."""
+        """Calculate profit density (ROI per, millisecond)."""
         if strategy.avg_compute_time_ms <= 0:
             return 0.0
 
@@ -203,7 +203,7 @@ class ProfitRegistry:
     def _determine_preferred_mode(self, strategy: StrategyMetadata) -> ComputeMode:
         """Determine preferred compute mode based on performance."""
         # Get recent executions for this strategy
-        recent_executions = [
+        recent_executions = []
             r for r in self.execution_history[-20:] if r.strategy_id == strategy.strategy_id  # Last 20 executions
         ]
 
@@ -239,7 +239,7 @@ class DualStateRouter:
 
     Routes calculations between ZPE (CPU) and ZBE (GPU) based on:
     - Strategy tier (short/mid/long)
-    - Profit density (ROI per compute time)
+    - Profit density (ROI per compute, time)
     - Historical performance
     - Current system load
     """
@@ -267,12 +267,12 @@ class DualStateRouter:
 
     def route(self, task_id: str, data: Dict[str, Any], force_mode: Optional[ComputeMode] = None) -> Dict[str, Any]:
         """
-        Route task to appropriate compute mode (ZPE or ZBE).
+        Route task to appropriate compute mode (ZPE or, ZBE).
 
         Args:
             task_id: Unique strategy identifier
             data: Task data to process
-            force_mode: Force specific compute mode (for testing)
+            force_mode: Force specific compute mode (for, testing)
 
         Returns:
             Task result with performance metrics
@@ -296,14 +296,14 @@ class DualStateRouter:
             execution_time_ms = (time.time() - start_time) * 1000
 
             # Create execution result
-            execution_result = ExecutionResult(
+            execution_result = ExecutionResult()
                 strategy_id=task_id,
                 compute_mode=compute_mode,
                 execution_time_ms=execution_time_ms,
                 profit_delta=result.get("profit_delta", 0.0),
                 success=result.get("success", True),
                 timestamp=datetime.now(),
-                metadata={
+                metadata={}
                     "input_data_size": len(str(data)),
                     "output_data_size": len(str(result)),
                     "gpu_load": self.gpu_load,
@@ -316,17 +316,17 @@ class DualStateRouter:
                 self.registry.update_strategy_performance(execution_result)
 
             # Add performance metrics to result
-            result["execution_metrics"] = {
+            result["execution_metrics"] = {}
                 "compute_mode": compute_mode.value,
                 "execution_time_ms": execution_time_ms,
                 "strategy_tier": self.registry.get_strategy_tier(task_id).value,
                 "profit_density": self.registry.get_profit_density(task_id),
             }
 
-            logger.debug(
-                "Routed {0} to {1} in {2}ms".format(task_id, 
+            logger.debug()
+                "Routed {0} to {1} in {2}ms".format(task_id,)
                     compute_mode.value, 
-                    execution_time_ms:.2f)
+                    execution_time_ms)
             )
             return result
 
@@ -346,9 +346,8 @@ class DualStateRouter:
 
         # Check GPU load
         if self.gpu_load > self.gpu_load_threshold:
-            logger.debug(
-                "GPU load high ({0}), preferring ZPE for {1}".format(
-                    self.gpu_load:.2f, task_id)
+            logger.debug()
+                "GPU load high ({0}), preferring ZPE for {1}".format(self.gpu_load)
             )
             return ComputeMode.ZPE
 
@@ -385,7 +384,7 @@ class DualStateRouter:
                 return ComputeMode.ZPE
 
     def _run_zpe(self, task_id: str, data: Dict[str, Any]) -> Dict[str, Any]:
-        """Execute task using ZPE (CPU-based computation)."""
+        """Execute task using ZPE (CPU-based, computation)."""
         try:
             # Import CPU handlers
             # Execute CPU strategy
@@ -403,7 +402,7 @@ class DualStateRouter:
             return self._fallback_cpu_execution(task_id, data)
 
     def _run_zbe(self, task_id: str, data: Dict[str, Any]) -> Dict[str, Any]:
-        """Execute task using ZBE (GPU-based computation)."""
+        """Execute task using ZBE (GPU-based, computation)."""
         try:
             # Import GPU handlers
             # Execute GPU strategy
@@ -423,7 +422,7 @@ class DualStateRouter:
     def _fallback_cpu_execution(self, task_id: str, data: Dict[str, Any]) -> Dict[str, Any]:
         """Fallback CPU execution when handlers are not available."""
         # Simple fallback implementation
-        result = {
+        result = {}
             "task_id": task_id,
             "result": "fallback_cpu_execution",
             "compute_mode": "zpe",
@@ -460,7 +459,7 @@ class DualStateRouter:
             zpe_avg_profit = np.mean([r.profit_delta for r in zpe_executions]) if zpe_executions else 0
             zbe_avg_profit = np.mean([r.profit_delta for r in zbe_executions]) if zbe_executions else 0
 
-            return {
+            return {}
                 "total_executions": total_executions,
                 "zpe_executions": len(zpe_executions),
                 "zbe_executions": len(zbe_executions),
@@ -484,7 +483,7 @@ class DualStateRouter:
         # Get recent executions
         recent_executions = [r for r in self.registry.execution_history[-20:] if r.strategy_id == strategy_id]
 
-        return {
+        return {}
             "strategy_id": strategy_id,
             "tier": metadata.tier.value,
             "priority": metadata.priority,
@@ -518,7 +517,7 @@ def route_task(task_id: str, data: Dict[str, Any], force_mode: Optional[ComputeM
 
 
 # Export key classes and functions
-__all__ = [
+__all__ = []
     "DualStateRouter",
     "StrategyTier",
     "ComputeMode",

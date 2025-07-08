@@ -18,7 +18,7 @@ BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
 STUB_TEMPLATE = '''
 # ⚠️ PHANTOM_MATH: stub generated for missing function {func_name}
-def {func_name}(*args, **kwargs):
+    def {func_name}(*args, **kwargs):
     """PHANTOM stub: {func_name} - implement tensor relay logic"""
     raise NotImplementedError("Phantom math routine '{func_name}' not implemented")
 '''

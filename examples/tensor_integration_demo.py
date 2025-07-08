@@ -1,5 +1,5 @@
-            from core.strategy_logic import (
-            from core.strategy_logic import TradingSignal, SignalType, SignalStrength
+from core.strategy_logic import (
+from core.strategy_logic import TradingSignal, SignalType, SignalStrength
 from core.galileo_tensor_bridge import GalileoTensorBridge
 from pathlib import Path
 from server.tensor_websocket_server import TensorWebSocketServer
@@ -191,6 +191,7 @@ class TensorIntegrationDemo:
     def _generate_tensor_signal():-> Any:
         """Generate trading signal from tensor analysis."""
         try:
+    pass
         except ImportError:
             return None
 

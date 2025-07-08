@@ -33,7 +33,7 @@ class ComplexSyntaxFixer:
             line = lines[i].strip()
 
             # Check for function definitions followed by try without try:
-            if (
+            if ()
                 line.startswith("def ")
                 and i + 1 < len(lines)
                 and lines[i + 1].strip().startswith("try")
@@ -65,7 +65,7 @@ class ComplexSyntaxFixer:
                 line = "        " + line.strip()
             elif line.strip().startswith("except ") and not line.startswith("        "):
                 line = "        " + line.strip()
-            elif line.strip().startswith("logger.") and not line.startswith(
+            elif line.strip().startswith("logger.") and not line.startswith()
                 "            "
             ):
                 line = "            " + line.strip()
@@ -86,7 +86,7 @@ class ComplexSyntaxFixer:
         # Fix triple colons
         content = re.sub(r":::", ":", content)
         # Fix missing colons
-        content = re.sub(
+        content = re.sub()
             r"def [^:]+$", lambda m: m.group(0) + ":", content, flags=re.MULTILINE
         )
         return content
@@ -111,7 +111,7 @@ class ComplexSyntaxFixer:
                     f.write(content)
 
                 # Verify fix
-                result = subprocess.run(
+                result = subprocess.run()
                     [sys.executable, "-m", "py_compile", file_path],
                     capture_output=True,
                     text=True,

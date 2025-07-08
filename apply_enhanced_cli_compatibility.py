@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Enhanced CLI Compatibility Applicator.
+"""Enhanced CLI Compatibility Applicator."
 
 Applies enhanced Windows CLI compatibility to mathematical validation systems
 in the SchwaBot trading intelligence build.
@@ -16,19 +16,19 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(
 logger = logging.getLogger(__name__)
 
 # Import our enhanced compatibility handler
-try:
+    try:
     # All imports from core.enhanced_windows_cli_compatibility are unused
     CLI_HANDLER_AVAILABLE = True
-except ImportError:
+    except ImportError:
     CLI_HANDLER_AVAILABLE = False
     print("Warning: Enhanced CLI compatibility handler not available")
 
 # Enhanced Windows CLI Compatibility Integration
-try:
+    try:
     from utils.safe_print import safe_print
 
     CLI_HANDLER_AVAILABLE = True
-except ImportError:
+    except ImportError:
     CLI_HANDLER_AVAILABLE = False
 
     def safe_print(message):
@@ -40,7 +40,7 @@ class CliCompatibilityApplicator:
     """Applies enhanced CLI compatibility to mathematical validation systems."""
 
     # Files that need CLI compatibility enhancement
-    TARGET_FILES = [
+    TARGET_FILES = []
         "mathematical_integration_validator.py",
         "mathematical_integration_pathway_demo.py",
         "run_mathematical_integration_validation.py",
@@ -55,8 +55,8 @@ class CliCompatibilityApplicator:
     # Import statement to add
     CLI_IMPORT_STATEMENT = """
 # Enhanced Windows CLI compatibility
-try:
-    from core.enhanced_windows_cli_compatibility import (
+    try:
+    from core.enhanced_windows_cli_compatibility import ()
         # EnhancedWindowsCliCompatibilityHandler,  # unused
         # cli_safe,  # unused
         # safe_print,  # unused
@@ -64,7 +64,7 @@ try:
         # get_safe_reporter  # unused
     )
     CLI_HANDLER_AVAILABLE = True
-except ImportError:
+    except ImportError:
     CLI_HANDLER_AVAILABLE = False
     # Fallback implementations
     def safe_print(msg, force_ascii=False):
@@ -77,7 +77,7 @@ except ImportError:
         try:
             getattr(logger, level.lower())(msg)
         except UnicodeEncodeError:
-            getattr(logger, level.lower())(
+            getattr(logger, level.lower())()
                 msg.encode('ascii', errors='replace').decode('ascii')
             )
 
@@ -87,7 +87,7 @@ except ImportError:
     def get_safe_reporter():
         def reporter(name, status, details="", metrics=None):
             status_text = "PASS" if status else "FAIL"
-            return (
+            return ()
                 "[{}] {}".format(status_text, name) +
                 (": {}".format(details) if details else "")
             )
@@ -184,7 +184,7 @@ except ImportError:
 
     def apply_to_all_targets(self) -> Dict[str, Any]:
         """Apply CLI compatibility to all target files."""
-        results = {
+        results = {}
             "processed": [],
             "errors": [],
             "total_files": len(self.TARGET_FILES),
@@ -192,7 +192,7 @@ except ImportError:
             "error_count": 0,
         }
 
-        logger.info(
+        logger.info()
             "Starting CLI compatibility enhancement for {} files".format(len(self.TARGET_FILES))
         )
 
@@ -206,7 +206,7 @@ except ImportError:
                 results["errors"].append({"file": file_path, "error": message})
                 results["error_count"] += 1
 
-        results["success_rate"] = (
+        results["success_rate"] = ()
             results["success_count"] / results["total_files"] * 100
             if results["total_files"] > 0
             else 0
@@ -219,7 +219,7 @@ def main():
     """Run the CLI compatibility application."""
     if CLI_HANDLER_AVAILABLE:
         safe_print("🚀 Enhanced CLI Compatibility Application Starting...")
-        safe_print(
+        safe_print()
             "   Applying bulletproof Windows CLI handling to mathematical " "validation systems..."
         )
     else:
@@ -241,7 +241,7 @@ def main():
 
     if CLI_HANDLER_AVAILABLE:
         safe_print("📊 Processing Results:")
-        safe_print(
+        safe_print()
             "   Files Processed: {}/{}".format(results["success_count"], results["total_files"])
         )
         safe_print("   Success Rate: {:.1f}%".format(results["success_rate"]))
@@ -253,7 +253,7 @@ def main():
                 safe_print("   {}: {}".format(error["file"], error["error"]))
 
         if results["success_rate"] >= 90:
-            safe_print(
+            safe_print()
                 "\n🎉 EXCELLENT! All mathematical systems now have bulletproof "
                 "CLI compatibility!"
             )

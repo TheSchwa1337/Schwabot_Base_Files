@@ -30,7 +30,7 @@ safe_print(f"Testing import of {module_name}...")
         __import__(module_name)
         safe_print(f"\\u2705 {module_name} imported successfully")
         return True
-except Exception as e:
+    except Exception as e:
         safe_print(f"\\u274c {module_name} import failed: {e}")
         traceback.print_exc()
         return False

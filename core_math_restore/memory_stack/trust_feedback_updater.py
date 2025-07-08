@@ -1,7 +1,7 @@
 from core.unified_math_system import unified_math
-            import yaml
-    from core.gpt_command_layer_simple import AIAgentType, CommandDomain
-    from core.prophet_connector import compute_alpha_score
+import yaml
+from core.gpt_command_layer_simple import AIAgentType, CommandDomain
+from core.prophet_connector import compute_alpha_score
 from core.utils.windows_cli_compatibility import safe_print, safe_format_error
 from dataclasses import dataclass
 from datetime import datetime, timedelta

@@ -1,7 +1,7 @@
-        from core.clean_unified_math import (
-        from core.brain_trading_engine import BrainTradingEngine
-        from symbolic_profit_router import SymbolicProfitRouter
-    import sys
+from core.clean_unified_math import ()
+from core.brain_trading_engine import BrainTradingEngine
+from symbolic_profit_router import SymbolicProfitRouter
+import sys
 from pathlib import Path
 import json
 import time
@@ -36,8 +36,8 @@ def test_core_integration_pipeline():
 
     try:
 
-        brain_config = {
-            "base_profit_rate": 0.002,
+        brain_config = {}
+            "base_profit_rate": 0.02,
             "confidence_threshold": 0.6,
             "enhancement_range": (0.8, 2.0),
             "max_history_size": 100,
@@ -46,7 +46,7 @@ def test_core_integration_pipeline():
         brain_engine = BrainTradingEngine(brain_config)
 
         # Test multiple market scenarios
-        test_scenarios = [
+        test_scenarios = []
             {"name": "Strong Bull", "price": 55000, "volume": 2000},
             {"name": "Bear Market", "price": 45000, "volume": 800},
             {"name": "Sideways", "price": 50000, "volume": 1000},
@@ -56,12 +56,12 @@ def test_core_integration_pipeline():
 
         brain_results = []
         for scenario in test_scenarios:
-            signal = brain_engine.process_brain_signal(
+            signal = brain_engine.process_brain_signal()
                 scenario["price"], scenario["volume"], "BTC"
             )
             decision = brain_engine.get_trading_decision(signal)
-            brain_results.append(
-                {
+            brain_results.append()
+                {}
                     "scenario": scenario["name"],
                     "price": scenario["price"],
                     "volume": scenario["volume"],
@@ -77,9 +77,9 @@ def test_core_integration_pipeline():
 
         # Show detailed results
         for result in brain_results:
-            print(
+            print()
                 f"   {result['scenario']}: {result['action']} "
-                f"(conf: {result['confidence']:.3f}, "
+                f"(conf: {result['confidence']:.3f}, ")
                 f"profit: ${result['profit_score']:,.2f})"
             )
 
@@ -107,12 +107,12 @@ def test_core_integration_pipeline():
             if "brain_results" in results and i < len(results["brain_results"]):
                 brain_result = results["brain_results"][i]
                 # Scale profit score to percentage
-                profit = brain_result["profit_score"] / (
+                profit = brain_result["profit_score"] / ()
                     brain_result["price"] * brain_result["volume"]
                 )
                 volume = brain_result["volume"]
             else:
-                profit = 0.05 + (i * 0.015)  # 5%, 6.5%, 8%, etc.
+                profit = 0.5 + (i * 0.15)  # 5%, 6.5%, 8%, etc.
                 volume = 1000 + (i * 300)
 
             # Register and process
@@ -122,8 +122,8 @@ def test_core_integration_pipeline():
             # Get visualization
             viz = router.get_profit_tier_visualization(symbol)
 
-            router_results.append(
-                {
+            router_results.append()
+                {}
                     "symbol": symbol,
                     "profit": profit,
                     "tier": viz["tier"],
@@ -139,9 +139,9 @@ def test_core_integration_pipeline():
 
         # Show detailed results
         for result in router_results:
-            print(
+            print()
                 f"   {result['symbol']}: {result['tier']} "
-                f"(profit: {result['profit']:.3f}, "
+                f"(profit: {result['profit']:.3f}, ")
                 f"trust: {result['trust_score']:.3f}, "
                 f"vault: {'✓' if result['vault_stored'] else '✗'})"
             )
@@ -177,16 +177,16 @@ def test_core_integration_pipeline():
                 optimized_profit = optimize_brain_profit(price, volume, confidence, 1.2)
 
                 # Test risk calculations
-                returns = [0.05, 0.02, -0.01, 0.03, 0.01, 0.04, -0.005]
+                returns = [0.5, 0.2, -0.1, 0.3, 0.1, 0.4, -0.05]
                 sharpe = math_system.calculate_sharpe_ratio(returns)
 
                 # Test portfolio calculations
-                position_size = calculate_position_size(
+                position_size = calculate_position_size()
                     confidence, 100000, 0.1
                 )  # $100k portfolio
 
-                math_results.append(
-                    {
+                math_results.append()
+                    {}
                         "scenario": brain_result["scenario"],
                         "price": price,
                         "volume": volume,
@@ -202,7 +202,7 @@ def test_core_integration_pipeline():
 
         # Show detailed results
         for result in math_results:
-            print(
+            print()
                 f"   {result['scenario']}: "
                 f"profit=${result['optimized_profit']:,.2f}, "
                 f"position=${result['position_size']:,.0f}, "
@@ -210,15 +210,15 @@ def test_core_integration_pipeline():
             )
 
         # Test integration function
-        input_data = {
-            "tensor": [
+        input_data = {}
+            "tensor": []
                 [price, volume]
                 for price, volume in [(50000, 1200), (51000, 1100), (49000, 1300)]
             ],
             "metadata": {"source": "core_integration_test", "timestamp": time.time()},
         }
         integration_result = math_system.integrate_all_systems(input_data)
-        print(
+        print()
             f"   Integration test: combined_score={integration_result.get('combined_score', 0):.2f}"
         )
 
@@ -241,7 +241,7 @@ def test_core_integration_pipeline():
             brain_data = results["brain_results"][0]
             router_data = results["router_results"][0]
 
-            print(
+            print()
                 f"✅ Brain → Symbolic: {brain_data['scenario']} → {router_data['symbol']}"
             )
             print(f"   Brain profit: ${brain_data['profit_score']:,.2f}")
@@ -252,18 +252,18 @@ def test_core_integration_pipeline():
             router_data = results["router_results"][0]
             math_data = results["math_results"][0]
 
-            print(
+            print()
                 f"✅ Symbolic → Math: {router_data['symbol']} → {math_data['scenario']}"
             )
             print(f"   Symbolic profit: {router_data['profit']:.3f}")
             print(f"   Math optimized: ${math_data['optimized_profit']:,.2f}")
 
         # Verify complete pipeline
-        if all(
+        if all()
             results.get(key, False)
             for key in ["brain_engine", "symbolic_router", "math_system"]
         ):
-            print(
+            print()
                 "✅ Complete pipeline: Market Data → Brain → Symbolic → Math → Decision"
             )
             data_flow_success = True
@@ -281,7 +281,7 @@ def test_core_integration_pipeline():
     print("-" * 40)
 
     try:
-        if all(
+        if all()
             results.get(key, False)
             for key in ["brain_engine", "symbolic_router", "math_system"]
         ):
@@ -309,11 +309,11 @@ def test_core_integration_pipeline():
             print(f"   Average Confidence: {avg_confidence:.3f}")
             print(f"   Total Position Allocation: ${total_allocation:,.0f}")
             print(f"   Symbols Processed: {len(router_data)}")
-            print(
+            print()
                 f"   Vault Storage Success: {sum(1 for r in router_data if r['vault_stored'])}/{len(router_data)}"
             )
 
-            results["performance_metrics"] = {
+            results["performance_metrics"] = {}
                 "avg_brain_profit": avg_brain_profit,
                 "max_brain_profit": max_brain_profit,
                 "avg_confidence": avg_confidence,
@@ -341,7 +341,7 @@ def test_core_integration_pipeline():
     print(f"Success Rate: {(passed_tests / total_tests) * 100:.1f}%")
 
     print("\nDetailed Results:")
-    test_names = {
+    test_names = {}
         "brain_engine": "Brain Trading Engine",
         "symbolic_router": "Symbolic Profit Router",
         "math_system": "Clean Unified Math System",
@@ -377,11 +377,11 @@ def test_core_integration_pipeline():
             print(f"   • Confidence Level: {metrics['avg_confidence']:.1%}")
 
     # Export comprehensive test results
-    test_report = {
+    test_report = {}
         "timestamp": time.time(),
         "test_type": "core_integration",
         "test_results": results,
-        "summary": {
+        "summary": {}
             "passed": passed_tests,
             "total": total_tests,
             "success_rate": (passed_tests / total_tests) * 100,
@@ -411,9 +411,9 @@ def test_core_integration_pipeline():
             f.write("=" * 40 + "\n\n")
             f.write("STATUS: READY FOR PRODUCTION BUILD\n\n")
             f.write("WORKING COMPONENTS:\n")
-            f.write("✅ Brain Trading Engine (AI Decision Core)\n")
-            f.write("✅ Symbolic Profit Router (Glyph Processing)\n")
-            f.write("✅ Clean Unified Math System (Mathematical Core)\n")
+            f.write("✅ Brain Trading Engine (AI Decision, Core)\n")
+            f.write("✅ Symbolic Profit Router (Glyph, Processing)\n")
+            f.write("✅ Clean Unified Math System (Mathematical, Core)\n")
             f.write("✅ Cross-Layer Data Flow\n")
             f.write("✅ Performance Metrics & Analytics\n\n")
             f.write("NEXT STEPS:\n")

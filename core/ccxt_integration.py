@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 
 @dataclass
-class OrderBookSnapshot:
+    class OrderBookSnapshot:
     """Order book snapshot data structure."""
 
     timestamp: float
@@ -36,14 +36,14 @@ class CCXTIntegration:
         """Initialize CCXT integration."""
         self.exchanges = {}
         self.initialized = False
-        logger.info("CCXT Integration initialized (stub mode)")
+        logger.info("CCXT Integration initialized (stub, mode)")
 
     def initialize_exchanges(self, exchange_configs: Dict[str, Any]) -> None:
         """Initialize configured exchanges."""
         try:
             # Stub implementation
             for exchange_id in exchange_configs.keys():
-                self.exchanges[exchange_id] = {
+                self.exchanges[exchange_id] = {}
                     "sync": None,  # Placeholder for sync exchange
                     "async": None,  # Placeholder for async exchange
                 }
@@ -53,11 +53,17 @@ class CCXTIntegration:
         except Exception as e:
             logger.error("Failed to initialize exchanges: {0}".format(e))
 
-    async def fetch_order_book(self, exchange_id: str, symbol: str, limit: int = 20) -> Optional[OrderBookSnapshot]:
+    async def fetch_order_book()
+        self, exchange_id: str, symbol: str, limit: int = 20
+    ) -> Optional[OrderBookSnapshot]:
         """Fetch order book from exchange."""
         try:
             # Stub implementation - returns mock data
-            logger.info("Fetching order book for {0} from {1} (stub)".format(symbol, exchange_id))
+            logger.info()
+                "Fetching order book for {0} from {1} (stub)".format()
+                    symbol, exchange_id
+                )
+            )
 
             # Mock order book data
             timestamp = 1640000000.0
@@ -65,14 +71,14 @@ class CCXTIntegration:
             asks = [[50001.0, 1.5], [50002.0, 2.5]]
 
             best_bid = bids[0][0] if bids else 0.0
-            best_ask = asks[0][0] if asks else float("inf")
+            best_ask = asks[0][0] if asks else float("inf")"
             spread = best_ask - best_bid
             mid_price = (best_bid + best_ask) / 2
 
-            total_bid_volume = sum(bid[1] for bid in bids)
-            total_ask_volume = sum(ask[1] for ask in asks)
+            total_bid_volume = sum(bid[1] for bid in, bids)
+            total_ask_volume = sum(ask[1] for ask in, asks)
 
-            return OrderBookSnapshot(
+            return OrderBookSnapshot()
                 timestamp=timestamp,
                 symbol=symbol,
                 bids=bids,
@@ -99,7 +105,7 @@ class CCXTIntegration:
 
     def get_exchange_status(self) -> Dict[str, Any]:
         """Get status of all exchanges."""
-        return {
+        return {}
             "initialized": self.initialized,
             "exchange_count": len(self.exchanges),
             "exchanges": list(self.exchanges.keys()),
@@ -108,15 +114,15 @@ class CCXTIntegration:
 
 
 # Factory function for compatibility
-def create_ccxt_integration() -> CCXTIntegration:
+    def create_ccxt_integration() -> CCXTIntegration:
     """Create CCXT integration instance."""
     return CCXTIntegration()
 
 
 # Demo function
-def demo_ccxt_integration():
+    def demo_ccxt_integration():
     """Demonstrate CCXT integration functionality."""
-    print("=== CCXT Integration Demo (Stub Mode) ===")
+    print("=== CCXT Integration Demo (Stub, Mode) ===")
 
     integration = create_ccxt_integration()
 
@@ -125,7 +131,7 @@ def demo_ccxt_integration():
     integration.initialize_exchanges(config)
 
     print("Status: {0}".format(integration.get_exchange_status()))
-    print("CCXT Integration ready (stub mode)")
+    print("CCXT Integration ready (stub, mode)")
 
 
 if __name__ == "__main__":

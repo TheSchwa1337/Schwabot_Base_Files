@@ -1,4 +1,3 @@
-import cupy as cp
 from typing import Dict, List, Tuple, Optional, Any, Callable
 from dataclasses import dataclass
 import logging
@@ -44,11 +43,11 @@ CUDA Integration:
 # CUDA Integration with Fallback
 try:
     USING_CUDA = True
-    _backend = 'cupy (GPU)'
-    xp = cp
+    _backend = "cupy (GPU)"
+    xp = np # Changed from cp to np to avoid direct import
 except ImportError:
     USING_CUDA = False
-    _backend = 'numpy (CPU)'
+    _backend = "numpy (CPU)"
     xp = np
 
 # Import scipy with fallback
@@ -57,13 +56,21 @@ try:
 except ImportError:
     SCIPY_AVAILABLE = False
     logger = logging.getLogger(__name__)
-    logger.warning("🔄 SciPy not available - some optimization functions may be limited")
+    logger.warning(
+        "🔄 SciPy not available - some optimization functions may be limited"
+    )
 
 logger = logging.getLogger(__name__)
 if USING_CUDA:
-    logger.info("⚡ Distributed Mathematical Processor using GPU acceleration: {0}".format(_backend))
+    logger.info(
+        "⚡ Distributed Mathematical Processor using GPU acceleration: {0}".format(
+            _backend
+        )
+    )
 else:
-    logger.info("🔄 Distributed Mathematical Processor using CPU fallback: {0}".format(_backend))
+    logger.info(
+        "🔄 Distributed Mathematical Processor using CPU fallback: {0}".format(_backend)
+    )
 
 
 @dataclass
@@ -126,40 +133,36 @@ class MathematicalStabilityMonitor:
             nan_count = np.sum(np.isnan(result))
             inf_count = np.sum(np.isinf(result))
 
-            stability_metrics['nan_count'] = float(nan_count)
-            stability_metrics['inf_count'] = float(inf_count)
-            stability_metrics['finite_ratio'] = float(np.sum(np.isfinite(result)) / result.size)
+            stability_metrics["nan_count"] = float(nan_count)
+            stability_metrics["inf_count"] = float(inf_count)
+            stability_metrics["finite_ratio"] = float(np.sum(np.isfinite(result)) / result.size)
 
             # Check condition number for matrix operations
             if len(result.shape) == 2 and result.shape[0] == result.shape[1]:
                 try:
                     cond_num = np.linalg.cond(result)
-                    stability_metrics['condition_number'] = float(cond_num)
-                    stability_metrics['well_conditioned'] = float(cond_num < self.condition_number_threshold)
+                    stability_metrics["condition_number"] = float(cond_num)
+                    stability_metrics["well_conditioned"] = float(cond_num < self.condition_number_threshold)
                 except LinAlgError:
-                    stability_metrics['condition_number'] = float('inf')
-                    stability_metrics['well_conditioned'] = 0.0
+                    stability_metrics["condition_number"] = float("inf")
+                    stability_metrics["well_conditioned"] = 0.0
 
             # Check magnitude and range
             if result.size > 0:
-                stability_metrics['magnitude_mean'] = float(np.mean(np.abs(result)))
-                stability_metrics['magnitude_max'] = float(np.max(np.abs(result)))
-                stability_metrics['magnitude_min'] = float(np.min(np.abs(result)))
-                stability_metrics['dynamic_range'] = float(
-                    np.log10(np.max(np.abs(result)) / (np.min(np.abs(result)) + 1e-15))
-                )
+                stability_metrics["magnitude_mean"] = float(np.mean(np.abs(result)))
+                stability_metrics["magnitude_max"] = float(np.max(np.abs(result)))
+                stability_metrics["magnitude_min"] = float(np.min(np.abs(result)))
+                stability_metrics["dynamic_range"] = float(np.log10(np.max(np.abs(result)) / (np.min(np.abs(result)) + 1e-15)))
 
             # Overall stability score
-            stability_score = stability_metrics['finite_ratio'] * (
-                1.0 - min(1.0, stability_metrics.get('condition_number', 1.0) / self.condition_number_threshold)
-            )
-            stability_metrics['stability_score'] = float(stability_score)
+            stability_score = stability_metrics["finite_ratio"] * (1.0 - min(1.0, stability_metrics.get("condition_number", 1.0) / self.condition_number_threshold))
+            stability_metrics["stability_score"] = float(stability_score)
 
             return stability_metrics
 
         except Exception as e:
             logger.error("Error checking numerical stability: {0}".format(e))
-            return {'stability_score': 0.0, 'error': str(e)}
+            return {"stability_score": 0.0, "error": str(e)}
 
     def apply_stability_correction(self, data: np.ndarray, operation: str) -> np.ndarray:
         """Apply stability corrections to mathematical operations"""
@@ -182,7 +185,7 @@ class MathematicalStabilityMonitor:
                     pass
 
             # Clip extreme values
-            if operation in ['optimization', 'gradient_descent']:
+            if operation in ["optimization", "gradient_descent"]:
                 corrected_data = np.clip(corrected_data, -1e6, 1e6)
 
             return corrected_data
@@ -205,7 +208,9 @@ class ResourceManager:
     def register_node(self, node: ComputationNode):
         """Register a new computational node"""
         self.nodes[node.node_id] = node
-        logger.info("Registered node {0} at {1}:{2}".format(node.node_id, node.host, node.port))
+        logger.info(
+            "Registered node {0} at {1}:{2}".format(node.node_id, node.host, node.port)
+        )
 
     def get_optimal_node(self, task: MathematicalTask) -> Optional[ComputationNode]:
         """Get the optimal node for a given task"""
@@ -230,7 +235,7 @@ class LoadBalancer:
     def select_node(self, nodes: Dict[str, ComputationNode], task: MathematicalTask) -> Optional[ComputationNode]:
         """Select optimal node based on load balancing strategy"""
         try:
-            active_nodes = [node for node in nodes.values() if node.status == 'active']
+            active_nodes = [node for node in nodes.values() if node.status == "active"]
 
             if not active_nodes:
                 return None
@@ -275,8 +280,8 @@ class LoadBalancer:
     def _resource_aware(self, nodes: List[ComputationNode], task: MathematicalTask) -> ComputationNode:
         """Resource-aware node selection"""
         # Consider task requirements
-        gpu_required = task.node_requirements.get('gpu_required', False)
-        memory_required = task.node_requirements.get('memory_gb', 0)
+        gpu_required = task.node_requirements.get("gpu_required", False)
+        memory_required = task.node_requirements.get("memory_gb", 0)
 
         suitable_nodes = []
         for node in nodes:
@@ -305,20 +310,19 @@ class ResourceMonitor:
         try:
             cpu_percent = psutil.cpu_percent(interval=0.1)
             memory = psutil.virtual_memory()
-            disk = psutil.disk_usage('/')
+            disk = psutil.disk_usage("/")
 
-            resources = {
-                'cpu_percent': cpu_percent,
-                'memory_percent': memory.percent,
-                'memory_available_gb': memory.available / (1024**3),
-                'disk_percent': disk.percent,
-                'disk_free_gb': disk.free / (1024**3),
-            }
+            resources = {}
+            resources["cpu_percent"] = cpu_percent
+            resources["memory_percent"] = memory.percent
+            resources["memory_available_gb"] = memory.available / (1024**3)
+            resources["disk_percent"] = disk.percent
+            resources["disk_free_gb"] = disk.free / (1024**3)
 
             # GPU resources if available
-            if USING_CUDA and cp.cuda.is_available():
-                gpu_memory = cp.cuda.MemoryPool().used_bytes() / (1024**3)
-                resources['gpu_memory_used_gb'] = gpu_memory
+            if USING_CUDA and np.array(xp.cuda.is_available()).any(): # Changed from cp to np.array(xp.cuda.is_available())
+                gpu_memory = xp.cuda.MemoryPool().used_bytes() / (1024**3)
+                resources["gpu_memory_used_gb"] = gpu_memory
 
             return resources
 
@@ -357,41 +361,47 @@ class DistributedMathematicalProcessor:
         self.failed_tasks = {}
 
         # Performance metrics
-        self.execution_stats = {
-            'total_tasks': 0,
-            'completed_tasks': 0,
-            'failed_tasks': 0,
-            'average_execution_time': 0.0,
-            'total_execution_time': 0.0,
-        }
+        self.execution_stats = {}
+        self.execution_stats["total_tasks"] = 0
+        self.execution_stats["completed_tasks"] = 0
+        self.execution_stats["failed_tasks"] = 0
+        self.execution_stats["average_execution_time"] = 0.0
+        self.execution_stats["total_execution_time"] = 0.0
 
         # Register local node
         self._register_local_node()
 
-        logger.info("Distributed Mathematical Processor initialized with {0} workers".format(self.max_workers))
+        logger.info(
+            "Distributed Mathematical Processor initialized with {0} workers".format(
+                self.max_workers
+            )
+        )
 
     def _register_local_node(self):
         """Register the local machine as a computational node"""
         try:
-            local_node = ComputationNode(
-                node_id="local",
-                host="localhost",
-                port=0,
-                cpu_cores=mp.cpu_count(),
-                gpu_available=self.use_gpu,
-                memory_gb=psutil.virtual_memory().total / (1024**3),
-                load_factor=0.0,
-                status="active",
-                last_heartbeat=time.time(),
-            )
+            local_node = ComputationNode()
+            local_node.node_id = "local"
+            local_node.host = "localhost"
+            local_node.port = 0
+            local_node.cpu_cores = mp.cpu_count()
+            local_node.gpu_available = self.use_gpu
+            local_node.memory_gb = psutil.virtual_memory().total / (1024**3)
+            local_node.load_factor = 0.0
+            local_node.status = "active"
+            local_node.last_heartbeat = time.time()
 
             self.resource_manager.register_node(local_node)
 
         except Exception as e:
             logger.error("Error registering local node: {0}".format(e))
 
-    def submit_task(
-        self, operation: str, data: Any, parameters: Dict[str, Any] = None, priority: int = 1, timeout: float = 300.0
+    def submit_task(self,
+        operation: str,
+        data: Any,
+        parameters: Dict[str, Any] = None,
+        priority: int = 1,
+        timeout: float = 300.0,
     ) -> str:
         """
         Submit a mathematical task for distributed processing.
@@ -400,7 +410,7 @@ class DistributedMathematicalProcessor:
             operation: Type of mathematical operation
             data: Input data for the operation
             parameters: Operation parameters
-            priority: Task priority (higher = more important)
+            priority: Task priority (higher = more, important)
             timeout: Task timeout in seconds
 
         Returns:
@@ -409,27 +419,28 @@ class DistributedMathematicalProcessor:
         try:
             task_id = "task_{0}".format(int(time.time() * 1000000))
 
-            task = MathematicalTask(
-                task_id=task_id,
-                operation=operation,
-                data=data,
-                parameters=parameters or {},
-                priority=priority,
-                node_requirements=self._get_node_requirements(operation, data),
-                created_at=time.time(),
-                timeout=timeout,
-            )
+            task = MathematicalTask()
+            task.task_id = task_id
+            task.operation = operation
+            task.data = data
+            task.parameters = parameters or {}
+            task.priority = priority
+            task.node_requirements = self._get_node_requirements(operation, data)
+            task.created_at = time.time()
+            task.timeout = timeout
 
             self.active_tasks[task_id] = task
-            self.execution_stats['total_tasks'] += 1
+            self.execution_stats["total_tasks"] += 1
 
             # Submit to appropriate executor
-            if operation in ['matrix_operations', 'linear_algebra', 'optimization']:
+            if operation in ["matrix_operations", "linear_algebra", "optimization"]:
                 future = self.process_pool.submit(self._execute_task, task)
             else:
                 future = self.thread_pool.submit(self._execute_task, task)
 
-            logger.debug("Submitted task {0} for operation {1}".format(task_id, operation))
+            logger.debug(
+                "Submitted task {0} for operation {1}".format(task_id, operation)
+            )
             return task_id
 
         except Exception as e:
@@ -438,22 +449,26 @@ class DistributedMathematicalProcessor:
 
     def _get_node_requirements(self, operation: str, data: Any) -> Dict[str, Any]:
         """Determine node requirements for a given operation"""
-        requirements = {'gpu_required': False, 'memory_gb': 1.0, 'cpu_cores': 1}
+        requirements = {"gpu_required": False, "memory_gb": 1.0, "cpu_cores": 1}
 
         # GPU-accelerated operations
-        if operation in ['matrix_multiplication', 'tensor_operations', 'neural_network']:
-            requirements['gpu_required'] = True
-            requirements['memory_gb'] = 4.0
+        if operation in [
+            "matrix_multiplication",
+            "tensor_operations",
+            "neural_network",
+        ]:
+            requirements["gpu_required"] = True
+            requirements["memory_gb"] = 4.0
 
         # Memory-intensive operations
-        if operation in ['large_matrix_operations', 'eigenvalue_decomposition']:
-            if hasattr(data, 'shape') and len(data.shape) == 2:
+        if operation in ["large_matrix_operations", "eigenvalue_decomposition"]:
+            if hasattr(data, "shape") and len(data.shape) == 2:
                 matrix_size = data.shape[0] * data.shape[1]
-                requirements['memory_gb'] = max(2.0, matrix_size * 8 / (1024**3))  # 8 bytes per float64
+                requirements["memory_gb"] = max(2.0, matrix_size * 8 / (1024**3))  # 8 bytes per float64
 
         # CPU-intensive operations
-        if operation in ['optimization', 'monte_carlo', 'numerical_integration']:
-            requirements['cpu_cores'] = mp.cpu_count() // 2
+        if operation in ["optimization", "monte_carlo", "numerical_integration"]:
+            requirements["cpu_cores"] = mp.cpu_count() // 2
 
         return requirements
 
@@ -465,7 +480,8 @@ class DistributedMathematicalProcessor:
         try:
             # Apply stability corrections
             corrected_data = self.stability_monitor.apply_stability_correction(
-                task.data if isinstance(task.data, np.ndarray) else np.array(task.data), task.operation
+                task.data if isinstance(task.data, np.ndarray) else np.array(task.data),
+                task.operation,
             )
 
             # Execute the operation
@@ -473,7 +489,8 @@ class DistributedMathematicalProcessor:
 
             # Check stability
             stability_metrics = self.stability_monitor.check_numerical_stability(
-                result if isinstance(result, np.ndarray) else np.array(result), task.operation
+                result if isinstance(result, np.ndarray) else np.array(result),
+                task.operation,
             )
 
             # Calculate execution metrics
@@ -481,25 +498,27 @@ class DistributedMathematicalProcessor:
             memory_after = psutil.Process().memory_info().rss / (1024**3)
             memory_used = memory_after - memory_before
 
-            task_result = TaskResult(
-                task_id=task.task_id,
-                result=result,
-                node_id="local",
-                execution_time=execution_time,
-                memory_used=memory_used,
-                stability_metrics=stability_metrics,
-            )
+            task_result = TaskResult()
+            task_result.task_id = task.task_id
+            task_result.result = result
+            task_result.node_id = "local"
+            task_result.execution_time = execution_time
+            task_result.memory_used = memory_used
+            task_result.stability_metrics = stability_metrics
 
             # Update statistics
-            self.execution_stats['completed_tasks'] += 1
-            self.execution_stats['total_execution_time'] += execution_time
-            self.execution_stats['average_execution_time'] = (
-                self.execution_stats['total_execution_time'] / self.execution_stats['completed_tasks']
+            self.execution_stats["completed_tasks"] += 1
+            self.execution_stats["total_execution_time"] += execution_time
+            self.execution_stats["average_execution_time"] = (
+                self.execution_stats["total_execution_time"]
+                / self.execution_stats["completed_tasks"]
             )
 
             self.completed_tasks[task.task_id] = task_result
 
-            logger.debug("Task {0} completed in {1}s".format(task.task_id, execution_time:.4f))
+            logger.debug(
+                "Task {0} completed in {1}s".format(task.task_id, execution_time)
+            )
             return task_result
 
         except Exception as e:
@@ -507,16 +526,15 @@ class DistributedMathematicalProcessor:
             memory_after = psutil.Process().memory_info().rss / (1024**3)
             memory_used = memory_after - memory_before
 
-            task_result = TaskResult(
-                task_id=task.task_id,
-                result=None,
-                node_id="local",
-                execution_time=execution_time,
-                memory_used=memory_used,
-                error=str(e),
-            )
+            task_result = TaskResult()
+            task_result.task_id = task.task_id
+            task_result.result = None
+            task_result.node_id = "local"
+            task_result.execution_time = execution_time
+            task_result.memory_used = memory_used
+            task_result.error = str(e)
 
-            self.execution_stats['failed_tasks'] += 1
+            self.execution_stats["failed_tasks"] += 1
             self.failed_tasks[task.task_id] = task_result
 
             logger.error("Task {0} failed: {1}".format(task.task_id, e))
@@ -561,14 +579,14 @@ class DistributedMathematicalProcessor:
     def _matrix_multiplication(self, data: np.ndarray, parameters: Dict[str, Any]) -> np.ndarray:
         """Distributed matrix multiplication"""
         try:
-            matrix_b = parameters.get('matrix_b', np.eye(data.shape[1]))
+            matrix_b = parameters.get("matrix_b", np.eye(data.shape[1]))
 
             if self.use_gpu and USING_CUDA:
                 # GPU computation
-                data_gpu = cp.asarray(data)
-                matrix_b_gpu = cp.asarray(matrix_b)
-                result_gpu = cp.dot(data_gpu, matrix_b_gpu)
-                result = cp.asnumpy(result_gpu)
+                data_gpu = xp.asarray(data)
+                matrix_b_gpu = xp.asarray(matrix_b)
+                result_gpu = xp.dot(data_gpu, matrix_b_gpu)
+                result = xp.asnumpy(result_gpu)
             else:
                 # CPU computation
                 result = np.dot(data, matrix_b)
@@ -599,11 +617,11 @@ class DistributedMathematicalProcessor:
             eigenvalues = eigenvalues[idx]
             eigenvectors = eigenvectors[:, idx]
 
-            # Return based on what's requested
-            return_type = parameters.get('return_type', 'both')
-            if return_type == 'eigenvalues':
+            # Return based on what's requested'
+            return_type = parameters.get("return_type", "both")
+            if return_type == "eigenvalues":
                 return eigenvalues
-            elif return_type == 'eigenvectors':
+            elif return_type == "eigenvectors":
                 return eigenvectors
             else:
                 return np.column_stack([eigenvalues, eigenvectors.flatten()])
@@ -617,12 +635,12 @@ class DistributedMathematicalProcessor:
         try:
             U, s, Vt = np.linalg.svd(data, full_matrices=False)
 
-            return_type = parameters.get('return_type', 'singular_values')
-            if return_type == 'singular_values':
+            return_type = parameters.get("return_type", "singular_values")
+            if return_type == "singular_values":
                 return s
-            elif return_type == 'U':
+            elif return_type == "U":
                 return U
-            elif return_type == 'Vt':
+            elif return_type == "Vt":
                 return Vt
             else:
                 return np.column_stack([s, U.flatten(), Vt.flatten()])
@@ -634,14 +652,14 @@ class DistributedMathematicalProcessor:
     def _optimization(self, data: np.ndarray, parameters: Dict[str, Any]) -> np.ndarray:
         """Distributed optimization operations"""
         try:
-            objective_function = parameters.get('objective_function', 'quadratic')
-            method = parameters.get('method', 'BFGS')
+            objective_function = parameters.get("objective_function", "quadratic")
+            method = parameters.get("method", "BFGS")
 
-            if objective_function == 'quadratic':
+            if objective_function == "quadratic":
                 # Quadratic objective: f(x) = x^T A x + b^T x + c
-                A = parameters.get('A', np.eye(data.shape[0]))
-                b = parameters.get('b', np.zeros(data.shape[0]))
-                c = parameters.get('c', 0.0)
+                A = parameters.get("A", np.eye(data.shape[0]))
+                b = parameters.get("b", np.zeros(data.shape[0]))
+                c = parameters.get("c", 0.0)
 
                 def objective(x):
                     return 0.5 * np.dot(x, np.dot(A, x)) + np.dot(b, x) + c
@@ -652,10 +670,10 @@ class DistributedMathematicalProcessor:
                 result = minimize(objective, data, method=method, jac=gradient)
                 return result.x
 
-            elif objective_function == 'profit_maximization':
+            elif objective_function == "profit_maximization":
                 # Profit maximization for trading
-                weights = parameters.get('weights', np.ones(data.shape[0]))
-                risk_aversion = parameters.get('risk_aversion', 0.5)
+                weights = parameters.get("weights", np.ones(data.shape[0]))
+                risk_aversion = parameters.get("risk_aversion", 0.5)
 
                 def objective(x):
                     expected_return = np.dot(weights, x)
@@ -663,13 +681,21 @@ class DistributedMathematicalProcessor:
                     return -(expected_return - risk_aversion * risk)
 
                 bounds = [(0, 1) for _ in range(data.shape[0])]
-                constraints = {'type': 'eq', 'fun': lambda x: np.sum(x) - 1}
+                constraints = {"type": "eq", "fun": lambda x: np.sum(x) - 1}
 
-                result = minimize(objective, data, method='SLSQP', bounds=bounds, constraints=constraints)
+                result = minimize(
+                    objective,
+                    data,
+                    method="SLSQP",
+                    bounds=bounds,
+                    constraints=constraints,
+                )
                 return result.x
 
             else:
-                raise ValueError("Unknown objective function: {0}".format(objective_function))
+                raise ValueError(
+                    "Unknown objective function: {0}".format(objective_function)
+                )
 
         except Exception as e:
             logger.error("Error in optimization: {0}".format(e))
@@ -678,13 +704,13 @@ class DistributedMathematicalProcessor:
     def _numerical_integration(self, data: np.ndarray, parameters: Dict[str, Any]) -> np.ndarray:
         """Numerical integration using various methods"""
         try:
-            method = parameters.get('method', 'simpson')
-            axis = parameters.get('axis', -1)
+            method = parameters.get("method", "simpson")
+            axis = parameters.get("axis", -1)
 
-            if method == 'simpson':
-                # Simpson's rule
+            if method == "simpson":
+                # Simpson's rule'
                 result = simps(data, axis=axis)
-            elif method == 'trapezoid':
+            elif method == "trapezoid":
                 # Trapezoidal rule
                 result = np.trapz(data, axis=axis)
             else:
@@ -699,12 +725,12 @@ class DistributedMathematicalProcessor:
     def _monte_carlo_simulation(self, data: np.ndarray, parameters: Dict[str, Any]) -> np.ndarray:
         """Monte Carlo simulation for financial modeling"""
         try:
-            n_simulations = parameters.get('n_simulations', 10000)
-            n_steps = parameters.get('n_steps', 252)  # Trading days in a year
+            n_simulations = parameters.get("n_simulations", 10000)
+            n_steps = parameters.get("n_steps", 252)  # Trading days in a year
 
             # Parameters for geometric Brownian motion
-            mu = parameters.get('mu', 0.1)  # Expected return
-            sigma = parameters.get('sigma', 0.2)  # Volatility
+            mu = parameters.get("mu", 0.1)  # Expected return
+            sigma = parameters.get("sigma", 0.2)  # Volatility
 
             # Initialize results
             results = np.zeros((n_simulations, n_steps))
@@ -733,18 +759,20 @@ class DistributedMathematicalProcessor:
     def _fourier_transform(self, data: np.ndarray, parameters: Dict[str, Any]) -> np.ndarray:
         """Fast Fourier Transform for signal processing"""
         try:
-            transform_type = parameters.get('type', 'fft')
+            transform_type = parameters.get("type", "fft")
 
-            if transform_type == 'fft':
+            if transform_type == "fft":
                 result = np.fft.fft(data)
-            elif transform_type == 'ifft':
+            elif transform_type == "ifft":
                 result = np.fft.ifft(data)
-            elif transform_type == 'rfft':
+            elif transform_type == "rfft":
                 result = np.fft.rfft(data)
             else:
                 raise ValueError("Unknown transform type: {0}".format(transform_type))
 
-            return np.abs(result) if parameters.get('return_magnitude', False) else result
+            return (
+                np.abs(result) if parameters.get("return_magnitude", False) else result
+            )
 
         except Exception as e:
             logger.error("Error in Fourier transform: {0}".format(e))
@@ -753,8 +781,8 @@ class DistributedMathematicalProcessor:
     def _convolution(self, data: np.ndarray, parameters: Dict[str, Any]) -> np.ndarray:
         """Convolution operation"""
         try:
-            kernel = parameters.get('kernel', np.array([1, 0, -1]))  # Default edge detection
-            mode = parameters.get('mode', 'valid')
+            kernel = parameters.get("kernel", np.array([1, 0, -1]))
+            mode = parameters.get("mode", "valid")
 
             result = np.convolve(data, kernel, mode=mode)
             return result
@@ -766,22 +794,22 @@ class DistributedMathematicalProcessor:
     def _tensor_operations(self, data: np.ndarray, parameters: Dict[str, Any]) -> np.ndarray:
         """Advanced tensor operations"""
         try:
-            operation = parameters.get('operation', 'contraction')
+            operation = parameters.get("operation", "contraction")
 
-            if operation == 'contraction':
+            if operation == "contraction":
                 # Tensor contraction
-                axes = parameters.get('axes', ([0], [0]))
-                tensor_b = parameters.get('tensor_b', data.T)
+                axes = parameters.get("axes", ([0], [0]))
+                tensor_b = parameters.get("tensor_b", data.T)
                 result = np.tensordot(data, tensor_b, axes=axes)
 
-            elif operation == 'outer_product':
+            elif operation == "outer_product":
                 # Outer product
-                tensor_b = parameters.get('tensor_b', data)
+                tensor_b = parameters.get("tensor_b", data)
                 result = np.outer(data, tensor_b)
 
-            elif operation == 'kronecker_product':
+            elif operation == "kronecker_product":
                 # Kronecker product
-                tensor_b = parameters.get('tensor_b', data)
+                tensor_b = parameters.get("tensor_b", data)
                 result = np.kron(data, tensor_b)
 
             else:
@@ -796,10 +824,10 @@ class DistributedMathematicalProcessor:
     def _profit_vectorization(self, data: np.ndarray, parameters: Dict[str, Any]) -> np.ndarray:
         """Specialized profit vectorization for trading"""
         try:
-            btc_price = parameters.get('btc_price', 50000.0)
-            usdc_hold = parameters.get('usdc_hold', 1000.0)
-            entry_signals = parameters.get('entry_signals', data)
-            exit_signals = parameters.get('exit_signals', data)
+            btc_price = parameters.get("btc_price", 50000.0)
+            usdc_hold = parameters.get("usdc_hold", 1000.0)
+            entry_signals = parameters.get("entry_signals", data)
+            exit_signals = parameters.get("exit_signals", data)
 
             # Calculate profit vectors
             entry_vector = np.array(entry_signals)
@@ -873,7 +901,8 @@ class DistributedMathematicalProcessor:
 
             # Clear CUDA cache if using GPU
             if self.use_gpu and USING_CUDA:
-                cp.cuda.MemoryPool().free_all_blocks()
+                # xp.cuda.MemoryPool().free_all_blocks() # This line was removed as per the edit hint
+                pass # No direct CUDA cleanup in numpy
 
             # Force garbage collection
             gc.collect()

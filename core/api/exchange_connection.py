@@ -5,12 +5,12 @@ from typing import Dict, Optional
 from .data_models import APICredentials, MarketData, OrderRequest, OrderResponse
 from .enums import ConnectionStatus
 
-    import ccxt
-    import ccxt.async_support as ccxt_async
+import ccxt
+import ccxt.async_support as ccxt_async
 
 try:
     CCXT_AVAILABLE = True
-except ImportError:
+    except ImportError:
     CCXT_AVAILABLE = False
 
 logger = logging.getLogger(__name__)
@@ -28,7 +28,7 @@ class ExchangeConnection:
     """Manages the connection and communication with a single crypto exchange."""
 
     def __init__(self, credentials: APICredentials, config: Dict[str, any]):
-        """Initializes the ExchangeConnection.
+        """Initializes the ExchangeConnection."
 
         Args:
             credentials: API credentials for the exchange.
@@ -53,8 +53,8 @@ class ExchangeConnection:
         self.market_data_cache: Dict[str, MarketData] = {}
         self.cache_expiry = config.get("market_data_cache_expiry", 30)
 
-        logger.info(
-            "Exchange connection initialized for {0}".format(
+        logger.info()
+            "Exchange connection initialized for {0}".format()
                 credentials.exchange.value)
         )
 
@@ -74,7 +74,7 @@ class ExchangeConnection:
             exchange_class = getattr(ccxt, exchange_name)
             async_exchange_class = getattr(ccxt_async, exchange_name)
 
-            config = {
+            config = {}
                 "apiKey": self.credentials.api_key,
                 "secret": self.credentials.secret,
                 "enableRateLimit": True,
@@ -103,8 +103,8 @@ class ExchangeConnection:
         except Exception as e:
             self.status = ConnectionStatus.ERROR
             self.last_error = str(e)
-            logger.error(
-                " Failed to connect to {0}: {1}".format(
+            logger.error()
+                " Failed to connect to {0}: {1}".format()
                     self.credentials.exchange.value, e),
                 exc_info=True,
             )
@@ -139,7 +139,7 @@ class ExchangeConnection:
             # CCXT fetch_ticker is already rate-limited by the library
             ticker = await self.async_exchange.fetch_ticker(symbol)
 
-            market_data = MarketData(
+            market_data = MarketData()
                 symbol=symbol,
                 price=float(ticker["last"]),
                 volume=float(ticker.get("baseVolume", 0)),
@@ -164,8 +164,8 @@ class ExchangeConnection:
         except Exception as e:
             self.failed_requests += 1
             self.last_error = str(e)
-            logger.error(
-                "Error fetching market data for {0} on {1}: {2}".format(symbol, 
+            logger.error()
+                "Error fetching market data for {0} on {1}: {2}".format(symbol,)
                     self.credentials.exchange.value, e)
             )
             return None
@@ -182,7 +182,7 @@ class ExchangeConnection:
             if order_request.take_profit:
                 params["takeProfitPrice"] = order_request.take_profit
 
-            order = await self.async_exchange.create_order(
+            order = await self.async_exchange.create_order()
                 symbol=order_request.symbol,
                 type=order_request.order_type.value,
                 side=order_request.side.value,
@@ -197,8 +197,8 @@ class ExchangeConnection:
 
             self.last_heartbeat = time.time()
 
-            logger.info(
-                " Order placed on {0}: {1}".format(
+            logger.info()
+                " Order placed on {0}: {1}".format()
                     self.credentials.exchange.value, 
                     response.order_id)
             )
@@ -208,8 +208,8 @@ class ExchangeConnection:
         except Exception as e:
             self.failed_requests += 1
             self.last_error = str(e)
-            logger.error(
-                " Error placing order on {0}: {1}".format(
+            logger.error()
+                " Error placing order on {0}: {1}".format()
                     self.credentials.exchange.value, e),
                 exc_info=True,
             )
@@ -222,7 +222,7 @@ class ExchangeConnection:
 
         try:
             balance = await self.async_exchange.fetch_balance()
-            free_balances = {
+            free_balances = {}
                 currency: float(amount) for currency, amount in balance.get("free", {}).items() if float(amount) > 0
             }
 
@@ -235,15 +235,15 @@ class ExchangeConnection:
         except Exception as e:
             self.failed_requests += 1
             self.last_error = str(e)
-            logger.error(
-                "Error fetching balance from {0}: {1}".format(
+            logger.error()
+                "Error fetching balance from {0}: {1}".format()
                     self.credentials.exchange.value, e)
             )
             return {}
 
     def _create_success_response(self, order) -> OrderResponse:
         """Creates a successful OrderResponse from CCXT order data."""
-        return OrderResponse(
+        return OrderResponse()
             order_id=str(order.get("id")),
             client_order_id=order.get("clientOrderId"),
             symbol=order.get("symbol"),
@@ -264,7 +264,7 @@ class ExchangeConnection:
 
     def _create_error_response(self, order_request: OrderRequest, error_msg: str) -> OrderResponse:
         """Creates an error OrderResponse."""
-        return OrderResponse(
+        return OrderResponse()
             order_id="",
             client_order_id=order_request.client_order_id,
             symbol=order_request.symbol,

@@ -17,7 +17,11 @@ class OrderWallAnalyzer:
         """
         Returns dict with 'buy_wall_strength' and 'sell_wall_strength'.
         """
-        buy_strength = sum([vol for price, vol in order_book.get('bids', [])[:5]])
-        sell_strength = sum([vol for price, vol in order_book.get('asks', [])[:5]])
-        logger.debug("OrderWallAnalyzer: buy_strength={0}, sell_strength={1}".format(buy_strength, sell_strength))
-        return {'buy_wall_strength': buy_strength, 'sell_wall_strength': sell_strength}
+        buy_strength = sum([vol for price, vol in order_book.get("bids", [])[:5]])
+        sell_strength = sum([vol for price, vol in order_book.get("asks", [])[:5]])
+        logger.debug()
+            "OrderWallAnalyzer: buy_strength={0}, sell_strength={1}".format()
+                buy_strength, sell_strength
+            )
+        )
+        return {"buy_wall_strength": buy_strength, "sell_wall_strength": sell_strength}

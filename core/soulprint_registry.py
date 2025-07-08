@@ -1,12 +1,11 @@
 import json
 import time
-from collections import defaultdict
 from typing import Any, Dict, List, Optional
 from dataclasses import dataclass
 
 
 @dataclass
-class SoulprintEntry:
+    class SoulprintEntry:
     soulprint: str
     timestamp: str
     vector: Dict[str, float]  # DriftVector serialized
@@ -29,7 +28,7 @@ class SoulprintRegistry:
         if registry_file:
             self._load()
 
-    def log_trigger(
+    def log_trigger()
         self,
         asset: str,
         phase: float,
@@ -39,7 +38,7 @@ class SoulprintRegistry:
         timestamp: Optional[float] = None,
     ):
         """Log a trigger event (entry/exit) with all math, phase, drift, and trade outcome."""
-        entry = {
+        entry = {}
             "asset": asset,
             "phase": phase,
             "drift": drift,
@@ -53,7 +52,7 @@ class SoulprintRegistry:
 
     def log_backtest_signal(self, signal_data: Dict[str, Any]):
         """Logs a signal from a backtest run, capturing key performance and context indicators."""
-        entry = {
+        entry = {}
             "type": "backtest_signal",
             "timestamp": signal_data.get("timestamp", time.time()),
             "asset": signal_data.get("asset"),
@@ -76,7 +75,7 @@ class SoulprintRegistry:
         best = max(filtered, key=lambda t: t["trade_result"].get("profit", 0))
         return best
 
-    def get_profit_vector(
+    def get_profit_vector()
         self, asset: str, phase: float = None, drift: float = None, window: int = 1000
     ) -> List[float]:
         """Return the rolling profit vector for a given asset/phase/drift."""
@@ -114,7 +113,7 @@ class SoulprintRegistry:
 
 
 # Example usage and testing
-def main():
+    def main():
     # You can set the registry path via env var, class method, or constructor
     # os.environ['SOULPRINT_REGISTRY_PATH'] = 'custom/path/registry.json'
     # SoulprintRegistry.set_default_registry_path('custom/path/registry.json')
@@ -122,20 +121,22 @@ def main():
     registry = SoulprintRegistry()
 
     # Example: Register a soulprint from a drift vector
-    test_vector = {
+    test_vector = {}
         "pair": "BTC/USDC",
         "entropy": 0.88,
-        "momentum": 0.04,
+        "momentum": 0.4,
         "volatility": 0.19,
         "temporal_variance": 0.92,
     }
 
-    soulprint = registry.register_soulprint(vector=test_vector, strategy_id="momentum_breakout", confidence=0.85)
+    soulprint = registry.register_soulprint()
+        vector=test_vector, strategy_id="momentum_breakout", confidence=0.85
+    )
 
     print("🌀 Registered Soulprint: {0}".format(soulprint))
 
     # Mark as executed with profit
-    registry.mark_executed(soulprint, profit_result=0.023)
+    registry.mark_executed(soulprint, profit_result=0.23)
 
     # Get registry statistics
     stats = registry.get_registry_stats()

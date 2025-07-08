@@ -1,4 +1,4 @@
-    import sys
+import sys
 from core.ferris_rde_daemon import FerrisRDEDaemon, DaemonConfig, get_daemon_instance
 from utils.safe_print import success, error, safe_print
 import asyncio
@@ -26,7 +26,7 @@ async def test_daemon_initialization():
 
     try:
         # Create custom configuration
-        config = DaemonConfig(
+        config = DaemonConfig()
             daemon_name="TestFerrisRDE",
             tick_interval_seconds=2.0,  # Faster for testing
             health_check_interval_seconds=10.0,
@@ -72,7 +72,7 @@ async def test_daemon_start_stop(daemon: FerrisRDEDaemon):
 
         # Check metrics
         metrics = daemon.metrics.get_summary()
-        safe_print(
+        safe_print()
             f"📊 Metrics after 10s: {metrics['total_ticks_processed']} ticks processed"
         )
 
@@ -96,20 +96,20 @@ async def test_entry_exit_logic(daemon: FerrisRDEDaemon):
         await daemon.start()
 
         # Simulate market data processing
-        test_market_data = {
+        test_market_data = {}
             "asset": "BTC/USD",
             "timestamp": time.time(),
             "current_price": 50000.0,
             "price_change": 2.5,
             "volume": 1000000.0,
             "volatility": 0.15,
-            "order_book": {
+            "order_book": {}
                 "bids": [[49999, 1.0], [49998, 2.0]],
                 "asks": [[50001, 1.0], [50002, 2.0]],
             },
         }
         # Process through trading pipeline
-        trading_signal = await daemon.trading_pipeline.process_market_data(
+        trading_signal = await daemon.trading_pipeline.process_market_data()
             market_data=test_market_data, asset="BTC/USD", thermal_state="warm"
         )
 
@@ -120,9 +120,9 @@ async def test_entry_exit_logic(daemon: FerrisRDEDaemon):
         assert trading_signal.bit_depth >= 2
         assert trading_signal.bit_depth <= 42
 
-        safe_print(
+        safe_print()
             f"📈 Generated signal: {trading_signal.signal_type} "
-            f"(confidence: {trading_signal.confidence:.3f}, "
+            f"(confidence: {trading_signal.confidence:.3f}, ")
             f"bit_depth: {trading_signal.bit_depth})"
         )
 
@@ -154,8 +154,8 @@ async def test_mathematical_integration(daemon: FerrisRDEDaemon):
         sample_time_series = list(range(len(sample_price_data)))
 
         # Update mathematical states
-        mathematical_states = (
-            await daemon.connectivity_manager.update_mathematical_states(
+        mathematical_states = ()
+            await daemon.connectivity_manager.update_mathematical_states()
                 price_data=sample_price_data,
                 volume_data=sample_volume_data,
                 time_series=sample_time_series,
@@ -169,19 +169,19 @@ async def test_mathematical_integration(daemon: FerrisRDEDaemon):
         # Check for specific mathematical components
         if "ferris_wheel_state" in mathematical_states:
             ferris_state = mathematical_states["ferris_wheel_state"]
-            safe_print(
+            safe_print()
                 f"🎡 Ferris wheel state: cycle_position={ferris_state.cycle_position:.3f}"
             )
 
         if "quantum_thermal_state" in mathematical_states:
             quantum_state = mathematical_states["quantum_thermal_state"]
-            safe_print(
+            safe_print()
                 f"⚛️ Quantum thermal state: temperature={quantum_state.temperature:.1f}K"
             )
 
         if "void_well_metrics" in mathematical_states:
             void_well = mathematical_states["void_well_metrics"]
-            safe_print(
+            safe_print()
                 f"🕳️ Void well metrics: fractal_index={void_well.fractal_index:.4f}"
             )
 
@@ -225,7 +225,7 @@ async def test_health_monitoring(daemon: FerrisRDEDaemon):
 
         # Check trading status
         trading_status = system_status["trading_status"]
-        safe_print(
+        safe_print()
             f"📈 Trading Status: {trading_status.get('overall_status', 'unknown')}"
         )
 
@@ -239,7 +239,7 @@ async def test_health_monitoring(daemon: FerrisRDEDaemon):
         assert "metrics" in daemon_status
         assert "components" in daemon_status
 
-        safe_print(
+        safe_print()
             f"🎡 Daemon Status: {daemon_status['daemon_info']['name']} "
             f"(uptime: {daemon_status['metrics']['uptime_seconds']:.1f}s)"
         )
@@ -269,7 +269,7 @@ async def test_performance_metrics(daemon: FerrisRDEDaemon):
         performance_summary = daemon.metrics.get_summary()
 
         # Verify metrics structure
-        required_metrics = [
+        required_metrics = []
             "uptime_seconds",
             "total_ticks_processed",
             "total_signals_generated",
@@ -283,11 +283,11 @@ async def test_performance_metrics(daemon: FerrisRDEDaemon):
         safe_print("📊 Performance Metrics:")
         safe_print(f"  Uptime: {performance_summary['uptime_seconds']:.1f}s")
         safe_print(f"  Ticks Processed: {performance_summary['total_ticks_processed']}")
-        safe_print(
+        safe_print()
             f"  Signals Generated: {performance_summary['total_signals_generated']}"
         )
         safe_print(f"  Trades Executed: {performance_summary['total_trades_executed']}")
-        safe_print(
+        safe_print()
             f"  Avg Processing Time: {performance_summary['avg_tick_processing_time_ms']:.2f}ms"
         )
         safe_print(f"  Total Errors: {performance_summary['total_errors']}")
@@ -319,12 +319,12 @@ async def test_pipeline_integration(daemon: FerrisRDEDaemon):
             pipeline = daemon.trade_tick_pipelines["BTC/USD"]
 
             # Create test order book
-            test_order_book = {
+            test_order_book = {}
                 "bids": [[49999, 1.0], [49998, 2.0], [49997, 1.5]],
                 "asks": [[50001, 1.0], [50002, 2.0], [50003, 1.5]],
             }
             # Process tick
-            tick = pipeline.process_tick(
+            tick = pipeline.process_tick()
                 order_book=test_order_book,
                 symbol="BTC/USD",
                 ferris_phase=0.5,
@@ -338,9 +338,9 @@ async def test_pipeline_integration(daemon: FerrisRDEDaemon):
             assert len(tick.strategy_bits) > 0
             assert tick.vector.shape[0] > 0
 
-            safe_print(
+            safe_print()
                 f"📊 Processed tick: {tick.symbol} "
-                f"(entry: {tick.entry}, exit: {tick.exit}, "
+                f"(entry: {tick.entry}, exit: {tick.exit}, ")
                 f"strategy_bits: {len(tick.strategy_bits)})"
             )
 
@@ -398,7 +398,7 @@ async def run_comprehensive_test():
 
         # Final status report
         final_status = daemon.get_daemon_status()
-        safe_print(
+        safe_print()
             f"📋 Final Status: {final_status['daemon_info']['name']} "
             f"- Total Errors: {final_status['metrics']['total_errors']}"
         )
@@ -440,7 +440,7 @@ async def quick_demo():
         safe_print(f"  Ticks Processed: {metrics['total_ticks_processed']}")
         safe_print(f"  Signals Generated: {metrics['total_signals_generated']}")
         safe_print(f"  Trades Executed: {metrics['total_trades_executed']}")
-        safe_print(
+        safe_print()
             f"  Avg Processing Time: {metrics['avg_tick_processing_time_ms']:.2f}ms"
         )
         safe_print(f"  Total Errors: {metrics['total_errors']}")
@@ -468,7 +468,7 @@ def main():
 
 if __name__ == "__main__":
     # Configure logging
-    logging.basicConfig(
+    logging.basicConfig()
         level=logging.INFO,
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     )

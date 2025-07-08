@@ -1,12 +1,12 @@
-        from core.math.trading_tensor_ops import trading_tensor_ops
+from core.math.trading_tensor_ops import trading_tensor_ops
 import numpy as np
-        import traceback
-    from core.ccxt_trading_executor import ccxt_executor, execute_trading_signal
-    from core.ferris_rde_core import ferris_rde_core
-    from core.ghost_router import GhostRouter
-    from core.integrated_ferris_glyph_controller import integrated_controller, process_btc_cycle
-    from core.lantern_core import enhanced_lantern_core, map_btc_price_to_word
-    from core.recursive_lattice_theorem import (
+import traceback
+from core.ccxt_trading_executor import ccxt_executor, execute_trading_signal
+from core.ferris_rde_core import ferris_rde_core
+from core.ghost_router import GhostRouter
+from core.integrated_ferris_glyph_controller import integrated_controller, process_btc_cycle
+from core.lantern_core import enhanced_lantern_core, map_btc_price_to_word
+from core.recursive_lattice_theorem import ()
 from typing import Dict, Any, List
 import json
 import os
@@ -41,19 +41,19 @@ Tests cover:
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'core'))
 
 # Import recursive lattice theorem
-try:
+    try:
         recursive_lattice, process_recursive_cycle, get_lattice_statistics,
         explain_system_mathematics, MathematicalConstant, PhaseGrade
     )
     LATTICE_AVAILABLE = True
-except ImportError as e:
+    except ImportError as e:
     print(f"❌ Recursive Lattice Theorem not available: {e}")
     LATTICE_AVAILABLE = False
 
 # Import existing Schwabot systems
-try:
+    try:
     SCHWABOT_CORE_AVAILABLE = True
-except ImportError as e:
+    except ImportError as e:
     print(f"❌ Schwabot core components not available: {e}")
     SCHWABOT_CORE_AVAILABLE = False
 
@@ -73,7 +73,7 @@ def test_mathematical_constants():
     """Test that mathematical constants are properly defined."""
     print_banner("TESTING MATHEMATICAL CONSTANTS", "🔢")
 
-    constants = [
+    constants = []
         ("Ferris Cycle", MathematicalConstant.FERRIS_CYCLE_MINUTES, 3.75),
         ("Glyph Lambda", MathematicalConstant.GLYPH_GROWTH_LAMBDA, 1.2),
         ("Glyph Mu", MathematicalConstant.GLYPH_DECAY_MU, 0.8),
@@ -130,7 +130,7 @@ def test_lantern_core_mathematics():
 
     # Test projection scan
     memory_hash = "a1b2c3d4e5f6"
-    glyph_payload = {
+    glyph_payload = {}
         "entropy_value": 0.7,
         "profit_symbolization": 0.8,
         "btc_correlation": 0.6,
@@ -149,7 +149,7 @@ def test_lantern_core_mathematics():
     assert -1.0 <= match_score <= 1.0, "Match score must be between -1 and 1"
 
     # Test trade trigger evaluation
-    trade_trigger = lantern_math.evaluate_trade_trigger(
+    trade_trigger = lantern_math.evaluate_trade_trigger()
         projection=projection,
         glyph_state=glyph_payload,
         ferris_phase=0.5,
@@ -199,7 +199,7 @@ def test_complete_recursive_cycle():
     for i, price in enumerate(btc_prices):
         print(f"\n🔁 Cycle {i+1}: BTC Price ${price:,.2f}")
 
-        input_data = {
+        input_data = {}
             "current_glyphs": 50 + i * 10,
             "ai_output": [f"signal_{i}", f"trend_{price}", "market_analysis"],
             "word": ["profit", "growth", "momentum", "surge", "bull"][i],
@@ -252,7 +252,7 @@ def test_integration_with_existing_systems():
 
     # Test 4: Recursive Lattice Processing
     print("\n   4️⃣  Recursive Lattice Processing:")
-    lattice_input = {
+    lattice_input = {}
         "current_glyphs": 75,
         "ai_output": ["integrated_signal", signal.recommended_action],
         "word": word_mapping.get('selected_word', 'default'),
@@ -287,20 +287,20 @@ def test_visual_phenomenon_explanation():
     print_banner("TESTING VISUAL PHENOMENON EXPLANATION", "👁️")
 
     # Simulate conditions that cause "weird" visual behavior
-    test_scenarios = [
-        {
+    test_scenarios = []
+        {}
             "name": "Glyph Overflow",
             "glyphs": 250,  # Near max capacity
             "phase": 0.95,   # Near peak
             "entropy": 0.8   # High entropy
         },
-        {
+        {}
             "name": "Ring Collapse",
             "glyphs": 256,  # At max capacity
             "phase": 1.0,    # At peak
             "entropy": 0.9   # Very high entropy
         },
-        {
+        {}
             "name": "Phase Instability",
             "glyphs": 128,  # Mid capacity
             "phase": 0.1,    # Near valley
@@ -339,7 +339,7 @@ def test_profit_generation_pipeline():
     print_banner("TESTING PROFIT GENERATION PIPELINE", "💰")
 
     # Simulate profitable trading sequence
-    profitable_sequence = [
+    profitable_sequence = []
         {"price": 49000.0, "signal": "accumulate", "confidence": 0.85},
         {"price": 50500.0, "signal": "hold", "confidence": 0.75},
         {"price": 52000.0, "signal": "partial_sell", "confidence": 0.90},
@@ -354,7 +354,7 @@ def test_profit_generation_pipeline():
         print(f"\n   💰 Step {i+1}: ${step['price']:,.2f}")
 
         # Process through recursive lattice
-        input_data = {
+        input_data = {}
             "current_glyphs": 50 + i * 20,
             "ai_output": [step['signal'], f"confidence_{step['confidence']}"],
             "word": "profit",
@@ -391,7 +391,7 @@ def test_profit_generation_pipeline():
     if total_profit > 0:
         print("   ✅ Profit generation pipeline validated")
     else:
-        print("   ⚠️  No profit generated (expected for simulation)")
+        print("   ⚠️  No profit generated (expected for, simulation)")
 
 def test_system_statistics():
     """Test system statistics and monitoring."""

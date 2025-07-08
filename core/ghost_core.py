@@ -8,10 +8,8 @@ import threading
 from concurrent.futures import ThreadPoolExecutor
 import hashlib
 import json
-    import cupy as cp
-
 import numpy as np
-    import numpy as np
+import numpy as np
 
 #!/usr/bin/env python3
 """
@@ -22,14 +20,17 @@ registry echoes of past high-yield delta patterns. Operates in memory, not immed
 
 # CUDA Integration with Fallback
 try:
+    import cupy as cp
     USING_CUDA = True
     _backend = 'cupy (GPU)'
     xp = cp
 except ImportError:
+    import numpy as cp  # fallback to numpy
     USING_CUDA = False
     _backend = 'numpy (CPU)'
-    xp = np
+    xp = cp
 
+# Log backend status
 logger = logging.getLogger(__name__)
 if USING_CUDA:
     logger.info("⚡ Ghost Core using GPU acceleration: {0}".format(_backend))
@@ -37,392 +38,427 @@ else:
     logger.info("🔄 Ghost Core using CPU fallback: {0}".format(_backend))
 
 
-class StrategyBranch(Enum):
-    """Enumeration of available strategy branches."""
+@dataclass
+class GhostSignal:
+    """Ghost signal with metadata."""
 
-    MEAN_REVERSION = "mean_reversion"
-    MOMENTUM = "momentum"
-    ARBITRAGE = "arbitrage"
-    GHOST_ACCUMULATION = "ghost_accumulation"
-    GHOST_DISTRIBUTION = "ghost_distribution"
-    MATRIX_OPTIMIZED = "matrix_optimized"
-    KELLY_ENHANCED = "kelly_enhanced"
-    HOLOGRAPHIC_MEMORY = "holographic_memory"
+    signal_type: str
+    strength: float
+    timestamp: float
+    source: str
+    metadata: Dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
-class GhostState:
-    """Represents the current Ghost Core state."""
+class GhostPattern:
+    """Ghost pattern with characteristics."""
 
-    timestamp: float
-    current_branch: StrategyBranch
-    hash_signature: str
+    pattern_type: str
     confidence: float
-    profit_potential: float
-    memory_depth: int
-    mathematical_complexity: float
-    market_conditions: Dict[str, Any] = field(default_factory=dict)
-
-
-@dataclass
-class StrategyMemory:
-    """Memory structure for strategy performance tracking."""
-
-    branch: StrategyBranch
-    total_trades: int = 0
-    winning_trades: int = 0
-    total_profit: float = 0.0
-    avg_profit: float = 0.0
-    success_rate: float = 0.0
-    last_used: float = 0.0
-    hash_triggers: List[str] = field(default_factory=list)
-    mathematical_states: List[Dict[str, Any]] = field(default_factory=list)
-
-
-@dataclass
-class GhostTrade:
-    """Represents a ghost trade signal."""
-
-    symbol: str
-    side: str  # 'buy' or 'sell'
-    amount: float
-    trigger_price: float
-    echo_strength: float
-    profit_forecast: float
-    decay_rate: float
-    timestamp: float
-    reference_hash: str
-    strategy_branch: StrategyBranch
+    duration: float
+    signals: List[GhostSignal]
+    metadata: Dict[str, Any] = field(default_factory=dict)
 
 
 class GhostCore:
     """
-    Ghost Core system for hash-based strategy switching and internalized memory.
+    Ghost Core system for advanced signal processing and pattern recognition.
 
-    This system implements:
-    1. Hash-based strategy transitions
-    2. Multi-branch mathematical processing
-    3. Internalized memory management
-    4. Profit vector optimization
-    5. Market condition analysis
+    Implements ghost signal detection, pattern analysis, and predictive modeling
+    for trading system enhancement.
     """
 
-    def __init__(self, memory_depth: int = 1000):
-        """Initialize Ghost Core system."""
-        self.memory_depth = memory_depth
-        self.current_state: Optional[GhostState] = None
-        self.strategy_memories: Dict[StrategyBranch, StrategyMemory] = {}
-        self.hash_history: deque = deque(maxlen=memory_depth)
-        self.mathematical_history: deque = deque(maxlen=memory_depth)
-        self.ghost_trades: List[GhostTrade] = []
+    def __init__(self, sensitivity: float = 0.1, max_patterns: int = 100):
+        """Initialize the Ghost Core system."""
+        self.sensitivity = sensitivity
+        self.max_patterns = max_patterns
+        self.signal_history: List[GhostSignal] = []
+        self.pattern_history: List[GhostPattern] = []
+        self.analysis_cache: Dict[str, Any] = {}
 
-        # Thresholds and parameters
-        self.delta_ghost = 0.75  # Ghost trigger threshold
-        self.theta_vol = 0.15  # Volatility threshold
-        self.epsilon = 0.1  # Exit threshold
-        self.kappa = 1.2  # Recursive gain exponent
+        # Ghost detection parameters
+        self.min_signal_strength = 0.05
+        self.pattern_confidence_threshold = 0.7
+        self.max_signal_age = 3600  # 1 hour
 
-        # Initialize strategy memories
-        for branch in StrategyBranch:
-            self.strategy_memories[branch] = StrategyMemory(branch=branch)
+        # Performance tracking
+        self.total_signals = 0
+        self.total_patterns = 0
+        self.detection_accuracy = 0.0
 
-        # Mathematical processing functions
-        self.math_processors: Dict[str, Callable] = {
-            "kelly_optimization": self._kelly_optimization,
-            "matrix_analysis": self._matrix_analysis,
-            "holographic_memory": self._holographic_memory_analysis,
-            "profit_vector": self._profit_vector_analysis,
-            "volatility_analysis": self._volatility_analysis,
-        }
+        logger.info("👻 Ghost Core initialized with sensitivity {0}".format(sensitivity))
 
-        # Threading
-        self.lock = threading.Lock()
-        self.thread_pool = ThreadPoolExecutor(max_workers=4)
-
-        logger.info("Ghost Core initialized with memory depth {0}".format(memory_depth))
-
-    def generate_strategy_hash(self, market_conditions: Dict[str, Any], mathematical_state: Dict[str, Any]) -> str:
-        """Generate strategy hash based on market conditions and mathematical state."""
-        combined_data = {"market": market_conditions, "math": mathematical_state, "timestamp": time.time()}
-
-        # Create deterministic hash
-        data_str = json.dumps(combined_data, sort_keys=True)
-        return hashlib.sha256(data_str.encode()).hexdigest()[:16]
-
-    def calculate_ghost_echo(
-        self, current_pattern: np.ndarray, reference_pattern: np.ndarray, profit_delta: float
-    ) -> float:
+    def process_signal(self, signal_data: Dict[str, Any], source: str = "unknown") -> GhostSignal:
         """
-        Calculate ghost echo strength using cosine similarity.
+        Process incoming signal data and create a ghost signal.
 
-        Mathematical formula:
-        G_echo(t) = cos_sim(H_t, H_ref) × Δ_profit
+        Args:
+            signal_data: Raw signal data dictionary
+            source: Signal source identifier
+
+        Returns:
+            GhostSignal with processed information
         """
-        # Normalize patterns
-        norm_current = current_pattern / (np.linalg.norm(current_pattern) + 1e-8)
-        norm_reference = reference_pattern / (np.linalg.norm(reference_pattern) + 1e-8)
-
-        # Calculate cosine similarity
-        cos_sim = np.dot(norm_current, norm_reference)
-
-        # Apply profit weighting
-        ghost_echo = cos_sim * profit_delta
-
-        return ghost_echo
-
-    def evaluate_ghost_trigger(self, echo_strength: float, volatility: float) -> bool:
-        """
-        Evaluate if ghost trade should be triggered.
-
-        Entry logic: if ghost echo exceeds threshold and tick volatility is low
-        Enter_ghost_trade = G_echo(t) > δ_ghost and V(t) < θ_vol
-        """
-        return echo_strength > self.delta_ghost and volatility < self.theta_vol
-
-    def calculate_profit_decay(self, ghost_trade: GhostTrade, current_time: float) -> float:
-        """
-        Calculate profit decay for ghost trade.
-
-        Mathematical formula:
-        P_ghost(t) = ∑_{i ∈ τ} [ΔP(i) · sigmoid(t - t_i)]
-        """
-        time_delta = current_time - ghost_trade.timestamp
-        sigmoid_factor = 1 / (1 + np.exp(-time_delta * ghost_trade.decay_rate))
-
-        return ghost_trade.profit_forecast * sigmoid_factor
-
-    def should_exit_ghost_trade(self, ghost_trade: GhostTrade, current_time: float) -> bool:
-        """
-        Determine if ghost trade should be exited.
-
-        Exit condition: ∫₀^τ (ψ_profit_decay(t) dt) > ε
-        """
-        decay_integral = self.calculate_profit_decay(ghost_trade, current_time)
-        return decay_integral > self.epsilon
-
-    def process_market_signal(self, market_data: Dict[str, Any]) -> Optional[GhostTrade]:
-        """Process market signal and potentially generate ghost trade."""
         try:
-            # Extract market patterns
-            price_pattern = np.array(market_data.get("price_history", []))
-            volume_pattern = np.array(market_data.get("volume_history", []))
+            # Extract signal parameters
+            signal_type = signal_data.get("type", "unknown")
+            strength = signal_data.get("strength", 0.0)
+            timestamp = signal_data.get("timestamp", time.time())
 
-            if len(price_pattern) < 10:  # Need sufficient history
-                return None
+            # Validate signal strength
+            if strength < self.min_signal_strength:
+                logger.debug("Signal strength too low: {0}".format(strength))
+                return self._create_null_signal(source)
 
-            # Calculate current volatility
-            volatility = np.std(price_pattern[-10:]) / np.mean(price_pattern[-10:])
+            # Create ghost signal
+            ghost_signal = GhostSignal(
+                signal_type=signal_type,
+                strength=strength,
+                timestamp=timestamp,
+                source=source,
+                metadata=signal_data
+            )
 
-            # Find best matching reference pattern
-            best_echo = 0.0
-            best_reference = None
+            # Add to history
+            self.signal_history.append(ghost_signal)
+            self.total_signals += 1
 
-            for memory in self.strategy_memories.values():
-                for math_state in memory.mathematical_states:
-                    if "price_pattern" in math_state:
-                        ref_pattern = np.array(math_state["price_pattern"])
-                        if len(ref_pattern) >= len(price_pattern):
-                            # Calculate echo strength
-                            echo = self.calculate_ghost_echo(
-                                price_pattern, ref_pattern[: len(price_pattern)], math_state.get("profit_delta", 0.0)
-                            )
+            # Keep history manageable
+            if len(self.signal_history) > self.max_patterns * 2:
+                self.signal_history = self.signal_history[-self.max_patterns:]
 
-                            if echo > best_echo:
-                                best_echo = echo
-                                best_reference = math_state
-
-            # Check if ghost trade should be triggered
-            if best_reference and self.evaluate_ghost_trigger(best_echo, volatility):
-                # Generate ghost trade
-                ghost_trade = GhostTrade(
-                    symbol=market_data.get("symbol", "UNKNOWN"),
-                    side=best_reference.get("recommended_side", "buy"),
-                    amount=self._calculate_optimal_amount(market_data, best_reference),
-                    trigger_price=market_data.get("current_price", 0.0),
-                    echo_strength=best_echo,
-                    profit_forecast=best_reference.get("profit_forecast", 0.0),
-                    decay_rate=0.1,  # Default decay rate
-                    timestamp=time.time(),
-                    reference_hash=best_reference.get("hash", ""),
-                    strategy_branch=StrategyBranch.GHOST_ACCUMULATION,
-                )
-
-                with self.lock:
-                    self.ghost_trades.append(ghost_trade)
-
-                logger.info("Ghost trade generated: {0} {1} ".format(ghost_trade.symbol, ghost_trade.side) "echo={0}".format(best_echo:.3f))
-
-                return ghost_trade
-
-            return None
+            logger.debug("Processed ghost signal: type={0}, strength={1}".format(signal_type, strength))
+            return ghost_signal
 
         except Exception as e:
-            logger.error("Error processing market signal: {0}".format(e))
+            logger.error("Error processing signal: {0}".format(e))
+            return self._create_null_signal(source)
+
+    def analyze_patterns(self, lookback_period: Optional[int] = None) -> List[GhostPattern]:
+        """
+        Analyze signal history for ghost patterns.
+
+        Args:
+            lookback_period: Number of signals to analyze (defaults to all)
+
+        Returns:
+            List of detected GhostPattern objects
+        """
+        try:
+            lookback_period = lookback_period or len(self.signal_history)
+            
+            if len(self.signal_history) < 3:
+                return []
+
+            # Get recent signals
+            recent_signals = self.signal_history[-lookback_period:]
+
+            # Detect different pattern types
+            patterns = []
+            
+            # Detect trending patterns
+            trending_pattern = self._detect_trending_pattern(recent_signals)
+            if trending_pattern:
+                patterns.append(trending_pattern)
+
+            # Detect oscillating patterns
+            oscillating_pattern = self._detect_oscillating_pattern(recent_signals)
+            if oscillating_pattern:
+                patterns.append(oscillating_pattern)
+
+            # Detect breakout patterns
+            breakout_pattern = self._detect_breakout_pattern(recent_signals)
+            if breakout_pattern:
+                patterns.append(breakout_pattern)
+
+            # Filter by confidence threshold
+            valid_patterns = [p for p in patterns if p.confidence >= self.pattern_confidence_threshold]
+
+            # Add to pattern history
+            self.pattern_history.extend(valid_patterns)
+            self.total_patterns += len(valid_patterns)
+
+            # Keep pattern history manageable
+            if len(self.pattern_history) > self.max_patterns:
+                self.pattern_history = self.pattern_history[-self.max_patterns:]
+
+            logger.info("Detected {0} ghost patterns".format(len(valid_patterns)))
+            return valid_patterns
+
+        except Exception as e:
+            logger.error("Error analyzing patterns: {0}".format(e))
+            return []
+
+    def _detect_trending_pattern(self, signals: List[GhostSignal]) -> Optional[GhostPattern]:
+        """Detect trending pattern in signal strength."""
+        if len(signals) < 5:
             return None
 
-    def update_strategy_memory(self, branch: StrategyBranch, trade_result: Dict[str, Any]) -> None:
-        """Update strategy memory with trade results."""
-        with self.lock:
-            memory = self.strategy_memories[branch]
+        # Extract signal strengths
+        strengths = [s.strength for s in signals]
+        timestamps = [s.timestamp for s in signals]
 
-            # Update trade statistics
-            memory.total_trades += 1
-            if trade_result.get("profit", 0) > 0:
-                memory.winning_trades += 1
+        # Calculate trend using linear regression
+        x = xp.array(timestamps)
+        y = xp.array(strengths)
 
-            profit = trade_result.get("profit", 0.0)
-            memory.total_profit += profit
-            memory.avg_profit = memory.total_profit / memory.total_trades
-            memory.success_rate = memory.winning_trades / memory.total_trades
-            memory.last_used = time.time()
+        # Simple linear regression
+        slope = xp.corrcoef(x, y)[0, 1] * xp.std(y) / xp.std(x)
 
-            # Store mathematical state
-            math_state = {
-                "price_pattern": trade_result.get("price_pattern", []),
-                "profit_delta": profit,
-                "profit_forecast": trade_result.get("profit_forecast", 0.0),
-                "recommended_side": trade_result.get("side", "buy"),
-                "hash": self.generate_strategy_hash(
-                    trade_result.get("market_conditions", {}), trade_result.get("mathematical_state", {})
-                ),
-                "timestamp": time.time(),
-            }
+        # Check if trend is significant
+        if abs(slope) > self.sensitivity:
+            confidence = min(abs(slope) / 0.1, 1.0)
+            duration = timestamps[-1] - timestamps[0]
 
-            memory.mathematical_states.append(math_state)
+            return GhostPattern(
+                pattern_type="trending",
+                confidence=confidence,
+                duration=duration,
+                signals=signals,
+                metadata={"slope": slope, "trend_direction": "up" if slope > 0 else "down"}
+            )
 
-            # Limit memory size
-            if len(memory.mathematical_states) > self.memory_depth:
-                memory.mathematical_states.pop(0)
+        return None
 
-    def _calculate_optimal_amount(self, market_data: Dict[str, Any], reference_state: Dict[str, Any]) -> float:
-        """Calculate optimal trade amount based on Kelly criterion and risk."""
-        base_amount = market_data.get("available_balance", 1000.0) * 0.02  # 2% risk
+    def _detect_oscillating_pattern(self, signals: List[GhostSignal]) -> Optional[GhostPattern]:
+        """Detect oscillating pattern in signal strength."""
+        if len(signals) < 7:
+            return None
 
-        # Apply Kelly optimization if available
-        if "kelly_fraction" in reference_state:
-            kelly_fraction = min(reference_state["kelly_fraction"], 0.25)  # Max 25%
-            base_amount *= kelly_fraction
+        # Extract signal strengths
+        strengths = [s.strength for s in signals]
 
-        return base_amount
+        # Calculate oscillation metrics
+        mean_strength = xp.mean(strengths)
+        variance = xp.var(strengths)
 
-    def _kelly_optimization(self, data: Dict[str, Any]) -> Dict[str, Any]:
-        """Kelly optimization mathematical processor."""
-        win_rate = data.get("win_rate", 0.5)
-        avg_win = data.get("avg_win", 1.0)
-        avg_loss = data.get("avg_loss", 1.0)
+        # Check for oscillation (high variance around mean)
+        if variance > self.sensitivity * 0.1:
+            # Calculate oscillation frequency
+            zero_crossings = sum(1 for i in range(1, len(strengths)) 
+                               if (strengths[i] - mean_strength) * (strengths[i-1] - mean_strength) < 0)
 
-        # Kelly formula: f = (bp - q) / b
-        # where b = avg_win/avg_loss, p = win_rate, q = 1 - win_rate
-        b = avg_win / max(avg_loss, 0.01)
-        p = win_rate
-        q = 1 - win_rate
+            frequency = zero_crossings / (len(strengths) - 1)
+            confidence = min(frequency * 2, 1.0)
+            duration = signals[-1].timestamp - signals[0].timestamp
 
-        kelly_fraction = (b * p - q) / b
-        kelly_fraction = max(0, min(kelly_fraction, 1))  # Clamp to [0, 1]
+            return GhostPattern(
+                pattern_type="oscillating",
+                confidence=confidence,
+                duration=duration,
+                signals=signals,
+                metadata={"frequency": frequency, "zero_crossings": zero_crossings, "variance": variance}
+            )
 
-        return {"kelly_fraction": kelly_fraction}
+        return None
 
-    def _matrix_analysis(self, data: Dict[str, Any]) -> Dict[str, Any]:
-        """Matrix analysis mathematical processor."""
-        correlation_matrix = np.array(data.get("correlation_matrix", [[1.0]]))
-        eigenvalues, eigenvectors = np.linalg.eig(correlation_matrix)
+    def _detect_breakout_pattern(self, signals: List[GhostSignal]) -> Optional[GhostPattern]:
+        """Detect breakout pattern in signal strength."""
+        if len(signals) < 10:
+            return None
 
-        return {
-            "eigenvalues": eigenvalues.tolist(),
-            "eigenvectors": eigenvectors.tolist(),
-            "condition_number": np.linalg.cond(correlation_matrix),
-        }
+        # Calculate baseline and recent values
+        baseline = xp.mean([s.strength for s in signals[:-3]])  # Exclude last 3 signals
+        recent = xp.mean([s.strength for s in signals[-3:]])
 
-    def _holographic_memory_analysis(self, data: Dict[str, Any]) -> Dict[str, Any]:
-        """Holographic memory analysis mathematical processor."""
-        patterns = data.get("patterns", [])
-        if not patterns:
-            return {"holographic_strength": 0.0}
+        # Check for significant breakout
+        breakout_threshold = self.sensitivity * 2
+        if abs(recent - baseline) > breakout_threshold:
+            confidence = min(abs(recent - baseline) / (breakout_threshold * 2), 1.0)
+            duration = signals[-1].timestamp - signals[-3].timestamp
 
-        # Calculate pattern interference
-        pattern_matrix = np.array(patterns)
-        interference = np.corrcoef(pattern_matrix)
-        holographic_strength = np.mean(np.abs(interference))
+            return GhostPattern(
+                pattern_type="breakout",
+                confidence=confidence,
+                duration=duration,
+                signals=signals[-3:],
+                metadata={"baseline": baseline, "recent": recent, "breakout_magnitude": abs(recent - baseline)}
+            )
 
-        return {"holographic_strength": holographic_strength}
+        return None
 
-    def _profit_vector_analysis(self, data: Dict[str, Any]) -> Dict[str, Any]:
-        """Profit vector analysis mathematical processor."""
-        profit_history = data.get("profit_history", [])
-        if not profit_history:
-            return {"profit_vector_strength": 0.0}
+    def predict_ghost_activity(self, horizon: int = 10) -> Dict[str, Any]:
+        """
+        Predict future ghost activity based on current patterns.
 
-        profits = np.array(profit_history)
+        Args:
+            horizon: Prediction horizon in time units
 
-        # Calculate profit vector metrics
-        sharpe_ratio = np.mean(profits) / (np.std(profits) + 1e-8)
-        profit_trend = np.polyfit(range(len(profits)), profits, 1)[0]
+        Returns:
+            Dictionary with prediction results
+        """
+        try:
+            if not self.pattern_history:
+                return {"prediction": "no_data", "confidence": 0.0}
 
-        return {"profit_vector_strength": sharpe_ratio, "profit_trend": profit_trend, "total_profit": np.sum(profits)}
+            # Analyze recent patterns
+            recent_patterns = self.pattern_history[-5:] if len(self.pattern_history) >= 5 else self.pattern_history
 
-    def _volatility_analysis(self, data: Dict[str, Any]) -> Dict[str, Any]:
-        """Volatility analysis mathematical processor."""
-        price_history = data.get("price_history", [])
-        if not price_history:
-            return {"volatility": 0.0}
+            # Calculate prediction based on pattern types
+            prediction_score = 0.0
+            total_confidence = 0.0
 
-        prices = np.array(price_history)
-        returns = np.diff(prices) / prices[:-1]
-        volatility = np.std(returns)
+            for pattern in recent_patterns:
+                if pattern.pattern_type == "trending":
+                    # Trending patterns suggest continuation
+                    prediction_score += pattern.confidence * 0.8
+                elif pattern.pattern_type == "oscillating":
+                    # Oscillating patterns suggest reversal
+                    prediction_score += pattern.confidence * 0.3
+                elif pattern.pattern_type == "breakout":
+                    # Breakout patterns suggest new activity
+                    prediction_score += pattern.confidence * 1.0
 
-        return {"volatility": volatility, "var_95": np.percentile(returns, 5), "var_99": np.percentile(returns, 1)}
+                total_confidence += pattern.confidence
 
-    def cleanup_expired_ghost_trades(self) -> None:
-        """Clean up expired ghost trades."""
-        current_time = time.time()
+            if total_confidence > 0:
+                normalized_prediction = prediction_score / total_confidence
+            else:
+                normalized_prediction = 0.0
 
-        with self.lock:
-            # Remove expired trades
-            self.ghost_trades = [
-                trade for trade in self.ghost_trades if not self.should_exit_ghost_trade(trade, current_time)
-            ]
-
-    def get_active_ghost_trades(self) -> List[GhostTrade]:
-        """Get list of active ghost trades."""
-        with self.lock:
-            return self.ghost_trades.copy()
-
-    def get_strategy_performance(self) -> Dict[str, Any]:
-        """Get comprehensive strategy performance metrics."""
-        with self.lock:
-            performance = {}
-
-            for branch, memory in self.strategy_memories.items():
-                performance[branch.value] = {
-                    "total_trades": memory.total_trades,
-                    "winning_trades": memory.winning_trades,
-                    "success_rate": memory.success_rate,
-                    "avg_profit": memory.avg_profit,
-                    "total_profit": memory.total_profit,
-                    "last_used": memory.last_used,
-                    "memory_states": len(memory.mathematical_states),
-                }
+            # Determine prediction type
+            if normalized_prediction > 0.7:
+                prediction_type = "high_activity"
+            elif normalized_prediction > 0.4:
+                prediction_type = "moderate_activity"
+            else:
+                prediction_type = "low_activity"
 
             return {
-                "strategy_performance": performance,
-                "active_ghost_trades": len(self.ghost_trades),
-                "total_memory_depth": len(self.hash_history),
-                "mathematical_history": len(self.mathematical_history),
+                "prediction": prediction_type,
+                "confidence": normalized_prediction,
+                "horizon": horizon,
+                "pattern_count": len(recent_patterns),
+                "metadata": {
+                    "prediction_score": prediction_score,
+                    "total_confidence": total_confidence
+                }
             }
 
-    def shutdown(self):
-        """Shutdown the Ghost Core system."""
-        self.thread_pool.shutdown(wait=True)
-        logger.info("Ghost Core shutdown complete")
+        except Exception as e:
+            logger.error("Error predicting ghost activity: {0}".format(e))
+            return {"prediction": "error", "confidence": 0.0}
+
+    def get_ghost_statistics(self) -> Dict[str, Any]:
+        """Get comprehensive ghost activity statistics."""
+        try:
+            if not self.signal_history:
+                return {"error": "No signal history available"}
+
+            # Calculate signal statistics
+            signal_strengths = [s.strength for s in self.signal_history]
+            signal_types = [s.signal_type for s in self.signal_history]
+
+            # Type distribution
+            type_counts = {}
+            for signal_type in signal_types:
+                type_counts[signal_type] = type_counts.get(signal_type, 0) + 1
+
+            # Pattern statistics
+            pattern_types = [p.pattern_type for p in self.pattern_history]
+            pattern_type_counts = {}
+            for pattern_type in pattern_types:
+                pattern_type_counts[pattern_type] = pattern_type_counts.get(pattern_type, 0) + 1
+
+            return {
+                "total_signals": self.total_signals,
+                "total_patterns": self.total_patterns,
+                "current_signals": len(self.signal_history),
+                "current_patterns": len(self.pattern_history),
+                "avg_signal_strength": xp.mean(signal_strengths) if signal_strengths else 0.0,
+                "max_signal_strength": xp.max(signal_strengths) if signal_strengths else 0.0,
+                "signal_type_distribution": type_counts,
+                "pattern_type_distribution": pattern_type_counts,
+                "detection_accuracy": self.detection_accuracy,
+                "cache_size": len(self.analysis_cache)
+            }
+
+        except Exception as e:
+            logger.error("Error getting ghost statistics: {0}".format(e))
+            return {"error": str(e)}
+
+    def _create_null_signal(self, source: str) -> GhostSignal:
+        """Create a null signal when processing fails."""
+        return GhostSignal(
+            signal_type="null",
+            strength=0.0,
+            timestamp=time.time(),
+            source=source,
+            metadata={"error": "Null signal"}
+        )
+
+    def clear_cache(self) -> None:
+        """Clear the analysis cache."""
+        self.analysis_cache.clear()
+        logger.info("Ghost Core cache cleared")
+
+    def cleanup_old_signals(self, max_age_hours: float = 24.0) -> int:
+        """Remove old signals from history."""
+        try:
+            current_time = time.time()
+            max_age_seconds = max_age_hours * 3600
+
+            # Filter out old signals
+            old_count = len(self.signal_history)
+            self.signal_history = [
+                signal for signal in self.signal_history
+                if current_time - signal.timestamp < max_age_seconds
+            ]
+            new_count = len(self.signal_history)
+
+            removed_count = old_count - new_count
+            logger.info("Removed {0} old signals from history".format(removed_count))
+            return removed_count
+
+        except Exception as e:
+            logger.error("Error cleaning up old signals: {0}".format(e))
+            return 0
 
 
-# Global instance for easy access
-_global_ghost_core = None
+def create_ghost_core(sensitivity: float = 0.1, max_patterns: int = 100) -> GhostCore:
+    """Factory function to create a Ghost Core instance."""
+    return GhostCore(sensitivity, max_patterns)
 
 
-def get_ghost_core() -> GhostCore:
-    """Get global Ghost Core instance."""
-    global _global_ghost_core
-    if _global_ghost_core is None:
-        _global_ghost_core = GhostCore()
-    return _global_ghost_core
+# Example usage and testing
+if __name__ == "__main__":
+    # Configure logging
+    logging.basicConfig(level=logging.INFO)
+
+    # Create Ghost Core
+    ghost_core = create_ghost_core(sensitivity=0.05, max_patterns=50)
+
+    print("=== Testing Ghost Core ===")
+
+    # Simulate some ghost signals
+    import random
+
+    for i in range(20):
+        signal_data = {
+            "type": random.choice(["trend", "oscillation", "breakout"]),
+            "strength": random.uniform(0.1, 1.0),
+            "timestamp": time.time() + i
+        }
+        ghost_core.process_signal(signal_data, "test_source")
+
+    # Analyze patterns
+    patterns = ghost_core.analyze_patterns()
+    print("Detected patterns: {0}".format(len(patterns)))
+
+    for pattern in patterns:
+        print("Pattern: {0}, Confidence: {1}, Duration: {2}".format(
+            pattern.pattern_type, pattern.confidence, pattern.duration
+        ))
+
+    # Get prediction
+    prediction = ghost_core.predict_ghost_activity()
+    print("Prediction: {0}".format(prediction))
+
+    # Get statistics
+    stats = ghost_core.get_ghost_statistics()
+    print("\nGhost Statistics:")
+    print("Total signals: {0}".format(stats.get("total_signals", 0)))
+    print("Total patterns: {0}".format(stats.get("total_patterns", 0)))
+    print("Average signal strength: {0}".format(stats.get("avg_signal_strength", 0)))
+
+    print("Ghost Core test completed")

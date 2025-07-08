@@ -7,22 +7,23 @@ from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import Any, Dict, Optional
 
-    import aiohttp
+import aiohttp
 
 try:
-except ImportError:  # Fallback to requests for sync usage / testing
+    pass
+    except ImportError:  # Fallback to requests for sync usage / testing
     aiohttp = None  # type: ignore
 
 __all__ = ["BaseAPIHandler"]
 
 logger = logging.getLogger(__name__)
 
-"""Base API Handler
+"""Base API Handler"
 
 Provides an abstract base class for integrating third-party APIs into the
 Schwabot data pipeline. Child classes only need to implement
 `_fetch_raw()` and (optionally) `_parse_raw()` and the handler is ready
-for use by the cache sync subsystem.
+    for use by the cache sync subsystem.
 """
 
 
@@ -96,7 +97,7 @@ class BaseAPIHandler(ABC):
         return await self.get_data()
 
     def is_fresh(self) -> bool:
-        """Check if cached data is fresh (within refresh interval)."""
+        """Check if cached data is fresh (within refresh, interval)."""
         return (time.time() - self._last_refresh) <= self.REFRESH_INTERVAL
 
     def cache_hash(self) -> str:
@@ -143,7 +144,7 @@ class BaseAPIHandler(ABC):
             self._rate_limit_window_start = current_time
             self._request_count = 0
 
-        return {
+        return {}
             "requests_used": self._request_count,
             "requests_remaining": max(0, self.RATE_LIMIT_REQUESTS - self._request_count),
             "window_remaining": max(0, self.RATE_LIMIT_WINDOW - window_elapsed),
@@ -152,7 +153,7 @@ class BaseAPIHandler(ABC):
 
     def get_error_status(self) -> Dict[str, Any]:
         """Get current error status."""
-        return {
+        return {}
             "total_errors": self._error_count,
             "consecutive_errors": self._consecutive_errors,
             "last_error_time": self._last_error_time,
@@ -163,11 +164,11 @@ class BaseAPIHandler(ABC):
 
     @abstractmethod
     async def _fetch_raw(self) -> Any:  # pragma: no cover  implemented by subclass
-        """Fetch raw data from the remote API (network call)."""
+        """Fetch raw data from the remote API (network, call)."""
         pass  # Must be implemented by subclass
 
     async def _parse_raw(self, raw: Any) -> Dict[str, Any]:
-        """Transform raw payload into a normalised JSON-serialisable dict.
+        """Transform raw payload into a normalised JSON-serialisable dict."
 
         Sub-classes may override for custom parsing. The default
         implementation assumes the payload is already JSON-compatible.
@@ -185,11 +186,11 @@ class BaseAPIHandler(ABC):
             self._rate_limit_window_start = current_time
             self._request_count = 0
 
-        # Check if we've exceeded the rate limit
+        # Check if we've exceeded the rate limit'
         if self._request_count >= self.RATE_LIMIT_REQUESTS:
             window_remaining = self.RATE_LIMIT_WINDOW - (current_time - self._rate_limit_window_start)
             if window_remaining > 0:
-                logger.warning("{0}: Rate limit exceeded, waiting {1} seconds".format(self.NAME, window_remaining:.1f))
+                logger.warning("{0}: Rate limit exceeded, waiting {1} seconds".format(self.NAME, window_remaining))
                 await asyncio.sleep(window_remaining)
                 self._rate_limit_window_start = current_time
                 self._request_count = 0
@@ -210,8 +211,8 @@ class BaseAPIHandler(ABC):
         self._last_error_time = time.time()
 
         # Log error with context
-        logger.error(
-            "{0}: Error occurred (total: {1}, consecutive: {2}) - {3}".format(
+        logger.error()
+            "{0}: Error occurred (total: {1}, consecutive: {2}) - {3}".format()
                 self.NAME, 
                 self._error_count, 
                 self._consecutive_errors, exc)
@@ -273,7 +274,7 @@ class BaseAPIHandler(ABC):
 
     def get_handler_info(self) -> Dict[str, Any]:
         """Get comprehensive handler information."""
-        return {
+        return {}
             "name": self.NAME,
             "cache_subdir": self.CACHE_SUBDIR,
             "refresh_interval": self.REFRESH_INTERVAL,

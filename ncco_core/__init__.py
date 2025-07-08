@@ -1,9 +1,9 @@
-    from .control_panel import AdvancedControlPanel
-    from .fill_conjunction import FillConjunctionEngine
-    from .harmony_memory import HarmonyMemory
-    from .ncco import NCCO
-    from .ncco_generator import generate_nccos
-    from .ncco_scorer import score_nccos
+from .control_panel import AdvancedControlPanel
+from .fill_conjunction import FillConjunctionEngine
+from .harmony_memory import HarmonyMemory
+from .ncco import NCCO
+from .ncco_generator import generate_nccos
+from .ncco_scorer import score_nccos
 from typing import Any
 import os
 import platform
@@ -25,6 +25,7 @@ Purpose: Bridge the gap between chaos and clarity in recursive AI trading decisi
 
 
 try:
+    pass
 except ImportError:
     # Fallback imports for development
     score_nccos = None

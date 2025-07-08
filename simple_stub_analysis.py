@@ -17,7 +17,7 @@ def get_flake8_errors():-> Dict[str, List[str]]:
     errors_by_file = {}
 
     try:
-        result = subprocess.run(
+        result = subprocess.run()
             ["flake8", "core/"],
             capture_output=True,
             text=True,
@@ -42,7 +42,7 @@ def get_flake8_errors():-> Dict[str, List[str]]:
 
 def analyze_file_stubs():-> Dict[str, any]:
     """Analyze a file for stub patterns."""
-    analysis = {
+    analysis = {}
         "file_path": str(file_path),
         "size_kb": 0,
         "stub_count": 0,
@@ -73,12 +73,12 @@ def analyze_file_stubs():-> Dict[str, any]:
                     function_name = re.search(r"def (\w+)", line).group(1)
                     analysis["incomplete_functions"].append(function_name)
 
-        analysis["stub_count"] = (
+        analysis["stub_count"] = ()
             analysis["pass_count"] + analysis["todo_count"] + analysis["fixme_count"]
         )
 
         # Check for math logic
-        math_indicators = [
+        math_indicators = []
             "numpy",
             "scipy",
             "pandas",
@@ -92,7 +92,7 @@ def analyze_file_stubs():-> Dict[str, any]:
             "vector",
             "tensor",
         ]
-        analysis["has_math_logic"] = any(
+        analysis["has_math_logic"] = any()
             indicator in content.lower() for indicator in math_indicators
         )
 
@@ -104,7 +104,7 @@ def analyze_file_stubs():-> Dict[str, any]:
 
 def identify_important_files():-> List[str]:
     """Identify the most important files based on naming patterns."""
-    important_patterns = [
+    important_patterns = []
         "mathlib*.py",
         "tensor*.py",
         "vector*.py",
@@ -143,7 +143,7 @@ def main():
             error_counts[error_type] = error_counts.get(error_type, 0) + 1
 
     print("\n📊 Error Summary:")
-    for error_type, count in sorted(
+    for error_type, count in sorted()
         error_counts.items(), key=lambda x: x[1], reverse=True
     ):
         print(f"  {error_type}: {count} occurrences")
@@ -165,8 +165,8 @@ def main():
             analyses.append(analysis)
 
     # Sort by importance (has math logic, has stubs, has errors, size)
-    analyses.sort(
-        key=lambda x: (
+    analyses.sort()
+        key=lambda x: ()
             x["has_math_logic"],
             x["stub_count"] > 0,
             x["e999_errors"] > 0,
@@ -182,7 +182,7 @@ def main():
         if analysis["stub_count"] > 0 or analysis["e999_errors"] > 0:
             print(f"\n📁 {analysis['file_path']}")
             print(f"   Size: {analysis['size_kb']:.1f}KB")
-            print(
+            print()
                 f"   Stubs: {analysis['stub_count']} (pass: {analysis['pass_count']}, TODO: {analysis['todo_count']}, FIXME: {analysis['fixme_count']})"
             )
             print(f"   E999 Errors: {analysis['e999_errors']}")
@@ -190,7 +190,7 @@ def main():
             print(f"   Has Math Logic: {'✅' if analysis['has_math_logic'] else '❌'}")
 
             if analysis["incomplete_functions"]:
-                print(
+                print()
                     f"   Incomplete Functions: {', '.join(analysis['incomplete_functions'][:3])}"
                 )
 
@@ -204,12 +204,12 @@ def main():
     print(f"\n1. **Critical Priority** ({len(files_with_e999)} files):")
     print("   Files with E999 syntax errors that prevent import/execution:")
     for f in files_with_e999[:5]:
-        print(f"   - {f['file_path']} ({f['e999_errors']} syntax errors)")
+        print(f"   - {f['file_path']} ({f['e999_errors']} syntax, errors)")
 
     print(f"\n2. **High Priority** ({len(files_with_stubs)} files):")
     print("   Files with stubbed/missing logic that need implementation:")
     for f in files_with_stubs[:5]:
-        print(f"   - {f['file_path']} ({f['stub_count']} stub indicators)")
+        print(f"   - {f['file_path']} ({f['stub_count']} stub, indicators)")
 
     print("\n3. **Common Issues to Fix Automatically**:")
     for error_type, count in error_counts.items():
@@ -221,7 +221,7 @@ def main():
     print("   - Implement automated linting in CI/CD pipeline")
     print("   - Use type hints consistently to catch import/name errors")
     print("   - Standardize docstring format to prevent W505 errors")
-    print(
+    print()
         "   - Use raw strings (r'') for regex patterns to prevent escape sequence errors"
     )
     print("   - Avoid Unicode characters in code comments and strings")

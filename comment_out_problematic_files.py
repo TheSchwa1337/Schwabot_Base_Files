@@ -17,7 +17,7 @@ This script will:
 
 
 # Clean implementation files that should NOT be commented out
-CLEAN_FILES = {
+CLEAN_FILES = {}
     'core/clean_math_foundation.py',
     'core/clean_profit_vectorization.py',
     'core/clean_trading_pipeline.py',
@@ -58,7 +58,7 @@ CLEAN_FILES = {
 def check_syntax_error(file_path):
     """Check if a Python file has syntax errors."""
     try:
-        result = subprocess.run(
+        result = subprocess.run()
             [sys.executable, '-m', 'py_compile', file_path],
             capture_output=True,
             text=True,
@@ -66,7 +66,7 @@ def check_syntax_error(file_path):
         )
         return result.returncode != 0
     except (subprocess.TimeoutExpired, subprocess.CalledProcessError):
-        return True  # Assume problematic if we can't check
+        return True  # Assume problematic if we can't check'
 
 
 def comment_out_file(file_path):
@@ -80,7 +80,7 @@ def comment_out_file(file_path):
         current_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         # Create commented version with explanation header
-        header = f'''"""
+        header = f'''"""'
 LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 
 This file has been automatically commented out because it contains syntax errors
@@ -90,10 +90,10 @@ Original file: {file_path}
 Date commented out: {current_date}
 
 The clean implementation has been preserved in the following files:
-- core/clean_math_foundation.py (mathematical foundation)
-- core/clean_profit_vectorization.py (profit calculations)
-- core/clean_trading_pipeline.py (trading logic)
-- core/clean_unified_math.py (unified mathematics)
+- core/clean_math_foundation.py (mathematical, foundation)
+- core/clean_profit_vectorization.py (profit, calculations)
+- core/clean_trading_pipeline.py (trading, logic)
+- core/clean_unified_math.py (unified, mathematics)
 
 All core functionality has been reimplemented in clean, production-ready files.
 """
@@ -150,7 +150,7 @@ def main():
     print("=" * 60)
 
     for file_path in python_files:
-        # Normalize path for comparison (convert Windows backslashes to forward slashes)
+        # Normalize path for comparison (convert Windows backslashes to forward, slashes)
         normalized_path = file_path.replace('\\', '/')
 
         # Skip clean implementation files

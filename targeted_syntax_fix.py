@@ -21,7 +21,7 @@ def fix_settings_manager():
     content = re.sub(r"}\s*}\s*$", "}", content, flags=re.MULTILINE)
 
     # Fix 2: Fix broken dictionary definitions
-    content = re.sub(
+    content = re.sub()
         r"(\w+)\s*=\s*\{\s*}\s*\n\s*([^}]*)\s*}\s*}", r"\1 = {\n\2\n}", content
     )
 
@@ -29,31 +29,31 @@ def fix_settings_manager():
     content = re.sub(r"(\w+)\(\s*\)\s*\n\s*([^)]*)\s*\)", r"\1(\n\2\n)", content)
 
     # Fix 4: Fix specific broken patterns
-    patterns_to_fix = [
+    patterns_to_fix = []
         # Fix config_data = {} followed by indented items
-        (
+        ()
             r'config_data = \{\s*}\s*\n\s*"performance":',
-            'config_data = {\n                "performance":',
+            'config_data = {\n                "performance":',}
         ),
-        (
+        ()
             r'config_data = \{\s*}\s*\n\s*"api":',
-            'config_data = {\n                "api":',
+            'config_data = {\n                "api":',}
         ),
         # Fix errors = {} followed by indented items
-        (
+        ()
             r'errors: Dict\[str, List\[str\]\] = \{\s*}\s*\n\s*"api":',
-            'errors: Dict[str, List[str]] = {\n                "api":',
+            'errors: Dict[str, List[str]] = {\n                "api":',}
         ),
         # Fix return {} followed by indented items
-        (r'return \{\s*}\s*\n\s*"api":', 'return {\n                "api":'),
+        (r'return \{\s*}\s*\n\s*"api":', 'return {\n                "api":'),}
         # Fix function calls
-        (
+        ()
             r"manager\.update_api_settings\(\s*\)\s*\n\s*coinbase_api_key=",
-            "manager.update_api_settings(\n        coinbase_api_key=",
+            "manager.update_api_settings(\n        coinbase_api_key=",)
         ),
-        (
+        ()
             r"manager\.update_trading_settings\(\s*\)\s*\n\s*trading_mode=",
-            "manager.update_trading_settings(\n        trading_mode=",
+            "manager.update_trading_settings(\n        trading_mode=",)
         ),
     ]
 
@@ -61,8 +61,8 @@ def fix_settings_manager():
         content = re.sub(pattern, replacement, content)
 
     # Fix 5: Fix specific broken dictionary structures
-    content = content.replace(
-        """        return {}
+    content = content.replace()
+        """        return {}"
             "api": {}
                 "sandbox_mode": self.settings.api.sandbox_mode,
                     "has_credentials": bool(self.settings.api.coinbase_api_key),
@@ -71,9 +71,9 @@ def fix_settings_manager():
                 "performance": asdict(self.settings.performance),
                     "risk": asdict(self.settings.risk),
                     "trading": asdict(self.settings.trading)
-        }""",
-        """        return {
-            "api": {
+        }""","
+        """        return {"}
+            "api": {}
                 "sandbox_mode": self.settings.api.sandbox_mode,
                 "has_credentials": bool(self.settings.api.coinbase_api_key),
                 "timeout": self.settings.api.api_timeout
@@ -81,44 +81,44 @@ def fix_settings_manager():
             "performance": asdict(self.settings.performance),
             "risk": asdict(self.settings.risk),
             "trading": asdict(self.settings.trading)
-        }""",
+        }""","
     )
 
-    content = content.replace(
-        """        errors: Dict[str, List[str]] = {}
+    content = content.replace()
+        """        errors: Dict[str, List[str]] = {}"
             "api": [],
                 "performance": [],
                     "risk": [],
                     "trading": []
-        }""",
-        """        errors: Dict[str, List[str]] = {
+        }""","
+        """        errors: Dict[str, List[str]] = {"}
             "api": [],
             "performance": [],
             "risk": [],
             "trading": []
-        }""",
+        }""","
     )
 
-    content = content.replace(
-        """    manager.update_api_settings()
+    content = content.replace()
+        """    manager.update_api_settings()"
         coinbase_api_key="test_key",
             sandbox_mode=True
-    )""",
-        """    manager.update_api_settings(
+    )""","
+        """    manager.update_api_settings(")
         coinbase_api_key="test_key",
         sandbox_mode=True
-    )""",
+    )""","
     )
 
-    content = content.replace(
-        """    manager.update_trading_settings()
+    content = content.replace()
+        """    manager.update_trading_settings()"
         trading_mode="demo",
             max_concurrent_trades=3
-    )""",
-        """    manager.update_trading_settings(
+    )""","
+        """    manager.update_trading_settings(")
         trading_mode="demo",
         max_concurrent_trades=3
-    )""",
+    )""","
     )
 
     with open(filepath, "w", encoding="utf-8") as f:
@@ -135,8 +135,8 @@ def fix_core_init():
         content = f.read()
 
     # Fix broken list definitions
-    content = content.replace(
-        """__all__ = []
+    content = content.replace()
+        """__all__ = []"
     # Core components
     "SpeedLatticeVault",
         "SpeedLatticeTradingIntegration",
@@ -159,8 +159,8 @@ def fix_core_init():
     "__version__",
         "__author__",
         "__description__",
-        ]""",
-        """__all__ = [
+        ]""","
+        """__all__ = ["]
     # Core components
     "SpeedLatticeVault",
     "SpeedLatticeTradingIntegration",
@@ -183,80 +183,80 @@ def fix_core_init():
     "__version__",
     "__author__",
     "__description__",
-]""",
+]""","
     )
 
     # Fix broken dictionary definitions
-    content = content.replace(
-        """        initialization_status = {}
+    content = content.replace()
+        """        initialization_status = {}"
             "status": "initializing",
                 "timestamp": datetime.now().isoformat(),
                 "version": __version__,
                 "modules": [],
                 "components": [],
                 "errors": [],
-                }""",
-        """        initialization_status = {
+                }""","
+        """        initialization_status = {"}
             "status": "initializing",
             "timestamp": datetime.now().isoformat(),
             "version": __version__,
             "modules": [],
             "components": [],
             "errors": [],
-        }""",
+        }""","
     )
 
-    content = content.replace(
-        """        core_modules = []
+    content = content.replace()
+        """        core_modules = []"
             ("speed_lattice_vault", "Speed Lattice Vault"),
                 ("speed_lattice_trading_integration", "Trading Integration"),
                 ("speed_lattice_visualizer", "Live Panel Visualizer"),
                 ("integrated_core_system", "Integrated Core System"),
                 ("mathlib_v2", "Mathematical Library V2"),
-                ]""",
-        """        core_modules = [
+                ]""","
+        """        core_modules = ["]
             ("speed_lattice_vault", "Speed Lattice Vault"),
             ("speed_lattice_trading_integration", "Trading Integration"),
             ("speed_lattice_visualizer", "Live Panel Visualizer"),
             ("integrated_core_system", "Integrated Core System"),
             ("mathlib_v2", "Mathematical Library V2"),
-        ]""",
+        ]""","
     )
 
-    content = content.replace(
-        """                module_result = {}
+    content = content.replace()
+        """                module_result = {}"
                     "name": module_name,
                         "description": description,
                         "status": "success",
                         "timestamp": datetime.now().isoformat(),
-                        }""",
-        """                module_result = {
+                        }""","
+        """                module_result = {"}
                     "name": module_name,
                     "description": description,
                     "status": "success",
                     "timestamp": datetime.now().isoformat(),
-                }""",
+                }""","
     )
 
-    content = content.replace(
-        """                module_result = {}
+    content = content.replace()
+        """                module_result = {}"
                     "name": module_name,
                         "description": description,
                         "status": "error",
                         "error": str(e),
                         "timestamp": datetime.now().isoformat(),
-                        }""",
-        """                module_result = {
+                        }""","
+        """                module_result = {"}
                     "name": module_name,
                     "description": description,
                     "status": "error",
                     "error": str(e),
                     "timestamp": datetime.now().isoformat(),
-                }""",
+                }""","
     )
 
-    content = content.replace(
-        """        return {}
+    content = content.replace()
+        """        return {}"
             "status": "error",
                 "timestamp": datetime.now().isoformat(),
                 "version": __version__,
@@ -264,8 +264,8 @@ def fix_core_init():
                 "modules": [],
                 "components": [],
                 "errors": [str(e)],
-                }""",
-        """        return {
+                }""","
+        """        return {"}
             "status": "error",
             "timestamp": datetime.now().isoformat(),
             "version": __version__,
@@ -273,54 +273,54 @@ def fix_core_init():
             "modules": [],
             "components": [],
             "errors": [str(e)],
-        }""",
+        }""","
     )
 
-    content = content.replace(
-        """        status = {}
+    content = content.replace()
+        """        status = {}"
             "timestamp": datetime.now().isoformat(),
                 "version": __version__,
                 "status": "operational",
                 "components": {},
                 "performance": {"memory_usage": "normal", "cpu_usage": "normal", "disk_usage": "normal"},
-                }""",
-        """        status = {
+                }""","
+        """        status = {"}
             "timestamp": datetime.now().isoformat(),
             "version": __version__,
             "status": "operational",
             "components": {},
             "performance": {"memory_usage": "normal", "cpu_usage": "normal", "disk_usage": "normal"},
-        }""",
+        }""","
     )
 
-    content = content.replace(
-        """        core_components = []
+    content = content.replace()
+        """        core_components = []"
             "SpeedLatticeVault",
                 "SpeedLatticeTradingIntegration",
                 "SpeedLatticeLivePanelSystem",
                 "IntegratedCoreSystem",
                 "CoreMathLibV2",
-                ]""",
-        """        core_components = [
+                ]""","
+        """        core_components = ["]
             "SpeedLatticeVault",
             "SpeedLatticeTradingIntegration",
             "SpeedLatticeLivePanelSystem",
             "IntegratedCoreSystem",
             "CoreMathLibV2",
-        ]""",
+        ]""","
     )
 
-    content = content.replace(
-        """                status["components"][component] = {}
+    content = content.replace()
+        """                status["components"][component] = {}"
                     "status": "error",
                         "error": str(e),
                         "timestamp": datetime.now().isoformat(),
-                        }""",
-        """                status["components"][component] = {
+                        }""","
+        """                status["components"][component] = {"}
                     "status": "error",
                     "error": str(e),
                     "timestamp": datetime.now().isoformat(),
-                }""",
+                }""","
     )
 
     with open(filepath, "w", encoding="utf-8") as f:
@@ -337,49 +337,49 @@ def fix_schwabot_main():
         content = f.read()
 
     # Fix broken function calls
-    content = content.replace(
-        """            self.trading_pipeline = TradingPipelineIntegration()
+    content = content.replace()
+        """            self.trading_pipeline = TradingPipelineIntegration()"
                 enable_gpu=True,
                     enable_distributed=False,
                     max_concurrent_trades=10,
                     risk_management_enabled=True
-            )""",
-        """            self.trading_pipeline = TradingPipelineIntegration(
+            )""","
+        """            self.trading_pipeline = TradingPipelineIntegration(")
                 enable_gpu=True,
                 enable_distributed=False,
                 max_concurrent_trades=10,
                 risk_management_enabled=True
-            )""",
+            )""","
     )
 
-    content = content.replace(
-        """            self.trading_pipeline = TradingPipelineIntegration()
+    content = content.replace()
+        """            self.trading_pipeline = TradingPipelineIntegration()"
                 enable_gpu=True,
                     enable_distributed=False,
                     max_concurrent_trades=5,
                     risk_management_enabled=True
-            )""",
-        """            self.trading_pipeline = TradingPipelineIntegration(
+            )""","
+        """            self.trading_pipeline = TradingPipelineIntegration(")
                 enable_gpu=True,
                 enable_distributed=False,
                 max_concurrent_trades=5,
                 risk_management_enabled=True
-            )""",
+            )""","
     )
 
-    content = content.replace(
-        """            self.trading_pipeline = TradingPipelineIntegration()
+    content = content.replace()
+        """            self.trading_pipeline = TradingPipelineIntegration()"
                 enable_gpu=True,
                     enable_distributed=True,
                     max_concurrent_trades=20,
                     risk_management_enabled=True
-            )""",
-        """            self.trading_pipeline = TradingPipelineIntegration(
+            )""","
+        """            self.trading_pipeline = TradingPipelineIntegration(")
                 enable_gpu=True,
                 enable_distributed=True,
                 max_concurrent_trades=20,
                 risk_management_enabled=True
-            )""",
+            )""","
     )
 
     with open(filepath, "w", encoding="utf-8") as f:

@@ -2,29 +2,28 @@
 # -*- coding: utf-8 -*-
 import logging
 import time
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional, Tuple
 
 # Third-party imports
 import numpy as np
 
 try:
     import cupy as cp
+
     USING_CUDA = True
-    _backend = 'cupy (GPU)'
+    _backend = "cupy (GPU)"
     xp = cp
 except ImportError:
     USING_CUDA = False
-    _backend = 'numpy (CPU)'
+    _backend = "numpy (CPU)"
     xp = np
 
 try:
     import scipy.linalg as linalg
     import scipy.signal as signal
-    import scipy.stats as stats
-    from scipy.fft import fft, fftfreq, ifft
+    from scipy.fft import fft, fftfreq
     from scipy.optimize import minimize
-    from scipy.sparse import csr_matrix
-    from scipy.special import gamma, zeta
+
     SCIPY_AVAILABLE = True
 except ImportError:
     SCIPY_AVAILABLE = False
@@ -33,35 +32,12 @@ except ImportError:
 
 # Application-specific imports
 from ..system.dual_state_router import (
-    ComputeMode,
-    StrategyTier,
     get_dual_state_router,
-    route_task,
-)
-from .type_defs import (
-    EULER_MASCHERONI,
-    GOLDEN_RATIO,
-    PI,
-    DualState,
-    E,
-    EntropySignal,
-    FractalMatrix,
-    QuantumState,
-    Tensor64,
-    Vector64,
 )
 from ..utils.cuda_helper import (
-    get_cuda_status,
-    report_cuda_status,
-    safe_convolution,
     safe_cuda_operation,
-    safe_eigenvalue_decomposition,
-    safe_fft,
-    safe_matrix_inverse,
     safe_matrix_multiply,
-    safe_svd,
     safe_tensor_contraction,
-    xp as helper_xp,
 )
 
 
@@ -74,7 +50,7 @@ Provides high-level math structures for vector folding, bit-phase analysis,
 matrix compression, and entropy vector quantization.
 
 Core Mathematical Functions:
-- Tensor fusion: T = A ⊗ B (tensor product)
+- Tensor fusion: T = A ⊗ B (tensor, product)
 - Phase rotations: R(θ) = [cos(θ) -sin(θ); sin(θ) cos(θ)]
 - Entropy quantization: H(X) = -∑p(x) log p(x)
 - Matrix trace conditions: tr(M) for stability analysis
@@ -132,7 +108,7 @@ class QuantumTensorOperations:
 
     Mathematical Foundation:
     - Superposition: |ψ⟩ = α|0⟩ + β|1⟩
-    - Entanglement: |ψ⟩ = (|00⟩ + |11⟩)/√2
+    - Entanglement: |ψ⟩ = (|0⟩ + |11⟩)/√2
     - Quantum gates: U|ψ⟩ for state evolution
     """
 
@@ -160,7 +136,9 @@ class QuantumTensorOperations:
 
             # Quantum cross product term
             if A.ndim == 1 and B.ndim == 1 and len(A) == 3 and len(B) == 3:
-                cross_product = safe_cuda_operation(lambda: xp.cross(A, B), lambda: np.cross(A, B))
+                cross_product = safe_cuda_operation(
+                    lambda: xp.cross(A, B), lambda: np.cross(A, B)
+                )
                 quantum_term = safe_cuda_operation(
                     lambda: xp.outer(cross_product, cross_product),
                     lambda: np.outer(cross_product, cross_product),
@@ -194,10 +172,14 @@ class QuantumTensorOperations:
         """
         try:
             # Create phase rotation matrix with CUDA acceleration
-            phase_factor = safe_cuda_operation(lambda: xp.exp(1j * angle), lambda: np.exp(1j * angle))
+            phase_factor = safe_cuda_operation(
+                lambda: xp.exp(1j * angle), lambda: np.exp(1j * angle)
+            )
 
             # Apply quantum phase rotation
-            rotated_tensor = safe_cuda_operation(lambda: phase_factor * tensor, lambda: phase_factor * tensor)
+            rotated_tensor = safe_cuda_operation(
+                lambda: phase_factor * tensor, lambda: phase_factor * tensor
+            )
 
             return rotated_tensor
 
@@ -231,7 +213,9 @@ class QuantumTensorOperations:
                 )
 
             # Normalize
-            trace = safe_cuda_operation(lambda: xp.trace(density_matrix), lambda: np.trace(density_matrix))
+            trace = safe_cuda_operation(
+                lambda: xp.trace(density_matrix), lambda: np.trace(density_matrix)
+            )
             if trace > 0:
                 density_matrix = density_matrix / trace
 
@@ -373,8 +357,10 @@ class TemporalAlgebra:
         self.time_resolution = 1e-6  # Microsecond precision
         self.entropy_evolution_rate = 0.1
 
-    def market_state_transition(
-        self, current_state: np.ndarray, time_delta: float, transition_matrix: np.ndarray
+    def market_state_transition(self,
+        current_state: np.ndarray,
+        time_delta: float,
+        transition_matrix: np.ndarray,
     ) -> np.ndarray:
         """
         Calculate market state transition using temporal algebra.
@@ -395,9 +381,7 @@ class TemporalAlgebra:
         exp_matrix = linalg.expm(transition_matrix * time_delta)
         return exp_matrix @ current_state
 
-    def entropy_evolution(
-        self, initial_entropy: float, time_series: np.ndarray, market_volatility: float
-    ) -> np.ndarray:
+    def entropy_evolution(self, initial_entropy: float, time_series: np.ndarray, market_volatility: float) -> np.ndarray:
         """
         Calculate entropy evolution over time using Fokker-Planck equation.
 
@@ -424,14 +408,14 @@ class TemporalAlgebra:
             dt = time_series[i] - time_series[i - 1]
             # Stochastic differential equation solution
             entropy_evolution[i] = (
-                entropy_evolution[i - 1] + drift_coeff * dt + np.sqrt(2 * diffusion_coeff * dt) * np.random.normal()
+                entropy_evolution[i - 1]
+                + drift_coeff * dt
+                + np.sqrt(2 * diffusion_coeff * dt) * np.random.normal()
             )
 
         return entropy_evolution
 
-    def phase_space_trajectory(
-        self, initial_conditions: np.ndarray, time_horizon: float, hamiltonian: callable
-    ) -> Tuple[np.ndarray, np.ndarray]:
+    def phase_space_trajectory(self, initial_conditions: np.ndarray, time_horizon: float, hamiltonian: callable) -> Tuple[np.ndarray, np.ndarray]:
         """
         Calculate phase space trajectory using Hamiltonian dynamics.
 
@@ -448,7 +432,7 @@ class TemporalAlgebra:
             Tuple of (positions, momenta) over time
         """
         # Symplectic integrator for Hamiltonian dynamics
-        dt = 0.01
+        dt = 0.1
         n_steps = int(time_horizon / dt)
 
         q = np.zeros(n_steps)
@@ -497,8 +481,7 @@ class InformationGeometry:
         else:
             raise ValueError("Unsupported distribution type: {0}".format(distribution_type))
 
-    def riemannian_geodesic(
-        self,
+    def riemannian_geodesic(self,
         start_point: np.ndarray,
         end_point: np.ndarray,
         metric_tensor: np.ndarray,
@@ -565,7 +548,7 @@ class SpectralAnalysis:
 
         Mathematical Formula:
         X(f) = ∫ x(t) e^(-i2πft) dt
-        P(f) = |X(f)|² (power spectrum)
+        P(f) = |X(f)|² (power, spectrum)
 
         Args:
             time_series: Market time series
@@ -589,8 +572,7 @@ class SpectralAnalysis:
         positive_freq_mask = frequencies >= 0
         return frequencies[positive_freq_mask], power_spectrum[positive_freq_mask]
 
-    def wavelet_transform(
-        self,
+    def wavelet_transform(self,
         time_series: np.ndarray,
         wavelet_type: str = "db4",
         scales: Optional[np.ndarray] = None,
@@ -618,9 +600,7 @@ class SpectralAnalysis:
 
         return coefficients, scales, frequencies
 
-    def harmonic_oscillator_model(
-        self, price_data: np.ndarray, time_axis: np.ndarray, damping_factor: float = 0.1
-    ) -> Dict[str, np.ndarray]:
+    def harmonic_oscillator_model(self, price_data: np.ndarray, time_axis: np.ndarray, damping_factor: float = 0.1) -> Dict[str, np.ndarray]:
         """
         Fit harmonic oscillator model to price data.
 
@@ -663,9 +643,7 @@ class SpectralAnalysis:
             "residuals": price_data - predictions,
         }
 
-    def spectral_density_estimation(
-        self, time_series: np.ndarray, method: str = "welch"
-    ) -> Tuple[np.ndarray, np.ndarray]:
+    def spectral_density_estimation(self, time_series: np.ndarray, method: str = "welch") -> Tuple[np.ndarray, np.ndarray]:
         """
         Estimate power spectral density.
 
@@ -681,7 +659,9 @@ class SpectralAnalysis:
             Tuple of (frequencies, power_spectral_density)
         """
         if method == "welch":
-            frequencies, psd = signal.welch(time_series, nperseg=min(256, len(time_series) // 4))
+            frequencies, psd = signal.welch(
+                time_series, nperseg=min(256, len(time_series) // 4)
+            )
         elif method == "periodogram":
             frequencies, psd = signal.periodogram(time_series)
         elif method == "burg":
@@ -699,6 +679,7 @@ class GroupTheoryOperations:
     """Group theory operations for market symmetries and transformations."""
 
     def __init__(self):
+        self.symmetry_groups = {}
         self.symmetry_groups = {
             "translation": self._translation_group,
             "rotation": self._rotation_group,
@@ -714,7 +695,10 @@ class GroupTheoryOperations:
         """Rotation group operation."""
         if vector.ndim == 1 and len(vector) == 2:
             cos_theta, sin_theta = np.cos(angle), np.sin(angle)
-            rotation_matrix = np.array([[cos_theta, -sin_theta], [sin_theta, cos_theta]])
+            rotation_matrix = np.array([
+                [cos_theta, -sin_theta],
+                [sin_theta, cos_theta]
+            ])
             return rotation_matrix @ vector
         else:
             # For higher dimensions, use rotation around principal axes
@@ -834,7 +818,7 @@ class AdvancedTensorAlgebra:
             logger.info("🔄 Dual State Router initialized for profit-tiered orchestration")
         else:
             self.dual_state_router = None
-            logger.info("⚠️ Using direct CUDA operations (no dual state router)")
+            logger.info("⚠️ Using direct CUDA operations (no dual state, router)")
 
         # Ferris Wheel cycle parameters
         self.ferris_wheel_period = 24 * 3600  # 24 hours in seconds
@@ -844,14 +828,14 @@ class AdvancedTensorAlgebra:
 
     def tensor_dot_fusion(self, A: np.ndarray, B: np.ndarray, axes: Optional[Tuple[int, ...]] = None) -> np.ndarray:
         """
-        Calculate rank-reducing contraction across axis 1 (strategy vector ↔ price matrix).
+        Calculate rank-reducing contraction across axis 1 (strategy vector ↔ price, matrix).
 
         Mathematical Formula:
-        T_ij = A_ik B_kj (Einstein summation convention)
+        T_ij = A_ik B_kj (Einstein summation, convention)
 
         Args:
-            A: First tensor (strategy vector)
-            B: Second tensor (price matrix)
+            A: First tensor (strategy, vector)
+            B: Second tensor (price, matrix)
             axes: Axes to contract along (default: axis 1)
 
         Returns:
@@ -878,7 +862,7 @@ class AdvancedTensorAlgebra:
                         # Fallback to direct computation
                         logger.debug("Dual state router returned no result, using direct computation")
 
-            # Direct computation (fallback or when dual state router not
+            # Direct computation (fallback or when dual state router, not)
             # available)
             if axes is None:
                 # Default: contract along axis 1 for strategy ↔ price mapping
@@ -889,7 +873,8 @@ class AdvancedTensorAlgebra:
 
             # Apply spectral normalization for stability with CUDA acceleration
             spectral_norm = safe_cuda_operation(
-                lambda: xp.linalg.norm(result, ord=2), lambda: linalg.norm(result, ord=2)
+                lambda: xp.linalg.norm(result, ord=2),
+                lambda: linalg.norm(result, ord=2),
             )
             if spectral_norm > 1e-6:
                 result = result / spectral_norm
@@ -911,7 +896,7 @@ class AdvancedTensorAlgebra:
 
         Args:
             x: Input vector
-            theta: Rotation angle (auto-calculated if None)
+            theta: Rotation angle (auto-calculated if, None)
 
         Returns:
             Rotated vector for dual-state execution
@@ -929,7 +914,8 @@ class AdvancedTensorAlgebra:
 
             # Create rotation matrix with CUDA acceleration
             cos_theta, sin_theta = safe_cuda_operation(
-                lambda: (xp.cos(theta), xp.sin(theta)), lambda: (np.cos(theta), np.sin(theta))
+                lambda: (xp.cos(theta), xp.sin(theta)),
+                lambda: (np.cos(theta), np.sin(theta)),
             )
             R = safe_cuda_operation(
                 lambda: xp.array([[cos_theta, -sin_theta], [sin_theta, cos_theta]]),
@@ -942,7 +928,9 @@ class AdvancedTensorAlgebra:
                 result = safe_matrix_multiply(R, x_2d)
             else:
                 # Batch rotation
-                result = safe_cuda_operation(lambda: xp.zeros_like(x_2d), lambda: np.zeros_like(x_2d))
+                result = safe_cuda_operation(
+                    lambda: xp.zeros_like(x_2d), lambda: np.zeros_like(x_2d)
+                )
                 for i in range(x_2d.shape[1]):
                     result[:, i] = safe_matrix_multiply(R, x_2d[:, i : i + 1]).flatten()
 
@@ -958,12 +946,12 @@ class AdvancedTensorAlgebra:
         Reshape matrix with volume-preserving constraints.
 
         Mathematical Formula:
-        V = det(M) (volume preservation)
+        V = det(M) (volume, preservation)
         M_reshaped = M * (V_target/V_original)^(1/dim)
 
         Args:
             M: Input matrix
-            target_shape: Target shape (auto-calculated if None)
+            target_shape: Target shape (auto-calculated if, None)
 
         Returns:
             Volume-preserving reshaped matrix
@@ -971,11 +959,15 @@ class AdvancedTensorAlgebra:
         try:
             if target_shape is None:
                 # Auto-calculate optimal shape based on volume
-                volume = safe_cuda_operation(lambda: xp.prod(M.shape), lambda: np.prod(M.shape))
+                volume = safe_cuda_operation(
+                    lambda: xp.prod(M.shape), lambda: np.prod(M.shape)
+                )
                 target_shape = self._calculate_optimal_shape(volume, M.ndim)
 
             # Preserve volume by scaling with CUDA acceleration
-            original_volume = safe_cuda_operation(lambda: xp.prod(M.shape), lambda: np.prod(M.shape))
+            original_volume = safe_cuda_operation(
+                lambda: xp.prod(M.shape), lambda: np.prod(M.shape)
+            )
             target_volume = np.prod(target_shape)
             scale_factor = (target_volume / original_volume) ** (1 / M.ndim)
 
@@ -1012,7 +1004,10 @@ class AdvancedTensorAlgebra:
             num_levels = max(2, int(1 / (1 - entropy_level + 1e-6)))
 
             # Normalize vector with CUDA acceleration
-            v_norm = safe_cuda_operation(lambda: V / (xp.linalg.norm(V) + 1e-6), lambda: V / (np.linalg.norm(V) + 1e-6))
+            v_norm = safe_cuda_operation(
+                lambda: V / (xp.linalg.norm(V) + 1e-6),
+                lambda: V / (np.linalg.norm(V) + 1e-6),
+            )
 
             # Quantize to discrete levels
             quantized = safe_cuda_operation(
@@ -1021,7 +1016,10 @@ class AdvancedTensorAlgebra:
             )
 
             # Restore original scale
-            result = safe_cuda_operation(lambda: quantized * xp.linalg.norm(V), lambda: quantized * np.linalg.norm(V))
+            result = safe_cuda_operation(
+                lambda: quantized * xp.linalg.norm(V),
+                lambda: quantized * np.linalg.norm(V),
+            )
 
             logger.debug("Entropy quantization: E=%.3f, levels=%d", entropy_level, num_levels)
             return result
@@ -1037,7 +1035,7 @@ class AdvancedTensorAlgebra:
         Mathematical Formula:
         tr(M) = ∑M_ii (trace)
         det(M) = ∏λ_i (determinant)
-        ||M||₂ = max|λ_i| (spectral norm)
+        ||M||₂ = max|λ_i| (spectral, norm)
 
         Args:
             M: Input matrix
@@ -1051,17 +1049,23 @@ class AdvancedTensorAlgebra:
 
             det = safe_cuda_operation(lambda: xp.linalg.det(M), lambda: linalg.det(M))
 
-            eigenvalues = safe_cuda_operation(lambda: xp.linalg.eigvals(M), lambda: linalg.eigvals(M))
+            eigenvalues = safe_cuda_operation(
+                lambda: xp.linalg.eigvals(M), lambda: linalg.eigvals(M)
+            )
 
             # Stability conditions
             max_real_eigenvalue = safe_cuda_operation(
-                lambda: xp.max(xp.real(eigenvalues)), lambda: np.max(np.real(eigenvalues))
+                lambda: xp.max(xp.real(eigenvalues)),
+                lambda: np.max(np.real(eigenvalues)),
             )
             min_real_eigenvalue = safe_cuda_operation(
-                lambda: xp.min(xp.real(eigenvalues)), lambda: np.min(np.real(eigenvalues))
+                lambda: xp.min(xp.real(eigenvalues)),
+                lambda: np.min(np.real(eigenvalues)),
             )
 
-            condition_number = safe_cuda_operation(lambda: xp.linalg.cond(M), lambda: linalg.cond(M))
+            condition_number = safe_cuda_operation(
+                lambda: xp.linalg.cond(M), lambda: linalg.cond(M)
+            )
 
             return {
                 "trace": float(trace),
@@ -1093,7 +1097,9 @@ class AdvancedTensorAlgebra:
         """
         try:
             # Calculate current spectral norm with CUDA acceleration
-            current_norm = safe_cuda_operation(lambda: xp.linalg.norm(M, ord=2), lambda: linalg.norm(M, ord=2))
+            current_norm = safe_cuda_operation(
+                lambda: xp.linalg.norm(M, ord=2), lambda: linalg.norm(M, ord=2)
+            )
 
             # Update history
             if not hasattr(self, "_spectral_history"):
@@ -1106,8 +1112,12 @@ class AdvancedTensorAlgebra:
             # Calculate statistics with CUDA acceleration
             history_array = np.array(self._spectral_history)
 
-            mean_norm = safe_cuda_operation(lambda: xp.mean(history_array), lambda: np.mean(history_array))
-            std_norm = safe_cuda_operation(lambda: xp.std(history_array), lambda: np.std(history_array))
+            mean_norm = safe_cuda_operation(
+                lambda: xp.mean(history_array), lambda: np.mean(history_array)
+            )
+            std_norm = safe_cuda_operation(
+                lambda: xp.std(history_array), lambda: np.std(history_array)
+            )
 
             # Calculate trend using polynomial fitting
             trend = np.polyfit(range(len(history_array)), history_array, 1)[0]
@@ -1129,11 +1139,11 @@ class AdvancedTensorAlgebra:
         Calculate Ferris Wheel cycle alignment for temporal synchronization.
 
         Mathematical Formula:
-        φ(t) = 2π * (t mod T) / T
+        φ(t) = 2π * (t mod, T) / T
         alignment = (sin(φ) + 1) / 2
 
         Args:
-            current_time: Current timestamp (uses current time if None)
+            current_time: Current timestamp (uses current time if, None)
 
         Returns:
             Cycle alignment factor (0-1)

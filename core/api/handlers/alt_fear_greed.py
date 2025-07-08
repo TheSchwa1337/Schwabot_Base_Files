@@ -5,20 +5,22 @@ import time
 from typing import Any, Dict, Optional
 from .base_handler import BaseAPIHandler
 
-    import aiohttp
-    import requests
+import aiohttp
+import requests
 
 try:
-except ImportError:  # pragma: no cover
+    pass
+    except ImportError:  # pragma: no cover
     aiohttp = None  # type: ignore
 
 try:
-except ImportError:  # pragma: no cover
+    pass
+    except ImportError:  # pragma: no cover
     requests = None  # type: ignore
 
 logger = logging.getLogger(__name__)
 
-"""Alternative.me Fear & Greed Handler
+"""Alternative.me Fear & Greed Handler"
 
 Fetches the latest Fear & Greed Index from https://alternative.me.
 
@@ -53,7 +55,7 @@ class FearGreedHandler(BaseAPIHandler):
                         resp.raise_for_status()
                         return await resp.json()
                 elif requests:
-                    # Blocking only used if aiohttp missing (e.g. quick tests)
+                    # Blocking only used if aiohttp missing (e.g. quick, tests)
                     loop = asyncio.get_running_loop()
                     return await loop.run_in_executor(None, lambda: requests.get(URL, timeout=15).json())
                 else:
@@ -64,8 +66,8 @@ class FearGreedHandler(BaseAPIHandler):
                 if attempt < self.MAX_RETRIES - 1:
                     await asyncio.sleep(self.RETRY_DELAY * (attempt + 1))
                 else:
-                    logger.error(
-                        "All {0} attempts failed for {1}".format(
+                    logger.error()
+                        "All {0} attempts failed for {1}".format()
                             self.MAX_RETRIES, 
                             self.NAME)
                     )
@@ -85,7 +87,7 @@ class FearGreedHandler(BaseAPIHandler):
                 if field not in data:
                     raise ValueError("Missing required field: {0}".format(field))
 
-            parsed_data = {
+            parsed_data = {}
                 "value": int(data["value"]),
                 "value_classification": data.get("value_classification", "Unknown"),
                 "timestamp": int(data["timestamp"]),
@@ -103,7 +105,7 @@ class FearGreedHandler(BaseAPIHandler):
         except Exception as exc:
             logger.error("{0}: failed to parse payload - {1}".format(self.NAME, exc))
             # Return a fallback response structure
-            return {
+            return {}
                 "value": 50,  # Neutral fear/greed value
                 "value_classification": "Unknown",
                 "timestamp": int(time.time()),
@@ -120,8 +122,8 @@ class FearGreedHandler(BaseAPIHandler):
 
     def _calculate_sentiment_score(self, value: int) -> float:
         """Calculate sentiment score based on fear/greed value."""
-        # Fear < 30 = potential long entry (positive sentiment)
-        # Greed > 70 = potential short entry (negative sentiment)
+        # Fear < 30 = potential long entry (positive, sentiment)
+        # Greed > 70 = potential short entry (negative, sentiment)
         if value < 30:
             return 1.0 - (value / 30.0)  # Higher score for lower fear
         elif value > 70:
@@ -154,7 +156,7 @@ class FearGreedHandler(BaseAPIHandler):
                     return cached_data
                 else:
                     # Return default data if no cache available
-                    return {
+                    return {}
                         "value": 50,
                         "value_classification": "Neutral",
                         "timestamp": int(current_time),

@@ -6,13 +6,13 @@ import time
 import json
 from .base_handler import BaseAPIHandler
 
-    import aiohttp
-    import requests
+import aiohttp
+import requests
 
-"""CoinGecko API Handler
+"""CoinGecko API Handler"
 
 Handles data fetching and processing from CoinGecko API endpoints
-for cryptocurrency market data, price feeds, and market analytics.
+    for cryptocurrency market data, price feeds, and market analytics.
 
 This module provides both sync and async interfaces for:
 - Price data fetching
@@ -37,11 +37,13 @@ Provides price data, market metrics, trending coins, and market dominance data.
 """
 
 try:
-except ImportError:
+    pass
+    except ImportError:
     aiohttp = None
 
 try:
-except ImportError:
+    pass
+    except ImportError:
     requests = None
 
 logger = logging.getLogger(__name__)
@@ -71,7 +73,7 @@ class CoinGeckoHandler(BaseAPIHandler):
 
         # Coins to track
 
-        self.coins = [
+        self.coins = []
             "bitcoin",
             "ethereum",
             "binancecoin",
@@ -154,7 +156,7 @@ class CoinGeckoHandler(BaseAPIHandler):
 
                 loop = asyncio.get_running_loop()
 
-                response = await loop.run_in_executor(
+                response = await loop.run_in_executor()
                     None,
                     lambda: requests.get("{0}/global".format(BASE_URL), headers=headers, timeout=15),
                 )
@@ -178,7 +180,7 @@ class CoinGeckoHandler(BaseAPIHandler):
 
             vs_currencies_str = ",".join(self.vs_currencies)
 
-            params = {
+            params = {}
                 "ids": coins_str,
                 "vs_currencies": vs_currencies_str,
                 "include_market_cap": True,
@@ -201,9 +203,9 @@ class CoinGeckoHandler(BaseAPIHandler):
 
                 loop = asyncio.get_running_loop()
 
-                response = await loop.run_in_executor(
+                response = await loop.run_in_executor()
                     None,
-                    lambda: requests.get(
+                    lambda: requests.get()
                         "{0}/simple/price".format(BASE_URL),
                         params=params,
                         headers=headers,
@@ -240,7 +242,7 @@ class CoinGeckoHandler(BaseAPIHandler):
 
                 loop = asyncio.get_running_loop()
 
-                response = await loop.run_in_executor(
+                response = await loop.run_in_executor()
                     None,
                     lambda: requests.get("{0}/search/trending".format(BASE_URL), headers=headers, timeout=15),
                 )
@@ -260,7 +262,7 @@ class CoinGeckoHandler(BaseAPIHandler):
 
         try:
 
-            params = {
+            params = {}
                 "vs_currency": "usd",
                 "order": "market_cap_desc",
                 "per_page": 10,
@@ -282,9 +284,9 @@ class CoinGeckoHandler(BaseAPIHandler):
 
                 loop = asyncio.get_running_loop()
 
-                response = await loop.run_in_executor(
+                response = await loop.run_in_executor()
                     None,
-                    lambda: requests.get(
+                    lambda: requests.get()
                         "{0}/coins/markets".format(BASE_URL),
                         params=params,
                         headers=headers,
@@ -307,7 +309,7 @@ class CoinGeckoHandler(BaseAPIHandler):
 
         try:
 
-            parsed_data = {
+            parsed_data = {}
                 "timestamp": int(time.time()),
                 "global_metrics": {},
                 "coin_prices": {},
@@ -322,7 +324,7 @@ class CoinGeckoHandler(BaseAPIHandler):
 
                 global_data = raw["global"]["data"]
 
-                parsed_data["global_metrics"] = {
+                parsed_data["global_metrics"] = {}
                     "total_market_cap_usd": global_data.get("total_market_cap", {}).get("usd", 0),
                     "total_volume_24h_usd": global_data.get("total_volume", {}).get("usd", 0),
                     "market_cap_change_24h": global_data.get("market_cap_change_percentage_24h_usd", 0),
@@ -346,8 +348,8 @@ class CoinGeckoHandler(BaseAPIHandler):
 
                 for coin in raw["trending"]["coins"]:
 
-                    trending_coins.append(
-                        {
+                    trending_coins.append()
+                        {}
                             "id": coin["item"]["id"],
                             "name": coin["item"]["name"],
                             "symbol": coin["item"]["symbol"],
@@ -388,7 +390,7 @@ class CoinGeckoHandler(BaseAPIHandler):
 
             # Return a fallback response structure
 
-            return {
+            return {}
                 "timestamp": int(time.time()),
                 "global_metrics": {},
                 "coin_prices": {},
@@ -424,17 +426,17 @@ class CoinGeckoHandler(BaseAPIHandler):
 
         # Normalize to a range, e.g., -100 to 100 or 0 to 100
 
-        # For simplicity, let's just cap it for now
+        # For simplicity, let's just cap it for now'
 
         sentiment_score = max(-100, min(100, sentiment_score))
 
-        return {
+        return {}
             "score": sentiment_score,
             "interpretation": ("Positive" if sentiment_score > 0 else "Negative" if sentiment_score < 0 else "Neutral"),
         }
 
 
-# Example usage (for testing purposes)
+# Example usage (for testing, purposes)
 
 
 if __name__ == "__main__":

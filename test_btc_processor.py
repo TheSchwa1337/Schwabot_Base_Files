@@ -1,11 +1,11 @@
-        from core.drift_shells import DriftShells
-        from core.entropic_vectorizer import EntropicVectorizer
-        from core.gpu_accelerator import GPUAccelerator
-        from core.integrators.autonomic_strategy_reflex_layer import (
-        from core.memory_backlog import MemoryBacklog
-        from core.multi_bit_btc_processor import MultiBitBTCProcessor
-        from core.triplet_harmony import TripletHarmony
-        import traceback
+from core.drift_shells import DriftShells
+from core.entropic_vectorizer import EntropicVectorizer
+from core.gpu_accelerator import GPUAccelerator
+from core.integrators.autonomic_strategy_reflex_layer import ()
+from core.memory_backlog import MemoryBacklog
+from core.multi_bit_btc_processor import MultiBitBTCProcessor
+from core.triplet_harmony import TripletHarmony
+import traceback
 import asyncio
 import logging
 import os
@@ -22,7 +22,7 @@ This script tests the BTC processor in isolation to avoid core module import iss
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 # Configure logging
-logging.basicConfig(
+logging.basicConfig()
     level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 
@@ -43,17 +43,17 @@ async def test_btc_processor():
         # Test EntropicVectorizer
         ev_config = {"enabled": True, "output_bits": 16}
         ev = EntropicVectorizer(ev_config)
-        class_id, risk_scalar, xor_drift = ev.build_strategy_vec(
+        class_id, risk_scalar, xor_drift = ev.build_strategy_vec()
             "test_hash", "test_price_hash", b"seed"
         )
-        print(
+        print()
             f"✅ EntropicVectorizer: class_id={class_id}, risk={risk_scalar:.3f}, xor_drift={xor_drift:.3f}"
         )
 
         # Test TripletHarmony
         th_config = {"enabled": True, "coherence_threshold": 0.85}
         TripletHarmony(th_config)
-        print(
+        print()
             f"✅ TripletHarmony initialized with threshold {th_config['coherence_threshold']}"
         )
 
@@ -63,12 +63,12 @@ async def test_btc_processor():
         print(f"✅ DriftShells initialized with {ds_config['shell_layers']} layers")
 
         # Test MemoryBacklog
-        mb_config = {
+        mb_config = {}
             "enabled": True,
             "backlog_depth": {"short_term": 96, "mid_term": 672, "long_term": 8760},
         }
         MemoryBacklog(mb_config)
-        print(
+        print()
             f"✅ MemoryBacklog initialized with short_term depth {mb_config['backlog_depth']['short_term']}"
         )
 
@@ -80,7 +80,7 @@ async def test_btc_processor():
         # Test ASRL
         asrl_config = {"alpha": 0.4, "beta": 0.3, "gamma": 0.3}
         AutonomicStrategyReflexLayer(asrl_config)
-        print(
+        print()
             f"✅ AutonomicStrategyReflexLayer initialized with alpha={asrl_config['alpha']}"
         )
 
@@ -110,7 +110,7 @@ async def test_btc_processor():
                 print(f"   - Risk: {profit_vector['risk']:.3f}")
                 print(f"   - Rho: {profit_vector['rho']:.3f}")
                 print(f"   - Coherence: {profit_vector['triplet_coherence']:.3f}")
-                print(
+                print()
                     f"   - U_r Score: {profit_vector['asrl_unified_reflex_score']:.3f}"
                 )
                 print(f"   - Lights: {profit_vector['lights']}")

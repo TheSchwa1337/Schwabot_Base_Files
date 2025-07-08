@@ -3,5 +3,4 @@
 
 """Master Cycle Engine Enhanced  compatibility stub."""
 
-
 __all__: list[str] = []

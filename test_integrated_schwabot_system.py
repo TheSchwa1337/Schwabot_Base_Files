@@ -1,9 +1,9 @@
-    from core.unified_math_system import unified_math
-    import numpy as np
-        import traceback
-    from core.ccxt_trading_executor import (
-    from core.integrated_ferris_glyph_controller import (
-    from core.lantern_core import enhanced_lantern_core, EntropyMode, map_btc_price_to_word
+from core.unified_math_system import unified_math
+import numpy as np
+import traceback
+from core.ccxt_trading_executor import ()
+from core.integrated_ferris_glyph_controller import ()
+from core.lantern_core import enhanced_lantern_core, EntropyMode, map_btc_price_to_word
 from decimal import Decimal
 from typing import Dict, Any, List
 import json
@@ -37,14 +37,14 @@ Mathematical Flow Validation:
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'core'))
 
 # Import all integrated components
-try:
+    try:
         integrated_controller, process_btc_cycle, TradingTimeframe
     )
         ccxt_executor, execute_trading_signal, TradingPair, ExecutionStrategy
     )
     print("✅ All integrated components imported successfully")
     COMPONENTS_AVAILABLE = True
-except ImportError as e:
+    except ImportError as e:
     print(f"❌ Component import failed: {e}")
     COMPONENTS_AVAILABLE = False
 
@@ -84,10 +84,10 @@ def test_lantern_core_word_mapping():
         print(f"   BTC Hash Word: {btc_word}")
         print(f"   Pattern Word: {pattern_word}")
 
-        results.append({
+        results.append({)}
             "btc_price": price,
             "word_mapping": word_mapping,
-            "additional_words": {
+            "additional_words": {}
                 "profit": profit_word,
                 "btc_hash": btc_word,
                 "pattern": pattern_word
@@ -197,9 +197,9 @@ def test_complete_recursive_flow():
     print_banner("COMPLETE RECURSIVE MATHEMATICAL FLOW TEST", "🔄")
 
     # Simulate real-time BTC price feed
-    btc_prices = [
-        49850.25, 50120.75, 49995.50, 50450.00, 50725.25,
-        51000.00, 50875.75, 51200.50, 51525.25, 51750.00
+    btc_prices = []
+        49850.25, 50120.75, 49995.50, 50450.0, 50725.25,
+        51000.0, 50875.75, 51200.50, 51525.25, 51750.0
 ]
     print("🚀 Simulating 3.75-minute BTC price cycles...")
     print("   Each cycle: BTC Price → Word → Glyph → Ferris → Ghost → Trade\n")
@@ -238,13 +238,13 @@ def test_complete_recursive_flow():
     print(f"Total Profit: ${total_profit}")
     print(f"Average Profit per Cycle: ${total_profit / total_trades if total_trades > 0 else 0}")
 
-    return {
+    return {}
         "total_cycles": total_trades,
         "successful_trades": successful_trades,
         "win_rate": win_rate,
         "total_profit": float(total_profit)
 }
-def test_system_status_reports():
+    def test_system_status_reports():
     """Test system status reporting."""
     print_banner("SYSTEM STATUS REPORTS", "📋")
 
@@ -288,7 +288,7 @@ def main():
         print("="*80)
 
         word_results = test_lantern_core_word_mapping()
-        test_mathematical_unified_system(
+        test_mathematical_unified_system()
             signals = test_integrated_ferris_glyph_controller()
             execution_results = test_ccxt_trading_executor(signals)
         )

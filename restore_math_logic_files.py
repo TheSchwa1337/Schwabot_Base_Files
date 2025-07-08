@@ -8,7 +8,7 @@ Restore selected math/logic files from backup to a clean directory, preserving s
 
 
 # List of files to restore (relative to cleanup_backup/core)
-FILES_TO_RESTORE = [
+FILES_TO_RESTORE = []
     "mathlib_v3.py",
     "mathlib_v3_visualizer.py",
     "mathlib_v2.py",
@@ -60,6 +60,6 @@ def restore_files():
 
 if __name__ == "__main__":
     restore_files()
-    print(
+    print()
         "\nRestore complete. You can now autopep8, flake8, and mypy the core_math_restore directory."
     )

@@ -27,7 +27,7 @@ Usage:
 
 
 # Configure logging
-logging.basicConfig(
+logging.basicConfig()
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
@@ -45,7 +45,7 @@ class SystemInfo:
 
     def get_python_version_str(): -> str:
         """Get Python version as string."""
-        return f"{self.python_version.major}.{self.python_version.minor}.{
+        return f"{self.python_version.major}.{self.python_version.minor}.{"}
             self.python_version.micro
         }"
 
@@ -79,7 +79,7 @@ class DependencyManager:
     def check_pip_available(): -> bool:
         """Check if pip is available."""
         try:
-            result = subprocess.run(
+            result = subprocess.run()
                 [self.system_info.get_pip_command(), "--version"],
                 capture_output=True,
                 text=True,
@@ -95,7 +95,7 @@ class DependencyManager:
         """Upgrade pip to latest version."""
         try:
             logger.info("Upgrading pip...")
-            subprocess.run(
+            subprocess.run()
                 [self.system_info.get_pip_command(), "install", "--upgrade", "pip"],
                 check=True,
             )
@@ -110,7 +110,7 @@ class DependencyManager:
         try:
             logger.info("Installing requirements...")
 
-            pip_cmd = [
+            pip_cmd = []
                 self.system_info.get_pip_command(),
                 "install",
                 "-r",
@@ -120,14 +120,14 @@ class DependencyManager:
             if venv_path:
              # Use virtual environment pip
                 if self.system_info.is_windows:
-                    pip_cmd = [
+                    pip_cmd = []
                         os.path.join(venv_path, "Scripts", "pip"),
                         "install",
                         "-r",
                         self.requirements_file,
                     ]
                 else:
-                    pip_cmd = [
+                    pip_cmd = []
                         os.path.join(venv_path, "bin", "pip"),
                         "install",
                         "-r",
@@ -144,7 +144,7 @@ class DependencyManager:
 
     def verify_installation(): -> Dict[str, bool]:
         """Verify that all required packages are installed."""
-        required_packages = [
+        required_packages = []
             "numpy",
             "pandas",
             "matplotlib",
@@ -239,7 +239,7 @@ class ConfigurationManager:
         """Create default configuration files."""
         try:
             # Create .env template
-            env_template = """# Schwabot Environment Configuration
+            env_template = """# Schwabot Environment Configuration"
 # Copy this file to .env and fill in your API keys
 
 # Coinbase API Configuration
@@ -254,7 +254,7 @@ COINMARKETCAP_API_KEY=your_coinmarketcap_api_key_here
 TRADING_MODE=demo
 SANDBOX_MODE=true
 MAX_TRADE_AMOUNT=100.0
-RISK_PER_TRADE=0.02
+RISK_PER_TRADE=0.2
 
 # System Configuration
 LOG_LEVEL=INFO
@@ -267,18 +267,18 @@ ENABLE_BACKTESTING=true
             logger.info("✅ Created .env.template")
 
             # Create basic config
-            basic_config = {
-                "system": {
+            basic_config = {}
+                "system": {}
                     "name": "Schwabot Trading System",
                     "version": "1.0.0",
                     "mode": "demo",
                 },
-                "api": {
+                "api": {}
                     "coinbase": {"enabled": True, "sandbox": True},
                     "coinmarketcap": {"enabled": True},
                     "coingecko": {"enabled": True},
                 },
-                "trading": {
+                "trading": {}
                     "enabled": False,
                     "pairs": ["BTC/USDC", "ETH/USDC", "XRP/USDC"],
                     "max_positions": 10,
@@ -297,22 +297,22 @@ ENABLE_BACKTESTING=true
     def setup_logging(): -> bool:
         """Setup logging configuration."""
         try:
-            log_config = {
+            log_config = {}
                 "version": 1,
                 "disable_existing_loggers": False,
-                "formatters": {
-                    "standard": {
+                "formatters": {}
+                    "standard": {}
                         "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
                     }
                 },
-                "handlers": {
-                    "file": {
+                "handlers": {}
+                    "file": {}
                         "class": "logging.FileHandler",
                         "filename": "logs/schwabot.log",
                         "formatter": "standard",
                         "level": "INFO",
                     },
-                    "console": {
+                    "console": {}
                         "class": "logging.StreamHandler",
                         "formatter": "standard",
                         "level": "INFO",
@@ -346,8 +346,8 @@ class InstallationManager:
 
         # Check Python version
         if not self.system_info.check_python_version():
-            logger.error(
-                f"❌ Python version {
+            logger.error()
+                f"❌ Python version {"}
                     self.system_info.get_python_version_str()
                 } is not supported. "
                 f"Python 3.8+ is required."
@@ -397,7 +397,7 @@ class InstallationManager:
         if all_installed:
             logger.info("✅ All dependencies installed successfully")
         else:
-            failed_packages = [
+            failed_packages = []
                 pkg for pkg, installed in verification_results.items() if not installed
             ]
             logger.error(f"❌ Failed to install packages: {failed_packages}")
@@ -429,7 +429,7 @@ class InstallationManager:
 
         try:
             # Test imports
-            test_imports = [
+            test_imports = []
                 "numpy",
                 "pandas",
                 "matplotlib",
@@ -463,10 +463,10 @@ class InstallationManager:
 
             if self.system_info.is_windows:
                 # Windows batch file
-                batch_content = """@echo off
+                batch_content = """@echo off""
 echo Starting Schwabot Trading System...
 cd /d "%~dp0"
-if exist schwabot_env\\Scripts\\activate.bat (
+    if exist schwabot_env\\Scripts\\activate.bat ()
     call schwabot_env\\Scripts\\activate.bat
     python main.py
 ) else (
@@ -480,10 +480,10 @@ pause
 
             else:
                 # Unix shell script
-                shell_content = """#!/bin/bash
+                shell_content = """#!/bin/bash"
 echo "Starting Schwabot Trading System..."
 cd "$(dirname "$0")"
-if [ -f "schwabot_env/bin/activate" ]; then
+    if [ -f "schwabot_env/bin/activate" ]; then
     source schwabot_env/bin/activate
 fi
 python3 main.py
@@ -545,7 +545,7 @@ def main():
     """Main installation function."""
     parser = argparse.ArgumentParser(description="Schwabot Installation Script")
     parser.add_argument("--auto", action="store_true", help="Automatic installation")
-    parser.add_argument(
+    parser.add_argument()
         "--check", action="store_true", help="Check system requirements only"
     )
     parser.add_argument("--configure", action="store_true", help="Configure only")

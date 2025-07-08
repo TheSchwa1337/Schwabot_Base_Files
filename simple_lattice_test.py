@@ -1,7 +1,7 @@
 import math
 import numpy as np
-        from core.recursive_lattice_theorem import (
-        import traceback
+from core.recursive_lattice_theorem import ()
+import traceback
 import os
 import sys
 import time
@@ -58,7 +58,7 @@ def test_direct_lattice():
 
         # Test complete cycle
         print("\n🔄 Complete Recursive Cycle:")
-        input_data = {
+        input_data = {}
             "current_glyphs": 100,
             "ai_output": ["test signal", "mathematical validation"],
             "word": "profit",
@@ -135,7 +135,7 @@ def test_mathematical_equations():
     print(f"   ||ΔT|| = {magnitude:.4f}")
 
     # Dot product for similarity
-    similarity = np.dot(test_vector, test_delta) / (
+    similarity = np.dot(test_vector, test_delta) / ()
         np.linalg.norm(test_vector) * magnitude
     )
     print(f"   Cosine similarity = {similarity:.4f}")
@@ -192,7 +192,7 @@ def test_integration_flow():
 
     print("\n✅ Complete integration flow validated!")
 
-    return {
+    return {}
         "btc_price": btc_price,
         "ferris_phase": phase,
         "glyph_count": new_glyphs,
@@ -224,7 +224,7 @@ def main():
     if lattice_success:
         print("✅ Recursive Lattice Theorem: OPERATIONAL")
     else:
-        print("⚠️  Recursive Lattice Theorem: LIMITED (imports failed)")
+        print("⚠️  Recursive Lattice Theorem: LIMITED (imports, failed)")
 
     print("✅ Core Mathematical Equations: VALIDATED")
     print("✅ Integration Flow: FUNCTIONAL")

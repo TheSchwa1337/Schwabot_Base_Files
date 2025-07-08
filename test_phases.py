@@ -17,7 +17,7 @@ def test_phases():
     print("\n📊 Phase Characteristics:")
     for phase in [FerrisPhase.LOW, FerrisPhase.MID, FerrisPhase.HIGH]:
         chars = core.get_phase_characteristics(phase)
-        print(
+        print()
             f"  {phase.value.upper()}: {chars['strategy']} strategy, "
             f"Risk: {chars['risk_tolerance']}, "
             f"BTC: {chars['btc_allocation'] * 100:.0f}%"
@@ -25,7 +25,7 @@ def test_phases():
 
     # Test phase calculations
     print("\n🔄 Phase Calculations:")
-    test_angles = [
+    test_angles = []
         0,
         math.pi / 4,
         math.pi / 2,
@@ -39,7 +39,7 @@ def test_phases():
     for angle in test_angles:
         intensity_phase, motion_phase = core._calculate_both_phases(angle)
         height = (math.sin(angle) + 1) / 2
-        print(
+        print()
             f"  Angle: {math.degrees(angle):6.1f}° -> "
             f"Intensity: {intensity_phase.value.upper():4} "
             f"(Height: {height:.3f})"
@@ -53,11 +53,11 @@ def test_phases():
         print(f"  {phase.value.upper()}: {adjusted_profit:.2f}%")
 
     # Test allocations
-    print("\n📈 Phase-Optimized Allocations ($10,000):")
+    print("\n📈 Phase-Optimized Allocations ($10,00):")
     total_capital = 10000.0
     for phase in [FerrisPhase.LOW, FerrisPhase.MID, FerrisPhase.HIGH]:
         allocation = core.get_phase_optimized_allocation(phase, total_capital)
-        print(
+        print()
             f"  {phase.value.upper()}: "
             f"BTC: ${allocation['BTC']:.0f}, "
             f"USDC: ${allocation['USDC']:.0f}, "

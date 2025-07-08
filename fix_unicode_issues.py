@@ -8,7 +8,7 @@ Replaces Unicode characters with ASCII equivalents to prevent syntax errors.
 
 
 # Unicode to ASCII character mappings
-UNICODE_REPLACEMENTS = {
+UNICODE_REPLACEMENTS = {}
     "∈": "in",
     "√": "sqrt",
     "π": "pi",
@@ -114,7 +114,7 @@ def main():
             print(f"✅ Fixed Unicode issues in: {file_path}")
             fixed_count += 1
 
-    print(
+    print()
         f"\n🎉 Fixed Unicode issues in {fixed_count} out of {len(python_files)} files!"
     )
 

@@ -61,7 +61,7 @@ class UnifiedMathSystem:
         price = market_data.get("price", 0.0)
         entry_price = market_data.get("entry_price", price)
         lower_bound = market_data.get("lower_bound", price * 0.95)
-        upper_bound = market_data.get("upper_bound", price * 1.05)
+        upper_bound = market_data.get("upper_bound", price * 1.5)
         frequency = market_data.get("frequency", 7.83)
         mass_coefficient = market_data.get("mass_coefficient", 1e-6)
 
@@ -79,13 +79,19 @@ class UnifiedMathSystem:
         )
 
         # Generate quantum soulprint vector
-        soulprint_vector = self.zpe_zbe_core.generate_quantum_soulprint_vector(zpe_vector, zbe_balance)
+        soulprint_vector = self.zpe_zbe_core.generate_quantum_soulprint_vector(
+            zpe_vector, zbe_balance
+        )
 
         # Assess strategy confidence
-        confidence = self.zpe_zbe_core.assess_quantum_strategy_confidence(zpe_vector, zbe_balance)
+        confidence = self.zpe_zbe_core.assess_quantum_strategy_confidence(
+            zpe_vector, zbe_balance
+        )
 
         # Dual matrix sync trigger
-        sync_trigger = self.zpe_zbe_core.dual_matrix_sync_trigger(zpe_vector, zbe_balance)
+        sync_trigger = self.zpe_zbe_core.dual_matrix_sync_trigger(
+            zpe_vector, zbe_balance
+        )
 
         return {
             "is_synced": sync_trigger["is_synced"],
@@ -101,7 +107,9 @@ class UnifiedMathSystem:
             "recommended_action": sync_trigger["recommended_action"],
         }
 
-    def advanced_quantum_decision_router(self, quantum_analysis: Dict[str, Any]) -> Dict[str, Any]:
+    def advanced_quantum_decision_router(
+        self, quantum_analysis: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """
         Advanced quantum decision routing based on analysis.
 
@@ -170,7 +178,10 @@ class UnifiedMathSystem:
         return max(0.0, min(1.0, total_entropy))
 
     def log_strategy_performance(
-        self, zpe_vector: ZPEVector, zbe_balance: ZBEBalance, strategy_metadata: Dict[str, Any]
+        self,
+        zpe_vector: ZPEVector,
+        zbe_balance: ZBEBalance,
+        strategy_metadata: Dict[str, Any],
     ) -> None:
         """
         Log strategy performance for adaptive learning.
@@ -180,7 +191,9 @@ class UnifiedMathSystem:
             zbe_balance: Zero-Based Equilibrium balance
             strategy_metadata: Strategy performance metadata
         """
-        self.performance_tracker.log_strategy_performance(zpe_vector, zbe_balance, strategy_metadata)
+        self.performance_tracker.log_strategy_performance(
+            zpe_vector, zbe_balance, strategy_metadata
+        )
 
     def get_quantum_strategy_recommendations(self) -> Dict[str, Any]:
         """

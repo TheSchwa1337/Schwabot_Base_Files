@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
-        import traceback
+import traceback
 from core.advanced_drift_shell_integration import (
 from utils.safe_print import safe_print, info, error, success
 import os

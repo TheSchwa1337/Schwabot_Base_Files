@@ -51,7 +51,7 @@ def run_autoflake(base_dir):
     """Run autoflake to remove unused imports and variables."""
     print("Running autoflake...")
     try:
-        subprocess.run([
+        subprocess.run([)]
             'autoflake',
             '--in-place',
             '--remove-all-unused-imports',
@@ -68,7 +68,7 @@ def run_black(base_dir):
     """Run black formatter."""
     print("Running black formatter...")
     try:
-        subprocess.run([
+        subprocess.run([)]
             'black',
             base_dir,
             '--line-length', '100'
@@ -82,7 +82,7 @@ def run_isort(base_dir):
     """Run isort to sort imports."""
     print("Running isort...")
     try:
-        subprocess.run([
+        subprocess.run([)]
             'isort',
             base_dir
         ], check=True)

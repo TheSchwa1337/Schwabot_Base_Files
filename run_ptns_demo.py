@@ -1,9 +1,9 @@
 from core.dual_error_handler import PhaseState
-from core.emoji_bitpath_mapper import (
-from core.gpu_fallback_manager import (
-from core.profit_tier_sequencer import (
+from core.emoji_bitpath_mapper import ()
+from core.gpu_fallback_manager import ()
+from core.profit_tier_sequencer import ()
 from core.symbolic_profit_router import ProfitTier
-from core.tier_validation_matrix import (
+from core.tier_validation_matrix import ()
 from tests.test_ptns_integration import test_ptns_complete_integration
 from typing import Dict, Any
 import time
@@ -64,7 +64,7 @@ print(f"✅ Navigation Status: {navigation_result['status']}")
 # Show portal details
 print("\n📋 Portal Traversal Details:")
     for i, portal in enumerate(navigation_result['portals_traversed']):
-        print(f"  {i + 1}. {portal['emoji']} -> {portal['portal_type']} "
+        print(f"  {i + 1}. {portal['emoji']} -> {portal['portal_type']} ")
                 f"(Path: {portal['bit_path']}, Safe: {portal['fallback_safe']})")
 
 return navigation_result
@@ -77,7 +77,7 @@ print("\n🔍 Tier Validation Demonstration")
 
 # Test tier transition validation
 print("🎯 Testing TIER_1 -> TIER_3 transition:")
-    validation_result=validate_profit_tier_transition(
+    validation_result=validate_profit_tier_transition()
         from_tier=ProfitTier.TIER_1,
         to_tier=ProfitTier.TIER_3,
         current_phase=PhaseState.BIT_8,
@@ -114,8 +114,8 @@ print("\n📊 Profit Sequencing Demonstration")
     print("-" * 40)
 
 # Create profit vectors for BTC trade
-vectors = [
-        ProfitVector(
+vectors = []
+        ProfitVector()
             hash_entropy = 0.85,
             strategy_weight = 1.3,
             delta_timing = 0.6,
@@ -123,7 +123,7 @@ vectors = [
             tier_action = TierAction.TRADE_ENTRY,
             symbol_zone = SymbolZone.GREEN_ZONE
         ),
-        ProfitVector(
+        ProfitVector()
             hash_entropy = 0.72,
             strategy_weight = 1.1,
             delta_timing = 0.8,
@@ -136,7 +136,7 @@ print(f"🪙 Processing BTC trade at $48,250")
     print(f"📈 Profit Vectors: {len(vectors)}")
 
 # Process profit sequence
-result = sequence_profit_tier(
+result = sequence_profit_tier()
         btc_price = 48250.0,
         vectors = vectors,
         tier = ProfitTier.TIER_2
@@ -166,10 +166,10 @@ gpu_fallback_manager.start_monitoring()
 # Submit test tasks
 print("📤 Submitting GPU tasks...")
     for i in range(3):
-        task_success=submit_gpu_task(
+        task_success=submit_gpu_task()
             task_id=f"demo_task_{i:03d}",
             task_type="profit_optimization",
-            data={
+            data={}
                 'profit_calculation': True,
                 'base_value': 1000.0 + (i * 100),
                 'risk_assessment': True,
@@ -213,7 +213,7 @@ print("1️⃣ Analyzing emoji trading signals...")
 
 # Step 2: Tier validation
 print("2️⃣ Validating tier transition...")
-    validation = validate_profit_tier_transition(
+    validation = validate_profit_tier_transition()
         from_tier = ProfitTier.TIER_1,
         to_tier = ProfitTier.TIER_2,
         current_phase = PhaseState.BIT_4,
@@ -222,8 +222,8 @@ print("2️⃣ Validating tier transition...")
 
 # Step 3: Profit optimization
 print("3️⃣ Optimizing profit sequence...")
-    vectors = [
-        ProfitVector(
+    vectors = []
+        ProfitVector()
             hash_entropy = 0.9,
             strategy_weight = 1.4,
             delta_timing = 0.7,
@@ -232,7 +232,7 @@ print("3️⃣ Optimizing profit sequence...")
             symbol_zone = SymbolZone.PURPLE_ZONE
         )
 ]
-profit_result = sequence_profit_tier(
+profit_result = sequence_profit_tier()
         btc_price = 49100.0,
         vectors = vectors,
         tier = ProfitTier.TIER_2
@@ -240,10 +240,10 @@ profit_result = sequence_profit_tier(
 
 # Step 4: GPU processing
 print("4️⃣ Processing through GPU pipeline...")
-    gpu_task = submit_gpu_task(
+    gpu_task = submit_gpu_task()
         task_id="complete_workflow_demo",
         task_type="integrated_workflow",
-        data={
+        data={}
             'navigation': navigation,
             'validation': validation.__dict__,
             'profit_result': profit_result
@@ -259,7 +259,7 @@ print("\n🏁 Workflow Results:")
     print(f"  🖥️ GPU Task: {'✅ Submitted' if gpu_task else '❌ Failed'}")
     print(f"  ⏱️ Total Time: {workflow_time:.4f}s")
 
-return {
+return {}
         'navigation': navigation,
         'validation': validation,
         'profit_result': profit_result,
@@ -301,9 +301,9 @@ print("\n" + "=" * 60)
         print(f"🕒 Total Demo Time: {total_time:.2f} seconds")
         print(f"🧪 Integration Tests: {test_results['success_rate']:.1f}% success rate")
         print(f"📊 Components Tested: 4 core modules + integration")
-        print(
-    f"🔧 System Status: {
-        '🟢 Operational' if test_results['tests_failed'] == 0 else '🟡 Partial'}")
+        print()
+    f"🔧 System Status: {"}
+        '🟢 Operational' if test_results['tests_failed'] == 0 else '🟡 Partial'}")"
 
 if test_results['tests_failed'] == 0:
             print("\n💎 The Profit Tier Navigation System is fully operational!")

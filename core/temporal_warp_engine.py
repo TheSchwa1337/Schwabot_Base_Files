@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
 
 
 @dataclass
-class WarpWindow:
+    class WarpWindow:
     """Warp window configuration for a strategy"""
 
     strategy_id: str
@@ -47,7 +47,7 @@ class TemporalWarpEngine:
         Initialize temporal warp engine
 
         Args:
-            default_alpha: Default warp scaling constant (seconds per drift unit)
+            default_alpha: Default warp scaling constant (seconds per drift, unit)
             max_warp_duration: Maximum warp window duration in seconds
         """
         self.warp_windows: Dict[str, WarpWindow] = {}
@@ -64,7 +64,7 @@ class TemporalWarpEngine:
         Args:
             strategy_id: Strategy identifier
             drift: Current drift value
-            alpha: Warp scaling constant (uses default if None)
+            alpha: Warp scaling constant (uses default if, None)
 
         Returns:
             Updated warp window
@@ -84,11 +84,11 @@ class TemporalWarpEngine:
             # Calculate confidence based on drift stability
             confidence = min(1.0, max(0.1, 1.0 - drift))
 
-            # Calculate priority (higher drift = higher priority)
+            # Calculate priority (higher drift = higher, priority)
             priority = int(drift * 100)
 
             # Create or update warp window
-            warp_window = WarpWindow(
+            warp_window = WarpWindow()
                 strategy_id=strategy_id,
                 open_time=open_time,
                 close_time=close_time,
@@ -102,7 +102,7 @@ class TemporalWarpEngine:
             # Record in history
             self.warp_history.append((strategy_id, now, drift))
 
-            logger.debug("Updated warp window for {0}: delay={1}s, confidence={2}".format(strategy_id, warp_delay:.1f, confidence:.3f))
+            logger.debug("Updated warp window for {0}: delay={1}s, confidence={2}".format(strategy_id, warp_delay))
             return warp_window
 
         except Exception as e:
@@ -140,7 +140,7 @@ class TemporalWarpEngine:
             strategy_id: Strategy identifier
 
         Returns:
-            Time in seconds until window opens (negative if already open)
+            Time in seconds until window opens (negative if already, open)
         """
         try:
             if strategy_id not in self.warp_windows:
@@ -233,13 +233,13 @@ class TemporalWarpEngine:
             List of high priority warp windows
         """
         try:
-            high_priority = [
+            high_priority = []
                 window
                 for window in self.warp_windows.values()
                 if window.priority >= min_priority and self.is_within_window(window.strategy_id)
             ]
 
-            # Sort by priority (highest first)
+            # Sort by priority (highest, first)
             high_priority.sort(key=lambda w: w.priority, reverse=True)
             return high_priority
 
@@ -293,7 +293,7 @@ class TemporalWarpEngine:
             # Get recent warp activity
             recent_activity = len([h for h in self.warp_history if (now - h[1]).total_seconds() < 3600])
 
-            return {
+            return {}
                 "active_windows": active_windows,
                 "total_windows": total_windows,
                 "avg_confidence": avg_confidence,
@@ -320,7 +320,7 @@ class TemporalWarpEngine:
         try:
             now = datetime.utcnow()
 
-            warp_window = WarpWindow(
+            warp_window = WarpWindow()
                 strategy_id=strategy_id,
                 open_time=now,
                 close_time=now + timedelta(seconds=duration_seconds),
@@ -368,10 +368,10 @@ def test_temporal_warp_engine():
     print("\n🕳️ Test 1: Updating Warp Window")
     drift = 0.25
     window = warp_engine.update_window(strategy_id, drift)
-    print("  Created warp window: delay={0}s".format(drift * 60:.1f))
+    print("  Created warp window: delay={0}s".format(drift * 60))
     print("  Open time: {0}".format(window.open_time))
     print("  Close time: {0}".format(window.close_time))
-    print("  Confidence: {0}".format(window.confidence:.3f))
+    print("  Confidence))"
 
     # Test 2: Check if within window
     print("\n⏱️ Test 2: Checking Window Status")
@@ -381,22 +381,22 @@ def test_temporal_warp_engine():
     # Test 3: Get time until window
     print("\n⏳ Test 3: Time Until Window")
     time_until = warp_engine.get_time_until(strategy_id)
-    print("  Time until window: {0} seconds".format(time_until:.1f))
+    print("  Time until window: {0} seconds".format(time_until))
 
     # Test 4: Get window duration
     print("\n📏 Test 4: Window Duration")
     duration = warp_engine.get_window_duration(strategy_id)
-    print("  Window duration: {0} seconds".format(duration:.1f))
+    print("  Window duration: {0} seconds".format(duration))
 
     # Test 5: Get confidence
     print("\n🎯 Test 5: Window Confidence")
     confidence = warp_engine.get_window_confidence(strategy_id)
-    print("  Window confidence: {0}".format(confidence:.3f))
+    print("  Window confidence: {0}".format(confidence))
 
     # Test 6: Force warp window
     print("\n⚡ Test 6: Force Warp Window")
     forced_window = warp_engine.force_warp_window(strategy_id, duration_seconds=120)
-    print("  Forced window created: {0}".format(forced_window is not None))
+    print("  Forced window created: {0}".format(forced_window is not, None))
 
     # Test 7: Get statistics
     print("\n📊 Test 7: Warp Statistics")

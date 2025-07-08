@@ -1,5 +1,5 @@
 import numpy as np
-        import traceback
+import traceback
 import os
 import sys
 
@@ -33,7 +33,7 @@ def test_mathematical_structures():
         # Calculate harmonic phases: φᵢ = 2πt/Pᵢ
         harmonic_phases = [2 * np.pi * current_time / P for P in periods]
 
-        # Calculate angular velocity: ω = 2π/P (using primary period)
+        # Calculate angular velocity: ω = 2π/P (using primary, period)
         primary_period = periods[0] if periods else 60
         angular_velocity = 2 * np.pi / primary_period
 
@@ -57,7 +57,7 @@ def test_mathematical_structures():
         assert 0 <= cycle_position <= 2 * np.pi, "Cycle position should be in [0, 2π]"
         assert angular_velocity > 0, "Angular velocity should be positive"
         assert 0 <= phase_coherence <= 1, "Phase coherence should be in [0, 1]"
-        assert synchronization_level >= 0, (
+        assert synchronization_level >= 0, ()
             "Synchronization level should be non-negative"
         )
 
@@ -93,11 +93,11 @@ def test_mathematical_structures():
         # Calculate entropy gradient: ∇S = Shannon(C⃗)
         if len(curl_field) > 1:
             # Normalize curl field for entropy calculation
-            curl_normalized = np.abs(curl_field) / (
+            curl_normalized = np.abs(curl_field) / ()
                 np.sum(np.abs(curl_field)) + epsilon
             )
             # Simple entropy calculation
-            entropy_gradient = -np.sum(
+            entropy_gradient = -np.sum()
                 curl_normalized * np.log2(curl_normalized + epsilon)
             )
         else:
@@ -124,7 +124,7 @@ def test_mathematical_structures():
         entry_price = 50000.0
         exit_price = 52500.0  # 5% profit
         time_held_minutes = 1440  # 24 hours
-        volatility = 0.02  # 2% volatility
+        volatility = 0.2  # 2% volatility
 
         # Calculate raw return: R = (P_exit - P_entry)/P_entry
         raw_return = (exit_price - entry_price) / entry_price
@@ -143,7 +143,7 @@ def test_mathematical_structures():
         sharpe_ratio = annualized_return / (volatility + epsilon)
 
         print(f"  Raw Return: {raw_return:.4f} ({raw_return * 100:.2f}%)")
-        print(
+        print()
             f"  Annualized Return: {annualized_return:.4f} ({annualized_return * 100:.2f}%)"
         )
         print(f"  Sharpe Ratio: {sharpe_ratio:.4f}")
@@ -152,13 +152,13 @@ def test_mathematical_structures():
 
         # Validate mathematical properties
         expected_raw_return = (exit_price - entry_price) / entry_price
-        assert abs(raw_return - expected_raw_return) < 1e-10, (
+        assert abs(raw_return - expected_raw_return) < 1e-10, ()
             "Raw return calculation error"
         )
-        assert risk_penalty > 0 and risk_penalty <= 1, (
-            "Risk penalty should be in (0, 1]"
+        assert risk_penalty > 0 and risk_penalty <= 1, ()
+            "Risk penalty should be in (0, 1]")
         )
-        assert risk_adjusted_return <= raw_return, (
+        assert risk_adjusted_return <= raw_return, ()
             "Risk-adjusted return should not exceed raw return"
         )
 
@@ -178,7 +178,7 @@ def test_mathematical_structures():
         odds = expected_return / volatility
 
         # Calculate Kelly fraction: f* = (p·b - q)/b
-        # where q = 1 - p (lose probability)
+        # where q = 1 - p (lose, probability)
         lose_probability = 1 - win_probability
         kelly_fraction = (win_probability * odds - lose_probability) / odds
 
@@ -187,7 +187,7 @@ def test_mathematical_structures():
 
         # Calculate growth rate: G = p·log(1 + bf*) + q·log(1 - f*)
         if kelly_fraction > 0 and kelly_fraction < 1:
-            growth_rate = win_probability * np.log(
+            growth_rate = win_probability * np.log()
                 1 + odds * kelly_fraction
             ) + lose_probability * np.log(1 - kelly_fraction)
         else:
@@ -211,7 +211,7 @@ def test_mathematical_structures():
         print("\n🧿 Testing RecursiveTimeLockSync...")
 
         # Test data - multiple time series at different scales
-        time_series = [
+        time_series = []
             np.array([1, 2, 3, 4, 5]),  # Short scale
             np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]),  # Medium scale
             np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]),  # Long scale
@@ -219,7 +219,7 @@ def test_mathematical_structures():
         periods = [5, 10, 15]  # Corresponding periods
         sync_threshold = 0.7
 
-        # Calculate phases for each scale: φₖ = 2π(Cₖ mod P)/P
+        # Calculate phases for each scale: φₖ = 2π(Cₖ mod, P)/P
         phases = []
         for i, (series, period) in enumerate(zip(time_series, periods)):
             if len(series) > 0:
@@ -242,7 +242,7 @@ def test_mathematical_structures():
 
         # Calculate ratios: (C₁/C₂, C₂/C₃)
         if len(phases) >= 3:
-            ratios = (
+            ratios = ()
                 phases[0] / (phases[1] + epsilon),
                 phases[1] / (phases[2] + epsilon),
             )

@@ -1,4 +1,4 @@
-    from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer
 from core.unified_math_system import unified_math
 from __future__ import annotations
 
@@ -23,6 +23,7 @@ from __future__ import annotations
 
 
 try:
+    pass
 except ImportError:
     TfidfVectorizer = None
 

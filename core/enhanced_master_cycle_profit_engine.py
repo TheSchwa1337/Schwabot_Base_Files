@@ -1,7 +1,7 @@
 # !/usr/bin/env python3
 
 
-"""Enhanced Master Cycle Profit Engine  compatibility stub.
+"""Enhanced Master Cycle Profit Engine  compatibility stub."
 
 
 
@@ -22,6 +22,5 @@ This stub merely preserves the import path so existing code continues to run.
 
 
 """
-
 
 __all__: list[str] = []

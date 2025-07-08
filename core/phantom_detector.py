@@ -7,7 +7,7 @@ from dataclasses import dataclass
 import numpy as np
 from scipy import signal
 from scipy.ndimage import gaussian_filter1d
-    import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 
 #!/usr/bin/env python3
 """
@@ -15,7 +15,7 @@ Phantom Math Detector
 ====================
 
 Advanced Phantom Zone detection system implementing formal mathematical equations
-for identifying pre-candle, entropy-driven trading opportunities.
+    for identifying pre-candle, entropy-driven trading opportunities.
 
 Core Equations:
 - Phantom Zone: Φ(t) = {ticks | ΔV(t)/Δτ > ε₁ ∧ d²P(t)/dτ² ≈ 0 ∧ 𝓔(t) > ε₂}
@@ -28,7 +28,7 @@ logger = logging.getLogger(__name__)
 
 
 @dataclass
-class PhantomZone:
+    class PhantomZone:
     """Phantom Zone data structure."""
 
     symbol: str
@@ -50,9 +50,9 @@ class PhantomZone:
 class PhantomDetector:
     """Advanced Phantom Zone detection system."""
 
-    def __init__(
+    def __init__()
         self,
-        entropy_threshold: float = 0.002,
+        entropy_threshold: float = 0.02,
         flatness_threshold: float = 0.1,
         window_size: int = 8,
         similarity_threshold: float = 0.7,
@@ -99,7 +99,7 @@ class PhantomDetector:
         self.flatness_history.append(flatness_score)
 
         # Phantom Zone detection logic
-        phantom_triggered = (
+        phantom_triggered = ()
             entropy_delta > self.entropy_threshold
             and flatness_score < self.flatness_threshold
             and similarity_score > self.similarity_threshold
@@ -108,8 +108,8 @@ class PhantomDetector:
 
         if phantom_triggered:
             logger.info("🔮 Phantom Zone detected for {0}".format(symbol))
-            logger.debug("  Δ: {0}, F: {1}".format(entropy_delta:.6f, flatness_score:.6f))
-            logger.debug("  S: {0}, P: {1}".format(similarity_score:.6f, phantom_potential:.6f))
+            logger.debug("  Δ))"
+            logger.debug("  S: {0}, P: {1}".format(similarity_score))
 
         return phantom_triggered
 
@@ -123,7 +123,7 @@ class PhantomDetector:
         if len(tick_prices) < 2:
             return 0.0
 
-        # Calculate velocity (first derivative)
+        # Calculate velocity (first, derivative)
         velocities = np.diff(tick_prices)
 
         # Calculate entropy using velocity changes
@@ -153,9 +153,9 @@ class PhantomDetector:
         Simplified to: F(t) = |mean(gradient(price))|
         """
         if len(tick_prices) < 3:
-            return 1.0  # High flatness (not flat)
+            return 1.0  # High flatness (not, flat)
 
-        # Calculate gradient (first derivative)
+        # Calculate gradient (first, derivative)
         gradient = np.gradient(tick_prices)
 
         # Calculate flatness as absolute mean of gradient
@@ -226,7 +226,7 @@ class PhantomDetector:
 
     def _create_phantom_features(self, phantom: PhantomZone) -> np.ndarray:
         """Create feature vector from phantom memory."""
-        return np.array(
+        return np.array()
             [phantom.entropy_delta, phantom.flatness_score, phantom.similarity_score, phantom.phantom_potential]
         )
 
@@ -250,7 +250,7 @@ class PhantomDetector:
         velocities = np.diff(tick_prices[-self.window_size :])
         velocity_magnitude = np.mean(np.abs(velocities))
 
-        # Duration factor (based on window size)
+        # Duration factor (based on window, size)
         duration = self.window_size
 
         # Calculate PPC
@@ -305,7 +305,7 @@ class PhantomDetector:
         time_of_day = time.strftime("%H%M", time.localtime(current_time))
         time_hash = hashlib.sha256(time_of_day.encode()).hexdigest()[:8]
 
-        phantom_zone = PhantomZone(
+        phantom_zone = PhantomZone()
             symbol=symbol,
             entry_tick=entry_tick,
             exit_tick=entry_tick,  # Will be updated when zone exits
@@ -346,18 +346,18 @@ class PhantomDetector:
             self.frequency_memory *= 0.95  # Slightly decrease frequency
         else:
             self.amplitude_memory *= 0.9  # Decrease amplitude for unprofitable patterns
-            self.frequency_memory *= 1.05  # Slightly increase frequency
+            self.frequency_memory *= 1.5  # Slightly increase frequency
 
         # Keep parameters in reasonable bounds
         self.amplitude_memory = np.clip(self.amplitude_memory, 0.1, 10.0)
         self.frequency_memory = np.clip(self.frequency_memory, 0.1, 10.0)
 
-        logger.info("🔮 Phantom Zone updated: profit={0}, duration={1}s".format(profit:.4f, phantom_zone.duration:.2f))
+        logger.info("🔮 Phantom Zone updated: profit={0}, duration={1}s".format(profit))
 
     def get_phantom_statistics(self) -> Dict[str, Any]:
         """Get Phantom detection statistics."""
         if not self.phantom_memory:
-            return {
+            return {}
                 'total_phantoms': 0,
                 'profitable_phantoms': 0,
                 'avg_profit': 0.0,
@@ -371,7 +371,7 @@ class PhantomDetector:
         avg_duration = np.mean([p.duration for p in self.phantom_memory])
         success_rate = profitable_phantoms / total_phantoms if total_phantoms > 0 else 0.0
 
-        return {
+        return {}
             'total_phantoms': total_phantoms,
             'profitable_phantoms': profitable_phantoms,
             'avg_profit': avg_profit,
@@ -429,8 +429,8 @@ def main():
             phantom_zone = detector.detect_phantom_zone(window, "BTC")
             if phantom_zone:
                 print("Phantom detected at tick {0}".format(i))
-                print("  Entry: ${0}".format(phantom_zone.entry_tick:.2f))
-                print("  Confidence: {0}".format(phantom_zone.confidence_score:.4f))
+                print("  Entry))"
+                print("  Confidence: {0}".format(phantom_zone.confidence_score))
                 print("  Hash: {0}...".format(phantom_zone.hash_signature[:8]))
                 print()
 

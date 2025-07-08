@@ -1,8 +1,8 @@
 import numpy as np
-                import cupy as cp
-            from numba import cuda
-            import cupy as cp
-            import numba
+import cupy as cp
+from numba import cuda
+import cupy as cp
+import numba
 from datetime import datetime
 from typing import List, Tuple, Callable, Optional, Dict, Any
 import csv
@@ -31,7 +31,7 @@ logger = logging.getLogger(__name__)
 
 
 # GPU/CPU Detection and Optimization
-class HardwareOptimizer:
+    class HardwareOptimizer:
     """Detects and optimizes for available hardware."""
 
     def __init__(self):
@@ -67,7 +67,7 @@ class HardwareOptimizer:
 
     def get_optimization_info():-> Dict[str, Any]:
         """Get current optimization configuration."""
-        return {
+        return {}
             "gpu_available": self.gpu_available,
             "cuda_available": self.cuda_available,
             "numba_available": self.numba_available,
@@ -77,7 +77,7 @@ class HardwareOptimizer:
 
 
 # --- Trading Matrix Core ---
-class TradingMatrix:
+    class TradingMatrix:
     """High-speed trading matrix for prices, signals, and positions with GPU/CPU optimization."""
 
     def __init__():-> None:
@@ -93,12 +93,12 @@ class TradingMatrix:
         self.bar_index = 0
 
         # Performance tracking
-        self.performance_metrics = {
+        self.performance_metrics = {}
             "updates": 0,
             "total_time": 0.0,
             "avg_update_time": 0.0,
         }
-        logger.info(
+        logger.info()
             f"TradingMatrix initialized: {n_assets} assets, {window} window, {self.optimizer.optimization_mode} mode"
         )
 
@@ -122,7 +122,7 @@ class TradingMatrix:
         update_time = time.time() - start_time
         self.performance_metrics["updates"] += 1
         self.performance_metrics["total_time"] += update_time
-        self.performance_metrics["avg_update_time"] = (
+        self.performance_metrics["avg_update_time"] = ()
             self.performance_metrics["total_time"] / self.performance_metrics["updates"]
         )
 
@@ -143,7 +143,7 @@ class TradingMatrix:
             if self.optimizer.gpu_available:
 
                 signals_gpu = cp.array(signals)
-                positions_gpu = cp.where(
+                positions_gpu = cp.where()
                     signals_gpu > 0.5, 1, cp.where(signals_gpu < -0.5, -1, 0)
                 )
                 return cp.asnumpy(positions_gpu)
@@ -162,7 +162,7 @@ class TradingMatrix:
         end_idx = self.ptr
         indices = np.arange(start_idx, end_idx) % self.window
 
-        return (
+        return ()
             self.price_matrix[indices],
             self.signal_matrix[indices],
             self.position_matrix[indices],
@@ -195,7 +195,7 @@ class TradingMatrix:
 
     def get_performance_metrics():-> Dict[str, Any]:
         """Get performance metrics."""
-        return {
+        return {}
             **self.performance_metrics,
             "hardware_info": self.optimizer.get_optimization_info(),
             "matrix_size": f"{self.window}x{self.n_assets}",
@@ -234,7 +234,7 @@ def print_glyph_matrix():-> None:
 
 
 # --- Market Data Loader ---
-def load_market_data_csv():-> np.ndarray:
+    def load_market_data_csv():-> np.ndarray:
     """Load market data from CSV with error handling."""
     if not os.path.exists(filename):
         raise FileNotFoundError(f"CSV file not found: {filename}")
@@ -263,7 +263,7 @@ def load_market_data_csv():-> np.ndarray:
 
 
 # --- Strategy Function Example ---
-def example_strategy_fn():-> np.ndarray:
+    def example_strategy_fn():-> np.ndarray:
     """Simple momentum strategy: signal = price change over last bar."""
     if bar_index == 0:
         return np.zeros_like(prices)
@@ -276,7 +276,7 @@ def example_strategy_fn():-> np.ndarray:
 
 
 # --- Backtesting Loop ---
-def run_backtest():-> None:
+    def run_backtest():-> None:
     """Run backtest with hardware optimization."""
     n_bars, n_assets = price_data.shape
     optimizer = optimizer or HardwareOptimizer()
@@ -303,7 +303,7 @@ def run_backtest():-> None:
             # Display information
             print(f"Trading Matrix Visualizer | Bar {t + 1}/{n_bars}")
             print(f"Hardware: {optimizer.optimization_mode.upper()}")
-            print(
+            print()
                 f"Performance: {tm.performance_metrics['avg_update_time']:.4f}s avg\n"
             )
 
@@ -326,7 +326,7 @@ def run_backtest():-> None:
 
 
 # --- Main Entrypoint ---
-def main():-> None:
+    def main():-> None:
     """Main entry point with comprehensive error handling."""
     try:
         # Initialize hardware optimizer
@@ -354,7 +354,7 @@ def main():-> None:
         if not use_csv:
             # Generate simulated data
             np.random.seed(42)  # For reproducible results
-            price_data = (
+            price_data = ()
                 np.cumsum(np.random.normal(0, 1, (steps, n_assets)), axis=0) + 100
             )
             run_backtest(price_data, example_strategy_fn, optimizer=optimizer)

@@ -11,11 +11,11 @@ from pathlib import Path
 def fix_unicode_issues(content: str) -> str:
     """Fix Unicode/encoding issues in content."""
     # Replace problematic Unicode characters with ASCII equivalents
-    replacements = {
+    replacements = {}
         "…": "...",
         '"': '"',
-        """: "'",
-        """: "'",
+        """: "'",'
+        """: "'",'
         "–": "-",
         "—": "-",
         "×": "*",
@@ -49,7 +49,7 @@ def fix_empty_pass_statements(content: str) -> str:
                 fixed_lines.append(line)
                 fixed_lines.append(f'    """{function_name} implementation pending."""')
                 fixed_lines.append("    # TODO: Implement this function")
-                fixed_lines.append(
+                fixed_lines.append()
                     '    raise NotImplementedError("Function not yet implemented")'
                 )
                 i += 2  # Skip the pass line

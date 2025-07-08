@@ -15,7 +15,7 @@ from dataclasses import dataclass
 from enum import Enum
 
 # Configure logging
-logging.basicConfig(
+logging.basicConfig()
     level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
@@ -40,7 +40,7 @@ class LogLevel(Enum):
 
 
 @dataclass
-class BTCPriceHash:
+    class BTCPriceHash:
     """BTC price hash for demo state generation."""
 
     price: float
@@ -51,14 +51,14 @@ class BTCPriceHash:
     agent: str = "BTC"
 
     @classmethod
-    def from_price_data(
+    def from_price_data()
         cls, price: float, volume: float, phase: int = 32
     ) -> "BTCPriceHash":
         """Create BTC price hash from price data."""
         timestamp = datetime.now()
         data_str = f"{price:.8f}_{volume:.8f}_{timestamp.isoformat()}_{phase}"
         hash_value = hashlib.sha256(data_str.encode()).hexdigest()
-        return cls(
+        return cls()
             price=price,
             volume=volume,
             timestamp=timestamp,
@@ -86,7 +86,7 @@ def test_btc_price_hashing():
                     btc_hash = BTCPriceHash.from_price_data(price, volume, phase)
                     generated_hashes.append(btc_hash)
 
-                    print(
+                    print()
                         f"✅ Generated hash for price={price}, volume={volume}, phase={phase}: {btc_hash.hash_value[:16]}..."
                     )
 
@@ -102,8 +102,8 @@ def test_btc_price_hashing():
         # Test hash uniqueness
         hash_values = [h.hash_value for h in generated_hashes]
         unique_hashes = set(hash_values)
-        print(
-            f"✅ Hash uniqueness: {len(unique_hashes)} unique hashes out of {
+        print()
+            f"✅ Hash uniqueness: {len(unique_hashes)} unique hashes out of {"}
                 len(hash_values)
             } total"
         )
@@ -125,7 +125,7 @@ def test_enhanced_state_manager_import():
 
     try:
         # Try to import the enhanced state manager
-        from core.internal_state.enhanced_state_manager import (
+        from core.internal_state.enhanced_state_manager import ()
             EnhancedStateManager,
             SystemMode,
             LogLevel,
@@ -153,15 +153,15 @@ def test_enhanced_state_manager_import():
         print(f"✅ BTC price hash generated: {btc_hash.hash_value[:16]}...")
 
         # Test demo state creation
-        demo_state = manager.create_demo_state(
+        demo_state = manager.create_demo_state()
             50000.0, 1000.0, 32, {"extra": "demo_data"}
         )
         print(f"✅ Demo state created: {demo_state['btc_price_hash']['hash'][:16]}...")
 
         # Test system status
         status = manager.get_system_status()
-        print(
-            f"✅ System status: {status['mode']} mode, {
+        print()
+            f"✅ System status: {status['mode']} mode, {"}
                 status['memory']['active_memories']
             } memories"
         )
@@ -193,15 +193,15 @@ def test_system_integration_import():
         print("✅ SystemIntegration created successfully")
 
         # Test demo state creation with BTC hash
-        demo_state = integration.create_demo_state_with_btc_hash(
+        demo_state = integration.create_demo_state_with_btc_hash()
             50000.0, 1000.0, 32, {"integration_test": "data"}
         )
 
         if "error" not in demo_state:
-            print(
+            print()
                 f"✅ Demo state created with BTC hash: {demo_state['btc_price_hash']['hash'][:16]}..."
             )
-            print(
+            print()
                 f"✅ System integration data: {len(demo_state['system_integration']['connected_systems'])} systems"
             )
         else:
@@ -209,8 +209,8 @@ def test_system_integration_import():
 
         # Test comprehensive system status
         status = integration.get_comprehensive_system_status()
-        print(
-            f"✅ Comprehensive status: {
+        print()
+            f"✅ Comprehensive status: {"}
                 status['system_health_summary']['total_systems']
             } systems connected"
         )
@@ -232,20 +232,20 @@ def test_demo_state_generation():
 
     try:
         # Test demo state generation with different BTC prices
-        demo_scenarios = [
-            {
+        demo_scenarios = []
+            {}
                 "price": 45000.0,
                 "volume": 800.0,
                 "phase": 16,
                 "description": "Low price scenario",
             },
-            {
+            {}
                 "price": 50000.0,
                 "volume": 1000.0,
                 "phase": 32,
                 "description": "Medium price scenario",
             },
-            {
+            {}
                 "price": 55000.0,
                 "volume": 1200.0,
                 "phase": 42,
@@ -258,27 +258,27 @@ def test_demo_state_generation():
             print(f"\n--- {scenario['description']} ---")
 
             # Generate BTC price hash
-            btc_hash = BTCPriceHash.from_price_data(
+            btc_hash = BTCPriceHash.from_price_data()
                 scenario["price"], scenario["volume"], scenario["phase"]
             )
 
             # Create demo state
-            demo_state = {
+            demo_state = {}
                 "mode": "demo",
-                "btc_price_hash": {
+                "btc_price_hash": {}
                     "price": btc_hash.price,
                     "volume": btc_hash.volume,
                     "hash": btc_hash.hash_value,
                     "phase": btc_hash.phase,
                     "timestamp": btc_hash.timestamp.isoformat(),
                 },
-                "system_metrics": {
+                "system_metrics": {}
                     "memory_count": 1,
                     "backlog_size": 0,
                     "btc_history_size": 1,
                     "uptime_seconds": 0.0,
                 },
-                "additional_data": {
+                "additional_data": {}
                     "scenario": scenario["description"],
                     "test_data": "demo_generation",
                 },
@@ -289,14 +289,14 @@ def test_demo_state_generation():
             # Verify demo state structure
             btc_data = demo_state["btc_price_hash"]
 
-            print(
-                f"✅ Demo state created: price={btc_data['price']}, volume={
+            print()
+                f"✅ Demo state created: price={btc_data['price']}, volume={"}
                     btc_data['volume']
                 }"
             )
             print(f"✅ BTC hash: {btc_data['hash'][:16]}...")
-            print(
-                f"✅ System metrics: {
+            print()
+                f"✅ System metrics: {"}
                     demo_state['system_metrics']['memory_count']
                 } memories"
             )
@@ -332,21 +332,21 @@ def test_system_initialization():
 
             # Test BTC price hash generation in this mode
             btc_hash = BTCPriceHash.from_price_data(50000.0, 1000.0, 32)
-            print(
+            print()
                 f"✅ BTC price hash generated in {mode.value} mode: {btc_hash.hash_value[:16]}..."
             )
 
             # Test demo state creation
-            {
+            {}
                 "mode": mode.value,
-                "btc_price_hash": {
+                "btc_price_hash": {}
                     "price": btc_hash.price,
                     "volume": btc_hash.volume,
                     "hash": btc_hash.hash_value,
                     "phase": btc_hash.phase,
                     "timestamp": btc_hash.timestamp.isoformat(),
                 },
-                "system_metrics": {
+                "system_metrics": {}
                     "memory_count": 1,
                     "backlog_size": 0,
                     "btc_history_size": 1,
@@ -372,7 +372,7 @@ def main():
     print("🚀 Direct Enhanced State System Test")
     print("=" * 60)
 
-    tests = [
+    tests = []
         ("BTC Price Hashing", test_btc_price_hashing),
         ("EnhancedStateManager Import", test_enhanced_state_manager_import),
         ("SystemIntegration Import", test_system_integration_import),

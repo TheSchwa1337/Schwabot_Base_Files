@@ -1,4 +1,3 @@
-import cupy as cp
 import hashlib
 import logging
 import sys
@@ -18,8 +17,8 @@ This module implements the fundamental profit calculation framework:
 Π = F(M(t), H(t), S)
 
 Where:
-- M(t): Market data (prices, volumes, on-chain signals)
-- H(t): History/state (hash matrices, tensor buckets)
+- M(t): Market data (prices, volumes, on-chain, signals)
+- H(t): History/state (hash matrices, tensor, buckets)
 - S: Static strategy parameters
 
 CRITICAL GUARANTEE: ZPE/ZBE systems never appear in this calculation.
@@ -34,14 +33,16 @@ CUDA Integration:
 
 # CUDA Integration with Fallback
 try:
+    import cupy as cp
     USING_CUDA = True
     _backend = 'cupy (GPU)'
     xp = cp
     la = cp.linalg
 except ImportError:
+    import numpy as cp  # fallback to numpy
     USING_CUDA = False
     _backend = 'numpy (CPU)'
-    xp = np
+    xp = cp
     la = np.linalg
 
 logger = logging.getLogger(__name__)
@@ -93,11 +94,11 @@ class HistoryState:
 
     def get_hash_signature(self) -> str:
         """Generate deterministic hash signature for state."""
-        state_str = "{0}_{1}_{2}".format(
+        state_str = "{0}_{1}_{2}".format()
             self.timestamp, 
-            len(
+            len()
                 self.hash_matrices), 
-                len(
+                len()
                     self.tensor_buckets))
         return hashlib.sha256(state_str.encode()).hexdigest()
 
@@ -106,9 +107,9 @@ class HistoryState:
 class StrategyParameters:
     """Immutable strategy parameters - S."""
 
-    risk_tolerance: float = 0.02
-    profit_target: float = 0.05
-    stop_loss: float = 0.01
+    risk_tolerance: float = 0.2
+    profit_target: float = 0.5
+    stop_loss: float = 0.1
     position_size: float = 0.1
     tensor_depth: int = 4
     hash_memory_depth: int = 100
@@ -177,7 +178,7 @@ class PureProfitCalculator:
         self.last_calculation_data: Dict[str, Any] = {}
 
         # Performance metrics
-        self.performance_metrics = {
+        self.performance_metrics = {}
             'gpu_operations': 0,
             'cpu_operations': 0,
             'fallback_operations': 0,
@@ -251,7 +252,7 @@ class PureProfitCalculator:
             mode_multiplier = self._get_mode_multiplier(mode)
 
             # Final profit score - YOUR final formula
-            total_profit_score = (
+            total_profit_score = ()
                 risk_adjusted_profit
                 * confidence_score
                 * (1.0 + tensor_contribution + hash_contribution)
@@ -266,9 +267,9 @@ class PureProfitCalculator:
             self._update_performance_metrics(calculation_time)
 
             # Store last calculation data for introspection
-            self.last_calculation_data = {
+            self.last_calculation_data = {}
                 "market_data": asdict(market_data) if hasattr(market_data, "__dict__") else market_data,
-                "history_state_summary": {
+                "history_state_summary": {}
                     "hash_matrices": len(history_state.hash_matrices),
                     "tensor_buckets": len(history_state.tensor_buckets),
                     "profit_memory_length": len(history_state.profit_memory),
@@ -277,7 +278,7 @@ class PureProfitCalculator:
                 "processing_mode": mode.value,
             }
 
-            return ProfitResult(
+            return ProfitResult()
                 timestamp=market_data.timestamp,
                 base_profit=base_profit,
                 risk_adjusted_profit=risk_adjusted_profit,
@@ -285,7 +286,7 @@ class PureProfitCalculator:
                 tensor_contribution=tensor_contribution,
                 hash_contribution=hash_contribution,
                 total_profit_score=total_profit_score,
-                calculation_metadata={
+                calculation_metadata={}
                     "calculation_time": calculation_time,
                     "processing_backend": _backend,
                     "mode": mode.value,
@@ -295,7 +296,7 @@ class PureProfitCalculator:
             )
 
         except Exception as e:
-            error = CalculationError(
+            error = CalculationError()
                 error_type=type(e).__name__,
                 error_message=str(e),
                 timestamp=time.time(),
@@ -309,9 +310,7 @@ class PureProfitCalculator:
             # Return safe fallback result
             return self._create_fallback_result(market_data, history_state, mode)
 
-    def _calculate_base_profit_safe(
-        self, market_data: MarketData, history_state: HistoryState, mode: ProcessingMode
-    ) -> float:
+    def _calculate_base_profit_safe(self, market_data: MarketData, history_state: HistoryState, mode: ProcessingMode) -> float:
         """Calculate base profit with safe fallback."""
         try:
             if mode == ProcessingMode.GPU_ACCELERATED and USING_CUDA:
@@ -358,9 +357,7 @@ class PureProfitCalculator:
         """Fallback base profit calculation."""
         return 0.0  # Neutral profit
 
-    def _calculate_risk_adjustment_safe(
-        self, market_data: MarketData, history_state: HistoryState, mode: ProcessingMode
-    ) -> float:
+    def _calculate_risk_adjustment_safe(self, market_data: MarketData, history_state: HistoryState, mode: ProcessingMode) -> float:
         """Calculate risk adjustment with safe fallback."""
         try:
             if mode == ProcessingMode.GPU_ACCELERATED and USING_CUDA:
@@ -392,9 +389,7 @@ class PureProfitCalculator:
         except Exception:
             raise
 
-    def _calculate_confidence_score_safe(
-        self, market_data: MarketData, history_state: HistoryState, mode: ProcessingMode
-    ) -> float:
+    def _calculate_confidence_score_safe(self, market_data: MarketData, history_state: HistoryState, mode: ProcessingMode) -> float:
         """Calculate confidence score with safe fallback."""
         try:
             if mode == ProcessingMode.GPU_ACCELERATED and USING_CUDA:
@@ -542,7 +537,7 @@ class PureProfitCalculator:
 
     def _get_mode_multiplier(self, mode: ProfitCalculationMode) -> float:
         """Get mode multiplier for profit calculation."""
-        multipliers = {
+        multipliers = {}
             ProfitCalculationMode.CONSERVATIVE: 0.8,
             ProfitCalculationMode.BALANCED: 1.0,
             ProfitCalculationMode.AGGRESSIVE: 1.3,
@@ -550,11 +545,9 @@ class PureProfitCalculator:
         }
         return multipliers.get(mode, 1.0)
 
-    def _create_fallback_result(
-        self, market_data: MarketData, history_state: HistoryState, mode: ProfitCalculationMode
-    ) -> ProfitResult:
+    def _create_fallback_result(self, market_data: MarketData, history_state: HistoryState, mode: ProfitCalculationMode) -> ProfitResult:
         """Create a safe fallback profit result."""
-        return ProfitResult(
+        return ProfitResult()
             timestamp=market_data.timestamp,
             base_profit=0.0,
             risk_adjusted_profit=0.0,
@@ -571,13 +564,13 @@ class PureProfitCalculator:
         total_calculations = self.calculation_count
         current_avg = self.performance_metrics['avg_calculation_time']
 
-        self.performance_metrics['avg_calculation_time'] = (
+        self.performance_metrics['avg_calculation_time'] = ()
             current_avg * (total_calculations - 1) + calculation_time
         ) / total_calculations
 
     def get_calculation_metrics(self) -> Dict[str, Any]:
         """Get comprehensive calculation metrics."""
-        return {
+        return {}
             "total_calculations": self.calculation_count,
             "total_calculation_time": self.total_calculation_time,
             "avg_calculation_time": self.performance_metrics['avg_calculation_time'],
@@ -585,7 +578,7 @@ class PureProfitCalculator:
             "processing_mode": self.processing_mode.value,
             "backend": _backend,
             "error_count": len(self.error_log),
-            "strategy_params": {
+            "strategy_params": {}
                 "risk_tolerance": self.strategy_params.risk_tolerance,
                 "profit_target": self.strategy_params.profit_target,
                 "position_size": self.strategy_params.position_size,
@@ -599,7 +592,7 @@ class PureProfitCalculator:
             error_type = error.error_type
             error_counts[error_type] = error_counts.get(error_type, 0) + 1
 
-        return {
+        return {}
             'total_errors': len(self.error_log),
             'error_types': error_counts,
             'fallback_usage': sum(1 for e in self.error_log if e.fallback_used),
@@ -658,7 +651,7 @@ class PureProfitCalculator:
         hist = self.last_calculation_data["history_state_summary"]
         mode = self.last_calculation_data["processing_mode"]
 
-        lines = [
+        lines = []
             "📊 LAST PROFIT CALCULATION",
             "-" * 40,
             "Processing mode : {0}".format(mode),
@@ -692,19 +685,19 @@ def assert_zpe_isolation() -> None:
 
 def create_sample_market_data() -> MarketData:
     """Create sample market data for testing."""
-    return MarketData(
+    return MarketData()
         timestamp=time.time(),
         btc_price=50000.0,
         eth_price=3000.0,
         usdc_volume=1000000.0,
-        volatility=0.02,
-        momentum=0.01,
+        volatility=0.2,
+        momentum=0.1,
         volume_profile=0.8,
         on_chain_signals={"whale_activity": 0.3, "network_health": 0.9},
     )
 
 
-def create_pure_profit_calculator(
+def create_pure_profit_calculator()
     strategy_params: StrategyParameters = None, processing_mode: ProcessingMode = ProcessingMode.HYBRID
 ) -> PureProfitCalculator:
     """Create a new pure profit calculator instance."""
@@ -736,7 +729,7 @@ def demo_pure_profit_calculation():
     # Show metrics
     metrics = calculator.get_calculation_metrics()
     print("\nCalculations: {0}".format(metrics['total_calculations']))
-    print("Avg time: {0}s".format(metrics['avg_calculation_time']:.6f))
+    print("Avg, time))"
     print("Backend: {0}".format(metrics['backend']))
 
 

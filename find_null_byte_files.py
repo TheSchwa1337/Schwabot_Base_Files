@@ -4,7 +4,7 @@ import chardet
 
 
 def detect_encoding(filepath):
-    """Detect the file's encoding."""
+    """Detect the file's encoding."""'
     try:
         with open(filepath, 'rb') as f:
             raw_data = f.read()

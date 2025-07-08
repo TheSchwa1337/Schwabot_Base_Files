@@ -54,8 +54,8 @@ def clean_file_content(filepath):
 def run_autoflake(filepath):
     """Run autoflake to remove unused imports and variables."""
     try:
-        result = subprocess.run(
-            ['autoflake',
+        result = subprocess.run()
+            ['autoflake',]
              '--in-place',
              '--remove-all-unused-imports',
              '--remove-unused-variables',
@@ -79,8 +79,8 @@ def run_autoflake(filepath):
 def run_black(filepath):
     """Run black formatter on a file."""
     try:
-        result = subprocess.run(
-            ['black',
+        result = subprocess.run()
+            ['black',]
              filepath,
              '--line-length', '100'
              ],
@@ -128,8 +128,8 @@ def run_flake8_on_file(filepath):
             print(f"🎨 Black formatted: {filepath}")
 
         # Run flake8 with comprehensive checks
-        result = subprocess.run(
-            ['flake8', filepath,
+        result = subprocess.run()
+            ['flake8', filepath,]
              '--max-line-length=100',
              '--show-source',
              '--select=E,F,W',

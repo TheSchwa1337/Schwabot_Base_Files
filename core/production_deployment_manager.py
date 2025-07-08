@@ -13,12 +13,12 @@ import json
 import time
 import hashlib
 from .secure_exchange_manager import get_exchange_manager, ExchangeType
-                import psutil
-                import psutil
-                import psutil
+import psutil
+import psutil
+import psutil
 
-            import ccxt
-            import numpy
+import ccxt
+import numpy
 
 #!/usr/bin/env python3
 """
@@ -62,7 +62,7 @@ class SecurityLevel(Enum):
 
 
 @dataclass
-class EnvironmentValidation:
+    class EnvironmentValidation:
     """Environment validation results."""
 
     is_valid: bool
@@ -74,7 +74,7 @@ class EnvironmentValidation:
 
 
 @dataclass
-class SystemHealth:
+    class SystemHealth:
     """System health status."""
 
     overall_health: str  # "healthy", "degraded", "critical"
@@ -87,7 +87,7 @@ class SystemHealth:
 
 
 @dataclass
-class DeploymentConfig:
+    class DeploymentConfig:
     """Production deployment configuration."""
 
     environment: DeploymentEnvironment
@@ -129,7 +129,7 @@ class ProductionDeploymentManager:
 
     def _load_deployment_config(self) -> DeploymentConfig:
         """Load deployment configuration from environment variables."""
-        return DeploymentConfig(
+        return DeploymentConfig()
             environment=self.environment,
             security_level=SecurityLevel(os.environ.get("SCHWABOT_SECURITY_LEVEL", "medium")),
             enable_monitoring=os.environ.get("SCHWABOT_ENABLE_MONITORING", "true").lower() == "true",
@@ -152,7 +152,7 @@ class ProductionDeploymentManager:
         # Configure file logging
         log_file = os.environ.get("SCHWABOT_LOG_FILE", "logs/schwabot.log")
 
-        logging.basicConfig(
+        logging.basicConfig()
             level=log_level,
             format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
             handlers=[logging.FileHandler(log_file), logging.StreamHandler(sys.stdout)],
@@ -176,8 +176,8 @@ class ProductionDeploymentManager:
         validation = EnvironmentValidation(is_valid=True)
 
         # Required environment variables for production
-        required_vars = [
-            # Exchange credentials (at least one exchange)
+        required_vars = []
+            # Exchange credentials (at least one, exchange)
             "BINANCE_API_KEY",
             "BINANCE_API_SECRET",
             "COINBASE_API_KEY",
@@ -250,7 +250,7 @@ class ProductionDeploymentManager:
                 validation.warnings.append("Backups not enabled for production")
 
         # Determine overall validity
-        validation.is_valid = (
+        validation.is_valid = ()
             len(validation.missing_vars) == 0 and len(validation.security_issues) == 0 and exchanges_configured
         )
 
@@ -272,7 +272,7 @@ class ProductionDeploymentManager:
         """Check system health and resources."""
         logger.info("🏥 Checking system health...")
 
-        health = SystemHealth(
+        health = SystemHealth()
             overall_health="healthy",
             cpu_usage=0.0,
             memory_usage=0.0,
@@ -317,13 +317,13 @@ class ProductionDeploymentManager:
             issues = []
 
             if health.cpu_usage > 80:
-                issues.append("High CPU usage: {0}%".format(health.cpu_usage:.1f))
+                issues.append("High CPU usage: {0}%".format(health.cpu_usage))
 
             if health.memory_usage > 85:
-                issues.append("High memory usage: {0}%".format(health.memory_usage:.1f))
+                issues.append("High memory usage: {0}%".format(health.memory_usage))
 
             if health.disk_usage > 90:
-                issues.append("High disk usage: {0}%".format(health.disk_usage:.1f))
+                issues.append("High disk usage: {0}%".format(health.disk_usage))
 
             if health.network_status != "connected":
                 issues.append("Network issues: {0}".format(health.network_status))
@@ -442,7 +442,7 @@ class ProductionDeploymentManager:
 
         # Environment validation
         env_validation = self.validate_environment()
-        results["checks"]["environment"] = {
+        results["checks"]["environment"] = {}
             "passed": env_validation.is_valid,
             "missing_vars": env_validation.missing_vars,
             "security_issues": env_validation.security_issues,
@@ -452,7 +452,7 @@ class ProductionDeploymentManager:
 
         # System health
         system_health = self.check_system_health()
-        results["checks"]["system_health"] = {
+        results["checks"]["system_health"] = {}
             "overall_health": system_health.overall_health,
             "cpu_usage": system_health.cpu_usage,
             "memory_usage": system_health.memory_usage,
@@ -467,7 +467,7 @@ class ProductionDeploymentManager:
         results["checks"]["exchanges"] = exchange_validation
 
         # Overall deployment readiness
-        deployment_ready = (
+        deployment_ready = ()
             env_validation.is_valid
             and system_health.overall_health in ["healthy", "degraded"]
             and any(exchange_validation.values())  # At least one exchange working

@@ -1,11 +1,11 @@
 import numpy as np
-        from core.dynamic_handoff_orchestrator import DynamicHandoffOrchestrator
-        from core.internal_state.fileization_manager import FileizationManager
-        from core.internal_state.state_continuity_manager import (
-        from core.internal_state.state_continuity_manager import (
-        from core.internal_state.state_continuity_manager import StateType
-        from core.internal_state.visualizer_integration import VisualizerIntegration
-        import subprocess
+from core.dynamic_handoff_orchestrator import DynamicHandoffOrchestrator
+from core.internal_state.fileization_manager import FileizationManager
+from core.internal_state.state_continuity_manager import ()
+from core.internal_state.state_continuity_manager import ()
+from core.internal_state.state_continuity_manager import StateType
+from core.internal_state.visualizer_integration import VisualizerIntegration
+import subprocess
 import logging
 import sys
 import time
@@ -25,7 +25,7 @@ Comprehensive test of the internal state management system, including:
 
 
 # Configure logging
-logging.basicConfig(
+logging.basicConfig()
     level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
@@ -46,13 +46,13 @@ def test_state_continuity_manager():
         print("✅ StateContinuityManager created")
 
         # Test state updates
-        test_data = {
+        test_data = {}
             "price": 50000,
             "volume": 1000,
             "timestamp": time.time(),
-            "indicators": {"rsi": 65.5, "macd": 0.02},
+            "indicators": {"rsi": 65.5, "macd": 0.2},
         }
-        state_key = manager.update_state(
+        state_key = manager.update_state()
             StateType.TRADING_STATE,
             test_data,
             agent="BTC",
@@ -110,7 +110,7 @@ def test_fileization_manager():
             print("❌ Failed to load array")
 
         # Test validation
-        valid = manager.validate_state(
+        valid = manager.validate_state()
             loaded_array, expected_shape=(10, 10), expected_type=np.ndarray
         )
         print(f"✅ Validation result: {valid}")
@@ -153,13 +153,13 @@ def test_visualizer_integration():
         print(f"✅ Integration status: {status}")
 
         # Test state updates
-        test_data = {
+        test_data = {}
             "price": 50000,
             "volume": 1000,
             "timestamp": time.time(),
-            "indicators": {"rsi": 65.5, "macd": 0.02},
+            "indicators": {"rsi": 65.5, "macd": 0.2},
         }
-        state_key = integration.update_state(
+        state_key = integration.update_state()
             StateType.TRADING_STATE,
             test_data,
             agent="BTC",
@@ -209,8 +209,8 @@ def test_orchestrator_integration():
         print(f"✅ State continuity report: {report}")
 
         # Test visualization data
-        viz_data = orchestrator.get_visualization_data("handoff")
-        print(
+        viz_data = orchestrator.get_visualization_data("handoff")"
+        print()
             f"✅ Handoff visualization data: {len(viz_data.get('states', []))} states"
         )
 
@@ -236,14 +236,14 @@ def test_json_hangup_prevention():
         print("✅ Created manager with short timeout")
 
         # Test large data handling
-        large_data = {
+        large_data = {}
             "large_array": np.random.rand(1000, 1000).tolist(),
             "nested_data": {"level1": {"level2": {"level3": [i for i in range(1000)]}}},
             "timestamp": time.time(),
         }
         # This should not hang due to timeout protection
         start_time = time.time()
-        state_key = manager.update_state(
+        state_key = manager.update_state()
             StateType.MATHEMATICAL_STATE, large_data, agent="BTC", phase=32
         )
         elapsed = time.time() - start_time
@@ -273,7 +273,7 @@ def test_lint_compliance():
     try:
 
         # Test flake8 compliance
-        modules = [
+        modules = []
             "core/internal_state/state_continuity_manager.py",
             "core/internal_state/fileization_manager.py",
             "core/internal_state/visualizer_integration.py",
@@ -283,7 +283,7 @@ def test_lint_compliance():
         all_passed = True
         for module in modules:
             try:
-                result = subprocess.run(
+                result = subprocess.run()
                     ["flake8", module, "--max-line-length=120"],
                     capture_output=True,
                     text=True,
@@ -316,7 +316,7 @@ def main():
     print("🚀 State Continuity System Test Suite")
     print("=" * 60)
 
-    tests = [
+    tests = []
         ("StateContinuityManager", test_state_continuity_manager),
         ("FileizationManager", test_fileization_manager),
         ("VisualizerIntegration", test_visualizer_integration),

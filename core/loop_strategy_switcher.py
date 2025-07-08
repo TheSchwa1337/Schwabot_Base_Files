@@ -36,7 +36,7 @@ logger = logging.getLogger(__name__)
 
 
 @dataclass
-class AssetTarget:
+    class AssetTarget:
     """Target asset for strategy execution"""
 
     symbol: str
@@ -49,7 +49,7 @@ class AssetTarget:
 
 
 @dataclass
-class StrategyResult:
+    class StrategyResult:
     """Result from strategy execution"""
 
     asset: str
@@ -149,7 +149,7 @@ class StrategyLoopSwitcher:
                             self.drift_tracker.record_vector(asset_target.symbol, profit_vector)
                     else:
                         wait_time = self.warp_engine.get_time_until(asset_target.symbol)
-                        logger.info("🕒 {0} not ready. Warp window opens in {1}s".format(asset_target.symbol, wait_time:.2f))
+                        logger.info("🕒 {0} not ready. Warp window opens in {1}s".format(asset_target.symbol, wait_time))
                         # Skip execution for now
 
                 except Exception as e:
@@ -164,7 +164,7 @@ class StrategyLoopSwitcher:
             fractal_matches = sum(1 for r in results if r.fractal_match)
             hash_matches = sum(1 for r in results if r.hash_match)
 
-            logger.info(
+            logger.info()
                 "✅ Hourly cycle completed: {0} strategies, ".format(len(results))
                 "{0} ghost shells, {1} fractal matches, ".format(ghost_shells_used, fractal_matches)
                 "{0} hash matches".format(hash_matches)
@@ -188,7 +188,7 @@ class StrategyLoopSwitcher:
             List of asset targets
         """
         try:
-            # Get top assets (mock data for now, replace with real API call)
+            # Get top assets (mock data for now, replace with real API, call)
             top_assets_data = self._fetch_top_assets_data()
 
             # Create asset targets
@@ -198,7 +198,7 @@ class StrategyLoopSwitcher:
                 is_held = symbol in portfolio
                 balance = portfolio.get(symbol, 0.0)
 
-                asset_target = AssetTarget(
+                asset_target = AssetTarget()
                     symbol=symbol,
                     current_price=asset_data["price"],
                     volume_24h=asset_data["volume"],
@@ -235,13 +235,13 @@ class StrategyLoopSwitcher:
 
     def _fetch_top_assets_data(self) -> List[Dict[str, Any]]:
         """
-        Fetch top assets data (mock implementation)
+        Fetch top assets data (mock, implementation)
 
         Returns:
             List of asset data dictionaries
         """
         # Mock data - replace with real CoinMarketCap API call
-        mock_data = [
+        mock_data = []
             {"symbol": "BTC", "price": 50000, "volume": 25000000000, "price_change": 2.5, "market_cap": 1000000000000},
             {"symbol": "ETH", "price": 3000, "volume": 15000000000, "price_change": -1.2, "market_cap": 350000000000},
             {"symbol": "XRP", "price": 0.5, "volume": 2000000000, "price_change": 5.8, "market_cap": 25000000000},
@@ -256,7 +256,7 @@ class StrategyLoopSwitcher:
 
         return random.sample(mock_data, min(10, len(mock_data)))
 
-    def _execute_strategy_for_asset(
+    def _execute_strategy_for_asset()
         self, asset_target: AssetTarget, market_data: Dict[str, Any]
     ) -> Optional[StrategyResult]:
         """
@@ -312,7 +312,7 @@ class StrategyLoopSwitcher:
 
                 # Layer 8: Apply hash-glyph path blending
                 try:
-                    glyph, blended_vector, decision_type = self.visualizer.route_with_path_blending(
+                    glyph, blended_vector, decision_type = self.visualizer.route_with_path_blending()
                         strategy_id, q_matrix, profit_vector, market_data
                     )
 
@@ -335,7 +335,7 @@ class StrategyLoopSwitcher:
                     decision_type = "fallback"
 
                 # Save to ghost shell memory
-                self.memory_engine.save_shell(
+                self.memory_engine.save_shell()
                     strategy_id,
                     q_matrix,
                     profit_vector,
@@ -344,7 +344,7 @@ class StrategyLoopSwitcher:
                 )
 
                 # Save fractal snapshot
-                self.fractal_tracker.save_snapshot(
+                self.fractal_tracker.save_snapshot()
                     q_matrix,
                     strategy_id,
                     profit_result=np.mean(profit_vector) if isinstance(profit_vector, np.ndarray) else 0.0,
@@ -352,7 +352,7 @@ class StrategyLoopSwitcher:
                 )
 
             # Create result with Layer 8 additions
-            result = StrategyResult(
+            result = StrategyResult()
                 asset=asset_target.symbol,
                 strategy_id=strategy_id,
                 qutrit_matrix=q_matrix.tolist(),
@@ -425,7 +425,7 @@ class StrategyLoopSwitcher:
             fractal_stats = self.fractal_tracker.get_pattern_statistics()
             visual_stats = self.visualizer.get_memory_statistics()
 
-            return {
+            return {}
                 "cycle_count": self.cycle_count,
                 "last_cycle_time": self.last_cycle_time,
                 "time_since_last_cycle": time.time() - self.last_cycle_time,
@@ -461,7 +461,7 @@ class StrategyLoopSwitcher:
 
     def force_cycle_execution(self, market_data: Dict[str, Any], portfolio: Dict[str, float]) -> List[StrategyResult]:
         """
-        Force immediate cycle execution (for testing)
+        Force immediate cycle execution (for, testing)
 
         Args:
             market_data: Market data
@@ -544,7 +544,7 @@ def test_strategy_loop_switcher():
         print("    Hash match: {0}".format(result.hash_match))
         print("    Glyph: {0}".format(result.glyph))
         print("    Decision: {0}".format(result.decision_type))
-        print("    Confidence: {0}".format(result.confidence:.3f))
+        print("    Confidence))"
         print("    Profit vector: {0}".format(result.profit_vector))
 
     # Test statistics

@@ -1,5 +1,5 @@
-        from core.strategy import create_glyph_trading_system
-        from core.strategy import create_glyph_trading_system
+from core.strategy import create_glyph_trading_system
+from core.strategy import create_glyph_trading_system
 from core.basket_vector_linker import BasketVectorLinker
 from core.glyph_phase_resolver import GlyphPhaseResolver
 from core.profit_memory_echo import ProfitMemoryEcho
@@ -9,7 +9,7 @@ from core.strategy.glyph_gate_engine import GlyphGateEngine
 from core.strategy.glyph_strategy_core import GlyphStrategyCore
 from core.strategy.zygot_zalgo_entropy_dual_key_gate import ZygotZalgoEntropyDualKeyGate
 from core.warp_sync_core import WarpSyncCore
-from drawdown_predictor import DrawdownPredictor  # Assuming it's in the root
+from drawdown_predictor import DrawdownPredictor  # Assuming it's in the root'
 import logging
 import os
 import sys
@@ -20,7 +20,7 @@ import traceback
 Test Script for Glyph Strategy System
 ------------------------------------
 Comprehensive test and demonstration of the glyph-to-strategy mapping system
-for Schwabot's mathematical trading framework.
+    for Schwabot's mathematical trading framework.'
 
 This script demonstrates:
 1. Glyph to strategy bit mapping via SHA256
@@ -37,7 +37,7 @@ sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 # Import the newly created modules for testing
 
 # Configure logging
-logging.basicConfig(
+logging.basicConfig()
     level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 
@@ -50,14 +50,14 @@ def test_glyph_strategy_core():
 
     try:
         # Initialize core
-        core = GlyphStrategyCore(
+        core = GlyphStrategyCore()
             enable_fractal_memory=True,
             enable_gear_shifting=True,
             volume_thresholds=(1.5e6, 5e6),
         )
 
         # Test glyphs
-        test_glyphs = [
+        test_glyphs = []
             "brain",
             "skull",
             "fire",
@@ -71,7 +71,7 @@ def test_glyph_strategy_core():
         ]
         test_volumes = [1e6, 3e6, 6e6]  # Low, medium, high volume
 
-        print(
+        print()
             f"Testing {len(test_glyphs)} glyphs across {len(test_volumes)} volume levels"
         )
         print()
@@ -86,8 +86,8 @@ def test_glyph_strategy_core():
                 # Get strategy selection
                 result = core.select_strategy(glyph, volume)
 
-                glyph_results.append(
-                    {
+                glyph_results.append()
+                    {}
                         "volume": volume,
                         "gear_state": result.gear_state,
                         "strategy_id": result.strategy_id,
@@ -96,7 +96,7 @@ def test_glyph_strategy_core():
                     }
                 )
 
-                print(
+                print()
                     f"  Volume: {volume:.1e} -> Gear: {result.gear_state}-bit, "
                     f"Strategy: {result.strategy_id}, Confidence: {result.confidence:.3f}"
                 )
@@ -135,7 +135,7 @@ def test_entry_exit_portal():
 
     try:
         # Initialize portal
-        portal = EntryExitPortal(
+        portal = EntryExitPortal()
             enable_risk_management=True,
             enable_portfolio_tracking=True,
             max_position_size=0.1,
@@ -160,7 +160,7 @@ def test_entry_exit_portal():
             print(f"Processing glyph: {glyph}")
 
             # Process signal
-            signal = portal.process_glyph_signal(
+            signal = portal.process_glyph_signal()
                 glyph, test_volume, test_asset, test_price
             )
 
@@ -182,15 +182,15 @@ def test_entry_exit_portal():
                     print(f"    Size: ${exec_result['executed_size']:,.2f}")
                     print(f"    Fees: ${exec_result['fees']:,.2f}")
 
-                    executed_trades.append(
+                    executed_trades.append()
                         {"glyph": glyph, "signal": signal, "execution": exec_result}
                     )
                 else:
-                    print(
+                    print()
                         f"  X Execution failed: {result.get('error', 'Unknown error')}"
                     )
             else:
-                print("  X Signal rejected (confidence too low)")
+                print("  X Signal rejected (confidence too, low)")
 
             print()
 
@@ -221,7 +221,7 @@ def test_integrated_workflow():
     try:
 
         # Create complete system
-        glyph_core, portal = create_glyph_trading_system(
+        glyph_core, portal = create_glyph_trading_system()
             enable_fractal_memory=True,
             enable_gear_shifting=True,
             enable_risk_management=True,
@@ -232,7 +232,7 @@ def test_integrated_workflow():
         print()
 
         # Simulate market conditions
-        market_scenarios = [
+        market_scenarios = []
             {"volume": 1e6, "price": 45000, "description": "Low volume, bearish"},
             {"volume": 3e6, "price": 50000, "description": "Medium volume, neutral"},
             {"volume": 7e6, "price": 55000, "description": "High volume, bullish"},
@@ -242,14 +242,14 @@ def test_integrated_workflow():
 
         for scenario in market_scenarios:
             print(f"Market Scenario: {scenario['description']}")
-            print(
+            print()
                 f"   Volume: {scenario['volume']:.1e}, Price: ${scenario['price']:,.2f}"
             )
             print()
 
             for glyph in test_glyphs:
                 # Process signal
-                signal = portal.process_glyph_signal(
+                signal = portal.process_glyph_signal()
                     glyph, scenario["volume"], "BTC/USD", scenario["price"]
                 )
 
@@ -257,9 +257,9 @@ def test_integrated_workflow():
                     # Execute signal
                     result = portal.execute_signal(signal, dry_run=True)
 
-                    print(
+                    print()
                         f"  {glyph} -> {signal.direction.value} "
-                        f"(Strategy: {signal.strategy_id}, "
+                        f"(Strategy: {signal.strategy_id}, ")
                         f"Confidence: {signal.confidence:.3f})"
                     )
 
@@ -274,11 +274,11 @@ def test_integrated_workflow():
                         if exec_result["status"] == "filled":
                             print(f"      Trade executed successfully for {glyph}.")
                         else:
-                            print(
+                            print()
                                 f"      Trade failed for {glyph}: {exec_result.get('error', 'Unknown error')}"
                             )
                 else:
-                    print(f"  {glyph} -> Signal rejected (confidence too low).")
+                    print(f"  {glyph} -> Signal rejected (confidence too, low).")
             print()
 
         # Print combined system statistics
@@ -324,22 +324,22 @@ def test_glyph_gate_engine():
     try:
         # Initialize individual components for the engine
 
-        glyph_core_test, _ = create_glyph_trading_system(
+        glyph_core_test, _ = create_glyph_trading_system()
             enable_fractal_memory=True, enable_gear_shifting=True
         )
         zygot_zalgo_gate_test = ZygotZalgoEntropyDualKeyGate()
         warp_sync_core_test = WarpSyncCore()
         quantum_trigger_test = QuantumSuperpositionalTrigger()
         # Need to provide initial strategies for BasketVectorLinker
-        initial_strategies_for_linker_test = {
-            "TrendFollowing_EMA": [0.1, 0.2, 0.7, 0.05, 0.3],
-            "MeanReversion_RSI": [0.8, 0.1, 0.05, 0.6, 0.1],
+        initial_strategies_for_linker_test = {}
+            "TrendFollowing_EMA": [0.1, 0.2, 0.7, 0.5, 0.3],
+            "MeanReversion_RSI": [0.8, 0.1, 0.5, 0.6, 0.1],
         }
         basket_linker_test = BasketVectorLinker(initial_strategies_for_linker_test)
         phase_resolver_test = GlyphPhaseResolver()
         profit_echo_test = ProfitMemoryEcho()
 
-        engine = GlyphGateEngine(
+        engine = GlyphGateEngine()
             glyph_core=glyph_core_test,
             zygot_zalgo_gate=zygot_zalgo_gate_test,
             warp_sync_core=warp_sync_core_test,
@@ -351,8 +351,8 @@ def test_glyph_gate_engine():
         )
 
         # Simulate a series of market ticks
-        market_ticks = [
-            {
+        market_ticks = []
+            {}
                 "glyph": "brain",
                 "volume": 1.2e6,
                 "price": 48000.0,
@@ -360,7 +360,7 @@ def test_glyph_gate_engine():
                 "internal_data": {"cpu_alignment": 0.8, "mem_usage": 0.5},
                 "external_data": {"market_volatility": 0.6, "news_sentiment": 0.7},
             },
-            {
+            {}
                 "glyph": "skull",
                 "volume": 3.5e6,
                 "price": 50500.0,
@@ -372,19 +372,19 @@ def test_glyph_gate_engine():
 
         success = True
         for tick in market_ticks:
-            print(
+            print()
                 f"\n--- Evaluating Signal for Glyph: {tick['glyph']}, Tick: {tick['tick_id']} ---"
             )
-            decision = engine.evaluate_signal(
+            decision = engine.evaluate_signal()
                 glyph=tick["glyph"],
                 volume_signal=tick["volume"],
                 current_price=tick["price"],
                 tick_id=tick["tick_id"],
                 internal_system_data=tick["internal_data"],
                 external_api_data=tick["external_data"],
-                performance_feedback={"recent_profit": 0.01, "recent_loss": 0.005},
+                performance_feedback={"recent_profit": 0.1, "recent_loss": 0.05},
             )
-            print(
+            print()
                 f"Final Decision: Gate Open = {decision.gate_open}, Reason = {decision.reason}, Confidence = {decision.confidence_score:.3f}"
             )
             if not decision.gate_open:
@@ -393,7 +393,7 @@ def test_glyph_gate_engine():
         print("\n--- Decision History --- ")
         history = engine.get_decision_history()
         for dec in history:
-            print(
+            print()
                 f"  Signal ID: {dec.signal_id}, Open: {dec.gate_open}, Conf: {dec.confidence_score:.3f}"
             )
 
@@ -422,27 +422,27 @@ def test_drawdown_predictor():
         predictor = DrawdownPredictor(lookback_period=10, confidence_level=0.9)
 
         # Simulate PnL data over time
-        simulated_pnl_data = [
-            0.01,
-            0.02,
-            -0.005,
-            0.015,
-            -0.01,
-            0.03,
-            0.005,
-            -0.025,
-            0.01,
-            0.00,  # Initial 10 for lookback
-            -0.03,
-            0.02,
-            0.01,
-            -0.015,
-            0.005,
-            -0.04,
-            0.02,
-            -0.01,
-            0.015,
-            0.00,  # Additional data
+        simulated_pnl_data = []
+            0.1,
+            0.2,
+            -0.05,
+            0.15,
+            -0.1,
+            0.3,
+            0.05,
+            -0.25,
+            0.1,
+            0.0,  # Initial 10 for lookback
+            -0.3,
+            0.2,
+            0.1,
+            -0.15,
+            0.05,
+            -0.4,
+            0.2,
+            -0.1,
+            0.15,
+            0.0,  # Additional data
         ]
 
         print(f"Predictor initialized with lookback_period={predictor.lookback_period}")
@@ -456,12 +456,12 @@ def test_drawdown_predictor():
             prediction = predictor.predict_drawdown()
             if prediction:
                 print(f"  Predicted Drawdown: {prediction['predicted_drawdown']:.4f}")
-                print(
+                print()
                     f"  Prediction Interval: ({prediction['lower_bound']:.4f}, {prediction['upper_bound']:.4f})"
                 )
             else:
-                print("  Prediction: Not enough data (expected for early steps).")
-                if (
+                print("  Prediction: Not enough data (expected for early, steps).")
+                if ()
                     i >= predictor.lookback_period - 1
                 ):  # After enough data, it should predict
                     success = False
@@ -475,7 +475,7 @@ def test_drawdown_predictor():
             else:
                 print(f"  {k}: {v}")
 
-        if (
+        if ()
             metrics["total_predictions"]
             < len(simulated_pnl_data) - predictor.lookback_period + 1
         ):
@@ -588,7 +588,7 @@ def main():
         print(f"{test_name.replace('_', ' ').title()}: {status}")
 
     overall_status = all(test_results.values())
-    final_message = (
+    final_message = ()
         "All tests passed successfully!"
         if overall_status
         else "Some tests failed. Please review the output above."

@@ -4,7 +4,7 @@ import re
 
 
 # Keywords and modules that indicate mathematical relevance
-MATH_KEYWORDS = [
+MATH_KEYWORDS = []
     "numpy",
     "scipy",
     "math",
@@ -82,7 +82,7 @@ MATH_KEYWORDS = [
     "RITL",
     "RITTLE",
 ]
-MATH_IMPORTS = [
+MATH_IMPORTS = []
     "import numpy",
     "import scipy",
     "import math",
@@ -106,10 +106,10 @@ def scan_file(filepath):
     with open(filepath, "r", encoding="utf-8", errors="ignore") as f:
         for i, line in enumerate(f, 1):
             # Check for math imports
-            if any(imp in line for imp in MATH_IMPORTS):
+            if any(imp in line for imp in, MATH_IMPORTS):
                 results.append((i, line.strip(), "math import"))
             # Check for math keywords
-            elif any(kw in line for kw in MATH_KEYWORDS):
+            elif any(kw in line for kw in, MATH_KEYWORDS):
                 results.append((i, line.strip(), "math keyword"))
             # Check for equations in comments or docstrings
             elif re.search(r"\b[A-Za-z]\s*\([^)]+\)\s*=\s*", line):

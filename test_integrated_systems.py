@@ -1,10 +1,10 @@
-        from core.balance_loader import (
-        from core.balance_loader import update_load_metrics, get_balance_statistics
-        from core.ghost_trigger_manager import (
-        from core.ghost_trigger_manager import (
-        from core.multi_bit_btc_processor import MultiBitBTCProcessor
-        from core.tick_management_system import (
-        from core.tick_management_system import run_tick_cycle, get_tick_statistics
+from core.balance_loader import ()
+from core.balance_loader import update_load_metrics, get_balance_statistics
+from core.ghost_trigger_manager import ()
+from core.ghost_trigger_manager import ()
+from core.multi_bit_btc_processor import MultiBitBTCProcessor
+from core.tick_management_system import ()
+from core.tick_management_system import run_tick_cycle, get_tick_statistics
 import asyncio
 import logging
 import os
@@ -31,7 +31,7 @@ ALIF/ALEPH coordination system with balance loading and ghost trigger management
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 # Configure logging
-logging.basicConfig(
+logging.basicConfig()
     level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 
@@ -57,7 +57,7 @@ def test_tick_management_system():
 
         # Register a callback to log tick events
         def tick_callback(tick_context: TickContext):
-            print(
+            print()
                 f"   Tick {tick_context.tick_id}: {tick_context.compression_mode.value} "
                 f"(entropy: {tick_context.entropy:.3f}, echo: {tick_context.echo_strength:.3f})"
             )
@@ -109,25 +109,25 @@ def test_balance_loader():
         print("\n🔄 Testing load metric updates...")
 
         # Simulate different load scenarios
-        scenarios = [
+        scenarios = []
             (15.0, 10.0, 0.7, 0.3, 0.0),  # ALIF heavy
             (8.0, 12.0, 0.4, 0.6, 0.0),  # ALEPH heavy
             (12.0, 11.0, 0.5, 0.5, 0.0),  # Balanced
-            (18.0, 16.0, 0.8, 0.2, 0.05),  # High load with decay
+            (18.0, 16.0, 0.8, 0.2, 0.5),  # High load with decay
         ]
-        for i, (
+        for i, ()
             alif_load,
             aleph_load,
             gpu_entropy,
             cpu_entropy,
             float_decay,
         ) in enumerate(scenarios):
-            metrics = update_load_metrics(
+            metrics = update_load_metrics()
                 alif_load, aleph_load, gpu_entropy, cpu_entropy, float_decay
             )
             optimal_route = get_optimal_route(alif_load, aleph_load)
 
-            print(
+            print()
                 f"   Scenario {i + 1}: ALIF={alif_load:.1f}, ALEPH={aleph_load:.1f} → {optimal_route}"
             )
             print(f"      Balance needed: {metrics.balance_needed}")
@@ -135,7 +135,7 @@ def test_balance_loader():
 
         # Test float decay monitoring
         print("\n⏱️ Testing float decay monitoring...")
-        decay_detected = monitor_float_decay(1.0, 1.05)  # 50ms decay
+        decay_detected = monitor_float_decay(1.0, 1.5)  # 50ms decay
         print(f"   Float decay detected: {decay_detected}")
 
         # Get statistics
@@ -177,21 +177,21 @@ def test_ghost_trigger_manager():
         # Create different types of triggers
         print("\n🔄 Creating ghost triggers...")
 
-        # Anchored trigger (real block)
-        anchored_trigger = create_ghost_trigger(
-            trigger_hash="anchored_1234567890abcdef",
+        # Anchored trigger (real, block)
+        anchored_trigger = create_ghost_trigger()
+            trigger_hash="anchored_1234567890abcdef","
             origin="btc_block_processor",
             anchor_status=AnchorStatus.ANCHORED,
             confidence=0.85,
             trigger_type=TriggerType.REAL_BLOCK,
             entropy_score=0.6,
             echo_strength=0.8,
-            drift_score=0.002,
+            drift_score=0.02,
         )
         print(f"   Created anchored trigger: {anchored_trigger.trigger_hash[:16]}...")
 
         # Unanchored trigger (simulated)
-        unanchored_trigger = create_ghost_trigger(
+        unanchored_trigger = create_ghost_trigger()
             trigger_hash="unanchored_abcdef1234567890",
             origin="alif_entropy_core",
             anchor_status=AnchorStatus.UNANCHORED,
@@ -199,9 +199,9 @@ def test_ghost_trigger_manager():
             trigger_type=TriggerType.ALIF_ENTROPY,
             entropy_score=0.8,
             echo_strength=0.4,
-            drift_score=0.015,
+            drift_score=0.15,
         )
-        print(
+        print()
             f"   Created unanchored trigger: {unanchored_trigger.trigger_hash[:16]}..."
         )
 
@@ -211,7 +211,7 @@ def test_ghost_trigger_manager():
 
         # Add profit vectors
         print("\n💰 Adding profit vectors...")
-        add_profit_vector(
+        add_profit_vector()
             trigger_hash=anchored_trigger.trigger_hash,
             entry_price=65000.0,
             exit_price=65500.0,
@@ -219,7 +219,7 @@ def test_ghost_trigger_manager():
             confidence=0.85,
         )
 
-        add_profit_vector(
+        add_profit_vector()
             trigger_hash=unanchored_trigger.trigger_hash,
             entry_price=65000.0,
             exit_price=64800.0,
@@ -227,7 +227,7 @@ def test_ghost_trigger_manager():
             confidence=0.65,
         )
 
-        add_profit_vector(
+        add_profit_vector()
             trigger_hash=fallback_trigger.trigger_hash,
             entry_price=65000.0,
             exit_price=65200.0,
@@ -276,7 +276,7 @@ async def test_btc_processor_integration():
         # Test with simulated data
         print("\n🔄 Testing BTC data processing...")
 
-        test_data = [
+        test_data = []
             (65000.0, 100.0),
             (65100.0, 95.0),
             (65200.0, 110.0),
@@ -291,7 +291,7 @@ async def test_btc_processor_integration():
                 print(f"      Class: {profit_vector['class']}")
                 print(f"      Risk: {profit_vector['risk']:.3f}")
                 print(f"      Coherence: {profit_vector['triplet_coherence']:.3f}")
-                print(
+                print()
                     f"      U_r Score: {profit_vector['asrl_unified_reflex_score']:.3f}"
                 )
             else:
@@ -327,12 +327,12 @@ def test_integrated_workflow():
             # 1. Run tick cycle
             tick_context = run_tick_cycle()
             if tick_context:
-                print(
+                print()
                     f"      Tick {tick_context.tick_id}: {tick_context.compression_mode.value}"
                 )
 
                 # 2. Update balance metrics
-                metrics = update_load_metrics(
+                metrics = update_load_metrics()
                     tick_context.alif_score,
                     tick_context.aleph_score,
                     tick_context.entropy * 0.7,  # GPU entropy
@@ -343,7 +343,7 @@ def test_integrated_workflow():
 
                 # 3. Create ghost trigger based on tick
                 if tick_context.validated:
-                    trigger = create_ghost_trigger(
+                    trigger = create_ghost_trigger()
                         trigger_hash=f"integrated_{tick_context.tick_id}_{int(time.time())}",
                         origin="integrated_workflow",
                         anchor_status=AnchorStatus.ANCHORED
@@ -357,22 +357,22 @@ def test_integrated_workflow():
                         echo_strength=tick_context.echo_strength,
                         drift_score=tick_context.drift_score,
                     )
-                    print(
+                    print()
                         f"      Created trigger: {trigger.trigger_hash[:16]}... ({trigger.anchor_status.value})"
                     )
 
-                    # 4. Simulate profit (if conditions are good)
+                    # 4. Simulate profit (if conditions are, good)
                     if tick_context.echo_strength > 0.6 and tick_context.entropy < 0.8:
                         entry_price = 65000.0 + (cycle * 100)
                         exit_price = entry_price + 200  # Simulate profit
-                        add_profit_vector(
+                        add_profit_vector()
                             trigger.trigger_hash,
                             entry_price,
                             exit_price,
                             1.0,
                             tick_context.echo_strength,
                         )
-                        print(
+                        print()
                             f"      Added profit vector: +{((exit_price - entry_price) / entry_price):.2%}"
                         )
 
@@ -399,7 +399,7 @@ async def main():
     print("🚀 Starting Integrated Systems Test Suite")
     print("=" * 60)
 
-    tests = [
+    tests = []
         ("Tick Management System", test_tick_management_system),
         ("Balance Loader", test_balance_loader),
         ("Ghost Trigger Manager", test_ghost_trigger_manager),
@@ -431,7 +431,7 @@ async def main():
     if passed == total:
         print("🎉 All integrated systems tests passed!")
         print("\n✅ Integration Summary:")
-        print(
+        print()
             "   - Tick Management System: Coordinating ALIF/ALEPH with compression modes"
         )
         print("   - Balance Loader: Managing GPU/CPU load balancing and float decay")

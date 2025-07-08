@@ -17,7 +17,7 @@ class MathLogicPreserver:
     """Preserves critical mathematical logic while fixing syntax issues."""
 
     def __init__(self):
-        self.critical_math_patterns = [
+        self.critical_math_patterns = []
             r"import numpy",
             r"import scipy",
             r"import pandas",
@@ -38,7 +38,7 @@ class MathLogicPreserver:
             r"class.*Calculator",
             r"class.*Solver",
         ]
-        self.critical_variables = [
+        self.critical_variables = []
             "gradient",
             "derivative",
             "integral",
@@ -64,7 +64,7 @@ class MathLogicPreserver:
 
     def extract_math_logic():-> Dict[str, any]:
         """Extract critical mathematical logic from content."""
-        math_logic = {
+        math_logic = {}
             "imports": [],
             "functions": [],
             "classes": [],
@@ -84,8 +84,8 @@ class MathLogicPreserver:
                     if line.strip().startswith("def "):
                         # Get function body
                         func_body = self._extract_function_body(lines, i)
-                        math_logic["functions"].append(
-                            {
+                        math_logic["functions"].append()
+                            {}
                                 "line": i + 1,
                                 "definition": line.strip(),
                                 "body": func_body,
@@ -94,8 +94,8 @@ class MathLogicPreserver:
                     elif line.strip().startswith("class "):
                         # Get class body
                         class_body = self._extract_class_body(lines, i)
-                        math_logic["classes"].append(
-                            {
+                        math_logic["classes"].append()
+                            {}
                                 "line": i + 1,
                                 "definition": line.strip(),
                                 "body": class_body,
@@ -105,14 +105,14 @@ class MathLogicPreserver:
             # Extract critical variables
             for var in self.critical_variables:
                 if var in line and "=" in line:
-                    math_logic["variables"].append(
+                    math_logic["variables"].append()
                         {"line": i + 1, "content": line.strip()}
                     )
 
             # Extract math-related comments
-            if any(
+            if any()
                 math_term in line.lower()
-                for math_term in [
+                for math_term in []
                     "math",
                     "calculate",
                     "compute",
@@ -122,7 +122,7 @@ class MathLogicPreserver:
                 ]
             ):
                 if line.strip().startswith("#"):
-                    math_logic["comments"].append(
+                    math_logic["comments"].append()
                         {"line": i + 1, "content": line.strip()}
                     )
 
@@ -175,13 +175,13 @@ class SyntaxFixer:
 
         for line in lines:
             # Count quotes and fix if odd
-            double_quotes = line.count('"')
-            single_quotes = line.count("'")
+            double_quotes = line.count('"')"
+            single_quotes = line.count("'")'
 
             if double_quotes % 2 != 0:
-                line = line + '"'
+                line = line + '"'"
             elif single_quotes % 2 != 0:
-                line = line + "'"
+                line = line + "'"'
 
             fixed_lines.append(line)
 
@@ -194,7 +194,7 @@ class SyntaxFixer:
 
         for line in lines:
             # Count parentheses
-            open_parens = line.count("(") + line.count("[") + line.count("{")
+            open_parens = line.count("(") + line.count("[") + line.count("{"))}]
             close_parens = line.count(")") + line.count("]") + line.count("}")
 
             # Add missing closing parentheses
@@ -254,7 +254,7 @@ class StubImplementer:
                 if i + 1 < len(lines) and re.match(r"^\s*pass\s*$", lines[i + 1]):
                     # Implement proper function
                     function_name = re.search(r"def (\w+)", line).group(1)
-                    implementation = self._generate_function_implementation(
+                    implementation = self._generate_function_implementation()
                         function_name, line
                     )
 
@@ -275,40 +275,40 @@ class StubImplementer:
         if params_match:
             [p.strip() for p in params_match.group(1).split(",") if p.strip()]
 
-        implementation = [
+        implementation = []
             f'    """{function_name} implementation."""',
             "    try:",
         ]
         # Generate appropriate implementation based on function name
-        if any(
+        if any()
             math_term in function_name.lower()
             for math_term in ["calculate", "compute", "solve"]
         ):
-            implementation.extend(
-                [
+            implementation.extend()
+                []
                     "        # Mathematical computation",
                     "        if len(args) == 0:",
                     "            return 0",
                     "        return sum(args) / len(args)",
                 ]
             )
-        elif any(
+        elif any()
             math_term in function_name.lower()
             for math_term in ["matrix", "vector", "tensor"]
         ):
-            implementation.extend(
-                [
+            implementation.extend()
+                []
                     "        # Matrix/Vector operation",
                     "        import numpy as np",
                     "        return np.array(args) if args else np.array([])",
                 ]
             )
-        elif any(
+        elif any()
             math_term in function_name.lower()
             for math_term in ["gradient", "derivative"]
         ):
-            implementation.extend(
-                [
+            implementation.extend()
+                []
                     "        # Gradient/Derivative calculation",
                     "        import numpy as np",
                     "        if len(args) < 2:",
@@ -317,15 +317,15 @@ class StubImplementer:
                 ]
             )
         else:
-            implementation.extend(
-                [
+            implementation.extend()
+                []
                     "        # Generic implementation",
                     "        return args[0] if args else None",
                 ]
             )
 
-        implementation.extend(
-            [
+        implementation.extend()
+            []
                 "    except Exception as e:",
                 f'        raise NotImplementedError(f"{function_name} not yet fully implemented: {{e}}")',
                 "",
@@ -391,15 +391,15 @@ class SystematicFixer:
             fixed_content = self.syntax_fixer.fix_unterminated_strings(fixed_content)
             fixed_content = self.syntax_fixer.fix_unmatched_parentheses(fixed_content)
             fixed_content = self.syntax_fixer.fix_indentation_errors(fixed_content)
-            fixed_content = self.syntax_fixer.fix_invalid_decimal_literals(
+            fixed_content = self.syntax_fixer.fix_invalid_decimal_literals()
                 fixed_content
             )
 
             # Implement stubs
-            fixed_content = self.stub_implementer.implement_empty_pass_functions(
+            fixed_content = self.stub_implementer.implement_empty_pass_functions()
                 fixed_content
             )
-            fixed_content = self.stub_implementer.implement_missing_imports(
+            fixed_content = self.stub_implementer.implement_missing_imports()
                 fixed_content
             )
 
@@ -445,7 +445,7 @@ class SystematicFixer:
 
         try:
             # Get files with E999 errors
-            result = subprocess.run(
+            result = subprocess.run()
                 ["flake8", "core/"],
                 capture_output=True,
                 text=True,
@@ -462,7 +462,7 @@ class SystematicFixer:
             print(f"Error getting critical files: {e}")
 
         # Add important files with stubs
-        important_patterns = [
+        important_patterns = []
             "strategy_loader.py",
             "matrix_mapper.py",
             "integration_test.py",

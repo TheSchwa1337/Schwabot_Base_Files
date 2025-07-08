@@ -1,5 +1,3 @@
-from typing import Any, Dict, List, Optional, Tuple, Union
-
 """
 
 
@@ -28,7 +26,7 @@ Original file: core\\strategy\\multi_phase_strategy_weight_tensor.py
 
 
 
-Date commented out: 2025-07-02 19:37:06
+Date commented out: 2025-7-2 19:37:6
 
 
 
@@ -40,19 +38,19 @@ The clean implementation has been preserved in the following files:
 
 
 
-- core/clean_math_foundation.py (mathematical foundation)
+- core/clean_math_foundation.py (mathematical, foundation)
 
 
 
-- core/clean_profit_vectorization.py (profit calculations)
+- core/clean_profit_vectorization.py (profit, calculations)
 
 
 
-- core/clean_trading_pipeline.py (trading logic)
+- core/clean_trading_pipeline.py (trading, logic)
 
 
 
-- core/clean_unified_math.py (unified mathematics)
+- core/clean_unified_math.py (unified, mathematics)
 
 
 
@@ -67,7 +65,6 @@ All core functionality has been reimplemented in clean, production-ready files.
 """
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
-
 
 """
 
@@ -227,7 +224,7 @@ self.strategy_to_index = {sid: i for i, sid in enumerate(self.strategy_ids)}
 
 
 
-# Initialize weights tensor (strategies x phases)
+# Initialize weights tensor (strategies x, phases)
 
 
 
@@ -259,7 +256,7 @@ self.phase_to_index = {phase_val: i for i, phase_val in enumerate(self.phases)}
 
 
 
-self.weight_tensor = (
+self.weight_tensor = ()
 
 
 
@@ -299,7 +296,7 @@ self.weight_tensor[idx, :] = weight
 
 
 
-            # Normalize column-wise (per phase) to ensure sum is 1.0
+            # Normalize column-wise (per, phase) to ensure sum is 1.0
 
 
 
@@ -329,7 +326,7 @@ self.current_phase: MarketPhase = MarketPhase.UNKNOWN
 
 self.metrics: Dict[str, Any]
 
-    = {last_update_time: None,total_updates: 0,phase_transitions: 0,active_phase": self.current_phase.value,
+    = {last_update_time: None,total_updates: 0,phase_transitions: 0,active_phase": self.current_phase.value,"}
 
 
 
@@ -459,7 +456,7 @@ are dictionaries containing performance metrics'
 
 
 
-(e.g., {'strategy_A': {'pnl': 0.05, 'volatility': 0.01}}).'
+(e.g., {'strategy_A': {'pnl': 0.5, 'volatility': 0.1}}).'
 
 
 
@@ -488,7 +485,7 @@ self.metrics[active_phase] = self.current_phase.value
 
 
 
-print("Market phase transitioned to: {0})
+print("Market phase transitioned to: {0})"
 
 
 
@@ -589,7 +586,7 @@ Returns the current state of the tensor and related metrics.return {1}
 
 
 
-def reset():Resets the tensor to initial weights and clears metrics.self.weight_tensor = (
+def reset():Resets the tensor to initial weights and clears metrics.self.weight_tensor = ()
 
 
 
@@ -627,9 +624,9 @@ self.current_phase = MarketPhase.UNKNOWN
 
 self.metrics
 
-   
-    {last_update_time: None,total_updates: 0,phase_transitions".format(identified_phase.value, # Convert numpy array to list
-for readability
+
+    {last_update_time: None,total_updates: 0,phase_transitions".format(identified_phase.value, # Convert numpy array to list")}
+    for readability
 
 
 
@@ -638,7 +635,7 @@ self.phases,current_phase": self.current_phase.value,metrics": self.metrics,
 
 
 
-): 0,active_phase": self.current_phase.value,
+): 0,active_phase": self.current_phase.value,"
 
 
 
@@ -691,7 +688,7 @@ strategies = [EMA_Cross,RSI_Divergence,Bollinger_Squeeze,Volume_Breakout]
 
 
 
-print(\nInitial Weights (across all
+print(\nInitial Weights (across, all))
 phases):)print(tensor_manager.get_current_state()[current_weight_tensor])
 
 
@@ -712,9 +709,9 @@ print(\n--- Scenario 1: Trend Phase, EMA_Cross performs well ---)
 
 
 
-performance_trend = {EMA_Cross: {pnl: 0.02,volatility": 0.005},RSI_Divergence": {pnl:
--0.005,volatility": 0.002},Bollinger_Squeeze": {pnl: 0.001,volatility": 0.001},Volume_Breakout":
-{pnl: 0.008,volatility": 0.003},
+performance_trend = {EMA_Cross: {pnl: 0.2,volatility": 0.05},RSI_Divergence": {pnl:}}
+-0.05,volatility": 0.02},Bollinger_Squeeze": {pnl: 0.01,volatility": 0.01},Volume_Breakout":
+{pnl: 0.08,volatility": 0.03},"
 
 
 
@@ -734,7 +731,7 @@ print(tensor_manager.get_strategy_weights_for_phase(MarketPhase.TREND))
 
 
 
-    print("Current Active Phase: {0})
+    print("Current Active Phase: {0})"
 
 
 
@@ -750,9 +747,9 @@ print(\n--- Scenario 2: Consolidation Phase, Bollinger_Squeeze performs well ---
 
 
 
-performance_consolidation = {1},RSI_Divergence".format(tensor_manager.get_active_phase(), EMA_Cross: {pnl:
--0.01,volatility": 0.003): {pnl: 0.002,volatility": 0.001},Bollinger_Squeeze": {pnl:
-0.03,volatility": 0.001},Volume_Breakout": {pnl: -0.002,volatility": 0.004},
+performance_consolidation = {1},RSI_Divergence".format(tensor_manager.get_active_phase(), EMA_Cross: {pnl:")}
+-0.1,volatility": 0.03): {pnl: 0.02,volatility": 0.01},Bollinger_Squeeze": {pnl:"}
+0.3,volatility": 0.01},Volume_Breakout": {pnl: -0.02,volatility": 0.04},"
 
 
 
@@ -772,7 +769,7 @@ print(tensor_manager.get_strategy_weights_for_phase(MarketPhase.CONSOLIDATION))
 
 
 
-    print("Current Active Phase: {0})
+    print("Current Active Phase: {0})"
 
 
 
@@ -790,7 +787,7 @@ print(tensor_manager.get_strategy_weights_for_phase(MarketPhase.CONSOLIDATION))
 
 performance_volatility
 
-    = {1},RSI_Divergence".format(tensor_manager.get_active_phase(), EMA_Cross: {pnl: 0.00,volatility": 0.005): {pnl: 0.01,volatility": 0.006},Bollinger_Squeeze": {pnl: -0.008,volatility": 0.002},Volume_Breakout": {pnl: 0.04,volatility": 0.01},
+    = {1},RSI_Divergence".format(tensor_manager.get_active_phase(), EMA_Cross: {pnl: 0.0,volatility": 0.05): {pnl: 0.1,volatility": 0.06},Bollinger_Squeeze": {pnl: -0.08,volatility": 0.02},Volume_Breakout": {pnl: 0.4,volatility": 0.1},"}
 
 
 
@@ -810,7 +807,7 @@ print(tensor_manager.get_strategy_weights_for_phase(MarketPhase.VOLATILITY))
 
 
 
-    print("Current Active Phase: {0})
+    print("Current Active Phase: {0})"
 
 
 
@@ -822,8 +819,8 @@ state = tensor_manager.get_current_state()'
 
 
 
-print(fTotal Updates: {1})'print(f".format(tensor_manager.get_active_phase(), state['metrics']['total_updates'])Phase Transitions:
-{state['metrics']['phase_transitions']})'print("Active Phase:
+print(fTotal Updates: {1})'print(f".format(tensor_manager.get_active_phase(), state['metrics']['total_updates'])Phase Transitions:'")
+{state['metrics']['phase_transitions']})'print("Active Phase:'")
 {0})print(Full Weight Tensor:)for row in
 state[current_weight_tensor]:
 
@@ -841,11 +838,11 @@ print(\n--- Resetting the tensor ---)
 
 
 
-print(Weights after reset(across all phases):)
+print(Weights after reset(across all, phases):)
 
 
 
-print(tensor_manager.get_current_state()[current_weight_tensor])".format(state['metrics']['active_phase'], x:.4f)"'"
+print(tensor_manager.get_current_state()[current_weight_tensor])".format(state['metrics']['active_phase'], x)"'"'
 
 
 

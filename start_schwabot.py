@@ -15,16 +15,16 @@ def main():
     print("=" * 50)
     print(f"🕐 Started at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print()
-    
+
     try:
         # Import and start the main launcher
         from schwabot_main_launcher import SchwabotMainLauncher
-        
+
         # Create launcher
         launcher = SchwabotMainLauncher()
-        
+
         # Configuration
-        config = {
+        config = {}
             'session_id': f"schwabot_{int(time.time())}",
             'exchange_name': "coinbase",
             'sandbox_mode': True,
@@ -34,12 +34,12 @@ def main():
             'enable_learning': True,
             'enable_automation': True
         }
-        
+
         print("📊 Starting Schwabot Trading Dashboard...")
         print("🧠 Starting Schwabot Trading Intelligence...")
         print("🌐 Starting Web Dashboard...")
         print()
-        
+
         # Start the system
         if launcher.start_schwabot_system(**config):
             print("✅ Schwabot Trading System Started Successfully!")
@@ -56,48 +56,48 @@ def main():
             print()
             print("🔄 System is running... Press Ctrl+C to stop")
             print("=" * 50)
-            
+
             # Keep running
             while True:
                 time.sleep(30)
                 status = launcher.get_system_status()
-                
+
                 if status.get('running'):
                     print(f"📊 Status: Running | Dashboard: {status.get('dashboard_url')}")
-                    
+
                     if 'dashboard' in status:
                         dashboard = status['dashboard']
-                        print(f"💰 Portfolio: ${dashboard.get('portfolio_value', 0):,.2f} | "
+                        print(f"💰 Portfolio: ${dashboard.get('portfolio_value', 0):,.2f} | ")
                               f"Profit: ${dashboard.get('total_profit', 0):,.2f} | "
                               f"Win Rate: {dashboard.get('win_rate', 0):.1f}% | "
                               f"Active Trades: {dashboard.get('active_trades', 0)}")
-                    
+
                     if 'intelligence' in status:
                         intelligence = status['intelligence']
-                        print(f"🧠 Intelligence: {'Running' if intelligence.get('running') else 'Stopped'} | "
+                        print(f"🧠 Intelligence: {'Running' if intelligence.get('running') else 'Stopped'} | ")
                               f"Learning: {'On' if intelligence.get('features_enabled', {}).get('learning') else 'Off'} | "
                               f"Automation: {'On' if intelligence.get('features_enabled', {}).get('automation') else 'Off'}")
                     print("-" * 50)
                 else:
                     print("❌ System error detected")
                     break
-        
+
         else:
             print("❌ Failed to start Schwabot Trading System")
             return 1
-    
+
     except KeyboardInterrupt:
         print("\n👋 Shutdown requested by user...")
-    
+
     except ImportError as e:
         print(f"❌ Import Error: {e}")
         print("Make sure all required files are in the correct location.")
         return 1
-    
+
     except Exception as e:
         print(f"❌ Unexpected error: {e}")
         return 1
-    
+
     finally:
         try:
             if 'launcher' in locals():
@@ -105,7 +105,7 @@ def main():
             print("✅ Schwabot Trading System shutdown complete")
         except:
             pass
-    
+
     return 0
 
 if __name__ == "__main__":

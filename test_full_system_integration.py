@@ -1,12 +1,12 @@
-        from core.api_bridge import APIBridge
-        from core.api_bridge import APIBridge, fetch_price_data, fetch_order_book_data
-        from core.api_bridge import fetch_price_data
-        from core.dualistic_thought_engines import DualisticThoughtEngines
-        from core.dualistic_thought_engines import DualisticThoughtEngines
-        from core.dualistic_thought_engines import DualisticThoughtEngines
-        from core.hash_relay_system import hash_relay_system
-        from core.hash_relay_system import hash_relay_system
-        from core.hash_relay_system import hash_relay_system
+from core.api_bridge import APIBridge
+from core.api_bridge import APIBridge, fetch_price_data, fetch_order_book_data
+from core.api_bridge import fetch_price_data
+from core.dualistic_thought_engines import DualisticThoughtEngines
+from core.dualistic_thought_engines import DualisticThoughtEngines
+from core.dualistic_thought_engines import DualisticThoughtEngines
+from core.hash_relay_system import hash_relay_system
+from core.hash_relay_system import hash_relay_system
+from core.hash_relay_system import hash_relay_system
 from typing import Dict, Any
 import asyncio
 import logging
@@ -28,7 +28,7 @@ Tests the complete Schwabot trading system pipeline:
 
 
 # Configure logging
-logging.basicConfig(
+logging.basicConfig()
     level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
@@ -43,7 +43,7 @@ def test_api_bridge():
     try:
 
         # Test API Bridge initialization
-        APIBridge(
+        APIBridge()
             enable_coingecko=True,
             enable_coinmarketcap=True,
             enable_ccxt=True,
@@ -55,7 +55,7 @@ def test_api_bridge():
         async def test_price_fetch():
             try:
                 price_data = await fetch_price_data("BTC/USDC")
-                print(
+                print()
                     f"✓ Price data fetched: {price_data.get('symbol', 'N/A')} @ ${price_data.get('price', 0):.2f}"
                 )
                 return True
@@ -67,7 +67,7 @@ def test_api_bridge():
         async def test_order_book():
             try:
                 order_book = await fetch_order_book_data("BTC/USDC", limit=5)
-                print(
+                print()
                     f"✓ Order book fetched: {len(order_book.get('bids', []))} bids, {len(order_book.get('asks', []))} asks"
                 )
                 return True
@@ -104,14 +104,14 @@ def test_dualistic_thought_engines():
         print("✓ Dualistic Thought Engines initialized")
 
         # Test market data processing
-        market_data = {
+        market_data = {}
             "rsi": 25.5,
-            "macd_signal": 0.01,
+            "macd_signal": 0.1,
             "volume_change": 0.3,
             "current_price": 62000.0,
             "moving_average": 61500.0,
             "previous_close": 61800.0,
-            "price_history": [
+            "price_history": []
                 61000.0,
                 61500.0,
                 62000.0,
@@ -124,7 +124,7 @@ def test_dualistic_thought_engines():
             "phase_data": [0.6, 0.4, 0.8, 0.2],
             "volatility": 0.8,
             "sentiment_score": 0.9,
-            "performance_delta": 0.05,
+            "performance_delta": 0.5,
             "consensus_signal": "buy",
         }
         # Process market data
@@ -159,7 +159,7 @@ def test_hash_relay_system():
 
         def relay_callback(hash_str: str, data: Dict[str, Any]):
             relay_received.append((hash_str, data))
-            print(
+            print()
                 f"✓ Relay received: {hash_str[:8]}... for {data.get('decision', 'unknown')}"
             )
 
@@ -167,7 +167,7 @@ def test_hash_relay_system():
         print("✓ Relay subscription registered")
 
         # Test data submission
-        test_data = {
+        test_data = {}
             "timestamp": time.time(),
             "decision": "buy",
             "confidence": 0.85,
@@ -214,7 +214,7 @@ def test_integrated_pipeline():
             print(f"✓ Market data fetched: ${price_data.get('price', 0):.2f}")
 
             # Step 2: Create market data for processing
-            market_data = {
+            market_data = {}
                 "current_price": price_data.get("price", 62000.0),
                 "rsi": 50.0,
                 "macd_signal": 0.0,
@@ -228,10 +228,10 @@ def test_integrated_pipeline():
                 "consensus_signal": "neutral",
             }
             # Step 3: Process through dualistic engines
-            thought_vector = engines.process_market_data(
+            thought_vector = engines.process_market_data()
                 market_data, thermal_state="warm"
             )
-            print(
+            print()
                 f"✓ Thought Vector processed: {thought_vector.decision} (confidence: {thought_vector.confidence:.2f})"
             )
 
@@ -275,8 +275,8 @@ def test_trading_channel_simulation():
 
         def trading_relay_callback(hash_str: str, data: Dict[str, Any]):
             if data.get("decision") in ["buy", "sell"]:
-                trading_decisions.append(
-                    {
+                trading_decisions.append()
+                    {}
                         "hash": hash_str[:8],
                         "decision": data["decision"],
                         "confidence": data["confidence"],
@@ -290,10 +290,10 @@ def test_trading_channel_simulation():
             # Simulate multiple market data points
             for i in range(3):
                 # Simulate different market conditions
-                market_data = {
+                market_data = {}
                     "current_price": 62000.0 + (i * 1000),
                     "rsi": 30.0 + (i * 20),
-                    "macd_signal": -0.01 + (i * 0.01),
+                    "macd_signal": -0.1 + (i * 0.1),
                     "volume_change": 0.1 + (i * 0.1),
                     "moving_average": 62000.0,
                     "previous_close": 62000.0,
@@ -304,10 +304,10 @@ def test_trading_channel_simulation():
                     "consensus_signal": "neutral",
                 }
                 # Process through engines
-                thought_vector = engines.process_market_data(
+                thought_vector = engines.process_market_data()
                     market_data, thermal_state="warm"
                 )
-                print(
+                print()
                     f"  Cycle {i + 1}: {thought_vector.decision} (confidence: {thought_vector.confidence:.2f})"
                 )
 
@@ -322,11 +322,11 @@ def test_trading_channel_simulation():
         loop.close()
 
         if success:
-            print(
+            print()
                 f"✓ Trading channel simulation successful: {len(trading_decisions)} decisions tracked"
             )
             for decision in trading_decisions:
-                print(
+                print()
                     f"  - {decision['decision'].upper()}: {decision['confidence']:.2f} confidence"
                 )
             return True
@@ -373,9 +373,9 @@ def main():
         print("\nSystem Components Verified:")
         print("  ✓ API Bridge (Coinbase, CoinMarketCap, CoinGecko)")
         print("  ✓ Dualistic Thought Engines (Logical + Intuitive)")
-        print("  ✓ Hash Relay System (Mathematical State Relay)")
-        print("  ✓ Integrated Pipeline (End-to-End Processing)")
-        print("  ✓ Trading Channel (Live Decision Making)")
+        print("  ✓ Hash Relay System (Mathematical State, Relay)")
+        print("  ✓ Integrated Pipeline (End-to-End, Processing)")
+        print("  ✓ Trading Channel (Live Decision, Making)")
         print("\nReady for:")
         print("  - Live API trading via CCXT")
         print("  - BTC processor integration")

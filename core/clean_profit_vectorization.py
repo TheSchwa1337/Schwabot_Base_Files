@@ -1,29 +1,23 @@
 import logging
 import time
-import threading
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Tuple, Any, Union
+from typing import Dict, List, Optional, Any
 from enum import Enum
 import numpy as np
 import cupy as cp
-from concurrent.futures import ThreadPoolExecutor
-import asyncio
-from scipy.optimize import minimize
-from scipy.linalg import expm, norm
-from scipy.stats import entropy
 import hashlib
-import json
-from datetime import datetime, timedelta
 
 # CUDA Integration with Fallback
 try:
+    import cupy as cp
     USING_CUDA = True
     _backend = 'cupy (GPU)'
     xp = cp
 except ImportError:
+    import numpy as cp  # fallback to numpy
     USING_CUDA = False
     _backend = 'numpy (CPU)'
-    xp = np
+    xp = cp
 
 from core.clean_math_foundation import BitPhase, CleanMathFoundation, ThermalState
 
@@ -93,7 +87,6 @@ class AllocationMethod(Enum):
 @dataclass
 class ProfitVector:
     """Profit vector result."""
-
     vector_id: str
     btc_price: float
     volume: float
@@ -108,7 +101,6 @@ class ProfitVector:
 @dataclass
 class BitPhaseTrigger:
     """Bit-phase trigger data."""
-
     bit_phase: int
     phase_value: int
     trigger_strength: float
@@ -120,7 +112,6 @@ class BitPhaseTrigger:
 @dataclass
 class ConsensusVote:
     """Consensus voting data."""
-
     vote_id: str
     profit_vector: np.ndarray
     confidence: float
@@ -133,7 +124,6 @@ class ConsensusVote:
 @dataclass
 class DLTWaveformData:
     """DLT waveform data."""
-
     waveform_id: str
     bit_phase: int
     phase_values: np.ndarray
@@ -146,7 +136,6 @@ class DLTWaveformData:
 @dataclass
 class DynamicAllocationSlider:
     """Dynamic allocation slider data."""
-
     slider_id: str
     allocation_percentage: float
     min_allocation: float
@@ -227,9 +216,7 @@ class CleanProfitVectorization:
 
         logger.info("Clean Profit Vectorization system initialized")
 
-    def calculate_profit_vector(
-        self, vector_input: Dict[str, Any], mode: VectorizationMode = VectorizationMode.ADAPTIVE
-    ) -> ProfitVector:
+    def calculate_profit_vector(self, vector_input: Dict[str, Any], mode: VectorizationMode = VectorizationMode.ADAPTIVE) -> ProfitVector:
         """
         Calculate profit vector using specified mode.
 
@@ -300,11 +287,7 @@ class CleanProfitVectorization:
             calculation_time = time.time() - start_time
             self.total_calculation_time += calculation_time
 
-            logger.debug(
-                "Calculated profit vector: {:.6f} in {:.4f}s".format(
-                    total_profit, calculation_time
-                )
-            )
+            logger.debug("Calculated profit vector: {:.6f} in {:.4f}s".format(total_profit, calculation_time))
 
             return profit_vector
 
@@ -350,14 +333,11 @@ class CleanProfitVectorization:
             VectorizationMode.MEAN_REVERSION: 0.9,
             VectorizationMode.ADAPTIVE: 1.0,
         }
-
         base_multiplier = multipliers.get(mode, 1.0)
-
         # Adaptive mode adjusts based on input
         if mode == VectorizationMode.ADAPTIVE:
             signal_strength = vector_input.get("signal_strength", 0.5)
             base_multiplier = 0.8 + (signal_strength * 0.6)
-
         return base_multiplier
 
     def _calculate_risk_factor(self, vector_input: Dict[str, Any]) -> float:
@@ -377,27 +357,23 @@ class CleanProfitVectorization:
     def _calculate_thermal_factor(self, vector_input: Dict[str, Any]) -> float:
         """Calculate thermal state adjustment factor."""
         thermal_state = vector_input.get("thermal_state", ThermalState.WARM)
-
         thermal_multipliers = {
             ThermalState.COOL: 0.9,
             ThermalState.WARM: 1.0,
             ThermalState.HOT: 1.1,
         }
-
         return thermal_multipliers.get(thermal_state, 1.0)
 
     def _calculate_precision_factor(self, vector_input: Dict[str, Any]) -> float:
         """Calculate bit phase precision factor."""
         bit_phase = vector_input.get("bit_phase", BitPhase.SIXTEEN_BIT)
-
         precision_multipliers = {
             BitPhase.FOUR_BIT: 0.95,
             BitPhase.EIGHT_BIT: 0.98,
             BitPhase.SIXTEEN_BIT: 1.0,
-            BitPhase.THIRTY_TWO_BIT: 1.02,
-            BitPhase.FORTY_TWO_BIT: 1.05,
+            BitPhase.THIRTY_TWO_BIT: 1.2,
+            BitPhase.FORTY_TWO_BIT: 1.5,
         }
-
         return precision_multipliers.get(bit_phase, 1.0)
 
     def _calculate_confidence(self, vector_input: Dict[str, Any], profit_value: float) -> float:
@@ -419,14 +395,12 @@ class CleanProfitVectorization:
             "thermal_state": vector_input.get("thermal_state", ThermalState.WARM).value,
             "bit_phase": vector_input.get("bit_phase", BitPhase.SIXTEEN_BIT).value,
         }
-
         key_str = str(sorted(key_data.items()))
         return hashlib.md5(key_str.encode()).hexdigest()
 
     def get_performance_metrics(self) -> Dict[str, Any]:
         """Get performance metrics for the vectorization system."""
         avg_time = self.total_calculation_time / max(1, self.calculation_count)
-
         return {
             "total_calculations": self.calculation_count,
             "total_calculation_time": self.total_calculation_time,
@@ -447,12 +421,7 @@ def create_profit_vectorization(cache_size: int = 1000) -> CleanProfitVectorizat
     return CleanProfitVectorization(cache_size)
 
 
-def calculate_quick_profit_vector(
-    price: float,
-    volume: float,
-    volatility: float = 0.5,
-    mode: VectorizationMode = VectorizationMode.BALANCED,
-) -> ProfitVector:
+def calculate_quick_profit_vector(price: float, volume: float, volatility: float = 0.5, mode: VectorizationMode = VectorizationMode.BALANCED) -> ProfitVector:
     """Quick profit vector calculation for simple use cases."""
     vectorizer = create_profit_vectorization()
     vector_input = {

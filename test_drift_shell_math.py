@@ -3,7 +3,7 @@ from typing import Tuple
 
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Standalone Test - Drift Shell Engine Mathematical Formulas
+"""Standalone Test - Drift Shell Engine Mathematical Formulas"
 
 This script demonstrates the core mathematical frameworks without external dependencies:
 
@@ -56,7 +56,7 @@ def calculate_bcoe():-> Tuple[float, float]:
         profit_projection: Projected profit magnitude
 
     Returns:
-        Tuple of (16-bit confidence, 10k-bit confidence)
+        Tuple of (16-bit confidence, 10k-bit, confidence)
     """
     # Execution window scale (ζ)
     zeta = 1.0 - min(volatility * 2, 1.0)
@@ -158,7 +158,7 @@ def calculate_unified_confidence():-> Tuple[bool, float]:
         Tuple of (should_activate, total_confidence)
     """
     # Unified confidence calculation
-    total_confidence = (
+    total_confidence = ()
         validity + bitmap_confidence + min(pv_magnitude, 1.0) + correction_total
     )
 
@@ -195,8 +195,8 @@ def demonstrate_drift_shell_mathematics():
 
     # TDCF - Memory is fresh and similar
     delta_t = 0.15  # 150ms old memory
-    sigma_tick = 0.02  # Low volatility
-    alpha_exec = 0.08  # 80ms execution delay
+    sigma_tick = 0.2  # Low volatility
+    alpha_exec = 0.8  # 80ms execution delay
     hash1 = "abc123def456"
     hash2 = "abc125def456"  # Very similar hash
     rho_hash = hash_similarity(hash1, hash2)
@@ -207,7 +207,7 @@ def demonstrate_drift_shell_mathematics():
     print(f"    Hash similarity: {rho_hash:.3f}")
 
     # BCOE - Stable market favors 16-bit bitmap
-    volatility = 0.025
+    volatility = 0.25
     volume_spike = 1.1
     profit_projection = 0.15
 
@@ -218,23 +218,23 @@ def demonstrate_drift_shell_mathematics():
     print(f"    Selected: {'16-bit' if bitmap_16 > bitmap_10k else '10k-bit'}")
 
     # PVF - Moderate bullish signal
-    hash_gradient = 0.05
-    momentum = 0.08
+    hash_gradient = 0.5
+    momentum = 0.8
     rsi = 62
-    phase_vector = (0.2, -0.1, 0.05)  # Slight bullish phase
+    phase_vector = (0.2, -0.1, 0.5)  # Slight bullish phase
 
-    pv_x, pv_y, pv_z, pv_magnitude = calculate_pvf(
+    pv_x, pv_y, pv_z, pv_magnitude = calculate_pvf()
         hash_gradient, momentum, rsi, phase_vector
     )
     print("  PVF Profit Vector:")
-    print(
+    print()
         f"    Direction: {'LONG' if pv_x > 0.1 else 'SHORT' if pv_x < -0.1 else 'HOLD'}"
     )
     print(f"    Magnitude: {pv_magnitude:.3f}")
     print(f"    Components: ({pv_x:.3f}, {pv_y:.3f}, {pv_z:.3f})")
 
     # CIF - Minimal corrections needed
-    deviation_magnitude = 0.05  # Small deviation
+    deviation_magnitude = 0.5  # Small deviation
     q_corr, t_corr, sm_corr = calculate_cif(deviation_magnitude)
     correction_total = q_corr + t_corr + sm_corr
     print("  CIF Corrections:")
@@ -244,7 +244,7 @@ def demonstrate_drift_shell_mathematics():
     print(f"    Total: {correction_total:.4f}")
 
     # Unified Confidence
-    should_activate, total_confidence = calculate_unified_confidence(
+    should_activate, total_confidence = calculate_unified_confidence()
         validity, max(bitmap_16, bitmap_10k), pv_magnitude, correction_total
     )
     print("  Unified Confidence:")
@@ -258,7 +258,7 @@ def demonstrate_drift_shell_mathematics():
 
     # TDCF - Older memory with hash divergence
     delta_t = 0.35  # 350ms old memory
-    sigma_tick = 0.08  # High volatility
+    sigma_tick = 0.8  # High volatility
     alpha_exec = 0.12  # 120ms execution delay
     hash1 = "abc123def456"
     hash2 = "xyz789uvw123"  # Very different hash
@@ -270,7 +270,7 @@ def demonstrate_drift_shell_mathematics():
     print(f"    Hash similarity: {rho_hash:.3f}")
 
     # BCOE - Volatile market favors 10k-bit bitmap
-    volatility = 0.085
+    volatility = 0.85
     volume_spike = 3.2
     profit_projection = 0.35
 
@@ -286,11 +286,11 @@ def demonstrate_drift_shell_mathematics():
     rsi = 25  # Oversold
     phase_vector = (-0.4, 0.2, 0.3)  # Bearish phase with high volatility
 
-    pv_x, pv_y, pv_z, pv_magnitude = calculate_pvf(
+    pv_x, pv_y, pv_z, pv_magnitude = calculate_pvf()
         hash_gradient, momentum, rsi, phase_vector
     )
     print("  PVF Profit Vector:")
-    print(
+    print()
         f"    Direction: {'LONG' if pv_x > 0.1 else 'SHORT' if pv_x < -0.1 else 'HOLD'}"
     )
     print(f"    Magnitude: {pv_magnitude:.3f}")
@@ -307,7 +307,7 @@ def demonstrate_drift_shell_mathematics():
     print(f"    Total: {correction_total:.4f}")
 
     # Unified Confidence
-    should_activate, total_confidence = calculate_unified_confidence(
+    should_activate, total_confidence = calculate_unified_confidence()
         validity, max(bitmap_16, bitmap_10k), pv_magnitude, correction_total
     )
     print("  Unified Confidence:")
@@ -322,9 +322,9 @@ def demonstrate_drift_shell_mathematics():
     # TDCF - Very stale memory with complete hash divergence
     delta_t = 0.8  # 800ms old memory
     sigma_tick = 0.15  # Extreme volatility
-    alpha_exec = 0.3  # 300ms execution delay (system overloaded)
+    alpha_exec = 0.3  # 300ms execution delay (system, overloaded)
     hash1 = "abc123def456"
-    hash2 = "000000000000"  # Completely different
+    hash2 = "00000000000"  # Completely different
     rho_hash = hash_similarity(hash1, hash2)
 
     validity = calculate_tdcf(delta_t, sigma_tick, alpha_exec, rho_hash)
@@ -349,11 +349,11 @@ def demonstrate_drift_shell_mathematics():
     rsi = 85  # Overbought
     phase_vector = (0.6, -0.3, 0.8)  # Extreme bullish momentum
 
-    pv_x, pv_y, pv_z, pv_magnitude = calculate_pvf(
+    pv_x, pv_y, pv_z, pv_magnitude = calculate_pvf()
         hash_gradient, momentum, rsi, phase_vector
     )
     print("  PVF Profit Vector:")
-    print(
+    print()
         f"    Direction: {'LONG' if pv_x > 0.1 else 'SHORT' if pv_x < -0.1 else 'HOLD'}"
     )
     print(f"    Magnitude: {pv_magnitude:.3f}")
@@ -370,7 +370,7 @@ def demonstrate_drift_shell_mathematics():
     print(f"    Total: {correction_total:.4f}")
 
     # Unified Confidence
-    should_activate, total_confidence = calculate_unified_confidence(
+    should_activate, total_confidence = calculate_unified_confidence()
         validity, max(bitmap_16, bitmap_10k), pv_magnitude, correction_total
     )
     print("  Unified Confidence:")

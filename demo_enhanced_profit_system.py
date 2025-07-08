@@ -8,7 +8,7 @@ import time
 
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Standalone Demo of Enhanced Profit Optimization System.
+"""Standalone Demo of Enhanced Profit Optimization System."
 
 This demo showcases the core profit optimization functionality
 without relying on external mathematical components that may have
@@ -18,7 +18,7 @@ making process for BTC/USDC trading.
 
 
 # Configure logging
-logging.basicConfig(
+logging.basicConfig()
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
@@ -43,7 +43,7 @@ class ProfitState(Enum):
 
 
 @dataclass
-class ProfitVector:
+    class ProfitVector:
     """Comprehensive profit vector with mathematical components."""
 
     timestamp: float
@@ -71,7 +71,7 @@ class ProfitVector:
 
 
 @dataclass
-class OptimizationResult:
+    class OptimizationResult:
     """Profit optimization result."""
 
     optimization_id: str
@@ -91,11 +91,11 @@ class SimpleProfitOptimizer:
     def __init__(self):
         """Initialize the profit optimizer."""
         self.confidence_threshold = 0.75
-        self.profit_threshold = 0.005  # 0.5% minimum
-        self.risk_tolerance = 0.02  # 2% max risk
+        self.profit_threshold = 0.05  # 0.5% minimum
+        self.risk_tolerance = 0.2  # 2% max risk
 
         # Mathematical weights
-        self.weights = {
+        self.weights = {}
             "hash_similarity": 0.25,
             "phase_alignment": 0.20,
             "entropy_score": 0.20,
@@ -104,7 +104,7 @@ class SimpleProfitOptimizer:
         }
 
         # Performance tracking
-        self.stats = {
+        self.stats = {}
             "total_optimizations": 0,
             "profitable_decisions": 0,
             "avg_confidence": 0.0,
@@ -121,21 +121,21 @@ class SimpleProfitOptimizer:
         try:
             # Calculate mathematical components using simplified models
             hash_similarity = self._calculate_hash_similarity(btc_price, usdc_volume)
-            phase_alignment = self._calculate_phase_alignment(
+            phase_alignment = self._calculate_phase_alignment()
                 market_data.get("price_history", [])
             )
-            entropy_score = self._calculate_entropy_score(
+            entropy_score = self._calculate_entropy_score()
                 market_data.get("price_history", [])
             )
-            drift_weight = self._calculate_drift_weight(
+            drift_weight = self._calculate_drift_weight()
                 market_data.get("price_history", [])
             )
-            pattern_confidence = self._calculate_pattern_confidence(
+            pattern_confidence = self._calculate_pattern_confidence()
                 market_data.get("price_history", [])
             )
 
             # Calculate composite confidence score
-            confidence_score = (
+            confidence_score = ()
                 self.weights["hash_similarity"] * hash_similarity
                 + self.weights["phase_alignment"] * phase_alignment
                 + self.weights["entropy_score"] * entropy_score
@@ -144,12 +144,12 @@ class SimpleProfitOptimizer:
             )
 
             # Calculate profit potential
-            profit_potential = self._calculate_profit_potential(
+            profit_potential = self._calculate_profit_potential()
                 btc_price, usdc_volume, confidence_score, market_data
             )
 
             # Determine trade direction and position sizing
-            trade_direction, position_size = self._determine_trade_parameters(
+            trade_direction, position_size = self._determine_trade_parameters()
                 profit_potential, confidence_score, market_data
             )
 
@@ -160,7 +160,7 @@ class SimpleProfitOptimizer:
             expected_profit = profit_potential * risk_adjustment * position_size
 
             # Create profit vector
-            profit_vector = ProfitVector(
+            profit_vector = ProfitVector()
                 timestamp=time.time(),
                 price=btc_price,
                 volume=usdc_volume,
@@ -186,7 +186,7 @@ class SimpleProfitOptimizer:
             optimization_time_ms = (time.time() - start_time) * 1000
 
             # Create optimization result
-            result = OptimizationResult(
+            result = OptimizationResult()
                 optimization_id=optimization_id,
                 timestamp=time.time(),
                 profit_vector=profit_vector,
@@ -195,7 +195,7 @@ class SimpleProfitOptimizer:
                 expected_return=expected_profit,
                 risk_score=risk_score,
                 optimization_time_ms=optimization_time_ms,
-                metadata={
+                metadata={}
                     "btc_price": btc_price,
                     "usdc_volume": usdc_volume,
                     "market_conditions": market_data.get("phase", "unknown"),
@@ -205,9 +205,9 @@ class SimpleProfitOptimizer:
             # Update statistics
             self._update_stats(result)
 
-            logger.info(
+            logger.info()
                 f"💰 Optimization complete: {trade_direction.value} "
-                f"(confidence: {confidence_score:.3f}, "
+                f"(confidence: {confidence_score:.3f}, ")
                 f"expected: {expected_profit:.4f})"
             )
 
@@ -224,7 +224,7 @@ class SimpleProfitOptimizer:
             market_state = f"{btc_price}_{usdc_volume}_{int(time.time())}"
             market_hash = hashlib.sha256(market_state.encode()).hexdigest()
 
-            # Simulate similarity calculation (in real system, this would compare with
+            # Simulate similarity calculation (in real system, this would compare, with)
             # historical hashes)
             hash_sum = sum(int(char, 16) for char in market_hash[:8])
             similarity = (hash_sum % 16) / 15.0  # Normalize to [0, 1]
@@ -246,11 +246,11 @@ class SimpleProfitOptimizer:
             momentum = (recent_prices[-1] - recent_prices[0]) / recent_prices[0]
 
             # Convert momentum to alignment score
-            if momentum > 0.02:  # Strong upward momentum
+            if momentum > 0.2:  # Strong upward momentum
                 return 0.9
             elif momentum > 0:  # Weak upward momentum
                 return 0.7
-            elif momentum > -0.02:  # Weak downward momentum
+            elif momentum > -0.2:  # Weak downward momentum
                 return 0.4
             else:  # Strong downward momentum
                 return 0.2
@@ -266,12 +266,12 @@ class SimpleProfitOptimizer:
                 return 0.5
 
             # Calculate price changes
-            changes = [
+            changes = []
                 abs(price_history[i] - price_history[i - 1]) / price_history[i - 1]
                 for i in range(1, len(price_history))
             ]
 
-            # Calculate entropy-like measure (lower variance = higher predictability)
+            # Calculate entropy-like measure (lower variance = higher, predictability)
             variance = np.var(changes)
             entropy_score = 1.0 / (1.0 + variance * 1000)  # Scale and invert
 
@@ -295,7 +295,7 @@ class SimpleProfitOptimizer:
             current_price = price_history[-1]
             drift = abs(current_price - weighted_avg) / current_price
 
-            # Convert to weight (lower drift = higher weight)
+            # Convert to weight (lower drift = higher, weight)
             drift_weight = 1.0 / (1.0 + drift * 10)
 
             return max(0.1, min(0.9, drift_weight))
@@ -334,7 +334,7 @@ class SimpleProfitOptimizer:
         """Calculate profit potential using mathematical model."""
         try:
             # Base profit from market conditions
-            volatility = market_data.get("volatility", 0.02)
+            volatility = market_data.get("volatility", 0.2)
             base_profit = volatility * 0.5  # 50% of volatility as profit potential
 
             # Volume factor
@@ -409,15 +409,15 @@ class SimpleProfitOptimizer:
     def _calculate_risk_score(): -> float:
         """Calculate overall risk score."""
         try:
-            volatility = market_data.get("volatility", 0.02)
+            volatility = market_data.get("volatility", 0.2)
             volatility_risk = min(1.0, volatility / self.risk_tolerance)
 
-            position_risk = (
+            position_risk = ()
                 profit_vector.position_size / 0.1
             )  # Normalize by max position
             confidence_risk = 1.0 - profit_vector.confidence_score
 
-            total_risk = (
+            total_risk = ()
                 volatility_risk * 0.4 + position_risk * 0.3 + confidence_risk * 0.3
             )
 
@@ -439,12 +439,12 @@ class SimpleProfitOptimizer:
             total = self.stats["total_optimizations"]
 
             current_avg = self.stats["avg_confidence"]
-            self.stats["avg_confidence"] = (
+            self.stats["avg_confidence"] = ()
                 current_avg * (total - 1) + result.confidence_level
             ) / total
 
             current_avg = self.stats["avg_profit_potential"]
-            self.stats["avg_profit_potential"] = (
+            self.stats["avg_profit_potential"] = ()
                 current_avg * (total - 1) + result.profit_vector.profit_potential
             ) / total
 
@@ -453,7 +453,7 @@ class SimpleProfitOptimizer:
 
     def _create_default_result(): -> OptimizationResult:
         """Create safe default result."""
-        profit_vector = ProfitVector(
+        profit_vector = ProfitVector()
             timestamp=time.time(),
             price=btc_price,
             volume=usdc_volume,
@@ -462,7 +462,7 @@ class SimpleProfitOptimizer:
             expected_profit=0.0,
         )
 
-        return OptimizationResult(
+        return OptimizationResult()
             optimization_id=optimization_id,
             timestamp=time.time(),
             profit_vector=profit_vector,
@@ -477,18 +477,18 @@ class SimpleProfitOptimizer:
         """Get performance summary."""
         success_rate = 0.0
         if self.stats["total_optimizations"] > 0:
-            success_rate = (
+            success_rate = ()
                 self.stats["profitable_decisions"] / self.stats["total_optimizations"]
             )
 
-        return {
+        return {}
             "total_optimizations": self.stats["total_optimizations"],
             "profitable_decisions": self.stats["profitable_decisions"],
             "success_rate": success_rate,
             "avg_confidence": self.stats["avg_confidence"],
             "avg_profit_potential": self.stats["avg_profit_potential"],
             "mathematical_weights": self.weights,
-            "thresholds": {
+            "thresholds": {}
                 "confidence": self.confidence_threshold,
                 "profit": self.profit_threshold,
                 "risk_tolerance": self.risk_tolerance,
@@ -505,34 +505,34 @@ def run_demo():
     optimizer = SimpleProfitOptimizer()
 
     # Test scenarios
-    test_scenarios = [
-        {
+    test_scenarios = []
+        {}
             "name": "Bull Market Scenario",
             "btc_price": 45200.0,
             "usdc_volume": 2500000.0,
-            "market_data": {
+            "market_data": {}
                 "price_history": [44000, 44300, 44600, 44900, 45200],
-                "volatility": 0.015,
+                "volatility": 0.15,
                 "phase": "expansion",
             },
         },
-        {
+        {}
             "name": "Volatile Market Scenario",
             "btc_price": 44000.0,
             "usdc_volume": 3000000.0,
-            "market_data": {
+            "market_data": {}
                 "price_history": [45000, 44500, 45200, 43800, 44000],
-                "volatility": 0.06,
+                "volatility": 0.6,
                 "phase": "transition",
             },
         },
-        {
+        {}
             "name": "Low Volume Scenario",
             "btc_price": 45100.0,
             "usdc_volume": 500000.0,
-            "market_data": {
+            "market_data": {}
                 "price_history": [45000, 45050, 45080, 45090, 45100],
-                "volatility": 0.02,
+                "volatility": 0.2,
                 "phase": "consolidation",
             },
         },
@@ -547,7 +547,7 @@ def run_demo():
         print(f"  Volatility: {scenario['market_data']['volatility']:.1%}")
 
         # Run optimization
-        result = optimizer.optimize_profit(
+        result = optimizer.optimize_profit()
             btc_price=scenario["btc_price"],
             usdc_volume=scenario["usdc_volume"],
             market_data=scenario["market_data"],
@@ -558,8 +558,8 @@ def run_demo():
         # Display results
         pv = result.profit_vector
         print("\n🎯 Optimization Results:")
-        print(
-            f"  Should Trade: {'✅' if result.should_trade else '❌'} {
+        print()
+            f"  Should Trade: {'✅' if result.should_trade else '❌'} {"}
                 result.should_trade
             }"
         )
@@ -596,8 +596,8 @@ def run_demo():
 
     # Analyze results
     profitable_scenarios = sum(1 for r in results if r.should_trade)
-    avg_confidence = sum(r.confidence_level for r in results) / len(results)
-    avg_expected_return = sum(r.expected_return for r in results) / len(results)
+    avg_confidence = sum(r.confidence_level for r in, results) / len(results)
+    avg_expected_return = sum(r.expected_return for r in, results) / len(results)
 
     print("\n🔍 Analysis:")
     print(f"  Profitable Scenarios: {profitable_scenarios}/{len(results)}")

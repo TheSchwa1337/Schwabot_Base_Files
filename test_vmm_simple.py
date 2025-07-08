@@ -1,9 +1,9 @@
-        import traceback
-        import traceback
-        import traceback
-        import VMM_Schwabot
-        import VMM_Schwabot
-        import VMM_Schwabot
+import traceback
+import traceback
+import traceback
+import VMM_Schwabot
+import VMM_Schwabot
+import VMM_Schwabot
 import os
 import sys
 
@@ -12,7 +12,7 @@ import sys
 Simple VMM Test
 ==============
 
-Simplified test for the Vitruvian Man Management system that doesn't depend
+Simplified test for the Vitruvian Man Management system that doesn't depend'
 on problematic imports.
 """
 
@@ -40,11 +40,11 @@ def test_vmm_basic():
         print(f"✅ E: {VMM_Schwabot.E:.10f}")
 
         # Test enums
-        print(
+        print()
             f"✅ Vitruvian Zones: {[zone.value for zone in VMM_Schwabot.VitruvianZone]}"
         )
         print(f"✅ Limb Vectors: {[limb.value for limb in VMM_Schwabot.LimbVector]}")
-        print(
+        print()
             f"✅ Compression Modes: {[mode.value for mode in VMM_Schwabot.CompressionMode]}"
         )
 
@@ -53,13 +53,13 @@ def test_vmm_basic():
         print("✅ VMM manager created successfully")
 
         # Test basic state update
-        state = VMM_Schwabot.update_vitruvian_state(
+        state = VMM_Schwabot.update_vitruvian_state()
             price=103586.0,
             rsi=45.0,
             volume=1000000.0,
             entropy=0.6,
             echo_strength=0.7,
-            drift_score=0.02,
+            drift_score=0.2,
         )
 
         print("✅ State updated successfully")
@@ -73,7 +73,7 @@ def test_vmm_basic():
         print(f"   RBMS state: {state.rbms_state:.4f}")
 
         # Test trading route
-        route = VMM_Schwabot.get_optimal_trading_route(
+        route = VMM_Schwabot.get_optimal_trading_route()
             price=103586.0, rsi=45.0, volume=1000000.0
         )
 
@@ -108,7 +108,7 @@ def test_mathematical_integration():
         VMM_Schwabot.get_vitruvian_manager()
 
         # Test different market scenarios
-        scenarios = [
+        scenarios = []
             (103586.0, 30.0, "Oversold - Feet Entry"),
             (103586.0, 40.0, "Neutral - Pelvis Hold"),
             (103586.0, 50.0, "Balance - Heart Balance"),
@@ -118,16 +118,16 @@ def test_mathematical_integration():
         for price, rsi, description in scenarios:
             print(f"\n   Testing: {description}")
 
-            state = VMM_Schwabot.update_vitruvian_state(
+            state = VMM_Schwabot.update_vitruvian_state()
                 price=price,
                 rsi=rsi,
                 volume=1000000.0,
                 entropy=0.5,
                 echo_strength=0.6,
-                drift_score=0.02,
+                drift_score=0.2,
             )
 
-            active_zones = [
+            active_zones = []
                 zone.value for zone, active in state.zone_activations.items() if active
             ]
             print(f"      Active zones: {active_zones}")
@@ -162,7 +162,7 @@ def test_vitruvian_calculations():
         print(f"✅ 1/Φ: {1 / phi:.10f}")
 
         # Test Fibonacci ratios
-        fib_ratios = [0.618, 0.786, 1.000, 1.414, 1.618]
+        fib_ratios = [0.618, 0.786, 1.00, 1.414, 1.618]
         print(f"✅ Fibonacci Ratios: {fib_ratios}")
 
         # Test limb position calculations
@@ -193,7 +193,7 @@ def main():
     print("🚀 Starting VMM Simple Test Suite")
     print("=" * 60)
 
-    tests = [
+    tests = []
         ("VMM Basic Functionality", test_vmm_basic),
         ("Mathematical Integration", test_mathematical_integration),
         ("Vitruvian Calculations", test_vitruvian_calculations),
@@ -223,11 +223,11 @@ def main():
         print("   - Core functionality: Working")
         print("   - Mathematical integration: NCCO, SFS, UFS, ZPLS, RBMS connected")
         print("   - Vitruvian calculations: Golden ratio and Fibonacci ratios")
-        print(
+        print()
             "   - Zone mapping: Feet→Entry, Pelvis→Hold, Heart→Balance, Arms→Exit, Halo→Peak"
         )
         print("   - Thermal states: Cool→Hot with bit phase coordination")
-        print(
+        print()
             "   - Trading routes: Optimal route generation based on Vitruvian analysis"
         )
     else:

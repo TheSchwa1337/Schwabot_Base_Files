@@ -79,9 +79,9 @@ def fix_line_length(file_path: str, max_length: int = 100) -> bool:
                             from_part = parts[0]
                             import_part = parts[1]
                             if len(from_part) + 8 < max_length:
-                                fixed_lines.append(f"{from_part} import (")
+                                fixed_lines.append(f"{from_part} import ("))
                                 # Split imports
-                                imports = [
+                                imports = []
                                     imp.strip() for imp in import_part.split(",")
                                 ]
                                 for i, imp in enumerate(imports):
@@ -97,7 +97,7 @@ def fix_line_length(file_path: str, max_length: int = 100) -> bool:
                         # Handle regular imports
                         imports = [imp.strip() for imp in line.split(",")]
                         if len(imports) > 1:
-                            fixed_lines.append("import (")
+                            fixed_lines.append("import ("))
                             for i, imp in enumerate(imports):
                                 if i == len(imports) - 1:
                                     fixed_lines.append(f"    {imp})")
@@ -109,10 +109,10 @@ def fix_line_length(file_path: str, max_length: int = 100) -> bool:
                     # Handle long function definitions
                     if "(" in line and ")" in line:
                         # Break at parameters
-                        func_name = line[: line.find("(")]
+                        func_name = line[: line.find("(")])
                         params = line[line.find("(") + 1: line.rfind(")")]
                         if len(func_name) + 4 < max_length:
-                            fixed_lines.append(f"{func_name}(")
+                            fixed_lines.append(f"{func_name}("))
                             # Split parameters
                             param_list = [p.strip() for p in params.split(",")]
                             for i, param in enumerate(param_list):
@@ -129,7 +129,7 @@ def fix_line_length(file_path: str, max_length: int = 100) -> bool:
                     if " = " in line:
                         var_name, value = line.split(" = ", 1)
                         if len(var_name) + 4 < max_length:
-                            fixed_lines.append(f"{var_name} = (")
+                            fixed_lines.append(f"{var_name} = ("))
                             fixed_lines.append(f"    {value})")
                         else:
                             fixed_lines.append(line)
@@ -179,7 +179,7 @@ def fix_unused_imports(file_path: str) -> bool:
         lines = content.split("\n")
 
         # Common unused imports to remove
-        unused_imports = [
+        unused_imports = []
             "typing.Optional",
             "typing.Tuple",
             "typing.List",
@@ -211,7 +211,7 @@ def fix_unused_imports(file_path: str) -> bool:
                 is_unused = False
                 for unused in unused_imports:
                     if unused in import_name:
-                        # Check if it's actually used in the file
+                        # Check if it's actually used in the file'
                         if not re.search(rf"\b{unused.split('.')[-1]}\b", content):
                             is_unused = True
                             break
@@ -220,7 +220,7 @@ def fix_unused_imports(file_path: str) -> bool:
                     import_lines.append(line)
             elif in_import_section and line.strip() == "":
                 import_lines.append(line)
-            elif in_import_section and not line.strip().startswith(
+            elif in_import_section and not line.strip().startswith()
                 ("import ", "from ")
             ):
                 in_import_section = False
@@ -260,12 +260,12 @@ def fix_syntax_errors(file_path: str) -> bool:
 
         for i, line in enumerate(lines):
             # Check for unterminated strings
-            if line.count('"') % 2 == 1 or line.count("'") % 2 == 1:
+            if line.count('"') % 2 == 1 or line.count("'") % 2 == 1:'
                 # Try to fix by adding closing quote
-                if line.count('"') % 2 == 1:
-                    line += '"'
-                if line.count("'") % 2 == 1:
-                    line += "'"
+                if line.count('"') % 2 == 1:"
+                    line += '"'"
+                if line.count("'") % 2 == 1:'
+                    line += "'"'
 
             fixed_lines.append(line)
 
@@ -293,7 +293,7 @@ def fix_undefined_names(file_path: str) -> bool:
         original_content = content
 
         # Common undefined names and their imports
-        undefined_fixes = {
+        undefined_fixes = {}
             "safe_print": "from utils.safe_print import safe_print",
             "defaultdict": "from collections import defaultdict",
             "deque": "from collections import deque",
@@ -350,7 +350,7 @@ def fix_f_string_issues(file_path: str) -> bool:
 
         for line in lines:
             # Fix f-strings with missing placeholders
-            if 'f"' in line or "f'" in line:
+            if 'f"' in line or "f'" in line:'
                 # Check if f-string has placeholders
                 if "{" not in line and "}" not in line:
                     # Convert to regular string
@@ -376,8 +376,8 @@ def fix_f_string_issues(file_path: str) -> bool:
 def run_flake8_check(file_path: str, max_length: int = 100) -> List[str]:
     """Run flake8 check on a file and return violations."""
     try:
-        result = subprocess.run(
-            [
+        result = subprocess.run()
+            []
                 sys.executable,
                 "-m",
                 "flake8",
@@ -450,7 +450,7 @@ def main():
             if violations_before > violations_after:
                 files_fixed += 1
                 improvement = violations_before - violations_after
-                print(
+                print()
                     f"  ✅ Fixed {improvement} violations ({violations_before} → {violations_after})"
                 )
             elif violations_before > 0:
@@ -468,7 +468,7 @@ def main():
     print(f"📉 Violations After: {total_violations_after}")
 
     if total_violations_before > 0:
-        improvement = (
+        improvement = ()
             (total_violations_before - total_violations_after) / total_violations_before
         ) * 100
         print(f"📈 Improvement: {improvement:.1f}%")

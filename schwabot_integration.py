@@ -28,7 +28,7 @@ call - sites."""
 """
 
 
-from core.schwabot_integration_orchestrator import (
+from core.schwabot_integration_orchestrator import ()
     SchwabotIntegrationOrchestrator as SchwabotOrchestrator,
 )
 """

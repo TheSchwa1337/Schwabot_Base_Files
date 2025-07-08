@@ -52,7 +52,7 @@ class APISource(Enum):
 
 
 @dataclass
-class PriceData:
+    class PriceData:
     """Price data structure."""
 
     symbol: str
@@ -67,7 +67,7 @@ class PriceData:
 
 
 @dataclass
-class OrderBookData:
+    class OrderBookData:
     """Order book data structure."""
 
     symbol: str
@@ -78,7 +78,7 @@ class OrderBookData:
 
 
 @dataclass
-class PortfolioData:
+    class PortfolioData:
     """Portfolio data structure."""
 
     total_balance: float
@@ -118,14 +118,14 @@ class APIIntegrationManager:
         try:
             # Coinbase Advanced Trade
             if all([self.coinbase_api_key, self.coinbase_secret, self.coinbase_passphrase]):
-                self.exchanges['coinbase'] = ccxt.coinbase(
-                    {
+                self.exchanges['coinbase'] = ccxt.coinbase()
+                    {}
                         'apiKey': self.coinbase_api_key,
                         'secret': self.coinbase_secret,
                         'password': self.coinbase_passphrase,
                         'sandbox': self.config.get('sandbox_mode', False),
                         'enableRateLimit': True,
-                        'options': {
+                        'options': {}
                             'defaultType': 'spot',
                             'adjustForTimeDifference': True,
                         },
@@ -134,21 +134,21 @@ class APIIntegrationManager:
                 success("✅ Coinbase Advanced Trade initialized")
 
             # Binance (fallback)
-            self.exchanges['binance'] = ccxt.binance(
-                {
+            self.exchanges['binance'] = ccxt.binance()
+                {}
                     'enableRateLimit': True,
-                    'options': {
+                    'options': {}
                         'defaultType': 'spot',
                         'adjustForTimeDifference': True,
                     },
                 }
             )
 
-            # Bybit (additional fallback)
-            self.exchanges['bybit'] = ccxt.bybit(
-                {
+            # Bybit (additional, fallback)
+            self.exchanges['bybit'] = ccxt.bybit()
+                {}
                     'enableRateLimit': True,
-                    'options': {
+                    'options': {}
                         'defaultType': 'spot',
                         'adjustForTimeDifference': True,
                     },
@@ -208,7 +208,7 @@ class APIIntegrationManager:
                         data = await response.json()
                         if 'data' in data and symbol in data['data']:
                             quote = data['data'][symbol]['quote']['USD']
-                            return PriceData(
+                            return PriceData()
                                 symbol=symbol,
                                 price=float(quote['price']),
                                 volume_24h=float(quote['volume_24h']),
@@ -224,10 +224,10 @@ class APIIntegrationManager:
         return None
 
     async def _fetch_coingecko_price(self, symbol: str) -> Optional[PriceData]:
-        """Fetch price from CoinGecko API (free fallback)."""
+        """Fetch price from CoinGecko API (free, fallback)."""
         try:
             # Map symbols to CoinGecko IDs
-            symbol_mapping = {
+            symbol_mapping = {}
                 'BTC': 'bitcoin',
                 'ETH': 'ethereum',
                 'ADA': 'cardano',
@@ -241,7 +241,7 @@ class APIIntegrationManager:
 
             coin_id = symbol_mapping.get(symbol, symbol.lower())
             url = f"https://api.coingecko.com/api/v3/simple/price"
-            params = {
+            params = {}
                 'ids': coin_id,
                 'vs_currencies': 'usd',
                 'include_24hr_change': 'true',
@@ -255,7 +255,7 @@ class APIIntegrationManager:
                         data = await response.json()
                         if coin_id in data:
                             coin_data = data[coin_id]
-                            return PriceData(
+                            return PriceData()
                                 symbol=symbol,
                                 price=float(coin_data['usd']),
                                 volume_24h=float(coin_data.get('usd_24h_vol', 0)),
@@ -279,7 +279,7 @@ class APIIntegrationManager:
             exchange = self.exchanges['coinbase']
             ticker = await exchange.fetch_ticker("{0}/USD".format(symbol))
 
-            return PriceData(
+            return PriceData()
                 symbol=symbol,
                 price=float(ticker['last']),
                 volume_24h=float(ticker['baseVolume']),
@@ -303,7 +303,7 @@ class APIIntegrationManager:
             exchange_instance = self.exchanges[exchange]
             order_book = await exchange_instance.fetch_order_book("{0}/USD".format(symbol), depth)
 
-            return OrderBookData(
+            return OrderBookData()
                 symbol=symbol,
                 bids=order_book['bids'][:depth],
                 asks=order_book['asks'][:depth],
@@ -343,7 +343,7 @@ class APIIntegrationManager:
                         except Exception:
                             positions[currency] = amount
 
-            return PortfolioData(
+            return PortfolioData()
                 total_balance=total_balance,
                 available_balance=float(balance['USD']['free']),
                 positions=positions,
@@ -356,7 +356,7 @@ class APIIntegrationManager:
             logger.error("Portfolio fetch error: {0}".format(e))
             return None
 
-    async def calculate_position_size(
+    async def calculate_position_size()
         self, symbol: str, entry_price: float, risk_amount: float, stop_loss_pct: float
     ) -> float:
         """Calculate position size based on risk management."""
@@ -382,7 +382,7 @@ class APIIntegrationManager:
             logger.error("Position size calculation error: {0}".format(e))
             return 0.0
 
-    async def place_order(
+    async def place_order()
         self, symbol: str, side: str, amount: float, price: float = None, order_type: str = 'market'
     ) -> Dict[str, Any]:
         """Place order on exchange."""
@@ -401,7 +401,7 @@ class APIIntegrationManager:
             # Place order
             order = await exchange.create_order(**order_params)
 
-            return {
+            return {}
                 'success': True,
                 'order_id': order['id'],
                 'status': order['status'],
@@ -439,7 +439,7 @@ class APIIntegrationManager:
 
 
 # CLI Interface
-class APIIntegrationCLI:
+    class APIIntegrationCLI:
     """CLI interface for API integration manager."""
 
     def __init__(self):
@@ -464,11 +464,10 @@ class APIIntegrationCLI:
         info("💰 Fetching price for {0}...".format(symbol))
         price_data = await self.api_manager.get_price_data(symbol)
 
-        if price_data:
-            success("✅ {0} Price: ${1}".format(symbol, price_data.price:,.2f))
+        if price_data))
             info("   Source: {0}".format(price_data.source))
-            info("   24h Change: {0}%".format(price_data.price_change_percent_24h:+.2f))
-            info("   Volume: ${0}".format(price_data.volume_24h:,.0f))
+            info("   24h, Change))"
+            info("   Volume: ${0}".format(price_data.volume_24h))
         else:
             error("❌ Failed to get price for {0}".format(symbol))
 
@@ -503,11 +502,10 @@ class APIIntegrationCLI:
         portfolio = await self.api_manager.get_portfolio_data()
 
         if portfolio:
-            success("✅ Portfolio Total: ${0}".format(portfolio.total_balance:,.2f))
-            info("   Available: ${0}".format(portfolio.available_balance:,.2f))
+            success("✅ Portfolio Total: ${0}".format(portfolio.total_balance))
+            info("   Available: ${0}".format(portfolio.available_balance))
             info("   Positions: {0}".format(len(portfolio.positions)))
-            for asset, value in portfolio.positions.items():
-                info("     {0}: ${1}".format(asset, value:,.2f))
+            for asset, value in portfolio.positions.items()))
         else:
             error("❌ Failed to get portfolio data")
 
@@ -520,17 +518,16 @@ class APIIntegrationCLI:
         info("🧮 Calculating position size for {0}...".format(symbol))
         position_size = await self.api_manager.calculate_position_size(symbol, entry_price, risk_amount, stop_loss_pct)
 
-        if position_size > 0:
-            success("✅ Recommended position size: {0} {1}".format(position_size:.4f, symbol))
-            info("   Entry price: ${0}".format(entry_price:,.2f))
-            info("   Risk amount: ${0}".format(risk_amount:,.2f))
+        if position_size > 0))
+            info("   Entry price: ${0}".format(entry_price))
+            info("   Risk amount: ${0}".format(risk_amount))
             info("   Stop loss: {0}".format(stop_loss_pct:.1%))
         else:
             error("❌ Failed to calculate position size")
 
     def show_banner(self):
         """Show CLI banner."""
-        print(
+        print()
             """
 🔗 SCHWABOT API INTEGRATION MANAGER
 ==================================

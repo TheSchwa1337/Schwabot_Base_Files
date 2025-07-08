@@ -1,8 +1,8 @@
 import logging
 from typing import Dict, Any, List, Optional, Tuple
 from .glyph_router import GlyphRouter
-from .hash_glyph_compression import HashGlyphCompressor, create_hash_glyph_compressor
-from .ai_matrix_consensus import AIMatrixConsensus, create_ai_matrix_consensus
+from .hash_glyph_compression import create_hash_glyph_compressor
+from .ai_matrix_consensus import create_ai_matrix_consensus
 
 import numpy as np
 
@@ -40,9 +40,13 @@ class VisualDecisionEngine:
         self.compressor = create_hash_glyph_compressor(max_memory_size=max_memory_size)
         self.consensus = create_ai_matrix_consensus(num_agents=num_agents)
 
-        logger.info("Visual Decision Engine initialized (memory: {0}, agents: {1})".format(max_memory_size, num_agents))
+        logger.info()
+            "Visual Decision Engine initialized (memory: {0}, agents: {1})".format()
+                max_memory_size, num_agents
+            )
+        )
 
-    def route_with_path_blending(
+    def route_with_path_blending()
         self,
         strategy_id: str,
         q_matrix: np.ndarray,
@@ -65,7 +69,9 @@ class VisualDecisionEngine:
             # Check for cached memory
             cached = self.compressor.retrieve(strategy_id, q_matrix)
             if cached:
-                logger.info("🧠 HASH-GLYPH PATH MATCH FOUND → Glyph: {0}".format(cached.glyph))
+                logger.info()
+                    "🧠 HASH-GLYPH PATH MATCH FOUND → Glyph: {0}".format(cached.glyph)
+                )
                 return cached.glyph, np.array(cached.vector), "replay"
 
             # Get glyph from router
@@ -76,7 +82,7 @@ class VisualDecisionEngine:
             blended_vector = consensus_result.blended_vector
 
             # Store in memory
-            self.compressor.store(
+            self.compressor.store()
                 strategy_id,
                 q_matrix,
                 glyph,
@@ -87,8 +93,11 @@ class VisualDecisionEngine:
 
             decision_type = consensus_result.consensus_vote
 
-            logger.debug("New path created: {0} → {1} (confidence: {2:.3f})".format(
-                glyph, decision_type, consensus_result.confidence))
+            logger.debug()
+                "New path created)".format(
+                    glyph, decision_type, consensus_result.confidence
+                )
+            )
             return glyph, blended_vector, decision_type
 
         except Exception as e:
@@ -97,7 +106,9 @@ class VisualDecisionEngine:
             glyph = self.router.route_by_vector(vector)
             return glyph, vector, "fallback"
 
-    def render_strategy_grid(self, asset: str, q_matrix: np.ndarray, profit_vector: np.ndarray) -> None:
+    def render_strategy_grid()
+        self, asset: str, q_matrix: np.ndarray, profit_vector: np.ndarray
+    ) -> None:
         """
         Render strategy grid with enhanced visual representation
 
@@ -151,7 +162,7 @@ class VisualDecisionEngine:
             memory_stats = self.compressor.get_memory_stats()
             consensus_stats = self.consensus.get_consensus_statistics()
 
-            return {
+            return {}
                 "memory": memory_stats,
                 "consensus": consensus_stats,
                 "total_components": 3,  # router, compressor, consensus
@@ -160,7 +171,9 @@ class VisualDecisionEngine:
             logger.error("Error getting statistics: {0}".format(e))
             return {}
 
-    def find_similar_patterns(self, strategy_id: str, q_matrix: np.ndarray) -> List[Any]:
+    def find_similar_patterns()
+        self, strategy_id: str, q_matrix: np.ndarray
+    ) -> List[Any]:
         """
         Find similar patterns in memory
 
@@ -210,7 +223,9 @@ class VisualDecisionEngine:
             return False
 
 
-def create_visual_decision_engine(max_memory_size: int = 1000, num_agents: int = 5) -> VisualDecisionEngine:
+def create_visual_decision_engine()
+    max_memory_size: int = 1000, num_agents: int = 5
+) -> VisualDecisionEngine:
     """
     Factory function to create VisualDecisionEngine
 
@@ -240,14 +255,18 @@ def test_visual_decision_engine():
 
     # Test 1: Path blending
     print("\n🔄 Test 1: Path Blending")
-    glyph, blended_vector, decision = engine.route_with_path_blending(strategy_id, q_matrix, vector, market_context)
+    glyph, blended_vector, decision = engine.route_with_path_blending()
+        strategy_id, q_matrix, vector, market_context
+    )
     print("  Glyph: {0}".format(glyph))
     print("  Decision: {0}".format(decision))
     print("  Blended vector: {0}".format(blended_vector))
 
-    # Test 2: Memory retrieval (should find cached)
+    # Test 2: Memory retrieval (should find, cached)
     print("\n🧠 Test 2: Memory Retrieval")
-    glyph2, blended_vector2, decision2 = engine.route_with_path_blending(strategy_id, q_matrix, vector, market_context)
+    glyph2, blended_vector2, decision2 = engine.route_with_path_blending()
+        strategy_id, q_matrix, vector, market_context
+    )
     print("  Retrieved: {0} → {1}".format(glyph2, decision2))
 
     # Test 3: Render strategy grid

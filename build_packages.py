@@ -89,8 +89,8 @@ class PackageBuilder:
 
         try:
             # Build wheel and source distribution
-            subprocess.run(
-                [
+            subprocess.run()
+                []
                     sys.executable,
                     "-m",
                     "build",
@@ -134,7 +134,7 @@ class PackageBuilder:
             deb_dir.mkdir(exist_ok=True)
 
             # Create control file
-            control_content = f"""Package: {self.package_name}
+            control_content = f"""Package: {self.package_name}"
 Version: {self.version}
 Section: utils
 Priority: optional
@@ -149,8 +149,8 @@ Schwabot is a comprehensive trading system with mathematical precision,
             control_file.write_text(control_content)
 
             # Build .deb package
-            subprocess.run(
-                [
+            subprocess.run()
+                []
                     "dpkg - deb",
                     "--build",
                     str(deb_dir),
@@ -170,7 +170,7 @@ Schwabot is a comprehensive trading system with mathematical precision,
 
         try:
             # Create RPM spec file
-            spec_content = f"""Name: {self.package_name}
+            spec_content = f"""Name: {self.package_name}"
 Version: {self.version}
 Release: 1
 Summary: Hardware - scale - aware economic kernel for federated trading devices
@@ -198,8 +198,8 @@ python3 -m pip uninstall -y {self.package_name}"""
             spec_file.write_text(spec_content)
 
             # Build RPM package
-            subprocess.run(
-                [
+            subprocess.run()
+                []
                     "rpmbuild",
                     "-bb",
                     "--define",
@@ -224,7 +224,7 @@ python3 -m pip uninstall -y {self.package_name}"""
             appdir.mkdir(exist_ok=True)
 
             # Create AppRun script
-            apprun_content = """#!/bin / bash
+            apprun_content = """#!/bin / bash"
 cd "$(dirname "$0")"
 exec python3 usr / bin / schwabot "$@"
 """
@@ -233,7 +233,7 @@ exec python3 usr / bin / schwabot "$@"
             apprun_file.chmod(0o755)
 
             # Create .desktop file
-            desktop_content = """[Desktop Entry]
+            desktop_content = """[Desktop Entry]"
 Name = Schwabot
 Comment = Hardware - scale - aware economic kernel for federated trading devices
 Exec = schwabot
@@ -246,11 +246,11 @@ Categories = Office;Finance;"""
             desktop_file.write_text(desktop_content)
 
             # Build AppImage
-            subprocess.run(
-                [
+            subprocess.run()
+                []
                     "appimagetool",
                     str(appdir),
-                    str(
+                    str()
                         self.dist_dir
                         / f"{self.package_name}-{self.version}-x86_64.AppImage"
                     ),
@@ -284,13 +284,13 @@ Categories = Office;Finance;"""
 
         try:
             # Install PyInstaller if not available
-            subprocess.run(
+            subprocess.run()
                 [sys.executable, "-m", "pip", "install", "pyinstaller"], check=True
             )
 
             # Build executable
-            subprocess.run(
-                [
+            subprocess.run()
+                []
                     sys.executable,
                     "-m",
                     "PyInstaller",
@@ -320,24 +320,24 @@ Categories = Office;Finance;"""
 
         try:
             # Install cx_Freeze if not available
-            subprocess.run(
+            subprocess.run()
                 [sys.executable, "-m", "pip", "install", "cx_Freeze"], check=True
             )
 
             # Create setup script for cx_Freeze
-            setup_cx_content = f"""from cx_Freeze import setup, Executable
+            setup_cx_content = f"""from cx_Freeze import setup, Executable"
 
-build_exe_options = {{
+build_exe_options = {{}}
     "packages": ["core", "ui", "config", "utils"],
     "excludes": ["tkinter", "test"],
     "include_files": ["config/", "ui / templates/", "ui / static/"]
 }}
 
 base = None
-if sys.platform == "win32":
+    if sys.platform == "win32":
     base = "Win32GUI"
 
-setup(
+setup()
     name="{self.package_name}",
     version="{self.version}",
     description="Hardware - scale - aware economic kernel",
@@ -350,7 +350,7 @@ setup(
             setup_cx_file.write_text(setup_cx_content)
 
             # Build MSI
-            subprocess.run(
+            subprocess.run()
                 [sys.executable, str(setup_cx_file), "bdist_msi"],
                 check=True,
                 cwd=self.build_dir,
@@ -371,7 +371,7 @@ setup(
 
         try:
             # Create portable directory
-            portable_dir = (
+            portable_dir = ()
                 self.dist_dir / f"{self.package_name}-{self.version}-portable"
             )
             portable_dir.mkdir(exist_ok=True)
@@ -386,12 +386,12 @@ setup(
             for dir_name in ["core", "ui", "config", "utils", "mathlib", "ncco_core"]:
                 src_dir = self.project_root / dir_name
                 if src_dir.exists():
-                    shutil.copytree(
+                    shutil.copytree()
                         src_dir, portable_dir / dir_name, dirs_exist_ok=True
                     )
 
             # Create batch file for Windows
-            batch_content = """@echo off
+            batch_content = """@echo off""
 echo Starting Schwabot Trading System...
 python run_schwabot.py
 pause"""
@@ -400,7 +400,7 @@ pause"""
             batch_file.write_text(batch_content)
 
             # Create ZIP archive
-            shutil.make_archive(
+            shutil.make_archive()
                 str(portable_dir), "zip", portable_dir.parent, portable_dir.name
             )
 
@@ -413,7 +413,7 @@ pause"""
             print(f"❌ Could not build portable package: {e}")
 
     def build_macos_packages(): -> None:
-        """Build macOS packages (.dmg, .pkg, App bundle)."""
+        """Build macOS packages (.dmg, .pkg, App, bundle)."""
         print("🍎 Building macOS packages...")
 
         # Build App bundle
@@ -433,24 +433,24 @@ pause"""
 
         try:
             # Install py2app if not available
-            subprocess.run(
+            subprocess.run()
                 [sys.executable, "-m", "pip", "install", "py2app"], check=True
             )
 
             # Create setup script for py2app
-            setup_py2app_content = f"""from setuptools import setup
+            setup_py2app_content = f"""from setuptools import setup"
 
 APP = ['run_schwabot.py']
-DATA_FILES = [
+DATA_FILES = []
     ('config', ['config / schwabot_config.yaml']),
     ('ui / templates', ['ui / templates / base.html', 'ui / templates / dashboard.html']),
     ('ui / static', ['ui / static/']),
 ]
-OPTIONS = {{
+OPTIONS = {{}}
     'argv_emulation': True,
     'packages': ['core', 'ui', 'config', 'utils'],
     'iconfile': 'ui / static / icon.icns',
-    'plist': {{
+    'plist': {{}}
         'CFBundleName': 'Schwabot',
         'CFBundleDisplayName': 'Schwabot Trading System',
         'CFBundleGetInfoString': "Hardware - scale - aware economic kernel",
@@ -461,7 +461,7 @@ OPTIONS = {{
     }}
 }}
 
-setup(
+setup()
     app = APP,
     data_files = DATA_FILES,
     options={{'py2app': OPTIONS}},
@@ -473,7 +473,7 @@ setup(
             setup_py2app_file.write_text(setup_py2app_content)
 
             # Build App bundle
-            subprocess.run(
+            subprocess.run()
                 [sys.executable, str(setup_py2app_file), "py2app"],
                 check=True,
                 cwd=self.build_dir,
@@ -499,8 +499,8 @@ setup(
             dmg_path = self.dist_dir / f"{self.package_name}-{self.version}.dmg"
 
             if app_path.exists():
-                subprocess.run(
-                    [
+                subprocess.run()
+                    []
                         "hdiutil",
                         "create",
                         "-volname",
@@ -532,8 +532,8 @@ setup(
             pkg_path = self.dist_dir / f"{self.package_name}-{self.version}.pkg"
 
             if app_path.exists():
-                subprocess.run(
-                    [
+                subprocess.run()
+                    []
                         "pkgbuild",
                         "--component",
                         str(app_path),
@@ -557,7 +557,7 @@ setup(
 
         try:
             # Create Dockerfile
-            dockerfile_content = """FROM python:3.9 - slim
+            dockerfile_content = """FROM python:3.9 - slim"
 
 # Set environment variables
 ENV PYTHONUNBUFFERED = 1
@@ -593,8 +593,8 @@ CMD ["python", "run_schwabot.py"]
             dockerfile_path.write_text(dockerfile_content)
 
             # Build Docker image
-            subprocess.run(
-                [
+            subprocess.run()
+                []
                     "docker",
                     "build",
                     "-t",
@@ -618,18 +618,18 @@ CMD ["python", "run_schwabot.py"]
 
         # Linux installer script
         linux_installer = self.dist_dir / "install_linux.sh"
-        linux_installer.write_text("""#!/bin / bash
+        linux_installer.write_text("""#!/bin / bash")
 echo "Installing Schwabot on Linux..."
 
 # Detect package manager
-if command -v apt - get &> /dev / null; then
+    if command -v apt - get &> /dev / null; then
 echo "Using apt package manager"
 sudo apt - get update
 sudo apt - get install -y python3 python3 - pip
-elif command -v yum &> /dev / null; then
+    elif command -v yum &> /dev / null; then
 echo "Using yum package manager"
 sudo yum install -y python3 python3 - pip
-elif command -v dnf &> /dev / null; then
+    elif command -v dnf &> /dev / null; then
 echo "Using dnf package manager"
 sudo dnf install -y python3 python3 - pip
 else
@@ -642,17 +642,17 @@ pip3 install schwabot-*.whl
 
 echo "Schwabot installed successfully!"
 echo "Run 'schwabot' to start the system"
-""")
+""")"
         linux_installer.chmod(0o755)
 
         # Windows installer script
         windows_installer = self.dist_dir / "install_windows.bat"
-        windows_installer.write_text("""@echo off
+        windows_installer.write_text("""@echo off"")
 echo Installing Schwabot on Windows...
 
 REM Check if Python is installed
 python --version >nul 2>&1
-if errorlevel 1 (
+    if errorlevel 1 ()
     echo Python is not installed. Please install Python 3.8+ first.
 pause
 exit /b 1
@@ -663,21 +663,21 @@ pip install schwabot-*.whl
 
 echo Schwabot installed successfully!
 echo Run 'schwabot' to start the system
-pause""")
+pause""")"
 
         # macOS installer script
         macos_installer = self.dist_dir / "install_macos.sh"
-        macos_installer.write_text("""#!/bin / bash
+        macos_installer.write_text("""#!/bin / bash")
 echo "Installing Schwabot on macOS..."
 
 # Check if Homebrew is installed
-if ! command -v brew &> /dev / null; then
+    if ! command -v brew &> /dev / null; then
 echo "Installing Homebrew..."
 /bin / bash -c "$(curl -fsSL https://raw.githubusercontent.com / Homebrew / install / HEAD / install.sh)"
 fi
 
 # Install Python if not already installed
-if ! command -v python3 &> /dev / null; then
+    if ! command -v python3 &> /dev / null; then
 echo "Installing Python..."
 brew install python
 fi
@@ -687,7 +687,7 @@ pip3 install schwabot-*.whl
 
 echo "Schwabot installed successfully!"
 echo "Run 'schwabot' to start the system"
-""")
+""")"
         macos_installer.chmod(0o755)
         print("✅ Installer scripts created")
 
@@ -700,8 +700,8 @@ echo "Run 'schwabot' to start the system"
         # List all files in dist directory
         for file_path in self.dist_dir.rglob("*"):
             if file_path.is_file():
-                packages.append(
-                    {
+                packages.append()
+                    {}
                         "name": file_path.name,
                         "size": file_path.stat().st_size,
                         "type": file_path.suffix,
@@ -710,7 +710,7 @@ echo "Run 'schwabot' to start the system"
                 )
 
         # Create summary file
-        summary = {
+        summary = {}
             "project": self.package_name,
             "version": self.version,
             "build_date": str(Path(__file__).stat().st_mtime),
@@ -738,22 +738,22 @@ echo "Run 'schwabot' to start the system"
 
 def main():
     """Main entry point."""
-    parser = argparse.ArgumentParser(
+    parser = argparse.ArgumentParser()
         description="Build Schwabot packages for multiple platforms"
     )
-    parser.add_argument(
+    parser.add_argument()
         "--platform",
         choices=["all", "linux", "windows", "macos", "python"],
         default="python",
         help="Target platform(s)",
     )
-    parser.add_argument(
+    parser.add_argument()
         "--format",
         choices=["all", "deb", "rpm", "appimage", "exe", "msi", "dmg", "pkg"],
         default="all",
         help="Package format(s)",
     )
-    parser.add_argument(
+    parser.add_argument()
         "--clean", action="store_true", help="Clean build directories before building"
     )
     parser.add_argument("--docker", action="store_true", help="Build Docker image")

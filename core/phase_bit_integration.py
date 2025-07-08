@@ -1,7 +1,7 @@
 import logging
 import hashlib
 from enum import Enum
-from typing import Any, Dict, NamedTuple, Optional
+from typing import Any, Dict, NamedTuple
 
 # !/usr/bin/env python3
 """
@@ -56,7 +56,7 @@ class PhaseBitIntegration:
         self.resolution_cache = {}
         self.resolution_count = 0
 
-    def resolve_bit_phase(
+    def resolve_bit_phase()
         self, context_hash: str = None, resolution_mode: str = "auto", **kwargs
     ) -> PhaseBitResolution:
         """
@@ -65,7 +65,7 @@ class PhaseBitIntegration:
         Args:
             context_hash: A hash string representing the current operational context.
             resolution_mode: "auto" for automatic, or a specific BitPhase value string.
-            **kwargs: Additional parameters for future expansion (e.g., historical data).
+            **kwargs: Additional parameters for future expansion (e.g., historical, data).
 
         Returns:
             A PhaseBitResolution NamedTuple containing the resolved bit phase,
@@ -74,7 +74,9 @@ class PhaseBitIntegration:
         try:
             # Generate context hash if not provided
             if context_hash is None:
-                context_data = "{0}_{1}_{2}".format(resolution_mode, self.resolution_count, kwargs)
+                context_data = "{0}_{1}_{2}".format()
+                    resolution_mode, self.resolution_count, kwargs
+                )
                 context_hash = hashlib.md5(context_data.encode()).hexdigest()
 
             self.resolution_count += 1
@@ -90,10 +92,12 @@ class PhaseBitIntegration:
             strategy_type = self._determine_strategy_type(context_hash, bit_phase)
 
             # Calculate confidence
-            confidence = self._calculate_confidence(context_hash, bit_phase, strategy_type)
+            confidence = self._calculate_confidence()
+                context_hash, bit_phase, strategy_type
+            )
 
             # Create resolution result
-            resolution = PhaseBitResolution(
+            resolution = PhaseBitResolution()
                 bit_phase=bit_phase,
                 strategy_type=strategy_type,
                 confidence=confidence,
@@ -108,7 +112,7 @@ class PhaseBitIntegration:
         except Exception as e:
             logger.error("Error in bit phase resolution: {0}".format(e))
             # Return default resolution
-            return PhaseBitResolution(
+            return PhaseBitResolution()
                 bit_phase=BitPhase.SIXTEEN_BIT,
                 strategy_type=StrategyType.DYNAMIC_STRATEGY,
                 confidence=0.5,
@@ -138,7 +142,9 @@ class PhaseBitIntegration:
         else:
             return BitPhase.FOUR_BIT
 
-    def _determine_strategy_type(self, context_hash: str, bit_phase: BitPhase) -> StrategyType:
+    def _determine_strategy_type()
+        self, context_hash: str, bit_phase: BitPhase
+    ) -> StrategyType:
         """Determine the appropriate strategy type."""
         hash_value = int(context_hash[-8:], 16)
 
@@ -151,7 +157,9 @@ class PhaseBitIntegration:
         else:
             return StrategyType.DYNAMIC_STRATEGY
 
-    def _calculate_confidence(self, context_hash: str, bit_phase: BitPhase, strategy_type: StrategyType) -> float:
+    def _calculate_confidence()
+        self, context_hash: str, bit_phase: BitPhase, strategy_type: StrategyType
+    ) -> float:
         """Calculate confidence in the resolution."""
         # Simple confidence calculation based on hash consistency
         hash_value = int(context_hash[:8], 16)
@@ -175,10 +183,11 @@ class PhaseBitIntegration:
 
     def get_resolution_stats(self) -> Dict[str, Any]:
         """Get statistics about resolutions performed."""
-        return {
+        return {}
             "total_resolutions": self.resolution_count,
             "cached_resolutions": len(self.resolution_cache),
-            "cache_hit_rate": len(self.resolution_cache) / max(1, self.resolution_count),
+            "cache_hit_rate": len(self.resolution_cache)
+            / max(1, self.resolution_count),
         }
 
     def clear_cache(self) -> None:

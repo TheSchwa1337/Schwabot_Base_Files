@@ -6,7 +6,6 @@ Trading executor for CCXT integration with Schwabot trading system.
 Provides interface for executing trades through various exchanges.
 """
 
-import asyncio
 import logging
 import time
 from dataclasses import dataclass
@@ -20,7 +19,6 @@ try:
 except ImportError:
     CCXT_AVAILABLE = False
     ccxt = None
-
 
 logger = logging.getLogger(__name__)
 
@@ -101,21 +99,23 @@ class CCXTTradingExecutor:
         try:
             # Initialize exchange connection
             exchange_name = config.get("exchange", "binance")
-            self.exchange = getattr(ccxt, exchange_name)(
-                {
-                    "apiKey": config.get("apiKey"),
-                    "secret": config.get("secret"),
-                    "sandbox": config.get("sandbox", True),
-                    "enableRateLimit": config.get("enableRateLimit", True),
-                    "timeout": config.get("timeout", 30000),
-                }
+            self.exchange = getattr(ccxt, exchange_name)({
+                "apiKey": config.get("apiKey"),
+                "secret": config.get("secret"),
+                "sandbox": config.get("sandbox", True),
+                "enableRateLimit": config.get("enableRateLimit", True),
+                "timeout": config.get("timeout", 30000),
+            })
+            logger.info(
+                "CCXT Trading Executor initialized with {0}".format(exchange_name)
             )
-            logger.info("CCXT Trading Executor initialized with {0}".format(exchange_name))
         except Exception as e:
             logger.error("Failed to initialize exchange: {0}".format(e))
             self.exchange = None
 
-    async def place_market_buy_order(self, symbol: str, amount: float) -> Dict[str, Any]:
+    async def place_market_buy_order(
+        self, symbol: str, amount: float
+    ) -> Dict[str, Any]:
         """Place a market buy order."""
         if not self.exchange:
             return {"error": "Exchange not initialized"}
@@ -128,7 +128,9 @@ class CCXTTradingExecutor:
             logger.error("Buy order failed: {0}".format(e))
             return {"error": str(e)}
 
-    async def place_market_sell_order(self, symbol: str, amount: float) -> Dict[str, Any]:
+    async def place_market_sell_order(
+        self, symbol: str, amount: float
+    ) -> Dict[str, Any]:
         """Place a market sell order."""
         if not self.exchange:
             return {"error": "Exchange not initialized"}
@@ -206,9 +208,13 @@ class CCXTTradingExecutor:
             symbol = signal.target_pair.value
             amount = float(signal.quantity)
 
-            if self.exchange:
-                # Real exchange execution
+            if self.config.get("simulation_mode", True):
+                # Simulation mode
+                return await self._simulate_buy(signal)
+            else:
+                # Live trading mode
                 order = await self.place_market_buy_order(symbol, amount)
+                
                 if "error" in order:
                     return ExecutionResult(
                         signal_id=signal.signal_id,
@@ -217,20 +223,19 @@ class CCXTTradingExecutor:
                         executed=False,
                         error_message=order["error"],
                     )
-
+                
+                # Update portfolio balance
+                self.portfolio_balance["USDC"] -= signal.quantity
+                self.portfolio_balance["BTC"] += signal.quantity
+                
                 return ExecutionResult(
                     signal_id=signal.signal_id,
                     pair=signal.target_pair,
                     strategy=signal.ghost_route,
                     executed=True,
-                    fill_amount=Decimal(str(order.get("amount", 0))),
+                    fill_amount=signal.quantity,
                     fill_price=Decimal(str(order.get("price", 0))),
-                    profit_realized=Decimal("0"),
                 )
-            else:
-                # Simulated execution
-                return await self._simulate_buy(signal)
-
         except Exception as e:
             logger.error("Buy execution failed: {0}".format(e))
             return ExecutionResult(
@@ -247,9 +252,13 @@ class CCXTTradingExecutor:
             symbol = signal.target_pair.value
             amount = float(signal.quantity)
 
-            if self.exchange:
-                # Real exchange execution
+            if self.config.get("simulation_mode", True):
+                # Simulation mode
+                return await self._simulate_sell(signal)
+            else:
+                # Live trading mode
                 order = await self.place_market_sell_order(symbol, amount)
+                
                 if "error" in order:
                     return ExecutionResult(
                         signal_id=signal.signal_id,
@@ -258,20 +267,19 @@ class CCXTTradingExecutor:
                         executed=False,
                         error_message=order["error"],
                     )
-
+                
+                # Update portfolio balance
+                self.portfolio_balance["BTC"] -= signal.quantity
+                self.portfolio_balance["USDC"] += signal.quantity
+                
                 return ExecutionResult(
                     signal_id=signal.signal_id,
                     pair=signal.target_pair,
                     strategy=signal.ghost_route,
                     executed=True,
-                    fill_amount=Decimal(str(order.get("amount", 0))),
+                    fill_amount=signal.quantity,
                     fill_price=Decimal(str(order.get("price", 0))),
-                    profit_realized=Decimal("0"),
                 )
-            else:
-                # Simulated execution
-                return await self._simulate_sell(signal)
-
         except Exception as e:
             logger.error("Sell execution failed: {0}".format(e))
             return ExecutionResult(
@@ -283,76 +291,55 @@ class CCXTTradingExecutor:
             )
 
     async def _simulate_buy(self, signal: IntegratedTradingSignal) -> ExecutionResult:
-        """Simulate buy order for testing."""
-        pair = signal.target_pair
-        current_price = self.price_data.get(pair, Decimal("50000"))
-        available_usdc = self.portfolio_balance.get("USDC", Decimal("0"))
-        position_size = available_usdc * Decimal("0.1")
-
-        if position_size >= Decimal("10"):
-            quantity = position_size / current_price
-            self.portfolio_balance["USDC"] -= position_size
-            if pair == TradingPair.BTC_USDC:
-                self.portfolio_balance["BTC"] += quantity
-            elif pair == TradingPair.ETH_USDC:
-                self.portfolio_balance["ETH"] += quantity
-            elif pair == TradingPair.XRP_USDC:
-                self.portfolio_balance["XRP"] += quantity
-
+        """Simulate buy order."""
+        try:
+            # Simulate successful buy
+            simulated_price = Decimal("50000")  # Simulated BTC price
+            self.portfolio_balance["USDC"] -= signal.quantity
+            self.portfolio_balance["BTC"] += signal.quantity
+            
             return ExecutionResult(
                 signal_id=signal.signal_id,
-                pair=pair,
+                pair=signal.target_pair,
                 strategy=signal.ghost_route,
                 executed=True,
-                fill_amount=quantity,
-                fill_price=current_price,
-                profit_realized=Decimal("0"),
+                fill_amount=signal.quantity,
+                fill_price=simulated_price,
             )
-        else:
+        except Exception as e:
+            logger.error("Simulated buy failed: {0}".format(e))
             return ExecutionResult(
                 signal_id=signal.signal_id,
-                pair=pair,
+                pair=signal.target_pair,
                 strategy=signal.ghost_route,
                 executed=False,
-                error_message="Insufficient balance for minimum order",
+                error_message=str(e),
             )
 
     async def _simulate_sell(self, signal: IntegratedTradingSignal) -> ExecutionResult:
-        """Simulate sell order for testing."""
-        pair = signal.target_pair
-        current_price = self.price_data.get(pair, Decimal("50000"))
-        asset = "UNKNOWN"
-        if pair == TradingPair.BTC_USDC:
-            asset = "BTC"
-        elif pair == TradingPair.ETH_USDC:
-            asset = "ETH"
-        elif pair == TradingPair.XRP_USDC:
-            asset = "XRP"
-
-        available_quantity = self.portfolio_balance.get(asset, Decimal("0"))
-        if available_quantity > Decimal("0"):
-            sell_quantity = available_quantity * Decimal("0.5")
-            usdc_received = sell_quantity * current_price
-            self.portfolio_balance[asset] -= sell_quantity
-            self.portfolio_balance["USDC"] += usdc_received
-            profit = usdc_received * Decimal("0.01")
-
+        """Simulate sell order."""
+        try:
+            # Simulate successful sell
+            simulated_price = Decimal("50000")  # Simulated BTC price
+            self.portfolio_balance["BTC"] -= signal.quantity
+            self.portfolio_balance["USDC"] += signal.quantity
+            
             return ExecutionResult(
                 signal_id=signal.signal_id,
-                pair=pair,
+                pair=signal.target_pair,
                 strategy=signal.ghost_route,
                 executed=True,
-                fill_amount=sell_quantity,
-                fill_price=current_price,
-                profit_realized=profit,
+                fill_amount=signal.quantity,
+                fill_price=simulated_price,
             )
-        else:
+        except Exception as e:
+            logger.error("Simulated sell failed: {0}".format(e))
             return ExecutionResult(
                 signal_id=signal.signal_id,
-                pair=pair,
+                pair=signal.target_pair,
                 strategy=signal.ghost_route,
                 executed=False,
-                error_message="No {0} available to sell".format(asset),
+                error_message=str(e),
             )
 
     async def close(self):

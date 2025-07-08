@@ -6,7 +6,7 @@ import logging
 import sys
 
 #!/usr/bin/env python3
-"""Schwabot Unified Launcher - Quick Start Script.
+"""Schwabot Unified Launcher - Quick Start Script."
 
 This script launches the complete unified Schwabot platform with:
 - Visual command center with Ferris wheel interface
@@ -23,7 +23,7 @@ sys.path.append(str(Path(__file__).parent))
 
 def setup_logging(log_level: str = "INFO"):
     """Setup logging configuration."""
-    logging.basicConfig(
+    logging.basicConfig()
         level=getattr(logging, log_level.upper()),
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
         handlers=[logging.StreamHandler(), logging.FileHandler("schwabot_unified.log")],
@@ -32,7 +32,7 @@ def setup_logging(log_level: str = "INFO"):
 
 def check_requirements():
     """Check if all required packages are installed."""
-    required_packages = [
+    required_packages = []
         "tkinter",
         "pandas",
         "numpy",
@@ -59,8 +59,8 @@ def check_requirements():
 
 
 def initialize_data_directories():
-    """Create necessary data directories if they don't exist."""
-    directories = [
+    """Create necessary data directories if they don't exist."""'
+    directories = []
         "data/historical/btc_usdc",
         "data/historical/eth_usdc",
         "data/historical/xrp_usdc",
@@ -79,7 +79,7 @@ def initialize_data_directories():
 
 def check_schwabot_components():
     """Check if core Schwabot components are available."""
-    core_files = [
+    core_files = []
         "core/live_execution_mapper.py",
         "core/risk_manager.py",
         "core/trade_executor.py",
@@ -104,29 +104,29 @@ def check_schwabot_components():
 def main():
     """Main launcher function."""
     parser = argparse.ArgumentParser(description="Schwabot Unified Launcher")
-    parser.add_argument(
+    parser.add_argument()
         "--log-level",
         default="INFO",
         choices=["DEBUG", "INFO", "WARNING", "ERROR"],
         help="Set logging level",
     )
-    parser.add_argument(
+    parser.add_argument()
         "--simulation-mode",
         action="store_true",
         default=True,
         help="Run in simulation mode (default)",
     )
-    parser.add_argument(
+    parser.add_argument()
         "--live-mode",
         action="store_true",
-        help="Run in live trading mode (requires API keys)",
+        help="Run in live trading mode (requires API, keys)",
     )
-    parser.add_argument(
+    parser.add_argument()
         "--skip-checks",
         action="store_true",
         help="Skip requirement and component checks",
     )
-    parser.add_argument(
+    parser.add_argument()
         "--debug-ui", action="store_true", help="Enable UI debugging features"
     )
 
@@ -161,7 +161,7 @@ def main():
 
         # Initialize component bridge
         bridge = get_component_bridge()
-        print(
+        print()
             f"🔗 Component bridge initialized with {len(bridge.components)} components"
         )
 

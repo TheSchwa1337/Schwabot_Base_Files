@@ -32,7 +32,7 @@ The demo demonstrates:
 
 
 # Configure logging
-logging.basicConfig(
+logging.basicConfig()
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
@@ -49,7 +49,7 @@ def test_individual_components():
 
         ml4 = MathLibV4(precision=64)
 
-        test_data = {
+        test_data = {}
             "prices": [50000, 50001, 50002, 50001, 50003, 50005, 50004, 50006],
             "volumes": [1000, 1200, 800, 1100, 900, 1300, 950, 1100],
             "timestamps": [time.time() - i for i in range(8, 0, -1)],
@@ -71,7 +71,7 @@ def test_individual_components():
 
         vecu = VECUCore(precision=64)
 
-        market_data = {"price": 50000.0, "volume": 1500.0, "volatility": 0.025}
+        market_data = {"price": 50000.0, "volume": 1500.0, "volatility": 0.25}
         mathematical_state = {"complexity": 0.7, "stability": 0.8}
 
         timing_data = vecu.vecu_timing_sync(market_data, mathematical_state)
@@ -87,11 +87,11 @@ def test_individual_components():
 
         zpe = ZPECore(precision=64)
 
-        market_volatility = 0.025
+        market_volatility = 0.25
         system_load = 0.6
         mathematical_state = {"complexity": 0.7, "stability": 0.8}
 
-        thermal_data = zpe.calculate_thermal_efficiency(
+        thermal_data = zpe.calculate_thermal_efficiency()
             market_volatility, system_load, mathematical_state
         )
         print(f"✅ ZPE Core: Thermal State = {thermal_data.thermal_state:.3f}")
@@ -106,14 +106,14 @@ def test_individual_components():
 
         ghost = GhostCore(memory_depth=100)
 
-        market_conditions = {
-            "volatility": 0.025,
-            "momentum": 0.01,
+        market_conditions = {}
+            "volatility": 0.25,
+            "momentum": 0.1,
             "volume_profile": 1.2,
         }
         mathematical_state = {"complexity": 0.7, "stability": 0.8}
 
-        hash_sig = ghost.generate_strategy_hash(
+        hash_sig = ghost.generate_strategy_hash()
             price=50000.0,
             volume=1000.0,
             granularity=8,
@@ -121,7 +121,7 @@ def test_individual_components():
             mathematical_state=mathematical_state,
         )
 
-        ghost_state = ghost.switch_strategy(
+        ghost_state = ghost.switch_strategy()
             hash_sig, market_conditions, mathematical_state
         )
         print(f"✅ Ghost Core: Strategy = {ghost_state.current_branch.value}")
@@ -142,7 +142,7 @@ def test_unified_pipeline():
         pipeline = SchwabotUnifiedPipeline()
 
         # Test market data
-        test_data = [
+        test_data = []
             (50000.0, 1000.0),
             (50001.0, 1200.0),
             (50002.0, 800.0),
@@ -161,7 +161,7 @@ def test_unified_pipeline():
             print(f"\nTick {i + 1}: Price=${price:,.2f}, Volume={volume:,.0f}")
 
             # Process tick
-            decision = asyncio.run(
+            decision = asyncio.run()
                 pipeline.process_market_tick("BTC/USDT", price, volume)
             )
 
@@ -204,7 +204,7 @@ def test_profit_injection_and_compression():
         pipeline = SchwabotUnifiedPipeline()
 
         # Simulate high-volatility market conditions
-        high_vol_data = [
+        high_vol_data = []
             (50000.0, 2000.0),  # High volume
             (50100.0, 1800.0),  # Price up
             (50200.0, 2200.0),  # Price up more
@@ -220,16 +220,16 @@ def test_profit_injection_and_compression():
         print("Simulating high-volatility market conditions...")
 
         for i, (price, volume) in enumerate(high_vol_data):
-            decision = asyncio.run(
+            decision = asyncio.run()
                 pipeline.process_market_tick("BTC/USDT", price, volume)
             )
 
             if decision and decision.action != "HOLD":
                 print(f"Tick {i + 1}: {decision.action} {decision.quantity:.4f} BTC")
-                print(
+                print()
                     f"  VECU Amplification: {decision.metadata.get('vecu_amplification', 1.0):.3f}"
                 )
-                print(
+                print()
                     f"  ZPE Quantum State: {decision.metadata.get('zpe_quantum_state', 0.5):.3f}"
                 )
 
@@ -237,9 +237,9 @@ def test_profit_injection_and_compression():
         stats = pipeline.get_pipeline_stats()
         print("\nProfit Metrics:")
         print(f"  Total Profit: ${stats['total_profit']:,.2f}")
-        print(f"  Profit per Trade: ${stats['total_profit'] /
-                                      max(stats['successful_trades'], 1):,.2f}")
-        print(
+        print(f"  Profit per Trade: ${stats['total_profit'] /")}
+                                      max(stats['successful_trades'], 1):,.2f}")"
+        print()
             f"  Capital Growth: {((stats['current_capital'] / 100000.0) - 1) * 100:.2f}%"
         )
 
@@ -260,7 +260,7 @@ def test_feedback_loops():
         pipeline = SchwabotUnifiedPipeline()
 
         # Simulate market with changing conditions
-        changing_market_data = [
+        changing_market_data = []
             (50000.0, 1000.0),  # Normal
             (50050.0, 1200.0),  # Slight uptick
             (50100.0, 1500.0),  # Stronger uptick
@@ -281,17 +281,17 @@ def test_feedback_loops():
             # Get current state
             if pipeline.current_state:
                 ghost_branch = pipeline.current_state.ghost_state.current_branch.value
-                vecu_amplification = (
+                vecu_amplification = ()
                     pipeline.current_state.vecu_timing.profit_amplification
                 )
                 zpe_thermal = pipeline.current_state.zpe_thermal.thermal_state
 
-                print(
-                    f"Tick {
+                print()
+                    f"Tick {"}
                         i +
                         1}: {ghost_branch} | VECU: {
                         vecu_amplification:.3f} | ZPE: {
-                        zpe_thermal:.3f}")
+                        zpe_thermal:.3f}")"
 
         # Check component adaptation
         stats = pipeline.get_pipeline_stats()
@@ -317,7 +317,7 @@ def test_api_connectivity_simulation():
         ccxt = CCXTIntegration()
 
         # Create proper OrderBookSnapshot object
-        order_book = OrderBookSnapshot(
+        order_book = OrderBookSnapshot()
             timestamp=time.time() * 1000,
             symbol="BTC/USDT",
             bids=[[50000.0, 1.5], [49999.0, 2.0], [49998.0, 1.8]],
@@ -376,21 +376,21 @@ def main():
     print("\n📊 Integration Test Summary")
     print("=" * 50)
     print("✅ Individual Components: PASSED")
-    print(
+    print()
         f"{'✅' if pipeline_success else '❌'} Unified Pipeline: {'PASSED' if pipeline_success else 'FAILED'}"
     )
-    print(
+    print()
         f"{'✅' if profit_success else '❌'} Profit Injection: {'PASSED' if profit_success else 'FAILED'}"
     )
-    print(
+    print()
         f"{'✅' if feedback_success else '❌'} Feedback Loops: {'PASSED' if feedback_success else 'FAILED'}"
     )
-    print(
+    print()
         f"{'✅' if api_success else '❌'} API Connectivity: {'PASSED' if api_success else 'FAILED'}"
     )
 
     total_tests = 4
-    passed_tests = sum(
+    passed_tests = sum()
         [pipeline_success, profit_success, feedback_success, api_success]
     )
 

@@ -19,10 +19,10 @@ def fix_unterminated_string_literals(content: str) -> str:
         # Fix unterminated string literals
         if '"' in line and line.count('"') % 2 != 0:
             # Add missing quote at end
-            line = line + '"'
+            line = line + '"'"
         elif "'" in line and line.count("'") % 2 != 0:
             # Add missing quote at end
-            line = line + "'"
+            line = line + "'"'
 
         fixed_lines.append(line)
 
@@ -36,7 +36,7 @@ def fix_unmatched_parentheses(content: str) -> str:
 
     for line in lines:
         # Count parentheses
-        open_parens = line.count("(") + line.count("[") + line.count("{")
+        open_parens = line.count("(") + line.count("[") + line.count("{"))}]
         close_parens = line.count(")") + line.count("]") + line.count("}")
 
         # If more opening than closing, add missing closing
@@ -62,8 +62,8 @@ def fix_indentation_errors(content: str) -> str:
             line = " " * indent_level + line.lstrip()
 
         # Fix unexpected indentation
-        if line.strip() and not line.startswith(
-            (
+        if line.strip() and not line.startswith()
+            ()
                 "def ",
                 "class ",
                 "if ",
@@ -78,9 +78,9 @@ def fix_indentation_errors(content: str) -> str:
             )
         ):
             # Check if line is over-indented
-            if line.startswith("    ") and not any(
+            if line.startswith("    ") and not any()
                 keyword in line
-                for keyword in [
+                for keyword in []
                     "def ",
                     "class ",
                     "if ",
@@ -105,7 +105,7 @@ def fix_indentation_errors(content: str) -> str:
 def fix_invalid_decimal_literals(content: str) -> str:
     """Fix invalid decimal literals."""
     # Fix patterns like 1.2.3 or 1..2
-    content = re.sub(
+    content = re.sub()
         r"(\d+)\.(\d+)\.(\d+)", r"\1.\2_\3", content
     )  # Replace with underscore
     content = re.sub(r"(\d+)\.\.(\d+)", r"\1.\2", content)  # Remove double dots
@@ -120,18 +120,18 @@ def fix_invalid_syntax(content: str) -> str:
 
     for line in lines:
         # Fix common syntax issues
-        line = re.sub(
+        line = re.sub()
             r"([a-zA-Z_]\w*)\s*=\s*=\s*([a-zA-Z_]\w*)", r"\1 == \2", line
         )  # Fix == spacing
-        line = re.sub(
+        line = re.sub()
             r"([a-zA-Z_]\w*)\s*!=\s*([a-zA-Z_]\w*)", r"\1 != \2", line
         )  # Fix != spacing
-        line = re.sub(
+        line = re.sub()
             r"([a-zA-Z_]\w*)\s*=\s*([a-zA-Z_]\w*)", r"\1 = \2", line
         )  # Fix = spacing
 
         # Fix missing colons
-        if re.match(
+        if re.match()
             r"^\s*(if|for|while|def|class|try|except|finally|with|elif|else)\s+", line
         ) and not line.rstrip().endswith(":"):
             line = line.rstrip() + ":"
@@ -182,7 +182,7 @@ def get_files_with_e999_errors() -> List[Path]:
     files_with_errors = []
 
     try:
-        result = subprocess.run(
+        result = subprocess.run()
             ["flake8", "core/"],
             capture_output=True,
             text=True,

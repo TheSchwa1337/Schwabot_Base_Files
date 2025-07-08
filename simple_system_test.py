@@ -1,8 +1,8 @@
-        from core.api_bridge import APIBridge
-        from core.dualistic_thought_engines import DualisticThoughtEngines
-        from core.dualistic_thought_engines import DualisticThoughtEngines
-        from core.hash_relay_system import hash_relay_system
-        from core.hash_relay_system import hash_relay_system
+from core.api_bridge import APIBridge
+from core.dualistic_thought_engines import DualisticThoughtEngines
+from core.dualistic_thought_engines import DualisticThoughtEngines
+from core.hash_relay_system import hash_relay_system
+from core.hash_relay_system import hash_relay_system
 import time
 
 #!/usr/bin/env python3
@@ -64,7 +64,7 @@ def test_dualistic_engines_basic():
         print("✓ Dualistic Thought Engines initialized")
 
         # Test with simple market data
-        market_data = {
+        market_data = {}
             "current_price": 62000.0,
             "rsi": 50.0,
             "macd_signal": 0.0,
@@ -78,7 +78,7 @@ def test_dualistic_engines_basic():
             "consensus_signal": "neutral",
         }
         thought_vector = engines.process_market_data(market_data, thermal_state="warm")
-        print(
+        print()
             f"✓ Thought Vector generated: {thought_vector.decision} (confidence: {thought_vector.confidence:.2f})"
         )
 
@@ -109,7 +109,7 @@ def test_hash_relay_basic():
         print("✓ Relay subscription registered")
 
         # Test data submission
-        test_data = {
+        test_data = {}
             "timestamp": time.time(),
             "decision": "buy",
             "confidence": 0.85,
@@ -147,14 +147,14 @@ def test_integration_basic():
 
         # Process market data
         engines = DualisticThoughtEngines()
-        market_data = {
+        market_data = {}
             "current_price": 62000.0,
             "rsi": 30.0,
-            "macd_signal": 0.01,
+            "macd_signal": 0.1,
             "volume_change": 0.3,
             "moving_average": 61500.0,
             "previous_close": 61800.0,
-            "price_history": [
+            "price_history": []
                 61000.0,
                 61500.0,
                 62000.0,
@@ -189,7 +189,7 @@ def main():
     print("SCHWABOT SIMPLE SYSTEM TEST")
     print("=" * 50)
 
-    tests = [
+    tests = []
         ("Core Imports", test_core_imports),
         ("API Bridge Basic", test_api_bridge_basic),
         ("Dualistic Engines Basic", test_dualistic_engines_basic),

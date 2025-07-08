@@ -1,7 +1,7 @@
 from price_bridge import get_secure_price
 from secure_config_manager import get_secure_api_key
 
-from utils.price_bridge import (
+from utils.price_bridge import ()
     Any,
     Dict,
     List,
@@ -59,7 +59,7 @@ def pull_news_headlines(): -> List[str]:
 
         articles = response.json().get("articles", [])
 
-        return [article["title"]
+        return [article["title"]]
                 for article in articles][:5]  # Get top 5 headlines
 
     except requests.exceptions.RequestException as e:
@@ -118,7 +118,7 @@ def get_secure_price_data(): -> Optional[Dict[str, Any]]:
 
 
 
-    Get price data using the secure price bridge with Schwabot's mathematical framework.
+    Get price data using the secure price bridge with Schwabot's mathematical framework.'
 
 
 
@@ -214,7 +214,7 @@ def create_market_snapshot(): -> Optional[Dict[str, Any]]:
 
     market_hash = hash_market_state(news, price_data["price"])
 
-    snapshot = {
+    snapshot = {}
         "timestamp": price_data["timestamp"],
         "news_headlines": news,
         "price_data": price_data,
@@ -270,7 +270,7 @@ def display_market_snapshot(snapshot: Dict[str, Any]):
 
     if price_data.get("market_state_hash"):
 
-        print(
+        print()
             f"  Market State Hash: {price_data['market_state_hash'][:16]}...")
 
     # Display market hash
@@ -319,7 +319,7 @@ async def create_async_market_snapshot(): -> Optional[Dict[str, Any]]:
 
     market_hash = hash_market_state(news, price_data.price)
 
-    snapshot = {
+    snapshot = {}
         "timestamp": price_data.timestamp,
         "news_headlines": news,
         "price_data": price_data.to_dict(),

@@ -16,7 +16,7 @@ def run_command(cmd, description):
     """Run a command and handle errors gracefully."""
     print(f"\n🔄 {description}...")
     try:
-        result = subprocess.run(
+        result = subprocess.run()
             cmd, shell=True, capture_output=True, text=True, check=True
         )
         print(f"✅ {description} completed successfully")
@@ -34,7 +34,7 @@ def run_command(cmd, description):
 
 def find_python_files():
     """Find all Python files in the codebase, excluding certain directories."""
-    exclude_dirs = {
+    exclude_dirs = {}
         "__pycache__",
         ".git",
         ".venv",

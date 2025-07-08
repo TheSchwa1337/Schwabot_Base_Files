@@ -30,7 +30,7 @@ def main():
     print("=" * 50)
 
     # Get all Python files in core
-    core_files = [f for f in os.listdir("core")
+    core_files = [f for f in os.listdir("core")]
                   if f.endswith('.py') and f != '__init__.py']
 
     successful = 0

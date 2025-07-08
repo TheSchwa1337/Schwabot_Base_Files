@@ -3,10 +3,10 @@ import logging
 import time
 from datetime import datetime
 from typing import Any, Dict, List, Optional, Tuple, Union
-    import asyncio
+import asyncio
 
-    from core.clean_unified_math import clean_unified_math
-    from core.trading_engine_integration import TradeSignal
+from core.clean_unified_math import clean_unified_math
+from core.trading_engine_integration import TradeSignal
 
 # !/usr/bin/env python3
 """
@@ -28,15 +28,15 @@ Author: Schwabot Development Team
 """
 
 # Core imports with fallbacks
-try:
+    try:
     MATH_AVAILABLE = True
-except ImportError:
+    except ImportError:
     MATH_AVAILABLE = False
     clean_unified_math = None
 
 try:
     TRADING_AVAILABLE = True
-except ImportError:
+    except ImportError:
     TRADING_AVAILABLE = False
     TradeSignal = None
 
@@ -82,7 +82,7 @@ class ComprehensiveIntegrationSystem:
         operational_components = sum(1 for status in self.component_status.values() if status == "OPERATIONAL")
         total_components = len(self.component_status)
 
-        return {
+        return {}
             "system_status": "OPERATIONAL" if operational_components > 0 else "DEGRADED",
             "operational_components": operational_components,
             "total_components": total_components,
@@ -92,7 +92,7 @@ class ComprehensiveIntegrationSystem:
             "uptime": time.time() - self.initialization_time,
         }
 
-    async def execute_trading_cycle(self, symbol: str = "BTC/USDC", amount: float = 0.001) -> Dict[str, Any]:
+    async def execute_trading_cycle(self, symbol: str = "BTC/USDC", amount: float = 0.01) -> Dict[str, Any]:
         """
         Execute a complete trading cycle with all available components.
 
@@ -120,7 +120,7 @@ class ComprehensiveIntegrationSystem:
 
             cycle_time = time.time() - cycle_start
 
-            return {
+            return {}
                 "success": True,
                 "symbol": symbol,
                 "cycle_time": cycle_time,
@@ -133,7 +133,7 @@ class ComprehensiveIntegrationSystem:
 
         except Exception as e:
             self.logger.error("Trading cycle error: {0}".format(e))
-            return {
+            return {}
                 "success": False,
                 "error": str(e),
                 "symbol": symbol,
@@ -144,10 +144,10 @@ class ComprehensiveIntegrationSystem:
         """Analyze market conditions."""
         try:
             # Simplified market analysis
-            analysis = {
+            analysis = {}
                 "symbol": symbol,
                 "trend": "NEUTRAL",
-                "volatility": 0.02,
+                "volatility": 0.2,
                 "volume_profile": "NORMAL",
                 "support_levels": [],
                 "resistance_levels": [],
@@ -169,7 +169,7 @@ class ComprehensiveIntegrationSystem:
         """Generate trading signal."""
         try:
             # Simplified signal generation
-            signal = {
+            signal = {}
                 "action": "HOLD",
                 "confidence": 0.5,
                 "reasoning": "Default neutral signal",
@@ -192,26 +192,26 @@ class ComprehensiveIntegrationSystem:
     async def _assess_risk(self, trading_signal: Dict[str, Any], amount: float) -> Dict[str, Any]:
         """Assess trading risk."""
         try:
-            base_risk = 0.02  # 2% base risk
+            base_risk = 0.2  # 2% base risk
             signal_confidence = trading_signal.get("confidence", 0.5)
 
             # Risk adjustment based on signal confidence
             adjusted_risk = base_risk * (2 - signal_confidence)
 
-            return {
+            return {}
                 "base_risk": base_risk,
                 "adjusted_risk": adjusted_risk,
                 "position_size": amount,
                 "max_loss": amount * adjusted_risk,
-                "risk_level": "LOW" if adjusted_risk < 0.02 else "MEDIUM",
-                "recommendation": "PROCEED" if adjusted_risk < 0.05 else "CAUTION",
+                "risk_level": "LOW" if adjusted_risk < 0.2 else "MEDIUM",
+                "recommendation": "PROCEED" if adjusted_risk < 0.5 else "CAUTION",
             }
 
         except Exception as e:
             self.logger.error("Risk assessment error: {0}".format(e))
             return {"error": str(e)}
 
-    async def _make_execution_decision(
+    async def _make_execution_decision()
         self, trading_signal: Dict[str, Any], risk_assessment: Dict[str, Any]
     ) -> Dict[str, Any]:
         """Make final execution decision."""
@@ -234,7 +234,7 @@ class ComprehensiveIntegrationSystem:
                 decision = "HOLD"
                 reason = "Insufficient confidence or elevated risk"
 
-            return {
+            return {}
                 "decision": decision,
                 "reason": reason,
                 "confidence": signal_confidence,

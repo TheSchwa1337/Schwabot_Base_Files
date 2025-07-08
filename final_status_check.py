@@ -3,7 +3,7 @@
 """
 Final Status Check Script.
 
-Comprehensive status check for Schwabot's flake8 compliance
+Comprehensive status check for Schwabot's flake8 compliance'
 and syntax error resolution progress.
 """
 
@@ -15,8 +15,8 @@ from pathlib import Path
 def run_flake8_check(directory: str, max_length: int = 100) -> int:
     """Run flake8 check and return violation count."""
     try:
-        result = subprocess.run(
-            [
+        result = subprocess.run()
+            []
                 sys.executable,
                 "-m",
                 "flake8",
@@ -45,7 +45,7 @@ def check_syntax_errors(directory: str) -> int:
 
         for file_path in python_files:
             if file_path.is_file():
-                result = subprocess.run(
+                result = subprocess.run()
                     [sys.executable, "-m", "py_compile", str(file_path)],
                     capture_output=True,
                     text=True,

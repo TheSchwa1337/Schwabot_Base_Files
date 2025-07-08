@@ -1,7 +1,7 @@
-        from ghost_signal import GhostSignalProcessor
-        from ghost_strategy_integration import GhostStrategyIntegrator
-        from hash_trigger_mapper import HashTriggerMapper
-        from hash_trigger_mapper import HashTriggerMapper
+from ghost_signal import GhostSignalProcessor
+from ghost_strategy_integration import GhostStrategyIntegrator
+from hash_trigger_mapper import HashTriggerMapper
+from hash_trigger_mapper import HashTriggerMapper
 from dual_unicore_handler import DualUnicoreHandler
 from ghost_strategy_integration import GhostStrategyIntegrator
 from typing import Dict, Any
@@ -56,24 +56,24 @@ def demonstrate_hash_trigger_mapper():"""
 mapper = HashTriggerMapper()
 
 # Test various hash patterns
-test_cases = [
-            ("000000", "Critical pattern - should be aggressive / defensive"),
+test_cases = []
+            ("00000", "Critical pattern - should be aggressive / defensive"),
             ("123456", "Sequential pattern - should be momentum / adaptive"),
             ("a1b2c3", "Patterned sequence - should be momentum / adaptive"),
             ("111111", "Repeating pattern - should be cautious / defensive"),
             ("abcdef", "Sequential pattern - should be momentum / adaptive"),
             ("random1", "Random pattern - should be adaptive / monitor")
 ]
-for hash_trigger, description in test_cases:
+    for hash_trigger, description in test_cases:
             mapping = mapper.map_hash_trigger(hash_trigger)
-            print(
-    f"  {hash_trigger}: {
-        mapping.strategy_pathway} ({
-            mapping.pattern_type.value})")
-            print(
-    f"    Confidence: {
+            print()
+    f"  {hash_trigger}: {"}
+        mapping.strategy_pathway} ({)
+            mapping.pattern_type.value})")"
+            print()
+    f"    Confidence: {"}
         mapping.confidence_level}, Score: {
-            mapping.mapping_score:.4f}")
+            mapping.mapping_score:.4f}")"
 
 # Get statistics
 stats = mapper.get_mapping_statistics()
@@ -109,7 +109,7 @@ processor = GhostSignalProcessor()
 class MockBTCVector:
 
 
-def __init__(self, price=50000.0, volatility=0.025, momentum=0.003):
+def __init__(self, price=50000.0, volatility=0.25, momentum=0.03):
     """Function implementation pending."""
 
 
@@ -122,21 +122,21 @@ self.price = price
                 self.hash_trigger = "a1b2c3"
 
 # Test different market conditions
-scenarios = [
-            {"name": "Low Risk Market", "entropy": 0.2,
-                "volatility": 0.01, "momentum": 0.001},
-            {"name": "Medium Risk Market", "entropy": 0.5,
-                "volatility": 0.025, "momentum": 0.003},
-            {"name": "High Risk Market", "entropy": 0.8,
-                "volatility": 0.06, "momentum": 0.01}
+scenarios = []
+            {"name": "Low Risk Market", "entropy": 0.2,}
+                "volatility": 0.1, "momentum": 0.01},
+            {"name": "Medium Risk Market", "entropy": 0.5,}
+                "volatility": 0.25, "momentum": 0.03},
+            {"name": "High Risk Market", "entropy": 0.8,}
+                "volatility": 0.6, "momentum": 0.1}
 ]
-for scenario in scenarios:
-            btc_vector = MockBTCVector(
+    for scenario in scenarios:
+            btc_vector = MockBTCVector()
                 volatility=scenario["volatility"],
                 momentum=scenario["momentum"]
             )
 
-signal = processor.create_signal(
+signal = processor.create_signal()
                 btc_vector=btc_vector,
                 entropy=scenario["entropy"],
                 timestamp=time.time()
@@ -182,7 +182,7 @@ integrator = GhostStrategyIntegrator()
 class MockBTCVector:
 
 
-def __init__(self, price=50000.0, volatility=0.025, momentum=0.003):
+def __init__(self, price=50000.0, volatility=0.25, momentum=0.03):
     """Function implementation pending."""
 
 
@@ -195,21 +195,21 @@ self.price = price
                 self.hash_trigger = "a1b2c3"
 
 # Test different scenarios
-scenarios = [
-            {"name": "Conservative Trading", "entropy": 0.2,
-                "volatility": 0.01, "momentum": 0.001},
-            {"name": "Balanced Trading", "entropy": 0.5,
-                "volatility": 0.025, "momentum": 0.003},
-            {"name": "Aggressive Trading", "entropy": 0.8,
-                "volatility": 0.06, "momentum": 0.01}
+scenarios = []
+            {"name": "Conservative Trading", "entropy": 0.2,}
+                "volatility": 0.1, "momentum": 0.01},
+            {"name": "Balanced Trading", "entropy": 0.5,}
+                "volatility": 0.25, "momentum": 0.03},
+            {"name": "Aggressive Trading", "entropy": 0.8,}
+                "volatility": 0.6, "momentum": 0.1}
 ]
-for scenario in scenarios:
-            btc_vector = MockBTCVector(
+    for scenario in scenarios:
+            btc_vector = MockBTCVector()
                 volatility=scenario["volatility"],
                 momentum=scenario["momentum"]
             )
 
-decision = integrator.make_enhanced_decision(
+decision = integrator.make_enhanced_decision()
                 btc_vector=btc_vector,
                 entropy=scenario["entropy"],
                 timestamp=time.time()
@@ -249,7 +249,7 @@ def demonstrate_unicode_compatibility():
 
    try:
         # Test various Unicode characters and emojis
-test_strings = [
+test_strings = []
             "\\u1f680 Ghost Signal System",
             "\\u26a1 Hash Trigger Mapping",
             "\\u1f3af Strategy Integration",
@@ -261,7 +261,7 @@ test_strings = [
             "\\u1f389 System Validation",
             "\\u1f527 Configuration Management"
 ]
-for test_string in test_strings:
+    for test_string in test_strings:
             print(f"  \\u2713 {test_string}")
 
 print("\\n\\u2705 All Unicode / emoji characters displayed correctly")
@@ -293,14 +293,14 @@ mapper = HashTriggerMapper()
         integrator = GhostStrategyIntegrator()
 
 # Test edge cases
-edge_cases = [
+edge_cases = []
             ("Empty string", ""),
             ("Very long string", "a" * 1000),
             ("Special characters", "!@  #$%^&*()"),
             ("Numbers only", "123456789"),
             ("Mixed case", "AbCdEfGhIj")
 ]
-for case_name, test_input in edge_cases:
+    for case_name, test_input in edge_cases:
             try:
                 mapping = mapper.map_hash_trigger(test_input)
                 print(f"  \\u2713 {case_name}: Handled gracefully")

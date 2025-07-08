@@ -17,10 +17,10 @@ sys.path.append(str(Path(__file__).parent / "core"))
 sys.path.append(str(Path(__file__).parent / "utils"))
 
 # Setup logging
-logging.basicConfig(
+logging.basicConfig()
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    handlers=[
+    handlers=[]
         logging.FileHandler('schwabot_simple.log'),
         logging.StreamHandler()
     ]
@@ -33,7 +33,7 @@ def main():
     print("=" * 50)
     print("Using existing functional systems")
     print("=" * 50)
-    
+
     try:
         # Import existing functional components
         from core.soulprint_registry import SoulprintRegistry
@@ -41,18 +41,18 @@ def main():
         from core.profit_optimization_engine import ProfitOptimizationEngine
         from core.enhanced_ccxt_trading_engine import EnhancedCCXTTradingEngine
         from core.automated_strategy_engine import AutomatedStrategyEngine
-        
+
         print("✅ Core components imported successfully")
-        
+
         # Initialize components
         soulprint_registry = SoulprintRegistry()
         qsc_allocator = QSCEnhancedProfitAllocator()
         profit_optimizer = ProfitOptimizationEngine()
         trading_engine = EnhancedCCXTTradingEngine()
         strategy_engine = AutomatedStrategyEngine()
-        
+
         print("✅ Components initialized successfully")
-        
+
         # Start the existing dashboard if available
         try:
             from schwabot_dashboard_integration import main as start_dashboard
@@ -60,13 +60,13 @@ def main():
             start_dashboard()
         except ImportError:
             print("⚠️ Dashboard not available, starting core only")
-            
+
             # Keep core running
             print("🔄 Core system running...")
             while True:
                 time.sleep(10)
                 print("💼 System active - Press Ctrl+C to stop")
-                
+
     except ImportError as e:
         print(f"❌ Import error: {e}")
         print("🔧 Please check that all core components are available")

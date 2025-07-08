@@ -50,7 +50,7 @@ class RetryReason(Enum):
 
 
 @dataclass
-class FillEvent:
+    class FillEvent:
     """Represents a single fill event."""
 
     order_id: str
@@ -67,7 +67,7 @@ class FillEvent:
 
 
 @dataclass
-class OrderState:
+    class OrderState:
     """Represents the current state of an order."""
 
     order_id: str
@@ -87,7 +87,7 @@ class OrderState:
     retry_count: int = 0
     max_retries: int = 3
     retry_delay: float = 1.0
-    slippage_tolerance: float = 0.005  # 0.5%
+    slippage_tolerance: float = 0.05  # 0.5%
 
     def __post_init__(self):
         """Initialize computed fields."""
@@ -112,7 +112,7 @@ class OrderState:
 
 
 @dataclass
-class RetryConfig:
+    class RetryConfig:
     """Configuration for retry logic."""
 
     max_retries: int = 3
@@ -120,7 +120,7 @@ class RetryConfig:
     max_delay: float = 30.0
     exponential_base: float = 2.0
     jitter_factor: float = 0.1
-    retryable_errors: List[str] = field(
+    retryable_errors: List[str] = field()
         default_factory=lambda: ['network_error', 'rate_limit', 'timeout', 'exchange_error']
     )
 
@@ -160,7 +160,7 @@ class FillHandler:
             # Analyze slippage
             await self._analyze_slippage(fill_event)
 
-            logger.info(
+            logger.info()
                 "Processed fill: {0} for {1} ".format(fill_event.trade_id, fill_event.symbol)
                 "({0} @ {1})".format(fill_event.amount, fill_event.price)
             )
@@ -193,10 +193,10 @@ class FillHandler:
         if not fills:
             raise ValueError("No fills data found")
 
-        # Use the first fill for now (could be enhanced to handle multiple fills)
+        # Use the first fill for now (could be enhanced to handle multiple, fills)
         fill = fills[0]
 
-        return FillEvent(
+        return FillEvent()
             order_id=fill_data.get('orderId', ''),
             trade_id=fill.get('tradeId', ''),
             symbol=fill_data.get('symbol', ''),
@@ -212,7 +212,7 @@ class FillHandler:
 
     def _parse_bitget_fill(self, fill_data: Dict[str, Any]) -> FillEvent:
         """Parse Bitget-style fill data."""
-        return FillEvent(
+        return FillEvent()
             order_id=fill_data.get('orderId', ''),
             trade_id=fill_data.get('tradeId', ''),
             symbol=fill_data.get('symbol', ''),
@@ -228,7 +228,7 @@ class FillHandler:
 
     def _parse_phemex_fill(self, fill_data: Dict[str, Any]) -> FillEvent:
         """Parse Phemex-style fill data."""
-        return FillEvent(
+        return FillEvent()
             order_id=fill_data.get('orderID', ''),
             trade_id=fill_data.get('execID', ''),
             symbol=fill_data.get('symbol', ''),
@@ -244,7 +244,7 @@ class FillHandler:
 
     def _parse_generic_fill(self, fill_data: Dict[str, Any]) -> FillEvent:
         """Parse generic fill data."""
-        return FillEvent(
+        return FillEvent()
             order_id=fill_data.get('order_id', fill_data.get('orderId', '')),
             trade_id=fill_data.get('trade_id', fill_data.get('tradeId', '')),
             symbol=fill_data.get('symbol', ''),
@@ -264,7 +264,7 @@ class FillHandler:
 
         if order_id not in self.active_orders:
             # Create new order state if not exists
-            self.active_orders[order_id] = OrderState(
+            self.active_orders[order_id] = OrderState()
                 order_id=order_id,
                 symbol=fill_event.symbol,
                 side=fill_event.side,
@@ -299,7 +299,7 @@ class FillHandler:
     async def _analyze_slippage(self, fill_event: FillEvent):
         """Analyze slippage for the fill event."""
         # This would typically compare against expected price
-        # For now, we'll just track the fill price
+        # For now, we'll just track the fill price'
         if fill_event.price > 0:
             # Could implement slippage calculation here
             pass
@@ -320,19 +320,19 @@ class FillHandler:
 
                 if retry_decision['should_retry']:
                     await self._schedule_retry(order_state, RetryReason.PARTIAL_FILL)
-                    return {
+                    return {}
                         "status": "partial_fill_retry_scheduled",
                         "remaining_amount": str(order_state.remaining_amount),
                         "retry_delay": retry_decision['delay'],
                     }
                 else:
-                    return {
+                    return {}
                         "status": "partial_fill_no_retry",
                         "remaining_amount": str(order_state.remaining_amount),
                         "reason": retry_decision['reason'],
                     }
 
-            return {
+            return {}
                 "status": "partial_fill_processed",
                 "fill_percentage": order_state.fill_percentage,
                 "remaining_amount": str(order_state.remaining_amount),
@@ -348,7 +348,7 @@ class FillHandler:
             return {"should_retry": False, "reason": "max_retries_exceeded", "delay": 0}
 
         # Calculate exponential backoff delay
-        delay = min(
+        delay = min()
             self.retry_config.base_delay * (self.retry_config.exponential_base**order_state.retry_count),
             self.retry_config.max_delay,
         )
@@ -364,7 +364,7 @@ class FillHandler:
         order_state.retry_count += 1
         self.total_retries += 1
 
-        retry_info = {
+        retry_info = {}
             "timestamp": int(time.time() * 1000),
             "reason": reason.value,
             "retry_count": order_state.retry_count,
@@ -402,7 +402,7 @@ class FillHandler:
 
             order_state.updated_at = int(time.time() * 1000)
 
-            return {
+            return {}
                 "status": "order_updated",
                 "order_status": order_state.status.value,
                 "fill_percentage": order_state.fill_percentage,
@@ -422,7 +422,7 @@ class FillHandler:
         completed_orders = sum(1 for order in self.active_orders.values() if order.status == FillStatus.COMPLETE)
         partial_orders = sum(1 for order in self.active_orders.values() if order.status == FillStatus.PARTIAL)
 
-        return {
+        return {}
             "total_fills_processed": self.total_fills_processed,
             "total_retries": self.total_retries,
             "total_fees": str(self.total_fees),
@@ -440,7 +440,7 @@ class FillHandler:
 
         orders_to_remove = []
         for order_id, order_state in self.active_orders.items():
-            if (
+            if ()
                 order_state.status in [FillStatus.COMPLETE, FillStatus.CANCELLED, FillStatus.FAILED]
                 and current_time - order_state.updated_at > max_age_ms
             ):
@@ -453,9 +453,9 @@ class FillHandler:
 
     def export_state(self) -> Dict[str, Any]:
         """Export current state for persistence."""
-        return {
-            "active_orders": {
-                order_id: {
+        return {}
+            "active_orders": {}
+                order_id: {}
                     "order_id": order.order_id,
                     "symbol": order.symbol,
                     "side": order.side,
@@ -473,8 +473,8 @@ class FillHandler:
                 }
                 for order_id, order in self.active_orders.items()
             },
-            "fill_history": [
-                {
+            "fill_history": []
+                {}
                     "order_id": fill.order_id,
                     "trade_id": fill.trade_id,
                     "symbol": fill.symbol,
@@ -495,7 +495,7 @@ class FillHandler:
         try:
             # Import active orders
             for order_id, order_data in state_data.get("active_orders", {}).items():
-                order_state = OrderState(
+                order_state = OrderState()
                     order_id=order_data["order_id"],
                     symbol=order_data["symbol"],
                     side=order_data["side"],
@@ -531,7 +531,7 @@ async def process_exchange_fill(fill_handler: FillHandler, fill_data: Dict[str, 
     return await fill_handler.process_fill_event(fill_data)
 
 
-async def handle_partial_fill_scenario(
+async def handle_partial_fill_scenario()
     fill_handler: FillHandler, order_id: str, fill_data: Dict[str, Any]
 ) -> Dict[str, Any]:
     """Handle a partial fill scenario."""

@@ -17,26 +17,26 @@ def fix_common_patterns(file_path):
         original_content = content
 
         # Fix 1: Remove unterminated string literals with multiple quotes
-        content = re.sub(r'""""""+', '"""', content)
-        content = re.sub(r'""""+', '"""', content)
+        content = re.sub(r'""""""+', '"""', content)"
+        content = re.sub(r'""""+', '"""', content)"
 
         # Fix 2: Fix unterminated string literals
-        content = re.sub(
-            r'print\("\[[A-Z]+ \{message\}""""""', 'print("[INFO] {message}")', content
+        content = re.sub()
+            r'print\("\[[A-Z]+ \{message\}""""""', 'print("[INFO] {message}")', content")]
         )
-        content = re.sub(
-            r'print\("\[[A-Z]+ \{message\}""""', 'print("[INFO] {message}")', content
+        content = re.sub()
+            r'print\("\[[A-Z]+ \{message\}""""', 'print("[INFO] {message}")', content")]
         )
 
         # Fix 3: Fix unmatched brackets in print statements
-        content = re.sub(
-            r'print\("\[INFO \{message\}\)\]""""""',
+        content = re.sub()
+            r'print\("\[INFO \{message\}\)\]""""""',"
             'print("[INFO] {message}")',
             content,
         )
 
         # Fix 4: Fix invalid syntax patterns
-        content = re.sub(
+        content = re.sub()
             r"pass\[BRAIN\] Placeholder function - SHA - 256 ID=\[autogen\]",
             "pass  # Placeholder",
             content,
@@ -47,15 +47,15 @@ def fix_common_patterns(file_path):
         content = re.sub(r'= "([^"]+)""""', r'= "\1"', content)
 
         # Fix 6: Fix unterminated triple-quoted strings
-        content = re.sub(r'""""""$', '"""', content, flags=re.MULTILINE)
-        content = re.sub(r'""""$', '"""', content, flags=re.MULTILINE)
+        content = re.sub(r'""""""$', '"""', content, flags=re.MULTILINE)"
+        content = re.sub(r'""""$', '"""', content, flags=re.MULTILINE)"
 
         # Fix 7: Fix unterminated string literals in function calls
-        content = re.sub(
-            r'logger\.error\(f"([^"]+)""""""', r'logger.error(f"\1")', content
+        content = re.sub()
+            r'logger\.error\(f"([^"]+)""""""', r'logger.error(f"\1")', content)
         )
-        content = re.sub(
-            r'logger\.error\(f"([^"]+)""""', r'logger.error(f"\1")', content
+        content = re.sub()
+            r'logger\.error\(f"([^"]+)""""', r'logger.error(f"\1")', content)
         )
 
         # Fix 8: Fix unterminated string literals in dictionary keys
@@ -67,52 +67,52 @@ def fix_common_patterns(file_path):
         content = re.sub(r'f"([^"]+)""""', r'f"\1"', content)
 
         # Fix 10: Remove emergency placeholder docstring patterns
-        content = re.sub(
+        content = re.sub()
             r"Emergency placeholder docstring\.Emergency placeholder docstring\.",
             "# Emergency placeholder docstring.",
             content,
         )
 
         # Fix 11: Fix unterminated string literals in comments
-        content = re.sub(r'# SYNTAX_FIX: ([^"]+)""""""', r"# SYNTAX_FIX: \1", content)
-        content = re.sub(r'# SYNTAX_FIX: ([^"]+)""""', r"# SYNTAX_FIX: \1", content)
+        content = re.sub(r'# SYNTAX_FIX: ([^"]+)""""""', r"# SYNTAX_FIX: \1", content)"
+        content = re.sub(r'# SYNTAX_FIX: ([^"]+)""""', r"# SYNTAX_FIX: \1", content)"
 
         # Fix 12: Fix unterminated string literals in variable names
-        content = re.sub(
+        content = re.sub()
             r'([a-zA-Z_][a-zA-Z0-9_]*)\s*=\s*"([^"]+)""""""', r'\1 = "\2"', content
         )
-        content = re.sub(
+        content = re.sub()
             r'([a-zA-Z_][a-zA-Z0-9_]*)\s*=\s*"([^"]+)""""', r'\1 = "\2"', content
         )
 
         # Fix 13: Fix unterminated string literals in class definitions
-        content = re.sub(
+        content = re.sub()
             r'class\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*:\s*""""""', r"class \1:", content
         )
-        content = re.sub(
+        content = re.sub()
             r'class\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*:\s*""""', r"class \1:", content
         )
 
         # Fix 14: Fix unterminated string literals in function definitions
-        content = re.sub(
+        content = re.sub()
             r'def\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*\([^)]*\)\s*:\s*""""""',
             r"def \1():",
             content,
         )
-        content = re.sub(
+        content = re.sub()
             r'def\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*\([^)]*\)\s*:\s*""""',
             r"def \1():",
             content,
         )
 
         # Fix 15: Fix unterminated string literals in if statements
-        content = re.sub(
-            r'if\s+__name__\s*==\s*"__main__""""""',
+        content = re.sub()
+            r'if\s+__name__\s*==\s*"__main__""""""',"
             'if __name__ == "__main__":',
             content,
         )
-        content = re.sub(
-            r'if\s+__name__\s*==\s*"__main__""""', 'if __name__ == "__main__":', content
+        content = re.sub()
+            r'if\s+__name__\s*==\s*"__main__""""', 'if __name__ == "__main__":', content"
         )
 
         # Fix 16: Remove trailing unterminated strings at end of file
@@ -121,22 +121,22 @@ def fix_common_patterns(file_path):
         content = re.sub(r'""\s*$', "", content, flags=re.MULTILINE)
 
         # Fix 17: Fix unterminated string literals in import statements
-        content = re.sub(
+        content = re.sub()
             r'from\s+([a-zA-Z_][a-zA-Z0-9_.]*)\s+import\s+([a-zA-Z_][a-zA-Z0-9_,\s]*)""""""',
             r"from \1 import \2",
             content,
         )
-        content = re.sub(
+        content = re.sub()
             r'from\s+([a-zA-Z_][a-zA-Z0-9_.]*)\s+import\s+([a-zA-Z_][a-zA-Z0-9_,\s]*)""""',
             r"from \1 import \2",
             content,
         )
 
         # Fix 18: Fix unterminated string literals in variable assignments with spaces
-        content = re.sub(
+        content = re.sub()
             r'([a-zA-Z_][a-zA-Z0-9_]*)\s*=\s*"([^"]+)\s*""""""', r'\1 = "\2"', content
         )
-        content = re.sub(
+        content = re.sub()
             r'([a-zA-Z_][a-zA-Z0-9_]*)\s*=\s*"([^"]+)\s*""""', r'\1 = "\2"', content
         )
 
@@ -170,7 +170,7 @@ def remove_unused_imports(file_path):
         original_content = content
 
         # Common unused imports to remove
-        unused_imports = [
+        unused_imports = []
             "from typing import Dict, List, Optional, Any",
             "from numpy import np",
             "import hashlib",
@@ -191,7 +191,7 @@ def remove_unused_imports(file_path):
             if any(line.strip() == imp for imp in unused_imports):
                 continue
             # Skip lines that start with unused imports but have comments
-            if any(
+            if any()
                 line.strip().startswith(imp.split("import")[0])
                 for imp in unused_imports
             ):

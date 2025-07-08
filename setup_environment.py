@@ -43,7 +43,7 @@ def check_python_version():
         print("   ⚠️  Schwabot requires Python 3.8 or higher")
         return False
     else:
-        print(
+        print()
             f"   ✅ Python {version.major}.{version.minor}.{version.micro} is compatible"
         )
         return True
@@ -54,13 +54,13 @@ def install_dependencies():
     print("\n📦 Installing Dependencies...")
 
     # Upgrade pip first
-    if not run_command(
+    if not run_command()
         f"{sys.executable} -m pip install --upgrade pip", "Upgrading pip"
     ):
         return False
 
     # Install core dependencies
-    if not run_command(
+    if not run_command()
         f"{sys.executable} -m pip install -r requirements.txt",
         "Installing core dependencies",
     ):
@@ -75,7 +75,7 @@ def install_dev_dependencies():
 
     dev_req_file = Path("requirements-dev.txt")
     if dev_req_file.exists():
-        return run_command(
+        return run_command()
             f"{sys.executable} -m pip install -r requirements-dev.txt",
             "Installing dev dependencies",
         )
@@ -90,7 +90,7 @@ def setup_pre_commit():
 
     if not run_command("pre-commit --version", "Checking pre-commit installation"):
         print("   Installing pre-commit...")
-        if not run_command(
+        if not run_command()
             f"{sys.executable} -m pip install pre-commit", "Installing pre-commit"
         ):
             return False
@@ -102,7 +102,7 @@ def create_directories():
     """Create necessary directories."""
     print("\n📁 Creating necessary directories...")
 
-    directories = [
+    directories = []
         "flask/feeds",
         "flask/feeds/sentiment",
         "flask/feeds/whale_data",
@@ -128,7 +128,7 @@ def test_imports():
     """Test key imports to verify installation."""
     print("\n🔍 Testing key imports...")
 
-    test_imports = [
+    test_imports = []
         ("numpy", "NumPy mathematical library"),
         ("aiohttp", "Async HTTP client"),
         ("requests", "HTTP requests library"),
@@ -158,7 +158,7 @@ def run_integration_test():
 
     test_file = Path("test_schwabot_integration.py")
     if test_file.exists():
-        return run_command(
+        return run_command()
             f"{sys.executable} test_schwabot_integration.py", "Running integration test"
         )
     else:
@@ -186,22 +186,22 @@ def main():
         sys.exit(1)
 
     # Ask about dev dependencies
-    install_dev = (
+    install_dev = ()
         input("\n🤔 Install development dependencies? (y/N): ").lower().startswith("y")
     )
     if install_dev:
         if not install_dev_dependencies():
-            print("⚠️  Failed to install dev dependencies (continuing anyway)")
+            print("⚠️  Failed to install dev dependencies (continuing, anyway)")
 
     # Ask about pre-commit
-    setup_hooks = (
+    setup_hooks = ()
         input("\n🤔 Set up pre-commit hooks for code quality? (y/N): ")
         .lower()
         .startswith("y")
     )
     if setup_hooks:
         if not setup_pre_commit():
-            print("⚠️  Failed to set up pre-commit hooks (continuing anyway)")
+            print("⚠️  Failed to set up pre-commit hooks (continuing, anyway)")
 
     # Test imports
     if not test_imports():

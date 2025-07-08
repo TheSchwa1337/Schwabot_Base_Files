@@ -10,14 +10,14 @@ def run_command(command, description):
     print(f"\n[*] {description}")
     try:
         result = subprocess.run(command, capture_output=True, text=True, shell=True)
-        return {
+        return {}
             'command': ' '.join(command) if isinstance(command, list) else command,
             'returncode': result.returncode,
             'stdout': result.stdout,
             'stderr': result.stderr
         }
     except Exception as e:
-        return {
+        return {}
             'command': ' '.join(command) if isinstance(command, list) else command,
             'returncode': 1,
             'stdout': '',
@@ -27,7 +27,7 @@ def run_command(command, description):
 
 def generate_report(checks):
     """Generate a comprehensive code quality report."""
-    report = {
+    report = {}
         'timestamp': datetime.now().isoformat(),
         'total_checks': len(checks),
         'passed_checks': sum(1 for check in checks if check['returncode'] == 0),
@@ -101,18 +101,18 @@ def diagnose_failures(checks):
 
 def main():
     # List of checks to run
-    checks = [
-        run_command('pip install autoflake black isort flake8 chardet',
+    checks = []
+        run_command('pip install autoflake black isort flake8 chardet',)
                     'Installing required tools'),
-        run_command('python prepare_flake8.py',
+        run_command('python prepare_flake8.py',)
                     'Preparing files for code quality check'),
-        run_command('python comprehensive_code_check.py',
+        run_command('python comprehensive_code_check.py',)
                     'Running comprehensive code check'),
-        run_command('flake8 core/ schwabot/ utils/ config/ --max-line-length=100 --count',
+        run_command('flake8 core/ schwabot/ utils/ config/ --max-line-length=100 --count',)
                     'Running flake8 check'),
-        run_command('black core/ schwabot/ utils/ config/ --check --line-length=100',
+        run_command('black core/ schwabot/ utils/ config/ --check --line-length=100',)
                     'Checking code formatting with black'),
-        run_command('isort core/ schwabot/ utils/ config/ --check-only',
+        run_command('isort core/ schwabot/ utils/ config/ --check-only',)
                     'Checking import sorting')
     ]
 

@@ -1,15 +1,15 @@
 from schwabot_unified_math import UnifiedTradingMathematics
 import numpy as np
-from core.profit_vector_forecast import (
-    from core.risk_manager import RiskManager
-    from core.strategy_logic import StrategyLogic, StrategyConfig, StrategyType
-    from core.unified_profit_vectorization_system import (
-        from collections import deque
-        from dataclasses import dataclass
-        from typing import Dict, List, Any, Tuple
-        import hashlib
-        import random
-        import time
+from core.profit_vector_forecast import ()
+from core.risk_manager import RiskManager
+from core.strategy_logic import StrategyLogic, StrategyConfig, StrategyType
+from core.unified_profit_vectorization_system import ()
+from collections import deque
+from dataclasses import dataclass
+from typing import Dict, List, Any, Tuple
+import hashlib
+import random
+import time
 
         #!/usr/bin/env python3
         """
@@ -22,7 +22,7 @@ Demonstrates the full integration of:
 - MCMC profit state forecasting
 - Real volatility and risk management
 - Advanced mathematical frameworks
-- Holographic-Recursive Market Memory (Schwa-Nexus Core)
+- Holographic-Recursive Market Memory (Schwa-Nexus, Core)
 - Epoch-based Historical Pattern Learning
 
 This script shows how 31 days of development crystallizes into a
@@ -42,13 +42,13 @@ and market dynamics learning.
 )
 
 CORE_MODULES_AVAILABLE = True
-except ImportError as e:
+    except ImportError as e:
     logging.warning(f"Some Schwabot modules not available: {e}")
     CORE_MODULES_AVAILABLE = False
 
 
 @dataclass
-class MarketEpoch:
+    class MarketEpoch:
     """Represents a market learning epoch with holographic memory."""
 
     epoch_id: str
@@ -64,7 +64,7 @@ class MarketEpoch:
 
 
 @dataclass
-class ActivePosition:
+    class ActivePosition:
     """Represents an active trading position with stop-loss protection."""
 
     position_id: str
@@ -92,15 +92,15 @@ class HolographicMarkovMemory:
     def store_profit_echo(): -> str:
         """Store profitable pattern in holographic memory."""
         # Create holographic hash signature
-        echo_data = f"{
+        echo_data = f"{"}
             price:.2f}_{
             profit:.4f}_{strategy}_{
-            market_conditions.get(
+            market_conditions.get()
                 'volatility',
                 0):.4f}"
         hash_signature = hashlib.sha256(echo_data.encode()).hexdigest()[:16]
 
-        profit_echo = {
+        profit_echo = {}
             "timestamp": time.time(),
             "price": price,
             "profit": profit,
@@ -114,7 +114,7 @@ class HolographicMarkovMemory:
 
         # Update hash pattern memory
         if hash_signature not in self.hash_patterns:
-            self.hash_patterns[hash_signature] = {
+            self.hash_patterns[hash_signature] = {}
                 "count": 0,
                 "total_profit": 0.0,
                 "avg_profit": 0.0,
@@ -126,8 +126,8 @@ class HolographicMarkovMemory:
         pattern["count"] += 1
         pattern["total_profit"] += profit
         pattern["avg_profit"] = pattern["total_profit"] / pattern["count"]
-        pattern["success_rate"] = (
-            sum(
+        pattern["success_rate"] = ()
+            sum()
                 1
                 for echo in self.profit_echoes
                 if echo["hash_signature"] == hash_signature and echo["profit"] > 0
@@ -135,7 +135,7 @@ class HolographicMarkovMemory:
             / pattern["count"]
         )
 
-        # Amplify successful patterns (holographic reinforcement)
+        # Amplify successful patterns (holographic, reinforcement)
         if profit > 0:
             pattern["echo_strength"] = min(3.0, pattern["echo_strength"] * 1.1)
             self.success_amplifiers[hash_signature] = pattern["echo_strength"]
@@ -148,9 +148,9 @@ class HolographicMarkovMemory:
             return {"echo_strength": 0.0, "predicted_profit": 0.0, "confidence": 0.0}
 
         # Create query hash
-        query_data = f"{
+        query_data = f"{"}
             current_price:.2f}_query_{strategy}_{
-            market_conditions.get(
+            market_conditions.get()
                 'volatility',
                 0):.4f}"
         hashlib.sha256(query_data.encode()).hexdigest()[:16]
@@ -159,18 +159,18 @@ class HolographicMarkovMemory:
         similar_echoes = []
         for echo in self.profit_echoes:
             # Price similarity
-            price_similarity = 1.0 - abs(echo["price"] - current_price) / max(
+            price_similarity = 1.0 - abs(echo["price"] - current_price) / max()
                 echo["price"], current_price
             )
             # Volatility similarity
-            vol_similarity = 1.0 - abs(
+            vol_similarity = 1.0 - abs()
                 echo["market_conditions"].get("volatility", 0)
                 - market_conditions.get("volatility", 0)
             )
             # Strategy match
             strategy_match = 1.0 if echo["strategy"] == strategy else 0.3
 
-            similarity_score = (
+            similarity_score = ()
                 price_similarity * 0.4 + vol_similarity * 0.3 + strategy_match * 0.3
             )
 
@@ -183,20 +183,20 @@ class HolographicMarkovMemory:
             return {"echo_strength": 0.0, "predicted_profit": 0.0, "confidence": 0.0}
 
         # Calculate weighted prediction
-        total_weight = sum(
+        total_weight = sum()
             echo["similarity"] * echo["success_weight"] for echo in similar_echoes
         )
-        weighted_profit = sum(
+        weighted_profit = sum()
             echo["profit"] * echo["similarity"] * echo["success_weight"]
             for echo in similar_echoes
         ) / max(total_weight, 1e-6)
 
-        echo_strength = min(
+        echo_strength = min()
             2.0, len(similar_echoes) / 10
         )  # Stronger with more similar patterns
         confidence = min(0.95, total_weight / len(similar_echoes))
 
-        return {
+        return {}
             "echo_strength": echo_strength,
             "predicted_profit": weighted_profit,
             "confidence": confidence,
@@ -215,7 +215,7 @@ class HolographicMarkovMemory:
         # Calculate success metrics
         profitable_trades = [t for t in trades_in_period if t["profit"] > 0]
         success_rate = len(profitable_trades) / len(trades_in_period)
-        avg_profit = sum(t["profit"] for t in trades_in_period) / len(trades_in_period)
+        avg_profit = sum(t["profit"] for t in, trades_in_period) / len(trades_in_period)
 
         # Create epoch hash
         epoch_data = f"{start_time}_{end_time}_{price_range[0]}_{price_range[1]}_{success_rate:.3f}"
@@ -224,7 +224,7 @@ class HolographicMarkovMemory:
         # Extract profit patterns
         profit_patterns = []
         for trade in profitable_trades:
-            pattern = {
+            pattern = {}
                 "entry_price": trade["entry_price"],
                 "profit_factor": trade["profit"] / trade["trade_value"],
                 "strategy": trade["strategy"],
@@ -233,7 +233,7 @@ class HolographicMarkovMemory:
             }
             profit_patterns.append(pattern)
 
-        epoch = MarketEpoch(
+        epoch = MarketEpoch()
             epoch_id=f"epoch_{epoch_hash}",
             start_time=start_time,
             end_time=end_time,
@@ -264,7 +264,7 @@ class IntegratedTradingSystem:
         self.current_capital = initial_capital
 
         # Initialize all subsystems
-        self.profit_system = UnifiedProfitVectorizationSystem(risk_free_rate=0.02)
+        self.profit_system = UnifiedProfitVectorizationSystem(risk_free_rate=0.2)
         self.strategy_engine = StrategyLogic()
         self.forecaster = ProfitVectorForecastEngine()
         self.risk_manager = RiskManager()
@@ -309,36 +309,36 @@ class IntegratedTradingSystem:
             # Calculate trend momentum
             if len(self.price_history) >= 5:
                 recent_prices = self.price_history[-5:]
-                price_changes = [
+                price_changes = []
                     recent_prices[i] - recent_prices[i - 1]
                     for i in range(1, len(recent_prices))
                 ]
                 avg_change = sum(price_changes) / len(price_changes)
 
                 # Update market trend
-                if avg_change > last_price * 0.001:  # 0.1% upward trend
+                if avg_change > last_price * 0.01:  # 0.1% upward trend
                     self.market_trend = "bullish"
-                elif avg_change < -last_price * 0.001:  # 0.1% downward trend
+                elif avg_change < -last_price * 0.01:  # 0.1% downward trend
                     self.market_trend = "bearish"
                 else:
                     self.market_trend = "neutral"
 
             # Market volatility with trend influence
-            base_volatility = 0.015  # 1.5% base volatility
-            trend_volatility = 0.005 if self.market_trend == "neutral" else 0.01
-            volatility = (
-                base_volatility + trend_volatility + random.uniform(-0.005, 0.005)
+            base_volatility = 0.15  # 1.5% base volatility
+            trend_volatility = 0.05 if self.market_trend == "neutral" else 0.1
+            volatility = ()
+                base_volatility + trend_volatility + random.uniform(-0.05, 0.05)
             )
 
             # Momentum with trend persistence
-            trend_momentum = {
-                "bullish": random.uniform(0.0, 0.008),
-                "bearish": random.uniform(-0.008, 0.0),
-                "neutral": random.uniform(-0.003, 0.003),
+            trend_momentum = {}
+                "bullish": random.uniform(0.0, 0.08),
+                "bearish": random.uniform(-0.08, 0.0),
+                "neutral": random.uniform(-0.03, 0.03),
             }[self.market_trend]
 
             # Price change calculation
-            price_change = last_price * (
+            price_change = last_price * ()
                 trend_momentum + np.random.normal(0, volatility)
             )
             price = max(1000, last_price + price_change)  # Minimum $1000
@@ -348,7 +348,7 @@ class IntegratedTradingSystem:
 
         # Calculate basic volatility from price history
         if len(self.price_history) >= 20:
-            returns = np.diff(np.array(self.price_history[-20:])) / np.array(
+            returns = np.diff(np.array(self.price_history[-20:])) / np.array()
                 self.price_history[-20:-1]
             )
             volatility = float(np.std(returns) * np.sqrt(252))  # Annualized volatility
@@ -360,7 +360,7 @@ class IntegratedTradingSystem:
         if len(self.price_history) > 200:  # Keep last 200 prices
             self.price_history = self.price_history[-200:]
 
-        return {
+        return {}
             "asset": "BTC/USD",
             "price": price,
             "volume": volume,
@@ -382,7 +382,7 @@ class IntegratedTradingSystem:
             self._complete_current_epoch()
 
         # 1. Calculate current risk metrics
-        portfolio_data = {
+        portfolio_data = {}
             "portfolio_history": self.portfolio_history,
             "price_history": self.price_history,
             "returns_history": self._calculate_returns(),
@@ -397,7 +397,7 @@ class IntegratedTradingSystem:
         if self.trades_executed:
             last_trade = self.trades_executed[-1]
             profit_pct = last_trade.get("profit_pct", 0.0)
-            self.forecaster.add_market_data(
+            self.forecaster.add_market_data()
                 price=market_data["price"],
                 volume=market_data["volume"],
                 rsi=50.0,  # Placeholder RSI
@@ -406,7 +406,7 @@ class IntegratedTradingSystem:
 
         # 3. Generate profit forecast
         (self.current_capital - self.initial_capital) / self.initial_capital
-        forecast = self.forecaster.generate_profit_vector(
+        forecast = self.forecaster.generate_profit_vector()
             current_price=market_data["price"],
             current_volume=market_data["volume"],
             current_rsi=50.0,  # Placeholder RSI
@@ -419,7 +419,7 @@ class IntegratedTradingSystem:
 
         # 5. Risk-adjust signal strengths with holographic memory enhancement
         adjusted_signals = []
-        market_conditions = {
+        market_conditions = {}
             "volatility": current_volatility,
             "drawdown": current_drawdown,
             "position_exposure": len(self.active_positions)
@@ -429,18 +429,18 @@ class IntegratedTradingSystem:
 
         for signal in signals:
             # Get holographic memory prediction
-            memory_query = self.holographic_memory.query_profit_echo(
+            memory_query = self.holographic_memory.query_profit_echo()
                 signal.price, signal.strategy_name, market_conditions
             )
 
             # Enhance confidence with memory echo
-            memory_enhanced_confidence = signal.confidence * (
+            memory_enhanced_confidence = signal.confidence * ()
                 1 + memory_query["echo_strength"] * 0.2
             )
             memory_enhanced_confidence = min(0.99, memory_enhanced_confidence)
 
             # Apply risk adjustment
-            adjusted_strength = self.risk_manager.get_risk_adjusted_signal_strength(
+            adjusted_strength = self.risk_manager.get_risk_adjusted_signal_strength()
                 memory_enhanced_confidence, market_conditions
             )
 
@@ -448,14 +448,14 @@ class IntegratedTradingSystem:
             signal.metadata["memory_prediction"] = memory_query
             adjusted_signals.append(signal)
 
-        # 6. Execute best signal (if any) with position limits
+        # 6. Execute best signal (if, any) with position limits
         executed_trade = None
         if adjusted_signals and len(self.active_positions) < 3:  # Max 3 positions
             # Sort by risk-adjusted confidence
             best_signal = max(adjusted_signals, key=lambda s: s.confidence)
 
             if best_signal.confidence > 0.3:  # Minimum confidence threshold
-                executed_trade = self._execute_trade_with_stop_loss(
+                executed_trade = self._execute_trade_with_stop_loss()
                     best_signal, current_volatility, market_conditions
                 )
 
@@ -463,7 +463,7 @@ class IntegratedTradingSystem:
         self._update_performance_metrics()
 
         # 8. Compile cycle results
-        cycle_results = {
+        cycle_results = {}
             "timestamp": market_data["timestamp"],
             "price": market_data["price"],
             "portfolio_value": self.current_capital,
@@ -489,7 +489,7 @@ class IntegratedTradingSystem:
         kelly_size = self.profit_system.get_kelly_position_size(base_position_size=0.1)
 
         # Calculate risk-adjusted position size
-        position_size = self.risk_manager.calculate_position_size(
+        position_size = self.risk_manager.calculate_position_size()
             entry_price=signal.price,
             stop_loss_price=signal.price * 0.95,  # 5% stop loss
             portfolio_value=self.current_capital,
@@ -498,9 +498,9 @@ class IntegratedTradingSystem:
         )
 
         # Calculate stop-loss and take-profit levels
-        stop_loss_distance = signal.price * 0.03  # 3% stop loss
-        take_profit_distance = (
-            signal.price * 0.08
+        stop_loss_distance = signal.price * 0.3  # 3% stop loss
+        take_profit_distance = ()
+            signal.price * 0.8
         )  # 8% take profit (better risk/reward)
 
         stop_loss_price = signal.price - stop_loss_distance
@@ -508,7 +508,7 @@ class IntegratedTradingSystem:
 
         # Create active position
         position_id = f"pos_{len(self.active_positions)}_{int(time.time())}"
-        position = ActivePosition(
+        position = ActivePosition()
             position_id=position_id,
             entry_price=signal.price,
             entry_time=time.time(),
@@ -526,7 +526,7 @@ class IntegratedTradingSystem:
         trade_value = position_size * signal.price
 
         # Record trade entry
-        trade_record = {
+        trade_record = {}
             "timestamp": time.time(),
             "position_id": position_id,
             "strategy": signal.strategy_name,
@@ -549,7 +549,7 @@ class IntegratedTradingSystem:
         self.trades_in_current_epoch.append(trade_record)
         self.total_trades += 1
 
-        print(
+        print()
             f"📈 OPENED POSITION: {signal.strategy_name} | "
             f"${signal.price:.0f} | Size: {position_size:.4f} | "
             f"SL: ${stop_loss_price:.0f} | TP: ${take_profit_price:.0f}"
@@ -563,26 +563,26 @@ class IntegratedTradingSystem:
 
         for position_id, position in self.active_positions.items():
             position.current_price = current_price
-            position.unrealized_pnl = (
+            position.unrealized_pnl = ()
                 current_price - position.entry_price
             ) * position.position_size
 
             # Check stop-loss
             if current_price <= position.stop_loss_price:
-                profit = (
+                profit = ()
                     position.stop_loss_price - position.entry_price
                 ) * position.position_size
-                self._close_position(
+                self._close_position()
                     position, position.stop_loss_price, profit, "stop_loss"
                 )
                 positions_to_close.append(position_id)
 
             # Check take-profit
             elif current_price >= position.take_profit_price:
-                profit = (
+                profit = ()
                     position.take_profit_price - position.entry_price
                 ) * position.position_size
-                self._close_position(
+                self._close_position()
                     position, position.take_profit_price, profit, "take_profit"
                 )
                 positions_to_close.append(position_id)
@@ -592,7 +592,7 @@ class IntegratedTradingSystem:
         for position_id in positions_to_close:
             del self.active_positions[position_id]
 
-    def _close_position(
+    def _close_position()
         self, position: ActivePosition, exit_price: float, profit: float, reason: str
     ):
         """Close a position and update capital."""
@@ -601,18 +601,18 @@ class IntegratedTradingSystem:
         self.portfolio_history.append(self.current_capital)
 
         # Store profit echo in holographic memory
-        market_conditions = {
+        market_conditions = {}
             "volatility": abs(exit_price - position.entry_price) / position.entry_price,
             "position_duration": time.time() - position.entry_time,
             "market_trend": self.market_trend,
         }
 
-        echo_hash = self.holographic_memory.store_profit_echo(
+        echo_hash = self.holographic_memory.store_profit_echo()
             position.entry_price, profit, position.strategy_name, market_conditions
         )
 
         # Create closure record
-        close_record = {
+        close_record = {}
             "timestamp": time.time(),
             "position_id": position.position_id,
             "strategy": position.strategy_name,
@@ -631,7 +631,7 @@ class IntegratedTradingSystem:
         self.trades_in_current_epoch.append(close_record)
 
         # Calculate profit for the profit system
-        self.profit_system.calculate_trade_profit(
+        self.profit_system.calculate_trade_profit()
             entry_price=position.entry_price,
             exit_price=exit_price,
             quantity=position.position_size,
@@ -641,7 +641,7 @@ class IntegratedTradingSystem:
         reason_emoji = "🛑" if reason == "stop_loss" else "🎯"
         profit_str = f"+${profit:.2f}" if profit > 0 else f"-${abs(profit):.2f}"
 
-        print(
+        print()
             f"{reason_emoji} CLOSED POSITION: {position.strategy_name} | "
             f"${position.entry_price:.0f} -> ${exit_price:.0f} | "
             f"{profit_str} ({close_record['profit_pct']:.1%}) | {reason.upper()}"
@@ -650,14 +650,14 @@ class IntegratedTradingSystem:
     def _complete_current_epoch(self):
         """Complete current epoch and create learning memory."""
         if len(self.trades_in_current_epoch) > 0:
-            epoch = self.holographic_memory.create_market_epoch(
+            epoch = self.holographic_memory.create_market_epoch()
                 self.current_epoch_start,
                 time.time(),
                 self.trades_in_current_epoch.copy(),
             )
 
             if epoch:
-                print(
+                print()
                     f"🔄 EPOCH COMPLETE: {epoch.epoch_id} | "
                     f"Trades: {epoch.total_trades} | "
                     f"Success: {epoch.success_rate:.1%} | "
@@ -676,7 +676,7 @@ class IntegratedTradingSystem:
         returns = []
         for i in range(1, len(self.portfolio_history)):
             if self.portfolio_history[i - 1] > 0:
-                ret = (
+                ret = ()
                     self.portfolio_history[i] - self.portfolio_history[i - 1]
                 ) / self.portfolio_history[i - 1]
                 returns.append(ret)
@@ -689,7 +689,7 @@ class IntegratedTradingSystem:
             return
 
         # Get profit system metrics
-        profit_summary = self.profit_system.get_performance_summary(
+        profit_summary = self.profit_system.get_performance_summary()
             self.initial_capital
         )
 
@@ -697,7 +697,7 @@ class IntegratedTradingSystem:
         forecast_summary = self.forecaster.get_performance_stats()
 
         # Calculate additional metrics
-        total_return = (
+        total_return = ()
             self.current_capital - self.initial_capital
         ) / self.initial_capital
 
@@ -706,7 +706,7 @@ class IntegratedTradingSystem:
         winning_closed = [t for t in closed_trades if t.get("profit", 0) > 0]
         win_rate = len(winning_closed) / max(1, len(closed_trades))
 
-        self.performance_metrics = {
+        self.performance_metrics = {}
             "total_return": total_return,
             "current_capital": self.current_capital,
             "total_trades": len(closed_trades),
@@ -733,55 +733,55 @@ class IntegratedTradingSystem:
         print("💰 Portfolio Performance:")
         print(f"   Initial Capital:     ${self.initial_capital:,.2f}")
         print(f"   Current Capital:     ${self.current_capital:,.2f}")
-        print(
+        print()
             f"   Total Return:        {self.performance_metrics.get('total_return', 0):.2%}"
         )
-        print(
+        print()
             f"   Active Positions:    {self.performance_metrics.get('open_positions', 0)}"
         )
-        print(
+        print()
             f"   Sharpe Ratio:        {self.performance_metrics.get('sharpe_ratio', 0):.4f}"
         )
-        print(
+        print()
             f"   Sortino Ratio:       {self.performance_metrics.get('sortino_ratio', 0):.4f}"
         )
 
         # Trading Performance
         print("\n📈 Trading Performance:")
-        print(
+        print()
             f"   Total Trades:        {self.performance_metrics.get('total_trades', 0)}"
         )
-        print(
+        print()
             f"   Win Rate:            {self.performance_metrics.get('win_rate', 0):.1%}"
         )
-        print(
+        print()
             f"   Profit Factor:       {self.performance_metrics.get('profit_factor', 0):.2f}"
         )
-        print(
+        print()
             f"   Kelly Multiplier:    {self.performance_metrics.get('kelly_multiplier', 0):.3f}"
         )
 
         # AI/ML Performance
         print("\n🤖 AI/ML Performance:")
-        print(
+        print()
             f"   Forecast Accuracy:   {self.performance_metrics.get('forecast_accuracy', 0):.1%}"
         )
-        print(
+        print()
             f"   Model Confidence:    {self.performance_metrics.get('model_confidence', 0):.1%}"
         )
 
         # Holographic Memory Analytics
         print("\n🧿 Holographic Memory System:")
-        print(
-            f"   Pattern Memory:      {
-                self.performance_metrics.get(
+        print()
+            f"   Pattern Memory:      {"}
+                self.performance_metrics.get()
                     'holographic_patterns',
-                    0)} patterns")
-        print(
+                    0)} patterns")"
+        print()
             f"   Learning Epochs:     {self.performance_metrics.get('epoch_count', 0)} completed"
         )
         print(f"   Echo Memory Size:    {len(self.holographic_memory.profit_echoes)}")
-        print(
+        print()
             f"   Success Amplifiers:  {len(self.holographic_memory.success_amplifiers)}"
         )
 
@@ -795,14 +795,14 @@ class IntegratedTradingSystem:
                 profit_str = f"+${profit:.2f}" if profit > 0 else f"-${abs(profit):.2f}"
 
                 if status == "open":
-                    print(
+                    print()
                         f"   {i}. {trade['strategy']} | OPEN | "
                         f"${trade['entry_price']:.0f} | "
                         f"SL: ${trade.get('stop_loss', 0):.0f}"
                     )
                 else:
                     reason = trade.get("reason", "manual")
-                    print(
+                    print()
                         f"   {i}. {trade['strategy']} | {status.upper()} | "
                         f"${trade.get('entry_price', 0):.0f} -> ${trade.get('exit_price', 0):.0f} | "
                         f"{profit_str} | {reason}"
@@ -813,7 +813,7 @@ def main():
     """Run the integrated trading system demo."""
     print("🧠 Starting Schwabot Integrated Trading System Demo")
     print("🔄 This demonstrates 31 days of mathematical framework development")
-    print(
+    print()
         "⚡ Real-time integration of Kelly, Sharpe/Sortino, MCMC, and Risk Management"
     )
     print("🧿 Enhanced with Holographic-Recursive Market Memory")
@@ -835,10 +835,10 @@ def main():
 
         # Print progress every 20 cycles
         if cycle % 20 == 0:
-            trend_emoji = {"bullish": "📈", "bearish": "📉", "neutral": "➡️"}[
+            trend_emoji = {"bullish": "📈", "bearish": "📉", "neutral": "➡️"}[]
                 results["market_trend"]
             ]
-            print(
+            print()
                 f"   Cycle {cycle:3d}: {trend_emoji} ${results['price']:,.0f} | "
                 f"Portfolio ${results['portfolio_value']:,.0f} | "
                 f"Positions {results['active_positions']} | "

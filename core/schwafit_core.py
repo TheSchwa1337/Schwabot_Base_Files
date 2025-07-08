@@ -1,6 +1,6 @@
 import hashlib
 import logging
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional
 
 import numpy as np
 
@@ -13,7 +13,12 @@ class SchwafitCore:
     Implements delta, normalization, cosine/DTW, entropy, memory, and fit decision.
     """
 
-    def __init__(self, window: int = 64, entropy_threshold: float = 2.5, fit_threshold: float = 0.85):
+    def __init__()
+        self,
+        window: int = 64,
+        entropy_threshold: float = 2.5,
+        fit_threshold: float = 0.85,
+    ):
         self.window = window
         self.entropy_threshold = entropy_threshold
         self.fit_threshold = fit_threshold
@@ -53,7 +58,7 @@ class SchwafitCore:
         p = p[p > 0]
         return float(-np.sum(p * np.log(p))) if len(p) > 0 else 0.0
 
-    def fit_vector(
+    def fit_vector()
         self,
         price_series: List[float],
         pattern_library: List[np.ndarray],
@@ -72,13 +77,17 @@ class SchwafitCore:
         top_indices = np.argsort(sims)[-3:][::-1]  # Top 3 matches
         top_scores = [sims[i] for i in top_indices]
         top_profits = [profit_scores[i] for i in top_indices]
-        fit_score = float(np.average([s * p for s, p in zip(top_scores, top_profits)]) if top_scores else 0.0)
+        fit_score = float()
+            np.average([s * p for s, p in zip(top_scores, top_profits)])
+            if top_scores
+            else 0.0
+        )
 
         # Decision logic
         decision = fit_score > self.fit_threshold and ent < self.entropy_threshold
         # Memory update
-        self.memory.append(
-            {
+        self.memory.append()
+            {}
                 "hash": v_hash,
                 "fit_score": fit_score,
                 "entropy": ent,
@@ -87,12 +96,12 @@ class SchwafitCore:
                 "decision": decision,
             }
         )
-        logger.info(
-            "Schwafit fit: hash={0}, fit_score={1}, entropy={2}, decision={3}".format(
+        logger.info()
+            "Schwafit fit: hash={0}, fit_score={1}, entropy={2}, decision={3}".format()
                 v_hash[:8], fit_score, ent, decision
             )
         )
-        return {
+        return {}
             "fit_score": fit_score,
             "entropy": ent,
             "top_scores": top_scores,

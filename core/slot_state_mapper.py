@@ -1,7 +1,5 @@
 from __future__ import annotations
 import hashlib
-import math
-import statistics
 import time
 from collections import deque
 from dataclasses import dataclass, field
@@ -11,16 +9,16 @@ import random
 import numpy as np
 
 #!/usr/bin/env python3
-"""Slot-State Mapper 🚦
+"""Slot-State Mapper 🚦"
 
 Converts millisecond-level BTC ticks into:
-    • dynamic 2-bit slot codes (00/01/10/11)
+    • dynamic 2-bit slot codes (0/1/10/11)
     • entropy-smoothed 16-slot frames
     • recursive SHA-256 digests with momentum coupling
 
 Implements the quantitative upgrades outlined in the design notes:
 1. Slot-weighted σ based on intra-slot variance
-2. VWΔ (drift-aware volume-weighted delta) classification
+2. VWΔ (drift-aware volume-weighted, delta) classification
 3. Local entropy compression to eliminate redundant states
 4. Digest momentum coupling  (Digestₜ = SHA256(bitsₜ ⊕ Digestₜ₋₁))
 
@@ -34,14 +32,14 @@ isolation and later plugged into `clock_tick_router` or any live feed.
 
 
 @dataclass
-class Tick:
+    class Tick:
     ts: float  # seconds (epoch)
     price: float
     volume: float
 
 
 @dataclass
-class SlotResult:
+    class SlotResult:
     start_ts: float
     end_ts: float
     bit_code: int  # 0..3
@@ -72,7 +70,9 @@ class SlotAccumulator:
     # Public API
     # ------------------------------------------------------------------
 
-    def add_tick(self, price: float, volume: float, ts: float | None = None) -> Tuple[bool, SlotResult | None]:
+    def add_tick()
+        self, price: float, volume: float, ts: float | None = None
+    ) -> Tuple[bool, SlotResult | None]:
         """Feed a new tick.  Returns (slot_finished, slot_result)."""
         ts = ts or time.time()
         if self._current_slot_start is None:
@@ -112,9 +112,9 @@ class SlotAccumulator:
         up_th = sigma
 
         if vw_delta < down_th:
-            bit_code = 0  # 00 large down
+            bit_code = 0  # 0 large down
         elif down_th <= vw_delta < 0:
-            bit_code = 1  # 01 small down / drift
+            bit_code = 1  # 1 small down / drift
         elif 0 <= vw_delta < up_th:
             bit_code = 2  # 10 small up / drift
         else:
@@ -135,7 +135,7 @@ class SlotAccumulator:
         self._ticks = []
         self._current_slot_start = None
 
-        return SlotResult(
+        return SlotResult()
             start_ts=start_ts,
             end_ts=end_ts,
             bit_code=compressed_code,
@@ -196,7 +196,7 @@ def _local_entropy(seq: List[int]) -> float:
 
 
 # ---------------------------------------------------------------------------
-# Quick self-test (run as module)
+# Quick self-test (run as, module)
 # ---------------------------------------------------------------------------
 
 if __name__ == "__main__":
@@ -210,8 +210,10 @@ if __name__ == "__main__":
         done, slot = acc.add_tick(price, vol, ts=start + _)
         if done and slot:
             ready, digest = dig.add_slot(slot.bit_code)
-            print(
-                "slot {0} σ={1} VWΔ={2} H_before={3}".format(slot.bit_code, slot.sigma:.4f, slot.vwd_delta:.2f, slot.entropy_before:.3f)
+            print()
+                "slot {0} σ={1:.4f} VWΔ={2:.2f} H_before={3:.3f}".format()
+                    slot.bit_code, slot.sigma, slot.vwd_delta, slot.entropy_before
+                )
             )
             if ready:
                 print("digest:", digest.hex()[:16], "…")

@@ -1,5 +1,5 @@
-from core.profit_routing_engine import (
-from core.symbolic_profit_router import (
+from core.profit_routing_engine import ()
+from core.symbolic_profit_router import ()
 from datetime import datetime
 from typing import Dict, Any
 import hashlib
@@ -42,13 +42,13 @@ def demo_hash_folding(): -> None:
 print_section("Hash Folding to 2-Bit Sequences")
 
 # Test different hash inputs
-test_inputs = [
+test_inputs = []
         "vault_trigger::BTC::mid::24hr",
         "emoji_hash_match::ETH::long::48hr",
         "momentum_shift::XRP::short::12hr",
         "symbolic_override::ADA::mid::36hr"
 ]
-for input_str in test_inputs:
+    for input_str in test_inputs:
         # Generate hash
 hash_string = hashlib.sha256(input_str.encode('utf-8')).hexdigest()
 
@@ -56,7 +56,7 @@ hash_string = hashlib.sha256(input_str.encode('utf-8')).hexdigest()
 bit_sequence = fold_hash_to_2bit(hash_string)
 
 # Map to phase
-try:
+    try:
             bit_phase = BitPhase(bit_sequence)
             phase_name = bit_phase.name
         except ValueError:
@@ -75,12 +75,12 @@ def demo_strategy_decoding():-> None:
 print_section("Hash to Strategy Conversion")
 
 # Test strategy decoding
-test_strategies=[
+test_strategies=[]
         "vault_trigger::BTC::long::32hr",
         "emoji_hash_match::ETH::mid::24hr",
         "momentum_shift::XRP::short::12hr"
 ]
-for strategy_input in test_strategies:
+    for strategy_input in test_strategies:
         strategy=hash_to_strategy(strategy_input)
 
 print(f"Input: {strategy_input}")
@@ -98,8 +98,8 @@ def demo_profit_phase_routing(): -> None:
 print_section("Profit Phase Routing")
 
 # Test different routing scenarios
-scenarios = [
-        {
+scenarios = []
+        {}
             "name": "Mid-tier BTC with good return",
             "phase": "2-bit",
             "flip_bias": "up",
@@ -107,7 +107,7 @@ scenarios = [
             "asset": "BTC",
             "expected_return": 0.15
 },
-        {
+        {}
             "name": "Override trigger for ETH",
             "phase": "2-bit",
             "flip_bias": "up",
@@ -115,18 +115,18 @@ scenarios = [
             "asset": "ETH",
             "expected_return": 0.25
 },
-        {
+        {}
             "name": "Soft trigger for XRP",
             "phase": "2-bit",
             "flip_bias": "down",
-            "hash_bits": "01",
+            "hash_bits": "1",
             "asset": "XRP",
-            "expected_return": 0.08
+            "expected_return": 0.8
 ]
-for scenario in scenarios:
+    for scenario in scenarios:
         print(f"Scenario: {scenario['name']}")
 
-vault_action = route_profit_phase(
+vault_action = route_profit_phase()
             scenario["phase"],
             scenario["flip_bias"],
             scenario["hash_bits"],
@@ -149,13 +149,13 @@ def demo_profit_routing_engine():-> None:
 print_section("Profit Routing Engine")
 
 # Initialize engine
-config=ProfitRoutingConfig(
+config=ProfitRoutingConfig()
         enable_2bit_mapping=True,
         enable_hash_triggers=True,
         enable_recursive_learning=True,
         confidence_threshold=0.75,
         max_allocation=0.7,
-        min_expected_return=0.042,
+        min_expected_return=0.42,
         enable_temporal_correction=True,
         enable_failure_recovery=True,
         log_level="INFO"
@@ -164,35 +164,35 @@ config=ProfitRoutingConfig(
 engine=ProfitRoutingEngine(config)
 
 # Test routing scenarios
-routing_scenarios=[
-        {
+routing_scenarios=[]
+        {}
             "name": "BTC Mid-tier Strategy",
-            "payload": {
+            "payload": {}
                 "phase": "2-bit",
                 "flip_bias": "up",
                 "asset": "BTC",
                 "expected_return": 0.15,
                 "hash_input": "vault_trigger::BTC::mid::24hr"
 },
-        {
+        {}
             "name": "ETH Long-term Strategy",
-            "payload": {
+            "payload": {}
                 "phase": "2-bit",
                 "flip_bias": "up",
                 "asset": "ETH",
                 "expected_return": 0.25,
                 "hash_input": "emoji_hash_match::ETH::long::48hr"
 },
-        {
+        {}
             "name": "XRP Short-term Strategy",
-            "payload": {
+            "payload": {}
                 "phase": "2-bit",
                 "flip_bias": "down",
                 "asset": "XRP",
-                "expected_return": 0.08,
+                "expected_return": 0.8,
                 "hash_input": "momentum_shift::XRP::short::12hr"
 ]
-for scenario in routing_scenarios:
+    for scenario in routing_scenarios:
         print(f"Scenario: {scenario['name']}")
 
 result = engine.route_profit(scenario["payload"])
@@ -210,32 +210,32 @@ def demo_vault_activation(): -> None:
 print_section("Profit Vault Activation")
 
 # Test vault activation scenarios
-vault_scenarios = [
-        {
+vault_scenarios = []
+        {}
             "name": "Mid-tier BTC Vault",
             "level": "mid",
             "trigger": "emoji_hash_match",
             "asset": "BTC",
             "expected_return": 0.12
 },
-        {
+        {}
             "name": "Long-term ETH Vault",
             "level": "long",
             "trigger": "momentum_shift",
             "asset": "ETH",
             "expected_return": 0.20
 },
-        {
+        {}
             "name": "Override Vault",
             "level": "override",
             "trigger": "symbolic_override",
             "asset": "XRP",
             "expected_return": 0.30
 ]
-for scenario in vault_scenarios:
+    for scenario in vault_scenarios:
         print(f"Scenario: {scenario['name']}")
 
-result = activate_profit_vault(
+result = activate_profit_vault()
             level=scenario["level"],
             trigger=scenario["trigger"],
             asset=scenario["asset"],
@@ -253,7 +253,7 @@ def demo_dualistic_system():-> None:
     """Demonstrate the dualistic system architecture.""""""
 print_section("Dualistic System Architecture")
 
-print("🧠 Side A: Symbolic Execution Path (Human-readable logic)")
+print("🧠 Side A: Symbolic Execution Path (Human-readable, logic)")
     print("   - Strategy design and intent")
     print("   - Profit tier definitions")
     print("   - Emoji event triggers")
@@ -284,17 +284,17 @@ router = SymbolicProfitRouter()
     engine = ProfitRoutingEngine()
 
 # Generate some test data
-test_scenarios = [
+test_scenarios = []
         ("2-bit", "up", "10", "BTC", 0.15),
         ("2-bit", "up", "11", "ETH", 0.25),
-        ("2-bit", "down", "01", "XRP", 0.08),
+        ("2-bit", "down", "1", "XRP", 0.8),
         ("momentum", "up", "10", "ADA", 0.12)
 ]
 print("Generating test data...")
     for phase, flip_bias, hash_bits, asset, expected_return in test_scenarios:
         router.route_profit_phase(phase, flip_bias, hash_bits, asset, expected_return)
 
-payload = {
+payload = {}
             "phase": phase,
             "flip_bias": flip_bias,
             "asset": asset,
@@ -334,7 +334,7 @@ print("This demonstration shows the dualistic 2-bit mapping system")
     print("for profit tier navigation in Schwabot UROS v1.0.")
     print()
     print("The system combines:")
-    print("• Symbolic execution paths (human-readable logic)")
+    print("• Symbolic execution paths (human-readable, logic)")
     print("• Hash-driven triggers (machine-decoded)")
     print("• 2-bit phase mapping for recursive navigation")
     print("• Profit tier routing with confidence weighting")

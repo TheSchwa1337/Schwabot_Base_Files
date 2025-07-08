@@ -2,7 +2,7 @@ import hashlib
 import json
 import time
 import logging
-from typing import Dict, Any, Optional, List, Tuple
+from typing import Dict, Any, Optional, List
 from dataclasses import dataclass
 from collections import OrderedDict
 
@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
 
 
 @dataclass
-class GlyphMemoryChunk:
+    class GlyphMemoryChunk:
     """Compressed memory chunk containing glyph, vector, and votes"""
 
     hash_key: str
@@ -56,15 +56,21 @@ class HashGlyphCompressor:
         self.glyph_memory: OrderedDict[str, GlyphMemoryChunk] = OrderedDict()
         self.max_memory_size = max_memory_size
         self.compression_threshold = compression_threshold
-        self.stats = {"stored": 0, "retrieved": 0, "hits": 0, "misses": 0, "compressed": 0}
+        self.stats = {}
+            "stored": 0,
+            "retrieved": 0,
+            "hits": 0,
+            "misses": 0,
+            "compressed": 0,
+        }
 
-        logger.info(
-            "Hash-Glyph Compressor initialized (max_size: {0}, threshold: {1})".format(
+        logger.info()
+            "Hash-Glyph Compressor initialized (max_size: {0}, threshold: {1})".format()
                 max_memory_size, compression_threshold
             )
         )
 
-    def store(
+    def store()
         self,
         strategy_id: str,
         q_matrix: np.ndarray,
@@ -92,7 +98,7 @@ class HashGlyphCompressor:
             hash_key = self._hash_key(strategy_id, q_matrix)
 
             # Create memory chunk
-            memory_chunk = GlyphMemoryChunk(
+            memory_chunk = GlyphMemoryChunk()
                 hash_key=hash_key,
                 glyph=glyph,
                 vector=vector.tolist() if isinstance(vector, np.ndarray) else vector,
@@ -115,14 +121,18 @@ class HashGlyphCompressor:
             if len(self.glyph_memory) > self.max_memory_size:
                 self._cleanup_oldest()
 
-            logger.debug("Stored glyph memory: {0}... → {1}".format(hash_key[:8], glyph))
+            logger.debug()
+                "Stored glyph memory: {0}... → {1}".format(hash_key[:8], glyph)
+            )
             return hash_key
 
         except Exception as e:
             logger.error("Error storing glyph memory: {0}".format(e))
             return ""
 
-    def retrieve(self, strategy_id: str, q_matrix: np.ndarray) -> Optional[GlyphMemoryChunk]:
+    def retrieve()
+        self, strategy_id: str, q_matrix: np.ndarray
+    ) -> Optional[GlyphMemoryChunk]:
         """
         Retrieve a strategy decision from compressed memory
 
@@ -142,14 +152,18 @@ class HashGlyphCompressor:
                 memory_chunk.usage_count += 1
                 memory_chunk.last_accessed = time.time()
 
-                # Move to end (most recently used)
+                # Move to end (most recently, used)
                 self.glyph_memory.move_to_end(hash_key)
 
                 # Update stats
                 self.stats["retrieved"] += 1
                 self.stats["hits"] += 1
 
-                logger.debug("Retrieved glyph memory: {0}... → {1}".format(hash_key[:8], memory_chunk.glyph))
+                logger.debug()
+                    "Retrieved glyph memory: {0}... → {1}".format()
+                        hash_key[:8], memory_chunk.glyph
+                    )
+                )
                 return memory_chunk
             else:
                 self.stats["retrieved"] += 1
@@ -176,10 +190,12 @@ class HashGlyphCompressor:
             flat_matrix = q_matrix.flatten().tolist()
 
             # Create payload
-            payload = "{0}:{1}".format(strategy_id, json.dumps(flat_matrix, sort_keys=True))
+            payload = "{0}:{1}".format()
+                strategy_id, json.dumps(flat_matrix, sort_keys=True)
+            )
 
             # Generate hash
-            hash_key = hashlib.sha256(payload.encode('utf-8')).hexdigest()
+            hash_key = hashlib.sha256(payload.encode("utf-8")).hexdigest()
             return hash_key
 
         except Exception as e:
@@ -232,9 +248,11 @@ class HashGlyphCompressor:
             for chunk in self.glyph_memory.values():
                 glyph_counts[chunk.glyph] = glyph_counts.get(chunk.glyph, 0) + 1
 
-            most_used_glyphs = sorted(glyph_counts.items(), key=lambda x: x[1], reverse=True)[:5]
+            most_used_glyphs = sorted()
+                glyph_counts.items(), key=lambda x: x[1], reverse=True
+            )[:5]
 
-            return {
+            return {}
                 **self.stats,
                 "memory_size": len(self.glyph_memory),
                 "avg_confidence": np.mean(confidences) if confidences else 0.0,
@@ -249,7 +267,7 @@ class HashGlyphCompressor:
             logger.error("Error getting memory stats: {0}".format(e))
             return self.stats.copy()
 
-    def find_similar_patterns(
+    def find_similar_patterns()
         self, strategy_id: str, q_matrix: np.ndarray, similarity_threshold: float = 0.8
     ) -> List[GlyphMemoryChunk]:
         """
@@ -276,7 +294,9 @@ class HashGlyphCompressor:
                     similar_chunks.append(chunk)
 
             # Sort by confidence and usage
-            similar_chunks.sort(key=lambda x: (x.confidence, x.usage_count), reverse=True)
+            similar_chunks.sort()
+                key=lambda x: (x.confidence, x.usage_count), reverse=True
+            )
 
             return similar_chunks[:10]  # Return top 10
 
@@ -295,10 +315,17 @@ class HashGlyphCompressor:
             True if export successful
         """
         try:
-            export_data = {"metadata": {"version": "1.0", "timestamp": time.time(), "stats": self.stats}, "memory": {}}
+            export_data = {}
+                "metadata": {}
+                    "version": "1.0",
+                    "timestamp": time.time(),
+                    "stats": self.stats,
+                },
+                "memory": {},
+            }
 
             for hash_key, chunk in self.glyph_memory.items():
-                export_data["memory"][hash_key] = {
+                export_data["memory"][hash_key] = {}
                     "glyph": chunk.glyph,
                     "vector": chunk.vector,
                     "votes": chunk.votes,
@@ -309,10 +336,14 @@ class HashGlyphCompressor:
                     "last_accessed": chunk.last_accessed,
                 }
 
-            with open(filepath, 'w') as f:
+            with open(filepath, "w") as f:
                 json.dump(export_data, f, indent=2)
 
-            logger.info("Exported {0} memory chunks to {1}".format(len(self.glyph_memory), filepath))
+            logger.info()
+                "Exported {0} memory chunks to {1}".format()
+                    len(self.glyph_memory), filepath
+                )
+            )
             return True
 
         except Exception as e:
@@ -330,12 +361,12 @@ class HashGlyphCompressor:
             True if import successful
         """
         try:
-            with open(filepath, 'r') as f:
+            with open(filepath, "r") as f:
                 import_data = json.load(f)
 
             imported_count = 0
             for hash_key, chunk_data in import_data["memory"].items():
-                memory_chunk = GlyphMemoryChunk(
+                memory_chunk = GlyphMemoryChunk()
                     hash_key=hash_key,
                     glyph=chunk_data["glyph"],
                     vector=chunk_data["vector"],
@@ -350,7 +381,9 @@ class HashGlyphCompressor:
                 self.glyph_memory[hash_key] = memory_chunk
                 imported_count += 1
 
-            logger.info("Imported {0} memory chunks from {1}".format(imported_count, filepath))
+            logger.info()
+                "Imported {0} memory chunks from {1}".format(imported_count, filepath)
+            )
             return True
 
         except Exception as e:
@@ -358,7 +391,7 @@ class HashGlyphCompressor:
             return False
 
 
-def create_hash_glyph_compressor(
+def create_hash_glyph_compressor()
     max_memory_size: int = 1000, compression_threshold: float = 0.8
 ) -> HashGlyphCompressor:
     """
@@ -371,7 +404,9 @@ def create_hash_glyph_compressor(
     Returns:
         Initialized HashGlyphCompressor instance
     """
-    return HashGlyphCompressor(max_memory_size=max_memory_size, compression_threshold=compression_threshold)
+    return HashGlyphCompressor()
+        max_memory_size=max_memory_size, compression_threshold=compression_threshold
+    )
 
 
 def test_hash_glyph_compression():
@@ -391,7 +426,9 @@ def test_hash_glyph_compression():
 
     # Test 1: Store memory chunk
     print("\n💾 Test 1: Storing Memory Chunk")
-    hash_key = compressor.store(strategy_id, q_matrix, glyph, vector, votes, confidence=0.9)
+    hash_key = compressor.store()
+        strategy_id, q_matrix, glyph, vector, votes, confidence=0.9
+    )
     print("  Stored with hash: {0}...".format(hash_key[:16]))
 
     # Test 2: Retrieve memory chunk
@@ -404,11 +441,11 @@ def test_hash_glyph_compression():
     else:
         print("  ❌ No memory found")
 
-    # Test 3: Test with different matrix (should miss)
+    # Test 3: Test with different matrix (should, miss)
     print("\n❌ Test 3: Testing Cache Miss")
     different_matrix = np.array([[2, 1, 0], [1, 0, 2], [0, 2, 1]])
     missed = compressor.retrieve(strategy_id, different_matrix)
-    print("  Cache miss: {0}".format(missed is None))
+    print("  Cache miss: {0}".format(missed is, None))
 
     # Test 4: Find similar patterns
     print("\n🔍 Test 4: Finding Similar Patterns")

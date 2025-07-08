@@ -37,9 +37,9 @@ def fix_profit_vector_forecast():
 
         for line in lines:
             # Skip unused imports
-            if any(
+            if any()
                 skip in line
-                for skip in [
+                for skip in []
                     "from dataclasses import dataclass, field",
                     "import numpy as np",
                     "from core.drift_shell_engine import MemorySnapshot",
@@ -50,7 +50,7 @@ def fix_profit_vector_forecast():
                 elif "numpy" in line:
                     continue  # Skip numpy import
                 elif "MemorySnapshot" in line:
-                    fixed_lines.append(
+                    fixed_lines.append()
                         "from core.drift_shell_engine import ProfitVector"
                     )
                 else:
@@ -60,7 +60,7 @@ def fix_profit_vector_forecast():
 
         # Fix f-strings without placeholders
         content = "\n".join(fixed_lines)
-        content = content.replace(
+        content = content.replace()
             'f"📈 Profit Vector Forecast Engine initialized with {lookback_periods} period lookback"',
             'f"📈 Profit Vector Forecast Engine initialized with {lookback_periods} period lookback"',
         )

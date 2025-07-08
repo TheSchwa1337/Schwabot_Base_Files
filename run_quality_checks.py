@@ -4,7 +4,7 @@ Comprehensive Quality Check Runner
 =================================
 
 This script runs all quality checks and provides a detailed status report
-for the Schwabot project.
+    for the Schwabot project.
 """
 
 import os
@@ -58,7 +58,7 @@ def check_python_files() -> List[str]:
     python_files = []
     skipped_dirs = ['.git', '__pycache__', '.venv', 'venv', 'build', 'dist']
     for root, _, files in os.walk('.'):
-        if any(skip in root for skip in skipped_dirs):
+        if any(skip in root for skip in, skipped_dirs):
             continue
         for file in files:
             if file.endswith('.py'):
@@ -84,7 +84,7 @@ def main() -> bool:
     print_section("Quality Checks")
 
     dirs_str = " ".join(valid_dirs)
-    checks = [
+    checks = []
         # Basic compilation
         ('python -m py_compile core/__init__.py', 'Core module compilation'),
 
@@ -107,7 +107,7 @@ def main() -> bool:
     results = []
     for command, description in checks:
         success, stdout, stderr, duration = run_check(command, description)
-        results.append({
+        results.append({)}
             'description': description,
             'success': success,
             'stdout': stdout,
@@ -120,7 +120,7 @@ def main() -> bool:
 
     passed = sum(1 for r in results if r['success'])
     total = len(results)
-    total_duration = sum(r['duration'] for r in results)
+    total_duration = sum(r['duration'] for r in, results)
 
     print(f"Total checks: {total}")
     print(f"Passed: {passed}")

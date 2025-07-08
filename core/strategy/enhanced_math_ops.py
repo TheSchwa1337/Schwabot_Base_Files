@@ -1,7 +1,7 @@
 import logging
 from typing import Any, Dict, Optional, Tuple, Union
-    import cupy as cp
-    from ..acceleration_enhancement import get_acceleration_enhancement
+import cupy as cp
+from ..acceleration_enhancement import get_acceleration_enhancement
 
 import numpy as np
 
@@ -21,23 +21,23 @@ INTEGRATION APPROACH:
 """
 
 # CUDA imports with fallback
-try:
+    try:
     CUDA_AVAILABLE = True
-except ImportError:
+    except ImportError:
     CUDA_AVAILABLE = False
     cp = None
 
 # Import enhancement layer
-try:
+    try:
     ENHANCEMENT_AVAILABLE = True
-except ImportError:
+    except ImportError:
     ENHANCEMENT_AVAILABLE = False
 
 logger = logging.getLogger(__name__)
 
 
-# Base CPU implementations (complement existing operations)
-def cpu_cosine_sim(a: np.ndarray, b: np.ndarray) -> float:
+# Base CPU implementations (complement existing, operations)
+    def cpu_cosine_sim(a: np.ndarray, b: np.ndarray) -> float:
     """CPU implementation of cosine similarity."""
     return float(np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b)))
 
@@ -99,8 +99,8 @@ def cpu_fractal_compression(data: np.ndarray, compression_ratio: float = 0.5) ->
     return data[::n]
 
 
-# GPU implementations (enhance existing operations)
-def gpu_cosine_sim(a: cp.ndarray, b: cp.ndarray) -> float:
+# GPU implementations (enhance existing, operations)
+    def gpu_cosine_sim(a: cp.ndarray, b: cp.ndarray) -> float:
     """GPU implementation of cosine similarity."""
     if not CUDA_AVAILABLE:
         return cpu_cosine_sim(cp.asnumpy(a), cp.asnumpy(b))
@@ -200,8 +200,8 @@ def gpu_fractal_compression(data: cp.ndarray, compression_ratio: float = 0.5) ->
     return cp.asnumpy(result)
 
 
-# Enhanced operation wrappers (complement existing operations)
-def enhanced_cosine_sim(
+# Enhanced operation wrappers (complement existing, operations)
+    def enhanced_cosine_sim()
     a: Union[np.ndarray, cp.ndarray],
     b: Union[np.ndarray, cp.ndarray],
     entropy: float = 0.5,
@@ -211,7 +211,7 @@ def enhanced_cosine_sim(
     """
     Enhanced cosine similarity with automatic CPU/GPU routing.
 
-    This ENHANCES existing operations, doesn't replace them.
+    This ENHANCES existing operations, doesn't replace them.'
 
     Args:
         a: First vector
@@ -247,7 +247,7 @@ def enhanced_cosine_sim(
     else:
         b_cpu, b_gpu = cp.asnumpy(b), b
 
-    return enhancement.execute_with_enhancement(
+    return enhancement.execute_with_enhancement()
         cpu_cosine_sim,
         gpu_cosine_sim,
         a_cpu,
@@ -262,7 +262,7 @@ def enhanced_cosine_sim(
     )
 
 
-def enhanced_matrix_multiply(
+def enhanced_matrix_multiply()
     a: Union[np.ndarray, cp.ndarray],
     b: Union[np.ndarray, cp.ndarray],
     entropy: float = 0.5,
@@ -272,7 +272,7 @@ def enhanced_matrix_multiply(
     """
     Enhanced matrix multiplication with automatic CPU/GPU routing.
 
-    This ENHANCES existing operations, doesn't replace them.
+    This ENHANCES existing operations, doesn't replace them.'
     """
     if not use_enhancement or not ENHANCEMENT_AVAILABLE:
         # Fallback to standard CPU implementation
@@ -298,7 +298,7 @@ def enhanced_matrix_multiply(
     else:
         b_cpu, b_gpu = cp.asnumpy(b), b
 
-    return enhancement.execute_with_enhancement(
+    return enhancement.execute_with_enhancement()
         cpu_matrix_multiply,
         gpu_matrix_multiply,
         a_cpu,
@@ -313,7 +313,7 @@ def enhanced_matrix_multiply(
     )
 
 
-def enhanced_tensor_contraction(
+def enhanced_tensor_contraction()
     a: Union[np.ndarray, cp.ndarray],
     b: Union[np.ndarray, cp.ndarray],
     axes: Tuple[int, int],
@@ -324,7 +324,7 @@ def enhanced_tensor_contraction(
     """
     Enhanced tensor contraction with automatic CPU/GPU routing.
 
-    This ENHANCES existing operations, doesn't replace them.
+    This ENHANCES existing operations, doesn't replace them.'
     """
     if not use_enhancement or not ENHANCEMENT_AVAILABLE:
         # Fallback to standard CPU implementation
@@ -350,7 +350,7 @@ def enhanced_tensor_contraction(
     else:
         b_cpu, b_gpu = cp.asnumpy(b), b
 
-    return enhancement.execute_with_enhancement(
+    return enhancement.execute_with_enhancement()
         cpu_tensor_contraction,
         gpu_tensor_contraction,
         a_cpu,
@@ -367,7 +367,7 @@ def enhanced_tensor_contraction(
     )
 
 
-def enhanced_eigenvalue_decomposition(
+def enhanced_eigenvalue_decomposition()
     a: Union[np.ndarray, cp.ndarray],
     entropy: float = 0.5,
     profit_weight: float = 0.5,
@@ -376,7 +376,7 @@ def enhanced_eigenvalue_decomposition(
     """
     Enhanced eigenvalue decomposition with automatic CPU/GPU routing.
 
-    This ENHANCES existing operations, doesn't replace them.
+    This ENHANCES existing operations, doesn't replace them.'
     """
     if not use_enhancement or not ENHANCEMENT_AVAILABLE:
         # Fallback to standard CPU implementation
@@ -396,7 +396,7 @@ def enhanced_eigenvalue_decomposition(
     else:
         a_cpu, a_gpu = cp.asnumpy(a), a
 
-    return enhancement.execute_with_enhancement(
+    return enhancement.execute_with_enhancement()
         cpu_eigenvalue_decomposition,
         gpu_eigenvalue_decomposition,
         a_cpu,
@@ -409,7 +409,7 @@ def enhanced_eigenvalue_decomposition(
     )
 
 
-def enhanced_fft_operation(
+def enhanced_fft_operation()
     a: Union[np.ndarray, cp.ndarray],
     entropy: float = 0.5,
     profit_weight: float = 0.5,
@@ -418,7 +418,7 @@ def enhanced_fft_operation(
     """
     Enhanced FFT operation with automatic CPU/GPU routing.
 
-    This ENHANCES existing operations, doesn't replace them.
+    This ENHANCES existing operations, doesn't replace them.'
     """
     if not use_enhancement or not ENHANCEMENT_AVAILABLE:
         # Fallback to standard CPU implementation
@@ -438,7 +438,7 @@ def enhanced_fft_operation(
     else:
         a_cpu, a_gpu = cp.asnumpy(a), a
 
-    return enhancement.execute_with_enhancement(
+    return enhancement.execute_with_enhancement()
         cpu_fft_operation,
         gpu_fft_operation,
         a_cpu,
@@ -451,7 +451,7 @@ def enhanced_fft_operation(
     )
 
 
-def enhanced_volatility_calculation(
+def enhanced_volatility_calculation()
     prices: Union[np.ndarray, cp.ndarray],
     window: int = 20,
     entropy: float = 0.5,
@@ -461,7 +461,7 @@ def enhanced_volatility_calculation(
     """
     Enhanced volatility calculation with automatic CPU/GPU routing.
 
-    This ENHANCES existing operations, doesn't replace them.
+    This ENHANCES existing operations, doesn't replace them.'
     """
     if not use_enhancement or not ENHANCEMENT_AVAILABLE:
         # Fallback to standard CPU implementation
@@ -481,7 +481,7 @@ def enhanced_volatility_calculation(
     else:
         prices_cpu, prices_gpu = cp.asnumpy(prices), prices
 
-    return enhancement.execute_with_enhancement(
+    return enhancement.execute_with_enhancement()
         cpu_volatility_calculation,
         gpu_volatility_calculation,
         prices_cpu,
@@ -496,7 +496,7 @@ def enhanced_volatility_calculation(
     )
 
 
-def enhanced_profit_vectorization(
+def enhanced_profit_vectorization()
     profits: Union[np.ndarray, cp.ndarray],
     weights: Union[np.ndarray, cp.ndarray],
     entropy: float = 0.5,
@@ -506,7 +506,7 @@ def enhanced_profit_vectorization(
     """
     Enhanced profit vectorization with automatic CPU/GPU routing.
 
-    This ENHANCES existing operations, doesn't replace them.
+    This ENHANCES existing operations, doesn't replace them.'
     """
     if not use_enhancement or not ENHANCEMENT_AVAILABLE:
         # Fallback to standard CPU implementation
@@ -532,7 +532,7 @@ def enhanced_profit_vectorization(
     else:
         weights_cpu, weights_gpu = cp.asnumpy(weights), weights
 
-    return enhancement.execute_with_enhancement(
+    return enhancement.execute_with_enhancement()
         cpu_profit_vectorization,
         gpu_profit_vectorization,
         profits_cpu,
@@ -547,7 +547,7 @@ def enhanced_profit_vectorization(
     )
 
 
-def enhanced_strategy_matching(
+def enhanced_strategy_matching()
     strategies: Union[np.ndarray, cp.ndarray],
     market_data: Union[np.ndarray, cp.ndarray],
     entropy: float = 0.5,
@@ -557,7 +557,7 @@ def enhanced_strategy_matching(
     """
     Enhanced strategy matching with automatic CPU/GPU routing.
 
-    This ENHANCES existing operations, doesn't replace them.
+    This ENHANCES existing operations, doesn't replace them.'
     """
     if not use_enhancement or not ENHANCEMENT_AVAILABLE:
         # Fallback to standard CPU implementation
@@ -583,7 +583,7 @@ def enhanced_strategy_matching(
     else:
         market_cpu, market_gpu = cp.asnumpy(market_data), market_data
 
-    return enhancement.execute_with_enhancement(
+    return enhancement.execute_with_enhancement()
         cpu_strategy_matching,
         gpu_strategy_matching,
         strategies_cpu,
@@ -598,7 +598,7 @@ def enhanced_strategy_matching(
     )
 
 
-def enhanced_hash_matching(
+def enhanced_hash_matching()
     hashes: Union[np.ndarray, cp.ndarray],
     target_hash: Union[np.ndarray, cp.ndarray],
     entropy: float = 0.5,
@@ -608,7 +608,7 @@ def enhanced_hash_matching(
     """
     Enhanced hash matching with automatic CPU/GPU routing.
 
-    This ENHANCES existing operations, doesn't replace them.
+    This ENHANCES existing operations, doesn't replace them.'
     """
     if not use_enhancement or not ENHANCEMENT_AVAILABLE:
         # Fallback to standard CPU implementation
@@ -634,7 +634,7 @@ def enhanced_hash_matching(
     else:
         target_cpu, target_gpu = cp.asnumpy(target_hash), target_hash
 
-    return enhancement.execute_with_enhancement(
+    return enhancement.execute_with_enhancement()
         cpu_hash_matching,
         gpu_hash_matching,
         hashes_cpu,
@@ -649,7 +649,7 @@ def enhanced_hash_matching(
     )
 
 
-def enhanced_fractal_compression(
+def enhanced_fractal_compression()
     data: Union[np.ndarray, cp.ndarray],
     compression_ratio: float = 0.5,
     entropy: float = 0.5,
@@ -659,7 +659,7 @@ def enhanced_fractal_compression(
     """
     Enhanced fractal compression with automatic CPU/GPU routing.
 
-    This ENHANCES existing operations, doesn't replace them.
+    This ENHANCES existing operations, doesn't replace them.'
     """
     if not use_enhancement or not ENHANCEMENT_AVAILABLE:
         # Fallback to standard CPU implementation
@@ -679,7 +679,7 @@ def enhanced_fractal_compression(
     else:
         data_cpu, data_gpu = cp.asnumpy(data), data
 
-    return enhancement.execute_with_enhancement(
+    return enhancement.execute_with_enhancement()
         cpu_fractal_compression,
         gpu_fractal_compression,
         data_cpu,
@@ -701,10 +701,10 @@ def get_enhancement_status() -> Dict[str, Any]:
     Returns:
         Dictionary with enhancement status information
     """
-    return {
+    return {}
         "enhancement_available": ENHANCEMENT_AVAILABLE,
         "cuda_available": CUDA_AVAILABLE,
-        "operations": {
+        "operations": {}
             "cosine_sim": True,
             "matrix_multiply": True,
             "tensor_contraction": True,
@@ -716,7 +716,7 @@ def get_enhancement_status() -> Dict[str, Any]:
             "hash_matching": True,
             "fractal_compression": True,
         },
-        "integration": {
+        "integration": {}
             "zpe_core": True,
             "zbe_core": True,
             "dual_state_router": True,
@@ -749,50 +749,49 @@ def demo_enhanced_math_ops():
     # Test cosine similarity with enhancement
     print("📊 Testing Enhanced Cosine Similarity:")
     result = enhanced_cosine_sim(a, b, entropy=0.7, profit_weight=0.6, use_enhancement=True)
-    print("  Result: {0}".format(result:.6f))
+    print("  Result: {0:.6f}".format(result))
 
     # Test matrix multiplication with enhancement
     print("\n📊 Testing Enhanced Matrix Multiplication:")
     result = enhanced_matrix_multiply(matrix_a, matrix_b, entropy=0.8, profit_weight=0.7, use_enhancement=True)
     print("  Result shape: {0}".format(result.shape))
-    print("  Result sum: {0}".format(np.sum(result):.6f))
+    print("  Result, sum)))"
 
     # Test FFT with enhancement
     print("\n📊 Testing Enhanced FFT Operation:")
     result = enhanced_fft_operation(a, entropy=0.6, profit_weight=0.5, use_enhancement=True)
     print("  Result shape: {0}".format(result.shape))
-    print("  Result magnitude: {0}".format(np.abs(result).mean():.6f))
+    print("  Result, magnitude).mean()))"
 
     # Test volatility calculation with enhancement
     print("\n📊 Testing Enhanced Volatility Calculation:")
-    prices = np.cumsum(np.random.randn(1000) * 0.01) + 100
+    prices = np.cumsum(np.random.randn(1000) * 0.1) + 100
     result = enhanced_volatility_calculation(prices, window=20, entropy=0.6, profit_weight=0.5, use_enhancement=True)
     print("  Result shape: {0}".format(result.shape))
-    print("  Average volatility: {0}".format(np.mean(result[20:]):.6f))
+    print("  Average, volatility)))"
 
     # Test without enhancement (fallback)
-    print("\n📊 Testing Fallback (No Enhancement):")
+    print("\n📊 Testing Fallback (No, Enhancement):")
     result_fallback = enhanced_cosine_sim(a, b, use_enhancement=False)
-    print("  Fallback result: {0}".format(result_fallback:.6f))
+    print("  Fallback result: {0:.6f}".format(result_fallback))
 
     # Get enhancement recommendations
     if ENHANCEMENT_AVAILABLE:
         enhancement = get_acceleration_enhancement()
         print("\n🎯 Enhancement Recommendations:")
         recommendations = enhancement.get_enhancement_recommendations("cosine_sim")
-        print(
-            "  Available: {0}".format(
-                recommendations.get(
+        print()
+            "  Available: {0}".format()
+                recommendations.get()
                     'enhancement_available',
                     False))
         )
-        print(
-            "  Recommendation: {0}".format(
-                recommendations.get(
+        print()
+            "  Recommendation: {0}".format(recommendations.get())
                     'recommendation',
                     'none'))
         )
-        print("  Confidence: {0}".format(recommendations.get('confidence', 0.0):.3f))
+        print("  Confidence)))"
 
         # Get enhancement report
         print("\n📊 Enhancement Report:")

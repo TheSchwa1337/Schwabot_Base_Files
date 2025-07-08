@@ -1,195 +1,293 @@
-import argparse
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Schwabot Command Line Interface.
+
+Simple CLI to control the Schwabot trading system.
+"""
+
+import asyncio
+import json
+import logging
 import sys
-import os
-import numpy as np
-from core.schwafit_core import SchwafitCore
-from core.strategy_bit_mapper import StrategyBitMapper
+import time
+from pathlib import Path
+from typing import Optional
+
+from core.live_api_backtesting import LiveAPIBacktesting, LiveAPIConfig, create_live_api_backtesting
+
+# Setup logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler('logs/schwabot_cli.log'),
+        logging.StreamHandler(sys.stdout)
+    ]
+)
+
+logger = logging.getLogger(__name__)
 
 
-def main():
-    parser = argparse.ArgumentParser(description="Schwabot CLI - Schwafit, Matrix, Bit Mapper, Live Handler, Ferris Wheel, and more.")
-    subparsers = parser.add_subparsers(dest="command", required=True)
+class SchwabotCLI:
+    """Command Line Interface for Schwabot trading system."""
 
-    # Fit command
-    fit_parser = subparsers.add_parser("fit", help="Run Schwafit on a price series.")
-    fit_parser.add_argument("--prices", type=str, required=True, help="CSV file or comma-separated price list.")
-    fit_parser.add_argument("--window", type=int, default=64, help="Window size for fit.")
-    fit_parser.add_argument("--show-math", action="store_true", help="Show all math output.")
+    def __init__(self):
+        """Initialize the CLI."""
+        self.backtesting: Optional[LiveAPIBacktesting] = None
+        self.config = self._load_config()
+        
+    def _load_config(self) -> LiveAPIConfig:
+        """Load configuration from file or create default."""
+        config_path = Path("config/schwabot_cli_config.json")
+        
+        if config_path.exists():
+            try:
+                with open(config_path, 'r') as f:
+                    config_data = json.load(f)
+                
+                return LiveAPIConfig(
+                    exchange=config_data.get("exchange", "binance"),
+                    api_key=config_data.get("api_key", ""),
+                    api_secret=config_data.get("api_secret", ""),
+                    sandbox=config_data.get("sandbox", True),
+                    symbols=config_data.get("symbols", ["BTC/USDC", "ETH/USDC"]),
+                    update_interval=config_data.get("update_interval", 1.0),
+                    enable_trading=config_data.get("enable_trading", False),
+                    max_position_size=config_data.get("max_position_size", 0.1),
+                    risk_management=config_data.get("risk_management", True)
+                )
+            except Exception as e:
+                logger.error(f"Failed to load config: {e}")
+        
+        # Default configuration
+        return LiveAPIConfig(
+            exchange="binance",
+            api_key="",
+            api_secret="",
+            sandbox=True,
+            symbols=["BTC/USDC", "ETH/USDC"],
+            update_interval=1.0,
+            enable_trading=False,
+            max_position_size=0.1,
+            risk_management=True
+        )
 
-    # Test command
-    test_parser = subparsers.add_parser("test", help="Run a mock Schwafit test.")
+    def _save_config(self):
+        """Save current configuration."""
+        config_path = Path("config/schwabot_cli_config.json")
+        config_path.parent.mkdir(exist_ok=True)
+        
+        config_data = {
+            "exchange": self.config.exchange,
+            "api_key": self.config.api_key,
+            "api_secret": self.config.api_secret,
+            "sandbox": self.config.sandbox,
+            "symbols": self.config.symbols,
+            "update_interval": self.config.update_interval,
+            "enable_trading": self.config.enable_trading,
+            "max_position_size": self.config.max_position_size,
+            "risk_management": self.config.risk_management
+        }
+        
+        with open(config_path, 'w') as f:
+            json.dump(config_data, f, indent=2)
 
-    # Status command
-    status_parser = subparsers.add_parser("status", help="Show Schwafit memory state.")
+    async def start_system(self):
+        """Start the Schwabot system."""
+        if self.backtesting and self.backtesting.is_running:
+            print("⚠️  System is already running!")
+            return
+        
+        print("🚀 Starting Schwabot Trading System...")
+        print(f"Exchange: {self.config.exchange}")
+        print(f"Symbols: {', '.join(self.config.symbols)}")
+        print(f"Trading enabled: {self.config.enable_trading}")
+        print(f"Sandbox mode: {self.config.sandbox}")
+        
+        try:
+            self.backtesting = create_live_api_backtesting(self.config)
+            await self.backtesting.start()
+        except Exception as e:
+            logger.error(f"Failed to start system: {e}")
+            print(f"❌ Failed to start system: {e}")
 
-    # Select strategy command
-    select_parser = subparsers.add_parser("select-strategy", help="Select strategy using Schwafit and Bit Mapper.")
-    select_parser.add_argument("--hash", type=str, required=True, help="Comma-separated hash vector (floats).")
-    select_parser.add_argument("--asset", type=str, default=None, help="Asset hint (optional).")
-    select_parser.add_argument("--matrix-dir", type=str, required=True, help="Path to matrix directory.")
+    async def stop_system(self):
+        """Stop the Schwabot system."""
+        if not self.backtesting or not self.backtesting.is_running:
+            print("⚠️  System is not running!")
+            return
+        
+        print("🛑 Stopping Schwabot Trading System...")
+        
+        try:
+            await self.backtesting.stop()
+            print("✅ System stopped successfully")
+        except Exception as e:
+            logger.error(f"Failed to stop system: {e}")
+            print(f"❌ Failed to stop system: {e}")
 
-    # Match matrix command
-    match_parser = subparsers.add_parser("match-matrix", help="Match hash to matrix using Schwafit and Matrix Mapper.")
-    match_parser.add_argument("--hash", type=str, required=True, help="Comma-separated hash vector (floats).")
-    match_parser.add_argument("--matrix-dir", type=str, required=True, help="Path to matrix directory.")
+    def enable_trading(self):
+        """Enable live trading."""
+        if not self.backtesting:
+            print("⚠️  System is not running! Start the system first.")
+            return
+        
+        self.backtesting.enable_trading()
+        self.config.enable_trading = True
+        self._save_config()
+        print("🟢 LIVE TRADING ENABLED")
 
-    # Live handler status command
-    live_parser = subparsers.add_parser("live-status", help="Show live handler status from Bit Mapper.")
-    live_parser.add_argument("--matrix-dir", type=str, required=True, help="Path to matrix directory.")
+    def disable_trading(self):
+        """Disable live trading."""
+        if not self.backtesting:
+            print("⚠️  System is not running! Start the system first.")
+            return
+        
+        self.backtesting.disable_trading()
+        self.config.enable_trading = False
+        self._save_config()
+        print("🔴 LIVE TRADING DISABLED")
 
-    # Ferris wheel spin command
-    ferris_parser = subparsers.add_parser("ferris-spin", help="Spin Ferris wheel and calculate tensor/profit vectors.")
-    ferris_parser.add_argument("--matrix-dir", type=str, required=True, help="Path to matrix directory.")
-    ferris_parser.add_argument("--ticks", type=int, default=24, help="Number of ticks to spin.")
+    def show_status(self):
+        """Show current system status."""
+        if not self.backtesting:
+            print("📊 System Status: NOT RUNNING")
+            return
+        
+        status = self.backtesting.get_status()
+        portfolio = self.backtesting.get_portfolio_summary()
+        
+        print("\n" + "="*50)
+        print("📊 SCHWABOT SYSTEM STATUS")
+        print("="*50)
+        print(f"Running: {'🟢 YES' if status['is_running'] else '🔴 NO'}")
+        print(f"Trading Enabled: {'🟢 YES' if status['is_trading_enabled'] else '🔴 NO'}")
+        print(f"Exchange: {status['exchange']}")
+        print(f"Symbols: {', '.join(status['symbols'])}")
+        print(f"Uptime: {status['uptime']:.1f} seconds")
+        print(f"Total Trades: {status['total_trades']}")
+        print(f"Successful Trades: {status['successful_trades']}")
+        print(f"Success Rate: {status['success_rate']:.1f}%")
+        print(f"Total PnL: ${status['total_pnl']:.2f}")
+        print(f"Registry Entries: {status['registry_entries']}")
+        
+        if portfolio:
+            print(f"\n💰 PORTFOLIO SUMMARY")
+            print(f"Total Value: ${portfolio.get('total_value', 0):.2f}")
+            print(f"Total PnL: ${portfolio.get('total_pnl', 0):.2f}")
+            print(f"Daily PnL: ${portfolio.get('daily_pnl', 0):.2f}")
+            print(f"Win Rate: {portfolio.get('win_rate', 0):.1f}%")
+            print(f"Max Drawdown: {portfolio.get('max_drawdown', 0):.1f}%")
+            print(f"Risk Level: {portfolio.get('risk_level', 'unknown')}")
+            print(f"Active Positions: {portfolio.get('active_positions', 0)}")
+        
+        print("="*50)
 
-    # Live tick command
-    tick_parser = subparsers.add_parser("live-tick", help="Simulate a live tick: update tensors, profit, and fit.")
-    tick_parser.add_argument("--matrix-dir", type=str, required=True, help="Path to matrix directory.")
-    tick_parser.add_argument("--price", type=float, required=True, help="Current price.")
-    tick_parser.add_argument("--asset", type=str, default="BTC/USDC", help="Asset symbol.")
+    def show_help(self):
+        """Show help information."""
+        print("\n" + "="*50)
+        print("🤖 SCHWABOT CLI HELP")
+        print("="*50)
+        print("Commands:")
+        print("  start           - Start the Schwabot system")
+        print("  stop            - Stop the Schwabot system")
+        print("  status          - Show current system status")
+        print("  enable-trading  - Enable live trading")
+        print("  disable-trading - Disable live trading")
+        print("  config          - Show current configuration")
+        print("  help            - Show this help message")
+        print("  quit            - Exit the CLI")
+        print("\nExamples:")
+        print("  > start")
+        print("  > enable-trading")
+        print("  > status")
+        print("  > disable-trading")
+        print("  > stop")
+        print("="*50)
 
-    # Entry/exit command
-    entry_parser = subparsers.add_parser("entry-exit", help="Calculate entry/exit using Schwafit and Bit Mapper.")
-    entry_parser.add_argument("--matrix-dir", type=str, required=True, help="Path to matrix directory.")
-    entry_parser.add_argument("--hash", type=str, required=True, help="Comma-separated hash vector (floats).")
-    entry_parser.add_argument("--market-state", type=str, required=False, help="Market state as JSON string.")
+    def show_config(self):
+        """Show current configuration."""
+        print("\n" + "="*50)
+        print("⚙️  CURRENT CONFIGURATION")
+        print("="*50)
+        print(f"Exchange: {self.config.exchange}")
+        print(f"API Key: {'*' * len(self.config.api_key) if self.config.api_key else 'NOT SET'}")
+        print(f"API Secret: {'*' * len(self.config.api_secret) if self.config.api_secret else 'NOT SET'}")
+        print(f"Sandbox Mode: {self.config.sandbox}")
+        print(f"Symbols: {', '.join(self.config.symbols)}")
+        print(f"Update Interval: {self.config.update_interval} seconds")
+        print(f"Trading Enabled: {self.config.enable_trading}")
+        print(f"Max Position Size: {self.config.max_position_size * 100}%")
+        print(f"Risk Management: {self.config.risk_management}")
+        print("="*50)
 
-    # Ghost trade command
-    ghost_parser = subparsers.add_parser("ghost-trade", help="Simulate ghost (BTC/USDC) trade using Schwafit-driven logic.")
-    ghost_parser.add_argument("--matrix-dir", type=str, required=True, help="Path to matrix directory.")
-    ghost_parser.add_argument("--hash", type=str, required=True, help="Comma-separated hash vector (floats).")
-    ghost_parser.add_argument("--price", type=float, required=True, help="Current BTC price.")
-    ghost_parser.add_argument("--usdc-balance", type=float, default=1000.0, help="USDC balance.")
-    ghost_parser.add_argument("--btc-balance", type=float, default=0.0, help="BTC balance.")
+    async def run_interactive(self):
+        """Run the interactive CLI."""
+        print("\n" + "="*50)
+        print("🤖 SCHWABOT TRADING SYSTEM CLI")
+        print("="*50)
+        print("Type 'help' for available commands")
+        print("Type 'quit' to exit")
+        print("="*50)
+        
+        while True:
+            try:
+                command = input("\nschwabot> ").strip().lower()
+                
+                if command == "quit" or command == "exit":
+                    if self.backtesting and self.backtesting.is_running:
+                        await self.stop_system()
+                    print("👋 Goodbye!")
+                    break
+                
+                elif command == "start":
+                    await self.start_system()
+                
+                elif command == "stop":
+                    await self.stop_system()
+                
+                elif command == "status":
+                    self.show_status()
+                
+                elif command == "enable-trading":
+                    self.enable_trading()
+                
+                elif command == "disable-trading":
+                    self.disable_trading()
+                
+                elif command == "config":
+                    self.show_config()
+                
+                elif command == "help":
+                    self.show_help()
+                
+                elif command == "":
+                    continue
+                
+                else:
+                    print(f"❌ Unknown command: {command}")
+                    print("Type 'help' for available commands")
+                
+            except KeyboardInterrupt:
+                print("\n⚠️  Interrupted by user")
+                if self.backtesting and self.backtesting.is_running:
+                    await self.stop_system()
+                break
+            except Exception as e:
+                logger.error(f"CLI error: {e}")
+                print(f"❌ Error: {e}")
 
-    # AI command (stub)
-    ai_parser = subparsers.add_parser("ai", help="Launch AI/CUDA model for fit/override (stub).")
 
-    # Config command (stub)
-    config_parser = subparsers.add_parser("config", help="Show or edit config (stub).")
+async def main():
+    """Main entry point."""
+    cli = SchwabotCLI()
+    await cli.run_interactive()
 
-    args = parser.parse_args()
-
-    if args.command == "fit":
-        schwafit = SchwafitCore(window=args.window)
-        if os.path.isfile(args.prices):
-            prices = np.loadtxt(args.prices, delimiter=",")
-        else:
-            prices = np.array([float(x) for x in args.prices.split(",")])
-        pattern_library = []
-        profit_scores = []
-        for i in range(len(prices) - args.window - 2):
-            v = schwafit.delta2(prices[i:i+args.window+2])
-            v_norm = schwafit.normalize(v)
-            pattern_library.append(v_norm)
-            profit_scores.append(float(prices[i+args.window+1] - prices[i+args.window]))
-        result = schwafit.fit_vector(prices, pattern_library, profit_scores)
-        print("Schwafit Fit Result:")
-        for k, v in result.items():
-            print(f"  {k}: {v}")
-        if args.show_math:
-            print("\nPattern Library Size:", len(pattern_library))
-            print("Top Scores:", result["top_scores"])
-            print("Top Profits:", result["top_profits"])
-            print("Entropy:", result["entropy"])
-    elif args.command == "test":
-        schwafit = SchwafitCore()
-        prices = np.cumsum(np.random.randn(200)) + 100
-        pattern_library = []
-        profit_scores = []
-        for i in range(len(prices) - schwafit.window - 2):
-            v = schwafit.delta2(prices[i:i+schwafit.window+2])
-            v_norm = schwafit.normalize(v)
-            pattern_library.append(v_norm)
-            profit_scores.append(float(prices[i+schwafit.window+1] - prices[i+schwafit.window]))
-        result = schwafit.fit_vector(prices, pattern_library, profit_scores)
-        print("Mock Schwafit Fit Result:")
-        for k, v in result.items():
-            print(f"  {k}: {v}")
-    elif args.command == "status":
-        schwafit = SchwafitCore()
-        print("Schwafit Memory:")
-        for entry in schwafit.fit_memory():
-            print(entry)
-    elif args.command == "select-strategy":
-        hash_vec = np.array([float(x) for x in args.hash.split(",")])
-        bit_mapper = StrategyBitMapper(args.matrix_dir)
-        result = bit_mapper.select_strategy(hash_vec, asset_hint=args.asset)
-        print("Selected Strategy Result:")
-        for k, v in result.items():
-            print(f"  {k}: {v}")
-    elif args.command == "match-matrix":
-        hash_vec = np.array([float(x) for x in args.hash.split(",")])
-        bit_mapper = StrategyBitMapper(args.matrix_dir)
-        matrix_name, entry, score, schwafit_info = bit_mapper.match_hash_to_matrix(hash_vec)
-        print("Matrix Match Result:")
-        print(f"  matrix_name: {matrix_name}")
-        print(f"  score: {score}")
-        print(f"  schwafit_info: {schwafit_info}")
-    elif args.command == "live-status":
-        bit_mapper = StrategyBitMapper(args.matrix_dir)
-        status = bit_mapper.get_live_handler_status()
-        print("Live Handler Status:")
-        for k, v in status.items():
-            print(f"  {k}: {v}")
-    elif args.command == "ferris-spin":
-        bit_mapper = StrategyBitMapper(args.matrix_dir)
-        print("Ferris Wheel Spin Results:")
-        for tick in range(args.ticks):
-            # Use tensor-weighted expansion and log profit vector
-            expanded_id = bit_mapper.expand_strategy_bits(tick, target_bits=8, mode="ferris_wheel")
-            print(f"Tick {tick}: Expanded ID: {expanded_id}")
-        print("Tensor Weights:", bit_mapper.tensor_weights)
-    elif args.command == "live-tick":
-        bit_mapper = StrategyBitMapper(args.matrix_dir)
-        # Simulate a live tick: update tensors, profit, and fit
-        # For demo, just update tensor weights and print
-        api_data = {"price_history": [args.price]}
-        bit_mapper.update_tensor_weights_from_api_data(api_data)
-        print("Live Tick: Updated tensor weights.")
-        print("Tensor Weights:", bit_mapper.tensor_weights)
-    elif args.command == "entry-exit":
-        bit_mapper = StrategyBitMapper(args.matrix_dir)
-        hash_vec = np.array([float(x) for x in args.hash.split(",")])
-        market_state = {}
-        if args.market_state:
-            import json
-            market_state = json.loads(args.market_state)
-        # Use select_strategy to get signal
-        result = bit_mapper.select_strategy(hash_vec)
-        print("Entry/Exit Calculation:")
-        print(result)
-        # Optionally, trigger entry/exit logic if implemented
-        # bit_mapper.trigger_entry_exit(result, market_state, ccxt_executor=None)
-    elif args.command == "ghost-trade":
-        bit_mapper = StrategyBitMapper(args.matrix_dir)
-        hash_vec = np.array([float(x) for x in args.hash.split(",")])
-        # Use Schwafit-driven logic to decide trade
-        result = bit_mapper.select_strategy(hash_vec, asset_hint="BTC/USDC")
-        print("Ghost Trade Decision:")
-        print(result)
-        # Simulate trade logic
-        usdc = args.usdc_balance
-        btc = args.btc_balance
-        price = args.price
-        if result["schwafit"] and result["schwafit"]["decision"]:
-            # Buy BTC with USDC
-            btc_bought = usdc / price
-            usdc = 0
-            btc += btc_bought
-            print(f"Executed BUY: Bought {btc_bought:.6f} BTC at {price}")
-        else:
-            # Sell BTC for USDC
-            usdc += btc * price
-            print(f"Executed SELL: Sold {btc:.6f} BTC at {price}")
-            btc = 0
-        print(f"Balances after trade: USDC={usdc:.2f}, BTC={btc:.6f}")
-    elif args.command == "ai":
-        print("[AI/CUDA model integration coming soon]")
-    elif args.command == "config":
-        print("[Config management coming soon]")
-    else:
-        parser.print_help()
 
 if __name__ == "__main__":
-    main() 
+    # Ensure logs directory exists
+    Path("logs").mkdir(exist_ok=True)
+    
+    # Run the CLI
+    asyncio.run(main()) 

@@ -22,7 +22,7 @@ class CodebaseFixer:
     def __init__(self, project_root: str = "."):
         self.project_root = Path(project_root)
         self.fixed_files: Set[str] = set()
-        self.error_patterns = {
+        self.error_patterns = {}
             "broken_dict": r"(\w+)\s*=\s*\{\}\s*\n\s*([^}]*\})",
             "broken_list": r"(\w+)\s*=\s*\[\]\s*\n\s*([^\]]*\])",
             "missing_typing": r"from typing import (?!.*List)",
@@ -31,7 +31,7 @@ class CodebaseFixer:
 
     def scan_codebase(self) -> Dict[str, List[str]]:
         """Scan the codebase for Python files and identify issues."""
-        issues = {
+        issues = {}
             "broken_dicts": [],
             "broken_lists": [],
             "missing_typing": [],
@@ -57,7 +57,7 @@ class CodebaseFixer:
 
     def _analyze_file(self, content: str, filepath: str) -> Dict[str, List[str]]:
         """Analyze a single file for issues."""
-        issues = {
+        issues = {}
             "broken_dicts": [],
             "broken_lists": [],
             "missing_typing": [],
@@ -160,7 +160,7 @@ class CodebaseFixer:
                 if dict_items:
                     # Fix the dictionary definition
                     indent = len(line) - len(line.lstrip())
-                    fixed_lines.append(" " * indent + f"{var_name} = {{")
+                    fixed_lines.append(" " * indent + f"{var_name} = {{")}}
 
                     for item in dict_items:
                         fixed_lines.append(" " * (indent + 4) + item)
@@ -199,7 +199,7 @@ class CodebaseFixer:
                 if list_items:
                     # Fix the list definition
                     indent = len(line) - len(line.lstrip())
-                    fixed_lines.append(" " * indent + f"{var_name} = [")
+                    fixed_lines.append(" " * indent + f"{var_name} = [")]
 
                     for item in list_items:
                         fixed_lines.append(" " * (indent + 4) + item)
@@ -259,7 +259,7 @@ class CodebaseFixer:
                 if params:
                     # Fix the function call
                     indent = len(line) - len(line.lstrip())
-                    fixed_lines.append(" " * indent + f"{func_name}(")
+                    fixed_lines.append(" " * indent + f"{func_name}("))
 
                     for param in params:
                         fixed_lines.append(" " * (indent + 4) + param)

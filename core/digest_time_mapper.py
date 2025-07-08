@@ -7,17 +7,17 @@ from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Tuple, Any, Generator
 from collections import deque
 import asyncio
-    import cupy as cp
+import cupy as cp
 from .entropy_math import bit_entropy, shannon_entropy, get_backend_info
-    import random
+import random
 
-    import numpy as np
+import numpy as np
 
 #!/usr/bin/env python3
 """
 Digest Time Mapper - Phase Wheel & Temporal Socketing Logic
 Converts millisecond BTC price ticks into 16-bit frames, then 256-bit SHA digests
-for quantum-enhanced trading strategy selection.
+    for quantum-enhanced trading strategy selection.
 
 Core Functions:
   * process_millisecond_tick(price, timestamp)  – convert tick to 16-bit frame
@@ -31,25 +31,25 @@ CUDA Integration:
 - Cross-platform compatibility (Windows, macOS, Linux)
 
 Mathematical Foundations:
-- Phase Wheel: θ(t) = 2π * (t mod T) / T
+- Phase Wheel: θ(t) = 2π * (t mod, T) / T
 - Temporal Socketing: S(t) = Σᵢ αᵢ * exp(-iωᵢt)
 - Digest Momentum: D(t) = SHA256(F(t) ⊕ T(t) ⊕ E(t))
 """
 
 # CUDA Integration with Fallback
-try:
+    try:
     USING_CUDA = True
     _backend = 'cupy (GPU)'
     xp = cp
-except ImportError:
+    except ImportError:
     USING_CUDA = False
     _backend = 'numpy (CPU)'
     xp = np
 
 logger = logging.getLogger(__name__)
-if USING_CUDA:
+    if USING_CUDA:
     logger.info("⚡ DigestTimeMapper using GPU acceleration: {0}".format(_backend))
-else:
+    else:
     logger.info("🔄 DigestTimeMapper using CPU fallback: {0}".format(_backend))
 
 # ---------------------------------------------------------------------------
@@ -58,7 +58,7 @@ else:
 
 
 @dataclass
-class PriceTick:
+    class PriceTick:
     """Individual millisecond price tick."""
 
     price: float
@@ -70,7 +70,7 @@ class PriceTick:
 
 
 @dataclass
-class Frame16Bit:
+    class Frame16Bit:
     """16-bit frame representation of price data."""
 
     frame_data: bytes  # 16 bits = 2 bytes
@@ -82,7 +82,7 @@ class Frame16Bit:
 
 
 @dataclass
-class TemporalSocket:
+    class TemporalSocket:
     """Temporal socket for pattern analysis."""
 
     socket_id: str
@@ -95,7 +95,7 @@ class TemporalSocket:
 
 
 @dataclass
-class DigestResult:
+    class DigestResult:
     """256-bit SHA digest with metadata."""
 
     digest: bytes
@@ -118,7 +118,7 @@ class DigestTimeMapper:
     Maps millisecond price ticks to 256-bit SHA digests via 16-bit frames.
 
     Mathematical Implementation:
-    - Phase Wheel: θ(t) = 2π * (t mod T) / T
+    - Phase Wheel: θ(t) = 2π * (t mod, T) / T
     - Temporal Socketing: S(t) = Σᵢ αᵢ * exp(-iωᵢt)
     - Digest Momentum: D(t) = SHA256(F(t) ⊕ T(t) ⊕ E(t))
     """
@@ -155,7 +155,7 @@ class DigestTimeMapper:
 
         logger.info("Digest Time Mapper initialized with {0}ms frame window".format(frame_window_ms))
 
-    def process_millisecond_tick(
+    def process_millisecond_tick()
         self, price: float, timestamp: Optional[float] = None, volume: float = 0.0, bid: float = 0.0, ask: float = 0.0
     ) -> Optional[Frame16Bit]:
         """
@@ -171,7 +171,7 @@ class DigestTimeMapper:
                 timestamp = time.time()
 
             # Create price tick
-            tick = PriceTick(
+            tick = PriceTick()
                 price=price, timestamp=timestamp, volume=volume, bid=bid, ask=ask, tick_id=self.total_ticks_processed
             )
 
@@ -192,11 +192,11 @@ class DigestTimeMapper:
                         self.total_frames_generated += 1
 
                     processing_time = time.time() - start_time
-                    self.avg_processing_time = (
+                    self.avg_processing_time = ()
                         self.avg_processing_time * (self.total_frames_generated - 1) + processing_time
                     ) / self.total_frames_generated
 
-                    logger.debug("Generated frame {0} in {1}s".format(frame.frame_index, processing_time:.4f))
+                    logger.debug("Generated frame {0} in {1}s".format(frame.frame_index, processing_time))
                     return frame
 
             return None
@@ -236,7 +236,7 @@ class DigestTimeMapper:
                 # Add entropy component
                 entropy_components.append(frame.entropy_level)
 
-                # Add temporal component (phase angle)
+                # Add temporal component (phase, angle)
                 temporal_components.append(frame.phase_angle)
 
             # Create temporal signature
@@ -261,7 +261,7 @@ class DigestTimeMapper:
             # Find matching temporal sockets
             socket_matches = self._find_socket_matches(digest, temporal_components)
 
-            result = DigestResult(
+            result = DigestResult()
                 digest=digest,
                 digest_hex=digest.hex(),
                 frame_count=frame_count,
@@ -291,7 +291,7 @@ class DigestTimeMapper:
             digest_entropy = bit_entropy(digest)
             digest_hex = digest.hex()
 
-            analysis = {
+            analysis = {}
                 'digest_entropy': digest_entropy,
                 'phase_wheel_position': self.phase_wheel_position,
                 'temporal_sockets': {},
@@ -323,7 +323,7 @@ class DigestTimeMapper:
             logger.error("Error in temporal socket analysis: {0}".format(e))
             return {}
 
-    def ferris_wheel_loop(
+    def ferris_wheel_loop()
         self, price_stream: Generator[Tuple[float, float], None, None]
     ) -> Generator[DigestResult, None, None]:
         """
@@ -350,7 +350,7 @@ class DigestTimeMapper:
                         yield digest_result
 
                 # Small delay to prevent overwhelming
-                time.sleep(0.001)  # 1ms delay
+                time.sleep(0.01)  # 1ms delay
 
         except Exception as e:
             logger.error("Error in Ferris Wheel loop: {0}".format(e))
@@ -361,7 +361,7 @@ class DigestTimeMapper:
     def get_mapper_stats(self) -> Dict[str, Any]:
         """Get mapper statistics and performance metrics."""
         with self.processing_lock:
-            stats = {
+            stats = {}
                 'total_ticks_processed': self.total_ticks_processed,
                 'total_frames_generated': self.total_frames_generated,
                 'total_digests_created': self.total_digests_created,
@@ -387,7 +387,7 @@ class DigestTimeMapper:
     def _initialize_temporal_sockets(self):
         """Initialize temporal sockets for pattern recognition."""
         # High-frequency socket (1-10 Hz)
-        self.temporal_sockets['high_freq'] = TemporalSocket(
+        self.temporal_sockets['high_freq'] = TemporalSocket()
             socket_id='high_freq',
             time_window=0.1,  # 100ms
             frequency_components=[5.0, 7.5, 10.0],  # Hz
@@ -397,7 +397,7 @@ class DigestTimeMapper:
         )
 
         # Medium-frequency socket (0.1-1 Hz)
-        self.temporal_sockets['medium_freq'] = TemporalSocket(
+        self.temporal_sockets['medium_freq'] = TemporalSocket()
             socket_id='medium_freq',
             time_window=1.0,  # 1s
             frequency_components=[0.5, 0.75, 1.0],  # Hz
@@ -406,11 +406,11 @@ class DigestTimeMapper:
             coherence_score=0.7,
         )
 
-        # Low-frequency socket (0.01-0.1 Hz)
-        self.temporal_sockets['low_freq'] = TemporalSocket(
+        # Low-frequency socket (0.1-0.1 Hz)
+        self.temporal_sockets['low_freq'] = TemporalSocket()
             socket_id='low_freq',
             time_window=10.0,  # 10s
-            frequency_components=[0.05, 0.075, 0.1],  # Hz
+            frequency_components=[0.5, 0.75, 0.1],  # Hz
             amplitude_weights=[0.6, 0.3, 0.1],
             phase_shifts=[0.0, xp.pi / 8, xp.pi / 4],
             coherence_score=0.6,
@@ -420,7 +420,7 @@ class DigestTimeMapper:
 
     def _update_phase_wheel(self, timestamp: float):
         """Update phase wheel position based on time."""
-        # Phase wheel: θ(t) = 2π * (t mod T) / T
+        # Phase wheel: θ(t) = 2π * (t mod, T) / T
         period_seconds = self.phase_period_ms / 1000.0
         self.phase_wheel_position = (2 * xp.pi * (timestamp % period_seconds)) / period_seconds
 
@@ -443,7 +443,7 @@ class DigestTimeMapper:
             # Volume intensity
             volume_intensity = xp.mean(volumes) if volumes else 0.0
 
-            # Volatility (standard deviation of price changes)
+            # Volatility (standard deviation of price, changes)
             if len(prices) > 1:
                 price_changes = [(prices[i] - prices[i - 1]) / prices[i - 1] for i in range(1, len(prices))]
                 volatility = xp.std(price_changes) if price_changes else 0.0
@@ -463,7 +463,7 @@ class DigestTimeMapper:
             entropy_level = shannon_entropy(frame_data)
 
             # Create frame
-            frame = Frame16Bit(
+            frame = Frame16Bit()
                 frame_data=frame_data,
                 timestamp=recent_ticks[-1].timestamp,
                 phase_angle=self.phase_wheel_position,
@@ -512,7 +512,7 @@ class DigestTimeMapper:
             return b'\x00' * 16
 
     def _gpu_sha256(self, data: bytes) -> bytes:
-        """GPU-accelerated SHA-256 (fallback to CPU)."""
+        """GPU-accelerated SHA-256 (fallback to, CPU)."""
         try:
             # For now, fallback to CPU SHA-256
             # GPU SHA-256 would require custom CUDA kernel
@@ -560,7 +560,7 @@ class DigestTimeMapper:
 
                 # Check if temporal components match socket frequencies
                 for freq, weight in zip(socket.frequency_components, socket.amplitude_weights):
-                    # Simple frequency matching (could be more sophisticated)
+                    # Simple frequency matching (could be more, sophisticated)
                     freq_match = 0.0
                     for component in temporal_components:
                         # Check if component frequency is close to socket frequency
@@ -588,7 +588,7 @@ class DigestTimeMapper:
         try:
             digest_entropy = bit_entropy(digest)
 
-            analysis = {
+            analysis = {}
                 'socket_id': socket.socket_id,
                 'time_window': socket.time_window,
                 'coherence': socket.coherence_score,
@@ -616,7 +616,7 @@ class DigestTimeMapper:
             digest_values = [b for b in digest]
 
             # Calculate basic frequency metrics
-            freq_analysis = {
+            freq_analysis = {}
                 'mean_frequency': xp.mean(digest_values),
                 'frequency_std': xp.std(digest_values),
                 'frequency_entropy': shannon_entropy(digest),
@@ -633,7 +633,7 @@ class DigestTimeMapper:
 # ---------------------------------------------------------------------------
 # Quick self-test
 # ---------------------------------------------------------------------------
-if __name__ == "__main__":
+    if __name__ == "__main__":
     # Test digest time mapper
     mapper = DigestTimeMapper()
 
@@ -645,7 +645,7 @@ if __name__ == "__main__":
             change = random.gauss(0, 100)  # Normal distribution
             base_price += change
             yield base_price, time.time()
-            time.sleep(0.01)  # 10ms intervals
+            time.sleep(0.1)  # 10ms intervals
 
     # Process some ticks
     stream = price_stream()
@@ -660,9 +660,9 @@ if __name__ == "__main__":
     # Generate digest
     digest_result = mapper.generate_phase_wheel_digest()
     if digest_result:
-        print("Generated digest: {0}...".format(digest_result.digest_hex[:16]))
-        print("Entropy score: {0}".format(digest_result.entropy_score:.3f))
-        print("Temporal coherence: {0}".format(digest_result.temporal_coherence:.3f))
+        print("Generated digest: {0}...".format(digest_result.digest_hex[:, 16]))
+        print("Entropy, score))"
+        print("Temporal coherence: {0}".format(digest_result.temporal_coherence))
         print("Socket matches: {0}".format(digest_result.socket_matches))
 
     # Show stats

@@ -15,7 +15,7 @@ This creates a self-contained .exe that includes all working components.
 
 def create_requirements_txt():
     """Create requirements.txt with minimal dependencies."""
-    requirements = [
+    requirements = []
         "numpy>=1.21.0",
         "asyncio",
         "pathlib",
@@ -37,21 +37,21 @@ def create_requirements_txt():
 
 def create_pyinstaller_spec():
     """Create PyInstaller spec file for executable creation."""
-    spec_content = """# -*- mode: python ; coding: utf-8 -*-
+    spec_content = """# -*- mode: python ; coding: utf-8 -*-"
 
 block_cipher = None
 
-a = Analysis(
+a = Analysis()
     ['test_brain_integration.py'],
     pathex=[],
     binaries=[],
-    datas=[
+    datas=[]
         ('core/brain_trading_engine.py', 'core'),
         ('core/unified_math_system.py', 'core'),
         ('core/type_defs.py', 'core'),
         ('utils/safe_print.py', 'utils'),
     ],
-    hiddenimports=[
+    hiddenimports=[]
         'numpy',
         'asyncio',
         'logging',
@@ -75,7 +75,7 @@ a = Analysis(
 
 pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
 
-exe = EXE(
+exe = EXE()
     pyz,
     a.scripts,
     a.binaries,
@@ -108,7 +108,7 @@ exe = EXE(
 def create_build_script():
     """Create build script for easy executable creation."""
     if sys.platform.startswith("win"):
-        script_content = """@echo off
+        script_content = """@echo off""
 echo Building Schwabot Brain Trading Executable...
 echo.
 
@@ -121,7 +121,7 @@ echo Building executable...
 pyinstaller schwabot.spec --clean --noconfirm
 
 echo.
-if exist "dist\\SchwabotBrainTrader.exe" (
+    if exist "dist\\SchwabotBrainTrader.exe" ()
     echo [SUCCESS] Build successful! Executable created at: dist\\SchwabotBrainTrader.exe
     echo.
     echo Testing executable...
@@ -139,7 +139,7 @@ pause
         with open(script_name, "w", encoding="utf-8") as f:
             f.write(script_content)
     else:
-        script_content = """#!/bin/bash
+        script_content = """#!/bin/bash"
 echo "Building Schwabot Brain Trading Executable..."
 echo
 
@@ -152,7 +152,7 @@ echo "Building executable..."
 pyinstaller schwabot.spec --clean --noconfirm
 
 echo
-if [ -f "dist/SchwabotBrainTrader" ]; then
+    if [ -f "dist/SchwabotBrainTrader" ]; then
     echo "[SUCCESS] Build successful! Executable created at: dist/SchwabotBrainTrader"
     echo
     echo "Testing executable..."
@@ -175,7 +175,7 @@ fi
 
 def create_readme():
     """Create README for the packaged application."""
-    readme_content = """# Schwabot Brain Trading System
+    readme_content = """# Schwabot Brain Trading System"
 
 ## Overview
 
@@ -229,8 +229,8 @@ python test_brain_integration.py
 The system can be configured by modifying the brain trading engine parameters:
 
 ```python
-config = {
-    'base_profit_rate': 0.002,        # 0.2% base profit rate
+config = {}
+    'base_profit_rate': 0.02,        # 0.2% base profit rate
     'confidence_threshold': 0.7,       # 70% confidence threshold
     'enhancement_range': (0.8, 1.8),   # Enhancement factor range
     'max_history_size': 1000           # Maximum signal history

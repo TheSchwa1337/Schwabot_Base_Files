@@ -9,7 +9,7 @@ Comprehensive script to fix remaining E999 errors in mathematical and core files
 
 
 def fix_complex_syntax_errors(): -> bool:
-    """Fix complex E999 syntax errors in a file.
+    """Fix complex E999 syntax errors in a file."
 
     Args:
         file_path: Path to the file to fix.
@@ -24,9 +24,9 @@ def fix_complex_syntax_errors(): -> bool:
         original_content = content
 
         # Fix 1: Remove all malformed docstrings
-        content = re.sub(r'""""""+', '"""', content)
-        content = re.sub(r'""""""', '"""', content)
-        content = re.sub(r'"""\s*"""', '"""', content)
+        content = re.sub(r'""""""+', '"""', content)"
+        content = re.sub(r'""""""', '"""', content)"
+        content = re.sub(r'"""\s*"""', '"""', content)"
 
         # Fix 2: Fix unterminated string literals
         lines = content.split("\n")
@@ -34,42 +34,42 @@ def fix_complex_syntax_errors(): -> bool:
 
         for line in lines:
             # Fix unterminated triple quotes
-            if line.count('"""') % 2 == 1:
-                if line.strip().endswith('"""'):
+            if line.count('"""') % 2 == 1:"
+                if line.strip().endswith('"""'):"
                     # Add missing closing quote
-                    line = line + '"""'
-                elif line.strip().startswith('"""'):
+                    line = line + '"""'"
+                elif line.strip().startswith('"""'):"
                     # Add missing opening quote
-                    line = '"""' + line
+                    line = '"""' + line"
 
             # Fix unterminated single quotes
-            if line.count("'") % 2 == 1:
-                if not line.strip().endswith("'"):
-                    line = line + "'"
+            if line.count("'") % 2 == 1:'
+                if not line.strip().endswith("'"):'
+                    line = line + "'"'
 
             # Fix unterminated double quotes
-            if line.count('"') % 2 == 1:
-                if not line.strip().endswith('"'):
-                    line = line + '"'
+            if line.count('"') % 2 == 1:"
+                if not line.strip().endswith('"'):"
+                    line = line + '"'"
 
             fixed_lines.append(line)
 
         content = "\n".join(fixed_lines)
 
         # Fix 3: Fix unmatched parentheses
-        # This is complex, so we'll do basic fixes
+        # This is complex, so we'll do basic fixes'
         content = re.sub(r"\(\s*\)\s*\)", "())", content)  # Fix double closing
-        content = re.sub(r"\(\s*\(\s*\)", "(()", content)  # Fix double opening
+        content = re.sub(r"\(\s*\(\s*\)", "(()", content)  # Fix double opening))
 
         # Fix 4: Fix invalid decimal literals
-        content = re.sub(
+        content = re.sub()
             r"(\d+)\.(\d+)\.(\d+)", r"\1.\2_\3", content
         )  # Fix multiple dots
 
         # Fix 5: Fix invalid syntax in function definitions
-        content = re.sub(
-            r'def\s+(\w+)\s*\([^)]*\)\s*->\s*[^:]*:"""',
-            r'def \1(self):\n        """',
+        content = re.sub()
+            r'def\s+(\w+)\s*\([^)]*\)\s*->\s*[^:]*:"""',"
+            r'def \1(self):\n        """',"
             content,
         )
 
@@ -127,7 +127,7 @@ def fix_complex_syntax_errors(): -> bool:
 
 
 def get_remaining_problematic_files(): -> List[Path]:
-    """Get list of files that still have E999 errors.
+    """Get list of files that still have E999 errors."
 
     Returns:
         List of problematic file paths.
@@ -136,7 +136,7 @@ def get_remaining_problematic_files(): -> List[Path]:
     problematic_files = []
 
     # Files that are likely to have mathematical content
-    math_patterns = [
+    math_patterns = []
         "advanced_*.py",
         "drift_*.py",
         "entropy_*.py",
@@ -163,7 +163,7 @@ def get_remaining_problematic_files(): -> List[Path]:
         problematic_files.extend(core_dir.glob(pattern))
 
     # Also check subdirectories
-    for subdir in [
+    for subdir in []
         "ghost",
         "lantern",
         "matrix",
@@ -201,7 +201,7 @@ def main():
             else:
                 print(f"  - No fixes needed for {file_path}")
 
-    print(
+    print()
         f"\nFixed {fixed_count} files out of {len(problematic_files)} problematic files"
     )
     print("Run flake8 again to check remaining E999 errors")

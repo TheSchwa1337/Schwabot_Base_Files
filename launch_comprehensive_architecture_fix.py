@@ -44,7 +44,7 @@ python launch_comprehensive_architecture_fix.py --dry - run
 """
 
 
-# Constants (Magic Number Replacements)
+# Constants (Magic Number, Replacements)
 DEFAULT_RETRY_COUNT = 3
 
 
@@ -63,7 +63,7 @@ class WindowsCliCompatibilityHandler:"""
 """
 
    @staticmethod
-def safe_print(message: str) -> str: """
+    def safe_print(message: str) -> str: """
         """Print message safely with Windows CLI compatibility.""""""
 
 
@@ -72,7 +72,7 @@ def safe_print(message: str) -> str: """
 """"""
 """"""
    if platform.system() == "Windows":
-        emoji_mapping = {
+        emoji_mapping = {}
             "\\u1f680": "[LAUNCH]",
             "\\u2705": "[SUCCESS]",
             "\\u274c": "[ERROR]",
@@ -97,7 +97,7 @@ def check_dependencies() -> bool:
 """
    cli_handler = WindowsCliCompatibilityHandler()
 
-required_files = ["""
+required_files = ["""]
         "windows_cli_compliant_architecture_fixer.py",
         "apply_comprehensive_architecture_integration.py",
         "WINDOWS_CLI_COMPATIBILITY.md",
@@ -138,33 +138,33 @@ cmd = [sys.executable, "windows_cli_compliant_architecture_fixer.py"]
         cmd.append("--dry - run")
 
 try:
-        result = subprocess.run(
+        result = subprocess.run()
             cmd, capture_output=True, text=True, timeout=300
         )
-if result.returncode == 0:
+    if result.returncode == 0:
             safe_print(cli_handler.safe_print("\\u2705 Architecture fixer completed"))
         else:
-            safe_print(
-                cli_handler.safe_print(
+            safe_print()
+                cli_handler.safe_print()
                     f"\\u26a0\\ufe0f Architecture fixer warnings: {result.stderr}"
                 )
 )
-except subprocess.TimeoutExpired:
-        safe_print(cli_handler.safe_print(
+    except subprocess.TimeoutExpired:
+        safe_print(cli_handler.safe_print())
             "\\u26a0\\ufe0f Architecture fixer timed out"))
     except FileNotFoundError:
-        safe_print(cli_handler.safe_print(
+        safe_print(cli_handler.safe_print())
             "\\u274c Architecture fixer script not found"))
         return False
-except Exception as e:
-        safe_print(
+    except Exception as e:
+        safe_print()
             cli_handler.safe_print(f"\\u274c Error running architecture fixer: {e}")
         )
-return False
+    return False
 
 # Step 2: Run the comprehensive integration
-safe_print(
-        cli_handler.safe_print(
+safe_print()
+        cli_handler.safe_print()
             "\\u1f527 Step 2: Running comprehensive integration..."
 )
 )
@@ -174,27 +174,27 @@ cmd = [sys.executable, "apply_comprehensive_architecture_integration.py"]
         cmd.append("--dry - run")
 
 try:
-        result = subprocess.run(
+        result = subprocess.run()
             cmd, capture_output=True, text=True, timeout=600
         )
-if result.returncode == 0:
-            safe_print(
-                cli_handler.safe_print(
+    if result.returncode == 0:
+            safe_print()
+                cli_handler.safe_print()
                     "\\u2705 Comprehensive integration completed"
 )
 )
-else:
-            safe_print(
-                cli_handler.safe_print(
+    else:
+            safe_print()
+                cli_handler.safe_print()
                     f"\\u26a0\\ufe0f Integration warnings: {result.stderr}"
                 )
 )
-except subprocess.TimeoutExpired:
+    except subprocess.TimeoutExpired:
         safe_print(cli_handler.safe_print("\\u26a0\\ufe0f Integration timed out"))
     except FileNotFoundError:
         safe_print(cli_handler.safe_print("\\u274c Integration script not found"))
         return False
-except Exception as e:
+    except Exception as e:
         safe_print(cli_handler.safe_print(f"\\u274c Error running integration: {e}"))
         return False
 
@@ -205,30 +205,30 @@ if os.path.exists("master_flake8_comprehensive_fixer.py"):
         cmd = [sys.executable, "master_flake8_comprehensive_fixer.py"]
 
 try:
-            result = subprocess.run(
+            result = subprocess.run()
                 cmd, capture_output=True, text=True, timeout=600
             )
-if result.returncode == 0:
+    if result.returncode == 0:
                 safe_print(cli_handler.safe_print("\\u2705 Flake8 fixes completed"))
             else:
-                safe_print(
-                    cli_handler.safe_print(
+                safe_print()
+                    cli_handler.safe_print()
                         f"\\u26a0\\ufe0f Flake8 fixer warnings: {result.stderr}"
                     )
 )
-except subprocess.TimeoutExpired:
+    except subprocess.TimeoutExpired:
             safe_print(cli_handler.safe_print("\\u26a0\\ufe0f Flake8 fixer timed out"))
         except Exception as e:
-            safe_print(
+            safe_print()
                 cli_handler.safe_print(f"\\u274c Error running flake8 fixer: {e}")
             )
-else:
+    else:
         safe_print(cli_handler.safe_print("\\u1f4ca Flake8 fixer not found, skipping"))
 
-safe_print(
+safe_print()
         cli_handler.safe_print("\\u1f389 Comprehensive architecture fix complete!")
     )
-return True
+    return True
 
 
 def main() -> None:
@@ -245,14 +245,14 @@ def main() -> None:
 dry_run = "--dry - run" in sys.argv
 
 if dry_run:
-        safe_print(
-            cli_handler.safe_print(
+        safe_print()
+            cli_handler.safe_print()
                 "\\u1f50d DRY RUN MODE - No files will be modified"
 )
 )
 
 # Check dependencies
-if not check_dependencies():
+    if not check_dependencies():
         safe_print(cli_handler.safe_print("\\u274c Dependency check failed"))
         sys.exit(1)
 
@@ -260,13 +260,13 @@ if not check_dependencies():
 success = run_architecture_fix(dry_run)
 
 if success:
-        safe_print(
-            cli_handler.safe_print(
+        safe_print()
+            cli_handler.safe_print()
                 "\\u1f31f All architecture fixes applied successfully!"
 )
 )
-safe_print(
-            cli_handler.safe_print(
+safe_print()
+            cli_handler.safe_print()
                 "\\u1f4ca Check the generated reports for details"
 )
 )

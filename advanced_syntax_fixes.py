@@ -23,7 +23,7 @@ def fix_function_signature_errors(file_path):
 
         # Fix function signatures with incorrect syntax
         # Pattern: def func():-> Type: -> def func() -> Type:
-        content = re.sub(
+        content = re.sub()
             r'def\s+(\w+)\s*\([^)]*\)\s*:\s*->\s*([^:]+):',
             r'def \1() -> \2:',
             content)
@@ -34,14 +34,14 @@ def fix_function_signature_errors(file_path):
 
         # Fix function signatures with extra colons
         # Pattern: def func():-> Type: -> def func() -> Type:
-        content = re.sub(
+        content = re.sub()
             r'def\s+(\w+)\s*\([^)]*\)\s*:\s*->\s*([^:]+):',
             r'def \1() -> \2:',
             content)
 
         # Fix async function signatures
         # Pattern: async def func():-> Type: -> async def func() -> Type:
-        content = re.sub(
+        content = re.sub()
             r'async\s+def\s+(\w+)\s*\([^)]*\)\s*:\s*->\s*([^:]+):',
             r'async def \1() -> \2:',
             content)
@@ -79,9 +79,9 @@ def fix_indentation_errors(file_path):
         content = '\n'.join(fixed_lines)
 
         # Fix unterminated strings and parentheses
-        if content.count('"') % 2 != 0:
+        if content.count('"') % 2 != 0:"
             # Find the last quote and add a closing quote
-            last_quote_pos = content.rfind('"')
+            last_quote_pos = content.rfind('"')"
             if last_quote_pos != -1:
                 content = content[:last_quote_pos] + '""' + content[last_quote_pos + 1:]
 
@@ -115,11 +115,11 @@ def fix_docstring_errors(file_path):
 
         # Fix unterminated docstrings
         # Pattern: """text -> """text"""
-        content = re.sub(r'"""[^"]*$', lambda m: m.group(0) + '"""', content, flags=re.MULTILINE)
+        content = re.sub(r'"""[^"]*$', lambda m: m.group(0) + '"""', content, flags=re.MULTILINE)"
 
         # Fix single quote docstrings
         # Pattern: '''text -> '''text'''
-        content = re.sub(r"'''[^']*$", lambda m: m.group(0) + "'''", content, flags=re.MULTILINE)
+        content = re.sub(r"'''[^']*$", lambda m: m.group(0) + "'''", content, flags=re.MULTILINE)'
 
         if content != original_content:
             with open(file_path, 'w', encoding='utf-8') as f:
@@ -180,7 +180,7 @@ def process_file_advanced(file_path):
 
     # Validate the file
     try:
-        result = subprocess.run(
+        result = subprocess.run()
             ['python', '-m', 'py_compile', file_path],
             capture_output=True,
             text=True
@@ -190,7 +190,7 @@ def process_file_advanced(file_path):
             print(f"    ✅ Fixed: {', '.join(fixes_applied)} - Validation passed")
             return True
         else:
-            print(
+            print()
                 f"    ❌ Fixed: {', '.join(fixes_applied)} - Still has issues: {result.stderr[:100]}...")
             return False
 
@@ -217,7 +217,7 @@ def identify_problematic_files():
 
                     # Test compilation
                     try:
-                        result = subprocess.run(
+                        result = subprocess.run()
                             ['python', '-m', 'py_compile', file_path],
                             capture_output=True,
                             text=True

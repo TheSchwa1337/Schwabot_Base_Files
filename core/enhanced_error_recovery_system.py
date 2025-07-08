@@ -18,7 +18,7 @@ import numpy as np
 Enhanced Error Recovery System for Schwabot Trading System
 
 Provides comprehensive error detection, classification, and recovery mechanisms
-for mathematical operations, network issues, and system failures.
+    for mathematical operations, network issues, and system failures.
 
 Features:
 - Multi-level error classification and severity assessment
@@ -35,19 +35,17 @@ CUDA Integration:
 
 # CUDA Integration with Fallback
 try:
-    USING_CUDA = True
-    _backend = 'cupy (GPU)'
-    xp = cp
+    import cupy as cp
+    CUPY_AVAILABLE = True
 except ImportError:
-    USING_CUDA = False
-    _backend = 'numpy (CPU)'
-    xp = np
+    import numpy as cp
+    CUPY_AVAILABLE = False
 
 logger = logging.getLogger(__name__)
-if USING_CUDA:
-    logger.info("⚡ Enhanced Error Recovery System using GPU acceleration: {0}".format(_backend))
+if CUPY_AVAILABLE:
+    logger.info("⚡ Enhanced Error Recovery System using GPU acceleration: {0}".format('cupy (GPU)'))
 else:
-    logger.info("🔄 Enhanced Error Recovery System using CPU fallback: {0}".format(_backend))
+    logger.info("🔄 Enhanced Error Recovery System using CPU fallback: {0}".format('numpy (CPU)'))
 
 
 class ErrorSeverity(Enum):
@@ -138,37 +136,36 @@ class MathematicalStabilityChecker:
         self.stability_threshold = 1e-12
         self.condition_number_threshold = 1e15
         self.convergence_threshold = 1e-10
-        self.numerical_precision = xp.finfo(float).eps
+        self.numerical_precision = cp.finfo(float).eps
 
-    def check_matrix_stability(self, matrix: xp.ndarray) -> Dict[str, Any]:
+    def check_matrix_stability(self, matrix: cp.ndarray) -> Dict[str, Any]:
         """Check matrix stability and conditioning"""
         try:
-            stability_report = {
-                'is_stable': True,
-                'condition_number': None,
-                'determinant': None,
-                'rank': None,
-                'eigenvalue_issues': False,
-                'numerical_issues': [],
-            }
+            stability_report = {}
+            stability_report['is_stable'] = True
+            stability_report['condition_number'] = None
+            stability_report['determinant'] = None
+            stability_report['rank'] = None
+            stability_report['eigenvalue_issues'] = False
+            stability_report['numerical_issues'] = []
 
             # Check for NaN or Inf values
-            if xp.any(xp.isnan(matrix)) or xp.any(xp.isinf(matrix)):
+            if cp.any(cp.isnan(matrix)) or cp.any(cp.isinf(matrix)):
                 stability_report['is_stable'] = False
                 stability_report['numerical_issues'].append('NaN or Inf values detected')
 
             # Check matrix conditioning
             if matrix.ndim == 2 and matrix.shape[0] == matrix.shape[1]:
                 try:
-                    cond_num = xp.linalg.cond(matrix)
+                    cond_num = cp.linalg.cond(matrix)
                     stability_report['condition_number'] = float(cond_num)
 
                     if cond_num > self.condition_number_threshold:
                         stability_report['is_stable'] = False
-                        stability_report['numerical_issues'].append("Ill-conditioned matrix (cond={0})".format(cond_num:.2e))
+                        stability_report['numerical_issues'].append(f"Ill-conditioned matrix (cond={cond_num:.2e})")
 
                     # Check determinant
-                    det = xp.linalg.det(matrix)
+                    det = cp.linalg.det(matrix)
                     stability_report['determinant'] = float(det)
 
                     if abs(det) < self.stability_threshold:
@@ -176,7 +173,7 @@ class MathematicalStabilityChecker:
                         stability_report['numerical_issues'].append('Matrix is nearly singular')
 
                     # Check rank
-                    rank = xp.linalg.matrix_rank(matrix)
+                    rank = cp.linalg.matrix_rank(matrix)
                     stability_report['rank'] = int(rank)
 
                     if rank < min(matrix.shape):
@@ -184,12 +181,12 @@ class MathematicalStabilityChecker:
                         stability_report['numerical_issues'].append('Matrix is rank deficient')
 
                     # Check eigenvalues for stability
-                    eigenvalues = xp.linalg.eigvals(matrix)
-                    if xp.any(xp.real(eigenvalues) < -self.stability_threshold):
+                    eigenvalues = cp.linalg.eigvals(matrix)
+                    if cp.any(cp.real(eigenvalues) < -self.stability_threshold):
                         stability_report['eigenvalue_issues'] = True
                         stability_report['numerical_issues'].append('Unstable eigenvalues detected')
 
-                except xp.linalg.LinAlgError as e:
+                except cp.linalg.LinAlgError as e:
                     stability_report['is_stable'] = False
                     stability_report['numerical_issues'].append("Linear algebra error: {0}".format(str(e)))
 
@@ -199,30 +196,30 @@ class MathematicalStabilityChecker:
             logger.error("Error checking matrix stability: {0}".format(e))
             return {'is_stable': False, 'error': str(e)}
 
-    def stabilize_matrix(self, matrix: xp.ndarray, method: str = 'ridge') -> xp.ndarray:
+    def stabilize_matrix(self, matrix: cp.ndarray, method: str = 'ridge') -> cp.ndarray:
         """Apply stabilization techniques to matrices"""
         try:
             stabilized = matrix.copy()
 
             # Replace NaN and Inf values
-            stabilized = xp.nan_to_num(stabilized, nan=0.0, posinf=1e10, neginf=-1e10)
+            stabilized = cp.nan_to_num(stabilized, nan=0.0, posinf=1e10, neginf=-1e10)
 
             if method == 'ridge' and matrix.ndim == 2 and matrix.shape[0] == matrix.shape[1]:
                 # Ridge regularization
-                regularization = 1e-10 * xp.eye(matrix.shape[0])
+                regularization = 1e-10 * cp.eye(matrix.shape[0])
                 stabilized += regularization
 
             elif method == 'truncated_svd':
                 # Truncated SVD for low-rank approximation
-                U, s, Vt = xp.linalg.svd(stabilized, full_matrices=False)
+                U, s, Vt = cp.linalg.svd(stabilized, full_matrices=False)
                 # Keep only significant singular values
-                threshold = xp.max(s) * 1e-10
-                s_truncated = xp.where(s > threshold, s, 0)
-                stabilized = U @ xp.diag(s_truncated) @ Vt
+                threshold = cp.max(s) * 1e-10
+                s_truncated = cp.where(s > threshold, s, 0)
+                stabilized = U @ cp.diag(s_truncated) @ Vt
 
             elif method == 'clipping':
                 # Clip extreme values
-                stabilized = xp.clip(stabilized, -1e10, 1e10)
+                stabilized = cp.clip(stabilized, -1e10, 1e10)
 
             return stabilized
 
@@ -235,68 +232,67 @@ class ErrorClassifier:
     """Classify errors by type and severity"""
 
     def __init__(self):
-        self.error_patterns = {
-            ErrorCategory.MATHEMATICAL: [
-                'singular matrix',
-                'ill-conditioned',
-                'convergence',
-                'numerical',
-                'overflow',
-                'underflow',
-                'division by zero',
-                'invalid value',
-            ],
-            ErrorCategory.NETWORK: [
-                'connection',
-                'timeout',
-                'network',
-                'socket',
-                'http',
-                'ssl',
-                'dns',
-                'unreachable',
-                'refused',
-            ],
-            ErrorCategory.MEMORY: [
-                'memory',
-                'allocation',
-                'out of memory',
-                'malloc',
-                'heap',
-                'stack overflow',
-                'segmentation fault',
-            ],
-            ErrorCategory.COMPUTATION: [
-                'computation',
-                'calculation',
-                'algorithm',
-                'iteration',
-                'optimization',
-                'gradient',
-                'derivative',
-            ],
-            ErrorCategory.DATA: [
-                'data',
-                'format',
-                'parsing',
-                'serialization',
-                'validation',
-                'schema',
-                'type',
-                'missing',
-            ],
-            ErrorCategory.SYSTEM: ['system', 'os', 'file', 'permission', 'disk', 'hardware', 'driver', 'resource'],
-            ErrorCategory.TRADING: [
-                'order',
-                'execution',
-                'balance',
-                'position',
-                'market',
-                'exchange',
-                'symbol',
-                'price',
-            ],
-        }
+        self.error_patterns = {}
+        self.error_patterns[ErrorCategory.MATHEMATICAL] = [
+            'singular matrix',
+            'ill-conditioned',
+            'convergence',
+            'numerical',
+            'overflow',
+            'underflow',
+            'division by zero',
+            'invalid value',
+        ]
+        self.error_patterns[ErrorCategory.NETWORK] = [
+            'connection',
+            'timeout',
+            'network',
+            'socket',
+            'http',
+            'ssl',
+            'dns',
+            'unreachable',
+            'refused',
+        ]
+        self.error_patterns[ErrorCategory.MEMORY] = [
+            'memory',
+            'allocation',
+            'out of memory',
+            'malloc',
+            'heap',
+            'stack overflow',
+            'segmentation fault',
+        ]
+        self.error_patterns[ErrorCategory.COMPUTATION] = [
+            'computation',
+            'calculation',
+            'algorithm',
+            'iteration',
+            'optimization',
+            'gradient',
+            'derivative',
+        ]
+        self.error_patterns[ErrorCategory.DATA] = [
+            'data',
+            'format',
+            'parsing',
+            'serialization',
+            'validation',
+            'schema',
+            'type',
+            'missing',
+        ]
+        self.error_patterns[ErrorCategory.SYSTEM] = ['system', 'os', 'file', 'permission', 'disk', 'hardware', 'driver', 'resource']
+        self.error_patterns[ErrorCategory.TRADING] = [
+            'order',
+            'execution',
+            'balance',
+            'position',
+            'market',
+            'exchange',
+            'symbol',
+            'price',
+        ]
 
     def classify_error(self, error: Exception, context: Dict[str, Any] = None) -> Tuple[ErrorCategory, ErrorSeverity]:
         """Classify error by category and severity"""
@@ -320,9 +316,7 @@ class ErrorClassifier:
             logger.error("Error classifying error: {0}".format(e))
             return ErrorCategory.UNKNOWN, ErrorSeverity.MEDIUM
 
-    def _determine_severity(
-        self, error: Exception, category: ErrorCategory, context: Dict[str, Any] = None
-    ) -> ErrorSeverity:
+    def _determine_severity(self, error: Exception, category: ErrorCategory, context: Dict[str, Any] = None) -> ErrorSeverity:
         """Determine error severity based on type and context"""
         try:
             # Critical errors
@@ -357,13 +351,12 @@ class RecoveryManager:
 
     def __init__(self, config: RecoveryConfiguration):
         self.config = config
-        self.recovery_strategies = {
-            RecoveryStrategy.RETRY: self._retry_strategy,
-            RecoveryStrategy.FALLBACK: self._fallback_strategy,
-            RecoveryStrategy.GRACEFUL_DEGRADATION: self._graceful_degradation_strategy,
-            RecoveryStrategy.SYSTEM_RESTART: self._system_restart_strategy,
-            RecoveryStrategy.MANUAL_INTERVENTION: self._manual_intervention_strategy,
-        }
+        self.recovery_strategies = {}
+        self.recovery_strategies[RecoveryStrategy.RETRY] = self._retry_strategy
+        self.recovery_strategies[RecoveryStrategy.FALLBACK] = self._fallback_strategy
+        self.recovery_strategies[RecoveryStrategy.GRACEFUL_DEGRADATION] = self._graceful_degradation_strategy
+        self.recovery_strategies[RecoveryStrategy.SYSTEM_RESTART] = self._system_restart_strategy
+        self.recovery_strategies[RecoveryStrategy.MANUAL_INTERVENTION] = self._manual_intervention_strategy
         self.fallback_functions = {}
         self.degraded_mode_functions = {}
 
@@ -505,7 +498,7 @@ class RecoveryManager:
 
             logger.critical("System restart requested due to critical error")
             # In a real system, this would trigger a controlled restart
-            # For now, we'll just log the request
+            # For now, we'll just log the request'
 
             return True
 
@@ -519,7 +512,7 @@ class RecoveryManager:
             logger.critical("Manual intervention required for error {0}".format(error_record.error_id))
 
             # In a real system, this would trigger alerts to operators
-            # For now, we'll just log the request
+            # For now, we'll just log the request'
 
             return False  # Manual intervention is not automatic
 
@@ -529,16 +522,15 @@ class RecoveryManager:
 
     def _get_safe_default(self, category: ErrorCategory) -> Any:
         """Get safe default values for different error categories"""
-        defaults = {
-            ErrorCategory.MATHEMATICAL: xp.array([0.0]),
-            ErrorCategory.COMPUTATION: 0.0,
-            ErrorCategory.DATA: None,
-            ErrorCategory.TRADING: {'action': 'hold', 'quantity': 0.0},
-            ErrorCategory.NETWORK: {'status': 'offline'},
-            ErrorCategory.SYSTEM: {'status': 'degraded'},
-            ErrorCategory.MEMORY: None,
-            ErrorCategory.UNKNOWN: None,
-        }
+        defaults = {}
+        defaults[ErrorCategory.MATHEMATICAL] = cp.array([0.0])
+        defaults[ErrorCategory.COMPUTATION] = 0.0
+        defaults[ErrorCategory.DATA] = None
+        defaults[ErrorCategory.TRADING] = {'action': 'hold', 'quantity': 0.0}
+        defaults[ErrorCategory.NETWORK] = {'status': 'offline'}
+        defaults[ErrorCategory.SYSTEM] = {'status': 'degraded'}
+        defaults[ErrorCategory.MEMORY] = None
+        defaults[ErrorCategory.UNKNOWN] = None
 
         return defaults.get(category, None)
 
@@ -608,9 +600,9 @@ class SystemHealthMonitor:
             disk = psutil.disk_usage('/')
             disk_usage = disk.percent
 
-            # GPU usage (if available)
+            # GPU usage (if, available)
             gpu_usage = None
-            if USING_CUDA:
+            if CUPY_AVAILABLE:
                 try:
                     gpu_memory = cp.cuda.MemoryPool().used_bytes()
                     gpu_total = cp.cuda.MemoryPool().total_bytes()
@@ -664,23 +656,23 @@ class SystemHealthMonitor:
 
             # CPU usage alert
             if health.cpu_usage > self.config.cpu_threshold * 100:
-                alerts.append("High CPU usage: {0}%".format(health.cpu_usage:.1f))
+                alerts.append("High CPU usage: {0}%".format(health.cpu_usage))
 
             # Memory usage alert
             if health.memory_usage > self.config.memory_threshold * 100:
-                alerts.append("High memory usage: {0}%".format(health.memory_usage:.1f))
+                alerts.append("High memory usage: {0}%".format(health.memory_usage))
 
             # Disk usage alert
             if health.disk_usage > 90.0:
-                alerts.append("High disk usage: {0}%".format(health.disk_usage:.1f))
+                alerts.append("High disk usage: {0}%".format(health.disk_usage))
 
             # GPU usage alert
             if health.gpu_usage is not None and health.gpu_usage > 90.0:
-                alerts.append("High GPU usage: {0}%".format(health.gpu_usage:.1f))
+                alerts.append("High GPU usage: {0}%".format(health.gpu_usage))
 
             # Error rate alert
             if health.error_rate > self.config.error_threshold:
-                alerts.append("High error rate: {0}".format(health.error_rate:.3f))
+                alerts.append("High error rate: {0}".format(health.error_rate))
 
             # Log alerts
             for alert in alerts:
@@ -766,11 +758,7 @@ class EnhancedErrorRecoverySystem:
                 else:
                     self.error_stats['failed_recoveries'] += 1
 
-                self.error_stats['recovery_rate'] = (
-                    self.error_stats['recovered_errors'] / self.error_stats['total_errors']
-                    if self.error_stats['total_errors'] > 0
-                    else 0.0
-                )
+                self.error_stats['recovery_rate'] = self.error_stats['recovered_errors'] / self.error_stats['total_errors'] if self.error_stats['total_errors'] > 0 else 0.0
 
             # Return recovery result
             if recovery_success and context:
@@ -831,11 +819,11 @@ class EnhancedErrorRecoverySystem:
         """Register a degraded mode function for graceful degradation"""
         self.recovery_manager.register_degraded_mode(function_name, degraded_func)
 
-    def check_mathematical_stability(self, data: xp.ndarray) -> Dict[str, Any]:
+    def check_mathematical_stability(self, data: cp.ndarray) -> Dict[str, Any]:
         """Check mathematical stability of data"""
         return self.stability_checker.check_matrix_stability(data)
 
-    def stabilize_mathematical_data(self, data: xp.ndarray, method: str = 'ridge') -> xp.ndarray:
+    def stabilize_mathematical_data(self, data: cp.ndarray, method: str = 'ridge') -> cp.ndarray:
         """Stabilize mathematical data"""
         return self.stability_checker.stabilize_matrix(data, method)
 

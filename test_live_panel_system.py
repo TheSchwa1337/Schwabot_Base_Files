@@ -32,7 +32,7 @@ def test_panel_system():
 
     # Test 3: Panel Switching
     print("\n🧪 Test 3: Panel Switching")
-    test_panels = [
+    test_panels = []
         PanelType.DRIFT_MATRIX,
         PanelType.SHIFT_PATTERNS,
         PanelType.CHRONO_BIAS,
@@ -56,7 +56,7 @@ def test_panel_system():
     for panel_type in test_panels:
         panel_state = panel_system.panels[panel_type]
         panel_state.update_data({"test": "data", "timestamp": time.time()})
-        print(
+        print()
             f"   ✅ Updated {panel_type.value}: {len(panel_state.history)} history entries"
         )
 
@@ -76,12 +76,12 @@ def test_panel_system():
 
     # Test 8: System Status
     print("\n🧪 Test 8: System Status")
-    status_items = [
+    status_items = []
         ("Total Panels", len(panel_system.panels)),
         ("API Connections", len(panel_system.api_connections)),
         ("Data Threads", len(panel_system.data_threads)),
         ("System Running", panel_system.is_running),
-        (
+        ()
             "Current Panel",
             panel_system.current_panel.value if panel_system.current_panel else None,
         ),
@@ -130,13 +130,13 @@ def test_api_integration():
     panel_system = SpeedLatticeLivePanelSystem()
 
     # Test custom API endpoints
-    custom_endpoints = {
+    custom_endpoints = {}
         PanelType.TRADING_STATE: "https://api.trading.com/v1/state",
         PanelType.POOL_ANALYSIS: "https://api.trading.com/v1/pools",
         PanelType.PATTERN_RECOGNITION: "https://api.trading.com/v1/patterns",
     }
     for panel_type, endpoint in custom_endpoints.items():
-        panel_system.connect_api(
+        panel_system.connect_api()
             panel_type, endpoint, "test_api_key", update_interval=2.0
         )
         print(f"   ✅ Connected {panel_type.value} to {endpoint}")
@@ -158,29 +158,29 @@ def test_visualization_features():
     panel_system = SpeedLatticeLivePanelSystem()
 
     # Test different data types
-    test_data = {
+    test_data = {}
         PanelType.DRIFT_MATRIX: {"drift_matrix": [[1, 2, 3], [4, 5, 6], [7, 8, 9]]},
-        PanelType.SHIFT_PATTERNS: {
-            "shift_patterns": [
+        PanelType.SHIFT_PATTERNS: {}
+            "shift_patterns": []
                 {"delta_t": 0.1, "delta_psi": 0.2, "action_trigger": "Stable"}
             ]
         },
-        PanelType.TRADING_STATE: {
+        PanelType.TRADING_STATE: {}
             "trading_state": "ACTIVE",
             "balances": {"usdc": 1000, "btc": 0.5, "total_profit": 100},
         },
-        PanelType.POOL_ANALYSIS: {
-            "pools": {
-                "pool_1": {
+        PanelType.POOL_ANALYSIS: {}
+            "pools": {}
+                "pool_1": {}
                     "is_active": True,
                     "liquidity": 50000,
                     "volume_24h": 10000,
-                    "fee_rate": 0.003,
+                    "fee_rate": 0.03,
                 }
             }
         },
-        PanelType.PATTERN_RECOGNITION: {
-            "patterns": {
+        PanelType.PATTERN_RECOGNITION: {}
+            "patterns": {}
                 "active": True,
                 "confidence": 0.85,
                 "pattern_type": "BULL_FLAG",

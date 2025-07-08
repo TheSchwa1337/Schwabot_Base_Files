@@ -20,7 +20,6 @@ try:
         create_math_foundation,
         quick_calculation,
     )
-
     CLEAN_MATH_AVAILABLE = True
 except ImportError:
     CLEAN_MATH_AVAILABLE = False
@@ -33,7 +32,6 @@ try:
         VectorizationMode,
         create_profit_vectorizer,
     )
-
     CLEAN_PROFIT_AVAILABLE = True
 except ImportError:
     CLEAN_PROFIT_AVAILABLE = False
@@ -41,7 +39,6 @@ except ImportError:
 # Orbital Brain System
 try:
     from .orbital_shell_brain_system import OrbitalBRAINSystem, OrbitalShell
-
     ORBITAL_BRAIN_AVAILABLE = True
 except ImportError:
     ORBITAL_BRAIN_AVAILABLE = False
@@ -56,7 +53,6 @@ try:
         create_trading_pipeline,
         run_trading_simulation,
     )
-
     CLEAN_PIPELINE_AVAILABLE = True
 except ImportError:
     CLEAN_PIPELINE_AVAILABLE = False
@@ -69,7 +65,6 @@ try:
         AssetAllocation,
         create_portfolio_balancer,
     )
-
     PORTFOLIO_BALANCER_AVAILABLE = True
 except ImportError:
     PORTFOLIO_BALANCER_AVAILABLE = False
@@ -81,7 +76,6 @@ try:
         BTCUSDCTradingConfig,
         create_btc_usdc_integration,
     )
-
     BTC_USDC_INTEGRATION_AVAILABLE = True
 except ImportError:
     BTC_USDC_INTEGRATION_AVAILABLE = False
@@ -100,7 +94,6 @@ try:
         get_system_profile,
         get_gpu_shader_config,
     )
-
     SYSTEM_PROFILER_AVAILABLE = True
 except ImportError:
     SYSTEM_PROFILER_AVAILABLE = False
@@ -115,7 +108,6 @@ try:
         get_cosine_similarity_config,
         run_gpu_fit_test,
     )
-
     GPU_DNA_AVAILABLE = True
 except ImportError:
     GPU_DNA_AVAILABLE = False
@@ -128,7 +120,6 @@ try:
         create_gpu_shader_integration,
         compute_strategy_similarities_gpu,
     )
-
     GPU_SHADER_INTEGRATION_AVAILABLE = True
 except ImportError:
     GPU_SHADER_INTEGRATION_AVAILABLE = False
@@ -198,26 +189,21 @@ __all__ = [
     "GPU_DNA_AVAILABLE",
     "GPU_SHADER_INTEGRATION_AVAILABLE",
     # Utility functions
-    "get_system_status",
-    "create_clean_trading_system",
-    "initialize_gpu_system",
 ]
 
 
 def get_system_status():
     """Get comprehensive system status for all components."""
-    status = {
-        "clean_math": CLEAN_MATH_AVAILABLE,
-        "clean_profit": CLEAN_PROFIT_AVAILABLE,
-        "clean_pipeline": CLEAN_PIPELINE_AVAILABLE,
-        "orbital_brain": ORBITAL_BRAIN_AVAILABLE,
-        "portfolio_balancer": PORTFOLIO_BALANCER_AVAILABLE,
-        "btc_usdc_integration": BTC_USDC_INTEGRATION_AVAILABLE,
-        "system_profiler": SYSTEM_PROFILER_AVAILABLE,
-        "gpu_dna": GPU_DNA_AVAILABLE,
-        "gpu_shader": GPU_SHADER_INTEGRATION_AVAILABLE,
-    }
-
+    status = {}
+    status["clean_math"] = CLEAN_MATH_AVAILABLE
+    status["clean_profit"] = CLEAN_PROFIT_AVAILABLE
+    status["clean_pipeline"] = CLEAN_PIPELINE_AVAILABLE
+    status["orbital_brain"] = ORBITAL_BRAIN_AVAILABLE
+    status["portfolio_balancer"] = PORTFOLIO_BALANCER_AVAILABLE
+    status["btc_usdc_integration"] = BTC_USDC_INTEGRATION_AVAILABLE
+    status["system_profiler"] = SYSTEM_PROFILER_AVAILABLE
+    status["gpu_dna"] = GPU_DNA_AVAILABLE
+    status["gpu_shader"] = GPU_SHADER_INTEGRATION_AVAILABLE
     return status
 
 

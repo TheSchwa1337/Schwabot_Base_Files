@@ -29,7 +29,7 @@ logger = logging.getLogger(__name__)
 
 
 @dataclass
-class FerrisState:
+    class FerrisState:
     """Represents a Ferris Wheel state."""
 
     phase: int
@@ -41,7 +41,7 @@ class FerrisState:
 
 
 @dataclass
-class NCCOHistoryRecord:
+    class NCCOHistoryRecord:
     """Represents a feedback record for NCCO memory."""
 
     timestamp: float
@@ -55,7 +55,7 @@ class NCCOHistoryRecord:
 
 class FerrisWheelRDE:
     """
-    Ferris Wheel RDE (Recursive Dualistic Engine) implementation.
+    Ferris Wheel RDE (Recursive Dualistic, Engine) implementation.
     Isolated version for backtesting.
     """
 
@@ -69,28 +69,28 @@ class FerrisWheelRDE:
         self.ncco_history: List[NCCOHistoryRecord] = []
         self.standard_bits = [4, 8, 42]
         self.alpha = 0.3  # Smoothing factor
-        self.learning_rate = 0.05  # Strategy mutation learning rate
+        self.learning_rate = 0.5  # Strategy mutation learning rate
         self.reward_rate = 0.1  # Reinforcement learning update rate
 
         # Strategy configuration
         self.strategy_sets = {4: ["hold"], 8: ["stable_swap"], 42: ["flip", "exit"]}
-        self.phase_modifiers = {
+        self.phase_modifiers = {}
             ("hold", "ascent"): 1.2,
             ("flip", "descent"): 1.3,
             ("exit", "peak"): 1.5,
             ("entry", "trough"): 1.4,
         }
         # Strategy performance tracking with history
-        self.strategy_performance: Dict[str, float] = {
+        self.strategy_performance: Dict[str, float] = {}
             s: 1.0 for s in ["hold", "stable_swap", "flip", "exit", "entry"]
         }
-        self.strategy_weights: Dict[str, float] = {
+        self.strategy_weights: Dict[str, float] = {}
             s: 1.0 for s in ["hold", "stable_swap", "flip", "exit", "entry"]
         }
-        self.strategy_smoothed: Dict[str, float] = {
+        self.strategy_smoothed: Dict[str, float] = {}
             s: 1.0 for s in ["hold", "stable_swap", "flip", "exit", "entry"]
         }
-        self.strategy_performance_history: Dict[str, List[float]] = {
+        self.strategy_performance_history: Dict[str, List[float]] = {}
             s: [] for s in ["hold", "stable_swap", "flip", "exit", "entry"]
         }
 
@@ -107,7 +107,7 @@ class FerrisWheelRDE:
         logger.info(f"🎡 Ferris Wheel RDE initialized with max_phases={max_phases}")
 
     def _calculate_entropy():-> float:
-        """Calculate entropy of a string using Shannon's formula."""
+        """Calculate entropy of a string using Shannon's formula."""'
         if not data:
             return 0.0
 
@@ -135,7 +135,7 @@ class FerrisWheelRDE:
         return {k: v / total for k, v in performance.items()}
 
     def smooth_weights():-> Dict[str, float]:
-        return {
+        return {}
             k: (1 - alpha) * old_weights.get(k, 1.0) + alpha * performance.get(k, 1.0)
             for k in performance
         }
@@ -166,7 +166,7 @@ class FerrisWheelRDE:
             # Apply mutation: positive trend increases weight
             delta = learning_rate * trend
             current_perf = self.strategy_performance.get(strat, 1.0)
-            self.strategy_performance[strat] = max(
+            self.strategy_performance[strat] = max()
                 0.1, current_perf + delta
             )  # Ensure positive
 
@@ -275,8 +275,8 @@ class FerrisWheelRDE:
         # 6. Feedback: update memory
         self.strategy_smoothed.update(smoothed)
         self.strategy_weights.update(norm)
-        self.ncco_history.append(
-            NCCOHistoryRecord(
+        self.ncco_history.append()
+            NCCOHistoryRecord()
                 timestamp=timestamp if timestamp is not None else time.time(),
                 strategy=strategy,
                 weight=smoothed[strategy],
@@ -290,12 +290,12 @@ class FerrisWheelRDE:
         # 7. Update Ferris state with actual entropy
         self.current_phase = (self.current_phase + 1) % self.max_phases
         self.rotation_count += 1
-        ferris_state = FerrisState(
+        ferris_state = FerrisState()
             phase=self.current_phase,
             bit_state=bit_mode,
             rotation_count=self.rotation_count,
             entropy_level=entropy_val,
-            metadata={
+            metadata={}
                 "strategy": strategy,
                 "probability": prob,
                 "phase": phase,
@@ -307,7 +307,7 @@ class FerrisWheelRDE:
         self.states.append(ferris_state)
 
         # 8. Return decision with RDE context
-        return {
+        return {}
             "strategy": strategy,
             "probability": prob,
             "phase": phase,
@@ -322,7 +322,7 @@ class FerrisWheelRDE:
 
 
 @dataclass
-class BacktestResult:
+    class BacktestResult:
     """Results from a backtest run."""
 
     total_trades: int
@@ -341,7 +341,7 @@ class BacktestResult:
 
 
 @dataclass
-class TradeRecord:
+    class TradeRecord:
     """Record of a single trade."""
 
     timestamp: float
@@ -373,10 +373,10 @@ class FerrisWheelBacktester:
 
         # Risk management parameters
         self.max_position_size = 0.1  # 10% of balance
-        self.stop_loss = 0.05  # 5% stop loss
+        self.stop_loss = 0.5  # 5% stop loss
         self.take_profit = 0.15  # 15% take profit
 
-        logger.info(
+        logger.info()
             f"🎯 Ferris Wheel Backtester initialized with ${initial_balance:,.2f}"
         )
 
@@ -389,16 +389,16 @@ class FerrisWheelBacktester:
         prices = []
         current_price = base_price
 
-        # Generate timestamps (hourly data)
+        # Generate timestamps (hourly, data)
         start_time = time.time() - (days * 24 * 3600)
 
         for hour in range(days * 24):
             timestamp = start_time + (hour * 3600)
 
             # Add market cycles (trend + noise + volatility)
-            trend = 0.0001 * math.sin(hour / (24 * 7))  # Weekly cycle
+            trend = 0.001 * math.sin(hour / (24 * 7))  # Weekly cycle
             noise = random.gauss(0, volatility / math.sqrt(24))  # Hourly noise
-            volatility_shock = (
+            volatility_shock = ()
                 random.gauss(0, volatility) * random.random()
             )  # Occasional shocks
 
@@ -411,7 +411,7 @@ class FerrisWheelBacktester:
 
             prices.append((timestamp, current_price))
 
-        logger.info(
+        logger.info()
             f"📈 Generated {len(prices)} price points, final price: ${current_price:,.2f}"
         )
         return prices
@@ -440,21 +440,21 @@ class FerrisWheelBacktester:
             position_size = 0.0
             position_value = 0.0
 
-        # Simulate P&L (simplified - in real trading this would be more complex)
+        # Simulate P&L (simplified - in real trading this would be more, complex)
         pnl = 0.0
         if action == "buy" and position_value > 0:
             # Simulate price movement
-            price_change = random.gauss(0.001, 0.005)  # Small random movement
+            price_change = random.gauss(0.01, 0.05)  # Small random movement
             pnl = position_value * price_change
         elif action == "sell" and position_value > 0:
-            price_change = random.gauss(-0.001, 0.005)
+            price_change = random.gauss(-0.01, 0.05)
             pnl = position_value * price_change
 
         # Update balance
         self.balance += pnl
 
         # Create trade record
-        trade = TradeRecord(
+        trade = TradeRecord()
             timestamp=time.time(),
             price=price,
             strategy=strategy,
@@ -504,12 +504,12 @@ class FerrisWheelBacktester:
 
         # Profit factor
         gross_profit = sum(trade.pnl for trade in self.trade_history if trade.pnl > 0)
-        gross_loss = abs(
+        gross_loss = abs()
             sum(trade.pnl for trade in self.trade_history if trade.pnl < 0)
         )
-        profit_factor = gross_profit / gross_loss if gross_loss > 0 else float("inf")
+        profit_factor = gross_profit / gross_loss if gross_loss > 0 else float("inf")"
 
-        return {
+        return {}
             "total_return": total_return,
             "sharpe_ratio": sharpe_ratio,
             "max_drawdown": max_dd,
@@ -530,7 +530,7 @@ class FerrisWheelBacktester:
         # Check entropy calculation
         test_string = "test_entropy_string"
         entropy = self.ferris_rde._calculate_entropy(test_string)
-        checks["entropy_calculation"] = (
+        checks["entropy_calculation"] = ()
             0.0 <= entropy <= 4.0
         )  # Reasonable bounds for this string
 
@@ -550,7 +550,7 @@ class FerrisWheelBacktester:
         # Check strategy mutation
         original_perf = self.ferris_rde.strategy_performance.copy()
         self.ferris_rde.mutate_strategy_weights({"hold": 1.5})
-        checks["strategy_mutation"] = any(
+        checks["strategy_mutation"] = any()
             self.ferris_rde.strategy_performance[k] != original_perf[k]
             for k in original_perf
         )
@@ -558,7 +558,7 @@ class FerrisWheelBacktester:
         # Check reinforcement learning
         original_perf = self.ferris_rde.strategy_performance["hold"]
         self.ferris_rde.update_strategy_reward("hold", 0.5)
-        checks["reinforcement_learning"] = (
+        checks["reinforcement_learning"] = ()
             self.ferris_rde.strategy_performance["hold"] != original_perf
         )
 
@@ -593,7 +593,7 @@ class FerrisWheelBacktester:
             score_components.append(0.0)
 
         # Mathematical validation score (25% weight)
-        math_score = (
+        math_score = ()
             sum(math_validation.values()) / len(math_validation)
             if math_validation
             else 0.0
@@ -626,14 +626,14 @@ class FerrisWheelBacktester:
         # Run backtest
         for i, (timestamp, price) in enumerate(price_data):
             # Run RDE cycle
-            result = self.ferris_rde.ferris_rde_cycle(
+            result = self.ferris_rde.ferris_rde_cycle()
                 price,
                 bit_mode=4 if i % 3 == 0 else 8 if i % 3 == 1 else 42,
                 timestamp=timestamp,
             )
 
             # Execute trade
-            trade = self.execute_trade(
+            trade = self.execute_trade()
                 price=price,
                 strategy=result["strategy"],
                 probability=result["probability"],
@@ -654,7 +654,7 @@ class FerrisWheelBacktester:
 
             # Progress logging
             if i % (len(price_data) // 10) == 0:
-                logger.info(
+                logger.info()
                     f"📊 Backtest progress: {i}/{len(price_data)} ({i / len(price_data) * 100:.1f}%)"
                 )
 
@@ -664,8 +664,8 @@ class FerrisWheelBacktester:
         live_ready_score = self.calculate_live_ready_score()
 
         # Create trade history for result
-        trade_history = [
-            {
+        trade_history = []
+            {}
                 "timestamp": trade.timestamp,
                 "price": trade.price,
                 "strategy": trade.strategy,
@@ -676,7 +676,7 @@ class FerrisWheelBacktester:
             }
             for trade in self.trade_history
         ]
-        result = BacktestResult(
+        result = BacktestResult()
             total_trades=risk_metrics.get("total_trades", 0),
             winning_trades=risk_metrics.get("winning_trades", 0),
             losing_trades=risk_metrics.get("total_trades", 0)
@@ -693,7 +693,7 @@ class FerrisWheelBacktester:
         )
 
         logger.info(f"✅ Backtest completed! Final balance: ${self.balance:,.2f}")
-        logger.info(
+        logger.info()
             f"📈 Total return: {risk_metrics.get('total_return', 0) * 100:.2f}%"
         )
         logger.info(f"🎯 Live ready score: {live_ready_score:.2f}/1.0")
@@ -703,7 +703,7 @@ class FerrisWheelBacktester:
     def save_results(self, result: BacktestResult, filepath: str):
         """Save backtest results to JSON file."""
         # Convert dataclass to dict for JSON serialization
-        result_dict = {
+        result_dict = {}
             "total_trades": result.total_trades,
             "winning_trades": result.winning_trades,
             "losing_trades": result.losing_trades,
@@ -714,7 +714,7 @@ class FerrisWheelBacktester:
             "strategy_performance": result.strategy_performance,
             "risk_metrics": result.risk_metrics,
             "trade_history": result.trade_history,
-            "mathematical_validation": {
+            "mathematical_validation": {}
                 k: str(v) for k, v in result.mathematical_validation.items()
             },  # Convert bool to str
             "live_ready_score": result.live_ready_score,
@@ -737,7 +737,7 @@ def main():
     backtester = FerrisWheelBacktester(initial_balance=10000.0)
 
     # Run backtest
-    result = backtester.run_backtest(days=90, volatility=0.02)
+    result = backtester.run_backtest(days=90, volatility=0.2)
 
     # Print results
     print("\n📊 Backtest Results Summary:")
@@ -780,7 +780,7 @@ def main():
     print("\nDetailed score breakdown:")
     print(f"  Performance: {result.total_return * 100:.2f}% return")
     print(f"  Risk Management: {result.max_drawdown * 100:.2f}% max drawdown")
-    print(
+    print()
         f"  Mathematical Validation: {sum(result.mathematical_validation.values())}/{len(result.mathematical_validation)} checks passed"
     )
     print(f"  Consistency: {result.win_rate * 100:.1f}% win rate")
@@ -789,7 +789,7 @@ def main():
     print("\n📋 Sample Trade History (Last 10):")
     print("-" * 60)
     for i, trade in enumerate(result.trade_history[-10:]):
-        print(
+        print()
             f"{i + 1:2d}. {trade['strategy']:<12} | {trade['action']:<4} | "
             f"Price: ${trade['price']:,.2f} | PnL: ${trade['pnl']:+.2f} | "
             f"Prob: {trade['probability']:.3f} | Entropy: {trade['entropy']:.3f}"

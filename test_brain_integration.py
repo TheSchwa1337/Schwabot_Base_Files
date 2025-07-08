@@ -1,7 +1,7 @@
-                    import math
-        from core.brain_trading_engine import BrainTradingEngine
-        from core.brain_trading_engine import BrainTradingEngine
-        import subprocess
+import math
+from core.brain_trading_engine import BrainTradingEngine
+from core.brain_trading_engine import BrainTradingEngine
+import subprocess
 from pathlib import Path
 import asyncio
 import json
@@ -20,7 +20,7 @@ This replaces placeholders with functional brain trading algorithms.
 
 
 # Configure logging
-logging.basicConfig(
+logging.basicConfig()
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
@@ -34,8 +34,8 @@ def test_brain_trading_engine():
     try:
 
         # Initialize with custom configuration
-        config = {
-            "base_profit_rate": 0.002,
+        config = {}
+            "base_profit_rate": 0.02,
             "confidence_threshold": 0.6,
             "enhancement_range": (0.8, 2.0),
             "max_history_size": 100,
@@ -45,7 +45,7 @@ def test_brain_trading_engine():
         print("✅ Brain Trading Engine initialized")
 
         # Test different market scenarios
-        test_scenarios = [
+        test_scenarios = []
             {"name": "Bull Run", "price": 50000, "volume": 1000},
             {"name": "Bear Market", "price": 45000, "volume": 800},
             {"name": "High Volatility", "price": 52000, "volume": 2000},
@@ -58,23 +58,23 @@ def test_brain_trading_engine():
 
         for i, scenario in enumerate(test_scenarios, 1):
             # Process brain signal
-            signal = engine.process_brain_signal(
+            signal = engine.process_brain_signal()
                 scenario["price"], scenario["volume"], "BTC"
             )
 
             # Get trading decision
             decision = engine.get_trading_decision(signal)
 
-            results.append(
+            results.append()
                 {"scenario": scenario, "signal": signal, "decision": decision}
             )
 
             print(f"{i}. {scenario['name']}")
             print(f"   Price: ${scenario['price']:,}, Volume: {scenario['volume']:,}")
-            print(
+            print()
                 f"   Signal: {signal.signal_strength:.3f}, Confidence: {signal.confidence:.3f}"
             )
-            print(
+            print()
                 f"   Action: {decision['action']}, Size: {decision['position_size']:.2%}"
             )
             print(f"   Profit Score: {signal.profit_score:.2f}")
@@ -108,7 +108,7 @@ def test_mathematical_functions():
         print("✅ Unified Math System loaded")
 
         # Test basic math operations
-        test_cases = [
+        test_cases = []
             (100.0, 1.5, "multiply"),
             ([1, 2, 3, 4, 5], None, "mean"),
             (25.0, None, "sqrt"),
@@ -172,12 +172,12 @@ async def run_backtest_simulation():
 
     try:
 
-        engine = BrainTradingEngine(
-            {"base_profit_rate": 0.001, "confidence_threshold": 0.7}
+        engine = BrainTradingEngine()
+            {"base_profit_rate": 0.01, "confidence_threshold": 0.7}
         )
 
         # Simulate price data
-        price_data = [
+        price_data = []
             50000,
             50200,
             49800,
@@ -194,7 +194,7 @@ async def run_backtest_simulation():
             52200,
         ]
 
-        volume_data = [
+        volume_data = []
             1000,
             1100,
             900,
@@ -245,7 +245,7 @@ async def run_backtest_simulation():
         total_return = (total_value - 100000) / 100000
 
         print("\n📈 BACKTEST RESULTS:")
-        print("   Starting Capital: $100,000")
+        print("   Starting Capital: $100,00")
         print(f"   Final Cash: ${portfolio:,.2f}")
         print(f"   BTC Holdings: {btc_holdings:.6f}")
         print(f"   BTC Value: ${final_btc_value:,.2f}")
@@ -254,10 +254,10 @@ async def run_backtest_simulation():
         print(f"   Total Trades: {len(trades)}")
 
         if trades:
-            avg_confidence = sum(t[3] for t in trades) / len(trades)
+            avg_confidence = sum(t[3] for t in, trades) / len(trades)
             print(f"   Avg Confidence: {avg_confidence:.3f}")
 
-        return True, {
+        return True, {}
             "starting_capital": 100000,
             "final_value": total_value,
             "return": total_return,
@@ -277,7 +277,7 @@ def run_flake8_check():
     try:
 
         # Check our brain trading engine
-        result = subprocess.run(
+        result = subprocess.run()
             ["python", "-m", "flake8", "core/brain_trading_engine.py", "--count"],
             capture_output=True,
             text=True,
@@ -341,7 +341,7 @@ async def main():
         print("⚠️  SOME TESTS FAILED - REVIEW REQUIRED")
 
     # Export test results
-    test_report = {
+    test_report = {}
         "timestamp": time.time(),
         "results": results,
         "passed": passed,

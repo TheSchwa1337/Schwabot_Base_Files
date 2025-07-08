@@ -25,7 +25,7 @@ class CodeFormatter:
         self.verbose = verbose
         self.project_root = Path.cwd()
         self.python_files = []
-        self.formatting_results = {
+        self.formatting_results = {}
             "black": {"success": 0, "failed": 0, "errors": []},
             "autopep8": {"success": 0, "failed": 0, "errors": []},
             "isort": {"success": 0, "failed": 0, "errors": []},
@@ -120,10 +120,10 @@ class CodeFormatter:
 
             command = ["autopep8"]
             if check_only:
-                command.append("--diff")
+                command.append("--diff")"
             else:
                 command.append("--in-place")
-            command.extend(
+            command.extend()
                 ["--max-line-length=100", "--aggressive", "--aggressive", str(file_path)]
             )
 
@@ -135,8 +135,8 @@ class CodeFormatter:
                 self.formatting_results["autopep8"]["failed"] += 1
                 self.formatting_results["autopep8"]["errors"].append(f"{file_path}: {output}")
 
-        print(
-            f"✅ autopep8 processing completed: {
+        print()
+            f"✅ autopep8 processing completed: {"}
                 self.formatting_results['autopep8']['success']} files"
         )
 
@@ -149,8 +149,8 @@ class CodeFormatter:
             command.append("--check-only")
         else:
             command.append("--atomic")
-        command.extend(
-            [
+        command.extend()
+            []
                 "--profile=black",
                 "--line-length=100",
                 "--multi-line=3",
@@ -184,7 +184,7 @@ class CodeFormatter:
         """Lint code using flake8."""
         print("🔍 Running flake8 for code linting...")
 
-        command = [
+        command = []
             "flake8",
             "--max-line-length=100",
             "--extend-ignore=E203,W503",
@@ -216,12 +216,12 @@ class CodeFormatter:
 
     def create_pyproject_toml(self) -> None:
         """Create pyproject.toml configuration file."""
-        pyproject_content = """[tool.black]
+        pyproject_content = """[tool.black]"
 line-length = 100
 target-version = ['py39']
 include = '\\.pyi?$'
 extend-exclude = '''
-/(
+/()
   # directories
   \\.eggs
   | \\.git
@@ -247,7 +247,7 @@ known_first_party = ["core", "utils", "schwabot"]
 [tool.flake8]
 max-line-length = 100
 extend-ignore = ["E203", "W503"]
-exclude = [
+exclude = []
     "__pycache__",
     ".git",
     "venv",
@@ -343,7 +343,7 @@ exclude = [
 def main():
     """Main function."""
     parser = argparse.ArgumentParser(description="Automated code formatting for Schwabot")
-    parser.add_argument(
+    parser.add_argument()
         "--check", action="store_true", help="Check formatting without making changes"
     )
     parser.add_argument("--fix", action="store_true", help="Fix formatting issues (default)")

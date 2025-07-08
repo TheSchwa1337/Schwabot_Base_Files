@@ -1,4 +1,4 @@
-            import traceback
+import traceback
 from core.btc_vector_processor import BTCVectorProcessor, GhostStrategyEngine
 from core.ghost_signal_types import ()
 from dual_unicore_handler import DualUnicoreHandler
@@ -38,7 +38,7 @@ Shows how to use BTC vector processing for real - time volatility - aware tradin
 # Add core to path
 REPO_ROOT = Path(__file__).resolve().parent"""
 CORE_PATH = REPO_ROOT / "core"
-if str(CORE_PATH) not in sys.path:
+    if str(CORE_PATH) not in sys.path:
     sys.path.insert(0, str(CORE_PATH))
 
 # Import ghost components
@@ -56,7 +56,7 @@ class GhostStrategyIntegrationDemo:
 
 def __init__(self): """
     """Function implementation pending."""
-pass
+    pass
 
 self.engine = GhostStrategyEngine()
         self.signal_history = []
@@ -72,25 +72,25 @@ signals = []
 
 for i in range(num_signals):
 # Simulate realistic BTC price movements
-trend = 0.001 * i  # Gradual upward trend
-            noise = 0.02 * (i % 3 - 1)  # Oscillating noise
+trend = 0.01 * i  # Gradual upward trend
+            noise = 0.2 * (i % 3 - 1)  # Oscillating noise
             price = base_price * (1 + trend + noise)
 
-# Simulate volatility clustering (GARCH - like behavior)
+# Simulate volatility clustering (GARCH - like, behavior)
             if i < 5:
-                volatility = 0.02  # Low volatility start
+                volatility = 0.2  # Low volatility start
             elif i < 10:
-                volatility = 0.05  # Increasing volatility
+                volatility = 0.5  # Increasing volatility
             else:
-                volatility = 0.08  # High volatility period
+                volatility = 0.8  # High volatility period
 
 # Simulate confidence based on signal consistency
-if i < 8:
+    if i < 8:
                 confidence = 0.9  # High confidence in stable period
             else:
                 confidence = 0.7  # Lower confidence in volatile period
 
-signal = GhostSignal("""
+signal = GhostSignal(""")
                 asset="BTC",
                 price=price,
                 volatility=volatility,
@@ -103,7 +103,7 @@ return signals
 
 def demonstrate_ghost_array_processing(self):
     """Function implementation pending."""
-pass
+    pass
 """
 """Demonstrate ghost array processing capabilities.""""""
 """"""
@@ -121,7 +121,7 @@ ghost_array = build_ghost_array(signals)
         print(f"\\u2705 Built ghost array: shape={ghost_array.shape}")
 
 # Validate array
-if validate_ghost_array(ghost_array):
+    if validate_ghost_array(ghost_array):
             print("\\u2705 Ghost array validation passed")
         else:
             print("\\u274c Ghost array validation failed")
@@ -144,7 +144,7 @@ return signals
 
 def demonstrate_strategy_engine(self, signals: List[GhostSignal]):
     """Function implementation pending."""
-pass
+    pass
 """
 """Demonstrate the complete strategy engine.""""""
 """"""
@@ -180,7 +180,7 @@ return result
 
 def demonstrate_volatility_scenarios(self):
     """Function implementation pending."""
-pass
+    pass
 """
 """Demonstrate different volatility scenarios.""""""
 """"""
@@ -190,18 +190,18 @@ pass
 print("\\n\\u1f30a Volatility Scenarios Demonstration")
         print("=" * 50)
 
-scenarios = {
-            "Low Volatility": {
+scenarios = {}
+            "Low Volatility": {}
                 "price_range": 100,
-                "volatility": 0.01,
+                "volatility": 0.1,
                 "confidence": 0.95
 },
-            "Medium Volatility": {
+            "Medium Volatility": {}
                 "price_range": 500,
-                "volatility": 0.04,
+                "volatility": 0.4,
                 "confidence": 0.8
 },
-            "High Volatility": {
+            "High Volatility": {}
                 "price_range": 2000,
                 "volatility": 0.10,
                 "confidence": 0.6
@@ -218,7 +218,7 @@ signals = []
                 price_change = (i % 3 - 1) * params["price_range"] / 3
                 price = base_price + price_change
 
-signal = GhostSignal(
+signal = GhostSignal()
                     asset="BTC",
                     price = price,
                     volatility = params["volatility"],
@@ -237,7 +237,7 @@ print(f"  \\u1f3af Action: {result['action']}")
 
 def demonstrate_real_time_processing(self):
     """Function implementation pending."""
-pass
+    pass
 """
 """Demonstrate real - time signal processing.""""""
 """"""
@@ -258,10 +258,10 @@ for i in range(8):
 price_change = (i % 4 - 2) * 200  # Oscillating pattern
             price = base_price + price_change + i * 50
 
-volatility = 0.02 + (i % 3) * 0.02
+volatility = 0.2 + (i % 3) * 0.2
             confidence = 0.8 + (i % 2) * 0.1
 
-signal = GhostSignal(
+signal = GhostSignal()
                 asset="BTC",
                 price = price,
                 volatility = volatility,
@@ -275,7 +275,7 @@ self.engine.btc_processor.add_ghost_signal(signal)
 # Get current state
 current_signal = self.engine.btc_processor.get_current_signal()
             if current_signal:
-                print(f"  Signal {i + 1}: Price=${price:,.0f}, "
+                print(f"  Signal {i + 1}: Price=${price:,.0f}, ")
                         f"Vol={current_signal['volatility']:.3f}, "
                         f"Conf={current_signal['confidence']:.2f}")
 
@@ -292,7 +292,7 @@ print(f"\\n\\u1f3af Final Strategy Decision:")
 
 def run_complete_demo(self):
     """Function implementation pending."""
-pass
+    pass
 """
 """Run the complete integration demonstration.""""""
 """"""
@@ -331,7 +331,7 @@ print("\n" + "=" * 70)
             print("  \\u1f4c8 BTC vector momentum analysis")
 
 # Save demo results
-demo_results = {
+demo_results = {}
                 "demo_timestamp": time.time(),
                 "final_strategy": result,
                 "engine_stats": self.engine.get_processor_statistics()
@@ -348,7 +348,7 @@ traceback.print_exc()
 
 def main():
     """Function implementation pending."""
-pass
+    pass
 """
 """Main demo execution.""""""
 """"""
@@ -359,5 +359,5 @@ demo = GhostStrategyIntegrationDemo()
     demo.run_complete_demo()
 
 """
-if __name__ == "__main__":
+    if __name__ == "__main__":
     main()

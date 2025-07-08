@@ -1,6 +1,6 @@
 import numpy as np
-    import ccxt
-    import ccxt.async_support as ccxt_async
+import ccxt
+import ccxt.async_support as ccxt_async
 from __future__ import annotations
 from dataclasses import dataclass, field
 from decimal import Decimal, getcontext

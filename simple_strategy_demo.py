@@ -25,7 +25,7 @@ in a self-contained, flake8-compliant script.
 class PerformanceMetrics:
     """Real Sharpe/Sortino ratio calculations."""
 
-    def __init__(self, risk_free_rate: float = 0.02):
+    def __init__(self, risk_free_rate: float = 0.2):
         self.risk_free_rate = risk_free_rate
         self.returns_history: List[float] = []
 
@@ -51,7 +51,7 @@ class PerformanceMetrics:
         return float(sharpe)
 
     def calculate_sortino_ratio():-> float:
-        """Calculate real Sortino ratio (downside deviation only)."""
+        """Calculate real Sortino ratio (downside deviation, only)."""
         if len(self.returns_history) < 10:
             return 0.0
 
@@ -62,7 +62,7 @@ class PerformanceMetrics:
         downside_returns = excess_returns[excess_returns < 0]
 
         if len(downside_returns) == 0:
-            return float("inf") if np.mean(excess_returns) > 0 else 0.0
+            return float("inf") if np.mean(excess_returns) > 0 else 0.0"
 
         downside_deviation = np.std(downside_returns, ddof=1)
         if downside_deviation == 0:
@@ -80,7 +80,7 @@ class KellyCriterion:
 
     def add_trade_result(self, profit: float, loss: float, won: bool):
         """Add trade result for Kelly calculation."""
-        self.trade_history.append(
+        self.trade_history.append()
             {"profit": profit if won else 0, "loss": loss if not won else 0, "won": won}
         )
 
@@ -114,8 +114,8 @@ class KellyCriterion:
 
         kelly_fraction = (b * p - q) / b
 
-        # Conservative scaling (max 25% of capital)
-        return max(0.05, min(0.25, kelly_fraction))
+        # Conservative scaling (max 25% of, capital)
+        return max(0.5, min(0.25, kelly_fraction))
 
 
 class MarkovProfitPredictor:
@@ -130,11 +130,11 @@ class MarkovProfitPredictor:
 
     def classify_profit():-> str:
         """Classify profit into discrete states."""
-        if profit_pct < -0.02:
+        if profit_pct < -0.2:
             return "loss"
-        elif profit_pct < 0.005:
+        elif profit_pct < 0.05:
             return "neutral"
-        elif profit_pct < 0.03:
+        elif profit_pct < 0.3:
             return "small_profit"
         else:
             return "big_profit"
@@ -188,27 +188,27 @@ class VolatilityCalculator:
     def calculate_volatility():-> float:
         """Calculate rolling volatility."""
         if len(self.price_history) < 2:
-            return 0.02  # Default 2%
+            return 0.2  # Default 2%
 
         # Calculate returns
         returns = []
         for i in range(1, len(self.price_history)):
             if self.price_history[i - 1] != 0:
-                ret = (
+                ret = ()
                     self.price_history[i] - self.price_history[i - 1]
                 ) / self.price_history[i - 1]
                 returns.append(ret)
 
         if len(returns) < 2:
-            return 0.02
+            return 0.2
 
         # Use recent window
-        recent_returns = (
+        recent_returns = ()
             returns[-self.window :] if len(returns) > self.window else returns
         )
         volatility = np.std(recent_returns, ddof=1)
 
-        # Annualize (assuming daily data)
+        # Annualize (assuming daily, data)
         return float(volatility * np.sqrt(252))
 
 
@@ -230,10 +230,10 @@ class FlipSwitchLogic:
 
         # More liberal conditions for demo purposes
         # High Kelly + reasonable volatility + any momentum = aggressive
-        if (
+        if ()
             kelly_fraction > 0.1
             and volatility < 0.8
-            and abs(momentum) > 0.005
+            and abs(momentum) > 0.05
             and forecast_confidence > 0.2
         ):
             self.aggressive_mode = True
@@ -289,7 +289,7 @@ class IntegratedStrategy:
         forecast_state, forecast_confidence = self.markov.predict_next_state()
 
         # 5. FlipSwitch decision
-        aggressive_mode, strategy_confidence = self.flipswitch.should_flip_aggressive(
+        aggressive_mode, strategy_confidence = self.flipswitch.should_flip_aggressive()
             kelly_fraction, current_volatility, momentum, forecast_confidence
         )
 
@@ -312,12 +312,12 @@ class IntegratedStrategy:
 
             if random.random() < win_probability:
                 # Winning trade
-                profit_pct = random.uniform(0.01, 0.05) * position_size
+                profit_pct = random.uniform(0.1, 0.5) * position_size
                 self.winning_trades += 1
                 won = True
             else:
                 # Losing trade
-                profit_pct = random.uniform(-0.05, -0.01) * position_size
+                profit_pct = random.uniform(-0.5, -0.1) * position_size
                 won = False
 
             # Update capital
@@ -326,7 +326,7 @@ class IntegratedStrategy:
 
             # Update systems with trade result
             self.performance.add_return(profit_pct)
-            self.kelly.add_trade_result(
+            self.kelly.add_trade_result()
                 profit=profit_pct if won else 0,
                 loss=abs(profit_pct) if not won else 0,
                 won=won,
@@ -337,12 +337,12 @@ class IntegratedStrategy:
         # 8. Calculate performance metrics
         sharpe = self.performance.calculate_sharpe_ratio()
         sortino = self.performance.calculate_sortino_ratio()
-        total_return = (
+        total_return = ()
             self.current_capital - self.initial_capital
         ) / self.initial_capital
         win_rate = self.winning_trades / max(1, self.trades_executed)
 
-        return {
+        return {}
             "price": current_price,
             "portfolio_value": self.current_capital,
             "total_return": total_return,
@@ -380,7 +380,7 @@ def main():
 
     # Run simulation
     print("\n🎯 Running 50 Trading Cycles...")
-    print(
+    print()
         f"{'Cycle':<5} {'Price':<8} {'Portfolio':<12} {'Return':<8} {'Sharpe':<8} "
         f"{'Kelly':<7} {'Mode':<6} {'Trades':<6}"
     )
@@ -393,8 +393,8 @@ def main():
             price = base_price
         else:
             # Add some realistic volatility and momentum
-            volatility = random.uniform(0.005, 0.03)
-            momentum = random.uniform(-0.01, 0.01)
+            volatility = random.uniform(0.05, 0.3)
+            momentum = random.uniform(-0.1, 0.1)
             price_change = base_price * (momentum + np.random.normal(0, volatility))
             price = max(base_price + price_change, base_price * 0.5)
             base_price = price
@@ -405,7 +405,7 @@ def main():
         # Print results every 10 cycles
         if cycle % 10 == 0:
             mode_str = "AGG" if results["aggressive_mode"] else "CON"
-            print(
+            print()
                 f"{cycle:<5} {results['price']:<8.0f} "
                 f"${results['portfolio_value']:<11,.0f} "
                 f"{results['total_return']:<7.1%} "
@@ -430,14 +430,14 @@ def main():
     print(f"🏆 Win Rate:             {final_results['win_rate']:.1%}")
     print(f"🎲 Kelly Fraction:       {final_results['kelly_fraction']:.3f}")
     print(f"📊 Current Volatility:   {final_results['volatility']:.1%}")
-    print(
+    print()
         f"🔄 Strategy Mode:        "
         f"{'Aggressive' if final_results['aggressive_mode'] else 'Conservative'}"
     )
 
     print("\n🎉 Demo Complete!")
     print("This demonstrates the integration of advanced mathematical frameworks")
-    print("developed over 31 days of systematic enhancement to Schwabot's core.")
+    print("developed over 31 days of systematic enhancement to Schwabot's core.")'
 
 
 if __name__ == "__main__":

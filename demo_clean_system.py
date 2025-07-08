@@ -1,11 +1,11 @@
-from core.clean_math_foundation import (
-    import numpy as np
-    from core.clean_profit_vectorization import (
-        from core.clean_trading_pipeline import (
-            from typing import Dict, Any
-            import asyncio
-            import logging
-            import time
+from core.clean_math_foundation import ()
+import numpy as np
+from core.clean_profit_vectorization import ()
+from core.clean_trading_pipeline import ()
+from typing import Dict, Any
+import asyncio
+import logging
+import time
 
             #!/usr/bin/env python3
             # -*- coding: utf-8 -*-
@@ -26,7 +26,7 @@ Schwabot trading system with all mathematical components working correctly.
 )
 
 # Configure logging
-logging.basicConfig(
+logging.basicConfig()
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
@@ -62,13 +62,13 @@ def demonstrate_math_foundation():
     print(f"Standard deviation = {std_result.value:.2f}")
 
     # Trading-specific operations
-    hash_result = math_foundation.execute_operation(
+    hash_result = math_foundation.execute_operation()
         MathOperation.HASH_RATE, 50000.0, 1.5, time.time()
     )
     print(f"Hash rate: {hash_result.value[:16]}...")
 
-    profit_result = math_foundation.execute_operation(
-        MathOperation.PROFIT_VECTOR, 50000.0, 1.5, 0.02
+    profit_result = math_foundation.execute_operation()
+        MathOperation.PROFIT_VECTOR, 50000.0, 1.5, 0.2
     )
     print(f"Profit vector: {profit_result.value}")
 
@@ -95,13 +95,13 @@ def demonstrate_profit_vectorization():
     print("=" * 50)
 
     # Create profit vectorizer
-    vectorizer = create_profit_vectorizer(
-        risk_free_rate=0.02,
+    vectorizer = create_profit_vectorizer()
+        risk_free_rate=0.2,
         mode=VectorizationMode.STANDARD
     )
 
     # Sample market data
-    market_data = {
+    market_data = {}
         "volatility": 0.3,
         "trend_strength": 0.7,
         "entropy_level": 4.2
@@ -110,7 +110,7 @@ def demonstrate_profit_vectorization():
     print("\n🎯 Different Vectorization Modes:")
 
     # Test different modes
-    modes = [
+    modes = []
         VectorizationMode.STANDARD,
         VectorizationMode.ENTROPY_WEIGHTED,
         VectorizationMode.CONSENSUS_VOTING,
@@ -123,7 +123,7 @@ def demonstrate_profit_vectorization():
     volume = 2.5
 
     for mode in modes:
-        profit_vector = vectorizer.calculate_profit_vectorization(
+        profit_vector = vectorizer.calculate_profit_vectorization()
             btc_price=btc_price,
             volume=volume,
             market_data=market_data,
@@ -151,7 +151,7 @@ async def demonstrate_trading_pipeline():
     print("=" * 50)
 
     # Create trading pipeline
-    pipeline = create_trading_pipeline(
+    pipeline = create_trading_pipeline()
         initial_capital=100000.0,
         strategy=StrategyBranch.MOMENTUM,
         vectorization=VectorizationMode.HYBRID_BLEND
@@ -172,7 +172,7 @@ async def demonstrate_trading_pipeline():
         price_change = np.random.normal(0, 500)  # $500 standard deviation
         current_price = max(base_price + price_change, 1000)  # Minimum $1000
 
-        market_data = MarketData(
+        market_data = MarketData()
             symbol="BTC/USD",
             price=current_price,
             volume=np.random.uniform(0.5, 5.0),
@@ -235,7 +235,7 @@ async def run_short_simulation():
     print("=" * 50)
 
     # Create pipeline with different settings
-    pipeline = create_trading_pipeline(
+    pipeline = create_trading_pipeline()
         initial_capital=50000.0,
         strategy=StrategyBranch.SCALPING,
         vectorization=VectorizationMode.BIT_PHASE_TRIGGER
@@ -245,7 +245,7 @@ async def run_short_simulation():
     print(f"Initial capital: ${pipeline.initial_capital:,.2f}")
 
     # Run simulation
-    results = await run_trading_simulation(
+    results = await run_trading_simulation()
         pipeline=pipeline,
         duration_seconds=30,
         tick_interval=0.5
@@ -285,7 +285,7 @@ def demonstrate_mathematical_integration():
     print(f"Volatility: {volatility_normalized:.4f}")
 
     # Calculate correlation between price and volume
-    correlation = math_foundation.execute_operation(
+    correlation = math_foundation.execute_operation()
         MathOperation.DOT_PRODUCT,
         price_data - np.mean(price_data),
         volume_data - np.mean(volume_data)
@@ -293,13 +293,13 @@ def demonstrate_mathematical_integration():
     print(f"Price-Volume Correlation: {correlation.value:.4f}")
 
     # Use profit vectorization with calculated values
-    market_conditions = {
+    market_conditions = {}
         "volatility": volatility_normalized,
         "trend_strength": abs(correlation.value) / 10000,  # Normalize
         "entropy_level": 4.0 + volatility_normalized * 2
     }
 
-    profit_vector = profit_vectorizer.calculate_profit_vectorization(
+    profit_vector = profit_vectorizer.calculate_profit_vectorization()
         btc_price=moving_avg.value,
         volume=np.mean(volume_data),
         market_data=market_conditions,
@@ -313,7 +313,7 @@ def demonstrate_mathematical_integration():
     print(f"Confidence: {profit_vector.confidence_score:.3f}")
 
     # Show thermal adjustment based on conditions
-    if volatility_normalized > 0.03:
+    if volatility_normalized > 0.3:
         math_foundation.set_thermal_state(ThermalState.HOT)
         print(f"🌡️ Thermal state adjusted to HOT due to high volatility")
 
@@ -322,13 +322,13 @@ def demonstrate_mathematical_integration():
     tensor_a = np.random.rand(3, 3)
     tensor_b = np.random.rand(3, 3)
 
-    tensor_result = math_foundation.execute_operation(
+    tensor_result = math_foundation.execute_operation()
         MathOperation.TENSOR_CONTRACTION, tensor_a, tensor_b, [1]
     )
     print(f"Tensor contraction result shape: {tensor_result.value.shape}")
 
     # Apply thermal correction
-    corrected_result = math_foundation.execute_operation(
+    corrected_result = math_foundation.execute_operation()
         MathOperation.THERMAL_CORRECTION, tensor_result.value, 1.2
     )
     print(f"Thermal corrected result: {corrected_result.value[:2, :2]}")  # Show partial

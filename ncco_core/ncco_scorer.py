@@ -1,4 +1,4 @@
-    from core.clean_unified_math import clean_unified_math as unified_math
+from core.clean_unified_math import clean_unified_math as unified_math
 from typing import Any, List
 import os
 import platform
@@ -16,6 +16,7 @@ during the collapse process.
 
 
 try:
+    pass
 except ImportError:
     # Fallback for development
     class UnifiedMathMock:

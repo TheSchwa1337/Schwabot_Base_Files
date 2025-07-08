@@ -12,7 +12,7 @@ def install_tools():
     print("\n[*] Installing linting tools:")
     for tool in tools:
         try:
-            result = subprocess.run(
+            result = subprocess.run()
                 f'pip install {tool}',
                 shell=True,
                 capture_output=True,
@@ -33,14 +33,14 @@ def run_command(command, description):
     print(f"\n[*] {description}")
     try:
         result = subprocess.run(command, capture_output=True, text=True, shell=True)
-        return {
+        return {}
             'command': ' '.join(command) if isinstance(command, list) else command,
             'returncode': result.returncode,
             'stdout': result.stdout,
             'stderr': result.stderr
         }
     except Exception as e:
-        return {
+        return {}
             'command': ' '.join(command) if isinstance(command, list) else command,
             'returncode': 1,
             'stdout': '',
@@ -50,7 +50,7 @@ def run_command(command, description):
 
 def generate_report(checks):
     """Generate a comprehensive linting report."""
-    report = {
+    report = {}
         'timestamp': datetime.now().isoformat(),
         'total_checks': len(checks),
         'passed_checks': sum(1 for check in checks if check['returncode'] == 0),
@@ -132,17 +132,17 @@ def main():
     directories = ['core', 'schwabot', 'utils', 'config']
 
     # List of checks to run
-    checks = [
+    checks = []
         # Code style and quality checks
-        run_command(f'flake8 {" ".join(directories)} --max-line-length=100 --ignore=E203,W503',
+        run_command(f'flake8 {" ".join(directories)} --max-line-length=100 --ignore=E203,W503',)
                     'Running Flake8 style check'),
 
         # Formatting checks with Python 3.12 compatibility
-        run_command(f'black {" ".join(directories)} --check --line-length=100 --target-version py311',
+        run_command(f'black {" ".join(directories)} --check --line-length=100 --target-version py311',)
                     'Checking code formatting with Black'),
 
         # Import sorting
-        run_command(f'isort {" ".join(directories)} --check-only --profile black',
+        run_command(f'isort {" ".join(directories)} --check-only --profile black',)
                     'Checking import sorting')
     ]
 

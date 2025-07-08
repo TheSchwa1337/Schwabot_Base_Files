@@ -1,6 +1,6 @@
 import hashlib
 import logging
-from typing import Dict, Any, Tuple, Optional
+from typing import Dict, Any, Optional
 from dataclasses import dataclass
 from enum import Enum
 
@@ -12,7 +12,7 @@ import numpy as np
 ===============================
 
 Converts SHA-256 hashes + market state into qutrit logic matrices (ℳₛ)
-for dynamic orbital signal processing and fallback vector morphing.
+    for dynamic orbital signal processing and fallback vector morphing.
 
 Tri-state encoding: (-1, 0, +1) → (0, 1, 2)
 Matrix operations: Sum % 3 → State decision
@@ -30,7 +30,7 @@ class QutritState(Enum):
 
 
 @dataclass
-class QutritMatrixResult:
+    class QutritMatrixResult:
     """Result from qutrit matrix processing"""
 
     matrix: np.ndarray
@@ -103,7 +103,9 @@ class QutritSignalMatrix:
             3x3 numpy array of qutrit values
         """
         # Generate hash from seed + market context
-        context_str = str(self.market_context.get('timestamp', '')) + str(self.market_context.get('price', ''))
+        context_str = str(self.market_context.get('timestamp', '')) + str()
+            self.market_context.get('price', '')
+        )
         full_seed = "{0}_{1}".format(seed, context_str)
 
         hash_hex = hashlib.sha256(full_seed.encode()).hexdigest()
@@ -173,7 +175,7 @@ class QutritSignalMatrix:
         self.matrix = self._build_matrix_from_hash(self.seed)
         self.last_update = market_data.get('timestamp', 0.0)
 
-        logger.debug(f"Updated qutrit matrix with new market context")
+        logger.debug("Updated qutrit matrix with new market context")
 
     def get_matrix_result(self) -> QutritMatrixResult:
         """
@@ -186,10 +188,12 @@ class QutritSignalMatrix:
         confidence = self.calculate_confidence()
 
         # Generate hash segment for reference
-        hash_hex = hashlib.sha256("{0}_{1}".format(self.seed, str(self.market_context)).encode()).hexdigest()
+        hash_hex = hashlib.sha256()
+            "{0}_{1}".format(self.seed, str(self.market_context)).encode()
+        ).hexdigest()
         hash_segment = hash_hex[:8]
 
-        return QutritMatrixResult(
+        return QutritMatrixResult()
             matrix=self.matrix.copy(),
             state=state,
             confidence=confidence,
@@ -223,16 +227,22 @@ class QutritSignalMatrix:
         state = self.get_state_decision()
         confidence = self.calculate_confidence()
 
-        descriptions = {
-            QutritState.DEFER: f"DEFER (confidence: {confidence:.3f}) - Hold position, wait for better signal",
-            QutritState.EXECUTE: f"EXECUTE (confidence: {confidence:.3f}) - Execute trade with current signal",
-            QutritState.RECHECK: f"RECHECK (confidence: {confidence:.3f}) - Re-evaluate market conditions",
+        descriptions = {}
+            QutritState.DEFER: "DEFER (confidence: {0:.3f}) - Hold position, wait for better signal".format(confidence)
+            ),
+            QutritState.EXECUTE) - Execute trade with current signal".format(confidence"
+            ),
+            QutritState.RECHECK) - Re-evaluate market conditions".format("
+                confidence
+            ),
         }
 
         return descriptions.get(state, "UNKNOWN STATE")
 
 
-def create_qutrit_matrix(seed: str, market_data: Optional[Dict[str, Any]] = None) -> QutritSignalMatrix:
+def create_qutrit_matrix()
+    seed: str, market_data: Optional[Dict[str, Any]] = None
+) -> QutritSignalMatrix:
     """
     Factory function to create QutritSignalMatrix
 
@@ -260,7 +270,7 @@ def test_qutrit_matrix():
     print("Seed: {0}".format(seed))
     print("Matrix:\n{0}".format(qutrit_matrix.get_matrix()))
     print("State: {0}".format(qutrit_matrix.get_state_decision()))
-    print(f"Confidence: {qutrit_matrix.calculate_confidence():.3f}")
+    print("Confidence)))"
     print("Description: {0}".format(qutrit_matrix.get_state_description()))
 
     # Test volatility overlay
@@ -269,10 +279,10 @@ def test_qutrit_matrix():
 
     # Test complete result
     result = qutrit_matrix.get_matrix_result()
-    print(f"\nComplete Result:")
+    print("\nComplete Result:")
     print("  Hash Segment: {0}".format(result.hash_segment))
     print("  State: {0}".format(result.state))
-    print(f"  Confidence: {result.confidence:.3f}")
+    print("  Confidence))"
 
 
 if __name__ == "__main__":

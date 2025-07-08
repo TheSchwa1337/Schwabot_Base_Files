@@ -51,7 +51,7 @@ class SimpleCLIRefactor:
 
 def __init__(self, root_dir: str = '.'):"""
     """Function implementation pending."""
-pass
+    pass
 
 self.root_dir = Path(root_dir)
         self.python_files = []
@@ -60,7 +60,7 @@ self.root_dir = Path(root_dir)
         self.errors = []
 
 # Files to skip
-self.skip_patterns = [
+self.skip_patterns = []
             r'__pycache__',
             r'\.git',
             r'\.mypy_cache',
@@ -81,7 +81,7 @@ self.skip_patterns = [
             r'simple_cli_refactor\.py',  # Skip this script
 ]
 # Common Unicode patterns found in the codebase
-self.unicode_patterns = [
+self.unicode_patterns = []
 # Emojis and symbols
 r'[\\u1f680\\u1f4c8\\u1f4c9\\u1f4b0\\u26a1\\u1f525\\u2744\\u1f4a1\\u1f3af\\u1f3aa\\u1f3ad\\u1f3a8\\u1f3b5\\u1f3ae\\u1f3c6\\u1f947\\u1f948\\u1f949]',
             r'[\\u1f517\\u1f512\\u1f513\\u1f510\\u1f511\\u1f528\\u1f529\\u1f52a\\u1f52b\\u1f52c\\u1f52d\\u1f52e\\u1f52f\\u1f530\\u1f531\\u1f532\\u1f533\\u1f534\\u1f535\\u1f536\\u1f537\\u1f538\\u1f539\\u1f53a\\u1f53b\\u1f53c\\u1f53d]',
@@ -137,25 +137,25 @@ self.python_files = filtered_files
 
 def contains_unicode():-> bool:
     """Function implementation pending."""
-pass
+    pass
 """
 """Check if text contains Unicode characters.""""""
 """"""
 """"""
 """"""
 """
-return bool(self.unicode_regex.search(text))
+    return bool(self.unicode_regex.search(text))
 
 def refactor_file():-> bool:"""
     """Function implementation pending."""
-pass
+    pass
 """
 """Refactor a single file to use safe_print.""""""
 """"""
 """"""
 """"""
 """
-try:
+    try:
             with open(file_path, 'r', encoding='utf - 8') as f:
                 content = f.read()
 
@@ -169,26 +169,26 @@ print_pattern = r'print\\s*\((.*?)\)'
 
 def replace_print(match):"""
     """Function implementation pending."""
-pass
+    pass
 
 args_str = match.group(1)
 
 # Check if this print statement contains Unicode
-if not self.contains_unicode(args_str):
+    if not self.contains_unicode(args_str):
                     return match.group(0)  # No change needed
 
 # Replace with safe_print
-return f'safe_print({args_str})'
+    return f'safe_print({args_str})'
 
 # Replace print statements
 content = re.sub(print_pattern, replace_print, content, flags = re.DOTALL)
 
 # Add import if needed and content was modified
-if content != original_content and not has_safe_print_import:
+    if content != original_content and not has_safe_print_import:
                 content = self._add_safe_print_import(content)
 
 # Write back if modified
-if content != original_content:
+    if content != original_content:
                 with open(file_path, 'w', encoding='utf - 8') as f:
                     f.write(content)
 
@@ -203,7 +203,7 @@ self.errors.append(f"Error refactoring {file_path}: {e}")
 
 def _add_safe_print_import():-> str:
     """Function implementation pending."""
-pass
+    pass
 """
 """Add safe_print import to the file.""""""
 """"""
@@ -212,7 +212,7 @@ pass
 """
 lines = content.split('\n')
 
-# Find the best place to add import (after existing imports)
+# Find the best place to add import (after existing, imports)
         import_end = 0
         for i, line in enumerate(lines):
             if line.strip().startswith(('import ', 'from ')):
@@ -228,14 +228,14 @@ return '\n'.join(lines)
 
 def scan_for_unicode_prints():-> List[str]:
     """Function implementation pending."""
-pass
+    pass
 """
 """Scan a file for print statements containing Unicode.""""""
 """"""
 """"""
 """"""
 """
-try:
+    try:
             with open(file_path, 'r', encoding='utf - 8') as f:
                 content = f.read()
 
@@ -255,7 +255,7 @@ self.errors.append(f"Error scanning {file_path}: {e}")
 
 def run_refactor():-> None:
     """Function implementation pending."""
-pass
+    pass
 """
 """Run the complete refactor process.""""""
 """"""
@@ -282,14 +282,14 @@ if unicode_prints:
                     info(f"  Found {len(unicode_prints)} Unicode print statements")
 
 # Show examples
-for j, print_stmt in enumerate(unicode_prints[:3]):  # Show first 3
+    for j, print_stmt in enumerate(unicode_prints[:3]):  # Show first 3
                         info(f"    Example {j + 1}: {print_stmt[:100]}...")
 
 if len(unicode_prints) > 3:
                         info(f"    ... and {len(unicode_prints) - 3} more")
 
 # Refactor file
-if self.refactor_file(file_path):
+    if self.refactor_file(file_path):
                         modified_count += 1
                         success(f"  Refactored {file_path}")
                     else:
@@ -301,7 +301,7 @@ if self.refactor_file(file_path):
 """"""
 """"""
 """
-pass
+    pass
 
 except Exception as e:"""
 error(f"Error processing {file_path}: {e}")
@@ -326,7 +326,7 @@ if self.modified_files:
 
 def main():
     """Function implementation pending."""
-pass
+    pass
 """
 """Main entry point.""""""
 """"""

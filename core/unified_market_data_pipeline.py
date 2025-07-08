@@ -25,7 +25,7 @@ to provide clean, standardized, and optimized market data input for the trading 
 
 Key Features:
 - Multi-source data aggregation and validation
-- Technical indicator calculations (RSI, MACD, Bollinger Bands)
+- Technical indicator calculations (RSI, MACD, Bollinger, Bands)
 - Sentiment analysis and on-chain metrics integration
 - Standardized MarketDataPacket output
 - Real-time data cleaning and optimization
@@ -60,7 +60,7 @@ class DataQuality(Enum):
 
 
 @dataclass
-class TechnicalIndicators:
+    class TechnicalIndicators:
     """Technical indicators calculated from price data."""
 
     rsi_14: float = 50.0
@@ -83,7 +83,7 @@ class TechnicalIndicators:
 
 
 @dataclass
-class OnChainMetrics:
+    class OnChainMetrics:
     """On-chain metrics from Glassnode and similar sources."""
 
     hash_rate: float = 0.0
@@ -101,7 +101,7 @@ class OnChainMetrics:
 
 
 @dataclass
-class MarketSentiment:
+    class MarketSentiment:
     """Market sentiment indicators."""
 
     fear_greed_index: float = 50.0
@@ -116,7 +116,7 @@ class MarketSentiment:
 
 
 @dataclass
-class MarketDataPacket:
+    class MarketDataPacket:
     """Standardized market data packet for trading pipeline input."""
 
     # Basic price data
@@ -158,7 +158,7 @@ class MarketDataPacket:
 
 
 @dataclass
-class PipelineMetrics:
+    class PipelineMetrics:
     """Pipeline performance and health metrics."""
 
     total_requests: int = 0
@@ -207,7 +207,7 @@ class UnifiedMarketDataPipeline:
 
     def _default_config(self) -> Dict[str, Any]:
         """Default configuration for the pipeline."""
-        return {
+        return {}
             "cache_ttl": 300,  # 5 minutes
             "max_price_history": 1000,
             "api_timeout": 30,
@@ -215,7 +215,7 @@ class UnifiedMarketDataPipeline:
             "failover_enabled": True,
             "quality_threshold": 0.7,
             "registry_file": None,
-            "apis": {
+            "apis": {}
                 "coingecko": {"enabled": True, "weight": 0.4},
                 "glassnode": {"enabled": True, "weight": 0.3},
                 "fear_greed": {"enabled": True, "weight": 0.2},
@@ -293,7 +293,7 @@ class UnifiedMarketDataPipeline:
             data_quality, freshness_score = self._assess_data_quality(raw_data)
 
             # Create unified market data packet
-            market_packet = MarketDataPacket(
+            market_packet = MarketDataPacket()
                 symbol=symbol,
                 price=cleaned_data.get("price", 0.0),
                 volume_24h=cleaned_data.get("volume_24h", 0.0),
@@ -314,7 +314,7 @@ class UnifiedMarketDataPipeline:
                 momentum_score=derived_metrics["momentum_score"],
                 sources_used=list(raw_data.keys()),
                 api_latencies={k: v.get("latency", 0.0) for k, v in raw_data.items()},
-                metadata={
+                metadata={}
                     "pipeline_version": "1.0.0",
                     "calculation_time": time.time() - start_time,
                     "quality_score": self._calculate_quality_score(data_quality, freshness_score),
@@ -332,9 +332,9 @@ class UnifiedMarketDataPipeline:
             if self.registry:
                 self._log_to_registry(market_packet)
 
-            logger.info(
+            logger.info()
                 "Generated market data packet for {0} ".format(symbol)
-                "(quality: {0}, sources: {1})".format(
+                "(quality: {0}, sources: {1})".format()
                     data_quality.value, 
                     len(raw_data))
             )
@@ -360,7 +360,7 @@ class UnifiedMarketDataPipeline:
                 latency = time.time() - start_time
 
                 if cg_data and "coin_prices" in cg_data:
-                    raw_data["coingecko"] = {
+                    raw_data["coingecko"] = {}
                         "data": cg_data,
                         "latency": latency,
                         "timestamp": time.time(),
@@ -376,7 +376,7 @@ class UnifiedMarketDataPipeline:
                 latency = time.time() - start_time
 
                 if gn_data and "latest_values" in gn_data:
-                    raw_data["glassnode"] = {
+                    raw_data["glassnode"] = {}
                         "data": gn_data,
                         "latency": latency,
                         "timestamp": time.time(),
@@ -392,7 +392,7 @@ class UnifiedMarketDataPipeline:
                 latency = time.time() - start_time
 
                 if fg_data:
-                    raw_data["fear_greed"] = {
+                    raw_data["fear_greed"] = {}
                         "data": fg_data,
                         "latency": latency,
                         "timestamp": time.time(),
@@ -408,7 +408,7 @@ class UnifiedMarketDataPipeline:
                 latency = time.time() - start_time
 
                 if wa_data:
-                    raw_data["whale_alert"] = {
+                    raw_data["whale_alert"] = {}
                         "data": wa_data,
                         "latency": latency,
                         "timestamp": time.time(),
@@ -420,7 +420,7 @@ class UnifiedMarketDataPipeline:
 
     def _clean_and_validate(self, raw_data: Dict[str, Any], symbol: str) -> Dict[str, Any]:
         """Clean and validate raw API data."""
-        cleaned = {
+        cleaned = {}
             "price": 0.0,
             "volume_24h": 0.0,
             "market_cap": 0.0,
@@ -486,7 +486,7 @@ class UnifiedMarketDataPipeline:
 
             # Bollinger Bands
             if len(prices) >= 20:
-                (
+                ()
                     indicators.bb_upper,
                     indicators.bb_middle,
                     indicators.bb_lower,
@@ -576,7 +576,7 @@ class UnifiedMarketDataPipeline:
 
     def _calculate_derived_metrics(self, data: Dict[str, Any], indicators: TechnicalIndicators) -> Dict[str, float]:
         """Calculate derived metrics for the trading system."""
-        metrics = {
+        metrics = {}
             "volatility": 0.5,
             "trend_strength": 0.5,
             "entropy_level": 4.0,
@@ -595,7 +595,7 @@ class UnifiedMarketDataPipeline:
                 rsi_trend = abs(indicators.rsi_14 - 50) / 50.0
                 metrics["trend_strength"] = min(1.0, (macd_strength + rsi_trend) / 2.0)
 
-            # Entropy level (market uncertainty)
+            # Entropy level (market, uncertainty)
             volatility = metrics["volatility"]
             bb_width = abs(indicators.bb_upper - indicators.bb_lower) / max(indicators.bb_middle, 1.0)
             metrics["entropy_level"] = min(10.0, 2.0 + volatility * 4.0 + bb_width * 4.0)
@@ -645,7 +645,7 @@ class UnifiedMarketDataPipeline:
         ema26 = self._calculate_ema(prices, 26)
         macd_line = ema12 - ema26
 
-        # Simple signal line (9-period EMA of MACD)
+        # Simple signal line (9-period EMA of, MACD)
         macd_signal = macd_line * 0.9  # Simplified
         macd_histogram = macd_line - macd_signal
 
@@ -749,7 +749,7 @@ class UnifiedMarketDataPipeline:
 
     def _calculate_quality_score(self, quality: DataQuality, freshness: float) -> float:
         """Calculate a numeric quality score."""
-        quality_scores = {
+        quality_scores = {}
             DataQuality.EXCELLENT: 1.0,
             DataQuality.GOOD: 0.8,
             DataQuality.ACCEPTABLE: 0.6,
@@ -825,7 +825,7 @@ class UnifiedMarketDataPipeline:
 
         try:
             # Create registry entry for market data
-            schwafit_info = {
+            schwafit_info = {}
                 "symbol": packet.symbol,
                 "price": packet.price,
                 "rsi_14": packet.technical_indicators.rsi_14,
@@ -840,12 +840,12 @@ class UnifiedMarketDataPipeline:
             }
 
             # Log as market data trigger
-            self.registry.log_trigger(
+            self.registry.log_trigger()
                 asset=packet.symbol,
                 phase=packet.technical_indicators.bb_position,
                 drift=packet.momentum_score,
                 schwafit_info=schwafit_info,
-                trade_result={
+                trade_result={}
                     "market_data_update": True,
                     "timestamp": packet.timestamp,
                     "data_quality_score": packet.metadata.get("quality_score", 0.0),
@@ -857,7 +857,7 @@ class UnifiedMarketDataPipeline:
 
     def _create_fallback_packet(self, symbol: str) -> MarketDataPacket:
         """Create a fallback market data packet when all sources fail."""
-        return MarketDataPacket(
+        return MarketDataPacket()
             symbol=symbol,
             price=0.0,
             volume_24h=0.0,
@@ -880,12 +880,12 @@ class UnifiedMarketDataPipeline:
         """Get comprehensive pipeline status and metrics."""
         uptime = time.time() - self.start_time
 
-        return {
+        return {}
             "pipeline_status": "running" if self.handlers else "stopped",
             "uptime_seconds": uptime,
             "active_handlers": list(self.handlers.keys()),
             "cached_symbols": list(self.data_cache.keys()),
-            "metrics": {
+            "metrics": {}
                 "total_requests": self.metrics.total_requests,
                 "success_rate": self.metrics.successful_requests / max(1, self.metrics.total_requests),
                 "average_latency": self.metrics.average_latency,
@@ -906,13 +906,13 @@ class UnifiedMarketDataPipeline:
                 test_data = await handler.get_data(force_refresh=False)
                 latency = time.time() - start_time
 
-                health_status[handler_name] = {
+                health_status[handler_name] = {}
                     "status": "healthy" if test_data else "unhealthy",
                     "latency": latency,
                     "last_check": time.time(),
                 }
             except Exception as e:
-                health_status[handler_name] = {
+                health_status[handler_name] = {}
                     "status": "error",
                     "error": str(e),
                     "last_check": time.time(),
@@ -922,7 +922,7 @@ class UnifiedMarketDataPipeline:
 
 
 # Factory function
-def create_unified_pipeline(config: Optional[Dict[str, Any]] = None) -> UnifiedMarketDataPipeline:
+    def create_unified_pipeline(config: Optional[Dict[str, Any]] = None) -> UnifiedMarketDataPipeline:
     """Create a new unified market data pipeline instance."""
     return UnifiedMarketDataPipeline(config)
 
@@ -936,7 +936,7 @@ async def demo_pipeline():
     btc_data = await pipeline.get_market_data("BTC")
 
     print("BTC Price: ${0:,.2f}".format(btc_data.price))
-    print("RSI: {0:.2f}".format(btc_data.technical_indicators.rsi_14))
+    print("RSI))"
     print("Data Quality: {0}".format(btc_data.data_quality.value))
     print("Sources Used: {0}".format(', '.join(btc_data.sources_used)))
 

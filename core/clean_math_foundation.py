@@ -16,30 +16,24 @@ Key Features:
 """
 
 import logging
-import time
-import threading
-from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Tuple, Any, Union
+from typing import Dict, Tuple, Any
 from enum import Enum
 import numpy as np
-import cupy as cp
-from concurrent.futures import ThreadPoolExecutor
-import asyncio
-from scipy.optimize import minimize
-from scipy.linalg import expm, norm
-from scipy.stats import entropy
-import hashlib
-import json
-from datetime import datetime, timedelta
+try:
+    import cupy as cp
+    CUPY_AVAILABLE = True
+except ImportError:
+    import numpy as cp
+    CUPY_AVAILABLE = False
 
 # CUDA Integration with Fallback
 try:
     USING_CUDA = True
-    _backend = 'cupy (GPU)'
+    _backend = "cupy (GPU)"
     xp = cp
 except ImportError:
     USING_CUDA = False
-    _backend = 'numpy (CPU)'
+    _backend = "numpy (CPU)"
     xp = np
 
 logger = logging.getLogger(__name__)
@@ -104,7 +98,7 @@ def calculate_vector_norm(vector: np.ndarray, p: float = 2.0) -> float:
 
     Args:
         vector: Input vector
-        p: Norm order (default: 2.0 for Euclidean norm)
+        p: Norm order (default: 2.0 for Euclidean, norm)
 
     Returns:
         Vector norm value
@@ -135,7 +129,7 @@ def calculate_matrix_condition_number(matrix: np.ndarray) -> float:
         matrix: Input matrix
 
     Returns:
-        Condition number (infinity if matrix is singular)
+        Condition number (infinity if matrix is, singular)
 
     Raises:
         ValueError: If matrix is not square
@@ -161,7 +155,7 @@ def calculate_correlation_matrix(returns: np.ndarray) -> np.ndarray:
     Calculate the correlation matrix from returns data.
 
     Args:
-        returns: Returns matrix (time x assets)
+        returns: Returns matrix (time x, assets)
 
     Returns:
         Correlation matrix
@@ -193,8 +187,8 @@ def calculate_covariance_matrix(returns: np.ndarray, ddof: int = 1) -> np.ndarra
     Calculate the covariance matrix from returns data.
 
     Args:
-        returns: Returns matrix (time x assets)
-        ddof: Delta degrees of freedom (default: 1 for sample covariance)
+        returns: Returns matrix (time x, assets)
+        ddof: Delta degrees of freedom (default: 1 for sample, covariance)
 
     Returns:
         Covariance matrix
@@ -221,7 +215,9 @@ def calculate_covariance_matrix(returns: np.ndarray, ddof: int = 1) -> np.ndarra
     return np.cov(returns_clean.T, ddof=ddof)
 
 
-def calculate_sharpe_ratio(returns: np.ndarray, risk_free_rate: float = 0.0, periods_per_year: int = 252) -> float:
+def calculate_sharpe_ratio(
+    returns: np.ndarray, risk_free_rate: float = 0.0, periods_per_year: int = 252
+) -> float:
     """
     Calculate the Sharpe ratio for a series of returns.
 
@@ -257,7 +253,9 @@ def calculate_sharpe_ratio(returns: np.ndarray, risk_free_rate: float = 0.0, per
     return float(sharpe_ratio)
 
 
-def calculate_sortino_ratio(returns: np.ndarray, risk_free_rate: float = 0.0, periods_per_year: int = 252) -> float:
+def calculate_sortino_ratio(
+    returns: np.ndarray, risk_free_rate: float = 0.0, periods_per_year: int = 252
+) -> float:
     """
     Calculate the Sortino ratio for a series of returns.
 
@@ -283,9 +281,9 @@ def calculate_sortino_ratio(returns: np.ndarray, risk_free_rate: float = 0.0, pe
     # Calculate mean
     mean_return = np.mean(excess_returns)
 
-    # Calculate downside deviation (only negative returns)
+    # Calculate downside deviation (only negative, returns)
     downside_returns = excess_returns[excess_returns < 0]
-    
+
     if len(downside_returns) == 0:
         return float("inf") if mean_return > 0 else 0.0
 
@@ -318,35 +316,37 @@ def calculate_max_drawdown(returns: np.ndarray) -> Dict[str, float]:
 
     # Calculate cumulative returns
     cumulative_returns = np.cumprod(1 + returns)
-    
+
     # Calculate running maximum
     running_max = np.maximum.accumulate(cumulative_returns)
-    
+
     # Calculate drawdown
     drawdown = (cumulative_returns - running_max) / running_max
-    
+
     # Find maximum drawdown
     max_drawdown = np.min(drawdown)
-    
+
     # Find start and end indices of max drawdown
     end_idx = np.argmin(drawdown)
-    start_idx = np.argmax(cumulative_returns[:end_idx + 1])
-    
+    start_idx = np.argmax(cumulative_returns[: end_idx + 1])
+
     return {
         "max_drawdown": float(max_drawdown),
         "start_index": int(start_idx),
         "end_index": int(end_idx),
-        "duration": int(end_idx - start_idx)
+        "duration": int(end_idx - start_idx),
     }
 
 
-def calculate_value_at_risk(returns: np.ndarray, confidence_level: float = 0.05) -> float:
+def calculate_value_at_risk(
+    returns: np.ndarray, confidence_level: float = 0.5
+) -> float:
     """
     Calculate Value at Risk (VaR) for a series of returns.
 
     Args:
         returns: Array of returns
-        confidence_level: Confidence level (e.g., 0.05 for 95% VaR)
+        confidence_level: Confidence level (e.g., 0.5 for 95% VaR)
 
     Returns:
         VaR value
@@ -366,13 +366,15 @@ def calculate_value_at_risk(returns: np.ndarray, confidence_level: float = 0.05)
     return float(var)
 
 
-def calculate_conditional_var(returns: np.ndarray, confidence_level: float = 0.05) -> float:
+def calculate_conditional_var(
+    returns: np.ndarray, confidence_level: float = 0.5
+) -> float:
     """
     Calculate Conditional Value at Risk (CVaR) for a series of returns.
 
     Args:
         returns: Array of returns
-        confidence_level: Confidence level (e.g., 0.05 for 95% CVaR)
+        confidence_level: Confidence level (e.g., 0.5 for 95% CVaR)
 
     Returns:
         CVaR value
@@ -388,10 +390,10 @@ def calculate_conditional_var(returns: np.ndarray, confidence_level: float = 0.0
 
     # Calculate VaR
     var = calculate_value_at_risk(returns, confidence_level)
-    
-    # Calculate CVaR (expected value of returns below VaR)
+
+    # Calculate CVaR (expected value of returns below, VaR)
     tail_returns = returns[returns <= var]
-    
+
     if len(tail_returns) == 0:
         return var
 

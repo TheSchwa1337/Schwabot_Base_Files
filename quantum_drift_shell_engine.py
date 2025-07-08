@@ -46,7 +46,7 @@ CONSERVATIVE = "CONSERVATIVE"
 
 
 @dataclass
-class ThermalState:
+    class ThermalState:
 
 """Represents thermal state in the drift shell.""""""
 """"""
@@ -64,7 +64,7 @@ position: Tuple[float, float, float]
 
 
 @dataclass
-class DriftAnalysisResult:
+    class DriftAnalysisResult:
 """
 """Result of thermal drift analysis.""""""
 """"""
@@ -94,7 +94,7 @@ class QuantumDriftShellEngine:
 
 def __init__():) -> None:"""
     """Function implementation pending."""
-pass
+    pass
 """
 """Initialize quantum drift shell engine.""""""
 """"""
@@ -107,15 +107,15 @@ self.grid_resolution = grid_resolution
         self.temperature_field: np.ndarray = np.zeros(grid_resolution)
         self.heat_flux_field: np.ndarray = np.zeros((*grid_resolution, 3))
         self.stability_threshold = 0.1
-        self.fallback_threshold = 0.05
+        self.fallback_threshold = 0.5
 
-# Physical constants (normalized for financial modeling)
+# Physical constants (normalized for financial, modeling)
         self.base_density = 1.0  # \\u03c1 base
         self.base_specific_heat = 1.0  # c_p base
 
 def initialize_thermal_grid():-> None:"""
     """Function implementation pending."""
-pass
+    pass
 """
 """Initialize thermal grid with market - based parameters.""""""
 """"""
@@ -130,7 +130,7 @@ for x in range(x_res):
                     position = (x, y, z)
 
 # Initialize thermal state based on position and market data
-initial_temp = self._calculate_initial_temperature(
+initial_temp = self._calculate_initial_temperature()
                         position, market_data
                     )
 
@@ -142,7 +142,7 @@ density = self.base_density * (1 + 0.1 * np.unified_math.sin(x * 0.1))
                     specific_heat = self.base_specific_heat * \
                         (1 + 0.1 * np.unified_math.cos(y * 0.1))
 
-thermal_state = ThermalState(
+thermal_state = ThermalState()
                         temperature = initial_temp,
                         heat_flux = heat_flux,
                         density = density,
@@ -168,7 +168,7 @@ def calculate_thermal_drift(): self,
 """"""
 """"""
 """
-if target_position not in self.thermal_grid:"""
+    if target_position not in self.thermal_grid:"""
 raise ValueError(f"Position {target_position} not in thermal grid")
 
 thermal_state = self.thermal_grid[target_position]
@@ -183,7 +183,7 @@ diffusivity_factor = thermal_state.density * thermal_state.specific_heat
         base_temperature_change = divergence / diffusivity_factor
 
 # Apply conditional variance based on drift mode
-conditional_variance = self._calculate_conditional_variance(
+conditional_variance = self._calculate_conditional_variance()
             thermal_state, drift_mode
         )
 
@@ -195,17 +195,17 @@ thermal_state.temperature += temperature_change * time_delta
         thermal_state.timestamp = time.time()
 
 # Calculate gradient magnitude
-gradient_magnitude = self._calculate_temperature_gradient_magnitude(
+gradient_magnitude = self._calculate_temperature_gradient_magnitude()
             target_position
 )
 
 # Calculate stability score
-stability_score = self._calculate_stability_score(
+stability_score = self._calculate_stability_score()
             temperature_change, gradient_magnitude
         )
 
 # Check fallback conditions
-fallback_triggered = self._check_fallback_conditions(
+fallback_triggered = self._check_fallback_conditions()
             stability_score, drift_mode
         )
 
@@ -213,11 +213,11 @@ fallback_triggered = self._check_fallback_conditions(
 drift_direction = self._calculate_drift_direction(target_position)
 
 # Calculate confidence level
-confidence_level = self._calculate_confidence_level(
+confidence_level = self._calculate_confidence_level()
             stability_score, gradient_magnitude, fallback_triggered
         )
 
-result = DriftAnalysisResult(
+result = DriftAnalysisResult()
             analysis_id = f"drift_{len(self.drift_history)}_{int(time.time())}",
             temperature_change = temperature_change,
             gradient_magnitude = gradient_magnitude,
@@ -245,7 +245,7 @@ def regulate_asset_stability():self,
 """"""
 """"""
 """
-regulation_results = {"""
+regulation_results = {"""}
             "regulated_positions": [],
             "stability_improvements": [],
             "fallback_activations": 0,
@@ -258,8 +258,8 @@ for position in asset_positions:
 drift_result = self.calculate_thermal_drift(position)
 
 # Apply regulation if needed
-if drift_result.stability_score < stability_target:
-                regulation_applied = self._apply_stability_regulation(
+    if drift_result.stability_score < stability_target:
+                regulation_applied = self._apply_stability_regulation()
                     position, drift_result, stability_target
                 )
 
@@ -268,7 +268,7 @@ if regulation_applied:
 
 # Re - analyze after regulation
 new_drift_result = self.calculate_thermal_drift(position)
-                    improvement = (
+                    improvement = ()
                         new_drift_result.stability_score - drift_result.stability_score
 )
 regulation_results["stability_improvements"].append(improvement)
@@ -278,7 +278,7 @@ if drift_result.fallback_triggered:
 
 total_stability += drift_result.stability_score
 
-regulation_results["overall_stability"] = (
+regulation_results["overall_stability"] = ()
             total_stability / len(asset_positions) if asset_positions else 0.0
         )
 
@@ -299,7 +299,7 @@ x, y, z = position
 base_temp = 1.0 + 0.1 * unified_math.unified_math.sin(x * 0.1) * unified_math.unified_math.cos(y * 0.1)
 
 # Market data influence
-if market_data:"""
+    if market_data:"""
 price_factor = market_data.get("price", 50000) / 50000.0
             volume_factor = market_data.get("volume", 1000) / 1000.0
             volatility_factor = market_data.get("volatility", 0.1) / 0.1
@@ -326,19 +326,19 @@ div_x = 0.0
         div_z = 0.0
 
 # X - direction divergence
-if x > 0 and x < x_res - 1:
+    if x > 0 and x < x_res - 1:
             q_x_plus = self.heat_flux_field[x + 1, y, z, 0]
             q_x_minus = self.heat_flux_field[x - 1, y, z, 0]
             div_x = (q_x_plus - q_x_minus) / 2.0
 
 # Y - direction divergence
-if y > 0 and y < y_res - 1:
+    if y > 0 and y < y_res - 1:
             q_y_plus = self.heat_flux_field[x, y + 1, z, 1]
             q_y_minus = self.heat_flux_field[x, y - 1, z, 1]
             div_y = (q_y_plus - q_y_minus) / 2.0
 
 # Z - direction divergence
-if z > 0 and z < z_res - 1:
+    if z > 0 and z < z_res - 1:
             q_z_plus = self.heat_flux_field[x, y, z + 1, 2]
             q_z_minus = self.heat_flux_field[x, y, z - 1, 2]
             div_z = (q_z_plus - q_z_minus) / 2.0
@@ -385,20 +385,20 @@ grad_x = 0.0
         grad_z = 0.0
 
 # Calculate gradients using finite differences
-if x > 0 and x < x_res - 1:
-            grad_x = (
+    if x > 0 and x < x_res - 1:
+            grad_x = ()
                 self.temperature_field[x + 1, y, z] -
                 self.temperature_field[x - 1, y, z]
             ) / 2.0
 
 if y > 0 and y < y_res - 1:
-            grad_y = (
+            grad_y = ()
                 self.temperature_field[x, y + 1, z] -
                 self.temperature_field[x, y - 1, z]
             ) / 2.0
 
 if z > 0 and z < z_res - 1:
-            grad_z = (
+            grad_z = ()
                 self.temperature_field[x, y, z + 1] -
                 self.temperature_field[x, y, z - 1]
             ) / 2.0
@@ -431,7 +431,7 @@ def _check_fallback_conditions():self,
 """"""
 """"""
 """
-if drift_mode == DriftMode.FALLBACK:
+    if drift_mode == DriftMode.FALLBACK:
             return True
 
 return stability_score < self.fallback_threshold
@@ -455,20 +455,20 @@ x, y, z = position
 direction = np.zeros(3)
 
 # Calculate direction from temperature gradient
-if x > 0 and x < x_res - 1:
-            direction[0] = (
+    if x > 0 and x < x_res - 1:
+            direction[0] = ()
                 self.temperature_field[x + 1, y, z] -
                 self.temperature_field[x - 1, y, z]
             ) / 2.0
 
 if y > 0 and y < y_res - 1:
-            direction[1] = (
+            direction[1] = ()
                 self.temperature_field[x, y + 1, z] -
                 self.temperature_field[x, y - 1, z]
             ) / 2.0
 
 if z > 0 and z < z_res - 1:
-            direction[2] = (
+            direction[2] = ()
                 self.temperature_field[x, y, z + 1] -
                 self.temperature_field[x, y, z - 1]
             ) / 2.0
@@ -512,7 +512,7 @@ def _apply_stability_regulation():self,
 """"""
 """"""
 """
-if position not in self.thermal_grid:
+    if position not in self.thermal_grid:
             return False
 
 thermal_state = self.thermal_grid[position]
@@ -535,7 +535,7 @@ return True
 
 
 # Convenience functions
-def create_quantum_drift_system():grid_resolution: Tuple[int, int, int] = (15, 15, 15)
+    def create_quantum_drift_system():grid_resolution: Tuple[int, int, int] = (15, 15, 15)
 ) -> QuantumDriftShellEngine:"""
 """Create and initialize quantum drift shell system.""""""
 """"""

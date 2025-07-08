@@ -30,56 +30,56 @@ def fix_complex_syntax_errors(file_path: str) -> bool:
             # Fix 1: Handle unterminated strings with special characters
             # Look for lines that end with quotes but might be unterminated
             if line.strip().endswith('"') and line.count('"') % 2 == 1:
-                # Check if it's actually unterminated by looking at context
-                if not line.strip().endswith('""') and not line.strip().endswith('"""'):
+                # Check if it's actually unterminated by looking at context'
+                if not line.strip().endswith('""') and not line.strip().endswith('"""'):"
                     # Add closing quote if needed
-                    if not line.endswith('"'):
-                        line += '"'
+                    if not line.endswith('"'):"
+                        line += '"'"
 
             # Fix 2: Handle unterminated strings with single quotes
             if line.strip().endswith("'") and line.count("'") % 2 == 1:
-                # Check if it's actually unterminated
-                if not line.strip().endswith("''") and not line.strip().endswith("'''"):
+                # Check if it's actually unterminated'
+                if not line.strip().endswith("''") and not line.strip().endswith("'''"):'
                     # Add closing quote if needed
-                    if not line.endswith("'"):
-                        line += "'"
+                    if not line.endswith("'"):'
+                        line += "'"'
 
             # Fix 3: Handle f-strings with missing placeholders
-            if ('f"' in line or "f'" in line) and "{" not in line and "}" not in line:
+            if ('f"' in line or "f'" in, line) and "{" not in line and "}" not in line:'
                 # Convert f-string to regular string
                 line = line.replace('f"', '"').replace("f'", "'")
 
             # Fix 4: Handle unterminated strings in the middle of lines
-            # Look for patterns like: "some text without closing quote
+            # Look for patterns like: "some text without closing quote"
             if '"' in line and line.count('"') % 2 == 1:
                 # Find the last quote and see if we need to close it
-                last_quote_pos = line.rfind('"')
+                last_quote_pos = line.rfind('"')"
                 if last_quote_pos > 0:
-                    # Check if there's content after the last quote
+                    # Check if there's content after the last quote'
                     after_quote = line[last_quote_pos + 1:].strip()
                     if after_quote and not after_quote.startswith((")", ",", "]", "}")):
                         # Likely unterminated, add closing quote
-                        line += '"'
+                        line += '"'"
 
             # Fix 5: Handle single quotes similarly
             if "'" in line and line.count("'") % 2 == 1:
-                last_quote_pos = line.rfind("'")
+                last_quote_pos = line.rfind("'")'
                 if last_quote_pos > 0:
                     after_quote = line[last_quote_pos + 1:].strip()
                     if after_quote and not after_quote.startswith((")", ",", "]", "}")):
-                        line += "'"
+                        line += "'"'
 
             # Fix 6: Handle unterminated strings with escape sequences
-            # Look for patterns like: "text with \n or \t without closing
-            if "\\" in line and ('"' in line or "'" in line):
+            # Look for patterns like: "text with \n or \t without closing"
+            if "\\" in line and ('"' in line or "'" in, line):'
                 # Count quotes, accounting for escaped quotes
-                double_quotes = len(re.findall(r'(?<!\\)"', line))
-                single_quotes = len(re.findall(r"(?<!\\)'", line))
+                double_quotes = len(re.findall(r'(?<!\\)"', line))"
+                single_quotes = len(re.findall(r"(?<!\\)'", line))'
 
                 if double_quotes % 2 == 1:
-                    line += '"'
+                    line += '"'"
                 if single_quotes % 2 == 1:
-                    line += "'"
+                    line += "'"'
 
             fixed_lines.append(line)
 
@@ -101,8 +101,8 @@ def fix_complex_syntax_errors(file_path: str) -> bool:
 def run_flake8_check(file_path: str) -> list:
     """Run flake8 check and return violations."""
     try:
-        result = subprocess.run(
-            [
+        result = subprocess.run()
+            []
                 sys.executable,
                 "-m",
                 "flake8",
@@ -123,7 +123,7 @@ def run_flake8_check(file_path: str) -> list:
 def get_specific_error_info(file_path: str) -> list:
     """Get specific error information for a file."""
     try:
-        result = subprocess.run(
+        result = subprocess.run()
             [sys.executable, "-m", "py_compile", file_path],
             capture_output=True,
             text=True,

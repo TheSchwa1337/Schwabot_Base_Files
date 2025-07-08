@@ -5,7 +5,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 import threading
 from concurrent.futures import ThreadPoolExecutor
-    import cupy as cp
+import cupy as cp
 import logging
 
 import numpy as np
@@ -20,12 +20,15 @@ Based on Zero-Point Entropy and Zero-Bound Entropy mathematical frameworks
 """
 
 try:
-    GPU_AVAILABLE = True
+    import cupy as cp
+    USING_CUDA = True
     _backend = 'cupy (GPU)'
+    xp = cp
 except ImportError:
-    cp = np
-    GPU_AVAILABLE = False
+    import numpy as cp  # fallback to numpy
+    USING_CUDA = False
     _backend = 'numpy (CPU)'
+    xp = cp
 logger = logging.getLogger(__name__)
 logger.info("MathematicalOptimizationBridge using backend: {0}".format(_backend))
 
@@ -48,7 +51,7 @@ class EntropyState(Enum):
 
 
 @dataclass
-class OptimizationResult:
+    class OptimizationResult:
     """Container for optimization results."""
 
     success: bool
@@ -61,7 +64,7 @@ class OptimizationResult:
 
 
 @dataclass
-class EntropyMetrics:
+    class EntropyMetrics:
     """Entropy calculation metrics."""
 
     z_score: float
@@ -75,7 +78,7 @@ class EntropyMetrics:
 class MathematicalOptimizationBridge:
     """
     Mathematical optimization bridge implementing entropy-weighted routing
-    between CPU (ZBE: Zero-Bound Entropy) and GPU (ZPE: Zero-Point Entropy).
+    between CPU (ZBE: Zero-Bound, Entropy) and GPU (ZPE: Zero-Point, Entropy).
     """
 
     def __init__(self, config: Optional[Dict[str, Any]] = None):
@@ -87,7 +90,7 @@ class MathematicalOptimizationBridge:
         self.beta_0 = self.config.get("beta_0", 0.3)  # Entropy shift weight
         self.theta_gpu = self.config.get("theta_gpu", 1.5)  # GPU routing threshold
         self.gamma = self.config.get("gamma", 0.1)  # Switch cost coefficient
-        self.lambda_decay = self.config.get("lambda_decay", 0.05)  # Decay rate
+        self.lambda_decay = self.config.get("lambda_decay", 0.5)  # Decay rate
 
         # Performance tracking
         self.total_operations = 0
@@ -104,16 +107,16 @@ class MathematicalOptimizationBridge:
         self.last_switch_time = time.time()
 
         logger.info("Mathematical Optimization Bridge v{0} initialized".format(self.version))
-        logger.info("GPU Available: {0}".format(GPU_AVAILABLE))
+        logger.info("GPU Available: {0}".format(USING_CUDA))
 
     def _default_config(self) -> Dict[str, Any]:
         """Default configuration for optimization bridge."""
-        return {
+        return {}
             "alpha_0": 0.7,
             "beta_0": 0.3,
             "theta_gpu": 1.5,
             "gamma": 0.1,
-            "lambda_decay": 0.05,
+            "lambda_decay": 0.5,
             "max_workers": 4,
             "max_history": 1000,
             "optimization_tolerance": 1e-6,
@@ -131,12 +134,12 @@ class MathematicalOptimizationBridge:
         """
         current_time = time.time()
 
-        # Calculate Z-score (normalized computational demand)
+        # Calculate Z-score (normalized computational, demand)
         mean_load = np.mean(data) if len(data) > 0 else computational_load
         std_load = np.std(data) if len(data) > 1 else 1.0
         z_score = mean_load / max(std_load, 1e-6)
 
-        # Calculate entropy shift rate (gradient approximation)
+        # Calculate entropy shift rate (gradient, approximation)
         if len(self.entropy_history) > 1:
             recent_entropy = [h.routing_coefficient for h in self.entropy_history[-10:]]
             entropy_shift = np.gradient(recent_entropy)[-1] if len(recent_entropy) > 1 else 0.0
@@ -150,7 +153,7 @@ class MathematicalOptimizationBridge:
         delta_t = current_time - self.last_switch_time
         switch_cost = self.gamma * np.exp(-self.lambda_decay * delta_t)
 
-        metrics = EntropyMetrics(
+        metrics = EntropyMetrics()
             z_score=z_score,
             entropy_shift=entropy_shift,
             routing_coefficient=routing_coefficient,
@@ -174,7 +177,7 @@ class MathematicalOptimizationBridge:
         if ζ > θ_gpu: route_to = "GPU"
         else: route_to = "CPU"
         """
-        if not GPU_AVAILABLE:
+        if not USING_CUDA:
             return OptimizationMode.CPU_ONLY
 
         # Apply routing threshold with switch cost consideration
@@ -187,7 +190,7 @@ class MathematicalOptimizationBridge:
         else:
             return OptimizationMode.CPU_ONLY
 
-    def optimize_tensor_operation(
+    def optimize_tensor_operation()
         self,
         tensor_a: np.ndarray,
         tensor_b: np.ndarray,
@@ -212,10 +215,10 @@ class MathematicalOptimizationBridge:
                 mode = self.determine_optimal_routing(metrics)
 
             # Execute operation based on routing decision
-            if mode == OptimizationMode.GPU_ONLY and GPU_AVAILABLE:
+            if mode == OptimizationMode.GPU_ONLY and USING_CUDA:
                 result = self._execute_gpu_operation(tensor_a, tensor_b, operation)
                 entropy_state = EntropyState.ZPE_POINT
-            elif mode == OptimizationMode.HYBRID and GPU_AVAILABLE:
+            elif mode == OptimizationMode.HYBRID and USING_CUDA:
                 result = self._execute_hybrid_operation(tensor_a, tensor_b, operation)
                 entropy_state = EntropyState.TRANSITION
             else:
@@ -234,8 +237,8 @@ class MathematicalOptimizationBridge:
                 self.total_operations += 1
                 self.total_optimization_time += execution_time
 
-                self.operation_history.append(
-                    {
+                self.operation_history.append()
+                    {}
                         "operation": operation,
                         "mode": mode.value,
                         "entropy_state": entropy_state.value,
@@ -249,18 +252,18 @@ class MathematicalOptimizationBridge:
                 if len(self.operation_history) > self.config.get("max_history", 1000):
                     self.operation_history.pop(0)
 
-            return OptimizationResult(
+            return OptimizationResult()
                 success=True,
                 result=result,
                 execution_time=execution_time,
                 optimization_mode=mode.value,
                 entropy_state=entropy_state.value,
-                performance_score=1.0 / max(0.001, execution_time),
+                performance_score=1.0 / max(0.01, execution_time),
             )
 
         except Exception as e:
             logger.error("Tensor optimization failed: {0}".format(e))
-            return OptimizationResult(
+            return OptimizationResult()
                 success=False,
                 result=None,
                 execution_time=time.time() - start_time,
@@ -271,7 +274,7 @@ class MathematicalOptimizationBridge:
             )
 
     def _execute_cpu_operation(self, tensor_a: np.ndarray, tensor_b: np.ndarray, operation: str) -> np.ndarray:
-        """Execute operation on CPU (ZBE: Zero-Bound Entropy)."""
+        """Execute operation on CPU (ZBE: Zero-Bound, Entropy)."""
         if operation == "dot":
             return np.dot(tensor_a, tensor_b)
         elif operation == "multiply":
@@ -284,8 +287,8 @@ class MathematicalOptimizationBridge:
             raise ValueError("Unsupported operation: {0}".format(operation))
 
     def _execute_gpu_operation(self, tensor_a: np.ndarray, tensor_b: np.ndarray, operation: str) -> np.ndarray:
-        """Execute operation on GPU (ZPE: Zero-Point Entropy)."""
-        if not GPU_AVAILABLE:
+        """Execute operation on GPU (ZPE: Zero-Point, Entropy)."""
+        if not USING_CUDA:
             raise RuntimeError("GPU not available")
 
         # Transfer to GPU
@@ -318,10 +321,10 @@ class MathematicalOptimizationBridge:
     def laplace_entropy_spectrum(self, data: np.ndarray) -> np.ndarray:
         """
         Apply Laplace entropy transform for signal processing.
-        Formula: L(f) = FFT(data) * exp(-0.05 * range(len(data)))
+        Formula: L(f) = FFT(data) * exp(-0.5 * range(len(data)))
         """
         fft_data = fft(data)
-        entropy_decay = np.exp(-0.05 * np.arange(len(data)))
+        entropy_decay = np.exp(-0.5 * np.arange(len(data)))
         return fft_data * entropy_decay
 
     def entropy_modulated_fourier_path(self, signal: np.ndarray) -> np.ndarray:
@@ -346,12 +349,12 @@ class MathematicalOptimizationBridge:
         with self.lock:
             avg_execution_time = self.total_optimization_time / max(1, self.total_operations)
 
-            return {
+            return {}
                 "total_operations": self.total_operations,
                 "total_optimization_time": self.total_optimization_time,
                 "average_execution_time": avg_execution_time,
                 "current_entropy_state": self.current_entropy_state.value,
-                "gpu_available": GPU_AVAILABLE,
+                "gpu_available": USING_CUDA,
                 "recent_operations": len(self.operation_history),
                 "routing_efficiency": self._calculate_routing_efficiency(),
             }
@@ -383,7 +386,7 @@ def get_optimization_bridge() -> MathematicalOptimizationBridge:
     return _global_bridge
 
 
-def optimize_tensor_operation(
+def optimize_tensor_operation()
     tensor_a: np.ndarray, tensor_b: np.ndarray, operation: str = "dot", mode: Optional[OptimizationMode] = None
 ) -> OptimizationResult:
     """Convenience function for tensor optimization."""

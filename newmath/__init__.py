@@ -1,8 +1,8 @@
-    from newmath import tensor_ops, profit_math, entropy_calc
-    from newmath.validation import run_full_tests"""
+from newmath import tensor_ops, profit_math, entropy_calc
+from newmath.validation import run_full_tests"""
 from . import profit_math
 from .profit_math import (
-        from .validation import run_basic_tests
+from .validation import run_basic_tests
 from . import entropy_calc
 from . import hash_vectors
 from . import matrix_utils

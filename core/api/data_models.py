@@ -8,7 +8,7 @@ from .enums import ExchangeType, OrderSide, OrderType
 # -*- coding: utf-8 -*-
 
 
-"""API System Data Models ====================
+"""API System Data Models ===================="
 
 
 
@@ -28,7 +28,7 @@ integration system.
 
 
 @dataclass
-class APICredentials:
+    class APICredentials:
     """API credentials for exchanges."""
 
     exchange: ExchangeType
@@ -40,7 +40,7 @@ class APICredentials:
 
 
 @dataclass
-class MarketData:
+    class MarketData:
     """Real-time market data."""
 
     symbol: str
@@ -57,7 +57,7 @@ class MarketData:
 
 
 @dataclass
-class OrderRequest:
+    class OrderRequest:
     """Order request structure."""
 
     symbol: str
@@ -72,7 +72,7 @@ class OrderRequest:
 
 
 @dataclass
-class OrderResponse:
+    class OrderResponse:
     """Order response structure."""
 
     order_id: str
@@ -109,7 +109,7 @@ class OrderResponse:
 
 
 @dataclass
-class PortfolioPosition:
+    class PortfolioPosition:
     """Portfolio position."""
 
     symbol: str
@@ -144,7 +144,7 @@ class PortfolioPosition:
 
 
 @dataclass
-class APIPricePoint:
+    class APIPricePoint:
     """Represents a single price point in a time series."""
 
     timestamp: int
@@ -155,7 +155,7 @@ class APIPricePoint:
 
 
 @dataclass
-class APIMarketDepth:
+    class APIMarketDepth:
     """Represents the market depth for an asset."""
 
     last_update_id: int
@@ -166,7 +166,7 @@ class APIMarketDepth:
 
 
 @dataclass
-class APITrade:
+    class APITrade:
     """Represents a single executed trade."""
 
     id: int
@@ -183,7 +183,7 @@ class APITrade:
 
 
 @dataclass
-class APINewsArticle:
+    class APINewsArticle:
     """Represents a single news article."""
 
     id: str
@@ -202,7 +202,7 @@ class APINewsArticle:
 
 
 @dataclass
-class APIFearAndGreedIndex:
+    class APIFearAndGreedIndex:
     """Represents a Fear and Greed Index value."""
 
     value: int  # 0-100
@@ -213,7 +213,7 @@ class APIFearAndGreedIndex:
 
 
 @dataclass
-class APIGenericData:
+    class APIGenericData:
     """A generic container for other data types."""
 
     source: str

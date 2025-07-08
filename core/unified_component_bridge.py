@@ -1,14 +1,13 @@
 from __future__ import annotations
-import asyncio
 import logging
 from enum import Enum
 from dataclasses import dataclass, field
 import time
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional
 from .advanced_settings_engine import AdvancedSettingsEngine
 from .clean_math_foundation import BitPhase, CleanMathFoundation, ThermalState
-from .clean_profit_vectorization import CleanProfitVectorization, ProfitVector, VectorizationMode
-from .clean_trading_pipeline import CleanTradingPipeline, MarketData, TradingDecision
+from .clean_profit_vectorization import CleanProfitVectorization
+from .clean_trading_pipeline import CleanTradingPipeline, MarketData
 from .mathlib_v4 import MathLibV4
 from .pure_profit_calculator import PureProfitCalculator, StrategyParameters
 
@@ -32,7 +31,7 @@ This bridge integrates:
 
 logger = logging.getLogger(__name__)
 
-__all__ = [
+__all__ = []
     "UnifiedComponentBridge",
     "BridgeMode",
     "ComponentType",
@@ -75,7 +74,7 @@ class ComponentStatus(Enum):
 
 
 @dataclass
-class BridgeMessage:
+    class BridgeMessage:
     """Message passed between components through the bridge."""
 
     timestamp: float
@@ -88,7 +87,7 @@ class BridgeMessage:
 
 
 @dataclass
-class UnifiedSystemState:
+    class UnifiedSystemState:
     """Unified state of the entire system."""
 
     timestamp: float
@@ -125,7 +124,7 @@ class UnifiedComponentBridge:
         self.message_history: List[BridgeMessage] = []
 
         # System state
-        self.system_state = UnifiedSystemState(
+        self.system_state = UnifiedSystemState()
             timestamp=time.time(),
             active_components={},
             system_health=1.0,
@@ -144,19 +143,27 @@ class UnifiedComponentBridge:
         # Initialize components
         self._initialize_components()
 
-        logger.info("UnifiedComponentBridge initialized with mode: {0}".format(mode.value))
+        logger.info()
+            "UnifiedComponentBridge initialized with mode: {0}".format(mode.value)
+        )
 
     def _initialize_components(self) -> None:
         """Initialize all system components."""
         try:
             # Initialize mathematical foundation
             self.components[ComponentType.MATH_FOUNDATION] = CleanMathFoundation()
-            self.component_status[ComponentType.MATH_FOUNDATION] = ComponentStatus.ACTIVE
+            self.component_status[ComponentType.MATH_FOUNDATION] = ()
+                ComponentStatus.ACTIVE
+            )
 
             # Initialize profit calculator with default strategy parameters
             default_strategy = StrategyParameters()
-            self.components[ComponentType.PROFIT_CALCULATOR] = PureProfitCalculator(default_strategy)
-            self.component_status[ComponentType.PROFIT_CALCULATOR] = ComponentStatus.ACTIVE
+            self.components[ComponentType.PROFIT_CALCULATOR] = PureProfitCalculator()
+                default_strategy
+            )
+            self.component_status[ComponentType.PROFIT_CALCULATOR] = ()
+                ComponentStatus.ACTIVE
+            )
 
             # Initialize DLT analyzer
             self.components[ComponentType.DLT_ANALYZER] = MathLibV4()
@@ -168,11 +175,15 @@ class UnifiedComponentBridge:
 
             # Initialize settings engine
             self.components[ComponentType.SETTINGS_ENGINE] = AdvancedSettingsEngine()
-            self.component_status[ComponentType.SETTINGS_ENGINE] = ComponentStatus.ACTIVE
+            self.component_status[ComponentType.SETTINGS_ENGINE] = ()
+                ComponentStatus.ACTIVE
+            )
 
             # Initialize trading pipeline
             self.components[ComponentType.TRADING_PIPELINE] = CleanTradingPipeline()
-            self.component_status[ComponentType.TRADING_PIPELINE] = ComponentStatus.ACTIVE
+            self.component_status[ComponentType.TRADING_PIPELINE] = ()
+                ComponentStatus.ACTIVE
+            )
 
             # Update system state
             self.system_state.active_components = self.component_status.copy()
@@ -183,7 +194,7 @@ class UnifiedComponentBridge:
             logger.error("Error initializing components: {0}".format(e))
             raise
 
-    async def send_message(
+    async def send_message()
         self,
         source: ComponentType,
         destination: ComponentType,
@@ -199,13 +210,13 @@ class UnifiedComponentBridge:
             destination: Destination component
             message_type: Type of message
             data: Message data
-            priority: Message priority (higher = more important)
+            priority: Message priority (higher = more, important)
 
         Returns:
             True if message was sent successfully
         """
         try:
-            message = BridgeMessage(
+            message = BridgeMessage()
                 timestamp=time.time(),
                 source=source,
                 destination=destination,
@@ -227,7 +238,11 @@ class UnifiedComponentBridge:
             if len(self.message_history) > self.max_message_history:
                 self.message_history = self.message_history[-self.max_message_history :]
 
-            logger.debug("Message sent: {0} -> {1} ({2})".format(source.value, destination.value, message_type))
+            logger.debug()
+                "Message sent: {0} -> {1} ({2})".format()
+                    source.value, destination.value, message_type
+                )
+            )
             return True
 
         except Exception as e:
@@ -237,7 +252,7 @@ class UnifiedComponentBridge:
     async def _process_message_queue(self) -> None:
         """Process the message queue asynchronously."""
         while self.message_queue:
-            # Sort by priority (higher priority first)
+            # Sort by priority (higher priority, first)
             self.message_queue.sort(key=lambda m: m.priority, reverse=True)
             message = self.message_queue.pop(0)
             await self._process_message(message)
@@ -268,7 +283,7 @@ class UnifiedComponentBridge:
             pipeline = self.components[ComponentType.TRADING_PIPELINE]
 
             # Convert message data to MarketData
-            market_data = MarketData(
+            market_data = MarketData()
                 symbol=message.data.get("symbol", "BTCUSDT"),
                 price=message.data.get("price", 0.0),
                 volume=message.data.get("volume", 0.0),
@@ -285,11 +300,11 @@ class UnifiedComponentBridge:
 
             if decision:
                 # Send decision to other components
-                await self.send_message(
+                await self.send_message()
                     ComponentType.TRADING_PIPELINE,
                     ComponentType.PROFIT_CALCULATOR,
                     "trading_decision",
-                    {
+                    {}
                         "action": decision.action.value,
                         "quantity": decision.quantity,
                         "price": decision.price,
@@ -308,11 +323,11 @@ class UnifiedComponentBridge:
             profit_result = calculator.calculate_profit(message.data)
 
             # Send result back
-            await self.send_message(
+            await self.send_message()
                 ComponentType.PROFIT_CALCULATOR,
                 message.source,
                 "profit_result",
-                {
+                {}
                     "profit_value": profit_result.profit_value,
                     "confidence": profit_result.confidence,
                     "mode": profit_result.mode.value,
@@ -330,10 +345,12 @@ class UnifiedComponentBridge:
             pattern_data = message.data.get("pattern_data", [])
             confidence_threshold = message.data.get("confidence_threshold", 0.5)
 
-            dlt_result = analyzer.analyze_dlt_pattern(pattern_data, confidence_threshold)
+            dlt_result = analyzer.analyze_dlt_pattern()
+                pattern_data, confidence_threshold
+            )
 
             # Send result back
-            await self.send_message(
+            await self.send_message()
                 ComponentType.DLT_ANALYZER,
                 message.source,
                 "dlt_result",
@@ -351,7 +368,7 @@ class UnifiedComponentBridge:
                 settings_engine.set(key, value)
 
             # Notify other components of settings change
-            await self.send_message(
+            await self.send_message()
                 ComponentType.SETTINGS_ENGINE,
                 ComponentType.TRADING_PIPELINE,
                 "settings_changed",
@@ -372,9 +389,15 @@ class UnifiedComponentBridge:
             self.system_state.active_components = self.component_status.copy()
 
         # Update system health
-        active_count = sum(1 for status in self.component_status.values() if status == ComponentStatus.ACTIVE)
+        active_count = sum()
+            1
+            for status in self.component_status.values()
+            if status == ComponentStatus.ACTIVE
+        )
         total_count = len(self.component_status)
-        self.system_state.system_health = active_count / total_count if total_count > 0 else 0.0
+        self.system_state.system_health = ()
+            active_count / total_count if total_count > 0 else 0.0
+        )
 
     def get_component(self, component_type: ComponentType) -> Optional[Any]:
         """Get a specific component."""
@@ -391,9 +414,15 @@ class UnifiedComponentBridge:
         self.system_state.active_components = self.component_status.copy()
 
         # Calculate system health
-        active_count = sum(1 for status in self.component_status.values() if status == ComponentStatus.ACTIVE)
+        active_count = sum()
+            1
+            for status in self.component_status.values()
+            if status == ComponentStatus.ACTIVE
+        )
         total_count = len(self.component_status)
-        self.system_state.system_health = active_count / total_count if total_count > 0 else 0.0
+        self.system_state.system_health = ()
+            active_count / total_count if total_count > 0 else 0.0
+        )
 
         return self.system_state
 
@@ -411,16 +440,18 @@ class UnifiedComponentBridge:
                 else:
                     is_healthy = component is not None
 
-                health_results[component_type.value] = {
+                health_results[component_type.value] = {}
                     "status": "healthy" if is_healthy else "unhealthy",
                     "accessible": component is not None,
                 }
 
                 # Update component status
-                self.component_status[component_type] = ComponentStatus.ACTIVE if is_healthy else ComponentStatus.ERROR
+                self.component_status[component_type] = ()
+                    ComponentStatus.ACTIVE if is_healthy else ComponentStatus.ERROR
+                )
 
             except Exception as e:
-                health_results[component_type.value] = {
+                health_results[component_type.value] = {}
                     "status": "error",
                     "error": str(e),
                 }
@@ -462,6 +493,8 @@ class UnifiedComponentBridge:
         logger.info("UnifiedComponentBridge shutdown complete")
 
 
-def create_unified_bridge(mode: BridgeMode = BridgeMode.ASYNCHRONOUS) -> UnifiedComponentBridge:
+def create_unified_bridge()
+    mode: BridgeMode = BridgeMode.ASYNCHRONOUS,
+) -> UnifiedComponentBridge:
     """Create a new unified component bridge."""
     return UnifiedComponentBridge(mode=mode)

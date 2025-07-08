@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 
 
 @dataclass
-class BacktestConfig:
+    class BacktestConfig:
     """Configuration for backtesting."""
 
     start_date: datetime
@@ -86,7 +86,7 @@ class BacktestingIntegration:
         self.current_positions: Dict[str, Dict[str, Any]] = {}
 
         # Performance metrics
-        self.metrics: Dict[str, float] = {
+        self.metrics: Dict[str, float] = {}
             "total_return": 0.0,
             "sharpe_ratio": 0.0,
             "max_drawdown": 0.0,
@@ -98,7 +98,7 @@ class BacktestingIntegration:
         """Initialize all system components for backtesting."""
         try:
             # Initialize market data pipeline
-            await self.market_data.initialize(
+            await self.market_data.initialize()
                 trading_pairs=self.config.trading_pairs,
                 start_date=self.config.start_date,
                 end_date=self.config.end_date,
@@ -111,7 +111,7 @@ class BacktestingIntegration:
 
             # Initialize risk management
             if self.config.enable_risk_management:
-                self.risk_manager.initialize(
+                self.risk_manager.initialize()
                     max_positions=self.config.max_open_positions,
                     max_leverage=self.config.max_leverage,
                     risk_profile=self.config.risk_profile,
@@ -137,7 +137,7 @@ class BacktestingIntegration:
             async for market_data in self.market_data.stream_historical_data():
                 # Process market data through GPU if enabled
                 if self.config.use_gpu and hasattr(self, 'gpu_integration'):
-                    processed_data = await self.gpu_integration.process_market_data(
+                    processed_data = await self.gpu_integration.process_market_data()
                         market_data, batch_size=self.config.gpu_batch_size
                     )
                 else:
@@ -161,8 +161,8 @@ class BacktestingIntegration:
 
                 # Log phantom data if enabled
                 if self.config.enable_phantom_logging:
-                    self.phantom_logger.log_system_state(
-                        {
+                    self.phantom_logger.log_system_state()
+                        {}
                             "market_data": processed_data,
                             "signals": signals,
                             "portfolio": self.current_positions,
@@ -175,7 +175,7 @@ class BacktestingIntegration:
 
             # Generate visualizations if enabled
             if self.config.enable_visualization and hasattr(self, 'visualizer'):
-                self.visualizer.create_performance_charts(
+                self.visualizer.create_performance_charts()
                     portfolio_history=self.portfolio_value_history,
                     trade_history=self.trade_history,
                     metrics=self.metrics,
@@ -184,7 +184,7 @@ class BacktestingIntegration:
                 if self.config.save_results:
                     self.visualizer.save_trade_log(self.trade_history)
 
-            return {
+            return {}
                 "metrics": self.metrics,
                 "trade_history": self.trade_history,
                 "portfolio_history": self.portfolio_value_history,
@@ -202,7 +202,7 @@ class BacktestingIntegration:
             execution_size = signal["size"]
             execution_type = signal["type"]
 
-            trade_result = {
+            trade_result = {}
                 "executed": True,
                 "timestamp": time.time(),
                 "pair": signal["pair"],
@@ -210,7 +210,7 @@ class BacktestingIntegration:
                 "price": execution_price,
                 "size": execution_size,
                 "value": execution_price * execution_size,
-                "fees": execution_price * execution_size * Decimal("0.001"),  # Simulated fees
+                "fees": execution_price * execution_size * Decimal("0.01"),  # Simulated fees
             }
 
             # Update positions
@@ -238,8 +238,8 @@ class BacktestingIntegration:
             self.portfolio_value_history.append(portfolio_value)
 
             # Update system profiler
-            self.system_profiler.update_state(
-                {
+            self.system_profiler.update_state()
+                {}
                     "portfolio_value": portfolio_value,
                     "open_positions": len(self.current_positions),
                     "market_data": market_data,
@@ -257,14 +257,14 @@ class BacktestingIntegration:
 
             # Calculate metrics
             self.metrics["total_return"] = float(self.portfolio_value_history[-1] / self.config.initial_capital) - 1
-            self.metrics["sharpe_ratio"] = (
+            self.metrics["sharpe_ratio"] = ()
                 float(np.mean(returns) / np.std(returns) * np.sqrt(252)) if len(returns) > 0 else 0
             )
             self.metrics["max_drawdown"] = float(np.min(portfolio_values / np.maximum.accumulate(portfolio_values)) - 1)
 
             # Calculate trade-specific metrics
             if self.trade_history:
-                winning_trades = sum(
+                winning_trades = sum()
                     1
                     for trade in self.trade_history
                     if trade["type"] == "sell" and trade["price"] > trade.get("entry_price", 0)
@@ -274,21 +274,21 @@ class BacktestingIntegration:
                 self.metrics["win_rate"] = winning_trades / total_trades if total_trades > 0 else 0
 
                 # Calculate profit factor
-                profits = sum(
+                profits = sum()
                     trade["value"] - trade["fees"]
                     for trade in self.trade_history
                     if trade["type"] == "sell" and trade["price"] > trade.get("entry_price", 0)
                 )
-                losses = sum(
+                losses = sum()
                     trade["value"] - trade["fees"]
                     for trade in self.trade_history
                     if trade["type"] == "sell" and trade["price"] <= trade.get("entry_price", 0)
                 )
 
-                self.metrics["profit_factor"] = float(profits / abs(losses)) if losses != 0 else float('in")
+                self.metrics["profit_factor"] = float(profits / abs(losses)) if losses != 0 else float('in")'
 
-            safe_print("Final portfolio value: ${1}".format(float(self.portfolio_value_history[-1]):,.2f))
-            safe_print("Total return: {1}".format(self.metrics[".format(0, 0)total_return']:.2%))
+            safe_print("Final portfolio value: ${1}".format(float(self.portfolio_value_history[-1])))
+            safe_print("Total return: {1}".format(self.metrics[".format(0, 0)total_return']:.2%))'
 
         except Exception as e:
             logger.error("Error calculating performance metrics: {0}".format(e))

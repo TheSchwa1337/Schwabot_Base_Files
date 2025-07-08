@@ -104,12 +104,12 @@ def test_api_integration():
     # Test comprehensive analysis
     print("  Testing comprehensive analysis...")
 
-    # Simulate the analysis (since we can't easily test async functions here)
+    # Simulate the analysis (since we can't easily test async functions, here)'
     entropy_metrics = api.entropy_tracker.calculate_entropy(price_data)
     trend = api.pattern_utils.analyze_trend(price_data)
     patterns = api.pattern_utils.detect_patterns(price_data)
 
-    print(
+    print()
         f"    Entropy: {entropy_metrics.entropy_value:.4f} ({entropy_metrics.state.value})"
     )
     print(f"    Trend: {trend.trend_direction} (strength: {trend.strength:.4f})")
@@ -125,7 +125,7 @@ def test_signal_generation():
     api = HashRecollectionAPI()
 
     # Generate different types of price data
-    test_cases = [
+    test_cases = []
         ("uptrend", [100 + i * 0.5 for i in range(30)]),
         ("downtrend", [100 - i * 0.5 for i in range(30)]),
         ("sideways", [100 + np.random.normal(0, 2) for _ in range(30)]),
@@ -141,14 +141,14 @@ def test_signal_generation():
         patterns = api.pattern_utils.detect_patterns(price_data)
 
         # Create bit sequence
-        normalized_prices = [
+        normalized_prices = []
             (p - min(price_data)) / (max(price_data) - min(price_data))
             for p in price_data
         ]
         bit_sequence = api.bit_operations.create_bit_sequence(normalized_prices)
         bit_patterns = api.bit_operations.detect_patterns(bit_sequence.bits)
 
-        print(
+        print()
             f"    Entropy signal: {entropy_signal.signal_type if entropy_signal else 'none'}"
         )
         print(f"    Trend: {trend.trend_direction} ({trend.strength:.4f})")

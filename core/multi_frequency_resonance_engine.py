@@ -1,17 +1,14 @@
-import asyncio
 import logging
 import time
 from collections import defaultdict, deque
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Dict, List, Optional, Any, Tuple
-from decimal import Decimal
-from .vectorized_profit_orchestrator import FrequencyPhase, ProfitVector, ProfitVectorState
+from typing import Dict, List, Any
+from .vectorized_profit_orchestrator import FrequencyPhase, ProfitVector
 from .unified_math_system import UnifiedMathSystem
 
 import numpy as np
 
-from utils.safe_print import safe_print, info, warn, error, success
 
 #!/usr/bin/env python3
 """
@@ -19,10 +16,10 @@ from utils.safe_print import safe_print, info, warn, error, success
 ======================================================================
 
 Advanced frequency harmonics system that coordinates profit optimization across:
-- Short-frequency trading (high-speed, quick profits)
-- Mid-frequency positioning (balanced, steady growth)
-- Long-frequency strategy (deep positioning, maximum profit)
-- Resonance synthesis (all frequencies aligned for maximum profit)
+- Short-frequency trading (high-speed, quick, profits)
+- Mid-frequency positioning (balanced, steady, growth)
+- Long-frequency strategy (deep positioning, maximum, profit)
+- Resonance synthesis (all frequencies aligned for maximum, profit)
 
 This engine creates harmonic profit waves across multiple time dimensions.
 """
@@ -41,7 +38,7 @@ class ResonanceMode(Enum):
 
 
 @dataclass
-class FrequencyWave:
+    class FrequencyWave:
     """Represents a profit wave at a specific frequency."""
 
     frequency: FrequencyPhase
@@ -66,7 +63,7 @@ class FrequencyWave:
 
 
 @dataclass
-class ResonanceHarmonic:
+    class ResonanceHarmonic:
     """Harmonic relationship between frequency waves."""
 
     primary_frequency: FrequencyPhase
@@ -98,7 +95,7 @@ class MultiFrequencyResonanceEngine:
         self.config = config
         self.unified_math = UnifiedMathSystem()
 
-        # Time synchronization (must be before frequency waves)
+        # Time synchronization (must be before frequency, waves)
         self.master_clock = time.time()
         self.frequency_clocks = {}
 
@@ -129,18 +126,18 @@ class MultiFrequencyResonanceEngine:
 
     def initialize_frequency_waves(self):
         """Initialize frequency waves for each phase."""
-        wave_configs = {
-            FrequencyPhase.SHORT_FREQUENCY: {
+        wave_configs = {}
+            FrequencyPhase.SHORT_FREQUENCY: {}
                 "wavelength": 60.0,  # 1 minute cycles
-                "amplitude": 0.02,  # 2% profit swings
+                "amplitude": 0.2,  # 2% profit swings
                 "phase_offset": 0.0,
             },
-            FrequencyPhase.MID_FREQUENCY: {
+            FrequencyPhase.MID_FREQUENCY: {}
                 "wavelength": 900.0,  # 15 minute cycles
-                "amplitude": 0.05,  # 5% profit swings
+                "amplitude": 0.5,  # 5% profit swings
                 "phase_offset": np.pi / 4,
             },
-            FrequencyPhase.LONG_FREQUENCY: {
+            FrequencyPhase.LONG_FREQUENCY: {}
                 "wavelength": 3600.0,  # 1 hour cycles
                 "amplitude": 0.10,  # 10% profit swings
                 "phase_offset": np.pi / 2,
@@ -148,7 +145,7 @@ class MultiFrequencyResonanceEngine:
         }
 
         for frequency, config in wave_configs.items():
-            self.frequency_waves[frequency] = FrequencyWave(
+            self.frequency_waves[frequency] = FrequencyWave()
                 frequency=frequency,
                 amplitude=config["amplitude"],
                 phase_offset=config["phase_offset"],
@@ -165,13 +162,17 @@ class MultiFrequencyResonanceEngine:
             # Initialize frequency clocks
             self.frequency_clocks[frequency] = time.time()
 
-    async def process_profit_vector(self, profit_vector: ProfitVector) -> Dict[str, Any]:
+    async def process_profit_vector()
+        self, profit_vector: ProfitVector
+    ) -> Dict[str, Any]:
         """Process profit vector through frequency resonance analysis."""
         try:
             current_time = time.time()
 
             # Update frequency waves
-            wave_updates = await self._update_frequency_waves(profit_vector, current_time)
+            wave_updates = await self._update_frequency_waves()
+                profit_vector, current_time
+            )
 
             # Detect resonance patterns
             resonance_analysis = await self._analyze_resonance_patterns(current_time)
@@ -180,19 +181,19 @@ class MultiFrequencyResonanceEngine:
             interference_effects = self._calculate_wave_interference()
 
             # Determine optimal frequency coordination
-            frequency_coordination = self._determine_frequency_coordination(
+            frequency_coordination = self._determine_frequency_coordination()
                 profit_vector, wave_updates, resonance_analysis
             )
 
             # Generate resonance-enhanced profit recommendations
-            resonance_recommendations = await self._generate_resonance_recommendations(
+            resonance_recommendations = await self._generate_resonance_recommendations()
                 profit_vector, frequency_coordination, interference_effects
             )
 
             # Update resonance state
             await self._update_resonance_state(resonance_analysis, interference_effects)
 
-            return {
+            return {}
                 "wave_updates": wave_updates,
                 "resonance_analysis": resonance_analysis,
                 "interference_effects": interference_effects,
@@ -200,14 +201,20 @@ class MultiFrequencyResonanceEngine:
                 "resonance_recommendations": resonance_recommendations,
                 "current_resonance_mode": self.current_resonance_mode.value,
                 "global_resonance_coherence": self.resonance_coherence,
-                "profit_amplification_factor": resonance_recommendations.get("amplification_factor", 1.0),
+                "profit_amplification_factor": resonance_recommendations.get()
+                    "amplification_factor", 1.0
+                ),
             }
 
         except Exception as e:
-            logger.error("Error processing profit vector through resonance: {0}".format(e))
+            logger.error()
+                "Error processing profit vector through resonance: {0}".format(e)
+            )
             return {"error": str(e)}
 
-    async def _update_frequency_waves(self, profit_vector: ProfitVector, current_time: float) -> Dict[str, Any]:
+    async def _update_frequency_waves()
+        self, profit_vector: ProfitVector, current_time: float
+    ) -> Dict[str, Any]:
         """Update all frequency waves based on current profit vector."""
         try:
             wave_updates = {}
@@ -225,18 +232,20 @@ class MultiFrequencyResonanceEngine:
                 current_wave_value = wave.amplitude * np.sin(wave_phase)
 
                 # Update profit velocity
-                previous_profit = wave.profit_history[-1] if wave.profit_history else 0.0
+                previous_profit = ()
+                    wave.profit_history[-1] if wave.profit_history else 0.0
+                )
                 wave.profit_velocity = profit_vector.profit_potential - previous_profit
 
                 # Update wave characteristics based on market conditions
                 if frequency == profit_vector.frequency_phase:
                     # Increase amplitude if this frequency is active
-                    wave.amplitude = min(0.15, wave.amplitude * 1.02)
-                    wave.coherence = min(1.0, wave.coherence + 0.05)
+                    wave.amplitude = min(0.15, wave.amplitude * 1.2)
+                    wave.coherence = min(1.0, wave.coherence + 0.5)
                 else:
                     # Slight decay if not active
-                    wave.amplitude = max(0.01, wave.amplitude * 0.998)
-                    wave.coherence = max(0.1, wave.coherence - 0.01)
+                    wave.amplitude = max(0.1, wave.amplitude * 0.998)
+                    wave.coherence = max(0.1, wave.coherence - 0.1)
 
                 # Update histories
                 wave.wave_history.append(current_wave_value)
@@ -247,7 +256,7 @@ class MultiFrequencyResonanceEngine:
                     wave.wave_history = wave.wave_history[-100:]
                     wave.profit_history = wave.profit_history[-100:]
 
-                wave_updates[frequency.value] = {
+                wave_updates[frequency.value] = {}
                     "position": wave_position,
                     "value": current_wave_value,
                     "amplitude": wave.amplitude,
@@ -267,7 +276,7 @@ class MultiFrequencyResonanceEngine:
     async def _analyze_resonance_patterns(self, current_time: float) -> Dict[str, Any]:
         """Analyze resonance patterns between frequency waves."""
         try:
-            resonance_analysis = {
+            resonance_analysis = {}
                 "active_harmonics": [],
                 "potential_harmonics": [],
                 "resonance_strength": 0.0,
@@ -288,22 +297,35 @@ class MultiFrequencyResonanceEngine:
 
                     # Check for simple harmonic relationships (2:1, 3:2, 4:3, etc.)
                     simple_ratios = [2.0, 1.5, 1.33, 3.0, 0.5, 0.67, 0.75]
-                    closest_ratio = min(simple_ratios, key=lambda x: abs(x - harmonic_ratio))
+                    closest_ratio = min()
+                        simple_ratios, key=lambda x: abs(x - harmonic_ratio)
+                    )
 
-                    if abs(harmonic_ratio - closest_ratio) < 0.1:  # Within 10% of simple ratio
+                    if ()
+                        abs(harmonic_ratio - closest_ratio) < 0.1
+                    ):  # Within 10% of simple ratio
                         # Calculate phase relationship
-                        phase_diff = abs(wave1.current_position - wave2.current_position)
-                        phase_diff = min(phase_diff, 1.0 - phase_diff)  # Normalize to [0, 0.5]
+                        phase_diff = abs()
+                            wave1.current_position - wave2.current_position
+                        )
+                        phase_diff = min()
+                            phase_diff, 1.0 - phase_diff
+                        )  # Normalize to [0, 0.5]
 
                         # Calculate resonance strength
                         coherence_product = wave1.coherence * wave2.coherence
                         amplitude_product = wave1.amplitude * wave2.amplitude
                         phase_alignment = 1.0 - (phase_diff * 2)  # Convert to [0, 1]
 
-                        resonance_strength = coherence_product * amplitude_product * phase_alignment * 100
+                        resonance_strength = ()
+                            coherence_product
+                            * amplitude_product
+                            * phase_alignment
+                            * 100
+                        )
 
                         if resonance_strength > 0.3:  # Significant resonance
-                            harmonic = {
+                            harmonic = {}
                                 "freq1": freq1.value,
                                 "freq2": freq2.value,
                                 "harmonic_ratio": harmonic_ratio,
@@ -317,24 +339,37 @@ class MultiFrequencyResonanceEngine:
                             if resonance_strength > 0.6:
                                 resonance_analysis["active_harmonics"].append(harmonic)
                             else:
-                                resonance_analysis["potential_harmonics"].append(harmonic)
+                                resonance_analysis["potential_harmonics"].append()
+                                    harmonic
+                                )
 
             # Calculate overall resonance metrics
             if resonance_analysis["active_harmonics"]:
-                avg_resonance = np.mean([h["resonance_strength"] for h in resonance_analysis["active_harmonics"]])
+                avg_resonance = np.mean()
+                    []
+                        h["resonance_strength"]
+                        for h in resonance_analysis["active_harmonics"]
+                    ]
+                )
                 resonance_analysis["resonance_strength"] = avg_resonance
 
-                avg_coherence = np.mean([h["coherence_product"] for h in resonance_analysis["active_harmonics"]])
+                avg_coherence = np.mean()
+                    []
+                        h["coherence_product"]
+                        for h in resonance_analysis["active_harmonics"]
+                    ]
+                )
                 resonance_analysis["coherence_score"] = avg_coherence
 
             # Identify synchronization opportunities
             for freq, wave in self.frequency_waves.items():
-                if (
-                    wave.coherence > 0.7 and abs(wave.profit_velocity) > 0.01 and wave.current_position > 0.8
+                if ()
+                    wave.coherence > 0.7
+                    and abs(wave.profit_velocity) > 0.1
+                    and wave.current_position > 0.8
                 ):  # Near wave peak
-
-                    resonance_analysis["synchronization_opportunities"].append(
-                        {
+                    resonance_analysis["synchronization_opportunities"].append()
+                        {}
                             "frequency": freq.value,
                             "coherence": wave.coherence,
                             "profit_velocity": wave.profit_velocity,
@@ -352,7 +387,7 @@ class MultiFrequencyResonanceEngine:
     def _calculate_wave_interference(self) -> Dict[str, Any]:
         """Calculate wave interference patterns between frequencies."""
         try:
-            interference_effects = {
+            interference_effects = {}
                 "constructive_zones": [],
                 "destructive_zones": [],
                 "interference_amplitude": 0.0,
@@ -377,7 +412,7 @@ class MultiFrequencyResonanceEngine:
             if len(frequencies) > 0:
                 combined_phase /= len(frequencies)
 
-            # Detect constructive interference (waves align)
+            # Detect constructive interference (waves, align)
             for i, freq1 in enumerate(frequencies):
                 for freq2 in frequencies[i + 1 :]:
                     wave1 = self.frequency_waves[freq1]
@@ -389,12 +424,14 @@ class MultiFrequencyResonanceEngine:
                     phase_diff = abs(phase1 - phase2) % (2 * np.pi)
                     phase_diff = min(phase_diff, 2 * np.pi - phase_diff)
 
-                    # Constructive interference (phases align)
+                    # Constructive interference (phases, align)
                     if phase_diff < np.pi / 4:  # Within 45 degrees
-                        constructive_strength = (wave1.amplitude + wave2.amplitude) * (1.0 - phase_diff / (np.pi / 4))
+                        constructive_strength = (wave1.amplitude + wave2.amplitude) * ()
+                            1.0 - phase_diff / (np.pi / 4)
+                        )
 
-                        interference_effects["constructive_zones"].append(
-                            {
+                        interference_effects["constructive_zones"].append()
+                            {}
                                 "freq1": freq1.value,
                                 "freq2": freq2.value,
                                 "phase_difference": phase_diff,
@@ -403,14 +440,16 @@ class MultiFrequencyResonanceEngine:
                             }
                         )
 
-                    # Destructive interference (phases oppose)
+                    # Destructive interference (phases, oppose)
                     elif phase_diff > 3 * np.pi / 4:  # More than 135 degrees
-                        destructive_strength = (
-                            abs(wave1.amplitude - wave2.amplitude) * (phase_diff - 3 * np.pi / 4) / (np.pi / 4)
+                        destructive_strength = ()
+                            abs(wave1.amplitude - wave2.amplitude)
+                            * (phase_diff - 3 * np.pi / 4)
+                            / (np.pi / 4)
                         )
 
-                        interference_effects["destructive_zones"].append(
-                            {
+                        interference_effects["destructive_zones"].append()
+                            {}
                                 "freq1": freq1.value,
                                 "freq2": freq2.value,
                                 "phase_difference": phase_diff,
@@ -420,11 +459,19 @@ class MultiFrequencyResonanceEngine:
                         )
 
             # Calculate net interference effect
-            constructive_sum = sum(zone["profit_amplification"] for zone in interference_effects["constructive_zones"])
-            destructive_sum = sum(zone["profit_reduction"] for zone in interference_effects["destructive_zones"])
+            constructive_sum = sum()
+                zone["profit_amplification"]
+                for zone in interference_effects["constructive_zones"]
+            )
+            destructive_sum = sum()
+                zone["profit_reduction"]
+                for zone in interference_effects["destructive_zones"]
+            )
 
             interference_effects["interference_amplitude"] = abs(combined_amplitude)
-            interference_effects["net_interference_effect"] = constructive_sum - destructive_sum
+            interference_effects["net_interference_effect"] = ()
+                constructive_sum - destructive_sum
+            )
 
             return interference_effects
 
@@ -432,12 +479,15 @@ class MultiFrequencyResonanceEngine:
             logger.error("Error calculating wave interference: {0}".format(e))
             return {"net_interference_effect": 0.0}
 
-    def _determine_frequency_coordination(
-        self, profit_vector: ProfitVector, wave_updates: Dict[str, Any], resonance_analysis: Dict[str, Any]
+    def _determine_frequency_coordination()
+        self,
+        profit_vector: ProfitVector,
+        wave_updates: Dict[str, Any],
+        resonance_analysis: Dict[str, Any],
     ) -> Dict[str, Any]:
         """Determine optimal frequency coordination strategy."""
         try:
-            coordination = {
+            coordination = {}
                 "recommended_mode": ResonanceMode.INDEPENDENT,
                 "primary_frequency": profit_vector.frequency_phase,
                 "secondary_frequencies": [],
@@ -448,8 +498,12 @@ class MultiFrequencyResonanceEngine:
             # Check for strong resonance
             if resonance_analysis.get("resonance_strength", 0.0) > 0.7:
                 coordination["recommended_mode"] = ResonanceMode.HARMONIC_SYNC
-                coordination["coordination_strength"] = resonance_analysis["resonance_strength"]
-                coordination["expected_profit_boost"] = resonance_analysis["resonance_strength"] * 0.1
+                coordination["coordination_strength"] = resonance_analysis[]
+                    "resonance_strength"
+                ]
+                coordination["expected_profit_boost"] = ()
+                    resonance_analysis["resonance_strength"] * 0.1
+                )
 
                 # Identify secondary frequencies for coordination
                 for harmonic in resonance_analysis.get("active_harmonics", []):
@@ -465,41 +519,46 @@ class MultiFrequencyResonanceEngine:
             elif len(resonance_analysis.get("synchronization_opportunities", [])) > 1:
                 coordination["recommended_mode"] = ResonanceMode.PROFIT_CASCADE
                 coordination["coordination_strength"] = 0.6
-                coordination["expected_profit_boost"] = 0.04
+                coordination["expected_profit_boost"] = 0.4
 
                 # Use frequencies with high coherence for cascade
                 for opp in resonance_analysis["synchronization_opportunities"]:
                     if opp["frequency"] != profit_vector.frequency_phase.value:
                         coordination["secondary_frequencies"].append(opp["frequency"])
 
-            # Check for maximum coherence (all frequencies aligned)
-            elif (
+            # Check for maximum coherence (all frequencies, aligned)
+            elif ()
                 resonance_analysis.get("coherence_score", 0.0) > 0.8
                 and len(resonance_analysis.get("active_harmonics", [])) >= 2
             ):
                 coordination["recommended_mode"] = ResonanceMode.MAXIMUM_COHERENCE
                 coordination["coordination_strength"] = 0.9
                 coordination["expected_profit_boost"] = 0.15
-                coordination["secondary_frequencies"] = [
-                    freq.value for freq in self.frequency_waves.keys() if freq != profit_vector.frequency_phase
+                coordination["secondary_frequencies"] = []
+                    freq.value
+                    for freq in self.frequency_waves.keys()
+                    if freq != profit_vector.frequency_phase
                 ]
 
             return coordination
 
         except Exception as e:
             logger.error("Error determining frequency coordination: {0}".format(e))
-            return {
+            return {}
                 "recommended_mode": ResonanceMode.INDEPENDENT,
                 "coordination_strength": 0.0,
                 "expected_profit_boost": 0.0,
             }
 
-    async def _generate_resonance_recommendations(
-        self, profit_vector: ProfitVector, frequency_coordination: Dict[str, Any], interference_effects: Dict[str, Any]
+    async def _generate_resonance_recommendations()
+        self,
+        profit_vector: ProfitVector,
+        frequency_coordination: Dict[str, Any],
+        interference_effects: Dict[str, Any],
     ) -> Dict[str, Any]:
         """Generate profit recommendations based on resonance analysis."""
         try:
-            recommendations = {
+            recommendations = {}
                 "amplification_factor": 1.0,
                 "risk_adjustment": 0.0,
                 "timing_optimization": {},
@@ -514,33 +573,41 @@ class MultiFrequencyResonanceEngine:
             if net_interference > 0:
                 base_amplification += min(0.5, net_interference)  # Cap at 50% boost
             else:
-                base_amplification += max(-0.3, net_interference)  # Cap at 30% reduction
+                base_amplification += max()
+                    -0.3, net_interference
+                )  # Cap at 30% reduction
 
             # Apply coordination boost
-            coordination_boost = frequency_coordination.get("expected_profit_boost", 0.0)
+            coordination_boost = frequency_coordination.get()
+                "expected_profit_boost", 0.0
+            )
             base_amplification += coordination_boost
 
             recommendations["amplification_factor"] = base_amplification
 
             # Risk adjustment based on resonance mode
-            resonance_mode = frequency_coordination.get("recommended_mode", ResonanceMode.INDEPENDENT)
+            resonance_mode = frequency_coordination.get()
+                "recommended_mode", ResonanceMode.INDEPENDENT
+            )
             if resonance_mode == ResonanceMode.MAXIMUM_COHERENCE:
                 recommendations["risk_adjustment"] = -0.2  # Lower risk due to coherence
             elif resonance_mode == ResonanceMode.WAVE_INTERFERENCE:
-                recommendations["risk_adjustment"] = 0.3  # Higher risk due to interference
+                recommendations["risk_adjustment"] = ()
+                    0.3  # Higher risk due to interference
+                )
             else:
                 recommendations["risk_adjustment"] = 0.0
 
             # Timing optimization
             current_freq_wave = self.frequency_waves[profit_vector.frequency_phase]
             if current_freq_wave.current_position > 0.7:  # Near peak
-                recommendations["timing_optimization"] = {
+                recommendations["timing_optimization"] = {}
                     "action": "accelerate_execution",
                     "reason": "approaching_wave_peak",
                     "urgency": "high",
                 }
             elif current_freq_wave.current_position < 0.3:  # Near trough
-                recommendations["timing_optimization"] = {
+                recommendations["timing_optimization"] = {}
                     "action": "delay_execution",
                     "reason": "approaching_wave_trough",
                     "urgency": "medium",
@@ -548,9 +615,11 @@ class MultiFrequencyResonanceEngine:
 
             # Frequency switching recommendations
             if len(frequency_coordination.get("secondary_frequencies", [])) > 0:
-                recommendations["frequency_switching"] = {
+                recommendations["frequency_switching"] = {}
                     "should_switch": True,
-                    "target_frequencies": frequency_coordination["secondary_frequencies"],
+                    "target_frequencies": frequency_coordination[]
+                        "secondary_frequencies"
+                    ],
                     "switch_reason": resonance_mode.value,
                     "expected_benefit": coordination_boost,
                 }
@@ -558,13 +627,13 @@ class MultiFrequencyResonanceEngine:
             # Dynamic profit targets based on resonance
             base_target = profit_vector.profit_potential
             if base_amplification > 1.2:
-                recommendations["profit_targets"] = {
+                recommendations["profit_targets"] = {}
                     "conservative": base_target * 1.1,
                     "moderate": base_target * base_amplification,
                     "aggressive": base_target * base_amplification * 1.2,
                 }
             else:
-                recommendations["profit_targets"] = {
+                recommendations["profit_targets"] = {}
                     "conservative": base_target * 0.8,
                     "moderate": base_target,
                     "aggressive": base_target * 1.1,
@@ -576,7 +645,9 @@ class MultiFrequencyResonanceEngine:
             logger.error("Error generating resonance recommendations: {0}".format(e))
             return {"amplification_factor": 1.0, "risk_adjustment": 0.0}
 
-    async def _update_resonance_state(self, resonance_analysis: Dict[str, Any], interference_effects: Dict[str, Any]):
+    async def _update_resonance_state()
+        self, resonance_analysis: Dict[str, Any], interference_effects: Dict[str, Any]
+    ):
         """Update global resonance state based on analysis."""
         try:
             # Update resonance coherence
@@ -593,7 +664,9 @@ class MultiFrequencyResonanceEngine:
                 self.current_resonance_mode = ResonanceMode.INDEPENDENT
 
             # Update global profit velocity
-            total_velocity = sum(wave.profit_velocity for wave in self.frequency_waves.values())
+            total_velocity = sum()
+                wave.profit_velocity for wave in self.frequency_waves.values()
+            )
             self.global_profit_velocity = total_velocity / len(self.frequency_waves)
 
             # Track performance
@@ -601,18 +674,22 @@ class MultiFrequencyResonanceEngine:
                 self.resonance_activations += 1
 
                 # Estimate profit from resonance
-                resonance_profit = (
-                    self.resonance_coherence * interference_effects.get("net_interference_effect", 0.0) * 0.1
+                resonance_profit = ()
+                    self.resonance_coherence
+                    * interference_effects.get("net_interference_effect", 0.0)
+                    * 0.1
                 )
                 self.total_resonance_profit += resonance_profit
 
             # Update harmonic history
-            harmonic_snapshot = {
+            harmonic_snapshot = {}
                 "timestamp": time.time(),
                 "resonance_mode": self.current_resonance_mode.value,
                 "coherence": self.resonance_coherence,
                 "active_harmonics": len(resonance_analysis.get("active_harmonics", [])),
-                "interference_effect": interference_effects.get("net_interference_effect", 0.0),
+                "interference_effect": interference_effects.get()
+                    "net_interference_effect", 0.0
+                ),
             }
             self.harmonic_history.append(harmonic_snapshot)
 
@@ -625,7 +702,7 @@ class MultiFrequencyResonanceEngine:
             # Wave statistics
             wave_stats = {}
             for freq, wave in self.frequency_waves.items():
-                wave_stats[freq.value] = {
+                wave_stats[freq.value] = {}
                     "amplitude": wave.amplitude,
                     "coherence": wave.coherence,
                     "position": wave.current_position,
@@ -635,11 +712,17 @@ class MultiFrequencyResonanceEngine:
                 }
 
             # Recent resonance activity
-            recent_resonance = [h for h in self.harmonic_history if time.time() - h["timestamp"] < 3600]
+            recent_resonance = []
+                h for h in self.harmonic_history if time.time() - h["timestamp"] < 3600
+            ]
 
-            avg_coherence = np.mean([h["coherence"] for h in recent_resonance]) if recent_resonance else 0.0
+            avg_coherence = ()
+                np.mean([h["coherence"] for h in recent_resonance])
+                if recent_resonance
+                else 0.0
+            )
 
-            return {
+            return {}
                 "current_resonance_mode": self.current_resonance_mode.value,
                 "global_resonance_coherence": self.resonance_coherence,
                 "global_profit_velocity": self.global_profit_velocity,
@@ -658,6 +741,8 @@ class MultiFrequencyResonanceEngine:
 
 
 # Factory function for easy integration
-def create_multi_frequency_resonance_engine(config: Dict[str, Any]) -> MultiFrequencyResonanceEngine:
+    def create_multi_frequency_resonance_engine()
+    config: Dict[str, Any],
+) -> MultiFrequencyResonanceEngine:
     """Create a multi-frequency resonance engine instance."""
     return MultiFrequencyResonanceEngine(config)

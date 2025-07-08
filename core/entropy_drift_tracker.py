@@ -1,12 +1,11 @@
-    import cupy as cp
 import time
 import logging
 from typing import Dict, List, Optional, Tuple, Union, Any
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from collections import deque
 from enum import Enum
 
-    import numpy as np
+import numpy as np
 
 #!/usr/bin/env python3
 """
@@ -28,21 +27,22 @@ CUDA Integration:
 
 # CUDA Integration with Fallback
 try:
+    import cupy as cp
     USING_CUDA = True
     _backend = 'cupy (GPU)'
     xp = cp
-    la = cp.linalg
 except ImportError:
+    import numpy as cp  # fallback to numpy
     USING_CUDA = False
     _backend = 'numpy (CPU)'
-    xp = np
-    la = np.linalg
+    xp = cp
 
+# Log backend status
 logger = logging.getLogger(__name__)
 if USING_CUDA:
-    logger.info("⚡ EntropyDriftTracker using GPU acceleration: {0}".format(_backend))
+    logger.info("⚡ Entropy Drift Tracker using GPU acceleration: {0}".format(_backend))
 else:
-    logger.info("🔄 EntropyDriftTracker using CPU fallback: {0}".format(_backend))
+    logger.info("🔄 Entropy Drift Tracker using CPU fallback: {0}".format(_backend))
 
 
 class DriftState(Enum):
@@ -102,9 +102,7 @@ class EntropyDriftTracker:
     for optimal trade execution timing with comprehensive error handling.
     """
 
-    def __init__(
-        self, max_history: int = 100, warp_threshold: float = 0.15, hybrid_mode: HybridMode = HybridMode.ADAPTIVE
-    ):
+    def __init__(self, max_history: int = 100, warp_threshold: float = 0.15, hybrid_mode: HybridMode = HybridMode.ADAPTIVE):
         """
         Initialize entropy drift tracker
 
@@ -138,7 +136,7 @@ class EntropyDriftTracker:
         Args:
             strategy_id: Strategy identifier
             vector: Current profit vector
-            force_cpu: Force CPU processing (for error recovery)
+            force_cpu: Force CPU processing (for error, recovery)
 
         Returns:
             Computed drift value
@@ -199,7 +197,7 @@ class EntropyDriftTracker:
                     drift_value = self._calculate_fallback_drift(vector, last_snapshot.vector)
                     self.performance_metrics['fallback_operations'] += 1
 
-            # Compute entropy score (vector variance)
+            # Compute entropy score (vector, variance)
             try:
                 entropy_score = float(xp.std(vector)) if len(vector) > 1 else 0.0
             except Exception as e:
@@ -243,7 +241,7 @@ class EntropyDriftTracker:
             ) / self.performance_metrics['total_operations']
 
             logger.debug(
-                "Recorded vector for {0}: drift={1}, entropy={2}, state={3}, mode={4}".format(strategy_id, drift_value:.4f, entropy_score:.4f, drift_state.value, processing_mode.value)
+                "Recorded vector for {0}: drift={1}, entropy={2}, state={3}, mode={4}".format(strategy_id, drift_value, entropy_score, drift_state.value, processing_mode.value)
             )
             return drift_value
 
@@ -261,9 +259,7 @@ class EntropyDriftTracker:
             logger.error("Error recording vector for {0}: {1}".format(strategy_id, e))
             return self._safe_fallback_drift()
 
-    def _calculate_fallback_drift(
-        self, vector1: Union[xp.ndarray, np.ndarray], vector2: Union[xp.ndarray, np.ndarray]
-    ) -> float:
+    def _calculate_fallback_drift(self, vector1: Union[xp.ndarray, np.ndarray], vector2: Union[xp.ndarray, np.ndarray]) -> float:
         """Calculate drift using fallback method."""
         try:
             # Convert to numpy for fallback calculation
@@ -392,7 +388,7 @@ class EntropyDriftTracker:
 
         Args:
             strategy_id: Strategy identifier
-            threshold: Custom threshold (uses default if None)
+            threshold: Custom threshold (uses default if, None)
 
         Returns:
             True if in warp window
@@ -516,16 +512,14 @@ class EntropyDriftTracker:
             stats = self.drift_stats[strategy_id].copy()
 
             # Add performance metrics
-            stats.update(
-                {
-                    'gpu_operations': self.performance_metrics['gpu_operations'],
-                    'cpu_operations': self.performance_metrics['cpu_operations'],
-                    'fallback_operations': self.performance_metrics['fallback_operations'],
-                    'avg_operation_time': self.performance_metrics['avg_operation_time'],
-                    'backend': _backend,
-                    'hybrid_mode': self.hybrid_mode.value,
-                }
-            )
+            stats.update({
+                'gpu_operations': self.performance_metrics['gpu_operations'],
+                'cpu_operations': self.performance_metrics['cpu_operations'],
+                'fallback_operations': self.performance_metrics['fallback_operations'],
+                'avg_operation_time': self.performance_metrics['avg_operation_time'],
+                'backend': _backend,
+                'hybrid_mode': self.hybrid_mode.value,
+            })
 
             return stats
 
@@ -553,12 +547,9 @@ class EntropyDriftTracker:
 
                 # Remove old snapshots
                 self.history[strategy_id] = deque(
-                    [
-                        snapshot
-                        for snapshot in self.history[strategy_id]
-                        if current_time - snapshot.timestamp < max_age_seconds
-                    ],
-                    maxlen=self.max_history,
+                    snapshot
+                    for snapshot in self.history[strategy_id]
+                    if current_time - snapshot.timestamp < max_age_seconds
                 )
 
                 cleaned_count += original_count - len(self.history[strategy_id])
@@ -591,11 +582,9 @@ class EntropyDriftTracker:
         }
 
 
-def create_entropy_drift_tracker(
-    max_history: int = 100, warp_threshold: float = 0.15, hybrid_mode: HybridMode = HybridMode.ADAPTIVE
-) -> EntropyDriftTracker:
+def create_entropy_drift_tracker() -> EntropyDriftTracker:
     """Create a new entropy drift tracker instance."""
-    return EntropyDriftTracker(max_history=max_history, warp_threshold=warp_threshold, hybrid_mode=hybrid_mode)
+    return EntropyDriftTracker(max_history=100, warp_threshold=0.15, hybrid_mode=HybridMode.ADAPTIVE)
 
 
 def test_entropy_drift_tracker():
@@ -615,7 +604,7 @@ def test_entropy_drift_tracker():
 
     for i, vector in enumerate(test_vectors):
         drift = tracker.record_vector(strategy_id, vector)
-        print("Vector {0}: drift = {1}".format(i+1, drift:.4f))
+        print("Vector {0}: drift = {1}".format(i+1, drift))
 
     # Test statistics
     stats = tracker.get_drift_statistics(strategy_id)

@@ -1,13 +1,13 @@
-            from core.clean_unified_math import (
-            from core.clean_unified_math import CleanUnifiedMathSystem
-            from core.brain_trading_engine import BrainTradingEngine
-            from core.brain_trading_engine import BrainTradingEngine
-            from core.schwabot_integration_pipeline import IntegrationOrchestrator
-            from core.schwabot_integration_pipeline import SecureAPIManager
-            from symbolic_profit_router import SymbolicProfitRouter
-            from symbolic_profit_router import SymbolicProfitRouter
-            import requests
-            import requests
+from core.clean_unified_math import ()
+from core.clean_unified_math import CleanUnifiedMathSystem
+from core.brain_trading_engine import BrainTradingEngine
+from core.brain_trading_engine import BrainTradingEngine
+from core.schwabot_integration_pipeline import IntegrationOrchestrator
+from core.schwabot_integration_pipeline import SecureAPIManager
+from symbolic_profit_router import SymbolicProfitRouter
+from symbolic_profit_router import SymbolicProfitRouter
+import requests
+import requests
 from typing import Dict, List, Any
 import ast
 import json
@@ -27,7 +27,7 @@ and functionality requirements before building the executable.
 
 
 # Configure logging
-logging.basicConfig(
+logging.basicConfig()
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
@@ -77,7 +77,7 @@ class SystemAudit:
         print("\n📝 CODE QUALITY AUDIT")
         print("-" * 40)
 
-        core_files = [
+        core_files = []
             "core/brain_trading_engine.py",
             "symbolic_profit_router.py",
             "core/clean_unified_math.py",
@@ -108,7 +108,7 @@ class SystemAudit:
                     # Check for proper class structure
                     structure_ok = self.check_class_structure(content)
 
-                    quality_results[file_path] = {
+                    quality_results[file_path] = {}
                         "syntax_valid": syntax_ok,
                         "imports_valid": imports_ok,
                         "structure_valid": structure_ok,
@@ -142,19 +142,19 @@ class SystemAudit:
             math_system = CleanUnifiedMathSystem()
 
             # Test mathematical operations
-            basic_ops = {
+            basic_ops = {}
                 "add": math_system.add(5, 3) == 8,
                 "multiply": math_system.multiply(4, 2.5) == 10,
                 "divide": math_system.divide(10, 2) == 5,
-                "sqrt": abs(math_system.sqrt(25) - 5) < 0.001,
-                "power": abs(math_system.power(2, 3) - 8) < 0.001,
+                "sqrt": abs(math_system.sqrt(25) - 5) < 0.01,
+                "power": abs(math_system.power(2, 3) - 8) < 0.01,
             }
 
             # Test optimization functions
             opt_result = optimize_brain_profit(50000, 1000, 0.75, 1.2)
             optimization_works = isinstance(opt_result, (int, float)) and opt_result > 0
 
-            math_checks["clean_unified_math"] = {
+            math_checks["clean_unified_math"] = {}
                 "basic_operations": all(basic_ops.values()),
                 "optimization_functions": optimization_works,
                 "integration_ready": True,
@@ -173,14 +173,14 @@ class SystemAudit:
             signal = brain_engine.process_brain_signal(50000, 1000)
             decision = brain_engine.get_trading_decision(signal)
 
-            brain_math_ok = (
+            brain_math_ok = ()
                 hasattr(signal, "confidence")
                 and hasattr(signal, "profit_score")
                 and isinstance(decision, dict)
                 and "action" in decision
             )
 
-            math_checks["brain_math"] = {
+            math_checks["brain_math"] = {}
                 "signal_processing": brain_math_ok,
                 "decision_logic": True,
             }
@@ -218,7 +218,7 @@ class SystemAudit:
                     all_working = False
                     break
 
-            components["brain_engine"] = {
+            components["brain_engine"] = {}
                 "functional": all_working,
                 "scenarios_tested": len(test_scenarios),
             }
@@ -246,11 +246,11 @@ class SystemAudit:
                 except Exception:
                     continue
 
-            components["symbolic_router"] = {
+            components["symbolic_router"] = {}
                 "functional": processed_count == len(test_symbols),
                 "symbols_processed": processed_count,
             }
-            print(
+            print()
                 f"  ✅ Symbolic Profit Router: {processed_count}/{len(test_symbols)} symbols"
             )
 
@@ -266,7 +266,7 @@ class SystemAudit:
             status = orchestrator.get_system_status()
             available_components = status.get("available_components", {})
 
-            components["integration_pipeline"] = {
+            components["integration_pipeline"] = {}
                 "functional": len(available_components) > 0,
                 "available_components": available_components,
             }
@@ -286,7 +286,7 @@ class SystemAudit:
         visual_components = {}
 
         # Check for visualization components
-        viz_files = [
+        viz_files = []
             "visualization/lantern_eye_gui.py",
             "visualization/drift_matrix_display.py",
             "visualization/profit_tier_visualizer.py",
@@ -301,7 +301,7 @@ class SystemAudit:
         # Check for GUI framework capability
         gui_frameworks = self.check_gui_frameworks()
 
-        visual_components = {
+        visual_components = {}
             "visualization_files": existing_viz,
             "gui_frameworks": gui_frameworks,
             "tab_switching_ready": len(gui_frameworks) > 0,
@@ -313,7 +313,7 @@ class SystemAudit:
         else:
             print("  ⚠️ Visualization files: Need to create GUI components")
 
-        print(
+        print()
             f"  GUI Frameworks: {', '.join(gui_frameworks) if gui_frameworks else 'None detected'}"
         )
 
@@ -336,7 +336,7 @@ class SystemAudit:
             print("  ❌ Requests library: Not available")
 
         # Check API configuration
-        config_files = [
+        config_files = []
             "config/master_integration.yaml",
             "config/api_keys.json",
             "config/trading_pairs.json",
@@ -358,7 +358,7 @@ class SystemAudit:
             secure_api_ready = False
             print(f"  ❌ Secure API Manager: {e}")
 
-        api_checks = {
+        api_checks = {}
             "ccxt_compatible": ccxt_available,
             "config_files": config_status,
             "secure_api_manager": secure_api_ready,
@@ -375,7 +375,7 @@ class SystemAudit:
         btc_components = {}
 
         # Check for BTC processing components
-        btc_files = [
+        btc_files = []
             "btc/block_processor.py",
             "btc/mining_pool_connector.py",
             "btc/hash_rate_calculator.py",
@@ -386,21 +386,21 @@ class SystemAudit:
         for btc_file in btc_files:
             btc_file_status[btc_file] = os.path.exists(btc_file)
             status = "✅" if btc_file_status[btc_file] else "📋"
-            print(
+            print()
                 f"  {status} {btc_file} {'(Found)' if btc_file_status[btc_file] else '(Planned)'}"
             )
 
         # Check mathematical readiness for BTC processing
         btc_math_ready = self.check_btc_math_readiness()
 
-        btc_components = {
+        btc_components = {}
             "btc_files": btc_file_status,
             "btc_math_ready": btc_math_ready,
             "integration_potential": True,  # Mathematical framework supports it
             "gpu_mining_ready": False,  # Would need implementation
         }
 
-        print(
+        print()
             f"  🧮 BTC Math Framework: {'✅ Ready' if btc_math_ready else '⚠️ Needs work'}"
         )
 
@@ -411,7 +411,7 @@ class SystemAudit:
         print("\n🔍 MISSING COMPONENTS CHECK")
         print("-" * 40)
 
-        critical_components = [
+        critical_components = []
             ("GUI Framework", self.check_gui_framework_complete()),
             ("CCXT Integration", self.check_ccxt_integration()),
             ("Visualization System", self.check_visualization_complete()),
@@ -441,7 +441,7 @@ class SystemAudit:
 
         # Code Quality Score
         code_quality = self.results.get("code_quality", {})
-        code_score = sum(
+        code_score = sum()
             1
             for file_data in code_quality.values()
             if isinstance(file_data, dict) and file_data.get("overall", False)
@@ -451,7 +451,7 @@ class SystemAudit:
 
         # Mathematical Integration Score
         math_integration = self.results.get("mathematical_integration", {})
-        math_score = sum(
+        math_score = sum()
             1
             for comp_data in math_integration.values()
             if isinstance(comp_data, dict) and not comp_data.get("error")
@@ -461,7 +461,7 @@ class SystemAudit:
 
         # Component Functionality Score
         components = self.results.get("component_functionality", {})
-        comp_score = sum(
+        comp_score = sum()
             1
             for comp_data in components.values()
             if isinstance(comp_data, dict) and comp_data.get("functional", False)
@@ -488,7 +488,7 @@ class SystemAudit:
             readiness = "NEEDS WORK"
             print(f"\n⚠️ {readiness}: Significant issues need resolution")
 
-        self.results["system_readiness"] = {
+        self.results["system_readiness"] = {}
             "scores": scores,
             "overall_score": overall_score,
             "readiness_level": readiness,
@@ -499,7 +499,7 @@ class SystemAudit:
     def check_required_imports(self, content: str) -> bool:
         """Check if file has required imports."""
         required_patterns = ["import", "from"]
-        return any(pattern in content for pattern in required_patterns)
+        return any(pattern in content for pattern in, required_patterns)
 
     def check_class_structure(self, content: str) -> bool:
         """Check if file has proper class structure."""
@@ -518,8 +518,8 @@ class SystemAudit:
             test_emoji = "🧠"
             bits = router.extract_2bit_from_unicode(test_emoji)
 
-            bit_systems["2bit_extraction"] = {
-                "functional": len(bits) == 2 and all(c in "01" for c in bits),
+            bit_systems["2bit_extraction"] = {}
+                "functional": len(bits) == 2 and all(c in "1" for c in, bits),
                 "test_result": bits,
             }
             print("  ✅ 2-bit Unicode extraction: Working")

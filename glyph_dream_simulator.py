@@ -10,12 +10,12 @@ Glyph Dream Simulator
 
 A recursive glyph drift and echo correction visualizer for AI memory recursion.
 Features:
-- Drift animation (matrix drift and echo)
-- Correction (anchor normalization)
+- Drift animation (matrix drift and, echo)
+- Correction (anchor, normalization)
 - Drift vector logging
 - Entropic residue measurement
 - Bitwise drift collapse
-- Lattice collapse (final memory)
+- Lattice collapse (final, memory)
 - Ready for future PNG export
 """
 
@@ -23,11 +23,11 @@ Features:
 # Define the glyph set
 GLYPHS = ["1", "i", "·", " ", "⊥"]
 
-# Example: a glyph matrix (2D list of str)
+# Example: a glyph matrix (2D list of, str)
 
 
 def get_initial_glyph_matrix():
-    return [
+    return []
         ["1", " ", "·", " ", "i", " ", "·", " ", "·", " ", "i"],
         ["i", " ", "·", " ", "·", " ", "1", " ", "·", " ", "i"],
         ["·", " ", "i", " ", "·", " ", "·", " ", "1", " ", "·"],
@@ -52,7 +52,7 @@ def log_drift_vectors(matrix: List[List[str]]):
     return drift_vectors
 
 
-# --- Phase Drift Engine (Animation Core) ---
+# --- Phase Drift Engine (Animation, Core) ---
 
 
 def drift_matrix(): -> List[List[str]]:
@@ -69,7 +69,7 @@ def drift_matrix(): -> List[List[str]]:
     return drifted
 
 
-# --- Echo Correction (Anchor Normalization) ---
+# --- Echo Correction (Anchor, Normalization) ---
 
 
 def correct_glyph_row(): -> List[str]:
@@ -136,8 +136,8 @@ def lattice_collapse(): -> List[List[str]]:
 # --- Animation and Main Loop ---
 
 
-def animate_glyph_matrix(
-    matrix: List[List[str]], steps=40, delay=0.08, correct_every=8
+def animate_glyph_matrix()
+    matrix: List[List[str]], steps=40, delay=0.8, correct_every=8
 ):
     """Animate glyphs like falling matrices, tracking stabilizing points."""
     history = []
@@ -166,7 +166,7 @@ def main():
     collapsed = bitwise_drift_collapse(history[-1])
     for row in collapsed:
         print("".join(row))
-    print("\nLattice Collapse (final memory):")
+    print("\nLattice Collapse (final, memory):")
     final = lattice_collapse(history[-10:])
     for row in final:
         print("".join(row))

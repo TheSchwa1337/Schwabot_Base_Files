@@ -17,7 +17,7 @@ import time
 import logging
 
 # Configure logging
-logging.basicConfig(
+logging.basicConfig()
     level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
@@ -29,7 +29,7 @@ def test_enhanced_state_manager():
     print("=" * 50)
 
     try:
-        from core.internal_state.enhanced_state_manager import (
+        from core.internal_state.enhanced_state_manager import ()
             EnhancedStateManager,
             SystemMode,
             LogLevel,
@@ -55,7 +55,7 @@ def test_enhanced_state_manager():
                 print("❌ Memory retrieval failed")
 
             # Test backlog operations
-            entry_id = manager.add_backlog_entry(
+            entry_id = manager.add_backlog_entry()
                 priority=5,
                 data={"test": "backlog_data"},
                 source="test",
@@ -71,16 +71,16 @@ def test_enhanced_state_manager():
             print(f"✅ BTC price hash generated: {btc_hash.hash_value[:16]}...")
 
             # Test demo state creation
-            demo_state = manager.create_demo_state(
+            demo_state = manager.create_demo_state()
                 50000.0, 1000.0, 32, {"extra": "demo_data"}
             )
-            print(
+            print()
                 f"✅ Demo state created: {demo_state['btc_price_hash']['hash'][:16]}..."
             )
 
             # Test system status
             status = manager.get_system_status()
-            print(
+            print()
                 f"✅ System status: {status['mode']} mode, {status['memory']['active_memories']} memories"
             )
 
@@ -120,15 +120,15 @@ def test_system_integration():
             print(f"✅ SystemIntegration created in {mode.value} mode")
 
             # Test demo state creation with BTC hash
-            demo_state = integration.create_demo_state_with_btc_hash(
+            demo_state = integration.create_demo_state_with_btc_hash()
                 50000.0, 1000.0, 32, {"integration_test": "data"}
             )
 
             if "error" not in demo_state:
-                print(
+                print()
                     f"✅ Demo state created with BTC hash: {demo_state['btc_price_hash']['hash'][:16]}..."
                 )
-                print(
+                print()
                     f"✅ System integration data: {len(demo_state['system_integration']['connected_systems'])} systems"
                 )
             else:
@@ -136,19 +136,19 @@ def test_system_integration():
 
             # Test BTC price history
             btc_history = integration.get_btc_price_history(limit=20)
-            print(
+            print()
                 f"✅ BTC price history: {len(btc_history)} entries with system context"
             )
 
             # Test comprehensive system status
             status = integration.get_comprehensive_system_status()
-            print(
+            print()
                 f"✅ Comprehensive status: {status['system_health_summary']['total_systems']} systems connected"
             )
 
             # Test system test
             test_results = integration.run_system_test(test_duration=10)
-            print(
+            print()
                 f"✅ System test completed: {len(test_results.get('tests', {}))} tests"
             )
 
@@ -172,7 +172,7 @@ def test_btc_price_hashing():
     print("=" * 50)
 
     try:
-        from core.internal_state.enhanced_state_manager import (
+        from core.internal_state.enhanced_state_manager import ()
             EnhancedStateManager,
             SystemMode,
             LogLevel,
@@ -195,7 +195,7 @@ def test_btc_price_hashing():
                     btc_hash = manager.generate_btc_price_hash(price, volume, phase)
                     generated_hashes.append(btc_hash)
 
-                    print(
+                    print()
                         f"✅ Generated hash for price={price}, volume={volume}, phase={phase}: {btc_hash.hash_value[:16]}..."
                     )
 
@@ -211,7 +211,7 @@ def test_btc_price_hashing():
         # Test hash uniqueness
         hash_values = [h.hash_value for h in generated_hashes]
         unique_hashes = set(hash_values)
-        print(
+        print()
             f"✅ Hash uniqueness: {len(unique_hashes)} unique hashes out of {len(hash_values)} total"
         )
 
@@ -220,13 +220,13 @@ def test_btc_price_hashing():
         print(f"✅ BTC price history: {len(history)} entries")
 
         # Test demo state with BTC hash
-        demo_state = manager.create_demo_state(
+        demo_state = manager.create_demo_state()
             50000.0, 1000.0, 32, {"btc_test": "data"}
         )
 
         if "btc_price_hash" in demo_state:
             btc_data = demo_state["btc_price_hash"]
-            print(
+            print()
                 f"✅ Demo state BTC data: price={btc_data['price']}, volume={btc_data['volume']}, hash={btc_data['hash'][:16]}..."
             )
         else:
@@ -245,7 +245,7 @@ def test_memory_and_backlog():
     print("=" * 50)
 
     try:
-        from core.internal_state.enhanced_state_manager import (
+        from core.internal_state.enhanced_state_manager import ()
             EnhancedStateManager,
             SystemMode,
             LogLevel,
@@ -256,9 +256,9 @@ def test_memory_and_backlog():
         print("✅ EnhancedStateManager created for memory/backlog testing")
 
         # Test memory operations
-        memory_tests = [
+        memory_tests = []
             {"id": "test1", "data": {"simple": "value"}, "ttl": 3600.0},
-            {
+            {}
                 "id": "test2",
                 "data": {"complex": {"nested": "data", "array": [1, 2, 3]}},
                 "ttl": 1800.0,
@@ -276,20 +276,20 @@ def test_memory_and_backlog():
                 print(f"❌ Memory retrieval failed: {test['id']}")
 
         # Test backlog operations
-        backlog_tests = [
-            {
+        backlog_tests = []
+            {}
                 "priority": 1,
                 "data": {"high": "priority"},
                 "source": "test",
                 "target": "memory",
             },
-            {
+            {}
                 "priority": 5,
                 "data": {"medium": "priority"},
                 "source": "test",
                 "target": "hash",
             },
-            {
+            {}
                 "priority": 10,
                 "data": {"low": "priority"},
                 "source": "demo",
@@ -297,14 +297,14 @@ def test_memory_and_backlog():
             },
         ]
         for test in backlog_tests:
-            entry_id = manager.add_backlog_entry(
+            entry_id = manager.add_backlog_entry()
                 test["priority"], test["data"], test["source"], test["target"]
             )
             print(f"✅ Added backlog entry: {entry_id} (priority: {test['priority']})")
 
         # Test backlog status
         status = manager.get_backlog_status()
-        print(
+        print()
             f"✅ Backlog status: {status['queue_size']} in queue, {status['processed_count']} processed"
         )
 
@@ -314,13 +314,13 @@ def test_memory_and_backlog():
 
         # Check updated status
         updated_status = manager.get_backlog_status()
-        print(
+        print()
             f"✅ Updated backlog status: {updated_status['queue_size']} in queue, {updated_status['processed_count']} processed"
         )
 
         # Test system status
         system_status = manager.get_system_status()
-        print(
+        print()
             f"✅ System status: {system_status['memory']['active_memories']} active memories"
         )
 
@@ -337,7 +337,7 @@ def test_logging_and_system_states():
     print("=" * 50)
 
     try:
-        from core.internal_state.enhanced_state_manager import (
+        from core.internal_state.enhanced_state_manager import ()
             EnhancedStateManager,
             SystemMode,
             LogLevel,
@@ -353,7 +353,7 @@ def test_logging_and_system_states():
 
             # Generate some activity to test logging
             for i in range(5):
-                manager.store_memory(
+                manager.store_memory()
                     f"log_test_{i}", {"iteration": i, "timestamp": time.time()}
                 )
                 manager.add_backlog_entry(i, {"log_test": i}, "test", "memory")
@@ -361,13 +361,13 @@ def test_logging_and_system_states():
 
             # Test system status
             status = manager.get_system_status()
-            print(
+            print()
                 f"✅ System status retrieved: {status['mode']} mode, uptime: {status['uptime_seconds']:.2f}s"
             )
 
             # Test thread status
             threads = status["threads"]
-            print(
+            print()
                 f"✅ Thread status: memory_cleanup={threads['memory_cleanup']}, "
                 f"backlog_processor={threads['backlog_processor']}, "
                 f"btc_hash_generator={threads['btc_hash_generator']}"
@@ -406,20 +406,20 @@ def test_demo_state_generation():
         print("✅ SystemIntegration created for demo testing")
 
         # Test demo state generation with different BTC prices
-        demo_scenarios = [
-            {
+        demo_scenarios = []
+            {}
                 "price": 45000.0,
                 "volume": 800.0,
                 "phase": 16,
                 "description": "Low price scenario",
             },
-            {
+            {}
                 "price": 50000.0,
                 "volume": 1000.0,
                 "phase": 32,
                 "description": "Medium price scenario",
             },
-            {
+            {}
                 "price": 55000.0,
                 "volume": 1200.0,
                 "phase": 42,
@@ -431,7 +431,7 @@ def test_demo_state_generation():
         for scenario in demo_scenarios:
             print(f"\n--- {scenario['description']} ---")
 
-            demo_state = integration.create_demo_state_with_btc_hash(
+            demo_state = integration.create_demo_state_with_btc_hash()
                 scenario["price"],
                 scenario["volume"],
                 scenario["phase"],
@@ -445,14 +445,14 @@ def test_demo_state_generation():
                 btc_data = demo_state["btc_price_hash"]
                 system_data = demo_state["system_integration"]
 
-                print(
+                print()
                     f"✅ Demo state created: price={btc_data['price']}, volume={btc_data['volume']}"
                 )
                 print(f"✅ BTC hash: {btc_data['hash'][:16]}...")
-                print(
+                print()
                     f"✅ System integration: {len(system_data['connected_systems'])} systems"
                 )
-                print(
+                print()
                     f"✅ System metrics: {demo_state['system_metrics']['memory_count']} memories, "
                     f"{demo_state['system_metrics']['backlog_size']} backlog items"
                 )
@@ -463,7 +463,7 @@ def test_demo_state_generation():
 
         # Test comprehensive status
         status = integration.get_comprehensive_system_status()
-        print(
+        print()
             f"✅ Comprehensive status: {status['system_health_summary']['total_systems']} systems, "
             f"{status['system_health_summary']['healthy_systems']} healthy"
         )
@@ -516,19 +516,19 @@ def test_system_initialization():
 
             # Test system health
             health_summary = status.get("system_health_summary", {})
-            print(
+            print()
                 f"✅ System health: {health_summary.get('healthy_systems', 0)}/{health_summary.get('total_systems', 0)} healthy"
             )
 
             # Test demo state creation
-            demo_state = integration.create_demo_state_with_btc_hash(
+            demo_state = integration.create_demo_state_with_btc_hash()
                 50000.0, 1000.0, 32, {"init_test": "data"}
             )
 
             if "error" not in demo_state:
                 print(f"✅ Demo state created successfully in {mode.value} mode")
             else:
-                print(
+                print()
                     f"❌ Demo state creation failed in {mode.value} mode: {demo_state['error']}"
                 )
 
@@ -547,7 +547,7 @@ def main():
     print("🚀 Enhanced State System Test Suite")
     print("=" * 60)
 
-    tests = [
+    tests = []
         ("EnhancedStateManager", test_enhanced_state_manager),
         ("SystemIntegration", test_system_integration),
         ("BTC Price Hashing", test_btc_price_hashing),
@@ -583,7 +583,7 @@ def main():
 
     if passed == total:
         print("🎉 All enhanced state system tests passed!")
-        print(
+        print()
             "✅ System properly initializes, organizes, and connects to internal systems"
         )
         print("✅ BTC price hashing works correctly for demo states")

@@ -24,18 +24,18 @@ def fix_unterminated_strings(file_path: str) -> bool:
 
         for i, line in enumerate(lines):
             # Check for unterminated strings
-            quote_count = line.count('"') + line.count("'")
+            quote_count = line.count('"') + line.count("'")'
 
             if quote_count % 2 == 1:
                 # Odd number of quotes - likely unterminated
                 print(f"  Found unterminated string in line {i + 1}: {line[:50]}...")
 
                 # Try to fix by adding closing quote
-                if line.count('"') % 2 == 1:
-                    line += '"'
+                if line.count('"') % 2 == 1:"
+                    line += '"'"
                     print("  Fixed: Added closing double quote")
-                if line.count("'") % 2 == 1:
-                    line += "'"
+                if line.count("'") % 2 == 1:'
+                    line += "'"'
                     print("  Fixed: Added closing single quote")
 
             fixed_lines.append(line)
@@ -58,8 +58,8 @@ def fix_unterminated_strings(file_path: str) -> bool:
 def run_flake8_check(file_path: str) -> list:
     """Run flake8 check and return violations."""
     try:
-        result = subprocess.run(
-            [
+        result = subprocess.run()
+            []
                 sys.executable,
                 "-m",
                 "flake8",

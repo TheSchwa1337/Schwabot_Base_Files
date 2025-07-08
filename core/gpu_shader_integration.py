@@ -8,7 +8,7 @@ Comprehensive GPU shader integration system that:
 - Integrates system profiling with GPU DNA detection
 - Manages GLSL shader compilation and execution
 - Provides hardware-adaptive cosine similarity calculations
-- Interfaces with Schwabot's strategy matching pipeline
+- Interfaces with Schwabot's strategy matching pipeline'
 
 Key Features:
 - Automatic shader adaptation (Pi 4 → RTX 5090)
@@ -21,7 +21,7 @@ import logging
 import os
 import time
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, Optional, Tuple
 
 import numpy as np
 import pygame
@@ -39,9 +39,12 @@ except ImportError:
 
 # Fix star imports by explicitly importing needed functions
 from OpenGL.GL import (
-    glUniform1f, glUniform1i, glBindFramebuffer, GL_FRAMEBUFFER, 
-    glViewport, glClear, GL_COLOR_BUFFER_BIT, glDrawArrays, 
-    GL_TRIANGLES, glReadPixels, GL_RGBA, GL_UNSIGNED_BYTE
+    glUniform1f,
+    glUniform1i,
+    glBindFramebuffer,
+    GL_FRAMEBUFFER,
+    glViewport,
+    glReadPixels,
 )
 
 logger = logging.getLogger(__name__)
@@ -50,7 +53,6 @@ logger = logging.getLogger(__name__)
 @dataclass
 class ShaderProgramConfig:
     """Configuration for compiled shader program."""
-
     program_id: int
     vertex_shader_id: int
     fragment_shader_id: int
@@ -98,7 +100,7 @@ class GPUShaderIntegration:
             self.gpu_dna_profile = detect_gpu_dna()
             self.shader_config = get_gpu_shader_config()
 
-            # Step 3: OpenGL initialization (if available)
+            # Step 3: OpenGL initialization (if, available)
             if OPENGL_AVAILABLE:
                 logger.info("🎮 Step 3: OpenGL Initialization...")
                 self._initialize_opengl()
@@ -112,16 +114,8 @@ class GPUShaderIntegration:
             logger.info("✅ GPU Shader Integration Initialized in {0:.2f}s".format(init_time))
             logger.info("🔧 System: {0}".format(self.system_profile.device_type))
             logger.info("🎮 GPU: {0}".format(self.system_profile.gpu.renderer))
-            logger.info(
-                "📊 Matrix Size: {0}x{0}".format(
-                    self.shader_config.matrix_size, self.shader_config.matrix_size
-                )
-            )
-            logger.info(
-                "⚡ Performance Multiplier: {0}x".format(
-                    self.shader_config.performance_multiplier
-                )
-            )
+            logger.info("📊 Matrix Size: {0}x{0}".format(self.shader_config.matrix_size, self.shader_config.matrix_size))
+            logger.info("⚡ Performance Multiplier: {0}x".format(self.shader_config.performance_multiplier))
 
             return True
 
@@ -178,14 +172,14 @@ class GPUShaderIntegration:
 
             # Get uniform locations
             uniform_locations = {
-                'u_tick_vector': glGetUniformLocation(program, 'u_tick_vector'),
-                'u_strategy_matrix': glGetUniformLocation(program, 'u_strategy_matrix'),
-                'u_vector_length': glGetUniformLocation(program, 'u_vector_length'),
-                'u_strategy_index': glGetUniformLocation(program, 'u_strategy_index'),
-                'u_matrix_size': glGetUniformLocation(program, 'u_matrix_size'),
-                'u_epsilon': glGetUniformLocation(program, 'u_epsilon'),
-                'u_enable_morphing': glGetUniformLocation(program, 'u_enable_morphing'),
-                'u_batch_size': glGetUniformLocation(program, 'u_batch_size'),
+                "u_tick_vector": glGetUniformLocation(program, "u_tick_vector"),
+                "u_strategy_matrix": glGetUniformLocation(program, "u_strategy_matrix"),
+                "u_vector_length": glGetUniformLocation(program, "u_vector_length"),
+                "u_strategy_index": glGetUniformLocation(program, "u_strategy_index"),
+                "u_matrix_size": glGetUniformLocation(program, "u_matrix_size"),
+                "u_epsilon": glGetUniformLocation(program, "u_epsilon"),
+                "u_enable_morphing": glGetUniformLocation(program, "u_enable_morphing"),
+                "u_batch_size": glGetUniformLocation(program, "u_batch_size"),
             }
 
             # Store compiled shader configuration
@@ -204,7 +198,7 @@ class GPUShaderIntegration:
 
             logger.info("✅ Shaders compiled successfully in {0:.2f}s".format(compile_time))
             logger.info("🔧 Precision: {0}".format(self.cosine_shader_program.precision_mode))
-            logger.info("🌊 Morphing: {0}".format('Enabled' if self.cosine_shader_program.morphing_enabled else 'Disabled'))
+            logger.info("🌊 Morphing: {0}".format("Enabled" if self.cosine_shader_program.morphing_enabled else "Disabled"))
 
         except Exception as e:
             logger.error("Shader compilation failed: {0}".format(e))
@@ -237,36 +231,36 @@ class GPUShaderIntegration:
         return """
         #version 300 es
         precision PRECISION_PLACEHOLDER float;
-        
+
         in vec2 v_texCoord;
         out vec4 fragColor;
-        
+
         uniform sampler2D u_tick_vector;
         uniform sampler2D u_strategy_matrix;
         uniform int u_vector_length;
         uniform int u_strategy_index;
         uniform float u_epsilon;
-        
-        float computeCosineSimilarity(int vectorLength, int strategyIndex) {
+
+        float computeCosineSimilarity(int vectorLength, int, strategyIndex) {
             float dotProduct = 0.0;
             float normA = 0.0;
             float normB = 0.0;
-            
+
             for (int i = 0; i < vectorLength; i++) {
                 if (i >= u_vector_length) break;
-                
+
                 float tickValue = texelFetch(u_tick_vector, ivec2(i, 0), 0).r;
                 float strategyValue = texelFetch(u_strategy_matrix, ivec2(i, strategyIndex), 0).r;
-                
+
                 dotProduct += tickValue * strategyValue;
                 normA += tickValue * tickValue;
                 normB += strategyValue * strategyValue;
             }
-            
+
             float denominator = sqrt(normA) * sqrt(normB) + u_epsilon;
             return dotProduct / denominator;
         }
-        
+
         void main() {
             float similarity = computeCosineSimilarity(u_vector_length, u_strategy_index);
             fragColor = vec4(similarity, 0.0, 0.0, 1.0);
@@ -278,8 +272,8 @@ class GPUShaderIntegration:
         Compute cosine similarity between tick vector and strategy vectors using GPU.
 
         Args:
-            tick_vector: Current market tick vector (1D array)
-            strategy_vectors: Matrix of strategy vectors (2D array)
+            tick_vector: Current market tick vector (1D, array)
+            strategy_vectors: Matrix of strategy vectors (2D, array)
 
         Returns:
             Array of cosine similarities for each strategy
@@ -315,14 +309,12 @@ class GPUShaderIntegration:
             execution_time = time.time() - start_time
             self.performance_metrics["operations_count"] += 1
             self.performance_metrics["average_execution_time"] = (
-                self.performance_metrics["average_execution_time"] * (
-                    self.performance_metrics["operations_count"] - 1
-                ) + execution_time
+                self.performance_metrics["average_execution_time"]
+                * (self.performance_metrics["operations_count"] - 1)
+                + execution_time
             ) / self.performance_metrics["operations_count"]
 
-            logger.debug(
-                "🔥 GPU cosine similarity computed in {0:.3f}s".format(execution_time)
-            )
+            logger.debug("🔥 GPU cosine similarity computed in {0:.3f}s".format(execution_time))
 
             return similarities
 
@@ -388,8 +380,12 @@ class GPUShaderIntegration:
 
         return framebuffer, result_texture
 
-    def _execute_cosine_shader(
-        self, tick_texture: int, strategy_texture: int, framebuffer: int, vector_length: int, num_strategies: int
+    def _execute_cosine_shader(self,
+        tick_texture: int,
+        strategy_texture: int,
+        framebuffer: int,
+        vector_length: int,
+        num_strategies: int,
     ) -> np.ndarray:
         """Execute cosine similarity shader and return results."""
 
@@ -399,21 +395,18 @@ class GPUShaderIntegration:
         # Bind textures
         glActiveTexture(GL_TEXTURE0)
         glBindTexture(GL_TEXTURE_2D, tick_texture)
-        glUniform1i(self.cosine_shader_program.uniform_locations['u_tick_vector'], 0)
+        glUniform1i(self.cosine_shader_program.uniform_locations["u_tick_vector"], 0)
 
         glActiveTexture(GL_TEXTURE1)
         glBindTexture(GL_TEXTURE_2D, strategy_texture)
-        glUniform1i(self.cosine_shader_program.uniform_locations['u_strategy_matrix'], 1)
+        glUniform1i(self.cosine_shader_program.uniform_locations["u_strategy_matrix"], 1)
 
         # Set uniforms
-        glUniform1i(self.cosine_shader_program.uniform_locations['u_vector_length'], vector_length)
-        glUniform1i(self.cosine_shader_program.uniform_locations['u_matrix_size'], self.shader_config.matrix_size)
-        glUniform1f(self.cosine_shader_program.uniform_locations['u_epsilon'], 1e-8)
-        glUniform1i(
-            self.cosine_shader_program.uniform_locations['u_enable_morphing'],
-            1 if self.shader_config.shader_morph_enabled else 0,
-        )
-        glUniform1i(self.cosine_shader_program.uniform_locations['u_batch_size'], self.shader_config.batch_size)
+        glUniform1i(self.cosine_shader_program.uniform_locations["u_vector_length"], vector_length)
+        glUniform1i(self.cosine_shader_program.uniform_locations["u_matrix_size"], self.shader_config.matrix_size)
+        glUniform1f(self.cosine_shader_program.uniform_locations["u_epsilon"], 1e-8)
+        glUniform1i(self.cosine_shader_program.uniform_locations["u_enable_morphing"], 1 if self.shader_config.shader_morph_enabled else 0)
+        glUniform1i(self.cosine_shader_program.uniform_locations["u_batch_size"], self.shader_config.batch_size)
 
         # Set viewport and render to framebuffer
         glBindFramebuffer(GL_FRAMEBUFFER, framebuffer)
@@ -421,9 +414,9 @@ class GPUShaderIntegration:
 
         results = np.zeros(num_strategies, dtype=np.float32)
 
-        # Render for each strategy (or in batches if supported)
+        # Render for each strategy (or in batches if, supported)
         for strategy_idx in range(0, num_strategies, self.shader_config.batch_size):
-            glUniform1i(self.cosine_shader_program.uniform_locations['u_strategy_index'], strategy_idx)
+            glUniform1i(self.cosine_shader_program.uniform_locations["u_strategy_index"], strategy_idx)
 
             # Render quad
             self._render_fullscreen_quad()
@@ -463,7 +456,7 @@ class GPUShaderIntegration:
 
     def _compute_cpu_fallback(self, tick_vector: np.ndarray, strategy_vectors: np.ndarray) -> np.ndarray:
         """CPU fallback for cosine similarity computation."""
-        logger.debug("�� Using CPU fallback for cosine similarity")
+        logger.debug(" Using CPU fallback for cosine similarity")
 
         # Normalize vectors
         tick_norm = np.linalg.norm(tick_vector)
@@ -482,7 +475,9 @@ class GPUShaderIntegration:
         """Get performance metrics for GPU operations."""
         return {
             **self.performance_metrics,
-            "gpu_tier": self.shader_config.gpu_tier if self.shader_config else "unknown",
+            "gpu_tier": self.shader_config.gpu_tier
+            if self.shader_config
+            else "unknown",
             "matrix_size": self.shader_config.matrix_size if self.shader_config else 0,
             "morphing_enabled": (
                 self.shader_config.shader_morph_enabled if self.shader_config else False
@@ -516,15 +511,11 @@ def create_gpu_shader_integration() -> GPUShaderIntegration:
     return integration
 
 
-def compute_strategy_similarities_gpu(
-    tick_vector: np.ndarray, strategy_vectors: np.ndarray
-) -> np.ndarray:
+def compute_strategy_similarities_gpu(tick_vector: np.ndarray, strategy_vectors: np.ndarray) -> np.ndarray:
     """Compute strategy similarities using GPU acceleration."""
     integration = create_gpu_shader_integration()
     try:
-        return integration.compute_strategy_similarity(
-            tick_vector, strategy_vectors
-        )
+        return integration.compute_strategy_similarity(tick_vector, strategy_vectors)
     finally:
         integration.cleanup()
 

@@ -77,7 +77,7 @@ async def download_historical_data(): -> Optional[pd.DataFrame]:
 
 
 
-        days: Number of days to fetch (max 365 for free tier)
+        days: Number of days to fetch (max 365 for free, tier)
 
 
 
@@ -103,7 +103,7 @@ async def download_historical_data(): -> Optional[pd.DataFrame]:
 
         url = f"{BASE_URL}/coins/{coin_id}/market_chart"
 
-        params = {
+        params = {}
             "vs_currency": vs_currency,
             "days": days,
             "interval": interval}
@@ -146,7 +146,7 @@ def parse_historical_data(): -> pd.DataFrame:
 
     for i, (timestamp, price) in enumerate(prices):
 
-        row = {
+        row = {}
             "timestamp": timestamp,
             "datetime": datetime.fromtimestamp(timestamp / 1000),
             "price": price,
@@ -192,7 +192,7 @@ async def download_all_historical_data(): -> None:
 
 
 
-        days: Number of days to fetch (max 365 for free tier)
+        days: Number of days to fetch (max 365 for free, tier)
 
 
 
@@ -232,9 +232,9 @@ async def download_all_historical_data(): -> None:
 
             df.to_csv(csv_path)
 
-            logger.info(
-                f" Saved {symbol} data: {
-                    len(df)} points to {csv_path}")
+            logger.info()
+                f" Saved {symbol} data: {"}
+                    len(df)} points to {csv_path}")"
 
             logger.info(f"   Date range: {df.index[0]} to {df.index[-1]}")
 
@@ -261,7 +261,7 @@ if __name__ == "__main__":
 
         await download_all_historical_data(days=365, interval="daily")
 
-        # Download 30 days of hourly data (for more granular testing)
+        # Download 30 days of hourly data (for more granular, testing)
 
         # await download_all_historical_data(days=30, interval="hourly")
 

@@ -1,9 +1,9 @@
 import numpy as np
-        from core.api_bridge import api_bridge  # Corrected to import the instance
-        from core.dualistic_thought_engines import DualisticThoughtEngines
-        from core.lantern_news_intelligence_bridge import LanternNewsIntelligenceBridge
-        from core.linguistic_glyph_engine import (
-        import traceback
+from core.api_bridge import api_bridge  # Corrected to import the instance
+from core.dualistic_thought_engines import DualisticThoughtEngines
+from core.lantern_news_intelligence_bridge import LanternNewsIntelligenceBridge
+from core.linguistic_glyph_engine import ()
+import traceback
 import asyncio  # Import asyncio for async operations
 import os
 import random
@@ -16,7 +16,7 @@ import time
 Demo: Linguistic Mathematical Trading System
 ===========================================
 
-Demonstrates Schwabot's complete English language → ASIC → Profit vectorization pipeline:
+Demonstrates Schwabot's complete English language → ASIC → Profit vectorization pipeline:'
 
 🧠 English Commands: "Capture BTC dip 🧿 vectorize profit"
 🔣 Glyph Processing: SHA hash → 2-bit ASIC logic
@@ -39,7 +39,7 @@ def simulate_market_conditions():
     volatility=random.uniform(0.5, 3.0)
     volume=random.randint(800000, 2000000)
 
-    return {
+    return {}
         "btc_price": base_price,
         "usdc_balance": 15000.0,
         "volume": volume,
@@ -91,42 +91,42 @@ async def linguistic_trading_demo_async():  # Changed to async function
         print("📰 NEWS INTELLIGENCE INTEGRATION DEMO")
         print("-" * 60)
         simulated_market_data = simulate_market_conditions()
-        print(
-            f"💹 Current Market (for News Context): BTC ${
+        print()
+            f"💹 Current Market (for News, Context): BTC ${"}
                 simulated_market_data['btc_price']:,}"
         )
 
-        # Fetch mock news (ApiBridge uses mock data for now)
+        # Fetch mock news (ApiBridge uses mock data for, now)
         print("Fetching recent news from API Bridge...")
-        recent_news_items = await lantern_news_bridge.fetch_and_process_news_from_api(
+        recent_news_items = await lantern_news_bridge.fetch_and_process_news_from_api()
             "BTC", limit=2
         )
 
         if recent_news_items:
             for i, news_item in enumerate(recent_news_items):
                 print(f"\n📢 Processing News Item {i + 1}: '{news_item.title}'")
-                news_decision_result = thought_engines.process_news_for_decision(
+                news_decision_result = thought_engines.process_news_for_decision()
                     news_item, simulated_market_data
                 )
 
                 if news_decision_result.get("success"):
                     tv = news_decision_result["thought_vector"]
                     la = news_decision_result["linguistic_analysis"]
-                    print(
-                        f"   🧠 News-Driven Decision: {tv['decision']} (Confidence: {
+                    print()
+                        f"   🧠 News-Driven Decision: {tv['decision']} (Confidence: {")}
                             tv['confidence']:.2f}, State: {tv['state']})"
                     )
-                    print(
-                        f"   ⚡ News Linguistic Bit State: {
+                    print()
+                        f"   ⚡ News Linguistic Bit State: {"}
     la['bit_state']:02b} | Weight: {
         la['weight']:.3f} | Hash: {
-            la['sha_hash'][
+            la['sha_hash'][]
                 :8]}..."
                     )
                     print(f"   🏷️ Generated Tags: {', '.join(tv['tags'])}")
                 else:
-                    print(
-                        f"   ❌ Failed to process news for decision: {
+                    print()
+                        f"   ❌ Failed to process news for decision: {"}
                             news_decision_result['error']
                         }"
                     )
@@ -136,26 +136,26 @@ async def linguistic_trading_demo_async():  # Changed to async function
         # --- End News Integration Demo ---
 
         # Demo trading scenarios with natural language commands
-        trading_scenarios = [
-            {
+        trading_scenarios = []
+            {}
                 "scenario": "Bull Market Entry",
-                "commands": [
+                "commands": []
                     "🚀 Execute aggressive BTC entry - capture momentum",
                     "💎 Diamond hands activated - hold position strong",
                     "🧿 Memory lock profit vector - preserve gains",
                 ],
             },
-            {
+            {}
                 "scenario": "Market Correction Strategy",
-                "commands": [
+                "commands": []
                     "👻 Ghost entry on next dip - stealth accumulation",
                     "🔄 Schwa recursive state - wait for confirmation",
                     "📈 Profit vector engaged - upward extrapolation",
                 ],
             },
-            {
+            {}
                 "scenario": "Risk Management Protocol",
-                "commands": [
+                "commands": []
                     "🔒 Lock current vector - preserve capital",
                     "⚡ Quick exit strategy - capture remaining profit",
                     "🌊 Neutral recursive state - assess market flow",
@@ -176,8 +176,8 @@ async def linguistic_trading_demo_async():  # Changed to async function
                 # Simulate market conditions
                 market_data = simulate_market_conditions()
 
-                print(
-                    f"💹 Market: BTC ${market_data['btc_price']:,    } | Vol: {
+                print()
+                    f"💹 Market: BTC ${market_data['btc_price']:,    } | Vol: {"}
                         market_data['volume']:,        }"
                 )
                 print(f"🧠 Command {cmd_num}: {command}")
@@ -189,7 +189,7 @@ async def linguistic_trading_demo_async():  # Changed to async function
                 linguistic_result = process_linguistic_command(command)
 
                 # Process through dualistic engines
-                trade_vector = linguistic_engine.process_btc_usdc_waveform(
+                trade_vector = linguistic_engine.process_btc_usdc_waveform()
                     command, market_data["btc_price"], market_data["usdc_balance"]
                 )
 
@@ -197,20 +197,20 @@ async def linguistic_trading_demo_async():  # Changed to async function
 
                 # Display results
                 print(f"   🎯 Decision: {linguistic_result['decision']}")
-                print(
-                    f"   ⚡ ASIC State: {
+                print()
+                    f"   ⚡ ASIC State: {"}
                         linguistic_result['bit_state']:02b} | Entropy: {
                         linguistic_result['entropy_overlay']:.3f}"
                 )
                 print(f"   💰 Profit Delta: ${trade_vector.profit_delta:.2f}")
-                print(
-                    f"   🔮 Glyph: {trade_vector.glyph_signature} | Processing: {
+                print()
+                    f"   🔮 Glyph: {trade_vector.glyph_signature} | Processing: {"}
                         processing_time:.1f}ms"
                 )
 
                 scenario_profit += trade_vector.profit_delta
-                commands_processed.append(
-                    {
+                commands_processed.append()
+                    {}
                         "command": command,
                         "decision": linguistic_result["decision"],
                         "bit_state": linguistic_result["bit_state"],
@@ -224,8 +224,8 @@ async def linguistic_trading_demo_async():  # Changed to async function
                 time.sleep(0.5)  # Pause for readability
 
             total_profit += scenario_profit
-            scenario_results.append(
-                {
+            scenario_results.append()
+                {}
                     "scenario": scenario["scenario"],
                     "profit": scenario_profit,
                     "commands": commands_processed,
@@ -234,8 +234,8 @@ async def linguistic_trading_demo_async():  # Changed to async function
 
             print(f"📈 Scenario Profit: ${scenario_profit:.2f}")
             print(f"🧮 Memory State: {len(linguistic_engine.memory_stack)} vectors")
-            print(
-                f"🌀 Fractal Energy: {
+            print()
+                f"🌀 Fractal Energy: {"}
                     np.sum(np.abs(linguistic_engine.fractal_memory)):.1f}"
             )
             print()
@@ -273,10 +273,10 @@ async def linguistic_trading_demo_async():  # Changed to async function
         recent_glyphs = memory_state.get("recent_glyphs", [])
         recent_states = memory_state.get("recent_bit_states", [])
 
-        for i, (glyph, state) in enumerate(
+        for i, (glyph, state) in enumerate()
             zip(recent_glyphs[-5:], recent_states[-5:]), 1
         ):
-            bit_meaning = {
+            bit_meaning = {}
                 0: "NULL_RECURSION",
                 1: "GHOST_ENTRY",
                 2: "MEMORY_LOCK",
@@ -290,11 +290,11 @@ async def linguistic_trading_demo_async():  # Changed to async function
         print("🧠 Full integration: English + Glyphs → ASIC → Profit Vectors")
         print("💰 Real-time BTC/USDC trading with fractal memory synthesis")
 
-        return True, {
+        return True, {}
             "total_profit": total_profit,
             "scenarios": scenario_results,
             "memory_state": memory_state,
-            "fractal_analysis": {
+            "fractal_analysis": {}
                 "forever_energy": float(np.sum(np.abs(forever_data))),
                 "paradox_energy": float(np.sum(np.abs(paradox_data))),
                 "echo_energy": float(np.sum(np.abs(echo_data))),

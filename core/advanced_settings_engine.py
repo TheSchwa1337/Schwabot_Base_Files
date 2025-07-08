@@ -28,7 +28,7 @@ Features:
 
 logger = logging.getLogger(__name__)
 
-__all__ = [
+__all__ = []
     "SettingsSection",
     "AdvancedSettingsEngine",
     "ConfigFormat",
@@ -55,7 +55,7 @@ class ValidationLevel(Enum):
 
 
 @dataclass
-class SettingsProfile:
+    class SettingsProfile:
     """Configuration profile with metadata."""
 
     name: str
@@ -118,7 +118,9 @@ class SettingsSection:
 
             if errors:
                 for error in errors:
-                    self._validation_errors.append("{0}: {1}".format(error.path, error.message))
+                    self._validation_errors.append()
+                        "{0}: {1}".format(error.path, error.message)
+                    )
                 return False
 
             return True
@@ -147,10 +149,9 @@ class SettingsSection:
         return key in self._data
 
     def __repr__(self) -> str:
-        return "<SettingsSection '{0}' with {1} settings>".format(
-            self.name, 
-            len(
-                self._data))
+        return "<SettingsSection '{0}' with {1} settings>".format()
+            self.name, len(self._data)
+        )
 
 
 class AdvancedSettingsEngine:
@@ -165,7 +166,7 @@ class AdvancedSettingsEngine:
     - Backup and restore
     """
 
-    def __init__(
+    def __init__()
         self,
         config_dir: Optional[str] = None,
         default_format: ConfigFormat = ConfigFormat.AUTO,
@@ -195,7 +196,9 @@ class AdvancedSettingsEngine:
         self.config_dir.mkdir(exist_ok=True)
         self._backup_dir.mkdir(exist_ok=True)
 
-        logger.info("AdvancedSettingsEngine initialized with config_dir: %s", self.config_dir)
+        logger.info()
+            "AdvancedSettingsEngine initialized with config_dir: %s", self.config_dir
+        )
 
     def load(self, file_path: Optional[str] = None) -> None:
         """
@@ -245,7 +248,9 @@ class AdvancedSettingsEngine:
                     if isinstance(section_data, dict):
                         section = SettingsSection(section_name, section_data)
                         self._sections[section_name] = section
-                        logger.debug("Loaded section '{0}' from {1}".format(section_name, path))
+                        logger.debug()
+                            "Loaded section '{0}' from {1}".format(section_name, path)
+                        )
 
             logger.info("Successfully loaded configuration from {0}".format(path))
 
@@ -255,7 +260,7 @@ class AdvancedSettingsEngine:
 
     def _load_all_files(self) -> None:
         """Load all configuration files from the config directory."""
-        config_files = (
+        config_files = ()
             list(self.config_dir.glob("*.yaml"))
             + list(self.config_dir.glob("*.yml"))
             + list(self.config_dir.glob("*.json"))
@@ -268,7 +273,7 @@ class AdvancedSettingsEngine:
             except Exception as e:
                 logger.warning("Skipping {0}: {1}".format(file_path, e))
 
-    def save(
+    def save()
         self,
         destination: Optional[str] = None,
         format_type: Optional[ConfigFormat] = None,
@@ -278,7 +283,7 @@ class AdvancedSettingsEngine:
 
         Args:
             destination: Path to save file. If None, saves to a default location.
-            format_type: Format to save in (YAML or JSON).
+            format_type: Format to save in (YAML or, JSON).
         """
         data = {name: section.to_dict() for name, section in self._sections.items()}
 
@@ -322,7 +327,7 @@ class AdvancedSettingsEngine:
         Args:
             key: Setting key (can be 'section.key' format)
             default: Default value if not found
-            section: Section name (if key doesn't include section)
+            section: Section name (if key doesn't include, section)'
 
         Returns:
             Setting value or default
@@ -345,7 +350,7 @@ class AdvancedSettingsEngine:
         Args:
             key: Setting key (can be 'section.key' format)
             value: Value to set
-            section: Section name (if key doesn't include section)
+            section: Section name (if key doesn't include, section)'
         """
         if "." in key and not section:
             section_name, setting_key = key.split(".", 1)
@@ -420,7 +425,7 @@ class AdvancedSettingsEngine:
         for section_name, section in self._sections.items():
             current_settings[section_name] = section.to_dict()
 
-        profile = SettingsProfile(
+        profile = SettingsProfile()
             name=name,
             description=description,
             settings=current_settings,
@@ -455,7 +460,7 @@ class AdvancedSettingsEngine:
 
     def diff(self, other: "AdvancedSettingsEngine") -> Dict[str, Any]:
         """
-        Compare this engine's settings with another.
+        Compare this engine's settings with another.'
 
         Args:
             other: Another AdvancedSettingsEngine instance
@@ -473,12 +478,12 @@ class AdvancedSettingsEngine:
             other_section = other._sections.get(section_name)
 
             if this_section is None:
-                differences[section_name] = {
+                differences[section_name] = {}
                     "type": "missing_in_this",
                     "data": other_section.to_dict(),
                 }
             elif other_section is None:
-                differences[section_name] = {
+                differences[section_name] = {}
                     "type": "missing_in_other",
                     "data": this_section.to_dict(),
                 }
@@ -488,7 +493,7 @@ class AdvancedSettingsEngine:
                 other_data = other_section.to_dict()
 
                 if this_data != other_data:
-                    differences[section_name] = {
+                    differences[section_name] = {}
                         "type": "different",
                         "this": this_data,
                         "other": other_data,
@@ -542,7 +547,9 @@ class AdvancedSettingsEngine:
             if level == ValidationLevel.SCHEMA and schema:
                 if not section.validate(schema):
                     all_valid = False
-                    logger.error("Validation failed for section '{0}'".format(section_name))
+                    logger.error()
+                        "Validation failed for section '{0}'".format(section_name)
+                    )
                     for error in section.get_validation_errors():
                         logger.error("  {0}".format(error))
 
@@ -577,7 +584,7 @@ class AdvancedSettingsEngine:
         profiles_count = len(self._profiles)
         active_profile = self._active_profile or "none"
 
-        return (
+        return ()
             f"<AdvancedSettingsEngine sections={sections_count} "
             f"profiles={profiles_count} active_profile='{active_profile}'>"
         )

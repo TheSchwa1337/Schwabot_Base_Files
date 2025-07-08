@@ -2,17 +2,18 @@ from __future__ import annotations
 import math
 import logging
 from collections import Counter
-from typing import Iterable, Sequence, Union
-import cupy as cp
+from typing import Sequence, Union, List, Dict, Any
 import numpy as np
+from dataclasses import dataclass, field
+import time
 
 #!/usr/bin/env python3
-"""Entropy Math 📊
+"""Entropy Math 📊"
 
 Provides reusable entropy / information-theory helpers used by:
-  • slot_state_mapper.py  (per-slot entropy)
-  • digest_mapper.py      (entropy-of-digest, Hamming weight, transition entropy)
-  • vector_registry.py    (feature extraction & similarity scoring)
+  • slot_state_mapper.py  (per-slot, entropy)
+  • digest_mapper.py      (entropy-of-digest, Hamming weight, transition, entropy)
+  • vector_registry.py    (feature extraction & similarity, scoring)
 
 Implemented metrics:
   * shannon_entropy(values, base=2)          – continuous or discrete data
@@ -28,282 +29,434 @@ CUDA Integration:
 """
 # CUDA Integration with Fallback
 try:
+    import cupy as cp
     USING_CUDA = True
     _backend = 'cupy (GPU)'
     xp = cp
 except ImportError:
+    import numpy as cp  # fallback to numpy
     USING_CUDA = False
     _backend = 'numpy (CPU)'
-    xp = np
+    xp = cp
 
+# Log backend status
 logger = logging.getLogger(__name__)
 if USING_CUDA:
-    logger.info("⚡ EntropyMath using GPU acceleration: {}".format(_backend))
+    logger.info("⚡ Entropy Math using GPU acceleration: {0}".format(_backend))
 else:
-    logger.info("🔄 EntropyMath using CPU fallback: {}".format(_backend))
-
-Number = Union[int, float]
-
-# ---------------------------------------------------------------------------
-# Core entropy helpers
-# ---------------------------------------------------------------------------
+    logger.info("🔄 Entropy Math using CPU fallback: {0}".format(_backend))
 
 
-def shannon_entropy(values: Sequence[Number], *, base: int = 2) -> float:
-    """Return Shannon entropy of *values* (list of numbers) using histogram bins.
+@dataclass
+class EntropyResult:
+    """Result container for entropy calculations."""
 
-    For <64 samples we default to len(values) unique bins (exact frequencies).
-    For large arrays we use GPU/CPU histogram with sqrt(n) bins for speed.
+    entropy_value: float
+    calculation_type: str
+    timestamp: float
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+
+class EntropyMathSystem:
     """
-    n = len(values)
-    if n == 0:
-        return 0.0
+    Advanced entropy mathematical system for trading calculations.
 
-    if n > 64:
-        # heuristic: sqrt(n) bins
-        bins = int(math.sqrt(n))
+    Implements various entropy calculations including Shannon entropy,
+    conditional entropy, and entropy-based trading metrics.
+    """
 
-        if USING_CUDA and cp.cuda.is_available():
-            try:
-                # GPU histogram
-                values_gpu = cp.asarray(values, dtype=cp.float32)
-                counts, _ = cp.histogram(values_gpu, bins=bins, density=False)
-                probs = counts[counts > 0] / n
-                probs = cp.asnumpy(probs)  # convert back to CPU for entropy calc
-            except Exception as e:
-                logger.warning("GPU histogram failed, falling back to CPU: {0}".format(e))
-                # Fallback to CPU
-                values_cpu = np.array(values, dtype=np.float32)
-                counts, _ = np.histogram(values_cpu, bins=bins, density=False)
-                probs = counts[counts > 0] / n
-        else:
-            # CPU histogram
-            values_cpu = np.array(values, dtype=np.float32)
-            counts, _ = np.histogram(values_cpu, bins=bins, density=False)
-            probs = counts[counts > 0] / n
-    else:
-        counts = Counter(values)
-        probs = [c / n for c in counts.values()]
+    def __init__(self):
+        """Initialize the entropy math system."""
+        self.calculation_history: List[EntropyResult] = []
+        self.entropy_cache: Dict[str, float] = {}
 
-    log_fn = _log_lookup(base)
-    return -sum(p * log_fn(p) for p in probs if p > 0)
+    def calculate_shannon_entropy(self, probabilities: List[float]) -> float:
+        """
+        Calculate Shannon entropy for a probability distribution.
 
+        Args:
+            probabilities: List of probabilities (must sum to 1)
 
-def transition_entropy(sequence: Sequence[int], *, base: int = 2) -> float:
-    """Entropy of first-order transitions between discrete states in *sequence*."""
-    if len(sequence) < 2:
-        return 0.0
-
-    if USING_CUDA and cp.cuda.is_available() and len(sequence) > 100:
+        Returns:
+            Shannon entropy value
+        """
         try:
-            # GPU transition counting
-            seq_gpu = cp.asarray(sequence, dtype=cp.int32)
-            transitions = {}
-
-            # Count transitions on GPU
-            for i in range(len(seq_gpu) - 1):
-                pair = (int(seq_gpu[i]), int(seq_gpu[i + 1]))
-                transitions[pair] = transitions.get(pair, 0) + 1
-
-            total = sum(transitions.values())
-            probs = [c / total for c in transitions.values()]
-        except Exception as e:
-            logger.warning("GPU transition entropy failed, falling back to CPU: {0}".format(e))
-            # Fallback to CPU
-            transitions = Counter(zip(sequence, sequence[1:]))
-            total = sum(transitions.values())
-            probs = [c / total for c in transitions.values()]
-    else:
-        # CPU transition counting
-        transitions = Counter(zip(sequence, sequence[1:]))
-        total = sum(transitions.values())
-        probs = [c / total for c in transitions.values()]
-
-    log_fn = _log_lookup(base)
-    return -sum(p * log_fn(p) for p in probs if p > 0)
-
-
-def hamming_weight(bits: bytes) -> int:
-    """Return number of '1' bits in *bits* (digest bytes)."""
-    if USING_CUDA and cp.cuda.is_available() and len(bits) > 32:
-        try:
-            # GPU Hamming weight for large digests
-            bits_array = cp.frombuffer(bits, dtype=cp.uint8)
-            # Convert to binary and count 1s
-            binary = cp.unpackbits(bits_array)
-            return int(cp.sum(binary))
-        except Exception as e:
-            logger.warning("GPU Hamming weight failed, falling back to CPU: {0}".format(e))
-            return sum(bin(b).count("1") for b in bits)
-    else:
-        # CPU Hamming weight
-        return sum(bin(b).count("1") for b in bits)
-
-
-def bit_entropy(digest: bytes) -> float:
-    """Shannon entropy of 256-bit digest treated as 256 Bernoulli trials."""
-    ones = hamming_weight(digest)
-    zeros = len(digest) * 8 - ones
-    if ones == 0 or zeros == 0:
-        return 0.0
-    p1 = ones / 256
-    p0 = 1.0 - p1
-    return -(p1 * math.log2(p1) + p0 * math.log2(p0))
-
-
-def normalized_entropy(values: Sequence[Number]) -> float:
-    """Return entropy scaled to 0-1 by dividing by max possible entropy."""
-    if not values:
-        return 0.0
-    unique = len(set(values))
-    if unique <= 1:
-        return 0.0
-    h = shannon_entropy(values, base=2)
-    h_max = math.log2(unique)
-    return h / h_max if h_max else 0.0
-
-
-def vector_similarity(vec1: Sequence[float], vec2: Sequence[float]) -> float:
-    """Calculate cosine similarity between two vectors using GPU/CPU."""
-    if len(vec1) != len(vec2):
-        return 0.0
-
-    if USING_CUDA and cp.cuda.is_available():
-        try:
-            # GPU cosine similarity
-            v1 = cp.asarray(vec1, dtype=cp.float32)
-            v2 = cp.asarray(vec2, dtype=cp.float32)
-
-            dot_product = cp.dot(v1, v2)
-            norm1 = cp.linalg.norm(v1)
-            norm2 = cp.linalg.norm(v2)
-
-            if norm1 == 0 or norm2 == 0:
+            if not probabilities:
                 return 0.0
 
-            similarity = float(dot_product / (norm1 * norm2))
-            return max(-1.0, min(1.0, similarity))  # clamp to [-1, 1]
+            # Validate probabilities
+            prob_array = xp.array(probabilities)
+            if not xp.allclose(xp.sum(prob_array), 1.0, atol=1e-6):
+                logger.warning("Probabilities do not sum to 1, normalizing")
+                prob_array = prob_array / xp.sum(prob_array)
+
+            # Calculate Shannon entropy: H = -sum(p * log2(p))
+            entropy = -xp.sum(prob_array * xp.log2(prob_array + 1e-10))
+            
+            self._log_calculation("shannon_entropy", entropy, {"probabilities": probabilities})
+            return float(entropy)
+
         except Exception as e:
-            logger.warning("GPU vector similarity failed, falling back to CPU: {0}".format(e))
-            # Fallback to CPU
-            return _cpu_cosine_similarity(vec1, vec2)
-    else:
-        # CPU cosine similarity
-        return _cpu_cosine_similarity(vec1, vec2)
-
-
-def _cpu_cosine_similarity(vec1: Sequence[float], vec2: Sequence[float]) -> float:
-    """CPU implementation of cosine similarity."""
-    try:
-        v1 = np.array(vec1, dtype=np.float32)
-        v2 = np.array(vec2, dtype=np.float32)
-
-        dot_product = np.dot(v1, v2)
-        norm1 = np.linalg.norm(v1)
-        norm2 = np.linalg.norm(v2)
-
-        if norm1 == 0 or norm2 == 0:
+            logger.error("Error calculating Shannon entropy: {0}".format(e))
             return 0.0
 
-        similarity = float(dot_product / (norm1 * norm2))
-        return max(-1.0, min(1.0, similarity))  # clamp to [-1, 1]
-    except Exception as e:
-        logger.error("CPU cosine similarity failed: {0}".format(e))
-        return 0.0
+    def calculate_conditional_entropy(self, joint_probs: xp.ndarray, marginal_probs: List[float]) -> float:
+        """
+        Calculate conditional entropy H(X|Y).
 
+        Args:
+            joint_probs: Joint probability matrix P(X,Y)
+            marginal_probs: Marginal probabilities P(Y)
 
-def hamming_distance(digest1: bytes, digest2: bytes) -> int:
-    """Calculate Hamming distance between two digests using GPU/CPU."""
-    if len(digest1) != len(digest2):
-        return -1  # invalid
-
-    if USING_CUDA and cp.cuda.is_available() and len(digest1) > 16:
+        Returns:
+            Conditional entropy value
+        """
         try:
-            # GPU Hamming distance
-            d1 = cp.frombuffer(digest1, dtype=cp.uint8)
-            d2 = cp.frombuffer(digest2, dtype=cp.uint8)
+            if joint_probs.size == 0 or len(marginal_probs) == 0:
+                return 0.0
 
-            # XOR and count 1s
-            xor_result = cp.bitwise_xor(d1, d2)
-            binary = cp.unpackbits(xor_result)
-            return int(cp.sum(binary))
+            # Calculate conditional entropy: H(X|Y) = -sum(P(x,y) * log2(P(x|y)))
+            conditional_entropy = 0.0
+            
+            for i in range(joint_probs.shape[0]):
+                for j in range(joint_probs.shape[1]):
+                    if joint_probs[i, j] > 0 and marginal_probs[j] > 0:
+                        conditional_prob = joint_probs[i, j] / marginal_probs[j]
+                        conditional_entropy -= joint_probs[i, j] * xp.log2(conditional_prob + 1e-10)
+
+            self._log_calculation("conditional_entropy", conditional_entropy, {
+                "joint_probs_shape": joint_probs.shape,
+                "marginal_probs": marginal_probs
+            })
+            return float(conditional_entropy)
+
         except Exception as e:
-            logger.warning("GPU Hamming distance failed, falling back to CPU: {0}".format(e))
-            return _cpu_hamming_distance(digest1, digest2)
-    else:
-        # CPU Hamming distance
-        return _cpu_hamming_distance(digest1, digest2)
+            logger.error("Error calculating conditional entropy: {0}".format(e))
+            return 0.0
 
+    def calculate_mutual_information(self, joint_probs: xp.ndarray, marginal_x: List[float], marginal_y: List[float]) -> float:
+        """
+        Calculate mutual information I(X;Y).
 
-def _cpu_hamming_distance(digest1: bytes, digest2: bytes) -> int:
-    """CPU implementation of Hamming distance."""
-    distance = 0
-    for b1, b2 in zip(digest1, digest2):
-        xor_result = b1 ^ b2
-        distance += bin(xor_result).count('1')
-    return distance
+        Args:
+            joint_probs: Joint probability matrix P(X,Y)
+            marginal_x: Marginal probabilities P(X)
+            marginal_y: Marginal probabilities P(Y)
 
-
-# ---------------------------------------------------------------------------
-# Internal util
-# ---------------------------------------------------------------------------
-
-
-def _log_lookup(base: int):
-    if base == 2:
-        return _log2
-    elif base == math.e:
-        return math.log  # natural
-    else:
-        inv = 1 / math.log(base)
-        return lambda x: math.log(x) * inv  # type: ignore
-
-
-def _log2(x: float) -> float:  # small inline faster than math.log2 for <Python3.11
-    return math.log(x, 2)
-
-
-# ---------------------------------------------------------------------------
-# Performance monitoring
-# ---------------------------------------------------------------------------
-
-
-def get_backend_info() -> dict:
-    """Get information about the current backend and performance."""
-    info = {'backend': _backend, 'using_cuda': USING_CUDA, 'cuda_available': False}
-
-    if USING_CUDA:
+        Returns:
+            Mutual information value
+        """
         try:
-            info['cuda_available'] = cp.cuda.is_available()
-            if info['cuda_available']:
-                info['gpu_name'] = cp.cuda.runtime.getDeviceProperties(0)['name'].decode()
-                info['gpu_memory'] = cp.cuda.runtime.memGetInfo()[1]  # total memory
+            if joint_probs.size == 0:
+                return 0.0
+
+            # Calculate mutual information: I(X;Y) = sum(P(x,y) * log2(P(x,y)/(P(x)*P(y))))
+            mutual_info = 0.0
+            
+            for i in range(joint_probs.shape[0]):
+                for j in range(joint_probs.shape[1]):
+                    if joint_probs[i, j] > 0 and marginal_x[i] > 0 and marginal_y[j] > 0:
+                        ratio = joint_probs[i, j] / (marginal_x[i] * marginal_y[j])
+                        mutual_info += joint_probs[i, j] * xp.log2(ratio + 1e-10)
+
+            self._log_calculation("mutual_information", mutual_info, {
+                "joint_probs_shape": joint_probs.shape,
+                "marginal_x": marginal_x,
+                "marginal_y": marginal_y
+            })
+            return float(mutual_info)
+
         except Exception as e:
-            logger.warning("Could not get CUDA info: {0}".format(e))
+            logger.error("Error calculating mutual information: {0}".format(e))
+            return 0.0
 
-    return info
+    def calculate_entropy_rate(self, time_series: List[float], window_size: int = 10) -> float:
+        """
+        Calculate entropy rate for a time series.
+
+        Args:
+            time_series: Time series data
+            window_size: Window size for entropy calculation
+
+        Returns:
+            Entropy rate value
+        """
+        try:
+            if len(time_series) < window_size + 1:
+                return 0.0
+
+            # Calculate entropy rate using sliding windows
+            entropy_values = []
+            
+            for i in range(len(time_series) - window_size):
+                window = time_series[i:i + window_size]
+                
+                # Calculate probability distribution for window
+                hist, _ = xp.histogram(window, bins=min(10, len(set(window))))
+                probs = hist / xp.sum(hist)
+                
+                # Calculate entropy for this window
+                window_entropy = self.calculate_shannon_entropy(probs.tolist())
+                entropy_values.append(window_entropy)
+
+            # Calculate average entropy rate
+            entropy_rate = xp.mean(entropy_values) if entropy_values else 0.0
+
+            self._log_calculation("entropy_rate", entropy_rate, {
+                "time_series_length": len(time_series),
+                "window_size": window_size,
+                "num_windows": len(entropy_values)
+            })
+            return float(entropy_rate)
+
+        except Exception as e:
+            logger.error("Error calculating entropy rate: {0}".format(e))
+            return 0.0
+
+    def calculate_entropy_based_volatility(self, returns: List[float]) -> float:
+        """
+        Calculate entropy-based volatility measure.
+
+        Args:
+            returns: List of return values
+
+        Returns:
+            Entropy-based volatility value
+        """
+        try:
+            if len(returns) < 2:
+                return 0.0
+
+            # Calculate return distribution
+            hist, _ = xp.histogram(returns, bins=min(20, len(set(returns))))
+            probs = hist / xp.sum(hist)
+
+            # Calculate entropy
+            entropy = self.calculate_shannon_entropy(probs.tolist())
+
+            # Scale by standard deviation for volatility measure
+            std_dev = xp.std(returns)
+            entropy_volatility = entropy * std_dev
+
+            self._log_calculation("entropy_volatility", entropy_volatility, {
+                "returns_length": len(returns),
+                "entropy": entropy,
+                "std_dev": std_dev
+            })
+            return float(entropy_volatility)
+
+        except Exception as e:
+            logger.error("Error calculating entropy-based volatility: {0}".format(e))
+            return 0.0
+
+    def calculate_entropy_trigger_score(self, price_data: List[float], volume_data: List[float]) -> float:
+        """
+        Calculate entropy trigger score for trading decisions.
+
+        Args:
+            price_data: Historical price data
+            volume_data: Historical volume data
+
+        Returns:
+            Entropy trigger score
+        """
+        try:
+            if len(price_data) < 10 or len(volume_data) < 10:
+                return 0.0
+
+            # Calculate price entropy
+            price_returns = xp.diff(xp.log(price_data))
+            price_entropy = self.calculate_entropy_based_volatility(price_returns.tolist())
+
+            # Calculate volume entropy
+            volume_entropy = self.calculate_entropy_based_volatility(volume_data)
+
+            # Calculate combined entropy score
+            combined_entropy = (price_entropy + volume_entropy) / 2.0
+
+            # Normalize to 0-1 range
+            trigger_score = xp.tanh(combined_entropy)
+
+            self._log_calculation("entropy_trigger_score", trigger_score, {
+                "price_entropy": price_entropy,
+                "volume_entropy": volume_entropy,
+                "combined_entropy": combined_entropy
+            })
+            return float(trigger_score)
+
+        except Exception as e:
+            logger.error("Error calculating entropy trigger score: {0}".format(e))
+            return 0.0
+
+    def calculate_entropy_divergence(self, prob_dist1: List[float], prob_dist2: List[float]) -> float:
+        """
+        Calculate Kullback-Leibler divergence between two probability distributions.
+
+        Args:
+            prob_dist1: First probability distribution
+            prob_dist2: Second probability distribution
+
+        Returns:
+            KL divergence value
+        """
+        try:
+            if len(prob_dist1) != len(prob_dist2):
+                logger.error("Probability distributions must have same length")
+                return 0.0
+
+            # Normalize distributions
+            p1 = xp.array(prob_dist1) / xp.sum(prob_dist1)
+            p2 = xp.array(prob_dist2) / xp.sum(prob_dist2)
+
+            # Calculate KL divergence: D_KL(P||Q) = sum(P * log(P/Q))
+            kl_divergence = xp.sum(p1 * xp.log(p1 / (p2 + 1e-10) + 1e-10))
+
+            self._log_calculation("kl_divergence", kl_divergence, {
+                "prob_dist1": prob_dist1,
+                "prob_dist2": prob_dist2
+            })
+            return float(kl_divergence)
+
+        except Exception as e:
+            logger.error("Error calculating KL divergence: {0}".format(e))
+            return 0.0
+
+    def calculate_entropy_correlation(self, series1: List[float], series2: List[float]) -> float:
+        """
+        Calculate entropy-based correlation between two time series.
+
+        Args:
+            series1: First time series
+            series2: Second time series
+
+        Returns:
+            Entropy correlation value
+        """
+        try:
+            if len(series1) != len(series2) or len(series1) < 10:
+                return 0.0
+
+            # Calculate entropy for each series
+            entropy1 = self.calculate_entropy_rate(series1)
+            entropy2 = self.calculate_entropy_rate(series2)
+
+            # Calculate correlation coefficient
+            correlation = xp.corrcoef(series1, series2)[0, 1]
+
+            # Combine entropy and correlation
+            entropy_correlation = (entropy1 + entropy2) * abs(correlation) / 2.0
+
+            self._log_calculation("entropy_correlation", entropy_correlation, {
+                "entropy1": entropy1,
+                "entropy2": entropy2,
+                "correlation": correlation
+            })
+            return float(entropy_correlation)
+
+        except Exception as e:
+            logger.error("Error calculating entropy correlation: {0}".format(e))
+            return 0.0
+
+    def _log_calculation(self, calculation_type: str, result: float, metadata: Dict[str, Any]) -> None:
+        """Log a calculation for debugging and analysis."""
+        entropy_result = EntropyResult(
+            entropy_value=result,
+            calculation_type=calculation_type,
+            timestamp=time.time(),
+            metadata=metadata
+        )
+        self.calculation_history.append(entropy_result)
+
+        # Cache result
+        cache_key = f"{calculation_type}_{hash(str(metadata))}"
+        self.entropy_cache[cache_key] = result
+
+    def get_calculation_history(self) -> List[EntropyResult]:
+        """Get calculation history."""
+        return self.calculation_history.copy()
+
+    def clear_cache(self) -> None:
+        """Clear the entropy cache."""
+        self.entropy_cache.clear()
+        logger.info("Entropy cache cleared")
+
+    def get_statistics(self) -> Dict[str, Any]:
+        """Get entropy calculation statistics."""
+        try:
+            if not self.calculation_history:
+                return {"error": "No calculation history available"}
+
+            # Calculate statistics by type
+            type_counts = {}
+            type_values = {}
+
+            for calc in self.calculation_history:
+                calc_type = calc.calculation_type
+                type_counts[calc_type] = type_counts.get(calc_type, 0) + 1
+                
+                if calc_type not in type_values:
+                    type_values[calc_type] = []
+                type_values[calc_type].append(calc.entropy_value)
+
+            # Calculate averages by type
+            type_averages = {}
+            for calc_type, values in type_values.items():
+                type_averages[calc_type] = xp.mean(values)
+
+            return {
+                "total_calculations": len(self.calculation_history),
+                "calculation_types": type_counts,
+                "type_averages": type_averages,
+                "cache_size": len(self.entropy_cache),
+                "last_calculation_time": self.calculation_history[-1].timestamp if self.calculation_history else 0
+            }
+
+        except Exception as e:
+            logger.error("Error getting statistics: {0}".format(e))
+            return {"error": str(e)}
 
 
-# ---------------------------------------------------------------------------
-# Quick self-test
-# ---------------------------------------------------------------------------
+def create_entropy_math_system() -> EntropyMathSystem:
+    """Factory function to create an entropy math system instance."""
+    return EntropyMathSystem()
+
+
+# Example usage and testing
 if __name__ == "__main__":
-    print("🔧 Entropy Math Backend Info:")
-    print(get_backend_info())
+    # Configure logging
+    logging.basicConfig(level=logging.INFO)
 
-    data = [1, 1, 1, 2, 2, 3]
-    print("H", shannon_entropy(data))
-    print("H_norm", normalized_entropy(data))
-    print("Transition H", transition_entropy([0, 1, 0, 1, 1, 0]))
-    digest = bytes.fromhex("a3" * 32)
-    print("Bit entropy", bit_entropy(digest))
+    # Create entropy math system
+    entropy_system = create_entropy_math_system()
 
-    # Test vector similarity
-    vec1 = [1.0, 2.0, 3.0]
-    vec2 = [1.0, 2.0, 3.0]
-    print("Cosine similarity:", vector_similarity(vec1, vec2))
+    print("=== Testing Entropy Math System ===")
 
-    # Test Hamming distance
-    d1 = bytes.fromhex("a3" * 16)
-    d2 = bytes.fromhex("a3" * 16)
-    print("Hamming distance:", hamming_distance(d1, d2))
+    # Test Shannon entropy
+    probabilities = [0.25, 0.25, 0.25, 0.25]
+    shannon_entropy = entropy_system.calculate_shannon_entropy(probabilities)
+    print("Shannon entropy: {0}".format(shannon_entropy))
+
+    # Test entropy rate
+    time_series = [1.0, 2.0, 1.5, 2.5, 1.8, 2.2, 1.9, 2.1, 1.7, 2.3]
+    entropy_rate = entropy_system.calculate_entropy_rate(time_series)
+    print("Entropy rate: {0}".format(entropy_rate))
+
+    # Test entropy-based volatility
+    returns = [0.01, -0.02, 0.03, -0.01, 0.02, -0.03, 0.01, -0.02, 0.03, -0.01]
+    entropy_volatility = entropy_system.calculate_entropy_based_volatility(returns)
+    print("Entropy-based volatility: {0}".format(entropy_volatility))
+
+    # Test entropy trigger score
+    price_data = [100.0, 101.0, 99.5, 102.0, 98.5, 103.0, 97.0, 104.0, 96.0, 105.0]
+    volume_data = [1000, 1100, 900, 1200, 800, 1300, 700, 1400, 600, 1500]
+    trigger_score = entropy_system.calculate_entropy_trigger_score(price_data, volume_data)
+    print("Entropy trigger score: {0}".format(trigger_score))
+
+    # Get statistics
+    stats = entropy_system.get_statistics()
+    print("\nEntropy Statistics:")
+    print("Total calculations: {0}".format(stats.get("total_calculations", 0)))
+    print("Calculation types: {0}".format(stats.get("calculation_types", {})))
+    print("Type averages: {0}".format(stats.get("type_averages", {})))
+
+    print("Entropy Math System test completed")

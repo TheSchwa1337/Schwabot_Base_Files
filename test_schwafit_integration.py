@@ -1,7 +1,7 @@
-        from core import (
-        from core.schwafit_core import SchwafitCore
-        from core.schwafit_trading_integration import SchwafitTradingIntegration
-        from core.schwafit_trading_integration import SchwafitTradingIntegration
+from core import ()
+from core.schwafit_core import SchwafitCore
+from core.schwafit_trading_integration import SchwafitTradingIntegration
+from core.schwafit_trading_integration import SchwafitTradingIntegration
 from datetime import datetime
 import asyncio
 import logging
@@ -28,7 +28,7 @@ This script verifies:
 sys.path.insert(0, ".")
 
 # Configure logging
-logging.basicConfig(
+logging.basicConfig()
     level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
@@ -56,14 +56,14 @@ def test_schwafit_core():
         test_phases = [0.5, 0.7, 0.3, 0.8]
 
         # Test ALIF calculation
-        print("\n📊 Testing ALIF (Adaptive Learning Interference Filter)...")
+        print("\n📊 Testing ALIF (Adaptive Learning Interference, Filter)...")
         alif_result = schwafit_core.calculate_alif(test_prices, test_volumes)
         print(f"   Certainty: {alif_result.certainty:.3f}")
         print(f"   Confidence: {alif_result.confidence:.3f}")
         print(f"   Thermal State: {alif_result.thermal_state}")
 
         # Test MIR4X calculation
-        print("\n🪞 Testing MIR4X (Mirror 4-phase pattern recognition)...")
+        print("\n🪞 Testing MIR4X (Mirror 4-phase pattern, recognition)...")
         mir4x_result = schwafit_core.calculate_mir4x(test_phases)
         print(f"   Certainty: {mir4x_result.certainty:.3f}")
         print(f"   Confidence: {mir4x_result.confidence:.3f}")
@@ -71,7 +71,7 @@ def test_schwafit_core():
 
         # Test comprehensive analysis
         print("\n🔍 Testing comprehensive mirror analysis...")
-        market_data = {
+        market_data = {}
             "prices": test_prices,
             "volumes": test_volumes,
             "phases": test_phases,
@@ -81,13 +81,13 @@ def test_schwafit_core():
 
         # Test recommendations
         print("\n💡 Testing mirror recommendations...")
-        recommendations = schwafit_core.get_mirror_recommendations(
+        recommendations = schwafit_core.get_mirror_recommendations()
             comprehensive_results
         )
-        print(
+        print()
             f"   Overall Confidence: {recommendations.get('overall_confidence', 0):.3f}"
         )
-        print(
+        print()
             f"   Recommended Action: {recommendations.get('recommended_action', 'unknown')}"
         )
         print(f"   Risk Level: {recommendations.get('risk_level', 'unknown')}")
@@ -107,14 +107,14 @@ def test_schwafit_trading_integration():
     try:
 
         # Initialize trading integration
-        schwafit_integration = SchwafitTradingIntegration(
+        schwafit_integration = SchwafitTradingIntegration()
             {"demo_mode": True, "simulate_trading": True}
         )
         print("✅ Schwafit Trading Integration initialized successfully")
 
         # Test market data processing
         print("\n📈 Testing market data processing...")
-        market_data = {
+        market_data = {}
             "symbol": "BTC/USDT",
             "prices": [50000, 50100, 49900, 50200, 50050],
             "volumes": [1500, 1800, 1200, 2100, 1600],
@@ -129,7 +129,7 @@ def test_schwafit_trading_integration():
 
         # Test trade execution
         print("\n🔄 Testing trade execution...")
-        execution_result = asyncio.run(
+        execution_result = asyncio.run()
             schwafit_integration.execute_trade_signal(signal)
         )
         print(f"   Executed: {execution_result.get('executed', False)}")
@@ -150,7 +150,7 @@ def test_schwafit_trading_integration():
         cycle_result = asyncio.run(schwafit_integration.run_trading_cycle(market_data))
         print(f"   Cycle Duration: {cycle_result.get('cycle_duration', 0):.3f}s")
         print(f"   Signal Generated: {cycle_result.get('signal') is not None}")
-        print(
+        print()
             f"   Execution Result: {cycle_result.get('execution_result', {}).get('executed', False)}"
         )
 
@@ -176,33 +176,33 @@ async def test_multiple_trading_cycles():
     try:
 
         # Initialize trading integration
-        schwafit_integration = SchwafitTradingIntegration(
+        schwafit_integration = SchwafitTradingIntegration()
             {"demo_mode": True, "simulate_trading": True}
         )
 
         # Test different market scenarios
-        scenarios = [
-            {
+        scenarios = []
+            {}
                 "name": "Bullish Market",
-                "data": {
+                "data": {}
                     "symbol": "BTC/USDT",
                     "prices": [50000, 50500, 51000, 51500, 52000],
                     "volumes": [1500, 1800, 2000, 2200, 2500],
                     "current_price": 52000,
                 },
             },
-            {
+            {}
                 "name": "Bearish Market",
-                "data": {
+                "data": {}
                     "symbol": "BTC/USDT",
                     "prices": [50000, 49500, 49000, 48500, 48000],
                     "volumes": [1500, 1800, 2000, 2200, 2500],
                     "current_price": 48000,
                 },
             },
-            {
+            {}
                 "name": "Sideways Market",
-                "data": {
+                "data": {}
                     "symbol": "BTC/USDT",
                     "prices": [50000, 50100, 49900, 50200, 50050],
                     "volumes": [1500, 1600, 1400, 1700, 1500],
@@ -216,7 +216,7 @@ async def test_multiple_trading_cycles():
             print(f"\n📈 Scenario {i}: {scenario['name']}")
 
             # Run trading cycle
-            cycle_result = await schwafit_integration.run_trading_cycle(
+            cycle_result = await schwafit_integration.run_trading_cycle()
                 scenario["data"]
             )
 
@@ -231,8 +231,8 @@ async def test_multiple_trading_cycles():
             print(f"   Confidence: {signal.confidence:.3f if signal else 0.0}")
             print(f"   Executed: {execution.get('executed', False)}")
 
-            results.append(
-                {
+            results.append()
+                {}
                     "scenario": scenario["name"],
                     "signal_type": signal.signal_type.value if signal else "None",
                     "confidence": signal.confidence if signal else 0.0,
@@ -273,7 +273,7 @@ def test_core_system_integration():
         print("🔄 Initializing core system...")
         init_result = initialize_core_system()
         print(f"   Status: {init_result['status']}")
-        print(
+        print()
             f"   Available components: {', '.join(init_result.get('available_components', []))}"
         )
 
@@ -284,7 +284,7 @@ def test_core_system_integration():
             print("   ✅ Schwafit trading integration retrieved successfully")
 
             # Test basic functionality
-            market_data = {
+            market_data = {}
                 "symbol": "ETH/USDT",
                 "prices": [3000, 3010, 2990, 3020, 3005],
                 "volumes": [1000, 1200, 800, 1400, 1100],
@@ -340,7 +340,7 @@ async def run_comprehensive_test():
     print("\n" + "=" * 60)
     print_banner("FINAL TEST RESULTS", "📋")
 
-    passed_tests = sum(1 for _, result in test_results if result)
+    passed_tests = sum(1 for _, result in test_results if, result)
     total_tests = len(test_results)
 
     for test_name, result in test_results:
@@ -355,7 +355,7 @@ async def run_comprehensive_test():
         print("\n🎉 All tests passed! Schwafit integration is working properly.")
         return True
     else:
-        print(
+        print()
             f"\n⚠️  {total_tests - passed_tests} test(s) failed. Please check the implementation."
         )
         return False

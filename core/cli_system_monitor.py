@@ -82,23 +82,21 @@ class SystemMonitorCLI:
 
         # Test monitoring capabilities
         cpu_info = self._get_cpu_info()
-        info(
-            "CPU: {0} cores, {1} GHz".format(
-                cpu_info['cpu_count'], 
-                cpu_info['cpu_freq']:.1f)
+        info()
+            "CPU: {0} cores @ {1:.1f} GHz".format(cpu_info['cpu_count'], cpu_info['cpu_freq'] / 1000)
         )
 
         # Test memory info
         memory_info = self._get_memory_info()
-        info("Memory: {0} GB total".format(memory_info['total']:.1f))
+        info("Memory: {0} GB total".format(memory_info['total']))
 
         # Test disk info
         disk_info = self._get_disk_info()
-        info("Disk: {0} GB total".format(disk_info['total']:.1f))
+        info("Disk: {0} GB total".format(disk_info['total']))
 
     def _get_system_info(self) -> Dict[str, str]:
         """Get basic system information."""
-        return {
+        return {}
             "system": platform.system(),
             "release": platform.release(),
             "version": platform.version(),
@@ -112,7 +110,7 @@ class SystemMonitorCLI:
         """Get CPU information."""
         try:
             cpu_freq = psutil.cpu_freq()
-            return {
+            return {}
                 "cpu_count": psutil.cpu_count(),
                 "cpu_freq": cpu_freq.current if cpu_freq else 0,
                 "cpu_percent": psutil.cpu_percent(interval=1),
@@ -125,7 +123,7 @@ class SystemMonitorCLI:
         """Get memory information."""
         try:
             memory = psutil.virtual_memory()
-            return {
+            return {}
                 "total": memory.total / (1024**3),  # GB
                 "available": memory.available / (1024**3),  # GB
                 "used": memory.used / (1024**3),  # GB
@@ -138,7 +136,7 @@ class SystemMonitorCLI:
         """Get disk information."""
         try:
             disk = psutil.disk_usage("/")
-            return {
+            return {}
                 "total": disk.total / (1024**3),  # GB
                 "used": disk.used / (1024**3),  # GB
                 "free": disk.free / (1024**3),  # GB
@@ -151,7 +149,7 @@ class SystemMonitorCLI:
         """Get network information."""
         try:
             network = psutil.net_io_counters()
-            return {
+            return {}
                 "bytes_sent": network.bytes_sent,
                 "bytes_recv": network.bytes_recv,
                 "packets_sent": network.packets_sent,
@@ -179,40 +177,36 @@ class SystemMonitorCLI:
         cpu_info = self._get_cpu_info()
         info(f"\n⚡ CPU Information:")
         info("  Cores: {0}".format(cpu_info['cpu_count']))
-        info("  Frequency: {0} GHz".format(cpu_info['cpu_freq']:.1f))
-        info("  Usage: {0}%".format(cpu_info['cpu_percent']:.1f))
+        info("  Frequency: {0:.1f} GHz".format(cpu_info['cpu_freq'] / 1000))
+        info("  Usage: {0}%".format(cpu_info['cpu_percent']))
         if cpu_info["cpu_load"][0] > 0:
-            info("  Load Average: {0}".format(cpu_info['cpu_load'][0]:.2f))
+            info("  Load Average: {0}".format(cpu_info['cpu_load'][0]))
 
         # Memory information
         memory_info = self._get_memory_info()
         info(f"\n💾 Memory Information:")
-        info("  Total: {0} GB".format(memory_info['total']:.1f))
-        info(
-            "  Used: {0} GB ({1}%)".format(
-                memory_info['used']:.1f, 
-                memory_info['percent']:.1f)
+        info("  Total: {0} GB".format(memory_info['total']))
+        info()
+            "  Used: {0} GB ({1}%)".format(memory_info['used'], memory_info['percent'])
         )
-        info("  Available: {0} GB".format(memory_info['available']:.1f))
+        info("  Available: {0} GB".format(memory_info['available']))
 
         # Disk information
         disk_info = self._get_disk_info()
         info(f"\n💿 Disk Information:")
-        info("  Total: {0} GB".format(disk_info['total']:.1f))
-        info(
-            "  Used: {0} GB ({1}%)".format(
-                disk_info['used']:.1f, 
-                disk_info['percent']:.1f)
+        info("  Total: {0} GB".format(disk_info['total']))
+        info()
+            "  Used: {0} GB ({1}%)".format(disk_info['used'], disk_info['percent'])
         )
-        info("  Free: {0} GB".format(disk_info['free']:.1f))
+        info("  Free: {0} GB".format(disk_info['free']))
 
         # Network information
         network_info = self._get_network_info()
         info(f"\n🌐 Network Information:")
-        info("  Bytes Sent: {0} MB".format(network_info['bytes_sent'] / (1024**2):.1f))
-        info("  Bytes Received: {0} MB".format(network_info['bytes_recv'] / (1024**2):.1f))
-        info("  Packets Sent: {0}".format(network_info['packets_sent']:,))
-        info("  Packets Received: {0}".format(network_info['packets_recv']:,))
+        info("  Bytes Sent: {0} MB".format(network_info['bytes_sent'] / (1024**2)))
+        info("  Bytes Received: {0} MB".format(network_info['bytes_recv'] / (1024**2)))
+        info("  Packets Sent: {0}".format(network_info['packets_sent']))
+        info("  Packets Received: {0}".format(network_info['packets_recv']))
 
         # Trading system status
         if self.router:
@@ -221,11 +215,10 @@ class SystemMonitorCLI:
             info("  Total Tasks: {0}".format(router_stats.get('total_tasks', 0)))
             info("  CPU Tasks: {0}".format(router_stats.get('cpu_tasks', 0)))
             info("  GPU Tasks: {0}".format(router_stats.get('gpu_tasks', 0)))
-            info(
-                "  Average Response Time: {0}s".format(
-                    router_stats.get(
+            info()
+                "  Average Response Time: {0}s".format(router_stats.get())
                         'avg_response_time',
-                        0):.3f)
+                        0))
             )
 
     async def show_performance_metrics(self):
@@ -243,90 +236,81 @@ class SystemMonitorCLI:
         disk_info = self._get_disk_info()
 
         info(f"⚡ System Performance:")
-        info("  CPU Utilization: {0}%".format(cpu_info['cpu_percent']:.1f))
-        info("  Memory Utilization: {0}%".format(memory_info['percent']:.1f))
-        info("  Disk Utilization: {0}%".format(disk_info['percent']:.1f))
+        info("  CPU Utilization: {0}%".format(cpu_info['cpu_percent']))
+        info("  Memory Utilization: {0}%".format(memory_info['percent']))
+        info("  Disk Utilization: {0}%".format(disk_info['percent']))
 
         # Trading system performance
         if self.router:
             router_perf = self.router.get_performance_metrics()
             info(f"\n🔄 Trading System Performance:")
-            info(
-                "  CPU Utilization: {0}%".format(
-                    router_perf.get(
+            info()
+                "  CPU Utilization: {0}%".format(router_perf.get())
                         'cpu_utilization',
-                        0):.1f)
+                        0))
             )
-            info(
-                "  GPU Utilization: {0}%".format(
-                    router_perf.get(
+            info()
+                "  GPU Utilization: {0}%".format(router_perf.get())
                         'gpu_utilization',
-                        0):.1f)
+                        0))
             )
-            info("  Memory Usage: {0}MB".format(router_perf.get('memory_usage', 0):.1f))
-            info(
-                "  Response Time: {0}s".format(
-                    router_perf.get(
+            info("  Memory Usage: {0}MB".format(router_perf.get('memory_usage', 0)))
+            info()
+                "  Response Time: {0}s".format(router_perf.get())
                         'avg_response_time',
-                        0):.3f)
+                        0))
             )
 
         # Tensor system performance
         if self.tensor_algebra:
             tensor_perf = self.tensor_algebra.get_performance_metrics()
             info(f"\n🧮 Tensor System Performance:")
-            info(
-                "  Total Operations: {0}".format(
-                    tensor_perf.get(
+            info()
+                "  Total Operations: {0}".format()
+                    tensor_perf.get()
                         'total_operations',
                         0))
             )
-            info(
-                "  Average Operation Time: {0}s".format(
-                    tensor_perf.get(
+            info()
+                "  Average Operation Time: {0}s".format(tensor_perf.get())
                         'avg_operation_time',
-                        0):.3f)
+                        0))
             )
-            info(
-                "  Cache Hit Rate: {0}%".format(
-                    tensor_perf.get(
+            info()
+                "  Cache Hit Rate: {0}%".format(tensor_perf.get())
                         'cache_hit_rate',
-                        0):.1f)
+                        0))
             )
-            info(
-                "  Memory Efficiency: {0}%".format(
-                    tensor_perf.get(
+            info()
+                "  Memory Efficiency: {0}%".format(tensor_perf.get())
                         'memory_efficiency',
-                        0):.1f)
+                        0))
             )
 
         # Profit system performance
         if self.profit_system:
             profit_perf = self.profit_system.get_performance_summary()
             info(f"\n💰 Profit System Performance:")
-            info(
-                "  Total Calculations: {0}".format(
-                    profit_perf.get(
+            info()
+                "  Total Calculations: {0}".format()
+                    profit_perf.get()
                         'total_calculations',
                         0))
             )
-            info(
-                "  Average Calculation Time: {0}s".format(
-                    profit_perf.get(
+            info()
+                "  Average Calculation Time: {0}s".format(profit_perf.get())
                         'average_calculation_time',
-                        0):.3f)
+                        0))
             )
-            info(
-                "  Average Profit: {0}".format(
-                    profit_perf.get(
+            info()
+                "  Average Profit: {0}".format(profit_perf.get())
                         'average_profit',
-                        0):.6f)
+                        0))
             )
-            info(
-                "  Profit Standard Deviation: {0}".format(
-                    profit_perf.get(
+            info()
+                "  Profit Standard Deviation: {0}".format(profit_perf.get())
                         'profit_std',
-                        0):.6f)
+                        0))
             )
 
     async def show_trading_metrics(self):
@@ -344,43 +328,40 @@ class SystemMonitorCLI:
             registry_stats = self.router.get_profit_registry_stats()
 
             info(f"🔄 Router Metrics:")
-            info(
-                "  Total Tasks Processed: {0}".format(
-                    router_stats.get(
+            info()
+                "  Total Tasks Processed: {0}".format()
+                    router_stats.get()
                         'total_tasks',
                         0))
             )
-            info(
-                "  CPU Task Ratio: {0}%".format(
-                    router_stats.get(
+            info()
+                "  CPU Task Ratio: {0}%".format(router_stats.get())
                         'cpu_tasks',
                         0) / max(
-                        router_stats.get(
+                        router_stats.get()
                             'total_tasks',
                             1),
-                        1) * 100:.1f)
+                        1) * 100)
             )
-            info(
-                "  GPU Task Ratio: {0}%".format(
-                    router_stats.get(
+            info()
+                "  GPU Task Ratio: {0}%".format(router_stats.get())
                         'gpu_tasks',
                         0) / max(
-                        router_stats.get(
+                        router_stats.get()
                             'total_tasks',
                             1),
-                        1) * 100:.1f)
+                        1) * 100)
             )
-            info(
-                "  Average Response Time: {0}s".format(
-                    router_stats.get(
+            info()
+                "  Average Response Time: {0}s".format(router_stats.get())
                         'avg_response_time',
-                        0):.3f)
+                        0))
             )
 
             info(f"\n💰 Profit Registry Metrics:")
-            info(
-                "  Total Strategies: {0}".format(
-                    registry_stats.get(
+            info()
+                "  Total Strategies: {0}".format()
+                    registry_stats.get()
                         'total_strategies',
                         0))
             )
@@ -395,19 +376,18 @@ class SystemMonitorCLI:
                 info(f"\n📊 Strategy Performance:")
                 for strategy, metrics in list(all_performance.items())[:5]:  # Top 5
                     info("  {0}:".format(strategy))
-                    info(
-                        "    Executions: {0}".format(
-                            metrics.get(
+                    info()
+                        "    Executions: {0}".format()
+                            metrics.get()
                                 'total_executions',
                                 0))
                     )
-                    info(
-                        "    Success Rate: {0}%".format(
-                            metrics.get(
+                    info()
+                        "    Success Rate: {0}%".format(metrics.get())
                                 'success_rate',
-                                0):.1f)
+                                0))
                     )
-                    info("    Avg Profit: {0}".format(metrics.get('avg_profit', 0):.3f))
+                    info("    Avg Profit: {0}".format(metrics.get('avg_profit', 0)))
 
     async def show_health_diagnostics(self):
         """Display system health diagnostics."""
@@ -449,13 +429,12 @@ class SystemMonitorCLI:
             health_status["disk"] = "HEALTHY"
 
         # Display health status
-        info("⚡ CPU: {0} ({1}%)".format(health_status['cpu'], cpu_info['cpu_percent']:.1f))
-        info(
-            "💾 Memory: {0} ({1}%)".format(
-                health_status['memory'], 
-                memory_info['percent']:.1f)
+        info("⚡ CPU: {0} ({1}%)".format(health_status['cpu'], cpu_info['cpu_percent']))
+        info()
+            "💾 Memory: {0} ({1}%)".format(health_status['memory'],)
+                memory_info['percent'])
         )
-        info("💿 Disk: {0} ({1}%)".format(health_status['disk'], disk_info['percent']:.1f))
+        info("💿 Disk: {0} ({1}%)".format(health_status['disk'], disk_info['percent']))
 
         # Overall health
         critical_count = sum(1 for status in health_status.values() if status == "CRITICAL")
@@ -508,35 +487,30 @@ class SystemMonitorCLI:
                 memory_info = self._get_memory_info()
                 disk_info = self._get_disk_info()
 
-                info(
-                    "⚡ CPU: {0}% | 💾 Memory: {1}% | 💿 Disk: {2}%".format(
-                        cpu_info['cpu_percent']:.1f, 
-                        memory_info['percent']:.1f, 
-                        disk_info['percent']:.1f)
+                info()
+                    "⚡ CPU: {0}% | 💾 Memory: {1}% | 💿 Disk: {2}%".format()
+                        cpu_info['cpu_percent'], memory_info['percent'], disk_info['percent']
+                    )
                 )
 
                 # Trading system metrics
                 if self.router:
                     router_stats = self.router.get_statistics()
-                    info(
-                        "🔄 Tasks: {0} | CPU: {1} | GPU: {2}".format(
-                            router_stats.get(
-                                'total_tasks',
-                                0), 
-                            router_stats.get(
-                                'cpu_tasks',
-                                0), 
-                            router_stats.get(
-                                'gpu_tasks',
-                                0))
+                    info()
+                        "🔄 Tasks: {0} | CPU: {1} | GPU: {2}".format()
+                            router_stats.get('total_tasks', 0), 
+                            router_stats.get('cpu_tasks', 0), 
+                            router_stats.get('gpu_tasks', 0)
+                        )
                     )
 
                 # Network metrics
                 network_info = self._get_network_info()
-                info(
-                    "🌐 Network: ↑{0}MB ↓{1}MB".format(network_info['bytes_sent'] /
-                                    (1024**2):.1f, network_info['bytes_recv'] /
-                                                       (1024**2):.1f)
+                info()
+                    "🌐 Network: {0} MB sent, {1} MB received".format()
+                        network_info['bytes_sent'] / (1024**2),
+                        network_info['bytes_recv'] / (1024**2)
+                    )
                 )
 
                 # Wait for next update
@@ -551,12 +525,12 @@ class SystemMonitorCLI:
             error("System not initialized. Run 'init' first.")
             return
 
-        info(f"📤 EXPORTING SYSTEM REPORT")
+        info("📤 EXPORTING SYSTEM REPORT")
         info("=" * 30)
 
         try:
             # Collect all system data
-            report_data = {
+            report_data = {}
                 "timestamp": datetime.now().isoformat(),
                 "system_info": self._get_system_info(),
                 "cpu_info": self._get_cpu_info(),
@@ -568,7 +542,7 @@ class SystemMonitorCLI:
 
             # Add trading system data
             if self.router:
-                report_data["trading_system"] = {
+                report_data["trading_system"] = {}
                     "router_stats": self.router.get_statistics(),
                     "registry_stats": self.router.get_profit_registry_stats(),
                     "performance_metrics": self.router.get_performance_metrics(),
@@ -576,7 +550,7 @@ class SystemMonitorCLI:
 
             # Add tensor system data
             if self.tensor_algebra:
-                report_data["tensor_system"] = {
+                report_data["tensor_system"] = {}
                     "performance_metrics": self.tensor_algebra.get_performance_metrics(),
                     "statistics": self.tensor_algebra.get_statistics(),
                 }
@@ -597,24 +571,16 @@ class SystemMonitorCLI:
                     f.write("SCHWABOT SYSTEM REPORT\n")
                     f.write("=" * 30 + "\n\n")
                     f.write("Generated: {0}\n".format(report_data['timestamp']))
-                    f.write("Uptime: {0} seconds\n\n".format(report_data['uptime']:.1f))
+                    f.write("Uptime: {0:.1f} seconds\n\n".format(report_data['uptime']))
 
                     f.write("SYSTEM INFORMATION:\n")
                     for key, value in report_data["system_info"].items():
                         f.write("  {0}: {1}\n".format(key, value))
 
-                    f.write(
-                        "\nCPU: {0}%\n".format(
-                            report_data['cpu_info']['cpu_percent']:.1f)
-                    )
-                    f.write(
-                        "Memory: {0}%\n".format(
-                            report_data['memory_info']['percent']:.1f)
-                    )
-                    f.write(
-                        "Disk: {0}%\n".format(
-                            report_data['disk_info']['percent']:.1f)
-                    )
+                    f.write("\nPERFORMANCE METRICS:\n")
+                    f.write("CPU: {0}%\n".format(report_data['cpu_info']['cpu_percent']))
+                    f.write("Memory: {0}%\n".format(report_data['memory_info']['percent']))
+                    f.write("Disk: {0}%\n".format(report_data['disk_info']['percent']))
 
                 info("Saved as text: {0}".format(file_path))
             else:
@@ -694,8 +660,8 @@ async def main():
     cli = SystemMonitorCLI()
 
     # Initialize if requested or if any command needs it
-    if args.init or any(
-        [
+    if args.init or any()
+        []
             args.status,
             args.performance,
             args.trading,

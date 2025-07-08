@@ -1,4 +1,4 @@
-    from sklearn.decomposition import PCA
+from sklearn.decomposition import PCA
 from core.unified_math_system import unified_math
 from __future__ import annotations
 
@@ -23,6 +23,7 @@ from __future__ import annotations
 
 
 try:
+    pass
 except ImportError:
     PCA = None
 

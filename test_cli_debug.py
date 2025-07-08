@@ -13,16 +13,16 @@ sys.path.append(str(Path(__file__).parent))
 try:
     from utils.safe_print import safe_print, info, warn, error, success
     print("✅ Safe print imports successful")
-    
+
     # Test safe print functions
     safe_print("Test safe_print")
     info("Test info")
     warn("Test warn")
     error("Test error")
     success("Test success")
-    
+
     print("✅ All safe print functions working")
-    
+
 except Exception as e:
     print(f"❌ Import error: {e}")
     import traceback

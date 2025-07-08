@@ -1,9 +1,9 @@
 import traceback
-from schwabot.session_context import (
-    from schwabot.vortex_security import get_vortex_security
-    import asyncio
-    import random
-    import time
+from schwabot.session_context import ()
+from schwabot.vortex_security import get_vortex_security
+import asyncio
+import random
+import time
 
     #!/usr/bin/env python3
     """
@@ -39,7 +39,7 @@ async def demo_secure_trading_session():
     print("=" * 50)
 
     # Create a secure trading session
-    session = create_trading_session(
+    session = create_trading_session()
         ai_agent="Claude-3.5-Sonnet",
         strategy_hash="fibonacci_retracement_v2",
         market_pair="BTC/USDC",
@@ -54,7 +54,7 @@ async def demo_secure_trading_session():
     print(f"   Pattern Fitness: {session.security_state.pattern_fitness:.4f}")
 
     # Simulate trading activities
-    activities = [
+    activities = []
         "market_analysis_started",
         "technical_indicators_calculated",
         "risk_assessment_completed",
@@ -63,7 +63,7 @@ async def demo_secure_trading_session():
     ]
 
     for i, activity in enumerate(activities):
-        log_trading_activity(
+        log_trading_activity()
             activity,
             step=i + 1,
             confidence=random.uniform(0.7, 0.95),
@@ -71,7 +71,7 @@ async def demo_secure_trading_session():
         )
 
         # Update session with new information
-        update_session(
+        update_session()
             current_step=activity,
             step_number=i + 1,
             entry_price=64250.0 + random.uniform(-100, 100),
@@ -94,23 +94,23 @@ async def demo_security_validation():
     security = get_vortex_security()
 
     # Test various input patterns
-    test_cases = [
-        {
+    test_cases = []
+        {}
             "name": "Normal Operation",
             "inputs": [0.5, 0.6, 0.4, 0.7],
             "expected": "PASS",
         },
-        {
+        {}
             "name": "High Entropy Attack",
-            "inputs": [0.1, 0.9, 0.05, 0.95],
+            "inputs": [0.1, 0.9, 0.5, 0.95],
             "expected": "PASS with framework switch",
         },
-        {
+        {}
             "name": "Pattern Disruption",
             "inputs": [1.0, 0.0, 1.0, 0.0],
             "expected": "FAIL",
         },
-        {
+        {}
             "name": "Quantum Coherence Test",
             "inputs": [0.618, 0.382, 0.618, 0.382],  # Golden ratio pattern
             "expected": "PASS",
@@ -123,7 +123,7 @@ async def demo_security_validation():
 
         try:
             # Create test session
-            create_trading_session(
+            create_trading_session()
                 ai_agent="SECURITY_TESTER",
                 strategy_hash=f"test_{test['name'].lower().replace(' ', '_')}",
                 market_pair="TEST/VALIDATION",
@@ -184,7 +184,7 @@ async def demo_recursive_quantum_folding():
     initial_state = {"x": 0.5, "y": 0.3, "z": 0.8, "t": 0.1}
     print(f"Initial: {initial_state}")
 
-    collapsed = folder.multi_dimensional_collapse(
+    collapsed = folder.multi_dimensional_collapse()
         initial_state["x"],
         initial_state["y"],
         initial_state["z"],
@@ -208,26 +208,26 @@ async def demo_adaptive_logic_frameworks():
     swap_logic = security.swap_logic
 
     # Test different system states
-    scenarios = [
-        {
+    scenarios = []
+        {}
             "name": "Low Threat, Stable System",
             "entropy": 0.3,
             "threat": 0.2,
             "coherence": 0.9,
         },
-        {
+        {}
             "name": "High Entropy Environment",
             "entropy": 0.8,
             "threat": 0.4,
             "coherence": 0.7,
         },
-        {
+        {}
             "name": "High Threat Detected",
             "entropy": 0.5,
             "threat": 0.8,
             "coherence": 0.6,
         },
-        {
+        {}
             "name": "Low Coherence State",
             "entropy": 0.4,
             "threat": 0.3,
@@ -242,7 +242,7 @@ async def demo_adaptive_logic_frameworks():
         print(f"   Coherence: {scenario['coherence']:.1f}")
 
         # Select framework
-        framework = swap_logic.select_framework(
+        framework = swap_logic.select_framework()
             scenario["entropy"], scenario["threat"], scenario["coherence"]
         )
 
@@ -276,7 +276,7 @@ async def demo_session_analytics():
         strategy = random.choice(strategies)
         pair = random.choice(pairs)
 
-        session = create_trading_session(
+        session = create_trading_session()
             ai_agent=agent,
             strategy_hash=f"{strategy}_v{random.randint(1, 3)}",
             market_pair=pair,
@@ -286,9 +286,9 @@ async def demo_session_analytics():
 
         # Simulate some profit data
         entry_price = random.uniform(30000, 70000)
-        exit_price = entry_price * random.uniform(0.95, 1.08)  # -5% to +8%
+        exit_price = entry_price * random.uniform(0.95, 1.8)  # -5% to +8%
 
-        update_session(
+        update_session()
             entry_price=entry_price,
             exit_price=exit_price,
             entry_time=time.time() - random.uniform(300, 3600),  # 5min to 1hr ago
@@ -296,7 +296,7 @@ async def demo_session_analytics():
 
         session_manager.close_session(session.session_id, exit_price)
 
-        await asyncio.sleep(0.05)  # Small delay
+        await asyncio.sleep(0.5)  # Small delay
 
     # Get analytics
     analytics = session_manager.get_session_analytics()

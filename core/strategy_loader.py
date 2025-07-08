@@ -14,7 +14,7 @@ STRATEGY_REGISTRY: Dict[str, Callable] = {}
 
 
 # Fallback strategy implementations
-def momentum_strategy(data: Dict[str, Any]) -> Dict[str, Any]:
+    def momentum_strategy(data: Dict[str, Any]) -> Dict[str, Any]:
     """Return default momentum strategy."""
     return {"action": "buy", "confidence": 0.8, "strategy": "momentum"}
 
@@ -30,8 +30,8 @@ def entropy_driven_strategy(data: Dict[str, Any]) -> Dict[str, Any]:
 
 
 # Add fallback strategies
-STRATEGY_REGISTRY.update(
-    {
+STRATEGY_REGISTRY.update()
+    {}
         "momentum": momentum_strategy,
         "mean_reversion": mean_reversion_strategy,
         "entropy_driven": entropy_driven_strategy,
@@ -39,7 +39,7 @@ STRATEGY_REGISTRY.update(
 )
 
 # Try to load actual strategy files if they exist
-if os.path.exists(STRATEGY_DIR):
+    if os.path.exists(STRATEGY_DIR):
     for fname in os.listdir(STRATEGY_DIR):
         if fname.endswith(".py") and not fname.startswith("_"):
             mod_name = fname[:-3]
@@ -53,8 +53,8 @@ if os.path.exists(STRATEGY_DIR):
             except Exception as e:
                 logger.warning("Error loading strategy {0}: {1}".format(mod_name, e))
 
-# Example hash mapping (expand as needed)
-HASH_MAP = {
+# Example hash mapping (expand as, needed)
+HASH_MAP = {}
     "momentum": "momentum",
     "mean_reversion": "mean_reversion",
     "entropy_driven": "entropy_driven",

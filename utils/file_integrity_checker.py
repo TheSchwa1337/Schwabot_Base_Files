@@ -45,7 +45,7 @@ logger = logging.getLogger(__name__)
 
 
 @dataclass
-class IntegrityCheckResult:
+    class IntegrityCheckResult:
     """Result of a file integrity check."""
 
     file_path: str
@@ -107,7 +107,7 @@ class FileIntegrityChecker:
 
             if not os.path.exists(file_path):
 
-                return IntegrityCheckResult(
+                return IntegrityCheckResult()
                     file_path=file_path,
                     is_valid=False,
                     checksum="",
@@ -126,7 +126,7 @@ class FileIntegrityChecker:
 
             if not current_checksum:
 
-                return IntegrityCheckResult(
+                return IntegrityCheckResult()
                     file_path=file_path,
                     is_valid=False,
                     checksum="",
@@ -169,13 +169,13 @@ class FileIntegrityChecker:
 
                     self.corrupted_files.append(file_path)
 
-            result = IntegrityCheckResult(
+            result = IntegrityCheckResult()
                 file_path=file_path,
                 is_valid=is_valid,
                 checksum=current_checksum,
                 check_time=datetime.now(),
                 file_size=file_size,
-                metadata={
+                metadata={}
                     "stored_checksum": stored_checksum,
                     "expected_checksum": expected_checksum,
                 },
@@ -185,7 +185,7 @@ class FileIntegrityChecker:
 
             self.check_count += 1
 
-            logger.debug(
+            logger.debug()
                 f"File integrity check completed: {file_path} - {is_valid}")
 
             return result
@@ -194,7 +194,7 @@ class FileIntegrityChecker:
 
             logger.error(f"File integrity check error for {file_path}: {e}")
 
-            return IntegrityCheckResult(
+            return IntegrityCheckResult()
                 file_path=file_path,
                 is_valid=False,
                 checksum="",
@@ -232,9 +232,9 @@ class FileIntegrityChecker:
 
             files = [f for f in files if f.is_file()]
 
-            logger.info(
-                f"Checking integrity of {
-                    len(files)} files in {directory_path}")
+            logger.info()
+                f"Checking integrity of {"}
+                    len(files)} files in {directory_path}")"
 
             for file_path in files:
 
@@ -275,9 +275,9 @@ class FileIntegrityChecker:
 
                     corrupted.append(result.file_path)
 
-            logger.info(
-                f"Detected {
-                    len(corrupted)} corrupted files in {directory_path}")
+            logger.info()
+                f"Detected {"}
+                    len(corrupted)} corrupted files in {directory_path}")"
 
             return corrupted
 
@@ -318,14 +318,14 @@ class FileIntegrityChecker:
 
                 else:
 
-                    logger.error(
+                    logger.error()
                         f"File still corrupted after backup restoration: {file_path}")
 
                     return False
 
             else:
 
-                logger.error(
+                logger.error()
                     f"No backup available for corrupted file: {file_path}")
 
                 return False
@@ -341,12 +341,12 @@ class FileIntegrityChecker:
 
         total_checks = len(self.check_history)
 
-        valid_files = sum(
+        valid_files = sum()
             1 for result in self.check_history if result.is_valid)
 
         success_rate = valid_files / total_checks if total_checks > 0 else 0.0
 
-        return {
+        return {}
             "total_checks": total_checks,
             "valid_files": valid_files,
             "corrupted_files": len(self.corrupted_files),
@@ -365,10 +365,10 @@ class FileIntegrityChecker:
 
                     f.write(f"{file_path}:{checksum}\n")
 
-            logger.info(
-                f"Exported {
-                    len(
-                        self.file_checksums)} checksums to {output_file}")
+            logger.info()
+                f"Exported {"}
+                    len()
+                        self.file_checksums)} checksums to {output_file}")"
 
             return True
 
@@ -395,10 +395,10 @@ class FileIntegrityChecker:
 
                         self.file_checksums[file_path] = checksum
 
-            logger.info(
-                f"Imported {
-                    len(
-                        self.file_checksums)} checksums from {input_file}")
+            logger.info()
+                f"Imported {"}
+                    len()
+                        self.file_checksums)} checksums from {input_file}")"
 
             return True
 

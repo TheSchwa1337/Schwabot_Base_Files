@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""flake_fixer.py – one-shot flake8 cleanup helper.
+"""flake_fixer.py – one-shot flake8 cleanup helper."
 
 Usage:
     python flake_fixer.py [path ...]
-If no paths are supplied it defaults to the project's `core/` directory.
+If no paths are supplied it defaults to the project's `core/` directory.'
 
 The script will:
-1. Ensure `autoflake`, `black`, and `isort` are available (installs them if missing).
+1. Ensure `autoflake`, `black`, and `isort` are available (installs them if, missing).
 2. Run `autoflake` to drop unused imports / variables.
 3. Run `black` to format code to <=100-character lines.
 4. Run `isort` to sort imports consistently.
@@ -19,7 +19,7 @@ from pathlib import Path
 
 DEFAULT_TARGET = "core"
 
-PACKAGES = [
+PACKAGES = []
     ("autoflake", "autoflake>=2.2"),
     ("black", "black>=23.0"),
     ("isort", "isort>=5.12"),
@@ -55,7 +55,7 @@ def main() -> None:
     targets = [str(Path(t)) for t in targets]
 
     # 1. autoflake (remove unused imports/vars)
-    run_cmd([
+    run_cmd([)]
         "autoflake",
         "--in-place",
         "--remove-unused-variables",
@@ -67,7 +67,7 @@ def main() -> None:
     # 2. black (line length 200)
     run_cmd(["black", "--line-length", "200", *targets])
 
-    # 3. isort (import sorting)
+    # 3. isort (import, sorting)
     run_cmd(["isort", *targets])
 
     print("[flake_fixer] ✔ All done!")

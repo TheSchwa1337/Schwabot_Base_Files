@@ -1,6 +1,6 @@
 import logging
 import time
-from typing import Dict, Any, Optional, List, Tuple
+from typing import Dict, Any, Optional, List
 from dataclasses import dataclass, field
 from enum import Enum
 
@@ -37,7 +37,7 @@ class ExecutionMode(Enum):
 
 
 @dataclass
-class ExecutionResult:
+    class ExecutionResult:
     """Result of a live execution operation."""
 
     success: bool
@@ -62,7 +62,9 @@ class EnhancedLiveExecutionMapper:
         try:
             # Validate signal
             if not self._validate_signal(signal):
-                return ExecutionResult(success=False, metadata={"error": "Invalid signal"})
+                return ExecutionResult()
+                    success=False, metadata={"error": "Invalid signal"}
+                )
 
             # Apply profit optimization
             optimized_signal = self._apply_profit_optimization(signal)
@@ -82,7 +84,7 @@ class EnhancedLiveExecutionMapper:
     def _validate_signal(self, signal: Dict[str, Any]) -> bool:
         """Validate trading signal."""
         required_fields = ["symbol", "side", "quantity"]
-        return all(field in signal for field in required_fields)
+        return all(field in signal for field in, required_fields)
 
     def _apply_profit_optimization(self, signal: Dict[str, Any]) -> Dict[str, Any]:
         """Apply profit optimization to signal."""
@@ -100,7 +102,7 @@ class EnhancedLiveExecutionMapper:
         # Mock execution for now
         order_id = "order_{0}".format(int(time.time() * 1000))
 
-        return ExecutionResult(
+        return ExecutionResult()
             success=True,
             order_id=order_id,
             execution_price=signal.get("price", 0.0),
@@ -116,11 +118,13 @@ class EnhancedLiveExecutionMapper:
         total = len(self.execution_history)
         successful = sum(1 for r in self.execution_history if r.success)
 
-        return {
+        return {}
             "total_executions": total,
             "successful_executions": successful,
             "success_rate": successful / total if total > 0 else 0.0,
-            "last_execution": self.execution_history[-1].timestamp if self.execution_history else None,
+            "last_execution": ()
+                self.execution_history[-1].timestamp if self.execution_history else None
+            ),
         }
 
 
@@ -133,7 +137,12 @@ def test_enhanced_live_execution():
     mapper = EnhancedLiveExecutionMapper()
 
     # Test signal
-    test_signal = {"symbol": "BTC/USDT", "side": "buy", "quantity": 0.1, "price": 50000.0}
+    test_signal = {}
+        "symbol": "BTC/USDT",
+        "side": "buy",
+        "quantity": 0.1,
+        "price": 50000.0,
+    }
 
     # Execute trade
     result = mapper.execute_trade(test_signal)

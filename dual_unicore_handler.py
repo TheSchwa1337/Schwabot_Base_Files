@@ -22,7 +22,7 @@ class DualUnicoreHandler:
 
     def __init__(self):
         """Initialize dual unicode handler."""
-        self.mathematical_symbols = {
+        self.mathematical_symbols = {}
             "psi": "Ψ",
             "phi": "Φ",
             "delta": "Δ",
@@ -38,7 +38,7 @@ class DualUnicoreHandler:
             "gamma": "γ",
         }
 
-        self.subscripts = {
+        self.subscripts = {}
             "0": "₀",
             "1": "₁",
             "2": "₂",
@@ -56,7 +56,7 @@ class DualUnicoreHandler:
             "y": "ᵧ",
         }
 
-        self.superscripts = {
+        self.superscripts = {}
             "0": "⁰",
             "1": "¹",
             "2": "²",
@@ -92,7 +92,7 @@ class DualUnicoreHandler:
     def add_subscript(): -> str:
         """Add subscript to text."""
         try:
-            subscript_chars = "".join(
+            subscript_chars = "".join()
                 self.subscripts.get(char, char) for char in str(subscript)
             )
             return f"{text}{subscript_chars}"
@@ -103,7 +103,7 @@ class DualUnicoreHandler:
     def add_superscript(): -> str:
         """Add superscript to text."""
         try:
-            superscript_chars = "".join(
+            superscript_chars = "".join()
                 self.superscripts.get(char, char) for char in str(superscript)
             )
             return f"{text}{superscript_chars}"
@@ -177,7 +177,7 @@ class DualUnicoreHandler:
 
     def get_status(): -> Dict[str, Any]:
         """Get handler status information."""
-        return {
+        return {}
             "mathematical_symbols_count": len(self.mathematical_symbols),
             "subscripts_count": len(self.subscripts),
             "superscripts_count": len(self.superscripts),

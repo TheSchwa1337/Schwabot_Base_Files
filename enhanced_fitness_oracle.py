@@ -1,5 +1,5 @@
 from core.unified_math_system import unified_math
-                    import yaml  # Lazy import to avoid hard dep
+import yaml  # Lazy import to avoid hard dep
 from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
@@ -50,7 +50,7 @@ ready; the public surface should remain stable."""
 # Logging setup \\u2013 honour parent log - level but stay silent by default
 # ---------------------------------------------------------------------------
 logger = logging.getLogger(__name__)
-if not logger.handlers:
+    if not logger.handlers:
     logger.addHandler(logging.NullHandler())
 
 # ---------------------------------------------------------------------------
@@ -59,7 +59,7 @@ if not logger.handlers:
 
 
 @dataclass
-class UnifiedFitnessScore:
+    class UnifiedFitnessScore:
 """
 """Lightweight container for the oracle's output.'"
 
@@ -111,7 +111,7 @@ The goal is *dependency satisfaction*, not production trading accuracy."""
 """
 
 def __init__():-> None:  # noqa: D401"""
-        """Load configuration (JSON or YAML) and warm - up state.""""""
+        """Load configuration (JSON or, YAML) and warm - up state.""""""
 """"""
 """"""
 """"""
@@ -120,7 +120,7 @@ self.config_path = Path(config_path) if config_path else None
         self.config: Dict[str, Any] = {}
         if self.config_path and self.config_path.exists():
             try: """
-if self.config_path.suffix.lower() in {".yml", ".yaml"}:
+    if self.config_path.suffix.lower() in {".yml", ".yaml"}:
 
 with self.config_path.open("r", encoding="utf - 8") as fh:
                         self.config = yaml.safe_load(fh) or {}
@@ -135,8 +135,8 @@ self.current_regime: str = "neutral"
 self.market_history: List[Dict[str, Any]] = []
         self.fitness_history: List[UnifiedFitnessScore] = []
 
-logger.info(
-    "EnhancedFitnessOracle initialised \\u2013 config entries: %s", len(
+logger.info()
+    "EnhancedFitnessOracle initialised \\u2013 config entries: %s", len()
         self.config))
 
 # ------------------------------------------------------------------
@@ -158,7 +158,7 @@ await asyncio.sleep(0)  # Yield control \\u2013 keeps async scheduling honest
 price_series = np.asarray(market_data.get("price_series", []), dtype = float)
         volume_series = np.asarray(market_data.get("volume_series", []), dtype = float)
 
-snapshot = {
+snapshot = {}
             "timestamp": market_data.get("timestamp", datetime.utcnow()),
             "mean_price": float(price_series.mean()) if price_series.size else None,
             "price_std": float(price_series.unified_math.std(ddof = 1)) if price_series.size else None,
@@ -172,7 +172,7 @@ self.market_history.append(snapshot)
         if len(self.market_history) > 5000:  # Safety bound
             self.market_history.pop(0)
 
-# Update market regime (toy logic)
+# Update market regime (toy, logic)
         price_std = snapshot["price_std"] or 0.0
         self.current_regime = "high_volatility" if price_std > 3 else "normal"
 
@@ -196,7 +196,7 @@ price_std = snapshot.get("price_std") or 0.0
         mean_price = snapshot.get("mean_price") or last_price
 
 # Very naive momentum estimator: deviation from mean / std
-if price_std > 1e - 6:
+    if price_std > 1e - 6:
             z_score = (last_price - mean_price) / price_std
         else:
             z_score = 0.0
@@ -205,7 +205,7 @@ overall_fitness = float(np.tanh(z_score))  # Map to (-1, 1)
         confidence = float(unified_math.abs(overall_fitness))
 
 # Map fitness to discrete action
-if overall_fitness > 0.7:
+    if overall_fitness > 0.7:
             action = "STRONG_BUY"
         elif overall_fitness > 0.2:
             action = "BUY"
@@ -218,7 +218,7 @@ if overall_fitness > 0.7:
 
 position_size = unified_math.max(0.0, confidence) * 1.0  # Placeholder sizing logic
 
-fitness = UnifiedFitnessScore(
+fitness = UnifiedFitnessScore()
             timestamp = datetime.utcnow(),
             overall_fitness = overall_fitness,
             action = action,
@@ -249,7 +249,7 @@ def _demo():-> None:  # pragma: no cover \\u2013 manual smoke - test
 
 
 oracle = EnhancedFitnessOracle()
-    dummy_market = {
+    dummy_market = {}
         "price_series": [100 + random.gauss(0, 2) for _ in range(20)],
         "volume_series": [1000 + random.gauss(0, 200) for _ in range(20)],
         "price": 101.5,

@@ -7,11 +7,11 @@ from enum import Enum
 from collections import deque, defaultdict
 import json
 import threading
-    from .bio_cellular_signaling import BioCellularSignaling, CellularSignalType, BioCellularResponse
-    from .bio_profit_vectorization import BioProfitVectorization, ProfitMetabolismType, BioProfitResponse
-    from .orbital_xi_ring_system import OrbitalXiRingSystem, XiRingLevel
-    from .matrix_mapper import MatrixMapper, FallbackDecision
-    from .quantum_mathematical_bridge import QuantumMathematicalBridge
+from .bio_cellular_signaling import BioCellularSignaling, CellularSignalType, BioCellularResponse
+from .bio_profit_vectorization import BioProfitVectorization, ProfitMetabolismType, BioProfitResponse
+from .orbital_xi_ring_system import OrbitalXiRingSystem, XiRingLevel
+from .matrix_mapper import MatrixMapper, FallbackDecision
+from .quantum_mathematical_bridge import QuantumMathematicalBridge
 
 import numpy as np
 
@@ -42,9 +42,9 @@ Market Data → Cellular Receptors → Signal Processing → Profit Metabolism �
 """
 
 # Import biological systems
-try:
+    try:
     BIO_SYSTEMS_AVAILABLE = True
-except ImportError as e:
+    except ImportError as e:
     print("⚠️ Bio-systems not available: {0}".format(e))
     BIO_SYSTEMS_AVAILABLE = False
 
@@ -74,7 +74,7 @@ class TradeDecisionType(Enum):
 
 
 @dataclass
-class CellularTradeDecision:
+    class CellularTradeDecision:
     """Decision made by cellular trade executor"""
 
     decision_type: TradeDecisionType
@@ -103,7 +103,7 @@ class CellularTradeDecision:
 
 
 @dataclass
-class CellularMemoryTrace:
+    class CellularMemoryTrace:
     """Memory trace for cellular learning"""
 
     market_conditions: Dict[str, float]
@@ -160,7 +160,7 @@ class CellularTradeExecutor:
         self.cellular_performance: Dict[CellularSignalType, float] = {}
 
         # Adaptive parameters
-        self.learning_rate = 0.01
+        self.learning_rate = 0.1
         self.adaptation_threshold = 0.1
         self.memory_formation_threshold = 0.7
 
@@ -171,7 +171,7 @@ class CellularTradeExecutor:
 
     def _default_config(self) -> Dict[str, Any]:
         """Default configuration for cellular trade executor"""
-        return {
+        return {}
             'execution_mode': 'integrated',
             'cellular_sensitivity': 1.0,
             'profit_optimization': True,
@@ -211,7 +211,7 @@ class CellularTradeExecutor:
             if max_activation > 0.5:
                 self.cellular_state = CellularTradeState.ACTIVATED
 
-            return {
+            return {}
                 'cellular_responses': cellular_responses,
                 'max_activation': max_activation,
                 'cellular_state': self.cellular_state.value,
@@ -221,7 +221,7 @@ class CellularTradeExecutor:
             logger.error("Error processing market stimuli: {0}".format(e))
             return {}
 
-    def optimize_profit_metabolism(
+    def optimize_profit_metabolism()
         self, market_data: Dict[str, Any], cellular_responses: Dict[CellularSignalType, BioCellularResponse]
     ) -> BioProfitResponse:
         """
@@ -242,7 +242,7 @@ class CellularTradeExecutor:
             logger.error("Error optimizing profit metabolism: {0}".format(e))
             return None
 
-    def integrate_xi_ring_memory(
+    def integrate_xi_ring_memory()
         self, cellular_responses: Dict[CellularSignalType, BioCellularResponse], strategy_id: str
     ) -> bool:
         """
@@ -299,7 +299,7 @@ class CellularTradeExecutor:
                 fallback_result = self.matrix_mapper.evaluate_hash_vector(strategy_id, market_data)
                 fallback_decision = fallback_result.decision
 
-            # Step 5: Quantum enhancement (if enabled)
+            # Step 5: Quantum enhancement (if, enabled)
             quantum_enhancement = 1.0
             if self.config.get('quantum_enhancement', False) and self.quantum_bridge:
                 # Apply quantum enhancement to cellular responses
@@ -321,13 +321,13 @@ class CellularTradeExecutor:
             homeostatic_balance = self._apply_homeostatic_regulation(market_data, cellular_responses)
 
             # Step 10: Create trade decision
-            decision = CellularTradeDecision(
+            decision = CellularTradeDecision()
                 decision_type=decision_type,
                 position_size=position_size,
                 confidence=confidence,
                 risk_adjustment=risk_adjustment,
                 dominant_signal=dominant_signal,
-                metabolic_pathway=(
+                metabolic_pathway=()
                     profit_response.metabolic_pathway if profit_response else ProfitMetabolismType.GLYCOLYSIS
                 ),
                 energy_state=profit_response.cellular_efficiency if profit_response else 1.0,
@@ -353,7 +353,7 @@ class CellularTradeExecutor:
             logger.error("Error executing cellular trade decision: {0}".format(e))
             return self._create_default_decision("Error: {0}".format(str(e)))
 
-    def _determine_trade_decision_type(
+    def _determine_trade_decision_type()
         self, dominant_response: BioCellularResponse, profit_response: BioProfitResponse
     ) -> TradeDecisionType:
         """Determine the type of trade decision based on cellular responses"""
@@ -373,7 +373,7 @@ class CellularTradeExecutor:
             logger.error("Error determining trade decision type: {0}".format(e))
             return TradeDecisionType.CELLULAR_HOLD
 
-    def _calculate_position_size(
+    def _calculate_position_size()
         self, dominant_response: BioCellularResponse, profit_response: BioProfitResponse
     ) -> float:
         """Calculate position size based on cellular and profit responses"""
@@ -396,7 +396,7 @@ class CellularTradeExecutor:
             logger.error("Error calculating position size: {0}".format(e))
             return 0.0
 
-    def _calculate_confidence(
+    def _calculate_confidence()
         self, cellular_responses: Dict[CellularSignalType, BioCellularResponse], profit_response: BioProfitResponse
     ) -> float:
         """Calculate confidence based on cellular consensus"""
@@ -421,7 +421,7 @@ class CellularTradeExecutor:
             logger.error("Error calculating confidence: {0}".format(e))
             return 0.5
 
-    def _calculate_risk_adjustment(
+    def _calculate_risk_adjustment()
         self, cellular_responses: Dict[CellularSignalType, BioCellularResponse], market_data: Dict[str, Any]
     ) -> float:
         """Calculate risk adjustment based on cellular feedback"""
@@ -444,7 +444,7 @@ class CellularTradeExecutor:
             logger.error("Error calculating risk adjustment: {0}".format(e))
             return 0.5
 
-    def _apply_homeostatic_regulation(
+    def _apply_homeostatic_regulation()
         self, market_data: Dict[str, Any], cellular_responses: Dict[CellularSignalType, BioCellularResponse]
     ) -> float:
         """Apply homeostatic regulation to maintain system balance"""
@@ -506,7 +506,7 @@ class CellularTradeExecutor:
         """Form memory trace for cellular learning"""
         try:
             # Create memory trace
-            memory_trace = CellularMemoryTrace(
+            memory_trace = CellularMemoryTrace()
                 market_conditions={},  # Will be filled by caller
                 cellular_response={k.value: v.activation_strength for k, v in cellular_responses.items()},
                 profit_outcome=0.0,  # Will be updated later
@@ -532,7 +532,7 @@ class CellularTradeExecutor:
             for signal_type in CellularSignalType:
                 if signal_type in cellular_responses:
                     activation = cellular_responses[signal_type].activation_strength
-                    activations.append("{0}:{1}".format(signal_type.value, activation:.2f))
+                    activations.append("{0}:{1}".format(signal_type.value, activation))
 
             return "|".join(activations)
 
@@ -542,7 +542,7 @@ class CellularTradeExecutor:
 
     def _create_default_decision(self, reason: str) -> CellularTradeDecision:
         """Create default decision for error cases"""
-        return CellularTradeDecision(
+        return CellularTradeDecision()
             decision_type=TradeDecisionType.CELLULAR_HOLD,
             position_size=0.0,
             confidence=0.0,
@@ -563,7 +563,7 @@ class CellularTradeExecutor:
     def get_system_status(self) -> Dict[str, Any]:
         """Get comprehensive system status"""
         try:
-            status = {
+            status = {}
                 'cellular_state': self.cellular_state.value,
                 'system_active': self.system_active,
                 'total_decisions': len(self.execution_history),

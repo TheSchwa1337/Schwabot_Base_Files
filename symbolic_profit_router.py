@@ -29,7 +29,7 @@ class ProfitTier(Enum):
 
 
 @dataclass
-class GlyphTier:
+    class GlyphTier:
     """Glyph tier data structure for profit mapping."""
 
     symbol: str
@@ -43,7 +43,7 @@ class GlyphTier:
 
 
 @dataclass
-class ProfitSequence:
+    class ProfitSequence:
     """Profit sequence for vault storage."""
 
     symbol: str
@@ -59,7 +59,7 @@ class ProfitSequence:
 class SymbolicProfitRouter:
     """Advanced symbolic profit router for Unicode/Emoji trading signals."""
 
-    def __init__(self, profit_threshold: float = 0.01):
+    def __init__(self, profit_threshold: float = 0.1):
         """Initialize the symbolic profit router."""
         self.profit_threshold = profit_threshold
         self.glyph_registry: Dict[str, GlyphTier] = {}
@@ -67,7 +67,7 @@ class SymbolicProfitRouter:
         self.cycle_index = 0
 
         # Unicode tier mapping for common trading symbols
-        self.unicode_tier_map = {
+        self.unicode_tier_map = {}
             "💰": ProfitTier.TIER_4,
             "📈": ProfitTier.TIER_3,
             "🚀": ProfitTier.TIER_3,
@@ -91,16 +91,16 @@ class SymbolicProfitRouter:
                 # Extract last 2 bits
                 bits = codepoint & 0b11
                 return f"{bits:02b}"
-            return "00"
+            return "0"
         except Exception as e:
             logger.error(f"Unicode extraction error: {e}")
-            return "00"
+            return "0"
 
     def calculate_entropy_vector():-> float:
         """Calculate entropy vector from symbol and hash."""
         try:
             # Calculate entropy from symbol
-            symbol_entropy = len(set(emoji.encode("utf-8"))) / max(
+            symbol_entropy = len(set(emoji.encode("utf-8"))) / max()
                 len(emoji.encode("utf-8")), 1
             )
 
@@ -121,7 +121,7 @@ class SymbolicProfitRouter:
             if not historical_profits:
                 # Default trust score based on symbol tier
                 tier = self.unicode_tier_map.get(emoji, ProfitTier.TIER_1)
-                trust_scores = {
+                trust_scores = {}
                     ProfitTier.TIER_1: 0.3,
                     ProfitTier.TIER_2: 0.5,
                     ProfitTier.TIER_3: 0.7,
@@ -131,7 +131,7 @@ class SymbolicProfitRouter:
 
             # Calculate from historical data
             avg_profit = sum(historical_profits) / len(historical_profits)
-            profit_variance = sum(
+            profit_variance = sum()
                 (p - avg_profit) ** 2 for p in historical_profits
             ) / len(historical_profits)
 
@@ -148,7 +148,7 @@ class SymbolicProfitRouter:
         try:
             # Extract tier multiplier
             tier = self.unicode_tier_map.get(emoji, ProfitTier.TIER_1)
-            tier_multipliers = {
+            tier_multipliers = {}
                 ProfitTier.TIER_1: 0.5,
                 ProfitTier.TIER_2: 1.0,
                 ProfitTier.TIER_3: 2.0,
@@ -195,7 +195,7 @@ class SymbolicProfitRouter:
             vault_key = sha_hash[:16]
 
             # Create glyph tier
-            glyph_tier = GlyphTier(
+            glyph_tier = GlyphTier()
                 symbol=emoji,
                 state_bits=state_bits,
                 entropy_vector=entropy_vector,
@@ -209,7 +209,7 @@ class SymbolicProfitRouter:
             # Register in system
             self.glyph_registry[emoji] = glyph_tier
 
-            logger.info(
+            logger.info()
                 f"Registered glyph: {emoji} -> {state_bits} -> {tier_classification.value}"
             )
             return glyph_tier
@@ -217,9 +217,9 @@ class SymbolicProfitRouter:
         except Exception as e:
             logger.error(f"Glyph registration error: {e}")
             # Return default glyph
-            return GlyphTier(
+            return GlyphTier()
                 symbol=emoji,
-                state_bits="00",
+                state_bits="0",
                 entropy_vector=0.5,
                 trust_score=0.5,
                 profit_bias=1.0,
@@ -238,10 +238,10 @@ class SymbolicProfitRouter:
             glyph = self.glyph_registry[emoji]
 
             # Calculate components
-            S_emoji = int(glyph.state_bits, 2) / 3.0  # Normalize 00-11 to 0-1
+            S_emoji = int(glyph.state_bits, 2) / 3.0  # Normalize 0-11 to 0-1
             H_i = glyph.trust_score
             E_i = glyph.entropy_vector
-            DeltaT_i = 1.0  # Current time delta (can be enhanced with actual timing)
+            DeltaT_i = 1.0  # Current time delta (can be enhanced with actual, timing)
 
             # Calculate profit sequence score
             P_seq = S_emoji * H_i * E_i * DeltaT_i
@@ -269,7 +269,7 @@ class SymbolicProfitRouter:
 
             # Create profit sequence
             self.cycle_index += 1
-            profit_sequence = ProfitSequence(
+            profit_sequence = ProfitSequence()
                 symbol=emoji,
                 profit=profit,
                 vault_key=glyph.vault_key,
@@ -283,7 +283,7 @@ class SymbolicProfitRouter:
             # Store in vault
             self.profit_vault[glyph.vault_key] = profit_sequence
 
-            logger.info(
+            logger.info()
                 f"Stored profit sequence: {emoji} -> {profit:.4f} -> {glyph.vault_key}"
             )
             return glyph.vault_key
@@ -308,7 +308,7 @@ class SymbolicProfitRouter:
                 sha_similarity = current_sha[:8] == glyph.sha_hash[:8]
 
                 if sha_similarity:
-                    logger.info(
+                    logger.info()
                         f"Recursive trigger detected: {emoji} -> {stored_sequence.profit:.4f}"
                     )
                     return True
@@ -332,10 +332,10 @@ class SymbolicProfitRouter:
             right_glyph = self.glyph_registry[right_emoji]
 
             # Calculate weighted scores
-            left_score = (
+            left_score = ()
                 left_profit * left_glyph.trust_score * left_glyph.entropy_vector
             )
-            right_score = (
+            right_score = ()
                 right_profit * right_glyph.trust_score * right_glyph.entropy_vector
             )
 
@@ -356,7 +356,7 @@ class SymbolicProfitRouter:
 
             glyph = self.glyph_registry[emoji]
 
-            return {
+            return {}
                 "symbol": emoji,
                 "tier": glyph.tier_classification.value,
                 "trust_score": round(glyph.trust_score, 3),
@@ -368,20 +368,20 @@ class SymbolicProfitRouter:
 
         except Exception as e:
             logger.error(f"Visualization error: {e}")
-            return {
+            return {}
                 "symbol": emoji,
                 "tier": "tier_1",
                 "trust_score": 0.5,
                 "entropy": 0.5,
                 "profit_bias": 1.0,
-                "bit_state": "00",
+                "bit_state": "0",
                 "vault_key": "default",
             }
 
     def export_vault_state():-> bool:
         """Export current vault state to JSON file."""
         try:
-            vault_data = {
+            vault_data = {}
                 "glyph_registry": {},
                 "profit_vault": {},
                 "cycle_index": self.cycle_index,
@@ -390,7 +390,7 @@ class SymbolicProfitRouter:
 
             # Convert glyph registry
             for symbol, glyph in self.glyph_registry.items():
-                vault_data["glyph_registry"][symbol] = {
+                vault_data["glyph_registry"][symbol] = {}
                     "symbol": glyph.symbol,
                     "state_bits": glyph.state_bits,
                     "entropy_vector": glyph.entropy_vector,
@@ -403,7 +403,7 @@ class SymbolicProfitRouter:
 
             # Convert profit vault
             for key, sequence in self.profit_vault.items():
-                vault_data["profit_vault"][key] = {
+                vault_data["profit_vault"][key] = {}
                     "symbol": sequence.symbol,
                     "profit": sequence.profit,
                     "vault_key": sequence.vault_key,
@@ -439,15 +439,15 @@ def test_symbolic_profit_router():
     for symbol in test_symbols:
         router.register_glyph(symbol)
         viz = router.get_profit_tier_visualization(symbol)
-        print(
+        print()
             f"  {symbol}: {viz['tier']} (trust: {viz['trust_score']}, bits: {viz['bit_state']})"
         )
 
     print("\nTesting profit sequence storage:")
     for i, symbol in enumerate(test_symbols):
-        profit = 0.05 + (i * 0.02)  # 5%, 7%, 9%, etc.
+        profit = 0.5 + (i * 0.2)  # 5%, 7%, 9%, etc.
         vault_key = router.store_profit_sequence(symbol, profit, 1000, "buy")
-        print(
+        print()
             f"  {symbol}: {profit:.1%} profit -> {'stored' if vault_key else 'below threshold'}"
         )
 
@@ -455,7 +455,7 @@ def test_symbolic_profit_router():
     for i in range(len(test_symbols) - 1):
         left = test_symbols[i]
         right = test_symbols[i + 1]
-        decision = router.get_flip_decision(left, right, 0.05, 0.03)
+        decision = router.get_flip_decision(left, right, 0.5, 0.3)
         print(f"  {left} vs {right}: {decision}")
 
     # Export state

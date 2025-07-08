@@ -35,7 +35,7 @@ def get_flake8_errors(): -> Dict[str, List[str]]:
 
 def analyze_file_content(): -> Dict[str, any]:
     """Analyze a file for missing/stubbed logic."""
-    analysis = {
+    analysis = {}
         "file_path": str(file_path),
         "size_kb": 0,
         "has_stubs": False,
@@ -54,7 +54,7 @@ def analyze_file_content(): -> Dict[str, any]:
         analysis["size_kb"] = len(content) / 1024
 
         # Check for stub indicators
-        stub_patterns = [
+        stub_patterns = []
             r'"""Function implementation pending\."""',
             r"pass\s*$",
             r"# TODO",
@@ -71,7 +71,7 @@ def analyze_file_content(): -> Dict[str, any]:
                 analysis["stub_indicators"].append(pattern)
 
         # Check for math logic indicators
-        math_patterns = [
+        math_patterns = []
             r"import numpy",
             r"import math",
             r"import scipy",
@@ -106,7 +106,7 @@ def analyze_file_content(): -> Dict[str, any]:
 
 def identify_important_files(): -> List[str]:
     """Identify the most important files based on naming patterns."""
-    important_patterns = [
+    important_patterns = []
         "mathlib*.py",
         "tensor*.py",
         "vector*.py",
@@ -130,7 +130,7 @@ def identify_important_files(): -> List[str]:
 
 def analyze_common_error_patterns(): -> Dict[str, int]:
     """Analyze common error patterns across the codebase."""
-    error_patterns = {
+    error_patterns = {}
         "E999": 0,  # Syntax errors
         "E261": 0,  # At least two spaces before inline comment
         "E128": 0,  # Continuation line under-indented
@@ -163,7 +163,7 @@ def main():
     error_patterns = analyze_common_error_patterns(errors_by_file)
 
     print("\n📊 Common Error Patterns:")
-    for pattern, count in sorted(
+    for pattern, count in sorted()
         error_patterns.items(), key=lambda x: x[1], reverse=True
     ):
         if count > 0:
@@ -189,7 +189,7 @@ def main():
             important_analyses.append(analysis)
 
     # Sort by importance (has math logic, has errors, size)
-    important_analyses.sort(
+    important_analyses.sort()
         key=lambda x: (x["has_math_logic"], x["e999_errors"] > 0, x["size_kb"]),
         reverse=True,
     )
@@ -205,14 +205,14 @@ def main():
             print(f"   Total Errors: {analysis['total_errors']}")
             print(f"   Has Math Logic: {'✅' if analysis['has_math_logic'] else '❌'}")
             print(f"   Has Stubs: {'⚠️' if analysis['has_stubs'] else '✅'}")
-            print(
-                f"   Classes: {analysis['has_classes']}, Functions: {
+            print()
+                f"   Classes: {analysis['has_classes']}, Functions: {"}
                     analysis['has_functions']
                 }"
             )
 
             if analysis["stub_indicators"]:
-                print(
+                print()
                     f"   Stub Indicators: {', '.join(analysis['stub_indicators'][:3])}"
                 )
 
@@ -226,12 +226,12 @@ def main():
     print(f"\n1. **Critical Priority** ({len(files_with_e999)} files):")
     print("   Files with E999 syntax errors that prevent import/execution:")
     for f in files_with_e999[:5]:
-        print(f"   - {f['file_path']} ({f['e999_errors']} syntax errors)")
+        print(f"   - {f['file_path']} ({f['e999_errors']} syntax, errors)")
 
     print(f"\n2. **High Priority** ({len(files_with_stubs)} files):")
     print("   Files with stubbed/missing logic that need implementation:")
     for f in files_with_stubs[:5]:
-        print(f"   - {f['file_path']} (contains stubs)")
+        print(f"   - {f['file_path']} (contains, stubs)")
 
     print("\n3. **Common Issues to Fix Automatically**:")
     for pattern, count in error_patterns.items():
@@ -243,7 +243,7 @@ def main():
     print("   - Implement automated linting in CI/CD pipeline")
     print("   - Use type hints consistently to catch import/name errors")
     print("   - Standardize docstring format to prevent W505 errors")
-    print(
+    print()
         "   - Use raw strings (r'') for regex patterns to prevent escape sequence errors"
     )
 

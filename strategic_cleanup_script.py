@@ -5,8 +5,8 @@ import os
 
 
 def delete_non_essential_files():
-    """Delete files that don't contribute to mathematical/trading core"""
-    files_to_delete = [
+    """Delete files that don't contribute to mathematical/trading core"""'
+    files_to_delete = []
         r"core\automated_flake8_fix.py",
         r"core\automated_system_fixes.py",
         r"core\bare_except_handling_fixes.py",

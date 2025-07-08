@@ -1,16 +1,15 @@
 import asyncio
 import logging
-from typing import Dict, Any, Optional, List, Tuple
+from typing import Dict, Any, Optional, List
 from dataclasses import dataclass
 from enum import Enum
 import time
-import hashlib
 
 import numpy as np
 
 try:
     import ccxt.async_support as ccxt  # type: ignore
-except ImportError:
+    except ImportError:
     ccxt = None  # type: ignore
     print("❌ CCXT not installed. Run: pip install ccxt")
 
@@ -20,7 +19,7 @@ from utils.secure_config_manager import SecureConfigManager
 """
 Real Multi-Exchange Trading Engine
 Supports multiple exchanges with mathematical arbitrage detection and routing optimization
-Based on Schwabot's mathematical optimization framework
+Based on Schwabot's mathematical optimization framework'
 """
 
 # Removed redundant placeholder try/except block
@@ -42,7 +41,7 @@ class SupportedExchange(Enum):
 
 
 @dataclass
-class ExchangeConfig:
+    class ExchangeConfig:
     """Configuration for exchange connection."""
 
     exchange: SupportedExchange
@@ -54,7 +53,7 @@ class ExchangeConfig:
 
 
 @dataclass
-class ArbitrageOpportunity:
+    class ArbitrageOpportunity:
     """Represents an arbitrage opportunity between exchanges."""
 
     buy_exchange: str
@@ -72,7 +71,7 @@ class ArbitrageOpportunity:
 
 
 @dataclass
-class RouteScore:
+    class RouteScore:
     """Represents routing score for exchange selection."""
 
     exchange: str
@@ -103,8 +102,8 @@ class RealMultiExchangeTrader:
         self.fee_cache: Dict[str, Dict[str, float]] = {}
 
         # Mathematical parameters
-        self.theta_arb = 0.002  # Arbitrage threshold (0.2%)
-        self.tau_fees = 0.001  # Fee impact threshold (0.1%)
+        self.theta_arb = 0.02  # Arbitrage threshold (0.2%)
+        self.tau_fees = 0.01  # Fee impact threshold (0.1%)
         self.lambda_latency = 0.1  # Latency weight
         self.gamma_liquidity = 0.3  # Liquidity weight
 
@@ -122,7 +121,7 @@ class RealMultiExchangeTrader:
             exchange_class = getattr(ccxt, exchange_name)
 
             # Create exchange instance with proper config
-            exchange_config = {
+            exchange_config = {}
                 "apiKey": config.get("api_key"),
                 "secret": config.get("secret"),
                 "sandbox": config.get("sandbox", True),
@@ -163,14 +162,16 @@ class RealMultiExchangeTrader:
             # Test basic connectivity
             await exchange.load_markets()
 
-            # Test balance access (requires read permission)
+            # Test balance access (requires read, permission)
             balance = await exchange.fetch_balance()
 
             # Record latency
             latency = time.time() - start_time
             self.latency_cache[name] = latency
 
-            logger.info(f"🔗 {name.upper()} connection test passed (latency: {latency:.3f}s)")
+            logger.info()
+                f"🔗 {name.upper()} connection test passed (latency: {latency:.3f}s)"
+            )
 
         except Exception as e:
             raise Exception("Connection test failed for {0}: {1}".format(name, e))
@@ -184,8 +185,14 @@ class RealMultiExchangeTrader:
         """
         return abs(price_1 - price_2)
 
-    def evaluate_arbitrage_opportunity(
-        self, buy_price: float, sell_price: float, buy_exchange: str, sell_exchange: str, symbol: str, volume: float
+    def evaluate_arbitrage_opportunity()
+        self,
+        buy_price: float,
+        sell_price: float,
+        buy_exchange: str,
+        sell_exchange: str,
+        symbol: str,
+        volume: float,
     ) -> Optional[ArbitrageOpportunity]:
         """
         Evaluate arbitrage opportunity using mathematical criteria.
@@ -205,8 +212,8 @@ class RealMultiExchangeTrader:
             return None
 
         # Calculate fees
-        buy_fee = self.fee_cache.get(buy_exchange, {}).get("taker", 0.001)
-        sell_fee = self.fee_cache.get(sell_exchange, {}).get("taker", 0.001)
+        buy_fee = self.fee_cache.get(buy_exchange, {}).get("taker", 0.01)
+        sell_fee = self.fee_cache.get(sell_exchange, {}).get("taker", 0.01)
         fees_total = (buy_price * buy_fee) + (sell_price * sell_fee)
 
         # Calculate net profit
@@ -218,7 +225,7 @@ class RealMultiExchangeTrader:
         if fee_impact > self.tau_fees:
             return None
 
-        return ArbitrageOpportunity(
+        return ArbitrageOpportunity()
             buy_exchange=buy_exchange,
             sell_exchange=sell_exchange,
             symbol=symbol,
@@ -233,7 +240,9 @@ class RealMultiExchangeTrader:
             timestamp=time.time(),
         )
 
-    def calculate_route_score(self, exchange: str, symbol: str, amount: float) -> RouteScore:
+    def calculate_route_score()
+        self, exchange: str, symbol: str, amount: float
+    ) -> RouteScore:
         """
         Calculate routing score for exchange selection.
 
@@ -242,10 +251,10 @@ class RealMultiExchangeTrader:
         """
         # Get cached metrics
         latency = self.latency_cache.get(exchange, 1.0)
-        fees = self.fee_cache.get(exchange, {}).get("taker", 0.001)
+        fees = self.fee_cache.get(exchange, {}).get("taker", 0.01)
 
-        # Estimate slippage (simplified model)
-        slippage = amount * 0.0001  # 0.01% per unit
+        # Estimate slippage (simplified, model)
+        slippage = amount * 0.001  # 0.1% per unit
 
         # Estimate liquidity (simplified)
         liquidity = 1.0  # Would be based on order book depth
@@ -255,17 +264,28 @@ class RealMultiExchangeTrader:
         total_cost = fee_cost + slippage
 
         # Score formula: higher is better
-        score = (liquidity * self.gamma_liquidity - total_cost) / (latency * self.lambda_latency + 1e-6)
-
-        return RouteScore(
-            exchange=exchange, score=score, latency=latency, fees=fee_cost, slippage=slippage, liquidity=liquidity
+        score = (liquidity * self.gamma_liquidity - total_cost) / ()
+            latency * self.lambda_latency + 1e-6
         )
 
-    def select_optimal_exchange(self, symbol: str, amount: float, exclude_exchanges: List[str] = None) -> Optional[str]:
+        return RouteScore()
+            exchange=exchange,
+            score=score,
+            latency=latency,
+            fees=fee_cost,
+            slippage=slippage,
+            liquidity=liquidity,
+        )
+
+    def select_optimal_exchange()
+        self, symbol: str, amount: float, exclude_exchanges: List[str] = None
+    ) -> Optional[str]:
         """Select optimal exchange based on routing scores."""
         exclude_exchanges = exclude_exchanges or []
 
-        available_exchanges = [ex for ex in self.active_exchanges if ex not in exclude_exchanges]
+        available_exchanges = []
+            ex for ex in self.active_exchanges if ex not in exclude_exchanges
+        ]
         if not available_exchanges:
             return None
 
@@ -278,12 +298,14 @@ class RealMultiExchangeTrader:
         # Select exchange with highest score
         best_score = max(scores, key=lambda x: x.score)
 
-        logger.info(
+        logger.info()
             f"Selected {best_score.exchange} for {symbol} (score: {best_score.score:.3f})"
         )
         return best_score.exchange
 
-    async def scan_arbitrage_opportunities(self, symbols: List[str]) -> List[ArbitrageOpportunity]:
+    async def scan_arbitrage_opportunities()
+        self, symbols: List[str]
+    ) -> List[ArbitrageOpportunity]:
         """Scan for arbitrage opportunities across all exchanges."""
         opportunities = []
 
@@ -298,13 +320,17 @@ class RealMultiExchangeTrader:
                     exchange = self.exchanges[exchange_name]
                     try:
                         ticker = await exchange.fetch_ticker(symbol)
-                        prices[exchange_name] = {
+                        prices[exchange_name] = {}
                             "bid": ticker.get("bid", 0),
                             "ask": ticker.get("ask", 0),
                             "volume": ticker.get("baseVolume", 0),
                         }
                     except Exception as e:
-                        logger.warning("Failed to fetch {0} from {1}: {2}".format(symbol, exchange_name, e))
+                        logger.warning()
+                            "Failed to fetch {0} from {1}: {2}".format()
+                                symbol, exchange_name, e
+                            )
+                        )
                         continue
 
                 # Find arbitrage opportunities
@@ -316,16 +342,23 @@ class RealMultiExchangeTrader:
                         # Use ask price for buying, bid price for selling
                         buy_price = buy_data["ask"]
                         sell_price = sell_data["bid"]
-                        volume = min(buy_data["volume"], sell_data["volume"]) * 0.01  # 1% of volume
+                        volume = ()
+                            min(buy_data["volume"], sell_data["volume"]) * 0.1
+                        )  # 1% of volume
 
                         if buy_price > 0 and sell_price > 0:
-                            opportunity = self.evaluate_arbitrage_opportunity(
-                                buy_price, sell_price, buy_exchange, sell_exchange, symbol, volume
+                            opportunity = self.evaluate_arbitrage_opportunity()
+                                buy_price,
+                                sell_price,
+                                buy_exchange,
+                                sell_exchange,
+                                symbol,
+                                volume,
                             )
 
                             if opportunity:
                                 opportunities.append(opportunity)
-                                logger.info(
+                                logger.info()
                                     f"Arbitrage opportunity: {symbol} {buy_exchange}→{sell_exchange} "
                                     f"profit: {opportunity.profit_percentage:.2%}"
                                 )
@@ -342,23 +375,29 @@ class RealMultiExchangeTrader:
 
         return opportunities
 
-    async def execute_arbitrage_trade(self, opportunity: ArbitrageOpportunity) -> Dict[str, Any]:
+    async def execute_arbitrage_trade()
+        self, opportunity: ArbitrageOpportunity
+    ) -> Dict[str, Any]:
         """Execute arbitrage trade across two exchanges."""
         try:
             # Execute buy order
             buy_exchange = self.exchanges[opportunity.buy_exchange]
-            buy_order = await buy_exchange.create_market_buy_order(opportunity.symbol, opportunity.volume_available)
+            buy_order = await buy_exchange.create_market_buy_order()
+                opportunity.symbol, opportunity.volume_available
+            )
 
             # Execute sell order
             sell_exchange = self.exchanges[opportunity.sell_exchange]
-            sell_order = await sell_exchange.create_market_sell_order(opportunity.symbol, opportunity.volume_available)
+            sell_order = await sell_exchange.create_market_sell_order()
+                opportunity.symbol, opportunity.volume_available
+            )
 
             # Calculate actual profit
             actual_buy_cost = buy_order.get("cost", 0)
             actual_sell_revenue = sell_order.get("cost", 0)
             actual_profit = actual_sell_revenue - actual_buy_cost
 
-            result = {
+            result = {}
                 "success": True,
                 "opportunity": opportunity,
                 "buy_order": buy_order,
@@ -372,7 +411,7 @@ class RealMultiExchangeTrader:
             # Store in execution history
             self.execution_history.append(result)
 
-            logger.info(
+            logger.info()
                 f"🚀 Arbitrage executed: {opportunity.symbol} profit: ${actual_profit:.2f}"
             )
 
@@ -380,9 +419,14 @@ class RealMultiExchangeTrader:
 
         except Exception as e:
             logger.error("❌ Arbitrage execution failed: {0}".format(e))
-            return {"success": False, "error": str(e), "opportunity": opportunity, "timestamp": time.time()}
+            return {}
+                "success": False,
+                "error": str(e),
+                "opportunity": opportunity,
+                "timestamp": time.time(),
+            }
 
-    async def execute_optimal_trade(
+    async def execute_optimal_trade()
         self, symbol: str, side: str, amount: float, order_type: str = "market"
     ) -> Dict[str, Any]:
         """Execute trade on optimal exchange."""
@@ -393,9 +437,11 @@ class RealMultiExchangeTrader:
         if not optimal_exchange:
             return {"error": "No suitable exchange found"}
 
-        return await self.execute_real_trade(optimal_exchange, symbol, side, amount, order_type)
+        return await self.execute_real_trade()
+            optimal_exchange, symbol, side, amount, order_type
+        )
 
-    async def execute_real_trade(
+    async def execute_real_trade()
         self,
         exchange_name: str,
         symbol: str,
@@ -414,26 +460,20 @@ class RealMultiExchangeTrader:
 
             if order_type == "market":
                 if side.lower() == "buy":
-                    order = await exchange.create_market_buy_order(
-                        symbol, amount
-                    )
+                    order = await exchange.create_market_buy_order(symbol, amount)
                 elif side.lower() == "sell":
-                    order = await exchange.create_market_sell_order(
-                        symbol, amount
-                    )
+                    order = await exchange.create_market_sell_order(symbol, amount)
                 else:
                     return {"error": "Invalid side: {0}".format(side)}
             else:
-                return {
-                    "error": "Order type {0} not implemented".format(order_type)
-                }
+                return {"error": "Order type {0} not implemented".format(order_type)}
 
             execution_time = time.time() - start_time
 
             # Update latency cache
             self.latency_cache[exchange_name] = execution_time
 
-            result = {
+            result = {}
                 "success": True,
                 "exchange": exchange_name,
                 "order": order,
@@ -451,8 +491,8 @@ class RealMultiExchangeTrader:
             # Store in execution history
             self.execution_history.append(result)
 
-            logger.info(
-                "🚀 REAL TRADE EXECUTED on {}: {} {} {} in {:.3f}s".format(
+            logger.info()
+                "🚀 REAL TRADE EXECUTED on {}: {} {} {} in {:.3f}s".format()
                     exchange_name.upper(), side, amount, symbol, execution_time
                 )
             )
@@ -460,7 +500,7 @@ class RealMultiExchangeTrader:
             return result
 
         except Exception as e:
-            logger.error(
+            logger.error()
                 "❌ Trade execution failed on {0}: {1}".format(exchange_name, e)
             )
             return {"error": str(e), "exchange": exchange_name}
@@ -478,19 +518,22 @@ class RealMultiExchangeTrader:
                 count = 0
 
                 for market in markets.values():
-                    if market.get("maker") is not None and market.get("taker") is not None:
+                    if ()
+                        market.get("maker") is not None
+                        and market.get("taker") is not None
+                    ):
                         total_maker_fee += market["maker"]
                         total_taker_fee += market["taker"]
                         count += 1
 
                 if count > 0:
-                    self.fee_cache[exchange_name] = {
+                    self.fee_cache[exchange_name] = {}
                         "maker": total_maker_fee / count,
                         "taker": total_taker_fee / count,
                     }
 
             except Exception as e:
-                logger.warning(
+                logger.warning()
                     "Failed to update fees for {0}: {1}".format(exchange_name, e)
                 )
 
@@ -507,22 +550,18 @@ class RealMultiExchangeTrader:
     def get_performance_metrics(self) -> Dict[str, Any]:
         """Get comprehensive performance metrics."""
         total_trades = len(self.execution_history)
-        successful_trades = sum(
+        successful_trades = sum()
             1 for trade in self.execution_history if trade.get("success", False)
         )
 
         arbitrage_count = len(self.arbitrage_history)
-        total_arbitrage_profit = sum(
-            arb.net_profit for arb in self.arbitrage_history
+        total_arbitrage_profit = sum(arb.net_profit for arb in self.arbitrage_history)
+
+        avg_latency = ()
+            np.mean(list(self.latency_cache.values())) if self.latency_cache else 0.0
         )
 
-        avg_latency = (
-            np.mean(list(self.latency_cache.values()))
-            if self.latency_cache
-            else 0.0
-        )
-
-        return {
+        return {}
             "total_trades": total_trades,
             "successful_trades": successful_trades,
             "success_rate": successful_trades / max(1, total_trades),
@@ -536,14 +575,12 @@ class RealMultiExchangeTrader:
     async def get_account_balance(self, exchange_name: str) -> Dict[str, Any]:
         """Get account balance from exchange."""
         if exchange_name not in self.exchanges:
-            return {
-                "error": "Exchange {0} not configured".format(exchange_name)
-            }
+            return {"error": "Exchange {0} not configured".format(exchange_name)}
 
         try:
             exchange = self.exchanges[exchange_name]
             balance = await exchange.fetch_balance()
-            return {
+            return {}
                 "success": True,
                 "balance": balance,
                 "exchange": exchange_name,
@@ -551,9 +588,7 @@ class RealMultiExchangeTrader:
         except Exception as e:
             return {"error": str(e), "exchange": exchange_name}
 
-    async def get_market_price(
-        self, exchange_name: str, symbol: str
-    ) -> Dict[str, Any]:
+    async def get_market_price(self, exchange_name: str, symbol: str) -> Dict[str, Any]:
         """Get current market price from exchange."""
         if exchange_name not in self.exchanges:
             return {"error": "Exchange {0} not configured".format(exchange_name)}
@@ -565,7 +600,7 @@ class RealMultiExchangeTrader:
             # Update price cache
             self.price_cache[exchange_name][symbol] = ticker.get("last", 0)
 
-            return {
+            return {}
                 "success": True,
                 "symbol": symbol,
                 "price": ticker.get("last"),
@@ -586,15 +621,15 @@ class RealMultiExchangeTrader:
 
             try:
                 # Get stored credentials
-                api_key = self.secure_config.get_secure_api_key(
+                api_key = self.secure_config.get_secure_api_key()
                     "{0}_api_key".format(exchange_name)
                 )
-                secret = self.secure_config.get_secure_api_key(
+                secret = self.secure_config.get_secure_api_key()
                     "{0}_secret".format(exchange_name)
                 )
 
                 if api_key and secret:
-                    config = {
+                    config = {}
                         "api_key": api_key,
                         "secret": secret,
                         "sandbox": True,  # Use sandbox by default
@@ -603,7 +638,7 @@ class RealMultiExchangeTrader:
 
                     # Add passphrase for Coinbase Pro
                     if exchange_name == "coinbasepro":
-                        passphrase = self.secure_config.get_secure_api_key(
+                        passphrase = self.secure_config.get_secure_api_key()
                             "{0}_passphrase".format(exchange_name)
                         )
                         if passphrase:

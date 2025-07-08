@@ -18,7 +18,7 @@ class ProfitTierAdjuster:
     def __init__(self, tier_thresholds: Dict[str, Any]):
         self.tier_thresholds = tier_thresholds
 
-    def adjust_tier(
+    def adjust_tier()
         self,
         current_tier: ProfitTier,
         swing_metrics: Dict[str, Any],
@@ -30,17 +30,16 @@ class ProfitTierAdjuster:
         """
         tier = current_tier
         # If swing strength is very high, consider moving up to aggressive
-        strength = swing_metrics.get('swing_strength', 0.0)
+        strength = swing_metrics.get("swing_strength", 0.0)
         if strength > 0.7 and current_tier != ProfitTier.TIER_3_AGGRESSIVE:
-            logger.info(
+            logger.info()
                 "ProfitTierAdjuster: upgrading to TIER_3_AGGRESSIVE due to swing strength"
             )
             return ProfitTier.TIER_3_AGGRESSIVE
         # If strong sell walls detected, consider moving to more moderate tier
-        sell_wall = wall_signals.get('sell_wall_strength', 0.0)
-        if sell_wall > 1.0 and \
-                current_tier == ProfitTier.TIER_3_AGGRESSIVE:
-            logger.info(
+        sell_wall = wall_signals.get("sell_wall_strength", 0.0)
+        if sell_wall > 1.0 and current_tier == ProfitTier.TIER_3_AGGRESSIVE:
+            logger.info()
                 "ProfitTierAdjuster: downgrading to TIER_2_MODERATE due to sell wall pressure"
             )
             return ProfitTier.TIER_2_MODERATE

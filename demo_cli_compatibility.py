@@ -1,7 +1,7 @@
-            from core.math_core import MathCore
-        from core.unified_math_system import unified_math
+from core.math_core import MathCore
 from core.unified_math_system import unified_math
-        from core.constants import FERRIS_PRIMARY_CYCLE
+from core.unified_math_system import unified_math
+from core.constants import FERRIS_PRIMARY_CYCLE
 from core.constants import PSI_INFINITY
 from dual_unicore_handler import DualUnicoreHandler
 import os
@@ -43,7 +43,7 @@ def safe_print_with_fallback(message):"""
 """"""
 """"""
 """
- emoji_map = {"""
+ emoji_map = {"""}
       "\\u2705": "[SUCCESS]",
       "\\u274c": "[ERROR]",
         "\\u26a0\\ufe0f": "[WARNING]",
@@ -60,8 +60,8 @@ def safe_print_with_fallback(message):"""
         "\\u1f300": "[SPIRAL]",
         "\\u1f4b0": "[MONEY]",
 
-# Check if we're in Windows CLI environment
-  is_windows_cli = platform.system() == "Windows" and (
+# Check if we're in Windows CLI environment'
+  is_windows_cli = platform.system() == "Windows" and ()
        "cmd" in os.environ.get("COMSPEC", "").lower()
         or "PSModulePath" in os.environ
 )
@@ -73,7 +73,7 @@ def safe_print_with_fallback(message):"""
         try:
             print(safe_message)
         except UnicodeEncodeError:
-            ascii_safe = safe_message.encode("ascii", errors="replace").decode(
+            ascii_safe = safe_message.encode("ascii", errors="replace").decode()
                 "ascii"
 )
 print(ascii_safe)
@@ -81,7 +81,7 @@ print(ascii_safe)
         try:
             print(message)
         except UnicodeEncodeError:
-            ascii_safe = message.encode("ascii", errors="replace").decode(
+            ascii_safe = message.encode("ascii", errors="replace").decode()
                 "ascii"
 )
 print(ascii_safe)
@@ -114,7 +114,7 @@ safe_print_with_fallback(f"\\u1f527 PowerShell: {powershell_detected}")
 safe_print_with_fallback("\\n\\u1f4c8 EMOJI FALLBACK TESTING:")
 
 # Test various emoji scenarios
-test_cases = [
+test_cases = []
         "\\u2705 Mathematical integration test PASSED",
         "\\u1f3af Target acquired: Advanced trading algorithms",
         "\\u1f4ca Processing market data with \\u26a1 lightning speed",
@@ -123,7 +123,7 @@ test_cases = [
         "\\u26a0\\ufe0f Warning: \\u1f525 High volatility detected",
         "\\u1f389 System deployment COMPLETE!",
 ]
-for i, test_case in enumerate(test_cases, 1):
+    for i, test_case in enumerate(test_cases, 1):
         safe_print_with_fallback(f"  {i}. {test_case}")
 
 safe_print_with_fallback("\\n\\u1f9ea MATHEMATICAL VALIDATION CLI SAFETY:")
@@ -141,7 +141,7 @@ safe_print_with_fallback(f"\\u1f4ca Data mean: {mean_val:.4f}")
         safe_print_with_fallback(f"\\u1f4ca Data std: {std_val:.4f}")
 
 except ImportError:
-        safe_print_with_fallback(
+        safe_print_with_fallback()
             "\\u26a0\\ufe0f NumPy not available - using basic operations"
 )
 data = [1, 2, 3, 4, 5]
@@ -164,8 +164,8 @@ math_core = MathCore()
             safe_print_with_fallback("\\u2705 MathCore initialized successfully")
 
 # Test with sample data
-test_result = math_core.process(
-                {
+test_result = math_core.process()
+                {}
                     "price_data": [50000, 50100, 49900, 50200],
                     "volume_data": [1000, 1200, 800, 1100],
             )
@@ -173,17 +173,17 @@ test_result = math_core.process(
 if test_result.get("status") == "processed":
                 safe_print_with_fallback("\\u2705 MathCore processing test PASSED")
             else:
-                safe_print_with_fallback(
+                safe_print_with_fallback()
                     "\\u26a0\\ufe0f MathCore processing test completed with warnings"
 )
 
 except ImportError:
-            safe_print_with_fallback(
+            safe_print_with_fallback()
                 "\\u26a0\\ufe0f MathCore not available - core constants working"
 )
 
 except ImportError:
-        safe_print_with_fallback(
+        safe_print_with_fallback()
             "\\u26a0\\ufe0f Core modules not available - using fallback demonstrations"
 )
 
@@ -195,10 +195,10 @@ safe_print_with_fallback("\\n\\u1f389 RESULTS SUMMARY:")
     safe_print_with_fallback("\\u2705 Windows CLI compatibility: BULLETPROOF")
 
 safe_print_with_fallback("\\n\\u1f680 DEPLOYMENT READY!")
-    safe_print_with_fallback(
+    safe_print_with_fallback()
         "Your mathematical validation systems will work flawlessly"
 )
-safe_print_with_fallback(
+safe_print_with_fallback()
         "across ALL Windows CLI environments with robust fallbacks."
 )
 safe_print_with_fallback("=" * 60)

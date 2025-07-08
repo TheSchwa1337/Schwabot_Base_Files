@@ -35,7 +35,7 @@ class MathLib:
     def calculate(self, operation: str, data: Vector, *args: Any, **kwargs: Any) -> Dict[str, Any]:
         """Calculate various mathematical operations."""
         try:
-            operations = {
+            operations = {}
                 "mean": self.mean,
                 "std": self.standard_deviation,
                 "variance": self.variance,
@@ -46,7 +46,7 @@ class MathLib:
             }
 
             if operation not in operations:
-                return {
+                return {}
                     "operation": operation,
                     "error": f"Unknown operation: {operation}",
                     "available_operations": list(operations.keys()),
@@ -55,7 +55,7 @@ class MathLib:
 
             result = operations[operation](data, *args, **kwargs)
 
-            return {
+            return {}
                 "operation": operation,
                 "result": result,
                 "data_length": len(data),
@@ -65,7 +65,7 @@ class MathLib:
 
         except Exception as e:
             logger.error(f"Error in calculation {operation}: {e}")
-            return {
+            return {}
                 "operation": operation,
                 "error": str(e),
                 "version": self.version,

@@ -1,21 +1,21 @@
-            from core.mathlib_v4 import MathLibV4
-            from core.matrix_math_utils import analyze_price_matrix
-            from core.unified_math_system import UnifiedMathSystem
-            import numpy as np
-        from core.mathlib_v4 import MathLibV4
-        from core.matrix_math_utils import analyze_price_matrix
-        from core.unified_math_system import UnifiedMathSystem
-        from core.enhanced_strategy_framework import (
-        from core.enhanced_strategy_framework import (
-        from core.risk_manager import RiskManager
-        from core.risk_manager import RiskManager
-        from core.strategy_integration_bridge import (
-        from core.strategy_integration_bridge import create_strategy_integration_bridge
-        from core.strategy_integration_bridge import create_strategy_integration_bridge
-        from core.strategy_integration_bridge import create_strategy_integration_bridge
-        from core.strategy_logic import StrategyLogic
-        from core.unified_trading_pipeline import UnifiedTradingPipeline
-        import subprocess
+from core.mathlib_v4 import MathLibV4
+from core.matrix_math_utils import analyze_price_matrix
+from core.unified_math_system import UnifiedMathSystem
+import numpy as np
+from core.mathlib_v4 import MathLibV4
+from core.matrix_math_utils import analyze_price_matrix
+from core.unified_math_system import UnifiedMathSystem
+from core.enhanced_strategy_framework import ()
+from core.enhanced_strategy_framework import ()
+from core.risk_manager import RiskManager
+from core.risk_manager import RiskManager
+from core.strategy_integration_bridge import ()
+from core.strategy_integration_bridge import create_strategy_integration_bridge
+from core.strategy_integration_bridge import create_strategy_integration_bridge
+from core.strategy_integration_bridge import create_strategy_integration_bridge
+from core.strategy_logic import StrategyLogic
+from core.unified_trading_pipeline import UnifiedTradingPipeline
+import subprocess
 from pathlib import Path
 import asyncio
 import logging
@@ -24,10 +24,10 @@ import time
 
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Comprehensive Integration Test - Enhanced Strategy Framework with Schwabot Pipeline.
+"""Comprehensive Integration Test - Enhanced Strategy Framework with Schwabot Pipeline."
 
 Comprehensive test suite validating the integration between:
-1. Enhanced Strategy Framework (Wall Street strategies)
+1. Enhanced Strategy Framework (Wall Street, strategies)
 2. Strategy Integration Bridge
 3. Schwabot Mathematical Pipeline
 4. API endpoints and visualization integration
@@ -41,7 +41,7 @@ Windows CLI compatible with detailed error reporting.
 
 
 # Configure logging
-logging.basicConfig(
+logging.basicConfig()
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
@@ -51,7 +51,7 @@ def check_import_compatibility():
     """Check import compatibility and component availability."""
     print("🔍 Checking Component Import Compatibility...")
 
-    import_status = {
+    import_status = {}
         "enhanced_framework": False,
         "integration_bridge": False,
         "core_components": False,
@@ -109,7 +109,7 @@ def test_enhanced_strategy_framework():
         )
 
         # Create framework with test configuration
-        config = {
+        config = {}
             "max_signal_history": 100,
             "min_signal_confidence": 0.6,
             "enable_dynamic_weights": True,
@@ -120,7 +120,7 @@ def test_enhanced_strategy_framework():
         # Test 1: Framework initialization
         assert framework.version == "2.0.0"
         assert len(framework.active_strategies) > 0
-        print(
+        print()
             f"   ✅ Framework initialized with {len(framework.active_strategies)} strategies"
         )
 
@@ -135,7 +135,7 @@ def test_enhanced_strategy_framework():
             framework._update_market_data("BTC/USDT", price, volume)
 
         # Generate signals
-        signals = framework.generate_wall_street_signals(
+        signals = framework.generate_wall_street_signals()
             asset="BTC/USDT", price=55000.0, volume=1500.0, timeframe=TimeFrame.ONE_HOUR
         )
 
@@ -181,7 +181,7 @@ async def test_strategy_integration_bridge():
     try:
 
         # Create integration bridge
-        config = {
+        config = {}
             "correlation_threshold": 0.5,
             "max_integrated_signals": 10,
             "enable_api_endpoints": True,
@@ -197,7 +197,7 @@ async def test_strategy_integration_bridge():
         # Test 2: Integrated signal processing
         print("   🔄 Processing integrated trading signals...")
 
-        integrated_signals = await bridge.process_integrated_trading_signal(
+        integrated_signals = await bridge.process_integrated_trading_signal()
             asset="BTC/USDT", price=52000.0, volume=1200.0
         )
 
@@ -209,7 +209,7 @@ async def test_strategy_integration_bridge():
             assert hasattr(signal, "mathematical_confidence")
             assert hasattr(signal, "composite_confidence")
             assert hasattr(signal, "correlation_score")
-            assert (
+            assert ()
                 signal.composite_confidence >= 0.0
                 and signal.composite_confidence <= 1.0
             )
@@ -237,9 +237,9 @@ async def test_strategy_integration_bridge():
         assert "orchestration_state" in status
         print("   ✅ Integration status reporting working")
 
-        # Test 6: Signal execution (dry run)
+        # Test 6: Signal execution (dry, run)
         if integrated_signals:
-            execution_result = await bridge.execute_integrated_signal(
+            execution_result = await bridge.execute_integrated_signal()
                 integrated_signals[0]
             )
             assert isinstance(execution_result, dict)
@@ -263,7 +263,7 @@ def test_mathematical_integration():
             mathlib = MathLibV4(precision=64)
 
             # Test basic mathematical operations
-            test_data = {
+            test_data = {}
                 "prices": [50000.0, 50100.0, 50200.0, 50150.0, 50300.0],
                 "volumes": [100.0, 110.0, 120.0, 115.0, 130.0],
                 "timestamps": [time.time() - i for i in range(5)],
@@ -314,20 +314,20 @@ def test_risk_management_integration():
     try:
 
         # Initialize risk manager
-        config = {
-            "max_portfolio_risk": 0.02,
+        config = {}
+            "max_portfolio_risk": 0.2,
             "max_position_size": 0.1,
-            "risk_free_rate": 0.02,
+            "risk_free_rate": 0.2,
         }
 
         risk_manager = RiskManager(config)
 
         # Test risk calculation
-        test_data = {
+        test_data = {}
             "asset": "BTC/USDT",
             "price": 50000.0,
             "volume": 1000.0,
-            "position_size": 0.05,
+            "position_size": 0.5,
         }
 
         risk_metrics = risk_manager.calculate_risk_metrics(test_data)
@@ -357,8 +357,8 @@ def test_api_visualization_integration():
         test_results = []
 
         for endpoint_name in api_endpoints.keys():
-            test_results.append(
-                {
+            test_results.append()
+                {}
                     "endpoint": endpoint_name,
                     "available": True,
                     "data_structure": "dict",  # All endpoints return dict
@@ -368,7 +368,7 @@ def test_api_visualization_integration():
         print(f"   ✅ {len(test_results)} API endpoints ready for visualization")
 
         # Check for visualization dashboard files
-        dashboard_files = [
+        dashboard_files = []
             "unified_visual_dashboard.html",
             "enhanced_crypto_dashboard.html",
         ]
@@ -393,7 +393,7 @@ async def test_end_to_end_integration():
     try:
 
         # Create complete integration
-        config = {
+        config = {}
             "correlation_threshold": 0.5,
             "enable_real_time_optimization": True,
             "enable_api_endpoints": True,
@@ -404,7 +404,7 @@ async def test_end_to_end_integration():
         print("   📊 Simulating complete trading cycle...")
 
         # Simulate market data sequence
-        market_data_sequence = [
+        market_data_sequence = []
             {"asset": "BTC/USDT", "price": 50000.0, "volume": 1000.0},
             {"asset": "BTC/USDT", "price": 50200.0, "volume": 1100.0},
             {"asset": "BTC/USDT", "price": 50400.0, "volume": 1200.0},
@@ -415,14 +415,14 @@ async def test_end_to_end_integration():
         all_signals = []
 
         for data in market_data_sequence:
-            signals = await bridge.process_integrated_trading_signal(
+            signals = await bridge.process_integrated_trading_signal()
                 asset=data["asset"], price=data["price"], volume=data["volume"]
             )
             all_signals.extend(signals)
 
         print(f"   ✅ Generated {len(all_signals)} total integrated signals")
 
-        # Test signal execution (dry run)
+        # Test signal execution (dry, run)
         executed_signals = 0
         for signal in all_signals[:3]:  # Test first 3 signals
             try:
@@ -455,7 +455,7 @@ def test_flake8_compliance():
 
     try:
 
-        files_to_check = [
+        files_to_check = []
             "core/enhanced_strategy_framework.py",
             "core/strategy_integration_bridge.py",
         ]
@@ -463,8 +463,8 @@ def test_flake8_compliance():
         for file_path in files_to_check:
             if Path(file_path).exists():
                 try:
-                    result = subprocess.run(
-                        [
+                    result = subprocess.run()
+                        []
                             "python",
                             "-m",
                             "flake8",
@@ -543,14 +543,14 @@ async def run_comprehensive_integration_test():
             passed_tests += 1
 
     success_rate = (passed_tests / total_tests) * 100
-    print(
+    print()
         f"\n🎯 Overall Success Rate: {passed_tests}/{total_tests} ({success_rate:.1f}%)"
     )
 
     if success_rate >= 80:
         print("\n🎉 EXCELLENT: Integration is ready for production!")
         print("   All critical components are working correctly.")
-        print(
+        print()
             "   Wall Street strategies are properly integrated with Schwabot pipeline."
         )
         print("   Mathematical framework integration is functional.")

@@ -8,7 +8,7 @@ def check_file(filepath):
             f.read()
         return True
     except UnicodeDecodeError:
-        print(f"Problematic file (encoding issue): {filepath}")
+        print(f"Problematic file (encoding, issue): {filepath}")
         return False
     except Exception as e:
         print(f"Error reading {filepath}: {e}")

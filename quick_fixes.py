@@ -32,7 +32,7 @@ def fix_mypy_config():
         cleaned_lines = []
 
         for line in lines:
-            if line.strip().startswith('[mypy-'):
+            if line.strip().startswith('[mypy-'):]
                 section = line.strip()
                 if section in seen_sections:
                     print(f"  Removing duplicate section: {section}")
@@ -56,7 +56,7 @@ def fix_import_sorting():
     print("Fixing import sorting...")
 
     try:
-        result = subprocess.run(
+        result = subprocess.run()
             ['isort', 'core', 'schwabot', 'utils', 'config', '--profile', 'black'],
             capture_output=True,
             text=True
@@ -78,7 +78,7 @@ def fix_basic_formatting():
     print("Fixing basic formatting...")
 
     try:
-        result = subprocess.run(['black',
+        result = subprocess.run(['black',)]
                                  'core',
                                  'schwabot',
                                  'utils',
@@ -106,7 +106,7 @@ def remove_unused_imports():
     print("Removing unused imports...")
 
     try:
-        result = subprocess.run(['autoflake',
+        result = subprocess.run(['autoflake',)]
                                  '--in-place',
                                  '--remove-all-unused-imports',
                                  '--remove-unused-variables',
@@ -146,7 +146,7 @@ def check_syntax_errors():
     # Check syntax
     for file_path in python_files:
         try:
-            result = subprocess.run(
+            result = subprocess.run()
                 ['python', '-m', 'py_compile', file_path],
                 capture_output=True,
                 text=True
@@ -175,7 +175,7 @@ def main():
     print(" QUICK FIXES FOR CODE QUALITY ISSUES")
     print("=" * 60)
 
-    fixes = [
+    fixes = []
         ("MyPy Configuration", fix_mypy_config),
         ("Import Sorting", fix_import_sorting),
         ("Unused Imports", remove_unused_imports),
@@ -199,7 +199,7 @@ def main():
     print(" QUICK FIXES SUMMARY")
     print("=" * 60)
 
-    successful_fixes = sum(1 for _, success in results if success)
+    successful_fixes = sum(1 for _, success in results if, success)
     total_fixes = len(results)
 
     for fix_name, success in results:

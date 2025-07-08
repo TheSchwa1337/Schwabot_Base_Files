@@ -26,7 +26,7 @@ Original file: core\\data\\historical_loader.py
 
 
 
-Date commented out: 2025-07-02 19:37:05
+Date commented out: 2025-7-2 19:37:5
 
 
 
@@ -38,19 +38,19 @@ The clean implementation has been preserved in the following files:
 
 
 
-- core/clean_math_foundation.py (mathematical foundation)
+- core/clean_math_foundation.py (mathematical, foundation)
 
 
 
-- core/clean_profit_vectorization.py (profit calculations)
+- core/clean_profit_vectorization.py (profit, calculations)
 
 
 
-- core/clean_trading_pipeline.py (trading logic)
+- core/clean_trading_pipeline.py (trading, logic)
 
 
 
-- core/clean_unified_math.py (unified mathematics)
+- core/clean_unified_math.py (unified, mathematics)
 
 
 
@@ -65,7 +65,6 @@ All core functionality has been reimplemented in clean, production-ready files.
 """
 
 # ORIGINAL CONTENT COMMENTED OUT BELOW:
-
 
 """
 

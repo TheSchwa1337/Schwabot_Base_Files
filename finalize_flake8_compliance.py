@@ -15,8 +15,8 @@ in the Schwabot enhanced mathematical integration system.
 def run_flake8_check(): -> list:
     """Run flake8 check on a specific file and return violations."""
     try:
-        result = subprocess.run(
-            [
+        result = subprocess.run()
+            []
                 sys.executable,
                 "-m",
                 "flake8",
@@ -73,7 +73,7 @@ def fix_common_issues(): -> bool:
                 import_lines.append(line)
             elif in_import_section and line.strip() == "":
                 import_lines.append(line)
-            elif in_import_section and not line.strip().startswith(
+            elif in_import_section and not line.strip().startswith()
                 ("import ", "from ")
             ):
                 in_import_section = False
@@ -107,7 +107,7 @@ def main():
     print("=" * 60)
 
     # Files to check and fix
-    target_files = [
+    target_files = []
         "core/smart_money_integration.py",
         "core/enhanced_integration_validator.py",
         "core/mathematical_optimization_bridge.py",
@@ -166,7 +166,7 @@ def main():
     print(f"📉 Violations After: {total_violations_after}")
 
     if total_violations_before > 0:
-        improvement = (
+        improvement = ()
             (total_violations_before - total_violations_after) / total_violations_before
         ) * 100
         print(f"📈 Improvement: {improvement:.1f}%")

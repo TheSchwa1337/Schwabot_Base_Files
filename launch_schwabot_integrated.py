@@ -1,21 +1,21 @@
-        import math
-            from core.chrono_resonance_weather_mapper import (
-            from core.data_pipeline_visualizer import (
-            from core.enhanced_profit_trading_strategy import (
-            from core.secure_api_coordinator import SecureAPICoordinator
-            import random
-        from core.chrono_resonance_weather_mapper import WeatherDataPoint
-        from core.data_pipeline_visualizer import DataCategory
-        from core.schwabot_integrated_launcher import SchwabotIntegratedLauncher
-        from datetime import datetime, timedelta
-        import random
-        import random
+import math
+from core.chrono_resonance_weather_mapper import ()
+from core.data_pipeline_visualizer import ()
+from core.enhanced_profit_trading_strategy import ()
+from core.secure_api_coordinator import SecureAPICoordinator
+import random
+from core.chrono_resonance_weather_mapper import WeatherDataPoint
+from core.data_pipeline_visualizer import DataCategory
+from core.schwabot_integrated_launcher import SchwabotIntegratedLauncher
+from datetime import datetime, timedelta
+import random
+import random
 import logging
 import sys
 
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Schwabot Integrated Launcher Demo - Complete System Demonstration.
+"""Schwabot Integrated Launcher Demo - Complete System Demonstration."
 
 This script demonstrates the complete Schwabot integrated system including:
 1. Secure API management and key storage
@@ -30,7 +30,7 @@ Usage:
 
 
 # Set up logging
-logging.basicConfig(
+logging.basicConfig()
     level=logging.INFO,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     handlers=[logging.StreamHandler(), logging.FileHandler("schwabot_launcher.log")],
@@ -42,7 +42,7 @@ logger=logging.getLogger(__name__)
 def check_dependencies():
     """Check if required dependencies are available."""
     required_modules=[]
-    optional_modules=[
+    optional_modules=[]
         ("numpy", "NumPy for mathematical operations"),
         ("scipy", "SciPy for advanced mathematical functions"),
         ("psutil", "PSUtil for system monitoring"),
@@ -75,10 +75,10 @@ def check_dependencies():
         return False
 
     if missing_optional:
-        logger.info(
+        logger.info()
             "📝 Some optional features may not be available due to missing dependencies"
         )
-        logger.info(
+        logger.info()
             "To install all dependencies, run: pip install numpy scipy psutil cryptography requests aiohttp"
         )
 
@@ -92,7 +92,7 @@ def create_demo_launcher():
     print("=" * 50)
 
     # Initialize demo components
-    components={
+    components={}
         "api_coordinator": None,
         "data_pipeline": None,
         "crwm_mapper": None,
@@ -149,7 +149,7 @@ def create_demo_launcher():
 def run_demo_without_ui(components):
     """Run a demo without UI components."""
 
-    print("\n🎯 Running System Demo (Console Mode)")
+    print("\n🎯 Running System Demo (Console, Mode)")
     print("-" * 40)
 
     # Demo API Coordinator
@@ -193,7 +193,7 @@ def run_demo_without_ui(components):
             humidity = 60 + random.uniform(-20, 20)
             wind_speed = 3 + random.uniform(0, 5)
 
-            weather_point = WeatherDataPoint(
+            weather_point = WeatherDataPoint()
                 timestamp=timestamp,
                 location="Demo Location",
                 temperature=temp,
@@ -217,8 +217,8 @@ def run_demo_without_ui(components):
         # Get weather signature
         signature = crwm.get_weather_signature("1h")
         if signature:
-            print(
-                f"  Current temperature: {
+            print()
+                f"  Current temperature: {"}
                     signature['current_conditions']['temperature']:.1f}°C"
             )
             print(f"  Trading signal: {signature['trading_signals']['direction']}")
@@ -232,11 +232,11 @@ def run_demo_without_ui(components):
         try:
             # Simulate market data
 
-            demo_market_data = {
+            demo_market_data = {}
                 "btc_price": 45000 + random.uniform(-1000, 1000),
                 "volume_24h": 2500000000 + random.uniform(-500000000, 500000000),
                 "price_change_24h": random.uniform(-5, 5),
-                "volatility": random.uniform(0.02, 0.08),
+                "volatility": random.uniform(0.2, 0.8),
             }
 
             result = profit_engine.analyze_market_conditions(demo_market_data)
@@ -244,7 +244,7 @@ def run_demo_without_ui(components):
 
         except Exception as e:
             logger.warning(f"Profit engine demo error: {e}")
-            print("  Profit engine initialized (demo data simulation failed)")
+            print("  Profit engine initialized (demo data simulation, failed)")
 
     print("\n✅ Demo completed successfully!")
 
@@ -292,7 +292,7 @@ def main():
     available_components = sum(1 for comp in components.values() if comp is not None)
     total_components = len(components)
 
-    print(
+    print()
         f"\n📊 System Status: {available_components}/{total_components} components available"
     )
 
@@ -302,8 +302,8 @@ def main():
 
     # Ask user for demo mode
     print("\n🎯 Select demo mode:")
-    print("1. Console demo (works with any setup)")
-    print("2. UI demo (requires tkinter)")
+    print("1. Console demo (works with any, setup)")
+    print("2. UI demo (requires, tkinter)")
     print("3. Full integration test")
 
     try:
@@ -333,7 +333,7 @@ def main():
         return 1
 
     print("\n🎉 Schwabot Integrated System Demo completed!")
-    print(
+    print()
         "📖 For more information, check the documentation files in the project directory."
     )
 

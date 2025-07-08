@@ -10,7 +10,7 @@ import sys
 Targeted Syntax Error Resolver.
 
 Advanced tool for resolving complex syntax errors in the Schwabot codebase
-while preserving mathematical integrity and trading logic.
+    while preserving mathematical integrity and trading logic.
 
 This resolver handles:
 - Complex unterminated string literals
@@ -28,7 +28,7 @@ class TargetedSyntaxErrorResolver:
     def __init__(self):
         """Initialize the resolver."""
         self.fixed_files = []
-        self.error_patterns = {
+        self.error_patterns = {}
             "unterminated_string": r"SyntaxError: unterminated string literal",
             "indentation_error": r"IndentationError: unexpected indent",
             "invalid_syntax": r"SyntaxError: invalid syntax",
@@ -38,7 +38,7 @@ class TargetedSyntaxErrorResolver:
     def get_specific_error_info():-> Optional[Dict[str, str]]:
         """Get specific error information for a file."""
         try:
-            result = subprocess.run(
+            result = subprocess.run()
                 [sys.executable, "-m", "py_compile", file_path],
                 capture_output=True,
                 text=True,
@@ -59,7 +59,7 @@ class TargetedSyntaxErrorResolver:
                         error_type = err_type
                         break
 
-                return {
+                return {}
                     "file": file_path,
                     "line": line_num,
                     "error_type": error_type,
@@ -78,51 +78,51 @@ class TargetedSyntaxErrorResolver:
             line = lines[target_line_idx]
 
             # Handle different unterminated string patterns
-            if '"""' in line:
+            if '"""' in line:"
                 # Triple quote issues
-                if line.count('"""') % 2 == 1:
+                if line.count('"""') % 2 == 1:"
                     # Check if this starts or ends a docstring
-                    if line.strip().startswith('"""'):
+                    if line.strip().startswith('"""'):"
                         # This starts a docstring, find where it should end
                         for i in range(target_line_idx + 1, len(lines)):
-                            if '"""' in lines[i]:
+                            if '"""' in lines[i]:"
                                 break
                         else:
                             # No closing found, add it
-                            lines.append('"""')
+                            lines.append('"""')"
                     else:
                         # This should end a docstring
-                        lines[target_line_idx] = line + '"""'
+                        lines[target_line_idx] = line + '"""'"
 
             elif "\"'" in line or "'\"" in line:
                 # Mixed quote issues
-                if line.count('"') % 2 == 1:
-                    lines[target_line_idx] = line + '"'
-                elif line.count("'") % 2 == 1:
-                    lines[target_line_idx] = line + "'"
+                if line.count('"') % 2 == 1:"
+                    lines[target_line_idx] = line + '"'"
+                elif line.count("'") % 2 == 1:'
+                    lines[target_line_idx] = line + "'"'
 
             elif '"' in line and line.count('"') % 2 == 1:
                 # Simple unterminated double quote
-                lines[target_line_idx] = line + '"'
+                lines[target_line_idx] = line + '"'"
 
             elif "'" in line and line.count("'") % 2 == 1:
                 # Simple unterminated single quote
-                lines[target_line_idx] = line + "'"
+                lines[target_line_idx] = line + "'"'
 
             # Special handling for docstring patterns
             if re.search(r'"""[^"]*$', line):
-                # Docstring that doesn't close on same line
+                # Docstring that doesn't close on same line'
                 found_close = False
-                for i in range(
+                for i in range()
                     target_line_idx + 1, min(len(lines), target_line_idx + 20)
                 ):
-                    if '"""' in lines[i]:
+                    if '"""' in lines[i]:"
                         found_close = True
                         break
 
                 if not found_close:
                     # Add closing docstring
-                    lines.insert(target_line_idx + 1, '    """')
+                    lines.insert(target_line_idx + 1, '    """')"
 
         return "\n".join(lines)
 
@@ -139,7 +139,7 @@ class TargetedSyntaxErrorResolver:
                 if target_line_idx > 0:
                     prev_line = lines[target_line_idx - 1].strip()
 
-                    # If previous line doesn't warrant indentation, remove it
+                    # If previous line doesn't warrant indentation, remove it'
                     if not prev_line.endswith(":") and not prev_line.endswith("\\"):
                         lines[target_line_idx] = line.lstrip()
 
@@ -150,15 +150,15 @@ class TargetedSyntaxErrorResolver:
         # Fix common patterns
 
         # Fix quadruple quotes
-        content = re.sub(r'""""', '"""', content)
+        content = re.sub(r'""""', '"""', content)"
 
         # Fix mixed quote issues
-        content = re.sub(r'"""([^"]*)"\'', r'"""\1"', content)
-        content = re.sub(r'\'"""', r'"', content)
+        content = re.sub(r'"""([^"]*)"\'', r'"""\1"', content)'
+        content = re.sub(r'\'"""', r'"', content)'
 
         # Fix f-string issues
-        content = re.sub(r'f"([^{}"]*)"', r'"\1"', content)
-        content = re.sub(r"f'([^{}']*)'", r"'\1'", content)
+        content = re.sub(r'f"([^{}"]*)"', r'"\1"', content)"
+        content = re.sub(r"f'([^{}']*)'", r"'\1'", content)'
 
         return content
 
@@ -181,11 +181,11 @@ class TargetedSyntaxErrorResolver:
 
             # Apply targeted fixes based on error type
             if error_info["error_type"] == "unterminated_string":
-                content = self.fix_unterminated_string_advanced(
+                content = self.fix_unterminated_string_advanced()
                     content, error_info.get("line")
                 )
             elif error_info["error_type"] == "unterminated_triple":
-                content = self.fix_unterminated_string_advanced(
+                content = self.fix_unterminated_string_advanced()
                     content, error_info.get("line")
                 )
             elif error_info["error_type"] == "indentation_error":
@@ -211,7 +211,7 @@ class TargetedSyntaxErrorResolver:
         core_dir = Path("core")
         python_files = list(core_dir.rglob("*.py"))
 
-        results = {
+        results = {}
             "total_files": len(python_files),
             "files_with_errors": 0,
             "files_fixed": 0,
@@ -245,14 +245,14 @@ class TargetedSyntaxErrorResolver:
                                 results["files_fixed"] += 1
 
                             # Check if error is resolved
-                            new_error_info = self.get_specific_error_info(
+                            new_error_info = self.get_specific_error_info()
                                 str(file_path)
                             )
                             if not new_error_info:
                                 print("    ✅ Syntax error resolved!")
                                 results["errors_resolved"] += 1
                             else:
-                                print(
+                                print()
                                     f"    ⚠️  Error remains: {new_error_info['error_type']}"
                                 )
                                 if iteration == 2:  # Last iteration
@@ -260,7 +260,7 @@ class TargetedSyntaxErrorResolver:
 
             print(f"  Fixed {iteration_fixes} files in this iteration")
 
-            # If no fixes were made, we're done
+            # If no fixes were made, we're done'
             if iteration_fixes == 0:
                 break
 
@@ -278,7 +278,7 @@ class TargetedSyntaxErrorResolver:
         print(f"⚠️  Errors Remaining: {results['errors_remaining']}")
 
         if results["files_with_errors"] > 0:
-            resolution_rate = (
+            resolution_rate = ()
                 results["errors_resolved"] / results["files_with_errors"]
             ) * 100
             print(f"📈 Resolution Rate: {resolution_rate:.1f}%")

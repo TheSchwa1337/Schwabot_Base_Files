@@ -1,6 +1,6 @@
 class GlyphRouter:
     def __init__(self):
-        self.glyph_map = {
+        self.glyph_map = {}
             "accumulate": "🌀",
             "breakout": "⚡",
             "fallback": "🛡️",
@@ -20,6 +20,6 @@ class GlyphRouter:
             return "⚡"
         elif max_val >= 0.25:
             return "🌀"
-        elif max_val < 0.05:
+        elif max_val < 0.5:
             return "🛡️"
         return "⏳"

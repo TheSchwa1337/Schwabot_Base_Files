@@ -1,4 +1,4 @@
-__all__ = [
+__all__ = []
     "brain_core",
     "shell_pathways",
     "neural_shell_net",

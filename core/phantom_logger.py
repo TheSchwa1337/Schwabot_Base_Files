@@ -7,7 +7,7 @@ from typing import Dict, List, Optional, Any
 from datetime import datetime, timedelta
 from dataclasses import dataclass, asdict
 
-    from core.phantom_detector import PhantomDetector, PhantomZone
+from core.phantom_detector import PhantomDetector, PhantomZone
 
 #!/usr/bin/env python3
 """
@@ -29,7 +29,7 @@ logger = logging.getLogger(__name__)
 
 
 @dataclass
-class PhantomLogEntry:
+    class PhantomLogEntry:
     """Phantom Zone log entry with full metadata."""
 
     symbol: str
@@ -63,19 +63,19 @@ class PhantomLogger:
         os.makedirs(os.path.dirname(log_path), exist_ok=True)
         os.makedirs(os.path.dirname(registry_path), exist_ok=True)
 
-        # Initialize log file if it doesn't exist
+        # Initialize log file if it doesn't exist'
         if not os.path.exists(self.log_path):
             with open(self.log_path, 'w') as f:
                 json.dump([], f)
 
-        # Initialize registry file if it doesn't exist
+        # Initialize registry file if it doesn't exist'
         if not os.path.exists(self.registry_path):
             with open(self.registry_path, 'w') as f:
                 json.dump({}, f)
 
         logger.info("🔮 Phantom Logger initialized")
 
-    def log_zone(
+    def log_zone()
         self,
         phantom_zone,
         profit_actual: float = 0.0,
@@ -101,7 +101,7 @@ class PhantomLogger:
             risk_level = self._determine_risk_level(phantom_zone.confidence_score, profit_percentage)
 
             # Create log entry
-            log_entry = PhantomLogEntry(
+            log_entry = PhantomLogEntry()
                 symbol=phantom_zone.symbol,
                 phantom_duration=phantom_zone.duration,
                 entry_tick=phantom_zone.entry_tick,
@@ -137,8 +137,8 @@ class PhantomLogger:
             self._update_registry(log_entry)
 
             logger.info("🔮 Phantom Zone logged: {0}...".format(phantom_zone.hash_signature[:8]))
-            logger.info("  Profit: {0} ({1}%)".format(profit_actual:.4f, profit_percentage:.2f))
-            logger.info("  Duration: {0}s".format(phantom_zone.duration:.2f))
+            logger.info("  Profit: {0} ({1}%)".format(profit_actual))
+            logger.info("  Duration: {0}s".format(phantom_zone.duration))
 
         except Exception as e:
             logger.error("❌ Error logging Phantom Zone: {0}".format(e))
@@ -162,7 +162,7 @@ class PhantomLogger:
                 registry = json.load(f)
 
             # Create registry entry
-            registry_entry = {
+            registry_entry = {}
                 "symbol": log_entry.symbol,
                 "entry": log_entry.entry_tick,
                 "exit": log_entry.exit_tick,
@@ -209,7 +209,7 @@ class PhantomLogger:
                 filtered_data.append(entry)
 
             if not filtered_data:
-                return {
+                return {}
                     'total_phantoms': 0,
                     'profitable_phantoms': 0,
                     'avg_profit': 0.0,
@@ -223,16 +223,16 @@ class PhantomLogger:
             # Calculate statistics
             total_phantoms = len(filtered_data)
             profitable_phantoms = sum(1 for e in filtered_data if e['profit_actual'] > 0)
-            avg_profit = sum(e['profit_actual'] for e in filtered_data) / total_phantoms
-            avg_duration = sum(e['phantom_duration'] for e in filtered_data) / total_phantoms
-            avg_confidence = sum(e['confidence_score'] for e in filtered_data) / total_phantoms
+            avg_profit = sum(e['profit_actual'] for e in, filtered_data) / total_phantoms
+            avg_duration = sum(e['phantom_duration'] for e in, filtered_data) / total_phantoms
+            avg_confidence = sum(e['confidence_score'] for e in, filtered_data) / total_phantoms
             success_rate = profitable_phantoms / total_phantoms
 
             profits = [e['profit_actual'] for e in filtered_data]
             best_profit = max(profits)
             worst_loss = min(profits)
 
-            return {
+            return {}
                 'total_phantoms': total_phantoms,
                 'profitable_phantoms': profitable_phantoms,
                 'avg_profit': avg_profit,
@@ -279,7 +279,7 @@ class PhantomLogger:
     def _calculate_entry_similarity(self, entry1: Dict[str, Any], entry2: Dict[str, Any]) -> float:
         """Calculate similarity between two Phantom entries."""
         # Simple similarity based on key metrics
-        factors = [
+        factors = []
             abs(entry1['entropy_delta'] - entry2['entropy_delta']),
             abs(entry1['flatness_score'] - entry2['flatness_score']),
             abs(entry1['confidence'] - entry2['confidence']),
@@ -290,7 +290,7 @@ class PhantomLogger:
         max_values = [1.0, 1.0, 1.0, 10.0]  # Max expected values
         normalized_factors = [f / max_val for f, max_val in zip(factors, max_values)]
 
-        # Calculate similarity (1 - average difference)
+        # Calculate similarity (1 - average, difference)
         avg_difference = sum(normalized_factors) / len(normalized_factors)
         similarity = max(0.0, 1.0 - avg_difference)
 
@@ -382,7 +382,7 @@ class PhantomLogger:
     def export_phantom_report(self, output_path: str = "phantom_analysis_report.json"):
         """Export comprehensive Phantom analysis report."""
         try:
-            report = {
+            report = {}
                 'timestamp': datetime.now().isoformat(),
                 'overall_statistics': self.get_phantom_statistics(),
                 'btc_statistics': self.get_phantom_statistics('BTC'),

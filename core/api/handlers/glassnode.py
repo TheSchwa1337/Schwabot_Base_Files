@@ -6,20 +6,22 @@ import json
 from typing import Any, Dict
 from .base_handler import BaseAPIHandler
 
-    import aiohttp
-    import requests
+import aiohttp
+import requests
 
 try:
-except ImportError:
+    pass
+    except ImportError:
     aiohttp = None
 
 try:
-except ImportError:
+    pass
+    except ImportError:
     requests = None
 
 logger = logging.getLogger(__name__)
 
-"""Glassnode API Handler
+"""Glassnode API Handler"
 
 Professional-grade Glassnode API integration for on-chain analytics
 and advanced cryptocurrency market intelligence.
@@ -55,7 +57,7 @@ class GlassnodeHandler(BaseAPIHandler):
 
         # Key metrics to track
 
-        self.metrics = [
+        self.metrics = []
             "market/marketcap_usd",
             "market/price_usd_close",
             "transactions/count",
@@ -75,7 +77,7 @@ class GlassnodeHandler(BaseAPIHandler):
 
         for metric in self.metrics:
 
-            params = {
+            params = {}
                 "a": self.asset,
                 "api_key": self.api_key,
                 "s": int(time.time() - 86400),  # Last 24 hours
@@ -101,8 +103,8 @@ class GlassnodeHandler(BaseAPIHandler):
 
                         elif resp.status != 200:
 
-                            logger.warning(
-                                "Glassnode API error {0} for metric {1}".format(
+                            logger.warning()
+                                "Glassnode API error {0} for metric {1}".format()
                                     resp.status, metric)
                             )
 
@@ -118,7 +120,7 @@ class GlassnodeHandler(BaseAPIHandler):
 
                     loop = asyncio.get_running_loop()
 
-                    response = await loop.run_in_executor(
+                    response = await loop.run_in_executor()
                         None,
                         lambda: requests.get("{0}/{1}".format(BASE_URL, metric), params=params, timeout=15),
                     )
@@ -133,8 +135,8 @@ class GlassnodeHandler(BaseAPIHandler):
 
                     elif response.status_code != 200:
 
-                        logger.warning(
-                            "Glassnode API error {0} for metric {1}".format(
+                        logger.warning()
+                            "Glassnode API error {0} for metric {1}".format()
                                 response.status_code, metric)
                         )
 
@@ -165,7 +167,7 @@ class GlassnodeHandler(BaseAPIHandler):
 
         try:
 
-            parsed_data = {
+            parsed_data = {}
                 "asset": self.asset,
                 "timestamp": int(time.time()),
                 "metrics": {},
@@ -209,7 +211,7 @@ class GlassnodeHandler(BaseAPIHandler):
 
                 # Store processed data
 
-                parsed_data["metrics"][metric_name] = {
+                parsed_data["metrics"][metric_name] = {}
                     "values": values,
                     "timestamps": timestamps,
                     "count": len(values),
@@ -219,7 +221,7 @@ class GlassnodeHandler(BaseAPIHandler):
 
                 parsed_data["latest_values"][metric_name] = values[-1] if values else 0.0
 
-                # Calculate trend (24h change)
+                # Calculate trend (24h, change)
 
                 if len(values) >= 2:
 
@@ -251,7 +253,7 @@ class GlassnodeHandler(BaseAPIHandler):
 
             logger.error("%s: failed to parse Glassnode data - %s", self.NAME, exc)
 
-            return {
+            return {}
                 "asset": self.asset,
                 "metrics": {},
                 "latest_values": {},
@@ -273,11 +275,11 @@ class GlassnodeHandler(BaseAPIHandler):
 
             transaction_count = latest_values.get("count", 0)
 
-            # Normalize and combine (simplified scoring)
+            # Normalize and combine (simplified, scoring)
 
-            network_score = min(
+            network_score = min()
                 100,
-                (
+                ()
                     (hash_rate / 1e18 * 20)  # Hash rate component
                     # Active addresses component
                     + (active_addresses / 1000000 * 30)
@@ -328,9 +330,9 @@ class GlassnodeHandler(BaseAPIHandler):
 
             # Activity score
 
-            activity_score = min(
+            activity_score = min()
                 100,
-                (
+                ()
                     (transaction_count / 300000 * 40)  # Transaction count
                     + (active_addresses / 1000000 * 60)  # Active addresses
                 ),
@@ -348,7 +350,7 @@ class GlassnodeHandler(BaseAPIHandler):
 
             logger.error("Error calculating composite scores: {0}".format(e))
 
-            scores = {
+            scores = {}
                 "network_health": 0.0,
                 "valuation_health": 0.0,
                 "activity_score": 0.0,

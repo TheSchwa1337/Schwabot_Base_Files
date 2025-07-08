@@ -1,10 +1,10 @@
-        from core.unified_math_system import UnifiedMathSystem
-        from core.dual_unicore_handler import DualUnicoreHandler
-        from core.dualistic_thought_engines import DualisticThoughtEngines
-        from core.phase_bit_integration import PhaseBitIntegration
-        from core.price_precision_utils import format_price
-        from core.unified_api_coordinator import ExchangeType, UnifiedApiCoordinator
-        from core.unified_profit_vectorization_system import (
+from core.unified_math_system import UnifiedMathSystem
+from core.dual_unicore_handler import DualUnicoreHandler
+from core.dualistic_thought_engines import DualisticThoughtEngines
+from core.phase_bit_integration import PhaseBitIntegration
+from core.price_precision_utils import format_price
+from core.unified_api_coordinator import ExchangeType, UnifiedApiCoordinator
+from core.unified_profit_vectorization_system import ()
 import sys
 import traceback
 
@@ -102,7 +102,7 @@ def test_functionality():
         # Test dual core handler
 
         handler = DualUnicoreHandler(max_workers=2)
-        math_result = handler.execute_mathematical_operation(
+        math_result = handler.execute_mathematical_operation()
             "mean", [1.0, 2.0, 3.0, 4.0]
         )
         handler.shutdown()
@@ -112,9 +112,9 @@ def test_functionality():
 
         engines = DualisticThoughtEngines()
 
-        sample_market_data = {
+        sample_market_data = {}
             "rsi": 45.0,
-            "macd_signal": 0.005,
+            "macd_signal": 0.05,
             "volume_change": 0.15,
             "current_price": 61500.0,
             "moving_average": 61200.0,
@@ -124,12 +124,12 @@ def test_functionality():
             "phase_data": [0.5, 0.6, 0.4, 0.7],
             "volatility": 0.4,
             "sentiment_score": 0.6,
-            "performance_delta": 0.02,
+            "performance_delta": 0.2,
             "actual_profit": 50.0,
             "consensus_signal": "hold",
         }
         thought_result = engines.process_market_data(sample_market_data)
-        print(
+        print()
             f"✅ Dualistic engines: {thought_result.decision} (confidence: {thought_result.confidence:.3f})"
         )
 

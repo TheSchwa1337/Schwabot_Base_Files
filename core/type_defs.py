@@ -1,7 +1,17 @@
 from __future__ import annotations
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Callable, Dict, List, NamedTuple, NewType, Optional, Tuple, Union
+from typing import ()
+    Any,
+    Callable,
+    Dict,
+    List,
+    NamedTuple,
+    NewType,
+    Optional,
+    Tuple,
+    Union,
+)
 from numpy.typing import NDArray
 
 import numpy as np
@@ -39,7 +49,7 @@ class Vector64(NamedTuple):
     64-dimensional vector for strategy space mapping.
 
     Mathematical Properties:
-    - Dimension: 64 (2^6 for binary strategy encoding)
+    - Dimension: 64 (2^6 for binary strategy, encoding)
     - Norm: L2 norm for similarity calculations
     - Operations: Tensor fusion, phase rotation, entropy quantization
 
@@ -160,14 +170,22 @@ class Tensor64(NamedTuple):
     """
 
     tensor: NDArray[np.float64]  # Multi-dimensional tensor
-    rank: int  # Tensor rank (number of dimensions)
+    rank: int  # Tensor rank (number of, dimensions)
     shape: Tuple[int, ...]  # Tensor shape
 
     def __post_init__(self):
         if self.tensor.ndim != self.rank:
-            raise ValueError("Tensor rank {0} doesn't match dimensions {1}".format(self.rank, self.tensor.ndim))
+            raise ValueError()
+                "Tensor rank {0} doesn't match dimensions {1}".format(')
+                    self.rank, self.tensor.ndim
+                )
+            )
         if self.tensor.shape != self.shape:
-            raise ValueError("Tensor shape {0} doesn't match declared shape {1}".format(self.tensor.shape, self.shape))
+            raise ValueError()
+                "Tensor shape {0} doesn't match declared shape {1}".format(')
+                    self.tensor.shape, self.shape
+                )
+            )
 
     def contract(self, other: Tensor64, axes: Tuple[int, int]) -> Tensor64:
         """Tensor contraction: T_ij = A_ik B_kj"""
@@ -292,7 +310,7 @@ class OrderType(Enum):
 
 
 @dataclass
-class Entropy:
+    class Entropy:
     """Entropy value with metadata."""
 
     value: float
@@ -303,7 +321,7 @@ class Entropy:
 
 
 @dataclass
-class PricePoint:
+    class PricePoint:
     """Price point with timestamp."""
 
     price: float
@@ -312,7 +330,7 @@ class PricePoint:
 
 
 @dataclass
-class MarketData:
+    class MarketData:
     """Market data container."""
 
     symbol: str
@@ -324,7 +342,7 @@ class MarketData:
 
 
 @dataclass
-class TradeSignal:
+    class TradeSignal:
     """Trading signal container."""
 
     action: TradingAction
@@ -336,7 +354,7 @@ class TradeSignal:
 
 
 @dataclass
-class Position:
+    class Position:
     """Trading position."""
 
     symbol: str
@@ -349,7 +367,7 @@ class Position:
 
 
 @dataclass
-class RiskMetrics:
+    class RiskMetrics:
     """Risk assessment metrics."""
 
     var_95: float  # Value at Risk at 95% confidence
@@ -392,7 +410,7 @@ class MathOperation(Enum):
 
 
 @dataclass
-class CalculationResult:
+    class CalculationResult:
     """Result of a mathematical calculation."""
 
     value: Union[Scalar, Vector, Matrix, Tensor, Vector64, FractalMatrix, Tensor64]
@@ -407,7 +425,7 @@ class CalculationResult:
 
 
 @dataclass
-class WaveFunction:
+    class WaveFunction:
     """Wave function representation."""
 
     states: List[QuantumState]
@@ -436,7 +454,7 @@ class ComponentStatus(Enum):
 
 
 @dataclass
-class SystemStatus:
+    class SystemStatus:
     """System status container."""
 
     component_name: str
@@ -452,18 +470,18 @@ class SystemStatus:
 
 
 @dataclass
-class TradingConfig:
+    class TradingConfig:
     """Trading configuration."""
 
     symbol: str
     max_position_size: float
     stop_loss_pct: float
     take_profit_pct: float
-    risk_per_trade: float = 0.02
+    risk_per_trade: float = 0.2
 
 
 @dataclass
-class MathConfig:
+    class MathConfig:
     """Mathematical configuration."""
 
     precision: int = 8
@@ -473,7 +491,7 @@ class MathConfig:
 
 
 @dataclass
-class SystemConfig:
+    class SystemConfig:
     """System configuration."""
 
     log_level: str = "INFO"
@@ -508,7 +526,7 @@ ValidationFunction = Callable[[Any], bool]
 
 
 @dataclass
-class ComplexMatrix:
+    class ComplexMatrix:
     """Complex-valued matrix."""
 
     real_part: Matrix
@@ -520,7 +538,7 @@ class ComplexMatrix:
 
 
 @dataclass
-class SparseTensor:
+    class SparseTensor:
     """Sparse tensor representation."""
 
     indices: List[Tuple[int, ...]]
@@ -541,7 +559,7 @@ class SparseTensor:
 
 
 @dataclass
-class ProfitMetrics:
+    class ProfitMetrics:
     """Profit and performance metrics."""
 
     total_return: float
@@ -554,7 +572,7 @@ class ProfitMetrics:
 
 
 @dataclass
-class TradeRecord:
+    class TradeRecord:
     """Individual trade record."""
 
     symbol: str
@@ -572,7 +590,7 @@ class TradeRecord:
 
 
 @dataclass
-class ValidationResult:
+    class ValidationResult:
     """Validation result container."""
 
     is_valid: bool
@@ -630,7 +648,7 @@ EULER_MASCHERONI = 0.5772156649015329
 # Trading constants
 DEFAULT_ENTROPY_THRESHOLD = 0.6
 DEFAULT_QUANTUM_COHERENCE_THRESHOLD = 0.8
-DEFAULT_DUAL_STATE_LEARNING_RATE = 0.01
+DEFAULT_DUAL_STATE_LEARNING_RATE = 0.1
 
 # Strategy constants
 STRATEGY_VECTOR_DIMENSION = 64
@@ -638,7 +656,7 @@ FRACTAL_MATRIX_MIN_SIZE = 8
 TENSOR_FUSION_THRESHOLD = 0.7
 
 # Export all types
-__all__ = [
+__all__ = []
     # Core mathematical types
     "Vector64",
     "FractalMatrix",

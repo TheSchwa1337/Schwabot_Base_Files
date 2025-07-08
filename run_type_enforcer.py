@@ -9,7 +9,7 @@ from utils.safe_print import safe_print, info, warn, error, success, debug
 # Initialize Unicode handler
 unicore = DualUnicoreHandler()
 
-"""Run Type Enforcer - Apply Type Annotations.
+"""Run Type Enforcer - Apply Type Annotations."
 ==========================================
 
 Simple script to run the type enforcer and eliminate MEDIUM priority flake8 issues.
@@ -21,12 +21,12 @@ sys.path.insert(0, str(Path(__file__).parent / "core"))
 try:
     from type_enforcer import type_enforcer
 
-    safe_print(
+    safe_print()
         "\\u1f527 Applying type annotations to eliminate MEDIUM priority issues..."
     )
 
     # Apply type annotations to all Python files
-    total_stats = {
+    total_stats = {}
         "functions_fixed": 0,
         "parameters_fixed": 0,
         "returns_fixed": 0,

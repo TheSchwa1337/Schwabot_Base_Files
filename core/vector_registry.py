@@ -12,7 +12,7 @@ from .entropy_math import bit_entropy, hamming_distance, vector_similarity, shan
 import numpy as np
 
 #!/usr/bin/env python3
-"""Vector Registry 🗂️
+"""Vector Registry 🗂️"
 
 Maps SHA-256 digests to compressed strategy vectors for:
   • Digest → Strategy matching
@@ -33,19 +33,19 @@ Core Functions:
 """
 
 # CUDA Integration with Fallback
-try:
+    try:
     USING_CUDA = True
     _backend = 'cupy (GPU)'
     xp = cp
-except ImportError:
+    except ImportError:
     USING_CUDA = False
     _backend = 'numpy (CPU)'
     xp = np
 
 logger = logging.getLogger(__name__)
-if USING_CUDA:
+    if USING_CUDA:
     logger.info("⚡ VectorRegistry using GPU acceleration: {0}".format(_backend))
-else:
+    else:
     logger.info("🔄 VectorRegistry using CPU fallback: {0}".format(_backend))
 
 # ---------------------------------------------------------------------------
@@ -54,7 +54,7 @@ else:
 
 
 @dataclass
-class StrategyVector:
+    class StrategyVector:
     """Compressed strategy representation for a digest."""
 
     digest: str  # SHA256 hex
@@ -62,7 +62,7 @@ class StrategyVector:
     asset_focus: str  # "BTC", "ETH", "XRP", "SOL", "USDC"
     entry_confidence: float  # 0.0 to 1.0
     exit_confidence: float  # 0.0 to 1.0
-    position_size: float  # 0.0 to 1.0 (fraction of capital)
+    position_size: float  # 0.0 to 1.0 (fraction of, capital)
     stop_loss_pct: float  # percentage
     take_profit_pct: float  # percentage
     rsi_band: int  # 0-100
@@ -75,7 +75,7 @@ class StrategyVector:
 
 
 @dataclass
-class DigestMatch:
+    class DigestMatch:
     """Result of digest similarity search."""
 
     digest: str
@@ -154,14 +154,14 @@ class VectorRegistry:
             # Update performance metrics
             search_time = time.time() - start_time
             self.total_searches += 1
-            self.avg_search_time = (
+            self.avg_search_time = ()
                 self.avg_search_time * (self.total_searches - 1) + search_time
             ) / self.total_searches
 
             if matches:
                 self.successful_matches += 1
 
-            logger.debug("Found {0} similar digests in {1:.4f}s".format(
+            logger.debug("Found {0} similar digests in {1:.4f}s".format())
                 len(matches), search_time))
             return matches
 
@@ -231,8 +231,8 @@ class VectorRegistry:
             # Persist updates
             self._save_registry()
 
-            logger.debug(
-                "Updated digest {0}... success_rate={1:.3f}, avg_profit={2:.4f}".format(
+            logger.debug()
+                "Updated digest {0}... success_rate={1:.3f}, avg_profit={2:.4f}".format()
                     digest_hex[:16], vector.success_rate, vector.avg_profit))
             return True
 
@@ -247,7 +247,7 @@ class VectorRegistry:
 
         vectors = list(self.digest_vectors.values())
 
-        stats = {
+        stats = {}
             "total_vectors": len(vectors),
             "total_searches": self.total_searches,
             "successful_matches": self.successful_matches,
@@ -258,8 +258,8 @@ class VectorRegistry:
             "strategy_counts": {},
             "asset_distribution": {},
             # Performance metrics
-            "avg_success_rate": sum(v.success_rate for v in vectors) / len(vectors),
-            "avg_profit": sum(v.avg_profit for v in vectors) / len(vectors),
+            "avg_success_rate": sum(v.success_rate for v in, vectors) / len(vectors),
+            "avg_profit": sum(v.avg_profit for v in, vectors) / len(vectors),
             "high_confidence_vectors": len([v for v in vectors if v.entry_confidence > 0.8]),
         }
 
@@ -281,7 +281,7 @@ class VectorRegistry:
         hamming_wt = sum(bin(b).count('1') for b in digest)
 
         # Create feature vector
-        embedding = [
+        embedding = []
             digest_entropy,
             hamming_wt / 256.0,  # normalized
             vector.entry_confidence,
@@ -297,12 +297,12 @@ class VectorRegistry:
         return embedding
 
     def _create_query_embedding(self, digest: bytes) -> List[float]:
-        """Create embedding for query digest (without strategy info)."""
+        """Create embedding for query digest (without strategy, info)."""
         digest_entropy = bit_entropy(digest)
         hamming_wt = sum(bin(b).count('1') for b in digest)
 
-        # Query embedding has fewer features (no strategy-specific data)
-        embedding = [
+        # Query embedding has fewer features (no strategy-specific, data)
+        embedding = []
             digest_entropy,
             hamming_wt / 256.0,
             0.5,  # neutral confidence
@@ -317,7 +317,7 @@ class VectorRegistry:
 
         return embedding
 
-    def _gpu_similarity_search(
+    def _gpu_similarity_search()
         self, query_digest: str, query_embedding: List[float], threshold: float, max_results: int
     ) -> List[DigestMatch]:
         """GPU-accelerated similarity search."""
@@ -365,8 +365,8 @@ class VectorRegistry:
                     # Calculate entropy difference
                     entropy_diff = abs(bit_entropy(query_bytes) - bit_entropy(stored_bytes))
 
-                    matches.append(
-                        DigestMatch(
+                    matches.append()
+                        DigestMatch()
                             digest=digest_hex,
                             similarity_score=float(sim_score),
                             strategy_vector=vector,
@@ -381,7 +381,7 @@ class VectorRegistry:
             logger.warning("GPU similarity search failed, falling back to CPU: {0}".format(e))
             return self._cpu_similarity_search(query_digest, query_embedding, threshold, max_results)
 
-    def _cpu_similarity_search(
+    def _cpu_similarity_search()
         self, query_digest: str, query_embedding: List[float], threshold: float, max_results: int
     ) -> List[DigestMatch]:
         """CPU similarity search."""
@@ -402,8 +402,8 @@ class VectorRegistry:
                 # Calculate entropy difference
                 entropy_diff = abs(bit_entropy(query_bytes) - bit_entropy(stored_bytes))
 
-                matches.append(
-                    DigestMatch(
+                matches.append()
+                    DigestMatch()
                         digest=digest_hex,
                         similarity_score=similarity,
                         strategy_vector=vector,
@@ -448,9 +448,9 @@ class VectorRegistry:
         """Save registry to disk."""
         try:
             # Prepare data
-            data = {
+            data = {}
                 'vectors': {},
-                'metrics': {
+                'metrics': {}
                     'total_searches': self.total_searches,
                     'successful_matches': self.successful_matches,
                     'avg_search_time': self.avg_search_time,
@@ -459,7 +459,7 @@ class VectorRegistry:
 
             # Convert vectors to dict
             for digest_hex, vector in self.digest_vectors.items():
-                data['vectors'][digest_hex] = {
+                data['vectors'][digest_hex] = {}
                     'digest': vector.digest,
                     'strategy_id': vector.strategy_id,
                     'asset_focus': vector.asset_focus,
@@ -488,13 +488,13 @@ class VectorRegistry:
 # ---------------------------------------------------------------------------
 # Quick self-test
 # ---------------------------------------------------------------------------
-if __name__ == "__main__":
+    if __name__ == "__main__":
     # Test vector registry
     registry = VectorRegistry("test_registry.json")
 
     # Create test vectors
     test_digest = hashlib.sha256(b"test_digest").digest()
-    test_vector = StrategyVector(
+    test_vector = StrategyVector()
         digest="",
         strategy_id="test_strategy",
         asset_focus="BTC",
@@ -514,5 +514,5 @@ if __name__ == "__main__":
     confidence = registry.get_confidence_score(test_digest, "test_strategy")
 
     print("Found {0} matches".format(len(matches)))
-    print("Confidence: {0}".format(confidence:.3f))
+    print("Confidence))"
     print("Registry stats:", registry.get_registry_stats())

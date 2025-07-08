@@ -43,12 +43,12 @@ and the API server on http://localhost:8081
 sys.path.append(str(Path(__file__).parent / "core"))
 
 # Import Schwabot components
-try:
+    try:
 
     IMPORTS_SUCCESSFUL = True
-except ImportError as e:
+    except ImportError as e:
     safe_print(f"Error importing Schwabot components: {e}")
-    safe_print(
+    safe_print()
         "Please ensure all dependencies are installed: pip install -r requirements.txt"
     )
     IMPORTS_SUCCESSFUL = False
@@ -65,10 +65,10 @@ def setup_logging():
     logs_dir.mkdir(exist_ok=True)
 
     # Configure logging
-    logging.basicConfig(
+    logging.basicConfig()
         level=logging.INFO,
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-        handlers=[
+        handlers=[]
             logging.FileHandler(logs_dir / "schwabot.log"),
             logging.StreamHandler(),
         ],
@@ -136,7 +136,7 @@ def validate_environment():
     """Validate that required environment variables are set."""
     logger.info("Validating environment configuration...")
 
-    required_vars = [
+    required_vars = []
         "BINANCE_API_KEY",
         "BINANCE_API_SECRET",
         "COINBASE_API_KEY",
@@ -204,34 +204,34 @@ def print_system_info():
         safe_print("\n--- System Configuration ---")
         safe_print(f"   Environment: {config_summary.get('environment', 'unknown')}")
         safe_print(f"   Debug Mode: {config_summary.get('debug_mode', False)}")
-        safe_print(
+        safe_print()
             f"   API Server Port: {config_summary.get('api_server_port', 'N/A')}"
         )
         safe_print(f"   Dashboard Port: {config_summary.get('dashboard_port', 'N/A')}")
         safe_print(f"   Exchange Mode: {config_summary.get('exchange_mode', 'N/A')}")
         safe_print(f"   Trading Pairs: {config_summary.get('trading_pairs', 'N/A')}")
-        safe_print(
-            f"   Risk Management: {
+        safe_print()
+            f"   Risk Management: {"}
                 config_summary.get('risk_management_enabled', False)
             }"
         )
     else:
-        safe_print(
-            "\n--- System Configuration: Not available (Settings Manager not initialized) ---"
+        safe_print()
+            "\n--- System Configuration: Not available (Settings Manager not, initialized) ---"
         )
 
     if "orchestrator" in components:
         safe_print("\n--- System Health Metrics ---")
-        # This will be updated to use chrono_causal_orchestrator's validation
+        # This will be updated to use chrono_causal_orchestrator's validation'
         # For now, placeholder or existing SystemIntegrationOrchestrator health
-        health_metrics = (
+        health_metrics = ()
             components["orchestrator"].get_system_health()
             if hasattr(components["orchestrator"], "get_system_health")
             else "N/A"
         )
         safe_print(f"   Overall Health: {health_metrics}")
-        safe_print(
-            f"   Chrono-Causal Orchestrator Status: {
+        safe_print()
+            f"   Chrono-Causal Orchestrator Status: {"}
                 'Initialized'
                 if 'chrono_orchestrator' in components
                 else 'Not Initialized'
@@ -281,7 +281,7 @@ def main():
         safe_print("\n>>> System Status: RUNNING")
 
         # Start the Flask app
-        socketio.run(
+        socketio.run()
             app,
             host=host,
             port=port,

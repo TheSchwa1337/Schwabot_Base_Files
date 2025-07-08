@@ -19,8 +19,11 @@ class ReentryLogic:
         self.reentry_cooldown = reentry_cooldown
         self.last_reentry_time = 0.0
 
-    def evaluate_reentry(
-        self, tick_cycle: Any, swing_metrics: Dict[str, Any], drift_vector: Dict[str, float]
+    def evaluate_reentry()
+        self,
+        tick_cycle: Any,
+        swing_metrics: Dict[str, Any],
+        drift_vector: Dict[str, float],
     ) -> (bool, float):
         """
         Decide whether to re-enter a trade.
@@ -31,7 +34,7 @@ class ReentryLogic:
             return False, 0.0
 
         confidence = tick_cycle.confidence_score
-        swing_strength = swing_metrics.get('swing_strength', 0.0)
+        swing_strength = swing_metrics.get("swing_strength", 0.0)
 
         # Simple rule: re-enter if confidence and swing strength high
         if confidence > self.min_confidence and swing_strength > 0.5:
@@ -39,7 +42,9 @@ class ReentryLogic:
             allocation = 0.1  # 10% reentry
             amount = tick_cycle.usdc_balance * allocation
             self.last_reentry_time = current_time
-            logger.info("ReentryLogic: triggering reentry with amount {0}".format(amount))
+            logger.info()
+                "ReentryLogic: triggering reentry with amount {0}".format(amount)
+            )
             return True, amount
 
         return False, 0.0

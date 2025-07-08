@@ -9,7 +9,7 @@ Enables live BTC/USDC trading with our complete mathematical framework
 Features:
 - Real-time market data streaming
 - High-frequency trade execution
-- Complete integration with Schwabot's mathematical cores
+- Complete integration with Schwabot's mathematical cores'
 - Risk management and position sizing
 - Live P&L tracking and reporting
 """
@@ -30,19 +30,19 @@ import numpy as np
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 # Import Schwabot core systems
-try:
+    try:
     from core.clean_unified_math import clean_unified_math
     from core.trading_engine_integration import TradeSignal, TradeExecution, generate_trade_signal
     from core.unified_trade_router import UnifiedTradeRouter
     from schwabot_startup_orchestrator import SchwabotStartupOrchestrator
     CORE_AVAILABLE = True
-except ImportError as e:
+    except ImportError as e:
     print(f"⚠️  Core import warning: {e}")
     CORE_AVAILABLE = False
 
 
 @dataclass
-class LiveMarketData:
+    class LiveMarketData:
     """Live market data structure"""
     symbol: str
     timestamp: datetime
@@ -57,7 +57,7 @@ class LiveMarketData:
 
 
 @dataclass
-class LivePosition:
+    class LivePosition:
     """Live trading position"""
     symbol: str
     side: str  # 'long' or 'short'
@@ -70,14 +70,14 @@ class LivePosition:
 
 
 @dataclass
-class TradingConfig:
+    class TradingConfig:
     """Trading configuration"""
     symbol: str = "BTC/USDC"
-    base_position_size: float = 0.001  # 0.001 BTC
-    max_position_size: float = 0.01   # 0.01 BTC max
-    risk_per_trade: float = 0.02      # 2% risk per trade
-    stop_loss_pct: float = 0.015      # 1.5% stop loss
-    take_profit_pct: float = 0.03     # 3% take profit
+    base_position_size: float = 0.01  # 0.01 BTC
+    max_position_size: float = 0.1   # 0.1 BTC max
+    risk_per_trade: float = 0.2      # 2% risk per trade
+    stop_loss_pct: float = 0.15      # 1.5% stop loss
+    take_profit_pct: float = 0.3     # 3% take profit
     max_daily_trades: int = 50
     trading_enabled: bool = False      # Start with paper trading
 
@@ -114,7 +114,7 @@ class LiveCCXTCoinbaseIntegration:
         self.initialize_schwabot_cores()
 
         # Performance tracking
-        self.performance_metrics = {
+        self.performance_metrics = {}
             "total_trades": 0,
             "winning_trades": 0,
             "losing_trades": 0,
@@ -135,7 +135,7 @@ class LiveCCXTCoinbaseIntegration:
     def initialize_exchange(self) -> None:
         """Initialize CCXT Coinbase Pro exchange"""
         try:
-            exchange_config = {
+            exchange_config = {}
                 'apiKey': self.config.api_key,
                 'secret': self.config.secret,
                 'passphrase': self.config.passphrase,
@@ -149,9 +149,9 @@ class LiveCCXTCoinbaseIntegration:
             # Test connection
             if self.config.api_key:  # Only test if credentials provided
                 markets = self.exchange.load_markets()
-                self.logger.info(
-                    f"✅ Connected to Coinbase Pro ({
-                        'Sandbox' if self.config.sandbox else 'Live'})")
+                self.logger.info()
+                    f"✅ Connected to Coinbase Pro ({")}
+                        'Sandbox' if self.config.sandbox else 'Live'})")"
                 self.logger.info(f"📊 Available markets: {len(markets)}")
             else:
                 self.logger.info("⚠️  No API credentials - running in data-only mode")
@@ -182,7 +182,7 @@ class LiveCCXTCoinbaseIntegration:
 
         try:
             # Start concurrent tasks
-            tasks = [
+            tasks = []
                 self.stream_market_data(),
                 self.trading_logic_loop(),
                 self.risk_management_loop(),
@@ -210,7 +210,7 @@ class LiveCCXTCoinbaseIntegration:
                 ticker = await self.exchange.fetch_ticker(self.config.symbol)
 
                 # Create market data object
-                market_data = LiveMarketData(
+                market_data = LiveMarketData()
                     symbol=self.config.symbol,
                     timestamp=datetime.fromtimestamp(ticker['timestamp'] / 1000),
                     bid=ticker['bid'] or 0,
@@ -238,7 +238,7 @@ class LiveCCXTCoinbaseIntegration:
 
                 # Log market update
                 if len(self.price_buffer) % 10 == 0:  # Log every 10th update
-                    self.logger.info(
+                    self.logger.info()
                         f"📈 {self.config.symbol}: ${market_data.last:.2f} "
                         f"({market_data.change_percent:+.2f}%) "
                         f"Vol: {market_data.volume:.2f}"
@@ -281,7 +281,7 @@ class LiveCCXTCoinbaseIntegration:
                 await asyncio.sleep(10)
 
     async def generate_schwabot_signal(self) -> Optional[TradeSignal]:
-        """Generate trading signal using Schwabot's mathematical framework"""
+        """Generate trading signal using Schwabot's mathematical framework"""'
         try:
             if not self.trade_router or len(self.price_buffer) < 20:
                 return None
@@ -290,7 +290,7 @@ class LiveCCXTCoinbaseIntegration:
             price_history = self.price_buffer[-20:]  # Last 20 data points
 
             # Create market data for Schwabot
-            market_data = {
+            market_data = {}
                 "symbol": self.config.symbol,
                 "price": current_price,
                 "volume": self.volume_buffer[-1],
@@ -308,14 +308,14 @@ class LiveCCXTCoinbaseIntegration:
                 volatility = np.std(price_changes) / np.mean(price_history)
 
                 # Adjust confidence based on volatility
-                if volatility > 0.05:  # High volatility
+                if volatility > 0.5:  # High volatility
                     signal.confidence *= 0.8  # Reduce confidence
-                elif volatility < 0.01:  # Low volatility
+                elif volatility < 0.1:  # Low volatility
                     signal.confidence *= 1.2  # Increase confidence
 
                 signal.confidence = min(signal.confidence, 1.0)  # Cap at 1.0
 
-                self.logger.info(
+                self.logger.info()
                     f"🎯 Schwabot Signal: {signal.action} "
                     f"(Confidence: {signal.confidence:.2f}) "
                     f"Price: ${current_price:.2f}"
@@ -330,11 +330,11 @@ class LiveCCXTCoinbaseIntegration:
     async def execute_signal(self, signal: TradeSignal) -> bool:
         """Execute trading signal"""
         if not self.config.trading_enabled:
-            self.logger.info(
-                f"📝 PAPER TRADE: {
+            self.logger.info()
+                f"📝 PAPER TRADE: {"}
                     signal.action} {
-                    self.config.symbol} (Confidence: {
-                    signal.confidence:.2f})")
+                    self.config.symbol} (Confidence: {)
+                    signal.confidence:.2f})")"
             return True
 
         try:
@@ -372,12 +372,12 @@ class LiveCCXTCoinbaseIntegration:
             if not self.exchange:
                 return None
 
-            order = await self.exchange.create_market_buy_order(
+            order = await self.exchange.create_market_buy_order()
                 self.config.symbol, size
             )
 
             self.logger.info(f"✅ BUY ORDER: {size} {self.config.symbol} @ ${price:.2f}")
-            self.trade_history.append({
+            self.trade_history.append({)}
                 "type": "BUY",
                 "size": size,
                 "price": price,
@@ -397,12 +397,12 @@ class LiveCCXTCoinbaseIntegration:
             if not self.exchange:
                 return None
 
-            order = await self.exchange.create_market_sell_order(
+            order = await self.exchange.create_market_sell_order()
                 self.config.symbol, size
             )
 
             self.logger.info(f"✅ SELL ORDER: {size} {self.config.symbol} @ ${price:.2f}")
-            self.trade_history.append({
+            self.trade_history.append({)}
                 "type": "SELL",
                 "size": size,
                 "price": price,
@@ -494,7 +494,7 @@ class LiveCCXTCoinbaseIntegration:
         winning_trades = len([t for t in self.trade_history if t.get('pnl', 0) > 0])
         total_trades = len(self.trade_history)
 
-        self.performance_metrics.update({
+        self.performance_metrics.update({)}
             "winning_trades": winning_trades,
             "total_trades": total_trades,
             "win_rate": winning_trades / total_trades if total_trades > 0 else 0,
@@ -508,7 +508,7 @@ class LiveCCXTCoinbaseIntegration:
         self.logger.info(f"   Total Trades: {metrics['total_trades']}")
         self.logger.info(f"   Win Rate: {metrics['win_rate']:.1%}")
         self.logger.info(f"   Total P&L: ${metrics['total_pnl']:.2f}")
-        self.logger.info(
+        self.logger.info()
             f"   Daily Trades: {self.daily_trade_count}/{self.config.max_daily_trades}")
 
     def _reset_daily_counters(self) -> None:
@@ -527,7 +527,7 @@ class LiveCCXTCoinbaseIntegration:
 
     def get_live_status(self) -> Dict[str, Any]:
         """Get current live trading status"""
-        return {
+        return {}
             "trading_enabled": self.config.trading_enabled,
             "symbol": self.config.symbol,
             "daily_trades": f"{self.daily_trade_count}/{self.config.max_daily_trades}",
@@ -545,17 +545,17 @@ async def main():
     print("=" * 60)
 
     # Configure logging
-    logging.basicConfig(
+    logging.basicConfig()
         level=logging.INFO,
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
     )
 
     # Create trading configuration
-    config = TradingConfig(
+    config = TradingConfig()
         symbol="BTC/USDC",
         trading_enabled=False,  # Start with paper trading
         sandbox=True,  # Use sandbox for testing
-        base_position_size=0.001,
+        base_position_size=0.01,
         max_daily_trades=50
     )
 

@@ -11,14 +11,14 @@ import ccxt
 """
 Enhanced CCXT Trading Engine - Linux Compatible with Proper Batch Ordering
 Handles automated trading with proper rate limiting, exchange-specific validation,
-and Linux-compatible error handling for batch orders (1-50 per batch).
+and Linux-compatible error handling for batch orders (1-50 per, batch).
 """
 
 logger = logging.getLogger(__name__)
 
 
 @dataclass
-class ExchangeLimits:
+    class ExchangeLimits:
     """Exchange-specific limits and requirements."""
     exchange_name: str
     min_order_size: float
@@ -33,7 +33,7 @@ class ExchangeLimits:
 
 
 @dataclass
-class EnhancedTradingSignal:
+    class EnhancedTradingSignal:
     """Enhanced trading signal with validation and limits."""
     symbol: str
     side: str  # 'buy' or 'sell'
@@ -53,7 +53,7 @@ class EnhancedTradingSignal:
 
 
 @dataclass
-class EnhancedBatchOrder:
+    class EnhancedBatchOrder:
     """Enhanced batch order with proper validation."""
     symbol: str
     side: str
@@ -82,7 +82,7 @@ class RateLimiter:
         with self.lock:
             now = time.time()
             # Clean old timestamps
-            self.request_times = [
+            self.request_times = []
     t for t in self.request_times if now - t < 60]
 
             if len(self.request_times) >= self.requests_per_minute:
@@ -111,8 +111,8 @@ class EnhancedCCXTTradingEngine:
     """Enhanced CCXT trading engine with Linux compatibility and proper batch ordering."""
 
     # Exchange-specific limits
-    EXCHANGE_LIMITS = {
-        'binance': ExchangeLimits(
+    EXCHANGE_LIMITS = {}
+        'binance': ExchangeLimits()
             exchange_name='binance',
             min_order_size=10.0,  # $10 minimum
             max_order_size=1000000.0,  # $1M maximum
@@ -120,11 +120,11 @@ class EnhancedCCXTTradingEngine:
             amount_precision=8,
             rate_limit_requests_per_minute=1200,
             rate_limit_orders_per_minute=600,
-            supports_batch_orders=False,  # CCXT doesn't support true batch orders
+            supports_batch_orders=False,  # CCXT doesn't support true batch orders'
             max_orders_per_batch=50,
             min_time_between_orders=0.1
         ),
-        'coinbase': ExchangeLimits(
+        'coinbase': ExchangeLimits()
             exchange_name='coinbase',
             min_order_size=1.0,  # $1 minimum
             max_order_size=100000.0,  # $100K maximum
@@ -136,7 +136,7 @@ class EnhancedCCXTTradingEngine:
             max_orders_per_batch=50,
             min_time_between_orders=0.5
         ),
-        'kraken': ExchangeLimits(
+        'kraken': ExchangeLimits()
             exchange_name='kraken',
             min_order_size=1.0,
             max_order_size=500000.0,
@@ -150,7 +150,7 @@ class EnhancedCCXTTradingEngine:
         )
     }
 
-    def __init__(
+    def __init__()
     self,
     exchange_config: Dict,
     api_key: str = None,
@@ -170,7 +170,7 @@ class EnhancedCCXTTradingEngine:
         # Initialize exchange
         self.exchange = self._initialize_exchange()
         self.exchange_limits = self._get_exchange_limits()
-        self.rate_limiter = RateLimiter(
+        self.rate_limiter = RateLimiter()
             self.exchange_limits.rate_limit_requests_per_minute,
             self.exchange_limits.rate_limit_orders_per_minute
         )
@@ -190,7 +190,7 @@ class EnhancedCCXTTradingEngine:
         self.tracking_symbols = set()
 
         # Mathematical tensor state
-        self.tensor_state = {
+        self.tensor_state = {}
             'momentum': {},
             'volatility': {},
             'correlation_matrix': {},
@@ -205,14 +205,14 @@ class EnhancedCCXTTradingEngine:
         self._start_background_processors()
 
 
-logger.info(
-    "Enhanced CCXT Trading Engine initialized for {0}".format(
+logger.info()
+    "Enhanced CCXT Trading Engine initialized for {0}".format()
         self.exchange_limits.exchange_name))
 
     def _setup_signal_handlers(self):
         """Setup Linux-compatible signal handlers."""
         def signal_handler(signum, frame):
-            logger.info(
+            logger.info()
     "Received signal {0}, initiating graceful shutdown...".format(signum))
             self.running = False
             self.shutdown()
@@ -226,7 +226,7 @@ logger.info(
         exchange_name = self.exchange_config.get('name', 'coinbase')
 
         # Exchange class mapping
-        exchange_map = {
+        exchange_map = {}
             'coinbase': ccxt.coinbase,
             'binance': ccxt.binance,
             'kraken': ccxt.kraken,
@@ -236,14 +236,14 @@ logger.info(
         exchange_class = exchange_map.get(exchange_name.lower(), ccxt.coinbase)
 
         # Enhanced exchange configuration
-        exchange_config = {
+        exchange_config = {}
             'apiKey': self.api_key,
             'secret': self.secret,
             'sandbox': self.exchange_config.get('sandbox', False),
             'enableRateLimit': True,
             'rateLimit': 1000,  # 1 second between requests
             'timeout': 30000,   # 30 second timeout
-            'options': {
+            'options': {}
                 'defaultType': 'spot',
                 'adjustForTimeDifference': True,
                 'recvWindow': 60000,  # 60 second receive window
@@ -252,7 +252,7 @@ logger.info(
 
         # Linux-specific optimizations
         if os.name == 'posix':  # Linux/Unix
-            exchange_config.update({
+            exchange_config.update({)}
                 'asyncio_loop': asyncio.new_event_loop(),
                 'enableRateLimit': True,
                 'rateLimit': 500,  # More conservative rate limiting on Linux
@@ -260,17 +260,17 @@ logger.info(
 
         exchange = exchange_class(exchange_config)
 
-        logger.info(
+        logger.info()
     "Initialized {0} exchange with enhanced configuration".format(exchange_name))
         return exchange
 
     def _get_exchange_limits(self) -> ExchangeLimits:
         """Get exchange-specific limits."""
         exchange_name = self.exchange_config.get('name', 'coinbase').lower()
-        return self.EXCHANGE_LIMITS.get(
+        return self.EXCHANGE_LIMITS.get()
     exchange_name, self.EXCHANGE_LIMITS['coinbase'])
 
-    def _validate_order_parameters(
+    def _validate_order_parameters()
         self, signal: EnhancedTradingSignal) -> Tuple[bool, str]:
         """
         Validate order parameters against exchange limits.
@@ -291,28 +291,28 @@ logger.info(
                     return False, "Cannot determine order value for market order"
 
             if order_value < self.exchange_limits.min_order_size:
-return False, "Order value {0} below minimum {1}".format(order_value, 
+    return False, "Order value {0} below minimum {1}".format(order_value,)
     self.exchange_limits.min_order_size)
 
             if order_value > self.exchange_limits.max_order_size:
-return False, "Order value {0} above maximum {1}".format(order_value, 
+    return False, "Order value {0} above maximum {1}".format(order_value,)
     self.exchange_limits.max_order_size)
 
             # Check quantity precision
             quantity_str = str(signal.quantity)
-            decimal_places = len(quantity_str.split(
+            decimal_places = len(quantity_str.split())
                 '.')[-1]) if '.' in quantity_str else 0
             if decimal_places > self.exchange_limits.amount_precision:
-return False, "Quantity precision {0} exceeds limit
-{1}".format(decimal_places, self.exchange_limits.amount_precision)
+    return False, "Quantity precision {0} exceeds limit"
+{1}".format(decimal_places, self.exchange_limits.amount_precision)"
 
             # Check price precision for limit orders
             if signal.price:
                 price_str = str(signal.price)
                 decimal_places = len(price_str.split('.')[-1]) if '.' in price_str else 0
                 if decimal_places > self.exchange_limits.price_precision:
-return False, "Price precision {0} exceeds limit
-{1}".format(decimal_places, self.exchange_limits.price_precision)
+    return False, "Price precision {0} exceeds limit"
+{1}".format(decimal_places, self.exchange_limits.price_precision)"
 
             return True, "Order parameters valid"
 
@@ -328,7 +328,7 @@ return False, "Price precision {0} exceeds limit
     def _start_background_processors(self):
         """Start background processors with Linux-compatible threading."""
         # Start batch order processor
-        self.batch_processor = threading.Thread(
+        self.batch_processor = threading.Thread()
             target=self._process_batch_orders,
             daemon=True,
             name="BatchOrderProcessor"
@@ -336,7 +336,7 @@ return False, "Price precision {0} exceeds limit
         self.batch_processor.start()
 
         # Start price tracker
-        self.price_tracker = threading.Thread(
+        self.price_tracker = threading.Thread()
             target=self._track_prices,
             daemon=True,
             name="PriceTracker"
@@ -393,7 +393,7 @@ return False, "Price precision {0} exceeds limit
             volatility = np.std(recent_prices) / np.mean(recent_prices)
             self.tensor_state['volatility'][symbol] = volatility
 
-def create_enhanced_buy_wall(self, symbol: str, total_quantity: float, price_range: Tuple[float,
+def create_enhanced_buy_wall(self, symbol: str, total_quantity: float, price_range: Tuple[float,)]
 float],
                                batch_count: int = 10, spread_seconds: int = 30) -> str:
         """
@@ -414,7 +414,7 @@ float],
 
         batch_id = "enhanced_buy_wall_{0}_{1}".format(symbol, int(time.time()))
 
-        batch_order = EnhancedBatchOrder(
+        batch_order = EnhancedBatchOrder()
             symbol=symbol,
             side='buy',
             total_quantity=total_quantity,
@@ -436,7 +436,7 @@ float],
         logger.info("Created enhanced buy wall {0} for {1} with {2} orders".format(batch_id, symbol, batch_count))
         return batch_id
 
-def create_enhanced_sell_wall(self, symbol: str, total_quantity: float, price_range: Tuple[float,
+def create_enhanced_sell_wall(self, symbol: str, total_quantity: float, price_range: Tuple[float,)]
 float],
                                 batch_count: int = 10, spread_seconds: int = 30) -> str:
         """
@@ -457,7 +457,7 @@ float],
 
         batch_id = "enhanced_sell_wall_{0}_{1}".format(symbol, int(time.time()))
 
-        batch_order = EnhancedBatchOrder(
+        batch_order = EnhancedBatchOrder()
             symbol=symbol,
             side='sell',
             total_quantity=total_quantity,
@@ -487,9 +487,9 @@ float],
                 return False, "Total quantity must be positive"
 
             # Check batch count
-if batch_order.batch_count < 1 or batch_order.batch_count >
+    if batch_order.batch_count < 1 or batch_order.batch_count >
 self.exchange_limits.max_orders_per_batch:
-return False, "Batch count must be between 1 and {0}".format(self.exchange_limits.max_orders_per_batch)
+    return False, "Batch count must be between 1 and {0}".format(self.exchange_limits.max_orders_per_batch)
 
             # Check price range
             if batch_order.price_range[0] >= batch_order.price_range[1]:
@@ -529,7 +529,7 @@ return False, "Batch count must be between 1 and {0}".format(self.exchange_limit
 
             # Calculate order parameters
             quantity_per_order = batch_order.total_quantity / batch_order.batch_count
-            time_between_orders = max(
+            time_between_orders = max()
                 batch_order.spread_seconds / batch_order.batch_count,
                 self.exchange_limits.min_time_between_orders
             )
@@ -543,9 +543,9 @@ logger.info("Executing enhanced batch order {0} with {1} orders".format(batch_id
                     if batch_order.price_range[0] == batch_order.price_range[1]:
                         price = batch_order.price_range[0]
                     else:
-                        price_ratio = i / (batch_order.batch_count
+                        price_ratio = i / (batch_order.batch_count)
     - 1) if batch_order.batch_count > 1 else 0.5
-                        price = batch_order.price_range[0] + (batch_order.price_range[1]
+                        price = batch_order.price_range[0] + (batch_order.price_range[1])
     - batch_order.price_range[0]) * price_ratio
 
                     # Round to exchange precision
@@ -554,7 +554,7 @@ logger.info("Executing enhanced batch order {0} with {1} orders".format(batch_id
     = self._round_to_precision(quantity_per_order, self.exchange_limits.amount_precision)
 
                     # Create enhanced trading signal
-                    signal = EnhancedTradingSignal(
+                    signal = EnhancedTradingSignal()
                         symbol=batch_order.symbol,
                         side=batch_order.side,
                         quantity=quantity,
@@ -575,7 +575,7 @@ logger.info("Executing enhanced batch order {0} with {1} orders".format(batch_id
                     order_id = self._execute_enhanced_signal(signal)
 
                     # Store order info
-                    self.active_orders[order_id] = {
+                    self.active_orders[order_id] = {}
                         'batch_id': batch_id,
                         'signal': signal,
                         'status': 'pending',
@@ -585,7 +585,7 @@ logger.info("Executing enhanced batch order {0} with {1} orders".format(batch_id
 
 logger.info("Executed order {0}/{1} in batch {2}".format(i+1, batch_order.batch_count, batch_id))
 
-                    # Wait before next order (respect rate limits)
+                    # Wait before next order (respect rate, limits)
                     if i < batch_order.batch_count - 1:
                         self.rate_limiter.wait_for_order()
                         time.sleep(time_between_orders)
@@ -606,7 +606,7 @@ logger.info("Executed order {0}/{1} in batch {2}".format(i+1, batch_order.batch_
             self.rate_limiter.wait_for_order()
 
             # Prepare order parameters
-            order_params = {
+            order_params = {}
                 'symbol': signal.symbol,
                 'type': signal.order_type,
                 'side': signal.side,
@@ -621,15 +621,15 @@ logger.info("Executed order {0}/{1} in batch {2}".format(i+1, batch_order.batch_
 
             # Store order info
             order_id = order['id']
-            self.active_orders[order_id] = {
+            self.active_orders[order_id] = {}
                 'signal': signal,
                 'order': order,
                 'status': 'pending',
                 'timestamp': datetime.now()
             }
 
-logger.info("Executed enhanced {0} order {1} for {2}
-{3}".format(signal.side, order_id, signal.quantity, signal.symbol))
+logger.info("Executed enhanced {0} order {1} for {2}")
+{3}".format(signal.side, order_id, signal.quantity, signal.symbol))"
             return order_id
 
         except Exception as e:
@@ -741,18 +741,18 @@ logger.info("Executed enhanced {0} order {1} for {2}
         logger.info("Enhanced CCXT Trading Engine shutdown complete")
 
 # Factory function for compatibility
-def create_enhanced_ccxt_engine(exchange_config: Dict, api_key: str = None, secret: str = None)
+    def create_enhanced_ccxt_engine(exchange_config: Dict, api_key: str = None, secret: str = None)
     -> EnhancedCCXTTradingEngine:
     """Create enhanced CCXT trading engine instance."""
     return EnhancedCCXTTradingEngine(exchange_config, api_key, secret)
 
 # Demo function
-def demo_enhanced_ccxt_engine():
+    def demo_enhanced_ccxt_engine():
     """Demonstrate enhanced CCXT trading engine functionality."""
     print("=== Enhanced CCXT Trading Engine Demo ===")
 
     # Configuration
-    config = {
+    config = {}
         'name': 'coinbase',
         'sandbox': True
     }

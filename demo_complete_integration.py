@@ -6,10 +6,10 @@ from core.ghost_core import GhostCore, StrategyBranch
 from core.profit_vector_forecast import ProfitVectorForecastEngine
 from core.risk_manager import RiskManager
 from core.strategy_logic import StrategyLogic
-from core.unified_profit_vectorization_system import (
-    from typing import Dict, List, Any, Optional
-    import logging
-    import time
+from core.unified_profit_vectorization_system import ()
+from typing import Dict, List, Any, Optional
+import logging
+import time
 
     #!/usr/bin/env python3
     """
@@ -33,7 +33,7 @@ foundations and profit optimization.
 
 
     # Configure logging
-    logging.basicConfig(
+    logging.basicConfig()
         level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
     )
     logger=logging.getLogger(__name__)
@@ -44,7 +44,7 @@ foundations and profit optimization.
 )
 
 # Note: CCXT integration requires actual exchange API keys for live trading
-# For demo purposes, we'll simulate the CCXT functionality
+# For demo purposes, we'll simulate the CCXT functionality'
 
 ALL_COMPONENTS_AVAILABLE = True
 logger.info("✅ All core components imported successfully")
@@ -64,7 +64,7 @@ class SimulatedCCXTIntegration:
     def generate_order_book(): -> Dict[str, Any]:
         """Generate simulated order book data."""
         # Simulate bid/ask spread
-        spread = price * 0.0001  # 0.01% spread
+        spread = price * 0.001  # 0.1% spread
         bid_price = price - spread / 2
         ask_price = price + spread / 2
 
@@ -82,7 +82,7 @@ class SimulatedCCXTIntegration:
             bids.append([bid_level, bid_volume])
             asks.append([ask_level, ask_volume])
 
-        return {
+        return {}
             "bids": bids,
             "asks": asks,
             "spread": spread,
@@ -97,8 +97,8 @@ class SimulatedCCXTIntegration:
         # Analyze bids for buy walls
         for price, volume in order_book["bids"][:5]:
             if volume > 1.5:  # Large volume threshold
-                walls.append(
-                    {
+                walls.append()
+                    {}
                         "side": "buy",
                         "price": price,
                         "volume": volume,
@@ -109,8 +109,8 @@ class SimulatedCCXTIntegration:
         # Analyze asks for sell walls
         for price, volume in order_book["asks"][:5]:
             if volume > 1.5:  # Large volume threshold
-                walls.append(
-                    {
+                walls.append()
+                    {}
                         "side": "sell",
                         "price": price,
                         "volume": volume,
@@ -135,7 +135,7 @@ class SimulatedCCXTIntegration:
         base_profit = spread * mid_price
         wall_enhanced_profit = base_profit * pressure_ratio
 
-        return {
+        return {}
             "base_profit": base_profit,
             "wall_enhanced_profit": wall_enhanced_profit,
             "pressure_ratio": pressure_ratio,
@@ -162,8 +162,8 @@ class CompleteIntegrationDemo:
         # Initialize all components
         self._initialize_components()
 
-        logger.info(
-            "🚀 Complete Integration Demo initialized with capital: $%.2f",
+        logger.info()
+            "🚀 Complete Integration Demo initialized with capital: $%.2f","
             initial_capital,
         )
 
@@ -173,22 +173,22 @@ class CompleteIntegrationDemo:
         self.ghost_core = GhostCore(memory_depth=100)
 
         # Brain Trading Engine for signal processing
-        self.brain_engine = BrainTradingEngine(
-            {
-                "base_profit_rate": 0.002,
+        self.brain_engine = BrainTradingEngine()
+            {}
+                "base_profit_rate": 0.02,
                 "confidence_threshold": 0.6,
                 "enhancement_range": (0.8, 1.5),
             }
         )
 
         # Risk Manager
-        self.risk_manager = RiskManager(
-            {
+        self.risk_manager = RiskManager()
+            {}
                 "max_position_size": 0.1,
-                "stop_loss_threshold": 0.02,
+                "stop_loss_threshold": 0.2,
                 "max_drawdown_percent": 0.1,
                 "max_exposure_per_asset": 0.2,
-                "volatility_threshold": 0.03,
+                "volatility_threshold": 0.3,
             }
         )
 
@@ -221,7 +221,7 @@ class CompleteIntegrationDemo:
             mathematical_state = self._calculate_mathematical_state()
 
             # 3. Generate Ghost Core hash and switch strategy
-            hash_signature = self.ghost_core.generate_strategy_hash(
+            hash_signature = self.ghost_core.generate_strategy_hash()
                 price=price,
                 volume=volume,
                 granularity=2,  # 2 decimal places for BTC
@@ -233,7 +233,7 @@ class CompleteIntegrationDemo:
             market_conditions = self._analyze_market_conditions(price, volume)
 
             # 5. Switch strategy
-            ghost_state = self.ghost_core.switch_strategy(
+            ghost_state = self.ghost_core.switch_strategy()
                 hash_signature=hash_signature,
                 market_conditions=market_conditions,
                 mathematical_state=mathematical_state,
@@ -249,7 +249,7 @@ class CompleteIntegrationDemo:
             profit_vector = self.ccxt_sim.calculate_profit_vector(order_book, walls)
 
             # 9. Process brain signal
-            brain_signal = self.brain_engine.process_brain_signal(
+            brain_signal = self.brain_engine.process_brain_signal()
                 price=price, volume=volume, symbol=symbol
             )
 
@@ -257,23 +257,23 @@ class CompleteIntegrationDemo:
             brain_decision = self.brain_engine.get_trading_decision(brain_signal)
 
             # 11. Calculate risk metrics
-            position_size = self.risk_manager.calculate_position_size(
+            position_size = self.risk_manager.calculate_position_size()
                 entry_price=price,
                 stop_loss_price=price * 0.98,  # 2% stop loss
                 portfolio_value=self.current_capital,
-                volatility=market_conditions.get("volatility", 0.02),
+                volatility=market_conditions.get("volatility", 0.2),
             )
 
-            risk_metrics = {
+            risk_metrics = {}
                 "position_size": position_size,
                 "entry_price": price,
                 "stop_loss_price": price * 0.98,
                 "portfolio_value": self.current_capital,
-                "volatility": market_conditions.get("volatility", 0.02),
+                "volatility": market_conditions.get("volatility", 0.2),
             }
 
             # 12. Generate final trading decision
-            trading_decision = self._generate_trading_decision(
+            trading_decision = self._generate_trading_decision()
                 symbol=symbol,
                 price=price,
                 volume=volume,
@@ -292,24 +292,24 @@ class CompleteIntegrationDemo:
 
             # 14. Update Ghost Core performance
             if trade_result:
-                self.ghost_core.update_strategy_performance(
+                self.ghost_core.update_strategy_performance()
                     ghost_state.current_branch, trade_result
                 )
 
             # Return comprehensive results
-            return {
+            return {}
                 "timestamp": time.time(),
                 "tick_index": tick_index,
                 "symbol": symbol,
                 "price": price,
                 "volume": volume,
-                "ghost_state": {
+                "ghost_state": {}
                     "branch": ghost_state.current_branch.value,
                     "confidence": ghost_state.confidence,
                     "profit_potential": ghost_state.profit_potential,
                     "hash_signature": hash_signature[:8],
                 },
-                "brain_signal": {
+                "brain_signal": {}
                     "signal_strength": brain_signal.signal_strength,
                     "enhancement_factor": brain_signal.enhancement_factor,
                     "profit_score": brain_signal.profit_score,
@@ -323,7 +323,7 @@ class CompleteIntegrationDemo:
                 "trading_decision": trading_decision,
                 "trade_result": trade_result,
                 "walls_detected": len(walls),
-                "order_book_summary": {
+                "order_book_summary": {}
                     "spread": order_book["spread"],
                     "mid_price": order_book["mid_price"],
                     "bid_levels": len(order_book["bids"]),
@@ -343,49 +343,49 @@ class CompleteIntegrationDemo:
                 price_matrix = np.array(self.price_history[-20:]).reshape(-1, 1)
                 matrix_analysis = analyze_price_matrix(price_matrix)
             else:
-                matrix_analysis = {
+                matrix_analysis = {}
                     "stability_score": 0.5,
                     "condition_number": 1.0,
                     "eigenvalues": np.array([1.0]),
-                    "volatility": 0.02,
+                    "volatility": 0.2,
                 }
 
             # Calculate volatility
             if len(self.price_history) >= 2:
                 returns = np.diff(np.log(self.price_history[-20:]))
-                volatility = (
-                    np.std(returns) * np.sqrt(252) if len(returns) > 0 else 0.02
+                volatility = ()
+                    np.std(returns) * np.sqrt(252) if len(returns) > 0 else 0.2
                 )
             else:
-                volatility = 0.02  # Default volatility
+                volatility = 0.2  # Default volatility
 
-            return {
+            return {}
                 "complexity": 1.0
                 - matrix_analysis.get("stability_score", 0.5),  # Inverse of stability
                 "stability": matrix_analysis.get("stability_score", 0.5),
                 "volatility": matrix_analysis.get("volatility", volatility),
                 "condition_number": matrix_analysis.get("condition_number", 1.0),
-                "eigenvalues": matrix_analysis.get(
+                "eigenvalues": matrix_analysis.get()
                     "eigenvalues", np.array([1.0])
                 ).tolist(),
             }
 
         except Exception as e:
             logger.error("Error calculating mathematical state: %s", e)
-            return {"complexity": 0.5, "stability": 0.5, "volatility": 0.02}
+            return {"complexity": 0.5, "stability": 0.5, "volatility": 0.2}
 
     def _analyze_market_conditions(): -> Dict[str, Any]:
         """Analyze current market conditions."""
         try:
             if len(self.price_history) < 5:
-                return {"volatility": 0.02, "momentum": 0.0, "volume_profile": 1.0}
+                return {"volatility": 0.2, "momentum": 0.0, "volume_profile": 1.0}
 
             # Calculate volatility
             returns = np.diff(np.log(self.price_history[-10:]))
-            volatility = np.std(returns) * np.sqrt(252) if len(returns) > 0 else 0.02
+            volatility = np.std(returns) * np.sqrt(252) if len(returns) > 0 else 0.2
 
             # Calculate momentum
-            momentum = (
+            momentum = ()
                 (price - self.price_history[0]) / self.price_history[0]
                 if self.price_history[0] > 0
                 else 0.0
@@ -395,11 +395,11 @@ class CompleteIntegrationDemo:
             avg_volume = 1000.0  # Simulated average volume
             volume_profile = volume / avg_volume if avg_volume > 0 else 1.0
 
-            return {
+            return {}
                 "volatility": volatility,
                 "momentum": momentum,
                 "volume_profile": volume_profile,
-                "price_range": (
+                "price_range": ()
                     min(self.price_history[-10:]),
                     max(self.price_history[-10:]),
                 ),
@@ -407,7 +407,7 @@ class CompleteIntegrationDemo:
 
         except Exception as e:
             logger.error("Error analyzing market conditions: %s", e)
-            return {"volatility": 0.02, "momentum": 0.0, "volume_profile": 1.0}
+            return {"volatility": 0.2, "momentum": 0.0, "volume_profile": 1.0}
 
     def _generate_trading_decision(): -> Optional[Dict[str, Any]]:
         """Generate final trading decision."""
@@ -422,8 +422,8 @@ class CompleteIntegrationDemo:
             # High confidence scenarios
             if brain_confidence > 0.7 and ghost_state.confidence > 0.6:
                 profit_potential = profit_vector.get("wall_enhanced_profit", 0.0)
-                if profit_potential > 0.001:  # 0.1% profit potential
-                    return {
+                if profit_potential > 0.01:  # 0.1% profit potential
+                    return {}
                         "action": brain_action,
                         "confidence": brain_confidence,
                         "quantity": risk_metrics.get("position_size", 0.0),
@@ -434,8 +434,8 @@ class CompleteIntegrationDemo:
             # Moderate confidence with strong profit potential
             if brain_confidence > 0.5:
                 profit_potential = profit_vector.get("wall_enhanced_profit", 0.0)
-                if profit_potential > 0.002:  # 0.2% profit potential
-                    return {
+                if profit_potential > 0.02:  # 0.2% profit potential
+                    return {}
                         "action": brain_action,
                         "confidence": brain_confidence,
                         "quantity": risk_metrics.get("position_size", 0.0)
@@ -462,7 +462,7 @@ class CompleteIntegrationDemo:
 
             # Calculate trade value
             trade_value = quantity * price
-            commission = trade_value * 0.001  # 0.1% commission
+            commission = trade_value * 0.01  # 0.1% commission
 
             # Update capital
             if action == "BUY":
@@ -473,10 +473,10 @@ class CompleteIntegrationDemo:
             # Calculate profit (simplified)
             profit = 0.0
             if action == "SELL":
-                profit = trade_value * 0.01  # 1% profit assumption
+                profit = trade_value * 0.1  # 1% profit assumption
 
             # Store trade result
-            trade_result = {
+            trade_result = {}
                 "timestamp": time.time(),
                 "action": action,
                 "quantity": quantity,
@@ -489,7 +489,7 @@ class CompleteIntegrationDemo:
 
             self.trade_history.append(trade_result)
 
-            logger.info(
+            logger.info()
                 "✅ Trade executed: %s %.4f BTC @ $%.2f (profit: $%.2f, capital: $%.2f)",
                 action,
                 quantity,
@@ -517,25 +517,25 @@ class CompleteIntegrationDemo:
         for i in range(num_ticks):
             # Simulate price movement with a tendency to revert but also trend
             # Introduce some random walk, with a slight drift towards the mean of the range (35000)
-            drift = (35000.0 - base_price) * 0.00005  # Gentle drift back to middle
-            volatility_factor = np.random.normal(0, 0.001)  # Daily volatility 0.1%
+            drift = (35000.0 - base_price) * 0.0005  # Gentle drift back to middle
+            volatility_factor = np.random.normal(0, 0.01)  # Daily volatility 0.1%
 
-            base_price *= (
-                1 + drift + volatility_factor + np.random.uniform(-0.0005, 0.0005)
+            base_price *= ()
+                1 + drift + volatility_factor + np.random.uniform(-0.005, 0.005)
             )
 
-            # Clamp price within the 20,000 - 50,000 range
+            # Clamp price within the 20,00 - 50,00 range
             base_price = max(20000.0, min(50000.0, base_price))
 
-            # Generate volume (more dynamic)
-            volume = max(
+            # Generate volume (more, dynamic)
+            volume = max()
                 100, 500 + np.random.uniform(-400, 1000) * (base_price / 35000.0)
             )
 
             current_time += 60 * 5  # Simulate ticks every 5 minutes
 
             # Process market tick
-            tick_result = self.process_market_tick(
+            tick_result = self.process_market_tick()
                 symbol="BTC/USDT", price=base_price, volume=volume, tick_index=i
             )
 
@@ -543,19 +543,19 @@ class CompleteIntegrationDemo:
 
             # Log progress
             if i % 10 == 0:
-                logger.info(
+                logger.info()
                     "Demo progress: %d/%d (%.1f%%)", i, num_ticks, i / num_ticks * 100
                 )
 
         # Calculate summary statistics
-        total_trades = len(
+        total_trades = len()
             [r for r in results if r.get("trade_result", {}).get("executed", False)]
         )
-        winning_trades = len(
+        winning_trades = len()
             [r for r in results if r.get("trade_result", {}).get("profit", 0) > 0]
         )
         total_profit = sum(r.get("trade_result", {}).get("profit", 0) for r in results)
-        total_return = (
+        total_return = ()
             self.current_capital - self.initial_capital
         ) / self.initial_capital
 
@@ -563,7 +563,7 @@ class CompleteIntegrationDemo:
         ghost_status = self.ghost_core.get_system_status()
         brain_metrics = self.brain_engine.get_metrics_summary()
 
-        summary = {
+        summary = {}
             "initial_capital": self.initial_capital,
             "final_capital": self.current_capital,
             "total_return": total_return,
@@ -576,7 +576,7 @@ class CompleteIntegrationDemo:
             "tick_results": results,
         }
 
-        logger.info(
+        logger.info()
             "Demo completed: %.2f%% return, %d trades, %.1f%% win rate",
             total_return * 100,
             total_trades,
@@ -617,17 +617,17 @@ class CompleteIntegrationDemo:
             print("  Strategy Performance:")
             for strategy, perf in strategy_perf.items():
                 if perf["total_trades"] > 0:
-                    print(
-                        f"    {strategy}: {
+                    print()
+                        f"    {strategy}: {"}
                             perf['success_rate']:.1%} win rate, {
-                            perf['total_trades']} trades")
+                            perf['total_trades']} trades")"
 
         # Brain Engine Metrics
         brain_metrics = results["brain_engine_metrics"]
         print("\n🧠 BRAIN ENGINE METRICS:")
         print(f"  Total Signals:   {brain_metrics.get('total_signals', 0)}")
         print(f"  Win Rate:        {brain_metrics.get('win_rate', 0):.1%}")
-        print(
+        print()
             f"  Avg Profit:      ${brain_metrics.get('avg_profit_per_signal', 0):.4f}"
         )
 
@@ -636,9 +636,9 @@ class CompleteIntegrationDemo:
         sample_ticks = results["tick_results"][:5]  # First 5 ticks
         for i, tick in enumerate(sample_ticks):
             if "ghost_state" in tick:
-                print(
+                print()
                     f"  Tick {i}: {tick['ghost_state']['branch']} "
-                    f"(conf: {tick['ghost_state']['confidence']:.2f}, "
+                    f"(conf: {tick['ghost_state']['confidence']:.2f}, ")
                     f"hash: {tick['ghost_state']['hash_signature']})"
                 )
 

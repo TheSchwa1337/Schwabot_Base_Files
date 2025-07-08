@@ -3,27 +3,27 @@ import random
 from datetime import datetime
 from typing import Any, Callable, Dict, Optional
 import time
-    import cupy as cp
+import cupy as cp
 import logging
-    from ..system.dual_state_router import (
+from ..system.dual_state_router import ()
 from core.unified_math_system import generate_unified_hash
 from .orbital_shell_brain_system import OrbitalBRAINSystem, ShellConsensus, AltitudeVector
 from .qutrit_signal_matrix import QutritSignalMatrix, QutritState
-        import os
+import os
 
 import numpy as np
 
-    from core.gpu_handlers import get_gpu_memory, select_best_gpu
-    from utils.cuda_helper import safe_cuda_operation, xp, USING_CUDA
-from core.advanced_tensor_algebra import (
+from core.gpu_handlers import get_gpu_memory, select_best_gpu
+from utils.cuda_helper import safe_cuda_operation, xp, USING_CUDA
+from core.advanced_tensor_algebra import ()
 from core.fractal_core import fractal_quantize_vector
 from core.matrix_mapper import EnhancedMatrixMapper, load_matrix_from_file
 from core.schwafit_core import SchwafitCore
 from core.strategy_loader import load_strategy
-    from core.visual_execution_node import emit_dashboard_event
-    from core.visual_execution_node import log_profit_tick
+from core.visual_execution_node import emit_dashboard_event
+from core.visual_execution_node import log_profit_tick
 
-"""Strategy Bit Mapper - Handles bitwise strategy expansion and hash-to-matrix matching.
+"""Strategy Bit Mapper - Handles bitwise strategy expansion and hash-to-matrix matching."
 
 CUDA Integration:
 - GPU-accelerated strategy operations with automatic CPU fallback
@@ -32,21 +32,22 @@ CUDA Integration:
 """
 
 try:
+    import cupy as cp
     USING_CUDA = True
     _backend = 'cupy (GPU)'
+    xp = cp
 except ImportError:
-    cp = np
+    import numpy as cp  # fallback to numpy
     USING_CUDA = False
     _backend = 'numpy (CPU)'
-logger = logging.getLogger(__name__)
-logger.info("StrategyBitMapper using backend: {0}".format(_backend))
+    xp = cp
 
 # CUDA Helper Integration
-try:
+    try:
     CUDA_AVAILABLE = True
     logger = logging.getLogger(__name__)
     logger.info("⚡ CUDA acceleration enabled in Strategy Bit Mapper")
-except ImportError:
+    except ImportError:
     xp = np
     USING_CUDA = False
     CUDA_AVAILABLE = False
@@ -59,7 +60,7 @@ except ImportError:
 
 
 # Dual State Router Integration
-try:
+    try:
         ComputeMode,
         StrategyTier,
         get_dual_state_router,
@@ -68,7 +69,7 @@ try:
 
     DUAL_STATE_AVAILABLE = True
     logger.info("🔄 Dual State Router integration enabled in Strategy Bit Mapper")
-except ImportError:
+    except ImportError:
     DUAL_STATE_AVAILABLE = False
     logger.warning("⚠️ Dual State Router not available in Strategy Bit Mapper")
 
@@ -78,21 +79,21 @@ except ImportError:
     temporal_algebra,
 )
 # Optional: Import dashboard event emitter if available
-try:
-except ImportError:
+    try:
+    pass
+    except ImportError:
 
     def emit_dashboard_event(event: str, data: Any) -> None:
-        """Emit dashboard event (no-op fallback)."""
-        pass
+        """Emit dashboard event (no-op, fallback)."""
 
 
 # Optional: Import profit tick logger if available
-try:
-except ImportError:
+    try:
+    pass
+    except ImportError:
 
     def log_profit_tick(data: Any) -> None:
-        """Log profit tick (no-op fallback)."""
-        pass
+        """Log profit tick (no-op, fallback)."""
 
 
 logger = logging.getLogger(__name__)
@@ -115,7 +116,7 @@ class StrategyBitMapper:
     for real-time, adaptive trading.
     """
 
-    def __init__(
+    def __init__()
         self,
         matrix_dir,
         dashboard_hook: Optional[Callable] = None,
@@ -125,7 +126,7 @@ class StrategyBitMapper:
         os.makedirs(self.matrix_dir, exist_ok=True)
         self.dashboard_hook = dashboard_hook or emit_dashboard_event
         self.expansion_history = []
-        self.metrics = {
+        self.metrics = {}
             "total_expansions": 0,
             "successful_mappings": 0,
             "failed_mappings": 0,
@@ -146,14 +147,14 @@ class StrategyBitMapper:
         self.api_data_cache: Dict[str, Any] = {}
 
         self.tensor_weights = safe_cuda_operation(lambda: xp.ones(64), lambda: np.ones(64))
-        self.weight_update_rate = 0.01
+        self.weight_update_rate = 0.1
         self.rebalancing_threshold = 0.1
 
         self.matrix_mapper = EnhancedMatrixMapper(matrix_dir, weather_api_key)
         self.schwafit = SchwafitCore(window=64)
         self.orbital_brain = OrbitalBRAINSystem()
 
-    def apply_qutrit_gate(
+    def apply_qutrit_gate()
         self, strategy_id: str, seed: str, market_data: Optional[Dict[str, Any]] = None
     ) -> Dict[str, Any]:
         """
@@ -183,7 +184,7 @@ class StrategyBitMapper:
                 action = "recheck"
                 reason = "Qutrit state indicates re-evaluation needed"
 
-            return {
+            return {}
                 "strategy_id": strategy_id,
                 "action": action,
                 "reason": reason,
@@ -195,7 +196,7 @@ class StrategyBitMapper:
 
         except Exception as e:
             logger.error("Error applying qutrit gate: {0}".format(e))
-            return {
+            return {}
                 "strategy_id": strategy_id,
                 "action": "defer",
                 "reason": "Qutrit gate error: {0}".format(str(e)),
@@ -207,7 +208,7 @@ class StrategyBitMapper:
 
     def defer(self, strategy_id: str) -> Dict[str, Any]:
         """Defer strategy execution"""
-        return {
+        return {}
             "strategy_id": strategy_id,
             "action": "defer",
             "reason": "Strategy deferred by qutrit gate",
@@ -216,7 +217,7 @@ class StrategyBitMapper:
 
     def execute_trade(self, strategy_id: str) -> Dict[str, Any]:
         """Execute trade strategy"""
-        return {
+        return {}
             "strategy_id": strategy_id,
             "action": "execute",
             "reason": "Strategy executed by qutrit gate",
@@ -225,7 +226,7 @@ class StrategyBitMapper:
 
     def recheck_later(self, strategy_id: str) -> Dict[str, Any]:
         """Recheck strategy later"""
-        return {
+        return {}
             "strategy_id": strategy_id,
             "action": "recheck",
             "reason": "Strategy marked for re-evaluation",
@@ -234,14 +235,14 @@ class StrategyBitMapper:
 
     def normalize_vector(self, v: np.ndarray) -> np.ndarray:
         norm = safe_cuda_operation(lambda: xp.linalg.norm(v), lambda: np.linalg.norm(v))
-        return safe_cuda_operation(lambda: v / norm if norm > 0 else v, lambda: v / norm if norm > 0 else v)
+        return safe_cuda_operation(lambda: v / norm if norm > 0 else v, lambda: v / norm if norm > 0 else, v)
 
     def compute_cosine_similarity(self, a: np.ndarray, b: np.ndarray) -> float:
         a = self.normalize_vector(a)
         b = self.normalize_vector(b)
         return float(safe_cuda_operation(lambda: xp.dot(a, b), lambda: np.dot(a, b)))
 
-    def expand_strategy_bits(
+    def expand_strategy_bits()
         self,
         strategy_id: int,
         target_bits: int = 8,
@@ -271,7 +272,7 @@ class StrategyBitMapper:
 
     def _tensor_weighted_expansion(self, strategy_id: int, target_bits: int) -> int:
         strategy_vector = np.array([int(b) for b in format(strategy_id, "0{0}b".format(target_bits))])
-        weighted_vector = safe_cuda_operation(
+        weighted_vector = safe_cuda_operation()
             lambda: strategy_vector * self.tensor_weights[:target_bits],
             lambda: strategy_vector * self.tensor_weights[:target_bits],
         )
@@ -288,9 +289,9 @@ class StrategyBitMapper:
         adaptive_shift = altitude_shift + consensus_shift
         expanded_strategy = (strategy_id + adaptive_shift) % (1 << target_bits)
 
-        self.dashboard_hook(
+        self.dashboard_hook()
             "orbital_expansion",
-            {
+            {}
                 "strategy_id": strategy_id,
                 "altitude": altitude_vector.altitude_value,
                 "consensus": shell_consensus.consensus_score,
@@ -309,7 +310,7 @@ class StrategyBitMapper:
     def _get_simulated_market_data(self) -> Dict[str, Any]:
         prices = [50000.0 + np.random.normal(0, 1000) for _ in range(20)]
         volumes = [np.random.exponential(1000) for _ in range(20)]
-        return {
+        return {}
             'price_history': prices,
             'volume_history': volumes,
             'current_price': prices[-1],

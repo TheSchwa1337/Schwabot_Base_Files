@@ -49,7 +49,7 @@ def main():
     print(f"Found {len(python_files)} Python files")
 
     for py_file in python_files:
-        if py_file.name != "fix_whitespace.py":  # Don't modify this script
+        if py_file.name != "fix_whitespace.py":  # Don't modify this script'
             fix_whitespace_issues(py_file)
 
     print("Whitespace fixes completed!")

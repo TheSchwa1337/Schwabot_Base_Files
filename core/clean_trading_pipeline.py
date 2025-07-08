@@ -41,14 +41,12 @@ from .unified_market_data_pipeline import (
     MarketDataPacket,
     create_unified_pipeline,
 )
-from .unified_math_system import UnifiedMathSystem, create_unified_math_system
+from .unified_math_system import create_unified_math_system
 from .zpe_zbe_core import (
-    QuantumPerformanceEntry,
     QuantumPerformanceRegistry,
     QuantumSyncStatus,
     ZBEBalance,
     ZPEVector,
-    ZPEZBECore,
     ZPEZBEPerformanceTracker,
     create_zpe_zbe_core,
 )
@@ -233,9 +231,9 @@ class RiskParameters:
     """Risk management parameters."""
 
     max_position_size: float = 0.1  # 10% max position
-    stop_loss_pct: float = 0.02  # 2% stop loss
-    take_profit_pct: float = 0.04  # 4% take profit
-    max_daily_loss: float = 0.05  # 5% max daily loss
+    stop_loss_pct: float = 0.2  # 2% stop loss
+    take_profit_pct: float = 0.4  # 4% take profit
+    max_daily_loss: float = 0.5  # 5% max daily loss
     volatility_threshold: float = 0.8  # High volatility threshold
     correlation_threshold: float = 0.9  # High correlation threshold
 
@@ -252,16 +250,15 @@ class CleanTradingPipeline:
     - Real-time market analysis and decision making
     """
 
-    def __init__(
-        self,
-        symbol: str = "BTCUSDT",
-        initial_capital: float = 10000.0,
-        risk_params: Optional[RiskParameters] = None,
-        matrix_dir: Union[str, Path] = "data/matrices",
-        registry_file: Optional[str] = None,
-        pipeline_config: Optional[Dict[str, Any]] = None,
-        safe_mode: bool = False,
-    ):
+    def __init__(self,
+                 symbol: str = "BTCUSDT",
+                 initial_capital: float = 10000.0,
+                 risk_params: Optional[RiskParameters] = None,
+                 matrix_dir: Union[str, Path] = "data/matrices",
+                 registry_file: Optional[str] = None,
+                 pipeline_config: Optional[Dict[str, Any]] = None,
+                 safe_mode: bool = False,
+                 ):
         """Initialize the trading pipeline."""
         self.symbol = symbol
         self.initial_capital = initial_capital
@@ -280,20 +277,19 @@ class CleanTradingPipeline:
         self.matrix_dir = Path(matrix_dir)
         self.strategy_bit_mapper = StrategyBitMapper(matrix_dir=self.matrix_dir)
 
-        # Initialize PortfolioTracker (assuming it handles real portfolio data
+        # Initialize PortfolioTracker (assuming it handles real portfolio, data)
         # eventually)
         # Placeholder until actual implementation is verified
         self.portfolio_tracker = PortfolioTracker()
 
-        # Initialize CCXTTradingExecutor (needs a proper config for live
+        # Initialize CCXTTradingExecutor (needs a proper config for, live)
         # trading)
-        self.ccxt_executor = CCXTTradingExecutor(
-            config={
-                "exchange": "binance",  # Example: configure for your exchange
-                "apiKey": "YOUR_API_KEY",
-                "secret": "YOUR_SECRET_KEY",
-            }
-        )
+        self.ccxt_executor = CCXTTradingExecutor()
+        self.ccxt_executor.config = {
+            "exchange": "binance",  # Example: configure for your exchange
+            "apiKey": "YOUR_API_KEY",
+            "secret": "YOUR_SECRET_KEY",
+        }
 
         # Initialize PhaseBitIntegration for dualistic state analysis
         self.phase_bit_integration = phase_bit_integration
@@ -303,19 +299,18 @@ class CleanTradingPipeline:
         self.unified_math_system = create_unified_math_system()
 
         # Pipeline state
-        self.state = PipelineState(
-            timestamp=time.time(),
-            active_strategy=StrategyBranch.MOMENTUM,
-            current_capital=initial_capital,
-            total_trades=0,
-            winning_trades=0,
-            losing_trades=0,
-            total_profit=0.0,
-            current_risk_level=0.0,
-            market_regime=MarketRegime.SIDEWAYS,
-            thermal_state=ThermalState.WARM,
-            bit_phase=BitPhase.EIGHT_BIT,
-        )
+        self.state = PipelineState()
+        self.state.timestamp = time.time()
+        self.state.active_strategy = StrategyBranch.MOMENTUM
+        self.state.current_capital = initial_capital
+        self.state.total_trades = 0
+        self.state.winning_trades = 0
+        self.state.losing_trades = 0
+        self.state.total_profit = 0.0
+        self.state.current_risk_level = 0.0
+        self.state.market_regime = MarketRegime.SIDEWAYS
+        self.state.thermal_state = ThermalState.WARM
+        self.state.bit_phase = BitPhase.EIGHT_BIT
 
         # Initialize ZPE-ZBE Performance Tracker
         self.zpe_zbe_performance_tracker = ZPEZBEPerformanceTracker()
@@ -326,25 +321,23 @@ class CleanTradingPipeline:
         self.crlf = create_crlf()
 
         # Enhanced pipeline state with CRLF tracking
-        self.crlf_enhanced_state = CRLFEnhancedPipelineState(
-            base_state=self.state,
-            crlf_instance=self.crlf,
-            current_crlf_output=0.0,
-            current_trigger_state=CRLFTriggerState.HOLD,
-            strategy_alignment_trend=[],
-            temporal_resonance_history=[],
-            recursion_depth_history=[],
-        )
+        self.crlf_enhanced_state = CRLFEnhancedPipelineState()
+        self.crlf_enhanced_state.base_state = self.state
+        self.crlf_enhanced_state.crlf_instance = self.crlf
+        self.crlf_enhanced_state.current_crlf_output = 0.0
+        self.crlf_enhanced_state.current_trigger_state = CRLFTriggerState.HOLD
+        self.crlf_enhanced_state.strategy_alignment_trend = []
+        self.crlf_enhanced_state.temporal_resonance_history = []
+        self.crlf_enhanced_state.recursion_depth_history = []
 
-        self.zpe_zbe_state = ZPEZBEPipelineState(
-            base_state=self.state,
-            current_zpe_energy=0.0,
-            current_zbe_status=0.0,
-            quantum_sync_status=QuantumSyncStatus.UNSYNCED,
-            quantum_potential=0.0,
-            system_entropy=0.0,
-            performance_registry=QuantumPerformanceRegistry(),
-        )
+        self.zpe_zbe_state = ZPEZBEPipelineState()
+        self.zpe_zbe_state.base_state = self.state
+        self.zpe_zbe_state.current_zpe_energy = 0.0
+        self.zpe_zbe_state.current_zbe_status = 0.0
+        self.zpe_zbe_state.quantum_sync_status = QuantumSyncStatus.UNSYNCED
+        self.zpe_zbe_state.quantum_potential = 0.0
+        self.zpe_zbe_state.system_entropy = 0.0
+        self.zpe_zbe_state.performance_registry = QuantumPerformanceRegistry()
 
         # Market data history for analysis
         self.market_data_history: List[MarketData] = []
@@ -388,14 +381,12 @@ class CleanTradingPipeline:
             },
         }
 
-    async def process_market_data(
-        self, market_data: Optional[Dict] = None, force_refresh: bool = False
-    ) -> Optional[Dict]:
+    async def process_market_data(self, market_data: Optional[Dict] = None, force_refresh: bool = False) -> Optional[Dict]:
         """
         Process market data through unified pipeline and execute trading logic.
 
         Args:
-            market_data: Optional manual market data (for testing)
+            market_data: Optional manual market data (for, testing)
             force_refresh: Force refresh from APIs
 
         Returns:
@@ -410,6 +401,7 @@ class CleanTradingPipeline:
             else:
                 # Get data from unified pipeline
                 symbol_base = self.symbol.replace("USDT", "").replace("USD", "")
+                market_packet = await self.market_pipeline.get_market_data()
                 market_packet = await self.market_pipeline.get_market_data(symbol_base, force_refresh=force_refresh)
 
                 # Convert to trading pipeline format
@@ -491,9 +483,7 @@ class CleanTradingPipeline:
             "freshness_score": packet.freshness_score,
         }
 
-    def _calculate_enhanced_trading_signals(
-        self, packet: Optional[MarketDataPacket], data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    def _calculate_enhanced_trading_signals(self, packet: Optional[MarketDataPacket], data: Dict[str, Any]) -> Dict[str, Any]:
         """Calculate enhanced trading signals using unified market data."""
         signals = {
             "buy_signals": [],
@@ -534,41 +524,21 @@ class CleanTradingPipeline:
 
         # Fear & Greed signals
         if sentiment.fear_greed_index < 25:
-            signals["buy_signals"].append(
-                {"indicator": "extreme_fear", "strength": 0.4, "value": sentiment.fear_greed_index}
-            )
+            signals["buy_signals"].append({"indicator": "extreme_fear", "strength": 0.4, "value": sentiment.fear_greed_index})
         elif sentiment.fear_greed_index > 75:
-            signals["sell_signals"].append(
-                {"indicator": "extreme_greed", "strength": 0.4, "value": sentiment.fear_greed_index}
-            )
+            signals["sell_signals"].append({"indicator": "extreme_greed", "strength": 0.4, "value": sentiment.fear_greed_index})
 
         # On-chain signals
         if onchain.mvrv_ratio < 0.8:
-            signals["buy_signals"].append(
-                {"indicator": "mvrv_undervalued", "strength": 0.3, "value": onchain.mvrv_ratio}
-            )
+            signals["buy_signals"].append({"indicator": "mvrv_undervalued", "strength": 0.3, "value": onchain.mvrv_ratio})
         elif onchain.mvrv_ratio > 3.0:
-            signals["sell_signals"].append(
-                {"indicator": "mvrv_overvalued", "strength": 0.3, "value": onchain.mvrv_ratio}
-            )
+            signals["sell_signals"].append({"indicator": "mvrv_overvalued", "strength": 0.3, "value": onchain.mvrv_ratio})
 
         # Network health signals
         if onchain.network_health_score > 80:
-            signals["buy_signals"].append(
-                {
-                    "indicator": "network_healthy",
-                    "strength": 0.2,
-                    "value": onchain.network_health_score,
-                }
-            )
+            signals["buy_signals"].append({"indicator": "network_healthy", "strength": 0.2, "value": onchain.network_health_score})
         elif onchain.network_health_score < 30:
-            signals["sell_signals"].append(
-                {
-                    "indicator": "network_unhealthy",
-                    "strength": 0.2,
-                    "value": onchain.network_health_score,
-                }
-            )
+            signals["sell_signals"].append({"indicator": "network_unhealthy", "strength": 0.2, "value": onchain.network_health_score})
 
         # Calculate overall signal strength
         buy_strength = sum(s["strength"] for s in signals["buy_signals"])
@@ -590,9 +560,7 @@ class CleanTradingPipeline:
 
         return signals
 
-    def _assess_risk_with_market_data(
-        self, packet: Optional[MarketDataPacket], signals: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    def _assess_risk_with_market_data(self, packet: Optional[MarketDataPacket], signals: Dict[str, Any]) -> Dict[str, Any]:
         """Assess trading risk using market data and portfolio state."""
         risk_assessment = {
             "risk_level": "medium",
@@ -602,8 +570,8 @@ class CleanTradingPipeline:
             "data_quality_risk": 0.5,
             "position_risk": 0.5,
             "recommended_position_size": 0.1,
-            "stop_loss_distance": 0.02,
-            "take_profit_distance": 0.04,
+            "stop_loss_distance": 0.2,
+            "take_profit_distance": 0.4,
         }
 
         if not packet:
@@ -642,13 +610,13 @@ class CleanTradingPipeline:
         confidence_multiplier = signals.get("confidence", 0.5)
 
         recommended_size = base_position_size * risk_multiplier * confidence_multiplier
-        risk_assessment["recommended_position_size"] = max(0.01, min(0.25, recommended_size))
+        risk_assessment["recommended_position_size"] = max(0.1, min(0.25, recommended_size))
 
         # Dynamic stop loss based on ATR and volatility
-        atr_distance = packet.technical_indicators.atr_14 / packet.price if packet.price > 0 else 0.02
+        atr_distance = (packet.technical_indicators.atr_14 / packet.price if packet.price > 0 else 0.2)
         volatility_distance = packet.volatility * 2.0
 
-        stop_loss_distance = max(0.01, min(0.05, (atr_distance + volatility_distance) / 2.0))
+        stop_loss_distance = max(0.1, min(0.5, (atr_distance + volatility_distance) / 2.0))
         risk_assessment["stop_loss_distance"] = stop_loss_distance
 
         # Take profit target (risk-reward ratio of 2:1)
@@ -671,14 +639,10 @@ class CleanTradingPipeline:
         if confidence >= min_confidence:
             if signal_strength > 0.5:
                 action = "buy"
-                reason = "Strong buy signals (strength: {0:.2f}, confidence: {1:.2f})".format(
-                    signal_strength, 
-                    confidence)
+                reason = "Strong buy signals (strength: {0:.2f}, confidence: {1:.2f})".format(signal_strength, confidence)
             elif signal_strength < -0.5:
                 action = "sell"
-                reason = "Strong sell signals (strength: {0:.2f}, confidence: {1:.2f})".format(
-                    signal_strength, 
-                    confidence)
+                reason = "Strong sell signals (strength: {0:.2f}, confidence: {1:.2f})".format(signal_strength, confidence)
 
         return {
             "action": action,
@@ -686,13 +650,11 @@ class CleanTradingPipeline:
             "signal_strength": signal_strength,
             "confidence": confidence,
             "position_size": risk_assessment.get("recommended_position_size", 0.1),
-            "stop_loss_distance": risk_assessment.get("stop_loss_distance", 0.02),
-            "take_profit_distance": risk_assessment.get("take_profit_distance", 0.04),
+            "stop_loss_distance": risk_assessment.get("stop_loss_distance", 0.2),
+            "take_profit_distance": risk_assessment.get("take_profit_distance", 0.4),
         }
 
-    def _log_trade_to_registry(
-        self, packet: MarketDataPacket, trade_action: Dict[str, Any], trade_result: Dict[str, Any]
-    ):
+    def _log_trade_to_registry(self, packet: MarketDataPacket, trade_action: Dict[str, Any], trade_result: Dict[str, Any]):
         """Log trade to soulprint registry with market data context."""
         if not self.registry:
             return
@@ -729,11 +691,7 @@ class CleanTradingPipeline:
                 trade_result=trade_result,
             )
 
-            logger.info(
-                "Trade logged to registry: {0} {1}".format(
-                    trade_action['action'], 
-                    packet.symbol)
-            )
+            logger.info("Trade logged to registry: {0} {1}".format(trade_action['action'], packet.symbol))
 
         except Exception as e:
             logger.error("Failed to log trade to registry: {0}".format(e))
@@ -749,14 +707,12 @@ class CleanTradingPipeline:
             Enhanced market data with CRLF analysis
         """
         # Prepare strategy vector from market data
-        strategy_vector = np.array(
-            [
-                market_data.volatility,  # Momentum component
-                market_data.trend_strength,  # Scalping component
-                1.0 - market_data.volatility,  # Mean reversion component
-                market_data.entropy_level / 10.0,  # Swing component (normalized)
-            ]
-        )
+        strategy_vector = np.array([
+            market_data.volatility,  # Momentum component
+            market_data.trend_strength,  # Scalping component
+            1.0 - market_data.volatility,  # Mean reversion component
+            market_data.entropy_level / 10.0,  # Swing component (normalized)
+        ])
 
         # Prepare profit curve from market data history
         if len(self.market_data_history) >= 7:
@@ -803,8 +759,8 @@ class CleanTradingPipeline:
             "price": market_data.price,
             "entry_price": market_data.price,  # Could be enhanced with actual entry price
             "lower_bound": market_data.price * 0.95,
-            "upper_bound": market_data.price * 1.05,
-            "frequency": 7.83,  # Earth's Schumann resonance
+            "upper_bound": market_data.price * 1.5,
+            "frequency": 7.83,  # Earth's Schumann resonance'
             "mass_coefficient": 1e-6,
         }
 
@@ -836,9 +792,7 @@ class CleanTradingPipeline:
             soulprint_vector=quantum_analysis["soulprint_vector"],
         )
 
-    def _enhance_strategy_selection_with_zpe_zbe(
-        self, market_data: MarketData, regime: MarketRegime
-    ) -> Tuple[StrategyBranch, Dict[str, Any]]:
+    def _enhance_strategy_selection_with_zpe_zbe(self, market_data: MarketData, regime: MarketRegime) -> Tuple[StrategyBranch, Dict[str, Any]]:
         """
         Enhance strategy selection with ZPE-ZBE analysis.
 
@@ -859,10 +813,7 @@ class CleanTradingPipeline:
         quantum_recommendations = self.unified_math_system.get_quantum_strategy_recommendations()
 
         # Adjust strategy based on quantum analysis
-        if zpe_zbe_market_data.quantum_sync_status in [
-            QuantumSyncStatus.FULL_SYNC,
-            QuantumSyncStatus.RESONANCE,
-        ]:
+        if zpe_zbe_market_data.quantum_sync_status in [QuantumSyncStatus.FULL_SYNC, QuantumSyncStatus.RESONANCE]:
             # High quantum sync - use more conservative strategy
             if base_strategy == StrategyBranch.MOMENTUM:
                 adjusted_strategy = StrategyBranch.SWING
@@ -888,9 +839,7 @@ class CleanTradingPipeline:
             "recommendations": quantum_recommendations,
         }
 
-    def _enhance_trading_decision_with_zpe_zbe(
-        self, base_decision: TradingDecision, zpe_zbe_market_data: ZPEZBEMarketData
-    ) -> ZPEZBETradingDecision:
+    def _enhance_trading_decision_with_zpe_zbe(self, base_decision: TradingDecision, zpe_zbe_market_data: ZPEZBEMarketData) -> ZPEZBETradingDecision:
         """
         Enhance trading decision with ZPE-ZBE analysis.
 
@@ -903,8 +852,7 @@ class CleanTradingPipeline:
         """
         # Get quantum decision routing
         quantum_analysis = {
-            "is_synced": zpe_zbe_market_data.quantum_sync_status
-            in [QuantumSyncStatus.FULL_SYNC, QuantumSyncStatus.RESONANCE],
+            "is_synced": zpe_zbe_market_data.quantum_sync_status in [QuantumSyncStatus.FULL_SYNC, QuantumSyncStatus.RESONANCE],
             "zpe_energy": zpe_zbe_market_data.zpe_vector.energy,
             "zbe_status": zpe_zbe_market_data.zbe_balance.status,
             "quantum_potential": zpe_zbe_market_data.quantum_potential,
@@ -941,9 +889,7 @@ class CleanTradingPipeline:
             system_entropy=system_entropy,
         )
 
-    def _enhance_risk_management_with_zpe_zbe(
-        self, signal: Dict[str, Any], zpe_zbe_market_data: ZPEZBEMarketData
-    ) -> Dict[str, Any]:
+    def _enhance_risk_management_with_zpe_zbe(self, signal: Dict[str, Any], zpe_zbe_market_data: ZPEZBEMarketData) -> Dict[str, Any]:
         """
         Enhance risk management with ZPE-ZBE analysis.
 
@@ -1016,9 +962,7 @@ class CleanTradingPipeline:
             "stability_score": zpe_zbe_decision.base_decision.metadata.get("zbe_stability_score", 0.0),
         }
 
-    def _enhance_trading_decision_with_crlf(
-        self, base_decision: TradingDecision, crlf_market_data: CRLFEnhancedMarketData
-    ) -> CRLFEnhancedTradingDecision:
+    def _enhance_trading_decision_with_crlf(self, base_decision: TradingDecision, crlf_market_data: CRLFEnhancedMarketData) -> CRLFEnhancedTradingDecision:
         """
         Enhance trading decision with CRLF analysis.
 
@@ -1048,9 +992,7 @@ class CleanTradingPipeline:
             strategy_weights=crlf_response.recommendations.get("strategy_weights", {}),
         )
 
-    def _adjust_decision_with_crlf(
-        self, base_decision: TradingDecision, crlf_response: CRLFResponse
-    ) -> TradingDecision:
+    def _adjust_decision_with_crlf(self, base_decision: TradingDecision, crlf_response: CRLFResponse) -> TradingDecision:
         """
         Adjust trading decision based on CRLF analysis.
 
@@ -1096,14 +1038,12 @@ class CleanTradingPipeline:
         adjusted_decision.risk_score *= risk_adjustment
 
         # Add CRLF metadata
-        adjusted_decision.metadata.update(
-            {
-                "crlf_output": crlf_response.crlf_output,
-                "crlf_confidence": crlf_response.confidence,
-                "recursion_depth": crlf_response.recursion_depth,
-                "strategy_weights": crlf_response.recommendations.get("strategy_weights", {}),
-            }
-        )
+        adjusted_decision.metadata.update({
+            "crlf_output": crlf_response.crlf_output,
+            "crlf_confidence": crlf_response.confidence,
+            "recursion_depth": crlf_response.recursion_depth,
+            "strategy_weights": crlf_response.recommendations.get("strategy_weights", {}),
+        })
 
         return adjusted_decision
 
@@ -1126,15 +1066,9 @@ class CleanTradingPipeline:
         # Keep history manageable
         max_history = 100
         if len(self.crlf_enhanced_state.strategy_alignment_trend) > max_history:
-            self.crlf_enhanced_state.strategy_alignment_trend = self.crlf_enhanced_state.strategy_alignment_trend[
-                -max_history:
-            ]
-            self.crlf_enhanced_state.temporal_resonance_history = self.crlf_enhanced_state.temporal_resonance_history[
-                -max_history:
-            ]
-            self.crlf_enhanced_state.recursion_depth_history = self.crlf_enhanced_state.recursion_depth_history[
-                -max_history:
-            ]
+            self.crlf_enhanced_state.strategy_alignment_trend = self.crlf_enhanced_state.strategy_alignment_trend[-max_history:]
+            self.crlf_enhanced_state.temporal_resonance_history = self.crlf_enhanced_state.temporal_resonance_history[-max_history:]
+            self.crlf_enhanced_state.recursion_depth_history = self.crlf_enhanced_state.recursion_depth_history[-max_history:]
 
         # Store last analysis
         self.crlf_enhanced_state.last_crlf_analysis = {
@@ -1187,21 +1121,9 @@ class CleanTradingPipeline:
             "pipeline_crlf_state": {
                 "current_crlf_output": self.crlf_enhanced_state.current_crlf_output,
                 "current_trigger_state": self.crlf_enhanced_state.current_trigger_state.value,
-                "strategy_alignment_trend": (
-                    self.crlf_enhanced_state.strategy_alignment_trend[-10:]
-                    if self.crlf_enhanced_state.strategy_alignment_trend
-                    else []
-                ),
-                "temporal_resonance_history": (
-                    self.crlf_enhanced_state.temporal_resonance_history[-10:]
-                    if self.crlf_enhanced_state.temporal_resonance_history
-                    else []
-                ),
-                "recursion_depth_history": (
-                    self.crlf_enhanced_state.recursion_depth_history[-10:]
-                    if self.crlf_enhanced_state.recursion_depth_history
-                    else []
-                ),
+                "strategy_alignment_trend": self.crlf_enhanced_state.strategy_alignment_trend[-10:] if self.crlf_enhanced_state.strategy_alignment_trend else [],
+                "temporal_resonance_history": self.crlf_enhanced_state.temporal_resonance_history[-10:] if self.crlf_enhanced_state.temporal_resonance_history else [],
+                "recursion_depth_history": self.crlf_enhanced_state.recursion_depth_history[-10:] if self.crlf_enhanced_state.recursion_depth_history else [],
                 "last_crlf_analysis": self.crlf_enhanced_state.last_crlf_analysis,
             },
         }
@@ -1245,7 +1167,7 @@ class CleanTradingPipeline:
             "volume": market_data.volume,
             "volatility": market_data.volatility,
             "entry_price": (self.market_data_history[0].price if self.market_data_history else market_data.price),
-            "frequency": 7.83,  # Earth's Schumann resonance frequency
+            "frequency": 7.83,  # Earth's Schumann resonance frequency'
             "mass_coefficient": market_data.volume / 1000000.0,  # Normalize volume
         }
 
@@ -1308,7 +1230,7 @@ class CleanTradingPipeline:
             "volume": market_data.volume,
             "volatility": market_data.volatility,
             "entry_price": (self.market_data_history[0].price if self.market_data_history else market_data.price),
-            "frequency": 7.83,  # Earth's Schumann resonance frequency
+            "frequency": 7.83,  # Earth's Schumann resonance frequency'
             "mass_coefficient": market_data.volume / 1000000.0,  # Normalize volume
         }
 
@@ -1369,7 +1291,7 @@ class CleanTradingPipeline:
     def _create_profit_vector(self, signal: Dict[str, Any], market_data: MarketData) -> ProfitVector:
         """Create profit vector for the signal."""
         # This method needs to adapt to receive IntegratedTradingSignal or its data
-        # For now, I'll adjust it to expect a dict compatible with previous signals.
+        # For now, I'll adjust it to expect a dict compatible with previous signals.'
         # If signal is IntegratedTradingSignal, convert it to dict for
         # compatibility.
         if isinstance(signal, IntegratedTradingSignal):
@@ -1412,7 +1334,7 @@ class CleanTradingPipeline:
                 "action": "SELL",
                 "quantity": self._calculate_position_size(market_data, "SELL"),
                 "confidence": min(abs(z_score) / 3.0, 1.0),
-                "profit_potential": abs(z_score) * 0.01,
+                "profit_potential": abs(z_score) * 0.1,
                 "risk_score": 0.3,
                 "metadata": {"z_score": z_score, "mean_price": mean_price},
             }
@@ -1421,7 +1343,7 @@ class CleanTradingPipeline:
                 "action": "BUY",
                 "quantity": self._calculate_position_size(market_data, "BUY"),
                 "confidence": min(abs(z_score) / 3.0, 1.0),
-                "profit_potential": abs(z_score) * 0.01,
+                "profit_potential": abs(z_score) * 0.1,
                 "risk_score": 0.3,
                 "metadata": {"z_score": z_score, "mean_price": mean_price},
             }
@@ -1441,7 +1363,7 @@ class CleanTradingPipeline:
         volume_surge = market_data.volume / np.mean([md.volume for md in self.market_data_history[-5:]])
 
         # Momentum logic
-        if momentum > 0.01 and volume_surge > 1.2:  # Strong upward momentum
+        if momentum > 0.1 and volume_surge > 1.2:  # Strong upward momentum
             return {
                 "action": "BUY",
                 "quantity": self._calculate_position_size(market_data, "BUY"),
@@ -1450,7 +1372,7 @@ class CleanTradingPipeline:
                 "risk_score": 0.4,
                 "metadata": {"momentum": momentum, "volume_surge": volume_surge},
             }
-        elif momentum < -0.01 and volume_surge > 1.2:  # Strong downward momentum
+        elif momentum < -0.1 and volume_surge > 1.2:  # Strong downward momentum
             return {
                 "action": "SELL",
                 "quantity": self._calculate_position_size(market_data, "SELL"),
@@ -1464,12 +1386,12 @@ class CleanTradingPipeline:
 
     def _arbitrage_signal(self, market_data: MarketData) -> Dict[str, Any]:
         """Generate arbitrage signal."""
-        # Simplified arbitrage logic (would need multiple exchanges in real
+        # Simplified arbitrage logic (would need multiple exchanges in, real)
         # implementation)
         if market_data.bid and market_data.ask:
             spread = (market_data.ask - market_data.bid) / market_data.price
 
-            if spread > 0.005:  # Minimum profitable spread
+            if spread > 0.05:  # Minimum profitable spread
                 return {
                     "action": "BUY",  # Buy at bid, sell at ask
                     "quantity": self._calculate_position_size(market_data, "BUY") * 0.5,
@@ -1492,7 +1414,7 @@ class CleanTradingPipeline:
         volatility = market_data.volatility
 
         # Scalping logic - capitalize on small movements
-        if abs(price_change) > 0.002 and volatility > 0.3:
+        if abs(price_change) > 0.02 and volatility > 0.3:
             action = "BUY" if price_change > 0 else "SELL"
             return {
                 "action": action,
@@ -1524,7 +1446,7 @@ class CleanTradingPipeline:
         support = np.mean(recent_lows) if recent_lows else current_price
 
         # Swing logic
-        if current_price <= support * 1.02 and trend > 0:  # Near support with uptrend
+        if current_price <= support * 1.2 and trend > 0:  # Near support with uptrend
             return {
                 "action": "BUY",
                 "quantity": self._calculate_position_size(market_data, "BUY"),
@@ -1567,7 +1489,7 @@ class CleanTradingPipeline:
                 "action": "BUY",
                 "quantity": self._calculate_position_size(market_data, "BUY") * 0.8,
                 "confidence": 0.6,
-                "profit_potential": 0.01,
+                "profit_potential": 0.1,
                 "risk_score": 0.3,
                 "metadata": {"grid_level": grid_level, "grid_size": grid_size},
             }
@@ -1576,7 +1498,7 @@ class CleanTradingPipeline:
                 "action": "SELL",
                 "quantity": self._calculate_position_size(market_data, "SELL") * 0.8,
                 "confidence": 0.6,
-                "profit_potential": 0.01,
+                "profit_potential": 0.1,
                 "risk_score": 0.3,
                 "metadata": {"grid_level": grid_level, "grid_size": grid_size},
             }
@@ -1584,18 +1506,16 @@ class CleanTradingPipeline:
         return None
 
     def _apply_risk_management(self, signal: Dict[str, Any], market_data: MarketData) -> Optional[Dict[str, Any]]:
-        # This method's logic will now be largely integrated into _determine_asset_and_signal
-        # so it's kept as a placeholder or for very specific, final checks if needed.
+        # This method's logic will now be largely integrated into _determine_asset_and_signal'
+        # so it's kept as a placeholder or for very specific, final checks if needed.'
         # For now, it simply returns the signal, as risk logic is shifting.
         return signal
 
     # --- New method to determine asset and formulate signal based on Ferris Wheel ---
-    async def _determine_asset_and_signal(
-        self,
-        expanded_strategy_id: int,
-        market_data: MarketData,
-        current_strategy_branch: StrategyBranch,
-    ) -> Tuple[Optional[IntegratedTradingSignal], Optional[str]]:
+    async def _determine_asset_and_signal(self,
+                                          expanded_strategy_id: int,
+                                          market_data: MarketData,
+                                          current_strategy_branch: StrategyBranch):
         """
         Determines the asset to trade and formulates the trading signal
         based on the expanded strategy ID from the Ferris Wheel.
@@ -1611,20 +1531,10 @@ class CleanTradingPipeline:
         try:
             # 1. PHASE BIT INTEGRATION - Determine optimal bit phase for this
             # decision
-            context_hash = "{0}_{1}_{2}".format(expanded_strategy_id, 
-                market_data.symbol, 
-                market_data.timestamp)
-            phase_resolution = self.phase_bit_integration.resolve_bit_phase(
-                context_hash=context_hash, resolution_mode="auto"
-            )
+            context_hash = "{0}_{1}_{2}".format(expanded_strategy_id, market_data.symbol, market_data.timestamp)
+            phase_resolution = self.phase_bit_integration.resolve_bit_phase(context_hash=context_hash, resolution_mode="auto")
 
-            logger.info(
-                "Phase resolution: {0} bits, strategy: {1}, confidence: {2:.3f}".format(
-                    phase_resolution.bit_phase.value,
-                    phase_resolution.strategy_type.value,
-                    phase_resolution.confidence
-                )
-            )
+            logger.info("Phase resolution: {0}".format(phase_resolution))
 
             # 2. REAL ASSET SELECTION - Get available assets from portfolio
             portfolio_summary = self.portfolio_tracker.get_portfolio_summary()
@@ -1643,7 +1553,7 @@ class CleanTradingPipeline:
                     "ETH/USDT",
                     "SOL/USDC",
                 ]
-                logger.info("Using default tradable assets (portfolio empty)")
+                logger.info("Using default tradable assets (portfolio, empty)")
 
             if not available_assets:
                 logger.error("No tradable assets available")
@@ -1662,11 +1572,7 @@ class CleanTradingPipeline:
                 selected_trading_pair = TradingPair.BTC_USDC  # Default fallback
                 logger.warning("Unsupported trading pair: {0}, using default".format(selected_asset_symbol))
 
-            logger.info(
-                "Ferris Wheel selected: {0} (ID: {1}, Index: {2}/{3})".format(
-                    selected_asset_symbol, expanded_strategy_id, asset_index, len(available_assets)
-                )
-            )
+            logger.info("Ferris Wheel selected: {0} (ID: {1}, Index: {2}/{3})".format(selected_asset_symbol, expanded_strategy_id, asset_index, len(available_assets)))
 
             # 4. DUALISTIC STATE ANALYSIS - Determine current market state and
             # strategy alignment
@@ -1721,39 +1627,24 @@ class CleanTradingPipeline:
                     timestamp=market_data.timestamp,
                 )
 
-                logger.info(
-                    "Generated signal: {0} {1} {2} (Confidence: {3}, Profit: {4})".format(
-                        signal.recommended_action, quantity, selected_asset_symbol,
-                        signal.confidence_score, signal.profit_potential
-                    )
-                )
+                logger.info("Generated signal: {0} {1} {2} (Confidence: {3}, Profit: {4})".format(signal.recommended_action, quantity, selected_asset_symbol, signal.confidence_score, signal.profit_potential))
 
                 return signal, selected_asset_symbol
             else:
-                logger.info(
-                    "No trade recommended for {0} (Action: {1}, Quantity: {2})".format(
-                        selected_asset_symbol, decision_data['action'], quantity
-                    )
-                )
+                logger.info("No trade recommended for {0} (Action: {1}, Quantity: {2})".format(selected_asset_symbol, decision_data['action'], quantity))
                 return None, selected_asset_symbol
 
         except Exception as e:
             logger.error("Error in _determine_asset_and_signal: {0}".format(e))
             return None, None
 
-    def _analyze_dualistic_state(
-        self, market_data: MarketData, expanded_strategy_id: int, phase_resolution: Any
-    ) -> Dict[str, Any]:
+    def _analyze_dualistic_state(self, market_data: MarketData, expanded_strategy_id: int, phase_resolution: Any) -> Dict[str, Any]:
         """
         Analyze dualistic state based on market data and strategy ID.
         This integrates your dualistic state machine logic.
         """
         # Create a hash-based dualistic state determination
-        state_hash = hash(
-            "{0}_{1}_{2}".format(expanded_strategy_id, 
-                market_data.price, 
-                market_data.volume)
-        )
+        state_hash = hash("{0}_{1}_{2}".format(expanded_strategy_id, market_data.price, market_data.volume))
 
         # Determine state based on hash and market conditions
         if state_hash % 2 == 0:
@@ -1777,14 +1668,12 @@ class CleanTradingPipeline:
             "market_alignment": market_data.trend_strength,
         }
 
-    async def _calculate_advanced_profit_vector(
-        self,
-        market_data: MarketData,
-        asset_symbol: str,
-        expanded_strategy_id: int,
-        phase_resolution: Any,
-        dualistic_state: Dict[str, Any],
-    ) -> ProfitVector:
+    async def _calculate_advanced_profit_vector(self,
+                                               market_data: MarketData,
+                                               asset_symbol: str,
+                                               expanded_strategy_id: int,
+                                               phase_resolution: Any,
+                                               dualistic_state: Dict[str, Any]):
         """
         Calculate advanced profit vector using your profit vectorization system.
         """
@@ -1823,14 +1712,12 @@ class CleanTradingPipeline:
 
         return profit_vector
 
-    def _integrate_decision_components(
-        self,
-        market_data: MarketData,
-        profit_vector: ProfitVector,
-        dualistic_state: Dict[str, Any],
-        expanded_strategy_id: int,
-        phase_resolution: Any,
-    ) -> Dict[str, Any]:
+    def _integrate_decision_components(self,
+                                       market_data: MarketData,
+                                       profit_vector: ProfitVector,
+                                       dualistic_state: Dict[str, Any],
+                                       expanded_strategy_id: int,
+                                       phase_resolution: Any) -> Dict[str, Any]:
         """
         Integrate all decision components to determine final trading action.
         """
@@ -1840,11 +1727,11 @@ class CleanTradingPipeline:
         profit_potential = 0.0
 
         # 1. Profit Vector Analysis
-        if profit_vector.profit_score > 0.02:  # 2% minimum profit potential
+        if profit_vector.profit_score > 0.2:  # 2% minimum profit potential
             action = "buy"
             confidence = profit_vector.confidence_score
             profit_potential = profit_vector.profit_score
-        elif profit_vector.profit_score < -0.02:  # Negative profit potential
+        elif profit_vector.profit_score < -0.2:  # Negative profit potential
             action = "sell"
             confidence = profit_vector.confidence_score
             profit_potential = abs(profit_vector.profit_score)
@@ -1886,13 +1773,11 @@ class CleanTradingPipeline:
             "strategy_pattern": strategy_pattern,
         }
 
-    def _calculate_advanced_position_size(
-        self,
-        market_data: MarketData,
-        decision_data: Dict[str, Any],
-        profit_vector: ProfitVector,
-        dualistic_state: Dict[str, Any],
-    ) -> float:
+    def _calculate_advanced_position_size(self,
+                                          market_data: MarketData,
+                                          decision_data: Dict[str, Any],
+                                          profit_vector: ProfitVector,
+                                          dualistic_state: Dict[str, Any]) -> float:
         """
         Calculate advanced position size based on multiple factors.
         """
@@ -1938,24 +1823,22 @@ class CleanTradingPipeline:
         # Cap at 2x base size
         return max(0.0, min(adjusted_size, base_size * 2.0))
 
-    def _calculate_comprehensive_risk(
-        self,
-        market_data: MarketData,
-        decision_data: Dict[str, Any],
-        profit_vector: ProfitVector,
-        quantity: float,
-        dualistic_state: Dict[str, Any],
-    ) -> Dict[str, float]:
+    def _calculate_comprehensive_risk(self,
+                                      market_data: MarketData,
+                                      decision_data: Dict[str, Any],
+                                      profit_vector: ProfitVector,
+                                      quantity: float,
+                                      dualistic_state: Dict[str, Any]) -> Dict[str, float]:
         """
         Calculate comprehensive risk assessment.
         """
         # Volatility risk
         volatility_risk = market_data.volatility * 0.8
 
-        # Position risk (based on position size relative to capital)
+        # Position risk (based on position size relative to, capital)
         position_risk = min((quantity * market_data.price) / self.state.current_capital, 1.0)
 
-        # Strategy risk (based on confidence and profit potential)
+        # Strategy risk (based on confidence and profit, potential)
         strategy_risk = 1.0 - decision_data["confidence"]
 
         # Market regime risk
@@ -1972,7 +1855,7 @@ class CleanTradingPipeline:
         else:
             dualistic_risk = 0.4
 
-        # Overall risk (weighted average)
+        # Overall risk (weighted, average)
         overall_risk = (
             volatility_risk * 0.3
             + position_risk * 0.25
@@ -2056,9 +1939,7 @@ class CleanTradingPipeline:
         profitable_trades = len([d for d in self.decision_history if d.profit_potential > 0])
 
         self.performance_metrics["win_rate"] = profitable_trades / total_trades if total_trades > 0 else 0
-        self.performance_metrics["total_return"] = (
-            self.state.current_capital - self.initial_capital
-        ) / self.initial_capital
+        self.performance_metrics["total_return"] = (self.state.current_capital - self.initial_capital) / self.initial_capital
 
     def get_pipeline_summary(self) -> Dict[str, Any]:
         """Get comprehensive pipeline summary."""
@@ -2095,7 +1976,7 @@ class CleanTradingPipeline:
     #  Historical-feed helpers (for DEMO / back-testing)
     # ---------------------------------------------------------------------
     def load_historical_feed(self, dataset_path: str, speed_multiplier: float = 1.0) -> None:
-        """Load a JSON candle file for demo/back-test playback.
+        """Load a JSON candle file for demo/back-test playback."
 
         Expected schema: list of {"timestamp": int, "open": float, "high": float, "low": float, "close": float, "volume": float}
         """
@@ -2105,11 +1986,7 @@ class CleanTradingPipeline:
             self._historical_feed = json.load(f)
         self._historical_cursor = 0
         self._historical_speed = max(speed_multiplier, 0.1)
-        logger.info(
-            "Historical feed loaded: {0} candles from {1} (x{2} speed)".format(
-                len(self._historical_feed), dataset_path, self._historical_speed
-            )
-        )
+        logger.info("Historical feed loaded: {0} candles from {1} (x{2} speed)".format(len(self._historical_feed), dataset_path, self._historical_speed))
 
     async def process_candle(self, candle: Dict[str, Any]) -> Optional[Dict[str, Any]]:
         """Process a single OHLCV candle through the same logic used in live trading."""
@@ -2136,9 +2013,7 @@ class CleanTradingPipeline:
     # ---------------------------------------------------------------------
     #  Override execute trade for LIVE-mode risk filters
     # ---------------------------------------------------------------------
-    async def _execute_trade_with_market_data(
-        self, trade_action: Dict[str, Any], packet: Optional[MarketDataPacket], data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _execute_trade_with_market_data(self, trade_action: Dict[str, Any], packet: Optional[MarketDataPacket], data: Dict[str, Any]) -> Dict[str, Any]:
         # ... existing code untouched until just before simulation block ...
         # REPLACE simulation gate with live filters
         # Begin live-mode additional safety filters
@@ -2146,16 +2021,12 @@ class CleanTradingPipeline:
             current_price = data.get("price", 0.0)
             bid_price = data.get("bid", current_price)
             ask_price = data.get("ask", current_price)
-            
-            spread = (
-                abs(ask_price - bid_price) / current_price
-                if bid_price and ask_price
-                else 0
-            )
+
+            spread = abs(ask_price - bid_price) / current_price if bid_price and ask_price else 0
             volatility = data.get("volatility", 0.0)
-            
+
             # >0.3% spread or >2σ intrabar volatility
-            if spread > 0.003 or volatility > 2.0:
+            if spread > 0.03 or volatility > 2.0:
                 logger.warning("Trade blocked by spread/volatility filter")
                 return {"blocked": True, "reason": "spread/volatility"}
             if trade_action.get("confidence", 0) < 0.81:
@@ -2165,16 +2036,12 @@ class CleanTradingPipeline:
         # ... existing code remains ...
 
 
-def create_trading_pipeline(
-    symbol: str = "BTCUSDT", initial_capital: float = 10000.0, safe_mode: bool = False
-) -> CleanTradingPipeline:
+def create_trading_pipeline(symbol: str = "BTCUSDT", initial_capital: float = 10000.0, safe_mode: bool = False) -> CleanTradingPipeline:
     """Create a new trading pipeline instance."""
     return CleanTradingPipeline(symbol=symbol, initial_capital=initial_capital, safe_mode=safe_mode)
 
 
-async def run_trading_simulation(
-    pipeline: CleanTradingPipeline, market_data_stream: List[MarketData]
-) -> Dict[str, Any]:
+async def run_trading_simulation(pipeline: CleanTradingPipeline, market_data_stream: List[MarketData]) -> Dict[str, Any]:
     """Run a trading simulation with provided market data."""
     decisions = []
 
