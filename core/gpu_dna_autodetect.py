@@ -1,14 +1,3 @@
-import json
-import logging
-import os
-import time
-from dataclasses import dataclass
-from typing import Any, Dict, Optional, Tuple
-from OpenGL.GL import *
-from OpenGL.GL.shaders import *
-import pygame
-from .system_state_profiler import SystemStateProfiler, GPUTier, GPUProfile, get_system_profile
-
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -29,7 +18,21 @@ Key Features:
 - Fallback support for headless/integrated systems
 """
 
+import json
+import logging
+import os
+import time
+from dataclasses import dataclass
+from typing import Any, Dict, Optional, Tuple
+
+import pygame
+
+from .system_state_profiler import SystemStateProfiler, GPUTier, GPUProfile, get_system_profile
+
+# OpenGL imports with fallback
 try:
+    from OpenGL.GL import *
+    from OpenGL.GL.shaders import *
     OPENGL_AVAILABLE = True
 except ImportError:
     OPENGL_AVAILABLE = False
@@ -123,10 +126,11 @@ class GPUDNAAutoDetect:
         },
     }
 
-    def __init__(self):
-        self.system_profile = None
-        self.shader_config = None
-        self.gpu_capabilities = None
+    def __init__(self) -> None:
+        """Initialize GPU DNA detection system."""
+        self.system_profile: Optional[SystemStateProfiler] = None
+        self.shader_config: Optional[ShaderConfig] = None
+        self.gpu_capabilities: Optional[Dict[str, Any]] = None
 
     def detect_gpu_dna(self) -> Dict[str, Any]:
         """
@@ -179,10 +183,10 @@ class GPUDNAAutoDetect:
         # Save DNA profile
         self._save_dna_profile(dna_profile)
 
-        logger.info(f"✅ GPU DNA Detection Complete")
+        logger.info("✅ GPU DNA Detection Complete")
         logger.info("🎮 GPU: {0} ({1})".format(gpu_profile.renderer, gpu_profile.gpu_tier.value))
         logger.info("📊 Matrix Size: {0}x{0}".format(self.shader_config.matrix_size, self.shader_config.matrix_size))
-        logger.info(f"⚡ Performance Multiplier: {self.shader_config.performance_multiplier}x")
+        logger.info("⚡ Performance Multiplier: {0}x".format(self.shader_config.performance_multiplier))
         logger.info("🔧 Shader Morph: {0}".format('Enabled' if self.shader_config.shader_morph_enabled else 'Disabled'))
 
         return dna_profile

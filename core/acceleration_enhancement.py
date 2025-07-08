@@ -1,19 +1,3 @@
-import asyncio
-import logging
-import threading
-import time
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Any, Callable, Dict, List, Optional, Tuple
-    import cupy as cp
-    from .system.dual_state_router import ComputeMode, DualStateRouter, StrategyTier
-    from .zbe_core import ZBECore, ZBEMode
-    from .zpe_core import ZPECore, ZPEMode
-
-    import numpy as np
-
-    from ..utils.cuda_helper import USING_CUDA, get_cuda_status, safe_cuda_operation, xp
-
 #!/usr/bin/env python3
 """
 Acceleration Enhancement Layer - CUDA + CPU Hybrid Architecture.
@@ -34,8 +18,18 @@ CORE CONCEPT:
 - Enhancement: Dynamic routing based on ZPE/ZBE entropy scores and profit weights
 """
 
+import logging
+import threading
+import time
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Callable, Dict, List, Optional, Tuple
+
+import numpy as np
+
 # CUDA Integration with Fallback
 try:
+    import cupy as cp
     USING_CUDA = True
     _backend = 'cupy (GPU)'
     xp = cp
@@ -46,17 +40,31 @@ except ImportError:
 
 # Import existing system components
 try:
+    from .system.dual_state_router import DualStateRouter, StrategyTier
+    from .zbe_core import ZBECore
+    from .zpe_core import ZPECore
     EXISTING_SYSTEM_AVAILABLE = True
 except ImportError as e:
     logging.warning("Some existing system components not available: {0}".format(e))
     EXISTING_SYSTEM_AVAILABLE = False
     # Create fallback classes
-
     class StrategyTier:
+        """Fallback strategy tier enum."""
         SHORT = "short"
         MID = "mid"
         LONG = "long"
 
+    class DualStateRouter:
+        """Fallback dual state router."""
+        pass
+
+    class ZBECore:
+        """Fallback ZBE core."""
+        pass
+
+    class ZPECore:
+        """Fallback ZPE core."""
+        pass
 
 # Log backend status
 logger = logging.getLogger(__name__)
@@ -210,17 +218,24 @@ class AccelerationEnhancement:
             self.mode_log.append((op_name, AccelerationMode.GPU_ONLY if use_gpu else AccelerationMode.CPU_ONLY))
 
         logger.debug(
-            "🎯 {0}: Entropy={1}, Profit={2}, ".format(op_name, 
-                entropy_score:.3f, 
-                profit_weight:.3f)
-            "Threshold={0} → {1}".format(
-                op_threshold:.3f, 
-                    'GPU Enhancement' if use_gpu else 'CPU Enhancement')
+            "🎯 {0}: Entropy={1:.3f}, Profit={2:.3f}, Threshold={3:.3f} → {4}".format(
+                op_name,
+                entropy_score,
+                profit_weight,
+                op_threshold,
+                'GPU Enhancement' if use_gpu else 'CPU Enhancement'
+            )
         )
 
         return use_gpu
 
-    def execute_with_enhancement(self, func_cpu: Callable, func_gpu: Callable, *args, **kwargs) -> Any:
+    def execute_with_enhancement(
+        self,
+        func_cpu: Callable[..., Any],
+        func_gpu: Callable[..., Any],
+        *args: Any,
+        **kwargs: Any
+    ) -> Any:
         """
         Execute with enhancement layer acceleration.
 
@@ -686,7 +701,7 @@ def get_acceleration_enhancement() -> AccelerationEnhancement:
     return _enhancement_instance
 
 
-def demo_acceleration_enhancement():
+def demo_acceleration_enhancement() -> None:
     """Demonstrate acceleration enhancement functionality."""
     print("\n" + "=" * 60)
     print("🚀 CUDA + CPU Hybrid Acceleration Enhancement Layer")
@@ -695,7 +710,7 @@ def demo_acceleration_enhancement():
     # Initialize enhancement layer
     enhancement = get_acceleration_enhancement()
 
-    print(f"✅ Acceleration Enhancement Layer initialized")
+    print("✅ Acceleration Enhancement Layer initialized")
     print("🎯 CUDA Available: {0}".format(enhancement.cuda_available))
     print(
         "🔗 Existing System Integration: {0}".format(
@@ -705,10 +720,12 @@ def demo_acceleration_enhancement():
     print()
 
     # Simulate some operations
-    def cpu_cosine_sim(a, b):
-        return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
+    def cpu_cosine_sim(a: np.ndarray, b: np.ndarray) -> float:
+        """CPU cosine similarity calculation."""
+        return float(np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b)))
 
-    def gpu_cosine_sim(a, b):
+    def gpu_cosine_sim(a: np.ndarray, b: np.ndarray) -> float:
+        """GPU cosine similarity calculation."""
         if USING_CUDA:
             a_gpu = cp.asarray(a)
             b_gpu = cp.asarray(b)
@@ -752,11 +769,11 @@ def demo_acceleration_enhancement():
             zbe_integration=True,
         )
 
-        print("  🌌 ZPE Enhancement: {0}".format(zpe_data.enhancement_factor:.3f))
-        print("  ⚡ ZBE Enhancement: {0}".format(zbe_data.enhancement_factor:.3f))
-        print("  🔗 Combined Entropy: {0}".format(combined_entropy:.3f))
-        print("  💰 Profit Weight: {0}".format(profit_weight:.3f))
-        print("  🎯 Result: {0}".format(result:.6f))
+        print("  🌌 ZPE Enhancement: {0:.3f}".format(zpe_data.enhancement_factor))
+        print("  ⚡ ZBE Enhancement: {0:.3f}".format(zbe_data.enhancement_factor))
+        print("  🔗 Combined Entropy: {0:.3f}".format(combined_entropy))
+        print("  💰 Profit Weight: {0:.3f}".format(profit_weight))
+        print("  🎯 Result: {0:.6f}".format(result))
 
     # Get enhancement recommendations
     print("\n🎯 Enhancement Recommendations:")
@@ -768,7 +785,7 @@ def demo_acceleration_enhancement():
                 False))
     )
     print("  Recommendation: {0}".format(recommendations.get('recommendation', 'none')))
-    print("  Confidence: {0}".format(recommendations.get('confidence', 0.0):.3f))
+    print("  Confidence: {0:.3f}".format(recommendations.get('confidence', 0.0)))
 
     # Get enhancement report
     print("\n📊 Enhancement Report:")
@@ -780,32 +797,17 @@ def demo_acceleration_enhancement():
     print("  📊 Total Operations: {0}".format(report['total_operations']))
     print("  💻 CPU Operations: {0}".format(report['cpu_operations']))
     print("  🎮 GPU Operations: {0}".format(report['gpu_operations']))
-    print("  ✅ Success Rate: {0}".format(report['overall_success_rate']:.1%))
-    print(f"  📈 Recent Distribution:")
-    print("    CPU: {0}%".format(report['recent_distribution']['cpu_percentage']:.1f))
-    print("    GPU: {0}%".format(report['recent_distribution']['gpu_percentage']:.1f))
-    print(f"  ⚡ Performance:")
-    print(
-        "    CPU Avg: {0}ms".format(
-            report['performance_metrics']['avg_cpu_time_ms']:.3f)
-    )
-    print(
-        "    GPU Avg: {0}ms".format(
-            report['performance_metrics']['avg_gpu_time_ms']:.3f)
-    )
-    print(
-        "    Speedup: {0}x".format(
-            report['performance_metrics']['speedup_ratio']:.2f)
-    )
-    print(f"  🌌 Enhancement Factors:")
-    print(
-        "    ZPE: {0}".format(
-            report['enhancement_metrics']['avg_zpe_enhancement_factor']:.3f)
-    )
-    print(
-        "    ZBE: {0}".format(
-            report['enhancement_metrics']['avg_zbe_enhancement_factor']:.3f)
-    )
+    print("  ✅ Success Rate: {0:.1%}".format(report['overall_success_rate']))
+    print("  📈 Recent Distribution:")
+    print("    CPU: {0:.1f}%".format(report['recent_distribution']['cpu_percentage']))
+    print("    GPU: {0:.1f}%".format(report['recent_distribution']['gpu_percentage']))
+    print("  ⚡ Performance:")
+    print("    CPU Avg: {0:.3f}ms".format(report['performance_metrics']['avg_cpu_time_ms']))
+    print("    GPU Avg: {0:.3f}ms".format(report['performance_metrics']['avg_gpu_time_ms']))
+    print("    Speedup: {0:.2f}x".format(report['performance_metrics']['speedup_ratio']))
+    print("  🌌 Enhancement Factors:")
+    print("    ZPE: {0:.3f}".format(report['enhancement_metrics']['avg_zpe_enhancement_factor']))
+    print("    ZBE: {0:.3f}".format(report['enhancement_metrics']['avg_zbe_enhancement_factor']))
 
     # Test integration with existing system
     print("\n🔗 Integration Test:")

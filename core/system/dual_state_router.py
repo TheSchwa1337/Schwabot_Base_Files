@@ -1,18 +1,3 @@
-import logging
-import threading
-import time
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
-            from ..cpu_handlers import run_cpu_strategy
-            from ..gpu_handlers import run_gpu_strategy
-        import asyncio
-
-import numpy as np
-
-    from ..utils.cuda_helper import (
-
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -32,14 +17,28 @@ The router learns which strategies "deserve" GPU based on:
 - Current market conditions
 """
 
+import asyncio
+import logging
+import threading
+import time
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple, Union
+
+import numpy as np
+
 # CUDA Helper Integration
 try:
+    from ..utils.cuda_helper import (
         USING_CUDA,
         get_cuda_status,
         report_cuda_status,
         safe_cuda_operation,
         xp,
     )
+    from ..cpu_handlers import run_cpu_strategy
+    from ..gpu_handlers import run_gpu_strategy
 
     CUDA_AVAILABLE = True
     logger = logging.getLogger(__name__)
@@ -325,9 +324,11 @@ class DualStateRouter:
             }
 
             logger.debug(
-                "Routed {0} to {1} in {2}ms".format(task_id, 
+                "Routed {0} to {1} in {2}ms".format(
+                    task_id, 
                     compute_mode.value, 
-                    execution_time_ms:.2f)
+                    execution_time_ms
+                )
             )
             return result
 
@@ -349,7 +350,8 @@ class DualStateRouter:
         if self.gpu_load > self.gpu_load_threshold:
             logger.debug(
                 "GPU load high ({0}), preferring ZPE for {1}".format(
-                    self.gpu_load:.2f, task_id)
+                    self.gpu_load, task_id
+                )
             )
             return ComputeMode.ZPE
 
@@ -525,10 +527,9 @@ class DualStateRouter:
             "compute_mode": compute_mode.upper() if compute_mode != "unknown" else "ZPE",
             "confidence": confidence,
             "reason": "Routed by DualStateRouter: {0}-term strategy with {1} profit density".format(
-                strategy_metadata.get(
-                    'strategy_tier',
-                    'mid'), 
-                profit_density:.3f),
+                strategy_metadata.get('strategy_tier', 'mid'), 
+                profit_density
+            ),
             "task_type": task_type,
             "strategy_metadata": strategy_metadata,
             "execution_metrics": result.get("execution_metrics", {}),

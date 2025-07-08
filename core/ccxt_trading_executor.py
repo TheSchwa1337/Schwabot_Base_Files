@@ -1,3 +1,11 @@
+#!/usr/bin/env python3
+"""
+CCXT Trading Executor.
+
+Trading executor for CCXT integration with Schwabot trading system.
+Provides interface for executing trades through various exchanges.
+"""
+
 import asyncio
 import logging
 import time
@@ -6,14 +14,13 @@ from decimal import Decimal
 from enum import Enum
 from typing import Any, Dict, Optional
 
-import ccxt.async_support as ccxt
+try:
+    import ccxt.async_support as ccxt
+    CCXT_AVAILABLE = True
+except ImportError:
+    CCXT_AVAILABLE = False
+    ccxt = None
 
-"""
-CCXT Trading Executor.
-
-Trading executor for CCXT integration with Schwabot trading system.
-Provides interface for executing trades through various exchanges.
-"""
 
 logger = logging.getLogger(__name__)
 
@@ -76,7 +83,7 @@ class CCXTTradingExecutor:
     def __init__(self, config: Dict[str, Any]) -> None:
         """Initialize CCXT trading executor."""
         self.config = config
-        self.exchange = None
+        self.exchange: Optional[Any] = None
         self.portfolio_balance = {
             "BTC": Decimal("0"),
             "ETH": Decimal("0"),
@@ -87,7 +94,7 @@ class CCXTTradingExecutor:
         self.price_data: Dict[TradingPair, Decimal] = {}
         self.monitoring_active = False
 
-        if ccxt is None:
+        if not CCXT_AVAILABLE:
             logger.error("CCXT not available. Install with: pip install ccxt")
             return
 

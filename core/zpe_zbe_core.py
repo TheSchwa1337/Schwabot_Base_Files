@@ -1,17 +1,19 @@
+#!/usr/bin/env python3
+"""Zero Point Energy and Zero-Based Equilibrium Core Module."""
+
+import logging
 import time
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Optional
-import cupy as cp
-from .clean_math_foundation import CleanMathFoundation
-import logging
 
 import numpy as np
 
-"""Zero Point Energy and Zero-Based Equilibrium Core Module."""
+from .clean_math_foundation import CleanMathFoundation
 
 # CUDA Integration with Fallback
 try:
+    import cupy as cp
     USING_CUDA = True
     _backend = 'cupy (GPU)'
     xp = cp

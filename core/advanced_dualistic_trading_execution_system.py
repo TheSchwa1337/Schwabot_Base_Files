@@ -1,17 +1,4 @@
-import logging
-import time
-from dataclasses import dataclass
-from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
-from .advanced_tensor_algebra import (
-from .type_defs import DualState, MarketData, Position, TradeSignal, TradingAction
-    import asyncio
-
-import numpy as np
-from scipy import linalg
-from scipy.special import sigmoid
-
-# !/usr/bin/env python3
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Advanced Dualistic Trading Execution System - Complete Implementation
@@ -39,11 +26,24 @@ Historical Integration:
 - Observes market bifurcations during tick inflection points
 """
 
+import asyncio
+import logging
+import time
+from dataclasses import dataclass
+from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple
+
+import numpy as np
+from scipy import linalg
+
+from .advanced_tensor_algebra import (
     AdvancedTensorAlgebra,
     information_geometry,
     spectral_analysis,
     temporal_algebra,
 )
+from .type_defs import MarketData, TradeSignal, TradingAction
+
 logger = logging.getLogger(__name__)
 
 __all__ = [
@@ -126,7 +126,8 @@ class SigmoidProfitTrigger:
     - Adaptive k-factor: k = k_0 * (1 + entropy_factor)
     """
 
-    def __init__(self, k_factor: float = 1.0, threshold: float = 0.7):
+    def __init__(self, k_factor: float = 1.0, threshold: float = 0.7) -> None:
+        """Initialize sigmoid profit trigger with k-factor and threshold."""
         self.k_factor = k_factor
         self.threshold = threshold
         self.decision_history: List[Dict[str, Any]] = []
@@ -389,7 +390,7 @@ class DynamicTradeResolutionLayer:
 class AdvancedDualisticTradingExecutionSystem:
     """Advanced dualistic trading execution system with quantum enhancements."""
 
-    def __init__(self, config: Optional[Dict[str, Any]] = None):
+    def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
         """Initialize the trading execution system."""
         self.config = config or self._default_config()
 
@@ -462,24 +463,24 @@ class AdvancedDualisticTradingExecutionSystem:
         """
         try:
             # Calculate H(t) - long-hold strength
-            H_t = self._calculate_long_hold_strength(long_hold_signal, market_data)
+            h_t = self._calculate_long_hold_strength(long_hold_signal, market_data)
 
             # Calculate S(t) - scalp vector strength
-            S_t = self._calculate_scalp_strength(scalp_signal, market_data)
+            s_t = self._calculate_scalp_strength(scalp_signal, market_data)
 
             # Get current weights α, β
             alpha = self.current_alpha
             beta = self.current_beta
 
             # Calculate dual-state execution
-            psi_trade = alpha * H_t + beta * S_t
+            psi_trade = alpha * h_t + beta * s_t
 
             # Normalize to ensure α + β = 1
             total_weight = alpha + beta
             if total_weight > 0:
                 alpha_norm = alpha / total_weight
                 beta_norm = beta / total_weight
-                psi_trade = alpha_norm * H_t + beta_norm * S_t
+                psi_trade = alpha_norm * h_t + beta_norm * s_t
 
             # Calculate confidence based on signal coherence
             confidence = self._calculate_signal_coherence(long_hold_signal, scalp_signal)
@@ -499,8 +500,8 @@ class AdvancedDualisticTradingExecutionSystem:
                 "psi_trade": float(psi_trade),
                 "alpha": float(alpha_norm),
                 "beta": float(beta_norm),
-                "H_t": float(H_t),
-                "S_t": float(S_t),
+                "H_t": float(h_t),
+                "S_t": float(s_t),
                 "mode": mode,
                 "action": action,
                 "confidence": confidence,
@@ -657,9 +658,9 @@ class AdvancedDualisticTradingExecutionSystem:
             self.current_beta /= total_weight
 
             logger.debug(
-                "Updated dual-state weights: α={0}, β={1}".format(
-                    self.current_alpha:.3f, 
-                    self.current_beta:.3f)
+                "Updated dual-state weights: alpha={0}, beta={1}".format(
+                    self.current_alpha, self.current_beta
+                )
             )
 
         except Exception as e:
@@ -1046,11 +1047,11 @@ async def demo_trading_execution():
 
     # Show system status
     status = system.get_system_status()
-    print(f"\nSystem Status:")
+    print("\nSystem Status:")
     print("  Total Executions: {0}".format(status['total_executions']))
-    print("  Success Rate: {0}".format(status['success_rate']:.2%))
-    print("  Current α: {0}".format(status['current_alpha']:.3f))
-    print("  Current β: {0}".format(status['current_beta']:.3f))
+    print("  Success Rate: {0:.2%}".format(status['success_rate']))
+    print("  Current alpha: {0:.3f}".format(status['current_alpha']))
+    print("  Current beta: {0:.3f}".format(status['current_beta']))
     print("  Ghost Shell Active: {0}".format(status['ghost_shell_active']))
 
 

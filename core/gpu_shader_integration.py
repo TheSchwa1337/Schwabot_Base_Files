@@ -1,16 +1,3 @@
-import logging
-import os
-import time
-from dataclasses import dataclass
-from typing import Any, Dict, List, Optional, Tuple, Union
-from OpenGL.GL import *
-from OpenGL.GL.shaders import *
-import pygame
-from .system_state_profiler import get_system_profile, SystemProfile
-from .gpu_dna_autodetect import detect_gpu_dna, get_gpu_shader_config, get_cosine_similarity_config, ShaderConfig
-
-import numpy as np
-
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -30,7 +17,22 @@ Key Features:
 - Fallback support for CPU-only systems
 """
 
+import logging
+import os
+import time
+from dataclasses import dataclass
+from typing import Any, Dict, List, Optional, Tuple, Union
+
+import numpy as np
+import pygame
+
+from .gpu_dna_autodetect import detect_gpu_dna, get_gpu_shader_config, ShaderConfig
+from .system_state_profiler import get_system_profile, SystemProfile
+
+# OpenGL imports with fallback
 try:
+    from OpenGL.GL import *
+    from OpenGL.GL.shaders import *
     OPENGL_AVAILABLE = True
 except ImportError:
     OPENGL_AVAILABLE = False
@@ -54,7 +56,8 @@ class ShaderProgramConfig:
 class GPUShaderIntegration:
     """Main GPU shader integration system for Schwabot."""
 
-    def __init__(self):
+    def __init__(self) -> None:
+        """Initialize GPU shader integration system."""
         self.system_profile: Optional[SystemProfile] = None
         self.gpu_dna_profile: Optional[Dict[str, Any]] = None
         self.shader_config: Optional[ShaderConfig] = None
@@ -99,7 +102,7 @@ class GPUShaderIntegration:
             init_time = time.time() - start_time
             self.performance_metrics["gpu_init_time"] = init_time
 
-            logger.info(f"✅ GPU Shader Integration Initialized in {init_time:.2f}s")
+            logger.info("✅ GPU Shader Integration Initialized in {0:.2f}s".format(init_time))
             logger.info("🔧 System: {0}".format(self.system_profile.device_type))
             logger.info("🎮 GPU: {0}".format(self.system_profile.gpu.renderer))
             logger.info("📊 Matrix Size: {0}x{0}".format(self.shader_config.matrix_size, self.shader_config.matrix_size))
@@ -184,7 +187,7 @@ class GPUShaderIntegration:
             compile_time = time.time() - start_time
             self.performance_metrics["shader_compile_time"] = compile_time
 
-            logger.info(f"✅ Shaders compiled successfully in {compile_time:.2f}s")
+            logger.info("✅ Shaders compiled successfully in {0:.2f}s".format(compile_time))
             logger.info("🔧 Precision: {0}".format(self.cosine_shader_program.precision_mode))
             logger.info("🌊 Morphing: {0}".format('Enabled' if self.cosine_shader_program.morphing_enabled else 'Disabled'))
 
