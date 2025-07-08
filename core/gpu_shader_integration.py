@@ -37,6 +37,13 @@ try:
 except ImportError:
     OPENGL_AVAILABLE = False
 
+# Fix star imports by explicitly importing needed functions
+from OpenGL.GL import (
+    glUniform1f, glUniform1i, glBindFramebuffer, GL_FRAMEBUFFER, 
+    glViewport, glClear, GL_COLOR_BUFFER_BIT, glDrawArrays, 
+    GL_TRIANGLES, glReadPixels, GL_RGBA, GL_UNSIGNED_BYTE
+)
+
 logger = logging.getLogger(__name__)
 
 

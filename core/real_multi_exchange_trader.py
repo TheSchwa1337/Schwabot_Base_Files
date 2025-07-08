@@ -586,8 +586,12 @@ class RealMultiExchangeTrader:
 
             try:
                 # Get stored credentials
-                api_key = self.secure_config.get_secure_api_key("{0}_api_key".format(exchange_name))
-                secret = self.secure_config.get_secure_api_key("{0}_secret".format(exchange_name))
+                api_key = self.secure_config.get_secure_api_key(
+                    "{0}_api_key".format(exchange_name)
+                )
+                secret = self.secure_config.get_secure_api_key(
+                    "{0}_secret".format(exchange_name)
+                )
 
                 if api_key and secret:
                     config = {
@@ -620,7 +624,7 @@ class RealMultiExchangeTrader:
 
         return results
 
-    async def close_all_connections(self):
+    async def close_all_connections(self) -> None:
         """Close all exchange connections."""
         for exchange_name, exchange in self.exchanges.items():
             try:

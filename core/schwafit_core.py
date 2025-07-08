@@ -88,7 +88,9 @@ class SchwafitCore:
             }
         )
         logger.info(
-            "Schwafit fit: hash={0}, fit_score={1}, entropy={2}, decision={3}".format(v_hash[:8], fit_score:.3f, ent:.3f, decision)
+            "Schwafit fit: hash={0}, fit_score={1}, entropy={2}, decision={3}".format(
+                v_hash[:8], fit_score, ent, decision
+            )
         )
         return {
             "fit_score": fit_score,
