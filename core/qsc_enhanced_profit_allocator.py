@@ -198,14 +198,17 @@ class QSCEnhancedProfitAllocator:
             tensor_coherence=tensor_coherence,
             recommended_by_qsc=qsc_validation["approved"],
             quantum_score=quantum_score,
-            phase_bucket=self._determine_phase_bucket(quantum_score, tensor_coherence),
+            phase_bucket=self._determine_phase_bucket(
+                quantum_score, tensor_coherence
+            ),
             total_profit=initial_profit,
         )
 
         self.active_cycles[cycle_id] = cycle
         logger.info(
-            "Created QSC profit cycle {0} with mode {1}".format(cycle_id, 
-                qsc_mode.value)
+            "Created QSC profit cycle {0} with mode {1}".format(
+                cycle_id, qsc_mode.value
+            )
         )
 
         return cycle

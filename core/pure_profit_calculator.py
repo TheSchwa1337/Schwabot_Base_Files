@@ -662,16 +662,16 @@ class PureProfitCalculator:
             "📊 LAST PROFIT CALCULATION",
             "-" * 40,
             "Processing mode : {0}".format(mode),
-            "BTC price       : {0}".format(md['btc_price'] if isinstance(md, dict) else md.btc_price),
-            "Base profit     : {0}".format(result['base_profit'] if isinstance(result, dict) else result.base_profit:.6f),
-            "Risk-adjusted   : {0}".format(result['risk_adjusted_profit'] if isinstance(result, dict) else result.risk_adjusted_profit:.6f),
-            "Confidence      : {0}".format(result['confidence_score'] if isinstance(result, dict) else result.confidence_score:.4f),
-            "Tensor contrib  : {0}".format(result['tensor_contribution'] if isinstance(result, dict) else result.tensor_contribution:.6f),
-            "Hash contrib    : {0}".format(result['hash_contribution'] if isinstance(result, dict) else result.hash_contribution:.6f),
-            "Total score     : {0}".format(result['total_profit_score'] if isinstance(result, dict) else result.total_profit_score:.6f),
-            "Hash matrices   : {0}".format(hist['hash_matrices']),
-            "Tensor buckets  : {0}".format(hist['tensor_buckets']),
-            "Profit memory   : {0}".format(hist['profit_memory_length']),
+            f"BTC price       : {md['btc_price'] if isinstance(md, dict) else md.btc_price}",
+            f"Base profit     : {(result['base_profit'] if isinstance(result, dict) else result.base_profit):.6f}",
+            f"Risk-adjusted   : {(result['risk_adjusted_profit'] if isinstance(result, dict) else result.risk_adjusted_profit):.6f}",
+            f"Confidence      : {(result['confidence_score'] if isinstance(result, dict) else result.confidence_score):.4f}",
+            f"Tensor contrib  : {(result['tensor_contribution'] if isinstance(result, dict) else result.tensor_contribution):.6f}",
+            f"Hash contrib    : {(result['hash_contribution'] if isinstance(result, dict) else result.hash_contribution):.6f}",
+            f"Total score     : {(result['total_profit_score'] if isinstance(result, dict) else result.total_profit_score):.6f}",
+            f"Hash matrices   : {hist['hash_matrices']}",
+            f"Tensor buckets  : {hist['tensor_buckets']}",
+            f"Profit memory   : {hist['profit_memory_length']},"
         ]
 
         if detail_level == "full":

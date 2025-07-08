@@ -1,5 +1,5 @@
 import logging
-from typing import Dict, List, Tuple, Optional, Any
+from typing import Dict, List, Tuple, Any
 import numpy as np
 from dataclasses import dataclass
 from concurrent.futures import ThreadPoolExecutor
@@ -19,10 +19,13 @@ except ImportError:
     xp = np
 
 logger = logging.getLogger(__name__)
+
+
 if USING_CUDA:
     logger.info(f"⚡ QuantumMathematicalBridge using GPU acceleration: {_backend}")
 else:
     logger.info(f"🔄 QuantumMathematicalBridge using CPU fallback: {_backend}")
+
 
 @dataclass
 class QuantumState:
@@ -33,6 +36,7 @@ class QuantumState:
     entangled_pairs: List[int]
     superposition_components: Dict[str, complex]
 
+
 @dataclass
 class QuantumTensor:
     """Quantum tensor for distributed mathematical operations"""
@@ -41,6 +45,7 @@ class QuantumTensor:
     entanglement_matrix: np.ndarray
     coherence_time: float
     fidelity: float
+
 
 class QuantumMathematicalBridge:
     """
@@ -67,7 +72,9 @@ class QuantumMathematicalBridge:
         self.quantum_executor = ThreadPoolExecutor(max_workers=8)
         self.quantum_lock = threading.Lock()
         
-        logger.info(f"Quantum Mathematical Bridge initialized with dimension {quantum_dimension}")
+        logger.info(
+            f"Quantum Mathematical Bridge initialized with dimension {quantum_dimension}"
+        )
     
     def _initialize_quantum_matrices(self):
         """Initialize fundamental quantum matrices"""
@@ -136,7 +143,9 @@ class QuantumMathematicalBridge:
                 superposition_components=superposition_components
             )
             
-            logger.debug(f"Created quantum superposition with {len(trading_signals)} components")
+            logger.debug(
+                f"Created quantum superposition with {len(trading_signals)} components"
+            )
             return quantum_state
             
         except Exception as e:
@@ -361,7 +370,9 @@ class QuantumMathematicalBridge:
                 'coherence_time': profit_tensor.coherence_time
             }
             
-            logger.info(f"Quantum profit vectorization completed: {result['quantum_profit']:.6f}")
+            logger.info(
+                f"Quantum profit vectorization completed: {result['quantum_profit']:.6f}"
+            )
             return result
             
         except Exception as e:

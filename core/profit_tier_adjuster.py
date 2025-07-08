@@ -32,11 +32,16 @@ class ProfitTierAdjuster:
         # If swing strength is very high, consider moving up to aggressive
         strength = swing_metrics.get('swing_strength', 0.0)
         if strength > 0.7 and current_tier != ProfitTier.TIER_3_AGGRESSIVE:
-            logger.info("ProfitTierAdjuster: upgrading to TIER_3_AGGRESSIVE due to swing strength")
+            logger.info(
+                "ProfitTierAdjuster: upgrading to TIER_3_AGGRESSIVE due to swing strength"
+            )
             return ProfitTier.TIER_3_AGGRESSIVE
         # If strong sell walls detected, consider moving to more moderate tier
         sell_wall = wall_signals.get('sell_wall_strength', 0.0)
-        if sell_wall > 1.0 and current_tier == ProfitTier.TIER_3_AGGRESSIVE:
-            logger.info("ProfitTierAdjuster: downgrading to TIER_2_MODERATE due to sell wall pressure")
+        if sell_wall > 1.0 and \
+                current_tier == ProfitTier.TIER_3_AGGRESSIVE:
+            logger.info(
+                "ProfitTierAdjuster: downgrading to TIER_2_MODERATE due to sell wall pressure"
+            )
             return ProfitTier.TIER_2_MODERATE
         return tier

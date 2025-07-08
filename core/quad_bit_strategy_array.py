@@ -1,10 +1,13 @@
-import asyncio
-from decimal import ROUND_DOWN, Decimal
-from typing import Any, Dict, List, Optional, Tuple
-from .clean_profit_vectorization import ProfitVector, VectorizationMode
+import logging
+from enum import Enum
+import time
+import numpy as np
+from dataclasses import dataclass, field
+from decimal import Decimal
+from typing import Any, Dict, List, Optional
+
 from .clean_trading_pipeline import TradingAction, TradingDecision
-from .clean_unified_math import clean_unified_math as unified_math
-from .trading_engine_integration import SchwabotTradingEngine, TradingMode
+from .trading_engine_integration import SchwabotTradingEngine
 
 from .ccxt_integration import CCXTIntegration
 
@@ -102,9 +105,10 @@ class TensorBasket:
         return basket_value
 
     def get_correlation_score(
-    self,
-    pair1: TradingPair,
-     pair2: TradingPair) -> float:
+        self,
+        pair1: TradingPair,
+        pair2: TradingPair,
+    ) -> float:
         """Get correlation between two pairs."""
         idx1 = self.pairs.index(pair1)
         idx2 = self.pairs.index(pair2)
@@ -115,8 +119,7 @@ class TensorBasket:
 class StrategyState:
     """Current state of the 4-bit strategy array."""
     active_sequence: DriftSequence
-    pair_states: Dict[TradingPair, Dict[str, Any]
-        ] = field(default_factory=dict)
+    pair_states: Dict[TradingPair, Dict[str, Any]] = field(default_factory=dict)
     basket_states: Dict[str, TensorBasket] = field(default_factory=dict)
     last_update: float = field(default_factory=time.time)
 
