@@ -396,7 +396,12 @@ class RealMultiExchangeTrader:
         return await self.execute_real_trade(optimal_exchange, symbol, side, amount, order_type)
 
     async def execute_real_trade(
-        self, exchange_name: str, symbol: str, side: str, amount: float, order_type: str = "market"
+        self,
+        exchange_name: str,
+        symbol: str,
+        side: str,
+        amount: float,
+        order_type: str = "market",
     ) -> Dict[str, Any]:
         """Execute real trade on specified exchange."""
         if exchange_name not in self.exchanges:
@@ -409,13 +414,19 @@ class RealMultiExchangeTrader:
 
             if order_type == "market":
                 if side.lower() == "buy":
-                    order = await exchange.create_market_buy_order(symbol, amount)
+                    order = await exchange.create_market_buy_order(
+                        symbol, amount
+                    )
                 elif side.lower() == "sell":
-                    order = await exchange.create_market_sell_order(symbol, amount)
+                    order = await exchange.create_market_sell_order(
+                        symbol, amount
+                    )
                 else:
                     return {"error": "Invalid side: {0}".format(side)}
             else:
-                return {"error": "Order type {0} not implemented".format(order_type)}
+                return {
+                    "error": "Order type {0} not implemented".format(order_type)
+                }
 
             execution_time = time.time() - start_time
 
@@ -441,13 +452,17 @@ class RealMultiExchangeTrader:
             self.execution_history.append(result)
 
             logger.info(
-                f"🚀 REAL TRADE EXECUTED on {exchange_name.upper()}: {side} {amount} {symbol} in {execution_time:.3f}s"
+                "🚀 REAL TRADE EXECUTED on {}: {} {} {} in {:.3f}s".format(
+                    exchange_name.upper(), side, amount, symbol, execution_time
+                )
             )
 
             return result
 
         except Exception as e:
-            logger.error("❌ Trade execution failed on {0}: {1}".format(exchange_name, e))
+            logger.error(
+                "❌ Trade execution failed on {0}: {1}".format(exchange_name, e)
+            )
             return {"error": str(e), "exchange": exchange_name}
 
     async def update_fee_cache(self) -> None:
@@ -469,10 +484,15 @@ class RealMultiExchangeTrader:
                         count += 1
 
                 if count > 0:
-                    self.fee_cache[exchange_name] = {"maker": total_maker_fee / count, "taker": total_taker_fee / count}
+                    self.fee_cache[exchange_name] = {
+                        "maker": total_maker_fee / count,
+                        "taker": total_taker_fee / count,
+                    }
 
             except Exception as e:
-                logger.warning("Failed to update fees for {0}: {1}".format(exchange_name, e))
+                logger.warning(
+                    "Failed to update fees for {0}: {1}".format(exchange_name, e)
+                )
 
     def unified_exchange_hash_router(self, input_vector: List[float]) -> str:
         """
@@ -487,12 +507,20 @@ class RealMultiExchangeTrader:
     def get_performance_metrics(self) -> Dict[str, Any]:
         """Get comprehensive performance metrics."""
         total_trades = len(self.execution_history)
-        successful_trades = sum(1 for trade in self.execution_history if trade.get("success", False))
+        successful_trades = sum(
+            1 for trade in self.execution_history if trade.get("success", False)
+        )
 
         arbitrage_count = len(self.arbitrage_history)
-        total_arbitrage_profit = sum(arb.net_profit for arb in self.arbitrage_history)
+        total_arbitrage_profit = sum(
+            arb.net_profit for arb in self.arbitrage_history
+        )
 
-        avg_latency = np.mean(list(self.latency_cache.values())) if self.latency_cache else 0.0
+        avg_latency = (
+            np.mean(list(self.latency_cache.values()))
+            if self.latency_cache
+            else 0.0
+        )
 
         return {
             "total_trades": total_trades,
@@ -508,16 +536,24 @@ class RealMultiExchangeTrader:
     async def get_account_balance(self, exchange_name: str) -> Dict[str, Any]:
         """Get account balance from exchange."""
         if exchange_name not in self.exchanges:
-            return {"error": "Exchange {0} not configured".format(exchange_name)}
+            return {
+                "error": "Exchange {0} not configured".format(exchange_name)
+            }
 
         try:
             exchange = self.exchanges[exchange_name]
             balance = await exchange.fetch_balance()
-            return {"success": True, "balance": balance, "exchange": exchange_name}
+            return {
+                "success": True,
+                "balance": balance,
+                "exchange": exchange_name,
+            }
         except Exception as e:
             return {"error": str(e), "exchange": exchange_name}
 
-    async def get_market_price(self, exchange_name: str, symbol: str) -> Dict[str, Any]:
+    async def get_market_price(
+        self, exchange_name: str, symbol: str
+    ) -> Dict[str, Any]:
         """Get current market price from exchange."""
         if exchange_name not in self.exchanges:
             return {"error": "Exchange {0} not configured".format(exchange_name)}
@@ -563,7 +599,9 @@ class RealMultiExchangeTrader:
 
                     # Add passphrase for Coinbase Pro
                     if exchange_name == "coinbasepro":
-                        passphrase = self.secure_config.get_secure_api_key("{0}_passphrase".format(exchange_name))
+                        passphrase = self.secure_config.get_secure_api_key(
+                            "{0}_passphrase".format(exchange_name)
+                        )
                         if passphrase:
                             config["passphrase"] = passphrase
 

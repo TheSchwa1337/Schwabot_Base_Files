@@ -30,38 +30,7 @@ except ImportError:
     xp = np
 
 # Import clean math system
-try:
-    pass
-except ImportError:
-    # Fallback for testing
-    class unified_math:
-        @staticmethod
-        def sin(x):
-            return xp.sin(x)
-
-        @staticmethod
-        def max(x, y):
-            return max(x, y)
-
-        @staticmethod
-        def min(x, y):
-            return min(x, y)
-
-        @staticmethod
-        def abs(x):
-            return abs(x)
-
-        @staticmethod
-        def multiply(x, y):
-            return x * y
-
-        @staticmethod
-        def tanh(x):
-            return xp.tanh(x)
-
-        @staticmethod
-        def atan(x):
-            return xp.arctan(x)
+# unified_math already imported above
 
 
 # Log backend status
@@ -282,7 +251,7 @@ class ZPECore:
             if len(self.thermal_history) > 1000:
                 self.thermal_history = self.thermal_history[-1000:]
 
-            self.logger.debug("Thermal efficiency: {0}".format(efficiency:.6f))
+            self.logger.debug("Thermal efficiency: {0:.6f}".format(efficiency))
             return thermal_data
 
         except Exception as e:
@@ -346,7 +315,7 @@ class ZPECore:
             if len(self.work_history) > 1000:
                 self.work_history = self.work_history[-1000:]
 
-            self.logger.debug("ZPE Work: {0}".format(work:.6f))
+            self.logger.debug("ZPE Work: {0:.6f}".format(work))
             return work_data
 
         except Exception as e:
@@ -410,7 +379,7 @@ class ZPECore:
             if len(self.torque_history) > 1000:
                 self.torque_history = self.torque_history[-1000:]
 
-            self.logger.debug("Rotational Torque: {0}".format(torque:.6f))
+            self.logger.debug("Rotational Torque: {0:.6f}".format(torque))
             return torque_data
 
         except Exception as e:
@@ -514,8 +483,8 @@ class ZPECore:
             }
 
             self.logger.info(
-                "Profit wheel result: {0} (confidence: {1})".format(
-                    signal, confidence:.3f))
+                "Profit wheel result: {0} (confidence: {1:.3f})".format(
+                    signal, confidence))
             return result
 
         except Exception as e:
@@ -553,7 +522,7 @@ class ZPECore:
                 "precision_factor": self.precision / 32.0,  # Normalize precision
             }
 
-            self.logger.debug("Computational boost: {0}".format(overall_boost:.3f))
+            self.logger.debug("Computational boost: {0:.3f}".format(overall_boost))
             return boost_factors
 
         except Exception as e:
@@ -825,15 +794,15 @@ def test_zpe_core():
 
     # Test thermal efficiency
     thermal_data = core.calculate_thermal_efficiency(1000.0, 1100.0)
-    print("Thermal Efficiency: {0}".format(thermal_data.thermal_efficiency:.6f))
+    print("Thermal Efficiency: {0:.6f}".format(thermal_data.thermal_efficiency))
 
     # Test ZPE work
     work_data = core.calculate_zpe_work(0.8, 0.5)
-    print("ZPE Work: {0}".format(work_data.work_value:.6f))
+    print("ZPE Work: {0:.6f}".format(work_data.work_value))
 
     # Test rotational torque
     torque_data = core.calculate_rotational_torque(0.7, 0.3)
-    print("Rotational Torque: {0}".format(torque_data.torque_value:.6f))
+    print("Rotational Torque: {0:.6f}".format(torque_data.torque_value))
 
     # Test profit wheel
     market_data = {
@@ -849,7 +818,7 @@ def test_zpe_core():
 
     # Test computational boost
     boost_factors = core.get_computational_boost()
-    print("Computational Boost: {0}".format(boost_factors['overall_boost']:.3f))
+    print("Computational Boost: {0:.3f}".format(boost_factors['overall_boost']))
 
     # Test with sample price data
     sample_prices = [100, 101, 99, 102, 98, 103, 97, 104, 96, 105]

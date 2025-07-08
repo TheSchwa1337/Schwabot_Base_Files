@@ -690,12 +690,6 @@ class CleanTradingPipeline:
             "take_profit_distance": risk_assessment.get("take_profit_distance", 0.04),
         }
 
-    async def _execute_trade_with_market_data(
-        self, trade_action: Dict[str, Any], packet: Optional[MarketDataPacket], data: Dict[str, Any]
-    ) -> Dict[str, Any]:
-        # duplicate placeholder removed to avoid override
-        return {"error": "duplicate removed"}
-
     def _log_trade_to_registry(
         self, packet: MarketDataPacket, trade_action: Dict[str, Any], trade_result: Dict[str, Any]
     ):
@@ -2150,13 +2144,18 @@ class CleanTradingPipeline:
         # Begin live-mode additional safety filters
         if hasattr(self, "mode") and self.mode == "live":
             current_price = data.get("price", 0.0)
+            bid_price = data.get("bid", current_price)
+            ask_price = data.get("ask", current_price)
+            
             spread = (
-                abs(data.get("ask", current_price) - data.get("bid", current_price)) / current_price
-                if data.get("bid") and data.get("ask")
+                abs(ask_price - bid_price) / current_price
+                if bid_price and ask_price
                 else 0
             )
             volatility = data.get("volatility", 0.0)
-            if spread > 0.003 or volatility > 2.0:  # >0.3% spread or >2σ intrabar volatility
+            
+            # >0.3% spread or >2σ intrabar volatility
+            if spread > 0.003 or volatility > 2.0:
                 logger.warning("Trade blocked by spread/volatility filter")
                 return {"blocked": True, "reason": "spread/volatility"}
             if trade_action.get("confidence", 0) < 0.81:

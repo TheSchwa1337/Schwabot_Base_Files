@@ -7,7 +7,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 
-    from core.clean_unified_math import clean_unified_math as unified_math
+from core.clean_unified_math import clean_unified_math as unified_math
 
 #!/usr/bin/env python3
 """
@@ -19,37 +19,7 @@ and bit-level optimization in trading systems.
 """
 
 # Import clean math system
-try:
-except ImportError:
-    # Fallback for testing
-    class unified_math:
-        @staticmethod
-        def sin(x):
-            return np.sin(x)
-
-        @staticmethod
-        def max(x, y):
-            return max(x, y)
-
-        @staticmethod
-        def min(x, y):
-            return min(x, y)
-
-        @staticmethod
-        def abs(x):
-            return abs(x)
-
-        @staticmethod
-        def multiply(x, y):
-            return x * y
-
-        @staticmethod
-        def sqrt(x):
-            return np.sqrt(x)
-
-        @staticmethod
-        def log(x):
-            return np.log(x)
+# unified_math already imported above
 
 
 class ZBEMode(Enum):
@@ -234,7 +204,7 @@ class ZBECore:
             if len(self.bit_history) > 1000:
                 self.bit_history = self.bit_history[-1000:]
 
-            self.logger.debug("Bit efficiency: {0}".format(bit_efficiency:.6f))
+            self.logger.debug(f"Bit efficiency: {bit_efficiency:.6f}")
             return bit_data
 
         except Exception as e:
@@ -321,7 +291,7 @@ class ZBECore:
             if len(self.memory_history) > 1000:
                 self.memory_history = self.memory_history[-1000:]
 
-            self.logger.debug("Memory efficiency: {0}".format(memory_efficiency:.6f))
+            self.logger.debug(f"Memory efficiency: {memory_efficiency:.6f}")
             return memory_data
 
         except Exception as e:
@@ -390,10 +360,7 @@ class ZBECore:
             if self.bit_history:
                 self.average_efficiency = np.mean([data.bit_efficiency for data in self.bit_history[-100:]])
 
-            self.logger.debug(
-                "Computational optimization: {0}".format(
-                    overall_optimization:.3f)
-            )
+            self.logger.debug(f"Computational optimization: {overall_optimization:.3f}")
             return optimization_factors
 
         except Exception as e:
@@ -556,31 +523,28 @@ def test_zbe_core():
 
     # Test bit efficiency
     bit_data = core.calculate_bit_efficiency(0.5, 0.6, 0.7, 0.8)
-    print("Bit Efficiency: {0}".format(bit_data.bit_efficiency:.6f))
+    print(f"Bit Efficiency: {bit_data.bit_efficiency:.6f}")
 
     # Test memory efficiency
     memory_data = core.calculate_memory_efficiency(0.4, 1000.0, 0.002, 0.7)
     if memory_data:
-        print("Memory Efficiency: {0}".format(memory_data.memory_efficiency:.6f))
+        print(f"Memory Efficiency: {memory_data.memory_efficiency:.6f}")
 
     # Test computational optimization
     optimization_factors = core.get_computational_optimization()
-    print(
-        "Overall Optimization: {0}".format(
-            optimization_factors['overall_optimization']:.3f)
-    )
+    print(f"Overall Optimization: {optimization_factors['overall_optimization']:.3f}")
 
     # Test bit throughput
     throughput = core.calculate_bit_throughput(0.5)
-    print("Bit Throughput: {0} bits/s".format(throughput:.0f))
+    print(f"Bit Throughput: {throughput:.0f} bits/s")
 
     # Test cache efficiency
     cache_efficiency = core.calculate_cache_efficiency(0.7, 1000.0)
-    print("Cache Efficiency: {0}".format(cache_efficiency:.6f))
+    print(f"Cache Efficiency: {cache_efficiency:.6f}")
 
     # Test register utilization
     register_utilization = core.calculate_register_utilization(0.9)
-    print("Register Utilization: {0}".format(register_utilization:.6f))
+    print(f"Register Utilization: {register_utilization:.6f}")
 
     # Test current state
     state = core.get_current_state()

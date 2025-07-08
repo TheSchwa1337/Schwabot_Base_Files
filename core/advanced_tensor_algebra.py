@@ -102,6 +102,12 @@ CUDA Integration:
 logger = logging.getLogger(__name__)
 logger.info("Advanced Tensor Algebra initialized with backend: {0}".format(_backend))
 
+# Dual state router availability check
+try:
+    DUAL_STATE_AVAILABLE = True
+except ImportError:
+    DUAL_STATE_AVAILABLE = False
+
 __all__ = [
     "AdvancedTensorAlgebra",
     "tensor_dot_fusion",
@@ -986,7 +992,7 @@ class AdvancedTensorAlgebra:
             logger.error("Volumetric reshape failed: %s", e)
             return M
 
-    def entropy_vector_quantize(self, V: np.ndarray, E: float) -> np.ndarray:
+    def entropy_vector_quantize(self, V: np.ndarray, entropy_level: float) -> np.ndarray:
         """
         Quantize vector based on entropy level.
 
@@ -996,14 +1002,14 @@ class AdvancedTensorAlgebra:
 
         Args:
             V: Input vector
-            E: Entropy level (0-1)
+            entropy_level: Entropy level (0-1)
 
         Returns:
             Quantized vector
         """
         try:
             # Calculate quantization levels based on entropy
-            num_levels = max(2, int(1 / (1 - E + 1e-6)))
+            num_levels = max(2, int(1 / (1 - entropy_level + 1e-6)))
 
             # Normalize vector with CUDA acceleration
             v_norm = safe_cuda_operation(lambda: V / (xp.linalg.norm(V) + 1e-6), lambda: V / (np.linalg.norm(V) + 1e-6))
@@ -1017,7 +1023,7 @@ class AdvancedTensorAlgebra:
             # Restore original scale
             result = safe_cuda_operation(lambda: quantized * xp.linalg.norm(V), lambda: quantized * np.linalg.norm(V))
 
-            logger.debug("Entropy quantization: E=%.3f, levels=%d", E, num_levels)
+            logger.debug("Entropy quantization: E=%.3f, levels=%d", entropy_level, num_levels)
             return result
 
         except Exception as e:
@@ -1248,10 +1254,10 @@ def volumetric_reshape(M: np.ndarray, target_shape: Optional[Tuple[int, ...]] = 
     return algebra.volumetric_reshape(M, target_shape)
 
 
-def entropy_vector_quantize(V: np.ndarray, E: float) -> np.ndarray:
+def entropy_vector_quantize(V: np.ndarray, entropy_level: float) -> np.ndarray:
     """Convenience function for entropy vector quantization."""
     algebra = AdvancedTensorAlgebra()
-    return algebra.entropy_vector_quantize(V, E)
+    return algebra.entropy_vector_quantize(V, entropy_level)
 
 
 def matrix_trace_conditions(M: np.ndarray) -> Dict[str, float]:
@@ -1270,18 +1276,6 @@ def ferris_wheel_alignment(current_time: Optional[float] = None) -> float:
     """Convenience function for Ferris Wheel alignment."""
     algebra = AdvancedTensorAlgebra()
     return algebra.ferris_wheel_alignment(current_time)
-
-
-def quantum_tensor_operations(A: np.ndarray, B: np.ndarray) -> Dict[str, Any]:
-    """Convenience function for quantum tensor operations."""
-    algebra = AdvancedTensorAlgebra()
-    return algebra.quantum_tensor_operations(A, B)
-
-
-def entropy_modulation_system(tensor: np.ndarray, modulation_strength: float = 1.0) -> np.ndarray:
-    """Convenience function for entropy modulation."""
-    algebra = AdvancedTensorAlgebra()
-    return algebra.entropy_modulation_system(tensor, modulation_strength)
 
 
 # =============================================================================

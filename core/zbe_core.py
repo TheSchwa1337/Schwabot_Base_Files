@@ -28,39 +28,7 @@ except ImportError:
     xp = np
 
 # Import clean math system
-try:
-    from core.clean_unified_math import clean_unified_math as unified_math
-except ImportError:
-    # Fallback for testing
-    class unified_math:
-        @staticmethod
-        def sin(x):
-            return xp.sin(x)
-
-        @staticmethod
-        def max(x, y):
-            return max(x, y)
-
-        @staticmethod
-        def min(x, y):
-            return min(x, y)
-
-        @staticmethod
-        def abs(x):
-            return abs(x)
-
-        @staticmethod
-        def multiply(x, y):
-            return x * y
-
-        @staticmethod
-        def sqrt(x):
-            return xp.sqrt(x)
-
-        @staticmethod
-        def log(x):
-            return xp.log(x)
-
+# unified_math already imported above
 
 # Log backend status
 logger = logging.getLogger(__name__)

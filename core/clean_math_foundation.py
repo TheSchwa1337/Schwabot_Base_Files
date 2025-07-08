@@ -38,7 +38,6 @@ try:
     _backend = 'cupy (GPU)'
     xp = cp
 except ImportError:
-    import numpy as np
     USING_CUDA = False
     _backend = 'numpy (CPU)'
     xp = np
@@ -419,18 +418,18 @@ def normalize_vector(vector: np.ndarray, norm_type: str = "l2") -> np.ndarray:
         raise ValueError("Vector cannot be empty")
 
     if norm_type == "l1":
-        norm = np.sum(np.abs(vector))
+        norm_value = np.sum(np.abs(vector))
     elif norm_type == "l2":
-        norm = np.linalg.norm(vector)
+        norm_value = np.linalg.norm(vector)
     elif norm_type == "max":
-        norm = np.max(np.abs(vector))
+        norm_value = np.max(np.abs(vector))
     else:
         raise ValueError("Invalid norm_type. Must be 'l1', 'l2', or 'max'")
 
-    if norm == 0:
+    if norm_value == 0:
         return vector
 
-    return vector / norm
+    return vector / norm_value
 
 
 def calculate_eigenvalues(matrix: np.ndarray) -> np.ndarray:

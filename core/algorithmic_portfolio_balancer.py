@@ -292,8 +292,8 @@ class AlgorithmicPortfolioBalancer:
 
                 # Execute trade (this would integrate with your trading executor)
                 # For now, we'll simulate execution
-                success = await self._execute_trade(decision)
-                if success:
+                trade_success = await self._execute_trade(decision)
+                if trade_success:
                     success_count += 1
                     logger.info(
                         "Rebalancing trade executed: {0} {1} {2}".format(decision.symbol, decision.action.value, decision.quantity)

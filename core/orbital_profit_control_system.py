@@ -28,21 +28,20 @@ Architecture:
 Market Data → Entropy Analysis → Orbital Processing → Control Channels → Profit Output
 """
 
-import json
 import logging
+import math
+import threading
 import time
 from collections import deque
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List
 
 import numpy as np
-from scipy.optimize import minimize
-from scipy.signal import butter, filtfilt
 
 # Import systems
 try:
-    from .entropy_driven_risk_management import EntropyDrivenRiskManager, CryptoAsset, AssetEntropy
+    from .entropy_driven_risk_management import EntropyDrivenRiskManager
     from .bio_cellular_signaling import BioCellularSignaling, CellularSignalType
     from .bio_profit_vectorization import BioProfitVectorization
     from .cellular_trade_executor import CellularTradeExecutor
@@ -246,7 +245,7 @@ class OrbitalProfitControlSystem:
         logger.info("🌌💰 Orbital Profit Control System initialized")
 
     def _default_config(self) -> Dict[str, Any]:
-        """Default configuration for orbital profit control system"""
+        """Return the default configuration for the orbital profit control system."""
         return {
             'orbital_mechanics_enabled': True,
             'thin_wire_optimization': True,
@@ -266,8 +265,8 @@ class OrbitalProfitControlSystem:
             'entropy_driven_management': True,
         }
 
-    def _initialize_orbital_rings(self):
-        """Initialize all orbital rings with calculated parameters"""
+    def _initialize_orbital_rings(self) -> None:
+        """Initialize all orbital rings with calculated parameters."""
         ring_configs = {
             OrbitalRingType.CORE_PROFIT_RING: {'radius': 1.0, 'mass': 500000.0, 'priority': 1},
             OrbitalRingType.STABILITY_RING: {'radius': 1.5, 'mass': 300000.0, 'priority': 2},
@@ -307,8 +306,8 @@ class OrbitalProfitControlSystem:
 
             self.orbital_rings[ring_type] = ring_state
 
-    def _initialize_control_channels(self):
-        """Initialize control channels"""
+    def _initialize_control_channels(self) -> None:
+        """Initialize control channels."""
         channel_configs = {
             ControlChannelType.THIN_WIRE_PRIMARY: {'bandwidth': 1000.0, 'latency': 0.001, 'priority': 1},
             ControlChannelType.GUIDED_RING_SECONDARY: {'bandwidth': 500.0, 'latency': 0.002, 'priority': 2},
@@ -330,13 +329,7 @@ class OrbitalProfitControlSystem:
             self.control_channels[channel_type] = channel_state
 
     def calculate_orbital_mechanics(self, dt: float = 0.1) -> Dict[OrbitalRingType, OrbitalRingState]:
-        """
-        Calculate orbital ring dynamics using gravitational mechanics.
-
-        F = GMm/r² (gravitational force)
-        v = √(GM/r) (orbital velocity)
-        ω = √(GM/r³) (angular frequency)
-        """
+        """Calculate orbital mechanics for all rings."""
         try:
             updated_rings = {}
 
@@ -428,12 +421,7 @@ class OrbitalProfitControlSystem:
             return self.orbital_rings
 
     def process_thin_wire_control(self, control_signals: Dict[str, float]) -> ThinWireState:
-        """
-        Process thin wire control with guided ring dynamics.
-
-        The thin wire acts as the primary control channel with minimal latency
-        and maximum signal integrity.
-        """
+        """Process thin wire control signals and update state."""
         try:
             # Update wire properties based on control signals
             signal_strength = control_signals.get('signal_strength', 1.0)
@@ -479,11 +467,7 @@ class OrbitalProfitControlSystem:
             return self.thin_wire_state
 
     def execute_master_control_loop(self, market_data: Dict[str, Any]) -> MasterControlState:
-        """
-        Execute the master control loop with PID control for system stability.
-
-        This is the heart of the orbital profit control system.
-        """
+        """Execute the master control loop for the trading system."""
         try:
             # Get entropy-driven risk management results
             entropy_result = None
@@ -580,8 +564,8 @@ class OrbitalProfitControlSystem:
             logger.error("Error in master control loop: {0}".format(e))
             return self.master_control_state
 
-    def _apply_control_to_rings(self, control_output: float):
-        """Apply control output to orbital rings"""
+    def _apply_control_to_rings(self, control_output: float) -> None:
+        """Apply control output to orbital rings."""
         try:
             # Distribute control signal to rings based on priority
             for ring_type, ring_state in self.orbital_rings.items():
@@ -601,8 +585,8 @@ class OrbitalProfitControlSystem:
         except Exception as e:
             logger.error("Error applying control to rings: {0}".format(e))
 
-    def _trigger_emergency_protocol(self, risk_level: float, drawdown: float):
-        """Trigger emergency shutdown protocol"""
+    def _trigger_emergency_protocol(self, risk_level: float, drawdown: float) -> None:
+        """Trigger emergency shutdown protocol."""
         try:
             logger.warning(
                 "🚨 Emergency protocol triggered: Risk={0:.3f}, Drawdown={1:.3f}".format(
@@ -628,12 +612,7 @@ class OrbitalProfitControlSystem:
             logger.error("Error in emergency protocol: {0}".format(e))
 
     def optimize_profit_flow(self, market_data: Dict[str, Any]) -> Dict[str, Any]:
-        """
-        Optimize profit flow through the orbital system.
-
-        This function integrates all components to optimize profit generation
-        while maintaining system health and stability.
-        """
+        """Optimize profit flow based on market data."""
         try:
             # Step 1: Update orbital mechanics
             dt = 1.0 / self.config.get('orbital_update_frequency', 1.0)
@@ -740,8 +719,8 @@ class OrbitalProfitControlSystem:
             logger.error("Error optimizing profit flow: {0}".format(e))
             return {'error': str(e)}
 
-    def _update_control_channels(self, market_data: Dict[str, Any]):
-        """Update control channel states"""
+    def _update_control_channels(self, market_data: Dict[str, Any]) -> None:
+        """Update control channel states."""
         try:
             for channel_type, channel_state in self.control_channels.items():
                 # Calculate load factor based on system demand
@@ -765,7 +744,7 @@ class OrbitalProfitControlSystem:
             logger.error("Error updating control channels: {0}".format(e))
 
     def _integrate_entropy_management(self, market_data: Dict[str, Any]) -> Dict[str, Any]:
-        """Integrate with entropy-driven risk management"""
+        """Integrate with entropy-driven risk management."""
         try:
             if not hasattr(self, 'entropy_manager') or not self.entropy_manager:
                 return {'active': False}
@@ -799,7 +778,7 @@ class OrbitalProfitControlSystem:
             return {'active': False, 'error': str(e)}
 
     def _integrate_bio_cellular_systems(self, market_data: Dict[str, Any]) -> Dict[str, Any]:
-        """Integrate with bio-cellular systems"""
+        """Integrate bio-cellular systems with market data."""
         try:
             if not hasattr(self, 'bio_integration') or not self.bio_integration:
                 return {'active': False}
@@ -830,7 +809,7 @@ class OrbitalProfitControlSystem:
             return {'active': False, 'error': str(e)}
 
     def get_system_status(self) -> Dict[str, Any]:
-        """Get comprehensive system status"""
+        """Get the current system status."""
         try:
             return {
                 'system_active': self.system_active,
@@ -859,8 +838,8 @@ class OrbitalProfitControlSystem:
             logger.error("Error getting system status: {0}".format(e))
             return {'error': str(e)}
 
-    def start_orbital_control(self):
-        """Start the orbital profit control system"""
+    def start_orbital_control(self) -> None:
+        """Start the orbital control system."""
         try:
             self.system_active = True
 
@@ -876,8 +855,8 @@ class OrbitalProfitControlSystem:
         except Exception as e:
             logger.error("Error starting orbital control: {0}".format(e))
 
-    def stop_orbital_control(self):
-        """Stop the orbital profit control system"""
+    def stop_orbital_control(self) -> None:
+        """Stop the orbital control system."""
         try:
             self.system_active = False
 
@@ -893,8 +872,8 @@ class OrbitalProfitControlSystem:
         except Exception as e:
             logger.error("Error stopping orbital control: {0}".format(e))
 
-    def cleanup_resources(self):
-        """Clean up all system resources"""
+    def cleanup_resources(self) -> None:
+        """Clean up resources used by the control system."""
         try:
             self.stop_orbital_control()
 
@@ -920,7 +899,9 @@ class OrbitalProfitControlSystem:
 
 
 # Convenience function for easy system creation
-def create_orbital_profit_control_system(config: Dict[str, Any] = None) -> OrbitalProfitControlSystem:
+def create_orbital_profit_control_system(
+    config: Dict[str, Any] = None
+) -> OrbitalProfitControlSystem:
     """
     Create and configure an orbital profit control system.
 
