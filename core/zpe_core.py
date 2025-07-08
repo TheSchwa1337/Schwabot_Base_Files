@@ -5,11 +5,11 @@ import time
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
-    import cupy as cp
+import cupy as cp
 
-    import numpy as np
+import numpy as np
 
-    from core.clean_unified_math import clean_unified_math as unified_math
+from core.clean_unified_math import clean_unified_math as unified_math
 
 """
 ZPE (Zero Point Energy) Core Module
@@ -31,6 +31,7 @@ except ImportError:
 
 # Import clean math system
 try:
+    pass
 except ImportError:
     # Fallback for testing
     class unified_math:
@@ -50,17 +51,17 @@ except ImportError:
         def abs(x):
             return abs(x)
 
-    @staticmethod
-    def multiply(x, y):
-        return x * y
+        @staticmethod
+        def multiply(x, y):
+            return x * y
 
-    @staticmethod
-    def tanh(x):
-        return xp.tanh(x)
+        @staticmethod
+        def tanh(x):
+            return xp.tanh(x)
 
-    @staticmethod
-    def atan(x):
-        return xp.arctan(x)
+        @staticmethod
+        def atan(x):
+            return xp.arctan(x)
 
 
 # Log backend status
@@ -513,9 +514,8 @@ class ZPECore:
             }
 
             self.logger.info(
-                "Profit wheel result: {0} (confidence: {1})".format(signal, 
-                    confidence:.3f)
-            )
+                "Profit wheel result: {0} (confidence: {1})".format(
+                    signal, confidence:.3f))
             return result
 
         except Exception as e:

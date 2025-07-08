@@ -8,10 +8,10 @@ from datetime import datetime
 from enum import Enum
 from functools import wraps
 from typing import Any, Callable, Dict, List, Optional, Tuple
-    import cupy as cp
+import cupy as cp
 import psutil
 
-    import numpy as np
+import numpy as np
 
 #!/usr/bin/env python3
 """

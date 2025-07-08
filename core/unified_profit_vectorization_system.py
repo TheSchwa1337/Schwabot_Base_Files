@@ -1,4 +1,4 @@
-    import cupy as cp
+import cupy as cp
 import logging
 import time
 from dataclasses import dataclass, field
@@ -10,7 +10,7 @@ from .pure_profit_calculator import PureProfitCalculator, StrategyParameters, Ma
 from .orbital_shell_brain_system import OrbitalBRAINSystem, ShellConsensus, AltitudeVector
 from .qutrit_signal_matrix import QutritSignalMatrix, QutritState, QutritMatrixResult
 
-    import numpy as np
+import numpy as np
 
 # !/usr/bin/env python3
 # -*- coding: utf-8 -*-
@@ -214,8 +214,7 @@ class UnifiedProfitVectorizationSystem:
 
             logger.debug(
                 "Unified profit calculation completed in {0}s".format(
-                    calculation_time:.4f)
-            )
+                    calculation_time:.4f))
 
             return result
 
@@ -687,7 +686,8 @@ class UnifiedProfitVectorizationSystem:
             qutrit_result = qutrit_matrix.get_matrix_result()
 
             # Log qutrit state for debugging
-            logger.debug("Qutrit state: {0} (confidence: {1})".format(qutrit_result.state, qutrit_result.confidence:.3f))
+            logger.debug("Qutrit state: {0} (confidence: {1})".format(
+                qutrit_result.state, qutrit_result.confidence:.3f))
 
             # Real profit vector calc with qutrit overlay
             result = self._build_market_objects(market_data)

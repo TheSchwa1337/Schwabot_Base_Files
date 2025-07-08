@@ -7,8 +7,8 @@
 This module implements the orbital profit control system that acts as a "thin wire"
 with "guided extra ring" attached to larger profit orbitals and control channels.
 
-It serves as the master control system for the entire bio-cellular trading architecture,
-providing:
+It serves as the master control system for the entire bio-cellular trading
+architecture, providing:
 
 - Orbital profit ring dynamics with guided control
 - Thin wire signal transmission between systems
@@ -205,8 +205,8 @@ class OrbitalProfitControlSystem:
         self.config = config or self._default_config()
 
         # Initialize orbital rings
-        self.orbital_rings: Dict[OrbitalRingType, OrbitalRingState] = {0}
-        self.control_channels: Dict[ControlChannelType, ControlChannelState] = {0}
+        self.orbital_rings: Dict[OrbitalRingType, OrbitalRingState] = {}
+        self.control_channels: Dict[ControlChannelType, ControlChannelState] = {}
 
         # Initialize control states
         self.thin_wire_state = ThinWireState()

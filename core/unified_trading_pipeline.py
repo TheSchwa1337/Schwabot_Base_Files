@@ -1,4 +1,6 @@
 import asyncio
+import logging
+import time
 from typing import Any, Dict, Optional
 
 from core.clean_trading_pipeline import CleanTradingPipeline, MarketData
@@ -44,9 +46,6 @@ class UnifiedTradingPipeline:
         return decision
 
 
-def create_unified_trading_pipeline(config: Optional[Dict[str, Any]] = None)
-
-
--> UnifiedTradingPipeline:
+def create_unified_trading_pipeline(config: Optional[Dict[str, Any]] = None) -> UnifiedTradingPipeline:
     """Factory function to create a UnifiedTradingPipeline instance."""
     return UnifiedTradingPipeline(config)

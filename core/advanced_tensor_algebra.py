@@ -1,18 +1,69 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 import logging
 import time
 from typing import Any, Dict, List, Optional, Tuple, Union
-    import cupy as cp
-    from ..system.dual_state_router import (
-from .type_defs import (
 
-    import numpy as np
-    from scipy import linalg, signal, stats
+# Third-party imports
+import numpy as np
+
+try:
+    import cupy as cp
+    USING_CUDA = True
+    _backend = 'cupy (GPU)'
+    xp = cp
+except ImportError:
+    USING_CUDA = False
+    _backend = 'numpy (CPU)'
+    xp = np
+
+try:
+    import scipy.linalg as linalg
+    import scipy.signal as signal
+    import scipy.stats as stats
     from scipy.fft import fft, fftfreq, ifft
     from scipy.optimize import minimize
     from scipy.sparse import csr_matrix
     from scipy.special import gamma, zeta
+    SCIPY_AVAILABLE = True
+except ImportError:
+    SCIPY_AVAILABLE = False
+    logger = logging.getLogger(__name__)
+    logger.warning("🔄 SciPy not available - some advanced functions may be limited")
 
-    from ..utils.cuda_helper import (
+# Application-specific imports
+from ..system.dual_state_router import (
+    ComputeMode,
+    StrategyTier,
+    get_dual_state_router,
+    route_task,
+)
+from .type_defs import (
+    EULER_MASCHERONI,
+    GOLDEN_RATIO,
+    PI,
+    DualState,
+    E,
+    EntropySignal,
+    FractalMatrix,
+    QuantumState,
+    Tensor64,
+    Vector64,
+)
+from ..utils.cuda_helper import (
+    get_cuda_status,
+    report_cuda_status,
+    safe_convolution,
+    safe_cuda_operation,
+    safe_eigenvalue_decomposition,
+    safe_fft,
+    safe_matrix_inverse,
+    safe_matrix_multiply,
+    safe_svd,
+    safe_tensor_contraction,
+    xp as helper_xp,
+)
+
 
 # !/usr/bin/env python3
 # -*- coding: utf-8 -*-
@@ -47,74 +98,6 @@ CUDA Integration:
 - Performance monitoring and optimization
 - Cross-platform compatibility (Windows, macOS, Linux)
 """
-
-# CUDA Integration with Fallback
-try:
-    USING_CUDA = True
-    _backend = 'cupy (GPU)'
-    xp = cp
-except ImportError:
-    USING_CUDA = False
-    _backend = 'numpy (CPU)'
-    xp = np
-
-# Import scipy with fallback
-try:
-    SCIPY_AVAILABLE = True
-except ImportError:
-    SCIPY_AVAILABLE = False
-    logger = logging.getLogger(__name__)
-    logger.warning("🔄 SciPy not available - some advanced functions may be limited")
-
-# CUDA Helper Integration (for additional utilities)
-try:
-        get_cuda_status,
-        report_cuda_status,
-        safe_convolution,
-        safe_cuda_operation,
-        safe_eigenvalue_decomposition,
-        safe_fft,
-        safe_matrix_inverse,
-        safe_matrix_multiply,
-        safe_svd,
-        safe_tensor_contraction,
-        xp as helper_xp,
-    )
-
-    CUDA_AVAILABLE = True
-    logger = logging.getLogger(__name__)
-    logger.info("⚡ CUDA acceleration enabled in Advanced Tensor Algebra: {0}".format(_backend))
-except ImportError:
-    # Fallback to CPU-only mode
-    CUDA_AVAILABLE = False
-    logger = logging.getLogger(__name__)
-    logger.warning("🔄 CUDA helper not available - using CPU-only mode in Advanced Tensor Algebra")
-
-# Dual State Router Integration
-try:
-        ComputeMode,
-        StrategyTier,
-        get_dual_state_router,
-        route_task,
-    )
-
-    DUAL_STATE_AVAILABLE = True
-    logger.info("🔄 Dual State Router integration enabled")
-except ImportError:
-    DUAL_STATE_AVAILABLE = False
-    logger.warning("⚠️ Dual State Router not available - using direct CUDA operations")
-
-    EULER_MASCHERONI,
-    GOLDEN_RATIO,
-    PI,
-    DualState,
-    E,
-    EntropySignal,
-    FractalMatrix,
-    QuantumState,
-    Tensor64,
-    Vector64,
-)
 
 logger = logging.getLogger(__name__)
 logger.info("Advanced Tensor Algebra initialized with backend: {0}".format(_backend))

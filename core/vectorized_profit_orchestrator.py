@@ -706,7 +706,8 @@ class VectorizedProfitOrchestrator:
                     self.state_transitions.append(transition_record)
 
                     info(
-                        "🎯 State transition: {0} → {1} ".format(old_state.value, rule.to_state.value)
+                        "🎯 State transition: {0} → {1} ".format(
+                            old_state.value, rule.to_state.value),
                         "(trigger: {0})".format(rule.trigger_condition)
                     )
 

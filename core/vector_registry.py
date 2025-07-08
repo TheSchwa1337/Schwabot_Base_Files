@@ -6,10 +6,10 @@ import time
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple, Any
-    import cupy as cp
+import cupy as cp
 from .entropy_math import bit_entropy, hamming_distance, vector_similarity, shannon_entropy, get_backend_info
 
-    import numpy as np
+import numpy as np
 
 #!/usr/bin/env python3
 """Vector Registry 🗂️
@@ -161,7 +161,8 @@ class VectorRegistry:
             if matches:
                 self.successful_matches += 1
 
-            logger.debug("Found {0} similar digests in {1}s".format(len(matches), search_time:.4f))
+            logger.debug("Found {0} similar digests in {1}s".format(
+                len(matches), search_time:.4f))
             return matches
 
         except Exception as e:
@@ -231,8 +232,8 @@ class VectorRegistry:
             self._save_registry()
 
             logger.debug(
-                "Updated digest {0}... success_rate={1}, avg_profit={2}".format(digest_hex[:16], vector.success_rate:.3f, vector.avg_profit:.4f)
-            )
+                "Updated digest {0}... success_rate={1}, avg_profit={2}".format(
+                    digest_hex[:16], vector.success_rate:.3f, vector.avg_profit:.4f))
             return True
 
         except Exception as e:

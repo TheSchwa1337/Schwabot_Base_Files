@@ -4,11 +4,7 @@ import logging
 from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass
 from enum import Enum
-    import cupy as cp
 
-    import numpy as np
-
-#!/usr/bin/env python3
 """
 🤖🔀 AI MATRIX CONSENSUS
 ========================
@@ -26,12 +22,14 @@ CUDA Integration:
 
 # CUDA Integration with Fallback
 try:
+    import cupy as cp
     USING_CUDA = True
     _backend = 'cupy (GPU)'
     xp = cp
 except ImportError:
     USING_CUDA = False
     _backend = 'numpy (CPU)'
+    import numpy as np
     xp = np
 
 logger = logging.getLogger(__name__)
@@ -141,7 +139,7 @@ class AIMatrixConsensus:
             # Blend votes into consensus
             consensus = self._blend_votes(agent_opinions, base_vector)
 
-            logger.debug("Consensus reached: {0} (confidence: {1})".format(consensus.consensus_vote, consensus.confidence:.3f))
+            logger.debug(f"Consensus reached: {consensus.consensus_vote} (confidence: {consensus.confidence:.3f})")
             return consensus
 
         except Exception as e:
@@ -252,8 +250,7 @@ class AIMatrixConsensus:
             final_confidence = min(1.0, base_confidence * (0.5 + vector_confidence))
 
             # Generate reasoning
-            reasoning
-    "{0} voted {1} based on glyph {2} and vector characteristics".format(agent_id, vote.value, glyph)
+            reasoning = "{0} voted {1} based on glyph {2} and vector characteristics".format(agent_id, vote.value, glyph)
 
             return vote, final_confidence, reasoning
 
@@ -503,7 +500,7 @@ def test_ai_matrix_consensus():
     print("\n🗳️ Test 1: Getting Consensus Vote")
     result = consensus.vote(glyph, base_vector, market_context)
     print("  Consensus vote: {0}".format(result.consensus_vote))
-    print("  Confidence: {0}".format(result.confidence:.3f))
+    print(f"  Confidence: {result.confidence:.3f}")
     print("  Blended vector: {0}".format(result.blended_vector))
     print("  Vote distribution: {0}".format(result.vote_distribution))
 
@@ -516,7 +513,7 @@ def test_ai_matrix_consensus():
     print("\n🌕 Test 3: Testing Different Glyph")
     result2 = consensus.vote("🌕", base_vector, market_context)
     print("  New consensus: {0}".format(result2.consensus_vote))
-    print("  New confidence: {0}".format(result2.confidence:.3f))
+    print(f"  New confidence: {result2.confidence:.3f}")
 
     # Test 4: Get statistics
     print("\n📊 Test 4: Consensus Statistics")

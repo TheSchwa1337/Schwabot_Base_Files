@@ -7,21 +7,21 @@ from collections import defaultdict, deque
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Dict, List, Optional, Any, Tuple, Union
-    import tkinter as tk
-    from tkinter import ttk, scrolledtext, messagebox
+import tkinter as tk
+from tkinter import ttk, scrolledtext, messagebox
 from .two_gram_detector import TwoGramDetector, TwoGramSignal, create_two_gram_detector
 from .algorithmic_portfolio_balancer import AlgorithmicPortfolioBalancer
 from .btc_usdc_trading_integration import BTCUSDCTradingIntegration
 from .phantom_detector import PhantomZone
 from .phantom_registry import PhantomRegistry
 from typing import TYPE_CHECKING
-    from .strategy_trigger_router import StrategyTriggerRouter, TriggerEvent, ExecutionResult
-            import psutil
+from .strategy_trigger_router import StrategyTriggerRouter, TriggerEvent, ExecutionResult
+import psutil
 
 import numpy as np
-    import matplotlib.pyplot as plt
-    from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-    from matplotlib.animation import FuncAnimation
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from matplotlib.animation import FuncAnimation
 
 from utils.safe_print import safe_print, info, warn, error, success, debug
 
@@ -149,6 +149,9 @@ logger = logging.getLogger(__name__)
 
 # Type hints for circular import resolution
 if TYPE_CHECKING:
+    pass
+
+
 class GUIMode(Enum):
     """GUI display modes for different use cases."""
 
@@ -798,7 +801,8 @@ Avg Entropy: {stats.get('average_entropy', 0.0):.3f}
             top_patterns = stats.get('top_patterns', [])
             for i, pattern in enumerate(top_patterns[:5], 1):
                 stats_text += "{0}. {1} {2} ".format(i, pattern.get('pattern', '??'), pattern.get('emoji_symbol', '❓'))
-                stats_text += "(f:{0}, b:{1})\n".format(pattern.get('frequency', 0), pattern.get('burst_score', 0.0):.1f)
+                stats_text += "(f:{0}, b:{1})\n".format(
+                    pattern.get('frequency', 0), pattern.get('burst_score', 0.0):.1f)
 
             stats_text += f"""
 🛡️ SYSTEM HEALTH:
@@ -861,7 +865,8 @@ Memory Usage: {stats.get('memory_usage_mb', 0):.1f} MB
                 price_label.grid(row=row, column=1, padx=10, pady=5)
 
                 # Change
-                change_text = "{0} {1}%".format('↗️' if data['change_24h'] > 0 else '↘️', data['change_24h']:+.2f)
+                change_text = "{0} {1}%".format(
+                    '↗️' if data['change_24h'] > 0 else '↘️', data['change_24h']:+.2f)
                 change_label = tk.Label(
                     self.market_display,
                     text=change_text,
@@ -1112,8 +1117,8 @@ CPU Health: {health_check.get('cpu_health', 'Good')}
             if self.two_gram_detector and time.time() - self.last_update_time > 30:
                 stats = await self.two_gram_detector.get_pattern_statistics()
                 info(
-                    "🧬 Patterns: {0}, Health: {1}".format(stats.get('active_patterns', 0), stats.get('system_health_score', 0.0):.2f)
-                )
+                    "🧬 Patterns: {0}, Health: {1}".format(
+                        stats.get('active_patterns', 0), stats.get('system_health_score', 0.0):.2f))
                 self.last_update_time = time.time()
 
         except Exception as e:

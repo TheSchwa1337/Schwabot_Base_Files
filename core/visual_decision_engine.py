@@ -87,7 +87,8 @@ class VisualDecisionEngine:
 
             decision_type = consensus_result.consensus_vote
 
-            logger.debug("New path created: {0} → {1} (confidence: {2})".format(glyph, decision_type, consensus_result.confidence:.3f))
+            logger.debug("New path created: {0} → {1} (confidence: {2:.3f})".format(
+                glyph, decision_type, consensus_result.confidence))
             return glyph, blended_vector, decision_type
 
         except Exception as e:

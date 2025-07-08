@@ -578,8 +578,6 @@ class AdvancedSettingsEngine:
         active_profile = self._active_profile or "none"
 
         return (
-            f"<AdvancedSettingsEngine "
-            "sections={0} ".format(sections_count)
-            "profiles={0} ".format(profiles_count)
-            "active_profile='{0}'>".format(active_profile)
+            f"<AdvancedSettingsEngine sections={sections_count} "
+            f"profiles={profiles_count} active_profile='{active_profile}'>"
         )
