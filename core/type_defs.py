@@ -1,3 +1,11 @@
+from __future__ import annotations
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Callable, Dict, List, NamedTuple, NewType, Optional, Tuple, Union
+from numpy.typing import NDArray
+
+import numpy as np
+
 # !/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -20,15 +28,6 @@ Historical Integration:
 - Supports quantum-inspired trading logic
 - Implements ZPE-ZBE signal triggers
 """
-
-from __future__ import annotations
-
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Any, Callable, Dict, List, NamedTuple, NewType, Optional, Tuple, Union
-
-import numpy as np
-from numpy.typing import NDArray
 
 # =============================================================================
 # CORE MATHEMATICAL TYPES - Advanced Architecture
@@ -166,17 +165,9 @@ class Tensor64(NamedTuple):
 
     def __post_init__(self):
         if self.tensor.ndim != self.rank:
-            raise ValueError(
-                f"Tensor rank {
-                    self.rank} doesn't match dimensions {
-                    self.tensor.ndim}"
-            )
+            raise ValueError("Tensor rank {0} doesn't match dimensions {1}".format(self.rank, self.tensor.ndim))
         if self.tensor.shape != self.shape:
-            raise ValueError(
-                f"Tensor shape {
-                    self.tensor.shape} doesn't match declared shape {
-                    self.shape}"
-            )
+            raise ValueError("Tensor shape {0} doesn't match declared shape {1}".format(self.tensor.shape, self.shape))
 
     def contract(self, other: Tensor64, axes: Tuple[int, int]) -> Tensor64:
         """Tensor contraction: T_ij = A_ik B_kj"""

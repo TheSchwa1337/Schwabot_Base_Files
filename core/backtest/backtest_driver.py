@@ -1,11 +1,12 @@
-from core.soulprint_registry import SoulprintRegistry
-from core.clean_trading_pipeline import CleanTradingPipeline, create_trading_pipeline
 import argparse
 import asyncio
 import json
 import os
 import sys
 from typing import Any, Dict, List
+
+from core.soulprint_registry import SoulprintRegistry
+from core.clean_trading_pipeline import CleanTradingPipeline, create_trading_pipeline
 
 # Adjust path to import from core
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -18,7 +19,7 @@ async def run_backtest(config: Dict[str, Any]):
     """
     dataset_path = config.get("dataset")
     if not dataset_path or not os.path.exists(dataset_path):
-        print(f"❌ Error: Historical dataset not found at '{dataset_path}'")
+        print("❌ Error: Historical dataset not found at '{0}'".format(dataset_path))
         return
 
     # 1. Initialize pipeline and registry
@@ -40,22 +41,22 @@ async def run_backtest(config: Dict[str, Any]):
         with open(dataset_path, "r", encoding="utf-8") as f:
             historical_candles = json.load(f)
         print(
-            f"✅ Loaded {
-                len(historical_candles)} candles from '{
-                os.path.basename(dataset_path)}'."
+            "✅ Loaded {0} candles from '{1}'.".format(
+                len(historical_candles), 
+                os.path.basename(dataset_path))
         )
     except json.JSONDecodeError:
-        print(f"❌ Error: Could not decode JSON from '{dataset_path}'.")
+        print("❌ Error: Could not decode JSON from '{0}'.".format(dataset_path))
         return
     except Exception as e:
-        print(f"❌ Error loading dataset: {e}")
+        print("❌ Error loading dataset: {0}".format(e))
         return
 
     # 3. Process candles
     print("⏳ Processing historical candles...")
     trade_signals = []
     for i, candle in enumerate(historical_candles):
-        print(f"   - Processing candle {i + 1}/{len(historical_candles)}", end="\r")
+        print("   - Processing candle {0}/{1}".format(i + 1, len(historical_candles)), end="\r")
         signal = await pipeline.process_candle(candle)
 
         if signal and not signal.get("blocked"):
@@ -93,8 +94,8 @@ async def run_backtest(config: Dict[str, Any]):
                     soulprint_registry.log_backtest_signal(log_data)
 
     print("\n✅ Back-test complete.")
-    print(f"   - Trades generated: {len(trade_signals)}")
-    print(f"   - Final portfolio value (simulated): ${pipeline.state.current_capital:.2f}")
+    print("   - Trades generated: {0}".format(len(trade_signals)))
+    print("   - Final portfolio value (simulated): ${0}".format(pipeline.state.current_capital:.2f))
 
 
 def main():
@@ -103,18 +104,10 @@ def main():
         description="Schwabot Backtest Driver",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
-    parser.add_argument(
-        "--dataset", type=str, required=True, help="Path to historical candle data JSON file."
-    )
-    parser.add_argument(
-        "--config", type=str, required=True, help="Path to the trading bot configuration file."
-    )
-    parser.add_argument(
-        "--symbol", type=str, default="BTC/USDT", help="Trading symbol for the back-test."
-    )
-    parser.add_argument(
-        "--capital", type=float, default=10000.0, help="Initial capital for the simulation."
-    )
+    parser.add_argument("--dataset", type=str, required=True, help="Path to historical candle data JSON file.")
+    parser.add_argument("--config", type=str, required=True, help="Path to the trading bot configuration file.")
+    parser.add_argument("--symbol", type=str, default="BTC/USDT", help="Trading symbol for the back-test.")
+    parser.add_argument("--capital", type=float, default=10000.0, help="Initial capital for the simulation.")
     parser.add_argument(
         "--registry-file",
         type=str,
@@ -129,10 +122,10 @@ def main():
         with open(args.config, "r") as f:
             config = json.load(f)
     except FileNotFoundError:
-        print(f"❌ Error: Base config file not found at '{args.config}'")
+        print("❌ Error: Base config file not found at '{0}'".format(args.config))
         sys.exit(1)
     except json.JSONDecodeError:
-        print(f"❌ Error: Could not decode JSON from '{args.config}'.")
+        print("❌ Error: Could not decode JSON from '{0}'.".format(args.config))
         sys.exit(1)
 
     # Override config with CLI arguments for the back-test

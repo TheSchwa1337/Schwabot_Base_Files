@@ -546,11 +546,7 @@ zygot_entropy = self._generate_zygot_entropy(internal_system_data)
 
 
 
-        return {gate_open: False,reason: f"Zygot Entropy too low({zygot_entropy:.3f} < {
-
-
-
-                    self.zygot_entropy_threshold:.3f}),}
+        return {gate_open: False,reason: "Zygot Entropy too low({0} < {1}),}
 
 
 
@@ -566,11 +562,7 @@ if zalgo_entropy < self.zalgo_entropy_threshold:
 
 
 
-        return {gate_open: False,reason": f"Zalgo Entropy too low({zalgo_entropy:.3f} < {
-
-
-
-                    self.zalgo_entropy_threshold:.3f}),}
+        return {2} < {3}),}
 
 
 
@@ -638,11 +630,11 @@ if not is_verified:
 
 
 
-self.metrics[gates_closed] += 1return {gate_open: False,reason:Dual-key verification failed.}
+self.metrics[gates_closed] += 1return {4}
 
 
 
-self.metrics[gates_opened] += 1return {gate_open: True,reason:All entropy and key conditions met.}
+self.metrics[gates_opened] += 1return {5}
 
 
 
@@ -739,7 +731,15 @@ gate = ZygotZalgoEntropyDualKeyGate(
 
 
 
-trade_signal = {signal_id:trade_123,direction:buy",size": 10,confidence": 0.8,
+trade_signal = {signal_id:trade_123,direction:buy".format(zygot_entropy:.3f, 
+
+
+
+                    self.zygot_entropy_threshold:.3f, gate_open: False,reason": f"Zalgo Entropy too low({zalgo_entropy:.3f, 
+
+
+
+                    self.zalgo_entropy_threshold:.3f, gate_open: False,reason:Dual-key verification failed., gate_open: True,reason:All entropy and key conditions met.),size": 10,confidence": 0.8,
 
 
 
@@ -809,9 +809,9 @@ print(fGate Result: {result3})print(fMetrics: {gate.get_metrics()})
 
 
 
-print(\n--- Test Case 4: Adaptive Thresholding (with bad performance) ---)print(f"Initial Zygot
-Threshold: {gate.zygot_entropy_threshold:.3f})print(fInitial Zalgo Threshold:
-{gate.zalgo_entropy_threshold:.3f})
+print(\n--- Test Case 4: Adaptive Thresholding (with bad performance) ---)print("Initial Zygot
+Threshold: {0})print(fInitial Zalgo Threshold:
+{1})
 
 
 
@@ -827,9 +827,9 @@ trade_signal, internal_data, external_data, performance_bad
 
 
 
-print(fGate Result: {result4})print(fNew Zygot Threshold:
-{gate.zygot_entropy_threshold:.3f})print(fNew Zalgo Threshold:
-{gate.zalgo_entropy_threshold:.3f})print(fMetrics: {gate.get_metrics()})
+print(fGate Result: {2})print(fNew Zygot Threshold:
+{0})print(fNew Zalgo Threshold:
+{1})print(fMetrics: {5})
 
 
 
@@ -843,9 +843,9 @@ gate.rotate_keys()
 
 
 
-print(fOld Zygot Key Hash: {initial_zygot_hash[:8]}...)print(f"New Zygot Key Hash:
-{gate.get_metrics()[current_zygot_key_hash][:8]}...)print(f"Old Zalgo Key Hash:
-{initial_zalgo_hash[:8]}...)print(f"New Zalgo Key Hash:
+print(fOld Zygot Key Hash: {6}...)print(f".format(gate.zygot_entropy_threshold:.3f, gate.zalgo_entropy_threshold:.3f, result4, gate.zygot_entropy_threshold:.3f, gate.zalgo_entropy_threshold:.3f, gate.get_metrics(), initial_zygot_hash[:8])New Zygot Key Hash:
+{gate.get_metrics()[current_zygot_key_hash][:8]}...)print("Old Zalgo Key Hash:
+{0}...)print(f".format(initial_zalgo_hash[:8])New Zalgo Key Hash:
 {gate.get_metrics()[current_zalgo_key_hash][:8]}...)
 
 

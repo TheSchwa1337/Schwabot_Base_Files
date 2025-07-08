@@ -1,3 +1,20 @@
+import asyncio
+import json
+import logging
+import time
+from dataclasses import dataclass, field
+from enum import Enum
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple, Union
+from .api.handlers.alt_fear_greed import FearGreedHandler
+from .api.handlers.coingecko import CoinGeckoHandler
+from .api.handlers.glassnode import GlassnodeHandler
+from .api.handlers.whale_alert import WhaleAlertHandler
+from .clean_math_foundation import CleanMathFoundation
+from .soulprint_registry import SoulprintRegistry
+
+import numpy as np
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -17,28 +34,8 @@ Key Features:
 
 """
 
-import asyncio
-import json
-import logging
-import time
-from dataclasses import dataclass, field
-from enum import Enum
-from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple, Union
-
-import numpy as np
-
-from .api.handlers.alt_fear_greed import FearGreedHandler
-
 # Import API handlers
-from .api.handlers.coingecko import CoinGeckoHandler
-from .api.handlers.glassnode import GlassnodeHandler
-from .api.handlers.whale_alert import WhaleAlertHandler
-
 # Import math utilities
-from .clean_math_foundation import CleanMathFoundation
-from .soulprint_registry import SoulprintRegistry
-
 logger = logging.getLogger(__name__)
 
 
@@ -249,10 +246,10 @@ class UnifiedMarketDataPipeline:
                 else:
                     logger.warning("Whale Alert API key not provided, handler disabled")
 
-            logger.info(f"Initialized {len(self.handlers)} API handlers")
+            logger.info("Initialized {0} API handlers".format(len(self.handlers)))
 
         except Exception as e:
-            logger.error(f"Error initializing API handlers: {e}")
+            logger.error("Error initializing API handlers: {0}".format(e))
 
     async def get_market_data(self, symbol: str, force_refresh: bool = False) -> MarketDataPacket:
         """
@@ -271,7 +268,7 @@ class UnifiedMarketDataPipeline:
             # Check cache first
             if not force_refresh and self._is_cached(symbol):
                 cached_data = self.data_cache[symbol]
-                logger.debug(f"Using cached data for {symbol}")
+                logger.debug("Using cached data for {0}".format(symbol))
                 return cached_data
 
             # Fetch data from all available sources
@@ -321,7 +318,7 @@ class UnifiedMarketDataPipeline:
                     "pipeline_version": "1.0.0",
                     "calculation_time": time.time() - start_time,
                     "quality_score": self._calculate_quality_score(data_quality, freshness_score),
-                    "cache_key": f"{symbol}_{int(time.time() // self.config['cache_ttl'])}",
+                    "cache_key": "{0}_{1}".format(symbol, int(time.time() // self.config['cache_ttl'])),
                 },
             )
 
@@ -336,16 +333,16 @@ class UnifiedMarketDataPipeline:
                 self._log_to_registry(market_packet)
 
             logger.info(
-                f"Generated market data packet for {symbol} "
-                f"(quality: {
-                    data_quality.value}, sources: {
-                    len(raw_data)})"
+                "Generated market data packet for {0} ".format(symbol)
+                "(quality: {0}, sources: {1})".format(
+                    data_quality.value, 
+                    len(raw_data))
             )
 
             return market_packet
 
         except Exception as e:
-            logger.error(f"Error generating market data for {symbol}: {e}")
+            logger.error("Error generating market data for {0}: {1}".format(symbol, e))
             self._update_metrics(False, time.time() - start_time)
 
             # Return fallback data
@@ -369,7 +366,7 @@ class UnifiedMarketDataPipeline:
                         "timestamp": time.time(),
                     }
             except Exception as e:
-                logger.error(f"CoinGecko fetch failed: {e}")
+                logger.error("CoinGecko fetch failed: {0}".format(e))
 
         # Fetch from Glassnode
         if "glassnode" in self.handlers:
@@ -385,7 +382,7 @@ class UnifiedMarketDataPipeline:
                         "timestamp": time.time(),
                     }
             except Exception as e:
-                logger.error(f"Glassnode fetch failed: {e}")
+                logger.error("Glassnode fetch failed: {0}".format(e))
 
         # Fetch from Fear & Greed
         if "fear_greed" in self.handlers:
@@ -401,7 +398,7 @@ class UnifiedMarketDataPipeline:
                         "timestamp": time.time(),
                     }
             except Exception as e:
-                logger.error(f"Fear & Greed fetch failed: {e}")
+                logger.error("Fear & Greed fetch failed: {0}".format(e))
 
         # Fetch from Whale Alert
         if "whale_alert" in self.handlers:
@@ -417,7 +414,7 @@ class UnifiedMarketDataPipeline:
                         "timestamp": time.time(),
                     }
             except Exception as e:
-                logger.error(f"Whale Alert fetch failed: {e}")
+                logger.error("Whale Alert fetch failed: {0}".format(e))
 
         return raw_data
 
@@ -457,9 +454,7 @@ class UnifiedMarketDataPipeline:
 
         return cleaned
 
-    def _calculate_technical_indicators(
-        self, symbol: str, data: Dict[str, Any]
-    ) -> TechnicalIndicators:
+    def _calculate_technical_indicators(self, symbol: str, data: Dict[str, Any]) -> TechnicalIndicators:
         """Calculate technical indicators from price data."""
         indicators = TechnicalIndicators()
 
@@ -487,9 +482,7 @@ class UnifiedMarketDataPipeline:
 
             # MACD calculation
             if len(prices) >= 26:
-                indicators.macd_line, indicators.macd_signal, indicators.macd_histogram = (
-                    self._calculate_macd(prices)
-                )
+                indicators.macd_line, indicators.macd_signal, indicators.macd_histogram = self._calculate_macd(prices)
 
             # Bollinger Bands
             if len(prices) >= 20:
@@ -523,7 +516,7 @@ class UnifiedMarketDataPipeline:
                 indicators.stoch_k, indicators.stoch_d = self._calculate_stochastic(prices, 14)
 
         except Exception as e:
-            logger.error(f"Error calculating technical indicators for {symbol}: {e}")
+            logger.error("Error calculating technical indicators for {0}: {1}".format(symbol, e))
 
         return indicators
 
@@ -581,9 +574,7 @@ class UnifiedMarketDataPipeline:
 
         return sentiment
 
-    def _calculate_derived_metrics(
-        self, data: Dict[str, Any], indicators: TechnicalIndicators
-    ) -> Dict[str, float]:
+    def _calculate_derived_metrics(self, data: Dict[str, Any], indicators: TechnicalIndicators) -> Dict[str, float]:
         """Calculate derived metrics for the trading system."""
         metrics = {
             "volatility": 0.5,
@@ -606,9 +597,7 @@ class UnifiedMarketDataPipeline:
 
             # Entropy level (market uncertainty)
             volatility = metrics["volatility"]
-            bb_width = abs(indicators.bb_upper - indicators.bb_lower) / max(
-                indicators.bb_middle, 1.0
-            )
+            bb_width = abs(indicators.bb_upper - indicators.bb_lower) / max(indicators.bb_middle, 1.0)
             metrics["entropy_level"] = min(10.0, 2.0 + volatility * 4.0 + bb_width * 4.0)
 
             # Liquidity score from volume
@@ -623,7 +612,7 @@ class UnifiedMarketDataPipeline:
                 metrics["momentum_score"] = max(-1.0, min(1.0, metrics["momentum_score"]))
 
         except Exception as e:
-            logger.error(f"Error calculating derived metrics: {e}")
+            logger.error("Error calculating derived metrics: {0}".format(e))
 
         return metrics
 
@@ -675,9 +664,7 @@ class UnifiedMarketDataPipeline:
 
         return float(ema)
 
-    def _calculate_bollinger_bands(
-        self, prices: np.ndarray, period: int = 20
-    ) -> Tuple[float, float, float, float]:
+    def _calculate_bollinger_bands(self, prices: np.ndarray, period: int = 20) -> Tuple[float, float, float, float]:
         """Calculate Bollinger Bands."""
         if len(prices) < period:
             return 0.0, 0.0, 0.0, 0.5
@@ -866,7 +853,7 @@ class UnifiedMarketDataPipeline:
             )
 
         except Exception as e:
-            logger.error(f"Failed to log market data to registry: {e}")
+            logger.error("Failed to log market data to registry: {0}".format(e))
 
     def _create_fallback_packet(self, symbol: str) -> MarketDataPacket:
         """Create a fallback market data packet when all sources fail."""
@@ -900,8 +887,7 @@ class UnifiedMarketDataPipeline:
             "cached_symbols": list(self.data_cache.keys()),
             "metrics": {
                 "total_requests": self.metrics.total_requests,
-                "success_rate": self.metrics.successful_requests
-                / max(1, self.metrics.total_requests),
+                "success_rate": self.metrics.successful_requests / max(1, self.metrics.total_requests),
                 "average_latency": self.metrics.average_latency,
                 "uptime_percentage": self.metrics.uptime_percentage,
                 "cache_size": len(self.data_cache),
@@ -949,14 +935,14 @@ async def demo_pipeline():
     # Get market data for Bitcoin
     btc_data = await pipeline.get_market_data("BTC")
 
-    print(f"BTC Price: ${btc_data.price:,.2f}")
-    print(f"RSI: {btc_data.technical_indicators.rsi_14:.2f}")
-    print(f"Data Quality: {btc_data.data_quality.value}")
-    print(f"Sources Used: {', '.join(btc_data.sources_used)}")
+    print("BTC Price: ${0}".format(btc_data.price:,.2f))
+    print("RSI: {0}".format(btc_data.technical_indicators.rsi_14:.2f))
+    print("Data Quality: {0}".format(btc_data.data_quality.value))
+    print("Sources Used: {0}".format(', '.join(btc_data.sources_used)))
 
     # Health check
     health = await pipeline.health_check()
-    print(f"API Health: {health}")
+    print("API Health: {0}".format(health))
 
 
 if __name__ == "__main__":

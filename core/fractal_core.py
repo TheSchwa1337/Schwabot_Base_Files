@@ -1,3 +1,14 @@
+import logging
+import math
+from dataclasses import dataclass, field
+from typing import Any, Dict, List, Tuple, Union
+    import cupy as cp
+    from ..system.dual_state_router import (
+
+    import numpy as np
+
+    from ..utils.cuda_helper import (
+
 # !/usr/bin/env python3
 """
 Fractal Core - Fractal mathematics for Schwabot trading system.
@@ -11,26 +22,18 @@ CUDA Integration:
 - Cross-platform compatibility (Windows, macOS, Linux)
 """
 
-import logging
-import math
-from dataclasses import dataclass, field
-from typing import Any, Dict, List, Tuple, Union
-
 # CUDA Integration with Fallback
 try:
-    import cupy as cp
     USING_CUDA = True
     _backend = 'cupy (GPU)'
     xp = cp
 except ImportError:
-    import numpy as np
     USING_CUDA = False
     _backend = 'numpy (CPU)'
     xp = np
 
 # CUDA Helper Integration (for additional utilities)
 try:
-    from ..utils.cuda_helper import (
         get_cuda_status,
         report_cuda_status,
         safe_convolution,
@@ -43,9 +46,10 @@ try:
         safe_tensor_contraction,
         xp as helper_xp,
     )
+
     CUDA_AVAILABLE = True
     logger = logging.getLogger(__name__)
-    logger.info(f"⚡ CUDA acceleration enabled in Fractal Core: {_backend}")
+    logger.info("⚡ CUDA acceleration enabled in Fractal Core: {0}".format(_backend))
 except ImportError:
     CUDA_AVAILABLE = False
     logger = logging.getLogger(__name__)
@@ -53,12 +57,12 @@ except ImportError:
 
 # Dual State Router Integration
 try:
-    from ..system.dual_state_router import (
         ComputeMode,
         StrategyTier,
         get_dual_state_router,
         route_task,
     )
+
     DUAL_STATE_AVAILABLE = True
     logger.info("🔄 Dual State Router integration enabled in Fractal Core")
 except ImportError:
@@ -66,7 +70,7 @@ except ImportError:
     logger.warning("⚠️ Dual State Router not available in Fractal Core")
 
 logger = logging.getLogger(__name__)
-logger.info(f"Fractal Core initialized with backend: {_backend}")
+logger.info("Fractal Core initialized with backend: {0}".format(_backend))
 
 
 @dataclass
@@ -183,7 +187,7 @@ def fractal_quantize_vector(
         )
 
     except Exception as e:
-        logger.error(f"Fractal quantization failed: {e}")
+        logger.error("Fractal quantization failed: {0}".format(e))
         # Return fallback quantization
         return FractalQuantizationResult(
             quantized_vector=np.array(vector, dtype=np.float64),
@@ -219,7 +223,7 @@ def quantize_vector(vector: Union[List[float], np.ndarray], precision: int = 8) 
         return quantized
 
     except Exception as e:
-        logger.error(f"Vector quantization failed: {e}")
+        logger.error("Vector quantization failed: {0}".format(e))
         return np.array(vector, dtype=np.float64)
 
 
@@ -275,7 +279,7 @@ def _sierpinski_quantize(vector: np.ndarray, precision: int) -> np.ndarray:
 
     for i, val in enumerate(vector):
         # Convert to binary representation
-        binary = format(int(val * (2**precision - 1)), f"0{precision}b")
+        binary = format(int(val * (2**precision - 1)), "0{0}b".format(precision))
 
         # Count 1s in binary (Sierpinski pattern)
         ones_count = binary.count("1")
@@ -300,9 +304,7 @@ def _calculate_fractal_dimension(vector: np.ndarray) -> float:
                 break
 
             # Count boxes needed to cover the vector
-            boxes_needed = safe_cuda_operation(
-                lambda: xp.ceil(len(vector) / size), lambda: np.ceil(len(vector) / size)
-            )
+            boxes_needed = safe_cuda_operation(lambda: xp.ceil(len(vector) / size), lambda: np.ceil(len(vector) / size))
             box_counts.append(boxes_needed)
 
         if len(box_counts) < 2:
@@ -326,7 +328,7 @@ def _calculate_fractal_dimension(vector: np.ndarray) -> float:
         return abs(slope)
 
     except Exception as e:
-        logger.error(f"Fractal dimension calculation failed: {e}")
+        logger.error("Fractal dimension calculation failed: {0}".format(e))
         return 1.0
 
 
@@ -400,13 +402,11 @@ def generate_fractal_hash(vector: np.ndarray, length: int = 64) -> str:
         return hex_hash
 
     except Exception as e:
-        logger.error(f"Fractal hash generation failed: {e}")
+        logger.error("Fractal hash generation failed: {0}".format(e))
         return "0" * (length // 4)
 
 
-def fractal_pattern_match(
-    pattern: np.ndarray, target: np.ndarray, threshold: float = 0.8
-) -> Tuple[bool, float]:
+def fractal_pattern_match(pattern: np.ndarray, target: np.ndarray, threshold: float = 0.8) -> Tuple[bool, float]:
     """
     Match fractal pattern in target vector.
 
@@ -439,5 +439,5 @@ def fractal_pattern_match(
         return match_found, float(best_score)
 
     except Exception as e:
-        logger.error(f"Fractal pattern matching failed: {e}")
+        logger.error("Fractal pattern matching failed: {0}".format(e))
         return False, 0.0

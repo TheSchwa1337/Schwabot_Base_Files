@@ -569,7 +569,7 @@ curve1 = lac.anticipate_losses(market_data1)'
 
 
 
-print(fAnticipated Loss Curve: {[f'{x:.4f}' for x in curve1]})
+print(fAnticipated Loss Curve: {["{0}".format(x:.4f) for x in curve1]})
 
 
 
@@ -581,7 +581,7 @@ curve2 = lac.anticipate_losses(market_data2)'
 
 
 
-print(fAnticipated Loss Curve: {[f'{x:.4f}' for x in curve2]})
+print(fAnticipated Loss Curve: {["{0}".format(x:.4f) for x in curve2]})
 
 
 
@@ -609,8 +609,8 @@ lac.reset()
 
 
 
-print(f"Historical Losses after reset: {lac.historical_losses})print(fMetrics after reset:
-{lac.get_metrics()})"'"
+print("Historical Losses after reset: {0})print(fMetrics after reset:
+{1})".format(lac.historical_losses, lac.get_metrics())'"
 
 
 

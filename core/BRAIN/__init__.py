@@ -5,4 +5,4 @@ __all__ = [
     "orbital_memory_vector",
     "synaptic_mapper",
     "shell_dna_encoder",
-] 
+]

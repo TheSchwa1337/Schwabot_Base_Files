@@ -1,20 +1,19 @@
 from __future__ import annotations
-
 import asyncio
 import logging
 from typing import Any, Dict, List
+from .base_handler import BaseAPIHandler
+
+    import aiohttp
+    import requests
 
 try:
-    import aiohttp
 except ImportError:  # pragma: no cover
     aiohttp = None
 
 try:
-    import requests
 except ImportError:  # pragma: no cover
     requests = None
-
-from .base_handler import BaseAPIHandler
 
 logger = logging.getLogger(__name__)
 
@@ -55,7 +54,7 @@ class WhaleAlertHandler(BaseAPIHandler):
 
             session = await self._get_session()
 
-            async with session.get(f"{BASE_URL}/transactions", params=params) as resp:
+            async with session.get("{0}/transactions".format(BASE_URL), params=params) as resp:
 
                 if resp.status == 401:
 
@@ -72,7 +71,7 @@ class WhaleAlertHandler(BaseAPIHandler):
             loop = asyncio.get_running_loop()
 
             response = await loop.run_in_executor(
-                None, lambda: requests.get(f"{BASE_URL}/transactions", params=params, timeout=15)
+                None, lambda: requests.get("{0}/transactions".format(BASE_URL), params=params, timeout=15)
             )
 
             if response.status_code == 401:

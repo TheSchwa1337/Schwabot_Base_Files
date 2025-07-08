@@ -1,20 +1,17 @@
 from __future__ import annotations
-
 import logging
 import time
-
 from typing import Dict, Optional
+from .data_models import APICredentials, MarketData, OrderRequest, OrderResponse
+from .enums import ConnectionStatus
 
-try:
     import ccxt
     import ccxt.async_support as ccxt_async
 
+try:
     CCXT_AVAILABLE = True
 except ImportError:
     CCXT_AVAILABLE = False
-
-from .data_models import APICredentials, MarketData, OrderRequest, OrderResponse
-from .enums import ConnectionStatus
 
 logger = logging.getLogger(__name__)
 
@@ -57,8 +54,8 @@ class ExchangeConnection:
         self.cache_expiry = config.get("market_data_cache_expiry", 30)
 
         logger.info(
-            f"Exchange connection initialized for {
-                credentials.exchange.value}"
+            "Exchange connection initialized for {0}".format(
+                credentials.exchange.value)
         )
 
     async def connect(self) -> bool:
@@ -70,7 +67,7 @@ class ExchangeConnection:
             return False
 
         self.status = ConnectionStatus.CONNECTING
-        logger.info(f"Connecting to {self.credentials.exchange.value}...")
+        logger.info("Connecting to {0}...".format(self.credentials.exchange.value))
 
         try:
             exchange_name = self.credentials.exchange.value
@@ -100,15 +97,15 @@ class ExchangeConnection:
             self.status = ConnectionStatus.CONNECTED
             self.last_heartbeat = time.time()
             self.reconnect_attempts = 0
-            logger.info(f" Successfully connected to {exchange_name}")
+            logger.info(" Successfully connected to {0}".format(exchange_name))
             return True
 
         except Exception as e:
             self.status = ConnectionStatus.ERROR
             self.last_error = str(e)
             logger.error(
-                f" Failed to connect to {
-                    self.credentials.exchange.value}: {e}",
+                " Failed to connect to {0}: {1}".format(
+                    self.credentials.exchange.value, e),
                 exc_info=True,
             )
             return False
@@ -118,14 +115,14 @@ class ExchangeConnection:
         if self.status == ConnectionStatus.DISCONNECTED:
             return
 
-        logger.info(f"Disconnecting from {self.credentials.exchange.value}...")
+        logger.info("Disconnecting from {0}...".format(self.credentials.exchange.value))
         try:
             if self.async_exchange:
                 await self.async_exchange.close()
             self.status = ConnectionStatus.DISCONNECTED
-            logger.info(f"Disconnected from {self.credentials.exchange.value}")
+            logger.info("Disconnected from {0}".format(self.credentials.exchange.value))
         except Exception as e:
-            logger.error(f"Error during disconnection: {e}", exc_info=True)
+            logger.error("Error during disconnection: {0}".format(e), exc_info=True)
 
     async def get_market_data(self, symbol: str) -> Optional[MarketData]:
         """Fetches market data for a given symbol, using a cache."""
@@ -168,8 +165,8 @@ class ExchangeConnection:
             self.failed_requests += 1
             self.last_error = str(e)
             logger.error(
-                f"Error fetching market data for {symbol} on {
-                    self.credentials.exchange.value}: {e}"
+                "Error fetching market data for {0} on {1}: {2}".format(symbol, 
+                    self.credentials.exchange.value, e)
             )
             return None
 
@@ -201,9 +198,9 @@ class ExchangeConnection:
             self.last_heartbeat = time.time()
 
             logger.info(
-                f" Order placed on {
-                    self.credentials.exchange.value}: {
-                    response.order_id}"
+                " Order placed on {0}: {1}".format(
+                    self.credentials.exchange.value, 
+                    response.order_id)
             )
 
             return response
@@ -212,8 +209,8 @@ class ExchangeConnection:
             self.failed_requests += 1
             self.last_error = str(e)
             logger.error(
-                f" Error placing order on {
-                    self.credentials.exchange.value}: {e}",
+                " Error placing order on {0}: {1}".format(
+                    self.credentials.exchange.value, e),
                 exc_info=True,
             )
             return self._create_error_response(order_request, str(e))
@@ -226,9 +223,7 @@ class ExchangeConnection:
         try:
             balance = await self.async_exchange.fetch_balance()
             free_balances = {
-                currency: float(amount)
-                for currency, amount in balance.get("free", {}).items()
-                if float(amount) > 0
+                currency: float(amount) for currency, amount in balance.get("free", {}).items() if float(amount) > 0
             }
 
             self.successful_requests += 1
@@ -241,8 +236,8 @@ class ExchangeConnection:
             self.failed_requests += 1
             self.last_error = str(e)
             logger.error(
-                f"Error fetching balance from {
-                    self.credentials.exchange.value}: {e}"
+                "Error fetching balance from {0}: {1}".format(
+                    self.credentials.exchange.value, e)
             )
             return {}
 

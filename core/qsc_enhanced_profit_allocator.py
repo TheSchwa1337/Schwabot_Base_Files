@@ -1,3 +1,11 @@
+import logging
+from enum import Enum
+from dataclasses import dataclass, field
+import time
+from typing import Dict, Any, List, Optional
+            from .quantum_static_core import QuantumStaticCore
+            from .galileo_tensor_bridge import GalileoTensorBridge
+
 # !/usr/bin/env python3
 """
 QSC Enhanced Profit Allocator
@@ -5,12 +13,6 @@ QSC Enhanced Profit Allocator
 This module provides quantum-static-core enhanced profit allocation with
 dynamic risk assessment and Fibonacci-based position sizing.
 """
-
-import logging
-from enum import Enum
-from dataclasses import dataclass, field
-import time
-from typing import Dict, Any, List, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -106,8 +108,6 @@ class QSCEnhancedProfitAllocator:
     def _create_qsc_core(self):
         """Create QSC core instance."""
         try:
-            from .quantum_static_core import QuantumStaticCore
-
             return QuantumStaticCore()
         except ImportError:
             logger.warning("QuantumStaticCore not available, using mock")
@@ -116,8 +116,6 @@ class QSCEnhancedProfitAllocator:
     def _create_tensor_bridge(self):
         """Create tensor bridge instance."""
         try:
-            from .galileo_tensor_bridge import GalileoTensorBridge
-
             return GalileoTensorBridge()
         except ImportError:
             logger.warning("GalileoTensorBridge not available, using mock")
@@ -159,7 +157,7 @@ class QSCEnhancedProfitAllocator:
             raise ValueError("Maximum concurrent cycles reached")
 
         if cycle_id in self.active_cycles:
-            raise ValueError(f"Cycle {cycle_id} already exists")
+            raise ValueError("Cycle {0} already exists".format(cycle_id))
 
         # Calculate QSC metrics
         resonance_score = self._calculate_resonance_score(market_conditions)
@@ -169,9 +167,7 @@ class QSCEnhancedProfitAllocator:
         quantum_score = self.qsc.calculate_quantum_score(market_conditions)
 
         # Determine QSC mode
-        qsc_mode = self._determine_qsc_mode(
-            resonance_score, fibonacci_alignment, entropy_stability, quantum_score
-        )
+        qsc_mode = self._determine_qsc_mode(resonance_score, fibonacci_alignment, entropy_stability, quantum_score)
 
         # QSC validation
         qsc_validation = self.qsc.validate_profit_cycle(
@@ -208,8 +204,8 @@ class QSCEnhancedProfitAllocator:
 
         self.active_cycles[cycle_id] = cycle
         logger.info(
-            f"Created QSC profit cycle {cycle_id} with mode {
-                qsc_mode.value}"
+            "Created QSC profit cycle {0} with mode {1}".format(cycle_id, 
+                qsc_mode.value)
         )
 
         return cycle
@@ -219,7 +215,7 @@ class QSCEnhancedProfitAllocator:
     ) -> Dict[str, Any]:
         """Allocate profit using QSC-enhanced logic."""
         if cycle_id not in self.active_cycles:
-            raise ValueError(f"Cycle {cycle_id} not found")
+            raise ValueError("Cycle {0} not found".format(cycle_id))
 
         cycle = self.active_cycles[cycle_id]
 
@@ -228,7 +224,7 @@ class QSCEnhancedProfitAllocator:
 
         # QSC validation check
         if not cycle.recommended_by_qsc:
-            logger.warning(f"Cycle {cycle_id} not recommended by QSC, blocking allocation")
+            logger.warning("Cycle {0} not recommended by QSC, blocking allocation".format(cycle_id))
             cycle.qsc_blocked_amount += profit_amount
             return {"allocated": 0.0, "blocked": profit_amount, "reason": "QSC validation failed"}
 
@@ -348,7 +344,7 @@ class QSCEnhancedProfitAllocator:
     def close_cycle(self, cycle_id: str) -> QSCProfitCycle:
         """Close a profit cycle."""
         if cycle_id not in self.active_cycles:
-            raise ValueError(f"Cycle {cycle_id} not found")
+            raise ValueError("Cycle {0} not found".format(cycle_id))
 
         cycle = self.active_cycles[cycle_id]
         cycle.end_time = time.time()
@@ -357,7 +353,7 @@ class QSCEnhancedProfitAllocator:
         self.cycle_history.append(cycle)
         del self.active_cycles[cycle_id]
 
-        logger.info(f"Closed QSC profit cycle {cycle_id}")
+        logger.info("Closed QSC profit cycle {0}".format(cycle_id))
         return cycle
 
     def get_cycle_status(self, cycle_id: str) -> Optional[Dict[str, Any]]:

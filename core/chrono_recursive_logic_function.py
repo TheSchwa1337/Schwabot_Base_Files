@@ -1,3 +1,15 @@
+import logging
+import math
+import time
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple
+    import cupy as cp
+from .clean_math_foundation import BitPhase, CleanMathFoundation, ThermalState
+from .zpe_zbe_core import QuantumSyncStatus, ZBEBalance, ZPEVector
+
+    import numpy as np
+
 #!/usr/bin/env python3
 """
 Chrono-Recursive Logic Function (CRLF)
@@ -12,34 +24,22 @@ This module implements:
 - Profit-based waveform correction
 """
 
-import logging
-import math
-import time
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
-
 # CUDA Integration with Fallback
 try:
-    import cupy as cp
     USING_CUDA = True
     _backend = 'cupy (GPU)'
     xp = cp
 except ImportError:
-    import numpy as np
     USING_CUDA = False
     _backend = 'numpy (CPU)'
     xp = np
 
-from .clean_math_foundation import BitPhase, CleanMathFoundation, ThermalState
-from .zpe_zbe_core import QuantumSyncStatus, ZBEBalance, ZPEVector
-
 # Log backend status
 logger = logging.getLogger(__name__)
 if USING_CUDA:
-    logger.info(f"⚡ CRLF using GPU acceleration: {_backend}")
+    logger.info("⚡ CRLF using GPU acceleration: {0}".format(_backend))
 else:
-    logger.info(f"🔄 CRLF using CPU fallback: {_backend}")
+    logger.info("🔄 CRLF using CPU fallback: {0}".format(_backend))
 
 
 class CRLFTriggerState(Enum):
@@ -202,12 +202,12 @@ class ChronoRecursiveLogicFunction:
             # Update performance metrics
             self._update_performance_metrics(response)
 
-            logger.debug(f"CRLF computed: {crlf_output:.4f} -> {trigger_state.value}")
+            logger.debug("CRLF computed: {0} -> {1}".format(crlf_output:.4f, trigger_state.value))
 
             return response
 
         except Exception as e:
-            logger.error(f"Error computing CRLF: {e}")
+            logger.error("Error computing CRLF: {0}".format(e))
             return self._create_fallback_response()
 
     def _compute_recursive_state_function(self) -> np.ndarray:
@@ -276,9 +276,7 @@ class ChronoRecursiveLogicFunction:
         strategy_gradient = np.zeros(len(self.state.psi))
 
         # Simple mapping: use profit trend to adjust strategy weights
-        avg_profit_trend = (
-            np.mean(profit_gradient[-5:]) if len(profit_gradient) >= 5 else np.mean(profit_gradient)
-        )
+        avg_profit_trend = np.mean(profit_gradient[-5:]) if len(profit_gradient) >= 5 else np.mean(profit_gradient)
 
         # Adjust strategy vector based on profit trend
         if avg_profit_trend > 0:
@@ -306,15 +304,13 @@ class ChronoRecursiveLogicFunction:
             delta_psi = 0.0
 
         # Update entropy with exponential decay
-        new_entropy = self.state.lambda_decay * self.state.entropy + (
-            1 - self.state.lambda_decay
-        ) * (market_entropy + delta_psi)
+        new_entropy = self.state.lambda_decay * self.state.entropy + (1 - self.state.lambda_decay) * (
+            market_entropy + delta_psi
+        )
 
         return np.clip(new_entropy, 0.0, 1.0)
 
-    def _compute_crlf_output(
-        self, psi_n: np.ndarray, gradient_psi: np.ndarray, entropy: float
-    ) -> float:
+    def _compute_crlf_output(self, psi_n: np.ndarray, gradient_psi: np.ndarray, entropy: float) -> float:
         """
         Compute CRLF output: Ψₙ(τ) ⋅ ∇ψ ⋅ Δₜ ⋅ e^(-Eτ)
         """
@@ -352,9 +348,7 @@ class ChronoRecursiveLogicFunction:
         else:
             return CRLFTriggerState.ESCALATE
 
-    def _generate_recommendations(
-        self, crlf_output: float, trigger_state: CRLFTriggerState
-    ) -> Dict[str, Any]:
+    def _generate_recommendations(self, crlf_output: float, trigger_state: CRLFTriggerState) -> Dict[str, Any]:
         """Generate recommendations based on CRLF output and trigger state."""
         recommendations = {
             "action": trigger_state.value,
@@ -475,9 +469,7 @@ class ChronoRecursiveLogicFunction:
             self.state.recursion_depth = 0
             self.state.strategy_corrections += 1
         else:
-            self.state.recursion_depth = min(
-                self.state.recursion_depth + 1, self.state.max_recursion_depth
-            )
+            self.state.recursion_depth = min(self.state.recursion_depth + 1, self.state.max_recursion_depth)
 
     def _compute_strategy_alignment(self, response: CRLFResponse) -> float:
         """Compute strategy alignment score."""
@@ -586,11 +578,11 @@ if __name__ == "__main__":
 
     response = crlf.compute_crlf(strategy_vector, profit_curve, market_entropy)
 
-    print(f"CRLF Output: {response.crlf_output:.4f}")
-    print(f"Trigger State: {response.trigger_state.value}")
-    print(f"Confidence: {response.confidence:.3f}")
-    print(f"Recommendations: {response.recommendations}")
+    print("CRLF Output: {0}".format(response.crlf_output:.4f))
+    print("Trigger State: {0}".format(response.trigger_state.value))
+    print("Confidence: {0}".format(response.confidence:.3f))
+    print("Recommendations: {0}".format(response.recommendations))
 
     # Get performance summary
     summary = crlf.get_performance_summary()
-    print(f"\nPerformance Summary: {summary}")
+    print("\nPerformance Summary: {0}".format(summary))

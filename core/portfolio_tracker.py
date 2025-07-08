@@ -262,7 +262,7 @@ self.portfolio_stats
 
 
 
-            logger.info(f"PortfolioTracker initialized with cash: {self.cash:.2f})
+            logger.info("PortfolioTracker initialized with cash: {0})
 
 
 
@@ -270,7 +270,7 @@ self.portfolio_stats
 
 
 
-def deposit():-> None:"Deposit cash into the portfolio.amount_dec = Decimal(str(amount))
+def deposit():-> None:".format(self.cash:.2f)Deposit cash into the portfolio.amount_dec = Decimal(str(amount))
 
 
 
@@ -291,7 +291,7 @@ self.portfolio_stats[total_deposits] += amount_decself.portfolio_stats[last_upda
 
 
 
-            logger.info(f"Deposited {amount_dec:.2f}. New cash: {self.cash:.2f})
+            logger.info("Deposited {0}. New cash: {1})
 
 
 
@@ -299,7 +299,8 @@ self.portfolio_stats[total_deposits] += amount_decself.portfolio_stats[last_upda
 
 
 
-def withdraw():-> None:"Withdraw cash from the portfolio.amount_dec = Decimal(str(amount))
+def withdraw():-> None:".format(amount_dec:.2f, self.cash:.2f)Withdraw cash from the portfolio.amount_dec
+    Decimal(str(amount))
 
 
 
@@ -328,7 +329,7 @@ self.portfolio_stats[total_withdrawals] += amount_decself.portfolio_stats[last_u
 
 
 
-            logger.info(f"Withdrew {amount_dec:.2f}. New cash: {self.cash:.2f})
+            logger.info("Withdrew {0}. New cash: {1})
 
 
 
@@ -382,7 +383,7 @@ if direction == buy:
 
 
 
-                logger.error(f"Insufficient cash to buy {qty_dec} of {asset}. Required: {
+                logger.error(f".format(amount_dec:.2f, self.cash:.2f)Insufficient cash to buy {qty_dec} of {asset}. Required: {
 
 
 
@@ -730,7 +731,7 @@ self.portfolio_stats
 
 
 
-}logger.info(f"Portfolio reset to initial cash: {self.cash:.2f})
+}logger.info("Portfolio reset to initial cash: {0})
 
 
 
@@ -750,7 +751,7 @@ level = logging.INFO,
 
 
 
-format=%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+format=%(asctime)s - %(name)s - %(levelname)s - %(message)s".format(self.cash:.2f),
 
 
 

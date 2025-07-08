@@ -1,3 +1,13 @@
+import asyncio
+from decimal import ROUND_DOWN, Decimal
+from typing import Any, Dict, List, Optional, Tuple
+from .clean_profit_vectorization import ProfitVector, VectorizationMode
+from .clean_trading_pipeline import TradingAction, TradingDecision
+from .clean_unified_math import clean_unified_math as unified_math
+from .trading_engine_integration import SchwabotTradingEngine, TradingMode
+
+from .ccxt_integration import CCXTIntegration
+
 # !/usr/bin/env python3
 """
 Quad-Bit Strategy Array System
@@ -11,16 +21,6 @@ Advanced 4-bit strategy array for multi-pair cryptocurrency trading with:
 - Buy wall/sell wall CCXT integration
 - Special BTC/USDC treatment
 """
-
-import asyncio
-from decimal import ROUND_DOWN, Decimal
-from typing import Any, Dict, List, Optional, Tuple
-
-from .ccxt_integration import CCXTIntegration
-from .clean_profit_vectorization import ProfitVector, VectorizationMode
-from .clean_trading_pipeline import TradingAction, TradingDecision
-from .clean_unified_math import clean_unified_math as unified_math
-from .trading_engine_integration import SchwabotTradingEngine, TradingMode
 
 logger = logging.getLogger(__name__)
 
@@ -290,7 +290,7 @@ def calculate_4bit_strategy(self,
         }
 
         if pair_str not in pair_mapping:
-            raise ValueError(f"Invalid trading pair: {pair_str}")
+            raise ValueError("Invalid trading pair: {0}".format(pair_str))
 
         pair = pair_mapping[pair_str]
 
@@ -455,7 +455,7 @@ Dict[str, Any]) -> TradingDecision:
                 'rsi': 55.0
             }
         except Exception as e:
-            logger.error(f"Error getting market data for {pair}: {e}")
+            logger.error("Error getting market data for {0}: {1}".format(pair, e))
             return None
 
 async def _generate_rebalancing_decision(self, pair: TradingPair, asset: AssetProfile, market_data:

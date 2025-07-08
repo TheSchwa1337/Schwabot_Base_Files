@@ -745,15 +745,8 @@ market_data
 
 
 
-print(f"Oscillator initialized with period = {oscillator.period}, smoothing={
-
-
-
-oscillator.smoothing_period}, hash_strength={
-
-
-
-                oscillator.hash_strength})print(\nCalculating oscillator values:)
+print("Oscillator initialized with period
+    {0}, smoothing={1}, hash_strength={2})print(\nCalculating oscillator values:)
 
 
 
@@ -781,15 +774,7 @@ if osc_value is not None:
 
 
 
-fStep {i +
-
-
-
-1}: Price = {price}, Volume={volume}, Oscillator={
-
-
-
-osc_value:.4f})
+fStep {3}: Price = {4}, Volume={5}, Oscillator={6})
 
 
 
@@ -797,11 +782,7 @@ else:
 
 
 
-            print(fStep {i +
-
-
-
-1}: Price = {price}, Volume={volume}, Oscillator=N/A (not enough data)
+            print(fStep {3}: Price = {4}, Volume={5}, Oscillator=N/A (not enough data)
 
 
 
@@ -825,7 +806,7 @@ for k, v in metrics.items():
 
 
 
-            print(f{k}: {v:.4f})
+            print(f{10}: {11})
 
 
 
@@ -833,7 +814,7 @@ else :
 
 
 
-            print(f{k}: {v})
+            print(f{10}: {13})
 
 
 
@@ -845,7 +826,27 @@ oscillator.reset()
 
 
 
-print(f"Oscillator value after reset: {oscillator.get_current_oscillator_value()})print(fMetrics
+print(f".format(oscillator.period, 
+
+
+
+oscillator.smoothing_period, 
+
+
+
+                oscillator.hash_strength, i +
+
+
+
+1, price, volume, 
+
+
+
+osc_value:.4f, i +
+
+
+
+1, price, volume, k, v:.4f, k, v)Oscillator value after reset: {oscillator.get_current_oscillator_value()})print(fMetrics
 after reset: {oscillator.get_metrics()})"'"
 
 

@@ -8,7 +8,7 @@ class GlyphRouter:
             "dip_harvest": "🌘",
             "ghost": "👻",
             "loopback": "🔁",
-            "deferral": "⏳"
+            "deferral": "⏳",
         }
 
     def get_glyph(self, strategy_name: str) -> str:
@@ -22,4 +22,4 @@ class GlyphRouter:
             return "🌀"
         elif max_val < 0.05:
             return "🛡️"
-        return "⏳" 
+        return "⏳"

@@ -1,3 +1,10 @@
+import argparse
+import json
+import sys
+from pathlib import Path
+from typing import Any, Dict
+from core.orbital_profit_control_system import OrbitalProfitControlSystem
+
 #!/usr/bin/env python3
 """CLI wrapper for the 🌌 Orbital Profit Control System
 
@@ -21,37 +28,30 @@ instance when necessary.  For long-running control loops use the *monitor* tool
 or integrate the class programmatically.
 """
 
-import argparse
-import json
-import sys
-from pathlib import Path
-from typing import Any, Dict
-
 # Project imports – lazy to avoid heavy cost when only requesting --help
-from core.orbital_profit_control_system import OrbitalProfitControlSystem
-
-
 # ---------------------------------------------------------------------------
 # Helper utilities
 # ---------------------------------------------------------------------------
+
 
 def _load_market_data(path: str) -> Dict[str, Any]:
     """Load market-data JSON file or return an empty dict."""
     p = Path(path)
     if not p.is_file():
-        print(f"⚠️  Market-data file not found: {path}", file=sys.stderr)
+        print("⚠️  Market-data file not found: {0}".format(path), file=sys.stderr)
         return {}
     try:
         with p.open("r", encoding="utf-8") as fp:
             return json.load(fp)
     except Exception as exc:
-        print(f"❌ Failed to read market-data file: {exc}", file=sys.stderr)
+        print("❌ Failed to read market-data file: {0}".format(exc), file=sys.stderr)
         return {}
 
 
 # ---------------------------------------------------------------------------
 # Command implementations
 # ---------------------------------------------------------------------------
+
 
 def cmd_init(args: argparse.Namespace) -> None:
     """Initialise and start the orbital controller."""
@@ -89,6 +89,7 @@ def cmd_stop(args: argparse.Namespace) -> None:
 # Main CLI dispatcher
 # ---------------------------------------------------------------------------
 
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         prog="orbit",
@@ -119,9 +120,9 @@ def main() -> None:
 
     dispatch_fn = dispatch_table.get(args.command)
     if dispatch_fn is None:
-        parser.error(f"Unknown command: {args.command}")
+        parser.error("Unknown command: {0}".format(args.command))
     dispatch_fn(args)
 
 
 if __name__ == "__main__":
-    main() 
+    main()

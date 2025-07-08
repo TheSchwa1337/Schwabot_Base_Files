@@ -1,3 +1,5 @@
+from typing import Any, Dict, List, Optional
+
 # !/usr/bin/env python3
 """
 Clean Profit Memory Echo - Recursive Memory Projection for Schwabot.
@@ -6,8 +8,6 @@ Implements the Recursive Memory Projection (F(t)), allowing Schwabot to
 echo previous profitable logic by replaying or biasing decisions based
 on past successful lattice states.
 """
-
-from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -57,7 +57,7 @@ class ProfitMemoryEcho:
 
 
 logger.info(
-    f"ProfitMemoryEcho initialized with offset={memory_offset}, scalar={volatility_scalar}")
+    "ProfitMemoryEcho initialized with offset={0}, scalar={1}".format(memory_offset, volatility_scalar))
 
     def store_lattice_state(self, tick_id: int, lattice_value: float, profit_change: float,
                            metadata: Dict[str, Any] = None) -> None:
@@ -83,7 +83,7 @@ logger.info(
                 del self.lattice_history[oldest_tick]
 
         except Exception as e:
-            logger.error(f"Failed to store lattice state: {e}")
+            logger.error("Failed to store lattice state: {0}".format(e))
 
     def retrieve_memory_projection(
     self, current_tick_id: int) -> Optional[MemoryProjection]:
@@ -141,12 +141,12 @@ logger.info(
             else:
                 self.metrics["failed_projections"] += 1
                 logger.debug(
-    f"No historical data found for tick {historical_tick_id}")
+    "No historical data found for tick {0}".format(historical_tick_id))
                 return None
 
         except Exception as e:
             self.metrics["failed_projections"] += 1
-            logger.error(f"Memory projection failed: {e}")
+            logger.error("Memory projection failed: {0}".format(e))
             return None
 
     def _calculate_projection_confidence(
@@ -250,8 +250,8 @@ logger.info(
         if new_volatility_scalar is not None:
             self.volatility_scalar = new_volatility_scalar
 
-logger.info(f"Profit Memory Echo parameters updated: offset={self.memory_offset},
-scalar={self.volatility_scalar}")
+logger.info("Profit Memory Echo parameters updated: offset={0},
+scalar={1}".format(self.memory_offset, self.volatility_scalar))
 
     def reset(self) -> None:
         """Resets the memory echo's history and metrics."""

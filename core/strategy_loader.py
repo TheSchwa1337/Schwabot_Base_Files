@@ -1,10 +1,10 @@
-# !/usr/bin/env python3
-"""Strategy Loader - Loads and routes strategies by name or hash."""
 import importlib
 import logging
 import os
 from typing import Any, Callable, Dict, Optional
 
+# !/usr/bin/env python3
+"""Strategy Loader - Loads and routes strategies by name or hash."""
 logger = logging.getLogger(__name__)
 
 STRATEGY_DIR = os.path.join(os.path.dirname(__file__), "strategy")
@@ -44,14 +44,14 @@ if os.path.exists(STRATEGY_DIR):
         if fname.endswith(".py") and not fname.startswith("_"):
             mod_name = fname[:-3]
             try:
-                mod = importlib.import_module(f"core.strategy.{mod_name}")
+                mod = importlib.import_module("core.strategy.{0}".format(mod_name))
                 if hasattr(mod, "execute"):
                     STRATEGY_REGISTRY[mod_name] = mod.execute
-                    logger.info(f"Loaded strategy: {mod_name}")
+                    logger.info("Loaded strategy: {0}".format(mod_name))
             except ImportError as e:
-                logger.warning(f"Could not import strategy {mod_name}: {e}")
+                logger.warning("Could not import strategy {0}: {1}".format(mod_name, e))
             except Exception as e:
-                logger.warning(f"Error loading strategy {mod_name}: {e}")
+                logger.warning("Error loading strategy {0}: {1}".format(mod_name, e))
 
 # Example hash mapping (expand as needed)
 HASH_MAP = {
@@ -67,9 +67,9 @@ def load_strategy(name_or_hash: str) -> Optional[Callable]:
     strategy = STRATEGY_REGISTRY.get(key)
 
     if strategy:
-        logger.info(f"Strategy loaded: {key}")
+        logger.info("Strategy loaded: {0}".format(key))
     else:
-        logger.warning(f"Strategy not found: {key}, using momentum fallback")
+        logger.warning("Strategy not found: {0}, using momentum fallback".format(key))
         strategy = STRATEGY_REGISTRY.get("momentum")
 
     return strategy

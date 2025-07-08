@@ -13,9 +13,7 @@ class SchwafitCore:
     Implements delta, normalization, cosine/DTW, entropy, memory, and fit decision.
     """
 
-    def __init__(
-        self, window: int = 64, entropy_threshold: float = 2.5, fit_threshold: float = 0.85
-    ):
+    def __init__(self, window: int = 64, entropy_threshold: float = 2.5, fit_threshold: float = 0.85):
         self.window = window
         self.entropy_threshold = entropy_threshold
         self.fit_threshold = fit_threshold
@@ -74,9 +72,7 @@ class SchwafitCore:
         top_indices = np.argsort(sims)[-3:][::-1]  # Top 3 matches
         top_scores = [sims[i] for i in top_indices]
         top_profits = [profit_scores[i] for i in top_indices]
-        fit_score = float(
-            np.average([s * p for s, p in zip(top_scores, top_profits)]) if top_scores else 0.0
-        )
+        fit_score = float(np.average([s * p for s, p in zip(top_scores, top_profits)]) if top_scores else 0.0)
 
         # Decision logic
         decision = fit_score > self.fit_threshold and ent < self.entropy_threshold
@@ -92,7 +88,7 @@ class SchwafitCore:
             }
         )
         logger.info(
-            f"Schwafit fit: hash={v_hash[:8]}, fit_score={fit_score:.3f}, entropy={ent:.3f}, decision={decision}"
+            "Schwafit fit: hash={0}, fit_score={1}, entropy={2}, decision={3}".format(v_hash[:8], fit_score:.3f, ent:.3f, decision)
         )
         return {
             "fit_score": fit_score,

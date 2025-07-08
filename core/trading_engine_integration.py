@@ -1,10 +1,3 @@
-"""
-Trading Engine Integration
-Handles signal and execution object definitions for Schwabot.
-Integrates advanced mathematical modeling for trade decision making.
-Provides robust error handling and validation mechanisms.
-"""
-
 import datetime
 import logging
 import math
@@ -13,14 +6,21 @@ import uuid
 from dataclasses import dataclass, field
 from enum import Enum, auto
 from typing import Any, Dict, List, Optional, Union
+import hashlib
 
 from core.clean_unified_math import (
+
+"""
+Trading Engine Integration
+Handles signal and execution object definitions for Schwabot.
+Integrates advanced mathematical modeling for trade decision making.
+Provides robust error handling and validation mechanisms.
+"""
+
     calculate_position_size,
     clean_unified_math,
     optimize_brain_profit,
 )
-
-import hashlib
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -79,17 +79,17 @@ def validate_positive_float(value: float, name: str, allow_zero: bool = False) -
         float: Validated value
     """
     if not isinstance(value, (int, float)):
-        raise ValidationError(f"{name} must be a number, got {type(value)}")
+        raise ValidationError("{0} must be a number, got {1}".format(name, type(value)))
 
     if math.isnan(value) or math.isinf(value):
-        raise ValidationError(f"{name} cannot be NaN or infinite")
+        raise ValidationError("{0} cannot be NaN or infinite".format(name))
 
     if allow_zero:
         if value < 0:
-            raise ValidationError(f"{name} must be non-negative, got {value}")
+            raise ValidationError("{0} must be non-negative, got {1}".format(name, value))
     else:
         if value <= 0:
-            raise ValidationError(f"{name} must be positive, got {value}")
+            raise ValidationError("{0} must be positive, got {1}".format(name, value))
 
     return float(value)
 
@@ -139,7 +139,7 @@ class TradeSignal:
                 self.price, self.volume, self.confidence, 1.0  # Default enhancement factor
             )
         except Exception as e:
-            logger.error(f"Mathematical score calculation failed: {e}")
+            logger.error("Mathematical score calculation failed: {0}".format(e))
             self.mathematical_score = 0.0
 
         # Calculate risk score
@@ -148,7 +148,7 @@ class TradeSignal:
                 self.mathematical_score, self.volatility, self.confidence
             )
         except Exception as e:
-            logger.error(f"Risk score calculation failed: {e}")
+            logger.error("Risk score calculation failed: {0}".format(e))
             self.risk_score = 0.0
 
         # Determine order side based on mathematical insights
@@ -237,7 +237,7 @@ class TradeExecution:
                 0.7,
             )
         except Exception as e:
-            logger.error(f"Performance score calculation failed: {e}")
+            logger.error("Performance score calculation failed: {0}".format(e))
             self.performance_score = 0.0
 
     def to_dict(self) -> Dict[str, Any]:
@@ -288,7 +288,7 @@ def generate_trade_signal(
             {"tensor": [[price, volume]], "metadata": metadata or {}}
         )
     except Exception as e:
-        logger.error(f"Mathematical system integration failed: {e}")
+        logger.error("Mathematical system integration failed: {0}".format(e))
         math_result = {}
 
     signal = TradeSignal(
@@ -316,16 +316,14 @@ def _generate_signal_hash(signal: TradeSignal) -> str:
         str: SHA-256 hash of the signal
     """
     hash_input = (
-        f"{signal.asset}|{signal.price}|{signal.volume}|"
-        f"{signal.signal_strength}|{signal.entropy}|{signal.volatility}|"
-        f"{signal.mathematical_score}|{signal.timestamp}"
+        "{0}|{1}|{2}|".format(signal.asset, signal.price, signal.volume)
+        "{0}|{1}|{2}|".format(signal.signal_strength, signal.entropy, signal.volatility)
+        "{0}|{1}".format(signal.mathematical_score, signal.timestamp)
     )
     return hashlib.sha256(hash_input.encode()).hexdigest()
 
 
-def log_trading_error(
-    error: Exception, severity: ErrorSeverity = ErrorSeverity.MEDIUM
-) -> Dict[str, Any]:
+def log_trading_error(error: Exception, severity: ErrorSeverity = ErrorSeverity.MEDIUM) -> Dict[str, Any]:
     """
     Log and analyze trading-related errors.
 
@@ -344,6 +342,6 @@ def log_trading_error(
         "traceback": traceback.format_exc(),
     }
 
-    logger.error(f"Trading Error [{severity.name}]: {error_details}")
+    logger.error("Trading Error [{0}]: {1}".format(severity.name, error_details))
 
     return error_details

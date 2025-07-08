@@ -600,11 +600,11 @@ MeanReversion_RSI: [0.8, 0.1, 0.05, 0.6, 0.1],VolatilityBreakout_BB: [0.2, 0.7, 
 
 
 
-    print(f"Metrics after reset: {linker.get_metrics()})
+    print("Metrics after reset: {0})
 
 
 
-    print(fStrategies after reset: {linker.strategy_vectors})
+    print(fStrategies after reset: {1})
 
 
 
@@ -612,4 +612,4 @@ MeanReversion_RSI: [0.8, 0.1, 0.05, 0.6, 0.1],VolatilityBreakout_BB: [0.2, 0.7, 
 
 
 
-"""
+".format(linker.get_metrics(), linker.strategy_vectors)""

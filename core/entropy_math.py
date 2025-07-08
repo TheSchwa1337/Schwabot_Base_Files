@@ -1,3 +1,13 @@
+from __future__ import annotations
+import math
+import logging
+from collections import Counter
+from typing import Iterable, Sequence, Union
+    import cupy as cp
+
+    import numpy as np
+        import numpy as np
+
 #!/usr/bin/env python3
 """Entropy Math 📊
 
@@ -18,36 +28,28 @@ CUDA Integration:
 - Performance monitoring and optimization
 - Cross-platform compatibility (Windows, macOS, Linux)
 """
-from __future__ import annotations
-
-import math
-import logging
-from collections import Counter
-from typing import Iterable, Sequence, Union
-
 # CUDA Integration with Fallback
 try:
-    import cupy as cp
     USING_CUDA = True
     _backend = 'cupy (GPU)'
     xp = cp
 except ImportError:
-    import numpy as np
     USING_CUDA = False
     _backend = 'numpy (CPU)'
     xp = np
 
 logger = logging.getLogger(__name__)
 if USING_CUDA:
-    logger.info(f"⚡ EntropyMath using GPU acceleration: {_backend}")
+    logger.info("⚡ EntropyMath using GPU acceleration: {0}".format(_backend))
 else:
-    logger.info(f"🔄 EntropyMath using CPU fallback: {_backend}")
+    logger.info("🔄 EntropyMath using CPU fallback: {0}".format(_backend))
 
 Number = Union[int, float]
 
 # ---------------------------------------------------------------------------
 # Core entropy helpers
 # ---------------------------------------------------------------------------
+
 
 def shannon_entropy(values: Sequence[Number], *, base: int = 2) -> float:
     """Return Shannon entropy of *values* (list of numbers) using histogram bins.
@@ -62,7 +64,7 @@ def shannon_entropy(values: Sequence[Number], *, base: int = 2) -> float:
     if n > 64:
         # heuristic: sqrt(n) bins
         bins = int(math.sqrt(n))
-        
+
         if USING_CUDA and cp.cuda.is_available():
             try:
                 # GPU histogram
@@ -71,7 +73,7 @@ def shannon_entropy(values: Sequence[Number], *, base: int = 2) -> float:
                 probs = counts[counts > 0] / n
                 probs = cp.asnumpy(probs)  # convert back to CPU for entropy calc
             except Exception as e:
-                logger.warning(f"GPU histogram failed, falling back to CPU: {e}")
+                logger.warning("GPU histogram failed, falling back to CPU: {0}".format(e))
                 # Fallback to CPU
                 values_cpu = np.array(values, dtype=np.float32)
                 counts, _ = np.histogram(values_cpu, bins=bins, density=False)
@@ -99,16 +101,16 @@ def transition_entropy(sequence: Sequence[int], *, base: int = 2) -> float:
             # GPU transition counting
             seq_gpu = cp.asarray(sequence, dtype=cp.int32)
             transitions = {}
-            
+
             # Count transitions on GPU
             for i in range(len(seq_gpu) - 1):
                 pair = (int(seq_gpu[i]), int(seq_gpu[i + 1]))
                 transitions[pair] = transitions.get(pair, 0) + 1
-            
+
             total = sum(transitions.values())
             probs = [c / total for c in transitions.values()]
         except Exception as e:
-            logger.warning(f"GPU transition entropy failed, falling back to CPU: {e}")
+            logger.warning("GPU transition entropy failed, falling back to CPU: {0}".format(e))
             # Fallback to CPU
             transitions = Counter(zip(sequence, sequence[1:]))
             total = sum(transitions.values())
@@ -133,7 +135,7 @@ def hamming_weight(bits: bytes) -> int:
             binary = cp.unpackbits(bits_array)
             return int(cp.sum(binary))
         except Exception as e:
-            logger.warning(f"GPU Hamming weight failed, falling back to CPU: {e}")
+            logger.warning("GPU Hamming weight failed, falling back to CPU: {0}".format(e))
             return sum(bin(b).count("1") for b in bits)
     else:
         # CPU Hamming weight
@@ -167,24 +169,24 @@ def vector_similarity(vec1: Sequence[float], vec2: Sequence[float]) -> float:
     """Calculate cosine similarity between two vectors using GPU/CPU."""
     if len(vec1) != len(vec2):
         return 0.0
-    
+
     if USING_CUDA and cp.cuda.is_available():
         try:
             # GPU cosine similarity
             v1 = cp.asarray(vec1, dtype=cp.float32)
             v2 = cp.asarray(vec2, dtype=cp.float32)
-            
+
             dot_product = cp.dot(v1, v2)
             norm1 = cp.linalg.norm(v1)
             norm2 = cp.linalg.norm(v2)
-            
+
             if norm1 == 0 or norm2 == 0:
                 return 0.0
-            
+
             similarity = float(dot_product / (norm1 * norm2))
             return max(-1.0, min(1.0, similarity))  # clamp to [-1, 1]
         except Exception as e:
-            logger.warning(f"GPU vector similarity failed, falling back to CPU: {e}")
+            logger.warning("GPU vector similarity failed, falling back to CPU: {0}".format(e))
             # Fallback to CPU
             return _cpu_cosine_similarity(vec1, vec2)
     else:
@@ -195,21 +197,20 @@ def vector_similarity(vec1: Sequence[float], vec2: Sequence[float]) -> float:
 def _cpu_cosine_similarity(vec1: Sequence[float], vec2: Sequence[float]) -> float:
     """CPU implementation of cosine similarity."""
     try:
-        import numpy as np
         v1 = np.array(vec1, dtype=np.float32)
         v2 = np.array(vec2, dtype=np.float32)
-        
+
         dot_product = np.dot(v1, v2)
         norm1 = np.linalg.norm(v1)
         norm2 = np.linalg.norm(v2)
-        
+
         if norm1 == 0 or norm2 == 0:
             return 0.0
-        
+
         similarity = float(dot_product / (norm1 * norm2))
         return max(-1.0, min(1.0, similarity))  # clamp to [-1, 1]
     except Exception as e:
-        logger.error(f"CPU cosine similarity failed: {e}")
+        logger.error("CPU cosine similarity failed: {0}".format(e))
         return 0.0
 
 
@@ -217,19 +218,19 @@ def hamming_distance(digest1: bytes, digest2: bytes) -> int:
     """Calculate Hamming distance between two digests using GPU/CPU."""
     if len(digest1) != len(digest2):
         return -1  # invalid
-    
+
     if USING_CUDA and cp.cuda.is_available() and len(digest1) > 16:
         try:
             # GPU Hamming distance
             d1 = cp.frombuffer(digest1, dtype=cp.uint8)
             d2 = cp.frombuffer(digest2, dtype=cp.uint8)
-            
+
             # XOR and count 1s
             xor_result = cp.bitwise_xor(d1, d2)
             binary = cp.unpackbits(xor_result)
             return int(cp.sum(binary))
         except Exception as e:
-            logger.warning(f"GPU Hamming distance failed, falling back to CPU: {e}")
+            logger.warning("GPU Hamming distance failed, falling back to CPU: {0}".format(e))
             return _cpu_hamming_distance(digest1, digest2)
     else:
         # CPU Hamming distance
@@ -249,6 +250,7 @@ def _cpu_hamming_distance(digest1: bytes, digest2: bytes) -> int:
 # Internal util
 # ---------------------------------------------------------------------------
 
+
 def _log_lookup(base: int):
     if base == 2:
         return _log2
@@ -267,14 +269,11 @@ def _log2(x: float) -> float:  # small inline faster than math.log2 for <Python3
 # Performance monitoring
 # ---------------------------------------------------------------------------
 
+
 def get_backend_info() -> dict:
     """Get information about the current backend and performance."""
-    info = {
-        'backend': _backend,
-        'using_cuda': USING_CUDA,
-        'cuda_available': False
-    }
-    
+    info = {'backend': _backend, 'using_cuda': USING_CUDA, 'cuda_available': False}
+
     if USING_CUDA:
         try:
             info['cuda_available'] = cp.cuda.is_available()
@@ -282,8 +281,8 @@ def get_backend_info() -> dict:
                 info['gpu_name'] = cp.cuda.runtime.getDeviceProperties(0)['name'].decode()
                 info['gpu_memory'] = cp.cuda.runtime.memGetInfo()[1]  # total memory
         except Exception as e:
-            logger.warning(f"Could not get CUDA info: {e}")
-    
+            logger.warning("Could not get CUDA info: {0}".format(e))
+
     return info
 
 
@@ -293,20 +292,20 @@ def get_backend_info() -> dict:
 if __name__ == "__main__":
     print("🔧 Entropy Math Backend Info:")
     print(get_backend_info())
-    
+
     data = [1, 1, 1, 2, 2, 3]
     print("H", shannon_entropy(data))
     print("H_norm", normalized_entropy(data))
     print("Transition H", transition_entropy([0, 1, 0, 1, 1, 0]))
     digest = bytes.fromhex("a3" * 32)
     print("Bit entropy", bit_entropy(digest))
-    
+
     # Test vector similarity
     vec1 = [1.0, 2.0, 3.0]
     vec2 = [1.0, 2.0, 3.0]
     print("Cosine similarity:", vector_similarity(vec1, vec2))
-    
+
     # Test Hamming distance
     d1 = bytes.fromhex("a3" * 16)
     d2 = bytes.fromhex("a3" * 16)
-    print("Hamming distance:", hamming_distance(d1, d2)) 
+    print("Hamming distance:", hamming_distance(d1, d2))

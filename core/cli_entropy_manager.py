@@ -1,3 +1,11 @@
+import argparse
+import json
+import sys
+from pathlib import Path
+from typing import Any, Dict
+
+from core.entropy_driven_risk_management import EntropyDrivenRiskManager
+
 #!/usr/bin/env python3
 """CLI wrapper for the 🧬 Entropy-Driven Risk Management system
 
@@ -12,30 +20,23 @@ Commands:
     stop        – stop the internal loops (placeholder)
 """
 
-import argparse
-import json
-import sys
-from pathlib import Path
-from typing import Any, Dict
-
-from core.entropy_driven_risk_management import EntropyDrivenRiskManager
-
 
 def _load_market_data(path: str) -> Dict[str, Any]:
     p = Path(path)
     if not p.is_file():
-        print(f"⚠️  Market-data file not found: {path}", file=sys.stderr)
+        print("⚠️  Market-data file not found: {0}".format(path), file=sys.stderr)
         return {}
     try:
         return json.loads(p.read_text(encoding="utf-8"))
     except Exception as exc:
-        print(f"❌ Failed to read market-data file: {exc}", file=sys.stderr)
+        print("❌ Failed to read market-data file: {0}".format(exc), file=sys.stderr)
         return {}
 
 
 # ---------------------------------------------------------------------------
 # Command handlers
 # ---------------------------------------------------------------------------
+
 
 def cmd_init(args: argparse.Namespace) -> None:
     mgr = EntropyDrivenRiskManager()
@@ -68,6 +69,7 @@ def cmd_stop(args: argparse.Namespace) -> None:
 # Main entry
 # ---------------------------------------------------------------------------
 
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         prog="entropy",
@@ -97,4 +99,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main() 
+    main()

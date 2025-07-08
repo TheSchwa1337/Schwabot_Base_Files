@@ -768,15 +768,7 @@ self.decision_history.append(decision)
 
 
 
-            logger.info(f"Glyph Gate Decision for {glyph}_{tick_id}: Open = {
-
-
-
-decision.gate_open}, Reason={
-
-
-
-decision.reason})
+            logger.info("Glyph Gate Decision for {0}_{1}: Open = {2}, Reason={3})
 
 
 
@@ -874,11 +866,7 @@ quantum_trigger_demo = QuantumSuperpositionalTrigger()
 
 
 initial_strategies_for_linker
-    = {TrendFollowing_EMA: [0.1, 0.2, 0.7, 0.05, 0.3],MeanReversion_RSI: [0.8, 0.1, 0.05, 0.6, 0.1],
-
-
-
-}
+    = {4}
 
 
 
@@ -950,12 +938,24 @@ print(\n--- Simulating Signal Evaluations ---)
 
 
 
-market_ticks = [{
+market_ticks = [{5},external_data".format(glyph, tick_id, 
+
+
+
+decision.gate_open, 
+
+
+
+decision.reason, TrendFollowing_EMA: [0.1, 0.2, 0.7, 0.05, 0.3],MeanReversion_RSI: [0.8, 0.1, 0.05, 0.6, 0.1],
+
+
+
+, 
 
 
 
 glyph:brain,volume": 1.2e6,price": 48000.0,tick_id: 1,internal_data": {cpu_alignment:
-0.8,mem_usage": 0.5},external_data": {market_volatility: 0.6,news_sentiment": 0.7},
+0.8,mem_usage": 0.5): {market_volatility: 0.6,news_sentiment": 0.7},
 
 
 
@@ -997,7 +997,7 @@ for tick in market_ticks:
 
 
 
-        print('f"\n--- Evaluating Signal for Glyph: {tick['glyph']}, Tick: {tick['tick_id']} ---)
+        print('"\n--- Evaluating Signal for Glyph: {0}, Tick: {1} ---)
 
 
 
@@ -1011,11 +1011,7 @@ glyph = tick[glyph],volume_signal = tick[volume],current_price = tick[price],tic
 
 
 
-performance_feedback = {recent_profit: 0.01,recent_loss": 0.005,
-
-
-
-},  # Dummy feedback
+performance_feedback = {2},  # Dummy feedback
 
 
 
@@ -1027,15 +1023,7 @@ print(
 
 
 
-fFinal Decision: Gate Open = {decision.gate_open}, Reason = {
-
-
-
-decision.reason}, Confidence = {
-
-
-
-decision.confidence_score:.3f})print(fMetadata: {decision.metadata})
+fFinal Decision: Gate Open = {3}, Reason = {4}, Confidence = {5})print(fMetadata: {6})
 
 
 
@@ -1055,19 +1043,7 @@ for dec in history:
 
 
 
-fSignal ID: {dec.signal_id}, Open: {
-
-
-
-dec.gate_open}, Conf: {
-
-
-
-dec.confidence_score:.3f}, Reason: {
-
-
-
-dec.reason})
+fSignal ID: {7}, Open: {8}, Conf: {9}, Reason: {10})
 
 
 
@@ -1079,7 +1055,31 @@ engine.reset_engine()
 
 
 
-print(f"Decision history after reset: {engine.get_decision_history()})"'"
+print(f".format(tick['glyph'], tick['tick_id'], recent_profit: 0.01,recent_loss": 0.005,
+
+
+
+, decision.gate_open, 
+
+
+
+decision.reason, 
+
+
+
+decision.confidence_score:.3f, decision.metadata, dec.signal_id, 
+
+
+
+dec.gate_open, 
+
+
+
+dec.confidence_score:.3f, 
+
+
+
+dec.reason)Decision history after reset: {engine.get_decision_history()})"'"
 
 
 

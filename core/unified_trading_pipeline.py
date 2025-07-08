@@ -1,14 +1,14 @@
+import asyncio
+from typing import Any, Dict, Optional
+
+from core.clean_trading_pipeline import CleanTradingPipeline, MarketData
+
 # !/usr/bin/env python3
 """
 Unified Trading Pipeline - Stub Implementation
 
 Minimal stub for unified trading pipeline to satisfy module imports and basic instantiation.
 """
-
-import asyncio
-from typing import Any, Dict, Optional
-
-from core.clean_trading_pipeline import CleanTradingPipeline, MarketData
 
 logger = logging.getLogger(__name__)
 
@@ -32,7 +32,7 @@ class UnifiedTradingPipeline:
         tick_index: int
     ) -> Optional[Dict[str, Any]]:
         """Process market data through CleanTradingPipeline."""
-        logger.debug(f"Processing market data for {symbol} at {price}")
+        logger.debug("Processing market data for {0} at {1}".format(symbol, price))
         md = MarketData(
             symbol=symbol,
             price=price,

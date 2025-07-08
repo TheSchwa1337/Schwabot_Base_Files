@@ -1,9 +1,9 @@
 from collections import defaultdict, deque
 from typing import Any, Dict, List, Optional, Tuple
-
-from core.drift_shell_engine import ProfitVector
 from data.temporal_intelligence_integration import TemporalIntelligenceIntegration
 from hash_recollection.pattern_utils import PatternUtils
+
+from core.drift_shell_engine import ProfitVector
 
 """
 

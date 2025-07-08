@@ -1,10 +1,3 @@
-"""
-CCXT Trading Executor.
-
-Trading executor for CCXT integration with Schwabot trading system.
-Provides interface for executing trades through various exchanges.
-"""
-
 import asyncio
 import logging
 import time
@@ -13,8 +6,16 @@ from decimal import Decimal
 from enum import Enum
 from typing import Any, Dict, Optional
 
-try:
     import ccxt.async_support as ccxt
+
+"""
+CCXT Trading Executor.
+
+Trading executor for CCXT integration with Schwabot trading system.
+Provides interface for executing trades through various exchanges.
+"""
+
+try:
 except ImportError:
     ccxt = None
     logging.warning("CCXT not installed. Install with: pip install ccxt")
@@ -107,9 +108,9 @@ class CCXTTradingExecutor:
                     "timeout": config.get("timeout", 30000),
                 }
             )
-            logger.info(f"CCXT Trading Executor initialized with {exchange_name}")
+            logger.info("CCXT Trading Executor initialized with {0}".format(exchange_name))
         except Exception as e:
-            logger.error(f"Failed to initialize exchange: {e}")
+            logger.error("Failed to initialize exchange: {0}".format(e))
             self.exchange = None
 
     async def place_market_buy_order(self, symbol: str, amount: float) -> Dict[str, Any]:
@@ -119,10 +120,10 @@ class CCXTTradingExecutor:
 
         try:
             order = await self.exchange.create_market_buy_order(symbol, amount)
-            logger.info(f"Buy order placed: {order}")
+            logger.info("Buy order placed: {0}".format(order))
             return order
         except Exception as e:
-            logger.error(f"Buy order failed: {e}")
+            logger.error("Buy order failed: {0}".format(e))
             return {"error": str(e)}
 
     async def place_market_sell_order(self, symbol: str, amount: float) -> Dict[str, Any]:
@@ -132,10 +133,10 @@ class CCXTTradingExecutor:
 
         try:
             order = await self.exchange.create_market_sell_order(symbol, amount)
-            logger.info(f"Sell order placed: {order}")
+            logger.info("Sell order placed: {0}".format(order))
             return order
         except Exception as e:
-            logger.error(f"Sell order failed: {e}")
+            logger.error("Sell order failed: {0}".format(e))
             return {"error": str(e)}
 
     async def get_balance(self) -> Dict[str, Any]:
@@ -147,7 +148,7 @@ class CCXTTradingExecutor:
             balance = await self.exchange.fetch_balance()
             return balance
         except Exception as e:
-            logger.error(f"Failed to get balance: {e}")
+            logger.error("Failed to get balance: {0}".format(e))
             return {"error": str(e)}
 
     async def get_ticker(self, symbol: str) -> Dict[str, Any]:
@@ -159,7 +160,7 @@ class CCXTTradingExecutor:
             ticker = await self.exchange.fetch_ticker(symbol)
             return ticker
         except Exception as e:
-            logger.error(f"Failed to get ticker: {e}")
+            logger.error("Failed to get ticker: {0}".format(e))
             return {"error": str(e)}
 
     def start_price_monitoring(self) -> None:
@@ -188,7 +189,7 @@ class CCXTTradingExecutor:
                     error_message="Invalid action: " + signal.recommended_action,
                 )
         except Exception as e:
-            logger.error(f"Signal execution failed: {e}")
+            logger.error("Signal execution failed: {0}".format(e))
             return ExecutionResult(
                 signal_id=signal.signal_id,
                 pair=signal.target_pair,
@@ -229,7 +230,7 @@ class CCXTTradingExecutor:
                 return await self._simulate_buy(signal)
 
         except Exception as e:
-            logger.error(f"Buy execution failed: {e}")
+            logger.error("Buy execution failed: {0}".format(e))
             return ExecutionResult(
                 signal_id=signal.signal_id,
                 pair=signal.target_pair,
@@ -270,7 +271,7 @@ class CCXTTradingExecutor:
                 return await self._simulate_sell(signal)
 
         except Exception as e:
-            logger.error(f"Sell execution failed: {e}")
+            logger.error("Sell execution failed: {0}".format(e))
             return ExecutionResult(
                 signal_id=signal.signal_id,
                 pair=signal.target_pair,
@@ -349,7 +350,7 @@ class CCXTTradingExecutor:
                 pair=pair,
                 strategy=signal.ghost_route,
                 executed=False,
-                error_message=f"No {asset} available to sell",
+                error_message="No {0} available to sell".format(asset),
             )
 
     async def close(self):

@@ -1,3 +1,14 @@
+import json
+import logging
+import os
+import time
+from dataclasses import dataclass
+from typing import Any, Dict, Optional, Tuple
+    from OpenGL.GL import *
+    from OpenGL.GL.shaders import *
+    import pygame
+from .system_state_profiler import SystemStateProfiler, GPUTier, GPUProfile, get_system_profile
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -18,27 +29,10 @@ Key Features:
 - Fallback support for headless/integrated systems
 """
 
-import json
-import logging
-import os
-import time
-from dataclasses import dataclass
-from typing import Any, Dict, Optional, Tuple
-
 try:
-    from OpenGL.GL import *
-    from OpenGL.GL.shaders import *
-    import pygame
     OPENGL_AVAILABLE = True
 except ImportError:
     OPENGL_AVAILABLE = False
-
-from .system_state_profiler import (
-    SystemStateProfiler, 
-    GPUTier, 
-    GPUProfile,
-    get_system_profile
-)
 
 logger = logging.getLogger(__name__)
 
@@ -46,6 +40,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class ShaderConfig:
     """GPU shader configuration optimized for specific hardware."""
+
     matrix_size: int
     batch_size: int
     use_half_precision: bool
@@ -59,17 +54,17 @@ class ShaderConfig:
 
 class GPUDNAAutoDetect:
     """GPU DNA detection and configuration system."""
-    
+
     # Performance multipliers by GPU tier
     PERFORMANCE_MULTIPLIERS = {
-        GPUTier.TIER_PI4: 1.0,      # Baseline (Pi 4)
-        GPUTier.TIER_LOW: 2.0,      # 2x Pi 4 performance
-        GPUTier.TIER_MID: 5.0,      # 5x Pi 4 performance  
-        GPUTier.TIER_HIGH: 12.0,    # 12x Pi 4 performance
-        GPUTier.TIER_ULTRA: 30.0,   # 30x Pi 4 performance
-        GPUTier.TIER_UNKNOWN: 1.5   # Conservative estimate
+        GPUTier.TIER_PI4: 1.0,  # Baseline (Pi 4)
+        GPUTier.TIER_LOW: 2.0,  # 2x Pi 4 performance
+        GPUTier.TIER_MID: 5.0,  # 5x Pi 4 performance
+        GPUTier.TIER_HIGH: 12.0,  # 12x Pi 4 performance
+        GPUTier.TIER_ULTRA: 30.0,  # 30x Pi 4 performance
+        GPUTier.TIER_UNKNOWN: 1.5,  # Conservative estimate
     }
-    
+
     # Shader configuration templates by tier
     SHADER_CONFIGS = {
         GPUTier.TIER_PI4: {
@@ -79,7 +74,7 @@ class GPUDNAAutoDetect:
             "shader_morph_enabled": False,
             "max_texture_size": 512,
             "fragment_passes": 1,
-            "instanced_rendering": False
+            "instanced_rendering": False,
         },
         GPUTier.TIER_LOW: {
             "matrix_size": 16,
@@ -88,7 +83,7 @@ class GPUDNAAutoDetect:
             "shader_morph_enabled": False,
             "max_texture_size": 1024,
             "fragment_passes": 2,
-            "instanced_rendering": False
+            "instanced_rendering": False,
         },
         GPUTier.TIER_MID: {
             "matrix_size": 32,
@@ -97,7 +92,7 @@ class GPUDNAAutoDetect:
             "shader_morph_enabled": True,
             "max_texture_size": 2048,
             "fragment_passes": 4,
-            "instanced_rendering": True
+            "instanced_rendering": True,
         },
         GPUTier.TIER_HIGH: {
             "matrix_size": 64,
@@ -106,7 +101,7 @@ class GPUDNAAutoDetect:
             "shader_morph_enabled": True,
             "max_texture_size": 4096,
             "fragment_passes": 8,
-            "instanced_rendering": True
+            "instanced_rendering": True,
         },
         GPUTier.TIER_ULTRA: {
             "matrix_size": 128,
@@ -115,7 +110,7 @@ class GPUDNAAutoDetect:
             "shader_morph_enabled": True,
             "max_texture_size": 8192,
             "fragment_passes": 16,
-            "instanced_rendering": True
+            "instanced_rendering": True,
         },
         GPUTier.TIER_UNKNOWN: {
             "matrix_size": 16,
@@ -124,37 +119,37 @@ class GPUDNAAutoDetect:
             "shader_morph_enabled": False,
             "max_texture_size": 1024,
             "fragment_passes": 1,
-            "instanced_rendering": False
-        }
+            "instanced_rendering": False,
+        },
     }
-    
+
     def __init__(self):
         self.system_profile = None
         self.shader_config = None
         self.gpu_capabilities = None
-        
+
     def detect_gpu_dna(self) -> Dict[str, Any]:
         """
         Comprehensive GPU DNA detection and configuration.
-        
+
         Returns:
             Dict containing GPU fingerprint and optimized shader config
         """
         logger.info("🧬 Detecting GPU DNA and shader capabilities...")
-        
+
         # Get system profile
         self.system_profile = get_system_profile()
         gpu_profile = self.system_profile.gpu
-        
+
         # Get GPU capabilities if OpenGL is available
         if OPENGL_AVAILABLE:
             self.gpu_capabilities = self._probe_gpu_capabilities()
         else:
             self.gpu_capabilities = self._create_fallback_capabilities()
-        
+
         # Generate shader configuration
         self.shader_config = self._generate_shader_config(gpu_profile)
-        
+
         # Create comprehensive DNA profile
         dna_profile = {
             "gpu_fingerprint": {
@@ -163,7 +158,7 @@ class GPUDNAAutoDetect:
                 "gl_version": gpu_profile.gl_version,
                 "glsl_version": gpu_profile.glsl_version,
                 "gpu_tier": gpu_profile.gpu_tier.value,
-                "system_tier": self.system_profile.system_tier.value
+                "system_tier": self.system_profile.system_tier.value,
             },
             "gpu_capabilities": self.gpu_capabilities,
             "shader_config": {
@@ -175,30 +170,30 @@ class GPUDNAAutoDetect:
                 "fragment_passes": self.shader_config.fragment_passes,
                 "instanced_rendering": self.shader_config.instanced_rendering,
                 "gpu_tier": self.shader_config.gpu_tier,
-                "performance_multiplier": self.shader_config.performance_multiplier
+                "performance_multiplier": self.shader_config.performance_multiplier,
             },
             "system_hash": self.system_profile.system_hash,
-            "detection_timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+            "detection_timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         }
-        
+
         # Save DNA profile
         self._save_dna_profile(dna_profile)
-        
+
         logger.info(f"✅ GPU DNA Detection Complete")
-        logger.info(f"🎮 GPU: {gpu_profile.renderer} ({gpu_profile.gpu_tier.value})")
-        logger.info(f"📊 Matrix Size: {self.shader_config.matrix_size}x{self.shader_config.matrix_size}")
-        logger.info(f"⚡ Performance Multiplier: {self.shader_config.performance_multiplier}x")
-        logger.info(f"🔧 Shader Morph: {'Enabled' if self.shader_config.shader_morph_enabled else 'Disabled'}")
-        
+        logger.info("🎮 GPU: {0} ({1})".format(gpu_profile.renderer, gpu_profile.gpu_tier.value))
+        logger.info("📊 Matrix Size: {0}x{0}".format(self.shader_config.matrix_size, self.shader_config.matrix_size))
+        logger.info("⚡ Performance Multiplier: {0}x".format(self.shader_config.performance_multiplier))
+        logger.info("🔧 Shader Morph: {0}".format('Enabled' if self.shader_config.shader_morph_enabled else 'Disabled'))
+
         return dna_profile
-    
+
     def _probe_gpu_capabilities(self) -> Dict[str, Any]:
         """Probe GPU capabilities using OpenGL."""
         try:
             # Initialize minimal OpenGL context
             pygame.init()
             pygame.display.set_mode((1, 1), pygame.OPENGL | pygame.HIDDEN)
-            
+
             capabilities = {
                 "max_texture_size": glGetIntegerv(GL_MAX_TEXTURE_SIZE),
                 "max_vertex_attribs": glGetIntegerv(GL_MAX_VERTEX_ATTRIBS),
@@ -211,9 +206,9 @@ class GPUDNAAutoDetect:
                 "vendor": glGetString(GL_VENDOR).decode(),
                 "renderer": glGetString(GL_RENDERER).decode(),
                 "version": glGetString(GL_VERSION).decode(),
-                "shading_language_version": glGetString(GL_SHADING_LANGUAGE_VERSION).decode()
+                "shading_language_version": glGetString(GL_SHADING_LANGUAGE_VERSION).decode(),
             }
-            
+
             # Get extensions
             num_extensions = glGetIntegerv(GL_NUM_EXTENSIONS)
             extensions = []
@@ -221,18 +216,18 @@ class GPUDNAAutoDetect:
                 ext = glGetStringi(GL_EXTENSIONS, i)
                 if ext:
                     extensions.append(ext.decode())
-            
+
             capabilities["extensions"] = extensions[:50]  # Limit to first 50 extensions
-            
+
             pygame.quit()
-            
-            logger.info(f"🔍 GPU Capabilities Probed: {len(capabilities)} properties detected")
+
+            logger.info("🔍 GPU Capabilities Probed: {0} properties detected".format(len(capabilities)))
             return capabilities
-            
+
         except Exception as e:
-            logger.warning(f"GPU capability probing failed: {e}")
+            logger.warning("GPU capability probing failed: {0}".format(e))
             return self._create_fallback_capabilities()
-    
+
     def _create_fallback_capabilities(self) -> Dict[str, Any]:
         """Create fallback GPU capabilities."""
         return {
@@ -248,31 +243,31 @@ class GPUDNAAutoDetect:
             "renderer": "Fallback Detection",
             "version": "Unknown",
             "shading_language_version": "Unknown",
-            "extensions": []
+            "extensions": [],
         }
-    
+
     def _generate_shader_config(self, gpu_profile: GPUProfile) -> ShaderConfig:
         """Generate optimized shader configuration for detected GPU."""
         gpu_tier = gpu_profile.gpu_tier
-        
+
         # Get base configuration for tier
         base_config = self.SHADER_CONFIGS.get(gpu_tier, self.SHADER_CONFIGS[GPUTier.TIER_UNKNOWN])
-        
+
         # Get performance multiplier
         performance_multiplier = self.PERFORMANCE_MULTIPLIERS.get(gpu_tier, 1.0)
-        
+
         # Apply GPU capability adjustments if available
         if self.gpu_capabilities:
             # Adjust texture size based on GPU limits
             max_texture = self.gpu_capabilities.get("max_texture_size", 1024)
             if base_config["max_texture_size"] > max_texture:
                 base_config["max_texture_size"] = max_texture
-            
+
             # Adjust matrix size if texture limits are restrictive
             if max_texture < 2048 and base_config["matrix_size"] > 32:
                 base_config["matrix_size"] = 32
-                logger.info(f"⚠️  Matrix size reduced to {base_config['matrix_size']} due to texture limits")
-        
+                logger.info("⚠️  Matrix size reduced to {0} due to texture limits".format(base_config['matrix_size']))
+
         return ShaderConfig(
             matrix_size=base_config["matrix_size"],
             batch_size=base_config["batch_size"],
@@ -282,80 +277,73 @@ class GPUDNAAutoDetect:
             fragment_passes=base_config["fragment_passes"],
             instanced_rendering=base_config["instanced_rendering"],
             gpu_tier=gpu_tier.value,
-            performance_multiplier=performance_multiplier
+            performance_multiplier=performance_multiplier,
         )
-    
+
     def _save_dna_profile(self, dna_profile: Dict[str, Any]):
         """Save GPU DNA profile to disk."""
         try:
             # Ensure directory exists
             dna_dir = "init/gpu_dna_profiles"
             os.makedirs(dna_dir, exist_ok=True)
-            
+
             # Save latest DNA profile
             latest_path = os.path.join(dna_dir, "latest_gpu_dna.json")
             with open(latest_path, "w") as f:
                 json.dump(dna_profile, f, indent=2)
-            
+
             # Save timestamped profile
             timestamp = dna_profile["detection_timestamp"].replace(":", "-")
             system_hash = dna_profile["system_hash"][:8]
-            timestamped_path = os.path.join(
-                dna_dir, 
-                f"gpu_dna_{timestamp}_{system_hash}.json"
-            )
+            timestamped_path = os.path.join(dna_dir, "gpu_dna_{0}_{1}.json".format(timestamp, system_hash))
             with open(timestamped_path, "w") as f:
                 json.dump(dna_profile, f, indent=2)
-            
-            logger.info(f"💾 GPU DNA Profile saved: {latest_path}")
-            
+
+            logger.info("💾 GPU DNA Profile saved: {0}".format(latest_path))
+
         except Exception as e:
-            logger.error(f"Failed to save GPU DNA profile: {e}")
-    
+            logger.error("Failed to save GPU DNA profile: {0}".format(e))
+
     def get_shader_config(self) -> ShaderConfig:
         """Get current shader configuration."""
         if not self.shader_config:
             self.detect_gpu_dna()
         return self.shader_config
-    
+
     def get_cosine_similarity_config(self) -> Dict[str, Any]:
         """Get configuration specifically for cosine similarity shader operations."""
         if not self.shader_config:
             self.detect_gpu_dna()
-        
+
         config = self.get_shader_config()
-        
+
         return {
             "matrix_size": config.matrix_size,
             "precision": "mediump" if config.use_half_precision else "highp",
             "batch_strategies": config.batch_size,
             "enable_morphing": config.shader_morph_enabled,
             "texture_format": "GL_R16F" if config.use_half_precision else "GL_R32F",
-            "fragment_shader_version": "#version 300 es" if config.gpu_tier in ["pi4", "low"] else "#version 330 core"
+            "fragment_shader_version": "#version 300 es" if config.gpu_tier in ["pi4", "low"] else "#version 330 core",
         }
-    
+
     def run_gpu_fit_test(self) -> Dict[str, Any]:
         """
         Run GPU fit test to validate shader capabilities.
-        
+
         Returns:
             Test results including maximum viable matrix size
         """
         logger.info("🧪 Running GPU Fit Test...")
-        
+
         if not OPENGL_AVAILABLE:
             logger.warning("OpenGL not available - skipping fit test")
-            return {
-                "test_passed": False,
-                "max_matrix_size": 16,
-                "error": "OpenGL not available"
-            }
-        
+            return {"test_passed": False, "max_matrix_size": 16, "error": "OpenGL not available"}
+
         try:
             # Initialize test environment
             pygame.init()
             pygame.display.set_mode((1, 1), pygame.OPENGL | pygame.HIDDEN)
-            
+
             # Test shader compilation
             test_vertex_shader = """
             #version 300 es
@@ -364,7 +352,7 @@ class GPUDNAAutoDetect:
                 gl_Position = vec4(position, 0.0, 1.0);
             }
             """
-            
+
             test_fragment_shader = """
             #version 300 es
             precision highp float;
@@ -375,65 +363,61 @@ class GPUDNAAutoDetect:
                 fragColor = texture(u_test_texture, texCoord);
             }
             """
-            
+
             # Try to compile test shaders
             vertex_shader = compileShader(test_vertex_shader, GL_VERTEX_SHADER)
             fragment_shader = compileShader(test_fragment_shader, GL_FRAGMENT_SHADER)
             test_program = compileProgram(vertex_shader, fragment_shader)
-            
+
             # Test matrix sizes starting from configured size
             config = self.get_shader_config()
             test_sizes = [8, 16, 32, 64, 128, 256]
             max_working_size = 8
-            
+
             for size in test_sizes:
                 if size > config.matrix_size * 2:
                     break
-                    
+
                 try:
                     # Create test texture
                     texture = glGenTextures(1)
                     glBindTexture(GL_TEXTURE_2D, texture)
-                    
+
                     # Try to allocate texture memory
                     glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, size, size, 0, GL_RED, GL_FLOAT, None)
-                    
+
                     # Check for GL errors
                     error = glGetError()
                     if error == GL_NO_ERROR:
                         max_working_size = size
-                        logger.info(f"✅ Matrix size {size}x{size} - OK")
+                        logger.info("✅ Matrix size {0}x{0} - OK".format(size, size))
                     else:
-                        logger.warning(f"❌ Matrix size {size}x{size} - Failed (GL Error: {error})")
+                        logger.warning("❌ Matrix size {0}x{0} - Failed (GL Error: {2})".format(size, size, error))
                         break
-                    
+
                     glDeleteTextures([texture])
-                    
+
                 except Exception as e:
-                    logger.warning(f"❌ Matrix size {size}x{size} - Exception: {e}")
+                    logger.warning("❌ Matrix size {0}x{0} - Exception: {2}".format(size, size, e))
                     break
-            
+
             pygame.quit()
-            
+
             test_result = {
                 "test_passed": True,
                 "max_matrix_size": max_working_size,
                 "configured_size": config.matrix_size,
                 "recommended_size": min(max_working_size, config.matrix_size),
                 "gpu_tier": config.gpu_tier,
-                "performance_multiplier": config.performance_multiplier
+                "performance_multiplier": config.performance_multiplier,
             }
-            
-            logger.info(f"🧪 GPU Fit Test Complete - Max Size: {max_working_size}x{max_working_size}")
+
+            logger.info("🧪 GPU Fit Test Complete - Max Size: {0}x{0}".format(max_working_size, max_working_size))
             return test_result
-            
+
         except Exception as e:
-            logger.error(f"GPU fit test failed: {e}")
-            return {
-                "test_passed": False,
-                "max_matrix_size": 16,
-                "error": str(e)
-            }
+            logger.error("GPU fit test failed: {0}".format(e))
+            return {"test_passed": False, "max_matrix_size": 16, "error": str(e)}
 
 
 # Factory functions
@@ -469,10 +453,10 @@ def run_gpu_fit_test() -> Dict[str, Any]:
 # Export key components
 __all__ = [
     "GPUDNAAutoDetect",
-    "ShaderConfig", 
+    "ShaderConfig",
     "create_gpu_dna_detector",
     "detect_gpu_dna",
     "get_gpu_shader_config",
     "get_cosine_similarity_config",
-    "run_gpu_fit_test"
-] 
+    "run_gpu_fit_test",
+]

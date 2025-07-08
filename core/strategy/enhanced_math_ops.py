@@ -1,3 +1,10 @@
+import logging
+from typing import Any, Dict, Optional, Tuple, Union
+    import cupy as cp
+    from ..acceleration_enhancement import get_acceleration_enhancement
+
+import numpy as np
+
 #!/usr/bin/env python3
 """
 Enhanced Math Operations - CUDA + CPU Hybrid Implementation
@@ -13,15 +20,8 @@ INTEGRATION APPROACH:
 - Maintains mathematical purity and trading decision integrity
 """
 
-import logging
-from typing import Any, Dict, Optional, Tuple, Union
-
-import numpy as np
-
 # CUDA imports with fallback
 try:
-    import cupy as cp
-
     CUDA_AVAILABLE = True
 except ImportError:
     CUDA_AVAILABLE = False
@@ -29,8 +29,6 @@ except ImportError:
 
 # Import enhancement layer
 try:
-    from ..acceleration_enhancement import get_acceleration_enhancement
-
     ENHANCEMENT_AVAILABLE = True
 except ImportError:
     ENHANCEMENT_AVAILABLE = False
@@ -567,12 +565,8 @@ def enhanced_strategy_matching(
             return cpu_strategy_matching(strategies, market_data)
         else:
             # Convert to CPU if needed
-            strategies_cpu = (
-                cp.asnumpy(strategies) if not isinstance(strategies, np.ndarray) else strategies
-            )
-            market_cpu = (
-                cp.asnumpy(market_data) if not isinstance(market_data, np.ndarray) else market_data
-            )
+            strategies_cpu = cp.asnumpy(strategies) if not isinstance(strategies, np.ndarray) else strategies
+            market_cpu = cp.asnumpy(market_data) if not isinstance(market_data, np.ndarray) else market_data
             return cpu_strategy_matching(strategies_cpu, market_cpu)
 
     # Use enhancement layer
@@ -580,16 +574,12 @@ def enhanced_strategy_matching(
 
     # Convert to appropriate format
     if isinstance(strategies, np.ndarray):
-        strategies_cpu, strategies_gpu = strategies, (
-            cp.asarray(strategies) if CUDA_AVAILABLE else strategies
-        )
+        strategies_cpu, strategies_gpu = strategies, (cp.asarray(strategies) if CUDA_AVAILABLE else strategies)
     else:
         strategies_cpu, strategies_gpu = cp.asnumpy(strategies), strategies
 
     if isinstance(market_data, np.ndarray):
-        market_cpu, market_gpu = market_data, (
-            cp.asarray(market_data) if CUDA_AVAILABLE else market_data
-        )
+        market_cpu, market_gpu = market_data, (cp.asarray(market_data) if CUDA_AVAILABLE else market_data)
     else:
         market_cpu, market_gpu = cp.asnumpy(market_data), market_data
 
@@ -627,9 +617,7 @@ def enhanced_hash_matching(
         else:
             # Convert to CPU if needed
             hashes_cpu = cp.asnumpy(hashes) if not isinstance(hashes, np.ndarray) else hashes
-            target_cpu = (
-                cp.asnumpy(target_hash) if not isinstance(target_hash, np.ndarray) else target_hash
-            )
+            target_cpu = cp.asnumpy(target_hash) if not isinstance(target_hash, np.ndarray) else target_hash
             return cpu_hash_matching(hashes_cpu, target_cpu)
 
     # Use enhancement layer
@@ -642,9 +630,7 @@ def enhanced_hash_matching(
         hashes_cpu, hashes_gpu = cp.asnumpy(hashes), hashes
 
     if isinstance(target_hash, np.ndarray):
-        target_cpu, target_gpu = target_hash, (
-            cp.asarray(target_hash) if CUDA_AVAILABLE else target_hash
-        )
+        target_cpu, target_gpu = target_hash, (cp.asarray(target_hash) if CUDA_AVAILABLE else target_hash)
     else:
         target_cpu, target_gpu = cp.asnumpy(target_hash), target_hash
 
@@ -746,8 +732,8 @@ def demo_enhanced_math_ops():
 
     # Get enhancement status
     status = get_enhancement_status()
-    print(f"✅ Enhancement Available: {status['enhancement_available']}")
-    print(f"🎯 CUDA Available: {status['cuda_available']}")
+    print("✅ Enhancement Available: {0}".format(status['enhancement_available']))
+    print("🎯 CUDA Available: {0}".format(status['cuda_available']))
     print()
 
     # Test data
@@ -757,41 +743,37 @@ def demo_enhanced_math_ops():
     matrix_a = np.random.rand(100, 100)
     matrix_b = np.random.rand(100, 100)
 
-    print(f"✅ Test data generated (size: {size})")
+    print("✅ Test data generated (size: {0})".format(size))
     print()
 
     # Test cosine similarity with enhancement
     print("📊 Testing Enhanced Cosine Similarity:")
     result = enhanced_cosine_sim(a, b, entropy=0.7, profit_weight=0.6, use_enhancement=True)
-    print(f"  Result: {result:.6f}")
+    print("  Result: {0}".format(result:.6f))
 
     # Test matrix multiplication with enhancement
     print("\n📊 Testing Enhanced Matrix Multiplication:")
-    result = enhanced_matrix_multiply(
-        matrix_a, matrix_b, entropy=0.8, profit_weight=0.7, use_enhancement=True
-    )
-    print(f"  Result shape: {result.shape}")
-    print(f"  Result sum: {np.sum(result):.6f}")
+    result = enhanced_matrix_multiply(matrix_a, matrix_b, entropy=0.8, profit_weight=0.7, use_enhancement=True)
+    print("  Result shape: {0}".format(result.shape))
+    print("  Result sum: {0}".format(np.sum(result):.6f))
 
     # Test FFT with enhancement
     print("\n📊 Testing Enhanced FFT Operation:")
     result = enhanced_fft_operation(a, entropy=0.6, profit_weight=0.5, use_enhancement=True)
-    print(f"  Result shape: {result.shape}")
-    print(f"  Result magnitude: {np.abs(result).mean():.6f}")
+    print("  Result shape: {0}".format(result.shape))
+    print("  Result magnitude: {0}".format(np.abs(result).mean():.6f))
 
     # Test volatility calculation with enhancement
     print("\n📊 Testing Enhanced Volatility Calculation:")
     prices = np.cumsum(np.random.randn(1000) * 0.01) + 100
-    result = enhanced_volatility_calculation(
-        prices, window=20, entropy=0.6, profit_weight=0.5, use_enhancement=True
-    )
-    print(f"  Result shape: {result.shape}")
-    print(f"  Average volatility: {np.mean(result[20:]):.6f}")
+    result = enhanced_volatility_calculation(prices, window=20, entropy=0.6, profit_weight=0.5, use_enhancement=True)
+    print("  Result shape: {0}".format(result.shape))
+    print("  Average volatility: {0}".format(np.mean(result[20:]):.6f))
 
     # Test without enhancement (fallback)
     print("\n📊 Testing Fallback (No Enhancement):")
     result_fallback = enhanced_cosine_sim(a, b, use_enhancement=False)
-    print(f"  Fallback result: {result_fallback:.6f}")
+    print("  Fallback result: {0}".format(result_fallback:.6f))
 
     # Get enhancement recommendations
     if ENHANCEMENT_AVAILABLE:
@@ -799,27 +781,27 @@ def demo_enhanced_math_ops():
         print("\n🎯 Enhancement Recommendations:")
         recommendations = enhancement.get_enhancement_recommendations("cosine_sim")
         print(
-            f"  Available: {
+            "  Available: {0}".format(
                 recommendations.get(
                     'enhancement_available',
-                    False)}"
+                    False))
         )
         print(
-            f"  Recommendation: {
+            "  Recommendation: {0}".format(
                 recommendations.get(
                     'recommendation',
-                    'none')}"
+                    'none'))
         )
-        print(f"  Confidence: {recommendations.get('confidence', 0.0):.3f}")
+        print("  Confidence: {0}".format(recommendations.get('confidence', 0.0):.3f))
 
         # Get enhancement report
         print("\n📊 Enhancement Report:")
         report = enhancement.get_enhancement_report()
-        print(f"  Status: {report['status']}")
-        print(f"  Total Operations: {report['total_operations']}")
-        print(f"  CPU Operations: {report['cpu_operations']}")
-        print(f"  GPU Operations: {report['gpu_operations']}")
-        print(f"  Success Rate: {report['overall_success_rate']:.1%}")
+        print("  Status: {0}".format(report['status']))
+        print("  Total Operations: {0}".format(report['total_operations']))
+        print("  CPU Operations: {0}".format(report['cpu_operations']))
+        print("  GPU Operations: {0}".format(report['gpu_operations']))
+        print("  Success Rate: {0}".format(report['overall_success_rate']:.1%))
 
     print("\n✅ Enhanced math operations demonstration completed!")
 

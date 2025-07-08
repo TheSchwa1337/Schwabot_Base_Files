@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
 Core module for Schwabot trading system.
 
@@ -5,8 +7,10 @@ This module provides clean, error-free implementations of the core
 mathematical and trading components.
 """
 
-# -*- coding: utf-8 -*-
+# Standard library imports
+import logging
 
+# Clean Math Foundation
 try:
     from .clean_math_foundation import (
         BitPhase,
@@ -21,6 +25,7 @@ try:
 except ImportError:
     CLEAN_MATH_AVAILABLE = False
 
+# Clean Profit Vectorization
 try:
     from .clean_profit_vectorization import (
         CleanProfitVectorization,
@@ -33,12 +38,15 @@ try:
 except ImportError:
     CLEAN_PROFIT_AVAILABLE = False
 
+# Orbital Brain System
 try:
     from .orbital_shell_brain_system import OrbitalBRAINSystem, OrbitalShell
+
     ORBITAL_BRAIN_AVAILABLE = True
 except ImportError:
     ORBITAL_BRAIN_AVAILABLE = False
 
+# Clean Trading Pipeline
 try:
     from .clean_trading_pipeline import (
         CleanTradingPipeline,
@@ -53,6 +61,7 @@ try:
 except ImportError:
     CLEAN_PIPELINE_AVAILABLE = False
 
+# Algorithmic Portfolio Balancer
 try:
     from .algorithmic_portfolio_balancer import (
         AlgorithmicPortfolioBalancer,
@@ -60,16 +69,19 @@ try:
         AssetAllocation,
         create_portfolio_balancer,
     )
+
     PORTFOLIO_BALANCER_AVAILABLE = True
 except ImportError:
     PORTFOLIO_BALANCER_AVAILABLE = False
 
+# BTC/USDC Trading Integration
 try:
     from .btc_usdc_trading_integration import (
         BTCUSDCTradingIntegration,
         BTCUSDCTradingConfig,
         create_btc_usdc_integration,
     )
+
     BTC_USDC_INTEGRATION_AVAILABLE = True
 except ImportError:
     BTC_USDC_INTEGRATION_AVAILABLE = False
@@ -86,8 +98,9 @@ try:
         GPUTier,
         create_system_profiler,
         get_system_profile,
-        get_gpu_shader_config
+        get_gpu_shader_config,
     )
+
     SYSTEM_PROFILER_AVAILABLE = True
 except ImportError:
     SYSTEM_PROFILER_AVAILABLE = False
@@ -100,8 +113,9 @@ try:
         create_gpu_dna_detector,
         detect_gpu_dna,
         get_cosine_similarity_config,
-        run_gpu_fit_test
+        run_gpu_fit_test,
     )
+
     GPU_DNA_AVAILABLE = True
 except ImportError:
     GPU_DNA_AVAILABLE = False
@@ -112,8 +126,9 @@ try:
         GPUShaderIntegration,
         ShaderProgramConfig,
         create_gpu_shader_integration,
-        compute_strategy_similarities_gpu
+        compute_strategy_similarities_gpu,
     )
+
     GPU_SHADER_INTEGRATION_AVAILABLE = True
 except ImportError:
     GPU_SHADER_INTEGRATION_AVAILABLE = False
@@ -142,7 +157,7 @@ __all__ = [
     "OrbitalShell",
     # Portfolio balancing components
     "AlgorithmicPortfolioBalancer",
-    "RebalancingStrategy", 
+    "RebalancingStrategy",
     "AssetAllocation",
     "create_portfolio_balancer",
     # BTC/USDC integration components
@@ -152,7 +167,7 @@ __all__ = [
     # GPU System State Profiler components
     "SystemStateProfiler",
     "SystemProfile",
-    "CPUProfile", 
+    "CPUProfile",
     "GPUProfile",
     "SystemTier",
     "CPUTier",
@@ -163,7 +178,7 @@ __all__ = [
     # GPU DNA Auto-Detection components
     "GPUDNAAutoDetect",
     "ShaderConfig",
-    "create_gpu_dna_detector", 
+    "create_gpu_dna_detector",
     "detect_gpu_dna",
     "get_cosine_similarity_config",
     "run_gpu_fit_test",
@@ -180,7 +195,7 @@ __all__ = [
     "PORTFOLIO_BALANCER_AVAILABLE",
     "BTC_USDC_INTEGRATION_AVAILABLE",
     "SYSTEM_PROFILER_AVAILABLE",
-    "GPU_DNA_AVAILABLE", 
+    "GPU_DNA_AVAILABLE",
     "GPU_SHADER_INTEGRATION_AVAILABLE",
     # Utility functions
     "get_system_status",
@@ -190,142 +205,72 @@ __all__ = [
 
 
 def get_system_status():
-    """Get the status of all system components."""
-    return {
-        "clean_implementations": {
-            "math_foundation": CLEAN_MATH_AVAILABLE,
-            "profit_vectorization": CLEAN_PROFIT_AVAILABLE,
-            "trading_pipeline": CLEAN_PIPELINE_AVAILABLE,
-            "orbital_brain_system": ORBITAL_BRAIN_AVAILABLE,
-            "portfolio_balancer": PORTFOLIO_BALANCER_AVAILABLE,
-            "btc_usdc_integration": BTC_USDC_INTEGRATION_AVAILABLE,
-        },
-        "gpu_system": {
-            "system_profiler": SYSTEM_PROFILER_AVAILABLE,
-            "gpu_dna_detection": GPU_DNA_AVAILABLE,
-            "shader_integration": GPU_SHADER_INTEGRATION_AVAILABLE,
-        },
-        "system_operational": (
-            CLEAN_MATH_AVAILABLE and 
-            CLEAN_PROFIT_AVAILABLE and 
-            CLEAN_PIPELINE_AVAILABLE and
-            PORTFOLIO_BALANCER_AVAILABLE and
-            BTC_USDC_INTEGRATION_AVAILABLE
-        ),
-        "gpu_acceleration_available": (
-            SYSTEM_PROFILER_AVAILABLE and
-            GPU_DNA_AVAILABLE and
-            GPU_SHADER_INTEGRATION_AVAILABLE
-        ),
+    """Get comprehensive system status for all components."""
+    status = {
+        "clean_math": CLEAN_MATH_AVAILABLE,
+        "clean_profit": CLEAN_PROFIT_AVAILABLE,
+        "clean_pipeline": CLEAN_PIPELINE_AVAILABLE,
+        "orbital_brain": ORBITAL_BRAIN_AVAILABLE,
+        "portfolio_balancer": PORTFOLIO_BALANCER_AVAILABLE,
+        "btc_usdc_integration": BTC_USDC_INTEGRATION_AVAILABLE,
+        "system_profiler": SYSTEM_PROFILER_AVAILABLE,
+        "gpu_dna": GPU_DNA_AVAILABLE,
+        "gpu_shader": GPU_SHADER_INTEGRATION_AVAILABLE,
     }
+
+    return status
 
 
 def initialize_gpu_system():
-    """
-    Initialize the GPU acceleration system for Schwabot.
-    
-    Returns:
-        Dictionary with GPU system components and status
-    """
-    gpu_system = {
-        "system_profile": None,
-        "gpu_dna_profile": None,
-        "shader_integration": None,
-        "initialization_status": {
-            "profiler": False,
-            "dna_detection": False,
-            "shader_integration": False
-        }
-    }
-    
+    """Initialize GPU system with proper error handling."""
     try:
-        # Initialize system profiler
         if SYSTEM_PROFILER_AVAILABLE:
-            gpu_system["system_profile"] = get_system_profile()
-            gpu_system["initialization_status"]["profiler"] = True
-        
-        # Initialize GPU DNA detection
-        if GPU_DNA_AVAILABLE:
-            gpu_system["gpu_dna_profile"] = detect_gpu_dna()
-            gpu_system["initialization_status"]["dna_detection"] = True
-        
-        # Initialize shader integration
-        if GPU_SHADER_INTEGRATION_AVAILABLE:
-            gpu_system["shader_integration"] = create_gpu_shader_integration()
-            gpu_system["initialization_status"]["shader_integration"] = True
-        
-        return gpu_system
-        
+            profiler = create_system_profiler()
+            system_profile = get_system_profile()
+
+            if system_profile.gpu_tier != GPUTier.NONE:
+                logging.info("GPU system initialized successfully")
+                return True
+            else:
+                logging.warning("No GPU detected, using CPU fallback")
+                return False
+        else:
+            logging.warning("System profiler not available")
+            return False
+
     except Exception as e:
-        import logging
-        logger = logging.getLogger(__name__)
-        logger.error(f"GPU system initialization failed: {e}")
-        return gpu_system
+        logging.error("Failed to initialize GPU system: {}".format(e))
+        return False
 
 
 def create_clean_trading_system(initial_capital=100000.0, enable_gpu_acceleration=True):
-    """
-    Create a complete clean trading system with all components.
+    """Create a clean trading system with all components."""
+    try:
+        # Initialize GPU if requested
+        gpu_available = False
+        if enable_gpu_acceleration:
+            gpu_available = initialize_gpu_system()
 
-    Args:
-        initial_capital: Initial capital for the trading system
-        enable_gpu_acceleration: Whether to enable GPU acceleration features
+        # Create trading pipeline
+        if CLEAN_PIPELINE_AVAILABLE:
+            pipeline = create_trading_pipeline(initial_capital)
 
-    Returns:
-        Dictionary with all initialized components
-    """
-    if not (CLEAN_MATH_AVAILABLE and CLEAN_PROFIT_AVAILABLE and CLEAN_PIPELINE_AVAILABLE):
-        raise ImportError("Clean implementations not available")
+            # Add portfolio balancer if available
+            if PORTFOLIO_BALANCER_AVAILABLE:
+                balancer = create_portfolio_balancer()
+                pipeline.add_component(balancer)
 
-    # Base configuration
-    config = {
-        "portfolio_config": {
-            "rebalancing_strategy": "phantom_adaptive",
-            "rebalance_threshold": 0.05,
-            "max_rebalance_frequency": 3600,
-        },
-        "btc_usdc_config": {
-            "symbol": "BTC/USDC",
-            "base_order_size": 0.001,
-            "max_order_size": 0.01,
-            "enable_portfolio_balancing": True,
-        },
-        "exchange_config": {
-            "exchange": "binance",
-            "sandbox": True,
-        }
-    }
+            # Add BTC/USDC integration if available
+            if BTC_USDC_INTEGRATION_AVAILABLE:
+                btc_integration = create_btc_usdc_integration()
+                pipeline.add_component(btc_integration)
 
-    system = {
-        "math_foundation": create_math_foundation(),
-        "profit_vectorizer": create_profit_vectorizer(),
-        "trading_pipeline": create_trading_pipeline(initial_capital=initial_capital),
-    }
-
-    if ORBITAL_BRAIN_AVAILABLE:
-        system["orbital_brain"] = OrbitalBRAINSystem()
-
-    if PORTFOLIO_BALANCER_AVAILABLE:
-        system["portfolio_balancer"] = create_portfolio_balancer(config)
-
-    if BTC_USDC_INTEGRATION_AVAILABLE:
-        system["btc_usdc_integration"] = create_btc_usdc_integration(config)
-
-    # Initialize GPU acceleration if requested and available
-    if enable_gpu_acceleration:
-        gpu_system = initialize_gpu_system()
-        system["gpu_system"] = gpu_system
-        
-        # Log GPU system status
-        import logging
-        logger = logging.getLogger(__name__)
-        if gpu_system["initialization_status"]["shader_integration"]:
-            logger.info("🚀 GPU-accelerated trading system initialized")
-            if gpu_system["system_profile"]:
-                profile = gpu_system["system_profile"]
-                logger.info(f"🎮 GPU: {profile.gpu.renderer} ({profile.gpu.gpu_tier.value})")
-                logger.info(f"📊 Matrix Size: {profile.gpu.max_matrix_size}x{profile.gpu.max_matrix_size}")
+            logging.info("Clean trading system created successfully")
+            return pipeline
         else:
-            logger.info("🔄 CPU-only trading system initialized (GPU acceleration unavailable)")
+            logging.error("Clean trading pipeline not available")
+            return None
 
-    return system
+    except Exception as e:
+        logging.error("Failed to create clean trading system: {}".format(e))
+        return None

@@ -1,13 +1,12 @@
 from __future__ import annotations
-
 import sys
 from typing import Any, Dict, List, Optional
+from core.unified_math_system import UnifiedMathSystem
 
 from core.advanced_tensor_algebra import UnifiedTensorAlgebra
 from core.enhanced_strategy_framework import EnhancedStrategyFramework
 from core.mathlib_v4 import MathLibV4
 from core.smart_money_integration import SmartMoneyIntegrationFramework
-from core.unified_math_system import UnifiedMathSystem
 from utils.safe_print import safe_print
 
 """
@@ -350,7 +349,8 @@ try: mathlib = MathLibV4()
 
 test_data
 
-    = {'prices': [100, 101, 102, 103, 104], 'volumes': [1000, 1100, 1200, 1300, 1400], 'timestamps': [time.time() - i for i in range(5)]
+    = {'prices': [100, 101, 102, 103, 104], 'volumes': [1000, 1100, 1200, 1300, 1400], 'timestamps': [time.time()
+    i for i in range(5)]
 
 
 
@@ -1053,8 +1053,8 @@ success_rate = (total_passed / total_tests) * 100 if total_tests > 0 else 0.0
 
 
 
-safe_print(\n+=* 60)safe_print( COMPLETE SYSTEM VALIDATION RESULTS)safe_print(=* 60)safe_print(f"
-Overall Success Rate: {success_rate:.1f}%)safe_print(f Tests Passed: {total_passed}/{total_tests})"
+safe_print(\n+=* 60)safe_print( COMPLETE SYSTEM VALIDATION RESULTS)safe_print(=* 60)safe_print("
+Overall Success Rate: {0}%)safe_print(f Tests Passed: {1}/{2})".format(success_rate:.1f, total_passed, total_tests)
 
 
 

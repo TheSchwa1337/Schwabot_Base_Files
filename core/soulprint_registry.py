@@ -19,7 +19,8 @@ class SoulprintEntry:
 
 class SoulprintRegistry:
     """
-    Registry for logging and querying Schwafit triggers, profit vectors, phase/drift optimization, and cross-asset analytics.
+    Registry for logging
+    querying Schwafit triggers, profit vectors, phase/drift optimization, and cross-asset analytics.
     """
 
     def __init__(self, registry_file: Optional[str] = None):
@@ -129,22 +130,20 @@ def main():
         "temporal_variance": 0.92,
     }
 
-    soulprint = registry.register_soulprint(
-        vector=test_vector, strategy_id="momentum_breakout", confidence=0.85
-    )
+    soulprint = registry.register_soulprint(vector=test_vector, strategy_id="momentum_breakout", confidence=0.85)
 
-    print(f"🌀 Registered Soulprint: {soulprint}")
+    print("🌀 Registered Soulprint: {0}".format(soulprint))
 
     # Mark as executed with profit
     registry.mark_executed(soulprint, profit_result=0.023)
 
     # Get registry statistics
     stats = registry.get_registry_stats()
-    print(f"📊 Registry Stats: {stats}")
+    print("📊 Registry Stats: {0}".format(stats))
 
     # Find similar patterns
     similar = registry.get_similar_soulprints(test_vector)
-    print(f"🔍 Found {len(similar)} similar soulprints")
+    print("🔍 Found {0} similar soulprints".format(len(similar)))
 
 
 if __name__ == "__main__":

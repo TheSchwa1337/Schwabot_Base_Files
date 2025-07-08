@@ -1,16 +1,18 @@
+import logging
+from typing import List, Dict, Any
+
 """
 Swing Pattern Recognition Module - Identify swing highs/lows and momentum divergence.
 """
 
-import logging
-from typing import List, Dict, Any
-
 logger = logging.getLogger(__name__)
+
 
 class SwingPatternRecognizer:
     """
     Identifies swing patterns in recent price history.
     """
+
     def identify_swing_patterns(self, price_history: List[float]) -> Dict[str, Any]:
         """
         Analyze price history to find swing highs, lows, and pattern metrics.
@@ -21,8 +23,8 @@ class SwingPatternRecognizer:
             return swings
 
         highs, lows = [], []
-        for i in range(1, len(price_history)-1):
-            prev, curr, nxt = price_history[i-1], price_history[i], price_history[i+1]
+        for i in range(1, len(price_history) - 1):
+            prev, curr, nxt = price_history[i - 1], price_history[i], price_history[i + 1]
             if curr > prev and curr > nxt:
                 highs.append((i, curr))
             if curr < prev and curr < nxt:
@@ -34,4 +36,4 @@ class SwingPatternRecognizer:
         count = len(highs) + len(lows)
         if count > 0:
             swings['swing_strength'] = abs(len(highs) - len(lows)) / count
-        return swings 
+        return swings

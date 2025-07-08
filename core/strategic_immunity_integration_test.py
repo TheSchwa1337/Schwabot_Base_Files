@@ -776,7 +776,7 @@ name: Low Volatility Market,market_data: {volatility: 0.05,volume: 500,price_cha
 
 
 
-        print(f"\n Testing: {scenario['name']})
+        print("\n Testing: {0})
 
 
 
@@ -828,7 +828,7 @@ name: Low Volatility Market,market_data: {volatility: 0.05,volume: 500,price_cha
 
 
 
-        print(f Security Improvement: {security_improvement:.2%})
+        print(f Security Improvement: {1})
 
 
 
@@ -860,7 +860,7 @@ name: Low Volatility Market,market_data: {volatility: 0.05,volume: 500,price_cha
 
 
 
-            print(f{key}:)
+            print(f{2}:)
 
 
 
@@ -868,7 +868,7 @@ name: Low Volatility Market,market_data: {volatility: 0.05,volume: 500,price_cha
 
 
 
-                print(f{subkey}: {subvalue})
+                print(f{3}: {4})
 
 
 
@@ -876,7 +876,7 @@ name: Low Volatility Market,market_data: {volatility: 0.05,volume: 500,price_cha
 
 
 
-            print(f{key}: {value})
+            print(f{2}: {6})
 
 
 
@@ -900,4 +900,4 @@ if __name__ == __main__:
 
 
 
-"""
+".format(scenario['name'], security_improvement:.2%, key, subkey, subvalue, key, value)""

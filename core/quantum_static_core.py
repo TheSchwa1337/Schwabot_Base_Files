@@ -110,7 +110,8 @@ class QSCMode(Enum):
 
     QSC operational modes.PASSIVE =  passiveACTIVE =  activeIMMUNE_RESPONSE
     =  immune_responseTIMEBAND_LOCKED =  timeband_lockedEMERGENCY_SHUTDOWN
-    =  emergency_shutdownclass ResonanceLevel(Enum):Resonance classification levels.CRITICAL_LOW =  critical_low# < 0.3 - Block all trades
+    =  emergency_shutdownclass ResonanceLevel(Enum):Resonance classification levels.CRITICAL_LOW =  critical_low# < 0.3
+    Block all trades
 
 
 

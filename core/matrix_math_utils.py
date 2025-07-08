@@ -1,3 +1,10 @@
+from __future__ import annotations
+    import cupy as cp
+from typing import Any, Dict, List, Optional, Tuple, Union
+import logging
+
+    import numpy as np
+
 """
 Matrix Math Utilities for Schwabot Trading System.
 
@@ -19,30 +26,23 @@ CUDA Integration:
 - Cross-platform compatibility (Windows, macOS, Linux)
 """
 
-from __future__ import annotations
-
 # CUDA Integration with Fallback
 try:
-    import cupy as cp
     USING_CUDA = True
     _backend = 'cupy (GPU)'
     xp = cp
     la = cp.linalg
 except ImportError:
-    import numpy as np
     USING_CUDA = False
     _backend = 'numpy (CPU)'
     xp = np
     la = np.linalg
 
-from typing import Any, Dict, List, Optional, Tuple, Union
-import logging
-
 logger = logging.getLogger(__name__)
 if USING_CUDA:
-    logger.info(f"⚡ MatrixMathUtils using GPU acceleration: {_backend}")
+    logger.info("⚡ MatrixMathUtils using GPU acceleration: {0}".format(_backend))
 else:
-    logger.info(f"🔄 MatrixMathUtils using CPU fallback: {_backend}")
+    logger.info("🔄 MatrixMathUtils using CPU fallback: {0}".format(_backend))
 
 
 def analyze_price_matrix(price_matrix: np.ndarray) -> Dict[str, Any]:
@@ -104,9 +104,7 @@ def analyze_price_matrix(price_matrix: np.ndarray) -> Dict[str, Any]:
         condition_number = np.inf
 
     # Matrix stability score (lower is more stable)
-    stability_score = (
-        np.std(eigenvalues) / np.mean(np.abs(eigenvalues)) if len(eigenvalues) > 0 else np.inf
-    )
+    stability_score = np.std(eigenvalues) / np.mean(np.abs(eigenvalues)) if len(eigenvalues) > 0 else np.inf
 
     # Risk metrics
     portfolio_volatility = np.sqrt(np.sum(covariance_matrix))
@@ -185,9 +183,7 @@ def risk_parity_weights(
         target_risk_contribution = portfolio_vol / num_assets
 
         # Update weights
-        weight_updates = (target_risk_contribution - risk_contributions) / (
-            covariance_matrix @ weights
-        )
+        weight_updates = (target_risk_contribution - risk_contributions) / (covariance_matrix @ weights)
         weights += 0.1 * weight_updates  # Small step size for stability
 
         # Normalize weights to sum to 1

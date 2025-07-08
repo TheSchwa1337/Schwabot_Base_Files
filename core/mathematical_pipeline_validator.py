@@ -1,18 +1,15 @@
         from unified_math_system import unified_math
     from .unified_math_system import unified_math
-
 from typing import Any, Dict, List, Optional, Tuple
-
 import psutil
 from advanced_tensor_algebra import UnifiedTensorAlgebra
 from unified_profit_vectorization_system import UnifiedProfitVectorizationSystem
 from zpe_core import ZPECore
-
-from utils.safe_print import debug, error, info, safe_print, success, warn
-
 from .advanced_tensor_algebra import UnifiedTensorAlgebra
 from .unified_profit_vectorization_system import UnifiedProfitVectorizationSystem
 from .zpe_core import ZPECore
+
+from utils.safe_print import debug, error, info, safe_print, success, warn
 
 # LEGACY FILE - COMMENTED OUT DUE TO SYNTAX ERRORS
 # (legacy code omitted for clarity; see clean implementation files)
@@ -1157,7 +1154,7 @@ validation of the entire mathematical pipeline.
 
 
 """
-                    recommendations.append(f"Bit phase resolution error: {e})"
+                    recommendations.append("Bit phase resolution error: {0})".format(e)
 
 
 
@@ -1476,7 +1473,7 @@ entry_exit_range: 0.5,liquidity_depth: 0.7,trend_change_rate: 0.3,price_derivati
 
 
 
-                    recommendations.append(f"Profit wheel spinning error: {e})"
+                    recommendations.append("Profit wheel spinning error: {0})".format(e)
 
 
 

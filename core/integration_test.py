@@ -1,10 +1,11 @@
+import pytest
+
+from core.unified_trading_pipeline import UnifiedTradingPipeline
+
 # !/usr/bin/env python3
 """
 Integration Test - High-level strategy integration unit tests
 """
-import pytest
-
-from core.unified_trading_pipeline import UnifiedTradingPipeline
 
 
 class DummyStrategy:

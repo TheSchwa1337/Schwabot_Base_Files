@@ -1,3 +1,8 @@
+import logging
+import hashlib
+from enum import Enum
+from typing import Any, Dict, NamedTuple, Optional
+
 # !/usr/bin/env python3
 """
 Phase Bit Integration Module
@@ -6,11 +11,6 @@ Manages the resolution and application of bit phases for various
 mathematical operations and strategy selections within Schwabot.
 This module is crucial for dynamic bitwise strategy adjustment.
 """
-
-import logging
-import hashlib
-from enum import Enum
-from typing import Any, Dict, NamedTuple, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -74,8 +74,7 @@ class PhaseBitIntegration:
         try:
             # Generate context hash if not provided
             if context_hash is None:
-                context_data = f"{resolution_mode}_{
-                    self.resolution_count}_{kwargs}"
+                context_data = "{0}_{1}_{2}".format(resolution_mode, self.resolution_count, kwargs)
                 context_hash = hashlib.md5(context_data.encode()).hexdigest()
 
             self.resolution_count += 1
@@ -98,7 +97,7 @@ class PhaseBitIntegration:
                 bit_phase=bit_phase,
                 strategy_type=strategy_type,
                 confidence=confidence,
-                reason=f"Resolved from context hash: {context_hash[:8]}...",
+                reason="Resolved from context hash: {0}...".format(context_hash[:8]),
             )
 
             # Cache the result
@@ -107,13 +106,13 @@ class PhaseBitIntegration:
             return resolution
 
         except Exception as e:
-            logger.error(f"Error in bit phase resolution: {e}")
+            logger.error("Error in bit phase resolution: {0}".format(e))
             # Return default resolution
             return PhaseBitResolution(
                 bit_phase=BitPhase.SIXTEEN_BIT,
                 strategy_type=StrategyType.DYNAMIC_STRATEGY,
                 confidence=0.5,
-                reason=f"Default resolution due to error: {str(e)}",
+                reason="Default resolution due to error: {0}".format(str(e)),
             )
 
     def _determine_bit_phase(self, context_hash: str, resolution_mode: str) -> BitPhase:
@@ -152,9 +151,7 @@ class PhaseBitIntegration:
         else:
             return StrategyType.DYNAMIC_STRATEGY
 
-    def _calculate_confidence(
-        self, context_hash: str, bit_phase: BitPhase, strategy_type: StrategyType
-    ) -> float:
+    def _calculate_confidence(self, context_hash: str, bit_phase: BitPhase, strategy_type: StrategyType) -> float:
         """Calculate confidence in the resolution."""
         # Simple confidence calculation based on hash consistency
         hash_value = int(context_hash[:8], 16)
@@ -201,19 +198,19 @@ def test_phase_bit_integration():
 
     # Test automatic resolution
     result1 = integration.resolve_bit_phase()
-    print(f"Auto resolution: {result1}")
+    print("Auto resolution: {0}".format(result1))
 
     # Test with specific context
     result2 = integration.resolve_bit_phase("test_context_123")
-    print(f"Context resolution: {result2}")
+    print("Context resolution: {0}".format(result2))
 
     # Test with specific mode
     result3 = integration.resolve_bit_phase(resolution_mode="32")
-    print(f"Manual resolution: {result3}")
+    print("Manual resolution: {0}".format(result3))
 
     # Test stats
     stats = integration.get_resolution_stats()
-    print(f"Resolution stats: {stats}")
+    print("Resolution stats: {0}".format(stats))
 
     print("Phase Bit Integration test completed!")
 

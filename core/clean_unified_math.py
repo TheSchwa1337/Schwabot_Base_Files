@@ -1,3 +1,13 @@
+import logging
+import math
+import time
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple, Union
+    import cupy as cp
+
+    import numpy as np
+
 #!/usr/bin/env python3
 """
 Clean Unified Math System - Advanced Mathematical Operations
@@ -14,21 +24,12 @@ Key Features:
 - Performance tracking and analysis
 """
 
-import logging
-import math
-import time
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
-
 # CUDA Integration with Fallback
 try:
-    import cupy as cp
     USING_CUDA = True
     _backend = 'cupy (GPU)'
     xp = cp
 except ImportError:
-    import numpy as np
     USING_CUDA = False
     _backend = 'numpy (CPU)'
     xp = np
@@ -36,9 +37,9 @@ except ImportError:
 # Log backend status
 logger = logging.getLogger(__name__)
 if USING_CUDA:
-    logger.info(f"⚡ Clean Unified Math using GPU acceleration: {_backend}")
+    logger.info("⚡ Clean Unified Math using GPU acceleration: {0}".format(_backend))
 else:
-    logger.info(f"🔄 Clean Unified Math using CPU fallback: {_backend}")
+    logger.info("🔄 Clean Unified Math using CPU fallback: {0}".format(_backend))
 
 
 @dataclass
@@ -66,7 +67,7 @@ class CleanUnifiedMathSystem:
             self._log_calculation("multiply", result, {"a": a, "b": b})
             return result
         except Exception as e:
-            logger.error(f"Multiplication error: {e}")
+            logger.error("Multiplication error: {0}".format(e))
             return 0.0
 
     def add(self, a: float, b: float) -> float:
@@ -76,7 +77,7 @@ class CleanUnifiedMathSystem:
             self._log_calculation("add", result, {"a": a, "b": b})
             return result
         except Exception as e:
-            logger.error(f"Addition error: {e}")
+            logger.error("Addition error: {0}".format(e))
             return 0.0
 
     def subtract(self, a: float, b: float) -> float:
@@ -86,7 +87,7 @@ class CleanUnifiedMathSystem:
             self._log_calculation("subtract", result, {"a": a, "b": b})
             return result
         except Exception as e:
-            logger.error(f"Subtraction error: {e}")
+            logger.error("Subtraction error: {0}".format(e))
             return 0.0
 
     def divide(self, a: float, b: float) -> float:
@@ -99,7 +100,7 @@ class CleanUnifiedMathSystem:
             self._log_calculation("divide", result, {"a": a, "b": b})
             return result
         except Exception as e:
-            logger.error(f"Division error: {e}")
+            logger.error("Division error: {0}".format(e))
             return 0.0
 
     def power(self, base: float, exponent: float) -> float:
@@ -109,7 +110,7 @@ class CleanUnifiedMathSystem:
             self._log_calculation("power", result, {"base": base, "exponent": exponent})
             return result
         except Exception as e:
-            logger.error(f"Power calculation error: {e}")
+            logger.error("Power calculation error: {0}".format(e))
             return 0.0
 
     def sqrt(self, value: float) -> float:
@@ -122,7 +123,7 @@ class CleanUnifiedMathSystem:
             self._log_calculation("sqrt", result, {"value": value})
             return result
         except Exception as e:
-            logger.error(f"Square root error: {e}")
+            logger.error("Square root error: {0}".format(e))
             return 0.0
 
     def exp(self, value: float) -> float:
@@ -132,7 +133,7 @@ class CleanUnifiedMathSystem:
             self._log_calculation("exp", result, {"value": value})
             return result
         except Exception as e:
-            logger.error(f"Exponential error: {e}")
+            logger.error("Exponential error: {0}".format(e))
             return 1.0
 
     def sin(self, value: float) -> float:
@@ -142,7 +143,7 @@ class CleanUnifiedMathSystem:
             self._log_calculation("sin", result, {"value": value})
             return result
         except Exception as e:
-            logger.error(f"Sine error: {e}")
+            logger.error("Sine error: {0}".format(e))
             return 0.0
 
     def cos(self, value: float) -> float:
@@ -152,7 +153,7 @@ class CleanUnifiedMathSystem:
             self._log_calculation("cos", result, {"value": value})
             return result
         except Exception as e:
-            logger.error(f"Cosine error: {e}")
+            logger.error("Cosine error: {0}".format(e))
             return 1.0
 
     def log(self, value: float, base: float = math.e) -> float:
@@ -165,7 +166,7 @@ class CleanUnifiedMathSystem:
             self._log_calculation("log", result, {"value": value, "base": base})
             return result
         except Exception as e:
-            logger.error(f"Logarithm error: {e}")
+            logger.error("Logarithm error: {0}".format(e))
             return 0.0
 
     def abs(self, value: float) -> float:
@@ -175,7 +176,7 @@ class CleanUnifiedMathSystem:
             self._log_calculation("abs", result, {"value": value})
             return result
         except Exception as e:
-            logger.error(f"Absolute value error: {e}")
+            logger.error("Absolute value error: {0}".format(e))
             return 0.0
 
     def min(self, values: List[float]) -> float:
@@ -187,7 +188,7 @@ class CleanUnifiedMathSystem:
             self._log_calculation("min", result, {"values": values})
             return result
         except Exception as e:
-            logger.error(f"Minimum calculation error: {e}")
+            logger.error("Minimum calculation error: {0}".format(e))
             return 0.0
 
     def max(self, values: List[float]) -> float:
@@ -199,7 +200,7 @@ class CleanUnifiedMathSystem:
             self._log_calculation("max", result, {"values": values})
             return result
         except Exception as e:
-            logger.error(f"Maximum calculation error: {e}")
+            logger.error("Maximum calculation error: {0}".format(e))
             return 0.0
 
     def mean(self, values: List[float]) -> float:
@@ -211,12 +212,10 @@ class CleanUnifiedMathSystem:
             self._log_calculation("mean", result, {"values": values})
             return result
         except Exception as e:
-            logger.error(f"Mean calculation error: {e}")
+            logger.error("Mean calculation error: {0}".format(e))
             return 0.0
 
-    def optimize_profit(
-        self, base_profit: float, enhancement_factor: float, confidence: float
-    ) -> float:
+    def optimize_profit(self, base_profit: float, enhancement_factor: float, confidence: float) -> float:
         """Optimize profit based on enhancement factor and confidence."""
         try:
             # Apply enhancement factor
@@ -225,12 +224,10 @@ class CleanUnifiedMathSystem:
             confidence_adjusted = self.multiply(enhanced, confidence)
             return confidence_adjusted
         except Exception as e:
-            logger.error(f"Profit optimization error: {e}")
+            logger.error("Profit optimization error: {0}".format(e))
             return base_profit
 
-    def calculate_risk_adjustment(
-        self, profit: float, volatility: float, confidence: float
-    ) -> float:
+    def calculate_risk_adjustment(self, profit: float, volatility: float, confidence: float) -> float:
         """Calculate risk-adjusted profit."""
         try:
             # Risk adjustment based on volatility and confidence
@@ -239,7 +236,7 @@ class CleanUnifiedMathSystem:
             adjusted_profit = self.multiply(profit, self.multiply(risk_factor, confidence_factor))
             return adjusted_profit
         except Exception as e:
-            logger.error(f"Risk adjustment error: {e}")
+            logger.error("Risk adjustment error: {0}".format(e))
             return profit
 
     def calculate_portfolio_weight(self, confidence: float, max_risk: float) -> float:
@@ -251,7 +248,7 @@ class CleanUnifiedMathSystem:
             final_weight = self.multiply(base_weight, 0.8)  # Conservative approach
             return final_weight
         except Exception as e:
-            logger.error(f"Portfolio weight calculation error: {e}")
+            logger.error("Portfolio weight calculation error: {0}".format(e))
             return 0.0
 
     def calculate_sharpe_ratio(self, returns: List[float], risk_free_rate: float = 0.02) -> float:
@@ -290,7 +287,7 @@ class CleanUnifiedMathSystem:
 
             return sharpe_ratio
         except Exception as e:
-            logger.error(f"Sharpe ratio calculation error: {e}")
+            logger.error("Sharpe ratio calculation error: {0}".format(e))
             return 0.0
 
     def integrate_all_systems(self, input_data: Dict[str, Any]) -> Dict[str, Any]:
@@ -322,7 +319,7 @@ class CleanUnifiedMathSystem:
             results["calculation_count"] = len(self.calculation_history)
             return results
         except Exception as e:
-            logger.error(f"System integration error: {e}")
+            logger.error("System integration error: {0}".format(e))
             return {"error": str(e), "timestamp": time.time()}
 
     def _log_calculation(self, operation: str, result: float, metadata: Dict[str, Any]) -> None:
@@ -335,9 +332,9 @@ class CleanUnifiedMathSystem:
         )
         self.calculation_history.append(math_result)
         # Cache the result for potential reuse
-        cache_key = f"{operation}_{hash(str(metadata))}"
+        cache_key = "{0}_{1}".format(operation, hash(str(metadata)))
         self.operation_cache[cache_key] = result
-        logger.debug(f"Math operation '{operation}' completed: {result}")
+        logger.debug("Math operation '{0}' completed: {1}".format(operation, result))
 
     def get_calculation_history(self) -> List[MathResult]:
         """Get the history of all calculations performed."""
@@ -374,12 +371,10 @@ class CleanUnifiedMathSystem:
                 "total_calculations": len(self.calculation_history),
                 "operation_counts": operation_counts,
                 "recent_operations": [calc.operation for calc in recent],
-                "last_calculation_time": (
-                    self.calculation_history[-1].timestamp if self.calculation_history else 0
-                ),
+                "last_calculation_time": (self.calculation_history[-1].timestamp if self.calculation_history else 0),
             }
         except Exception as e:
-            logger.error(f"Calculation summary error: {e}")
+            logger.error("Calculation summary error: {0}".format(e))
             return {"error": str(e)}
 
 
@@ -387,33 +382,23 @@ class CleanUnifiedMathSystem:
 clean_unified_math = CleanUnifiedMathSystem()
 
 
-def optimize_brain_profit(
-    price: float, volume: float, confidence: float, enhancement_factor: float
-) -> float:
+def optimize_brain_profit(price: float, volume: float, confidence: float, enhancement_factor: float) -> float:
     """Optimized profit calculation for brain trading signals."""
     try:
         # Base profit calculation
         base_profit = clean_unified_math.multiply(price, volume) * 0.001  # 0.1% base
         # Apply brain optimization
-        optimized_profit = clean_unified_math.optimize_profit(
-            base_profit, enhancement_factor, confidence
-        )
+        optimized_profit = clean_unified_math.optimize_profit(base_profit, enhancement_factor, confidence)
         # Apply risk adjustment based on volatility estimation
-        volatility = clean_unified_math.min(
-            [0.5, clean_unified_math.divide(abs(price - 50000), 50000)]
-        )
-        risk_adjusted = clean_unified_math.calculate_risk_adjustment(
-            optimized_profit, volatility, confidence
-        )
+        volatility = clean_unified_math.min([0.5, clean_unified_math.divide(abs(price - 50000), 50000)])
+        risk_adjusted = clean_unified_math.calculate_risk_adjustment(optimized_profit, volatility, confidence)
         return risk_adjusted
     except Exception as e:
-        logger.error(f"Brain profit optimization error: {e}")
+        logger.error("Brain profit optimization error: {0}".format(e))
         return 0.0
 
 
-def calculate_position_size(
-    confidence: float, portfolio_value: float, max_risk_percent: float
-) -> float:
+def calculate_position_size(confidence: float, portfolio_value: float, max_risk_percent: float) -> float:
     """Calculate position size based on confidence and risk management."""
     try:
         # Calculate maximum position based on risk
@@ -426,7 +411,7 @@ def calculate_position_size(
         final_size = clean_unified_math.min([position_size, max_position])
         return final_size
     except Exception as e:
-        logger.error(f"Position size calculation error: {e}")
+        logger.error("Position size calculation error: {0}".format(e))
         return 0.0
 
 
@@ -437,41 +422,41 @@ def test_clean_unified_math_system():
 
     # Test basic operations
     print("Basic Operations:")
-    print(f"5 + 3 = {clean_unified_math.add(5, 3)}")
-    print(f"  10 * 2.5 = {clean_unified_math.multiply(10, 2.5)}")
-    print(f"  100 / 4 = {clean_unified_math.divide(100, 4)}")
-    print(f"  sqrt(25) = {clean_unified_math.sqrt(25)}")
+    print("5 + 3 = {0}".format(clean_unified_math.add(5, 3)))
+    print("  10 * 2.5 = {0}".format(clean_unified_math.multiply(10, 2.5)))
+    print("  100 / 4 = {0}".format(clean_unified_math.divide(100, 4)))
+    print("  sqrt(25) = {0}".format(clean_unified_math.sqrt(25)))
 
     # Test optimization functions
     print("\nOptimization Functions:")
     optimized = clean_unified_math.optimize_profit(1000, 1.5, 0.8)
-    print(f"  Optimized profit: {optimized:.2f}")
+    print("  Optimized profit: {0}".format(optimized:.2f))
     risk_adjusted = clean_unified_math.calculate_risk_adjustment(1000, 0.2, 0.7)
-    print(f"  Risk adjusted: {risk_adjusted:.2f}")
+    print("  Risk adjusted: {0}".format(risk_adjusted:.2f))
 
     # Test brain profit optimization
     print("\nBrain Trading Integration:")
     brain_profit = optimize_brain_profit(50000, 1000, 0.75, 1.2)
-    print(f"  Brain optimized profit: {brain_profit:.2f}")
+    print("  Brain optimized profit: {0}".format(brain_profit:.2f))
     position_size = calculate_position_size(0.8, 100000, 0.1)
-    print(f"  Position size: ${position_size:.2f}")
+    print("  Position size: ${0}".format(position_size:.2f))
 
     # Test performance metrics
     returns = [0.05, 0.02, -0.01, 0.03, 0.01]
     sharpe = clean_unified_math.calculate_sharpe_ratio(returns)
-    print(f"  Sharpe ratio: {sharpe:.3f}")
+    print("  Sharpe ratio: {0}".format(sharpe:.3f))
 
     # Test integration function
     input_data = {"tensor": [[50000, 1200], [49500, 1100]], "metadata": {"source": "test"}}
     integration_result = clean_unified_math.integrate_all_systems(input_data)
     print("\nIntegration Result:")
-    print(f"Combined Score: {integration_result.get('combined_score', 0):.2f}")
+    print("Combined Score: {0}".format(integration_result.get('combined_score', 0):.2f))
 
     # Show calculation summary
     summary = clean_unified_math.get_calculation_summary()
     print("\nCalculation Summary:")
-    print(f"  Total calculations: {summary['total_calculations']}")
-    print(f"Operation counts: {summary.get('operation_counts', {})}")
+    print("  Total calculations: {0}".format(summary['total_calculations']))
+    print("Operation counts: {0})}".format(summary.get('operation_counts', {))
     print(" Clean Unified Math System test completed")
 
 

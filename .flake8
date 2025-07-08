@@ -1,6 +1,6 @@
 [flake8]
-# Flake8 Configuration for Schwabot Biological Immune System
-# ==========================================================
+# Flake8 Configuration for Schwabot Trading System
+# ================================================
 
 # Maximum line length - increased for mathematical formulas
 max-line-length = 120
@@ -8,28 +8,13 @@ max-line-length = 120
 # Maximum complexity for functions
 max-complexity = 15
 
-# Ignore specific error codes
-# Line length issues (handled by black)
-# Import organization (handled by isort/flake8-import-order)
-# Docstring issues (handled by pydocstyle)
-# Type annotation issues (handled by mypy)
-# Variable naming issues (relaxed for mathematical variables)
-# Unused variables (allow for mathematical formulas)
-# Import issues (relaxed for mathematical imports)
-# Import order issues (handled by flake8-import-order)
-# Bandit security warnings (if not using Bandit, these are noise)
-# Line length and whitespace (already handled by Black)
+# Ignore specific error codes that conflict with Black formatting
 extend-ignore = 
-    E203,  # whitespace before ':'
+    E203,  # whitespace before ':' (handled by Black)
     E266,  # too many leading '#' for block comment
     E501,  # line too long (handled by max-line-length)
-    W503,  # line break before binary operator
-    F401,  # imported but unused
-    F811,  # redefinition of unused
-    F821,  # undefined name
-    F841,  # local variable assigned but never used
+    W503,  # line break before binary operator (handled by Black)
     E265,  # block comment should start with '# '
-    E999,  # syntax error (these should be fixed manually)
 
 # Exclude directories and files
 exclude = 
@@ -44,60 +29,15 @@ exclude =
     .mypy_cache,
     .pytest_cache
 
-# Per-file-ignores
+# Per-file-ignores for mathematical modules
 per-file-ignores = 
     # Allow longer lines in test files
     tests/*:E501
     # Allow imports in __init__.py files
     __init__.py:F401
-    # Allow star imports in mathematical modules
-    core/advanced_mathematical_core.py:F403,F405
-    core/unified_math_system.py:F403,F405
     # Allow unused variables in mathematical formulas
     core/*:F841
     utils/*:F841
-    # Ignore specific files that have known issues
-    core/api/handlers/*:F401,F811,F821
-    core/biological_immune_error_handler.py:E501
-    core/chrono_resonance_weather_mapper.py:E501
-    core/comprehensive_integration_system.py:E501
-    core/correction_overlay_matrix.py:E501
-    core/data_pipeline_visualizer.py:E501
-    core/drift_shell_engine.py:E501
-    core/enhanced_acceleration_integration.py:E501
-    core/enhanced_integration_validator.py:E501
-    core/enhanced_live_execution_mapper.py:E501
-    core/enhanced_master_cycle_engine.py:E501
-    core/enhanced_profit_trading_strategy.py:E501
-    core/enhanced_strategy_framework.py:E501
-    core/risk_manager.py:E501
-    core/schwabot_integrated_launcher.py:E501
-    core/schwabot_integration_pipeline.py:E501
-    core/schwabot_unified_integration.py:E501
-    core/schwabot_unified_pipeline.py:E501
-    core/advanced_dualistic_trading_execution_system.py:E501
-    core/adaptive_immunity_vector.py:E501
-    core/basket_vector_linker.py:E501
-    core/brain_trading_engine.py:E501
-    core/ccxt_integration.py:E501
-    core/clean_math_foundation.py:E501
-    core/dualistic_state_machine.py:E501
-    core/entropy_monitor.py:E501
-    core/error_handling_and_flake_gate_prevention.py:E501
-    core/qsc_enhanced_profit_allocator.py:E501
-    core/quantum_static_core.py:E501
-    core/quantum_superpositional_trigger.py:E501
-    core/quantum_drift_shell_engine.py:E501
-    core/pure_profit_calculator.py:E501
-    core/advanced_settings_engine.py:F401
-    core/api/data_models.py:F401
-    core/api/exchange_connection.py:F401
-    core/api/handlers/alt_fear_greed.py:F811
-    core/api/handlers/base_handler.py:E265
-    core/api/handlers/coingecko.py:F811,F821
-    core/api/handlers/glassnode.py:F401,F811,F821,F841
-    core/api/handlers/whale_alert.py:F811
-    */migrations/*:E501
 
 # Statistics
 statistics = True
@@ -134,41 +74,3 @@ filename = *.py
 
 # Min version
 min-version = 3.8
-
-# Output format
-output-format = 
-    %(path)s:%(row)d:%(col)d: %(code)s %(text)s
-
-# Parse error format
-parse-error-format = 
-    %(path)s:%(row)d:%(col)d: %(code)s %(text)s
-
-# Plugin prefix
-plugin-prefix = flake8
-
-# Plugins
-plugins = 
-
-# Require plugins
-require-plugins = 
-
-# Tool Integrations
-use-pycodestyle = True
-use-pyflakes = True
-use-mccabe = True
-use-naming = True
-use-docstring = True
-use-import-order = True
-use-bandit = False # Set to True if you want to enable Bandit security checks
-use-black = True
-use-isort = True
-use-mypy = False # Set to True if you want to enable MyPy type checking
-use-pydocstyle = False # Set to True if you want to enable Pydocstyle docstring checks
-use-pylint = False # Set to True if you want to enable Pylint checks
-use-radon = False
-use-safety = False
-use-vulture = False
-use-xenon = False
-use-yapf = False
-use-autopep8 = False
-docstring-convention = google

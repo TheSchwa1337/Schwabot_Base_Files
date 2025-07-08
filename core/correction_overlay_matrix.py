@@ -1,9 +1,9 @@
 from typing import Any, Dict, List, Optional, Tuple, Union
-
-from core.drift_shell_engine import CorrectionFactors, ProfitVector
 from data.temporal_intelligence_integration import TemporalIntelligenceIntegration
 from hash_recollection.entropy_tracker import EntropyTracker
 from hash_recollection.pattern_utils import PatternUtils
+
+from core.drift_shell_engine import CorrectionFactors, ProfitVector
 
 # QuantumDriftShellEngine import fixed
 

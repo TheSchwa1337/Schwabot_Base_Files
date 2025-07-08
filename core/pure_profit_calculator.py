@@ -1,3 +1,14 @@
+    import cupy as cp
+import hashlib
+import logging
+import sys
+import time
+from dataclasses import dataclass, field, asdict
+from enum import Enum
+from typing import Any, Dict, List, Union
+
+    import numpy as np
+
 # !/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -23,35 +34,26 @@ CUDA Integration:
 
 # CUDA Integration with Fallback
 try:
-    import cupy as cp
     USING_CUDA = True
     _backend = 'cupy (GPU)'
     xp = cp
     la = cp.linalg
 except ImportError:
-    import numpy as np
     USING_CUDA = False
     _backend = 'numpy (CPU)'
     xp = np
     la = np.linalg
 
-import hashlib
-import logging
-import sys
-import time
-from dataclasses import dataclass, field, asdict
-from enum import Enum
-from typing import Any, Dict, List, Union
-
 logger = logging.getLogger(__name__)
 if USING_CUDA:
-    logger.info(f"⚡ PureProfitCalculator using GPU acceleration: {_backend}")
+    logger.info("⚡ PureProfitCalculator using GPU acceleration: {0}".format(_backend))
 else:
-    logger.info(f"🔄 PureProfitCalculator using CPU fallback: {_backend}")
+    logger.info("🔄 PureProfitCalculator using CPU fallback: {0}".format(_backend))
 
 
 class ProcessingMode(Enum):
     """Processing mode for profit calculations."""
+
     GPU_ACCELERATED = "gpu_accelerated"
     CPU_FALLBACK = "cpu_fallback"
     HYBRID = "hybrid"
@@ -91,12 +93,12 @@ class HistoryState:
 
     def get_hash_signature(self) -> str:
         """Generate deterministic hash signature for state."""
-        state_str = f"{
-            self.timestamp}_{
+        state_str = "{0}_{1}_{2}".format(
+            self.timestamp, 
             len(
-                self.hash_matrices)}_{
+                self.hash_matrices), 
                 len(
-                    self.tensor_buckets)}"
+                    self.tensor_buckets))
         return hashlib.sha256(state_str.encode()).hexdigest()
 
 
@@ -147,6 +149,7 @@ class ProfitResult:
 @dataclass
 class CalculationError:
     """Error information for profit calculations."""
+
     error_type: str
     error_message: str
     timestamp: float
@@ -164,8 +167,7 @@ class PureProfitCalculator:
     All computations are mathematically pure and deterministic.
     """
 
-    def __init__(self, strategy_params: StrategyParameters, 
-                 processing_mode: ProcessingMode = ProcessingMode.HYBRID):
+    def __init__(self, strategy_params: StrategyParameters, processing_mode: ProcessingMode = ProcessingMode.HYBRID):
         """Initialize pure profit calculator."""
         self.strategy_params = strategy_params
         self.processing_mode = processing_mode
@@ -180,7 +182,7 @@ class PureProfitCalculator:
             'cpu_operations': 0,
             'fallback_operations': 0,
             'error_count': 0,
-            'avg_calculation_time': 0.0
+            'avg_calculation_time': 0.0,
         }
 
         # Mathematical constants for profit calculation
@@ -188,14 +190,14 @@ class PureProfitCalculator:
         self.EULER_CONSTANT = 2.718281828459
         self.PI = 3.141592653589793
 
-        logger.info(f"Pure Profit Calculator initialized - Mathematical Mode with {processing_mode.value}")
+        logger.info("Pure Profit Calculator initialized - Mathematical Mode with {0}".format(processing_mode.value))
 
     def calculate_profit(
         self,
         market_data: MarketData,
         history_state: HistoryState,
         mode: ProfitCalculationMode = ProfitCalculationMode.BALANCED,
-        force_cpu: bool = False
+        force_cpu: bool = False,
     ) -> ProfitResult:
         """
         Calculate pure profit using mathematical framework.
@@ -287,9 +289,9 @@ class PureProfitCalculator:
                     "calculation_time": calculation_time,
                     "processing_backend": _backend,
                     "mode": mode.value,
-                    "calculation_id": self.calculation_count
+                    "calculation_id": self.calculation_count,
                 },
-                processing_mode=current_mode
+                processing_mode=current_mode,
             )
 
         except Exception as e:
@@ -298,18 +300,18 @@ class PureProfitCalculator:
                 error_message=str(e),
                 timestamp=time.time(),
                 fallback_used=True,
-                processing_mode=ProcessingMode.SAFE_MODE
+                processing_mode=ProcessingMode.SAFE_MODE,
             )
             self.error_log.append(error)
             self.performance_metrics['error_count'] += 1
-            logger.error(f"Error in profit calculation: {e}")
-            
+            logger.error("Error in profit calculation: {0}".format(e))
+
             # Return safe fallback result
             return self._create_fallback_result(market_data, history_state, mode)
 
-    def _calculate_base_profit_safe(self, market_data: MarketData, 
-                                   history_state: HistoryState, 
-                                   mode: ProcessingMode) -> float:
+    def _calculate_base_profit_safe(
+        self, market_data: MarketData, history_state: HistoryState, mode: ProcessingMode
+    ) -> float:
         """Calculate base profit with safe fallback."""
         try:
             if mode == ProcessingMode.GPU_ACCELERATED and USING_CUDA:
@@ -317,7 +319,7 @@ class PureProfitCalculator:
             else:
                 return self._calculate_base_profit_cpu(market_data, history_state)
         except Exception as e:
-            logger.warning(f"Base profit calculation failed, using fallback: {e}")
+            logger.warning("Base profit calculation failed, using fallback: {0}".format(e))
             self.performance_metrics['fallback_operations'] += 1
             return self._calculate_base_profit_fallback(market_data, history_state)
 
@@ -328,11 +330,11 @@ class PureProfitCalculator:
             price_factor = cp.array([market_data.btc_price / 100000.0])  # Normalize
             volume_factor = cp.array([market_data.usdc_volume / 1000000.0])  # Normalize
             momentum_factor = cp.array([market_data.momentum])
-            
+
             # Combine factors using GPU operations
             combined_factors = cp.concatenate([price_factor, volume_factor, momentum_factor])
             base_profit = float(cp.mean(combined_factors))
-            
+
             return max(-1.0, min(1.0, base_profit))
         except Exception:
             raise
@@ -344,10 +346,10 @@ class PureProfitCalculator:
             price_factor = market_data.btc_price / 100000.0  # Normalize
             volume_factor = market_data.usdc_volume / 1000000.0  # Normalize
             momentum_factor = market_data.momentum
-            
+
             # Combine factors
             base_profit = (price_factor + volume_factor + momentum_factor) / 3.0
-            
+
             return max(-1.0, min(1.0, base_profit))
         except Exception:
             raise
@@ -356,9 +358,9 @@ class PureProfitCalculator:
         """Fallback base profit calculation."""
         return 0.0  # Neutral profit
 
-    def _calculate_risk_adjustment_safe(self, market_data: MarketData, 
-                                       history_state: HistoryState, 
-                                       mode: ProcessingMode) -> float:
+    def _calculate_risk_adjustment_safe(
+        self, market_data: MarketData, history_state: HistoryState, mode: ProcessingMode
+    ) -> float:
         """Calculate risk adjustment with safe fallback."""
         try:
             if mode == ProcessingMode.GPU_ACCELERATED and USING_CUDA:
@@ -366,7 +368,7 @@ class PureProfitCalculator:
             else:
                 return self._calculate_risk_adjustment_cpu(market_data, history_state)
         except Exception as e:
-            logger.warning(f"Risk adjustment calculation failed, using fallback: {e}")
+            logger.warning("Risk adjustment calculation failed, using fallback: {0}".format(e))
             self.performance_metrics['fallback_operations'] += 1
             return 1.0  # No adjustment
 
@@ -375,7 +377,7 @@ class PureProfitCalculator:
         try:
             volatility_array = cp.array([market_data.volatility])
             risk_tolerance_array = cp.array([self.strategy_params.risk_tolerance])
-            
+
             # Calculate risk adjustment
             risk_adjustment = float(1.0 - (volatility_array * risk_tolerance_array)[0])
             return max(0.1, min(2.0, risk_adjustment))
@@ -390,9 +392,9 @@ class PureProfitCalculator:
         except Exception:
             raise
 
-    def _calculate_confidence_score_safe(self, market_data: MarketData, 
-                                        history_state: HistoryState, 
-                                        mode: ProcessingMode) -> float:
+    def _calculate_confidence_score_safe(
+        self, market_data: MarketData, history_state: HistoryState, mode: ProcessingMode
+    ) -> float:
         """Calculate confidence score with safe fallback."""
         try:
             if mode == ProcessingMode.GPU_ACCELERATED and USING_CUDA:
@@ -400,7 +402,7 @@ class PureProfitCalculator:
             else:
                 return self._calculate_confidence_score_cpu(market_data, history_state)
         except Exception as e:
-            logger.warning(f"Confidence score calculation failed, using fallback: {e}")
+            logger.warning("Confidence score calculation failed, using fallback: {0}".format(e))
             self.performance_metrics['fallback_operations'] += 1
             return 0.5  # Medium confidence
 
@@ -409,7 +411,7 @@ class PureProfitCalculator:
         try:
             volume_profile_array = cp.array([market_data.volume_profile])
             momentum_array = cp.array([abs(market_data.momentum)])
-            
+
             # Calculate confidence based on volume profile and momentum
             confidence = float(cp.mean(volume_profile_array + momentum_array) / 2.0)
             return max(0.0, min(1.0, confidence))
@@ -424,8 +426,7 @@ class PureProfitCalculator:
         except Exception:
             raise
 
-    def _calculate_tensor_contribution_safe(self, history_state: HistoryState, 
-                                           mode: ProcessingMode) -> float:
+    def _calculate_tensor_contribution_safe(self, history_state: HistoryState, mode: ProcessingMode) -> float:
         """Calculate tensor contribution with safe fallback."""
         try:
             if mode == ProcessingMode.GPU_ACCELERATED and USING_CUDA:
@@ -433,7 +434,7 @@ class PureProfitCalculator:
             else:
                 return self._calculate_tensor_contribution_cpu(history_state)
         except Exception as e:
-            logger.warning(f"Tensor contribution calculation failed, using fallback: {e}")
+            logger.warning("Tensor contribution calculation failed, using fallback: {0}".format(e))
             self.performance_metrics['fallback_operations'] += 1
             return 0.0  # No tensor contribution
 
@@ -442,7 +443,7 @@ class PureProfitCalculator:
         try:
             if not history_state.tensor_buckets:
                 return 0.0
-            
+
             # Calculate tensor contribution using GPU
             tensor_values = []
             for tensor in history_state.tensor_buckets.values():
@@ -452,7 +453,7 @@ class PureProfitCalculator:
                     # Convert to GPU if needed
                     gpu_tensor = cp.asarray(tensor)
                     tensor_values.append(float(cp.mean(gpu_tensor)))
-            
+
             if tensor_values:
                 return float(cp.mean(cp.array(tensor_values)))
             return 0.0
@@ -464,7 +465,7 @@ class PureProfitCalculator:
         try:
             if not history_state.tensor_buckets:
                 return 0.0
-            
+
             # Calculate tensor contribution using CPU
             tensor_values = []
             for tensor in history_state.tensor_buckets.values():
@@ -474,15 +475,14 @@ class PureProfitCalculator:
                     # Convert to CPU if needed
                     cpu_tensor = cp.asnumpy(tensor) if USING_CUDA else tensor
                     tensor_values.append(float(np.mean(cpu_tensor)))
-            
+
             if tensor_values:
                 return float(np.mean(tensor_values))
             return 0.0
         except Exception:
             raise
 
-    def _calculate_hash_contribution_safe(self, history_state: HistoryState, 
-                                         mode: ProcessingMode) -> float:
+    def _calculate_hash_contribution_safe(self, history_state: HistoryState, mode: ProcessingMode) -> float:
         """Calculate hash contribution with safe fallback."""
         try:
             if mode == ProcessingMode.GPU_ACCELERATED and USING_CUDA:
@@ -490,7 +490,7 @@ class PureProfitCalculator:
             else:
                 return self._calculate_hash_contribution_cpu(history_state)
         except Exception as e:
-            logger.warning(f"Hash contribution calculation failed, using fallback: {e}")
+            logger.warning("Hash contribution calculation failed, using fallback: {0}".format(e))
             self.performance_metrics['fallback_operations'] += 1
             return 0.0  # No hash contribution
 
@@ -510,7 +510,7 @@ class PureProfitCalculator:
                     # Convert to GPU if needed
                     gpu_matrix = cp.asarray(hash_matrix)
                     hash_values.append(float(cp.std(gpu_matrix)))
-            
+
             if hash_values:
                 return float(cp.mean(cp.array(hash_values)))
             return 0.0
@@ -533,7 +533,7 @@ class PureProfitCalculator:
                     # Convert to CPU if needed
                     cpu_matrix = cp.asnumpy(hash_matrix) if USING_CUDA else hash_matrix
                     hash_values.append(float(np.std(cpu_matrix)))
-            
+
             if hash_values:
                 return float(np.mean(hash_values))
             return 0.0
@@ -550,9 +550,9 @@ class PureProfitCalculator:
         }
         return multipliers.get(mode, 1.0)
 
-    def _create_fallback_result(self, market_data: MarketData, 
-                               history_state: HistoryState, 
-                               mode: ProfitCalculationMode) -> ProfitResult:
+    def _create_fallback_result(
+        self, market_data: MarketData, history_state: HistoryState, mode: ProfitCalculationMode
+    ) -> ProfitResult:
         """Create a safe fallback profit result."""
         return ProfitResult(
             timestamp=market_data.timestamp,
@@ -563,17 +563,17 @@ class PureProfitCalculator:
             hash_contribution=0.0,
             total_profit_score=0.0,
             calculation_metadata={"fallback": True, "error_recovery": True},
-            processing_mode=ProcessingMode.SAFE_MODE
+            processing_mode=ProcessingMode.SAFE_MODE,
         )
 
     def _update_performance_metrics(self, calculation_time: float) -> None:
         """Update performance metrics."""
         total_calculations = self.calculation_count
         current_avg = self.performance_metrics['avg_calculation_time']
-        
+
         self.performance_metrics['avg_calculation_time'] = (
-            (current_avg * (total_calculations - 1) + calculation_time) / total_calculations
-        )
+            current_avg * (total_calculations - 1) + calculation_time
+        ) / total_calculations
 
     def get_calculation_metrics(self) -> Dict[str, Any]:
         """Get comprehensive calculation metrics."""
@@ -589,7 +589,7 @@ class PureProfitCalculator:
                 "risk_tolerance": self.strategy_params.risk_tolerance,
                 "profit_target": self.strategy_params.profit_target,
                 "position_size": self.strategy_params.position_size,
-            }
+            },
         }
 
     def get_error_summary(self) -> Dict[str, Any]:
@@ -598,12 +598,12 @@ class PureProfitCalculator:
         for error in self.error_log:
             error_type = error.error_type
             error_counts[error_type] = error_counts.get(error_type, 0) + 1
-        
+
         return {
             'total_errors': len(self.error_log),
             'error_types': error_counts,
             'fallback_usage': sum(1 for e in self.error_log if e.fallback_used),
-            'recent_errors': [e for e in self.error_log[-10:]]  # Last 10 errors
+            'recent_errors': [e for e in self.error_log[-10:]],  # Last 10 errors
         }
 
     def validate_profit_purity(self, market_data: MarketData, history_state: HistoryState) -> bool:
@@ -613,25 +613,24 @@ class PureProfitCalculator:
             if 'zpe_core' in sys.modules or 'zbe_core' in sys.modules:
                 logger.warning("ZPE/ZBE systems detected - profit calculation may not be pure")
                 return False
-            
+
             # Validate mathematical properties
             result = self.calculate_profit(market_data, history_state)
-            
+
             # Check bounds
             if not (-1.0 <= result.total_profit_score <= 1.0):
                 logger.warning("Profit score out of bounds")
                 return False
-            
+
             # Check for NaN or infinite values
-            if (xp.isnan(result.total_profit_score) or 
-                xp.isinf(result.total_profit_score)):
+            if xp.isnan(result.total_profit_score) or xp.isinf(result.total_profit_score):
                 logger.warning("Invalid profit score detected")
                 return False
-            
+
             return True
 
         except Exception as e:
-            logger.error(f"Profit purity validation failed: {e}")
+            logger.error("Profit purity validation failed: {0}".format(e))
             return False
 
     def reset_error_log(self) -> None:
@@ -641,16 +640,12 @@ class PureProfitCalculator:
 
     def flash_screen(self) -> None:
         """Display a startup flash screen with current parameters and state."""
-        banner = (
-            "\n" + "=" * 60 + "\n" +
-            "🚀 SCHWABOT PURE PROFIT CALCULATOR 🚀\n" +
-            "=" * 60 + "\n"
-        )
+        banner = "\n" + "=" * 60 + "\n" + "🚀 SCHWABOT PURE PROFIT CALCULATOR 🚀\n" + "=" * 60 + "\n"
         print(banner)
-        print(f"Risk tolerance       : {self.strategy_params.risk_tolerance}")
-        print(f"Profit target        : {self.strategy_params.profit_target}")
-        print(f"Position size        : {self.strategy_params.position_size}")
-        print(f"Processing mode      : {self.processing_mode.value} -> Backend: {_backend}")
+        print("Risk tolerance       : {0}".format(self.strategy_params.risk_tolerance))
+        print("Profit target        : {0}".format(self.strategy_params.profit_target))
+        print("Position size        : {0}".format(self.strategy_params.position_size))
+        print("Processing mode      : {0} -> Backend: {1}".format(self.processing_mode.value, _backend))
         print("=" * 60)
 
     def explain_last_calculation(self, detail_level: str = "summary") -> str:
@@ -664,18 +659,19 @@ class PureProfitCalculator:
         mode = self.last_calculation_data["processing_mode"]
 
         lines = [
-            "📊 LAST PROFIT CALCULATION", "-" * 40,
-            f"Processing mode : {mode}",
-            f"BTC price       : {md['btc_price'] if isinstance(md, dict) else md.btc_price}",
-            f"Base profit     : {result['base_profit'] if isinstance(result, dict) else result.base_profit:.6f}",
-            f"Risk-adjusted   : {result['risk_adjusted_profit'] if isinstance(result, dict) else result.risk_adjusted_profit:.6f}",
-            f"Confidence      : {result['confidence_score'] if isinstance(result, dict) else result.confidence_score:.4f}",
-            f"Tensor contrib  : {result['tensor_contribution'] if isinstance(result, dict) else result.tensor_contribution:.6f}",
-            f"Hash contrib    : {result['hash_contribution'] if isinstance(result, dict) else result.hash_contribution:.6f}",
-            f"Total score     : {result['total_profit_score'] if isinstance(result, dict) else result.total_profit_score:.6f}",
-            f"Hash matrices   : {hist['hash_matrices']}",
-            f"Tensor buckets  : {hist['tensor_buckets']}",
-            f"Profit memory   : {hist['profit_memory_length']}",
+            "📊 LAST PROFIT CALCULATION",
+            "-" * 40,
+            "Processing mode : {0}".format(mode),
+            "BTC price       : {0}".format(md['btc_price'] if isinstance(md, dict) else md.btc_price),
+            "Base profit     : {0}".format(result['base_profit'] if isinstance(result, dict) else result.base_profit:.6f),
+            "Risk-adjusted   : {0}".format(result['risk_adjusted_profit'] if isinstance(result, dict) else result.risk_adjusted_profit:.6f),
+            "Confidence      : {0}".format(result['confidence_score'] if isinstance(result, dict) else result.confidence_score:.4f),
+            "Tensor contrib  : {0}".format(result['tensor_contribution'] if isinstance(result, dict) else result.tensor_contribution:.6f),
+            "Hash contrib    : {0}".format(result['hash_contribution'] if isinstance(result, dict) else result.hash_contribution:.6f),
+            "Total score     : {0}".format(result['total_profit_score'] if isinstance(result, dict) else result.total_profit_score:.6f),
+            "Hash matrices   : {0}".format(hist['hash_matrices']),
+            "Tensor buckets  : {0}".format(hist['tensor_buckets']),
+            "Profit memory   : {0}".format(hist['profit_memory_length']),
         ]
 
         if detail_level == "full":
@@ -690,7 +686,7 @@ def assert_zpe_isolation() -> None:
         raise ImportError("ZPE core detected - profit calculation is not pure")
     if 'zbe_core' in sys.modules:
         raise ImportError("ZBE core detected - profit calculation is not pure")
-    
+
     logger.info("✅ ZPE/ZBE isolation verified - profit calculation is pure")
 
 
@@ -704,12 +700,13 @@ def create_sample_market_data() -> MarketData:
         volatility=0.02,
         momentum=0.01,
         volume_profile=0.8,
-        on_chain_signals={"whale_activity": 0.3, "network_health": 0.9}
+        on_chain_signals={"whale_activity": 0.3, "network_health": 0.9},
     )
 
 
-def create_pure_profit_calculator(strategy_params: StrategyParameters = None,
-                                 processing_mode: ProcessingMode = ProcessingMode.HYBRID) -> PureProfitCalculator:
+def create_pure_profit_calculator(
+    strategy_params: StrategyParameters = None, processing_mode: ProcessingMode = ProcessingMode.HYBRID
+) -> PureProfitCalculator:
     """Create a new pure profit calculator instance."""
     if strategy_params is None:
         strategy_params = StrategyParameters()
@@ -738,9 +735,9 @@ def demo_pure_profit_calculation():
 
     # Show metrics
     metrics = calculator.get_calculation_metrics()
-    print(f"\nCalculations: {metrics['total_calculations']}")
-    print(f"Avg time: {metrics['avg_calculation_time']:.6f}s")
-    print(f"Backend: {metrics['backend']}")
+    print("\nCalculations: {0}".format(metrics['total_calculations']))
+    print("Avg time: {0}s".format(metrics['avg_calculation_time']:.6f))
+    print("Backend: {0}".format(metrics['backend']))
 
 
 if __name__ == "__main__":

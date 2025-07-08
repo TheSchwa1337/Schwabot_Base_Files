@@ -1,14 +1,14 @@
+import logging
+import time
+from dataclasses import dataclass, field
+from typing import Any, Dict, List, Optional
+
 # !/usr/bin/env python3
 """
 Unified Trade Router
 Handles all routing between raw market data → signal construction → execution logic.
 Enhanced to work with the improved trading engine integration.
 """
-
-import logging
-import time
-from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -128,9 +128,7 @@ class TradingError(Exception):
     pass
 
 
-def generate_trade_signal(
-    asset: str, price: float, volume: float, metadata: Dict[str, Any]
-) -> TradeSignal:
+def generate_trade_signal(asset: str, price: float, volume: float, metadata: Dict[str, Any]) -> TradeSignal:
     """Generate trade signal with enhanced validation."""
     if price <= 0:
         raise ValidationError("Price must be positive")
@@ -149,7 +147,7 @@ def generate_trade_signal(
     order_side = OrderSide.BUY if metadata.get("trend", "up") == "up" else OrderSide.SELL
 
     return TradeSignal(
-        id=f"signal_{int(time.time() * 1000)}",
+        id="signal_{0}".format(int(time.time() * 1000)),
         asset=asset,
         price=price,
         volume=volume,
@@ -163,7 +161,7 @@ def generate_trade_signal(
 
 def log_trading_error(error: Exception, severity: ErrorSeverity) -> None:
     """Log trading error with severity."""
-    logger.error(f"[{severity}] Trading error: {error}")
+    logger.error("[{0}] Trading error: {1}".format(severity, error))
 
 
 class UnifiedTradeRouter:
@@ -203,27 +201,25 @@ class UnifiedTradeRouter:
         """
         try:
             # Use the enhanced signal generation function
-            signal = generate_trade_signal(
-                asset=asset, price=price, volume=volume, metadata=metadata or {}
-            )
+            signal = generate_trade_signal(asset=asset, price=price, volume=volume, metadata=metadata or {})
 
             self.signal_history.append(signal)
             self.success_count += 1
 
-            logger.info(f"Trade Signal routed successfully: {signal.id}")
-            logger.debug(f"Signal details: {signal.to_dict()}")
+            logger.info("Trade Signal routed successfully: {0}".format(signal.id))
+            logger.debug("Signal details: {0}".format(signal.to_dict()))
 
             return signal
 
         except ValidationError as ve:
             self.error_count += 1
             log_trading_error(ve, ErrorSeverity.HIGH)
-            raise TradingError(f"Signal validation failed: {ve}")
+            raise TradingError("Signal validation failed: {0}".format(ve))
 
         except Exception as e:
             self.error_count += 1
             log_trading_error(e, ErrorSeverity.CRITICAL)
-            raise TradingError(f"Signal generation failed: {e}")
+            raise TradingError("Signal generation failed: {0}".format(e))
 
     def route_trade_execution(
         self,
@@ -256,7 +252,7 @@ class UnifiedTradeRouter:
 
             # Create execution with enhanced tracking
             execution = TradeExecution(
-                id=f"exec_{int(time.time() * 1000)}",
+                id="exec_{0}".format(int(time.time() * 1000)),
                 signal_id=signal.id,
                 asset=signal.asset,
                 execution_price=execution_price,
@@ -273,20 +269,20 @@ class UnifiedTradeRouter:
             self.execution_log.append(execution)
             self.success_count += 1
 
-            logger.info(f"Trade Execution routed successfully: {execution.id}")
-            logger.debug(f"Execution details: {execution.to_dict()}")
+            logger.info("Trade Execution routed successfully: {0}".format(execution.id))
+            logger.debug("Execution details: {0}".format(execution.to_dict()))
 
             return execution
 
         except ValidationError as ve:
             self.error_count += 1
             log_trading_error(ve, ErrorSeverity.HIGH)
-            raise TradingError(f"Execution validation failed: {ve}")
+            raise TradingError("Execution validation failed: {0}".format(ve))
 
         except Exception as e:
             self.error_count += 1
             log_trading_error(e, ErrorSeverity.CRITICAL)
-            raise TradingError(f"Execution creation failed: {e}")
+            raise TradingError("Execution creation failed: {0}".format(e))
 
     def get_performance_metrics(self) -> Dict[str, Any]:
         """
@@ -297,31 +293,23 @@ class UnifiedTradeRouter:
         """
         try:
             total_operations = self.success_count + self.error_count
-            success_rate = (
-                (self.success_count / total_operations * 100) if total_operations > 0 else 0
-            )
+            success_rate = (self.success_count / total_operations * 100) if total_operations > 0 else 0
 
             # Calculate average signal strength
             avg_signal_strength = 0
             if self.signal_history:
-                avg_signal_strength = sum(s.signal_strength for s in self.signal_history) / len(
-                    self.signal_history
-                )
+                avg_signal_strength = sum(s.signal_strength for s in self.signal_history) / len(self.signal_history)
 
             # Calculate average mathematical score
             avg_math_score = 0
             if self.signal_history:
-                avg_math_score = sum(s.mathematical_score for s in self.signal_history) / len(
-                    self.signal_history
-                )
+                avg_math_score = sum(s.mathematical_score for s in self.signal_history) / len(self.signal_history)
 
             # Calculate average performance score
             avg_performance = 0
             valid_executions = [e for e in self.execution_log if e.performance_score is not None]
             if valid_executions:
-                avg_performance = sum(e.performance_score for e in valid_executions) / len(
-                    valid_executions
-                )
+                avg_performance = sum(e.performance_score for e in valid_executions) / len(valid_executions)
 
             return {
                 "total_signals": len(self.signal_history),
@@ -333,23 +321,19 @@ class UnifiedTradeRouter:
                 "average_mathematical_score": round(avg_math_score, 4),
                 "average_performance_score": round(avg_performance, 4),
                 "last_signal_time": (
-                    time.strftime(
-                        "%Y-%m-%d %H:%M:%S", time.localtime(self.signal_history[-1].timestamp)
-                    )
+                    time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(self.signal_history[-1].timestamp))
                     if self.signal_history
                     else None
                 ),
                 "last_execution_time": (
-                    time.strftime(
-                        "%Y-%m-%d %H:%M:%S", time.localtime(self.execution_log[-1].timestamp)
-                    )
+                    time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(self.execution_log[-1].timestamp))
                     if self.execution_log
                     else None
                 ),
             }
 
         except Exception as e:
-            logger.error(f"Error calculating performance metrics: {e}")
+            logger.error("Error calculating performance metrics: {0}".format(e))
             return {
                 "error": "Failed to calculate metrics",
                 "total_signals": len(self.signal_history),

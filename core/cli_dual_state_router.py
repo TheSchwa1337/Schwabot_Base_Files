@@ -1,3 +1,16 @@
+from core.system.dual_state_router import DualStateRouter
+import argparse
+import asyncio
+import json
+import sys
+import time
+from pathlib import Path
+from typing import Any, Dict, List, Optional
+
+from utils.safe_print import error, info, safe_print, success, warn
+from core.gpu_handlers import GPUHandlers
+from core.cpu_handlers import CPUHandlers
+
 #!/usr/bin/env python3
 """
 Dual State Router CLI - CPU/GPU Orchestration Control
@@ -12,18 +25,6 @@ Features:
 - Real-time performance monitoring
 - Strategy tier management
 """
-
-from utils.safe_print import error, info, safe_print, success, warn
-from core.system.dual_state_router import DualStateRouter
-from core.gpu_handlers import GPUHandlers
-from core.cpu_handlers import CPUHandlers
-import argparse
-import asyncio
-import json
-import sys
-import time
-from pathlib import Path
-from typing import Any, Dict, List, Optional
 
 # Add project root to path
 sys.path.append(str(Path(__file__).parent.parent))
@@ -58,7 +59,7 @@ class DualStateRouterCLI:
             success("✅ Dual State Router System initialized successfully")
 
         except Exception as e:
-            error(f"❌ Failed to initialize system: {e}")
+            error("❌ Failed to initialize system: {0}".format(e))
             return False
 
         return True
@@ -70,11 +71,11 @@ class DualStateRouterCLI:
         # Test CPU handlers
         test_data = {"price": 50000.0, "volume": 1000.0, "volatility": 0.15}
         cpu_result = await self.cpu_handlers.process_market_data(test_data)
-        info(f"CPU test result: {cpu_result.get('status', 'unknown')}")
+        info("CPU test result: {0}".format(cpu_result.get('status', 'unknown')))
 
         # Test GPU handlers (with fallback)
         gpu_result = await self.gpu_handlers.process_market_data(test_data)
-        info(f"GPU test result: {gpu_result.get('status', 'unknown')}")
+        info("GPU test result: {0}".format(gpu_result.get('status', 'unknown')))
 
         # Test router
         router_result = await self.router.route_task(
@@ -86,10 +87,10 @@ class DualStateRouterCLI:
             },
         )
         info(
-            f"Router test result: {
+            "Router test result: {0}".format(
                 router_result.get(
                     'compute_mode',
-                    'unknown')}"
+                    'unknown'))
         )
 
     async def show_system_status(self):
@@ -104,52 +105,52 @@ class DualStateRouterCLI:
         # Router status
         router_stats = self.router.get_statistics()
         info(f"📊 Router Statistics:")
-        info(f"  Total Tasks: {router_stats.get('total_tasks', 0)}")
-        info(f"  CPU Tasks: {router_stats.get('cpu_tasks', 0)}")
-        info(f"  GPU Tasks: {router_stats.get('gpu_tasks', 0)}")
+        info("  Total Tasks: {0}".format(router_stats.get('total_tasks', 0)))
+        info("  CPU Tasks: {0}".format(router_stats.get('cpu_tasks', 0)))
+        info("  GPU Tasks: {0}".format(router_stats.get('gpu_tasks', 0)))
         info(
-            f"  Average Response Time: {
+            "  Average Response Time: {0}s".format(
                 router_stats.get(
                     'avg_response_time',
-                    0):.3f}s"
+                    0):.3f)
         )
 
         # Profit registry status
         registry_stats = self.router.get_profit_registry_stats()
         info(f"💰 Profit Registry:")
         info(
-            f"  Total Strategies: {
+            "  Total Strategies: {0}".format(
                 registry_stats.get(
                     'total_strategies',
-                    0)}"
+                    0))
         )
-        info(f"  Short-term Strategies: {registry_stats.get('short_term', 0)}")
-        info(f"  Mid-term Strategies: {registry_stats.get('mid_term', 0)}")
-        info(f"  Long-term Strategies: {registry_stats.get('long_term', 0)}")
+        info("  Short-term Strategies: {0}".format(registry_stats.get('short_term', 0)))
+        info("  Mid-term Strategies: {0}".format(registry_stats.get('mid_term', 0)))
+        info("  Long-term Strategies: {0}".format(registry_stats.get('long_term', 0)))
 
         # Performance metrics
         performance = self.router.get_performance_metrics()
         info(f"⚡ Performance Metrics:")
         info(
-            f"  CPU Utilization: {
+            "  CPU Utilization: {0}%".format(
                 performance.get(
                     'cpu_utilization',
-                    0):.1f}%"
+                    0):.1f)
         )
         info(
-            f"  GPU Utilization: {
+            "  GPU Utilization: {0}%".format(
                 performance.get(
                     'gpu_utilization',
-                    0):.1f}%"
+                    0):.1f)
         )
-        info(f"  Memory Usage: {performance.get('memory_usage', 0):.1f}MB")
+        info("  Memory Usage: {0}MB".format(performance.get('memory_usage', 0):.1f))
 
         # System load
         system_load = self.router.get_system_load()
         info(f"🖥️  System Load:")
-        info(f"  CPU Load: {system_load.get('cpu_load', 0):.2f}")
-        info(f"  GPU Load: {system_load.get('gpu_load', 0):.2f}")
-        info(f"  Memory Load: {system_load.get('memory_load', 0):.2f}")
+        info("  CPU Load: {0}".format(system_load.get('cpu_load', 0):.2f))
+        info("  GPU Load: {0}".format(system_load.get('gpu_load', 0):.2f))
+        info("  Memory Load: {0}".format(system_load.get('memory_load', 0):.2f))
 
     async def show_profit_registry(self, limit: int = 10):
         """Display profit registry entries."""
@@ -157,7 +158,7 @@ class DualStateRouterCLI:
             error("System not initialized. Run 'init' first.")
             return
 
-        info(f"💰 PROFIT REGISTRY (Top {limit})")
+        info("💰 PROFIT REGISTRY (Top {0})".format(limit))
         info("=" * 40)
 
         registry_entries = self.router.get_profit_registry_entries(limit=limit)
@@ -167,17 +168,17 @@ class DualStateRouterCLI:
             return
 
         for i, entry in enumerate(registry_entries, 1):
-            info(f"{i}. Strategy: {entry.get('strategy_name', 'Unknown')}")
-            info(f"   Tier: {entry.get('strategy_tier', 'Unknown')}")
-            info(f"   Profit Density: {entry.get('profit_density', 0):.3f}")
-            info(f"   Success Rate: {entry.get('success_rate', 0):.1f}%")
+            info("{0}. Strategy: {1}".format(i, entry.get('strategy_name', 'Unknown')))
+            info("   Tier: {0}".format(entry.get('strategy_tier', 'Unknown')))
+            info("   Profit Density: {0}".format(entry.get('profit_density', 0):.3f))
+            info("   Success Rate: {0}%".format(entry.get('success_rate', 0):.1f))
             info(
-                f"   Preferred Mode: {
+                "   Preferred Mode: {0}".format(
                     entry.get(
                         'preferred_compute_mode',
-                        'Unknown')}"
+                        'Unknown'))
             )
-            info(f"   Last Updated: {entry.get('last_updated', 'Unknown')}")
+            info("   Last Updated: {0}".format(entry.get('last_updated', 'Unknown')))
             info("")
 
     async def route_test_task(self, task_type: str, strategy_tier: str, profit_density: float):
@@ -196,19 +197,19 @@ class DualStateRouterCLI:
             "compute_time": 0.1,
         }
 
-        info(f"Task Type: {task_type}")
-        info(f"Strategy Tier: {strategy_tier}")
-        info(f"Profit Density: {profit_density}")
+        info("Task Type: {0}".format(task_type))
+        info("Strategy Tier: {0}".format(strategy_tier))
+        info("Profit Density: {0}".format(profit_density))
 
         # Route the task
         start_time = time.time()
         result = await self.router.route_task(task_type, strategy_metadata)
         routing_time = time.time() - start_time
 
-        info(f"Routing Decision: {result.get('compute_mode', 'Unknown')}")
-        info(f"Routing Time: {routing_time:.3f}s")
-        info(f"Confidence: {result.get('confidence', 0):.3f}")
-        info(f"Reason: {result.get('reason', 'No reason provided')}")
+        info("Routing Decision: {0}".format(result.get('compute_mode', 'Unknown')))
+        info("Routing Time: {0}s".format(routing_time:.3f))
+        info("Confidence: {0}".format(result.get('confidence', 0):.3f))
+        info("Reason: {0}".format(result.get('reason', 'No reason provided')))
 
     async def process_btc_price(self, price: float, volume: float, volatility: float):
         """Process BTC price data through the dual-state system."""
@@ -226,15 +227,15 @@ class DualStateRouterCLI:
             "timestamp": time.time(),
         }
 
-        info(f"BTC Price: ${price:,.2f}")
-        info(f"Volume: {volume:,.0f}")
-        info(f"Volatility: {volatility:.3f}")
+        info("BTC Price: ${0}".format(price:,.2f))
+        info("Volume: {0}".format(volume:,.0f))
+        info("Volatility: {0}".format(volatility:.3f))
 
         # Process through different strategies
         strategies = ["short", "mid", "long"]
 
         for strategy in strategies:
-            info(f"\n📈 Processing {strategy.upper()}-term strategy...")
+            info("\n📈 Processing {0}-term strategy...".format(strategy.upper()))
 
             strategy_metadata = {
                 "strategy_tier": strategy,
@@ -252,14 +253,14 @@ class DualStateRouterCLI:
                 result = await self.gpu_handlers.process_market_data(market_data)
 
             info(
-                f"  Compute Mode: {
+                "  Compute Mode: {0}".format(
                     routing_result.get(
                         'compute_mode',
-                        'Unknown')}"
+                        'Unknown'))
             )
-            info(f"  Processing Time: {result.get('processing_time', 0):.3f}s")
-            info(f"  Signal Strength: {result.get('signal_strength', 0):.3f}")
-            info(f"  Confidence: {result.get('confidence', 0):.3f}")
+            info("  Processing Time: {0}s".format(result.get('processing_time', 0):.3f))
+            info("  Signal Strength: {0}".format(result.get('signal_strength', 0):.3f))
+            info("  Confidence: {0}".format(result.get('confidence', 0):.3f))
 
     async def show_strategy_performance(self, strategy_name: Optional[str] = None):
         """Display strategy performance metrics."""
@@ -274,34 +275,34 @@ class DualStateRouterCLI:
             # Show specific strategy
             performance = self.router.get_strategy_performance(strategy_name)
             if performance:
-                info(f"Strategy: {strategy_name}")
+                info("Strategy: {0}".format(strategy_name))
                 info(
-                    f"Total Executions: {
+                    "Total Executions: {0}".format(
                         performance.get(
                             'total_executions',
-                            0)}"
+                            0))
                 )
                 info(
-                    f"Success Rate: {
+                    "Success Rate: {0}%".format(
                         performance.get(
                             'success_rate',
-                            0):.1f}%"
+                            0):.1f)
                 )
-                info(f"Average Profit: {performance.get('avg_profit', 0):.3f}")
+                info("Average Profit: {0}".format(performance.get('avg_profit', 0):.3f))
                 info(
-                    f"Preferred Compute Mode: {
+                    "Preferred Compute Mode: {0}".format(
                         performance.get(
                             'preferred_compute_mode',
-                            'Unknown')}"
+                            'Unknown'))
                 )
                 info(
-                    f"Last Execution: {
+                    "Last Execution: {0}".format(
                         performance.get(
                             'last_execution',
-                            'Unknown')}"
+                            'Unknown'))
                 )
             else:
-                warn(f"Strategy '{strategy_name}' not found.")
+                warn("Strategy '{0}' not found.".format(strategy_name))
         else:
             # Show all strategies
             all_performance = self.router.get_all_strategy_performance()
@@ -311,15 +312,15 @@ class DualStateRouterCLI:
                 return
 
             for strategy, metrics in all_performance.items():
-                info(f"\n📈 {strategy}:")
-                info(f"  Executions: {metrics.get('total_executions', 0)}")
-                info(f"  Success Rate: {metrics.get('success_rate', 0):.1f}%")
-                info(f"  Avg Profit: {metrics.get('avg_profit', 0):.3f}")
+                info("\n📈 {0}:".format(strategy))
+                info("  Executions: {0}".format(metrics.get('total_executions', 0)))
+                info("  Success Rate: {0}%".format(metrics.get('success_rate', 0):.1f))
+                info("  Avg Profit: {0}".format(metrics.get('avg_profit', 0):.3f))
                 info(
-                    f"  Compute Mode: {
+                    "  Compute Mode: {0}".format(
                         metrics.get(
                             'preferred_compute_mode',
-                            'Unknown')}"
+                            'Unknown'))
                 )
 
     async def reset_system(self):
@@ -372,9 +373,7 @@ class DualStateRouterCLI:
                 elif command.startswith("btc "):
                     parts = command.split()
                     if len(parts) >= 4:
-                        await self.process_btc_price(
-                            float(parts[1]), float(parts[2]), float(parts[3])
-                        )
+                        await self.process_btc_price(float(parts[1]), float(parts[2]), float(parts[3]))
                     else:
                         error("Usage: btc <price> <volume> <volatility>")
                 elif command.startswith("performance"):
@@ -382,13 +381,13 @@ class DualStateRouterCLI:
                     strategy = parts[1] if len(parts) > 1 else None
                     await self.show_strategy_performance(strategy)
                 else:
-                    warn(f"Unknown command: {command}")
+                    warn("Unknown command: {0}".format(command))
 
             except KeyboardInterrupt:
                 info("\n👋 Goodbye!")
                 break
             except Exception as e:
-                error(f"Error: {e}")
+                error("Error: {0}".format(e))
 
     def _show_help(self):
         """Show help information."""
@@ -404,15 +403,11 @@ class DualStateRouterCLI:
 
 async def main():
     """Main CLI entry point."""
-    parser = argparse.ArgumentParser(
-        description="Dual State Router CLI - CPU/GPU Orchestration Control"
-    )
+    parser = argparse.ArgumentParser(description="Dual State Router CLI - CPU/GPU Orchestration Control")
     parser.add_argument("--init", action="store_true", help="Initialize the system")
     parser.add_argument("--status", action="store_true", help="Show system status")
     parser.add_argument("--registry", action="store_true", help="Show profit registry")
-    parser.add_argument(
-        "--test", nargs=3, metavar=("TYPE", "TIER", "DENSITY"), help="Test task routing"
-    )
+    parser.add_argument("--test", nargs=3, metavar=("TYPE", "TIER", "DENSITY"), help="Test task routing")
     parser.add_argument(
         "--btc",
         nargs=3,
@@ -420,9 +415,7 @@ async def main():
         type=float,
         help="Process BTC price data",
     )
-    parser.add_argument(
-        "--performance", nargs="?", metavar="STRATEGY", help="Show performance metrics"
-    )
+    parser.add_argument("--performance", nargs="?", metavar="STRATEGY", help="Show performance metrics")
     parser.add_argument("--reset", action="store_true", help="Reset system")
     parser.add_argument("--interactive", action="store_true", help="Run interactive mode")
 

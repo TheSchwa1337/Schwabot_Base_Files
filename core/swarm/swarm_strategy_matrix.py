@@ -1,10 +1,13 @@
-import numpy as np
 from typing import Any, Dict, List, Optional
+
+import numpy as np
+
 
 class SwarmStrategyMatrix:
     """
     Minimal SwarmStrategyMatrix for strategy matrix logic and import integrity.
     """
+
     def __init__(self, config: Optional[Dict[str, Any]] = None):
         self.config = config or self._default_config()
         self.nodes: Dict[str, Any] = {}
@@ -27,11 +30,11 @@ class SwarmStrategyMatrix:
             'min_confidence': 0.3,
         }
 
-    def _initialize_swarm_nodes(self):
+    def _initialize_swarm_nodes(self) -> None:
         # Minimal stub: no-op
         pass
 
-    def swarm_vector_response(self, market_conditions=None, immune_activation=0.0):
+    def swarm_vector_response(self, market_conditions=None, immune_activation=0.0) -> Dict[str, Any]:
         # Return a neutral vector and dummy metadata
         return {
             'swarm_vector': np.zeros(3),

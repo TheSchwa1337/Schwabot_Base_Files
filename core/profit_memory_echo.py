@@ -548,11 +548,11 @@ else:
 
 
 
-        print(f"Current Tick {current_tick_3} (new offset): No memory projection found.
+        print("Current Tick {0} (new offset): No memory projection found.
 
 
 
-)print(fMetrics: {memory_echo.get_metrics()})
+)print(fMetrics: {1})
 
 
 
@@ -564,7 +564,7 @@ memory_echo.reset()
 
 
 
-print(f"Metrics after reset: {memory_echo.get_metrics()})
+print(f".format(current_tick_3, memory_echo.get_metrics())Metrics after reset: {memory_echo.get_metrics()})
 
 
 

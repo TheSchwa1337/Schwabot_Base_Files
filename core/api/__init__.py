@@ -1,13 +1,13 @@
+from .data_models import APICredentials, MarketData, OrderRequest, OrderResponse, PortfolioPosition
+from .enums import ConnectionStatus, ExchangeType, OrderSide, OrderType
+from .exchange_connection import ExchangeConnection
+from .integration_manager import ApiIntegrationManager
+
 # !/usr/bin/env python3
 
 
 # -*- coding: utf-8 -*-
 
-
-from .data_models import APICredentials, MarketData, OrderRequest, OrderResponse, PortfolioPosition
-from .enums import ConnectionStatus, ExchangeType, OrderSide, OrderType
-from .exchange_connection import ExchangeConnection
-from .integration_manager import ApiIntegrationManager
 
 """Schwabot Core API Package
 

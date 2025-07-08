@@ -277,7 +277,7 @@ total_measurements: 0,corrected_operations: 0,avg_latency_ms": 0.0,drift_correct
 
 
 
-logger.info(f" Latency Compensator initialized with {max_acceptable_latency_ms}ms threshold
+logger.info(" Latency Compensator initialized with {0}ms threshold
 
 
 
@@ -314,7 +314,7 @@ Returns:
 
 
 
-            Start timestamp in nanoseconds"start_time_ns = time.perf_counter_ns()
+            Start timestamp in nanoseconds".format(max_acceptable_latency_ms)start_time_ns = time.perf_counter_ns()
 
 
 

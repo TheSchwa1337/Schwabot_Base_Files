@@ -1,11 +1,12 @@
-# !/usr/bin/env python3
-"""
-Mathlib v3 Visualizer - Minimal stub for import and placeholder plot
-"""
 from io import BytesIO
 
 import matplotlib.pyplot as plt
 import numpy as np
+
+# !/usr/bin/env python3
+"""
+Mathlib v3 Visualizer - Minimal stub for import and placeholder plot
+"""
 
 
 def get_placeholder_plot() -> bytes:

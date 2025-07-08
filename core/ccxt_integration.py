@@ -1,3 +1,7 @@
+import logging
+from dataclasses import dataclass
+from typing import Any, Dict, Optional
+
 # !/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -6,10 +10,6 @@ CCXT Integration Module - Functional Stub
 This module provides basic CCXT exchange integration functionality.
 Currently implemented as a working stub to ensure system stability.
 """
-
-import logging
-from dataclasses import dataclass
-from typing import Any, Dict, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -47,19 +47,17 @@ class CCXTIntegration:
                     "sync": None,  # Placeholder for sync exchange
                     "async": None,  # Placeholder for async exchange
                 }
-                logger.info(f"Initialized exchange: {exchange_id} (stub)")
+                logger.info("Initialized exchange: {0} (stub)".format(exchange_id))
 
             self.initialized = True
         except Exception as e:
-            logger.error(f"Failed to initialize exchanges: {e}")
+            logger.error("Failed to initialize exchanges: {0}".format(e))
 
-    async def fetch_order_book(
-        self, exchange_id: str, symbol: str, limit: int = 20
-    ) -> Optional[OrderBookSnapshot]:
+    async def fetch_order_book(self, exchange_id: str, symbol: str, limit: int = 20) -> Optional[OrderBookSnapshot]:
         """Fetch order book from exchange."""
         try:
             # Stub implementation - returns mock data
-            logger.info(f"Fetching order book for {symbol} from {exchange_id} (stub)")
+            logger.info("Fetching order book for {0} from {1} (stub)".format(symbol, exchange_id))
 
             # Mock order book data
             timestamp = 1640000000.0
@@ -87,7 +85,7 @@ class CCXTIntegration:
             )
 
         except Exception as e:
-            logger.error(f"Failed to fetch order book: {e}")
+            logger.error("Failed to fetch order book: {0}".format(e))
             return None
 
     def _determine_granularity(self, price: float) -> str:
@@ -126,7 +124,7 @@ def demo_ccxt_integration():
     config = {"binance": {"sandbox": True}, "coinbase": {"sandbox": True}}
     integration.initialize_exchanges(config)
 
-    print(f"Status: {integration.get_exchange_status()}")
+    print("Status: {0}".format(integration.get_exchange_status()))
     print("CCXT Integration ready (stub mode)")
 
 

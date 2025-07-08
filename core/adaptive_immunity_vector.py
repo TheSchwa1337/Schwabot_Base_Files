@@ -971,7 +971,7 @@ if __name__ == __main__:
 
 
 
-    print(fResistance Profile R(t): {[f'{r:.4f}' for r in resistance_values]})
+    print(fResistance Profile R(t): {["{0}".format(r:.4f) for r in resistance_values]})
 
 
 

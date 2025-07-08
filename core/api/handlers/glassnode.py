@@ -1,22 +1,21 @@
 from __future__ import annotations
-
 import asyncio
 import logging
 import time
 import json
 from typing import Any, Dict
+from .base_handler import BaseAPIHandler
+
+    import aiohttp
+    import requests
 
 try:
-    import aiohttp
 except ImportError:
     aiohttp = None
 
 try:
-    import requests
 except ImportError:
     requests = None
-
-from .base_handler import BaseAPIHandler
 
 logger = logging.getLogger(__name__)
 
@@ -90,11 +89,11 @@ class GlassnodeHandler(BaseAPIHandler):
 
                     session = await self._get_session()
 
-                    async with session.get(f"{BASE_URL}/{metric}", params=params) as resp:
+                    async with session.get("{0}/{1}".format(BASE_URL, metric), params=params) as resp:
 
                         if resp.status == 401:
 
-                            logger.warning(f"Glassnode API key invalid for metric {metric}")
+                            logger.warning("Glassnode API key invalid for metric {0}".format(metric))
 
                             all_data[metric] = []
 
@@ -103,8 +102,8 @@ class GlassnodeHandler(BaseAPIHandler):
                         elif resp.status != 200:
 
                             logger.warning(
-                                f"Glassnode API error {
-                                    resp.status} for metric {metric}"
+                                "Glassnode API error {0} for metric {1}".format(
+                                    resp.status, metric)
                             )
 
                             all_data[metric] = []
@@ -121,12 +120,12 @@ class GlassnodeHandler(BaseAPIHandler):
 
                     response = await loop.run_in_executor(
                         None,
-                        lambda: requests.get(f"{BASE_URL}/{metric}", params=params, timeout=15),
+                        lambda: requests.get("{0}/{1}".format(BASE_URL, metric), params=params, timeout=15),
                     )
 
                     if response.status_code == 401:
 
-                        logger.warning(f"Glassnode API key invalid for metric {metric}")
+                        logger.warning("Glassnode API key invalid for metric {0}".format(metric))
 
                         all_data[metric] = []
 
@@ -135,8 +134,8 @@ class GlassnodeHandler(BaseAPIHandler):
                     elif response.status_code != 200:
 
                         logger.warning(
-                            f"Glassnode API error {
-                                response.status_code} for metric {metric}"
+                            "Glassnode API error {0} for metric {1}".format(
+                                response.status_code, metric)
                         )
 
                         all_data[metric] = []
@@ -155,7 +154,7 @@ class GlassnodeHandler(BaseAPIHandler):
 
             except Exception as e:
 
-                logger.error(f"Failed to fetch Glassnode metric {metric}: {e}")
+                logger.error("Failed to fetch Glassnode metric {0}: {1}".format(metric, e))
 
                 all_data[metric] = []
 
@@ -244,9 +243,7 @@ class GlassnodeHandler(BaseAPIHandler):
 
             # Calculate composite scores
 
-            parsed_data["composite_scores"] = self._calculate_composite_scores(
-                parsed_data["latest_values"]
-            )
+            parsed_data["composite_scores"] = self._calculate_composite_scores(parsed_data["latest_values"])
 
             return parsed_data
 
@@ -343,15 +340,13 @@ class GlassnodeHandler(BaseAPIHandler):
 
             # Combine into an overall score
 
-            overall_score = (
-                scores["network_health"] + scores["valuation_health"] + scores["activity_score"]
-            ) / 3
+            overall_score = (scores["network_health"] + scores["valuation_health"] + scores["activity_score"]) / 3
 
             scores["overall_score"] = round(overall_score, 2)
 
         except Exception as e:
 
-            logger.error(f"Error calculating composite scores: {e}")
+            logger.error("Error calculating composite scores: {0}".format(e))
 
             scores = {
                 "network_health": 0.0,

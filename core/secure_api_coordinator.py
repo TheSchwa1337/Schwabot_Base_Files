@@ -1,6 +1,5 @@
 import asyncio
 from typing import Any, Dict, List, Optional, Union
-
 from cryptography.fernet import Fernet
 
 """
@@ -144,7 +143,8 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 Secure API Coordinator
 
-    - Centralized API Management for Schwabot.This module provides secure, centralized management for all API integrations:
+   
+    Centralized API Management for Schwabot.This module provides secure, centralized management for all API integrations:
 
 
 
@@ -820,7 +820,7 @@ self.credentials[provider] = credentials
 
 
 
-            logger.info(f" Loaded credentials for {provider.value})
+            logger.info(" Loaded credentials for {0})
 
 
 
@@ -832,7 +832,7 @@ self.credentials[provider] = credentials
 
 
 
-                        logger.error(fFailed to load credentials for {provider_name}: {e}
+                        logger.error(fFailed to load credentials for {1}: {2}
 
 
 
@@ -844,7 +844,7 @@ self.credentials[provider] = credentials
 
 
 
-        except Exception as e:logger.error(fFailed to load credentials file: {e})
+        except Exception as e:logger.error(fFailed to load credentials file: {2})
 
 
 
@@ -852,7 +852,7 @@ self.credentials[provider] = credentials
 
 
 
-def _save_credentials():Save encrypted credentials to storage.try: encrypted_data = {}
+def _save_credentials():Save encrypted credentials to storage.try: encrypted_data = {4}
 
 
 
@@ -868,17 +868,7 @@ for provider, creds in self.credentials.items():
 
 
 
-encrypted_creds = {
-
-
-
-api_key: self.fernet.encrypt(creds.api_key.encode()).decode(),sandbox: creds.sandbox,security_level:
-creds.security_level.value,rate_limit": creds.rate_limit,usage_count":
-creds.usage_count,created_at": creds.created_at.isoformat(),
-
-
-
-}
+encrypted_creds = {5}
 
 
 
@@ -962,7 +952,17 @@ os.chmod(self.credentials_file, 0o600)
 
 
 
-        except Exception as e:logger.error(f"Failed to save credentials: {e})
+        except Exception as e:logger.error(f".format(provider.value, provider_name, e, e, , 
+
+
+
+api_key: self.fernet.encrypt(creds.api_key.encode()).decode(),sandbox: creds.sandbox,security_level:
+creds.security_level.value,rate_limit": creds.rate_limit,usage_count":
+creds.usage_count,created_at": creds.created_at.isoformat(),
+
+
+
+)Failed to save credentials: {e})
 
 
 
@@ -1525,11 +1525,11 @@ api_request.error_message = fHTTP {response.status_code}self.stats[failed_reques
 
 
 
-result = {success: False,error: f"HTTP {response.status_code}: {
+result = {success: False,error: "HTTP {0}: {1},status_code".format(response.status_code, 
 
 
 
-response.text},status_code": response.status_code,request_id: request_id,
+response.text): response.status_code,request_id: request_id,
 
 
 
@@ -1909,7 +1909,7 @@ if response and response.get(success):
 
 
                 data = response[data]btc_data = data[data][BTC]price
-    = btc_data[quote][USD][price]logger.info(f" BTC Price: ${price:,.2f})
+    = btc_data[quote][USD][price]logger.info(" BTC Price: ${0})
 
 
 
@@ -1933,7 +1933,7 @@ if response and response.get(success):
 
 
 
-            logger.error(fError getting BTC price: {e})
+            logger.error(fError getting BTC price: {1})
 
 
 
@@ -1974,7 +1974,7 @@ APIProvider.OPENWEATHER,
 
 
 
-/data/2.5/weather,params = {q: location,appid: creds.api_key,units:metric},
+/data/2.5/weather,params = {2},
 
 
 
@@ -2000,15 +2000,15 @@ if response and response.get(success):
 
 crwm_data
 
-    = {location: weather_data[name],temperature": weather_data[main][temp],pressure": weather_data[main][pressure],humidity": weather_data[main][humidity],weather": weather_data[weather][0][main],wind_speed": weather_data[wind][speed],timestamp": datetime.now().isoformat(),
+    = {3}
 
 
 
-}
+            logger.info(f".format(price:,.2f, e, q: location,appid: creds.api_key,units:metric, location: weather_data[name],temperature": weather_data[main][temp],pressure": weather_data[main][pressure],humidity": weather_data[main][humidity],weather": weather_data[weather][0][main],wind_speed": weather_data[wind][speed],timestamp": datetime.now().isoformat(),
 
 
 
-            logger.info(f" Weather data retrieved for {location})
+) Weather data retrieved for {location})
 
 
 
@@ -2107,11 +2107,7 @@ processed_articles.append(processed_article)
 
 
 
-            logger.info(f" Retrieved {'
-
-
-
-len(processed_articles)} articles for '{query}')
+            logger.info(" Retrieved {0} articles for '{1}')
 
 
 
@@ -2135,7 +2131,7 @@ len(processed_articles)} articles for '{query}')
 
 
 
-            logger.error(fError getting news sentiment: {e})
+            logger.error(fError getting news sentiment: {2})
 
 
 
@@ -2160,11 +2156,7 @@ APIProvider.TWITTER,
 
 
 
-params = {query: query,max_results: max_tweets,tweet.fields:created_at,public_metrics",
-
-
-
-},
+params = {3},
 
 
 
@@ -2176,7 +2168,15 @@ if response and response.get(success):
 
 
 
-                tweets = response[data].get(data", [])
+                tweets = response[data].get(data".format('
+
+
+
+len(processed_articles), query, e, query: query,max_results: max_tweets,tweet.fields:created_at,public_metrics",
+
+
+
+), [])
 
 
 
@@ -2210,11 +2210,7 @@ processed_tweets.append(processed_tweet)
 
 
 
-            logger.info(f" Retrieved {'
-
-
-
-len(processed_tweets)} tweets for '{query}')
+            logger.info(" Retrieved {0} tweets for '{1}')
 
 
 
@@ -2238,7 +2234,7 @@ len(processed_tweets)} tweets for '{query}')
 
 
 
-            logger.error(fError getting social sentiment: {e})
+            logger.error(fError getting social sentiment: {2})
 
 
 
@@ -2252,7 +2248,11 @@ len(processed_tweets)} tweets for '{query}')
 
 def get_api_status():-> Dict[str, Any]:Get comprehensive API status.try: status
 
-    = {total_providers: len(self.credentials),active_providers: [],inactive_providers": [],rate_limit_status": {},performance_stats: self.stats.copy(),last_requests": {},
+    = {3},performance_stats: self.stats.copy(),last_requests".format('
+
+
+
+len(processed_tweets), query, e, total_providers: len(self.credentials),active_providers: [],inactive_providers": [],rate_limit_status": {): {},
 
 
 
@@ -2572,7 +2572,7 @@ self._save_credentials()
 
 
 
-        except Exception as e:logger.error(f"Error closing API coordinator: {e})
+        except Exception as e:logger.error("Error closing API coordinator: {0})
 
 
 
@@ -2665,7 +2665,7 @@ coordinator.store_credentials(
 
 
 
-APIProvider.COINMARKETCAP,your-api-key-here",
+APIProvider.COINMARKETCAP,your-api-key-here".format(e),
 
 
 
@@ -2713,8 +2713,8 @@ status = coordinator.get_api_status()'
 
 
 
-print(fTotal providers configured: {status['total_providers']})'print(f"Active providers:
-{len(status['active_providers'])})'print(f"Total requests:
+print(fTotal providers configured: {status['total_providers']})'print("Active providers:
+{0})'print(f".format(len(status['active_providers']))Total requests:
 {status['performance_stats']['total_requests']})
 
 

@@ -1,3 +1,6 @@
+from decimal import Decimal, getcontext
+from typing import Any, Dict, List, Optional, Tuple, Union
+
 # !/usr/bin/env python3
 """
 Clean Risk Manager - Risk assessment and management for Schwabot trading system.
@@ -5,9 +8,6 @@ Clean Risk Manager - Risk assessment and management for Schwabot trading system.
 Provides real-time risk assessment, position sizing, and risk management
 for the Schwabot trading system.
 """
-
-from decimal import Decimal, getcontext
-from typing import Any, Dict, List, Optional, Tuple, Union
 
 logger = logging.getLogger(__name__)
 
@@ -243,14 +243,14 @@ def assess_risk(self,
         if self.risk_metrics["drawdown"].status == "red":
             adjusted_size *= 0.5  # Halve position size
             logger.warning(
-                f"Reducing position due to high drawdown risk. New size: {adjusted_size:.4f}"
+                "Reducing position due to high drawdown risk. New size: {0}".format(adjusted_size:.4f)
             )
 
         # Reduce size if high exposure risk
         if self.risk_metrics["exposure_btc"].status == "red":
             adjusted_size *= 0.7  # Reduce by 30%
             logger.warning(
-                f"Reducing position due to high exposure risk. New size: {adjusted_size:.4f}"
+                "Reducing position due to high exposure risk. New size: {0}".format(adjusted_size:.4f)
             )
 
         # Adjust based on confidence

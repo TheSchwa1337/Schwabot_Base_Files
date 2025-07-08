@@ -1,21 +1,30 @@
+import logging
+from typing import Dict, Any
+
+from schwabot_executable_core import ProfitTier
+
 """
 Dynamic Profit Tier Adjustment Module - Adjust profit tier based on swing and wall signals.
 """
 
-import logging
-from typing import Dict, Any
-from schwabot_executable_core import ProfitTier
-
 logger = logging.getLogger(__name__)
+
 
 class ProfitTierAdjuster:
     """
     Adjusts profit tier dynamically based on market signals.
     """
+
     def __init__(self, tier_thresholds: Dict[str, Any]):
         self.tier_thresholds = tier_thresholds
 
-    def adjust_tier(self, current_tier: ProfitTier, swing_metrics: Dict[str, Any], wall_signals: Dict[str, Any], drift_vector: Dict[str, float]) -> ProfitTier:
+    def adjust_tier(
+        self,
+        current_tier: ProfitTier,
+        swing_metrics: Dict[str, Any],
+        wall_signals: Dict[str, Any],
+        drift_vector: Dict[str, float],
+    ) -> ProfitTier:
         """
         Returns adjusted profit tier.
         """
@@ -30,4 +39,4 @@ class ProfitTierAdjuster:
         if sell_wall > 1.0 and current_tier == ProfitTier.TIER_3_AGGRESSIVE:
             logger.info("ProfitTierAdjuster: downgrading to TIER_2_MODERATE due to sell wall pressure")
             return ProfitTier.TIER_2_MODERATE
-        return tier 
+        return tier

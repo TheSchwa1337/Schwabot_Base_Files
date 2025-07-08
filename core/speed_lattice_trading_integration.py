@@ -22,7 +22,7 @@ class SpeedLatticeTradingIntegrator:
     def hash_tick(self, price: float, volume: float, timestamp: Optional[float] = None) -> str:
         """Hash tick data for identification."""
         timestamp = timestamp or time.time()
-        payload = f"{price}-{volume}-{timestamp}".encode()
+        payload = "{0}-{1}-{2}".format(price, volume, timestamp).encode()
         return hashlib.sha256(payload).hexdigest()
 
     def register_strategy(self, strategy_id: str, strategy_func: Callable):

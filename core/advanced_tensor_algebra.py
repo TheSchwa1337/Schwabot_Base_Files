@@ -1,3 +1,19 @@
+import logging
+import time
+from typing import Any, Dict, List, Optional, Tuple, Union
+    import cupy as cp
+    from ..system.dual_state_router import (
+from .type_defs import (
+
+    import numpy as np
+    from scipy import linalg, signal, stats
+    from scipy.fft import fft, fftfreq, ifft
+    from scipy.optimize import minimize
+    from scipy.sparse import csr_matrix
+    from scipy.special import gamma, zeta
+
+    from ..utils.cuda_helper import (
+
 # !/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -32,29 +48,18 @@ CUDA Integration:
 - Cross-platform compatibility (Windows, macOS, Linux)
 """
 
-import logging
-import time
-from typing import Any, Dict, List, Optional, Tuple, Union
-
 # CUDA Integration with Fallback
 try:
-    import cupy as cp
     USING_CUDA = True
     _backend = 'cupy (GPU)'
     xp = cp
 except ImportError:
-    import numpy as np
     USING_CUDA = False
     _backend = 'numpy (CPU)'
     xp = np
 
 # Import scipy with fallback
 try:
-    from scipy import linalg, signal, stats
-    from scipy.fft import fft, fftfreq, ifft
-    from scipy.optimize import minimize
-    from scipy.sparse import csr_matrix
-    from scipy.special import gamma, zeta
     SCIPY_AVAILABLE = True
 except ImportError:
     SCIPY_AVAILABLE = False
@@ -63,7 +68,6 @@ except ImportError:
 
 # CUDA Helper Integration (for additional utilities)
 try:
-    from ..utils.cuda_helper import (
         get_cuda_status,
         report_cuda_status,
         safe_convolution,
@@ -76,9 +80,10 @@ try:
         safe_tensor_contraction,
         xp as helper_xp,
     )
+
     CUDA_AVAILABLE = True
     logger = logging.getLogger(__name__)
-    logger.info(f"⚡ CUDA acceleration enabled in Advanced Tensor Algebra: {_backend}")
+    logger.info("⚡ CUDA acceleration enabled in Advanced Tensor Algebra: {0}".format(_backend))
 except ImportError:
     # Fallback to CPU-only mode
     CUDA_AVAILABLE = False
@@ -87,7 +92,6 @@ except ImportError:
 
 # Dual State Router Integration
 try:
-    from ..system.dual_state_router import (
         ComputeMode,
         StrategyTier,
         get_dual_state_router,
@@ -100,7 +104,6 @@ except ImportError:
     DUAL_STATE_AVAILABLE = False
     logger.warning("⚠️ Dual State Router not available - using direct CUDA operations")
 
-from .type_defs import (
     EULER_MASCHERONI,
     GOLDEN_RATIO,
     PI,
@@ -114,7 +117,7 @@ from .type_defs import (
 )
 
 logger = logging.getLogger(__name__)
-logger.info(f"Advanced Tensor Algebra initialized with backend: {_backend}")
+logger.info("Advanced Tensor Algebra initialized with backend: {0}".format(_backend))
 
 __all__ = [
     "AdvancedTensorAlgebra",
@@ -182,7 +185,7 @@ class QuantumTensorOperations:
             return quantum_fusion
 
         except Exception as e:
-            logger.error(f"Quantum tensor fusion failed: {e}")
+            logger.error("Quantum tensor fusion failed: {0}".format(e))
             return safe_tensor_contraction(A, B, axes=0)
 
     def quantum_phase_rotation(self, tensor: np.ndarray, angle: float) -> np.ndarray:
@@ -202,19 +205,15 @@ class QuantumTensorOperations:
         """
         try:
             # Create phase rotation matrix with CUDA acceleration
-            phase_factor = safe_cuda_operation(
-                lambda: xp.exp(1j * angle), lambda: np.exp(1j * angle)
-            )
+            phase_factor = safe_cuda_operation(lambda: xp.exp(1j * angle), lambda: np.exp(1j * angle))
 
             # Apply quantum phase rotation
-            rotated_tensor = safe_cuda_operation(
-                lambda: phase_factor * tensor, lambda: phase_factor * tensor
-            )
+            rotated_tensor = safe_cuda_operation(lambda: phase_factor * tensor, lambda: phase_factor * tensor)
 
             return rotated_tensor
 
         except Exception as e:
-            logger.error(f"Quantum phase rotation failed: {e}")
+            logger.error("Quantum phase rotation failed: {0}".format(e))
             return tensor
 
     def quantum_entanglement_measure(self, tensor: np.ndarray) -> float:
@@ -243,9 +242,7 @@ class QuantumTensorOperations:
                 )
 
             # Normalize
-            trace = safe_cuda_operation(
-                lambda: xp.trace(density_matrix), lambda: np.trace(density_matrix)
-            )
+            trace = safe_cuda_operation(lambda: xp.trace(density_matrix), lambda: np.trace(density_matrix))
             if trace > 0:
                 density_matrix = density_matrix / trace
 
@@ -272,7 +269,7 @@ class QuantumTensorOperations:
             return float(np.clip(entanglement, 0.0, 1.0))
 
         except Exception as e:
-            logger.error(f"Quantum entanglement measure failed: {e}")
+            logger.error("Quantum entanglement measure failed: {0}".format(e))
             return 0.0
 
 
@@ -317,12 +314,10 @@ class EntropyModulationSystem:
             return float(entropy)
 
         except Exception as e:
-            logger.error(f"Shannon entropy calculation failed: {e}")
+            logger.error("Shannon entropy calculation failed: {0}".format(e))
             return 0.0
 
-    def entropy_based_modulation(
-        self, tensor: np.ndarray, modulation_strength: float = 1.0
-    ) -> np.ndarray:
+    def entropy_based_modulation(self, tensor: np.ndarray, modulation_strength: float = 1.0) -> np.ndarray:
         """
         Apply entropy-based modulation to tensor.
 
@@ -347,7 +342,7 @@ class EntropyModulationSystem:
             return modulated_tensor
 
         except Exception as e:
-            logger.error(f"Entropy-based modulation failed: {e}")
+            logger.error("Entropy-based modulation failed: {0}".format(e))
             return tensor
 
     def adaptive_entropy_threshold(self, data_history: List[float]) -> float:
@@ -378,7 +373,7 @@ class EntropyModulationSystem:
             return float(np.clip(threshold, 0.1, 0.9))
 
         except Exception as e:
-            logger.error(f"Adaptive entropy threshold failed: {e}")
+            logger.error("Adaptive entropy threshold failed: {0}".format(e))
             return self.entropy_threshold
 
 
@@ -440,9 +435,7 @@ class TemporalAlgebra:
             dt = time_series[i] - time_series[i - 1]
             # Stochastic differential equation solution
             entropy_evolution[i] = (
-                entropy_evolution[i - 1]
-                + drift_coeff * dt
-                + np.sqrt(2 * diffusion_coeff * dt) * np.random.normal()
+                entropy_evolution[i - 1] + drift_coeff * dt + np.sqrt(2 * diffusion_coeff * dt) * np.random.normal()
             )
 
         return entropy_evolution
@@ -489,9 +482,7 @@ class InformationGeometry:
         self.metric_tensor = None
         self.connection_coefficients = None
 
-    def fisher_information_metric(
-        self, data: np.ndarray, distribution_type: str = "normal"
-    ) -> np.ndarray:
+    def fisher_information_metric(self, data: np.ndarray, distribution_type: str = "normal") -> np.ndarray:
         """
         Calculate Fisher information metric for market data.
 
@@ -515,7 +506,7 @@ class InformationGeometry:
             lambda_est = 1 / np.mean(data)
             return np.array([[1 / lambda_est**2]])
         else:
-            raise ValueError(f"Unsupported distribution type: {distribution_type}")
+            raise ValueError("Unsupported distribution type: {0}".format(distribution_type))
 
     def riemannian_geodesic(
         self,
@@ -579,9 +570,7 @@ class SpectralAnalysis:
         self.nyquist_frequency = 0.5
         self.window_types = ["hann", "hamming", "blackman"]
 
-    def fourier_spectrum(
-        self, time_series: np.ndarray, sampling_rate: float = 1.0
-    ) -> Tuple[np.ndarray, np.ndarray]:
+    def fourier_spectrum(self, time_series: np.ndarray, sampling_rate: float = 1.0) -> Tuple[np.ndarray, np.ndarray]:
         """
         Calculate Fourier spectrum of market data.
 
@@ -712,7 +701,7 @@ class SpectralAnalysis:
             frequencies, psd = signal.freqz(1, ar_coeffs, worN=512)
             frequencies = frequencies / (2 * np.pi)  # Normalize to [0, 0.5]
         else:
-            raise ValueError(f"Unsupported method: {method}")
+            raise ValueError("Unsupported method: {0}".format(method))
 
         return frequencies, psd
 
@@ -752,9 +741,7 @@ class GroupTheoryOperations:
         reflection_matrix[axis, axis] = -1
         return reflection_matrix @ vector
 
-    def market_symmetry_group(
-        self, market_data: np.ndarray, symmetry_type: str = "translation"
-    ) -> np.ndarray:
+    def market_symmetry_group(self, market_data: np.ndarray, symmetry_type: str = "translation") -> np.ndarray:
         """
         Apply symmetry group transformation to market data.
 
@@ -769,7 +756,7 @@ class GroupTheoryOperations:
             Transformed market data
         """
         if symmetry_type not in self.symmetry_groups:
-            raise ValueError(f"Unsupported symmetry type: {symmetry_type}")
+            raise ValueError("Unsupported symmetry type: {0}".format(symmetry_type))
 
         group_operation = self.symmetry_groups[symmetry_type]
 
@@ -808,7 +795,7 @@ class GroupTheoryOperations:
                 np.array([[0, -1, 0], [1, 0, 0], [0, 0, 0]]),  # z-rotation
             ]
         else:
-            raise ValueError(f"Unsupported group type: {group_type} with dimension {dimension}")
+            raise ValueError("Unsupported group type: {0} with dimension {1}".format(group_type, dimension))
 
     def invariant_quantity(self, market_data: np.ndarray, group_operation: callable) -> float:
         """
@@ -866,9 +853,7 @@ class AdvancedTensorAlgebra:
 
         logger.info("AdvancedTensorAlgebra initialized with precision=%d", precision)
 
-    def tensor_dot_fusion(
-        self, A: np.ndarray, B: np.ndarray, axes: Optional[Tuple[int, ...]] = None
-    ) -> np.ndarray:
+    def tensor_dot_fusion(self, A: np.ndarray, B: np.ndarray, axes: Optional[Tuple[int, ...]] = None) -> np.ndarray:
         """
         Calculate rank-reducing contraction across axis 1 (strategy vector ↔ price matrix).
 
@@ -902,9 +887,7 @@ class AdvancedTensorAlgebra:
                         return result["result"]
                     else:
                         # Fallback to direct computation
-                        logger.debug(
-                            "Dual state router returned no result, using direct computation"
-                        )
+                        logger.debug("Dual state router returned no result, using direct computation")
 
             # Direct computation (fallback or when dual state router not
             # available)
@@ -970,9 +953,7 @@ class AdvancedTensorAlgebra:
                 result = safe_matrix_multiply(R, x_2d)
             else:
                 # Batch rotation
-                result = safe_cuda_operation(
-                    lambda: xp.zeros_like(x_2d), lambda: np.zeros_like(x_2d)
-                )
+                result = safe_cuda_operation(lambda: xp.zeros_like(x_2d), lambda: np.zeros_like(x_2d))
                 for i in range(x_2d.shape[1]):
                     result[:, i] = safe_matrix_multiply(R, x_2d[:, i : i + 1]).flatten()
 
@@ -983,9 +964,7 @@ class AdvancedTensorAlgebra:
             logger.error("Bit-phase rotation failed: %s", e)
             return x  # Return original on error
 
-    def volumetric_reshape(
-        self, M: np.ndarray, target_shape: Optional[Tuple[int, ...]] = None
-    ) -> np.ndarray:
+    def volumetric_reshape(self, M: np.ndarray, target_shape: Optional[Tuple[int, ...]] = None) -> np.ndarray:
         """
         Reshape matrix with volume-preserving constraints.
 
@@ -1007,9 +986,7 @@ class AdvancedTensorAlgebra:
                 target_shape = self._calculate_optimal_shape(volume, M.ndim)
 
             # Preserve volume by scaling with CUDA acceleration
-            original_volume = safe_cuda_operation(
-                lambda: xp.prod(M.shape), lambda: np.prod(M.shape)
-            )
+            original_volume = safe_cuda_operation(lambda: xp.prod(M.shape), lambda: np.prod(M.shape))
             target_volume = np.prod(target_shape)
             scale_factor = (target_volume / original_volume) ** (1 / M.ndim)
 
@@ -1046,9 +1023,7 @@ class AdvancedTensorAlgebra:
             num_levels = max(2, int(1 / (1 - E + 1e-6)))
 
             # Normalize vector with CUDA acceleration
-            v_norm = safe_cuda_operation(
-                lambda: V / (xp.linalg.norm(V) + 1e-6), lambda: V / (np.linalg.norm(V) + 1e-6)
-            )
+            v_norm = safe_cuda_operation(lambda: V / (xp.linalg.norm(V) + 1e-6), lambda: V / (np.linalg.norm(V) + 1e-6))
 
             # Quantize to discrete levels
             quantized = safe_cuda_operation(
@@ -1057,9 +1032,7 @@ class AdvancedTensorAlgebra:
             )
 
             # Restore original scale
-            result = safe_cuda_operation(
-                lambda: quantized * xp.linalg.norm(V), lambda: quantized * np.linalg.norm(V)
-            )
+            result = safe_cuda_operation(lambda: quantized * xp.linalg.norm(V), lambda: quantized * np.linalg.norm(V))
 
             logger.debug("Entropy quantization: E=%.3f, levels=%d", E, num_levels)
             return result
@@ -1089,9 +1062,7 @@ class AdvancedTensorAlgebra:
 
             det = safe_cuda_operation(lambda: xp.linalg.det(M), lambda: linalg.det(M))
 
-            eigenvalues = safe_cuda_operation(
-                lambda: xp.linalg.eigvals(M), lambda: linalg.eigvals(M)
-            )
+            eigenvalues = safe_cuda_operation(lambda: xp.linalg.eigvals(M), lambda: linalg.eigvals(M))
 
             # Stability conditions
             max_real_eigenvalue = safe_cuda_operation(
@@ -1101,9 +1072,7 @@ class AdvancedTensorAlgebra:
                 lambda: xp.min(xp.real(eigenvalues)), lambda: np.min(np.real(eigenvalues))
             )
 
-            condition_number = safe_cuda_operation(
-                lambda: xp.linalg.cond(M), lambda: linalg.cond(M)
-            )
+            condition_number = safe_cuda_operation(lambda: xp.linalg.cond(M), lambda: linalg.cond(M))
 
             return {
                 "trace": float(trace),
@@ -1135,9 +1104,7 @@ class AdvancedTensorAlgebra:
         """
         try:
             # Calculate current spectral norm with CUDA acceleration
-            current_norm = safe_cuda_operation(
-                lambda: xp.linalg.norm(M, ord=2), lambda: linalg.norm(M, ord=2)
-            )
+            current_norm = safe_cuda_operation(lambda: xp.linalg.norm(M, ord=2), lambda: linalg.norm(M, ord=2))
 
             # Update history
             if not hasattr(self, "_spectral_history"):
@@ -1150,12 +1117,8 @@ class AdvancedTensorAlgebra:
             # Calculate statistics with CUDA acceleration
             history_array = np.array(self._spectral_history)
 
-            mean_norm = safe_cuda_operation(
-                lambda: xp.mean(history_array), lambda: np.mean(history_array)
-            )
-            std_norm = safe_cuda_operation(
-                lambda: xp.std(history_array), lambda: np.std(history_array)
-            )
+            mean_norm = safe_cuda_operation(lambda: xp.mean(history_array), lambda: np.mean(history_array))
+            std_norm = safe_cuda_operation(lambda: xp.std(history_array), lambda: np.std(history_array))
 
             # Calculate trend using polynomial fitting
             trend = np.polyfit(range(len(history_array)), history_array, 1)[0]
@@ -1196,9 +1159,7 @@ class AdvancedTensorAlgebra:
             # Convert to alignment factor using sine wave
             alignment = (np.sin(2 * np.pi * cycle_phase) + 1) / 2
 
-            logger.debug(
-                "Ferris Wheel alignment: phase=%.3f, alignment=%.3f", cycle_phase, alignment
-            )
+            logger.debug("Ferris Wheel alignment: phase=%.3f, alignment=%.3f", cycle_phase, alignment)
             return float(alignment)
 
         except Exception as e:
@@ -1222,9 +1183,7 @@ class AdvancedTensorAlgebra:
 
             # Quantum phase rotation
             phase_angle = self.temporal_algebra.ferris_wheel_alignment() * 2 * np.pi
-            rotated_fusion = self.quantum_operations.quantum_phase_rotation(
-                quantum_fusion, phase_angle
-            )
+            rotated_fusion = self.quantum_operations.quantum_phase_rotation(quantum_fusion, phase_angle)
 
             # Entanglement measure
             entanglement = self.quantum_operations.quantum_entanglement_measure(rotated_fusion)
@@ -1240,9 +1199,7 @@ class AdvancedTensorAlgebra:
             logger.error("Quantum tensor operations failed: %s", e)
             return {}
 
-    def entropy_modulation_system(
-        self, tensor: np.ndarray, modulation_strength: float = 1.0
-    ) -> np.ndarray:
+    def entropy_modulation_system(self, tensor: np.ndarray, modulation_strength: float = 1.0) -> np.ndarray:
         """
         Apply entropy-based modulation to tensor.
 
@@ -1290,9 +1247,7 @@ class AdvancedTensorAlgebra:
 # =============================================================================
 
 
-def tensor_dot_fusion(
-    A: np.ndarray, B: np.ndarray, axes: Optional[Tuple[int, ...]] = None
-) -> np.ndarray:
+def tensor_dot_fusion(A: np.ndarray, B: np.ndarray, axes: Optional[Tuple[int, ...]] = None) -> np.ndarray:
     """Convenience function for tensor dot fusion."""
     algebra = AdvancedTensorAlgebra()
     return algebra.tensor_dot_fusion(A, B, axes)

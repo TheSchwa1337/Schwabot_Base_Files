@@ -1,5 +1,4 @@
 from __future__ import annotations
-
 import asyncio
 import json
 import logging
@@ -8,8 +7,9 @@ from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import Any, Dict, Optional
 
-try:
     import aiohttp
+
+try:
 except ImportError:  # Fallback to requests for sync usage / testing
     aiohttp = None  # type: ignore
 
@@ -125,9 +125,7 @@ class BaseAPIHandler(ABC):
                         timestamps.append(float(value))
 
                 if timestamps:
-                    variance = sum(
-                        (x - sum(timestamps) / len(timestamps)) ** 2 for x in timestamps
-                    ) / len(timestamps)
+                    variance = sum((x - sum(timestamps) / len(timestamps)) ** 2 for x in timestamps) / len(timestamps)
                     # Normalize to [0, 1]
                     return min(1.0, max(0.0, variance / 1000.0))
 
@@ -189,13 +187,9 @@ class BaseAPIHandler(ABC):
 
         # Check if we've exceeded the rate limit
         if self._request_count >= self.RATE_LIMIT_REQUESTS:
-            window_remaining = self.RATE_LIMIT_WINDOW - (
-                current_time - self._rate_limit_window_start
-            )
+            window_remaining = self.RATE_LIMIT_WINDOW - (current_time - self._rate_limit_window_start)
             if window_remaining > 0:
-                logger.warning(
-                    f"{self.NAME}: Rate limit exceeded, waiting {window_remaining:.1f} seconds"
-                )
+                logger.warning("{0}: Rate limit exceeded, waiting {1} seconds".format(self.NAME, window_remaining:.1f))
                 await asyncio.sleep(window_remaining)
                 self._rate_limit_window_start = current_time
                 self._request_count = 0
@@ -217,10 +211,10 @@ class BaseAPIHandler(ABC):
 
         # Log error with context
         logger.error(
-            f"{
-                self.NAME}: Error occurred (total: {
-                self._error_count}, consecutive: {
-                self._consecutive_errors}) - {exc}"
+            "{0}: Error occurred (total: {1}, consecutive: {2}) - {3}".format(
+                self.NAME, 
+                self._error_count, 
+                self._consecutive_errors, exc)
         )
 
     # Caching helpers --------------------------------------------------------
@@ -272,7 +266,7 @@ class BaseAPIHandler(ABC):
 
         for method_name in required_methods:
             if not hasattr(self, method_name):
-                logger.error(f"{self.NAME}: Missing required method '{method_name}'")
+                logger.error("{0}: Missing required method '{1}'".format(self.NAME, method_name))
                 return False
 
         return True

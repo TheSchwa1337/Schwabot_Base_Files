@@ -1,9 +1,9 @@
 from typing import Any, Callable, Dict, List, Optional, Tuple, Union
-
-from core.risk_manager import RiskManager
 from data.temporal_intelligence_integration import TemporalIntelligenceIntegration
 from hash_recollection.entropy_tracker import EntropyTracker
 from hash_recollection.pattern_utils import PatternUtils
+
+from core.risk_manager import RiskManager
 
 # QuantumDriftShellEngine import fixed
 
@@ -567,7 +567,7 @@ total_evaluations: 0,valid_memory_recalls: 0,drift_rejections": 0,correction_inj
 
 
 
-logger.info(f" Advanced Drift Shell Engine initialized with {memory_buffer_size} memory slots
+logger.info(" Advanced Drift Shell Engine initialized with {0} memory slots
 
 
 
@@ -579,7 +579,7 @@ logger.info(f" Advanced Drift Shell Engine initialized with {memory_buffer_size}
 
 
 
-def record_memory():-> str:"Record a new memory snapshot with tensor compression.Args:
+def record_memory():-> str:".format(memory_buffer_size)Record a new memory snapshot with tensor compression.Args:
 
 
 

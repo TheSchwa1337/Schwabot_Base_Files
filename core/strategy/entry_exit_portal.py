@@ -457,11 +457,11 @@ self.stats = {total_signals: 0,executed_trades: 0,rejected_signals": 0,avg_proce
 
 
 
-            logger.info(EntryExitPortal initialized:f"risk_mgmt = {enable_risk_management},
+            logger.info(EntryExitPortal initialized:"risk_mgmt = {0},
 
 
 
-            fportfolio_tracking = {enable_portfolio_tracking}
+            fportfolio_tracking = {1}
 
 
 
@@ -561,19 +561,11 @@ strategy_result = self.glyph_core.select_strategy(
 
 
 
-fSignal rejected: confidence {
+fSignal rejected: confidence {2}
 
 
 
-strategy_result.confidence:.3f}
-
-
-
-                    fbelow threshold {
-
-
-
-                        self.min_confidence_threshold})self.stats[rejected_signals] += 1
+                    fbelow threshold {3})self.stats[rejected_signals] += 1
 
 
 
@@ -649,11 +641,7 @@ volume=volume_signal,
 
 
 
-metadata={gear_state: strategy_result.gear_state,processing_time: time.time() - start_time,
-
-
-
-},
+metadata={4},
 
 
 
@@ -705,15 +693,7 @@ self.stats[total_signals] += 1
 
 
 
-            logger.info(fTrade signal generated: {glyph} -> {
-
-
-
-direction.value}f{asset} (confidence: {
-
-
-
-strategy_result.confidence:.3f}))
+            logger.info(fTrade signal generated: {5} -> {6}f{7} (confidence: {2}))
 
 
 
@@ -733,7 +713,7 @@ strategy_result.confidence:.3f}))
 
 
 
-            logger.error(fSignal processing failed: {e})
+            logger.error(fSignal processing failed: {9})
 
 
 
@@ -1050,7 +1030,7 @@ Returns:
 
 
 
-execution_result = {status:failed,message:Execution prevented}
+execution_result = {10}
 
 
 
@@ -1082,8 +1062,8 @@ if size_to_execute <= 0:  # No position to take
 
 
 
-fNo position to execute for {signal.asset}. Size calculated as 0.)return
-{status:no_action,message:Position size is zero}
+fNo position to execute for {11}. Size calculated as 0.)return
+{12}
 
 
 
@@ -1107,25 +1087,13 @@ if self.trade_executor:
 
 
 
-fSimulating {signal.direction.value} order for {
-
-
-
-signal.asset}fsize {size_to_execute:.4f} at {
-
-
-
-signal.price})
+fSimulating {13} order for {14}fsize {15} at {16})
 
 
 
 execution_result
 
-    = {status:dry_run_success,order_id:simulated_+ str(int(time.time())),executed_size": size_to_execute,price": signal.price,fees": size_to_execute * 0.001,  # Simulate 0.1% feemessage:Simulated trade execution",
-
-
-
-}
+    = {17}
 
 
 
@@ -1141,15 +1109,7 @@ else:
 
 
 
-fPlacing {signal.direction.value} order for {
-
-
-
-signal.asset}fsize {size_to_execute:.4f} at {
-
-
-
-signal.price})
+fPlacing {13} order for {14}fsize {15} at {16})
 
 
 
@@ -1167,7 +1127,47 @@ signal.asset, signal.direction.value, size_to_execute, signal.price
 
 execution_result
 
-    = {status:live_executed,order_id: order.get(order_id,N/A),executed_size": order.get(executed_size", 0.0),price": order.get(price", 0.0),fees": order.get(fees", 0.0),message":Live trade execution",
+    = {status:live_executed,order_id: order.get(order_id,N/A),executed_size".format(enable_risk_management, enable_portfolio_tracking, 
+
+
+
+strategy_result.confidence:.3f, 
+
+
+
+                        self.min_confidence_threshold, gear_state: strategy_result.gear_state,processing_time: time.time() - start_time,
+
+
+
+, glyph, 
+
+
+
+direction.value, asset, 
+
+
+
+strategy_result.confidence:.3f, e, status:failed,message:Execution prevented, signal.asset, status:no_action,message:Position size is zero, signal.direction.value, 
+
+
+
+signal.asset, size_to_execute:.4f, 
+
+
+
+signal.price, status:dry_run_success,order_id:simulated_+ str(int(time.time())),executed_size": size_to_execute,price": signal.price,fees": size_to_execute * 0.001,  # Simulate 0.1% feemessage:Simulated trade execution",
+
+
+
+, signal.direction.value, 
+
+
+
+signal.asset, size_to_execute:.4f, 
+
+
+
+signal.price): order.get(executed_size", 0.0),price": order.get(price", 0.0),fees": order.get(fees", 0.0),message":Live trade execution",
 
 
 

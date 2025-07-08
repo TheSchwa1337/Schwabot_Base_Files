@@ -219,7 +219,8 @@ class StateType(Enum):
 
 class TransitionTrigger(Enum):Triggers for state transitions.ENTROPY_THRESHOLD
     =  entropy_thresholdQUANTUM_PHASE_SHIFT =  quantum_phase_shiftPROFIT_DIFFERENTIAL
-    =  profit_differentialMARKET_VOLATILITY =  market_volatilityMANUAL_OVERRIDE =  manual_overrideNIBBLE_RITTLE_IMBALANCE =  nibble_rittle_imbalance@dataclass
+    =  profit_differentialMARKET_VOLATILITY
+     market_volatilityMANUAL_OVERRIDE =  manual_overrideNIBBLE_RITTLE_IMBALANCE =  nibble_rittle_imbalance@dataclass
 
 
 

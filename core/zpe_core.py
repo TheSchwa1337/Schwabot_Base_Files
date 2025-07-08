@@ -1,3 +1,16 @@
+import datetime
+import logging
+import math
+import time
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple
+    import cupy as cp
+
+    import numpy as np
+
+    from core.clean_unified_math import clean_unified_math as unified_math
+
 """
 ZPE (Zero Point Energy) Core Module
 Advanced quantum energy field calculations for trading optimization
@@ -6,29 +19,18 @@ Implements Zero Point Energy mathematical models for market prediction
 and quantum field fluctuation analysis in trading systems.
 """
 
-import datetime
-import logging
-import math
-import time
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
-
 # CUDA Integration with Fallback
 try:
-    import cupy as cp
     USING_CUDA = True
     _backend = 'cupy (GPU)'
     xp = cp
 except ImportError:
-    import numpy as np
     USING_CUDA = False
     _backend = 'numpy (CPU)'
     xp = np
 
 # Import clean math system
 try:
-    from core.clean_unified_math import clean_unified_math as unified_math
 except ImportError:
     # Fallback for testing
     class unified_math:
@@ -60,12 +62,13 @@ except ImportError:
     def atan(x):
         return xp.arctan(x)
 
+
 # Log backend status
 logger = logging.getLogger(__name__)
 if USING_CUDA:
-    logger.info(f"⚡ ZPE Core using GPU acceleration: {_backend}")
+    logger.info("⚡ ZPE Core using GPU acceleration: {0}".format(_backend))
 else:
-    logger.info(f"🔄 ZPE Core using CPU fallback: {_backend}")
+    logger.info("🔄 ZPE Core using CPU fallback: {0}".format(_backend))
 
 
 class ZPEMode(Enum):
@@ -179,7 +182,7 @@ class ZPECore:
     def set_mode(self, mode: ZPEMode) -> None:
         """Set ZPE operation mode."""
         self.mode = mode
-        self.logger.info(f"ZPE mode set to: {mode.value}")
+        self.logger.info("ZPE mode set to: {0}".format(mode.value))
 
     def calculate_zero_point_energy(self, frequency: float, amplitude: float = 1.0) -> float:
         """
@@ -211,7 +214,7 @@ class ZPECore:
             return normalized_zpe
 
         except Exception as e:
-            self.logger.error(f"ZPE calculation error: {e}")
+            self.logger.error("ZPE calculation error: {0}".format(e))
             return self.ZPE_CONSTANTS["ZERO_POINT_BASELINE"]
 
     def calculate_thermal_efficiency(
@@ -278,11 +281,11 @@ class ZPECore:
             if len(self.thermal_history) > 1000:
                 self.thermal_history = self.thermal_history[-1000:]
 
-            self.logger.debug(f"Thermal efficiency: {efficiency:.6f}")
+            self.logger.debug("Thermal efficiency: {0}".format(efficiency:.6f))
             return thermal_data
 
         except Exception as e:
-            self.logger.error(f"Thermal efficiency calculation error: {e}")
+            self.logger.error("Thermal efficiency calculation error: {0}".format(e))
             return ThermalData(
                 timestamp=time.time(),
                 thermal_efficiency=0.0,
@@ -342,11 +345,11 @@ class ZPECore:
             if len(self.work_history) > 1000:
                 self.work_history = self.work_history[-1000:]
 
-            self.logger.debug(f"ZPE Work: {work:.6f}")
+            self.logger.debug("ZPE Work: {0}".format(work:.6f))
             return work_data
 
         except Exception as e:
-            self.logger.error(f"ZPE work calculation error: {e}")
+            self.logger.error("ZPE work calculation error: {0}".format(e))
             return ZPEWorkData(
                 timestamp=time.time(),
                 work_value=0.0,
@@ -356,9 +359,7 @@ class ZPECore:
                 metadata={"error": str(e)},
             )
 
-    def calculate_rotational_torque(
-        self, liquidity_depth: float, trend_change_rate: float
-    ) -> RotationalTorqueData:
+    def calculate_rotational_torque(self, liquidity_depth: float, trend_change_rate: float) -> RotationalTorqueData:
         """
         Calculate Rotational Torque: τ = I · α
 
@@ -408,11 +409,11 @@ class ZPECore:
             if len(self.torque_history) > 1000:
                 self.torque_history = self.torque_history[-1000:]
 
-            self.logger.debug(f"Rotational Torque: {torque:.6f}")
+            self.logger.debug("Rotational Torque: {0}".format(torque:.6f))
             return torque_data
 
         except Exception as e:
-            self.logger.error(f"Rotational torque calculation error: {e}")
+            self.logger.error("Rotational torque calculation error: {0}".format(e))
             return RotationalTorqueData(
                 timestamp=time.time(),
                 torque_value=0.0,
@@ -512,13 +513,13 @@ class ZPECore:
             }
 
             self.logger.info(
-                f"Profit wheel result: {signal} (confidence: {
-                    confidence:.3f})"
+                "Profit wheel result: {0} (confidence: {1})".format(signal, 
+                    confidence:.3f)
             )
             return result
 
         except Exception as e:
-            self.logger.error(f"Profit wheel error: {e}")
+            self.logger.error("Profit wheel error: {0}".format(e))
             return {
                 "timestamp": time.time(),
                 "signal": "HOLD",
@@ -552,11 +553,11 @@ class ZPECore:
                 "precision_factor": self.precision / 32.0,  # Normalize precision
             }
 
-            self.logger.debug(f"Computational boost: {overall_boost:.3f}")
+            self.logger.debug("Computational boost: {0}".format(overall_boost:.3f))
             return boost_factors
 
         except Exception as e:
-            self.logger.error(f"Computational boost calculation error: {e}")
+            self.logger.error("Computational boost calculation error: {0}".format(e))
             return {
                 "thermal_boost": 1.0,
                 "work_boost": 1.0,
@@ -593,12 +594,10 @@ class ZPECore:
             return coupled_fluctuation
 
         except Exception as e:
-            self.logger.error(f"Quantum fluctuation calculation error: {e}")
+            self.logger.error("Quantum fluctuation calculation error: {0}".format(e))
             return 0.0
 
-    def calculate_energy_field_coherence(
-        self, signal_strength: float, market_volatility: float
-    ) -> float:
+    def calculate_energy_field_coherence(self, signal_strength: float, market_volatility: float) -> float:
         """
         Calculate energy field coherence based on signal and volatility.
 
@@ -626,7 +625,7 @@ class ZPECore:
             return coherence
 
         except Exception as e:
-            self.logger.error(f"Coherence calculation error: {e}")
+            self.logger.error("Coherence calculation error: {0}".format(e))
             return 0.5
 
     def update_energy_fields(
@@ -652,14 +651,10 @@ class ZPECore:
         """
         try:
             # Calculate primary energy field
-            self.energy_fields["primary_field"] = self.calculate_zero_point_energy(
-                frequency, amplitude
-            )
+            self.energy_fields["primary_field"] = self.calculate_zero_point_energy(frequency, amplitude)
 
             # Calculate quantum vacuum fluctuations
-            self.energy_fields["quantum_vacuum"] = self.calculate_quantum_field_fluctuation(
-                price_data
-            )
+            self.energy_fields["quantum_vacuum"] = self.calculate_quantum_field_fluctuation(price_data)
 
             # Calculate field coherence
             self.energy_fields["field_coherence"] = self.calculate_energy_field_coherence(
@@ -695,12 +690,10 @@ class ZPECore:
             return self.energy_fields.copy()
 
         except Exception as e:
-            self.logger.error(f"Energy field update error: {e}")
+            self.logger.error("Energy field update error: {0}".format(e))
             return self.energy_fields.copy()
 
-    def get_zpe_trading_signal(
-        self, current_price: float, historical_prices: List[float]
-    ) -> Dict[str, any]:
+    def get_zpe_trading_signal(self, current_price: float, historical_prices: List[float]) -> Dict[str, any]:
         """
         Generate ZPE-based trading signal.
 
@@ -721,9 +714,7 @@ class ZPECore:
             momentum = (current_price - historical_prices[-10]) / historical_prices[-10]
 
             # Calculate frequency from price oscillations
-            frequency = (
-                abs(xp.fft.fftfreq(len(price_changes))[1]) * self.ZPE_CONSTANTS["FREQUENCY_BASE"]
-            )
+            frequency = abs(xp.fft.fftfreq(len(price_changes))[1]) * self.ZPE_CONSTANTS["FREQUENCY_BASE"]
 
             # Update energy fields
             energy_fields = self.update_energy_fields(
@@ -766,7 +757,7 @@ class ZPECore:
             }
 
         except Exception as e:
-            self.logger.error(f"ZPE trading signal error: {e}")
+            self.logger.error("ZPE trading signal error: {0}".format(e))
             return {
                 "signal": "HOLD",
                 "confidence": 0.0,
@@ -830,19 +821,19 @@ def test_zpe_core():
 
     # Test ZPE calculation
     zpe = core.calculate_zero_point_energy(100.0, 1.5)
-    print(f"Zero Point Energy: {zpe}")
+    print("Zero Point Energy: {0}".format(zpe))
 
     # Test thermal efficiency
     thermal_data = core.calculate_thermal_efficiency(1000.0, 1100.0)
-    print(f"Thermal Efficiency: {thermal_data.thermal_efficiency:.6f}")
+    print("Thermal Efficiency: {0}".format(thermal_data.thermal_efficiency:.6f))
 
     # Test ZPE work
     work_data = core.calculate_zpe_work(0.8, 0.5)
-    print(f"ZPE Work: {work_data.work_value:.6f}")
+    print("ZPE Work: {0}".format(work_data.work_value:.6f))
 
     # Test rotational torque
     torque_data = core.calculate_rotational_torque(0.7, 0.3)
-    print(f"Rotational Torque: {torque_data.torque_value:.6f}")
+    print("Rotational Torque: {0}".format(torque_data.torque_value:.6f))
 
     # Test profit wheel
     market_data = {
@@ -854,22 +845,22 @@ def test_zpe_core():
         "energy_output": 1100.0,
     }
     wheel_result = core.spin_profit_wheel(market_data)
-    print(f"Profit Wheel Signal: {wheel_result['signal']}")
+    print("Profit Wheel Signal: {0}".format(wheel_result['signal']))
 
     # Test computational boost
     boost_factors = core.get_computational_boost()
-    print(f"Computational Boost: {boost_factors['overall_boost']:.3f}")
+    print("Computational Boost: {0}".format(boost_factors['overall_boost']:.3f))
 
     # Test with sample price data
     sample_prices = [100, 101, 99, 102, 98, 103, 97, 104, 96, 105]
 
     # Test trading signal
     signal = core.get_zpe_trading_signal(105, sample_prices)
-    print(f"ZPE Trading Signal: {signal}")
+    print("ZPE Trading Signal: {0}".format(signal))
 
     # Test energy state
     state = core.get_current_energy_state()
-    print(f"Energy State: {state}")
+    print("Energy State: {0}".format(state))
 
     print("ZPE Core test completed!")
 

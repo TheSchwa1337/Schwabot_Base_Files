@@ -1,10 +1,3 @@
-# !/usr/bin/env python3
-"""
-Enhanced CCXT Trading Engine - Linux Compatible with Proper Batch Ordering
-Handles automated trading with proper rate limiting, exchange-specific validation,
-and Linux-compatible error handling for batch orders (1-50 per batch).
-"""
-
 import asyncio
 import signal
 import sys
@@ -13,6 +6,13 @@ from queue import Empty, Queue
 from typing import Any, Dict, List, Optional, Tuple
 
 import ccxt
+
+# !/usr/bin/env python3
+"""
+Enhanced CCXT Trading Engine - Linux Compatible with Proper Batch Ordering
+Handles automated trading with proper rate limiting, exchange-specific validation,
+and Linux-compatible error handling for batch orders (1-50 per batch).
+"""
 
 logger = logging.getLogger(__name__)
 
@@ -206,14 +206,14 @@ class EnhancedCCXTTradingEngine:
 
 
 logger.info(
-    f"Enhanced CCXT Trading Engine initialized for {
-        self.exchange_limits.exchange_name}")
+    "Enhanced CCXT Trading Engine initialized for {0}".format(
+        self.exchange_limits.exchange_name))
 
     def _setup_signal_handlers(self):
         """Setup Linux-compatible signal handlers."""
         def signal_handler(signum, frame):
             logger.info(
-    f"Received signal {signum}, initiating graceful shutdown...")
+    "Received signal {0}, initiating graceful shutdown...".format(signum))
             self.running = False
             self.shutdown()
             sys.exit(0)
@@ -261,7 +261,7 @@ logger.info(
         exchange = exchange_class(exchange_config)
 
         logger.info(
-    f"Initialized {exchange_name} exchange with enhanced configuration")
+    "Initialized {0} exchange with enhanced configuration".format(exchange_name))
         return exchange
 
     def _get_exchange_limits(self) -> ExchangeLimits:
@@ -291,33 +291,33 @@ logger.info(
                     return False, "Cannot determine order value for market order"
 
             if order_value < self.exchange_limits.min_order_size:
-return False, f"Order value {order_value} below minimum {
-    self.exchange_limits.min_order_size}"
+return False, "Order value {0} below minimum {1}".format(order_value, 
+    self.exchange_limits.min_order_size)
 
             if order_value > self.exchange_limits.max_order_size:
-return False, f"Order value {order_value} above maximum {
-    self.exchange_limits.max_order_size}"
+return False, "Order value {0} above maximum {1}".format(order_value, 
+    self.exchange_limits.max_order_size)
 
             # Check quantity precision
             quantity_str = str(signal.quantity)
             decimal_places = len(quantity_str.split(
                 '.')[-1]) if '.' in quantity_str else 0
             if decimal_places > self.exchange_limits.amount_precision:
-return False, f"Quantity precision {decimal_places} exceeds limit
-{self.exchange_limits.amount_precision}"
+return False, "Quantity precision {0} exceeds limit
+{1}".format(decimal_places, self.exchange_limits.amount_precision)
 
             # Check price precision for limit orders
             if signal.price:
                 price_str = str(signal.price)
                 decimal_places = len(price_str.split('.')[-1]) if '.' in price_str else 0
                 if decimal_places > self.exchange_limits.price_precision:
-return False, f"Price precision {decimal_places} exceeds limit
-{self.exchange_limits.price_precision}"
+return False, "Price precision {0} exceeds limit
+{1}".format(decimal_places, self.exchange_limits.price_precision)
 
             return True, "Order parameters valid"
 
         except Exception as e:
-            return False, f"Validation error: {str(e)}"
+            return False, "Validation error: {0}".format(str(e))
 
     def _round_to_precision(self, value: float, precision: int) -> float:
         """Round value to exchange precision."""
@@ -361,12 +361,12 @@ return False, f"Price precision {decimal_places} exceeds limit
                         self._update_tensor_state(symbol, ticker['last'])
 
                     except Exception as e:
-                        logger.warning(f"Failed to fetch price for {symbol}: {e}")
+                        logger.warning("Failed to fetch price for {0}: {1}".format(symbol, e))
 
                 time.sleep(1)  # Update every second
 
             except Exception as e:
-                logger.error(f"Error in price tracking: {e}")
+                logger.error("Error in price tracking: {0}".format(e))
                 time.sleep(5)
 
     def _update_tensor_state(self, symbol: str, price: float):
@@ -412,7 +412,7 @@ float],
         # Validate batch count
         batch_count = max(1, min(batch_count, self.exchange_limits.max_orders_per_batch))
 
-        batch_id = f"enhanced_buy_wall_{symbol}_{int(time.time())}"
+        batch_id = "enhanced_buy_wall_{0}_{1}".format(symbol, int(time.time()))
 
         batch_order = EnhancedBatchOrder(
             symbol=symbol,
@@ -428,12 +428,12 @@ float],
         # Validate batch order
         is_valid, error_msg = self._validate_batch_order(batch_order)
         if not is_valid:
-            raise ValueError(f"Invalid batch order: {error_msg}")
+            raise ValueError("Invalid batch order: {0}".format(error_msg))
 
         batch_order.validated = True
         self.batch_queue.put((batch_id, batch_order))
 
-        logger.info(f"Created enhanced buy wall {batch_id} for {symbol} with {batch_count} orders")
+        logger.info("Created enhanced buy wall {0} for {1} with {2} orders".format(batch_id, symbol, batch_count))
         return batch_id
 
 def create_enhanced_sell_wall(self, symbol: str, total_quantity: float, price_range: Tuple[float,
@@ -455,7 +455,7 @@ float],
         # Validate batch count
         batch_count = max(1, min(batch_count, self.exchange_limits.max_orders_per_batch))
 
-        batch_id = f"enhanced_sell_wall_{symbol}_{int(time.time())}"
+        batch_id = "enhanced_sell_wall_{0}_{1}".format(symbol, int(time.time()))
 
         batch_order = EnhancedBatchOrder(
             symbol=symbol,
@@ -471,12 +471,12 @@ float],
         # Validate batch order
         is_valid, error_msg = self._validate_batch_order(batch_order)
         if not is_valid:
-            raise ValueError(f"Invalid batch order: {error_msg}")
+            raise ValueError("Invalid batch order: {0}".format(error_msg))
 
         batch_order.validated = True
         self.batch_queue.put((batch_id, batch_order))
 
-        logger.info(f"Created enhanced sell wall {batch_id} for {symbol} with {batch_count} orders")
+        logger.info("Created enhanced sell wall {0} for {1} with {2} orders".format(batch_id, symbol, batch_count))
         return batch_id
 
     def _validate_batch_order(self, batch_order: EnhancedBatchOrder) -> Tuple[bool, str]:
@@ -489,7 +489,7 @@ float],
             # Check batch count
 if batch_order.batch_count < 1 or batch_order.batch_count >
 self.exchange_limits.max_orders_per_batch:
-return False, f"Batch count must be between 1 and {self.exchange_limits.max_orders_per_batch}"
+return False, "Batch count must be between 1 and {0}".format(self.exchange_limits.max_orders_per_batch)
 
             # Check price range
             if batch_order.price_range[0] >= batch_order.price_range[1]:
@@ -502,7 +502,7 @@ return False, f"Batch count must be between 1 and {self.exchange_limits.max_orde
             return True, "Batch order valid"
 
         except Exception as e:
-            return False, f"Validation error: {str(e)}"
+            return False, "Validation error: {0}".format(str(e))
 
     def _process_batch_orders(self):
         """Enhanced batch order processor with rate limiting and error handling."""
@@ -517,14 +517,14 @@ return False, f"Batch count must be between 1 and {self.exchange_limits.max_orde
             except Empty:
                 continue
             except Exception as e:
-                logger.error(f"Error processing batch orders: {e}")
+                logger.error("Error processing batch orders: {0}".format(e))
                 time.sleep(1)
 
     def _execute_enhanced_batch_order(self, batch_id: str, batch_order: EnhancedBatchOrder):
         """Execute enhanced batch order with proper rate limiting and validation."""
         try:
             if not batch_order.validated:
-                logger.error(f"Batch order {batch_id} not validated")
+                logger.error("Batch order {0} not validated".format(batch_id))
                 return
 
             # Calculate order parameters
@@ -534,7 +534,7 @@ return False, f"Batch count must be between 1 and {self.exchange_limits.max_orde
                 self.exchange_limits.min_time_between_orders
             )
 
-logger.info(f"Executing enhanced batch order {batch_id} with {batch_order.batch_count} orders")
+logger.info("Executing enhanced batch order {0} with {1} orders".format(batch_id, batch_order.batch_count))
 
             # Create and execute orders
             for i in range(batch_order.batch_count):
@@ -568,7 +568,7 @@ logger.info(f"Executing enhanced batch order {batch_id} with {batch_order.batch_
                     # Validate signal
                     is_valid, error_msg = self._validate_order_parameters(signal)
                     if not is_valid:
-                        logger.warning(f"Order {i+1} in batch {batch_id} invalid: {error_msg}")
+                        logger.warning("Order {0} in batch {1} invalid: {2}".format(i+1, batch_id, error_msg))
                         continue
 
                     # Execute order with rate limiting
@@ -583,7 +583,7 @@ logger.info(f"Executing enhanced batch order {batch_id} with {batch_order.batch_
                         'total_orders': batch_order.batch_count
                     }
 
-logger.info(f"Executed order {i+1}/{batch_order.batch_count} in batch {batch_id}")
+logger.info("Executed order {0}/{1} in batch {2}".format(i+1, batch_order.batch_count, batch_id))
 
                     # Wait before next order (respect rate limits)
                     if i < batch_order.batch_count - 1:
@@ -591,13 +591,13 @@ logger.info(f"Executed order {i+1}/{batch_order.batch_count} in batch {batch_id}
                         time.sleep(time_between_orders)
 
                 except Exception as e:
-                    logger.error(f"Error executing order {i+1} in batch {batch_id}: {e}")
+                    logger.error("Error executing order {0} in batch {1}: {2}".format(i+1, batch_id, e))
                     continue
 
-            logger.info(f"Completed enhanced batch order {batch_id}")
+            logger.info("Completed enhanced batch order {0}".format(batch_id))
 
         except Exception as e:
-            logger.error(f"Error executing enhanced batch order {batch_id}: {e}")
+            logger.error("Error executing enhanced batch order {0}: {1}".format(batch_id, e))
 
     def _execute_enhanced_signal(self, signal: EnhancedTradingSignal) -> str:
         """Execute enhanced trading signal with rate limiting and error handling."""
@@ -628,12 +628,12 @@ logger.info(f"Executed order {i+1}/{batch_order.batch_count} in batch {batch_id}
                 'timestamp': datetime.now()
             }
 
-logger.info(f"Executed enhanced {signal.side} order {order_id} for {signal.quantity}
-{signal.symbol}")
+logger.info("Executed enhanced {0} order {1} for {2}
+{3}".format(signal.side, order_id, signal.quantity, signal.symbol))
             return order_id
 
         except Exception as e:
-            logger.error(f"Error executing enhanced signal: {e}")
+            logger.error("Error executing enhanced signal: {0}".format(e))
             raise
 
     def get_current_price(self, symbol: str) -> Optional[float]:
@@ -663,7 +663,7 @@ logger.info(f"Executed enhanced {signal.side} order {order_id} for {signal.quant
 
                 return self.active_orders[order_id]
             except Exception as e:
-                logger.warning(f"Could not fetch order status for {order_id}: {e}")
+                logger.warning("Could not fetch order status for {0}: {1}".format(order_id, e))
                 return self.active_orders.get(order_id, {})
 
         return {}
@@ -688,11 +688,11 @@ logger.info(f"Executed enhanced {signal.side} order {order_id} for {signal.quant
                 self.order_history.append(self.active_orders[order_id])
                 del self.active_orders[order_id]
 
-            logger.info(f"Canceled order {order_id}")
+            logger.info("Canceled order {0}".format(order_id))
             return True
 
         except Exception as e:
-            logger.error(f"Error canceling order {order_id}: {e}")
+            logger.error("Error canceling order {0}: {1}".format(order_id, e))
             return False
 
     def get_portfolio(self) -> Dict:
@@ -705,7 +705,7 @@ logger.info(f"Executed enhanced {signal.side} order {order_id} for {signal.quant
             self.portfolio = balance
             return balance
         except Exception as e:
-            logger.error(f"Error fetching portfolio: {e}")
+            logger.error("Error fetching portfolio: {0}".format(e))
             return self.portfolio
 
     def get_tensor_state(self) -> Dict:
@@ -729,7 +729,7 @@ logger.info(f"Executed enhanced {signal.side} order {order_id} for {signal.quant
             try:
                 self.cancel_order(order_id)
             except Exception as e:
-                logger.warning(f"Error canceling order {order_id}: {e}")
+                logger.warning("Error canceling order {0}: {1}".format(order_id, e))
 
         # Wait for background threads to finish
         if self.batch_processor and self.batch_processor.is_alive():
@@ -761,10 +761,10 @@ def demo_enhanced_ccxt_engine():
         # Create engine
         engine = create_enhanced_ccxt_engine(config)
 
-        print(f"Exchange: {engine.get_exchange_limits().exchange_name}")
-print(f"Rate Limits: {engine.get_exchange_limits().rate_limit_requests_per_minute} requests/min")
-print(f"Order Limits: {engine.get_exchange_limits().rate_limit_orders_per_minute} orders/min")
-        print(f"Max Batch Orders: {engine.get_exchange_limits().max_orders_per_batch}")
+        print("Exchange: {0}".format(engine.get_exchange_limits().exchange_name))
+print("Rate Limits: {0} requests/min".format(engine.get_exchange_limits().rate_limit_requests_per_minute))
+print("Order Limits: {0} orders/min".format(engine.get_exchange_limits().rate_limit_orders_per_minute))
+        print("Max Batch Orders: {0}".format(engine.get_exchange_limits().max_orders_per_batch))
 
         # Add symbol tracking
         engine.add_symbol_to_tracking('BTC/USDC')
@@ -774,7 +774,7 @@ print(f"Order Limits: {engine.get_exchange_limits().rate_limit_orders_per_minute
 
         # Get current price
         price = engine.get_current_price('BTC/USDC')
-        print(f"Current BTC/USDC price: {price}")
+        print("Current BTC/USDC price: {0}".format(price))
 
         # Shutdown
         engine.shutdown()
@@ -782,7 +782,7 @@ print(f"Order Limits: {engine.get_exchange_limits().rate_limit_orders_per_minute
         print("Enhanced CCXT Trading Engine demo completed successfully")
 
     except Exception as e:
-        print(f"Demo error: {e}")
+        print("Demo error: {0}".format(e))
 
 if __name__ == "__main__":
     demo_enhanced_ccxt_engine()

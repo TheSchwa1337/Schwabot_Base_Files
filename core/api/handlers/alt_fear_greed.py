@@ -1,21 +1,20 @@
 from __future__ import annotations
-
 import asyncio
 import logging
 import time
 from typing import Any, Dict, Optional
+from .base_handler import BaseAPIHandler
+
+    import aiohttp
+    import requests
 
 try:
-    import aiohttp
 except ImportError:  # pragma: no cover
     aiohttp = None  # type: ignore
 
 try:
-    import requests
 except ImportError:  # pragma: no cover
     requests = None  # type: ignore
-
-from .base_handler import BaseAPIHandler
 
 logger = logging.getLogger(__name__)
 
@@ -56,21 +55,19 @@ class FearGreedHandler(BaseAPIHandler):
                 elif requests:
                     # Blocking only used if aiohttp missing (e.g. quick tests)
                     loop = asyncio.get_running_loop()
-                    return await loop.run_in_executor(
-                        None, lambda: requests.get(URL, timeout=15).json()
-                    )
+                    return await loop.run_in_executor(None, lambda: requests.get(URL, timeout=15).json())
                 else:
                     raise RuntimeError("Neither aiohttp nor requests is available for HTTP calls")
 
             except Exception as exc:
-                logger.warning(f"Attempt {attempt + 1}/{self.MAX_RETRIES} failed: {exc}")
+                logger.warning("Attempt {0}/{1} failed: {2}".format(attempt + 1, self.MAX_RETRIES, exc))
                 if attempt < self.MAX_RETRIES - 1:
                     await asyncio.sleep(self.RETRY_DELAY * (attempt + 1))
                 else:
                     logger.error(
-                        f"All {
-                            self.MAX_RETRIES} attempts failed for {
-                            self.NAME}"
+                        "All {0} attempts failed for {1}".format(
+                            self.MAX_RETRIES, 
+                            self.NAME)
                     )
                     raise
 
@@ -86,7 +83,7 @@ class FearGreedHandler(BaseAPIHandler):
             required_fields = ["value", "value_classification", "timestamp"]
             for field in required_fields:
                 if field not in data:
-                    raise ValueError(f"Missing required field: {field}")
+                    raise ValueError("Missing required field: {0}".format(field))
 
             parsed_data = {
                 "value": int(data["value"]),
@@ -104,7 +101,7 @@ class FearGreedHandler(BaseAPIHandler):
             return parsed_data
 
         except Exception as exc:
-            logger.error(f"{self.NAME}: failed to parse payload - {exc}")
+            logger.error("{0}: failed to parse payload - {1}".format(self.NAME, exc))
             # Return a fallback response structure
             return {
                 "value": 50,  # Neutral fear/greed value
@@ -139,7 +136,7 @@ class FearGreedHandler(BaseAPIHandler):
         # Check cache expiry
         if current_time > self._cache_expiry_time:
             force_refresh = True
-            logger.debug(f"{self.NAME}: Cache expired, forcing refresh")
+            logger.debug("{0}: Cache expired, forcing refresh".format(self.NAME))
 
         if force_refresh or (current_time - self._last_refresh > self.REFRESH_INTERVAL):
             try:
@@ -149,11 +146,11 @@ class FearGreedHandler(BaseAPIHandler):
                 self._last_refresh = current_time
                 return parsed
             except Exception as exc:
-                logger.error(f"{self.NAME}: refresh failed - {exc}", exc_info=True)
+                logger.error("{0}: refresh failed - {1}".format(self.NAME, exc), exc_info=True)
                 # Fallback to cached data if available
                 cached_data = await self._read_cache()
                 if cached_data:
-                    logger.info(f"{self.NAME}: Using cached data due to refresh failure")
+                    logger.info("{0}: Using cached data due to refresh failure".format(self.NAME))
                     return cached_data
                 else:
                     # Return default data if no cache available

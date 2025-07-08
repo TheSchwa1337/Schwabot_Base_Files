@@ -1,3 +1,15 @@
+    import cupy as cp
+import hashlib
+import logging
+import time
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple, Union
+
+    import numpy as np
+
+from core.clean_math_foundation import BitPhase, CleanMathFoundation, ThermalState
+
 # !/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -14,24 +26,13 @@ CUDA Integration:
 
 # CUDA Integration with Fallback
 try:
-    import cupy as cp
     USING_CUDA = True
     _backend = 'cupy (GPU)'
     xp = cp
 except ImportError:
-    import numpy as np
     USING_CUDA = False
     _backend = 'numpy (CPU)'
     xp = np
-
-import hashlib
-import logging
-import time
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
-
-from core.clean_math_foundation import BitPhase, CleanMathFoundation, ThermalState
 
 # -*- coding: utf-8 -*-
 
@@ -44,9 +45,9 @@ operations that power the Schwabot trading system.
 
 logger = logging.getLogger(__name__)
 if USING_CUDA:
-    logger.info(f"⚡ CleanProfitVectorization using GPU acceleration: {_backend}")
+    logger.info("⚡ CleanProfitVectorization using GPU acceleration: {0}".format(_backend))
 else:
-    logger.info(f"🔄 CleanProfitVectorization using CPU fallback: {_backend}")
+    logger.info("🔄 CleanProfitVectorization using CPU fallback: {0}".format(_backend))
 
 
 class VectorizationMode(Enum):
@@ -242,7 +243,7 @@ class CleanProfitVectorization:
             # Check cache first
             cached_vector = self.cache.get(cache_key)
             if cached_vector is not None:
-                logger.debug(f"Using cached profit vector for key: {cache_key[:16]}...")
+                logger.debug("Using cached profit vector for key: {0}...".format(cache_key[:16]))
                 return cached_vector
 
             # Calculate base profit using math foundation
@@ -261,9 +262,7 @@ class CleanProfitVectorization:
             precision_factor = self._calculate_precision_factor(vector_input)
 
             # Combine all factors
-            total_profit = (
-                base_profit * mode_multiplier * risk_factor * thermal_factor * precision_factor
-            )
+            total_profit = base_profit * mode_multiplier * risk_factor * thermal_factor * precision_factor
 
             # Ensure bounded result
             total_profit = max(-1.0, min(1.0, total_profit))
@@ -295,15 +294,15 @@ class CleanProfitVectorization:
             self.total_calculation_time += calculation_time
 
             logger.debug(
-                f"Calculated profit vector: {
-                    total_profit:.6f} in {
-                    calculation_time:.4f}s"
+                "Calculated profit vector: {0} in {1}s".format(
+                    total_profit:.6f, 
+                    calculation_time:.4f)
             )
 
             return profit_vector
 
         except Exception as e:
-            logger.error(f"Error calculating profit vector: {e}")
+            logger.error("Error calculating profit vector: {0}".format(e))
             # Return safe default vector
             return ProfitVector(
                 vector_id="error_vector",
@@ -477,14 +476,12 @@ def demo_profit_vectorization():
 
     for mode in VectorizationMode:
         vector = vectorizer.calculate_profit_vector(test_input, mode)
-        print(
-            f"{mode.value}: {vector.profit_score:.6f} (confidence: {vector.confidence_score:.3f})"
-        )
+        print("{0}: {1} (confidence: {2})".format(mode.value, vector.profit_score:.6f, vector.confidence_score:.3f))
 
     # Show performance metrics
     metrics = vectorizer.get_performance_metrics()
-    print(f"\nCalculations: {metrics['total_calculations']}")
-    print(f"Avg time: {metrics['average_calculation_time']:.6f}s")
+    print("\nCalculations: {0}".format(metrics['total_calculations']))
+    print("Avg time: {0}s".format(metrics['average_calculation_time']:.6f))
 
 
 if __name__ == "__main__":

@@ -1356,7 +1356,7 @@ else:
 
 return {action: action,position_size: position_size,confidence: signal.confidence,expected_profit:
 signal.profit_score,signal_strength": signal.signal_strength,timestamp": signal.timestamp,symbol":
-signal.symbol,reasoning": f"Brain signal: {action} with {signal.confidence:.2f} confidence,
+signal.symbol,reasoning": "Brain signal: {0} with {1} confidence,
 
 
 
@@ -1368,24 +1368,24 @@ signal.symbol,reasoning": f"Brain signal: {action} with {signal.confidence:.2f} 
 
 
 
-        except Exception as e:logger.error(fTrading decision generation failed: {e})
+        except Exception as e:logger.error(fTrading decision generation failed: {2})
 
 
 
-return {action:HOLD,position_size": 0.0,confidence": 0.0,expected_profit": 0.0,signal_strength":
+return {3}
+
+
+
+
+
+
+
+def get_metrics_summary():-> Dict[str, Any]:".format(action, signal.confidence:.2f, e, action:HOLD,position_size": 0.0,confidence": 0.0,expected_profit": 0.0,signal_strength":
 0.0,timestamp": time.time(),symbol":BTC",reasoning":Error in signal processing",
 
 
 
-}
-
-
-
-
-
-
-
-def get_metrics_summary():-> Dict[str, Any]:"Get trading metrics summary.return {total_signals:
+)Get trading metrics summary.return {total_signals:
 self.metrics.total_signals,profitable_signals": self.metrics.profitable_signals,win_rate":
 self.metrics.win_rate,total_profit": self.metrics.total_profit,avg_profit_per_signal":
 self.metrics.avg_profit_per_signal,sharpe_ratio": self.metrics.sharpe_ratio,max_drawdown":

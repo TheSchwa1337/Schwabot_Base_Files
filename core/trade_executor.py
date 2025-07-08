@@ -225,11 +225,7 @@ total_orders: 0,executed_orders: 0,canceled_orders": 0,avg_execution_time": 0.0,
 
 
 
-            logger.info(f"TradeExecutor initialized in {
-
-
-
-'simulation' if simulation_mode else 'live'} mode.)
+            logger.info("TradeExecutor initialized in {0} mode.)
 
 
 
@@ -238,7 +234,11 @@ total_orders: 0,executed_orders: 0,canceled_orders": 0,avg_execution_time": 0.0,
 
 
 def place_order():-> Dict[str, Any]:Place a trading order.Args:asset: The trading asset
-(e.g.,BTC/USD).direction:buyorsell".
+(e.g.,BTC/USD).direction:buyorsell".format(
+
+
+
+'simulation' if simulation_mode else 'live').
 
 
 
@@ -491,7 +491,7 @@ if order and order.status == pending:
 
 
             order.status = canceledself.execution_stats[canceled_orders]
-    += 1logger.info(f"Order {order_id} canceled.)return {status:canceled,order_id: order_id}
+    += 1logger.info("Order {0} canceled.)return {1}
 
 
 
@@ -499,7 +499,7 @@ elif order:
 
 
 
-            logger.warning(f"Cannot cancel order {order_id} (status: {
+            logger.warning(f".format(order_id, status:canceled,order_id: order_id)Cannot cancel order {order_id} (status: {
 
 
 
@@ -507,7 +507,7 @@ order.status}).)
 
 
 
-        return {status:failed,message": f"Cannot cancel order in {order.status} state,}
+        return {status:failed,message": "Cannot cancel order in {0} state,}
 
 
 
@@ -515,7 +515,7 @@ else :
 
 
 
-logger.warning(f"Order {order_id} not found.)return {status:failed,message:Order not found}
+logger.warning(f".format(order.status)Order {order_id} not found.)return {status:failed,message:Order not found}
 
 
 
@@ -663,7 +663,7 @@ print(\n--- Trade Executor Demo (Simulation Mode) ---)
 
 
     buy_order_result
-    = executor.place_order(BTC/USD,buy, 0.001, 50000.0)print(f"Buy Order Result: {buy_order_result})
+    = executor.place_order(BTC/USD,buy, 0.001, 50000.0)print("Buy Order Result: {0})
 
 
 
@@ -676,7 +676,7 @@ print(\n--- Trade Executor Demo (Simulation Mode) ---)
 
 
     sell_order_result
-    = executor.place_order(ETH/USD,sell, 0.01, 3000.0)print(fSell Order Result: {sell_order_result})
+    = executor.place_order(ETH/USD,sell, 0.01, 3000.0)print(fSell Order Result: {1})
 
 
 
@@ -692,7 +692,7 @@ cancel_failed_result = executor.cancel_order(buy_order_result[order_id])
 
 
 
-print(fCancel Failed Result: {cancel_failed_result})
+print(fCancel Failed Result: {2})
 
 
 
@@ -712,7 +712,7 @@ executor_for_cancel = TradeExecutor(simulation_mode=True)
 
 
 
-pending_order_id = fPENDING-{int(time.time() * 1000)}
+pending_order_id = fPENDING-{3}
 
 
 
@@ -724,7 +724,7 @@ order_id = pending_order_id,
 
 
 
-asset=XRP/USD,direction=buy",
+asset=XRP/USD,direction=buy".format(buy_order_result, sell_order_result, cancel_failed_result, int(time.time() * 1000)),
 
 
 
@@ -744,7 +744,7 @@ status=pending",
 
 
 
-print(f"\nCreated pending order: {executor_for_cancel.get_order_status(pending_order_id)})
+print("\nCreated pending order: {0})
 
 
 
@@ -752,11 +752,11 @@ cancel_success_result = executor_for_cancel.cancel_order(pending_order_id)
 
 
 
-print(fCancel Success Result: {cancel_success_result})
+print(fCancel Success Result: {1})
 
 
 
-print(fStatus after cancel: {executor_for_cancel.get_order_status(pending_order_id)})
+print(fStatus after cancel: {0})
 
 
 
@@ -772,7 +772,7 @@ for key, value in stats.items():
 
 
 
-        print(f{key}: {value})
+        print(f{3}: {4})
 
 
 
@@ -784,7 +784,7 @@ for order in executor.get_all_orders():
 
 
 
-        print(f{order})
+        print(f{5})
 
 
 
@@ -792,7 +792,7 @@ if __name__ == __main__:
 
 
 
-    main()"'"
+    main()".format(executor_for_cancel.get_order_status(pending_order_id), cancel_success_result, executor_for_cancel.get_order_status(pending_order_id), key, value, order)'"
 
 
 

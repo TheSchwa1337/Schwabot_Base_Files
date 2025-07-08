@@ -1,3 +1,19 @@
+from core.unified_profit_vectorization_system import UnifiedProfitVectorizationSystem
+import argparse
+import asyncio
+import json
+import sys
+import time
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
+
+import numpy as np
+
+from utils.safe_print import error, info, safe_print, success, warn
+from core.strategy_bit_mapper import StrategyBitMapper
+from core.fractal_core import FractalCore
+from core.advanced_tensor_algebra import AdvancedTensorAlgebra
+
 #!/usr/bin/env python3
 """
 Tensor State Manager CLI - Advanced Tensor State Control
@@ -12,21 +28,6 @@ Features:
 - Monitor tensor performance metrics
 - Control tensor operations and calculations
 """
-
-from utils.safe_print import error, info, safe_print, success, warn
-from core.unified_profit_vectorization_system import UnifiedProfitVectorizationSystem
-from core.strategy_bit_mapper import StrategyBitMapper
-from core.fractal_core import FractalCore
-from core.advanced_tensor_algebra import AdvancedTensorAlgebra
-import argparse
-import asyncio
-import json
-import sys
-import time
-from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
-
-import numpy as np
 
 # Add project root to path
 sys.path.append(str(Path(__file__).parent.parent))
@@ -61,7 +62,7 @@ class TensorStateManagerCLI:
             success("✅ Tensor State Management System initialized successfully")
 
         except Exception as e:
-            error(f"❌ Failed to initialize system: {e}")
+            error("❌ Failed to initialize system: {0}".format(e))
             return False
 
         return True
@@ -74,30 +75,30 @@ class TensorStateManagerCLI:
         test_matrix = np.random.random((3, 3))
         tensor_result = self.tensor_algebra.tensor_dot_fusion(test_matrix, test_matrix)
         info(
-            f"Tensor algebra test: {
+            "Tensor algebra test: {0}".format(
                 tensor_result.shape if hasattr(
                     tensor_result,
-                    'shape') else 'success'}"
+                    'shape') else 'success')
         )
 
         # Test strategy mapper
         test_hash = np.random.random(64)
         strategy_result = self.strategy_mapper.select_strategy(test_hash)
         info(
-            f"Strategy mapper test: {
+            "Strategy mapper test: {0}".format(
                 strategy_result.get(
                     'status',
-                    'success')}"
+                    'success'))
         )
 
         # Test fractal core
         fractal_result = self.fractal_core.analyze_fractal_pattern(test_matrix)
-        info(f"Fractal core test: {fractal_result.get('status', 'success')}")
+        info("Fractal core test: {0}".format(fractal_result.get('status', 'success')))
 
         # Test profit system
         market_data = {"price": 50000.0, "volume": 1000.0, "volatility": 0.15}
         profit_result = self.profit_system.calculate_unified_profit(market_data)
-        info(f"Profit system test: {profit_result.profit_value:.6f}")
+        info("Profit system test: {0}".format(profit_result.profit_value:.6f))
 
     async def show_tensor_status(self):
         """Display comprehensive tensor system status."""
@@ -111,63 +112,63 @@ class TensorStateManagerCLI:
         # Tensor algebra status
         tensor_stats = self.tensor_algebra.get_statistics()
         info(f"📊 Tensor Algebra Statistics:")
-        info(f"  Total Operations: {tensor_stats.get('total_operations', 0)}")
+        info("  Total Operations: {0}".format(tensor_stats.get('total_operations', 0)))
         info(
-            f"  Matrix Operations: {
+            "  Matrix Operations: {0}".format(
                 tensor_stats.get(
                     'matrix_operations',
-                    0)}"
+                    0))
         )
         info(
-            f"  Vector Operations: {
+            "  Vector Operations: {0}".format(
                 tensor_stats.get(
                     'vector_operations',
-                    0)}"
+                    0))
         )
         info(
-            f"  Average Operation Time: {
+            "  Average Operation Time: {0}s".format(
                 tensor_stats.get(
                     'avg_operation_time',
-                    0):.3f}s"
+                    0):.3f)
         )
 
         # Strategy mapper status
         mapper_stats = self.strategy_mapper.get_statistics()
         info(f"🗺️  Strategy Mapper Statistics:")
-        info(f"  Total Strategies: {mapper_stats.get('total_strategies', 0)}")
-        info(f"  Cache Hits: {mapper_stats.get('cache_hits', 0)}")
-        info(f"  Cache Misses: {mapper_stats.get('cache_misses', 0)}")
+        info("  Total Strategies: {0}".format(mapper_stats.get('total_strategies', 0)))
+        info("  Cache Hits: {0}".format(mapper_stats.get('cache_hits', 0)))
+        info("  Cache Misses: {0}".format(mapper_stats.get('cache_misses', 0)))
         info(
-            f"  Average Match Time: {
+            "  Average Match Time: {0}s".format(
                 mapper_stats.get(
                     'avg_match_time',
-                    0):.3f}s"
+                    0):.3f)
         )
 
         # Fractal core status
         fractal_stats = self.fractal_core.get_statistics()
         info(f"🌀 Fractal Core Statistics:")
-        info(f"  Pattern Analysis: {fractal_stats.get('pattern_analysis', 0)}")
+        info("  Pattern Analysis: {0}".format(fractal_stats.get('pattern_analysis', 0)))
         info(
-            f"  Fractal Dimensions: {
+            "  Fractal Dimensions: {0}".format(
                 fractal_stats.get(
                     'fractal_dimensions',
-                    0)}"
+                    0))
         )
         info(
-            f"  Entropy Calculations: {
+            "  Entropy Calculations: {0}".format(
                 fractal_stats.get(
                     'entropy_calculations',
-                    0)}"
+                    0))
         )
 
         # Memory usage
         memory_info = self._get_memory_usage()
         info(f"💾 Memory Usage:")
-        info(f"  Tensor Cache: {memory_info.get('tensor_cache', 0):.1f}MB")
-        info(f"  Strategy Cache: {memory_info.get('strategy_cache', 0):.1f}MB")
-        info(f"  Fractal Cache: {memory_info.get('fractal_cache', 0):.1f}MB")
-        info(f"  Total Memory: {memory_info.get('total_memory', 0):.1f}MB")
+        info("  Tensor Cache: {0}MB".format(memory_info.get('tensor_cache', 0):.1f))
+        info("  Strategy Cache: {0}MB".format(memory_info.get('strategy_cache', 0):.1f))
+        info("  Fractal Cache: {0}MB".format(memory_info.get('fractal_cache', 0):.1f))
+        info("  Total Memory: {0}MB".format(memory_info.get('total_memory', 0):.1f))
 
     async def inspect_tensor_state(self, tensor_name: str):
         """Inspect a specific tensor state."""
@@ -175,21 +176,21 @@ class TensorStateManagerCLI:
             error("System not initialized. Run 'init' first.")
             return
 
-        info(f"🔍 INSPECTING TENSOR: {tensor_name}")
+        info("🔍 INSPECTING TENSOR: {0}".format(tensor_name))
         info("=" * 40)
 
         # Get tensor information
         tensor_info = self.tensor_algebra.get_tensor_info(tensor_name)
 
         if not tensor_info:
-            warn(f"Tensor '{tensor_name}' not found.")
+            warn("Tensor '{0}' not found.".format(tensor_name))
             return
 
-        info(f"Shape: {tensor_info.get('shape', 'Unknown')}")
-        info(f"Data Type: {tensor_info.get('dtype', 'Unknown')}")
-        info(f"Memory Usage: {tensor_info.get('memory_usage', 0):.2f}MB")
-        info(f"Last Modified: {tensor_info.get('last_modified', 'Unknown')}")
-        info(f"Operations Count: {tensor_info.get('operations_count', 0)}")
+        info("Shape: {0}".format(tensor_info.get('shape', 'Unknown')))
+        info("Data Type: {0}".format(tensor_info.get('dtype', 'Unknown')))
+        info("Memory Usage: {0}MB".format(tensor_info.get('memory_usage', 0):.2f))
+        info("Last Modified: {0}".format(tensor_info.get('last_modified', 'Unknown')))
+        info("Operations Count: {0}".format(tensor_info.get('operations_count', 0)))
 
         # Show tensor data (first few elements)
         tensor_data = tensor_info.get("data", None)
@@ -198,9 +199,9 @@ class TensorStateManagerCLI:
             if hasattr(tensor_data, "shape") and len(tensor_data.shape) <= 2:
                 # Show first few elements
                 preview = tensor_data.flatten()[:10]
-                info(f"  First 10 elements: {preview}")
+                info("  First 10 elements: {0}".format(preview))
             else:
-                info(f"  Tensor shape: {tensor_data.shape}")
+                info("  Tensor shape: {0}".format(tensor_data.shape))
 
     async def process_btc_tensor(self, price: float, volume: float, volatility: float):
         """Process BTC price data through the tensor pipeline."""
@@ -218,87 +219,85 @@ class TensorStateManagerCLI:
             "timestamp": time.time(),
         }
 
-        info(f"BTC Price: ${price:,.2f}")
-        info(f"Volume: {volume:,.0f}")
-        info(f"Volatility: {volatility:.3f}")
+        info("BTC Price: ${0}".format(price:,.2f))
+        info("Volume: {0}".format(volume:,.0f))
+        info("Volatility: {0}".format(volatility:.3f))
 
         # Step 1: Create price tensor
         info("\n📊 Step 1: Creating Price Tensor...")
         price_tensor = self.tensor_algebra.create_price_tensor(market_data)
-        info(f"Price tensor shape: {price_tensor.shape}")
-        info(f"Price tensor norm: {np.linalg.norm(price_tensor):.6f}")
+        info("Price tensor shape: {0}".format(price_tensor.shape))
+        info("Price tensor norm: {0}".format(np.linalg.norm(price_tensor):.6f))
 
         # Step 2: Generate hash vector
         info("\n🔗 Step 2: Generating Hash Vector...")
         hash_vector = self.strategy_mapper.generate_hash_vector(price_tensor)
-        info(f"Hash vector length: {len(hash_vector)}")
-        info(f"Hash vector norm: {np.linalg.norm(hash_vector):.6f}")
+        info("Hash vector length: {0}".format(len(hash_vector)))
+        info("Hash vector norm: {0}".format(np.linalg.norm(hash_vector):.6f))
 
         # Step 3: Select strategy
         info("\n🎯 Step 3: Selecting Strategy...")
         strategy_result = self.strategy_mapper.select_strategy(hash_vector)
         info(
-            f"Selected strategy: {
+            "Selected strategy: {0}".format(
                 strategy_result.get(
                     'strategy_name',
-                    'Unknown')}"
+                    'Unknown'))
         )
         info(
-            f"Strategy confidence: {
+            "Strategy confidence: {0}".format(
                 strategy_result.get(
                     'confidence',
-                    0):.3f}"
+                    0):.3f)
         )
         info(
-            f"Strategy tier: {
+            "Strategy tier: {0}".format(
                 strategy_result.get(
                     'strategy_tier',
-                    'Unknown')}"
+                    'Unknown'))
         )
 
         # Step 4: Fractal analysis
         info("\n🌀 Step 4: Fractal Analysis...")
         fractal_result = self.fractal_core.analyze_fractal_pattern(price_tensor)
         info(
-            f"Fractal dimension: {
+            "Fractal dimension: {0}".format(
                 fractal_result.get(
                     'fractal_dimension',
-                    0):.3f}"
+                    0):.3f)
         )
-        info(f"Entropy: {fractal_result.get('entropy', 0):.3f}")
+        info("Entropy: {0}".format(fractal_result.get('entropy', 0):.3f))
         info(
-            f"Pattern complexity: {
+            "Pattern complexity: {0}".format(
                 fractal_result.get(
                     'pattern_complexity',
-                    0):.3f}"
+                    0):.3f)
         )
 
         # Step 5: Profit calculation
         info("\n💰 Step 5: Profit Calculation...")
         profit_result = self.profit_system.calculate_unified_profit(market_data)
-        info(f"Profit value: {profit_result.profit_value:.6f}")
-        info(f"Confidence: {profit_result.confidence:.3f}")
-        info(f"Integration mode: {profit_result.integration_mode.value}")
+        info("Profit value: {0}".format(profit_result.profit_value:.6f))
+        info("Confidence: {0}".format(profit_result.confidence:.3f))
+        info("Integration mode: {0}".format(profit_result.integration_mode.value))
 
         # Step 6: Tensor fusion
         info("\n⚡ Step 6: Tensor Fusion...")
-        fusion_result = self.tensor_algebra.tensor_dot_fusion(
-            price_tensor, hash_vector.reshape(-1, 1)
-        )
-        info(f"Fusion result shape: {fusion_result.shape}")
-        info(f"Fusion magnitude: {np.linalg.norm(fusion_result):.6f}")
+        fusion_result = self.tensor_algebra.tensor_dot_fusion(price_tensor, hash_vector.reshape(-1, 1))
+        info("Fusion result shape: {0}".format(fusion_result.shape))
+        info("Fusion magnitude: {0}".format(np.linalg.norm(fusion_result):.6f))
 
         # Summary
         info("\n📋 PROCESSING SUMMARY")
         info("=" * 25)
         info(
-            f"Final Signal Strength: {
+            "Final Signal Strength: {0}".format(
                 strategy_result.get(
                     'signal_strength',
-                    0):.3f}"
+                    0):.3f)
         )
-        info(f"Final Confidence: {profit_result.confidence:.3f}")
-        info(f"Processing Time: {time.time() - market_data['timestamp']:.3f}s")
+        info("Final Confidence: {0}".format(profit_result.confidence:.3f))
+        info("Processing Time: {0}s".format(time.time() - market_data['timestamp']:.3f))
 
     async def show_tensor_cache(self, limit: int = 10):
         """Display tensor cache contents."""
@@ -306,7 +305,7 @@ class TensorStateManagerCLI:
             error("System not initialized. Run 'init' first.")
             return
 
-        info(f"💾 TENSOR CACHE CONTENTS (Top {limit})")
+        info("💾 TENSOR CACHE CONTENTS (Top {0})".format(limit))
         info("=" * 45)
 
         cache_entries = self.tensor_algebra.get_cache_entries(limit=limit)
@@ -316,11 +315,11 @@ class TensorStateManagerCLI:
             return
 
         for i, entry in enumerate(cache_entries, 1):
-            info(f"{i}. Tensor: {entry.get('name', 'Unknown')}")
-            info(f"   Shape: {entry.get('shape', 'Unknown')}")
-            info(f"   Memory: {entry.get('memory_usage', 0):.2f}MB")
-            info(f"   Last Used: {entry.get('last_used', 'Unknown')}")
-            info(f"   Access Count: {entry.get('access_count', 0)}")
+            info("{0}. Tensor: {1}".format(i, entry.get('name', 'Unknown')))
+            info("   Shape: {0}".format(entry.get('shape', 'Unknown')))
+            info("   Memory: {0}MB".format(entry.get('memory_usage', 0):.2f))
+            info("   Last Used: {0}".format(entry.get('last_used', 'Unknown')))
+            info("   Access Count: {0}".format(entry.get('access_count', 0)))
             info("")
 
     async def clear_tensor_cache(self):
@@ -351,60 +350,60 @@ class TensorStateManagerCLI:
         tensor_perf = self.tensor_algebra.get_performance_metrics()
         info(f"📊 Tensor Algebra Performance:")
         info(
-            f"  Average Operation Time: {
+            "  Average Operation Time: {0}s".format(
                 tensor_perf.get(
                     'avg_operation_time',
-                    0):.3f}s"
+                    0):.3f)
         )
-        info(f"  Total Operations: {tensor_perf.get('total_operations', 0)}")
-        info(f"  Cache Hit Rate: {tensor_perf.get('cache_hit_rate', 0):.1f}%")
+        info("  Total Operations: {0}".format(tensor_perf.get('total_operations', 0)))
+        info("  Cache Hit Rate: {0}%".format(tensor_perf.get('cache_hit_rate', 0):.1f))
         info(
-            f"  Memory Efficiency: {
+            "  Memory Efficiency: {0}%".format(
                 tensor_perf.get(
                     'memory_efficiency',
-                    0):.1f}%"
+                    0):.1f)
         )
 
         # Strategy mapper performance
         mapper_perf = self.strategy_mapper.get_performance_metrics()
         info(f"🗺️  Strategy Mapper Performance:")
         info(
-            f"  Average Match Time: {
+            "  Average Match Time: {0}s".format(
                 mapper_perf.get(
                     'avg_match_time',
-                    0):.3f}s"
+                    0):.3f)
         )
-        info(f"  Total Matches: {mapper_perf.get('total_matches', 0)}")
-        info(f"  Match Accuracy: {mapper_perf.get('match_accuracy', 0):.1f}%")
+        info("  Total Matches: {0}".format(mapper_perf.get('total_matches', 0)))
+        info("  Match Accuracy: {0}%".format(mapper_perf.get('match_accuracy', 0):.1f))
 
         # Fractal core performance
         fractal_perf = self.fractal_core.get_performance_metrics()
         info(f"🌀 Fractal Core Performance:")
         info(
-            f"  Average Analysis Time: {
+            "  Average Analysis Time: {0}s".format(
                 fractal_perf.get(
                     'avg_analysis_time',
-                    0):.3f}s"
+                    0):.3f)
         )
-        info(f"  Total Analyses: {fractal_perf.get('total_analyses', 0)}")
+        info("  Total Analyses: {0}".format(fractal_perf.get('total_analyses', 0)))
         info(
-            f"  Pattern Detection Rate: {
+            "  Pattern Detection Rate: {0}%".format(
                 fractal_perf.get(
                     'pattern_detection_rate',
-                    0):.1f}%"
+                    0):.1f)
         )
 
         # Overall system performance
         overall_perf = self._calculate_overall_performance()
         info(f"🎯 Overall System Performance:")
         info(
-            f"  System Efficiency: {
+            "  System Efficiency: {0}%".format(
                 overall_perf.get(
                     'system_efficiency',
-                    0):.1f}%"
+                    0):.1f)
         )
-        info(f"  Response Time: {overall_perf.get('response_time', 0):.3f}s")
-        info(f"  Throughput: {overall_perf.get('throughput', 0):.1f} ops/sec")
+        info("  Response Time: {0}s".format(overall_perf.get('response_time', 0):.3f))
+        info("  Throughput: {0} ops/sec".format(overall_perf.get('throughput', 0):.1f))
 
     async def export_tensor_data(self, tensor_name: str, file_path: str):
         """Export tensor data to file."""
@@ -412,7 +411,7 @@ class TensorStateManagerCLI:
             error("System not initialized. Run 'init' first.")
             return
 
-        info(f"📤 EXPORTING TENSOR: {tensor_name}")
+        info("📤 EXPORTING TENSOR: {0}".format(tensor_name))
         info("=" * 35)
 
         try:
@@ -420,7 +419,7 @@ class TensorStateManagerCLI:
             tensor_data = self.tensor_algebra.get_tensor_data(tensor_name)
 
             if tensor_data is None:
-                warn(f"Tensor '{tensor_name}' not found.")
+                warn("Tensor '{0}' not found.".format(tensor_name))
                 return
 
             # Export based on file extension
@@ -428,7 +427,7 @@ class TensorStateManagerCLI:
 
             if file_path.suffix == ".npy":
                 np.save(file_path, tensor_data)
-                info(f"Saved as NumPy array: {file_path}")
+                info("Saved as NumPy array: {0}".format(file_path))
             elif file_path.suffix == ".json":
                 # Convert to JSON-serializable format
                 json_data = {
@@ -439,27 +438,25 @@ class TensorStateManagerCLI:
                 }
                 with open(file_path, "w") as f:
                     json.dump(json_data, f, indent=2)
-                info(f"Saved as JSON: {file_path}")
+                info("Saved as JSON: {0}".format(file_path))
             elif file_path.suffix == ".csv":
                 np.savetxt(file_path, tensor_data, delimiter=",")
-                info(f"Saved as CSV: {file_path}")
+                info("Saved as CSV: {0}".format(file_path))
             else:
-                error(f"Unsupported file format: {file_path.suffix}")
+                error("Unsupported file format: {0}".format(file_path.suffix))
                 return
 
-            success(f"✅ Tensor exported successfully to {file_path}")
+            success("✅ Tensor exported successfully to {0}".format(file_path))
 
         except Exception as e:
-            error(f"❌ Export failed: {e}")
+            error("❌ Export failed: {0}".format(e))
 
     def _get_memory_usage(self) -> Dict[str, float]:
         """Get memory usage information."""
         try:
             # Calculate approximate memory usage
             tensor_cache_size = len(self.tensor_algebra.get_cache_entries()) * 0.1  # MB per entry
-            strategy_cache_size = (
-                len(self.strategy_mapper.get_cache_entries()) * 0.05
-            )  # MB per entry
+            strategy_cache_size = len(self.strategy_mapper.get_cache_entries()) * 0.05  # MB per entry
             fractal_cache_size = len(self.fractal_core.get_cache_entries()) * 0.02  # MB per entry
 
             return {
@@ -537,9 +534,7 @@ class TensorStateManagerCLI:
                 elif command.startswith("btc "):
                     parts = command.split()
                     if len(parts) >= 4:
-                        await self.process_btc_tensor(
-                            float(parts[1]), float(parts[2]), float(parts[3])
-                        )
+                        await self.process_btc_tensor(float(parts[1]), float(parts[2]), float(parts[3]))
                     else:
                         error("Usage: btc <price> <volume> <volatility>")
                 elif command.startswith("export "):
@@ -549,13 +544,13 @@ class TensorStateManagerCLI:
                     else:
                         error("Usage: export <tensor_name> <file_path>")
                 else:
-                    warn(f"Unknown command: {command}")
+                    warn("Unknown command: {0}".format(command))
 
             except KeyboardInterrupt:
                 info("\n👋 Goodbye!")
                 break
             except Exception as e:
-                error(f"Error: {e}")
+                error("Error: {0}".format(e))
 
     def _show_help(self):
         """Show help information."""
@@ -572,9 +567,7 @@ class TensorStateManagerCLI:
 
 async def main():
     """Main CLI entry point."""
-    parser = argparse.ArgumentParser(
-        description="Tensor State Manager CLI - Advanced Tensor State Control"
-    )
+    parser = argparse.ArgumentParser(description="Tensor State Manager CLI - Advanced Tensor State Control")
     parser.add_argument("--init", action="store_true", help="Initialize the system")
     parser.add_argument("--status", action="store_true", help="Show system status")
     parser.add_argument("--cache", action="store_true", help="Show tensor cache")

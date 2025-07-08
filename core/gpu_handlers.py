@@ -1,3 +1,15 @@
+import logging
+import time
+from typing import Any, Dict, List, Optional, Tuple, Union
+    import cupy as cp
+    from .cpu_handlers import run_cpu_strategy
+        import asyncio
+
+import numpy as np
+    import numpy as np
+
+    from ..utils.cuda_helper import (
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -7,33 +19,24 @@ Provides GPU-accelerated handlers with automatic CPU fallback for all
 matrix, tensor, and vector operations.
 """
 
-import logging
-import time
-from typing import Any, Dict, List, Optional, Tuple, Union
-
-import numpy as np
-
 # CUDA Integration with Fallback
 try:
-    import cupy as cp
     USING_CUDA = True
     _backend = 'cupy (GPU)'
     xp = cp
 except ImportError:
-    import numpy as np
     USING_CUDA = False
     _backend = 'numpy (CPU)'
     xp = np
 
 logger = logging.getLogger(__name__)
 if USING_CUDA:
-    logger.info(f"⚡ GPU Handlers using GPU acceleration: {_backend}")
+    logger.info("⚡ GPU Handlers using GPU acceleration: {0}".format(_backend))
 else:
-    logger.info(f"🔄 GPU Handlers using CPU fallback: {_backend}")
+    logger.info("🔄 GPU Handlers using CPU fallback: {0}".format(_backend))
 
 # CUDA Helper Integration (for additional utilities)
 try:
-    from ..utils.cuda_helper import (
         get_cuda_status,
         report_cuda_status,
         safe_convolution,
@@ -49,7 +52,7 @@ try:
 
     CUDA_AVAILABLE = True
     logger = logging.getLogger(__name__)
-    logger.info(f"⚡ CUDA acceleration available for GPU Handlers: {_backend}")
+    logger.info("⚡ CUDA acceleration available for GPU Handlers: {0}".format(_backend))
 except ImportError:
     xp = np
     CUDA_AVAILABLE = False
@@ -58,7 +61,6 @@ except ImportError:
 
 # Import CPU handlers for fallback
 try:
-    from .cpu_handlers import run_cpu_strategy
 except ImportError:
 
     def run_cpu_strategy(task_id: str, data: Dict[str, Any]) -> Dict[str, Any]:
@@ -66,7 +68,7 @@ except ImportError:
 
 
 logger = logging.getLogger(__name__)
-logger.info(f"GPU Handlers initialized with backend: {_backend}")
+logger.info("GPU Handlers initialized with backend: {0}".format(_backend))
 
 
 def run_gpu_strategy(task_id: str, data: Dict[str, Any]) -> Dict[str, Any]:
@@ -85,7 +87,7 @@ def run_gpu_strategy(task_id: str, data: Dict[str, Any]) -> Dict[str, Any]:
     try:
         # Check if CUDA is available
         if not CUDA_AVAILABLE:
-            logger.warning(f"CUDA not available, falling back to CPU for {task_id}")
+            logger.warning("CUDA not available, falling back to CPU for {0}".format(task_id))
             return run_cpu_strategy(task_id, data)
 
         # Route to appropriate GPU handler based on task_id
@@ -123,15 +125,15 @@ def run_gpu_strategy(task_id: str, data: Dict[str, Any]) -> Dict[str, Any]:
         )
 
         logger.debug(
-            f"GPU strategy {task_id} completed in {
-                execution_time_ms:.2f}ms"
+            "GPU strategy {0} completed in {1}ms".format(task_id, 
+                execution_time_ms:.2f)
         )
         return result
 
     except Exception as e:
-        logger.error(f"GPU strategy {task_id} failed: {e}")
+        logger.error("GPU strategy {0} failed: {1}".format(task_id, e))
         # Fallback to CPU
-        logger.info(f"Falling back to CPU for {task_id}")
+        logger.info("Falling back to CPU for {0}".format(task_id))
         return run_cpu_strategy(task_id, data)
 
 
@@ -169,9 +171,7 @@ def _gpu_matrix_match(data: Dict[str, Any]) -> Dict[str, Any]:
             # Calculate similarities in parallel
             for matrix_data, matrix in batch_arrays:
                 # Flatten matrix for comparison
-                flat_matrix = safe_cuda_operation(
-                    lambda: matrix.flatten(), lambda: matrix.flatten()
-                )
+                flat_matrix = safe_cuda_operation(lambda: matrix.flatten(), lambda: matrix.flatten())
 
                 # Calculate cosine similarity with GPU acceleration
                 similarity = _gpu_cosine_similarity(hash_vector, flat_matrix)
@@ -191,7 +191,7 @@ def _gpu_matrix_match(data: Dict[str, Any]) -> Dict[str, Any]:
         }
 
     except Exception as e:
-        logger.error(f"GPU matrix match failed: {e}")
+        logger.error("GPU matrix match failed: {0}".format(e))
         return {"profit_delta": 0.0, "match_found": False}
 
 
@@ -211,14 +211,10 @@ def _gpu_ghost_tick_detector(data: Dict[str, Any]) -> Dict[str, Any]:
             return {"profit_delta": 0.0, "ghost_detected": False}
 
         # Calculate price momentum with GPU acceleration
-        price_momentum = safe_cuda_operation(
-            lambda: xp.diff(price_data), lambda: np.diff(price_data)
-        )
+        price_momentum = safe_cuda_operation(lambda: xp.diff(price_data), lambda: np.diff(price_data))
 
         # Calculate volume statistics with GPU acceleration
-        volume_mean = safe_cuda_operation(
-            lambda: xp.mean(volume_data), lambda: np.mean(volume_data)
-        )
+        volume_mean = safe_cuda_operation(lambda: xp.mean(volume_data), lambda: np.mean(volume_data))
         volume_std = safe_cuda_operation(lambda: xp.std(volume_data), lambda: np.std(volume_data))
 
         # Calculate volume anomaly
@@ -251,7 +247,7 @@ def _gpu_ghost_tick_detector(data: Dict[str, Any]) -> Dict[str, Any]:
         }
 
     except Exception as e:
-        logger.error(f"GPU ghost tick detection failed: {e}")
+        logger.error("GPU ghost tick detection failed: {0}".format(e))
         return {"profit_delta": 0.0, "ghost_detected": False}
 
 
@@ -273,17 +269,11 @@ def _gpu_altitude_rebalance(data: Dict[str, Any]) -> Dict[str, Any]:
             lambda: np.array([pos.get("value", 0) for pos in positions]),
         )
 
-        total_value = safe_cuda_operation(
-            lambda: xp.sum(position_values), lambda: np.sum(position_values)
-        )
+        total_value = safe_cuda_operation(lambda: xp.sum(position_values), lambda: np.sum(position_values))
 
         current_weights = safe_cuda_operation(
-            lambda: (
-                position_values / total_value if total_value > 0 else xp.zeros_like(position_values)
-            ),
-            lambda: (
-                position_values / total_value if total_value > 0 else np.zeros_like(position_values)
-            ),
+            lambda: (position_values / total_value if total_value > 0 else xp.zeros_like(position_values)),
+            lambda: (position_values / total_value if total_value > 0 else np.zeros_like(position_values)),
         )
 
         # Calculate rebalancing needs with GPU acceleration
@@ -310,7 +300,7 @@ def _gpu_altitude_rebalance(data: Dict[str, Any]) -> Dict[str, Any]:
         }
 
     except Exception as e:
-        logger.error(f"GPU altitude rebalance failed: {e}")
+        logger.error("GPU altitude rebalance failed: {0}".format(e))
         return {"profit_delta": 0.0, "rebalanced": False}
 
 
@@ -332,9 +322,7 @@ def _gpu_fractal_analysis(data: Dict[str, Any]) -> Dict[str, Any]:
         similarity = _gpu_calculate_self_similarity(time_series)
 
         # Detect fractal patterns
-        fractal_score = safe_cuda_operation(
-            lambda: fractal_dim * similarity, lambda: fractal_dim * similarity
-        )
+        fractal_score = safe_cuda_operation(lambda: fractal_dim * similarity, lambda: fractal_dim * similarity)
 
         # Calculate profit potential (higher for GPU)
         profit_delta = float(fractal_score * 0.05)  # 5% of fractal score
@@ -349,7 +337,7 @@ def _gpu_fractal_analysis(data: Dict[str, Any]) -> Dict[str, Any]:
         }
 
     except Exception as e:
-        logger.error(f"GPU fractal analysis failed: {e}")
+        logger.error("GPU fractal analysis failed: {0}".format(e))
         return {"profit_delta": 0.0, "fractal_detected": False}
 
 
@@ -373,9 +361,7 @@ def _gpu_tensor_operations(data: Dict[str, Any]) -> Dict[str, Any]:
         elif operation == "tensordot":
             result = safe_tensor_contraction(tensor_a, tensor_b, axes=0)
         elif operation == "outer":
-            result = safe_cuda_operation(
-                lambda: xp.outer(tensor_a, tensor_b), lambda: np.outer(tensor_a, tensor_b)
-            )
+            result = safe_cuda_operation(lambda: xp.outer(tensor_a, tensor_b), lambda: np.outer(tensor_a, tensor_b))
         elif operation == "eigenvalue":
             result = safe_eigenvalue_decomposition(tensor_a)
         elif operation == "svd":
@@ -396,15 +382,13 @@ def _gpu_tensor_operations(data: Dict[str, Any]) -> Dict[str, Any]:
             "profit_delta": profit_delta,
             "operation_completed": True,
             "result_shape": result.shape if hasattr(result, "shape") else None,
-            "result_sum": float(
-                safe_cuda_operation(lambda: xp.sum(result), lambda: np.sum(result))
-            ),
+            "result_sum": float(safe_cuda_operation(lambda: xp.sum(result), lambda: np.sum(result))),
             "complexity_score": float(complexity),
             "gpu_accelerated": True,
         }
 
     except Exception as e:
-        logger.error(f"GPU tensor operations failed: {e}")
+        logger.error("GPU tensor operations failed: {0}".format(e))
         return {"profit_delta": 0.0, "operation_completed": False}
 
 
@@ -420,12 +404,8 @@ def _gpu_spectral_analysis(data: Dict[str, Any]) -> Dict[str, Any]:
             return {"profit_delta": 0.0, "spectral_analyzed": False}
 
         # Apply window function with GPU acceleration
-        window = safe_cuda_operation(
-            lambda: xp.hanning(len(signal_data)), lambda: np.hanning(len(signal_data))
-        )
-        windowed_signal = safe_cuda_operation(
-            lambda: signal_data * window, lambda: signal_data * window
-        )
+        window = safe_cuda_operation(lambda: xp.hanning(len(signal_data)), lambda: np.hanning(len(signal_data)))
+        windowed_signal = safe_cuda_operation(lambda: signal_data * window, lambda: signal_data * window)
 
         # Compute FFT with GPU acceleration
         fft_result = safe_fft(windowed_signal)
@@ -434,9 +414,7 @@ def _gpu_spectral_analysis(data: Dict[str, Any]) -> Dict[str, Any]:
         )
 
         # Calculate power spectrum with GPU acceleration
-        power_spectrum = safe_cuda_operation(
-            lambda: xp.abs(fft_result) ** 2, lambda: np.abs(fft_result) ** 2
-        )
+        power_spectrum = safe_cuda_operation(lambda: xp.abs(fft_result) ** 2, lambda: np.abs(fft_result) ** 2)
 
         # Find dominant frequencies
         positive_freq_mask = safe_cuda_operation(lambda: frequencies > 0, lambda: frequencies > 0)
@@ -444,9 +422,7 @@ def _gpu_spectral_analysis(data: Dict[str, Any]) -> Dict[str, Any]:
             lambda: power_spectrum[positive_freq_mask], lambda: power_spectrum[positive_freq_mask]
         )
 
-        dominant_freq_idx = safe_cuda_operation(
-            lambda: xp.argmax(positive_power), lambda: np.argmax(positive_power)
-        )
+        dominant_freq_idx = safe_cuda_operation(lambda: xp.argmax(positive_power), lambda: np.argmax(positive_power))
         dominant_frequency = safe_cuda_operation(
             lambda: frequencies[positive_freq_mask][dominant_freq_idx],
             lambda: frequencies[positive_freq_mask][dominant_freq_idx],
@@ -477,7 +453,7 @@ def _gpu_spectral_analysis(data: Dict[str, Any]) -> Dict[str, Any]:
         }
 
     except Exception as e:
-        logger.error(f"GPU spectral analysis failed: {e}")
+        logger.error("GPU spectral analysis failed: {0}".format(e))
         return {"profit_delta": 0.0, "spectral_analyzed": False}
 
 
@@ -493,14 +469,10 @@ def _gpu_entropy_calculation(data: Dict[str, Any]) -> Dict[str, Any]:
             return {"profit_delta": 0.0, "entropy_calculated": False}
 
         # Normalize to probability distribution with GPU acceleration
-        total = safe_cuda_operation(
-            lambda: xp.sum(probability_dist), lambda: np.sum(probability_dist)
-        )
+        total = safe_cuda_operation(lambda: xp.sum(probability_dist), lambda: np.sum(probability_dist))
 
         if total > 0:
-            normalized_dist = safe_cuda_operation(
-                lambda: probability_dist / total, lambda: probability_dist / total
-            )
+            normalized_dist = safe_cuda_operation(lambda: probability_dist / total, lambda: probability_dist / total)
         else:
             normalized_dist = probability_dist
 
@@ -511,9 +483,7 @@ def _gpu_entropy_calculation(data: Dict[str, Any]) -> Dict[str, Any]:
         )
 
         # Calculate maximum possible entropy
-        max_entropy = safe_cuda_operation(
-            lambda: xp.log(len(normalized_dist)), lambda: np.log(len(normalized_dist))
-        )
+        max_entropy = safe_cuda_operation(lambda: xp.log(len(normalized_dist)), lambda: np.log(len(normalized_dist)))
 
         # Normalize entropy to [0, 1]
         normalized_entropy = safe_cuda_operation(
@@ -534,7 +504,7 @@ def _gpu_entropy_calculation(data: Dict[str, Any]) -> Dict[str, Any]:
         }
 
     except Exception as e:
-        logger.error(f"GPU entropy calculation failed: {e}")
+        logger.error("GPU entropy calculation failed: {0}".format(e))
         return {"profit_delta": 0.0, "entropy_calculated": False}
 
 
@@ -544,19 +514,13 @@ def _gpu_generic_strategy(data: Dict[str, Any]) -> Dict[str, Any]:
         # Simple generic computation with GPU acceleration
         input_data = data.get("input_data", [])
         if isinstance(input_data, list):
-            input_array = safe_cuda_operation(
-                lambda: xp.array(input_data), lambda: np.array(input_data)
-            )
+            input_array = safe_cuda_operation(lambda: xp.array(input_data), lambda: np.array(input_data))
         else:
-            input_array = safe_cuda_operation(
-                lambda: xp.array([input_data]), lambda: np.array([input_data])
-            )
+            input_array = safe_cuda_operation(lambda: xp.array([input_data]), lambda: np.array([input_data]))
 
         # Basic statistical analysis with GPU acceleration
         if input_array.size > 0:
-            mean_val = safe_cuda_operation(
-                lambda: xp.mean(input_array), lambda: np.mean(input_array)
-            )
+            mean_val = safe_cuda_operation(lambda: xp.mean(input_array), lambda: np.mean(input_array))
             std_val = safe_cuda_operation(lambda: xp.std(input_array), lambda: np.std(input_array))
             max_val = safe_cuda_operation(lambda: xp.max(input_array), lambda: np.max(input_array))
             min_val = safe_cuda_operation(lambda: xp.min(input_array), lambda: np.min(input_array))
@@ -578,7 +542,7 @@ def _gpu_generic_strategy(data: Dict[str, Any]) -> Dict[str, Any]:
         }
 
     except Exception as e:
-        logger.error(f"GPU generic strategy failed: {e}")
+        logger.error("GPU generic strategy failed: {0}".format(e))
         return {"profit_delta": 0.0, "generic_completed": False}
 
 
@@ -606,9 +570,7 @@ def _gpu_calculate_fractal_dimension(time_series: np.ndarray) -> float:
             return 1.0
 
         # GPU-accelerated box-counting
-        box_sizes = safe_cuda_operation(
-            lambda: xp.array([1, 2, 4, 8]), lambda: np.array([1, 2, 4, 8])
-        )
+        box_sizes = safe_cuda_operation(lambda: xp.array([1, 2, 4, 8]), lambda: np.array([1, 2, 4, 8]))
         box_counts = []
 
         for size in box_sizes:
@@ -628,9 +590,7 @@ def _gpu_calculate_fractal_dimension(time_series: np.ndarray) -> float:
             lambda: xp.log(1 / box_sizes[: len(box_counts)]),
             lambda: np.log(1 / box_sizes[: len(box_counts)]),
         )
-        log_counts = safe_cuda_operation(
-            lambda: xp.log(xp.array(box_counts)), lambda: np.log(np.array(box_counts))
-        )
+        log_counts = safe_cuda_operation(lambda: xp.log(xp.array(box_counts)), lambda: np.log(np.array(box_counts)))
 
         # Linear regression with GPU acceleration
         slope = safe_cuda_operation(
@@ -658,9 +618,7 @@ def _gpu_calculate_self_similarity(time_series: np.ndarray) -> float:
                 break
 
             # Create scaled version
-            scaled = safe_cuda_operation(
-                lambda: time_series[:: int(scale)], lambda: time_series[:: int(scale)]
-            )
+            scaled = safe_cuda_operation(lambda: time_series[:: int(scale)], lambda: time_series[:: int(scale)])
             if len(scaled) < 2:
                 continue
 
@@ -669,9 +627,7 @@ def _gpu_calculate_self_similarity(time_series: np.ndarray) -> float:
                 lambda: xp.corrcoef(time_series[: len(scaled)], scaled)[0, 1],
                 lambda: np.corrcoef(time_series[: len(scaled)], scaled)[0, 1],
             )
-            if not safe_cuda_operation(
-                lambda: xp.isnan(correlation), lambda: np.isnan(correlation)
-            ):
+            if not safe_cuda_operation(lambda: xp.isnan(correlation), lambda: np.isnan(correlation)):
                 similarities.append(abs(correlation))
 
         return float(
@@ -738,7 +694,7 @@ class GPUHandlers:
 
         except Exception as e:
             self.stats["failed_operations"] += 1
-            self.logger.error(f"GPU strategy {task_id} failed: {e}")
+            self.logger.error("GPU strategy {0} failed: {1}".format(task_id, e))
             return {
                 "task_id": task_id,
                 "error": str(e),
@@ -787,8 +743,6 @@ class GPUHandlers:
     async def process_market_data(self, market_data: dict) -> dict:
         """Async wrapper to process market data using GPU strategy."""
         start_time = time.time()
-        import asyncio
-
         await asyncio.sleep(0)
         # Use a generic or specific strategy for demonstration
         result = self.run_strategy("market_analysis", market_data)

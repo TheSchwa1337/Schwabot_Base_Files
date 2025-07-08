@@ -1,31 +1,31 @@
-"""Zero Point Energy and Zero-Based Equilibrium Core Module."""
-
 import time
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Optional
+    import cupy as cp
+from .clean_math_foundation import CleanMathFoundation
+import logging
+
+    import numpy as np
+
+"""Zero Point Energy and Zero-Based Equilibrium Core Module."""
 
 # CUDA Integration with Fallback
 try:
-    import cupy as cp
     USING_CUDA = True
     _backend = 'cupy (GPU)'
     xp = cp
 except ImportError:
-    import numpy as np
     USING_CUDA = False
     _backend = 'numpy (CPU)'
     xp = np
 
-from .clean_math_foundation import CleanMathFoundation
-
 # Log backend status
-import logging
 logger = logging.getLogger(__name__)
 if USING_CUDA:
-    logger.info(f"⚡ ZPE-ZBE Core using GPU acceleration: {_backend}")
+    logger.info("⚡ ZPE-ZBE Core using GPU acceleration: {0}".format(_backend))
 else:
-    logger.info(f"🔄 ZPE-ZBE Core using CPU fallback: {_backend}")
+    logger.info("🔄 ZPE-ZBE Core using CPU fallback: {0}".format(_backend))
 
 
 class QuantumSyncStatus(Enum):
@@ -141,9 +141,7 @@ class ZPEZBECore:
 
         # Calculate stability score
         price_range = upper_bound - lower_bound
-        normalized_position = (
-            (current_price - lower_bound) / price_range if price_range > 0 else 0.5
-        )
+        normalized_position = (current_price - lower_bound) / price_range if price_range > 0 else 0.5
         stability_score = 1.0 - abs(normalized_position - 0.5) * 2
 
         return ZBEBalance(
@@ -178,9 +176,7 @@ class ZPEZBECore:
         else:
             return QuantumSyncStatus.UNSYNCED
 
-    def dual_matrix_sync_trigger(
-        self, zpe_vector: ZPEVector, zbe_balance: ZBEBalance
-    ) -> Dict[str, Any]:
+    def dual_matrix_sync_trigger(self, zpe_vector: ZPEVector, zbe_balance: ZBEBalance) -> Dict[str, Any]:
         """
         Determine dual matrix synchronization trigger conditions.
 
@@ -205,9 +201,7 @@ class ZPEZBECore:
             "recommended_action": "hold" if is_quantum_synced else "monitor",
         }
 
-    def generate_quantum_soulprint_vector(
-        self, zpe_vector: ZPEVector, zbe_balance: ZBEBalance
-    ) -> Dict[str, float]:
+    def generate_quantum_soulprint_vector(self, zpe_vector: ZPEVector, zbe_balance: ZBEBalance) -> Dict[str, float]:
         """
         Generate a soulprint-compatible vector from ZPE and ZBE calculations.
 
@@ -227,9 +221,7 @@ class ZPEZBECore:
             "zbe_status": zbe_balance.status,
         }
 
-    def assess_quantum_strategy_confidence(
-        self, zpe_vector: ZPEVector, zbe_balance: ZBEBalance
-    ) -> float:
+    def assess_quantum_strategy_confidence(self, zpe_vector: ZPEVector, zbe_balance: ZBEBalance) -> float:
         """
         Calculate confidence score based on quantum synchronization metrics.
 
@@ -258,12 +250,7 @@ class ZPEZBECore:
         quantum_potential = zpe_vector.metadata.get("quantum_potential", 0.0)
 
         # Composite confidence calculation
-        confidence = (
-            sync_confidence * 0.4
-            + stability_factor * 0.3
-            + equilibrium_factor * 0.2
-            + quantum_potential * 0.1
-        )
+        confidence = sync_confidence * 0.4 + stability_factor * 0.3 + equilibrium_factor * 0.2 + quantum_potential * 0.1
 
         return max(0.0, min(1.0, confidence))
 
@@ -356,9 +343,7 @@ class QuantumPerformanceRegistry:
 
         # Normalize performance metrics
         for status, metrics in sync_performance.items():
-            metrics["avg_profit"] = (
-                metrics["total_profit"] / metrics["count"] if metrics["count"] > 0 else 0.0
-            )
+            metrics["avg_profit"] = metrics["total_profit"] / metrics["count"] if metrics["count"] > 0 else 0.0
             metrics["avg_risk_score"] /= metrics["count"] if metrics["count"] > 0 else 1.0
 
         # Determine optimal thermal state
@@ -381,14 +366,8 @@ class QuantumPerformanceRegistry:
 
         return {
             "total_strategies": len(self.performance_entries),
-            "average_profit": (
-                total_profit / len(self.performance_entries) if self.performance_entries else 0.0
-            ),
-            "profit_rate": (
-                profitable_entries / len(self.performance_entries)
-                if self.performance_entries
-                else 0.0
-            ),
+            "average_profit": (total_profit / len(self.performance_entries) if self.performance_entries else 0.0),
+            "profit_rate": (profitable_entries / len(self.performance_entries) if self.performance_entries else 0.0),
             "performance_by_sync_status": sync_performance,
             "optimal_thermal_state": optimal_thermal_state,
         }

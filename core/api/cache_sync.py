@@ -1,5 +1,4 @@
 from __future__ import annotations
-
 import asyncio
 import importlib
 import inspect
@@ -7,7 +6,6 @@ from types import ModuleType
 import logging
 from typing import List
 from pathlib import Path
-
 from .handlers.base_handler import BaseAPIHandler
 
 """A service for synchronizing API data caches."""
@@ -70,9 +68,7 @@ class CacheSyncService:
 
         await self._discover_handlers()
         self._task = asyncio.create_task(self._run_loop())
-        logger.info(
-            f"[Service Started] CacheSyncService started with {len(self.handlers)} handlers"
-        )
+        logger.info("[Service Started] CacheSyncService started with {0} handlers".format(len(self.handlers)))
 
     async def stop(self) -> None:
         """Stop the cache sync service."""
@@ -107,7 +103,7 @@ class CacheSyncService:
             if py_file.name == "__init__.py" or py_file.name.startswith("_"):
                 continue
 
-            rel_mod = f"{HANDLER_PACKAGE}.{py_file.stem}"
+            rel_mod = "{0}.{1}".format(HANDLER_PACKAGE, py_file.stem)
             try:
                 mod: ModuleType = importlib.import_module(rel_mod)  # noqa: PERF401
             except Exception as exc:  # noqa: BLE001

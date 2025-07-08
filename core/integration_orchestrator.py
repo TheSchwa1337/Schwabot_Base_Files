@@ -1,12 +1,15 @@
+import os
+
+import numpy as np
+
+from core.matrix_mapper import match_hash_to_matrix
+from core.strategy_loader import load_strategy
+from core.unified_trading_pipeline import UnifiedTradingPipeline
+
 # !/usr/bin/env python3
 """
 Integration Orchestrator - Full-system async orchestrator
 """
-import numpy as np
-import os
-from core.matrix_mapper import match_hash_to_matrix
-from core.strategy_loader import load_strategy
-from core.unified_trading_pipeline import UnifiedTradingPipeline
 
 
 def orchestrate_trade(input_hash_vec, matrix_dir, strategy_name=None):

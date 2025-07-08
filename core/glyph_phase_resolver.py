@@ -1,3 +1,8 @@
+import logging
+import time
+from enum import Enum
+from typing import Any, Dict, Optional, Union
+
 # !/usr/bin/env python3
 """
 Glyph Phase Resolver.
@@ -5,11 +10,6 @@ Glyph Phase Resolver.
 Routes glyph logic based on observed phase shifts and entropy dynamics.
 This module provides intelligent glyph routing for the Schwabot trading system.
 """
-
-import logging
-import time
-from enum import Enum
-from typing import Any, Dict, Optional, Union
 
 logger = logging.getLogger(__name__)
 
@@ -88,9 +88,7 @@ class GlyphPhaseResolver:
 
             # Integrate entropy corridor status
             if entropy_corridor_status:
-                routing_behavior = self._apply_entropy_adjustments(
-                    routing_behavior, entropy_corridor_status
-                )
+                routing_behavior = self._apply_entropy_adjustments(routing_behavior, entropy_corridor_status)
 
             # Store routing decision in history
             self.metrics["routing_history"].append(
@@ -109,12 +107,10 @@ class GlyphPhaseResolver:
             return routing_behavior
 
         except Exception as e:
-            logger.error(f"Error in glyph phase resolution: {e}")
+            logger.error("Error in glyph phase resolution: {0}".format(e))
             return RoutingBehavior.CONSERVATIVE_ROUTING.value
 
-    def _apply_entropy_adjustments(
-        self, current_routing: str, entropy_status: Dict[str, Any]
-    ) -> str:
+    def _apply_entropy_adjustments(self, current_routing: str, entropy_status: Dict[str, Any]) -> str:
         """
         Apply entropy-based adjustments to routing behavior.
 
@@ -146,21 +142,15 @@ class GlyphPhaseResolver:
             # Check entropy trend
             entropy_trend = entropy_status.get("entropy_trend", "stable")
 
-            if (
-                entropy_trend == "increasing"
-                and current_routing == RoutingBehavior.NORMAL_GLYPH_ROUTING.value
-            ):
+            if entropy_trend == "increasing" and current_routing == RoutingBehavior.NORMAL_GLYPH_ROUTING.value:
                 return RoutingBehavior.HIGH_ENTROPY_ROUTING.value
-            elif (
-                entropy_trend == "decreasing"
-                and current_routing == RoutingBehavior.CONSERVATIVE_ROUTING.value
-            ):
+            elif entropy_trend == "decreasing" and current_routing == RoutingBehavior.CONSERVATIVE_ROUTING.value:
                 return RoutingBehavior.NORMAL_GLYPH_ROUTING.value
 
             return current_routing
 
         except Exception as e:
-            logger.error(f"Error applying entropy adjustments: {e}")
+            logger.error("Error applying entropy adjustments: {0}".format(e))
             return current_routing
 
     def get_glyph_phase_state(
@@ -197,7 +187,7 @@ class GlyphPhaseResolver:
             return phase
 
         except Exception as e:
-            logger.error(f"Error determining glyph phase state: {e}")
+            logger.error("Error determining glyph phase state: {0}".format(e))
             return GlyphPhase.NORMAL
 
     def calculate_phase_confidence(
@@ -221,9 +211,7 @@ class GlyphPhaseResolver:
             # Add entropy-based confidence
             if entropy_corridor_status:
                 entropy_level = entropy_corridor_status.get("entropy_level", 0.5)
-                entropy_confidence = (
-                    1.0 - abs(entropy_level - 0.5) * 2
-                )  # Peak confidence at 0.5 entropy
+                entropy_confidence = 1.0 - abs(entropy_level - 0.5) * 2  # Peak confidence at 0.5 entropy
                 confidence += entropy_confidence * 0.3  # 30% weight for entropy
 
                 # Add trend confidence
@@ -234,7 +222,7 @@ class GlyphPhaseResolver:
             return max(0.0, min(1.0, confidence))
 
         except Exception as e:
-            logger.error(f"Error calculating phase confidence: {e}")
+            logger.error("Error calculating phase confidence: {0}".format(e))
             return 0.5  # Default moderate confidence
 
     def get_routing_statistics(self) -> Dict[str, Any]:
@@ -249,12 +237,8 @@ class GlyphPhaseResolver:
 
             # Calculate additional statistics
             if self.metrics["routing_history"]:
-                recent_routings = [
-                    entry["routing"] for entry in self.metrics["routing_history"][-10:]
-                ]
-                stats["most_common_recent_routing"] = max(
-                    set(recent_routings), key=recent_routings.count
-                )
+                recent_routings = [entry["routing"] for entry in self.metrics["routing_history"][-10:]]
+                stats["most_common_recent_routing"] = max(set(recent_routings), key=recent_routings.count)
 
                 phase_shifts = [entry["phase_shift"] for entry in self.metrics["routing_history"]]
                 stats["average_phase_shift"] = sum(phase_shifts) / len(phase_shifts)
@@ -264,7 +248,7 @@ class GlyphPhaseResolver:
             return stats
 
         except Exception as e:
-            logger.error(f"Error getting routing statistics: {e}")
+            logger.error("Error getting routing statistics: {0}".format(e))
             return self.metrics.copy()
 
     def reset_metrics(self) -> None:
@@ -290,11 +274,11 @@ def test_glyph_phase_resolver():
 
     # Test normal resolution
     result1 = resolver.resolve_glyph_phase(0.05)
-    print(f"Normal phase resolution: {result1}")
+    print("Normal phase resolution: {0}".format(result1))
 
     # Test divergence resolution
     result2 = resolver.resolve_glyph_phase(0.15)
-    print(f"Divergence phase resolution: {result2}")
+    print("Divergence phase resolution: {0}".format(result2))
 
     # Test with entropy status
     entropy_status = {
@@ -303,19 +287,19 @@ def test_glyph_phase_resolver():
         "entropy_trend": "increasing",
     }
     result3 = resolver.resolve_glyph_phase(0.05, entropy_status)
-    print(f"High entropy resolution: {result3}")
+    print("High entropy resolution: {0}".format(result3))
 
     # Test phase state
     phase_state = resolver.get_glyph_phase_state(0.12, entropy_status)
-    print(f"Phase state: {phase_state}")
+    print("Phase state: {0}".format(phase_state))
 
     # Test confidence calculation
     confidence = resolver.calculate_phase_confidence(0.08, entropy_status)
-    print(f"Phase confidence: {confidence:.3f}")
+    print("Phase confidence: {0}".format(confidence:.3f))
 
     # Test statistics
     stats = resolver.get_routing_statistics()
-    print(f"Routing statistics: {stats}")
+    print("Routing statistics: {0}".format(stats))
 
     print("Glyph Phase Resolver test completed!")
 

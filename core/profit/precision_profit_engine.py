@@ -1,9 +1,11 @@
 from typing import Any, Dict, List, Optional
 
+
 class PrecisionProfitEngine:
     """
     Minimal PrecisionProfitEngine for profit pattern logic and import integrity.
     """
+
     def __init__(self, config: Optional[Dict[str, Any]] = None):
         self.config = config or self._default_config()
         self.price_history: List[Any] = []
@@ -33,6 +35,6 @@ class PrecisionProfitEngine:
             'enable_macro_trading': True,
         }
 
-    def process_btc_tick(self, price=0.0, volume=0.0, qsc_alignment=0.0, gts_confirmation=0.0):
+    def process_btc_tick(self, price=0.0, volume=0.0, qsc_alignment=0.0, gts_confirmation=0.0) -> List[Any]:
         # Minimal stub: return empty list
         return []

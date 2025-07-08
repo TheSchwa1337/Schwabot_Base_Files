@@ -1,3 +1,13 @@
+import json
+import logging
+import time
+from dataclasses import dataclass, field
+from enum import Enum
+from pathlib import Path
+from typing import Any, Dict, List, Optional
+import yaml
+from jsonschema import Draft7Validator
+
 # !/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -15,17 +25,6 @@ Features:
 - Backup and restore functionality
 - CLI integration for settings management
 """
-
-import json
-import logging
-import time
-from dataclasses import dataclass, field
-from enum import Enum
-from pathlib import Path
-from typing import Any, Dict, List, Optional
-
-import yaml
-from jsonschema import Draft7Validator
 
 logger = logging.getLogger(__name__)
 
@@ -119,12 +118,12 @@ class SettingsSection:
 
             if errors:
                 for error in errors:
-                    self._validation_errors.append(f"{error.path}: {error.message}")
+                    self._validation_errors.append("{0}: {1}".format(error.path, error.message))
                 return False
 
             return True
         except Exception as e:
-            self._validation_errors.append(f"Validation error: {e}")
+            self._validation_errors.append("Validation error: {0}".format(e))
             return False
 
     def get_validation_errors(self) -> List[str]:
@@ -148,10 +147,10 @@ class SettingsSection:
         return key in self._data
 
     def __repr__(self) -> str:
-        return f"<SettingsSection '{
-            self.name}' with {
+        return "<SettingsSection '{0}' with {1} settings>".format(
+            self.name, 
             len(
-                self._data)} settings>"
+                self._data))
 
 
 class AdvancedSettingsEngine:
@@ -210,7 +209,7 @@ class AdvancedSettingsEngine:
         else:
             self._load_all_files()
 
-        logger.info(f"Loaded {len(self._sections)} configuration sections")
+        logger.info("Loaded {0} configuration sections".format(len(self._sections)))
 
     def _load_single_file(self, file_path: str) -> None:
         """Load a single configuration file."""
@@ -219,7 +218,7 @@ class AdvancedSettingsEngine:
             path = self.config_dir / path
 
         if not path.exists():
-            raise FileNotFoundError(f"Configuration file not found: {path}")
+            raise FileNotFoundError("Configuration file not found: {0}".format(path))
 
         try:
             # Determine format
@@ -246,12 +245,12 @@ class AdvancedSettingsEngine:
                     if isinstance(section_data, dict):
                         section = SettingsSection(section_name, section_data)
                         self._sections[section_name] = section
-                        logger.debug(f"Loaded section '{section_name}' from {path}")
+                        logger.debug("Loaded section '{0}' from {1}".format(section_name, path))
 
-            logger.info(f"Successfully loaded configuration from {path}")
+            logger.info("Successfully loaded configuration from {0}".format(path))
 
         except Exception as e:
-            logger.error(f"Failed to load configuration from {path}: {e}")
+            logger.error("Failed to load configuration from {0}: {1}".format(path, e))
             raise
 
     def _load_all_files(self) -> None:
@@ -267,7 +266,7 @@ class AdvancedSettingsEngine:
             try:
                 self._load_single_file(str(file_path))
             except Exception as e:
-                logger.warning(f"Skipping {file_path}: {e}")
+                logger.warning("Skipping {0}: {1}".format(file_path, e))
 
     def save(
         self,
@@ -310,10 +309,10 @@ class AdvancedSettingsEngine:
                 else:
                     json.dump(data, f, indent=2, ensure_ascii=False)
 
-            logger.info(f"Configuration saved to {path}")
+            logger.info("Configuration saved to {0}".format(path))
 
         except Exception as e:
-            logger.error(f"Failed to save configuration to {path}: {e}")
+            logger.error("Failed to save configuration to {0}: {1}".format(path, e))
             raise
 
     def get(self, key: str, default: Any = None, section: Optional[str] = None) -> Any:
@@ -382,7 +381,7 @@ class AdvancedSettingsEngine:
             profile_name: Name of the profile to apply
         """
         if profile_name not in self._profiles:
-            raise ValueError(f"Profile '{profile_name}' not found")
+            raise ValueError("Profile '{0}' not found".format(profile_name))
 
         profile = self._profiles[profile_name]
 
@@ -400,7 +399,7 @@ class AdvancedSettingsEngine:
         if profile.validation_level != ValidationLevel.NONE:
             self._validate_all(profile.validation_level)
 
-        logger.info(f"Applied profile '{profile_name}'")
+        logger.info("Applied profile '{0}'".format(profile_name))
 
     def create_profile(self, name: str, description: str = "") -> SettingsProfile:
         """
@@ -414,7 +413,7 @@ class AdvancedSettingsEngine:
             Created SettingsProfile
         """
         if name in self._profiles:
-            raise ValueError(f"Profile '{name}' already exists")
+            raise ValueError("Profile '{0}' already exists".format(name))
 
         # Create profile with current settings
         current_settings = {}
@@ -429,7 +428,7 @@ class AdvancedSettingsEngine:
         )
 
         self._profiles[name] = profile
-        logger.info(f"Created profile '{name}'")
+        logger.info("Created profile '{0}'".format(name))
 
         return profile
 
@@ -508,14 +507,14 @@ class AdvancedSettingsEngine:
             Path to backup file
         """
         if not backup_name:
-            backup_name = f"backup_{int(time.time())}"
+            backup_name = "backup_{0}".format(int(time.time()))
 
-        backup_path = self._backup_dir / f"{backup_name}.yaml"
+        backup_path = self._backup_dir / "{0}.yaml".format(backup_name)
 
         # Save current settings to backup
         self.save(str(backup_path), ConfigFormat.YAML)
 
-        logger.info(f"Created backup: {backup_path}")
+        logger.info("Created backup: {0}".format(backup_path))
         return str(backup_path)
 
     def restore(self, backup_path: str) -> None:
@@ -527,11 +526,11 @@ class AdvancedSettingsEngine:
         """
         path = Path(backup_path)
         if not path.exists():
-            raise FileNotFoundError(f"Backup file not found: {backup_path}")
+            raise FileNotFoundError("Backup file not found: {0}".format(backup_path))
 
         # Load backup
         self._load_single_file(str(path))
-        logger.info(f"Restored settings from backup: {backup_path}")
+        logger.info("Restored settings from backup: {0}".format(backup_path))
 
     def _validate_all(self, level: ValidationLevel) -> bool:
         """Validate all sections."""
@@ -543,9 +542,9 @@ class AdvancedSettingsEngine:
             if level == ValidationLevel.SCHEMA and schema:
                 if not section.validate(schema):
                     all_valid = False
-                    logger.error(f"Validation failed for section '{section_name}'")
+                    logger.error("Validation failed for section '{0}'".format(section_name))
                     for error in section.get_validation_errors():
-                        logger.error(f"  {error}")
+                        logger.error("  {0}".format(error))
 
             elif level == ValidationLevel.STRICT:
                 # Basic type checking and required fields
@@ -580,7 +579,7 @@ class AdvancedSettingsEngine:
 
         return (
             f"<AdvancedSettingsEngine "
-            f"sections={sections_count} "
-            f"profiles={profiles_count} "
-            f"active_profile='{active_profile}'>"
+            "sections={0} ".format(sections_count)
+            "profiles={0} ".format(profiles_count)
+            "active_profile='{0}'>".format(active_profile)
         )

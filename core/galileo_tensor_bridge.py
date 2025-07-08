@@ -1,16 +1,17 @@
 import cmath
 from typing import Any, Dict, List, Optional, Union
 
+    from core.visual_execution_node import emit_dashboard_event
+    from core.visual_execution_node import log_profit_tick
+
 # Optional: Import dashboard event emitter if available
 try:
-    from core.visual_execution_node import emit_dashboard_event
 except ImportError:
     def emit_dashboard_event(event, data):
         pass  # No-op fallback
 
 # Optional: Import profit tick logger if available
 try:
-    from core.visual_execution_node import log_profit_tick
 except ImportError:
     def log_profit_tick(data):
         pass  # No-op fallback
@@ -146,9 +147,9 @@ def test_galileo_tensor_bridge():
     tensor_field = bridge.initialize_tensor_field()
     stability = bridge.calculate_stability_factors()
     gut_metrics = bridge.calculate_gut_metrics(btc_price=60000.0)
-    print(f"Tensor field shape: {tensor_field.shape}")
-    print(f"Stability factors: {stability}")
-    print(f"GUT metrics: {gut_metrics}")
+    print("Tensor field shape: {0}".format(tensor_field.shape))
+    print("Stability factors: {0}".format(stability))
+    print("GUT metrics: {0}".format(gut_metrics))
     print("GalileoTensorBridge test passed")
 
 if __name__ == "__main__":

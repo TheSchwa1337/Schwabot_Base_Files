@@ -580,7 +580,7 @@ self.signal_weights.tolist(),timestamp": signal_data.timestamp,source": signal_d
 
 
 
-            logger.debug(f" Immune trigger: {triggered} (strength: {activation_strength:.3f})
+            logger.debug(" Immune trigger: {0} (strength: {1})
 
 
 
@@ -693,11 +693,11 @@ Simple adaptive mechanism - adjust threshold based on activation
 
 
 
-            f Adaptive tau updated: {self.adaptive_tau:.3f}
+            f Adaptive tau updated: {2}
 
 
 
-            f(trigger rate: {trigger_rate:.3f})
+            f(trigger rate: {3})
 
 
 
@@ -870,12 +870,7 @@ GTS integration.Args:
 
 
 
-metadata={analysis: analysis,signal_source: signal_data.source,confidence:
-signal_data.confidence,processing_time: time.time() - signal_data.timestamp,
-
-
-
-            },
+metadata={4},
 
 
 
@@ -1009,7 +1004,12 @@ status.recent_responses = self.response_history[-100:] if self.response_history 
 
 
 
-        return {gate_status: {
+        return {5},recent_performance".format(triggered, activation_strength:.3f, self.adaptive_tau:.3f, trigger_rate:.3f, analysis: analysis,signal_source: signal_data.source,confidence:
+signal_data.confidence,processing_time: time.time() - signal_data.timestamp,
+
+
+
+            , gate_status: {
 
 
 
@@ -1019,7 +1019,7 @@ self.adaptive_tau,signal_weights": self.signal_weights.tolist(),
 
 
 
-            },recent_performance": {response_count: len(recent_responses),avg_trigger_strength": (
+            ): {response_count: len(recent_responses),avg_trigger_strength": (
 
 
 
@@ -1319,8 +1319,8 @@ if __name__ == __main__:
 
 
 
-print(fTotal signals: {status['gate_status']['total_signals']})'print(f"Trigger rate:
-{status['gate_status']['trigger_rate']:.3f})'print(f"Adaptive threshold:
+print(fTotal signals: {status['gate_status']['total_signals']})'print("Trigger rate:
+{0})'print(f".format(status['gate_status']['trigger_rate']:.3f)Adaptive threshold:
 {status['gate_status']['adaptive_threshold']:.3f})
 
 

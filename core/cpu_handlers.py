@@ -1,3 +1,15 @@
+import logging
+import time
+from typing import Any, Dict, List, Optional, Tuple, Union
+        import asyncio
+
+import numpy as np
+from scipy import linalg, signal, stats
+from scipy.fft import fft, fftfreq, ifft
+from scipy.sparse import csr_matrix
+
+    from ..utils.cuda_helper import safe_cuda_operation
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -7,18 +19,8 @@ Mirrors GPU logic using NumPy for CPU-based computation.
 Handles short-term, low-latency operations that require immediate response.
 """
 
-import logging
-import time
-from typing import Any, Dict, List, Optional, Tuple, Union
-
-import numpy as np
-from scipy import linalg, signal, stats
-from scipy.fft import fft, fftfreq, ifft
-from scipy.sparse import csr_matrix
-
 # Import CUDA helper for fallback operations
 try:
-    from ..utils.cuda_helper import safe_cuda_operation
 except ImportError:
 
     def safe_cuda_operation(operation, fallback_operation):
@@ -76,13 +78,13 @@ def run_cpu_strategy(task_id: str, data: Dict[str, Any]) -> Dict[str, Any]:
         )
 
         logger.debug(
-            f"CPU strategy {task_id} completed in {
-                execution_time_ms:.2f}ms"
+            "CPU strategy {0} completed in {1}ms".format(task_id, 
+                execution_time_ms:.2f)
         )
         return result
 
     except Exception as e:
-        logger.error(f"CPU strategy {task_id} failed: {e}")
+        logger.error("CPU strategy {0} failed: {1}".format(task_id, e))
         return {
             "task_id": task_id,
             "error": str(e),
@@ -129,7 +131,7 @@ def _cpu_matrix_match(data: Dict[str, Any]) -> Dict[str, Any]:
         }
 
     except Exception as e:
-        logger.error(f"CPU matrix match failed: {e}")
+        logger.error("CPU matrix match failed: {0}".format(e))
         return {"profit_delta": 0.0, "match_found": False}
 
 
@@ -166,7 +168,7 @@ def _cpu_ghost_tick_detector(data: Dict[str, Any]) -> Dict[str, Any]:
         }
 
     except Exception as e:
-        logger.error(f"CPU ghost tick detection failed: {e}")
+        logger.error("CPU ghost tick detection failed: {0}".format(e))
         return {"profit_delta": 0.0, "ghost_detected": False}
 
 
@@ -181,9 +183,7 @@ def _cpu_altitude_rebalance(data: Dict[str, Any]) -> Dict[str, Any]:
 
         # Calculate current weights
         total_value = sum(pos.get("value", 0) for pos in positions)
-        current_weights = [
-            pos.get("value", 0) / total_value if total_value > 0 else 0 for pos in positions
-        ]
+        current_weights = [pos.get("value", 0) / total_value if total_value > 0 else 0 for pos in positions]
 
         # Calculate rebalancing needs
         rebalance_diffs = []
@@ -205,7 +205,7 @@ def _cpu_altitude_rebalance(data: Dict[str, Any]) -> Dict[str, Any]:
         }
 
     except Exception as e:
-        logger.error(f"CPU altitude rebalance failed: {e}")
+        logger.error("CPU altitude rebalance failed: {0}".format(e))
         return {"profit_delta": 0.0, "rebalanced": False}
 
 
@@ -236,7 +236,7 @@ def _cpu_fractal_analysis(data: Dict[str, Any]) -> Dict[str, Any]:
         }
 
     except Exception as e:
-        logger.error(f"CPU fractal analysis failed: {e}")
+        logger.error("CPU fractal analysis failed: {0}".format(e))
         return {"profit_delta": 0.0, "fractal_detected": False}
 
 
@@ -272,7 +272,7 @@ def _cpu_tensor_operations(data: Dict[str, Any]) -> Dict[str, Any]:
         }
 
     except Exception as e:
-        logger.error(f"CPU tensor operations failed: {e}")
+        logger.error("CPU tensor operations failed: {0}".format(e))
         return {"profit_delta": 0.0, "operation_completed": False}
 
 
@@ -314,7 +314,7 @@ def _cpu_spectral_analysis(data: Dict[str, Any]) -> Dict[str, Any]:
         }
 
     except Exception as e:
-        logger.error(f"CPU spectral analysis failed: {e}")
+        logger.error("CPU spectral analysis failed: {0}".format(e))
         return {"profit_delta": 0.0, "spectral_analyzed": False}
 
 
@@ -353,7 +353,7 @@ def _cpu_entropy_calculation(data: Dict[str, Any]) -> Dict[str, Any]:
         }
 
     except Exception as e:
-        logger.error(f"CPU entropy calculation failed: {e}")
+        logger.error("CPU entropy calculation failed: {0}".format(e))
         return {"profit_delta": 0.0, "entropy_calculated": False}
 
 
@@ -390,7 +390,7 @@ def _cpu_generic_strategy(data: Dict[str, Any]) -> Dict[str, Any]:
         }
 
     except Exception as e:
-        logger.error(f"CPU generic strategy failed: {e}")
+        logger.error("CPU generic strategy failed: {0}".format(e))
         return {"profit_delta": 0.0, "generic_completed": False}
 
 
@@ -516,7 +516,7 @@ class CPUHandlers:
 
         except Exception as e:
             self.stats["failed_operations"] += 1
-            self.logger.error(f"CPU strategy {task_id} failed: {e}")
+            self.logger.error("CPU strategy {0} failed: {1}".format(task_id, e))
             return {
                 "task_id": task_id,
                 "error": str(e),
@@ -554,8 +554,6 @@ class CPUHandlers:
         """Async wrapper to process market data using CPU strategy."""
         start_time = time.time()
         # Simulate async work
-        import asyncio
-
         await asyncio.sleep(0)
         # Use a generic or specific strategy for demonstration
         result = self.run_strategy("market_analysis", market_data)

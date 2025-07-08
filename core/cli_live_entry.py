@@ -1,12 +1,3 @@
-# !/usr/bin/env python3
-"""
-CLI Live Entry - Live Trading Bot Command Interface
-Connects to real APIs and executes actual trades
-"""
-from core.unified_market_data_pipeline import create_unified_pipeline
-from core.soulprint_registry import SoulprintRegistry
-from core.clean_trading_pipeline import CleanTradingPipeline, create_trading_pipeline
-from core.ccxt_trading_executor import CCXTTradingExecutor
 import argparse
 import asyncio
 import json
@@ -15,6 +6,17 @@ import sys
 import time
 from typing import Any, Dict, Optional
 
+from core.ccxt_trading_executor import CCXTTradingExecutor
+
+from core.unified_market_data_pipeline import create_unified_pipeline
+from core.soulprint_registry import SoulprintRegistry
+from core.clean_trading_pipeline import CleanTradingPipeline, create_trading_pipeline
+
+# !/usr/bin/env python3
+"""
+CLI Live Entry - Live Trading Bot Command Interface
+Connects to real APIs and executes actual trades
+"""
 # Add parent directory to path for imports
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
@@ -103,7 +105,7 @@ class LiveTradingBot:
         return result
 
     except Exception as e:
-            return {"error": f"Trade execution failed: {e}"}
+            return {"error": "Trade execution failed: {0}".format(e)}
 
     def _log_trade_result(self, trade_result: Dict[str, Any]):
         """Log trade result to registry."""
@@ -134,12 +136,12 @@ class LiveTradingBot:
             )
 
     except Exception as e:
-            print(f"Failed to log trade: {e}")
+            print("Failed to log trade: {0}".format(e))
 
     async def start_automated_trading(self, interval: int = 60):
         """Start automated trading loop."""
         self.is_running = True
-        print(f"🚀 Starting automated trading (interval: {interval}s)")
+        print("🚀 Starting automated trading (interval: {0}s)".format(interval))
 
         while self.is_running:
             try:
@@ -154,13 +156,13 @@ class LiveTradingBot:
         "action", "hold")
                     if action != "hold":
                         print(
-    f"⚡ Trade executed: {action} {
-        self.config.get('symbol')}")
+    "⚡ Trade executed: {0} {1}".format(action, 
+        self.config.get('symbol')))
 
                 await asyncio.sleep(interval)
 
             except Exception as e:
-                print(f"❌ Trading error: {e}")
+                print("❌ Trading error: {0}".format(e))
                 await asyncio.sleep(interval)
 
     def stop_trading(self):
@@ -222,7 +224,7 @@ def main():
 
     # Load configuration
     if not os.path.exists(args.config):
-        print(f"❌ Configuration file not found: {args.config}")
+        print("❌ Configuration file not found: {0}".format(args.config))
         return 1
 
     with open(args.config, 'r') as f:
@@ -251,7 +253,7 @@ def main():
     elif args.mode in ["log-trigger", "best-phase", "profit-vector", "cross-asset-best", "last-triggers"]:
         return handle_registry_operation(config, args)
     else:
-        print(f"Unknown mode: {args.mode}")
+        print("Unknown mode: {0}".format(args.mode))
         return 1
 
 
@@ -268,16 +270,16 @@ async def execute_single_trade(config: Dict[str, Any], args):
 
         if trade_result:
             action = trade_result.get("trade_action", {}).get("action", "hold")
-            print(f"✅ Trade completed: {action} {args.symbol}")
+            print("✅ Trade completed: {0} {1}".format(action, args.symbol))
 
             if "execution_result" in trade_result:
                 execution = trade_result["execution_result"]
                 if "error" not in execution:
-                    print(f"💰 Order ID: {execution.get('id', 'N/A')}")
-                    print(f"💵 Amount: {execution.get('amount', 0)}")
-                    print(f"💲 Price: {execution.get('price', 0)}")
+                    print("💰 Order ID: {0}".format(execution.get('id', 'N/A')))
+                    print("💵 Amount: {0}".format(execution.get('amount', 0)))
+                    print("💲 Price: {0}".format(execution.get('price', 0)))
         else:
-                    print(f"❌ Execution error: {execution['error']}")
+                    print("❌ Execution error: {0}".format(execution['error']))
 
             return 0
         else:
@@ -285,7 +287,7 @@ async def execute_single_trade(config: Dict[str, Any], args):
             return 1
             
     except Exception as e:
-        print(f"❌ Error: {e}")
+        print("❌ Error: {0}".format(e))
         return 1
 
 async def start_automated_trading(config: Dict[str, Any], args):
@@ -301,7 +303,7 @@ async def start_automated_trading(config: Dict[str, Any], args):
         print("\n🛑 Trading bot stopped by user")
         return 0
     except Exception as e:
-        print(f"❌ Error: {e}")
+        print("❌ Error: {0}".format(e))
         return 1
 
 def handle_registry_operation(config: Dict[str, Any], args):

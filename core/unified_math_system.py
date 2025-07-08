@@ -1,15 +1,14 @@
+import hashlib
+from typing import Any, Dict
+from .clean_math_foundation import CleanMathFoundation
+from .zpe_zbe_core import ZBEBalance, ZPEVector, ZPEZBECore, ZPEZBEPerformanceTracker
+
 """
 Unified Mathematical System for Schwabot.
 
 This module provides a comprehensive mathematical foundation
 integrating quantum-inspired computational models.
 """
-
-import hashlib
-from typing import Any, Dict
-
-from .clean_math_foundation import CleanMathFoundation
-from .zpe_zbe_core import ZBEBalance, ZPEVector, ZPEZBECore, ZPEZBEPerformanceTracker
 
 
 def generate_unified_hash(data: Any) -> str:
@@ -80,9 +79,7 @@ class UnifiedMathSystem:
         )
 
         # Generate quantum soulprint vector
-        soulprint_vector = self.zpe_zbe_core.generate_quantum_soulprint_vector(
-            zpe_vector, zbe_balance
-        )
+        soulprint_vector = self.zpe_zbe_core.generate_quantum_soulprint_vector(zpe_vector, zbe_balance)
 
         # Assess strategy confidence
         confidence = self.zpe_zbe_core.assess_quantum_strategy_confidence(zpe_vector, zbe_balance)
@@ -183,9 +180,7 @@ class UnifiedMathSystem:
             zbe_balance: Zero-Based Equilibrium balance
             strategy_metadata: Strategy performance metadata
         """
-        self.performance_tracker.log_strategy_performance(
-            zpe_vector, zbe_balance, strategy_metadata
-        )
+        self.performance_tracker.log_strategy_performance(zpe_vector, zbe_balance, strategy_metadata)
 
     def get_quantum_strategy_recommendations(self) -> Dict[str, Any]:
         """
@@ -213,8 +208,4 @@ def create_unified_math_system() -> UnifiedMathSystem:
 
 
 # Export key functions and classes
-__all__ = [
-    "UnifiedMathSystem",
-    "generate_unified_hash",
-    "create_unified_math_system"
-]
+__all__ = ["UnifiedMathSystem", "generate_unified_hash", "create_unified_math_system"]

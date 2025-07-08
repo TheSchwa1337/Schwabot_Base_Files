@@ -1,12 +1,10 @@
 import asyncio
 from typing import Any, Dict, Optional
-
 import logging
 from pathlib import Path
 import json
 import time
 from datetime import timedelta, datetime
-
 from .data_models import APICredentials, MarketData, OrderRequest, OrderResponse, PortfolioPosition
 from .enums import ConnectionStatus, ExchangeType
 from .exchange_connection import ExchangeConnection
@@ -62,14 +60,11 @@ class ApiIntegrationManager:
 
     def load_configuration(self) -> None:
         """Load API configurations from the specified JSON file."""
-        logger.info(f"Loading API configuration from {self.config_path}...")
+        logger.info("Loading API configuration from {0}...".format(self.config_path))
 
         try:
             if not self.config_path.exists():
-                logger.warning(
-                    f"Configuration file not found: {self.config_path}. "
-                    "No exchanges will be loaded."
-                )
+                logger.warning("Configuration file not found: {0}. ".format(self.config_path) "No exchanges will be loaded.")
                 return
 
             with open(self.config_path, "r", encoding="utf-8") as f:
@@ -87,17 +82,15 @@ class ApiIntegrationManager:
                             testnet=exchange_config.get("testnet", True),
                         )
 
-                        self.connections[exchange_name] = ExchangeConnection(
-                            credentials, exchange_config
-                        )
+                        self.connections[exchange_name] = ExchangeConnection(credentials, exchange_config)
 
                     except (ValueError, KeyError) as e:
-                        logger.error(f"Failed to parse config for '{exchange_name}': {e}")
+                        logger.error("Failed to parse config for '{0}': {1}".format(exchange_name, e))
 
-            logger.info(f"Loaded {len(self.connections)} exchange configurations.")
+            logger.info("Loaded {0} exchange configurations.".format(len(self.connections)))
 
         except Exception as e:
-            logger.error(f"Error loading API configuration: {e}", exc_info=True)
+            logger.error("Error loading API configuration: {0}".format(e), exc_info=True)
 
     async def start(self) -> None:
         """Start the API integration system and all connections."""
@@ -151,7 +144,7 @@ class ApiIntegrationManager:
             except asyncio.CancelledError:
                 break
             except Exception as e:
-                logger.error(f"Error in main loop: {e}", exc_info=True)
+                logger.error("Error in main loop: {0}".format(e), exc_info=True)
                 await asyncio.sleep(self.reconnect_interval)
 
     async def _heartbeat_check(self) -> None:
@@ -162,14 +155,14 @@ class ApiIntegrationManager:
                 and time.time() - conn.last_heartbeat > self.heartbeat_interval
             ):
                 if conn.status != ConnectionStatus.RECONNECTING:
-                    logger.warning(f"Connection issue with {name}. Attempting to reconnect...")
+                    logger.warning("Connection issue with {0}. Attempting to reconnect...".format(name))
                     conn.status = ConnectionStatus.RECONNECTING
                     conn.reconnect_attempts += 1
 
                     if conn.reconnect_attempts <= conn.max_reconnect_attempts:
                         asyncio.create_task(conn.connect())
                     else:
-                        logger.error(f"Max reconnect attempts reached for {name}. Disabling.")
+                        logger.error("Max reconnect attempts reached for {0}. Disabling.".format(name))
                         conn.status = ConnectionStatus.ERROR
 
     async def _update_all_portfolios(self) -> None:
@@ -178,15 +171,13 @@ class ApiIntegrationManager:
         # For now, it's a placeholder for periodic background tasks.
         pass
 
-    async def place_order(
-        self, exchange_name: str, order_request: OrderRequest
-    ) -> Optional[OrderResponse]:
+    async def place_order(self, exchange_name: str, order_request: OrderRequest) -> Optional[OrderResponse]:
         """Place an order on a specific exchange."""
         connection = self.connections.get(exchange_name)
         if connection and connection.status == ConnectionStatus.CONNECTED:
             return await connection.place_order(order_request)
 
-        logger.error(f"Cannot place order: exchange '{exchange_name}' is not available.")
+        logger.error("Cannot place order: exchange '{0}' is not available.".format(exchange_name))
         return None
 
     async def get_market_data(self, exchange_name: str, symbol: str) -> Optional[MarketData]:
@@ -195,7 +186,7 @@ class ApiIntegrationManager:
         if connection and connection.status == ConnectionStatus.CONNECTED:
             return await connection.get_market_data(symbol)
 
-        logger.warning(f"Cannot get market data: exchange '{exchange_name}' is not available.")
+        logger.warning("Cannot get market data: exchange '{0}' is not available.".format(exchange_name))
         return None
 
     def get_system_status(self) -> Dict[str, Any]:
@@ -210,9 +201,7 @@ class ApiIntegrationManager:
                 name: {
                     "status": conn.status.value,
                     "last_heartbeat": (
-                        datetime.fromtimestamp(conn.last_heartbeat).isoformat()
-                        if conn.last_heartbeat
-                        else None
+                        datetime.fromtimestamp(conn.last_heartbeat).isoformat() if conn.last_heartbeat else None
                     ),
                     "reconnect_attempts": conn.reconnect_attempts,
                     "last_error": conn.last_error,

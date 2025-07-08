@@ -2,7 +2,6 @@ import asyncio
 import tkinter as tk
 from tkinter import Canvas, ttk
 from typing import Any, Dict, List, Optional, Tuple
-
 import psutil
 
 """
@@ -226,7 +225,8 @@ logger = logging.getLogger(__name__)
 
 class DataTier(Enum):Data storage tiers.RAM_CACHE = ram_cacheMID_TERM =  mid_termLONG_TERM
     = long_termARCHIVE =  archiveclass DataCategory(Enum):Data categories for pipeline.BTC_HASHING
-    = btc_hashingTRADING_SIGNALS =  trading_signalsMARKET_DATA = market_dataRISK_METRICS =  risk_metricsPORTFOLIO_STATE = portfolio_stateANALYSIS_RESULTS =  analysis_resultsSYSTEM_LOGS = system_logsAPI_RESPONSES =  api_responses@dataclass
+    = btc_hashingTRADING_SIGNALS =  trading_signalsMARKET_DATA = market_dataRISK_METRICS =  risk_metricsPORTFOLIO_STATE
+    portfolio_stateANALYSIS_RESULTS =  analysis_resultsSYSTEM_LOGS = system_logsAPI_RESPONSES =  api_responses@dataclass
 
 
 
@@ -413,7 +413,8 @@ self.tier_limits = {
 
 DataTier.RAM_CACHE: self.config[ram_cache_limit_mb] * 1024
     * 1024,DataTier.MID_TERM: self.config[mid_term_limit_mb] * 1024
-    * 1024,DataTier.LONG_TERM: self.config[long_term_limit_mb] * 1024 * 1024,DataTier.ARCHIVE: self.config[archive_limit_mb] * 1024 * 1024,
+    * 1024,DataTier.LONG_TERM: self.config[long_term_limit_mb]
+    1024 * 1024,DataTier.ARCHIVE: self.config[archive_limit_mb] * 1024 * 1024,
 
 
 
@@ -2921,7 +2922,7 @@ self.metrics_text.delete(1.0, tk.END)self.metrics_text.insert(1.0,\n.join(metric
 
 
 
-        except Exception as e:logger.error(f"Error updating metrics display: {e})
+        except Exception as e:logger.error("Error updating metrics display: {0})
 
 
 
@@ -3045,7 +3046,7 @@ self.pipeline_stats.uptime_seconds * 1024 * 1024
 
 
 
-            logger.error(fError updating pipeline stats: {e})
+            logger.error(fError updating pipeline stats: {0})
 
 
 
@@ -3053,7 +3054,7 @@ self.pipeline_stats.uptime_seconds * 1024 * 1024
 
 
 
-def _format_bytes():-> str:Format bytes into human readable format.for unit in [B,KB,MB",GB",TB]:
+def _format_bytes():-> str:Format bytes into human readable format.for unit in [B,KB,MB".format(e, e),GB",TB]:
 
 
 
@@ -3182,7 +3183,7 @@ self.start_time = time.time()
 
 
 
-        except Exception as e:logger.error(f"Error resetting pipeline: {e})
+        except Exception as e:logger.error("Error resetting pipeline: {0})
 
 
 
@@ -3197,11 +3198,11 @@ def _export_statistics():Export pipeline statistics.try: timestamp
 
 export_data
 
-    = {export_timestamp: datetime.now().isoformat(),pipeline_stats": {total_data_processed: self.pipeline_stats.total_data_processed,active_units": self.pipeline_stats.active_units,compression_ratio": self.pipeline_stats.compression_ratio,memory_efficiency": self.pipeline_stats.memory_efficiency,throughput_mbps": self.pipeline_stats.throughput_mbps,uptime_seconds": self.pipeline_stats.uptime_seconds,
+    = {1},tier_metrics".format(e, export_timestamp: datetime.now().isoformat(),pipeline_stats": {total_data_processed: self.pipeline_stats.total_data_processed,active_units": self.pipeline_stats.active_units,compression_ratio": self.pipeline_stats.compression_ratio,memory_efficiency": self.pipeline_stats.memory_efficiency,throughput_mbps": self.pipeline_stats.throughput_mbps,uptime_seconds": self.pipeline_stats.uptime_seconds,
 
 
 
-},tier_metrics": {tier.value: {total_units: metrics.total_units,total_size_bytes":
+): {tier.value: {total_units: metrics.total_units,total_size_bytes":
 metrics.total_size_bytes,compressed_size_bytes": metrics.compressed_size_bytes,usage_percentage":
 metrics.usage_percentage,flow_rate_mbps": metrics.flow_rate_mbps,compression_savings":
 metrics.compression_savings,
@@ -3335,7 +3336,7 @@ if self.root:
 
 
 
-        except Exception as e:logger.error(f"Error closing visualizer: {e})
+        except Exception as e:logger.error("Error closing visualizer: {0})
 
 
 
@@ -3451,7 +3452,7 @@ if __name__ == __main__:
 
 
 
-    main()""'"
+    main()".format(e)"'"
 
 
 

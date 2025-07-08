@@ -1,3 +1,10 @@
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple, Union
+from numpy.typing import NDArray
+
+import numpy as np
+
 # !/usr/bin/env python3
 """
 Profit Optimization Engine
@@ -15,16 +22,9 @@ This module provides:
 All functions are pure and can be unit-tested in isolation.
 """
 
-import numpy as np
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
-
-from numpy.typing import NDArray
-
-
 class OptimizationMethod(Enum):
     """Optimization methods for profit calculation."""
+
     GRADIENT_DESCENT = "gradient_descent"
     GENETIC_ALGORITHM = "genetic_algorithm"
     SIMULATED_ANNEALING = "simulated_annealing"
@@ -34,6 +34,7 @@ class OptimizationMethod(Enum):
 
 class RiskMetric(Enum):
     """Risk metrics for portfolio optimization."""
+
     SHARPE_RATIO = "sharpe_ratio"
     SORTINO_RATIO = "sortino_ratio"
     MAX_DRAWDOWN = "max_drawdown"
@@ -44,6 +45,7 @@ class RiskMetric(Enum):
 @dataclass
 class OptimizationResult:
     """Result of an optimization run."""
+
     optimal_parameters: Dict[str, float]
     objective_value: float
     convergence: bool
@@ -55,6 +57,7 @@ class OptimizationResult:
 @dataclass
 class PortfolioWeights:
     """Portfolio weight allocation."""
+
     weights: np.ndarray
     assets: List[str]
     total_weight: float
@@ -81,32 +84,28 @@ class ProfitOptimizationEngine:
         risk_metric: RiskMetric = RiskMetric.SHARPE_RATIO,
         constraints: Optional[Dict[str, Any]] = None,
         max_iterations: int = 1000,
-        tolerance: float = 1e-6
+        tolerance: float = 1e-6,
     ) -> OptimizationResult:
         """
-        Optimize portfolio weights for maximum risk-adjusted returns.
+                Optimize portfolio weights for maximum risk-adjusted returns.
 
-Args:
-            returns: Historical returns matrix (time x assets)
-            method: Optimization method to use
-            risk_metric: Risk metric to optimize
-            constraints: Optimization constraints
-            max_iterations: Maximum iterations
-            tolerance: Convergence tolerance
+        Args:
+                    returns: Historical returns matrix (time x assets)
+                    method: Optimization method to use
+                    risk_metric: Risk metric to optimize
+                    constraints: Optimization constraints
+                    max_iterations: Maximum iterations
+                    tolerance: Convergence tolerance
 
-Returns:
-            Optimization result with optimal weights
+        Returns:
+                    Optimization result with optimal weights
         """
         if method == OptimizationMethod.GRADIENT_DESCENT:
-            return self._gradient_descent_optimization(
-                returns, risk_metric, constraints, max_iterations, tolerance
-            )
+            return self._gradient_descent_optimization(returns, risk_metric, constraints, max_iterations, tolerance)
         elif method == OptimizationMethod.GENETIC_ALGORITHM:
-            return self._genetic_algorithm_optimization(
-                returns, risk_metric, constraints, max_iterations
-            )
+            return self._genetic_algorithm_optimization(returns, risk_metric, constraints, max_iterations)
         else:
-            raise ValueError(f"Unsupported optimization method: {method}")
+            raise ValueError("Unsupported optimization method: {0}".format(method))
 
     def _gradient_descent_optimization(
         self,
@@ -114,7 +113,7 @@ Returns:
         risk_metric: RiskMetric,
         constraints: Optional[Dict[str, Any]],
         max_iterations: int,
-        tolerance: float
+        tolerance: float,
     ) -> OptimizationResult:
         """Gradient descent optimization."""
         num_assets = returns.shape[1]
@@ -128,8 +127,7 @@ Returns:
         for iteration in range(max_iterations):
             # Calculate objective function and gradient
             if risk_metric == RiskMetric.SHARPE_RATIO:
-                objective, gradient = self._sharpe_ratio_gradient(
-                    weights, returns, cov_matrix)
+                objective, gradient = self._sharpe_ratio_gradient(weights, returns, cov_matrix)
             else:
                 objective, gradient = self._generic_risk_gradient(weights, returns, cov_matrix, risk_metric)
 
@@ -158,15 +156,11 @@ Returns:
                 'method': 'gradient_descent',
                 'risk_metric': risk_metric.value,
                 'final_weight_change': float(weight_change),
-            }
+            },
         )
 
     def _genetic_algorithm_optimization(
-        self,
-        returns: np.ndarray,
-        risk_metric: RiskMetric,
-        constraints: Optional[Dict[str, Any]],
-        max_iterations: int
+        self, returns: np.ndarray, risk_metric: RiskMetric, constraints: Optional[Dict[str, Any]], max_iterations: int
     ) -> OptimizationResult:
         """Genetic algorithm optimization."""
         num_assets = returns.shape[1]
@@ -180,7 +174,7 @@ Returns:
             population.append(weights)
 
         best_weights = None
-        best_objective = float('-inf')
+        best_objective = float('-in")
 
         for generation in range(max_iterations):
             # Evaluate fitness
@@ -223,19 +217,21 @@ Returns:
             population = new_population
 
         return OptimizationResult(
-            optimal_parameters={'weights': best_weights.tolist()},
+            optimal_parameters={0},
             objective_value=best_objective,
             convergence=True,
             iterations=max_iterations,
             execution_time=0.0,
             metadata={
-                'method': 'genetic_algorithm',
+                ".format('weights': best_weights.tolist())method': 'genetic_algorithm',
                 'risk_metric': risk_metric.value,
                 'population_size': population_size,
-            }
+            },
         )
 
-    def _sharpe_ratio_gradient(self, weights: np.ndarray, returns: np.ndarray, cov_matrix: np.ndarray) -> Tuple[float, np.ndarray]:
+    def _sharpe_ratio_gradient(
+        self, weights: np.ndarray, returns: np.ndarray, cov_matrix: np.ndarray
+    ) -> Tuple[float, np.ndarray]:
         """Calculate Sharpe ratio and its gradient."""
         # Calculate portfolio return and volatility
         portfolio_return = np.mean(returns @ weights)
@@ -246,13 +242,17 @@ Returns:
 
         # Gradient of Sharpe ratio
         if portfolio_vol > 0:
-            gradient = (returns.mean(axis=0) - self.risk_free_rate) / portfolio_vol - (portfolio_return - self.risk_free_rate) * (cov_matrix @ weights) / (portfolio_vol ** 3)
+            gradient = (returns.mean(axis=0) - self.risk_free_rate) / portfolio_vol - (
+                portfolio_return - self.risk_free_rate
+            ) * (cov_matrix @ weights) / (portfolio_vol**3)
         else:
             gradient = np.zeros_like(weights)
 
         return sharpe_ratio, gradient
 
-    def _generic_risk_gradient(self, weights: np.ndarray, returns: np.ndarray, cov_matrix: np.ndarray, risk_metric: RiskMetric) -> Tuple[float, np.ndarray]:
+    def _generic_risk_gradient(
+        self, weights: np.ndarray, returns: np.ndarray, cov_matrix: np.ndarray, risk_metric: RiskMetric
+    ) -> Tuple[float, np.ndarray]:
         """Calculate generic risk metric and gradient."""
         if risk_metric == RiskMetric.MAX_DRAWDOWN:
             return self._max_drawdown_gradient(weights, returns)
@@ -331,7 +331,7 @@ def create_optimization_engine(risk_free_rate: float = 0.2) -> ProfitOptimizatio
 def optimize_portfolio(
     returns: np.ndarray,
     method: OptimizationMethod = OptimizationMethod.GRADIENT_DESCENT,
-    risk_metric: RiskMetric = RiskMetric.SHARPE_RATIO
+    risk_metric: RiskMetric = RiskMetric.SHARPE_RATIO,
 ) -> OptimizationResult:
     """Convenience function for portfolio optimization."""
     engine = ProfitOptimizationEngine()

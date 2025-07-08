@@ -1,3 +1,12 @@
+import asyncio
+from typing import Any, Dict, List, Optional, Tuple, Union
+
+    from core.clean_risk_manager import RiskAssessment, RiskManager
+    from core.clean_profit_memory_echo import MemoryProjection, ProfitMemoryEcho
+    from core.mathlib_v4 import MathLibV4
+    from core.clean_unified_math import UnifiedMathSystem
+    from core.clean_trading_pipeline import UnifiedTradingPipeline
+
 # !/usr/bin/env python3
 """
 Clean Strategy Integration Bridge
@@ -11,12 +20,8 @@ This bridge orchestrates the integration between:
     5. API Layer for visualization
 """
 
-import asyncio
-from typing import Any, Dict, List, Optional, Tuple, Union
-
 # Core imports with error handling
 try:
-    from core.clean_risk_manager import RiskAssessment, RiskManager
     RISK_MANAGER_AVAILABLE = True
 except ImportError:
     RISK_MANAGER_AVAILABLE = False
@@ -24,7 +29,6 @@ except ImportError:
     RiskAssessment = None
 
 try:
-    from core.clean_profit_memory_echo import MemoryProjection, ProfitMemoryEcho
     PROFIT_MEMORY_AVAILABLE = True
 except ImportError:
     PROFIT_MEMORY_AVAILABLE = False
@@ -32,21 +36,18 @@ except ImportError:
     MemoryProjection = None
 
 try:
-    from core.mathlib_v4 import MathLibV4
     MATHLIB_AVAILABLE = True
 except ImportError:
     MATHLIB_AVAILABLE = False
     MathLibV4 = None
 
 try:
-    from core.clean_unified_math import UnifiedMathSystem
     UNIFIED_MATH_AVAILABLE = True
 except ImportError:
     UNIFIED_MATH_AVAILABLE = False
     UnifiedMathSystem = None
 
 try:
-    from core.clean_trading_pipeline import UnifiedTradingPipeline
     TRADING_PIPELINE_AVAILABLE = True
 except ImportError:
     TRADING_PIPELINE_AVAILABLE = False
@@ -133,7 +134,7 @@ self.integrated_signals: List[IntegratedTradingSignal] = []
             "execution_success_rate": 0.0
         }
 
-        logger.info(f"StrategyIntegrationBridge initialized (v{self.version})")
+        logger.info("StrategyIntegrationBridge initialized (v{0})".format(self.version))
 
     def _default_config(self) -> Dict[str, Any]:
         """Default configuration for the integration bridge."""
@@ -201,10 +202,10 @@ self.orchestration_state.total_strategies_active = (
                 self.orchestration_state.schwabot_strategies_active
             )
 
-logger.info(f"Initialized {self.orchestration_state.total_strategies_active} components")
+logger.info("Initialized {0} components".format(self.orchestration_state.total_strategies_active))
 
         except Exception as e:
-            logger.error(f"Component initialization error: {e}")
+            logger.error("Component initialization error: {0}".format(e))
             # Continue with available components
 
 async def process_integrated_trading_signal(self, asset: str, price: float, volume: float,
@@ -255,13 +256,13 @@ self._update_integration_metrics(filtered_signals)
 self.orchestration_state.signals_generated_today += len(filtered_signals)
 
             logger.info(
-                f"Generated {len(filtered_signals)} integrated signals for {asset}"
+                "Generated {0} integrated signals for {1}".format(len(filtered_signals), asset)
             )
 
         return filtered_signals
 
         except Exception as e:
-            logger.error(f"Error processing integrated trading signal: {e}")
+            logger.error("Error processing integrated trading signal: {0}".format(e))
             return []
 
 def _generate_wall_street_signals(self, asset: str, price: float, volume: float, timeframe: str) ->
@@ -321,7 +322,7 @@ List[Dict[str, Any]]:
             return signals
 
         except Exception as e:
-            logger.error(f"Error generating Wall Street signals: {e}")
+            logger.error("Error generating Wall Street signals: {0}".format(e))
         return []
 
 async def _perform_mathematical_analysis(self, asset: str, price: float, volume: float) -> Dict[str,
@@ -386,7 +387,7 @@ Any]:
                 }
 
         except Exception as e:
-            logger.error(f"Mathematical analysis failed: {e}")
+            logger.error("Mathematical analysis failed: {0}".format(e))
 
         return analysis
 
@@ -456,13 +457,13 @@ composite_confidence=composite_confidence,
 
 # Apply filters
             if composite_confidence < self.config["correlation_threshold"]:
-logger.debug(f"Signal filtered out due to low composite confidence: {composite_confidence}")
+logger.debug("Signal filtered out due to low composite confidence: {0}".format(composite_confidence))
         return None
 
         return integrated_signal
 
         except Exception as e:
-            logger.error(f"Failed to create integrated signal: {e}")
+            logger.error("Failed to create integrated signal: {0}".format(e))
         return None
 
 def _calculate_signal_correlation(self, wall_street_signal: Dict[str, Any], mathematical_analysis:
@@ -502,7 +503,7 @@ correlation = abs(signal_direction - math_direction) / 2.0
         return max(0.0, min(1.0, correlation))
 
         except Exception as e:
-            logger.error(f"Correlation calculation failed: {e}")
+            logger.error("Correlation calculation failed: {0}".format(e))
         return 0.5  # Default correlation
 
 def _calculate_integrated_position_sizing(self, wall_street_signal: Dict[str, Any],
@@ -600,7 +601,7 @@ filtered.sort(key=lambda s: (s.execution_priority, -s.composite_confidence))
         return filtered[:max_signals]
 
         except Exception as e:
-            logger.error(f"Error filtering integrated signals: {e}")
+            logger.error("Error filtering integrated signals: {0}".format(e))
             return signals
 
     def _update_integration_metrics(self, signals: List[IntegratedTradingSignal]) -> None:
@@ -655,7 +656,7 @@ else:
         return execution_result
 
         except Exception as e:
-            logger.error(f"Signal execution failed: {e}")
+            logger.error("Signal execution failed: {0}".format(e))
             return {"executed": False, "error": str(e)}
 
 def _convert_to_trading_decision(self, integrated_signal: IntegratedTradingSignal) -> Dict[str,

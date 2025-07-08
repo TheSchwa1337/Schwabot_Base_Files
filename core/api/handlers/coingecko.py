@@ -1,3 +1,14 @@
+from __future__ import annotations
+import asyncio
+import logging
+from typing import Any, Dict
+import time
+import json
+from .base_handler import BaseAPIHandler
+
+    import aiohttp
+    import requests
+
 """CoinGecko API Handler
 
 Handles data fetching and processing from CoinGecko API endpoints
@@ -25,25 +36,13 @@ Provides price data, market metrics, trending coins, and market dominance data.
 
 """
 
-from __future__ import annotations
-
-import asyncio
-import logging
-from typing import Any, Dict
-import time
-import json
-
 try:
-    import aiohttp
 except ImportError:
     aiohttp = None
 
 try:
-    import requests
 except ImportError:
     requests = None
-
-from .base_handler import BaseAPIHandler
 
 logger = logging.getLogger(__name__)
 
@@ -130,7 +129,7 @@ class CoinGeckoHandler(BaseAPIHandler):
 
         except Exception as e:
 
-            logger.error(f"Failed to fetch CoinGecko data: {e}")
+            logger.error("Failed to fetch CoinGecko data: {0}".format(e))
 
             all_data = {"global": {}, "prices": {}, "trending": {}, "dominance": {}}
 
@@ -145,7 +144,7 @@ class CoinGeckoHandler(BaseAPIHandler):
 
                 session = await self._get_session()
 
-                async with session.get(f"{BASE_URL}/global", headers=headers) as resp:
+                async with session.get("{0}/global".format(BASE_URL), headers=headers) as resp:
 
                     resp.raise_for_status()
 
@@ -157,7 +156,7 @@ class CoinGeckoHandler(BaseAPIHandler):
 
                 response = await loop.run_in_executor(
                     None,
-                    lambda: requests.get(f"{BASE_URL}/global", headers=headers, timeout=15),
+                    lambda: requests.get("{0}/global".format(BASE_URL), headers=headers, timeout=15),
                 )
 
                 response.raise_for_status()
@@ -166,7 +165,7 @@ class CoinGeckoHandler(BaseAPIHandler):
 
         except Exception as e:
 
-            logger.error(f"Failed to fetch global data: {e}")
+            logger.error("Failed to fetch global data: {0}".format(e))
 
             return {}
 
@@ -192,9 +191,7 @@ class CoinGeckoHandler(BaseAPIHandler):
 
                 session = await self._get_session()
 
-                async with session.get(
-                    f"{BASE_URL}/simple/price", params=params, headers=headers
-                ) as resp:
+                async with session.get("{0}/simple/price".format(BASE_URL), params=params, headers=headers) as resp:
 
                     resp.raise_for_status()
 
@@ -207,7 +204,7 @@ class CoinGeckoHandler(BaseAPIHandler):
                 response = await loop.run_in_executor(
                     None,
                     lambda: requests.get(
-                        f"{BASE_URL}/simple/price",
+                        "{0}/simple/price".format(BASE_URL),
                         params=params,
                         headers=headers,
                         timeout=15,
@@ -220,7 +217,7 @@ class CoinGeckoHandler(BaseAPIHandler):
 
         except Exception as e:
 
-            logger.error(f"Failed to fetch price data: {e}")
+            logger.error("Failed to fetch price data: {0}".format(e))
 
             return {}
 
@@ -233,7 +230,7 @@ class CoinGeckoHandler(BaseAPIHandler):
 
                 session = await self._get_session()
 
-                async with session.get(f"{BASE_URL}/search/trending", headers=headers) as resp:
+                async with session.get("{0}/search/trending".format(BASE_URL), headers=headers) as resp:
 
                     resp.raise_for_status()
 
@@ -245,9 +242,7 @@ class CoinGeckoHandler(BaseAPIHandler):
 
                 response = await loop.run_in_executor(
                     None,
-                    lambda: requests.get(
-                        f"{BASE_URL}/search/trending", headers=headers, timeout=15
-                    ),
+                    lambda: requests.get("{0}/search/trending".format(BASE_URL), headers=headers, timeout=15),
                 )
 
                 response.raise_for_status()
@@ -256,7 +251,7 @@ class CoinGeckoHandler(BaseAPIHandler):
 
         except Exception as e:
 
-            logger.error(f"Failed to fetch trending data: {e}")
+            logger.error("Failed to fetch trending data: {0}".format(e))
 
             return {}
 
@@ -277,9 +272,7 @@ class CoinGeckoHandler(BaseAPIHandler):
 
                 session = await self._get_session()
 
-                async with session.get(
-                    f"{BASE_URL}/coins/markets", params=params, headers=headers
-                ) as resp:
+                async with session.get("{0}/coins/markets".format(BASE_URL), params=params, headers=headers) as resp:
 
                     resp.raise_for_status()
 
@@ -292,7 +285,7 @@ class CoinGeckoHandler(BaseAPIHandler):
                 response = await loop.run_in_executor(
                     None,
                     lambda: requests.get(
-                        f"{BASE_URL}/coins/markets",
+                        "{0}/coins/markets".format(BASE_URL),
                         params=params,
                         headers=headers,
                         timeout=15,
@@ -305,7 +298,7 @@ class CoinGeckoHandler(BaseAPIHandler):
 
         except Exception as e:
 
-            logger.error(f"Failed to fetch dominance data: {e}")
+            logger.error("Failed to fetch dominance data: {0}".format(e))
 
             return []
 
@@ -332,9 +325,7 @@ class CoinGeckoHandler(BaseAPIHandler):
                 parsed_data["global_metrics"] = {
                     "total_market_cap_usd": global_data.get("total_market_cap", {}).get("usd", 0),
                     "total_volume_24h_usd": global_data.get("total_volume", {}).get("usd", 0),
-                    "market_cap_change_24h": global_data.get(
-                        "market_cap_change_percentage_24h_usd", 0
-                    ),
+                    "market_cap_change_24h": global_data.get("market_cap_change_percentage_24h_usd", 0),
                     "active_cryptocurrencies": global_data.get("active_cryptocurrencies", 0),
                     "markets": global_data.get("markets", 0),
                     "defi_volume_24h": global_data.get("defi_volume_24h", 0),
@@ -419,10 +410,7 @@ class CoinGeckoHandler(BaseAPIHandler):
 
             sentiment_score += len(parsed_data["trending_coins"]) * 5
 
-        if (
-            "global_metrics" in parsed_data
-            and "market_cap_change_24h" in parsed_data["global_metrics"]
-        ):
+        if "global_metrics" in parsed_data and "market_cap_change_24h" in parsed_data["global_metrics"]:
 
             change = parsed_data["global_metrics"]["market_cap_change_24h"]
 
@@ -442,11 +430,7 @@ class CoinGeckoHandler(BaseAPIHandler):
 
         return {
             "score": sentiment_score,
-            "interpretation": (
-                "Positive"
-                if sentiment_score > 0
-                else "Negative" if sentiment_score < 0 else "Neutral"
-            ),
+            "interpretation": ("Positive" if sentiment_score > 0 else "Negative" if sentiment_score < 0 else "Neutral"),
         }
 
 

@@ -1,13 +1,12 @@
+import pickle
+from typing import Any, Dict, List, Optional, Tuple
+from .automated_trading_engine import AutomatedTradingEngine, BatchOrder, TradingSignal
+
 # !/usr/bin/env python3
 """
 Automated Strategy Engine - Learning from Trading Patterns
 Automatically formulates buy/sell walls based on mathematical tensor movements
 """
-
-import pickle
-from typing import Any, Dict, List, Optional, Tuple
-
-from .automated_trading_engine import AutomatedTradingEngine, BatchOrder, TradingSignal
 
 logger = logging.getLogger(__name__)
 
@@ -15,6 +14,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class StrategyPattern:
     """Pattern learned from trading history."""
+
     pattern_id: str
     symbol: str
     tensor_signature: np.ndarray
@@ -30,6 +30,7 @@ class StrategyPattern:
 @dataclass
 class AutomatedDecision:
     """Automated trading decision based on learned patterns."""
+
     symbol: str
     action: str  # 'buy_wall', 'sell_wall', 'basket', 'hold'
     confidence: float
@@ -49,10 +50,7 @@ class AutomatedDecision:
 class AutomatedStrategyEngine:
     """Engine that learns from trading patterns and makes automated decisions."""
 
-    def __init__(
-    self,
-    trading_engine: AutomatedTradingEngine,
-     learning_config: Dict = None):
+    def __init__(self, trading_engine: AutomatedTradingEngine, learning_config: Dict = None):
         """
         Initialize automated strategy engine.
 
@@ -74,7 +72,7 @@ class AutomatedStrategyEngine:
             'successful_trades': 0,
             'total_profit': 0.0,
             'win_rate': 0.0,
-            'avg_profit_per_trade': 0.0
+            'avg_profit_per_trade': 0.0,
         }
 
         # Strategy state
@@ -86,7 +84,7 @@ class AutomatedStrategyEngine:
             'momentum_thresholds': {},
             'volatility_thresholds': {},
             'correlation_thresholds': {},
-            'basket_optimization': {}
+            'basket_optimization': {},
         }
 
         # Learning parameters
@@ -112,22 +110,20 @@ class AutomatedStrategyEngine:
             'volatility_window': 50,
             'correlation_window': 100,
             'profit_threshold': 0.02,  # 2% minimum profit
-            'loss_threshold': -0.05,   # 5% maximum loss
+            'loss_threshold': -0.05,  # 5% maximum loss
             'max_batch_size': 50,
             'min_batch_size': 1,
-            'default_spread_seconds': 30
+            'default_spread_seconds': 30,
         }
 
     def _start_background_learning(self):
         """Start background learning processes."""
         # Pattern learning thread
-        self.learning_thread = threading.Thread(
-    target=self._background_learning, daemon=True)
+        self.learning_thread = threading.Thread(target=self._background_learning, daemon=True)
         self.learning_thread.start()
 
         # Performance monitoring thread
-        self.monitoring_thread = threading.Thread(
-    target=self._monitor_performance, daemon=True)
+        self.monitoring_thread = threading.Thread(target=self._monitor_performance, daemon=True)
         self.monitoring_thread.start()
 
         logger.info("Started background learning processes")
@@ -146,29 +142,35 @@ class AutomatedStrategyEngine:
             tensor_state = self.trading_engine.get_tensor_state()
 
             if symbol not in tensor_state['momentum']:
-                return {'error': f'No data available for {symbol}'}
+                return {'error': "No data available for {0}".format(symbol)}
 
             # Get price history
             price_history = tensor_state['momentum'][symbol]
             if len(price_history) < 10:
-                return {'error': f'Insufficient data for {symbol}'}
+                return {'error': "Insufficient data for {0}".format(symbol)}
 
             # Calculate momentum indicators
             momentum_window = self.learning_config['momentum_window']
             recent_prices = price_history[-momentum_window:]
 
             # Short-term momentum (last 5 periods)
-            short_momentum = (recent_prices[-1] - recent_prices[-5]) / recent_prices[-5] if len(recent_prices) >= 5 else 0
+            short_momentum = (
+                (recent_prices[-1] - recent_prices[-5]) / recent_prices[-5] if len(recent_prices) >= 5 else 0
+            )
 
             # Medium-term momentum (last 10 periods)
-            medium_momentum = (recent_prices[-1] - recent_prices[-10]) / recent_prices[-10] if len(recent_prices) >= 10 else 0
+            medium_momentum = (
+                (recent_prices[-1] - recent_prices[-10]) / recent_prices[-10] if len(recent_prices) >= 10 else 0
+            )
 
             # Long-term momentum (full window)
             long_momentum = (recent_prices[-1] - recent_prices[0]) / recent_prices[0]
 
             # Volatility analysis
             volatility_window = self.learning_config['volatility_window']
-            volatility_data = price_history[-volatility_window:] if len(price_history) >= volatility_window else price_history
+            volatility_data = (
+                price_history[-volatility_window:] if len(price_history) >= volatility_window else price_history
+            )
             volatility = np.std(volatility_data) / np.mean(volatility_data)
 
             # Price trend analysis
@@ -183,34 +185,25 @@ class AutomatedStrategyEngine:
             analysis = {
                 'symbol': symbol,
                 'timestamp': datetime.now(),
-                'momentum': {
-                    'short_term': short_momentum,
-                    'medium_term': medium_momentum,
-                    'long_term': long_momentum
-                },
+                'momentum': {'short_term': short_momentum, 'medium_term': medium_momentum, 'long_term': long_momentum},
                 'volatility': volatility,
                 'trend': price_trend,
                 'volume_profile': volume_profile,
                 'patterns': patterns,
-                'tensor_signature': self._calculate_tensor_signature(recent_prices)
+                'tensor_signature': self._calculate_tensor_signature(recent_prices),
             }
 
             return analysis
 
         except Exception as e:
-            logger.error(f"Error analyzing tensor movements for {symbol}: {e}")
+            logger.error("Error analyzing tensor movements for {0}: {1}".format(symbol, e))
             return {'error': str(e)}
 
     def _analyze_volume_profile(self, symbol: str) -> Dict[str, float]:
         """Analyze volume profile for a symbol."""
         # This would integrate with exchange volume data
         # For now, return placeholder data
-        return {
-            'current_volume': 1000000,
-            'avg_volume': 1500000,
-            'volume_trend': 0.1,
-            'volume_volatility': 0.2
-        }
+        return {'current_volume': 1000000, 'avg_volume': 1500000, 'volume_trend': 0.1, 'volume_volatility': 0.2}
 
     def _recognize_patterns(self, symbol: str, prices: List[float]) -> List[Dict]:
         """Recognize trading patterns in price data."""
@@ -224,13 +217,15 @@ class AutomatedStrategyEngine:
             if pattern.symbol == symbol:
                 similarity = self._calculate_pattern_similarity(prices, pattern.tensor_signature)
                 if similarity > self.min_confidence_threshold:
-                    patterns.append({
-                        'pattern_id': pattern_id,
-                        'similarity': similarity,
-                        'expected_movement': pattern.price_movement,
-                        'success_rate': pattern.success_rate,
-                        'confidence': pattern.confidence
-                    })
+                    patterns.append(
+                        {
+                            'pattern_id': pattern_id,
+                            'similarity': similarity,
+                            'expected_movement': pattern.price_movement,
+                            'success_rate': pattern.success_rate,
+                            'confidence': pattern.confidence,
+                        }
+                    )
 
         # Sort by confidence
         patterns.sort(key=lambda x: x['confidence'], reverse=True)
@@ -247,12 +242,7 @@ class AutomatedStrategyEngine:
 
         # Price changes
         price_changes = np.diff(prices)
-        features.extend([
-            np.mean(price_changes),
-            np.std(price_changes),
-            np.max(price_changes),
-            np.min(price_changes)
-        ])
+        features.extend([np.mean(price_changes), np.std(price_changes), np.max(price_changes), np.min(price_changes)])
 
         # Momentum features
         if len(prices) >= 5:
@@ -318,13 +308,13 @@ class AutomatedStrategyEngine:
             analysis = self.analyze_tensor_movements(symbol)
 
             if 'error' in analysis:
-                logger.warning(f"Cannot make decision for {symbol}: {analysis['error']}")
+                logger.warning("Cannot make decision for {0}: {1}".format(symbol, analysis['error']))
                 return None
 
             # Get current price
             current_price = self.trading_engine.get_current_price(symbol)
             if not current_price:
-                logger.warning(f"No current price for {symbol}")
+                logger.warning("No current price for {0}".format(symbol))
                 return None
 
             # Evaluate patterns and make decision
@@ -332,22 +322,23 @@ class AutomatedStrategyEngine:
 
             if decision:
                 # Store decision for learning
-                self.decision_history.append({
-                    'symbol': symbol,
-                    'decision': decision,
-                    'analysis': analysis,
-                    'timestamp': datetime.now()
-                })
+                self.decision_history.append(
+                    {'symbol': symbol, 'decision': decision, 'analysis': analysis, 'timestamp': datetime.now()}
+                )
 
-                logger.info(f"Made automated decision for {symbol}: {decision.action} (confidence: {decision.confidence:.2f})")
+                logger.info(
+                    "Made automated decision for {0}: {1} (confidence: {2})".format(symbol, decision.action, decision.confidence:.2f)
+                )
 
             return decision
 
         except Exception as e:
-            logger.error(f"Error making automated decision for {symbol}: {e}")
+            logger.error("Error making automated decision for {0}: {1}".format(symbol, e))
             return None
 
-    def _evaluate_patterns_for_decision(self, symbol: str, analysis: Dict, current_price: float) -> Optional[AutomatedDecision]:
+    def _evaluate_patterns_for_decision(
+        self, symbol: str, analysis: Dict, current_price: float
+    ) -> Optional[AutomatedDecision]:
         """Evaluate patterns and create trading decision."""
         patterns = analysis.get('patterns', [])
         momentum = analysis.get('momentum', {})
@@ -400,8 +391,8 @@ class AutomatedStrategyEngine:
             price_range=price_range,
             batch_count=batch_count,
             spread_seconds=spread_seconds,
-            strategy_id=f"auto_{best_pattern['pattern_id']}",
-            reasoning=f"Pattern {best_pattern['pattern_id']} with {confidence:.2f} confidence, expected movement: {expected_movement:.3f}"
+            strategy_id="auto_{0}".format(best_pattern['pattern_id']),
+            reasoning="Pattern {0} with {1} confidence, expected movement: {2}".format(best_pattern['pattern_id'], confidence:.2f, expected_movement:.3f),
         )
 
         return decision
@@ -423,7 +414,7 @@ class AutomatedStrategyEngine:
                     total_quantity=decision.quantity,
                     price_range=decision.price_range,
                     batch_count=decision.batch_count,
-                    spread_seconds=decision.spread_seconds
+                    spread_seconds=decision.spread_seconds,
                 )
 
             elif decision.action == 'sell_wall':
@@ -432,24 +423,24 @@ class AutomatedStrategyEngine:
                     total_quantity=decision.quantity,
                     price_range=decision.price_range,
                     batch_count=decision.batch_count,
-                    spread_seconds=decision.spread_seconds
+                    spread_seconds=decision.spread_seconds,
                 )
 
             else:
-                raise ValueError(f"Unknown action: {decision.action}")
+                raise ValueError("Unknown action: {0}".format(decision.action))
 
             # Store decision execution
             self.active_strategies[batch_id] = {
                 'decision': decision,
                 'status': 'executing',
-                'start_time': datetime.now()
+                'start_time': datetime.now(),
             }
 
-            logger.info(f"Executed automated decision: {decision.action} for {decision.symbol}")
+            logger.info("Executed automated decision: {0} for {1}".format(decision.action, decision.symbol))
             return batch_id
 
         except Exception as e:
-            logger.error(f"Error executing automated decision: {e}")
+            logger.error("Error executing automated decision: {0}".format(e))
             raise
 
     def _background_learning(self):
@@ -468,7 +459,7 @@ class AutomatedStrategyEngine:
                 time.sleep(60)  # Learn every minute
 
             except Exception as e:
-                logger.error(f"Error in background learning: {e}")
+                logger.error("Error in background learning: {0}".format(e))
                 time.sleep(300)  # Wait 5 minutes on error
 
     def _learn_from_decisions(self):
@@ -515,7 +506,9 @@ class AutomatedStrategyEngine:
 
             # Update success rate
             total_occurrences = pattern.occurrence_count + 1
-            new_success_rate = (pattern.success_rate * pattern.occurrence_count + (1 if success else 0)) / total_occurrences
+            new_success_rate = (
+                pattern.success_rate * pattern.occurrence_count + (1 if success else 0)
+            ) / total_occurrences
 
             # Update pattern
             pattern.success_rate = new_success_rate
@@ -525,7 +518,9 @@ class AutomatedStrategyEngine:
             # Update confidence based on success rate
             pattern.confidence = min(1.0, pattern.confidence + (0.01 if success else -0.01))
 
-            logger.info(f"Updated pattern {pattern_id}: success_rate={new_success_rate:.3f}, confidence={pattern.confidence:.3f}")
+            logger.info(
+                "Updated pattern {0}: success_rate={1}, confidence={2}".format(pattern_id, new_success_rate:.3f, pattern.confidence:.3f)
+            )
 
     def _update_pattern_performance(self):
         """Update overall pattern performance metrics."""
@@ -536,7 +531,9 @@ class AutomatedStrategyEngine:
         avg_success_rate = np.mean([p.success_rate for p in self.learned_patterns.values()])
         avg_confidence = np.mean([p.confidence for p in self.learned_patterns.values()])
 
-        logger.info(f"Pattern performance: {total_patterns} patterns, avg_success={avg_success_rate:.3f}, avg_confidence={avg_confidence:.3f}")
+        logger.info(
+            "Pattern performance: {0} patterns, avg_success={1}, avg_confidence={2}".format(total_patterns, avg_success_rate:.3f, avg_confidence:.3f)
+        )
 
     def _optimize_strategies(self):
         """Optimize trading strategies based on performance."""
@@ -548,7 +545,7 @@ class AutomatedStrategyEngine:
 
         for pattern_id in patterns_to_remove:
             del self.learned_patterns[pattern_id]
-            logger.info(f"Removed low-performing pattern: {pattern_id}")
+            logger.info("Removed low-performing pattern: {0}".format(pattern_id))
 
     def _monitor_performance(self):
         """Monitor overall trading performance."""
@@ -563,7 +560,7 @@ class AutomatedStrategyEngine:
                 time.sleep(300)  # Update every 5 minutes
 
             except Exception as e:
-                logger.error(f"Error in performance monitoring: {e}")
+                logger.error("Error in performance monitoring: {0}".format(e))
                 time.sleep(600)  # Wait 10 minutes on error
 
     def _update_performance_metrics(self):
@@ -574,7 +571,7 @@ class AutomatedStrategyEngine:
 
     def _log_performance_summary(self):
         """Log performance summary."""
-        logger.info(f"Performance summary: {self.performance_metrics}")
+        logger.info("Performance summary: {0}".format(self.performance_metrics))
 
     def _load_learned_patterns(self):
         """Load learned patterns from file."""
@@ -583,9 +580,9 @@ class AutomatedStrategyEngine:
             if patterns_file.exists():
                 with open(patterns_file, 'rb') as f:
                     self.learned_patterns = pickle.load(f)
-                logger.info(f"Loaded {len(self.learned_patterns)} learned patterns")
+                logger.info("Loaded {0} learned patterns".format(len(self.learned_patterns)))
         except Exception as e:
-            logger.warning(f"Could not load learned patterns: {e}")
+            logger.warning("Could not load learned patterns: {0}".format(e))
 
     def _save_learned_patterns(self):
         """Save learned patterns to file."""
@@ -596,9 +593,9 @@ class AutomatedStrategyEngine:
             with open(patterns_file, 'wb') as f:
                 pickle.dump(self.learned_patterns, f)
 
-            logger.info(f"Saved {len(self.learned_patterns)} learned patterns")
+            logger.info("Saved {0} learned patterns".format(len(self.learned_patterns)))
         except Exception as e:
-            logger.error(f"Could not save learned patterns: {e}")
+            logger.error("Could not save learned patterns: {0}".format(e))
 
     def get_learning_status(self) -> Dict:
         """Get current learning status."""
@@ -607,7 +604,7 @@ class AutomatedStrategyEngine:
             'decision_history': len(self.decision_history),
             'active_strategies': len(self.active_strategies),
             'performance_metrics': self.performance_metrics,
-            'learning_config': self.learning_config
+            'learning_config': self.learning_config,
         }
 
     def shutdown(self):

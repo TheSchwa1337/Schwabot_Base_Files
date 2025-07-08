@@ -1,3 +1,17 @@
+from __future__ import annotations
+import asyncio
+import logging
+from enum import Enum
+from dataclasses import dataclass, field
+import time
+from typing import Any, Dict, List, Optional, Tuple, Union
+from .advanced_settings_engine import AdvancedSettingsEngine
+from .clean_math_foundation import BitPhase, CleanMathFoundation, ThermalState
+from .clean_profit_vectorization import CleanProfitVectorization, ProfitVector, VectorizationMode
+from .clean_trading_pipeline import CleanTradingPipeline, MarketData, TradingDecision
+from .mathlib_v4 import MathLibV4
+from .pure_profit_calculator import PureProfitCalculator, StrategyParameters
+
 # !/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -15,22 +29,6 @@ This bridge integrates:
 - Profit calculation systems
 - Risk management components
 """
-
-from __future__ import annotations
-
-import asyncio
-import logging
-from enum import Enum
-from dataclasses import dataclass, field
-import time
-from typing import Any, Dict, List, Optional, Tuple, Union
-
-from .advanced_settings_engine import AdvancedSettingsEngine
-from .clean_math_foundation import BitPhase, CleanMathFoundation, ThermalState
-from .clean_profit_vectorization import CleanProfitVectorization, ProfitVector, VectorizationMode
-from .clean_trading_pipeline import CleanTradingPipeline, MarketData, TradingDecision
-from .mathlib_v4 import MathLibV4
-from .pure_profit_calculator import PureProfitCalculator, StrategyParameters
 
 logger = logging.getLogger(__name__)
 
@@ -146,10 +144,7 @@ class UnifiedComponentBridge:
         # Initialize components
         self._initialize_components()
 
-        logger.info(
-            f"UnifiedComponentBridge initialized with mode: {
-                mode.value}"
-        )
+        logger.info("UnifiedComponentBridge initialized with mode: {0}".format(mode.value))
 
     def _initialize_components(self) -> None:
         """Initialize all system components."""
@@ -160,9 +155,7 @@ class UnifiedComponentBridge:
 
             # Initialize profit calculator with default strategy parameters
             default_strategy = StrategyParameters()
-            self.components[ComponentType.PROFIT_CALCULATOR] = PureProfitCalculator(
-                default_strategy
-            )
+            self.components[ComponentType.PROFIT_CALCULATOR] = PureProfitCalculator(default_strategy)
             self.component_status[ComponentType.PROFIT_CALCULATOR] = ComponentStatus.ACTIVE
 
             # Initialize DLT analyzer
@@ -187,7 +180,7 @@ class UnifiedComponentBridge:
             logger.info("All components initialized successfully")
 
         except Exception as e:
-            logger.error(f"Error initializing components: {e}")
+            logger.error("Error initializing components: {0}".format(e))
             raise
 
     async def send_message(
@@ -234,11 +227,11 @@ class UnifiedComponentBridge:
             if len(self.message_history) > self.max_message_history:
                 self.message_history = self.message_history[-self.max_message_history :]
 
-            logger.debug(f"Message sent: {source.value} -> {destination.value} ({message_type})")
+            logger.debug("Message sent: {0} -> {1} ({2})".format(source.value, destination.value, message_type))
             return True
 
         except Exception as e:
-            logger.error(f"Error sending message: {e}")
+            logger.error("Error sending message: {0}".format(e))
             return False
 
     async def _process_message_queue(self) -> None:
@@ -264,10 +257,10 @@ class UnifiedComponentBridge:
             elif message.message_type == "system_status":
                 await self._handle_system_status(message)
             else:
-                logger.warning(f"Unknown message type: {message.message_type}")
+                logger.warning("Unknown message type: {0}".format(message.message_type))
 
         except Exception as e:
-            logger.error(f"Error processing message: {e}")
+            logger.error("Error processing message: {0}".format(e))
 
     async def _handle_market_data(self, message: BridgeMessage) -> None:
         """Handle market data messages."""
@@ -379,9 +372,7 @@ class UnifiedComponentBridge:
             self.system_state.active_components = self.component_status.copy()
 
         # Update system health
-        active_count = sum(
-            1 for status in self.component_status.values() if status == ComponentStatus.ACTIVE
-        )
+        active_count = sum(1 for status in self.component_status.values() if status == ComponentStatus.ACTIVE)
         total_count = len(self.component_status)
         self.system_state.system_health = active_count / total_count if total_count > 0 else 0.0
 
@@ -400,9 +391,7 @@ class UnifiedComponentBridge:
         self.system_state.active_components = self.component_status.copy()
 
         # Calculate system health
-        active_count = sum(
-            1 for status in self.component_status.values() if status == ComponentStatus.ACTIVE
-        )
+        active_count = sum(1 for status in self.component_status.values() if status == ComponentStatus.ACTIVE)
         total_count = len(self.component_status)
         self.system_state.system_health = active_count / total_count if total_count > 0 else 0.0
 
@@ -428,9 +417,7 @@ class UnifiedComponentBridge:
                 }
 
                 # Update component status
-                self.component_status[component_type] = (
-                    ComponentStatus.ACTIVE if is_healthy else ComponentStatus.ERROR
-                )
+                self.component_status[component_type] = ComponentStatus.ACTIVE if is_healthy else ComponentStatus.ERROR
 
             except Exception as e:
                 health_results[component_type.value] = {

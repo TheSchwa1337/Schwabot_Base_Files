@@ -1,3 +1,7 @@
+from decimal import Decimal, getcontext
+from typing import Any, Dict, List, Optional, Tuple, Union
+import numpy.typing as npt
+
 # !/usr/bin/env python3
 """
 Strategy Logic - Core Trading Strategy Implementation
@@ -12,11 +16,6 @@ Key Features:
 - Risk-aware position sizing
 - Performance tracking and optimization
 """
-
-from decimal import Decimal, getcontext
-from typing import Any, Dict, List, Optional, Tuple, Union
-
-import numpy.typing as npt
 
 # Set high precision for financial calculations
 getcontext().prec = 18
@@ -111,8 +110,8 @@ class StrategyLogic:
         self.take_profit_pct = 0.15  # 15% take profit
 
         logger.info(
-    f"Initialized StrategyLogic with type: {
-        strategy_type.value}")
+    "Initialized StrategyLogic with type: {0}".format(
+        strategy_type.value))
 
     def process_market_data(self, market_data: Dict[str, Any]) -> MarketSignal:
         """Process market data and generate signals."""
@@ -134,7 +133,7 @@ class StrategyLogic:
             return signal
 
         except Exception as e:
-            logger.error(f"Error processing market data: {e}")
+            logger.error("Error processing market data: {0}".format(e))
             return self._create_default_signal()
 
     def make_decision(self,
@@ -184,12 +183,12 @@ class StrategyLogic:
             return decision
 
         except Exception as e:
-            logger.error(f"Error making decision: {e}")
+            logger.error("Error making decision: {0}".format(e))
             return StrategyDecision(
                 action=SignalType.HOLD,
                 confidence=0.0,
                 position_size=0.0,
-                reasoning=f"Error in decision making: {e}"
+                reasoning="Error in decision making: {0}".format(e)
             )
 
     def _calculate_indicators(
@@ -472,8 +471,8 @@ Tuple[SignalType, float]:
         max_size = available_capital * self.max_position_size / current_price
         position_size = min(position_size, max_size)
 
-        logger.debug(f"Position size calculation: capital={available_capital:.2f}, "
-                    f"price={current_price:.2f}, size={position_size:.4f}")
+        logger.debug("Position size calculation: capital={0}, ".format(available_capital:.2f)
+                    "price={0}, size={1}".format(current_price:.2f, position_size:.4f))
 
         return max(0.0, position_size)
 
@@ -533,10 +532,10 @@ Tuple[SignalType, float]:
             try:
                 available_capital = float(available_capital)
                 if available_capital > 0:
-                    logger.info(f"Using available capital: {available_capital:.2f}")
+                    logger.info("Using available capital: {0}".format(available_capital:.2f))
                     return available_capital
             except (ValueError, TypeError):
-                logger.warning(f"Invalid available capital value: {available_capital}")
+                logger.warning("Invalid available capital value: {0}".format(available_capital))
 
         # Fallback to default value
         logger.warning("Could not extract available capital from portfolio data, using fallback")
@@ -577,16 +576,16 @@ Optional[float]]:
     def _generate_reasoning(self, signal: MarketSignal, action: SignalType) -> str:
         """Generate reasoning for the decision."""
         reasoning_parts = [
-            f"Signal: {signal.signal_type.value}",
-            f"Strength: {signal.strength.value}",
-            f"Confidence: {signal.confidence:.2f}",
-            f"Action: {action.value}"
+            "Signal: {0}".format(signal.signal_type.value),
+            "Strength: {0}".format(signal.strength.value),
+            "Confidence: {0}".format(signal.confidence:.2f),
+            "Action: {0}".format(action.value)
         ]
 
         if signal.metadata.get("indicators"):
             indicators = signal.metadata["indicators"]
-            reasoning_parts.append(f"RSI: {indicators.get('rsi', 0):.1f}")
-            reasoning_parts.append(f"MACD: {indicators.get('macd', 0):.4f}")
+            reasoning_parts.append("RSI: {0}".format(indicators.get('rsi', 0):.1f))
+            reasoning_parts.append("MACD: {0}".format(indicators.get('macd', 0):.4f))
 
         return " | ".join(reasoning_parts)
 
@@ -652,18 +651,18 @@ def create_strategy_logic(strategy_type: StrategyType = StrategyType.HYBRID) -> 
 
 # Temporary strategy tags mapped to known hashes
 STRATEGY_DB = {
-    "8f51c6a0f9eee0e4b8f866ce7041ffa2145af1cff9b07f5577147aa629089c7f": {
-        "name": "Long Momentum",
-        "risk": "Low",
-        "action": "Buy & Hold"
-    }
+    "8f51c6a0f9eee0e4b8f866ce7041ffa2145af1cff9b07f5577147aa629089c7": {0}
 }
 
 def activate_strategy_for_hash(soulprint_hash, asset):
     if soulprint_hash in STRATEGY_DB:
         return STRATEGY_DB[soulprint_hash]
     return {
-        "name": "Unrecognized Pattern",
+        ".format(
+        "name": "Long Momentum",
+        "risk": "Low",
+        "action": "Buy & Hold"
+    )name": "Unrecognized Pattern",
         "risk": "Unknown",
         "action": "Observe"
     }

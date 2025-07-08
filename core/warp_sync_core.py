@@ -1,16 +1,15 @@
+import time
+import math
+from typing import Any, Dict, Optional
+
+from core.clean_unified_math import clean_unified_math
+
 # !/usr/bin/env python3
 """
 Warp Sync Core Stub Implementation
 
 Minimal stub for WarpSyncCore to satisfy module imports and basic instantiation.
 """
-
-import time
-import math
-
-from typing import Any, Dict, Optional
-
-from core.clean_unified_math import clean_unified_math
 
 
 class WarpSyncCore:

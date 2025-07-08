@@ -142,7 +142,8 @@ self.active_strategy_id: str = default_strategy_id
 
 self.metrics: Dict[str, Any]
 
-    = {total_evaluations: 0,total_switches: 0,last_switch_time": None,strategy_activations": {self.default_strategy_id: 0},
+   
+    {total_evaluations: 0,total_switches: 0,last_switch_time": None,strategy_activations": {self.default_strategy_id: 0},
 
 
 
@@ -249,7 +250,7 @@ description: Optional description of the condition.if target_strategy_id not in 
 
 
 
-            raise ValueError('f"Target strategy ID '{target_strategy_id}' is not registered.
+            raise ValueError('"Target strategy ID '{0}' is not registered.
 
 
 
@@ -274,7 +275,7 @@ self.switch_conditions.append(
 
 
 {condition_func: condition_func,target_strategy_id: target_strategy_id,priority":
-priority,description": description or f"Switch to {target_strategy_id},
+priority,description": description or f"Switch to {0},
 
 
 
@@ -374,7 +375,7 @@ break  # Found a matching condition, use this strategy
 
 
 
-fError evaluating condition '{'condition[description]}': {e}'
+fError evaluating condition '{2}': {3}'
 
 
 
@@ -402,7 +403,7 @@ if next_strategy_id != self.active_strategy_id:
 
 
 
-fSwitching from {self.active_strategy_id} to {next_strategy_id})self.metrics[total_switches]
+fSwitching from {4} to {5})self.metrics[total_switches]
     += 1self.metrics[last_switch_time] = time.time()
 
 
@@ -444,7 +445,7 @@ self.metrics[strategy_activations][self.active_strategy_id]
 
 
 
-fError: Active strategy '{'self.active_strategy_id}' not found. Falling back to default.'
+fError: Active strategy '{6}' not found. Falling back to default.'
 
 
 
@@ -489,11 +490,12 @@ try: result = strategy_func(data)
 
 
 
-            print(fError executing strategy '{self.active_strategy_id}': {e})
+            print(fError executing strategy '{4}': {3})
 
 
 
-        return {status:error,message: str(e),executed_strategy": self.active_strategy_id,
+        return {status:error,message: str(e),executed_strategy".format(target_strategy_id, condition_func: condition_func,target_strategy_id: target_strategy_id,priority":
+priority,description": description or f"Switch to {target_strategy_id, 'condition[description], e, self.active_strategy_id, next_strategy_id, 'self.active_strategy_id, self.active_strategy_id, e): self.active_strategy_id,
 
 
 
@@ -567,11 +569,11 @@ def strategy_a():-> Dict[str, Any]:'
 
 
 
-def strategy_b():-> Dict[str, Any]:'print(f"Executing Strategy B with data: {data.get('value')})
+def strategy_b():-> Dict[str, Any]:'print("Executing Strategy B with data: {0})
 
 
 
-        return {strategy:B,processed_value: data.get(value", 0) / 2}
+        return {1}
 
 
 
@@ -579,7 +581,8 @@ def strategy_b():-> Dict[str, Any]:'print(f"Executing Strategy B with data: {dat
 
 
 
-def strategy_c():-> Dict[str, Any]:'print(f"Executing Strategy C with data: {data.get('value')})
+def strategy_c():-> Dict[str, Any]:'print(f".format(data.get('value'), strategy:B,processed_value: data.get(value", 0)
+    2)Executing Strategy C with data: {data.get('value')})
 
 
 

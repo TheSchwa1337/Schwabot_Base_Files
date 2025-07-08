@@ -1,3 +1,15 @@
+from __future__ import annotations
+import hashlib
+import math
+import statistics
+import time
+from collections import deque
+from dataclasses import dataclass, field
+from typing import Deque, List, Tuple
+    import random
+
+import numpy as np
+
 #!/usr/bin/env python3
 """Slot-State Mapper 🚦
 
@@ -16,22 +28,10 @@ This module is intentionally self-contained so it can be unit-tested in
 isolation and later plugged into `clock_tick_router` or any live feed.
 """
 
-from __future__ import annotations
-
-import hashlib
-import math
-import statistics
-import time
-from collections import deque
-from dataclasses import dataclass, field
-from typing import Deque, List, Tuple
-
-import numpy as np
-
-
 # ---------------------------------------------------------------------------
 # Helper dataclasses
 # ---------------------------------------------------------------------------
+
 
 @dataclass
 class Tick:
@@ -55,6 +55,7 @@ class SlotResult:
 # ---------------------------------------------------------------------------
 # SlotAccumulator – collects raw ticks and outputs 2-bit slot codes
 # ---------------------------------------------------------------------------
+
 
 class SlotAccumulator:
     """Aggregate ticks into a fixed-length slot and produce a 2-bit code."""
@@ -150,6 +151,7 @@ class SlotAccumulator:
 # Digest builder with momentum coupling
 # ---------------------------------------------------------------------------
 
+
 class DigestMomentumBuilder:
     """Builds recursive SHA-256 digests from slot bit-streams."""
 
@@ -165,7 +167,7 @@ class DigestMomentumBuilder:
             return False, b""
 
         # build 32-byte bit-vector (=256 bits)
-        bitstring = "".join(f"{code:02b}" for code in self.bits_buffer)
+        bitstring = "".join("{0}".format(code:02b) for code in self.bits_buffer)
         preimage_bytes = int(bitstring, 2).to_bytes(32, "big")
 
         # momentum coupling
@@ -183,6 +185,7 @@ class DigestMomentumBuilder:
 # Utility functions
 # ---------------------------------------------------------------------------
 
+
 def _local_entropy(seq: List[int]) -> float:
     if not seq:
         return 0.0
@@ -197,8 +200,6 @@ def _local_entropy(seq: List[int]) -> float:
 # ---------------------------------------------------------------------------
 
 if __name__ == "__main__":
-    import random
-
     acc = SlotAccumulator(slot_seconds=1)  # fast test slot
     dig = DigestMomentumBuilder()
 
@@ -209,6 +210,8 @@ if __name__ == "__main__":
         done, slot = acc.add_tick(price, vol, ts=start + _)
         if done and slot:
             ready, digest = dig.add_slot(slot.bit_code)
-            print(f"slot {slot.bit_code} σ={slot.sigma:.4f} VWΔ={slot.vwd_delta:.2f} H_before={slot.entropy_before:.3f}")
+            print(
+                "slot {0} σ={1} VWΔ={2} H_before={3}".format(slot.bit_code, slot.sigma:.4f, slot.vwd_delta:.2f, slot.entropy_before:.3f)
+            )
             if ready:
-                print("digest:", digest.hex()[:16], "…") 
+                print("digest:", digest.hex()[:16], "…")

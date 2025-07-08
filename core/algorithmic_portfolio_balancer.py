@@ -1,3 +1,19 @@
+import asyncio
+import logging
+import time
+from dataclasses import dataclass, field
+from decimal import Decimal
+from enum import Enum
+from typing import Dict, List, Optional, Tuple, Any
+from .clean_trading_pipeline import TradingDecision, TradingAction
+from .phantom_detector import PhantomZone
+from .phantom_registry import PhantomRegistry
+from .phantom_logger import PhantomLogger
+
+import numpy as np
+
+from utils.safe_print import safe_print, info, warn, error, success
+
 #!/usr/bin/env python3
 """
 Algorithmic Portfolio Balancer
@@ -11,26 +27,12 @@ Advanced portfolio balancing system for Schwabot with:
 - Integration with Phantom Math system
 """
 
-import asyncio
-import logging
-import time
-from dataclasses import dataclass, field
-from decimal import Decimal
-from enum import Enum
-from typing import Dict, List, Optional, Tuple, Any
-import numpy as np
-
-from .clean_trading_pipeline import TradingDecision, TradingAction
-from .phantom_detector import PhantomZone
-from .phantom_registry import PhantomRegistry
-from .phantom_logger import PhantomLogger
-from utils.safe_print import safe_print, info, warn, error, success
-
 logger = logging.getLogger(__name__)
 
 
 class RebalancingStrategy(Enum):
     """Portfolio rebalancing strategies."""
+
     EQUAL_WEIGHT = "equal_weight"
     RISK_PARITY = "risk_parity"
     BLACK_LITTERMAN = "black_litterman"
@@ -41,6 +43,7 @@ class RebalancingStrategy(Enum):
 @dataclass
 class AssetAllocation:
     """Asset allocation configuration."""
+
     symbol: str
     target_weight: float
     min_weight: float = 0.0
@@ -55,6 +58,7 @@ class AssetAllocation:
 @dataclass
 class PortfolioState:
     """Current portfolio state."""
+
     total_value: Decimal
     cash_balance: Decimal
     asset_balances: Dict[str, Decimal]
@@ -67,22 +71,20 @@ class PortfolioState:
 
 class AlgorithmicPortfolioBalancer:
     """Advanced algorithmic portfolio balancer."""
-    
+
     def __init__(self, config: Dict[str, Any]):
         self.config = config
         self.phantom_registry = PhantomRegistry()
         self.phantom_logger = PhantomLogger()
-        
+
         # Portfolio configuration
-        self.rebalancing_strategy = RebalancingStrategy(
-            config.get("rebalancing_strategy", "phantom_adaptive")
-        )
+        self.rebalancing_strategy = RebalancingStrategy(config.get("rebalancing_strategy", "phantom_adaptive"))
         self.rebalance_threshold = config.get("rebalance_threshold", 0.05)
         self.max_rebalance_frequency = config.get("max_rebalance_frequency", 3600)  # 1 hour
-        
+
         # Asset allocations
         self.asset_allocations = self._initialize_asset_allocations()
-        
+
         # Portfolio state
         self.portfolio_state = PortfolioState(
             total_value=Decimal("0"),
@@ -90,50 +92,30 @@ class AlgorithmicPortfolioBalancer:
             asset_balances={},
             asset_values={},
             asset_weights={},
-            last_rebalance=0.0
+            last_rebalance=0.0,
         )
-        
+
         # Performance tracking
         self.performance_history = []
         self.rebalance_history = []
-        
+
         logger.info("Algorithmic Portfolio Balancer initialized")
 
     def _initialize_asset_allocations(self) -> Dict[str, AssetAllocation]:
         """Initialize asset allocation configurations."""
         allocations = {
             "BTC": AssetAllocation(
-                symbol="BTC",
-                target_weight=0.4,
-                min_weight=0.2,
-                max_weight=0.6,
-                risk_score=0.7,
-                volatility=0.02
+                symbol="BTC", target_weight=0.4, min_weight=0.2, max_weight=0.6, risk_score=0.7, volatility=0.02
             ),
             "ETH": AssetAllocation(
-                symbol="ETH", 
-                target_weight=0.3,
-                min_weight=0.15,
-                max_weight=0.45,
-                risk_score=0.6,
-                volatility=0.025
+                symbol="ETH", target_weight=0.3, min_weight=0.15, max_weight=0.45, risk_score=0.6, volatility=0.025
             ),
             "SOL": AssetAllocation(
-                symbol="SOL",
-                target_weight=0.2,
-                min_weight=0.1,
-                max_weight=0.3,
-                risk_score=0.8,
-                volatility=0.03
+                symbol="SOL", target_weight=0.2, min_weight=0.1, max_weight=0.3, risk_score=0.8, volatility=0.03
             ),
             "USDC": AssetAllocation(
-                symbol="USDC",
-                target_weight=0.1,
-                min_weight=0.05,
-                max_weight=0.2,
-                risk_score=0.1,
-                volatility=0.001
-            )
+                symbol="USDC", target_weight=0.1, min_weight=0.05, max_weight=0.2, risk_score=0.1, volatility=0.001
+            ),
         }
         return allocations
 
@@ -143,7 +125,7 @@ class AlgorithmicPortfolioBalancer:
             # Calculate current asset values
             asset_values = {}
             total_value = Decimal("0")
-            
+
             for symbol, balance in self.portfolio_state.asset_balances.items():
                 if symbol in market_data:
                     price = Decimal(str(market_data[symbol].get("price", 0)))
@@ -152,43 +134,43 @@ class AlgorithmicPortfolioBalancer:
                     total_value += value
                 else:
                     asset_values[symbol] = Decimal("0")
-            
+
             # Add cash balance
             total_value += self.portfolio_state.cash_balance
-            
+
             # Calculate weights
             asset_weights = {}
             if total_value > 0:
                 for symbol, value in asset_values.items():
                     asset_weights[symbol] = float(value / total_value)
-            
+
             # Update portfolio state
             self.portfolio_state.total_value = total_value
             self.portfolio_state.asset_values = asset_values
             self.portfolio_state.asset_weights = asset_weights
-            
-            logger.debug(f"Portfolio state updated: ${total_value:,.2f}")
-            
+
+            logger.debug("Portfolio state updated: ${0}".format(total_value:,.2f))
+
         except Exception as e:
-            logger.error(f"Error updating portfolio state: {e}")
+            logger.error("Error updating portfolio state: {0}".format(e))
 
     async def check_rebalancing_needs(self) -> bool:
         """Check if portfolio needs rebalancing."""
         current_time = time.time()
-        
+
         # Check frequency limit
         if current_time - self.portfolio_state.last_rebalance < self.max_rebalance_frequency:
             return False
-        
+
         # Check weight deviations
         for symbol, allocation in self.asset_allocations.items():
             current_weight = self.portfolio_state.asset_weights.get(symbol, 0.0)
             target_weight = allocation.target_weight
-            
+
             if abs(current_weight - target_weight) > self.rebalance_threshold:
-                logger.info(f"Rebalancing needed: {symbol} weight {current_weight:.3f} vs target {target_weight:.3f}")
+                logger.info("Rebalancing needed: {0} weight {1} vs target {2}".format(symbol, current_weight:.3f, target_weight:.3f))
                 return True
-        
+
         return False
 
     async def calculate_phantom_adjusted_weights(self, market_data: Dict[str, Any]) -> Dict[str, float]:
@@ -196,15 +178,15 @@ class AlgorithmicPortfolioBalancer:
         try:
             # Get Phantom Zone data
             phantom_zones = await self._get_phantom_zones(market_data)
-            
+
             # Calculate adjusted weights
             adjusted_weights = {}
             base_weights = {symbol: alloc.target_weight for symbol, alloc in self.asset_allocations.items()}
-            
+
             for symbol, base_weight in base_weights.items():
                 # Get Phantom Zone score for this asset
                 phantom_score = self._get_asset_phantom_score(symbol, phantom_zones)
-                
+
                 # Adjust weight based on Phantom Math
                 if phantom_score > 0.7:  # Strong Phantom Zone
                     adjusted_weight = base_weight * 1.2  # Increase allocation
@@ -212,44 +194,44 @@ class AlgorithmicPortfolioBalancer:
                     adjusted_weight = base_weight * 0.8  # Decrease allocation
                 else:
                     adjusted_weight = base_weight
-                
+
                 # Apply constraints
                 allocation = self.asset_allocations[symbol]
                 adjusted_weight = max(allocation.min_weight, min(allocation.max_weight, adjusted_weight))
-                
+
                 adjusted_weights[symbol] = adjusted_weight
-            
+
             # Normalize weights
             total_weight = sum(adjusted_weights.values())
             if total_weight > 0:
-                adjusted_weights = {k: v/total_weight for k, v in adjusted_weights.items()}
-            
+                adjusted_weights = {k: v / total_weight for k, v in adjusted_weights.items()}
+
             return adjusted_weights
-            
+
         except Exception as e:
-            logger.error(f"Error calculating Phantom-adjusted weights: {e}")
+            logger.error("Error calculating Phantom-adjusted weights: {0}".format(e))
             return {symbol: alloc.target_weight for symbol, alloc in self.asset_allocations.items()}
 
     async def generate_rebalancing_decisions(self, market_data: Dict[str, Any]) -> List[TradingDecision]:
         """Generate rebalancing trading decisions."""
         try:
             decisions = []
-            
+
             # Calculate target weights based on strategy
             if self.rebalancing_strategy == RebalancingStrategy.PHANTOM_ADAPTIVE:
                 target_weights = await self.calculate_phantom_adjusted_weights(market_data)
             else:
                 target_weights = {symbol: alloc.target_weight for symbol, alloc in self.asset_allocations.items()}
-            
+
             # Calculate required trades
             for symbol, target_weight in target_weights.items():
                 current_weight = self.portfolio_state.asset_weights.get(symbol, 0.0)
                 weight_diff = target_weight - current_weight
-                
+
                 if abs(weight_diff) > self.rebalance_threshold:
                     # Calculate trade amount
                     trade_value = abs(weight_diff) * float(self.portfolio_state.total_value)
-                    
+
                     if weight_diff > 0:
                         # Need to buy
                         action = TradingAction.BUY
@@ -258,11 +240,11 @@ class AlgorithmicPortfolioBalancer:
                         # Need to sell
                         action = TradingAction.SELL
                         quantity = abs(float(self.portfolio_state.asset_balances.get(symbol, 0)) * weight_diff)
-                    
+
                     # Create trading decision
                     decision = TradingDecision(
                         timestamp=time.time(),
-                        symbol=f"{symbol}/USDC",
+                        symbol="{0}/USDC".format(symbol),
                         action=action,
                         quantity=quantity,
                         price=float(market_data[symbol].get("price", 0)),
@@ -276,23 +258,23 @@ class AlgorithmicPortfolioBalancer:
                             "current_weight": current_weight,
                             "target_weight": target_weight,
                             "weight_diff": weight_diff,
-                            "strategy": self.rebalancing_strategy.value
-                        }
+                            "strategy": self.rebalancing_strategy.value,
+                        },
                     )
-                    
+
                     decisions.append(decision)
-            
+
             return decisions
-            
+
         except Exception as e:
-            logger.error(f"Error generating rebalancing decisions: {e}")
+            logger.error("Error generating rebalancing decisions: {0}".format(e))
             return []
 
     async def execute_rebalancing(self, decisions: List[TradingDecision]) -> bool:
         """Execute rebalancing trades."""
         try:
             success_count = 0
-            
+
             for decision in decisions:
                 # Log the rebalancing decision
                 await self.phantom_logger.log_phantom_zone(
@@ -304,34 +286,38 @@ class AlgorithmicPortfolioBalancer:
                         similarity_score=0.5,
                         potential_score=0.5,
                         zone_type="rebalancing",
-                        metadata=decision.metadata
+                        metadata=decision.metadata,
                     )
                 )
-                
+
                 # Execute trade (this would integrate with your trading executor)
                 # For now, we'll simulate execution
                 success = await self._execute_trade(decision)
                 if success:
                     success_count += 1
-                    logger.info(f"Rebalancing trade executed: {decision.symbol} {decision.action.value} {decision.quantity}")
-            
+                    logger.info(
+                        "Rebalancing trade executed: {0} {1} {2}".format(decision.symbol, decision.action.value, decision.quantity)
+                    )
+
             # Update rebalancing state
             self.portfolio_state.last_rebalance = time.time()
             self.portfolio_state.rebalance_count += 1
-            
+
             # Log rebalancing event
-            self.rebalance_history.append({
-                "timestamp": time.time(),
-                "decisions_count": len(decisions),
-                "success_count": success_count,
-                "portfolio_value": float(self.portfolio_state.total_value)
-            })
-            
-            success(f"Portfolio rebalancing completed: {success_count}/{len(decisions)} trades executed")
+            self.rebalance_history.append(
+                {
+                    "timestamp": time.time(),
+                    "decisions_count": len(decisions),
+                    "success_count": success_count,
+                    "portfolio_value": float(self.portfolio_state.total_value),
+                }
+            )
+
+            success("Portfolio rebalancing completed: {0}/{1} trades executed".format(success_count, len(decisions)))
             return success_count == len(decisions)
-            
+
         except Exception as e:
-            logger.error(f"Error executing rebalancing: {e}")
+            logger.error("Error executing rebalancing: {0}".format(e))
             return False
 
     async def _execute_trade(self, decision: TradingDecision) -> bool:
@@ -347,13 +333,11 @@ class AlgorithmicPortfolioBalancer:
             for symbol in self.asset_allocations.keys():
                 if symbol in market_data:
                     # Get recent Phantom Zones for this asset
-                    recent_zones = await self.phantom_registry.get_recent_zones(
-                        symbol, hours=24
-                    )
+                    recent_zones = await self.phantom_registry.get_recent_zones(symbol, hours=24)
                     zones.extend(recent_zones)
             return zones
         except Exception as e:
-            logger.error(f"Error getting Phantom Zones: {e}")
+            logger.error("Error getting Phantom Zones: {0}".format(e))
             return []
 
     def _get_asset_phantom_score(self, symbol: str, phantom_zones: List[PhantomZone]) -> float:
@@ -362,13 +346,13 @@ class AlgorithmicPortfolioBalancer:
             asset_zones = [zone for zone in phantom_zones if zone.symbol == symbol]
             if not asset_zones:
                 return 0.5  # Neutral score
-            
+
             # Calculate average potential score
             avg_potential = sum(zone.potential_score for zone in asset_zones) / len(asset_zones)
             return avg_potential
-            
+
         except Exception as e:
-            logger.error(f"Error calculating Phantom score for {symbol}: {e}")
+            logger.error("Error calculating Phantom score for {0}: {1}".format(symbol, e))
             return 0.5
 
     async def get_portfolio_metrics(self) -> Dict[str, Any]:
@@ -380,11 +364,11 @@ class AlgorithmicPortfolioBalancer:
                 "asset_weights": self.portfolio_state.asset_weights,
                 "rebalance_count": self.portfolio_state.rebalance_count,
                 "last_rebalance": self.portfolio_state.last_rebalance,
-                "performance": self._calculate_performance_metrics()
+                "performance": self._calculate_performance_metrics(),
             }
             return metrics
         except Exception as e:
-            logger.error(f"Error getting portfolio metrics: {e}")
+            logger.error("Error getting portfolio metrics: {0}".format(e))
             return {}
 
     def _calculate_performance_metrics(self) -> Dict[str, float]:
@@ -392,30 +376,26 @@ class AlgorithmicPortfolioBalancer:
         try:
             if len(self.performance_history) < 2:
                 return {"return": 0.0, "volatility": 0.0, "sharpe_ratio": 0.0}
-            
+
             # Calculate returns
             returns = []
             for i in range(1, len(self.performance_history)):
-                prev_value = self.performance_history[i-1]["value"]
+                prev_value = self.performance_history[i - 1]["value"]
                 curr_value = self.performance_history[i]["value"]
                 if prev_value > 0:
                     returns.append((curr_value - prev_value) / prev_value)
-            
+
             if not returns:
                 return {"return": 0.0, "volatility": 0.0, "sharpe_ratio": 0.0}
-            
+
             avg_return = np.mean(returns)
             volatility = np.std(returns)
             sharpe_ratio = avg_return / volatility if volatility > 0 else 0.0
-            
-            return {
-                "return": avg_return,
-                "volatility": volatility,
-                "sharpe_ratio": sharpe_ratio
-            }
-            
+
+            return {"return": avg_return, "volatility": volatility, "sharpe_ratio": sharpe_ratio}
+
         except Exception as e:
-            logger.error(f"Error calculating performance metrics: {e}")
+            logger.error("Error calculating performance metrics: {0}".format(e))
             return {"return": 0.0, "volatility": 0.0, "sharpe_ratio": 0.0}
 
     async def calculate_performance_metrics(self) -> Dict[str, Any]:
@@ -423,10 +403,10 @@ class AlgorithmicPortfolioBalancer:
         try:
             # Get basic performance metrics
             basic_metrics = self._calculate_performance_metrics()
-            
+
             # Calculate additional metrics
             current_time = time.time()
-            
+
             # Calculate total return
             if len(self.performance_history) >= 2:
                 initial_value = self.performance_history[0]["value"]
@@ -434,7 +414,7 @@ class AlgorithmicPortfolioBalancer:
                 total_return = (current_value - initial_value) / initial_value if initial_value > 0 else 0.0
             else:
                 total_return = 0.0
-            
+
             # Calculate max drawdown
             max_drawdown = 0.0
             if len(self.performance_history) > 1:
@@ -444,7 +424,7 @@ class AlgorithmicPortfolioBalancer:
                         peak = record["value"]
                     drawdown = (peak - record["value"]) / peak if peak > 0 else 0.0
                     max_drawdown = max(max_drawdown, drawdown)
-            
+
             # Calculate drift score
             drift_score = 0.0
             if self.portfolio_state.asset_weights:
@@ -453,17 +433,17 @@ class AlgorithmicPortfolioBalancer:
                     target_weight = allocation.target_weight
                     drift_score += abs(current_weight - target_weight)
                 drift_score /= len(self.asset_allocations)
-            
+
             # Count rebalances today
             today_start = current_time - (current_time % 86400)  # Start of today
             rebalances_today = sum(1 for record in self.rebalance_history if record["timestamp"] >= today_start)
-            
+
             # Format last rebalance time
             if self.portfolio_state.last_rebalance > 0:
                 last_rebalance = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(self.portfolio_state.last_rebalance))
             else:
                 last_rebalance = "Never"
-            
+
             return {
                 "total_return": total_return,
                 "sharpe_ratio": basic_metrics.get("sharpe_ratio", 0.0),
@@ -474,11 +454,11 @@ class AlgorithmicPortfolioBalancer:
                 "drift_score": drift_score,
                 "total_value": float(self.portfolio_state.total_value),
                 "cash_balance": float(self.portfolio_state.cash_balance),
-                "asset_weights": self.portfolio_state.asset_weights
+                "asset_weights": self.portfolio_state.asset_weights,
             }
-            
+
         except Exception as e:
-            logger.error(f"Error calculating performance metrics: {e}")
+            logger.error("Error calculating performance metrics: {0}".format(e))
             return {
                 "total_return": 0.0,
                 "sharpe_ratio": 0.0,
@@ -489,11 +469,11 @@ class AlgorithmicPortfolioBalancer:
                 "drift_score": 0.0,
                 "total_value": 0.0,
                 "cash_balance": 0.0,
-                "asset_weights": {}
+                "asset_weights": {},
             }
 
 
 # Factory function for easy integration
 def create_portfolio_balancer(config: Dict[str, Any]) -> AlgorithmicPortfolioBalancer:
     """Create a portfolio balancer instance."""
-    return AlgorithmicPortfolioBalancer(config) 
+    return AlgorithmicPortfolioBalancer(config)

@@ -1,3 +1,28 @@
+import logging
+import random
+from datetime import datetime
+from typing import Any, Callable, Dict, Optional
+import time
+    import cupy as cp
+import logging
+    from ..system.dual_state_router import (
+from core.unified_math_system import generate_unified_hash
+from .orbital_shell_brain_system import OrbitalBRAINSystem, ShellConsensus, AltitudeVector
+from .qutrit_signal_matrix import QutritSignalMatrix, QutritState
+        import os
+
+import numpy as np
+
+    from core.gpu_handlers import get_gpu_memory, select_best_gpu
+    from utils.cuda_helper import safe_cuda_operation, xp, USING_CUDA
+from core.advanced_tensor_algebra import (
+from core.fractal_core import fractal_quantize_vector
+from core.matrix_mapper import EnhancedMatrixMapper, load_matrix_from_file
+from core.schwafit_core import SchwafitCore
+from core.strategy_loader import load_strategy
+    from core.visual_execution_node import emit_dashboard_event
+    from core.visual_execution_node import log_profit_tick
+
 """Strategy Bit Mapper - Handles bitwise strategy expansion and hash-to-matrix matching.
 
 CUDA Integration:
@@ -6,28 +31,18 @@ CUDA Integration:
 - Cross-platform compatibility (Windows, macOS, Linux)
 """
 
-import logging
-import random
-from datetime import datetime
-from typing import Any, Callable, Dict, Optional
-import time
-import numpy as np
 try:
-    import cupy as cp
     USING_CUDA = True
     _backend = 'cupy (GPU)'
 except ImportError:
     cp = np
     USING_CUDA = False
     _backend = 'numpy (CPU)'
-import logging
 logger = logging.getLogger(__name__)
-logger.info(f"StrategyBitMapper using backend: {_backend}")
+logger.info("StrategyBitMapper using backend: {0}".format(_backend))
 
 # CUDA Helper Integration
 try:
-    from core.gpu_handlers import get_gpu_memory, select_best_gpu
-    from utils.cuda_helper import safe_cuda_operation, xp, USING_CUDA
     CUDA_AVAILABLE = True
     logger = logging.getLogger(__name__)
     logger.info("⚡ CUDA acceleration enabled in Strategy Bit Mapper")
@@ -37,58 +52,55 @@ except ImportError:
     CUDA_AVAILABLE = False
     logger = logging.getLogger(__name__)
     logger.warning("🔄 CUDA not available - using CPU-only mode in Strategy Bit Mapper")
+
     def safe_cuda_operation(cuda_fn, cpu_fn, **kwargs):
         """CPU-only fallback for safe_cuda_operation."""
         return cpu_fn(**kwargs)
 
+
 # Dual State Router Integration
 try:
-    from ..system.dual_state_router import (
         ComputeMode,
         StrategyTier,
         get_dual_state_router,
         route_task,
     )
+
     DUAL_STATE_AVAILABLE = True
     logger.info("🔄 Dual State Router integration enabled in Strategy Bit Mapper")
 except ImportError:
     DUAL_STATE_AVAILABLE = False
     logger.warning("⚠️ Dual State Router not available in Strategy Bit Mapper")
 
-from core.advanced_tensor_algebra import (
     AdvancedTensorAlgebra,
     information_geometry,
     spectral_analysis,
     temporal_algebra,
 )
-from core.fractal_core import fractal_quantize_vector
-from core.matrix_mapper import EnhancedMatrixMapper, load_matrix_from_file
-from core.schwafit_core import SchwafitCore
-from core.strategy_loader import load_strategy
-from core.unified_math_system import generate_unified_hash
-from .orbital_shell_brain_system import OrbitalBRAINSystem, ShellConsensus, AltitudeVector
-from .qutrit_signal_matrix import QutritSignalMatrix, QutritState
-
 # Optional: Import dashboard event emitter if available
 try:
-    from core.visual_execution_node import emit_dashboard_event
 except ImportError:
+
     def emit_dashboard_event(event: str, data: Any) -> None:
         """Emit dashboard event (no-op fallback)."""
         pass
 
+
 # Optional: Import profit tick logger if available
 try:
-    from core.visual_execution_node import log_profit_tick
 except ImportError:
+
     def log_profit_tick(data: Any) -> None:
         """Log profit tick (no-op fallback)."""
         pass
 
+
 logger = logging.getLogger(__name__)
+
 
 class ExpansionMode:
     """Expansion modes for strategy bit mapping."""
+
     FLIP = "flip"
     MIRROR = "mirror"
     RANDOM = "random"
@@ -96,11 +108,13 @@ class ExpansionMode:
     TENSOR_WEIGHTED = "tensor_weighted"
     ORBITAL_ADAPTIVE = "orbital_adaptive"
 
+
 class StrategyBitMapper:
     """
     Handles bitwise strategy expansion, hash-to-matrix matching, and integration
     for real-time, adaptive trading.
     """
+
     def __init__(
         self,
         matrix_dir,
@@ -108,7 +122,6 @@ class StrategyBitMapper:
         weather_api_key: Optional[str] = None,
     ):
         self.matrix_dir = matrix_dir
-        import os
         os.makedirs(self.matrix_dir, exist_ok=True)
         self.dashboard_hook = dashboard_hook or emit_dashboard_event
         self.expansion_history = []
@@ -132,9 +145,7 @@ class StrategyBitMapper:
         self.handler_weights: Dict[str, float] = {}
         self.api_data_cache: Dict[str, Any] = {}
 
-        self.tensor_weights = safe_cuda_operation(
-            lambda: xp.ones(64), lambda: np.ones(64)
-        )
+        self.tensor_weights = safe_cuda_operation(lambda: xp.ones(64), lambda: np.ones(64))
         self.weight_update_rate = 0.01
         self.rebalancing_threshold = 0.1
 
@@ -142,15 +153,17 @@ class StrategyBitMapper:
         self.schwafit = SchwafitCore(window=64)
         self.orbital_brain = OrbitalBRAINSystem()
 
-    def apply_qutrit_gate(self, strategy_id: str, seed: str, market_data: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    def apply_qutrit_gate(
+        self, strategy_id: str, seed: str, market_data: Optional[Dict[str, Any]] = None
+    ) -> Dict[str, Any]:
         """
         Apply qutrit gate to strategy decision
-        
+
         Args:
             strategy_id: Strategy identifier
             seed: Seed for qutrit matrix generation
             market_data: Optional market context
-            
+
         Returns:
             Dictionary with action and metadata
         """
@@ -158,7 +171,7 @@ class StrategyBitMapper:
             # Create qutrit matrix
             qutrit_matrix = QutritSignalMatrix(seed, market_data)
             qutrit_result = qutrit_matrix.get_matrix_result()
-            
+
             # Apply state-based logic
             if qutrit_result.state == QutritState.DEFER:
                 action = "defer"
@@ -169,7 +182,7 @@ class StrategyBitMapper:
             else:  # RECHECK
                 action = "recheck"
                 reason = "Qutrit state indicates re-evaluation needed"
-            
+
             return {
                 "strategy_id": strategy_id,
                 "action": action,
@@ -177,19 +190,19 @@ class StrategyBitMapper:
                 "qutrit_state": qutrit_result.state.value,
                 "confidence": qutrit_result.confidence,
                 "hash_segment": qutrit_result.hash_segment,
-                "matrix": qutrit_result.matrix.tolist()
+                "matrix": qutrit_result.matrix.tolist(),
             }
-            
+
         except Exception as e:
-            logger.error(f"Error applying qutrit gate: {e}")
+            logger.error("Error applying qutrit gate: {0}".format(e))
             return {
                 "strategy_id": strategy_id,
                 "action": "defer",
-                "reason": f"Qutrit gate error: {str(e)}",
+                "reason": "Qutrit gate error: {0}".format(str(e)),
                 "qutrit_state": QutritState.DEFER.value,
                 "confidence": 0.0,
                 "hash_segment": "error",
-                "matrix": [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+                "matrix": [[0, 0, 0], [0, 0, 0], [0, 0, 0]],
             }
 
     def defer(self, strategy_id: str) -> Dict[str, Any]:
@@ -198,7 +211,7 @@ class StrategyBitMapper:
             "strategy_id": strategy_id,
             "action": "defer",
             "reason": "Strategy deferred by qutrit gate",
-            "timestamp": time.time()
+            "timestamp": time.time(),
         }
 
     def execute_trade(self, strategy_id: str) -> Dict[str, Any]:
@@ -207,7 +220,7 @@ class StrategyBitMapper:
             "strategy_id": strategy_id,
             "action": "execute",
             "reason": "Strategy executed by qutrit gate",
-            "timestamp": time.time()
+            "timestamp": time.time(),
         }
 
     def recheck_later(self, strategy_id: str) -> Dict[str, Any]:
@@ -216,14 +229,12 @@ class StrategyBitMapper:
             "strategy_id": strategy_id,
             "action": "recheck",
             "reason": "Strategy marked for re-evaluation",
-            "timestamp": time.time()
+            "timestamp": time.time(),
         }
 
     def normalize_vector(self, v: np.ndarray) -> np.ndarray:
         norm = safe_cuda_operation(lambda: xp.linalg.norm(v), lambda: np.linalg.norm(v))
-        return safe_cuda_operation(
-            lambda: v / norm if norm > 0 else v, lambda: v / norm if norm > 0 else v
-        )
+        return safe_cuda_operation(lambda: v / norm if norm > 0 else v, lambda: v / norm if norm > 0 else v)
 
     def compute_cosine_similarity(self, a: np.ndarray, b: np.ndarray) -> float:
         a = self.normalize_vector(a)
@@ -235,12 +246,12 @@ class StrategyBitMapper:
         strategy_id: int,
         target_bits: int = 8,
         mode: str = ExpansionMode.RANDOM,
-        market_data: Optional[Dict[str, Any]] = None
+        market_data: Optional[Dict[str, Any]] = None,
     ) -> int:
         if mode == ExpansionMode.FLIP:
             return strategy_id ^ ((1 << target_bits) - 1)
         elif mode == ExpansionMode.MIRROR:
-            binary = format(strategy_id, f"0{target_bits}b")
+            binary = format(strategy_id, "0{0}b".format(target_bits))
             return int(binary[::-1], 2)
         elif mode == ExpansionMode.RANDOM:
             random.seed(strategy_id)
@@ -256,17 +267,15 @@ class StrategyBitMapper:
             market_data = market_data or self._get_simulated_market_data()
             return self._orbital_adaptive_expansion(strategy_id, target_bits, market_data)
         else:
-            raise ValueError(f"Invalid expansion mode: {mode}")
+            raise ValueError("Invalid expansion mode: {0}".format(mode))
 
     def _tensor_weighted_expansion(self, strategy_id: int, target_bits: int) -> int:
-        strategy_vector = np.array([int(b) for b in format(strategy_id, f"0{target_bits}b")])
+        strategy_vector = np.array([int(b) for b in format(strategy_id, "0{0}b".format(target_bits))])
         weighted_vector = safe_cuda_operation(
             lambda: strategy_vector * self.tensor_weights[:target_bits],
             lambda: strategy_vector * self.tensor_weights[:target_bits],
         )
-        expansion_value = safe_cuda_operation(
-            lambda: xp.sum(weighted_vector), lambda: np.sum(weighted_vector)
-        )
+        expansion_value = safe_cuda_operation(lambda: xp.sum(weighted_vector), lambda: np.sum(weighted_vector))
         return int(np.round(expansion_value)) % (1 << target_bits)
 
     def _orbital_adaptive_expansion(self, strategy_id: int, target_bits: int, market_data: Dict[str, Any]) -> int:
@@ -275,7 +284,7 @@ class StrategyBitMapper:
 
         altitude_shift = int(altitude_vector.altitude_value * (1 << (target_bits - 2)))
         consensus_shift = int(shell_consensus.consensus_score * (1 << (target_bits - 2)))
-        
+
         adaptive_shift = altitude_shift + consensus_shift
         expanded_strategy = (strategy_id + adaptive_shift) % (1 << target_bits)
 
@@ -301,6 +310,9 @@ class StrategyBitMapper:
         prices = [50000.0 + np.random.normal(0, 1000) for _ in range(20)]
         volumes = [np.random.exponential(1000) for _ in range(20)]
         return {
-            'price_history': prices, 'volume_history': volumes, 'current_price': prices[-1],
-            'current_volume': volumes[-1], 'timestamp': time.time()
+            'price_history': prices,
+            'volume_history': volumes,
+            'current_price': prices[-1],
+            'current_volume': volumes[-1],
+            'timestamp': time.time(),
         }

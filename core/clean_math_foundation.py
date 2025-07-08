@@ -1,3 +1,13 @@
+import logging
+import math
+import time
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple, Union
+    import cupy as cp
+
+    import numpy as np
+
 #!/usr/bin/env python3
 """
 Clean Math Foundation - Core Mathematical Operations
@@ -14,21 +24,12 @@ Key Features:
 - Performance optimization
 """
 
-import logging
-import math
-import time
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
-
 # CUDA Integration with Fallback
 try:
-    import cupy as cp
     USING_CUDA = True
     _backend = 'cupy (GPU)'
     xp = cp
 except ImportError:
-    import numpy as np
     USING_CUDA = False
     _backend = 'numpy (CPU)'
     xp = np
@@ -36,9 +37,9 @@ except ImportError:
 # Log backend status
 logger = logging.getLogger(__name__)
 if USING_CUDA:
-    logger.info(f"⚡ Clean Math Foundation using GPU acceleration: {_backend}")
+    logger.info("⚡ Clean Math Foundation using GPU acceleration: {0}".format(_backend))
 else:
-    logger.info(f"🔄 Clean Math Foundation using CPU fallback: {_backend}")
+    logger.info("🔄 Clean Math Foundation using CPU fallback: {0}".format(_backend))
 
 
 class ThermalState(Enum):
@@ -213,9 +214,7 @@ def calculate_covariance_matrix(returns: np.ndarray, ddof: int = 1) -> np.ndarra
     return np.cov(returns_clean.T, ddof=ddof)
 
 
-def calculate_sharpe_ratio(
-    returns: np.ndarray, risk_free_rate: float = 0.0, periods_per_year: int = 252
-) -> float:
+def calculate_sharpe_ratio(returns: np.ndarray, risk_free_rate: float = 0.0, periods_per_year: int = 252) -> float:
     """
     Calculate the Sharpe ratio for a series of returns.
 
@@ -250,16 +249,12 @@ def calculate_sharpe_ratio(
         return 0.0
 
     # Annualize
-    sharpe_ratio = (mean_excess_return * periods_per_year) / (
-        std_return * math.sqrt(periods_per_year)
-    )
+    sharpe_ratio = (mean_excess_return * periods_per_year) / (std_return * math.sqrt(periods_per_year))
 
     return float(sharpe_ratio)
 
 
-def calculate_sortino_ratio(
-    returns: np.ndarray, risk_free_rate: float = 0.0, periods_per_year: int = 252
-) -> float:
+def calculate_sortino_ratio(returns: np.ndarray, risk_free_rate: float = 0.0, periods_per_year: int = 252) -> float:
     """
     Calculate the Sortino ratio for a series of returns.
 
@@ -298,9 +293,7 @@ def calculate_sortino_ratio(
         return 0.0
 
     # Annualize
-    sortino_ratio = (np.mean(excess_returns) * periods_per_year) / (
-        downside_deviation * math.sqrt(periods_per_year)
-    )
+    sortino_ratio = (np.mean(excess_returns) * periods_per_year) / (downside_deviation * math.sqrt(periods_per_year))
 
     return float(sortino_ratio)
 

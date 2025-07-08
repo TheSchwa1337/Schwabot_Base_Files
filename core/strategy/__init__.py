@@ -1,3 +1,8 @@
+    from .entry_exit_portal import EntryExitPortal
+    from .flip_switch_logic_lattice import FlipSwitchLogicLattice
+    from .glyph_gate_engine import GlyphGateEngine
+    from .glyph_strategy_core import GlyphStrategyCore
+
 """
 Strategy Module Package Initializer
 
@@ -5,22 +10,18 @@ This module contains the strategic intelligence components for Schwabot trading.
 """
 
 try:
-    from .entry_exit_portal import EntryExitPortal
 except ImportError:
     EntryExitPortal = None
 
 try:
-    from .flip_switch_logic_lattice import FlipSwitchLogicLattice
 except ImportError:
     FlipSwitchLogicLattice = None
 
 try:
-    from .glyph_gate_engine import GlyphGateEngine
 except ImportError:
     GlyphGateEngine = None
 
 try:
-    from .glyph_strategy_core import GlyphStrategyCore
 except ImportError:
     GlyphStrategyCore = None
 

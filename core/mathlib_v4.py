@@ -1,3 +1,14 @@
+from __future__ import annotations
+import hashlib
+import logging
+import math
+import time
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import List, Dict, Any
+
+import numpy as np
+
 # !/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -11,18 +22,6 @@ Comprehensive mathematical library providing:
 - Advanced statistical operations
 - Waveform analysis and drift correction
 """
-
-from __future__ import annotations
-
-import hashlib
-import logging
-import math
-import time
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import List, Dict, Any
-
-import numpy as np
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -118,9 +117,7 @@ class Dual:
 
     def __truediv__(self, other) -> Dual:
         if isinstance(other, Dual):
-            return Dual(
-                self.val / other.val, (self.eps * other.val - self.val * other.eps) / (other.val**2)
-            )
+            return Dual(self.val / other.val, (self.eps * other.val - self.val * other.eps) / (other.val**2))
         else:
             return Dual(self.val / other, self.eps / other)
 
@@ -165,7 +162,7 @@ class MathLibV4:
         self.pattern_cache: Dict[str, DLTMetrics] = {}
         self.analysis_history: List[Dict[str, Any]] = []
 
-        logger.info(f"MathLibV4 initialized with precision {precision}")
+        logger.info("MathLibV4 initialized with precision {0}".format(precision))
 
     def calculate_dlt_metrics(self, data: Dict[str, Any]) -> DLTMetrics:
         """
@@ -185,7 +182,7 @@ class MathLibV4:
             deltas = [prices[i] - prices[i - 1] for i in range(1, len(prices))]
 
             # YOUR pattern hash algorithm
-            pattern_data = "".join([f"{d:.6f}" for d in deltas])
+            pattern_data = "".join(["{0}".format(d:.6f) for d in deltas])
             pattern_hash = hashlib.sha256(pattern_data.encode()).hexdigest()
 
             # YOUR triplet lock mechanism
@@ -232,7 +229,7 @@ class MathLibV4:
             return metrics
 
         except Exception as e:
-            logger.error(f"DLT metrics calculation failed: {e}")
+            logger.error("DLT metrics calculation failed: {0}".format(e))
             raise
 
     def _calculate_triplet_lock(self, deltas: List[float]) -> bool:
@@ -247,9 +244,7 @@ class MathLibV4:
                 return True
         return False
 
-    def _calculate_confidence(
-        self, deltas: List[float], mean_delta: float, std_dev: float
-    ) -> float:
+    def _calculate_confidence(self, deltas: List[float], mean_delta: float, std_dev: float) -> float:
         """YOUR confidence calculation algorithm."""
         if std_dev == 0:
             return 1.0
@@ -373,22 +368,22 @@ def demo_mathlib_v4():
 
     # Calculate DLT metrics
     metrics = mathlib.calculate_dlt_metrics(sample_data)
-    print(f"Pattern Hash: {metrics.pattern_hash[:16]}...")
-    print(f"Triplet Lock: {metrics.triplet_lock}")
-    print(f"Confidence: {metrics.confidence:.4f}")
-    print(f"Warp Factor: {metrics.warp_factor:.4f}")
+    print("Pattern Hash: {0}...".format(metrics.pattern_hash[:16]))
+    print("Triplet Lock: {0}".format(metrics.triplet_lock))
+    print("Confidence: {0}".format(metrics.confidence:.4f))
+    print("Warp Factor: {0}".format(metrics.warp_factor:.4f))
 
     # Demonstrate dual number automatic differentiation
     def f(x_dual: Dual) -> Dual:
         return x_dual * x_dual + x_dual.sin()
 
     gradient = mathlib.compute_dual_gradient(f, 2.0)
-    print(f"Gradient at x = 2.0: {gradient:.4f}")
+    print("Gradient at x = 2.0: {0}".format(gradient:.4f))
 
     # Show version info
     version_info = mathlib.get_version_info()
-    print(f"Version: {version_info['version']}")
-    print(f"Cache size: {version_info['cache_size']}")
+    print("Version: {0}".format(version_info['version']))
+    print("Cache size: {0}".format(version_info['cache_size']))
 
 
 if __name__ == "__main__":

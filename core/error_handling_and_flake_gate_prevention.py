@@ -1,3 +1,10 @@
+import asyncio
+import importlib
+import sys
+import traceback
+from collections import defaultdict
+from typing import Any, Dict, List, Optional, Set, Tuple, Union
+
 """
 Comprehensive Error Handling and Flake Gate Prevention System
 
@@ -20,13 +27,6 @@ Mathematical Foundation:
 - System Integrity: S = (component_health * integration_coherence)
 - Flake Gate Prevention: F = f(import_order, dependency_graph, fallback_chain)
 """
-
-import asyncio
-import importlib
-import sys
-import traceback
-from collections import defaultdict
-from typing import Any, Dict, List, Optional, Set, Tuple, Union
 
 # Configure logging
 logging.basicConfig(
@@ -382,7 +382,7 @@ class ComprehensiveErrorHandler:
         Returns:
             Tuple of (module_object, success_flag)
         """
-        error_id = hashlib.sha256(f"{time.time()}_{module_name}".encode()).hexdigest()[:16]
+        error_id = hashlib.sha256("{0}_{1}".format(time.time(), module_name).encode()).hexdigest()[:16]
 
         try:
             # Try to import the module
@@ -391,7 +391,7 @@ class ComprehensiveErrorHandler:
             # Update module status
             self._update_module_status(module_name, True, None)
 
-            logger.info(f"Successfully imported {module_name}")
+            logger.info("Successfully imported {0}".format(module_name))
             return module, True
 
         except ImportError as e:
@@ -415,7 +415,7 @@ class ComprehensiveErrorHandler:
             self.error_history.append(error_record)
             self._update_module_status(module_name, False, error_message)
 
-            logger.warning(f"Import failed for {module_name}: {error_message}")
+            logger.warning("Import failed for {0}: {1}".format(module_name, error_message))
 
             # Try fallback if enabled
             if fallback_enabled and module_name in self.fallback_modules:
@@ -424,7 +424,7 @@ class ComprehensiveErrorHandler:
                 error_record.recovery_successful = True
                 error_record.recovery_strategy = RecoveryStrategy.FALLBACK_MODULE
 
-                logger.info(f"Using fallback for {module_name}")
+                logger.info("Using fallback for {0}".format(module_name))
                 return fallback_module, False  # False indicates fallback used
 
             return None, False
@@ -463,7 +463,7 @@ def _update_module_status(self, module_name: str, is_available: bool, error_mess
         Returns:
             Recovery result dictionary
         """
-        error_id = hashlib.sha256(f"{time.time()}_{str(error)}".encode()).hexdigest()[:16]
+        error_id = hashlib.sha256("{0}_{1}".format(time.time(), str(error)).encode()).hexdigest()[:16]
 
         # Determine error type and severity
         error_type = self._classify_error(error)
@@ -535,7 +535,7 @@ def _attempt_recovery(self, error_record: ErrorRecord, context: Dict[str, Any]) 
             else:
                 return self._recover_from_generic_error(error_record, context)
         except Exception as recovery_error:
-            logger.error(f"Recovery attempt failed: {recovery_error}")
+            logger.error("Recovery attempt failed: {0}".format(recovery_error))
             return {
                 'success': False,
                 'strategy': None,
@@ -550,7 +550,7 @@ Dict[str, Any]:
 
         if module_name and module_name in self.fallback_modules:
             fallback_module = self.fallback_modules[module_name]
-            logger.info(f"Using fallback for {module_name}")
+            logger.info("Using fallback for {0}".format(module_name))
             return {
                 'success': True,
                 'strategy': RecoveryStrategy.FALLBACK_MODULE,
@@ -650,7 +650,7 @@ Dict[str, Any]:
             return self.system_health
 
         except Exception as e:
-            logger.error(f"Failed to check system health: {e}")
+            logger.error("Failed to check system health: {0}".format(e))
             return self.system_health
 
     def _calculate_health_score(self, modules_available: int, modules_total: int,
@@ -676,7 +676,7 @@ critical_errors: int, high_errors: int, medium_errors: int, low_errors: int,
             return max(0.0, min(1.0, health_score))
 
         except Exception as e:
-            logger.error(f"Failed to calculate health score: {e}")
+            logger.error("Failed to calculate health score: {0}".format(e))
             return 0.5
 
     def _count_flake_gate_issues(self) -> int:
@@ -758,7 +758,7 @@ modules_available: int, recovery_success_rate: float) -> List[str]:
             }
 
         except Exception as e:
-            logger.error(f"Failed to get error analysis: {e}")
+            logger.error("Failed to get error analysis: {0}".format(e))
             return {'error': str(e)}
 
     def validate_import_chain(self, module_name: str) -> Dict[str, Any]:
@@ -779,14 +779,14 @@ modules_available: int, recovery_success_rate: float) -> List[str]:
                 validation_result['is_available'] = status.is_available
 
                 if not status.is_available:
-validation_result['import_issues'].append(f"Module {module_name} is not available")
+validation_result['import_issues'].append("Module {0} is not available".format(module_name))
 
                     if status.fallback_available:
                         validation_result['import_recommendations'].append(
-                            f"Use fallback for {module_name}"
+                            "Use fallback for {0}".format(module_name)
                         )
                     else:
-validation_result['import_recommendations'].append(f"Install or fix {module_name}")
+validation_result['import_recommendations'].append("Install or fix {0}".format(module_name))
 
             # Check dependencies
             if module_name in self.fallback_chains:
@@ -795,7 +795,7 @@ validation_result['import_recommendations'].append(f"Install or fix {module_name
             return validation_result
 
         except Exception as e:
-            logger.error(f"Failed to validate import chain for {module_name}: {e}")
+            logger.error("Failed to validate import chain for {0}: {1}".format(module_name, e))
             return {'error': str(e)}
 
     def get_performance_summary(self) -> Dict[str, Any]:
@@ -828,7 +828,7 @@ validation_result['import_recommendations'].append(f"Install or fix {module_name
             }
 
         except Exception as e:
-            logger.error(f"Failed to get performance summary: {e}")
+            logger.error("Failed to get performance summary: {0}".format(e))
             return {'error': str(e)}
 
 
@@ -861,24 +861,24 @@ if __name__ == "__main__":
 
     # Check system health
     health = comprehensive_error_handler.check_system_health()
-    print(f"\nSystem Health: {health.overall_health:.2%}")
-    print(f"Modules Available: {health.modules_available}/{health.modules_total}")
-    print(f"Recovery Success Rate: {health.recovery_success_rate:.2%}")
-    print(f"Flake Gate Issues: {health.flake_gate_issues}")
+    print("\nSystem Health: {0}".format(health.overall_health:.2%))
+    print("Modules Available: {0}/{1}".format(health.modules_available, health.modules_total))
+    print("Recovery Success Rate: {0}".format(health.recovery_success_rate:.2%))
+    print("Flake Gate Issues: {0}".format(health.flake_gate_issues))
 
     if health.recommendations:
         print("\nRecommendations:")
         for rec in health.recommendations:
-            print(f"- {rec}")
+            print("- {0}".format(rec))
 
     # Show performance summary
     performance = comprehensive_error_handler.get_performance_summary()
     print(f"\nPerformance Summary:")
     print(
-        f"Overall Health: {performance.get('system_health', {}).get('overall_health', 0.0):.2%}"
+        "Overall Health: {0}).get('overall_health', 0.0):.2%}".format(performance.get('system_health', {)
     )
     print(
-f"Module Availability: {performance.get('system_health', {}).get('module_availability_rate',
-0.0):.2%}"
+"Module Availability: {0}).get('module_availability_rate',
+0.0):.2%}".format(performance.get('system_health', {)
     )
-    print(f"Total Errors: {performance.get('error_statistics', {}).get('error_count', 0)}")
+    print("Total Errors: {0}).get('error_count', 0)}".format(performance.get('error_statistics', {))

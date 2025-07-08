@@ -1,3 +1,13 @@
+import asyncio
+import logging
+import time
+from datetime import datetime
+from typing import Any, Dict, List, Optional, Tuple, Union
+    import asyncio
+
+    from core.clean_unified_math import clean_unified_math
+    from core.trading_engine_integration import TradeSignal
+
 # !/usr/bin/env python3
 """
 Comprehensive Integration System - Complete Implementation
@@ -17,24 +27,14 @@ Key Features:
 Author: Schwabot Development Team
 """
 
-import asyncio
-import logging
-import time
-from datetime import datetime
-from typing import Any, Dict, List, Optional, Tuple, Union
-
 # Core imports with fallbacks
 try:
-    from core.clean_unified_math import clean_unified_math
-
     MATH_AVAILABLE = True
 except ImportError:
     MATH_AVAILABLE = False
     clean_unified_math = None
 
 try:
-    from core.trading_engine_integration import TradeSignal
-
     TRADING_AVAILABLE = True
 except ImportError:
     TRADING_AVAILABLE = False
@@ -79,26 +79,20 @@ class ComprehensiveIntegrationSystem:
 
     def get_system_status(self) -> Dict[str, Any]:
         """Get current system status."""
-        operational_components = sum(
-            1 for status in self.component_status.values() if status == "OPERATIONAL"
-        )
+        operational_components = sum(1 for status in self.component_status.values() if status == "OPERATIONAL")
         total_components = len(self.component_status)
 
         return {
             "system_status": "OPERATIONAL" if operational_components > 0 else "DEGRADED",
             "operational_components": operational_components,
             "total_components": total_components,
-            "availability_ratio": (
-                operational_components / total_components if total_components > 0 else 0
-            ),
+            "availability_ratio": (operational_components / total_components if total_components > 0 else 0),
             "component_status": self.component_status.copy(),
             "initialization_time": self.initialization_time,
             "uptime": time.time() - self.initialization_time,
         }
 
-    async def execute_trading_cycle(
-        self, symbol: str = "BTC/USDC", amount: float = 0.001
-    ) -> Dict[str, Any]:
+    async def execute_trading_cycle(self, symbol: str = "BTC/USDC", amount: float = 0.001) -> Dict[str, Any]:
         """
         Execute a complete trading cycle with all available components.
 
@@ -122,9 +116,7 @@ class ComprehensiveIntegrationSystem:
             risk_assessment = await self._assess_risk(trading_signal, amount)
 
             # Execution decision
-            execution_decision = await self._make_execution_decision(
-                trading_signal, risk_assessment
-            )
+            execution_decision = await self._make_execution_decision(trading_signal, risk_assessment)
 
             cycle_time = time.time() - cycle_start
 
@@ -140,7 +132,7 @@ class ComprehensiveIntegrationSystem:
             }
 
         except Exception as e:
-            self.logger.error(f"Trading cycle error: {e}")
+            self.logger.error("Trading cycle error: {0}".format(e))
             return {
                 "success": False,
                 "error": str(e),
@@ -170,12 +162,10 @@ class ComprehensiveIntegrationSystem:
             return analysis
 
         except Exception as e:
-            self.logger.error(f"Market analysis error: {e}")
+            self.logger.error("Market analysis error: {0}".format(e))
             return {"error": str(e), "symbol": symbol}
 
-    async def _generate_signal(
-        self, symbol: str, market_analysis: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _generate_signal(self, symbol: str, market_analysis: Dict[str, Any]) -> Dict[str, Any]:
         """Generate trading signal."""
         try:
             # Simplified signal generation
@@ -196,7 +186,7 @@ class ComprehensiveIntegrationSystem:
             return signal
 
         except Exception as e:
-            self.logger.error(f"Signal generation error: {e}")
+            self.logger.error("Signal generation error: {0}".format(e))
             return {"error": str(e), "symbol": symbol}
 
     async def _assess_risk(self, trading_signal: Dict[str, Any], amount: float) -> Dict[str, Any]:
@@ -218,7 +208,7 @@ class ComprehensiveIntegrationSystem:
             }
 
         except Exception as e:
-            self.logger.error(f"Risk assessment error: {e}")
+            self.logger.error("Risk assessment error: {0}".format(e))
             return {"error": str(e)}
 
     async def _make_execution_decision(
@@ -253,7 +243,7 @@ class ComprehensiveIntegrationSystem:
             }
 
         except Exception as e:
-            self.logger.error(f"Execution decision error: {e}")
+            self.logger.error("Execution decision error: {0}".format(e))
             return {"error": str(e), "decision": "HOLD"}
 
 
@@ -263,18 +253,16 @@ comprehensive_integration_system = ComprehensiveIntegrationSystem()
 
 def test_comprehensive_integration():
     """Test function for comprehensive integration system."""
-    import asyncio
-
     async def run_test():
         system = ComprehensiveIntegrationSystem()
 
         # Test system status
         status = system.get_system_status()
-        print(f"System Status: {status}")
+        print("System Status: {0}".format(status))
 
         # Test trading cycle
         result = await system.execute_trading_cycle()
-        print(f"Trading Cycle Result: {result}")
+        print("Trading Cycle Result: {0}".format(result))
 
     asyncio.run(run_test())
 

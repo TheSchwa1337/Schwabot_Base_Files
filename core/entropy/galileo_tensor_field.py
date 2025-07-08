@@ -1726,19 +1726,19 @@ if __name__ == "__main__":
 
 
 
-        print(f"{description}:  = {theta:.3f}, ={phi:.3f}")
+        print("{0}:  = {1}, ={2}".format(description, theta:.3f, phi:.3f))
 
 
 
-        print(f"Sync score: {sync_score:.3f}")
+        print("Sync score: {0}".format(sync_score:.3f))
 
 
 
-        print(f"Alignment: {result.alignment.value}")
+        print("Alignment: {0}".format(result.alignment.value))
 
 
 
-        print(f"Angular diff: {result.angular_difference:.3f}")
+        print("Angular diff: {0}".format(result.angular_difference:.3f))
 
 
 
@@ -1754,7 +1754,7 @@ if __name__ == "__main__":
 
 
 
-        print(f"  Immune trust: {trust} - {reasoning}")
+        print("  Immune trust: {0} - {1}".format(trust, reasoning))
 
 
 
@@ -1826,7 +1826,7 @@ if __name__ == "__main__":
 
 
 
-        print(f"{description}: QSC = {theta:.3f}, GTS={phi:.3f}")
+        print("{0}: QSC = {1}, GTS={2}".format(description, theta:.3f, phi:.3f))
 
 
 
@@ -1842,7 +1842,7 @@ if __name__ == "__main__":
 
 
 
-        print(f"  Sync: {sync_score:.3f}, Alignment: {result.alignment.value}")
+        print("  Sync: {0}, Alignment: {1}".format(sync_score:.3f, result.alignment.value))
 
 
 
@@ -1858,7 +1858,7 @@ if __name__ == "__main__":
 
 
 
-    print(f"\nFound {len(harmonic_pairs)} harmonic pairs")
+    print("\nFound {0} harmonic pairs".format(len(harmonic_pairs)))
 
 
 
@@ -1882,7 +1882,7 @@ if __name__ == "__main__":
 
 
 
-            f"Consensus: angle = {consensus_angle:.3f}, confidence={consensus_confidence:.3f}"
+            "Consensus: angle = {0}, confidence={1}".format(consensus_angle:.3f, consensus_confidence:.3f)
 
 
 
@@ -1906,19 +1906,19 @@ if __name__ == "__main__":
 
 
 
-    print(f"Total syncs: {status['field_status']['total_syncs']}")
+    print("Total syncs: {0}".format(status['field_status']['total_syncs']))
 
 
 
-    print(f"Harmony rate: {status['field_status']['harmony_rate']:.3f}")
+    print("Harmony rate: {0}".format(status['field_status']['harmony_rate']:.3f))
 
 
 
-    print(f"QSC solutions: {status['solution_inventory']['qsc_solutions']}")
+    print("QSC solutions: {0}".format(status['solution_inventory']['qsc_solutions']))
 
 
 
-    print(f"GTS solutions: {status['solution_inventory']['gts_solutions']}")
+    print("GTS solutions: {0}".format(status['solution_inventory']['gts_solutions']))
 
 
 

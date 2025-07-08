@@ -1,23 +1,27 @@
-"""
-Reentry Logic Module - Dynamic re-entry based on drift patterns, swing metrics, and performance.
-"""
-
 import logging
 from typing import Dict, Any
 import time
 
+"""
+Reentry Logic Module - Dynamic re-entry based on drift patterns, swing metrics, and performance.
+"""
+
 logger = logging.getLogger(__name__)
+
 
 class ReentryLogic:
     """
     Evaluates if and when to re-enter a position after exit to maximize profit.
     """
+
     def __init__(self, min_confidence: float = 0.5, reentry_cooldown: float = 300):
         self.min_confidence = min_confidence
         self.reentry_cooldown = reentry_cooldown
         self.last_reentry_time = 0.0
 
-    def evaluate_reentry(self, tick_cycle: Any, swing_metrics: Dict[str, Any], drift_vector: Dict[str, float]) -> (bool, float):
+    def evaluate_reentry(
+        self, tick_cycle: Any, swing_metrics: Dict[str, Any], drift_vector: Dict[str, float]
+    ) -> (bool, float):
         """
         Decide whether to re-enter a trade.
         Returns (should_reenter: bool, amount: float).
@@ -35,7 +39,7 @@ class ReentryLogic:
             allocation = 0.1  # 10% reentry
             amount = tick_cycle.usdc_balance * allocation
             self.last_reentry_time = current_time
-            logger.info(f"ReentryLogic: triggering reentry with amount {amount}")
+            logger.info("ReentryLogic: triggering reentry with amount {0}".format(amount))
             return True, amount
 
-        return False, 0.0 
+        return False, 0.0
