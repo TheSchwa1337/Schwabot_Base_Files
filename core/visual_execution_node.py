@@ -867,7 +867,8 @@ Avg Entropy: {stats.get('average_entropy', 0.0):.3f}
 
             top_patterns = stats.get('top_patterns', [])
             for i, pattern in enumerate(top_patterns[:5], 1):
-                stats_text += "{0}. {1} {2} ".format(i, pattern.get('pattern', '??'), pattern.get('emoji_symbol', '❓'))
+                stats_text += "{0}. {1} {2} ".format(i, pattern.get(
+                    'pattern', '??'), pattern.get('emoji_symbol', '❓'))
                 stats_text += "(f:{0}, b:{1:.2f})\n".format()
                     pattern.get('frequency', 0), pattern.get('burst_score', 0.0)
                 )
@@ -937,7 +938,8 @@ Memory Usage: {stats.get('memory_usage_mb', 0):.1f} MB
                 price_label.grid(row=row, column=1, padx=10, pady=5)
 
                 # Change
-                change_text = "{0} {1:.2f}%".format("↗" if data["change_24h"] > 0 else "↘", abs(data["change_24h"]))
+                change_text = "{0} {1:.2f}%".format(
+                    "↗" if data["change_24h"] > 0 else "↘", abs(data["change_24h"]))
                 change_label = tk.Label(
                     self.market_display,
                     text=change_text,
@@ -1201,7 +1203,8 @@ CPU Health: {health_check.get('cpu_health', 'Good')}
                 stats = await self.two_gram_detector.get_pattern_statistics()
                 info()
                     "🧬 Patterns: {0}, Health: {1:.2f}".format()
-                        stats.get('active_patterns', 0), stats.get('system_health_score', 0.0)
+                        stats.get('active_patterns', 0), stats.get(
+                            'system_health_score', 0.0)
                     )
                 )
                 self.last_update_time = time.time()

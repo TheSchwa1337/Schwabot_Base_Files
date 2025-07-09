@@ -189,9 +189,6 @@ class BTCUSDCTradingIntegration:
     async def calculate_performance_metrics(self) -> Dict[str, Any]:
         """Calculate comprehensive performance metrics."""
         try:
-            # Get basic performance metrics
-            basic_metrics = await self.get_performance_metrics()
-
             # Calculate additional metrics
             if self.trade_history:
                 # Calculate win rate

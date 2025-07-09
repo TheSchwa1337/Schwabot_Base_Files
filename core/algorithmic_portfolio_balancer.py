@@ -11,8 +11,6 @@ from .phantom_logger import PhantomLogger
 
 import numpy as np
 
-from utils.safe_print import success
-
 #!/usr/bin/env python3
 """
 Algorithmic Portfolio Balancer

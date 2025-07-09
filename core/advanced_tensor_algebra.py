@@ -292,7 +292,9 @@ class EntropyModulationSystem:
             logger.error("Shannon entropy calculation failed: {0}".format(e))
             return 0.0
 
-    def entropy_based_modulation(self, tensor: np.ndarray, modulation_strength: float = 1.0) -> np.ndarray:
+    def entropy_based_modulation(
+        self, tensor: np.ndarray, modulation_strength: float = 1.0
+    ) -> np.ndarray:
         """
         Apply entropy-based modulation to tensor.
 
@@ -383,7 +385,9 @@ class TemporalAlgebra:
         exp_matrix = linalg.expm(transition_matrix * time_delta)
         return exp_matrix @ current_state
 
-    def entropy_evolution(self, initial_entropy: float, time_series: np.ndarray, market_volatility: float) -> np.ndarray:
+    def entropy_evolution(
+        self, initial_entropy: float, time_series: np.ndarray, market_volatility: float
+    ) -> np.ndarray:
         """
         Calculate entropy evolution over time using Fokker-Planck equation.
 
@@ -417,7 +421,9 @@ class TemporalAlgebra:
 
         return entropy_evolution
 
-    def phase_space_trajectory(self, initial_conditions: np.ndarray, time_horizon: float, hamiltonian: callable) -> Tuple[np.ndarray, np.ndarray]:
+    def phase_space_trajectory(
+        self, initial_conditions: np.ndarray, time_horizon: float, hamiltonian: callable
+    ) -> Tuple[np.ndarray, np.ndarray]:
         """
         Calculate phase space trajectory using Hamiltonian dynamics.
 
@@ -481,7 +487,8 @@ class InformationGeometry:
             lambda_est = 1 / np.mean(data)
             return np.array([[1 / lambda_est**2]])
         else:
-            raise ValueError("Unsupported distribution type: {0}".format(distribution_type))
+            raise ValueError(
+                "Unsupported distribution type: {0}".format(distribution_type))
 
     def riemannian_geodesic(self,
         start_point: np.ndarray,
@@ -770,7 +777,8 @@ class GroupTheoryOperations:
                 np.array([[0, -1, 0], [1, 0, 0], [0, 0, 0]]),  # z-rotation
             ]
         else:
-            raise ValueError("Unsupported group type: {0} with dimension {1}".format(group_type, dimension))
+            raise ValueError(
+                "Unsupported group type: {0} with dimension {1}".format(group_type, dimension))
 
     def invariant_quantity(self, market_data: np.ndarray, group_operation: callable) -> float:
         """
@@ -854,7 +862,8 @@ class AdvancedTensorAlgebra:
                     "operation": "tensordot",
                 }
 
-                result = self.dual_state_router.route(task_id="tensor_fusion", data=task_data)
+                result = self.dual_state_router.route(
+                    task_id="tensor_fusion", data=task_data)
 
                 if result.get("success", False):
                     # Extract result from dual state router
@@ -862,7 +871,8 @@ class AdvancedTensorAlgebra:
                         return result["result"]
                     else:
                         # Fallback to direct computation
-                        logger.debug("Dual state router returned no result, using direct computation")
+                        logger.debug(
+                            "Dual state router returned no result, using direct computation")
 
             # Direct computation (fallback or when dual state router, not)
             # available)
@@ -881,7 +891,8 @@ class AdvancedTensorAlgebra:
             if spectral_norm > 1e-6:
                 result = result / spectral_norm
 
-            logger.debug("Tensor fusion completed: shape %s → %s", (A.shape, B.shape), result.shape)
+            logger.debug("Tensor fusion completed: shape %s → %s",
+                         (A.shape, B.shape), result.shape)
             return result
 
         except Exception as e:
@@ -1023,7 +1034,8 @@ class AdvancedTensorAlgebra:
                 lambda: quantized * np.linalg.norm(V),
             )
 
-            logger.debug("Entropy quantization: E=%.3f, levels=%d", entropy_level, num_levels)
+            logger.debug("Entropy quantization: E=%.3f, levels=%d",
+                         entropy_level, num_levels)
             return result
 
         except Exception as e:
@@ -1155,12 +1167,14 @@ class AdvancedTensorAlgebra:
                 current_time = time.time()
 
             # Calculate phase in 24-hour cycle
-            cycle_phase = (current_time % self.ferris_wheel_period) / self.ferris_wheel_period
+            cycle_phase = (current_time % self.ferris_wheel_period) / \
+                           self.ferris_wheel_period
 
             # Convert to alignment factor using sine wave
             alignment = (np.sin(2 * np.pi * cycle_phase) + 1) / 2
 
-            logger.debug("Ferris Wheel alignment: phase=%.3f, alignment=%.3f", cycle_phase, alignment)
+            logger.debug("Ferris Wheel alignment: phase=%.3f, alignment=%.3f",
+                         cycle_phase, alignment)
             return float(alignment)
 
         except Exception as e:
@@ -1184,10 +1198,12 @@ class AdvancedTensorAlgebra:
 
             # Quantum phase rotation
             phase_angle = self.temporal_algebra.ferris_wheel_alignment() * 2 * np.pi
-            rotated_fusion = self.quantum_operations.quantum_phase_rotation(quantum_fusion, phase_angle)
+            rotated_fusion = self.quantum_operations.quantum_phase_rotation(
+                quantum_fusion, phase_angle)
 
             # Entanglement measure
-            entanglement = self.quantum_operations.quantum_entanglement_measure(rotated_fusion)
+            entanglement = self.quantum_operations.quantum_entanglement_measure(
+                rotated_fusion)
 
             return {
                 "quantum_fusion": quantum_fusion,
