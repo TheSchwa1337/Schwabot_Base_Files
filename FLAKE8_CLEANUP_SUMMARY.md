@@ -142,7 +142,7 @@ autopep8 core/ --select=W291,W293 --in-place
    ```
 
 5. **Generate final report**:
-   ```bash
+```bash
    python fix_flake8.py --target-dir .
    ```
 

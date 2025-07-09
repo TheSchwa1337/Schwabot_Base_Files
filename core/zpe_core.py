@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 backend_status = backend_info()
 if backend_status["accelerated"]:
     logger.info("⚡ ZPE Core using GPU acceleration: CuPy (GPU)")
-else:
+    else:
     logger.info("🔄 ZPE Core using CPU fallback: NumPy (CPU)")
 
 
@@ -38,7 +38,7 @@ class ZPEMode(Enum):
 
 
 @dataclass
-class ThermalData:
+    class ThermalData:
     """Thermal efficiency data."""
 
     timestamp: float
@@ -51,7 +51,7 @@ class ThermalData:
 
 
 @dataclass
-class ZPEWorkData:
+    class ZPEWorkData:
     """ZPE work calculation data."""
 
     timestamp: float
@@ -63,7 +63,7 @@ class ZPEWorkData:
 
 
 @dataclass
-class RotationalTorqueData:
+    class RotationalTorqueData:
     """Rotational torque calculation data."""
 
     timestamp: float
@@ -399,10 +399,10 @@ class ZPECore:
 
             # Update profit wheel state
             self.profit_wheel_state.update({
-                "is_spinning": spin_frequency > 0.1,
-                "spin_frequency": spin_frequency,
-                "profit_momentum": profit_momentum,
-                "thermal_balance": thermal_balance,
+                    "is_spinning": spin_frequency > 0.1,
+                    "spin_frequency": spin_frequency,
+                    "profit_momentum": profit_momentum,
+                    "thermal_balance": thermal_balance,
             })
 
             # Calculate overall profit score
@@ -601,14 +601,14 @@ class ZPECore:
 
             # Store calculation in history
             self.calculation_history.append({
-                "timestamp": datetime.datetime.now(),
-                "energy_fields": self.energy_fields.copy(),
+                    "timestamp": datetime.datetime.now(),
+                    "energy_fields": self.energy_fields.copy(),
                 "input_params": {
-                    "frequency": frequency,
-                    "amplitude": amplitude,
-                    "signal_strength": signal_strength,
-                    "market_volatility": market_volatility,
-                },
+                        "frequency": frequency,
+                        "amplitude": amplitude,
+                        "signal_strength": signal_strength,
+                        "market_volatility": market_volatility,
+                    },
             })
 
             # Keep only last 100 calculations
