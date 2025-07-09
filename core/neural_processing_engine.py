@@ -324,6 +324,8 @@ class NeuralProcessingEngine:
         self.optimizers = {}
         self.scalers = {}
         self.training_history = {}
+        self.phase_entropy = 0.0
+        self.entropy_threshold = 0.019
 
         # Initialize neural networks if PyTorch is available
         if TORCH_AVAILABLE:
@@ -908,3 +910,19 @@ class NeuralProcessingEngine:
             self.cleanup_neural_resources()
         except Exception:
             pass
+
+    def inject_phase_entropy(self, entropy_value):
+        """
+        Smoothly blends incoming entropy into a phase entropy state.
+        Triggers activation if threshold is crossed.
+        """
+        self.phase_entropy = (self.phase_entropy * 0.8) + (entropy_value * 0.2)
+        if self.phase_entropy > self.entropy_threshold:
+            return self.trigger_quantum_state()
+        return "INERT"
+
+    def trigger_quantum_state(self):
+        """
+        Trigger core strategy mode based on accumulated entropy.
+        """
+        return "ENTROPIC_INVERSION_ACTIVATED"

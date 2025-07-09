@@ -264,6 +264,9 @@ class DualStateRouter:
         self.cpu_load = 0.0
         self.last_load_update = datetime.now()
 
+        self.entropy_buffer = []
+        self.current_state = "NEUTRAL"
+
         logger.info("🔄 Dual State Router initialized with profit-tiered orchestration")
 
     def route(
@@ -309,6 +312,24 @@ class DualStateRouter:
                 logger.error(f"Task execution failed: {e}")
                 # Fallback to CPU execution
                 return self._fallback_cpu_execution(task_id, data)
+
+    def route_entropy(self, entropy_value):
+        """
+        Routes entropy values and determines routing state.
+        If entropy is consistently high, switches to AGGRESSIVE mode.
+        """
+        self.entropy_buffer.append(entropy_value)
+        if len(self.entropy_buffer) > 100:
+            self.entropy_buffer.pop(0)
+
+        if entropy_value > 0.02 and len(self.entropy_buffer) >= 3:
+            recent = self.entropy_buffer[-3:]
+            avg = sum(recent) / 3
+            if avg > 0.018:
+                self.current_state = "AGGRESSIVE"
+                return "ROUTE_ACTIVE"
+        self.current_state = "NEUTRAL"
+        return "ROUTE_PASSIVE"
 
     def _determine_compute_mode(
         self, task_id: str, data: Dict[str, Any]

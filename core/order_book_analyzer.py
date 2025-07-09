@@ -711,6 +711,20 @@ class OrderBookAnalyzer:
             logger.error("Liquidity trend calculation failed: %s", e)
             return "unknown"
 
+    def scan_entropy(self, bids, asks):
+        """
+        Analyze entropy between bids and asks.
+        Computes the std deviation of the bid/ask spread.
+        """
+        spread_changes = np.diff([b - a for b, a in zip(bids[-5:], asks[-5:])])
+        entropy_sigma = np.std(spread_changes)
+        self.last_entropy = entropy_sigma
+
+        # Route entropy as a signal
+        if entropy_sigma > 0.022:
+            return {"signal": True, "entropy": entropy_sigma}
+        return {"signal": False, "entropy": entropy_sigma}
+
 
 # Convenience functions for external use
 def create_order_book_analyzer(config: Optional[Dict[str, Any]] = None) -> OrderBookAnalyzer:
