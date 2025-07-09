@@ -60,7 +60,7 @@ class DataQuality(Enum):
 
 
 @dataclass
-    class TechnicalIndicators:
+class TechnicalIndicators:
     """Technical indicators calculated from price data."""
 
     rsi_14: float = 50.0
@@ -83,7 +83,7 @@ class DataQuality(Enum):
 
 
 @dataclass
-    class OnChainMetrics:
+class OnChainMetrics:
     """On-chain metrics from Glassnode and similar sources."""
 
     hash_rate: float = 0.0
@@ -101,7 +101,7 @@ class DataQuality(Enum):
 
 
 @dataclass
-    class MarketSentiment:
+class MarketSentiment:
     """Market sentiment indicators."""
 
     fear_greed_index: float = 50.0
@@ -116,7 +116,7 @@ class DataQuality(Enum):
 
 
 @dataclass
-    class MarketDataPacket:
+class MarketDataPacket:
     """Standardized market data packet for trading pipeline input."""
 
     # Basic price data
@@ -158,7 +158,7 @@ class DataQuality(Enum):
 
 
 @dataclass
-    class PipelineMetrics:
+class PipelineMetrics:
     """Pipeline performance and health metrics."""
 
     total_requests: int = 0
@@ -207,7 +207,7 @@ class UnifiedMarketDataPipeline:
 
     def _default_config(self) -> Dict[str, Any]:
         """Default configuration for the pipeline."""
-        return {}
+        return {
             "cache_ttl": 300,  # 5 minutes
             "max_price_history": 1000,
             "api_timeout": 30,
@@ -215,7 +215,7 @@ class UnifiedMarketDataPipeline:
             "failover_enabled": True,
             "quality_threshold": 0.7,
             "registry_file": None,
-            "apis": {}
+            "apis": {
                 "coingecko": {"enabled": True, "weight": 0.4},
                 "glassnode": {"enabled": True, "weight": 0.3},
                 "fear_greed": {"enabled": True, "weight": 0.2},

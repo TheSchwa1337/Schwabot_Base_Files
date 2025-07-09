@@ -19,19 +19,16 @@ Mathematical Framework:
 - 𝒞ₐ = consensus_altitude(Φₜ, ℳₜ, threshold)
 """
 
-import hashlib
-import json
 import logging
 import threading
 import time
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional
 
 # Import existing Schwabot components
 try:
-    from .orbital_shell_brain_system import OrbitalShell, OrbitalState, ShellMemoryTensor
-    from .unified_math_system import generate_unified_hash
+    from .orbital_shell_brain_system import OrbitalShell
     from .quantum_mathematical_bridge import QuantumMathematicalBridge
     from .neural_processing_engine import NeuralProcessingEngine
 

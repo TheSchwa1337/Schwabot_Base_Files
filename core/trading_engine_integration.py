@@ -8,7 +8,11 @@ from enum import Enum, auto
 from typing import Any, Dict, List, Optional, Union
 import hashlib
 
-from core.clean_unified_math import ()
+from core.clean_unified_math import (
+    calculate_position_size,
+    clean_unified_math,
+    optimize_brain_profit,
+)
 
 """
 Trading Engine Integration
@@ -16,11 +20,6 @@ Handles signal and execution object definitions for Schwabot.
 Integrates advanced mathematical modeling for trade decision making.
 Provides robust error handling and validation mechanisms.
 """
-
-    calculate_position_size,
-    clean_unified_math,
-    optimize_brain_profit,
-)
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -93,7 +92,7 @@ def validate_positive_float(value: float, name: str, allow_zero: bool = False) -
 
 
 @dataclass
-    class TradeSignal:
+class TradeSignal:
     """
     Enhanced trade signal with advanced mathematical insights.
     Incorporates multiple dimensions of trading intelligence.
@@ -133,7 +132,7 @@ def validate_positive_float(value: float, name: str, allow_zero: bool = False) -
 
         # Calculate mathematical score using brain profit optimization
         try:
-            self.mathematical_score = optimize_brain_profit()
+            self.mathematical_score = optimize_brain_profit(
                 self.price, self.volume, self.confidence, 1.0  # Default enhancement factor
             )
         except Exception as e:
@@ -142,7 +141,7 @@ def validate_positive_float(value: float, name: str, allow_zero: bool = False) -
 
         # Calculate risk score
         try:
-            self.risk_score = clean_unified_math.calculate_risk_adjustment()
+            self.risk_score = clean_unified_math.calculate_risk_adjustment(
                 self.mathematical_score, self.volatility, self.confidence
             )
         except Exception as e:
@@ -154,7 +153,7 @@ def validate_positive_float(value: float, name: str, allow_zero: bool = False) -
 
     def to_dict(self) -> Dict[str, Any]:
         """Convert signal to dictionary with enhanced metadata."""
-        base_dict = {}
+        base_dict = {
             "id": self.id,
             "asset": self.asset,
             "price": self.price,
@@ -174,7 +173,7 @@ def validate_positive_float(value: float, name: str, allow_zero: bool = False) -
 
 
 @dataclass
-    class TradeExecution:
+class TradeExecution:
     """
     Enhanced trade execution tracking with performance metrics.
     """
@@ -217,7 +216,6 @@ def validate_positive_float(value: float, name: str, allow_zero: bool = False) -
         Raises:
             ValidationError: If entry price is invalid
         """
-        # Validate entry price
         entry_price = validate_positive_float(entry_price, "Entry Price")
 
         # Calculate realized profit
@@ -228,7 +226,7 @@ def validate_positive_float(value: float, name: str, allow_zero: bool = False) -
 
         # Use mathematical system to score performance
         try:
-            self.performance_score = clean_unified_math.optimize_profit()
+            self.performance_score = clean_unified_math.optimize_profit(
                 # Default confidence
                 abs(self.realized_profit),
                 self.volume,
@@ -240,7 +238,7 @@ def validate_positive_float(value: float, name: str, allow_zero: bool = False) -
 
     def to_dict(self) -> Dict[str, Any]:
         """Convert execution to dictionary with performance metrics."""
-        return {}
+        return {
             "id": self.id,
             "signal_id": self.signal_id,
             "asset": self.asset,
@@ -255,7 +253,7 @@ def validate_positive_float(value: float, name: str, allow_zero: bool = False) -
         }
 
 
-def generate_trade_signal()
+def generate_trade_signal(
     asset: str, price: float, volume: float, metadata: Optional[Dict[str, Any]] = None
 ) -> TradeSignal:
     """
@@ -282,14 +280,14 @@ def generate_trade_signal()
 
     # Use mathematical system to generate signal parameters
     try:
-        math_result = clean_unified_math.integrate_all_systems()
+        math_result = clean_unified_math.integrate_all_systems(
             {"tensor": [[price, volume]], "metadata": metadata or {}}
         )
     except Exception as e:
         logger.error("Mathematical system integration failed: {0}".format(e))
         math_result = {}
 
-    signal = TradeSignal()
+    signal = TradeSignal(
         asset=asset,
         price=price,
         volume=volume,
@@ -313,9 +311,9 @@ def _generate_signal_hash(signal: TradeSignal) -> str:
     Returns:
         str: SHA-256 hash of the signal
     """
-    hash_input = ()
-        "{0}|{1}|{2}|".format(signal.asset, signal.price, signal.volume)
-        "{0}|{1}|{2}|".format(signal.signal_strength, signal.entropy, signal.volatility)
+    hash_input = (
+        "{0}|{1}|{2}|".format(signal.asset, signal.price, signal.volume) +
+        "{0}|{1}|{2}|".format(signal.signal_strength, signal.entropy, signal.volatility) +
         "{0}|{1}".format(signal.mathematical_score, signal.timestamp)
     )
     return hashlib.sha256(hash_input.encode()).hexdigest()
@@ -333,12 +331,13 @@ def log_trading_error(error: Exception, severity: ErrorSeverity = ErrorSeverity.
         Dict containing error details
     """
     error_details = {}
+    error_details.update({
         "error_type": type(error).__name__,
         "error_message": str(error),
         "severity": severity.name,
         "timestamp": datetime.datetime.utcnow().isoformat(),
         "traceback": traceback.format_exc(),
-    }
+    })
 
     logger.error("Trading Error [{0}]: {1}".format(severity.name, error_details))
 

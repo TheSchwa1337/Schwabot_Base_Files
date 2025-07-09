@@ -1,359 +1,495 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
-CCXT Trading Executor.
+💼 CCXT Trading Executor for Schwabot
+=====================================
 
-Trading executor for CCXT integration with Schwabot trading system.
-Provides interface for executing trades through various exchanges.
+Real trading execution engine using CCXT library.
+Handles order book management, trade execution, and portfolio operations.
 """
 
+import asyncio
 import logging
 import time
-from dataclasses import dataclass
-from decimal import Decimal
+from typing import Dict, Any, Optional, List, Tuple
+from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, Optional
-
-try:
-    import ccxt.async_support as ccxt
-
-    CCXT_AVAILABLE = True
-except ImportError:
-    CCXT_AVAILABLE = False
-    ccxt = None
+import ccxt.async_support as ccxt
+import numpy as np
 
 logger = logging.getLogger(__name__)
 
 
-class TradingPair(Enum):
-    """Trading pair enumeration."""
+class OrderStatus(Enum):
+    """Order status enumeration."""
+    PENDING = "pending"
+    OPEN = "open"
+    CLOSED = "closed"
+    CANCELED = "canceled"
+    PARTIALLY_FILLED = "partially_filled"
+    FILLED = "filled"
+    REJECTED = "rejected"
 
-    BTC_USDC = "BTC/USDC"
-    ETH_USDC = "ETH/USDC"
-    XRP_USDC = "XRP/USDC"
-    BTC_USDT = "BTC/USDT"
-    ETH_USDT = "ETH/USDT"
-    USDC_USD = "USDC/USD"
-    USDT_USD = "USDT/USD"
+
+class OrderType(Enum):
+    """Order type enumeration."""
+    MARKET = "market"
+    LIMIT = "limit"
+    STOP = "stop"
+    STOP_LIMIT = "stop_limit"
+    TAKE_PROFIT = "take_profit"
 
 
-@dataclass
-class IntegratedTradingSignal:
-    """Integrated trading signal for execution."""
-
-    signal_id: str
-    recommended_action: str  # 'buy', 'sell', 'hold'
-    target_pair: TradingPair
-    quantity: Decimal
-    confidence_score: Decimal
-    profit_potential: Decimal
-    risk_assessment: Dict[str, Any]
-    ghost_route: str
-    timestamp: float = None
-
-    def __post_init__(self) -> None:
-        """Initialize timestamp if not provided."""
-        if self.timestamp is None:
-            self.timestamp = time.time()
+class OrderSide(Enum):
+    """Order side enumeration."""
+    BUY = "buy"
+    SELL = "sell"
 
 
 @dataclass
-class ExecutionResult:
-    """Result of trade execution."""
+class OrderBook:
+    """Order book representation."""
+    symbol: str
+    bids: List[Tuple[float, float]]  # (price, amount)
+    asks: List[Tuple[float, float]]  # (price, amount)
+    timestamp: float = field(default_factory=time.time)
+    
+    def get_best_bid(self) -> Optional[Tuple[float, float]]:
+        """Get best bid (highest price)."""
+        return self.bids[0] if self.bids else None
+    
+    def get_best_ask(self) -> Optional[Tuple[float, float]]:
+        """Get best ask (lowest price)."""
+        return self.asks[0] if self.asks else None
+    
+    def get_spread(self) -> Optional[float]:
+        """Calculate bid-ask spread."""
+        best_bid = self.get_best_bid()
+        best_ask = self.get_best_ask()
+        if best_bid and best_ask:
+            return best_ask[0] - best_bid[0]
+        return None
+    
+    def get_mid_price(self) -> Optional[float]:
+        """Calculate mid price."""
+        best_bid = self.get_best_bid()
+        best_ask = self.get_best_ask()
+        if best_bid and best_ask:
+            return (best_bid[0] + best_ask[0]) / 2
+        return None
 
-    signal_id: str
-    pair: TradingPair
-    strategy: str
-    executed: bool
-    fill_amount: Decimal = Decimal("0")
-    fill_price: Decimal = Decimal("0")
-    profit_realized: Optional[Decimal] = None
+
+@dataclass
+class TradeOrder:
+    """Trade order representation."""
+    symbol: str
+    side: OrderSide
+    order_type: OrderType
+    amount: float
+    price: Optional[float] = None
+    stop_price: Optional[float] = None
+    take_profit: Optional[float] = None
+    stop_loss: Optional[float] = None
+    order_id: Optional[str] = None
+    status: OrderStatus = OrderStatus.PENDING
+    filled_amount: float = 0.0
+    average_price: Optional[float] = None
+    timestamp: float = field(default_factory=time.time)
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass
+class TradeResult:
+    """Trade execution result."""
+    order_id: str
+    symbol: str
+    side: OrderSide
+    amount: float
+    price: float
+    cost: float
+    fee: Optional[float] = None
+    timestamp: float = field(default_factory=time.time)
+    success: bool = True
     error_message: Optional[str] = None
-    timestamp: float = None
-
-    def __post_init__(self) -> None:
-        """Initialize timestamp if not provided."""
-        if self.timestamp is None:
-            self.timestamp = time.time()
 
 
 class CCXTTradingExecutor:
-    """CCXT Trading Executor for live trading."""
-
-    def __init__(self, config: Dict[str, Any]) -> None:
-        """Initialize CCXT trading executor."""
+    """
+    CCXT-based trading executor for real trading operations.
+    
+    Handles:
+    - Exchange connections and authentication
+    - Order book management
+    - Trade execution and order management
+    - Portfolio balance tracking
+    - Risk management and position sizing
+    """
+    
+    def __init__(self, config: Dict[str, Any]):
+        """Initialize the CCXT trading executor."""
         self.config = config
-        self.exchange: Optional[Any] = None
-        self.portfolio_balance = {
-            "BTC": Decimal("0"),
-            "ETH": Decimal("0"),
-            "XRP": Decimal("0"),
-            "USDC": Decimal("10000"),
-            "USDT": Decimal("0"),
-        }
-        self.price_data: Dict[TradingPair, Decimal] = {}
-        self.monitoring_active = False
-
-        if not CCXT_AVAILABLE:
-            logger.error("CCXT not available. Install with: pip install ccxt")
-            return
-
+        self.exchanges: Dict[str, ccxt.Exchange] = {}
+        self.order_books: Dict[str, OrderBook] = {}
+        self.active_orders: Dict[str, TradeOrder] = {}
+        self.positions: Dict[str, Dict[str, Any]] = {}
+        self.balances: Dict[str, Dict[str, float]] = {}
+        
+        # Trading parameters
+        self.max_position_size = config.get("max_position_size", 0.1)
+        self.max_daily_trades = config.get("max_daily_trades", 100)
+        self.slippage_tolerance = config.get("slippage_tolerance", 0.001)
+        self.order_timeout = config.get("order_timeout", 30.0)
+        
+        # Performance tracking
+        self.daily_trades = 0
+        self.daily_volume = 0.0
+        self.last_reset = time.time()
+        
+        # Initialize exchanges
+        self._initialize_exchanges()
+    
+    def _initialize_exchanges(self):
+        """Initialize exchange connections."""
+        exchanges_config = self.config.get("exchanges", [])
+        
+        for exchange_config in exchanges_config:
+            if not exchange_config.get("enabled", False):
+                continue
+                
+            exchange_name = exchange_config.get("name", "").lower()
+            api_key = exchange_config.get("api_key")
+            secret = exchange_config.get("secret")
+            sandbox = exchange_config.get("sandbox", False)
+            
+            try:
+                # Get exchange class
+                exchange_class = getattr(ccxt, exchange_name)
+                
+                # Create exchange instance
+                exchange = exchange_class({
+                    'apiKey': api_key,
+                    'secret': secret,
+                    'sandbox': sandbox,
+                    'enableRateLimit': True,
+                    'options': {
+                        'defaultType': 'spot',
+                    }
+                })
+                
+                self.exchanges[exchange_name] = exchange
+                logger.info(f"✅ Initialized {exchange_name} exchange")
+                
+            except Exception as e:
+                logger.error(f"❌ Failed to initialize {exchange_name}: {e}")
+    
+    async def connect_exchanges(self):
+        """Connect to all configured exchanges."""
+        for exchange_name, exchange in self.exchanges.items():
+            try:
+                await exchange.load_markets()
+                logger.info(f"✅ Connected to {exchange_name}")
+            except Exception as e:
+                logger.error(f"❌ Failed to connect to {exchange_name}: {e}")
+    
+    async def disconnect_exchanges(self):
+        """Disconnect from all exchanges."""
+        for exchange_name, exchange in self.exchanges.items():
+            try:
+                await exchange.close()
+                logger.info(f"✅ Disconnected from {exchange_name}")
+            except Exception as e:
+                logger.error(f"❌ Error disconnecting from {exchange_name}: {e}")
+    
+    async def fetch_order_book(self, symbol: str, exchange_name: str = "binance") -> Optional[OrderBook]:
+        """Fetch order book for a symbol."""
         try:
-            # Initialize exchange connection
-            exchange_name = config.get("exchange", "binance")
-            self.exchange = getattr(ccxt, exchange_name)(
-                {
-                    "apiKey": config.get("apiKey"),
-                    "secret": config.get("secret"),
-                    "sandbox": config.get("sandbox", True),
-                    "enableRateLimit": config.get("enableRateLimit", True),
-                    "timeout": config.get("timeout", 30000),
-                }
+            exchange = self.exchanges.get(exchange_name)
+            if not exchange:
+                logger.error(f"Exchange {exchange_name} not found")
+                return None
+            
+            # Fetch order book
+            order_book_data = await exchange.fetch_order_book(symbol)
+            
+            # Convert to OrderBook object
+            order_book = OrderBook(
+                symbol=symbol,
+                bids=order_book_data['bids'][:20],  # Top 20 bids
+                asks=order_book_data['asks'][:20],  # Top 20 asks
+                timestamp=order_book_data['timestamp'] / 1000.0
             )
-            logger.info("CCXT Trading Executor initialized with {0}".format(exchange_name))
+            
+            # Cache order book
+            self.order_books[symbol] = order_book
+            
+            return order_book
+            
         except Exception as e:
-            logger.error("Failed to initialize exchange: {0}".format(e))
-            self.exchange = None
-
-    async def place_market_buy_order(self, symbol: str, amount: float) -> Dict[str, Any]:
-        """Place a market buy order."""
-        if not self.exchange:
-            return {"error": "Exchange not initialized"}
-
+            logger.error(f"Error fetching order book for {symbol}: {e}")
+            return None
+    
+    async def fetch_balance(self, exchange_name: str = "binance") -> Dict[str, float]:
+        """Fetch account balance."""
         try:
-            order = await self.exchange.create_market_buy_order(symbol, amount)
-            logger.info("Buy order placed: {0}".format(order))
-            return order
+            exchange = self.exchanges.get(exchange_name)
+            if not exchange:
+                logger.error(f"Exchange {exchange_name} not found")
+                return {}
+            
+            balance_data = await exchange.fetch_balance()
+            
+            # Extract free balances
+            balances = {}
+            for currency, amounts in balance_data.items():
+                if isinstance(amounts, dict) and 'free' in amounts:
+                    if amounts['free'] > 0:
+                        balances[currency] = amounts['free']
+            
+            # Cache balances
+            self.balances[exchange_name] = balances
+            
+            return balances
+            
         except Exception as e:
-            logger.error("Buy order failed: {0}".format(e))
-            return {"error": str(e)}
-
-    async def place_market_sell_order(self, symbol: str, amount: float) -> Dict[str, Any]:
-        """Place a market sell order."""
-        if not self.exchange:
-            return {"error": "Exchange not initialized"}
-
+            logger.error(f"Error fetching balance from {exchange_name}: {e}")
+            return {}
+    
+    async def fetch_positions(self, exchange_name: str = "binance") -> Dict[str, Dict[str, Any]]:
+        """Fetch current positions."""
         try:
-            order = await self.exchange.create_market_sell_order(symbol, amount)
-            logger.info("Sell order placed: {0}".format(order))
-            return order
-        except Exception as e:
-            logger.error("Sell order failed: {0}".format(e))
-            return {"error": str(e)}
-
-    async def get_balance(self) -> Dict[str, Any]:
-        """Get account balance."""
-        if not self.exchange:
-            return {"error": "Exchange not initialized"}
-
-        try:
-            balance = await self.exchange.fetch_balance()
-            return balance
-        except Exception as e:
-            logger.error("Failed to get balance: {0}".format(e))
-            return {"error": str(e)}
-
-    async def get_ticker(self, symbol: str) -> Dict[str, Any]:
-        """Get current ticker for symbol."""
-        if not self.exchange:
-            return {"error": "Exchange not initialized"}
-
-        try:
-            ticker = await self.exchange.fetch_ticker(symbol)
-            return ticker
-        except Exception as e:
-            logger.error("Failed to get ticker: {0}".format(e))
-            return {"error": str(e)}
-
-    def start_price_monitoring(self) -> None:
-        """Start price monitoring."""
-        self.monitoring_active = True
-        logger.info("Price monitoring started")
-
-    def stop_price_monitoring(self) -> None:
-        """Stop price monitoring."""
-        self.monitoring_active = False
-        logger.info("Price monitoring stopped")
-
-    async def execute_signal(self, signal: IntegratedTradingSignal) -> ExecutionResult:
-        """Execute a trading signal."""
-        try:
-            if signal.recommended_action.lower() == "buy":
-                return await self._execute_buy(signal)
-            elif signal.recommended_action.lower() == "sell":
-                return await self._execute_sell(signal)
+            exchange = self.exchanges.get(exchange_name)
+            if not exchange:
+                logger.error(f"Exchange {exchange_name} not found")
+                return {}
+            
+            # Note: This depends on exchange support for futures/positions
+            if hasattr(exchange, 'fetch_positions'):
+                positions_data = await exchange.fetch_positions()
+                
+                positions = {}
+                for pos in positions_data:
+                    if pos['size'] != 0:  # Only non-zero positions
+                        positions[pos['symbol']] = {
+                            'size': pos['size'],
+                            'side': pos['side'],
+                            'entry_price': pos['entryPrice'],
+                            'unrealized_pnl': pos['unrealizedPnl'],
+                            'timestamp': pos['timestamp'] / 1000.0
+                        }
+                
+                # Cache positions
+                self.positions[exchange_name] = positions
+                
+                return positions
             else:
-                return ExecutionResult(
-                    signal_id=signal.signal_id,
-                    pair=signal.target_pair,
-                    strategy=signal.ghost_route,
-                    executed=False,
-                    error_message="Invalid action: " + signal.recommended_action,
+                logger.warning(f"Exchange {exchange_name} doesn't support position fetching")
+                return {}
+                
+        except Exception as e:
+            logger.error(f"Error fetching positions from {exchange_name}: {e}")
+            return {}
+    
+    async def place_order(self, order: TradeOrder, exchange_name: str = "binance") -> TradeResult:
+        """Place a trade order."""
+        try:
+            # Reset daily counters if needed
+            self._reset_daily_counters()
+            
+            # Check daily limits
+            if self.daily_trades >= self.max_daily_trades:
+                return TradeResult(
+                    order_id="",
+                    symbol=order.symbol,
+                    side=order.side,
+                    amount=order.amount,
+                    price=0.0,
+                    cost=0.0,
+                    success=False,
+                    error_message="Daily trade limit exceeded"
                 )
-        except Exception as e:
-            logger.error("Signal execution failed: {0}".format(e))
-            return ExecutionResult(
-                signal_id=signal.signal_id,
-                pair=signal.target_pair,
-                strategy=signal.ghost_route,
-                executed=False,
-                error_message=str(e),
-            )
-
-    async def _execute_buy(self, signal: IntegratedTradingSignal) -> ExecutionResult:
-        """Execute buy order."""
-        try:
-            symbol = signal.target_pair.value
-            amount = float(signal.quantity)
-
-            if self.config.get("simulation_mode", True):
-                # Simulation mode
-                return await self._simulate_buy(signal)
-            else:
-                # Live trading mode
-                order = await self.place_market_buy_order(symbol, amount)
-
-                if "error" in order:
-                    return ExecutionResult(
-                        signal_id=signal.signal_id,
-                        pair=signal.target_pair,
-                        strategy=signal.ghost_route,
-                        executed=False,
-                        error_message=order["error"],
-                    )
-
-                # Update portfolio balance
-                self.portfolio_balance["USDC"] -= signal.quantity
-                self.portfolio_balance["BTC"] += signal.quantity
-
-                return ExecutionResult(
-                    signal_id=signal.signal_id,
-                    pair=signal.target_pair,
-                    strategy=signal.ghost_route,
-                    executed=True,
-                    fill_amount=signal.quantity,
-                    fill_price=Decimal(str(order.get("price", 0))),
+            
+            exchange = self.exchanges.get(exchange_name)
+            if not exchange:
+                return TradeResult(
+                    order_id="",
+                    symbol=order.symbol,
+                    side=order.side,
+                    amount=order.amount,
+                    price=0.0,
+                    cost=0.0,
+                    success=False,
+                    error_message=f"Exchange {exchange_name} not found"
                 )
-        except Exception as e:
-            logger.error("Buy execution failed: {0}".format(e))
-            return ExecutionResult(
-                signal_id=signal.signal_id,
-                pair=signal.target_pair,
-                strategy=signal.ghost_route,
-                executed=False,
-                error_message=str(e),
+            
+            # Prepare order parameters
+            order_params = {
+                'symbol': order.symbol,
+                'type': order.order_type.value,
+                'side': order.side.value,
+                'amount': order.amount,
+            }
+            
+            if order.price:
+                order_params['price'] = order.price
+            
+            if order.stop_price:
+                order_params['stopPrice'] = order.stop_price
+            
+            # Place order
+            order_response = await exchange.create_order(**order_params)
+            
+            # Update order status
+            order.order_id = order_response['id']
+            order.status = OrderStatus.OPEN
+            
+            # Track active order
+            self.active_orders[order.order_id] = order
+            
+            # Update daily counters
+            self.daily_trades += 1
+            self.daily_volume += order.amount * (order.price or 0)
+            
+            logger.info(f"✅ Placed {order.side.value} order for {order.amount} {order.symbol} at {order.price}")
+            
+            return TradeResult(
+                order_id=order.order_id,
+                symbol=order.symbol,
+                side=order.side,
+                amount=order.amount,
+                price=order.price or 0.0,
+                cost=order.amount * (order.price or 0.0),
+                success=True
             )
-
-    async def _execute_sell(self, signal: IntegratedTradingSignal) -> ExecutionResult:
-        """Execute sell order."""
+            
+        except Exception as e:
+            logger.error(f"Error placing order: {e}")
+            return TradeResult(
+                order_id="",
+                symbol=order.symbol,
+                side=order.side,
+                amount=order.amount,
+                price=0.0,
+                cost=0.0,
+                success=False,
+                error_message=str(e)
+            )
+    
+    async def cancel_order(self, order_id: str, symbol: str, exchange_name: str = "binance") -> bool:
+        """Cancel an active order."""
         try:
-            symbol = signal.target_pair.value
-            amount = float(signal.quantity)
-
-            if self.config.get("simulation_mode", True):
-                # Simulation mode
-                return await self._simulate_sell(signal)
-            else:
-                # Live trading mode
-                order = await self.place_market_sell_order(symbol, amount)
-
-                if "error" in order:
-                    return ExecutionResult(
-                        signal_id=signal.signal_id,
-                        pair=signal.target_pair,
-                        strategy=signal.ghost_route,
-                        executed=False,
-                        error_message=order["error"],
-                    )
-
-                # Update portfolio balance
-                self.portfolio_balance["BTC"] -= signal.quantity
-                self.portfolio_balance["USDC"] += signal.quantity
-
-                return ExecutionResult(
-                    signal_id=signal.signal_id,
-                    pair=signal.target_pair,
-                    strategy=signal.ghost_route,
-                    executed=True,
-                    fill_amount=signal.quantity,
-                    fill_price=Decimal(str(order.get("price", 0))),
-                )
+            exchange = self.exchanges.get(exchange_name)
+            if not exchange:
+                logger.error(f"Exchange {exchange_name} not found")
+                return False
+            
+            await exchange.cancel_order(order_id, symbol)
+            
+            # Update order status
+            if order_id in self.active_orders:
+                self.active_orders[order_id].status = OrderStatus.CANCELED
+            
+            logger.info(f"✅ Cancelled order {order_id}")
+            return True
+            
         except Exception as e:
-            logger.error("Sell execution failed: {0}".format(e))
-            return ExecutionResult(
-                signal_id=signal.signal_id,
-                pair=signal.target_pair,
-                strategy=signal.ghost_route,
-                executed=False,
-                error_message=str(e),
-            )
-
-    async def _simulate_buy(self, signal: IntegratedTradingSignal) -> ExecutionResult:
-        """Simulate buy order."""
+            logger.error(f"Error cancelling order {order_id}: {e}")
+            return False
+    
+    async def get_order_status(self, order_id: str, symbol: str, exchange_name: str = "binance") -> Optional[Dict[str, Any]]:
+        """Get order status."""
         try:
-            # Simulate successful buy
-            simulated_price = Decimal("50000")  # Simulated BTC price
-            self.portfolio_balance["USDC"] -= signal.quantity
-            self.portfolio_balance["BTC"] += signal.quantity
-
-            return ExecutionResult(
-                signal_id=signal.signal_id,
-                pair=signal.target_pair,
-                strategy=signal.ghost_route,
-                executed=True,
-                fill_amount=signal.quantity,
-                fill_price=simulated_price,
-            )
+            exchange = self.exchanges.get(exchange_name)
+            if not exchange:
+                logger.error(f"Exchange {exchange_name} not found")
+                return None
+            
+            order_data = await exchange.fetch_order(order_id, symbol)
+            
+            return {
+                'id': order_data['id'],
+                'symbol': order_data['symbol'],
+                'side': order_data['side'],
+                'type': order_data['type'],
+                'amount': order_data['amount'],
+                'filled': order_data['filled'],
+                'remaining': order_data['remaining'],
+                'price': order_data['price'],
+                'average': order_data['average'],
+                'status': order_data['status'],
+                'timestamp': order_data['timestamp'] / 1000.0
+            }
+            
         except Exception as e:
-            logger.error("Simulated buy failed: {0}".format(e))
-            return ExecutionResult(
-                signal_id=signal.signal_id,
-                pair=signal.target_pair,
-                strategy=signal.ghost_route,
-                executed=False,
-                error_message=str(e),
-            )
-
-    async def _simulate_sell(self, signal: IntegratedTradingSignal) -> ExecutionResult:
-        """Simulate sell order."""
+            logger.error(f"Error fetching order status for {order_id}: {e}")
+            return None
+    
+    async def calculate_position_size(self, symbol: str, available_balance: float, 
+                                    risk_per_trade: float = 0.02) -> float:
+        """Calculate optimal position size based on risk management."""
         try:
-            # Simulate successful sell
-            simulated_price = Decimal("50000")  # Simulated BTC price
-            self.portfolio_balance["BTC"] -= signal.quantity
-            self.portfolio_balance["USDC"] += signal.quantity
-
-            return ExecutionResult(
-                signal_id=signal.signal_id,
-                pair=signal.target_pair,
-                strategy=signal.ghost_route,
-                executed=True,
-                fill_amount=signal.quantity,
-                fill_price=simulated_price,
-            )
+            # Get current price
+            order_book = await self.fetch_order_book(symbol)
+            if not order_book:
+                return 0.0
+            
+            current_price = order_book.get_mid_price()
+            if not current_price:
+                return 0.0
+            
+            # Calculate position size based on risk
+            risk_amount = available_balance * risk_per_trade
+            position_size = risk_amount / current_price
+            
+            # Apply maximum position size limit
+            max_size = available_balance * self.max_position_size / current_price
+            position_size = min(position_size, max_size)
+            
+            return position_size
+            
         except Exception as e:
-            logger.error("Simulated sell failed: {0}".format(e))
-            return ExecutionResult(
-                signal_id=signal.signal_id,
-                pair=signal.target_pair,
-                strategy=signal.ghost_route,
-                executed=False,
-                error_message=str(e),
-            )
+            logger.error(f"Error calculating position size: {e}")
+            return 0.0
+    
+    def _reset_daily_counters(self):
+        """Reset daily trading counters if needed."""
+        current_time = time.time()
+        if current_time - self.last_reset > 86400:  # 24 hours
+            self.daily_trades = 0
+            self.daily_volume = 0.0
+            self.last_reset = current_time
+    
+    async def get_trading_summary(self) -> Dict[str, Any]:
+        """Get trading summary and statistics."""
+        try:
+            total_balance = 0.0
+            total_positions = 0
+            
+            # Aggregate balances across exchanges
+            for exchange_name, balances in self.balances.items():
+                for currency, amount in balances.items():
+                    if currency in ['USDC', 'USD', 'USDT']:
+                        total_balance += amount
+            
+            # Count active positions
+            for exchange_name, positions in self.positions.items():
+                total_positions += len(positions)
+            
+            return {
+                'total_balance': total_balance,
+                'active_positions': total_positions,
+                'daily_trades': self.daily_trades,
+                'daily_volume': self.daily_volume,
+                'max_daily_trades': self.max_daily_trades,
+                'order_books_cached': len(self.order_books),
+                'active_orders': len(self.active_orders),
+                'connected_exchanges': list(self.exchanges.keys())
+            }
+            
+        except Exception as e:
+            logger.error(f"Error getting trading summary: {e}")
+            return {}
 
-    async def close(self):
-        """Close exchange connection."""
-        if self.exchange:
-            await self.exchange.close()
-            logger.info("Exchange connection closed")
 
-
-if __name__ == "__main__":
-    # Example usage
-    config = {
-        "exchange": "binance",
-        "apiKey": "your_api_key",
-        "secret": "your_secret",
-        "sandbox": True,
-    }
-
-    executor = CCXTTradingExecutor(config)
-    print("CCXT Trading Executor initialized")
+def create_ccxt_trading_executor(config: Dict[str, Any]) -> CCXTTradingExecutor:
+    """Factory function to create CCXT trading executor."""
+    return CCXTTradingExecutor(config)

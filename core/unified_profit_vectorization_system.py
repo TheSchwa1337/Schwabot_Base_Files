@@ -1,23 +1,22 @@
-import cupy as cp
 import logging
 import time
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Optional
 from .clean_math_foundation import BitPhase, CleanMathFoundation, ThermalState
-from .clean_profit_vectorization import ()
+from .clean_profit_vectorization import (
     CleanProfitVectorization,
     ProfitVector,
     VectorizationMode,
 )
-from .pure_profit_calculator import ()
+from .pure_profit_calculator import (
     PureProfitCalculator,
     StrategyParameters,
     MarketData,
     HistoryState,
     ProfitResult,
 )
-from .orbital_shell_brain_system import ()
+from .orbital_shell_brain_system import (
     OrbitalBRAINSystem,
     ShellConsensus,
     AltitudeVector,
@@ -48,28 +47,29 @@ CUDA Integration:
 """
 
 # CUDA Integration with Fallback
-    try:
+try:
+    import cupy as cp
     USING_CUDA = True
     _backend = "cupy (GPU)"
     xp = cp
-    except ImportError:
+except ImportError:
     USING_CUDA = False
     _backend = "numpy (CPU)"
     xp = np
 
 logger = logging.getLogger(__name__)
-    if USING_CUDA:
-    logger.info()
-        "⚡ UnifiedProfitVectorizationSystem using GPU acceleration: {0}".format()
+if USING_CUDA:
+    logger.info(
+        "⚡ UnifiedProfitVectorizationSystem using GPU acceleration: {0}".format(
             _backend
         )
     )
-    else:
-    logger.info()
+else:
+    logger.info(
         "🔄 UnifiedProfitVectorizationSystem using CPU fallback: {0}".format(_backend)
     )
 
-__all__ = []
+__all__ = [
     "UnifiedProfitVectorizationSystem",
     "ProfitIntegrationMode",
     "VectorizationStrategy",
@@ -100,7 +100,7 @@ class VectorizationStrategy(Enum):
 
 
 @dataclass
-    class UnifiedProfitResult:
+class UnifiedProfitResult:
     """Result from unified profit vectorization system."""
 
     timestamp: float
@@ -151,7 +151,7 @@ class UnifiedProfitVectorizationSystem:
     of the original algorithms.
     """
 
-    def __init__()
+    def __init__(
         self, integration_mode: ProfitIntegrationMode = ProfitIntegrationMode.UNIFIED
     ):
         """Initialize the unified profit vectorization system."""
@@ -172,13 +172,13 @@ class UnifiedProfitVectorizationSystem:
         self.max_history_size = 1000
         self.performance_tracking = True
 
-        logger.info()
-            "UnifiedProfitVectorizationSystem initialized with mode: {0}".format()
+        logger.info(
+            "UnifiedProfitVectorizationSystem initialized with mode: {0}".format(
                 integration_mode.value
             )
         )
 
-    def calculate_unified_profit()
+    def calculate_unified_profit(
         self,
         market_data: Dict[str, Any],
         strategy: VectorizationStrategy = VectorizationStrategy.STANDARD,
@@ -213,23 +213,23 @@ class UnifiedProfitVectorizationSystem:
             # Calculate profit using different methods based on integration
             # mode
             if self.integration_mode == ProfitIntegrationMode.UNIFIED:
-                result = self._calculate_unified_mode()
+                result = self._calculate_unified_mode(
                     market_data, strategy, thermal_state, bit_phase
                 )
             elif self.integration_mode == ProfitIntegrationMode.WEIGHTED:
-                result = self._calculate_weighted_mode()
+                result = self._calculate_weighted_mode(
                     market_data, strategy, thermal_state, bit_phase
                 )
             elif self.integration_mode == ProfitIntegrationMode.CONSENSUS:
-                result = self._calculate_consensus_mode()
+                result = self._calculate_consensus_mode(
                     market_data, strategy, thermal_state, bit_phase
                 )
             elif self.integration_mode == ProfitIntegrationMode.ADAPTIVE:
-                result = self._calculate_adaptive_mode()
+                result = self._calculate_adaptive_mode(
                     market_data, strategy, thermal_state, bit_phase
                 )
             elif self.integration_mode == ProfitIntegrationMode.ORBITAL_CONSENSUS:
-                result = self._calculate_orbital_consensus_mode()
+                result = self._calculate_orbital_consensus_mode(
                     market_data,
                     strategy,
                     thermal_state,
@@ -238,7 +238,7 @@ class UnifiedProfitVectorizationSystem:
                     altitude_vector,
                 )
             else:  # HIERARCHICAL
-                result = self._calculate_hierarchical_mode()
+                result = self._calculate_hierarchical_mode(
                     market_data, strategy, thermal_state, bit_phase
                 )
 

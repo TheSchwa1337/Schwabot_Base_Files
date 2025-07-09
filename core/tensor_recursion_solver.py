@@ -9,7 +9,7 @@ with GPU/CPU compatibility via XP backend.
 """
 
 import logging
-from typing import Dict, List, Optional, Any, Tuple
+from typing import Dict, Any, Tuple
 from dataclasses import dataclass, field
 import time
 
@@ -270,7 +270,7 @@ def test_tensor_recursion():
     # Solve recursion
     result = solve_tensor_recursion(initial_tensor, simple_recursion)
 
-    logger.info(f"Tensor recursion test completed:")
+    logger.info("Tensor recursion test completed:")
     logger.info(f"Converged: {result.metadata.get('converged', False)}")
     logger.info(f"Iterations: {result.convergence_iterations}")
     logger.info(f"Residual norm: {result.residual_norm:.6f}")

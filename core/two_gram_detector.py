@@ -338,7 +338,7 @@ class TwoGramDetector:
     def _encode_pattern_type(self, pattern: str) -> List[float]:
         """Encode pattern type as numerical vector."""
         # One-hot-like encoding for different pattern types
-        encodings = {}
+        encodings = {
             "UD": [1.0, 0.0, 0.0],  # Volatility
             "DU": [1.0, 0.0, 0.0],  # Volatility
             "BE": [0.0, 1.0, 0.0],  # Swap
@@ -375,7 +375,7 @@ class TwoGramDetector:
                 vector_matrix = np.pad(vector_matrix, ((0, 0), (0, pad_width)), 'constant')
 
             # Check for fractal match
-            fractal_match = self.fractal_memory.match_fractal()
+            fractal_match = self.fractal_memory.match_fractal(
                 current_matrix=vector_matrix[:2, :4],  # Use first 2x4 for consistency
                 strategy_id="2gram_{0}".format(pattern),
                 market_context=context,
@@ -436,17 +436,15 @@ class TwoGramDetector:
                 logger.warn("🛡️ T-cell activation for pattern {0}: triggers={1}".format(pattern, activation_triggers))
 
                 # Log T-cell response
-                self.memory.t_cell_responses.append()
-                    {}
-                        "timestamp": time.time(),
-                        "pattern": pattern,
-                        "triggers": activation_triggers,
-                        "health_score": health_score,
-                        "frequency": frequency,
-                        "entropy": entropy,
-                        "burst_score": burst_score,
-                    }
-                )
+                self.memory.t_cell_responses.append({
+                    "timestamp": time.time(),
+                    "pattern": pattern,
+                    "triggers": activation_triggers,
+                    "health_score": health_score,
+                    "frequency": frequency,
+                    "entropy": entropy,
+                    "burst_score": burst_score,
+                })
 
             # Update system state
             self.t_cell_active = t_cell_activation or self.t_cell_active
@@ -478,7 +476,7 @@ class TwoGramDetector:
 
     def _determine_strategy_trigger(self, pattern: str, burst_score: float) -> Optional[str]:
         """Determine which strategy should be triggered by this pattern."""
-        strategy_mappings = {}
+        strategy_mappings = {
             "UD": "volatility_reversal_entry",
             "DU": "reversal_momentum_entry",
             "BE": "swap_arbitrage_trigger",
@@ -537,9 +535,7 @@ class TwoGramDetector:
 
                 # Limit history size
                 if len(self.memory.pattern_frequencies[signal.pattern]) > 100:
-                    self.memory.pattern_frequencies[signal.pattern] = self.memory.pattern_frequencies[signal.pattern][]
-                        -100:
-                    ]
+                    self.memory.pattern_frequencies[signal.pattern] = self.memory.pattern_frequencies[signal.pattern][-100:]
 
             # Update entropy history
             if signals:
@@ -552,24 +548,22 @@ class TwoGramDetector:
             # Record burst events
             burst_signals = [s for s in signals if s.burst_score > self.burst_threshold]
             for signal in burst_signals:
-                self.memory.burst_events.append()
-                    {}
-                        "timestamp": signal.timestamp,
-                        "pattern": signal.pattern,
-                        "burst_score": signal.burst_score,
-                        "frequency": signal.frequency,
-                        "entropy": signal.entropy,
-                        "strategy_trigger": signal.strategy_trigger,
-                        "context": context,
-                    }
-                )
+                self.memory.burst_events.append({
+                    "timestamp": signal.timestamp,
+                    "pattern": signal.pattern,
+                    "burst_score": signal.burst_score,
+                    "frequency": signal.frequency,
+                    "entropy": signal.entropy,
+                    "strategy_trigger": signal.strategy_trigger,
+                    "context": context,
+                })
 
             # Save fractal snapshots for significant patterns
             if self.fractal_memory and burst_signals:
                 for signal in burst_signals:
                     vector_matrix = np.array(signal.similarity_vector).reshape(2, -1)
                     if vector_matrix.shape[1] >= 4:
-                        self.fractal_memory.save_snapshot()
+                        self.fractal_memory.save_snapshot(
                             q_matrix=vector_matrix[:2, :4],
                             strategy_id="2gram_{0}".format(signal.pattern),
                             profit_result=None,  # Will be updated later
@@ -582,7 +576,7 @@ class TwoGramDetector:
     async def get_pattern_statistics(self) -> Dict[str, Any]:
         """Get comprehensive statistics about detected patterns."""
         try:
-            stats = {}
+            stats = {
                 "active_patterns": len(self.active_patterns),
                 "total_patterns_tracked": len(self.memory.pattern_frequencies),
                 "total_burst_events": len(self.memory.burst_events),
@@ -596,7 +590,7 @@ class TwoGramDetector:
             # Pattern frequency distribution
             pattern_distribution = {}
             for pattern, frequencies in self.memory.pattern_frequencies.items():
-                pattern_distribution[pattern] = {}
+                pattern_distribution[pattern] = {
                     "total_occurrences": len(frequencies),
                     "avg_frequency": np.mean(frequencies) if frequencies else 0,
                     "max_frequency": max(frequencies) if frequencies else 0,
@@ -611,10 +605,10 @@ class TwoGramDetector:
 
             # Entropy statistics
             if self.memory.entropy_history:
-                stats["entropy_stats"] = {}
+                stats["entropy_stats"] = {
                     "current_entropy": self.memory.entropy_history[-1],
                     "avg_entropy": np.mean(self.memory.entropy_history),
-                    "entropy_trend": ()
+                    "entropy_trend": (
                         self.memory.entropy_history[-10:]
                         if len(self.memory.entropy_history) >= 10
                         else self.memory.entropy_history
@@ -644,7 +638,7 @@ class TwoGramDetector:
                 return None
 
             # Create strategy trigger packet
-            strategy_packet = {}
+            strategy_packet = {
                 "trigger_type": "2gram_pattern",
                 "strategy_name": signal.strategy_trigger,
                 "pattern": signal.pattern,
@@ -698,12 +692,12 @@ class TwoGramDetector:
     async def health_check(self) -> Dict[str, Any]:
         """Perform comprehensive health check of the 2-gram detector."""
         try:
-            health_report = {}
+            health_report = {
                 "detector_status": "healthy" if self.system_health > 0.7 else "degraded",
                 "system_health_score": self.system_health,
                 "t_cell_active": self.t_cell_active,
                 "active_pattern_count": len(self.active_patterns),
-                "memory_utilization": {}
+                "memory_utilization": {
                     "pattern_frequencies": len(self.memory.pattern_frequencies),
                     "entropy_history": len(self.memory.entropy_history),
                     "burst_events": len(self.memory.burst_events),
@@ -739,7 +733,7 @@ class TwoGramDetector:
 
             # Get recent active patterns
             for pattern, signal in list(self.active_patterns.items())[-limit:]:
-                pattern_data = {}
+                pattern_data = {
                     "pattern": signal.pattern,
                     "emoji_symbol": signal.emoji_symbol,
                     "frequency": signal.frequency,
@@ -757,15 +751,14 @@ class TwoGramDetector:
                 }
                 recent_patterns.append(pattern_data)
 
-            # If we don't have enough active patterns, add from memory'
+            # If we don't have enough active patterns, add from memory
             if len(recent_patterns) < limit:
                 # Get recent burst events
-                recent_bursts = sorted(self.memory.burst_events, key=lambda x: x["timestamp"], reverse=True)[]
-                    : limit - len(recent_patterns)
-                ]
+                recent_bursts = sorted(self.memory.burst_events, key=lambda x: x["timestamp"], reverse=True)
+                recent_bursts = recent_bursts[:limit - len(recent_patterns)]
 
                 for burst in recent_bursts:
-                    pattern_data = {}
+                    pattern_data = {
                         "pattern": burst["pattern"],
                         "emoji_symbol": self.symbol_map.get(burst["pattern"], "🔍"),
                         "frequency": burst["frequency"],
@@ -789,21 +782,18 @@ class TwoGramDetector:
             logger.error("Error getting recent patterns: {0}".format(e))
             return []
 
-
 # Factory function for easy integration
-    def create_two_gram_detector(config: Optional[Dict[str, Any]] = None) -> TwoGramDetector:
+def create_two_gram_detector(config: Optional[Dict[str, Any]] = None) -> TwoGramDetector:
     """Create a two-gram detector instance with optional configuration."""
     if config is None:
         config = {}
-
-    return TwoGramDetector()
+    return TwoGramDetector(
         window_size=config.get("window_size", 100),
         burst_threshold=config.get("burst_threshold", 2.0),
         similarity_threshold=config.get("similarity_threshold", 0.85),
         t_cell_sensitivity=config.get("t_cell_sensitivity", 0.7),
         enable_fractal_memory=config.get("enable_fractal_memory", True),
     )
-
 
 # Integration test function
 async def test_two_gram_integration():
@@ -822,9 +812,7 @@ async def test_two_gram_integration():
 
     print("Detected {0} 2-gram signals:".format(len(signals)))
     for signal in signals:
-            "freq={0}, entropy={1}".format(signal.frequency, signal.entropy)
-        )
-
+        print("  Pattern: {0}, freq={1}, entropy={2}".format(signal.pattern, signal.frequency, signal.entropy))
         if signal.strategy_trigger:
             print("    → Strategy: {0} (priority: {1})".format(signal.strategy_trigger, signal.execution_priority))
 
@@ -832,7 +820,7 @@ async def test_two_gram_integration():
     stats = await detector.get_pattern_statistics()
     print(f"\nDetector Statistics:")
     print("  Active patterns: {0}".format(stats['active_patterns']))
-    print("  System, health))"
+    print("  System health: {0}".format(stats['system_health']))
     print("  T-cell active: {0}".format(stats['t_cell_active']))
 
     # Health check
@@ -841,6 +829,6 @@ async def test_two_gram_integration():
 
     print("✅ Two-gram detector test completed")
 
-
 if __name__ == "__main__":
+    import asyncio
     asyncio.run(test_two_gram_integration())

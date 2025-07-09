@@ -215,7 +215,10 @@ class TemporalWarpEngine:
             window = self.warp_windows[strategy_id]
 
             # Optimal time is middle of window
-            window_center = window.open_time + (window.close_time - window.open_time) / 2
+            window_center = (
+                window.open_time + 
+                (window.close_time - window.open_time) / 2
+            )
             return window_center
 
         except Exception as e:

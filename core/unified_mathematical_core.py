@@ -21,11 +21,11 @@ from dataclasses import dataclass
 import numpy as np
 
 # CUDA/GPU libraries with fallback
-    try:
-
+try:
+    import cupy as cp
     USING_CUDA = True
     xp = cp
-    except ImportError:
+except ImportError:
     USING_CUDA = False
     xp = np
 
@@ -35,7 +35,7 @@ logger = logging.getLogger(__name__)
 
 
 @dataclass
-    class ZPECalculation:
+class ZPECalculation:
     """Zero Point Energy calculation result."""
 
     energy: float
@@ -45,7 +45,7 @@ logger = logging.getLogger(__name__)
 
 
 @dataclass
-    class ZBECalculation:
+class ZBECalculation:
     """Zero Bit Entropy calculation result."""
 
     entropy: float
@@ -71,22 +71,22 @@ class UnifiedMathCore:
         self.xp = cp if self.gpu_available else np
         self.planck_constant = 6.62607015e-34  # Planck's constant in J⋅s'
 
-        logger.info()
-            "Unified Math Core initialized - GPU: {}, Device: {}".format()
+        logger.info(
+            "Unified Math Core initialized - GPU: {}, Device: {}".format(
                 self.gpu_available, "CUDA" if self.gpu_available else "CPU"
             )
         )
 
     def _default_config(self) -> Dict[str, Any]:
         """Default configuration for mathematical parameters."""
-        return {}
+        return {
             "precision": FIT_PROFILE.precision
             if hasattr(FIT_PROFILE, "precision")
             else "float32",
             "matrix_size": FIT_PROFILE.matrix_size
             if hasattr(FIT_PROFILE, "matrix_size")
             else 1024,
-            "gpu_enabled": ()
+            "gpu_enabled": (
                 FIT_PROFILE.can_run_gpu_logic
                 if hasattr(FIT_PROFILE, "can_run_gpu_logic")
                 else False
