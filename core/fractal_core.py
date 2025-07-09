@@ -1,7 +1,6 @@
 from __future__ import annotations
 import logging
-import time
-from typing import Dict, List, Optional, Tuple, Union, Any
+from typing import Dict, List, Tuple, Union, Any
 from dataclasses import dataclass, field
 import hashlib
 import math
@@ -138,8 +137,8 @@ def quantize_vector(vector: Union[List[float], np.ndarray], precision: int = 8) 
         # Quantize to specified precision
         max_val = 2**precision - 1
         quantized = safe_cuda_operation(
-            lambda: xp.round(vector * max_val) / max_val,
-            lambda: np.round(vector * max_val) / max_val,
+            lambda: xp.round(normalized * max_val) / max_val,
+            lambda: np.round(normalized * max_val) / max_val,
         )
 
         return quantized

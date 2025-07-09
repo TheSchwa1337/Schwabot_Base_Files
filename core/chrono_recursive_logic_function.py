@@ -1,23 +1,5 @@
-import logging
-import math
-import time
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Any, Dict, List, Optional
-import numpy as np
-
-try:
-    import cupy as cp
-
-    CUPY_AVAILABLE = True
-except ImportError:
-    import numpy as cp
-
-    CUPY_AVAILABLE = False
-
-from .clean_math_foundation import CleanMathFoundation
-
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
 Chrono-Recursive Logic Function (CRLF)
 
@@ -31,10 +13,19 @@ This module implements:
 - Profit-based waveform correction
 """
 
+import logging
+import time
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, List, Optional
+
+import numpy as np
+
+logger = logging.getLogger(__name__)
+
 # CUDA Integration with Fallback
 try:
     import cupy as cp
-
     USING_CUDA = True
     _backend = 'cupy (GPU)'
     xp = cp
@@ -44,11 +35,12 @@ except ImportError:
     xp = np
 
 # Log backend status
-logger = logging.getLogger(__name__)
 if USING_CUDA:
     logger.info("⚡ CRLF using GPU acceleration: {0}".format(_backend))
 else:
     logger.info("🔄 CRLF using CPU fallback: {0}".format(_backend))
+
+from .clean_math_foundation import CleanMathFoundation
 
 
 class CRLFTriggerState(Enum):
@@ -141,7 +133,12 @@ class ChronoRecursiveLogicFunction:
 
     def _create_default_state(self) -> CRLFState:
         """Create a default CRLF state."""
-        return CRLFState()
+        return CRLFState(
+            tau=0.0,
+            psi=np.array([0.0]),
+            delta_t=0.0,
+            entropy=0.0
+        )
 
     def compute_crlf(
         self,
@@ -190,14 +187,15 @@ class ChronoRecursiveLogicFunction:
             self._update_state_history(psi_n, entropy_updated, crlf_output)
 
             # Create response
-            response = CRLFResponse()
-            response.crlf_output = crlf_output
-            response.trigger_state = trigger_state
-            response.psi_n = psi_n
-            response.entropy_updated = entropy_updated
-            response.recursion_depth = self.state.recursion_depth
-            response.confidence = self._compute_confidence(crlf_output, entropy_updated)
-            response.recommendations = recommendations
+            response = CRLFResponse(
+                crlf_output=crlf_output,
+                trigger_state=trigger_state,
+                psi_n=psi_n,
+                entropy_updated=entropy_updated,
+                recursion_depth=self.state.recursion_depth,
+                confidence=self._compute_confidence(crlf_output, entropy_updated),
+                recommendations=recommendations
+            )
 
             # Store execution history
             self.execution_history.append(response)
@@ -214,362 +212,404 @@ class ChronoRecursiveLogicFunction:
             return self._create_fallback_response()
 
     def _compute_recursive_state_function(self) -> np.ndarray:
-        """
-        Compute recursive state function: Ψₙ(τ) = αₙ ⋅ Ψₙ₋₁(τ-1) + βₙ ⋅ Rₙ(τ)
+        """Compute recursive state function Ψₙ(τ)."""
+        try:
+            # Base state function
+            tau = self.state.tau
+            psi = self.state.psi
 
-        Where:
-        - Ψₙ₋₁ is the last known strategy signal
-        - Rₙ(τ) is the response function
-        - αₙ, βₙ are dynamic weighting coefficients
-        """
-        if not self.state.psi_history:
-            # First iteration - use current psi
-            psi_n = self.state.psi.copy()
-        else:
-            # Recursive computation
-            psi_prev = self.state.psi_history[-1]
-            response_function = self._compute_response_function()
+            # Recursive state computation
+            psi_n = psi * np.exp(-self.state.lambda_decay * tau)
 
-            psi_n = self.state.alpha_n * psi_prev + self.state.beta_n * response_function
+            # Apply recursion depth scaling
+            if self.state.recursion_depth > 0:
+                depth_factor = 1.0 / (1.0 + self.state.recursion_depth * 0.1)
+                psi_n *= depth_factor
 
-        # Normalize to prevent divergence
-        psi_n = np.clip(psi_n, 0.0, 1.0)
+            return psi_n
 
-        return psi_n
+        except Exception as e:
+            logger.error("Error computing recursive state function: {0}".format(e))
+            return np.array([0.0])
 
     def _compute_response_function(self) -> np.ndarray:
-        """
-        Compute response function Rₙ(τ) based on current market conditions.
+        """Compute response function for state transitions."""
+        try:
+            # Response function based on current state
+            psi = self.state.psi
+            entropy = self.state.entropy
 
-        This function responds to:
-        - Hash triggers
-        - Market anomalies
-        - AI feedback
-        """
-        # Base response based on current entropy
-        base_response = np.array([0.5] * len(self.state.psi))
+            # Compute response with entropy damping
+            response = psi * np.exp(-entropy * 0.1)
 
-        # Adjust based on entropy level
-        if self.state.entropy > 0.8:
-            # High entropy - conservative response
-            base_response *= 0.7
-        elif self.state.entropy < 0.2:
-            # Low entropy - aggressive response
-            base_response *= 1.3
+            return response
 
-        # Add noise for exploration
-        noise = np.random.normal(0, 0.1, len(base_response))
-        response = base_response + noise
-
-        return np.clip(response, 0.0, 1.0)
+        except Exception as e:
+            logger.error("Error computing response function: {0}".format(e))
+            return np.array([0.0])
 
     def _compute_strategy_gradient(self, profit_curve: np.ndarray) -> np.ndarray:
-        """
-        Compute spatial gradient ∇ψ of strategy shift.
+        """Compute spatial gradient ∇ψ from profit curve."""
+        try:
+            if len(profit_curve) < 2:
+                return np.array([0.0])
 
-        This represents the directionality of the profit curve.
-        """
-        if len(profit_curve) < 2:
-            return np.array([0.0] * len(self.state.psi))
+            # Compute gradient using finite differences
+            gradient = np.gradient(profit_curve)
 
-        # Compute gradient of profit curve
-        profit_gradient = np.gradient(profit_curve)
+            # Normalize gradient
+            if np.linalg.norm(gradient) > 0:
+                gradient = gradient / np.linalg.norm(gradient)
 
-        # Map profit gradient to strategy dimensions
-        strategy_gradient = np.zeros(len(self.state.psi))
+            return gradient
 
-        # Simple mapping: use profit trend to adjust strategy weights
-        avg_profit_trend = (
-            np.mean(profit_gradient[-5:]) if len(profit_gradient) >= 5 else np.mean(profit_gradient)
-        )
-
-        # Adjust strategy vector based on profit trend
-        if avg_profit_trend > 0:
-            # Positive trend - increase aggressive strategies
-            strategy_gradient[0] = 0.1  # Momentum
-            strategy_gradient[1] = 0.5  # Scalping
-        else:
-            # Negative trend - increase conservative strategies
-            strategy_gradient[2] = 0.1  # Mean reversion
-            strategy_gradient[3] = 0.5  # Swing
-
-        return strategy_gradient
+        except Exception as e:
+            logger.error("Error computing strategy gradient: {0}".format(e))
+            return np.array([0.0])
 
     def _update_entropy(self, market_entropy: float, gradient_psi: np.ndarray) -> float:
-        """
-        Update entropy: E(t+1) = λ ⋅ E(t) + (1-λ) ⋅ |Δψ|
+        """Update entropy based on market conditions and gradient."""
+        try:
+            # Current entropy
+            current_entropy = self.state.entropy
 
-        Where Δψ is the delta shift between expected and real execution.
-        """
-        # Compute delta shift
-        if self.state.psi_history:
-            expected_psi = self.state.psi_history[-1]
-            delta_psi = np.linalg.norm(self.state.psi - expected_psi)
-        else:
-            delta_psi = 0.0
+            # Gradient-based entropy contribution
+            gradient_magnitude = np.linalg.norm(gradient_psi)
+            gradient_entropy = gradient_magnitude * 0.1
 
-        # Update entropy with exponential decay
-        new_entropy = self.state.lambda_decay * self.state.entropy + (
-            1 - self.state.lambda_decay
-        ) * (market_entropy + delta_psi)
+            # Market entropy contribution
+            market_contribution = market_entropy * 0.3
 
-        return np.clip(new_entropy, 0.0, 1.0)
+            # Update entropy with decay
+            new_entropy = (current_entropy * self.state.lambda_decay + 
+                          gradient_entropy + market_contribution) / 2.0
+
+            return min(new_entropy, 10.0)  # Cap entropy
+
+        except Exception as e:
+            logger.error("Error updating entropy: {0}".format(e))
+            return self.state.entropy
 
     def _compute_crlf_output(
         self, psi_n: np.ndarray, gradient_psi: np.ndarray, entropy: float
     ) -> float:
-        """
-        Compute CRLF output: Ψₙ(τ) ⋅ ∇ψ ⋅ Δₜ ⋅ e^(-Eτ)
-        """
-        # Compute dot product of recursive state and gradient
-        psi_gradient_product = np.dot(psi_n, gradient_psi)
+        """Compute CRLF output: Ψₙ(τ) ⋅ ∇ψ ⋅ Δₜ ⋅ e^(-Eτ)."""
+        try:
+            # Compute dot product Ψₙ(τ) ⋅ ∇ψ
+            dot_product = np.dot(psi_n, gradient_psi)
 
-        # Apply temporal decay
-        temporal_decay = math.exp(-entropy * self.state.tau)
+            # Time factor Δₜ
+            time_factor = self.state.delta_t
 
-        # Apply tick-phase offset
-        phase_offset = 1.0 + self.state.delta_t
+            # Entropy decay factor e^(-Eτ)
+            entropy_decay = np.exp(-entropy * self.state.tau)
 
-        # Compute final output
-        crlf_output = psi_gradient_product * temporal_decay * phase_offset
+            # Final CRLF output
+            crlf_output = dot_product * time_factor * entropy_decay
 
-        return crlf_output
+            return float(crlf_output)
+
+        except Exception as e:
+            logger.error("Error computing CRLF output: {0}".format(e))
+            return 0.0
 
     def _determine_trigger_state(self, crlf_output: float) -> CRLFTriggerState:
-        """
-        Determine trigger state based on CRLF output thresholds.
+        """Determine trigger state based on CRLF output."""
+        try:
+            if crlf_output <= self.state.hold_threshold:
+                return CRLFTriggerState.HOLD
+            elif crlf_output <= self.state.escalate_threshold:
+                return CRLFTriggerState.ESCALATE
+            elif crlf_output <= self.state.override_threshold:
+                return CRLFTriggerState.OVERRIDE
+            else:
+                return CRLFTriggerState.RECURSIVE_RESET
 
-        0 < CRLF < θ → HOLD logic
-        θ < CRLF < 1 → ESCALATE
-        CRLF > 1.5 → OVERRIDE trigger
-        CRLF < 0 → RECURSIVE RESET (fallback)
-        """
-        if crlf_output < 0:
-            return CRLFTriggerState.RECURSIVE_RESET
-        elif crlf_output < self.state.hold_threshold:
+        except Exception as e:
+            logger.error("Error determining trigger state: {0}".format(e))
             return CRLFTriggerState.HOLD
-        elif crlf_output < self.state.escalate_threshold:
-            return CRLFTriggerState.ESCALATE
-        elif crlf_output > self.state.override_threshold:
-            return CRLFTriggerState.OVERRIDE
-        else:
-            return CRLFTriggerState.ESCALATE
 
     def _generate_recommendations(
         self, crlf_output: float, trigger_state: CRLFTriggerState
     ) -> Dict[str, Any]:
         """Generate recommendations based on CRLF output and trigger state."""
-        recommendations = {}
-        recommendations["action"] = trigger_state.value
-        recommendations["confidence"] = self._compute_confidence(crlf_output, self.state.entropy)
-        recommendations["risk_adjustment"] = self._compute_risk_adjustment(crlf_output)
-        recommendations["strategy_weights"] = self._compute_strategy_weights(crlf_output)
-        recommendations["temporal_urgency"] = self._compute_temporal_urgency(crlf_output)
+        try:
+            recommendations = {
+                "action": trigger_state.value,
+                "confidence": self._compute_confidence(crlf_output, self.state.entropy),
+                "risk_adjustment": self._compute_risk_adjustment(crlf_output),
+                "strategy_weights": self._compute_strategy_weights(crlf_output),
+                "temporal_urgency": self._compute_temporal_urgency(crlf_output),
+                "hold_duration": self._compute_hold_duration(crlf_output),
+            }
 
-        # Add state-specific recommendations
-        if trigger_state == CRLFTriggerState.OVERRIDE:
-            recommendations.update(
-                {
-                    "override_matrix": "FastProfitOverrideΩ",
-                    "priority": "HIGH",
-                    "timeout": 300,  # 5 minutes
-                }
-            )
-        elif trigger_state == CRLFTriggerState.RECURSIVE_RESET:
-            recommendations.update(
-                {
-                    "reset_cycle": "Recursive_Fallback_7D",
-                    "fallback_strategy": "Conservative_Mean_Reversion",
-                    "recovery_time": 604800,  # 7 days
-                }
-            )
-        elif trigger_state == CRLFTriggerState.HOLD:
-            recommendations.update(
-                {
-                    "hold_duration": self._compute_hold_duration(crlf_output),
-                    "monitoring_frequency": "HIGH",
-                }
-            )
+            return recommendations
 
-        return recommendations
+        except Exception as e:
+            logger.error("Error generating recommendations: {0}".format(e))
+            return {"action": "hold", "confidence": 0.0}
 
     def _compute_confidence(self, crlf_output: float, entropy: float) -> float:
-        """Compute confidence level based on CRLF output and entropy."""
-        # Higher CRLF output = higher confidence
-        output_confidence = min(abs(crlf_output) / 2.0, 1.0)
+        """Compute confidence in the CRLF output."""
+        try:
+            # Base confidence from output magnitude
+            base_confidence = min(abs(crlf_output), 1.0)
 
-        # Lower entropy = higher confidence
-        entropy_confidence = 1.0 - entropy
+            # Entropy penalty
+            entropy_penalty = entropy * 0.1
 
-        # Combined confidence
-        confidence = (output_confidence + entropy_confidence) / 2.0
+            # Final confidence
+            confidence = max(0.0, base_confidence - entropy_penalty)
 
-        return np.clip(confidence, 0.0, 1.0)
+            return confidence
+
+        except Exception as e:
+            logger.error("Error computing confidence: {0}".format(e))
+            return 0.5
 
     def _compute_risk_adjustment(self, crlf_output: float) -> float:
-        """Compute risk adjustment factor based on CRLF output."""
-        if crlf_output > 1.5:
-            # Override - reduce risk
+        """Compute risk adjustment factor."""
+        try:
+            # Higher output = higher risk
+            risk_factor = min(abs(crlf_output), 2.0) / 2.0
+
+            # Apply sigmoid transformation
+            risk_adjustment = 1.0 / (1.0 + np.exp(-5.0 * (risk_factor - 0.5)))
+
+            return risk_adjustment
+
+        except Exception as e:
+            logger.error("Error computing risk adjustment: {0}".format(e))
             return 0.5
-        elif crlf_output > 1.0:
-            # Escalate - moderate risk
-            return 0.8
-        elif crlf_output > 0.3:
-            # Normal - standard risk
-            return 1.0
-        else:
-            # Hold - increase risk
-            return 1.2
 
     def _compute_strategy_weights(self, crlf_output: float) -> Dict[str, float]:
-        """Compute strategy weights based on CRLF output."""
-        if crlf_output > 1.5:
-            # Override - aggressive strategies
-            return {"momentum": 0.4, "scalping": 0.3, "mean_reversion": 0.2, "swing": 0.1}
-        elif crlf_output > 1.0:
-            # Escalate - balanced strategies
-            return {"momentum": 0.3, "scalping": 0.3, "mean_reversion": 0.2, "swing": 0.2}
-        else:
-            # Hold/Reset - conservative strategies
-            return {"momentum": 0.1, "scalping": 0.1, "mean_reversion": 0.4, "swing": 0.4}
+        """Compute strategy weighting factors."""
+        try:
+            magnitude = abs(crlf_output)
+
+            weights = {
+                "conservative": max(0.0, 1.0 - magnitude),
+                "moderate": 0.5,
+                "aggressive": min(1.0, magnitude),
+            }
+
+            # Normalize weights
+            total = sum(weights.values())
+            if total > 0:
+                weights = {k: v / total for k, v in weights.items()}
+
+            return weights
+
+        except Exception as e:
+            logger.error("Error computing strategy weights: {0}".format(e))
+            return {"conservative": 0.5, "moderate": 0.3, "aggressive": 0.2}
 
     def _compute_temporal_urgency(self, crlf_output: float) -> str:
-        """Compute temporal urgency based on CRLF output."""
-        if crlf_output > 1.5:
-            return "IMMEDIATE"
-        elif crlf_output > 1.0:
-            return "HIGH"
-        elif crlf_output > 0.3:
-            return "MEDIUM"
-        else:
-            return "LOW"
+        """Compute temporal urgency level."""
+        try:
+            magnitude = abs(crlf_output)
+
+            if magnitude < 0.3:
+                return "low"
+            elif magnitude < 0.7:
+                return "medium"
+            else:
+                return "high"
+
+        except Exception as e:
+            logger.error("Error computing temporal urgency: {0}".format(e))
+            return "medium"
 
     def _compute_hold_duration(self, crlf_output: float) -> int:
-        """Compute hold duration in seconds based on CRLF output."""
-        # Lower CRLF output = longer hold duration
-        base_duration = 300  # 5 minutes
-        multiplier = max(0.1, 1.0 - abs(crlf_output))
-        return int(base_duration * multiplier)
+        """Compute recommended hold duration in ticks."""
+        try:
+            magnitude = abs(crlf_output)
+
+            if magnitude < 0.3:
+                return 10
+            elif magnitude < 0.7:
+                return 5
+            else:
+                return 1
+
+        except Exception as e:
+            logger.error("Error computing hold duration: {0}".format(e))
+            return 5
 
     def _update_state_history(self, psi_n: np.ndarray, entropy: float, crlf_output: float):
-        """Update state history for recursive computations."""
-        self.state.psi_history.append(psi_n.copy())
-        self.state.entropy_history.append(entropy)
-        self.state.crlf_output_history.append(crlf_output)
+        """Update state history for tracking."""
+        try:
+            self.state.psi_history.append(psi_n.copy())
+            self.state.entropy_history.append(entropy)
+            self.state.crlf_output_history.append(crlf_output)
 
-        # Keep history manageable
-        max_history = 100
-        if len(self.state.psi_history) > max_history:
-            self.state.psi_history = self.state.psi_history[-max_history:]
-            self.state.entropy_history = self.state.entropy_history[-max_history:]
-            self.state.crlf_output_history = self.state.crlf_output_history[-max_history:]
+            # Keep history manageable
+            max_history = 100
+            if len(self.state.psi_history) > max_history:
+                self.state.psi_history = self.state.psi_history[-max_history:]
+                self.state.entropy_history = self.state.entropy_history[-max_history:]
+                self.state.crlf_output_history = self.state.crlf_output_history[-max_history:]
+
+        except Exception as e:
+            logger.error("Error updating state history: {0}".format(e))
 
     def _update_performance_metrics(self, response: CRLFResponse):
         """Update performance tracking metrics."""
-        self.state.total_executions += 1
+        try:
+            self.state.total_executions += 1
 
-        # Track strategy alignment
-        alignment_score = self._compute_strategy_alignment(response)
-        self.strategy_alignment_scores.append(alignment_score)
+            # Track strategy alignment
+            alignment_score = self._compute_strategy_alignment(response)
+            self.strategy_alignment_scores.append(alignment_score)
 
-        # Update recursion depth
-        if response.trigger_state == CRLFTriggerState.RECURSIVE_RESET:
-            self.state.recursion_depth = 0
-            self.state.strategy_corrections += 1
-        else:
-            self.state.recursion_depth = min(
-                self.state.recursion_depth + 1, self.state.max_recursion_depth
-            )
+            # Update corrections count
+            if response.trigger_state in [CRLFTriggerState.OVERRIDE, CRLFTriggerState.RECURSIVE_RESET]:
+                self.state.strategy_corrections += 1
+
+        except Exception as e:
+            logger.error("Error updating performance metrics: {0}".format(e))
 
     def _compute_strategy_alignment(self, response: CRLFResponse) -> float:
         """Compute strategy alignment score."""
-        # Higher confidence and lower entropy = better alignment
-        alignment = response.confidence * (1.0 - response.entropy_updated)
-        return np.clip(alignment, 0.0, 1.0)
+        try:
+            # Alignment based on confidence and trigger state
+            base_alignment = response.confidence
+
+            # Penalty for extreme trigger states
+            if response.trigger_state in [CRLFTriggerState.OVERRIDE, CRLFTriggerState.RECURSIVE_RESET]:
+                base_alignment *= 0.8
+
+            return base_alignment
+
+        except Exception as e:
+            logger.error("Error computing strategy alignment: {0}".format(e))
+            return 0.5
 
     def _create_fallback_response(self) -> CRLFResponse:
         """Create a fallback response when computation fails."""
-        response = CRLFResponse()
-        response.crlf_output = -1.0
-        response.trigger_state = CRLFTriggerState.RECURSIVE_RESET
-        response.psi_n = self.state.psi.copy()
-        response.entropy_updated = 1.0
-        response.recursion_depth = 0
-        response.confidence = 0.0
-        response.recommendations = {
-            "action": "recursive_reset",
-            "fallback_strategy": "Conservative_Mean_Reversion",
-            "error": "Computation failed",
-        }
-        return response
+        try:
+            return CRLFResponse(
+                crlf_output=0.0,
+                trigger_state=CRLFTriggerState.HOLD,
+                psi_n=np.array([0.0]),
+                entropy_updated=self.state.entropy,
+                recursion_depth=0,
+                confidence=0.0,
+                recommendations={"action": "hold", "confidence": 0.0}
+            )
+
+        except Exception as e:
+            logger.error("Error creating fallback response: {0}".format(e))
+            # Return minimal response
+            return CRLFResponse(
+                crlf_output=0.0,
+                trigger_state=CRLFTriggerState.HOLD,
+                psi_n=np.array([0.0]),
+                entropy_updated=0.0,
+                recursion_depth=0,
+                confidence=0.0,
+                recommendations={}
+            )
 
     def get_performance_summary(self) -> Dict[str, Any]:
         """Get comprehensive performance summary."""
-        if not self.execution_history:
-            return {"error": "No execution history available"}
+        try:
+            return {
+                "total_executions": self.state.total_executions,
+                "strategy_corrections": self.state.strategy_corrections,
+                "trigger_state_distribution": self._get_trigger_state_distribution(),
+                "alignment_trend": self._get_alignment_trend(),
+                "crlf_statistics": self._get_crlf_statistics(),
+                "recent_recommendations": self._get_recent_recommendations(),
+                "current_state": {
+                    "recursion_depth": self.state.recursion_depth,
+                    "entropy": self.state.entropy,
+                    "tau": self.state.tau,
+                }
+            }
 
-        recent_responses = self.execution_history[-50:]  # Last 50 executions
-
-        return {
-            "total_executions": self.state.total_executions,
-            "strategy_corrections": self.state.strategy_corrections,
-            "current_recursion_depth": self.state.recursion_depth,
-            "average_confidence": np.mean([r.confidence for r in recent_responses]),
-            "average_entropy": np.mean([r.entropy_updated for r in recent_responses]),
-            "trigger_state_distribution": self._get_trigger_state_distribution(),
-            "strategy_alignment_trend": self._get_alignment_trend(),
-            "crlf_output_statistics": self._get_crlf_statistics(),
-            "recommendations": self._get_recent_recommendations(),
-        }
+        except Exception as e:
+            logger.error("Error getting performance summary: {0}".format(e))
+            return {}
 
     def _get_trigger_state_distribution(self) -> Dict[str, int]:
         """Get distribution of trigger states."""
-        distribution = {}
-        for response in self.execution_history:
-            state = response.trigger_state.value
-            distribution[state] = distribution.get(state, 0) + 1
-        return distribution
+        try:
+            distribution = {}
+            for response in self.execution_history:
+                state = response.trigger_state.value
+                distribution[state] = distribution.get(state, 0) + 1
+
+            return distribution
+
+        except Exception as e:
+            logger.error("Error getting trigger state distribution: {0}".format(e))
+            return {}
 
     def _get_alignment_trend(self) -> List[float]:
-        """Get recent strategy alignment trend."""
-        return self.strategy_alignment_scores[-20:] if self.strategy_alignment_scores else []
+        """Get recent alignment trend."""
+        try:
+            return self.strategy_alignment_scores[-20:] if self.strategy_alignment_scores else []
+
+        except Exception as e:
+            logger.error("Error getting alignment trend: {0}".format(e))
+            return []
 
     def _get_crlf_statistics(self) -> Dict[str, float]:
         """Get CRLF output statistics."""
-        outputs = [r.crlf_output for r in self.execution_history]
-        if not outputs:
-            return {}
+        try:
+            outputs = [r.crlf_output for r in self.execution_history]
 
-        return {
-            "mean": np.mean(outputs),
-            "std": np.std(outputs),
-            "min": np.min(outputs),
-            "max": np.max(outputs),
-            "median": np.median(outputs),
-        }
+            if not outputs:
+                return {}
+
+            return {
+                "mean": float(np.mean(outputs)),
+                "std": float(np.std(outputs)),
+                "min": float(np.min(outputs)),
+                "max": float(np.max(outputs)),
+                "median": float(np.median(outputs)),
+            }
+
+        except Exception as e:
+            logger.error("Error getting CRLF statistics: {0}".format(e))
+            return {}
 
     def _get_recent_recommendations(self) -> List[Dict[str, Any]]:
         """Get recent recommendations."""
-        recent = self.execution_history[-10:]
-        return [
-            {
-                "action": r.recommendations.get("action", "unknown"),
-                "confidence": r.confidence,
-                "crlf_output": r.crlf_output,
-            }
-            for r in recent
-        ]
+        try:
+            recent_responses = self.execution_history[-10:] if self.execution_history else []
+            recommendations = []
+
+            for response in recent_responses:
+                recommendations.append({
+                    "crlf_output": response.crlf_output,
+                    "trigger_state": response.trigger_state.value,
+                    "confidence": response.confidence,
+                    "recommendations": response.recommendations,
+                })
+
+            return recommendations
+
+        except Exception as e:
+            logger.error("Error getting recent recommendations: {0}".format(e))
+            return []
 
     def reset_state(self):
-        """Reset CRLF state for fresh computation."""
-        self.state = self._create_default_state()
-        self.execution_history.clear()
-        self.strategy_alignment_scores.clear()
-        logger.info("🔄 CRLF state reset")
+        """Reset the CRLF state."""
+        try:
+            self.state = self._create_default_state()
+            self.execution_history.clear()
+            self.strategy_alignment_scores.clear()
+            logger.info("CRLF state reset")
+
+        except Exception as e:
+            logger.error("Error resetting CRLF state: {0}".format(e))
 
 
+# Factory function
 def create_crlf() -> ChronoRecursiveLogicFunction:
-    """Factory function to create a CRLF instance."""
+    """Create a ChronoRecursiveLogicFunction instance."""
     return ChronoRecursiveLogicFunction()
 
 

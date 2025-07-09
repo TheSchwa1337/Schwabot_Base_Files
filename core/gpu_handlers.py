@@ -17,6 +17,7 @@ except ImportError:
 
 # CUDA Helper Integration (for additional, utilities)
 try:
+    from utils.cuda_helper import (
         get_cuda_status,
         report_cuda_status,
         safe_convolution,
@@ -44,7 +45,6 @@ except ImportError:
     def run_cpu_strategy(task_id: str, data: Dict[str, Any]) -> Dict[str, Any]:
         """Fallback CPU strategy when GPU is not available."""
         return {"profit_delta": 0.0, "success": False, "fallback": True}
-
 
 logger = logging.getLogger(__name__)
 logger.info("GPU Handlers initialized with backend: {0}".format(_backend))

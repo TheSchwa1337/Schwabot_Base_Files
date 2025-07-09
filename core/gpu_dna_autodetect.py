@@ -33,8 +33,14 @@ from .system_state_profiler import (
 
 # OpenGL imports with fallback
 try:
-    from OpenGL.GL import *
-    from OpenGL.GL.shaders import *
+    from OpenGL.GL import (
+        glGetIntegerv, GL_MAX_TEXTURE_SIZE, GL_MAX_VERTEX_ATTRIBS,
+        GL_MAX_UNIFORM_LOCATIONS, GL_MAX_TEXTURE_IMAGE_UNITS,
+        GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, GL_MAX_VERTEX_UNIFORM_VECTORS,
+        GL_MAX_FRAGMENT_UNIFORM_VECTORS, GL_MAX_VARYING_VECTORS,
+        GL_MAX_VERTEX_OUTPUT_COMPONENTS, GL_MAX_FRAGMENT_INPUT_COMPONENTS
+    )
+    from OpenGL.GL.shaders import compileShader, glCreateShader, glShaderSource
 
     OPENGL_AVAILABLE = True
 except ImportError:
@@ -189,9 +195,7 @@ class GPUDNAAutoDetect:
         logger.info("✅ GPU DNA Detection Complete")
         logger.info("🎮 GPU: {0} ({1})".format(gpu_profile.renderer, gpu_profile.gpu_tier.value))
         logger.info(
-            "📊 Matrix Size: {0}x{0}".format(
-                self.shader_config.matrix_size, self.shader_config.matrix_size
-            )
+            "📊 Matrix Size: {0}x{0}".format(self.shader_config.matrix_size)
         )
         logger.info(
             "⚡ Performance Multiplier: {0}x".format(self.shader_config.performance_multiplier)

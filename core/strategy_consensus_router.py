@@ -19,21 +19,19 @@ Mathematical Framework:
 - 𝒟ₜ = decision_vector(ℛₜ, confidence_level)
 """
 
-import hashlib
-import json
 import logging
 import threading
 import time
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional
+
 from core.backend_math import get_backend, is_gpu
 
 xp = get_backend()
 
 # Import existing Schwabot components
 try:
-    from .unified_math_system import generate_unified_hash
     from .orbital_shell_brain_system import OrbitalShell
     from .tensor_weight_memory import TensorWeightMemory
 
@@ -660,7 +658,9 @@ class StrategyConsensusRouter:
             decision_confidence = consensus_result.confidence_level
 
             # Generate reasoning
-            reasoning = f"Highest confidence consensus: {selected_route} with {decision_confidence:.2f} confidence"
+            reasoning = (
+                f"Highest confidence consensus: {selected_route} with {decision_confidence:.2f} confidence"
+            )
 
             # Calculate execution priority
             execution_priority = int(decision_confidence * 10)
@@ -686,7 +686,9 @@ class StrategyConsensusRouter:
             decision_confidence = consensus_result.trust_weighted_score
 
             # Generate reasoning
-            reasoning = f"Weighted consensus: {selected_route} with trust-weighted score {decision_confidence:.2f}"
+            reasoning = (
+                f"Weighted consensus: {selected_route} with trust-weighted score {decision_confidence:.2f}"
+            )
 
             # Calculate execution priority
             execution_priority = int(decision_confidence * 10)
@@ -720,7 +722,9 @@ class StrategyConsensusRouter:
             enhanced_confidence = xp.clip(enhanced_confidence, 0.0, 1.0)
 
             # Generate reasoning
-            reasoning = f"Consensus plus: {selected_route} with enhanced confidence {enhanced_confidence:.2f}"
+            reasoning = (
+                f"Consensus plus: {selected_route} with enhanced confidence {enhanced_confidence:.2f}"
+            )
 
             # Calculate execution priority
             execution_priority = int(enhanced_confidence * 10)

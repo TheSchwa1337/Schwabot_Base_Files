@@ -78,9 +78,6 @@ try:
         EntropySignal
     )
     from .fractal_core import FractalCore
-    from .phantom_core import PhantomCore
-    from .entropy_signal_bridge import EntropySignalBridge
-    from .profit_cycle_allocator import ProfitCycleAllocator
     
     ENTROPY_INTEGRATION_AVAILABLE = True
     logger = logging.getLogger(__name__)
@@ -530,7 +527,9 @@ class CleanTradingPipeline:
         self.trades_history: List[Dict[str, Any]] = []
         self.performance_metrics: Dict[str, Any] = {}
 
-        logger.info(f"🧬 Clean Trading Pipeline initialized for {symbol} with {initial_capital} capital")
+        logger.info(
+            f"🧬 Clean Trading Pipeline initialized for {symbol} with {initial_capital} capital"
+        )
 
     def _default_pipeline_config(self) -> Dict[str, Any]:
         """

@@ -1,16 +1,15 @@
+#!/usr/bin/env python3
 import logging
 import time
 from dataclasses import dataclass
-from typing import Dict, Optional, Any
-from .clean_trading_pipeline import TradingDecision, TradingAction
+from typing import Dict, List, Optional, Any
+import numpy as np
+
 from .algorithmic_portfolio_balancer import AlgorithmicPortfolioBalancer
 from .phantom_registry import PhantomRegistry
-
-import numpy as np
+from .clean_trading_pipeline import TradingDecision, TradingAction
 from .ccxt_trading_executor import CCXTTradingExecutor
 
-
-#!/usr/bin/env python3
 """
 BTC/USDC Trading Integration
 ============================
@@ -87,7 +86,7 @@ class BTCUSDCTradingIntegration:
         try:
             # Initialize trading executor
             if not await self.trading_executor.initialize():
-                error("Failed to initialize trading executor")
+                logger.error("Failed to initialize trading executor")
                 return False
 
             # Initialize portfolio balancer
@@ -96,11 +95,11 @@ class BTCUSDCTradingIntegration:
             # Load initial market data
             await self._update_market_data()
 
-            success("BTC/USDC Trading Integration initialized successfully")
+            logger.info("BTC/USDC Trading Integration initialized successfully")
             return True
 
         except Exception as e:
-            error("Error initializing BTC/USDC trading integration: {0}".format(e))
+            logger.error(f"Error initializing BTC/USDC trading integration: {e}")
             return False
 
     async def process_market_data(self, market_data: Dict[str, Any]) -> Optional[TradingDecision]:
@@ -130,7 +129,7 @@ class BTCUSDCTradingIntegration:
             return decision
 
         except Exception as e:
-            logger.error("Error processing market data: {0}".format(e))
+            logger.error(f"Error processing market data: {e}")
             return None
 
     async def execute_trade(self, decision: TradingDecision) -> bool:
@@ -157,18 +156,16 @@ class BTCUSDCTradingIntegration:
                 if self.config.enable_portfolio_balancing:
                     await self._check_and_execute_rebalancing()
 
-                success(
-                    "Trade executed: {0} {1} {2}".format(
-                        decision.symbol, decision.action.value, decision.quantity
-                    )
+                logger.info(
+                    f"Trade executed: {decision.symbol} {decision.action.value} {decision.quantity}"
                 )
                 return True
             else:
-                warn("Trade execution failed: {0}".format(decision.symbol))
+                logger.warning(f"Trade execution failed: {decision.symbol}")
                 return False
 
         except Exception as e:
-            logger.error("Error executing trade: {0}".format(e))
+            logger.error(f"Error executing trade: {e}")
             return False
 
     async def validate_trading_decision(self, decision: TradingDecision) -> bool:
@@ -176,7 +173,7 @@ class BTCUSDCTradingIntegration:
         try:
             return self._validate_trading_decision(decision)
         except Exception as e:
-            logger.error("Error validating trading decision: {0}".format(e))
+            logger.error(f"Error validating trading decision: {e}")
             return False
 
     async def calculate_performance_metrics(self) -> Dict[str, Any]:
@@ -462,7 +459,7 @@ class BTCUSDCTradingIntegration:
             return decision
 
         except Exception as e:
-            logger.error("Error generating trading decision: {1}".format(e))
+            logger.error(f"Error generating trading decision: {e}")
             return None
 
     def _should_trade(self) -> bool:
@@ -499,7 +496,7 @@ class BTCUSDCTradingIntegration:
             return True
 
         except Exception as e:
-            logger.error("Error validating trading decision: {1}".format(e))
+            logger.error(f"Error validating trading decision: {e}")
             return False
 
     def _calculate_position_size(self, signal_strength: float) -> float:
@@ -540,7 +537,7 @@ class BTCUSDCTradingIntegration:
             return spread
 
         except Exception as e:
-            logger.error("Error calculating spread: {0}".format(e))
+            logger.error(f"Error calculating spread: {e}")
             return float("inf")
 
     def _calculate_volatility(self) -> float:
@@ -560,7 +557,7 @@ class BTCUSDCTradingIntegration:
             return volatility
 
         except Exception as e:
-            logger.error("Error calculating volatility: {1}".format(e))
+            logger.error(f"Error calculating volatility: {e}")
             return 0.0
 
     async def _update_position(self, decision: TradingDecision) -> None:
@@ -629,7 +626,7 @@ class BTCUSDCTradingIntegration:
             }
             return metrics
         except Exception as e:
-            logger.error("Error getting performance metrics: {0}".format(e))
+            logger.error(f"Error getting performance metrics: {e}")
             return {}
 
 

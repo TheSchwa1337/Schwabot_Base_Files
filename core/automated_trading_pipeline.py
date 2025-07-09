@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import asyncio
 import logging
 import time
@@ -6,12 +7,18 @@ from typing import Dict, List, Optional, Tuple, Any, Generator
 from pathlib import Path
 from .digest_time_mapper import DigestTimeMapper, PriceTick, DigestResult
 from .vector_registry import VectorRegistry, StrategyVector, DigestMatch
-from .pure_profit_calculator import ()
+from .pure_profit_calculator import (
+    PureProfitCalculator,
+    MarketData,
+    HistoryState,
+    StrategyParameters,
+    ProcessingMode,
+    ProfitCalculationMode,
+)
 from .quantum_mathematical_bridge import QuantumMathematicalBridge
 from .secure_exchange_manager import SecureExchangeManager, ExchangeType, get_exchange_manager
 import random
 
-#!/usr/bin/env python3
 """
 Automated Trading Pipeline - Unified Decision Engine
 Connects all core systems for natural, automated trading decisions:
@@ -34,19 +41,11 @@ Mathematical Integration:
   * Risk-adjusted position sizing
 """
 
-# Core system imports
-    PureProfitCalculator,
-    MarketData,
-    HistoryState,
-    StrategyParameters,
-    ProcessingMode,
-    ProfitCalculationMode,
-)
 logger = logging.getLogger(__name__)
 
 
 @dataclass
-    class TradingDecision:
+class TradingDecision:
     """Complete trading decision with full transparency."""
 
     timestamp: float
@@ -67,7 +66,7 @@ logger = logging.getLogger(__name__)
 
 
 @dataclass
-    class PipelineMetrics:
+class PipelineMetrics:
     """Pipeline performance and decision metrics."""
 
     total_ticks_processed: int = 0
@@ -90,7 +89,7 @@ class AutomatedTradingPipeline:
     4. Decision → Execution (with full, transparency)
     """
 
-    def __init__()
+    def __init__(
         self,
         registry_path: str = "data/trading_vector_registry.json",
         profit_calculator_params: Optional[StrategyParameters] = None,
@@ -105,11 +104,11 @@ class AutomatedTradingPipeline:
 
         # Initialize profit calculator with custom parameters
         if profit_calculator_params is None:
-            profit_calculator_params = StrategyParameters()
+            profit_calculator_params = StrategyParameters(
                 risk_tolerance=0.2, profit_target=0.5, position_size=0.1, tensor_depth=4, hash_memory_depth=100
             )
 
-        self.profit_calculator = PureProfitCalculator()
+        self.profit_calculator = PureProfitCalculator(
             strategy_params=profit_calculator_params, processing_mode=processing_mode
         )
 
@@ -128,7 +127,7 @@ class AutomatedTradingPipeline:
         self.profit_calculator.flash_screen()
         logger.info("🚀 Automated Trading Pipeline initialized")
 
-    def process_price_tick()
+    def process_price_tick(
         self, price: float, volume: float = 0.0, bid: float = 0.0, ask: float = 0.0
     ) -> Optional[TradingDecision]:
         """
@@ -152,7 +151,7 @@ class AutomatedTradingPipeline:
             self.metrics.total_digests_generated += 1
 
             # Step 3: Find similar strategies in vector registry
-            similar_digests = self.vector_registry.find_similar_digests()
+            similar_digests = self.vector_registry.find_similar_digests(
                 digest_result.digest, threshold=0.6, max_results=5
             )
 
@@ -160,8 +159,8 @@ class AutomatedTradingPipeline:
                 # No similar patterns found - create new strategy vector
                 strategy_vector = self._create_default_strategy_vector(digest_result)
                 self.vector_registry.register_digest(digest_result.digest, strategy_vector)
-                similar_digests = []
-                    DigestMatch()
+                similar_digests = [
+                    DigestMatch(
                         digest=digest_result.digest_hex,
                         similarity_score=1.0,
                         strategy_vector=strategy_vector,
@@ -175,7 +174,7 @@ class AutomatedTradingPipeline:
             strategy_vector = best_match.strategy_vector
 
             # Step 5: Create market data for profit calculation
-            market_data = MarketData()
+            market_data = MarketData(
                 timestamp=time.time(),
                 btc_price=price,
                 eth_price=price * 0.6,  # Approximate ETH/BTC ratio
@@ -190,12 +189,12 @@ class AutomatedTradingPipeline:
             history_state = HistoryState(timestamp=time.time())
 
             # Step 7: Perform profit calculation
-            profit_result = self.profit_calculator.calculate_profit()
+            profit_result = self.profit_calculator.calculate_profit(
                 market_data, history_state, mode=ProfitCalculationMode.BALANCED
             )
 
             # Step 8: Make trading decision
-            decision = self._make_trading_decision()
+            decision = self._make_trading_decision(
                 digest_result, strategy_vector, profit_result, market_data, best_match, start_time
             )
 
@@ -213,9 +212,7 @@ class AutomatedTradingPipeline:
             logger.error("Error in pipeline processing: {0}".format(e))
             return None
 
-    async def run_continuous_pipeline()
-        self, price_stream: Generator[Tuple[float, float], None, None], max_decisions: int = 100
-    ) -> Generator[TradingDecision, None, None]:
+    async def run_continuous_pipeline(self, price_stream: Generator[Tuple[float, float], None, None], max_decisions: int = 100) -> Generator[TradingDecision, None, None]:
         """
         Run continuous pipeline processing on a price stream.
 
@@ -283,9 +280,7 @@ Position Size: {decision.position_size:.2%}
 
         return explanation
 
-    def execute_trading_decision()
-        self, decision: TradingDecision, exchange: ExchangeType = ExchangeType.BINANCE
-    ) -> Dict[str, Any]:
+    def execute_trading_decision(self, decision: TradingDecision, exchange: ExchangeType = ExchangeType.BINANCE) -> Dict[str, Any]:
         """
         Execute a trading decision on the specified exchange.
 
@@ -300,11 +295,7 @@ Position Size: {decision.position_size:.2%}
             # Validate trading readiness
             is_ready, issues = self.exchange_manager.validate_trading_ready()
             if not is_ready:
-                return {}
-                    "success": False,
-                    "error": "Trading system not ready: {0}".format(issues),
-                    "decision_id": decision.digest_hex[:16],
-                }
+                return {"success": False, "error": "Trading system not ready: {0}".format(issues), "decision_id": decision.digest_hex[:16]}
 
             # Determine trading symbol
             symbol = "{0}/USDT".format(decision.strategy_vector.asset_focus)
@@ -314,7 +305,7 @@ Position Size: {decision.position_size:.2%}
             order_amount = decision.position_size * 100  # Simplified for demo
 
             # Execute the trade
-            trade_result = self.exchange_manager.execute_trade()
+            trade_result = self.exchange_manager.execute_trade(
                 exchange=exchange,
                 symbol=symbol,
                 side="buy" if decision.position_size > 0 else "sell",
@@ -329,14 +320,7 @@ Position Size: {decision.position_size:.2%}
                 decision.trade_executed = True
                 decision.trade_result = trade_result
 
-                return {}
-                    "success": True,
-                    "order_id": trade_result.get("order_id"),
-                    "symbol": symbol,
-                    "amount": order_amount,
-                    "decision_id": decision.digest_hex[:16],
-                    "trade_result": trade_result,
-                }
+                return {"success": True, "order_id": trade_result.get("order_id"), "symbol": symbol, "amount": order_amount, "decision_id": decision.digest_hex[:16], "trade_result": trade_result}
             else:
                 logger.error("❌ Trade execution failed: {0}".format(trade_result.get('error')))
                 return {"success": False, "error": trade_result.get("error"), "decision_id": decision.digest_hex[:16]}
@@ -352,32 +336,31 @@ Position Size: {decision.position_size:.2%}
     def get_pipeline_metrics(self) -> Dict[str, Any]:
         """Get comprehensive pipeline metrics."""
         metrics = {}
-            "pipeline_stats": {}
-                "total_ticks_processed": self.metrics.total_ticks_processed,
-                "total_digests_generated": self.metrics.total_digests_generated,
-                "total_decisions_made": self.metrics.total_decisions_made,
-                "avg_processing_time": self.metrics.avg_processing_time,
-                "success_rate": self.metrics.success_rate,
-                "total_pnl": self.metrics.total_pnl,
-                "last_decision_time": self.metrics.last_decision_time,
-            },
-            "component_stats": {}
-                "digest_mapper": self.digest_mapper.get_mapper_stats(),
-                "vector_registry": self.vector_registry.get_registry_stats(),
-                "profit_calculator": self.profit_calculator.get_calculation_metrics(),
-            },
-            "decision_history": {}
-                "total_decisions": len(self.decision_history),
-                "recent_decisions": []
-                    {}
-                        "timestamp": d.timestamp,
-                        "strategy": d.strategy_vector.strategy_id,
-                        "confidence": d.confidence_score,
-                        "position_size": d.position_size,
-                    }
-                    for d in self.decision_history[-10:]  # Last 10 decisions
-                ],
-            },
+        metrics["pipeline_stats"] = {
+            "total_ticks_processed": self.metrics.total_ticks_processed,
+            "total_digests_generated": self.metrics.total_digests_generated,
+            "total_decisions_made": self.metrics.total_decisions_made,
+            "avg_processing_time": self.metrics.avg_processing_time,
+            "success_rate": self.metrics.success_rate,
+            "total_pnl": self.metrics.total_pnl,
+            "last_decision_time": self.metrics.last_decision_time,
+        }
+        metrics["component_stats"] = {
+            "digest_mapper": self.digest_mapper.get_mapper_stats(),
+            "vector_registry": self.vector_registry.get_registry_stats(),
+            "profit_calculator": self.profit_calculator.get_calculation_metrics(),
+        }
+        metrics["decision_history"] = {
+            "total_decisions": len(self.decision_history),
+            "recent_decisions": [
+                {
+                    "timestamp": d.timestamp,
+                    "strategy": d.strategy_vector.strategy_id,
+                    "confidence": d.confidence_score,
+                    "position_size": d.position_size,
+                }
+                for d in self.decision_history[-10:]  # Last 10 decisions
+            ],
         }
 
         return metrics
@@ -393,7 +376,7 @@ Position Size: {decision.position_size:.2%}
 
     def _create_default_strategy_vector(self, digest_result: DigestResult) -> StrategyVector:
         """Create a default strategy vector for new digests."""
-        return StrategyVector()
+        return StrategyVector(
             digest="",
             strategy_id="auto_{0}".format(digest_result.digest_hex[:8]),
             asset_focus="BTC",
@@ -407,7 +390,7 @@ Position Size: {decision.position_size:.2%}
             entropy_band=digest_result.entropy_score,
         )
 
-    def _make_trading_decision()
+    def _make_trading_decision(
         self,
         digest_result: DigestResult,
         strategy_vector: StrategyVector,
@@ -420,22 +403,21 @@ Position Size: {decision.position_size:.2%}
 
         # Extract profit calculation details
         profit_calc = {}
-            'total_profit_score': profit_result.total_profit_score,
-            'risk_adjusted_profit': profit_result.risk_adjusted_profit,
-            'tensor_contribution': profit_result.tensor_contribution,
-            'hash_contribution': profit_result.hash_contribution,
-            'confidence_score': profit_result.confidence_score,
-        }
+        profit_calc['total_profit_score'] = profit_result.total_profit_score
+        profit_calc['risk_adjusted_profit'] = profit_result.risk_adjusted_profit
+        profit_calc['tensor_contribution'] = profit_result.tensor_contribution
+        profit_calc['hash_contribution'] = profit_result.hash_contribution
+        profit_calc['confidence_score'] = profit_result.confidence_score
 
         # Calculate overall confidence
-        confidence_score = ()
+        confidence_score = (
             strategy_vector.entry_confidence * 0.4
             + profit_result.confidence_score * 0.3
             + best_match.similarity_score * 0.3
         )
 
         # Decision logic
-        should_trade = ()
+        should_trade = (
             confidence_score >= self.min_confidence_threshold
             and profit_result.total_profit_score >= self.min_profit_score_threshold
             and strategy_vector.success_rate >= 0.5  # Only trade strategies with >50% success
@@ -453,23 +435,22 @@ Position Size: {decision.position_size:.2%}
         take_profit = entry_price * (1 + strategy_vector.take_profit_pct / 100)
 
         # Create decision reason
-        decision_reason = self._create_decision_reason()
+        decision_reason = self._create_decision_reason(
             digest_result, strategy_vector, profit_result, best_match, confidence_score
         )
 
         # Create mathematical basis
         mathematical_basis = {}
-            'digest_entropy': digest_result.entropy_score,
-            'temporal_coherence': digest_result.temporal_coherence,
-            'similarity_score': best_match.similarity_score,
-            'hamming_distance': best_match.hamming_distance,
-            'profit_calculation': profit_calc,
-            'strategy_success_rate': strategy_vector.success_rate,
-        }
+        mathematical_basis['digest_entropy'] = digest_result.entropy_score
+        mathematical_basis['temporal_coherence'] = digest_result.temporal_coherence
+        mathematical_basis['similarity_score'] = best_match.similarity_score
+        mathematical_basis['hamming_distance'] = best_match.hamming_distance
+        mathematical_basis['profit_calculation'] = profit_calc
+        mathematical_basis['strategy_success_rate'] = strategy_vector.success_rate
 
         processing_time = time.time() - start_time
 
-        return TradingDecision()
+        return TradingDecision(
             timestamp=time.time(),
             digest=digest_result.digest,
             digest_hex=digest_result.digest_hex,
@@ -485,7 +466,7 @@ Position Size: {decision.position_size:.2%}
             processing_time=processing_time,
         )
 
-    def _create_decision_reason()
+    def _create_decision_reason(
         self,
         digest_result: DigestResult,
         strategy_vector: StrategyVector,
@@ -529,18 +510,18 @@ Position Size: {decision.position_size:.2%}
     def _log_decision(self, decision: TradingDecision):
         """Log the trading decision with full transparency."""
         logger.info("🎯 TRADING DECISION: {0}".format(decision.strategy_vector.strategy_id))
-        logger.info("   Confidence))"
-        logger.info("   Position Size: {0}".format(decision.position_size:, .2%))
-        logger.info("   Entry))"
-        logger.info("   Stop Loss: ${0}".format(decision.stop_loss))
-        logger.info("   Take Profit: ${0}".format(decision.take_profit))
+        logger.info("   Confidence: {0:.3f}".format(decision.confidence_score))
+        logger.info("   Position Size: {0:.2%}".format(decision.position_size))
+        logger.info("   Entry Price: ${0:,.2f}".format(decision.entry_price))
+        logger.info("   Stop Loss: ${0:,.2f} ({1:.1f}%)".format(decision.stop_loss, decision.strategy_vector.stop_loss_pct))
+        logger.info("   Take Profit: ${0:,.2f} ({1:.1f}%)".format(decision.take_profit, decision.strategy_vector.take_profit_pct))
         logger.info("   Reason: {0}".format(decision.decision_reason))
 
 
 # ---------------------------------------------------------------------------
 # Quick self-test
 # ---------------------------------------------------------------------------
-    if __name__ == "__main__":
+if __name__ == "__main__":
     # Test automated trading pipeline
     pipeline = AutomatedTradingPipeline()
 

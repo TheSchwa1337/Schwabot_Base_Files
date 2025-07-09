@@ -1,19 +1,10 @@
-import json
-import logging
-import time
-from dataclasses import dataclass, field
-from enum import Enum
-from pathlib import Path
-from typing import Any, Dict, List, Optional
-import yaml
-from jsonschema import Draft7Validator
-
-# !/usr/bin/env python3
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Advanced Settings Engine
+⚙️ ADVANCED SETTINGS ENGINE - SCHWABOT CONFIGURATION MANAGEMENT
+==============================================================
 
-A comprehensive settings management system for the Schwabot trading platform.
+Advanced settings management system for the Schwabot trading platform.
 Handles YAML and JSON configuration files with validation, profiles, and
 real-time updates.
 
@@ -26,9 +17,19 @@ Features:
 - CLI integration for settings management
 """
 
+import json
+import logging
+import time
+from dataclasses import dataclass, field
+from enum import Enum
+from pathlib import Path
+from typing import Any, Dict, List, Optional
+import yaml
+from jsonschema import Draft7Validator
+
 logger = logging.getLogger(__name__)
 
-__all__ = []
+__all__ = [
     "SettingsSection",
     "AdvancedSettingsEngine",
     "ConfigFormat",
@@ -55,7 +56,7 @@ class ValidationLevel(Enum):
 
 
 @dataclass
-    class SettingsProfile:
+class SettingsProfile:
     """Configuration profile with metadata."""
 
     name: str
@@ -118,7 +119,7 @@ class SettingsSection:
 
             if errors:
                 for error in errors:
-                    self._validation_errors.append()
+                    self._validation_errors.append(
                         "{0}: {1}".format(error.path, error.message)
                     )
                 return False
@@ -149,13 +150,15 @@ class SettingsSection:
         return key in self._data
 
     def __repr__(self) -> str:
-        return "<SettingsSection '{0}' with {1} settings>".format()
+        return "<SettingsSection '{0}' with {1} settings>".format(
             self.name, len(self._data)
         )
 
 
 class AdvancedSettingsEngine:
     """
+    ⚙️ Advanced Settings Engine
+    
     Advanced settings management engine for Schwabot.
 
     Provides comprehensive configuration management with support for:
@@ -166,7 +169,7 @@ class AdvancedSettingsEngine:
     - Backup and restore
     """
 
-    def __init__()
+    def __init__(
         self,
         config_dir: Optional[str] = None,
         default_format: ConfigFormat = ConfigFormat.AUTO,
@@ -196,34 +199,30 @@ class AdvancedSettingsEngine:
         self.config_dir.mkdir(exist_ok=True)
         self._backup_dir.mkdir(exist_ok=True)
 
-        logger.info()
+        logger.info(
             "AdvancedSettingsEngine initialized with config_dir: %s", self.config_dir
         )
 
     def load(self, file_path: Optional[str] = None) -> None:
         """
-        Load configuration from file or directory.
+        Load configuration files.
 
         Args:
-            file_path: Specific file to load, or None to load all config files
+            file_path: Specific file to load, or None to load all files
         """
         if file_path:
             self._load_single_file(file_path)
         else:
             self._load_all_files()
 
-        logger.info("Loaded {0} configuration sections".format(len(self._sections)))
-
     def _load_single_file(self, file_path: str) -> None:
         """Load a single configuration file."""
-        path = Path(file_path)
-        if not path.is_absolute():
-            path = self.config_dir / path
-
-        if not path.exists():
-            raise FileNotFoundError("Configuration file not found: {0}".format(path))
-
         try:
+            path = Path(file_path)
+            if not path.exists():
+                logger.warning("Configuration file not found: %s", file_path)
+                return
+
             # Determine format
             if path.suffix.lower() in [".yaml", ".yml"]:
                 format_type = ConfigFormat.YAML
@@ -239,129 +238,104 @@ class AdvancedSettingsEngine:
                 else:
                     data = json.load(f)
 
-            # Store loaded data
-            self._loaded_files[str(path)] = data
-
             # Create sections
-            if isinstance(data, dict):
-                for section_name, section_data in data.items():
-                    if isinstance(section_data, dict):
-                        section = SettingsSection(section_name, section_data)
-                        self._sections[section_name] = section
-                        logger.debug()
-                            "Loaded section '{0}' from {1}".format(section_name, path)
-                        )
+            for section_name, section_data in data.items():
+                if isinstance(section_data, dict):
+                    section = SettingsSection(section_name, section_data)
+                    self._sections[section_name] = section
 
-            logger.info("Successfully loaded configuration from {0}".format(path))
+            self._loaded_files[str(path)] = data
+            logger.info("Loaded configuration file: %s", file_path)
 
         except Exception as e:
-            logger.error("Failed to load configuration from {0}: {1}".format(path, e))
-            raise
+            logger.error("Failed to load configuration file %s: %s", file_path, e)
 
     def _load_all_files(self) -> None:
-        """Load all configuration files from the config directory."""
-        config_files = ()
-            list(self.config_dir.glob("*.yaml"))
-            + list(self.config_dir.glob("*.yml"))
-            + list(self.config_dir.glob("*.json"))
-        )
-
-        # Load each file
-        for file_path in config_files:
-            try:
+        """Load all configuration files in the config directory."""
+        for file_path in self.config_dir.glob("*"):
+            if file_path.is_file() and file_path.suffix.lower() in [".yaml", ".yml", ".json"]:
                 self._load_single_file(str(file_path))
-            except Exception as e:
-                logger.warning("Skipping {0}: {1}".format(file_path, e))
 
-    def save()
+    def save(
         self,
-        destination: Optional[str] = None,
+        file_path: Optional[str] = None,
         format_type: Optional[ConfigFormat] = None,
+        include_changes_only: bool = False,
     ) -> None:
         """
-        Save current configuration to file.
+        Save configuration to file.
 
         Args:
-            destination: Path to save file. If None, saves to a default location.
-            format_type: Format to save in (YAML or, JSON).
+            file_path: Output file path
+            format_type: Output format
+            include_changes_only: Only save sections with changes
         """
-        data = {name: section.to_dict() for name, section in self._sections.items()}
-
-        if destination is None:
-            destination = self.config_dir / "current_settings.yaml"
-
-        path = Path(destination)
-        if not path.is_absolute():
-            path = self.config_dir / path
-
-        # Determine format
-        if format_type is None:
-            if path.suffix.lower() in [".yaml", ".yml"]:
-                format_type = ConfigFormat.YAML
-            elif path.suffix.lower() == ".json":
-                format_type = ConfigFormat.JSON
-            else:
-                format_type = self.default_format
-
         try:
-            # Ensure directory exists
-            path.parent.mkdir(parents=True, exist_ok=True)
+            if not file_path:
+                file_path = self.config_dir / f"config.{format_type.value if format_type else 'yaml'}"
+
+            path = Path(file_path)
+            format_type = format_type or self.default_format
+
+            # Prepare data
+            data = {}
+            for section_name, section in self._sections.items():
+                if include_changes_only and not section.has_changes():
+                    continue
+                data[section_name] = section.to_dict()
 
             # Save file
             with open(path, "w", encoding="utf-8") as f:
                 if format_type == ConfigFormat.YAML:
                     yaml.dump(data, f, default_flow_style=False, indent=2)
                 else:
-                    json.dump(data, f, indent=2, ensure_ascii=False)
+                    json.dump(data, f, indent=2)
 
-            logger.info("Configuration saved to {0}".format(path))
+            logger.info("Saved configuration to: %s", file_path)
 
         except Exception as e:
-            logger.error("Failed to save configuration to {0}: {1}".format(path, e))
-            raise
-
-    def get(self, key: str, default: Any = None, section: Optional[str] = None) -> Any:
-        """
-        Get a setting value.
-
-        Args:
-            key: Setting key (can be 'section.key' format)
-            default: Default value if not found
-            section: Section name (if key doesn't include, section)'
-
-        Returns:
-            Setting value or default
-        """
-        if "." in key and not section:
-            section_name, setting_key = key.split(".", 1)
-        else:
-            section_name = section or "default"
-            setting_key = key
-
-        if section_name in self._sections:
-            return self._sections[section_name].get(setting_key, default)
-
-        return default
+            logger.error("Failed to save configuration: %s", e)
 
     def set(self, key: str, value: Any, section: Optional[str] = None) -> None:
         """
-        Set a setting value.
+        Set a configuration value.
 
         Args:
-            key: Setting key (can be 'section.key' format)
-            value: Value to set
-            section: Section name (if key doesn't include, section)'
+            key: Configuration key
+            value: Configuration value
+            section: Section name (optional)
         """
-        if "." in key and not section:
-            section_name, setting_key = key.split(".", 1)
+        if section:
+            if section not in self._sections:
+                self._sections[section] = SettingsSection(section)
+            self._sections[section].set(key, value)
         else:
-            section_name = section or "default"
-            setting_key = key
+            # Set in all sections
+            for section_obj in self._sections.values():
+                section_obj.set(key, value)
 
-        if section_name not in self._sections:
-            self._sections[section_name] = SettingsSection(section_name)
+    def get(self, key: str, default: Any = None, section: Optional[str] = None) -> Any:
+        """
+        Get a configuration value.
 
-        self._sections[section_name].set(setting_key, value)
+        Args:
+            key: Configuration key
+            default: Default value if key not found
+            section: Section name (optional)
+
+        Returns:
+            Configuration value
+        """
+        if section:
+            if section in self._sections:
+                return self._sections[section].get(key, default)
+            return default
+        else:
+            # Get from first section that has the key
+            for section_obj in self._sections.values():
+                if key in section_obj:
+                    return section_obj.get(key, default)
+            return default
 
     def section(self, name: str) -> SettingsSection:
         """
@@ -371,11 +345,10 @@ class AdvancedSettingsEngine:
             name: Section name
 
         Returns:
-            SettingsSection instance
+            Settings section
         """
         if name not in self._sections:
             self._sections[name] = SettingsSection(name)
-
         return self._sections[name]
 
     def apply_profile(self, profile_name: str) -> None:
@@ -385,26 +358,33 @@ class AdvancedSettingsEngine:
         Args:
             profile_name: Name of the profile to apply
         """
-        if profile_name not in self._profiles:
-            raise ValueError("Profile '{0}' not found".format(profile_name))
+        try:
+            if profile_name not in self._profiles:
+                logger.warning("Profile not found: %s", profile_name)
+                return
 
-        profile = self._profiles[profile_name]
+            profile = self._profiles[profile_name]
+            
+            # Apply profile settings
+            for section_name, section_data in profile.settings.items():
+                if section_name not in self._sections:
+                    self._sections[section_name] = SettingsSection(section_name)
+                
+                section = self._sections[section_name]
+                section.update(section_data)
 
-        # Apply profile settings
-        for section_name, section_data in profile.settings.items():
-            if section_name not in self._sections:
-                self._sections[section_name] = SettingsSection(section_name)
+            # Update active profile
+            self._active_profile = profile_name
+            
+            # Deactivate other profiles
+            for other_profile in self._profiles.values():
+                other_profile.is_active = False
+            profile.is_active = True
 
-            self._sections[section_name].update(section_data)
+            logger.info("Applied profile: %s", profile_name)
 
-        # Update active profile
-        self._active_profile = profile_name
-
-        # Validate if needed
-        if profile.validation_level != ValidationLevel.NONE:
-            self._validate_all(profile.validation_level)
-
-        logger.info("Applied profile '{0}'".format(profile_name))
+        except Exception as e:
+            logger.error("Failed to apply profile %s: %s", profile_name, e)
 
     def create_profile(self, name: str, description: str = "") -> SettingsProfile:
         """
@@ -415,112 +395,198 @@ class AdvancedSettingsEngine:
             description: Profile description
 
         Returns:
-            Created SettingsProfile
+            Created profile
         """
-        if name in self._profiles:
-            raise ValueError("Profile '{0}' already exists".format(name))
+        try:
+            # Create profile with current settings
+            profile_data = {}
+            for section_name, section in self._sections.items():
+                profile_data[section_name] = section.to_dict()
 
-        # Create profile with current settings
-        current_settings = {}
-        for section_name, section in self._sections.items():
-            current_settings[section_name] = section.to_dict()
+            profile = SettingsProfile(
+                name=name,
+                description=description,
+                settings=profile_data,
+                validation_level=self.validation_level,
+                is_active=False
+            )
 
-        profile = SettingsProfile()
-            name=name,
-            description=description,
-            settings=current_settings,
-            validation_level=self.validation_level,
-        )
+            self._profiles[name] = profile
+            logger.info("Created profile: %s", name)
+            return profile
 
-        self._profiles[name] = profile
-        logger.info("Created profile '{0}'".format(name))
-
-        return profile
+        except Exception as e:
+            logger.error("Failed to create profile %s: %s", name, e)
+            raise
 
     def save_profile(self, name: str) -> None:
-        """Save current settings as a profile."""
-        if name in self._profiles:
-            # Update existing profile
-            profile = self._profiles[name]
-            profile.settings.clear()
-            for section_name, section in self._sections.items():
-                profile.settings[section_name] = section.to_dict()
-            profile.modified_at = time.time()
-        else:
-            # Create new profile
-            self.create_profile(name)
+        """
+        Save current settings to a profile.
+
+        Args:
+            name: Profile name
+        """
+        try:
+            if name in self._profiles:
+                profile = self._profiles[name]
+                profile.settings = {
+                    section_name: section.to_dict()
+                    for section_name, section in self._sections.items()
+                }
+                profile.modified_at = time.time()
+                logger.info("Updated profile: %s", name)
+            else:
+                self.create_profile(name)
+
+        except Exception as e:
+            logger.error("Failed to save profile %s: %s", name, e)
 
     def list_profiles(self) -> List[str]:
-        """List all available profiles."""
+        """Get list of available profiles."""
         return list(self._profiles.keys())
 
     def get_active_profile(self) -> Optional[str]:
-        """Get the name of the currently active profile."""
+        """Get the currently active profile."""
         return self._active_profile
 
     def diff(self, other: "AdvancedSettingsEngine") -> Dict[str, Any]:
         """
-        Compare this engine's settings with another.'
+        Compare this settings engine with another.
 
         Args:
-            other: Another AdvancedSettingsEngine instance
+            other: Another settings engine to compare with
 
         Returns:
-            Dictionary of differences
+            Dictionary containing differences
         """
-        differences = {}
+        try:
+            diff_result = {
+                "sections": {},
+                "profiles": {},
+                "summary": {}
+            }
 
-        # Compare sections
-        all_sections = set(self._sections.keys()) | set(other._sections.keys())
-
-        for section_name in all_sections:
-            this_section = self._sections.get(section_name)
-            other_section = other._sections.get(section_name)
-
-            if this_section is None:
-                differences[section_name] = {}
-                    "type": "missing_in_this",
-                    "data": other_section.to_dict(),
-                }
-            elif other_section is None:
-                differences[section_name] = {}
-                    "type": "missing_in_other",
-                    "data": this_section.to_dict(),
-                }
-            else:
-                # Compare section contents
-                this_data = this_section.to_dict()
-                other_data = other_section.to_dict()
-
-                if this_data != other_data:
-                    differences[section_name] = {}
-                        "type": "different",
-                        "this": this_data,
-                        "other": other_data,
+            # Compare sections
+            all_sections = set(self._sections.keys()) | set(other._sections.keys())
+            
+            for section_name in all_sections:
+                this_section = self._sections.get(section_name)
+                other_section = other._sections.get(section_name)
+                
+                if this_section and other_section:
+                    # Both exist, compare
+                    this_data = this_section.to_dict()
+                    other_data = other_section.to_dict()
+                    
+                    if this_data != other_data:
+                        diff_result["sections"][section_name] = {
+                            "this": this_data,
+                            "other": other_data,
+                            "changed": True
+                        }
+                elif this_section:
+                    # Only this has the section
+                    diff_result["sections"][section_name] = {
+                        "this": this_section.to_dict(),
+                        "other": None,
+                        "added": True
+                    }
+                else:
+                    # Only other has the section
+                    diff_result["sections"][section_name] = {
+                        "this": None,
+                        "other": other_section.to_dict(),
+                        "removed": True
                     }
 
-        return differences
+            # Compare profiles
+            all_profiles = set(self._profiles.keys()) | set(other._profiles.keys())
+            
+            for profile_name in all_profiles:
+                this_profile = self._profiles.get(profile_name)
+                other_profile = other._profiles.get(profile_name)
+                
+                if this_profile and other_profile:
+                    if this_profile.settings != other_profile.settings:
+                        diff_result["profiles"][profile_name] = {
+                            "this": this_profile.settings,
+                            "other": other_profile.settings,
+                            "changed": True
+                        }
+                elif this_profile:
+                    diff_result["profiles"][profile_name] = {
+                        "this": this_profile.settings,
+                        "other": None,
+                        "added": True
+                    }
+                else:
+                    diff_result["profiles"][profile_name] = {
+                        "this": None,
+                        "other": other_profile.settings,
+                        "removed": True
+                    }
+
+            # Summary
+            diff_result["summary"] = {
+                "sections_changed": len([s for s in diff_result["sections"].values() if s.get("changed")]),
+                "sections_added": len([s for s in diff_result["sections"].values() if s.get("added")]),
+                "sections_removed": len([s for s in diff_result["sections"].values() if s.get("removed")]),
+                "profiles_changed": len([p for p in diff_result["profiles"].values() if p.get("changed")]),
+                "profiles_added": len([p for p in diff_result["profiles"].values() if p.get("added")]),
+                "profiles_removed": len([p for p in diff_result["profiles"].values() if p.get("removed")])
+            }
+
+            return diff_result
+
+        except Exception as e:
+            logger.error("Failed to generate diff: %s", e)
+            return {"error": str(e)}
 
     def backup(self, backup_name: Optional[str] = None) -> str:
         """
         Create a backup of current settings.
 
         Args:
-            backup_name: Optional backup name, defaults to timestamp
+            backup_name: Optional backup name
 
         Returns:
             Path to backup file
         """
-        if not backup_name:
-            backup_name = "backup_{0}".format(int(time.time()))
+        try:
+            if not backup_name:
+                backup_name = f"backup_{int(time.time())}"
 
-        backup_path = self._backup_dir / "{0}.yaml".format(backup_name)
+            backup_path = self._backup_dir / f"{backup_name}.json"
+            
+            # Save current state
+            backup_data = {
+                "sections": {
+                    name: section.to_dict()
+                    for name, section in self._sections.items()
+                },
+                "profiles": {
+                    name: {
+                        "name": profile.name,
+                        "description": profile.description,
+                        "settings": profile.settings,
+                        "validation_level": profile.validation_level.value,
+                        "is_active": profile.is_active
+                    }
+                    for name, profile in self._profiles.items()
+                },
+                "active_profile": self._active_profile,
+                "backup_timestamp": time.time()
+            }
 
-        # Save current settings to backup
-        self.save(str(backup_path), ConfigFormat.YAML)
+            with open(backup_path, "w", encoding="utf-8") as f:
+                json.dump(backup_data, f, indent=2)
 
-        logger.info("Created backup: {0}".format(backup_path))
-        return str(backup_path)
+            logger.info("Created backup: %s", backup_path)
+            return str(backup_path)
+
+        except Exception as e:
+            logger.error("Failed to create backup: %s", e)
+            raise
 
     def restore(self, backup_path: str) -> None:
         """
@@ -529,40 +595,72 @@ class AdvancedSettingsEngine:
         Args:
             backup_path: Path to backup file
         """
-        path = Path(backup_path)
-        if not path.exists():
-            raise FileNotFoundError("Backup file not found: {0}".format(backup_path))
+        try:
+            with open(backup_path, "r", encoding="utf-8") as f:
+                backup_data = json.load(f)
 
-        # Load backup
-        self._load_single_file(str(path))
-        logger.info("Restored settings from backup: {0}".format(backup_path))
+            # Restore sections
+            self._sections.clear()
+            for section_name, section_data in backup_data.get("sections", {}).items():
+                self._sections[section_name] = SettingsSection(section_name, section_data)
+
+            # Restore profiles
+            self._profiles.clear()
+            for profile_name, profile_data in backup_data.get("profiles", {}).items():
+                profile = SettingsProfile(
+                    name=profile_data["name"],
+                    description=profile_data["description"],
+                    settings=profile_data["settings"],
+                    validation_level=ValidationLevel(profile_data["validation_level"]),
+                    is_active=profile_data["is_active"]
+                )
+                self._profiles[profile_name] = profile
+
+            # Restore active profile
+            self._active_profile = backup_data.get("active_profile")
+
+            logger.info("Restored from backup: %s", backup_path)
+
+        except Exception as e:
+            logger.error("Failed to restore from backup %s: %s", backup_path, e)
+            raise
 
     def _validate_all(self, level: ValidationLevel) -> bool:
-        """Validate all sections."""
-        all_valid = True
+        """
+        Validate all sections.
 
-        for section_name, section in self._sections.items():
-            schema = self._schemas.get(section_name)
+        Args:
+            level: Validation level
 
-            if level == ValidationLevel.SCHEMA and schema:
-                if not section.validate(schema):
-                    all_valid = False
-                    logger.error()
-                        "Validation failed for section '{0}'".format(section_name)
-                    )
-                    for error in section.get_validation_errors():
-                        logger.error("  {0}".format(error))
+        Returns:
+            True if all sections are valid
+        """
+        try:
+            all_valid = True
+            
+            for section_name, section in self._sections.items():
+                if level == ValidationLevel.STRICT:
+                    if not self._validate_section_strict(section):
+                        all_valid = False
+                elif level == ValidationLevel.SCHEMA:
+                    schema = self._schemas.get(section_name)
+                    if not section.validate(schema):
+                        all_valid = False
+                        logger.error("Validation failed for section %s", section_name)
 
-            elif level == ValidationLevel.STRICT:
-                # Basic type checking and required fields
-                if not self._validate_section_strict(section):
-                    all_valid = False
+            return all_valid
 
-        return all_valid
+        except Exception as e:
+            logger.error("Validation failed: %s", e)
+            return False
 
     def _validate_section_strict(self, section: SettingsSection) -> bool:
-        """Strict validation of a section."""
-        # This is a basic implementation - can be extended
+        """Validate a section with strict rules."""
+        # Basic validation - ensure all values are not None
+        for key, value in section._data.items():
+            if value is None:
+                logger.error("Invalid value in section %s: %s is None", section.name, key)
+                return False
         return True
 
     def is_loaded(self) -> bool:
@@ -570,21 +668,122 @@ class AdvancedSettingsEngine:
         return bool(self._sections)
 
     def get_sections(self) -> List[str]:
-        """Get list of all section names."""
+        """Get list of section names."""
         return list(self._sections.keys())
 
     def reload(self) -> None:
         """Reload all configuration files."""
         self._sections.clear()
         self._loaded_files.clear()
-        self.load()
+        self._load_all_files()
 
     def __repr__(self) -> str:
-        sections_count = len(self._sections)
-        profiles_count = len(self._profiles)
-        active_profile = self._active_profile or "none"
-
-        return ()
-            f"<AdvancedSettingsEngine sections={sections_count} "
-            f"profiles={profiles_count} active_profile='{active_profile}'>"
+        return "<AdvancedSettingsEngine with {0} sections, {1} profiles>".format(
+            len(self._sections), len(self._profiles)
         )
+
+
+def create_advanced_settings_engine(
+    config_dir: Optional[str] = None,
+    default_format: ConfigFormat = ConfigFormat.AUTO,
+    validation_level: ValidationLevel = ValidationLevel.BASIC,
+) -> AdvancedSettingsEngine:
+    """
+    Factory function to create Advanced Settings Engine.
+    
+    Args:
+        config_dir: Configuration directory
+        default_format: Default file format
+        validation_level: Validation level
+        
+    Returns:
+        Configured settings engine
+    """
+    return AdvancedSettingsEngine(config_dir, default_format, validation_level)
+
+
+def demo_advanced_settings_engine():
+    """Demonstrate the advanced settings engine functionality."""
+    print("\n" + "=" * 60)
+    print("⚙️ Advanced Settings Engine Demo")
+    print("=" * 60)
+    
+    # Initialize settings engine
+    engine = create_advanced_settings_engine()
+    
+    print("✅ Advanced Settings Engine initialized")
+    print(f"📁 Config Directory: {engine.config_dir}")
+    print(f"🎯 Default Format: {engine.default_format.value}")
+    print(f"🔍 Validation Level: {engine.validation_level.value}")
+    print()
+    
+    # Create some test sections
+    print("📝 Creating Test Sections:")
+    
+    # Trading section
+    trading_section = engine.section("trading")
+    trading_section.update({
+        "max_position_size": 1000.0,
+        "risk_tolerance": 0.02,
+        "enable_stop_loss": True,
+        "stop_loss_pct": 0.05
+    })
+    print("  ✅ Trading section created")
+    
+    # API section
+    api_section = engine.section("api")
+    api_section.update({
+        "base_url": "https://api.exchange.com",
+        "timeout": 30,
+        "retry_attempts": 3,
+        "rate_limit": 100
+    })
+    print("  ✅ API section created")
+    
+    # Strategy section
+    strategy_section = engine.section("strategy")
+    strategy_section.update({
+        "default_strategy": "dualistic",
+        "enable_ghost_shell": True,
+        "quantum_coherence": 0.8,
+        "entropy_threshold": 0.15
+    })
+    print("  ✅ Strategy section created")
+    
+    # Create a profile
+    print("\n👤 Creating Profile:")
+    profile = engine.create_profile("demo_profile", "Demo configuration profile")
+    print(f"  ✅ Profile created: {profile.name}")
+    
+    # Save configuration
+    print("\n💾 Saving Configuration:")
+    engine.save("demo_config.yaml", ConfigFormat.YAML)
+    print("  ✅ Configuration saved to demo_config.yaml")
+    
+    # Get settings
+    print("\n🔍 Retrieving Settings:")
+    max_position = engine.get("max_position_size", section="trading")
+    api_timeout = engine.get("timeout", section="api")
+    strategy_name = engine.get("default_strategy", section="strategy")
+    
+    print(f"  📊 Max Position Size: {max_position}")
+    print(f"  ⏱️ API Timeout: {api_timeout}")
+    print(f"  🎯 Default Strategy: {strategy_name}")
+    
+    # Create backup
+    print("\n💿 Creating Backup:")
+    backup_path = engine.backup("demo_backup")
+    print(f"  ✅ Backup created: {backup_path}")
+    
+    # Get statistics
+    print("\n📊 Engine Statistics:")
+    print(f"  📁 Sections: {len(engine.get_sections())}")
+    print(f"  👤 Profiles: {len(engine.list_profiles())}")
+    print(f"  🔄 Active Profile: {engine.get_active_profile()}")
+    print(f"  📝 Loaded: {engine.is_loaded()}")
+    
+    print("\n✅ Advanced Settings Engine demo completed!")
+
+
+if __name__ == "__main__":
+    demo_advanced_settings_engine()

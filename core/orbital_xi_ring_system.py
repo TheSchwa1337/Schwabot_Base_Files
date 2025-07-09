@@ -41,12 +41,12 @@ from typing import Any, Dict, List, Optional, Tuple
 import numpy as np
 
 # Import existing Schwabot components
-    try:
+try:
     from .quantum_mathematical_bridge import QuantumMathematicalBridge, QuantumState
     from .orbital_shell_brain_system import OrbitalBRAINSystem, OrbitalShell
     from .schwabot_rheology_integration import SchwabotRheologyIntegration, RheologicalState
     SCHWABOT_COMPONENTS_AVAILABLE = True
-    except ImportError as e:
+except ImportError as e:
     print("⚠️ Some Schwabot components not available: {0}".format(e))
     SCHWABOT_COMPONENTS_AVAILABLE = False
 
@@ -65,7 +65,7 @@ class XiRingLevel(Enum):
 
 
 @dataclass
-    class XiRingState:
+class XiRingState:
     """State representation for a single Ξ ring"""
 
     ring_level: XiRingLevel
@@ -97,7 +97,7 @@ class XiRingLevel(Enum):
 
 
 @dataclass
-    class StrategyOrbit:
+class StrategyOrbit:
     """Orbital trajectory for a strategy through Ξ rings"""
 
     strategy_id: str
@@ -152,19 +152,26 @@ class OrbitalXiRingSystem:
 
         # Ring transition thresholds
         self.RING_TRANSITION_THRESHOLDS = {}
-            XiRingLevel.XI_0: 0.8,  # High confidence needed
-            XiRingLevel.XI_1: 0.6,  # Moderate confidence
-            XiRingLevel.XI_2: 0.4,  # Low confidence
-            XiRingLevel.XI_3: 0.2,  # Very low confidence
-            XiRingLevel.XI_4: 0.1,  # Minimal confidence
-            XiRingLevel.XI_5: 0.5,  # Ghost activation threshold
-        }
+        for ring_level in XiRingLevel:
+            self.RING_TRANSITION_THRESHOLDS[ring_level] = 0.0
+            if ring_level.value == 0:
+                self.RING_TRANSITION_THRESHOLDS[ring_level] = 0.8
+            elif ring_level.value == 1:
+                self.RING_TRANSITION_THRESHOLDS[ring_level] = 0.6
+            elif ring_level.value == 2:
+                self.RING_TRANSITION_THRESHOLDS[ring_level] = 0.4
+            elif ring_level.value == 3:
+                self.RING_TRANSITION_THRESHOLDS[ring_level] = 0.2
+            elif ring_level.value == 4:
+                self.RING_TRANSITION_THRESHOLDS[ring_level] = 0.1
+            elif ring_level.value == 5:
+                self.RING_TRANSITION_THRESHOLDS[ring_level] = 0.5
 
         logger.info("🪐 Orbital Ξ Ring System initialized")
 
     def _default_config(self) -> Dict[str, Any]:
         """Default configuration for the Ξ ring system"""
-        return {}
+        return {
             'max_rings': 6,
             'entropy_threshold': 2.0,
             'oscillation_frequency_base': 1.0,
@@ -181,64 +188,69 @@ class OrbitalXiRingSystem:
     def _initialize_xi_rings(self):
         """Initialize all Ξ rings with default states"""
         ring_configs = {}
-            XiRingLevel.XI_0: {}
-                'name': 'Core Strategy',
-                'activation_threshold': 0.8,
-                'memory_decay_rate': 0.99,
-                'gravitational_mass': 10.0,
-                'orbital_velocity': 0.0,  # Stationary core
-                'description': 'Active trade logic nucleus',
-            },
-            XiRingLevel.XI_1: {}
-                'name': 'Elastic Band',
-                'activation_threshold': 0.6,
-                'memory_decay_rate': 0.95,
-                'gravitational_mass': 5.0,
-                'orbital_velocity': 0.1,
-                'description': 'Memory persistence, semi-fluid fallback',
-            },
-            XiRingLevel.XI_2: {}
-                'name': 'Plastic Wrap',
-                'activation_threshold': 0.4,
-                'memory_decay_rate': 0.90,
-                'gravitational_mass': 3.0,
-                'orbital_velocity': 0.2,
-                'description': 'Mid-term deformation state',
-            },
-            XiRingLevel.XI_3: {}
-                'name': 'Glass Shell',
-                'activation_threshold': 0.2,
-                'memory_decay_rate': 0.85,
-                'gravitational_mass': 1.5,
-                'orbital_velocity': 0.3,
-                'description': 'Volatility archives, inactive fallback',
-            },
-            XiRingLevel.XI_4: {}
-                'name': 'Event Horizon',
-                'activation_threshold': 0.1,
-                'memory_decay_rate': 0.80,
-                'gravitational_mass': 0.8,
-                'orbital_velocity': 0.4,
-                'description': 'Entropy-locked memory',
-            },
-            XiRingLevel.XI_5: {}
-                'name': 'Deep Space',
-                'activation_threshold': 0.5,
-                'memory_decay_rate': 0.75,
-                'gravitational_mass': 0.3,
-                'orbital_velocity': 0.5,
-                'description': 'Ghost reactivation zone',
-            },
-        }
+        for ring_level in XiRingLevel:
+            ring_configs[ring_level] = {}
+            if ring_level == XiRingLevel.XI_0:
+                ring_configs[ring_level] = {
+                    'name': 'Core Strategy',
+                    'activation_threshold': 0.8,
+                    'memory_decay_rate': 0.99,
+                    'gravitational_mass': 10.0,
+                    'orbital_velocity': 0.0,  # Stationary core
+                    'description': 'Active trade logic nucleus',
+                }
+            elif ring_level == XiRingLevel.XI_1:
+                ring_configs[ring_level] = {
+                    'name': 'Elastic Band',
+                    'activation_threshold': 0.6,
+                    'memory_decay_rate': 0.95,
+                    'gravitational_mass': 5.0,
+                    'orbital_velocity': 0.1,
+                    'description': 'Memory persistence, semi-fluid fallback',
+                }
+            elif ring_level == XiRingLevel.XI_2:
+                ring_configs[ring_level] = {
+                    'name': 'Plastic Wrap',
+                    'activation_threshold': 0.4,
+                    'memory_decay_rate': 0.90,
+                    'gravitational_mass': 3.0,
+                    'orbital_velocity': 0.2,
+                    'description': 'Mid-term deformation state',
+                }
+            elif ring_level == XiRingLevel.XI_3:
+                ring_configs[ring_level] = {
+                    'name': 'Glass Shell',
+                    'activation_threshold': 0.2,
+                    'memory_decay_rate': 0.85,
+                    'gravitational_mass': 1.5,
+                    'orbital_velocity': 0.3,
+                    'description': 'Volatility archives, inactive fallback',
+                }
+            elif ring_level == XiRingLevel.XI_4:
+                ring_configs[ring_level] = {
+                    'name': 'Event Horizon',
+                    'activation_threshold': 0.1,
+                    'memory_decay_rate': 0.80,
+                    'gravitational_mass': 0.8,
+                    'orbital_velocity': 0.4,
+                    'description': 'Entropy-locked memory',
+                }
+            elif ring_level == XiRingLevel.XI_5:
+                ring_configs[ring_level] = {
+                    'name': 'Deep Space',
+                    'activation_threshold': 0.5,
+                    'memory_decay_rate': 0.75,
+                    'gravitational_mass': 0.3,
+                    'orbital_velocity': 0.5,
+                    'description': 'Ghost reactivation zone',
+                }
 
         for ring_level, config in ring_configs.items():
-            self.ring_states[ring_level] = XiRingState()
-                ring_level=ring_level,
-                activation_threshold=config['activation_threshold'],
-                memory_decay_rate=config['memory_decay_rate'],
-                gravitational_mass=config['gravitational_mass'],
-                orbital_velocity=config['orbital_velocity'],
-            )
+            self.ring_states[ring_level] = XiRingState(ring_level=ring_level)
+            self.ring_states[ring_level].activation_threshold = config['activation_threshold']
+            self.ring_states[ring_level].memory_decay_rate = config['memory_decay_rate']
+            self.ring_states[ring_level].gravitational_mass = config['gravitational_mass']
+            self.ring_states[ring_level].orbital_velocity = config['orbital_velocity']
 
     def calculate_entropy_state(self, market_data: Dict[str, Any], strategy_performance: Dict[str, float]) -> float:
         """
@@ -364,9 +376,7 @@ class OrbitalXiRingSystem:
             logger.error("Error generating core hash: {0}".format(e))
             return hashlib.sha256(str(time.time()).encode()).hexdigest()[:16]
 
-    def calculate_strategy_fitness()
-        self, entropy: float, inertial_mass: float, memory_retention: float, oscillation: float
-    ) -> float:
+    def calculate_strategy_fitness(self, entropy: float, inertial_mass: float, memory_retention: float, oscillation: float) -> float:
         """
         Calculate strategy fitness score ζ.
 
@@ -391,9 +401,7 @@ class OrbitalXiRingSystem:
             logger.error("Error calculating strategy fitness: {0}".format(e))
             return 0.0
 
-    def update_ring_state()
-        self, ring_level: XiRingLevel, market_data: Dict[str, Any], strategy_performance: Dict[str, float]
-    ) -> XiRingState:
+    def update_ring_state(self, ring_level: XiRingLevel, market_data: Dict[str, Any], strategy_performance: Dict[str, float]) -> XiRingState:
         """Update the state of a specific Ξ ring"""
         try:
             ring_state = self.ring_states[ring_level]
@@ -446,7 +454,7 @@ class OrbitalXiRingSystem:
 
     def _generate_phase_id(self, entropy: float, inertial_mass: float, oscillation: float) -> str:
         """Generate unique phase identifier"""
-        phase_signature = "{0}_{1}_{2}_{3}".format(entropy)))
+        phase_signature = "{0}_{1}_{2}_{3}".format(entropy, inertial_mass, oscillation, time.time())
         return hashlib.md5(phase_signature.encode()).hexdigest()[:8]
 
     def calculate_orbital_mechanics(self, strategy_id: str, ring_level: XiRingLevel) -> Dict[str, float]:
@@ -477,7 +485,7 @@ class OrbitalXiRingSystem:
             # Calculate escape velocity
             escape_velocity = np.sqrt(2 * self.GRAVITATIONAL_CONSTANT * gravitational_mass / orbital_radius)
 
-            return {}
+            return {
                 'binding_energy': binding_energy,
                 'orbital_velocity': orbital_velocity,
                 'orbital_period': orbital_period,
@@ -489,16 +497,14 @@ class OrbitalXiRingSystem:
             logger.error("Error calculating orbital mechanics: {0}".format(e))
             return {}
 
-    def create_strategy_orbit()
-        self, strategy_id: str, initial_ring: XiRingLevel, performance_data: Dict[str, Any]
-    ) -> StrategyOrbit:
+    def create_strategy_orbit(self, strategy_id: str, initial_ring: XiRingLevel, performance_data: Dict[str, Any]) -> StrategyOrbit:
         """Create a new strategy orbit"""
         try:
             # Calculate orbital mechanics
             mechanics = self.calculate_orbital_mechanics(strategy_id, initial_ring)
 
             # Create orbit
-            orbit = StrategyOrbit()
+            orbit = StrategyOrbit(
                 strategy_id=strategy_id,
                 current_ring=initial_ring,
                 orbital_path=[initial_ring],
@@ -538,18 +544,12 @@ class OrbitalXiRingSystem:
 
             # Check if fitness allows promotion (inward, movement)
             for ring_level in XiRingLevel:
-                if ()
-                    ring_level.value < current_ring.value
-                    and fitness_score >= self.RING_TRANSITION_THRESHOLDS[ring_level]
-                ):
+                if ring_level.value < current_ring.value and fitness_score >= self.RING_TRANSITION_THRESHOLDS[ring_level]:
                     return ring_level
 
             # Check if fitness forces demotion (outward, movement)
             for ring_level in XiRingLevel:
-                if ()
-                    ring_level.value > current_ring.value
-                    and fitness_score < self.RING_TRANSITION_THRESHOLDS[current_ring]
-                ):
+                if ring_level.value > current_ring.value and fitness_score < self.RING_TRANSITION_THRESHOLDS[current_ring]:
                     return ring_level
 
             # Stay in current ring
@@ -559,9 +559,7 @@ class OrbitalXiRingSystem:
             logger.error("Error determining ring transition: {0}".format(e))
             return XiRingLevel.XI_3  # Default to glass shell
 
-    def execute_ring_transition()
-        self, strategy_id: str, target_ring: XiRingLevel, reason: str = "fitness_change"
-    ) -> bool:
+    def execute_ring_transition(self, strategy_id: str, target_ring: XiRingLevel, reason: str = "fitness_change") -> bool:
         """Execute a ring transition for a strategy"""
         try:
             orbit = self.strategy_orbits.get(strategy_id)
@@ -590,11 +588,9 @@ class OrbitalXiRingSystem:
 
             # Calculate eccentricity
             if orbit.last_periapsis > 0:
-                orbit.eccentricity = (orbit.last_apoapsis - orbit.last_periapsis) / ()
-                    orbit.last_apoapsis + orbit.last_periapsis
-                )
+                orbit.eccentricity = (orbit.last_apoapsis - orbit.last_periapsis) / (orbit.last_apoapsis + orbit.last_periapsis)
 
-            logger.info()
+            logger.info(
                 "Strategy {0} transitioned from Ξ{1} to Ξ{2} ({3})".format(strategy_id, old_ring.value, target_ring.value, reason)
             )
             return True
@@ -684,17 +680,16 @@ class OrbitalXiRingSystem:
 
                 # Find strategies in this ring
                 ring_strategies = []
-                    strategy_id
-                    for strategy_id, orbit in self.strategy_orbits.items()
-                    if orbit.current_ring == ring_level and strategy_id != failed_strategy_id
-                ]
+                for strategy_id, orbit in self.strategy_orbits.items():
+                    if orbit.current_ring == ring_level and strategy_id != failed_strategy_id:
+                        ring_strategies.append(strategy_id)
 
                 if not ring_strategies:
                     continue
 
                 # Select best strategy based on fitness
                 best_strategy = None
-                best_fitness = -float('in')
+                best_fitness = -float('inf')
 
                 for strategy_id in ring_strategies:
                     ring_state = self.ring_states[ring_level]
@@ -719,23 +714,23 @@ class OrbitalXiRingSystem:
         try:
             ring_status = {}
             for ring_level, ring_state in self.ring_states.items():
-                ring_status["Xi_{2}".format(ring_level.value)] = {}
+                ring_status["Xi_{0}".format(ring_level.value)] = {
                     'entropy': ring_state.entropy,
                     'oscillation_frequency': ring_state.oscillation_frequency,
                     'inertial_mass': ring_state.inertial_mass,
                     'memory_retention': ring_state.memory_retention,
                     'strategy_fitness': ring_state.strategy_fitness,
                     'phase_locked': ring_state.phase_locked,
-                    'active_strategies': len()
+                    'active_strategies': len(
                         [orbit for orbit in self.strategy_orbits.values() if orbit.current_ring == ring_level]
                     ),
                 }
 
-            return {}
+            return {
                 'system_active': self.system_active,
                 'total_strategies': len(self.strategy_orbits),
                 'ring_status': ring_status,
-                'orbital_mechanics': {}
+                'orbital_mechanics': {
                     'gravitational_constant': self.GRAVITATIONAL_CONSTANT,
                     'entropy_scaling': self.ENTROPY_SCALING_FACTOR,
                     'memory_half_life': self.MEMORY_HALF_LIFE,

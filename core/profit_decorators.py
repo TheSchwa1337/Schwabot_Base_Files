@@ -7,7 +7,7 @@ Decorators to automatically integrate profit-driven backend selection into exist
 
 import functools
 import time
-from typing import Callable, Any, Optional, Dict
+from typing import Callable, Optional
 from profit_backend_dispatcher import dispatch_op, registry
 
 
@@ -28,7 +28,7 @@ def profit_driven_op(operation_name: str, profit_calculator: Optional[Callable] 
             if profit_calculator:
                 try:
                     profit = profit_calculator(*args, **kwargs)
-                except:
+                except Exception:
                     pass
 
             # Estimate data size from first argument
@@ -81,7 +81,6 @@ def profit_tracked(profit_calculator: Optional[Callable] = None):
                     pass
 
             # Estimate data size from first argument
-            data_size = None
             if args:
                 arg = args[0]
                 if hasattr(arg, 'size'):

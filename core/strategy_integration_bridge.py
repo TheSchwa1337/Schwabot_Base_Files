@@ -1,55 +1,41 @@
 import asyncio
 from typing import Any, Dict, List, Optional, Tuple, Union
 
-from core.clean_risk_manager import RiskAssessment, RiskManager
-from core.clean_profit_memory_echo import MemoryProjection, ProfitMemoryEcho
-from core.mathlib_v4 import MathLibV4
-from core.clean_unified_math import UnifiedMathSystem
-from core.clean_trading_pipeline import UnifiedTradingPipeline
-
-# !/usr/bin/env python3
-"""
-Clean Strategy Integration Bridge
-    - Connects Wall Street strategies with Schwabot mathematical pipeline.
-
-This bridge orchestrates the integration between:
-    1. Enhanced Strategy Framework (Wall Street, strategies)
-    2. Schwabot Mathematical Pipeline (MathLibV4, Unified, Math)
-    3. Unified Trading Pipeline
-    4. Risk Management System
-    5. API Layer for visualization
-"""
-
 # Core imports with error handling
-    try:
+try:
+    from core.risk_manager import RiskManager, RiskAssessment
     RISK_MANAGER_AVAILABLE = True
-    except ImportError:
+except ImportError:
     RISK_MANAGER_AVAILABLE = False
     RiskManager = None
     RiskAssessment = None
 
 try:
+    from core.profit_memory_echo import ProfitMemoryEcho, MemoryProjection
     PROFIT_MEMORY_AVAILABLE = True
-    except ImportError:
+except ImportError:
     PROFIT_MEMORY_AVAILABLE = False
     ProfitMemoryEcho = None
     MemoryProjection = None
 
 try:
+    from core.mathlib_v4 import MathLibV4
     MATHLIB_AVAILABLE = True
-    except ImportError:
+except ImportError:
     MATHLIB_AVAILABLE = False
     MathLibV4 = None
 
 try:
+    from core.unified_math_system import UnifiedMathSystem
     UNIFIED_MATH_AVAILABLE = True
-    except ImportError:
+except ImportError:
     UNIFIED_MATH_AVAILABLE = False
     UnifiedMathSystem = None
 
 try:
+    from core.unified_trading_pipeline import UnifiedTradingPipeline
     TRADING_PIPELINE_AVAILABLE = True
-    except ImportError:
+except ImportError:
     TRADING_PIPELINE_AVAILABLE = False
     UnifiedTradingPipeline = None
 
@@ -57,29 +43,27 @@ logger = logging.getLogger(__name__)
 
 
 @dataclass
-    class IntegratedTradingSignal:
+class IntegratedTradingSignal:
     """Integrated trading signal combining Wall Street and Schwabot strategies."""
 
     # Wall Street strategy signal
     wall_street_signal: Dict[str, Any] = field(default_factory=dict)
 
-# Schwabot mathematical analysis
+    # Schwabot mathematical analysis
     mathematical_confidence: float = 0.0
     dlt_metrics: Dict[str, Any] = field(default_factory=dict)
+    unified_math_state: Dict[str, Any] = field(default_factory=dict)
 
+    # Risk analysis
+    risk_score: float = 0.0
+    position_sizing: Dict[str, Any] = field(default_factory=dict)
 
-unified_math_state: Dict[str, Any] = field(default_factory=dict)
-
-# Risk analysis
-risk_score: float = 0.0
-position_sizing: Dict[str, Any] = field(default_factory=dict)
-
-# Execution parameters
-execution_priority: int = 0
-estimated_slippage: float = 0.1
+    # Execution parameters
+    execution_priority: int = 0
+    estimated_slippage: float = 0.1
     execution_window: float = 60.0  # seconds
 
-# Integration metadata
+    # Integration metadata
     correlation_score: float = 0.0
     composite_confidence: float = 0.0
     timestamp: float = field(default_factory=time.time)
@@ -87,15 +71,13 @@ estimated_slippage: float = 0.1
 
 
 @dataclass
-    class StrategyOrchestrationState:
+class StrategyOrchestrationState:
     """State management for strategy orchestration."""
     total_strategies_active: int = 0
-
-
-wall_street_strategies_active: int = 0
-schwabot_strategies_active: int = 0
-signals_generated_today: int = 0
-signals_executed_today: int = 0
+    wall_street_strategies_active: int = 0
+    schwabot_strategies_active: int = 0
+    signals_generated_today: int = 0
+    signals_executed_today: int = 0
     total_signals_generated: int = 0
     average_signal_confidence: float = 0.0
     last_orchestration_update: float = field(default_factory=time.time)

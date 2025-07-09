@@ -3,7 +3,7 @@ import hashlib
 import logging
 import math
 import time
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from enum import Enum
 from typing import List, Dict, Any
 
@@ -175,7 +175,6 @@ class MathLibV4:
         try:
             prices = data.get("prices", [])
             volumes = data.get("volumes", [])
-            timestamps = data.get("timestamps", [])
 
             if len(prices) < 3:
                 raise ValueError("Need at least 3 data points for DLT analysis")

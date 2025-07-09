@@ -2,8 +2,7 @@ import asyncio
 import logging
 import time
 from datetime import datetime
-from typing import Any, Dict, List, Optional, Tuple, Union
-import asyncio
+from typing import Any, Dict
 
 from core.clean_unified_math import CleanUnifiedMathSystem
 from core.trading_engine_integration import TradeSignal
@@ -82,14 +81,17 @@ class ComprehensiveIntegrationSystem:
 
     def get_system_status(self) -> Dict[str, Any]:
         """Get current system status."""
-        operational_components = sum(1 for status in self.component_status.values() if status == "OPERATIONAL")
+        operational_components = sum(
+            1 for status in self.component_status.values() if status == "OPERATIONAL"
+        )
         total_components = len(self.component_status)
-
         return {
             "system_status": "OPERATIONAL" if operational_components > 0 else "DEGRADED",
             "operational_components": operational_components,
             "total_components": total_components,
-            "availability_ratio": (operational_components / total_components if total_components > 0 else 0),
+            "availability_ratio": (
+                operational_components / total_components if total_components > 0 else 0
+            ),
             "component_status": self.component_status.copy(),
             "initialization_time": self.initialization_time,
             "uptime": time.time() - self.initialization_time,
@@ -119,7 +121,9 @@ class ComprehensiveIntegrationSystem:
             risk_assessment = await self._assess_risk(trading_signal, amount)
 
             # Execution decision
-            execution_decision = await self._make_execution_decision(trading_signal, risk_assessment)
+            execution_decision = await self._make_execution_decision(
+                trading_signal, risk_assessment
+            )
 
             cycle_time = time.time() - cycle_start
 
@@ -214,7 +218,9 @@ class ComprehensiveIntegrationSystem:
             self.logger.error("Risk assessment error: {0}".format(e))
             return {"error": str(e)}
 
-    async def _make_execution_decision(self, trading_signal: Dict[str, Any], risk_assessment: Dict[str, Any]) -> Dict[str, Any]:
+    async def _make_execution_decision(
+        self, trading_signal: Dict[str, Any], risk_assessment: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Make final execution decision."""
         try:
             signal_action = trading_signal.get("action", "HOLD")

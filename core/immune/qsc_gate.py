@@ -113,7 +113,8 @@ All core functionality has been reimplemented in clean, production-ready files.
 
 QSC Gate (Quantum Static Core, Gate)
 
-    - Immune System Integration.Advanced gate system that integrates quantum static calculations with immune
+    - Immune System Integration.Advanced gate system that integrates quantum static 
+    # calculations with immune
 
 
 
@@ -1258,10 +1259,11 @@ if __name__ == __main__:
 
     test_signals
 
-    = [create_signal_from_market_data(0.3, 0.7, 0.2, test_1),create_signal_from_market_data(0.8, 0.9, 0.6,test_2),create_signal_from_market_data(-0.2, 0.1, 0.8,test_3),create_signal_from_market_data(0.9, 0.8, 0.9,test_4),]
-
-
-
+    = [
+        create_signal_from_market_data(0.3, 0.7, 0.2, test_1),
+        create_signal_from_market_data(0.8, 0.9, 0.6, test_2),
+        create_signal_from_market_data(-0.2, 0.1, 0.8, test_3),
+        create_signal_from_market_data(0.9, 0.8, 0.9, test_4),
     ]
 
 

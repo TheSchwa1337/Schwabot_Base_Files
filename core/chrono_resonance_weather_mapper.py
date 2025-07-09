@@ -1,13 +1,5 @@
-import asyncio
-import logging
-from dataclasses import dataclass, field
-from datetime import datetime
-from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
-
-import requests
-
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
 Chrono Resonance Weather Mapping (CRWF) - Geo-Located Entropy Trigger System (GETS)
 
@@ -37,22 +29,31 @@ Where:
 - φₙ: Phase offset per harmonic index
 """
 
+import logging
+import time
+from datetime import datetime
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple
+
+import numpy as np
+import requests
+
+logger = logging.getLogger(__name__)
+
 # CUDA Integration with Fallback
 try:
     import cupy as cp
-
     USING_CUDA = True
     _backend = 'cupy (GPU)'
     xp = cp
 except ImportError:
     import numpy as cp  # fallback to numpy
-
     USING_CUDA = False
     _backend = 'numpy (CPU)'
     xp = cp
 
 # Log backend status
-logger = logging.getLogger(__name__)
 if USING_CUDA:
     logger.info("⚡ CRWF using GPU acceleration: {0}".format(_backend))
 else:
@@ -97,7 +98,7 @@ class WeatherDataPoint:
     wind_direction: float  # degrees
 
     # Advanced weather data
-    schumann_frequency: float = 7.83  # Hz (default Schumann, resonance)
+    schumann_frequency: float = 7.83  # Hz (default Schumann resonance)
     geomagnetic_index: float = 0.0  # Kp index
     solar_flux: float = 100.0  # Solar flux units
 
@@ -202,7 +203,6 @@ class WeatherPriceCorrelation:
     confidence_interval: Tuple[float, float]
 
     # CRWF enhanced
-    entropy_weighted_correlation: float
     resonance_adjusted_correlation: float
 
     metadata: Dict[str, Any] = field(default_factory=dict)
@@ -210,62 +210,58 @@ class WeatherPriceCorrelation:
 
 class ChronoResonanceWeatherMapper:
     """
-    ChronoResonance Weather Mapping system with geo-located entropy triggers.
+    Chrono-Resonance Weather Mapper implementation.
 
-    Implements the full CRWF mathematical model:
-    E_CRWF(t,φ,λ,h) = α∇T(t,φ,λ) + β∇P(t,φ,λ) + γ⋅Ω(t,φ,λ,h)
+    Maps atmospheric conditions to market volatility through mathematical resonance analysis.
     """
 
     def __init__(self, api_key: Optional[str] = None):
-        """Initialize the CRWF system."""
+        """Initialize the CRWF mapper."""
         self.api_key = api_key
-        self.weather_history: List[WeatherDataPoint] = []
+        self.weather_cache: Dict[str, WeatherDataPoint] = {}
         self.location_cache: Dict[str, GeoLocation] = {}
-
-        # CRWF parameters
-        self.alpha = 0.4  # Temperature gradient weight
-        self.beta = 0.4  # Pressure gradient weight
-        self.gamma = 0.2  # Schumann/geomagnetic weight
-
-        # Resonance parameters
-        self.schumann_frequencies = [7.83, 14.3, 20.8, 27.3, 33.8]  # Hz
-        self.geomagnetic_threshold = 5.0  # Kp index threshold
 
         # Performance tracking
         self.computation_history: List[CRWFResponse] = []
-        self.correlation_history: List[WeatherPriceCorrelation] = []
+        self.api_calls = 0
+        self.cache_hits = 0
 
-        logger.info("🌤️ ChronoResonance Weather Mapper initialized")
+        # CRWF parameters
+        self.alpha = 0.4  # Temperature gradient weight
+        self.beta = 0.3   # Pressure gradient weight
+        self.gamma = 0.3  # Schumann interference weight
+
+        logger.info("🌤️ Chrono-Resonance Weather Mapper initialized")
 
     def compute_crwf(
         self, weather_data: WeatherDataPoint, location: GeoLocation, market_entropy: float = 0.5
     ) -> CRWFResponse:
         """
-        Compute the ChronoResonance Weather Function.
+        Compute Chrono-Resonance Weather Function.
 
         Args:
-            weather_data: Current weather data point
-            location: Geographic location with resonance properties
+            weather_data: Weather measurement data
+            location: Geographic location data
             market_entropy: Current market entropy level
 
         Returns:
-            CRWFResponse with computed weather-entropy analysis
+            CRWFResponse with computed weather-entropy mapping
         """
         try:
-            # Compute temperature gradient ∇T(t,φ,λ)
+            # Compute temperature gradient
             temp_gradient = self._compute_temperature_gradient(weather_data)
 
-            # Compute pressure gradient ∇P(t,φ,λ)
+            # Compute pressure gradient
             pressure_gradient = self._compute_pressure_gradient(weather_data)
 
-            # Compute Schumann/geomagnetic interference Ω(t,φ,λ,h)
+            # Compute Schumann interference
             schumann_interference = self._compute_schumann_interference(weather_data, location)
 
-            # Compute CRWF output: E_CRWF = α∇T + β∇P + γ⋅Ω
+            # Compute CRWF output: α∇T + β∇P + γ⋅Ω
             crwf_output = (
-                self.alpha * temp_gradient
-                + self.beta * pressure_gradient
-                + self.gamma * schumann_interference
+                self.alpha * temp_gradient +
+                self.beta * pressure_gradient +
+                self.gamma * schumann_interference
             )
 
             # Compute entropy score
@@ -279,21 +275,17 @@ class ChronoResonanceWeatherMapper:
             # Determine weather pattern
             weather_pattern = self._determine_weather_pattern(weather_data, crwf_output)
 
-            # Compute geo-alignment score
+            # Compute geo-alignment
             geo_alignment = self._compute_geo_alignment(location, weather_data)
 
             # Compute temporal resonance
             temporal_resonance = self._compute_temporal_resonance(weather_data, location)
 
-            # Compute CRLF adjustment factor
-            crlf_adjustment = self._compute_crlf_adjustment(
-                crwf_output, market_entropy, entropy_score
-            )
+            # Compute CRLF adjustment
+            crlf_adjustment = self._compute_crlf_adjustment(crwf_output, market_entropy, entropy_score)
 
             # Generate recommendations
-            recommendations = self._generate_recommendations(
-                crwf_output, weather_pattern, entropy_score
-            )
+            recommendations = self._generate_recommendations(crwf_output, weather_pattern, entropy_score)
 
             # Create response
             response = CRWFResponse(
@@ -303,29 +295,22 @@ class ChronoResonanceWeatherMapper:
                 weather_pattern=weather_pattern,
                 temperature_gradient=temp_gradient,
                 pressure_gradient=pressure_gradient,
-                geo_alignment_score=geo_alignment["alignment_score"],
-                ley_line_resonance=geo_alignment["ley_line_resonance"],
-                geomagnetic_factor=geo_alignment["geomagnetic_factor"],
+                geo_alignment_score=geo_alignment.get('alignment_score', 0.0),
+                ley_line_resonance=geo_alignment.get('ley_line_resonance', 0.0),
+                geomagnetic_factor=geo_alignment.get('geomagnetic_factor', 0.0),
                 temporal_resonance=temporal_resonance,
-                phase_alignment=geo_alignment["phase_alignment"],
+                phase_alignment=geo_alignment.get('phase_alignment', 0.0),
                 crlf_adjustment_factor=crlf_adjustment,
-                market_entropy_adjustment=entropy_score - market_entropy,
+                market_entropy_adjustment=entropy_score * 0.1,
                 timestamp=weather_data.timestamp,
                 location=location,
-                recommendations=recommendations,
+                recommendations=recommendations
             )
 
             # Store in history
             self.computation_history.append(response)
-            self.weather_history.append(weather_data)
 
-            # Keep history manageable
-            max_history = 1000
-            if len(self.computation_history) > max_history:
-                self.computation_history = self.computation_history[-max_history:]
-                self.weather_history = self.weather_history[-max_history:]
-
-            logger.debug("CRWF computed: {0}, Entropy: {1}".format(crwf_output, entropy_score))
+            logger.debug("CRWF computed: {0:.4f} -> {1}".format(crwf_output, weather_pattern.value))
 
             return response
 
@@ -334,339 +319,352 @@ class ChronoResonanceWeatherMapper:
             return self._create_fallback_response(weather_data, location)
 
     def _compute_temperature_gradient(self, weather_data: WeatherDataPoint) -> float:
-        """Compute temporal temperature gradient ∇T(t,φ,λ)."""
-        if len(self.weather_history) < 2:
+        """Compute temperature gradient contribution."""
+        try:
+            # Base temperature gradient
+            base_gradient = weather_data.temperature / 30.0  # Normalize to 0-1
+
+            # Apply humidity correction
+            humidity_factor = 1.0 + (weather_data.humidity - 50.0) / 100.0
+
+            # Apply wind correction
+            wind_factor = 1.0 + weather_data.wind_speed / 20.0
+
+            # Final gradient
+            gradient = base_gradient * humidity_factor * wind_factor
+
+            return np.clip(gradient, -1.0, 1.0)
+
+        except Exception as e:
+            logger.error("Error computing temperature gradient: {0}".format(e))
             return 0.0
-
-        # Get recent temperature history for this location
-        recent_temps = [
-            w.temperature
-            for w in self.weather_history[-24:]  # Last 24 hours
-            if (
-                abs(w.latitude - weather_data.latitude) < 0.1
-                and abs(w.longitude - weather_data.longitude) < 0.1
-            )
-        ]
-
-        if len(recent_temps) < 2:
-            return 0.0
-
-        # Compute gradient using finite difference
-        temp_gradient = xp.gradient(recent_temps)
-        return float(xp.mean(temp_gradient))
 
     def _compute_pressure_gradient(self, weather_data: WeatherDataPoint) -> float:
-        """Compute barometric pressure gradient ∇P(t,φ,λ)."""
-        if len(self.weather_history) < 2:
+        """Compute pressure gradient contribution."""
+        try:
+            # Normalize pressure (typical range: 950-1050 hPa)
+            normalized_pressure = (weather_data.pressure - 1000.0) / 50.0
+
+            # Apply altitude correction
+            altitude_factor = 1.0 + weather_data.altitude / 1000.0
+
+            # Final gradient
+            gradient = normalized_pressure * altitude_factor
+
+            return np.clip(gradient, -1.0, 1.0)
+
+        except Exception as e:
+            logger.error("Error computing pressure gradient: {0}".format(e))
             return 0.0
-
-        # Get recent pressure history for this location
-        recent_pressures = [
-            w.pressure
-            for w in self.weather_history[-24:]  # Last 24 hours
-            if (
-                abs(w.latitude - weather_data.latitude) < 0.1
-                and abs(w.longitude - weather_data.longitude) < 0.1
-            )
-        ]
-
-        if len(recent_pressures) < 2:
-            return 0.0
-
-        # Compute gradient using finite difference
-        pressure_gradient = xp.gradient(recent_pressures)
-        return float(xp.mean(pressure_gradient))
 
     def _compute_schumann_interference(
         self, weather_data: WeatherDataPoint, location: GeoLocation
     ) -> float:
-        """
-        Compute Schumann + geomagnetic interference function Ω(t,φ,λ,h).
+        """Compute Schumann resonance interference."""
+        try:
+            # Base Schumann frequency
+            base_frequency = weather_data.schumann_frequency
 
-        This function models the interference between Schumann resonances
-        and geomagnetic activity at the given location.
-        """
-        # Base Schumann resonance
-        schumann_base = weather_data.schumann_frequency
+            # Location-specific resonance
+            location_resonance = location.schumann_resonance
 
-        # Geomagnetic activity factor
-        geomagnetic_factor = weather_data.geomagnetic_index / 9.0  # Normalize Kp index
+            # Frequency difference
+            freq_diff = abs(base_frequency - location_resonance)
 
-        # Altitude factor (higher altitude = stronger, interference)
-        altitude_factor = xp.exp(weather_data.altitude / 10000.0)
+            # Geomagnetic contribution
+            geomagnetic_contribution = weather_data.geomagnetic_index * 0.1
 
-        # Solar flux factor
-        solar_factor = weather_data.solar_flux / 200.0  # Normalize solar flux
+            # Solar flux contribution
+            solar_contribution = (weather_data.solar_flux - 100.0) / 100.0
 
-        # Compute interference pattern
-        interference = 0.0
-        for i, freq in enumerate(self.schumann_frequencies):
-            # Resonance strength decreases with frequency
-            resonance_strength = 1.0 / (i + 1)
+            # Compute interference
+            interference = (1.0 / (1.0 + freq_diff)) + geomagnetic_contribution + solar_contribution
 
-            # Phase difference between current and resonant frequency
-            phase_diff = xp.abs(schumann_base - freq) / freq
+            return np.clip(interference, 0.0, 1.0)
 
-            # Interference contribution
-            interference += (
-                resonance_strength
-                * xp.exp(-phase_diff)
-                * (1.0 + geomagnetic_factor)
-                * altitude_factor
-                * solar_factor
-            )
-
-        return float(interference)
+        except Exception as e:
+            logger.error("Error computing Schumann interference: {0}".format(e))
+            return 0.5
 
     def _compute_entropy_score(
         self, weather_data: WeatherDataPoint, location: GeoLocation
     ) -> float:
-        """
-        Compute entropy trigger score for unbiased entropy state validation.
+        """Compute entropy score from weather conditions."""
+        try:
+            # Temperature variability
+            temp_entropy = abs(weather_data.temperature) / 50.0
 
-        Based on the user's entropy_trigger_score function:
-        entropy_score = 0.25 * temp_var + 0.5 * pressure_drop + 0.25 * schumann_deviation
-        """
-        # Temperature variation
-        temp_var = xp.abs(weather_data.temperature - 15.0)  # Deviation from 15°C baseline
+            # Pressure variability
+            pressure_entropy = abs(weather_data.pressure - 1013.25) / 100.0
 
-        # Pressure drop (normalized)
-        pressure_drop = xp.maximum(0, 1013.25 - weather_data.pressure) / 1013.25
+            # Wind entropy
+            wind_entropy = weather_data.wind_speed / 30.0
 
-        # Schumann frequency deviation
-        schumann_deviation = xp.abs(weather_data.schumann_frequency - 7.83) / 7.83
+            # Location entropy multiplier
+            location_multiplier = location.entropy_zone_multiplier
 
-        # Compute entropy score
-        entropy_score = (
-            0.25 * temp_var / 30.0  # Normalize temperature variation
-            + 0.5 * pressure_drop
-            + 0.25 * schumann_deviation
-        )
+            # Combined entropy
+            total_entropy = (temp_entropy + pressure_entropy + wind_entropy) * location_multiplier
 
-        # Apply location boost
-        location_boost = location.entropy_zone_multiplier
+            return np.clip(total_entropy, 0.0, 1.0)
 
-        return float(entropy_score * location_boost)
+        except Exception as e:
+            logger.error("Error computing entropy score: {0}".format(e))
+            return 0.5
 
     def _compute_resonance_strength(
         self, weather_data: WeatherDataPoint, location: GeoLocation, crwf_output: float
     ) -> float:
-        """Compute resonance strength based on CRWF output and location factors."""
-        # Base resonance from CRWF output
-        base_resonance = xp.abs(crwf_output)
+        """Compute resonance strength."""
+        try:
+            # Base resonance from CRWF output
+            base_resonance = abs(crwf_output)
 
-        # Location resonance factor
-        location_resonance = location.resonance_factor
+            # Location resonance factor
+            location_factor = location.resonance_factor
 
-        # Weather condition resonance
-        weather_resonance = 1.0
-        if weather_data.pressure < 1000:  # Low pressure = higher resonance
-            weather_resonance = 1.5
-        elif weather_data.pressure > 1020:  # High pressure = lower resonance
-            weather_resonance = 0.7
+            # Ley line contribution
+            ley_contribution = location.ley_line_strength * 0.1
 
-        # Geomagnetic resonance
-        geomagnetic_resonance = 1.0 + (weather_data.geomagnetic_index / 9.0)
+            # Geomagnetic contribution
+            geomagnetic_contribution = location.geomagnetic_density * 0.1
 
-        # Combined resonance strength
-        resonance_strength = (
-            base_resonance * location_resonance * weather_resonance * geomagnetic_resonance
-        )
+            # Final resonance strength
+            resonance = (base_resonance + ley_contribution + geomagnetic_contribution) * location_factor
 
-        return float(xp.clip(resonance_strength, 0.0, 10.0))
+            return np.clip(resonance, 0.0, 1.0)
+
+        except Exception as e:
+            logger.error("Error computing resonance strength: {0}".format(e))
+            return 0.5
 
     def _determine_weather_pattern(
         self, weather_data: WeatherDataPoint, crwf_output: float
     ) -> WeatherPattern:
-        """Determine weather pattern based on CRWF analysis."""
-        if weather_data.pressure > 1020:
-            return WeatherPattern.HIGH_PRESSURE
-        elif weather_data.pressure < 1000:
-            return WeatherPattern.LOW_PRESSURE
-        elif weather_data.geomagnetic_index > self.geomagnetic_threshold:
-            return WeatherPattern.GEOMAGNETIC_STORM
-        elif xp.abs(crwf_output) > 2.0:
-            return WeatherPattern.STORM_FRONT
-        elif xp.abs(crwf_output) < 0.5:
+        """Determine weather pattern from CRWF output."""
+        try:
+            if crwf_output > 0.7:
+                return WeatherPattern.HIGH_PRESSURE
+            elif crwf_output < -0.7:
+                return WeatherPattern.LOW_PRESSURE
+            elif abs(crwf_output) < 0.2:
+                return WeatherPattern.ATMOSPHERIC_STABILITY
+            elif weather_data.geomagnetic_index > 5.0:
+                return WeatherPattern.GEOMAGNETIC_STORM
+            else:
+                return WeatherPattern.WEATHER_TRANSITION
+
+        except Exception as e:
+            logger.error("Error determining weather pattern: {0}".format(e))
             return WeatherPattern.ATMOSPHERIC_STABILITY
-        else:
-            return WeatherPattern.WEATHER_TRANSITION
 
     def _compute_geo_alignment(
         self, location: GeoLocation, weather_data: WeatherDataPoint
     ) -> Dict[str, float]:
-        """Compute geo-alignment score using LeyTrace and ColdBase logic."""
-        # Ley line resonance (simplified)
-        ley_line_resonance = location.ley_line_strength
+        """Compute geographic alignment factors."""
+        try:
+            # Base alignment score
+            alignment_score = 0.5
 
-        # Geomagnetic density
-        geomagnetic_factor = location.geomagnetic_density
+            # Ley line resonance
+            ley_line_resonance = location.ley_line_strength
 
-        # Cold base factor (simplified)
-        cold_base_factor = 1.0
-        if weather_data.temperature < 0:
-            cold_base_factor = 1.2
-        elif weather_data.temperature > 30:
-            cold_base_factor = 0.8
+            # Geomagnetic factor
+            geomagnetic_factor = location.geomagnetic_density
 
-        # Phase alignment
-        phase_alignment = ley_line_resonance * geomagnetic_factor * cold_base_factor
+            # Phase alignment (simplified)
+            phase_alignment = 0.5 + 0.5 * np.sin(time.time() / 3600.0)
 
-        # Overall alignment score
-        alignment_score = xp.clip(phase_alignment, 0.0, 1.0)
+            return {
+                'alignment_score': alignment_score,
+                'ley_line_resonance': ley_line_resonance,
+                'geomagnetic_factor': geomagnetic_factor,
+                'phase_alignment': phase_alignment,
+            }
 
-        return {
-            "alignment_score": float(alignment_score),
-            "ley_line_resonance": float(ley_line_resonance),
-            "geomagnetic_factor": float(geomagnetic_factor),
-            "phase_alignment": float(phase_alignment),
-        }
+        except Exception as e:
+            logger.error("Error computing geo alignment: {0}".format(e))
+            return {
+                'alignment_score': 0.5,
+                'ley_line_resonance': 0.0,
+                'geomagnetic_factor': 0.0,
+                'phase_alignment': 0.5,
+            }
 
     def _compute_temporal_resonance(
         self, weather_data: WeatherDataPoint, location: GeoLocation
     ) -> float:
-        """Compute temporal resonance based on time and location."""
-        # Time-based resonance (hour of day)
-        hour = weather_data.timestamp.hour
-        time_resonance = 1.0 + 0.2 * xp.sin(2 * xp.pi * hour / 24.0)
+        """Compute temporal resonance factor."""
+        try:
+            # Time-based resonance
+            time_factor = np.sin(2 * np.pi * time.time() / 86400.0)  # Daily cycle
 
-        # Seasonal resonance
-        day_of_year = weather_data.timestamp.timetuple().tm_yday
-        seasonal_resonance = 1.0 + 0.1 * xp.sin(2 * xp.pi * day_of_year / 365.0)
+            # Location-specific temporal factor
+            location_factor = location.resonance_factor
 
-        # Location temporal factor
-        location_temporal = location.resonance_factor
+            # Weather temporal contribution
+            weather_factor = weather_data.temperature / 30.0
 
-        # Combined temporal resonance
-        temporal_resonance = time_resonance * seasonal_resonance * location_temporal
+            # Combined temporal resonance
+            temporal_resonance = (time_factor + weather_factor) * location_factor
 
-        return float(xp.clip(temporal_resonance, 0.0, 2.0))
+            return np.clip(temporal_resonance, -1.0, 1.0)
+
+        except Exception as e:
+            logger.error("Error computing temporal resonance: {0}".format(e))
+            return 0.0
 
     def _compute_crlf_adjustment(
         self, crwf_output: float, market_entropy: float, entropy_score: float
     ) -> float:
-        """Compute CRLF adjustment factor based on CRWF output."""
-        # Base adjustment from CRWF output
-        base_adjustment = 1.0 + (crwf_output * 0.1)
+        """Compute CRLF adjustment factor."""
+        try:
+            # Base adjustment from CRWF output
+            base_adjustment = crwf_output * 0.1
 
-        # Entropy alignment adjustment
-        entropy_diff = entropy_score - market_entropy
-        entropy_adjustment = 1.0 + (entropy_diff * 0.2)
+            # Market entropy contribution
+            market_contribution = market_entropy * 0.05
 
-        # Combined adjustment
-        adjustment = base_adjustment * entropy_adjustment
+            # Weather entropy contribution
+            weather_contribution = entropy_score * 0.05
 
-        return float(xp.clip(adjustment, 0.5, 2.0))
+            # Final adjustment
+            adjustment = base_adjustment + market_contribution + weather_contribution
+
+            return np.clip(adjustment, -0.2, 0.2)
+
+        except Exception as e:
+            logger.error("Error computing CRLF adjustment: {0}".format(e))
+            return 0.0
 
     def _generate_recommendations(
         self, crwf_output: float, weather_pattern: WeatherPattern, entropy_score: float
     ) -> Dict[str, Any]:
-        """Generate trading recommendations based on CRWF analysis."""
-        recommendations = {
-            "weather_pattern": weather_pattern.value,
-            "entropy_level": (
-                "high" if entropy_score > 0.7 else "medium" if entropy_score > 0.3 else "low"
-            ),
-            "crwf_strength": (
-                "strong"
-                if xp.abs(crwf_output) > 2.0
-                else "moderate" if xp.abs(crwf_output) > 1.0 else "weak"
-            ),
-        }
+        """Generate weather-based trading recommendations."""
+        try:
+            recommendations = {
+                "weather_pattern": weather_pattern.value,
+                "entropy_level": "high" if entropy_score > 0.7 else "medium" if entropy_score > 0.3 else "low",
+                "crwf_strength": "strong" if abs(crwf_output) > 0.7 else "moderate" if abs(crwf_output) > 0.3 else "weak",
+            }
 
-        # Pattern-specific recommendations
-        if weather_pattern == WeatherPattern.GEOMAGNETIC_STORM:
-            recommendations.update(
-                {"action": "reduce_exposure", "risk_multiplier": 1.5, "timeout_hours": 24}
-            )
-        elif weather_pattern == WeatherPattern.STORM_FRONT:
-            recommendations.update(
-                {
-                    "action": "increase_volatility_hedge",
-                    "volatility_multiplier": 1.3,
-                    "timeout_hours": 12,
-                }
-            )
-        elif weather_pattern == WeatherPattern.HIGH_PRESSURE:
-            recommendations.update(
-                {"action": "stable_trading", "risk_multiplier": 0.8, "timeout_hours": 6}
-            )
-        elif weather_pattern == WeatherPattern.LOW_PRESSURE:
-            recommendations.update(
-                {"action": "opportunistic_trading", "risk_multiplier": 1.2, "timeout_hours": 8}
-            )
+            # Pattern-specific recommendations
+            if weather_pattern == WeatherPattern.HIGH_PRESSURE:
+                recommendations["trading_bias"] = "bullish"
+                recommendations["volatility_expectation"] = "low"
+            elif weather_pattern == WeatherPattern.LOW_PRESSURE:
+                recommendations["trading_bias"] = "bearish"
+                recommendations["volatility_expectation"] = "high"
+            elif weather_pattern == WeatherPattern.GEOMAGNETIC_STORM:
+                recommendations["trading_bias"] = "neutral"
+                recommendations["volatility_expectation"] = "very_high"
+            else:
+                recommendations["trading_bias"] = "neutral"
+                recommendations["volatility_expectation"] = "normal"
 
-        return recommendations
+            return recommendations
+
+        except Exception as e:
+            logger.error("Error generating recommendations: {0}".format(e))
+            return {"weather_pattern": "unknown", "trading_bias": "neutral"}
 
     def _create_fallback_response(
         self, weather_data: WeatherDataPoint, location: GeoLocation
     ) -> CRWFResponse:
-        """Create a fallback response when computation fails."""
-        return CRWFResponse(
-            crwf_output=0.0,
-            entropy_score=0.5,
-            resonance_strength=0.0,
-            weather_pattern=WeatherPattern.ATMOSPHERIC_STABILITY,
-            temperature_gradient=0.0,
-            pressure_gradient=0.0,
-            geo_alignment_score=0.5,
-            ley_line_resonance=0.0,
-            geomagnetic_factor=0.0,
-            temporal_resonance=1.0,
-            phase_alignment=0.0,
-            crlf_adjustment_factor=1.0,
-            market_entropy_adjustment=0.0,
-            timestamp=weather_data.timestamp,
-            location=location,
-            recommendations={"action": "fallback", "error": "Computation failed"},
-        )
+        """Create fallback response when computation fails."""
+        try:
+            return CRWFResponse(
+                crwf_output=0.0,
+                entropy_score=0.5,
+                resonance_strength=0.5,
+                weather_pattern=WeatherPattern.ATMOSPHERIC_STABILITY,
+                temperature_gradient=0.0,
+                pressure_gradient=0.0,
+                geo_alignment_score=0.5,
+                ley_line_resonance=0.0,
+                geomagnetic_factor=0.0,
+                temporal_resonance=0.0,
+                phase_alignment=0.5,
+                crlf_adjustment_factor=0.0,
+                market_entropy_adjustment=0.0,
+                timestamp=weather_data.timestamp,
+                location=location,
+                recommendations={"weather_pattern": "unknown", "trading_bias": "neutral"}
+            )
+
+        except Exception as e:
+            logger.error("Error creating fallback response: {0}".format(e))
+            # Return minimal response
+            return CRWFResponse(
+                crwf_output=0.0,
+                entropy_score=0.5,
+                resonance_strength=0.5,
+                weather_pattern=WeatherPattern.ATMOSPHERIC_STABILITY,
+                temperature_gradient=0.0,
+                pressure_gradient=0.0,
+                geo_alignment_score=0.5,
+                ley_line_resonance=0.0,
+                geomagnetic_factor=0.0,
+                temporal_resonance=0.0,
+                phase_alignment=0.5,
+                crlf_adjustment_factor=0.0,
+                market_entropy_adjustment=0.0,
+                timestamp=datetime.now(),
+                location=location,
+                recommendations={}
+            )
 
     async def fetch_weather_data(
         self, latitude: float, longitude: float, api_key: Optional[str] = None
     ) -> Optional[WeatherDataPoint]:
-        """
-        Fetch weather data from OpenWeatherMap API.
-
-        Args:
-            latitude: Location latitude
-            longitude: Location longitude
-            api_key: OpenWeatherMap API key
-
-        Returns:
-            WeatherDataPoint with current weather data
-        """
+        """Fetch weather data from API."""
         try:
-            api_key = api_key or self.api_key
-            if not api_key:
-                logger.warning("No API key provided for weather data fetch")
+            # Check cache first
+            cache_key = f"{latitude:.3f},{longitude:.3f}"
+            if cache_key in self.weather_cache:
+                self.cache_hits += 1
+                return self.weather_cache[cache_key]
+
+            # Use provided API key or instance key
+            key = api_key or self.api_key
+            if not key:
+                logger.warning("No API key provided for weather data")
                 return None
 
-            # OpenWeatherMap API call
-            url = "http://api.openweathermap.org/data/2.5/weather"
-            params = {"lat": latitude, "lon": longitude, "appid": api_key, "units": "metric"}
+            # API endpoint (example using OpenWeatherMap)
+            url = f"http://api.openweathermap.org/data/2.5/weather"
+            params = {
+                "lat": latitude,
+                "lon": longitude,
+                "appid": key,
+                "units": "metric"
+            }
 
-            async with asyncio.timeout(10):
-                response = requests.get(url, params=params)
-                response.raise_for_status()
-                data = response.json()
+            # Make API call
+            response = requests.get(url, params=params, timeout=10)
+            response.raise_for_status()
 
-            # Extract weather data
+            data = response.json()
+
+            # Parse weather data
             weather_data = WeatherDataPoint(
                 timestamp=datetime.now(),
                 latitude=latitude,
                 longitude=longitude,
-                altitude=data.get("main", {}).get("pressure", 1013.25)
-                / 10.0,  # Rough altitude estimate
-                temperature=data["main"]["temp"],
-                pressure=data["main"]["pressure"],
-                humidity=data["main"]["humidity"],
-                wind_speed=data["wind"]["speed"],
-                wind_direction=data["wind"].get("deg", 0.0),
-                weather_type=data["weather"][0]["main"],
-                source="openweathermap",
+                altitude=data.get("main", {}).get("pressure", 1013.25),
+                temperature=data.get("main", {}).get("temp", 20.0),
+                pressure=data.get("main", {}).get("pressure", 1013.25),
+                humidity=data.get("main", {}).get("humidity", 50.0),
+                wind_speed=data.get("wind", {}).get("speed", 0.0),
+                wind_direction=data.get("wind", {}).get("deg", 0.0),
+                weather_type=data.get("weather", [{}])[0].get("main", "unknown"),
+                source="openweathermap"
             )
 
-            logger.info("Weather data fetched for {0}, {1}".format(latitude, longitude))
+            # Cache the result
+            self.weather_cache[cache_key] = weather_data
+            self.api_calls += 1
+
             return weather_data
 
         except Exception as e:
@@ -674,170 +672,168 @@ class ChronoResonanceWeatherMapper:
             return None
 
     def get_location(self, latitude: float, longitude: float, name: str = "") -> GeoLocation:
-        """Get or create a GeoLocation with computed resonance properties."""
-        location_key = "{0},{1}".format(latitude, longitude)
+        """Get or create a geographic location."""
+        try:
+            # Check cache first
+            cache_key = f"{latitude:.3f},{longitude:.3f}"
+            if cache_key in self.location_cache:
+                return self.location_cache[cache_key]
 
-        if location_key in self.location_cache:
-            return self.location_cache[location_key]
+            # Create new location
+            location = GeoLocation(
+                latitude=latitude,
+                longitude=longitude,
+                name=name,
+                ley_line_strength=self._compute_ley_line_strength(latitude, longitude),
+                geomagnetic_density=self._compute_geomagnetic_density(latitude, longitude),
+                entropy_zone_multiplier=self._compute_entropy_zone_multiplier(latitude, longitude),
+                resonance_factor=self._compute_resonance_factor(latitude, longitude)
+            )
 
-        # Create new location with computed properties
-        location = GeoLocation(
-            latitude=latitude,
-            longitude=longitude,
-            name=name,
-            ley_line_strength=self._compute_ley_line_strength(latitude, longitude),
-            geomagnetic_density=self._compute_geomagnetic_density(latitude, longitude),
-            entropy_zone_multiplier=self._compute_entropy_zone_multiplier(latitude, longitude),
-            resonance_factor=self._compute_resonance_factor(latitude, longitude),
-        )
+            # Cache the location
+            self.location_cache[cache_key] = location
 
-        self.location_cache[location_key] = location
-        return location
+            return location
+
+        except Exception as e:
+            logger.error("Error getting location: {0}".format(e))
+            return GeoLocation(latitude=latitude, longitude=longitude, name=name)
 
     def _compute_ley_line_strength(self, latitude: float, longitude: float) -> float:
-        """Compute ley line strength at given coordinates (simplified)."""
-        # Simplified ley line computation based on known ley line intersections
-        # In a real implementation, this would use actual ley line data
+        """Compute ley line strength at location."""
+        try:
+            # Simplified ley line computation
+            # In reality, this would use actual ley line databases
+            base_strength = 0.5
+            
+            # Add some geographic variation
+            lat_factor = np.sin(latitude * np.pi / 180.0)
+            lon_factor = np.cos(longitude * np.pi / 180.0)
+            
+            strength = base_strength + 0.3 * lat_factor + 0.2 * lon_factor
+            
+            return np.clip(strength, 0.0, 1.0)
 
-        # Tiger, GA coordinates (34.8°N, 83.4°W) - user's root node
-        tiger_lat, tiger_lon = 34.8, -83.4
-
-        # Distance from Tiger, GA
-        distance = xp.sqrt((latitude - tiger_lat) ** 2 + (longitude - tiger_lon) ** 2)
-
-        # Ley line strength decreases with distance from known intersections
-        ley_strength = xp.exp(-distance / 10.0)  # 10 degree decay
-
-        return float(xp.clip(ley_strength, 0.0, 1.0))
+        except Exception as e:
+            logger.error("Error computing ley line strength: {0}".format(e))
+            return 0.5
 
     def _compute_geomagnetic_density(self, latitude: float, longitude: float) -> float:
-        """Compute geomagnetic density at given coordinates."""
-        # Simplified geomagnetic density computation
-        # Higher density near poles, lower near equator
+        """Compute geomagnetic density at location."""
+        try:
+            # Simplified geomagnetic computation
+            # Higher at poles, lower at equator
+            lat_abs = abs(latitude)
+            
+            # Geomagnetic density increases with latitude
+            density = lat_abs / 90.0
+            
+            return np.clip(density, 0.0, 1.0)
 
-        # Distance from magnetic equator (simplified)
-        magnetic_latitude = xp.abs(latitude)
-
-        # Geomagnetic density increases with magnetic latitude
-        geomagnetic_density = 0.3 + 0.7 * (magnetic_latitude / 90.0)
-
-        return float(xp.clip(geomagnetic_density, 0.0, 1.0))
+        except Exception as e:
+            logger.error("Error computing geomagnetic density: {0}".format(e))
+            return 0.5
 
     def _compute_entropy_zone_multiplier(self, latitude: float, longitude: float) -> float:
-        """Compute entropy zone multiplier for location."""
-        # Simplified entropy zone computation
-        # Higher entropy in equatorial regions, lower in polar regions
+        """Compute entropy zone multiplier."""
+        try:
+            # Simplified entropy zone computation
+            # Higher entropy near equator and specific longitudes
+            lat_factor = 1.0 - abs(latitude) / 90.0  # Higher at equator
+            lon_factor = 0.5 + 0.5 * np.sin(longitude * np.pi / 180.0)
+            
+            multiplier = 0.5 + 0.5 * (lat_factor + lon_factor) / 2.0
+            
+            return np.clip(multiplier, 0.5, 1.5)
 
-        # Distance from equator
-        equator_distance = xp.abs(latitude)
-
-        # Entropy multiplier decreases with distance from equator
-        entropy_multiplier = 1.5 - 0.5 * (equator_distance / 90.0)
-
-        return float(xp.clip(entropy_multiplier, 0.5, 1.5))
+        except Exception as e:
+            logger.error("Error computing entropy zone multiplier: {0}".format(e))
+            return 1.0
 
     def _compute_resonance_factor(self, latitude: float, longitude: float) -> float:
         """Compute resonance factor for location."""
-        # Simplified resonance factor computation
-        # Combines ley line strength and geomagnetic density
+        try:
+            # Simplified resonance computation
+            # Combine multiple geographic factors
+            lat_factor = np.cos(latitude * np.pi / 180.0)
+            lon_factor = np.sin(longitude * np.pi / 180.0)
+            
+            resonance = 0.5 + 0.3 * lat_factor + 0.2 * lon_factor
+            
+            return np.clip(resonance, 0.0, 1.0)
 
-        ley_strength = self._compute_ley_line_strength(latitude, longitude)
-        geomagnetic_density = self._compute_geomagnetic_density(latitude, longitude)
-
-        # Resonance factor is geometric mean of ley strength and geomagnetic density
-        resonance_factor = xp.sqrt(ley_strength * geomagnetic_density)
-
-        return float(xp.clip(resonance_factor, 0.0, 1.0))
+        except Exception as e:
+            logger.error("Error computing resonance factor: {0}".format(e))
+            return 0.5
 
     def get_performance_summary(self) -> Dict[str, Any]:
-        """Get comprehensive CRWF performance summary."""
-        if not self.computation_history:
-            return {"error": "No computation history available"}
+        """Get comprehensive performance summary."""
+        try:
+            return {
+                "total_computations": len(self.computation_history),
+                "api_calls": self.api_calls,
+                "cache_hits": self.cache_hits,
+                "cache_hit_rate": self.cache_hits / max(self.api_calls + self.cache_hits, 1),
+                "weather_pattern_distribution": self._get_weather_pattern_distribution(),
+                "geo_alignment_trend": self._get_geo_alignment_trend(),
+                "crwf_statistics": self._get_crwf_statistics(),
+                "parameters": {
+                    "alpha": self.alpha,
+                    "beta": self.beta,
+                    "gamma": self.gamma,
+                }
+            }
 
-        # Last 100 computations
-        recent_responses = self.computation_history[-100:]
-
-        return {
-            "total_computations": len(self.computation_history),
-            "average_crwf_output": xp.mean([r.crwf_output for r in recent_responses]),
-            "average_entropy_score": xp.mean([r.entropy_score for r in recent_responses]),
-            "average_resonance_strength": xp.mean([r.resonance_strength for r in recent_responses]),
-            "weather_pattern_distribution": self._get_weather_pattern_distribution(),
-            "geo_alignment_trend": self._get_geo_alignment_trend(),
-            "crwf_output_statistics": self._get_crwf_statistics(),
-            "location_cache_size": len(self.location_cache),
-            "weather_history_size": len(self.weather_history),
-        }
+        except Exception as e:
+            logger.error("Error getting performance summary: {0}".format(e))
+            return {}
 
     def _get_weather_pattern_distribution(self) -> Dict[str, int]:
         """Get distribution of weather patterns."""
-        distribution = {}
-        for response in self.computation_history:
-            pattern = response.weather_pattern.value
-            distribution[pattern] = distribution.get(pattern, 0) + 1
-        return distribution
+        try:
+            distribution = {}
+            for response in self.computation_history:
+                pattern = response.weather_pattern.value
+                distribution[pattern] = distribution.get(pattern, 0) + 1
+
+            return distribution
+
+        except Exception as e:
+            logger.error("Error getting weather pattern distribution: {0}".format(e))
+            return {}
 
     def _get_geo_alignment_trend(self) -> List[float]:
         """Get recent geo-alignment trend."""
-        recent = self.computation_history[-20:]
-        return [r.geo_alignment_score for r in recent] if recent else []
+        try:
+            recent_responses = self.computation_history[-20:] if self.computation_history else []
+            return [r.geo_alignment_score for r in recent_responses]
+
+        except Exception as e:
+            logger.error("Error getting geo alignment trend: {0}".format(e))
+            return []
 
     def _get_crwf_statistics(self) -> Dict[str, float]:
         """Get CRWF output statistics."""
-        outputs = [r.crwf_output for r in self.computation_history]
-        if not outputs:
+        try:
+            outputs = [r.crwf_output for r in self.computation_history]
+
+            if not outputs:
+                return {}
+
+            return {
+                "mean": float(np.mean(outputs)),
+                "std": float(np.std(outputs)),
+                "min": float(np.min(outputs)),
+                "max": float(np.max(outputs)),
+                "median": float(np.median(outputs)),
+            }
+
+        except Exception as e:
+            logger.error("Error getting CRWF statistics: {0}".format(e))
             return {}
 
-        return {
-            "mean": xp.mean(outputs),
-            "std": xp.std(outputs),
-            "min": xp.min(outputs),
-            "max": xp.max(outputs),
-            "median": xp.median(outputs),
-        }
 
-
+# Factory function
 def create_crwf_mapper(api_key: Optional[str] = None) -> ChronoResonanceWeatherMapper:
-    """Factory function to create a CRWF mapper instance."""
+    """Create a ChronoResonanceWeatherMapper instance."""
     return ChronoResonanceWeatherMapper(api_key)
-
-
-# Example usage and testing
-if __name__ == "__main__":
-    # Configure logging
-    logging.basicConfig(level=logging.INFO)
-
-    # Create CRWF mapper
-    crwf = create_crwf_mapper()
-
-    # Test location (Tiger, GA - user's root node)
-    test_location = crwf.get_location(34.8, -83.4, "Tiger, GA")
-
-    # Create test weather data
-    test_weather = WeatherDataPoint(
-        timestamp=datetime.now(),
-        latitude=34.8,
-        longitude=-83.4,
-        altitude=300.0,
-        temperature=20.0,
-        pressure=1013.25,
-        humidity=60.0,
-        wind_speed=5.0,
-        wind_direction=180.0,
-        schumann_frequency=7.83,
-        geomagnetic_index=2.0,
-        solar_flux=100.0,
-    )
-
-    # Compute CRWF
-    response = crwf.compute_crwf(test_weather, test_location)
-
-    print("CRWF Output: {0}".format(response.crwf_output))
-    print("Entropy Score: {0}".format(response.entropy_score))
-    print("Weather Pattern: {0}".format(response.weather_pattern.value))
-    print("Geo Alignment: {0}".format(response.geo_alignment_score))
-    print("CRLF Adjustment: {0}".format(response.crlf_adjustment_factor))
-
-    # Get performance summary
-    summary = crwf.get_performance_summary()
-    print("\nPerformance Summary: {0}".format(summary))

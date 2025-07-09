@@ -285,31 +285,27 @@ class TwoGramDetector:
             for pattern, frequency in current_freq.items():
                 # Calculate burst score (Z-score of frequency deviation)
                 burst_score: float = self._calculate_burst_score(pattern, frequency)
-                
                 # Generate similarity vector for cosine matching
                 similarity_vector: List[float] = self._generate_similarity_vector(
                     pattern, frequency, entropy
                 )
-                
                 # Get symbolic representation
                 emoji_symbol: str = self.symbol_map.get(pattern, "❓")
                 asic_hash: str = self._generate_asic_hash(pattern, frequency)
-                
                 # Check fractal resonance with historical patterns
                 fractal_resonance, fractal_confidence = await self._check_fractal_resonance(
                     pattern, similarity_vector, context
                 )
-                
                 # Assess T-cell immune response
                 t_cell_activation, health_score = self._assess_t_cell_response(
                     pattern, frequency, entropy, burst_score
                 )
-                
                 # Determine strategy trigger and risk level
                 strategy_trigger: Optional[str] = self._determine_strategy_trigger(pattern, burst_score)
                 risk_level: str = self._assess_risk_level(pattern, entropy, burst_score)
-                execution_priority: int = self._calculate_execution_priority(burst_score, fractal_confidence)
-                
+                execution_priority: int = self._calculate_execution_priority(
+                    burst_score, fractal_confidence
+                )
                 # Create signal packet
                 signal = TwoGramSignal(
                     pattern=pattern,
@@ -327,17 +323,12 @@ class TwoGramDetector:
                     risk_level=risk_level,
                     execution_priority=execution_priority,
                 )
-                
                 signals.append(signal)
-                
                 # Update active patterns
                 self.active_patterns[pattern] = signal
-
             # Update pattern memory and history
             await self._update_pattern_memory(signals, context)
-            
             return signals
-
         except Exception as e:
             logger.error(f"Error analyzing sequence: {e}")
             raise RuntimeError(f"Pattern analysis failed: {e}")
@@ -1451,23 +1442,35 @@ async def test_two_gram_integration():
 
     # Simulate market direction sequence
     market_sequence = "UUDDUDUDBEEBBEAAAZZXREEUUDDBEUUDE"
-    context = {"market_data": {"btc_price": 50000, "eth_price": 3000, "volume": 1000000}, "timestamp": time.time()}
+    context = {
+        "market_data": {"btc_price": 50000, "eth_price": 3000, "volume": 1000000},
+        "timestamp": time.time(),
+    }
 
     # Analyze sequence
     signals = await detector.analyze_sequence(market_sequence, context)
 
     print("Detected {0} 2-gram signals:".format(len(signals)))
     for signal in signals:
-        print("  Pattern: {0}, freq={1}, entropy={2}".format(signal.pattern, signal.frequency, signal.entropy))
+        print(
+            "  Pattern: {0}, freq={1}, entropy={2}".format(
+                signal.pattern, signal.frequency, signal.entropy
+            )
+        )
         if signal.strategy_trigger:
-            print("    → Strategy: {0} (priority: {1})".format(signal.strategy_trigger, signal.execution_priority))
+            print(
+                "    → Strategy: {0} (priority: {1})".format(
+                    signal.strategy_trigger, signal.execution_priority
+                )
+            )
 
     # Get statistics
     stats = await detector.get_pattern_statistics()
-    print(f"\nDetector Statistics:")
+    print("\nDetector Statistics:")
     print("  Active patterns: {0}".format(stats['active_patterns']))
-    print("  System health: {0}".format(stats['system_health']))
-    print("  T-cell active: {0}".format(stats['t_cell_active']))
+    health_key = stats.get('system_health', stats.get('system_health_score', 'N/A'))
+    print("  System health: {0}".format(health_key))
+    print("  T-cell active: {0}".format(stats['t_cell_status']))
 
     # Health check
     health = await detector.health_check()
@@ -1476,5 +1479,4 @@ async def test_two_gram_integration():
     print("✅ Two-gram detector test completed")
 
 if __name__ == "__main__":
-    import asyncio
     asyncio.run(test_two_gram_integration())

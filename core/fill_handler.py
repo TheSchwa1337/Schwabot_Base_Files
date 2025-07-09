@@ -50,7 +50,7 @@ class RetryReason(Enum):
 
 
 @dataclass
-    class FillEvent:
+class FillEvent:
     """Represents a single fill event."""
 
     order_id: str
@@ -67,7 +67,7 @@ class RetryReason(Enum):
 
 
 @dataclass
-    class OrderState:
+class OrderState:
     """Represents the current state of an order."""
 
     order_id: str
@@ -112,7 +112,7 @@ class RetryReason(Enum):
 
 
 @dataclass
-    class RetryConfig:
+class RetryConfig:
     """Configuration for retry logic."""
 
     max_retries: int = 3
@@ -120,7 +120,7 @@ class RetryReason(Enum):
     max_delay: float = 30.0
     exponential_base: float = 2.0
     jitter_factor: float = 0.1
-    retryable_errors: List[str] = field()
+    retryable_errors: List[str] = field(
         default_factory=lambda: ['network_error', 'rate_limit', 'timeout', 'exchange_error']
     )
 

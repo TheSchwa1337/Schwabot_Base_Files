@@ -38,7 +38,7 @@ class ExecutionMode(Enum):
 
 
 @dataclass
-    class TimingBucket:
+class TimingBucket:
     """Represents a timing bucket for trade execution."""
 
     tier: StrategyTier
@@ -50,7 +50,7 @@ class ExecutionMode(Enum):
 
 
 @dataclass
-    class MarketMomentum:
+class MarketMomentum:
     """Market momentum analysis results."""
 
     momentum_score: float
@@ -64,7 +64,7 @@ class ExecutionMode(Enum):
 
 
 @dataclass
-    class ProfitVector:
+class ProfitVector:
     """Profit vector for asset/strategy matching."""
 
     asset: str
@@ -76,7 +76,7 @@ class ExecutionMode(Enum):
 
 
 @dataclass
-    class ExecutionSignal:
+class ExecutionSignal:
     """Execution signal from strategy to mapper."""
 
     symbol: str
@@ -128,7 +128,7 @@ class LiveExecutionMapper:
 
     def _default_config(self) -> Dict[str, Any]:
         """Default configuration for execution mapper."""
-        return {}
+        return {
             "max_history": 1000,
             "momentum_threshold": 0.2,
             "volatility_threshold": 0.5,
@@ -139,20 +139,20 @@ class LiveExecutionMapper:
 
     def _initialize_timing_buckets(self) -> Dict[StrategyTier, TimingBucket]:
         """Initialize timing buckets with default parameters."""
-        return {}
-            StrategyTier.ULTRA_SHORT: TimingBucket()
+        return {
+            StrategyTier.ULTRA_SHORT: TimingBucket(
                 tier=StrategyTier.ULTRA_SHORT, tau_short=3, tau_long=8, threshold=0.1, baseline_vol=0.2, weight=0.8
             ),
-            StrategyTier.SHORT_TERM: TimingBucket()
+            StrategyTier.SHORT_TERM: TimingBucket(
                 tier=StrategyTier.SHORT_TERM, tau_short=5, tau_long=15, threshold=0.15, baseline_vol=0.3, weight=1.0
             ),
-            StrategyTier.MID_TERM: TimingBucket()
+            StrategyTier.MID_TERM: TimingBucket(
                 tier=StrategyTier.MID_TERM, tau_short=15, tau_long=50, threshold=0.2, baseline_vol=0.4, weight=1.2
             ),
-            StrategyTier.LONG_TERM: TimingBucket()
+            StrategyTier.LONG_TERM: TimingBucket(
                 tier=StrategyTier.LONG_TERM, tau_short=50, tau_long=200, threshold=0.25, baseline_vol=0.5, weight=1.5
             ),
-            StrategyTier.ULTRA_LONG: TimingBucket()
+            StrategyTier.ULTRA_LONG: TimingBucket(
                 tier=StrategyTier.ULTRA_LONG, tau_short=100, tau_long=500, threshold=0.3, baseline_vol=0.6, weight=2.0
             ),
         }
@@ -180,7 +180,7 @@ class LiveExecutionMapper:
         """
         # Ensure price history exists
         if symbol not in self.price_history:
-            self.price_history[symbol] = deque(maxlen=self.config.get("max_history", 1000))
+            self.price_history[symbol] = deque(maxlen=self.config["max_history"])
 
         # Add current price to history
         self.price_history[symbol].append(current_price)
@@ -189,7 +189,7 @@ class LiveExecutionMapper:
         prices = list(self.price_history[symbol])
 
         if len(prices) < 10:  # Need minimum history
-            return MarketMomentum()
+            return MarketMomentum(
                 momentum_score=0.0,
                 ema_short=current_price,
                 ema_long=current_price,
@@ -212,10 +212,10 @@ class LiveExecutionMapper:
         volatility = np.std(returns[-20:]) if len(returns) >= 20 else np.std(returns)
 
         # Determine trend confirmation
-        trend_confirmed = abs(momentum_score) > self.config.get("momentum_threshold", 0.2)
+        trend_confirmed = abs(momentum_score) > self.config["momentum_threshold"]
 
         # Volume adjustment (simplified)
-        volume_adjusted = volatility > self.config.get("volatility_threshold", 0.5)
+        volume_adjusted = volatility > self.config["volatility_threshold"]
 
         # Determine recommended tier
         recommended_tier = self._determine_strategy_tier(momentum_score, volatility, trend_confirmed)
@@ -223,7 +223,7 @@ class LiveExecutionMapper:
         # Calculate confidence
         confidence = min(1.0, abs(momentum_score) / (volatility + 1e-6))
 
-        momentum = MarketMomentum()
+        momentum = MarketMomentum(
             momentum_score=momentum_score,
             ema_short=ema_short,
             ema_long=ema_long,
@@ -236,7 +236,7 @@ class LiveExecutionMapper:
 
         # Store in history
         if symbol not in self.momentum_history:
-            self.momentum_history[symbol] = deque(maxlen=self.config.get("max_history", 1000))
+            self.momentum_history[symbol] = deque(maxlen=self.config["max_history"])
         self.momentum_history[symbol].append(momentum)
 
         return momentum
@@ -250,7 +250,7 @@ class LiveExecutionMapper:
         elif trend_confirmed() and Vol_adj > baseline: Strategy_tier = "Mid-term"
         else: Strategy_tier = "Long-term"
         """
-        theta = self.config.get("momentum_threshold", 0.2)
+        theta = self.config["momentum_threshold"]
 
         if abs(momentum) > theta:
             if volatility > 0.1:  # High volatility
@@ -279,14 +279,14 @@ class LiveExecutionMapper:
         asset = symbol.split('/')[0] if '/' in symbol else symbol
 
         # Calculate strategy deltas
-        strategy_deltas = {}
+        strategy_deltas = {
             "short_term": momentum.momentum_score * 2.0,
             "mid_term": momentum.momentum_score * 1.5,
             "long_term": momentum.momentum_score * 1.0,
         }
 
         # Calculate volume weights
-        volume_weights = {}
+        volume_weights = {
             "BTC": self.asset_weights.get("BTC", 0.4),
             "ETH": self.asset_weights.get("ETH", 0.3),
             "XRP": self.asset_weights.get("XRP", 0.2),
@@ -300,7 +300,7 @@ class LiveExecutionMapper:
             expected_returns[strategy] = delta * weight * momentum.confidence
 
         # Calculate risk metrics
-        risk_metrics = {}
+        risk_metrics = {
             "volatility": momentum.volatility,
             "drawdown_risk": momentum.volatility * 2.0,
             "liquidity_risk": 1.0 - momentum.confidence,
@@ -310,7 +310,7 @@ class LiveExecutionMapper:
         max_return = max(expected_returns.values()) if expected_returns else 0.0
         optimal_allocation = min(1.0, max_return / (momentum.volatility + 1e-6))
 
-        return ProfitVector()
+        return ProfitVector(
             asset=asset,
             strategy_deltas=strategy_deltas,
             volume_weights=volume_weights,
@@ -319,7 +319,7 @@ class LiveExecutionMapper:
             optimal_allocation=optimal_allocation,
         )
 
-    def create_execution_signal()
+    def create_execution_signal(
         self,
         symbol: str,
         side: str,
@@ -335,7 +335,7 @@ class LiveExecutionMapper:
         profit_vector = self.calculate_profit_vector(symbol, momentum)
 
         # Create execution signal
-        signal = ExecutionSignal()
+        signal = ExecutionSignal(
             symbol=symbol,
             side=side,
             amount=amount,
@@ -350,12 +350,12 @@ class LiveExecutionMapper:
         # Store in history
         with self.lock:
             self.execution_history.append(signal)
-            if len(self.execution_history) > self.config.get("max_history", 1000):
+            if len(self.execution_history) > self.config["max_history"]:
                 self.execution_history.pop(0)
 
-        logger.info()
-            "Execution signal created: {0} {1} {2} ".format(symbol, side, amount)
-            "tier={0} confidence={1}".format(momentum.recommended_tier.value, momentum.confidence)
+        logger.info(
+            f"Execution signal created: {symbol} {side} {amount} "
+            f"tier={momentum.recommended_tier.value} confidence={momentum.confidence}"
         )
 
         return signal
@@ -363,7 +363,7 @@ class LiveExecutionMapper:
     def should_execute_signal(self, signal: ExecutionSignal) -> bool:
         """Determine if execution signal should be executed."""
         # Check confidence threshold
-        if signal.confidence < self.config.get("confidence_threshold", 0.7):
+        if signal.confidence < self.config["confidence_threshold"]:
             return False
 
         # Check momentum requirements
@@ -386,7 +386,7 @@ class LiveExecutionMapper:
 
         # Generate buy signal if momentum is positive
         if momentum.momentum_score > 0:
-            signal = self.create_execution_signal()
+            signal = self.create_execution_signal(
                 symbol=symbol,
                 side="buy",
                 amount=self._calculate_optimal_amount(symbol, momentum),
@@ -398,7 +398,7 @@ class LiveExecutionMapper:
 
         # Generate sell signal if momentum is negative
         elif momentum.momentum_score < 0:
-            signal = self.create_execution_signal()
+            signal = self.create_execution_signal(
                 symbol=symbol,
                 side="sell",
                 amount=self._calculate_optimal_amount(symbol, momentum),
@@ -421,7 +421,7 @@ class LiveExecutionMapper:
         volatility_factor = 1.0 / (1.0 + momentum.volatility)
 
         # Adjust based on tier
-        tier_weights = {}
+        tier_weights = {
             StrategyTier.ULTRA_SHORT: 0.5,
             StrategyTier.SHORT_TERM: 0.8,
             StrategyTier.MID_TERM: 1.0,
@@ -461,12 +461,12 @@ class LiveExecutionMapper:
             # Calculate average metrics
             avg_confidence = np.mean(confidence_scores)
 
-            return {}
+            return {
                 "total_signals": len(self.execution_history),
                 "tier_distribution": tier_counts,
                 "average_confidence": avg_confidence,
-                "timing_buckets": {}
-                    tier.value: {}
+                "timing_buckets": {
+                    tier.value: {
                         "threshold": bucket.threshold,
                         "baseline_vol": bucket.baseline_vol,
                         "weight": bucket.weight,

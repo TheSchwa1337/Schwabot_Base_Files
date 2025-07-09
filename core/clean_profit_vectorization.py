@@ -1,29 +1,4 @@
-import logging
-import time
-from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Any
-from enum import Enum
-import numpy as np
-import cupy as cp
-import hashlib
-
-# CUDA Integration with Fallback
-try:
-    import cupy as cp
-
-    USING_CUDA = True
-    _backend = 'cupy (GPU)'
-    xp = cp
-except ImportError:
-    import numpy as cp  # fallback to numpy
-
-    USING_CUDA = False
-    _backend = 'numpy (CPU)'
-    xp = cp
-
-from core.clean_math_foundation import BitPhase, CleanMathFoundation, ThermalState
-
-# !/usr/bin/env python3
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Clean Profit Vectorization System
@@ -37,20 +12,36 @@ CUDA Integration:
 - Cross-platform compatibility (Windows, macOS, Linux)
 """
 
-# -*- coding: utf-8 -*-
+import hashlib
+import logging
+import time
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, List, Optional
 
-"""
-Clean Profit Vectorization for Schwabot Trading System.
-
-This module provides clean, working implementations of profit vectorization
-operations that power the Schwabot trading system.
-"""
+import numpy as np
 
 logger = logging.getLogger(__name__)
+
+# CUDA Integration with Fallback
+try:
+    import cupy as cp
+    USING_CUDA = True
+    _backend = 'cupy (GPU)'
+    xp = cp
+except ImportError:
+    import numpy as cp  # fallback to numpy
+    USING_CUDA = False
+    _backend = 'numpy (CPU)'
+    xp = cp
+
+# Log backend status
 if USING_CUDA:
-    logger.info(f"⚡ CleanProfitVectorization using GPU acceleration: {_backend}")
+    logger.info("⚡ CleanProfitVectorization using GPU acceleration: {0}".format(_backend))
 else:
-    logger.info(f"🔄 CleanProfitVectorization using CPU fallback: {_backend}")
+    logger.info("🔄 CleanProfitVectorization using CPU fallback: {0}".format(_backend))
+
+from core.clean_math_foundation import BitPhase, CleanMathFoundation, ThermalState
 
 
 class VectorizationMode(Enum):
@@ -203,283 +194,330 @@ class ProfitVectorCache:
 
 
 class CleanProfitVectorization:
-    """
-    Clean implementation of profit vectorization system.
-
-    This system calculates profit vectors using mathematical models that integrate:
-    - Market data analysis
-    - Risk-adjusted returns
-    - Thermal state considerations
-    - Bit phase precision
-    - Multiple vectorization modes
-    """
+    """Clean profit vectorization system."""
 
     def __init__(self, cache_size: int = 1000):
-        """Initialize profit vectorization system."""
-        self.math_foundation = CleanMathFoundation()
+        """Initialize the profit vectorization system."""
         self.cache = ProfitVectorCache(cache_size)
-        self.calculation_count = 0
-        self.total_calculation_time = 0.0
+        self.math_foundation = CleanMathFoundation()
+        self.performance_metrics = {
+            "total_calculations": 0,
+            "cache_hits": 0,
+            "average_calculation_time": 0.0,
+        }
 
-        logger.info("Clean Profit Vectorization system initialized")
+        logger.info("CleanProfitVectorization initialized with cache size: {0}".format(cache_size))
 
     def calculate_profit_vector(
         self, vector_input: Dict[str, Any], mode: VectorizationMode = VectorizationMode.ADAPTIVE
     ) -> ProfitVector:
         """
-        Calculate profit vector using specified mode.
+        Calculate profit vector based on input data and mode.
 
         Args:
-            vector_input: Input data for vectorization
+            vector_input: Input data for profit calculation
             mode: Vectorization mode to use
 
         Returns:
-            Calculated profit vector
+            ProfitVector with calculated profit data
         """
         start_time = time.time()
-        self.calculation_count += 1
+
+        # Check cache first
+        cache_key = self._generate_cache_key(vector_input, mode)
+        cached_result = self.cache.get(cache_key)
+        if cached_result:
+            self.performance_metrics["cache_hits"] += 1
+            return cached_result
 
         try:
-            # Generate cache key
-            cache_key = self._generate_cache_key(vector_input, mode)
-
-            # Check cache first
-            cached_vector = self.cache.get(cache_key)
-            if cached_vector is not None:
-                logger.debug("Using cached profit vector for key: {0}...".format(cache_key[:16]))
-                return cached_vector
-
-            # Calculate base profit using math foundation
+            # Calculate base profit
             base_profit = self._calculate_base_profit(vector_input)
 
-            # Apply mode-specific calculations
+            # Get mode multiplier
             mode_multiplier = self._get_mode_multiplier(mode, vector_input)
 
-            # Calculate risk adjustment
+            # Calculate risk factor
             risk_factor = self._calculate_risk_factor(vector_input)
 
-            # Calculate thermal adjustment
+            # Calculate thermal factor
             thermal_factor = self._calculate_thermal_factor(vector_input)
 
-            # Calculate bit phase precision
+            # Calculate precision factor
             precision_factor = self._calculate_precision_factor(vector_input)
 
-            # Combine all factors
-            total_profit = (
+            # Calculate final profit score
+            profit_score = (
                 base_profit * mode_multiplier * risk_factor * thermal_factor * precision_factor
             )
 
-            # Ensure bounded result
-            total_profit = max(-1.0, min(1.0, total_profit))
+            # Calculate confidence
+            confidence = self._calculate_confidence(vector_input, profit_score)
 
             # Create profit vector
-            profit_vector = ProfitVector(
-                vector_id=self._generate_vector_id(),
-                btc_price=vector_input.get("price", 0.0),
+            vector = ProfitVector(
+                vector_id=hashlib.md5(str(vector_input).encode()).hexdigest()[:8],
+                btc_price=vector_input.get("btc_price", 0.0),
                 volume=vector_input.get("volume", 0.0),
-                profit_score=total_profit,
-                confidence_score=self._calculate_confidence(vector_input, total_profit),
+                profit_score=profit_score,
+                confidence_score=confidence,
                 mode=mode.value,
-                method=AllocationMethod.EQUAL_WEIGHT.value,
+                method="clean_vectorization",
                 timestamp=time.time(),
                 metadata={
+                    "base_profit": base_profit,
                     "mode_multiplier": mode_multiplier,
                     "risk_factor": risk_factor,
                     "thermal_factor": thermal_factor,
                     "precision_factor": precision_factor,
-                    "calculation_id": self.calculation_count,
-                },
+                }
             )
 
             # Cache the result
-            self.cache.set(cache_key, profit_vector)
+            self.cache.set(cache_key, vector)
 
-            # Update timing
+            # Update performance metrics
             calculation_time = time.time() - start_time
-            self.total_calculation_time += calculation_time
+            self.performance_metrics["total_calculations"] += 1
+            self._update_average_calculation_time(calculation_time)
 
-            logger.debug(
-                "Calculated profit vector: {:.6f} in {:.4f}s".format(total_profit, calculation_time)
-            )
-
-            return profit_vector
+            return vector
 
         except Exception as e:
             logger.error("Error calculating profit vector: {0}".format(e))
-            # Return safe default vector
+            # Return fallback vector
             return ProfitVector(
-                vector_id="error_vector",
-                btc_price=0.0,
-                volume=0.0,
+                vector_id="fallback",
+                btc_price=vector_input.get("btc_price", 0.0),
+                volume=vector_input.get("volume", 0.0),
                 profit_score=0.0,
                 confidence_score=0.0,
-                mode=VectorizationMode.STANDARD.value,
-                method=AllocationMethod.EQUAL_WEIGHT.value,
+                mode=mode.value,
+                method="fallback",
                 timestamp=time.time(),
-                metadata={"error": str(e)},
+                metadata={"error": str(e)}
             )
 
     def _calculate_base_profit(self, vector_input: Dict[str, Any]) -> float:
         """Calculate base profit from input data."""
-        price = vector_input.get("price", 0.0)
-        volume = vector_input.get("volume", 0.0)
-        volatility = vector_input.get("volatility", 0.5)
+        try:
+            btc_price = vector_input.get("btc_price", 0.0)
+            volume = vector_input.get("volume", 0.0)
+            volatility = vector_input.get("volatility", 0.5)
 
-        # Normalize inputs
-        price_factor = min(1.0, price / 100000.0) if price > 0 else 0.0
-        volume_factor = min(1.0, volume / 1000000.0) if volume > 0 else 0.0
-        volatility_factor = 1.0 - min(1.0, volatility)
+            # Simple base profit calculation
+            base_profit = (btc_price * volume * volatility) / 1000000.0
 
-        # Calculate base profit using weighted combination
-        base_profit = price_factor * 0.3 + volume_factor * 0.4 + volatility_factor * 0.3
+            return np.clip(base_profit, 0.0, 1.0)
 
-        return base_profit
+        except Exception as e:
+            logger.error("Error calculating base profit: {0}".format(e))
+            return 0.0
 
     def _get_mode_multiplier(self, mode: VectorizationMode, vector_input: Dict[str, Any]) -> float:
         """Get multiplier based on vectorization mode."""
-        multipliers = {
-            VectorizationMode.CONSERVATIVE: 0.8,
-            VectorizationMode.BALANCED: 1.0,
-            VectorizationMode.AGGRESSIVE: 1.3,
-            VectorizationMode.HIGH_FREQUENCY: 1.1,
-            VectorizationMode.MOMENTUM_BASED: 1.2,
-            VectorizationMode.MEAN_REVERSION: 0.9,
-            VectorizationMode.ADAPTIVE: 1.0,
-        }
-        base_multiplier = multipliers.get(mode, 1.0)
-        # Adaptive mode adjusts based on input
-        if mode == VectorizationMode.ADAPTIVE:
-            signal_strength = vector_input.get("signal_strength", 0.5)
-            base_multiplier = 0.8 + (signal_strength * 0.6)
-        return base_multiplier
+        try:
+            multipliers = {
+                VectorizationMode.CONSERVATIVE: 0.7,
+                VectorizationMode.BALANCED: 1.0,
+                VectorizationMode.AGGRESSIVE: 1.3,
+                VectorizationMode.HIGH_FREQUENCY: 1.2,
+                VectorizationMode.MOMENTUM_BASED: 1.1,
+                VectorizationMode.MEAN_REVERSION: 0.9,
+                VectorizationMode.ADAPTIVE: 1.0,
+            }
+
+            return multipliers.get(mode, 1.0)
+
+        except Exception as e:
+            logger.error("Error getting mode multiplier: {0}".format(e))
+            return 1.0
 
     def _calculate_risk_factor(self, vector_input: Dict[str, Any]) -> float:
-        """Calculate risk adjustment factor."""
-        volatility = vector_input.get("volatility", 0.5)
-        quantity = vector_input.get("quantity", 0.0)
+        """Calculate risk factor from input data."""
+        try:
+            volatility = vector_input.get("volatility", 0.5)
+            market_condition = vector_input.get("market_condition", "normal")
 
-        # Risk increases with volatility and large positions
-        volatility_risk = volatility * 0.5
-        position_risk = min(0.3, quantity * 0.1) if quantity > 0 else 0.0
+            # Risk factor based on volatility and market condition
+            risk_factor = 1.0 - (volatility * 0.3)
 
-        total_risk = volatility_risk + position_risk
-        risk_factor = max(0.1, 1.0 - total_risk)
+            if market_condition == "bearish":
+                risk_factor *= 0.8
+            elif market_condition == "bullish":
+                risk_factor *= 1.2
 
-        return risk_factor
+            return np.clip(risk_factor, 0.5, 1.5)
+
+        except Exception as e:
+            logger.error("Error calculating risk factor: {0}".format(e))
+            return 1.0
 
     def _calculate_thermal_factor(self, vector_input: Dict[str, Any]) -> float:
-        """Calculate thermal state adjustment factor."""
-        thermal_state = vector_input.get("thermal_state", ThermalState.WARM)
-        thermal_multipliers = {
-            ThermalState.COOL: 0.9,
-            ThermalState.WARM: 1.0,
-            ThermalState.HOT: 1.1,
-        }
-        return thermal_multipliers.get(thermal_state, 1.0)
+        """Calculate thermal factor from input data."""
+        try:
+            # Thermal factor based on market temperature
+            market_temperature = vector_input.get("market_temperature", 0.5)
+            thermal_factor = 1.0 + (market_temperature - 0.5) * 0.2
+
+            return np.clip(thermal_factor, 0.8, 1.2)
+
+        except Exception as e:
+            logger.error("Error calculating thermal factor: {0}".format(e))
+            return 1.0
 
     def _calculate_precision_factor(self, vector_input: Dict[str, Any]) -> float:
-        """Calculate bit phase precision factor."""
-        bit_phase = vector_input.get("bit_phase", BitPhase.SIXTEEN_BIT)
-        precision_multipliers = {
-            BitPhase.FOUR_BIT: 0.95,
-            BitPhase.EIGHT_BIT: 0.98,
-            BitPhase.SIXTEEN_BIT: 1.0,
-            BitPhase.THIRTY_TWO_BIT: 1.2,
-            BitPhase.FORTY_TWO_BIT: 1.5,
-        }
-        return precision_multipliers.get(bit_phase, 1.0)
+        """Calculate precision factor from input data."""
+        try:
+            # Precision factor based on data quality
+            data_quality = vector_input.get("data_quality", 0.8)
+            precision_factor = 0.8 + (data_quality * 0.4)
+
+            return np.clip(precision_factor, 0.8, 1.2)
+
+        except Exception as e:
+            logger.error("Error calculating precision factor: {0}".format(e))
+            return 1.0
 
     def _calculate_confidence(self, vector_input: Dict[str, Any], profit_value: float) -> float:
-        """Calculate confidence score for the profit vector."""
-        signal_strength = vector_input.get("signal_strength", 0.5)
-        # Higher confidence for moderate profits
-        data_quality = 1.0 - abs(profit_value)
+        """Calculate confidence score."""
+        try:
+            # Base confidence on profit value and data quality
+            data_quality = vector_input.get("data_quality", 0.8)
+            base_confidence = min(abs(profit_value), 1.0) * data_quality
 
-        confidence = (signal_strength + data_quality) / 2.0
-        return max(0.0, min(1.0, confidence))
+            return np.clip(base_confidence, 0.0, 1.0)
+
+        except Exception as e:
+            logger.error("Error calculating confidence: {0}".format(e))
+            return 0.5
 
     def _generate_cache_key(self, vector_input: Dict[str, Any], mode: VectorizationMode) -> str:
-        """Generate cache key for input and mode."""
-        key_data = {
-            "price": vector_input.get("price", 0.0),
-            "volume": vector_input.get("volume", 0.0),
-            "volatility": vector_input.get("volatility", 0.5),
-            "mode": mode.value,
-            "thermal_state": vector_input.get("thermal_state", ThermalState.WARM).value,
-            "bit_phase": vector_input.get("bit_phase", BitPhase.SIXTEEN_BIT).value,
-        }
-        key_str = str(sorted(key_data.items()))
-        return hashlib.md5(key_str.encode()).hexdigest()
+        """Generate cache key for vector input."""
+        try:
+            # Create a hash of the input data and mode
+            key_data = str(vector_input) + mode.value
+            return hashlib.md5(key_data.encode()).hexdigest()
+
+        except Exception as e:
+            logger.error("Error generating cache key: {0}".format(e))
+            return "default_key"
+
+    def _update_average_calculation_time(self, calculation_time: float) -> None:
+        """Update average calculation time."""
+        try:
+            current_avg = self.performance_metrics["average_calculation_time"]
+            total_calculations = self.performance_metrics["total_calculations"]
+
+            # Exponential moving average
+            alpha = 0.1
+            new_avg = alpha * calculation_time + (1 - alpha) * current_avg
+            self.performance_metrics["average_calculation_time"] = new_avg
+
+        except Exception as e:
+            logger.error("Error updating average calculation time: {0}".format(e))
 
     def get_performance_metrics(self) -> Dict[str, Any]:
-        """Get performance metrics for the vectorization system."""
-        avg_time = self.total_calculation_time / max(1, self.calculation_count)
-        return {
-            "total_calculations": self.calculation_count,
-            "total_calculation_time": self.total_calculation_time,
-            "average_calculation_time": avg_time,
-            "cache_info": self.cache.get_cache_info(),
-            "math_foundation_version": self.math_foundation.get_version_info(),
-        }
+        """Get performance metrics."""
+        try:
+            return {
+                **self.performance_metrics,
+                "cache_info": self.cache.get_cache_info(),
+            }
+
+        except Exception as e:
+            logger.error("Error getting performance metrics: {0}".format(e))
+            return {}
 
     def clear_cache(self) -> None:
-        """Clear the profit vector cache."""
-        self.cache.clear()
-        logger.info("Profit vector cache cleared")
+        """Clear the cache."""
+        try:
+            self.cache.clear()
+            logger.info("Profit vectorization cache cleared")
+
+        except Exception as e:
+            logger.error("Error clearing cache: {0}".format(e))
 
 
-# Factory functions for easy instantiation
+# Factory function
 def create_profit_vectorization(cache_size: int = 1000) -> CleanProfitVectorization:
-    """Create profit vectorization system."""
+    """Create a CleanProfitVectorization instance."""
     return CleanProfitVectorization(cache_size)
 
 
+# Utility function for quick profit vector calculation
 def calculate_quick_profit_vector(
     price: float,
     volume: float,
     volatility: float = 0.5,
     mode: VectorizationMode = VectorizationMode.BALANCED,
 ) -> ProfitVector:
-    """Quick profit vector calculation for simple use cases."""
-    vectorizer = create_profit_vectorization()
-    vector_input = {
-        "price": price,
-        "volume": volume,
-        "volatility": volatility,
-        "signal_strength": 0.7,
-    }
-    return vectorizer.calculate_profit_vector(vector_input, mode)
+    """Quick profit vector calculation for simple inputs."""
+    try:
+        vectorization = create_profit_vectorization()
+        vector_input = {
+            "btc_price": price,
+            "volume": volume,
+            "volatility": volatility,
+            "market_condition": "normal",
+            "market_temperature": 0.5,
+            "data_quality": 0.8,
+        }
+
+        return vectorization.calculate_profit_vector(vector_input, mode)
+
+    except Exception as e:
+        logger.error("Error in quick profit vector calculation: {0}".format(e))
+        return ProfitVector(
+            vector_id="quick_fallback",
+            btc_price=price,
+            volume=volume,
+            profit_score=0.0,
+            confidence_score=0.0,
+            mode=mode.value,
+            method="quick_fallback",
+            timestamp=time.time(),
+            metadata={"error": str(e)}
+        )
 
 
 # Demo function
 def demo_profit_vectorization():
-    """Demonstrate profit vectorization capabilities."""
-    print("=== Clean Profit Vectorization Demo ===")
+    """Demonstrate profit vectorization functionality."""
+    try:
+        print("🧮 Clean Profit Vectorization Demo")
+        print("=" * 40)
 
-    vectorizer = create_profit_vectorization()
+        # Create vectorization instance
+        vectorization = create_profit_vectorization()
 
-    # Test different modes
-    test_input = {
-        "price": 50000.0,
-        "volume": 1000.0,
-        "volatility": 0.3,
-        "signal_strength": 0.8,
-        "thermal_state": ThermalState.WARM,
-        "bit_phase": BitPhase.THIRTY_TWO_BIT,
-    }
+        # Test data
+        test_input = {
+            "btc_price": 50000.0,
+            "volume": 1000000.0,
+            "volatility": 0.3,
+            "market_condition": "bullish",
+            "market_temperature": 0.7,
+            "data_quality": 0.9,
+        }
 
-    for mode in VectorizationMode:
-        vector = vectorizer.calculate_profit_vector(test_input, mode)
-        print(
-            "{0}: {1:.6f} (confidence: {2:.3f})".format(
-                mode.value, vector.profit_score, vector.confidence_score
-            )
-        )
+        # Calculate profit vector
+        result = vectorization.calculate_profit_vector(test_input, VectorizationMode.AGGRESSIVE)
 
-    # Show performance metrics
-    metrics = vectorizer.get_performance_metrics()
-    print("\nCalculations: {0}".format(metrics['total_calculations']))
-    print("Avg time: {0:.6f}s".format(metrics['average_calculation_time']))
+        print(f"Profit Score: {result.profit_score:.4f}")
+        print(f"Confidence: {result.confidence_score:.4f}")
+        print(f"Mode: {result.mode}")
+        print(f"Method: {result.method}")
+
+        # Get performance metrics
+        metrics = vectorization.get_performance_metrics()
+        print(f"\nPerformance Metrics:")
+        print(f"Total Calculations: {metrics['total_calculations']}")
+        print(f"Cache Hits: {metrics['cache_hits']}")
+        print(f"Average Time: {metrics['average_calculation_time']:.4f}s")
+
+    except Exception as e:
+        print(f"Demo error: {e}")
 
 
 if __name__ == "__main__":

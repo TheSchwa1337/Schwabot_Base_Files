@@ -71,7 +71,7 @@ def cmd_stop(args: argparse.Namespace) -> None:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(
         prog="entropy",
         description="Entropy-Driven Risk Management CLI wrapper",
     )
@@ -89,7 +89,7 @@ def main() -> None:
 
     args = parser.parse_args()
 
-    handlers = {}
+    handlers = {
         "init": cmd_init,
         "status": cmd_status,
         "process": cmd_process,

@@ -5,12 +5,11 @@ import logging
 import time
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional
 from core.backend_math import get_backend, is_gpu
+from .clean_math_foundation import CleanMathFoundation
 
 xp = get_backend()
-
-from .clean_math_foundation import CleanMathFoundation
 
 # Log backend status
 logger = logging.getLogger(__name__)

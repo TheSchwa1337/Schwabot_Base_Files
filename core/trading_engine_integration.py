@@ -9,7 +9,6 @@ from typing import Any, Dict, List, Optional, Union
 import hashlib
 
 from core.clean_unified_math import (
-    calculate_position_size,
     optimize_brain_profit,
     CleanUnifiedMathSystem,
 )
@@ -32,10 +31,8 @@ class TradingError(Exception):
     """Base exception for trading-related errors."""
 
 
-
 class ValidationError(TradingError):
     """Raised when input validation fails."""
-
 
 
 class OrderType(Enum):
@@ -322,7 +319,9 @@ def _generate_signal_hash(signal: TradeSignal) -> str:
     return hashlib.sha256(hash_input.encode()).hexdigest()
 
 
-def log_trading_error(error: Exception, severity: ErrorSeverity = ErrorSeverity.MEDIUM) -> Dict[str, Any]:
+def log_trading_error(
+    error: Exception, severity: ErrorSeverity = ErrorSeverity.MEDIUM
+) -> Dict[str, Any]:
     """
     Log and analyze trading-related errors.
 

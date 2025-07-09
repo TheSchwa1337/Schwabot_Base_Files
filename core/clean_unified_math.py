@@ -9,6 +9,7 @@ from core.backend_math import get_backend, backend_info
 xp = get_backend()
 
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
 Clean Unified Math System - Advanced Mathematical Operations
 

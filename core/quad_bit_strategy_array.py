@@ -52,15 +52,11 @@ class DriftSequence(Enum):
     SEQUENCE_0000 = 0  # Conservative entry, small position, low risk, basic profit
     SEQUENCE_0001 = 1  # Conservative entry, small position, low risk, aggressive profit
     SEQUENCE_0010 = 2  # Conservative entry, small position, high risk, basic profit
-    SEQUENCE_0011 = ()
-        3  # Conservative entry, small position, high risk, aggressive profit
-    )
+    SEQUENCE_0011 = 3  # Conservative entry, small position, high risk, aggressive profit
     SEQUENCE_0100 = 4  # Conservative entry, large position, low risk, basic profit
     SEQUENCE_0101 = 5  # Conservative entry, large position, low risk, aggressive profit
     SEQUENCE_0110 = 6  # Conservative entry, large position, high risk, basic profit
-    SEQUENCE_0111 = ()
-        7  # Conservative entry, large position, high risk, aggressive profit
-    )
+    SEQUENCE_0111 = 7  # Conservative entry, large position, high risk, aggressive profit
     SEQUENCE_1000 = 8  # Aggressive entry, small position, low risk, basic profit
     SEQUENCE_1001 = 9  # Aggressive entry, small position, low risk, aggressive profit
     SEQUENCE_1010 = 10  # Aggressive entry, small position, high risk, basic profit
@@ -72,7 +68,7 @@ class DriftSequence(Enum):
 
 
 @dataclass
-    class AssetProfile:
+class AssetProfile:
     """Asset profile for balance and allocation."""
 
     symbol: str
@@ -89,7 +85,7 @@ class DriftSequence(Enum):
 
 
 @dataclass
-    class TensorBasket:
+class TensorBasket:
     """Tensor basket for cross-pair calculations."""
 
     pairs: List[TradingPair]
@@ -113,7 +109,7 @@ class DriftSequence(Enum):
                 basket_value += prices[pair.value] * weight
         return basket_value
 
-    def get_correlation_score()
+    def get_correlation_score(
         self,
         pair1: TradingPair,
         pair2: TradingPair,
@@ -125,7 +121,7 @@ class DriftSequence(Enum):
 
 
 @dataclass
-    class StrategyState:
+class StrategyState:
     """Current state of the 4-bit strategy array."""
 
     active_sequence: DriftSequence
@@ -153,6 +149,7 @@ class QuadBitStrategyArray:
 
         # Initialize asset profiles
         self.asset_profiles = {}
+        self.asset_profiles = {
             TradingPair.BTC_USDC: AssetProfile("BTC", Decimal("0"), 0.0, 0.4),
             TradingPair.ETH_USDC: AssetProfile("ETH", Decimal("0"), 0.0, 0.3),
             TradingPair.SOL_USDC: AssetProfile("SOL", Decimal("0"), 0.0, 0.2),
@@ -164,6 +161,7 @@ class QuadBitStrategyArray:
 
         # Strategy parameters
         self.entry_thresholds = {}
+        self.entry_thresholds = {
             TradingPair.BTC_USDC: 0.2,  # 2% for BTC (more, conservative)
             TradingPair.ETH_USDC: 0.25,  # 2.5% for ETH
             TradingPair.SOL_USDC: 0.3,  # 3% for SOL
@@ -171,6 +169,7 @@ class QuadBitStrategyArray:
         }
 
         self.exit_thresholds = {}
+        self.exit_thresholds = {
             TradingPair.BTC_USDC: 0.15,  # 1.5% for BTC
             TradingPair.ETH_USDC: 0.2,  # 2% for ETH
             TradingPair.SOL_USDC: 0.25,  # 2.5% for SOL
@@ -183,20 +182,16 @@ class QuadBitStrategyArray:
         """Initialize tensor baskets for cross-pair calculations."""
         # Main basket with all pairs
         all_pairs = list(TradingPair)
-        correlation_matrix = np.array()
-            []
-                [1.0, 0.7, 0.6, 0.5],  # BTC correlations
-                [0.7, 1.0, 0.8, 0.6],  # ETH correlations
-                [0.6, 0.8, 1.0, 0.7],  # SOL correlations
-                [0.5, 0.6, 0.7, 1.0],  # XRP correlations
-            ]
-        )
+        correlation_matrix = np.array([
+            [1.0, 0.7, 0.6, 0.5],  # BTC correlations
+            [0.7, 1.0, 0.8, 0.6],  # ETH correlations
+            [0.6, 0.8, 1.0, 0.7],  # SOL correlations
+            [0.5, 0.6, 0.7, 1.0],  # XRP correlations
+        ])
 
-        volatility_vector = np.array()
-            [0.2, 0.25, 0.3, 0.35]
-        )  # Historical volatilities
+        volatility_vector = np.array([0.2, 0.25, 0.3, 0.35])  # Historical volatilities
 
-        self.state.basket_states["main"] = TensorBasket()
+        self.state.basket_states["main"] = TensorBasket(
             pairs=all_pairs,
             weights=[0.4, 0.3, 0.2, 0.1],  # BTC, ETH, SOL, XRP weights
             correlation_matrix=correlation_matrix,
@@ -209,7 +204,7 @@ class QuadBitStrategyArray:
         btc_correlation = np.array([[1.0, 0.7], [0.7, 1.0]])
         btc_volatility = np.array([0.2, 0.25])
 
-        self.state.basket_states["btc_focused"] = TensorBasket()
+        self.state.basket_states["btc_focused"] = TensorBasket(
             pairs=btc_pairs,
             weights=[0.7, 0.3],  # 70% BTC, 30% ETH
             correlation_matrix=btc_correlation,
@@ -219,7 +214,7 @@ class QuadBitStrategyArray:
 
         logger.info("Tensor baskets initialized")
 
-    def calculate_4bit_strategy()
+    def calculate_4bit_strategy(
         self,
         pair: TradingPair,
         market_data: Dict[str, Any],
@@ -304,6 +299,7 @@ class QuadBitStrategyArray:
         bit_3 = sequence.value & 1  # Profit optimization
 
         params = {}
+        params = {
             "entry_aggressive": bool(bit_0),
             "large_position": bool(bit_1),
             "high_risk": bool(bit_2),
@@ -319,7 +315,7 @@ class QuadBitStrategyArray:
 
         return params
 
-    def _apply_btc_special_treatment()
+    def _apply_btc_special_treatment(
         self,
         params: Dict[str, Any],
         market_data: Dict[str, Any],
@@ -336,7 +332,7 @@ class QuadBitStrategyArray:
 
         return params
 
-    def _generate_trading_decision()
+    def _generate_trading_decision(
         self,
         pair: TradingPair,
         market_data: Dict[str, Any],
@@ -368,7 +364,7 @@ class QuadBitStrategyArray:
                 signal = TradingAction.HOLD
 
         # Create trading decision
-        decision = TradingDecision()
+        decision = TradingDecision(
             timestamp=time.time(),
             symbol=pair.value,
             action=signal,
@@ -381,7 +377,7 @@ class QuadBitStrategyArray:
             thermal_state=None,  # Will be set by pipeline
             bit_phase=None,  # Will be set by pipeline
             profit_vector=None,  # Will be set by pipeline
-            metadata={}
+            metadata={
                 "sequence": self.state.active_sequence.value,
                 "params": params,
                 "stop_loss": current_price * (1 - params["stop_loss_pct"]),
@@ -391,7 +387,7 @@ class QuadBitStrategyArray:
 
         return decision
 
-    def _calculate_position_size()
+    def _calculate_position_size(
         self, pair: TradingPair, params: Dict[str, Any]
     ) -> float:
         """Calculate position size based on strategy parameters."""
@@ -408,12 +404,12 @@ class QuadBitStrategyArray:
 
         return size
 
-    async def execute_strategy()
+    async def execute_strategy(
         self, pair_str: str, market_data: Dict[str, Any]
     ) -> TradingDecision:
         """Execute strategy for a specific trading pair."""
         # Convert string to TradingPair enum
-        pair_mapping = {}
+        pair_mapping = {
             "BTC/USDC": TradingPair.BTC_USDC,
             "ETH/USDC": TradingPair.ETH_USDC,
             "SOL/USDC": TradingPair.SOL_USDC,
@@ -440,15 +436,12 @@ class QuadBitStrategyArray:
         decision = self._generate_trading_decision(pair, market_data, params)
 
         # Update state
-        self.state.update_pair_state()
-            pair,
-            {}
-                "sequence": sequence,
-                "params": params,
-                "decision": decision,
-                "market_data": market_data,
-            },
-        )
+        self.state.update_pair_state(pair, {
+            "sequence": sequence,
+            "params": params,
+            "decision": decision,
+            "market_data": market_data,
+        })
 
         return decision
 
@@ -457,7 +450,7 @@ class QuadBitStrategyArray:
         decisions = []
 
         # Check which assets need rebalancing
-        assets_to_rebalance = []
+        assets_to_rebalance = [
             profile
             for profile in self.asset_profiles.values()
             if profile.needs_rebalancing()
@@ -472,7 +465,7 @@ class QuadBitStrategyArray:
                 continue
 
             # Generate rebalancing decision
-            decision = await self._generate_rebalancing_decision()
+            decision = await self._generate_rebalancing_decision(
                 pair, asset, market_data
             )
             if decision:
@@ -485,7 +478,7 @@ class QuadBitStrategyArray:
         try:
             # This would integrate with your existing market data system
             # For now, return mock data
-            return {}
+            return {
                 "current_price": 50000.0 if pair == TradingPair.BTC_USDC else 3000.0,
                 "close_prices": [50000.0, 50100.0, 50200.0, 50300.0, 50400.0],
                 "volume": 1000000,
@@ -495,7 +488,7 @@ class QuadBitStrategyArray:
             logger.error("Error getting market data for {0}: {1}".format(pair, e))
             return None
 
-    async def _generate_rebalancing_decision()
+    async def _generate_rebalancing_decision(
         self,
         pair: TradingPair,
         asset: AssetProfile,
@@ -523,7 +516,7 @@ class QuadBitStrategyArray:
         allocation_diff = abs(target_allocation - current_allocation)
         quantity = allocation_diff * 1000.0  # Base quantity for rebalancing
 
-        return TradingDecision()
+        return TradingDecision(
             timestamp=time.time(),
             symbol=pair.value,
             action=signal,
@@ -536,7 +529,7 @@ class QuadBitStrategyArray:
             thermal_state=None,  # Assuming no thermal state
             bit_phase=None,  # Assuming no bit phase
             profit_vector=None,  # Assuming no profit vector
-            metadata={}
+            metadata={
                 "type": "rebalancing",
                 "asset": asset.symbol,
                 "target_allocation": target_allocation,
@@ -547,10 +540,10 @@ class QuadBitStrategyArray:
 
     def get_system_status(self) -> Dict[str, Any]:
         """Get comprehensive system status."""
-        return {}
+        return {
             "active_sequence": self.state.active_sequence.value,
-            "pair_states": {}
-                pair.value: {}
+            "pair_states": {
+                pair.value: {
                     "sequence": state.get("sequence", {}).value
                     if state.get("sequence")
                     else None,
@@ -558,8 +551,8 @@ class QuadBitStrategyArray:
                 }
                 for pair, state in self.state.pair_states.items()
             },
-            "asset_profiles": {}
-                profile.symbol: {}
+            "asset_profiles": {
+                profile.symbol: {
                     "balance": float(profile.balance),
                     "allocation": profile.allocation_percentage,
                     "target": profile.target_allocation,
@@ -567,8 +560,8 @@ class QuadBitStrategyArray:
                 }
                 for profile in self.asset_profiles.values()
             },
-            "basket_states": {}
-                name: {}
+            "basket_states": {
+                name: {
                     "pairs": [p.value for p in basket.pairs],
                     "weights": basket.weights,
                     "drift_sequence": basket.drift_sequence.value,
@@ -580,7 +573,7 @@ class QuadBitStrategyArray:
 
 
 # Helper function for easy integration
-    def create_quad_bit_strategy_array()
+def create_quad_bit_strategy_array(
     trading_engine: SchwabotTradingEngine,
 ) -> QuadBitStrategyArray:
     """Create and initialize quad-bit strategy array."""

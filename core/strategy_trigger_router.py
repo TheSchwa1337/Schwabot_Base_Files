@@ -147,9 +147,9 @@ class StrategyTriggerRouter:
 
     def _initialize_strategy_registry(self) -> Dict[str, Dict[str, Any]]:
         """Initialize the strategy registry with 2-gram and traditional strategies."""
-        return {}
+        return {
             # 2-gram pattern strategies
-            "volatility_reversal_entry": {}
+            "volatility_reversal_entry": {
                 "type": "2gram_strategy",
                 "pattern": "UD",
                 "description": "Enter on volatility reversal pattern",
@@ -158,7 +158,7 @@ class StrategyTriggerRouter:
                 "required_confidence": 0.7,
                 "asset_targets": ["BTC/USDC", "ETH/USDC"],
             },
-            "reversal_momentum_entry": {}
+            "reversal_momentum_entry": {
                 "type": "2gram_strategy",
                 "pattern": "DU",
                 "description": "Enter on reversal momentum pattern",
@@ -167,7 +167,7 @@ class StrategyTriggerRouter:
                 "required_confidence": 0.6,
                 "asset_targets": ["BTC/USDC", "ETH/USDC"],
             },
-            "swap_arbitrage_trigger": {}
+            "swap_arbitrage_trigger": {
                 "type": "2gram_strategy",
                 "pattern": "BE",
                 "description": "Trigger swap arbitrage on BTC-ETH pattern",
@@ -176,7 +176,7 @@ class StrategyTriggerRouter:
                 "required_confidence": 0.8,
                 "asset_targets": ["BTC/USDC", "ETH/USDC"],
             },
-            "trend_momentum_entry": {}
+            "trend_momentum_entry": {
                 "type": "2gram_strategy",
                 "pattern": "UU",
                 "description": "Enter on sustained uptrend momentum",
@@ -185,7 +185,7 @@ class StrategyTriggerRouter:
                 "required_confidence": 0.75,
                 "asset_targets": ["BTC/USDC", "ETH/USDC"],
             },
-            "flatline_caution_mode": {}
+            "flatline_caution_mode": {
                 "type": "2gram_strategy",
                 "pattern": "AA",
                 "description": "Activate caution mode on flatline anomaly",
@@ -194,7 +194,7 @@ class StrategyTriggerRouter:
                 "required_confidence": 0.5,
                 "asset_targets": ["all"],
             },
-            "entropy_spike_response": {}
+            "entropy_spike_response": {
                 "type": "2gram_strategy",
                 "pattern": "EE",
                 "description": "Respond to entropy spike event",
@@ -204,7 +204,7 @@ class StrategyTriggerRouter:
                 "asset_targets": ["all"],
             },
             # Traditional strategies
-            "phantom_zone_entry": {}
+            "phantom_zone_entry": {
                 "type": "phantom_strategy",
                 "description": "Enter based on Phantom Zone detection",
                 "risk_level": "medium",
@@ -212,7 +212,7 @@ class StrategyTriggerRouter:
                 "required_confidence": 0.7,
                 "asset_targets": ["BTC/USDC", "ETH/USDC"],
             },
-            "portfolio_rebalance_trigger": {}
+            "portfolio_rebalance_trigger": {
                 "type": "portfolio_strategy",
                 "description": "Trigger portfolio rebalancing",
                 "risk_level": "low",

@@ -1,6 +1,6 @@
 class GlyphRouter:
     def __init__(self):
-        self.glyph_map = {}
+        self.glyph_map = {
             "accumulate": "🌀",
             "breakout": "⚡",
             "fallback": "🛡️",

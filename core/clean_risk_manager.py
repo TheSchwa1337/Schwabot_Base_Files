@@ -1,13 +1,21 @@
-from decimal import Decimal, getcontext
-from typing import Any, Dict, List, Optional, Tuple, Union
-
-# !/usr/bin/env python3
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
-Clean Risk Manager - Risk assessment and management for Schwabot trading system.
+Clean Risk Manager
+==================
 
-Provides real-time risk assessment, position sizing, and risk management
-    for the Schwabot trading system.
+Handles real-time risk assessment and management for trading operations.
+Provides comprehensive risk metrics and recommendations.
 """
+
+import logging
+import random
+import time
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, List
+
+import numpy as np
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +29,7 @@ class RiskLevel(Enum):
 
 
 @dataclass
-    class RiskMetric:
+class RiskMetric:
     """Represents a risk metric."""
     name: str
     value: float
@@ -32,7 +40,7 @@ class RiskLevel(Enum):
 
 
 @dataclass
-    class RiskAssessment:
+class RiskAssessment:
     """Complete risk assessment result."""
     overall_risk_score: float
     risk_level: RiskLevel
@@ -46,7 +54,7 @@ class RiskManager:
     """Handles real-time risk assessment and management."""
 
     def __init__(self, config: Dict[str, Any] = None):
-        """Initialize the risk manager."
+        """Initialize the risk manager.
 
         Args:
             config: Configuration dictionary for risk parameters.
@@ -56,7 +64,7 @@ class RiskManager:
         self.last_assessment_time = 0.0
 
         # Performance metrics
-        self.assessment_stats = {}
+        self.assessment_stats = {
             "total_assessments": 0,
             "risk_violations": 0,
             "position_adjustments": 0,
@@ -68,7 +76,7 @@ class RiskManager:
 
     def _default_config(self) -> Dict[str, Any]:
         """Default risk manager configuration."""
-        return {}
+        return {
             "max_drawdown_percent": 0.5,  # 5%
             "max_exposure_per_asset": 0.2,  # 20%
             "volatility_threshold": 0.3,  # 3% price change
@@ -81,25 +89,23 @@ class RiskManager:
 
     def _initialize_default_metrics(self) -> None:
         """Initialize default risk metrics."""
-        self.risk_metrics["drawdown"] = RiskMetric()
+        self.risk_metrics["drawdown"] = RiskMetric(
             "drawdown", 0.0, self.config["max_drawdown_percent"], "green"
         )
-        self.risk_metrics["exposure_btc"] = RiskMetric()
+        self.risk_metrics["exposure_btc"] = RiskMetric(
             "exposure_btc", 0.0, self.config["max_exposure_per_asset"], "green"
         )
-        self.risk_metrics["volatility"] = RiskMetric()
+        self.risk_metrics["volatility"] = RiskMetric(
             "volatility", 0.0, self.config["volatility_threshold"], "green"
         )
-        self.risk_metrics["leverage"] = RiskMetric()
+        self.risk_metrics["leverage"] = RiskMetric(
             "leverage", 1.0, self.config["max_leverage"], "green"
         )
 
-
-def assess_risk(self,)
-    portfolio_value: float,
-    asset_exposures: Dict[str,]
-     float]) -> RiskAssessment:
-        """Assess overall portfolio risk based on current state."
+    def assess_risk(
+        self, portfolio_value: float, asset_exposures: Dict[str, float]
+    ) -> RiskAssessment:
+        """Assess overall portfolio risk based on current state.
 
         Args:
             portfolio_value: Current total portfolio value.
@@ -111,28 +117,26 @@ def assess_risk(self,)
         start_time = time.time()
         self.assessment_stats["total_assessments"] += 1
 
-        # Calculate drawdown (simplified - in real implementation would, use)
-        # historical data)
+        # Calculate drawdown (simplified - in real implementation would use historical data)
         current_drawdown = self._calculate_drawdown(portfolio_value)
         self.risk_metrics["drawdown"].value = current_drawdown
-        self.risk_metrics["drawdown"].status = self._get_status()
+        self.risk_metrics["drawdown"].status = self._get_status(
             current_drawdown, self.config["max_drawdown_percent"]
         )
 
         # Calculate asset exposure
-        total_btc_exposure = ()
-            asset_exposures.get("BTC/USD", 0.0) /
-                                portfolio_value if portfolio_value > 0 else 0.0
+        total_btc_exposure = (
+            asset_exposures.get("BTC/USD", 0.0) / portfolio_value if portfolio_value > 0 else 0.0
         )
         self.risk_metrics["exposure_btc"].value = total_btc_exposure
-        self.risk_metrics["exposure_btc"].status = self._get_status()
+        self.risk_metrics["exposure_btc"].status = self._get_status(
             total_btc_exposure, self.config["max_exposure_per_asset"]
         )
 
         # Calculate volatility
         current_volatility = self._calculate_volatility(asset_exposures)
         self.risk_metrics["volatility"].value = current_volatility
-        self.risk_metrics["volatility"].status = self._get_status()
+        self.risk_metrics["volatility"].status = self._get_status(
             current_volatility, self.config["volatility_threshold"]
         )
 
@@ -146,7 +150,7 @@ def assess_risk(self,)
         self.last_assessment_time = time.time()
         self._update_avg_assessment_time(time.time() - start_time)
 
-        return RiskAssessment()
+        return RiskAssessment(
             overall_risk_score=risk_score,
             risk_level=risk_level,
             metrics=self.risk_metrics.copy(),
@@ -154,7 +158,7 @@ def assess_risk(self,)
         )
 
     def _calculate_drawdown(self, portfolio_value: float) -> float:
-        """Calculate current drawdown (simplified, implementation)."""
+        """Calculate current drawdown (simplified implementation)."""
         # In real implementation, this would compare against peak portfolio value
         # For now, use a simulated drawdown
         return random.uniform(0.0, 0.1)
@@ -217,117 +221,103 @@ def assess_risk(self,)
 
     def _get_status(self, current_value: float, threshold: float) -> str:
         """Helper to determine status based on value and threshold."""
-        if current_value > threshold:
+        if current_value >= threshold:
             return "red"
-        elif current_value > threshold * 0.8:  # Warning zone
+        elif current_value >= threshold * 0.7:
             return "yellow"
         else:
             return "green"
 
-    def adjust_position_size(self, proposed_size: float, confidence: float,)
-                           current_price: float) -> float:
-        """Adjust proposed position size based on risk assessment."
+    def adjust_position_size(self, proposed_size: float, confidence: float, current_price: float) -> float:
+        """Adjust position size based on risk assessment."""
+        try:
+            # Get current risk assessment
+            risk_assessment = self.assess_risk(100000.0, {"BTC/USD": proposed_size * current_price})
 
-        Args:
-            proposed_size: The initial proposed position size.
-            confidence: The confidence level of the trade signal (0.0 to 1.0).
-            current_price: Current asset price.
+            # Adjust based on risk level
+            if risk_assessment.risk_level == RiskLevel.CRITICAL:
+                adjusted_size = proposed_size * 0.3
+            elif risk_assessment.risk_level == RiskLevel.HIGH:
+                adjusted_size = proposed_size * 0.6
+            elif risk_assessment.risk_level == RiskLevel.MEDIUM:
+                adjusted_size = proposed_size * 0.8
+            else:
+                adjusted_size = proposed_size
 
-        Returns:
-            The risk-adjusted position size.
-        """
-        original_size = proposed_size
-        adjusted_size = proposed_size
+            # Adjust based on confidence
+            if confidence < self.config["min_confidence_for_high_risk"]:
+                adjusted_size *= 0.7
 
-        # Reduce size if high drawdown risk
-        if self.risk_metrics["drawdown"].status == "red":
-            adjusted_size *= 0.5  # Halve position size
-            logger.warning()
-                "Reducing position due to high drawdown risk. New size: {0}".format(adjusted_size)
-            )
+            # Apply position size multiplier
+            adjusted_size *= self.config["position_size_multiplier"]
 
-        # Reduce size if high exposure risk
-        if self.risk_metrics["exposure_btc"].status == "red":
-            adjusted_size *= 0.7  # Reduce by 30%
-            logger.warning()
-                "Reducing position due to high exposure risk. New size: {0}".format(adjusted_size)
-            )
-
-        # Adjust based on confidence
-        if confidence < self.config["min_confidence_for_high_risk"]:
-            adjusted_size *= confidence  # Scale by confidence
-
-        # Apply position size multiplier from config
-        adjusted_size *= self.config["position_size_multiplier"]
-
-        # Ensure minimum position size
-        min_size = 0.01  # Minimum 0.1% position
-        adjusted_size = max(min_size, adjusted_size)
-
-        if adjusted_size != original_size:
             self.assessment_stats["position_adjustments"] += 1
 
-        return adjusted_size
+            return max(0.0, adjusted_size)
+
+        except Exception as e:
+            logger.error("Error adjusting position size: {0}".format(e))
+            return proposed_size * 0.5
 
     def calculate_risk_metrics(self, trade_data: Dict[str, Any]) -> Dict[str, float]:
-        """Calculate risk metrics for a specific trade."
+        """Calculate comprehensive risk metrics for a trade."""
+        try:
+            price = trade_data.get("price", 0.0)
+            volume = trade_data.get("volume", 0.0)
+            position_size = trade_data.get("position_size", 0.0)
+            asset = trade_data.get("asset", "unknown")
 
-        Args:
-            trade_data: Dictionary containing trade information.
+            metrics = {
+                "price_risk": self._calculate_price_risk(price, volume),
+                "volume_risk": self._calculate_volume_risk(volume),
+                "position_risk": self._calculate_position_risk(position_size),
+                "asset_risk": self._calculate_asset_risk(asset),
+            }
 
-        Returns:
-            Dictionary of risk metrics.
-        """
-        metrics = {}
+            # Calculate total risk
+            total_risk = sum(metrics.values()) / len(metrics)
+            metrics["total_risk"] = total_risk
 
-        # Extract trade parameters
-        asset = trade_data.get("asset", "BTC/USD")
-        price = trade_data.get("price", 50000.0)
-        volume = trade_data.get("volume", 1.0)
-        position_size = trade_data.get("position_size", 0.1)
+            return metrics
 
-        # Calculate various risk metrics
-        metrics["price_risk"] = self._calculate_price_risk(price, volume)
-        metrics["volume_risk"] = self._calculate_volume_risk(volume)
-        metrics["position_risk"] = self._calculate_position_risk(position_size)
-        metrics["asset_risk"] = self._calculate_asset_risk(asset)
-
-        # Calculate composite risk score
-        metrics["risk_score"] = np.mean(list(metrics.values()))
-
-        return metrics
+        except Exception as e:
+            logger.error("Error calculating risk metrics: {0}".format(e))
+            return {"total_risk": 0.5}
 
     def _calculate_price_risk(self, price: float, volume: float) -> float:
         """Calculate price-based risk."""
-        # Higher price with high volume = higher risk
-        price_factor = min(price / 100000, 1.0)  # Normalize to 0-1
-        volume_factor = min(volume / 1000, 1.0)  # Normalize to 0-1
-        return (price_factor + volume_factor) / 2
+        # Higher price with low volume = higher risk
+        if volume == 0:
+            return 0.5
+        return min(1.0, price / (volume * 1000))
 
     def _calculate_volume_risk(self, volume: float) -> float:
         """Calculate volume-based risk."""
-        # Very low or very high volume = higher risk
-        normalized_volume = volume / 1000  # Normalize
-        if normalized_volume < 0.1 or normalized_volume > 10:
+        # Low volume = higher risk
+        if volume < 1000:
             return 0.8
+        elif volume < 10000:
+            return 0.5
         else:
-            return 0.3
+            return 0.2
 
     def _calculate_position_risk(self, position_size: float) -> float:
         """Calculate position size risk."""
         # Larger positions = higher risk
-        return min(position_size * 2, 1.0)
+        return min(1.0, position_size / 100000)
 
     def _calculate_asset_risk(self, asset: str) -> float:
         """Calculate asset-specific risk."""
-        # Different assets have different risk profiles
-        risk_profiles = {}
-            "BTC/USD": 0.3,
-            "ETH/USD": 0.4,
-            "SOL/USD": 0.6,
-            "XRP/USD": 0.5,
-        }
-        return risk_profiles.get(asset, 0.5)
+        # Simplified asset risk calculation
+        high_risk_assets = ["BTC", "ETH"]
+        medium_risk_assets = ["USDT", "USDC"]
+        
+        if asset in high_risk_assets:
+            return 0.7
+        elif asset in medium_risk_assets:
+            return 0.3
+        else:
+            return 0.5
 
     def _update_avg_assessment_time(self, assessment_time: float) -> None:
         """Update average assessment time."""
@@ -340,18 +330,22 @@ def assess_risk(self,)
         self.assessment_stats["avg_assessment_time"] = new_avg
 
     def get_risk_summary(self) -> Dict[str, Any]:
-        """Get summary of current risk state."""
-        return {}
-            "risk_metrics": {name: {}}
-                "value": metric.value,
-                "threshold": metric.threshold,
-                "status": metric.status
-            } for name, metric in self.risk_metrics.items()},
-            "assessment_stats": self.assessment_stats,
-            "last_assessment": self.last_assessment_time,
-            "config": self.config
-        }
+        """Get comprehensive risk summary."""
+        try:
+            return {
+                "risk_level": self._determine_risk_level(self._calculate_overall_risk_score()).value,
+                "metrics": {name: metric.value for name, metric in self.risk_metrics.items()},
+                "assessment_stats": self.assessment_stats,
+                "last_assessment": self.last_assessment_time,
+                "config": self.config,
+            }
+
+        except Exception as e:
+            logger.error("Error getting risk summary: {0}".format(e))
+            return {}
 
 
-# Export main classes
-__all__ = ["RiskManager", "RiskMetric", "RiskAssessment", "RiskLevel"]
+# Factory function
+def create_risk_manager(config: Dict[str, Any] = None) -> RiskManager:
+    """Create a risk manager instance."""
+    return RiskManager(config)

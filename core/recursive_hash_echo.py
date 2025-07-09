@@ -9,9 +9,8 @@ for hash-based pattern recognition and feedback loops.
 """
 
 import logging
-from typing import Dict, List, Optional, Any, Tuple
+from typing import Dict, List, Any
 from dataclasses import dataclass, field
-import time
 
 from core.backend_math import get_backend, is_gpu
 
@@ -311,7 +310,7 @@ def test_recursive_hash_echo():
     # Test pattern recognition
     hash_sequence = [xp.random.rand(16) for _ in range(10)]
     patterns = hash_pattern_recognition(hash_sequence, pattern_length=2)
-    logger.info(f"Pattern recognition: {patterns}")
+    logger.info("Pattern recognition: %s", patterns)
 
     return {
         'echo_result': echo_result,

@@ -19,12 +19,12 @@ class ReentryLogic:
         self.reentry_cooldown = reentry_cooldown
         self.last_reentry_time = 0.0
 
-    def evaluate_reentry()
+    def evaluate_reentry(
         self,
         tick_cycle: Any,
         swing_metrics: Dict[str, Any],
         drift_vector: Dict[str, float],
-    ) -> (bool, float):
+    ) -> tuple[bool, float]:
         """
         Decide whether to re-enter a trade.
         Returns (should_reenter: bool, amount: float).
@@ -42,7 +42,7 @@ class ReentryLogic:
             allocation = 0.1  # 10% reentry
             amount = tick_cycle.usdc_balance * allocation
             self.last_reentry_time = current_time
-            logger.info()
+            logger.info(
                 "ReentryLogic: triggering reentry with amount {0}".format(amount)
             )
             return True, amount

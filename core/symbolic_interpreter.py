@@ -33,9 +33,6 @@ import numpy as np
 # Import existing Schwabot components
 try:
     from .strategy_bit_mapper import StrategyBitMapper
-    from .unified_math_system import generate_unified_hash
-    from .fractal_core import fractal_quantize_vector
-    from .orbital_shell_brain_system import OrbitalShell
 
     SCHWABOT_COMPONENTS_AVAILABLE = True
 except ImportError as e:
@@ -489,7 +486,7 @@ class SymbolicInterpreter:
                 return 0.5
 
             # Generate hash vector for strategy matching
-            strategy_hash = self._generate_strategy_hash(collapse_result)
+            # strategy_hash = self._generate_strategy_hash(collapse_result)  # Unused
 
             # Use strategy mapper to find similarity
             # This would integrate with the existing strategy_bit_mapper.py
@@ -554,7 +551,11 @@ class SymbolicInterpreter:
         """Generate hash vector for strategy matching"""
         try:
             # Create hash input from collapse result
-            hash_input = f"{collapse_result.collapsed_symbol}_{collapse_result.action}_{collapse_result.confidence}"
+            hash_input = (
+                f"{collapse_result.collapsed_symbol}_"
+                f"{collapse_result.action}_"
+                f"{collapse_result.confidence}"
+            )
             hash_value = hashlib.sha256(hash_input.encode()).hexdigest()
 
             # Convert to vector

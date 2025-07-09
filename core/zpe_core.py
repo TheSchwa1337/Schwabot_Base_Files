@@ -601,14 +601,14 @@ class ZPECore:
 
             # Store calculation in history
             self.calculation_history.append({
-                    "timestamp": datetime.datetime.now(),
-                    "energy_fields": self.energy_fields.copy(),
+                "timestamp": datetime.datetime.now(),
+                "energy_fields": self.energy_fields.copy(),
                 "input_params": {
-                        "frequency": frequency,
-                        "amplitude": amplitude,
-                        "signal_strength": signal_strength,
-                        "market_volatility": market_volatility,
-                    },
+                    "frequency": frequency,
+                    "amplitude": amplitude,
+                    "signal_strength": signal_strength,
+                    "market_volatility": market_volatility,
+                },
             })
 
             # Keep only last 100 calculations

@@ -193,28 +193,19 @@ initial_zalgo_key if initial_zalgo_key else self._generate_key()
 
 
 
-self.metrics: Dict[str, Any]
-
-    = {total_evaluations: 0,gates_opened": 0,gates_closed": 0,last_evaluation_time": None,current_zygot_entropy": 0.0,current_zalgo_entropy": 0.0,current_zygot_key_hash: hashlib.sha256(")}
-
-
-
-self._zygot_key.encode()
-
-
-
-).hexdigest(),current_zalgo_key_hash: hashlib.sha256(
-
-
-
-self._zalgo_key.encode()
-
-
-
-).hexdigest(),
-
-
-
+self.metrics: Dict[str, Any] = {
+    "total_evaluations": 0,
+    "gates_opened": 0,
+    "gates_closed": 0,
+    "last_evaluation_time": None,
+    "current_zygot_entropy": 0.0,
+    "current_zalgo_entropy": 0.0,
+    "current_zygot_key_hash": hashlib.sha256(
+        self._zygot_key.encode()
+    ).hexdigest(),
+    "current_zalgo_key_hash": hashlib.sha256(
+        self._zalgo_key.encode()
+    ).hexdigest(),
 }
 
 
@@ -289,41 +280,15 @@ entropy_source = f{time.time()}-{internal_data.get('cpu_load',')}
 
 
 
-def _generate_zalgo_entropy():-> float:
-
-
-
-Generates external (Zalgo) entropy based on external market data or APIs.
-
-
-
-This is a placeholder. Real implementation would involve external API calls.  # Example: based on
-market volatility, news sentiment, external API
-
-
-
-# health
-
-
-
-entropy_source = f{external_data.get('market_volatility', 0.5)}-{}
-
-
-
-external_data.get('news_sentiment', 0.5)}-{
-
-
-
-external_data.get('api_latency', 0.1)}hashed_entropy
-    = hashlib.sha256(entropy_source.encode()).hexdigest()
-
-
-
-# Convert hash to a float between 0 and 1 (simplified for, demo)
-
-
-
-        return int(hashed_entropy[:8], 16) / 0xFFFFFFFF
+def _generate_zalgo_entropy(self) -> float:
+    """
+    Generates external (Zalgo) entropy based on external market data or APIs.
+    
+    This is a placeholder. Real implementation would involve external API calls.
+    Example: based on market volatility, news sentiment, external API health
+    """
+    # This is a placeholder. Real implementation would involve external API calls.
+    # Example: based on market volatility, news sentiment, external API health
 
 
 
@@ -831,10 +796,10 @@ gate.rotate_keys()
 
 
 
-print(fOld Zygot Key Hash: {6}...)print(f".format(gate.zygot_entropy_threshold), initial_zygot_hash[:8])New Zygot Key Hash:"
-{gate.get_metrics()[current_zygot_key_hash][:8]}...)print("Old Zalgo Key Hash:"
-{0}...)print(f".format(initial_zalgo_hash[:8])New Zalgo Key Hash:"
-{gate.get_metrics()[current_zalgo_key_hash][:8]}...)
+print(f"Old Zygot Key Hash: {initial_zygot_hash[:8]}...")
+    print(f"New Zygot Key Hash: {gate.get_metrics()['current_zygot_key_hash'][:8]}...")
+    print(f"Old Zalgo Key Hash: {initial_zalgo_hash[:8]}...")
+    print(f"New Zalgo Key Hash: {gate.get_metrics()['current_zalgo_key_hash'][:8]}...")
 
 
 

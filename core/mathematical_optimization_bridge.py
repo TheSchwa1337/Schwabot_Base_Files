@@ -49,7 +49,7 @@ class EntropyState(Enum):
 
 
 @dataclass
-    class OptimizationResult:
+class OptimizationResult:
     """Container for optimization results."""
 
     success: bool
@@ -62,7 +62,7 @@ class EntropyState(Enum):
 
 
 @dataclass
-    class EntropyMetrics:
+class EntropyMetrics:
     """Entropy calculation metrics."""
 
     z_score: float
@@ -109,7 +109,7 @@ class MathematicalOptimizationBridge:
 
     def _default_config(self) -> Dict[str, Any]:
         """Default configuration for optimization bridge."""
-        return {}
+        return {
             "alpha_0": 0.7,
             "beta_0": 0.3,
             "theta_gpu": 1.5,
@@ -151,7 +151,7 @@ class MathematicalOptimizationBridge:
         delta_t = current_time - self.last_switch_time
         switch_cost = self.gamma * np.exp(-self.lambda_decay * delta_t)
 
-        metrics = EntropyMetrics()
+        metrics = EntropyMetrics(
             z_score=z_score,
             entropy_shift=entropy_shift,
             routing_coefficient=routing_coefficient,
@@ -188,7 +188,7 @@ class MathematicalOptimizationBridge:
         else:
             return OptimizationMode.CPU_ONLY
 
-    def optimize_tensor_operation()
+    def optimize_tensor_operation(
         self,
         tensor_a: np.ndarray,
         tensor_b: np.ndarray,
@@ -235,22 +235,20 @@ class MathematicalOptimizationBridge:
                 self.total_operations += 1
                 self.total_optimization_time += execution_time
 
-                self.operation_history.append()
-                    {}
-                        "operation": operation,
-                        "mode": mode.value,
-                        "entropy_state": entropy_state.value,
-                        "execution_time": execution_time,
-                        "tensor_sizes": [tensor_a.shape, tensor_b.shape],
-                        "routing_coefficient": metrics.routing_coefficient,
-                        "timestamp": time.time(),
-                    }
-                )
+                self.operation_history.append({
+                    "operation": operation,
+                    "mode": mode.value,
+                    "entropy_state": entropy_state.value,
+                    "execution_time": execution_time,
+                    "tensor_sizes": [tensor_a.shape, tensor_b.shape],
+                    "routing_coefficient": metrics.routing_coefficient,
+                    "timestamp": time.time(),
+                })
 
                 if len(self.operation_history) > self.config.get("max_history", 1000):
                     self.operation_history.pop(0)
 
-            return OptimizationResult()
+            return OptimizationResult(
                 success=True,
                 result=result,
                 execution_time=execution_time,
@@ -261,7 +259,7 @@ class MathematicalOptimizationBridge:
 
         except Exception as e:
             logger.error("Tensor optimization failed: {0}".format(e))
-            return OptimizationResult()
+            return OptimizationResult(
                 success=False,
                 result=None,
                 execution_time=time.time() - start_time,
@@ -321,7 +319,7 @@ class MathematicalOptimizationBridge:
         Apply Laplace entropy transform for signal processing.
         Formula: L(f) = FFT(data) * exp(-0.5 * range(len(data)))
         """
-        fft_data = fft(data)
+        fft_data = np.fft.fft(data)
         entropy_decay = np.exp(-0.5 * np.arange(len(data)))
         return fft_data * entropy_decay
 
@@ -329,7 +327,7 @@ class MathematicalOptimizationBridge:
         """
         Apply entropy-modulated Fourier pathway analysis.
         """
-        f = fft(signal)
+        f = np.fft.fft(signal)
         entropy_curve = np.log2(np.abs(f) + 1)
         return f * entropy_curve
 
@@ -347,7 +345,7 @@ class MathematicalOptimizationBridge:
         with self.lock:
             avg_execution_time = self.total_optimization_time / max(1, self.total_operations)
 
-            return {}
+            return {
                 "total_operations": self.total_operations,
                 "total_optimization_time": self.total_optimization_time,
                 "average_execution_time": avg_execution_time,
@@ -384,7 +382,7 @@ def get_optimization_bridge() -> MathematicalOptimizationBridge:
     return _global_bridge
 
 
-def optimize_tensor_operation()
+def optimize_tensor_operation(
     tensor_a: np.ndarray, tensor_b: np.ndarray, operation: str = "dot", mode: Optional[OptimizationMode] = None
 ) -> OptimizationResult:
     """Convenience function for tensor optimization."""

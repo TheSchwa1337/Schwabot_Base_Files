@@ -36,7 +36,7 @@ logger = logging.getLogger(__name__)
 
 
 @dataclass
-    class AssetTarget:
+class AssetTarget:
     """Target asset for strategy execution"""
 
     symbol: str
@@ -49,7 +49,7 @@ logger = logging.getLogger(__name__)
 
 
 @dataclass
-    class StrategyResult:
+class StrategyResult:
     """Result from strategy execution"""
 
     asset: str
@@ -164,10 +164,12 @@ class StrategyLoopSwitcher:
             fractal_matches = sum(1 for r in results if r.fractal_match)
             hash_matches = sum(1 for r in results if r.hash_match)
 
-            logger.info()
-                "✅ Hourly cycle completed: {0} strategies, ".format(len(results))
-                "{0} ghost shells, {1} fractal matches, ".format(ghost_shells_used, fractal_matches)
-                "{0} hash matches".format(hash_matches)
+            logger.info(
+                "✅ Hourly cycle completed: {0} strategies, "
+                "{1} ghost shells, {2} fractal matches, "
+                "{3} hash matches".format(
+                    len(results), ghost_shells_used, fractal_matches, hash_matches
+                )
             )
 
             return results
@@ -198,7 +200,7 @@ class StrategyLoopSwitcher:
                 is_held = symbol in portfolio
                 balance = portfolio.get(symbol, 0.0)
 
-                asset_target = AssetTarget()
+                asset_target = AssetTarget(
                     symbol=symbol,
                     current_price=asset_data["price"],
                     volume_24h=asset_data["volume"],
@@ -241,7 +243,7 @@ class StrategyLoopSwitcher:
             List of asset data dictionaries
         """
         # Mock data - replace with real CoinMarketCap API call
-        mock_data = []
+        mock_data = [
             {"symbol": "BTC", "price": 50000, "volume": 25000000000, "price_change": 2.5, "market_cap": 1000000000000},
             {"symbol": "ETH", "price": 3000, "volume": 15000000000, "price_change": -1.2, "market_cap": 350000000000},
             {"symbol": "XRP", "price": 0.5, "volume": 2000000000, "price_change": 5.8, "market_cap": 25000000000},
@@ -256,9 +258,7 @@ class StrategyLoopSwitcher:
 
         return random.sample(mock_data, min(10, len(mock_data)))
 
-    def _execute_strategy_for_asset()
-        self, asset_target: AssetTarget, market_data: Dict[str, Any]
-    ) -> Optional[StrategyResult]:
+    def _execute_strategy_for_asset(self, asset_target: AssetTarget, market_data: Dict[str, Any]) -> Optional[StrategyResult]:
         """
         Execute strategy for a specific asset
 
@@ -312,7 +312,7 @@ class StrategyLoopSwitcher:
 
                 # Layer 8: Apply hash-glyph path blending
                 try:
-                    glyph, blended_vector, decision_type = self.visualizer.route_with_path_blending()
+                    glyph, blended_vector, decision_type = self.visualizer.route_with_path_blending(
                         strategy_id, q_matrix, profit_vector, market_data
                     )
 
@@ -335,7 +335,7 @@ class StrategyLoopSwitcher:
                     decision_type = "fallback"
 
                 # Save to ghost shell memory
-                self.memory_engine.save_shell()
+                self.memory_engine.save_shell(
                     strategy_id,
                     q_matrix,
                     profit_vector,
@@ -344,7 +344,7 @@ class StrategyLoopSwitcher:
                 )
 
                 # Save fractal snapshot
-                self.fractal_tracker.save_snapshot()
+                self.fractal_tracker.save_snapshot(
                     q_matrix,
                     strategy_id,
                     profit_result=np.mean(profit_vector) if isinstance(profit_vector, np.ndarray) else 0.0,
@@ -352,7 +352,7 @@ class StrategyLoopSwitcher:
                 )
 
             # Create result with Layer 8 additions
-            result = StrategyResult()
+            result = StrategyResult(
                 asset=asset_target.symbol,
                 strategy_id=strategy_id,
                 qutrit_matrix=q_matrix.tolist(),
@@ -425,7 +425,7 @@ class StrategyLoopSwitcher:
             fractal_stats = self.fractal_tracker.get_pattern_statistics()
             visual_stats = self.visualizer.get_memory_statistics()
 
-            return {}
+            return {
                 "cycle_count": self.cycle_count,
                 "last_cycle_time": self.last_cycle_time,
                 "time_since_last_cycle": time.time() - self.last_cycle_time,
@@ -544,7 +544,7 @@ def test_strategy_loop_switcher():
         print("    Hash match: {0}".format(result.hash_match))
         print("    Glyph: {0}".format(result.glyph))
         print("    Decision: {0}".format(result.decision_type))
-        print("    Confidence))"
+        print("    Confidence: {0}".format(result.confidence))
         print("    Profit vector: {0}".format(result.profit_vector))
 
     # Test statistics

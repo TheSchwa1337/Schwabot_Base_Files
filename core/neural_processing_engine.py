@@ -282,7 +282,7 @@ if TORCH_AVAILABLE:
             if len(self.memory) < batch_size:
                 return
 
-            batch = np.random.sample(self.memory, batch_size)
+            # batch = np.random.sample(self.memory, batch_size)
             # Implementation would continue here...
 
             if self.epsilon > self.epsilon_min:

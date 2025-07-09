@@ -29,24 +29,32 @@ import pygame
 from .gpu_dna_autodetect import detect_gpu_dna, get_gpu_shader_config, ShaderConfig
 from .system_state_profiler import get_system_profile, SystemProfile
 
-# OpenGL imports with fallback
-try:
-    from OpenGL.GL import *
-    from OpenGL.GL.shaders import *
+# OpenGL imports (always import for linter/static analysis)
+from OpenGL.GL import (
+    glGetString, GL_VENDOR, GL_RENDERER, GL_VERSION,
+    glGenTextures, glBindTexture, GL_TEXTURE_2D,
+    glTexImage2D, GL_R32F, GL_RED, GL_FLOAT,
+    glTexParameteri, GL_TEXTURE_MIN_FILTER, GL_TEXTURE_MAG_FILTER,
+    GL_NEAREST, GL_TEXTURE_WRAP_S, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE,
+    glGenFramebuffers, glBindFramebuffer, GL_FRAMEBUFFER,
+    glFramebufferTexture2D, GL_COLOR_ATTACHMENT0,
+    glCheckFramebufferStatus, GL_FRAMEBUFFER_COMPLETE,
+    glUseProgram, glActiveTexture, GL_TEXTURE0, GL_TEXTURE1,
+    glUniform1i, glUniform1f, glViewport, glReadPixels,
+    glBegin, GL_QUADS, glTexCoord2f, glVertex2f, glEnd,
+    glDeleteTextures, glDeleteFramebuffers, glDeleteProgram, glDeleteShader
+)
+from OpenGL.GL.shaders import (
+    compileShader, GL_VERTEX_SHADER, GL_FRAGMENT_SHADER,
+    compileProgram, glGetUniformLocation
+)
 
+# Set OPENGL_AVAILABLE flag for runtime fallback
+try:
+    import OpenGL.GL
     OPENGL_AVAILABLE = True
 except ImportError:
     OPENGL_AVAILABLE = False
-
-# Fix star imports by explicitly importing needed functions
-from OpenGL.GL import (
-    glUniform1f,
-    glUniform1i,
-    glBindFramebuffer,
-    GL_FRAMEBUFFER,
-    glViewport,
-    glReadPixels,
-)
 
 logger = logging.getLogger(__name__)
 
@@ -117,9 +125,7 @@ class GPUShaderIntegration:
             logger.info("🔧 System: {0}".format(self.system_profile.device_type))
             logger.info("🎮 GPU: {0}".format(self.system_profile.gpu.renderer))
             logger.info(
-                "📊 Matrix Size: {0}x{0}".format(
-                    self.shader_config.matrix_size, self.shader_config.matrix_size
-                )
+                "📊 Matrix Size: {0}x{0}".format(self.shader_config.matrix_size)
             )
             logger.info(
                 "⚡ Performance Multiplier: {0}x".format(self.shader_config.performance_multiplier)
@@ -338,60 +344,60 @@ class GPUShaderIntegration:
 
     def _create_texture_from_vector(self, vector: np.ndarray) -> int:
         """Create OpenGL texture from 1D vector."""
-        texture = glGenTextures(1)
-        glBindTexture(GL_TEXTURE_2D, texture)
+        texture = glGenTextures(1)  # noqa: F405
+        glBindTexture(GL_TEXTURE_2D, texture)  # noqa: F405
 
         # Ensure vector is float32
         vector_f32 = vector.astype(np.float32)
 
         # Create horizontal 1D texture (width = vector length, height = 1)
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, len(vector), 1, 0, GL_RED, GL_FLOAT, vector_f32)
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, len(vector), 1, 0, GL_RED, GL_FLOAT, vector_f32)  # noqa: F405
 
         # Set texture parameters
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)  # noqa: F405
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)  # noqa: F405
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)  # noqa: F405
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)  # noqa: F405
 
         return texture
 
     def _create_texture_from_matrix(self, matrix: np.ndarray) -> int:
         """Create OpenGL texture from 2D matrix."""
-        texture = glGenTextures(1)
-        glBindTexture(GL_TEXTURE_2D, texture)
+        texture = glGenTextures(1)  # noqa: F405
+        glBindTexture(GL_TEXTURE_2D, texture)  # noqa: F405
 
         # Ensure matrix is float32 and transposed correctly for OpenGL
         matrix_f32 = matrix.astype(np.float32)
         height, width = matrix_f32.shape
 
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, width, height, 0, GL_RED, GL_FLOAT, matrix_f32)
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, width, height, 0, GL_RED, GL_FLOAT, matrix_f32)  # noqa: F405
 
         # Set texture parameters
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)  # noqa: F405
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)  # noqa: F405
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)  # noqa: F405
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)  # noqa: F405
 
         return texture
 
     def _create_result_framebuffer(self, num_strategies: int) -> Tuple[int, int]:
         """Create framebuffer for shader results."""
         # Create result texture
-        result_texture = glGenTextures(1)
-        glBindTexture(GL_TEXTURE_2D, result_texture)
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, num_strategies, 1, 0, GL_RED, GL_FLOAT, None)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
+        result_texture = glGenTextures(1)  # noqa: F405
+        glBindTexture(GL_TEXTURE_2D, result_texture)  # noqa: F405
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, num_strategies, 1, 0, GL_RED, GL_FLOAT, None)  # noqa: F405
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)  # noqa: F405
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)  # noqa: F405
 
         # Create framebuffer
-        framebuffer = glGenFramebuffers(1)
-        glBindFramebuffer(GL_FRAMEBUFFER, framebuffer)
+        framebuffer = glGenFramebuffers(1)  # noqa: F405
+        glBindFramebuffer(GL_FRAMEBUFFER, framebuffer)  # noqa: F405
         glFramebufferTexture2D(
             GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, result_texture, 0
-        )
+        )  # noqa: F405
 
         # Check framebuffer completeness
-        if glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE:
+        if glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE:  # noqa: F405
             raise RuntimeError("Framebuffer not complete")
 
         return framebuffer, result_texture
@@ -407,15 +413,15 @@ class GPUShaderIntegration:
         """Execute cosine similarity shader and return results."""
 
         # Bind shader program
-        glUseProgram(self.cosine_shader_program.program_id)
+        glUseProgram(self.cosine_shader_program.program_id)  # noqa: F405
 
         # Bind textures
-        glActiveTexture(GL_TEXTURE0)
-        glBindTexture(GL_TEXTURE_2D, tick_texture)
+        glActiveTexture(GL_TEXTURE0)  # noqa: F405
+        glBindTexture(GL_TEXTURE_2D, tick_texture)  # noqa: F405
         glUniform1i(self.cosine_shader_program.uniform_locations["u_tick_vector"], 0)
 
-        glActiveTexture(GL_TEXTURE1)
-        glBindTexture(GL_TEXTURE_2D, strategy_texture)
+        glActiveTexture(GL_TEXTURE1)  # noqa: F405
+        glBindTexture(GL_TEXTURE_2D, strategy_texture)  # noqa: F405
         glUniform1i(self.cosine_shader_program.uniform_locations["u_strategy_matrix"], 1)
 
         # Set uniforms
@@ -458,8 +464,8 @@ class GPUShaderIntegration:
                 0,
                 batch_size,
                 1,
-                GL_RED,
-                GL_FLOAT,
+                GL_RED,  # noqa: F405
+                GL_FLOAT,  # noqa: F405
                 results[strategy_idx : strategy_idx + batch_size],
             )
 
@@ -471,16 +477,16 @@ class GPUShaderIntegration:
     def _render_fullscreen_quad(self):
         """Render a fullscreen quad for shader execution."""
         # Simplified quad rendering - in production would use VAO/VBO
-        glBegin(GL_QUADS)
-        glTexCoord2f(0.0, 0.0)
-        glVertex2f(-1.0, -1.0)
-        glTexCoord2f(1.0, 0.0)
-        glVertex2f(1.0, -1.0)
-        glTexCoord2f(1.0, 1.0)
-        glVertex2f(1.0, 1.0)
-        glTexCoord2f(0.0, 1.0)
-        glVertex2f(-1.0, 1.0)
-        glEnd()
+        glBegin(GL_QUADS)  # noqa: F405
+        glTexCoord2f(0.0, 0.0)  # noqa: F405
+        glVertex2f(-1.0, -1.0)  # noqa: F405
+        glTexCoord2f(1.0, 0.0)  # noqa: F405
+        glVertex2f(1.0, -1.0)  # noqa: F405
+        glTexCoord2f(1.0, 1.0)  # noqa: F405
+        glVertex2f(1.0, 1.0)  # noqa: F405
+        glTexCoord2f(0.0, 1.0)  # noqa: F405
+        glVertex2f(-1.0, 1.0)  # noqa: F405
+        glEnd()  # noqa: F405
 
     def _compute_cpu_fallback(
         self, tick_vector: np.ndarray, strategy_vectors: np.ndarray
@@ -518,9 +524,9 @@ class GPUShaderIntegration:
         """Cleanup GPU resources."""
         if self.cosine_shader_program:
             try:
-                glDeleteProgram(self.cosine_shader_program.program_id)
-                glDeleteShader(self.cosine_shader_program.vertex_shader_id)
-                glDeleteShader(self.cosine_shader_program.fragment_shader_id)
+                glDeleteProgram(self.cosine_shader_program.program_id)  # noqa: F405
+                glDeleteShader(self.cosine_shader_program.vertex_shader_id)  # noqa: F405
+                glDeleteShader(self.cosine_shader_program.fragment_shader_id)  # noqa: F405
             except Exception:
                 pass
 

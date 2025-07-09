@@ -1,51 +1,32 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+🧬 Bio-Cellular Signaling System
+================================
+
+Implements biological cellular signaling mechanisms for trading.
+Treats the bot as a cytological AI that responds to market stimuli through
+cellular receptor dynamics, cascade amplification, and feedback loops.
+"""
+
 import logging
-import time
-import math
-from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Tuple, Any, Callable
-from enum import Enum
 import threading
-import json
-from .orbital_xi_ring_system import OrbitalXiRingSystem, XiRingLevel
-from .matrix_mapper import MatrixMapper, FallbackDecision
-from .quantum_mathematical_bridge import QuantumMathematicalBridge
-from .strategy_loader import load_strategy
+import time
+from collections import deque
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
-
-#!/usr/bin/env python3
-"""
-🧬 BIO-CELLULAR SIGNALING SYSTEM — SCHWABOT CYTOLOGICAL AI
-========================================================
-
-This module implements biological cellular signaling mechanisms for Schwabot,
-transforming the trading bot into a cytological AI that operates through:
-- β₂-AR receptor dynamics with desensitization and feedback
-- RTK cascades for multi-tier signal amplification
-- Calcium oscillations for frequency-modulated pulse trains
-- TGF-β negative feedback loops for overtrade throttling
-- NF-κB translocation for pattern memory formation
-- mTOR logic for capital/opportunity dual gating
-
-Mathematical Foundation:
-- ODE frameworks for signal propagation
-- Hill kinetics for smooth activation
-- Feedback loops for desensitization
-- Multi-tier cascade amplification
-- Frequency-modulated signaling
-- Memory formation through signaling patterns
-
-Integration Points:
-- Orbital Ξ Ring System → Cellular memory states
-- Matrix Mapper → Signal classification
-- Quantum Mathematical Bridge → Tensor operations
-- Profit Vectorization → Bio-logical optimization
-"""
+from scipy.integrate import odeint
 
 # Import existing Schwabot components
-    try:
+try:
+    from .orbital_xi_ring_system import OrbitalXiRingSystem, XiRingLevel
+    from .matrix_mapper import MatrixMapper, FallbackDecision
+    from .quantum_mathematical_bridge import QuantumMathematicalBridge
     SCHWABOT_COMPONENTS_AVAILABLE = True
-    except ImportError as e:
+except ImportError as e:
     print("⚠️ Some Schwabot components not available: {0}".format(e))
     SCHWABOT_COMPONENTS_AVAILABLE = False
 
@@ -74,7 +55,7 @@ class ReceptorState(Enum):
 
 
 @dataclass
-    class CellularSignalState:
+class CellularSignalState:
     """State representation for cellular signals"""
 
     signal_type: CellularSignalType
@@ -99,14 +80,14 @@ class ReceptorState(Enum):
     half_saturation: float = 0.5  # K - Half-max constant
     max_response: float = 1.0  # Maximum response
 
-    # Cascade parameters (for, RTK)
+    # Cascade parameters (for RTK)
     cascade_levels: List[float] = field(default_factory=lambda: [0.0] * 5)
     cascade_delays: List[float] = field(default_factory=lambda: [0.1, 0.2, 0.3, 0.4, 0.5])
     cascade_amplifications: List[float] = field(default_factory=lambda: [1.2, 1.5, 1.8, 2.0, 2.2])
 
 
 @dataclass
-    class BioCellularResponse:
+class BioCellularResponse:
     """Response from cellular signaling system"""
 
     signal_type: CellularSignalType
@@ -174,7 +155,7 @@ class BioCellularSignaling:
         self.NOISE_AMPLITUDE = 0.1
 
         # Performance tracking
-        self.signal_performance: Dict[CellularSignalType, List[float]] = {}
+        self.signal_performance: Dict[CellularSignalType, List[float]] = {
             signal_type: [] for signal_type in CellularSignalType
         }
 
@@ -182,7 +163,7 @@ class BioCellularSignaling:
 
     def _default_config(self) -> Dict[str, Any]:
         """Default configuration for bio-cellular signaling"""
-        return {}
+        return {
             'beta2_ar_sensitivity': 1.0,
             'rtk_cascade_depth': 5,
             'calcium_pulse_frequency': 0.1,
@@ -199,8 +180,8 @@ class BioCellularSignaling:
 
     def _initialize_cellular_signals(self):
         """Initialize all cellular signal types"""
-        signal_configs = {}
-            CellularSignalType.BETA2_AR: {}
+        signal_configs = {
+            CellularSignalType.BETA2_AR: {
                 'activation_rate': 2.0,
                 'deactivation_rate': 0.5,
                 'feedback_rate': 0.3,
@@ -208,7 +189,7 @@ class BioCellularSignaling:
                 'half_saturation': 0.3,
                 'receptor_density': 1000,
             },
-            CellularSignalType.RTK_CASCADE: {}
+            CellularSignalType.RTK_CASCADE: {
                 'activation_rate': 1.5,
                 'deactivation_rate': 0.3,
                 'feedback_rate': 0.1,
@@ -216,7 +197,7 @@ class BioCellularSignaling:
                 'half_saturation': 0.4,
                 'receptor_density': 500,
             },
-            CellularSignalType.CALCIUM_OSCILLATION: {}
+            CellularSignalType.CALCIUM_OSCILLATION: {
                 'activation_rate': 5.0,
                 'deactivation_rate': 2.0,
                 'feedback_rate': 0.8,
@@ -224,7 +205,7 @@ class BioCellularSignaling:
                 'half_saturation': 0.2,
                 'receptor_density': 2000,
             },
-            CellularSignalType.TGF_BETA_FEEDBACK: {}
+            CellularSignalType.TGF_BETA_FEEDBACK: {
                 'activation_rate': 0.8,
                 'deactivation_rate': 0.1,
                 'feedback_rate': 1.2,
@@ -232,26 +213,27 @@ class BioCellularSignaling:
                 'half_saturation': 0.6,
                 'receptor_density': 300,
             },
-            CellularSignalType.NF_KB_TRANSLOCATION: {}
+            CellularSignalType.NF_KB_TRANSLOCATION: {
                 'activation_rate': 1.2,
                 'deactivation_rate': 0.2,
                 'feedback_rate': 0.4,
                 'hill_coefficient': 2.5,
-                'half_saturation': 0.35,
+                'half_saturation': 0.5,
                 'receptor_density': 800,
             },
-            CellularSignalType.MTOR_GATING: {}
+            CellularSignalType.MTOR_GATING: {
                 'activation_rate': 0.5,
-                'deactivation_rate': 0.5,
-                'feedback_rate': 0.15,
-                'hill_coefficient': 1.8,
-                'half_saturation': 0.5,
-                'receptor_density': 400,
+                'deactivation_rate': 0.05,
+                'feedback_rate': 0.2,
+                'hill_coefficient': 1.0,
+                'half_saturation': 0.7,
+                'receptor_density': 1500,
             },
         }
 
+        # Create signal states
         for signal_type, config in signal_configs.items():
-            self.signal_states[signal_type] = CellularSignalState()
+            self.signal_states[signal_type] = CellularSignalState(
                 signal_type=signal_type,
                 activation_rate=config['activation_rate'],
                 deactivation_rate=config['deactivation_rate'],
@@ -261,116 +243,38 @@ class BioCellularSignaling:
             )
             self.receptor_populations[signal_type] = config['receptor_density']
 
-    def beta2_ar_signaling()
-        self, ligand_concentration: float, current_state: CellularSignalState, dt: float = 0.1
+        logger.info("✅ Initialized {0} cellular signal types".format(len(self.signal_states)))
+
+    def beta2_ar_signaling(
+        self, ligand_concentration: float, current_state: CellularSignalState
     ) -> CellularSignalState:
-        """
-        β₂-AR receptor signaling with desensitization and feedback.
-
-        Mathematical Implementation:
-        dS/dt = k_on * L(t) * (1-S) - [k_off + k_feedback * F(t)] * S
-        dF/dt = k_f_on * S - k_f_off * F
-        dP/dt = k_P * S - k_exit * F * P
-        """
+        """Beta-2 adrenergic receptor signaling (momentum detection)"""
         try:
-            # Update ligand concentration
-            current_state.ligand_concentration = ligand_concentration
-
-            # ODE system for β₂-AR dynamics
+            # Hill kinetics for receptor activation
             def beta2_ar_ode(state, t):
-                S, F, P = state
+                S, F = state  # Activation, Feedback
+                L = ligand_concentration
 
-                # Activation with ligand binding
-                dS_dt = ()
-                    current_state.activation_rate * ligand_concentration * (1 - S)
-                    - (current_state.deactivation_rate + current_state.feedback_rate * F) * S
+                # Hill equation for activation
+                hill_term = (L ** current_state.hill_coefficient) / (
+                    current_state.half_saturation ** current_state.hill_coefficient + L ** current_state.hill_coefficient
                 )
 
-                # Feedback accumulation
-                dF_dt = 0.5 * S - 0.2 * F
+                # ODE system
+                dS_dt = current_state.activation_rate * hill_term * (1 - S) - current_state.deactivation_rate * S
+                dF_dt = current_state.feedback_rate * S - 0.1 * F
 
-                # Position dynamics
-                dP_dt = 0.3 * S - 0.1 * F * P
+                return [dS_dt, dF_dt]
 
-                return [dS_dt, dF_dt, dP_dt]
-
-            # Solve ODE
-            initial_state = [current_state.activation_level, current_state.feedback_level, current_state.position_size]
-
-            t = np.linspace(0, dt, self.INTEGRATION_STEPS)
-            solution = odeint(beta2_ar_ode, initial_state, t)
+            # Integrate ODE
+            t_span = np.linspace(0, self.TIME_STEP, self.INTEGRATION_STEPS)
+            initial_state = [current_state.activation_level, current_state.feedback_level]
+            solution = odeint(beta2_ar_ode, initial_state, t_span)
 
             # Update state
-            final_state = solution[-1]
-            current_state.activation_level = max(0, min(1, final_state[0]))
-            current_state.feedback_level = max(0, final_state[1])
-            current_state.position_size = np.clip(final_state[2], -1, 1)
-
-            # Update receptor state
-            if current_state.activation_level > 0.8:
-                current_state.receptor_state = ReceptorState.ACTIVE
-            elif current_state.activation_level > 0.5:
-                current_state.receptor_state = ReceptorState.ACTIVATING
-            elif current_state.feedback_level > 0.6:
-                current_state.receptor_state = ReceptorState.DESENSITIZING
-            else:
-                current_state.receptor_state = ReceptorState.INACTIVE
-
-            # Add to signal history
-            current_state.signal_history.append(current_state.activation_level)
-
-            return current_state
-
-        except Exception as e:
-            logger.error("Error in β₂-AR signaling: {0}".format(e))
-            return current_state
-
-    def rtk_cascade_signaling()
-        self, growth_factor: float, current_state: CellularSignalState, dt: float = 0.1
-    ) -> CellularSignalState:
-        """
-        RTK cascade signaling with multi-tier amplification.
-
-        Mathematical Implementation:
-        X₁(t) = σ₁ * L(t)
-        X₂(t) = σ₂ * X₁(t-τ₁)
-        X₃(t) = σ₃ * X₂(t-τ₂)
-        ...
-        Xₙ(t) = σₙ * Xₙ₋₁(t-τₙ₋₁)
-        """
-        try:
-            # Update ligand concentration
-            current_state.ligand_concentration = growth_factor
-
-            # Initialize cascade if empty
-            if len(current_state.cascade_levels) == 0:
-                current_state.cascade_levels = [0.0] * 5
-
-            # First level - direct activation
-            current_state.cascade_levels[0] = ()
-                current_state.activation_rate * growth_factor * (1 - current_state.cascade_levels[0])
-                - current_state.deactivation_rate * current_state.cascade_levels[0]
-            ) * dt + current_state.cascade_levels[0]
-
-            # Subsequent levels - delayed amplification
-            for i in range(1, len(current_state.cascade_levels)):
-                delay_factor = np.exp(-current_state.cascade_delays[i - 1] / dt)
-                amplification = current_state.cascade_amplifications[i - 1]
-
-                current_state.cascade_levels[i] = ()
-                    amplification
-                    * current_state.cascade_levels[i - 1]
-                    * delay_factor
-                    * (1 - current_state.cascade_levels[i])
-                    - current_state.deactivation_rate * current_state.cascade_levels[i]
-                ) * dt + current_state.cascade_levels[i]
-
-            # Final activation is sum of all cascade levels
-            current_state.activation_level = np.sum(current_state.cascade_levels) / len(current_state.cascade_levels)
-            current_state.activation_level = max(0, min(1, current_state.activation_level))
-
-            # Position size based on final cascade output
-            current_state.position_size = np.tanh(current_state.activation_level * 2 - 1)
+            current_state.activation_level = solution[-1, 0]
+            current_state.feedback_level = solution[-1, 1]
+            current_state.ligand_concentration = ligand_concentration
 
             # Update receptor state
             if current_state.activation_level > 0.7:
@@ -380,355 +284,294 @@ class BioCellularSignaling:
             else:
                 current_state.receptor_state = ReceptorState.INACTIVE
 
-            # Add to signal history
-            current_state.signal_history.append(current_state.activation_level)
+            # Add noise if enabled
+            if self.config.get('noise_enabled', True):
+                noise = np.random.normal(0, self.NOISE_AMPLITUDE)
+                current_state.activation_level = np.clip(current_state.activation_level + noise, 0, 1)
 
             return current_state
 
         except Exception as e:
-            logger.error("Error in RTK cascade signaling: {0}".format(e))
+            logger.error("Error in beta2_ar_signaling: {0}".format(e))
             return current_state
 
-    def calcium_oscillation_signaling()
-        self, calcium_stimulus: float, current_state: CellularSignalState, dt: float = 0.1
+    def rtk_cascade_signaling(
+        self, ligand_concentration: float, current_state: CellularSignalState
     ) -> CellularSignalState:
-        """
-        Calcium oscillation signaling with pulse dynamics.
-
-        Mathematical Implementation:
-        d[Ca²⁺]/dt = J_release - J_reuptake - J_leak
-        """
+        """Receptor tyrosine kinase cascade signaling (trend confirmation)"""
         try:
-            # Update ligand concentration
-            current_state.ligand_concentration = calcium_stimulus
+            # Multi-level cascade with delays
+            cascade_levels = current_state.cascade_levels.copy()
+            cascade_delays = current_state.cascade_delays
+            cascade_amps = current_state.cascade_amplifications
 
-            # Calcium dynamics ODE
-            def calcium_ode(state, t):
-                Ca, IP3, DAG = state
+            # First level activation
+            hill_term = (ligand_concentration ** current_state.hill_coefficient) / (
+                current_state.half_saturation ** current_state.hill_coefficient + ligand_concentration ** current_state.hill_coefficient
+            )
+            cascade_levels[0] = hill_term
 
-                # Stimulus-dependent calcium release
-                J_release = current_state.activation_rate * calcium_stimulus * (1 - Ca)
-
-                # Calcium reuptake (ATP-dependent)
-                J_reuptake = 2.0 * Ca**2 / (0.1 + Ca**2)
-
-                # Background leak
-                J_leak = 0.5 * Ca
-
-                # IP3 dynamics
-                dIP3_dt = 0.8 * calcium_stimulus - 0.3 * IP3
-
-                # DAG dynamics
-                dDAG_dt = 0.5 * IP3 - 0.2 * DAG
-
-                dCa_dt = J_release - J_reuptake - J_leak
-
-                return [dCa_dt, dIP3_dt, dDAG_dt]
-
-            # Solve ODE
-            initial_state = [current_state.activation_level, current_state.feedback_level, current_state.position_size]
-
-            t = np.linspace(0, dt, self.INTEGRATION_STEPS)
-            solution = odeint(calcium_ode, initial_state, t)
+            # Propagate through cascade levels
+            for i in range(1, len(cascade_levels)):
+                # Activation with delay and amplification
+                activation = cascade_levels[i - 1] * cascade_amps[i - 1]
+                cascade_levels[i] = activation * (1 - np.exp(-self.TIME_STEP / cascade_delays[i]))
 
             # Update state
-            final_state = solution[-1]
-            current_state.activation_level = max(0, min(1, final_state[0]))
-            current_state.feedback_level = max(0, final_state[1])
-            current_state.position_size = np.clip(final_state[2], -1, 1)
+            current_state.cascade_levels = cascade_levels
+            current_state.activation_level = cascade_levels[-1]  # Final cascade level
+            current_state.ligand_concentration = ligand_concentration
 
-            # Pulse detection
-            if len(current_state.signal_history) > 5:
-                recent_signals = list(current_state.signal_history)[-5:]
-                if current_state.activation_level > 0.6 and all(s < 0.4 for s in, recent_signals):
-                    # Pulse detected
-                    current_time = time.time()
-                    if current_state.last_pulse_time > 0:
-                        pulse_interval = current_time - current_state.last_pulse_time
-                        current_state.pulse_frequency = 1.0 / pulse_interval
-                    current_state.last_pulse_time = current_time
+            # Update receptor state based on final cascade level
+            if current_state.activation_level > 0.8:
+                current_state.receptor_state = ReceptorState.ACTIVE
+            elif current_state.activation_level > 0.4:
+                current_state.receptor_state = ReceptorState.ACTIVATING
+            else:
+                current_state.receptor_state = ReceptorState.INACTIVE
+
+            return current_state
+
+        except Exception as e:
+            logger.error("Error in rtk_cascade_signaling: {0}".format(e))
+            return current_state
+
+    def calcium_oscillation_signaling(
+        self, ligand_concentration: float, current_state: CellularSignalState
+    ) -> CellularSignalState:
+        """Calcium oscillation signaling (volume pulse detection)"""
+        try:
+            # Calcium oscillation model
+            def calcium_ode(state, t):
+                Ca, IP3 = state  # Calcium, IP3 concentration
+                L = ligand_concentration
+
+                # Calcium dynamics
+                dCa_dt = current_state.activation_rate * L * IP3 - current_state.deactivation_rate * Ca
+                dIP3_dt = current_state.activation_rate * L - current_state.feedback_rate * IP3
+
+                return [dCa_dt, dIP3_dt]
+
+            # Integrate ODE
+            t_span = np.linspace(0, self.TIME_STEP, self.INTEGRATION_STEPS)
+            initial_state = [current_state.activation_level, current_state.feedback_level]
+            solution = odeint(calcium_ode, initial_state, t_span)
+
+            # Update state
+            current_state.activation_level = solution[-1, 0]
+            current_state.feedback_level = solution[-1, 1]
+            current_state.ligand_concentration = ligand_concentration
+
+            # Calculate pulse frequency
+            if len(current_state.signal_history) > 1:
+                recent_signals = list(current_state.signal_history)[-10:]
+                peaks = [i for i in range(1, len(recent_signals) - 1) if recent_signals[i] > recent_signals[i - 1] and recent_signals[i] > recent_signals[i + 1]]
+                current_state.pulse_frequency = len(peaks) / len(recent_signals) if recent_signals else 0.0
 
             # Update receptor state
-            if current_state.activation_level > 0.8:
+            if current_state.pulse_frequency > 0.3:
                 current_state.receptor_state = ReceptorState.ACTIVE
             elif current_state.pulse_frequency > 0.1:
                 current_state.receptor_state = ReceptorState.ACTIVATING
             else:
                 current_state.receptor_state = ReceptorState.INACTIVE
 
-            # Add to signal history
-            current_state.signal_history.append(current_state.activation_level)
-
             return current_state
 
         except Exception as e:
-            logger.error("Error in calcium oscillation signaling: {0}".format(e))
+            logger.error("Error in calcium_oscillation_signaling: {0}".format(e))
             return current_state
 
-    def tgf_beta_feedback_signaling()
-        self, growth_signal: float, current_state: CellularSignalState, dt: float = 0.1
+    def tgf_beta_feedback_signaling(
+        self, ligand_concentration: float, current_state: CellularSignalState
     ) -> CellularSignalState:
-        """
-        TGF-β negative feedback signaling for overtrade throttling.
-
-        Mathematical Implementation:
-        dI/dt = k_a * A - k_d * I
-        """
+        """TGF-beta feedback signaling (risk inhibition)"""
         try:
-            # Update ligand concentration
-            current_state.ligand_concentration = growth_signal
-
-            # TGF-β feedback dynamics
+            # Negative feedback model
             def tgf_beta_ode(state, t):
-                A, I = state
+                S, F = state  # Signal, Feedback
+                L = ligand_concentration
 
-                # Activation by growth signal
-                dA_dt = current_state.activation_rate * growth_signal * (1 - A) - 0.2 * A
+                # Strong negative feedback
+                dS_dt = current_state.activation_rate * L * (1 - F) - current_state.deactivation_rate * S
+                dF_dt = current_state.feedback_rate * S - 0.05 * F
 
-                # Inhibitor production
-                dI_dt = 0.8 * A - 0.1 * I
+                return [dS_dt, dF_dt]
 
-                return [dA_dt, dI_dt]
-
-            # Solve ODE
+            # Integrate ODE
+            t_span = np.linspace(0, self.TIME_STEP, self.INTEGRATION_STEPS)
             initial_state = [current_state.activation_level, current_state.feedback_level]
-
-            t = np.linspace(0, dt, self.INTEGRATION_STEPS)
-            solution = odeint(tgf_beta_ode, initial_state, t)
+            solution = odeint(tgf_beta_ode, initial_state, t_span)
 
             # Update state
-            final_state = solution[-1]
-            current_state.activation_level = max(0, min(1, final_state[0]))
-            current_state.feedback_level = max(0, final_state[1])
-
-            # Position size reduced by inhibition
-            current_state.position_size = current_state.activation_level * (1 - current_state.feedback_level)
-            current_state.position_size = np.clip(current_state.position_size, -1, 1)
+            current_state.activation_level = solution[-1, 0]
+            current_state.feedback_level = solution[-1, 1]
+            current_state.ligand_concentration = ligand_concentration
 
             # Update receptor state
-            if current_state.feedback_level > 0.6:
+            if current_state.feedback_level > 0.7:
                 current_state.receptor_state = ReceptorState.DESENSITIZING
             elif current_state.activation_level > 0.5:
                 current_state.receptor_state = ReceptorState.ACTIVE
             else:
                 current_state.receptor_state = ReceptorState.INACTIVE
 
-            # Add to signal history
-            current_state.signal_history.append(current_state.activation_level)
-
             return current_state
 
         except Exception as e:
-            logger.error("Error in TGF-β feedback signaling: {0}".format(e))
+            logger.error("Error in tgf_beta_feedback_signaling: {0}".format(e))
             return current_state
 
-    def nf_kb_translocation_signaling()
-        self, inflammatory_signal: float, current_state: CellularSignalState, dt: float = 0.1
+    def nf_kb_translocation_signaling(
+        self, ligand_concentration: float, current_state: CellularSignalState
     ) -> CellularSignalState:
-        """
-        NF-κB translocation signaling for pattern memory formation.
-
-        Mathematical Implementation:
-        d[NFκB]/dt = α - β * I(t)
-        dI/dt = γ * [NFκB] - δ * I
-        """
+        """NF-kB translocation signaling (stress response)"""
         try:
-            # Update ligand concentration
-            current_state.ligand_concentration = inflammatory_signal
-
-            # NF-κB translocation dynamics
+            # NF-kB translocation model
             def nf_kb_ode(state, t):
-                NFkB, I = state
+                NF_KB_cyto, NF_KB_nuc = state  # Cytoplasmic, Nuclear
+                L = ligand_concentration
 
-                # NF-κB activation
-                alpha = current_state.activation_rate * inflammatory_signal
-                beta = 0.5 * I
+                # Translocation dynamics
+                translocation_rate = current_state.activation_rate * L
+                return_rate = current_state.deactivation_rate
 
-                # Inhibitor dynamics
-                gamma = 0.3 * NFkB
-                delta = 0.1 * I
+                dNF_KB_cyto_dt = return_rate * NF_KB_nuc - translocation_rate * NF_KB_cyto
+                dNF_KB_nuc_dt = translocation_rate * NF_KB_cyto - return_rate * NF_KB_nuc
 
-                dNFkB_dt = alpha - beta * NFkB
-                dI_dt = gamma - delta
+                return [dNF_KB_cyto_dt, dNF_KB_nuc_dt]
 
-                return [dNFkB_dt, dI_dt]
+            # Integrate ODE
+            t_span = np.linspace(0, self.TIME_STEP, self.INTEGRATION_STEPS)
+            initial_state = [1 - current_state.activation_level, current_state.activation_level]
+            solution = odeint(nf_kb_ode, initial_state, t_span)
 
-            # Solve ODE
-            initial_state = [current_state.activation_level, current_state.feedback_level]
+            # Update state (nuclear NF-kB is the active form)
+            current_state.activation_level = solution[-1, 1]
+            current_state.ligand_concentration = ligand_concentration
 
-            t = np.linspace(0, dt, self.INTEGRATION_STEPS)
-            solution = odeint(nf_kb_ode, initial_state, t)
-
-            # Update state
-            final_state = solution[-1]
-            current_state.activation_level = max(0, min(1, final_state[0]))
-            current_state.feedback_level = max(0, final_state[1])
-
-            # Position size based on NF-κB level
-            current_state.position_size = np.tanh(current_state.activation_level - 0.5)
+            # Memory formation
+            if current_state.activation_level > 0.6 and self.config.get('nf_kb_memory_formation', True):
+                current_state.memory_formation = True
 
             # Update receptor state
             if current_state.activation_level > 0.7:
                 current_state.receptor_state = ReceptorState.ACTIVE
-            elif current_state.feedback_level > 0.5:
-                current_state.receptor_state = ReceptorState.DESENSITIZING
-            else:
-                current_state.receptor_state = ReceptorState.INACTIVE
-
-            # Add to signal history
-            current_state.signal_history.append(current_state.activation_level)
-
-            return current_state
-
-        except Exception as e:
-            logger.error("Error in NF-κB translocation signaling: {0}".format(e))
-            return current_state
-
-    def mtor_gating_signaling()
-        self, nutrient_level: float, energy_level: float, current_state: CellularSignalState, dt: float = 0.1
-    ) -> CellularSignalState:
-        """
-        mTOR gating signaling for capital/opportunity dual gating.
-
-        Mathematical Implementation:
-        Activation_mTOR = H([ATP] - θ₁) * H([Nutrient] - θ₂)
-        """
-        try:
-            # Heaviside step functions for gating
-            def heaviside(x):
-                return 1.0 if x >= 0 else 0.0
-
-            # Update ligand concentration (combined, signal)
-            current_state.ligand_concentration = (nutrient_level + energy_level) / 2
-
-            # mTOR gating logic
-            nutrient_gate = heaviside(nutrient_level - 0.3)
-            energy_gate = heaviside(energy_level - 0.4)
-
-            # Dual gating activation
-            gating_signal = nutrient_gate * energy_gate
-
-            # mTOR dynamics
-            def mtor_ode(state, t):
-                mTOR, S6K1 = state
-
-                # mTOR activation only if both gates are open
-                dmTOR_dt = ()
-                    current_state.activation_rate * gating_signal * (1 - mTOR) - current_state.deactivation_rate * mTOR
-                )
-
-                # S6K1 activation downstream of mTOR
-                dS6K1_dt = 2.0 * mTOR - 0.5 * S6K1
-
-                return [dmTOR_dt, dS6K1_dt]
-
-            # Solve ODE
-            initial_state = [current_state.activation_level, current_state.feedback_level]
-
-            t = np.linspace(0, dt, self.INTEGRATION_STEPS)
-            solution = odeint(mtor_ode, initial_state, t)
-
-            # Update state
-            final_state = solution[-1]
-            current_state.activation_level = max(0, min(1, final_state[0]))
-            current_state.feedback_level = max(0, final_state[1])
-
-            # Position size only if both gates are open
-            if gating_signal > 0.5:
-                current_state.position_size = current_state.activation_level
-            else:
-                current_state.position_size = 0.0
-
-            # Update receptor state
-            if gating_signal > 0.5 and current_state.activation_level > 0.6:
-                current_state.receptor_state = ReceptorState.ACTIVE
-            elif gating_signal > 0.5:
+            elif current_state.activation_level > 0.3:
                 current_state.receptor_state = ReceptorState.ACTIVATING
             else:
                 current_state.receptor_state = ReceptorState.INACTIVE
 
-            # Add to signal history
-            current_state.signal_history.append(current_state.activation_level)
-
             return current_state
 
         except Exception as e:
-            logger.error("Error in mTOR gating signaling: {0}".format(e))
+            logger.error("Error in nf_kb_translocation_signaling: {0}".format(e))
             return current_state
 
-    def hill_kinetics_smoothing()
-        self, ligand_concentration: float, hill_coefficient: float, half_saturation: float, max_response: float = 1.0
-    ) -> float:
-        """
-        Hill kinetics smoothing function.
-
-        Mathematical Implementation:
-        Response = max_response * [L]^n / (K^n + [L]^n)
-        """
+    def mtor_gating_signaling(
+        self, ligand_concentration: float, current_state: CellularSignalState
+    ) -> CellularSignalState:
+        """mTOR gating signaling (capital allocation)"""
         try:
-            if ligand_concentration <= 0:
-                return 0.0
+            # Heaviside function for threshold gating
+            def heaviside(x):
+                return 1.0 if x > 0 else 0.0
 
-            numerator = max_response * (ligand_concentration**hill_coefficient)
-            denominator = (half_saturation**hill_coefficient) + (ligand_concentration**hill_coefficient)
+            # mTOR gating model
+            def mtor_ode(state, t):
+                S, F = state  # Signal, Feedback
+                L = ligand_concentration
+                threshold = self.config.get('mtor_capital_threshold', 0.3)
 
-            response = numerator / denominator
-            return response
+                # Gating function
+                gate = heaviside(L - threshold)
+
+                # mTOR activation
+                dS_dt = current_state.activation_rate * gate * L - current_state.deactivation_rate * S
+                dF_dt = current_state.feedback_rate * S - 0.02 * F
+
+                return [dS_dt, dF_dt]
+
+            # Integrate ODE
+            t_span = np.linspace(0, self.TIME_STEP, self.INTEGRATION_STEPS)
+            initial_state = [current_state.activation_level, current_state.feedback_level]
+            solution = odeint(mtor_ode, initial_state, t_span)
+
+            # Update state
+            current_state.activation_level = solution[-1, 0]
+            current_state.feedback_level = solution[-1, 1]
+            current_state.ligand_concentration = ligand_concentration
+
+            # Update receptor state
+            if current_state.activation_level > 0.8:
+                current_state.receptor_state = ReceptorState.ACTIVE
+            elif current_state.activation_level > 0.4:
+                current_state.receptor_state = ReceptorState.ACTIVATING
+            else:
+                current_state.receptor_state = ReceptorState.INACTIVE
+
+            return current_state
 
         except Exception as e:
-            logger.error("Error in Hill kinetics smoothing: {0}".format(e))
-            return 0.0
+            logger.error("Error in mtor_gating_signaling: {0}".format(e))
+            return current_state
+
+    def hill_kinetics_smoothing(self, signal: float, state: CellularSignalState) -> float:
+        """Apply Hill kinetics smoothing to signal"""
+        try:
+            # Hill equation
+            smoothed = (signal ** state.hill_coefficient) / (
+                state.half_saturation ** state.hill_coefficient + signal ** state.hill_coefficient
+            )
+            return smoothed * state.max_response
+
+        except Exception as e:
+            logger.error("Error in hill_kinetics_smoothing: {0}".format(e))
+            return signal
 
     def process_market_signal(self, market_data: Dict[str, Any]) -> Dict[CellularSignalType, BioCellularResponse]:
-        """
-        Process market data through all cellular signaling pathways.
-
-        This is the main function that translates market signals into cellular responses.
-        """
+        """Process market data through cellular signaling pathways"""
         try:
             responses = {}
 
             # Extract market signals
             price_momentum = market_data.get('price_momentum', 0.0)
-            volatility = market_data.get('volatility', 0.0)
             volume_delta = market_data.get('volume_delta', 0.0)
-            liquidity = market_data.get('liquidity', 0.5)
+            volatility = market_data.get('volatility', 0.0)
             risk_level = market_data.get('risk_level', 0.3)
+            liquidity = market_data.get('liquidity', 0.5)
+            capital_ratio = market_data.get('capital_ratio', 0.5)
 
-            # Process through each signaling pathway
-            for signal_type, signal_state in self.signal_states.items():
+            # Process each signal type
+            for signal_type, state in self.signal_states.items():
+                # Map market data to ligand concentrations
                 if signal_type == CellularSignalType.BETA2_AR:
-                    # β₂-AR responds to price momentum
-                    updated_state = self.beta2_ar_signaling(abs(price_momentum), signal_state, self.TIME_STEP)
-
+                    ligand = abs(price_momentum)
+                    updated_state = self.beta2_ar_signaling(ligand, state)
                 elif signal_type == CellularSignalType.RTK_CASCADE:
-                    # RTK cascade responds to volatility
-                    updated_state = self.rtk_cascade_signaling(volatility, signal_state, self.TIME_STEP)
-
+                    ligand = abs(price_momentum) * (1 + volatility)
+                    updated_state = self.rtk_cascade_signaling(ligand, state)
                 elif signal_type == CellularSignalType.CALCIUM_OSCILLATION:
-                    # Calcium responds to volume changes
-                    updated_state = self.calcium_oscillation_signaling(abs(volume_delta), signal_state, self.TIME_STEP)
-
+                    ligand = abs(volume_delta)
+                    updated_state = self.calcium_oscillation_signaling(ligand, state)
                 elif signal_type == CellularSignalType.TGF_BETA_FEEDBACK:
-                    # TGF-β responds to risk level
-                    updated_state = self.tgf_beta_feedback_signaling(risk_level, signal_state, self.TIME_STEP)
-
+                    ligand = risk_level
+                    updated_state = self.tgf_beta_feedback_signaling(ligand, state)
                 elif signal_type == CellularSignalType.NF_KB_TRANSLOCATION:
-                    # NF-κB responds to market stress
-                    market_stress = (volatility + abs(volume_delta)) / 2
-                    updated_state = self.nf_kb_translocation_signaling(market_stress, signal_state, self.TIME_STEP)
-
+                    ligand = volatility
+                    updated_state = self.nf_kb_translocation_signaling(ligand, state)
                 elif signal_type == CellularSignalType.MTOR_GATING:
-                    # mTOR responds to liquidity and opportunity
-                    opportunity = abs(price_momentum)
-                    updated_state = self.mtor_gating_signaling(liquidity, opportunity, signal_state, self.TIME_STEP)
+                    ligand = capital_ratio
+                    updated_state = self.mtor_gating_signaling(ligand, state)
+                else:
+                    continue
 
-                # Update the state
-                self.signal_states[signal_type] = updated_state
-
-                # Generate cellular response
-                response = self._generate_cellular_response(updated_state, market_data)
+                # Generate response
+                response = self._generate_cellular_response(updated_state, signal_type)
                 responses[signal_type] = response
+
+                # Update state
+                self.signal_states[signal_type] = updated_state
 
             return responses
 
@@ -736,56 +579,47 @@ class BioCellularSignaling:
             logger.error("Error processing market signal: {0}".format(e))
             return {}
 
-    def _generate_cellular_response()
-        self, signal_state: CellularSignalState, market_data: Dict[str, Any]
+    def _generate_cellular_response(
+        self, state: CellularSignalState, signal_type: CellularSignalType
     ) -> BioCellularResponse:
-        """Generate trading response from cellular signal state"""
+        """Generate trading response from cellular state"""
         try:
-            # Determine trade action
-            if signal_state.position_size > 0.3:
+            # Determine trade action based on activation level
+            if state.activation_level > 0.7:
                 trade_action = "buy"
-            elif signal_state.position_size < -0.3:
+                position_delta = state.activation_level
+            elif state.activation_level < 0.3:
                 trade_action = "sell"
+                position_delta = -(1 - state.activation_level)
             else:
                 trade_action = "hold"
+                position_delta = 0.0
 
-            # Calculate confidence based on activation level
-            confidence = signal_state.activation_level * (1 - signal_state.feedback_level)
+            # Calculate confidence
+            confidence = state.activation_level
 
-            # Risk adjustment based on feedback
-            risk_adjustment = 1.0 - signal_state.feedback_level
-
-            # Determine Xi ring target based on activation
-            if signal_state.activation_level > 0.8:
-                xi_ring_target = XiRingLevel.XI_0
-            elif signal_state.activation_level > 0.6:
-                xi_ring_target = XiRingLevel.XI_1
-            elif signal_state.activation_level > 0.4:
-                xi_ring_target = XiRingLevel.XI_2
-            else:
-                xi_ring_target = XiRingLevel.XI_3
+            # Calculate risk adjustment
+            risk_adjustment = 1.0 - state.feedback_level
 
             # Create response
-            response = BioCellularResponse()
-                signal_type=signal_state.signal_type,
+            response = BioCellularResponse(
+                signal_type=signal_type,
                 trade_action=trade_action,
-                position_delta=signal_state.position_size,
+                position_delta=position_delta,
                 confidence=confidence,
                 risk_adjustment=risk_adjustment,
-                activation_strength=signal_state.activation_level,
-                feedback_inhibition=signal_state.feedback_level,
-                pulse_frequency=signal_state.pulse_frequency,
-                receptor_density=self.receptor_populations.get(signal_state.signal_type, 1000),
-                xi_ring_target=xi_ring_target,
-                memory_formation=signal_state.activation_level > 0.7,
+                activation_strength=state.activation_level,
+                feedback_inhibition=state.feedback_level,
+                pulse_frequency=state.pulse_frequency,
+                receptor_density=self.receptor_populations.get(signal_type, 1000),
             )
 
             return response
 
         except Exception as e:
             logger.error("Error generating cellular response: {0}".format(e))
-            return BioCellularResponse()
-                signal_type=signal_state.signal_type,
+            return BioCellularResponse(
+                signal_type=signal_type,
                 trade_action="hold",
                 position_delta=0.0,
                 confidence=0.0,
@@ -796,60 +630,54 @@ class BioCellularSignaling:
                 receptor_density=1000,
             )
 
-    def integrate_with_xi_rings()
-        self, cellular_responses: Dict[CellularSignalType, BioCellularResponse], strategy_id: str
-    ) -> bool:
+    def integrate_with_xi_rings(self, responses: Dict[CellularSignalType, BioCellularResponse]) -> Dict[CellularSignalType, BioCellularResponse]:
         """Integrate cellular responses with Xi ring system"""
         try:
-            if not self.xi_ring_system:
-                return False
+            if not SCHWABOT_COMPONENTS_AVAILABLE or not self.xi_ring_system:
+                return responses
 
-            # Find the most active cellular response
-            best_response = max(cellular_responses.values(), key=lambda r: r.activation_strength)
+            for signal_type, response in responses.items():
+                # Map cellular activation to Xi ring level
+                activation_level = response.activation_strength
+                if activation_level > 0.8:
+                    xi_level = XiRingLevel.XI_0
+                elif activation_level > 0.6:
+                    xi_level = XiRingLevel.XI_1
+                elif activation_level > 0.4:
+                    xi_level = XiRingLevel.XI_2
+                elif activation_level > 0.2:
+                    xi_level = XiRingLevel.XI_3
+                else:
+                    xi_level = XiRingLevel.XI_4
 
-            # Create or update strategy orbit
-            if strategy_id not in self.xi_ring_system.strategy_orbits:
-                self.xi_ring_system.create_strategy_orbit(strategy_id, best_response.xi_ring_target, {})
-            else:
-                # Check if ring transition is needed
-                current_orbit = self.xi_ring_system.strategy_orbits[strategy_id]
-                if current_orbit.current_ring != best_response.xi_ring_target:
-                    self.xi_ring_system.execute_ring_transition()
-                        strategy_id, best_response.xi_ring_target, "cellular_signal"
-                    )
+                response.xi_ring_target = xi_level
 
-            return True
+            return responses
 
         except Exception as e:
             logger.error("Error integrating with Xi rings: {0}".format(e))
-            return False
+            return responses
 
     def get_system_status(self) -> Dict[str, Any]:
         """Get comprehensive system status"""
         try:
-            signal_status = {}
-            for signal_type, signal_state in self.signal_states.items():
-                signal_status[signal_type.value] = {}
-                    'activation_level': signal_state.activation_level,
-                    'feedback_level': signal_state.feedback_level,
-                    'position_size': signal_state.position_size,
-                    'receptor_state': signal_state.receptor_state.value,
-                    'pulse_frequency': signal_state.pulse_frequency,
-                    'ligand_concentration': signal_state.ligand_concentration,
-                    'receptor_density': self.receptor_populations.get(signal_type, 1000),
-                }
-
-            return {}
+            status = {
                 'system_active': self.system_active,
-                'signal_states': signal_status,
-                'total_signals': len(self.signal_states),
-                'integration_enabled': SCHWABOT_COMPONENTS_AVAILABLE,
-                'biological_constants': {}
-                    'temperature': self.TEMPERATURE,
-                    'membrane_potential': self.MEMBRANE_POTENTIAL,
-                    'time_step': self.TIME_STEP,
-                },
+                'signal_types': len(self.signal_states),
+                'receptor_populations': self.receptor_populations,
+                'performance_metrics': {},
             }
+
+            # Calculate performance metrics
+            for signal_type, performance in self.signal_performance.items():
+                if performance:
+                    status['performance_metrics'][signal_type.value] = {
+                        'avg_activation': np.mean(performance),
+                        'max_activation': np.max(performance),
+                        'signal_count': len(performance),
+                    }
+
+            return status
 
         except Exception as e:
             logger.error("Error getting system status: {0}".format(e))
@@ -867,11 +695,11 @@ class BioCellularSignaling:
 
     def cleanup_resources(self):
         """Clean up system resources"""
-        try:
-            self.stop_cellular_signaling()
-            self.signal_states.clear()
-            self.receptor_populations.clear()
-            self.signal_performance.clear()
-            logger.info("🧬 Bio-Cellular Signaling resources cleaned up")
-        except Exception as e:
-            logger.error("Error cleaning up resources: {0}".format(e))
+        self.stop_cellular_signaling()
+        logger.info("🧬 Bio-Cellular Signaling System resources cleaned up")
+
+
+# Factory function
+def create_bio_cellular_signaling(config: Dict[str, Any] = None) -> BioCellularSignaling:
+    """Create a bio-cellular signaling instance"""
+    return BioCellularSignaling(config)

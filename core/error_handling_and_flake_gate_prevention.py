@@ -27,7 +27,7 @@ Mathematical Foundation:
 """
 
 # Configure logging
-logging.basicConfig()
+logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
@@ -71,7 +71,7 @@ class RecoveryStrategy(Enum):
 
 
 @dataclass
-    class ErrorRecord:
+class ErrorRecord:
     """Record of an error for analysis and recovery."""
     error_id: str
     error_type: ErrorType
@@ -88,7 +88,7 @@ class RecoveryStrategy(Enum):
 
 
 @dataclass
-    class ModuleStatus:
+class ModuleStatus:
     """Status of a module in the system."""
     module_name: str
     is_available: bool
@@ -102,7 +102,7 @@ class RecoveryStrategy(Enum):
 
 
 @dataclass
-    class SystemHealth:
+class SystemHealth:
     """Overall system health status."""
     overall_health: float  # 0.0 to 1.0
     critical_errors: int

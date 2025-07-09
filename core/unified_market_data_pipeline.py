@@ -1,11 +1,9 @@
 import asyncio
-import json
 import logging
 import time
 from dataclasses import dataclass, field
 from enum import Enum
-from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional, Tuple
 from .api.handlers.alt_fear_greed import FearGreedHandler
 from .api.handlers.coingecko import CoinGeckoHandler
 from .api.handlers.glassnode import GlassnodeHandler
@@ -15,7 +13,6 @@ from .soulprint_registry import SoulprintRegistry
 
 import numpy as np
 
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Unified Market Data Pipeline for Schwabot Trading System
@@ -344,7 +341,9 @@ class UnifiedMarketDataPipeline:
             return market_packet
 
         except Exception as e:
-            logger.error("Error generating market data for {0}: {1}".format(symbol, e))
+            logger.error(
+                "Error generating market data for {0}: {1}".format(symbol, e)
+            )
             self._update_metrics(False, time.time() - start_time)
 
             # Return fallback data
@@ -456,7 +455,9 @@ class UnifiedMarketDataPipeline:
 
         return cleaned
 
-    def _calculate_technical_indicators(self, symbol: str, data: Dict[str, Any]) -> TechnicalIndicators:
+    def _calculate_technical_indicators(
+        self, symbol: str, data: Dict[str, Any]
+    ) -> TechnicalIndicators:
         """Calculate technical indicators from price data."""
         indicators = TechnicalIndicators()
 
@@ -484,16 +485,18 @@ class UnifiedMarketDataPipeline:
 
             # MACD calculation
             if len(prices) >= 26:
-                indicators.macd_line, indicators.macd_signal, indicators.macd_histogram = self._calculate_macd(prices)
+                macd_result = self._calculate_macd(prices)
+                indicators.macd_line, indicators.macd_signal, indicators.macd_histogram = macd_result
 
             # Bollinger Bands
             if len(prices) >= 20:
+                bb_result = self._calculate_bollinger_bands(prices)
                 (
                     indicators.bb_upper,
                     indicators.bb_middle,
                     indicators.bb_lower,
                     indicators.bb_position,
-                ) = self._calculate_bollinger_bands(prices)
+                ) = bb_result
 
             # Moving averages
             if len(prices) >= 12:
@@ -515,10 +518,13 @@ class UnifiedMarketDataPipeline:
 
             # Stochastic oscillator
             if len(prices) >= 14:
-                indicators.stoch_k, indicators.stoch_d = self._calculate_stochastic(prices, 14)
+                stoch_result = self._calculate_stochastic(prices, 14)
+                indicators.stoch_k, indicators.stoch_d = stoch_result
 
         except Exception as e:
-            logger.error("Error calculating technical indicators for {0}: {1}".format(symbol, e))
+            logger.error(
+                "Error calculating technical indicators for {0}: {1}".format(symbol, e)
+            )
 
         return indicators
 
@@ -576,7 +582,9 @@ class UnifiedMarketDataPipeline:
 
         return sentiment
 
-    def _calculate_derived_metrics(self, data: Dict[str, Any], indicators: TechnicalIndicators) -> Dict[str, float]:
+    def _calculate_derived_metrics(
+        self, data: Dict[str, Any], indicators: TechnicalIndicators
+    ) -> Dict[str, float]:
         """Calculate derived metrics for the trading system."""
         metrics = {
             "volatility": 0.5,
@@ -593,23 +601,33 @@ class UnifiedMarketDataPipeline:
 
             # Trend strength from MACD and RSI
             if indicators.macd_histogram != 0:
-                macd_strength = abs(indicators.macd_histogram) / max(abs(indicators.macd_line), 1.0)
+                macd_strength = abs(indicators.macd_histogram) / max(
+                    abs(indicators.macd_line), 1.0
+                )
                 rsi_trend = abs(indicators.rsi_14 - 50) / 50.0
                 metrics["trend_strength"] = min(1.0, (macd_strength + rsi_trend) / 2.0)
 
             # Entropy level (market, uncertainty)
             volatility = metrics["volatility"]
-            bb_width = abs(indicators.bb_upper - indicators.bb_lower) / max(indicators.bb_middle, 1.0)
-            metrics["entropy_level"] = min(10.0, 2.0 + volatility * 4.0 + bb_width * 4.0)
+            bb_width = abs(indicators.bb_upper - indicators.bb_lower) / max(
+                indicators.bb_middle, 1.0
+            )
+            metrics["entropy_level"] = min(
+                10.0, 2.0 + volatility * 4.0 + bb_width * 4.0
+            )
 
             # Liquidity score from volume
             if indicators.volume_ratio > 0:
-                metrics["liquidity_score"] = min(1.0, np.log(indicators.volume_ratio + 1) / 2.0)
+                metrics["liquidity_score"] = min(
+                    1.0, np.log(indicators.volume_ratio + 1) / 2.0
+                )
 
             # Momentum score
             if indicators.rsi_14 > 0:
                 rsi_momentum = (indicators.rsi_14 - 50) / 50.0
-                macd_momentum = indicators.macd_line / max(abs(indicators.macd_line), 1.0)
+                macd_momentum = indicators.macd_line / max(
+                    abs(indicators.macd_line), 1.0
+                )
                 metrics["momentum_score"] = (rsi_momentum + macd_momentum) / 2.0
                 metrics["momentum_score"] = max(-1.0, min(1.0, metrics["momentum_score"]))
 
@@ -666,7 +684,9 @@ class UnifiedMarketDataPipeline:
 
         return float(ema)
 
-    def _calculate_bollinger_bands(self, prices: np.ndarray, period: int = 20) -> Tuple[float, float, float, float]:
+    def _calculate_bollinger_bands(
+        self, prices: np.ndarray, period: int = 20
+    ) -> Tuple[float, float, float, float]:
         """Calculate Bollinger Bands."""
         if len(prices) < period:
             return 0.0, 0.0, 0.0, 0.5
@@ -678,7 +698,10 @@ class UnifiedMarketDataPipeline:
         lower = sma - (2 * std)
 
         current_price = prices[-1]
-        position = (current_price - lower) / (upper - lower) if (upper - lower) > 0 else 0.5
+        position = (
+            (current_price - lower) / (upper - lower)
+            if (upper - lower) > 0 else 0.5
+        )
         position = max(0.0, min(1.0, position))
 
         return float(upper), float(sma), float(lower), float(position)
@@ -850,7 +873,9 @@ class UnifiedMarketDataPipeline:
                 trade_result={
                     "market_data_update": True,
                     "timestamp": packet.timestamp,
-                    "data_quality_score": packet.metadata.get("quality_score", 0.0),
+                    "data_quality_score": packet.metadata.get(
+                        "quality_score", 0.0
+                    ),
                 },
             )
 
@@ -875,7 +900,10 @@ class UnifiedMarketDataPipeline:
             market_sentiment=MarketSentiment(),
             sources_used=[],
             api_latencies={},
-            metadata={"fallback": True, "error": "All data sources failed"},
+            metadata={
+                "fallback": True,
+                "error": "All data sources failed"
+            },
         )
 
     def get_pipeline_status(self) -> Dict[str, Any]:

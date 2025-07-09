@@ -15,7 +15,7 @@ import numpy as np
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-from typing import Any, Dict, List, Optional, Callable
+from typing import Any, Dict, List, Tuple
 from pathlib import Path
 
 # Import core modules
@@ -31,7 +31,6 @@ except ImportError:
 
 logger = logging.getLogger(__name__)
 
-
 class EntropyState(Enum):
     """Entropy-based system states."""
     INERT = "INERT"
@@ -42,7 +41,6 @@ class EntropyState(Enum):
     ENTROPIC_SURGE = "ENTROPIC_SURGE"
     ENTROPIC_CALM = "ENTROPIC_CALM"
 
-
 @dataclass
 class EntropySignal:
     """Represents an entropy signal with metadata."""
@@ -52,7 +50,6 @@ class EntropySignal:
     quantum_state: str
     confidence: float
     metadata: Dict[str, Any] = field(default_factory=dict)
-
 
 @dataclass
 class TimingCycle:
@@ -65,7 +62,6 @@ class TimingCycle:
     next_execution: float
     enabled: bool = True
 
-
 @dataclass
 class PerformanceMetrics:
     """Performance metrics for entropy signal processing."""
@@ -75,11 +71,10 @@ class PerformanceMetrics:
     quantum_state_activation_rate: float
     timestamp: float
 
-
 class EntropySignalIntegrator:
     """
     Main integrator for entropy signals in the trading pipeline.
-    
+
     Manages the flow of entropy signals through:
     - Order book analysis
     - Dual state router
@@ -92,31 +87,31 @@ class EntropySignalIntegrator:
         """Initialize the entropy signal integrator."""
         self.config = self._load_config(config_path)
         self.current_state = EntropyState.NEUTRAL
-        
+
         # Initialize core components
         self.order_book_analyzer = None
         self.dual_state_router = None
         self.neural_engine = None
-        
+
         # Signal processing
         self.entropy_buffer = []
         self.signal_history = []
         self.performance_metrics = []
-        
+
         # Timing cycles
         self.tick_cycle = None
         self.routing_cycle = None
         self.cycles = {}
-        
+
         # Performance tracking
         self.metrics_start_time = time.time()
         self.total_signals_processed = 0
         self.successful_detections = 0
-        
+
         # Initialize components
         self._initialize_components()
         self._setup_timing_cycles()
-        
+
         logger.info("Entropy Signal Integrator initialized")
 
     def _load_config(self, config_path: str) -> Dict[str, Any]:
@@ -126,13 +121,13 @@ class EntropySignalIntegrator:
             if not config_file.exists():
                 logger.warning(f"Config file {config_path} not found, using defaults")
                 return self._get_default_config()
-            
+
             with open(config_file, 'r') as f:
                 config = yaml.safe_load(f)
-            
+
             logger.info(f"Loaded entropy signal configuration from {config_path}")
             return config
-            
+
         except Exception as e:
             logger.error(f"Error loading config: {e}")
             return self._get_default_config()
@@ -200,17 +195,17 @@ class EntropySignalIntegrator:
             if OrderBookAnalyzer:
                 self.order_book_analyzer = OrderBookAnalyzer()
                 logger.info("Order book analyzer initialized")
-            
+
             # Initialize dual state router
             if DualStateRouter:
                 self.dual_state_router = get_dual_state_router()
                 logger.info("Dual state router initialized")
-            
+
             # Initialize neural processing engine
             if NeuralProcessingEngine:
                 self.neural_engine = NeuralProcessingEngine()
                 logger.info("Neural processing engine initialized")
-                
+
         except Exception as e:
             logger.error(f"Error initializing components: {e}")
 
@@ -218,7 +213,7 @@ class EntropySignalIntegrator:
         """Setup timing cycles based on configuration."""
         try:
             timing_config = self.config.get("timing_cycles", {})
-            
+
             # Setup tick cycle
             tick_config = timing_config.get("tick_cycle", {})
             self.tick_cycle = TimingCycle(
@@ -230,7 +225,7 @@ class EntropySignalIntegrator:
                 next_execution=time.time() + (tick_config.get("base_interval_ms", 50) / 1000.0),
                 enabled=tick_config.get("entropy_adaptive", True)
             )
-            
+
             # Setup routing cycle
             routing_config = timing_config.get("routing_cycle", {})
             self.routing_cycle = TimingCycle(
@@ -242,46 +237,48 @@ class EntropySignalIntegrator:
                 next_execution=time.time() + (routing_config.get("base_interval_ms", 500) / 1000.0),
                 enabled=routing_config.get("entropy_adaptive", True)
             )
-            
+
             # Store cycles
             self.cycles = {
                 "tick": self.tick_cycle,
                 "routing": self.routing_cycle
             }
-            
+
             logger.info("Timing cycles initialized")
-            
+
         except Exception as e:
             logger.error(f"Error setting up timing cycles: {e}")
 
-    def process_entropy_signal(self, bids: List[Tuple[float, float]], 
-                             asks: List[Tuple[float, float]]) -> EntropySignal:
+    def process_entropy_signal(self, bids: List[Tuple[float, float]],
+                              asks: List[Tuple[float, float]]) -> EntropySignal:
         """
         Process entropy signal through the complete pipeline.
-        
+
         Args:
             bids: Order book bids
             asks: Order book asks
-            
+
         Returns:
             Processed entropy signal with routing and quantum states
         """
         start_time = time.time()
-        
+
         try:
             # Step 1: Order book analysis and entropy calculation
             entropy_result = self._calculate_entropy(bids, asks)
             entropy_value = entropy_result.get("entropy", 0.0)
-            
+
             # Step 2: Route entropy through dual state router
             routing_state = self._route_entropy(entropy_value)
-            
+
             # Step 3: Inject phase entropy into neural engine
             quantum_state = self._inject_phase_entropy(entropy_value)
-            
+
             # Step 4: Calculate confidence
-            confidence = self._calculate_signal_confidence(entropy_value, routing_state, quantum_state)
-            
+            confidence = self._calculate_signal_confidence(
+                entropy_value, routing_state, quantum_state
+            )
+
             # Create entropy signal
             signal = EntropySignal(
                 timestamp=time.time(),
@@ -294,25 +291,27 @@ class EntropySignalIntegrator:
                     "signal_quality": self._assess_signal_quality(entropy_value)
                 }
             )
-            
+
             # Update buffers and history
             self._update_signal_buffers(signal)
-            
+
             # Update timing cycles
             self._adapt_timing_cycles(signal)
-            
+
             # Update performance metrics
             self._update_performance_metrics(signal)
-            
+
             self.total_signals_processed += 1
             if signal.confidence > 0.5:
                 self.successful_detections += 1
-            
-            logger.debug(f"Processed entropy signal: {entropy_value:.6f}, "
-                        f"routing: {routing_state}, quantum: {quantum_state}")
-            
+
+            logger.debug(
+                f"Processed entropy signal: {entropy_value:.6f}, "
+                f"routing: {routing_state}, quantum: {quantum_state}"
+            )
+
             return signal
-            
+
         except Exception as e:
             logger.error(f"Error processing entropy signal: {e}")
             # Return fallback signal
@@ -325,7 +324,7 @@ class EntropySignalIntegrator:
                 metadata={"error": str(e)}
             )
 
-    def _calculate_entropy(self, bids: List[Tuple[float, float]], 
+    def _calculate_entropy(self, bids: List[Tuple[float, float]],
                           asks: List[Tuple[float, float]]) -> Dict[str, Any]:
         """Calculate entropy from order book data."""
         try:
@@ -343,7 +342,7 @@ class EntropySignalIntegrator:
                     return {"signal": entropy_sigma > 0.022, "entropy": entropy_sigma}
                 else:
                     return {"signal": False, "entropy": 0.0}
-                    
+
         except Exception as e:
             logger.error(f"Error calculating entropy: {e}")
             return {"signal": False, "entropy": 0.0}
@@ -359,7 +358,7 @@ class EntropySignalIntegrator:
                     return "ROUTE_ACTIVE"
                 else:
                     return "ROUTE_PASSIVE"
-                    
+
         except Exception as e:
             logger.error(f"Error routing entropy: {e}")
             return "ROUTE_PASSIVE"
@@ -375,25 +374,25 @@ class EntropySignalIntegrator:
                     return "ENTROPIC_INVERSION_ACTIVATED"
                 else:
                     return "INERT"
-                    
+
         except Exception as e:
             logger.error(f"Error injecting phase entropy: {e}")
             return "INERT"
 
-    def _calculate_signal_confidence(self, entropy_value: float, 
+    def _calculate_signal_confidence(self, entropy_value: float,
                                    routing_state: str, quantum_state: str) -> float:
         """Calculate confidence in the entropy signal."""
         try:
             # Base confidence from entropy value
             base_confidence = min(entropy_value * 10, 1.0)
-            
+
             # Adjust based on routing state
             routing_confidence = {
                 "ROUTE_ACTIVE": 0.8,
                 "ROUTE_PASSIVE": 0.6,
                 "NEUTRAL": 0.5
             }.get(routing_state, 0.5)
-            
+
             # Adjust based on quantum state
             quantum_confidence = {
                 "ENTROPIC_INVERSION_ACTIVATED": 0.9,
@@ -401,14 +400,14 @@ class EntropySignalIntegrator:
                 "ENTROPIC_SURGE": 0.8,
                 "ENTROPIC_CALM": 0.4
             }.get(quantum_state, 0.5)
-            
+
             # Weighted average
-            confidence = (base_confidence * 0.4 + 
-                         routing_confidence * 0.3 + 
+            confidence = (base_confidence * 0.4 +
+                         routing_confidence * 0.3 +
                          quantum_confidence * 0.3)
-            
+
             return min(max(confidence, 0.0), 1.0)
-            
+
         except Exception as e:
             logger.error(f"Error calculating signal confidence: {e}")
             return 0.5
@@ -416,12 +415,14 @@ class EntropySignalIntegrator:
     def _assess_signal_quality(self, entropy_value: float) -> str:
         """Assess the quality of the entropy signal."""
         try:
-            thresholds = self.config.get("entropy_signal_flow", {}).get("order_book_analysis", {}).get("entropy_calculation", {})
-            
+            thresholds = self.config.get("entropy_signal_flow", {}).get(
+                "order_book_analysis", {}
+            ).get("entropy_calculation", {})
+
             high_threshold = thresholds.get("threshold_high", 0.022)
             medium_threshold = thresholds.get("threshold_medium", 0.015)
             low_threshold = thresholds.get("threshold_low", 0.008)
-            
+
             if entropy_value >= high_threshold:
                 return "HIGH"
             elif entropy_value >= medium_threshold:
@@ -430,7 +431,7 @@ class EntropySignalIntegrator:
                 return "LOW"
             else:
                 return "VERY_LOW"
-                
+
         except Exception as e:
             logger.error(f"Error assessing signal quality: {e}")
             return "UNKNOWN"
@@ -440,20 +441,22 @@ class EntropySignalIntegrator:
         try:
             # Update entropy buffer
             self.entropy_buffer.append(signal.entropy_value)
-            
+
             # Maintain buffer size
-            max_buffer_size = self.config.get("entropy_signal_flow", {}).get("dual_state_router", {}).get("entropy_routing", {}).get("buffer_size", 100)
+            max_buffer_size = self.config.get("entropy_signal_flow", {}).get(
+                "dual_state_router", {}
+            ).get("entropy_routing", {}).get("buffer_size", 100)
             if len(self.entropy_buffer) > max_buffer_size:
                 self.entropy_buffer.pop(0)
-            
+
             # Update signal history
             self.signal_history.append(signal)
-            
+
             # Maintain history size
             max_history = 1000
             if len(self.signal_history) > max_history:
                 self.signal_history.pop(0)
-                
+
         except Exception as e:
             logger.error(f"Error updating signal buffers: {e}")
 
@@ -462,12 +465,12 @@ class EntropySignalIntegrator:
         try:
             # Get timing configuration
             timing_config = self.config.get("timing_cycles", {})
-            
+
             # Adapt tick cycle
             if self.tick_cycle and self.tick_cycle.enabled:
                 tick_config = timing_config.get("tick_cycle", {})
                 adjustment_config = tick_config.get("tick_rate_adjustment", {})
-                
+
                 # Calculate entropy multiplier
                 if signal.entropy_value > 0.018:  # High entropy
                     multiplier = adjustment_config.get("high_entropy_multiplier", 0.5)
@@ -475,23 +478,23 @@ class EntropySignalIntegrator:
                     multiplier = adjustment_config.get("low_entropy_multiplier", 2.0)
                 else:  # Medium entropy
                     multiplier = 1.0
-                
+
                 # Update tick cycle
                 self.tick_cycle.entropy_multiplier = multiplier
                 new_interval = int(self.tick_cycle.base_interval_ms * multiplier)
-                
+
                 # Apply limits
                 max_rate = adjustment_config.get("max_tick_rate_ms", 10)
                 min_rate = adjustment_config.get("min_tick_rate_ms", 200)
                 new_interval = max(min_rate, min(max_rate, new_interval))
-                
+
                 self.tick_cycle.current_interval_ms = new_interval
-                
+
             # Adapt routing cycle
             if self.routing_cycle and self.routing_cycle.enabled:
                 routing_config = timing_config.get("routing_cycle", {})
                 frequency_config = routing_config.get("routing_frequency", {})
-                
+
                 # Determine routing interval based on state
                 if signal.routing_state == "ROUTE_ACTIVE":
                     interval = frequency_config.get("aggressive_mode_interval_ms", 200)
@@ -499,9 +502,9 @@ class EntropySignalIntegrator:
                     interval = frequency_config.get("passive_mode_interval_ms", 1000)
                 else:
                     interval = frequency_config.get("neutral_mode_interval_ms", 500)
-                
+
                 self.routing_cycle.current_interval_ms = interval
-                
+
         except Exception as e:
             logger.error(f"Error adapting timing cycles: {e}")
 
@@ -510,24 +513,30 @@ class EntropySignalIntegrator:
         try:
             # Calculate current metrics
             detection_rate = self.successful_detections / max(self.total_signals_processed, 1)
-            
+
             # Calculate average latency
             if self.signal_history:
-                latencies = [s.metadata.get("processing_time_ms", 0) for s in self.signal_history[-100:]]
+                latencies = [
+                    s.metadata.get("processing_time_ms", 0)
+                    for s in self.signal_history[-100:]
+                ]
                 avg_latency = np.mean(latencies)
             else:
                 avg_latency = 0.0
-            
+
             # Calculate routing accuracy (simplified)
             routing_accuracy = 0.85  # Placeholder - would need historical data
-            
+
             # Calculate quantum state activation rate
             if self.signal_history:
-                activations = sum(1 for s in self.signal_history if s.quantum_state == "ENTROPIC_INVERSION_ACTIVATED")
+                activations = sum(
+                    1 for s in self.signal_history
+                    if s.quantum_state == "ENTROPIC_INVERSION_ACTIVATED"
+                )
                 activation_rate = activations / len(self.signal_history)
             else:
                 activation_rate = 0.0
-            
+
             # Create metrics object
             metrics = PerformanceMetrics(
                 entropy_detection_rate=detection_rate,
@@ -536,14 +545,14 @@ class EntropySignalIntegrator:
                 quantum_state_activation_rate=activation_rate,
                 timestamp=time.time()
             )
-            
+
             self.performance_metrics.append(metrics)
-            
+
             # Maintain metrics history
             max_metrics = 1000
             if len(self.performance_metrics) > max_metrics:
                 self.performance_metrics.pop(0)
-                
+
         except Exception as e:
             logger.error(f"Error updating performance metrics: {e}")
 
@@ -553,16 +562,16 @@ class EntropySignalIntegrator:
             cycle = self.cycles.get(cycle_type)
             if not cycle or not cycle.enabled:
                 return False
-            
+
             current_time = time.time()
             if current_time >= cycle.next_execution:
                 # Update execution times
                 cycle.last_execution = current_time
                 cycle.next_execution = current_time + (cycle.current_interval_ms / 1000.0)
                 return True
-            
+
             return False
-            
+
         except Exception as e:
             logger.error(f"Error checking cycle execution: {e}")
             return False
@@ -590,7 +599,7 @@ class EntropySignalIntegrator:
                     "history_size": len(self.signal_history)
                 }
             }
-            
+
         except Exception as e:
             logger.error(f"Error getting current state: {e}")
             return {}
@@ -600,18 +609,26 @@ class EntropySignalIntegrator:
         try:
             if not self.performance_metrics:
                 return {}
-            
+
             recent_metrics = self.performance_metrics[-100:]  # Last 100 metrics
-            
+
             return {
-                "average_detection_rate": np.mean([m.entropy_detection_rate for m in recent_metrics]),
-                "average_latency_ms": np.mean([m.signal_latency_ms for m in recent_metrics]),
-                "average_routing_accuracy": np.mean([m.routing_accuracy for m in recent_metrics]),
-                "average_activation_rate": np.mean([m.quantum_state_activation_rate for m in recent_metrics]),
+                "average_detection_rate": np.mean([
+                    m.entropy_detection_rate for m in recent_metrics
+                ]),
+                "average_latency_ms": np.mean([
+                    m.signal_latency_ms for m in recent_metrics
+                ]),
+                "average_routing_accuracy": np.mean([
+                    m.routing_accuracy for m in recent_metrics
+                ]),
+                "average_activation_rate": np.mean([
+                    m.quantum_state_activation_rate for m in recent_metrics
+                ]),
                 "total_signals_processed": self.total_signals_processed,
                 "uptime_seconds": time.time() - self.metrics_start_time
             }
-            
+
         except Exception as e:
             logger.error(f"Error getting performance summary: {e}")
             return {}
@@ -621,7 +638,9 @@ class EntropySignalIntegrator:
 _integrator = None
 
 
-def get_entropy_integrator(config_path: str = "config/entropy_signal_integration.yaml") -> EntropySignalIntegrator:
+def get_entropy_integrator(
+    config_path: str = "config/entropy_signal_integration.yaml"
+) -> EntropySignalIntegrator:
     """Get global entropy signal integrator instance."""
     global _integrator
     if _integrator is None:
@@ -629,7 +648,7 @@ def get_entropy_integrator(config_path: str = "config/entropy_signal_integration
     return _integrator
 
 
-def process_entropy_signal(bids: List[Tuple[float, float]], 
+def process_entropy_signal(bids: List[Tuple[float, float]],
                           asks: List[Tuple[float, float]]) -> EntropySignal:
     """Convenience function to process entropy signal."""
     integrator = get_entropy_integrator()
@@ -645,4 +664,4 @@ def should_execute_tick() -> bool:
 def should_execute_routing() -> bool:
     """Check if routing cycle should execute."""
     integrator = get_entropy_integrator()
-    return integrator.should_execute_cycle("routing") 
+    return integrator.should_execute_cycle("routing")

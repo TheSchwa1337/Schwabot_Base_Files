@@ -1,5 +1,6 @@
 from datetime import datetime
 from typing import Dict, List, Optional
+import matplotlib.pyplot as plt
 import seaborn as sns
 from pathlib import Path
 
@@ -17,7 +18,7 @@ class BacktestVisualizer:
         plt.style.use('seaborn')
         sns.set_palette("husl")
 
-    def create_performance_charts()
+    def create_performance_charts(
         self, portfolio_history: List[float], trade_history: List[Dict], metrics: Dict[str, float], save: bool = True
     ):
         """Create comprehensive performance visualization."""
@@ -70,7 +71,7 @@ class BacktestVisualizer:
 
         # Add initial and final values
         ax.text(0, portfolio_history[0], "${0}".format(portfolio_history[0]), verticalalignment='bottom')
-        ax.text()
+        ax.text(
             len(portfolio_history) - 1,
             portfolio_history[-1],
             "${0}".format(portfolio_history[-1]),
@@ -80,7 +81,7 @@ class BacktestVisualizer:
     def _plot_trade_distribution(self, ax, trades_df: pd.DataFrame):
         """Plot trade size and profit distribution."""
         if not trades_df.empty:
-            trades_df['profit'] = trades_df.apply()
+            trades_df['profit'] = trades_df.apply(
                 lambda x: x['value'] - x['fees'] if x['type'] == 'sell' else 0, axis=1
             )
 
@@ -105,8 +106,8 @@ class BacktestVisualizer:
 
         # Add max drawdown annotation
         max_drawdown_idx = np.argmin(drawdown)
-        ax.annotate()
-            "Max Drawdown: {0}".format(drawdown[max_drawdown_idx]:.2%),
+        ax.annotate(
+            "Max Drawdown: {0:.2%}".format(drawdown[max_drawdown_idx]),
             xy=(max_drawdown_idx, drawdown[max_drawdown_idx]),
             xytext=(10, 10),
             textcoords='offset points',
@@ -115,11 +116,11 @@ class BacktestVisualizer:
 
     def _plot_metrics_summary(self, ax, metrics: Dict[str, float]):
         """Plot performance metrics summary."""
-        metrics_to_show = {}
-            'Total Return': "{0}".format(metrics['total_return']:, .2%),
-            'Sharpe Ratio'),
-            'Max Drawdown': "{0}".format(metrics['max_drawdown']:.2%),
-            'Win Rate': "{0}".format(metrics['win_rate']:.2%),
+        metrics_to_show = {
+            'Total Return': "{0:.2%}".format(metrics['total_return']),
+            'Sharpe Ratio': "{0:.2f}".format(metrics['sharpe_ratio']),
+            'Max Drawdown': "{0:.2%}".format(metrics['max_drawdown']),
+            'Win Rate': "{0:.2%}".format(metrics['win_rate']),
         }
 
         # Create bar chart
@@ -134,7 +135,7 @@ class BacktestVisualizer:
         # Add value labels
         for i, bar in enumerate(bars):
             width = bar.get_width()
-            ax.text()
+            ax.text(
                 width,
                 bar.get_y() + bar.get_height() / 2,
                 "{0}".format(list(metrics_to_show.values())[i]),

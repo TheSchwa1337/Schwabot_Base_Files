@@ -1,29 +1,43 @@
-from __future__ import annotations
-from dataclasses import dataclass, field
-from datetime import datetime
-from decimal import Decimal
-from typing import Any, Dict, List, Optional, Tuple
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Backtesting Integration Module
+==============================
+
+Integrates backtesting capabilities with core system components.
+Provides comprehensive backtesting with GPU acceleration and visualization.
+"""
+
 import asyncio
 import logging
 import time
-from core.system_state_profiler import SystemStateProfiler
+from dataclasses import dataclass, field
+from datetime import datetime
+from decimal import Decimal
+from typing import Any, Dict, List, Optional
 
-import numpy as np
-
-from core.gpu_shader_integration import GPUShaderIntegration
-from core.secure_exchange_manager import SecureExchangeManager
-from core.vectorized_profit_orchestrator import VectorizedProfitOrchestrator
 from core.unified_market_data_pipeline import UnifiedMarketDataPipeline
+from core.risk_manager import RiskManager
+from core.vectorized_profit_orchestrator import VectorizedProfitOrchestrator
+from core.system_state_profiler import SystemStateProfiler
 from core.phantom_registry import PhantomRegistry
 from core.phantom_logger import PhantomLogger
-from core.risk_manager import RiskManager
+from core.gpu_shader_integration import GPUShaderIntegration
+from utils.safe_print import safe_print
 from core.backtest_visualization import BacktestVisualizer
 
 logger = logging.getLogger(__name__)
 
+# Check for CUDA availability
+try:
+    import torch
+    USING_CUDA = torch.cuda.is_available()
+except ImportError:
+    USING_CUDA = False
+
 
 @dataclass
-    class BacktestConfig:
+class BacktestConfig:
     """Configuration for backtesting."""
 
     start_date: datetime
@@ -84,7 +98,7 @@ class BacktestingIntegration:
         self.current_positions: Dict[str, Dict[str, Any]] = {}
 
         # Performance metrics
-        self.metrics: Dict[str, float] = {}
+        self.metrics: Dict[str, float] = {
             "total_return": 0.0,
             "sharpe_ratio": 0.0,
             "max_drawdown": 0.0,
@@ -96,7 +110,7 @@ class BacktestingIntegration:
         """Initialize all system components for backtesting."""
         try:
             # Initialize market data pipeline
-            await self.market_data.initialize()
+            await self.market_data.initialize(
                 trading_pairs=self.config.trading_pairs,
                 start_date=self.config.start_date,
                 end_date=self.config.end_date,
@@ -109,7 +123,7 @@ class BacktestingIntegration:
 
             # Initialize risk management
             if self.config.enable_risk_management:
-                self.risk_manager.initialize()
+                self.risk_manager.initialize(
                     max_positions=self.config.max_open_positions,
                     max_leverage=self.config.max_leverage,
                     risk_profile=self.config.risk_profile,
@@ -135,7 +149,7 @@ class BacktestingIntegration:
             async for market_data in self.market_data.stream_historical_data():
                 # Process market data through GPU if enabled
                 if self.config.use_gpu and hasattr(self, 'gpu_integration'):
-                    processed_data = await self.gpu_integration.process_market_data()
+                    processed_data = await self.gpu_integration.process_market_data(
                         market_data, batch_size=self.config.gpu_batch_size
                     )
                 else:
@@ -159,8 +173,8 @@ class BacktestingIntegration:
 
                 # Log phantom data if enabled
                 if self.config.enable_phantom_logging:
-                    self.phantom_logger.log_system_state()
-                        {}
+                    self.phantom_logger.log_system_state(
+                        {
                             "market_data": processed_data,
                             "signals": signals,
                             "portfolio": self.current_positions,
@@ -173,7 +187,7 @@ class BacktestingIntegration:
 
             # Generate visualizations if enabled
             if self.config.enable_visualization and hasattr(self, 'visualizer'):
-                self.visualizer.create_performance_charts()
+                self.visualizer.create_performance_charts(
                     portfolio_history=self.portfolio_value_history,
                     trade_history=self.trade_history,
                     metrics=self.metrics,
@@ -182,7 +196,7 @@ class BacktestingIntegration:
                 if self.config.save_results:
                     self.visualizer.save_trade_log(self.trade_history)
 
-            return {}
+            return {
                 "metrics": self.metrics,
                 "trade_history": self.trade_history,
                 "portfolio_history": self.portfolio_value_history,
@@ -200,7 +214,7 @@ class BacktestingIntegration:
             execution_size = signal["size"]
             execution_type = signal["type"]
 
-            trade_result = {}
+            trade_result = {
                 "executed": True,
                 "timestamp": time.time(),
                 "pair": signal["pair"],
@@ -220,26 +234,27 @@ class BacktestingIntegration:
             return trade_result
 
         except Exception as e:
-            logger.error("Trade execution error: {0}".format(e))
+            logger.error("Error executing trade: {0}".format(e))
             return {"executed": False, "error": str(e)}
 
     async def _update_system_state(self, market_data: Dict[str, Any]):
-        """Update system state with latest market data."""
+        """Update system state with new market data."""
         try:
-            # Calculate current portfolio value
-            portfolio_value = self.config.initial_capital
+            # Update portfolio value
+            current_value = self.config.initial_capital
             for pair, position in self.current_positions.items():
-                current_price = market_data[pair]["price"]
-                position_value = position["size"] * current_price
-                portfolio_value += position_value
+                if pair in market_data:
+                    current_price = market_data[pair]["price"]
+                    position_value = position["size"] * current_price
+                    current_value += position_value
 
-            self.portfolio_value_history.append(portfolio_value)
+            self.portfolio_value_history.append(current_value)
 
             # Update system profiler
-            self.system_profiler.update_state()
-                {}
-                    "portfolio_value": portfolio_value,
-                    "open_positions": len(self.current_positions),
+            await self.system_profiler.update_state(
+                {
+                    "portfolio_value": current_value,
+                    "positions": self.current_positions,
                     "market_data": market_data,
                 }
             )
@@ -248,45 +263,69 @@ class BacktestingIntegration:
             logger.error("Error updating system state: {0}".format(e))
 
     def _calculate_performance_metrics(self):
-        """Calculate final performance metrics."""
+        """Calculate comprehensive performance metrics."""
         try:
-            portfolio_values = np.array(self.portfolio_value_history)
-            returns = np.diff(portfolio_values) / portfolio_values[:-1]
+            if len(self.portfolio_value_history) < 2:
+                return
 
-            # Calculate metrics
-            self.metrics["total_return"] = float(self.portfolio_value_history[-1] / self.config.initial_capital) - 1
-            self.metrics["sharpe_ratio"] = ()
-                float(np.mean(returns) / np.std(returns) * np.sqrt(252)) if len(returns) > 0 else 0
-            )
-            self.metrics["max_drawdown"] = float(np.min(portfolio_values / np.maximum.accumulate(portfolio_values)) - 1)
+            # Calculate total return
+            initial_value = float(self.portfolio_value_history[0])
+            final_value = float(self.portfolio_value_history[-1])
+            self.metrics["total_return"] = (final_value - initial_value) / initial_value
 
-            # Calculate trade-specific metrics
+            # Calculate Sharpe ratio (simplified)
+            returns = []
+            for i in range(1, len(self.portfolio_value_history)):
+                prev_value = float(self.portfolio_value_history[i - 1])
+                curr_value = float(self.portfolio_value_history[i])
+                returns.append((curr_value - prev_value) / prev_value)
+
+            if returns:
+                avg_return = sum(returns) / len(returns)
+                std_return = (sum((r - avg_return) ** 2 for r in returns) / len(returns)) ** 0.5
+                self.metrics["sharpe_ratio"] = avg_return / std_return if std_return > 0 else 0.0
+
+            # Calculate max drawdown
+            peak = initial_value
+            max_drawdown = 0.0
+            for value in self.portfolio_value_history:
+                float_value = float(value)
+                if float_value > peak:
+                    peak = float_value
+                drawdown = (peak - float_value) / peak
+                max_drawdown = max(max_drawdown, drawdown)
+            self.metrics["max_drawdown"] = max_drawdown
+
+            # Calculate win rate
             if self.trade_history:
-                winning_trades = sum()
-                    1
-                    for trade in self.trade_history
-                    if trade["type"] == "sell" and trade["price"] > trade.get("entry_price", 0)
-                )
-                total_trades = len([t for t in self.trade_history if t["type"] == "sell"])
+                winning_trades = sum(1 for trade in self.trade_history if trade.get("pnl", 0) > 0)
+                self.metrics["win_rate"] = winning_trades / len(self.trade_history)
 
-                self.metrics["win_rate"] = winning_trades / total_trades if total_trades > 0 else 0
-
-                # Calculate profit factor
-                profits = sum()
-                    trade["value"] - trade["fees"]
-                    for trade in self.trade_history
-                    if trade["type"] == "sell" and trade["price"] > trade.get("entry_price", 0)
-                )
-                losses = sum()
-                    trade["value"] - trade["fees"]
-                    for trade in self.trade_history
-                    if trade["type"] == "sell" and trade["price"] <= trade.get("entry_price", 0)
-                )
-
-                self.metrics["profit_factor"] = float(profits / abs(losses)) if losses != 0 else float('in")'
-
-            safe_print("Final portfolio value: ${1}".format(float(self.portfolio_value_history[-1])))
-            safe_print("Total return: {1}".format(self.metrics[".format(0, 0)total_return']:.2%))'
+            # Calculate profit factor
+            if self.trade_history:
+                total_profit = sum(trade.get("pnl", 0) for trade in self.trade_history if trade.get("pnl", 0) > 0)
+                total_loss = abs(sum(trade.get("pnl", 0) for trade in self.trade_history if trade.get("pnl", 0) < 0))
+                self.metrics["profit_factor"] = total_profit / total_loss if total_loss > 0 else float("inf")
 
         except Exception as e:
             logger.error("Error calculating performance metrics: {0}".format(e))
+
+    def get_results_summary(self) -> Dict[str, Any]:
+        """Get a summary of backtest results."""
+        return {
+            "config": {
+                "start_date": self.config.start_date,
+                "end_date": self.config.end_date,
+                "initial_capital": self.config.initial_capital,
+                "trading_pairs": self.config.trading_pairs,
+            },
+            "metrics": self.metrics,
+            "trade_count": len(self.trade_history),
+            "final_portfolio_value": self.portfolio_value_history[-1] if self.portfolio_value_history else 0,
+        }
+
+
+# Factory function
+def create_backtesting_integration(config: BacktestConfig) -> BacktestingIntegration:
+    """Create a backtesting integration instance."""
+    return BacktestingIntegration(config)

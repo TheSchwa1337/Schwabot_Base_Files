@@ -2,9 +2,7 @@ from __future__ import annotations
 import logging
 import time
 from dataclasses import dataclass, field
-from typing import Dict, Any, Tuple, List, Optional
-
-import numpy as np
+from typing import Dict, Any, Tuple, List
 
 """
 Matrix Math Utilities for Schwabot Trading System.

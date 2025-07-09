@@ -4,7 +4,7 @@ import sys
 import time
 from dataclasses import dataclass, field, asdict
 from enum import Enum
-from typing import Any, Dict, List, Union
+from typing import Any, Dict, List
 
 import numpy as np
 
@@ -259,20 +259,20 @@ class PureProfitCalculator:
                 try:
                     # Create order book data for entropy processing
                     order_book_data = self._extract_order_book_data(market_data)
-                    
+
                     # Process entropy signals
                     entropy_result = self.entropy_integration.process_entropy_signals(
                         order_book_data=order_book_data,
                         market_context=self._create_market_context(market_data, history_state)
                     )
-                    
+
                     # Extract entropy adjustments
                     entropy_adjustment = entropy_result.get('confidence_adjustment', 1.0)
                     entropy_timing = entropy_result.get('timing_cycle', 1.0)
                     entropy_score = entropy_result.get('entropy_score', 1.0)
-                    
+
                     logger.info(f"🔄 Entropy adjustments applied - timing: {entropy_timing:.3f}, score: {entropy_score:.3f}")
-                    
+
                 except Exception as e:
                     logger.warning(f"⚠️ Entropy signal processing failed: {e}")
                     entropy_adjustment = 1.0
@@ -728,10 +728,10 @@ class PureProfitCalculator:
     def _extract_order_book_data(self, market_data: MarketData) -> Dict[str, Any]:
         """
         Extract order book data from market data for entropy processing.
-        
+
         Args:
             market_data: Market data object
-            
+
         Returns:
             Order book data dictionary
         """
@@ -744,9 +744,9 @@ class PureProfitCalculator:
                 'spread': 0.001,
                 'depth': 10
             }
-            
+
             return order_book
-            
+
         except Exception as e:
             logger.warning(f"⚠️ Failed to extract order book data: {e}")
             # Return minimal order book data
@@ -761,11 +761,11 @@ class PureProfitCalculator:
     def _create_market_context(self, market_data: MarketData, history_state: HistoryState) -> Dict[str, Any]:
         """
         Create market context for entropy processing.
-        
+
         Args:
             market_data: Market data object
             history_state: History state object
-            
+
         Returns:
             Market context dictionary
         """
@@ -783,7 +783,7 @@ class PureProfitCalculator:
                 'tensor_buckets_count': len(history_state.tensor_buckets),
                 'profit_memory_length': len(history_state.profit_memory),
             }
-            
+
         except Exception as e:
             logger.warning(f"⚠️ Failed to create market context: {e}")
             return {

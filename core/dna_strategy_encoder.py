@@ -20,22 +20,17 @@ Mathematical Framework:
 """
 
 import hashlib
-import json
 import logging
 import threading
 import time
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional, Tuple
 import numpy as np
 import cupy as cp
 
 # Import existing Schwabot components
 try:
-    from .unified_math_system import generate_unified_hash
-    from .fractal_core import fractal_quantize_vector
-    from .orbital_shell_brain_system import OrbitalShell
-
     SCHWABOT_COMPONENTS_AVAILABLE = True
 except ImportError as e:
     print(f"⚠️ Some Schwabot components not available: {e}")

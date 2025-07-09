@@ -19,23 +19,16 @@ Mathematical Framework:
 - ℱₜ = fitness_evaluator(𝒫ₜ, time_held, strategy_hash)
 """
 
-import hashlib
 import json
 import logging
-import threading
 import time
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List
 import numpy as np
 
 # Import existing Schwabot components
 try:
-    from .unified_profit_vectorization_system import UnifiedProfitVectorizationSystem
-    from .unified_math_system import generate_unified_hash
-    from .matrix_mapper import EnhancedMatrixMapper
-    from .fractal_core import fractal_quantize_vector
-
     SCHWABOT_COMPONENTS_AVAILABLE = True
 except ImportError as e:
     print(f"⚠️ Some Schwabot components not available: {e}")

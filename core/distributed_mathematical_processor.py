@@ -1,21 +1,19 @@
-from typing import Dict, List, Tuple, Optional, Any, Callable
+from typing import Dict, List, Optional, Any
 from dataclasses import dataclass
 import logging
-from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor, as_completed
-import threading
+from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
+import multiprocessing as mp
 import asyncio
 import time
-import json
 import psutil
 import gc
 import random
 
 import numpy as np
-from scipy.optimize import minimize_scalar, minimize
+from scipy.optimize import minimize_scalar
 from scipy.linalg import LinAlgError
-from scipy.integrate import simps
 
-#!/usr/bin/env python3
+# !/usr/bin/env python3
 """
 Distributed Mathematical Processor - Advanced Distributed Computing
 Implements distributed mathematical operations across multiple nodes,
@@ -914,8 +912,8 @@ class DistributedMathematicalProcessor:
 
             # Clear CUDA cache if using GPU
             if self.use_gpu and USING_CUDA:
-                # xp.cuda.MemoryPool().free_all_blocks() # This line was removed as per the edit hint
-                pass  # No direct CUDA cleanup in numpy
+                # No direct CUDA cleanup in numpy
+                pass
 
             # Force garbage collection
             gc.collect()

@@ -1,13 +1,13 @@
 import time
 import logging
-from typing import Dict, Any, List, Optional, Tuple
+from typing import Dict, Any, List, Optional
 from dataclasses import dataclass
 from enum import Enum
 import json
 
 import numpy as np
 
-#!/usr/bin/env python3
+# !/usr/bin/env python3
 """
 🧠⚛️ FRACTAL MEMORY TRACKER
 ===========================
@@ -242,7 +242,9 @@ class FractalMemoryTracker:
         else:
             return FractalMatchType.NO_MATCH
 
-    def _calculate_match_confidence(self, matched_snapshot: FractalSnapshot, similarity_score: float) -> float:
+    def _calculate_match_confidence(
+        self, matched_snapshot: FractalSnapshot, similarity_score: float
+    ) -> float:
         """Calculate confidence score for a fractal match"""
         try:
             base_confidence = similarity_score
@@ -255,8 +257,10 @@ class FractalMemoryTracker:
                 else:
                     profit_boost = max(-0.1, matched_snapshot.profit_result * 0.5)
 
-            # Time decay factor (older patterns get lower, confidence)
-            time_decay = max(0.5, 1.0 - (time.time() - matched_snapshot.timestamp) / 86400)  # 24 hour decay
+            # Time decay factor (older patterns get lower confidence)
+            time_decay = max(
+                0.5, 1.0 - (time.time() - matched_snapshot.timestamp) / 86400
+            )  # 24 hour decay
 
             final_confidence = (base_confidence + profit_boost) * time_decay
             return max(0.0, min(1.0, final_confidence))
@@ -356,7 +360,8 @@ class FractalMemoryTracker:
 
             # Remove old patterns
             self.snapshot_stack = [
-                snapshot for snapshot in self.snapshot_stack if snapshot.timestamp >= cutoff_time
+                snapshot for snapshot in self.snapshot_stack 
+                if snapshot.timestamp >= cutoff_time
             ]
 
             removed_count = initial_count - len(self.snapshot_stack)

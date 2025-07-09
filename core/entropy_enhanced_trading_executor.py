@@ -18,7 +18,7 @@ entropy-driven decision making and real-time market adaptation.
 import logging
 import time
 import asyncio
-from typing import Dict, Any, List, Optional, Tuple
+from typing import Dict, Any, Optional, Tuple
 from dataclasses import dataclass, field
 from enum import Enum
 import ccxt
@@ -28,8 +28,6 @@ import numpy as np
 from core.entropy_signal_integration import EntropySignalIntegration
 from core.strategy_bit_mapper import StrategyBitMapper
 from core.pure_profit_calculator import PureProfitCalculator, MarketData, HistoryState, StrategyParameters
-from core.clean_trading_pipeline import CleanTradingPipeline
-from core.real_time_execution_engine import RealTimeExecutionEngine
 from core.risk_manager import RiskManager
 from core.portfolio_tracker import PortfolioTracker
 
@@ -85,7 +83,7 @@ class TradingResult:
 class EntropyEnhancedTradingExecutor:
     """
     Complete entropy-enhanced trading execution system.
-    
+
     This class orchestrates the entire trading process:
     1. Market data collection
     2. Entropy signal processing
@@ -108,7 +106,7 @@ class EntropyEnhancedTradingExecutor:
         self.strategy_config = strategy_config
         self.entropy_config = entropy_config
         self.risk_config = risk_config
-        
+
         # Initialize components
         self.entropy_integration = EntropySignalIntegration()
         self.strategy_mapper = StrategyBitMapper(matrix_dir="./matrices")
@@ -122,14 +120,14 @@ class EntropyEnhancedTradingExecutor:
         )
         self.risk_manager = RiskManager(risk_config)
         self.portfolio_tracker = PortfolioTracker()
-        
+
         # Trading state
         self.trading_state = TradingState.IDLE
         self.current_position = 0.0
         self.last_trade_time = 0.0
         self.trade_count = 0
         self.successful_trades = 0
-        
+
         # Performance metrics
         self.performance_metrics = {
             'total_trades': 0,
@@ -140,10 +138,10 @@ class EntropyEnhancedTradingExecutor:
             'entropy_adjustments': 0,
             'risk_blocks': 0
         }
-        
+
         # Initialize exchange connection
         self.exchange = self._initialize_exchange()
-        
+
         logger.info("🔄 Entropy-Enhanced Trading Executor initialized")
 
     def _initialize_exchange(self) -> ccxt.Exchange:
@@ -151,17 +149,17 @@ class EntropyEnhancedTradingExecutor:
         try:
             exchange_id = self.exchange_config.get('exchange', 'coinbase')
             exchange_class = getattr(ccxt, exchange_id)
-            
+
             exchange = exchange_class({
                 'apiKey': self.exchange_config.get('api_key'),
                 'secret': self.exchange_config.get('secret'),
                 'sandbox': self.exchange_config.get('sandbox', True),
                 'enableRateLimit': True,
             })
-            
+
             logger.info(f"🔄 Exchange connection initialized: {exchange_id}")
             return exchange
-            
+
         except Exception as e:
             logger.error(f"❌ Failed to initialize exchange: {e}")
             raise
@@ -169,22 +167,22 @@ class EntropyEnhancedTradingExecutor:
     async def execute_trading_cycle(self) -> TradingResult:
         """
         Execute a complete trading cycle with entropy enhancement.
-        
+
         Returns:
             TradingResult: Result of the trading cycle
         """
         try:
             self.trading_state = TradingState.ANALYZING
-            
+
             # 1. Collect market data
             market_data = await self._collect_market_data()
-            
+
             # 2. Process entropy signals
             entropy_result = await self._process_entropy_signals(market_data)
-            
+
             # 3. Generate strategy decision
             decision = await self._generate_trading_decision(market_data, entropy_result)
-            
+
             # 4. Risk assessment
             if not self._assess_risk(decision):
                 logger.warning("⚠️ Risk assessment failed - skipping trade")
@@ -198,30 +196,18 @@ class EntropyEnhancedTradingExecutor:
                     action=TradingAction.HOLD,
                     metadata={'reason': 'risk_assessment_failed'}
                 )
-            
+
             # 5. Execute trade
-            if decision.action != TradingAction.HOLD:
-                self.trading_state = TradingState.EXECUTING
-                result = await self._execute_trade(decision)
-                
-                # 6. Update portfolio and metrics
-                self._update_portfolio(result)
-                self._update_performance_metrics(result)
-                
-                return result
-            else:
-                logger.info("🔄 Decision: HOLD - no trade executed")
-                return TradingResult(
-                    success=True,
-                    order_id=None,
-                    executed_price=0.0,
-                    executed_quantity=0.0,
-                    fees=0.0,
-                    timestamp=time.time(),
-                    action=TradingAction.HOLD,
-                    metadata={'reason': 'hold_decision'}
-                )
-                
+            self.trading_state = TradingState.EXECUTING
+            result = await self._execute_trade(decision)
+
+            # 6. Update portfolio and metrics
+            self._update_portfolio(result)
+            self._update_performance_metrics(result)
+
+            self.trading_state = TradingState.IDLE
+            return result
+
         except Exception as e:
             logger.error(f"❌ Trading cycle failed: {e}")
             self.trading_state = TradingState.ERROR
@@ -237,379 +223,429 @@ class EntropyEnhancedTradingExecutor:
             )
 
     async def _collect_market_data(self) -> MarketData:
-        """Collect real-time market data."""
+        """Collect current market data from exchange."""
         try:
-            # Fetch current market data
+            # Fetch ticker data
             ticker = await self.exchange.fetch_ticker('BTC/USDC')
+
+            # Fetch order book
             order_book = await self.exchange.fetch_order_book('BTC/USDC')
-            
+
+            # Fetch recent trades
+            trades = await self.exchange.fetch_trades('BTC/USDC', limit=100)
+
             # Calculate additional metrics
             volatility = self._calculate_volatility(order_book)
             momentum = self._calculate_momentum(ticker)
             volume_profile = self._calculate_volume_profile(order_book)
-            
-            market_data = MarketData(
-                timestamp=time.time(),
-                btc_price=float(ticker['last']),
-                eth_price=0.0,  # Not used for BTC/USDC trading
-                usdc_volume=float(ticker['quoteVolume']),
+
+            return MarketData(
+                symbol='BTC/USDC',
+                price=ticker['last'],
+                volume=ticker['baseVolume'],
+                timestamp=ticker['timestamp'],
+                bid=order_book['bids'][0][0] if order_book['bids'] else ticker['last'],
+                ask=order_book['asks'][0][0] if order_book['asks'] else ticker['last'],
                 volatility=volatility,
                 momentum=momentum,
                 volume_profile=volume_profile,
-                on_chain_signals={}  # Placeholder for on-chain data
+                order_book=order_book,
+                trades=trades
             )
-            
-            logger.info(f"📊 Market data collected - BTC: ${market_data.btc_price:,.2f}")
-            return market_data
-            
+
         except Exception as e:
             logger.error(f"❌ Failed to collect market data: {e}")
             raise
 
     async def _process_entropy_signals(self, market_data: MarketData) -> Dict[str, Any]:
-        """Process entropy signals for trading enhancement."""
+        """Process entropy signals for trading decisions."""
         try:
-            # Extract order book data
-            order_book_data = {
-                'bids': [[market_data.btc_price * 0.999, 100]],
-                'asks': [[market_data.btc_price * 1.001, 100]],
-                'timestamp': market_data.timestamp,
-                'spread': 0.001,
-                'depth': 10
-            }
-            
-            # Create market context
-            market_context = {
-                'timestamp': market_data.timestamp,
-                'btc_price': market_data.btc_price,
-                'usdc_volume': market_data.usdc_volume,
-                'volatility': market_data.volatility,
-                'momentum': market_data.momentum,
-                'volume_profile': market_data.volume_profile,
-            }
-            
             # Process entropy signals
-            entropy_result = self.entropy_integration.process_entropy_signals(
-                order_book_data=order_book_data,
-                market_context=market_context
-            )
-            
-            logger.info(f"🔄 Entropy signals processed - timing: {entropy_result.get('timing_cycle', 1.0):.3f}")
+            entropy_result = await self.entropy_integration.process_market_data(market_data)
+
+            # Apply entropy adjustments
+            self.performance_metrics['entropy_adjustments'] += 1
+
             return entropy_result
-            
+
         except Exception as e:
             logger.error(f"❌ Failed to process entropy signals: {e}")
             return {
-                'confidence_adjustment': 1.0,
-                'timing_cycle': 1.0,
-                'entropy_score': 1.0,
-                'strategy_score': 1.0
+                'entropy_score': 0.0,
+                'entropy_timing': 0.0,
+                'signal_strength': 0.0,
+                'confidence': 0.0
             }
 
     async def _generate_trading_decision(
-        self, 
-        market_data: MarketData, 
+        self,
+        market_data: MarketData,
         entropy_result: Dict[str, Any]
     ) -> TradingDecision:
-        """Generate trading decision using entropy-enhanced strategy."""
+        """Generate trading decision based on market data and entropy signals."""
         try:
-            # Create history state
-            history_state = HistoryState(timestamp=time.time())
-            
-            # Calculate profit with entropy enhancement
-            profit_result = self.profit_calculator.calculate_profit(
+            # Calculate profit potential
+            profit_result = self.profit_calculator.calculate_profit_potential(
                 market_data=market_data,
-                history_state=history_state
+                history_state=HistoryState(
+                    current_position=self.current_position,
+                    last_trade_time=self.last_trade_time,
+                    trade_count=self.trade_count
+                )
             )
-            
-            # Generate strategy ID using bit mapper
-            strategy_id = self.strategy_mapper.expand_strategy_bits(
-                strategy_id=int(time.time() * 1000) % 10000,
-                target_bits=8,
-                mode="entropy_adaptive",
-                market_data={
-                    'btc_price': market_data.btc_price,
-                    'volatility': market_data.volatility,
-                    'entropy_score': entropy_result.get('entropy_score', 1.0)
-                }
-            )
-            
-            # Determine trading action based on profit score and entropy
+
+            # Determine action based on profit and entropy
             action, confidence, reasoning = self._determine_action(
                 profit_result, entropy_result, market_data
             )
-            
+
             # Calculate position size
-            quantity = self._calculate_position_size(
-                confidence, entropy_result, market_data
-            )
-            
-            decision = TradingDecision(
+            quantity = self._calculate_position_size(confidence, entropy_result, market_data)
+
+            # Determine risk level
+            risk_level = self._assess_risk_level(profit_result)
+
+            return TradingDecision(
                 action=action,
                 confidence=confidence,
                 quantity=quantity,
-                price=market_data.btc_price,
+                price=market_data.price,
                 timestamp=time.time(),
-                entropy_score=entropy_result.get('entropy_score', 1.0),
-                entropy_timing=entropy_result.get('timing_cycle', 1.0),
-                strategy_id=str(strategy_id),
-                risk_level=self._assess_risk_level(profit_result),
+                entropy_score=entropy_result.get('entropy_score', 0.0),
+                entropy_timing=entropy_result.get('entropy_timing', 0.0),
+                strategy_id=profit_result.get('strategy_id', 'default'),
+                risk_level=risk_level,
                 reasoning=reasoning,
                 metadata={
-                    'profit_score': profit_result.total_profit_score,
-                    'entropy_result': entropy_result
+                    'profit_potential': profit_result.get('profit_potential', 0.0),
+                    'entropy_adjustment': entropy_result.get('signal_strength', 0.0)
                 }
             )
-            
-            logger.info(f"🎯 Trading decision: {action.value} - confidence: {confidence:.3f}")
-            return decision
-            
+
         except Exception as e:
             logger.error(f"❌ Failed to generate trading decision: {e}")
-            raise
+            return TradingDecision(
+                action=TradingAction.HOLD,
+                confidence=0.0,
+                quantity=0.0,
+                price=market_data.price,
+                timestamp=time.time(),
+                entropy_score=0.0,
+                entropy_timing=0.0,
+                strategy_id='error',
+                risk_level='high',
+                reasoning=f'Error: {str(e)}'
+            )
 
     def _determine_action(
-        self, 
-        profit_result, 
-        entropy_result: Dict[str, Any], 
+        self,
+        profit_result,
+        entropy_result: Dict[str, Any],
         market_data: MarketData
     ) -> Tuple[TradingAction, float, str]:
-        """Determine trading action based on profit score and entropy."""
-        profit_score = profit_result.total_profit_score
-        entropy_score = entropy_result.get('entropy_score', 1.0)
-        entropy_timing = entropy_result.get('timing_cycle', 1.0)
-        
-        # Adjust profit score with entropy
-        adjusted_score = profit_score * entropy_score * entropy_timing
-        
-        # Determine action based on adjusted score
-        if adjusted_score > 0.3:
-            action = TradingAction.BUY
-            confidence = min(0.95, adjusted_score)
-            reasoning = f"Strong buy signal (profit: {profit_score:.3f}, entropy: {entropy_score:.3f})"
-        elif adjusted_score < -0.3:
-            action = TradingAction.SELL
-            confidence = min(0.95, abs(adjusted_score))
-            reasoning = f"Strong sell signal (profit: {profit_score:.3f}, entropy: {entropy_score:.3f})"
-        else:
-            action = TradingAction.HOLD
-            confidence = 0.5
-            reasoning = f"Neutral signal (profit: {profit_score:.3f}, entropy: {entropy_score:.3f})"
-        
-        return action, confidence, reasoning
+        """Determine trading action based on profit and entropy analysis."""
+        try:
+            profit_potential = profit_result.get('profit_potential', 0.0)
+            entropy_score = entropy_result.get('entropy_score', 0.0)
+            signal_strength = entropy_result.get('signal_strength', 0.0)
+
+            # Combine profit and entropy signals
+            combined_score = (profit_potential * 0.6) + (entropy_score * 0.4)
+            confidence = min(1.0, abs(combined_score))
+
+            # Determine action based on combined score
+            if combined_score > 0.3:
+                action = TradingAction.BUY
+                reasoning = (
+                    f"Strong buy signal (profit: {profit_potential:.3f}, "
+                    f"entropy: {entropy_score:.3f})"
+                )
+            elif combined_score < -0.3:
+                action = TradingAction.SELL
+                reasoning = (
+                    f"Strong sell signal (profit: {profit_potential:.3f}, "
+                    f"entropy: {entropy_score:.3f})"
+                )
+            else:
+                action = TradingAction.HOLD
+                reasoning = (
+                    f"Neutral signal (profit: {profit_potential:.3f}, "
+                    f"entropy: {entropy_score:.3f})"
+                )
+
+            return action, confidence, reasoning
+
+        except Exception as e:
+            logger.error(f"❌ Failed to determine action: {e}")
+            return TradingAction.HOLD, 0.0, f"Error: {str(e)}"
 
     def _calculate_position_size(
-        self, 
-        confidence: float, 
-        entropy_result: Dict[str, Any], 
+        self,
+        confidence: float,
+        entropy_result: Dict[str, Any],
         market_data: MarketData
     ) -> float:
-        """Calculate position size based on confidence and entropy."""
-        base_size = self.strategy_config.get('base_position_size', 0.01)  # 1% of portfolio
-        
-        # Adjust based on confidence
-        confidence_multiplier = confidence
-        
-        # Adjust based on entropy timing
-        entropy_timing = entropy_result.get('timing_cycle', 1.0)
-        timing_multiplier = min(2.0, max(0.5, entropy_timing))
-        
-        # Adjust based on volatility
-        volatility_multiplier = 1.0 / (1.0 + market_data.volatility)
-        
-        # Calculate final position size
-        position_size = base_size * confidence_multiplier * timing_multiplier * volatility_multiplier
-        
-        # Ensure within limits
-        max_size = self.strategy_config.get('max_position_size', 0.1)  # 10% max
-        position_size = min(max_size, max(0.001, position_size))
-        
-        return position_size
+        """Calculate position size based on confidence and risk parameters."""
+        try:
+            # Base position size from risk config
+            base_size = self.risk_config.get('position_size', 0.1)
+
+            # Adjust based on confidence
+            confidence_multiplier = min(2.0, confidence * 2.0)
+
+            # Adjust based on entropy timing
+            entropy_timing = entropy_result.get('entropy_timing', 0.0)
+            timing_multiplier = 1.0 + (entropy_timing * 0.5)
+
+            # Calculate final position size
+            position_size = base_size * confidence_multiplier * timing_multiplier
+
+            # Apply risk limits
+            max_position = self.risk_config.get('max_position_size', 0.5)
+            position_size = min(position_size, max_position)
+
+            return position_size
+
+        except Exception as e:
+            logger.error(f"❌ Failed to calculate position size: {e}")
+            return 0.0
 
     def _assess_risk(self, decision: TradingDecision) -> bool:
         """Assess risk for the trading decision."""
         try:
-            risk_assessment = self.risk_manager.assess_trade_risk({
-                'action': decision.action.value,
-                'quantity': decision.quantity,
-                'price': decision.price,
-                'confidence': decision.confidence,
-                'entropy_score': decision.entropy_score,
-                'current_position': self.current_position,
-                'portfolio_value': self.portfolio_tracker.get_total_value()
-            })
-            
-            return risk_assessment.get('approved', False)
-            
+            # Check with risk manager
+            risk_assessment = self.risk_manager.assess_trade_risk(decision)
+
+            if not risk_assessment['approved']:
+                self.performance_metrics['risk_blocks'] += 1
+                logger.warning(
+                    f"⚠️ Risk assessment failed: {risk_assessment['reason']}"
+                )
+                return False
+
+            return True
+
         except Exception as e:
             logger.error(f"❌ Risk assessment failed: {e}")
             return False
 
     def _assess_risk_level(self, profit_result) -> str:
-        """Assess risk level based on profit result."""
-        if profit_result.total_profit_score > 0.5:
-            return "low"
-        elif profit_result.total_profit_score > 0.0:
-            return "medium"
-        else:
-            return "high"
+        """Assess risk level based on profit analysis."""
+        try:
+            volatility = profit_result.get('volatility', 0.0)
+            drawdown = profit_result.get('max_drawdown', 0.0)
+
+            if volatility > 0.5 or drawdown > 0.2:
+                return 'high'
+            elif volatility > 0.3 or drawdown > 0.1:
+                return 'moderate'
+            else:
+                return 'low'
+
+        except Exception as e:
+            logger.error(f"❌ Failed to assess risk level: {e}")
+            return 'high'
 
     async def _execute_trade(self, decision: TradingDecision) -> TradingResult:
         """Execute the trading decision."""
         try:
-            if decision.action == TradingAction.BUY:
-                order = await self.exchange.create_market_buy_order(
-                    symbol='BTC/USDC',
-                    amount=decision.quantity
+            if decision.action == TradingAction.HOLD:
+                return TradingResult(
+                    success=True,
+                    order_id=None,
+                    executed_price=0.0,
+                    executed_quantity=0.0,
+                    fees=0.0,
+                    timestamp=time.time(),
+                    action=decision.action,
+                    metadata={'reason': 'hold_decision'}
                 )
-            elif decision.action == TradingAction.SELL:
-                order = await self.exchange.create_market_sell_order(
-                    symbol='BTC/USDC',
-                    amount=decision.quantity
-                )
-            else:
-                raise ValueError(f"Invalid action: {decision.action}")
-            
-            # Wait for order to be filled
-            await asyncio.sleep(1)
-            
-            # Get order status
-            order_status = await self.exchange.fetch_order(order['id'], 'BTC/USDC')
-            
-            result = TradingResult(
-                success=order_status['status'] == 'closed',
-                order_id=order['id'],
-                executed_price=float(order_status['price']),
-                executed_quantity=float(order_status['filled']),
-                fees=float(order_status.get('fee', {}).get('cost', 0.0)),
+
+            # Prepare order parameters
+            symbol = 'BTC/USDC'
+            side = decision.action.value
+            amount = decision.quantity
+            price = decision.price
+
+            # Execute order
+            order = await self.exchange.create_order(
+                symbol=symbol,
+                type='market',
+                side=side,
+                amount=amount
+            )
+
+            # Calculate fees
+            fees = (
+                order.get('fee', {}).get('cost', 0.0)
+                if order.get('fee') else 0.0
+            )
+
+            return TradingResult(
+                success=order.get('status') == 'closed',
+                order_id=order.get('id'),
+                executed_price=order.get('price', price),
+                executed_quantity=order.get('amount', amount),
+                fees=fees,
                 timestamp=time.time(),
                 action=decision.action,
-                metadata={
-                    'order_status': order_status['status'],
-                    'strategy_id': decision.strategy_id,
-                    'entropy_score': decision.entropy_score
-                }
+                metadata={'order': order}
             )
-            
-            logger.info(f"✅ Trade executed: {decision.action.value} {result.executed_quantity:.6f} BTC @ ${result.executed_price:,.2f}")
-            return result
-            
+
         except Exception as e:
             logger.error(f"❌ Trade execution failed: {e}")
-            raise
+            return TradingResult(
+                success=False,
+                order_id=None,
+                executed_price=0.0,
+                executed_quantity=0.0,
+                fees=0.0,
+                timestamp=time.time(),
+                action=decision.action,
+                metadata={'error': str(e)}
+            )
 
     def _update_portfolio(self, result: TradingResult) -> None:
         """Update portfolio with trade result."""
         try:
-            if result.success and result.action in [TradingAction.BUY, TradingAction.SELL]:
+            if result.success and result.executed_quantity > 0:
                 self.portfolio_tracker.update_position(
-                    asset='BTC',
-                    quantity=result.executed_quantity if result.action == TradingAction.BUY else -result.executed_quantity,
+                    symbol='BTC/USDC',
+                    quantity=result.executed_quantity,
                     price=result.executed_price,
-                    timestamp=result.timestamp
+                    action=result.action.value
                 )
-                
-                # Update current position
-                if result.action == TradingAction.BUY:
-                    self.current_position += result.executed_quantity
-                else:
-                    self.current_position -= result.executed_quantity
-                    
+
         except Exception as e:
-            logger.error(f"❌ Portfolio update failed: {e}")
+            logger.error(f"❌ Failed to update portfolio: {e}")
 
     def _update_performance_metrics(self, result: TradingResult) -> None:
-        """Update performance metrics."""
+        """Update performance metrics with trade result."""
         try:
-            self.performance_metrics['total_trades'] += 1
-            
+            self.trade_count += 1
+            self.last_trade_time = time.time()
+
             if result.success:
+                self.successful_trades += 1
                 self.performance_metrics['successful_trades'] += 1
-                
+
                 # Calculate profit/loss
                 if result.action == TradingAction.BUY:
-                    # Track cost basis
-                    pass
+                    self.current_position += result.executed_quantity
                 elif result.action == TradingAction.SELL:
-                    # Calculate realized P&L
-                    pass
-                    
+                    self.current_position -= result.executed_quantity
+
+            self.performance_metrics['total_trades'] += 1
+
         except Exception as e:
-            logger.error(f"❌ Performance metrics update failed: {e}")
+            logger.error(f"❌ Failed to update performance metrics: {e}")
 
     def _calculate_volatility(self, order_book: Dict[str, Any]) -> float:
-        """Calculate volatility from order book."""
+        """Calculate market volatility from order book."""
         try:
-            bids = order_book['bids'][:10]
-            asks = order_book['asks'][:10]
-            
-            bid_prices = [float(bid[0]) for bid in bids]
-            ask_prices = [float(ask[0]) for ask in asks]
-            
-            mid_price = (np.mean(bid_prices) + np.mean(ask_prices)) / 2
-            spread = (np.mean(ask_prices) - np.mean(bid_prices)) / mid_price
-            
-            return min(1.0, spread * 10)  # Normalize to 0-1
-            
-        except Exception:
-            return 0.2  # Default volatility
+            if not order_book.get('bids') or not order_book.get('asks'):
+                return 0.0
+
+            # Calculate spread
+            best_bid = order_book['bids'][0][0]
+            best_ask = order_book['asks'][0][0]
+            spread = (best_ask - best_bid) / best_bid
+
+            # Calculate depth-weighted volatility
+            bid_depth = sum(bid[1] for bid in order_book['bids'][:5])
+            ask_depth = sum(ask[1] for ask in order_book['asks'][:5])
+            depth_ratio = min(bid_depth, ask_depth) / max(bid_depth, ask_depth)
+
+            volatility = spread * (1.0 - depth_ratio)
+            return min(1.0, volatility)
+
+        except Exception as e:
+            logger.error(f"❌ Failed to calculate volatility: {e}")
+            return 0.0
 
     def _calculate_momentum(self, ticker: Dict[str, Any]) -> float:
-        """Calculate momentum from ticker data."""
+        """Calculate market momentum from ticker data."""
         try:
-            current_price = float(ticker['last'])
-            open_price = float(ticker['open'])
-            
-            momentum = (current_price - open_price) / open_price
-            return max(-1.0, min(1.0, momentum * 10))  # Normalize to -1 to 1
-            
-        except Exception:
+            # Simple momentum calculation based on price change
+            price_change = ticker.get('change', 0.0)
+            base_volume = ticker.get('baseVolume', 1.0)
+
+            # Normalize by volume
+            momentum = price_change / (base_volume + 1e-8)
+            return np.clip(momentum, -1.0, 1.0)
+
+        except Exception as e:
+            logger.error(f"❌ Failed to calculate momentum: {e}")
             return 0.0
 
     def _calculate_volume_profile(self, order_book: Dict[str, Any]) -> float:
         """Calculate volume profile from order book."""
         try:
-            total_volume = sum(float(bid[1]) for bid in order_book['bids'][:5])
-            return min(1.0, total_volume / 1000)  # Normalize
-            
-        except Exception:
-            return 0.5
+            if not order_book.get('bids') or not order_book.get('asks'):
+                return 0.0
+
+            # Calculate volume imbalance
+            bid_volume = sum(bid[1] for bid in order_book['bids'][:10])
+            ask_volume = sum(ask[1] for ask in order_book['asks'][:10])
+
+            total_volume = bid_volume + ask_volume
+            if total_volume == 0:
+                return 0.0
+
+            volume_imbalance = (bid_volume - ask_volume) / total_volume
+            return np.clip(volume_imbalance, -1.0, 1.0)
+
+        except Exception as e:
+            logger.error(f"❌ Failed to calculate volume profile: {e}")
+            return 0.0
 
     def get_performance_summary(self) -> Dict[str, Any]:
-        """Get performance summary."""
-        return {
-            'trading_state': self.trading_state.value,
-            'current_position': self.current_position,
-            'total_trades': self.performance_metrics['total_trades'],
-            'success_rate': (
-                self.performance_metrics['successful_trades'] / 
-                max(1, self.performance_metrics['total_trades'])
-            ),
-            'total_profit': self.performance_metrics['total_profit'],
-            'entropy_adjustments': self.performance_metrics['entropy_adjustments'],
-            'risk_blocks': self.performance_metrics['risk_blocks']
-        }
+        """Get comprehensive performance summary."""
+        try:
+            total_trades = self.performance_metrics['total_trades']
+            successful_trades = self.performance_metrics['successful_trades']
+
+            return {
+                'trading_state': self.trading_state.value,
+                'current_position': self.current_position,
+                'total_trades': total_trades,
+                'successful_trades': successful_trades,
+                'success_rate': successful_trades / max(1, total_trades),
+                'total_profit': self.performance_metrics['total_profit'],
+                'max_drawdown': self.performance_metrics['max_drawdown'],
+                'sharpe_ratio': self.performance_metrics['sharpe_ratio'],
+                'entropy_adjustments': self.performance_metrics['entropy_adjustments'],
+                'risk_blocks': self.performance_metrics['risk_blocks'],
+                'last_trade_time': self.last_trade_time
+            }
+
+        except Exception as e:
+            logger.error(f"❌ Failed to get performance summary: {e}")
+            return {}
 
     async def run_trading_loop(self, interval_seconds: int = 60) -> None:
         """Run continuous trading loop."""
-        logger.info("🚀 Starting entropy-enhanced trading loop")
-        
+        logger.info(f"🔄 Starting trading loop with {interval_seconds}s intervals")
+
         while True:
             try:
+                # Execute trading cycle
                 result = await self.execute_trading_cycle()
-                
-                # Log performance
+
+                # Log result
                 if result.success:
-                    logger.info(f"✅ Trading cycle completed successfully")
+                    logger.info(
+                        f"✅ Trade executed: {result.action.value} "
+                        f"{result.executed_quantity} @ {result.executed_price}"
+                    )
                 else:
-                    logger.warning(f"⚠️ Trading cycle completed with issues: {result.metadata}")
-                
+                    logger.warning(
+                        f"⚠️ Trade failed: {result.metadata.get('reason', 'unknown')}"
+                    )
+
                 # Wait for next cycle
                 await asyncio.sleep(interval_seconds)
-                
-            except KeyboardInterrupt:
-                logger.info("🛑 Trading loop stopped by user")
-                break
+
             except Exception as e:
                 logger.error(f"❌ Trading loop error: {e}")
                 await asyncio.sleep(interval_seconds)
@@ -631,9 +667,9 @@ def create_trading_executor(
 
 
 async def demo_trading_executor():
-    """Demonstrate the trading executor functionality."""
+    """Demo the trading executor functionality."""
     print("=== Entropy-Enhanced Trading Executor Demo ===")
-    
+
     # Configuration
     exchange_config = {
         'exchange': 'coinbase',
@@ -641,33 +677,32 @@ async def demo_trading_executor():
         'secret': 'demo_secret',
         'sandbox': True
     }
-    
+
     strategy_config = {
-        'base_position_size': 0.01,
-        'max_position_size': 0.1,
-        'entropy_threshold': 0.5
+        'strategy_type': 'entropy_enhanced',
+        'parameters': {}
     }
-    
+
     entropy_config = {
-        'timing_cycles': [1, 5, 15, 30],
-        'confidence_threshold': 0.7
+        'signal_threshold': 0.5,
+        'timing_window': 300
     }
-    
+
     risk_config = {
         'risk_tolerance': 0.2,
-        'max_drawdown': 0.1,
-        'position_limit': 0.2
+        'position_size': 0.1,
+        'max_position_size': 0.5
     }
-    
+
     # Create executor
     executor = create_trading_executor(
         exchange_config, strategy_config, entropy_config, risk_config
     )
-    
+
     # Run demo cycle
     result = await executor.execute_trading_cycle()
     print(f"Demo result: {result}")
-    
+
     # Show performance
     performance = executor.get_performance_summary()
     print(f"Performance: {performance}")

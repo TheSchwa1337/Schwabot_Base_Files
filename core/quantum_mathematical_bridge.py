@@ -86,7 +86,7 @@ class QuantumMathematicalBridge:
 
         # CNOT gate
         self.cnot = xp.array(
-            [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 0, 1], [0, 0, 1, 0]], 
+            [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 0, 1], [0, 0, 1, 0]],
             dtype=complex
         )
 

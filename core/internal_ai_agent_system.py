@@ -52,7 +52,7 @@ class MessageType(Enum):
 
 
 @dataclass
-    class AgentMessage:
+class AgentMessage:
     """Message structure for inter-agent communication."""
 
     sender_id: str
@@ -64,7 +64,7 @@ class MessageType(Enum):
 
 
 @dataclass
-    class MarketData:
+class MarketData:
     """Standardized market data structure."""
 
     symbol: str
@@ -78,7 +78,7 @@ class MessageType(Enum):
 
 
 @dataclass
-    class TradingSuggestion:
+class TradingSuggestion:
     """Trading suggestion from an AI agent."""
 
     agent_id: str
@@ -113,7 +113,7 @@ class SharedKnowledgeRepository:
             return {}
 
         # Calculate consensus based on recent insights
-        recent_insights = []
+        recent_insights = [
             insight
             for insight in self.agent_insights.values()
             if time.time() - insight["timestamp"] < 3600  # Last hour
@@ -123,25 +123,22 @@ class SharedKnowledgeRepository:
             return {}
 
         # Simple consensus: average of confidence scores
-        total_confidence = sum()
+        total_confidence = sum(
             insight["insight"].get("confidence", 0) for insight in recent_insights
         )
         avg_confidence = total_confidence / len(recent_insights)
 
-        return {}
+        return {
             "consensus_confidence": avg_confidence,
             "insight_count": len(recent_insights),
             "timestamp": time.time(),
         }
 
-    def update_strategy_performance()
-        self, strategy_id: str, performance: Dict[str, Any]
-    ):
+    def update_strategy_performance(self, strategy_id: str, performance: Dict[str, Any]):
         """Update strategy performance metrics."""
         self.strategy_performance[strategy_id] = {}
-            "performance": performance,
-            "timestamp": time.time(),
-        }
+        self.strategy_performance[strategy_id]["performance"] = performance
+        self.strategy_performance[strategy_id]["timestamp"] = time.time()
 
     def get_market_data(self, symbol: str) -> Optional[MarketData]:
         """Get market data for a symbol."""
@@ -155,29 +152,23 @@ class SharedKnowledgeRepository:
 class InternalAIAgent:
     """Base class for internal AI agents."""
 
-    def __init__()
-        self,
-        agent_id: str,
-        agent_type: AgentType,
-        config: Optional[Dict[str, Any]] = None,
-    ):
+    def __init__(self, agent_id: str, agent_type: AgentType, config: Optional[Dict[str, Any]] = None):
         self.agent_id = agent_id
         self.agent_type = agent_type
         self.config = config or self._default_config()
         self.knowledge_repo = SharedKnowledgeRepository()
         self.math_core = get_unified_math_core()
         self.performance_metrics = {}
-            "suggestions_made": 0,
-            "successful_trades": 0,
-            "total_pnl": 0.0,
-            "accuracy_rate": 0.0,
-        }
+        self.performance_metrics["suggestions_made"] = 0
+        self.performance_metrics["successful_trades"] = 0
+        self.performance_metrics["total_pnl"] = 0.0
+        self.performance_metrics["accuracy_rate"] = 0.0
 
         logger.info("Initialized {} agent: {}".format(agent_type.value, agent_id))
 
     def _default_config(self) -> Dict[str, Any]:
         """Default configuration for the agent."""
-        return {}
+        return {
             "confidence_threshold": 0.7,
             "risk_tolerance": 0.5,
             "analysis_window": 100,  # data points
@@ -200,14 +191,10 @@ class InternalAIAgent:
             return analysis_result
 
         except Exception as e:
-            logger.error()
-                "Market data analysis failed for agent {}: {}".format(self.agent_id, e)
-            )
+            logger.error("Market data analysis failed for agent {}: {}".format(self.agent_id, e))
             return {"error": str(e)}
 
-    async def _gpu_analysis()
-        self, price_data: np.ndarray, volume_data: np.ndarray
-    ) -> Dict[str, Any]:
+    async def _gpu_analysis(self, price_data: np.ndarray, volume_data: np.ndarray) -> Dict[str, Any]:
         """GPU-accelerated market data analysis."""
         try:
             # Use unified math core for calculations
@@ -223,13 +210,11 @@ class InternalAIAgent:
 
                 # Calculate momentum
                 if len(price_tensor) > 1:
-                    momentum = float()
-                        (price_tensor[-1] - price_tensor[0]) / price_tensor[0]
-                    )
+                    momentum = float((price_tensor[-1] - price_tensor[0]) / price_tensor[0])
                 else:
                     momentum = 0.0
 
-                return {}
+                return {
                     "price_mean": price_mean,
                     "price_std": price_std,
                     "volume_mean": volume_mean,
@@ -246,9 +231,7 @@ class InternalAIAgent:
             logger.error("GPU analysis failed, using CPU fallback: {}".format(e))
             return self._cpu_analysis(price_data, volume_data)
 
-    def _cpu_analysis()
-        self, price_data: np.ndarray, volume_data: np.ndarray
-    ) -> Dict[str, Any]:
+    def _cpu_analysis(self, price_data: np.ndarray, volume_data: np.ndarray) -> Dict[str, Any]:
         """CPU-based market data analysis."""
         try:
             price_mean = float(np.mean(price_data))
@@ -260,7 +243,7 @@ class InternalAIAgent:
             else:
                 momentum = 0.0
 
-            return {}
+            return {
                 "price_mean": price_mean,
                 "price_std": price_std,
                 "volume_mean": volume_mean,
@@ -293,17 +276,13 @@ class InternalAIAgent:
             return suggestion
 
         except Exception as e:
-            logger.error()
-                "Suggestion generation failed for agent {}: {}".format(self.agent_id, e)
-            )
+            logger.error("Suggestion generation failed for agent {}: {}".format(self.agent_id, e))
             raise
 
-    async def _generate_suggestion()
-        self, analysis: Dict[str, Any], context: Dict[str, Any]
-    ) -> TradingSuggestion:
+    async def _generate_suggestion(self, analysis: Dict[str, Any], context: Dict[str, Any]) -> TradingSuggestion:
         """Generate specific suggestion based on agent type."""
         # Base implementation - should be overridden by specialized agents
-        return TradingSuggestion()
+        return TradingSuggestion(
             agent_id=self.agent_id,
             agent_type=self.agent_type,
             symbol=context.get("symbol", "UNKNOWN"),
@@ -330,14 +309,10 @@ class InternalAIAgent:
             successful_trades = self.performance_metrics["successful_trades"]
 
             if total_suggestions > 0:
-                self.performance_metrics["accuracy_rate"] = ()
-                    successful_trades / total_suggestions
-                )
+                self.performance_metrics["accuracy_rate"] = successful_trades / total_suggestions
 
         except Exception as e:
-            logger.error()
-                "Performance update failed for agent {}: {}".format(self.agent_id, e)
-            )
+            logger.error("Performance update failed for agent {}: {}".format(self.agent_id, e))
 
     def get_performance_metrics(self) -> Dict[str, Any]:
         """Get current performance metrics."""
@@ -352,9 +327,7 @@ class StrategyAgent(InternalAIAgent):
         self.pattern_memory = []
         self.signal_history = []
 
-    async def _generate_suggestion()
-        self, analysis: Dict[str, Any], context: Dict[str, Any]
-    ) -> TradingSuggestion:
+    async def _generate_suggestion(self, analysis: Dict[str, Any], context: Dict[str, Any]) -> TradingSuggestion:
         """Generate strategy-based trading suggestion."""
         try:
             symbol = context.get("symbol", "UNKNOWN")
@@ -379,13 +352,9 @@ class StrategyAgent(InternalAIAgent):
             volatility = analysis.get("price_std", 0.0)
             risk_score = min(1.0, volatility / 100.0)  # Normalize volatility
 
-            reasoning = ()
-                "Momentum-based strategy: momentum={:.4f}, volatility={:.4f}".format()
-                    momentum, volatility
-                )
-            )
+            reasoning = "Momentum-based strategy: momentum={:.4f}, volatility={:.4f}".format(momentum, volatility)
 
-            return TradingSuggestion()
+            return TradingSuggestion(
                 agent_id=self.agent_id,
                 agent_type=self.agent_type,
                 symbol=symbol,
@@ -408,15 +377,13 @@ class RiskAgent(InternalAIAgent):
 
     def __init__(self, agent_id: str, config: Optional[Dict[str, Any]] = None):
         super().__init__(agent_id, AgentType.RISK, config)
-        self.risk_thresholds = {}
+        self.risk_thresholds = {
             "max_position_size": 0.1,  # 10% of portfolio
             "max_drawdown": 0.5,  # 5% max drawdown
             "volatility_limit": 0.2,  # 20% volatility limit
         }
 
-    async def _generate_suggestion()
-        self, analysis: Dict[str, Any], context: Dict[str, Any]
-    ) -> TradingSuggestion:
+    async def _generate_suggestion(self, analysis: Dict[str, Any], context: Dict[str, Any]) -> TradingSuggestion:
         """Generate risk-based trading suggestion."""
         try:
             symbol = context.get("symbol", "UNKNOWN")
@@ -433,16 +400,12 @@ class RiskAgent(InternalAIAgent):
                 reasoning = "Risk too high: volatility={:.4f}".format(volatility)
             else:
                 # Calculate safe position size
-                safe_quantity = self.risk_thresholds["max_position_size"] * ()
-                    1.0 - risk_score
-                )
+                safe_quantity = self.risk_thresholds["max_position_size"] * (1.0 - risk_score)
                 action = "buy" if safe_quantity > 0 else "hold"
                 quantity = safe_quantity
-                reasoning = "Risk-adjusted position: size={:.4f}, risk={:.4f}".format()
-                    safe_quantity, risk_score
-                )
+                reasoning = "Risk-adjusted position: size={:.4f}, risk={:.4f}".format(safe_quantity, risk_score)
 
-            return TradingSuggestion()
+            return TradingSuggestion(
                 agent_id=self.agent_id,
                 agent_type=self.agent_type,
                 symbol=symbol,
@@ -472,9 +435,7 @@ class AgentCommunicationHub:
     def register_agent(self, agent: InternalAIAgent):
         """Register an agent with the communication hub."""
         self.agents[agent.agent_id] = agent
-        logger.info()
-            "Registered agent: {} ({})".format(agent.agent_id, agent.agent_type.value)
-        )
+        logger.info("Registered agent: {} ({})".format(agent.agent_id, agent.agent_type.value))
 
     async def broadcast_message(self, message: AgentMessage):
         """Broadcast message to all agents."""
@@ -482,22 +443,16 @@ class AgentCommunicationHub:
             for agent in self.agents.values():
                 await agent.receive_message(message)
 
-            logger.debug()
-                "Broadcasted message from {} to {} agents".format()
-                    message.sender_id, len(self.agents)
-                )
-            )
+            logger.debug("Broadcasted message from {} to {} agents".format(message.sender_id, len(self.agents)))
 
         except Exception as e:
             logger.error("Message broadcast failed: {}".format(e))
 
-    async def build_consensus()
-        self, suggestions: List[TradingSuggestion]
-    ) -> Dict[str, Any]:
+    async def build_consensus(self, suggestions: List[TradingSuggestion]) -> Dict[str, Any]:
         """Build consensus from agent suggestions."""
         try:
             if not suggestions:
-                return {}
+                return {
                     "consensus": "hold",
                     "confidence": 0.0,
                     "reasoning": "No suggestions",
@@ -517,23 +472,19 @@ class AgentCommunicationHub:
                 action_confidences[action].append(suggestion.confidence)
 
             # Find most common action
-            most_common_action = max()
-                action_counts.keys(), key=lambda x: action_counts[x]
-            )
+            most_common_action = max(action_counts.keys(), key=lambda x: action_counts[x])
 
             # Calculate average confidence for most common action
             avg_confidence = np.mean(action_confidences[most_common_action])
 
             # Build reasoning
-            reasoning = ()
-                "Consensus: {} agents suggest {}, avg confidence: {:.3f}".format()
-                    action_counts[most_common_action],
-                    most_common_action,
-                    avg_confidence,
-                )
+            reasoning = "Consensus: {} agents suggest {}, avg confidence: {:.3f}".format(
+                action_counts[most_common_action],
+                most_common_action,
+                avg_confidence,
             )
 
-            consensus = {}
+            consensus = {
                 "consensus": most_common_action,
                 "confidence": avg_confidence,
                 "reasoning": reasoning,
@@ -548,7 +499,7 @@ class AgentCommunicationHub:
 
         except Exception as e:
             logger.error("Consensus building failed: {}".format(e))
-            return {}
+            return {
                 "consensus": "hold",
                 "confidence": 0.0,
                 "reasoning": "Consensus failed",

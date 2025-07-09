@@ -9,6 +9,7 @@ This subpackage contains concrete third-party API handlers used by
 """
 
 import importlib
+from importlib.machinery import iter_modules as _iter_modules
 from pathlib import Path as _Path
 
 # Ensure that when the package is imported standalone, all modules are

@@ -27,8 +27,8 @@ This is Schwabot's quantum mathematical foundation layer.
 
 # Standard library imports
 import logging
-from typing import Any, Dict, Optional, List, Tuple, Union
-from dataclasses import dataclass, field
+from typing import Any, Dict, Optional, List
+from dataclasses import dataclass
 
 # Third-party mathematical libraries
 import numpy as np
@@ -597,7 +597,8 @@ class UnifiedMathCore:
 
         # Calculate quantum potential
         laplacian = np.gradient(np.gradient(np.real(wave_function)))
-        quantum_potential = -self.reduced_planck_constant**2 / (2 * 1e-30) * np.mean(laplacian / (wave_function + 1e-10))
+        quantum_potential = -self.reduced_planck_constant**2 / (2 * 1e-30) * \
+            np.mean(laplacian / (wave_function + 1e-10))
 
         return QuantumMarketState(
             wave_function=wave_function,
@@ -661,23 +662,16 @@ class UnifiedMathCore:
             Optimized portfolio weights and metrics
         """
         try:
-            # Convert to GPU arrays
-            weights_gpu = cp.asarray(weights, dtype=cp.float64)
-            
             # Create quantum superposition of weight combinations
             n_combinations = 100
             weight_combinations = cp.random.random((n_combinations, len(weights)), dtype=cp.float64)
-            
             # Normalize weights to sum to 1
             weight_combinations /= cp.sum(weight_combinations, axis=1, keepdims=True)
-            
             # Calculate risk scores for each combination
             risk_scores = cp.sum(weight_combinations ** 2, axis=1)  # Simplified risk measure
-            
             # Find optimal combination based on risk tolerance
             optimal_idx = cp.argmin(cp.abs(risk_scores - risk_tolerance))
             optimized_weights = cp.asnumpy(weight_combinations[optimal_idx])
-            
             return {
                 "optimized_weights": optimized_weights,
                 "risk_score": float(risk_scores[optimal_idx]),
@@ -757,8 +751,10 @@ class UnifiedMathCore:
             "precision": self.config["precision"],
             "matrix_size": self.config["matrix_size"],
             "quantum_states_tracked": len(self.quantum_states),
-            "average_entanglement": np.mean(self.entanglement_history) if self.entanglement_history else 0.0,
-            "average_coherence": np.mean(self.coherence_history) if self.coherence_history else 0.0,
+            "average_entanglement": np.mean(self.entanglement_history) \
+                if self.entanglement_history else 0.0,
+            "average_coherence": np.mean(self.coherence_history) \
+                if self.coherence_history else 0.0,
             "planck_constant": self.planck_constant,
             "reduced_planck_constant": self.reduced_planck_constant,
             "boltzmann_constant": self.boltzmann_constant,

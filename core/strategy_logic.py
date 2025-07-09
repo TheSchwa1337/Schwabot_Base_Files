@@ -54,7 +54,7 @@ class StrategyType(Enum):
 
 
 @dataclass
-    class MarketSignal:
+class MarketSignal:
     """Market signal data."""
     signal_type: SignalType
     strength: SignalStrength
@@ -66,7 +66,7 @@ class StrategyType(Enum):
 
 
 @dataclass
-    class StrategyDecision:
+class StrategyDecision:
     """Strategy decision output."""
     action: SignalType
     confidence: float
@@ -78,7 +78,7 @@ class StrategyType(Enum):
 
 
 @dataclass
-    class StrategyPerformance:
+class StrategyPerformance:
     """Strategy performance metrics."""
     total_trades: int = 0
     winning_trades: int = 0
@@ -109,9 +109,11 @@ class StrategyLogic:
         self.stop_loss_pct = 0.5  # 5% stop loss
         self.take_profit_pct = 0.15  # 15% take profit
 
-        logger.info()
-    "Initialized StrategyLogic with type: {0}".format()
-        strategy_type.value))
+        logger.info(
+            "Initialized StrategyLogic with type: {0}".format(
+                strategy_type.value
+            )
+        )
 
     def process_market_data(self, market_data: Dict[str, Any]) -> MarketSignal:
         """Process market data and generate signals."""
@@ -136,15 +138,16 @@ class StrategyLogic:
             logger.error("Error processing market data: {0}".format(e))
             return self._create_default_signal()
 
-    def make_decision(self,)
-    signal: MarketSignal,
-    portfolio_data: Dict[str,]
-     Any]) -> StrategyDecision:
+    def make_decision(
+        self,
+        signal: MarketSignal,
+        portfolio_data: Dict[str, Any]
+    ) -> StrategyDecision:
         """Make trading decision based on signal and portfolio."""
         try:
             # Validate signal
             if signal.confidence < self.confidence_threshold:
-                return StrategyDecision()
+                return StrategyDecision(
                     action=SignalType.HOLD,
                     confidence=signal.confidence,
                     position_size=0.0,
@@ -152,25 +155,27 @@ class StrategyLogic:
                 )
 
             # Calculate position size
-            position_size = self._calculate_position_size()
-                signal, portfolio_data)
+            position_size = self._calculate_position_size(
+                signal, portfolio_data
+            )
 
             # Determine action
             action = self._determine_action(signal, portfolio_data)
 
             # Calculate stop loss and take profit
-            stop_loss, take_profit = self._calculate_risk_levels()
-                signal.price, action)
+            stop_loss, take_profit = self._calculate_risk_levels(
+                signal.price, action
+            )
 
             # Create decision
-            decision = StrategyDecision()
+            decision = StrategyDecision(
                 action=action,
                 confidence=signal.confidence,
                 position_size=position_size,
                 stop_loss=stop_loss,
                 take_profit=take_profit,
                 reasoning=self._generate_reasoning(signal, action),
-                metadata={}
+                metadata={
                     "strategy_type": self.strategy_type.value,
                     "signal_strength": signal.strength.value,
                     "timestamp": time.time()
@@ -184,15 +189,16 @@ class StrategyLogic:
 
         except Exception as e:
             logger.error("Error making decision: {0}".format(e))
-            return StrategyDecision()
+            return StrategyDecision(
                 action=SignalType.HOLD,
                 confidence=0.0,
                 position_size=0.0,
                 reasoning="Error in decision making: {0}".format(e)
             )
 
-    def _calculate_indicators()
-        self, market_data: Dict[str, Any]) -> Dict[str, float]:
+    def _calculate_indicators(
+        self, market_data: Dict[str, Any]
+    ) -> Dict[str, float]:
         """Calculate technical indicators."""
         prices = market_data.get("price_history", [])
         volumes = market_data.get("volume_history", [])
@@ -210,10 +216,11 @@ class StrategyLogic:
         bb_position = self._calculate_bollinger_position(prices)
 
         # Volume analysis
-        volume_ratio = self._calculate_volume_ratio()
-            volumes) if volumes else 1.0
+        volume_ratio = self._calculate_volume_ratio(
+            volumes
+        ) if volumes else 1.0
 
-        return {}
+        return {
             "rsi": rsi,
             "macd": macd,
             "bollinger_position": bb_position,
@@ -294,11 +301,10 @@ class StrategyLogic:
 
         return current_volume / avg_volume
 
-    def _generate_signal(self,)
-    indicators: Dict[str,]
-    float],
-    market_data: Dict[str,]
-     Any]) -> MarketSignal:
+    def _generate_signal(self,
+        indicators: Dict[str, float],
+        market_data: Dict[str, Any]
+    ) -> MarketSignal:
         """Generate trading signal based on indicators."""
         rsi = indicators["rsi"]
         macd = indicators["macd"]
@@ -307,16 +313,13 @@ class StrategyLogic:
 
         # Determine signal type based on strategy
         if self.strategy_type == StrategyType.TREND_FOLLOWING:
-            signal_type, confidence = self._trend_following_signal()
-                rsi, macd, bb_position)
+            signal_type, confidence = self._trend_following_signal(rsi, macd, bb_position)
         elif self.strategy_type == StrategyType.MEAN_REVERSION:
-            signal_type, confidence = self._mean_reversion_signal()
-                rsi, bb_position)
+            signal_type, confidence = self._mean_reversion_signal(rsi, bb_position)
         elif self.strategy_type == StrategyType.MOMENTUM:
             signal_type, confidence = self._momentum_signal(macd, volume_ratio)
         elif self.strategy_type == StrategyType.QUANTUM:
-            signal_type, confidence = self._quantum_signal()
-                indicators, market_data)
+            signal_type, confidence = self._quantum_signal(indicators, market_data)
         else:  # HYBRID
             signal_type, confidence = self._hybrid_signal(indicators)
 
@@ -326,7 +329,7 @@ class StrategyLogic:
         # Determine strength
         strength = self._determine_strength(confidence)
 
-        return MarketSignal()
+        return MarketSignal(
             signal_type=signal_type,
             strength=strength,
             confidence=confidence,
@@ -336,8 +339,7 @@ class StrategyLogic:
             metadata={"indicators": indicators}
         )
 
-    def _trend_following_signal(self, rsi: float, macd: float, bb_position: float) -> Tuple[SignalType,]
-float]:
+    def _trend_following_signal(self, rsi: float, macd: float, bb_position: float) -> Tuple[SignalType, float]:
         """Generate trend following signal."""
         # Buy conditions
         if rsi < 70 and macd > 0 and bb_position < 0.8:
@@ -348,8 +350,7 @@ float]:
         else:
             return SignalType.HOLD, 0.5
 
-    def _mean_reversion_signal()
-        self, rsi: float, bb_position: float) -> Tuple[SignalType, float]:
+    def _mean_reversion_signal(self, rsi: float, bb_position: float) -> Tuple[SignalType, float]:
         """Generate mean reversion signal."""
         # Buy conditions (oversold)
         if rsi < 30 and bb_position < 0.2:
@@ -360,8 +361,7 @@ float]:
         else:
             return SignalType.HOLD, 0.5
 
-    def _momentum_signal()
-        self, macd: float, volume_ratio: float) -> Tuple[SignalType, float]:
+    def _momentum_signal(self, macd: float, volume_ratio: float) -> Tuple[SignalType, float]:
         """Generate momentum signal."""
         # Strong momentum with volume
         if macd > 0 and volume_ratio > 1.2:
@@ -371,10 +371,7 @@ float]:
         else:
             return SignalType.HOLD, 0.5
 
-    def _quantum_signal(self, indicators: Dict[str, float], market_data: Dict[str, Any]) ->
-
-
-Tuple[SignalType, float]:
+    def _quantum_signal(self, indicators: Dict[str, float], market_data: Dict[str, Any]) -> Tuple[SignalType, float]:
         """Generate quantum-enhanced signal."""
         # Simplified quantum signal (would integrate with quantum, core)
         base_confidence = 0.6
@@ -457,7 +454,7 @@ Tuple[SignalType, float]:
         confidence_adjustment = signal.confidence
 
         # Adjust based on signal strength
-        strength_adjustment = {}
+        strength_adjustment = {
             SignalStrength.WEAK: 0.5,
             SignalStrength.MODERATE: 0.75,
             SignalStrength.STRONG: 1.0,
@@ -558,8 +555,7 @@ Tuple[SignalType, float]:
         else:
             return SignalType.HOLD
 
-    def _calculate_risk_levels(self, price: float, action: SignalType) -> Tuple[Optional[float],]
-Optional[float]]:
+    def _calculate_risk_levels(self, price: float, action: SignalType) -> Tuple[Optional[float], Optional[float]]:
         """Calculate stop loss and take profit levels."""
         if action == SignalType.BUY:
             stop_loss = price * (1 - self.stop_loss_pct)
@@ -575,10 +571,10 @@ Optional[float]]:
 
     def _generate_reasoning(self, signal: MarketSignal, action: SignalType) -> str:
         """Generate reasoning for the decision."""
-        reasoning_parts = []
+        reasoning_parts = [
             "Signal: {0}".format(signal.signal_type.value),
             "Strength: {0}".format(signal.strength.value),
-            "Confidence),"
+            "Confidence: {0:.2f}".format(signal.confidence),
             "Action: {0}".format(action.value)
         ]
 
@@ -591,7 +587,7 @@ Optional[float]]:
 
     def _create_default_signal(self) -> MarketSignal:
         """Create default signal when processing fails."""
-        return MarketSignal()
+        return MarketSignal(
             signal_type=SignalType.HOLD,
             strength=SignalStrength.WEAK,
             confidence=0.0,
@@ -613,10 +609,8 @@ Optional[float]]:
             self.performance.losing_trades += 1
 
         # Update derived metrics
-        self.performance.win_rate = self.performance.winning_trades
-    / max(1, self.performance.total_trades)
-        self.performance.avg_trade_pnl = self.performance.total_pnl
-    / max(1, self.performance.total_trades)
+        self.performance.win_rate = self.performance.winning_trades / max(1, self.performance.total_trades)
+        self.performance.avg_trade_pnl = self.performance.total_pnl / max(1, self.performance.total_trades)
 
         # Update max drawdown (simplified)
         if pnl < 0:
@@ -624,7 +618,7 @@ Optional[float]]:
 
     def get_performance_summary(self) -> Dict[str, Any]:
         """Get performance summary."""
-        return {}
+        return {
             "strategy_type": self.strategy_type.value,
             "total_trades": self.performance.total_trades,
             "winning_trades": self.performance.winning_trades,
@@ -645,7 +639,7 @@ Optional[float]]:
 
 
 # Factory function
-    def create_strategy_logic(strategy_type: StrategyType = StrategyType.HYBRID) -> StrategyLogic:
+def create_strategy_logic(strategy_type: StrategyType = StrategyType.HYBRID) -> StrategyLogic:
     """Create a new strategy logic instance."""
     return StrategyLogic(strategy_type)
 

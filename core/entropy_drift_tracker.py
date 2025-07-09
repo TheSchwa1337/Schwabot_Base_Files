@@ -1,12 +1,13 @@
 import time
 import logging
-from typing import Dict, List, Optional, Tuple, Union, Any
-from dataclasses import dataclass, field
+from typing import Dict, List, Optional, Union, Any
+from dataclasses import dataclass
 from enum import Enum
+from collections import deque
 
 import numpy as np
 
-#!/usr/bin/env python3
+# !/usr/bin/env python3
 """
 🌌⚙️ ENTROPY DRIFT TRACKER
 ==========================
@@ -132,9 +133,8 @@ class EntropyDriftTracker:
         }
 
         logger.info(
-            "Entropy Drift Tracker initialized (max_history: {0}, threshold: {1}, hybrid_mode: {2})".format(
-                max_history, warp_threshold, hybrid_mode.value
-            )
+            "Entropy Drift Tracker initialized (max_history: {0}, threshold: {1}, "
+            "hybrid_mode: {2})".format(max_history, warp_threshold, hybrid_mode.value)
         )
 
     def record_vector(
@@ -201,7 +201,7 @@ class EntropyDriftTracker:
                     else:
                         last_vector = last_snapshot.vector
 
-                    drift_value = float(la.norm(vector - last_vector))
+                    drift_value = float(xp.linalg.norm(vector - last_vector))
                 except Exception as e:
                     logger.warning("Drift calculation failed, using fallback: {0}".format(e))
                     drift_value = self._calculate_fallback_drift(vector, last_snapshot.vector)
@@ -390,7 +390,7 @@ class EntropyDriftTracker:
                     elif not USING_CUDA and isinstance(v2, cp.ndarray):
                         v2 = cp.asnumpy(v2)
 
-                    drift = float(la.norm(v1 - v2))
+                    drift = float(xp.linalg.norm(v1 - v2))
                     drifts.append(drift)
                 except Exception as e:
                     logger.warning("Drift computation failed for pair {0}: {1}".format(i, e))
@@ -450,7 +450,7 @@ class EntropyDriftTracker:
             drifts = []
             for i in range(1, len(vectors)):
                 try:
-                    drift = float(la.norm(vectors[i].vector - vectors[i - 1].vector))
+                    drift = float(xp.linalg.norm(vectors[i].vector - vectors[i - 1].vector))
                     drifts.append(drift)
                 except Exception:
                     # Use fallback

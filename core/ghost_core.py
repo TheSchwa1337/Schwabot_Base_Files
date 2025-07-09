@@ -1,16 +1,10 @@
+#!/usr/bin/env python3
 import logging
 import time
-from typing import Dict, Any, Optional, List, Callable
+from typing import Dict, Any, Optional, List
 from dataclasses import dataclass, field
-from enum import Enum
-import threading
-from concurrent.futures import ThreadPoolExecutor
-import hashlib
 import json
-import numpy as np
-import numpy as np
 
-#!/usr/bin/env python3
 """
 Ghost Core System for Schwabot Trading System
 Implements latent signal evaluation logic for "ghost trades" triggered by
@@ -25,11 +19,11 @@ try:
     _backend = 'cupy (GPU)'
     xp = cp
 except ImportError:
-    import numpy as cp  # fallback to numpy
+    import numpy as np  # fallback to numpy
 
     USING_CUDA = False
     _backend = 'numpy (CPU)'
-    xp = cp
+    xp = np
 
 # Log backend status
 logger = logging.getLogger(__name__)

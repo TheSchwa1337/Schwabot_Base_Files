@@ -9,7 +9,7 @@ import numpy as np
 
 try:
     import ccxt.async_support as ccxt  # type: ignore
-    except ImportError:
+except ImportError:
     ccxt = None  # type: ignore
     print("❌ CCXT not installed. Run: pip install ccxt")
 
@@ -41,7 +41,7 @@ class SupportedExchange(Enum):
 
 
 @dataclass
-    class ExchangeConfig:
+class ExchangeConfig:
     """Configuration for exchange connection."""
 
     exchange: SupportedExchange
@@ -53,7 +53,7 @@ class SupportedExchange(Enum):
 
 
 @dataclass
-    class ArbitrageOpportunity:
+class ArbitrageOpportunity:
     """Represents an arbitrage opportunity between exchanges."""
 
     buy_exchange: str
@@ -71,7 +71,7 @@ class SupportedExchange(Enum):
 
 
 @dataclass
-    class RouteScore:
+class RouteScore:
     """Represents routing score for exchange selection."""
 
     exchange: str
@@ -121,7 +121,7 @@ class RealMultiExchangeTrader:
             exchange_class = getattr(ccxt, exchange_name)
 
             # Create exchange instance with proper config
-            exchange_config = {}
+            exchange_config = {
                 "apiKey": config.get("api_key"),
                 "secret": config.get("secret"),
                 "sandbox": config.get("sandbox", True),

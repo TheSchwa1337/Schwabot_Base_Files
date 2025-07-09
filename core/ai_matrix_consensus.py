@@ -4,6 +4,7 @@ import logging
 from typing import Dict, List, Any, Optional, Tuple
 from dataclasses import dataclass
 from enum import Enum
+import numpy as np
 
 """
 🤖🔀 AI MATRIX CONSENSUS
@@ -23,7 +24,6 @@ CUDA Integration:
 # CUDA Integration with Fallback
 try:
     import cupy as cp
-
     USING_CUDA = True
     _backend = 'cupy (GPU)'
     xp = cp
@@ -34,15 +34,14 @@ except ImportError:
     xp = cp
 
 logger = logging.getLogger(__name__)
-    if USING_CUDA:
+if USING_CUDA:
     logger.info("⚡ AI Matrix Consensus using GPU acceleration: {0}".format(_backend))
-    else:
+else:
     logger.info("🔄 AI Matrix Consensus using CPU fallback: {0}".format(_backend))
 
 
 class AgentVote(Enum):
     """AI agent vote types"""
-
     EXECUTE = "execute"
     DEFER = "defer"
     INVERT = "invert"
@@ -53,9 +52,8 @@ class AgentVote(Enum):
 
 
 @dataclass
-    class AgentOpinion:
+class AgentOpinion:
     """Individual agent opinion with confidence"""
-
     agent_id: str
     vote: AgentVote
     confidence: float
@@ -64,9 +62,8 @@ class AgentVote(Enum):
 
 
 @dataclass
-    class ConsensusResult:
+class ConsensusResult:
     """Result of AI consensus blending"""
-
     blended_vector: np.ndarray
     consensus_vote: str
     confidence: float
@@ -94,12 +91,11 @@ class AIMatrixConsensus:
         self.agents = self._initialize_agents()
         self.agent_weights = self._initialize_weights()
         self.vote_history: List[Tuple[str, AgentOpinion]] = []
-
         logger.info("AI Matrix Consensus initialized with {0} agents".format(num_agents))
 
     def _initialize_agents(self) -> List[str]:
         """Initialize AI agent IDs"""
-        agent_names = []
+        agent_names = [
             "R1",
             "Claude",
             "GPT-4o",
@@ -126,7 +122,7 @@ class AIMatrixConsensus:
                 weights[agent] = 0.6  # Medium confidence
         return weights
 
-    def vote()
+    def vote(
         self, glyph: str, base_vector: np.ndarray, market_context: Optional[Dict[str, Any]] = None
     ) -> ConsensusResult:
         """
@@ -151,7 +147,7 @@ class AIMatrixConsensus:
             # Blend votes into consensus
             consensus = self._blend_votes(agent_opinions, base_vector)
 
-            logger.debug()
+            logger.debug(
                 f"Consensus reached: {consensus.consensus_vote} (confidence: {consensus.confidence:.3f})"
             )
             return consensus
@@ -160,7 +156,7 @@ class AIMatrixConsensus:
             logger.error("Error in consensus voting: {0}".format(e))
             return self._fallback_consensus(base_vector)
 
-    def _agent_vote()
+    def _agent_vote(
         self,
         agent_id: str,
         glyph: str,
@@ -181,31 +177,28 @@ class AIMatrixConsensus:
         """
         try:
             # Simulate agent decision making based on glyph and context
-            vote, confidence, reasoning = self._simulate_agent_decision()
+            vote, confidence, reasoning = self._simulate_agent_decision(
                 agent_id, glyph, base_vector, market_context
             )
-
-            opinion = AgentOpinion()
+            opinion = AgentOpinion(
                 agent_id=agent_id,
                 vote=vote,
                 confidence=confidence,
                 reasoning=reasoning,
                 timestamp=time.time(),
             )
-
             return opinion
-
         except Exception as e:
             logger.error("Error getting vote from {0}: {1}".format(agent_id, e))
-            return AgentOpinion()
+            return AgentOpinion(
                 agent_id=agent_id,
                 vote=AgentVote.HOLD,
-                confidence=0.5,
-                reasoning="Error in decision making",
+                confidence=0.0,
+                reasoning="Error",
                 timestamp=time.time(),
             )
 
-    def _simulate_agent_decision()
+    def _simulate_agent_decision(
         self,
         agent_id: str,
         glyph: str,
@@ -229,8 +222,8 @@ class AIMatrixConsensus:
             base_confidence = self.agent_weights.get(agent_id, 0.5)
 
             # Glyph-based decision patterns
-            glyph_patterns = {}
-                "🌘": {"execute": 0.3, "defer": 0.4, "recycle": 0.3},
+            glyph_patterns = {
+                "��": {"execute": 0.3, "defer": 0.4, "recycle": 0.3},
                 "🌗": {"execute": 0.5, "defer": 0.3, "recycle": 0.2},
                 "🌖": {"execute": 0.7, "defer": 0.2, "recycle": 0.1},
                 "🌕": {"execute": 0.8, "defer": 0.1, "recycle": 0.1},
@@ -244,7 +237,7 @@ class AIMatrixConsensus:
             pattern = glyph_patterns.get(glyph, {"execute": 0.33, "defer": 0.34, "recycle": 0.33})
 
             # Agent-specific biases
-            agent_biases = {}
+            agent_biases = {
                 "R1": {"execute": 1.2, "defer": 0.8, "recycle": 1.0},
                 "Claude": {"execute": 0.9, "defer": 1.1, "recycle": 1.0},
                 "GPT-4o": {"execute": 1.1, "defer": 0.9, "recycle": 1.0},
@@ -278,7 +271,7 @@ class AIMatrixConsensus:
             final_confidence = min(1.0, base_confidence * (0.5 + vector_confidence))
 
             # Generate reasoning
-            reasoning = "{0} voted {1} based on glyph {2} and vector characteristics".format()
+            reasoning = "{0} voted {1} based on glyph {2} and vector characteristics".format(
                 agent_id, vote.value, glyph
             )
 
@@ -288,7 +281,7 @@ class AIMatrixConsensus:
             logger.error("Error simulating agent decision: {0}".format(e))
             return AgentVote.HOLD, 0.5, "Error in simulation"
 
-    def _blend_votes()
+    def _blend_votes(
         self, agent_opinions: List[AgentOpinion], base_vector: np.ndarray
     ) -> ConsensusResult:
         """
@@ -303,7 +296,7 @@ class AIMatrixConsensus:
         """
         try:
             # Vote weights for vector modulation
-            vote_weights = {}
+            vote_weights = {
                 AgentVote.EXECUTE: 1.0,
                 AgentVote.DEFER: 0.5,
                 AgentVote.INVERT: -1.0,
@@ -349,7 +342,7 @@ class AIMatrixConsensus:
             # Generate reasoning
             reasoning = "Consensus: {0} from {1} agents".format(consensus_vote, len(agent_opinions))
 
-            return ConsensusResult()
+            return ConsensusResult(
                 blended_vector=blended_vector,
                 consensus_vote=consensus_vote,
                 confidence=overall_confidence,
@@ -409,7 +402,7 @@ class AIMatrixConsensus:
         Returns:
             Fallback consensus result
         """
-        return ConsensusResult()
+        return ConsensusResult(
             blended_vector=base_vector,
             consensus_vote="hold",
             confidence=0.5,
@@ -418,7 +411,7 @@ class AIMatrixConsensus:
             reasoning="Fallback consensus due to error",
         )
 
-    def blended_vector()
+    def blended_vector(
         self, glyph: str, base_vector: np.ndarray, market_context: Optional[Dict[str, Any]] = None
     ) -> np.ndarray:
         """
@@ -468,7 +461,7 @@ class AIMatrixConsensus:
             confidences = [op.confidence for _, op in self.vote_history]
             avg_confidence = np.mean(confidences) if confidences else 0.0
 
-            return {}
+            return {
                 "total_votes": total_votes,
                 "agent_votes": agent_votes,
                 "vote_counts": vote_counts,
@@ -532,7 +525,7 @@ def test_ai_matrix_consensus():
     print("\n🗳️ Test 1: Getting Consensus Vote")
     result = consensus.vote(glyph, base_vector, market_context)
     print("  Consensus vote: {0}".format(result.consensus_vote))
-    print(f"  Confidence)"
+    print(f"  Confidence: {result.confidence:.3f}")
     print("  Blended vector: {0}".format(result.blended_vector))
     print("  Vote distribution: {0}".format(result.vote_distribution))
 
@@ -545,7 +538,7 @@ def test_ai_matrix_consensus():
     print("\n🌕 Test 3: Testing Different Glyph")
     result2 = consensus.vote("🌕", base_vector, market_context)
     print("  New consensus: {0}".format(result2.consensus_vote))
-    print(f"  New, confidence)"
+    print(f"  New, confidence: {result2.confidence:.3f}")
 
     # Test 4: Get statistics
     print("\n📊 Test 4: Consensus Statistics")

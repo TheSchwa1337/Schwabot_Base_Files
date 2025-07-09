@@ -24,7 +24,7 @@ async def run_backtest(config: Dict[str, Any]):
 
     # 1. Initialize pipeline and registry
     print("🔧 Initializing trading pipeline for back-testing...")
-    pipeline: CleanTradingPipeline = create_trading_pipeline()
+    pipeline: CleanTradingPipeline = create_trading_pipeline(
         symbol=config.get("symbol", "BTC/USDT"),
         initial_capital=config.get("initial_capital", 10000.0),
         registry_file=config.get("registry_file"),
@@ -40,10 +40,11 @@ async def run_backtest(config: Dict[str, Any]):
     try:
         with open(dataset_path, "r", encoding="utf-8") as f:
             historical_candles = json.load(f)
-        print()
-            "✅ Loaded {0} candles from '{1}'.".format()
+        print(
+            "✅ Loaded {0} candles from '{1}'.".format(
                 len(historical_candles),
-                os.path.basename(dataset_path))
+                os.path.basename(dataset_path)
+            )
         )
     except json.JSONDecodeError:
         print("❌ Error: Could not decode JSON from '{0}'.".format(dataset_path))
@@ -75,12 +76,12 @@ async def run_backtest(config: Dict[str, Any]):
                 else:
                     projected_gain = 0
 
-                log_data = {}
+                log_data = {
                     "timestamp": signal.get("timestamp"),
                     "asset": signal.get("symbol"),
                     "mode": "demo",
                     "hash_id": signal.get("trade_id"),
-                    "signal_vector": {}
+                    "signal_vector": {
                         "action": signal.get("action"),
                         "confidence": market_context.get("confidence"),
                         "signal_strength": market_context.get("signal_strength"),
@@ -95,12 +96,12 @@ async def run_backtest(config: Dict[str, Any]):
 
     print("\n✅ Back-test complete.")
     print("   - Trades generated: {0}".format(len(trade_signals)))
-    print("   - Final portfolio value (simulated)))"
+    print("   - Final portfolio value (simulated)")
 
 
 def main():
     """Main entry point for the back-test driver."""
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(
         description="Schwabot Backtest Driver",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
@@ -108,7 +109,7 @@ def main():
     parser.add_argument("--config", type=str, required=True, help="Path to the trading bot configuration file.")
     parser.add_argument("--symbol", type=str, default="BTC/USDT", help="Trading symbol for the back-test.")
     parser.add_argument("--capital", type=float, default=10000.0, help="Initial capital for the simulation.")
-    parser.add_argument()
+    parser.add_argument(
         "--registry-file",
         type=str,
         default="data/logs/backtest_registry.json",

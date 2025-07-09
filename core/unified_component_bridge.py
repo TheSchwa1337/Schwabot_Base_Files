@@ -151,8 +151,7 @@ class UnifiedComponentBridge:
             self.components[ComponentType.MATH_FOUNDATION] = CleanMathFoundation()
             self.component_status[ComponentType.MATH_FOUNDATION] = ComponentStatus.ACTIVE
 
-            # Initialize profit calculator with default strategy parameters
-            default_strategy = StrategyParameters()
+            # Initialize profit calculator
             self.components[ComponentType.PROFIT_CALCULATOR] = PureProfitCalculator()
             self.component_status[ComponentType.PROFIT_CALCULATOR] = ComponentStatus.ACTIVE
 
@@ -181,7 +180,8 @@ class UnifiedComponentBridge:
             logger.error("Error initializing components: {0}".format(e))
             raise
 
-    async def send_message(self,
+    async def send_message(
+        self,
         source: ComponentType,
         destination: ComponentType,
         message_type: str,
@@ -224,7 +224,11 @@ class UnifiedComponentBridge:
             if len(self.message_history) > self.max_message_history:
                 self.message_history = self.message_history[-self.max_message_history :]
 
-            logger.debug("Message sent: {0} -> {1} ({2})".format(source.value, destination.value, message_type))
+            logger.debug(
+                "Message sent: {0} -> {1} ({2})".format(
+                    source.value, destination.value, message_type
+                )
+            )
             return True
 
         except Exception as e:
@@ -368,9 +372,14 @@ class UnifiedComponentBridge:
             self.system_state.active_components = self.component_status.copy()
 
         # Update system health
-        active_count = sum(1 for status in self.component_status.values() if status == ComponentStatus.ACTIVE)
+        active_count = sum(
+            1 for status in self.component_status.values() 
+            if status == ComponentStatus.ACTIVE
+        )
         total_count = len(self.component_status)
-        self.system_state.system_health = active_count / total_count if total_count > 0 else 0.0
+        self.system_state.system_health = (
+            active_count / total_count if total_count > 0 else 0.0
+        )
 
     def get_component(self, component_type: ComponentType) -> Optional[Any]:
         """Get a specific component."""
@@ -387,9 +396,14 @@ class UnifiedComponentBridge:
         self.system_state.active_components = self.component_status.copy()
 
         # Calculate system health
-        active_count = sum(1 for status in self.component_status.values() if status == ComponentStatus.ACTIVE)
+        active_count = sum(
+            1 for status in self.component_status.values() 
+            if status == ComponentStatus.ACTIVE
+        )
         total_count = len(self.component_status)
-        self.system_state.system_health = active_count / total_count if total_count > 0 else 0.0
+        self.system_state.system_health = (
+            active_count / total_count if total_count > 0 else 0.0
+        )
 
         return self.system_state
 
@@ -414,7 +428,8 @@ class UnifiedComponentBridge:
                 }
 
                 # Update component status
-                self.component_status[component_type] = ComponentStatus.ACTIVE if is_healthy else ComponentStatus.ERROR
+                status = ComponentStatus.ACTIVE if is_healthy else ComponentStatus.ERROR
+                self.component_status[component_type] = status
 
             except Exception as e:
                 health_results[component_type.value] = {}

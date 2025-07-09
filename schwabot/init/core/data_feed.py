@@ -12,7 +12,7 @@ Mathematical Components:
 """
 
 import time
-from typing import Dict, Any, Optional
+from typing import Dict, Any
 
 try:
     import ccxt

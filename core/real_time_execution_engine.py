@@ -28,7 +28,7 @@ This is Schwabot's live trading execution layer.
 import asyncio
 import logging
 import time
-from typing import Any, Dict, List, Optional, Callable, Set, Tuple, Union
+from typing import Any, Dict, List, Optional, Callable, Set, Tuple
 from dataclasses import dataclass, field
 from enum import Enum
 import numpy as np
@@ -46,15 +46,13 @@ try:
     from .entropy_signal_integration import (
         get_entropy_integrator,
         process_entropy_signal,
-        should_execute_tick,
-        should_execute_routing,
         EntropySignal
     )
     from .fractal_core import FractalCore
     from .phantom_core import PhantomCore
     from .entropy_signal_bridge import EntropySignalBridge
     from .profit_cycle_allocator import ProfitCycleAllocator
-    
+
     ENTROPY_INTEGRATION_AVAILABLE = True
     logger = logging.getLogger(__name__)
     logger.info("🧠 Entropy signal integration modules loaded successfully")
@@ -69,7 +67,7 @@ logger = logging.getLogger(__name__)
 class SignalType(Enum):
     """
     Types of trading signals with mathematical properties.
-    
+
     Signal Classification:
     - BUY: Long position signal (price expected to increase)
     - SELL: Short position signal (price expected to decrease)
@@ -86,7 +84,7 @@ class SignalType(Enum):
 class SignalStrength(Enum):
     """
     Signal strength levels with mathematical thresholds.
-    
+
     Strength Classification:
     - WEAK: confidence < 0.3, minimal market impact expected
     - MODERATE: 0.3 ≤ confidence < 0.6, moderate market impact
@@ -104,7 +102,7 @@ class SignalStrength(Enum):
 class TradingSignal:
     """
     Trading signal with comprehensive mathematical analysis.
-    
+
     Mathematical Properties:
     - confidence: Signal confidence C = f(signal_strength, market_regime, risk_score)
     - price: Target execution price (float)
@@ -142,7 +140,7 @@ class TradingSignal:
 class ExecutionResult:
     """
     Result of signal execution with mathematical metrics.
-    
+
     Mathematical Properties:
     - success: Execution success boolean
     - execution_time: Time from signal to execution (seconds)
@@ -164,7 +162,7 @@ class ExecutionResult:
 class PerformanceMetrics:
     """
     Real-time performance metrics with mathematical calculations.
-    
+
     Mathematical Metrics:
     - win_rate: Win rate W = successful_signals / total_signals
     - average_pnl: Average P&L A = total_pnl / total_signals
@@ -239,24 +237,25 @@ class RealTimeExecutionEngine:
         self.tensor_algebra = AdvancedTensorAlgebra()
 
         # Entropy Signal Integration Components
+        global ENTROPY_INTEGRATION_AVAILABLE
         if ENTROPY_INTEGRATION_AVAILABLE:
             try:
                 # Initialize entropy signal integrator
                 self.entropy_integrator = get_entropy_integrator()
-                
+
                 # Initialize entropy core components
                 self.fractal_core = FractalCore()
                 self.phantom_core = PhantomCore()
                 self.entropy_bridge = EntropySignalBridge()
                 self.profit_cycle_allocator = ProfitCycleAllocator()
-                
+
                 # Entropy signal tracking
                 self.entropy_signals: List[EntropySignal] = []
                 self.current_entropy_state: str = "NEUTRAL"
                 self.entropy_confidence: float = 0.0
-                
+
                 logger.info("🧠 Entropy signal integration components initialized successfully")
-                
+
             except Exception as e:
                 logger.error(f"❌ Failed to initialize entropy components: {e}")
                 ENTROPY_INTEGRATION_AVAILABLE = False
@@ -300,10 +299,10 @@ class RealTimeExecutionEngine:
     def _default_config(self) -> Dict[str, Any]:
         """
         Get default configuration with mathematical parameters.
-        
+
         Returns:
             Default configuration dictionary with execution parameters
-            
+
         Configuration Parameters:
         - signal_threshold: Minimum signal confidence for execution (0-1)
         - risk_limits: Maximum risk exposure limits (fraction of capital)
@@ -526,21 +525,21 @@ class RealTimeExecutionEngine:
                 try:
                     # Generate order book data from market state
                     bids, asks = self._extract_order_book_from_market_state(market_state)
-                    
+
                     if bids and asks:
                         # Process entropy signal through the complete pipeline
                         entropy_signal = process_entropy_signal(bids, asks)
-                        
+
                         # Update entropy tracking
                         self.entropy_signals.append(entropy_signal)
                         self.current_entropy_state = entropy_signal.routing_state
                         self.entropy_confidence = entropy_signal.confidence
-                        
+
                         # Process through entropy core components
                         smoothed_entropy = self.entropy_bridge.smooth_entropy(entropy_signal.entropy_value)
                         fractal_state = self.fractal_core.update_with_entropy(smoothed_entropy)
                         phantom_state = self.phantom_core.pulse(smoothed_entropy)
-                        
+
                         entropy_signals = {
                             "entropy_value": entropy_signal.entropy_value,
                             "routing_state": entropy_signal.routing_state,
@@ -551,11 +550,13 @@ class RealTimeExecutionEngine:
                             "phantom_state": phantom_state,
                             "processing_time_ms": entropy_signal.metadata.get("processing_time_ms", 0)
                         }
-                        
-                        logger.debug(f"🧠 Entropy processed: {entropy_signal.entropy_value:.6f}, "
-                                   f"Routing: {entropy_signal.routing_state}, "
-                                   f"Quantum: {entropy_signal.quantum_state}")
-                        
+
+                        logger.debug(
+                            f"🧠 Entropy processed: {entropy_signal.entropy_value:.6f}, "
+                            f"Routing: {entropy_signal.routing_state}, "
+                            f"Quantum: {entropy_signal.quantum_state}"
+                        )
+
                 except Exception as e:
                     logger.error(f"❌ Error processing entropy signals: {e}")
                     entropy_signals = {"error": str(e)}
@@ -567,26 +568,28 @@ class RealTimeExecutionEngine:
 
             # Entropy-enhanced signal generation
             if entropy_signals and not entropy_signals.get("error"):
-                entropy_enhanced_signals = await self._generate_entropy_signals(market_state, entropy_signals)
+                entropy_enhanced_signals = await self._generate_entropy_signals(
+                    market_state, entropy_signals
+                )
                 signals.extend(entropy_enhanced_signals)
 
             # Quantum-enhanced signal generation
-            if self.config["enable_quantum_analysis"]:
+            if self.config["quantum_integration"]:
                 quantum_signals = await self._generate_quantum_signals(market_state)
                 signals.extend(quantum_signals)
 
             # Tensor-based signal generation
-            if self.config["enable_tensor_analysis"]:
+            if self.config["tensor_analysis"]:
                 tensor_signals = await self._generate_tensor_signals(market_state)
                 signals.extend(tensor_signals)
 
             # ZPE-ZBE signal generation
-            if self.config["enable_zpe_zbe_analysis"]:
+            if self.config["zpe_zbe_analysis"]:
                 zpe_zbe_signals = await self._generate_zpe_zbe_signals(market_state)
                 signals.extend(zpe_zbe_signals)
 
             # Order book-based signals
-            if self.config["enable_order_book_analysis"]:
+            if self.config["order_book_analysis"]:
                 order_book_signals = await self._generate_order_book_signals(market_state)
                 signals.extend(order_book_signals)
 
@@ -596,54 +599,58 @@ class RealTimeExecutionEngine:
             logger.error("Signal generation failed: %s", e)
             return []
 
-    def _extract_order_book_from_market_state(self, market_state) -> Tuple[List[Tuple[float, float]], List[Tuple[float, float]]]:
+    def _extract_order_book_from_market_state(
+        self, market_state
+    ) -> Tuple[List[Tuple[float, float]], List[Tuple[float, float]]]:
         """Extract order book data from market state for entropy processing."""
         try:
             # Generate realistic order book from market state
             base_price = market_state.current_price
             base_volume = market_state.volume_24h / 24  # Hourly volume estimate
-            
+
             # Generate bids (price, volume) - decreasing prices
             bids = []
             for i in range(20):
                 price = base_price * (1 - 0.001 * (i + 1))  # 0.1% spread per level
                 volume = base_volume * (1 + np.random.uniform(-0.3, 0.3))  # Random volume variation
                 bids.append((price, volume))
-            
+
             # Generate asks (price, volume) - increasing prices
             asks = []
             for i in range(20):
                 price = base_price * (1 + 0.001 * (i + 1))  # 0.1% spread per level
                 volume = base_volume * (1 + np.random.uniform(-0.3, 0.3))  # Random volume variation
                 asks.append((price, volume))
-            
+
             # Add entropy by varying the spread based on volatility
             if market_state.volatility > 0.7:  # High volatility
                 spread_factor = np.random.uniform(1.5, 3.0)
                 asks = [(price * spread_factor, volume) for price, volume in asks]
-            
+
             return bids, asks
-            
+
         except Exception as e:
             logger.error(f"Error extracting order book: {e}")
             return [], []
 
-    async def _generate_entropy_signals(self, market_state, entropy_signals: Dict[str, Any]) -> List[TradingSignal]:
+    async def _generate_entropy_signals(
+        self, market_state, entropy_signals: Dict[str, Any]
+    ) -> List[TradingSignal]:
         """Generate signals based on entropy analysis."""
         try:
             signals = []
-            
+
             entropy_value = entropy_signals.get("entropy_value", 0.0)
             routing_state = entropy_signals.get("routing_state", "NEUTRAL")
             quantum_state = entropy_signals.get("quantum_state", "INERT")
             confidence = entropy_signals.get("confidence", 0.0)
-            
+
             # Generate signals based on entropy state
             if entropy_value > 0.020 and confidence > 0.7:  # High entropy with confidence
                 # High entropy suggests market volatility - potential momentum opportunity
                 signal_type = SignalType.BUY if routing_state == "ROUTE_ACTIVE" else SignalType.SELL
                 strength = self._calculate_signal_strength(confidence)
-                
+
                 # Calculate position size based on entropy
                 base_position = 0.05  # 5% base position
                 if routing_state == "ROUTE_ACTIVE":
@@ -652,11 +659,11 @@ class RealTimeExecutionEngine:
                     position_size = base_position * 0.7  # Decrease for passive routing
                 else:
                     position_size = base_position
-                
+
                 # Adjust for quantum state
                 if quantum_state == "ENTROPIC_INVERSION_ACTIVATED":
                     position_size *= 1.3  # 30% boost for quantum activation
-                
+
                 signal = TradingSignal(
                     signal_type=signal_type,
                     symbol=market_state.symbol,
@@ -675,13 +682,15 @@ class RealTimeExecutionEngine:
                     order_book_signals=entropy_signals,
                     risk_metrics={"entropy_based": True},
                 )
-                
+
                 signals.append(signal)
-                logger.info(f"🧠 Entropy signal generated: {signal_type.value} {market_state.symbol}, "
-                           f"Entropy: {entropy_value:.6f}, Confidence: {confidence:.3f}")
-            
+                logger.info(
+                    f"🧠 Entropy signal generated: {signal_type.value} {market_state.symbol}, "
+                    f"Entropy: {entropy_value:.6f}, Confidence: {confidence:.3f}"
+                )
+
             return signals
-            
+
         except Exception as e:
             logger.error(f"Entropy signal generation failed: {e}")
             return []

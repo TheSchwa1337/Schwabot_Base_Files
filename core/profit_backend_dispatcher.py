@@ -5,14 +5,13 @@ Dynamically selects CPU vs GPU based on profit metrics and performance learning.
 
 import time
 import threading
-import json
-import os
-from typing import Dict, Any, Callable, Optional, Tuple
+from typing import Dict, Any, Optional
+from collections import defaultdict, deque
 import numpy as np
 
 # Import both backends
 try:
-
+    import cupy as cp
     HAS_CUPY = True
 except ImportError:
     HAS_CUPY = False

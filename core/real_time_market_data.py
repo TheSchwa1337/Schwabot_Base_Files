@@ -208,7 +208,6 @@ class RealTimeMarketDataStream:
 
     async def _maintain_websocket_connection(self, exchange_id: str, symbol: str):
         """Maintain WebSocket connection with automatic reconnection."""
-        market_key = f"{exchange_id}:{symbol}"
         retry_count = 0
 
         while self.running:

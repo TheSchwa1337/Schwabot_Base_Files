@@ -17,14 +17,12 @@ from dataclasses import dataclass, field
 from decimal import Decimal
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Callable
-
-import numpy as np
+from typing import Any, Dict, List, Optional
 
 from .clean_trading_pipeline import CleanTradingPipeline, create_trading_pipeline
 from .portfolio_tracker import PortfolioTracker, create_portfolio_tracker
 from .ccxt_trading_executor import CCXTTradingExecutor, IntegratedTradingSignal
-from .unified_market_data_pipeline import create_unified_pipeline, MarketDataPacket
+from .unified_market_data_pipeline import create_unified_pipeline
 
 logger = logging.getLogger(__name__)
 
@@ -350,7 +348,8 @@ class LiveAPIBacktesting:
                     self.total_pnl += result.profit_realized
 
                 logger.info(
-                    f"Trade executed: {signal.recommended_action} {signal.quantity} {signal.target_pair}"
+                    f"Trade executed: {signal.recommended_action} "
+                    f"{signal.quantity} {signal.target_pair}"
                 )
                 logger.info(f"PnL: {result.profit_realized}")
 

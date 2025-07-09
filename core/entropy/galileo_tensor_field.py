@@ -1535,55 +1535,36 @@ consensus_angle, consensus_confidence = self.get_consensus_direction()
 
 
 
-        return {field_status: {}}
-
-
-
-total_syncs: self.total_syncs,successful_harmonies: self.successful_harmonies,conflict_detections":"
-self.conflict_detections,harmony_rate": harmony_rate,conflict_rate":
-conflict_rate,adaptive_threshold": self.adaptive_mu,"
-
-
-
-},solution_inventory": {qsc_solutions: len(self.qsc_solutions),gts_solutions":
-len(self.gts_solutions),sync_history": len(self.sync_history),"
-
-
-
-},recent_performance": {sync_count: len(recent_syncs),avg_sync_score": ()
-
-
-
-np.mean([r.sync_score for r in recent_syncs])
-
-
-
-if recent_syncs:
-
-
-
-else 0.0
-
-
-
-),alignment_distribution": alignment_counts,"
-
-
-
-},consensus": {angle: consensus_angle,confidence": consensus_confidence,harmonic_pairs":"
-len(self.find_harmonic_solutions()),
-
-
-
-},configuration": self.config,"
-
-
-
-}
-
-
-
-
+        return {
+            "field_status": {
+                "total_syncs": self.total_syncs,
+                "successful_harmonies": self.successful_harmonies,
+                "conflict_detections": self.conflict_detections,
+                "harmony_rate": harmony_rate,
+                "conflict_rate": conflict_rate,
+                "adaptive_threshold": self.adaptive_mu,
+            },
+            "solution_inventory": {
+                "qsc_solutions": len(self.qsc_solutions),
+                "gts_solutions": len(self.gts_solutions),
+                "sync_history": len(self.sync_history),
+            },
+            "recent_performance": {
+                "sync_count": len(recent_syncs),
+                "avg_sync_score": (
+                    np.mean([r.sync_score for r in recent_syncs])
+                    if recent_syncs
+                    else 0.0
+                ),
+                "alignment_distribution": alignment_counts,
+            },
+            "consensus": {
+                "angle": consensus_angle,
+                "confidence": consensus_confidence,
+                "harmonic_pairs": len(self.find_harmonic_solutions()),
+            },
+            "configuration": self.config,
+        }
 
 
 
