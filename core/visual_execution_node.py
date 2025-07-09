@@ -15,9 +15,17 @@ from typing import TYPE_CHECKING
 from .strategy_trigger_router import StrategyTriggerRouter, ExecutionResult
 import psutil
 
-import numpy as np
+from core.backend_math import get_backend, is_gpu
+xp = get_backend()
 
 from utils.safe_print import info, warn, error
+
+# Log backend status
+logger = logging.getLogger(__name__)
+if is_gpu():
+    logger.info("⚡ Visual Execution Node using GPU acceleration: CuPy (GPU)")
+else:
+    logger.info("🔄 Visual Execution Node using CPU fallback: NumPy (CPU)")
 
 #!/usr/bin/env python3
 """
@@ -37,7 +45,7 @@ This node serves as Schwabot's visual cortex for human interaction.'
 
 try:
     GUI_AVAILABLE = True
-    except ImportError:
+except ImportError:
     GUI_AVAILABLE = False
 
     # Create mock classes for testing
@@ -142,7 +150,7 @@ try:
 logger = logging.getLogger(__name__)
 
 # Type hints for circular import resolution
-    if TYPE_CHECKING:
+if TYPE_CHECKING:
     pass
 
 
@@ -166,7 +174,7 @@ class VisualizationTheme(Enum):
 
 
 @dataclass
-    class VisualConfig:
+class VisualConfig:
     """Configuration for visual execution node."""
 
     gui_mode: GUIMode = GUIMode.FULL_DASHBOARD
@@ -182,7 +190,7 @@ class VisualizationTheme(Enum):
 
 
 @dataclass
-    class PatternVisualization:
+class PatternVisualization:
     """Visual representation of a 2-gram pattern."""
 
     pattern: str
@@ -198,17 +206,63 @@ class VisualizationTheme(Enum):
     alpha: float = 1.0
 
 
-@dataclass
-    class MarketVisualization:
-    """Visual representation of market data."""
+def render_signal_view(signal: xp.ndarray) -> xp.ndarray:
+    """
+    Render signal view using FFT analysis.
+    
+    Args:
+        signal: Input signal array
+        
+    Returns:
+        Normalized amplitude spectrum
+    """
+    try:
+        # Compute FFT
+        fft_data = xp.fft.fft(signal)
+        
+        # Extract amplitude
+        amplitude = xp.abs(fft_data)
+        
+        # Normalize
+        max_amp = xp.max(amplitude + 1e-8)
+        normalized = amplitude / max_amp
+        
+        return normalized
+        
+    except Exception as e:
+        logger.error(f"Error rendering signal view: {e}")
+        return xp.zeros_like(signal)
 
-    symbol: str
-    price: float
-    change_24h: float
-    volume: float
-    timestamp: float
-    color: str
-    trend_arrow: str
+
+def signal_energy(signal_array: xp.ndarray) -> float:
+    """
+    Compute signal energy.
+    
+    Args:
+        signal_array: Input signal array
+        
+    Returns:
+        Signal energy
+    """
+    try:
+        return float(xp.sum(signal_array ** 2))
+        
+    except Exception as e:
+        logger.error(f"Error computing signal energy: {e}")
+        return 0.0
+
+
+def export_signal_for_plot(signal_array: xp.ndarray) -> xp.ndarray:
+    """
+    Safely export signal for plotting.
+    
+    Args:
+        signal_array: Signal array (CuPy or NumPy)
+        
+    Returns:
+        NumPy array (safe for plotting)
+    """
+    return signal_array.get() if hasattr(signal_array, 'get') else signal_array
 
 
 class VisualExecutionNode:
@@ -260,29 +314,29 @@ class VisualExecutionNode:
 
     def _get_color_scheme(self) -> Dict[str, str]:
         """Get color scheme based on theme."""
-        schemes = {}
-            VisualizationTheme.DARK_CYBERPUNK: {}
+        schemes = {
+            VisualizationTheme.DARK_CYBERPUNK: {
                 "bg": "#0a0a0a",
                 "fg": "#00ff00",
-                "accent": "#ff00ff","
+                "accent": "#ff00ff",
                 "warning": "#ffff00",
                 "error": "#ff0000",
                 "success": "#00ff80",
-                "pattern": "#00ccff","
+                "pattern": "#00ccff",
                 "trading": "#ff8000",
             },
-            VisualizationTheme.LIGHT_MINIMAL: {}
-                "bg": "#ffffff","
+            VisualizationTheme.LIGHT_MINIMAL: {
+                "bg": "#ffffff",
                 "fg": "#333333",
                 "accent": "#0066cc",
                 "warning": "#ff9900",
                 "error": "#cc0000",
-                "success": "#09900",
+                "success": "#099900",
                 "pattern": "#0099cc",
                 "trading": "#cc6600",
             },
-            VisualizationTheme.MATRIX_GREEN: {}
-                "bg": "#00000",
+            VisualizationTheme.MATRIX_GREEN: {
+                "bg": "#000000",
                 "fg": "#00ff00",
                 "accent": "#66ff66",
                 "warning": "#ffff00",
@@ -291,9 +345,9 @@ class VisualExecutionNode:
                 "pattern": "#00cc00",
                 "trading": "#88ff88",
             },
-            VisualizationTheme.SCHWABOT_CLASSIC: {}
+            VisualizationTheme.SCHWABOT_CLASSIC: {
                 "bg": "#1a1a2e",
-                "fg": "#eeeeff","
+                "fg": "#eeeeff",
                 "accent": "#16213e",
                 "warning": "#ffa500",
                 "error": "#ff4757",
@@ -304,8 +358,7 @@ class VisualExecutionNode:
         }
         return schemes.get(self.config.theme, schemes[VisualizationTheme.SCHWABOT_CLASSIC])
 
-    async def inject_components()
-        self,
+    async def inject_components(self,
         two_gram_detector: TwoGramDetector,
         strategy_router: Optional['StrategyTriggerRouter'] = None,
         portfolio_balancer: Optional[AlgorithmicPortfolioBalancer] = None,
@@ -385,7 +438,7 @@ class VisualExecutionNode:
         canvas_frame = tk.Frame(parent, bg=self.color_scheme["bg"])
         canvas_frame.pack(fill="both", expand=True, padx=10, pady=10)
 
-        self.canvas = tk.Canvas()
+        self.canvas = tk.Canvas(
             canvas_frame, bg=self.color_scheme["bg"], highlightthickness=0, width=800, height=400
         )
         self.canvas.pack(side="left", fill="both", expand=True)
@@ -395,7 +448,7 @@ class VisualExecutionNode:
         info_frame.pack(fill="x", padx=10, pady=5)
 
         # Pattern statistics
-        stats_label = tk.Label()
+        stats_label = tk.Label(
             info_frame,
             text="Pattern Statistics",
             bg=self.color_scheme["accent"],
@@ -404,7 +457,7 @@ class VisualExecutionNode:
         )
         stats_label.pack(pady=5)
 
-        self.pattern_stats_text = scrolledtext.ScrolledText()
+        self.pattern_stats_text = scrolledtext.ScrolledText(
             info_frame,
             height=8,
             bg=self.color_scheme["bg"],
@@ -419,7 +472,7 @@ class VisualExecutionNode:
         market_frame = tk.Frame(parent, bg=self.color_scheme["accent"])
         market_frame.pack(fill="x", padx=10, pady=10)
 
-        market_label = tk.Label()
+        market_label = tk.Label(
             market_frame,
             text="📈 Live Market Data",
             bg=self.color_scheme["accent"],
@@ -435,7 +488,7 @@ class VisualExecutionNode:
         controls_frame = tk.Frame(parent, bg=self.color_scheme["accent"])
         controls_frame.pack(fill="x", padx=10, pady=10)
 
-        controls_label = tk.Label()
+        controls_label = tk.Label(
             controls_frame,
             text="🎮 Trading Controls",
             bg=self.color_scheme["accent"],
@@ -448,7 +501,7 @@ class VisualExecutionNode:
         button_frame.pack(pady=10)
 
         # Control buttons
-        self.start_button = tk.Button()
+        self.start_button = tk.Button(
             button_frame,
             text="▶️ Start Trading",
             command=self._start_trading,
@@ -458,7 +511,7 @@ class VisualExecutionNode:
         )
         self.start_button.pack(side="left", padx=5)
 
-        self.stop_button = tk.Button()
+        self.stop_button = tk.Button(
             button_frame,
             text="⏹️ Stop Trading",
             command=self._stop_trading,
@@ -468,7 +521,7 @@ class VisualExecutionNode:
         )
         self.stop_button.pack(side="left", padx=5)
 
-        self.demo_button = tk.Button()
+        self.demo_button = tk.Button(
             button_frame,
             text="🎭 Demo Mode",
             command=self._toggle_demo,
@@ -484,7 +537,7 @@ class VisualExecutionNode:
         balance_frame = tk.Frame(parent, bg=self.color_scheme["accent"])
         balance_frame.pack(fill="both", expand=True, padx=10, pady=10)
 
-        balance_label = tk.Label()
+        balance_label = tk.Label(
             balance_frame,
             text="⚖️ Portfolio Balance",
             bg=self.color_scheme["accent"],
@@ -493,7 +546,7 @@ class VisualExecutionNode:
         )
         balance_label.pack(pady=5)
 
-        self.balance_canvas = tk.Canvas()
+        self.balance_canvas = tk.Canvas(
             balance_frame, bg=self.color_scheme["bg"], highlightthickness=0, height=300
         )
         self.balance_canvas.pack(fill="both", expand=True, padx=10, pady=5)
@@ -502,7 +555,7 @@ class VisualExecutionNode:
         metrics_frame = tk.Frame(parent, bg=self.color_scheme["accent"])
         metrics_frame.pack(fill="x", padx=10, pady=10)
 
-        metrics_label = tk.Label()
+        metrics_label = tk.Label(
             metrics_frame,
             text="📊 Performance Metrics",
             bg=self.color_scheme["accent"],
@@ -511,7 +564,7 @@ class VisualExecutionNode:
         )
         metrics_label.pack(pady=5)
 
-        self.metrics_text = scrolledtext.ScrolledText()
+        self.metrics_text = scrolledtext.ScrolledText(
             metrics_frame,
             height=6,
             bg=self.color_scheme["bg"],
@@ -526,7 +579,7 @@ class VisualExecutionNode:
         status_frame = tk.Frame(parent, bg=self.color_scheme["accent"])
         status_frame.pack(fill="x", padx=10, pady=10)
 
-        status_label = tk.Label()
+        status_label = tk.Label(
             status_frame,
             text="🛡️ System Health Monitor",
             bg=self.color_scheme["accent"],
@@ -540,7 +593,7 @@ class VisualExecutionNode:
         indicators_frame.pack(fill="x", padx=10, pady=5)
 
         self.health_indicators = {}
-        indicator_names = []
+        indicator_names = [
             ("🧬", "2-Gram Detector"),
             ("🎯", "Strategy Router"),
             ("⚖️", "Portfolio Balancer"),
@@ -556,7 +609,7 @@ class VisualExecutionNode:
             indicator_frame = tk.Frame(indicators_frame, bg=self.color_scheme["accent"])
             indicator_frame.grid(row=row, column=col, padx=10, pady=5, sticky="ew")
 
-            indicator_label = tk.Label()
+            indicator_label = tk.Label(
                 indicator_frame,
                 text="{0} {1}".format(emoji, name),
                 bg=self.color_scheme["accent"],
@@ -565,7 +618,7 @@ class VisualExecutionNode:
             )
             indicator_label.pack(anchor="w")
 
-            status_indicator = tk.Label()
+            status_indicator = tk.Label(
                 indicator_frame,
                 text="🟡 Unknown",
                 bg=self.color_scheme["accent"],
@@ -584,7 +637,7 @@ class VisualExecutionNode:
         tcell_frame = tk.Frame(parent, bg=self.color_scheme["accent"])
         tcell_frame.pack(fill="both", expand=True, padx=10, pady=10)
 
-        tcell_label = tk.Label()
+        tcell_label = tk.Label(
             tcell_frame,
             text="🛡️ T-Cell Protection Status",
             bg=self.color_scheme["accent"],
@@ -593,7 +646,7 @@ class VisualExecutionNode:
         )
         tcell_label.pack(pady=5)
 
-        self.tcell_text = scrolledtext.ScrolledText()
+        self.tcell_text = scrolledtext.ScrolledText(
             tcell_frame,
             height=8,
             bg=self.color_scheme["bg"],
@@ -610,7 +663,7 @@ class VisualExecutionNode:
         status_frame = tk.Frame(self.root, bg=self.color_scheme["accent"])
         status_frame.pack(fill="x", side="bottom")
 
-        self.status_label = tk.Label()
+        self.status_label = tk.Label(
             status_frame,
             text="🔄 Initializing...",
             bg=self.color_scheme["accent"],
@@ -621,7 +674,7 @@ class VisualExecutionNode:
         self.status_label.pack(side="left", padx=10, pady=2)
 
         # FPS counter
-        self.fps_label = tk.Label()
+        self.fps_label = tk.Label(
             status_frame,
             text="FPS: 0",
             bg=self.color_scheme["accent"],
@@ -746,7 +799,7 @@ class VisualExecutionNode:
 
         # Draw pattern circle
         radius = pattern_viz.size
-        self.canvas.create_oval()
+        self.canvas.create_oval(
             pattern_viz.x - radius,
             pattern_viz.y - radius,
             pattern_viz.x + radius,
@@ -757,7 +810,7 @@ class VisualExecutionNode:
         )
 
         # Draw emoji symbol
-        self.canvas.create_text()
+        self.canvas.create_text(
             pattern_viz.x,
             pattern_viz.y - radius - 15,
             text=pattern_viz.emoji_symbol,
@@ -766,7 +819,7 @@ class VisualExecutionNode:
         )
 
         # Draw pattern text
-        self.canvas.create_text()
+        self.canvas.create_text(
             pattern_viz.x,
             pattern_viz.y,
             text=pattern_viz.pattern,
@@ -775,7 +828,7 @@ class VisualExecutionNode:
         )
 
         # Draw frequency
-        self.canvas.create_text()
+        self.canvas.create_text(
             pattern_viz.x,
             pattern_viz.y + radius + 10,
             text="f:{0}".format(pattern_viz.frequency),
@@ -784,7 +837,7 @@ class VisualExecutionNode:
         )
 
         # Draw burst score
-        self.canvas.create_text()
+        self.canvas.create_text(
             pattern_viz.x,
             pattern_viz.y + radius + 25,
             text="b:{:.2f}".format(pattern_viz.burst_score),
@@ -844,14 +897,14 @@ Memory Usage: {stats.get('memory_usage_mb', 0):.1f} MB
             # Simulate market data (in real implementation, this would come from live, feeds)
             market_data = {}
                 "BTC/USDC": {}
-                    "price": 50000.0 + np.random.normal(0, 500),
-                    "change_24h": np.random.normal(0, 3),
-                    "volume": 1000000 + np.random.normal(0, 100000),
+                    "price": 50000.0 + xp.random.normal(0, 500),
+                    "change_24h": xp.random.normal(0, 3),
+                    "volume": 1000000 + xp.random.normal(0, 100000),
                 },
                 "ETH/USDC": {}
-                    "price": 3000.0 + np.random.normal(0, 100),
-                    "change_24h": np.random.normal(0, 4),
-                    "volume": 800000 + np.random.normal(0, 80000),
+                    "price": 3000.0 + xp.random.normal(0, 100),
+                    "change_24h": xp.random.normal(0, 4),
+                    "volume": 800000 + xp.random.normal(0, 80000),
                 },
             }
 
@@ -859,7 +912,7 @@ Memory Usage: {stats.get('memory_usage_mb', 0):.1f} MB
             row = 0
             for symbol, data in market_data.items():
                 # Symbol label
-                symbol_label = tk.Label()
+                symbol_label = tk.Label(
                     self.market_display,
                     text=symbol,
                     bg=self.color_scheme["bg"],
@@ -874,7 +927,7 @@ Memory Usage: {stats.get('memory_usage_mb', 0):.1f} MB
                     if data["change_24h"] > 0
                     else self.color_scheme["error"]
                 )
-                price_label = tk.Label()
+                price_label = tk.Label(
                     self.market_display,
                     text="${0:.2f}".format(data['price']),
                     bg=self.color_scheme["bg"],
@@ -885,7 +938,7 @@ Memory Usage: {stats.get('memory_usage_mb', 0):.1f} MB
 
                 # Change
                 change_text = "{0} {1:.2f}%".format("↗" if data["change_24h"] > 0 else "↘", abs(data["change_24h"]))
-                change_label = tk.Label()
+                change_label = tk.Label(
                     self.market_display,
                     text=change_text,
                     bg=self.color_scheme["bg"],
@@ -895,7 +948,7 @@ Memory Usage: {stats.get('memory_usage_mb', 0):.1f} MB
                 change_label.grid(row=row, column=2, padx=10, pady=5)
 
                 # Volume
-                volume_label = tk.Label()
+                volume_label = tk.Label(
                     self.market_display,
                     text="Vol: ${0:.0f}K".format(data["volume"] / 1000),
                     bg=self.color_scheme["bg"],
@@ -949,10 +1002,10 @@ Memory Usage: {stats.get('memory_usage_mb', 0):.1f} MB
 
                     # Draw pie slice (simplified as text for, now)
                     angle_rad = math.radians(start_angle + extent / 2)
-                    text_x = center_x + (radius * 0.7) * math.cos(angle_rad)
-                    text_y = center_y + (radius * 0.7) * math.sin(angle_rad)
+                    text_x = center_x + (radius * 0.7) * xp.cos(angle_rad)
+                    text_y = center_y + (radius * 0.7) * xp.sin(angle_rad)
 
-                    self.balance_canvas.create_text()
+                    self.balance_canvas.create_text(
                         text_x,
                         text_y,
                         text="{0}\n{1:.1%}".format(asset, weight),
@@ -964,7 +1017,7 @@ Memory Usage: {stats.get('memory_usage_mb', 0):.1f} MB
                     start_angle += extent
 
             # Draw total value
-            self.balance_canvas.create_text()
+            self.balance_canvas.create_text(
                 center_x,
                 center_y,
                 text="Total\n${0:.2f}".format(total_value),
