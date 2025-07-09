@@ -8,6 +8,15 @@ from typing import Any, Dict, List, Union
 
 import numpy as np
 
+# Entropy Signal Integration
+try:
+    from core.entropy_signal_integration import EntropySignalIntegration
+    ENTROPY_AVAILABLE = True
+    logger.info("🔄 Entropy Signal Integration enabled in Pure Profit Calculator")
+except ImportError:
+    ENTROPY_AVAILABLE = False
+    logger.warning("⚠️ Entropy Signal Integration not available in Pure Profit Calculator")
+
 # !/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
@@ -94,12 +103,11 @@ class HistoryState:
 
     def get_hash_signature(self) -> str:
         """Generate deterministic hash signature for state."""
-        state_str = "{0}_{1}_{2}".format()
+        state_str = "{0}_{1}_{2}".format(
             self.timestamp,
-            len()
-                self.hash_matrices),
-                len()
-                    self.tensor_buckets))
+            len(self.hash_matrices),
+            len(self.tensor_buckets)
+        )
         return hashlib.sha256(state_str.encode()).hexdigest()
 
 
@@ -178,7 +186,7 @@ class PureProfitCalculator:
         self.last_calculation_data: Dict[str, Any] = {}
 
         # Performance metrics
-        self.performance_metrics = {}
+        self.performance_metrics = {
             'gpu_operations': 0,
             'cpu_operations': 0,
             'fallback_operations': 0,
@@ -190,6 +198,14 @@ class PureProfitCalculator:
         self.GOLDEN_RATIO = 1.618033988749
         self.EULER_CONSTANT = 2.718281828459
         self.PI = 3.141592653589793
+
+        # Initialize entropy signal integration if available
+        if ENTROPY_AVAILABLE:
+            self.entropy_integration = EntropySignalIntegration()
+            logger.info("🔄 Entropy signal integration initialized in Pure Profit Calculator")
+        else:
+            self.entropy_integration = None
+            logger.warning("⚠️ Entropy signal integration not available in Pure Profit Calculator")
 
         logger.info("Pure Profit Calculator initialized - Mathematical Mode with {0}".format(processing_mode.value))
 
@@ -235,12 +251,41 @@ class PureProfitCalculator:
             # Base profit calculation - YOUR mathematical formula
             base_profit = self._calculate_base_profit_safe(market_data, history_state, current_mode)
 
+            # Process entropy signals if available
+            entropy_adjustment = 1.0
+            entropy_timing = 1.0
+            entropy_score = 1.0
+            if self.entropy_integration:
+                try:
+                    # Create order book data for entropy processing
+                    order_book_data = self._extract_order_book_data(market_data)
+                    
+                    # Process entropy signals
+                    entropy_result = self.entropy_integration.process_entropy_signals(
+                        order_book_data=order_book_data,
+                        market_context=self._create_market_context(market_data, history_state)
+                    )
+                    
+                    # Extract entropy adjustments
+                    entropy_adjustment = entropy_result.get('confidence_adjustment', 1.0)
+                    entropy_timing = entropy_result.get('timing_cycle', 1.0)
+                    entropy_score = entropy_result.get('entropy_score', 1.0)
+                    
+                    logger.info(f"🔄 Entropy adjustments applied - timing: {entropy_timing:.3f}, score: {entropy_score:.3f}")
+                    
+                except Exception as e:
+                    logger.warning(f"⚠️ Entropy signal processing failed: {e}")
+                    entropy_adjustment = 1.0
+                    entropy_timing = 1.0
+                    entropy_score = 1.0
+
             # Risk adjustment - YOUR risk framework
             risk_adjustment = self._calculate_risk_adjustment_safe(market_data, history_state, current_mode)
-            risk_adjusted_profit = base_profit * risk_adjustment
+            risk_adjusted_profit = base_profit * risk_adjustment * entropy_adjustment
 
             # Confidence scoring - YOUR confidence algorithm
             confidence_score = self._calculate_confidence_score_safe(market_data, history_state, current_mode)
+            confidence_score *= entropy_adjustment  # Apply entropy confidence adjustment
 
             # Tensor contribution - YOUR tensor mathematics
             tensor_contribution = self._calculate_tensor_contribution_safe(history_state, current_mode)
@@ -251,12 +296,14 @@ class PureProfitCalculator:
             # Mode multiplier - YOUR mode calculations
             mode_multiplier = self._get_mode_multiplier(mode)
 
-            # Final profit score - YOUR final formula
-            total_profit_score = ()
+            # Final profit score - YOUR final formula with entropy enhancement
+            total_profit_score = (
                 risk_adjusted_profit
                 * confidence_score
                 * (1.0 + tensor_contribution + hash_contribution)
                 * mode_multiplier
+                * entropy_timing  # Apply entropy timing multiplier
+                * entropy_score   # Apply entropy score multiplier
             )
 
             # Ensure bounded result
@@ -267,9 +314,9 @@ class PureProfitCalculator:
             self._update_performance_metrics(calculation_time)
 
             # Store last calculation data for introspection
-            self.last_calculation_data = {}
+            self.last_calculation_data = {
                 "market_data": asdict(market_data) if hasattr(market_data, "__dict__") else market_data,
-                "history_state_summary": {}
+                "history_state_summary": {
                     "hash_matrices": len(history_state.hash_matrices),
                     "tensor_buckets": len(history_state.tensor_buckets),
                     "profit_memory_length": len(history_state.profit_memory),
@@ -278,7 +325,7 @@ class PureProfitCalculator:
                 "processing_mode": mode.value,
             }
 
-            return ProfitResult()
+            result = ProfitResult(
                 timestamp=market_data.timestamp,
                 base_profit=base_profit,
                 risk_adjusted_profit=risk_adjusted_profit,
@@ -286,17 +333,23 @@ class PureProfitCalculator:
                 tensor_contribution=tensor_contribution,
                 hash_contribution=hash_contribution,
                 total_profit_score=total_profit_score,
-                calculation_metadata={}
+                calculation_metadata={
                     "calculation_time": calculation_time,
                     "processing_backend": _backend,
                     "mode": mode.value,
                     "calculation_id": self.calculation_count,
+                    "entropy_adjustment": entropy_adjustment,
+                    "entropy_timing": entropy_timing,
+                    "entropy_score": entropy_score,
+                    "entropy_available": self.entropy_integration is not None,
                 },
                 processing_mode=current_mode,
             )
 
+            return result
+
         except Exception as e:
-            error = CalculationError()
+            error = CalculationError(
                 error_type=type(e).__name__,
                 error_message=str(e),
                 timestamp=time.time(),
@@ -537,7 +590,7 @@ class PureProfitCalculator:
 
     def _get_mode_multiplier(self, mode: ProfitCalculationMode) -> float:
         """Get mode multiplier for profit calculation."""
-        multipliers = {}
+        multipliers = {
             ProfitCalculationMode.CONSERVATIVE: 0.8,
             ProfitCalculationMode.BALANCED: 1.0,
             ProfitCalculationMode.AGGRESSIVE: 1.3,
@@ -547,7 +600,7 @@ class PureProfitCalculator:
 
     def _create_fallback_result(self, market_data: MarketData, history_state: HistoryState, mode: ProfitCalculationMode) -> ProfitResult:
         """Create a safe fallback profit result."""
-        return ProfitResult()
+        return ProfitResult(
             timestamp=market_data.timestamp,
             base_profit=0.0,
             risk_adjusted_profit=0.0,
@@ -564,13 +617,13 @@ class PureProfitCalculator:
         total_calculations = self.calculation_count
         current_avg = self.performance_metrics['avg_calculation_time']
 
-        self.performance_metrics['avg_calculation_time'] = ()
+        self.performance_metrics['avg_calculation_time'] = (
             current_avg * (total_calculations - 1) + calculation_time
         ) / total_calculations
 
     def get_calculation_metrics(self) -> Dict[str, Any]:
         """Get comprehensive calculation metrics."""
-        return {}
+        return {
             "total_calculations": self.calculation_count,
             "total_calculation_time": self.total_calculation_time,
             "avg_calculation_time": self.performance_metrics['avg_calculation_time'],
@@ -578,7 +631,7 @@ class PureProfitCalculator:
             "processing_mode": self.processing_mode.value,
             "backend": _backend,
             "error_count": len(self.error_log),
-            "strategy_params": {}
+            "strategy_params": {
                 "risk_tolerance": self.strategy_params.risk_tolerance,
                 "profit_target": self.strategy_params.profit_target,
                 "position_size": self.strategy_params.position_size,
@@ -592,7 +645,7 @@ class PureProfitCalculator:
             error_type = error.error_type
             error_counts[error_type] = error_counts.get(error_type, 0) + 1
 
-        return {}
+        return {
             'total_errors': len(self.error_log),
             'error_types': error_counts,
             'fallback_usage': sum(1 for e in self.error_log if e.fallback_used),
@@ -651,7 +704,7 @@ class PureProfitCalculator:
         hist = self.last_calculation_data["history_state_summary"]
         mode = self.last_calculation_data["processing_mode"]
 
-        lines = []
+        lines = [
             "📊 LAST PROFIT CALCULATION",
             "-" * 40,
             "Processing mode : {0}".format(mode),
@@ -664,13 +717,81 @@ class PureProfitCalculator:
             f"Total score     : {(result['total_profit_score'] if isinstance(result, dict) else result.total_profit_score):.6f}",
             f"Hash matrices   : {hist['hash_matrices']}",
             f"Tensor buckets  : {hist['tensor_buckets']}",
-            f"Profit memory   : {hist['profit_memory_length']},"
+            f"Profit memory   : {hist['profit_memory_length']}",
         ]
 
         if detail_level == "full":
             lines.append("\n🧮 FULL RESULT OBJECT:\n" + str(result))
 
         return "\n".join(lines)
+
+    def _extract_order_book_data(self, market_data: MarketData) -> Dict[str, Any]:
+        """
+        Extract order book data from market data for entropy processing.
+        
+        Args:
+            market_data: Market data object
+            
+        Returns:
+            Order book data dictionary
+        """
+        try:
+            # Create simulated order book data from market data
+            order_book = {
+                'bids': [[market_data.btc_price * 0.999, 100]],
+                'asks': [[market_data.btc_price * 1.001, 100]],
+                'timestamp': market_data.timestamp,
+                'spread': 0.001,
+                'depth': 10
+            }
+            
+            return order_book
+            
+        except Exception as e:
+            logger.warning(f"⚠️ Failed to extract order book data: {e}")
+            # Return minimal order book data
+            return {
+                'bids': [[50000, 100]],
+                'asks': [[50001, 100]],
+                'timestamp': time.time(),
+                'spread': 0.001,
+                'depth': 10
+            }
+
+    def _create_market_context(self, market_data: MarketData, history_state: HistoryState) -> Dict[str, Any]:
+        """
+        Create market context for entropy processing.
+        
+        Args:
+            market_data: Market data object
+            history_state: History state object
+            
+        Returns:
+            Market context dictionary
+        """
+        try:
+            return {
+                'timestamp': market_data.timestamp,
+                'btc_price': market_data.btc_price,
+                'eth_price': market_data.eth_price,
+                'usdc_volume': market_data.usdc_volume,
+                'volatility': market_data.volatility,
+                'momentum': market_data.momentum,
+                'volume_profile': market_data.volume_profile,
+                'on_chain_signals': market_data.on_chain_signals,
+                'hash_matrices_count': len(history_state.hash_matrices),
+                'tensor_buckets_count': len(history_state.tensor_buckets),
+                'profit_memory_length': len(history_state.profit_memory),
+            }
+            
+        except Exception as e:
+            logger.warning(f"⚠️ Failed to create market context: {e}")
+            return {
+                'timestamp': time.time(),
+                'btc_price': 50000.0,
+                'volatility': 0.2,
+                'momentum': 0.1,
+            }
 
 
 def assert_zpe_isolation() -> None:
@@ -685,7 +806,7 @@ def assert_zpe_isolation() -> None:
 
 def create_sample_market_data() -> MarketData:
     """Create sample market data for testing."""
-    return MarketData()
+    return MarketData(
         timestamp=time.time(),
         btc_price=50000.0,
         eth_price=3000.0,
@@ -697,13 +818,10 @@ def create_sample_market_data() -> MarketData:
     )
 
 
-def create_pure_profit_calculator()
-    strategy_params: StrategyParameters = None, processing_mode: ProcessingMode = ProcessingMode.HYBRID
-) -> PureProfitCalculator:
+def create_pure_profit_calculator() -> PureProfitCalculator:
     """Create a new pure profit calculator instance."""
-    if strategy_params is None:
-        strategy_params = StrategyParameters()
-    return PureProfitCalculator(strategy_params=strategy_params, processing_mode=processing_mode)
+    strategy_params = StrategyParameters()
+    return PureProfitCalculator(strategy_params=strategy_params, processing_mode=ProcessingMode.HYBRID)
 
 
 def demo_pure_profit_calculation():
@@ -729,7 +847,7 @@ def demo_pure_profit_calculation():
     # Show metrics
     metrics = calculator.get_calculation_metrics()
     print("\nCalculations: {0}".format(metrics['total_calculations']))
-    print("Avg, time))"
+    print("Avg time: {0:.2f}s".format(metrics['avg_calculation_time']))
     print("Backend: {0}".format(metrics['backend']))
 
 

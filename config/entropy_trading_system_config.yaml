@@ -1,0 +1,375 @@
+# Entropy-Enhanced Trading System Configuration
+# Complete configuration for production BTC/USDC trading with entropy signals
+
+# Exchange Configuration
+exchange:
+  name: "coinbase"
+  api_key: "${COINBASE_API_KEY}"
+  secret: "${COINBASE_SECRET}"
+  sandbox: true  # Set to false for production
+  testnet: true  # Set to false for production
+  rate_limit: 100  # Requests per minute
+  timeout: 30000  # milliseconds
+  
+  # Trading pairs
+  trading_pairs:
+    - symbol: "BTC/USDC"
+      base_currency: "BTC"
+      quote_currency: "USDC"
+      min_order_size: 0.001
+      max_order_size: 10.0
+      price_precision: 2
+      amount_precision: 6
+      
+  # Order types
+  order_types:
+    - "market"
+    - "limit"
+    - "stop_loss"
+    - "take_profit"
+
+# Entropy Signal Configuration
+entropy:
+  # Timing cycles for entropy processing (in minutes)
+  timing_cycles:
+    - 1    # 1-minute cycle
+    - 5    # 5-minute cycle
+    - 15   # 15-minute cycle
+    - 30   # 30-minute cycle
+    - 60   # 1-hour cycle
+    
+  # Confidence thresholds
+  confidence_thresholds:
+    low: 0.3
+    medium: 0.5
+    high: 0.7
+    critical: 0.9
+    
+  # Entropy score multipliers
+  score_multipliers:
+    timing: 1.0
+    confidence: 1.0
+    volatility: 1.0
+    momentum: 1.0
+    
+  # Order book analysis
+  order_book:
+    depth: 20
+    spread_threshold: 0.001
+    volume_threshold: 1000
+    imbalance_threshold: 0.2
+    
+  # Market context
+  market_context:
+    price_history_length: 100
+    volume_history_length: 50
+    volatility_window: 20
+    momentum_window: 10
+
+# Strategy Configuration
+strategy:
+  # Base strategy parameters
+  base_position_size: 0.01  # 1% of portfolio
+  max_position_size: 0.1    # 10% of portfolio
+  min_position_size: 0.001  # 0.1% of portfolio
+  
+  # Strategy bit mapping
+  bit_mapping:
+    target_bits: 8
+    expansion_modes:
+      - "entropy_adaptive"
+      - "tensor_weighted"
+      - "orbital_adaptive"
+    hash_threshold: 0.8
+    
+  # Profit calculation
+  profit_calculation:
+    mode: "balanced"  # conservative, balanced, aggressive, tensor_optimized
+    risk_tolerance: 0.2
+    profit_target: 0.5
+    stop_loss: 0.1
+    position_size: 0.1
+    
+  # Strategy selection
+  strategy_selection:
+    entropy_threshold: 0.5
+    confidence_threshold: 0.7
+    risk_threshold: 0.3
+    
+  # Trading signals
+  trading_signals:
+    buy_threshold: 0.3
+    sell_threshold: -0.3
+    hold_threshold: 0.1
+    emergency_exit_threshold: -0.8
+
+# Risk Management Configuration
+risk:
+  # Risk tolerance levels
+  risk_tolerance: 0.2
+  max_drawdown: 0.1
+  position_limit: 0.2
+  daily_loss_limit: 0.05
+  weekly_loss_limit: 0.15
+  monthly_loss_limit: 0.25
+  
+  # Position sizing
+  position_sizing:
+    kelly_criterion: true
+    volatility_adjustment: true
+    correlation_adjustment: true
+    max_leverage: 1.0
+    
+  # Stop loss and take profit
+  stop_loss:
+    enabled: true
+    percentage: 0.02  # 2%
+    trailing: true
+    trailing_percentage: 0.01  # 1%
+    
+  take_profit:
+    enabled: true
+    percentage: 0.05  # 5%
+    trailing: true
+    trailing_percentage: 0.02  # 2%
+    
+  # Risk assessment
+  risk_assessment:
+    max_position_value: 10000  # USD
+    max_daily_trades: 50
+    max_concurrent_positions: 3
+    correlation_threshold: 0.7
+
+# Portfolio Management
+portfolio:
+  # Portfolio tracking
+  tracking:
+    enabled: true
+    update_interval: 60  # seconds
+    history_length: 1000
+    
+  # Rebalancing
+  rebalancing:
+    enabled: true
+    interval: 3600  # 1 hour
+    threshold: 0.05  # 5%
+    
+  # Performance metrics
+  performance:
+    sharpe_ratio_window: 252  # days
+    max_drawdown_window: 252  # days
+    volatility_window: 30  # days
+
+# Trading Execution Configuration
+execution:
+  # Trading loop
+  trading_loop:
+    enabled: true
+    interval: 60  # seconds
+    max_cycles_per_hour: 60
+    
+  # Order execution
+  order_execution:
+    default_type: "market"
+    retry_attempts: 3
+    retry_delay: 5  # seconds
+    timeout: 30  # seconds
+    
+  # Slippage tolerance
+  slippage:
+    max_slippage: 0.001  # 0.1%
+    slippage_check: true
+    
+  # Fee management
+  fees:
+    maker_fee: 0.001  # 0.1%
+    taker_fee: 0.002  # 0.2%
+    fee_optimization: true
+
+# Data Collection and Processing
+data:
+  # Market data
+  market_data:
+    sources:
+      - "exchange"
+      - "websocket"
+      - "rest_api"
+    update_interval: 1  # seconds
+    history_length: 1000
+    
+  # Order book data
+  order_book:
+    depth: 20
+    update_interval: 1  # seconds
+    snapshot_interval: 60  # seconds
+    
+  # Historical data
+  historical:
+    enabled: true
+    storage_path: "./data/historical"
+    compression: true
+    retention_days: 365
+
+# Logging and Monitoring
+logging:
+  # Log levels
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR, CRITICAL
+  file_logging: true
+  log_file: "./logs/trading_system.log"
+  max_file_size: 100  # MB
+  backup_count: 5
+  
+  # Performance logging
+  performance_logging: true
+  performance_file: "./logs/performance.log"
+  
+  # Trade logging
+  trade_logging: true
+  trade_file: "./logs/trades.log"
+  
+  # Error logging
+  error_logging: true
+  error_file: "./logs/errors.log"
+
+# Monitoring and Alerts
+monitoring:
+  # Health checks
+  health_checks:
+    enabled: true
+    interval: 300  # 5 minutes
+    timeout: 30  # seconds
+    
+  # Performance monitoring
+  performance_monitoring:
+    enabled: true
+    metrics_interval: 60  # seconds
+    dashboard_enabled: true
+    
+  # Alerts
+  alerts:
+    enabled: true
+    channels:
+      - "email"
+      - "slack"
+      - "webhook"
+    
+    # Alert thresholds
+    thresholds:
+      max_drawdown: 0.1
+      consecutive_losses: 5
+      system_error_rate: 0.05
+      api_error_rate: 0.1
+
+# Security Configuration
+security:
+  # API key management
+  api_keys:
+    encryption: true
+    key_rotation: true
+    rotation_interval: 30  # days
+    
+  # Access control
+  access_control:
+    ip_whitelist: []
+    user_authentication: true
+    session_timeout: 3600  # 1 hour
+    
+  # Data protection
+  data_protection:
+    encryption_at_rest: true
+    encryption_in_transit: true
+    data_retention: 365  # days
+
+# Backup and Recovery
+backup:
+  # Configuration backup
+  config_backup:
+    enabled: true
+    interval: 24  # hours
+    retention_days: 30
+    
+  # Data backup
+  data_backup:
+    enabled: true
+    interval: 6  # hours
+    retention_days: 90
+    
+  # State backup
+  state_backup:
+    enabled: true
+    interval: 60  # minutes
+    retention_days: 7
+
+# Development and Testing
+development:
+  # Testing mode
+  testing_mode: true
+  paper_trading: true
+  simulation_mode: true
+  
+  # Debug settings
+  debug:
+    enabled: false
+    verbose_logging: false
+    performance_profiling: false
+    
+  # Development tools
+  tools:
+    backtesting: true
+    strategy_optimization: true
+    risk_simulation: true
+
+# Integration Settings
+integration:
+  # External APIs
+  external_apis:
+    weather_api: false
+    news_api: false
+    sentiment_api: false
+    
+  # Webhooks
+  webhooks:
+    trade_execution: false
+    risk_alert: false
+    performance_update: false
+    
+  # Database
+  database:
+    enabled: false
+    type: "postgresql"
+    connection_string: "${DATABASE_URL}"
+
+# Environment-specific overrides
+environments:
+  development:
+    exchange:
+      sandbox: true
+      testnet: true
+    logging:
+      level: "DEBUG"
+    development:
+      testing_mode: true
+      paper_trading: true
+      
+  staging:
+    exchange:
+      sandbox: true
+      testnet: false
+    logging:
+      level: "INFO"
+    development:
+      testing_mode: false
+      paper_trading: true
+      
+  production:
+    exchange:
+      sandbox: false
+      testnet: false
+    logging:
+      level: "WARNING"
+    development:
+      testing_mode: false
+      paper_trading: false
+    monitoring:
+      alerts:
+        enabled: true 

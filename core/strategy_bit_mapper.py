@@ -5,8 +5,10 @@ from typing import Any, Callable, Dict, Optional
 import time
 import logging
 import os
+import numpy as np
 
 from core.backend_math import get_backend, is_gpu
+from utils.cuda_helper import safe_cuda_operation
 
 xp = get_backend()
 
@@ -20,6 +22,15 @@ from core.schwafit_core import SchwafitCore
 from core.strategy_loader import load_strategy
 from core.visual_execution_node import emit_dashboard_event
 from core.visual_execution_node import log_profit_tick
+
+# Entropy Signal Integration
+try:
+    from core.entropy_signal_integration import EntropySignalIntegration
+    ENTROPY_AVAILABLE = True
+    logger.info("🔄 Entropy Signal Integration enabled in Strategy Bit Mapper")
+except ImportError:
+    ENTROPY_AVAILABLE = False
+    logger.warning("⚠️ Entropy Signal Integration not available in Strategy Bit Mapper")
 
 # Log backend status
 logger = logging.getLogger(__name__)
@@ -143,11 +154,19 @@ class StrategyBitMapper:
         self.schwafit = SchwafitCore(window=64)
         self.orbital_brain = OrbitalBRAINSystem()
 
+        # Initialize entropy signal integration if available
+        if ENTROPY_AVAILABLE:
+            self.entropy_integration = EntropySignalIntegration()
+            logger.info("🔄 Entropy signal integration initialized in Strategy Bit Mapper")
+        else:
+            self.entropy_integration = None
+            logger.warning("⚠️ Entropy signal integration not available in Strategy Bit Mapper")
+
     def apply_qutrit_gate(
         self, strategy_id: str, seed: str, market_data: Optional[Dict[str, Any]] = None
     ) -> Dict[str, Any]:
         """
-        Apply qutrit gate to strategy decision
+        Apply qutrit gate to strategy decision with entropy signal integration
 
         Args:
             strategy_id: Strategy identifier
@@ -162,7 +181,33 @@ class StrategyBitMapper:
             qutrit_matrix = QutritSignalMatrix(seed, market_data)
             qutrit_result = qutrit_matrix.get_matrix_result()
 
-            # Apply state-based logic
+            # Process entropy signals if available
+            entropy_adjustment = 1.0
+            entropy_timing = None
+            if self.entropy_integration and market_data:
+                try:
+                    # Extract order book data for entropy processing
+                    order_book_data = self._extract_order_book_data(market_data)
+                    
+                    # Process entropy signals
+                    entropy_result = self.entropy_integration.process_entropy_signals(
+                        order_book_data=order_book_data,
+                        market_context=market_data
+                    )
+                    
+                    # Apply entropy adjustments
+                    entropy_adjustment = entropy_result.get('confidence_adjustment', 1.0)
+                    entropy_timing = entropy_result.get('timing_cycle', None)
+                    
+                    logger.info(f"🔄 Entropy adjustment applied: {entropy_adjustment:.3f}")
+                    
+                except Exception as e:
+                    logger.warning(f"⚠️ Entropy signal processing failed: {e}")
+                    entropy_adjustment = 1.0
+
+            # Apply state-based logic with entropy adjustment
+            adjusted_confidence = qutrit_result.confidence * entropy_adjustment
+            
             if qutrit_result.state == QutritState.DEFER:
                 action = "defer"
                 reason = "Qutrit state indicates hold position"
@@ -178,7 +223,10 @@ class StrategyBitMapper:
                 "action": action,
                 "reason": reason,
                 "qutrit_state": qutrit_result.state.value,
-                "confidence": qutrit_result.confidence,
+                "confidence": adjusted_confidence,
+                "original_confidence": qutrit_result.confidence,
+                "entropy_adjustment": entropy_adjustment,
+                "entropy_timing": entropy_timing,
                 "hash_segment": qutrit_result.hash_segment,
                 "matrix": qutrit_result.matrix.tolist(),
             }
@@ -191,6 +239,9 @@ class StrategyBitMapper:
                 "reason": str(e),
                 "qutrit_state": "error",
                 "confidence": 0.0,
+                "original_confidence": 0.0,
+                "entropy_adjustment": 1.0,
+                "entropy_timing": None,
                 "hash_segment": "",
                 "matrix": [],
             }
@@ -229,24 +280,57 @@ class StrategyBitMapper:
         mode: str = ExpansionMode.RANDOM,
         market_data: Optional[Dict[str, Any]] = None,
     ) -> int:
+        """
+        Expand strategy bits with entropy signal integration for enhanced decision making.
+        
+        Args:
+            strategy_id: Original strategy ID
+            target_bits: Target number of bits
+            mode: Expansion mode
+            market_data: Market data for entropy processing
+            
+        Returns:
+            Expanded strategy ID
+        """
+        # Process entropy signals if available
+        entropy_factor = 1.0
+        if self.entropy_integration and market_data:
+            try:
+                order_book_data = self._extract_order_book_data(market_data)
+                entropy_result = self.entropy_integration.process_entropy_signals(
+                    order_book_data=order_book_data,
+                    market_context=market_data
+                )
+                
+                # Use entropy timing to adjust expansion
+                entropy_factor = entropy_result.get('expansion_factor', 1.0)
+                logger.info(f"🔄 Entropy expansion factor: {entropy_factor:.3f}")
+                
+            except Exception as e:
+                logger.warning(f"⚠️ Entropy expansion processing failed: {e}")
+                entropy_factor = 1.0
+
+        # Apply entropy factor to strategy ID
+        adjusted_strategy_id = int(strategy_id * entropy_factor) % (2**32)
+        
         if mode == ExpansionMode.FLIP:
-            return strategy_id ^ ((1 << target_bits) - 1)
+            return adjusted_strategy_id ^ ((1 << target_bits) - 1)
         elif mode == ExpansionMode.MIRROR:
-            binary = format(strategy_id, "0{0}b".format(target_bits))
+            binary = format(adjusted_strategy_id, "0{0}b".format(target_bits))
             return int(binary[::-1], 2)
         elif mode == ExpansionMode.RANDOM:
-            random.seed(strategy_id)
+            random.seed(adjusted_strategy_id)
             return random.randint(0, (1 << target_bits) - 1)
         elif mode == ExpansionMode.FERRIS_WHEEL:
             now = datetime.utcnow()
             hour_angle = (now.hour + now.minute / 60.0) * (2 * np.pi / 24)
             drift = int((np.sin(hour_angle) + 1) * ((1 << (target_bits - 1)) - 1))
-            return (strategy_id + drift) % (1 << target_bits)
+            return (adjusted_strategy_id + drift) % (1 << target_bits)
         elif mode == ExpansionMode.TENSOR_WEIGHTED:
-            return self._tensor_weighted_expansion(strategy_id, target_bits)
+            return self._tensor_weighted_expansion(adjusted_strategy_id, target_bits)
         elif mode == ExpansionMode.ORBITAL_ADAPTIVE:
             market_data = market_data or self._get_simulated_market_data()
-            return self._orbital_adaptive_expansion(strategy_id, target_bits, market_data)
+            return self._orbital_adaptive_expansion(adjusted_strategy_id, target_bits, market_data)
         else:
             raise ValueError("Invalid expansion mode: {0}".format(mode))
 
@@ -288,8 +372,59 @@ class StrategyBitMapper:
     def select_strategy(
         self, hash_vec: xp.ndarray, asset_hint: Optional[str] = None, location: Any = None
     ):
-        """Select strategy based on hash vector using xp backend."""
-        return self.matrix_mapper.select_strategy(hash_vec, asset_hint, location)
+        """
+        Select strategy based on hash vector with entropy signal integration.
+        
+        Args:
+            hash_vec: Hash vector for strategy selection
+            asset_hint: Optional asset hint
+            location: Optional location context
+            
+        Returns:
+            Selected strategy information
+        """
+        try:
+            # Get base strategy selection
+            base_strategy = self.matrix_mapper.select_strategy(hash_vec, asset_hint, location)
+            
+            # Apply entropy signal processing if available
+            if self.entropy_integration:
+                try:
+                    # Create market context from available data
+                    market_context = {
+                        'asset': asset_hint,
+                        'timestamp': time.time(),
+                        'hash_vector': hash_vec.tolist() if hasattr(hash_vec, 'tolist') else hash_vec
+                    }
+                    
+                    # Process entropy signals
+                    entropy_result = self.entropy_integration.process_entropy_signals(
+                        order_book_data=self._get_simulated_market_data(),
+                        market_context=market_context
+                    )
+                    
+                    # Adjust strategy selection based on entropy
+                    entropy_score = entropy_result.get('strategy_score', 1.0)
+                    entropy_timing = entropy_result.get('timing_cycle', None)
+                    
+                    # Enhance base strategy with entropy information
+                    if isinstance(base_strategy, dict):
+                        base_strategy['entropy_score'] = entropy_score
+                        base_strategy['entropy_timing'] = entropy_timing
+                        base_strategy['entropy_adjusted'] = True
+                        
+                        logger.info(f"🔄 Strategy selection enhanced with entropy score: {entropy_score:.3f}")
+                    
+                except Exception as e:
+                    logger.warning(f"⚠️ Entropy strategy selection failed: {e}")
+                    if isinstance(base_strategy, dict):
+                        base_strategy['entropy_adjusted'] = False
+            
+            return base_strategy
+            
+        except Exception as e:
+            logger.error(f"Error in strategy selection: {e}")
+            return None
 
     def _get_simulated_market_data(self) -> Dict[str, Any]:
         """Get simulated market data for testing."""
@@ -299,3 +434,44 @@ class StrategyBitMapper:
             "timestamp": time.time(),
             "volatility": 0.02,
         }
+
+    def _extract_order_book_data(self, market_data: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Extract order book data from market data for entropy processing.
+        
+        Args:
+            market_data: Market data dictionary
+            
+        Returns:
+            Order book data dictionary
+        """
+        try:
+            # Extract order book data if available
+            order_book = market_data.get('order_book', {})
+            
+            # If no order book data, create simulated data
+            if not order_book:
+                order_book = {
+                    'bids': [[market_data.get('price', 50000) * 0.999, 100]],
+                    'asks': [[market_data.get('price', 50000) * 1.001, 100]],
+                    'timestamp': market_data.get('timestamp', time.time())
+                }
+            
+            return {
+                'bids': order_book.get('bids', []),
+                'asks': order_book.get('asks', []),
+                'timestamp': order_book.get('timestamp', time.time()),
+                'spread': market_data.get('spread', 0.001),
+                'depth': market_data.get('depth', 10)
+            }
+            
+        except Exception as e:
+            logger.warning(f"⚠️ Failed to extract order book data: {e}")
+            # Return minimal order book data
+            return {
+                'bids': [[50000, 100]],
+                'asks': [[50001, 100]],
+                'timestamp': time.time(),
+                'spread': 0.001,
+                'depth': 10
+            }

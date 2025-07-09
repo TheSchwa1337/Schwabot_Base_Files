@@ -52,6 +52,28 @@ from .zpe_zbe_core import (
 )
 from .ccxt_trading_executor import CCXTTradingExecutor, IntegratedTradingSignal, TradingPair
 
+# Entropy Signal Integration
+try:
+    from .entropy_signal_integration import (
+        get_entropy_integrator,
+        process_entropy_signal,
+        should_execute_tick,
+        should_execute_routing,
+        EntropySignal
+    )
+    from .fractal_core import FractalCore
+    from .phantom_core import PhantomCore
+    from .entropy_signal_bridge import EntropySignalBridge
+    from .profit_cycle_allocator import ProfitCycleAllocator
+    
+    ENTROPY_INTEGRATION_AVAILABLE = True
+    logger = logging.getLogger(__name__)
+    logger.info("🧠 Entropy signal integration modules loaded successfully")
+except ImportError as e:
+    ENTROPY_INTEGRATION_AVAILABLE = False
+    logger = logging.getLogger(__name__)
+    logger.warning(f"⚠️ Entropy integration modules not available: {e}")
+
 logger = logging.getLogger(__name__)
 
 
@@ -366,6 +388,31 @@ class CleanTradingPipeline:
             self.pipeline_config["registry_file"] = registry_file
         self.market_pipeline = create_unified_pipeline(self.pipeline_config)
 
+        # Initialize Entropy Signal Integration Components
+        if ENTROPY_INTEGRATION_AVAILABLE:
+            try:
+                # Initialize entropy signal integrator
+                self.entropy_integrator = get_entropy_integrator()
+                
+                # Initialize entropy core components
+                self.fractal_core = FractalCore()
+                self.phantom_core = PhantomCore()
+                self.entropy_bridge = EntropySignalBridge()
+                self.profit_cycle_allocator = ProfitCycleAllocator()
+                
+                # Entropy signal tracking
+                self.entropy_signals: List[EntropySignal] = []
+                self.current_entropy_state = "NEUTRAL"
+                self.entropy_confidence = 0.0
+                
+                logger.info("🧠 Entropy signal integration components initialized successfully")
+                
+            except Exception as e:
+                logger.error(f"❌ Failed to initialize entropy components: {e}")
+                ENTROPY_INTEGRATION_AVAILABLE = False
+        else:
+            logger.warning("⚠️ Entropy integration not available - trading without entropy signals")
+
         logger.info("Trading pipeline initialized with unified market data for {0}".format(symbol))
 
     def _default_pipeline_config(self) -> Dict[str, Any]:
@@ -417,11 +464,60 @@ class CleanTradingPipeline:
             # Calculate trading signals using enhanced data
             signals = self._calculate_enhanced_trading_signals(market_packet, processed_data)
 
+            # Process entropy signals if available
+            entropy_signals = {}
+            if ENTROPY_INTEGRATION_AVAILABLE and self.entropy_integrator:
+                try:
+                    # Generate mock order book data from market packet
+                    bids, asks = self._extract_order_book_from_packet(market_packet, processed_data)
+                    
+                    if bids and asks:
+                        # Process entropy signal through the complete pipeline
+                        entropy_signal = process_entropy_signal(bids, asks)
+                        
+                        # Update entropy tracking
+                        self.entropy_signals.append(entropy_signal)
+                        self.current_entropy_state = entropy_signal.routing_state
+                        self.entropy_confidence = entropy_signal.confidence
+                        
+                        # Process through entropy core components
+                        smoothed_entropy = self.entropy_bridge.smooth_entropy(entropy_signal.entropy_value)
+                        fractal_state = self.fractal_core.update_with_entropy(smoothed_entropy)
+                        phantom_state = self.phantom_core.pulse(smoothed_entropy)
+                        
+                        # Get capital allocation based on entropy
+                        capital_allocation = self.profit_cycle_allocator.allocate_capital(
+                            entropy_signal.entropy_value,
+                            self.state.current_capital,
+                            fractal_state,
+                            phantom_state
+                        )
+                        
+                        entropy_signals = {
+                            "entropy_value": entropy_signal.entropy_value,
+                            "routing_state": entropy_signal.routing_state,
+                            "quantum_state": entropy_signal.quantum_state,
+                            "confidence": entropy_signal.confidence,
+                            "smoothed_entropy": smoothed_entropy,
+                            "fractal_state": fractal_state,
+                            "phantom_state": phantom_state,
+                            "capital_allocation": capital_allocation,
+                            "processing_time_ms": entropy_signal.metadata.get("processing_time_ms", 0)
+                        }
+                        
+                        logger.debug(f"🧠 Entropy processed: {entropy_signal.entropy_value:.6f}, "
+                                   f"Routing: {entropy_signal.routing_state}, "
+                                   f"Quantum: {entropy_signal.quantum_state}")
+                        
+                except Exception as e:
+                    logger.error(f"❌ Error processing entropy signals: {e}")
+                    entropy_signals = {"error": str(e)}
+
             # Risk assessment with market data
             risk_assessment = self._assess_risk_with_market_data(market_packet, signals)
 
-            # Determine trade action
-            trade_action = self._determine_trade_action(signals, risk_assessment)
+            # Determine trade action with entropy enhancement
+            trade_action = self._determine_trade_action_with_entropy(signals, risk_assessment, entropy_signals)
 
             # Execute trade if action required
             trade_result = None
@@ -673,10 +769,45 @@ class CleanTradingPipeline:
 
         return risk_assessment
 
-    def _determine_trade_action(
-        self, signals: Dict[str, Any], risk_assessment: Dict[str, Any]
+    def _extract_order_book_from_packet(self, packet: Optional[MarketDataPacket], data: Dict[str, Any]) -> Tuple[List[Tuple[float, float]], List[Tuple[float, float]]]:
+        """Extract order book data from market packet for entropy processing."""
+        try:
+            if not packet:
+                return [], []
+            
+            # Generate realistic order book from market data
+            base_price = packet.price
+            base_volume = packet.volume_24h / 24  # Hourly volume estimate
+            
+            # Generate bids (price, volume) - decreasing prices
+            bids = []
+            for i in range(20):
+                price = base_price * (1 - 0.001 * (i + 1))  # 0.1% spread per level
+                volume = base_volume * (1 + np.random.uniform(-0.3, 0.3))  # Random volume variation
+                bids.append((price, volume))
+            
+            # Generate asks (price, volume) - increasing prices
+            asks = []
+            for i in range(20):
+                price = base_price * (1 + 0.001 * (i + 1))  # 0.1% spread per level
+                volume = base_volume * (1 + np.random.uniform(-0.3, 0.3))  # Random volume variation
+                asks.append((price, volume))
+            
+            # Add entropy by varying the spread based on volatility
+            if packet.volatility > 0.7:  # High volatility
+                spread_factor = np.random.uniform(1.5, 3.0)
+                asks = [(price * spread_factor, volume) for price, volume in asks]
+            
+            return bids, asks
+            
+        except Exception as e:
+            logger.error(f"Error extracting order book: {e}")
+            return [], []
+
+    def _determine_trade_action_with_entropy(
+        self, signals: Dict[str, Any], risk_assessment: Dict[str, Any], entropy_signals: Dict[str, Any]
     ) -> Dict[str, Any]:
-        """Determine trade action based on signals and risk assessment."""
+        """Determine trade action based on signals, risk assessment, and entropy signals."""
         signal_strength = signals.get("signal_strength", 0.0)
         confidence = signals.get("confidence", 0.0)
         risk_level = risk_assessment.get("risk_level", "high")
@@ -684,29 +815,59 @@ class CleanTradingPipeline:
         # Minimum confidence thresholds based on risk
         min_confidence = {"low": 0.3, "medium": 0.5, "high": 0.7}.get(risk_level, 0.7)
 
+        # Enhance confidence with entropy signals
+        entropy_confidence = entropy_signals.get("confidence", 0.0)
+        entropy_value = entropy_signals.get("entropy_value", 0.0)
+        routing_state = entropy_signals.get("routing_state", "NEUTRAL")
+        quantum_state = entropy_signals.get("quantum_state", "INERT")
+        
+        # Adjust confidence based on entropy
+        if entropy_confidence > 0.0:
+            # Weight entropy confidence with base confidence
+            enhanced_confidence = (confidence * 0.7) + (entropy_confidence * 0.3)
+            confidence = min(enhanced_confidence, 1.0)
+            
+            # Boost confidence for high entropy states
+            if routing_state == "ROUTE_ACTIVE" and entropy_value > 0.018:
+                confidence *= 1.2  # 20% boost for active routing
+            elif quantum_state == "ENTROPIC_INVERSION_ACTIVATED":
+                confidence *= 1.3  # 30% boost for quantum activation
+
         action = "hold"
         reason = "Insufficient signal strength or confidence"
 
         if confidence >= min_confidence:
             if signal_strength > 0.5:
                 action = "buy"
-                reason = "Strong buy signals (strength: {0:.2f}, confidence: {1:.2f})".format(
-                    signal_strength, confidence
+                reason = "Strong buy signals (strength: {0:.2f}, confidence: {1:.2f}, entropy: {2:.6f})".format(
+                    signal_strength, confidence, entropy_value
                 )
             elif signal_strength < -0.5:
                 action = "sell"
-                reason = "Strong sell signals (strength: {0:.2f}, confidence: {1:.2f})".format(
-                    signal_strength, confidence
+                reason = "Strong sell signals (strength: {0:.2f}, confidence: {1:.2f}, entropy: {2:.6f})".format(
+                    signal_strength, confidence, entropy_value
                 )
+
+        # Get capital allocation from entropy signals
+        capital_allocation = entropy_signals.get("capital_allocation", {})
+        position_size = capital_allocation.get("allocated_amount", risk_assessment.get("recommended_position_size", 0.1))
+        
+        # Adjust position size based on entropy state
+        if routing_state == "ROUTE_ACTIVE":
+            position_size *= 1.2  # Increase position size for active routing
+        elif routing_state == "ROUTE_PASSIVE":
+            position_size *= 0.8  # Decrease position size for passive routing
 
         return {
             "action": action,
             "reason": reason,
             "signal_strength": signal_strength,
             "confidence": confidence,
-            "position_size": risk_assessment.get("recommended_position_size", 0.1),
+            "position_size": position_size,
             "stop_loss_distance": risk_assessment.get("stop_loss_distance", 0.2),
             "take_profit_distance": risk_assessment.get("take_profit_distance", 0.4),
+            "entropy_signals": entropy_signals,
+            "entropy_enhanced": True,
         }
 
     def _log_trade_to_registry(
