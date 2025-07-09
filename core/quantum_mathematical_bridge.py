@@ -1,8 +1,17 @@
+"""
+Quantum Mathematical Bridge for Advanced Trading Operations.
+
+This module provides quantum computing-inspired mathematical operations for
+cryptocurrency trading, including quantum superposition, entanglement,
+and tensor operations for profit vectorization.
+"""
+
 import logging
-from typing import Dict, List, Tuple, Any
-from dataclasses import dataclass
-from concurrent.futures import ThreadPoolExecutor
 import threading
+from concurrent.futures import ThreadPoolExecutor
+from dataclasses import dataclass
+from typing import Any, Dict, List, Tuple
+
 from core.backend_math import get_backend
 
 xp = get_backend()
@@ -12,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class QuantumState:
-    """Quantum state representation for trading operations"""
+    """Quantum state representation for trading operations."""
 
     amplitude: complex
     phase: float
@@ -23,7 +32,7 @@ class QuantumState:
 
 @dataclass
 class QuantumTensor:
-    """Quantum tensor for distributed mathematical operations"""
+    """Quantum tensor for distributed mathematical operations."""
 
     data: xp.ndarray
     quantum_dimension: int
@@ -42,7 +51,10 @@ class QuantumMathematicalBridge:
     - Quantum Tensor Operations: T_quantum = ∑ᵢ αᵢ|ψᵢ⟩⊗|φᵢ⟩
     """
 
-    def __init__(self, quantum_dimension: int = 16, use_gpu: bool = True):
+    def __init__(
+        self, quantum_dimension: int = 16, use_gpu: bool = True
+    ) -> None:
+        """Initialize the quantum mathematical bridge."""
         self.quantum_dimension = quantum_dimension
         self.use_gpu = use_gpu
         self.quantum_states = {}
@@ -57,10 +69,13 @@ class QuantumMathematicalBridge:
         self.quantum_executor = ThreadPoolExecutor(max_workers=8)
         self.quantum_lock = threading.Lock()
 
-        logger.info(f"Quantum Mathematical Bridge initialized with dimension {quantum_dimension}")
+        logger.info(
+            f"Quantum Mathematical Bridge initialized with dimension "
+            f"{quantum_dimension}"
+        )
 
-    def _initialize_quantum_matrices(self):
-        """Initialize fundamental quantum matrices"""
+    def _initialize_quantum_matrices(self) -> None:
+        """Initialize fundamental quantum matrices."""
         # Pauli matrices
         self.pauli_x = xp.array([[0, 1], [1, 0]], dtype=complex)
         self.pauli_y = xp.array([[0, -1j], [1j, 0]], dtype=complex)
@@ -71,14 +86,15 @@ class QuantumMathematicalBridge:
 
         # CNOT gate
         self.cnot = xp.array(
-            [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 0, 1], [0, 0, 1, 0]], dtype=complex
+            [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 0, 1], [0, 0, 1, 0]], 
+            dtype=complex
         )
 
         # Quantum Fourier Transform matrix
         self.qft_matrix = self._generate_qft_matrix(self.quantum_dimension)
 
     def _generate_qft_matrix(self, n: int) -> xp.ndarray:
-        """Generate Quantum Fourier Transform matrix"""
+        """Generate Quantum Fourier Transform matrix."""
         omega = xp.exp(2j * xp.pi / n)
         qft = xp.zeros((n, n), dtype=complex)
 
@@ -88,7 +104,9 @@ class QuantumMathematicalBridge:
 
         return qft
 
-    def create_quantum_superposition(self, trading_signals: List[float]) -> QuantumState:
+    def create_quantum_superposition(
+        self, trading_signals: List[float]
+    ) -> QuantumState:
         """
         Create quantum superposition state from trading signals.
 
@@ -123,7 +141,10 @@ class QuantumMathematicalBridge:
                 superposition_components=superposition_components,
             )
 
-            logger.debug(f"Created quantum superposition with {len(trading_signals)} components")
+            logger.debug(
+                f"Created quantum superposition with {len(trading_signals)} "
+                f"components"
+            )
             return quantum_state
 
         except Exception as e:
@@ -144,8 +165,12 @@ class QuantumMathematicalBridge:
             bell_coefficient = 1 / xp.sqrt(2)
 
             # Entangle the states
-            entangled_amplitude1 = bell_coefficient * (state1.amplitude + state2.amplitude)
-            entangled_amplitude2 = bell_coefficient * (state1.amplitude - state2.amplitude)
+            entangled_amplitude1 = bell_coefficient * (
+                state1.amplitude + state2.amplitude
+            )
+            entangled_amplitude2 = bell_coefficient * (
+                state1.amplitude - state2.amplitude
+            )
 
             # Update entanglement registry
             entanglement_id = len(self.entanglement_registry)
@@ -201,35 +226,53 @@ class QuantumMathematicalBridge:
 
             # Apply quantum operation
             if operation_type == "qft":
-                result = self._apply_quantum_fourier_transform(quantum_tensor)
+                quantum_tensor = self._apply_quantum_fourier_transform(
+                    quantum_tensor
+                )
             elif operation_type == "hadamard":
-                result = self._apply_hadamard_transform(quantum_tensor)
+                quantum_tensor = self._apply_hadamard_transform(quantum_tensor)
             elif operation_type == "phase_shift":
-                result = self._apply_phase_shift(quantum_tensor)
+                quantum_tensor = self._apply_phase_shift(quantum_tensor)
             else:
                 raise ValueError(f"Unknown quantum operation: {operation_type}")
 
             # Calculate fidelity
-            result.fidelity = self._calculate_fidelity(quantum_tensor, result)
+            fidelity = self._calculate_fidelity(
+                QuantumTensor(
+                    data=tensor_data,
+                    quantum_dimension=self.quantum_dimension,
+                    entanglement_matrix=xp.eye(tensor_data.shape[0], dtype=complex),
+                    coherence_time=1.0,
+                    fidelity=1.0,
+                ),
+                quantum_tensor,
+            )
 
-            logger.debug(f"Applied quantum tensor operation: {operation_type}")
-            return result
+            quantum_tensor.fidelity = fidelity
+
+            logger.debug(
+                f"Applied quantum tensor operation {operation_type} with "
+                f"fidelity {fidelity:.6f}"
+            )
+            return quantum_tensor
 
         except Exception as e:
             logger.error(f"Error in quantum tensor operation: {e}")
             raise
 
-    def _apply_quantum_fourier_transform(self, tensor: QuantumTensor) -> QuantumTensor:
-        """Apply Quantum Fourier Transform to tensor"""
+    def _apply_quantum_fourier_transform(
+        self, tensor: QuantumTensor
+    ) -> QuantumTensor:
+        """Apply Quantum Fourier Transform to tensor."""
         try:
-            qft_matrix = xp.asarray(self.qft_matrix)
-            transformed_data = xp.dot(qft_matrix, tensor.data)
+            # Apply QFT matrix
+            transformed_data = xp.dot(self.qft_matrix, tensor.data)
 
             return QuantumTensor(
                 data=transformed_data,
                 quantum_dimension=tensor.quantum_dimension,
                 entanglement_matrix=tensor.entanglement_matrix,
-                coherence_time=tensor.coherence_time * 0.95,  # Slight decoherence
+                coherence_time=tensor.coherence_time * 0.97,
                 fidelity=tensor.fidelity,
             )
 
@@ -238,19 +281,13 @@ class QuantumMathematicalBridge:
             raise
 
     def _apply_hadamard_transform(self, tensor: QuantumTensor) -> QuantumTensor:
-        """Apply Hadamard transformation for superposition"""
+        """Apply Hadamard transform to tensor."""
         try:
-            # Apply Hadamard to create superposition
-            if tensor.data.shape[0] >= 2:
-                hadamard_expanded = xp.kron(self.hadamard, xp.eye(tensor.data.shape[0] // 2))
-                if hadamard_expanded.shape[0] > tensor.data.shape[0]:
-                    hadamard_expanded = hadamard_expanded[
-                        : tensor.data.shape[0], : tensor.data.shape[0]
-                    ]
-
-                transformed_data = xp.dot(hadamard_expanded, tensor.data)
-            else:
-                transformed_data = tensor.data
+            # Apply Hadamard gate
+            hadamard_matrix = xp.kron(
+                self.hadamard, xp.eye(tensor.data.shape[0] // 2, dtype=complex)
+            )
+            transformed_data = xp.dot(hadamard_matrix, tensor.data)
 
             return QuantumTensor(
                 data=transformed_data,
@@ -264,10 +301,14 @@ class QuantumMathematicalBridge:
             logger.error(f"Error applying Hadamard transform: {e}")
             raise
 
-    def _apply_phase_shift(self, tensor: QuantumTensor, phase: float = xp.pi / 4) -> QuantumTensor:
-        """Apply phase shift transformation"""
+    def _apply_phase_shift(
+        self, tensor: QuantumTensor, phase: float = xp.pi / 4
+    ) -> QuantumTensor:
+        """Apply phase shift transformation."""
         try:
-            phase_matrix = xp.diag(xp.exp(1j * phase * xp.arange(tensor.data.shape[0])))
+            phase_matrix = xp.diag(
+                xp.exp(1j * phase * xp.arange(tensor.data.shape[0]))
+            )
             transformed_data = xp.dot(phase_matrix, tensor.data)
 
             return QuantumTensor(
@@ -282,8 +323,10 @@ class QuantumMathematicalBridge:
             logger.error(f"Error applying phase shift: {e}")
             raise
 
-    def _calculate_fidelity(self, original: QuantumTensor, transformed: QuantumTensor) -> float:
-        """Calculate quantum fidelity between states"""
+    def _calculate_fidelity(
+        self, original: QuantumTensor, transformed: QuantumTensor
+    ) -> float:
+        """Calculate quantum fidelity between states."""
         try:
             # Quantum fidelity: F = |⟨ψ|φ⟩|²
             overlap = xp.vdot(original.data, transformed.data)
@@ -293,7 +336,9 @@ class QuantumMathematicalBridge:
             if norm_original == 0 or norm_transformed == 0:
                 return 0.0
 
-            fidelity = xp.abs(overlap) ** 2 / (norm_original**2 * norm_transformed**2)
+            fidelity = xp.abs(overlap) ** 2 / (
+                norm_original**2 * norm_transformed**2
+            )
             return float(fidelity)
 
         except Exception as e:
@@ -324,7 +369,9 @@ class QuantumMathematicalBridge:
             )
 
             # Calculate profit vector using quantum amplitudes
-            profit_amplitude = entangled_entry.amplitude * entangled_exit.amplitude.conjugate()
+            profit_amplitude = (
+                entangled_entry.amplitude * entangled_exit.amplitude.conjugate()
+            )
             profit_probability = xp.abs(profit_amplitude) ** 2
 
             # Quantum profit calculation
@@ -350,7 +397,10 @@ class QuantumMathematicalBridge:
                 "coherence_time": profit_tensor.coherence_time,
             }
 
-            logger.info(f"Quantum profit vectorization completed: {result['quantum_profit']:.6f}")
+            logger.info(
+                f"Quantum profit vectorization completed: "
+                f"{result['quantum_profit']:.6f}"
+            )
             return result
 
         except Exception as e:
@@ -402,7 +452,8 @@ class QuantumMathematicalBridge:
 
             # Check for amplitude normalization
             total_prob = xp.sum(
-                xp.abs(amp) ** 2 for amp in corrupted_state.superposition_components.values()
+                xp.abs(amp) ** 2 
+                for amp in corrupted_state.superposition_components.values()
             )
             if total_prob > 0:
                 correction_factor = 1.0 / xp.sqrt(total_prob)
@@ -432,8 +483,8 @@ class QuantumMathematicalBridge:
             logger.error(f"Error in quantum error correction: {e}")
             raise
 
-    def cleanup_quantum_resources(self):
-        """Clean up quantum computational resources"""
+    def cleanup_quantum_resources(self) -> None:
+        """Clean up quantum computational resources."""
         try:
             # Clear quantum states
             self.quantum_states.clear()
@@ -449,8 +500,8 @@ class QuantumMathematicalBridge:
         except Exception as e:
             logger.error(f"Error cleaning up quantum resources: {e}")
 
-    def __del__(self):
-        """Destructor to ensure resource cleanup"""
+    def __del__(self) -> None:
+        """Destructor to ensure resource cleanup."""
         try:
             self.cleanup_quantum_resources()
         except Exception:

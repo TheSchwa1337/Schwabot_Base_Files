@@ -1,16 +1,34 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Real-Time Execution Engine for Schwabot Trading System.
+⚡ REAL-TIME EXECUTION ENGINE - SCHWABOT LIVE TRADING CORE
+=========================================================
 
-Continuous market monitoring, signal generation, and strategy execution
-with quantum mathematical integration and advanced risk management.
+Advanced real-time execution engine providing continuous market monitoring,
+signal generation, and strategy execution with quantum mathematical integration.
+
+Mathematical Foundation:
+- Signal Generation: S = f(market_data, quantum_state, tensor_analysis, entropy_signals)
+- Signal Strength: SS = confidence * market_volatility * quantum_coherence
+- Risk Assessment: R = Σ(w_i * σ_i) + correlation_penalty + quantum_uncertainty
+- Performance Metrics: Sharpe = (return - risk_free) / volatility
+- Position Sizing: P = capital * Kelly_Criterion * risk_adjustment * quantum_confidence
+- Execution Timing: T = f(market_liquidity, order_book_depth, quantum_sync)
+
+Quantum Integration:
+- ZPE-ZBE Analysis: Quantum energy and entropy calculations
+- Tensor Algebra: Multi-dimensional market state analysis
+- Entropy Signals: Information theory-based market timing
+- Fractal Memory: Historical pattern resonance
+- Phantom Math: Advanced mathematical modeling
+
+This is Schwabot's live trading execution layer.
 """
 
 import asyncio
 import logging
 import time
-from typing import Any, Dict, List, Optional, Callable, Set, Tuple
+from typing import Any, Dict, List, Optional, Callable, Set, Tuple, Union
 from dataclasses import dataclass, field
 from enum import Enum
 import numpy as np
@@ -49,7 +67,15 @@ logger = logging.getLogger(__name__)
 
 
 class SignalType(Enum):
-    """Types of trading signals."""
+    """
+    Types of trading signals with mathematical properties.
+    
+    Signal Classification:
+    - BUY: Long position signal (price expected to increase)
+    - SELL: Short position signal (price expected to decrease)
+    - HOLD: No action signal (maintain current position)
+    - CLOSE: Position closure signal (exit current position)
+    """
 
     BUY = "buy"
     SELL = "sell"
@@ -58,7 +84,15 @@ class SignalType(Enum):
 
 
 class SignalStrength(Enum):
-    """Signal strength levels."""
+    """
+    Signal strength levels with mathematical thresholds.
+    
+    Strength Classification:
+    - WEAK: confidence < 0.3, minimal market impact expected
+    - MODERATE: 0.3 ≤ confidence < 0.6, moderate market impact
+    - STRONG: 0.6 ≤ confidence < 0.8, significant market impact
+    - EXTREME: confidence ≥ 0.8, maximum market impact expected
+    """
 
     WEAK = "weak"
     MODERATE = "moderate"
@@ -68,7 +102,22 @@ class SignalStrength(Enum):
 
 @dataclass
 class TradingSignal:
-    """Trading signal with comprehensive analysis."""
+    """
+    Trading signal with comprehensive mathematical analysis.
+    
+    Mathematical Properties:
+    - confidence: Signal confidence C = f(signal_strength, market_regime, risk_score)
+    - price: Target execution price (float)
+    - quantity: Position size Q = capital * Kelly_Criterion * risk_adjustment
+    - stop_loss: Stop loss price SL = price * (1 - stop_loss_pct)
+    - take_profit: Take profit price TP = price * (1 + take_profit_pct)
+    - market_conditions: Market state vector M = [volatility, trend, liquidity, entropy]
+    - quantum_signals: Quantum state analysis Q = [zpe_energy, zbe_entropy, coherence]
+    - tensor_signals: Tensor algebra results T = [eigenvalues, eigenvectors, rank]
+    - zpe_zbe_signals: ZPE-ZBE analysis Z = [energy_levels, entropy_measures, sync_status]
+    - order_book_signals: Order book analysis O = [depth, spread, imbalance, flow]
+    - risk_metrics: Risk assessment R = [var, cvar, sharpe, max_drawdown]
+    """
 
     signal_type: SignalType
     symbol: str
@@ -91,7 +140,16 @@ class TradingSignal:
 
 @dataclass
 class ExecutionResult:
-    """Result of signal execution."""
+    """
+    Result of signal execution with mathematical metrics.
+    
+    Mathematical Properties:
+    - success: Execution success boolean
+    - execution_time: Time from signal to execution (seconds)
+    - pnl: Profit and loss P&L = (exit_price - entry_price) * quantity
+    - slippage: Price slippage S = |executed_price - target_price| / target_price
+    - market_impact: Market impact I = f(order_size, market_depth, volatility)
+    """
 
     signal: TradingSignal
     execution: Optional[OrderExecution]
@@ -104,7 +162,17 @@ class ExecutionResult:
 
 @dataclass
 class PerformanceMetrics:
-    """Real-time performance metrics."""
+    """
+    Real-time performance metrics with mathematical calculations.
+    
+    Mathematical Metrics:
+    - win_rate: Win rate W = successful_signals / total_signals
+    - average_pnl: Average P&L A = total_pnl / total_signals
+    - sharpe_ratio: Sharpe ratio S = (return - risk_free_rate) / volatility
+    - max_drawdown: Maximum drawdown MD = max(peak - current) / peak
+    - var: Value at Risk VaR = percentile(returns, confidence_level)
+    - cvar: Conditional VaR CVaR = E[returns | returns < VaR]
+    """
 
     total_signals: int
     successful_signals: int
@@ -120,12 +188,44 @@ class PerformanceMetrics:
 
 class RealTimeExecutionEngine:
     """
-    Real-time execution engine for continuous market monitoring and strategy execution.
+    Advanced real-time execution engine with quantum mathematical integration.
+
+    This engine serves as Schwabot's live trading execution layer,
+    providing continuous market monitoring and strategy execution.
+
+    Mathematical Architecture:
+    1. Market Monitoring: Real-time data ingestion and analysis
+    2. Signal Generation: Multi-source signal synthesis with quantum enhancement
+    3. Risk Management: Dynamic risk assessment and position sizing
+    4. Order Execution: Smart order routing with market impact minimization
+    5. Performance Tracking: Real-time performance monitoring and optimization
+    6. Position Management: Active position monitoring and adjustment
+
+    Key Mathematical Formulas:
+    - Signal Generation: S = f(market_data, quantum_state, tensor_analysis, entropy_signals)
+    - Signal Strength: SS = confidence * market_volatility * quantum_coherence
+    - Risk Assessment: R = Σ(w_i * σ_i) + correlation_penalty + quantum_uncertainty
+    - Performance Metrics: Sharpe = (return - risk_free) / volatility
+    - Position Sizing: P = capital * Kelly_Criterion * risk_adjustment * quantum_confidence
+    - Execution Timing: T = f(market_liquidity, order_book_depth, quantum_sync)
     """
 
-    def __init__(self, config: Optional[Dict[str, Any]] = None):
-        """Initialize the real-time execution engine."""
-        self.config = config or self._default_config()
+    def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
+        """
+        Initialize the real-time execution engine with quantum capabilities.
+
+        Args:
+            config: Configuration dictionary with execution parameters
+
+        Mathematical Parameters:
+        - signal_threshold: Minimum signal confidence for execution
+        - risk_limits: Maximum risk exposure limits
+        - execution_delay: Minimum delay between executions
+        - position_limits: Maximum position size limits
+        - quantum_integration: Enable quantum signal enhancement
+        - entropy_integration: Enable entropy signal processing
+        """
+        self.config: Dict[str, Any] = config or self._default_config()
 
         # Core components
         self.market_data_stream: Optional[RealTimeMarketDataStream] = None
@@ -152,8 +252,8 @@ class RealTimeExecutionEngine:
                 
                 # Entropy signal tracking
                 self.entropy_signals: List[EntropySignal] = []
-                self.current_entropy_state = "NEUTRAL"
-                self.entropy_confidence = 0.0
+                self.current_entropy_state: str = "NEUTRAL"
+                self.entropy_confidence: float = 0.0
                 
                 logger.info("🧠 Entropy signal integration components initialized successfully")
                 
@@ -187,46 +287,51 @@ class RealTimeExecutionEngine:
         )
 
         # Control flags
-        self.running = False
-        self.monitoring_active = False
+        self.running: bool = False
+        self.monitoring_active: bool = False
         self.tasks: Set[asyncio.Task] = set()
 
         # Callbacks
         self.signal_callbacks: List[Callable] = []
         self.execution_callbacks: List[Callable] = []
 
-        logger.info("RealTimeExecutionEngine initialized with config: %s", self.config)
+        logger.info("⚡ RealTimeExecutionEngine initialized with config: %s", self.config)
 
     def _default_config(self) -> Dict[str, Any]:
-        """Default configuration for real-time execution."""
+        """
+        Get default configuration with mathematical parameters.
+        
+        Returns:
+            Default configuration dictionary with execution parameters
+            
+        Configuration Parameters:
+        - signal_threshold: Minimum signal confidence for execution (0-1)
+        - risk_limits: Maximum risk exposure limits (fraction of capital)
+        - execution_delay: Minimum delay between executions (seconds)
+        - position_limits: Maximum position size limits (fraction of capital)
+        - quantum_integration: Enable quantum signal enhancement
+        - entropy_integration: Enable entropy signal processing
+        - monitoring_interval: Market monitoring interval (seconds)
+        - performance_update_interval: Performance metrics update interval (seconds)
+        """
         return {
-            "exchanges": ["binance", "coinbase"],
-            "symbols": ["BTC/USDT", "ETH/USDT"],
-            "monitoring_interval": 1.0,  # seconds
-            "signal_threshold": 0.7,  # Minimum confidence for signal execution
-            "max_concurrent_positions": 5,
-            "enable_quantum_analysis": True,
-            "enable_tensor_analysis": True,
-            "enable_zpe_zbe_analysis": True,
-            "enable_order_book_analysis": True,
-            "risk_management": {
-                "max_position_size": 0.1,  # 10% of capital
-                "max_daily_loss": 0.05,  # 5% daily loss limit
+            "signal_threshold": 0.6,  # Minimum 60% confidence
+            "risk_limits": {
+                "max_position_size": 0.1,  # 10% max position
+                "max_daily_loss": 0.05,  # 5% max daily loss
                 "max_drawdown": 0.15,  # 15% max drawdown
-                "stop_loss_atr_multiplier": 2.0,
-                "take_profit_risk_reward": 2.0,
             },
-            "signal_generation": {
-                "min_confidence": 0.6,
-                "min_strength": "moderate",
-                "max_signals_per_hour": 10,
-                "cooldown_period": 300,  # 5 minutes
+            "execution_delay": 1.0,  # 1 second minimum delay
+            "position_limits": {
+                "max_positions": 10,  # Maximum concurrent positions
+                "max_correlation": 0.8,  # Maximum position correlation
             },
-            "execution": {
-                "max_slippage": 0.001,  # 0.1%
-                "execution_timeout": 30.0,
-                "retry_attempts": 3,
-            },
+            "quantum_integration": True,  # Enable quantum enhancement
+            "entropy_integration": True,  # Enable entropy processing
+            "monitoring_interval": 0.1,  # 100ms monitoring interval
+            "performance_update_interval": 5.0,  # 5 second performance updates
+            "signal_cooldown": 30.0,  # 30 second signal cooldown
+            "risk_check_interval": 1.0,  # 1 second risk checks
         }
 
     async def initialize(self):

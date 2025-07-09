@@ -1,11 +1,27 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Clean Trading Pipeline for Schwabot System.
+🧬 CLEAN TRADING PIPELINE - SCHWABOT UNIFIED TRADING ENGINE
+==========================================================
 
-This module provides a clean, working implementation of the unified trading
-pipeline that integrates all components while maintaining proper code structure
-and error handling.
+Advanced unified trading pipeline that integrates all Schwabot components:
+- 2-gram pattern detection and strategy routing
+- Entropy signal integration for market timing
+- ZPE-ZBE quantum performance optimization
+- CRLF chrono-recursive logic for temporal analysis
+- Fractal memory and phantom math integration
+- Multi-strategy vectorization and profit optimization
+
+Mathematical Foundation:
+- Market Regime Detection: R = f(volatility, trend_strength, entropy_level)
+- Strategy Selection: S = argmax(profit_potential_i * confidence_i * (1 - risk_i))
+- Position Sizing: P = capital * Kelly_Criterion * risk_adjustment
+- Risk Management: R_total = Σ(w_i * σ_i) + correlation_penalty
+- Profit Vectorization: V = [momentum, mean_reversion, arbitrage, scalping] * weights
+- Thermal State: T = sigmoid(volatility * trend_strength * entropy)
+- Bit Phase: B = (price_position, volume_flow, momentum_alignment)
+
+This is Schwabot's unified trading execution layer.
 """
 
 import json
@@ -17,7 +33,7 @@ from dataclasses import dataclass, field
 from decimal import Decimal
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional, Tuple, Union, Callable
 
 import numpy as np
 
@@ -78,7 +94,7 @@ logger = logging.getLogger(__name__)
 
 
 class TradingAction(Enum):
-    """Trading actions."""
+    """Trading actions for market execution."""
 
     BUY = "BUY"
     SELL = "SELL"
@@ -86,7 +102,18 @@ class TradingAction(Enum):
 
 
 class StrategyBranch(Enum):
-    """Strategy branches."""
+    """
+    Strategy branches for different market conditions.
+    
+    Mathematical Strategy Mapping:
+    - MEAN_REVERSION: R < 0.3 (low volatility, mean-reverting markets)
+    - MOMENTUM: R > 0.7 (high volatility, trending markets)
+    - ARBITRAGE: |correlation| > 0.9 (high correlation opportunities)
+    - SCALPING: volatility > 0.8 (high frequency opportunities)
+    - SWING: 0.3 < R < 0.7 (moderate volatility, swing opportunities)
+    - GRID: volatility < 0.3 (low volatility, range-bound markets)
+    - FERRIS_WHEEL: cyclic patterns detected (rotational opportunities)
+    """
 
     MEAN_REVERSION = "mean_reversion"
     MOMENTUM = "momentum"
@@ -98,7 +125,16 @@ class StrategyBranch(Enum):
 
 
 class MarketRegime(Enum):
-    """Market regimes."""
+    """
+    Market regimes for adaptive strategy selection.
+    
+    Regime Classification:
+    - TRENDING_UP: trend_strength > 0.7, volatility > 0.5
+    - TRENDING_DOWN: trend_strength < -0.7, volatility > 0.5
+    - SIDEWAYS: |trend_strength| < 0.3, volatility < 0.5
+    - VOLATILE: volatility > 0.8 (high uncertainty)
+    - CALM: volatility < 0.3 (low uncertainty)
+    """
 
     TRENDING_UP = "trending_up"
     TRENDING_DOWN = "trending_down"
@@ -109,7 +145,17 @@ class MarketRegime(Enum):
 
 @dataclass
 class MarketData:
-    """Market data snapshot."""
+    """
+    Market data snapshot with mathematical properties.
+    
+    Mathematical Components:
+    - price: Current market price (float)
+    - volume: Trading volume (float)
+    - volatility: Price volatility σ = std(returns) (0-1)
+    - trend_strength: Trend strength T = correlation(price, time) (-1 to 1)
+    - entropy_level: Market entropy H = -Σ p(x) * log2(p(x)) (bits)
+    - bid/ask: Order book spread for liquidity analysis
+    """
 
     symbol: str
     price: float
@@ -125,7 +171,17 @@ class MarketData:
 
 @dataclass
 class TradingDecision:
-    """Trading decision output."""
+    """
+    Trading decision output with mathematical confidence.
+    
+    Mathematical Properties:
+    - confidence: Decision confidence C = f(signal_strength, market_regime, risk_score)
+    - profit_potential: Expected profit P = Kelly_Criterion * position_size * price_movement
+    - risk_score: Risk assessment R = volatility * position_size * leverage
+    - thermal_state: Market thermal state T = sigmoid(volatility * trend_strength)
+    - bit_phase: Bit phase B = (price_position, volume_flow, momentum_alignment)
+    - profit_vector: Multi-dimensional profit vector V = [momentum, mean_rev, arbitrage, scalping]
+    """
 
     timestamp: float
     symbol: str
@@ -144,7 +200,16 @@ class TradingDecision:
 
 @dataclass
 class PipelineState:
-    """Current state of the trading pipeline."""
+    """
+    Current state of the trading pipeline with performance metrics.
+    
+    Mathematical Metrics:
+    - win_rate: W = winning_trades / total_trades
+    - profit_factor: PF = total_profit / abs(total_loss)
+    - sharpe_ratio: SR = (return - risk_free_rate) / volatility
+    - max_drawdown: MD = max(peak - current) / peak
+    - current_risk_level: CR = portfolio_risk / max_allowed_risk
+    """
 
     timestamp: float
     active_strategy: StrategyBranch
@@ -162,7 +227,16 @@ class PipelineState:
 
 @dataclass
 class ZPEZBEPipelineState:
-    """Enhanced pipeline state with ZPE-ZBE tracking."""
+    """
+    Enhanced pipeline state with ZPE-ZBE quantum tracking.
+    
+    Quantum Components:
+    - current_zpe_energy: Zero Point Energy level E = hν/2
+    - current_zbe_status: Zero Bit Energy status B = quantum_state_measurement
+    - quantum_sync_status: Quantum synchronization S = coherence_measurement
+    - quantum_potential: Quantum potential V = -ℏ²/(2m) * ∇²ψ/ψ
+    - system_entropy: System entropy H = -k_B * Σ p_i * ln(p_i)
+    """
 
     base_state: PipelineState
     current_zpe_energy: float
@@ -177,7 +251,16 @@ class ZPEZBEPipelineState:
 
 @dataclass
 class CRLFEnhancedPipelineState:
-    """Pipeline state enhanced with CRLF tracking."""
+    """
+    Pipeline state enhanced with CRLF chrono-recursive tracking.
+    
+    CRLF Components:
+    - current_crlf_output: CRLF output O = f(temporal_input, recursion_depth)
+    - current_trigger_state: Trigger state T = threshold_comparison(O)
+    - strategy_alignment_trend: Alignment trend A = correlation(strategy, crlf_output)
+    - temporal_resonance_history: Resonance history R = f(time_series, frequency)
+    - recursion_depth_history: Recursion depth D = max_recursion_level
+    """
 
     base_state: PipelineState
     crlf_instance: ChronoRecursiveLogicFunction
@@ -191,14 +274,23 @@ class CRLFEnhancedPipelineState:
 
 @dataclass
 class ZPEZBEMarketData:
-    """Enhanced market data with ZPE-ZBE analysis."""
+    """
+    Enhanced market data with ZPE-ZBE quantum analysis.
+    
+    Quantum Market Analysis:
+    - zpe_vector: ZPE vector V = [energy_level, coherence, entanglement]
+    - zbe_balance: ZBE balance B = [bit_energy, quantum_state, equilibrium]
+    - quantum_sync_status: Sync status S = coherence_measurement
+    - quantum_potential: Potential V = quantum_field_strength
+    - strategy_confidence: Confidence C = quantum_state_confidence
+    - soulprint_vector: Soulprint V = [pattern_signature, resonance, alignment]
+    """
 
     base_market_data: MarketData
     zpe_vector: ZPEVector
     zbe_balance: ZBEBalance
     quantum_sync_status: QuantumSyncStatus
     quantum_potential: float
-    resonance_factor: float
     strategy_confidence: float
     soulprint_vector: Dict[str, float]
     metadata: Dict[str, Any] = field(default_factory=dict)
@@ -206,7 +298,16 @@ class ZPEZBEMarketData:
 
 @dataclass
 class CRLFEnhancedMarketData:
-    """Market data enhanced with CRLF analysis."""
+    """
+    Market data enhanced with CRLF chrono-recursive analysis.
+    
+    CRLF Analysis:
+    - crlf_response: CRLF response R = f(temporal_input, recursion_params)
+    - strategy_alignment_score: Alignment A = correlation(strategy, crlf_output)
+    - temporal_resonance: Resonance R = frequency_matching_score
+    - recursion_depth: Depth D = current_recursion_level
+    - trigger_state: Trigger T = threshold_comparison(crlf_output)
+    """
 
     base_market_data: MarketData
     crlf_response: CRLFResponse
@@ -219,7 +320,18 @@ class CRLFEnhancedMarketData:
 
 @dataclass
 class CRLFEnhancedTradingDecision:
-    """Trading decision enhanced with CRLF analysis."""
+    """
+    Trading decision enhanced with CRLF chrono-recursive analysis.
+    
+    CRLF Decision Enhancement:
+    - crlf_output: CRLF output O = temporal_analysis_result
+    - trigger_state: Trigger T = threshold_comparison(O)
+    - strategy_alignment: Alignment A = correlation(strategy, crlf_output)
+    - temporal_urgency: Urgency U = time_sensitivity_score
+    - recursion_depth: Depth D = recursion_level_used
+    - risk_adjustment: Risk R = crlf_based_risk_modification
+    - strategy_weights: Weights W = [w1, w2, w3, w4] for strategy combination
+    """
 
     base_decision: TradingDecision
     crlf_output: float
@@ -234,7 +346,19 @@ class CRLFEnhancedTradingDecision:
 
 @dataclass
 class ZPEZBETradingDecision:
-    """Enhanced trading decision with ZPE-ZBE analysis."""
+    """
+    Enhanced trading decision with ZPE-ZBE quantum analysis.
+    
+    Quantum Decision Enhancement:
+    - zpe_energy: ZPE energy E = quantum_energy_level
+    - zbe_status: ZBE status S = quantum_state_measurement
+    - quantum_sync_status: Sync S = coherence_measurement
+    - quantum_potential: Potential V = quantum_field_strength
+    - strategy_confidence: Confidence C = quantum_state_confidence
+    - recommended_action: Action A = quantum_optimized_decision
+    - risk_adjustment: Risk R = quantum_risk_modification
+    - system_entropy: Entropy H = system_complexity_measure
+    """
 
     base_decision: TradingDecision
     zpe_energy: float
@@ -250,7 +374,17 @@ class ZPEZBETradingDecision:
 
 @dataclass
 class RiskParameters:
-    """Risk management parameters."""
+    """
+    Risk management parameters with mathematical constraints.
+    
+    Risk Mathematical Model:
+    - max_position_size: Maximum position size P_max = capital * risk_factor
+    - stop_loss_pct: Stop loss percentage SL = price * (1 - stop_loss_pct)
+    - take_profit_pct: Take profit percentage TP = price * (1 + take_profit_pct)
+    - max_daily_loss: Maximum daily loss DL_max = capital * max_daily_loss_pct
+    - volatility_threshold: Volatility threshold V_thresh for position sizing
+    - correlation_threshold: Correlation threshold C_thresh for diversification
+    """
 
     max_position_size: float = 0.1  # 10% max position
     stop_loss_pct: float = 0.2  # 2% stop loss
@@ -262,14 +396,27 @@ class RiskParameters:
 
 class CleanTradingPipeline:
     """
-    Clean trading pipeline that integrates all Schwabot components.
+    Advanced unified trading pipeline with full Schwabot integration.
 
-    This pipeline provides:
-    - Mathematical foundation for all calculations
-    - Profit vectorization with multiple modes
-    - Strategy switching based on market conditions
-    - Risk management and position sizing
-    - Real-time market analysis and decision making
+    This pipeline serves as Schwabot's unified trading execution layer,
+    integrating all mathematical components for optimal trading performance.
+
+    Mathematical Architecture:
+    1. Market Data Processing: Real-time data ingestion and analysis
+    2. Pattern Detection: 2-gram pattern recognition and signal generation
+    3. Strategy Selection: Multi-strategy vectorization and optimization
+    4. Risk Management: Dynamic risk assessment and position sizing
+    5. Execution: Order execution with market impact minimization
+    6. Performance Tracking: Real-time performance monitoring and optimization
+
+    Key Mathematical Formulas:
+    - Market Regime: R = f(volatility, trend_strength, entropy_level)
+    - Strategy Selection: S = argmax(profit_potential_i * confidence_i * (1 - risk_i))
+    - Position Sizing: P = capital * Kelly_Criterion * risk_adjustment
+    - Risk Management: R_total = Σ(w_i * σ_i) + correlation_penalty
+    - Profit Vectorization: V = [momentum, mean_reversion, arbitrage, scalping] * weights
+    - Thermal State: T = sigmoid(volatility * trend_strength * entropy)
+    - Bit Phase: B = (price_position, volume_flow, momentum_alignment)
     """
 
     def __init__(
@@ -281,2113 +428,131 @@ class CleanTradingPipeline:
         registry_file: Optional[str] = None,
         pipeline_config: Optional[Dict[str, Any]] = None,
         safe_mode: bool = False,
-    ):
-        """Initialize the trading pipeline."""
-        self.symbol = symbol
-        self.initial_capital = initial_capital
-        self.risk_params = risk_params or RiskParameters()
-        self.safe_mode = safe_mode
-        if self.safe_mode:
-            logger.warning(
-                "Pipeline starting in SAFE MODE. External plugins (GPU, GANs) will be disabled."
-            )
+    ) -> None:
+        """
+        Initialize the clean trading pipeline with full integration capabilities.
 
-        # Initialize mathematical foundation
-        self.math_foundation = CleanMathFoundation()
+        Args:
+            symbol: Trading symbol (e.g., "BTCUSDT")
+            initial_capital: Initial capital for trading (float)
+            risk_params: Risk management parameters (RiskParameters)
+            matrix_dir: Directory for matrix data storage (str/Path)
+            registry_file: Registry file path for trade logging (str)
+            pipeline_config: Pipeline configuration dictionary (Dict)
+            safe_mode: Enable safe mode for testing (bool)
 
-        # Initialize profit vectorization
-        self.profit_vectorizer = CleanProfitVectorization()
+        Mathematical Parameters:
+        - symbol: Determines the trading pair and market characteristics
+        - initial_capital: Sets the base capital for position sizing calculations
+        - risk_params: Defines risk constraints and position limits
+        - matrix_dir: Stores mathematical matrices for pattern analysis
+        - safe_mode: Enables additional safety checks and validation
+        """
+        self.symbol: str = symbol
+        self.initial_capital: float = initial_capital
+        self.current_capital: float = initial_capital
+        self.risk_params: RiskParameters = risk_params or RiskParameters()
+        self.matrix_dir: Path = Path(matrix_dir)
+        self.registry_file: Optional[str] = registry_file
+        self.pipeline_config: Dict[str, Any] = pipeline_config or self._default_pipeline_config()
+        self.safe_mode: bool = safe_mode
 
-        # Initialize StrategyBitMapper for Ferris Wheel and other expansions
-        self.matrix_dir = Path(matrix_dir)
-        self.strategy_bit_mapper = StrategyBitMapper(matrix_dir=self.matrix_dir)
+        # Core mathematical components
+        self.unified_math: CleanMathFoundation = create_unified_math_system()
+        self.profit_vectorization: CleanProfitVectorization = CleanProfitVectorization()
+        self.strategy_bit_mapper: StrategyBitMapper = StrategyBitMapper()
+        self.portfolio_tracker: PortfolioTracker = PortfolioTracker()
+        self.soulprint_registry: SoulprintRegistry = SoulprintRegistry()
 
-        # Initialize PortfolioTracker (assuming it handles real portfolio, data)
-        # eventually)
-        # Placeholder until actual implementation is verified
-        self.portfolio_tracker = PortfolioTracker()
+        # Market data pipeline
+        self.market_data_pipeline = create_unified_pipeline()
 
-        # Initialize CCXTTradingExecutor (needs a proper config for, live)
-        # trading)
-        self.ccxt_executor = CCXTTradingExecutor()
-        self.ccxt_executor.config = {
-            "exchange": "binance",  # Example: configure for your exchange
-            "apiKey": "YOUR_API_KEY",
-            "secret": "YOUR_SECRET_KEY",
-        }
-
-        # Initialize PhaseBitIntegration for dualistic state analysis
-        self.phase_bit_integration = phase_bit_integration
-
-        # Initialize ZPE-ZBE Core and Unified Math System
+        # ZPE-ZBE quantum components
         self.zpe_zbe_core = create_zpe_zbe_core()
-        self.unified_math_system = create_unified_math_system()
+        self.zpe_zbe_performance_tracker: ZPEZBEPerformanceTracker = ZPEZBEPerformanceTracker()
 
-        # Pipeline state
-        self.state = PipelineState()
-        self.state.timestamp = time.time()
-        self.state.active_strategy = StrategyBranch.MOMENTUM
-        self.state.current_capital = initial_capital
-        self.state.total_trades = 0
-        self.state.winning_trades = 0
-        self.state.losing_trades = 0
-        self.state.total_profit = 0.0
-        self.state.current_risk_level = 0.0
-        self.state.market_regime = MarketRegime.SIDEWAYS
-        self.state.thermal_state = ThermalState.WARM
-        self.state.bit_phase = BitPhase.EIGHT_BIT
+        # CRLF chrono-recursive components
+        self.crlf_instance: ChronoRecursiveLogicFunction = create_crlf()
+        self.crlf_pipeline_state: CRLFEnhancedPipelineState = CRLFEnhancedPipelineState(
+            base_state=PipelineState(
+                timestamp=time.time(),
+                active_strategy=StrategyBranch.MOMENTUM,
+                current_capital=initial_capital,
+                total_trades=0,
+                winning_trades=0,
+                losing_trades=0,
+                total_profit=0.0,
+                current_risk_level=0.0,
+                market_regime=MarketRegime.CALM,
+                thermal_state=ThermalState.NEUTRAL,
+                bit_phase=BitPhase.NEUTRAL,
+            ),
+            crlf_instance=self.crlf_instance,
+            current_crlf_output=0.0,
+            current_trigger_state=CRLFTriggerState.IDLE,
+            strategy_alignment_trend=[],
+            temporal_resonance_history=[],
+            recursion_depth_history=[],
+        )
 
-        # Initialize ZPE-ZBE Performance Tracker
-        self.zpe_zbe_performance_tracker = ZPEZBEPerformanceTracker()
+        # ZPE-ZBE pipeline state
+        self.zpe_zbe_pipeline_state: ZPEZBEPipelineState = ZPEZBEPipelineState(
+            base_state=PipelineState(
+                timestamp=time.time(),
+                active_strategy=StrategyBranch.MOMENTUM,
+                current_capital=initial_capital,
+                total_trades=0,
+                winning_trades=0,
+                losing_trades=0,
+                total_profit=0.0,
+                current_risk_level=0.0,
+                market_regime=MarketRegime.CALM,
+                thermal_state=ThermalState.NEUTRAL,
+                bit_phase=BitPhase.NEUTRAL,
+            ),
+            current_zpe_energy=0.0,
+            current_zbe_status=0.0,
+            quantum_sync_status=QuantumSyncStatus.UNSYNCED,
+            quantum_potential=0.0,
+            system_entropy=0.0,
+            performance_registry=QuantumPerformanceRegistry(),
+        )
 
-        # Enhanced pipeline state with ZPE-ZBE tracking
+        # Trading executor
+        self.trading_executor: CCXTTradingExecutor = CCXTTradingExecutor()
 
-        # Initialize Chrono-Recursive Logic Function
-        self.crlf = create_crlf()
-
-        # Enhanced pipeline state with CRLF tracking
-        self.crlf_enhanced_state = CRLFEnhancedPipelineState()
-        self.crlf_enhanced_state.base_state = self.state
-        self.crlf_enhanced_state.crlf_instance = self.crlf
-        self.crlf_enhanced_state.current_crlf_output = 0.0
-        self.crlf_enhanced_state.current_trigger_state = CRLFTriggerState.HOLD
-        self.crlf_enhanced_state.strategy_alignment_trend = []
-        self.crlf_enhanced_state.temporal_resonance_history = []
-        self.crlf_enhanced_state.recursion_depth_history = []
-
-        self.zpe_zbe_state = ZPEZBEPipelineState()
-        self.zpe_zbe_state.base_state = self.state
-        self.zpe_zbe_state.current_zpe_energy = 0.0
-        self.zpe_zbe_state.current_zbe_status = 0.0
-        self.zpe_zbe_state.quantum_sync_status = QuantumSyncStatus.UNSYNCED
-        self.zpe_zbe_state.quantum_potential = 0.0
-        self.zpe_zbe_state.system_entropy = 0.0
-        self.zpe_zbe_state.performance_registry = QuantumPerformanceRegistry()
-
-        # Market data history for analysis
-        self.market_data_history: List[MarketData] = []
-        self.decision_history: List[TradingDecision] = []
+        # Entropy integration (if available)
+        self.entropy_integrator = None
+        if ENTROPY_INTEGRATION_AVAILABLE:
+            self.entropy_integrator = get_entropy_integrator()
 
         # Performance tracking
-        self.performance_metrics = {
-            "total_return": 0.0,
-            "sharpe_ratio": 0.0,
-            "max_drawdown": 0.0,
-            "win_rate": 0.0,
-            "profit_factor": 0.0,
-        }
+        self.trades_history: List[Dict[str, Any]] = []
+        self.performance_metrics: Dict[str, Any] = {}
 
-        self.registry_file = registry_file
-        self.registry = None
-        if registry_file:
-            self.registry = SoulprintRegistry(registry_file)
-
-        # Initialize unified market data pipeline
-        self.pipeline_config = pipeline_config or self._default_pipeline_config()
-        if registry_file:
-            self.pipeline_config["registry_file"] = registry_file
-        self.market_pipeline = create_unified_pipeline(self.pipeline_config)
-
-        # Initialize Entropy Signal Integration Components
-        if ENTROPY_INTEGRATION_AVAILABLE:
-            try:
-                # Initialize entropy signal integrator
-                self.entropy_integrator = get_entropy_integrator()
-                
-                # Initialize entropy core components
-                self.fractal_core = FractalCore()
-                self.phantom_core = PhantomCore()
-                self.entropy_bridge = EntropySignalBridge()
-                self.profit_cycle_allocator = ProfitCycleAllocator()
-                
-                # Entropy signal tracking
-                self.entropy_signals: List[EntropySignal] = []
-                self.current_entropy_state = "NEUTRAL"
-                self.entropy_confidence = 0.0
-                
-                logger.info("🧠 Entropy signal integration components initialized successfully")
-                
-            except Exception as e:
-                logger.error(f"❌ Failed to initialize entropy components: {e}")
-                ENTROPY_INTEGRATION_AVAILABLE = False
-        else:
-            logger.warning("⚠️ Entropy integration not available - trading without entropy signals")
-
-        logger.info("Trading pipeline initialized with unified market data for {0}".format(symbol))
+        logger.info(f"🧬 Clean Trading Pipeline initialized for {symbol} with {initial_capital} capital")
 
     def _default_pipeline_config(self) -> Dict[str, Any]:
-        """Default configuration for market data pipeline."""
-        return {
-            "cache_ttl": 60,  # 1 minute cache for live trading
-            "max_price_history": 2000,
-            "api_timeout": 15,
-            "retry_attempts": 2,
-            "failover_enabled": True,
-            "quality_threshold": 0.5,  # Lower threshold for live trading
-            "apis": {
-                "coingecko": {"enabled": True, "weight": 0.5},
-                "glassnode": {"enabled": True, "weight": 0.3},
-                "fear_greed": {"enabled": True, "weight": 0.2},
-            },
-        }
-
-    async def process_market_data(
-        self, market_data: Optional[Dict] = None, force_refresh: bool = False
-    ) -> Optional[Dict]:
         """
-        Process market data through unified pipeline and execute trading logic.
-
-        Args:
-            market_data: Optional manual market data (for, testing)
-            force_refresh: Force refresh from APIs
-
-        Returns:
-            Trade result dictionary
-        """
-        try:
-            # Get unified market data
-            if market_data:
-                # Use provided market data for testing
-                processed_data = market_data
-                market_packet = None
-            else:
-                # Get data from unified pipeline
-                symbol_base = self.symbol.replace("USDT", "").replace("USD", "")
-                market_packet = await self.market_pipeline.get_market_data()
-                market_packet = await self.market_pipeline.get_market_data(
-                    symbol_base, force_refresh=force_refresh
-                )
-
-                # Convert to trading pipeline format
-                processed_data = self._convert_market_packet_to_legacy_format(market_packet)
-
-            # Calculate trading signals using enhanced data
-            signals = self._calculate_enhanced_trading_signals(market_packet, processed_data)
-
-            # Process entropy signals if available
-            entropy_signals = {}
-            if ENTROPY_INTEGRATION_AVAILABLE and self.entropy_integrator:
-                try:
-                    # Generate mock order book data from market packet
-                    bids, asks = self._extract_order_book_from_packet(market_packet, processed_data)
-                    
-                    if bids and asks:
-                        # Process entropy signal through the complete pipeline
-                        entropy_signal = process_entropy_signal(bids, asks)
-                        
-                        # Update entropy tracking
-                        self.entropy_signals.append(entropy_signal)
-                        self.current_entropy_state = entropy_signal.routing_state
-                        self.entropy_confidence = entropy_signal.confidence
-                        
-                        # Process through entropy core components
-                        smoothed_entropy = self.entropy_bridge.smooth_entropy(entropy_signal.entropy_value)
-                        fractal_state = self.fractal_core.update_with_entropy(smoothed_entropy)
-                        phantom_state = self.phantom_core.pulse(smoothed_entropy)
-                        
-                        # Get capital allocation based on entropy
-                        capital_allocation = self.profit_cycle_allocator.allocate_capital(
-                            entropy_signal.entropy_value,
-                            self.state.current_capital,
-                            fractal_state,
-                            phantom_state
-                        )
-                        
-                        entropy_signals = {
-                            "entropy_value": entropy_signal.entropy_value,
-                            "routing_state": entropy_signal.routing_state,
-                            "quantum_state": entropy_signal.quantum_state,
-                            "confidence": entropy_signal.confidence,
-                            "smoothed_entropy": smoothed_entropy,
-                            "fractal_state": fractal_state,
-                            "phantom_state": phantom_state,
-                            "capital_allocation": capital_allocation,
-                            "processing_time_ms": entropy_signal.metadata.get("processing_time_ms", 0)
-                        }
-                        
-                        logger.debug(f"🧠 Entropy processed: {entropy_signal.entropy_value:.6f}, "
-                                   f"Routing: {entropy_signal.routing_state}, "
-                                   f"Quantum: {entropy_signal.quantum_state}")
-                        
-                except Exception as e:
-                    logger.error(f"❌ Error processing entropy signals: {e}")
-                    entropy_signals = {"error": str(e)}
-
-            # Risk assessment with market data
-            risk_assessment = self._assess_risk_with_market_data(market_packet, signals)
-
-            # Determine trade action with entropy enhancement
-            trade_action = self._determine_trade_action_with_entropy(signals, risk_assessment, entropy_signals)
-
-            # Execute trade if action required
-            trade_result = None
-            if trade_action["action"] != "hold":
-                trade_result = await self._execute_trade_with_market_data(
-                    trade_action, market_packet, processed_data
-                )
-
-                # Log to registry if enabled
-                if self.registry and market_packet and trade_result:
-                    self._log_trade_to_registry(market_packet, trade_action, trade_result)
-
-            return {
-                "timestamp": time.time(),
-                "symbol": self.symbol,
-                "market_data": processed_data,
-                "market_packet": market_packet.__dict__ if market_packet else None,
-                "signals": signals,
-                "risk_assessment": risk_assessment,
-                "trade_action": trade_action,
-                "trade_result": trade_result,
-                "pipeline_metrics": self.market_pipeline.get_pipeline_status(),
-            }
-
-        except Exception as e:
-            logger.error("Error processing market data: {0}".format(e))
-            return None
-
-    def _convert_market_packet_to_legacy_format(self, packet: MarketDataPacket) -> Dict[str, Any]:
-        """Convert MarketDataPacket to legacy format for existing pipeline compatibility."""
-        return {
-            "symbol": packet.symbol,
-            "price": packet.price,
-            "volume": packet.volume_24h,
-            "market_cap": packet.market_cap,
-            "price_change_24h": packet.price_change_24h,
-            "volume_change_24h": packet.volume_change_24h,
-            "timestamp": packet.timestamp,
-            # Technical indicators
-            "rsi": packet.technical_indicators.rsi_14,
-            "rsi_21": packet.technical_indicators.rsi_21,
-            "macd": packet.technical_indicators.macd_line,
-            "macd_signal": packet.technical_indicators.macd_signal,
-            "macd_histogram": packet.technical_indicators.macd_histogram,
-            "bb_upper": packet.technical_indicators.bb_upper,
-            "bb_middle": packet.technical_indicators.bb_middle,
-            "bb_lower": packet.technical_indicators.bb_lower,
-            "bb_position": packet.technical_indicators.bb_position,
-            "atr": packet.technical_indicators.atr_14,
-            "stoch_k": packet.technical_indicators.stoch_k,
-            "volume_ratio": packet.technical_indicators.volume_ratio,
-            # Sentiment and on-chain
-            "fear_greed": packet.market_sentiment.fear_greed_index,
-            "fear_greed_class": packet.market_sentiment.fear_greed_classification,
-            "network_health": packet.onchain_metrics.network_health_score,
-            "whale_activity": packet.onchain_metrics.whale_activity_score,
-            "mvrv": packet.onchain_metrics.mvrv_ratio,
-            "nvt": packet.onchain_metrics.nvt_ratio,
-            # Derived metrics
-            "volatility": packet.volatility,
-            "trend_strength": packet.trend_strength,
-            "entropy_level": packet.entropy_level,
-            "liquidity_score": packet.liquidity_score,
-            "momentum_score": packet.momentum_score,
-            # Quality metrics
-            "data_quality": packet.data_quality.value,
-            "source_count": packet.source_count,
-            "freshness_score": packet.freshness_score,
-        }
-
-    def _calculate_enhanced_trading_signals(
-        self, packet: Optional[MarketDataPacket], data: Dict[str, Any]
-    ) -> Dict[str, Any]:
-        """Calculate enhanced trading signals using unified market data."""
-        signals = {
-            "buy_signals": [],
-            "sell_signals": [],
-            "neutral_signals": [],
-            "signal_strength": 0.0,
-            "confidence": 0.0,
-        }
-
-        if not packet:
-            return signals
-
-        ti = packet.technical_indicators
-        sentiment = packet.market_sentiment
-        onchain = packet.onchain_metrics
-
-        # RSI signals
-        if ti.rsi_14 < 30:
-            signals["buy_signals"].append(
-                {"indicator": "rsi_oversold", "strength": 0.8, "value": ti.rsi_14}
-            )
-        elif ti.rsi_14 > 70:
-            signals["sell_signals"].append(
-                {"indicator": "rsi_overbought", "strength": 0.8, "value": ti.rsi_14}
-            )
-
-        # MACD signals
-        if ti.macd_histogram > 0 and ti.macd_line > ti.macd_signal:
-            signals["buy_signals"].append(
-                {"indicator": "macd_bullish", "strength": 0.7, "value": ti.macd_histogram}
-            )
-        elif ti.macd_histogram < 0 and ti.macd_line < ti.macd_signal:
-            signals["sell_signals"].append(
-                {"indicator": "macd_bearish", "strength": 0.7, "value": ti.macd_histogram}
-            )
-
-        # Bollinger Bands signals
-        if ti.bb_position < 0.1:
-            signals["buy_signals"].append(
-                {"indicator": "bb_oversold", "strength": 0.6, "value": ti.bb_position}
-            )
-        elif ti.bb_position > 0.9:
-            signals["sell_signals"].append(
-                {"indicator": "bb_overbought", "strength": 0.6, "value": ti.bb_position}
-            )
-
-        # Volume signals
-        if ti.volume_ratio > 2.0:
-            signals["buy_signals"].append(
-                {"indicator": "volume_surge", "strength": 0.5, "value": ti.volume_ratio}
-            )
-
-        # Fear & Greed signals
-        if sentiment.fear_greed_index < 25:
-            signals["buy_signals"].append(
-                {"indicator": "extreme_fear", "strength": 0.4, "value": sentiment.fear_greed_index}
-            )
-        elif sentiment.fear_greed_index > 75:
-            signals["sell_signals"].append(
-                {"indicator": "extreme_greed", "strength": 0.4, "value": sentiment.fear_greed_index}
-            )
-
-        # On-chain signals
-        if onchain.mvrv_ratio < 0.8:
-            signals["buy_signals"].append(
-                {"indicator": "mvrv_undervalued", "strength": 0.3, "value": onchain.mvrv_ratio}
-            )
-        elif onchain.mvrv_ratio > 3.0:
-            signals["sell_signals"].append(
-                {"indicator": "mvrv_overvalued", "strength": 0.3, "value": onchain.mvrv_ratio}
-            )
-
-        # Network health signals
-        if onchain.network_health_score > 80:
-            signals["buy_signals"].append(
-                {
-                    "indicator": "network_healthy",
-                    "strength": 0.2,
-                    "value": onchain.network_health_score,
-                }
-            )
-        elif onchain.network_health_score < 30:
-            signals["sell_signals"].append(
-                {
-                    "indicator": "network_unhealthy",
-                    "strength": 0.2,
-                    "value": onchain.network_health_score,
-                }
-            )
-
-        # Calculate overall signal strength
-        buy_strength = sum(s["strength"] for s in signals["buy_signals"])
-        sell_strength = sum(s["strength"] for s in signals["sell_signals"])
-
-        signals["signal_strength"] = buy_strength - sell_strength
-        signals["confidence"] = min(1.0, (buy_strength + sell_strength) / 5.0)
-
-        # Data quality affects confidence
-        quality_multiplier = {
-            "excellent": 1.0,
-            "good": 0.9,
-            "acceptable": 0.7,
-            "poor": 0.5,
-            "failed": 0.1,
-        }.get(packet.data_quality.value, 0.5)
-
-        signals["confidence"] *= quality_multiplier
-
-        return signals
-
-    def _assess_risk_with_market_data(
-        self, packet: Optional[MarketDataPacket], signals: Dict[str, Any]
-    ) -> Dict[str, Any]:
-        """Assess trading risk using market data and portfolio state."""
-        risk_assessment = {
-            "risk_level": "medium",
-            "risk_score": 0.5,
-            "volatility_risk": 0.5,
-            "liquidity_risk": 0.5,
-            "data_quality_risk": 0.5,
-            "position_risk": 0.5,
-            "recommended_position_size": 0.1,
-            "stop_loss_distance": 0.2,
-            "take_profit_distance": 0.4,
-        }
-
-        if not packet:
-            risk_assessment["risk_level"] = "high"
-            risk_assessment["risk_score"] = 0.8
-            return risk_assessment
-
-        # Volatility risk assessment
-        volatility_risk = min(1.0, packet.volatility * 2.0)
-        risk_assessment["volatility_risk"] = volatility_risk
-
-        # Liquidity risk assessment
-        liquidity_risk = 1.0 - packet.liquidity_score
-        risk_assessment["liquidity_risk"] = liquidity_risk
-
-        # Data quality risk
-        quality_risk = 1.0 - packet.metadata.get("quality_score", 0.5)
-        risk_assessment["data_quality_risk"] = quality_risk
-
-        # Calculate overall risk score
-        risk_score = (volatility_risk + liquidity_risk + quality_risk) / 3.0
-        risk_assessment["risk_score"] = risk_score
-
-        # Risk level classification
-        if risk_score < 0.3:
-            risk_assessment["risk_level"] = "low"
-        elif risk_score < 0.6:
-            risk_assessment["risk_level"] = "medium"
-        else:
-            risk_assessment["risk_level"] = "high"
-
-        # Position sizing based on risk
-        base_position_size = 0.1
-        # Reduce size for higher risk
-        risk_multiplier = 1.0 - (risk_score * 0.8)
-        confidence_multiplier = signals.get("confidence", 0.5)
-
-        recommended_size = base_position_size * risk_multiplier * confidence_multiplier
-        risk_assessment["recommended_position_size"] = max(0.1, min(0.25, recommended_size))
-
-        # Dynamic stop loss based on ATR and volatility
-        atr_distance = (
-            packet.technical_indicators.atr_14 / packet.price if packet.price > 0 else 0.2
-        )
-        volatility_distance = packet.volatility * 2.0
-
-        stop_loss_distance = max(0.1, min(0.5, (atr_distance + volatility_distance) / 2.0))
-        risk_assessment["stop_loss_distance"] = stop_loss_distance
-
-        # Take profit target (risk-reward ratio of 2:1)
-        risk_assessment["take_profit_distance"] = stop_loss_distance * 2.0
-
-        return risk_assessment
-
-    def _extract_order_book_from_packet(self, packet: Optional[MarketDataPacket], data: Dict[str, Any]) -> Tuple[List[Tuple[float, float]], List[Tuple[float, float]]]:
-        """Extract order book data from market packet for entropy processing."""
-        try:
-            if not packet:
-                return [], []
-            
-            # Generate realistic order book from market data
-            base_price = packet.price
-            base_volume = packet.volume_24h / 24  # Hourly volume estimate
-            
-            # Generate bids (price, volume) - decreasing prices
-            bids = []
-            for i in range(20):
-                price = base_price * (1 - 0.001 * (i + 1))  # 0.1% spread per level
-                volume = base_volume * (1 + np.random.uniform(-0.3, 0.3))  # Random volume variation
-                bids.append((price, volume))
-            
-            # Generate asks (price, volume) - increasing prices
-            asks = []
-            for i in range(20):
-                price = base_price * (1 + 0.001 * (i + 1))  # 0.1% spread per level
-                volume = base_volume * (1 + np.random.uniform(-0.3, 0.3))  # Random volume variation
-                asks.append((price, volume))
-            
-            # Add entropy by varying the spread based on volatility
-            if packet.volatility > 0.7:  # High volatility
-                spread_factor = np.random.uniform(1.5, 3.0)
-                asks = [(price * spread_factor, volume) for price, volume in asks]
-            
-            return bids, asks
-            
-        except Exception as e:
-            logger.error(f"Error extracting order book: {e}")
-            return [], []
-
-    def _determine_trade_action_with_entropy(
-        self, signals: Dict[str, Any], risk_assessment: Dict[str, Any], entropy_signals: Dict[str, Any]
-    ) -> Dict[str, Any]:
-        """Determine trade action based on signals, risk assessment, and entropy signals."""
-        signal_strength = signals.get("signal_strength", 0.0)
-        confidence = signals.get("confidence", 0.0)
-        risk_level = risk_assessment.get("risk_level", "high")
-
-        # Minimum confidence thresholds based on risk
-        min_confidence = {"low": 0.3, "medium": 0.5, "high": 0.7}.get(risk_level, 0.7)
-
-        # Enhance confidence with entropy signals
-        entropy_confidence = entropy_signals.get("confidence", 0.0)
-        entropy_value = entropy_signals.get("entropy_value", 0.0)
-        routing_state = entropy_signals.get("routing_state", "NEUTRAL")
-        quantum_state = entropy_signals.get("quantum_state", "INERT")
+        Get default pipeline configuration with mathematical parameters.
         
-        # Adjust confidence based on entropy
-        if entropy_confidence > 0.0:
-            # Weight entropy confidence with base confidence
-            enhanced_confidence = (confidence * 0.7) + (entropy_confidence * 0.3)
-            confidence = min(enhanced_confidence, 1.0)
+        Returns:
+            Default configuration dictionary with mathematical parameters
             
-            # Boost confidence for high entropy states
-            if routing_state == "ROUTE_ACTIVE" and entropy_value > 0.018:
-                confidence *= 1.2  # 20% boost for active routing
-            elif quantum_state == "ENTROPIC_INVERSION_ACTIVATED":
-                confidence *= 1.3  # 30% boost for quantum activation
-
-        action = "hold"
-        reason = "Insufficient signal strength or confidence"
-
-        if confidence >= min_confidence:
-            if signal_strength > 0.5:
-                action = "buy"
-                reason = "Strong buy signals (strength: {0:.2f}, confidence: {1:.2f}, entropy: {2:.6f})".format(
-                    signal_strength, confidence, entropy_value
-                )
-            elif signal_strength < -0.5:
-                action = "sell"
-                reason = "Strong sell signals (strength: {0:.2f}, confidence: {1:.2f}, entropy: {2:.6f})".format(
-                    signal_strength, confidence, entropy_value
-                )
-
-        # Get capital allocation from entropy signals
-        capital_allocation = entropy_signals.get("capital_allocation", {})
-        position_size = capital_allocation.get("allocated_amount", risk_assessment.get("recommended_position_size", 0.1))
-        
-        # Adjust position size based on entropy state
-        if routing_state == "ROUTE_ACTIVE":
-            position_size *= 1.2  # Increase position size for active routing
-        elif routing_state == "ROUTE_PASSIVE":
-            position_size *= 0.8  # Decrease position size for passive routing
-
+        Configuration Parameters:
+        - update_interval: Data update interval in seconds
+        - max_position_size: Maximum position size as fraction of capital
+        - risk_free_rate: Risk-free rate for Sharpe ratio calculations
+        - volatility_window: Window size for volatility calculations
+        - correlation_window: Window size for correlation calculations
+        """
         return {
-            "action": action,
-            "reason": reason,
-            "signal_strength": signal_strength,
-            "confidence": confidence,
-            "position_size": position_size,
-            "stop_loss_distance": risk_assessment.get("stop_loss_distance", 0.2),
-            "take_profit_distance": risk_assessment.get("take_profit_distance", 0.4),
-            "entropy_signals": entropy_signals,
-            "entropy_enhanced": True,
+            "update_interval": 1.0,
+            "max_position_size": 0.1,
+            "risk_free_rate": 0.02,
+            "volatility_window": 20,
+            "correlation_window": 50,
+            "entropy_threshold": 0.5,
+            "thermal_threshold": 0.7,
+            "bit_phase_threshold": 0.6,
         }
-
-    def _log_trade_to_registry(
-        self, packet: MarketDataPacket, trade_action: Dict[str, Any], trade_result: Dict[str, Any]
-    ):
-        """Log trade to soulprint registry with market data context."""
-        if not self.registry:
-            return
-
-        try:
-            # Create comprehensive schwafit info
-            schwafit_info = {
-                "symbol": packet.symbol,
-                "price": packet.price,
-                "rsi_14": packet.technical_indicators.rsi_14,
-                "macd_line": packet.technical_indicators.macd_line,
-                "bb_position": packet.technical_indicators.bb_position,
-                "volatility": packet.volatility,
-                "trend_strength": packet.trend_strength,
-                "entropy_level": packet.entropy_level,
-                "momentum_score": packet.momentum_score,
-                "fear_greed": packet.market_sentiment.fear_greed_index,
-                "network_health": packet.onchain_metrics.network_health_score,
-                "whale_activity": packet.onchain_metrics.whale_activity_score,
-                "mvrv": packet.onchain_metrics.mvrv_ratio,
-                "data_quality": packet.data_quality.value,
-                "source_count": packet.source_count,
-                "signal_strength": trade_action["signal_strength"],
-                "confidence": trade_action["confidence"],
-                "action": trade_action["action"],
-            }
-
-            # Log to registry
-            self.registry.log_trigger(
-                asset=packet.symbol,
-                phase=packet.technical_indicators.bb_position,
-                drift=packet.momentum_score,
-                schwafit_info=schwafit_info,
-                trade_result=trade_result,
-            )
-
-            logger.info(
-                "Trade logged to registry: {0} {1}".format(trade_action['action'], packet.symbol)
-            )
-
-        except Exception as e:
-            logger.error("Failed to log trade to registry: {0}".format(e))
-
-    def _enhance_market_data_with_crlf(self, market_data: MarketData) -> CRLFEnhancedMarketData:
-        """
-        Enhance market data with CRLF analysis.
-
-        Args:
-            market_data: Base market data
-
-        Returns:
-            Enhanced market data with CRLF analysis
-        """
-        # Prepare strategy vector from market data
-        strategy_vector = np.array(
-            [
-                market_data.volatility,  # Momentum component
-                market_data.trend_strength,  # Scalping component
-                1.0 - market_data.volatility,  # Mean reversion component
-                market_data.entropy_level / 10.0,  # Swing component (normalized)
-            ]
-        )
-
-        # Prepare profit curve from market data history
-        if len(self.market_data_history) >= 7:
-            profit_curve = np.array([md.price for md in self.market_data_history[-7:]])
-        else:
-            # Use current price repeated if not enough history
-            profit_curve = np.array([market_data.price] * 7)
-
-        # Compute CRLF
-        crlf_response = self.crlf.compute_crlf(
-            strategy_vector=strategy_vector,
-            profit_curve=profit_curve,
-            market_entropy=market_data.entropy_level / 10.0,
-            time_offset=0.0,
-        )
-
-        # Calculate strategy alignment score
-        strategy_alignment = self._compute_strategy_alignment_score(crlf_response)
-
-        # Calculate temporal resonance
-        temporal_resonance = self._compute_temporal_resonance(crlf_response)
-
-        return CRLFEnhancedMarketData(
-            base_market_data=market_data,
-            crlf_response=crlf_response,
-            strategy_alignment_score=strategy_alignment,
-            temporal_resonance=temporal_resonance,
-            recursion_depth=crlf_response.recursion_depth,
-            trigger_state=crlf_response.trigger_state,
-        )
-
-    def _enhance_market_data_with_zpe_zbe(self, market_data: MarketData) -> ZPEZBEMarketData:
-        """
-        Enhance market data with ZPE-ZBE analysis.
-
-        Args:
-            market_data: Base market data
-
-        Returns:
-            Enhanced market data with ZPE-ZBE analysis
-        """
-        # Prepare market data for quantum analysis
-        quantum_market_data = {
-            "price": market_data.price,
-            "entry_price": market_data.price,  # Could be enhanced with actual entry price
-            "lower_bound": market_data.price * 0.95,
-            "upper_bound": market_data.price * 1.5,
-            "frequency": 7.83,  # Earth's Schumann resonance'
-            "mass_coefficient": 1e-6,
-        }
-
-        # Perform quantum market analysis
-        quantum_analysis = self.unified_math_system.quantum_market_analysis(quantum_market_data)
-
-        # Calculate ZPE vector
-        zpe_vector = self.zpe_zbe_core.calculate_zero_point_energy(
-            frequency=quantum_market_data["frequency"],
-            mass_coefficient=quantum_market_data["mass_coefficient"],
-        )
-
-        # Calculate ZBE balance
-        zbe_balance = self.zpe_zbe_core.calculate_zbe_balance(
-            entry_price=quantum_market_data["entry_price"],
-            current_price=quantum_market_data["price"],
-            lower_bound=quantum_market_data["lower_bound"],
-            upper_bound=quantum_market_data["upper_bound"],
-        )
-
-        return ZPEZBEMarketData(
-            base_market_data=market_data,
-            zpe_vector=zpe_vector,
-            zbe_balance=zbe_balance,
-            quantum_sync_status=zpe_vector.sync_status,
-            quantum_potential=quantum_analysis["quantum_potential"],
-            resonance_factor=quantum_analysis["resonance_factor"],
-            strategy_confidence=quantum_analysis["strategy_confidence"],
-            soulprint_vector=quantum_analysis["soulprint_vector"],
-        )
-
-    def _enhance_strategy_selection_with_zpe_zbe(
-        self, market_data: MarketData, regime: MarketRegime
-    ) -> Tuple[StrategyBranch, Dict[str, Any]]:
-        """
-        Enhance strategy selection with ZPE-ZBE analysis.
-
-        Args:
-            market_data: Market data
-            regime: Market regime
-
-        Returns:
-            Tuple of (strategy_branch, zpe_zbe_analysis)
-        """
-        # Get base strategy
-        base_strategy = self._determine_optimal_strategy(regime, market_data)
-
-        # Enhance with ZPE-ZBE analysis
-        zpe_zbe_market_data = self._enhance_market_data_with_zpe_zbe(market_data)
-
-        # Get quantum strategy recommendations
-        quantum_recommendations = self.unified_math_system.get_quantum_strategy_recommendations()
-
-        # Adjust strategy based on quantum analysis
-        if zpe_zbe_market_data.quantum_sync_status in [
-            QuantumSyncStatus.FULL_SYNC,
-            QuantumSyncStatus.RESONANCE,
-        ]:
-            # High quantum sync - use more conservative strategy
-            if base_strategy == StrategyBranch.MOMENTUM:
-                adjusted_strategy = StrategyBranch.SWING
-            elif base_strategy == StrategyBranch.SCALPING:
-                adjusted_strategy = StrategyBranch.MEAN_REVERSION
-            else:
-                adjusted_strategy = base_strategy
-        else:
-            # Low quantum sync - use more aggressive strategy
-            if base_strategy == StrategyBranch.SWING:
-                adjusted_strategy = StrategyBranch.MOMENTUM
-            elif base_strategy == StrategyBranch.MEAN_REVERSION:
-                adjusted_strategy = StrategyBranch.SCALPING
-            else:
-                adjusted_strategy = base_strategy
-
-        return adjusted_strategy, {
-            "zpe_energy": zpe_zbe_market_data.zpe_vector.energy,
-            "zbe_status": zpe_zbe_market_data.zbe_balance.status,
-            "quantum_sync_status": zpe_zbe_market_data.quantum_sync_status.value,
-            "quantum_potential": zpe_zbe_market_data.quantum_potential,
-            "strategy_confidence": zpe_zbe_market_data.strategy_confidence,
-            "recommendations": quantum_recommendations,
-        }
-
-    def _enhance_trading_decision_with_zpe_zbe(
-        self, base_decision: TradingDecision, zpe_zbe_market_data: ZPEZBEMarketData
-    ) -> ZPEZBETradingDecision:
-        """
-        Enhance trading decision with ZPE-ZBE analysis.
-
-        Args:
-            base_decision: Base trading decision
-            zpe_zbe_market_data: Enhanced market data with ZPE-ZBE analysis
-
-        Returns:
-            Enhanced trading decision with ZPE-ZBE analysis
-        """
-        # Get quantum decision routing
-        quantum_analysis = {
-            "is_synced": zpe_zbe_market_data.quantum_sync_status
-            in [QuantumSyncStatus.FULL_SYNC, QuantumSyncStatus.RESONANCE],
-            "zpe_energy": zpe_zbe_market_data.zpe_vector.energy,
-            "zbe_status": zpe_zbe_market_data.zbe_balance.status,
-            "quantum_potential": zpe_zbe_market_data.quantum_potential,
-            "strategy_confidence": zpe_zbe_market_data.strategy_confidence,
-        }
-
-        quantum_decision = self.unified_math_system.advanced_quantum_decision_router(
-            quantum_analysis
-        )
-
-        # Calculate system entropy
-        system_entropy = self.unified_math_system.get_system_entropy(quantum_analysis)
-
-        # Log performance for adaptive learning
-        strategy_metadata = {
-            "strategy_id": base_decision.strategy_branch.value,
-            "profit": base_decision.profit_potential,
-            "risk_score": base_decision.risk_score,
-            "thermal_state": base_decision.thermal_state.value,
-            "bit_phase": base_decision.bit_phase.value,
-        }
-
-        self.unified_math_system.log_strategy_performance(
-            zpe_zbe_market_data.zpe_vector, zpe_zbe_market_data.zbe_balance, strategy_metadata
-        )
-
-        return ZPEZBETradingDecision(
-            base_decision=base_decision,
-            zpe_energy=zpe_zbe_market_data.zpe_vector.energy,
-            zbe_status=zpe_zbe_market_data.zbe_balance.status,
-            quantum_sync_status=zpe_zbe_market_data.quantum_sync_status,
-            quantum_potential=zpe_zbe_market_data.quantum_potential,
-            strategy_confidence=zpe_zbe_market_data.strategy_confidence,
-            recommended_action=quantum_decision["action"],
-            risk_adjustment=quantum_decision["risk_adjustment"],
-            system_entropy=system_entropy,
-        )
-
-    def _enhance_risk_management_with_zpe_zbe(
-        self, signal: Dict[str, Any], zpe_zbe_market_data: ZPEZBEMarketData
-    ) -> Dict[str, Any]:
-        """
-        Enhance risk management with ZPE-ZBE analysis.
-
-        Args:
-            signal: Trading signal
-            zpe_zbe_market_data: Enhanced market data with ZPE-ZBE analysis
-
-        Returns:
-            Enhanced signal with ZPE-ZBE risk adjustments
-        """
-        # Get base risk parameters
-        enhanced_signal = signal.copy()
-
-        # Adjust risk based on quantum sync status
-        if zpe_zbe_market_data.quantum_sync_status == QuantumSyncStatus.RESONANCE:
-            # High quantum sync - reduce risk
-            enhanced_signal["risk_multiplier"] = 0.5
-            enhanced_signal["position_size_multiplier"] = 1.5
-        elif zpe_zbe_market_data.quantum_sync_status == QuantumSyncStatus.FULL_SYNC:
-            # Good quantum sync - moderate risk
-            enhanced_signal["risk_multiplier"] = 0.8
-            enhanced_signal["position_size_multiplier"] = 1.2
-        elif zpe_zbe_market_data.quantum_sync_status == QuantumSyncStatus.PARTIAL_SYNC:
-            # Partial quantum sync - normal risk
-            enhanced_signal["risk_multiplier"] = 1.0
-            enhanced_signal["position_size_multiplier"] = 1.0
-        else:
-            # No quantum sync - increase risk
-            enhanced_signal["risk_multiplier"] = 1.5
-            enhanced_signal["position_size_multiplier"] = 0.8
-
-        # Adjust based on ZBE status
-        if abs(zpe_zbe_market_data.zbe_balance.status) > 0.5:
-            # Far from equilibrium - reduce position size
-            enhanced_signal["position_size_multiplier"] *= 0.7
-
-        # Adjust based on strategy confidence
-        if zpe_zbe_market_data.strategy_confidence > 0.8:
-            enhanced_signal["confidence_multiplier"] = 1.2
-        elif zpe_zbe_market_data.strategy_confidence < 0.4:
-            enhanced_signal["confidence_multiplier"] = 0.6
-        else:
-            enhanced_signal["confidence_multiplier"] = 1.0
-
-        return enhanced_signal
-
-    def _update_zpe_zbe_performance_metrics(self, zpe_zbe_decision: ZPEZBETradingDecision) -> None:
-        """
-        Update ZPE-ZBE performance metrics.
-
-        Args:
-            zpe_zbe_decision: Enhanced trading decision with ZPE-ZBE analysis
-        """
-        # Update ZPE-ZBE state
-        self.zpe_zbe_state.current_zpe_energy = zpe_zbe_decision.zpe_energy
-        self.zpe_zbe_state.current_zbe_status = zpe_zbe_decision.zbe_status
-        self.zpe_zbe_state.quantum_sync_status = zpe_zbe_decision.quantum_sync_status
-        self.zpe_zbe_state.quantum_potential = zpe_zbe_decision.quantum_potential
-        self.zpe_zbe_state.system_entropy = zpe_zbe_decision.system_entropy
-
-        # Store last analysis
-        self.zpe_zbe_state.last_zpe_analysis = {
-            "energy": zpe_zbe_decision.zpe_energy,
-            "sync_status": zpe_zbe_decision.quantum_sync_status.value,
-            "potential": zpe_zbe_decision.quantum_potential,
-        }
-
-        self.zpe_zbe_state.last_zbe_analysis = {
-            "status": zpe_zbe_decision.zbe_status,
-            "stability_score": zpe_zbe_decision.base_decision.metadata.get(
-                "zbe_stability_score", 0.0
-            ),
-        }
-
-    def _enhance_trading_decision_with_crlf(
-        self, base_decision: TradingDecision, crlf_market_data: CRLFEnhancedMarketData
-    ) -> CRLFEnhancedTradingDecision:
-        """
-        Enhance trading decision with CRLF analysis.
-
-        Args:
-            base_decision: Base trading decision
-            crlf_market_data: Enhanced market data with CRLF analysis
-
-        Returns:
-            Enhanced trading decision with CRLF analysis
-        """
-        crlf_response = crlf_market_data.crlf_response
-
-        # Adjust decision based on CRLF trigger state
-        adjusted_decision = self._adjust_decision_with_crlf(base_decision, crlf_response)
-
-        # Update CRLF state
-        self._update_crlf_pipeline_state(crlf_response)
-
-        return CRLFEnhancedTradingDecision(
-            base_decision=adjusted_decision,
-            crlf_output=crlf_response.crlf_output,
-            trigger_state=crlf_response.trigger_state,
-            strategy_alignment=crlf_market_data.strategy_alignment_score,
-            temporal_urgency=crlf_response.recommendations.get("temporal_urgency", "MEDIUM"),
-            recursion_depth=crlf_response.recursion_depth,
-            risk_adjustment=crlf_response.recommendations.get("risk_adjustment", 1.0),
-            strategy_weights=crlf_response.recommendations.get("strategy_weights", {}),
-        )
-
-    def _adjust_decision_with_crlf(
-        self, base_decision: TradingDecision, crlf_response: CRLFResponse
-    ) -> TradingDecision:
-        """
-        Adjust trading decision based on CRLF analysis.
-
-        Args:
-            base_decision: Base trading decision
-            crlf_response: CRLF response
-
-        Returns:
-            Adjusted trading decision
-        """
-        adjusted_decision = base_decision
-
-        # Adjust based on trigger state
-        if crlf_response.trigger_state == CRLFTriggerState.OVERRIDE:
-            # Override - increase position size and confidence
-            adjusted_decision.quantity *= 1.5
-            adjusted_decision.confidence = min(1.0, adjusted_decision.confidence * 1.2)
-            adjusted_decision.metadata["crlf_override"] = True
-            adjusted_decision.metadata["override_matrix"] = "FastProfitOverrideΩ"
-
-        elif crlf_response.trigger_state == CRLFTriggerState.ESCALATE:
-            # Escalate - moderate increase
-            adjusted_decision.quantity *= 1.2
-            adjusted_decision.confidence = min(1.0, adjusted_decision.confidence * 1.1)
-            adjusted_decision.metadata["crlf_escalate"] = True
-
-        elif crlf_response.trigger_state == CRLFTriggerState.HOLD:
-            # Hold - reduce position size
-            adjusted_decision.quantity *= 0.7
-            adjusted_decision.confidence *= 0.9
-            adjusted_decision.metadata["crlf_hold"] = True
-            adjusted_decision.metadata["hold_duration"] = crlf_response.recommendations.get(
-                "hold_duration", 300
-            )
-
-        elif crlf_response.trigger_state == CRLFTriggerState.RECURSIVE_RESET:
-            # Reset - use fallback strategy
-            adjusted_decision.quantity *= 0.5
-            adjusted_decision.confidence *= 0.7
-            adjusted_decision.metadata["crlf_reset"] = True
-            adjusted_decision.metadata["fallback_strategy"] = "Conservative_Mean_Reversion"
-
-        # Apply risk adjustment
-        risk_adjustment = crlf_response.recommendations.get("risk_adjustment", 1.0)
-        adjusted_decision.risk_score *= risk_adjustment
-
-        # Add CRLF metadata
-        adjusted_decision.metadata.update(
-            {
-                "crlf_output": crlf_response.crlf_output,
-                "crlf_confidence": crlf_response.confidence,
-                "recursion_depth": crlf_response.recursion_depth,
-                "strategy_weights": crlf_response.recommendations.get("strategy_weights", {}),
-            }
-        )
-
-        return adjusted_decision
-
-    def _update_crlf_pipeline_state(self, crlf_response: CRLFResponse):
-        """
-        Update CRLF pipeline state with latest response.
-
-        Args:
-            crlf_response: Latest CRLF response
-        """
-        # Update current state
-        self.crlf_enhanced_state.current_crlf_output = crlf_response.crlf_output
-        self.crlf_enhanced_state.current_trigger_state = crlf_response.trigger_state
-
-        # Update history
-        self.crlf_enhanced_state.strategy_alignment_trend.append(
-            self._compute_strategy_alignment_score(crlf_response)
-        )
-        self.crlf_enhanced_state.temporal_resonance_history.append(
-            self._compute_temporal_resonance(crlf_response)
-        )
-        self.crlf_enhanced_state.recursion_depth_history.append(crlf_response.recursion_depth)
-
-        # Keep history manageable
-        max_history = 100
-        if len(self.crlf_enhanced_state.strategy_alignment_trend) > max_history:
-            self.crlf_enhanced_state.strategy_alignment_trend = (
-                self.crlf_enhanced_state.strategy_alignment_trend[-max_history:]
-            )
-            self.crlf_enhanced_state.temporal_resonance_history = (
-                self.crlf_enhanced_state.temporal_resonance_history[-max_history:]
-            )
-            self.crlf_enhanced_state.recursion_depth_history = (
-                self.crlf_enhanced_state.recursion_depth_history[-max_history:]
-            )
-
-        # Store last analysis
-        self.crlf_enhanced_state.last_crlf_analysis = {
-            "crlf_output": crlf_response.crlf_output,
-            "trigger_state": crlf_response.trigger_state.value,
-            "confidence": crlf_response.confidence,
-            "recursion_depth": crlf_response.recursion_depth,
-            "recommendations": crlf_response.recommendations,
-        }
-
-    def _compute_strategy_alignment_score(self, crlf_response: CRLFResponse) -> float:
-        """
-        Compute strategy alignment score from CRLF response.
-
-        Args:
-            crlf_response: CRLF response
-
-        Returns:
-            Strategy alignment score (0.0 to 1.0)
-        """
-        # Higher confidence and lower entropy = better alignment
-        alignment = crlf_response.confidence * (1.0 - crlf_response.entropy_updated)
-        return np.clip(alignment, 0.0, 1.0)
-
-    def _compute_temporal_resonance(self, crlf_response: CRLFResponse) -> float:
-        """
-        Compute temporal resonance from CRLF response.
-
-        Args:
-            crlf_response: CRLF response
-
-        Returns:
-            Temporal resonance score (0.0 to 1.0)
-        """
-        # Temporal resonance based on CRLF output magnitude and confidence
-        resonance = abs(crlf_response.crlf_output) * crlf_response.confidence
-        return np.clip(resonance, 0.0, 1.0)
-
-    def get_crlf_performance_summary(self) -> Dict[str, Any]:
-        """
-        Get CRLF performance summary.
-
-        Returns:
-            CRLF performance summary
-        """
-        crlf_summary = self.crlf.get_performance_summary()
-
-        return {
-            "crlf_performance": crlf_summary,
-            "pipeline_crlf_state": {
-                "current_crlf_output": self.crlf_enhanced_state.current_crlf_output,
-                "current_trigger_state": self.crlf_enhanced_state.current_trigger_state.value,
-                "strategy_alignment_trend": (
-                    self.crlf_enhanced_state.strategy_alignment_trend[-10:]
-                    if self.crlf_enhanced_state.strategy_alignment_trend
-                    else []
-                ),
-                "temporal_resonance_history": (
-                    self.crlf_enhanced_state.temporal_resonance_history[-10:]
-                    if self.crlf_enhanced_state.temporal_resonance_history
-                    else []
-                ),
-                "recursion_depth_history": (
-                    self.crlf_enhanced_state.recursion_depth_history[-10:]
-                    if self.crlf_enhanced_state.recursion_depth_history
-                    else []
-                ),
-                "last_crlf_analysis": self.crlf_enhanced_state.last_crlf_analysis,
-            },
-        }
-
-    def get_zpe_zbe_pipeline_summary(self) -> Dict[str, Any]:
-        """
-        Get ZPE-ZBE enhanced pipeline summary.
-
-        Returns:
-            Enhanced pipeline summary with ZPE-ZBE metrics
-        """
-        base_summary = self.get_pipeline_summary()
-
-        # Get performance analysis
-        performance_analysis = self.unified_math_system.get_performance_analysis()
-        quantum_recommendations = self.unified_math_system.get_quantum_strategy_recommendations()
-
-        return {
-            **base_summary,
-            "zpe_zbe_metrics": {
-                "current_zpe_energy": self.zpe_zbe_state.current_zpe_energy,
-                "current_zbe_status": self.zpe_zbe_state.current_zbe_status,
-                "quantum_sync_status": self.zpe_zbe_state.quantum_sync_status.value,
-                "quantum_potential": self.zpe_zbe_state.quantum_potential,
-                "system_entropy": self.zpe_zbe_state.system_entropy,
-                "last_zpe_analysis": self.zpe_zbe_state.last_zpe_analysis,
-                "last_zbe_analysis": self.zpe_zbe_state.last_zbe_analysis,
-            },
-            "quantum_performance": performance_analysis,
-            "quantum_recommendations": quantum_recommendations,
-        }
-
-    def _analyze_market_regime(self, market_data: MarketData) -> MarketRegime:
-        """Analyze current market regime using mathematical indicators and quantum insights."""
-        if len(self.market_data_history) < 20:
-            return MarketRegime.SIDEWAYS
-
-        # Prepare market data for quantum analysis
-        quantum_market_data = {
-            "price": market_data.price,
-            "volume": market_data.volume,
-            "volatility": market_data.volatility,
-            "entry_price": (
-                self.market_data_history[0].price if self.market_data_history else market_data.price
-            ),
-            "frequency": 7.83,  # Earth's Schumann resonance frequency'
-            "mass_coefficient": market_data.volume / 1000000.0,  # Normalize volume
-        }
-
-        # Perform quantum market analysis
-        quantum_analysis = self.unified_math_system.quantum_market_analysis(quantum_market_data)
-
-        # Get recent price data
-        recent_prices = [md.price for md in self.market_data_history[-20:]]
-        trend_slope = np.polyfit(range(len(recent_prices)), recent_prices, 1)[0]
-        price_std = np.std(recent_prices)
-
-        # Volatility analysis
-        volatility = market_data.volatility
-        high_vol_threshold = self.risk_params.volatility_threshold
-
-        # Quantum-enhanced regime classification
-        if quantum_analysis.get("is_synced", False):
-            # During quantum sync, treat market as stable
-            return MarketRegime.CALM
-
-        # Traditional regime logic with quantum insights
-        if volatility > high_vol_threshold:
-            return MarketRegime.VOLATILE
-        elif abs(trend_slope) < price_std * 0.1:
-            return MarketRegime.SIDEWAYS
-        elif trend_slope > 0:
-            return MarketRegime.TRENDING_UP
-        elif trend_slope < 0:
-            return MarketRegime.TRENDING_DOWN
-        else:
-            return MarketRegime.CALM
-
-    def _determine_optimal_strategy(
-        self, regime: MarketRegime, market_data: MarketData
-    ) -> StrategyBranch:
-        """Determine optimal strategy based on market regime."""
-        strategy_map = {
-            MarketRegime.TRENDING_UP: StrategyBranch.MOMENTUM,
-            MarketRegime.TRENDING_DOWN: StrategyBranch.MOMENTUM,
-            MarketRegime.SIDEWAYS: StrategyBranch.MEAN_REVERSION,
-            MarketRegime.VOLATILE: StrategyBranch.SCALPING,
-            MarketRegime.CALM: StrategyBranch.GRID,
-        }
-
-        base_strategy = strategy_map.get(regime, StrategyBranch.MOMENTUM)
-
-        # Strategy refinement based on additional factors
-        if market_data.volume > 1.5 * np.mean([md.volume for md in self.market_data_history[-10:]]):
-            # High volume - prefer momentum or arbitrage
-            if regime in [MarketRegime.TRENDING_UP, MarketRegime.TRENDING_DOWN]:
-                return StrategyBranch.MOMENTUM
-            else:
-                return StrategyBranch.ARBITRAGE
-
-        return base_strategy
-
-    def _update_thermal_state(self, market_data: MarketData):
-        """Update thermal state based on market conditions and quantum synchronization."""
-        # Prepare market data for quantum analysis
-        quantum_market_data = {
-            "price": market_data.price,
-            "volume": market_data.volume,
-            "volatility": market_data.volatility,
-            "entry_price": (
-                self.market_data_history[0].price if self.market_data_history else market_data.price
-            ),
-            "frequency": 7.83,  # Earth's Schumann resonance frequency'
-            "mass_coefficient": market_data.volume / 1000000.0,  # Normalize volume
-        }
-
-        # Perform quantum market analysis
-        quantum_analysis = self.unified_math_system.quantum_market_analysis(quantum_market_data)
-
-        # Thermal state logic based on entropy and volatility
-        entropy = market_data.entropy_level
-        volatility = market_data.volatility
-        quantum_potential = quantum_analysis.get("quantum_potential", 0.0)
-
-        # Quantum synchronization impacts thermal state
-        if quantum_analysis.get("is_synced", False):
-            # Quantum sync leads to a stable, cool state
-            self.state.thermal_state = ThermalState.COOL
-            self.state.bit_phase = BitPhase.EIGHT_BIT
-        elif entropy > 6.0 or volatility > 0.8 or quantum_potential > 0.7:
-            # High entropy, volatility, or quantum potential leads to hot state
-            self.state.thermal_state = ThermalState.HOT
-            self.state.bit_phase = BitPhase.THIRTY_TWO_BIT
-        elif entropy > 4.0 or volatility > 0.5 or quantum_potential > 0.3:
-            # Moderate conditions lead to warm state
-            self.state.thermal_state = ThermalState.WARM
-            self.state.bit_phase = BitPhase.SIXTEEN_BIT
-        else:
-            # Low entropy and volatility lead to cool state
-            self.state.thermal_state = ThermalState.COOL
-            self.state.bit_phase = BitPhase.EIGHT_BIT
-
-    async def _generate_signal(
-        self, market_data: MarketData, strategy: StrategyBranch
-    ) -> Optional[Dict[str, Any]]:
-        """Generate trading signal based on strategy."""
-        signal_generators = {
-            StrategyBranch.MOMENTUM: self._momentum_signal,
-            StrategyBranch.MEAN_REVERSION: self._mean_reversion_signal,
-            StrategyBranch.ARBITRAGE: self._arbitrage_signal,
-            StrategyBranch.SCALPING: self._scalping_signal,
-            StrategyBranch.SWING: self._swing_signal,
-            StrategyBranch.GRID: self._grid_signal,
-        }
-
-        generator = signal_generators.get(strategy)
-        if not generator:
-            return None
-
-        return generator(market_data)
-
-    def _select_vectorization_mode(
-        self, strategy: StrategyBranch, market_data: MarketData
-    ) -> VectorizationMode:
-        """Select appropriate vectorization mode."""
-        if strategy in [StrategyBranch.SCALPING, StrategyBranch.ARBITRAGE]:
-            return VectorizationMode.HIGH_FREQUENCY
-        elif strategy == StrategyBranch.MOMENTUM:
-            return VectorizationMode.MOMENTUM_BASED
-        elif strategy == StrategyBranch.MEAN_REVERSION:
-            return VectorizationMode.MEAN_REVERSION
-        else:
-            return VectorizationMode.ADAPTIVE
-
-    def _create_profit_vector(
-        self, signal: Dict[str, Any], market_data: MarketData
-    ) -> ProfitVector:
-        """Create profit vector for the signal."""
-        # This method needs to adapt to receive IntegratedTradingSignal or its data
-        # For now, I'll adjust it to expect a dict compatible with previous signals.'
-        # If signal is IntegratedTradingSignal, convert it to dict for
-        # compatibility.
-        if isinstance(signal, IntegratedTradingSignal):
-            # Convert to a dictionary that _create_profit_vector can understand
-            # Adjust keys to match what profit_vectorizer expects
-            signal_dict = {
-                "action": signal.recommended_action.upper(),
-                # Use the actual quantity from IntegratedTradingSignal
-                "quantity": float(signal.quantity),
-                "confidence": float(signal.confidence_score),
-                "profit_potential": float(signal.profit_potential),
-                "risk_score": float(signal.risk_assessment.get("overall_risk", 0.5)),
-            }
-        else:
-            signal_dict = signal
-
-        mode = self._select_vectorization_mode(self.state.active_strategy, market_data)
-        return self.profit_vectorizer.calculate_profit_vector(
-            market_data.price,
-            market_data.volume,
-            signal_dict,  # Pass the adjusted signal dict
-            mode=mode,
-        )
-
-    def _mean_reversion_signal(self, market_data: MarketData) -> Dict[str, Any]:
-        """Generate mean reversion signal."""
-        if len(self.market_data_history) < 20:
-            return None
-
-        recent_prices = [md.price for md in self.market_data_history[-20:]]
-        mean_price = np.mean(recent_prices)
-        std_price = np.std(recent_prices)
-
-        current_price = market_data.price
-        z_score = (current_price - mean_price) / std_price if std_price > 0 else 0
-
-        # Mean reversion logic
-        if z_score > 2.0:  # Price too high
-            return {
-                "action": "SELL",
-                "quantity": self._calculate_position_size(market_data, "SELL"),
-                "confidence": min(abs(z_score) / 3.0, 1.0),
-                "profit_potential": abs(z_score) * 0.1,
-                "risk_score": 0.3,
-                "metadata": {"z_score": z_score, "mean_price": mean_price},
-            }
-        elif z_score < -2.0:  # Price too low
-            return {
-                "action": "BUY",
-                "quantity": self._calculate_position_size(market_data, "BUY"),
-                "confidence": min(abs(z_score) / 3.0, 1.0),
-                "profit_potential": abs(z_score) * 0.1,
-                "risk_score": 0.3,
-                "metadata": {"z_score": z_score, "mean_price": mean_price},
-            }
-        else:
-            return None
-
-    def _momentum_signal(self, market_data: MarketData) -> Dict[str, Any]:
-        """Generate momentum signal."""
-        if len(self.market_data_history) < 10:
-            return None
-
-        recent_prices = [md.price for md in self.market_data_history[-10:]]
-        short_ma = np.mean(recent_prices[-5:])
-        long_ma = np.mean(recent_prices)
-
-        momentum = (short_ma - long_ma) / long_ma if long_ma > 0 else 0
-        volume_surge = market_data.volume / np.mean(
-            [md.volume for md in self.market_data_history[-5:]]
-        )
-
-        # Momentum logic
-        if momentum > 0.1 and volume_surge > 1.2:  # Strong upward momentum
-            return {
-                "action": "BUY",
-                "quantity": self._calculate_position_size(market_data, "BUY"),
-                "confidence": min(momentum * 10, 1.0),
-                "profit_potential": momentum * 2,
-                "risk_score": 0.4,
-                "metadata": {"momentum": momentum, "volume_surge": volume_surge},
-            }
-        elif momentum < -0.1 and volume_surge > 1.2:  # Strong downward momentum
-            return {
-                "action": "SELL",
-                "quantity": self._calculate_position_size(market_data, "SELL"),
-                "confidence": min(abs(momentum) * 10, 1.0),
-                "profit_potential": abs(momentum) * 2,
-                "risk_score": 0.4,
-                "metadata": {"momentum": momentum, "volume_surge": volume_surge},
-            }
-
-        return None
-
-    def _arbitrage_signal(self, market_data: MarketData) -> Dict[str, Any]:
-        """Generate arbitrage signal."""
-        # Simplified arbitrage logic (would need multiple exchanges in, real)
-        # implementation)
-        if market_data.bid and market_data.ask:
-            spread = (market_data.ask - market_data.bid) / market_data.price
-
-            if spread > 0.05:  # Minimum profitable spread
-                return {
-                    "action": "BUY",  # Buy at bid, sell at ask
-                    "quantity": self._calculate_position_size(market_data, "BUY") * 0.5,
-                    "confidence": min(spread * 100, 1.0),
-                    "profit_potential": spread,
-                    "risk_score": 0.2,
-                    "metadata": {"spread": spread, "bid": market_data.bid, "ask": market_data.ask},
-                }
-
-        return None
-
-    def _scalping_signal(self, market_data: MarketData) -> Dict[str, Any]:
-        """Generate scalping signal."""
-        if len(self.market_data_history) < 5:
-            return None
-
-        # Very short-term price movement analysis
-        recent_prices = [md.price for md in self.market_data_history[-5:]]
-        price_change = (recent_prices[-1] - recent_prices[0]) / recent_prices[0]
-        volatility = market_data.volatility
-
-        # Scalping logic - capitalize on small movements
-        if abs(price_change) > 0.02 and volatility > 0.3:
-            action = "BUY" if price_change > 0 else "SELL"
-            return {
-                "action": action,
-                # Higher frequency
-                "quantity": self._calculate_position_size(market_data, action) * 2,
-                "confidence": min(abs(price_change) * 100, 1.0),
-                "profit_potential": abs(price_change) * 0.5,
-                "risk_score": 0.6,
-                "metadata": {"price_change": price_change, "volatility": volatility},
-            }
-
-        return None
-
-    def _swing_signal(self, market_data: MarketData) -> Dict[str, Any]:
-        """Generate swing trading signal."""
-        if len(self.market_data_history) < 50:
-            return None
-
-        # Medium-term trend analysis
-        prices = [md.price for md in self.market_data_history[-50:]]
-        trend = np.polyfit(range(len(prices)), prices, 1)[0]
-        current_price = market_data.price
-
-        # Support and resistance levels
-        recent_highs = [max(prices[i : i + 10]) for i in range(0, len(prices) - 10, 10)]
-        recent_lows = [min(prices[i : i + 10]) for i in range(0, len(prices) - 10, 10)]
-
-        resistance = np.mean(recent_highs) if recent_highs else current_price
-        support = np.mean(recent_lows) if recent_lows else current_price
-
-        # Swing logic
-        if current_price <= support * 1.2 and trend > 0:  # Near support with uptrend
-            return {
-                "action": "BUY",
-                "quantity": self._calculate_position_size(market_data, "BUY"),
-                "confidence": 0.7,
-                "profit_potential": (resistance - current_price) / current_price,
-                "risk_score": 0.4,
-                "metadata": {"support": support, "resistance": resistance, "trend": trend},
-            }
-        elif current_price >= resistance * 0.98 and trend < 0:  # Near resistance with downtrend
-            return {
-                "action": "SELL",
-                "quantity": self._calculate_position_size(market_data, "SELL"),
-                "confidence": 0.7,
-                "profit_potential": (current_price - support) / current_price,
-                "risk_score": 0.4,
-                "metadata": {"support": support, "resistance": resistance, "trend": trend},
-            }
-
-        return None
-
-    def _grid_signal(self, market_data: MarketData) -> Dict[str, Any]:
-        """Generate grid trading signal."""
-        if len(self.market_data_history) < 20:
-            return None
-
-        # Grid trading logic
-        recent_prices = [md.price for md in self.market_data_history[-20:]]
-        price_range = max(recent_prices) - min(recent_prices)
-        grid_size = price_range / 10  # 10 grid levels
-
-        current_price = market_data.price
-        base_price = np.mean(recent_prices)
-
-        # Determine grid position
-        grid_level = round((current_price - base_price) / grid_size)
-
-        # Grid logic - buy low, sell high within range
-        if grid_level <= -2:  # Lower grid levels
-            return {
-                "action": "BUY",
-                "quantity": self._calculate_position_size(market_data, "BUY") * 0.8,
-                "confidence": 0.6,
-                "profit_potential": 0.1,
-                "risk_score": 0.3,
-                "metadata": {"grid_level": grid_level, "grid_size": grid_size},
-            }
-        elif grid_level >= 2:  # Upper grid levels
-            return {
-                "action": "SELL",
-                "quantity": self._calculate_position_size(market_data, "SELL") * 0.8,
-                "confidence": 0.6,
-                "profit_potential": 0.1,
-                "risk_score": 0.3,
-                "metadata": {"grid_level": grid_level, "grid_size": grid_size},
-            }
-
-        return None
-
-    def _apply_risk_management(
-        self, signal: Dict[str, Any], market_data: MarketData
-    ) -> Optional[Dict[str, Any]]:
-        # This method's logic will now be largely integrated into _determine_asset_and_signal'
-        # so it's kept as a placeholder or for very specific, final checks if needed.'
-        # For now, it simply returns the signal, as risk logic is shifting.
-        return signal
-
-    # --- New method to determine asset and formulate signal based on Ferris Wheel ---
-    async def _determine_asset_and_signal(
-        self,
-        expanded_strategy_id: int,
-        market_data: MarketData,
-        current_strategy_branch: StrategyBranch,
-    ):
-        """
-        Determines the asset to trade and formulates the trading signal
-        based on the expanded strategy ID from the Ferris Wheel.
-
-        This method integrates:
-        - Ferris Wheel expansion logic
-        - Dualistic state machine
-        - Profit vectorization
-        - Real-time portfolio data
-        - Advanced mathematical decision making
-        - Ghost Core interaction
-        """
-        try:
-            # 1. PHASE BIT INTEGRATION - Determine optimal bit phase for this
-            # decision
-            context_hash = "{0}_{1}_{2}".format(
-                expanded_strategy_id, market_data.symbol, market_data.timestamp
-            )
-            phase_resolution = self.phase_bit_integration.resolve_bit_phase(
-                context_hash=context_hash, resolution_mode="auto"
-            )
-
-            logger.info("Phase resolution: {0}".format(phase_resolution))
-
-            # 2. REAL ASSET SELECTION - Get available assets from portfolio
-            portfolio_summary = self.portfolio_tracker.get_portfolio_summary()
-            available_assets = []
-
-            # Extract available trading pairs from portfolio
-            if "positions" in portfolio_summary and portfolio_summary["positions"]:
-                available_assets = list(portfolio_summary["positions"].keys())
-            else:
-                # Fallback to default tradable assets if portfolio is empty
-                available_assets = [
-                    "BTC/USDC",
-                    "ETH/USDC",
-                    "XRP/USDC",
-                    "BTC/USDT",
-                    "ETH/USDT",
-                    "SOL/USDC",
-                ]
-                logger.info("Using default tradable assets (portfolio, empty)")
-
-            if not available_assets:
-                logger.error("No tradable assets available")
-                return None, None
-
-            # 3. FERRIS WHEEL ASSET SELECTION - Use expanded strategy ID for
-            # deterministic selection
-            asset_index = expanded_strategy_id % len(available_assets)
-            selected_asset_symbol = available_assets[asset_index]
-
-            # Convert to TradingPair enum if possible
-            try:
-                selected_trading_pair = TradingPair(selected_asset_symbol)
-            except ValueError:
-                # Create a custom TradingPair for unsupported symbols
-                selected_trading_pair = TradingPair.BTC_USDC  # Default fallback
-                logger.warning(
-                    "Unsupported trading pair: {0}, using default".format(selected_asset_symbol)
-                )
-
-            logger.info(
-                "Ferris Wheel selected: {0} (ID: {1}, Index: {2}/{3})".format(
-                    selected_asset_symbol, expanded_strategy_id, asset_index, len(available_assets)
-                )
-            )
-
-            # 4. DUALISTIC STATE ANALYSIS - Determine current market state and
-            # strategy alignment
-            dualistic_state = self._analyze_dualistic_state(
-                market_data, expanded_strategy_id, phase_resolution
-            )
-
-            # 5. PROFIT VECTORIZATION - Calculate expected profit vector for
-            # this asset/strategy
-            profit_vector = await self._calculate_advanced_profit_vector(
-                market_data,
-                selected_asset_symbol,
-                expanded_strategy_id,
-                phase_resolution,
-                dualistic_state,
-            )
-
-            # 6. ADVANCED DECISION LOGIC - Integrate all mathematical
-            # components
-            decision_data = self._integrate_decision_components(
-                market_data, profit_vector, dualistic_state, expanded_strategy_id, phase_resolution
-            )
-
-            # 7. POSITION SIZING - Calculate optimal position size
-            quantity = self._calculate_advanced_position_size(
-                market_data, decision_data, profit_vector, dualistic_state
-            )
-
-            # 8. RISK ASSESSMENT - Comprehensive risk evaluation
-            risk_assessment = self._calculate_comprehensive_risk(
-                market_data, decision_data, profit_vector, quantity, dualistic_state
-            )
-
-            # 9. FINAL SIGNAL CONSTRUCTION - Create the complete trading signal
-            if decision_data["action"] != "hold" and quantity > 0:
-                signal = IntegratedTradingSignal(
-                    signal_id=str(uuid.uuid4()),
-                    recommended_action=decision_data["action"],
-                    target_pair=selected_trading_pair,
-                    quantity=Decimal(str(quantity)),
-                    confidence_score=Decimal(str(decision_data["confidence"])),
-                    profit_potential=Decimal(str(profit_vector.profit_score)),
-                    risk_assessment={
-                        "overall_risk": risk_assessment["overall_risk"],
-                        "ferris_id": expanded_strategy_id,
-                        "bit_phase": phase_resolution.bit_phase.value,
-                        "dualistic_state": dualistic_state["state"],
-                        "market_regime": market_data.metadata.get("market_regime", "unknown"),
-                        "volatility_risk": risk_assessment["volatility_risk"],
-                        "position_risk": risk_assessment["position_risk"],
-                        "strategy_risk": risk_assessment["strategy_risk"],
-                    },
-                    ghost_route="ferris_wheel_{0}".format(phase_resolution.strategy_type.value),
-                    timestamp=market_data.timestamp,
-                )
-
-                logger.info(
-                    "Generated signal: {0} {1} {2} (Confidence: {3}, Profit: {4})".format(
-                        signal.recommended_action,
-                        quantity,
-                        selected_asset_symbol,
-                        signal.confidence_score,
-                        signal.profit_potential,
-                    )
-                )
-
-                return signal, selected_asset_symbol
-            else:
-                logger.info(
-                    "No trade recommended for {0} (Action: {1}, Quantity: {2})".format(
-                        selected_asset_symbol, decision_data['action'], quantity
-                    )
-                )
-                return None, selected_asset_symbol
-
-        except Exception as e:
-            logger.error("Error in _determine_asset_and_signal: {0}".format(e))
-            return None, None
-
-    def _analyze_dualistic_state(
-        self, market_data: MarketData, expanded_strategy_id: int, phase_resolution: Any
-    ) -> Dict[str, Any]:
-        """
-        Analyze dualistic state based on market data and strategy ID.
-        This integrates your dualistic state machine logic.
-        """
-        # Create a hash-based dualistic state determination
-        state_hash = hash(
-            "{0}_{1}_{2}".format(expanded_strategy_id, market_data.price, market_data.volume)
-        )
-
-        # Determine state based on hash and market conditions
-        if state_hash % 2 == 0:
-            state = "positive_phase"
-            confidence_multiplier = 1.2
-        else:
-            state = "negative_phase"
-            confidence_multiplier = 0.8
-
-        # Adjust based on market conditions
-        if market_data.trend_strength > 0.7:
-            state += "_trending"
-        elif market_data.volatility > 0.8:
-            state += "_volatile"
-
-        return {
-            "state": state,
-            "confidence_multiplier": confidence_multiplier,
-            "hash_value": state_hash,
-            "bit_phase": phase_resolution.bit_phase.value,
-            "market_alignment": market_data.trend_strength,
-        }
-
-    async def _calculate_advanced_profit_vector(
-        self,
-        market_data: MarketData,
-        asset_symbol: str,
-        expanded_strategy_id: int,
-        phase_resolution: Any,
-        dualistic_state: Dict[str, Any],
-    ):
-        """
-        Calculate advanced profit vector using your profit vectorization system.
-        """
-        # Create comprehensive input for profit vectorization
-        vector_input = {
-            "price": market_data.price,
-            "volume": market_data.volume,
-            "volatility": market_data.volatility,
-            "trend_strength": market_data.trend_strength,
-            "entropy_level": market_data.entropy_level,
-            "asset_symbol": asset_symbol,
-            "strategy_id": expanded_strategy_id,
-            "bit_phase": phase_resolution.bit_phase.value,
-            "dualistic_state": dualistic_state["state"],
-            "confidence_multiplier": dualistic_state["confidence_multiplier"],
-            "timestamp": market_data.timestamp,
-            "metadata": market_data.metadata,
-        }
-
-        # Select vectorization mode based on strategy and market conditions
-        if market_data.volatility > 0.8:
-            mode = VectorizationMode.HIGH_FREQUENCY
-        elif market_data.trend_strength > 0.7:
-            mode = VectorizationMode.MOMENTUM_BASED
-        elif market_data.trend_strength < 0.3:
-            mode = VectorizationMode.MEAN_REVERSION
-        else:
-            mode = VectorizationMode.ADAPTIVE
-
-        # Calculate profit vector
-        profit_vector = self.profit_vectorizer.calculate_profit_vector(vector_input, mode=mode)
-
-        # Apply dualistic state adjustments
-        profit_vector.profit_score *= dualistic_state["confidence_multiplier"]
-        profit_vector.confidence_score *= dualistic_state["confidence_multiplier"]
-
-        return profit_vector
-
-    def _integrate_decision_components(
-        self,
-        market_data: MarketData,
-        profit_vector: ProfitVector,
-        dualistic_state: Dict[str, Any],
-        expanded_strategy_id: int,
-        phase_resolution: Any,
-    ) -> Dict[str, Any]:
-        """
-        Integrate all decision components to determine final trading action.
-        """
-        # Base decision logic
-        action = "hold"
-        confidence = 0.0
-        profit_potential = 0.0
-
-        # 1. Profit Vector Analysis
-        if profit_vector.profit_score > 0.2:  # 2% minimum profit potential
-            action = "buy"
-            confidence = profit_vector.confidence_score
-            profit_potential = profit_vector.profit_score
-        elif profit_vector.profit_score < -0.2:  # Negative profit potential
-            action = "sell"
-            confidence = profit_vector.confidence_score
-            profit_potential = abs(profit_vector.profit_score)
-
-        # 2. Market Regime Analysis
-        if market_data.trend_strength > 0.7 and action == "buy":
-            confidence *= 1.2  # Boost confidence for strong trends
-        elif market_data.trend_strength < 0.3 and action == "sell":
-            confidence *= 1.1  # Boost confidence for strong downtrends
-
-        # 3. Volatility Adjustment
-        if market_data.volatility > 0.8:
-            confidence *= 0.8  # Reduce confidence in high volatility
-            profit_potential *= 1.3  # But increase profit potential
-
-        # 4. Dualistic State Integration
-        confidence *= dualistic_state["confidence_multiplier"]
-
-        # 5. Bit Phase Precision
-        if phase_resolution.bit_phase.value >= 16:
-            confidence *= 1.1  # Higher precision = higher confidence
-        elif phase_resolution.bit_phase.value <= 4:
-            confidence *= 0.9  # Lower precision = lower confidence
-
-        # 6. Strategy ID Pattern Analysis
-        strategy_pattern = expanded_strategy_id % 256
-        if strategy_pattern in [0, 64, 128, 192]:  # Special pattern values
-            confidence *= 1.15  # Boost confidence for special patterns
-
-        # Ensure confidence is within bounds
-        confidence = max(0.1, min(1.0, confidence))
-
-        return {
-            "action": action,
-            "confidence": confidence,
-            "profit_potential": profit_potential,
-            "dualistic_state": dualistic_state,
-            "bit_phase": phase_resolution.bit_phase.value,
-            "strategy_pattern": strategy_pattern,
-        }
-
-    def _calculate_advanced_position_size(
-        self,
-        market_data: MarketData,
-        decision_data: Dict[str, Any],
-        profit_vector: ProfitVector,
-        dualistic_state: Dict[str, Any],
-    ) -> float:
-        """
-        Calculate advanced position size based on multiple factors.
-        """
-        # Base position size
-        base_size = self.risk_params.max_position_size * self.state.current_capital
-
-        # Price adjustment
-        price = market_data.price
-        if price <= 0:
-            return 0.0
-
-        # Volatility adjustment
-        volatility_adjustment = 1.0 - (market_data.volatility * 0.5)
-
-        # Confidence adjustment
-        confidence_adjustment = decision_data["confidence"]
-
-        # Profit potential adjustment
-        profit_adjustment = min(profit_vector.profit_score * 10, 2.0)  # Cap at 2x
-
-        # Dualistic state adjustment
-        dualistic_adjustment = dualistic_state["confidence_multiplier"]
-
-        # Thermal state adjustment
-        thermal_multiplier = {
-            ThermalState.COOL: 0.8,
-            ThermalState.WARM: 1.0,
-            ThermalState.HOT: 1.2,
-        }.get(self.state.thermal_state, 1.0)
-
-        # Calculate final position size
-        adjusted_size = (
-            base_size
-            * volatility_adjustment
-            * confidence_adjustment
-            * profit_adjustment
-            * dualistic_adjustment
-            * thermal_multiplier
-            / price
-        )
-
-        # Ensure positive and reasonable size
-        # Cap at 2x base size
-        return max(0.0, min(adjusted_size, base_size * 2.0))
-
-    def _calculate_comprehensive_risk(
-        self,
-        market_data: MarketData,
-        decision_data: Dict[str, Any],
-        profit_vector: ProfitVector,
-        quantity: float,
-        dualistic_state: Dict[str, Any],
-    ) -> Dict[str, float]:
-        """
-        Calculate comprehensive risk assessment.
-        """
-        # Volatility risk
-        volatility_risk = market_data.volatility * 0.8
-
-        # Position risk (based on position size relative to, capital)
-        position_risk = min((quantity * market_data.price) / self.state.current_capital, 1.0)
-
-        # Strategy risk (based on confidence and profit, potential)
-        strategy_risk = 1.0 - decision_data["confidence"]
-
-        # Market regime risk
-        if market_data.trend_strength < 0.3:
-            regime_risk = 0.6
-        elif market_data.trend_strength > 0.7:
-            regime_risk = 0.3
-        else:
-            regime_risk = 0.5
-
-        # Dualistic state risk
-        if dualistic_state["state"].endswith("_volatile"):
-            dualistic_risk = 0.7
-        else:
-            dualistic_risk = 0.4
-
-        # Overall risk (weighted, average)
-        overall_risk = (
-            volatility_risk * 0.3
-            + position_risk * 0.25
-            + strategy_risk * 0.2
-            + regime_risk * 0.15
-            + dualistic_risk * 0.1
-        )
-
-        return {
-            "overall_risk": overall_risk,
-            "volatility_risk": volatility_risk,
-            "position_risk": position_risk,
-            "strategy_risk": strategy_risk,
-            "regime_risk": regime_risk,
-            "dualistic_risk": dualistic_risk,
-        }
-
-    def _calculate_position_size(self, market_data: MarketData, action: str) -> float:
-        """Calculate appropriate position size."""
-        base_size = self.risk_params.max_position_size * self.state.current_capital
-        price = market_data.price
-        volatility_adjustment = 1.0 - market_data.volatility
-
-        # Adjust for volatility
-        adjusted_size = base_size * volatility_adjustment / price
-
-        # Thermal state adjustment
-        thermal_multiplier = {
-            ThermalState.COOL: 0.8,
-            ThermalState.WARM: 1.0,
-            ThermalState.HOT: 1.2,
-        }.get(self.state.thermal_state, 1.0)
-
-        # Ensure positive quantity
-        return max(0.0, adjusted_size * thermal_multiplier)
-
-    def _calculate_portfolio_risk(self) -> float:
-        """Calculate current portfolio risk level."""
-        if len(self.decision_history) < 5:
-            return 0.0
-
-        recent_decisions = self.decision_history[-5:]
-        risk_scores = [d.risk_score for d in recent_decisions]
-        return np.mean(risk_scores)
-
-    def _calculate_daily_pnl(self) -> float:
-        """Calculate daily P&L."""
-        today_start = time.time() - 24 * 3600  # 24 hours ago
-        today_decisions = [d for d in self.decision_history if d.timestamp >= today_start]
-
-        pnl = 0.0
-        for decision in today_decisions:
-            if decision.action == TradingAction.BUY:
-                pnl -= decision.quantity * decision.price
-            elif decision.action == TradingAction.SELL:
-                pnl += decision.quantity * decision.price
-
-        return pnl
-
-    def _update_pipeline_state(self, decision: TradingDecision) -> None:
-        """Update pipeline state after decision."""
-        self.state.timestamp = decision.timestamp
-        self.state.total_trades += 1
-
-        # Update capital (simplified)
-        if decision.action == TradingAction.BUY:
-            self.state.current_capital -= decision.quantity * decision.price
-        elif decision.action == TradingAction.SELL:
-            self.state.current_capital += decision.quantity * decision.price
-
-        # Update performance metrics
-        self._update_pipeline_metrics()
-
-    def _update_pipeline_metrics(self) -> None:
-        """Update performance metrics."""
-        if len(self.decision_history) < 2:
-            return
-
-        # Calculate basic metrics
-        total_trades = len(self.decision_history)
-        profitable_trades = len([d for d in self.decision_history if d.profit_potential > 0])
-
-        self.performance_metrics["win_rate"] = (
-            profitable_trades / total_trades if total_trades > 0 else 0
-        )
-        self.performance_metrics["total_return"] = (
-            self.state.current_capital - self.initial_capital
-        ) / self.initial_capital
-
-    def get_pipeline_summary(self) -> Dict[str, Any]:
-        """Get comprehensive pipeline summary."""
-        return {
-            "state": {
-                "symbol": self.symbol,
-                "current_capital": self.state.current_capital,
-                "total_trades": self.state.total_trades,
-                "active_strategy": self.state.active_strategy.value,
-                "market_regime": self.state.market_regime.value,
-                "thermal_state": self.state.thermal_state.value,
-                "bit_phase": self.state.bit_phase.value,
-            },
-            "performance": self.performance_metrics,
-            "risk_parameters": {
-                "max_position_size": self.risk_params.max_position_size,
-                "stop_loss_pct": self.risk_params.stop_loss_pct,
-                "take_profit_pct": self.risk_params.take_profit_pct,
-            },
-            "history_length": {
-                "market_data": len(self.market_data_history),
-                "decisions": len(self.decision_history),
-            },
-        }
-
-    def set_mode(self, mode: str = "demo") -> None:
-        """Set pipeline operating mode (testing/demo/live)."""
-        if mode not in {"testing", "demo", "live"}:
-            raise ValueError("Unsupported mode: {0}".format(mode))
-        self.mode = mode
-        logger.info("Pipeline mode set to {0}".format(mode.upper()))
-
-    # ---------------------------------------------------------------------
-    #  Historical-feed helpers (for DEMO / back-testing)
-    # ---------------------------------------------------------------------
-    def load_historical_feed(self, dataset_path: str, speed_multiplier: float = 1.0) -> None:
-        """Load a JSON candle file for demo/back-test playback."
-
-        Expected schema: list of {"timestamp": int, "open": float, "high": float, "low": float, "close": float, "volume": float}
-        """
-        if not os.path.exists(dataset_path):
-            raise FileNotFoundError(dataset_path)
-        with open(dataset_path, "r", encoding="utf-8") as f:
-            self._historical_feed = json.load(f)
-        self._historical_cursor = 0
-        self._historical_speed = max(speed_multiplier, 0.1)
-        logger.info(
-            "Historical feed loaded: {0} candles from {1} (x{2} speed)".format(
-                len(self._historical_feed), dataset_path, self._historical_speed
-            )
-        )
-
-    async def process_candle(self, candle: Dict[str, Any]) -> Optional[Dict[str, Any]]:
-        """Process a single OHLCV candle through the same logic used in live trading."""
-        # Map candle to minimal market_data dict expected by
-        # _calculate_enhanced_trading_signals
-        try:
-            market_packet = None  # Not using MarketDataPacket in back-test minimal path
-            data = {
-                "symbol": self.symbol,
-                "price": candle["close"],
-                "volume": candle.get("volume", 0.0),
-                "timestamp": candle["timestamp"],
-            }
-            signals = self._calculate_enhanced_trading_signals(market_packet, data)
-            risk_assessment = self._assess_risk_with_market_data(market_packet, signals)
-            trade_action = self._determine_trade_action(signals, risk_assessment)
-            if trade_action["action"] != "hold":
-                return await self._execute_trade_with_market_data(trade_action, market_packet, data)
-            return None
-        except Exception as e:
-            logger.error("Back-test candle processing error: {0}".format(e))
-            return None
-
-    # ---------------------------------------------------------------------
-    #  Override execute trade for LIVE-mode risk filters
-    # ---------------------------------------------------------------------
-    async def _execute_trade_with_market_data(
-        self, trade_action: Dict[str, Any], packet: Optional[MarketDataPacket], data: Dict[str, Any]
-    ) -> Dict[str, Any]:
-        # ... existing code untouched until just before simulation block ...
-        # REPLACE simulation gate with live filters
-        # Begin live-mode additional safety filters
-        if hasattr(self, "mode") and self.mode == "live":
-            current_price = data.get("price", 0.0)
-            bid_price = data.get("bid", current_price)
-            ask_price = data.get("ask", current_price)
-
-            spread = abs(ask_price - bid_price) / current_price if bid_price and ask_price else 0
-            volatility = data.get("volatility", 0.0)
-
-            # >0.3% spread or >2σ intrabar volatility
-            if spread > 0.03 or volatility > 2.0:
-                logger.warning("Trade blocked by spread/volatility filter")
-                return {"blocked": True, "reason": "spread/volatility"}
-            if trade_action.get("confidence", 0) < 0.81:
-                logger.warning("Trade blocked by low confidence filter")
-                return {"blocked": True, "reason": "confidence"}
-        # Continue with original execution logic
-        # ... existing code remains ...
-
-
-def create_trading_pipeline(
-    symbol: str = "BTCUSDT", initial_capital: float = 10000.0, safe_mode: bool = False
-) -> CleanTradingPipeline:
-    """Create a new trading pipeline instance."""
-    return CleanTradingPipeline(symbol=symbol, initial_capital=initial_capital, safe_mode=safe_mode)
-
-
-async def run_trading_simulation(
-    pipeline: CleanTradingPipeline, market_data_stream: List[MarketData]
-) -> Dict[str, Any]:
-    """Run a trading simulation with provided market data."""
-    decisions = []
-
-    for market_data in market_data_stream:
-        decision = await pipeline.process_market_data(market_data)
-        if decision:
-            decisions.append(decision)
-
-    return {
-        "total_decisions": len(decisions),
-        "pipeline_summary": pipeline.get_pipeline_summary(),
-        "final_capital": pipeline.state.current_capital,
-        "total_return": (pipeline.state.current_capital - pipeline.initial_capital)
-        / pipeline.initial_capital,
-    }

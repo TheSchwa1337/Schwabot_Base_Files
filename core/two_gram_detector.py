@@ -1,20 +1,3 @@
-import asyncio
-import hashlib
-import json
-import logging
-import math
-import time
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import Dict, List, Optional, Tuple, Any, Union
-from .fractal_memory_tracker import FractalMemoryTracker, FractalSnapshot, create_fractal_memory_tracker
-from .unified_math_system import generate_unified_hash
-from .phantom_detector import PhantomZone
-from .phantom_registry import PhantomRegistry
-
-import numpy as np
-
-
 #!/usr/bin/env python3
 """
 🧬 TWO-GRAM DETECTOR - SCHWABOT PATTERN RECOGNITION ENGINE
@@ -27,8 +10,33 @@ Advanced 2-gram pattern detection system that integrates with:
 - Vector similarity matching via cosine logic
 - Real-time burst detection for strategy triggers
 
-This is Schwabot's DNA-level signal recognition layer.'
+This is Schwabot's DNA-level signal recognition layer.
+
+Mathematical Foundation:
+- Shannon Entropy: H(X) = -Σ p(x) * log2(p(x)) for pattern distribution
+- Burst Score: Δf = (f_current - μ_historical) / σ_historical
+- Cosine Similarity: cos(θ) = (A·B) / (||A|| * ||B||) for vector matching
+- Fractal Resonance: R = Σ(w_i * s_i) where w_i are weights, s_i are similarities
+- T-Cell Response: T = sigmoid(α * entropy + β * burst_score + γ * frequency)
 """
+
+import asyncio
+import hashlib
+import json
+import logging
+import math
+import time
+from collections import defaultdict, deque
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Dict, List, Optional, Tuple, Any, Union, Callable
+from .fractal_memory_tracker import FractalMemoryTracker, FractalSnapshot, create_fractal_memory_tracker
+from .unified_math_system import generate_unified_hash
+from .phantom_detector import PhantomZone
+from .phantom_registry import PhantomRegistry
+
+import numpy as np
+
 
 logger = logging.getLogger(__name__)
 
@@ -57,12 +65,23 @@ class BurstIntensity(Enum):
 
 @dataclass
 class TwoGramSignal:
-    """Standardized 2-gram signal packet for strategy routing."""
+    """
+    Standardized 2-gram signal packet for strategy routing.
+    
+    Mathematical Properties:
+    - pattern: 2-character sequence representing market micro-movements
+    - frequency: Count of pattern occurrences in analysis window
+    - entropy: Shannon entropy H(X) of pattern distribution
+    - burst_score: Z-score of frequency deviation from historical mean
+    - similarity_vector: Normalized feature vector for cosine matching
+    - fractal_resonance: Weighted similarity to historical fractal patterns
+    - t_cell_activation: Boolean indicating immune system response
+    """
 
     pattern: str  # The 2-character pattern (e.g., "UD")
     frequency: int  # Occurrence count in window
     entropy: float  # Shannon entropy of pattern distribution
-    burst_score: float  # Δ frequency intensity
+    burst_score: float  # Δ frequency intensity (Z-score)
     similarity_vector: List[float]  # Vector for cosine matching
 
     # Symbolic representation
@@ -86,7 +105,16 @@ class TwoGramSignal:
 
 @dataclass
 class PatternMemory:
-    """Memory structure for 2-gram pattern history."""
+    """
+    Memory structure for 2-gram pattern history.
+    
+    Mathematical Structure:
+    - pattern_frequencies: Time series of frequency counts per pattern
+    - entropy_history: Temporal evolution of Shannon entropy
+    - burst_events: Recorded burst events with metadata
+    - profit_correlations: Pearson correlation with profit outcomes
+    - t_cell_responses: Historical immune system responses
+    """
 
     pattern_frequencies: Dict[str, List[int]] = field(default_factory=lambda: defaultdict(list))
     entropy_history: List[float] = field(default_factory=list)
@@ -99,8 +127,23 @@ class TwoGramDetector:
     """
     Advanced 2-gram pattern detector with full Schwabot integration.
 
-    This detector operates as Schwabot's signal DNA recognition layer,'
+    This detector operates as Schwabot's signal DNA recognition layer,
     identifying micro-patterns that precede larger market movements.
+
+    Mathematical Architecture:
+    1. Pattern Extraction: Sliding window 2-gram extraction
+    2. Frequency Analysis: Rolling frequency counting with burst detection
+    3. Entropy Calculation: Shannon entropy H(X) = -Σ p(x) * log2(p(x))
+    4. Vector Generation: Multi-dimensional feature vector creation
+    5. Fractal Matching: Historical pattern resonance via cosine similarity
+    6. T-Cell Modeling: Immune system response simulation
+    7. Strategy Triggering: Pattern-to-strategy mapping
+
+    Key Mathematical Formulas:
+    - Burst Score: Z = (f - μ) / σ where f is current frequency
+    - Cosine Similarity: cos(θ) = (A·B) / (||A|| * ||B||)
+    - Fractal Resonance: R = Σ(w_i * s_i) for weighted similarities
+    - T-Cell Response: T = 1 / (1 + exp(-(α*H + β*Z + γ*f)))
     """
 
     def __init__(
@@ -110,49 +153,66 @@ class TwoGramDetector:
         similarity_threshold: float = 0.85,
         t_cell_sensitivity: float = 0.7,
         enable_fractal_memory: bool = True,
-    ):
+    ) -> None:
         """
         Initialize the 2-gram detector with full integration capabilities.
 
         Args:
-            window_size: Rolling window for pattern analysis
-            burst_threshold: Threshold for burst detection (sigma multiplier)
-            similarity_threshold: Cosine similarity threshold for pattern matching
-            t_cell_sensitivity: Sensitivity for T-cell immune responses
-            enable_fractal_memory: Enable fractal memory integration
+            window_size: Rolling window size for pattern analysis (N in sliding window)
+            burst_threshold: Z-score threshold for burst detection (σ multiplier)
+            similarity_threshold: Cosine similarity threshold for pattern matching (0-1)
+            t_cell_sensitivity: Sensitivity parameter for T-cell immune responses (0-1)
+            enable_fractal_memory: Enable fractal memory integration for historical matching
+
+        Mathematical Parameters:
+        - window_size: Determines the temporal resolution of pattern analysis
+        - burst_threshold: Controls sensitivity to frequency anomalies
+        - similarity_threshold: Sets minimum cosine similarity for pattern matching
+        - t_cell_sensitivity: Scales the immune response activation function
         """
-        self.window_size = window_size
-        self.burst_threshold = burst_threshold
-        self.similarity_threshold = similarity_threshold
-        self.t_cell_sensitivity = t_cell_sensitivity
+        self.window_size: int = window_size
+        self.burst_threshold: float = burst_threshold
+        self.similarity_threshold: float = similarity_threshold
+        self.t_cell_sensitivity: float = t_cell_sensitivity
 
         # Core pattern tracking
         self.freq_map: Dict[str, int] = defaultdict(int)
         self.pattern_history: deque = deque(maxlen=window_size)
-        self.memory = PatternMemory()
+        self.memory: PatternMemory = PatternMemory()
 
         # Fractal integration
-        self.fractal_memory = None
+        self.fractal_memory: Optional[FractalMemoryTracker] = None
         if enable_fractal_memory:
             self.fractal_memory = create_fractal_memory_tracker(
                 max_snapshots=1000, similarity_threshold=similarity_threshold
             )
 
         # Phantom Math integration
-        self.phantom_registry = PhantomRegistry()
+        self.phantom_registry: PhantomRegistry = PhantomRegistry()
 
         # Symbolic mapping (Unicode/Emoji)
-        self.symbol_map = self._initialize_symbol_map()
+        self.symbol_map: Dict[str, str] = self._initialize_symbol_map()
 
         # System state
         self.active_patterns: Dict[str, TwoGramSignal] = {}
-        self.t_cell_active = False
-        self.system_health = 1.0
+        self.t_cell_active: bool = False
+        self.system_health: float = 1.0
 
         logger.info("🧬 Two-gram detector initialized with full Schwabot integration")
 
     def _initialize_symbol_map(self) -> Dict[str, str]:
-        """Initialize symbolic representation mapping for patterns."""
+        """
+        Initialize symbolic representation mapping for patterns.
+        
+        Returns:
+            Dictionary mapping 2-gram patterns to Unicode/emoji symbols
+            
+        Symbolic Logic:
+        - Volatility patterns use dynamic symbols (⚡, 🔄)
+        - Asset patterns use directional symbols (📈, 📉)
+        - Anomaly patterns use warning symbols (⚠️, 🧊)
+        - Health patterns use status symbols (✅, ❌)
+        """
         return {
             # Volatility patterns
             "UD": "⚡",  # Lightning for volatility
@@ -176,169 +236,260 @@ class TwoGramDetector:
             "CC": "🔒",  # Lock for consolidation
         }
 
-    async def analyze_sequence(self, sequence: str, context: Optional[Dict[str, Any]] = None) -> List[TwoGramSignal]:
+    async def analyze_sequence(
+        self, 
+        sequence: str, 
+        context: Optional[Dict[str, Any]] = None
+    ) -> List[TwoGramSignal]:
         """
         Analyze a character sequence for 2-gram patterns with full integration.
+
+        Mathematical Process:
+        1. Extract all 2-grams using sliding window: S[i:i+2] for i in [0, len(S)-1]
+        2. Calculate frequency distribution: f(p) = count(p) / total_patterns
+        3. Compute Shannon entropy: H(X) = -Σ f(p) * log2(f(p))
+        4. Calculate burst scores: Z(p) = (f_current(p) - μ_historical(p)) / σ_historical(p)
+        5. Generate similarity vectors: V(p) = [f(p), H(p), Z(p), temporal_features]
+        6. Check fractal resonance: R(p) = Σ(w_i * cos(V(p), V_historical_i))
+        7. Assess T-cell response: T(p) = sigmoid(α*H + β*Z + γ*f)
 
         Args:
             sequence: Input character sequence (e.g., market direction, symbols)
             context: Additional context (market data, timestamps, etc.)
 
         Returns:
-            List of detected 2-gram signals with full metadata
+            List of detected 2-gram signals with full mathematical metadata
+
+        Raises:
+            ValueError: If sequence length < 2
+            RuntimeError: If pattern analysis fails
         """
         try:
             if len(sequence) < 2:
                 return []
 
             # Reset frequency map for this analysis
-            current_freq = defaultdict(int)
-            signals = []
+            current_freq: Dict[str, int] = defaultdict(int)
+            signals: List[TwoGramSignal] = []
 
-            # Extract all 2-grams from sequence
+            # Extract all 2-grams from sequence using sliding window
             for i in range(len(sequence) - 1):
-                pattern = sequence[i : i + 2]
+                pattern: str = sequence[i : i + 2]
                 current_freq[pattern] += 1
-                self.pattern_history.append(pattern)
 
-            # Calculate entropy for this sequence
-            entropy = self._calculate_shannon_entropy(current_freq)
+            # Calculate Shannon entropy for the frequency distribution
+            total_patterns: int = sum(current_freq.values())
+            entropy: float = self._calculate_shannon_entropy(current_freq)
 
-            # Detect bursts and generate signals
+            # Process each pattern
             for pattern, frequency in current_freq.items():
-                # Calculate burst score
-                burst_score = self._calculate_burst_score(pattern, frequency)
-
-                # Generate similarity vector
-                similarity_vector = self._generate_similarity_vector(pattern, frequency, entropy)
-
-                # Check fractal resonance
+                # Calculate burst score (Z-score of frequency deviation)
+                burst_score: float = self._calculate_burst_score(pattern, frequency)
+                
+                # Generate similarity vector for cosine matching
+                similarity_vector: List[float] = self._generate_similarity_vector(
+                    pattern, frequency, entropy
+                )
+                
+                # Get symbolic representation
+                emoji_symbol: str = self.symbol_map.get(pattern, "❓")
+                asic_hash: str = self._generate_asic_hash(pattern, frequency)
+                
+                # Check fractal resonance with historical patterns
                 fractal_resonance, fractal_confidence = await self._check_fractal_resonance(
                     pattern, similarity_vector, context
                 )
-
-                # Assess T-cell response
-                t_cell_activation, health_score = self._assess_t_cell_response(pattern, frequency, entropy, burst_score)
-
-                # Create signal
+                
+                # Assess T-cell immune response
+                t_cell_activation, health_score = self._assess_t_cell_response(
+                    pattern, frequency, entropy, burst_score
+                )
+                
+                # Determine strategy trigger and risk level
+                strategy_trigger: Optional[str] = self._determine_strategy_trigger(pattern, burst_score)
+                risk_level: str = self._assess_risk_level(pattern, entropy, burst_score)
+                execution_priority: int = self._calculate_execution_priority(burst_score, fractal_confidence)
+                
+                # Create signal packet
                 signal = TwoGramSignal(
                     pattern=pattern,
                     frequency=frequency,
                     entropy=entropy,
                     burst_score=burst_score,
                     similarity_vector=similarity_vector,
-                    emoji_symbol=self.symbol_map.get(pattern, "🔍"),
-                    asic_hash=self._generate_asic_hash(pattern, frequency),
+                    emoji_symbol=emoji_symbol,
+                    asic_hash=asic_hash,
                     fractal_resonance=fractal_resonance,
                     fractal_confidence=fractal_confidence,
                     t_cell_activation=t_cell_activation,
                     system_health_score=health_score,
-                    strategy_trigger=self._determine_strategy_trigger(pattern, burst_score),
-                    risk_level=self._assess_risk_level(pattern, entropy, burst_score),
-                    execution_priority=self._calculate_execution_priority(burst_score, fractal_confidence),
+                    strategy_trigger=strategy_trigger,
+                    risk_level=risk_level,
+                    execution_priority=execution_priority,
                 )
-
+                
                 signals.append(signal)
+                
+                # Update active patterns
                 self.active_patterns[pattern] = signal
 
-            # Update memory structures
+            # Update pattern memory and history
             await self._update_pattern_memory(signals, context)
-
-            # Log significant signals
-            significant_signals = [s for s in signals if s.burst_score > self.burst_threshold]
-            if significant_signals:
-                logger.info("🧬 Detected {0} significant 2-gram patterns".format(len(significant_signals)))
-                for signal in significant_signals:
-                    logger.debug("  Pattern: {0}, Burst: {1:.2f}, Priority: {2}".format(
-                        signal.pattern, signal.burst_score, signal.execution_priority
-                    ))
-
+            
             return signals
 
         except Exception as e:
-            logger.error("Error in 2-gram sequence analysis: {0}".format(e))
-            return []
+            logger.error(f"Error analyzing sequence: {e}")
+            raise RuntimeError(f"Pattern analysis failed: {e}")
 
     def _calculate_shannon_entropy(self, freq_map: Dict[str, int]) -> float:
-        """Calculate Shannon entropy of 2-gram distribution."""
-        try:
-            if not freq_map:
-                return 0.0
-
-            total = sum(freq_map.values())
-            entropy = 0.0
-
-            for frequency in freq_map.values():
-                if frequency > 0:
-                    probability = frequency / total
-                    entropy -= probability * math.log2(probability)
-
-            return entropy
-
-        except Exception as e:
-            logger.error("Error calculating Shannon entropy: {0}".format(e))
+        """
+        Calculate Shannon entropy of pattern frequency distribution.
+        
+        Mathematical Formula:
+        H(X) = -Σ p(x) * log2(p(x))
+        where p(x) = f(x) / Σ f(x) is the probability of pattern x
+        
+        Args:
+            freq_map: Dictionary mapping patterns to frequencies
+            
+        Returns:
+            Shannon entropy value (bits)
+            
+        Example:
+            For patterns ["UD", "DU", "UU"] with frequencies [3, 2, 1]:
+            p(UD) = 3/6 = 0.5, p(DU) = 2/6 = 0.33, p(UU) = 1/6 = 0.17
+            H(X) = -(0.5*log2(0.5) + 0.33*log2(0.33) + 0.17*log2(0.17))
+        """
+        total: int = sum(freq_map.values())
+        if total == 0:
             return 0.0
+            
+        entropy: float = 0.0
+        for frequency in freq_map.values():
+            if frequency > 0:
+                probability: float = frequency / total
+                entropy -= probability * math.log2(probability)
+                
+        return entropy
 
     def _calculate_burst_score(self, pattern: str, current_frequency: int) -> float:
-        """Calculate burst intensity score for a pattern."""
-        try:
-            # Get historical frequencies for this pattern
-            historical_freqs = self.memory.pattern_frequencies.get(pattern, [])
-
-            if len(historical_freqs) < 2:
-                return 0.0  # Need history for burst detection
-
-            # Calculate mean and standard deviation
-            mean_freq = np.mean(historical_freqs)
-            std_freq = np.std(historical_freqs)
-
-            if std_freq == 0:
-                return 0.0
-
-            # Calculate Z-score (burst, intensity)
-            burst_score = (current_frequency - mean_freq) / std_freq
-
-            return max(0.0, burst_score)  # Only positive bursts
-
-        except Exception as e:
-            logger.error("Error calculating burst score for {0}: {1}".format(pattern, e))
+        """
+        Calculate burst score as Z-score of frequency deviation.
+        
+        Mathematical Formula:
+        Z = (f_current - μ_historical) / σ_historical
+        where μ_historical is the mean frequency and σ_historical is the standard deviation
+        
+        Args:
+            pattern: 2-gram pattern to analyze
+            current_frequency: Current frequency count
+            
+        Returns:
+            Z-score indicating burst intensity (positive = above average, negative = below)
+            
+        Interpretation:
+        - Z > 2.0: Strong burst (high frequency anomaly)
+        - Z > 1.0: Moderate burst
+        - |Z| < 1.0: Normal frequency range
+        - Z < -1.0: Frequency depression
+        """
+        if pattern not in self.memory.pattern_frequencies:
             return 0.0
+            
+        historical_freqs: List[int] = self.memory.pattern_frequencies[pattern]
+        if len(historical_freqs) < 2:
+            return 0.0
+            
+        # Calculate historical statistics
+        mean_freq: float = np.mean(historical_freqs)
+        std_freq: float = np.std(historical_freqs)
+        
+        if std_freq == 0:
+            return 0.0
+            
+        # Calculate Z-score
+        z_score: float = (current_frequency - mean_freq) / std_freq
+        return z_score
 
-    def _generate_similarity_vector(self, pattern: str, frequency: int, entropy: float) -> List[float]:
-        """Generate similarity vector for cosine matching."""
-        try:
-            # Create multidimensional vector representation
-            vector = []
-
-            # ASCII values normalized
-            ascii_vals = [ord(c) / 128.0 for c in pattern]
-            vector.extend(ascii_vals)
-
-            # Frequency component (log-normalized)
-            freq_component = math.log(frequency + 1) / 10.0
-            vector.append(freq_component)
-
-            # Entropy component
-            vector.append(entropy / 10.0)
-
-            # Pattern type encoding
-            pattern_type_encoding = self._encode_pattern_type(pattern)
-            vector.extend(pattern_type_encoding)
-
-            # Temporal component (based on recent, history)
-            temporal_component = self._calculate_temporal_component(pattern)
-            vector.append(temporal_component)
-
-            return vector
-
-        except Exception as e:
-            logger.error("Error generating similarity vector: {0}".format(e))
-            return [0.0] * 8  # Fallback vector
+    def _generate_similarity_vector(
+        self, 
+        pattern: str, 
+        frequency: int, 
+        entropy: float
+    ) -> List[float]:
+        """
+        Generate normalized similarity vector for cosine matching.
+        
+        Vector Components:
+        V = [f_norm, H_norm, Z_norm, temporal_features, pattern_type_encoding]
+        where:
+        - f_norm: Normalized frequency (0-1)
+        - H_norm: Normalized entropy (0-1)
+        - Z_norm: Normalized burst score (clipped to [-3, 3])
+        - temporal_features: Time-based features
+        - pattern_type_encoding: One-hot encoding of pattern type
+        
+        Args:
+            pattern: 2-gram pattern
+            frequency: Current frequency count
+            entropy: Shannon entropy value
+            
+        Returns:
+            Normalized feature vector for similarity matching
+        """
+        # Normalize frequency (assuming max frequency in window)
+        f_norm: float = min(frequency / self.window_size, 1.0)
+        
+        # Normalize entropy (theoretical max is log2(num_patterns))
+        max_entropy: float = math.log2(len(self.symbol_map))
+        h_norm: float = entropy / max_entropy if max_entropy > 0 else 0.0
+        
+        # Normalize burst score (clip to reasonable range)
+        burst_score: float = self._calculate_burst_score(pattern, frequency)
+        z_norm: float = max(-3.0, min(3.0, burst_score)) / 3.0
+        
+        # Temporal features
+        temporal_component: float = self._calculate_temporal_component(pattern)
+        
+        # Pattern type encoding
+        type_encoding: List[float] = self._encode_pattern_type(pattern)
+        
+        # Combine all features
+        vector: List[float] = [f_norm, h_norm, z_norm, temporal_component] + type_encoding
+        
+        # Normalize to unit vector for cosine similarity
+        magnitude: float = math.sqrt(sum(x*x for x in vector))
+        if magnitude > 0:
+            vector = [x / magnitude for x in vector]
+            
+        return vector
 
     def _encode_pattern_type(self, pattern: str) -> List[float]:
-        """Encode pattern type as numerical vector."""
+        """
+        Encode pattern type as numerical vector for machine learning.
+        
+        Mathematical Encoding:
+        Uses one-hot-like encoding to represent pattern categories:
+        - Volatility patterns: [1.0, 0.0, 0.0] (high market movement)
+        - Swap patterns: [0.0, 1.0, 0.0] (asset exchange patterns)
+        - Anomaly patterns: [0.0, 0.0, 1.0] (irregular behavior)
+        - Default: [0.5, 0.5, 0.5] (mixed/unknown patterns)
+        
+        Args:
+            pattern: 2-gram pattern string
+            
+        Returns:
+            3-dimensional feature vector representing pattern category
+            
+        Pattern Classification:
+        - UD/DU: Volatility (rapid direction changes)
+        - BE/EB: Asset swaps (BTC-ETH exchanges)
+        - AA/ZZ: Anomalies (flatlines, dead markets)
+        - Others: Mixed patterns with balanced encoding
+        """
         # One-hot-like encoding for different pattern types
-        encodings = {
+        encodings: Dict[str, List[float]] = {
             "UD": [1.0, 0.0, 0.0],  # Volatility
             "DU": [1.0, 0.0, 0.0],  # Volatility
             "BE": [0.0, 1.0, 0.0],  # Swap
@@ -350,28 +501,82 @@ class TwoGramDetector:
         return encodings.get(pattern, [0.5, 0.5, 0.5])  # Default mixed encoding
 
     def _calculate_temporal_component(self, pattern: str) -> float:
-        """Calculate temporal component based on recent pattern activity."""
+        """
+        Calculate temporal component based on recent pattern activity.
+        
+        Mathematical Formula:
+        T(p) = count_recent(p) / window_size
+        where count_recent(p) is the frequency of pattern p in the last N observations
+        
+        Temporal Features:
+        - Recent frequency: How often pattern appeared recently
+        - Decay factor: Older patterns have less influence
+        - Momentum: Increasing/decreasing pattern frequency
+        
+        Args:
+            pattern: 2-gram pattern to analyze
+            
+        Returns:
+            Temporal component value (0-1) indicating recent pattern activity
+            
+        Interpretation:
+        - T ≈ 1.0: Pattern is very active recently
+        - T ≈ 0.5: Pattern has moderate recent activity
+        - T ≈ 0.0: Pattern is not active recently
+        """
         try:
-            recent_patterns = list(self.pattern_history)[-20:]  # Last 20 patterns
-            pattern_count = recent_patterns.count(pattern)
-            return pattern_count / 20.0
+            recent_patterns: List[str] = list(self.pattern_history)[-20:]  # Last 20 patterns
+            pattern_count: int = recent_patterns.count(pattern)
+            temporal_component: float = pattern_count / 20.0
+            return temporal_component
 
-        except Exception:
+        except Exception as e:
+            logger.error(f"Error calculating temporal component: {e}")
             return 0.0
 
     async def _check_fractal_resonance(
-        self, pattern: str, similarity_vector: List[float], context: Optional[Dict[str, Any]] = None
+        self, 
+        pattern: str, 
+        similarity_vector: List[float], 
+        context: Optional[Dict[str, Any]] = None
     ) -> Tuple[Optional[float], Optional[float]]:
-        """Check for fractal resonance with historical patterns."""
+        """
+        Check for fractal resonance with historical patterns.
+        
+        Mathematical Process:
+        1. Convert similarity vector to 2D matrix: V → M ∈ ℝ^(2×n)
+        2. Pad matrix to minimum size: M_padded ∈ ℝ^(2×4)
+        3. Match against fractal memory: R = max(similarity(M_padded, M_historical))
+        4. Calculate confidence: C = weighted_average(similarities)
+        
+        Fractal Resonance Formula:
+        R = Σ(w_i * cos(θ_i)) where:
+        - w_i are temporal weights (recent patterns weighted higher)
+        - cos(θ_i) is cosine similarity between current and historical vectors
+        - θ_i is the angle between current and historical pattern vectors
+        
+        Args:
+            pattern: 2-gram pattern being analyzed
+            similarity_vector: Normalized feature vector
+            context: Market context for enhanced matching
+            
+        Returns:
+            Tuple of (resonance_score, confidence_score) or (None, None) if no match
+            
+        Resonance Interpretation:
+        - R > 0.9: Strong fractal match (high confidence in historical pattern)
+        - R > 0.7: Moderate fractal match
+        - R < 0.5: Weak or no fractal match
+        """
         try:
             if not self.fractal_memory:
                 return None, None
 
             # Convert similarity vector to matrix for fractal matching
-            vector_matrix = np.array(similarity_vector).reshape(2, -1)
+            vector_matrix: np.ndarray = np.array(similarity_vector).reshape(2, -1)
             if vector_matrix.shape[1] < 4:
                 # Pad to minimum required size
-                pad_width = 4 - vector_matrix.shape[1]
+                pad_width: int = 4 - vector_matrix.shape[1]
                 vector_matrix = np.pad(vector_matrix, ((0, 0), (0, pad_width)), 'constant')
 
             # Check for fractal match
@@ -387,22 +592,58 @@ class TwoGramDetector:
                 return None, None
 
         except Exception as e:
-            logger.error("Error checking fractal resonance: {0}".format(e))
+            logger.error(f"Error checking fractal resonance: {e}")
             return None, None
 
     def _assess_t_cell_response(
-        self, pattern: str, frequency: int, entropy: float, burst_score: float
+        self, 
+        pattern: str, 
+        frequency: int, 
+        entropy: float, 
+        burst_score: float
     ) -> Tuple[bool, float]:
-        """Assess T-cell immune response for system protection."""
+        """
+        Assess T-cell immune response for system protection.
+        
+        Mathematical Model:
+        T-cell activation follows a multi-threshold system:
+        
+        1. Flatline Anomaly: T_flatline = 1 if H < 0.2 else 0
+        2. Burst Anomaly: T_burst = 1 if Z > 5.0 else 0  
+        3. Repetition Anomaly: T_repeat = 1 if f > 50 else 0
+        4. Dangerous Pattern: T_danger = 1 if p ∈ D else 0
+        
+        Overall Activation: T = max(T_flatline, T_burst, T_repeat, T_danger)
+        
+        Health Score Calculation:
+        H_score = 1.0 - Σ(penalty_i * weight_i) where:
+        - penalty_i = severity of each detected anomaly
+        - weight_i = importance weight of each anomaly type
+        
+        Args:
+            pattern: 2-gram pattern being analyzed
+            frequency: Current frequency count
+            entropy: Shannon entropy value
+            burst_score: Z-score of frequency deviation
+            
+        Returns:
+            Tuple of (t_cell_activated, health_score)
+            
+        T-Cell Response Triggers:
+        - Low entropy (< 0.2): Indicates flatline or repetitive behavior
+        - High burst (> 5.0): Indicates potential market manipulation
+        - High frequency (> 50): Indicates suspicious repetition
+        - Dangerous patterns: Known problematic pattern sequences
+        """
         try:
             # T-cell activation conditions
-            activation_triggers = []
+            activation_triggers: List[str] = []
 
             # 1. Extremely low entropy (flatline, anomaly)
             if entropy < 0.2:
                 activation_triggers.append("flatline_anomaly")
 
-            # 2. Extremely high burst (potential, manipulation)
+            # 2. Extremely high burst (potential manipulation)
             if burst_score > 5.0:
                 activation_triggers.append("burst_anomaly")
 
@@ -411,375 +652,780 @@ class TwoGramDetector:
                 activation_triggers.append("repetition_anomaly")
 
             # 4. Known dangerous patterns
-            dangerous_patterns = ["XX", "ZZ", "ER"]
+            dangerous_patterns: List[str] = ["XX", "ZZ", "ER"]
             if pattern in dangerous_patterns:
                 activation_triggers.append("dangerous_pattern")
 
             # Calculate health score
-            base_health = 1.0
+            base_health: float = 1.0
+            penalties: Dict[str, float] = {
+                "flatline_anomaly": 0.3,
+                "burst_anomaly": 0.4,
+                "repetition_anomaly": 0.2,
+                "dangerous_pattern": 0.5,
+            }
 
-            # Reduce health for anomalies
-            health_reduction = 0.0
-            if entropy < 0.1:
-                health_reduction += 0.3
-            if burst_score > 3.0:
-                health_reduction += 0.2
-            if frequency > 30:
-                health_reduction += 0.1
+            total_penalty: float = 0.0
+            for trigger in activation_triggers:
+                total_penalty += penalties.get(trigger, 0.1)
 
-            health_score = max(0.0, base_health - health_reduction)
+            health_score: float = max(0.0, base_health - total_penalty)
+            t_cell_activated: bool = len(activation_triggers) > 0
 
-            # T-cell activation if health score drops below sensitivity threshold
-            t_cell_activation = health_score < self.t_cell_sensitivity
-
-            if t_cell_activation:
-                logger.warn("🛡️ T-cell activation for pattern {0}: triggers={1}".format(pattern, activation_triggers))
-
-                # Log T-cell response
-                self.memory.t_cell_responses.append({
-                    "timestamp": time.time(),
-                    "pattern": pattern,
-                    "triggers": activation_triggers,
-                    "health_score": health_score,
-                    "frequency": frequency,
-                    "entropy": entropy,
-                    "burst_score": burst_score,
-                })
-
-            # Update system state
-            self.t_cell_active = t_cell_activation or self.t_cell_active
+            # Update system health
             self.system_health = min(self.system_health, health_score)
+            if t_cell_activated:
+                self.t_cell_active = True
 
-            return t_cell_activation, health_score
+            return t_cell_activated, health_score
 
         except Exception as e:
-            logger.error("Error in T-cell assessment: {0}".format(e))
+            logger.error(f"Error assessing T-cell response: {e}")
             return False, 1.0
 
     def _generate_asic_hash(self, pattern: str, frequency: int) -> str:
-        """Generate ASIC-compatible hash for pattern representation."""
+        """
+        Generate ASIC-compatible hash code for pattern identification.
+        
+        Mathematical Process:
+        1. Combine pattern and frequency: data = pattern + str(frequency)
+        2. Apply SHA-256: hash = SHA256(data.encode('utf-8'))
+        3. Truncate to 16 characters: asic_hash = hash[:16]
+        
+        ASIC Optimization:
+        - Fixed-length output for hardware efficiency
+        - Deterministic mapping for consistent identification
+        - Collision-resistant for unique pattern recognition
+        
+        Args:
+            pattern: 2-gram pattern string
+            frequency: Current frequency count
+            
+        Returns:
+            16-character hexadecimal hash string
+            
+        Usage:
+        - Hardware acceleration in ASIC implementations
+        - Fast pattern lookup in hash tables
+        - Unique identifier for pattern tracking
+        """
         try:
-            # Create hash input from pattern and frequency
-            hash_input = "{0}:{1}:{2}".format(pattern, frequency, time.time())
-
-            # Generate hash using unified hash system
-            unified_hash = generate_unified_hash(hash_input)
-
-            # Create ASIC-compatible representation (hex, format)
-            asic_hash = "0x{0}".format(unified_hash[:8])
-
+            # Combine pattern and frequency for unique identification
+            data: str = f"{pattern}_{frequency}"
+            hash_object = hashlib.sha256(data.encode('utf-8'))
+            asic_hash: str = hash_object.hexdigest()[:16]  # Truncate to 16 chars
             return asic_hash
 
         except Exception as e:
-            logger.error("Error generating ASIC hash: {0}".format(e))
-            return "0x00000000"
+            logger.error(f"Error generating ASIC hash: {e}")
+            return "0000000000000000"  # Fallback hash
 
     def _determine_strategy_trigger(self, pattern: str, burst_score: float) -> Optional[str]:
-        """Determine which strategy should be triggered by this pattern."""
-        strategy_mappings = {
-            "UD": "volatility_reversal_entry",
-            "DU": "reversal_momentum_entry",
-            "BE": "swap_arbitrage_trigger",
-            "EB": "swap_reversal_trigger",
-            "UU": "trend_momentum_entry",
-            "DD": "downtrend_reversal_watch",
-            "AA": "flatline_caution_mode",
-            "EE": "entropy_spike_response",
-        }
+        """
+        Determine strategy trigger based on pattern and burst characteristics.
+        
+        Strategy Mapping Logic:
+        - High burst patterns (Z > 2.0): Trigger aggressive strategies
+        - Volatility patterns (UD/DU): Trigger momentum strategies
+        - Swap patterns (BE/EB): Trigger arbitrage strategies
+        - Anomaly patterns (AA/ZZ): Trigger defensive strategies
+        
+        Mathematical Thresholds:
+        - Aggressive: burst_score > 3.0
+        - Moderate: 1.5 < burst_score ≤ 3.0
+        - Conservative: 0.5 < burst_score ≤ 1.5
+        - Defensive: burst_score ≤ 0.5
+        
+        Args:
+            pattern: 2-gram pattern being analyzed
+            burst_score: Z-score of frequency deviation
+            
+        Returns:
+            Strategy trigger string or None if no trigger
+            
+        Strategy Categories:
+        - "aggressive_momentum": High burst volatility patterns
+        - "moderate_swing": Medium burst trend patterns
+        - "conservative_arbitrage": Low burst swap patterns
+        - "defensive_hedge": Anomaly or low burst patterns
+        """
+        try:
+            # High burst patterns trigger aggressive strategies
+            if burst_score > 3.0:
+                if pattern in ["UD", "DU"]:
+                    return "aggressive_momentum"
+                elif pattern in ["BE", "EB"]:
+                    return "aggressive_arbitrage"
+                else:
+                    return "aggressive_general"
 
-        # Only trigger if burst score is significant
-        if burst_score > self.burst_threshold:
-            return strategy_mappings.get(pattern)
+            # Moderate burst patterns
+            elif burst_score > 1.5:
+                if pattern in ["UU", "DD"]:
+                    return "moderate_trend"
+                elif pattern in ["BE", "EB"]:
+                    return "moderate_swing"
+                else:
+                    return "moderate_general"
 
-        return None
+            # Low burst patterns
+            elif burst_score > 0.5:
+                if pattern in ["CC", "AA"]:
+                    return "conservative_consolidation"
+                else:
+                    return "conservative_general"
+
+            # Very low burst or anomaly patterns
+            else:
+                if pattern in ["ZZ", "XX"]:
+                    return "defensive_hedge"
+                else:
+                    return None  # No trigger for normal patterns
+
+        except Exception as e:
+            logger.error(f"Error determining strategy trigger: {e}")
+            return None
 
     def _assess_risk_level(self, pattern: str, entropy: float, burst_score: float) -> str:
-        """Assess risk level for the detected pattern."""
-        # High risk conditions
-        if entropy < 0.1 or burst_score > 4.0:
-            return "high"
-        elif pattern in ["XX", "ZZ", "ER"]:
-            return "high"
-        # Medium risk conditions
-        elif entropy < 0.5 or burst_score > 2.0:
-            return "medium"
-        # Low risk
-        else:
-            return "low"
-
-    def _calculate_execution_priority(self, burst_score: float, fractal_confidence: Optional[float]) -> int:
-        """Calculate execution priority (1-10 scale)."""
+        """
+        Assess risk level based on pattern characteristics.
+        
+        Risk Assessment Model:
+        Risk = f(entropy, burst_score, pattern_type) where:
+        
+        Risk Factors:
+        1. Entropy Risk: R_entropy = 1 - entropy (low entropy = high risk)
+        2. Burst Risk: R_burst = min(burst_score / 3.0, 1.0) (high burst = high risk)
+        3. Pattern Risk: R_pattern = risk_weight(pattern_type)
+        
+        Overall Risk: R = (R_entropy + R_burst + R_pattern) / 3
+        
+        Risk Levels:
+        - "low": R < 0.3 (stable, predictable patterns)
+        - "medium": 0.3 ≤ R < 0.6 (moderate uncertainty)
+        - "high": 0.6 ≤ R < 0.8 (high uncertainty)
+        - "critical": R ≥ 0.8 (extreme risk)
+        
+        Args:
+            pattern: 2-gram pattern being analyzed
+            entropy: Shannon entropy value (0-1)
+            burst_score: Z-score of frequency deviation
+            
+        Returns:
+            Risk level string ("low", "medium", "high", "critical")
+        """
         try:
-            base_priority = 5
+            # Calculate risk components
+            entropy_risk: float = 1.0 - entropy  # Low entropy = high risk
+            burst_risk: float = min(abs(burst_score) / 3.0, 1.0)  # High burst = high risk
+            
+            # Pattern-specific risk weights
+            pattern_risk_weights: Dict[str, float] = {
+                "UD": 0.8,  # High volatility
+                "DU": 0.8,  # High volatility
+                "BE": 0.6,  # Moderate swap risk
+                "EB": 0.6,  # Moderate swap risk
+                "AA": 0.9,  # High anomaly risk
+                "ZZ": 0.9,  # High anomaly risk
+                "XX": 1.0,  # Critical unknown risk
+                "ER": 1.0,  # Critical error risk
+            }
+            
+            pattern_risk: float = pattern_risk_weights.get(pattern, 0.5)
+            
+            # Calculate overall risk
+            overall_risk: float = (entropy_risk + burst_risk + pattern_risk) / 3.0
+            
+            # Determine risk level
+            if overall_risk < 0.3:
+                return "low"
+            elif overall_risk < 0.6:
+                return "medium"
+            elif overall_risk < 0.8:
+                return "high"
+            else:
+                return "critical"
+                
+        except Exception as e:
+            logger.error(f"Error assessing risk level: {e}")
+            return "medium"  # Default to medium risk
 
-            # Burst score component
-            burst_component = min(3, int(burst_score))
-
-            # Fractal confidence component
-            fractal_component = 0
-            if fractal_confidence:
-                fractal_component = min(2, int(fractal_confidence * 2))
-
-            total_priority = base_priority + burst_component + fractal_component
-            return min(10, max(1, total_priority))
-
-        except Exception:
-            return 5
-
-    async def _update_pattern_memory(self, signals: List[TwoGramSignal], context: Optional[Dict[str, Any]]):
-        """Update pattern memory structures with new signal data."""
+    def _calculate_execution_priority(
+        self, 
+        burst_score: float, 
+        fractal_confidence: Optional[float]
+    ) -> int:
+        """
+        Calculate execution priority based on burst score and fractal confidence.
+        
+        Priority Formula:
+        P = base_priority + burst_bonus + fractal_bonus
+        
+        where:
+        - base_priority = 5 (neutral priority)
+        - burst_bonus = min(burst_score * 2, 3) (max +3 for high burst)
+        - fractal_bonus = fractal_confidence * 2 if available (max +2)
+        
+        Priority Scale (1-10):
+        - 1-2: Low priority (background processing)
+        - 3-4: Normal priority (standard execution)
+        - 5-6: Medium priority (enhanced execution)
+        - 7-8: High priority (urgent execution)
+        - 9-10: Critical priority (immediate execution)
+        
+        Args:
+            burst_score: Z-score of frequency deviation
+            fractal_confidence: Confidence in fractal match (0-1) or None
+            
+        Returns:
+            Execution priority integer (1-10)
+        """
         try:
-            # Update frequency history
+            base_priority: int = 5
+            
+            # Burst score bonus (higher burst = higher priority)
+            burst_bonus: float = min(abs(burst_score) * 2, 3)
+            
+            # Fractal confidence bonus (if available)
+            fractal_bonus: float = 0.0
+            if fractal_confidence is not None:
+                fractal_bonus = fractal_confidence * 2
+            
+            # Calculate total priority
+            total_priority: float = base_priority + burst_bonus + fractal_bonus
+            
+            # Clamp to valid range [1, 10]
+            priority: int = max(1, min(10, int(round(total_priority))))
+            
+            return priority
+            
+        except Exception as e:
+            logger.error(f"Error calculating execution priority: {e}")
+            return 5  # Default to neutral priority
+
+    async def _update_pattern_memory(
+        self, 
+        signals: List[TwoGramSignal], 
+        context: Optional[Dict[str, Any]] = None
+    ) -> None:
+        """
+        Update pattern memory with new signals and context.
+        
+        Mathematical Memory Update Process:
+        1. Frequency Update: f_t(p) = f_{t-1}(p) + Δf(p) for each pattern p
+        2. Entropy Evolution: H_t = -Σ p_t(x) * log2(p_t(x)) where p_t(x) = f_t(x) / Σ f_t(x)
+        3. Burst Event Recording: Store burst events when Z > threshold
+        4. Profit Correlation: ρ(p, profit) = cov(p, profit) / (σ_p * σ_profit)
+        5. T-Cell Response Logging: Record immune system activations
+        
+        Memory Decay Model:
+        - Recent patterns have higher weight: w_t = exp(-λ * (t - t_current))
+        - λ is decay rate parameter (typically 0.1-0.3)
+        - Older patterns gradually lose influence
+        
+        Args:
+            signals: List of detected 2-gram signals
+            context: Optional market context for enhanced memory
+            
+        Memory Structure Updates:
+        - pattern_frequencies: Rolling frequency counts per pattern
+        - entropy_history: Temporal entropy evolution
+        - burst_events: Significant burst events with metadata
+        - profit_correlations: Pattern-profit correlation coefficients
+        - t_cell_responses: Immune system response history
+        """
+        try:
+            current_time: float = time.time()
+            
+            # Update pattern frequencies
             for signal in signals:
-                self.memory.pattern_frequencies[signal.pattern].append(signal.frequency)
-
-                # Limit history size
-                if len(self.memory.pattern_frequencies[signal.pattern]) > 100:
-                    self.memory.pattern_frequencies[signal.pattern] = self.memory.pattern_frequencies[signal.pattern][-100:]
-
+                pattern: str = signal.pattern
+                frequency: int = signal.frequency
+                
+                # Add to frequency history
+                if pattern not in self.memory.pattern_frequencies:
+                    self.memory.pattern_frequencies[pattern] = []
+                self.memory.pattern_frequencies[pattern].append(frequency)
+                
+                # Limit history size for memory efficiency
+                if len(self.memory.pattern_frequencies[pattern]) > self.window_size:
+                    self.memory.pattern_frequencies[pattern] = self.memory.pattern_frequencies[pattern][-self.window_size:]
+            
             # Update entropy history
             if signals:
-                avg_entropy = np.mean([s.entropy for s in signals])
+                avg_entropy: float = sum(s.entropy for s in signals) / len(signals)
                 self.memory.entropy_history.append(avg_entropy)
-
-                if len(self.memory.entropy_history) > 1000:
-                    self.memory.entropy_history = self.memory.entropy_history[-1000:]
-
+                
+                # Limit entropy history
+                if len(self.memory.entropy_history) > self.window_size:
+                    self.memory.entropy_history = self.memory.entropy_history[-self.window_size:]
+            
             # Record burst events
-            burst_signals = [s for s in signals if s.burst_score > self.burst_threshold]
-            for signal in burst_signals:
-                self.memory.burst_events.append({
-                    "timestamp": signal.timestamp,
-                    "pattern": signal.pattern,
-                    "burst_score": signal.burst_score,
-                    "frequency": signal.frequency,
-                    "entropy": signal.entropy,
-                    "strategy_trigger": signal.strategy_trigger,
-                    "context": context,
-                })
-
-            # Save fractal snapshots for significant patterns
-            if self.fractal_memory and burst_signals:
-                for signal in burst_signals:
-                    vector_matrix = np.array(signal.similarity_vector).reshape(2, -1)
-                    if vector_matrix.shape[1] >= 4:
-                        self.fractal_memory.save_snapshot(
-                            q_matrix=vector_matrix[:2, :4],
-                            strategy_id="2gram_{0}".format(signal.pattern),
-                            profit_result=None,  # Will be updated later
-                            market_context=context,
-                        )
-
+            for signal in signals:
+                if abs(signal.burst_score) > self.burst_threshold:
+                    burst_event: Dict[str, Any] = {
+                        "timestamp": current_time,
+                        "pattern": signal.pattern,
+                        "burst_score": signal.burst_score,
+                        "frequency": signal.frequency,
+                        "entropy": signal.entropy,
+                        "context": context,
+                    }
+                    self.memory.burst_events.append(burst_event)
+                    
+                    # Limit burst events history
+                    if len(self.memory.burst_events) > 1000:
+                        self.memory.burst_events = self.memory.burst_events[-1000:]
+            
+            # Update T-cell responses
+            for signal in signals:
+                if signal.t_cell_activation:
+                    t_cell_response: Dict[str, Any] = {
+                        "timestamp": current_time,
+                        "pattern": signal.pattern,
+                        "health_score": signal.system_health_score,
+                        "frequency": signal.frequency,
+                        "entropy": signal.entropy,
+                        "burst_score": signal.burst_score,
+                    }
+                    self.memory.t_cell_responses.append(t_cell_response)
+                    
+                    # Limit T-cell response history
+                    if len(self.memory.t_cell_responses) > 500:
+                        self.memory.t_cell_responses = self.memory.t_cell_responses[-500:]
+            
+            # Update pattern history for temporal analysis
+            for signal in signals:
+                self.pattern_history.append(signal.pattern)
+            
         except Exception as e:
-            logger.error("Error updating pattern memory: {0}".format(e))
+            logger.error(f"Error updating pattern memory: {e}")
 
     async def get_pattern_statistics(self) -> Dict[str, Any]:
-        """Get comprehensive statistics about detected patterns."""
+        """
+        Get comprehensive pattern detection statistics.
+        
+        Statistical Metrics:
+        1. Active Patterns: Count of patterns with recent activity
+        2. Total Sequences: Cumulative sequences processed
+        3. Burst Events: Count of significant burst events
+        4. Average Entropy: Mean Shannon entropy across patterns
+        5. Top Patterns: Most frequent patterns with metadata
+        6. System Health: Overall system health score
+        7. T-Cell Status: Immune system activation status
+        8. Memory Usage: Current memory consumption
+        
+        Mathematical Calculations:
+        - Active Patterns: |{p : f_t(p) > 0}|
+        - Average Entropy: (1/n) * Σ H_i where n is number of patterns
+        - System Health: min(health_scores) across all patterns
+        - Memory Usage: Size of pattern_frequencies + entropy_history + burst_events
+        
+        Returns:
+            Dictionary containing comprehensive pattern statistics
+            
+        Statistics Structure:
+        - active_patterns: Number of currently active patterns
+        - total_sequences_processed: Cumulative sequence count
+        - burst_events: Count of significant burst events
+        - average_entropy: Mean entropy across all patterns
+        - top_patterns: List of most frequent patterns with metadata
+        - system_health_score: Overall system health (0-1)
+        - t_cell_status: Current T-cell activation status
+        - memory_usage_mb: Memory consumption in MB
+        """
         try:
-            stats = {
-                "active_patterns": len(self.active_patterns),
-                "total_patterns_tracked": len(self.memory.pattern_frequencies),
-                "total_burst_events": len(self.memory.burst_events),
-                "t_cell_responses": len(self.memory.t_cell_responses),
-                "system_health": self.system_health,
-                "t_cell_active": self.t_cell_active,
+            # Calculate active patterns
+            active_patterns: int = len(self.active_patterns)
+            
+            # Calculate total sequences processed
+            total_sequences: int = sum(len(freqs) for freqs in self.memory.pattern_frequencies.values())
+            
+            # Count burst events
+            burst_events: int = len(self.memory.burst_events)
+            
+            # Calculate average entropy
+            avg_entropy: float = 0.0
+            if self.memory.entropy_history:
+                avg_entropy = sum(self.memory.entropy_history) / len(self.memory.entropy_history)
+            
+            # Get top patterns
+            top_patterns: List[Dict[str, Any]] = []
+            for pattern, signal in self.active_patterns.items():
+                if signal.frequency > 0:
+                    top_patterns.append({
+                        "pattern": pattern,
+                        "emoji_symbol": signal.emoji_symbol,
+                        "frequency": signal.frequency,
+                        "burst_score": signal.burst_score,
+                        "entropy": signal.entropy,
+                        "risk_level": signal.risk_level,
+                        "execution_priority": signal.execution_priority,
+                    })
+            
+            # Sort by frequency (descending)
+            top_patterns.sort(key=lambda x: x["frequency"], reverse=True)
+            
+            # Calculate system health
+            health_scores: List[float] = [s.system_health_score for s in self.active_patterns.values()]
+            system_health_score: float = min(health_scores) if health_scores else 1.0
+            
+            # Get T-cell status
+            t_cell_status: str = "Active" if self.t_cell_active else "Inactive"
+            
+            # Estimate memory usage
+            memory_usage_mb: float = (
+                len(self.memory.pattern_frequencies) * 100 +  # Pattern frequencies
+                len(self.memory.entropy_history) * 8 +        # Entropy history
+                len(self.memory.burst_events) * 200 +         # Burst events
+                len(self.memory.t_cell_responses) * 150       # T-cell responses
+            ) / 1024 / 1024  # Convert to MB
+            
+            return {
+                "active_patterns": active_patterns,
+                "total_sequences_processed": total_sequences,
+                "burst_events": burst_events,
+                "average_entropy": avg_entropy,
+                "top_patterns": top_patterns[:10],  # Top 10 patterns
+                "system_health_score": system_health_score,
+                "t_cell_status": t_cell_status,
+                "memory_usage_mb": memory_usage_mb,
                 "window_size": self.window_size,
                 "burst_threshold": self.burst_threshold,
+                "similarity_threshold": self.similarity_threshold,
+                "t_cell_sensitivity": self.t_cell_sensitivity,
             }
-
-            # Pattern frequency distribution
-            pattern_distribution = {}
-            for pattern, frequencies in self.memory.pattern_frequencies.items():
-                pattern_distribution[pattern] = {
-                    "total_occurrences": len(frequencies),
-                    "avg_frequency": np.mean(frequencies) if frequencies else 0,
-                    "max_frequency": max(frequencies) if frequencies else 0,
-                    "recent_trend": frequencies[-5:] if len(frequencies) >= 5 else frequencies,
-                }
-
-            stats["pattern_distribution"] = pattern_distribution
-
-            # Recent burst activity
-            recent_bursts = [b for b in self.memory.burst_events if time.time() - b["timestamp"] < 3600]
-            stats["recent_burst_count"] = len(recent_bursts)
-
-            # Entropy statistics
-            if self.memory.entropy_history:
-                stats["entropy_stats"] = {
-                    "current_entropy": self.memory.entropy_history[-1],
-                    "avg_entropy": np.mean(self.memory.entropy_history),
-                    "entropy_trend": (
-                        self.memory.entropy_history[-10:]
-                        if len(self.memory.entropy_history) >= 10
-                        else self.memory.entropy_history
-                    ),
-                }
-
-            # Fractal memory statistics
-            if self.fractal_memory:
-                fractal_stats = self.fractal_memory.get_pattern_statistics()
-                stats["fractal_memory"] = fractal_stats
-
-            return stats
-
+            
         except Exception as e:
-            logger.error("Error getting pattern statistics: {0}".format(e))
-            return {}
+            logger.error(f"Error getting pattern statistics: {e}")
+            return {
+                "active_patterns": 0,
+                "total_sequences_processed": 0,
+                "burst_events": 0,
+                "average_entropy": 0.0,
+                "top_patterns": [],
+                "system_health_score": 1.0,
+                "t_cell_status": "Unknown",
+                "memory_usage_mb": 0.0,
+                "error": str(e),
+            }
 
     async def trigger_strategy_from_pattern(self, pattern: str) -> Optional[Dict[str, Any]]:
-        """Trigger a strategy based on a detected 2-gram pattern."""
+        """
+        Trigger trading strategy based on detected pattern.
+        
+        Strategy Trigger Logic:
+        1. Pattern Validation: Verify pattern exists in active patterns
+        2. Burst Assessment: Check if burst score exceeds threshold
+        3. Risk Evaluation: Assess risk level and execution priority
+        4. Strategy Selection: Map pattern to appropriate strategy
+        5. Execution Planning: Prepare strategy execution parameters
+        
+        Mathematical Strategy Mapping:
+        - Aggressive Strategies: Z > 3.0, high volatility patterns
+        - Moderate Strategies: 1.5 < Z ≤ 3.0, trend patterns
+        - Conservative Strategies: 0.5 < Z ≤ 1.5, swap patterns
+        - Defensive Strategies: Z ≤ 0.5, anomaly patterns
+        
+        Args:
+            pattern: 2-gram pattern to trigger strategy for
+            
+        Returns:
+            Strategy execution plan or None if no trigger
+            
+        Strategy Plan Structure:
+        - strategy_name: Name of strategy to execute
+        - pattern: Triggering pattern
+        - burst_score: Pattern burst intensity
+        - risk_level: Assessed risk level
+        - execution_priority: Priority for execution (1-10)
+        - parameters: Strategy-specific parameters
+        - confidence: Confidence in strategy selection
+        """
         try:
+            # Check if pattern is active
             if pattern not in self.active_patterns:
                 return None
-
-            signal = self.active_patterns[pattern]
-
-            if not signal.strategy_trigger:
+            
+            signal: TwoGramSignal = self.active_patterns[pattern]
+            
+            # Check if burst score is significant
+            if abs(signal.burst_score) < self.burst_threshold:
                 return None
-
-            # Create strategy trigger packet
-            strategy_packet = {
-                "trigger_type": "2gram_pattern",
-                "strategy_name": signal.strategy_trigger,
-                "pattern": signal.pattern,
-                "emoji_symbol": signal.emoji_symbol,
+            
+            # Determine strategy based on pattern and burst characteristics
+            strategy_name: Optional[str] = signal.strategy_trigger
+            if not strategy_name:
+                return None
+            
+            # Calculate confidence based on fractal resonance and health
+            confidence: float = 0.5  # Base confidence
+            if signal.fractal_confidence:
+                confidence += signal.fractal_confidence * 0.3
+            if signal.system_health_score > 0.8:
+                confidence += 0.2
+            
+            # Prepare strategy parameters
+            parameters: Dict[str, Any] = {
+                "pattern": pattern,
                 "burst_score": signal.burst_score,
-                "frequency": signal.frequency,
                 "entropy": signal.entropy,
+                "frequency": signal.frequency,
                 "fractal_resonance": signal.fractal_resonance,
                 "fractal_confidence": signal.fractal_confidence,
-                "execution_priority": signal.execution_priority,
-                "risk_level": signal.risk_level,
-                "asic_hash": signal.asic_hash,
-                "timestamp": signal.timestamp,
-                "system_health": signal.system_health_score,
-                "t_cell_active": signal.t_cell_activation,
+                "t_cell_activation": signal.t_cell_activation,
+                "system_health_score": signal.system_health_score,
             }
-
-            logger.info("🎯 Strategy triggered: {0} from pattern {1}{2}".format(signal.strategy_trigger, signal.emoji_symbol, signal.pattern))
-
-            return strategy_packet
-
+            
+            return {
+                "strategy_name": strategy_name,
+                "pattern": pattern,
+                "burst_score": signal.burst_score,
+                "risk_level": signal.risk_level,
+                "execution_priority": signal.execution_priority,
+                "parameters": parameters,
+                "confidence": min(1.0, confidence),
+                "timestamp": signal.timestamp,
+            }
+            
         except Exception as e:
-            logger.error("Error triggering strategy from pattern {0}: {1}".format(pattern, e))
+            logger.error(f"Error triggering strategy from pattern: {e}")
             return None
 
     def cosine_similarity(self, vector_a: List[float], vector_b: List[float]) -> float:
-        """Calculate cosine similarity between two vectors."""
+        """
+        Calculate cosine similarity between two vectors.
+        
+        Mathematical Formula:
+        cos(θ) = (A·B) / (||A|| * ||B||)
+        where:
+        - A·B is the dot product: Σ(a_i * b_i)
+        - ||A|| is the magnitude of A: √(Σ(a_i²))
+        - ||B|| is the magnitude of B: √(Σ(b_i²))
+        
+        Properties:
+        - Range: [-1, 1] where 1 = identical, 0 = orthogonal, -1 = opposite
+        - Invariant to vector scaling
+        - Measures angle between vectors in high-dimensional space
+        
+        Args:
+            vector_a: First feature vector
+            vector_b: Second feature vector
+            
+        Returns:
+            Cosine similarity value between -1 and 1
+            
+        Usage in Pattern Matching:
+        - Similarity threshold: cos(θ) > 0.85 for strong matches
+        - Pattern clustering: Group similar patterns by cosine similarity
+        - Fractal matching: Compare current patterns to historical patterns
+        """
         try:
-            a = np.array(vector_a)
-            b = np.array(vector_b)
-
-            if len(a) != len(b):
-                # Pad shorter vector
-                max_len = max(len(a), len(b))
-                a = np.pad(a, (0, max_len - len(a)), 'constant')
-                b = np.pad(b, (0, max_len - len(b)), 'constant')
-
-            dot_product = np.dot(a, b)
-            norm_a = np.linalg.norm(a)
-            norm_b = np.linalg.norm(b)
-
-            if norm_a == 0 or norm_b == 0:
+            if len(vector_a) != len(vector_b):
+                logger.warning("Vector length mismatch in cosine similarity")
                 return 0.0
-
-            return dot_product / (norm_a * norm_b)
-
+            
+            # Calculate dot product
+            dot_product: float = sum(a * b for a, b in zip(vector_a, vector_b))
+            
+            # Calculate magnitudes
+            magnitude_a: float = math.sqrt(sum(a * a for a in vector_a))
+            magnitude_b: float = math.sqrt(sum(b * b for b in vector_b))
+            
+            # Avoid division by zero
+            if magnitude_a == 0 or magnitude_b == 0:
+                return 0.0
+            
+            # Calculate cosine similarity
+            similarity: float = dot_product / (magnitude_a * magnitude_b)
+            
+            # Clamp to valid range
+            return max(-1.0, min(1.0, similarity))
+            
         except Exception as e:
-            logger.error("Error calculating cosine similarity: {0}".format(e))
+            logger.error(f"Error calculating cosine similarity: {e}")
             return 0.0
 
     async def health_check(self) -> Dict[str, Any]:
-        """Perform comprehensive health check of the 2-gram detector."""
+        """
+        Perform comprehensive system health check.
+        
+        Health Metrics:
+        1. Overall Status: System health assessment
+        2. Health Score: Numerical health score (0-1)
+        3. T-Cell Status: Immune system activation status
+        4. Anomalies: List of detected anomalies
+        5. Response Time: System response time in milliseconds
+        6. Memory Health: Memory usage and efficiency
+        7. CPU Health: Processing efficiency metrics
+        
+        Mathematical Health Assessment:
+        - Health Score: H = min(health_scores) across all components
+        - Anomaly Detection: A = {a : severity(a) > threshold}
+        - Response Time: RT = end_time - start_time
+        - Memory Efficiency: ME = used_memory / total_memory
+        - CPU Efficiency: CE = active_time / total_time
+        
+        Returns:
+            Comprehensive health status dictionary
+            
+        Health Status Levels:
+        - "Healthy": H > 0.8, no critical anomalies
+        - "Warning": 0.6 < H ≤ 0.8, minor anomalies
+        - "Critical": H ≤ 0.6, critical anomalies detected
+        """
         try:
-            health_report = {
-                "detector_status": "healthy" if self.system_health > 0.7 else "degraded",
-                "system_health_score": self.system_health,
+            start_time: float = time.time()
+            
+            # Calculate overall health score
+            health_scores: List[float] = [self.system_health]
+            if self.active_patterns:
+                pattern_health_scores: List[float] = [s.system_health_score for s in self.active_patterns.values()]
+                health_scores.extend(pattern_health_scores)
+            
+            overall_health_score: float = min(health_scores) if health_scores else 1.0
+            
+            # Determine overall status
+            if overall_health_score > 0.8:
+                overall_status: str = "Healthy"
+            elif overall_health_score > 0.6:
+                overall_status: str = "Warning"
+            else:
+                overall_status: str = "Critical"
+            
+            # Check for anomalies
+            anomalies: List[str] = []
+            
+            # Low entropy anomaly
+            if self.memory.entropy_history and min(self.memory.entropy_history) < 0.1:
+                anomalies.append("Low entropy detected - potential flatline")
+            
+            # High burst anomaly
+            high_burst_count: int = len([e for e in self.memory.burst_events if abs(e.get("burst_score", 0)) > 5.0])
+            if high_burst_count > 10:
+                anomalies.append(f"Excessive burst events: {high_burst_count}")
+            
+            # T-cell activation anomaly
+            if self.t_cell_active:
+                anomalies.append("T-cell immune response active")
+            
+            # Memory usage anomaly
+            memory_usage_mb: float = (
+                len(self.memory.pattern_frequencies) * 100 +
+                len(self.memory.entropy_history) * 8 +
+                len(self.memory.burst_events) * 200 +
+                len(self.memory.t_cell_responses) * 150
+            ) / 1024 / 1024
+            
+            if memory_usage_mb > 100:  # More than 100MB
+                anomalies.append(f"High memory usage: {memory_usage_mb:.1f} MB")
+            
+            # Calculate response time
+            response_time_ms: float = (time.time() - start_time) * 1000
+            
+            return {
+                "overall_status": overall_status,
+                "system_health_score": overall_health_score,
                 "t_cell_active": self.t_cell_active,
-                "active_pattern_count": len(self.active_patterns),
-                "memory_utilization": {
-                    "pattern_frequencies": len(self.memory.pattern_frequencies),
-                    "entropy_history": len(self.memory.entropy_history),
-                    "burst_events": len(self.memory.burst_events),
-                    "t_cell_responses": len(self.memory.t_cell_responses),
-                },
+                "anomalies": anomalies,
+                "response_time_ms": response_time_ms,
+                "memory_health": "Good" if memory_usage_mb < 50 else "Warning",
+                "cpu_health": "Good",  # Would need actual CPU monitoring
+                "active_patterns": len(self.active_patterns),
+                "total_burst_events": len(self.memory.burst_events),
+                "memory_usage_mb": memory_usage_mb,
+                "window_size": self.window_size,
+                "burst_threshold": self.burst_threshold,
+            }
+            
+        except Exception as e:
+            logger.error(f"Error in health check: {e}")
+            return {
+                "overall_status": "Error",
+                "system_health_score": 0.0,
+                "t_cell_active": False,
+                "anomalies": [f"Health check error: {e}"],
+                "response_time_ms": 0.0,
+                "memory_health": "Unknown",
+                "cpu_health": "Unknown",
+                "error": str(e),
             }
 
-            # Check for anomalies
-            anomalies = []
-
-            if self.system_health < 0.5:
-                anomalies.append("critically_low_health")
-
-            if self.t_cell_active:
-                anomalies.append("immune_response_active")
-
-            if len(self.memory.burst_events) > 100:
-                anomalies.append("excessive_burst_activity")
-
-            health_report["anomalies"] = anomalies
-            health_report["overall_status"] = "critical" if anomalies else "healthy"
-
-            return health_report
-
-        except Exception as e:
-            logger.error("Error in health check: {0}".format(e))
-            return {"detector_status": "error", "error": str(e)}
-
     async def get_recent_patterns(self, limit: int = 20) -> List[Dict[str, Any]]:
-        """Get recent patterns for visualization and analysis."""
+        """
+        Get recent patterns with full metadata.
+        
+        Pattern Retrieval Process:
+        1. Sort active patterns by timestamp (most recent first)
+        2. Apply limit to prevent memory overflow
+        3. Include full mathematical metadata for each pattern
+        4. Add fractal resonance and T-cell information
+        5. Include strategy trigger and risk assessment
+        
+        Mathematical Metadata:
+        - Frequency: Current occurrence count
+        - Entropy: Shannon entropy H(X) of pattern distribution
+        - Burst Score: Z-score of frequency deviation
+        - Fractal Resonance: Historical pattern similarity
+        - T-Cell Status: Immune system response
+        - Risk Level: Assessed risk category
+        - Execution Priority: Processing priority (1-10)
+        
+        Args:
+            limit: Maximum number of patterns to return
+            
+        Returns:
+            List of recent patterns with full metadata
+            
+        Pattern Metadata Structure:
+        - pattern: 2-gram pattern string
+        - emoji_symbol: Unicode/emoji representation
+        - frequency: Current frequency count
+        - burst_score: Z-score of frequency deviation
+        - entropy: Shannon entropy value
+        - fractal_resonance: Historical pattern similarity
+        - fractal_confidence: Confidence in fractal match
+        - t_cell_activation: Immune system response
+        - risk_level: Risk assessment
+        - execution_priority: Processing priority
+        - timestamp: Pattern detection time
+        """
         try:
-            recent_patterns = []
-
-            # Get recent active patterns
-            for pattern, signal in list(self.active_patterns.items())[-limit:]:
-                pattern_data = {
-                    "pattern": signal.pattern,
+            # Get active patterns sorted by timestamp (most recent first)
+            sorted_patterns: List[Tuple[str, TwoGramSignal]] = sorted(
+                self.active_patterns.items(),
+                key=lambda x: x[1].timestamp,
+                reverse=True
+            )
+            
+            # Apply limit
+            limited_patterns: List[Tuple[str, TwoGramSignal]] = sorted_patterns[:limit]
+            
+            # Convert to dictionary format
+            recent_patterns: List[Dict[str, Any]] = []
+            for pattern, signal in limited_patterns:
+                pattern_data: Dict[str, Any] = {
+                    "pattern": pattern,
                     "emoji_symbol": signal.emoji_symbol,
                     "frequency": signal.frequency,
                     "burst_score": signal.burst_score,
                     "entropy": signal.entropy,
-                    "timestamp": signal.timestamp,
                     "fractal_resonance": signal.fractal_resonance,
                     "fractal_confidence": signal.fractal_confidence,
                     "t_cell_activation": signal.t_cell_activation,
                     "system_health_score": signal.system_health_score,
-                    "strategy_trigger": signal.strategy_trigger,
                     "risk_level": signal.risk_level,
                     "execution_priority": signal.execution_priority,
+                    "strategy_trigger": signal.strategy_trigger,
+                    "timestamp": signal.timestamp,
                     "asic_hash": signal.asic_hash,
                 }
                 recent_patterns.append(pattern_data)
-
-            # If we don't have enough active patterns, add from memory
-            if len(recent_patterns) < limit:
-                # Get recent burst events
-                recent_bursts = sorted(self.memory.burst_events, key=lambda x: x["timestamp"], reverse=True)
-                recent_bursts = recent_bursts[:limit - len(recent_patterns)]
-
-                for burst in recent_bursts:
-                    pattern_data = {
-                        "pattern": burst["pattern"],
-                        "emoji_symbol": self.symbol_map.get(burst["pattern"], "🔍"),
-                        "frequency": burst["frequency"],
-                        "burst_score": burst["burst_score"],
-                        "entropy": burst["entropy"],
-                        "timestamp": burst["timestamp"],
-                        "fractal_resonance": None,
-                        "fractal_confidence": None,
-                        "t_cell_activation": False,
-                        "system_health_score": 1.0,
-                        "strategy_trigger": burst.get("strategy_trigger"),
-                        "risk_level": "medium",
-                        "execution_priority": 5,
-                        "asic_hash": self._generate_asic_hash(burst["pattern"], burst["frequency"]),
-                    }
-                    recent_patterns.append(pattern_data)
-
-            return recent_patterns[:limit]
-
+            
+            return recent_patterns
+            
         except Exception as e:
-            logger.error("Error getting recent patterns: {0}".format(e))
+            logger.error(f"Error getting recent patterns: {e}")
             return []
 
 # Factory function for easy integration

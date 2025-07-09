@@ -754,7 +754,7 @@ class VisualExecutionNode:
                 y = (i // 5) * (canvas_height // 3) + (canvas_height // 6)
 
                 # Create pattern visualization
-                pattern_viz = PatternVisualization()
+                pattern_viz = PatternVisualization(
                     pattern=pattern_data.get("pattern", "??"),
                     emoji_symbol=pattern_data.get("emoji_symbol", "❓"),
                     frequency=pattern_data.get("frequency", 0),
@@ -863,11 +863,8 @@ Avg Entropy: {stats.get('average_entropy', 0.0):.3f}
 
             top_patterns = stats.get('top_patterns', [])
             for i, pattern in enumerate(top_patterns[:5], 1):
-                stats_text += "{0}. {1} {2} ".format(i, pattern.get(
-                    'pattern', '??'), pattern.get('emoji_symbol', '❓'))
-                stats_text += "(f:{0}, b:{1:.2f})\n".format()
-                    pattern.get('frequency', 0), pattern.get('burst_score', 0.0)
-                )
+                stats_text += "{0}. {1} {2} ".format(i, pattern.get('pattern', '??'), pattern.get('emoji_symbol', '❓'))
+                stats_text += "(f:{0}, b:{1:.2f})\n".format(pattern.get('frequency', 0), pattern.get('burst_score', 0.0))
 
             stats_text += f"""
 🛡️ SYSTEM HEALTH:
@@ -892,13 +889,13 @@ Memory Usage: {stats.get('memory_usage_mb', 0):.1f} MB
                 widget.destroy()
 
             # Simulate market data (in real implementation, this would come from live, feeds)
-            market_data = {}
-                "BTC/USDC": {}
+            market_data = {
+                "BTC/USDC": {
                     "price": 50000.0 + xp.random.normal(0, 500),
                     "change_24h": xp.random.normal(0, 3),
                     "volume": 1000000 + xp.random.normal(0, 100000),
                 },
-                "ETH/USDC": {}
+                "ETH/USDC": {
                     "price": 3000.0 + xp.random.normal(0, 100),
                     "change_24h": xp.random.normal(0, 4),
                     "volume": 800000 + xp.random.normal(0, 80000),
@@ -919,11 +916,7 @@ Memory Usage: {stats.get('memory_usage_mb', 0):.1f} MB
                 symbol_label.grid(row=row, column=0, padx=10, pady=5, sticky="w")
 
                 # Price
-                price_color = ()
-                    self.color_scheme["success"]
-                    if data["change_24h"] > 0
-                    else self.color_scheme["error"]
-                )
+                price_color = self.color_scheme["success"] if data["change_24h"] > 0 else self.color_scheme["error"]
                 price_label = tk.Label(
                     self.market_display,
                     text="${0:.2f}".format(data['price']),
@@ -987,7 +980,7 @@ Memory Usage: {stats.get('memory_usage_mb', 0):.1f} MB
             total_value = float(portfolio_state.total_value)
             start_angle = 0
 
-            colors = []
+            colors = [
                 self.color_scheme["pattern"],
                 self.color_scheme["trading"],
                 self.color_scheme["success"],
@@ -1068,17 +1061,11 @@ Drift Score: {performance.get('drift_score', 0.0):.3f}
             # Update health indicators
             if hasattr(self, 'health_indicators'):
                 # Check component health
-                health_status = {}
-                    "2-Gram Detector": ()
-                        "🟢 Healthy" if self.two_gram_detector else "🔴 Not Available"
-                    ),
+                health_status = {
+                    "2-Gram Detector": "🟢 Healthy" if self.two_gram_detector else "🔴 Not Available",
                     "Strategy Router": "🟢 Healthy" if self.strategy_router else "🔴 Not Available",
-                    "Portfolio Balancer": ()
-                        "🟢 Healthy" if self.portfolio_balancer else "🔴 Not Available"
-                    ),
-                    "BTC/USDC Integration": ()
-                        "🟢 Healthy" if self.btc_usdc_integration else "🔴 Not Available"
-                    ),
+                    "Portfolio Balancer": "🟢 Healthy" if self.portfolio_balancer else "🔴 Not Available",
+                    "BTC/USDC Integration": "🟢 Healthy" if self.btc_usdc_integration else "🔴 Not Available",
                     "Network Status": "🟢 Connected",
                     "Memory Usage": "🟡 {0:.1f} MB".format(self._get_memory_usage()),
                 }
@@ -1148,9 +1135,7 @@ CPU Health: {health_check.get('cpu_health', 'Good')}
             if self.btc_usdc_integration:
                 components.append("💱")
 
-            status_text = "🔄 Running - Components: {0} - Frame: {1}".format()
-                ' '.join(components), self.animation_frame
-            )
+            status_text = "🔄 Running - Components: {0} - Frame: {1}".format(' '.join(components), self.animation_frame)
             self.status_label.config(text=status_text)
 
         except Exception as e:
@@ -1197,34 +1182,15 @@ CPU Health: {health_check.get('cpu_health', 'Good')}
             # Log pattern statistics periodically
             if self.two_gram_detector and time.time() - self.last_update_time > 30:
                 stats = await self.two_gram_detector.get_pattern_statistics()
-                info()
-                    "🧬 Patterns: {0}, Health: {1:.2f}".format()
-                        stats.get('active_patterns', 0), stats.get(
-                            'system_health_score', 0.0)
-                    )
-                )
+                info("🧬 Patterns: {0}, Health: {1:.2f}".format(stats.get('active_patterns', 0), stats.get('system_health_score', 0.0)))
                 self.last_update_time = time.time()
 
         except Exception as e:
             logger.error("Error in headless update: {0}".format(e))
 
-    def stop(self):
-        """Stop the visual execution node."""
-        self.running = False
-
-        if self.root:
-            self.root.quit()
-
-        info("🖥️ Visual Execution Node stopped")
-
-    def run_gui(self):
-        """Run the GUI main loop (blocking)."""
-        if self.root:
-            self.root.mainloop()
-
     async def get_visualization_statistics(self) -> Dict[str, Any]:
         """Get visualization performance statistics."""
-        return {}
+        return {
             "gui_available": GUI_AVAILABLE,
             "running": self.running,
             "current_fps": self.current_fps,
@@ -1236,9 +1202,8 @@ CPU Health: {health_check.get('cpu_health', 'Good')}
             "memory_usage_mb": self._get_memory_usage(),
         }
 
-
 # Factory function for easy integration
-    def create_visual_execution_node(config: Optional[Dict[str, Any]] = None) -> VisualExecutionNode:
+def create_visual_execution_node(config: Optional[Dict[str, Any]] = None) -> VisualExecutionNode:
     """Create a visual execution node instance."""
     visual_config = VisualConfig()
 
@@ -1249,7 +1214,6 @@ CPU Health: {health_check.get('cpu_health', 'Good')}
 
     return VisualExecutionNode(visual_config)
 
-
 # Integration test function
 async def test_visual_execution_node():
     """Test the visual execution node with mock data."""
@@ -1257,7 +1221,7 @@ async def test_visual_execution_node():
     print("=" * 50)
 
     # Create visual node
-    config = {}
+    config = {
         "gui_mode": GUIMode.DEMO_MODE,
         "theme": VisualizationTheme.SCHWABOT_CLASSIC,
         "update_interval_ms": 500,
