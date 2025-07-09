@@ -1,30 +1,23 @@
-from __future__ import annotations
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Base API Handler for Schwabot external API integrations.
+"""
+
 import asyncio
 import json
 import logging
 import time
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import Any, Dict, Optional
-
-import aiohttp
+from typing import Any, Dict
 
 try:
-    pass
-    except ImportError:  # Fallback to requests for sync usage / testing
-    aiohttp = None  # type: ignore
-
-__all__ = ["BaseAPIHandler"]
+    import aiohttp
+except ImportError:
+    aiohttp = None
 
 logger = logging.getLogger(__name__)
-
-"""Base API Handler"
-
-Provides an abstract base class for integrating third-party APIs into the
-Schwabot data pipeline. Child classes only need to implement
-`_fetch_raw()` and (optionally) `_parse_raw()` and the handler is ready
-    for use by the cache sync subsystem.
-"""
 
 
 class BaseAPIHandler(ABC):
@@ -33,9 +26,7 @@ class BaseAPIHandler(ABC):
     # --- Class-level configuration ------------------------------------------
 
     NAME: str = "generic_api"  # Override in subclass (e.g. lunarcrush)
-
     CACHE_SUBDIR: str = "generic"  # flask/feeds/<CACHE_SUBDIR>/latest.json
-
     REFRESH_INTERVAL: int = 300  # seconds - 5-minute default
 
     # Rate limiting configuration
@@ -48,47 +39,42 @@ class BaseAPIHandler(ABC):
     RETRY_DELAY: float = 2.0
     TIMEOUT: int = 30  # seconds
 
-    # ------------------------------------------------------------------------------
-
     def __init__(self, cache_root: Path | str = Path("flask/feeds")) -> None:
-        self.cache_root: Path = Path(cache_root)
-        self._last_refresh: float = 0.0
-        self._session: Optional[aiohttp.ClientSession] = None if aiohttp else None
-
-        # Rate limiting state
-        self._request_count: int = 0
-        self._rate_limit_window_start: float = time.time()
-        self._last_request_time: float = 0.0
-
-        # Error tracking
-        self._error_count: int = 0
-        self._last_error_time: float = 0.0
-        self._consecutive_errors: int = 0
-
-    # Public API -------------------------------------------------------------
+        """Initialize the API handler."""
+        self.cache_root = Path(cache_root)
+        self._session: aiohttp.ClientSession | None = None
+        self._last_refresh = 0.0
+        self._last_request_time = 0.0
+        self._rate_limit_window_start = time.time()
+        self._request_count = 0
+        self._error_count = 0
+        self._consecutive_errors = 0
+        self._last_error_time = 0.0
 
     async def get_data(self, force_refresh: bool = False) -> Dict[str, Any]:
-        """Return cached data, refreshing from the remote API if needed."""
-        if force_refresh or (time.time() - self._last_refresh > self.REFRESH_INTERVAL):
+        """Get data from cache or fetch fresh data if needed."""
+        if not force_refresh and self.is_fresh():
+            return await self._read_cache()  # Return cached data if no refresh needed
+
+        # Fetch fresh data
+        for attempt in range(self.MAX_RETRIES):
             try:
-                # Check rate limits before making request
                 await self._check_rate_limit()
-
-                raw = await self._fetch_raw()
-                parsed = await self._parse_raw(raw)
-                await self._write_cache(parsed)
+                raw_data = await self._fetch_raw()
+                parsed_data = await self._parse_raw(raw_data)
+                await self._write_cache(parsed_data)
                 self._last_refresh = time.time()
+                self._consecutive_errors = 0  # Reset error count on success
+                return parsed_data
 
-                # Reset error counters on success
-                self._consecutive_errors = 0
-                self._error_count = 0
-
-                return parsed
             except Exception as exc:
                 self._handle_error(exc)
-                logger.error("%s: refresh failed - %s", self.NAME, exc, exc_info=True)
-                # Fallback to cached data if available
-                return await self._read_cache()
+                if attempt < self.MAX_RETRIES - 1:
+                    await asyncio.sleep(self.RETRY_DELAY * (attempt + 1))
+                else:
+                    logger.error(
+                        f"{self.NAME}: Max retries exceeded, returning cached data")
+                    return await self._read_cache()  # Return cached data if available
 
         return await self._read_cache()  # Return cached data if no refresh needed
 
@@ -97,7 +83,7 @@ class BaseAPIHandler(ABC):
         return await self.get_data()
 
     def is_fresh(self) -> bool:
-        """Check if cached data is fresh (within refresh, interval)."""
+        """Check if cached data is fresh (within refresh interval)."""
         return (time.time() - self._last_refresh) <= self.REFRESH_INTERVAL
 
     def cache_hash(self) -> str:
@@ -126,7 +112,8 @@ class BaseAPIHandler(ABC):
                         timestamps.append(float(value))
 
                 if timestamps:
-                    variance = sum((x - sum(timestamps) / len(timestamps)) ** 2 for x in timestamps) / len(timestamps)
+                    variance = sum((x - sum(timestamps) / len(timestamps))
+                                   ** 2 for x in timestamps) / len(timestamps)
                     # Normalize to [0, 1]
                     return min(1.0, max(0.0, variance / 1000.0))
 
@@ -144,16 +131,22 @@ class BaseAPIHandler(ABC):
             self._rate_limit_window_start = current_time
             self._request_count = 0
 
-        return {}
+        return {
             "requests_used": self._request_count,
-            "requests_remaining": max(0, self.RATE_LIMIT_REQUESTS - self._request_count),
-            "window_remaining": max(0, self.RATE_LIMIT_WINDOW - window_elapsed),
+            "requests_remaining": max(
+                0,
+                self.RATE_LIMIT_REQUESTS -
+                self._request_count),
+            "window_remaining": max(
+                0,
+                self.RATE_LIMIT_WINDOW -
+                window_elapsed),
             "rate_limit_exceeded": self._request_count >= self.RATE_LIMIT_REQUESTS,
         }
 
     def get_error_status(self) -> Dict[str, Any]:
         """Get current error status."""
-        return {}
+        return {
             "total_errors": self._error_count,
             "consecutive_errors": self._consecutive_errors,
             "last_error_time": self._last_error_time,
@@ -164,11 +157,11 @@ class BaseAPIHandler(ABC):
 
     @abstractmethod
     async def _fetch_raw(self) -> Any:  # pragma: no cover  implemented by subclass
-        """Fetch raw data from the remote API (network, call)."""
+        """Fetch raw data from the remote API (network call)."""
         pass  # Must be implemented by subclass
 
     async def _parse_raw(self, raw: Any) -> Dict[str, Any]:
-        """Transform raw payload into a normalised JSON-serialisable dict."
+        """Transform raw payload into a normalised JSON-serialisable dict.
 
         Sub-classes may override for custom parsing. The default
         implementation assumes the payload is already JSON-compatible.
@@ -186,11 +179,13 @@ class BaseAPIHandler(ABC):
             self._rate_limit_window_start = current_time
             self._request_count = 0
 
-        # Check if we've exceeded the rate limit'
+        # Check if we've exceeded the rate limit
         if self._request_count >= self.RATE_LIMIT_REQUESTS:
-            window_remaining = self.RATE_LIMIT_WINDOW - (current_time - self._rate_limit_window_start)
+            window_remaining = self.RATE_LIMIT_WINDOW - \
+                (current_time - self._rate_limit_window_start)
             if window_remaining > 0:
-                logger.warning("{0}: Rate limit exceeded, waiting {1} seconds".format(self.NAME, window_remaining))
+                logger.warning(
+                    f"{self.NAME}: Rate limit exceeded, waiting {window_remaining} seconds")
                 await asyncio.sleep(window_remaining)
                 self._rate_limit_window_start = current_time
                 self._request_count = 0
@@ -211,12 +206,11 @@ class BaseAPIHandler(ABC):
         self._last_error_time = time.time()
 
         # Log error with context
-        logger.error()
-            "{0}: Error occurred (total: {1}, consecutive: {2}) - {3}".format()
-                self.NAME, 
-                self._error_count, 
-                self._consecutive_errors, exc)
-        )
+        logger.error(
+            f"{
+                self.NAME}: Error occurred (total: {
+                self._error_count}, consecutive: {
+                self._consecutive_errors}) - {exc}")
 
     # Caching helpers --------------------------------------------------------
 
@@ -247,7 +241,8 @@ class BaseAPIHandler(ABC):
     # type: ignore[return-type]
     async def _get_session(self) -> aiohttp.ClientSession:
         if not aiohttp:
-            raise RuntimeError("aiohttp is required for async HTTP but not installed")
+            raise RuntimeError(
+                "aiohttp is required for async HTTP but not installed")
 
         if not self._session:
             timeout = aiohttp.ClientTimeout(total=self.TIMEOUT)
@@ -267,14 +262,15 @@ class BaseAPIHandler(ABC):
 
         for method_name in required_methods:
             if not hasattr(self, method_name):
-                logger.error("{0}: Missing required method '{1}'".format(self.NAME, method_name))
+                logger.error(
+                    f"{self.NAME}: Missing required method '{method_name}'")
                 return False
 
         return True
 
     def get_handler_info(self) -> Dict[str, Any]:
         """Get comprehensive handler information."""
-        return {}
+        return {
             "name": self.NAME,
             "cache_subdir": self.CACHE_SUBDIR,
             "refresh_interval": self.REFRESH_INTERVAL,

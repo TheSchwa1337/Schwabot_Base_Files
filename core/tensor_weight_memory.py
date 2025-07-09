@@ -27,8 +27,6 @@ import time
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
-import numpy as np
-import cupy as cp
 
 # Import existing Schwabot components
 try:
@@ -41,19 +39,17 @@ except ImportError as e:
     print(f"⚠️ Some Schwabot components not available: {e}")
     SCHWABOT_COMPONENTS_AVAILABLE = False
 
+from core.backend_math import get_backend, backend_info
+xp = get_backend()
+
 logger = logging.getLogger(__name__)
 
-# CUDA Integration with Fallback
-try:
-    USING_CUDA = True
-    _backend = "cupy (GPU)"
-    xp = cp
-except ImportError:
-    USING_CUDA = False
-    _backend = "numpy (CPU)"
-    xp = np
-
-logger.info(f"🧠 TensorWeightMemory using backend: {_backend}")
+# Log backend status
+backend_status = backend_info()
+if backend_status["accelerated"]:
+    logger.info("🧠 TensorWeightMemory using GPU acceleration: CuPy (GPU)")
+else:
+    logger.info("🧠 TensorWeightMemory using CPU fallback: NumPy (CPU)")
 
 
 class MemoryUpdateMode(Enum):
@@ -78,10 +74,10 @@ class MemoryTensor:
     """Memory tensor ℳₜ for storing shell weights and history"""
     
     timestamp: float
-    shell_weights: np.ndarray  # Wₜ [8] - weights for each shell
-    hash_entropy: np.ndarray   # Hₜ [64] - hash entropy vector
-    success_scores: np.ndarray # Sₜ [8] - success/failure scores
-    phi_tensor: np.ndarray     # Φₜ [8] - combined tensor state
+    shell_weights: xp.ndarray  # Wₜ [8] - weights for each shell
+    hash_entropy: xp.ndarray   # Hₜ [64] - hash entropy vector
+    success_scores: xp.ndarray # Sₜ [8] - success/failure scores
+    phi_tensor: xp.ndarray     # Φₜ [8] - combined tensor state
     confidence: float
     update_mode: MemoryUpdateMode
     metadata: Dict[str, Any] = field(default_factory=dict)
@@ -91,8 +87,8 @@ class MemoryTensor:
 class WeightUpdateResult:
     """Result of weight update operation"""
     
-    new_weights: np.ndarray
-    weight_delta: np.ndarray
+    new_weights: xp.ndarray
+    weight_delta: xp.ndarray
     entropy_contribution: float
     success_contribution: float
     confidence_change: float
@@ -128,7 +124,7 @@ class TensorWeightMemory:
         
         # Initialize weight tensors
         self.shell_weights = xp.ones(8) * 0.5  # Wₜ - initial weights
-        self.weight_history: List[np.ndarray] = []
+        self.weight_history: List[xp.ndarray] = []
         self.memory_tensors: List[MemoryTensor] = []
         
         # Neural processing components
@@ -170,7 +166,7 @@ class TensorWeightMemory:
     def update_shell_weights(
         self,
         trade_result: Dict[str, Any],
-        hash_entropy: np.ndarray,
+        hash_entropy: xp.ndarray,
         current_shell: OrbitalShell,
         strategy_id: str
     ) -> WeightUpdateResult:
@@ -217,7 +213,7 @@ class TensorWeightMemory:
                 return WeightUpdateResult(
                     new_weights=new_weights,
                     weight_delta=weight_delta,
-                    entropy_contribution=np.mean(hash_entropy),
+                    entropy_contribution=xp.mean(hash_entropy),
                     success_contribution=success_score,
                     confidence_change=memory_tensor.confidence - self._get_previous_confidence(),
                     update_mode=update_mode,
@@ -234,7 +230,7 @@ class TensorWeightMemory:
     
     def consensus_altitude(
         self,
-        phi_tensor: np.ndarray,
+        phi_tensor: xp.ndarray,
         memory_tensor: MemoryTensor,
         threshold: Optional[float] = None
     ) -> ConsensusAltitudeResult:
@@ -276,7 +272,7 @@ class TensorWeightMemory:
             ]
             
             # Calculate confidence
-            confidence_level = np.mean(memory_tensor.shell_weights)
+            confidence_level = xp.mean(memory_tensor.shell_weights)
             
             # Determine if trade is allowed
             trade_allowed = (
@@ -322,7 +318,7 @@ class TensorWeightMemory:
             normalized_profit = profit / (duration * risk + 1e-8)
             
             # Apply sigmoid to get score between 0 and 1
-            success_score = 1.0 / (1.0 + np.exp(-normalized_profit))
+            success_score = 1.0 / (1.0 + xp.exp(-normalized_profit))
             
             return float(success_score)
             
@@ -346,9 +342,9 @@ class TensorWeightMemory:
     def _calculate_weight_gradient(
         self,
         success_score: float,
-        hash_entropy: np.ndarray,
+        hash_entropy: xp.ndarray,
         current_shell: OrbitalShell
-    ) -> np.ndarray:
+    ) -> xp.ndarray:
         """Calculate weight gradient ∇L(Wₜ)"""
         try:
             # Base gradient from success score
@@ -372,9 +368,9 @@ class TensorWeightMemory:
     
     def _apply_weight_update(
         self,
-        gradient: np.ndarray,
+        gradient: xp.ndarray,
         update_mode: MemoryUpdateMode
-    ) -> np.ndarray:
+    ) -> xp.ndarray:
         """Apply weight update Wₜ₊₁ = Wₜ + α·∇L(Wₜ) + β·Hₑ·Sₜ"""
         try:
             # Apply gradient update
@@ -401,8 +397,8 @@ class TensorWeightMemory:
     
     def _create_memory_tensor(
         self,
-        weights: np.ndarray,
-        hash_entropy: np.ndarray,
+        weights: xp.ndarray,
+        hash_entropy: xp.ndarray,
         success_score: float,
         update_mode: MemoryUpdateMode
     ) -> MemoryTensor:
@@ -412,7 +408,7 @@ class TensorWeightMemory:
             phi_tensor = weights * success_score
             
             # Calculate confidence
-            confidence = float(np.mean(weights))
+            confidence = float(xp.mean(weights))
             
             memory_tensor = MemoryTensor(
                 timestamp=time.time(),
@@ -434,7 +430,7 @@ class TensorWeightMemory:
             logger.error(f"Error creating memory tensor: {e}")
             return self._get_empty_memory_tensor()
     
-    def _update_system_state(self, memory_tensor: MemoryTensor, new_weights: np.ndarray):
+    def _update_system_state(self, memory_tensor: MemoryTensor, new_weights: xp.ndarray):
         """Update system state with new memory tensor"""
         try:
             # Add to history
@@ -480,7 +476,7 @@ class TensorWeightMemory:
         except Exception as e:
             logger.error(f"Error updating performance metrics: {e}")
     
-    def _calculate_momentum_curvature(self, phi_tensor: np.ndarray) -> float:
+    def _calculate_momentum_curvature(self, phi_tensor: xp.ndarray) -> float:
         """Calculate momentum curvature ∇ψₜ"""
         try:
             if len(self.memory_tensors) < 2:
@@ -489,7 +485,7 @@ class TensorWeightMemory:
             current_phi = phi_tensor
             previous_phi = self.memory_tensors[-2].phi_tensor
             
-            curvature = float(np.mean(current_phi - previous_phi))
+            curvature = float(xp.mean(current_phi - previous_phi))
             return curvature
             
         except Exception as e:
@@ -506,7 +502,7 @@ class TensorWeightMemory:
             recent_scores = [
                 tensor.success_scores[0] for tensor in self.memory_tensors[-5:]
             ]
-            rolling_return = float(np.mean(recent_scores))
+            rolling_return = float(xp.mean(recent_scores))
             
             return rolling_return
             
@@ -514,14 +510,14 @@ class TensorWeightMemory:
             logger.error(f"Error calculating rolling return: {e}")
             return 0.0
     
-    def _calculate_entropy_shift(self, hash_entropy: np.ndarray) -> float:
+    def _calculate_entropy_shift(self, hash_entropy: xp.ndarray) -> float:
         """Calculate entropy shift εₜ"""
         try:
             if len(self.memory_tensors) < 2:
                 return 0.0
             
-            current_entropy = np.mean(hash_entropy)
-            previous_entropy = np.mean(self.memory_tensors[-2].hash_entropy)
+            current_entropy = xp.mean(hash_entropy)
+            previous_entropy = xp.mean(self.memory_tensors[-2].hash_entropy)
             
             entropy_shift = float(current_entropy - previous_entropy)
             return entropy_shift
@@ -536,8 +532,8 @@ class TensorWeightMemory:
             if len(self.memory_tensors) < 2:
                 return 0.0
             
-            current_phi = np.mean(memory_tensor.phi_tensor)
-            previous_phi = np.mean(self.memory_tensors[-2].phi_tensor)
+            current_phi = xp.mean(memory_tensor.phi_tensor)
+            previous_phi = xp.mean(self.memory_tensors[-2].phi_tensor)
             
             alpha_decay = float(current_phi - previous_phi)
             return alpha_decay
@@ -590,8 +586,8 @@ class TensorWeightMemory:
                 "current_weights": self.shell_weights.tolist(),
                 "memory_size": len(self.memory_tensors),
                 "performance_metrics": self.performance_metrics,
-                "backend": _backend,
-                "cuda_available": USING_CUDA
+                "backend": backend_status["backend"],
+                "accelerated": backend_status["accelerated"]
             }
         except Exception as e:
             logger.error(f"Error getting system status: {e}")

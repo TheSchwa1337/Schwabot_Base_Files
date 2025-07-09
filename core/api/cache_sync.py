@@ -1,45 +1,26 @@
-from __future__ import annotations
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Cache Sync Service
+==================
+
+Periodically refreshes all registered API handlers and stores their
+normalised JSON payloads into the local `flask/feeds/` cache hierarchy.
+
+This service is **independent** from the trading loop - it can be run as
+its own asyncio Task or integrated as a background task by the
+`ApiIntegrationManager`.
+"""
+
 import asyncio
 import importlib
 import inspect
-from types import ModuleType
 import logging
-from typing import List
 from pathlib import Path
+from types import ModuleType
+from typing import List
+
 from .handlers.base_handler import BaseAPIHandler
-
-"""A service for synchronizing API data caches."""
-
-
-# # Cache Sync Service
-
-
-# ==================
-
-
-#
-
-
-# Periodically refreshes all registered API handlers and stores their
-
-
-# normalised JSON payloads into the local `flask/feeds/` cache hierarchy.
-
-
-#
-
-
-# This service is **independent** from the trading loop  it can be run as
-
-
-# its own asyncio Task or integrated as a background task by the
-
-
-# `ApiIntegrationManager`.
-
-
-#
-
 
 logger = logging.getLogger(__name__)
 
@@ -51,7 +32,7 @@ class CacheSyncService:
     """Background service that refreshes all API handler caches."""
 
     def __init__(self, refresh_interval: int = DEFAULT_REFRESH) -> None:
-        """Initialize the CacheSyncService."
+        """Initialize the CacheSyncService.
 
         Args:
             refresh_interval: The interval in seconds to refresh the cache.
@@ -68,11 +49,8 @@ class CacheSyncService:
 
         await self._discover_handlers()
         self._task = asyncio.create_task(self._run_loop())
-        logger.info()
-            "[Service Started] CacheSyncService started with {0} handlers".format()
-                len(self.handlers)
-            )
-        )
+        logger.info("[Service Started] CacheSyncService started with {0} handlers".format(
+            len(self.handlers)))
 
     async def stop(self) -> None:
         """Stop the cache sync service."""
@@ -85,22 +63,19 @@ class CacheSyncService:
             self._task = None
 
         # Close handler sessions
-        await asyncio.gather()
-            *(h.close() for h in self.handlers), return_exceptions=True
-        )
+        await asyncio.gather(*(h.close() for h in self.handlers), return_exceptions=True)
         logger.info("[Service Stopped] CacheSyncService stopped")
 
     async def _run_loop(self) -> None:
         """The main loop that periodically refreshes the cache."""
         while True:
             try:
-                await asyncio.gather()
-                    *(h.get_data(force_refresh=True) for h in self.handlers)
-                )
+                await asyncio.gather(*(h.get_data(force_refresh=True) for h in self.handlers))
             except Exception as exc:  # noqa: BLE001
-                logger.error()
-                    "CacheSyncService iteration failed: %s", exc, exc_info=True
-                )
+                logger.error(
+                    "CacheSyncService iteration failed: %s",
+                    exc,
+                    exc_info=True)
 
             await asyncio.sleep(self.refresh_interval)
 
@@ -117,15 +92,18 @@ class CacheSyncService:
             try:
                 mod: ModuleType = importlib.import_module(rel_mod)  # noqa: PERF401
             except Exception as exc:  # noqa: BLE001
-                logger.error("Failed to import handler module %s: %s", rel_mod, exc)
+                logger.error(
+                    "Failed to import handler module %s: %s", rel_mod, exc)
                 continue
 
             for _, obj in inspect.getmembers(mod, inspect.isclass):
-                if issubclass(obj, BaseAPIHandler) and obj is not BaseAPIHandler:
+                if issubclass(
+                        obj, BaseAPIHandler) and obj is not BaseAPIHandler:
                     try:
                         # type: ignore[call-arg]
                         handler: BaseAPIHandler = obj()
                         self.handlers.append(handler)
                         logger.info("Registered handler: %s", handler.NAME)
                     except Exception as exc:  # noqa: BLE001
-                        logger.error("Failed to initialise handler %s: %s", obj, exc)
+                        logger.error(
+                            "Failed to initialise handler %s: %s", obj, exc)

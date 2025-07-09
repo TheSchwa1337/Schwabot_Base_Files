@@ -1,34 +1,20 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Data models for API responses.
+"""
+
 from dataclasses import dataclass, field
-from typing import Any, Dict, Optional
+from typing import Dict, Any, Optional, List
 from .enums import ExchangeType, OrderSide, OrderType
 
-# !/usr/bin/env python3
-
-
-# -*- coding: utf-8 -*-
-
-
-"""API System Data Models ===================="
-
-
-
-
-
-
-
-Contains all data models (dataclasses) for the Schwabot live API
-
-
-
-integration system.
-
-
-
-"""
+# =====================================================================
+#  Core Data Structures for API Payloads
+# =====================================================================
 
 
 @dataclass
-    class APICredentials:
+class APICredentials:
     """API credentials for exchanges."""
 
     exchange: ExchangeType
@@ -40,7 +26,7 @@ integration system.
 
 
 @dataclass
-    class MarketData:
+class MarketData:
     """Real-time market data."""
 
     symbol: str
@@ -57,7 +43,7 @@ integration system.
 
 
 @dataclass
-    class OrderRequest:
+class OrderRequest:
     """Order request structure."""
 
     symbol: str
@@ -72,148 +58,96 @@ integration system.
 
 
 @dataclass
-    class OrderResponse:
+class OrderResponse:
     """Order response structure."""
 
     order_id: str
-
     client_order_id: Optional[str]
-
     symbol: str
-
     side: str
-
     order_type: str
-
     amount: float
-
     price: float
-
     filled: float
-
     remaining: float
-
     cost: float
-
     status: str
-
     timestamp: float
-
     fee: Optional[Dict[str, Any]] = None
-
     info: Dict[str, Any] = field(default_factory=dict)
-
     success: bool = True
-
     error_message: Optional[str] = None
 
 
 @dataclass
-    class PortfolioPosition:
+class PortfolioPosition:
     """Portfolio position."""
 
     symbol: str
-
     amount: float
-
     entry_price: float
-
     current_price: float
-
     value_usd: float
-
     pnl: float
-
     pnl_percentage: float
-
     timestamp: float
-
     metadata: Dict[str, Any] = field(default_factory=dict)
 
 
-"""Data models for API responses."""
-
-
-# =====================================================================
-
-
-#  Core Data Structures for API Payloads
-
-
-# =====================================================================
-
-
 @dataclass
-    class APIPricePoint:
+class APIPricePoint:
     """Represents a single price point in a time series."""
 
     timestamp: int
-
     price: float
-
     volume: Optional[float] = None
 
 
 @dataclass
-    class APIMarketDepth:
+class APIMarketDepth:
     """Represents the market depth for an asset."""
 
     last_update_id: int
-
-    bids: list[tuple[float, float]]  # (price, quantity)
-
-    asks: list[tuple[float, float]]  # (price, quantity)
+    bids: List[tuple[float, float]]  # (price, quantity)
+    asks: List[tuple[float, float]]  # (price, quantity)
 
 
 @dataclass
-    class APITrade:
+class APITrade:
     """Represents a single executed trade."""
 
     id: int
-
     price: float
-
     qty: float
-
     quote_qty: float
-
     timestamp: int
-
     is_buyer_maker: bool
 
 
 @dataclass
-    class APINewsArticle:
+class APINewsArticle:
     """Represents a single news article."""
 
     id: str
-
     source: str
-
     headline: str
-
     summary: str
-
     url: str
-
     timestamp: int
-
     sentiment: Optional[float] = None  # e.g., -1.0 to 1.0
 
 
 @dataclass
-    class APIFearAndGreedIndex:
+class APIFearAndGreedIndex:
     """Represents a Fear and Greed Index value."""
 
     value: int  # 0-100
-
     value_classification: str  # e.g., Extreme Fear
-
     timestamp: int
 
 
 @dataclass
-    class APIGenericData:
+class APIGenericData:
     """A generic container for other data types."""
 
     source: str

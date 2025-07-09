@@ -39,6 +39,8 @@ from ..utils.cuda_helper import (
     safe_matrix_multiply,
     safe_tensor_contraction,
 )
+from core.backend_math import get_backend, backend_info
+xp = get_backend()
 
 
 # !/usr/bin/env python3

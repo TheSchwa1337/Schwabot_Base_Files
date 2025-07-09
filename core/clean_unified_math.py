@@ -5,7 +5,8 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
 
-import numpy as np
+from core.backend_math import get_backend, backend_info
+xp = get_backend()
 
 #!/usr/bin/env python3
 """
@@ -23,20 +24,13 @@ Key Features:
 - Performance tracking and analysis
 """
 
-# CUDA Integration with Fallback
-try:
-    import cupy as cp
-    CUPY_AVAILABLE = True
-except ImportError:
-    import numpy as cp  # fallback to numpy
-    CUPY_AVAILABLE = False
-
 # Log backend status
 logger = logging.getLogger(__name__)
-if CUPY_AVAILABLE:
-    logger.info("⚡ Clean Unified Math using GPU acceleration: {0}".format("cupy (GPU)"))
+backend_status = backend_info()
+if backend_status["accelerated"]:
+    logger.info("⚡ Clean Unified Math using GPU acceleration: CuPy (GPU)")
 else:
-    logger.info("🔄 Clean Unified Math using CPU fallback: {0}".format("numpy (CPU)"))
+    logger.info("🔄 Clean Unified Math using CPU fallback: NumPy (CPU)")
 
 
 @dataclass
@@ -107,7 +101,7 @@ class CleanUnifiedMathSystem:
         if cache_key in self.operation_cache:
             return self.operation_cache[cache_key]
 
-        result = cp.power(base, exponent)
+        result = xp.power(base, exponent)
         self._log_calculation("power", result, {"base": base, "exponent": exponent})
         return result
 
@@ -121,7 +115,7 @@ class CleanUnifiedMathSystem:
         if cache_key in self.operation_cache:
             return self.operation_cache[cache_key]
 
-        result = cp.sqrt(value)
+        result = xp.sqrt(value)
         self._log_calculation("sqrt", result, {"value": value})
         return result
 
@@ -131,7 +125,7 @@ class CleanUnifiedMathSystem:
         if cache_key in self.operation_cache:
             return self.operation_cache[cache_key]
 
-        result = cp.exp(value)
+        result = xp.exp(value)
         self._log_calculation("exp", result, {"value": value})
         return result
 
@@ -141,7 +135,7 @@ class CleanUnifiedMathSystem:
         if cache_key in self.operation_cache:
             return self.operation_cache[cache_key]
 
-        result = cp.sin(value)
+        result = xp.sin(value)
         self._log_calculation("sin", result, {"value": value})
         return result
 
@@ -151,7 +145,7 @@ class CleanUnifiedMathSystem:
         if cache_key in self.operation_cache:
             return self.operation_cache[cache_key]
 
-        result = cp.cos(value)
+        result = xp.cos(value)
         self._log_calculation("cos", result, {"value": value})
         return result
 
@@ -165,7 +159,7 @@ class CleanUnifiedMathSystem:
         if cache_key in self.operation_cache:
             return self.operation_cache[cache_key]
 
-        result = cp.log(value) / cp.log(base)
+        result = xp.log(value) / xp.log(base)
         self._log_calculation("log", result, {"value": value, "base": base})
         return result
 
@@ -175,7 +169,7 @@ class CleanUnifiedMathSystem:
         if cache_key in self.operation_cache:
             return self.operation_cache[cache_key]
 
-        result = cp.abs(value)
+        result = xp.abs(value)
         self._log_calculation("abs", result, {"value": value})
         return result
 
@@ -189,7 +183,7 @@ class CleanUnifiedMathSystem:
         if cache_key in self.operation_cache:
             return self.operation_cache[cache_key]
 
-        result = cp.min(values)
+        result = xp.min(values)
         self._log_calculation("min", result, {"values": values})
         return result
 
@@ -203,7 +197,7 @@ class CleanUnifiedMathSystem:
         if cache_key in self.operation_cache:
             return self.operation_cache[cache_key]
 
-        result = cp.max(values)
+        result = xp.max(values)
         self._log_calculation("max", result, {"values": values})
         return result
 
@@ -217,7 +211,7 @@ class CleanUnifiedMathSystem:
         if cache_key in self.operation_cache:
             return self.operation_cache[cache_key]
 
-        result = cp.mean(values)
+        result = xp.mean(values)
         self._log_calculation("mean", result, {"values": values})
         return result
 
@@ -228,7 +222,7 @@ class CleanUnifiedMathSystem:
             enhanced_profit = base_profit * (1.0 + enhancement_factor * confidence)
             
             # Apply mathematical optimization
-            optimized_profit = cp.tanh(enhanced_profit) * cp.abs(enhanced_profit)
+            optimized_profit = xp.tanh(enhanced_profit) * xp.abs(enhanced_profit)
             
             self._log_calculation("optimize_profit", optimized_profit, {
                 "base_profit": base_profit,
@@ -246,7 +240,7 @@ class CleanUnifiedMathSystem:
         try:
             # Risk adjustment formula
             risk_factor = 1.0 - (volatility * (1.0 - confidence))
-            adjusted_profit = profit * cp.clip(risk_factor, 0.1, 2.0)
+            adjusted_profit = profit * xp.clip(risk_factor, 0.1, 2.0)
             
             self._log_calculation("risk_adjustment", adjusted_profit, {
                 "profit": profit,
@@ -263,7 +257,7 @@ class CleanUnifiedMathSystem:
         """Calculate portfolio weight based on confidence and risk."""
         try:
             # Weight calculation using sigmoid function
-            weight = 1.0 / (1.0 + cp.exp(-10 * (confidence - 0.5)))
+            weight = 1.0 / (1.0 + xp.exp(-10 * (confidence - 0.5)))
             risk_adjusted_weight = weight * (1.0 - max_risk)
             
             self._log_calculation("portfolio_weight", risk_adjusted_weight, {
@@ -271,7 +265,7 @@ class CleanUnifiedMathSystem:
                 "max_risk": max_risk
             })
             
-            return cp.clip(risk_adjusted_weight, 0.0, 1.0)
+            return xp.clip(risk_adjusted_weight, 0.0, 1.0)
         except Exception as e:
             logger.error("Error in portfolio weight calculation: {0}".format(e))
             return 0.5
@@ -283,9 +277,9 @@ class CleanUnifiedMathSystem:
                 logger.warning("Insufficient data for Sharpe ratio calculation")
                 return 0.0
 
-            returns_array = cp.array(returns)
-            mean_return = cp.mean(returns_array)
-            std_dev = cp.std(returns_array)
+            returns_array = xp.array(returns)
+            mean_return = xp.mean(returns_array)
+            std_dev = xp.std(returns_array)
 
             if std_dev == 0:
                 logger.warning("Zero standard deviation for Sharpe ratio")
@@ -483,3 +477,11 @@ def test_clean_unified_math_system():
 
 if __name__ == "__main__":
     test_clean_unified_math_system()
+
+# Create a global instance for easy access
+clean_unified_math = CleanUnifiedMathSystem()
+
+# Export the function for backward compatibility
+def clean_unified_math_function():
+    """Return the global clean unified math instance."""
+    return clean_unified_math
