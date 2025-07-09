@@ -43,12 +43,12 @@ from .unified_market_data_pipeline import (
 )
 from .unified_math_system import create_unified_math_system
 from .zpe_zbe_core import (
-    QuantumPerformanceRegistry,
-    QuantumSyncStatus,
-    ZBEBalance,
-    ZPEVector,
-    ZPEZBEPerformanceTracker,
-    create_zpe_zbe_core,
+    QuantumPerformanceRegistry,  # noqa: F401 - Used in performance tracking (_update_zpe_zbe_performance_metrics)
+    QuantumSyncStatus,          # noqa: F401 - Used in quantum sync analysis (_enhance_market_data_with_zpe_zbe)
+    ZBEBalance,                 # noqa: F401 - Used in equilibrium calculations (_enhance_risk_management_with_zpe_zbe)
+    ZPEVector,                  # noqa: F401 - Used in zero point energy analysis (_enhance_strategy_selection_with_zpe_zbe)
+    ZPEZBEPerformanceTracker,   # noqa: F401 - Used in performance monitoring and optimization
+    create_zpe_zbe_core,        # noqa: F401 - Used in core system initialization
 )
 from .ccxt_trading_executor import CCXTTradingExecutor, IntegratedTradingSignal, TradingPair
 

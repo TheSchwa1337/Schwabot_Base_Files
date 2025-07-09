@@ -16,6 +16,7 @@ import sys
 from pathlib import Path
 from typing import List, Dict, Tuple, Optional
 
+
 class MathematicalSyntaxFixer:
     """Fix mathematical syntax issues systematically."""
 
@@ -206,7 +207,7 @@ class MathematicalSyntaxFixer:
             return line
 
         # Don't break docstrings'
-        if '"""' in line or "'''" in line:'
+        if '"""' in line or "'''" in line: '
             return line
 
         # Try to break at operators

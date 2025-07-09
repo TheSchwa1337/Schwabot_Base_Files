@@ -187,7 +187,7 @@ class AutomatedRepairSystem:
 
         for i, line in enumerate(lines):
             # Check for unterminated strings
-            if line.count('"') % 2 == 1 and not line.strip().endswith('\\'):"
+            if line.count('"') % 2 == 1 and not line.strip().endswith('\\'): "
                 # Add closing quote if missing
                 line = line + '"'"
 

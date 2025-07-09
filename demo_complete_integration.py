@@ -31,7 +31,6 @@ comprehensive, internalized trading system with proper mathematical
 foundations and profit optimization.
 """
 
-
     # Configure logging
     logging.basicConfig()
         level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
@@ -163,7 +162,7 @@ class CompleteIntegrationDemo:
         self._initialize_components()
 
         logger.info()
-            "🚀 Complete Integration Demo initialized with capital: $%.2f","
+            "🚀 Complete Integration Demo initialized with capital: $%.2f", "
             initial_capital,
         )
 

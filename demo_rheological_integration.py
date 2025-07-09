@@ -29,6 +29,7 @@ from datetime import datetime
     print("⚠️ Integration modules not available - running in simulation mode")
     INTEGRATION_AVAILABLE = False
 
+
 class RheologicalDemo:
     """
     Demonstration of Schwabot's rheological integration capabilities.'

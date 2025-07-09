@@ -260,7 +260,7 @@ def fix_syntax_errors(file_path: str) -> bool:
 
         for i, line in enumerate(lines):
             # Check for unterminated strings
-            if line.count('"') % 2 == 1 or line.count("'") % 2 == 1:'
+            if line.count('"') % 2 == 1 or line.count("'") % 2 == 1: '
                 # Try to fix by adding closing quote
                 if line.count('"') % 2 == 1:"
                     line += '"'"

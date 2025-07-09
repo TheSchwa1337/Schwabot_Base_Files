@@ -70,7 +70,8 @@ class CrossPlatformCLIValidator:
                 success(f"✅ {test_name}: PASS")
                 return True
             else:
-                self.test_results["tests"][test_name] = {"status": "FAIL", "details": "Test returned False"}
+                self.test_results["tests"][test_name] = {
+                    "status": "FAIL", "details": "Test returned False"}
                 self.test_results["summary"]["failed"] += 1
                 error(f"❌ {test_name}: FAIL")
                 return False

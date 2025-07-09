@@ -31,6 +31,7 @@ sys.path.append('.')
 
 logger = logging.getLogger(__name__)
 
+
 @dataclass
     class ValidationIssue:
     """Represents a validation issue found in the codebase"""
@@ -41,6 +42,7 @@ logger = logging.getLogger(__name__)
     severity: str  # 'error', 'warning', 'info'
     suggested_fix: Optional[str] = None
 
+
 @dataclass
     class ModuleStatus:
     """Status of a module import"""
@@ -49,6 +51,7 @@ logger = logging.getLogger(__name__)
     import_error: Optional[str] = None
     dependencies: List[str] = None
     fallback_available: bool = False
+
 
 class CodebaseValidator:
     """
@@ -353,7 +356,7 @@ class CodebaseValidator:
                 ))
 
             # Check for print statements (should use, logger)
-            if 'print(' in content and 'logger' not in content:)
+            if 'print(' in content and 'logger' not in content: )
                 self.issues.append(ValidationIssue())
                     file_path=str(file_path),
                     line_number=0,

@@ -16,7 +16,6 @@ This script demonstrates the fully functional, clean implementation of the
 Schwabot trading system with all mathematical components working correctly.
 """
 
-
             # Import our clean implementations
             CleanMathFoundation, MathOperation, ThermalState, BitPhase, create_math_foundation
         )

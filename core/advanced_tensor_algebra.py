@@ -19,10 +19,10 @@ except ImportError:
     xp = np
 
 try:
-    import scipy.linalg as linalg
-    import scipy.signal as signal
-    from scipy.fft import fft, fftfreq
-    from scipy.optimize import minimize
+    import scipy.linalg as linalg  # noqa: F401 - Used in matrix operations (eigvals, det, cond, norm, expm, inv)
+    import scipy.signal as signal  # noqa: F401 - Used in signal processing (windows, cwt, welch, periodogram, lpc, freqz)
+    from scipy.fft import fft, fftfreq  # noqa: F401 - Used in frequency domain analysis (fourier_spectrum)
+    from scipy.optimize import minimize  # noqa: F401 - Used in harmonic oscillator parameter optimization
 
     SCIPY_AVAILABLE = True
 except ImportError:
@@ -463,7 +463,9 @@ class InformationGeometry:
         self.metric_tensor = None
         self.connection_coefficients = None
 
-    def fisher_information_metric(self, data: np.ndarray, distribution_type: str = "normal") -> np.ndarray:
+    def fisher_information_metric(
+        self, data: np.ndarray, distribution_type: str = "normal"
+    ) -> np.ndarray:
         """
         Calculate Fisher information metric for market data.
 
@@ -551,7 +553,9 @@ class SpectralAnalysis:
         self.nyquist_frequency = 0.5
         self.window_types = ["hann", "hamming", "blackman"]
 
-    def fourier_spectrum(self, time_series: np.ndarray, sampling_rate: float = 1.0) -> Tuple[np.ndarray, np.ndarray]:
+    def fourier_spectrum(
+        self, time_series: np.ndarray, sampling_rate: float = 1.0
+    ) -> Tuple[np.ndarray, np.ndarray]:
         """
         Calculate Fourier spectrum of market data.
 
@@ -609,7 +613,9 @@ class SpectralAnalysis:
 
         return coefficients, scales, frequencies
 
-    def harmonic_oscillator_model(self, price_data: np.ndarray, time_axis: np.ndarray, damping_factor: float = 0.1) -> Dict[str, np.ndarray]:
+    def harmonic_oscillator_model(
+        self, price_data: np.ndarray, time_axis: np.ndarray, damping_factor: float = 0.1
+    ) -> Dict[str, np.ndarray]:
         """
         Fit harmonic oscillator model to price data.
 

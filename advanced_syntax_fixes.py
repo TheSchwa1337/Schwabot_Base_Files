@@ -79,7 +79,7 @@ def fix_indentation_errors(file_path):
         content = '\n'.join(fixed_lines)
 
         # Fix unterminated strings and parentheses
-        if content.count('"') % 2 != 0:"
+        if content.count('"') % 2 != 0: "
             # Find the last quote and add a closing quote
             last_quote_pos = content.rfind('"')"
             if last_quote_pos != -1:

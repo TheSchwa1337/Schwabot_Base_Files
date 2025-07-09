@@ -39,6 +39,7 @@ logger = logging.getLogger(__name__)
     print(f"⚠️ Advanced systems not available: {e}")
     SYSTEMS_AVAILABLE = False
 
+
 class CompleteSystemDemo:
     """Demonstration of the complete advanced algorithmic trading system"""
 
@@ -463,7 +464,8 @@ class CompleteSystemDemo:
 
         if self.profit_history:
             print(f"\n📊 Live Simulation Performance:")
-            print(f"  Total Return: {((self.profit_history[-1] / max(self.profit_history[0], 1.0)) - 1) * 100:.2f}%")
+            print(
+                f"  Total Return: {((self.profit_history[-1] / max(self.profit_history[0], 1.0)) - 1) * 100:.2f}%")
             print(f"  Volatility: {np.std(self.profit_history):.3f}")
             print(f"  Average Risk: {np.mean(self.risk_history):.3f}")
             print(f"  System Uptime Health: {np.mean(self.health_history):.3f}")

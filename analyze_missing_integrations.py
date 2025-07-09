@@ -14,6 +14,7 @@ import re
 from pathlib import Path
 from typing import Dict, List, Set, Tuple
 
+
 def analyze_missing_zpe_methods() -> Dict[str, List[str]]:
     """Analyze missing ZPE methods that are being called."""
     missing_methods = {}

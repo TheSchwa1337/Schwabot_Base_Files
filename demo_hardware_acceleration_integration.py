@@ -24,7 +24,6 @@ CRITICAL: These systems do NOT make trading decisions or affect profit calculati
 They only optimize the computational performance of the underlying hardware.
 """
 
-
     # Import our hardware acceleration systems
     HardwareAccelerationManager,
     AccelerationMode,

@@ -38,6 +38,7 @@ from datetime import datetime
     print(f"⚠️ Bio-systems not available: {e}")
     BIO_SYSTEMS_AVAILABLE = False
 
+
 class BioCellularTradingDemo:
     """Demonstration of the complete bio-cellular trading system"""
 
@@ -228,7 +229,8 @@ class BioCellularTradingDemo:
                 print(f"      Trade Action: {response.trade_action}")
                 print(f"      Position Delta: {response.position_delta:.3f}")
                 print(f"      Confidence: {response.confidence:.3f}")
-                print(f"      Receptor State: {self.cellular_signaling.signal_states[signal_type].receptor_state.value}")
+                print(
+                    f"      Receptor State: {self.cellular_signaling.signal_states[signal_type].receptor_state.value}")
 
             # Store results for visualization
             self.demo_results.append({)}
@@ -287,7 +289,8 @@ class BioCellularTradingDemo:
             print(f"\n🧪 Scenario: {scenario['name']}")
 
             # First get cellular responses
-            cellular_responses = self.cellular_signaling.process_market_signal(scenario['market_data'])
+            cellular_responses = self.cellular_signaling.process_market_signal(
+                scenario['market_data'])
 
             # Then run profit optimization
             profit_response = self.profit_vectorization.optimize_profit_vectorization()
@@ -296,7 +299,8 @@ class BioCellularTradingDemo:
 
             print(f"  Expected Pathway: {scenario['expected_pathway']}")
             print(f"  Actual Pathway: {profit_response.metabolic_pathway.value}")
-            print(f"  ✅ Match: {scenario['expected_pathway'].lower() in profit_response.metabolic_pathway.value}")
+            print(
+                f"  ✅ Match: {scenario['expected_pathway'].lower() in profit_response.metabolic_pathway.value}")
 
             print(f"  Recommended Position: {profit_response.recommended_position:.3f}")
             print(f"  Profit Velocity: {profit_response.profit_velocity:.3f}")
@@ -459,11 +463,13 @@ class BioCellularTradingDemo:
                     responses.append(response)
 
                 max_response = max(responses)
-                threshold_reached = next((conc for conc, resp in zip(ligand_concentrations, responses) if resp > 0.5), None)
+                threshold_reached = next((conc for conc, resp in zip(
+                    ligand_concentrations, responses) if resp > 0.5), None)
 
                 print(f"  {params['name']} (n={params['n']}):")
                 print(f"    Max Response: {max_response:.3f}")
-                print(f"    50% Threshold at: {threshold_reached:.3f}" if threshold_reached else "    50% Threshold: Not reached")
+                print(
+                    f"    50% Threshold at: {threshold_reached:.3f}" if threshold_reached else "    50% Threshold: Not reached")
 
         input("\n⏸️ Press Enter to continue to Homeostatic Regulation Demo...")
 
@@ -543,7 +549,8 @@ class BioCellularTradingDemo:
                 print(f"    Market Volatility: {scenario['volatility']:.1f}")
                 print(f"    Risk Level: {scenario['risk']:.1f}")
                 print(f"    Homeostatic Balance: {homeostatic_balance:.3f}")
-                print(f"    System Stability: {'✅ Stable' if homeostatic_balance > 0.5 else '⚠️ Stressed'}")
+                print(
+                    f"    System Stability: {'✅ Stable' if homeostatic_balance > 0.5 else '⚠️ Stressed'}")
 
         input("\n⏸️ Press Enter to continue to Live Cellular Trading Simulation...")
 
@@ -620,7 +627,8 @@ class BioCellularTradingDemo:
 
         if simulation_data:
             # Calculate statistics
-            decision_types = [data['trade_decision'].decision_type.value for data in simulation_data]
+            decision_types = [
+                data['trade_decision'].decision_type.value for data in simulation_data]
             cellular_states = [data['cellular_state'] for data in simulation_data]
             position_sizes = [data['trade_decision'].position_size for data in simulation_data]
             confidences = [data['trade_decision'].confidence for data in simulation_data]

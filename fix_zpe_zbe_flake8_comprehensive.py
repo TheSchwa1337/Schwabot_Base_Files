@@ -163,7 +163,8 @@ def run_final_flake8_check():
     for file_path in files_to_check:
         try:
             result = subprocess.run()
-                [sys.executable, '-m', 'flake8', file_path, '--max-line-length=100', '--ignore=D100,D200,D204,D205,D400,D401,ANN101,B007'],
+                [sys.executable, '-m', 'flake8', file_path, '--max-line-length=100',
+                    '--ignore=D100,D200,D204,D205,D400,D401,ANN101,B007'],
                 capture_output=True,
                 text=True
             )

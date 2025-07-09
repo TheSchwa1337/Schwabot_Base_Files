@@ -195,7 +195,8 @@ def demo_enhancement_integration():
         print(f"   Cosine Similarity: {result:.6f}")
 
         # Test matrix multiplication
-        result = enhanced_matrix_multiply(matrix_a, matrix_b, entropy=0.8, profit_weight=0.7, use_enhancement=True)
+        result = enhanced_matrix_multiply(
+            matrix_a, matrix_b, entropy=0.8, profit_weight=0.7, use_enhancement=True)
         print(f"   Matrix Multiplication: {result.shape}, sum: {np.sum(result):.6f}")
 
     except ImportError as e:

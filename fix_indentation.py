@@ -62,7 +62,7 @@ for path in PY_FILES:
         if text[i].strip() == "try:":
             j = i + 1
             # skip blank/comment lines
-            while j < len(text) and text[j].strip() in ("", "#", '"""', "'''"):'
+            while j < len(text) and text[j].strip() in ("", "#", '"""', "'''"): '
                 j += 1
             if j < len(text) and text[j].lstrip().startswith("except"):
                 text.insert(i + 1, "    pass")

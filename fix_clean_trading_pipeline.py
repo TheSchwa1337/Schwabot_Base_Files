@@ -7,6 +7,7 @@ This script fixes the malformed dataclass definitions in the clean trading pipel
 
 import re
 
+
 def fix_clean_trading_pipeline():
     """Fix the malformed dataclass definitions in clean_trading_pipeline.py."""
 
@@ -87,6 +88,7 @@ def fix_clean_trading_pipeline():
         f.write(content)
 
     print("✅ Fixed dataclass definitions in clean_trading_pipeline.py")
+
 
 if __name__ == '__main__':
     fix_clean_trading_pipeline() 

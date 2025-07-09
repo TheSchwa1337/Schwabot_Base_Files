@@ -84,7 +84,7 @@ class CompleteDriftShellDemo:
         print("✅ All components initialized successfully")
         print()
 
-    def simulate_market_tick():-> Dict[str, Any]:
+    def simulate_market_tick(): -> Dict[str, Any]:
         """Simulate a market tick with various scenarios."""
         self.current_tick += 1
 
@@ -147,7 +147,7 @@ class CompleteDriftShellDemo:
             "scenario": scenario,
         }
 
-    def demonstrate_timing_validation():-> Dict[str, Any]:
+    def demonstrate_timing_validation(): -> Dict[str, Any]:
         """Demonstrate temporal drift compensation and memory validation."""
         print(f"⏱️ TIMING VALIDATION - Tick {market_data['tick_id']}")
         print("-" * 50)

@@ -21,7 +21,6 @@ This script provides a WebSocket server that feeds real-time data
 to the Schwabot Altitude Dashboard.
 """
 
-
     # Import our integrated systems
     create_ghost_trigger,
     get_trigger_performance,

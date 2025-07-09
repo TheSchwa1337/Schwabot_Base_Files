@@ -31,6 +31,7 @@ from datetime import datetime
     print("⚠️ Core systems not available - running in simulation mode")
     SYSTEMS_AVAILABLE = False
 
+
 class OrbitalXiDemo:
     """Demonstration of orbital Ξ ring and matrix mapper functionality"""
 
@@ -219,7 +220,8 @@ class OrbitalXiDemo:
             print(f"  Entropy (Ξ): {entropy:.6f}")
 
             # Calculate oscillation
-            oscillation = self.xi_ring_system.calculate_oscillation_frequency(market_data['price_history'])
+            oscillation = self.xi_ring_system.calculate_oscillation_frequency(
+                market_data['price_history'])
             print(f"  Oscillation (ω): {oscillation:.6f}")
 
             # Calculate inertial mass
@@ -230,11 +232,13 @@ class OrbitalXiDemo:
             print(f"  Inertial Mass (ℐ): {inertial_mass:.6f}")
 
             # Calculate memory retention
-            memory_retention = self.xi_ring_system.calculate_memory_retention(300.0, market_data['volatility'])
+            memory_retention = self.xi_ring_system.calculate_memory_retention(
+                300.0, market_data['volatility'])
             print(f"  Memory Retention (Φ): {memory_retention:.6f}")
 
             # Generate core hash
-            core_hash = self.xi_ring_system.generate_core_hash("demo_strategy", entropy, inertial_mass, oscillation)
+            core_hash = self.xi_ring_system.generate_core_hash(
+                "demo_strategy", entropy, inertial_mass, oscillation)
             print(f"  Core Hash (χ): {core_hash}")
 
         input("\n⏸️ Press Enter to continue to Orbital Mechanics...")
@@ -307,7 +311,8 @@ class OrbitalXiDemo:
             }
 
             # Load matrix
-            matrix = self.matrix_mapper.load_matrix("test_strategy", market_data, strategy_performance)
+            matrix = self.matrix_mapper.load_matrix(
+                "test_strategy", market_data, strategy_performance)
 
             print(f"  Strategy ID: {matrix.strategy_id}")
             print(f"  Current Ring: Ξ{matrix.current_ring.value}")

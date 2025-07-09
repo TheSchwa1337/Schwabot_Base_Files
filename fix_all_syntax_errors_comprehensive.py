@@ -32,7 +32,7 @@ def fix_syntax_errors_in_file(file_path: str) -> bool:
             # Fix 1: Handle unterminated strings
             if '"' in line and line.count('"') % 2 == 1:
                 # Check if it's actually unterminated'
-                if not line.strip().endswith('""') and not line.strip().endswith('"""'):"
+                if not line.strip().endswith('""') and not line.strip().endswith('"""'): "
                     if not line.endswith('"'):"
                         line += '"'"
 

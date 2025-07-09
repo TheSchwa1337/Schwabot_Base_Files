@@ -29,6 +29,7 @@ from typing import Dict, List, Any, Optional, Tuple
 project_root = Path(__file__).parent
 sys.path.insert(0, str(project_root))
 
+
 class DeploymentReadinessChecker:
     """Comprehensive deployment readiness checker for Schwabot."""
 
@@ -242,7 +243,7 @@ class DeploymentReadinessChecker:
                 try:
                     with open(file_path, 'r', encoding='utf-8') as f:
                         content = f.read()
-                        if '"""' in content or "'''" in content:'
+                        if '"""' in content or "'''" in content: '
                             files_with_docstrings += 1
                 except Exception:
                     continue

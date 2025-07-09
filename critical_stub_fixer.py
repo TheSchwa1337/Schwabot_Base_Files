@@ -15,6 +15,7 @@ from typing import Dict, List, Any
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
 class CriticalStubFixer:
     """Fixes critical stub implementations in the codebase."""
 
@@ -163,7 +164,7 @@ class SmartMoneyIntegration:
     return SmartMoneyIntegration(config)
 
 __all__ = ["SmartMoneyIntegration", "create_smart_money_integration"]
-''','
+''', '
 
             "master_cycle_engine_enhanced": '''
 #!/usr/bin/env python3

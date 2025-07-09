@@ -7,6 +7,7 @@ import os
 import re
 from pathlib import Path
 
+
 def fix_line_length(file_path: str, max_length: int = 100) -> None:
     """Fix lines that are too long by breaking them appropriately."""
     with open(file_path, 'r', encoding='utf-8') as f:
@@ -55,7 +56,7 @@ def fix_line_length(file_path: str, max_length: int = 100) -> None:
                     paren_count = 0
                     close_paren = -1
                     for i, char in enumerate(line[open_paren:], open_paren):
-                        if char == '(':)
+                        if char == '(': )
                             paren_count += 1
                         elif char == ')':
                             paren_count -= 1

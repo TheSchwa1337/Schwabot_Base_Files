@@ -16,6 +16,7 @@ import re
 import glob
 from pathlib import Path
 
+
 def fix_unterminated_strings(content):
     """Fix unterminated string literals."""
     lines = content.split('\n')
@@ -23,7 +24,7 @@ def fix_unterminated_strings(content):
 
     for i, line in enumerate(lines):
         # Check for unterminated strings
-        if '"' in line or "'" in line:'
+        if '"' in line or "'" in line: '
             # Count quotes
             single_quotes = line.count("'")'
             double_quotes = line.count('"')"

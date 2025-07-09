@@ -26,12 +26,14 @@ from enum import Enum
 
 logger = logging.getLogger(__name__)
 
+
 class IntegrityStatus(Enum):
     """Integrity check status."""
     PASSED = "passed"
     WARNING = "warning"
     FAILED = "failed"
     CRITICAL = "critical"
+
 
 @dataclass
     class IntegrityCheck:
@@ -42,6 +44,7 @@ class IntegrityStatus(Enum):
     message: str
     details: Dict[str, Any]
     timestamp: float
+
 
 @dataclass
     class ChronoResonanceIntegrityReport:
@@ -55,6 +58,7 @@ class IntegrityStatus(Enum):
     recommendations: List[str]
     timestamp: float
     checks: List[IntegrityCheck]
+
 
 class ChronoResonanceIntegrityChecker:
     """
@@ -186,7 +190,8 @@ class ChronoResonanceIntegrityChecker:
 
         # Analyze results
         checks_passed = sum(1 for check in self.checks if check.status == IntegrityStatus.PASSED)
-        checks_failed = sum(1 for check in self.checks if check.status in [IntegrityStatus.FAILED, IntegrityStatus.CRITICAL])
+        checks_failed = sum(1 for check in self.checks if check.status in [
+                            IntegrityStatus.FAILED, IntegrityStatus.CRITICAL])
 
         # Determine overall status
         if any(check.status == IntegrityStatus.CRITICAL for check in self.checks):
@@ -294,7 +299,8 @@ class ChronoResonanceIntegrityChecker:
                         check_type="mathematical_constants",
                         status=IntegrityStatus.CRITICAL,
                         message="CRLF tau constant modified",
-                        details={"expected": self.critical_constants["CRLF_TAU_DEFAULT"], "actual": crlf.state.tau},
+                        details={
+                            "expected": self.critical_constants["CRLF_TAU_DEFAULT"], "actual": crlf.state.tau},
                         timestamp=time.time()
                     ))
 
@@ -314,7 +320,8 @@ class ChronoResonanceIntegrityChecker:
                         check_type="mathematical_constants",
                         status=IntegrityStatus.CRITICAL,
                         message="CRLF entropy constant modified",
-                        details={"expected": self.critical_constants["CRLF_ENTROPY_DEFAULT"], "actual": crlf.state.entropy},
+                        details={
+                            "expected": self.critical_constants["CRLF_ENTROPY_DEFAULT"], "actual": crlf.state.entropy},
                         timestamp=time.time()
                     ))
 
@@ -350,7 +357,8 @@ class ChronoResonanceIntegrityChecker:
                         check_type="mathematical_constants",
                         status=IntegrityStatus.CRITICAL,
                         message="CRWF Schumann frequency constant modified",
-                        details={"expected": self.critical_constants["CRWF_SCHUMANN_FREQUENCY"], "actual": test_data.schumann_frequency},
+                        details={
+                            "expected": self.critical_constants["CRWF_SCHUMANN_FREQUENCY"], "actual": test_data.schumann_frequency},
                         timestamp=time.time()
                     ))
 
@@ -445,7 +453,8 @@ class ChronoResonanceIntegrityChecker:
                     check_type="temporal_calculations",
                     status=IntegrityStatus.CRITICAL,
                     message="Temporal warp calculations failed",
-                    details={"expected_drift": test_drift, "actual_drift": window.drift_value if window else None},
+                    details={"expected_drift": test_drift,
+                        "actual_drift": window.drift_value if window else None},
                     timestamp=time.time()
                 ))
 
@@ -469,7 +478,8 @@ class ChronoResonanceIntegrityChecker:
 
             # Create test matrices
             test_matrix1 = np.array([[0.5, 0.3, 0.2], [0.3, 0.5, 0.2], [0.2, 0.2, 0.6]])
-            test_matrix2 = np.array([[0.5, 0.3, 0.2], [0.3, 0.5, 0.2], [0.2, 0.2, 0.6]])  # Identical
+            test_matrix2 = np.array([[0.5, 0.3, 0.2], [0.3, 0.5, 0.2],
+                                    [0.2, 0.2, 0.6]])  # Identical
 
             # Save snapshots
             snapshot_id1 = tracker.save_snapshot(test_matrix1, "test_strategy_1")
@@ -484,7 +494,8 @@ class ChronoResonanceIntegrityChecker:
                     check_type="fractal_patterns",
                     status=IntegrityStatus.PASSED,
                     message="Fractal pattern recognition working correctly",
-                    details={"similarity_score": match.similarity_score, "match_type": match.match_type.value},
+                    details={"similarity_score": match.similarity_score,
+                        "match_type": match.match_type.value},
                     timestamp=time.time()
                 ))
             else:
@@ -493,7 +504,8 @@ class ChronoResonanceIntegrityChecker:
                     check_type="fractal_patterns",
                     status=IntegrityStatus.CRITICAL,
                     message="Fractal pattern recognition failed",
-                    details={"expected_similarity": ">0.95", "actual_similarity": match.similarity_score if match else None},
+                    details={"expected_similarity": ">0.95",
+                        "actual_similarity": match.similarity_score if match else None},
                     timestamp=time.time()
                 ))
 
@@ -545,7 +557,8 @@ class ChronoResonanceIntegrityChecker:
                     check_type="imports",
                     status=IntegrityStatus.CRITICAL,
                     message="Some chrono resonance imports failed",
-                    details={"failed_imports": failed_imports, "successful_imports": successful_imports},
+                    details={"failed_imports": failed_imports,
+                        "successful_imports": successful_imports},
                     timestamp=time.time()
                 ))
 
@@ -581,7 +594,8 @@ class ChronoResonanceIntegrityChecker:
                     check_type="mathematical_formulas",
                     status=IntegrityStatus.PASSED,
                     message="CRLF mathematical formulas working correctly",
-                    details={"crlf_output": response.crlf_output, "trigger_state": response.trigger_state.value},
+                    details={"crlf_output": response.crlf_output,
+                        "trigger_state": response.trigger_state.value},
                     timestamp=time.time()
                 ))
             else:
@@ -641,7 +655,8 @@ class ChronoResonanceIntegrityChecker:
                     vectors_found = any(len(signal.similarity_vector) > 0 for signal in signals)
 
                     # Check that pattern types are recognized
-                    pattern_types_found = any(signal.pattern in self.critical_two_gram_patterns.values() for signal in signals)
+                    pattern_types_found = any(
+                        signal.pattern in self.critical_two_gram_patterns.values() for signal in signals)
 
                     if entropy_found and vectors_found and pattern_types_found:
                         self.checks.append(IntegrityCheck())
@@ -649,7 +664,8 @@ class ChronoResonanceIntegrityChecker:
                             check_type="weighted_logic_system",
                             status=IntegrityStatus.PASSED,
                             message="Two-gram weighted logic system functioning correctly",
-                            details={"signals_detected": len(signals), "entropy_working": entropy_found, "vectors_working": vectors_found},
+                            details={"signals_detected": len(
+                                signals), "entropy_working": entropy_found, "vectors_working": vectors_found},
                             timestamp=time.time()
                         ))
                     else:
@@ -658,7 +674,8 @@ class ChronoResonanceIntegrityChecker:
                             check_type="weighted_logic_system",
                             status=IntegrityStatus.CRITICAL,
                             message="Two-gram weighted logic system malfunction",
-                            details={"entropy_working": entropy_found, "vectors_working": vectors_found, "patterns_working": pattern_types_found},
+                            details={"entropy_working": entropy_found, "vectors_working": vectors_found,
+                                "patterns_working": pattern_types_found},
                             timestamp=time.time()
                         ))
                 else:
@@ -705,7 +722,8 @@ class ChronoResonanceIntegrityChecker:
                     check_type="profit_calculations",
                     status=IntegrityStatus.PASSED,
                     message="Entry/exit profit calculations working correctly",
-                    details={"entry_price": entry_price, "exit_price": exit_price, "profit_pct": expected_profit},
+                    details={"entry_price": entry_price,
+                        "exit_price": exit_price, "profit_pct": expected_profit},
                     timestamp=time.time()
                 ))
             else:
@@ -728,7 +746,8 @@ class ChronoResonanceIntegrityChecker:
                     check_type="trading_imports",
                     status=IntegrityStatus.PASSED,
                     message="Entry/exit trading components importable",
-                    details={"components": ["BTCUSDCTradingIntegration", "AlgorithmicPortfolioBalancer"]},
+                    details={"components": ["BTCUSDCTradingIntegration",
+                        "AlgorithmicPortfolioBalancer"]},
                     timestamp=time.time()
                 ))
 
@@ -804,26 +823,34 @@ class ChronoResonanceIntegrityChecker:
         """Generate recommendations based on integrity check results."""
         recommendations = []
 
-        failed_checks = [check for check in self.checks if check.status in [IntegrityStatus.FAILED, IntegrityStatus.CRITICAL]]
+        failed_checks = [check for check in self.checks if check.status in [
+            IntegrityStatus.FAILED, IntegrityStatus.CRITICAL]]
         warning_checks = [check for check in self.checks if check.status == IntegrityStatus.WARNING]
 
         if failed_checks:
-            recommendations.append("🔴 CRITICAL: Some chrono resonance components have integrity issues that must be addressed immediately.")
-            recommendations.append("   - Review failed checks above and restore original mathematical constants")
+            recommendations.append(
+                "🔴 CRITICAL: Some chrono resonance components have integrity issues that must be addressed immediately.")
+            recommendations.append(
+                "   - Review failed checks above and restore original mathematical constants")
             recommendations.append("   - Ensure line ending patterns are preserved")
             recommendations.append("   - Verify temporal calculations are working correctly")
 
         if warning_checks:
-            recommendations.append("⚠️ WARNING: Some chrono resonance components have minor issues that should be monitored.")
+            recommendations.append(
+                "⚠️ WARNING: Some chrono resonance components have minor issues that should be monitored.")
             recommendations.append("   - Review warning checks above for potential issues")
 
         if not failed_checks and not warning_checks:
-            recommendations.append("✅ EXCELLENT: All chrono resonance components are functioning correctly.")
+            recommendations.append(
+                "✅ EXCELLENT: All chrono resonance components are functioning correctly.")
             recommendations.append("   - Continue to monitor for any accidental modifications")
-            recommendations.append("   - Preserve the mathematical foundation of the chrono resonance system")
+            recommendations.append(
+                "   - Preserve the mathematical foundation of the chrono resonance system")
 
-        recommendations.append("🔮 REMEMBER: The chrono resonance mathematics and weather forecasting pipeline")
-        recommendations.append("   are sophisticated systems that rely on precise temporal calculations.")
+        recommendations.append(
+            "🔮 REMEMBER: The chrono resonance mathematics and weather forecasting pipeline")
+        recommendations.append(
+            "   are sophisticated systems that rely on precise temporal calculations.")
         recommendations.append("   Always respect the internal logic and mathematical patterns.")
 
         return recommendations
@@ -858,7 +885,8 @@ class ChronoResonanceIntegrityChecker:
                 IntegrityStatus.FAILED: "❌",
                 IntegrityStatus.CRITICAL: "🔴"
             }
-            print(f"   {status_emoji[check.status]} {check.component} - {check.check_type}: {check.message}")
+            print(
+                f"   {status_emoji[check.status]} {check.component} - {check.check_type}: {check.message}")
 
         print(f"\n💡 RECOMMENDATIONS:")
         for recommendation in report.recommendations:

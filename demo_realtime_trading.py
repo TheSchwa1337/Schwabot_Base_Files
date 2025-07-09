@@ -15,6 +15,7 @@ from datetime import datetime
 BASE_URL = "http://localhost:5000"
 API_BASE = f"{BASE_URL}/api/live"
 
+
 class RealTimeTradingDemo:
     def __init__(self):
         self.sio = socketio.Client()
@@ -38,7 +39,8 @@ class RealTimeTradingDemo:
         def on_realtime_update(data):
             event_type = data.get('type', 'unknown')
             event_data = data.get('data', {})
-            timestamp = datetime.fromtimestamp(data.get('timestamp', time.time())).strftime('%H:%M:%S')
+            timestamp = datetime.fromtimestamp(
+                data.get('timestamp', time.time())).strftime('%H:%M:%S')
 
             print(f"📡 [{timestamp}] {event_type.upper()}: {json.dumps(event_data, indent=2)}")
             self.events_received.append(event_type)
@@ -230,7 +232,8 @@ class RealTimeTradingDemo:
             print("=" * 60)
             print(f"📡 Total real-time events received: {len(self.events_received)}")
             print(f"🎯 Event types: {list(set(self.events_received))}")
-            print(f"✅ Real-time functionality: {'Working' if len(self.events_received) > 1 else 'Limited'}")
+            print(
+                f"✅ Real-time functionality: {'Working' if len(self.events_received) > 1 else 'Limited'}")
             print(f"🌐 Dashboard available at: {BASE_URL}")
             print(f"🔧 API endpoints available at: {API_BASE}")
             print("=" * 60)

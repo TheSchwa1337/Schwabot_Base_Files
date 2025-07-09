@@ -31,7 +31,7 @@ def fix_complex_syntax_errors(file_path: str) -> bool:
             # Look for lines that end with quotes but might be unterminated
             if line.strip().endswith('"') and line.count('"') % 2 == 1:
                 # Check if it's actually unterminated by looking at context'
-                if not line.strip().endswith('""') and not line.strip().endswith('"""'):"
+                if not line.strip().endswith('""') and not line.strip().endswith('"""'): "
                     # Add closing quote if needed
                     if not line.endswith('"'):"
                         line += '"'"

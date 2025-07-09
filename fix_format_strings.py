@@ -8,6 +8,7 @@ import os
 import re
 import glob
 
+
 def fix_format_strings(content):
     """Fix invalid decimal literal format strings in content."""
     # Pattern to match .format() calls with invalid decimal literals
@@ -39,7 +40,7 @@ def fix_format_strings(content):
     # Also fix specific patterns we found
     # Pattern: variable:.4f) -> variable) with format in string
     patterns_to_fix = []
-        (r'(["\'])([^"\']*\{[0-9]+\})([^"\']*)\1\.format\(([^)]*?)([^:,\s]+):(\.[0-9]+f)\)','
+        (r'(["\'])([^"\']*\{[0-9]+\})([^"\']*)\1\.format\(([^)]*?)([^:,\s]+):(\.[0-9]+f)\)', '
          r'\1\2:\6\3\1.format(\4\5)'),
         (r'\.format\(([^,)]+), ([^:)]+):(\.[0-9]+f)\)', r'.format(\1, \2)'),
         (r'\.format\(([^:)]+):(\.[0-9]+f)\)', r'.format(\1)'),

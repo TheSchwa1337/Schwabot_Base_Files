@@ -16,6 +16,7 @@ import random
 BASE_URL = "http://localhost:5000"
 API_BASE = f"{BASE_URL}/api/automated"
 
+
 class AutomatedTradingDemo:
     def __init__(self):
         self.sio = socketio.Client()
@@ -39,7 +40,8 @@ class AutomatedTradingDemo:
         def on_realtime_update(data):
             event_type = data.get('type', 'unknown')
             event_data = data.get('data', {})
-            timestamp = datetime.fromtimestamp(data.get('timestamp', time.time())).strftime('%H:%M:%S')
+            timestamp = datetime.fromtimestamp(
+                data.get('timestamp', time.time())).strftime('%H:%M:%S')
 
             if event_type.startswith('automated_'):
                 print(f"🤖 [{timestamp}] {event_type.upper()}: {json.dumps(event_data, indent=2)}")
@@ -305,7 +307,8 @@ class AutomatedTradingDemo:
                 if orders:
                     print(f"   ✅ Found {len(orders)} active orders:")
                     for order_id, order in orders.items():
-                        print(f"     📋 {order_id}: {order['symbol']} {order['side']} {order['quantity']} ({order['status']})")
+                        print(
+                            f"     📋 {order_id}: {order['symbol']} {order['side']} {order['quantity']} ({order['status']})")
                 else:
                     print("   ℹ️ No active orders found")
             else:
@@ -436,7 +439,8 @@ class AutomatedTradingDemo:
             print("=" * 70)
             print(f"🤖 Total automated events received: {len(self.events_received)}")
             print(f"🎯 Event types: {list(set(self.events_received))}")
-            print(f"✅ Automated trading functionality: {'Working' if len(self.events_received) > 1 else 'Limited'}")
+            print(
+                f"✅ Automated trading functionality: {'Working' if len(self.events_received) > 1 else 'Limited'}")
             print(f"🌐 Dashboard available at: {BASE_URL}")
             print(f"🔧 API endpoints available at: {API_BASE}")
             print("=" * 70)

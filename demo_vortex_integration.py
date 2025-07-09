@@ -22,7 +22,6 @@ This shows how mathematical security emerges from pattern legitimacy
 rather than traditional cryptographic primitives.
 """
 
-
     create_trading_session,
     get_current_session,
     log_trading_activity,

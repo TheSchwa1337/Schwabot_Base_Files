@@ -138,7 +138,8 @@ def main():
                     'Running Flake8 style check'),
 
         # Formatting checks with Python 3.12 compatibility
-        run_command(f'black {" ".join(directories)} --check --line-length=100 --target-version py311',)
+        run_command(
+            f'black {" ".join(directories)} --check --line-length=100 --target-version py311',)
                     'Checking code formatting with Black'),
 
         # Import sorting
