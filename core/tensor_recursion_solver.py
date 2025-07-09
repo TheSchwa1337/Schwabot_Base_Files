@@ -27,7 +27,7 @@ else:
 @dataclass
 class RecursionResult:
     """Result of tensor recursion operation."""
-    
+
     solution: xp.ndarray
     convergence_iterations: int
     residual_norm: float
@@ -51,19 +51,19 @@ def recursive_tensor_match(a: xp.ndarray, b: xp.ndarray) -> float:
         min_len = min(len(a), len(b))
         a_trimmed = a[:min_len]
         b_trimmed = b[:min_len]
-        
+
         # Compute dot product
         dot_product = xp.dot(a_trimmed, b_trimmed)
-        
+
         # Compute norms
         norm_a = xp.linalg.norm(a_trimmed)
         norm_b = xp.linalg.norm(b_trimmed)
-        
+
         # Avoid division by zero
         denominator = norm_a * norm_b + 1e-8
-        
+
         return float(dot_product / denominator)
-        
+
     except Exception as e:
         logger.error(f"Error in recursive tensor match: {e}")
         return 0.0
@@ -82,7 +82,7 @@ def normalize_tensor(tensor: xp.ndarray) -> xp.ndarray:
     try:
         norm = xp.linalg.norm(tensor)
         return tensor / (norm + 1e-8)
-        
+
     except Exception as e:
         logger.error(f"Error normalizing tensor: {e}")
         return tensor
@@ -109,12 +109,12 @@ def compute_tensor_resonance(field_a: xp.ndarray, field_b: xp.ndarray) -> float:
         else:
             field_a_flat = field_a.flatten()
             field_b_flat = field_b.flatten()
-        
+
         # Compute mean absolute difference
         resonance = float(xp.mean(xp.abs(field_a_flat - field_b_flat)))
-        
+
         return resonance
-        
+
     except Exception as e:
         logger.error(f"Error computing tensor resonance: {e}")
         return 0.0
@@ -141,17 +141,17 @@ def solve_tensor_recursion(
     try:
         start_time = time.time()
         current_tensor = initial_tensor.copy()
-        
+
         for iteration in range(max_iterations):
             # Apply recursion function
             next_tensor = recursion_function(current_tensor)
-            
+
             # Check convergence
             residual = xp.linalg.norm(next_tensor - current_tensor)
-            
+
             if residual < tolerance:
                 computation_time = time.time() - start_time
-                
+
                 return RecursionResult(
                     solution=next_tensor,
                     convergence_iterations=iteration + 1,
@@ -163,12 +163,12 @@ def solve_tensor_recursion(
                         "max_iterations": max_iterations
                     }
                 )
-            
+
             current_tensor = next_tensor
-        
+
         # If we reach here, didn't converge
         computation_time = time.time() - start_time
-        
+
         return RecursionResult(
             solution=current_tensor,
             convergence_iterations=max_iterations,
@@ -180,7 +180,7 @@ def solve_tensor_recursion(
                 "max_iterations": max_iterations
             }
         )
-        
+
     except Exception as e:
         logger.error(f"Error in tensor recursion solver: {e}")
         return RecursionResult(
@@ -209,12 +209,12 @@ def compute_tensor_eigenvalues(tensor: xp.ndarray) -> xp.ndarray:
             tensor_2d = tensor.reshape(tensor.shape[0], -1)
         else:
             tensor_2d = tensor
-        
+
         # Compute eigenvalues
         eigenvalues = xp.linalg.eigvals(tensor_2d)
-        
+
         return eigenvalues
-        
+
     except Exception as e:
         logger.error(f"Error computing tensor eigenvalues: {e}")
         return xp.array([])
@@ -236,12 +236,12 @@ def tensor_svd_decomposition(tensor: xp.ndarray) -> Tuple[xp.ndarray, xp.ndarray
             tensor_2d = tensor.reshape(tensor.shape[0], -1)
         else:
             tensor_2d = tensor
-        
+
         # Perform SVD
         U, S, V = xp.linalg.svd(tensor_2d)
-        
+
         return U, S, V
-        
+
     except Exception as e:
         logger.error(f"Error in tensor SVD decomposition: {e}")
         return xp.array([]), xp.array([]), xp.array([])
@@ -265,24 +265,24 @@ def test_tensor_recursion():
     """Test the tensor recursion solver."""
     # Create test data
     initial_tensor = xp.random.rand(10, 10)
-    
+
     # Define a simple recursion function
     def simple_recursion(tensor):
         return 0.5 * (tensor + xp.eye(tensor.shape[0]))
-    
+
     # Solve recursion
     result = solve_tensor_recursion(initial_tensor, simple_recursion)
-    
+
     logger.info(f"Tensor recursion test completed:")
     logger.info(f"Converged: {result.metadata.get('converged', False)}")
     logger.info(f"Iterations: {result.convergence_iterations}")
     logger.info(f"Residual norm: {result.residual_norm:.6f}")
     logger.info(f"Computation time: {result.computation_time:.4f}s")
-    
+
     return result
 
 
 if __name__ == "__main__":
     # Run test
     test_result = test_tensor_recursion()
-    print("Tensor recursion solver test completed successfully!") 
+    print("Tensor recursion solver test completed successfully!")

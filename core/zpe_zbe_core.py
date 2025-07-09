@@ -194,13 +194,13 @@ class ZPEZBECore:
         is_quantum_synced = (
             zpe_vector.sync_status in [QuantumSyncStatus.FULL_SYNC, QuantumSyncStatus.RESONANCE]
         )
-        
+
         # ZBE stability conditions
         is_zbe_stable = abs(zbe_balance.status) < 0.5 and zbe_balance.stability_score > 0.7
-        
+
         # Dual matrix trigger
         dual_trigger = is_quantum_synced and is_zbe_stable
-        
+
         return {
             "dual_trigger": dual_trigger,
             "quantum_synced": is_quantum_synced,
@@ -232,13 +232,13 @@ class ZPEZBECore:
             QuantumSyncStatus.RESONANCE: 0.9,
             QuantumSyncStatus.QUANTUM_HOLD: 0.3,
         }.get(zpe_vector.sync_status, 0.5)
-        
+
         # ZBE stability factor
         stability_factor = zbe_balance.stability_score
-        
+
         # Combined confidence
         confidence = (sync_confidence + stability_factor) / 2.0
-        
+
         return float(xp.clip(confidence, 0.0, 1.0))
 
 
@@ -274,7 +274,7 @@ class QuantumPerformanceRegistry:
     def add_performance_entry(self, entry: QuantumPerformanceEntry) -> None:
         """Add a performance entry to the registry."""
         self.performance_entries.append(entry)
-        
+
         # Maintain max entries
         if len(self.performance_entries) > self.max_entries:
             self.performance_entries.pop(0)
@@ -365,20 +365,20 @@ class QuantumPerformanceRegistry:
             Recommended strategy parameters
         """
         analysis = self.analyze_quantum_performance()
-        
+
         if not analysis["total_strategies"]:
             return {
                 "recommended_sync_status": "FULL_SYNC",
                 "recommended_thermal_state": "neutral",
                 "confidence": 0.5,
             }
-        
+
         # Find best performing sync status
         best_sync = max(
             analysis["performance_by_sync_status"].items(),
             key=lambda x: x[1]["avg_profit"],
         )[0]
-        
+
         return {
             "recommended_sync_status": best_sync,
             "recommended_thermal_state": analysis["optimal_thermal_state"],

@@ -27,7 +27,7 @@ else:
 @dataclass
 class StrategyDecision:
     """Strategy decision result."""
-    
+
     strategy_name: str
     confidence_score: float
     hash_energy: float
@@ -49,13 +49,13 @@ def select_strategy(hash_tensor: xp.ndarray, threshold: float = 0.65) -> str:
     try:
         # Compute energy from hash tensor
         energy = float(xp.sum(xp.abs(hash_tensor)))
-        
+
         # Make decision based on energy level
         if energy > threshold:
             return "long"
         else:
             return "short"
-            
+
     except Exception as e:
         logger.error(f"Error in strategy selection: {e}")
         return "neutral"
@@ -74,12 +74,12 @@ def compute_hash_energy(matrix: xp.ndarray) -> float:
     try:
         # Compute FFT of matrix
         fft = xp.fft.fft(matrix)
-        
+
         # Calculate energy as mean of absolute FFT values
         energy = float(xp.mean(xp.abs(fft)))
-        
+
         return energy
-        
+
     except Exception as e:
         logger.error(f"Error computing hash energy: {e}")
         return 0.0
@@ -98,13 +98,13 @@ def route_decision_logic(signal_vec: xp.ndarray) -> str:
     try:
         # Compute activation score
         activation_score = float(xp.mean(signal_vec) + xp.std(signal_vec))
-        
+
         # Make routing decision
         if activation_score > 1.0:
             return "route_a"
         else:
             return "route_b"
-            
+
     except Exception as e:
         logger.error(f"Error in route decision logic: {e}")
         return "route_default"
@@ -125,12 +125,12 @@ def analyze_strategy_performance(
     try:
         if not strategy_results:
             return {}
-        
+
         # Extract performance metrics
         profits = xp.array([result.get('profit', 0.0) for result in strategy_results])
         risks = xp.array([result.get('risk', 0.0) for result in strategy_results])
         durations = xp.array([result.get('duration', 0.0) for result in strategy_results])
-        
+
         # Compute performance metrics
         metrics = {
             'avg_profit': float(xp.mean(profits)),
@@ -142,9 +142,9 @@ def analyze_strategy_performance(
             'profitable_trades': int(xp.sum(profits > 0)),
             'profit_ratio': float(xp.sum(profits > 0) / len(profits))
         }
-        
+
         return metrics
-        
+
     except Exception as e:
         logger.error(f"Error analyzing strategy performance: {e}")
         return {}
@@ -167,30 +167,30 @@ def compute_strategy_weights(
     try:
         # Base weights from historical performance
         base_weights = xp.abs(historical_performance)
-        
+
         # Normalize weights
         total_weight = xp.sum(base_weights)
         if total_weight > 0:
             normalized_weights = base_weights / total_weight
         else:
             normalized_weights = xp.ones_like(base_weights) / len(base_weights)
-        
+
         # Apply market condition adjustments
         volatility = current_market_conditions.get('volatility', 0.5)
         trend_strength = current_market_conditions.get('trend_strength', 0.5)
-        
+
         # Adjust weights based on market conditions
         adjusted_weights = normalized_weights * (1 + volatility * trend_strength)
-        
+
         # Renormalize
         total_adjusted = xp.sum(adjusted_weights)
         if total_adjusted > 0:
             final_weights = adjusted_weights / total_adjusted
         else:
             final_weights = normalized_weights
-        
+
         return final_weights
-        
+
     except Exception as e:
         logger.error(f"Error computing strategy weights: {e}")
         return xp.ones(len(historical_performance)) / len(historical_performance)
@@ -215,31 +215,31 @@ def optimize_strategy_allocation(
     try:
         if not strategy_candidates or performance_matrix.size == 0:
             return {}
-        
+
         # Extract expected returns and risks
         expected_returns = performance_matrix[:, 0] if performance_matrix.ndim > 1 else performance_matrix
         risks = performance_matrix[:, 1] if performance_matrix.ndim > 1 else xp.ones_like(expected_returns) * 0.1
-        
+
         # Compute Sharpe-like ratios
         sharpe_ratios = expected_returns / (risks + 1e-8)
-        
+
         # Apply risk budget constraint
         risk_adjusted_weights = sharpe_ratios / xp.sum(sharpe_ratios)
-        
+
         # Ensure risk budget constraint
         total_risk = xp.sum(risk_adjusted_weights * risks)
         if total_risk > risk_budget:
             scaling_factor = risk_budget / total_risk
             risk_adjusted_weights *= scaling_factor
-        
+
         # Create allocation dictionary
         allocation = {}
         for i, strategy in enumerate(strategy_candidates):
             if i < len(risk_adjusted_weights):
                 allocation[strategy] = float(risk_adjusted_weights[i])
-        
+
         return allocation
-        
+
     except Exception as e:
         logger.error(f"Error optimizing strategy allocation: {e}")
         return {}
@@ -264,29 +264,29 @@ def test_strategy_router():
     # Create test data
     hash_tensor = xp.random.rand(10, 10)
     signal_vector = xp.random.randn(20)
-    
+
     # Test strategy selection
     strategy = select_strategy(hash_tensor, threshold=0.5)
     logger.info(f"Selected strategy: {strategy}")
-    
+
     # Test hash energy computation
     energy = compute_hash_energy(hash_tensor)
     logger.info(f"Hash energy: {energy:.4f}")
-    
+
     # Test route decision
     route = route_decision_logic(signal_vector)
     logger.info(f"Route decision: {route}")
-    
+
     # Test strategy performance analysis
     test_results = [
         {'profit': 100.0, 'risk': 0.1, 'duration': 3600},
         {'profit': -50.0, 'risk': 0.2, 'duration': 1800},
         {'profit': 200.0, 'risk': 0.15, 'duration': 7200}
     ]
-    
+
     performance = analyze_strategy_performance(test_results)
     logger.info(f"Performance metrics: {performance}")
-    
+
     return {
         'strategy': strategy,
         'energy': energy,
@@ -298,4 +298,4 @@ def test_strategy_router():
 if __name__ == "__main__":
     # Run test
     test_result = test_strategy_router()
-    print("Strategy router test completed successfully!") 
+    print("Strategy router test completed successfully!")
