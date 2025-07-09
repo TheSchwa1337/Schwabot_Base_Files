@@ -15,7 +15,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 import numpy as np
 
-from .real_time_market_data import RealTimeMarketDataStream, MarketDataEvent, DataType
+from .real_time_market_data import RealTimeMarketDataStream, MarketDataEvent, DataType  # noqa: F401
 from .smart_order_executor import SmartOrderExecutor, OrderExecution
 from .advanced_risk_manager import AdvancedRiskManager
 from .order_book_analyzer import OrderBookAnalyzer
@@ -203,8 +203,12 @@ class RealTimeExecutionEngine:
             )
             
             # Register market data callbacks
-            self.market_data_stream.register_callback(DataType.TICKER, self._on_ticker_update)
-            self.market_data_stream.register_callback(DataType.ORDER_BOOK, self._on_order_book_update)
+            self.market_data_stream.register_callback(
+                DataType.TICKER, self._on_ticker_update
+            )
+            self.market_data_stream.register_callback(
+                DataType.ORDER_BOOK, self._on_order_book_update
+            )
             
             self.running = True
             logger.info("Real-time execution engine initialized successfully")
@@ -303,7 +307,10 @@ class RealTimeExecutionEngine:
                 
                 # Check if risk limits are exceeded
                 if portfolio_risk.total_risk > self.config["risk_management"]["max_drawdown"]:
-                    logger.warning("Portfolio risk limit exceeded: %.2f%%", portfolio_risk.total_risk * 100)
+                    logger.warning(
+                        "Portfolio risk limit exceeded: %.2f%%", 
+                        portfolio_risk.total_risk * 100
+                    )
                     await self._reduce_risk_exposure()
                 
                 # Update performance metrics
@@ -607,8 +614,10 @@ class RealTimeExecutionEngine:
             snapshot = market_state.order_book_snapshot
             
             # Check for strong buy/sell walls
-            buy_walls = [w for w in snapshot.walls if w.wall_type.value == "buy_wall"]
-            sell_walls = [w for w in snapshot.walls if w.wall_type.value == "sell_wall"]
+            buy_walls = [
+                w for w in snapshot.walls if w.wall_type.value == "buy_wall"
+            ]
+            # sell_walls = [w for w in snapshot.walls if w.wall_type.value == "sell_wall"]  # Future implementation
             
             # Generate signal based on wall strength
             if buy_walls and max(w.strength_score for w in buy_walls) > 0.8:
@@ -751,7 +760,9 @@ class RealTimeExecutionEngine:
             }
             
             # Execute signal
-            execution = await self.order_executor.execute_signal(signal_dict, signal.quantity)
+            execution = await self.order_executor.execute_signal(
+                signal_dict, signal.quantity
+            )
             
             # Calculate execution time
             execution_time = time.time() - start_time
@@ -785,7 +796,8 @@ class RealTimeExecutionEngine:
             self.execution_history.append(result)
             
             logger.info("Signal executed: %s %s %s (confidence: %.2f)", 
-                       signal.signal_type.value, signal.quantity, signal.symbol, signal.confidence)
+                       signal.signal_type.value, signal.quantity, signal.symbol, 
+                       signal.confidence)
             
             return result
             
@@ -868,7 +880,8 @@ class RealTimeExecutionEngine:
             for position_id, _ in positions_to_close:
                 await self._close_position(position_id, "risk_reduction")
             
-            logger.info("Reduced risk exposure by closing %d positions", len(positions_to_close))
+            logger.info("Reduced risk exposure by closing %d positions", 
+                       len(positions_to_close))
             
         except Exception as e:
             logger.error("Failed to reduce risk exposure: %s", e)
@@ -893,7 +906,10 @@ class RealTimeExecutionEngine:
             self.performance_metrics.successful_signals = successful_signals
             self.performance_metrics.failed_signals = total_signals - successful_signals
             self.performance_metrics.win_rate = successful_signals / total_signals if total_signals > 0 else 0.0
-            self.performance_metrics.average_pnl = self.performance_metrics.total_pnl / total_signals if total_signals > 0 else 0.0
+            self.performance_metrics.average_pnl = (
+                self.performance_metrics.total_pnl / total_signals 
+                if total_signals > 0 else 0.0
+            )
             self.performance_metrics.current_positions = len(self.active_positions)
             
             # Calculate Sharpe ratio (simplified)
@@ -902,7 +918,9 @@ class RealTimeExecutionEngine:
                 if returns:
                     avg_return = np.mean(returns)
                     std_return = np.std(returns)
-                    self.performance_metrics.sharpe_ratio = avg_return / std_return if std_return > 0 else 0.0
+                    self.performance_metrics.sharpe_ratio = (
+                        avg_return / std_return if std_return > 0 else 0.0
+                    )
             
         except Exception as e:
             logger.error("Performance metrics calculation failed: %s", e)
@@ -962,10 +980,12 @@ class RealTimeExecutionEngine:
     def _get_performance_summary(self) -> str:
         """Get formatted performance summary string."""
         summary = self.get_performance_summary()
-        return (f"Signals: {summary['total_signals']}, "
-                f"Win Rate: {summary['win_rate']:.2%}, "
-                f"P&L: ${summary['total_pnl']:.2f}, "
-                f"Positions: {summary['current_positions']}")
+        return (
+            f"Signals: {summary['total_signals']}, "
+            f"Win Rate: {summary['win_rate']:.2%}, "
+            f"P&L: ${summary['total_pnl']:.2f}, "
+            f"Positions: {summary['current_positions']}"
+        )
 
     async def stop(self):
         """Stop the real-time execution engine."""
@@ -1001,12 +1021,16 @@ class RealTimeExecutionEngine:
 
 
 # Convenience functions for external use
-def create_real_time_execution_engine(config: Optional[Dict[str, Any]] = None) -> RealTimeExecutionEngine:
+def create_real_time_execution_engine(
+    config: Optional[Dict[str, Any]] = None
+) -> RealTimeExecutionEngine:
     """Create a new real-time execution engine instance."""
     return RealTimeExecutionEngine(config)
 
 
-async def start_real_time_execution_engine(config: Optional[Dict[str, Any]] = None) -> RealTimeExecutionEngine:
+async def start_real_time_execution_engine(
+    config: Optional[Dict[str, Any]] = None
+) -> RealTimeExecutionEngine:
     """Start a real-time execution engine."""
     engine = RealTimeExecutionEngine(config)
     await engine.initialize()

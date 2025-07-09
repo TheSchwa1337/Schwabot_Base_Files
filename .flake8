@@ -23,7 +23,10 @@ exclude =
     htmlcov,
     .tox,
     .mypy_cache,
-    .ruff_cache
+    .ruff_cache,
+    backup_*,
+    *backup*,
+    backups/
 
 # Ignore specific error codes for critical system components
 # F401: Unused imports - Critical for mathematical operations and system integration

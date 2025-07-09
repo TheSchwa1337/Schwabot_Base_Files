@@ -10,7 +10,7 @@ and multiple execution strategies for optimal trade execution.
 import asyncio
 import logging
 import time
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional
 from dataclasses import dataclass, field
 from enum import Enum
 import ccxt.async_support as ccxt
@@ -262,7 +262,9 @@ class SmartOrderExecutor:
             logger.error("Signal execution failed: %s", e)
             raise
 
-    def _create_order_request_from_signal(self, signal: Dict[str, Any], position_size: float) -> OrderRequest:
+    def _create_order_request_from_signal(
+        self, signal: Dict[str, Any], position_size: float
+    ) -> OrderRequest:
         """Create order request from trading signal."""
         try:
             symbol = signal.get("symbol", "BTC/USDT")
@@ -351,7 +353,9 @@ class SmartOrderExecutor:
             logger.error("Failed to determine order type: %s", e)
             return OrderType.LIMIT
 
-    def _calculate_optimal_price(self, signal: Dict[str, Any], order_type: OrderType) -> Optional[float]:
+    def _calculate_optimal_price(
+        self, signal: Dict[str, Any], order_type: OrderType
+    ) -> Optional[float]:
         """Calculate optimal price for order."""
         try:
             current_price = signal.get("current_price", 50000.0)
@@ -451,11 +455,16 @@ class SmartOrderExecutor:
             
             # Check balance across all exchanges
             for exchange_id, balance in self.exchange_balances.items():
-                available = balance.get(quote_currency if side == "buy" else base_currency, 0.0)
+                available = balance.get(
+                    quote_currency if side == "buy" else base_currency, 0.0
+                )
                 if available >= required_amount:
                     return {"valid": True, "exchange": exchange_id}
             
-            return {"valid": False, "reason": f"Insufficient {quote_currency if side == 'buy' else base_currency} balance"}
+            return {
+                "valid": False, 
+                "reason": f"Insufficient {quote_currency if side == 'buy' else base_currency} balance"
+            }
             
         except Exception as e:
             logger.error("Balance check failed: %s", e)
@@ -471,12 +480,17 @@ class SmartOrderExecutor:
             # Check max order size
             max_order_size = self.config["risk_limits"]["max_order_size"]
             if order_value > max_order_size:
-                return {"valid": False, "reason": f"Order value {order_value} exceeds max order size {max_order_size}"}
+                return {
+                    "valid": False, 
+                    "reason": f"Order value {order_value} exceeds max order size {max_order_size}"
+                }
             
             # Check daily volume limit
-            daily_volume = sum([execution.executed_quantity * execution.average_price 
-                              for execution in self.order_history 
-                              if time.time() - execution.execution_time < 86400])
+            daily_volume = sum([
+                execution.executed_quantity * execution.average_price 
+                for execution in self.order_history 
+                if time.time() - execution.execution_time < 86400
+            ])
             
             max_daily_volume = self.config["risk_limits"]["max_daily_volume"]
             if daily_volume + order_value > max_daily_volume:
@@ -488,7 +502,9 @@ class SmartOrderExecutor:
             logger.error("Risk limit check failed: %s", e)
             return {"valid": False, "reason": f"Risk limit check error: {e}"}
 
-    def _check_exchange_availability(self, symbol: str) -> Dict[str, Any]:
+    def _check_exchange_availability(
+        self, symbol: str
+    ) -> Dict[str, Any]:
         """Check if symbol is available on configured exchanges."""
         try:
             for exchange_id in self.exchanges.keys():
@@ -502,7 +518,9 @@ class SmartOrderExecutor:
             logger.error("Exchange availability check failed: %s", e)
             return {"valid": False, "reason": f"Exchange availability check error: {e}"}
 
-    def _select_execution_strategy(self, order_request: OrderRequest, signal: Dict[str, Any]) -> ExecutionStrategy:
+    def _select_execution_strategy(
+        self, order_request: OrderRequest, signal: Dict[str, Any]
+    ) -> ExecutionStrategy:
         """Select optimal execution strategy based on order and market conditions."""
         try:
             # Override with signal-specific strategy if provided
@@ -549,7 +567,9 @@ class SmartOrderExecutor:
             order_book = await exchange.fetch_order_book(order_request.symbol)
             
             # Calculate expected price
-            expected_price = self._calculate_expected_price(order_book, order_request.side, order_request.quantity)
+            expected_price = self._calculate_expected_price(
+                order_book, order_request.side, order_request.quantity
+            )
             
             # Execute market order
             order_params = {
@@ -573,7 +593,10 @@ class SmartOrderExecutor:
             
             # Check slippage limits
             if slippage > order_request.max_slippage:
-                logger.warning("Slippage %.4f exceeds limit %.4f", slippage, order_request.max_slippage)
+                logger.warning(
+                    "Slippage %.4f exceeds limit %.4f", 
+                    slippage, order_request.max_slippage
+                )
             
             return OrderExecution(
                 order_id=response.get("id", ""),
@@ -619,7 +642,9 @@ class SmartOrderExecutor:
             )
             
             # Wait for order to be filled (with timeout)
-            filled_order = await self._wait_for_order_fill(exchange, response["id"], order_request.symbol)
+            filled_order = await self._wait_for_order_fill(
+                exchange, response["id"], order_request.symbol
+            )
             
             execution_time = time.time() - start_time
             
@@ -734,7 +759,9 @@ class SmartOrderExecutor:
             logger.error("Balanced order execution failed: %s", e)
             raise
 
-    def _calculate_expected_price(self, order_book: Dict[str, Any], side: str, quantity: float) -> float:
+    def _calculate_expected_price(
+        self, order_book: Dict[str, Any], side: str, quantity: float
+    ) -> float:
         """Calculate expected execution price from order book."""
         try:
             if side == "buy":
@@ -785,7 +812,9 @@ class SmartOrderExecutor:
             logger.error("Optimal limit price calculation failed: %s", e)
             return 0.0
 
-    async def _wait_for_order_fill(self, exchange: ccxt.Exchange, order_id: str, symbol: str) -> Dict[str, Any]:
+    async def _wait_for_order_fill(
+        self, exchange: ccxt.Exchange, order_id: str, symbol: str
+    ) -> Dict[str, Any]:
         """Wait for order to be filled with timeout."""
         try:
             timeout = self.config["order_timeout"]
@@ -807,7 +836,9 @@ class SmartOrderExecutor:
             logger.error("Order fill wait failed: %s", e)
             raise
 
-    def _combine_execution_results(self, executions: List[OrderExecution], original_request: OrderRequest) -> OrderExecution:
+    def _combine_execution_results(
+        self, executions: List[OrderExecution], original_request: OrderRequest
+    ) -> OrderExecution:
         """Combine multiple execution results into single result."""
         try:
             if not executions:

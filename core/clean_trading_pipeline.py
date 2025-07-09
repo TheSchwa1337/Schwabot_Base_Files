@@ -383,7 +383,11 @@ class CleanTradingPipeline:
             },
         }
 
-    async def process_market_data(self, market_data: Optional[Dict] = None, force_refresh: bool = False) -> Optional[Dict]:
+    async def process_market_data(
+        self,
+        market_data: Optional[Dict] = None,
+        force_refresh: bool = False
+    ) -> Optional[Dict]:
         """
         Process market data through unified pipeline and execute trading logic.
 
@@ -404,31 +408,42 @@ class CleanTradingPipeline:
                 # Get data from unified pipeline
                 symbol_base = self.symbol.replace("USDT", "").replace("USD", "")
                 market_packet = await self.market_pipeline.get_market_data()
-                market_packet = await self.market_pipeline.get_market_data(symbol_base, force_refresh=force_refresh)
+                market_packet = await self.market_pipeline.get_market_data(
+                    symbol_base, force_refresh=force_refresh
+                )
 
                 # Convert to trading pipeline format
                 processed_data = self._convert_market_packet_to_legacy_format(
-                    market_packet)
+                    market_packet
+                )
 
             # Calculate trading signals using enhanced data
             signals = self._calculate_enhanced_trading_signals(
-                market_packet, processed_data)
+                market_packet, processed_data
+            )
 
             # Risk assessment with market data
-            risk_assessment = self._assess_risk_with_market_data(market_packet, signals)
+            risk_assessment = self._assess_risk_with_market_data(
+                market_packet, signals
+            )
 
             # Determine trade action
-            trade_action = self._determine_trade_action(signals, risk_assessment)
+            trade_action = self._determine_trade_action(
+                signals, risk_assessment
+            )
 
             # Execute trade if action required
             trade_result = None
             if trade_action["action"] != "hold":
-                trade_result = await self._execute_trade_with_market_data(trade_action, market_packet, processed_data)
+                trade_result = await self._execute_trade_with_market_data(
+                    trade_action, market_packet, processed_data
+                )
 
                 # Log to registry if enabled
                 if self.registry and market_packet and trade_result:
                     self._log_trade_to_registry(
-                        market_packet, trade_action, trade_result)
+                        market_packet, trade_action, trade_result
+                    )
 
             return {
                 "timestamp": time.time(),

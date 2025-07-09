@@ -6,8 +6,6 @@ from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
 
 import requests
-from scipy import signal
-from scipy.fft import fft, fftfreq
 
 #!/usr/bin/env python3
 """
@@ -238,7 +236,10 @@ class ChronoResonanceWeatherMapper:
         logger.info("🌤️ ChronoResonance Weather Mapper initialized")
 
     def compute_crwf(
-        self, weather_data: WeatherDataPoint, location: GeoLocation, market_entropy: float = 0.5
+        self,
+        weather_data: WeatherDataPoint,
+        location: GeoLocation,
+        market_entropy: float = 0.5
     ) -> CRWFResponse:
         """
         Compute the ChronoResonance Weather Function.
@@ -263,29 +264,43 @@ class ChronoResonanceWeatherMapper:
 
             # Compute CRWF output: E_CRWF = α∇T + β∇P + γ⋅Ω
             crwf_output = (
-                self.alpha * temp_gradient + self.beta * pressure_gradient + self.gamma * schumann_interference
+                self.alpha * temp_gradient +
+                self.beta * pressure_gradient +
+                self.gamma * schumann_interference
             )
 
             # Compute entropy score
             entropy_score = self._compute_entropy_score(weather_data, location)
 
             # Compute resonance strength
-            resonance_strength = self._compute_resonance_strength(weather_data, location, crwf_output)
+            resonance_strength = self._compute_resonance_strength(
+                weather_data, location, crwf_output
+            )
 
             # Determine weather pattern
-            weather_pattern = self._determine_weather_pattern(weather_data, crwf_output)
+            weather_pattern = self._determine_weather_pattern(
+                weather_data, crwf_output
+            )
 
             # Compute geo-alignment score
-            geo_alignment = self._compute_geo_alignment(location, weather_data)
+            geo_alignment = self._compute_geo_alignment(
+                location, weather_data
+            )
 
             # Compute temporal resonance
-            temporal_resonance = self._compute_temporal_resonance(weather_data, location)
+            temporal_resonance = self._compute_temporal_resonance(
+                weather_data, location
+            )
 
             # Compute CRLF adjustment factor
-            crlf_adjustment = self._compute_crlf_adjustment(crwf_output, market_entropy, entropy_score)
+            crlf_adjustment = self._compute_crlf_adjustment(
+                crwf_output, market_entropy, entropy_score
+            )
 
             # Generate recommendations
-            recommendations = self._generate_recommendations(crwf_output, weather_pattern, entropy_score)
+            recommendations = self._generate_recommendations(
+                crwf_output, weather_pattern, entropy_score
+            )
 
             # Create response
             response = CRWFResponse(
@@ -318,7 +333,9 @@ class ChronoResonanceWeatherMapper:
                 self.weather_history = self.weather_history[-max_history:]
 
             logger.debug(
-                "CRWF computed: {0}, Entropy: {1}".format(crwf_output, entropy_score)
+                "CRWF computed: {0}, Entropy: {1}".format(
+                    crwf_output, entropy_score
+                )
             )
 
             return response
@@ -336,7 +353,8 @@ class ChronoResonanceWeatherMapper:
         recent_temps = [
             w.temperature
             for w in self.weather_history[-24:]  # Last 24 hours
-            if abs(w.latitude - weather_data.latitude) < 0.1 and abs(w.longitude - weather_data.longitude) < 0.1
+            if (abs(w.latitude - weather_data.latitude) < 0.1 and
+                abs(w.longitude - weather_data.longitude) < 0.1)
         ]
 
         if len(recent_temps) < 2:
@@ -355,7 +373,8 @@ class ChronoResonanceWeatherMapper:
         recent_pressures = [
             w.pressure
             for w in self.weather_history[-24:]  # Last 24 hours
-            if abs(w.latitude - weather_data.latitude) < 0.1 and abs(w.longitude - weather_data.longitude) < 0.1
+            if (abs(w.latitude - weather_data.latitude) < 0.1 and
+                abs(w.longitude - weather_data.longitude) < 0.1)
         ]
 
         if len(recent_pressures) < 2:
@@ -395,7 +414,8 @@ class ChronoResonanceWeatherMapper:
 
             # Interference contribution
             interference += (
-                resonance_strength * xp.exp(-phase_diff) * (1.0 + geomagnetic_factor) * altitude_factor * solar_factor
+                resonance_strength * xp.exp(-phase_diff) *
+                (1.0 + geomagnetic_factor) * altitude_factor * solar_factor
             )
 
         return float(interference)
@@ -418,7 +438,9 @@ class ChronoResonanceWeatherMapper:
 
         # Compute entropy score
         entropy_score = (
-            0.25 * temp_var / 30.0 + 0.5 * pressure_drop + 0.25 * schumann_deviation  # Normalize temperature variation
+            0.25 * temp_var / 30.0 +  # Normalize temperature variation
+            0.5 * pressure_drop +
+            0.25 * schumann_deviation
         )
 
         # Apply location boost
@@ -427,7 +449,10 @@ class ChronoResonanceWeatherMapper:
         return float(entropy_score * location_boost)
 
     def _compute_resonance_strength(
-        self, weather_data: WeatherDataPoint, location: GeoLocation, crwf_output: float
+        self,
+        weather_data: WeatherDataPoint,
+        location: GeoLocation,
+        crwf_output: float
     ) -> float:
         """Compute resonance strength based on CRWF output and location factors."""
         # Base resonance from CRWF output
@@ -447,7 +472,10 @@ class ChronoResonanceWeatherMapper:
         geomagnetic_resonance = 1.0 + (weather_data.geomagnetic_index / 9.0)
 
         # Combined resonance strength
-        resonance_strength = base_resonance * location_resonance * weather_resonance * geomagnetic_resonance
+        resonance_strength = (
+            base_resonance * location_resonance * 
+            weather_resonance * geomagnetic_resonance
+        )
 
         return float(xp.clip(resonance_strength, 0.0, 10.0))
 
@@ -527,7 +555,10 @@ class ChronoResonanceWeatherMapper:
         return float(xp.clip(adjustment, 0.5, 2.0))
 
     def _generate_recommendations(
-        self, crwf_output: float, weather_pattern: WeatherPattern, entropy_score: float
+        self,
+        crwf_output: float,
+        weather_pattern: WeatherPattern,
+        entropy_score: float
     ) -> Dict[str, Any]:
         """Generate trading recommendations based on CRWF analysis."""
         recommendations = {
@@ -578,7 +609,10 @@ class ChronoResonanceWeatherMapper:
         )
 
     async def fetch_weather_data(
-        self, latitude: float, longitude: float, api_key: Optional[str] = None
+        self,
+        latitude: float,
+        longitude: float,
+        api_key: Optional[str] = None
     ) -> Optional[WeatherDataPoint]:
         """
         Fetch weather data from OpenWeatherMap API.

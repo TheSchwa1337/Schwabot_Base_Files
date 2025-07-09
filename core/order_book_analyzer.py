@@ -175,8 +175,11 @@ class OrderBookAnalyzer:
             # Keep history manageable
             self._cleanup_history()
             
-            logger.debug("Order book analysis completed for %s: %d walls detected", 
-                        symbol, len(all_walls))
+            logger.debug(
+                "Order book analysis completed for %s: %d walls detected",
+                symbol,
+                len(all_walls)
+            )
             
             return snapshot
             
@@ -298,7 +301,9 @@ class OrderBookAnalyzer:
             logger.error("Sell wall detection failed: %s", e)
             return []
 
-    def _cluster_by_price(self, orders: List[Tuple[float, float]], threshold: float) -> Dict[float, List[Tuple[float, float]]]:
+    def _cluster_by_price(
+        self, orders: List[Tuple[float, float]], threshold: float
+    ) -> Dict[float, List[Tuple[float, float]]]:
         """Cluster orders by price levels within threshold."""
         clusters = {}
         
@@ -354,7 +359,9 @@ class OrderBookAnalyzer:
             logger.error("Wall strength calculation failed: %s", e)
             return 0.0
 
-    def _calculate_impact_radius(self, total_volume: float, price_level: float, mid_price: float) -> float:
+    def _calculate_impact_radius(
+        self, total_volume: float, price_level: float, mid_price: float
+    ) -> float:
         """Calculate the price impact radius of a wall."""
         try:
             # Base impact based on volume
@@ -371,14 +378,20 @@ class OrderBookAnalyzer:
             logger.error("Impact radius calculation failed: %s", e)
             return 0.01
 
-    def _calculate_wall_confidence(self, total_volume: float, order_count: int, strength_score: float) -> float:
+    def _calculate_wall_confidence(
+        self, total_volume: float, order_count: int, strength_score: float
+    ) -> float:
         """Calculate confidence in wall detection (0-1)."""
         try:
             # Volume confidence
-            volume_confidence = min(total_volume / (self.min_wall_volume * 5), 1.0)
+            volume_confidence = min(
+                total_volume / (self.min_wall_volume * 5), 1.0
+            )
             
             # Order count confidence
-            order_confidence = min(order_count / (self.min_wall_orders * 3), 1.0)
+            order_confidence = min(
+                order_count / (self.min_wall_orders * 3), 1.0
+            )
             
             # Strength confidence
             strength_confidence = strength_score
@@ -454,7 +467,9 @@ class OrderBookAnalyzer:
             logger.error("Depth liquidity calculation failed: %s", e)
             return 0.0
 
-    def _calculate_spread(self, bids: List[Tuple[float, float]], asks: List[Tuple[float, float]]) -> float:
+    def _calculate_spread(
+        self, bids: List[Tuple[float, float]], asks: List[Tuple[float, float]]
+    ) -> float:
         """Calculate bid-ask spread."""
         try:
             if not bids or not asks:
@@ -470,7 +485,9 @@ class OrderBookAnalyzer:
             logger.error("Spread calculation failed: %s", e)
             return 0.0
 
-    def _calculate_market_impact_score(self, bid_liquidity: float, ask_liquidity: float, spread: float) -> float:
+    def _calculate_market_impact_score(
+        self, bid_liquidity: float, ask_liquidity: float, spread: float
+    ) -> float:
         """Calculate market impact score (0-1, lower is better)."""
         try:
             # Higher liquidity = lower impact
@@ -566,7 +583,9 @@ class OrderBookAnalyzer:
             logger.error("Optimal exit calculation failed: %s", e)
             return bids[0][0] if bids else 0.0
 
-    def _calculate_mid_price(self, bids: List[Tuple[float, float]], asks: List[Tuple[float, float]]) -> float:
+    def _calculate_mid_price(
+        self, bids: List[Tuple[float, float]], asks: List[Tuple[float, float]]
+    ) -> float:
         """Calculate mid price from best bid and ask."""
         try:
             if not bids or not asks:
@@ -607,9 +626,13 @@ class OrderBookAnalyzer:
                 "total_walls": len(self.wall_history),
                 "buy_walls": len(buy_walls),
                 "sell_walls": len(sell_walls),
-                "strongest_buy_wall": max(buy_walls, key=lambda w: w.strength_score).strength_score if buy_walls else 0.0,
-                "strongest_sell_wall": max(sell_walls, key=lambda w: w.strength_score).strength_score if sell_walls else 0.0,
-                "average_wall_strength": np.mean([w.strength_score for w in self.wall_history]) if self.wall_history else 0.0,
+                "strongest_buy_wall": max(buy_walls, key=lambda w: w.strength_score).strength_score \
+                    if buy_walls else 0.0,
+                "strongest_sell_wall": max(sell_walls, key=lambda w: w.strength_score).strength_score \
+                    if sell_walls else 0.0,
+                "average_wall_strength": np.mean([
+                    w.strength_score for w in self.wall_history
+                ]) if self.wall_history else 0.0,
                 "wall_detection_rate": len(self.analysis_history) / max(len(self.analysis_history), 1),
             }
             
@@ -626,11 +649,21 @@ class OrderBookAnalyzer:
             recent_analyses = self.analysis_history[-100:]  # Last 100 analyses
             
             return {
-                "average_spread": np.mean([a.liquidity_analysis.spread for a in recent_analyses]),
-                "average_depth_score": np.mean([a.liquidity_analysis.depth_score for a in recent_analyses]),
-                "average_imbalance": np.mean([a.liquidity_analysis.imbalance_ratio for a in recent_analyses]),
-                "average_market_impact": np.mean([a.liquidity_analysis.market_impact_score for a in recent_analyses]),
-                "liquidity_trend": self._calculate_liquidity_trend(recent_analyses),
+                "average_spread": np.mean([
+                    a.liquidity_analysis.spread for a in recent_analyses
+                ]),
+                "average_depth_score": np.mean([
+                    a.liquidity_analysis.depth_score for a in recent_analyses
+                ]),
+                "average_imbalance": np.mean([
+                    a.liquidity_analysis.imbalance_ratio for a in recent_analyses
+                ]),
+                "average_market_impact": np.mean([
+                    a.liquidity_analysis.market_impact_score for a in recent_analyses
+                ]),
+                "liquidity_trend": self._calculate_liquidity_trend(
+                    recent_analyses
+                ),
             }
             
         except Exception as e:
@@ -675,8 +708,12 @@ def analyze_order_book_simple(bids: List[Tuple[float, float]],
         "mid_price": snapshot.mid_price,
         "spread": snapshot.spread,
         "wall_count": len(snapshot.walls),
-        "buy_walls": len([w for w in snapshot.walls if w.wall_type == WallType.BUY_WALL]),
-        "sell_walls": len([w for w in snapshot.walls if w.wall_type == WallType.SELL_WALL]),
+        "buy_walls": len([
+            w for w in snapshot.walls if w.wall_type == WallType.BUY_WALL
+        ]),
+        "sell_walls": len([
+            w for w in snapshot.walls if w.wall_type == WallType.SELL_WALL
+        ]),
         "optimal_entry": snapshot.liquidity_analysis.optimal_entry_price,
         "optimal_exit": snapshot.liquidity_analysis.optimal_exit_price,
         "liquidity_score": snapshot.liquidity_analysis.depth_score,
