@@ -17,7 +17,6 @@ import importlib
 import inspect
 import logging
 from pathlib import Path
-from types import ModuleType
 from typing import List
 
 from .handlers.base_handler import BaseAPIHandler

@@ -4,7 +4,6 @@ import asyncio
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Tuple, Any
 from enum import Enum
-from collections import deque, defaultdict
 import json
 import threading
 from .bio_cellular_signaling import BioCellularSignaling, CellularSignalType, BioCellularResponse

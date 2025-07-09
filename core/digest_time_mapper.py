@@ -5,7 +5,6 @@ import time
 import threading
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Tuple, Any, Generator
-from collections import deque
 import asyncio
 import cupy as cp
 from .entropy_math import bit_entropy, shannon_entropy, get_backend_info

@@ -24,8 +24,6 @@ from dataclasses import asdict
 # Flask and WebSocket imports
     try:
     from flask import Flask, jsonify, request
-    from flask_socketio import SocketIO, emit, join_room
-    from flask_cors import CORS
 
     FLASK_AVAILABLE = True
     except ImportError:
@@ -431,15 +429,15 @@ class FlaskCommunicationRelay:
             <style>
                 body { font-family: Arial, sans-serif; margin: 20px; }
                 .container { max-width: 1200px; margin: 0 auto; }
-                .header { background: #2c3e50; color: white; padding: 20px; border-radius: 5px; }
-                .section { margin: 20px 0; padding: 20px; border: 1px solid #ddd; border-radius: 5px; }
+                .header { background:  #2c3e50; color: white; padding: 20px; border-radius: 5px; }
+                .section { margin: 20px 0; padding: 20px; border: 1px solid  #ddd; border-radius: 5px; }
                 .status { padding: 10px; margin: 10px 0; border-radius: 3px; }
-                .status.running { background: #d4edda; color: #155724; }
-                .status.stopped { background: #f8d7da; color: #721c24; }
+                .status.running { background:  #d4edda; color: #155724; }
+                .status.stopped { background:  #f8d7da; color: #721c24; }
                 button { padding: 10px 20px; margin: 5px; border: none; border-radius: 3px; cursor: pointer; }
-                button.start { background: #28a745; color: white; }
-                button.stop { background: #dc3545; color: white; }
-                .metric { display: inline-block; margin: 10px; padding: 10px; background: #f8f9fa; border-radius: 3px; }
+                button.start { background:  #28a745; color: white; }
+                button.stop { background:  #dc3545; color: white; }
+                .metric { display: inline-block; margin: 10px; padding: 10px; background:  #f8f9fa; border-radius: 3px; }
             </style>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
         </head>
@@ -492,7 +490,7 @@ class FlaskCommunicationRelay:
                 });
 
                 socket.on('analysis_result', function(data) {)}
-                    document.getElementById('analysis-result').innerHTML = 
+                    document.getElementById('analysis-result').innerHTML =
                         '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
                 });
 

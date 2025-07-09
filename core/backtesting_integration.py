@@ -18,8 +18,6 @@ from core.phantom_registry import PhantomRegistry
 from core.phantom_logger import PhantomLogger
 from core.risk_manager import RiskManager
 from core.backtest_visualization import BacktestVisualizer
-from utils.safe_print import safe_print
-from utils.cuda_helper import get_cuda_status, USING_CUDA
 
 logger = logging.getLogger(__name__)
 

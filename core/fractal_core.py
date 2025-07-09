@@ -159,12 +159,12 @@ def _mandelbrot_quantize(vector: xp.ndarray, precision: int) -> xp.ndarray:
             # Mandelbrot iteration
             z = complex(0, 0)
             c = complex(val * 2 - 1, 0)  # Map to [-1, 1]
-            
+
             for iter_count in range(max_iter):
                 z = z * z + c
                 if abs(z) > 2:
                     break
-            
+
             # Quantize based on iteration count
             quantized[i] = iter_count / max_iter
 
@@ -181,19 +181,19 @@ def _julia_quantize(vector: xp.ndarray, precision: int) -> xp.ndarray:
         # Julia set-inspired quantization
         max_iter = precision * 2
         quantized = xp.zeros_like(vector)
-        
+
         # Fixed Julia parameter
         c = complex(-0.7, 0.27)
 
         for i, val in enumerate(vector):
             # Julia iteration
             z = complex(val * 2 - 1, 0)  # Map to [-1, 1]
-            
+
             for iter_count in range(max_iter):
                 z = z * z + c
                 if abs(z) > 2:
                     break
-            
+
             # Quantize based on iteration count
             quantized[i] = iter_count / max_iter
 
@@ -209,7 +209,7 @@ def _sierpinski_quantize(vector: xp.ndarray, precision: int) -> xp.ndarray:
     try:
         # Sierpinski-inspired quantization
         quantized = xp.zeros_like(vector)
-        
+
         for i, val in enumerate(vector):
             # Sierpinski-like pattern
             x = val
@@ -252,7 +252,7 @@ def _calculate_fractal_dimension(vector: xp.ndarray) -> float:
             for val in vector:
                 box_idx = int(val / box_size)
                 boxes.add(box_idx)
-            
+
             sizes.append(box_size)
             counts.append(len(boxes))
 
@@ -274,7 +274,7 @@ def _calculate_fractal_dimension(vector: xp.ndarray) -> float:
 
         # Fractal dimension is the slope
         fractal_dim = (n * sum_xy - sum_x * sum_y) / (n * sum_x2 - sum_x * sum_x)
-        
+
         return max(0.0, min(2.0, fractal_dim))
 
     except Exception as e:
@@ -309,7 +309,7 @@ def _calculate_self_similarity(vector: xp.ndarray) -> float:
             for i in range(0, len(vector) - window_size * 2, window_size):
                 window1 = vector[i:i + window_size]
                 window2 = vector[i + window_size:i + window_size * 2]
-                
+
                 if len(window1) == len(window2) and len(window1) > 1:
                     corr = xp.corrcoef(window1, window2)[0, 1]
                     if not xp.isnan(corr):
@@ -342,16 +342,16 @@ def generate_fractal_hash(vector: xp.ndarray, length: int = 64) -> str:
     try:
         # Quantize vector using fractal method
         quantized = fractal_quantize_vector(vector, precision=8, method="mandelbrot")
-        
+
         # Create hash from quantized vector
         hash_input = quantized.quantized_vector.tobytes()
         hash_input += str(quantized.fractal_dimension).encode()
         hash_input += str(quantized.self_similarity_score).encode()
-        
+
         # Generate hash
         hash_obj = hashlib.sha256(hash_input)
         hash_hex = hash_obj.hexdigest()
-        
+
         # Return specified length
         return hash_hex[:length // 4]  # 4 bits per hex character
 

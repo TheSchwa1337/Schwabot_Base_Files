@@ -219,16 +219,16 @@ class CleanUnifiedMathSystem:
         try:
             # Apply enhancement factor with confidence weighting
             enhanced_profit = base_profit * (1.0 + enhancement_factor * confidence)
-            
+
             # Apply mathematical optimization
             optimized_profit = xp.tanh(enhanced_profit) * xp.abs(enhanced_profit)
-            
+
             self._log_calculation("optimize_profit", optimized_profit, {
                 "base_profit": base_profit,
                 "enhancement_factor": enhancement_factor,
                 "confidence": confidence
             })
-            
+
             return optimized_profit
         except Exception as e:
             logger.error("Error in profit optimization: {0}".format(e))
@@ -240,13 +240,13 @@ class CleanUnifiedMathSystem:
             # Risk adjustment formula
             risk_factor = 1.0 - (volatility * (1.0 - confidence))
             adjusted_profit = profit * xp.clip(risk_factor, 0.1, 2.0)
-            
+
             self._log_calculation("risk_adjustment", adjusted_profit, {
                 "profit": profit,
                 "volatility": volatility,
                 "confidence": confidence
             })
-            
+
             return adjusted_profit
         except Exception as e:
             logger.error("Error in risk adjustment: {0}".format(e))
@@ -258,12 +258,12 @@ class CleanUnifiedMathSystem:
             # Weight calculation using sigmoid function
             weight = 1.0 / (1.0 + xp.exp(-10 * (confidence - 0.5)))
             risk_adjusted_weight = weight * (1.0 - max_risk)
-            
+
             self._log_calculation("portfolio_weight", risk_adjusted_weight, {
                 "confidence": confidence,
                 "max_risk": max_risk
             })
-            
+
             return xp.clip(risk_adjusted_weight, 0.0, 1.0)
         except Exception as e:
             logger.error("Error in portfolio weight calculation: {0}".format(e))
@@ -306,7 +306,7 @@ class CleanUnifiedMathSystem:
         """Integrate all mathematical systems for comprehensive analysis."""
         try:
             results = {}
-            
+
             # Extract key parameters
             base_profit = input_data.get("base_profit", 0.0)
             enhancement_factor = input_data.get("enhancement_factor", 1.0)
@@ -314,13 +314,13 @@ class CleanUnifiedMathSystem:
             volatility = input_data.get("volatility", 0.1)
             max_risk = input_data.get("max_risk", 0.2)
             returns = input_data.get("returns", [])
-            
+
             # Calculate integrated metrics
             optimized_profit = self.optimize_profit(base_profit, enhancement_factor, confidence)
             risk_adjusted_profit = self.calculate_risk_adjustment(optimized_profit, volatility, confidence)
             portfolio_weight = self.calculate_portfolio_weight(confidence, max_risk)
             sharpe_ratio = self.calculate_sharpe_ratio(returns)
-            
+
             # Compile results
             results = {
                 "optimized_profit": optimized_profit,
@@ -331,10 +331,10 @@ class CleanUnifiedMathSystem:
                 "risk_score": volatility,
                 "enhancement_applied": enhancement_factor,
             }
-            
+
             self._log_calculation("system_integration", results, input_data)
             return results
-            
+
         except Exception as e:
             logger.error("Error in system integration: {0}".format(e))
             return {"error": str(e)}
@@ -395,13 +395,13 @@ def optimize_brain_profit(price: float, volume: float, confidence: float, enhanc
     """Optimize brain profit using unified math system."""
     try:
         math_system = CleanUnifiedMathSystem()
-        
+
         # Calculate base profit
         base_profit = price * volume * 0.01  # 1% base profit
-        
+
         # Apply optimization
         optimized_profit = math_system.optimize_profit(base_profit, enhancement_factor, confidence)
-        
+
         return optimized_profit
     except Exception as e:
         logger.error("Error in brain profit optimization: {0}".format(e))
@@ -412,16 +412,16 @@ def calculate_position_size(confidence: float, portfolio_value: float, max_risk_
     """Calculate position size based on confidence and risk parameters."""
     try:
         math_system = CleanUnifiedMathSystem()
-        
+
         # Convert percentage to decimal
         max_risk = max_risk_percent / 100.0
-        
+
         # Calculate weight
         weight = math_system.calculate_portfolio_weight(confidence, max_risk)
-        
+
         # Calculate position size
         position_size = portfolio_value * weight
-        
+
         return position_size
     except Exception as e:
         logger.error("Error in position size calculation: {0}".format(e))
@@ -431,27 +431,27 @@ def calculate_position_size(confidence: float, portfolio_value: float, max_risk_
 def test_clean_unified_math_system():
     """Test the clean unified math system."""
     print("=== Testing Clean Unified Math System ===")
-    
+
     math_system = CleanUnifiedMathSystem()
-    
+
     # Test basic operations
     print("Testing basic operations...")
     assert math_system.add(2, 3) == 5
     assert math_system.multiply(4, 5) == 20
     assert math_system.subtract(10, 3) == 7
     assert math_system.divide(15, 3) == 5
-    
+
     # Test advanced operations
     print("Testing advanced operations...")
     assert math_system.power(2, 3) == 8
     assert abs(math_system.sqrt(16) - 4) < 0.001
     assert abs(math_system.exp(1) - 2.718) < 0.1
-    
+
     # Test profit optimization
     print("Testing profit optimization...")
     optimized = math_system.optimize_profit(100.0, 0.5, 0.8)
     print("Optimized profit: {0}".format(optimized))
-    
+
     # Test system integration
     print("Testing system integration...")
     input_data = {
@@ -462,10 +462,10 @@ def test_clean_unified_math_system():
         "max_risk": 0.2,
         "returns": [0.01, 0.02, -0.01, 0.03, 0.01]
     }
-    
+
     results = math_system.integrate_all_systems(input_data)
     print("Integration results: {0}".format(results))
-    
+
     # Get summary
     summary = math_system.get_calculation_summary()
     print("\nCalculation Summary:")

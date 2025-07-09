@@ -121,7 +121,7 @@ class StrategyLoopSwitcher:
                 logger.debug("Hourly cycle not yet due")
                 return []
 
-            logger.info("🔄 Executing hourly strategy cycle #{0}".format(self.cycle_count + 1))
+            logger.info("🔄 Executing hourly strategy cycle  #{0}".format(self.cycle_count + 1))
 
             # Get asset targets
             asset_targets = self._get_asset_targets(portfolio, market_data)

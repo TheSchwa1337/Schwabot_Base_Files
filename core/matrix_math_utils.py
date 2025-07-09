@@ -86,7 +86,7 @@ class MatrixMathUtils:
                 raise ValueError("Matrix dimensions incompatible for multiplication")
 
             result = xp.dot(matrix_a, matrix_b)
-            
+
             self._log_operation("matrix_multiply", result, {
                 "matrix_a_shape": matrix_a.shape,
                 "matrix_b_shape": matrix_b.shape,
@@ -145,7 +145,7 @@ class MatrixMathUtils:
                 raise ValueError("Matrix must be square for eigenvalue decomposition")
 
             eigenvalues, eigenvectors = xp.linalg.eig(matrix)
-            
+
             self._log_operation("eigenvalue_decomposition", (eigenvalues, eigenvectors), {
                 "matrix_shape": matrix.shape,
                 "num_eigenvalues": len(eigenvalues)
@@ -168,7 +168,7 @@ class MatrixMathUtils:
         """
         try:
             U, S, V = xp.linalg.svd(matrix)
-            
+
             self._log_operation("svd", (U, S, V), {
                 "matrix_shape": matrix.shape,
                 "num_singular_values": len(S)
@@ -193,7 +193,7 @@ class MatrixMathUtils:
         try:
             S = xp.linalg.svd(matrix, compute_uv=False)
             rank = xp.sum(S > tolerance)
-            
+
             self._log_operation("matrix_rank", rank, {
                 "matrix_shape": matrix.shape,
                 "tolerance": tolerance,
@@ -218,7 +218,7 @@ class MatrixMathUtils:
         try:
             S = xp.linalg.svd(matrix, compute_uv=False)
             condition_number = xp.max(S) / xp.min(S)
-            
+
             self._log_operation("matrix_condition_number", condition_number, {
                 "matrix_shape": matrix.shape,
                 "singular_values": S
@@ -276,7 +276,7 @@ class MatrixMathUtils:
                 raise ValueError("Matrix must be square for trace calculation")
 
             trace = xp.trace(matrix)
-            
+
             self._log_operation("matrix_trace", trace, {
                 "matrix_shape": matrix.shape
             })
@@ -301,7 +301,7 @@ class MatrixMathUtils:
                 raise ValueError("Matrix must be square for determinant calculation")
 
             det = xp.linalg.det(matrix)
-            
+
             self._log_operation("matrix_determinant", det, {
                 "matrix_shape": matrix.shape
             })
@@ -361,7 +361,7 @@ class MatrixMathUtils:
                 raise ValueError("Matrix must be square for exponential calculation")
 
             result = xp.linalg.expm(matrix)
-            
+
             self._log_operation("matrix_exponential", result, {
                 "matrix_shape": matrix.shape
             })
@@ -386,7 +386,7 @@ class MatrixMathUtils:
                 raise ValueError("Matrix must be square for logarithm calculation")
 
             result = xp.linalg.logm(matrix)
-            
+
             self._log_operation("matrix_logarithm", result, {
                 "matrix_shape": matrix.shape
             })
@@ -411,7 +411,7 @@ class MatrixMathUtils:
                 raise ValueError("Matrix must be square for square root calculation")
 
             result = xp.linalg.sqrtm(matrix)
-            
+
             self._log_operation("matrix_sqrt", result, {
                 "matrix_shape": matrix.shape
             })
@@ -433,7 +433,7 @@ class MatrixMathUtils:
         """
         try:
             result = xp.linalg.pinv(matrix)
-            
+
             self._log_operation("matrix_pseudo_inverse", result, {
                 "matrix_shape": matrix.shape,
                 "result_shape": result.shape
@@ -459,7 +459,7 @@ class MatrixMathUtils:
                 raise ValueError("Matrix must be square for Cholesky decomposition")
 
             result = xp.linalg.cholesky(matrix)
-            
+
             self._log_operation("matrix_cholesky", result, {
                 "matrix_shape": matrix.shape
             })
@@ -481,7 +481,7 @@ class MatrixMathUtils:
         """
         try:
             Q, R = xp.linalg.qr(matrix)
-            
+
             self._log_operation("matrix_qr", (Q, R), {
                 "matrix_shape": matrix.shape
             })
@@ -506,7 +506,7 @@ class MatrixMathUtils:
                 raise ValueError("Matrix must be square for LU decomposition")
 
             P, L, U = xp.linalg.lu(matrix)
-            
+
             self._log_operation("matrix_lu", (P, L, U), {
                 "matrix_shape": matrix.shape
             })
@@ -552,7 +552,7 @@ class MatrixMathUtils:
             for op in self.operation_history:
                 op_type = op.operation
                 operation_counts[op_type] = operation_counts.get(op_type, 0) + 1
-                
+
                 if op_type not in operation_times:
                     operation_times[op_type] = []
                 operation_times[op_type].append(op.timestamp)

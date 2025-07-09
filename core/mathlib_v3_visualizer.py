@@ -1,6 +1,4 @@
-from io import BytesIO
 
-import matplotlib.pyplot as plt
 import numpy as np
 
 # !/usr/bin/env python3

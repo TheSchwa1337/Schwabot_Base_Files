@@ -99,27 +99,27 @@ class RealTimeExecutionEngine:
     def __init__(self, config: Optional[Dict[str, Any]] = None):
         """Initialize the real-time execution engine."""
         self.config = config or self._default_config()
-        
+
         # Core components
         self.market_data_stream: Optional[RealTimeMarketDataStream] = None
         self.order_executor: Optional[SmartOrderExecutor] = None
         self.risk_manager: Optional[AdvancedRiskManager] = None
         self.order_book_analyzer: Optional[OrderBookAnalyzer] = None
         self.trading_pipeline: Optional[CleanTradingPipeline] = None
-        
+
         # Quantum components
         self.zpe_zbe_core = create_zpe_zbe_core()
         self.tensor_algebra = AdvancedTensorAlgebra()
-        
+
         # Signal processing
         self.signal_queue: asyncio.Queue = asyncio.Queue()
         self.active_signals: Dict[str, TradingSignal] = {}
         self.signal_history: List[TradingSignal] = []
-        
+
         # Execution tracking
         self.execution_history: List[ExecutionResult] = []
         self.active_positions: Dict[str, Dict[str, Any]] = {}
-        
+
         # Performance tracking
         self.performance_metrics = PerformanceMetrics(
             total_signals=0,
@@ -133,16 +133,16 @@ class RealTimeExecutionEngine:
             current_positions=0,
             risk_metrics={},
         )
-        
+
         # Control flags
         self.running = False
         self.monitoring_active = False
         self.tasks: Set[asyncio.Task] = set()
-        
+
         # Callbacks
         self.signal_callbacks: List[Callable] = []
         self.execution_callbacks: List[Callable] = []
-        
+
         logger.info("RealTimeExecutionEngine initialized with config: %s", self.config)
 
     def _default_config(self) -> Dict[str, Any]:
@@ -181,27 +181,27 @@ class RealTimeExecutionEngine:
         """Initialize all components and start the execution engine."""
         try:
             logger.info("Initializing real-time execution engine...")
-            
+
             # Initialize market data stream
             self.market_data_stream = RealTimeMarketDataStream(self.config)
             await self.market_data_stream.initialize()
-            
+
             # Initialize order executor
             self.order_executor = SmartOrderExecutor(self.config)
             await self.order_executor.initialize()
-            
+
             # Initialize risk manager
             self.risk_manager = AdvancedRiskManager(self.config.get("risk_management", {}))
-            
+
             # Initialize order book analyzer
             self.order_book_analyzer = OrderBookAnalyzer()
-            
+
             # Initialize trading pipeline
             self.trading_pipeline = CleanTradingPipeline(
                 symbol=self.config["symbols"][0],
                 initial_capital=10000.0
             )
-            
+
             # Register market data callbacks
             self.market_data_stream.register_callback(
                 DataType.TICKER, self._on_ticker_update
@@ -209,10 +209,10 @@ class RealTimeExecutionEngine:
             self.market_data_stream.register_callback(
                 DataType.ORDER_BOOK, self._on_order_book_update
             )
-            
+
             self.running = True
             logger.info("Real-time execution engine initialized successfully")
-            
+
         except Exception as e:
             logger.error("Failed to initialize real-time execution engine: %s", e)
             raise
@@ -222,10 +222,10 @@ class RealTimeExecutionEngine:
         try:
             if not self.running:
                 raise RuntimeError("Execution engine not initialized")
-            
+
             logger.info("Starting real-time market monitoring...")
             self.monitoring_active = True
-            
+
             # Start monitoring tasks
             tasks = [
                 asyncio.create_task(self._market_monitoring_task()),
@@ -234,12 +234,12 @@ class RealTimeExecutionEngine:
                 asyncio.create_task(self._performance_tracking_task()),
                 asyncio.create_task(self._position_management_task()),
             ]
-            
+
             for task in tasks:
                 self.tasks.add(task)
-            
+
             logger.info("Real-time monitoring started successfully")
-            
+
         except Exception as e:
             logger.error("Failed to start monitoring: %s", e)
             raise
@@ -250,17 +250,17 @@ class RealTimeExecutionEngine:
             try:
                 # Get current market states
                 market_states = self.market_data_stream.get_all_market_states()
-                
+
                 for market_key, market_state in market_states.items():
                     # Generate signals for each market
                     signals = await self._generate_signals(market_state)
-                    
+
                     # Queue signals for processing
                     for signal in signals:
                         await self.signal_queue.put(signal)
-                
+
                 await asyncio.sleep(self.config["monitoring_interval"])
-                
+
             except Exception as e:
                 logger.error("Market monitoring task error: %s", e)
                 await asyncio.sleep(5)
@@ -271,25 +271,25 @@ class RealTimeExecutionEngine:
             try:
                 # Get signal from queue
                 signal = await asyncio.wait_for(self.signal_queue.get(), timeout=1.0)
-                
+
                 # Validate signal
                 if not self._validate_signal(signal):
                     continue
-                
+
                 # Check risk limits
                 if not self._check_risk_limits(signal):
                     logger.info("Signal rejected due to risk limits: %s", signal.symbol)
                     continue
-                
+
                 # Execute signal
                 execution_result = await self._execute_signal(signal)
-                
+
                 # Update performance metrics
                 self._update_performance_metrics(execution_result)
-                
+
                 # Trigger callbacks
                 await self._trigger_execution_callbacks(execution_result)
-                
+
             except asyncio.TimeoutError:
                 continue
             except Exception as e:
@@ -304,24 +304,24 @@ class RealTimeExecutionEngine:
                     list(self.active_positions.values()),
                     {}  # Market data would be passed here
                 )
-                
+
                 # Check if risk limits are exceeded
                 if portfolio_risk.total_risk > self.config["risk_management"]["max_drawdown"]:
                     logger.warning(
-                        "Portfolio risk limit exceeded: %.2f%%", 
+                        "Portfolio risk limit exceeded: %.2f%%",
                         portfolio_risk.total_risk * 100
                     )
                     await self._reduce_risk_exposure()
-                
+
                 # Update performance metrics
                 self.performance_metrics.risk_metrics = {
                     "portfolio_risk": portfolio_risk.total_risk,
                     "max_drawdown": portfolio_risk.max_portfolio_drawdown,
                     "diversification_score": portfolio_risk.diversification_score,
                 }
-                
+
                 await asyncio.sleep(10)  # Check every 10 seconds
-                
+
             except Exception as e:
                 logger.error("Risk monitoring task error: %s", e)
                 await asyncio.sleep(10)
@@ -332,13 +332,13 @@ class RealTimeExecutionEngine:
             try:
                 # Calculate performance metrics
                 self._calculate_performance_metrics()
-                
+
                 # Log performance summary
                 if self.performance_metrics.total_signals % 10 == 0:  # Every 10 signals
                     logger.info("Performance Summary: %s", self._get_performance_summary())
-                
+
                 await asyncio.sleep(30)  # Update every 30 seconds
-                
+
             except Exception as e:
                 logger.error("Performance tracking task error: %s", e)
                 await asyncio.sleep(30)
@@ -351,14 +351,14 @@ class RealTimeExecutionEngine:
                 for position_id, position in self.active_positions.items():
                     # Check stop-loss and take-profit
                     current_price = self._get_current_price(position["symbol"])
-                    
+
                     if current_price <= position["stop_loss"]:
                         await self._close_position(position_id, "stop_loss")
                     elif current_price >= position["take_profit"]:
                         await self._close_position(position_id, "take_profit")
-                
+
                 await asyncio.sleep(5)  # Check every 5 seconds
-                
+
             except Exception as e:
                 logger.error("Position management task error: %s", e)
                 await asyncio.sleep(5)
@@ -367,34 +367,34 @@ class RealTimeExecutionEngine:
         """Generate trading signals from market data."""
         try:
             signals = []
-            
+
             # Basic signal generation from trading pipeline
             if self.trading_pipeline:
                 pipeline_signals = await self._generate_pipeline_signals(market_state)
                 signals.extend(pipeline_signals)
-            
+
             # Quantum-enhanced signal generation
             if self.config["enable_quantum_analysis"]:
                 quantum_signals = await self._generate_quantum_signals(market_state)
                 signals.extend(quantum_signals)
-            
+
             # Tensor-based signal generation
             if self.config["enable_tensor_analysis"]:
                 tensor_signals = await self._generate_tensor_signals(market_state)
                 signals.extend(tensor_signals)
-            
+
             # ZPE-ZBE signal generation
             if self.config["enable_zpe_zbe_analysis"]:
                 zpe_zbe_signals = await self._generate_zpe_zbe_signals(market_state)
                 signals.extend(zpe_zbe_signals)
-            
+
             # Order book-based signals
             if self.config["enable_order_book_analysis"]:
                 order_book_signals = await self._generate_order_book_signals(market_state)
                 signals.extend(order_book_signals)
-            
+
             return signals
-            
+
         except Exception as e:
             logger.error("Signal generation failed: %s", e)
             return []
@@ -403,7 +403,7 @@ class RealTimeExecutionEngine:
         """Generate signals using the trading pipeline."""
         try:
             signals = []
-            
+
             # Create market data for pipeline
             market_data = {
                 "price": market_state.current_price,
@@ -414,35 +414,35 @@ class RealTimeExecutionEngine:
                 "ask": market_state.ask,
                 "spread": market_state.spread,
             }
-            
+
             # Get pipeline decision
             decision = self.trading_pipeline._make_trading_decision(market_data)
-            
+
             if decision["action"] in ["buy", "sell"]:
                 # Calculate signal strength and confidence
                 confidence = decision.get("confidence", 0.5)
                 strength = self._calculate_signal_strength(confidence)
-                
+
                 # Calculate position size
                 position_size = self.risk_manager.calculate_position_size(
                     {"confidence": confidence},
                     market_data
                 )
-                
+
                 # Calculate stop-loss and take-profit
                 stop_loss = self.risk_manager.calculate_dynamic_stop_loss(
                     market_state.current_price,
                     market_data,
                     position_size
                 )
-                
+
                 take_profit = self.risk_manager.calculate_dynamic_take_profit(
                     market_state.current_price,
                     stop_loss,
                     market_data,
                     position_size
                 )
-                
+
                 signal = TradingSignal(
                     signal_type=SignalType.BUY if decision["action"] == "buy" else SignalType.SELL,
                     symbol=market_state.symbol,
@@ -461,11 +461,11 @@ class RealTimeExecutionEngine:
                     order_book_signals={},
                     risk_metrics={},
                 )
-                
+
                 signals.append(signal)
-            
+
             return signals
-            
+
         except Exception as e:
             logger.error("Pipeline signal generation failed: %s", e)
             return []
@@ -474,19 +474,19 @@ class RealTimeExecutionEngine:
         """Generate signals using quantum analysis."""
         try:
             signals = []
-            
+
             # Extract quantum signals
             quantum_signals = market_state.quantum_signals
-            
+
             # Analyze quantum entanglement
             entanglement = quantum_signals.get("quantum_entanglement", 0.0)
             coherence = quantum_signals.get("quantum_coherence", 0.0)
-            
+
             # Generate signal based on quantum metrics
             if entanglement > 0.7 and coherence > 0.6:
                 confidence = min(entanglement * coherence, 0.95)
                 strength = self._calculate_signal_strength(confidence)
-                
+
                 signal = TradingSignal(
                     signal_type=SignalType.BUY,
                     symbol=market_state.symbol,
@@ -505,11 +505,11 @@ class RealTimeExecutionEngine:
                     order_book_signals={},
                     risk_metrics={},
                 )
-                
+
                 signals.append(signal)
-            
+
             return signals
-            
+
         except Exception as e:
             logger.error("Quantum signal generation failed: %s", e)
             return []
@@ -518,19 +518,19 @@ class RealTimeExecutionEngine:
         """Generate signals using tensor analysis."""
         try:
             signals = []
-            
+
             # Extract tensor signals
             tensor_signals = market_state.tensor_signals
-            
+
             # Analyze tensor metrics
             tensor_rank = tensor_signals.get("tensor_rank", 0)
             tensor_norm = tensor_signals.get("tensor_norm", 0.0)
-            
+
             # Generate signal based on tensor analysis
             if tensor_rank > 2 and tensor_norm > 0.5:
                 confidence = min(tensor_norm * 0.8, 0.9)
                 strength = self._calculate_signal_strength(confidence)
-                
+
                 signal = TradingSignal(
                     signal_type=SignalType.BUY,
                     symbol=market_state.symbol,
@@ -549,11 +549,11 @@ class RealTimeExecutionEngine:
                     order_book_signals={},
                     risk_metrics={},
                 )
-                
+
                 signals.append(signal)
-            
+
             return signals
-            
+
         except Exception as e:
             logger.error("Tensor signal generation failed: %s", e)
             return []
@@ -562,19 +562,19 @@ class RealTimeExecutionEngine:
         """Generate signals using ZPE-ZBE analysis."""
         try:
             signals = []
-            
+
             # Extract ZPE-ZBE signals
             zpe_signals = market_state.zpe_zbe_signals
-            
+
             # Analyze ZPE metrics
             zpe_energy = zpe_signals.get("zpe_energy", 0.0)
             zpe_frequency = zpe_signals.get("zpe_frequency", 0.0)
-            
+
             # Generate signal based on ZPE analysis
             if zpe_energy > 0.6 and 7.0 <= zpe_frequency <= 8.0:  # Schumann resonance range
                 confidence = min(zpe_energy * 0.7, 0.85)
                 strength = self._calculate_signal_strength(confidence)
-                
+
                 signal = TradingSignal(
                     signal_type=SignalType.BUY,
                     symbol=market_state.symbol,
@@ -593,11 +593,11 @@ class RealTimeExecutionEngine:
                     order_book_signals={},
                     risk_metrics={},
                 )
-                
+
                 signals.append(signal)
-            
+
             return signals
-            
+
         except Exception as e:
             logger.error("ZPE-ZBE signal generation failed: %s", e)
             return []
@@ -606,24 +606,24 @@ class RealTimeExecutionEngine:
         """Generate signals using order book analysis."""
         try:
             signals = []
-            
+
             if not market_state.order_book_snapshot:
                 return signals
-            
+
             # Analyze order book
             snapshot = market_state.order_book_snapshot
-            
+
             # Check for strong buy/sell walls
             buy_walls = [
                 w for w in snapshot.walls if w.wall_type.value == "buy_wall"
             ]
             # sell_walls = [w for w in snapshot.walls if w.wall_type.value == "sell_wall"]  # Future implementation
-            
+
             # Generate signal based on wall strength
             if buy_walls and max(w.strength_score for w in buy_walls) > 0.8:
                 confidence = 0.75
                 strength = self._calculate_signal_strength(confidence)
-                
+
                 signal = TradingSignal(
                     signal_type=SignalType.BUY,
                     symbol=market_state.symbol,
@@ -642,11 +642,11 @@ class RealTimeExecutionEngine:
                     order_book_signals={"wall_analysis": "strong_buy_wall"},
                     risk_metrics={},
                 )
-                
+
                 signals.append(signal)
-            
+
             return signals
-            
+
         except Exception as e:
             logger.error("Order book signal generation failed: %s", e)
             return []
@@ -668,22 +668,22 @@ class RealTimeExecutionEngine:
             # Check minimum confidence
             if signal.confidence < self.config["signal_generation"]["min_confidence"]:
                 return False
-            
+
             # Check minimum strength
             min_strength = SignalStrength(self.config["signal_generation"]["min_strength"])
             if signal.strength.value < min_strength.value:
                 return False
-            
+
             # Check cooldown period
             if not self._check_signal_cooldown(signal):
                 return False
-            
+
             # Check maximum signals per hour
             if not self._check_signal_frequency():
                 return False
-            
+
             return True
-            
+
         except Exception as e:
             logger.error("Signal validation failed: %s", e)
             return False
@@ -693,15 +693,15 @@ class RealTimeExecutionEngine:
         try:
             cooldown_period = self.config["signal_generation"]["cooldown_period"]
             current_time = time.time()
-            
+
             # Check recent signals for this symbol
             for recent_signal in self.signal_history[-10:]:  # Check last 10 signals
-                if (recent_signal.symbol == signal.symbol and 
+                if (recent_signal.symbol == signal.symbol and
                     current_time - recent_signal.timestamp < cooldown_period):
                     return False
-            
+
             return True
-            
+
         except Exception as e:
             logger.error("Signal cooldown check failed: %s", e)
             return True
@@ -712,12 +712,12 @@ class RealTimeExecutionEngine:
             max_signals_per_hour = self.config["signal_generation"]["max_signals_per_hour"]
             current_time = time.time()
             one_hour_ago = current_time - 3600
-            
+
             # Count signals in the last hour
             recent_signals = [s for s in self.signal_history if s.timestamp > one_hour_ago]
-            
+
             return len(recent_signals) < max_signals_per_hour
-            
+
         except Exception as e:
             logger.error("Signal frequency check failed: %s", e)
             return True
@@ -728,17 +728,17 @@ class RealTimeExecutionEngine:
             # Check maximum concurrent positions
             if len(self.active_positions) >= self.config["max_concurrent_positions"]:
                 return False
-            
+
             # Check if we already have a position in this symbol
             if signal.symbol in self.active_positions:
                 return False
-            
+
             # Check daily loss limit
             if self.performance_metrics.total_pnl < -self.config["risk_management"]["max_daily_loss"]:
                 return False
-            
+
             return True
-            
+
         except Exception as e:
             logger.error("Risk limit check failed: %s", e)
             return False
@@ -747,7 +747,7 @@ class RealTimeExecutionEngine:
         """Execute trading signal."""
         try:
             start_time = time.time()
-            
+
             # Create signal dictionary for order executor
             signal_dict = {
                 "symbol": signal.symbol,
@@ -758,18 +758,18 @@ class RealTimeExecutionEngine:
                 "urgency": "normal",
                 "market_conditions": signal.market_conditions,
             }
-            
+
             # Execute signal
             execution = await self.order_executor.execute_signal(
                 signal_dict, signal.quantity
             )
-            
+
             # Calculate execution time
             execution_time = time.time() - start_time
-            
+
             # Calculate P&L (for now, assume 0 for new positions)
             pnl = 0.0
-            
+
             # Create execution result
             result = ExecutionResult(
                 signal=signal,
@@ -778,7 +778,7 @@ class RealTimeExecutionEngine:
                 execution_time=execution_time,
                 pnl=pnl,
             )
-            
+
             # Add to active positions if successful
             if result.success:
                 self.active_positions[signal.symbol] = {
@@ -790,17 +790,17 @@ class RealTimeExecutionEngine:
                     "take_profit": signal.take_profit,
                     "entry_time": time.time(),
                 }
-            
+
             # Add to history
             self.signal_history.append(signal)
             self.execution_history.append(result)
-            
-            logger.info("Signal executed: %s %s %s (confidence: %.2f)", 
-                       signal.signal_type.value, signal.quantity, signal.symbol, 
+
+            logger.info("Signal executed: %s %s %s (confidence: %.2f)",
+                       signal.signal_type.value, signal.quantity, signal.symbol,
                        signal.confidence)
-            
+
             return result
-            
+
         except Exception as e:
             logger.error("Signal execution failed: %s", e)
             return ExecutionResult(
@@ -817,7 +817,7 @@ class RealTimeExecutionEngine:
             position = self.active_positions.get(position_id)
             if not position:
                 return
-            
+
             # Create close signal
             close_signal = TradingSignal(
                 signal_type=SignalType.SELL if position["signal"].signal_type == SignalType.BUY else SignalType.BUY,
@@ -838,30 +838,30 @@ class RealTimeExecutionEngine:
                 risk_metrics={},
                 metadata={"close_reason": reason},
             )
-            
+
             # Execute close order
             close_result = await self._execute_signal(close_signal)
-            
+
             # Calculate P&L
             if close_result.success and close_result.execution:
                 entry_price = position["entry_price"]
                 exit_price = close_result.execution.average_price
                 quantity = position["quantity"]
-                
+
                 if position["signal"].signal_type == SignalType.BUY:
                     pnl = (exit_price - entry_price) * quantity
                 else:
                     pnl = (entry_price - exit_price) * quantity
-                
+
                 close_result.pnl = pnl
                 self.performance_metrics.total_pnl += pnl
-            
+
             # Remove from active positions
             del self.active_positions[position_id]
-            
-            logger.info("Position closed: %s (reason: %s, P&L: %.2f)", 
+
+            logger.info("Position closed: %s (reason: %s, P&L: %.2f)",
                        position_id, reason, close_result.pnl)
-            
+
         except Exception as e:
             logger.error("Failed to close position %s: %s", position_id, e)
 
@@ -873,16 +873,16 @@ class RealTimeExecutionEngine:
                 self.active_positions.items(),
                 key=lambda x: x[1]["signal"].confidence
             )
-            
+
             # Close bottom 50% of positions
             positions_to_close = positions_by_confidence[:len(positions_by_confidence) // 2]
-            
+
             for position_id, _ in positions_to_close:
                 await self._close_position(position_id, "risk_reduction")
-            
-            logger.info("Reduced risk exposure by closing %d positions", 
+
+            logger.info("Reduced risk exposure by closing %d positions",
                        len(positions_to_close))
-            
+
         except Exception as e:
             logger.error("Failed to reduce risk exposure: %s", e)
 
@@ -901,17 +901,17 @@ class RealTimeExecutionEngine:
         try:
             total_signals = len(self.execution_history)
             successful_signals = len([r for r in self.execution_history if r.success])
-            
+
             self.performance_metrics.total_signals = total_signals
             self.performance_metrics.successful_signals = successful_signals
             self.performance_metrics.failed_signals = total_signals - successful_signals
             self.performance_metrics.win_rate = successful_signals / total_signals if total_signals > 0 else 0.0
             self.performance_metrics.average_pnl = (
-                self.performance_metrics.total_pnl / total_signals 
+                self.performance_metrics.total_pnl / total_signals
                 if total_signals > 0 else 0.0
             )
             self.performance_metrics.current_positions = len(self.active_positions)
-            
+
             # Calculate Sharpe ratio (simplified)
             if total_signals > 0:
                 returns = [r.pnl for r in self.execution_history]
@@ -921,7 +921,7 @@ class RealTimeExecutionEngine:
                     self.performance_metrics.sharpe_ratio = (
                         avg_return / std_return if std_return > 0 else 0.0
                     )
-            
+
         except Exception as e:
             logger.error("Performance metrics calculation failed: %s", e)
 
@@ -929,13 +929,13 @@ class RealTimeExecutionEngine:
         """Update performance metrics with new execution result."""
         try:
             self.performance_metrics.total_pnl += execution_result.pnl
-            
+
             # Update max drawdown
             if execution_result.pnl < 0:
                 current_drawdown = abs(execution_result.pnl)
                 if current_drawdown > self.performance_metrics.max_drawdown:
                     self.performance_metrics.max_drawdown = current_drawdown
-            
+
         except Exception as e:
             logger.error("Performance metrics update failed: %s", e)
 
@@ -950,7 +950,7 @@ class RealTimeExecutionEngine:
                         callback(execution_result)
                 except Exception as e:
                     logger.error("Execution callback error: %s", e)
-                    
+
         except Exception as e:
             logger.error("Failed to trigger execution callbacks: %s", e)
 
@@ -991,31 +991,31 @@ class RealTimeExecutionEngine:
         """Stop the real-time execution engine."""
         try:
             logger.info("Stopping real-time execution engine...")
-            
+
             self.monitoring_active = False
             self.running = False
-            
+
             # Cancel all tasks
             for task in self.tasks:
                 task.cancel()
-            
+
             # Wait for tasks to complete
             if self.tasks:
                 await asyncio.gather(*self.tasks, return_exceptions=True)
-            
+
             # Close all positions
             for position_id in list(self.active_positions.keys()):
                 await self._close_position(position_id, "system_shutdown")
-            
+
             # Stop components
             if self.market_data_stream:
                 await self.market_data_stream.stop()
-            
+
             if self.order_executor:
                 await self.order_executor.stop()
-            
+
             logger.info("Real-time execution engine stopped")
-            
+
         except Exception as e:
             logger.error("Failed to stop real-time execution engine: %s", e)
 
@@ -1035,4 +1035,4 @@ async def start_real_time_execution_engine(
     engine = RealTimeExecutionEngine(config)
     await engine.initialize()
     await engine.start_monitoring()
-    return engine 
+    return engine

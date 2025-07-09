@@ -222,7 +222,7 @@ class GPUShaderIntegration:
 
         # Add precision preprocessor directive for Pi 4 optimization
         if self.shader_config.use_half_precision:
-            shader_source = "#define MEDIUMP_PRECISION\n" + shader_source
+            shader_source = "  #define MEDIUMP_PRECISION\n" + shader_source
 
         return shader_source
 

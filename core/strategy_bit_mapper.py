@@ -13,7 +13,6 @@ from core.unified_math_system import generate_unified_hash
 from .orbital_shell_brain_system import OrbitalBRAINSystem, ShellConsensus, AltitudeVector
 from .qutrit_signal_matrix import QutritSignalMatrix, QutritState
 from core.gpu_handlers import get_gpu_memory, select_best_gpu
-from utils.cuda_helper import safe_cuda_operation, USING_CUDA
 from core.fractal_core import fractal_quantize_vector
 from core.matrix_mapper import EnhancedMatrixMapper, load_matrix_from_file
 from core.schwafit_core import SchwafitCore
@@ -112,7 +111,7 @@ class StrategyBitMapper:
             "failed_mappings": 0,
             "last_expansion_time": None,
         }
-        
+
         # Initialize tensor algebra components if available
         try:
             self.tensor_algebra = AdvancedTensorAlgebra()
@@ -266,10 +265,10 @@ class StrategyBitMapper:
         try:
             # Use orbital brain for adaptive expansion
             orbital_result = self.orbital_brain.compute_orbital_expansion(strategy_id, market_data)
-            
+
             # Convert to xp array for processing
             orbital_vector = xp.array(orbital_result.get("expansion_vector", [1.0]))
-            
+
             # Apply orbital scaling
             expansion_factor = float(xp.mean(orbital_vector))
             return int(strategy_id * expansion_factor) % (2**target_bits)

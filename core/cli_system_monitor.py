@@ -12,7 +12,6 @@ from typing import Any, Dict, List, Optional, Tuple
 import psutil
 import os
 
-from utils.safe_print import error, info, safe_print, success, warn
 from core.advanced_tensor_algebra import AdvancedTensorAlgebra
 
 #!/usr/bin/env python3
@@ -498,8 +497,8 @@ class SystemMonitorCLI:
                     router_stats = self.router.get_statistics()
                     info()
                         "🔄 Tasks: {0} | CPU: {1} | GPU: {2}".format()
-                            router_stats.get('total_tasks', 0), 
-                            router_stats.get('cpu_tasks', 0), 
+                            router_stats.get('total_tasks', 0),
+                            router_stats.get('cpu_tasks', 0),
                             router_stats.get('gpu_tasks', 0)
                         )
                     )

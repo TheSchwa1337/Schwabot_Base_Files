@@ -123,7 +123,7 @@ Key functionalities include:
 
 
 
-- Integration with risk management systems.# Assuming these might be available from other core
+- Integration with risk management systems.  # Assuming these might be available from other core
 modules
 
 
@@ -223,7 +223,7 @@ Placeholder for training a predictive model.
 
 
 
-In a real scenario, this would involve feature engineering and model selection.# Example: a simple
+In a real scenario, this would involve feature engineering and model selection.  # Example: a simple
 moving average or a regression model
 
 

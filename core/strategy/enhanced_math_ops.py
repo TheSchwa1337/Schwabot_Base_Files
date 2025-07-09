@@ -1,6 +1,5 @@
 import logging
 from typing import Any, Dict, Optional, Tuple, Union
-import cupy as cp
 from ..acceleration_enhancement import get_acceleration_enhancement
 
 import numpy as np

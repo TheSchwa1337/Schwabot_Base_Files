@@ -42,7 +42,7 @@ async def run_backtest(config: Dict[str, Any]):
             historical_candles = json.load(f)
         print()
             "✅ Loaded {0} candles from '{1}'.".format()
-                len(historical_candles), 
+                len(historical_candles),
                 os.path.basename(dataset_path))
         )
     except json.JSONDecodeError:

@@ -24,7 +24,7 @@ class SwingPatternRecognizer:
 
         highs, lows = [], []
         for i in range(1, len(price_history) - 1):
-            prev, curr, nxt = ()
+            prev, curr, nxt = (
                 price_history[i - 1],
                 price_history[i],
                 price_history[i + 1],

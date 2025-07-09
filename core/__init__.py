@@ -260,3 +260,26 @@ def create_clean_trading_system(initial_capital=100000.0, enable_gpu_acceleratio
     except Exception as e:
         logging.error("Failed to create clean trading system: {}".format(e))
         return None
+
+
+# Initialize cross-platform compatibility
+def setup_cross_platform_compatibility():
+    """Setup cross-platform compatibility for the trading system."""
+    import platform
+    import sys
+
+    # Set platform-specific configurations
+    if platform.system() == "Windows":
+        # Windows-specific settings
+        pass
+    elif platform.system() == "Linux":
+        # Linux-specific settings
+        pass
+    elif platform.system() == "Darwin":
+        # macOS-specific settings
+        pass
+
+    logging.info(f"Cross-platform compatibility setup for {platform.system()}")
+
+
+setup_cross_platform_compatibility()

@@ -130,23 +130,23 @@ system protection for enhanced trading security and validation.logger = logging.
 
 
 class ImmuneResponseLevel(Enum):Immune response activation levels.DORMANT
-    = dormant# No immune activity
+    = dormant  # No immune activity
 
 
 
-    MONITORING =  monitoring# Low-level surveillance
+    MONITORING =  monitoring  # Low-level surveillance
 
 
 
-    ACTIVATED =  activated# Active immune response
+    ACTIVATED =  activated  # Active immune response
 
 
 
-    HEIGHTENED =  heightened# High-intensity response
+    HEIGHTENED =  heightened  # High-intensity response
 
 
 
-    EMERGENCY =  emergency# Maximum immune activation
+    EMERGENCY =  emergency  # Maximum immune activation
 
 
 
@@ -731,7 +731,7 @@ GTS integration.Args:
 
 
 
-            Complete QSC immune response# Get immune trigger response
+            Complete QSC immune response  # Get immune trigger response
 
 
 

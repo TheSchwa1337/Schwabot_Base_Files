@@ -4,9 +4,7 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 import asyncio
 
 import numpy as np
-from scipy import linalg, signal, stats
 from scipy.fft import fft, fftfreq, ifft
-from scipy.sparse import csr_matrix
 
 from ..utils.cuda_helper import safe_cuda_operation
 

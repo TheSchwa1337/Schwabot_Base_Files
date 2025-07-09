@@ -34,7 +34,6 @@ from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
-from scipy import linalg
 
 from .advanced_tensor_algebra import ()
     AdvancedTensorAlgebra,

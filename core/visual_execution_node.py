@@ -2,12 +2,9 @@ import asyncio
 import logging
 import math
 import time
-from collections import deque
 from dataclasses import dataclass
 from enum import Enum
 from typing import Dict, List, Optional, Any
-import tkinter as tk
-from tkinter import ttk, scrolledtext
 from .two_gram_detector import TwoGramDetector, create_two_gram_detector
 from .algorithmic_portfolio_balancer import AlgorithmicPortfolioBalancer
 from .btc_usdc_trading_integration import BTCUSDCTradingIntegration
@@ -18,7 +15,6 @@ import psutil
 from core.backend_math import get_backend, is_gpu
 xp = get_backend()
 
-from utils.safe_print import info, warn, error
 
 # Log backend status
 logger = logging.getLogger(__name__)
@@ -209,26 +205,26 @@ class PatternVisualization:
 def render_signal_view(signal: xp.ndarray) -> xp.ndarray:
     """
     Render signal view using FFT analysis.
-    
+
     Args:
         signal: Input signal array
-        
+
     Returns:
         Normalized amplitude spectrum
     """
     try:
         # Compute FFT
         fft_data = xp.fft.fft(signal)
-        
+
         # Extract amplitude
         amplitude = xp.abs(fft_data)
-        
+
         # Normalize
         max_amp = xp.max(amplitude + 1e-8)
         normalized = amplitude / max_amp
-        
+
         return normalized
-        
+
     except Exception as e:
         logger.error(f"Error rendering signal view: {e}")
         return xp.zeros_like(signal)
@@ -237,16 +233,16 @@ def render_signal_view(signal: xp.ndarray) -> xp.ndarray:
 def signal_energy(signal_array: xp.ndarray) -> float:
     """
     Compute signal energy.
-    
+
     Args:
         signal_array: Input signal array
-        
+
     Returns:
         Signal energy
     """
     try:
         return float(xp.sum(signal_array ** 2))
-        
+
     except Exception as e:
         logger.error(f"Error computing signal energy: {e}")
         return 0.0
@@ -255,10 +251,10 @@ def signal_energy(signal_array: xp.ndarray) -> float:
 def export_signal_for_plot(signal_array: xp.ndarray) -> xp.ndarray:
     """
     Safely export signal for plotting.
-    
+
     Args:
         signal_array: Signal array (CuPy or NumPy)
-        
+
     Returns:
         NumPy array (safe for plotting)
     """
@@ -316,44 +312,44 @@ class VisualExecutionNode:
         """Get color scheme based on theme."""
         schemes = {
             VisualizationTheme.DARK_CYBERPUNK: {
-                "bg": "#0a0a0a",
-                "fg": "#00ff00",
-                "accent": "#ff00ff",
-                "warning": "#ffff00",
-                "error": "#ff0000",
-                "success": "#00ff80",
-                "pattern": "#00ccff",
-                "trading": "#ff8000",
+                "bg": "  #0a0a0a",
+                "fg": "  #00ff00",
+                "accent": "  #ff00ff",
+                "warning": "  #ffff00",
+                "error": "  #ff0000",
+                "success": "  #00ff80",
+                "pattern": "  #00ccff",
+                "trading": "  #ff8000",
             },
             VisualizationTheme.LIGHT_MINIMAL: {
-                "bg": "#ffffff",
-                "fg": "#333333",
-                "accent": "#0066cc",
-                "warning": "#ff9900",
-                "error": "#cc0000",
-                "success": "#099900",
-                "pattern": "#0099cc",
-                "trading": "#cc6600",
+                "bg": "  #ffffff",
+                "fg": "  #333333",
+                "accent": "  #0066cc",
+                "warning": "  #ff9900",
+                "error": "  #cc0000",
+                "success": "  #099900",
+                "pattern": "  #0099cc",
+                "trading": "  #cc6600",
             },
             VisualizationTheme.MATRIX_GREEN: {
-                "bg": "#000000",
-                "fg": "#00ff00",
-                "accent": "#66ff66",
-                "warning": "#ffff00",
-                "error": "#ff4444",
-                "success": "#44ff44",
-                "pattern": "#00cc00",
-                "trading": "#88ff88",
+                "bg": "  #000000",
+                "fg": "  #00ff00",
+                "accent": "  #66ff66",
+                "warning": "  #ffff00",
+                "error": "  #ff4444",
+                "success": "  #44ff44",
+                "pattern": "  #00cc00",
+                "trading": "  #88ff88",
             },
             VisualizationTheme.SCHWABOT_CLASSIC: {
-                "bg": "#1a1a2e",
-                "fg": "#eeeeff",
-                "accent": "#16213e",
-                "warning": "#ffa500",
-                "error": "#ff4757",
-                "success": "#2ed573",
-                "pattern": "#3742fa",
-                "trading": "#ff6b6b",
+                "bg": "  #1a1a2e",
+                "fg": "  #eeeeff",
+                "accent": "  #16213e",
+                "warning": "  #ffa500",
+                "error": "  #ff4757",
+                "success": "  #2ed573",
+                "pattern": "  #3742fa",
+                "trading": "  #ff6b6b",
             },
         }
         return schemes.get(self.config.theme, schemes[VisualizationTheme.SCHWABOT_CLASSIC])

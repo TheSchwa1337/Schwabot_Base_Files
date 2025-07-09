@@ -244,7 +244,7 @@ Generates internal (Zygot) entropy based on system-internal data.
 
 
 
-This is a placeholder. Real implementation would involve complex metrics.# Example: based on system
+This is a placeholder. Real implementation would involve complex metrics.  # Example: based on system
 uptime, CPU load, memory usage, internal
 
 
@@ -297,7 +297,7 @@ Generates external (Zalgo) entropy based on external market data or APIs.
 
 
 
-This is a placeholder. Real implementation would involve external API calls.# Example: based on
+This is a placeholder. Real implementation would involve external API calls.  # Example: based on
 market volatility, news sentiment, external API
 
 
@@ -384,7 +384,7 @@ This is a placeholder. Real adaptive logic would be more complex.if not self.ada
 
 
 
-            return # Example: If recent trades were highly profitable, loosen thresholds slightly
+            return  # Example: If recent trades were highly profitable, loosen thresholds slightly
 
 
 

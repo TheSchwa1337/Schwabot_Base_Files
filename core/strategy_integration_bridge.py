@@ -622,7 +622,7 @@ max_scores = 1000
 # Update composite confidence average
         if self.integration_metrics["correlation_scores"]:
             self.integration_metrics["composite_confidence_avg"]
-    = sum(self.integration_metrics["correlation_scores"]) 
+    = sum(self.integration_metrics["correlation_scores"])
     / len(self.integration_metrics["correlation_scores"])
 
 # Update strategy agreement rate

@@ -473,7 +473,7 @@ class ChronoResonanceWeatherMapper:
 
         # Combined resonance strength
         resonance_strength = (
-            base_resonance * location_resonance * 
+            base_resonance * location_resonance *
             weather_resonance * geomagnetic_resonance
         )
 

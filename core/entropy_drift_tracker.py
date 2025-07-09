@@ -2,7 +2,6 @@ import time
 import logging
 from typing import Dict, List, Optional, Tuple, Union, Any
 from dataclasses import dataclass, field
-from collections import deque
 from enum import Enum
 
 import numpy as np

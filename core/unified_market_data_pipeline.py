@@ -335,7 +335,7 @@ class UnifiedMarketDataPipeline:
             logger.info()
                 "Generated market data packet for {0} ".format(symbol)
                 "(quality: {0}, sources: {1})".format()
-                    data_quality.value, 
+                    data_quality.value,
                     len(raw_data))
             )
 

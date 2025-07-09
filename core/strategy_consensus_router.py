@@ -126,7 +126,7 @@ class DecisionVector:
 class StrategyConsensusRouter:
     """
     🧭 Live Strategy Consensus Router Based on Trust Weighting
-    
+
     Provides live strategy consensus routing:
     - Voting on trade ideas from mathlib, R1, GPT-4o, Claude, etc.
     - Trust-weighted decision vector generation
@@ -253,14 +253,14 @@ class StrategyConsensusRouter:
     ) -> StrategyVote:
         """
         Submit a strategy vote from a source
-        
+
         Args:
             source_id: Source identifier
             vote: Vote (BUY, SELL, HOLD, WAIT)
             confidence: Confidence level (0.0 to 1.0)
             reasoning: Reasoning for the vote
             metadata: Additional metadata
-            
+
         Returns:
             StrategyVote object
         """
@@ -306,11 +306,11 @@ class StrategyConsensusRouter:
     ) -> ConsensusResult:
         """
         Calculate consensus from current votes
-        
+
         Args:
             consensus_mode: Mode for consensus calculation
             threshold: Optional custom threshold
-            
+
         Returns:
             ConsensusResult with consensus information
         """
@@ -351,11 +351,11 @@ class StrategyConsensusRouter:
     ) -> RouteDecision:
         """
         Select final route based on consensus
-        
+
         Args:
             consensus_result: Consensus result
             route_mode: Mode for route selection
-            
+
         Returns:
             RouteDecision with selected route
         """
@@ -389,11 +389,11 @@ class StrategyConsensusRouter:
     ) -> DecisionVector:
         """
         Generate decision vector for execution
-        
+
         Args:
             route_decision: Selected route decision
             market_context: Current market context
-            
+
         Returns:
             DecisionVector for execution
         """

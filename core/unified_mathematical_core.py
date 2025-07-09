@@ -19,11 +19,9 @@ from dataclasses import dataclass
 
 # Third-party mathematical libraries
 import numpy as np
-from scipy import linalg
 
 # CUDA/GPU libraries with fallback
     try:
-    import cupy as cp
 
     USING_CUDA = True
     xp = cp
@@ -32,7 +30,6 @@ from scipy import linalg
     xp = np
 
 # Internal imports
-from utils.cuda_helper import FIT_PROFILE
 
 logger = logging.getLogger(__name__)
 

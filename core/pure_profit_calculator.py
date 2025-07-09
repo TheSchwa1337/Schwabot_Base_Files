@@ -95,9 +95,9 @@ class HistoryState:
     def get_hash_signature(self) -> str:
         """Generate deterministic hash signature for state."""
         state_str = "{0}_{1}_{2}".format()
-            self.timestamp, 
+            self.timestamp,
             len()
-                self.hash_matrices), 
+                self.hash_matrices),
                 len()
                     self.tensor_buckets))
         return hashlib.sha256(state_str.encode()).hexdigest()

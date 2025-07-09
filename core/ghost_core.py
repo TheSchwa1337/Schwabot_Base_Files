@@ -3,7 +3,6 @@ import time
 from typing import Dict, Any, Optional, List, Callable
 from dataclasses import dataclass, field
 from enum import Enum
-from collections import deque
 import threading
 from concurrent.futures import ThreadPoolExecutor
 import hashlib
@@ -146,7 +145,7 @@ class GhostCore:
         """
         try:
             lookback_period = lookback_period or len(self.signal_history)
-            
+
             if len(self.signal_history) < 3:
                 return []
 
@@ -155,7 +154,7 @@ class GhostCore:
 
             # Detect different pattern types
             patterns = []
-            
+
             # Detect trending patterns
             trending_pattern = self._detect_trending_pattern(recent_signals)
             if trending_pattern:
@@ -235,7 +234,7 @@ class GhostCore:
         # Check for oscillation (high variance around mean)
         if variance > self.sensitivity * 0.1:
             # Calculate oscillation frequency
-            zero_crossings = sum(1 for i in range(1, len(strengths)) 
+            zero_crossings = sum(1 for i in range(1, len(strengths))
                                if (strengths[i] - mean_strength) * (strengths[i-1] - mean_strength) < 0)
 
             frequency = zero_crossings / (len(strengths) - 1)

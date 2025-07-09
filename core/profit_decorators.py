@@ -7,7 +7,6 @@ Decorators to automatically integrate profit-driven backend selection into exist
 
 import functools
 import time
-import inspect
 from typing import Callable, Any, Optional, Dict
 from profit_backend_dispatcher import dispatch_op, registry
 
@@ -46,14 +45,14 @@ def profit_driven_op(
             # Remove profit and data_size from kwargs to avoid multiple values error
             kwargs.pop('profit', None)
             kwargs.pop('data_size', None)
-            
+
             # Try to use the profit-driven dispatcher, fallback to original function if operation not registered
             try:
                 return dispatch_op(operation_name, *args, profit=profit, data_size=data_size, **kwargs)
             except ValueError:
                 # Operation not registered, fallback to original function
                 return func(*args, **kwargs)
-        
+
         return wrapper
 
     return decorator

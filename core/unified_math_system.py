@@ -1,5 +1,5 @@
 import hashlib
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 from .clean_math_foundation import CleanMathFoundation
 from .zpe_zbe_core import ZBEBalance, ZPEVector, ZPEZBECore, ZPEZBEPerformanceTracker
 

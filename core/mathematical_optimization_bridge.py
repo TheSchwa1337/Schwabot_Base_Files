@@ -9,8 +9,6 @@ import cupy as cp
 import logging
 
 import numpy as np
-from scipy.fft import fft, ifft
-from scipy.stats import norm
 
 #!/usr/bin/env python3
 """

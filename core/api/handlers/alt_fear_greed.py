@@ -68,7 +68,7 @@ class FearGreedHandler(BaseAPIHandler):
                 else:
                     logger.error()
                         "All {0} attempts failed for {1}".format()
-                            self.MAX_RETRIES, 
+                            self.MAX_RETRIES,
                             self.NAME)
                     )
                     raise

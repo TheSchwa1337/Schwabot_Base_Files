@@ -214,7 +214,7 @@ class CCXTTradingExecutor:
             else:
                 # Live trading mode
                 order = await self.place_market_buy_order(symbol, amount)
-                
+
                 if "error" in order:
                     return ExecutionResult(
                         signal_id=signal.signal_id,
@@ -223,11 +223,11 @@ class CCXTTradingExecutor:
                         executed=False,
                         error_message=order["error"],
                     )
-                
+
                 # Update portfolio balance
                 self.portfolio_balance["USDC"] -= signal.quantity
                 self.portfolio_balance["BTC"] += signal.quantity
-                
+
                 return ExecutionResult(
                     signal_id=signal.signal_id,
                     pair=signal.target_pair,
@@ -258,7 +258,7 @@ class CCXTTradingExecutor:
             else:
                 # Live trading mode
                 order = await self.place_market_sell_order(symbol, amount)
-                
+
                 if "error" in order:
                     return ExecutionResult(
                         signal_id=signal.signal_id,
@@ -267,11 +267,11 @@ class CCXTTradingExecutor:
                         executed=False,
                         error_message=order["error"],
                     )
-                
+
                 # Update portfolio balance
                 self.portfolio_balance["BTC"] -= signal.quantity
                 self.portfolio_balance["USDC"] += signal.quantity
-                
+
                 return ExecutionResult(
                     signal_id=signal.signal_id,
                     pair=signal.target_pair,
@@ -297,7 +297,7 @@ class CCXTTradingExecutor:
             simulated_price = Decimal("50000")  # Simulated BTC price
             self.portfolio_balance["USDC"] -= signal.quantity
             self.portfolio_balance["BTC"] += signal.quantity
-            
+
             return ExecutionResult(
                 signal_id=signal.signal_id,
                 pair=signal.target_pair,
@@ -323,7 +323,7 @@ class CCXTTradingExecutor:
             simulated_price = Decimal("50000")  # Simulated BTC price
             self.portfolio_balance["BTC"] -= signal.quantity
             self.portfolio_balance["USDC"] += signal.quantity
-            
+
             return ExecutionResult(
                 signal_id=signal.signal_id,
                 pair=signal.target_pair,
@@ -347,3 +347,16 @@ class CCXTTradingExecutor:
         if self.exchange:
             await self.exchange.close()
             logger.info("Exchange connection closed")
+
+
+if __name__ == "__main__":
+    # Example usage
+    config = {
+        "exchange": "binance",
+        "apiKey": "your_api_key",
+        "secret": "your_secret",
+        "sandbox": True,
+    }
+
+    executor = CCXTTradingExecutor(config)
+    print("CCXT Trading Executor initialized")

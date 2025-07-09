@@ -4,7 +4,6 @@ import math
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Tuple, Any, Callable
 from enum import Enum
-from collections import deque
 import threading
 import json
 from .orbital_xi_ring_system import OrbitalXiRingSystem, XiRingLevel
@@ -13,8 +12,6 @@ from .quantum_mathematical_bridge import QuantumMathematicalBridge
 from .strategy_loader import load_strategy
 
 import numpy as np
-from scipy.integrate import odeint
-from scipy.optimize import minimize
 
 #!/usr/bin/env python3
 """

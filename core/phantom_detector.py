@@ -5,9 +5,6 @@ from typing import Dict, List, Optional, Tuple, Any
 from dataclasses import dataclass
 
 import numpy as np
-from scipy import signal
-from scipy.ndimage import gaussian_filter1d
-import matplotlib.pyplot as plt
 
 #!/usr/bin/env python3
 """

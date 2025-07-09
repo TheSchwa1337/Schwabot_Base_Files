@@ -133,23 +133,23 @@ Implements redundant detection layers using Galileo Tensor Streams.logger
 
 
 class TensorAlignment(Enum):Tensor alignment states.MISALIGNED
-    = misaligned# Poor sync between solutions
+    = misaligned  # Poor sync between solutions
 
 
 
-PARTIAL =  partial# Some alignment detected
+PARTIAL =  partial  # Some alignment detected
 
 
 
-SYNCHRONIZED =  synchronized# Good sync between solutions
+SYNCHRONIZED =  synchronized  # Good sync between solutions
 
 
 
-HARMONIZED =  harmonized# Perfect harmony between solutions
+HARMONIZED =  harmonized  # Perfect harmony between solutions
 
 
 
-CONFLICTED =  conflicted# Active disagreement
+CONFLICTED =  conflicted  # Active disagreement
 
 
 
@@ -1623,7 +1623,7 @@ Returns:
 
 
 
-        Tuple of (theta_angle, phi_angle)# Convert market signals to angular representation
+        Tuple of (theta_angle, phi_angle)  # Convert market signals to angular representation
 
 
 

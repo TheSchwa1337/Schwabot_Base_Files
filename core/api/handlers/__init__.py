@@ -10,7 +10,6 @@ This subpackage contains concrete third-party API handlers used by
 
 import importlib
 from pathlib import Path as _Path
-from pkgutil import iter_modules as _iter_modules
 
 # Ensure that when the package is imported standalone, all modules are
 # loaded so that `inspect.getmembers` in CacheSyncService can discover

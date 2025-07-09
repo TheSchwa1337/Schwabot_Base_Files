@@ -6,7 +6,6 @@ import logging
 from typing import Dict, List, Any, Tuple
 from dataclasses import dataclass, asdict
 from datetime import datetime
-from collections import defaultdict
 
 import numpy as np
 

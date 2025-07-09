@@ -258,10 +258,10 @@ class GPUDNAAutoDetect:
         """Generate optimized shader configuration based on GPU profile."""
         # Get base config for GPU tier
         base_config = self.SHADER_CONFIGS.get(gpu_profile.gpu_tier, self.SHADER_CONFIGS[GPUTier.TIER_UNKNOWN])
-        
+
         # Get performance multiplier
         performance_multiplier = self.PERFORMANCE_MULTIPLIERS.get(gpu_profile.gpu_tier, 1.5)
-        
+
         # Create shader config
         shader_config = ShaderConfig(
             matrix_size=base_config["matrix_size"],
@@ -274,7 +274,7 @@ class GPUDNAAutoDetect:
             gpu_tier=gpu_profile.gpu_tier.value,
             performance_multiplier=performance_multiplier
         )
-        
+
         return shader_config
 
     def _save_dna_profile(self, dna_profile: Dict[str, Any]) -> None:
@@ -282,12 +282,12 @@ class GPUDNAAutoDetect:
         try:
             dna_file = Path("data/gpu_dna_profile.json")
             dna_file.parent.mkdir(exist_ok=True)
-            
+
             with open(dna_file, 'w') as f:
                 json.dump(dna_profile, f, indent=2)
-            
+
             logger.info(f"DNA profile saved to {dna_file}")
-            
+
         except Exception as e:
             logger.error(f"Failed to save DNA profile: {e}")
 
@@ -295,7 +295,7 @@ class GPUDNAAutoDetect:
         """Get configuration for cosine similarity calculations."""
         if not self.shader_config:
             self.detect_gpu_dna()
-        
+
         return {
             "matrix_size": self.shader_config.matrix_size,
             "batch_size": self.shader_config.batch_size,
@@ -306,35 +306,35 @@ class GPUDNAAutoDetect:
     def run_gpu_fit_test(self) -> Dict[str, Any]:
         """Run GPU fitness test to validate configuration."""
         logger.info("🧪 Running GPU fitness test...")
-        
+
         if not self.shader_config:
             self.detect_gpu_dna()
-        
+
         # Simulate matrix operations
         matrix_size = self.shader_config.matrix_size
         batch_size = self.shader_config.batch_size
-        
+
         # Create test matrices
         matrices = [np.random.random((matrix_size, matrix_size)).astype(np.float32) for _ in range(batch_size)]
-        
+
         start_time = time.time()
-        
+
         # Perform matrix operations
         results = []
         for matrix in matrices:
             # Simulate shader operations
             result = np.dot(matrix, matrix.T)
             results.append(result)
-        
+
         end_time = time.time()
         execution_time = end_time - start_time
-        
+
         # Calculate performance metrics
         total_operations = batch_size * matrix_size * matrix_size * 2  # Multiply + transpose
         operations_per_second = total_operations / execution_time
-        
+
         fitness_score = min(100.0, operations_per_second / 1000000)  # Normalize to 0-100
-        
+
         test_results = {
             "matrix_size": matrix_size,
             "batch_size": batch_size,
@@ -344,9 +344,9 @@ class GPUDNAAutoDetect:
             "gpu_tier": self.shader_config.gpu_tier,
             "performance_multiplier": self.shader_config.performance_multiplier,
         }
-        
+
         logger.info(f"✅ GPU Fitness Test Complete - Score: {fitness_score:.1f}/100")
-        
+
         return test_results
 
 

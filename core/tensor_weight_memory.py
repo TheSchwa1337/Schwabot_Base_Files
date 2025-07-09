@@ -76,7 +76,7 @@ class MemoryTensor:
     timestamp: float
     shell_weights: xp.ndarray  # Wₜ [8] - weights for each shell
     hash_entropy: xp.ndarray   # Hₜ [64] - hash entropy vector
-    success_scores: xp.ndarray # Sₜ [8] - success/failure scores
+    success_scores: xp.ndarray  # Sₜ [8] - success/failure scores
     phi_tensor: xp.ndarray     # Φₜ [8] - combined tensor state
     confidence: float
     update_mode: MemoryUpdateMode
@@ -111,7 +111,7 @@ class ConsensusAltitudeResult:
 class TensorWeightMemory:
     """
     🧠⚛️ Neural Memory Tensor Weight Evaluation System
-    
+
     Provides real-time updates to shell activation weights based on:
     - Trade success/failure history
     - Hash entropy vector analysis
@@ -172,13 +172,13 @@ class TensorWeightMemory:
     ) -> WeightUpdateResult:
         """
         Update shell weights based on trade result and entropy
-        
+
         Args:
             trade_result: Trade outcome with profit/loss data
             hash_entropy: Current hash entropy vector Hₜ
             current_shell: Shell that executed the trade
             strategy_id: Strategy identifier for tracking
-            
+
         Returns:
             WeightUpdateResult with updated weights and metadata
         """
@@ -236,12 +236,12 @@ class TensorWeightMemory:
     ) -> ConsensusAltitudeResult:
         """
         Calculate consensus altitude for trade pipeline control
-        
+
         Args:
             phi_tensor: Current Φₜ tensor
             memory_tensor: Current memory tensor ℳₜ
             threshold: Optional custom threshold
-            
+
         Returns:
             ConsensusAltitudeResult with trade decision
         """

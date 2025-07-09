@@ -38,11 +38,11 @@ class RecursionResult:
 def recursive_tensor_match(a: xp.ndarray, b: xp.ndarray) -> float:
     """
     Compute cosine similarity across recursive vector bands.
-    
+
     Args:
         a: First tensor/vector
         b: Second tensor/vector
-        
+
     Returns:
         Cosine similarity score
     """
@@ -72,10 +72,10 @@ def recursive_tensor_match(a: xp.ndarray, b: xp.ndarray) -> float:
 def normalize_tensor(tensor: xp.ndarray) -> xp.ndarray:
     """
     Normalize tensor using L2 norm.
-    
+
     Args:
         tensor: Input tensor
-        
+
     Returns:
         Normalized tensor
     """
@@ -91,11 +91,11 @@ def normalize_tensor(tensor: xp.ndarray) -> xp.ndarray:
 def compute_tensor_resonance(field_a: xp.ndarray, field_b: xp.ndarray) -> float:
     """
     Compute resonance between two tensor fields.
-    
+
     Args:
         field_a: First tensor field
         field_b: Second tensor field
-        
+
     Returns:
         Resonance score
     """
@@ -128,13 +128,13 @@ def solve_tensor_recursion(
 ) -> RecursionResult:
     """
     Solve tensor recursion problem.
-    
+
     Args:
         initial_tensor: Starting tensor
         recursion_function: Function that defines the recursion
         max_iterations: Maximum number of iterations
         tolerance: Convergence tolerance
-        
+
     Returns:
         RecursionResult with solution and metadata
     """
@@ -195,10 +195,10 @@ def solve_tensor_recursion(
 def compute_tensor_eigenvalues(tensor: xp.ndarray) -> xp.ndarray:
     """
     Compute eigenvalues of a tensor using XP backend.
-    
+
     Args:
         tensor: Input tensor (2D matrix)
-        
+
     Returns:
         Array of eigenvalues
     """
@@ -223,10 +223,10 @@ def compute_tensor_eigenvalues(tensor: xp.ndarray) -> xp.ndarray:
 def tensor_svd_decomposition(tensor: xp.ndarray) -> Tuple[xp.ndarray, xp.ndarray, xp.ndarray]:
     """
     Perform SVD decomposition of a tensor.
-    
+
     Args:
         tensor: Input tensor (2D matrix)
-        
+
     Returns:
         Tuple of (U, S, V) matrices
     """
@@ -250,10 +250,10 @@ def tensor_svd_decomposition(tensor: xp.ndarray) -> Tuple[xp.ndarray, xp.ndarray
 def export_tensor_safely(tensor: xp.ndarray) -> xp.ndarray:
     """
     Safely export tensor for plotting or external use.
-    
+
     Args:
         tensor: Input tensor (CuPy or NumPy)
-        
+
     Returns:
         NumPy array (safe for external libraries)
     """

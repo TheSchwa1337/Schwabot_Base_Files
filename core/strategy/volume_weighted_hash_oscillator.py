@@ -264,7 +264,7 @@ self.metrics: Dict[str, Any]
 
 
 
-def _generate_volume_weighted_hash():-> str:Generates a SHA256 hash weighted by volume.# Combine
+def _generate_volume_weighted_hash():-> str:Generates a SHA256 hash weighted by volume.  # Combine
 price and volume with a timestamp for uniqueness and
 
 
@@ -289,7 +289,7 @@ def _hash_to_integer():-> int:
 
 
 
-Converts a portion of the hash string to an integer.# Use the first `hash_strength` characters for
+Converts a portion of the hash string to an integer.  # Use the first `hash_strength` characters for
 the integer conversion
 
 
@@ -827,7 +827,7 @@ print(f".format(oscillator.period,"))
 
 
 
-oscillator.smoothing_period, 
+oscillator.smoothing_period,
 
 
 
@@ -835,7 +835,7 @@ oscillator.smoothing_period,
 
 
 
-1, price, volume, 
+1, price, volume,
 
 
 

@@ -14,7 +14,6 @@ import aiohttp
 import ccxt.async_support as ccxt
 
 from utils.secure_config_manager import SecureConfigManager
-from utils.safe_print import info, warn, error, success
 
 #!/usr/bin/env python3
 """

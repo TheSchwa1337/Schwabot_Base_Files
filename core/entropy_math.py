@@ -1,7 +1,6 @@
 from __future__ import annotations
 import math
 import logging
-from collections import Counter
 from typing import Sequence, Union, List, Dict, Any
 import numpy as np
 from dataclasses import dataclass, field
@@ -92,7 +91,7 @@ class EntropyMathSystem:
 
             # Calculate Shannon entropy: H = -sum(p * log2(p))
             entropy = -xp.sum(prob_array * xp.log2(prob_array + 1e-10))
-            
+
             self._log_calculation("shannon_entropy", entropy, {"probabilities": probabilities})
             return float(entropy)
 
@@ -117,7 +116,7 @@ class EntropyMathSystem:
 
             # Calculate conditional entropy: H(X|Y) = -sum(P(x,y) * log2(P(x|y)))
             conditional_entropy = 0.0
-            
+
             for i in range(joint_probs.shape[0]):
                 for j in range(joint_probs.shape[1]):
                     if joint_probs[i, j] > 0 and marginal_probs[j] > 0:
@@ -152,7 +151,7 @@ class EntropyMathSystem:
 
             # Calculate mutual information: I(X;Y) = sum(P(x,y) * log2(P(x,y)/(P(x)*P(y))))
             mutual_info = 0.0
-            
+
             for i in range(joint_probs.shape[0]):
                 for j in range(joint_probs.shape[1]):
                     if joint_probs[i, j] > 0 and marginal_x[i] > 0 and marginal_y[j] > 0:
@@ -187,14 +186,14 @@ class EntropyMathSystem:
 
             # Calculate entropy rate using sliding windows
             entropy_values = []
-            
+
             for i in range(len(time_series) - window_size):
                 window = time_series[i:i + window_size]
-                
+
                 # Calculate probability distribution for window
                 hist, _ = xp.histogram(window, bins=min(10, len(set(window))))
                 probs = hist / xp.sum(hist)
-                
+
                 # Calculate entropy for this window
                 window_entropy = self.calculate_shannon_entropy(probs.tolist())
                 entropy_values.append(window_entropy)
@@ -393,7 +392,7 @@ class EntropyMathSystem:
             for calc in self.calculation_history:
                 calc_type = calc.calculation_type
                 type_counts[calc_type] = type_counts.get(calc_type, 0) + 1
-                
+
                 if calc_type not in type_values:
                     type_values[calc_type] = []
                 type_values[calc_type].append(calc.entropy_value)

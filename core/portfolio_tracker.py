@@ -105,7 +105,7 @@ class TradeRecord:
 class PortfolioTracker:
     """Portfolio tracker for managing positions and performance."""
 
-    def __init__(self, initial_balance: Dict[str, Decimal] = None, 
+    def __init__(self, initial_balance: Dict[str, Decimal] = None,
                  risk_params: Optional[Dict[str, Any]] = None):
         """Initialize portfolio tracker."""
         self.initial_balance = initial_balance or {
@@ -113,28 +113,28 @@ class PortfolioTracker:
             "BTC": Decimal("0"),
             "ETH": Decimal("0"),
         }
-        
+
         self.risk_params = risk_params or {
             "max_position_size": 0.1,  # 10% max position
             "max_daily_loss": 0.05,    # 5% max daily loss
             "stop_loss_pct": 0.02,     # 2% stop loss
             "take_profit_pct": 0.04,   # 4% take profit
         }
-        
+
         # Portfolio state
         self.balances: Dict[str, PortfolioBalance] = {}
         self.positions: Dict[str, Position] = {}
         self.trade_history: List[TradeRecord] = []
         self.performance_history: List[PortfolioMetrics] = []
-        
+
         # Initialize balances
         self._initialize_balances()
-        
+
         # Performance tracking
         self.start_time = time.time()
         self.peak_value = self.get_total_portfolio_value()
         self.max_drawdown = 0.0
-        
+
         logger.info("Portfolio Tracker initialized")
 
     def _initialize_balances(self):
@@ -146,7 +146,7 @@ class PortfolioTracker:
                 total_balance=amount
             )
 
-    def update_balance(self, asset: str, amount: Decimal, 
+    def update_balance(self, asset: str, amount: Decimal,
                       balance_type: str = "free") -> None:
         """Update portfolio balance."""
         if asset not in self.balances:
@@ -155,14 +155,14 @@ class PortfolioTracker:
                 free_balance=Decimal("0"),
                 total_balance=Decimal("0")
             )
-        
+
         if balance_type == "free":
             self.balances[asset].free_balance = amount
         elif balance_type == "locked":
             self.balances[asset].locked_balance = amount
-        
+
         self.balances[asset].total_balance = (
-            self.balances[asset].free_balance + 
+            self.balances[asset].free_balance +
             self.balances[asset].locked_balance
         )
         self.balances[asset].last_updated = time.time()
@@ -174,7 +174,7 @@ class PortfolioTracker:
     def get_total_portfolio_value(self) -> Decimal:
         """Get total portfolio value in USD."""
         total_value = Decimal("0")
-        
+
         for balance in self.balances.values():
             if balance.asset == "USDC":
                 total_value += balance.total_balance
@@ -185,16 +185,16 @@ class PortfolioTracker:
                     total_value += balance.total_balance * Decimal("50000")  # Simulated BTC price
                 elif balance.asset == "ETH":
                     total_value += balance.total_balance * Decimal("3000")   # Simulated ETH price
-        
+
         return total_value
 
     def open_position(self, symbol: str, position_type: PositionType,
-                     quantity: Decimal, price: Decimal, 
+                     quantity: Decimal, price: Decimal,
                      stop_loss: Optional[Decimal] = None,
                      take_profit: Optional[Decimal] = None) -> str:
         """Open a new position."""
         position_id = f"{symbol}_{int(time.time())}"
-        
+
         position = Position(
             symbol=symbol,
             position_type=position_type,
@@ -205,18 +205,18 @@ class PortfolioTracker:
             stop_loss=stop_loss,
             take_profit=take_profit
         )
-        
+
         self.positions[position_id] = position
-        
+
         # Update balances
         if position_type == PositionType.LONG:
             # Buy position - reduce USDC, increase asset
             asset = symbol.replace("USDC", "").replace("USDT", "")
-            self.update_balance("USDC", 
+            self.update_balance("USDC",
                               self.balances["USDC"].free_balance - (quantity * price))
-            self.update_balance(asset, 
+            self.update_balance(asset,
                               self.balances.get(asset, PortfolioBalance(asset, Decimal("0"))).free_balance + quantity)
-        
+
         logger.info(f"Opened {position_type.value} position: {position_id}")
         return position_id
 
@@ -225,9 +225,9 @@ class PortfolioTracker:
         if position_id not in self.positions:
             logger.warning(f"Position {position_id} not found")
             return None
-        
+
         position = self.positions[position_id]
-        
+
         # Calculate PnL
         if position.position_type == PositionType.LONG:
             pnl = (price - position.entry_price) * position.quantity
@@ -235,22 +235,22 @@ class PortfolioTracker:
         else:
             pnl = (position.entry_price - price) * position.quantity
             pnl_percentage = ((position.entry_price - price) / position.entry_price) * 100
-        
+
         # Update position
         position.current_price = price
         position.pnl = pnl
         position.pnl_percentage = float(pnl_percentage)
         position.position_type = PositionType.CLOSED
-        
+
         # Update balances
         asset = position.symbol.replace("USDC", "").replace("USDT", "")
         if position.position_type == PositionType.LONG:
             # Sell position - increase USDC, reduce asset
-            self.update_balance("USDC", 
+            self.update_balance("USDC",
                               self.balances["USDC"].free_balance + (position.quantity * price))
-            self.update_balance(asset, 
+            self.update_balance(asset,
                               self.balances[asset].free_balance - position.quantity)
-        
+
         # Create trade record
         trade_record = TradeRecord(
             trade_id=f"trade_{int(time.time())}",
@@ -262,12 +262,12 @@ class PortfolioTracker:
             pnl=pnl,
             pnl_percentage=float(pnl_percentage)
         )
-        
+
         self.trade_history.append(trade_record)
-        
+
         # Remove from active positions
         del self.positions[position_id]
-        
+
         logger.info(f"Closed position {position_id}, PnL: {pnl}")
         return trade_record
 
@@ -276,7 +276,7 @@ class PortfolioTracker:
         for position_id, position in self.positions.items():
             if position.symbol in price_updates:
                 position.current_price = price_updates[position.symbol]
-                
+
                 # Calculate unrealized PnL
                 if position.position_type == PositionType.LONG:
                     position.pnl = (position.current_price - position.entry_price) * position.quantity
@@ -288,54 +288,54 @@ class PortfolioTracker:
     def check_stop_losses(self, current_prices: Dict[str, Decimal]) -> List[str]:
         """Check and return positions that hit stop loss."""
         positions_to_close = []
-        
+
         for position_id, position in self.positions.items():
             if position.symbol not in current_prices:
                 continue
-                
+
             current_price = current_prices[position.symbol]
-            
+
             # Check stop loss
             if position.stop_loss:
                 if position.position_type == PositionType.LONG and current_price <= position.stop_loss:
                     positions_to_close.append(position_id)
                 elif position.position_type == PositionType.SHORT and current_price >= position.stop_loss:
                     positions_to_close.append(position_id)
-            
+
             # Check take profit
             if position.take_profit:
                 if position.position_type == PositionType.LONG and current_price >= position.take_profit:
                     positions_to_close.append(position_id)
                 elif position.position_type == PositionType.SHORT and current_price <= position.take_profit:
                     positions_to_close.append(position_id)
-        
+
         return positions_to_close
 
     def calculate_metrics(self) -> PortfolioMetrics:
         """Calculate current portfolio metrics."""
         total_value = self.get_total_portfolio_value()
-        
+
         # Calculate total PnL
         total_pnl = total_value - sum(balance.total_balance for balance in self.balances.values())
         total_pnl_percentage = float((total_pnl / total_value) * 100) if total_value > 0 else 0.0
-        
+
         # Calculate daily PnL (simplified)
         daily_pnl = total_pnl  # In a real system, this would be calculated from daily snapshots
         daily_pnl_percentage = total_pnl_percentage
-        
+
         # Calculate win rate
         winning_trades = len([t for t in self.trade_history if t.pnl and t.pnl > 0])
         total_trades = len(self.trade_history)
         win_rate = (winning_trades / total_trades * 100) if total_trades > 0 else 0.0
-        
+
         # Calculate max drawdown
         if total_value > self.peak_value:
             self.peak_value = total_value
-        
+
         current_drawdown = (self.peak_value - total_value) / self.peak_value * 100
         if current_drawdown > self.max_drawdown:
             self.max_drawdown = current_drawdown
-        
+
         # Determine risk level
         if self.max_drawdown > 20:
             risk_level = RiskLevel.EXTREME
@@ -345,7 +345,7 @@ class PortfolioTracker:
             risk_level = RiskLevel.MEDIUM
         else:
             risk_level = RiskLevel.LOW
-        
+
         metrics = PortfolioMetrics(
             total_value=total_value,
             total_pnl=total_pnl,
@@ -361,14 +361,14 @@ class PortfolioTracker:
             volatility=0.0,    # Would need historical data to calculate
             risk_level=risk_level
         )
-        
+
         self.performance_history.append(metrics)
         return metrics
 
     def get_portfolio_summary(self) -> Dict[str, Any]:
         """Get comprehensive portfolio summary."""
         metrics = self.calculate_metrics()
-        
+
         return {
             "total_value": float(metrics.total_value),
             "total_pnl": float(metrics.total_pnl),
@@ -447,10 +447,10 @@ class PortfolioTracker:
                 for trade in self.trade_history
             ]
         }
-        
+
         with open(filepath, 'w') as f:
             json.dump(state, f, indent=2)
-        
+
         logger.info(f"Portfolio state saved to {filepath}")
 
     def load_portfolio_state(self, filepath: str) -> None:
@@ -458,10 +458,10 @@ class PortfolioTracker:
         if not Path(filepath).exists():
             logger.warning(f"Portfolio state file {filepath} not found")
             return
-        
+
         with open(filepath, 'r') as f:
             state = json.load(f)
-        
+
         # Load balances
         self.balances.clear()
         for asset, balance_data in state.get("balances", {}).items():
@@ -472,7 +472,7 @@ class PortfolioTracker:
                 total_balance=Decimal(balance_data["total_balance"]),
                 last_updated=balance_data["last_updated"]
             )
-        
+
         # Load positions
         self.positions.clear()
         for pos_id, pos_data in state.get("positions", {}).items():
@@ -488,7 +488,7 @@ class PortfolioTracker:
                 stop_loss=Decimal(pos_data["stop_loss"]) if pos_data["stop_loss"] else None,
                 take_profit=Decimal(pos_data["take_profit"]) if pos_data["take_profit"] else None
             )
-        
+
         # Load trade history
         self.trade_history.clear()
         for trade_data in state.get("trade_history", []):
@@ -504,11 +504,11 @@ class PortfolioTracker:
                 strategy=trade_data["strategy"],
                 confidence=trade_data["confidence"]
             ))
-        
+
         logger.info(f"Portfolio state loaded from {filepath}")
 
 
 def create_portfolio_tracker(initial_balance: Dict[str, Decimal] = None,
                            risk_params: Optional[Dict[str, Any]] = None) -> PortfolioTracker:
     """Create a new portfolio tracker instance."""
-    return PortfolioTracker(initial_balance=initial_balance, risk_params=risk_params) 
+    return PortfolioTracker(initial_balance=initial_balance, risk_params=risk_params)

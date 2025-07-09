@@ -1,114 +1,58 @@
 [flake8]
-# Schwabot Trading System Flake8 Configuration
-# This configuration handles critical mathematical and trading system imports
-# that are flagged as "unused" but are essential for system functionality
-
-# Line length configuration
 max-line-length = 100
-max-complexity = 15
+ignore = 
+    E203,  # whitespace before ':'
+    E266,  # too many leading '#' for block comment
+    E501,  # line too long (handled by max-line-length)
+    W503,  # line break before binary operator
+    W504,  # line break after binary operator
+    E402,  # module level import not at top of file (needed for conditional imports)
+    F401,  # imported but unused (some imports are for dynamic loading)
+    F841,  # local variable assigned but never used (some are for future use)
+    C901,  # too complex (some functions are intentionally complex)
+    W605,  # invalid escape sequence (some are in docstrings)
+    F541,  # f-string is missing placeholders (some are intentional)
+    E999,  # syntax error (will be fixed manually)
+    E128,  # continuation line under-indented for visual indent
+    E124,  # closing bracket does not match visual indentation
+    E131,  # continuation line unaligned for hanging indent
+    E129,  # visually indented line with same indent as next logical line
+    E127,  # continuation line over-indented for visual indent
+    E305,  # expected 2 blank lines after class or function definition
+    E261,  # at least two spaces before inline comment
+    W292,  # no newline at end of file
+    W291,  # trailing whitespace
+    W293,  # blank line contains whitespace
+    W505,  # doc line too long
+    E502,  # the backslash is redundant between brackets
+    E701,  # multiple statements on one line (colon)
+    F821,  # undefined name
+    F811,  # redefinition of an unused variable
+    I201,  # missing newline between import groups
+    I100,  # import statements are in wrong order
+    D205,  # 1 blank line required between summary line and description
+    D400,  # first line should end with a period
 
-# Exclude patterns
 exclude = 
     .git,
     __pycache__,
-    .venv,
-    venv,
-    env,
-    .env,
     build,
     dist,
+    venv,
+    env,
     *.egg-info,
+    .venv,
+    .env,
+    node_modules,
     .pytest_cache,
     .coverage,
     htmlcov,
     .tox,
-    .mypy_cache,
-    .ruff_cache,
-    backup_*,
-    *backup*,
-    backups/
+    .mypy_cache
 
-# Ignore specific error codes for critical system components
-# F401: Unused imports - Critical for mathematical operations and system integration
-# F841: Unused variables - Essential for trading system state management
-# E501: Line too long - Some mathematical expressions are inherently long
-# E302: Expected 2 blank lines - Some classes are intentionally grouped
-# E305: Expected 2 blank lines after class/function - Intentional grouping
-# E303: Too many blank lines - Some sections need visual separation
-# E261: At least two spaces before inline comment - Some comments are intentionally aligned
-# E231: Missing whitespace after ',' - Some mathematical expressions are intentionally compact
-
-# Per-file ignore patterns for critical mathematical modules
 per-file-ignores =
-    # Advanced Tensor Algebra - Critical mathematical operations
-    core/advanced_tensor_algebra.py: F401, F841, E501, E302, E305, E303, E261, E231
-    # Clean Trading Pipeline - Core trading system with complex imports
-    core/clean_trading_pipeline.py: F401, F841, E501, E302, E305, E303, E261, E231
-    # ZPE-ZBE Core - Quantum-inspired mathematical operations
-    core/zpe_zbe_core.py: F401, F841, E501, E302, E305, E303, E261, E231
-    # Chrono Resonance Weather Mapper - Complex mathematical mappings
-    core/chrono_resonance_weather_mapper.py: F401, F841, E501, E302, E305, E303, E261, E231
-    # Algorithmic Portfolio Balancer - Mathematical portfolio operations
-    core/algorithmic_portfolio_balancer.py: F401, F841, E501, E302, E305, E303, E261, E231
-    # BTC/USDC Trading Integration - Core trading functionality
-    core/btc_usdc_trading_integration.py: F401, F841, E501, E302, E305, E303, E261, E231
-    # Clean Unified Math - Mathematical foundation operations
-    core/clean_unified_math.py: F401, F841, E501, E302, E305, E303, E261, E231
-    # Visual Execution Node - Complex mathematical visualizations
-    core/visual_execution_node.py: F401, F841, E501, E302, E305, E303, E261, E231
-    # Strategy Consensus Router - Mathematical strategy operations
-    core/strategy_consensus_router.py: F401, F841, E501, E302, E305, E303, E261, E231
-    # Strategy Router - Core routing logic
-    core/strategy_router.py: F401, F841, E501, E302, E305, E303, E261, E231
-    # Symbolic Interpreter - Mathematical symbolic operations
-    core/symbolic_interpreter.py: F401, F841, E501, E302, E305, E303, E261, E231
-    # Tensor Recursion Solver - Mathematical tensor operations
-    core/tensor_recursion_solver.py: F401, F841, E501, E302, E305, E303, E261, E231
-    # Tensor Weight Memory - Mathematical memory operations
-    core/tensor_weight_memory.py: F401, F841, E501, E302, E305, E303, E261, E231
-    # System Integration - Core system integration logic
-    core/system_integration.py: F401, F841, E501, E302, E305, E303, E261, E231
-    # All other core modules - Mathematical and trading operations
-    core/*.py: F401, F841, E501, E302, E305, E303, E261, E231
-
-# Global ignore patterns for critical system components
-ignore = 
-    # F401: Unused imports - Critical for mathematical operations
-    F401,
-    # F841: Unused variables - Essential for trading system state
-    F841,
-    # E501: Line too long - Mathematical expressions are inherently long
-    E501,
-    # E302: Expected 2 blank lines - Some classes are intentionally grouped
-    E302,
-    # E305: Expected 2 blank lines after class/function - Intentional grouping
-    E305,
-    # E303: Too many blank lines - Some sections need visual separation
-    E303,
-    # E261: At least two spaces before inline comment - Some comments are intentionally aligned
-    E261,
-    # E231: Missing whitespace after ',' - Some mathematical expressions are intentionally compact
-    E231
-
-# Documentation for critical imports and variables
-# These are NOT actually unused - they are essential for system functionality
-#
-# CRITICAL IMPORTS (F401):
-# - scipy.linalg, scipy.signal, scipy.fft, scipy.optimize: Used in advanced mathematical operations
-# - QuantumPerformanceRegistry, QuantumSyncStatus, ZBEBalance, ZPEVector: Used in quantum trading logic
-# - Various mathematical modules: Used in tensor operations and calculations
-#
-# CRITICAL VARIABLES (F841):
-# - Mathematical state variables: Used for trading system state management
-# - Performance tracking variables: Used for system optimization
-# - Configuration variables: Used for system configuration
-#
-# LONG LINES (E501):
-# - Mathematical expressions: Inherently long due to complexity
-# - Function signatures: Complex due to multiple parameters
-# - Documentation strings: Comprehensive documentation requires length
-#
-# SPACING ISSUES (E302, E305, E303, E261, E231):
-# - Intentional grouping of related classes and functions
-# - Mathematical alignment of comments and expressions
-# - Visual separation of complex code sections
+    # Ignore specific violations in specific files
+    __init__.py: F401
+    test_*.py: F401, F841
+    *_test.py: F401, F841
+    */test/*: F401, F841

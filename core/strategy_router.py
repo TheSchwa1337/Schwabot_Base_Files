@@ -38,11 +38,11 @@ class StrategyDecision:
 def select_strategy(hash_tensor: xp.ndarray, threshold: float = 0.65) -> str:
     """
     Select strategy based on hash tensor energy.
-    
+
     Args:
         hash_tensor: Hash tensor for strategy selection
         threshold: Decision threshold
-        
+
     Returns:
         Selected strategy name
     """
@@ -64,10 +64,10 @@ def select_strategy(hash_tensor: xp.ndarray, threshold: float = 0.65) -> str:
 def compute_hash_energy(matrix: xp.ndarray) -> float:
     """
     Compute hash energy using FFT analysis.
-    
+
     Args:
         matrix: Input matrix
-        
+
     Returns:
         Hash energy score
     """
@@ -88,10 +88,10 @@ def compute_hash_energy(matrix: xp.ndarray) -> float:
 def route_decision_logic(signal_vec: xp.ndarray) -> str:
     """
     Route decision based on signal vector analysis.
-    
+
     Args:
         signal_vec: Signal vector for decision making
-        
+
     Returns:
         Route decision
     """
@@ -115,10 +115,10 @@ def analyze_strategy_performance(
 ) -> Dict[str, float]:
     """
     Analyze strategy performance using XP backend.
-    
+
     Args:
         strategy_results: List of strategy result dictionaries
-        
+
     Returns:
         Performance metrics
     """
@@ -156,11 +156,11 @@ def compute_strategy_weights(
 ) -> xp.ndarray:
     """
     Compute strategy weights based on historical performance and market conditions.
-    
+
     Args:
         historical_performance: Historical performance data
         current_market_conditions: Current market conditions
-        
+
     Returns:
         Strategy weights array
     """
@@ -203,12 +203,12 @@ def optimize_strategy_allocation(
 ) -> Dict[str, float]:
     """
     Optimize strategy allocation using XP backend.
-    
+
     Args:
         strategy_candidates: List of strategy candidates
         performance_matrix: Performance matrix (strategies x metrics)
         risk_budget: Total risk budget
-        
+
     Returns:
         Optimized allocation weights
     """
@@ -248,10 +248,10 @@ def optimize_strategy_allocation(
 def export_strategy_data(strategy_data: xp.ndarray) -> xp.ndarray:
     """
     Safely export strategy data for external use.
-    
+
     Args:
         strategy_data: Strategy data array (CuPy or NumPy)
-        
+
     Returns:
         NumPy array (safe for external libraries)
     """

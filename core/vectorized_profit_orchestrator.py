@@ -1,6 +1,5 @@
 import logging
 import time
-from collections import defaultdict, deque
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Dict, List, Optional, Any, Tuple
@@ -13,7 +12,6 @@ from .fractal_memory_tracker import FractalMemoryTracker
 
 import numpy as np
 
-from utils.safe_print import info
 
 #!/usr/bin/env python3
 """

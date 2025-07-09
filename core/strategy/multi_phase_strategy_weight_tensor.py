@@ -625,7 +625,7 @@ self.current_phase = MarketPhase.UNKNOWN
 self.metrics
 
 
-    {last_update_time: None,total_updates: 0,phase_transitions".format(identified_phase.value, # Convert numpy array to list")}
+    {last_update_time: None,total_updates: 0,phase_transitions".format(identified_phase.value,  # Convert numpy array to list")}
     for readability
 
 

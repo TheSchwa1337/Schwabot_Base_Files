@@ -17,7 +17,6 @@ except ImportError:
 
 # CUDA Helper Integration (for additional, utilities)
 try:
-    from utils.cuda_helper import (
         get_cuda_status,
         report_cuda_status,
         safe_convolution,

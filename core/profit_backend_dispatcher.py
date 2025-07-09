@@ -7,13 +7,11 @@ import time
 import threading
 import json
 import os
-from collections import defaultdict, deque
 from typing import Dict, Any, Callable, Optional, Tuple
 import numpy as np
 
 # Import both backends
 try:
-    import cupy as cp
 
     HAS_CUPY = True
 except ImportError:

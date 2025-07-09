@@ -6,7 +6,6 @@ FORCE_CPU = os.getenv("FORCE_CPU", "false").lower() in ("true", "1", "yes")
 try:
     if FORCE_CPU:
         raise ImportError("Forced CPU fallback triggered.")
-    import cupy as xp
     GPU_ENABLED = True
 except ImportError:
     import numpy as xp
@@ -23,4 +22,4 @@ def backend_info():
         "backend": "CuPy" if GPU_ENABLED else "NumPy",
         "accelerated": GPU_ENABLED,
         "force_cpu": FORCE_CPU,
-    } 
+    }

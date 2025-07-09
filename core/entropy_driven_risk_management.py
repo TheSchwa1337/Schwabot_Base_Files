@@ -4,7 +4,6 @@ import math
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Tuple, Any
 from enum import Enum
-from collections import deque
 import threading
 import json
 from .bio_cellular_signaling import BioCellularSignaling, CellularSignalType
@@ -15,8 +14,6 @@ from .matrix_mapper import MatrixMapper
 from .quantum_mathematical_bridge import QuantumMathematicalBridge
 
 import numpy as np
-from scipy.stats import entropy
-from scipy.optimize import minimize
 
 #!/usr/bin/env python3
 """

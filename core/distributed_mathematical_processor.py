@@ -3,17 +3,11 @@ from dataclasses import dataclass
 import logging
 from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor, as_completed
 import threading
-import multiprocessing as mp
 import asyncio
 import time
-from functools import wraps
-import pickle
-import socket
 import json
-from queue import Queue, Empty
 import psutil
 import gc
-import warnings
 import random
 
 import numpy as np
@@ -44,7 +38,7 @@ CUDA Integration:
 try:
     USING_CUDA = True
     _backend = "cupy (GPU)"
-    xp = np # Changed from cp to np to avoid direct import
+    xp = np  # Changed from cp to np to avoid direct import
 except ImportError:
     USING_CUDA = False
     _backend = "numpy (CPU)"
@@ -320,7 +314,7 @@ class ResourceMonitor:
             resources["disk_free_gb"] = disk.free / (1024**3)
 
             # GPU resources if available
-            if USING_CUDA and np.array(xp.cuda.is_available()).any(): # Changed from cp to np.array(xp.cuda.is_available())
+            if USING_CUDA and np.array(xp.cuda.is_available()).any():  # Changed from cp to np.array(xp.cuda.is_available())
                 gpu_memory = xp.cuda.MemoryPool().used_bytes() / (1024**3)
                 resources["gpu_memory_used_gb"] = gpu_memory
 
@@ -902,7 +896,7 @@ class DistributedMathematicalProcessor:
             # Clear CUDA cache if using GPU
             if self.use_gpu and USING_CUDA:
                 # xp.cuda.MemoryPool().free_all_blocks() # This line was removed as per the edit hint
-                pass # No direct CUDA cleanup in numpy
+                pass  # No direct CUDA cleanup in numpy
 
             # Force garbage collection
             gc.collect()

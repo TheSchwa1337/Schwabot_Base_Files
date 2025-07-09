@@ -4,7 +4,7 @@
 🔮 SYMBOLIC LAYER COLLAPSE INTERPRETER
 =====================================
 
-Symbolic Layer Collapse Interpreter for Schwabot
+Symbolic Layer Collapse Interpreter for Schwabot.
 
 This module provides:
 1. Real-time symbolic collapse decoder feeding recursive strategy logic
@@ -20,16 +20,15 @@ Mathematical Framework:
 """
 
 import hashlib
-import json
 import logging
 import re
 import threading
 import time
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List
+
 import numpy as np
-import cupy as cp
 
 # Import existing Schwabot components
 try:
@@ -46,6 +45,7 @@ logger = logging.getLogger(__name__)
 
 # CUDA Integration with Fallback
 try:
+    import cupy as cp
     USING_CUDA = True
     _backend = "cupy (GPU)"
     xp = cp
@@ -124,7 +124,7 @@ class InterpretationResult:
 class SymbolicInterpreter:
     """
     🔮 Symbolic Layer Collapse Interpreter
-    
+
     Provides real-time symbolic collapse decoding for recursive strategy logic:
     - Translates raw symbol patterns into trading actions
     - Uses cosine similarity against strategy_bit_mapper.py
@@ -278,11 +278,11 @@ class SymbolicInterpreter:
     ) -> InterpretationResult:
         """
         Interpret a raw symbol pattern into trading action
-        
+
         Args:
             raw_pattern: Raw symbol pattern string (e.g. "[FIRE]+[WATER]")
             market_context: Current market context
-            
+
         Returns:
             InterpretationResult with collapse and strategy information
         """

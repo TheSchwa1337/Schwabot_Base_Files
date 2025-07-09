@@ -79,7 +79,7 @@ class FitnessEvaluator(Enum):
 @dataclass
 class BacktestResult:
     """Result from backtest execution"""
-    
+
     strategy_id: str
     strategy_hash: str
     profit_delta: float
@@ -95,7 +95,7 @@ class BacktestResult:
 @dataclass
 class MatrixUpdate:
     """Matrix update operation"""
-    
+
     matrix_id: str
     update_vector: np.ndarray
     fitness_score: float
@@ -337,7 +337,7 @@ class ProfitMatrixFeedbackLoop:
                 if len(recent_scores) >= 2:
                     score_improvement = recent_scores[-1] - recent_scores[0]
                     adjustment_magnitude = abs(adjustment_factor)
-                    
+
                     if adjustment_magnitude > 0:
                         self.adjustment_efficiency = score_improvement / adjustment_magnitude
                     else:
@@ -530,4 +530,4 @@ if __name__ == "__main__":
     print("New learning rate: {0}".format(optimization.get("learning_rate", 0)))
     print("New decay factor: {0}".format(optimization.get("decay_factor", 0)))
 
-    print("Profit Matrix Feedback Loop test completed") 
+    print("Profit Matrix Feedback Loop test completed")

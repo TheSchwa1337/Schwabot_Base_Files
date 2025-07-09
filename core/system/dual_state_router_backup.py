@@ -325,7 +325,7 @@ class DualStateRouter:
 
             logger.debug()
                 "Routed {0} to {1} in {2}ms".format(task_id,)
-                    compute_mode.value, 
+                    compute_mode.value,
                     execution_time_ms)
             )
             return result
