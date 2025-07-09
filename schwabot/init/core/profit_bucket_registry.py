@@ -1,22 +1,29 @@
 """
-profit_bucket_registry.py
--------------------------
+Profit Bucket Registry
+=====================
+
 Stores profitable trade patterns as hash buckets with their associated
 exit strategies, profit targets, and success rates. This enables
 recursive strategy layering where successful patterns reinforce themselves.
+
+Mathematical Components:
+- Hash-based pattern matching with prefix similarity
+- Confidence scoring with exponential moving average
+- Profit percentage calculations
+- Pattern similarity scoring
 """
-from __future__ import annotations
 
 import json
 import time
-from typing import Dict, List, Tuple, Optional
+import hashlib
+from typing import Dict, Optional, Tuple
 from dataclasses import dataclass, asdict
-from .hash_drift_sync import market_hash
 
 
 @dataclass
 class ProfitBucket:
     """A profitable trade pattern with its exit strategy."""
+    
     hash_pattern: str
     entry_price: float
     exit_price: float
@@ -32,9 +39,14 @@ class ProfitBucketRegistry:
     """Manages profitable trade patterns and their exit strategies."""
     
     def __init__(self, store_path: str = "profit_buckets.json"):
+        """Initialize the profit bucket registry."""
         self.store_path = store_path
         self.buckets: Dict[str, ProfitBucket] = {}
         self._load()
+    
+    def market_hash(self, tick_blob: str) -> str:
+        """Generate hash from market tick data."""
+        return hashlib.sha256(tick_blob.encode()).hexdigest()
     
     def add_profitable_trade(self, 
                            tick_blob: str,
@@ -43,7 +55,7 @@ class ProfitBucketRegistry:
                            time_to_exit: int,
                            strategy_id: str) -> None:
         """Record a successful trade pattern."""
-        hash_pattern = market_hash(tick_blob)
+        hash_pattern = self.market_hash(tick_blob)
         profit_pct = ((exit_price - entry_price) / entry_price) * 100
         
         if hash_pattern in self.buckets:
@@ -73,7 +85,7 @@ class ProfitBucketRegistry:
     
     def find_matching_pattern(self, tick_blob: str, min_confidence: float = 0.3) -> Optional[ProfitBucket]:
         """Find a profitable pattern that matches current market conditions."""
-        current_hash = market_hash(tick_blob)
+        current_hash = self.market_hash(tick_blob)
         
         best_match = None
         best_score = 0.0
@@ -103,6 +115,21 @@ class ProfitBucketRegistry:
         if bucket:
             return bucket.exit_price, bucket.time_to_exit
         return None
+    
+    def get_bucket_stats(self) -> Dict[str, any]:
+        """Get statistics about stored buckets."""
+        if not self.buckets:
+            return {"total_buckets": 0, "avg_confidence": 0.0, "avg_profit": 0.0}
+        
+        total_buckets = len(self.buckets)
+        avg_confidence = sum(b.confidence for b in self.buckets.values()) / total_buckets
+        avg_profit = sum(b.profit_pct for b in self.buckets.values()) / total_buckets
+        
+        return {
+            "total_buckets": total_buckets,
+            "avg_confidence": avg_confidence,
+            "avg_profit": avg_profit
+        }
     
     def _load(self) -> None:
         """Load buckets from JSON file."""

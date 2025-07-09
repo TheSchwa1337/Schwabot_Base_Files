@@ -137,7 +137,7 @@ class AccelerationEnhancement:
     to the existing ZPE/ZBE cores and Dual State Router.
 
     This enhancement:
-    1. Works alongside existing systems (doesn't replace, them)'
+    1. Works alongside existing systems (doesn't replace them)
     2. Provides additional acceleration options
     3. Integrates with existing ZPE/ZBE calculations
     4. Enhances the Dual State Router with operation-specific recommendations
@@ -196,7 +196,7 @@ class AccelerationEnhancement:
         """
         Enhanced switch logic that works alongside existing ZPE/ZBE routing.
 
-        This ENHANCES the existing routing logic, doesn't replace it.'
+        This ENHANCES the existing routing logic, doesn't replace it.
 
         Args:
             op_name: Operation name for logging
@@ -234,7 +234,7 @@ class AccelerationEnhancement:
         """
         Execute with enhancement layer acceleration.
 
-        This ENHANCES existing operations, doesn't replace them.'
+        This ENHANCES existing operations, doesn't replace them.
 
         Args:
             func_cpu: CPU implementation function
@@ -325,7 +325,7 @@ class AccelerationEnhancement:
         """
         Calculate ZPE enhancement data that complements existing ZPE core.
 
-        This ENHANCES existing ZPE calculations, doesn't replace them.'
+        This ENHANCES existing ZPE calculations, doesn't replace them.
 
         Args:
             tick_delta: Price tick delta
@@ -371,7 +371,7 @@ class AccelerationEnhancement:
         """
         Calculate ZBE enhancement data that complements existing ZBE core.
 
-        This ENHANCES existing ZBE calculations, doesn't replace them.'
+        This ENHANCES existing ZBE calculations, doesn't replace them.
 
         Args:
             failure_count: Number of recent failures
