@@ -37,7 +37,7 @@ class FractalMatchType(Enum):
 
 
 @dataclass
-    class FractalSnapshot:
+class FractalSnapshot:
     """Snapshot of a qutrit matrix at a specific time"""
 
     q_matrix: np.ndarray
@@ -49,7 +49,7 @@ class FractalMatchType(Enum):
 
 
 @dataclass
-    class FractalMatch:
+class FractalMatch:
     """Result of a fractal pattern match"""
 
     match_type: FractalMatchType
@@ -81,13 +81,13 @@ class FractalMemoryTracker:
         self.similarity_threshold = similarity_threshold
         self.match_history: List[FractalMatch] = []
 
-        logger.info()
-            "Fractal Memory Tracker initialized (max: {0}, threshold: {1})".format()
+        logger.info(
+            "Fractal Memory Tracker initialized (max: {0}, threshold: {1})".format(
                 max_snapshots, similarity_threshold
             )
         )
 
-    def save_snapshot()
+    def save_snapshot(
         self,
         q_matrix: np.ndarray,
         strategy_id: str,
@@ -107,7 +107,7 @@ class FractalMemoryTracker:
             Snapshot ID
         """
         try:
-            snapshot = FractalSnapshot()
+            snapshot = FractalSnapshot(
                 q_matrix=q_matrix.copy(),
                 timestamp=time.time(),
                 strategy_id=strategy_id,
@@ -122,7 +122,7 @@ class FractalMemoryTracker:
             if len(self.snapshot_stack) > self.max_snapshots:
                 self.snapshot_stack.pop(0)  # Remove oldest
 
-            snapshot_id = "snapshot_{0}_{1}".format()
+            snapshot_id = "snapshot_{0}_{1}".format(
                 len(self.snapshot_stack), int(snapshot.timestamp)
             )
             logger.debug("Saved fractal snapshot: {0}".format(snapshot_id))
@@ -133,7 +133,7 @@ class FractalMemoryTracker:
             logger.error("Error saving fractal snapshot: {0}".format(e))
             return ""
 
-    def match_fractal()
+    def match_fractal(
         self,
         current_matrix: np.ndarray,
         strategy_id: str,
@@ -173,7 +173,7 @@ class FractalMemoryTracker:
 
             if best_match:
                 # Create current snapshot for comparison
-                current_snapshot = FractalSnapshot()
+                current_snapshot = FractalSnapshot(
                     q_matrix=current_matrix.copy(),
                     timestamp=time.time(),
                     strategy_id=strategy_id,
@@ -190,7 +190,7 @@ class FractalMemoryTracker:
                 # Determine if replay is recommended
                 replay_recommended = self._should_replay_pattern(best_match, confidence)
 
-                fractal_match = FractalMatch()
+                fractal_match = FractalMatch(
                     match_type=match_type,
                     similarity_score=best_score,
                     matched_snapshot=best_match,
@@ -202,9 +202,9 @@ class FractalMemoryTracker:
                 # Store in match history
                 self.match_history.append(fractal_match)
 
-                logger.info()
-                    "Fractal match found: {0} (similarity: {1}, confidence: {2})".format()
-                        match_type.value, best_score
+                logger.info(
+                    "Fractal match found: {0} (similarity: {1}, confidence: {2})".format(
+                        match_type.value, best_score, confidence
                     )
                 )
                 return fractal_match
@@ -242,9 +242,7 @@ class FractalMemoryTracker:
         else:
             return FractalMatchType.NO_MATCH
 
-    def _calculate_match_confidence()
-        self, matched_snapshot: FractalSnapshot, similarity_score: float
-    ) -> float:
+    def _calculate_match_confidence(self, matched_snapshot: FractalSnapshot, similarity_score: float) -> float:
         """Calculate confidence score for a fractal match"""
         try:
             base_confidence = similarity_score
@@ -258,9 +256,7 @@ class FractalMemoryTracker:
                     profit_boost = max(-0.1, matched_snapshot.profit_result * 0.5)
 
             # Time decay factor (older patterns get lower, confidence)
-            time_decay = max()
-                0.5, 1.0 - (time.time() - matched_snapshot.timestamp) / 86400
-            )  # 24 hour decay
+            time_decay = max(0.5, 1.0 - (time.time() - matched_snapshot.timestamp) / 86400)  # 24 hour decay
 
             final_confidence = (base_confidence + profit_boost) * time_decay
             return max(0.0, min(1.0, final_confidence))
@@ -268,9 +264,7 @@ class FractalMemoryTracker:
         except Exception:
             return similarity_score
 
-    def _should_replay_pattern()
-        self, matched_snapshot: FractalSnapshot, confidence: float
-    ) -> bool:
+    def _should_replay_pattern(self, matched_snapshot: FractalSnapshot, confidence: float) -> bool:
         """Determine if a pattern should be replayed based on confidence and history"""
         try:
             # High confidence patterns are more likely to be replayed
@@ -301,13 +295,12 @@ class FractalMemoryTracker:
         try:
             cutoff_time = time.time() - (hours_back * 3600)
             recent_patterns = []
-                snapshot
-                for snapshot in self.snapshot_stack
-                if snapshot.timestamp >= cutoff_time
-            ]
+            for snapshot in self.snapshot_stack:
+                if snapshot.timestamp >= cutoff_time:
+                    recent_patterns.append(snapshot)
 
-            logger.debug()
-                "Found {0} patterns from last {1} hours".format()
+            logger.debug(
+                "Found {0} patterns from last {1} hours".format(
                     len(recent_patterns), hours_back
                 )
             )
@@ -324,34 +317,24 @@ class FractalMemoryTracker:
                 return {"total_patterns": 0}
 
             total_patterns = len(self.snapshot_stack)
-            profitable_patterns = sum()
-                1
-                for s in self.snapshot_stack
-                if s.profit_result and s.profit_result > 0
+            profitable_patterns = sum(
+                1 for s in self.snapshot_stack if s.profit_result and s.profit_result > 0
             )
-            loss_patterns = sum()
-                1
-                for s in self.snapshot_stack
-                if s.profit_result and s.profit_result < 0
+            loss_patterns = sum(
+                1 for s in self.snapshot_stack if s.profit_result and s.profit_result < 0
             )
 
-            avg_profit = ()
-                np.mean()
-                    []
-                        s.profit_result
-                        for s in self.snapshot_stack
-                        if s.profit_result is not None
-                    ]
-                )
+            avg_profit = (
+                np.mean([s.profit_result for s in self.snapshot_stack if s.profit_result is not None])
                 or 0.0
             )
-            avg_similarity = ()
+            avg_similarity = (
                 np.mean([m.similarity_score for m in self.match_history])
                 if self.match_history
                 else 0.0
             )
 
-            return {}
+            return {
                 "total_patterns": total_patterns,
                 "profitable_patterns": profitable_patterns,
                 "loss_patterns": loss_patterns,
@@ -372,10 +355,8 @@ class FractalMemoryTracker:
             initial_count = len(self.snapshot_stack)
 
             # Remove old patterns
-            self.snapshot_stack = []
-                snapshot
-                for snapshot in self.snapshot_stack
-                if snapshot.timestamp >= cutoff_time
+            self.snapshot_stack = [
+                snapshot for snapshot in self.snapshot_stack if snapshot.timestamp >= cutoff_time
             ]
 
             removed_count = initial_count - len(self.snapshot_stack)
@@ -390,15 +371,15 @@ class FractalMemoryTracker:
     def export_patterns(self, filepath: str) -> bool:
         """Export patterns to JSON file"""
         try:
-            export_data = {}
-                "metadata": {}
+            export_data = {
+                "metadata": {
                     "export_time": time.time(),
                     "total_patterns": len(self.snapshot_stack),
                     "max_snapshots": self.max_snapshots,
                     "similarity_threshold": self.similarity_threshold,
                 },
-                "patterns": []
-                    {}
+                "patterns": [
+                    {
                         "q_matrix": snapshot.q_matrix.tolist(),
                         "timestamp": snapshot.timestamp,
                         "strategy_id": snapshot.strategy_id,
@@ -412,8 +393,8 @@ class FractalMemoryTracker:
             with open(filepath, "w") as f:
                 json.dump(export_data, f, indent=2)
 
-            logger.info()
-                "Exported {0} patterns to {1}".format()
+            logger.info(
+                "Exported {0} patterns to {1}".format(
                     len(self.snapshot_stack), filepath
                 )
             )
@@ -431,7 +412,7 @@ class FractalMemoryTracker:
 
             imported_count = 0
             for pattern_data in import_data.get("patterns", []):
-                snapshot = FractalSnapshot()
+                snapshot = FractalSnapshot(
                     q_matrix=np.array(pattern_data["q_matrix"]),
                     timestamp=pattern_data["timestamp"],
                     strategy_id=pattern_data["strategy_id"],
@@ -446,7 +427,7 @@ class FractalMemoryTracker:
             if len(self.snapshot_stack) > self.max_snapshots:
                 self.snapshot_stack = self.snapshot_stack[-self.max_snapshots :]
 
-            logger.info()
+            logger.info(
                 "Imported {0} patterns from {1}".format(imported_count, filepath)
             )
             return True
@@ -456,9 +437,7 @@ class FractalMemoryTracker:
             return False
 
 
-def create_fractal_memory_tracker()
-    max_snapshots: int = 1000, similarity_threshold: float = 0.8
-) -> FractalMemoryTracker:
+def create_fractal_memory_tracker() -> FractalMemoryTracker:
     """
     Factory function to create FractalMemoryTracker
 
@@ -470,8 +449,6 @@ def create_fractal_memory_tracker()
         Initialized FractalMemoryTracker instance
     """
     return FractalMemoryTracker()
-        max_snapshots=max_snapshots, similarity_threshold=similarity_threshold
-    )
 
 
 def test_fractal_memory_tracker():
@@ -498,24 +475,24 @@ def test_fractal_memory_tracker():
     print("\n🔍 Testing fractal matching...")
     match_1 = tracker.match_fractal(q_matrix_1, strategy_id)
     if match_1:
-        print()
-            "Exact match found: {0} (similarity: {1})".format()
+        print(
+            "Exact match found: {0} (similarity: {1})".format(
                 match_1.match_type.value, match_1.similarity_score
             )
         )
 
     match_2 = tracker.match_fractal(q_matrix_2, strategy_id)
     if match_2:
-        print()
-            "Similar match found: {0} (similarity: {1})".format()
+        print(
+            "Similar match found: {0} (similarity: {1})".format(
                 match_2.match_type.value, match_2.similarity_score
             )
         )
 
     match_3 = tracker.match_fractal(q_matrix_3, strategy_id)
     if match_3:
-        print()
-            "Different match found: {0} (similarity: {1})".format()
+        print(
+            "Different match found: {0} (similarity: {1})".format(
                 match_3.match_type.value, match_3.similarity_score
             )
         )

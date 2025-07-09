@@ -10,9 +10,12 @@ import hashlib
 
 from core.clean_unified_math import (
     calculate_position_size,
-    clean_unified_math,
     optimize_brain_profit,
+    CleanUnifiedMathSystem,
 )
+
+# Initialize the unified math system
+clean_unified_math = CleanUnifiedMathSystem()
 
 """
 Trading Engine Integration

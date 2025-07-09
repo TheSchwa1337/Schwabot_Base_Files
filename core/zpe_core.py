@@ -5,7 +5,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Optional
 
-from core.clean_unified_math import clean_unified_math as unified_math
+from core.clean_unified_math import CleanUnifiedMathSystem as unified_math
 from core.backend_math import get_backend, backend_info
 xp = get_backend()
 
@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 backend_status = backend_info()
 if backend_status["accelerated"]:
     logger.info("⚡ ZPE Core using GPU acceleration: CuPy (GPU)")
-    else:
+else:
     logger.info("🔄 ZPE Core using CPU fallback: NumPy (CPU)")
 
 
@@ -38,7 +38,7 @@ class ZPEMode(Enum):
 
 
 @dataclass
-    class ThermalData:
+class ThermalData:
     """Thermal efficiency data."""
 
     timestamp: float
@@ -51,7 +51,7 @@ class ZPEMode(Enum):
 
 
 @dataclass
-    class ZPEWorkData:
+class ZPEWorkData:
     """ZPE work calculation data."""
 
     timestamp: float
@@ -63,7 +63,7 @@ class ZPEMode(Enum):
 
 
 @dataclass
-    class RotationalTorqueData:
+class RotationalTorqueData:
     """Rotational torque calculation data."""
 
     timestamp: float

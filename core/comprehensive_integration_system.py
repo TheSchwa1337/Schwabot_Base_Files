@@ -5,7 +5,7 @@ from datetime import datetime
 from typing import Any, Dict, List, Optional, Tuple, Union
 import asyncio
 
-from core.clean_unified_math import clean_unified_math
+from core.clean_unified_math import CleanUnifiedMathSystem
 from core.trading_engine_integration import TradeSignal
 
 # !/usr/bin/env python3
@@ -28,17 +28,20 @@ Author: Schwabot Development Team
 """
 
 # Core imports with fallbacks
-    try:
+try:
     MATH_AVAILABLE = True
-    except ImportError:
+except ImportError:
     MATH_AVAILABLE = False
     clean_unified_math = None
 
 try:
     TRADING_AVAILABLE = True
-    except ImportError:
+except ImportError:
     TRADING_AVAILABLE = False
     TradeSignal = None
+
+# Initialize the unified math system
+clean_unified_math = CleanUnifiedMathSystem()
 
 
 class ComprehensiveIntegrationSystem:
@@ -82,7 +85,7 @@ class ComprehensiveIntegrationSystem:
         operational_components = sum(1 for status in self.component_status.values() if status == "OPERATIONAL")
         total_components = len(self.component_status)
 
-        return {}
+        return {
             "system_status": "OPERATIONAL" if operational_components > 0 else "DEGRADED",
             "operational_components": operational_components,
             "total_components": total_components,
@@ -120,7 +123,7 @@ class ComprehensiveIntegrationSystem:
 
             cycle_time = time.time() - cycle_start
 
-            return {}
+            return {
                 "success": True,
                 "symbol": symbol,
                 "cycle_time": cycle_time,
@@ -133,7 +136,7 @@ class ComprehensiveIntegrationSystem:
 
         except Exception as e:
             self.logger.error("Trading cycle error: {0}".format(e))
-            return {}
+            return {
                 "success": False,
                 "error": str(e),
                 "symbol": symbol,
@@ -144,7 +147,7 @@ class ComprehensiveIntegrationSystem:
         """Analyze market conditions."""
         try:
             # Simplified market analysis
-            analysis = {}
+            analysis = {
                 "symbol": symbol,
                 "trend": "NEUTRAL",
                 "volatility": 0.2,
@@ -169,7 +172,7 @@ class ComprehensiveIntegrationSystem:
         """Generate trading signal."""
         try:
             # Simplified signal generation
-            signal = {}
+            signal = {
                 "action": "HOLD",
                 "confidence": 0.5,
                 "reasoning": "Default neutral signal",
@@ -198,7 +201,7 @@ class ComprehensiveIntegrationSystem:
             # Risk adjustment based on signal confidence
             adjusted_risk = base_risk * (2 - signal_confidence)
 
-            return {}
+            return {
                 "base_risk": base_risk,
                 "adjusted_risk": adjusted_risk,
                 "position_size": amount,
@@ -211,9 +214,7 @@ class ComprehensiveIntegrationSystem:
             self.logger.error("Risk assessment error: {0}".format(e))
             return {"error": str(e)}
 
-    async def _make_execution_decision()
-        self, trading_signal: Dict[str, Any], risk_assessment: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _make_execution_decision(self, trading_signal: Dict[str, Any], risk_assessment: Dict[str, Any]) -> Dict[str, Any]:
         """Make final execution decision."""
         try:
             signal_action = trading_signal.get("action", "HOLD")
@@ -234,7 +235,7 @@ class ComprehensiveIntegrationSystem:
                 decision = "HOLD"
                 reason = "Insufficient confidence or elevated risk"
 
-            return {}
+            return {
                 "decision": decision,
                 "reason": reason,
                 "confidence": signal_confidence,

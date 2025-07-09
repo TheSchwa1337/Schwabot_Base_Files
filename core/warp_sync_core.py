@@ -2,7 +2,10 @@ import time
 import math
 from typing import Any, Dict, Optional
 
-from core.clean_unified_math import clean_unified_math
+from core.clean_unified_math import CleanUnifiedMathSystem
+
+# Initialize the unified math system
+clean_unified_math = CleanUnifiedMathSystem()
 
 # !/usr/bin/env python3
 """
@@ -15,7 +18,7 @@ Minimal stub for WarpSyncCore to satisfy module imports and basic instantiation.
 class WarpSyncCore:
     """Stub WarpSyncCore for timing and decay."""
 
-    def __init__()
+    def __init__(
         self, initial_lambda: float = 0.5, initial_sigma_sq: float = 1.0
     ) -> None:
         """Initialize the WarpSyncCore stub."""
@@ -23,7 +26,7 @@ class WarpSyncCore:
         self.sigma_sq = initial_sigma_sq
         self.metrics: Dict[str, Any] = {}
 
-    def calculate_omega()
+    def calculate_omega(
         self, delta_psi: float, current_time: Optional[float] = None
     ) -> float:
         """Calculate the warp drift entropy Ω(t) using unified math system."""
@@ -36,13 +39,13 @@ class WarpSyncCore:
         self.metrics["current_warp_momentum"] = omega
         return omega
 
-    def quantum_weighted_strategy_evaluation()
+    def quantum_weighted_strategy_evaluation(
         self, ratio: float, freq: float, asset_pair: str = "BTC/USDC"
     ) -> Dict[str, Any]:
         """Evaluate warp sync using unified math system for quantum scoring."""
         input_data = {"tensor": [[ratio, freq]], "metadata": {"asset_pair": asset_pair}}
         result = clean_unified_math.integrate_all_systems(input_data)
-        return {}
+        return {
             "quantum_score": result.get("combined_score", 0.0),
             "is_stable": result.get("combined_score", 0.0) > 0.5,
             "components": result,
