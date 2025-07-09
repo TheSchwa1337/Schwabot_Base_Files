@@ -9,6 +9,7 @@ import math
 import numpy as np
 
 from core.backend_math import get_backend, is_gpu
+
 xp = get_backend()
 
 # Log backend status
@@ -260,7 +261,7 @@ def _calculate_fractal_dimension(vector: xp.ndarray) -> float:
             return 1.0
 
         # Calculate fractal dimension using linear regression
-        log_sizes = [math.log(1/s) for s in sizes]
+        log_sizes = [math.log(1 / s) for s in sizes]
         log_counts = [math.log(c) for c in counts]
 
         n = len(log_sizes)
@@ -307,8 +308,8 @@ def _calculate_self_similarity(vector: xp.ndarray) -> float:
             # Calculate correlation between adjacent windows
             correlations = []
             for i in range(0, len(vector) - window_size * 2, window_size):
-                window1 = vector[i:i + window_size]
-                window2 = vector[i + window_size:i + window_size * 2]
+                window1 = vector[i : i + window_size]
+                window2 = vector[i + window_size : i + window_size * 2]
 
                 if len(window1) == len(window2) and len(window1) > 1:
                     corr = xp.corrcoef(window1, window2)[0, 1]
@@ -353,15 +354,17 @@ def generate_fractal_hash(vector: xp.ndarray, length: int = 64) -> str:
         hash_hex = hash_obj.hexdigest()
 
         # Return specified length
-        return hash_hex[:length // 4]  # 4 bits per hex character
+        return hash_hex[: length // 4]  # 4 bits per hex character
 
     except Exception as e:
         logger.error("Fractal hash generation failed: {0}".format(e))
         # Fallback to simple hash
-        return hashlib.md5(str(vector).encode()).hexdigest()[:length // 4]
+        return hashlib.md5(str(vector).encode()).hexdigest()[: length // 4]
 
 
-def fractal_pattern_match(pattern: xp.ndarray, target: xp.ndarray, threshold: float = 0.8) -> Tuple[bool, float]:
+def fractal_pattern_match(
+    pattern: xp.ndarray, target: xp.ndarray, threshold: float = 0.8
+) -> Tuple[bool, float]:
     """
     Match a fractal pattern against a target vector.
 
@@ -383,16 +386,22 @@ def fractal_pattern_match(pattern: xp.ndarray, target: xp.ndarray, threshold: fl
 
         # Vector similarity
         if len(pattern_quantized.quantized_vector) == len(target_quantized.quantized_vector):
-            vector_sim = xp.corrcoef(pattern_quantized.quantized_vector, target_quantized.quantized_vector)[0, 1]
+            vector_sim = xp.corrcoef(
+                pattern_quantized.quantized_vector, target_quantized.quantized_vector
+            )[0, 1]
             if not xp.isnan(vector_sim):
                 similarities.append(abs(vector_sim))
 
         # Fractal dimension similarity
-        dim_sim = 1.0 - abs(pattern_quantized.fractal_dimension - target_quantized.fractal_dimension)
+        dim_sim = 1.0 - abs(
+            pattern_quantized.fractal_dimension - target_quantized.fractal_dimension
+        )
         similarities.append(dim_sim)
 
         # Self-similarity similarity
-        self_sim = 1.0 - abs(pattern_quantized.self_similarity_score - target_quantized.self_similarity_score)
+        self_sim = 1.0 - abs(
+            pattern_quantized.self_similarity_score - target_quantized.self_similarity_score
+        )
         similarities.append(self_sim)
 
         # Overall similarity

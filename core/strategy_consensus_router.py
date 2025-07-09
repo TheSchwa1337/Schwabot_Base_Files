@@ -28,6 +28,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple, Union
 from core.backend_math import get_backend, is_gpu
+
 xp = get_backend()
 
 # Import existing Schwabot components
@@ -35,6 +36,7 @@ try:
     from .unified_math_system import generate_unified_hash
     from .orbital_shell_brain_system import OrbitalShell
     from .tensor_weight_memory import TensorWeightMemory
+
     SCHWABOT_COMPONENTS_AVAILABLE = True
 except ImportError as e:
     print(f"⚠️ Some Schwabot components not available: {e}")
@@ -45,14 +47,16 @@ logger = logging.getLogger(__name__)
 
 class ConsensusMode(Enum):
     """Modes for consensus calculation"""
-    MAJORITY = "majority"          # Simple majority vote
-    WEIGHTED = "weighted"          # Trust-weighted consensus
-    UNANIMOUS = "unanimous"        # All sources must agree
-    ADAPTIVE = "adaptive"          # Dynamic threshold based on confidence
+
+    MAJORITY = "majority"  # Simple majority vote
+    WEIGHTED = "weighted"  # Trust-weighted consensus
+    UNANIMOUS = "unanimous"  # All sources must agree
+    ADAPTIVE = "adaptive"  # Dynamic threshold based on confidence
 
 
 class RouteSelectionMode(Enum):
     """Modes for route selection"""
+
     HIGHEST_CONFIDENCE = "highest_confidence"
     WEIGHTED_AVERAGE = "weighted_average"
     CONSENSUS_PLUS = "consensus_plus"
@@ -157,7 +161,7 @@ class StrategyConsensusRouter:
             "total_consensuses": 0,
             "successful_routes": 0,
             "average_confidence": 0.0,
-            "trust_stability": 0.0
+            "trust_stability": 0.0,
         }
 
         # Threading
@@ -190,38 +194,38 @@ class StrategyConsensusRouter:
                     "trust_weight": 0.8,
                     "success_rate": 0.7,
                     "stability_score": 0.8,
-                    "source_type": "mathematical"
+                    "source_type": "mathematical",
                 },
                 "R1": {
                     "trust_weight": 0.7,
                     "success_rate": 0.65,
                     "stability_score": 0.75,
-                    "source_type": "neural"
+                    "source_type": "neural",
                 },
                 "GPT4o": {
                     "trust_weight": 0.6,
                     "success_rate": 0.6,
                     "stability_score": 0.7,
-                    "source_type": "ai"
+                    "source_type": "ai",
                 },
                 "Claude": {
                     "trust_weight": 0.6,
                     "success_rate": 0.6,
                     "stability_score": 0.7,
-                    "source_type": "ai"
+                    "source_type": "ai",
                 },
                 "FractalCore": {
                     "trust_weight": 0.75,
                     "success_rate": 0.7,
                     "stability_score": 0.8,
-                    "source_type": "fractal"
+                    "source_type": "fractal",
                 },
                 "OrbitalBrain": {
                     "trust_weight": 0.8,
                     "success_rate": 0.75,
                     "stability_score": 0.85,
-                    "source_type": "orbital"
-                }
+                    "source_type": "orbital",
+                },
             }
 
             # Create trust profile objects
@@ -233,7 +237,7 @@ class StrategyConsensusRouter:
                     stability_score=profile_data["stability_score"],
                     last_update=time.time(),
                     vote_history=[],
-                    metadata={"source_type": profile_data["source_type"]}
+                    metadata={"source_type": profile_data["source_type"]},
                 )
 
                 self.trust_profiles[source_id] = trust_profile
@@ -249,7 +253,7 @@ class StrategyConsensusRouter:
         vote: str,
         confidence: float,
         reasoning: str = "",
-        metadata: Dict[str, Any] = None
+        metadata: Dict[str, Any] = None,
     ) -> StrategyVote:
         """
         Submit a strategy vote from a source
@@ -270,7 +274,9 @@ class StrategyConsensusRouter:
                 raise ValueError(f"Invalid vote: {vote}")
 
             # Validate confidence
-            confidence = xp.clip(confidence, self.config["min_confidence"], self.config["max_confidence"])
+            confidence = xp.clip(
+                confidence, self.config["min_confidence"], self.config["max_confidence"]
+            )
 
             # Create strategy vote
             strategy_vote = StrategyVote(
@@ -280,7 +286,7 @@ class StrategyConsensusRouter:
                 confidence=confidence,
                 reasoning=reasoning,
                 timestamp=time.time(),
-                metadata=metadata or {}
+                metadata=metadata or {},
             )
 
             # Add to vote history
@@ -302,7 +308,7 @@ class StrategyConsensusRouter:
     def calculate_consensus(
         self,
         consensus_mode: ConsensusMode = ConsensusMode.WEIGHTED,
-        threshold: Optional[float] = None
+        threshold: Optional[float] = None,
     ) -> ConsensusResult:
         """
         Calculate consensus from current votes
@@ -347,7 +353,7 @@ class StrategyConsensusRouter:
     def select_route(
         self,
         consensus_result: ConsensusResult,
-        route_mode: RouteSelectionMode = RouteSelectionMode.WEIGHTED_AVERAGE
+        route_mode: RouteSelectionMode = RouteSelectionMode.WEIGHTED_AVERAGE,
     ) -> RouteDecision:
         """
         Select final route based on consensus
@@ -383,9 +389,7 @@ class StrategyConsensusRouter:
             return self._get_fallback_route_decision(consensus_result)
 
     def generate_decision_vector(
-        self,
-        route_decision: RouteDecision,
-        market_context: Dict[str, Any] = None
+        self, route_decision: RouteDecision, market_context: Dict[str, Any] = None
     ) -> DecisionVector:
         """
         Generate decision vector for execution
@@ -411,8 +415,8 @@ class StrategyConsensusRouter:
                     "route_reasoning": route_decision.route_reasoning,
                     "execution_priority": route_decision.execution_priority,
                     "risk_adjustments": route_decision.risk_adjustments,
-                    "market_context": market_context
-                }
+                    "market_context": market_context,
+                },
             )
 
             return decision_vector
@@ -443,7 +447,7 @@ class StrategyConsensusRouter:
                     stability_score=0.5,
                     last_update=time.time(),
                     vote_history=[],
-                    metadata={"source_type": strategy_vote.source_type}
+                    metadata={"source_type": strategy_vote.source_type},
                 )
                 self.trust_profiles[strategy_vote.source_id] = trust_profile
 
@@ -453,9 +457,7 @@ class StrategyConsensusRouter:
 
             # Update trust weight based on confidence
             confidence_factor = strategy_vote.confidence
-            trust_profile.trust_weight = (
-                trust_profile.trust_weight * 0.9 + confidence_factor * 0.1
-            )
+            trust_profile.trust_weight = trust_profile.trust_weight * 0.9 + confidence_factor * 0.1
 
             # Update last update time
             trust_profile.last_update = time.time()
@@ -468,8 +470,7 @@ class StrategyConsensusRouter:
         try:
             current_time = time.time()
             recent_votes = [
-                vote for vote in self.vote_history
-                if current_time - vote.timestamp <= time_window
+                vote for vote in self.vote_history if current_time - vote.timestamp <= time_window
             ]
             return recent_votes
         except Exception as e:
@@ -508,7 +509,7 @@ class StrategyConsensusRouter:
                 agreement_ratio=agreement_ratio,
                 trust_weighted_score=average_confidence * agreement_ratio,
                 participating_sources=list(set(vote.source_id for vote in votes)),
-                metadata={"consensus_mode": "majority", "vote_counts": vote_counts}
+                metadata={"consensus_mode": "majority", "vote_counts": vote_counts},
             )
 
         except Exception as e:
@@ -516,9 +517,7 @@ class StrategyConsensusRouter:
             return self._get_default_consensus_result()
 
     def _calculate_weighted_consensus(
-        self,
-        votes: List[StrategyVote],
-        threshold: Optional[float]
+        self, votes: List[StrategyVote], threshold: Optional[float]
     ) -> ConsensusResult:
         """Calculate weighted consensus"""
         try:
@@ -535,8 +534,7 @@ class StrategyConsensusRouter:
             for vote in votes:
                 # Get trust weight
                 trust_weight = self.trust_profiles.get(
-                    vote.source_id,
-                    TrustProfile(vote.source_id, 0.5, 0.5, 0.5, time.time())
+                    vote.source_id, TrustProfile(vote.source_id, 0.5, 0.5, 0.5, time.time())
                 ).trust_weight
 
                 # Calculate weighted score
@@ -569,8 +567,8 @@ class StrategyConsensusRouter:
                 metadata={
                     "consensus_mode": "weighted",
                     "weighted_scores": weighted_scores,
-                    "threshold": threshold
-                }
+                    "threshold": threshold,
+                },
             )
 
         except Exception as e:
@@ -597,7 +595,7 @@ class StrategyConsensusRouter:
                     agreement_ratio=1.0,
                     trust_weighted_score=average_confidence,
                     participating_sources=list(set(vote.source_id for vote in votes)),
-                    metadata={"consensus_mode": "unanimous", "unanimous": True}
+                    metadata={"consensus_mode": "unanimous", "unanimous": True},
                 )
             else:
                 # No unanimous consensus
@@ -607,7 +605,7 @@ class StrategyConsensusRouter:
                     agreement_ratio=0.0,
                     trust_weighted_score=0.0,
                     participating_sources=list(set(vote.source_id for vote in votes)),
-                    metadata={"consensus_mode": "unanimous", "unanimous": False}
+                    metadata={"consensus_mode": "unanimous", "unanimous": False},
                 )
 
         except Exception as e:
@@ -615,9 +613,7 @@ class StrategyConsensusRouter:
             return self._get_default_consensus_result()
 
     def _calculate_adaptive_consensus(
-        self,
-        votes: List[StrategyVote],
-        threshold: Optional[float]
+        self, votes: List[StrategyVote], threshold: Optional[float]
     ) -> ConsensusResult:
         """Calculate adaptive consensus"""
         try:
@@ -639,7 +635,7 @@ class StrategyConsensusRouter:
                     agreement_ratio=weighted_result.agreement_ratio,
                     trust_weighted_score=weighted_result.trust_weighted_score * 0.5,
                     participating_sources=weighted_result.participating_sources,
-                    metadata={"consensus_mode": "adaptive", "reason": "low_agreement"}
+                    metadata={"consensus_mode": "adaptive", "reason": "low_agreement"},
                 )
             else:
                 # Medium agreement - use weighted with reduced confidence
@@ -649,7 +645,7 @@ class StrategyConsensusRouter:
                     agreement_ratio=weighted_result.agreement_ratio,
                     trust_weighted_score=weighted_result.trust_weighted_score * 0.8,
                     participating_sources=weighted_result.participating_sources,
-                    metadata={"consensus_mode": "adaptive", "reason": "medium_agreement"}
+                    metadata={"consensus_mode": "adaptive", "reason": "medium_agreement"},
                 )
 
         except Exception as e:
@@ -675,7 +671,7 @@ class StrategyConsensusRouter:
                 route_reasoning=reasoning,
                 execution_priority=execution_priority,
                 risk_adjustments={},
-                metadata={"route_mode": "highest_confidence"}
+                metadata={"route_mode": "highest_confidence"},
             )
 
         except Exception as e:
@@ -704,7 +700,7 @@ class StrategyConsensusRouter:
                 route_reasoning=reasoning,
                 execution_priority=execution_priority,
                 risk_adjustments=risk_adjustments,
-                metadata={"route_mode": "weighted_average"}
+                metadata={"route_mode": "weighted_average"},
             )
 
         except Exception as e:
@@ -718,7 +714,9 @@ class StrategyConsensusRouter:
             selected_route = consensus_result.consensus_vote
 
             # Enhance confidence based on agreement ratio
-            enhanced_confidence = consensus_result.confidence_level * (1.0 + consensus_result.agreement_ratio * 0.2)
+            enhanced_confidence = consensus_result.confidence_level * (
+                1.0 + consensus_result.agreement_ratio * 0.2
+            )
             enhanced_confidence = xp.clip(enhanced_confidence, 0.0, 1.0)
 
             # Generate reasoning
@@ -736,7 +734,7 @@ class StrategyConsensusRouter:
                 route_reasoning=reasoning,
                 execution_priority=execution_priority,
                 risk_adjustments=risk_adjustments,
-                metadata={"route_mode": "consensus_plus"}
+                metadata={"route_mode": "consensus_plus"},
             )
 
         except Exception as e:
@@ -756,7 +754,9 @@ class StrategyConsensusRouter:
             else:
                 # Low quality consensus - use highest confidence with reduced priority
                 route_decision = self._select_highest_confidence_route(consensus_result)
-                route_decision.execution_priority = xp.maximum(1, xp.floor(route_decision.execution_priority / 2))
+                route_decision.execution_priority = xp.maximum(
+                    1, xp.floor(route_decision.execution_priority / 2)
+                )
                 route_decision.metadata["route_mode"] = "adaptive_low_quality"
                 return route_decision
 
@@ -789,7 +789,9 @@ class StrategyConsensusRouter:
             logger.error(f"Error generating risk adjustments: {e}")
             return {}
 
-    def _calculate_urgency(self, route_decision: RouteDecision, market_context: Dict[str, Any]) -> float:
+    def _calculate_urgency(
+        self, route_decision: RouteDecision, market_context: Dict[str, Any]
+    ) -> float:
         """Calculate urgency level"""
         try:
             # Base urgency from decision confidence
@@ -807,7 +809,9 @@ class StrategyConsensusRouter:
             logger.error(f"Error calculating urgency: {e}")
             return 0.5
 
-    def _calculate_risk_level(self, route_decision: RouteDecision, market_context: Dict[str, Any]) -> float:
+    def _calculate_risk_level(
+        self, route_decision: RouteDecision, market_context: Dict[str, Any]
+    ) -> float:
         """Calculate risk level"""
         try:
             # Base risk from decision confidence (inverse)
@@ -824,7 +828,9 @@ class StrategyConsensusRouter:
             logger.error(f"Error calculating risk level: {e}")
             return 0.5
 
-    def _calculate_position_size(self, route_decision: RouteDecision, market_context: Dict[str, Any]) -> float:
+    def _calculate_position_size(
+        self, route_decision: RouteDecision, market_context: Dict[str, Any]
+    ) -> float:
         """Calculate position size"""
         try:
             # Base position size from confidence
@@ -840,7 +846,9 @@ class StrategyConsensusRouter:
             logger.error(f"Error calculating position size: {e}")
             return 0.5
 
-    def _calculate_stop_loss(self, route_decision: RouteDecision, market_context: Dict[str, Any]) -> float:
+    def _calculate_stop_loss(
+        self, route_decision: RouteDecision, market_context: Dict[str, Any]
+    ) -> float:
         """Calculate stop loss"""
         try:
             # Base stop loss
@@ -858,7 +866,9 @@ class StrategyConsensusRouter:
             logger.error(f"Error calculating stop loss: {e}")
             return 0.05
 
-    def _calculate_take_profit(self, route_decision: RouteDecision, market_context: Dict[str, Any]) -> float:
+    def _calculate_take_profit(
+        self, route_decision: RouteDecision, market_context: Dict[str, Any]
+    ) -> float:
         """Calculate take profit"""
         try:
             # Base take profit (2:1 risk-reward)
@@ -888,9 +898,8 @@ class StrategyConsensusRouter:
             total_consensuses = self.performance_metrics["total_consensuses"]
             current_avg = self.performance_metrics["average_confidence"]
             new_avg = (
-                (current_avg * (total_consensuses - 1) +
-                 consensus_result.confidence_level) / total_consensuses
-            )
+                current_avg * (total_consensuses - 1) + consensus_result.confidence_level
+            ) / total_consensuses
             self.performance_metrics["average_confidence"] = new_avg
 
         except Exception as e:
@@ -921,7 +930,7 @@ class StrategyConsensusRouter:
             agreement_ratio=0.0,
             trust_weighted_score=0.0,
             participating_sources=[],
-            metadata={"consensus_mode": "default"}
+            metadata={"consensus_mode": "default"},
         )
 
     def _get_fallback_vote(self, source_id: str, vote: str, confidence: float) -> StrategyVote:
@@ -933,7 +942,7 @@ class StrategyConsensusRouter:
             confidence=confidence,
             reasoning="Fallback vote",
             timestamp=time.time(),
-            metadata={"error": "fallback_vote"}
+            metadata={"error": "fallback_vote"},
         )
 
     def _get_fallback_route_decision(self, consensus_result: ConsensusResult) -> RouteDecision:
@@ -944,7 +953,7 @@ class StrategyConsensusRouter:
             route_reasoning="Fallback route decision",
             execution_priority=1,
             risk_adjustments={},
-            metadata={"error": "fallback_route"}
+            metadata={"error": "fallback_route"},
         )
 
     def _get_fallback_decision_vector(self, route_decision: RouteDecision) -> DecisionVector:
@@ -957,7 +966,7 @@ class StrategyConsensusRouter:
             position_size=0.1,
             stop_loss=0.05,
             take_profit=0.10,
-            metadata={"error": "fallback_decision_vector"}
+            metadata={"error": "fallback_decision_vector"},
         )
 
     def get_system_status(self) -> Dict[str, Any]:
@@ -974,7 +983,7 @@ class StrategyConsensusRouter:
                 "route_history_size": len(self.route_history),
                 "performance_metrics": self.performance_metrics,
                 "backend": "cupy (GPU)" if is_gpu() else "numpy (CPU)",
-                "cuda_available": is_gpu()
+                "cuda_available": is_gpu(),
             }
         except Exception as e:
             logger.error(f"Error getting system status: {e}")

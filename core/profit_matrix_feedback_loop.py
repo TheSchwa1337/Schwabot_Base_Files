@@ -35,6 +35,7 @@ try:
     from .unified_math_system import generate_unified_hash
     from .matrix_mapper import EnhancedMatrixMapper
     from .fractal_core import fractal_quantize_vector
+
     SCHWABOT_COMPONENTS_AVAILABLE = True
 except ImportError as e:
     print(f"⚠️ Some Schwabot components not available: {e}")
@@ -43,11 +44,13 @@ except ImportError as e:
 # CUDA Integration with Fallback
 try:
     import cupy as cp
+
     USING_CUDA = True
     _backend = 'cupy (GPU)'
     xp = cp
 except ImportError:
     import numpy as cp  # fallback to numpy
+
     USING_CUDA = False
     _backend = 'numpy (CPU)'
     xp = cp
@@ -62,6 +65,7 @@ else:
 
 class FeedbackMode(Enum):
     """Modes for feedback processing"""
+
     REINFORCEMENT = "reinforcement"  # Positive feedback
     DECAY = "decay"  # Negative feedback
     NEUTRAL = "neutral"  # No change
@@ -70,6 +74,7 @@ class FeedbackMode(Enum):
 
 class FitnessEvaluator(Enum):
     """Types of fitness evaluation"""
+
     PROFIT_ONLY = "profit_only"
     TIME_WEIGHTED = "time_weighted"
     RISK_ADJUSTED = "risk_adjusted"
@@ -151,7 +156,11 @@ class ProfitMatrixFeedbackLoop:
         self.average_feedback_score = 0.0
         self.adjustment_efficiency = 0.0
 
-        logger.info("💰 Profit Matrix Feedback Loop initialized with learning rate {0}".format(learning_rate))
+        logger.info(
+            "💰 Profit Matrix Feedback Loop initialized with learning rate {0}".format(
+                learning_rate
+            )
+        )
 
     def process_profit_matrix(self, matrix: xp.ndarray, source: str = "unknown") -> ProfitMatrix:
         """
@@ -170,7 +179,7 @@ class ProfitMatrixFeedbackLoop:
                 matrix=matrix.copy(),
                 timestamp=time.time(),
                 source=source,
-                metadata={"shape": matrix.shape, "dtype": str(matrix.dtype)}
+                metadata={"shape": matrix.shape, "dtype": str(matrix.dtype)},
             )
 
             # Add to history
@@ -178,16 +187,20 @@ class ProfitMatrixFeedbackLoop:
 
             # Keep history manageable
             if len(self.matrix_history) > self.history_window:
-                self.matrix_history = self.matrix_history[-self.history_window:]
+                self.matrix_history = self.matrix_history[-self.history_window :]
 
-            logger.debug("Processed profit matrix: shape={0}, source={1}".format(matrix.shape, source))
+            logger.debug(
+                "Processed profit matrix: shape={0}, source={1}".format(matrix.shape, source)
+            )
             return profit_matrix
 
         except Exception as e:
             logger.error("Error processing profit matrix: {0}".format(e))
             return self._create_fallback_matrix(matrix, source)
 
-    def apply_feedback_loop(self, current_matrix: xp.ndarray, performance_metrics: Dict[str, float]) -> FeedbackResult:
+    def apply_feedback_loop(
+        self, current_matrix: xp.ndarray, performance_metrics: Dict[str, float]
+    ) -> FeedbackResult:
         """
         Apply feedback loop to adjust profit matrix.
 
@@ -217,8 +230,8 @@ class ProfitMatrixFeedbackLoop:
                 metadata={
                     "performance_metrics": performance_metrics,
                     "original_shape": current_matrix.shape,
-                    "adjusted_shape": adjusted_matrix.shape
-                }
+                    "adjusted_shape": adjusted_matrix.shape,
+                },
             )
 
             # Add to history
@@ -230,9 +243,13 @@ class ProfitMatrixFeedbackLoop:
 
             # Keep history manageable
             if len(self.feedback_history) > self.history_window:
-                self.feedback_history = self.feedback_history[-self.history_window:]
+                self.feedback_history = self.feedback_history[-self.history_window :]
 
-            logger.info("Applied feedback loop: score={0}, adjustment={1}".format(feedback_score, adjustment_factor))
+            logger.info(
+                "Applied feedback loop: score={0}, adjustment={1}".format(
+                    feedback_score, adjustment_factor
+                )
+            )
             return feedback_result
 
         except Exception as e:
@@ -255,10 +272,10 @@ class ProfitMatrixFeedbackLoop:
             sharpe_weight = 0.2
 
             feedback_score = (
-                profit_weight * profit_rate +
-                risk_weight * (1.0 - risk_score) +  # Lower risk is better
-                volatility_weight * (1.0 - volatility) +  # Lower volatility is better
-                sharpe_weight * xp.tanh(sharpe_ratio)  # Normalize Sharpe ratio
+                profit_weight * profit_rate
+                + risk_weight * (1.0 - risk_score)  # Lower risk is better
+                + volatility_weight * (1.0 - volatility)  # Lower volatility is better
+                + sharpe_weight * xp.tanh(sharpe_ratio)  # Normalize Sharpe ratio
             )
 
             # Normalize to 0-1 range
@@ -283,10 +300,14 @@ class ProfitMatrixFeedbackLoop:
             if self.feedback_history:
                 recent_adjustments = [f.adjustment_factor for f in self.feedback_history[-5:]]
                 avg_recent_adjustment = xp.mean(recent_adjustments)
-                adjustment = adjustment * self.decay_factor + avg_recent_adjustment * (1.0 - self.decay_factor)
+                adjustment = adjustment * self.decay_factor + avg_recent_adjustment * (
+                    1.0 - self.decay_factor
+                )
 
             # Clamp to maximum adjustment
-            adjustment = xp.clip(adjustment, -self.max_adjustment_factor, self.max_adjustment_factor)
+            adjustment = xp.clip(
+                adjustment, -self.max_adjustment_factor, self.max_adjustment_factor
+            )
 
             return float(adjustment)
 
@@ -358,7 +379,11 @@ class ProfitMatrixFeedbackLoop:
 
             # Performance trends
             recent_scores = feedback_scores[-10:] if len(feedback_scores) >= 10 else feedback_scores
-            score_trend = xp.mean(recent_scores) - xp.mean(feedback_scores[:-10]) if len(feedback_scores) >= 10 else 0.0
+            score_trend = (
+                xp.mean(recent_scores) - xp.mean(feedback_scores[:-10])
+                if len(feedback_scores) >= 10
+                else 0.0
+            )
 
             return {
                 "total_feedback_cycles": self.total_feedback_cycles,
@@ -366,13 +391,15 @@ class ProfitMatrixFeedbackLoop:
                 "adjustment_efficiency": self.adjustment_efficiency,
                 "current_feedback_score": feedback_scores[-1] if feedback_scores else 0.0,
                 "score_trend": score_trend,
-                "average_adjustment_factor": xp.mean(adjustment_factors) if adjustment_factors else 0.0,
+                "average_adjustment_factor": (
+                    xp.mean(adjustment_factors) if adjustment_factors else 0.0
+                ),
                 "max_adjustment_factor": xp.max(adjustment_factors) if adjustment_factors else 0.0,
                 "min_adjustment_factor": xp.min(adjustment_factors) if adjustment_factors else 0.0,
                 "learning_rate": self.learning_rate,
                 "decay_factor": self.decay_factor,
                 "history_size": len(self.feedback_history),
-                "matrix_history_size": len(self.matrix_history)
+                "matrix_history_size": len(self.matrix_history),
             }
 
         except Exception as e:
@@ -423,7 +450,7 @@ class ProfitMatrixFeedbackLoop:
                 "decay_factor": new_decay_factor,
                 "performance_gap": performance_gap,
                 "current_performance": current_performance,
-                "target_performance": target_performance
+                "target_performance": target_performance,
             }
 
         except Exception as e:
@@ -436,7 +463,7 @@ class ProfitMatrixFeedbackLoop:
             matrix=matrix.copy(),
             timestamp=time.time(),
             source=source,
-            metadata={"error": "Fallback matrix"}
+            metadata={"error": "Fallback matrix"},
         )
 
     def _create_fallback_feedback(self, matrix: xp.ndarray) -> FeedbackResult:
@@ -446,7 +473,7 @@ class ProfitMatrixFeedbackLoop:
             feedback_score=0.5,
             adjustment_factor=0.0,
             timestamp=time.time(),
-            metadata={"error": "Fallback feedback"}
+            metadata={"error": "Fallback feedback"},
         )
 
     def clear_history(self) -> None:
@@ -465,11 +492,11 @@ class ProfitMatrixFeedbackLoop:
                         "feedback_score": f.feedback_score,
                         "adjustment_factor": f.adjustment_factor,
                         "timestamp": f.timestamp,
-                        "metadata": f.metadata
+                        "metadata": f.metadata,
                     }
                     for f in self.feedback_history
                 ],
-                "statistics": self.get_feedback_statistics()
+                "statistics": self.get_feedback_statistics(),
             }
 
             with open(filepath, 'w') as f:
@@ -483,7 +510,9 @@ class ProfitMatrixFeedbackLoop:
             return False
 
 
-def create_profit_matrix_feedback_loop(learning_rate: float = 0.01, decay_factor: float = 0.95) -> ProfitMatrixFeedbackLoop:
+def create_profit_matrix_feedback_loop(
+    learning_rate: float = 0.01, decay_factor: float = 0.95
+) -> ProfitMatrixFeedbackLoop:
     """Factory function to create a profit matrix feedback loop instance."""
     return ProfitMatrixFeedbackLoop(learning_rate, decay_factor)
 
@@ -510,7 +539,7 @@ if __name__ == "__main__":
         "profit_rate": 0.15,
         "risk_score": 0.3,
         "volatility": 0.08,
-        "sharpe_ratio": 1.2
+        "sharpe_ratio": 1.2,
     }
 
     feedback_result = feedback_loop.apply_feedback_loop(test_matrix, performance_metrics)

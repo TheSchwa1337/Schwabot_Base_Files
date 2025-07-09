@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from typing import Any, Dict, List
 
 from core.backend_math import get_backend, backend_info
+
 xp = get_backend()
 
 #!/usr/bin/env python3
@@ -214,7 +215,9 @@ class CleanUnifiedMathSystem:
         self._log_calculation("mean", result, {"values": values})
         return result
 
-    def optimize_profit(self, base_profit: float, enhancement_factor: float, confidence: float) -> float:
+    def optimize_profit(
+        self, base_profit: float, enhancement_factor: float, confidence: float
+    ) -> float:
         """Optimize profit using mathematical enhancement."""
         try:
             # Apply enhancement factor with confidence weighting
@@ -223,29 +226,35 @@ class CleanUnifiedMathSystem:
             # Apply mathematical optimization
             optimized_profit = xp.tanh(enhanced_profit) * xp.abs(enhanced_profit)
 
-            self._log_calculation("optimize_profit", optimized_profit, {
-                "base_profit": base_profit,
-                "enhancement_factor": enhancement_factor,
-                "confidence": confidence
-            })
+            self._log_calculation(
+                "optimize_profit",
+                optimized_profit,
+                {
+                    "base_profit": base_profit,
+                    "enhancement_factor": enhancement_factor,
+                    "confidence": confidence,
+                },
+            )
 
             return optimized_profit
         except Exception as e:
             logger.error("Error in profit optimization: {0}".format(e))
             return base_profit
 
-    def calculate_risk_adjustment(self, profit: float, volatility: float, confidence: float) -> float:
+    def calculate_risk_adjustment(
+        self, profit: float, volatility: float, confidence: float
+    ) -> float:
         """Calculate risk-adjusted profit."""
         try:
             # Risk adjustment formula
             risk_factor = 1.0 - (volatility * (1.0 - confidence))
             adjusted_profit = profit * xp.clip(risk_factor, 0.1, 2.0)
 
-            self._log_calculation("risk_adjustment", adjusted_profit, {
-                "profit": profit,
-                "volatility": volatility,
-                "confidence": confidence
-            })
+            self._log_calculation(
+                "risk_adjustment",
+                adjusted_profit,
+                {"profit": profit, "volatility": volatility, "confidence": confidence},
+            )
 
             return adjusted_profit
         except Exception as e:
@@ -259,10 +268,11 @@ class CleanUnifiedMathSystem:
             weight = 1.0 / (1.0 + xp.exp(-10 * (confidence - 0.5)))
             risk_adjusted_weight = weight * (1.0 - max_risk)
 
-            self._log_calculation("portfolio_weight", risk_adjusted_weight, {
-                "confidence": confidence,
-                "max_risk": max_risk
-            })
+            self._log_calculation(
+                "portfolio_weight",
+                risk_adjusted_weight,
+                {"confidence": confidence, "max_risk": max_risk},
+            )
 
             return xp.clip(risk_adjusted_weight, 0.0, 1.0)
         except Exception as e:
@@ -317,7 +327,9 @@ class CleanUnifiedMathSystem:
 
             # Calculate integrated metrics
             optimized_profit = self.optimize_profit(base_profit, enhancement_factor, confidence)
-            risk_adjusted_profit = self.calculate_risk_adjustment(optimized_profit, volatility, confidence)
+            risk_adjusted_profit = self.calculate_risk_adjustment(
+                optimized_profit, volatility, confidence
+            )
             portfolio_weight = self.calculate_portfolio_weight(confidence, max_risk)
             sharpe_ratio = self.calculate_sharpe_ratio(returns)
 
@@ -384,14 +396,18 @@ class CleanUnifiedMathSystem:
                 "total_calculations": len(self.calculation_history),
                 "operation_counts": operation_counts,
                 "recent_operations": [calc.operation for calc in recent],
-                "last_calculation_time": (self.calculation_history[-1].timestamp if self.calculation_history else 0),
+                "last_calculation_time": (
+                    self.calculation_history[-1].timestamp if self.calculation_history else 0
+                ),
             }
         except Exception as e:
             logger.error("Calculation summary error: {0}".format(e))
             return {"error": str(e)}
 
 
-def optimize_brain_profit(price: float, volume: float, confidence: float, enhancement_factor: float) -> float:
+def optimize_brain_profit(
+    price: float, volume: float, confidence: float, enhancement_factor: float
+) -> float:
     """Optimize brain profit using unified math system."""
     try:
         math_system = CleanUnifiedMathSystem()
@@ -408,7 +424,9 @@ def optimize_brain_profit(price: float, volume: float, confidence: float, enhanc
         return 0.0
 
 
-def calculate_position_size(confidence: float, portfolio_value: float, max_risk_percent: float) -> float:
+def calculate_position_size(
+    confidence: float, portfolio_value: float, max_risk_percent: float
+) -> float:
     """Calculate position size based on confidence and risk parameters."""
     try:
         math_system = CleanUnifiedMathSystem()
@@ -460,7 +478,7 @@ def test_clean_unified_math_system():
         "confidence": 0.8,
         "volatility": 0.1,
         "max_risk": 0.2,
-        "returns": [0.01, 0.02, -0.01, 0.03, 0.01]
+        "returns": [0.01, 0.02, -0.01, 0.03, 0.01],
     }
 
     results = math_system.integrate_all_systems(input_data)
@@ -479,6 +497,7 @@ if __name__ == "__main__":
 
 # Create a global instance for easy access
 clean_unified_math = CleanUnifiedMathSystem()
+
 
 # Export the function for backward compatibility
 def clean_unified_math_function():

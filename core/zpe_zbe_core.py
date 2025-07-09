@@ -7,6 +7,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
 from core.backend_math import get_backend, is_gpu
+
 xp = get_backend()
 
 from .clean_math_foundation import CleanMathFoundation
@@ -74,9 +75,7 @@ class ZPEZBECore:
         Args:
             math_foundation: Optional mathematical foundation for advanced calculations
         """
-        self.math_foundation: CleanMathFoundation = (
-            math_foundation or CleanMathFoundation()
-        )
+        self.math_foundation: CleanMathFoundation = math_foundation or CleanMathFoundation()
 
     def calculate_zero_point_energy(
         self,
@@ -191,9 +190,10 @@ class ZPEZBECore:
             Synchronization trigger metadata
         """
         # Quantum sync conditions
-        is_quantum_synced = (
-            zpe_vector.sync_status in [QuantumSyncStatus.FULL_SYNC, QuantumSyncStatus.RESONANCE]
-        )
+        is_quantum_synced = zpe_vector.sync_status in [
+            QuantumSyncStatus.FULL_SYNC,
+            QuantumSyncStatus.RESONANCE,
+        ]
 
         # ZBE stability conditions
         is_zbe_stable = abs(zbe_balance.status) < 0.5 and zbe_balance.stability_score > 0.7
@@ -319,13 +319,9 @@ class QuantumPerformanceRegistry:
         # Normalize performance metrics
         for status, metrics in sync_performance.items():
             metrics["avg_profit"] = (
-                metrics["total_profit"] / metrics["count"]
-                if metrics["count"] > 0
-                else 0.0
+                metrics["total_profit"] / metrics["count"] if metrics["count"] > 0 else 0.0
             )
-            metrics["avg_risk_score"] /= (
-                metrics["count"] if metrics["count"] > 0 else 1.0
-            )
+            metrics["avg_risk_score"] /= metrics["count"] if metrics["count"] > 0 else 1.0
 
         # Determine optimal thermal state
         thermal_performance = {}

@@ -63,9 +63,7 @@ class BTCUSDCTradingIntegration:
 
         # Initialize components
         self.trading_executor = CCXTTradingExecutor(config.get("exchange_config", {}))
-        self.portfolio_balancer = AlgorithmicPortfolioBalancer(
-            config.get("portfolio_config", {})
-        )
+        self.portfolio_balancer = AlgorithmicPortfolioBalancer(config.get("portfolio_config", {}))
         self.phantom_registry = PhantomRegistry()
 
         # Trading state
@@ -105,9 +103,7 @@ class BTCUSDCTradingIntegration:
             error("Error initializing BTC/USDC trading integration: {0}".format(e))
             return False
 
-    async def process_market_data(
-        self, market_data: Dict[str, Any]
-    ) -> Optional[TradingDecision]:
+    async def process_market_data(self, market_data: Dict[str, Any]) -> Optional[TradingDecision]:
         """Process market data and generate trading decisions."""
         try:
             # Update market data cache
@@ -152,9 +148,7 @@ class BTCUSDCTradingIntegration:
                 await self._update_position(decision)
 
                 # Update portfolio state
-                await self.portfolio_balancer.update_portfolio_state(
-                    self.market_data_cache
-                )
+                await self.portfolio_balancer.update_portfolio_state(self.market_data_cache)
 
                 # Log trade
                 self._log_trade(decision)
@@ -191,22 +185,16 @@ class BTCUSDCTradingIntegration:
             # Calculate additional metrics
             if self.trade_history:
                 # Calculate win rate
-                winning_trades = sum(
-                    1 for trade in self.trade_history if trade.get("pnl", 0) > 0
-                )
+                winning_trades = sum(1 for trade in self.trade_history if trade.get("pnl", 0) > 0)
                 total_trades = len(self.trade_history)
                 win_rate = winning_trades / total_trades if total_trades > 0 else 0.0
 
                 # Calculate average profit/loss
                 profits = [
-                    trade.get("pnl", 0)
-                    for trade in self.trade_history
-                    if trade.get("pnl", 0) > 0
+                    trade.get("pnl", 0) for trade in self.trade_history if trade.get("pnl", 0) > 0
                 ]
                 losses = [
-                    trade.get("pnl", 0)
-                    for trade in self.trade_history
-                    if trade.get("pnl", 0) < 0
+                    trade.get("pnl", 0) for trade in self.trade_history if trade.get("pnl", 0) < 0
                 ]
 
                 avg_profit = np.mean(profits) if profits else 0.0
@@ -215,9 +203,7 @@ class BTCUSDCTradingIntegration:
                 # Calculate profit factor
                 total_profit = sum(profits) if profits else 0.0
                 total_loss = abs(sum(losses)) if losses else 0.0
-                profit_factor = (
-                    total_profit / total_loss if total_loss > 0 else float("inf")
-                )
+                profit_factor = total_profit / total_loss if total_loss > 0 else float("inf")
 
                 # Calculate max drawdown
                 cumulative_pnl = []
@@ -274,9 +260,7 @@ class BTCUSDCTradingIntegration:
             executor_status = "available" if self.trading_executor else "not_available"
 
             # Check if portfolio balancer is available
-            balancer_status = (
-                "available" if self.portfolio_balancer else "not_available"
-            )
+            balancer_status = "available" if self.portfolio_balancer else "not_available"
 
             # Check market data freshness
             current_time = time.time()
@@ -284,13 +268,7 @@ class BTCUSDCTradingIntegration:
             last_update = btc_data.get("timestamp", 0)
             data_age = current_time - last_update if last_update > 0 else float("inf")
 
-            data_status = (
-                "fresh"
-                if data_age < 60
-                else "stale"
-                if data_age < 300
-                else "very_stale"
-            )
+            data_status = "fresh" if data_age < 60 else "stale" if data_age < 300 else "very_stale"
 
             # Overall system status
             if (
@@ -357,9 +335,7 @@ class BTCUSDCTradingIntegration:
         """Check Phantom Math signals for BTC."""
         try:
             # Get recent Phantom Zones for BTC
-            recent_zones = await self.phantom_registry.get_recent_zones(
-                "BTC/USDC", hours=1
-            )
+            recent_zones = await self.phantom_registry.get_recent_zones("BTC/USDC", hours=1)
 
             if not recent_zones:
                 return None
@@ -402,16 +378,12 @@ class BTCUSDCTradingIntegration:
 
             if needs_rebalancing:
                 # Generate rebalancing decisions
-                decisions = (
-                    await self.portfolio_balancer.generate_rebalancing_decisions(
-                        self.market_data_cache
-                    )
+                decisions = await self.portfolio_balancer.generate_rebalancing_decisions(
+                    self.market_data_cache
                 )
 
                 # Find BTC-specific rebalancing
-                btc_decision = next(
-                    (d for d in decisions if d.symbol == "BTC/USDC"), None
-                )
+                btc_decision = next((d for d in decisions if d.symbol == "BTC/USDC"), None)
 
                 if btc_decision:
                     return {
@@ -461,9 +433,7 @@ class BTCUSDCTradingIntegration:
                 elif phantom_signal["signal_direction"] == "sell":
                     action = TradingAction.SELL
 
-                quantity = self._calculate_position_size(
-                    phantom_signal["signal_strength"]
-                )
+                quantity = self._calculate_position_size(phantom_signal["signal_strength"])
                 confidence = phantom_signal["signal_strength"]
 
             # No action if no clear signal
@@ -662,7 +632,9 @@ class BTCUSDCTradingIntegration:
             logger.error("Error getting performance metrics: {0}".format(e))
             return {}
 
+
 # Factory function for easy integration
+
 
 def create_btc_usdc_integration(config: Dict[str, Any]) -> BTCUSDCTradingIntegration:
     """Create a BTC/USDC trading integration instance."""

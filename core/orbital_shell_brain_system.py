@@ -287,7 +287,9 @@ class OrbitalBRAINSystem:
         time_evolution = np.exp(-1j * E_n * t / h_bar)
         return R_n * Y_n * time_evolution
 
-    def calculate_shell_energy(self, shell: OrbitalShell, volatility: float, drift_rate: float) -> float:
+    def calculate_shell_energy(
+        self, shell: OrbitalShell, volatility: float, drift_rate: float
+    ) -> float:
         """Calculate shell energy: Eₙ = -(k²/2n²) + λ·σₙ² - μ·∂Rₙ/∂t"""
         n = shell.value + 1
         k = self.config["k_constant"]
@@ -305,12 +307,8 @@ class OrbitalBRAINSystem:
             prices = np.random.normal(50000, 1000, 10)
 
         price_changes = np.diff(prices)
-        momentum_curvature = (
-            np.mean(price_changes[-5:]) if len(price_changes) >= 5 else 0.0
-        )
-        rolling_return = (
-            (prices[-1] - prices[-10]) / prices[-10] if len(prices) >= 10 else 0.0
-        )
+        momentum_curvature = np.mean(price_changes[-5:]) if len(price_changes) >= 5 else 0.0
+        rolling_return = (prices[-1] - prices[-10]) / prices[-10] if len(prices) >= 10 else 0.0
         entropy_shift = (
             np.std(price_changes) / np.mean(np.abs(price_changes))
             if len(price_changes) > 0
@@ -318,9 +316,7 @@ class OrbitalBRAINSystem:
         )
         alpha_decay = 0.1 * (time.time() % 100) / 100
 
-        altitude_value = (
-            momentum_curvature + rolling_return * entropy_shift - alpha_decay
-        )
+        altitude_value = momentum_curvature + rolling_return * entropy_shift - alpha_decay
         confidence_level = min(1.0, len(prices) / 100.0)
 
         return AltitudeVector(
@@ -332,7 +328,9 @@ class OrbitalBRAINSystem:
             confidence_level=confidence_level,
         )
 
-    def calculate_neural_shell_confidence(self, shell: OrbitalShell, memory_tensor: ShellMemoryTensor) -> float:
+    def calculate_neural_shell_confidence(
+        self, shell: OrbitalShell, memory_tensor: ShellMemoryTensor
+    ) -> float:
         """Calculate shell confidence: Θₛ = softmax(W₁·tanh(W₂·ℳₛ + b))"""
         memory_vector = memory_tensor.memory_vector
         W1 = self.neural_shell_weights[shell.value, :32]
@@ -340,7 +338,9 @@ class OrbitalBRAINSystem:
         b = 0.1
 
         if len(memory_vector) != len(W2):
-            memory_vector = np.pad(memory_vector, (0, max(0, len(W2) - len(memory_vector))), "constant")[: len(W2)]
+            memory_vector = np.pad(
+                memory_vector, (0, max(0, len(W2) - len(memory_vector))), "constant"
+            )[: len(W2)]
 
         hidden = np.dot(W2, memory_vector) + b
         activated = np.tanh(hidden)
@@ -372,17 +372,14 @@ class OrbitalBRAINSystem:
 
             pnl_history = memory_tensor.pnl_history
             shell_weights[shell] = (
-                max(0.0, min(1.0, (np.mean(pnl_history) + 1.0) / 2.0))
-                if pnl_history
-                else 0.5
+                max(0.0, min(1.0, (np.mean(pnl_history) + 1.0) / 2.0)) if pnl_history else 0.5
             )
 
             if shell_activations[shell] > 0.5:
                 active_shells.append(shell)
 
         consensus_score = sum(
-            shell_activations[s] * shell_confidences[s] * shell_weights[s]
-            for s in OrbitalShell
+            shell_activations[s] * shell_confidences[s] * shell_weights[s] for s in OrbitalShell
         ) / len(OrbitalShell)
 
         return ShellConsensus(
@@ -394,7 +391,9 @@ class OrbitalBRAINSystem:
             threshold_met=(consensus_score >= self.config["consensus_threshold"]),
         )
 
-    def calculate_profit_tier_bucket(self, pnl: float, altitude: AltitudeVector, consensus: ShellConsensus) -> ProfitTierBucket:
+    def calculate_profit_tier_bucket(
+        self, pnl: float, altitude: AltitudeVector, consensus: ShellConsensus
+    ) -> ProfitTierBucket:
         """Calculate Profit-Tier Vector Bucket: 𝒱ₚ = B(ΔPnL) + α·ℵₐ(t) + β·𝒞ₛ"""
         α, β = 0.3, 0.4
         enhanced_pnl = pnl + α * altitude.altitude_value + β * consensus.consensus_score
@@ -415,9 +414,7 @@ class OrbitalBRAINSystem:
             pnl_history = self.shell_memory_tensors[shell].pnl_history
             vol_history = self.shell_memory_tensors[shell].volatility_history
 
-            delta = (
-                (pnl_history[-1] - pnl_history[-2]) if len(pnl_history) >= 2 else 0.0
-            )
+            delta = (pnl_history[-1] - pnl_history[-2]) if len(pnl_history) >= 2 else 0.0
             volatility = vol_history[-1] if vol_history else 0.2
 
             if delta > profit_threshold and volatility < σ_max:
@@ -433,7 +430,9 @@ class OrbitalBRAINSystem:
         if shell.value < 7:
             self._transfer_shell_allocation(shell, OrbitalShell(shell.value + 1), 0.2)
 
-    def _transfer_shell_allocation(self, from_shell: OrbitalShell, to_shell: OrbitalShell, ratio: float):
+    def _transfer_shell_allocation(
+        self, from_shell: OrbitalShell, to_shell: OrbitalShell, ratio: float
+    ):
         from_state, to_state = (
             self.orbital_states[from_shell],
             self.orbital_states[to_shell],
@@ -445,9 +444,7 @@ class OrbitalBRAINSystem:
                 to_state.asset_allocation.get(asset, 0.0) + transfer_amount
             )
         logger.info(
-            "🔄 Transferred {:.1%} from {} to {}".format(
-                ratio, from_shell.name, to_shell.name
-            )
+            "🔄 Transferred {:.1%} from {} to {}".format(ratio, from_shell.name, to_shell.name)
         )
 
     def encode_shell_dna(self, shell: OrbitalShell) -> str:
@@ -472,9 +469,7 @@ class OrbitalBRAINSystem:
         if self.active:
             return
         self.active = True
-        self.rotation_thread = threading.Thread(
-            target=self._orbital_brain_loop, daemon=True
-        )
+        self.rotation_thread = threading.Thread(target=self._orbital_brain_loop, daemon=True)
         self.rotation_thread.start()
         logger.info("🧠⚛️ Orbital BRAIN System started successfully!")
 
@@ -499,7 +494,9 @@ class OrbitalBRAINSystem:
                     if self.orbital_states[shell].confidence > 0.8:
                         self.encode_shell_dna(shell)
 
-                bucket = self.calculate_profit_tier_bucket(0.2, self.current_altitude_vector, self.current_shell_consensus)
+                bucket = self.calculate_profit_tier_bucket(
+                    0.2, self.current_altitude_vector, self.current_shell_consensus
+                )
                 logger.info(
                     "Consensus: {:.3f}, Altitude: {:.3f}, Bucket: {}".format(
                         self.current_shell_consensus.consensus_score,
@@ -527,11 +524,7 @@ class OrbitalBRAINSystem:
 
         for shell, memory in self.shell_memory_tensors.items():
             prices = np.array(market_data["price_history"])
-            volatility = (
-                np.std(prices[-10:]) / np.mean(prices[-10:])
-                if len(prices) >= 2
-                else 0.2
-            )
+            volatility = np.std(prices[-10:]) / np.mean(prices[-10:]) if len(prices) >= 2 else 0.2
 
             new_point = np.array([price / 50000.0, volume / 1000.0, volatility])
             memory.memory_vector = np.roll(memory.memory_vector, -3)

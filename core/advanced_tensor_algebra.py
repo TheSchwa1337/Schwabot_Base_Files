@@ -21,8 +21,13 @@ except ImportError:
 try:
     import scipy.linalg as linalg  # noqa: F401 - Used in matrix operations (eigvals, det, cond, norm, expm, inv)
     import scipy.signal as signal  # noqa: F401 - Used in signal processing (windows, cwt, welch, periodogram, lpc, freqz)
-    from scipy.fft import fft, fftfreq  # noqa: F401 - Used in frequency domain analysis (fourier_spectrum)
-    from scipy.optimize import minimize  # noqa: F401 - Used in harmonic oscillator parameter optimization
+    from scipy.fft import (
+        fft,
+        fftfreq,
+    )  # noqa: F401 - Used in frequency domain analysis (fourier_spectrum)
+    from scipy.optimize import (
+        minimize,
+    )  # noqa: F401 - Used in harmonic oscillator parameter optimization
 
     SCIPY_AVAILABLE = True
 except ImportError:
@@ -40,6 +45,7 @@ from ..utils.cuda_helper import (
     safe_tensor_contraction,
 )
 from core.backend_math import get_backend, backend_info
+
 xp = get_backend()
 
 
@@ -138,9 +144,7 @@ class QuantumTensorOperations:
 
             # Quantum cross product term
             if A.ndim == 1 and B.ndim == 1 and len(A) == 3 and len(B) == 3:
-                cross_product = safe_cuda_operation(
-                    lambda: xp.cross(A, B), lambda: np.cross(A, B)
-                )
+                cross_product = safe_cuda_operation(lambda: xp.cross(A, B), lambda: np.cross(A, B))
                 quantum_term = safe_cuda_operation(
                     lambda: xp.outer(cross_product, cross_product),
                     lambda: np.outer(cross_product, cross_product),
@@ -361,7 +365,8 @@ class TemporalAlgebra:
         self.time_resolution = 1e-6  # Microsecond precision
         self.entropy_evolution_rate = 0.1
 
-    def market_state_transition(self,
+    def market_state_transition(
+        self,
         current_state: np.ndarray,
         time_delta: float,
         transition_matrix: np.ndarray,
@@ -489,10 +494,10 @@ class InformationGeometry:
             lambda_est = 1 / np.mean(data)
             return np.array([[1 / lambda_est**2]])
         else:
-            raise ValueError(
-                "Unsupported distribution type: {0}".format(distribution_type))
+            raise ValueError("Unsupported distribution type: {0}".format(distribution_type))
 
-    def riemannian_geodesic(self,
+    def riemannian_geodesic(
+        self,
         start_point: np.ndarray,
         end_point: np.ndarray,
         metric_tensor: np.ndarray,
@@ -585,7 +590,8 @@ class SpectralAnalysis:
         positive_freq_mask = frequencies >= 0
         return frequencies[positive_freq_mask], power_spectrum[positive_freq_mask]
 
-    def wavelet_transform(self,
+    def wavelet_transform(
+        self,
         time_series: np.ndarray,
         wavelet_type: str = "db4",
         scales: Optional[np.ndarray] = None,
@@ -658,7 +664,9 @@ class SpectralAnalysis:
             "residuals": price_data - predictions,
         }
 
-    def spectral_density_estimation(self, time_series: np.ndarray, method: str = "welch") -> Tuple[np.ndarray, np.ndarray]:
+    def spectral_density_estimation(
+        self, time_series: np.ndarray, method: str = "welch"
+    ) -> Tuple[np.ndarray, np.ndarray]:
         """
         Estimate power spectral density.
 
@@ -674,9 +682,7 @@ class SpectralAnalysis:
             Tuple of (frequencies, power_spectral_density)
         """
         if method == "welch":
-            frequencies, psd = signal.welch(
-                time_series, nperseg=min(256, len(time_series) // 4)
-            )
+            frequencies, psd = signal.welch(time_series, nperseg=min(256, len(time_series) // 4))
         elif method == "periodogram":
             frequencies, psd = signal.periodogram(time_series)
         elif method == "burg":
@@ -710,10 +716,7 @@ class GroupTheoryOperations:
         """Rotation group operation."""
         if vector.ndim == 1 and len(vector) == 2:
             cos_theta, sin_theta = np.cos(angle), np.sin(angle)
-            rotation_matrix = np.array([
-                [cos_theta, -sin_theta],
-                [sin_theta, cos_theta]
-            ])
+            rotation_matrix = np.array([[cos_theta, -sin_theta], [sin_theta, cos_theta]])
             return rotation_matrix @ vector
         else:
             # For higher dimensions, use rotation around principal axes
@@ -729,7 +732,9 @@ class GroupTheoryOperations:
         reflection_matrix[axis, axis] = -1
         return reflection_matrix @ vector
 
-    def market_symmetry_group(self, market_data: np.ndarray, symmetry_type: str = "translation") -> np.ndarray:
+    def market_symmetry_group(
+        self, market_data: np.ndarray, symmetry_type: str = "translation"
+    ) -> np.ndarray:
         """
         Apply symmetry group transformation to market data.
 
@@ -784,7 +789,8 @@ class GroupTheoryOperations:
             ]
         else:
             raise ValueError(
-                "Unsupported group type: {0} with dimension {1}".format(group_type, dimension))
+                "Unsupported group type: {0} with dimension {1}".format(group_type, dimension)
+            )
 
     def invariant_quantity(self, market_data: np.ndarray, group_operation: callable) -> float:
         """
@@ -842,7 +848,9 @@ class AdvancedTensorAlgebra:
 
         logger.info("AdvancedTensorAlgebra initialized with precision=%d", precision)
 
-    def tensor_dot_fusion(self, A: np.ndarray, B: np.ndarray, axes: Optional[Tuple[int, ...]] = None) -> np.ndarray:
+    def tensor_dot_fusion(
+        self, A: np.ndarray, B: np.ndarray, axes: Optional[Tuple[int, ...]] = None
+    ) -> np.ndarray:
         """
         Calculate rank-reducing contraction across axis 1 (strategy vector ↔ price, matrix).
 
@@ -868,8 +876,7 @@ class AdvancedTensorAlgebra:
                     "operation": "tensordot",
                 }
 
-                result = self.dual_state_router.route(
-                    task_id="tensor_fusion", data=task_data)
+                result = self.dual_state_router.route(task_id="tensor_fusion", data=task_data)
 
                 if result.get("success", False):
                     # Extract result from dual state router
@@ -878,7 +885,8 @@ class AdvancedTensorAlgebra:
                     else:
                         # Fallback to direct computation
                         logger.debug(
-                            "Dual state router returned no result, using direct computation")
+                            "Dual state router returned no result, using direct computation"
+                        )
 
             # Direct computation (fallback or when dual state router, not)
             # available)
@@ -897,8 +905,7 @@ class AdvancedTensorAlgebra:
             if spectral_norm > 1e-6:
                 result = result / spectral_norm
 
-            logger.debug("Tensor fusion completed: shape %s → %s",
-                         (A.shape, B.shape), result.shape)
+            logger.debug("Tensor fusion completed: shape %s → %s", (A.shape, B.shape), result.shape)
             return result
 
         except Exception as e:
@@ -960,7 +967,9 @@ class AdvancedTensorAlgebra:
             logger.error("Bit-phase rotation failed: %s", e)
             return x  # Return original on error
 
-    def volumetric_reshape(self, M: np.ndarray, target_shape: Optional[Tuple[int, ...]] = None) -> np.ndarray:
+    def volumetric_reshape(
+        self, M: np.ndarray, target_shape: Optional[Tuple[int, ...]] = None
+    ) -> np.ndarray:
         """
         Reshape matrix with volume-preserving constraints.
 
@@ -978,9 +987,7 @@ class AdvancedTensorAlgebra:
         try:
             if target_shape is None:
                 # Auto-calculate optimal shape based on volume
-                volume = safe_cuda_operation(
-                    lambda: xp.prod(M.shape), lambda: np.prod(M.shape)
-                )
+                volume = safe_cuda_operation(lambda: xp.prod(M.shape), lambda: np.prod(M.shape))
                 target_shape = self._calculate_optimal_shape(volume, M.ndim)
 
             # Preserve volume by scaling with CUDA acceleration
@@ -1040,8 +1047,7 @@ class AdvancedTensorAlgebra:
                 lambda: quantized * np.linalg.norm(V),
             )
 
-            logger.debug("Entropy quantization: E=%.3f, levels=%d",
-                         entropy_level, num_levels)
+            logger.debug("Entropy quantization: E=%.3f, levels=%d", entropy_level, num_levels)
             return result
 
         except Exception as e:
@@ -1173,14 +1179,14 @@ class AdvancedTensorAlgebra:
                 current_time = time.time()
 
             # Calculate phase in 24-hour cycle
-            cycle_phase = (current_time % self.ferris_wheel_period) / \
-                           self.ferris_wheel_period
+            cycle_phase = (current_time % self.ferris_wheel_period) / self.ferris_wheel_period
 
             # Convert to alignment factor using sine wave
             alignment = (np.sin(2 * np.pi * cycle_phase) + 1) / 2
 
-            logger.debug("Ferris Wheel alignment: phase=%.3f, alignment=%.3f",
-                         cycle_phase, alignment)
+            logger.debug(
+                "Ferris Wheel alignment: phase=%.3f, alignment=%.3f", cycle_phase, alignment
+            )
             return float(alignment)
 
         except Exception as e:
@@ -1205,11 +1211,11 @@ class AdvancedTensorAlgebra:
             # Quantum phase rotation
             phase_angle = self.temporal_algebra.ferris_wheel_alignment() * 2 * np.pi
             rotated_fusion = self.quantum_operations.quantum_phase_rotation(
-                quantum_fusion, phase_angle)
+                quantum_fusion, phase_angle
+            )
 
             # Entanglement measure
-            entanglement = self.quantum_operations.quantum_entanglement_measure(
-                rotated_fusion)
+            entanglement = self.quantum_operations.quantum_entanglement_measure(rotated_fusion)
 
             return {
                 "quantum_fusion": quantum_fusion,
@@ -1222,7 +1228,9 @@ class AdvancedTensorAlgebra:
             logger.error("Quantum tensor operations failed: %s", e)
             return {}
 
-    def entropy_modulation_system(self, tensor: np.ndarray, modulation_strength: float = 1.0) -> np.ndarray:
+    def entropy_modulation_system(
+        self, tensor: np.ndarray, modulation_strength: float = 1.0
+    ) -> np.ndarray:
         """
         Apply entropy-based modulation to tensor.
 
@@ -1270,7 +1278,9 @@ class AdvancedTensorAlgebra:
 # =============================================================================
 
 
-def tensor_dot_fusion(A: np.ndarray, B: np.ndarray, axes: Optional[Tuple[int, ...]] = None) -> np.ndarray:
+def tensor_dot_fusion(
+    A: np.ndarray, B: np.ndarray, axes: Optional[Tuple[int, ...]] = None
+) -> np.ndarray:
     """Convenience function for tensor dot fusion."""
     algebra = AdvancedTensorAlgebra()
     return algebra.tensor_dot_fusion(A, B, axes)

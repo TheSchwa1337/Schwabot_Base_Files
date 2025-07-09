@@ -15,6 +15,7 @@ from typing import Any, Dict, Optional
 
 try:
     import ccxt.async_support as ccxt
+
     CCXT_AVAILABLE = True
 except ImportError:
     CCXT_AVAILABLE = False
@@ -99,23 +100,21 @@ class CCXTTradingExecutor:
         try:
             # Initialize exchange connection
             exchange_name = config.get("exchange", "binance")
-            self.exchange = getattr(ccxt, exchange_name)({
-                "apiKey": config.get("apiKey"),
-                "secret": config.get("secret"),
-                "sandbox": config.get("sandbox", True),
-                "enableRateLimit": config.get("enableRateLimit", True),
-                "timeout": config.get("timeout", 30000),
-            })
-            logger.info(
-                "CCXT Trading Executor initialized with {0}".format(exchange_name)
+            self.exchange = getattr(ccxt, exchange_name)(
+                {
+                    "apiKey": config.get("apiKey"),
+                    "secret": config.get("secret"),
+                    "sandbox": config.get("sandbox", True),
+                    "enableRateLimit": config.get("enableRateLimit", True),
+                    "timeout": config.get("timeout", 30000),
+                }
             )
+            logger.info("CCXT Trading Executor initialized with {0}".format(exchange_name))
         except Exception as e:
             logger.error("Failed to initialize exchange: {0}".format(e))
             self.exchange = None
 
-    async def place_market_buy_order(
-        self, symbol: str, amount: float
-    ) -> Dict[str, Any]:
+    async def place_market_buy_order(self, symbol: str, amount: float) -> Dict[str, Any]:
         """Place a market buy order."""
         if not self.exchange:
             return {"error": "Exchange not initialized"}
@@ -128,9 +127,7 @@ class CCXTTradingExecutor:
             logger.error("Buy order failed: {0}".format(e))
             return {"error": str(e)}
 
-    async def place_market_sell_order(
-        self, symbol: str, amount: float
-    ) -> Dict[str, Any]:
+    async def place_market_sell_order(self, symbol: str, amount: float) -> Dict[str, Any]:
         """Place a market sell order."""
         if not self.exchange:
             return {"error": "Exchange not initialized"}

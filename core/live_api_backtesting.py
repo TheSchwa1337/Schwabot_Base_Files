@@ -31,15 +31,17 @@ logger = logging.getLogger(__name__)
 
 class BacktestMode(Enum):
     """Backtesting modes."""
-    LIVE_API = "live_api"           # Real API connections, live data
-    SIMULATION = "simulation"        # Simulated trading with real data
-    HISTORICAL = "historical"        # Historical data replay
+
+    LIVE_API = "live_api"  # Real API connections, live data
+    SIMULATION = "simulation"  # Simulated trading with real data
+    HISTORICAL = "historical"  # Historical data replay
     PAPER_TRADING = "paper_trading"  # Paper trading with live data
 
 
 @dataclass
 class LiveAPIConfig:
     """Configuration for live API backtesting."""
+
     exchange: str = "binance"
     api_key: str = ""
     api_secret: str = ""
@@ -56,6 +58,7 @@ class LiveAPIConfig:
 @dataclass
 class LiveMarketData:
     """Live market data from API."""
+
     symbol: str
     price: Decimal
     volume: Decimal
@@ -71,6 +74,7 @@ class LiveMarketData:
 @dataclass
 class RegistryEntry:
     """Entry in the live data registry."""
+
     timestamp: float
     symbol: str
     price: float
@@ -136,7 +140,7 @@ class LiveAPIBacktesting:
                 "apiKey": self.config.api_key,
                 "secret": self.config.api_secret,
                 "sandbox": self.config.sandbox,
-                "simulation_mode": not self.is_trading_enabled
+                "simulation_mode": not self.is_trading_enabled,
             }
 
             self.trading_executor = CCXTTradingExecutor(executor_config)
@@ -146,9 +150,7 @@ class LiveAPIBacktesting:
 
             # Initialize trading pipeline
             self.trading_pipeline = create_trading_pipeline(
-                symbol="BTCUSDC",
-                initial_capital=10000.0,
-                safe_mode=not self.is_trading_enabled
+                symbol="BTCUSDC", initial_capital=10000.0, safe_mode=not self.is_trading_enabled
             )
 
             # Initialize market data pipeline
@@ -244,10 +246,16 @@ class LiveAPIBacktesting:
                         timestamp=time.time(),
                         bid=Decimal(str(ticker.get("bid", 0))) if ticker.get("bid") else None,
                         ask=Decimal(str(ticker.get("ask", 0))) if ticker.get("ask") else None,
-                        high_24h=Decimal(str(ticker.get("high", 0))) if ticker.get("high") else None,
+                        high_24h=(
+                            Decimal(str(ticker.get("high", 0))) if ticker.get("high") else None
+                        ),
                         low_24h=Decimal(str(ticker.get("low", 0))) if ticker.get("low") else None,
-                        change_24h=Decimal(str(ticker.get("change", 0))) if ticker.get("change") else None,
-                        change_percent_24h=float(ticker.get("percentage", 0)) if ticker.get("percentage") else None
+                        change_24h=(
+                            Decimal(str(ticker.get("change", 0))) if ticker.get("change") else None
+                        ),
+                        change_percent_24h=(
+                            float(ticker.get("percentage", 0)) if ticker.get("percentage") else None
+                        ),
                     )
 
                     market_data[symbol] = live_data
@@ -274,7 +282,7 @@ class LiveAPIBacktesting:
                     "high_24h": float(data.high_24h) if data.high_24h else None,
                     "low_24h": float(data.low_24h) if data.low_24h else None,
                     "change_24h": float(data.change_24h) if data.change_24h else None,
-                    "change_percent_24h": data.change_percent_24h
+                    "change_percent_24h": data.change_percent_24h,
                 }
 
                 # Process through trading pipeline
@@ -292,8 +300,9 @@ class LiveAPIBacktesting:
         except Exception as e:
             logger.error(f"Failed to process market data: {e}")
 
-    async def _generate_trading_signal(self, symbol: str, market_data: LiveMarketData,
-                                     pipeline_result: Dict[str, Any]) -> Optional[IntegratedTradingSignal]:
+    async def _generate_trading_signal(
+        self, symbol: str, market_data: LiveMarketData, pipeline_result: Dict[str, Any]
+    ) -> Optional[IntegratedTradingSignal]:
         """Generate trading signal from pipeline result."""
         try:
             # Extract trading decision from pipeline
@@ -311,7 +320,7 @@ class LiveAPIBacktesting:
                     confidence_score=Decimal(str(decision.get("confidence", 0.5))),
                     profit_potential=Decimal(str(decision.get("profit_potential", 0))),
                     risk_assessment=decision.get("risk_assessment", {}),
-                    ghost_route=decision.get("strategy_branch", "unknown")
+                    ghost_route=decision.get("strategy_branch", "unknown"),
                 )
 
                 return signal
@@ -340,7 +349,9 @@ class LiveAPIBacktesting:
                 if result.profit_realized:
                     self.total_pnl += result.profit_realized
 
-                logger.info(f"Trade executed: {signal.recommended_action} {signal.quantity} {signal.target_pair}")
+                logger.info(
+                    f"Trade executed: {signal.recommended_action} {signal.quantity} {signal.target_pair}"
+                )
                 logger.info(f"PnL: {result.profit_realized}")
 
                 # Update portfolio tracker
@@ -381,8 +392,18 @@ class LiveAPIBacktesting:
             entry = RegistryEntry(
                 timestamp=time.time(),
                 symbol="BTC/USDC",  # Primary symbol
-                price=float(self.market_data_cache.get("BTC/USDC", LiveMarketData("BTC/USDC", Decimal("0"), Decimal("0"), time.time())).price),
-                volume=float(self.market_data_cache.get("BTC/USDC", LiveMarketData("BTC/USDC", Decimal("0"), Decimal("0"), time.time())).volume),
+                price=float(
+                    self.market_data_cache.get(
+                        "BTC/USDC",
+                        LiveMarketData("BTC/USDC", Decimal("0"), Decimal("0"), time.time()),
+                    ).price
+                ),
+                volume=float(
+                    self.market_data_cache.get(
+                        "BTC/USDC",
+                        LiveMarketData("BTC/USDC", Decimal("0"), Decimal("0"), time.time()),
+                    ).volume
+                ),
                 market_data={
                     symbol: {
                         "price": float(data.price),
@@ -393,7 +414,7 @@ class LiveAPIBacktesting:
                         "high_24h": float(data.high_24h) if data.high_24h else None,
                         "low_24h": float(data.low_24h) if data.low_24h else None,
                         "change_24h": float(data.change_24h) if data.change_24h else None,
-                        "change_percent_24h": data.change_percent_24h
+                        "change_percent_24h": data.change_percent_24h,
                     }
                     for symbol, data in self.market_data_cache.items()
                 },
@@ -401,9 +422,11 @@ class LiveAPIBacktesting:
                     "total_trades": self.total_trades,
                     "successful_trades": self.successful_trades,
                     "total_pnl": float(self.total_pnl),
-                    "is_trading_enabled": self.is_trading_enabled
+                    "is_trading_enabled": self.is_trading_enabled,
                 },
-                portfolio_state=self.portfolio_tracker.get_portfolio_summary() if self.portfolio_tracker else {}
+                portfolio_state=(
+                    self.portfolio_tracker.get_portfolio_summary() if self.portfolio_tracker else {}
+                ),
             )
 
             self.live_registry.append(entry)
@@ -427,7 +450,7 @@ class LiveAPIBacktesting:
                     "market_data": entry.market_data,
                     "trading_signals": entry.trading_signals,
                     "portfolio_state": entry.portfolio_state,
-                    "metadata": entry.metadata
+                    "metadata": entry.metadata,
                 }
                 for entry in self.live_registry
             ]
@@ -456,11 +479,15 @@ class LiveAPIBacktesting:
                 "end_time": time.time(),
                 "total_trades": self.total_trades,
                 "successful_trades": self.successful_trades,
-                "success_rate": (self.successful_trades / self.total_trades * 100) if self.total_trades > 0 else 0,
+                "success_rate": (
+                    (self.successful_trades / self.total_trades * 100)
+                    if self.total_trades > 0
+                    else 0
+                ),
                 "total_pnl": float(self.total_pnl),
                 "is_trading_enabled": self.is_trading_enabled,
                 "exchange": self.config.exchange,
-                "symbols": self.config.symbols
+                "symbols": self.config.symbols,
             }
 
             with open("data/performance_summary.json", 'w') as f:
@@ -488,13 +515,15 @@ class LiveAPIBacktesting:
             "is_trading_enabled": self.is_trading_enabled,
             "total_trades": self.total_trades,
             "successful_trades": self.successful_trades,
-            "success_rate": (self.successful_trades / self.total_trades * 100) if self.total_trades > 0 else 0,
+            "success_rate": (
+                (self.successful_trades / self.total_trades * 100) if self.total_trades > 0 else 0
+            ),
             "total_pnl": float(self.total_pnl),
             "uptime": time.time() - self.start_time,
             "market_data_symbols": list(self.market_data_cache.keys()),
             "registry_entries": len(self.live_registry),
             "exchange": self.config.exchange,
-            "symbols": self.config.symbols
+            "symbols": self.config.symbols,
         }
 
     def get_portfolio_summary(self) -> Dict[str, Any]:
@@ -530,7 +559,7 @@ if __name__ == "__main__":
         sandbox=True,
         symbols=["BTC/USDC", "ETH/USDC"],
         enable_trading=False,  # Start with trading disabled
-        update_interval=1.0
+        update_interval=1.0,
     )
 
     # Run the system

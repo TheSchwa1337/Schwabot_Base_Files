@@ -117,7 +117,9 @@ class Dual:
 
     def __truediv__(self, other) -> Dual:
         if isinstance(other, Dual):
-            return Dual(self.val / other.val, (self.eps * other.val - self.val * other.eps) / (other.val**2))
+            return Dual(
+                self.val / other.val, (self.eps * other.val - self.val * other.eps) / (other.val**2)
+            )
         else:
             return Dual(self.val / other, self.eps / other)
 
@@ -217,12 +219,14 @@ class MathLibV4:
             self.pattern_cache[pattern_hash] = metrics
 
             # Add to history
-            self.analysis_history.append({
-                "timestamp": time.time(),
-                "pattern_hash": pattern_hash,
-                "confidence": confidence,
-                "operation": "dlt_metrics",
-            })
+            self.analysis_history.append(
+                {
+                    "timestamp": time.time(),
+                    "pattern_hash": pattern_hash,
+                    "confidence": confidence,
+                    "operation": "dlt_metrics",
+                }
+            )
 
             return metrics
 
@@ -242,7 +246,9 @@ class MathLibV4:
                 return True
         return False
 
-    def _calculate_confidence(self, deltas: List[float], mean_delta: float, std_dev: float) -> float:
+    def _calculate_confidence(
+        self, deltas: List[float], mean_delta: float, std_dev: float
+    ) -> float:
         """YOUR confidence calculation algorithm."""
         if std_dev == 0:
             return 1.0

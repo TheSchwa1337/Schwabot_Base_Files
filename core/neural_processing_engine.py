@@ -29,6 +29,7 @@ try:
     import torch.nn.functional as F
     import torch.optim as optim
     from torch.utils.data import TensorDataset, DataLoader
+
     TORCH_AVAILABLE = True
 except ImportError:
     TORCH_AVAILABLE = False
@@ -37,6 +38,7 @@ except ImportError:
 # Try to import scikit-learn components
 try:
     from sklearn.metrics import accuracy_score, precision_score, recall_score
+
     SKLEARN_AVAILABLE = True
 except ImportError:
     SKLEARN_AVAILABLE = False
@@ -74,7 +76,9 @@ if TORCH_AVAILABLE:
     class PricePatternCNN(nn.Module):
         """Convolutional Neural Network for price pattern recognition"""
 
-        def __init__(self, input_channels: int = 1, sequence_length: int = 100, num_classes: int = 3):
+        def __init__(
+            self, input_channels: int = 1, sequence_length: int = 100, num_classes: int = 3
+        ):
             super(PricePatternCNN, self).__init__()
 
             # Convolutional layers
@@ -122,21 +126,23 @@ if TORCH_AVAILABLE:
     class TradingLSTM(nn.Module):
         """LSTM Network for temporal sequence modeling in trading"""
 
-        def __init__(self, input_size: int = 10, hidden_size: int = 128, num_layers: int = 3, output_size: int = 1):
+        def __init__(
+            self,
+            input_size: int = 10,
+            hidden_size: int = 128,
+            num_layers: int = 3,
+            output_size: int = 1,
+        ):
             super(TradingLSTM, self).__init__()
 
             self.hidden_size = hidden_size
             self.num_layers = num_layers
 
             # LSTM layers
-            self.lstm = nn.LSTM(
-                input_size, hidden_size, num_layers, batch_first=True, dropout=0.2
-            )
+            self.lstm = nn.LSTM(input_size, hidden_size, num_layers, batch_first=True, dropout=0.2)
 
             # Attention mechanism
-            self.attention = nn.MultiheadAttention(
-                hidden_size, num_heads=8, batch_first=True
-            )
+            self.attention = nn.MultiheadAttention(hidden_size, num_heads=8, batch_first=True)
 
             # Fully connected layers
             self.fc1 = nn.Linear(hidden_size, 64)
@@ -153,9 +159,7 @@ if TORCH_AVAILABLE:
             lstm_out, (hidden, cell) = self.lstm(x)
 
             # Apply attention mechanism
-            attention_out, attention_weights = self.attention(
-                lstm_out, lstm_out, lstm_out
-            )
+            attention_out, attention_weights = self.attention(lstm_out, lstm_out, lstm_out)
 
             # Use the last output
             x = attention_out[:, -1, :]
@@ -170,7 +174,14 @@ if TORCH_AVAILABLE:
     class TradingTransformer(nn.Module):
         """Transformer architecture for advanced trading signal processing"""
 
-        def __init__(self, input_dim: int = 10, d_model: int = 256, nhead: int = 8, num_layers: int = 6, output_dim: int = 1):
+        def __init__(
+            self,
+            input_dim: int = 10,
+            d_model: int = 256,
+            nhead: int = 8,
+            num_layers: int = 6,
+            output_dim: int = 1,
+        ):
             super(TradingTransformer, self).__init__()
 
             self.d_model = d_model
@@ -189,9 +200,7 @@ if TORCH_AVAILABLE:
                 dropout=0.1,
                 batch_first=True,
             )
-            self.transformer_encoder = nn.TransformerEncoder(
-                encoder_layer, num_layers=num_layers
-            )
+            self.transformer_encoder = nn.TransformerEncoder(encoder_layer, num_layers=num_layers)
 
             # Output layers
             self.output_projection = nn.Linear(d_model, output_dim)
@@ -221,7 +230,12 @@ if TORCH_AVAILABLE:
     class ReinforcementLearningAgent(nn.Module):
         """Deep Q-Network for reinforcement learning in trading"""
 
-        def __init__(self, state_size: int = 20, action_size: int = 3, hidden_sizes: List[int] = [256, 128, 64]):
+        def __init__(
+            self,
+            state_size: int = 20,
+            action_size: int = 3,
+            hidden_sizes: List[int] = [256, 128, 64],
+        ):
             super(ReinforcementLearningAgent, self).__init__()
 
             # Create sequential layers
@@ -322,15 +336,21 @@ class NeuralProcessingEngine:
         try:
             # Price pattern CNN
             self.models["pattern_cnn"] = PricePatternCNN().to(self.device)
-            self.optimizers["pattern_cnn"] = optim.Adam(self.models["pattern_cnn"].parameters(), lr=0.01)
+            self.optimizers["pattern_cnn"] = optim.Adam(
+                self.models["pattern_cnn"].parameters(), lr=0.01
+            )
 
             # Trading LSTM
             self.models["trading_lstm"] = TradingLSTM().to(self.device)
-            self.optimizers["trading_lstm"] = optim.Adam(self.models["trading_lstm"].parameters(), lr=0.01)
+            self.optimizers["trading_lstm"] = optim.Adam(
+                self.models["trading_lstm"].parameters(), lr=0.01
+            )
 
             # Trading Transformer
             self.models["trading_transformer"] = TradingTransformer().to(self.device)
-            self.optimizers["trading_transformer"] = optim.Adam(self.models["trading_transformer"].parameters(), lr=0.001)
+            self.optimizers["trading_transformer"] = optim.Adam(
+                self.models["trading_transformer"].parameters(), lr=0.001
+            )
 
             # Reinforcement Learning Agent
             self.models["rl_agent"] = ReinforcementLearningAgent().to(self.device)
@@ -383,14 +403,16 @@ class NeuralProcessingEngine:
                         "volatility": 0.3,
                         "volume": 0.2,
                         "momentum": 0.1,
-                    }
+                    },
                 )
             self.models["pattern_cnn"].eval()
             # Preprocess data
             processed_data = self.preprocess_data(price_data, "minmax")
             # Convert to tensor
             if len(processed_data.shape) == 2:
-                processed_data = processed_data.reshape(processed_data.shape[0], 1, processed_data.shape[1])
+                processed_data = processed_data.reshape(
+                    processed_data.shape[0], 1, processed_data.shape[1]
+                )
             input_tensor = torch.FloatTensor(processed_data).to(self.device)
             # Forward pass
             with torch.no_grad():
@@ -410,10 +432,16 @@ class NeuralProcessingEngine:
             result = NeuralPrediction(
                 prediction=float(prediction[0]) if len(prediction) > 0 else 0.0,
                 confidence=float(confidence[0]) if len(confidence) > 0 else 0.0,
-                probability_distribution=prob_dist[0] if len(prob_dist) > 0 else np.array([0.33, 0.33, 0.34]),
+                probability_distribution=(
+                    prob_dist[0] if len(prob_dist) > 0 else np.array([0.33, 0.33, 0.34])
+                ),
                 feature_importance=feature_importance,
             )
-            logger.debug("Price pattern prediction: {0}, confidence: {1}".format(result.prediction, result.confidence))
+            logger.debug(
+                "Price pattern prediction: {0}, confidence: {1}".format(
+                    result.prediction, result.confidence
+                )
+            )
             return result
         except Exception as e:
             logger.error("Error in price pattern prediction: {0}".format(e))
@@ -439,11 +467,13 @@ class NeuralProcessingEngine:
                         "price_momentum": 0.25,
                         "volume_trend": 0.20,
                         "volatility_pattern": 0.20,
-                    }
+                    },
                 )
             self.models["trading_lstm"].eval()
             # Preprocess data
-            processed_data = self.preprocess_data(sequence_data.reshape(-1, sequence_data.shape[-1]), "standard")
+            processed_data = self.preprocess_data(
+                sequence_data.reshape(-1, sequence_data.shape[-1]), "standard"
+            )
             processed_data = processed_data.reshape(sequence_data.shape)
             # Convert to tensor
             input_tensor = torch.FloatTensor(processed_data).to(self.device)
@@ -469,7 +499,11 @@ class NeuralProcessingEngine:
                 feature_importance=feature_importance,
                 attention_weights=attention_weights.cpu().numpy(),
             )
-            logger.debug("Temporal sequence prediction: {0}, confidence: {1}".format(result.prediction, result.confidence))
+            logger.debug(
+                "Temporal sequence prediction: {0}, confidence: {1}".format(
+                    result.prediction, result.confidence
+                )
+            )
             return result
         except Exception as e:
             logger.error("Error in temporal sequence prediction: {0}".format(e))
@@ -495,11 +529,13 @@ class NeuralProcessingEngine:
                         "local_patterns": 0.25,
                         "attention_focus": 0.25,
                         "temporal_relationships": 0.20,
-                    }
+                    },
                 )
             self.models["trading_transformer"].eval()
             # Preprocess data
-            processed_data = self.preprocess_data(input_data.reshape(-1, input_data.shape[-1]), "standard")
+            processed_data = self.preprocess_data(
+                input_data.reshape(-1, input_data.shape[-1]), "standard"
+            )
             processed_data = processed_data.reshape(input_data.shape)
             # Convert to tensor
             input_tensor = torch.FloatTensor(processed_data).to(self.device)
@@ -523,7 +559,11 @@ class NeuralProcessingEngine:
                 probability_distribution=np.array([confidence, 1 - confidence]),
                 feature_importance=feature_importance,
             )
-            logger.debug("Transformer prediction: {0}, confidence: {1}".format(result.prediction, result.confidence))
+            logger.debug(
+                "Transformer prediction: {0}, confidence: {1}".format(
+                    result.prediction, result.confidence
+                )
+            )
             return result
         except Exception as e:
             logger.error("Error in transformer prediction: {0}".format(e))
@@ -566,13 +606,16 @@ class NeuralProcessingEngine:
                 "confidence": float(np.max(q_values_np) - np.mean(q_values_np)),
                 "epsilon": self.models["rl_agent"].epsilon,
             }
-            logger.debug("RL action: {0}, Q-values: {1}".format(result["action_name"], result["q_values"]))
+            logger.debug(
+                "RL action: {0}, Q-values: {1}".format(result["action_name"], result["q_values"])
+            )
             return result
         except Exception as e:
             logger.error("Error in reinforcement learning action: {0}".format(e))
             raise
 
-    def train_model(self,
+    def train_model(
+        self,
         model_name: str,
         train_data: np.ndarray,
         train_labels: np.ndarray,
@@ -608,7 +651,9 @@ class NeuralProcessingEngine:
             processed_data = self.preprocess_data(train_data, "standard")
 
             # Create dataset and dataloader
-            dataset = TensorDataset(torch.FloatTensor(processed_data), torch.FloatTensor(train_labels))
+            dataset = TensorDataset(
+                torch.FloatTensor(processed_data), torch.FloatTensor(train_labels)
+            )
             dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
 
             training_metrics = []
@@ -666,7 +711,9 @@ class NeuralProcessingEngine:
 
                 if model_name == "pattern_cnn" and SKLEARN_AVAILABLE:
                     accuracy = accuracy_score(actuals, predictions)
-                    precision = precision_score(actuals, predictions, average="weighted", zero_division=0)
+                    precision = precision_score(
+                        actuals, predictions, average="weighted", zero_division=0
+                    )
                     recall = recall_score(actuals, predictions, average="weighted", zero_division=0)
                 else:
                     # For regression models, use different metrics
@@ -674,7 +721,11 @@ class NeuralProcessingEngine:
                     precision = accuracy
                     recall = accuracy
 
-                f1 = 2 * (precision * recall) / (precision + recall) if (precision + recall) > 0 else 0
+                f1 = (
+                    2 * (precision * recall) / (precision + recall)
+                    if (precision + recall) > 0
+                    else 0
+                )
 
                 metrics = TrainingMetrics(
                     loss=avg_loss,
@@ -688,7 +739,11 @@ class NeuralProcessingEngine:
                 training_metrics.append(metrics)
 
                 if epoch % 10 == 0:
-                    logger.info("Epoch {0}: Loss={1:.4f}, Accuracy={2:.4f}".format(epoch, avg_loss, accuracy))
+                    logger.info(
+                        "Epoch {0}: Loss={1:.4f}, Accuracy={2:.4f}".format(
+                            epoch, avg_loss, accuracy
+                        )
+                    )
 
             # Store training history
             self.training_history[model_name] = training_metrics
@@ -700,7 +755,8 @@ class NeuralProcessingEngine:
             logger.error("Error training model {0}: {1}".format(model_name, e))
             raise
 
-    def neural_profit_optimization(self,
+    def neural_profit_optimization(
+        self,
         btc_price: float,
         usdc_hold: float,
         market_data: np.ndarray,
@@ -719,8 +775,12 @@ class NeuralProcessingEngine:
         try:
             # Get predictions from all models
             pattern_pred = self.predict_price_pattern(market_data.reshape(1, -1))
-            temporal_pred = self.predict_temporal_sequence(historical_data.reshape(1, -1, historical_data.shape[-1]))
-            transformer_pred = self.predict_with_transformer(historical_data.reshape(1, -1, historical_data.shape[-1]))
+            temporal_pred = self.predict_temporal_sequence(
+                historical_data.reshape(1, -1, historical_data.shape[-1])
+            )
+            transformer_pred = self.predict_with_transformer(
+                historical_data.reshape(1, -1, historical_data.shape[-1])
+            )
             rl_action = self.reinforcement_learning_action(market_data)
 
             # Ensemble prediction
@@ -767,7 +827,11 @@ class NeuralProcessingEngine:
                 "profit_multiplier": profit_multiplier,
             }
 
-            logger.info("Neural profit optimization: {0:.6f}, Action: {1}".format(optimized_profit, rl_action["action_name"]))
+            logger.info(
+                "Neural profit optimization: {0:.6f}, Action: {1}".format(
+                    optimized_profit, rl_action["action_name"]
+                )
+            )
             return result
 
         except Exception as e:

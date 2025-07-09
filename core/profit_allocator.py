@@ -14,6 +14,7 @@ from dataclasses import dataclass, field
 import time
 
 from core.backend_math import get_backend, is_gpu
+
 xp = get_backend()
 
 # Log backend status
@@ -130,9 +131,7 @@ def compute_gain_profile(profit_data: xp.ndarray, target_frequencies: List[float
 
 
 def optimize_profit_allocation(
-    profit_history: xp.ndarray,
-    strategy_weights: Dict[str, float],
-    risk_tolerance: float = 0.5
+    profit_history: xp.ndarray, strategy_weights: Dict[str, float], risk_tolerance: float = 0.5
 ) -> AllocationResult:
     """
     Optimize profit allocation using FFT-based analysis.
@@ -169,7 +168,9 @@ def optimize_profit_allocation(
             allocated_amounts[strategy] = total_profit * weight
 
         # Calculate efficiency score
-        efficiency_score = float(xp.mean(xp.abs(optimized_spectrum)) / xp.mean(xp.abs(fft_spectrum)))
+        efficiency_score = float(
+            xp.mean(xp.abs(optimized_spectrum)) / xp.mean(xp.abs(fft_spectrum))
+        )
 
         return AllocationResult(
             total_profit=total_profit,
@@ -180,8 +181,8 @@ def optimize_profit_allocation(
             metadata={
                 "risk_tolerance": risk_tolerance,
                 "strategy_count": len(strategy_weights),
-                "optimization_timestamp": time.time()
-            }
+                "optimization_timestamp": time.time(),
+            },
         )
 
     except Exception as e:
@@ -192,7 +193,7 @@ def optimize_profit_allocation(
             fft_spectrum=xp.array([]),
             gain_profile=xp.array([]),
             efficiency_score=0.0,
-            metadata={"error": str(e)}
+            metadata={"error": str(e)},
         )
 
 
@@ -214,12 +215,7 @@ def test_profit_allocation():
     """Test the profit allocation system."""
     # Generate test data
     profit_data = xp.random.randn(1000) * 100  # Simulated profit history
-    strategy_weights = {
-        "momentum": 0.4,
-        "mean_reversion": 0.3,
-        "arbitrage": 0.2,
-        "hedging": 0.1
-    }
+    strategy_weights = {"momentum": 0.4, "mean_reversion": 0.3, "arbitrage": 0.2, "hedging": 0.1}
 
     # Test allocation
     result = optimize_profit_allocation(profit_data, strategy_weights, risk_tolerance=0.3)

@@ -34,14 +34,18 @@ CUDA Integration:
 # CUDA Integration with Fallback
 try:
     import cupy as cp
+
     CUPY_AVAILABLE = True
 except ImportError:
     import numpy as cp
+
     CUPY_AVAILABLE = False
 
 logger = logging.getLogger(__name__)
 if CUPY_AVAILABLE:
-    logger.info("⚡ Enhanced Error Recovery System using GPU acceleration: {0}".format('cupy (GPU)'))
+    logger.info(
+        "⚡ Enhanced Error Recovery System using GPU acceleration: {0}".format('cupy (GPU)')
+    )
 else:
     logger.info("🔄 Enhanced Error Recovery System using CPU fallback: {0}".format('numpy (CPU)'))
 
@@ -160,7 +164,9 @@ class MathematicalStabilityChecker:
 
                     if cond_num > self.condition_number_threshold:
                         stability_report['is_stable'] = False
-                        stability_report['numerical_issues'].append(f"Ill-conditioned matrix (cond={cond_num:.2e})")
+                        stability_report['numerical_issues'].append(
+                            f"Ill-conditioned matrix (cond={cond_num:.2e})"
+                        )
 
                     # Check determinant
                     det = cp.linalg.det(matrix)
@@ -186,7 +192,9 @@ class MathematicalStabilityChecker:
 
                 except cp.linalg.LinAlgError as e:
                     stability_report['is_stable'] = False
-                    stability_report['numerical_issues'].append("Linear algebra error: {0}".format(str(e)))
+                    stability_report['numerical_issues'].append(
+                        "Linear algebra error: {0}".format(str(e))
+                    )
 
             return stability_report
 
@@ -280,7 +288,16 @@ class ErrorClassifier:
             'type',
             'missing',
         ]
-        self.error_patterns[ErrorCategory.SYSTEM] = ['system', 'os', 'file', 'permission', 'disk', 'hardware', 'driver', 'resource']
+        self.error_patterns[ErrorCategory.SYSTEM] = [
+            'system',
+            'os',
+            'file',
+            'permission',
+            'disk',
+            'hardware',
+            'driver',
+            'resource',
+        ]
         self.error_patterns[ErrorCategory.TRADING] = [
             'order',
             'execution',
@@ -292,7 +309,9 @@ class ErrorClassifier:
             'price',
         ]
 
-    def classify_error(self, error: Exception, context: Dict[str, Any] = None) -> Tuple[ErrorCategory, ErrorSeverity]:
+    def classify_error(
+        self, error: Exception, context: Dict[str, Any] = None
+    ) -> Tuple[ErrorCategory, ErrorSeverity]:
         """Classify error by category and severity"""
         try:
             error_message = str(error).lower()
@@ -314,7 +333,9 @@ class ErrorClassifier:
             logger.error("Error classifying error: {0}".format(e))
             return ErrorCategory.UNKNOWN, ErrorSeverity.MEDIUM
 
-    def _determine_severity(self, error: Exception, category: ErrorCategory, context: Dict[str, Any] = None) -> ErrorSeverity:
+    def _determine_severity(
+        self, error: Exception, category: ErrorCategory, context: Dict[str, Any] = None
+    ) -> ErrorSeverity:
         """Determine error severity based on type and context"""
         try:
             # Critical errors
@@ -352,9 +373,13 @@ class RecoveryManager:
         self.recovery_strategies = {}
         self.recovery_strategies[RecoveryStrategy.RETRY] = self._retry_strategy
         self.recovery_strategies[RecoveryStrategy.FALLBACK] = self._fallback_strategy
-        self.recovery_strategies[RecoveryStrategy.GRACEFUL_DEGRADATION] = self._graceful_degradation_strategy
+        self.recovery_strategies[RecoveryStrategy.GRACEFUL_DEGRADATION] = (
+            self._graceful_degradation_strategy
+        )
         self.recovery_strategies[RecoveryStrategy.SYSTEM_RESTART] = self._system_restart_strategy
-        self.recovery_strategies[RecoveryStrategy.MANUAL_INTERVENTION] = self._manual_intervention_strategy
+        self.recovery_strategies[RecoveryStrategy.MANUAL_INTERVENTION] = (
+            self._manual_intervention_strategy
+        )
         self.fallback_functions = {}
         self.degraded_mode_functions = {}
 
@@ -377,7 +402,11 @@ class RecoveryManager:
             error_record.recovery_time = time.time() - start_time
             error_record.recovered = success
 
-            logger.info("Recovery {0} for error {1}".format('successful' if success else 'failed', error_record.error_id))
+            logger.info(
+                "Recovery {0} for error {1}".format(
+                    'successful' if success else 'failed', error_record.error_id
+                )
+            )
             return success
 
         except Exception as e:
@@ -459,7 +488,9 @@ class RecoveryManager:
             logger.error("Error in fallback strategy: {0}".format(e))
             return False
 
-    def _graceful_degradation_strategy(self, error_record: ErrorRecord, context: Dict[str, Any] = None) -> bool:
+    def _graceful_degradation_strategy(
+        self, error_record: ErrorRecord, context: Dict[str, Any] = None
+    ) -> bool:
         """Graceful degradation strategy"""
         try:
             function_name = context.get('function_name') if context else None
@@ -488,7 +519,9 @@ class RecoveryManager:
             logger.error("Error in graceful degradation: {0}".format(e))
             return False
 
-    def _system_restart_strategy(self, error_record: ErrorRecord, context: Dict[str, Any] = None) -> bool:
+    def _system_restart_strategy(
+        self, error_record: ErrorRecord, context: Dict[str, Any] = None
+    ) -> bool:
         """System restart strategy (placeholder)"""
         try:
             if not self.config.auto_restart_enabled:
@@ -504,10 +537,14 @@ class RecoveryManager:
             logger.error("Error in system restart strategy: {0}".format(e))
             return False
 
-    def _manual_intervention_strategy(self, error_record: ErrorRecord, context: Dict[str, Any] = None) -> bool:
+    def _manual_intervention_strategy(
+        self, error_record: ErrorRecord, context: Dict[str, Any] = None
+    ) -> bool:
         """Manual intervention strategy"""
         try:
-            logger.critical("Manual intervention required for error {0}".format(error_record.error_id))
+            logger.critical(
+                "Manual intervention required for error {0}".format(error_record.error_id)
+            )
 
             # In a real system, this would trigger alerts to operators
             # For now, we'll just log the request'
@@ -711,7 +748,12 @@ class EnhancedErrorRecoverySystem:
 
         # Error tracking
         self.error_history = []
-        self.error_stats = {'total_errors': 0, 'recovered_errors': 0, 'failed_recoveries': 0, 'recovery_rate': 0.0}
+        self.error_stats = {
+            'total_errors': 0,
+            'recovered_errors': 0,
+            'failed_recoveries': 0,
+            'recovery_rate': 0.0,
+        }
 
         # Threading
         self.error_lock = threading.Lock()
@@ -756,7 +798,11 @@ class EnhancedErrorRecoverySystem:
                 else:
                     self.error_stats['failed_recoveries'] += 1
 
-                self.error_stats['recovery_rate'] = self.error_stats['recovered_errors'] / self.error_stats['total_errors'] if self.error_stats['total_errors'] > 0 else 0.0
+                self.error_stats['recovery_rate'] = (
+                    self.error_stats['recovered_errors'] / self.error_stats['total_errors']
+                    if self.error_stats['total_errors'] > 0
+                    else 0.0
+                )
 
             # Return recovery result
             if recovery_success and context:
@@ -862,7 +908,9 @@ class EnhancedErrorRecoverySystem:
             pass
 
 
-def error_recovery_decorator(recovery_system: EnhancedErrorRecoverySystem, function_name: str = None):
+def error_recovery_decorator(
+    recovery_system: EnhancedErrorRecoverySystem, function_name: str = None
+):
     """Decorator for automatic error recovery"""
 
     def decorator(func):

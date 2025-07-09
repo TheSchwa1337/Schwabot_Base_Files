@@ -84,14 +84,10 @@ class UnifiedMathSystem:
         )
 
         # Assess strategy confidence
-        confidence = self.zpe_zbe_core.assess_quantum_strategy_confidence(
-            zpe_vector, zbe_balance
-        )
+        confidence = self.zpe_zbe_core.assess_quantum_strategy_confidence(zpe_vector, zbe_balance)
 
         # Dual matrix sync trigger
-        sync_trigger = self.zpe_zbe_core.dual_matrix_sync_trigger(
-            zpe_vector, zbe_balance
-        )
+        sync_trigger = self.zpe_zbe_core.dual_matrix_sync_trigger(zpe_vector, zbe_balance)
 
         return {
             "is_synced": sync_trigger["is_synced"],
@@ -107,9 +103,7 @@ class UnifiedMathSystem:
             "recommended_action": sync_trigger["recommended_action"],
         }
 
-    def advanced_quantum_decision_router(
-        self, quantum_analysis: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    def advanced_quantum_decision_router(self, quantum_analysis: Dict[str, Any]) -> Dict[str, Any]:
         """
         Advanced quantum decision routing based on analysis.
 

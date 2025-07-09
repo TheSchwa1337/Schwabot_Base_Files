@@ -43,7 +43,7 @@ class SystemIntegrationManager:
             'system_uptime': 0.0,
             'trades_executed': 0,
             'backtests_completed': 0,
-            'errors_count': 0
+            'errors_count': 0,
         }
 
         # Initialize component references
@@ -90,7 +90,7 @@ class SystemIntegrationManager:
                 'neural_engine': self.neural_engine,
                 'brain_system': self.brain_system,
                 'portfolio_tracker': self.portfolio_tracker,
-                'backtesting': self.backtesting
+                'backtesting': self.backtesting,
             }
 
             self.is_initialized = True
@@ -102,8 +102,13 @@ class SystemIntegrationManager:
             self.performance_metrics['errors_count'] += 1
             raise
 
-    async def run_backtest(self, initial_capital: Decimal, start_date: datetime,
-                          end_date: datetime, trading_pair: TradingPair) -> Dict[str, Any]:
+    async def run_backtest(
+        self,
+        initial_capital: Decimal,
+        start_date: datetime,
+        end_date: datetime,
+        trading_pair: TradingPair,
+    ) -> Dict[str, Any]:
         """Run a backtest with the specified parameters."""
         if not self.is_initialized:
             raise RuntimeError("System not initialized")
@@ -119,7 +124,7 @@ class SystemIntegrationManager:
                 'trading_pair': trading_pair.value,
                 'enable_neural_processing': True,
                 'enable_brain_system': True,
-                'enable_tensor_memory': True
+                'enable_tensor_memory': True,
             }
 
             # Run backtest
@@ -147,7 +152,7 @@ class SystemIntegrationManager:
             'is_running': self.is_running,
             'components': list(self.components.keys()),
             'performance_metrics': self.performance_metrics.copy(),
-            'config': self.config
+            'config': self.config,
         }
 
     def export_system_data(self, filename: str = "system_data.json"):
@@ -156,7 +161,7 @@ class SystemIntegrationManager:
             data = {
                 'timestamp': datetime.now().isoformat(),
                 'status': self.get_system_status(),
-                'config': self.config
+                'config': self.config,
             }
 
             os.makedirs('exports', exist_ok=True)
@@ -204,7 +209,4 @@ async def initialize_and_start_system(config: Dict[str, Any]) -> SystemIntegrati
 
 
 # Export main classes and functions
-__all__ = [
-    'SystemIntegrationManager',
-    'initialize_and_start_system'
-]
+__all__ = ['SystemIntegrationManager', 'initialize_and_start_system']

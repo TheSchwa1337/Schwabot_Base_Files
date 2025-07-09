@@ -20,11 +20,13 @@ registry echoes of past high-yield delta patterns. Operates in memory, not immed
 # CUDA Integration with Fallback
 try:
     import cupy as cp
+
     USING_CUDA = True
     _backend = 'cupy (GPU)'
     xp = cp
 except ImportError:
     import numpy as cp  # fallback to numpy
+
     USING_CUDA = False
     _backend = 'numpy (CPU)'
     xp = cp
@@ -115,7 +117,7 @@ class GhostCore:
                 strength=strength,
                 timestamp=timestamp,
                 source=source,
-                metadata=signal_data
+                metadata=signal_data,
             )
 
             # Add to history
@@ -124,9 +126,11 @@ class GhostCore:
 
             # Keep history manageable
             if len(self.signal_history) > self.max_patterns * 2:
-                self.signal_history = self.signal_history[-self.max_patterns:]
+                self.signal_history = self.signal_history[-self.max_patterns :]
 
-            logger.debug("Processed ghost signal: type={0}, strength={1}".format(signal_type, strength))
+            logger.debug(
+                "Processed ghost signal: type={0}, strength={1}".format(signal_type, strength)
+            )
             return ghost_signal
 
         except Exception as e:
@@ -171,7 +175,9 @@ class GhostCore:
                 patterns.append(breakout_pattern)
 
             # Filter by confidence threshold
-            valid_patterns = [p for p in patterns if p.confidence >= self.pattern_confidence_threshold]
+            valid_patterns = [
+                p for p in patterns if p.confidence >= self.pattern_confidence_threshold
+            ]
 
             # Add to pattern history
             self.pattern_history.extend(valid_patterns)
@@ -179,7 +185,7 @@ class GhostCore:
 
             # Keep pattern history manageable
             if len(self.pattern_history) > self.max_patterns:
-                self.pattern_history = self.pattern_history[-self.max_patterns:]
+                self.pattern_history = self.pattern_history[-self.max_patterns :]
 
             logger.info("Detected {0} ghost patterns".format(len(valid_patterns)))
             return valid_patterns
@@ -214,7 +220,7 @@ class GhostCore:
                 confidence=confidence,
                 duration=duration,
                 signals=signals,
-                metadata={"slope": slope, "trend_direction": "up" if slope > 0 else "down"}
+                metadata={"slope": slope, "trend_direction": "up" if slope > 0 else "down"},
             )
 
         return None
@@ -234,8 +240,11 @@ class GhostCore:
         # Check for oscillation (high variance around mean)
         if variance > self.sensitivity * 0.1:
             # Calculate oscillation frequency
-            zero_crossings = sum(1 for i in range(1, len(strengths))
-                               if (strengths[i] - mean_strength) * (strengths[i-1] - mean_strength) < 0)
+            zero_crossings = sum(
+                1
+                for i in range(1, len(strengths))
+                if (strengths[i] - mean_strength) * (strengths[i - 1] - mean_strength) < 0
+            )
 
             frequency = zero_crossings / (len(strengths) - 1)
             confidence = min(frequency * 2, 1.0)
@@ -246,7 +255,11 @@ class GhostCore:
                 confidence=confidence,
                 duration=duration,
                 signals=signals,
-                metadata={"frequency": frequency, "zero_crossings": zero_crossings, "variance": variance}
+                metadata={
+                    "frequency": frequency,
+                    "zero_crossings": zero_crossings,
+                    "variance": variance,
+                },
             )
 
         return None
@@ -271,7 +284,11 @@ class GhostCore:
                 confidence=confidence,
                 duration=duration,
                 signals=signals[-3:],
-                metadata={"baseline": baseline, "recent": recent, "breakout_magnitude": abs(recent - baseline)}
+                metadata={
+                    "baseline": baseline,
+                    "recent": recent,
+                    "breakout_magnitude": abs(recent - baseline),
+                },
             )
 
         return None
@@ -291,7 +308,11 @@ class GhostCore:
                 return {"prediction": "no_data", "confidence": 0.0}
 
             # Analyze recent patterns
-            recent_patterns = self.pattern_history[-5:] if len(self.pattern_history) >= 5 else self.pattern_history
+            recent_patterns = (
+                self.pattern_history[-5:]
+                if len(self.pattern_history) >= 5
+                else self.pattern_history
+            )
 
             # Calculate prediction based on pattern types
             prediction_score = 0.0
@@ -330,8 +351,8 @@ class GhostCore:
                 "pattern_count": len(recent_patterns),
                 "metadata": {
                     "prediction_score": prediction_score,
-                    "total_confidence": total_confidence
-                }
+                    "total_confidence": total_confidence,
+                },
             }
 
         except Exception as e:
@@ -369,7 +390,7 @@ class GhostCore:
                 "signal_type_distribution": type_counts,
                 "pattern_type_distribution": pattern_type_counts,
                 "detection_accuracy": self.detection_accuracy,
-                "cache_size": len(self.analysis_cache)
+                "cache_size": len(self.analysis_cache),
             }
 
         except Exception as e:
@@ -383,7 +404,7 @@ class GhostCore:
             strength=0.0,
             timestamp=time.time(),
             source=source,
-            metadata={"error": "Null signal"}
+            metadata={"error": "Null signal"},
         )
 
     def clear_cache(self) -> None:
@@ -400,7 +421,8 @@ class GhostCore:
             # Filter out old signals
             old_count = len(self.signal_history)
             self.signal_history = [
-                signal for signal in self.signal_history
+                signal
+                for signal in self.signal_history
                 if current_time - signal.timestamp < max_age_seconds
             ]
             new_count = len(self.signal_history)
@@ -436,7 +458,7 @@ if __name__ == "__main__":
         signal_data = {
             "type": random.choice(["trend", "oscillation", "breakout"]),
             "strength": random.uniform(0.1, 1.0),
-            "timestamp": time.time() + i
+            "timestamp": time.time() + i,
         }
         ghost_core.process_signal(signal_data, "test_source")
 
@@ -445,9 +467,11 @@ if __name__ == "__main__":
     print("Detected patterns: {0}".format(len(patterns)))
 
     for pattern in patterns:
-        print("Pattern: {0}, Confidence: {1}, Duration: {2}".format(
-            pattern.pattern_type, pattern.confidence, pattern.duration
-        ))
+        print(
+            "Pattern: {0}, Confidence: {1}, Duration: {2}".format(
+                pattern.pattern_type, pattern.confidence, pattern.duration
+            )
+        )
 
     # Get prediction
     prediction = ghost_core.predict_ghost_activity()

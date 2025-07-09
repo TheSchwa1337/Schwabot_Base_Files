@@ -36,6 +36,7 @@ try:
     from .unified_math_system import generate_unified_hash
     from .fractal_core import fractal_quantize_vector
     from .orbital_shell_brain_system import OrbitalShell
+
     SCHWABOT_COMPONENTS_AVAILABLE = True
 except ImportError as e:
     print(f"⚠️ Some Schwabot components not available: {e}")
@@ -46,6 +47,7 @@ logger = logging.getLogger(__name__)
 # CUDA Integration with Fallback
 try:
     import cupy as cp
+
     USING_CUDA = True
     _backend = "cupy (GPU)"
     xp = cp
@@ -59,21 +61,23 @@ logger.info(f"🔮 SymbolicInterpreter using backend: {_backend}")
 
 class SymbolType(Enum):
     """Types of symbols in the system"""
-    ELEMENTAL = "elemental"      # [FIRE], [WATER], [EARTH], [AIR]
-    EMOTIONAL = "emotional"      # [JOY], [FEAR], [ANGER], [CALM]
-    ACTION = "action"           # [BUY], [SELL], [HOLD], [WAIT]
-    STATE = "state"             # [HOT], [COLD], [WARM], [NEUTRAL]
-    COMPOUND = "compound"       # [STEAM], [ICE], [LAVA], [SMOKE]
-    BRAIN = "brain"             # [BRAIN], [EYE], [FIRE], [MIND]
-    ABSTRACT = "abstract"       # [CHAOS], [ORDER], [FLOW], [STASIS]
+
+    ELEMENTAL = "elemental"  # [FIRE], [WATER], [EARTH], [AIR]
+    EMOTIONAL = "emotional"  # [JOY], [FEAR], [ANGER], [CALM]
+    ACTION = "action"  # [BUY], [SELL], [HOLD], [WAIT]
+    STATE = "state"  # [HOT], [COLD], [WARM], [NEUTRAL]
+    COMPOUND = "compound"  # [STEAM], [ICE], [LAVA], [SMOKE]
+    BRAIN = "brain"  # [BRAIN], [EYE], [FIRE], [MIND]
+    ABSTRACT = "abstract"  # [CHAOS], [ORDER], [FLOW], [STASIS]
 
 
 class CollapseMode(Enum):
     """Modes for symbolic collapse"""
+
     DETERMINISTIC = "deterministic"  # Fixed mapping
     PROBABILISTIC = "probabilistic"  # Weighted random
-    ADAPTIVE = "adaptive"           # Dynamic based on context
-    QUANTUM = "quantum"            # Quantum superposition collapse
+    ADAPTIVE = "adaptive"  # Dynamic based on context
+    QUANTUM = "quantum"  # Quantum superposition collapse
 
 
 @dataclass
@@ -156,7 +160,7 @@ class SymbolicInterpreter:
             "successful_collapses": 0,
             "failed_collapses": 0,
             "average_confidence": 0.0,
-            "pattern_complexity": 0.0
+            "pattern_complexity": 0.0,
         }
 
         # Threading
@@ -195,7 +199,11 @@ class SymbolicInterpreter:
 
             # Brain symbols
             brain_symbols = {
-                "[BRAIN]": {"type": SymbolType.BRAIN, "weight": 1.0, "action": "cognitive_analysis"},
+                "[BRAIN]": {
+                    "type": SymbolType.BRAIN,
+                    "weight": 1.0,
+                    "action": "cognitive_analysis",
+                },
                 "[EYE]": {"type": SymbolType.BRAIN, "weight": 1.0, "action": "market_observation"},
                 "[MIND]": {"type": SymbolType.BRAIN, "weight": 1.0, "action": "strategic_planning"},
                 "[FIRE]": {"type": SymbolType.BRAIN, "weight": 1.0, "action": "neural_activation"},
@@ -230,7 +238,7 @@ class SymbolicInterpreter:
                     symbol_type=symbol_data["type"],
                     weight=symbol_data["weight"],
                     vector=vector,
-                    metadata={"action": symbol_data["action"]}
+                    metadata={"action": symbol_data["action"]},
                 )
 
                 self.symbol_database[symbol_name] = symbol
@@ -259,7 +267,7 @@ class SymbolicInterpreter:
 
             # Convert hash to vector
             vector = np.zeros(self.config["symbol_vector_dim"])
-            for i, char in enumerate(hash_value[:self.config["symbol_vector_dim"]]):
+            for i, char in enumerate(hash_value[: self.config["symbol_vector_dim"]]):
                 vector[i] = ord(char) / 255.0
 
             # Normalize vector
@@ -272,9 +280,7 @@ class SymbolicInterpreter:
             return np.random.rand(self.config["symbol_vector_dim"])
 
     def interpret_symbol_pattern(
-        self,
-        raw_pattern: str,
-        market_context: Dict[str, Any] = None
+        self, raw_pattern: str, market_context: Dict[str, Any] = None
     ) -> InterpretationResult:
         """
         Interpret a raw symbol pattern into trading action
@@ -317,8 +323,8 @@ class SymbolicInterpreter:
                     metadata={
                         "raw_pattern": raw_pattern,
                         "market_context": market_context,
-                        "interpretation_count": self.interpretation_count
-                    }
+                        "interpretation_count": self.interpretation_count,
+                    },
                 )
 
                 # Update system state
@@ -349,7 +355,7 @@ class SymbolicInterpreter:
                         symbol_type=SymbolType.ABSTRACT,
                         weight=0.5,
                         vector=np.random.rand(self.config["symbol_vector_dim"]),
-                        metadata={"action": "unknown_action"}
+                        metadata={"action": "unknown_action"},
                     )
                     symbols.append(unknown_symbol)
 
@@ -357,20 +363,12 @@ class SymbolicInterpreter:
             pattern_hash = hashlib.sha256(raw_pattern.encode()).hexdigest()
 
             return SymbolPattern(
-                symbols=symbols,
-                pattern_hash=pattern_hash,
-                timestamp=time.time(),
-                context={}
+                symbols=symbols, pattern_hash=pattern_hash, timestamp=time.time(), context={}
             )
 
         except Exception as e:
             logger.error(f"Error parsing symbol pattern: {e}")
-            return SymbolPattern(
-                symbols=[],
-                pattern_hash="",
-                timestamp=time.time(),
-                context={}
-            )
+            return SymbolPattern(symbols=[], pattern_hash="", timestamp=time.time(), context={})
 
     def _apply_compound_rules(self, pattern: SymbolPattern) -> SymbolPattern:
         """Apply compound rules to simplify pattern"""
@@ -392,13 +390,15 @@ class SymbolicInterpreter:
                         compound_symbol = self.symbol_database[compound_symbol_name]
 
                         # Replace the two symbols with compound
-                        new_symbols = pattern.symbols[:i] + [compound_symbol] + pattern.symbols[i+2:]
+                        new_symbols = (
+                            pattern.symbols[:i] + [compound_symbol] + pattern.symbols[i + 2 :]
+                        )
 
                         return SymbolPattern(
                             symbols=new_symbols,
                             pattern_hash=pattern.pattern_hash,
                             timestamp=pattern.timestamp,
-                            context=pattern.context
+                            context=pattern.context,
                         )
 
             return pattern
@@ -408,9 +408,7 @@ class SymbolicInterpreter:
             return pattern
 
     def _perform_symbolic_collapse(
-        self,
-        pattern: SymbolPattern,
-        market_context: Dict[str, Any]
+        self, pattern: SymbolPattern, market_context: Dict[str, Any]
     ) -> CollapseResult:
         """Perform symbolic collapse to determine action"""
         try:
@@ -449,8 +447,8 @@ class SymbolicInterpreter:
                 metadata={
                     "pattern_hash": pattern.pattern_hash,
                     "symbol_count": len(pattern.symbols),
-                    "dominant_weight": dominant_symbol.weight
-                }
+                    "dominant_weight": dominant_symbol.weight,
+                },
             )
 
         except Exception as e:
@@ -458,9 +456,7 @@ class SymbolicInterpreter:
             return self._get_default_collapse_result()
 
     def _calculate_collapse_confidence(
-        self,
-        pattern: SymbolPattern,
-        market_context: Dict[str, Any]
+        self, pattern: SymbolPattern, market_context: Dict[str, Any]
     ) -> float:
         """Calculate confidence for collapse result"""
         try:
@@ -478,11 +474,7 @@ class SymbolicInterpreter:
                 context_factor = 1.0 - abs(volatility - 0.5)
 
             # Combine factors
-            confidence = (
-                base_confidence * 0.4 +
-                type_diversity * 0.3 +
-                context_factor * 0.3
-            )
+            confidence = base_confidence * 0.4 + type_diversity * 0.3 + context_factor * 0.3
 
             return float(np.clip(confidence, 0.0, 1.0))
 
@@ -510,9 +502,7 @@ class SymbolicInterpreter:
             return 0.5
 
     def _determine_fractal_strategy(
-        self,
-        collapse_result: CollapseResult,
-        similarity_score: float
+        self, collapse_result: CollapseResult, similarity_score: float
     ) -> str:
         """Determine fractal strategy based on collapse result"""
         try:
@@ -614,9 +604,9 @@ class SymbolicInterpreter:
             total_interpretations = self.performance_metrics["total_interpretations"]
             current_avg = self.performance_metrics["average_confidence"]
             new_avg = (
-                (current_avg * (total_interpretations - 1) +
-                 interpretation_result.collapse_result.confidence) / total_interpretations
-            )
+                current_avg * (total_interpretations - 1)
+                + interpretation_result.collapse_result.confidence
+            ) / total_interpretations
             self.performance_metrics["average_confidence"] = new_avg
 
             # Update pattern complexity
@@ -634,20 +624,15 @@ class SymbolicInterpreter:
             action="defer_action",
             strategy_id=f"symbolic_default_{int(time.time())}",
             market_context={},
-            metadata={"error": "default_collapse"}
+            metadata={"error": "default_collapse"},
         )
 
     def _get_fallback_interpretation(
-        self,
-        raw_pattern: str,
-        market_context: Dict[str, Any]
+        self, raw_pattern: str, market_context: Dict[str, Any]
     ) -> InterpretationResult:
         """Get fallback interpretation when processing fails"""
         fallback_pattern = SymbolPattern(
-            symbols=[],
-            pattern_hash="",
-            timestamp=time.time(),
-            context={}
+            symbols=[], pattern_hash="", timestamp=time.time(), context={}
         )
 
         fallback_collapse = self._get_default_collapse_result()
@@ -661,8 +646,8 @@ class SymbolicInterpreter:
             metadata={
                 "raw_pattern": raw_pattern,
                 "market_context": market_context,
-                "error": "fallback_interpretation"
-            }
+                "error": "fallback_interpretation",
+            },
         )
 
     def get_system_status(self) -> Dict[str, Any]:
@@ -676,7 +661,7 @@ class SymbolicInterpreter:
                 "pattern_history_size": len(self.pattern_history),
                 "performance_metrics": self.performance_metrics,
                 "backend": _backend,
-                "cuda_available": USING_CUDA
+                "cuda_available": USING_CUDA,
             }
         except Exception as e:
             logger.error(f"Error getting system status: {e}")

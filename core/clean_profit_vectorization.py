@@ -10,11 +10,13 @@ import hashlib
 # CUDA Integration with Fallback
 try:
     import cupy as cp
+
     USING_CUDA = True
     _backend = 'cupy (GPU)'
     xp = cp
 except ImportError:
     import numpy as cp  # fallback to numpy
+
     USING_CUDA = False
     _backend = 'numpy (CPU)'
     xp = cp
@@ -87,6 +89,7 @@ class AllocationMethod(Enum):
 @dataclass
 class ProfitVector:
     """Profit vector result."""
+
     vector_id: str
     btc_price: float
     volume: float
@@ -101,6 +104,7 @@ class ProfitVector:
 @dataclass
 class BitPhaseTrigger:
     """Bit-phase trigger data."""
+
     bit_phase: int
     phase_value: int
     trigger_strength: float
@@ -112,6 +116,7 @@ class BitPhaseTrigger:
 @dataclass
 class ConsensusVote:
     """Consensus voting data."""
+
     vote_id: str
     profit_vector: np.ndarray
     confidence: float
@@ -124,6 +129,7 @@ class ConsensusVote:
 @dataclass
 class DLTWaveformData:
     """DLT waveform data."""
+
     waveform_id: str
     bit_phase: int
     phase_values: np.ndarray
@@ -136,6 +142,7 @@ class DLTWaveformData:
 @dataclass
 class DynamicAllocationSlider:
     """Dynamic allocation slider data."""
+
     slider_id: str
     allocation_percentage: float
     min_allocation: float
@@ -216,7 +223,9 @@ class CleanProfitVectorization:
 
         logger.info("Clean Profit Vectorization system initialized")
 
-    def calculate_profit_vector(self, vector_input: Dict[str, Any], mode: VectorizationMode = VectorizationMode.ADAPTIVE) -> ProfitVector:
+    def calculate_profit_vector(
+        self, vector_input: Dict[str, Any], mode: VectorizationMode = VectorizationMode.ADAPTIVE
+    ) -> ProfitVector:
         """
         Calculate profit vector using specified mode.
 
@@ -256,7 +265,9 @@ class CleanProfitVectorization:
             precision_factor = self._calculate_precision_factor(vector_input)
 
             # Combine all factors
-            total_profit = base_profit * mode_multiplier * risk_factor * thermal_factor * precision_factor
+            total_profit = (
+                base_profit * mode_multiplier * risk_factor * thermal_factor * precision_factor
+            )
 
             # Ensure bounded result
             total_profit = max(-1.0, min(1.0, total_profit))
@@ -287,7 +298,9 @@ class CleanProfitVectorization:
             calculation_time = time.time() - start_time
             self.total_calculation_time += calculation_time
 
-            logger.debug("Calculated profit vector: {:.6f} in {:.4f}s".format(total_profit, calculation_time))
+            logger.debug(
+                "Calculated profit vector: {:.6f} in {:.4f}s".format(total_profit, calculation_time)
+            )
 
             return profit_vector
 
@@ -421,7 +434,12 @@ def create_profit_vectorization(cache_size: int = 1000) -> CleanProfitVectorizat
     return CleanProfitVectorization(cache_size)
 
 
-def calculate_quick_profit_vector(price: float, volume: float, volatility: float = 0.5, mode: VectorizationMode = VectorizationMode.BALANCED) -> ProfitVector:
+def calculate_quick_profit_vector(
+    price: float,
+    volume: float,
+    volatility: float = 0.5,
+    mode: VectorizationMode = VectorizationMode.BALANCED,
+) -> ProfitVector:
     """Quick profit vector calculation for simple use cases."""
     vectorizer = create_profit_vectorization()
     vector_input = {
@@ -452,7 +470,11 @@ def demo_profit_vectorization():
 
     for mode in VectorizationMode:
         vector = vectorizer.calculate_profit_vector(test_input, mode)
-        print("{0}: {1:.6f} (confidence: {2:.3f})".format(mode.value, vector.profit_score, vector.confidence_score))
+        print(
+            "{0}: {1:.6f} (confidence: {2:.3f})".format(
+                mode.value, vector.profit_score, vector.confidence_score
+            )
+        )
 
     # Show performance metrics
     metrics = vectorizer.get_performance_metrics()

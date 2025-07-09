@@ -11,9 +11,7 @@ from typing import Callable, Any, Optional, Dict
 from profit_backend_dispatcher import dispatch_op, registry
 
 
-def profit_driven_op(
-        operation_name: str,
-        profit_calculator: Optional[Callable] = None):
+def profit_driven_op(operation_name: str, profit_calculator: Optional[Callable] = None):
     """
     Decorator to make a function use profit-driven backend selection.
 
@@ -48,7 +46,9 @@ def profit_driven_op(
 
             # Try to use the profit-driven dispatcher, fallback to original function if operation not registered
             try:
-                return dispatch_op(operation_name, *args, profit=profit, data_size=data_size, **kwargs)
+                return dispatch_op(
+                    operation_name, *args, profit=profit, data_size=data_size, **kwargs
+                )
             except ValueError:
                 # Operation not registered, fallback to original function
                 return func(*args, **kwargs)
@@ -102,8 +102,7 @@ def profit_tracked(profit_calculator: Optional[Callable] = None):
                 execution_time = time.time() - start_time
                 # Update registry (using 'cpu' as default since we don't know
                 # the backend)
-                registry.update_stats(
-                    op_name, 'cpu', execution_time, profit, success)
+                registry.update_stats(op_name, 'cpu', execution_time, profit, success)
 
             return result
 
@@ -144,8 +143,7 @@ def auto_backend_select(profit_calculator: Optional[Callable] = None):
                     data_size = len(arg)
 
             # Get backend recommendation
-            recommended_backend = registry.get_backend_recommendation(
-                op_name, data_size)
+            recommended_backend = registry.get_backend_recommendation(op_name, data_size)
 
             # Execute with timing
             start_time = time.time()
@@ -159,12 +157,7 @@ def auto_backend_select(profit_calculator: Optional[Callable] = None):
             finally:
                 execution_time = time.time() - start_time
                 # Update registry with the backend that was actually used
-                registry.update_stats(
-                    op_name,
-                    recommended_backend,
-                    execution_time,
-                    profit,
-                    success)
+                registry.update_stats(op_name, recommended_backend, execution_time, profit, success)
 
             return result
 

@@ -4,6 +4,7 @@ from dataclasses import dataclass, field
 import time
 from typing import Dict, Any, List, Optional
 from core.backend_math import get_backend, is_gpu
+
 xp = get_backend()
 
 # !/usr/bin/env python3
@@ -206,11 +207,7 @@ class QSCEnhancedProfitAllocator:
         )
 
         self.active_cycles[cycle_id] = cycle
-        logger.info(
-            "Created QSC profit cycle {0} with mode {1}".format(
-                cycle_id, qsc_mode.value
-            )
-        )
+        logger.info("Created QSC profit cycle {0} with mode {1}".format(cycle_id, qsc_mode.value))
 
         return cycle
 
@@ -231,16 +228,12 @@ class QSCEnhancedProfitAllocator:
 
         # QSC validation check
         if not cycle.recommended_by_qsc:
-            logger.warning(
-                "Cycle {0} not recommended by QSC, blocking allocation".format(cycle_id)
-            )
+            logger.warning("Cycle {0} not recommended by QSC, blocking allocation".format(cycle_id))
             cycle.qsc_blocked_amount += profit_amount
             return {"allocated": 0.0, "blocked": profit_amount, "reason": "QSC validation failed"}
 
         # Calculate allocation based on QSC mode
-        allocation_result = self._calculate_qsc_allocation(
-            cycle, profit_amount, allocation_targets
-        )
+        allocation_result = self._calculate_qsc_allocation(cycle, profit_amount, allocation_targets)
 
         # Update cycle
         cycle.allocated_profit += allocation_result["allocated"]
@@ -299,9 +292,7 @@ class QSCEnhancedProfitAllocator:
         quantum_score: float,
     ) -> QSCAllocationMode:
         """Determine QSC allocation mode based on metrics."""
-        avg_score = (
-            resonance_score + fibonacci_alignment + entropy_stability + quantum_score
-        ) / 4
+        avg_score = (resonance_score + fibonacci_alignment + entropy_stability + quantum_score) / 4
 
         if avg_score >= 0.8:
             return QSCAllocationMode.QUANTUM_ENHANCED
@@ -396,12 +387,8 @@ class QSCEnhancedProfitAllocator:
             "active_cycles": len(self.active_cycles),
             "total_cycles": len(self.cycle_history),
             "max_concurrent_cycles": self.config["max_concurrent_cycles"],
-            "total_profit_allocated": sum(
-                c.allocated_profit for c in self.active_cycles.values()
-            ),
-            "total_profit_blocked": sum(
-                c.qsc_blocked_amount for c in self.active_cycles.values()
-            ),
+            "total_profit_allocated": sum(c.allocated_profit for c in self.active_cycles.values()),
+            "total_profit_blocked": sum(c.qsc_blocked_amount for c in self.active_cycles.values()),
         }
 
 

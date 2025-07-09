@@ -30,11 +30,13 @@ CUDA Integration:
 # CUDA Integration with Fallback
 try:
     import cupy as cp
+
     USING_CUDA = True
     _backend = 'cupy (GPU)'
     xp = cp
 except ImportError:
     import numpy as cp  # fallback to numpy
+
     USING_CUDA = False
     _backend = 'numpy (CPU)'
     xp = cp
@@ -87,11 +89,15 @@ class MatrixMathUtils:
 
             result = xp.dot(matrix_a, matrix_b)
 
-            self._log_operation("matrix_multiply", result, {
-                "matrix_a_shape": matrix_a.shape,
-                "matrix_b_shape": matrix_b.shape,
-                "result_shape": result.shape
-            })
+            self._log_operation(
+                "matrix_multiply",
+                result,
+                {
+                    "matrix_a_shape": matrix_a.shape,
+                    "matrix_b_shape": matrix_b.shape,
+                    "result_shape": result.shape,
+                },
+            )
             return result
 
         except Exception as e:
@@ -120,10 +126,9 @@ class MatrixMathUtils:
             else:
                 result = xp.linalg.inv(matrix)
 
-            self._log_operation("matrix_inverse", result, {
-                "matrix_shape": matrix.shape,
-                "determinant": det
-            })
+            self._log_operation(
+                "matrix_inverse", result, {"matrix_shape": matrix.shape, "determinant": det}
+            )
             return result
 
         except Exception as e:
@@ -146,17 +151,20 @@ class MatrixMathUtils:
 
             eigenvalues, eigenvectors = xp.linalg.eig(matrix)
 
-            self._log_operation("eigenvalue_decomposition", (eigenvalues, eigenvectors), {
-                "matrix_shape": matrix.shape,
-                "num_eigenvalues": len(eigenvalues)
-            })
+            self._log_operation(
+                "eigenvalue_decomposition",
+                (eigenvalues, eigenvectors),
+                {"matrix_shape": matrix.shape, "num_eigenvalues": len(eigenvalues)},
+            )
             return eigenvalues, eigenvectors
 
         except Exception as e:
             logger.error("Error in eigenvalue decomposition: {0}".format(e))
             return xp.array([]), xp.array([])
 
-    def singular_value_decomposition(self, matrix: xp.ndarray) -> Tuple[xp.ndarray, xp.ndarray, xp.ndarray]:
+    def singular_value_decomposition(
+        self, matrix: xp.ndarray
+    ) -> Tuple[xp.ndarray, xp.ndarray, xp.ndarray]:
         """
         Perform singular value decomposition.
 
@@ -169,10 +177,9 @@ class MatrixMathUtils:
         try:
             U, S, V = xp.linalg.svd(matrix)
 
-            self._log_operation("svd", (U, S, V), {
-                "matrix_shape": matrix.shape,
-                "num_singular_values": len(S)
-            })
+            self._log_operation(
+                "svd", (U, S, V), {"matrix_shape": matrix.shape, "num_singular_values": len(S)}
+            )
             return U, S, V
 
         except Exception as e:
@@ -194,11 +201,11 @@ class MatrixMathUtils:
             S = xp.linalg.svd(matrix, compute_uv=False)
             rank = xp.sum(S > tolerance)
 
-            self._log_operation("matrix_rank", rank, {
-                "matrix_shape": matrix.shape,
-                "tolerance": tolerance,
-                "singular_values": S
-            })
+            self._log_operation(
+                "matrix_rank",
+                rank,
+                {"matrix_shape": matrix.shape, "tolerance": tolerance, "singular_values": S},
+            )
             return int(rank)
 
         except Exception as e:
@@ -219,10 +226,11 @@ class MatrixMathUtils:
             S = xp.linalg.svd(matrix, compute_uv=False)
             condition_number = xp.max(S) / xp.min(S)
 
-            self._log_operation("matrix_condition_number", condition_number, {
-                "matrix_shape": matrix.shape,
-                "singular_values": S
-            })
+            self._log_operation(
+                "matrix_condition_number",
+                condition_number,
+                {"matrix_shape": matrix.shape, "singular_values": S},
+            )
             return float(condition_number)
 
         except Exception as e:
@@ -251,10 +259,9 @@ class MatrixMathUtils:
             else:
                 raise ValueError("Unknown norm type: {0}".format(norm_type))
 
-            self._log_operation("matrix_norm", norm, {
-                "matrix_shape": matrix.shape,
-                "norm_type": norm_type
-            })
+            self._log_operation(
+                "matrix_norm", norm, {"matrix_shape": matrix.shape, "norm_type": norm_type}
+            )
             return float(norm)
 
         except Exception as e:
@@ -277,9 +284,7 @@ class MatrixMathUtils:
 
             trace = xp.trace(matrix)
 
-            self._log_operation("matrix_trace", trace, {
-                "matrix_shape": matrix.shape
-            })
+            self._log_operation("matrix_trace", trace, {"matrix_shape": matrix.shape})
             return float(trace)
 
         except Exception as e:
@@ -302,9 +307,7 @@ class MatrixMathUtils:
 
             det = xp.linalg.det(matrix)
 
-            self._log_operation("matrix_determinant", det, {
-                "matrix_shape": matrix.shape
-            })
+            self._log_operation("matrix_determinant", det, {"matrix_shape": matrix.shape})
             return float(det)
 
         except Exception as e:
@@ -336,10 +339,9 @@ class MatrixMathUtils:
                 # Negative power: matrix^(-n) = (matrix^(-1))^n
                 result = xp.linalg.matrix_power(xp.linalg.inv(matrix), -power)
 
-            self._log_operation("matrix_power", result, {
-                "matrix_shape": matrix.shape,
-                "power": power
-            })
+            self._log_operation(
+                "matrix_power", result, {"matrix_shape": matrix.shape, "power": power}
+            )
             return result
 
         except Exception as e:
@@ -362,9 +364,7 @@ class MatrixMathUtils:
 
             result = xp.linalg.expm(matrix)
 
-            self._log_operation("matrix_exponential", result, {
-                "matrix_shape": matrix.shape
-            })
+            self._log_operation("matrix_exponential", result, {"matrix_shape": matrix.shape})
             return result
 
         except Exception as e:
@@ -387,9 +387,7 @@ class MatrixMathUtils:
 
             result = xp.linalg.logm(matrix)
 
-            self._log_operation("matrix_logarithm", result, {
-                "matrix_shape": matrix.shape
-            })
+            self._log_operation("matrix_logarithm", result, {"matrix_shape": matrix.shape})
             return result
 
         except Exception as e:
@@ -412,9 +410,7 @@ class MatrixMathUtils:
 
             result = xp.linalg.sqrtm(matrix)
 
-            self._log_operation("matrix_sqrt", result, {
-                "matrix_shape": matrix.shape
-            })
+            self._log_operation("matrix_sqrt", result, {"matrix_shape": matrix.shape})
             return result
 
         except Exception as e:
@@ -434,10 +430,11 @@ class MatrixMathUtils:
         try:
             result = xp.linalg.pinv(matrix)
 
-            self._log_operation("matrix_pseudo_inverse", result, {
-                "matrix_shape": matrix.shape,
-                "result_shape": result.shape
-            })
+            self._log_operation(
+                "matrix_pseudo_inverse",
+                result,
+                {"matrix_shape": matrix.shape, "result_shape": result.shape},
+            )
             return result
 
         except Exception as e:
@@ -460,9 +457,7 @@ class MatrixMathUtils:
 
             result = xp.linalg.cholesky(matrix)
 
-            self._log_operation("matrix_cholesky", result, {
-                "matrix_shape": matrix.shape
-            })
+            self._log_operation("matrix_cholesky", result, {"matrix_shape": matrix.shape})
             return result
 
         except Exception as e:
@@ -482,16 +477,16 @@ class MatrixMathUtils:
         try:
             Q, R = xp.linalg.qr(matrix)
 
-            self._log_operation("matrix_qr", (Q, R), {
-                "matrix_shape": matrix.shape
-            })
+            self._log_operation("matrix_qr", (Q, R), {"matrix_shape": matrix.shape})
             return Q, R
 
         except Exception as e:
             logger.error("Error in QR decomposition: {0}".format(e))
             return xp.array([]), xp.array([])
 
-    def matrix_lu_decomposition(self, matrix: xp.ndarray) -> Tuple[xp.ndarray, xp.ndarray, xp.ndarray]:
+    def matrix_lu_decomposition(
+        self, matrix: xp.ndarray
+    ) -> Tuple[xp.ndarray, xp.ndarray, xp.ndarray]:
         """
         Perform LU decomposition.
 
@@ -507,9 +502,7 @@ class MatrixMathUtils:
 
             P, L, U = xp.linalg.lu(matrix)
 
-            self._log_operation("matrix_lu", (P, L, U), {
-                "matrix_shape": matrix.shape
-            })
+            self._log_operation("matrix_lu", (P, L, U), {"matrix_shape": matrix.shape})
             return P, L, U
 
         except Exception as e:
@@ -519,10 +512,7 @@ class MatrixMathUtils:
     def _log_operation(self, operation: str, result: Any, metadata: Dict[str, Any]) -> None:
         """Log a matrix operation for debugging and analysis."""
         matrix_result = MatrixResult(
-            result=result,
-            operation=operation,
-            timestamp=time.time(),
-            metadata=metadata
+            result=result, operation=operation, timestamp=time.time(), metadata=metadata
         )
         self.operation_history.append(matrix_result)
 
@@ -561,7 +551,7 @@ class MatrixMathUtils:
             operation_avg_times = {}
             for op_type, times in operation_times.items():
                 if len(times) > 1:
-                    intervals = [times[i] - times[i-1] for i in range(1, len(times))]
+                    intervals = [times[i] - times[i - 1] for i in range(1, len(times))]
                     operation_avg_times[op_type] = xp.mean(intervals)
                 else:
                     operation_avg_times[op_type] = 0.0
@@ -571,7 +561,9 @@ class MatrixMathUtils:
                 "operation_counts": operation_counts,
                 "operation_avg_times": operation_avg_times,
                 "cache_size": len(self.matrix_cache),
-                "last_operation_time": self.operation_history[-1].timestamp if self.operation_history else 0
+                "last_operation_time": (
+                    self.operation_history[-1].timestamp if self.operation_history else 0
+                ),
             }
 
         except Exception as e:

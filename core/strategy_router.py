@@ -14,6 +14,7 @@ from dataclasses import dataclass, field
 import time
 
 from core.backend_math import get_backend, is_gpu
+
 xp = get_backend()
 
 # Log backend status
@@ -110,9 +111,7 @@ def route_decision_logic(signal_vec: xp.ndarray) -> str:
         return "route_default"
 
 
-def analyze_strategy_performance(
-    strategy_results: List[Dict[str, Any]]
-) -> Dict[str, float]:
+def analyze_strategy_performance(strategy_results: List[Dict[str, Any]]) -> Dict[str, float]:
     """
     Analyze strategy performance using XP backend.
 
@@ -140,7 +139,7 @@ def analyze_strategy_performance(
             'avg_duration': float(xp.mean(durations)),
             'total_trades': len(strategy_results),
             'profitable_trades': int(xp.sum(profits > 0)),
-            'profit_ratio': float(xp.sum(profits > 0) / len(profits))
+            'profit_ratio': float(xp.sum(profits > 0) / len(profits)),
         }
 
         return metrics
@@ -151,8 +150,7 @@ def analyze_strategy_performance(
 
 
 def compute_strategy_weights(
-    historical_performance: xp.ndarray,
-    current_market_conditions: Dict[str, Any]
+    historical_performance: xp.ndarray, current_market_conditions: Dict[str, Any]
 ) -> xp.ndarray:
     """
     Compute strategy weights based on historical performance and market conditions.
@@ -197,9 +195,7 @@ def compute_strategy_weights(
 
 
 def optimize_strategy_allocation(
-    strategy_candidates: List[str],
-    performance_matrix: xp.ndarray,
-    risk_budget: float = 1.0
+    strategy_candidates: List[str], performance_matrix: xp.ndarray, risk_budget: float = 1.0
 ) -> Dict[str, float]:
     """
     Optimize strategy allocation using XP backend.
@@ -217,8 +213,14 @@ def optimize_strategy_allocation(
             return {}
 
         # Extract expected returns and risks
-        expected_returns = performance_matrix[:, 0] if performance_matrix.ndim > 1 else performance_matrix
-        risks = performance_matrix[:, 1] if performance_matrix.ndim > 1 else xp.ones_like(expected_returns) * 0.1
+        expected_returns = (
+            performance_matrix[:, 0] if performance_matrix.ndim > 1 else performance_matrix
+        )
+        risks = (
+            performance_matrix[:, 1]
+            if performance_matrix.ndim > 1
+            else xp.ones_like(expected_returns) * 0.1
+        )
 
         # Compute Sharpe-like ratios
         sharpe_ratios = expected_returns / (risks + 1e-8)
@@ -281,18 +283,13 @@ def test_strategy_router():
     test_results = [
         {'profit': 100.0, 'risk': 0.1, 'duration': 3600},
         {'profit': -50.0, 'risk': 0.2, 'duration': 1800},
-        {'profit': 200.0, 'risk': 0.15, 'duration': 7200}
+        {'profit': 200.0, 'risk': 0.15, 'duration': 7200},
     ]
 
     performance = analyze_strategy_performance(test_results)
     logger.info(f"Performance metrics: {performance}")
 
-    return {
-        'strategy': strategy,
-        'energy': energy,
-        'route': route,
-        'performance': performance
-    }
+    return {'strategy': strategy, 'energy': energy, 'route': route, 'performance': performance}
 
 
 if __name__ == "__main__":

@@ -28,6 +28,7 @@ logger = logging.getLogger(__name__)
 
 class SignalType(Enum):
     """Types of trading signals."""
+
     BUY = "buy"
     SELL = "sell"
     HOLD = "hold"
@@ -36,6 +37,7 @@ class SignalType(Enum):
 
 class SignalStrength(Enum):
     """Signal strength levels."""
+
     WEAK = "weak"
     MODERATE = "moderate"
     STRONG = "strong"
@@ -45,6 +47,7 @@ class SignalStrength(Enum):
 @dataclass
 class TradingSignal:
     """Trading signal with comprehensive analysis."""
+
     signal_type: SignalType
     symbol: str
     exchange: str
@@ -67,6 +70,7 @@ class TradingSignal:
 @dataclass
 class ExecutionResult:
     """Result of signal execution."""
+
     signal: TradingSignal
     execution: Optional[OrderExecution]
     success: bool
@@ -79,6 +83,7 @@ class ExecutionResult:
 @dataclass
 class PerformanceMetrics:
     """Real-time performance metrics."""
+
     total_signals: int
     successful_signals: int
     failed_signals: int
@@ -198,14 +203,11 @@ class RealTimeExecutionEngine:
 
             # Initialize trading pipeline
             self.trading_pipeline = CleanTradingPipeline(
-                symbol=self.config["symbols"][0],
-                initial_capital=10000.0
+                symbol=self.config["symbols"][0], initial_capital=10000.0
             )
 
             # Register market data callbacks
-            self.market_data_stream.register_callback(
-                DataType.TICKER, self._on_ticker_update
-            )
+            self.market_data_stream.register_callback(DataType.TICKER, self._on_ticker_update)
             self.market_data_stream.register_callback(
                 DataType.ORDER_BOOK, self._on_order_book_update
             )
@@ -301,15 +303,13 @@ class RealTimeExecutionEngine:
             try:
                 # Check portfolio risk
                 portfolio_risk = self.risk_manager.assess_portfolio_risk(
-                    list(self.active_positions.values()),
-                    {}  # Market data would be passed here
+                    list(self.active_positions.values()), {}  # Market data would be passed here
                 )
 
                 # Check if risk limits are exceeded
                 if portfolio_risk.total_risk > self.config["risk_management"]["max_drawdown"]:
                     logger.warning(
-                        "Portfolio risk limit exceeded: %.2f%%",
-                        portfolio_risk.total_risk * 100
+                        "Portfolio risk limit exceeded: %.2f%%", portfolio_risk.total_risk * 100
                     )
                     await self._reduce_risk_exposure()
 
@@ -425,22 +425,16 @@ class RealTimeExecutionEngine:
 
                 # Calculate position size
                 position_size = self.risk_manager.calculate_position_size(
-                    {"confidence": confidence},
-                    market_data
+                    {"confidence": confidence}, market_data
                 )
 
                 # Calculate stop-loss and take-profit
                 stop_loss = self.risk_manager.calculate_dynamic_stop_loss(
-                    market_state.current_price,
-                    market_data,
-                    position_size
+                    market_state.current_price, market_data, position_size
                 )
 
                 take_profit = self.risk_manager.calculate_dynamic_take_profit(
-                    market_state.current_price,
-                    stop_loss,
-                    market_data,
-                    position_size
+                    market_state.current_price, stop_loss, market_data, position_size
                 )
 
                 signal = TradingSignal(
@@ -614,9 +608,7 @@ class RealTimeExecutionEngine:
             snapshot = market_state.order_book_snapshot
 
             # Check for strong buy/sell walls
-            buy_walls = [
-                w for w in snapshot.walls if w.wall_type.value == "buy_wall"
-            ]
+            buy_walls = [w for w in snapshot.walls if w.wall_type.value == "buy_wall"]
             # sell_walls = [w for w in snapshot.walls if w.wall_type.value == "sell_wall"]  # Future implementation
 
             # Generate signal based on wall strength
@@ -696,8 +688,10 @@ class RealTimeExecutionEngine:
 
             # Check recent signals for this symbol
             for recent_signal in self.signal_history[-10:]:  # Check last 10 signals
-                if (recent_signal.symbol == signal.symbol and
-                    current_time - recent_signal.timestamp < cooldown_period):
+                if (
+                    recent_signal.symbol == signal.symbol
+                    and current_time - recent_signal.timestamp < cooldown_period
+                ):
                     return False
 
             return True
@@ -734,7 +728,10 @@ class RealTimeExecutionEngine:
                 return False
 
             # Check daily loss limit
-            if self.performance_metrics.total_pnl < -self.config["risk_management"]["max_daily_loss"]:
+            if (
+                self.performance_metrics.total_pnl
+                < -self.config["risk_management"]["max_daily_loss"]
+            ):
                 return False
 
             return True
@@ -760,9 +757,7 @@ class RealTimeExecutionEngine:
             }
 
             # Execute signal
-            execution = await self.order_executor.execute_signal(
-                signal_dict, signal.quantity
-            )
+            execution = await self.order_executor.execute_signal(signal_dict, signal.quantity)
 
             # Calculate execution time
             execution_time = time.time() - start_time
@@ -795,9 +790,13 @@ class RealTimeExecutionEngine:
             self.signal_history.append(signal)
             self.execution_history.append(result)
 
-            logger.info("Signal executed: %s %s %s (confidence: %.2f)",
-                       signal.signal_type.value, signal.quantity, signal.symbol,
-                       signal.confidence)
+            logger.info(
+                "Signal executed: %s %s %s (confidence: %.2f)",
+                signal.signal_type.value,
+                signal.quantity,
+                signal.symbol,
+                signal.confidence,
+            )
 
             return result
 
@@ -820,7 +819,11 @@ class RealTimeExecutionEngine:
 
             # Create close signal
             close_signal = TradingSignal(
-                signal_type=SignalType.SELL if position["signal"].signal_type == SignalType.BUY else SignalType.BUY,
+                signal_type=(
+                    SignalType.SELL
+                    if position["signal"].signal_type == SignalType.BUY
+                    else SignalType.BUY
+                ),
                 symbol=position_id,
                 exchange=position["signal"].exchange,
                 strength=SignalStrength.STRONG,
@@ -859,8 +862,9 @@ class RealTimeExecutionEngine:
             # Remove from active positions
             del self.active_positions[position_id]
 
-            logger.info("Position closed: %s (reason: %s, P&L: %.2f)",
-                       position_id, reason, close_result.pnl)
+            logger.info(
+                "Position closed: %s (reason: %s, P&L: %.2f)", position_id, reason, close_result.pnl
+            )
 
         except Exception as e:
             logger.error("Failed to close position %s: %s", position_id, e)
@@ -870,18 +874,16 @@ class RealTimeExecutionEngine:
         try:
             # Close positions with lowest confidence
             positions_by_confidence = sorted(
-                self.active_positions.items(),
-                key=lambda x: x[1]["signal"].confidence
+                self.active_positions.items(), key=lambda x: x[1]["signal"].confidence
             )
 
             # Close bottom 50% of positions
-            positions_to_close = positions_by_confidence[:len(positions_by_confidence) // 2]
+            positions_to_close = positions_by_confidence[: len(positions_by_confidence) // 2]
 
             for position_id, _ in positions_to_close:
                 await self._close_position(position_id, "risk_reduction")
 
-            logger.info("Reduced risk exposure by closing %d positions",
-                       len(positions_to_close))
+            logger.info("Reduced risk exposure by closing %d positions", len(positions_to_close))
 
         except Exception as e:
             logger.error("Failed to reduce risk exposure: %s", e)
@@ -905,10 +907,11 @@ class RealTimeExecutionEngine:
             self.performance_metrics.total_signals = total_signals
             self.performance_metrics.successful_signals = successful_signals
             self.performance_metrics.failed_signals = total_signals - successful_signals
-            self.performance_metrics.win_rate = successful_signals / total_signals if total_signals > 0 else 0.0
+            self.performance_metrics.win_rate = (
+                successful_signals / total_signals if total_signals > 0 else 0.0
+            )
             self.performance_metrics.average_pnl = (
-                self.performance_metrics.total_pnl / total_signals
-                if total_signals > 0 else 0.0
+                self.performance_metrics.total_pnl / total_signals if total_signals > 0 else 0.0
             )
             self.performance_metrics.current_positions = len(self.active_positions)
 
@@ -1022,14 +1025,14 @@ class RealTimeExecutionEngine:
 
 # Convenience functions for external use
 def create_real_time_execution_engine(
-    config: Optional[Dict[str, Any]] = None
+    config: Optional[Dict[str, Any]] = None,
 ) -> RealTimeExecutionEngine:
     """Create a new real-time execution engine instance."""
     return RealTimeExecutionEngine(config)
 
 
 async def start_real_time_execution_engine(
-    config: Optional[Dict[str, Any]] = None
+    config: Optional[Dict[str, Any]] = None,
 ) -> RealTimeExecutionEngine:
     """Start a real-time execution engine."""
     engine = RealTimeExecutionEngine(config)

@@ -14,6 +14,7 @@ from dataclasses import dataclass, field
 import time
 
 from core.backend_math import get_backend, is_gpu
+
 xp = get_backend()
 
 # Log backend status
@@ -114,9 +115,7 @@ def dynamic_hash_trigger(signal_array: xp.ndarray) -> float:
 
 
 def recursive_hash_echo(
-    initial_hash: xp.ndarray,
-    max_depth: int = 5,
-    echo_decay: float = 0.8
+    initial_hash: xp.ndarray, max_depth: int = 5, echo_decay: float = 0.8
 ) -> HashEchoResult:
     """
     Perform recursive hash echo operation.
@@ -166,8 +165,8 @@ def recursive_hash_echo(
             metadata={
                 "echo_decay": echo_decay,
                 "max_depth": max_depth,
-                "final_echo_strength": echo_strength
-            }
+                "final_echo_strength": echo_strength,
+            },
         )
 
     except Exception as e:
@@ -177,13 +176,12 @@ def recursive_hash_echo(
             similarity_score=0.0,
             feedback_amplitude=0.0,
             recursion_depth=0,
-            metadata={"error": str(e)}
+            metadata={"error": str(e)},
         )
 
 
 def hash_pattern_recognition(
-    hash_sequence: List[xp.ndarray],
-    pattern_length: int = 3
+    hash_sequence: List[xp.ndarray], pattern_length: int = 3
 ) -> Dict[str, Any]:
     """
     Recognize patterns in hash sequence using XP backend.
@@ -204,11 +202,11 @@ def hash_pattern_recognition(
 
         # Look for repeating patterns
         for i in range(len(hash_sequence) - pattern_length + 1):
-            pattern = hash_sequence[i:i + pattern_length]
+            pattern = hash_sequence[i : i + pattern_length]
 
             # Check for pattern repetition
             for j in range(i + pattern_length, len(hash_sequence) - pattern_length + 1):
-                candidate_pattern = hash_sequence[j:j + pattern_length]
+                candidate_pattern = hash_sequence[j : j + pattern_length]
 
                 # Compute pattern similarity
                 pattern_similarity = 0.0
@@ -219,11 +217,9 @@ def hash_pattern_recognition(
                 pattern_similarity /= pattern_length
 
                 if pattern_similarity > 0.8:  # High similarity threshold
-                    patterns.append({
-                        "start_index": i,
-                        "repeat_index": j,
-                        "similarity": pattern_similarity
-                    })
+                    patterns.append(
+                        {"start_index": i, "repeat_index": j, "similarity": pattern_similarity}
+                    )
                     similarities.append(pattern_similarity)
 
         # Calculate overall confidence
@@ -233,7 +229,7 @@ def hash_pattern_recognition(
             "patterns": patterns,
             "confidence": confidence,
             "pattern_count": len(patterns),
-            "avg_similarity": float(xp.mean(similarities)) if similarities else 0.0
+            "avg_similarity": float(xp.mean(similarities)) if similarities else 0.0,
         }
 
     except Exception as e:
@@ -321,7 +317,7 @@ def test_recursive_hash_echo():
         'echo_result': echo_result,
         'similarity': similarity,
         'trigger': trigger,
-        'patterns': patterns
+        'patterns': patterns,
     }
 
 

@@ -19,6 +19,7 @@ import numpy as np
 # Try to import pygame for OpenGL context
 try:
     import pygame
+
     PYGAME_AVAILABLE = True
 except ImportError:
     PYGAME_AVAILABLE = False
@@ -34,6 +35,7 @@ from .system_state_profiler import (
 try:
     from OpenGL.GL import *
     from OpenGL.GL.shaders import *
+
     OPENGL_AVAILABLE = True
 except ImportError:
     OPENGL_AVAILABLE = False
@@ -185,18 +187,14 @@ class GPUDNAAutoDetect:
         self._save_dna_profile(dna_profile)
 
         logger.info("✅ GPU DNA Detection Complete")
-        logger.info(
-            "🎮 GPU: {0} ({1})".format(gpu_profile.renderer, gpu_profile.gpu_tier.value)
-        )
+        logger.info("🎮 GPU: {0} ({1})".format(gpu_profile.renderer, gpu_profile.gpu_tier.value))
         logger.info(
             "📊 Matrix Size: {0}x{0}".format(
                 self.shader_config.matrix_size, self.shader_config.matrix_size
             )
         )
         logger.info(
-            "⚡ Performance Multiplier: {0}x".format(
-                self.shader_config.performance_multiplier
-            )
+            "⚡ Performance Multiplier: {0}x".format(self.shader_config.performance_multiplier)
         )
         logger.info(
             "🔧 Shader Morph: {0}".format(
@@ -221,12 +219,8 @@ class GPUDNAAutoDetect:
                 "max_combined_texture_image_units": (
                     glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS)
                 ),
-                "max_vertex_uniform_vectors": (
-                    glGetIntegerv(GL_MAX_VERTEX_UNIFORM_VECTORS)
-                ),
-                "max_fragment_uniform_vectors": (
-                    glGetIntegerv(GL_MAX_FRAGMENT_UNIFORM_VECTORS)
-                ),
+                "max_vertex_uniform_vectors": (glGetIntegerv(GL_MAX_VERTEX_UNIFORM_VECTORS)),
+                "max_fragment_uniform_vectors": (glGetIntegerv(GL_MAX_FRAGMENT_UNIFORM_VECTORS)),
                 "max_varying_vectors": glGetIntegerv(GL_MAX_VARYING_VECTORS),
                 "max_vertex_output_vectors": glGetIntegerv(GL_MAX_VERTEX_OUTPUT_COMPONENTS),
                 "max_fragment_input_vectors": glGetIntegerv(GL_MAX_FRAGMENT_INPUT_COMPONENTS),
@@ -257,7 +251,9 @@ class GPUDNAAutoDetect:
     def _generate_shader_config(self, gpu_profile: GPUProfile) -> ShaderConfig:
         """Generate optimized shader configuration based on GPU profile."""
         # Get base config for GPU tier
-        base_config = self.SHADER_CONFIGS.get(gpu_profile.gpu_tier, self.SHADER_CONFIGS[GPUTier.TIER_UNKNOWN])
+        base_config = self.SHADER_CONFIGS.get(
+            gpu_profile.gpu_tier, self.SHADER_CONFIGS[GPUTier.TIER_UNKNOWN]
+        )
 
         # Get performance multiplier
         performance_multiplier = self.PERFORMANCE_MULTIPLIERS.get(gpu_profile.gpu_tier, 1.5)
@@ -272,7 +268,7 @@ class GPUDNAAutoDetect:
             fragment_passes=base_config["fragment_passes"],
             instanced_rendering=base_config["instanced_rendering"],
             gpu_tier=gpu_profile.gpu_tier.value,
-            performance_multiplier=performance_multiplier
+            performance_multiplier=performance_multiplier,
         )
 
         return shader_config
@@ -315,7 +311,10 @@ class GPUDNAAutoDetect:
         batch_size = self.shader_config.batch_size
 
         # Create test matrices
-        matrices = [np.random.random((matrix_size, matrix_size)).astype(np.float32) for _ in range(batch_size)]
+        matrices = [
+            np.random.random((matrix_size, matrix_size)).astype(np.float32)
+            for _ in range(batch_size)
+        ]
 
         start_time = time.time()
 

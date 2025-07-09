@@ -29,11 +29,13 @@ CUDA Integration:
 # CUDA Integration with Fallback
 try:
     import cupy as cp
+
     USING_CUDA = True
     _backend = 'cupy (GPU)'
     xp = cp
 except ImportError:
     import numpy as cp  # fallback to numpy
+
     USING_CUDA = False
     _backend = 'numpy (CPU)'
     xp = cp
@@ -99,7 +101,9 @@ class EntropyMathSystem:
             logger.error("Error calculating Shannon entropy: {0}".format(e))
             return 0.0
 
-    def calculate_conditional_entropy(self, joint_probs: xp.ndarray, marginal_probs: List[float]) -> float:
+    def calculate_conditional_entropy(
+        self, joint_probs: xp.ndarray, marginal_probs: List[float]
+    ) -> float:
         """
         Calculate conditional entropy H(X|Y).
 
@@ -123,17 +127,20 @@ class EntropyMathSystem:
                         conditional_prob = joint_probs[i, j] / marginal_probs[j]
                         conditional_entropy -= joint_probs[i, j] * xp.log2(conditional_prob + 1e-10)
 
-            self._log_calculation("conditional_entropy", conditional_entropy, {
-                "joint_probs_shape": joint_probs.shape,
-                "marginal_probs": marginal_probs
-            })
+            self._log_calculation(
+                "conditional_entropy",
+                conditional_entropy,
+                {"joint_probs_shape": joint_probs.shape, "marginal_probs": marginal_probs},
+            )
             return float(conditional_entropy)
 
         except Exception as e:
             logger.error("Error calculating conditional entropy: {0}".format(e))
             return 0.0
 
-    def calculate_mutual_information(self, joint_probs: xp.ndarray, marginal_x: List[float], marginal_y: List[float]) -> float:
+    def calculate_mutual_information(
+        self, joint_probs: xp.ndarray, marginal_x: List[float], marginal_y: List[float]
+    ) -> float:
         """
         Calculate mutual information I(X;Y).
 
@@ -158,11 +165,15 @@ class EntropyMathSystem:
                         ratio = joint_probs[i, j] / (marginal_x[i] * marginal_y[j])
                         mutual_info += joint_probs[i, j] * xp.log2(ratio + 1e-10)
 
-            self._log_calculation("mutual_information", mutual_info, {
-                "joint_probs_shape": joint_probs.shape,
-                "marginal_x": marginal_x,
-                "marginal_y": marginal_y
-            })
+            self._log_calculation(
+                "mutual_information",
+                mutual_info,
+                {
+                    "joint_probs_shape": joint_probs.shape,
+                    "marginal_x": marginal_x,
+                    "marginal_y": marginal_y,
+                },
+            )
             return float(mutual_info)
 
         except Exception as e:
@@ -188,7 +199,7 @@ class EntropyMathSystem:
             entropy_values = []
 
             for i in range(len(time_series) - window_size):
-                window = time_series[i:i + window_size]
+                window = time_series[i : i + window_size]
 
                 # Calculate probability distribution for window
                 hist, _ = xp.histogram(window, bins=min(10, len(set(window))))
@@ -201,11 +212,15 @@ class EntropyMathSystem:
             # Calculate average entropy rate
             entropy_rate = xp.mean(entropy_values) if entropy_values else 0.0
 
-            self._log_calculation("entropy_rate", entropy_rate, {
-                "time_series_length": len(time_series),
-                "window_size": window_size,
-                "num_windows": len(entropy_values)
-            })
+            self._log_calculation(
+                "entropy_rate",
+                entropy_rate,
+                {
+                    "time_series_length": len(time_series),
+                    "window_size": window_size,
+                    "num_windows": len(entropy_values),
+                },
+            )
             return float(entropy_rate)
 
         except Exception as e:
@@ -237,18 +252,20 @@ class EntropyMathSystem:
             std_dev = xp.std(returns)
             entropy_volatility = entropy * std_dev
 
-            self._log_calculation("entropy_volatility", entropy_volatility, {
-                "returns_length": len(returns),
-                "entropy": entropy,
-                "std_dev": std_dev
-            })
+            self._log_calculation(
+                "entropy_volatility",
+                entropy_volatility,
+                {"returns_length": len(returns), "entropy": entropy, "std_dev": std_dev},
+            )
             return float(entropy_volatility)
 
         except Exception as e:
             logger.error("Error calculating entropy-based volatility: {0}".format(e))
             return 0.0
 
-    def calculate_entropy_trigger_score(self, price_data: List[float], volume_data: List[float]) -> float:
+    def calculate_entropy_trigger_score(
+        self, price_data: List[float], volume_data: List[float]
+    ) -> float:
         """
         Calculate entropy trigger score for trading decisions.
 
@@ -276,18 +293,24 @@ class EntropyMathSystem:
             # Normalize to 0-1 range
             trigger_score = xp.tanh(combined_entropy)
 
-            self._log_calculation("entropy_trigger_score", trigger_score, {
-                "price_entropy": price_entropy,
-                "volume_entropy": volume_entropy,
-                "combined_entropy": combined_entropy
-            })
+            self._log_calculation(
+                "entropy_trigger_score",
+                trigger_score,
+                {
+                    "price_entropy": price_entropy,
+                    "volume_entropy": volume_entropy,
+                    "combined_entropy": combined_entropy,
+                },
+            )
             return float(trigger_score)
 
         except Exception as e:
             logger.error("Error calculating entropy trigger score: {0}".format(e))
             return 0.0
 
-    def calculate_entropy_divergence(self, prob_dist1: List[float], prob_dist2: List[float]) -> float:
+    def calculate_entropy_divergence(
+        self, prob_dist1: List[float], prob_dist2: List[float]
+    ) -> float:
         """
         Calculate Kullback-Leibler divergence between two probability distributions.
 
@@ -310,10 +333,9 @@ class EntropyMathSystem:
             # Calculate KL divergence: D_KL(P||Q) = sum(P * log(P/Q))
             kl_divergence = xp.sum(p1 * xp.log(p1 / (p2 + 1e-10) + 1e-10))
 
-            self._log_calculation("kl_divergence", kl_divergence, {
-                "prob_dist1": prob_dist1,
-                "prob_dist2": prob_dist2
-            })
+            self._log_calculation(
+                "kl_divergence", kl_divergence, {"prob_dist1": prob_dist1, "prob_dist2": prob_dist2}
+            )
             return float(kl_divergence)
 
         except Exception as e:
@@ -345,24 +367,26 @@ class EntropyMathSystem:
             # Combine entropy and correlation
             entropy_correlation = (entropy1 + entropy2) * abs(correlation) / 2.0
 
-            self._log_calculation("entropy_correlation", entropy_correlation, {
-                "entropy1": entropy1,
-                "entropy2": entropy2,
-                "correlation": correlation
-            })
+            self._log_calculation(
+                "entropy_correlation",
+                entropy_correlation,
+                {"entropy1": entropy1, "entropy2": entropy2, "correlation": correlation},
+            )
             return float(entropy_correlation)
 
         except Exception as e:
             logger.error("Error calculating entropy correlation: {0}".format(e))
             return 0.0
 
-    def _log_calculation(self, calculation_type: str, result: float, metadata: Dict[str, Any]) -> None:
+    def _log_calculation(
+        self, calculation_type: str, result: float, metadata: Dict[str, Any]
+    ) -> None:
         """Log a calculation for debugging and analysis."""
         entropy_result = EntropyResult(
             entropy_value=result,
             calculation_type=calculation_type,
             timestamp=time.time(),
-            metadata=metadata
+            metadata=metadata,
         )
         self.calculation_history.append(entropy_result)
 
@@ -407,7 +431,9 @@ class EntropyMathSystem:
                 "calculation_types": type_counts,
                 "type_averages": type_averages,
                 "cache_size": len(self.entropy_cache),
-                "last_calculation_time": self.calculation_history[-1].timestamp if self.calculation_history else 0
+                "last_calculation_time": (
+                    self.calculation_history[-1].timestamp if self.calculation_history else 0
+                ),
             }
 
         except Exception as e:

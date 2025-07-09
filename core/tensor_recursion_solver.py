@@ -14,6 +14,7 @@ from dataclasses import dataclass, field
 import time
 
 from core.backend_math import get_backend, is_gpu
+
 xp = get_backend()
 
 # Log backend status
@@ -124,7 +125,7 @@ def solve_tensor_recursion(
     initial_tensor: xp.ndarray,
     recursion_function: callable,
     max_iterations: int = 100,
-    tolerance: float = 1e-6
+    tolerance: float = 1e-6,
 ) -> RecursionResult:
     """
     Solve tensor recursion problem.
@@ -160,8 +161,8 @@ def solve_tensor_recursion(
                     metadata={
                         "converged": True,
                         "tolerance": tolerance,
-                        "max_iterations": max_iterations
-                    }
+                        "max_iterations": max_iterations,
+                    },
                 )
 
             current_tensor = next_tensor
@@ -174,11 +175,7 @@ def solve_tensor_recursion(
             convergence_iterations=max_iterations,
             residual_norm=float(xp.linalg.norm(current_tensor)),
             computation_time=computation_time,
-            metadata={
-                "converged": False,
-                "tolerance": tolerance,
-                "max_iterations": max_iterations
-            }
+            metadata={"converged": False, "tolerance": tolerance, "max_iterations": max_iterations},
         )
 
     except Exception as e:
@@ -188,7 +185,7 @@ def solve_tensor_recursion(
             convergence_iterations=0,
             residual_norm=float('inf'),
             computation_time=0.0,
-            metadata={"error": str(e)}
+            metadata={"error": str(e)},
         )
 
 

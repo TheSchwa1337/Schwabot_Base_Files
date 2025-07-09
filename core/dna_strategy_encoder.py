@@ -35,6 +35,7 @@ try:
     from .unified_math_system import generate_unified_hash
     from .fractal_core import fractal_quantize_vector
     from .orbital_shell_brain_system import OrbitalShell
+
     SCHWABOT_COMPONENTS_AVAILABLE = True
 except ImportError as e:
     print(f"⚠️ Some Schwabot components not available: {e}")
@@ -57,18 +58,20 @@ logger.info(f"🧬 DNAStrategyEncoder using backend: {_backend}")
 
 class DNAEncodingMode(Enum):
     """Modes for DNA encoding"""
-    COMPACT = "compact"      # Minimal encoding
-    DETAILED = "detailed"    # Full encoding with metadata
-    ADAPTIVE = "adaptive"    # Dynamic based on complexity
-    QUANTUM = "quantum"      # Quantum superposition encoding
+
+    COMPACT = "compact"  # Minimal encoding
+    DETAILED = "detailed"  # Full encoding with metadata
+    ADAPTIVE = "adaptive"  # Dynamic based on complexity
+    QUANTUM = "quantum"  # Quantum superposition encoding
 
 
 class RecallMode(Enum):
     """Modes for DNA recall"""
-    EXACT = "exact"          # Exact match only
-    FUZZY = "fuzzy"          # Fuzzy matching with threshold
+
+    EXACT = "exact"  # Exact match only
+    FUZZY = "fuzzy"  # Fuzzy matching with threshold
     SIMILARITY = "similarity"  # Cosine similarity based
-    ADAPTIVE = "adaptive"    # Dynamic threshold
+    ADAPTIVE = "adaptive"  # Dynamic threshold
 
 
 @dataclass
@@ -140,7 +143,7 @@ class DNAStrategyEncoder:
             similarity_matrix=xp.zeros((0, 0)),
             recall_history=[],
             memory_size=0,
-            metadata={}
+            metadata={},
         )
 
         # Performance tracking
@@ -152,7 +155,7 @@ class DNAStrategyEncoder:
             "total_recalls": 0,
             "successful_recalls": 0,
             "average_similarity": 0.0,
-            "memory_efficiency": 0.0
+            "memory_efficiency": 0.0,
         }
 
         # Threading
@@ -169,7 +172,7 @@ class DNAStrategyEncoder:
             "recall_threshold": 0.7,
             "max_memory_size": 10000,
             "encoding_timeout": 1.0,  # seconds
-            "recall_timeout": 0.5,    # seconds
+            "recall_timeout": 0.5,  # seconds
             "profit_bands": ["LOSS", "BREAKEVEN", "SMALL_PROFIT", "MEDIUM_PROFIT", "LARGE_PROFIT"],
             "asset_codes": ["BTC", "ETH", "XRP", "SOL", "USDC", "MIXED"],
             "time_bands": [60, 300, 900, 3600, 86400],  # seconds
@@ -183,7 +186,7 @@ class DNAStrategyEncoder:
         time_held: float,
         entropy_delta: float,
         encoding_mode: DNAEncodingMode = DNAEncodingMode.ADAPTIVE,
-        metadata: Dict[str, Any] = None
+        metadata: Dict[str, Any] = None,
     ) -> EncodingResult:
         """
         Encode strategy result into DNA format
@@ -220,7 +223,7 @@ class DNAStrategyEncoder:
                     dna_hash="",  # Will be generated
                     encoding_mode=encoding_mode,
                     timestamp=time.time(),
-                    metadata=metadata or {}
+                    metadata=metadata or {},
                 )
 
                 # Generate DNA hash
@@ -242,8 +245,8 @@ class DNAStrategyEncoder:
                     memory_updated=memory_updated,
                     metadata={
                         "encoding_count": self.encoding_count,
-                        "memory_size": len(self.dna_memory.dna_records)
-                    }
+                        "memory_size": len(self.dna_memory.dna_records),
+                    },
                 )
 
                 # Update system state
@@ -265,7 +268,7 @@ class DNAStrategyEncoder:
         time_held: float,
         entropy_delta: float,
         recall_mode: RecallMode = RecallMode.SIMILARITY,
-        threshold: Optional[float] = None
+        threshold: Optional[float] = None,
     ) -> RecallResult:
         """
         Recall strategy DNA from memory
@@ -296,7 +299,7 @@ class DNAStrategyEncoder:
                     dna_hash="",
                     encoding_mode=DNAEncodingMode.COMPACT,
                     timestamp=time.time(),
-                    metadata={}
+                    metadata={},
                 )
 
                 # Generate query hash
@@ -328,8 +331,8 @@ class DNAStrategyEncoder:
                     metadata={
                         "recall_count": self.recall_count,
                         "recall_time": time.time() - start_time,
-                        "memory_size": len(self.dna_memory.dna_records)
-                    }
+                        "memory_size": len(self.dna_memory.dna_records),
+                    },
                 )
 
                 # Update system state
@@ -443,9 +446,7 @@ class DNAStrategyEncoder:
             if len(self.dna_memory.dna_vectors) == 0:
                 self.dna_memory.dna_vectors = dna_vector.reshape(1, -1)
             else:
-                self.dna_memory.dna_vectors = np.vstack([
-                    self.dna_memory.dna_vectors, dna_vector
-                ])
+                self.dna_memory.dna_vectors = np.vstack([self.dna_memory.dna_vectors, dna_vector])
 
             # Update similarity matrix
             self._update_similarity_matrix()
@@ -508,10 +509,7 @@ class DNAStrategyEncoder:
             logger.error(f"Error pruning memory: {e}")
 
     def _find_dna_matches(
-        self,
-        query_vector: np.ndarray,
-        recall_mode: RecallMode,
-        threshold: Optional[float]
+        self, query_vector: np.ndarray, recall_mode: RecallMode, threshold: Optional[float]
     ) -> Tuple[Optional[StrategyDNA], float]:
         """Find DNA matches based on recall mode"""
         try:
@@ -567,9 +565,7 @@ class DNAStrategyEncoder:
             return None, 0.0
 
     def _generate_logic_recall(
-        self,
-        matched_dna: Optional[StrategyDNA],
-        similarity_score: float
+        self, matched_dna: Optional[StrategyDNA], similarity_score: float
     ) -> Dict[str, Any]:
         """Generate logic recall from matched DNA"""
         try:
@@ -579,7 +575,7 @@ class DNAStrategyEncoder:
                     "confidence": 0.0,
                     "strategy_hints": [],
                     "risk_adjustments": {},
-                    "timing_suggestions": {}
+                    "timing_suggestions": {},
                 }
 
             # Generate logic recall based on matched DNA
@@ -594,7 +590,7 @@ class DNAStrategyEncoder:
                 "strategy_hints": self._generate_strategy_hints(matched_dna),
                 "risk_adjustments": self._generate_risk_adjustments(matched_dna),
                 "timing_suggestions": self._generate_timing_suggestions(matched_dna),
-                "metadata": matched_dna.metadata
+                "metadata": matched_dna.metadata,
             }
 
             return logic_recall
@@ -689,10 +685,7 @@ class DNAStrategyEncoder:
             return {}
 
     def _calculate_recall_confidence(
-        self,
-        matched_dna: Optional[StrategyDNA],
-        similarity_score: float,
-        recall_mode: RecallMode
+        self, matched_dna: Optional[StrategyDNA], similarity_score: float, recall_mode: RecallMode
     ) -> float:
         """Calculate recall confidence"""
         try:
@@ -754,9 +747,8 @@ class DNAStrategyEncoder:
             total_recalls = self.performance_metrics["total_recalls"]
             current_avg = self.performance_metrics["average_similarity"]
             new_avg = (
-                (current_avg * (total_recalls - 1) +
-                 recall_result.similarity_score) / total_recalls
-            )
+                current_avg * (total_recalls - 1) + recall_result.similarity_score
+            ) / total_recalls
             self.performance_metrics["average_similarity"] = new_avg
 
         except Exception as e:
@@ -768,7 +760,7 @@ class DNAStrategyEncoder:
         profit_delta: float,
         asset_code: str,
         time_held: float,
-        entropy_delta: float
+        entropy_delta: float,
     ) -> EncodingResult:
         """Get fallback encoding result when encoding fails"""
         fallback_dna = StrategyDNA(
@@ -780,14 +772,14 @@ class DNAStrategyEncoder:
             dna_hash=hashlib.sha256(str(time.time()).encode()).hexdigest(),
             encoding_mode=DNAEncodingMode.COMPACT,
             timestamp=time.time(),
-            metadata={"error": "fallback_encoding"}
+            metadata={"error": "fallback_encoding"},
         )
 
         return EncodingResult(
             dna=fallback_dna,
             encoding_time=0.0,
             memory_updated=False,
-            metadata={"error": "fallback_encoding"}
+            metadata={"error": "fallback_encoding"},
         )
 
     def _get_fallback_recall_result(self) -> RecallResult:
@@ -798,7 +790,7 @@ class DNAStrategyEncoder:
             recall_mode=RecallMode.SIMILARITY,
             logic_recall={"recall_type": "fallback", "confidence": 0.0},
             confidence=0.0,
-            metadata={"error": "fallback_recall"}
+            metadata={"error": "fallback_recall"},
         )
 
     def get_system_status(self) -> Dict[str, Any]:
@@ -814,7 +806,7 @@ class DNAStrategyEncoder:
                 "similarity_matrix_shape": self.dna_memory.similarity_matrix.shape,
                 "performance_metrics": self.performance_metrics,
                 "backend": _backend,
-                "cuda_available": USING_CUDA
+                "cuda_available": USING_CUDA,
             }
         except Exception as e:
             logger.error(f"Error getting system status: {e}")

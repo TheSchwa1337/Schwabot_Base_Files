@@ -24,6 +24,7 @@ logger = logging.getLogger(__name__)
 
 class OrderType(Enum):
     """Types of orders."""
+
     MARKET = "market"
     LIMIT = "limit"
     STOP_LOSS = "stop_loss"
@@ -34,6 +35,7 @@ class OrderType(Enum):
 
 class ExecutionStrategy(Enum):
     """Order execution strategies."""
+
     AGGRESSIVE = "aggressive"
     CONSERVATIVE = "conservative"
     BALANCED = "balanced"
@@ -44,6 +46,7 @@ class ExecutionStrategy(Enum):
 @dataclass
 class OrderRequest:
     """Order request with execution parameters."""
+
     symbol: str
     side: str  # "buy" or "sell"
     order_type: OrderType
@@ -61,6 +64,7 @@ class OrderRequest:
 @dataclass
 class OrderExecution:
     """Order execution result."""
+
     order_id: str
     symbol: str
     side: str
@@ -80,6 +84,7 @@ class OrderExecution:
 @dataclass
 class ExecutionMetrics:
     """Execution performance metrics."""
+
     total_orders: int
     successful_orders: int
     failed_orders: int
@@ -179,12 +184,14 @@ class SmartOrderExecutor:
             for exchange_id in self.config["exchanges"]:
                 # Create exchange instance
                 exchange_class = getattr(ccxt, exchange_id)
-                exchange = exchange_class({
-                    'enableRateLimit': True,
-                    'options': {
-                        'defaultType': 'spot',
+                exchange = exchange_class(
+                    {
+                        'enableRateLimit': True,
+                        'options': {
+                            'defaultType': 'spot',
+                        },
                     }
-                })
+                )
 
                 # Load API keys if available
                 api_keys = self._load_api_keys(exchange_id)
@@ -295,7 +302,7 @@ class SmartOrderExecutor:
                     "signal_confidence": confidence,
                     "signal_type": signal.get("type", "unknown"),
                     "position_size": position_size,
-                }
+                },
             )
 
         except Exception as e:
@@ -455,15 +462,13 @@ class SmartOrderExecutor:
 
             # Check balance across all exchanges
             for exchange_id, balance in self.exchange_balances.items():
-                available = balance.get(
-                    quote_currency if side == "buy" else base_currency, 0.0
-                )
+                available = balance.get(quote_currency if side == "buy" else base_currency, 0.0)
                 if available >= required_amount:
                     return {"valid": True, "exchange": exchange_id}
 
             return {
                 "valid": False,
-                "reason": f"Insufficient {quote_currency if side == 'buy' else base_currency} balance"
+                "reason": f"Insufficient {quote_currency if side == 'buy' else base_currency} balance",
             }
 
         except Exception as e:
@@ -482,15 +487,17 @@ class SmartOrderExecutor:
             if order_value > max_order_size:
                 return {
                     "valid": False,
-                    "reason": f"Order value {order_value} exceeds max order size {max_order_size}"
+                    "reason": f"Order value {order_value} exceeds max order size {max_order_size}",
                 }
 
             # Check daily volume limit
-            daily_volume = sum([
-                execution.executed_quantity * execution.average_price
-                for execution in self.order_history
-                if time.time() - execution.execution_time < 86400
-            ])
+            daily_volume = sum(
+                [
+                    execution.executed_quantity * execution.average_price
+                    for execution in self.order_history
+                    if time.time() - execution.execution_time < 86400
+                ]
+            )
 
             max_daily_volume = self.config["risk_limits"]["max_daily_volume"]
             if daily_volume + order_value > max_daily_volume:
@@ -502,9 +509,7 @@ class SmartOrderExecutor:
             logger.error("Risk limit check failed: %s", e)
             return {"valid": False, "reason": f"Risk limit check error: {e}"}
 
-    def _check_exchange_availability(
-        self, symbol: str
-    ) -> Dict[str, Any]:
+    def _check_exchange_availability(self, symbol: str) -> Dict[str, Any]:
         """Check if symbol is available on configured exchanges."""
         try:
             for exchange_id in self.exchanges.keys():
@@ -583,7 +588,7 @@ class SmartOrderExecutor:
                 type="market",
                 side=order_request.side,
                 amount=order_request.quantity,
-                params=order_params
+                params=order_params,
             )
 
             # Calculate execution metrics
@@ -594,8 +599,7 @@ class SmartOrderExecutor:
             # Check slippage limits
             if slippage > order_request.max_slippage:
                 logger.warning(
-                    "Slippage %.4f exceeds limit %.4f",
-                    slippage, order_request.max_slippage
+                    "Slippage %.4f exceeds limit %.4f", slippage, order_request.max_slippage
                 )
 
             return OrderExecution(
@@ -638,7 +642,7 @@ class SmartOrderExecutor:
                 side=order_request.side,
                 amount=order_request.quantity,
                 price=optimal_price,
-                params={"timeInForce": order_request.time_in_force}
+                params={"timeInForce": order_request.time_in_force},
             )
 
             # Wait for order to be filled (with timeout)
@@ -846,7 +850,9 @@ class SmartOrderExecutor:
 
             # Calculate combined metrics
             total_quantity = sum(execution.executed_quantity for execution in executions)
-            total_cost = sum(execution.executed_quantity * execution.average_price for execution in executions)
+            total_cost = sum(
+                execution.executed_quantity * execution.average_price for execution in executions
+            )
             total_fees = sum(execution.fees for execution in executions)
             total_time = sum(execution.execution_time for execution in executions)
 

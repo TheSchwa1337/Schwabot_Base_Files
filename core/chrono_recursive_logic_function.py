@@ -8,9 +8,11 @@ import numpy as np
 
 try:
     import cupy as cp
+
     CUPY_AVAILABLE = True
 except ImportError:
     import numpy as cp
+
     CUPY_AVAILABLE = False
 
 from .clean_math_foundation import CleanMathFoundation
@@ -32,6 +34,7 @@ This module implements:
 # CUDA Integration with Fallback
 try:
     import cupy as cp
+
     USING_CUDA = True
     _backend = 'cupy (GPU)'
     xp = cp
@@ -140,7 +143,8 @@ class ChronoRecursiveLogicFunction:
         """Create a default CRLF state."""
         return CRLFState()
 
-    def compute_crlf(self,
+    def compute_crlf(
+        self,
         strategy_vector: np.ndarray,
         profit_curve: np.ndarray,
         market_entropy: float,
@@ -305,11 +309,15 @@ class ChronoRecursiveLogicFunction:
             delta_psi = 0.0
 
         # Update entropy with exponential decay
-        new_entropy = self.state.lambda_decay * self.state.entropy + (1 - self.state.lambda_decay) * (market_entropy + delta_psi)
+        new_entropy = self.state.lambda_decay * self.state.entropy + (
+            1 - self.state.lambda_decay
+        ) * (market_entropy + delta_psi)
 
         return np.clip(new_entropy, 0.0, 1.0)
 
-    def _compute_crlf_output(self, psi_n: np.ndarray, gradient_psi: np.ndarray, entropy: float) -> float:
+    def _compute_crlf_output(
+        self, psi_n: np.ndarray, gradient_psi: np.ndarray, entropy: float
+    ) -> float:
         """
         Compute CRLF output: Ψₙ(τ) ⋅ ∇ψ ⋅ Δₜ ⋅ e^(-Eτ)
         """
@@ -347,7 +355,9 @@ class ChronoRecursiveLogicFunction:
         else:
             return CRLFTriggerState.ESCALATE
 
-    def _generate_recommendations(self, crlf_output: float, trigger_state: CRLFTriggerState) -> Dict[str, Any]:
+    def _generate_recommendations(
+        self, crlf_output: float, trigger_state: CRLFTriggerState
+    ) -> Dict[str, Any]:
         """Generate recommendations based on CRLF output and trigger state."""
         recommendations = {}
         recommendations["action"] = trigger_state.value
@@ -358,22 +368,28 @@ class ChronoRecursiveLogicFunction:
 
         # Add state-specific recommendations
         if trigger_state == CRLFTriggerState.OVERRIDE:
-            recommendations.update({
-                "override_matrix": "FastProfitOverrideΩ",
-                "priority": "HIGH",
-                "timeout": 300,  # 5 minutes
-            })
+            recommendations.update(
+                {
+                    "override_matrix": "FastProfitOverrideΩ",
+                    "priority": "HIGH",
+                    "timeout": 300,  # 5 minutes
+                }
+            )
         elif trigger_state == CRLFTriggerState.RECURSIVE_RESET:
-            recommendations.update({
-                "reset_cycle": "Recursive_Fallback_7D",
-                "fallback_strategy": "Conservative_Mean_Reversion",
-                "recovery_time": 604800,  # 7 days
-            })
+            recommendations.update(
+                {
+                    "reset_cycle": "Recursive_Fallback_7D",
+                    "fallback_strategy": "Conservative_Mean_Reversion",
+                    "recovery_time": 604800,  # 7 days
+                }
+            )
         elif trigger_state == CRLFTriggerState.HOLD:
-            recommendations.update({
-                "hold_duration": self._compute_hold_duration(crlf_output),
-                "monitoring_frequency": "HIGH",
-            })
+            recommendations.update(
+                {
+                    "hold_duration": self._compute_hold_duration(crlf_output),
+                    "monitoring_frequency": "HIGH",
+                }
+            )
 
         return recommendations
 

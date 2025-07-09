@@ -19,6 +19,7 @@ logger = logging.getLogger(__name__)
 
 class PositionSizingModel(Enum):
     """Position sizing models."""
+
     KELLY = "kelly"
     VOLATILITY = "volatility"
     FIXED_FRACTIONAL = "fixed_fractional"
@@ -28,6 +29,7 @@ class PositionSizingModel(Enum):
 
 class RiskLevel(Enum):
     """Risk levels."""
+
     CONSERVATIVE = "conservative"
     MODERATE = "moderate"
     AGGRESSIVE = "aggressive"
@@ -37,6 +39,7 @@ class RiskLevel(Enum):
 @dataclass
 class RiskMetrics:
     """Risk metrics for a position or portfolio."""
+
     var_95: float  # Value at Risk (95% confidence)
     var_99: float  # Value at Risk (99% confidence)
     max_drawdown: float
@@ -53,6 +56,7 @@ class RiskMetrics:
 @dataclass
 class PositionRisk:
     """Risk assessment for a single position."""
+
     position_size: float
     entry_price: float
     stop_loss: float
@@ -71,6 +75,7 @@ class PositionRisk:
 @dataclass
 class PortfolioRisk:
     """Portfolio-level risk assessment."""
+
     total_value: float
     total_risk: float
     diversification_score: float
@@ -150,7 +155,7 @@ class AdvancedRiskManager:
         self,
         signal: Dict[str, Any],
         market_data: Dict[str, Any],
-        portfolio_state: Optional[Dict[str, Any]] = None
+        portfolio_state: Optional[Dict[str, Any]] = None,
     ) -> float:
         """
         Calculate optimal position size using selected model.
@@ -183,7 +188,7 @@ class AdvancedRiskManager:
         self,
         signal: Dict[str, Any],
         market_data: Dict[str, Any],
-        portfolio_state: Optional[Dict[str, Any]] = None
+        portfolio_state: Optional[Dict[str, Any]] = None,
     ) -> float:
         """
         Calculate position size using Kelly Criterion.
@@ -226,8 +231,13 @@ class AdvancedRiskManager:
             # Apply maximum position size constraint
             final_size = min(kelly_fraction, self.max_position_size)
 
-            logger.debug("Kelly Criterion: p=%.3f, b=%.3f, fraction=%.3f, final=%.3f",
-                        p, b, kelly_fraction, final_size)
+            logger.debug(
+                "Kelly Criterion: p=%.3f, b=%.3f, fraction=%.3f, final=%.3f",
+                p,
+                b,
+                kelly_fraction,
+                final_size,
+            )
 
             return final_size
 
@@ -239,7 +249,7 @@ class AdvancedRiskManager:
         self,
         signal: Dict[str, Any],
         market_data: Dict[str, Any],
-        portfolio_state: Optional[Dict[str, Any]] = None
+        portfolio_state: Optional[Dict[str, Any]] = None,
     ) -> float:
         """Calculate position size adjusted for volatility."""
         try:
@@ -280,7 +290,7 @@ class AdvancedRiskManager:
         self,
         signal: Dict[str, Any],
         market_data: Dict[str, Any],
-        portfolio_state: Optional[Dict[str, Any]] = None
+        portfolio_state: Optional[Dict[str, Any]] = None,
     ) -> float:
         """Calculate position size using Optimal f (Ralph Vince)."""
         try:
@@ -337,7 +347,7 @@ class AdvancedRiskManager:
         self,
         signal: Dict[str, Any],
         market_data: Dict[str, Any],
-        portfolio_state: Optional[Dict[str, Any]] = None
+        portfolio_state: Optional[Dict[str, Any]] = None,
     ) -> float:
         """Calculate position size using risk parity principles."""
         try:
@@ -354,8 +364,7 @@ class AdvancedRiskManager:
 
             # Risk parity sizing
             risk_parity_size = (
-                target_risk_per_position / position_risk
-                if position_risk > 0 else 0.0
+                target_risk_per_position / position_risk if position_risk > 0 else 0.0
             )
 
             # Apply constraints
@@ -375,7 +384,7 @@ class AdvancedRiskManager:
         self,
         signal: Dict[str, Any],
         market_data: Dict[str, Any],
-        portfolio_state: Optional[Dict[str, Any]] = None
+        portfolio_state: Optional[Dict[str, Any]] = None,
     ) -> float:
         """Calculate position size using fixed fractional method."""
         try:
@@ -393,10 +402,7 @@ class AdvancedRiskManager:
             return self.max_position_size * 0.1
 
     def calculate_dynamic_stop_loss(
-        self,
-        entry_price: float,
-        market_data: Dict[str, Any],
-        position_size: float
+        self, entry_price: float, market_data: Dict[str, Any], position_size: float
     ) -> float:
         """
         Calculate dynamic stop loss based on volatility and market conditions.
@@ -440,13 +446,17 @@ class AdvancedRiskManager:
 
             # Ensure reasonable stop loss
             min_stop_distance = 0.005  # Minimum 0.5% stop
-            max_stop_distance = 0.20   # Maximum 20% stop
+            max_stop_distance = 0.20  # Maximum 20% stop
 
             stop_distance = max(min_stop_distance, min(stop_distance, max_stop_distance))
             stop_loss = entry_price * (1 - stop_distance)
 
-            logger.debug("Dynamic stop loss: entry=%.2f, stop=%.2f, distance=%.3f",
-                        entry_price, stop_loss, stop_distance)
+            logger.debug(
+                "Dynamic stop loss: entry=%.2f, stop=%.2f, distance=%.3f",
+                entry_price,
+                stop_loss,
+                stop_distance,
+            )
 
             return stop_loss
 
@@ -460,7 +470,7 @@ class AdvancedRiskManager:
         entry_price: float,
         stop_loss: float,
         market_data: Dict[str, Any],
-        position_size: float
+        position_size: float,
     ) -> float:
         """
         Calculate dynamic take profit based on risk-reward ratio and market conditions.
@@ -493,7 +503,9 @@ class AdvancedRiskManager:
             size_adjustment = 1.0 + (position_size * 0.5)
 
             # Calculate reward ratio
-            reward_ratio = base_risk_reward * volatility_adjustment * trend_adjustment * size_adjustment
+            reward_ratio = (
+                base_risk_reward * volatility_adjustment * trend_adjustment * size_adjustment
+            )
 
             # Calculate take profit
             reward_amount = risk_amount * reward_ratio
@@ -517,8 +529,12 @@ class AdvancedRiskManager:
             reward_ratio = max(min_reward_ratio, min(reward_ratio, max_reward_ratio))
             take_profit = entry_price + (risk_amount * reward_ratio)
 
-            logger.debug("Dynamic take profit: entry=%.2f, target=%.2f, ratio=%.2f",
-                        entry_price, take_profit, reward_ratio)
+            logger.debug(
+                "Dynamic take profit: entry=%.2f, target=%.2f, ratio=%.2f",
+                entry_price,
+                take_profit,
+                reward_ratio,
+            )
 
             return take_profit
 
@@ -535,7 +551,7 @@ class AdvancedRiskManager:
         position_size: float,
         entry_price: float,
         stop_loss: float,
-        take_profit: float
+        take_profit: float,
     ) -> PositionRisk:
         """
         Comprehensive risk assessment for a single position.
@@ -613,9 +629,7 @@ class AdvancedRiskManager:
             )
 
     def assess_portfolio_risk(
-        self,
-        positions: List[Dict[str, Any]],
-        market_data: Dict[str, Any]
+        self, positions: List[Dict[str, Any]], market_data: Dict[str, Any]
     ) -> PortfolioRisk:
         """
         Comprehensive portfolio risk assessment.
@@ -747,7 +761,7 @@ class AdvancedRiskManager:
             price_risk = min(risk_amount / entry_price, 1.0)
 
             # Combined risk score
-            risk_score = (size_risk * 0.6 + price_risk * 0.4)
+            risk_score = size_risk * 0.6 + price_risk * 0.4
 
             return min(max(risk_score, 0.0), 1.0)
 
@@ -755,9 +769,7 @@ class AdvancedRiskManager:
             logger.error("Position risk score calculation failed: %s", e)
             return 0.5
 
-    def _calculate_market_risk_score(
-        self, market_data: Dict[str, Any]
-    ) -> float:
+    def _calculate_market_risk_score(self, market_data: Dict[str, Any]) -> float:
         """Calculate market-specific risk score (0-1, higher is riskier)."""
         try:
             # Volatility risk
@@ -778,7 +790,7 @@ class AdvancedRiskManager:
             }.get(market_regime, 0.5)
 
             # Combined market risk
-            market_risk = (volatility_risk * 0.5 + spread_risk * 0.2 + regime_risk * 0.3)
+            market_risk = volatility_risk * 0.5 + spread_risk * 0.2 + regime_risk * 0.3
 
             return min(max(market_risk, 0.0), 1.0)
 
@@ -786,9 +798,7 @@ class AdvancedRiskManager:
             logger.error("Market risk score calculation failed: %s", e)
             return 0.5
 
-    def _calculate_portfolio_risk_score(
-        self, position_size: float
-    ) -> float:
+    def _calculate_portfolio_risk_score(self, position_size: float) -> float:
         """Calculate portfolio-level risk score (0-1, higher is riskier)."""
         try:
             # Current portfolio risk
@@ -801,7 +811,7 @@ class AdvancedRiskManager:
             daily_loss_risk = min(self.daily_loss_tracker / self.max_daily_loss, 1.0)
 
             # Combined portfolio risk
-            portfolio_risk = (concentration_risk * 0.6 + daily_loss_risk * 0.4)
+            portfolio_risk = concentration_risk * 0.6 + daily_loss_risk * 0.4
 
             return min(max(portfolio_risk, 0.0), 1.0)
 
@@ -834,9 +844,7 @@ class AdvancedRiskManager:
             logger.error("Kelly fraction calculation failed: %s", e)
             return 0.0
 
-    def _get_trade_history(
-        self
-    ) -> List[Dict[str, Any]]:
+    def _get_trade_history(self) -> List[Dict[str, Any]]:
         """Get historical trade data for calculations."""
         # This would typically come from a database or registry
         # For now, return mock data
@@ -936,7 +944,9 @@ class AdvancedRiskManager:
                 risk_score = pos.get("risk_score", 0.5)
 
                 # Simplified risk contribution calculation
-                correlation_factor = np.mean(correlation_matrix[i, :]) if correlation_matrix.size > 0 else 0.5
+                correlation_factor = (
+                    np.mean(correlation_matrix[i, :]) if correlation_matrix.size > 0 else 0.5
+                )
                 risk_contribution = risk_score * correlation_factor
 
                 risk_contributions[position_id] = risk_contribution
@@ -1007,7 +1017,7 @@ class AdvancedRiskManager:
         self,
         positions: List[Dict[str, Any]],
         risk_allocations: Dict[str, float],
-        correlation_matrix: np.ndarray
+        correlation_matrix: np.ndarray,
     ) -> List[Dict[str, Any]]:
         """Generate portfolio rebalancing recommendations."""
         try:
@@ -1015,31 +1025,33 @@ class AdvancedRiskManager:
 
             # Check for high correlation positions
             if correlation_matrix.size > 1:
-                high_correlation_threshold = self.config.get(
-                    "correlation_threshold", 0.7
-                )
+                high_correlation_threshold = self.config.get("correlation_threshold", 0.7)
 
                 for i in range(correlation_matrix.shape[0]):
                     for j in range(i + 1, correlation_matrix.shape[1]):
                         if correlation_matrix[i, j] > high_correlation_threshold:
-                            recommendations.append({
-                                "type": "reduce_correlation",
-                                "positions": [i, j],
-                                "correlation": correlation_matrix[i, j],
-                                "action": "Consider reducing one of these positions",
-                                "priority": "high",
-                            })
+                            recommendations.append(
+                                {
+                                    "type": "reduce_correlation",
+                                    "positions": [i, j],
+                                    "correlation": correlation_matrix[i, j],
+                                    "action": "Consider reducing one of these positions",
+                                    "priority": "high",
+                                }
+                            )
 
             # Check for risk concentration
             for position_id, risk_allocation in risk_allocations.items():
                 if risk_allocation > 0.3:  # More than 30% risk in one position
-                    recommendations.append({
-                        "type": "reduce_concentration",
-                        "position": position_id,
-                        "risk_allocation": risk_allocation,
-                        "action": "Consider reducing position size",
-                        "priority": "medium",
-                    })
+                    recommendations.append(
+                        {
+                            "type": "reduce_concentration",
+                            "position": position_id,
+                            "risk_allocation": risk_allocation,
+                            "action": "Consider reducing position size",
+                            "priority": "medium",
+                        }
+                    )
 
             return recommendations
 
@@ -1081,15 +1093,21 @@ class AdvancedRiskManager:
                 "total_positions": len(self.position_history),
                 "max_drawdown": self._calculate_max_drawdown(),
                 "risk_metrics": {
-                    "avg_position_risk": np.mean([
-                        pos.get("risk_score", 0.5) for pos in self.position_history
-                    ]) if self.position_history else 0.0,
-                    "avg_market_risk": np.mean([
-                        pos.get("market_risk", 0.5) for pos in self.position_history
-                    ]) if self.position_history else 0.0,
-                    "avg_portfolio_risk": np.mean([
-                        pos.get("portfolio_risk", 0.5) for pos in self.position_history
-                    ]) if self.position_history else 0.0,
+                    "avg_position_risk": (
+                        np.mean([pos.get("risk_score", 0.5) for pos in self.position_history])
+                        if self.position_history
+                        else 0.0
+                    ),
+                    "avg_market_risk": (
+                        np.mean([pos.get("market_risk", 0.5) for pos in self.position_history])
+                        if self.position_history
+                        else 0.0
+                    ),
+                    "avg_portfolio_risk": (
+                        np.mean([pos.get("portfolio_risk", 0.5) for pos in self.position_history])
+                        if self.position_history
+                        else 0.0
+                    ),
                 },
             }
 
@@ -1105,9 +1123,7 @@ def create_advanced_risk_manager(config: Optional[Dict[str, Any]] = None) -> Adv
 
 
 def calculate_position_size_kelly(
-    signal: Dict[str, Any],
-    market_data: Dict[str, Any],
-    config: Optional[Dict[str, Any]] = None
+    signal: Dict[str, Any], market_data: Dict[str, Any], config: Optional[Dict[str, Any]] = None
 ) -> float:
     """Quick Kelly Criterion position sizing."""
     risk_manager = AdvancedRiskManager(config)
@@ -1118,7 +1134,7 @@ def calculate_dynamic_stop_loss(
     entry_price: float,
     market_data: Dict[str, Any],
     position_size: float,
-    config: Optional[Dict[str, Any]] = None
+    config: Optional[Dict[str, Any]] = None,
 ) -> float:
     """Quick dynamic stop loss calculation."""
     risk_manager = AdvancedRiskManager(config)

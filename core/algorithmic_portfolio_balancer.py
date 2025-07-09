@@ -78,9 +78,7 @@ class AlgorithmicPortfolioBalancer:
         self.rebalancing_strategy = RebalancingStrategy(
             config.get("rebalancing_strategy", "phantom_adaptive")
         )
-        self.rebalance_threshold = config.get(
-            "max_rebalance_frequency", 3600
-        )  # 1 hour
+        self.rebalance_threshold = config.get("max_rebalance_frequency", 3600)  # 1 hour
 
         # Asset allocations
         self.asset_allocations = self._initialize_asset_allocations()
@@ -179,10 +177,7 @@ class AlgorithmicPortfolioBalancer:
         current_time = time.time()
 
         # Check frequency limit
-        if (
-            current_time - self.portfolio_state.last_rebalance
-            < self.rebalance_threshold
-        ):
+        if current_time - self.portfolio_state.last_rebalance < self.rebalance_threshold:
             return False
 
         # Check weight deviations
@@ -211,8 +206,7 @@ class AlgorithmicPortfolioBalancer:
             # Calculate adjusted weights
             adjusted_weights = {}
             base_weights = {
-                symbol: alloc.target_weight
-                for symbol, alloc in self.asset_allocations.items()
+                symbol: alloc.target_weight for symbol, alloc in self.asset_allocations.items()
             }
 
             for symbol, base_weight in base_weights.items():
@@ -238,9 +232,7 @@ class AlgorithmicPortfolioBalancer:
             # Normalize weights
             total_weight = sum(adjusted_weights.values())
             if total_weight > 0:
-                adjusted_weights = {
-                    k: v / total_weight for k, v in adjusted_weights.items()
-                }
+                adjusted_weights = {k: v / total_weight for k, v in adjusted_weights.items()}
 
             return adjusted_weights
 
@@ -257,13 +249,10 @@ class AlgorithmicPortfolioBalancer:
 
             # Calculate target weights based on strategy
             if self.rebalancing_strategy == RebalancingStrategy.PHANTOM_ADAPTIVE:
-                target_weights = await self.calculate_phantom_adjusted_weights(
-                    market_data
-                )
+                target_weights = await self.calculate_phantom_adjusted_weights(market_data)
             else:
                 target_weights = {
-                    symbol: alloc.target_weight
-                    for symbol, alloc in self.asset_allocations.items()
+                    symbol: alloc.target_weight for symbol, alloc in self.asset_allocations.items()
                 }
 
             # Calculate required trades
@@ -273,21 +262,16 @@ class AlgorithmicPortfolioBalancer:
 
                 if abs(weight_diff) > self.rebalance_threshold:
                     # Calculate trade amount
-                    trade_value = abs(weight_diff) * float(
-                        self.portfolio_state.total_value
-                    )
+                    trade_value = abs(weight_diff) * float(self.portfolio_state.total_value)
 
                     if weight_diff > 0:
                         # Need to buy
                         action = TradingAction.BUY
-                        quantity = trade_value / float(
-                            market_data[symbol].get("price", 1)
-                        )
+                        quantity = trade_value / float(market_data[symbol].get("price", 1))
                     else:
                         # Need to sell
                         quantity = abs(
-                            float(self.portfolio_state.asset_balances.get(symbol, 0))
-                            * weight_diff
+                            float(self.portfolio_state.asset_balances.get(symbol, 0)) * weight_diff
                         )
 
                     # Create trading decision
@@ -381,27 +365,21 @@ class AlgorithmicPortfolioBalancer:
         # For now, return True to simulate successful execution
         return True
 
-    async def _get_phantom_zones(
-        self, market_data: Dict[str, Any]
-    ) -> List[PhantomZone]:
+    async def _get_phantom_zones(self, market_data: Dict[str, Any]) -> List[PhantomZone]:
         """Get Phantom Zone data for assets."""
         try:
             zones = []
             for symbol in self.asset_allocations.keys():
                 if symbol in market_data:
                     # Get recent Phantom Zones for this asset
-                    recent_zones = await self.phantom_registry.get_recent_zones(
-                        symbol, hours=24
-                    )
+                    recent_zones = await self.phantom_registry.get_recent_zones(symbol, hours=24)
                     zones.extend(recent_zones)
             return zones
         except Exception as e:
             logger.error("Error getting Phantom Zones: {0}".format(e))
             return []
 
-    def _get_asset_phantom_score(
-        self, symbol: str, phantom_zones: List[PhantomZone]
-    ) -> float:
+    def _get_asset_phantom_score(self, symbol: str, phantom_zones: List[PhantomZone]) -> float:
         """Calculate Phantom Zone score for an asset."""
         try:
             asset_zones = [zone for zone in phantom_zones if zone.symbol == symbol]
@@ -409,15 +387,11 @@ class AlgorithmicPortfolioBalancer:
                 return 0.5  # Neutral score
 
             # Calculate average potential score
-            avg_potential = sum(zone.potential_score for zone in asset_zones) / len(
-                asset_zones
-            )
+            avg_potential = sum(zone.potential_score for zone in asset_zones) / len(asset_zones)
             return avg_potential
 
         except Exception as e:
-            logger.error(
-                "Error calculating Phantom score for {0}: {1}".format(symbol, e)
-            )
+            logger.error("Error calculating Phantom score for {0}: {1}".format(symbol, e))
             return 0.5
 
     async def get_portfolio_metrics(self) -> Dict[str, Any]:
@@ -480,9 +454,7 @@ class AlgorithmicPortfolioBalancer:
                 initial_value = self.performance_history[0]["value"]
                 current_value = float(self.portfolio_state.total_value)
                 total_return = (
-                    (current_value - initial_value) / initial_value
-                    if initial_value > 0
-                    else 0.0
+                    (current_value - initial_value) / initial_value if initial_value > 0 else 0.0
                 )
             else:
                 total_return = 0.0
@@ -509,9 +481,7 @@ class AlgorithmicPortfolioBalancer:
             # Count rebalances today
             today_start = current_time - (current_time % 86400)  # Start of today
             rebalances_today = sum(
-                1
-                for record in self.rebalance_history
-                if record["timestamp"] >= today_start
+                1 for record in self.rebalance_history if record["timestamp"] >= today_start
             )
 
             # Format last rebalance time

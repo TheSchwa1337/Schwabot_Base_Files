@@ -20,6 +20,7 @@ try:
         create_math_foundation,
         quick_calculation,
     )
+
     CLEAN_MATH_AVAILABLE = True
 except ImportError:
     CLEAN_MATH_AVAILABLE = False
@@ -32,6 +33,7 @@ try:
         VectorizationMode,
         create_profit_vectorizer,
     )
+
     CLEAN_PROFIT_AVAILABLE = True
 except ImportError:
     CLEAN_PROFIT_AVAILABLE = False
@@ -39,6 +41,7 @@ except ImportError:
 # Orbital Brain System
 try:
     from .orbital_shell_brain_system import OrbitalBRAINSystem, OrbitalShell
+
     ORBITAL_BRAIN_AVAILABLE = True
 except ImportError:
     ORBITAL_BRAIN_AVAILABLE = False
@@ -53,6 +56,7 @@ try:
         create_trading_pipeline,
         run_trading_simulation,
     )
+
     CLEAN_PIPELINE_AVAILABLE = True
 except ImportError:
     CLEAN_PIPELINE_AVAILABLE = False
@@ -65,6 +69,7 @@ try:
         AssetAllocation,
         create_portfolio_balancer,
     )
+
     PORTFOLIO_BALANCER_AVAILABLE = True
 except ImportError:
     PORTFOLIO_BALANCER_AVAILABLE = False
@@ -76,6 +81,7 @@ try:
         BTCUSDCTradingConfig,
         create_btc_usdc_integration,
     )
+
     BTC_USDC_INTEGRATION_AVAILABLE = True
 except ImportError:
     BTC_USDC_INTEGRATION_AVAILABLE = False
@@ -94,6 +100,7 @@ try:
         get_system_profile,
         get_gpu_shader_config,
     )
+
     SYSTEM_PROFILER_AVAILABLE = True
 except ImportError:
     SYSTEM_PROFILER_AVAILABLE = False
@@ -108,6 +115,7 @@ try:
         get_cosine_similarity_config,
         run_gpu_fit_test,
     )
+
     GPU_DNA_AVAILABLE = True
 except ImportError:
     GPU_DNA_AVAILABLE = False
@@ -120,6 +128,7 @@ try:
         create_gpu_shader_integration,
         compute_strategy_similarities_gpu,
     )
+
     GPU_SHADER_INTEGRATION_AVAILABLE = True
 except ImportError:
     GPU_SHADER_INTEGRATION_AVAILABLE = False

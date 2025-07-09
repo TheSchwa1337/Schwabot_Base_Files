@@ -27,6 +27,7 @@ logger = logging.getLogger(__name__)
 
 class DataType(Enum):
     """Types of market data."""
+
     TICKER = "ticker"
     ORDER_BOOK = "order_book"
     TRADES = "trades"
@@ -38,6 +39,7 @@ class DataType(Enum):
 @dataclass
 class MarketDataEvent:
     """Market data event with quantum enhancements."""
+
     data_type: DataType
     symbol: str
     exchange: str
@@ -52,6 +54,7 @@ class MarketDataEvent:
 @dataclass
 class RealTimeMarketState:
     """Real-time market state with comprehensive analysis."""
+
     symbol: str
     exchange: str
     current_price: float
@@ -150,12 +153,14 @@ class RealTimeMarketDataStream:
             for exchange_id in self.config["exchanges"]:
                 # Create exchange instance
                 exchange_class = getattr(ccxt, exchange_id)
-                exchange = exchange_class({
-                    'enableRateLimit': True,
-                    'options': {
-                        'defaultType': 'spot',
+                exchange = exchange_class(
+                    {
+                        'enableRateLimit': True,
+                        'options': {
+                            'defaultType': 'spot',
+                        },
                     }
-                })
+                )
 
                 self.exchanges[exchange_id] = exchange
                 self.connection_status[exchange_id] = False
@@ -192,8 +197,10 @@ class RealTimeMarketDataStream:
                         volatility=0.0,
                     )
 
-            logger.info("Started WebSocket connections for %d market pairs",
-                       len(self.config["exchanges"]) * len(self.config["symbols"]))
+            logger.info(
+                "Started WebSocket connections for %d market pairs",
+                len(self.config["exchanges"]) * len(self.config["symbols"]),
+            )
 
         except Exception as e:
             logger.error("Failed to start WebSocket connections: %s", e)
@@ -213,12 +220,18 @@ class RealTimeMarketDataStream:
                 retry_count += 1
                 self.error_counts[exchange_id] += 1
 
-                logger.error("WebSocket connection failed for %s:%s (attempt %d): %s",
-                           exchange_id, symbol, retry_count, e)
+                logger.error(
+                    "WebSocket connection failed for %s:%s (attempt %d): %s",
+                    exchange_id,
+                    symbol,
+                    retry_count,
+                    e,
+                )
 
                 if retry_count >= self.config["max_retries"]:
-                    logger.error("Max retries reached for %s:%s, stopping connection",
-                               exchange_id, symbol)
+                    logger.error(
+                        "Max retries reached for %s:%s, stopping connection", exchange_id, symbol
+                    )
                     break
 
                 # Wait before retry
@@ -239,8 +252,7 @@ class RealTimeMarketDataStream:
                 await self._handle_custom_websocket(exchange_id, symbol, market_key)
 
         except Exception as e:
-            logger.error("Failed to connect WebSocket for %s:%s: %s",
-                        exchange_id, symbol, e)
+            logger.error("Failed to connect WebSocket for %s:%s: %s", exchange_id, symbol, e)
             raise
 
     async def _handle_ccxt_websocket(self, exchange: ccxt.Exchange, symbol: str, market_key: str):
@@ -305,7 +317,7 @@ class RealTimeMarketDataStream:
                 subscribe_msg = {
                     "type": "subscribe",
                     "product_ids": [symbol],
-                    "channels": ["ticker", "level2", "matches"]
+                    "channels": ["ticker", "level2", "matches"],
                 }
                 await websocket.send(json.dumps(subscribe_msg))
 
@@ -313,15 +325,12 @@ class RealTimeMarketDataStream:
                 subscribe_msg = {
                     "event": "subscribe",
                     "pair": [symbol],
-                    "subscription": {
-                        "name": "ticker"
-                    }
+                    "subscription": {"name": "ticker"},
                 }
                 await websocket.send(json.dumps(subscribe_msg))
 
         except Exception as e:
-            logger.error("Failed to subscribe to feeds for %s:%s: %s",
-                        exchange_id, symbol, e)
+            logger.error("Failed to subscribe to feeds for %s:%s: %s", exchange_id, symbol, e)
             raise
 
     async def _process_websocket_message(self, market_key: str, message: str):
@@ -420,8 +429,12 @@ class RealTimeMarketDataStream:
         """Process order book data with wall detection."""
         try:
             # Extract order book data
-            bids = [(float(price), float(volume)) for price, volume in order_book_data.get("bids", [])]
-            asks = [(float(price), float(volume)) for price, volume in order_book_data.get("asks", [])]
+            bids = [
+                (float(price), float(volume)) for price, volume in order_book_data.get("bids", [])
+            ]
+            asks = [
+                (float(price), float(volume)) for price, volume in order_book_data.get("asks", [])
+            ]
 
             # Analyze order book
             snapshot = self.order_book_analyzer.analyze_order_book(
@@ -502,13 +515,15 @@ class RealTimeMarketDataStream:
         """Perform tensor analysis on market data."""
         try:
             # Create market tensor
-            market_tensor = np.array([
-                ticker_info["price"],
-                ticker_info["volume"],
-                ticker_info["change"],
-                ticker_info["bid"],
-                ticker_info["ask"],
-            ])
+            market_tensor = np.array(
+                [
+                    ticker_info["price"],
+                    ticker_info["volume"],
+                    ticker_info["change"],
+                    ticker_info["bid"],
+                    ticker_info["ask"],
+                ]
+            )
 
             # Perform tensor operations
             tensor_analysis = self.tensor_algebra.advanced_tensor_operations(market_tensor)
@@ -615,10 +630,12 @@ class RealTimeMarketDataStream:
                         liquidity_summary = self.order_book_analyzer.get_liquidity_summary()
 
                         # Update market state with analysis results
-                        market_state.quantum_signals.update({
-                            "wall_analysis": wall_summary,
-                            "liquidity_analysis": liquidity_summary,
-                        })
+                        market_state.quantum_signals.update(
+                            {
+                                "wall_analysis": wall_summary,
+                                "liquidity_analysis": liquidity_summary,
+                            }
+                        )
 
                 await asyncio.sleep(5)  # Update every 5 seconds
 
@@ -735,12 +752,16 @@ class RealTimeMarketDataStream:
 
 
 # Convenience functions for external use
-def create_real_time_market_data_stream(config: Optional[Dict[str, Any]] = None) -> RealTimeMarketDataStream:
+def create_real_time_market_data_stream(
+    config: Optional[Dict[str, Any]] = None,
+) -> RealTimeMarketDataStream:
     """Create a new real-time market data stream instance."""
     return RealTimeMarketDataStream(config)
 
 
-async def start_market_data_stream(config: Optional[Dict[str, Any]] = None) -> RealTimeMarketDataStream:
+async def start_market_data_stream(
+    config: Optional[Dict[str, Any]] = None,
+) -> RealTimeMarketDataStream:
     """Start a real-time market data stream."""
     stream = RealTimeMarketDataStream(config)
     await stream.initialize()

@@ -48,8 +48,11 @@ class CacheSyncService:
 
         await self._discover_handlers()
         self._task = asyncio.create_task(self._run_loop())
-        logger.info("[Service Started] CacheSyncService started with {0} handlers".format(
-            len(self.handlers)))
+        logger.info(
+            "[Service Started] CacheSyncService started with {0} handlers".format(
+                len(self.handlers)
+            )
+        )
 
     async def stop(self) -> None:
         """Stop the cache sync service."""
@@ -71,10 +74,7 @@ class CacheSyncService:
             try:
                 await asyncio.gather(*(h.get_data(force_refresh=True) for h in self.handlers))
             except Exception as exc:  # noqa: BLE001
-                logger.error(
-                    "CacheSyncService iteration failed: %s",
-                    exc,
-                    exc_info=True)
+                logger.error("CacheSyncService iteration failed: %s", exc, exc_info=True)
 
             await asyncio.sleep(self.refresh_interval)
 
@@ -91,18 +91,15 @@ class CacheSyncService:
             try:
                 mod: ModuleType = importlib.import_module(rel_mod)  # noqa: PERF401
             except Exception as exc:  # noqa: BLE001
-                logger.error(
-                    "Failed to import handler module %s: %s", rel_mod, exc)
+                logger.error("Failed to import handler module %s: %s", rel_mod, exc)
                 continue
 
             for _, obj in inspect.getmembers(mod, inspect.isclass):
-                if issubclass(
-                        obj, BaseAPIHandler) and obj is not BaseAPIHandler:
+                if issubclass(obj, BaseAPIHandler) and obj is not BaseAPIHandler:
                     try:
                         # type: ignore[call-arg]
                         handler: BaseAPIHandler = obj()
                         self.handlers.append(handler)
                         logger.info("Registered handler: %s", handler.NAME)
                     except Exception as exc:  # noqa: BLE001
-                        logger.error(
-                            "Failed to initialise handler %s: %s", obj, exc)
+                        logger.error("Failed to initialise handler %s: %s", obj, exc)

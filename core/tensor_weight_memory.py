@@ -34,12 +34,14 @@ try:
     from .unified_math_system import generate_unified_hash
     from .quantum_mathematical_bridge import QuantumMathematicalBridge
     from .neural_processing_engine import NeuralProcessingEngine
+
     SCHWABOT_COMPONENTS_AVAILABLE = True
 except ImportError as e:
     print(f"⚠️ Some Schwabot components not available: {e}")
     SCHWABOT_COMPONENTS_AVAILABLE = False
 
 from core.backend_math import get_backend, backend_info
+
 xp = get_backend()
 
 logger = logging.getLogger(__name__)
@@ -54,6 +56,7 @@ else:
 
 class MemoryUpdateMode(Enum):
     """Modes for memory tensor updates"""
+
     REINFORCEMENT = "reinforcement"  # Positive feedback
     DECAY = "decay"  # Negative feedback
     NEUTRAL = "neutral"  # No change
@@ -62,6 +65,7 @@ class MemoryUpdateMode(Enum):
 
 class WeightUpdateStrategy(Enum):
     """Strategies for weight updates"""
+
     GRADIENT_DESCENT = "gradient_descent"
     MOMENTUM = "momentum"
     ADAM = "adam"
@@ -75,9 +79,9 @@ class MemoryTensor:
 
     timestamp: float
     shell_weights: xp.ndarray  # Wₜ [8] - weights for each shell
-    hash_entropy: xp.ndarray   # Hₜ [64] - hash entropy vector
+    hash_entropy: xp.ndarray  # Hₜ [64] - hash entropy vector
     success_scores: xp.ndarray  # Sₜ [8] - success/failure scores
-    phi_tensor: xp.ndarray     # Φₜ [8] - combined tensor state
+    phi_tensor: xp.ndarray  # Φₜ [8] - combined tensor state
     confidence: float
     update_mode: MemoryUpdateMode
     metadata: Dict[str, Any] = field(default_factory=dict)
@@ -140,7 +144,7 @@ class TensorWeightMemory:
             "reinforcement_updates": 0,
             "decay_updates": 0,
             "average_confidence": 0.0,
-            "weight_stability": 0.0
+            "weight_stability": 0.0,
         }
 
         # Threading
@@ -153,9 +157,9 @@ class TensorWeightMemory:
         """Default configuration"""
         return {
             "learning_rate": 0.01,  # α - learning rate
-            "entropy_weight": 0.3,   # β - entropy contribution weight
-            "momentum": 0.9,         # μ - momentum coefficient
-            "decay_rate": 0.001,     # λ - weight decay rate
+            "entropy_weight": 0.3,  # β - entropy contribution weight
+            "momentum": 0.9,  # μ - momentum coefficient
+            "decay_rate": 0.001,  # λ - weight decay rate
             "consensus_threshold": 0.75,
             "altitude_threshold": 0.6,
             "max_memory_size": 1000,
@@ -168,7 +172,7 @@ class TensorWeightMemory:
         trade_result: Dict[str, Any],
         hash_entropy: xp.ndarray,
         current_shell: OrbitalShell,
-        strategy_id: str
+        strategy_id: str,
     ) -> WeightUpdateResult:
         """
         Update shell weights based on trade result and entropy
@@ -220,8 +224,8 @@ class TensorWeightMemory:
                     metadata={
                         "strategy_id": strategy_id,
                         "shell": current_shell.name,
-                        "trade_result": trade_result
-                    }
+                        "trade_result": trade_result,
+                    },
                 )
 
             except Exception as e:
@@ -229,10 +233,7 @@ class TensorWeightMemory:
                 return self._get_fallback_result()
 
     def consensus_altitude(
-        self,
-        phi_tensor: xp.ndarray,
-        memory_tensor: MemoryTensor,
-        threshold: Optional[float] = None
+        self, phi_tensor: xp.ndarray, memory_tensor: MemoryTensor, threshold: Optional[float] = None
     ) -> ConsensusAltitudeResult:
         """
         Calculate consensus altitude for trade pipeline control
@@ -256,10 +257,10 @@ class TensorWeightMemory:
 
             # Calculate altitude vector ℵₐ(t)
             altitude_value = (
-                momentum_curvature * 0.3 +
-                rolling_return * 0.3 +
-                entropy_shift * 0.2 +
-                alpha_decay * 0.2
+                momentum_curvature * 0.3
+                + rolling_return * 0.3
+                + entropy_shift * 0.2
+                + alpha_decay * 0.2
             )
 
             # Determine consensus
@@ -267,8 +268,7 @@ class TensorWeightMemory:
 
             # Identify active shells
             active_shells = [
-                i for i, weight in enumerate(memory_tensor.shell_weights)
-                if weight > 0.6
+                i for i, weight in enumerate(memory_tensor.shell_weights) if weight > 0.6
             ]
 
             # Calculate confidence
@@ -276,9 +276,9 @@ class TensorWeightMemory:
 
             # Determine if trade is allowed
             trade_allowed = (
-                consensus_met and
-                confidence_level >= self.config["altitude_threshold"] and
-                len(active_shells) > 0
+                consensus_met
+                and confidence_level >= self.config["altitude_threshold"]
+                and len(active_shells) > 0
             )
 
             return ConsensusAltitudeResult(
@@ -292,8 +292,8 @@ class TensorWeightMemory:
                     "rolling_return": rolling_return,
                     "entropy_shift": entropy_shift,
                     "alpha_decay": alpha_decay,
-                    "threshold": threshold
-                }
+                    "threshold": threshold,
+                },
             )
 
         except Exception as e:
@@ -304,7 +304,7 @@ class TensorWeightMemory:
                 active_shells=[],
                 confidence_level=0.0,
                 trade_allowed=False,
-                metadata={"error": str(e)}
+                metadata={"error": str(e)},
             )
 
     def _calculate_success_score(self, trade_result: Dict[str, Any]) -> float:
@@ -327,9 +327,7 @@ class TensorWeightMemory:
             return 0.5  # Neutral score
 
     def _determine_update_mode(
-        self,
-        success_score: float,
-        trade_result: Dict[str, Any]
+        self, success_score: float, trade_result: Dict[str, Any]
     ) -> MemoryUpdateMode:
         """Determine update mode based on success score and trade result"""
         if success_score > 0.7:
@@ -340,10 +338,7 @@ class TensorWeightMemory:
             return MemoryUpdateMode.NEUTRAL
 
     def _calculate_weight_gradient(
-        self,
-        success_score: float,
-        hash_entropy: xp.ndarray,
-        current_shell: OrbitalShell
+        self, success_score: float, hash_entropy: xp.ndarray, current_shell: OrbitalShell
     ) -> xp.ndarray:
         """Calculate weight gradient ∇L(Wₜ)"""
         try:
@@ -356,8 +351,8 @@ class TensorWeightMemory:
 
             # Combine gradients
             gradient = (
-                self.config["learning_rate"] * base_gradient +
-                self.config["entropy_weight"] * entropy_contribution
+                self.config["learning_rate"] * base_gradient
+                + self.config["entropy_weight"] * entropy_contribution
             )
 
             return gradient
@@ -367,9 +362,7 @@ class TensorWeightMemory:
             return xp.zeros(8)
 
     def _apply_weight_update(
-        self,
-        gradient: xp.ndarray,
-        update_mode: MemoryUpdateMode
+        self, gradient: xp.ndarray, update_mode: MemoryUpdateMode
     ) -> xp.ndarray:
         """Apply weight update Wₜ₊₁ = Wₜ + α·∇L(Wₜ) + β·Hₑ·Sₜ"""
         try:
@@ -383,7 +376,7 @@ class TensorWeightMemory:
                 new_weights -= 0.01 * xp.ones(8)
 
             # Apply weight decay
-            new_weights *= (1.0 - self.config["decay_rate"])
+            new_weights *= 1.0 - self.config["decay_rate"]
 
             # Clamp weights to bounds
             min_weight, max_weight = self.config["weight_bounds"]
@@ -400,7 +393,7 @@ class TensorWeightMemory:
         weights: xp.ndarray,
         hash_entropy: xp.ndarray,
         success_score: float,
-        update_mode: MemoryUpdateMode
+        update_mode: MemoryUpdateMode,
     ) -> MemoryTensor:
         """Create memory tensor ℳₜ"""
         try:
@@ -420,8 +413,8 @@ class TensorWeightMemory:
                 update_mode=update_mode,
                 metadata={
                     "update_count": self.update_count,
-                    "performance_metrics": self.performance_metrics.copy()
-                }
+                    "performance_metrics": self.performance_metrics.copy(),
+                },
             )
 
             return memory_tensor
@@ -499,9 +492,7 @@ class TensorWeightMemory:
                 return 0.0
 
             # Calculate rolling average of success scores
-            recent_scores = [
-                tensor.success_scores[0] for tensor in self.memory_tensors[-5:]
-            ]
+            recent_scores = [tensor.success_scores[0] for tensor in self.memory_tensors[-5:]]
             rolling_return = float(xp.mean(recent_scores))
 
             return rolling_return
@@ -560,7 +551,7 @@ class TensorWeightMemory:
             success_contribution=0.5,
             confidence_change=0.0,
             update_mode=MemoryUpdateMode.NEUTRAL,
-            metadata={"error": "fallback_result"}
+            metadata={"error": "fallback_result"},
         )
 
     def _get_empty_memory_tensor(self) -> MemoryTensor:
@@ -573,7 +564,7 @@ class TensorWeightMemory:
             phi_tensor=xp.ones(8) * 0.25,
             confidence=0.5,
             update_mode=MemoryUpdateMode.NEUTRAL,
-            metadata={"error": "empty_tensor"}
+            metadata={"error": "empty_tensor"},
         )
 
     def get_system_status(self) -> Dict[str, Any]:
@@ -587,7 +578,7 @@ class TensorWeightMemory:
                 "memory_size": len(self.memory_tensors),
                 "performance_metrics": self.performance_metrics,
                 "backend": backend_status["backend"],
-                "accelerated": backend_status["accelerated"]
+                "accelerated": backend_status["accelerated"],
             }
         except Exception as e:
             logger.error(f"Error getting system status: {e}")

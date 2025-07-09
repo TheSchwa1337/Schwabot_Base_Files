@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from concurrent.futures import ThreadPoolExecutor
 import threading
 from core.backend_math import get_backend
+
 xp = get_backend()
 
 logger = logging.getLogger(__name__)
@@ -56,9 +57,7 @@ class QuantumMathematicalBridge:
         self.quantum_executor = ThreadPoolExecutor(max_workers=8)
         self.quantum_lock = threading.Lock()
 
-        logger.info(
-            f"Quantum Mathematical Bridge initialized with dimension {quantum_dimension}"
-        )
+        logger.info(f"Quantum Mathematical Bridge initialized with dimension {quantum_dimension}")
 
     def _initialize_quantum_matrices(self):
         """Initialize fundamental quantum matrices"""
@@ -89,9 +88,7 @@ class QuantumMathematicalBridge:
 
         return qft
 
-    def create_quantum_superposition(
-        self, trading_signals: List[float]
-    ) -> QuantumState:
+    def create_quantum_superposition(self, trading_signals: List[float]) -> QuantumState:
         """
         Create quantum superposition state from trading signals.
 
@@ -126,9 +123,7 @@ class QuantumMathematicalBridge:
                 superposition_components=superposition_components,
             )
 
-            logger.debug(
-                f"Created quantum superposition with {len(trading_signals)} components"
-            )
+            logger.debug(f"Created quantum superposition with {len(trading_signals)} components")
             return quantum_state
 
         except Exception as e:
@@ -149,12 +144,8 @@ class QuantumMathematicalBridge:
             bell_coefficient = 1 / xp.sqrt(2)
 
             # Entangle the states
-            entangled_amplitude1 = bell_coefficient * (
-                state1.amplitude + state2.amplitude
-            )
-            entangled_amplitude2 = bell_coefficient * (
-                state1.amplitude - state2.amplitude
-            )
+            entangled_amplitude1 = bell_coefficient * (state1.amplitude + state2.amplitude)
+            entangled_amplitude2 = bell_coefficient * (state1.amplitude - state2.amplitude)
 
             # Update entanglement registry
             entanglement_id = len(self.entanglement_registry)
@@ -253,7 +244,9 @@ class QuantumMathematicalBridge:
             if tensor.data.shape[0] >= 2:
                 hadamard_expanded = xp.kron(self.hadamard, xp.eye(tensor.data.shape[0] // 2))
                 if hadamard_expanded.shape[0] > tensor.data.shape[0]:
-                    hadamard_expanded = hadamard_expanded[:tensor.data.shape[0], :tensor.data.shape[0]]
+                    hadamard_expanded = hadamard_expanded[
+                        : tensor.data.shape[0], : tensor.data.shape[0]
+                    ]
 
                 transformed_data = xp.dot(hadamard_expanded, tensor.data)
             else:
@@ -271,9 +264,7 @@ class QuantumMathematicalBridge:
             logger.error(f"Error applying Hadamard transform: {e}")
             raise
 
-    def _apply_phase_shift(
-        self, tensor: QuantumTensor, phase: float = xp.pi / 4
-    ) -> QuantumTensor:
+    def _apply_phase_shift(self, tensor: QuantumTensor, phase: float = xp.pi / 4) -> QuantumTensor:
         """Apply phase shift transformation"""
         try:
             phase_matrix = xp.diag(xp.exp(1j * phase * xp.arange(tensor.data.shape[0])))
@@ -291,9 +282,7 @@ class QuantumMathematicalBridge:
             logger.error(f"Error applying phase shift: {e}")
             raise
 
-    def _calculate_fidelity(
-        self, original: QuantumTensor, transformed: QuantumTensor
-    ) -> float:
+    def _calculate_fidelity(self, original: QuantumTensor, transformed: QuantumTensor) -> float:
         """Calculate quantum fidelity between states"""
         try:
             # Quantum fidelity: F = |⟨ψ|φ⟩|²
@@ -335,9 +324,7 @@ class QuantumMathematicalBridge:
             )
 
             # Calculate profit vector using quantum amplitudes
-            profit_amplitude = (
-                entangled_entry.amplitude * entangled_exit.amplitude.conjugate()
-            )
+            profit_amplitude = entangled_entry.amplitude * entangled_exit.amplitude.conjugate()
             profit_probability = xp.abs(profit_amplitude) ** 2
 
             # Quantum profit calculation
@@ -363,9 +350,7 @@ class QuantumMathematicalBridge:
                 "coherence_time": profit_tensor.coherence_time,
             }
 
-            logger.info(
-                f"Quantum profit vectorization completed: {result['quantum_profit']:.6f}"
-            )
+            logger.info(f"Quantum profit vectorization completed: {result['quantum_profit']:.6f}")
             return result
 
         except Exception as e:

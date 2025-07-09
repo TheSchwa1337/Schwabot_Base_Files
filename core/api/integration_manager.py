@@ -45,15 +45,15 @@ class ApiIntegrationManager:
 
     def load_configuration(self) -> None:
         """Load API configurations from the specified JSON file."""
-        logger.info(
-            "Loading API configuration from {0}...".format(
-                self.config_path))
+        logger.info("Loading API configuration from {0}...".format(self.config_path))
 
         try:
             if not self.config_path.exists():
                 logger.warning(
                     "Configuration file not found: {0}. No exchanges will be loaded.".format(
-                        self.config_path))
+                        self.config_path
+                    )
+                )
                 return
 
             with open(self.config_path, "r", encoding="utf-8") as f:
@@ -72,20 +72,18 @@ class ApiIntegrationManager:
                         )
 
                         self.connections[exchange_name] = ExchangeConnection(
-                            credentials, exchange_config)
+                            credentials, exchange_config
+                        )
 
                     except (ValueError, KeyError) as e:
                         logger.error(
-                            "Failed to parse config for '{0}': {1}".format(
-                                exchange_name, e))
+                            "Failed to parse config for '{0}': {1}".format(exchange_name, e)
+                        )
 
-            logger.info("Loaded {0} exchange configurations.".format(
-                len(self.connections)))
+            logger.info("Loaded {0} exchange configurations.".format(len(self.connections)))
 
         except Exception as e:
-            logger.error(
-                "Error loading API configuration: {0}".format(e),
-                exc_info=True)
+            logger.error("Error loading API configuration: {0}".format(e), exc_info=True)
 
     async def start(self) -> None:
         """Start the API integration system and all connections."""
@@ -126,8 +124,7 @@ class ApiIntegrationManager:
 
     async def _connect_all_exchanges(self) -> None:
         """Attempt to connect to all loaded exchange configurations."""
-        connection_tasks = [conn.connect()
-                            for conn in self.connections.values()]
+        connection_tasks = [conn.connect() for conn in self.connections.values()]
         await asyncio.gather(*connection_tasks)
 
     async def _main_loop(self) -> None:
@@ -140,9 +137,7 @@ class ApiIntegrationManager:
             except asyncio.CancelledError:
                 break
             except Exception as e:
-                logger.error(
-                    "Error in main loop: {0}".format(e),
-                    exc_info=True)
+                logger.error("Error in main loop: {0}".format(e), exc_info=True)
                 await asyncio.sleep(self.reconnect_interval)
 
     async def _heartbeat_check(self) -> None:
@@ -155,16 +150,17 @@ class ApiIntegrationManager:
 
                 if conn.status != ConnectionStatus.RECONNECTING:
                     logger.warning(
-                        "Connection issue with {0}. Attempting to reconnect...".format(name))
+                        "Connection issue with {0}. Attempting to reconnect...".format(name)
+                    )
                     conn.status = ConnectionStatus.RECONNECTING
                     conn.reconnect_attempts += 1
 
-                    if conn.reconnect_attempts <= getattr(
-                            conn, 'max_reconnect_attempts', 5):
+                    if conn.reconnect_attempts <= getattr(conn, 'max_reconnect_attempts', 5):
                         asyncio.create_task(conn.connect())
                     else:
                         logger.error(
-                            "Max reconnect attempts reached for {0}. Disabling.".format(name))
+                            "Max reconnect attempts reached for {0}. Disabling.".format(name)
+                        )
                         conn.status = ConnectionStatus.ERROR
 
     async def _update_all_portfolios(self) -> None:
@@ -174,29 +170,25 @@ class ApiIntegrationManager:
         pass
 
     async def place_order(
-            self,
-            exchange_name: str,
-            order_request: OrderRequest) -> Optional[OrderResponse]:
+        self, exchange_name: str, order_request: OrderRequest
+    ) -> Optional[OrderResponse]:
         """Place an order on a specific exchange."""
         connection = self.connections.get(exchange_name)
         if connection and connection.status == ConnectionStatus.CONNECTED:
             return await connection.place_order(order_request)
 
-        logger.error(
-            "Cannot place order: exchange '{0}' is not available.".format(exchange_name))
+        logger.error("Cannot place order: exchange '{0}' is not available.".format(exchange_name))
         return None
 
-    async def get_market_data(
-            self,
-            exchange_name: str,
-            symbol: str) -> Optional[MarketData]:
+    async def get_market_data(self, exchange_name: str, symbol: str) -> Optional[MarketData]:
         """Get market data from a specific exchange."""
         connection = self.connections.get(exchange_name)
         if connection and connection.status == ConnectionStatus.CONNECTED:
             return await connection.get_market_data(symbol)
 
         logger.warning(
-            "Cannot get market data: exchange '{0}' is not available.".format(exchange_name))
+            "Cannot get market data: exchange '{0}' is not available.".format(exchange_name)
+        )
         return None
 
     def get_system_status(self) -> Dict[str, Any]:
@@ -211,7 +203,9 @@ class ApiIntegrationManager:
                 name: {
                     "status": conn.status.value,
                     "last_heartbeat": (
-                        datetime.fromtimestamp(conn.last_heartbeat).isoformat() if conn.last_heartbeat else None
+                        datetime.fromtimestamp(conn.last_heartbeat).isoformat()
+                        if conn.last_heartbeat
+                        else None
                     ),
                     "reconnect_attempts": conn.reconnect_attempts,
                     "last_error": conn.last_error,

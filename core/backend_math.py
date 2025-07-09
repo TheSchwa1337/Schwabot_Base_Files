@@ -9,13 +9,17 @@ try:
     GPU_ENABLED = True
 except ImportError:
     import numpy as xp
+
     GPU_ENABLED = False
+
 
 def get_backend():
     return xp
 
+
 def is_gpu():
     return GPU_ENABLED
+
 
 def backend_info():
     return {

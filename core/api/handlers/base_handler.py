@@ -71,8 +71,7 @@ class BaseAPIHandler(ABC):
                 if attempt < self.MAX_RETRIES - 1:
                     await asyncio.sleep(self.RETRY_DELAY * (attempt + 1))
                 else:
-                    logger.error(
-                        f"{self.NAME}: Max retries exceeded, returning cached data")
+                    logger.error(f"{self.NAME}: Max retries exceeded, returning cached data")
                     return await self._read_cache()  # Return cached data if available
 
         return await self._read_cache()  # Return cached data if no refresh needed
@@ -111,8 +110,9 @@ class BaseAPIHandler(ABC):
                         timestamps.append(float(value))
 
                 if timestamps:
-                    variance = sum((x - sum(timestamps) / len(timestamps))
-                                   ** 2 for x in timestamps) / len(timestamps)
+                    variance = sum(
+                        (x - sum(timestamps) / len(timestamps)) ** 2 for x in timestamps
+                    ) / len(timestamps)
                     # Normalize to [0, 1]
                     return min(1.0, max(0.0, variance / 1000.0))
 
@@ -132,14 +132,8 @@ class BaseAPIHandler(ABC):
 
         return {
             "requests_used": self._request_count,
-            "requests_remaining": max(
-                0,
-                self.RATE_LIMIT_REQUESTS -
-                self._request_count),
-            "window_remaining": max(
-                0,
-                self.RATE_LIMIT_WINDOW -
-                window_elapsed),
+            "requests_remaining": max(0, self.RATE_LIMIT_REQUESTS - self._request_count),
+            "window_remaining": max(0, self.RATE_LIMIT_WINDOW - window_elapsed),
             "rate_limit_exceeded": self._request_count >= self.RATE_LIMIT_REQUESTS,
         }
 
@@ -180,11 +174,13 @@ class BaseAPIHandler(ABC):
 
         # Check if we've exceeded the rate limit
         if self._request_count >= self.RATE_LIMIT_REQUESTS:
-            window_remaining = self.RATE_LIMIT_WINDOW - \
-                (current_time - self._rate_limit_window_start)
+            window_remaining = self.RATE_LIMIT_WINDOW - (
+                current_time - self._rate_limit_window_start
+            )
             if window_remaining > 0:
                 logger.warning(
-                    f"{self.NAME}: Rate limit exceeded, waiting {window_remaining} seconds")
+                    f"{self.NAME}: Rate limit exceeded, waiting {window_remaining} seconds"
+                )
                 await asyncio.sleep(window_remaining)
                 self._rate_limit_window_start = current_time
                 self._request_count = 0
@@ -209,7 +205,8 @@ class BaseAPIHandler(ABC):
             f"{
                 self.NAME}: Error occurred (total: {
                 self._error_count}, consecutive: {
-                self._consecutive_errors}) - {exc}")
+                self._consecutive_errors}) - {exc}"
+        )
 
     # Caching helpers --------------------------------------------------------
 
@@ -240,8 +237,7 @@ class BaseAPIHandler(ABC):
     # type: ignore[return-type]
     async def _get_session(self) -> aiohttp.ClientSession:
         if not aiohttp:
-            raise RuntimeError(
-                "aiohttp is required for async HTTP but not installed")
+            raise RuntimeError("aiohttp is required for async HTTP but not installed")
 
         if not self._session:
             timeout = aiohttp.ClientTimeout(total=self.TIMEOUT)
@@ -261,8 +257,7 @@ class BaseAPIHandler(ABC):
 
         for method_name in required_methods:
             if not hasattr(self, method_name):
-                logger.error(
-                    f"{self.NAME}: Missing required method '{method_name}'")
+                logger.error(f"{self.NAME}: Missing required method '{method_name}'")
                 return False
 
         return True

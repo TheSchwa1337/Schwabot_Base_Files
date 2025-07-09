@@ -29,28 +29,30 @@ class ProfitBackendRegistry:
                     'count': 0,
                     'total_time': 0.0,
                     'avg_time': 0.0,
-                    'success_rate': 0.0},
+                    'success_rate': 0.0,
+                },
                 'gpu': {
                     'profit': 0.0,
                     'count': 0,
                     'total_time': 0.0,
                     'avg_time': 0.0,
-                    'success_rate': 0.0},
-            })
+                    'success_rate': 0.0,
+                },
+            }
+        )
         self.recent_performance = defaultdict(
-            lambda: {
-                'cpu': deque(
-                    maxlen=max_history), 'gpu': deque(
-                    maxlen=max_history)})
+            lambda: {'cpu': deque(maxlen=max_history), 'gpu': deque(maxlen=max_history)}
+        )
         self.lock = threading.RLock()
 
     def update_stats(
-            self,
-            op_name: str,
-            backend: str,
-            execution_time: float,
-            profit: float = 0.0,
-            success: bool = True):
+        self,
+        op_name: str,
+        backend: str,
+        execution_time: float,
+        profit: float = 0.0,
+        success: bool = True,
+    ):
         """Update performance statistics for an operation."""
         with self.lock:
             stats = self.operation_stats[op_name][backend]
@@ -67,19 +69,24 @@ class ProfitBackendRegistry:
             # Update success rate
             if success:
                 stats['success_rate'] = (
-                    stats['success_rate'] * (stats['count'] - 1) + 1.0) / stats['count']
+                    stats['success_rate'] * (stats['count'] - 1) + 1.0
+                ) / stats['count']
             else:
-                stats['success_rate'] = (
-                    stats['success_rate'] * (stats['count'] - 1)) / stats['count']
+                stats['success_rate'] = (stats['success_rate'] * (stats['count'] - 1)) / stats[
+                    'count'
+                ]
 
             # Store recent performance for trend analysis
-            recent.append({'time': execution_time, 'profit': profit,
-                          'success': success, 'timestamp': time.time()})
+            recent.append(
+                {
+                    'time': execution_time,
+                    'profit': profit,
+                    'success': success,
+                    'timestamp': time.time(),
+                }
+            )
 
-    def get_backend_recommendation(
-            self,
-            op_name: str,
-            data_size: Optional[int] = None) -> str:
+    def get_backend_recommendation(self, op_name: str, data_size: Optional[int] = None) -> str:
         """Get the recommended backend based on profit and performance metrics."""
         with self.lock:
             if op_name not in self.operation_stats:
@@ -93,19 +100,19 @@ class ProfitBackendRegistry:
             gpu_stats = self.operation_stats[op_name]['gpu']
 
             # Calculate profit per second for each backend
-            cpu_profit_rate = cpu_stats['profit'] / \
-                max(cpu_stats['total_time'], 0.001)
-            gpu_profit_rate = gpu_stats['profit'] / \
-                max(gpu_stats['total_time'], 0.001)
+            cpu_profit_rate = cpu_stats['profit'] / max(cpu_stats['total_time'], 0.001)
+            gpu_profit_rate = gpu_stats['profit'] / max(gpu_stats['total_time'], 0.001)
 
             # Consider recent performance trends (last 10 operations)
             cpu_recent = list(self.recent_performance[op_name]['cpu'])[-10:]
             gpu_recent = list(self.recent_performance[op_name]['gpu'])[-10:]
 
-            cpu_recent_avg = np.mean(
-                [p['time'] for p in cpu_recent]) if cpu_recent else float('inf')
-            gpu_recent_avg = np.mean(
-                [p['time'] for p in gpu_recent]) if gpu_recent else float('inf')
+            cpu_recent_avg = (
+                np.mean([p['time'] for p in cpu_recent]) if cpu_recent else float('inf')
+            )
+            gpu_recent_avg = (
+                np.mean([p['time'] for p in gpu_recent]) if gpu_recent else float('inf')
+            )
 
             # Decision logic: prioritize profit rate, then speed, then success
             # rate
@@ -127,8 +134,9 @@ class ProfitBackendRegistry:
         with self.lock:
             summary = {
                 'total_operations': sum(
-                    stats['cpu']['count'] +
-                    stats['gpu']['count'] for stats in self.operation_stats.values()),
+                    stats['cpu']['count'] + stats['gpu']['count']
+                    for stats in self.operation_stats.values()
+                ),
                 'operations': {},
             }
 
@@ -178,22 +186,14 @@ class BackendOperations:
     def convolution(data, kernel, **kwargs):
         """Convolution operation."""
         # Simplified convolution - you might want to use scipy.signal.convolve
-        return np.convolve(
-            data.flatten(),
-            kernel.flatten(),
-            mode='same').reshape(
-            data.shape)
+        return np.convolve(data.flatten(), kernel.flatten(), mode='same').reshape(data.shape)
 
     @staticmethod
     def convolution_gpu(data, kernel, **kwargs):
         """GPU convolution operation."""
         if not HAS_CUPY:
             raise RuntimeError("CuPy not available")
-        return cp.convolve(
-            data.flatten(),
-            kernel.flatten(),
-            mode='same').reshape(
-            data.shape)
+        return cp.convolve(data.flatten(), kernel.flatten(), mode='same').reshape(data.shape)
 
     @staticmethod
     def fft(data, **kwargs):
@@ -210,27 +210,19 @@ class BackendOperations:
 
 # Operation mapping
 OPERATIONS = {
-    'matrix_multiply': (
-        BackendOperations.matrix_multiply,
-        BackendOperations.matrix_multiply_gpu),
+    'matrix_multiply': (BackendOperations.matrix_multiply, BackendOperations.matrix_multiply_gpu),
     'elementwise_multiply': (
         BackendOperations.elementwise_multiply,
-        BackendOperations.elementwise_multiply_gpu),
-    'convolution': (
-        BackendOperations.convolution,
-        BackendOperations.convolution_gpu),
-    'fft': (
-        BackendOperations.fft,
-        BackendOperations.fft_gpu),
+        BackendOperations.elementwise_multiply_gpu,
+    ),
+    'convolution': (BackendOperations.convolution, BackendOperations.convolution_gpu),
+    'fft': (BackendOperations.fft, BackendOperations.fft_gpu),
 }
 
 
 def dispatch_op(
-        op_name: str,
-        *args,
-        profit: float = 0.0,
-        data_size: Optional[int] = None,
-        **kwargs) -> Any:
+    op_name: str, *args, profit: float = 0.0, data_size: Optional[int] = None, **kwargs
+) -> Any:
     """
     Dispatch an operation to the most profitable backend.
 
@@ -250,8 +242,7 @@ def dispatch_op(
     cpu_op, gpu_op = OPERATIONS[op_name]
 
     # Get backend recommendation
-    recommended_backend = registry.get_backend_recommendation(
-        op_name, data_size)
+    recommended_backend = registry.get_backend_recommendation(op_name, data_size)
 
     # Execute operation with timing
     start_time = time.time()
@@ -274,12 +265,7 @@ def dispatch_op(
     execution_time = time.time() - start_time
 
     # Update registry with performance data
-    registry.update_stats(
-        op_name,
-        recommended_backend,
-        execution_time,
-        profit,
-        success)
+    registry.update_stats(op_name, recommended_backend, execution_time, profit, success)
 
     return result
 
@@ -299,45 +285,22 @@ def reset_stats():
 def matrix_multiply(a, b, profit=0.0, **kwargs):
     """Profit-driven matrix multiplication."""
     data_size = a.size if hasattr(a, 'size') else len(a) * len(a[0])
-    return dispatch_op(
-        'matrix_multiply',
-        a,
-        b,
-        profit=profit,
-        data_size=data_size,
-        **kwargs)
+    return dispatch_op('matrix_multiply', a, b, profit=profit, data_size=data_size, **kwargs)
 
 
 def elementwise_multiply(a, b, profit=0.0, **kwargs):
     """Profit-driven element-wise multiplication."""
     data_size = a.size if hasattr(a, 'size') else len(a)
-    return dispatch_op(
-        'elementwise_multiply',
-        a,
-        b,
-        profit=profit,
-        data_size=data_size,
-        **kwargs)
+    return dispatch_op('elementwise_multiply', a, b, profit=profit, data_size=data_size, **kwargs)
 
 
 def convolution(data, kernel, profit=0.0, **kwargs):
     """Profit-driven convolution."""
     data_size = data.size if hasattr(data, 'size') else len(data)
-    return dispatch_op(
-        'convolution',
-        data,
-        kernel,
-        profit=profit,
-        data_size=data_size,
-        **kwargs)
+    return dispatch_op('convolution', data, kernel, profit=profit, data_size=data_size, **kwargs)
 
 
 def fft(data, profit=0.0, **kwargs):
     """Profit-driven FFT."""
     data_size = data.size if hasattr(data, 'size') else len(data)
-    return dispatch_op(
-        'fft',
-        data,
-        profit=profit,
-        data_size=data_size,
-        **kwargs)
+    return dispatch_op('fft', data, profit=profit, data_size=data_size, **kwargs)

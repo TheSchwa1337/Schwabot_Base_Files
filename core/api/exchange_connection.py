@@ -20,8 +20,7 @@ try:
     CCXT_AVAILABLE = True
 except ImportError:
     CCXT_AVAILABLE = False
-    logger.warning(
-        "CCXT library not available. Exchange functionality will be limited.")
+    logger.warning("CCXT library not available. Exchange functionality will be limited.")
 
 
 class ExchangeConnection:
@@ -41,23 +40,18 @@ class ExchangeConnection:
         self.market_data_cache = {}
         self.cache_expiry = config.get("cache_expiry", 5)  # 5 seconds
 
-        logger.info(
-            "Exchange connection initialized for {0}".format(
-                credentials.exchange.value))
+        logger.info("Exchange connection initialized for {0}".format(credentials.exchange.value))
 
     async def connect(self) -> bool:
         """Establishes connection to the exchange."""
         if not CCXT_AVAILABLE:
-            logger.error(
-                "CCXT library not available. Cannot connect to exchange.")
+            logger.error("CCXT library not available. Cannot connect to exchange.")
             self.status = ConnectionStatus.ERROR
             self.last_error = "CCXT library not installed."
             return False
 
         self.status = ConnectionStatus.CONNECTING
-        logger.info(
-            "Connecting to {0}...".format(
-                self.credentials.exchange.value))
+        logger.info("Connecting to {0}...".format(self.credentials.exchange.value))
 
         try:
             exchange_name = self.credentials.exchange.value
@@ -68,12 +62,8 @@ class ExchangeConnection:
                 "apiKey": self.credentials.api_key,
                 "secret": self.credentials.secret,
                 "enableRateLimit": True,
-                "timeout": self.config.get(
-                    "timeout",
-                    30000),
-                "options": {
-                    "defaultType": "spot",
-                    "adjustForTimeDifference": True},
+                "timeout": self.config.get("timeout", 30000),
+                "options": {"defaultType": "spot", "adjustForTimeDifference": True},
             }
 
             if self.credentials.passphrase:
@@ -97,8 +87,10 @@ class ExchangeConnection:
         except Exception as e:
             self.status = ConnectionStatus.ERROR
             self.last_error = str(e)
-            logger.error("Failed to connect to {0}: {1}".format(
-                self.credentials.exchange.value, e), exc_info=True, )
+            logger.error(
+                "Failed to connect to {0}: {1}".format(self.credentials.exchange.value, e),
+                exc_info=True,
+            )
             return False
 
     async def disconnect(self):
@@ -106,20 +98,14 @@ class ExchangeConnection:
         if self.status == ConnectionStatus.DISCONNECTED:
             return
 
-        logger.info(
-            "Disconnecting from {0}...".format(
-                self.credentials.exchange.value))
+        logger.info("Disconnecting from {0}...".format(self.credentials.exchange.value))
         try:
             if self.async_exchange:
                 await self.async_exchange.close()
             self.status = ConnectionStatus.DISCONNECTED
-            logger.info(
-                "Disconnected from {0}".format(
-                    self.credentials.exchange.value))
+            logger.info("Disconnected from {0}".format(self.credentials.exchange.value))
         except Exception as e:
-            logger.error(
-                "Error during disconnection: {0}".format(e),
-                exc_info=True)
+            logger.error("Error during disconnection: {0}".format(e), exc_info=True)
 
     async def get_market_data(self, symbol: str) -> Optional[MarketData]:
         """Fetches market data for a given symbol, using a cache."""
@@ -129,9 +115,7 @@ class ExchangeConnection:
         # Check cache first
         cached_data = self.market_data_cache.get(symbol)
 
-        if cached_data and (
-                time.time() -
-                cached_data.timestamp < self.cache_expiry):
+        if cached_data and (time.time() - cached_data.timestamp < self.cache_expiry):
             return cached_data
 
         try:
@@ -163,14 +147,15 @@ class ExchangeConnection:
             self.last_error = str(e)
             logger.error(
                 "Error fetching market data for {0} on {1}: {2}".format(
-                    symbol, self.credentials.exchange.value, e))
+                    symbol, self.credentials.exchange.value, e
+                )
+            )
             return None
 
     async def place_order(self, order_request: OrderRequest) -> OrderResponse:
         """Places a trade order on the exchange."""
         if self.status != ConnectionStatus.CONNECTED:
-            return self._create_error_response(
-                order_request, "Exchange not connected.")
+            return self._create_error_response(order_request, "Exchange not connected.")
 
         try:
             params = {}
@@ -194,16 +179,19 @@ class ExchangeConnection:
 
             logger.info(
                 "Order placed on {0}: {1}".format(
-                    self.credentials.exchange.value,
-                    response.order_id))
+                    self.credentials.exchange.value, response.order_id
+                )
+            )
 
             return response
 
         except Exception as e:
             self.failed_requests += 1
             self.last_error = str(e)
-            logger.error("Error placing order on {0}: {1}".format(
-                self.credentials.exchange.value, e), exc_info=True, )
+            logger.error(
+                "Error placing order on {0}: {1}".format(self.credentials.exchange.value, e),
+                exc_info=True,
+            )
             return self._create_error_response(order_request, str(e))
 
     async def get_balance(self) -> Dict[str, float]:
@@ -214,10 +202,10 @@ class ExchangeConnection:
         try:
             balance = await self.async_exchange.fetch_balance()
             free_balances = {
-                currency: float(amount) for currency,
-                amount in balance.get(
-                    "free",
-                    {}).items() if float(amount) > 0}
+                currency: float(amount)
+                for currency, amount in balance.get("free", {}).items()
+                if float(amount) > 0
+            }
 
             self.successful_requests += 1
             self.last_heartbeat = time.time()
@@ -228,8 +216,8 @@ class ExchangeConnection:
             self.failed_requests += 1
             self.last_error = str(e)
             logger.error(
-                "Error fetching balance from {0}: {1}".format(
-                    self.credentials.exchange.value, e))
+                "Error fetching balance from {0}: {1}".format(self.credentials.exchange.value, e)
+            )
             return {}
 
     def _create_success_response(self, order) -> OrderResponse:
@@ -251,10 +239,7 @@ class ExchangeConnection:
             info=order,
         )
 
-    def _create_error_response(
-            self,
-            order_request: OrderRequest,
-            error_msg: str) -> OrderResponse:
+    def _create_error_response(self, order_request: OrderRequest, error_msg: str) -> OrderResponse:
         """Creates an error OrderResponse."""
         return OrderResponse(
             order_id="",

@@ -7,6 +7,7 @@ import logging
 import os
 
 from core.backend_math import get_backend, is_gpu
+
 xp = get_backend()
 
 from core.unified_math_system import generate_unified_hash
@@ -260,7 +261,9 @@ class StrategyBitMapper:
             logger.error("Tensor weighted expansion failed: {0}".format(e))
             return strategy_id % (2**target_bits)
 
-    def _orbital_adaptive_expansion(self, strategy_id: int, target_bits: int, market_data: Dict[str, Any]) -> int:
+    def _orbital_adaptive_expansion(
+        self, strategy_id: int, target_bits: int, market_data: Dict[str, Any]
+    ) -> int:
         """Expand strategy using orbital adaptive approach with xp backend."""
         try:
             # Use orbital brain for adaptive expansion
@@ -276,11 +279,15 @@ class StrategyBitMapper:
             logger.error("Orbital adaptive expansion failed: {0}".format(e))
             return strategy_id % (2**target_bits)
 
-    def match_hash_to_matrix(self, input_hash_vec: xp.ndarray, location: Any = None, threshold: float = 0.8):
+    def match_hash_to_matrix(
+        self, input_hash_vec: xp.ndarray, location: Any = None, threshold: float = 0.8
+    ):
         """Match hash vector to matrix using xp backend."""
         return self.matrix_mapper.match_hash_to_matrix(input_hash_vec, location, threshold)
 
-    def select_strategy(self, hash_vec: xp.ndarray, asset_hint: Optional[str] = None, location: Any = None):
+    def select_strategy(
+        self, hash_vec: xp.ndarray, asset_hint: Optional[str] = None, location: Any = None
+    ):
         """Select strategy based on hash vector using xp backend."""
         return self.matrix_mapper.select_strategy(hash_vec, asset_hint, location)
 

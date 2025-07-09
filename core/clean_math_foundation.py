@@ -19,11 +19,14 @@ import logging
 from typing import Dict, Tuple, Any
 from enum import Enum
 import numpy as np
+
 try:
     import cupy as cp
+
     CUPY_AVAILABLE = True
 except ImportError:
     import numpy as cp
+
     CUPY_AVAILABLE = False
 
 # CUDA Integration with Fallback
@@ -338,9 +341,7 @@ def calculate_max_drawdown(returns: np.ndarray) -> Dict[str, float]:
     }
 
 
-def calculate_value_at_risk(
-    returns: np.ndarray, confidence_level: float = 0.5
-) -> float:
+def calculate_value_at_risk(returns: np.ndarray, confidence_level: float = 0.5) -> float:
     """
     Calculate Value at Risk (VaR) for a series of returns.
 
@@ -366,9 +367,7 @@ def calculate_value_at_risk(
     return float(var)
 
 
-def calculate_conditional_var(
-    returns: np.ndarray, confidence_level: float = 0.5
-) -> float:
+def calculate_conditional_var(returns: np.ndarray, confidence_level: float = 0.5) -> float:
     """
     Calculate Conditional Value at Risk (CVaR) for a series of returns.
 
